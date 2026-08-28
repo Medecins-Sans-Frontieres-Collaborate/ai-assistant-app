@@ -33,6 +33,48 @@ export enum LogEventType {
   ToneAnalysisError = 'ToneAnalysisError',
   TokenUsage = 'TokenUsage',
   CustomMetric = 'CustomMetric',
+  /** One executed MCP / builtin tool call inside the tool loop. */
+  ToolCall = 'ToolCall',
+  /** One agent-access guard decision (allow / deny / unavailable). */
+  AgentAccess = 'AgentAccess',
+}
+
+/**
+ * Which kind of agent a request ran under. Derived server-side from what the
+ * pipeline ACTUALLY resolved — not from the client's botId alone.
+ */
+export type AgentKind = 'rag' | 'prompt' | 'm365' | 'foundry';
+
+/**
+ * Per-request telemetry context threaded from the chat pipeline into every
+ * log event it emits. Built once by `createTelemetryMiddleware` so that
+ * ChatCompletion, TokenUsage, Search, AgentExecution, ToolCall and Error rows
+ * for the same request all carry identical agent + correlation fields.
+ *
+ * ⚠ Every field here must be a declared column in the DCR stream
+ * (`scripts/update-log-ingestion-schema.py`) or it is dropped at ingestion.
+ */
+export interface RequestTelemetry {
+  /** Agent id as sent by the client (conversation.bot); may be stale. */
+  botId?: string;
+  agentKind?: AgentKind;
+  /** Human-readable agent name resolved at request time. */
+  agentName?: string;
+  /** Where the agent definition came from (static config, admin blob, BYO source path, catalog). */
+  agentSource?: string;
+  /**
+   * True only when the server actually applied the agent to this request.
+   * False when botId named an agent the pipeline ignored (stale/unattached
+   * bot, deleted agent, failed validation) — resolves the historical
+   * ambiguity where BotId was logged regardless.
+   */
+  agentApplied?: boolean;
+  /** Client conversation id — collapses tool-loop rounds into one turn. */
+  conversationId?: string;
+  /** Server-generated per-HTTP-request id. */
+  requestId?: string;
+  /** MCP / M365 tool-loop round index (0 = first request of the turn). */
+  loopRound?: number;
 }
 
 /**
@@ -50,7 +92,12 @@ export enum ErrorSeverity {
  * These fields provide context for every logged event.
  */
 export interface BaseLogEntry {
-  /** ISO 8601 timestamp of when the event occurred */
+  /**
+   * Event time in the Log Analytics convention. Sent explicitly so the
+   * stored TimeGenerated is the app's event time rather than ingestion time.
+   */
+  TimeGenerated: string;
+  /** ISO 8601 timestamp of when the event occurred (legacy duplicate of TimeGenerated) */
   Timestamp: string;
   /** Type of event being logged */
   EventType: LogEventType;
@@ -80,6 +127,18 @@ export interface BaseLogEntry {
   AgentId?: string;
   /** Agent type (e.g., 'bing_grounding', 'custom') */
   AgentType?: string;
+  /** Resolved agent kind ('rag' | 'prompt' | 'm365' | 'foundry'). */
+  AgentKind?: AgentKind;
+  /** Resolved human-readable agent name. */
+  AgentName?: string;
+  /** Registry / source the agent definition came from. */
+  AgentSource?: string;
+  /** True when the server actually applied the agent (see RequestTelemetry). */
+  AgentApplied?: boolean;
+  /** Client conversation id. */
+  ConversationId?: string;
+  /** Tool-loop round index. */
+  LoopRound?: number;
   /** Model used for the operation */
   ModelUsed?: string;
   /** Number of messages in the conversation context */
@@ -168,7 +227,7 @@ export interface ErrorLogEntry extends BaseLogEntry {
 export interface FileSuccessLogEntry extends BaseLogEntry {
   EventType: LogEventType.FileSuccess;
   /** Original filename */
-  Filename: string;
+  FileName: string;
   /** File size in bytes */
   FileSize: number;
   /** MIME type or file type category */
@@ -183,7 +242,7 @@ export interface FileSuccessLogEntry extends BaseLogEntry {
 export interface FileErrorLogEntry extends BaseLogEntry {
   EventType: LogEventType.FileError;
   /** Original filename */
-  Filename: string;
+  FileName: string;
   /** File size in bytes */
   FileSize?: number;
   /** MIME type or file type category */
@@ -264,7 +323,7 @@ export interface AgentErrorLogEntry extends BaseLogEntry {
 export interface TranscriptionSuccessLogEntry extends BaseLogEntry {
   EventType: LogEventType.TranscriptionSuccess;
   /** Original filename */
-  Filename: string;
+  FileName: string;
   /** File size in bytes */
   FileSize: number;
   /** Type of transcription (e.g., 'whisper', 'batch', 'chunked') */
@@ -281,7 +340,7 @@ export interface TranscriptionSuccessLogEntry extends BaseLogEntry {
 export interface TranscriptionErrorLogEntry extends BaseLogEntry {
   EventType: LogEventType.TranscriptionError;
   /** Original filename */
-  Filename?: string;
+  FileName?: string;
   /** File size in bytes */
   FileSize?: number;
   /** Type of transcription attempted */
@@ -299,7 +358,7 @@ export interface TranscriptionErrorLogEntry extends BaseLogEntry {
 export interface TranscriptionQueuedLogEntry extends BaseLogEntry {
   EventType: LogEventType.TranscriptionQueued;
   /** Original filename */
-  Filename: string;
+  FileName: string;
   /** File size in bytes */
   FileSize: number;
   /** Job ID for tracking */
@@ -474,8 +533,35 @@ export interface FileRetrievalErrorLogEntry extends BaseLogEntry {
 /**
  * Union type of all log entry types.
  */
+/**
+ * One executed tool call inside the MCP / M365 tool loop. Logged per call
+ * (not per round) so usage can be broken down by tool and by connector.
+ */
+export interface ToolCallLogEntry extends BaseLogEntry {
+  EventType: LogEventType.ToolCall;
+  /** Tool name as exposed by the server (server-native, not model-mangled). */
+  ToolName: string;
+  /** Connector / catalog key, or the builtin server id. */
+  ToolServer: string;
+  /** Whether the call returned an error result or threw. */
+  Status: 'success' | 'error';
+  ErrorMessage?: string;
+}
+
+/**
+ * One agent-access guard decision. Mirrors the `[agent-access-audit]`
+ * console line as a queryable event.
+ */
+export interface AgentAccessLogEntry extends BaseLogEntry {
+  EventType: LogEventType.AgentAccess;
+  AccessDecision: 'allow' | 'deny' | 'unavailable';
+  AccessReason: string;
+}
+
 export type LogEntry =
   | ChatCompletionLogEntry
+  | ToolCallLogEntry
+  | AgentAccessLogEntry
   | TokenUsageLogEntry
   | ErrorLogEntry
   | FileSuccessLogEntry
