@@ -9,6 +9,9 @@
  * identity by default (TRANSLATE_AUTH=default switches to the app's
  * DefaultAzureCredential chain, which honours AZURE_CLIENT_SECRET — beware a
  * stale secret there fails hard instead of falling through to the CLI).
+ * The spawned `az` inherits AZURE_CONFIG_DIR, so per-profile CLI wrappers
+ * work out of the box, e.g.:
+ *     eval "$(azp ctx env <profile>)" && node scripts/translateMissing.ts
  *
  * Every run also VALIDATES existing translations against the English source
  * (balanced ICU braces, identical placeholder arguments) and retranslates any
@@ -378,7 +381,7 @@ export function validateTranslation(
   }
   const sourceKeywords = [...icuKeywords(sourceText)].sort();
   const translatedKeywords = [...icuKeywords(translatedText)].sort();
-  if (sourceKeywords.join(' ') !== translatedKeywords.join(' ')) {
+  if (sourceKeywords.join('\0') !== translatedKeywords.join('\0')) {
     return 'plural/select structure changed';
   }
   return null;
@@ -684,6 +687,18 @@ ${JSON.stringify(textsList, null, 2)}`;
       }
       return result;
     } catch (error) {
+      // Auth failures are not transient: retrying (and the later validation
+      // rounds) would repeat the same failure for every batch. Throw so the
+      // whole locale fails fast with the real cause.
+      const status = (error as { status?: number }).status;
+      const message = error instanceof Error ? error.message : String(error);
+      if (
+        status === 401 ||
+        status === 403 ||
+        /az login|credential/i.test(message)
+      ) {
+        throw error;
+      }
       lastError = error;
       if (attempt < API_RETRIES) {
         const delaySeconds = Math.min(2 ** attempt, 30) * (0.5 + Math.random());
