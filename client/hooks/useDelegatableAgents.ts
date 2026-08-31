@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
+import { useAdminDiscoveredAgents } from '@/client/hooks/settings/useAdminDiscoveredAgents';
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 
 import type {
@@ -13,15 +14,12 @@ import type {
   AdminOrgAgentsResponse,
   AdminPromptAgentsResponse,
   AdminRulesResponse,
-  AgentsApiResponse,
   MergedAgentRow,
 } from '@/components/AgentAccess/types';
 import {
   CLIENT_PROMPT_AGENT_SOURCE,
   clientCanonicalAgentKey,
 } from '@/components/AgentAccess/types';
-
-import { useSettingsStore } from '@/client/stores/settingsStore';
 
 /** One delegatable thing: a canonical key with a human name. */
 export interface DelegationOption {
@@ -90,24 +88,7 @@ export function useDelegatableAgents({
 }: UseDelegatableAgentsOptions) {
   const listQuery = { retry: 1, refetchOnWindowFocus: false } as const;
   const needAgentQueries = rows === undefined;
-  const customAgentSources = useSettingsStore((s) => s.customAgentSources);
-  const sourcePaths = customAgentSources.map((s) => s.resourcePath);
-
-  const agentsQuery = useQuery<AgentsApiResponse>({
-    queryKey: ['agent-access-admin-agents', ...sourcePaths],
-    queryFn: async () => {
-      const params = new URLSearchParams();
-      if (sourcePaths.length > 0) params.set('sources', sourcePaths.join(','));
-      const url = `/api/agents${params.toString() ? '?' + params.toString() : ''}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch agents: ${response.status}`);
-      }
-      return response.json();
-    },
-    enabled: needAgentQueries,
-    ...listQuery,
-  });
+  const agentsQuery = useAdminDiscoveredAgents({ enabled: needAgentQueries });
   const rulesQuery = useQuery<AdminRulesResponse>({
     queryKey: ['agent-access-rules'],
     queryFn: () => fetchAdminList('/api/agent-access/rules'),

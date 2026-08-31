@@ -990,7 +990,12 @@
     "agentsEntry": "Wakilai",
     "agentsTitle": "Bincika wakilai kuma fara hira da ɗaya",
     "agentsLoading": "Ana duba waɗanne wakilai za ka iya amfani da su…",
-    "agentsLoadError": "An kasa ɗora wakilanka — buɗe don ƙoƙarin sake sawa"
+    "agentsLoadError": "An kasa ɗora wakilanka — buɗe don ƙoƙarin sake sawa",
+    "newChatInFolder": "Sabon hira a wannan babban fayil",
+    "resizeHandle": "Gyara girman gefen menu",
+    "resizeHint": "Ja don gyara girman gefen menu; danna sau biyu don dawo da asali",
+    "openFolder": "Bude babban fayil {name}",
+    "openFolderMenu": "Bude babban fayil"
   },
   "errors": {
     "somethingWentWrong": "Wani abu ya samu matsala",
@@ -5126,5 +5131,29 @@
       "officeId": "ofishi {value}",
       "groups": "{count, plural, one {# rukuni} other {# rukuni}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Sabon hira",
+    "rename": "Canza sunan babban fayil",
+    "renameLabel": "Sunan babban fayil",
+    "deleteFolder": "Goge babban fayil",
+    "close": "Rufe babban fayil",
+    "selectAll": "Zaɓi duka",
+    "selectedCount": "An zaɓi {count}",
+    "selectChat": "Zaɓi {name}",
+    "moveTo": "Matsa zuwa…",
+    "deleteSelected": "Goge",
+    "confirmDeleteChats": "A goge hira {count} da aka zaɓa? Ba za a iya dawo da su ba.",
+    "emptyTitle": "Babu hira a wannan babban fayil tukuna",
+    "emptyHint": "Fara sabon hira a nan, ko ja hirar zuwa wannan babban fayil a gefen menu.",
+    "messageCount": "Saƙo {count}"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Nema babban fayil…",
+    "ariaLabel": "Zaɓi babban fayil",
+    "noResults": "Babu babban fayil da ya dace",
+    "createFolder": "Sabon babban fayil “{name}”"
+  },
+  "This conversation is already empty": "Wannan tattaunawar tuni babu komai cikinta"
 }

@@ -430,6 +430,7 @@ export class StandardChatHandler extends BasePipelineStage {
             reasoningEffort: context.reasoningEffort,
             verbosity: context.verbosity,
             botId: ragConfig?.botId,
+            telemetry: context.telemetry,
             hostedRegion: context.hostedRegion,
             transcript,
             citations,
@@ -558,6 +559,7 @@ export class StandardChatHandler extends BasePipelineStage {
             hasRAG: !!ragConfig,
             botId: context.botId,
             reasoningEffort: context.reasoningEffort,
+            telemetry: context.telemetry,
           });
 
           span.setAttribute('chat.final_message_count', messagesToSend.length);
@@ -588,6 +590,7 @@ export class StandardChatHandler extends BasePipelineStage {
             operation: 'chat',
             model: context.modelId,
             botId: context.botId,
+            telemetry: context.telemetry,
           });
 
           // Check if RAG was being used (need to redeclare since it's outside span scope)

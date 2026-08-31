@@ -990,7 +990,12 @@
     "agentsEntry": "Ajan",
     "agentsTitle": "Browse ajan yo epi kòmanse chat ak youn",
     "agentsLoading": "N ap tcheke ki ajan ou ka itilize…",
-    "agentsLoadError": "Nou pa t ka chaje ajan ou yo — klike pou eseye ankò"
+    "agentsLoadError": "Nou pa t ka chaje ajan ou yo — klike pou eseye ankò",
+    "newChatInFolder": "Nouvo konvèsasyon nan katab sa a",
+    "resizeHandle": "Chanje gwosè bar an bò",
+    "resizeHint": "Trennen pou chanje gwosè bar an bò; double-klike pou retabli",
+    "openFolder": "Louvri katab {name}",
+    "openFolderMenu": "Louvri katab"
   },
   "errors": {
     "somethingWentWrong": "Yon bagay mal pase",
@@ -5126,5 +5131,29 @@
       "officeId": "biwo {value}",
       "groups": "{count, plural, one {# gwoup} other {# gwoup}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Nouvo konvèsasyon",
+    "rename": "Chanje non katab",
+    "renameLabel": "Non katab",
+    "deleteFolder": "Efase katab",
+    "close": "Fèmen katab",
+    "selectAll": "Chwazi tout",
+    "selectedCount": "{count} chwazi",
+    "selectChat": "Chwazi {name}",
+    "moveTo": "Deplase nan…",
+    "deleteSelected": "Efase",
+    "confirmDeleteChats": "Efase {count} konvèsasyon chwazi yo? Sa p ap ka retabli.",
+    "emptyTitle": "Pa gen konvèsasyon nan katab sa a ankò",
+    "emptyHint": "Kòmanse yon nouvo konvèsasyon isit la, oswa trennen konvèsasyon sou katab sa a nan bar an bò.",
+    "messageCount": "{count} mesaj"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Chèche katab…",
+    "ariaLabel": "Chwazi yon katab",
+    "noResults": "Pa gen katab ki koresponn",
+    "createFolder": "Nouvo katab “{name}”"
+  },
+  "This conversation is already empty": "Konvèsasyon sa a deja vid"
 }

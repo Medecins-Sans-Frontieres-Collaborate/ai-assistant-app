@@ -856,7 +856,12 @@
     "agentsEntry": "এজেন্টসমূহ",
     "agentsTitle": "এজেন্ট ব্রাউজ করুন এবং কারও সাথে চ্যাট শুরু করুন",
     "agentsLoading": "আপনি কোন এজেন্ট ব্যবহার করতে পারেন তা যাচাই করা হচ্ছে…",
-    "agentsLoadError": "আপনার এজেন্ট লোড করা যায়নি — পুনরায় চেষ্টা করতে খুলুন"
+    "agentsLoadError": "আপনার এজেন্ট লোড করা যায়নি — পুনরায় চেষ্টা করতে খুলুন",
+    "newChatInFolder": "এই ফোল্ডারে নতুন চ্যাট",
+    "resizeHandle": "সাইডবারের আকার পরিবর্তন করুন",
+    "resizeHint": "সাইডবারের আকার পরিবর্তনের জন্য ড্র্যাগ করুন; পুনঃস্থাপনের জন্য ডাবল-ক্লিক করুন",
+    "openFolder": "ফোল্ডার {name} খুলুন",
+    "openFolderMenu": "ফোল্ডার খুলুন"
   },
   "prompts": {
     "buildReusablePrompts": "AI সহায়তায় পুনর্ব্যবহারযোগ্য প্রম্পট তৈরি করুন",
@@ -5142,5 +5147,29 @@
       "officeId": "অফিস {value}",
       "groups": "{count, plural, one {#টি গ্রুপ} other {#টি গ্রুপ}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "নতুন চ্যাট",
+    "rename": "ফোল্ডারের নাম পরিবর্তন করুন",
+    "renameLabel": "ফোল্ডারের নাম",
+    "deleteFolder": "ফোল্ডার মুছুন",
+    "close": "ফোল্ডার বন্ধ করুন",
+    "selectAll": "সব নির্বাচন করুন",
+    "selectedCount": "{count}টি নির্বাচিত",
+    "selectChat": "{name} নির্বাচন করুন",
+    "moveTo": "এতে সরান…",
+    "deleteSelected": "মুছে ফেলুন",
+    "confirmDeleteChats": "নির্বাচিত {count}টি চ্যাট মুছবেন? এটি আর ফিরে আসবে না।",
+    "emptyTitle": "এখনও এই ফোল্ডারে কোনো চ্যাট নেই",
+    "emptyHint": "এখানে নতুন চ্যাট শুরু করুন, অথবা সাইডবার থেকে চ্যাটগুলো এই ফোল্ডারে ড্র্যাগ করুন।",
+    "messageCount": "{count}টি বার্তা"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "ফোল্ডারে খুঁজুন…",
+    "ariaLabel": "একটি ফোল্ডার বাছুন",
+    "noResults": "কোনো ফোল্ডার মেলেনি",
+    "createFolder": "নতুন ফোল্ডার “{name}”"
+  },
+  "This conversation is already empty": "এই আলাপটি ইতিমধ্যেই খালি"
 }

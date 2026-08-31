@@ -179,8 +179,10 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     setValidationResult(null);
 
     try {
+      // The Foundry half of discovery is the one that honours `sources`
+      // (`/api/agents` is the fast app-agent half and ignores it).
       const params = new URLSearchParams({ sources: path });
-      const response = await fetch(`/api/agents?${params.toString()}`);
+      const response = await fetch(`/api/agents/foundry?${params.toString()}`);
 
       if (!response.ok) {
         setError(t('connectionFailed'));
@@ -188,12 +190,16 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
       }
 
       const data = await response.json();
-      // /api/agents merges every discovery bucket (regional/office paths and
-      // admin prompt agents) into one array; only entries tagged with the
-      // validated path belong to THIS connection. In particular, prompt
-      // agents (type 'prompt', source 'prompt-agent') are app-defined
-      // personas, not connectable Foundry resources — without this filter
-      // they'd inflate agentCount and leak into the step-2 checkbox list.
+      // `unavailable` means nothing could be discovered for this user (OBO
+      // failed, …): not a verified connection, so don't report "0 agents".
+      if (data.unavailable === true) {
+        setError(t('connectionFailed'));
+        return null;
+      }
+      // The route merges every discovery bucket (regional/office paths too)
+      // into one array; only entries tagged with the validated path belong
+      // to THIS connection — without this filter they'd inflate agentCount
+      // and leak into the step-2 checkbox list.
       const agents: DiscoveredAgent[] = (
         (data.agents ?? []) as DiscoveredAgent[]
       ).filter((a) => a.source === path);

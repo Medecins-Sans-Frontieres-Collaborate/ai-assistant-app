@@ -910,7 +910,12 @@
     "agentsEntry": "エージェント",
     "agentsTitle": "エージェントを閲覧してチャットを開始する",
     "agentsLoading": "利用可能なエージェントを確認しています…",
-    "agentsLoadError": "エージェントを読み込めませんでした — クリックして再試行してください"
+    "agentsLoadError": "エージェントを読み込めませんでした — クリックして再試行してください",
+    "newChatInFolder": "このフォルダーで新規チャット",
+    "resizeHandle": "サイドバーのサイズ変更",
+    "resizeHint": "ドラッグでサイドバーのサイズ変更、ダブルクリックでリセット",
+    "openFolder": "フォルダー「{name}」を開く",
+    "openFolderMenu": "フォルダーを開く"
   },
   "prompts": {
     "buildReusablePrompts": "AIの支援で再利用可能なプロンプトを構築",
@@ -5142,5 +5147,29 @@
       "officeId": "オフィス {value}",
       "groups": "{count, plural, one {# グループ} other {# グループ}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "（{count}）",
+    "newChat": "新規チャット",
+    "rename": "フォルダー名を変更",
+    "renameLabel": "フォルダー名",
+    "deleteFolder": "フォルダーを削除",
+    "close": "フォルダーを閉じる",
+    "selectAll": "すべて選択",
+    "selectedCount": "{count}件選択中",
+    "selectChat": "{name}を選択",
+    "moveTo": "移動先…",
+    "deleteSelected": "削除",
+    "confirmDeleteChats": "{count}件の選択したチャットを削除しますか？この操作は元に戻せません。",
+    "emptyTitle": "このフォルダーにはまだチャットがありません",
+    "emptyHint": "ここで新規チャットをはじめるか、サイドバーからチャットをこのフォルダーへドラッグしてください。",
+    "messageCount": "{count}件のメッセージ"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "フォルダーを検索…",
+    "ariaLabel": "フォルダーを選択",
+    "noResults": "一致するフォルダーがありません",
+    "createFolder": "新規フォルダー「{name}」"
+  },
+  "This conversation is already empty": "この会話はすでに空です"
 }

@@ -827,7 +827,12 @@
     "agentsEntry": "Агенти",
     "agentsTitle": "Переглядайте агентів і починайте чат з одним із них",
     "agentsLoading": "Перевіряємо, якими агентами ви можете скористатися…",
-    "agentsLoadError": "Не вдалося завантажити ваших агентів — відкрийте, щоб повторити спробу"
+    "agentsLoadError": "Не вдалося завантажити ваших агентів — відкрийте, щоб повторити спробу",
+    "newChatInFolder": "Новий чат у цій папці",
+    "resizeHandle": "Змінити розмір бокової панелі",
+    "resizeHint": "Перетягніть, щоб змінити розмір бокової панелі; двічі клацніть, щоб скинути",
+    "openFolder": "Відкрити папку {name}",
+    "openFolderMenu": "Відкрити папку"
   },
   "prompts": {
     "buildReusablePrompts": "Створюйте багаторазові підказки з допомогою ШІ",
@@ -5142,5 +5147,29 @@
       "officeId": "офіс {value}",
       "groups": "{count, plural, one {# група} few {# групи} many {# груп} other {# групи}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Новий чат",
+    "rename": "Перейменувати папку",
+    "renameLabel": "Назва папки",
+    "deleteFolder": "Видалити папку",
+    "close": "Закрити папку",
+    "selectAll": "Вибрати все",
+    "selectedCount": "Вибрано: {count}",
+    "selectChat": "Вибрати {name}",
+    "moveTo": "Перемістити до…",
+    "deleteSelected": "Видалити",
+    "confirmDeleteChats": "Видалити {count} вибраних чат(ів)? Це неможливо скасувати.",
+    "emptyTitle": "У цій папці поки немає чатів",
+    "emptyHint": "Створіть тут новий чат або перетягніть чати у цю папку на боковій панелі.",
+    "messageCount": "{count} повідомлень"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Пошук папок…",
+    "ariaLabel": "Виберіть папку",
+    "noResults": "Немає відповідних папок",
+    "createFolder": "Нова папка «{name}»"
+  },
+  "This conversation is already empty": "Ця розмова вже порожня"
 }

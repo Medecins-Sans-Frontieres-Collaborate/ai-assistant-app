@@ -98,6 +98,13 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
     updateTone(toneId, { folderId });
   };
 
+  // "New folder …" row in the move picker: create + move in one step.
+  const handleCreateFolderAndMove = (toneId: string, name: string) => {
+    const folder: FolderInterface = { id: uuidv4(), name, type: 'tone' };
+    addFolder(folder);
+    updateTone(toneId, { folderId: folder.id });
+  };
+
   const handleDeleteTone = (toneId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (window.confirm(t('Are you sure you want to delete this tone?'))) {
@@ -446,6 +453,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
                             }}
                             onDelete={(e) => handleDeleteTone(tone.id, e)}
                             onMoveToFolder={handleMoveToFolder}
+                            onCreateFolderAndMove={handleCreateFolderAndMove}
                             onExport={() => handleExportSingle(tone)}
                           />
                         </div>
@@ -496,6 +504,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
                       }}
                       onDelete={(e) => handleDeleteTone(tone.id, e)}
                       onMoveToFolder={handleMoveToFolder}
+                      onCreateFolderAndMove={handleCreateFolderAndMove}
                       onExport={() => handleExportSingle(tone)}
                     />
                   </div>

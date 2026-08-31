@@ -885,7 +885,12 @@
     "agentsEntry": "Agents",
     "agentsTitle": "Explora els agents i comença una conversa amb un",
     "agentsLoading": "S'està comprovant quins agents pots utilitzar…",
-    "agentsLoadError": "No s'han pogut carregar els teus agents — obre per tornar-ho a intentar"
+    "agentsLoadError": "No s'han pogut carregar els teus agents — obre per tornar-ho a intentar",
+    "newChatInFolder": "Nova conversa en aquesta carpeta",
+    "resizeHandle": "Canvia la mida de la barra lateral",
+    "resizeHint": "Arrossega per canviar la mida de la barra lateral; fes doble clic per restablir",
+    "openFolder": "Obre la carpeta {name}",
+    "openFolderMenu": "Obre la carpeta"
   },
   "prompts": {
     "buildReusablePrompts": "Crear indicacions reutilitzables amb assistència d'IA",
@@ -5142,5 +5147,29 @@
       "officeId": "oficina {value}",
       "groups": "{count, plural, one {# grup} other {# grups}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Nova conversa",
+    "rename": "Canvia el nom de la carpeta",
+    "renameLabel": "Nom de la carpeta",
+    "deleteFolder": "Elimina la carpeta",
+    "close": "Tanca la carpeta",
+    "selectAll": "Selecciona-ho tot",
+    "selectedCount": "{count} seleccionats",
+    "selectChat": "Selecciona {name}",
+    "moveTo": "Mou a…",
+    "deleteSelected": "Elimina",
+    "confirmDeleteChats": "Voleu suprimir els {count} xats seleccionats? Aquesta acció no es pot desfer.",
+    "emptyTitle": "Encara no hi ha converses en aquesta carpeta",
+    "emptyHint": "Comença una conversa aquí o arrossega converses a aquesta carpeta a la barra lateral.",
+    "messageCount": "{count} missatge(s)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Cerca carpetes…",
+    "ariaLabel": "Tria una carpeta",
+    "noResults": "No hi ha cap carpeta coincident",
+    "createFolder": "Nova carpeta “{name}”"
+  },
+  "This conversation is already empty": "Aquesta conversa ja és buida"
 }

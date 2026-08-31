@@ -16,6 +16,7 @@
  * embedded with the agent's embedding deployment inside searchM365Agent.
  */
 import { searchM365Agent } from '@/lib/services/m365/agentIndexService';
+import { getAzureMonitorLogger } from '@/lib/services/observability';
 
 import { buildConversationContextSections } from '@/lib/utils/app/systemPrompt';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -174,6 +175,18 @@ export class M365AgentEnricher extends BasePipelineStage {
         searchDocs.map((doc, index) => [String(index + 1), doc.chunk]),
       );
 
+      // Same visibility RAGEnricher gives static agents: one Search row per
+      // retrieval (query omitted for privacy).
+      void getAzureMonitorLogger().logSearch({
+        user: context.user,
+        query: '',
+        resultCount: searchDocs.length,
+        searchType: 'm365-agent',
+        indexName: agent.id,
+        botId: context.botId,
+        telemetry: context.telemetry,
+      });
+
       return {
         ...context,
         enrichedMessages,
@@ -203,6 +216,14 @@ export class M365AgentEnricher extends BasePipelineStage {
       console.error(
         `[M365AgentEnricher] retrieval failed for ${sanitizeForLog(agent.id)}: ${sanitizeForLog(error)}`,
       );
+      void getAzureMonitorLogger().logSearchError({
+        user: context.user,
+        indexName: agent.id,
+        errorCode: 'M365_AGENT_RETRIEVAL_FAILED',
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        botId: context.botId,
+        telemetry: context.telemetry,
+      });
       return context;
     }
   }

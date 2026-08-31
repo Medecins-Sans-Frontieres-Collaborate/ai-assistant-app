@@ -990,7 +990,12 @@
     "agentsEntry": "ወኪላት",
     "agentsTitle": "ወኪላት ይቐይሩን ከኣንዳንዱ ምዛር ቴክስት ጀምሩ",
     "agentsLoading": "እዚ ትኽክልኩም ዘምጽኡን ዝኽእሉ ገለ ኣጄንት እዚ እዚ እተረዳኡ…",
-    "agentsLoadError": "ኣጄንታትኩም ምምጻዕ ኣይተኻአኑን — ምለላዕ ክትፈትኑ ክኽእሉ ኢኹም"
+    "agentsLoadError": "ኣጄንታትኩም ምምጻዕ ኣይተኻአኑን — ምለላዕ ክትፈትኑ ክኽእሉ ኢኹም",
+    "newChatInFolder": "ሓዲሽ ቻት ኣብዚ ፎልደር",
+    "resizeHandle": "ጎና ይቕረብ/ይርዝሕ",
+    "resizeHint": "ጎና ምቕያዝ ምግባር፣ ሓዳሽ ዝፈጸመሉ ክሳዕ ኣብ ልዕሊ ውድድ።",
+    "openFolder": "ፎልደር ክኩል {name}",
+    "openFolderMenu": "ፎልደር ክኩል"
   },
   "errors": {
     "somethingWentWrong": "ገለ ጸገም ተፈጢሩ",
@@ -5126,5 +5131,29 @@
       "officeId": "ቢሮ {value}",
       "groups": "{count, plural, one {# ቡድን} other {# ቡድናት}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "ሓዲሽ ቻት",
+    "rename": "ፎልደር ስም ምቅያር",
+    "renameLabel": "ሽም ፎልደር",
+    "deleteFolder": "ፎልደር ምድምሳስ",
+    "close": "ፎልደር መዝጊዕ",
+    "selectAll": "ኩሉ ምረጽ",
+    "selectedCount": "{count} ተመራጺ",
+    "selectChat": "{name} ምረጽ",
+    "moveTo": "ናብ… ኣንቀሳቕስ",
+    "deleteSelected": "ኣጥፋ",
+    "confirmDeleteChats": "{count} ተመራጺ ቻት(ን) ኣጥፋ? ኣይክእልን ምትካል።",
+    "emptyTitle": "እዚ ፎልደር ቻት ኣይተጨነቐን",
+    "emptyHint": "ኣብዚ ሓዲሽ ቻት ጀምር፣ ወይ ቻታት ናብዚ ፎልደር ኣብ ጎና ጨምር።",
+    "messageCount": "{count} መልእኽቲ"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "ፎልደራት ድለን…",
+    "ariaLabel": "ፎልደር ምረጽ",
+    "noResults": "ፎልደራት ኣይተሳለጡን",
+    "createFolder": "ሓዲሽ ፎልደር “{name}”"
+  },
+  "This conversation is already empty": "ዚቕጽል ውይን ባዶ ኣሎ"
 }

@@ -910,7 +910,12 @@
     "agentsEntry": "Wakala",
     "agentsTitle": "Vinjari wakala na anza mazungumzo na mmoja",
     "agentsLoading": "Inaangalia ni mawakala gani unaweza kutumia…",
-    "agentsLoadError": "Mawakala wako hawakuweza kupakiwa — fungua upya ujaribu tena"
+    "agentsLoadError": "Mawakala wako hawakuweza kupakiwa — fungua upya ujaribu tena",
+    "newChatInFolder": "Soga mpya kwenye folda hii",
+    "resizeHandle": "Badilisha ukubwa wa upande wa kando",
+    "resizeHint": "Buruta kubadilisha ukubwa wa upande wa kando; bofya mara mbili kurejesha",
+    "openFolder": "Fungua folda {name}",
+    "openFolderMenu": "Fungua folda"
   },
   "prompts": {
     "buildReusablePrompts": "Jenga vidokezi vinavyoweza kutumika tena kwa msaada wa AI",
@@ -5142,5 +5147,29 @@
       "officeId": "ofisi {value}",
       "groups": "{count, plural, one {# kundi} other {# makundi}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Soga mpya",
+    "rename": "Badilisha jina la folda",
+    "renameLabel": "Jina la folda",
+    "deleteFolder": "Futa folda",
+    "close": "Funga folda",
+    "selectAll": "Chagua zote",
+    "selectedCount": "{count} imechaguliwa",
+    "selectChat": "Chagua {name}",
+    "moveTo": "Hamisha hadi…",
+    "deleteSelected": "Futa",
+    "confirmDeleteChats": "Futa soga {count} ulizochagua? Hili haliwezi kurekebishwa.",
+    "emptyTitle": "Hakuna soga kwenye folda hii bado",
+    "emptyHint": "Anza soga mpya hapa, au buruta soga kwenye folda hii katika upande wa kando.",
+    "messageCount": "Ujumbe {count}"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Tafuta folda…",
+    "ariaLabel": "Chagua folda",
+    "noResults": "Hakuna folda inayolingana",
+    "createFolder": "Folda mpya “{name}”"
+  },
+  "This conversation is already empty": "Mazungumzo haya tayari ni tupu"
 }

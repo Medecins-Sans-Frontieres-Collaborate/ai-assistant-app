@@ -910,7 +910,12 @@
     "agentsEntry": "Agenti",
     "agentsTitle": "Procházejte agenty a začněte s některým chatovat",
     "agentsLoading": "Kontroluje se, které agenty můžete použít…",
-    "agentsLoadError": "Vaše agenty se nepodařilo načíst — otevřete pro opakování"
+    "agentsLoadError": "Vaše agenty se nepodařilo načíst — otevřete pro opakování",
+    "newChatInFolder": "Nový chat v této složce",
+    "resizeHandle": "Změnit velikost postranního panelu",
+    "resizeHint": "Tažením změníte velikost postranního panelu; dvojklikem obnovíte výchozí",
+    "openFolder": "Otevřít složku {name}",
+    "openFolderMenu": "Otevřít složku"
   },
   "prompts": {
     "buildReusablePrompts": "Vytvářejte opakovaně použitelné výzvy s pomocí AI",
@@ -5142,5 +5147,29 @@
       "officeId": "pobočka {value}",
       "groups": "{count, plural, one {# skupina} other {# skupin}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Nový chat",
+    "rename": "Přejmenovat složku",
+    "renameLabel": "Název složky",
+    "deleteFolder": "Smazat složku",
+    "close": "Zavřít složku",
+    "selectAll": "Vybrat vše",
+    "selectedCount": "Vybráno: {count}",
+    "selectChat": "Vybrat {name}",
+    "moveTo": "Přesunout do…",
+    "deleteSelected": "Smazat",
+    "confirmDeleteChats": "Smazat {count} vybraných chatů? Tuto akci nelze vrátit zpět.",
+    "emptyTitle": "V této složce zatím nejsou žádné chaty",
+    "emptyHint": "Začněte zde nový chat nebo přetáhněte chaty do této složky v postranním panelu.",
+    "messageCount": "{count} zpráv"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Hledat složky…",
+    "ariaLabel": "Vyberte složku",
+    "noResults": "Nenalezeny žádné složky",
+    "createFolder": "Nová složka „{name}“"
+  },
+  "This conversation is already empty": "Tento rozhovor je už prázdný"
 }

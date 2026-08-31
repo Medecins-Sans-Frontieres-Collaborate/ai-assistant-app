@@ -990,7 +990,12 @@
     "agentsEntry": "Agents",
     "agentsTitle": "Περιηγηθείτε στους agents και ξεκινήστε συνομιλία με έναν",
     "agentsLoading": "Έλεγχος ποιοι πράκτορες είναι διαθέσιμοι…",
-    "agentsLoadError": "Αδυναμία φόρτωσης των πρακτόρων σας — ανοίξτε για επανάληψη"
+    "agentsLoadError": "Αδυναμία φόρτωσης των πρακτόρων σας — ανοίξτε για επανάληψη",
+    "newChatInFolder": "Νέα συνομιλία σε αυτόν τον φάκελο",
+    "resizeHandle": "Αλλαγή μεγέθους πλαϊνής στήλης",
+    "resizeHint": "Σύρετε για να αλλάξετε το μέγεθος της πλαϊνής στήλης· διπλό κλικ για επαναφορά",
+    "openFolder": "Άνοιγμα φακέλου {name}",
+    "openFolderMenu": "Άνοιγμα φακέλου"
   },
   "errors": {
     "somethingWentWrong": "Κάτι πήγε στραβά",
@@ -5126,5 +5131,29 @@
       "officeId": "γραφείο {value}",
       "groups": "{count, plural, one {# ομάδα} other {# ομάδες}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Νέα συνομιλία",
+    "rename": "Μετονομασία φακέλου",
+    "renameLabel": "Όνομα φακέλου",
+    "deleteFolder": "Διαγραφή φακέλου",
+    "close": "Κλείσιμο φακέλου",
+    "selectAll": "Επιλογή όλων",
+    "selectedCount": "{count} επιλεγμένα",
+    "selectChat": "Επιλογή {name}",
+    "moveTo": "Μετακίνηση σε…",
+    "deleteSelected": "Διαγραφή",
+    "confirmDeleteChats": "Διαγραφή {count} επιλεγμένων συνομιλιών; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
+    "emptyTitle": "Δεν υπάρχουν ακόμη συνομιλίες σε αυτόν τον φάκελο",
+    "emptyHint": "Ξεκινήστε μια νέα συνομιλία εδώ ή σύρετε συνομιλίες σε αυτόν τον φάκελο στην πλαϊνή στήλη.",
+    "messageCount": "{count} μήνυμα(τα)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Αναζήτηση φακέλων…",
+    "ariaLabel": "Επιλέξτε φάκελο",
+    "noResults": "Δεν βρέθηκαν φάκελοι",
+    "createFolder": "Νέος φάκελος «{name}»"
+  },
+  "This conversation is already empty": "Αυτή η συνομιλία είναι ήδη κενή"
 }

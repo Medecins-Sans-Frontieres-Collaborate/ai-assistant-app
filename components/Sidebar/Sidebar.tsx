@@ -10,6 +10,7 @@ import {
   IconEdit,
   IconFileText,
   IconFolder,
+  IconFolderOpen,
   IconFolderPlus,
   IconLogout,
   IconMessage,
@@ -32,6 +33,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useNewConversation } from '@/client/hooks/conversation/useNewConversation';
 import { useAgentBrowserAvailability } from '@/client/hooks/settings/useAvailableAgents';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useFolderManagement } from '@/client/hooks/ui/useFolderManagement';
@@ -55,7 +57,6 @@ import {
 import { usePlatformModifier } from '@/lib/utils/shared/platform';
 
 import { Conversation } from '@/types/chat';
-import { SearchMode } from '@/types/searchMode';
 import {
   CONVERSATION_WORKFLOW_TYPES,
   ConversationWorkflowType,
@@ -63,6 +64,7 @@ import {
 
 import { SearchModal } from './components/SearchModal';
 import { SidebarHeader } from './components/SidebarHeader';
+import { SidebarResizeHandle } from './components/SidebarResizeHandle';
 import { AgentBrowserModal } from '@/components/Agents/AgentBrowserModal';
 import ShareToOneDriveModal from '@/components/Chat/ShareToOneDriveModal';
 import { CustomizationsModal } from '@/components/QuickActions/CustomizationsModal';
@@ -79,7 +81,6 @@ import { VirtualConversationList } from './VirtualConversationList';
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
-import { getOrganizationAgentIdFromModelId } from '@/lib/organizationAgents';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -90,8 +91,16 @@ export const Sidebar = memo(function Sidebar() {
   const tWorkflows = useTranslations('workflows');
   // Fail-closed: conversation workflows are a brand-new surface; an LD
   // outage must degrade to hidden. See docs/LAUNCHDARKLY_FLAGS.md.
-  const { conversationWorkflows } = useFlags();
+  const { conversationWorkflows, folderView } = useFlags();
   const workflowsEnabled = conversationWorkflows === true;
+  // Fail-closed: the folder page is a brand-new main-panel surface; with LD
+  // unserved the folder rows behave exactly as before (collapse toggle only).
+  const folderViewEnabled = folderView === true;
+  // Folder open in the main panel (FolderView). Selecting any conversation
+  // closes it; the folder row and its menu are the entry points.
+  const openFolderId = useUIStore((s) => s.openFolderId);
+  const openFolder = useUIStore((s) => s.openFolder);
+  const closeFolder = useUIStore((s) => s.closeFolder);
   const modifierLabel = usePlatformModifier();
   const params = useParams();
   const locale = params?.locale || 'en';
@@ -119,14 +128,7 @@ export const Sidebar = memo(function Sidebar() {
     deleteFolder,
     isLoaded,
   } = useConversations();
-  const {
-    defaultModelId,
-    models,
-    temperature,
-    systemPrompt,
-    defaultSearchMode,
-    defaultInterpreterMode,
-  } = useSettings();
+  const { defaultModelId, models, temperature, systemPrompt } = useSettings();
 
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [shareConversationTarget, setShareConversationTarget] =
@@ -246,79 +248,15 @@ export const Sidebar = memo(function Sidebar() {
     [],
   );
 
-  const handleNewConversation = () => {
+  const startNewConversation = useNewConversation();
+
+  /**
+   * Start a new chat. `folderId` places it directly in a folder (from the
+   * folder's context menu); the default creates it at the top level.
+   */
+  const handleNewConversation = (folderId: string | null = null) => {
     setShowNewChatMenu(false); // Close menu when creating new conversation
-
-    // Check if the latest conversation is already empty (workflow
-    // conversations don't count — reusing one would open its workflow
-    // window instead of a fresh chat)
-    const latestConversation = conversations[0];
-    if (
-      latestConversation &&
-      latestConversation.messages.length === 0 &&
-      !latestConversation.conversationType
-    ) {
-      if (latestConversation.id !== selectedConversation?.id) {
-        // Switch to the existing empty conversation
-        selectConversation(latestConversation.id);
-      } else {
-        // Already on the empty conversation - show toast
-        toast(t('This conversation is already empty'));
-      }
-      return;
-    }
-
-    // Get the most recently selected model from the current conversation if available,
-    // otherwise fall back to the default model from settings
-    const currentModel = selectedConversation?.model;
-
-    // Use current conversation's model directly if it exists (preserves custom agents),
-    // otherwise look up the default model from settings
-    const modelToUse = currentModel
-      ? currentModel // Use current model directly (includes custom agents)
-      : models.find((m) => m.id === defaultModelId);
-
-    const defaultModel = modelToUse || models[0];
-    if (!defaultModel) return;
-
-    console.log(
-      `[Sidebar] Creating new conversation with model: ${defaultModel.id} (${defaultModel.name})`,
-      `\n  Source: ${currentModel ? 'current conversation' : 'default settings'}`,
-      `\n  defaultModelId: ${defaultModelId}`,
-    );
-
-    // Use the model as-is (preserves all properties including custom agent fields)
-    const modelWithDefaults = {
-      ...defaultModel,
-    };
-
-    // Determine appropriate search mode based on model capabilities
-    // If the model is an agent (has agentId), use the default search mode from settings
-    // Otherwise, ensure we don't use AGENT mode on non-agent models
-    let searchMode = defaultSearchMode;
-    if (searchMode === SearchMode.AGENT && !defaultModel.agentId) {
-      // Auto-fix: If default is AGENT but model doesn't support it, use INTELLIGENT instead
-      searchMode = SearchMode.INTELLIGENT;
-    }
-
-    // Get bot ID for organization agents (enables RAG)
-    const botId = getOrganizationAgentIdFromModelId(defaultModel.id);
-
-    const newConversation: Conversation = {
-      id: uuidv4(),
-      name: '',
-      messages: [],
-      model: modelWithDefaults,
-      prompt: systemPrompt || '',
-      temperature: temperature || 0.5,
-      folderId: null,
-      defaultSearchMode: searchMode, // Use model-appropriate search mode
-      defaultInterpreterMode, // Settings default (INTELLIGENT unless the user turned it off)
-      bot: botId || undefined, // Set bot ID for RAG-enabled organization agents
-    };
-
-    addConversation(newConversation);
-    selectConversation(newConversation.id);
+    startNewConversation(folderId);
   };
 
   const handleNewWorkflowConversation = (type: ConversationWorkflowType) => {
@@ -352,21 +290,26 @@ export const Sidebar = memo(function Sidebar() {
     addConversation(newConversation);
   };
 
-  // Trigger new-conversation from keyboard shortcut event.
+  // Trigger new-conversation from keyboard shortcut event. The listener is
+  // registered once; a ref keeps it pointed at the latest handler.
+  const newConversationRef = useRef(handleNewConversation);
   useEffect(() => {
-    const handler = () => handleNewConversation();
+    newConversationRef.current = handleNewConversation;
+  });
+  useEffect(() => {
+    const handler = () => newConversationRef.current();
     document.addEventListener('keyboard-new-conversation', handler);
     return () => {
       document.removeEventListener('keyboard-new-conversation', handler);
     };
-    // handleNewConversation depends on many values, but we want to always use the latest version
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // useCallback so the memoized ConversationItem doesn't see new function
   // references and re-render on every Sidebar update.
   const handleSelectConversation = useCallback(
     (conversationId: string) => {
+      // Leaving the folder page for a chat — even the already-selected one.
+      closeFolder();
       // Skip if already selected
       if (conversationId === selectedConversation?.id) return;
 
@@ -386,6 +329,7 @@ export const Sidebar = memo(function Sidebar() {
       selectConversation(conversationId);
     },
     [
+      closeFolder,
       selectedConversation?.id,
       isArtifactOpen,
       hasUnsavedChanges,
@@ -435,6 +379,17 @@ export const Sidebar = memo(function Sidebar() {
       updateConversation(conversationId, { folderId });
     },
     [updateConversation],
+  );
+
+  // "New folder …" row in the move picker: create the folder and move the
+  // conversation in one step (no rename-mode round trip).
+  const handleCreateFolderAndMove = useCallback(
+    (conversationId: string, name: string) => {
+      const folder = { id: uuidv4(), name, type: 'chat' as const };
+      addFolder(folder);
+      updateConversation(conversationId, { folderId: folder.id });
+    },
+    [addFolder, updateConversation],
   );
 
   const handleRenameConversation = useCallback(
@@ -586,7 +541,7 @@ export const Sidebar = memo(function Sidebar() {
         // 100%` against the initial containing block (the large viewport), so
         // the drawer ran under the mobile URL bar. w-[min(...)] keeps a
         // tappable strip of backdrop on 320px screens.
-        className={`fixed left-0 top-0 z-50 h-dvh flex flex-col border-r border-gray-300 bg-white dark:border-gray-700 dark:bg-surface-dark-base transition-all duration-300 ease-in-out w-[min(260px,85vw)] ${
+        className={`sidebar-width-target fixed left-0 top-0 z-50 h-dvh flex flex-col border-r border-gray-300 bg-white dark:border-gray-700 dark:bg-surface-dark-base transition-all duration-300 ease-in-out w-[min(var(--sidebar-width,260px),85vw)] ${
           showChatbar
             ? 'translate-x-0 overflow-hidden'
             : '-translate-x-full md:translate-x-0 md:w-14 overflow-visible'
@@ -599,6 +554,9 @@ export const Sidebar = memo(function Sidebar() {
           t={t}
         />
 
+        {/* Drag-to-resize edge (desktop, expanded only) */}
+        {showChatbar && <SidebarResizeHandle />}
+
         {/* Action buttons */}
         <div
           className={`border-b transition-all duration-300 ${showChatbar ? 'py-2 px-3 space-y-1 border-gray-300 dark:border-gray-700 overflow-hidden' : 'py-3 px-0 space-y-2 border-transparent overflow-visible'}`}
@@ -610,7 +568,7 @@ export const Sidebar = memo(function Sidebar() {
             >
               <button
                 className={`flex items-center ${showChatbar ? 'gap-2 flex-1' : ''}`}
-                onClick={handleNewConversation}
+                onClick={() => handleNewConversation()}
                 title={t('New chat')}
                 aria-label={t('New chat')}
               >
@@ -876,7 +834,9 @@ export const Sidebar = memo(function Sidebar() {
                       className={`group flex items-center gap-2 rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-800 ${
                         folderManager.dragOverFolderId === folder.id
                           ? 'bg-blue-100 dark:bg-blue-900/30 ring-2 ring-blue-400'
-                          : ''
+                          : openFolderId === folder.id
+                            ? 'bg-gray-200 dark:bg-gray-700'
+                            : ''
                       }`}
                     >
                       <button
@@ -930,8 +890,26 @@ export const Sidebar = memo(function Sidebar() {
                           autoFocus
                           className="flex-1 rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 focus:border-gray-500 focus:outline-none dark:border-gray-600 dark:bg-surface-dark dark:text-gray-100"
                         />
+                      ) : folderViewEnabled ? (
+                        <button
+                          type="button"
+                          className="min-w-0 flex-1 truncate text-left text-sm font-medium text-gray-900 dark:text-gray-100"
+                          title={folder.name}
+                          aria-label={t('sidebar.openFolder', {
+                            name: folder.name,
+                          })}
+                          aria-current={
+                            openFolderId === folder.id ? 'page' : undefined
+                          }
+                          onClick={() => openFolder(folder.id)}
+                        >
+                          {folder.name} ({folderConversations.length})
+                        </button>
                       ) : (
-                        <span className="flex-1 truncate text-sm font-medium text-gray-900 dark:text-gray-100">
+                        <span
+                          className="flex-1 truncate text-sm font-medium text-gray-900 dark:text-gray-100"
+                          title={folder.name}
+                        >
                           {folder.name} ({folderConversations.length})
                         </span>
                       )}
@@ -981,6 +959,47 @@ export const Sidebar = memo(function Sidebar() {
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <div className="p-1">
+                                  {folderViewEnabled && (
+                                    <button
+                                      className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setShowFolderMenuId(null);
+                                        openFolder(folder.id);
+                                      }}
+                                    >
+                                      <IconFolderOpen
+                                        size={14}
+                                        className="text-gray-600 dark:text-gray-400"
+                                      />
+                                      {t('sidebar.openFolderMenu')}
+                                    </button>
+                                  )}
+
+                                  {/* New chat directly inside this folder */}
+                                  <button
+                                    className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setShowFolderMenuId(null);
+                                      // Make sure the new chat is visible
+                                      if (
+                                        folderManager.collapsedFolders.has(
+                                          folder.id,
+                                        )
+                                      ) {
+                                        folderManager.toggleFolder(folder.id);
+                                      }
+                                      handleNewConversation(folder.id);
+                                    }}
+                                  >
+                                    <IconPlus
+                                      size={14}
+                                      className="text-gray-600 dark:text-gray-400"
+                                    />
+                                    {t('sidebar.newChatInFolder')}
+                                  </button>
+
                                   {/* Rename option */}
                                   <button
                                     className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
@@ -1057,6 +1076,7 @@ export const Sidebar = memo(function Sidebar() {
                           handleSelectConversation={handleSelectConversation}
                           handleDeleteConversation={handleDeleteConversation}
                           handleMoveToFolder={handleMoveToFolder}
+                          handleCreateFolderAndMove={handleCreateFolderAndMove}
                           handleRenameConversation={handleRenameConversation}
                           handleExportConversation={handleExportConversation}
                           handleShareConversation={handleShareConversation}
@@ -1089,6 +1109,7 @@ export const Sidebar = memo(function Sidebar() {
                     handleSelectConversation={handleSelectConversation}
                     handleDeleteConversation={handleDeleteConversation}
                     handleMoveToFolder={handleMoveToFolder}
+                    handleCreateFolderAndMove={handleCreateFolderAndMove}
                     handleRenameConversation={handleRenameConversation}
                     handleExportConversation={handleExportConversation}
                     handleShareConversation={handleShareConversation}
@@ -1116,7 +1137,10 @@ export const Sidebar = memo(function Sidebar() {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           filteredConversations={filteredConversations}
-          selectConversation={selectConversation}
+          selectConversation={(id) => {
+            closeFolder();
+            selectConversation(id);
+          }}
           t={t}
         />
       </div>

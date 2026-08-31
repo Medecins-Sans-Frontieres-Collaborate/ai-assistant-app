@@ -910,7 +910,12 @@
     "agentsEntry": "에이전트",
     "agentsTitle": "에이전트를 찾아보고 채팅을 시작하세요",
     "agentsLoading": "사용 가능한 에이전트를 확인하는 중…",
-    "agentsLoadError": "에이전트를 불러올 수 없습니다 — 다시 시도하려면 열어주세요"
+    "agentsLoadError": "에이전트를 불러올 수 없습니다 — 다시 시도하려면 열어주세요",
+    "newChatInFolder": "이 폴더에서 새 채팅",
+    "resizeHandle": "사이드바 크기 조절",
+    "resizeHint": "드래그하여 사이드바 크기 조절, 더블클릭으로 초기화",
+    "openFolder": "폴더 열기 {name}",
+    "openFolderMenu": "폴더 열기"
   },
   "prompts": {
     "buildReusablePrompts": "AI 지원으로 재사용 가능한 프롬프트 구축",
@@ -5142,5 +5147,29 @@
       "officeId": "사무실 {value}",
       "groups": "{count, plural, one {#개 그룹} other {#개 그룹}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "새 채팅",
+    "rename": "폴더 이름 변경",
+    "renameLabel": "폴더 이름",
+    "deleteFolder": "폴더 삭제",
+    "close": "폴더 닫기",
+    "selectAll": "모두 선택",
+    "selectedCount": "{count}개 선택됨",
+    "selectChat": "{name} 선택",
+    "moveTo": "다른 위치로 이동…",
+    "deleteSelected": "삭제",
+    "confirmDeleteChats": "선택한 채팅 {count}개를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+    "emptyTitle": "이 폴더에는 아직 채팅이 없습니다",
+    "emptyHint": "여기서 새 채팅을 시작하거나, 사이드바에서 채팅을 이 폴더로 드래그하세요.",
+    "messageCount": "{count}개 메시지"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "폴더 검색…",
+    "ariaLabel": "폴더 선택",
+    "noResults": "일치하는 폴더가 없습니다",
+    "createFolder": "새 폴더 \"{name}\""
+  },
+  "This conversation is already empty": "이 대화는 이미 비어 있습니다"
 }

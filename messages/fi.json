@@ -885,7 +885,12 @@
     "agentsEntry": "Agentit",
     "agentsTitle": "Selaa agentteja ja aloita keskustelu jonkun kanssa",
     "agentsLoading": "Tarkistetaan, mitä agenteja voit käyttää…",
-    "agentsLoadError": "Agenntiesi lataaminen epäonnistui — avaa ja yritä uudelleen"
+    "agentsLoadError": "Agenntiesi lataaminen epäonnistui — avaa ja yritä uudelleen",
+    "newChatInFolder": "Uusi keskustelu tässä kansiossa",
+    "resizeHandle": "Muuta sivupalkin kokoa",
+    "resizeHint": "Vedä muuttaaksesi sivupalkin kokoa; kaksoisnapsauta palauttaaksesi oletuskoon",
+    "openFolder": "Avaa kansio {name}",
+    "openFolderMenu": "Avaa kansio"
   },
   "prompts": {
     "buildReusablePrompts": "Rakenna uudelleenkäytettäviä kehotteita tekoälyn avulla",
@@ -5142,5 +5147,29 @@
       "officeId": "toimisto {value}",
       "groups": "{count, plural, one {# ryhmä} other {# ryhmää}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Uusi keskustelu",
+    "rename": "Nimeä kansio uudelleen",
+    "renameLabel": "Kansion nimi",
+    "deleteFolder": "Poista kansio",
+    "close": "Sulje kansio",
+    "selectAll": "Valitse kaikki",
+    "selectedCount": "{count} valittu",
+    "selectChat": "Valitse {name}",
+    "moveTo": "Siirrä…",
+    "deleteSelected": "Poista",
+    "confirmDeleteChats": "Poistetaanko {count} valittua keskustelua? Tätä ei voi peruuttaa.",
+    "emptyTitle": "Tässä kansiossa ei ole vielä keskusteluja",
+    "emptyHint": "Aloita uusi keskustelu täällä tai vedä keskusteluja tähän kansioon sivupalkista.",
+    "messageCount": "{count} viesti(ä)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Etsi kansioita…",
+    "ariaLabel": "Valitse kansio",
+    "noResults": "Yhtään kansiota ei löytynyt",
+    "createFolder": "Uusi kansio “{name}”"
+  },
+  "This conversation is already empty": "Tämä keskustelu on jo tyhjä"
 }

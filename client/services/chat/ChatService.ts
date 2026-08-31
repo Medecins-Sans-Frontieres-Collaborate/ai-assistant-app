@@ -163,6 +163,8 @@ export class ChatService {
        * a real model — unlocks decoupled agent resolution server-side.
        */
       agentAttached?: boolean;
+      /** Telemetry-only: conversation.id, so server logs can group a turn's rounds. */
+      conversationId?: string;
       threadId?: string;
       searchMode?: SearchMode;
       webSearchOptions?: WebSearchOptions;
@@ -217,6 +219,7 @@ export class ChatService {
       verbosity: options?.verbosity,
       botId: options?.botId,
       agentAttached: options?.agentAttached,
+      conversationId: options?.conversationId,
       threadId: options?.threadId,
       searchMode: options?.searchMode,
       webSearchOptions: options?.webSearchOptions,
@@ -287,6 +290,8 @@ export class ChatService {
        * a real model — unlocks decoupled agent resolution server-side.
        */
       agentAttached?: boolean;
+      /** Telemetry-only: conversation.id, so server logs can group a turn's rounds. */
+      conversationId?: string;
       threadId?: string;
       searchMode?: SearchMode;
       forcedAgentType?: string;
@@ -310,6 +315,7 @@ export class ChatService {
       verbosity: options?.verbosity,
       botId: options?.botId,
       agentAttached: options?.agentAttached,
+      conversationId: options?.conversationId,
       threadId: options?.threadId,
       searchMode: options?.searchMode,
       forcedAgentType: options?.forcedAgentType,

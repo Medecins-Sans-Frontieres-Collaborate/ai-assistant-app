@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
+import { useAdminDiscoveredAgents } from '@/client/hooks/settings/useAdminDiscoveredAgents';
 import {
   unwrapApiData,
   useAgentAccessAdmin,
@@ -36,7 +37,6 @@ import {
   AdminStoredConnector,
   AdminStoredDatasetMeta,
   AdminStoredGuide,
-  AgentsApiResponse,
   CLIENT_GUIDE_SOURCE,
   CLIENT_MAP_DATASET_SOURCE,
   CLIENT_MCP_CONNECTOR_SOURCE,
@@ -45,7 +45,6 @@ import {
   clientCanonicalAgentKey,
 } from './types';
 
-import { useSettingsStore } from '@/client/stores/settingsStore';
 import { Link } from '@/lib/navigation';
 
 type PanelTab = 'agents' | 'connectors' | 'guides' | 'datasets' | 'localAdmins';
@@ -96,12 +95,6 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
     refetch: refetchMe,
   } = useAgentAccessAdmin();
 
-  // The admin's own discovery includes their configured custom sources,
-  // mirroring useFoundryAgents — but WITHOUT per-source selection filtering:
-  // hidden-from-picker agents are still manageable here.
-  const customAgentSources = useSettingsStore((s) => s.customAgentSources);
-  const sourcePaths = customAgentSources.map((s) => s.resourcePath);
-
   const rulesQuery = useQuery<AdminRulesResponse>({
     queryKey: ['agent-access-rules'],
     queryFn: async () => {
@@ -115,24 +108,10 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
     refetchOnWindowFocus: false,
   });
 
-  const agentsQuery = useQuery<AgentsApiResponse>({
-    queryKey: ['agent-access-admin-agents', ...sourcePaths],
-    queryFn: async () => {
-      const params = new URLSearchParams();
-      if (sourcePaths.length > 0) {
-        params.set('sources', sourcePaths.join(','));
-      }
-      const url = `/api/agents${params.toString() ? '?' + params.toString() : ''}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch agents: ${response.status}`);
-      }
-      return response.json();
-    },
-    staleTime: 60 * 60 * 1000,
-    retry: 1,
-    refetchOnWindowFocus: false,
-  });
+  // Both discovery halves (Foundry incl. the admin's custom sources, plus
+  // app-defined agents), WITHOUT per-source selection filtering:
+  // hidden-from-picker agents are still manageable here.
+  const agentsQuery = useAdminDiscoveredAgents();
 
   const promptAgentsQuery = useQuery<AdminPromptAgentsResponse>({
     queryKey: ['agent-access-prompt-agents'],

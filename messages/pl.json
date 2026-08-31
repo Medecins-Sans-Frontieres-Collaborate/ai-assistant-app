@@ -907,7 +907,12 @@
     "agentsEntry": "Agenci",
     "agentsTitle": "Przeglądaj agentów i rozpocznij z jednym rozmowę",
     "agentsLoading": "Sprawdzanie, których agentów możesz użyć…",
-    "agentsLoadError": "Nie udało się załadować Twoich agentów — otwórz ponownie, aby spróbować jeszcze raz"
+    "agentsLoadError": "Nie udało się załadować Twoich agentów — otwórz ponownie, aby spróbować jeszcze raz",
+    "newChatInFolder": "Nowy czat w tym folderze",
+    "resizeHandle": "Zmień rozmiar paska bocznego",
+    "resizeHint": "Przeciągnij, aby zmienić rozmiar paska bocznego; kliknij dwukrotnie, aby przywrócić ustawienia domyślne",
+    "openFolder": "Otwórz folder {name}",
+    "openFolderMenu": "Otwórz folder"
   },
   "prompts": {
     "buildReusablePrompts": "Twórz wielokrotnego użytku podpowiedzi z pomocą AI",
@@ -5142,5 +5147,29 @@
       "officeId": "biuro {value}",
       "groups": "{count, plural, one {# grupa} other {# grupy}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Nowy czat",
+    "rename": "Zmień nazwę folderu",
+    "renameLabel": "Nazwa folderu",
+    "deleteFolder": "Usuń folder",
+    "close": "Zamknij folder",
+    "selectAll": "Zaznacz wszystko",
+    "selectedCount": "Zaznaczono: {count}",
+    "selectChat": "Zaznacz {name}",
+    "moveTo": "Przenieś do…",
+    "deleteSelected": "Usuń",
+    "confirmDeleteChats": "Usunąć {count} zaznaczone czaty? Tej operacji nie można cofnąć.",
+    "emptyTitle": "Brak czatów w tym folderze",
+    "emptyHint": "Rozpocznij nowy czat tutaj lub przeciągnij czaty do tego folderu na pasku bocznym.",
+    "messageCount": "{count} wiadomości"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Szukaj folderów…",
+    "ariaLabel": "Wybierz folder",
+    "noResults": "Brak pasujących folderów",
+    "createFolder": "Nowy folder „{name}”"
+  },
+  "This conversation is already empty": "Ta rozmowa jest już pusta"
 }

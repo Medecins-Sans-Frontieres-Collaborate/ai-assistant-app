@@ -990,7 +990,12 @@
     "agentsEntry": "ئەجێنتەکان",
     "agentsTitle": "بگەڕێ بۆ ئەجێنتەکان و گفتوگۆیەک لەگەڵ یەکێک دەست پێبکە",
     "agentsLoading": "پشکنین دەکات کە کام ئیجێنت دەتوانیت بەکارهێنیت...",
-    "agentsLoadError": "ئیجێنتەکانت نەتوانرا بار بکرێن — بیکەرەوە بۆ هەوڵدانەوە"
+    "agentsLoadError": "ئیجێنتەکانت نەتوانرا بار بکرێن — بیکەرەوە بۆ هەوڵدانەوە",
+    "newChatInFolder": "گفتوگۆی نوێ لە ئەم پۆلەدا",
+    "resizeHandle": "قۆناغی لاپەڕە گۆڕدە",
+    "resizeHint": "بکێشە بۆ گۆڕینی قەبارەی لاپەڕە؛ دووجار کلیک بکە بۆ دووبارەکردنەوە",
+    "openFolder": "پۆلەکە بکەوە {name}",
+    "openFolderMenu": "پۆلەکە بکەوە"
   },
   "errors": {
     "somethingWentWrong": "Tiştek xelet çûye",
@@ -5126,5 +5131,29 @@
       "officeId": "ئۆفیس {value}",
       "groups": "{count, plural, one {# گرووپ} other {# گرووپ}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "گفتوگۆی نوێ",
+    "rename": "ناوی پۆل گۆڕە",
+    "renameLabel": "ناوی پۆل",
+    "deleteFolder": "پۆل بسڕەوە",
+    "close": "پۆل داخە",
+    "selectAll": "هەموو هەلبژێرە",
+    "selectedCount": "{count} هەلبژێردراو",
+    "selectChat": "{name} هەلبژێرە",
+    "moveTo": "بۆ بیگوازە…",
+    "deleteSelected": "سڕینەوە",
+    "confirmDeleteChats": "دەتەوێت {count} گفتوگۆی دیاریکراو بسڕیتەوە؟ ئەمە ناتوانرێت وەک خۆی بگەڕێتەوە.",
+    "emptyTitle": "هێشتا هیچ گفتوگۆیەک لەم پۆلەدا نیە",
+    "emptyHint": "لەئێرە گفتوگۆی نوێ دەست پێبکە، یان گفتوگۆکان بیکێشە بۆ ئەم پۆلە لە لاپەڕەکەدا.",
+    "messageCount": "{count} پەیام"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "پۆل بگەڕێ …",
+    "ariaLabel": "پۆلێک هەلبژێرە",
+    "noResults": "هیچ پۆلێک هاوتا نیە",
+    "createFolder": "پۆلی نوێ “{name}”"
+  },
+  "This conversation is already empty": "ئەم گفتوگۆیە پێشتر بەتاڵە"
 }

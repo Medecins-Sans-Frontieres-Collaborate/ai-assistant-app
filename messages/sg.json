@@ -990,7 +990,12 @@
     "agentsEntry": "Bângbi",
     "agentsTitle": "Zia bângbi kɛ pé ayeke zo jihâ na mo",
     "agentsLoading": "Bi na na sô lo agents mo yeke koui…",
-    "agentsLoadError": "Agents mo ape yeke koui — wilî lo na koke"
+    "agentsLoadError": "Agents mo ape yeke koui — wilî lo na koke",
+    "newChatInFolder": "Ködöröngö na nzönî sô ayeke na ndabändö äti",
+    "resizeHandle": "Wûsũ sija ndabändö",
+    "resizeHint": "Gômböngö sô na wûsũ ndabändö; kîrî nî za lutî wala",
+    "openFolder": "Fungbi ndabändö {name}",
+    "openFolderMenu": "Fungbi ndabändö"
   },
   "errors": {
     "somethingWentWrong": "Ë a sara nzönî pepe",
@@ -5126,5 +5131,29 @@
       "officeId": "ofisi {value}",
       "groups": "{count, plural, one {# group} other {# group}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Ködöröngö mbârî",
+    "rename": "Sôngö tî ndabändö",
+    "renameLabel": "Nzönî tî ndabändö",
+    "deleteFolder": "Kwê ndabändö",
+    "close": "Hinda ndabändö",
+    "selectAll": "Sâra kõ",
+    "selectedCount": "{count} asêrèsê",
+    "selectChat": "Sâra {name}",
+    "moveTo": "Gbanî na...",
+    "deleteSelected": "Kwê",
+    "confirmDeleteChats": "Kwê ködöröngö {count} asêrèsê? Mbî na mû yângâ.",
+    "emptyTitle": "Mbênî ködöröngö na ndabändö äruka",
+    "emptyHint": "Tîrî ködöröngö mbârî, wala gômbô ködöröngö na ndabändö sô na ndabändö äti.",
+    "messageCount": "{count} ngangu"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Zingbî ndabändö...",
+    "ariaLabel": "Fâ ndabändö",
+    "noResults": "Ndabändö moko azo yeke",
+    "createFolder": "Ndabändö mbârî “{name}”"
+  },
+  "This conversation is already empty": "Kuye keti tîrî ti yeke sôh."
 }

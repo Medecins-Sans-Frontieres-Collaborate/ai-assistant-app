@@ -209,4 +209,62 @@ describe('runToolLoopCore — builtin dispatch', () => {
       }),
     );
   });
+
+  it('reports every executed call to onToolCall (success and executor error)', async () => {
+    const executor = makeExecutor({
+      callTool: vi
+        .fn()
+        .mockResolvedValueOnce({ resultText: 'ok', isError: false })
+        .mockRejectedValueOnce(new Error('boom')),
+    });
+    const onToolCall = vi.fn();
+    const captured = { results: [] as ExecutedToolResult[][] };
+    const { strategy } = makeStrategy(captured);
+
+    await runToolLoopCore<string>({
+      ...baseOptions,
+      strategy,
+      onToolCall,
+      servers: [builtinServer],
+      builtinExecutor: executor,
+      pendingToolCalls: [
+        {
+          id: 'call_1',
+          serverId: 'builtin-m365',
+          toolName: 'calendar_list_events',
+          argumentsJson: '{}',
+        },
+        {
+          id: 'call_2',
+          serverId: 'builtin-m365',
+          toolName: 'tasks_list',
+          argumentsJson: '{}',
+        },
+      ],
+      approvalResponses: [
+        { approval_request_id: 'call_1', approve: true },
+        { approval_request_id: 'call_2', approve: true },
+      ],
+    }).then((r) => r.text());
+
+    expect(onToolCall).toHaveBeenCalledTimes(2);
+    expect(onToolCall).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        toolName: 'calendar_list_events',
+        serverId: 'builtin-m365',
+        serverLabel: 'Microsoft 365',
+        success: true,
+        durationMs: expect.any(Number),
+      }),
+    );
+    expect(onToolCall).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        toolName: 'tasks_list',
+        success: false,
+        errorMessage: 'boom',
+      }),
+    );
+  });
 });

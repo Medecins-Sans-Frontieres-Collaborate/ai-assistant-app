@@ -885,7 +885,12 @@
     "agentsEntry": "סוכנים",
     "agentsTitle": "עיינו בסוכנים והתחילו שיחה עם אחד",
     "agentsLoading": "בודק אילו סוכנים זמינים לשימוש…",
-    "agentsLoadError": "לא ניתן היה לטעון את הסוכנים שלך — פתח לנסות שוב"
+    "agentsLoadError": "לא ניתן היה לטעון את הסוכנים שלך — פתח לנסות שוב",
+    "newChatInFolder": "שיחה חדשה בתיקיה זו",
+    "resizeHandle": "שנה גודל סרגל צד",
+    "resizeHint": "גרור לשינוי גודל הסרגל; לחיצה כפולה לאיפוס",
+    "openFolder": "פתח תיקיה {name}",
+    "openFolderMenu": "פתח תיקיה"
   },
   "prompts": {
     "buildReusablePrompts": "בניית הנחיות לשימוש חוזר בעזרת AI",
@@ -5142,5 +5147,29 @@
       "officeId": "משרד {value}",
       "groups": "{count, plural, one {# קבוצה} other {# קבוצות}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "שיחה חדשה",
+    "rename": "שנה שם תיקיה",
+    "renameLabel": "שם התיקיה",
+    "deleteFolder": "מחק תיקיה",
+    "close": "סגור תיקיה",
+    "selectAll": "בחר הכל",
+    "selectedCount": "{count} נבחרו",
+    "selectChat": "בחר {name}",
+    "moveTo": "העבר אל…",
+    "deleteSelected": "מחק",
+    "confirmDeleteChats": "למחוק {count} שיחות שנבחרו? לא ניתן לבטל פעולה זו.",
+    "emptyTitle": "אין שיחות בתיקיה זו עדיין",
+    "emptyHint": "התחילו שיחה חדשה כאן, או גררו שיחות לתיקיה זו בסרגל הצד.",
+    "messageCount": "{count} הודעות"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "חיפוש תיקיות…",
+    "ariaLabel": "בחר תיקיה",
+    "noResults": "לא נמצאו תיקיות תואמות",
+    "createFolder": "תיקיה חדשה \"{name}\""
+  },
+  "This conversation is already empty": "שיחה זו כבר ריקה"
 }

@@ -291,6 +291,8 @@ export interface ChatBody {
    * See InputValidator's ChatBodySchema for the server-side contract.
    */
   agentAttached?: boolean;
+  /** Telemetry-only correlation id (conversation.id); never used for routing. */
+  conversationId?: string;
   stream?: boolean;
   threadId?: string; // Azure AI Agent thread ID
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models

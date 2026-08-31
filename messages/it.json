@@ -831,7 +831,12 @@
     "agentsEntry": "Agenti",
     "agentsTitle": "Esplora gli agenti e avvia una chat con uno di loro",
     "agentsLoading": "Verifica degli agenti disponibili…",
-    "agentsLoadError": "Impossibile caricare i tuoi agenti — apri per riprovare"
+    "agentsLoadError": "Impossibile caricare i tuoi agenti — apri per riprovare",
+    "newChatInFolder": "Nuova chat in questa cartella",
+    "resizeHandle": "Ridimensiona barra laterale",
+    "resizeHint": "Trascina per ridimensionare la barra laterale; doppio clic per ripristinare",
+    "openFolder": "Apri cartella {name}",
+    "openFolderMenu": "Apri cartella"
   },
   "errors": {
     "somethingWentWrong": "Qualcosa è andato storto",
@@ -5142,5 +5147,29 @@
       "officeId": "ufficio {value}",
       "groups": "{count, plural, one {# gruppo} other {# gruppi}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Nuova chat",
+    "rename": "Rinomina cartella",
+    "renameLabel": "Nome cartella",
+    "deleteFolder": "Elimina cartella",
+    "close": "Chiudi cartella",
+    "selectAll": "Seleziona tutto",
+    "selectedCount": "{count} selezionati",
+    "selectChat": "Seleziona {name}",
+    "moveTo": "Sposta in…",
+    "deleteSelected": "Elimina",
+    "confirmDeleteChats": "Eliminare {count} chat selezionate? Questa azione non può essere annullata.",
+    "emptyTitle": "Nessuna chat in questa cartella",
+    "emptyHint": "Avvia una nuova chat qui o trascina le chat su questa cartella nella barra laterale.",
+    "messageCount": "{count} messaggio/i"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Cerca cartelle…",
+    "ariaLabel": "Scegli una cartella",
+    "noResults": "Nessuna cartella corrispondente",
+    "createFolder": "Nuova cartella “{name}”"
+  },
+  "This conversation is already empty": "Questa conversazione è già vuota"
 }

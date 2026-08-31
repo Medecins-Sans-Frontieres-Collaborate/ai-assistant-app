@@ -990,7 +990,12 @@
     "agentsEntry": "Mpanampy",
     "agentsTitle": "Hijery mpanampy ary manomboka miresaka amin'ny iray",
     "agentsLoading": "Hamarina hoe iza amin'ireo agent no azonao ampiasaina…",
-    "agentsLoadError": "Tsy afaka novahana ny agents-nao — sokafy mba hamerina"
+    "agentsLoadError": "Tsy afaka novahana ny agents-nao — sokafy mba hamerina",
+    "newChatInFolder": "Resaka vaovao ao amin'ity lahatahiry ity",
+    "resizeHandle": "Ahitsio ny sisiny",
+    "resizeHint": "Sintomy hanova ny hatevin'ny sisiny; kitiho indroa hanamboatra indray",
+    "openFolder": "Sokafy ny lahatahiry {name}",
+    "openFolderMenu": "Sokafy ny lahatahiry"
   },
   "errors": {
     "somethingWentWrong": "Nisy tsy nety",
@@ -5126,5 +5131,29 @@
       "officeId": "birao {value}",
       "groups": "{count, plural, one {# vondrona} other {# vondrona}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Resaka vaovao",
+    "rename": "Ovao anarana ny lahatahiry",
+    "renameLabel": "Anaran'ny lahatahiry",
+    "deleteFolder": "Fafao ny lahatahiry",
+    "close": "Akatò ny lahatahiry",
+    "selectAll": "Safidio rehetra",
+    "selectedCount": "{count} no voafantina",
+    "selectChat": "Safidio {name}",
+    "moveTo": "Afindra ho…",
+    "deleteSelected": "Fafana",
+    "confirmDeleteChats": "Fafana ny resaka {count} voafantina? Tsy afaka averina izany.",
+    "emptyTitle": "Tsy mbola misy resaka ato amin'ity lahatahiry ity",
+    "emptyHint": "Atombohy eto ny resaka vaovao, na tariho eto amin'ity lahatahiry ity ny resaka avy ao amin'ny sisiny.",
+    "messageCount": "{count} hafatra"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Karohy ny lahatahiry…",
+    "ariaLabel": "Misafidiana lahatahiry",
+    "noResults": "Tsy misy lahatahiry mifanaraka",
+    "createFolder": "Lahatahiry vaovao “{name}”"
+  },
+  "This conversation is already empty": "Tsy misy hafatra intsony ity resaka ity"
 }

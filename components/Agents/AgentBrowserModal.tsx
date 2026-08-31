@@ -549,6 +549,21 @@ export function AgentBrowserModal() {
               })}
             </ul>
           )}
+          {isError && allItems.length > 0 && (
+            // The fast half failed but bundled/static rows (or connectors)
+            // still render: without this line the missing admin-managed
+            // agents would just look absent.
+            <p className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
+              <span>{t('loadError')}</span>
+              <button
+                type="button"
+                onClick={retry}
+                className="rounded border border-amber-300 px-2 py-0.5 text-amber-800 hover:bg-amber-100 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/40"
+              >
+                {t('retry')}
+              </button>
+            </p>
+          )}
           {!isError && isDiscoveryLoading && (
             <p
               className="px-3 py-2 text-center text-xs text-gray-500 dark:text-gray-400"

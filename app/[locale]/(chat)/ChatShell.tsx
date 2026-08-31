@@ -42,7 +42,7 @@ function shouldShowMigrationDialog(): boolean {
  * Children are the page content that can change/remount freely
  */
 export function ChatShell({ children }: { children: React.ReactNode }) {
-  const { showChatbar } = useUI();
+  const { showChatbar, sidebarWidth } = useUI();
   // Admin is a full-page surface like the help center: the conversation
   // sidebar is not interactable there and only confuses the UI, so it is
   // not rendered and the content takes the full viewport. Admin stays
@@ -90,7 +90,17 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <>
+    // `display: contents` wrapper: no box of its own, it only carries the
+    // `--sidebar-width` custom property (from the persisted preference, so
+    // SSR paints the right width with no post-hydration jump) down to the
+    // sidebar, the content offset and the fixed banners' spacers. The drag
+    // handle writes the live width here during a resize (see
+    // SidebarResizeHandle), which is why the div is also tagged.
+    <div
+      className="contents"
+      data-sidebar-width-root
+      style={{ '--sidebar-width': `${sidebarWidth}px` } as React.CSSProperties}
+    >
       <UpdateBanner />
       {/* Both banners read the session, so they live inside AppProviders
           (SessionProvider) rather than the locale layout. */}
@@ -118,8 +128,10 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
           className={
             isAdminRoute
               ? 'flex min-w-0 flex-1'
-              : `flex min-w-0 flex-1 transition-all duration-300 ease-in-out ${
-                  showChatbar ? 'md:ml-[260px]' : 'md:ml-14'
+              : `sidebar-width-target flex min-w-0 flex-1 transition-all duration-300 ease-in-out ${
+                  showChatbar
+                    ? 'md:ml-[var(--sidebar-width,260px)]'
+                    : 'md:ml-14'
                 }`
           }
         >
@@ -130,6 +142,6 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
         {/* Encrypted-backup modal host + sync triggers (flag-gated inside). */}
         <BackupModals />
       </div>
-    </>
+    </div>
   );
 }

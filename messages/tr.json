@@ -910,7 +910,12 @@
     "agentsEntry": "Agentlar",
     "agentsTitle": "Agentlara göz atın ve biriyle sohbet başlatın",
     "agentsLoading": "Kullanabileceğiniz ajanlar kontrol ediliyor…",
-    "agentsLoadError": "Ajanlarınız yüklenemedi — yeniden denemek için açın"
+    "agentsLoadError": "Ajanlarınız yüklenemedi — yeniden denemek için açın",
+    "newChatInFolder": "Bu klasörde yeni sohbet",
+    "resizeHandle": "Kenar çubuğunu yeniden boyutlandır",
+    "resizeHint": "Kenar çubuğunu yeniden boyutlandırmak için sürükleyin; sıfırlamak için çift tıklayın",
+    "openFolder": "Klasörü aç: {name}",
+    "openFolderMenu": "Klasörü aç"
   },
   "prompts": {
     "buildReusablePrompts": "AI yardımıyla yeniden kullanılabilir istemler oluşturun",
@@ -5142,5 +5147,29 @@
       "officeId": "ofis {value}",
       "groups": "{count, plural, one {# grup} other {# grup}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Yeni sohbet",
+    "rename": "Klasörü yeniden adlandır",
+    "renameLabel": "Klasör adı",
+    "deleteFolder": "Klasörü sil",
+    "close": "Klasörü kapat",
+    "selectAll": "Tümünü seç",
+    "selectedCount": "{count} seçildi",
+    "selectChat": "{name} sohbetini seç",
+    "moveTo": "Taşı…",
+    "deleteSelected": "Sil",
+    "confirmDeleteChats": "{count} seçili sohbeti silmek istiyor musunuz? Bu işlem geri alınamaz.",
+    "emptyTitle": "Bu klasörde henüz sohbet yok",
+    "emptyHint": "Buradan yeni bir sohbet başlatabilir veya sohbetleri kenar çubuğundaki bu klasöre sürükleyebilirsiniz.",
+    "messageCount": "{count} mesaj"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Klasörlerde ara…",
+    "ariaLabel": "Bir klasör seçin",
+    "noResults": "Eşleşen klasör yok",
+    "createFolder": "Yeni klasör “{name}”"
+  },
+  "This conversation is already empty": "Bu konuşma zaten boş"
 }

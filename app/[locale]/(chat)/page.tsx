@@ -7,7 +7,10 @@ import { useSelectedConversationType } from '@/client/hooks/workflows/useSelecte
 import { Chat } from '@/components/Chat/Chat';
 import { LoadingScreen } from '@/components/Chat/LoadingScreen';
 import { MobileChatHeader } from '@/components/Chat/MobileChatHeader';
+import { FolderView } from '@/components/Folders/FolderView';
 import { WorkflowShell } from '@/components/Workflows/WorkflowShell';
+
+import { useUIStore } from '@/client/stores/uiStore';
 
 /**
  * Main chat page
@@ -18,10 +21,24 @@ import { WorkflowShell } from '@/components/Workflows/WorkflowShell';
  * WorkflowShell instead of the standard chat surface. The branch reads the
  * conversation's type, not the LaunchDarkly flag, so existing workflow
  * conversations always open even when the flag is off.
+ *
+ * A folder opened from the sidebar (uiStore.openFolderId) takes precedence
+ * and renders the FolderView; it is ephemeral state that any conversation
+ * selection clears, so the chat/workflow branch below is unaffected by it
+ * once the user opens a chat.
  */
 export default function ChatPage() {
   const [isModelSelectOpen, setIsModelSelectOpen] = useState(false);
   const workflowType = useSelectedConversationType();
+  const openFolderId = useUIStore((s) => s.openFolderId);
+
+  if (openFolderId) {
+    return (
+      <div className="flex flex-1 overflow-hidden">
+        <FolderView folderId={openFolderId} />
+      </div>
+    );
+  }
 
   if (workflowType) {
     return (

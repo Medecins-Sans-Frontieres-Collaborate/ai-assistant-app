@@ -1,8 +1,6 @@
 'use client';
 
 import {
-  IconCheck,
-  IconChevronDown,
   IconChevronRight,
   IconDots,
   IconDownload,
@@ -18,6 +16,8 @@ import { Conversation } from '@/types/chat';
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
 import { WORKFLOW_META } from '@/components/Workflows/registryMeta';
 
+import { FolderPicker } from './FolderPicker';
+
 interface ConversationItemProps {
   conversation: Conversation;
   /** Pre-computed in Sidebar so changing selection only re-renders two rows. */
@@ -25,6 +25,8 @@ interface ConversationItemProps {
   handleSelectConversation: (id: string) => void;
   handleDeleteConversation: (id: string, e: React.MouseEvent) => void;
   handleMoveToFolder: (conversationId: string, folderId: string | null) => void;
+  /** Creates a folder with `name` and moves the conversation into it. */
+  handleCreateFolderAndMove?: (conversationId: string, name: string) => void;
   handleRenameConversation: (id: string, currentName: string) => void;
   handleExportConversation: (conversation: Conversation) => void;
   /** Absent when sharing is unavailable (flag off / M365 not connected). */
@@ -39,6 +41,7 @@ function ConversationItemInner({
   handleSelectConversation,
   handleDeleteConversation,
   handleMoveToFolder,
+  handleCreateFolderAndMove,
   handleRenameConversation,
   handleExportConversation,
   handleShareConversation,
@@ -46,17 +49,18 @@ function ConversationItemInner({
   t,
 }: ConversationItemProps) {
   const [showMenu, setShowMenu] = useState(false);
-  const [showFolderSubmenu, setShowFolderSubmenu] = useState(false);
+  const [showFolderPicker, setShowFolderPicker] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingName, setEditingName] = useState(
     conversation.name || t('New Conversation'),
   );
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
 
-  const handleCloseMenu = useCallback(() => {
-    setShowMenu(false);
-    setShowFolderSubmenu(false);
-  }, []);
+  const handleCloseMenu = useCallback(() => setShowMenu(false), []);
+  const handleCloseFolderPicker = useCallback(
+    () => setShowFolderPicker(false),
+    [],
+  );
 
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.effectAllowed = 'move';
@@ -83,12 +87,20 @@ function ConversationItemInner({
           : 'hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-sm'
       }`}
       onClick={() =>
-        !isEditing && !showMenu && handleSelectConversation(conversation.id)
+        !isEditing &&
+        !showMenu &&
+        !showFolderPicker &&
+        handleSelectConversation(conversation.id)
       }
       onKeyDown={(e) => {
+        // Only treat Enter/Space as row activation when the ROW itself is
+        // focused. Descendants (the rename input, the Options button) bubble
+        // their keydowns here, and preventDefault() on a bubbled Space used to
+        // swallow the space character in the rename input.
+        if (e.target !== e.currentTarget) return;
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          if (!isEditing && !showMenu)
+          if (!isEditing && !showMenu && !showFolderPicker)
             handleSelectConversation(conversation.id);
         }
       }}
@@ -126,13 +138,17 @@ function ConversationItemInner({
                 />
               );
             })()}
-          <span className="truncate">
+          {/* title: the row truncates, so hovering reveals the full name */}
+          <span
+            className="truncate"
+            title={conversation.name || t('New Conversation')}
+          >
             {conversation.name || t('New Conversation')}
           </span>
         </span>
       )}
       <div
-        className={`relative shrink-0 transition-opacity ${showMenu ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+        className={`relative shrink-0 transition-opacity ${showMenu || showFolderPicker ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
       >
         {!isEditing && (
           <>
@@ -184,70 +200,29 @@ function ConversationItemInner({
                 {t('Rename')}
               </button>
 
-              {/* Move to folder option with submenu */}
-              <div>
-                <button
-                  className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowFolderSubmenu(!showFolderSubmenu);
-                  }}
-                >
-                  <span className="flex items-center gap-2">
-                    <IconFolder
-                      size={14}
-                      className="text-gray-600 dark:text-gray-400"
-                    />
-                    {t('Move to folder')}
-                  </span>
-                  {showFolderSubmenu ? (
-                    <IconChevronDown
-                      size={14}
-                      className="text-gray-600 dark:text-gray-400"
-                    />
-                  ) : (
-                    <IconChevronRight
-                      size={14}
-                      className="text-gray-600 dark:text-gray-400"
-                    />
-                  )}
-                </button>
-
-                {/* Folder submenu - inline expansion */}
-                {showFolderSubmenu && (
-                  <div className="pl-4 mt-1">
-                    <button
-                      className="w-full text-left px-3 py-2 text-xs text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleMoveToFolder(conversation.id, null);
-                        handleCloseMenu();
-                      }}
-                    >
-                      {t('No folder')}
-                      {!conversation.folderId && (
-                        <IconCheck size={12} className="shrink-0" />
-                      )}
-                    </button>
-                    {folders.map((folder) => (
-                      <button
-                        key={folder.id}
-                        className="w-full text-left px-3 py-2 text-xs text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleMoveToFolder(conversation.id, folder.id);
-                          handleCloseMenu();
-                        }}
-                      >
-                        <span className="truncate">{folder.name}</span>
-                        {conversation.folderId === folder.id && (
-                          <IconCheck size={12} className="shrink-0" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {/* Move to folder — opens the searchable FolderPicker
+                  anchored to the Options button (the menu closes first, so
+                  the picker never fights the menu for the viewport) */}
+              <button
+                className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCloseMenu();
+                  setShowFolderPicker(true);
+                }}
+              >
+                <span className="flex items-center gap-2">
+                  <IconFolder
+                    size={14}
+                    className="text-gray-600 dark:text-gray-400"
+                  />
+                  {t('Move to folder')}
+                </span>
+                <IconChevronRight
+                  size={14}
+                  className="text-gray-600 dark:text-gray-400"
+                />
+              </button>
 
               {/* Export option */}
               <button
@@ -298,6 +273,20 @@ function ConversationItemInner({
             </div>
           </div>
         </DropdownPortal>
+
+        <FolderPicker
+          triggerRef={menuTriggerRef}
+          isOpen={showFolderPicker}
+          onClose={handleCloseFolderPicker}
+          folders={folders}
+          value={conversation.folderId ?? null}
+          onSelect={(folderId) => handleMoveToFolder(conversation.id, folderId)}
+          onCreateFolder={
+            handleCreateFolderAndMove
+              ? (name) => handleCreateFolderAndMove(conversation.id, name)
+              : undefined
+          }
+        />
       </div>
     </div>
   );

@@ -990,7 +990,12 @@
     "agentsEntry": "एजेन्टहरू",
     "agentsTitle": "एजेन्टहरू ब्राउज गर्नुहोस् र कुनै सँग च्याट सुरु गर्नुहोस्",
     "agentsLoading": "तपाईंले प्रयोग गर्न सक्ने एजेन्टहरू जाँच गरिँदैछ…",
-    "agentsLoadError": "तपाईंका एजेन्टहरू लोड गर्न सकिएन — पुन: प्रयास गर्न खोल्नुहोस्"
+    "agentsLoadError": "तपाईंका एजेन्टहरू लोड गर्न सकिएन — पुन: प्रयास गर्न खोल्नुहोस्",
+    "newChatInFolder": "यस फोल्डरमा नयाँ च्याट",
+    "resizeHandle": "साइडबारको आकार परिवर्तन गर्नुहोस्",
+    "resizeHint": "साइडबारको आकार परिवर्तन गर्न तान्नुहोस्; रिसेट गर्न डबल-क्लिक गर्नुहोस्",
+    "openFolder": "फोल्डर {name} खोल्नुहोस्",
+    "openFolderMenu": "फोल्डर खोल्नुहोस्"
   },
   "errors": {
     "somethingWentWrong": "केही गलत भयो",
@@ -5126,5 +5131,29 @@
       "officeId": "कार्यालय {value}",
       "groups": "{count, plural, one {# समुह} other {# समुहहरू}}"
     }
-  }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "नयाँ च्याट",
+    "rename": "फोल्डरको नाम परिवर्तन गर्नुहोस्",
+    "renameLabel": "फोल्डरको नाम",
+    "deleteFolder": "फोल्डर मेटाउनुहोस्",
+    "close": "फोल्डर बन्द गर्नुहोस्",
+    "selectAll": "सबै चयन गर्नुहोस्",
+    "selectedCount": "{count} छानिएको",
+    "selectChat": "{name} छान्नुहोस्",
+    "moveTo": "यसमा सार्नुहोस्…",
+    "deleteSelected": "मेटाउनुहोस्",
+    "confirmDeleteChats": "{count} छानिएको च्याट(हरू) मेट्नुहोस्? यो कार्य फर्काउन सकिँदैन।",
+    "emptyTitle": "यो फोल्डरमा अझै कुनै च्याट छैन",
+    "emptyHint": "यहाँ नयाँ च्याट सुरु गर्नुहोस्, वा साइडबारमा च्याटहरू यस फोल्डरमा तान्नुहोस्।",
+    "messageCount": "{count} सन्देश(हरू)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "फोल्डर खोज्नुहोस्…",
+    "ariaLabel": "फोल्डर छान्नुहोस्",
+    "noResults": "फोल्डर मिलेन",
+    "createFolder": "नयाँ फोल्डर “{name}”"
+  },
+  "This conversation is already empty": "यो संवाद पहिले नै खाली छ"
 }
