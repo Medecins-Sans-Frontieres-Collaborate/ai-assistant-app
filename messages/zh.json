@@ -5201,5 +5201,6 @@
     "ariaLabel": "选择文件夹",
     "noResults": "未找到匹配的文件夹",
     "createFolder": "新建文件夹“{name}”"
-  }
+  },
+  "This conversation is already empty": "此对话已为空"
 }

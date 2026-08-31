@@ -5170,5 +5170,6 @@
     "ariaLabel": "एक फ़ोल्डर चुनें",
     "noResults": "कोई फ़ोल्डर मेल नहीं खाता",
     "createFolder": "नया फ़ोल्डर “{name}”"
-  }
+  },
+  "This conversation is already empty": "यह बातचीत पहले से ही खाली है"
 }

@@ -5170,5 +5170,6 @@
     "ariaLabel": "Alegeți un dosar",
     "noResults": "Nu există dosare potrivite",
     "createFolder": "Dosar nou „{name}”"
-  }
+  },
+  "This conversation is already empty": "Această conversație este deja goală"
 }

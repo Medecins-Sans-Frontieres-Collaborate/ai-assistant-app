@@ -5154,5 +5154,6 @@
     "ariaLabel": "Misafidiana lahatahiry",
     "noResults": "Tsy misy lahatahiry mifanaraka",
     "createFolder": "Lahatahiry vaovao “{name}”"
-  }
+  },
+  "This conversation is already empty": "Tsy misy hafatra intsony ity resaka ity"
 }

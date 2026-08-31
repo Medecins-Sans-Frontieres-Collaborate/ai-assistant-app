@@ -5170,5 +5170,6 @@
     "ariaLabel": "เลือกโฟลเดอร์",
     "noResults": "ไม่พบโฟลเดอร์ที่ตรงกัน",
     "createFolder": "สร้างโฟลเดอร์ใหม่ “{name}”"
-  }
+  },
+  "This conversation is already empty": "การสนทนานี้ว่างเปล่าอยู่แล้ว"
 }

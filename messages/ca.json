@@ -5170,5 +5170,6 @@
     "ariaLabel": "Tria una carpeta",
     "noResults": "No hi ha cap carpeta coincident",
     "createFolder": "Nova carpeta “{name}”"
-  }
+  },
+  "This conversation is already empty": "Aquesta conversa ja és buida"
 }

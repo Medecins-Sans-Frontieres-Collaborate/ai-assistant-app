@@ -5154,5 +5154,6 @@
     "ariaLabel": "Chwazi yon katab",
     "noResults": "Pa gen katab ki koresponn",
     "createFolder": "Nouvo katab “{name}”"
-  }
+  },
+  "This conversation is already empty": "Konvèsasyon sa a deja vid"
 }

@@ -5170,5 +5170,6 @@
     "ariaLabel": "ፎልደር ይምረጡ",
     "noResults": "ምንም ፎልደር አልተገኘም",
     "createFolder": "አዲስ ፎልደር “{name}”"
-  }
+  },
+  "This conversation is already empty": "ይህ ውይይት አሁንም ባዶ ነው"
 }

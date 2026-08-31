@@ -5170,5 +5170,6 @@
     "ariaLabel": "Choisir un dossier",
     "noResults": "Aucun dossier correspondant",
     "createFolder": "Nouveau dossier « {name} »"
-  }
+  },
+  "This conversation is already empty": "Cette conversation est déjà vide"
 }

@@ -5170,5 +5170,6 @@
     "ariaLabel": "Escolha uma pasta",
     "noResults": "Nenhuma pasta encontrada",
     "createFolder": "Nova pasta “{name}”"
-  }
+  },
+  "This conversation is already empty": "Esta conversa já está vazia"
 }

@@ -5154,5 +5154,6 @@
     "ariaLabel": "Hitamwo folder",
     "noResults": "Nta folder bihuye",
     "createFolder": "Folder nshasha “{name}”"
-  }
+  },
+  "This conversation is already empty": "Iki kiganiro nta na kimwe kirimwo"
 }

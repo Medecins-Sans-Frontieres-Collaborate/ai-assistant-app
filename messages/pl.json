@@ -5170,5 +5170,6 @@
     "ariaLabel": "Wybierz folder",
     "noResults": "Brak pasujących folderów",
     "createFolder": "Nowy folder „{name}”"
-  }
+  },
+  "This conversation is already empty": "Ta rozmowa jest już pusta"
 }

@@ -5154,5 +5154,6 @@
     "ariaLabel": "Izaberite fasciklu",
     "noResults": "Nema fascikli koje odgovaraju",
     "createFolder": "Nova fascikla “{name}”"
-  }
+  },
+  "This conversation is already empty": "Ovaj razgovor je već prazan"
 }

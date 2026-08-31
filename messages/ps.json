@@ -5154,5 +5154,6 @@
     "ariaLabel": "یو فولډر انتخاب کړئ",
     "noResults": "هیڅ فولډر ونه موندل شو",
     "createFolder": "نوی فولډر “{name}”"
-  }
+  },
+  "This conversation is already empty": "دا خبرې اترې له مخکې نه خالي دي"
 }

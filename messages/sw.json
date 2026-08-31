@@ -5170,5 +5170,6 @@
     "ariaLabel": "Chagua folda",
     "noResults": "Hakuna folda inayolingana",
     "createFolder": "Folda mpya “{name}”"
-  }
+  },
+  "This conversation is already empty": "Mazungumzo haya tayari ni tupu"
 }

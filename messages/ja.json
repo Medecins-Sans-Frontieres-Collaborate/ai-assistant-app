@@ -5170,5 +5170,6 @@
     "ariaLabel": "フォルダーを選択",
     "noResults": "一致するフォルダーがありません",
     "createFolder": "新規フォルダー「{name}」"
-  }
+  },
+  "This conversation is already empty": "この会話はすでに空です"
 }

@@ -5170,5 +5170,6 @@
     "ariaLabel": "폴더 선택",
     "noResults": "일치하는 폴더가 없습니다",
     "createFolder": "새 폴더 \"{name}\""
-  }
+  },
+  "This conversation is already empty": "이 대화는 이미 비어 있습니다"
 }

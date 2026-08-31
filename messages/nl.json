@@ -5170,5 +5170,6 @@
     "ariaLabel": "Kies een map",
     "noResults": "Geen overeenkomende mappen",
     "createFolder": "Nieuwe map “{name}”"
-  }
+  },
+  "This conversation is already empty": "Dit gesprek is al leeg"
 }

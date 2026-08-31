@@ -5170,5 +5170,6 @@
     "ariaLabel": "Виберіть папку",
     "noResults": "Немає відповідних папок",
     "createFolder": "Нова папка «{name}»"
-  }
+  },
+  "This conversation is already empty": "Ця розмова вже порожня"
 }

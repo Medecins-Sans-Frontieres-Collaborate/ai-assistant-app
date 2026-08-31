@@ -5154,5 +5154,6 @@
     "ariaLabel": "Pona dosiye",
     "noResults": "Ba dosiye ezalaka te",
     "createFolder": "Dosiye ya sika “{name}”"
-  }
+  },
+  "This conversation is already empty": "Lisolo oyo ezali kala lisusu te"
 }

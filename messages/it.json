@@ -5170,5 +5170,6 @@
     "ariaLabel": "Scegli una cartella",
     "noResults": "Nessuna cartella corrispondente",
     "createFolder": "Nuova cartella “{name}”"
-  }
+  },
+  "This conversation is already empty": "Questa conversazione è già vuota"
 }

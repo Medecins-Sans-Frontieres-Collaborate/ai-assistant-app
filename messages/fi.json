@@ -5170,5 +5170,6 @@
     "ariaLabel": "Valitse kansio",
     "noResults": "Yhtään kansiota ei löytynyt",
     "createFolder": "Uusi kansio “{name}”"
-  }
+  },
+  "This conversation is already empty": "Tämä keskustelu on jo tyhjä"
 }

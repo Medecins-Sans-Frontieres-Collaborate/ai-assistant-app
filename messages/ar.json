@@ -5170,5 +5170,6 @@
     "ariaLabel": "اختر مجلدًا",
     "noResults": "لا توجد مجلدات مطابقة",
     "createFolder": "مجلد جديد “{name}”"
-  }
+  },
+  "This conversation is already empty": "هذه المحادثة فارغة بالفعل"
 }

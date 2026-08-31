@@ -5170,5 +5170,6 @@
     "ariaLabel": "انتخاب پوشه",
     "noResults": "پوشه‌ای یافت نشد",
     "createFolder": "پوشه جدید «{name}»"
-  }
+  },
+  "This conversation is already empty": "این گفتگو قبلاً خالی است"
 }

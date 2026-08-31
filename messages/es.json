@@ -5170,5 +5170,6 @@
     "ariaLabel": "Elija una carpeta",
     "noResults": "Ninguna carpeta coincide",
     "createFolder": "Nueva carpeta «{name}»"
-  }
+  },
+  "This conversation is already empty": "Esta conversación ya está vacía"
 }

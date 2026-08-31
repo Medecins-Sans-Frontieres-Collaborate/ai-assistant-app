@@ -5170,5 +5170,6 @@
     "ariaLabel": "Vyberte složku",
     "noResults": "Nenalezeny žádné složky",
     "createFolder": "Nová složka „{name}“"
-  }
+  },
+  "This conversation is already empty": "Tento rozhovor je už prázdný"
 }

@@ -5154,5 +5154,6 @@
     "ariaLabel": "پۆلێک هەلبژێرە",
     "noResults": "هیچ پۆلێک هاوتا نیە",
     "createFolder": "پۆلی نوێ “{name}”"
-  }
+  },
+  "This conversation is already empty": "ئەم گفتوگۆیە پێشتر بەتاڵە"
 }

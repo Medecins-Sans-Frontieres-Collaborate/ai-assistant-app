@@ -5170,5 +5170,6 @@
     "ariaLabel": "একটি ফোল্ডার বাছুন",
     "noResults": "কোনো ফোল্ডার মেলেনি",
     "createFolder": "নতুন ফোল্ডার “{name}”"
-  }
+  },
+  "This conversation is already empty": "এই আলাপটি ইতিমধ্যেই খালি"
 }

@@ -5170,5 +5170,6 @@
     "ariaLabel": "Bir klasör seçin",
     "noResults": "Eşleşen klasör yok",
     "createFolder": "Yeni klasör “{name}”"
-  }
+  },
+  "This conversation is already empty": "Bu konuşma zaten boş"
 }

@@ -5154,5 +5154,6 @@
     "ariaLabel": "Интихоби ҷузвадон",
     "noResults": "Ҷузвадон мувофиқат намекунад",
     "createFolder": "Ҷузвадони нав “{name}”"
-  }
+  },
+  "This conversation is already empty": "Ин сӯҳбат аллакай холӣ аст"
 }

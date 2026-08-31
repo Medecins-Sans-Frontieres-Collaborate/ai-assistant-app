@@ -5170,5 +5170,6 @@
     "ariaLabel": "බහාලුමක් තෝරන්න",
     "noResults": "ගැලපෙන බහාලුම් නොමැත",
     "createFolder": "නව බහාලුම “{name}”"
-  }
+  },
+  "This conversation is already empty": "මෙම සංවාදය දැනටමත් හිස් ය"
 }

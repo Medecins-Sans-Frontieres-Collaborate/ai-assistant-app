@@ -5170,5 +5170,6 @@
     "ariaLabel": "ఒక ఫోల్డర్ ఎంపిక చేయండి",
     "noResults": "ఏ ఫోల్డర్‌లు సరిపోలలేదు",
     "createFolder": "కొత్త ఫోల్డర్ “{name}”"
-  }
+  },
+  "This conversation is already empty": "ఈ సంభాషణ ఇప్పటికే ఖాళీగా ఉంది"
 }

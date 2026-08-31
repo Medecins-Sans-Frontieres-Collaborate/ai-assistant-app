@@ -5170,5 +5170,6 @@
     "ariaLabel": "Välj en mapp",
     "noResults": "Inga mappar matchar",
     "createFolder": "Ny mapp “{name}”"
-  }
+  },
+  "This conversation is already empty": "Denna konversation är redan tom"
 }

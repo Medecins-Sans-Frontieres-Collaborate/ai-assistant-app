@@ -5170,5 +5170,6 @@
     "ariaLabel": "בחר תיקיה",
     "noResults": "לא נמצאו תיקיות תואמות",
     "createFolder": "תיקיה חדשה \"{name}\""
-  }
+  },
+  "This conversation is already empty": "שיחה זו כבר ריקה"
 }

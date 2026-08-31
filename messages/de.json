@@ -5170,5 +5170,6 @@
     "ariaLabel": "Ordner auswählen",
     "noResults": "Keine passenden Ordner",
     "createFolder": "Neuer Ordner „{name}“"
-  }
+  },
+  "This conversation is already empty": "Dieses Gespräch ist bereits leer."
 }

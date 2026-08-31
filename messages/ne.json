@@ -5154,5 +5154,6 @@
     "ariaLabel": "फोल्डर छान्नुहोस्",
     "noResults": "फोल्डर मिलेन",
     "createFolder": "नयाँ फोल्डर “{name}”"
-  }
+  },
+  "This conversation is already empty": "यो संवाद पहिले नै खाली छ"
 }

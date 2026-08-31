@@ -5154,5 +5154,6 @@
     "ariaLabel": "Επιλέξτε φάκελο",
     "noResults": "Δεν βρέθηκαν φάκελοι",
     "createFolder": "Νέος φάκελος «{name}»"
-  }
+  },
+  "This conversation is already empty": "Αυτή η συνομιλία είναι ήδη κενή"
 }

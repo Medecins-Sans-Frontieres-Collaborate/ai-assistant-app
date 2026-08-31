@@ -5170,5 +5170,6 @@
     "ariaLabel": "ဖိုလ်ဒါရွေးပါ",
     "noResults": "သင့်တဲ့ဖိုလ်ဒါမရှိပါ",
     "createFolder": "ဖိုလ်ဒါအသစ် “{name}”"
-  }
+  },
+  "This conversation is already empty": "ဤဆွေးနွေးမှုသည် ထပ်မံပြီးသား အလွတ်ဖြစ်နေပါသည်"
 }

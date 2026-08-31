@@ -5170,5 +5170,6 @@
     "ariaLabel": "Pilih folder",
     "noResults": "Tidak ada folder yang cocok",
     "createFolder": "Folder baru “{name}”"
-  }
+  },
+  "This conversation is already empty": "Percakapan ini sudah kosong"
 }

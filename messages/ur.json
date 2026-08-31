@@ -5200,5 +5200,6 @@
     "ariaLabel": "فولڈر منتخب کریں",
     "noResults": "کوئی فولڈر نہیں ملا",
     "createFolder": "نیا فولڈر “{name}”"
-  }
+  },
+  "This conversation is already empty": "یہ گفتگو پہلے ہی خالی ہے"
 }

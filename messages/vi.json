@@ -5201,5 +5201,6 @@
     "ariaLabel": "Chọn thư mục",
     "noResults": "Không có thư mục phù hợp",
     "createFolder": "Thư mục mới “{name}”"
-  }
+  },
+  "This conversation is already empty": "Cuộc trò chuyện này đã trống"
 }
