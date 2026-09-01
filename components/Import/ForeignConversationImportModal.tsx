@@ -45,7 +45,9 @@ export const ForeignConversationImportModal: FC<Props> = ({
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [filter, setFilter] = useState('');
   const [placeInFolder, setPlaceInFolder] = useState(true);
-  const [folderName, setFolderName] = useState('');
+  // null = untouched, shows the source-specific default. Kept separate from
+  // the typed value so the reset effect below does not depend on `t`.
+  const [folderName, setFolderName] = useState<string | null>(null);
 
   const source = detection?.source ?? 'chatgpt';
   const sourceLabel = t(sourceLabelKey(source));
@@ -67,13 +69,14 @@ export const ForeignConversationImportModal: FC<Props> = ({
     );
     setFilter('');
     setPlaceInFolder(true);
-    setFolderName(
-      t('defaultFolderName', { source: t(sourceLabelKey(detection.source)) }),
-    );
+    setFolderName(null);
     // existingIds is intentionally excluded: a store update while the picker
     // is open must not wipe the user's selection.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [detection, t]);
+  }, [detection]);
+
+  const effectiveFolderName =
+    folderName ?? t('defaultFolderName', { source: sourceLabel });
 
   const visible = useMemo(() => {
     const q = filter.trim().toLowerCase();
@@ -113,7 +116,7 @@ export const ForeignConversationImportModal: FC<Props> = ({
   const handleImport = () => {
     if (selectedItems.length === 0) return;
     onImport(selectedItems, {
-      folderName: placeInFolder ? folderName.trim() || null : null,
+      folderName: placeInFolder ? effectiveFolderName.trim() || null : null,
     });
   };
 
@@ -253,7 +256,7 @@ export const ForeignConversationImportModal: FC<Props> = ({
           {placeInFolder && (
             <input
               type="text"
-              value={folderName}
+              value={effectiveFolderName}
               onChange={(e) => setFolderName(e.target.value)}
               aria-label={t('folderName')}
               placeholder={t('folderName')}
