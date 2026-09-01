@@ -5128,5 +5128,32 @@
       "officeId": "office {value}",
       "groups": "{count, plural, one {# group} other {# groups}}"
     }
+  },
+  "conversationImport": {
+    "title": "Import conversations",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Found {count, plural, one {# conversation} other {# conversations}} in this {source} export.",
+    "skipped": "{count, plural, one {# entry} other {# entries}} could not be read and will be skipped.",
+    "textOnly": "Only message text is imported. Attachments, images, files, and tool outputs are left out.",
+    "searchPlaceholder": "Filter by title",
+    "selectAll": "Select all",
+    "deselectAll": "Deselect all",
+    "selectedCount": "{selected} of {total} selected",
+    "alreadyImported": "Already imported",
+    "turnCount": "{count, plural, one {# message} other {# messages}}",
+    "droppedParts": "{count, plural, one {# part} other {# parts}} left out",
+    "placeInFolder": "Put imported conversations in a folder",
+    "folderName": "Folder name",
+    "defaultFolderName": "Imported from {source}",
+    "importButton": "Import {count, plural, one {# conversation} other {# conversations}}",
+    "cancel": "Cancel",
+    "untitled": "Untitled conversation",
+    "success": "Imported {count, plural, one {# conversation} other {# conversations}}",
+    "noModel": "No model is available to attach to imported conversations. Try again once models have loaded.",
+    "zipRejected": "Zip archives cannot be imported. Unzip the export and choose the conversations.json file inside it.",
+    "nothingImportable": "This {source} export contains no conversations with readable messages.",
+    "noMatches": "No conversations match your filter",
+    "listLabel": "Conversations to import"
   }
 }
