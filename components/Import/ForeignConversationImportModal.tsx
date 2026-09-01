@@ -49,7 +49,7 @@ export const ForeignConversationImportModal: FC<Props> = ({
 
   const source = detection?.source ?? 'chatgpt';
   const sourceLabel = t(sourceLabelKey(source));
-  const items = detection?.conversations ?? [];
+  const items = useMemo(() => detection?.conversations ?? [], [detection]);
 
   const appIdOf = (c: ForeignConversation) =>
     foreignConversationId(c.source, c.sourceId);
