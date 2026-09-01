@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useForeignConversationImport } from '@/client/hooks/conversation/useForeignConversationImport';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useCreateReducer } from '@/client/hooks/ui/useCreateReducer';
 import { useUI } from '@/client/hooks/ui/useUI';
@@ -16,6 +17,8 @@ import { getStorageUsage } from '@/lib/utils/app/storage/storageMonitor';
 
 import { SearchMode } from '@/types/searchMode';
 import { DEFAULT_STREAMING_SPEED, Settings } from '@/types/settings';
+
+import { ForeignConversationImportModal } from '@/components/Import/ForeignConversationImportModal';
 
 import packageJson from '../../package.json';
 import { MigrationDialog } from '../Migration/MigrationDialog';
@@ -70,6 +73,9 @@ export function SettingDialog() {
   });
 
   const [storageData, setStorageData] = useState<any>(null);
+  // "Import Backup" also accepts ChatGPT / Claude conversations.json files;
+  // those open a picker instead of running the full-backup merge.
+  const foreignImport = useForeignConversationImport();
   const [fullProfile, setFullProfile] = useState<any>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState<SettingsSection>(
@@ -249,6 +255,7 @@ export function SettingDialog() {
   };
 
   const handleImportConversations = (data: any) => {
+    if (foreignImport.offer(data)) return;
     try {
       // Use the proper importData function which handles all data types:
       // conversations, folders, prompts, tones, and custom agents
@@ -397,6 +404,15 @@ export function SettingDialog() {
       <MigrationDialog
         isOpen={showMigrationDialog}
         onComplete={() => setShowMigrationDialog(false)}
+      />
+
+      {/* Picker for ChatGPT / Claude exports dropped on "Import Backup" */}
+      <ForeignConversationImportModal
+        isOpen={foreignImport.pending !== null}
+        detection={foreignImport.pending}
+        existingIds={foreignImport.existingIds}
+        onClose={foreignImport.close}
+        onImport={foreignImport.commit}
       />
     </div>
   );
