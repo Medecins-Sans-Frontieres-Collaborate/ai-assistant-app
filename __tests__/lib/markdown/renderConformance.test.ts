@@ -156,7 +156,7 @@ const check = (testCase: ConformanceCase): void => {
 describe('markdown conformance — leak detector', () => {
   for (const testCase of CONFORMANCE_CASES) {
     const name = `${testCase.id} — ${testCase.label}`;
-    if (testCase.knownGap) {
+    if (testCase.knownGapFamilies?.includes('leak')) {
       // Documented gap. `it.fails` means the day someone closes it this test
       // goes red and tells them to delete the `knownGap` field.
       it.fails(`[known gap] ${name}`, () => check(testCase));

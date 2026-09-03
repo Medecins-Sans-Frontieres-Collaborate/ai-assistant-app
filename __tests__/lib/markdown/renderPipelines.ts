@@ -44,18 +44,24 @@ import type { PluggableList, Processor } from 'unified';
 import { unified } from 'unified';
 
 /**
- * Text that must never reach a reader's eyes. If any of these survives into
- * visible prose, the user is looking at LaTeX source instead of an equation —
- * which is the whole of issue #121 in one boolean.
+ * TeX COMMANDS. One of these in visible output means an equation was not
+ * handled at all — and read aloud it is spoken nonsense ("backslash frac open
+ * brace a close brace"), which is why the speech path is held to this list.
  */
-export const LEAK_TOKENS = [
+export const TEX_COMMAND_TOKENS = [
   '\\frac',
   '\\text{',
   '\\begin{',
   '\\end{',
-  '\\[',
-  '\\(',
 ] as const;
+
+/**
+ * Text that must never reach a reader's eyes on screen: the commands above
+ * plus the delimiters a renderer should have consumed. If any of these survives
+ * into visible prose the user is looking at LaTeX source instead of an
+ * equation — the whole of issue #121 in one boolean.
+ */
+export const LEAK_TOKENS = [...TEX_COMMAND_TOKENS, '\\[', '\\('] as const;
 
 /**
  * remend's marker for an auto-closed incomplete link. `\[` at the end of a
@@ -269,6 +275,72 @@ export const signatureOfBlocks = (
   // render represents it as the `\n` text node collapse() turns into a space.
   text: collapse(perBlock.map((b) => b.visibleText).join(' ')),
 });
+
+/**
+ * One rendered frame of a streamed message, produced exactly as Streamdown's
+ * streaming mode produces it.
+ */
+export interface StreamFrame {
+  readonly prefix: string;
+  readonly normalized: string;
+  readonly blocks: readonly string[];
+  /**
+   * remend — Streamdown's own "is this markdown incomplete?" judgement — left
+   * every block alone. That makes this frame COMPLETE markdown, and complete
+   * markdown has no excuse for rendering an error or an empty box.
+   */
+  readonly settled: boolean;
+  readonly signature: RenderSignature;
+  readonly visibleText: string;
+  readonly katexErrors: readonly KatexError[];
+  readonly texAnnotations: readonly string[];
+}
+
+/**
+ * remend closes emphasis, links and `$$`, but NOT code fences: it returns
+ * ```` ```math ```` unchanged even though the fence never closes. So its
+ * judgement needs this one supplement, or a half-arrived fence would be called
+ * "complete markdown" and held to the clean-render standard it cannot meet.
+ */
+const hasUnterminatedFence = (markdown: string): boolean => {
+  const fences = markdown.match(/^ {0,3}(?:```|~~~)/gm) ?? [];
+  return fences.length % 2 === 1;
+};
+
+export const renderStreamFrame = (
+  prefix: string,
+  normalized: string,
+): StreamFrame => {
+  const blocks = parseMarkdownIntoBlocks(normalized);
+  const settled =
+    !hasUnterminatedFence(normalized) &&
+    blocks.every((block) => remend(block.trim()) === block.trim());
+  const perBlock = blocks.map((block) => renderScreen(remend(block.trim())));
+  return {
+    prefix,
+    normalized,
+    blocks,
+    settled,
+    signature: signatureOfBlocks(perBlock),
+    visibleText: perBlock.map((block) => block.visibleText).join(' '),
+    katexErrors: perBlock.flatMap((block) => block.katexErrors),
+    texAnnotations: perBlock.flatMap((block) => block.texAnnotations),
+  };
+};
+
+/**
+ * Prefix lengths to replay. A stride rather than every character: a
+ * character-by-character replay of the whole corpus is minutes of CPU for the
+ * same signal. The final length is always included, because the last frame is
+ * the one that must equal the static render.
+ */
+export const prefixLengths = (input: string, maxFrames: number): number[] => {
+  const stride = Math.max(1, Math.ceil(input.length / maxFrames));
+  const lengths: number[] = [];
+  for (let n = stride; n < input.length; n += stride) lengths.push(n);
+  lengths.push(input.length);
+  return lengths;
+};
 
 /** Multi-line, greppable failure context. A bare boolean is useless here. */
 export const describeRender = (

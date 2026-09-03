@@ -31,7 +31,12 @@ import {
   ConformanceCase,
   RENDERER_PARITY_MATRIX,
 } from '../../fixtures/markdown/conformanceCases';
-import { LEAK_TOKENS, collapse, renderScreen } from './renderPipelines';
+import {
+  LEAK_TOKENS,
+  TEX_COMMAND_TOKENS,
+  collapse,
+  renderScreen,
+} from './renderPipelines';
 
 import { decode } from 'he';
 import { describe, expect, it } from 'vitest';
@@ -172,13 +177,10 @@ describe('parity — TTS column', () => {
         expect(spoken, context).toContain(needle);
       }
 
-      if (
-        row.tts === 'declared-downgrade' &&
-        testCase.expectation === 'renders-math'
-      ) {
-        // The declared downgrade is a spoken stand-in, not a deletion: the
-        // listener has to know an equation was there.
-        expect(spoken.toLowerCase(), context).toContain('equation');
+      if (row.ttsSpoken) {
+        // The declared downgrade made concrete: either the verbalization or
+        // the placeholder, never silence and never TeX.
+        expect(spoken, context).toContain(row.ttsSpoken);
       }
     });
   }
@@ -209,9 +211,23 @@ describe('parity sweep — no silent divergence anywhere in the corpus', () => {
         ).toContain(collapse(tex));
       }
 
-      const spoken = spokenText(testCase.input);
-      const leaked = LEAK_TOKENS.filter((token) => spoken.includes(token));
-      expect(leaked, `case: ${testCase.id}\nspoken:\n${spoken}`).toEqual([]);
+      // A ```latex fence is TeX the reader asked to SEE, and this app reads
+      // code aloud as words; whether it should is a separate product decision.
+      if (!testCase.rawTexIsIntentional) {
+        const spoken = spokenText(testCase.input);
+        const leaked = TEX_COMMAND_TOKENS.filter((token) =>
+          spoken.includes(token),
+        );
+        expect(
+          leaked,
+          [
+            `case: ${testCase.id}`,
+            'a TeX command reached the speech synthesizer, which reads it out',
+            'verbatim ("backslash frac open brace a close brace").',
+            `spoken:\n${spoken}`,
+          ].join('\n'),
+        ).toEqual([]);
+      }
     };
 
     if (testCase.knownGapFamilies?.includes('parity')) {

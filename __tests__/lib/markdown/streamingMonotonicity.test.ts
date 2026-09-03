@@ -53,29 +53,38 @@ const replay = (input: string): StreamFrame[] =>
   });
 
 /**
- * How many times the content ALREADY on screen can legitimately change as more
- * text arrives: once per math region, when it flips from literal characters to
- * typeset glyphs. Anything beyond that is prose churning under the reader.
+ * How many times the content already on screen may legitimately change as more
+ * text arrives.
+ *
+ * A `$$…$$` region gets ONE: it is literal text until the closing `$$` lands,
+ * then flips to typeset glyphs. A `\[…\]` or `\(…\)` region gets TWO, and the
+ * second one is a measured fact rather than a courtesy: while the region is
+ * open, markdown eats the delimiter's backslash and shows a bare `(`, so the
+ * text changes once when the opener is consumed and again when the closer
+ * arrives and normalization converts the region. A ```` ```math ```` fence gets one.
  */
-const mathRegionCount = (input: string): number => {
+const churnBudget = (input: string): number => {
   const doubleDollars = (input.match(/(?<!\\)\$\$/g) ?? []).length;
   const brackets = (input.match(/\\\[/g) ?? []).length;
   const parens = (input.match(/\\\(/g) ?? []).length;
   const fences = (input.match(/```(?:math|latex|tex)/g) ?? []).length;
-  return Math.ceil(doubleDollars / 2) + brackets + parens + fences;
+  return Math.ceil(doubleDollars / 2) + brackets * 2 + parens * 2 + fences;
 };
 
 /**
- * Markdown whose BLOCK STRUCTURE changes as it arrives: a table is a paragraph
- * until its delimiter row lands, a list item is a paragraph until the next item
- * lands, a fence is prose until it closes. Their text legitimately reflows, so
- * the stability bound below does not apply to them — that is a markdown fact,
- * not a math defect.
+ * Markdown whose STRUCTURE changes as it arrives, independently of math: a
+ * table is a paragraph until its delimiter row lands, a list item is a
+ * paragraph until the next one lands, a fence is prose until it closes — and
+ * remend auto-closes a dangling `**`, so the text renders bold, then unbolds
+ * when the real closer arrives. That churn is a markdown fact, not a math
+ * defect, so the bound below is not applied to these inputs.
  */
+const BLOCK_STRUCTURE_RE =
+  /^[ \t]*(\||[-*+][ \t]|\d+[.)][ \t]|>|#{1,6}[ \t]|```|~~~| {4}\S)/m;
+const INLINE_STRUCTURE_RE = /\*\*|__|`|\]\(|(?<![\\\w])_\S/;
+
 const hasReflowingStructure = (input: string): boolean =>
-  /^[ \t]*(\||[-*+][ \t]|\d+[.)][ \t]|>|#{1,6}[ \t]|```|~~~|    \S)/m.test(
-    input,
-  );
+  BLOCK_STRUCTURE_RE.test(input) || INLINE_STRUCTURE_RE.test(input);
 
 const streamable = CONFORMANCE_CASES.filter((c) => !c.skipStreaming);
 
@@ -185,7 +194,7 @@ describe('streaming replay — settled content does not churn', () => {
           );
         }
       }
-      const budget = mathRegionCount(testCase.input);
+      const budget = churnBudget(testCase.input);
       expect(
         unstable.length,
         [
