@@ -132,16 +132,59 @@ export function peekOrgAgentById(id: string): OrganizationAgent | null {
 }
 
 /**
+ * One request's view of the admin org-agent records: what serves, and which
+ * static ids the admin has retired outright.
+ */
+export interface AdminOrgAgentSnapshot {
+  /** Records that are serveable right now (enabled + validation ok + index recheck). */
+  serveable: OrgRagAgent[];
+  /**
+   * Static config ids an `enabled: false` admin record retires — the
+   * no-deploy kill switch. Deliberately has NO replacement: nothing is
+   * served in the static entry's place.
+   */
+  disabledStaticIds: string[];
+}
+
+/**
+ * Serveability and suppression from ONE read of the access snapshot and ONE
+ * `isServeableNow` evaluation per record.
+ *
+ * Both answers must come from the same pass. `isServeableNow` layers a
+ * 5-minute, single-flight-less index-probe cache over an access snapshot
+ * that `ensureFresh` may refresh mid-request, so two independent reads can
+ * disagree: one can say "static agent X is overridden, suppress it" while
+ * the other drops the override from what is served, and X then vanishes
+ * with nothing in its place. Callers derive both halves from this snapshot
+ * so that cannot happen.
+ */
+export async function getAdminOrgAgentSnapshot(): Promise<AdminOrgAgentSnapshot> {
+  const service = AgentAccessService.getInstance();
+  if (!service.isEnabled()) return { serveable: [], disabledStaticIds: [] };
+  await service.ensureFresh();
+  const records = service.getOrgAgents();
+  const staticIds = new Set(getOrganizationAgents().map((agent) => agent.id));
+  const candidates = records.filter(isServeable);
+  const flags = await Promise.all(candidates.map(isServeableNow));
+  return {
+    serveable: candidates.filter((_, index) => flags[index]),
+    // Records that failed validation or the index recheck are NOT listed:
+    // they are still `enabled`, so the static entry they override keeps
+    // serving as the fallback (see the merge rule at the top of the file).
+    disabledStaticIds: records
+      .filter((record) => !record.enabled && staticIds.has(record.id))
+      .map((record) => record.id),
+  };
+}
+
+/**
  * Admin records that are currently serveable — the discovery surface
  * (/api/agents) reads this; layer-1 access filtering happens there.
+ * Prefer {@link getAdminOrgAgentSnapshot} when the caller also needs the
+ * suppression list, so both come from the same pass.
  */
 export async function getServeableAdminOrgAgents(): Promise<OrgRagAgent[]> {
-  const service = AgentAccessService.getInstance();
-  if (!service.isEnabled()) return [];
-  await service.ensureFresh();
-  const candidates = service.getOrgAgents().filter(isServeable);
-  const flags = await Promise.all(candidates.map(isServeableNow));
-  return candidates.filter((_, index) => flags[index]);
+  return (await getAdminOrgAgentSnapshot()).serveable;
 }
 
 /**
@@ -149,21 +192,21 @@ export async function getServeableAdminOrgAgents(): Promise<OrgRagAgent[]> {
  * display — overrides (serveable records replacing a static entry) and
  * explicit disables. Served to clients so the bundled static list can be
  * trimmed without a deploy.
+ *
+ * Standalone convenience for callers that need nothing else; /api/agents
+ * derives its list from {@link getAdminOrgAgentSnapshot} instead, because
+ * it must never suppress a static id whose replacement is missing from the
+ * very same response.
  */
 export async function getSuppressedStaticAgentIds(): Promise<string[]> {
-  const service = AgentAccessService.getInstance();
-  if (!service.isEnabled()) return [];
-  await service.ensureFresh();
+  const { serveable, disabledStaticIds } = await getAdminOrgAgentSnapshot();
   const staticIds = new Set(getOrganizationAgents().map((agent) => agent.id));
-  const overrides = service
-    .getOrgAgents()
-    .filter((record) => staticIds.has(record.id));
-  const suppressed = await Promise.all(
-    overrides.map(
-      async (record) => !record.enabled || (await isServeableNow(record)),
-    ),
+  return Array.from(
+    new Set([
+      ...disabledStaticIds,
+      ...serveable
+        .filter((record) => staticIds.has(record.id))
+        .map((record) => record.id),
+    ]),
   );
-  return overrides
-    .filter((_, index) => suppressed[index])
-    .map((record) => record.id);
 }
