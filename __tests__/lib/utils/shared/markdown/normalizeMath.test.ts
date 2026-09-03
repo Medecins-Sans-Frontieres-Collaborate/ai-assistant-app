@@ -53,6 +53,15 @@ const DELIMITER_CONVERSION: Case[] = [
     input: 'table | $x$ | \\(y\\) |',
     expected: 'table | $x$ | $$y$$ |',
   },
+  {
+    // Single-dollar output would be INERT: Streamdown pins remark-math with
+    // `singleDollarTextMath: false`, so `$x$` reaches the reader as literal
+    // text. `$$` on one line is inline math to remark-math, which is what
+    // `\( … \)` meant in the first place.
+    name: 'inline conversion never emits a single-dollar delimiter',
+    input: 'Then \\(\\alpha\\) and \\( x^2 \\) and \\(y\\).',
+    expected: 'Then $$\\alpha$$ and $$x^2$$ and $$y$$.',
+  },
 ];
 
 const CONVERSION_GUARDS: Case[] = [
@@ -117,6 +126,26 @@ const DISPLAY_REGIONS: Case[] = [
       '- Step:\n\n  $$\\begin{aligned}\n  a &= b\n  \\end{aligned}$$\n\n- Next',
     expected:
       '- Step:\n\n  $$\n  \\begin{aligned}\n  a &= b\n  \\end{aligned}\n  $$\n\n- Next',
+  },
+  {
+    // The closing `$$` used to lose its `> ` prefix, which ended the quote
+    // early and left a second, EMPTY display box sitting outside it.
+    name: 'blockquote markers are carried onto every emitted line',
+    input: '> The ratio:\n>\n> $$\n> \\frac{a}{b}\n> $$',
+    expected: '> The ratio:\n>\n> $$\n> \\frac{a}{b}\n> $$',
+  },
+  {
+    name: 'a `>`-only line inside a quoted equation counts as blank',
+    input:
+      '> $$\n> \\begin{aligned}\n> a &= b \\\\\n>\n> c &= d\n> \\end{aligned}\n> $$',
+    expected:
+      '> $$\n> \\begin{aligned}\n> a &= b \\\\\n> c &= d\n> \\end{aligned}\n> $$',
+  },
+  {
+    // `>` is a relation in math mode. Only an opener that actually carried a
+    // quote marker may have quote markers stripped off its body.
+    name: 'a leading `>` in UNQUOTED display math is content, not a marker',
+    input: '$$\na\n> b\n$$',
   },
   { name: 'empty display region', input: '$$ $$' },
   { name: 'already-canonical inline display region', input: '$$E=mc^2$$' },
