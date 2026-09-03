@@ -32,6 +32,7 @@ import { appendCitationsToMarkdown } from '@/lib/utils/app/export/citationExport
 import { getAutonym } from '@/lib/utils/app/locales';
 import { parseThinkingContent } from '@/lib/utils/app/stream/thinking';
 import { rewriteSandboxLinks } from '@/lib/utils/shared/chat/sandboxLinks';
+import { toSpeakableText } from '@/lib/utils/shared/markdown/speakableText';
 import { generateAudioFilename } from '@/lib/utils/shared/string/slugify';
 
 import {
@@ -460,8 +461,19 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
 
           // Build request body with user's TTS settings for server-side voice resolution
           // Send explicit voice override if provided, otherwise send settings for resolution
+          //
+          // The synthesizer reads its input literally, so raw TeX comes out as
+          // "backslash frac open brace a close brace". `toSpeakableText` says
+          // what can be said in a sentence and collapses the rest to a spoken
+          // placeholder. It runs HERE rather than on the server because the
+          // server's `cleanMarkdown` strips emphasis with a `[*_]{1,3}` rule
+          // that would shred `x_1` before anything could verbalize it — and
+          // because shrinking the text client-side also, correctly, shrinks
+          // what the `feature.tts.charactersPerDay` guard has to count.
           const requestBody = {
-            text: displayedContent,
+            text: toSpeakableText(displayedContent, {
+              equationPlaceholder: t('chat.ttsEquationPlaceholder'),
+            }),
             voiceName: overrides.globalVoice || undefined,
             rate: overrides.rate ?? ttsSettings.rate,
             pitch: overrides.pitch ?? ttsSettings.pitch,
