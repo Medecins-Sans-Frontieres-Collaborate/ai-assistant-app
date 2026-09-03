@@ -105,7 +105,9 @@ describe('streaming replay — no remend artifacts reach the reader', () => {
             'this marker, which CommonMark then leaves in the prose because an',
             'ESCAPED bracket never opened a link. The app turns remend off',
             '(MATH_PARSE_INCOMPLETE_MARKDOWN in components/Markdown/mathRehype.ts);',
-            'this frame says it is back on, or back on at one call site.',
+            'this frame says that CONSTANT is back on. Whether each renderer',
+            'still FORWARDS it to <Streamdown> is asserted separately, in',
+            '__tests__/components/Markdown/IncompleteMarkdownWiring.test.tsx.',
           ].join('\n'),
         ).toBe(false);
       }
