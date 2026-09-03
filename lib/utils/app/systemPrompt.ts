@@ -15,6 +15,73 @@
  */
 
 /**
+ * Formatting rules that are a CONTRACT WITH THE RENDERER, not editorial
+ * taste: the chat UI renders markdown through Streamdown -> remark-math ->
+ * KaTeX, which understands `$`/`$$` delimiters and nothing else. A model
+ * that defaults to `\( ... \)` / `\[ ... \]` (what GPT/o-series do with no
+ * guidance) produces raw LaTeX on screen — issue #121.
+ *
+ * Exported, and interpolated into DEFAULT_BASE_SYSTEM_PROMPT below so there
+ * is exactly ONE copy of the text, because every path that REPLACES the base
+ * prompt with an agent's own prompt has to re-append it (see
+ * buildAgentPromptSections).
+ *
+ * Renderer coupling to keep in sync: single-dollar inline math only reaches
+ * KaTeX if the render layer passes remark-math `singleDollarTextMath: true`
+ * — Streamdown's default is `false`. If that render-side setting is ever
+ * reverted, the inline bullet here has to revert to `$$...$$` with it.
+ */
+export const RESPONSE_FORMATTING_PROMPT_SECTION = `## Response Formatting
+
+### Markdown
+- Use GitHub-flavored markdown for formatting
+- Use headers (##, ###) to organize longer responses
+- Use code blocks with language identifiers: \`\`\`typescript, \`\`\`python
+- Use inline \`code\` for file names, function names, and technical terms
+
+### Code Blocks
+- Always specify the language for syntax highlighting
+- For file references, indicate the path when helpful
+- Prefer complete, runnable examples over fragments
+- Even in scripts, please use well-named and wrapped functions / classes, as appropriate
+
+### Mathematical Notation / Formulas
+- Write mathematics as LaTeX inside dollar delimiters (rendered with KaTeX) unless the user requests otherwise
+- Inline math uses SINGLE dollar signs inside the sentence: \`$E = mc^2$\`
+- Display math uses DOUBLE dollar signs alone on their own lines, with a blank line before and after the block
+- Never use \`\\( ... \\)\`, \`\\[ ... \\]\`, or a \`\`\`latex code fence — this app does not render them and the user sees raw LaTeX
+- Keep a display block continuous: no blank lines inside \`$$ ... $$\` (inside \`aligned\`/\`cases\`, break lines with \`\\\\\`)
+- Escape a literal dollar sign as \`\\$\` — e.g. a budget of \`\\$5,000\` — otherwise text between two dollar signs is parsed as math
+- Prefer display math for complex equations, proofs, and multi-step derivations`;
+
+/**
+ * Mermaid guidance — same renderer-contract reasoning as
+ * RESPONSE_FORMATTING_PROMPT_SECTION: an agent prompt that replaces the base
+ * prompt loses it, and the model then emits diagram syntax the app cannot
+ * render.
+ */
+export const DIAGRAMS_PROMPT_SECTION = `## Diagrams
+
+When visual explanation helps, use Mermaid diagrams in fenced code blocks.
+
+### Flowchart Syntax (most common errors happen here)
+- Always use node IDs with labels: \`A["Start"] --> B["End"]\` NOT \`["Start"] --> ["End"]\`
+- Include direction: \`flowchart TD\` (top-down) or \`flowchart LR\` (left-right)
+- Node IDs must be alphanumeric without spaces
+- Escape special characters in labels: \`&\` → \`&amp;\`, \`<\` → \`&lt;\`
+
+### Supported Diagram Types
+- \`flowchart\` - Processes, workflows (use instead of deprecated \`graph\`)
+- \`sequenceDiagram\` - Actor interactions over time
+- \`stateDiagram-v2\` - State machines
+- \`classDiagram\` - UML class relationships
+- \`erDiagram\` - Database entity relationships
+- \`pie\` - Proportional data
+- \`gantt\` - Project timelines
+- \`mindmap\` - Hierarchical ideas
+- \`journey\` - User experience flows`;
+
+/**
  * Default base system prompt content.
  * Can be overridden via BASE_SYSTEM_PROMPT environment variable.
  */
@@ -82,47 +149,9 @@ You are an AI tool, not a human colleague or subject matter expert:
 - Be clear that you do not know everything about the application and any advice there is generic
 - Be clear, when relevant, that you do not know anything about the user outside of the current conversation. So you cannot make assessments made on other conversations or context 
 
-## Response Formatting
+${RESPONSE_FORMATTING_PROMPT_SECTION}
 
-### Markdown
-- Use GitHub-flavored markdown for formatting
-- Use headers (##, ###) to organize longer responses
-- Use code blocks with language identifiers: \`\`\`typescript, \`\`\`python
-- Use inline \`code\` for file names, function names, and technical terms
-
-### Code Blocks
-- Always specify the language for syntax highlighting
-- For file references, indicate the path when helpful
-- Prefer complete, runnable examples over fragments
-- Even in scripts, please use well-named and wrapped functions / classes, as appropriate
-
-### Mathematical Notation / Formulas
-- Use KaTeX for mathematical proofs, equations, and formulas unless the user requests otherwise
-- Always use double dollar signs for math: \`$$E = mc^2$$\`
-- For display/block math, place \`$$...$$\` on its own line with blank lines before and after
-- For inline math within sentences, use \`$$...$$\` inline with the text
-- Prefer display math for complex equations, proofs, and multi-step derivations
-
-## Diagrams
-
-When visual explanation helps, use Mermaid diagrams in fenced code blocks.
-
-### Flowchart Syntax (most common errors happen here)
-- Always use node IDs with labels: \`A["Start"] --> B["End"]\` NOT \`["Start"] --> ["End"]\`
-- Include direction: \`flowchart TD\` (top-down) or \`flowchart LR\` (left-right)
-- Node IDs must be alphanumeric without spaces
-- Escape special characters in labels: \`&\` → \`&amp;\`, \`<\` → \`&lt;\`
-
-### Supported Diagram Types
-- \`flowchart\` - Processes, workflows (use instead of deprecated \`graph\`)
-- \`sequenceDiagram\` - Actor interactions over time
-- \`stateDiagram-v2\` - State machines
-- \`classDiagram\` - UML class relationships
-- \`erDiagram\` - Database entity relationships
-- \`pie\` - Proportional data
-- \`gantt\` - Project timelines
-- \`mindmap\` - Hierarchical ideas
-- \`journey\` - User experience flows
+${DIAGRAMS_PROMPT_SECTION}
 
 ## Reasoning
 
@@ -294,6 +323,83 @@ export function buildConversationContextSections(
         memoryItems.map((m) => `- ${m}`).join('\n'),
     );
   }
+
+  return sections.join('\n\n');
+}
+
+/**
+ * Top-level headings a replaced prompt must not lose, because they describe
+ * what the RENDERER can display rather than a style preference.
+ */
+const FORMATTING_SECTION_HEADINGS = [
+  '## Response Formatting',
+  '## Diagrams',
+] as const;
+
+/**
+ * Slices one top-level `## ` section out of a prompt, heading included,
+ * stopping at the next top-level heading (so the `### ` subsections come
+ * along). Anchored to a line start so a `### Response Formatting` subheading
+ * elsewhere can never be mistaken for the section itself.
+ *
+ * Returns undefined when the prompt has no such section — the signal that an
+ * operator override carries different structure and the caller must fall
+ * back to the built-in constants.
+ */
+function extractPromptSection(
+  prompt: string,
+  heading: string,
+): string | undefined {
+  const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = new RegExp(`(?:^|\\n)${escaped}\\n`).exec(prompt);
+  if (!match) return undefined;
+
+  const body = prompt.slice(match.index + match[0].length);
+  const next = body.search(/\n## /);
+  return `${heading}\n${next === -1 ? body : body.slice(0, next)}`.trimEnd();
+}
+
+/**
+ * Everything an agent prompt that REPLACES context.systemPrompt has to get
+ * back: the formatting/diagram rules plus the conversation-context block.
+ *
+ * Why the rules are READ OUT of the effective base prompt instead of being
+ * emitted from the constants directly: BASE_SYSTEM_PROMPT is overridable via
+ * an env var, and a deployment that rewrote `## Response Formatting` must get
+ * ITS wording on agent paths too — otherwise agent responses would silently
+ * follow different rules than normal chat, and appending the built-in copy on
+ * top of an override that already has its own section would inject a stale
+ * duplicate the model has to reconcile. Extraction keeps the two in lockstep
+ * by construction, with a single source of truth.
+ *
+ * The constants are the fallback for an override that carries NO such
+ * section: the `$`/`$$` delimiter rules are a renderer contract, and an agent
+ * with no math guidance at all emits `\( ... \)` and the user sees raw LaTeX
+ * (issue #121). An operator who deliberately strips the section still gets
+ * the built-in rules; that is the intended trade — the alternative
+ * (returning nothing) reinstates the reported bug on overridden deployments.
+ *
+ * `basePrompt` is injectable for tests; production callers pass nothing.
+ */
+export function buildAgentPromptSections(
+  conversationSummary?: string,
+  memories?: string[],
+  basePrompt: string = BASE_SYSTEM_PROMPT,
+): string {
+  const extracted = FORMATTING_SECTION_HEADINGS.map((heading) =>
+    extractPromptSection(basePrompt, heading),
+  ).filter((section): section is string => !!section);
+
+  const sections =
+    extracted.length > 0
+      ? extracted
+      : [RESPONSE_FORMATTING_PROMPT_SECTION, DIAGRAMS_PROMPT_SECTION];
+
+  const conversationContext = buildConversationContextSections(
+    conversationSummary,
+    memories,
+  );
+  if (conversationContext) sections.push(conversationContext);
 
   return sections.join('\n\n');
 }
