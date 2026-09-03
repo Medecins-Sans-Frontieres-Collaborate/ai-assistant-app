@@ -36,6 +36,7 @@ import {
   LEAK_TOKENS,
   describeRender,
   findLeaks,
+  findRawCommands,
   renderScreen,
   renderWithStockSanitize,
   renderWithoutSanitize,
@@ -87,6 +88,24 @@ const check = (testCase: ConformanceCase): void => {
     ),
   ).toEqual([]);
 
+  // --- universal: no unsupported TeX command in prose ----------------------
+  // The token list above cannot cover this class. rehype-katex is pinned with
+  // an `errorColor`, so KaTeX prints an unknown control sequence as its own
+  // name in a muted colour — no error span, no title, nothing for
+  // `allowKatexError` or the empty-box detector to catch. Any backslash
+  // command still readable as prose is the issue-#121 symptom, whichever
+  // command it happens to be.
+  if (!testCase.rawTexIsIntentional) {
+    expect(
+      findRawCommands(analysis.proseText),
+      context(
+        'a TeX command reached the reader as prose. KaTeX renders an UNSUPPORTED ' +
+          'control sequence as its own name in errorColor — no .katex-error, no title — ' +
+          'so allowKatexError and the degradation rules never fire for this class.',
+      ),
+    ).toEqual([]);
+  }
+
   // The flip side, so `rawTexIsIntentional` is a real assertion and not a
   // silencer: a case that promises to SHOW TeX must still be showing it.
   if (testCase.rawTexIsIntentional) {
@@ -111,6 +130,19 @@ const check = (testCase: ConformanceCase): void => {
       analysis.katexErrors,
       context('an equation that should render cleanly produced a KaTeX error'),
     ).toEqual([]);
+  }
+
+  if (testCase.mustBeDisplayMath) {
+    expect(
+      analysis.displayCount,
+      context(
+        'this case asked for DISPLAY math and got an inline span. A one-line ' +
+          "`$$…$$` is remark-math's inline construct: no .katex-display wrapper, " +
+          'so no centring, no big-operator limits, and — since `.katex .base` is ' +
+          '`white-space: nowrap` — no overflow-x scroller either, which is how a ' +
+          'wide derivation ends up spilling out of the message bubble.',
+      ),
+    ).toBeGreaterThan(0);
   }
 
   if (testCase.expectation === 'stays-literal') {
@@ -212,13 +244,48 @@ describe('the sanitize step is where rendered equations live or die', () => {
     expect(stock.visibleText).toContain('\\frac{a}{b}');
   });
 
-  it('the app chain (MATH_REHYPE_PLUGINS) keeps classes, MathML and styles', () => {
+  it('the app chain (MATH_REHYPE_PLUGINS) keeps classes, MathML, styles and aria-hidden', () => {
     const safe = renderScreen(displayMath);
     expect(safe.katexCount, safe.html).toBeGreaterThan(0);
     expect(safe.html).toContain('class="katex"');
     expect(safe.html).toContain('<math');
     expect(safe.html).toContain('style="');
+    // KaTeX puts BOTH layers in the accessibility tree on purpose: the MathML
+    // is what a screen reader reads, and `aria-hidden="true"` on the visual
+    // glyph layer is the ONLY thing stopping it being read a second time.
+    // `ariaHidden` is not in hast-util-sanitize's wildcard allowlist, so
+    // dropping that one line from MATH_ATTRIBUTES passes every other assertion
+    // here while every equation starts announcing twice. Matching the span
+    // rather than the bare attribute also catches it landing on the wrong node.
+    expect(safe.html).toContain('class="katex-html" aria-hidden="true"');
     // The TeX is inside <annotation> where it belongs, not loose in prose.
     expect(safe.proseText).not.toContain('\\frac');
+  });
+
+  // Re-arming sanitize is a widening of a security control, so the widening
+  // itself needs a boundary test. `className`/`style` are granted per tag
+  // (span + the MathML set), never on `*`: KaTeX emits them on no other tag,
+  // so a wildcard grant would buy nothing for mathematics while handing raw
+  // HTML — from a poisoned RAG source, or an injected answer — the ability to
+  // position itself over the page. rehype-raw runs BEFORE sanitize in this
+  // chain, so that HTML really does reach the sanitizer as elements.
+  it('does not let raw HTML in a message carry style or class through', () => {
+    const overlay =
+      '<div style="position:fixed;inset:0;background:red" class="evil">x</div>\n\nafter';
+    const safe = renderScreen(overlay);
+    expect(safe.html).not.toContain('position:fixed');
+    expect(safe.html).not.toContain('evil');
+    // The paragraph after it still renders — this is a stripped attribute,
+    // not a dropped document.
+    expect(safe.visibleText).toContain('after');
+  });
+
+  it('keeps the SVG layer KaTeX draws stretchy delimiters and arrows with', () => {
+    // \xrightarrow, \overbrace and tall \left(...\right) are paths, not
+    // glyphs. They were unwrapped to nothing under the stock schema.
+    const safe = renderScreen('$$A \\xrightarrow{f} B$$');
+    expect(safe.html, safe.html).toContain('<svg');
+    expect(safe.html).toContain('<path');
+    expect(safe.katexErrors).toEqual([]);
   });
 });

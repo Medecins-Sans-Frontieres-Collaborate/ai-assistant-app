@@ -6,6 +6,11 @@
  *   screen  Streamdown → remark-math → KaTeX (typeset equations)
  *   export  `markdownToHtml` → `marked` + a math extension (TeX as text) —
  *           the choke point for .docx, .pdf, .html, .txt and the document editor
+ *   .md     the ONE surface that bypasses that choke point:
+ *           `MessageDownloadMenu.prepare` short-circuits `markdownToHtml` for
+ *           `format === 'md'` and writes the markdown to disk, so the file's
+ *           math correctness rests on that component's own
+ *           `normalizeMathDelimiters` call (and `ShareToOneDriveModal`'s)
  *   TTS     `toSpeakableText` → `cleanMarkdown` → the speech synthesizer
  *
  * They cannot all do the same thing: Word has no KaTeX and a voice cannot say
@@ -48,6 +53,19 @@ const exportedText = (markdown: string): string =>
       .replace(/<br\s*\/?>/gi, '\n')
       .replace(/<[^>]+>/g, ''),
   );
+
+/**
+ * The reader's view of a downloaded `.md` file.
+ *
+ * NOT `exportedText`: `markdownToHtml` normalizes internally (formatConverter
+ * line ~265), which makes that helper normalization-immune and therefore blind
+ * to this surface. The md branch never calls it, so the bytes on disk are just
+ * the normalized markdown — and if the call sites stop normalizing, a user
+ * downloading .md and .docx from the same menu on the same message gets `\[ …
+ * \]` in one and `$$ … $$` in the other.
+ */
+const mdFileText = (markdown: string): string =>
+  normalizeMathDelimiters(markdown);
 
 /**
  * The real TTS chain: the client strips math to a spoken placeholder, then the
@@ -149,6 +167,20 @@ describe('parity — export column', () => {
       // math is unrecoverable in Word, Obsidian or anywhere else.
       expect(exported, context).not.toContain('\\[');
       expect(exported, context).not.toContain('\\(');
+
+      // Same promise for the .md file, which reaches disk without ever
+      // touching markdownToHtml.
+      const mdFile = mdFileText(testCase.input);
+      expect(mdFile, `${context}\nmd file:\n${mdFile}`).not.toContain('\\[');
+      expect(mdFile, `${context}\nmd file:\n${mdFile}`).not.toContain('\\(');
+      if (row.export === 'declared-downgrade') {
+        for (const tex of screen.texAnnotations) {
+          expect(collapse(mdFile), `${context}\nmd file:\n${mdFile}`).toContain(
+            collapse(tex),
+          );
+        }
+        expect(mdFile, `${context}\nmd file:\n${mdFile}`).toContain('$$');
+      }
     });
   }
 });
@@ -197,6 +229,8 @@ describe('parity sweep — no silent divergence anywhere in the corpus', () => {
       const screen = renderScreen(normalized);
       const exported = exportedText(testCase.input);
 
+      const mdFile = mdFileText(testCase.input);
+
       for (const tex of screen.texAnnotations) {
         if (tex.trim() === '') continue;
         expect(
@@ -207,6 +241,17 @@ describe('parity sweep — no silent divergence anywhere in the corpus', () => {
             tex,
             `normalized:\n${normalized}`,
             `exported:\n${exported}`,
+          ].join('\n'),
+        ).toContain(collapse(tex));
+        // The .md surface bypasses markdownToHtml entirely, so it needs its
+        // own sweep or the divergence can come back there unseen.
+        expect(
+          collapse(mdFile),
+          [
+            `case: ${testCase.id}`,
+            'the screen typeset this expression but the .md download lost it:',
+            tex,
+            `md file:\n${mdFile}`,
           ].join('\n'),
         ).toContain(collapse(tex));
       }

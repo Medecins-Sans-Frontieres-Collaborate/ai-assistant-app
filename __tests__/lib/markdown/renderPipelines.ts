@@ -390,3 +390,26 @@ const indent = (text: string): string =>
 /** Leak tokens present in a case's prose. Empty array is the passing state. */
 export const findLeaks = (proseText: string): string[] =>
   LEAK_TOKENS.filter((token) => proseText.includes(token));
+
+/**
+ * Backslash commands left in PROSE — the leak class a fixed token list can
+ * never enumerate.
+ *
+ * Streamdown pins rehype-katex with `errorColor: 'var(--color-muted-foreground)'`,
+ * so an UNSUPPORTED control sequence is not an error at all: KaTeX prints the
+ * command's own name in a muted colour inside an ordinary `.katex` node, with
+ * no `.katex-error` span and no `title`. Nothing in the degradation apparatus
+ * fires — `allowKatexError`, DEGRADATION_RULES and the empty-box detector all
+ * sit idle — and the reader is looking at raw TeX. Measured: `$$\ce{2H2 + O2
+ * -> 2H2O}$$` reaches the page as `\ce2H2+O2->2H2O`, and `$$\foobarbaz{x}$$`
+ * as `\foobarbazx`, both with `katexErrors: []`.
+ *
+ * A shape test rather than a list, because the offending command is whatever
+ * the model invented. Deliberately NOT folded into `LEAK_TOKENS`: that array
+ * is also used as an INVERSE assertion for `rawTexIsIntentional` cases, and
+ * `TEX_COMMAND_TOKENS` gates the TTS sweep, so widening either would silently
+ * change two other semantics.
+ */
+export const findRawCommands = (proseText: string): string[] => [
+  ...new Set(proseText.match(/\\[a-zA-Z]+/g) ?? []),
+];
