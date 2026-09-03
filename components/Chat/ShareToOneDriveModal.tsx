@@ -31,6 +31,7 @@ import {
   renderShareMarkdown,
 } from '@/lib/utils/app/share/shareContent';
 import { markdownToHtml } from '@/lib/utils/shared/document/formatConverter';
+import { normalizeMathDelimiters } from '@/lib/utils/shared/markdown/normalizeMath';
 
 import { Conversation, Message } from '@/types/chat';
 
@@ -192,10 +193,15 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
         return;
       }
 
-      const markdown = renderShareMarkdown(title, messages, {
-        user: t('roleUser'),
-        assistant: t('roleAssistant'),
-      });
+      // Normalized before BOTH arguments so the .docx and the markdown fallback
+      // carry the same delimiters — a shared document must not disagree with
+      // the conversation it was shared from (issue #121). Idempotent.
+      const markdown = normalizeMathDelimiters(
+        renderShareMarkdown(title, messages, {
+          user: t('roleUser'),
+          assistant: t('roleAssistant'),
+        }),
+      );
       const blob = await buildBlob('docx', markdownToHtml(markdown), markdown);
       // The document heading keeps the title as typed; only the FILE name
       // needs OneDrive's character rules applied.
