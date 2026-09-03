@@ -128,3 +128,29 @@ export const MATH_REHYPE_PLUGINS: PluggableList = Object.entries(
 ).map(([name, plugin]) =>
   name === 'sanitize' ? [rehypeSanitize, MATH_SANITIZE_SCHEMA] : plugin,
 );
+
+/**
+ * Whether Streamdown may run `remend` over a partial block while a message
+ * streams (Streamdown's own default is `true`).
+ *
+ * OFF, because remend is measurably wrong on this app's content:
+ *  - it counts brackets without honouring backslash escapes, so a `\[` with no
+ *    `\]` yet — the opener of every display equation GPT emits — is read as an
+ *    incomplete LINK and closed with `](streamdown:incomplete-link)`. CommonMark
+ *    does not open a link on an escaped bracket, so that closer is never
+ *    consumed: the literal string is printed into the answer, and for a message
+ *    that merely MENTIONS `\[` it stays there for the whole stream.
+ *  - it closes a partial `$$` region with another `$$`, so every token of a
+ *    half-arrived formula re-renders as a churning red KaTeX error span.
+ *
+ * What is given up is small by comparison: remend does NOT close incomplete
+ * code fences (measured on remend 1.0.1 — `"```python\nprint(1)"` comes back
+ * unchanged), so all it buys is auto-closing a half-typed `**bold`, `*em*` or
+ * `` `code` ``, which now shows its markers for the few hundred milliseconds
+ * before the closer arrives.
+ *
+ * Exported rather than inlined so the conformance harness
+ * (`__tests__/lib/markdown/renderPipelines.ts`) models the real streaming path
+ * instead of assuming one.
+ */
+export const MATH_PARSE_INCOMPLETE_MARKDOWN = false;
