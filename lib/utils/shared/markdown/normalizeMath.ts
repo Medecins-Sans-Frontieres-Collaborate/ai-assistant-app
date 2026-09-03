@@ -69,6 +69,14 @@ interface LineState {
   inIndentedCode: boolean;
 }
 
+/** Where a segment sits relative to line boundaries in the whole document. */
+interface SegmentBounds {
+  /** The segment's first character begins a line. */
+  readonly startsAtLineStart: boolean;
+  /** The segment's last character ends a line (or the document). */
+  readonly endsAtLineEnd: boolean;
+}
+
 /** Longest `\[ … \]` body we will convert; see mathPlausible. */
 const MAX_TEX_REGION_LENGTH = 1000;
 
@@ -122,10 +130,14 @@ export function normalizeMathDelimiters(markdown: string): string {
 
     const startsAtLineStart =
       segment.start === 0 || markdown[segment.start - 1] === '\n';
+    const segmentEnd = segment.start + segment.text.length;
+    const endsAtLineEnd =
+      segmentEnd === markdown.length || markdown[segmentEnd] === '\n';
+    const bounds: SegmentBounds = { startsAtLineStart, endsAtLineEnd };
 
     let text = segment.text;
-    text = convertTexRegions(text, '[', ']', true);
-    text = convertTexRegions(text, '(', ')', false);
+    text = convertTexRegions(text, '[', ']', true, bounds);
+    text = convertTexRegions(text, '(', ')', false, bounds);
     text = normalizeDisplayRegions(text);
     text = escapeCurrency(text, state, startsAtLineStart);
     out += text;
@@ -220,6 +232,16 @@ function segmentProtectedRegions(markdown: string): Segment[] {
   return segments;
 }
 
+/** Indentation plus any number of blockquote markers, as a fence line may carry. */
+const CONTAINER_INDENT = /^[ \t]*(?:>[ \t]*)*/;
+
+/**
+ * Everything CommonMark allows before a fence marker on its own line:
+ * indentation, blockquote markers, and at most one list marker.
+ */
+const FENCE_LINE_PREFIX =
+  /^[ \t]*(?:>[ \t]*)*(?:[-*+][ \t]+|\d{1,9}[.)][ \t]+)?$/;
+
 /**
  * If a fenced code block opens at `i`, returns the offset just past its
  * closing fence line (or the end of input when unterminated).
@@ -235,7 +257,14 @@ function segmentProtectedRegions(markdown: string): Segment[] {
  */
 function matchFence(text: string, i: number): number {
   const lineStart = text.lastIndexOf('\n', i - 1) + 1;
-  if (!/^[ \t]*$/.test(text.slice(lineStart, i))) return -1;
+  // A fence legally opens inside a container: `> ```sh` in a quote, `- ```sh`
+  // on a list-marker line. Demanding pure whitespace here left both of those
+  // unprotected, and the only thing that accidentally saved them was
+  // matchInlineCode finding a matching backtick run later — which never happens
+  // for a `~~~` fence (that branch is backtick-only) nor for a fence that has
+  // not closed yet mid-stream. The visible cost was rule 4 writing `\$` into
+  // someone's `echo $HOME`, permanently for a tilde fence.
+  if (!FENCE_LINE_PREFIX.test(text.slice(lineStart, i))) return -1;
 
   const fenceChar = text[i];
   let openLength = 0;
@@ -251,8 +280,12 @@ function matchFence(text: string, i: number): number {
     const lineEnd = newline === -1 ? text.length : newline;
     const line = text.slice(cursor, lineEnd);
 
-    let k = 0;
-    while (line[k] === ' ' || line[k] === '\t') k++;
+    // The closer carries the same container prefix as the opener, so `> ~~~`
+    // has to be recognised as closing `> ~~~sh`. Without this the opener above
+    // would match and then never find its closer, protecting the whole rest of
+    // the document.
+    const indent = CONTAINER_INDENT.exec(line)?.[0] ?? '';
+    let k = indent.length;
     let closeLength = 0;
     while (line[k + closeLength] === fenceChar) closeLength++;
     if (
@@ -342,6 +375,14 @@ function matchHtmlBlock(text: string, i: number): number {
 /* -------------------------------------------------------------------------- */
 
 /**
+ * What may precede a display region on its own line: indentation and
+ * blockquote markers, and nothing else. Deliberately excludes a list marker —
+ * `- \[ x^2 \]` is a bullet whose text is the equation, and lifting it onto
+ * its own lines would pull it out of the item.
+ */
+const OWN_LINE_PREFIX = /^[ \t]*(?:>[ \t]?)*$/;
+
+/**
  * Rewrites balanced TeX delimiter pairs into dollar delimiters.
  *
  * Prevents: `\[ \frac{a}{b} \]` rendering as the literal text
@@ -356,8 +397,44 @@ function convertTexRegions(
   openChar: string,
   closeChar: string,
   display: boolean,
+  bounds: SegmentBounds,
 ): string {
   if (!text.includes(`\\${openChar}`)) return text;
+
+  /**
+   * Whether the region `[open, closeEnd)` is alone on its line — nothing but a
+   * container prefix in front of it, nothing but whitespace behind it.
+   *
+   * Only such a region may be promoted to the multi-line `$$` shape. `\[` means
+   * DISPLAY math, but a one-line `$$…$$` is remark-math's INLINE construct:
+   * measured, it produces no `.katex-display` wrapper, no `display="block"` and
+   * `\sum` limits beside the sigma instead of above it — and because
+   * `.katex .base` is `white-space: nowrap`, the `.katex-display{overflow-x:auto}`
+   * rule in globals.css never applies, so a wide derivation spills out of the
+   * message bubble with no scrollbar.
+   *
+   * Promoting a MID-SENTENCE region instead would be destructive, which is why
+   * this guard is not optional: measured, `The value $$\n…\n$$ is here.`
+   * swallows " is here." outright.
+   */
+  /** Nothing but a container prefix stands between the line start and `open`. */
+  const startsLine = (open: number): boolean => {
+    const lineStart = text.lastIndexOf('\n', open - 1) + 1;
+    // A segment that begins mid-line (prose after an inline code span) carries
+    // no evidence about what precedes it, so it never counts as line-owning.
+    if (lineStart === 0 && !bounds.startsAtLineStart) return false;
+    return OWN_LINE_PREFIX.test(text.slice(lineStart, open));
+  };
+
+  const ownsItsLine = (open: number, closeEnd: number): boolean => {
+    if (!startsLine(open)) return false;
+
+    const newline = text.indexOf('\n', closeEnd);
+    if (newline === -1) {
+      return bounds.endsAtLineEnd && /^[ \t]*$/.test(text.slice(closeEnd));
+    }
+    return /^[ \t]*$/.test(text.slice(closeEnd, newline));
+  };
 
   let out = '';
   let i = 0;
@@ -379,7 +456,7 @@ function convertTexRegions(
       continue;
     }
 
-    const close = findTexClose(text, i + 2, closeChar);
+    const close = findTexClose(text, i + 2, closeChar, startsLine(i));
     if (close === -1) {
       // Streaming safety: no closer yet, so nothing after this point can be
       // judged. Copy the rest through untouched.
@@ -404,8 +481,8 @@ function convertTexRegions(
       continue;
     }
 
-    // `\[a\]\[b\]` naively becomes `$$a$$$$b$$`, which renders as NEITHER
-    // equation. One space between adjacent regions restores both.
+    // `\[a^2\]\[b^2\]` naively becomes `$$a^2$$$$b^2$$`, which renders as
+    // NEITHER equation. One space between adjacent regions restores both.
     if (previousEnd === i) out += ' ';
     // `$$` for BOTH forms, deliberately. Streamdown pins remark-math with
     // `singleDollarTextMath: false` (measured: `defaultRemarkPlugins.math[1]`
@@ -415,7 +492,15 @@ function convertTexRegions(
     // exactly what `\( … \)` meant. If `singleDollarTextMath` is ever turned
     // on, this can go back to `$…$` for the inline arm — nothing else depends
     // on it.
-    out += display ? `$$${inner}$$` : `$$${inner.trim()}$$`;
+    //
+    // A `\[ … \]` that owns its line is the one exception: it asked for
+    // DISPLAY math, so it goes onto its own lines and rule 3 finishes the job
+    // (container prefix, blank-line collapse) below.
+    if (display && ownsItsLine(i, close + 2)) {
+      out += `$$\n${inner.trim()}\n$$`;
+    } else {
+      out += display ? `$$${inner}$$` : `$$${inner.trim()}$$`;
+    }
     i = close + 2;
     previousEnd = i;
   }
@@ -423,18 +508,65 @@ function convertTexRegions(
   return out;
 }
 
-/** First unescaped `\]` / `\)` at or after `from`, or -1. */
-function findTexClose(text: string, from: number, closeChar: string): number {
+/**
+ * First unescaped `\]` / `\)` at or after `from`, or -1 — stopping at a blank
+ * line.
+ *
+ * The bound is a correctness fix, not an optimization. Scanning forward
+ * without one let an UNPAIRED `\[` reach across paragraphs and pair with an
+ * unrelated `\]`: measured, "type \[ in your document.\n\nIn section 2 … \]
+ * behaves at the end." fused two paragraphs, put a literal `$$` on screen and
+ * DELETED the clause after the false closer.
+ *
+ * It is a bound rather than a flat "stop at the first blank line" because a
+ * blank line inside a display block is precisely the C3 case this module
+ * exists to repair (`\[` / `\begin{aligned}` / blank / `\end{aligned}` / `\]`
+ * — rule 3 then collapses the blank so remark-math can typeset it). So a blank
+ * line may be crossed ONLY by a region that is shaped like a block: both
+ * delimiters alone on their own lines. Prose openers and prose closers, which
+ * is every corrupting case, stop at the paragraph break exactly as
+ * `findClosingSingleDollar` and remark-math's own constructs do.
+ */
+function findTexClose(
+  text: string,
+  from: number,
+  closeChar: string,
+  openerOwnsLine: boolean,
+): number {
+  let crossedBlankLine = false;
+
   for (let k = from; k < text.length - 1; k++) {
+    if (text[k] === '\n') {
+      let p = k + 1;
+      while (text[p] === ' ' || text[p] === '\t') p++;
+      if (p >= text.length || text[p] === '\n') {
+        if (!openerOwnsLine) return -1;
+        crossedBlankLine = true;
+      }
+      continue;
+    }
     if (
       text[k] === '\\' &&
       text[k + 1] === closeChar &&
       !isEscapedAt(text, k)
     ) {
+      // Give up rather than keep looking: a closer further on is even less
+      // likely to be the author's, and copying through untouched is the arm
+      // that already handles a still-streaming region.
+      if (crossedBlankLine && !closerOwnsLine(text, k)) return -1;
       return k;
     }
   }
   return -1;
+}
+
+/** Whether the two-character closer at `k` sits alone on its line. */
+function closerOwnsLine(text: string, k: number): boolean {
+  const lineStart = text.lastIndexOf('\n', k - 1) + 1;
+  if (!OWN_LINE_PREFIX.test(text.slice(lineStart, k))) return false;
+  const newline = text.indexOf('\n', k + 2);
+  const tail = newline === -1 ? text.slice(k + 2) : text.slice(k + 2, newline);
+  return /^[ \t]*$/.test(tail);
 }
 
 /**
@@ -443,16 +575,28 @@ function findTexClose(text: string, from: number, closeChar: string): number {
  * Prevents: "use \[ and \] to escape" becoming `use $$ and $$ to escape`,
  * which typesets the word "and". A false negative merely shows the model's
  * literal text; a false positive corrupts a sentence — so this errs toward
- * leaving things alone. Known accepted miss: `\(ABC\)` (a triangle, three
- * letters, no operator).
+ * leaving things alone.
+ *
+ * Accepting a bare digit, or any body of two characters or fewer, was NOT
+ * erring that way. `\[` and `\]` are also how markdown escapes a literal
+ * bracket, so `\[3.2\]` (a section number), `\[2\]` (a citation), `\[a-z\]`
+ * (a character class) and `\[ok\]` all reached the reader with the very
+ * brackets the author escaped to keep DELETED — measured, `\[a-z\]` rendered
+ * as `a−z`. So a digit is not a signal and a hyphen is not an operator.
+ *
+ * Known accepted misses, all of which merely show the author's own text:
+ * `\(ABC\)` (a triangle), `\( n - 1 \)` (a hyphen with no other signal).
  */
 function mathPlausible(inner: string): boolean {
   if (inner.length === 0 || inner.length > MAX_TEX_REGION_LENGTH) return false;
   const trimmed = inner.trim();
   if (trimmed === '') return false;
-  // A TeX command, an operator, a brace or a digit — or a bare short symbol
-  // such as `x`, `n`, `dx`.
-  return /[\\^_{}=+\-*/<>|]|\d/.test(trimmed) || trimmed.length <= 2;
+  // A backslash command, a superscript/subscript, or a brace: unambiguous TeX.
+  if (/[\\^_{}]/.test(trimmed)) return true;
+  // Otherwise an operator counts only BETWEEN operands, so `a-z` in a
+  // character class and `0-10` in a range stay literal. `-` is left out
+  // entirely: it is a hyphen far more often than it is a minus sign.
+  return /[A-Za-z0-9)\]]\s*[=+*/<>|]\s*[A-Za-z0-9[(]/.test(trimmed);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -647,6 +791,19 @@ function escapeCurrency(
       continue;
     }
 
+    // A `$` inside a bare URL belongs to the link destination, not to prose.
+    // GFM's literal-autolink extension does NOT process backslash escapes, so
+    // the `\` we would add survives into the href as `%5C` (a 404) and shows as
+    // a stray backslash in the link text — measured on both renderers for
+    // "Try https://ex.com/a$1,000/b and https://ex.com/$2,000 now.". Tier A of
+    // isCurrencySpan has no math-signal veto, so the rest of the URL after the
+    // amount is no defence.
+    if (inAutolink(text, i)) {
+      out += ch;
+      i++;
+      continue;
+    }
+
     const content = text.slice(i + 1, closer);
     if (isCurrencySpan(content)) {
       out += '\\$';
@@ -661,6 +818,20 @@ function escapeCurrency(
   }
 
   return out;
+}
+
+/** A whitespace-delimited run that GFM would autolink. */
+const AUTOLINK_RUN = /^<?(?:https?|ftp):\/\/|^<?www\./i;
+
+/**
+ * Whether the sigil at `i` sits inside a bare URL. Walks back to the start of
+ * the whitespace-delimited run and asks whether that run opens like a link;
+ * prose amounts (`$5,000`) never start with a scheme or `www.`.
+ */
+function inAutolink(text: string, i: number): boolean {
+  let start = i;
+  while (start > 0 && !/[ \t\n]/.test(text[start - 1])) start--;
+  return AUTOLINK_RUN.test(text.slice(start, i));
 }
 
 /**
