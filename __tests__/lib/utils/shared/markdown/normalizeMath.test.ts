@@ -39,19 +39,44 @@ const DELIMITER_CONVERSION: Case[] = [
     expected: '$$\\alpha$$ and $$\\beta$$',
   },
   {
-    name: 'display region mid-sentence keeps its inner padding',
+    // `\[` MEANS display. A one-line `$$…$$` is remark-math's INLINE construct
+    // (measured: no `.katex-display`, no `display="block"`, `\sum` limits
+    // beside the sigma) and, because `.katex .base` is `white-space: nowrap`,
+    // the `.katex-display{overflow-x:auto}` rule in globals.css never applies,
+    // so a wide derivation spills out of the bubble with no scrollbar.
+    name: 'a \\[ … \\] alone on its line becomes DISPLAY math, not inline',
+    input: 'MMR:\n\n\\[ \\sum_{i=1}^{n} \\frac{x_i}{n} \\]\n\nDone.',
+    expected: 'MMR:\n\n$$\n\\sum_{i=1}^{n} \\frac{x_i}{n}\n$$\n\nDone.',
+  },
+  {
+    // The other half of the same rule. Promoting a mid-sentence region is
+    // destructive: measured, `The value $$\n…\n$$ is here.` swallows
+    // " is here." entirely.
+    name: 'display region mid-sentence stays on one line, padding intact',
     input: 'Answer \\[ x = 1 \\] done',
     expected: 'Answer $$ x = 1 $$ done',
   },
   {
+    // A bullet whose text IS the equation. Lifting it onto its own lines would
+    // pull it out of the list item, so OWN_LINE_PREFIX excludes list markers.
+    name: 'a \\[ … \\] that is a list item stays inline',
+    input: '- step\n- \\[ x^2 = 1 \\]\n- three',
+    expected: '- step\n- $$ x^2 = 1 $$\n- three',
+  },
+  {
+    name: 'a promoted region inside a blockquote keeps its markers',
+    input: '> \\[ x^2 = 1 \\]',
+    expected: '> $$\n> x^2 = 1\n> $$',
+  },
+  {
     name: 'adjacent display regions get a separator (else NEITHER renders)',
-    input: '\\[a\\]\\[b\\]',
-    expected: '$$a$$ $$b$$',
+    input: '\\[a^2\\]\\[b^2\\]',
+    expected: '$$a^2$$ $$b^2$$',
   },
   {
     name: 'inline region inside a table cell',
-    input: 'table | $x$ | \\(y\\) |',
-    expected: 'table | $x$ | $$y$$ |',
+    input: 'table | $x$ | \\(y^2\\) |',
+    expected: 'table | $x$ | $$y^2$$ |',
   },
   {
     // Single-dollar output would be INERT: Streamdown pins remark-math with
@@ -59,8 +84,8 @@ const DELIMITER_CONVERSION: Case[] = [
     // text. `$$` on one line is inline math to remark-math, which is what
     // `\( … \)` meant in the first place.
     name: 'inline conversion never emits a single-dollar delimiter',
-    input: 'Then \\(\\alpha\\) and \\( x^2 \\) and \\(y\\).',
-    expected: 'Then $$\\alpha$$ and $$x^2$$ and $$y$$.',
+    input: 'Then \\(\\alpha\\) and \\( x^2 \\) and \\(y_1\\).',
+    expected: 'Then $$\\alpha$$ and $$x^2$$ and $$y_1$$.',
   },
 ];
 
@@ -85,6 +110,57 @@ const CONVERSION_GUARDS: Case[] = [
   {
     name: 'a LaTeX \\\\[2pt] line break is not a display opener',
     input: '$$\\begin{aligned} a \\\\[2pt] b \\end{aligned}$$',
+  },
+
+  // `\[` / `\]` is ALSO how markdown escapes a literal bracket, so every case
+  // below is prose whose brackets the author deliberately kept. Converting one
+  // does not merely restyle it — it DELETES the brackets: measured, `\[a-z\]`
+  // rendered as `a−z` and `\[2\]` as `2`, on screen and in the .docx alike.
+  {
+    name: 'a character class is not an equation',
+    input: 'The character class \\[a-z\\] matches lowercase letters.',
+  },
+  {
+    name: 'a section number is not an equation',
+    input: 'See section \\[3.2\\] of the protocol for details.',
+  },
+  {
+    name: 'a form placeholder is not an equation',
+    input: 'Replace \\[site 1\\] and \\[site 2\\] in the form.',
+  },
+  {
+    name: 'a citation marker is not an equation',
+    input: 'See the report \\[1\\] and the annex \\[2\\].',
+  },
+  {
+    name: 'a two-character body is not an equation',
+    input: 'Mark it \\[ok\\] when the task \\[x\\] is done.',
+  },
+  {
+    name: 'a numeric range is not an equation',
+    input: 'The acceptable range \\(0-10\\) is documented.',
+  },
+
+  // An unpaired opener must never reach forward across a paragraph break to
+  // pair with an unrelated closer. Measured before the bound: the two
+  // paragraphs fused, a literal `$$` appeared on screen, and everything after
+  // the false closer was DELETED from the render.
+  {
+    // Both of these carry a math signal (`=`) inside the would-be region, so
+    // mathPlausible cannot be what saves them — only the paragraph bound can.
+    name: 'an unpaired \\[ does not pair with a \\] two paragraphs later',
+    input:
+      'To show a literal bracket, type \\[ in your document.\n\nIn section 2, where x = 1, we explain how \\] behaves.',
+  },
+  {
+    name: 'a dropped closer does not swallow the paragraphs after it',
+    input:
+      'The area is \\[ A = \\pi r^2 and that is all.\n\nNext paragraph has a - dash in it.\n\nLater we write \\] by mistake.',
+  },
+  {
+    name: 'an unpaired \\( behaves the same way',
+    input:
+      'Type \\( to open a span.\n\nLater, with n = 2, a stray \\) appears in the text.',
   },
 ];
 
@@ -176,10 +252,35 @@ const PROTECTED_REGIONS: Case[] = [
     name: 'unterminated fence is protected to end of input (streaming)',
     input: '```sh\necho $HOME and $PATH\n',
   },
+
+  // A fence legally opens inside a container. Requiring pure whitespace before
+  // the marker left these unprotected, and the accidental save (matchInlineCode
+  // finding a later matching backtick run) does not exist for a `~~~` fence or
+  // for a fence still streaming — so the `\$` was permanent, not a flicker.
+  {
+    name: 'tilde fence inside a blockquote',
+    input: '> ~~~sh\n> echo $5,000 and $3,000\n> ~~~',
+  },
+  {
+    name: 'backtick fence inside a blockquote',
+    input: '> ```sh\n> echo $5,000 and $3,000\n> ```',
+  },
+  {
+    name: 'fence on a list-marker line, still streaming',
+    input: '- ```bash\n  echo $HOME and $PATH',
+  },
+  {
+    name: 'quoted fence, streaming prefix',
+    input: '> ```sh\n> echo $5,000 and $3,',
+  },
+  {
+    name: 'fence on an ordered-list marker line',
+    input: '1. ```sh\n   echo $5,000 and $3,000\n   ```',
+  },
   {
     name: 'inline code span is protected, prose around it is not',
-    input: 'Use `echo $HOME and $PATH` plus \\( y \\)',
-    expected: 'Use `echo $HOME and $PATH` plus $$y$$',
+    input: 'Use `echo $HOME and $PATH` plus \\( y^2 \\)',
+    expected: 'Use `echo $HOME and $PATH` plus $$y^2$$',
   },
   {
     name: 'double-backtick span containing a backtick',
@@ -299,6 +400,23 @@ const CURRENCY_NEGATIVES: Case[] = [
   {
     name: 'already escaped (idempotency guard)',
     input: 'Budget is \\$5,000 for supplies',
+  },
+
+  // GFM's literal-autolink extension does not process backslash escapes, so a
+  // `\` added inside a bare URL survives into the href as `%5C` — a 404 — and
+  // shows as a stray backslash in the link text. Measured on both renderers.
+  {
+    name: 'a $ inside a bare URL is part of the link, not currency',
+    input: 'Try https://ex.com/a$1,000/b and https://ex.com/$2,000 now.',
+  },
+  {
+    name: 'a bare URL is left alone even when prose currency follows',
+    input:
+      'See https://ex.com/report?amt=$1,000 and the budget is \\$5,000 total.',
+  },
+  {
+    name: 'www.-style autolink',
+    input: 'Visit www.ex.com/a$1,000/b and www.ex.com/$2,000 today.',
   },
 ];
 
