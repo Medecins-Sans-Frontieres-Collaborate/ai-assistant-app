@@ -55,6 +55,7 @@ export const RESPONSE_FORMATTING_PROMPT_SECTION = `## Response Formatting
 - Single dollar signs are NOT math delimiters here — \`$5,000\` is a price, and \`$x$\` would be shown to the user as literal text
 - Never use \`\\( ... \\)\`, \`\\[ ... \\]\`, or a \`\`\`latex code fence — this app does not render them and the user sees raw LaTeX
 - Keep a display block continuous: no blank lines inside \`$$ ... $$\` (inside \`aligned\`/\`cases\`, break lines with \`\\\\\`)
+- Write a literal percent sign as \`\\%\` — a bare \`%\` opens a TeX comment and silently deletes the rest of the line (including a \`\\\\\` row break)
 - Prefer display math for complex equations, proofs, and multi-step derivations`;
 
 /**
