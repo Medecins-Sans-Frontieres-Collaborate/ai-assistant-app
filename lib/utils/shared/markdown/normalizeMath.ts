@@ -407,7 +407,15 @@ function convertTexRegions(
     // `\[a\]\[b\]` naively becomes `$$a$$$$b$$`, which renders as NEITHER
     // equation. One space between adjacent regions restores both.
     if (previousEnd === i) out += ' ';
-    out += display ? `$$${inner}$$` : `$${inner.trim()}$`;
+    // `$$` for BOTH forms, deliberately. Streamdown pins remark-math with
+    // `singleDollarTextMath: false` (measured: `defaultRemarkPlugins.math[1]`
+    // in streamdown 1.6.11), so `$x$` is INERT here — emitting it would swap
+    // one piece of visible source, `( x^2 )`, for another, `$x^2$`. A `$$…$$`
+    // span that stays on one line is inline math to remark-math, which is
+    // exactly what `\( … \)` meant. If `singleDollarTextMath` is ever turned
+    // on, this can go back to `$…$` for the inline arm — nothing else depends
+    // on it.
+    out += display ? `$$${inner}$$` : `$$${inner.trim()}$$`;
     i = close + 2;
     previousEnd = i;
   }
@@ -470,6 +478,14 @@ function mathPlausible(inner: string): boolean {
  * it onto its own lines would silently promote inline to display and reflow
  * the sentence.
  */
+/**
+ * The markdown container prefix a line can carry: indentation, then any number
+ * of blockquote markers. Rule 3 re-applies exactly this to the lines it
+ * rewrites, so an equation stays inside whatever list item or quote it started
+ * in.
+ */
+const BLOCK_PREFIX = /^[ \t]*(?:>[ \t]?)*/;
+
 function normalizeDisplayRegions(text: string): string {
   if (!text.includes('$$')) return text;
 
@@ -497,24 +513,35 @@ function normalizeDisplayRegions(text: string): string {
       continue;
     }
 
-    // Indent of the line the opening `$$` sits on, re-applied to every body
-    // line. Matters inside list items, where a fully unindented equation would
-    // otherwise fall out of the item.
+    // The container prefix of the line the opening `$$` sits on, re-applied to
+    // every body line AND to the closing delimiter. Indentation matters inside
+    // list items, where a fully unindented equation falls out of the item; the
+    // blockquote markers matter because a closing `$$` that loses its `> `
+    // ends the quote early and leaves a second, EMPTY display box behind it.
     const lineStart = text.lastIndexOf('\n', i - 1) + 1;
-    const indent = /^[ \t]*/.exec(text.slice(lineStart, i))?.[0] ?? '';
+    const prefix = BLOCK_PREFIX.exec(text.slice(lineStart, i))?.[0] ?? '';
+    // Only strip quote markers off the body when the opener actually carried
+    // one. Outside a blockquote a leading `>` is content (`a > b` is valid
+    // math), and eating it would corrupt the equation.
+    const stripPrefix = prefix.includes('>') ? BLOCK_PREFIX : /^[ \t]*/;
 
     const body = content
+      .split('\n')
+      .map((line) => line.replace(stripPrefix, ''))
+      .join('\n')
       // Drop blank lines (whitespace is meaningless inside math, and a blank
-      // line here is what splits the equation across render blocks).
+      // line here is what splits the equation across render blocks). Runs
+      // AFTER the prefix strip so a `>`-only line inside a quoted equation
+      // counts as blank.
       .replace(/\n[ \t]*(?=\n)/g, '')
       .replace(/\n{2,}/g, '\n')
       .replace(/^\s+/, '')
       .replace(/\s+$/, '')
       .split('\n')
-      .map((line) => indent + line.replace(/^[ \t]+/, ''))
+      .map((line) => prefix + line)
       .join('\n');
 
-    out += `$$\n${body}\n${indent}$$`;
+    out += `$$\n${body}\n${prefix}$$`;
     i = close + 2;
   }
 
