@@ -6,10 +6,14 @@ import { Session } from 'next-auth';
  * See docs/AGENT_ACCESS_CONTROL.md. Caching contract: callers `await
  * ensureFresh()` first (no-op while the 60s TTL is warm), then call the
  * synchronous `evaluateAccess()` any number of times over that snapshot.
- * On refresh failure the last-known-good ruleset keeps serving; only when
- * the feature is enabled AND no snapshot was ever loaded does
- * `evaluateAccess` return the distinct 'unavailable' decision — callers
- * fail closed at invocation and pass through at discovery.
+ * On refresh failure the last-known-good ruleset keeps serving; the
+ * distinct 'unavailable' decision covers the two states where the answer is
+ * "cannot say", not "no": (1) the feature is enabled AND no snapshot was
+ * ever loaded ('rules-unavailable'), and (2) the rule targets GROUPS and
+ * this user's Entra membership lookup failed within the negative-cache
+ * window ('group-membership-degraded' — see groupMembership.ts). In both
+ * cases callers fail closed at invocation and pass through at discovery, so
+ * a Graph blip hides no agent from the picker but grants no invocation.
  *
  * All existing caches in this app are per-process with no cross-replica
  * invalidation; this follows the same convention with a deliberately short
@@ -44,7 +48,10 @@ import {
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 import { canonicalAgentKey } from '@/lib/services/agentAccess/types';
-import { getCachedGroupIdsForMail } from '@/lib/services/m365/groupMembership';
+import {
+  getCachedGroupIdsForMail,
+  isGroupMembershipDegraded,
+} from '@/lib/services/m365/groupMembership';
 import { getAzureMonitorLogger } from '@/lib/services/observability/AzureMonitorLoggingService';
 import {
   Principal,
@@ -80,12 +87,35 @@ const GENERATION_PROBE_INTERVAL_MS = 5_000;
 
 export type AccessDecisionKind = 'allow' | 'deny' | 'unavailable';
 
+/**
+ * Reason paired with 'unavailable' when a rule targets groups and Entra
+ * could not be asked whether this user is in them (groupMembership.ts
+ * negative-cached the failed lookup). Exported because the discovery filter
+ * treats it differently from 'rules-unavailable': the latter means NO rule
+ * can be evaluated for anyone (global pass-through), this one means one
+ * user's membership is unknown (pass that agent through, keep enforcing the
+ * rest of the catalog).
+ */
+export const GROUP_MEMBERSHIP_DEGRADED_REASON = 'group-membership-degraded';
+
+/**
+ * Whether a decision reason denotes the degraded-group case, including
+ * after the unresolved-source sweep has prefixed it.
+ */
+export function isGroupMembershipDegradedReason(reason: string): boolean {
+  return (
+    reason === GROUP_MEMBERSHIP_DEGRADED_REASON ||
+    reason.endsWith(`:${GROUP_MEMBERSHIP_DEGRADED_REASON}`)
+  );
+}
+
 export interface AgentAccessDecision {
   decision: AccessDecisionKind;
   /**
    * Machine-readable cause: 'feature-disabled' | 'no-rule' | 'public' |
-   * 'allow-user' | 'allow-domain' | 'no-user-mail' | 'not-allowed' |
-   * 'rules-unavailable' | 'unresolved-source:<inner reason>' |
+   * 'allow-user' | 'allow-domain' | 'allow-group' | 'no-user-mail' |
+   * 'not-allowed' | 'rules-unavailable' | 'group-membership-degraded' |
+   * 'unresolved-source:<inner reason>' |
    * 'unresolved-source-all-rules-satisfied'.
    */
   reason: string;
@@ -467,8 +497,13 @@ export class AgentAccessService {
     for (const stored of candidates) {
       const result = this.evaluateRule(stored, input.userMail);
       if (result.decision !== 'allow') {
+        // Propagate the KIND, not just the reason: flattening an
+        // 'unavailable' into a 'deny' here would lose the "try again
+        // shortly" copy at the invocation guard (and re-hide the agent at
+        // discovery). Both kinds still fail closed at invocation — every
+        // caller of this branch tests `!== 'allow'`.
         return {
-          decision: 'deny',
+          decision: result.decision,
           reason: `unresolved-source:${result.reason}`,
         };
       }
@@ -496,7 +531,8 @@ export class AgentAccessService {
     // disagree about what "this user matches this rule" means. Group ids
     // come from the process-level membership cache (warmed per request by
     // the calling route) — cold cache means no group grants, never an
-    // error, matching the pre-§5 posture.
+    // error, matching the pre-§5 posture. A FAILED lookup is handled
+    // separately at the terminal deny below.
     const principal: Principal = {
       userId: '',
       mail: normalizeMail(userMail),
@@ -512,6 +548,24 @@ export class AgentAccessService {
     }
     if (matchesPrincipal(principal, 'group', access.allowGroups)) {
       return { decision: 'allow', reason: 'allow-group' };
+    }
+    if (access.allowGroups.length > 0 && isGroupMembershipDegraded(userMail)) {
+      // The rule grants by GROUP and Graph could not answer whether this
+      // user is in it, so the [] above is "could not ask", not "member of
+      // nothing". Denying here is indistinguishable from a correct denial
+      // in the logs AND sticks for the whole client session (/api/agents is
+      // fetched once per page load), so the agent vanishes for minutes over
+      // a 60s blip. 'unavailable' keeps it visible at discovery while the
+      // invocation guard still fails closed on any non-'allow'.
+      //
+      // Only a RETRYABLE lookup failure sets the marker (groupMembership.ts):
+      // a standing gap — tenant consent never granted, a refresh token that
+      // no longer redeems — denies as it always did, rather than listing
+      // every group-restricted agent to everyone for as long as it lasts.
+      return {
+        decision: 'unavailable',
+        reason: GROUP_MEMBERSHIP_DEGRADED_REASON,
+      };
     }
     return { decision: 'deny', reason: 'not-allowed' };
   }
