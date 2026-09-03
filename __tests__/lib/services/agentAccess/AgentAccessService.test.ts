@@ -42,8 +42,11 @@ vi.mock('@/lib/services/observability/AzureMonitorLoggingService', () => ({
 // Group evaluation reads the membership cache synchronously; the mock lets
 // tests model warm and cold cache states without Graph.
 const cachedGroupsMock = vi.hoisted(() => vi.fn<() => string[]>(() => []));
+// Degraded = the lookup FAILED (not "member of nothing"); default healthy.
+const degradedGroupsMock = vi.hoisted(() => vi.fn<() => boolean>(() => false));
 vi.mock('@/lib/services/m365/groupMembership', () => ({
   getCachedGroupIdsForMail: cachedGroupsMock,
+  isGroupMembershipDegraded: degradedGroupsMock,
 }));
 
 const mockEnv = vi.hoisted(() => ({
@@ -170,6 +173,8 @@ describe('AgentAccessService', () => {
     mockListAllGuides.mockResolvedValue([]);
     mockReadGenerationEtag.mockResolvedValue(null);
     mockBumpGeneration.mockResolvedValue(undefined);
+    cachedGroupsMock.mockReturnValue([]);
+    degradedGroupsMock.mockReturnValue(false);
   });
 
   afterEach(() => {
@@ -968,6 +973,73 @@ describe('AgentAccessService', () => {
       expect(service.evaluateAccess(input)).toEqual({
         decision: 'deny',
         reason: 'not-allowed',
+      });
+    });
+
+    it('reports unavailable when the membership lookup itself failed', async () => {
+      // Graph could not answer "is this user in engineering-group-id?".
+      // Denying would look identical to a real denial and would stick for
+      // the whole client session; 'unavailable' passes through at discovery
+      // and still fails closed at invocation.
+      cachedGroupsMock.mockReturnValue([]);
+      degradedGroupsMock.mockReturnValue(true);
+      const service = await freshServiceWith([groupRule()]);
+      expect(service.evaluateAccess(input)).toEqual({
+        decision: 'unavailable',
+        reason: 'group-membership-degraded',
+      });
+      expect(degradedGroupsMock).toHaveBeenCalledWith('user@example.com');
+    });
+
+    it('keeps a hard deny for a rule with no group targets, even when degraded', async () => {
+      cachedGroupsMock.mockReturnValue([]);
+      degradedGroupsMock.mockReturnValue(true);
+      const service = await freshServiceWith([
+        storedRule(SOURCE_A, 'finance-bot', {
+          type: 'restricted',
+          allowUsers: ['someone.else@example.com'],
+        }),
+      ]);
+      expect(service.evaluateAccess(input)).toEqual({
+        decision: 'deny',
+        reason: 'not-allowed',
+      });
+    });
+
+    it('still allows a user/domain match while membership is degraded', async () => {
+      cachedGroupsMock.mockReturnValue([]);
+      degradedGroupsMock.mockReturnValue(true);
+      const service = await freshServiceWith([
+        storedRule(SOURCE_A, 'finance-bot', {
+          type: 'restricted',
+          allowUsers: ['user@example.com'],
+          allowGroups: ['engineering-group-id'],
+        }),
+      ]);
+      expect(service.evaluateAccess(input)).toEqual({
+        decision: 'allow',
+        reason: 'allow-user',
+      });
+    });
+
+    it('keeps the missing-mail deny ahead of the degraded check', async () => {
+      degradedGroupsMock.mockReturnValue(true);
+      const service = await freshServiceWith([groupRule()]);
+      expect(service.evaluateAccess({ ...input, userMail: undefined })).toEqual(
+        {
+          decision: 'deny',
+          reason: 'no-user-mail',
+        },
+      );
+    });
+
+    it('propagates unavailable (not deny) through the unresolved-source sweep', async () => {
+      cachedGroupsMock.mockReturnValue([]);
+      degradedGroupsMock.mockReturnValue(true);
+      const service = await freshServiceWith([groupRule()]);
+      expect(service.evaluateAccess({ ...input, source: null })).toEqual({
+        decision: 'unavailable',
+        reason: 'unresolved-source:group-membership-degraded',
       });
     });
 
