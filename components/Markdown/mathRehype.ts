@@ -46,18 +46,26 @@ const MATHML_TAG_NAMES = [
 ] as const;
 
 /**
- * Attributes KaTeX puts on its output. `className` carries the entire KaTeX
+ * Attributes KaTeX puts on a `<span>`. `className` carries the entire KaTeX
  * stylesheet contract (`katex`, `katex-display`, `katex-mathml`, `katex-html`,
  * `strut`, `vlist-*`, …) and `style` carries the per-glyph struts and offsets
  * that make a formula lay out at all — without both, a rendered equation
  * collapses into a run of unstyled spans. `ariaHidden` is what keeps screen
  * readers from reading the visual half on top of the MathML half.
+ *
+ * Scoped to `span` deliberately. Measured: KaTeX emits `class`/`style` on NO
+ * other tag, so granting them on `*` would buy nothing for mathematics while
+ * letting model- or document-authored raw HTML through with them — a
+ * `<div style="position:fixed;inset:0;…">` in a poisoned RAG source or an
+ * injected answer would then cover the whole viewport.
  */
-const MATH_ATTRIBUTES = [
-  'className',
-  'style',
-  'ariaHidden',
-  // MathML presentation attributes.
+const KATEX_SPAN_ATTRIBUTES = ['className', 'style', 'ariaHidden'] as const;
+
+/**
+ * MathML presentation attributes KaTeX emits, granted only on the MathML tags
+ * above (never on `*` — see {@link KATEX_SPAN_ATTRIBUTES}).
+ */
+const MATHML_ATTRIBUTES = [
   'accent',
   'accentunder',
   'close',
@@ -100,10 +108,35 @@ const MATH_ATTRIBUTES = [
  */
 export const MATH_SANITIZE_SCHEMA: SanitizeSchema = {
   ...defaultSchema,
-  tagNames: [...(defaultSchema.tagNames ?? []), ...MATHML_TAG_NAMES],
+  tagNames: [
+    ...(defaultSchema.tagNames ?? []),
+    ...MATHML_TAG_NAMES,
+    // Stretchy delimiters, arrows and braces (\left(, \xrightarrow,
+    // \overbrace) are drawn as inline SVG paths rather than glyphs.
+    'svg',
+    'path',
+  ],
   attributes: {
     ...defaultSchema.attributes,
-    '*': [...(defaultSchema.attributes?.['*'] ?? []), ...MATH_ATTRIBUTES],
+    // NOTE: no '*' entry. Everything below is granted per tag so that raw
+    // HTML in a message cannot inherit `style`/`class` from the math surface.
+    span: [...(defaultSchema.attributes?.span ?? []), ...KATEX_SPAN_ATTRIBUTES],
+    ...Object.fromEntries(
+      MATHML_TAG_NAMES.map((tag) => [
+        tag,
+        [...(defaultSchema.attributes?.[tag] ?? []), ...MATHML_ATTRIBUTES],
+      ]),
+    ),
+    svg: [
+      'className',
+      'style',
+      'width',
+      'height',
+      'viewBox',
+      'preserveAspectRatio',
+      'xmlns',
+    ],
+    path: ['d'],
   },
 };
 
@@ -119,9 +152,9 @@ export const MATH_SANITIZE_SCHEMA: SanitizeSchema = {
  * delimiter normalization or CSS can fix that; the classes never survive.
  *
  * `rehype-raw` and `rehype-harden` (link/image/protocol allow-listing) are
- * left untouched, so the only widening is the KaTeX surface above. Note this
- * does admit `style` on model-authored spans; that is the deliberate trade for
- * having renderable mathematics at all, and `rehype-harden` still runs after.
+ * left untouched, so the only widening is the KaTeX surface above, granted per
+ * tag rather than on `*`: model-authored raw HTML gains nothing except on a
+ * bare `<span>`, and `rehype-harden` still runs after.
  */
 export const MATH_REHYPE_PLUGINS: PluggableList = Object.entries(
   defaultRehypePlugins,
