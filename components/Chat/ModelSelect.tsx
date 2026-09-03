@@ -121,7 +121,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({
     officePaths,
     isLoadingFoundryAgents,
     isDiscoveryLoading,
+    isFoundryAgentsError,
+    isDiscoveryError,
     refetchFoundryAgents,
+    retryFoundryAgents,
   } = useFoundryAgents();
 
   const selectedModelId = selectedConversation?.model?.id || defaultModelId;
@@ -1475,6 +1478,12 @@ export const ModelSelect: FC<ModelSelectProps> = ({
           officePaths={officePaths}
           selectedModelId={attachedAgentModelId ?? null}
           isLoadingFoundryAgents={isLoadingFoundryAgents || isDiscoveryLoading}
+          isFoundryAgentsError={isFoundryAgentsError}
+          isDiscoveryError={isDiscoveryError}
+          // Retry, not refresh: the ↻ button below busts the server-side
+          // discovery cache, which is the wrong (and slower) remedy for a
+          // request that simply failed in flight.
+          onRetryAgents={() => retryFoundryAgents()}
           onRefreshAgents={() => refetchFoundryAgents()}
           agentSources={customAgentSources}
           onAddSource={() => {
