@@ -1,0 +1,199 @@
+/**
+ * FAMILY 3 — STREAMING MONOTONICITY.
+ *
+ * A message is not rendered once; it is rendered on every chunk. In
+ * `mode="streaming"` Streamdown splits the partial text into blocks and runs
+ * `remend` over each one, which auto-CLOSES whatever is dangling: a half-typed
+ * `$$\frac{\te` becomes `$$\frac{\te$$` and is handed to KaTeX, which throws a
+ * red error span that changes with every token. Worse, remend reads a dangling
+ * `\[` as an incomplete markdown LINK and appends the literal marker
+ * `](streamdown:incomplete-link)` — so an agent emitting `\[ \frac{a` prints
+ * that string on screen mid-answer.
+ *
+ * This family replays every corpus case one chunk at a time through that exact
+ * machinery and asserts three things:
+ *
+ *   1. remend's incomplete-link marker never reaches the reader. Normalization
+ *      must have already turned `\[ … \]` into `$$ … $$` by the time remend
+ *      looks at it.
+ *   2. A SETTLED frame renders cleanly — no KaTeX error, no empty equation box.
+ *      "Settled" is remend's own judgement: it changed nothing, so the markdown
+ *      is complete, and complete markdown has no excuse for showing an error.
+ *      This is the assertion that matters, because the alternative ("no errors
+ *      ever") is unachievable: an equation that has only half arrived cannot be
+ *      typeset, and a transient error there is honest.
+ *   3. The last frame equals the static render. Whatever the stream did on the
+ *      way, the finished message must be identical to the same content parsed
+ *      in one pass — which is what `mode="static"` gives a finished message.
+ *
+ * Plus a bounded stability claim (see MONOTONICITY below).
+ */
+import { normalizeMathDelimiters } from '@/lib/utils/shared/markdown/normalizeMath';
+
+import { CONFORMANCE_CASES } from '../../fixtures/markdown/conformanceCases';
+import {
+  REMEND_INCOMPLETE_LINK,
+  StreamFrame,
+  collapse,
+  prefixLengths,
+  renderScreen,
+  renderStreamFrame,
+  signatureOf,
+} from './renderPipelines';
+
+import { describe, expect, it } from 'vitest';
+
+/** Frames per case. Enough to cross every delimiter; cheap enough to run always. */
+const MAX_FRAMES = 14;
+
+const replay = (input: string): StreamFrame[] =>
+  prefixLengths(input, MAX_FRAMES).map((length) => {
+    const prefix = input.slice(0, length);
+    return renderStreamFrame(prefix, normalizeMathDelimiters(prefix));
+  });
+
+/**
+ * How many times the content ALREADY on screen can legitimately change as more
+ * text arrives: once per math region, when it flips from literal characters to
+ * typeset glyphs. Anything beyond that is prose churning under the reader.
+ */
+const mathRegionCount = (input: string): number => {
+  const doubleDollars = (input.match(/(?<!\\)\$\$/g) ?? []).length;
+  const brackets = (input.match(/\\\[/g) ?? []).length;
+  const parens = (input.match(/\\\(/g) ?? []).length;
+  const fences = (input.match(/```(?:math|latex|tex)/g) ?? []).length;
+  return Math.ceil(doubleDollars / 2) + brackets + parens + fences;
+};
+
+/**
+ * Markdown whose BLOCK STRUCTURE changes as it arrives: a table is a paragraph
+ * until its delimiter row lands, a list item is a paragraph until the next item
+ * lands, a fence is prose until it closes. Their text legitimately reflows, so
+ * the stability bound below does not apply to them — that is a markdown fact,
+ * not a math defect.
+ */
+const hasReflowingStructure = (input: string): boolean =>
+  /^[ \t]*(\||[-*+][ \t]|\d+[.)][ \t]|>|#{1,6}[ \t]|```|~~~|    \S)/m.test(
+    input,
+  );
+
+const streamable = CONFORMANCE_CASES.filter((c) => !c.skipStreaming);
+
+describe('streaming replay — no remend artifacts reach the reader', () => {
+  for (const testCase of streamable) {
+    it(`${testCase.id} — ${testCase.label}`, () => {
+      for (const frame of replay(testCase.input)) {
+        expect(
+          frame.visibleText.includes(REMEND_INCOMPLETE_LINK),
+          [
+            `case: ${testCase.id}`,
+            `prefix: ${JSON.stringify(frame.prefix)}`,
+            `normalized: ${JSON.stringify(frame.normalized)}`,
+            `text: ${JSON.stringify(frame.visibleText)}`,
+            'remend read a dangling `\\[` as an incomplete link. Normalization must',
+            'convert `\\[ … \\]` to `$$ … $$` before Streamdown sees the chunk.',
+          ].join('\n'),
+        ).toBe(false);
+      }
+    });
+  }
+});
+
+describe('streaming replay — a settled frame renders cleanly', () => {
+  for (const testCase of streamable) {
+    const run = (): void => {
+      for (const frame of replay(testCase.input)) {
+        if (!frame.settled) continue;
+        const context = [
+          `case: ${testCase.id}`,
+          `prefix: ${JSON.stringify(frame.prefix)}`,
+          `normalized: ${JSON.stringify(frame.normalized)}`,
+          `blocks: ${JSON.stringify(frame.blocks)}`,
+          `errors: ${JSON.stringify(frame.katexErrors)}`,
+          `tex: ${JSON.stringify(frame.texAnnotations)}`,
+          'remend changed nothing, so this frame is COMPLETE markdown — it must',
+          'not show an error or an empty equation box.',
+        ].join('\n');
+
+        if (!testCase.allowKatexError) {
+          expect(frame.katexErrors, context).toEqual([]);
+        }
+        expect(
+          frame.texAnnotations.filter((tex) => tex.trim() === ''),
+          context,
+        ).toEqual([]);
+      }
+    };
+
+    if (testCase.knownGapFamilies?.includes('streaming')) {
+      it.fails(`[known gap] ${testCase.id} — ${testCase.label}`, run);
+    } else {
+      it(`${testCase.id} — ${testCase.label}`, run);
+    }
+  }
+});
+
+describe('streaming replay — the final frame equals the static render', () => {
+  // `mode="streaming"` splits into blocks and remends each; `mode="static"`
+  // parses the whole string once. A finished message must be the same either
+  // way, or a message changes appearance the moment streaming stops.
+  for (const testCase of streamable) {
+    const run = (): void => {
+      const frames = replay(testCase.input);
+      const last = frames[frames.length - 1];
+      const staticRender = signatureOf(
+        renderScreen(normalizeMathDelimiters(testCase.input)),
+      );
+      expect(
+        last.signature,
+        [
+          `case: ${testCase.id}`,
+          `final streaming frame: ${JSON.stringify(last.signature)}`,
+          `static render        : ${JSON.stringify(staticRender)}`,
+        ].join('\n'),
+      ).toEqual(staticRender);
+    };
+
+    if (testCase.knownGapFamilies?.includes('streaming')) {
+      it.fails(`[known gap] ${testCase.id} — ${testCase.label}`, run);
+    } else {
+      it(`${testCase.id} — ${testCase.label}`, run);
+    }
+  }
+});
+
+describe('streaming replay — settled content does not churn', () => {
+  // MONOTONICITY. Over the frames that are complete markdown, the text on
+  // screen should only ever GROW: what a reader has already read must still be
+  // there, in the same order, one chunk later. The one licensed exception is a
+  // math region flipping from literal characters to typeset glyphs, which is
+  // why the bound is the number of math regions rather than zero.
+  for (const testCase of streamable) {
+    if (hasReflowingStructure(testCase.input)) continue;
+
+    it(`${testCase.id} — ${testCase.label}`, () => {
+      const settled = replay(testCase.input).filter((frame) => frame.settled);
+      const unstable: string[] = [];
+      for (let i = 1; i < settled.length; i += 1) {
+        const before = collapse(settled[i - 1].visibleText);
+        const after = collapse(settled[i].visibleText);
+        if (!after.startsWith(before)) {
+          unstable.push(
+            `after ${JSON.stringify(settled[i - 1].prefix)}\n` +
+              `  was: ${JSON.stringify(before)}\n` +
+              `  now: ${JSON.stringify(after)}`,
+          );
+        }
+      }
+      const budget = mathRegionCount(testCase.input);
+      expect(
+        unstable.length,
+        [
+          `case: ${testCase.id}`,
+          `budget: ${budget} (one retroactive change allowed per math region)`,
+          ...unstable,
+        ].join('\n'),
+      ).toBeLessThanOrEqual(budget);
+    });
+  }
+});
