@@ -460,6 +460,14 @@ function mathPlausible(inner: string): boolean {
 /* -------------------------------------------------------------------------- */
 
 /**
+ * The markdown container prefix a line can carry: indentation, then any number
+ * of blockquote markers. Rule 3 re-applies exactly this to the lines it
+ * rewrites, so an equation stays inside whatever list item or quote it started
+ * in.
+ */
+const BLOCK_PREFIX = /^[ \t]*(?:>[ \t]?)*/;
+
+/**
  * Puts every multi-line `$$ … $$` region into the one shape the pipeline
  * renders correctly: delimiters alone on their own lines, no interior blank
  * lines.
@@ -478,14 +486,6 @@ function mathPlausible(inner: string): boolean {
  * it onto its own lines would silently promote inline to display and reflow
  * the sentence.
  */
-/**
- * The markdown container prefix a line can carry: indentation, then any number
- * of blockquote markers. Rule 3 re-applies exactly this to the lines it
- * rewrites, so an equation stays inside whatever list item or quote it started
- * in.
- */
-const BLOCK_PREFIX = /^[ \t]*(?:>[ \t]?)*/;
-
 function normalizeDisplayRegions(text: string): string {
   if (!text.includes('$$')) return text;
 
