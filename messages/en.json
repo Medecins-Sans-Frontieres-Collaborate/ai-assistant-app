@@ -963,6 +963,7 @@
     "listen": "Listen",
     "processingAudio": "Processing audio...",
     "ttsError": "Error generating audio. Please try again.",
+    "ttsEquationPlaceholder": "equation",
     "unsupportedMessageType": "Error rendering message: Unsupported message type",
     "createTodoTasks": "Create To Do tasks from this response"
   },
