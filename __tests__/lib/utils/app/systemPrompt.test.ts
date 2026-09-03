@@ -51,10 +51,15 @@ describe('systemPrompt', () => {
       // Written as a template literal, so a single un-doubled backslash
       // would silently compile away — assert on the runtime characters.
       expect(section).toContain('### Mathematical Notation / Formulas');
-      expect(section).toContain('`$E = mc^2$`');
+      // `$$` is the ONLY delimiter that renders: Streamdown pins remark-math
+      // with `singleDollarTextMath: false`, so guidance naming `$x$` as inline
+      // math would be telling models to emit text the app cannot typeset.
+      expect(section).toContain('`$$ ... $$` kept on ONE line');
+      expect(section).toContain('Single dollar signs are NOT math delimiters');
+      expect(section).not.toContain('`$E = mc^2$`');
+      expect(section).not.toContain('SINGLE dollar signs');
       expect(section).toContain('Never use `\\( ... \\)`, `\\[ ... \\]`');
       expect(section).toContain('```latex');
-      expect(section).toContain('Escape a literal dollar sign as `\\$`');
       expect(section).toContain('no blank lines inside `$$ ... $$`');
       // The pre-fix wording told models to use $$ for INLINE math too
       expect(section).not.toContain('For inline math within sentences');
@@ -80,7 +85,6 @@ describe('systemPrompt', () => {
       expect(result).toContain('### Mathematical Notation / Formulas');
       expect(result).toContain('## Diagrams');
       expect(result).toContain('$$');
-      expect(result).toContain('\\$');
       // The rules must not themselves demonstrate the broken delimiters
       // outside the "Never use" bullet that forbids them.
       expect(result).not.toContain('\\(x\\)');
