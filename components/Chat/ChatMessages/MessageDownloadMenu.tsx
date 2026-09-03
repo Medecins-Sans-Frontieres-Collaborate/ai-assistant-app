@@ -14,6 +14,7 @@ import {
 
 import { appendCitationsToMarkdown } from '@/lib/utils/app/export/citationExport';
 import { markdownToHtml } from '@/lib/utils/shared/document/formatConverter';
+import { normalizeMathDelimiters } from '@/lib/utils/shared/markdown/normalizeMath';
 
 import { Citation } from '@/types/rag';
 
@@ -72,10 +73,14 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
   const prepare = (format: ExportFormat) => {
     // Citations live outside the message body, so append them as a Sources
     // section before export — otherwise inline [n] markers reference nothing.
-    const exportContent = appendCitationsToMarkdown(
-      content,
-      citations ?? [],
-      t('chat.sources'),
+    // Normalized here and not only inside markdownToHtml, because the `md`
+    // export never goes through markdownToHtml — it writes this string to disk
+    // verbatim. Without this the .md file keeps the model's `\[ ... \]`, which
+    // renders as raw TeX in every downstream tool, while the .docx alongside it
+    // carries `$$ ... $$`. Idempotent, so the second pass inside
+    // markdownToHtml is a no-op.
+    const exportContent = normalizeMathDelimiters(
+      appendCitationsToMarkdown(content, citations ?? [], t('chat.sources')),
     );
     // For non-md formats we precompute HTML from the markdown source. For md
     // we pass an empty `html` and let the hook write the markdown source
