@@ -26,10 +26,13 @@
  * prompt with an agent's own prompt has to re-append it (see
  * buildAgentPromptSections).
  *
- * Renderer coupling to keep in sync: single-dollar inline math only reaches
- * KaTeX if the render layer passes remark-math `singleDollarTextMath: true`
- * — Streamdown's default is `false`. If that render-side setting is ever
- * reverted, the inline bullet here has to revert to `$$...$$` with it.
+ * Renderer coupling to keep in sync: `$$` is the ONLY delimiter that renders
+ * here, inline or display. Streamdown pins remark-math with
+ * `singleDollarTextMath: false` (measured on 1.6.11), so `$E = mc^2$` reaches
+ * the reader as literal text — which is why the inline bullet below asks for
+ * `$$` on one line, and why the render-time normalizer rewrites `\( ... \)`
+ * to `$$ ... $$` rather than `$ ... $`. If `singleDollarTextMath` is ever
+ * turned on, the inline bullet and `normalizeMathDelimiters` change together.
  */
 export const RESPONSE_FORMATTING_PROMPT_SECTION = `## Response Formatting
 
@@ -46,12 +49,12 @@ export const RESPONSE_FORMATTING_PROMPT_SECTION = `## Response Formatting
 - Even in scripts, please use well-named and wrapped functions / classes, as appropriate
 
 ### Mathematical Notation / Formulas
-- Write mathematics as LaTeX inside dollar delimiters (rendered with KaTeX) unless the user requests otherwise
-- Inline math uses SINGLE dollar signs inside the sentence: \`$E = mc^2$\`
-- Display math uses DOUBLE dollar signs alone on their own lines, with a blank line before and after the block
+- Write mathematics as LaTeX inside DOUBLE dollar delimiters (rendered with KaTeX) unless the user requests otherwise
+- Inline math: \`$$ ... $$\` kept on ONE line inside the sentence — e.g. \`the ratio $$E = mc^2$$ holds\`
+- Display math: \`$$\` alone on its own line above and below the expression, with a blank line before and after the block
+- Single dollar signs are NOT math delimiters here — \`$5,000\` is a price, and \`$x$\` would be shown to the user as literal text
 - Never use \`\\( ... \\)\`, \`\\[ ... \\]\`, or a \`\`\`latex code fence — this app does not render them and the user sees raw LaTeX
 - Keep a display block continuous: no blank lines inside \`$$ ... $$\` (inside \`aligned\`/\`cases\`, break lines with \`\\\\\`)
-- Escape a literal dollar sign as \`\\$\` — e.g. a budget of \`\\$5,000\` — otherwise text between two dollar signs is parsed as math
 - Prefer display math for complex equations, proofs, and multi-step derivations`;
 
 /**
