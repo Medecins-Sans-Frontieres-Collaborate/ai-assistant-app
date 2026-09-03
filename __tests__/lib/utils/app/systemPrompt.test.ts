@@ -1,8 +1,11 @@
 import {
   BASE_SYSTEM_PROMPT,
   DEFAULT_USER_PROMPT,
+  DIAGRAMS_PROMPT_SECTION,
+  RESPONSE_FORMATTING_PROMPT_SECTION,
   SystemPromptOptions,
   SystemPromptUserInfo,
+  buildAgentPromptSections,
   buildConversationContextSections,
   buildSystemPrompt,
   extractUserPrompt,
@@ -40,6 +43,116 @@ describe('systemPrompt', () => {
       expect(BASE_SYSTEM_PROMPT).toContain('Mermaid');
       expect(BASE_SYSTEM_PROMPT).toContain('flowchart');
       expect(BASE_SYSTEM_PROMPT).toContain('sequenceDiagram');
+    });
+
+    it('math guidance names the delimiters the renderer actually supports', () => {
+      const section = RESPONSE_FORMATTING_PROMPT_SECTION;
+
+      // Written as a template literal, so a single un-doubled backslash
+      // would silently compile away — assert on the runtime characters.
+      expect(section).toContain('### Mathematical Notation / Formulas');
+      expect(section).toContain('`$E = mc^2$`');
+      expect(section).toContain('Never use `\\( ... \\)`, `\\[ ... \\]`');
+      expect(section).toContain('```latex');
+      expect(section).toContain('Escape a literal dollar sign as `\\$`');
+      expect(section).toContain('no blank lines inside `$$ ... $$`');
+      // The pre-fix wording told models to use $$ for INLINE math too
+      expect(section).not.toContain('For inline math within sentences');
+    });
+
+    it('interpolates each shared section into the base prompt exactly once', () => {
+      // Guards against an accidental double-interpolation leaving the model
+      // two conflicting copies of the formatting rules.
+      expect(
+        BASE_SYSTEM_PROMPT.split(RESPONSE_FORMATTING_PROMPT_SECTION).length - 1,
+      ).toBe(1);
+      expect(BASE_SYSTEM_PROMPT.split(DIAGRAMS_PROMPT_SECTION).length - 1).toBe(
+        1,
+      );
+    });
+  });
+
+  describe('buildAgentPromptSections', () => {
+    it('returns the formatting and diagram rules', () => {
+      const result = buildAgentPromptSections();
+
+      expect(result).toContain('## Response Formatting');
+      expect(result).toContain('### Mathematical Notation / Formulas');
+      expect(result).toContain('## Diagrams');
+      expect(result).toContain('$$');
+      expect(result).toContain('\\$');
+      // The rules must not themselves demonstrate the broken delimiters
+      // outside the "Never use" bullet that forbids them.
+      expect(result).not.toContain('\\(x\\)');
+    });
+
+    it('extracts the sections verbatim from the default base prompt', () => {
+      // Extraction and the exported constants must not drift apart.
+      expect(buildAgentPromptSections()).toBe(
+        `${RESPONSE_FORMATTING_PROMPT_SECTION}\n\n${DIAGRAMS_PROMPT_SECTION}`,
+      );
+    });
+
+    it('honors an operator BASE_SYSTEM_PROMPT override without duplicating', () => {
+      const override = [
+        '# Custom',
+        '',
+        '## Response Formatting',
+        '- use pigeons',
+        '',
+        '## Other',
+        'unrelated',
+        '',
+      ].join('\n');
+
+      const result = buildAgentPromptSections(undefined, undefined, override);
+
+      expect(result).toBe('## Response Formatting\n- use pigeons');
+      // The operator's wording wins; the built-in copy is NOT appended too
+      expect(result).not.toContain('Mathematical Notation');
+      expect(result).not.toContain('unrelated');
+    });
+
+    it('falls back to the built-in rules when an override has no formatting section', () => {
+      const result = buildAgentPromptSections(
+        undefined,
+        undefined,
+        '# Custom\n\nJust be nice.\n',
+      );
+
+      // The delimiter rules are a renderer contract, so an override that
+      // drops them entirely must not leave agents with no math guidance.
+      expect(result).toBe(
+        `${RESPONSE_FORMATTING_PROMPT_SECTION}\n\n${DIAGRAMS_PROMPT_SECTION}`,
+      );
+    });
+
+    it('appends the conversation-context sections after the rules', () => {
+      const result = buildAgentPromptSections('We discussed budgets.', [
+        'Prefers concise answers',
+      ]);
+
+      expect(result).toContain('## Response Formatting');
+      expect(result).toContain('## Earlier Conversation Summary');
+      expect(result).toContain('We discussed budgets.');
+      expect(result).toContain('## User Memories');
+      expect(result).toContain('- Prefers concise answers');
+      expect(result.indexOf('## Response Formatting')).toBeLessThan(
+        result.indexOf('## Earlier Conversation Summary'),
+      );
+    });
+
+    it('does not require a section subheading to be a top-level match', () => {
+      // `### Response Formatting` must not be mistaken for the section.
+      const result = buildAgentPromptSections(
+        undefined,
+        undefined,
+        '# Custom\n\n### Response Formatting\n- nested\n',
+      );
+
+      expect(result).toBe(
+        `${RESPONSE_FORMATTING_PROMPT_SECTION}\n\n${DIAGRAMS_PROMPT_SECTION}`,
+      );
     });
   });
 
