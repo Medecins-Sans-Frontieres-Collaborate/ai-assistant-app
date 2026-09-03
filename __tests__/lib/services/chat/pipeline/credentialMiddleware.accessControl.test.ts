@@ -426,6 +426,29 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
       );
     });
 
+    it("blocks a degraded group lookup too ('unavailable' is never an allow)", async () => {
+      // Fix 4 makes a failed Entra membership lookup report 'unavailable'
+      // so discovery stops hiding the agent. The invocation guard must be
+      // unmoved by that: it keys on `decision !== 'allow'`, not the reason.
+      accessEvaluate.mockReturnValue({
+        decision: 'unavailable',
+        reason: 'group-membership-degraded',
+      });
+
+      await expect(
+        createCredentialMiddleware(
+          makeNonFoundryAgentContext('org-finance-bot'),
+          mockReq,
+        ),
+      ).rejects.toMatchObject({
+        code: ErrorCode.AGENT_UNAVAILABLE,
+        metadata: {
+          accessDecision: 'unavailable',
+          accessReason: 'group-membership-degraded',
+        },
+      });
+    });
+
     it('allow keeps the path byte-identical to before the guard ({} returned)', async () => {
       accessEvaluate.mockReturnValue({ decision: 'allow', reason: 'no-rule' });
 
