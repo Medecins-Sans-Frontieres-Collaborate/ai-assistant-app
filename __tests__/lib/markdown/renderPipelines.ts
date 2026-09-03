@@ -28,7 +28,10 @@
  * and `renderWithoutSanitize` exist beside it — `renderConformance.test.ts`
  * uses them to turn "everything is broken" into a one-line diagnosis.
  */
-import { MATH_REHYPE_PLUGINS } from '@/components/Markdown/mathRehype';
+import {
+  MATH_PARSE_INCOMPLETE_MARKDOWN,
+  MATH_REHYPE_PLUGINS,
+} from '@/components/Markdown/mathRehype';
 
 import type { Element, Nodes, Root } from 'hast';
 import { toHtml } from 'hast-util-to-html';
@@ -66,9 +69,19 @@ export const LEAK_TOKENS = [...TEX_COMMAND_TOKENS, '\\[', '\\('] as const;
 /**
  * remend's marker for an auto-closed incomplete link. `\[` at the end of a
  * streaming chunk looks like a markdown link opener to remend, so an agent
- * emitting `\[ \frac{a` mid-stream prints this literal string on screen.
+ * emitting `\[ \frac{a` mid-stream prints this literal string on screen —
+ * CommonMark never opens a link on an ESCAPED bracket, so remend's closer is
+ * never consumed and lands in the prose as-is.
  */
 export const REMEND_INCOMPLETE_LINK = '](streamdown:incomplete-link)';
+
+/**
+ * Whether the app lets Streamdown run remend on a partial block. Read from the
+ * app's own config rather than assumed, so this harness keeps describing the
+ * real streaming path: flipping `MATH_PARSE_INCOMPLETE_MARKDOWN` back to
+ * `true` puts the remend artifacts back and turns family 3 red again.
+ */
+export const APP_APPLIES_REMEND: boolean = MATH_PARSE_INCOMPLETE_MARKDOWN;
 
 type MarkdownProcessor = Processor<
   Root,
@@ -312,10 +325,16 @@ export const renderStreamFrame = (
   normalized: string,
 ): StreamFrame => {
   const blocks = parseMarkdownIntoBlocks(normalized);
+  // `settled` stays a remend question even when the app no longer RUNS remend:
+  // it is being used here purely as a completeness oracle ("would anything
+  // still be auto-closed?"), and that judgement is what makes the clean-render
+  // assertions below fair. Only the rendering honours the app's setting.
   const settled =
     !hasUnterminatedFence(normalized) &&
     blocks.every((block) => remend(block.trim()) === block.trim());
-  const perBlock = blocks.map((block) => renderScreen(remend(block.trim())));
+  const perBlock = blocks.map((block) =>
+    renderScreen(APP_APPLIES_REMEND ? remend(block.trim()) : block),
+  );
   return {
     prefix,
     normalized,
