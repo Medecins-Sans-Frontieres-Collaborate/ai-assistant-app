@@ -55,8 +55,32 @@ describe('PromptAgentEnricher', () => {
     it('overrides the system prompt with the persona prompt', async () => {
       const result = await enricher.execute(makeContext());
 
-      expect(result.systemPrompt).toBe('You are a persona.');
+      // Persona instructions come FIRST and verbatim; the shared rules follow
+      expect(result.systemPrompt).toMatch(/^You are a persona\.\n\n/);
       expect(result.errors).toHaveLength(0);
+    });
+
+    it('re-appends the renderer-contract formatting rules (issue #121)', async () => {
+      const result = await enricher.execute(makeContext());
+
+      // Without this the persona replaces the base prompt wholesale and the
+      // model defaults to \( \) / \[ \], which the app renders as raw LaTeX.
+      expect(result.systemPrompt).toContain('## Response Formatting');
+      expect(result.systemPrompt).toContain(
+        '### Mathematical Notation / Formulas',
+      );
+      expect(result.systemPrompt).toContain('## Diagrams');
+      expect(result.systemPrompt).toContain('$$');
+    });
+
+    it('falls back to the base prompt when the persona prompt is empty', async () => {
+      const result = await enricher.execute(
+        makeContext({
+          promptAgent: { ...promptAgentRecord, systemPrompt: '' },
+        }),
+      );
+
+      expect(result.systemPrompt).toBe('Original system prompt');
     });
 
     it('re-appends the conversation-context sections (summary + memories)', async () => {

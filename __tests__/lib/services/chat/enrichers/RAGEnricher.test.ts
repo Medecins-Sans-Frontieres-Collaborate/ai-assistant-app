@@ -219,7 +219,32 @@ describe('RAGEnricher', () => {
 
         const result = await enricher.execute(context);
 
-        expect(result.systemPrompt).toBe(mockOrganizationAgent.systemPrompt);
+        // The agent's own instructions come FIRST and unmodified...
+        expect(
+          result.systemPrompt?.startsWith(
+            `${mockOrganizationAgent.systemPrompt}\n\n`,
+          ),
+        ).toBe(true);
+        expect(result.systemPrompt).not.toContain('Original system prompt');
+      });
+
+      it('re-appends the renderer-contract formatting rules (issue #121)', async () => {
+        const context = createTestChatContext({
+          botId: 'msf_communications',
+          systemPrompt: 'Original system prompt',
+          messages: [createTestMessage({ content: 'Hello' })],
+        });
+
+        const result = await enricher.execute(context);
+
+        // ...and the shared formatting/diagram rules follow it, so an org
+        // agent doesn't lose the $$ math guidance and emit raw \( \) LaTeX.
+        expect(result.systemPrompt).toContain('## Response Formatting');
+        expect(result.systemPrompt).toContain(
+          '### Mathematical Notation / Formulas',
+        );
+        expect(result.systemPrompt).toContain('## Diagrams');
+        expect(result.systemPrompt).toContain('$$');
       });
 
       it('should store search metadata in processedContent', async () => {
