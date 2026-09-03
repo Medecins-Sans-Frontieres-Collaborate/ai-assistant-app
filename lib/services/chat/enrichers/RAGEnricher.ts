@@ -2,7 +2,7 @@ import { getAzureMonitorLogger } from '@/lib/services/observability';
 import { resolveOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
 import { RAGService } from '@/lib/services/ragService';
 
-import { buildConversationContextSections } from '@/lib/utils/app/systemPrompt';
+import { buildAgentPromptSections } from '@/lib/utils/app/systemPrompt';
 
 import { Message, MessageType } from '@/types/chat';
 
@@ -222,10 +222,15 @@ export class RAGEnricher extends BasePipelineStage {
             number: index + 1,
           }));
 
-          // Summary/memories sections already live in context.systemPrompt
-          // (buildSystemPrompt); re-append them when the org agent's own
-          // prompt replaces it so RAG requests keep the sections.
-          const conversationContext = buildConversationContextSections(
+          // The org agent's prompt REPLACES the base prompt, taking the
+          // renderer contract (math/markdown/diagram rules) with it as well
+          // as the summary/memories sections. Re-append both.
+          //
+          // Ordering is deliberate: the agent's own instructions come FIRST
+          // and the shared rules after, so an agent that deliberately
+          // overrides formatting still wins on substance — the rules here
+          // describe what the renderer can display, not what to say.
+          const agentSections = buildAgentPromptSections(
             context.conversationSummary,
             context.memories,
           );
@@ -234,11 +239,12 @@ export class RAGEnricher extends BasePipelineStage {
           const result = {
             ...context,
             enrichedMessages,
-            // Override system prompt with organization agent's system prompt
-            systemPrompt:
-              agent.systemPrompt && conversationContext
-                ? `${agent.systemPrompt}\n\n${conversationContext}`
-                : agent.systemPrompt || context.systemPrompt,
+            // Override system prompt with organization agent's system prompt.
+            // Admin-authored org agents may have an empty prompt (the schema
+            // defaults it to ''), in which case the full base prompt stands.
+            systemPrompt: agent.systemPrompt
+              ? `${agent.systemPrompt}\n\n${agentSections}`
+              : context.systemPrompt,
             processedContent: {
               ...context.processedContent,
               metadata: {
