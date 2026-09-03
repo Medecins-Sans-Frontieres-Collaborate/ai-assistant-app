@@ -46,6 +46,12 @@ vi.mock('@/lib/services/auth/appIdentityCredential', () => ({
   createAppIdentityCredential: vi.fn(),
 }));
 vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
+  // Re-exported verbatim: the discovery filter imports them to tell the
+  // one-user degraded-group case apart from a whole-ruleset outage.
+  GROUP_MEMBERSHIP_DEGRADED_REASON: 'group-membership-degraded',
+  isGroupMembershipDegradedReason: (reason: string) =>
+    reason === 'group-membership-degraded' ||
+    reason.endsWith(':group-membership-degraded'),
   AgentAccessService: {
     getInstance: () => ({
       isEnabled: accessIsEnabled,
