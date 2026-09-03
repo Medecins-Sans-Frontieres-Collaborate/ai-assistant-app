@@ -26,14 +26,17 @@ const DELIMITER_CONVERSION: Case[] = [
     expected: 'Intro\n\n$$\n\\frac{a}{b}\n$$\n\nEnd',
   },
   {
+    // `$$` for inline too: Streamdown pins remark-math with
+    // `singleDollarTextMath: false`, so `$x^2$` would be literal text on
+    // screen — a different piece of visible source, not a fix.
     name: 'inline \\( … \\) mid-sentence',
     input: 'Value \\( x^2 \\) here',
-    expected: 'Value $x^2$ here',
+    expected: 'Value $$x^2$$ here',
   },
   {
     name: 'two inline regions in one sentence',
     input: '\\(\\alpha\\) and \\(\\beta\\)',
-    expected: '$\\alpha$ and $\\beta$',
+    expected: '$$\\alpha$$ and $$\\beta$$',
   },
   {
     name: 'display region mid-sentence keeps its inner padding',
@@ -48,7 +51,7 @@ const DELIMITER_CONVERSION: Case[] = [
   {
     name: 'inline region inside a table cell',
     input: 'table | $x$ | \\(y\\) |',
-    expected: 'table | $x$ | $y$ |',
+    expected: 'table | $x$ | $$y$$ |',
   },
 ];
 
@@ -147,7 +150,7 @@ const PROTECTED_REGIONS: Case[] = [
   {
     name: 'inline code span is protected, prose around it is not',
     input: 'Use `echo $HOME and $PATH` plus \\( y \\)',
-    expected: 'Use `echo $HOME and $PATH` plus $y$',
+    expected: 'Use `echo $HOME and $PATH` plus $$y$$',
   },
   {
     name: 'double-backtick span containing a backtick',
