@@ -15,7 +15,10 @@
 import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
+import {
+  AgentAccessService,
+  isGroupMembershipDegradedReason,
+} from '@/lib/services/agentAccess/AgentAccessService';
 import {
   M365_AGENT_SOURCE,
   ORG_AGENT_SOURCE,
@@ -28,10 +31,7 @@ import {
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
-import {
-  getServeableAdminOrgAgents,
-  getSuppressedStaticAgentIds,
-} from '@/lib/services/orgAgents/orgAgentRegistry';
+import { getAdminOrgAgentSnapshot } from '@/lib/services/orgAgents/orgAgentRegistry';
 
 import { isValidFoundryResourcePath } from '@/lib/utils/shared/armPath';
 
@@ -204,44 +204,80 @@ async function getVisibleM365AgentEntries(
   }
   return entries;
 }
+
+interface VisibleOrgAgents {
+  entries: DiscoveredAgent[];
+  /**
+   * Static ids this pass is entitled to hide: every one of them is either
+   * an admin kill switch (nothing replaces it, by design) or has its
+   * replacement in `entries`.
+   */
+  suppressedStaticIds: string[];
+}
+
 /**
  * Admin-authored org RAG agents (serveable records only — enabled +
  * validation ok), filtered by the same layer-1 rules as the other
  * app-managed kinds. Carries the display metadata the static config file
  * would otherwise provide, plus the tool-toggle flags the client gates on.
+ *
+ * Emits the suppression list alongside the entries rather than letting the
+ * caller re-derive it, because the two must agree: a static id may only be
+ * hidden when its replacement is in THIS response. The record set comes
+ * from a single {@link getAdminOrgAgentSnapshot} pass for the same reason.
  */
-async function getVisibleOrgAgentEntries(
+async function getVisibleOrgAgents(
   userMail: string | undefined,
-): Promise<DiscoveredAgent[]> {
+): Promise<VisibleOrgAgents> {
   const accessService = AgentAccessService.getInstance();
-  if (!accessService.isEnabled()) return [];
+  if (!accessService.isEnabled()) {
+    return { entries: [], suppressedStaticIds: [] };
+  }
+  const { serveable, disabledStaticIds } = await getAdminOrgAgentSnapshot();
   const staticIds = new Set(getOrganizationAgents().map((agent) => agent.id));
   const entries: DiscoveredAgent[] = [];
-  for (const orgAgent of await getServeableAdminOrgAgents()) {
+  // The kill switch is the one suppression with no replacement: an
+  // `enabled: false` record retires the static entry outright.
+  const suppressedStaticIds: string[] = [...disabledStaticIds];
+  for (const orgAgent of serveable) {
+    const overridesStatic = staticIds.has(orgAgent.id);
     const { decision } = accessService.evaluateAccess({
       userMail,
       source: ORG_AGENT_SOURCE,
       agentName: orgAgent.id,
     });
-    if (decision !== 'deny') {
-      entries.push({
-        id: orgAgent.id,
-        name: orgAgent.name,
-        description: orgAgent.description,
-        agentName: orgAgent.id,
-        source: ORG_AGENT_SOURCE,
-        type: 'org',
-        icon: orgAgent.icon,
-        color: orgAgent.color,
-        ...(orgAgent.category && { category: orgAgent.category }),
-        ...(orgAgent.maintainedBy && { maintainedBy: orgAgent.maintainedBy }),
-        allowWebSearch: orgAgent.allowWebSearch,
-        allowCodeInterpreter: orgAgent.allowCodeInterpreter,
-        overridesStatic: staticIds.has(orgAgent.id),
-      });
+    if (decision === 'deny') {
+      // The override is restricted away from this user. Its rule key is
+      // `org-agent::<id>` — the SAME key the static entry is evaluated
+      // under — so getDeniedStaticOrgAgentIds() suppresses the static twin
+      // as the deliberate admin restriction it is. Nothing to add here;
+      // suppressing from this side too would hide the static entry on a
+      // path that carries no access decision of its own.
+      continue;
     }
+    entries.push({
+      id: orgAgent.id,
+      name: orgAgent.name,
+      description: orgAgent.description,
+      agentName: orgAgent.id,
+      source: ORG_AGENT_SOURCE,
+      type: 'org',
+      icon: orgAgent.icon,
+      color: orgAgent.color,
+      ...(orgAgent.category && { category: orgAgent.category }),
+      ...(orgAgent.maintainedBy && { maintainedBy: orgAgent.maintainedBy }),
+      allowWebSearch: orgAgent.allowWebSearch,
+      allowCodeInterpreter: orgAgent.allowCodeInterpreter,
+      overridesStatic,
+    });
+    // Only now — the replacement is in the response, so hiding the static
+    // entry cannot leave a hole. A record dropped for a NON-access reason
+    // (failed validation, failed index recheck) never reaches `serveable`
+    // and therefore never suppresses anything: the static entry keeps
+    // serving, which is the documented fallback.
+    if (overridesStatic) suppressedStaticIds.push(orgAgent.id);
   }
-  return entries;
+  return { entries, suppressedStaticIds };
 }
 
 /**
@@ -249,7 +285,13 @@ async function getVisibleOrgAgentEntries(
  * lookup the invocation guard applies (`org-agent::<id>`). Folded into
  * `suppressedOrgAgentIds` so the bundled client list trims them — a UX
  * filter only; the chat pipeline re-evaluates on invocation. 'unavailable'
- * passes through like every other discovery surface.
+ * passes through like every other discovery surface — including the
+ * degraded-group case, where a static agent stays VISIBLE rather than
+ * vanishing because Entra could not confirm the user's membership.
+ *
+ * This is also what suppresses the static entry behind an admin override
+ * the user is denied: the override and the static entry share the id, so
+ * they share the rule.
  */
 async function getDeniedStaticOrgAgentIds(
   userMail: string | undefined,
@@ -276,35 +318,39 @@ export interface AppAgents {
    * plus the ones an access rule denies THIS user — the client trims the
    * bundled list with this, so a file agent can be retired, replaced or
    * restricted without a deploy.
+   *
+   * Invariant: an id only lands here when the same response either carries
+   * its replacement (an override in `agents`) or hides it deliberately (an
+   * `enabled: false` kill switch, or an access deny). Suppressing an id
+   * whose replacement silently dropped out is how org agents vanish from
+   * the picker until a reload.
    */
   suppressedOrgAgentIds: string[];
 }
 
 /**
- * The five lookups behind the fast half, in parallel. They evaluate
+ * The four lookups behind the fast half, in parallel. They evaluate
  * group-scoped rules synchronously from the group cache, so the caller
  * MUST have awaited `resolveUserGroupIds` first.
+ *
+ * Org agents and their suppression list come back from ONE lookup on
+ * purpose: they are two halves of a single decision (see
+ * {@link getVisibleOrgAgents}).
  */
 export async function collectAppAgents(
   userMail: string | undefined,
 ): Promise<AppAgents> {
-  const [
-    promptAgentEntries,
-    m365AgentEntries,
-    orgAgentEntries,
-    suppressedStaticIds,
-    deniedStaticIds,
-  ] = await Promise.all([
-    getVisiblePromptAgentEntries(userMail),
-    getVisibleM365AgentEntries(userMail),
-    getVisibleOrgAgentEntries(userMail),
-    getSuppressedStaticAgentIds(),
-    getDeniedStaticOrgAgentIds(userMail),
-  ]);
+  const [promptAgentEntries, m365AgentEntries, orgAgents, deniedStaticIds] =
+    await Promise.all([
+      getVisiblePromptAgentEntries(userMail),
+      getVisibleM365AgentEntries(userMail),
+      getVisibleOrgAgents(userMail),
+      getDeniedStaticOrgAgentIds(userMail),
+    ]);
   return {
-    agents: [...promptAgentEntries, ...m365AgentEntries, ...orgAgentEntries],
+    agents: [...promptAgentEntries, ...m365AgentEntries, ...orgAgents.entries],
     suppressedOrgAgentIds: Array.from(
-      new Set([...suppressedStaticIds, ...deniedStaticIds]),
+      new Set([...orgAgents.suppressedStaticIds, ...deniedStaticIds]),
     ),
   };
 }
@@ -456,10 +502,15 @@ export async function discoverFoundryAgents(
 
   // App-layer access filter (docs/AGENT_ACCESS_CONTROL.md). Drops agents
   // the user fails evaluateAccess for — UX-level only; the invocation
-  // guard in the chat pipeline is the security control. On 'unavailable'
-  // (enabled + no last-known-good ruleset) discovery passes through
-  // unfiltered: this is a visibility-only surface, and invocation fails
-  // closed independently.
+  // guard in the chat pipeline is the security control. 'unavailable'
+  // comes in two flavours and they are NOT handled alike:
+  //  - 'rules-unavailable' (enabled + no last-known-good ruleset): no rule
+  //    can be evaluated for anyone, so the whole discovery passes through
+  //    unfiltered;
+  //  - 'group-membership-degraded': only THIS user's Entra group lookup
+  //    failed, so just that agent passes through and the rest of the
+  //    catalog stays filtered.
+  // Either way invocation fails closed independently.
   let visibleAgents: DiscoveredAgent[] = allAgents;
   const accessService = AgentAccessService.getInstance();
   if (accessService.isEnabled()) {
@@ -470,13 +521,23 @@ export async function discoverFoundryAgents(
       : accessService.ensureFresh());
     const filtered: DiscoveredAgent[] = [];
     let rulesUnavailable = false;
+    let degradedGroupAgents = 0;
     for (const agent of allAgents) {
-      const { decision } = accessService.evaluateAccess({
+      const { decision, reason } = accessService.evaluateAccess({
         userMail: session.user.mail,
         source: agent.source,
         agentName: agent.agentName,
       });
       if (decision === 'unavailable') {
+        if (isGroupMembershipDegradedReason(reason)) {
+          // A Graph blip on one user's group lookup must not switch rule
+          // enforcement off for the entire catalog: show this agent (the
+          // rule would only have denied it because membership is unknown)
+          // and keep filtering everything else.
+          filtered.push(agent);
+          degradedGroupAgents += 1;
+          continue;
+        }
         rulesUnavailable = true;
         break;
       }
@@ -489,6 +550,13 @@ export async function discoverFoundryAgents(
         '[/api/agents] Agent access rules unavailable; returning unfiltered discovery (invocation still fails closed)',
       );
     } else {
+      if (degradedGroupAgents > 0) {
+        // Audible so the softening is traceable to a Graph outage rather
+        // than to a rule change.
+        console.warn(
+          `[/api/agents] Group membership degraded; passed ${degradedGroupAgents} group-scoped agent(s) through discovery (invocation still fails closed)`,
+        );
+      }
       visibleAgents = filtered;
     }
   }
