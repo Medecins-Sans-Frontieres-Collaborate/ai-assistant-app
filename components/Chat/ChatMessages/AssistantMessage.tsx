@@ -735,6 +735,15 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                       <CitationStreamdown
                         citations={citations}
                         isAnimating={messageIsStreaming}
+                        // "streaming" splits the text into blocks and runs
+                        // Streamdown's incomplete-markdown completion on every
+                        // chunk (which is what auto-closes a half-typed `$$`
+                        // into a churning KaTeX error). A finished message can
+                        // never gain more text, so it must not keep paying for
+                        // that: "static" renders the whole string in one pass,
+                        // which is also the only mode that keeps a multi-line
+                        // `$$ … $$` block intact.
+                        mode={messageIsStreaming ? 'streaming' : 'static'}
                         controls={true}
                         shikiTheme={['github-light', 'github-dark']}
                         // Mermaid is the most expensive parser in the
