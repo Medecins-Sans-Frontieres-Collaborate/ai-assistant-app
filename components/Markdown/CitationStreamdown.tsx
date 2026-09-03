@@ -14,7 +14,10 @@ import { Citation } from '@/types/rag';
 
 import { CitationItem } from '../Chat/Citations/CitationItem';
 import { MarkdownTable } from './MarkdownTable';
-import { MATH_REHYPE_PLUGINS } from './mathRehype';
+import {
+  MATH_PARSE_INCOMPLETE_MARKDOWN,
+  MATH_REHYPE_PLUGINS,
+} from './mathRehype';
 
 import { Streamdown } from 'streamdown';
 import type { StreamdownProps } from 'streamdown';
@@ -27,8 +30,8 @@ interface CitationStreamdownProps extends Omit<StreamdownProps, 'components'> {
   components?: Components;
 
   /**
-   * Rewrite `\( … \)` / `\[ … \]` to the `$`/`$$` delimiters remark-math
-   * actually understands, and pull multi-line `$$` blocks into the shape
+   * Rewrite `\( … \)` / `\[ … \]` to the `$$` delimiters remark-math actually
+   * understands here, and pull multi-line `$$` blocks into the shape
    * Streamdown's block splitter can keep together. Defaults to `true` because
    * every caller today renders MODEL-authored markdown, where raw LaTeX is a
    * defect we own.
@@ -64,6 +67,7 @@ export const CitationStreamdown: FC<CitationStreamdownProps> = memo(
     isAnimating = false,
     normalizeMath = true,
     rehypePlugins = MATH_REHYPE_PLUGINS,
+    parseIncompleteMarkdown = MATH_PARSE_INCOMPLETE_MARKDOWN,
     children,
     ...props
   }) => {
@@ -241,6 +245,7 @@ export const CitationStreamdown: FC<CitationStreamdownProps> = memo(
           components={enhancedComponents}
           isAnimating={isAnimating}
           rehypePlugins={rehypePlugins}
+          parseIncompleteMarkdown={parseIncompleteMarkdown}
           {...props}
         >
           {renderedChildren}
