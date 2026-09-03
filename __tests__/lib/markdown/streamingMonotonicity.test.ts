@@ -32,6 +32,7 @@ import { normalizeMathDelimiters } from '@/lib/utils/shared/markdown/normalizeMa
 
 import { CONFORMANCE_CASES } from '../../fixtures/markdown/conformanceCases';
 import {
+  APP_APPLIES_REMEND,
   REMEND_INCOMPLETE_LINK,
   StreamFrame,
   collapse,
@@ -41,6 +42,7 @@ import {
   signatureOf,
 } from './renderPipelines';
 
+import remend from 'remend';
 import { describe, expect, it } from 'vitest';
 
 /** Frames per case. Enough to cross every delimiter; cheap enough to run always. */
@@ -99,13 +101,50 @@ describe('streaming replay — no remend artifacts reach the reader', () => {
             `prefix: ${JSON.stringify(frame.prefix)}`,
             `normalized: ${JSON.stringify(frame.normalized)}`,
             `text: ${JSON.stringify(frame.visibleText)}`,
-            'remend read a dangling `\\[` as an incomplete link. Normalization must',
-            'convert `\\[ … \\]` to `$$ … $$` before Streamdown sees the chunk.',
+            'remend reads a dangling `\\[` as an incomplete link and closes it with',
+            'this marker, which CommonMark then leaves in the prose because an',
+            'ESCAPED bracket never opened a link. The app turns remend off',
+            '(MATH_PARSE_INCOMPLETE_MARKDOWN in components/Markdown/mathRehype.ts);',
+            'this frame says it is back on, or back on at one call site.',
           ].join('\n'),
         ).toBe(false);
       }
     });
   }
+});
+
+/**
+ * Why the family above is not vacuous.
+ *
+ * It passes because `MATH_PARSE_INCOMPLETE_MARKDOWN` is `false`, so pinning the
+ * behaviour that setting exists to avoid is the only thing that keeps the
+ * assertion honest: if remend were ever re-enabled, THIS is what every reader
+ * would see mid-answer, and the family above would go red for eight cases.
+ */
+describe('remend — the behaviour MATH_PARSE_INCOMPLETE_MARKDOWN turns off', () => {
+  const dangling = 'The array notation \\[ is introduced later in the guide.';
+
+  it('closes a dangling \\[ with a link marker CommonMark cannot consume', () => {
+    expect(remend(dangling)).toContain(REMEND_INCOMPLETE_LINK);
+    expect(renderScreen(remend(dangling)).proseText).toContain(
+      REMEND_INCOMPLETE_LINK,
+    );
+  });
+
+  it('is not applied by the app, so that marker never renders', () => {
+    expect(APP_APPLIES_REMEND).toBe(false);
+    expect(renderScreen(dangling).proseText).not.toContain(
+      REMEND_INCOMPLETE_LINK,
+    );
+  });
+
+  it('also closes a half-arrived $$ region, which is what churned mid-stream', () => {
+    // C5: every token of a partial formula re-rendered as a KaTeX error span.
+    const partial = 'Area:\n\n$$\\frac{\\te';
+    expect(remend(partial)).toBe('Area:\n\n$$\\frac{\\te$$');
+    expect(renderScreen(remend(partial)).katexErrors).not.toEqual([]);
+    expect(renderScreen(partial).katexErrors).toEqual([]);
+  });
 });
 
 describe('streaming replay — a settled frame renders cleanly', () => {
