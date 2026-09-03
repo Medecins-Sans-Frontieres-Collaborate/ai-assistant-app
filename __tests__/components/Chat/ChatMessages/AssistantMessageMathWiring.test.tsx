@@ -96,6 +96,48 @@ describe('AssistantMessage — math render wiring', () => {
     expect(citationStreamdownProps.at(-1)!.children).toBe(RAW);
   });
 
+  it('speaks a verbalized transcript, not the LaTeX source', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      blob: async () => new Blob(['audio'], { type: 'audio/mpeg' }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    // jsdom has no object-URL implementation and the handler calls it on the
+    // response blob before this test's assertions run.
+    vi.stubGlobal('URL', {
+      ...URL,
+      createObjectURL: () => 'blob:stub',
+      revokeObjectURL: () => undefined,
+    });
+    // A successful TTS response mounts <AudioPlayer>, whose autoplay effect
+    // calls media.play() — unimplemented in jsdom, and it rejects OUTSIDE the
+    // test body, so without this the file fails on an unhandled rejection even
+    // with every assertion green.
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue(undefined);
+
+    renderMessage(false);
+    await waitFor(() =>
+      expect(citationStreamdownProps.length).toBeGreaterThan(0),
+    );
+
+    await userEvent.click(await screen.findByLabelText(/listen/i));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    const [url, init] = fetchMock.mock.calls.at(-1)!;
+    expect(url).toBe('/api/chat/tts');
+    const spoken = JSON.parse((init as RequestInit).body as string).text;
+
+    // The synthesizer reads its input literally, so anything still carrying a
+    // backslash would be pronounced ("backslash pi r squared").
+    expect(spoken).not.toContain('\\[');
+    expect(spoken).not.toContain('\\pi');
+    expect(spoken).toContain('pi r squared');
+    expect(spoken).toContain('grows');
+
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
   it('copies the ORIGINAL, un-normalized markdown', async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, 'clipboard', {
