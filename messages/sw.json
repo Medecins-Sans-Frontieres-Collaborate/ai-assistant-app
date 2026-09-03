@@ -5171,5 +5171,32 @@
     "noResults": "Hakuna folda inayolingana",
     "createFolder": "Folda mpya “{name}”"
   },
-  "This conversation is already empty": "Mazungumzo haya tayari ni tupu"
+  "This conversation is already empty": "Mazungumzo haya tayari ni tupu",
+  "conversationImport": {
+    "title": "Ingiza mazungumzo",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Imepatikana {count, plural, one {# mazungumzo} other {# mazungumzo}} katika {source} hii iliyosafirishwa.",
+    "skipped": "{count, plural, one {# kipengele} other {# vipengele}} haviwezi kusomwa na vitaachwa.",
+    "textOnly": "Ni maandishi tu ya ujumbe yanaingizwa. Viambatisho, picha, faili, na matokeo ya zana havitaingizwa.",
+    "searchPlaceholder": "Chuja kwa kichwa",
+    "selectAll": "Chagua vyote",
+    "deselectAll": "Ondoa uteuzi wote",
+    "selectedCount": "{selected} kati ya {total} vimechaguliwa",
+    "alreadyImported": "Tayari vimeingizwa",
+    "turnCount": "{count, plural, one {# ujumbe} other {# jumbe}}",
+    "droppedParts": "{count, plural, one {# sehemu} other {# sehemu}} zimeachwa",
+    "placeInFolder": "Weka mazungumzo yaliyoingizwa ndani ya folda",
+    "folderName": "Jina la folda",
+    "defaultFolderName": "Imetoka kwa {source}",
+    "importButton": "Ingiza {count, plural, one {# mazungumzo} other {# mazungumzo}}",
+    "cancel": "Ghairi",
+    "untitled": "Mazungumzo bila jina",
+    "success": "Imezidisha {count, plural, one {# mazungumzo} other {# mazungumzo}}",
+    "noModel": "Hakuna modeli inayopatikana ya kuambatanisha na mazungumzo yaliyoingizwa. Jaribu tena baada ya modeli kupakiwa.",
+    "zipRejected": "Faili za zip haziwezi kuingizwa. Fungua zip na uchague faili ya conversations.json iliyo ndani.",
+    "nothingImportable": "{source} hii haijumuishi mazungumzo yenye ujumbe unaosomeka.",
+    "noMatches": "Hakuna mazungumzo yanayolingana na kichujio chako",
+    "listLabel": "Mazungumzo ya kuingiza"
+  }
 }

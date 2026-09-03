@@ -5155,5 +5155,32 @@
     "noResults": "Ҷузвадон мувофиқат намекунад",
     "createFolder": "Ҷузвадони нав “{name}”"
   },
-  "This conversation is already empty": "Ин сӯҳбат аллакай холӣ аст"
+  "This conversation is already empty": "Ин сӯҳбат аллакай холӣ аст",
+  "conversationImport": {
+    "title": "Ворид кардани сӯҳбатҳо",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "{count, plural, one {# сӯҳбат} other {# сӯҳбат}} дар ин содироти {source} ёфт шуд.",
+    "skipped": "{count, plural, one {# сабт} other {# сабт}} хонда намешавад ва аз корбарӣ хориҷ мегардад.",
+    "textOnly": "Танҳо матни паём ворид мешавад. Замимаҳо, тасвирҳо, файлҳо ва натиҷаҳои абзор дохил намешаванд.",
+    "searchPlaceholder": "Филтр кардан аз рӯи унвон",
+    "selectAll": "Интихоби ҳама",
+    "deselectAll": "Бекор кардани интихоб",
+    "selectedCount": "{selected} аз {total} интихоб шуд",
+    "alreadyImported": "Аллакай ворид шудааст",
+    "turnCount": "{count, plural, one {# паём} other {# паём}}",
+    "droppedParts": "{count, plural, one {# қисм} other {# қисм}} дохил нашуд",
+    "placeInFolder": "Сӯҳбатҳои воридшударо ба ҷузвадон гузоред",
+    "folderName": "Номи ҷузвадон",
+    "defaultFolderName": "Воридшуда аз {source}",
+    "importButton": "Ворид кардани {count, plural, one {# сӯҳбат} other {# сӯҳбат}}",
+    "cancel": "Бекор кардан",
+    "untitled": "Сӯҳбати беунвон",
+    "success": "{count, plural, one {# сӯҳбат} other {# сӯҳбат}} ворид шуд",
+    "noModel": "Ягон модел барои пайваст кардан ба сӯҳбатҳои воридшуда мавҷуд нест. Пас аз бор шудани моделҳо дубора кӯшиш кунед.",
+    "zipRejected": "Архивҳои ZIP ворид карда намешаванд. Содиротро кнап кунед ва файли conversations.json-ро интихоб намоед.",
+    "nothingImportable": "Ин содироти {source} сӯҳбат бо паёмҳои хонданибоб надорад.",
+    "noMatches": "Ягон сӯҳбат ба филтри шумо мувофиқат намекунад",
+    "listLabel": "Сӯҳбатҳо барои ворид кардан"
+  }
 }

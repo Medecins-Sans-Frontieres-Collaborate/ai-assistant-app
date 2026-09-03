@@ -5155,5 +5155,32 @@
     "noResults": "Nta dosiye bijyanye",
     "createFolder": "Dosiye nshya “{name}”"
   },
-  "This conversation is already empty": "Iyi kiganiro gisanzwe kirimo ubusa"
+  "This conversation is already empty": "Iyi kiganiro gisanzwe kirimo ubusa",
+  "conversationImport": {
+    "title": "Kwinjiza ibiganiro",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Habonetse {count, plural, one {# ikiganiro} other {# biganiro}} muri aya masohoka ya {source}.",
+    "skipped": "{count, plural, one {# iteme} other {# bineme}} ntibishoboye gusomwa bizasimbukwa.",
+    "textOnly": "Hinjizwa gusa ubutumwa bwanditse. Inyongera, amashusho, amadosiye, n'ibiva mu bikoresho ntibinjizwa.",
+    "searchPlaceholder": "Shungura ukurikije umutwe",
+    "selectAll": "Hitamo byose",
+    "deselectAll": "Hagarika guhitamo byose",
+    "selectedCount": "{selected} muri {total} byatoranyijwe",
+    "alreadyImported": "Byamaze kwinjizwa",
+    "turnCount": "{count, plural, one {# ubutumwa} other {# ubutumwa}}",
+    "droppedParts": "{count, plural, one {# igice} other {# bice}} byasizwe",
+    "placeInFolder": "Shyira ibiganiro byinjiye muri dosiye",
+    "folderName": "Izina rya dosiye",
+    "defaultFolderName": "Byinjiye biva kuri {source}",
+    "importButton": "Injiza {count, plural, one {# ikiganiro} other {# biganiro}}",
+    "cancel": "Hagarika",
+    "untitled": "Ikiganiro kitagira izina",
+    "success": "Hinjiye {count, plural, one {# ikiganiro} other {# biganiro}}",
+    "noModel": "Nta modeli iboneka yo gufatanya n'ibiganiro byinjiye. Ongera ugerageze nyuma yo kuboneka kwa model.",
+    "zipRejected": "Amadosiye ya Zip ntashobora kwinjizwa. Fungura export hanyuma uhitemo dosiye conversations.json irimo.",
+    "nothingImportable": "Aya masohoka ya {source} ntarimo ibiganiro birimo ubutumwa bushobora gusomwa.",
+    "noMatches": "Nta biganiro bihuye n'ishyirahamwe ukoresheje",
+    "listLabel": "Ibiganiro byo kwinjiza"
+  }
 }

@@ -5171,5 +5171,32 @@
     "noResults": "일치하는 폴더가 없습니다",
     "createFolder": "새 폴더 \"{name}\""
   },
-  "This conversation is already empty": "이 대화는 이미 비어 있습니다"
+  "This conversation is already empty": "이 대화는 이미 비어 있습니다",
+  "conversationImport": {
+    "title": "대화 가져오기",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "이 {source} 내보내기에서 {count, plural, one {#개의 대화} other {#개의 대화}}를 찾았습니다.",
+    "skipped": "{count, plural, one {#개 항목} other {#개 항목}}을(를) 읽을 수 없어 건너뜁니다.",
+    "textOnly": "메시지 텍스트만 가져옵니다. 첨부파일, 이미지, 파일, 도구 결과 등은 제외됩니다.",
+    "searchPlaceholder": "제목으로 필터링",
+    "selectAll": "전체 선택",
+    "deselectAll": "전체 선택 해제",
+    "selectedCount": "{total}개 중 {selected}개 선택됨",
+    "alreadyImported": "이미 가져온 대화",
+    "turnCount": "{count, plural, one {#개 메시지} other {#개 메시지}}",
+    "droppedParts": "{count, plural, one {#개 항목} other {#개 항목}} 제외됨",
+    "placeInFolder": "가져온 대화를 폴더에 저장",
+    "folderName": "폴더 이름",
+    "defaultFolderName": "{source}에서 가져옴",
+    "importButton": "{count, plural, one {#개 대화 가져오기} other {#개 대화 가져오기}}",
+    "cancel": "취소",
+    "untitled": "제목 없는 대화",
+    "success": "{count, plural, one {#개 대화 가져옴} other {#개 대화 가져옴}}",
+    "noModel": "가져온 대화에 연결할 수 있는 모델이 없습니다. 모델이 로드된 후 다시 시도해 주세요.",
+    "zipRejected": "Zip 압축 파일은 가져올 수 없습니다. 내보낸 압축을 해제한 후, 그 안의 conversations.json 파일을 선택해 주세요.",
+    "nothingImportable": "이 {source} 내보내기에는 읽을 수 있는 메시지가 있는 대화가 없습니다.",
+    "noMatches": "필터에 맞는 대화가 없습니다",
+    "listLabel": "가져올 대화 목록"
+  }
 }

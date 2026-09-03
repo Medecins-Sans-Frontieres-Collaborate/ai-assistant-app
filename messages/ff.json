@@ -5155,5 +5155,32 @@
     "noResults": "Haa kaɓirgal ko feewi",
     "createFolder": "Kaɓirgal kesɗo “{name}”"
   },
-  "This conversation is already empty": "Nde hiwto waawi e jamma"
+  "This conversation is already empty": "Nde hiwto waawi e jamma",
+  "conversationImport": {
+    "title": "Naataa finndeeji",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "A anndi {count, plural, one {# finndeejo} other {# finndeeji}} e ndeen {source} barki.",
+    "skipped": "{count, plural, one {# cemma} other {# cemmuuji}} waawi alabbinay, tee mbaɗii gaccii.",
+    "textOnly": "So tawii nguurndam finndeeji tan neɗɗo naatataa. Kikku, njaajeendi, feewi e caɗeeji kuulee waawataa naatada.",
+    "searchPlaceholder": "Suɓo e innde",
+    "selectAll": "Suɓo fow",
+    "deselectAll": "Luumo fow",
+    "selectedCount": "{selected} e {total} suɓaani",
+    "alreadyImported": "Naatataa",
+    "turnCount": "{count, plural, one {# nguurndam} other {# nguurndamji}}",
+    "droppedParts": "{count, plural, one {# cemma} other {# cemmuuji}} mbaɗii gaccii",
+    "placeInFolder": "Sari finndeeji naatada e puccital",
+    "folderName": "Innde puccital",
+    "defaultFolderName": "Naatani e {source}",
+    "importButton": "Naat {count, plural, one {# finndeejo} other {# finndeeji}}",
+    "cancel": "Haaytu",
+    "untitled": "Finndeejo les",
+    "success": "Naatani {count, plural, one {# finndeejo} other {# finndeeji}}",
+    "noModel": "Misimaani seedam wondude yimɓe finndeeji naatada. Humpito tun nde seedaaɓe waawaa naatude.",
+    "zipRejected": "Fakkita Zip waawataa naatada. Lef ndiyam e barki, suɓo conversations.json ngal fu.",
+    "nothingImportable": "Ndeen {source} barki fayi waawitaaba finndeeji e nguurndam waawnde.",
+    "noMatches": "Finndeeji wayiɓe fayi ɓurto suɓorgol maa",
+    "listLabel": "Finndeeji nataanɗe"
+  }
 }

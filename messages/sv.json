@@ -5171,5 +5171,32 @@
     "noResults": "Inga mappar matchar",
     "createFolder": "Ny mapp “{name}”"
   },
-  "This conversation is already empty": "Denna konversation är redan tom"
+  "This conversation is already empty": "Denna konversation är redan tom",
+  "conversationImport": {
+    "title": "Importera konversationer",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Hittade {count, plural, one {# konversation} other {# konversationer}} i denna {source}-export.",
+    "skipped": "{count, plural, one {# post} other {# poster}} kunde inte läsas och hoppas över.",
+    "textOnly": "Endast meddelandetext importeras. Bilagor, bilder, filer och verktygsutdata utelämnas.",
+    "searchPlaceholder": "Filtrera efter titel",
+    "selectAll": "Markera alla",
+    "deselectAll": "Avmarkera alla",
+    "selectedCount": "{selected} av {total} markerade",
+    "alreadyImported": "Redan importerad",
+    "turnCount": "{count, plural, one {# meddelande} other {# meddelanden}}",
+    "droppedParts": "{count, plural, one {# del} other {# delar}} utelämnades",
+    "placeInFolder": "Lägg importerade konversationer i en mapp",
+    "folderName": "Mappnamn",
+    "defaultFolderName": "Importerad från {source}",
+    "importButton": "Importera {count, plural, one {# konversation} other {# konversationer}}",
+    "cancel": "Avbryt",
+    "untitled": "Namnlös konversation",
+    "success": "Importerade {count, plural, one {# konversation} other {# konversationer}}",
+    "noModel": "Ingen modell är tillgänglig för att kopplas till importerade konversationer. Försök igen när modellerna har laddats.",
+    "zipRejected": "Zip-arkiv kan inte importeras. Packa upp exporten och välj filen conversations.json inuti.",
+    "nothingImportable": "Denna {source}-export innehåller inga konversationer med läsbara meddelanden.",
+    "noMatches": "Inga konversationer matchar ditt filter",
+    "listLabel": "Konversationer att importera"
+  }
 }

@@ -5171,5 +5171,32 @@
     "noResults": "कोई फ़ोल्डर मेल नहीं खाता",
     "createFolder": "नया फ़ोल्डर “{name}”"
   },
-  "This conversation is already empty": "यह बातचीत पहले से ही खाली है"
+  "This conversation is already empty": "यह बातचीत पहले से ही खाली है",
+  "conversationImport": {
+    "title": "वार्तालाप आयात करें",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "इस {source} निर्यात में {count, plural, one {# वार्तालाप} other {# वार्तालाप}} मिले।",
+    "skipped": "{count, plural, one {# प्रविष्टि} other {# प्रविष्टियाँ}} पढ़ी नहीं जा सकीं और छोड़ दी जाएंगी।",
+    "textOnly": "केवल संदेश का पाठ आयात किया जाएगा। संलग्नक, चित्र, फ़ाइलें, और टूल आउटपुट शामिल नहीं हैं।",
+    "searchPlaceholder": "शीर्षक से फ़िल्टर करें",
+    "selectAll": "सभी चुनें",
+    "deselectAll": "सभी चयन हटाएँ",
+    "selectedCount": "{total} में से {selected} चयनित",
+    "alreadyImported": "पहले ही आयात किया गया",
+    "turnCount": "{count, plural, one {# संदेश} other {# संदेश}}",
+    "droppedParts": "{count, plural, one {# भाग} other {# भाग}} छोड़े गए",
+    "placeInFolder": "आयात किए गए वार्तालापों को एक फ़ोल्डर में रखें",
+    "folderName": "फ़ोल्डर का नाम",
+    "defaultFolderName": "{source} से आयातित",
+    "importButton": "{count, plural, one {# वार्तालाप आयात करें} other {# वार्तालाप आयात करें}}",
+    "cancel": "रद्द करें",
+    "untitled": "बिना शीर्षक वार्तालाप",
+    "success": "{count, plural, one {# वार्तालाप आयात किया गया} other {# वार्तालाप आयात किए गए}}",
+    "noModel": "आयातित वार्तालापों के लिए कोई मॉडल उपलब्ध नहीं है। कृपया मॉडल लोड होने के बाद पुनः प्रयास करें।",
+    "zipRejected": "Zip संग्रह आयात नहीं किए जा सकते। निर्यात को अनजिप करें और उसमें से conversations.json फ़ाइल चुनें।",
+    "nothingImportable": "इस {source} निर्यात में पढ़ने योग्य संदेशों वाला कोई वार्तालाप नहीं है।",
+    "noMatches": "आपके फ़िल्टर से कोई वार्तालाप मेल नहीं खाता",
+    "listLabel": "आयात करने के लिए वार्तालाप"
+  }
 }

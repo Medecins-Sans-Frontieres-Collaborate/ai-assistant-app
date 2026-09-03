@@ -5202,5 +5202,32 @@
     "noResults": "未找到匹配的文件夹",
     "createFolder": "新建文件夹“{name}”"
   },
-  "This conversation is already empty": "此对话已为空"
+  "This conversation is already empty": "此对话已为空",
+  "conversationImport": {
+    "title": "导入对话",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "在此{source}导出文件中找到{count, plural, one {# 个对话} other {# 个对话}}。",
+    "skipped": "{count, plural, one {# 条记录} other {# 条记录}}无法读取，将被跳过。",
+    "textOnly": "仅导入消息文本。附件、图片、文件和工具输出将不会导入。",
+    "searchPlaceholder": "按标题筛选",
+    "selectAll": "全选",
+    "deselectAll": "取消全选",
+    "selectedCount": "已选{selected}/{total}",
+    "alreadyImported": "已导入",
+    "turnCount": "{count, plural, one {# 条消息} other {# 条消息}}",
+    "droppedParts": "{count, plural, one {# 部分} other {# 部分}}未导入",
+    "placeInFolder": "将导入的对话放入文件夹",
+    "folderName": "文件夹名称",
+    "defaultFolderName": "从{source}导入",
+    "importButton": "导入{count, plural, one {# 个对话} other {# 个对话}}",
+    "cancel": "取消",
+    "untitled": "未命名对话",
+    "success": "已导入{count, plural, one {# 个对话} other {# 个对话}}",
+    "noModel": "没有可用于附加到导入对话的模型。请在模型加载后重试。",
+    "zipRejected": "无法导入Zip压缩包。请先解压导出文件，然后选择其中的conversations.json文件。",
+    "nothingImportable": "此{source}导出文件中没有包含可读取消息的对话。",
+    "noMatches": "没有符合筛选条件的对话",
+    "listLabel": "待导入对话"
+  }
 }

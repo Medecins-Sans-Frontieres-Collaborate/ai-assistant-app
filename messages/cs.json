@@ -5171,5 +5171,32 @@
     "noResults": "Nenalezeny žádné složky",
     "createFolder": "Nová složka „{name}“"
   },
-  "This conversation is already empty": "Tento rozhovor je už prázdný"
+  "This conversation is already empty": "Tento rozhovor je už prázdný",
+  "conversationImport": {
+    "title": "Importovat konverzace",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "V tomto exportu {source} nalezeno {count, plural, one {# konverzace} other {# konverzací}}.",
+    "skipped": "{count, plural, one {# záznam} other {# záznamů}} nelze načíst a budou přeskočeny.",
+    "textOnly": "Importuje se pouze text zpráv. Přílohy, obrázky, soubory a výstupy nástrojů nejsou zahrnuty.",
+    "searchPlaceholder": "Filtrovat podle názvu",
+    "selectAll": "Vybrat vše",
+    "deselectAll": "Zrušit výběr",
+    "selectedCount": "Vybráno {selected} z {total}",
+    "alreadyImported": "Již importováno",
+    "turnCount": "{count, plural, one {# zpráva} other {# zpráv}}",
+    "droppedParts": "{count, plural, one {# část} other {# částí}} vynecháno",
+    "placeInFolder": "Umístit importované konverzace do složky",
+    "folderName": "Název složky",
+    "defaultFolderName": "Importováno z {source}",
+    "importButton": "Importovat {count, plural, one {# konverzaci} other {# konverzací}}",
+    "cancel": "Zrušit",
+    "untitled": "Konverzace bez názvu",
+    "success": "Importováno {count, plural, one {# konverzace} other {# konverzací}}",
+    "noModel": "Není k dispozici žádný model pro přiřazení k importovaným konverzacím. Zkuste to znovu, až budou modely načteny.",
+    "zipRejected": "Nelze importovat ZIP archivy. Rozbalte export a vyberte soubor conversations.json uvnitř.",
+    "nothingImportable": "Tento export {source} neobsahuje žádné konverzace s čitelnými zprávami.",
+    "noMatches": "Žádné konverzace neodpovídají vašemu filtru",
+    "listLabel": "Konverzace k importu"
+  }
 }

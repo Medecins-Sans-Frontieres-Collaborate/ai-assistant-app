@@ -5171,5 +5171,32 @@
     "noResults": "ไม่พบโฟลเดอร์ที่ตรงกัน",
     "createFolder": "สร้างโฟลเดอร์ใหม่ “{name}”"
   },
-  "This conversation is already empty": "การสนทนานี้ว่างเปล่าอยู่แล้ว"
+  "This conversation is already empty": "การสนทนานี้ว่างเปล่าอยู่แล้ว",
+  "conversationImport": {
+    "title": "นำเข้าบทสนทนา",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "พบ {count, plural, one {# บทสนทนา} other {# บทสนทนา}} ในการส่งออก {source} นี้",
+    "skipped": "{count, plural, one {# รายการ} other {# รายการ}} ไม่สามารถอ่านได้และจะถูกข้าม",
+    "textOnly": "นำเข้าเฉพาะข้อความของข้อความเท่านั้น ไฟล์แนบ รูปภาพ ไฟล์ และผลลัพธ์จากเครื่องมือจะไม่ถูกนำเข้า",
+    "searchPlaceholder": "กรองตามชื่อเรื่อง",
+    "selectAll": "เลือกทั้งหมด",
+    "deselectAll": "ยกเลิกการเลือกทั้งหมด",
+    "selectedCount": "เลือกแล้ว {selected} จาก {total}",
+    "alreadyImported": "นำเข้าแล้ว",
+    "turnCount": "{count, plural, one {# ข้อความ} other {# ข้อความ}}",
+    "droppedParts": "{count, plural, one {# ส่วน} other {# ส่วน}} ที่ไม่ได้ใส่",
+    "placeInFolder": "วางบทสนทนาที่นำเข้าไว้ในโฟลเดอร์",
+    "folderName": "ชื่อโฟลเดอร์",
+    "defaultFolderName": "นำเข้าจาก {source}",
+    "importButton": "นำเข้า {count, plural, one {# บทสนทนา} other {# บทสนทนา}}",
+    "cancel": "ยกเลิก",
+    "untitled": "บทสนทนาไม่มีชื่อ",
+    "success": "นำเข้าแล้ว {count, plural, one {# บทสนทนา} other {# บทสนทนา}}",
+    "noModel": "ไม่มีโมเดลสำหรับแนบบทสนทนาที่นำเข้า กรุณาลองใหม่หลังจากโหลดโมเดลแล้ว",
+    "zipRejected": "ไม่สามารถนำเข้าไฟล์ Zip ได้ กรุณาแตกไฟล์และเลือกแฟ้ม conversations.json ข้างใน",
+    "nothingImportable": "ส่งออก {source} นี้ไม่มีบทสนทนาที่มีข้อความที่อ่านได้",
+    "noMatches": "ไม่มีบทสนทนาที่ตรงกับตัวกรองของคุณ",
+    "listLabel": "บทสนทนาที่จะนำเข้า"
+  }
 }

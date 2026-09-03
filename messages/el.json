@@ -5155,5 +5155,32 @@
     "noResults": "Δεν βρέθηκαν φάκελοι",
     "createFolder": "Νέος φάκελος «{name}»"
   },
-  "This conversation is already empty": "Αυτή η συνομιλία είναι ήδη κενή"
+  "This conversation is already empty": "Αυτή η συνομιλία είναι ήδη κενή",
+  "conversationImport": {
+    "title": "Εισαγωγή συνομιλιών",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Βρέθηκαν {count, plural, one {# συνομιλία} other {# συνομιλίες}} σε αυτήν την εξαγωγή από {source}.",
+    "skipped": "{count, plural, one {# καταχώρηση} other {# καταχωρήσεις}} δεν ήταν δυνατό να διαβαστούν και θα παραλειφθούν.",
+    "textOnly": "Εισάγεται μόνο το κείμενο των μηνυμάτων. Συνημμένα, εικόνες, αρχεία και αποτελέσματα εργαλείων παραλείπονται.",
+    "searchPlaceholder": "Φιλτράρισμα με βάση τον τίτλο",
+    "selectAll": "Επιλογή όλων",
+    "deselectAll": "Αποεπιλογή όλων",
+    "selectedCount": "{selected} από {total} επιλεγμένα",
+    "alreadyImported": "Έχει ήδη εισαχθεί",
+    "turnCount": "{count, plural, one {# μήνυμα} other {# μηνύματα}}",
+    "droppedParts": "{count, plural, one {# μέρος} other {# μέρη}} παραλείφθηκε",
+    "placeInFolder": "Τοποθέτηση των εισαγόμενων συνομιλιών σε φάκελο",
+    "folderName": "Όνομα φακέλου",
+    "defaultFolderName": "Εισαγωγή από {source}",
+    "importButton": "Εισαγωγή {count, plural, one {# συνομιλίας} other {# συνομιλιών}}",
+    "cancel": "Ακύρωση",
+    "untitled": "Χωρίς τίτλο συνομιλία",
+    "success": "Εισήχθησαν {count, plural, one {# συνομιλία} other {# συνομιλίες}}",
+    "noModel": "Δεν υπάρχει διαθέσιμο μοντέλο για συσχετισμό με τις εισαχθείσες συνομιλίες. Δοκιμάστε ξανά όταν φορτώσουν τα μοντέλα.",
+    "zipRejected": "Δεν είναι δυνατή η εισαγωγή αρχείων zip. Αποσυμπιέστε την εξαγωγή και επιλέξτε το αρχείο conversations.json που βρίσκεται μέσα.",
+    "nothingImportable": "Αυτή η εξαγωγή από {source} δεν περιέχει συνομιλίες με αναγνώσιμα μηνύματα.",
+    "noMatches": "Καμία συνομιλία δεν ταιριάζει στο φίλτρο σας",
+    "listLabel": "Συνομιλίες προς εισαγωγή"
+  }
 }

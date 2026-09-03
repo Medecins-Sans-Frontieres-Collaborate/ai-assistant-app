@@ -5171,5 +5171,32 @@
     "noResults": "ගැලපෙන බහාලුම් නොමැත",
     "createFolder": "නව බහාලුම “{name}”"
   },
-  "This conversation is already empty": "මෙම සංවාදය දැනටමත් හිස් ය"
+  "This conversation is already empty": "මෙම සංවාදය දැනටමත් හිස් ය",
+  "conversationImport": {
+    "title": "සාකච්ඡා ආයාත කරන්න",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "මෙම {source} අපනයනයේ {count, plural, one {සාකච්ඡාවක්} other {සාකච්ඡා}} හමු වුණා.",
+    "skipped": "{count, plural, one {ඇතුළත් කිරීමක්} other {ඇතුළත් කිරීම්}} කියවිය නොහැකි නිසා මඟහැරේ.",
+    "textOnly": "පණිවිඩෙහි පෙළ පමණක් ආයාත වේ. අමුණන්නන්, පින්තූර, ගොනු සහ මෙවලම් ප්‍රතිඵල ඇතුළත් නොවේ.",
+    "searchPlaceholder": "ශීර්ෂය අනුව පෙරන්න",
+    "selectAll": "සියල්ල තෝරන්න",
+    "deselectAll": "සියල්ල තේරීම ඉවත් කරන්න",
+    "selectedCount": "{total}යෙන් {selected} තේරී ඇත",
+    "alreadyImported": "දැනටමත් ආයාත කර ඇත",
+    "turnCount": "{count, plural, one {පණිවිඩයක්} other {පණිවිඩ}}",
+    "droppedParts": "{count, plural, one {අංශයක්} other {අංශ}} ඇතුළත් කර නැත",
+    "placeInFolder": "ආයාත කරන සාකච්ඡා ෆෝල්ඩරයකට තබන්න",
+    "folderName": "ෆෝල්ඩරයේ නම",
+    "defaultFolderName": "{source} වෙතින් ආයාත කරන ලදි",
+    "importButton": "{count, plural, one {සාකච්ඡාවක්} other {සාකච්ඡා}} ආයාත කරන්න",
+    "cancel": "අවලංගු කරන්න",
+    "untitled": "නම ලබා නොදුන් සාකච්ඡාව",
+    "success": "{count, plural, one {සාකච්ඡාවක්} other {සාකච්ඡා}} ආයාත කළා",
+    "noModel": "ආයාත කළ සාකච්ඡා සඳහා ආසන්න කළ හැකි යමක් නො ඇත. ආකෘති පූරණය වූ පසු නැවත උත්සාහ කරන්න.",
+    "zipRejected": "Zip ආරක්ෂා ආයාත කළ නොහැක. අපනයනය unzip කර, ඇතුළත conversations.json ගොනුව තෝරන්න.",
+    "nothingImportable": "මෙම {source} අපනයනයේ කියවිය හැකි පණිවිඩ සහිත සාකච්ඡා නැත.",
+    "noMatches": "ඔබේ පෙරහනට ගැළපෙන සාකච්ඡා නොමැත",
+    "listLabel": "ආයාත කිරීම් සඳහා සාකච්ඡා"
+  }
 }

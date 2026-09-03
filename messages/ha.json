@@ -5155,5 +5155,32 @@
     "noResults": "Babu babban fayil da ya dace",
     "createFolder": "Sabon babban fayil “{name}”"
   },
-  "This conversation is already empty": "Wannan tattaunawar tuni babu komai cikinta"
+  "This conversation is already empty": "Wannan tattaunawar tuni babu komai cikinta",
+  "conversationImport": {
+    "title": "Shigo da tattaunawa",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "An samo {count, plural, one {# tattaunawa} other {# tattaunawa}} a cikin wannan fitarwar {source}.",
+    "skipped": "{count, plural, one {# bayanin} other {# bayanai}} ba a iya karanta shi ba, za a watsar da shi.",
+    "textOnly": "Ana shigo da saƙonnin rubutu kawai. Ana barin naɗe-naɗe, hotuna, fayiloli, da sakamakon kayan aiki.",
+    "searchPlaceholder": "Gwada tacewa ta take",
+    "selectAll": "Zaɓi duka",
+    "deselectAll": "Cire zaɓi duka",
+    "selectedCount": "An zaɓi {selected} daga {total}",
+    "alreadyImported": "An riga an shigo da shi",
+    "turnCount": "{count, plural, one {# saƙo} other {# saƙonni}}",
+    "droppedParts": "{count, plural, one {# ɓangare} other {# ɓangarori}} an bar su",
+    "placeInFolder": "Sanya tattaunawar da aka shigo dasu a cikin babban fayil",
+    "folderName": "Sunan babban fayil",
+    "defaultFolderName": "An shigo daga {source}",
+    "importButton": "Shigo da {count, plural, one {# tattaunawa} other {# tattaunawa}}",
+    "cancel": "Soke",
+    "untitled": "Tattaunawar ba ta da suna",
+    "success": "An shigo da {count, plural, one {# tattaunawa} other {# tattaunawa}}",
+    "noModel": "Babu samfurin da ake samuwa don haɗawa da tattaunawar da aka shigo da su. Gwada sake dubawa bayan samfurori sun ɗora.",
+    "zipRejected": "Ba za a iya shigo da fayilolin zip ba. Fitar da zip sannan zaɓi fayil ɗin conversations.json da ke ciki.",
+    "nothingImportable": "Wannan fitarwar {source} ba ta ƙunshi kowace tattaunawa da ake iya karanta saƙonninta ba.",
+    "noMatches": "Babu tattaunawar da ta dace da tsarin tacewa naka",
+    "listLabel": "Tattaunawar da za a shigo da su"
+  }
 }

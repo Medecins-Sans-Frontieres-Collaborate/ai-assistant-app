@@ -5155,5 +5155,32 @@
     "noResults": "Nema fascikli koje odgovaraju",
     "createFolder": "Nova fascikla “{name}”"
   },
-  "This conversation is already empty": "Ovaj razgovor je već prazan"
+  "This conversation is already empty": "Ovaj razgovor je već prazan",
+  "conversationImport": {
+    "title": "Uvezi razgovore",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Pronađeno {count, plural, one {# razgovor} other {# razgovora}} u ovom {source} izvozu.",
+    "skipped": "{count, plural, one {# unos} other {# unosa}} nije moguće učitati i biće preskočen.",
+    "textOnly": "Uvozi se samo tekst poruka. Prilozi, slike, fajlovi i rezultati alata nisu uključeni.",
+    "searchPlaceholder": "Filtriraj po nazivu",
+    "selectAll": "Izaberi sve",
+    "deselectAll": "Poništi izbor",
+    "selectedCount": "Izabrano {selected} od {total}",
+    "alreadyImported": "Već uvezeno",
+    "turnCount": "{count, plural, one {# poruka} other {# poruka}}",
+    "droppedParts": "{count, plural, one {# deo} other {# delova}} nije uvezeno",
+    "placeInFolder": "Smesti uvezene razgovore u folder",
+    "folderName": "Naziv foldera",
+    "defaultFolderName": "Uvezeno iz {source}",
+    "importButton": "Uvezi {count, plural, one {# razgovor} other {# razgovora}}",
+    "cancel": "Otkaži",
+    "untitled": "Neimenovani razgovor",
+    "success": "Uvezeno {count, plural, one {# razgovor} other {# razgovora}}",
+    "noModel": "Nijedan model nije dostupan za povezivanje sa uvezenim razgovorima. Pokušajte ponovo kada se modeli učitaju.",
+    "zipRejected": "ZIP arhive nije moguće uvesti. Otpakujte izvoz i izaberite conversations.json fajl iz njega.",
+    "nothingImportable": "Ovaj {source} izvoz ne sadrži razgovore sa čitljivim porukama.",
+    "noMatches": "Nema razgovora koji odgovaraju filteru",
+    "listLabel": "Razgovori za uvoz"
+  }
 }

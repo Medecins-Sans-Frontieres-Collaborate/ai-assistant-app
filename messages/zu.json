@@ -5155,5 +5155,32 @@
     "noResults": "Azikho amafolda afanayo",
     "createFolder": "Ifolda entsha “{name}”"
   },
-  "This conversation is already empty": "Le ngxoxo isivele ingenalutho"
+  "This conversation is already empty": "Le ngxoxo isivele ingenalutho",
+  "conversationImport": {
+    "title": "Ngenisa izingxoxo",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Kutholakale {count, plural, one {# ingxoxo} other {# izingxoxo}} kule {source} yokuthekelisa.",
+    "skipped": "{count, plural, one {# okungafundiwe} other {# okungafundiwe}} kuzogqitshelwa ngoba akunakufundwa.",
+    "textOnly": "Kungeniswa umbhalo wemiyalezo kuphela. Okunamathiselwe, izithombe, amafayela, kanye nemiphumela yamathuluzi kushiywa ngaphandle.",
+    "searchPlaceholder": "Hlunga ngesihloko",
+    "selectAll": "Khetha konke",
+    "deselectAll": "Susa konke okukhethiwe",
+    "selectedCount": "Kukhethiwe {selected} kwe-{total}",
+    "alreadyImported": "Sekungenisiwe",
+    "turnCount": "{count, plural, one {# umyalezo} other {# imiyalezo}}",
+    "droppedParts": "{count, plural, one {# ingxenye} other {# izingxenye}} kushiywe ngaphandle",
+    "placeInFolder": "Faka izingxoxo ezingenisiwe kufolda",
+    "folderName": "Igama lefolda",
+    "defaultFolderName": "Kungenisiwe kuvela ku-{source}",
+    "importButton": "Ngenisa {count, plural, one {# ingxoxo} other {# izingxoxo}}",
+    "cancel": "Khansela",
+    "untitled": "Ingxoxo engenasihloko",
+    "success": "Kungenisiwe {count, plural, one {# ingxoxo} other {# izingxoxo}}",
+    "noModel": "Ayikho imodeli etholakalayo ongayinamathisela ezingxoxweni ezenisiwe. Zama futhi uma imodeli isilayishiwe.",
+    "zipRejected": "Amafayela e-Zip awakwazi ukungeniswa. Vula ifayela ekuthekelisiwe bese ukhetha ifayela elithi conversations.json elikuwo.",
+    "nothingImportable": "Le {source} yokuthekelisa ayinazo izingxoxo eziqukethe imiyalezo efundekayo.",
+    "noMatches": "Azikho izingxoxo ezihambisana nokuhlunga kwakho",
+    "listLabel": "Izingxoxo ezizongeniswa"
+  }
 }

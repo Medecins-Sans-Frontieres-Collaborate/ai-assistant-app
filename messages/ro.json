@@ -5171,5 +5171,32 @@
     "noResults": "Nu există dosare potrivite",
     "createFolder": "Dosar nou „{name}”"
   },
-  "This conversation is already empty": "Această conversație este deja goală"
+  "This conversation is already empty": "Această conversație este deja goală",
+  "conversationImport": {
+    "title": "Importă conversații",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Au fost găsite {count, plural, one {# conversație} other {# conversații}} în acest export {source}.",
+    "skipped": "{count, plural, one {# intrare} other {# intrări}} nu au putut fi citite și vor fi omise.",
+    "textOnly": "Se importă doar textul mesajelor. Atașamentele, imaginile, fișierele și rezultatele instrumentelor nu sunt incluse.",
+    "searchPlaceholder": "Filtrează după titlu",
+    "selectAll": "Selectează tot",
+    "deselectAll": "Deselectează tot",
+    "selectedCount": "{selected} din {total} selectate",
+    "alreadyImported": "Deja importat",
+    "turnCount": "{count, plural, one {# mesaj} other {# mesaje}}",
+    "droppedParts": "{count, plural, one {# parte} other {# părți}} omise",
+    "placeInFolder": "Pune conversațiile importate într-un folder",
+    "folderName": "Nume folder",
+    "defaultFolderName": "Importat din {source}",
+    "importButton": "Importă {count, plural, one {# conversație} other {# conversații}}",
+    "cancel": "Anulează",
+    "untitled": "Conversație fără titlu",
+    "success": "Au fost importate {count, plural, one {# conversație} other {# conversații}}",
+    "noModel": "Nu este disponibil niciun model pentru a fi asociat cu conversațiile importate. Încercați din nou după încărcarea modelelor.",
+    "zipRejected": "Arhivele zip nu pot fi importate. Dezarhivați exportul și alegeți fișierul conversations.json din interior.",
+    "nothingImportable": "Acest export {source} nu conține nicio conversație cu mesaje ce pot fi citite.",
+    "noMatches": "Nicio conversație nu corespunde filtrului",
+    "listLabel": "Conversații de importat"
+  }
 }

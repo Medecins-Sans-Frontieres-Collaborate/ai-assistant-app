@@ -5171,5 +5171,32 @@
     "noResults": "Eşleşen klasör yok",
     "createFolder": "Yeni klasör “{name}”"
   },
-  "This conversation is already empty": "Bu konuşma zaten boş"
+  "This conversation is already empty": "Bu konuşma zaten boş",
+  "conversationImport": {
+    "title": "Sohbetleri içe aktar",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Bu {source} dışa aktarımında {count, plural, one {# sohbet} other {# sohbet}} bulundu.",
+    "skipped": "{count, plural, one {# giriş} other {# giriş}} okunamadı ve atlanacak.",
+    "textOnly": "Yalnızca mesaj metni içe aktarılır. Ekler, görseller, dosyalar ve araç çıktıları dahil edilmez.",
+    "searchPlaceholder": "Başlığa göre filtrele",
+    "selectAll": "Tümünü seç",
+    "deselectAll": "Tümünü bırak",
+    "selectedCount": "{total} arasından {selected} seçildi",
+    "alreadyImported": "Zaten içe aktarıldı",
+    "turnCount": "{count, plural, one {# mesaj} other {# mesaj}}",
+    "droppedParts": "{count, plural, one {# parça} other {# parça}} dahil edilmedi",
+    "placeInFolder": "İçe aktarılan sohbetleri bir klasöre koy",
+    "folderName": "Klasör adı",
+    "defaultFolderName": "{source} kaynağından içe aktarıldı",
+    "importButton": "{count, plural, one {# sohbeti} other {# sohbeti}} içe aktar",
+    "cancel": "İptal et",
+    "untitled": "Başlıksız sohbet",
+    "success": "{count, plural, one {# sohbet} other {# sohbet}} içe aktarıldı",
+    "noModel": "İçe aktarılan sohbetlere eklenecek bir model yok. Modeller yüklendikten sonra tekrar deneyin.",
+    "zipRejected": "Zip arşivleri içe aktarılamaz. Lütfen dışa aktarılan dosyanın sıkıştırmasını açın ve içindeki conversations.json dosyasını seçin.",
+    "nothingImportable": "Bu {source} dışa aktarımında okunabilir mesajı olan sohbet yok.",
+    "noMatches": "Filtrenize uygun sohbet bulunamadı",
+    "listLabel": "İçe aktarılacak sohbetler"
+  }
 }

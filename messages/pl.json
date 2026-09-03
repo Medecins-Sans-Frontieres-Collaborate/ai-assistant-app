@@ -5171,5 +5171,32 @@
     "noResults": "Brak pasujących folderów",
     "createFolder": "Nowy folder „{name}”"
   },
-  "This conversation is already empty": "Ta rozmowa jest już pusta"
+  "This conversation is already empty": "Ta rozmowa jest już pusta",
+  "conversationImport": {
+    "title": "Importuj rozmowy",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Znaleziono {count, plural, one {# rozmowę} other {# rozmów}} w tym eksporcie z {source}.",
+    "skipped": "{count, plural, one {# wpis} other {# wpisów}} nie można odczytać i zostaną pominięte.",
+    "textOnly": "Importowany jest tylko tekst wiadomości. Załączniki, obrazy, pliki i wyniki narzędzi nie są uwzględniane.",
+    "searchPlaceholder": "Filtruj po tytule",
+    "selectAll": "Zaznacz wszystko",
+    "deselectAll": "Odznacz wszystko",
+    "selectedCount": "Wybrano {selected} z {total}",
+    "alreadyImported": "Już zaimportowano",
+    "turnCount": "{count, plural, one {# wiadomość} other {# wiadomości}}",
+    "droppedParts": "{count, plural, one {# część} other {# części}} pominięto",
+    "placeInFolder": "Umieść zaimportowane rozmowy w folderze",
+    "folderName": "Nazwa folderu",
+    "defaultFolderName": "Zaimportowano z {source}",
+    "importButton": "Importuj {count, plural, one {# rozmowę} other {# rozmów}}",
+    "cancel": "Anuluj",
+    "untitled": "Rozmowa bez tytułu",
+    "success": "Zaimportowano {count, plural, one {# rozmowę} other {# rozmów}}",
+    "noModel": "Brak dostępnego modelu do przypisania do zaimportowanych rozmów. Spróbuj ponownie po załadowaniu modeli.",
+    "zipRejected": "Nie można importować archiwów zip. Rozpakuj eksport i wybierz plik conversations.json.",
+    "nothingImportable": "Eksport z {source} nie zawiera rozmów z czytelnymi wiadomościami.",
+    "noMatches": "Brak rozmów spełniających kryteria filtra",
+    "listLabel": "Rozmowy do importu"
+  }
 }

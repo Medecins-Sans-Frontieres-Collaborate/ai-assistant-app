@@ -5171,5 +5171,32 @@
     "noResults": "Aucun dossier correspondant",
     "createFolder": "Nouveau dossier « {name} »"
   },
-  "This conversation is already empty": "Cette conversation est déjà vide"
+  "This conversation is already empty": "Cette conversation est déjà vide",
+  "conversationImport": {
+    "title": "Importer des conversations",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "{count, plural, one {# conversation} other {# conversations}} trouvée(s) dans cette exportation {source}.",
+    "skipped": "{count, plural, one {# entrée} other {# entrées}} n'ont pas pu être lues et seront ignorées.",
+    "textOnly": "Seul le texte des messages est importé. Les pièces jointes, images, fichiers et résultats d’outils ne sont pas pris en compte.",
+    "searchPlaceholder": "Filtrer par titre",
+    "selectAll": "Tout sélectionner",
+    "deselectAll": "Tout désélectionner",
+    "selectedCount": "{selected} sur {total} sélectionné(s)",
+    "alreadyImported": "Déjà importé",
+    "turnCount": "{count, plural, one {# message} other {# messages}}",
+    "droppedParts": "{count, plural, one {# élément} other {# éléments}} ignoré(s)",
+    "placeInFolder": "Placer les conversations importées dans un dossier",
+    "folderName": "Nom du dossier",
+    "defaultFolderName": "Importé depuis {source}",
+    "importButton": "Importer {count, plural, one {# conversation} other {# conversations}}",
+    "cancel": "Annuler",
+    "untitled": "Conversation sans titre",
+    "success": "{count, plural, one {# conversation} other {# conversations}} importée(s)",
+    "noModel": "Aucun modèle n’est disponible pour les conversations importées. Veuillez réessayer une fois les modèles chargés.",
+    "zipRejected": "Les archives zip ne peuvent pas être importées. Décompressez l’exportation et choisissez le fichier conversations.json à l’intérieur.",
+    "nothingImportable": "Cet export {source} ne contient aucune conversation avec des messages lisibles.",
+    "noMatches": "Aucune conversation ne correspond à votre filtre",
+    "listLabel": "Conversations à importer"
+  }
 }

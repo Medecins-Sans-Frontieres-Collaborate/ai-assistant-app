@@ -5171,5 +5171,32 @@
     "noResults": "לא נמצאו תיקיות תואמות",
     "createFolder": "תיקיה חדשה \"{name}\""
   },
-  "This conversation is already empty": "שיחה זו כבר ריקה"
+  "This conversation is already empty": "שיחה זו כבר ריקה",
+  "conversationImport": {
+    "title": "ייבוא שיחות",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "נמצאו {count, plural, one {שיחה אחת} other {# שיחות}} בייצוא זה מ-{source}.",
+    "skipped": "{count, plural, one {רשומה אחת} other {# רשומות}} לא נקראו ותידלגנה.",
+    "textOnly": "מייבא רק את טקסט ההודעות. קבצים מצורפים, תמונות, מסמכים ותוצאות כלים לא ייכללו.",
+    "searchPlaceholder": "סינון לפי כותרת",
+    "selectAll": "בחר הכול",
+    "deselectAll": "בטל בחירה של הכול",
+    "selectedCount": "{selected} מתוך {total} נבחרו",
+    "alreadyImported": "כבר יובא",
+    "turnCount": "{count, plural, one {הודעה אחת} other {# הודעות}}",
+    "droppedParts": "{count, plural, one {חלק אחד} other {# חלקים}} לא ייובאו",
+    "placeInFolder": "הנח שיחות מיובאות בתיקיה",
+    "folderName": "שם התיקיה",
+    "defaultFolderName": "יובא מ-{source}",
+    "importButton": "ייבא {count, plural, one {שיחה אחת} other {# שיחות}}",
+    "cancel": "ביטול",
+    "untitled": "שיחה ללא כותרת",
+    "success": "יובאו {count, plural, one {שיחה אחת} other {# שיחות}}",
+    "noModel": "לא זמין דגם לחיבור לשיחות המיובאות. נא לנסות שוב לאחר טעינת הדגמים.",
+    "zipRejected": "לא ניתן לייבא קבצי Zip. יש לחלץ את הייצוא ולבחור את הקובץ conversations.json שבתוכו.",
+    "nothingImportable": "הייצוא של {source} אינו מכיל שיחות עם הודעות קריאות.",
+    "noMatches": "לא נמצאו שיחות התואמות למסנן",
+    "listLabel": "שיחות לייבוא"
+  }
 }

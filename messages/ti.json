@@ -5155,5 +5155,32 @@
     "noResults": "ፎልደራት ኣይተሳለጡን",
     "createFolder": "ሓዲሽ ፎልደር “{name}”"
   },
-  "This conversation is already empty": "ዚቕጽል ውይን ባዶ ኣሎ"
+  "This conversation is already empty": "ዚቕጽል ውይን ባዶ ኣሎ",
+  "conversationImport": {
+    "title": "ዓወታት ምውሳኽ",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "ኣብዚ {source} ምስክር ፡ {count, plural, one {# ዓወት} other {# ዓወታት}} ተረኺቡ።",
+    "skipped": "{count, plural, one {# መዝገብ} other {# መዝገቦት}} ኣይተንበበንን ክተፈታልዩ እየ።",
+    "textOnly": "ኣብ ልዕሊ መዝገብ ብጥራይ ዝልከ ሓበሬታ ብቐሊሉ ይውሰኽ። ኣቀራረብታት፣ ስእሊታት፣ ፋይሎታትን ተጠቓመ ዝገብሩ እንተገበረ ክወክሉ ኣይክእሉን።",
+    "searchPlaceholder": "ብርእሰ-ርእሲ ፍለጥ",
+    "selectAll": "ኩሉ ምምረጥ",
+    "deselectAll": "ኩሉ ምውሰድ",
+    "selectedCount": "{selected} ካብ {total} ተመሪጹ",
+    "alreadyImported": "ተውሲኹ ኣሎ።",
+    "turnCount": "{count, plural, one {# መልእኽቲ} other {# መልእኽታት}}",
+    "droppedParts": "{count, plural, one {# ክፋል} other {# ክፋላት}} ዝተረፈ።",
+    "placeInFolder": "ዝተውሰኹ ዓወታት ቦታ ኣብ ፎልደር ኣእቱ",
+    "folderName": "ስም ፎልደር",
+    "defaultFolderName": "ካብ {source} ተወሲኹ",
+    "importButton": "{count, plural, one {# ዓወት ውሰኽ} other {# ዓወታት ውሰኽ}}",
+    "cancel": "ምቕጻል",
+    "untitled": "ዘይስም ዓወት",
+    "success": "{count, plural, one {# ዓወት ተውሲኹ} other {# ዓወታት ተውሲኹ}}",
+    "noModel": "ሞዴል ንምግባር ዓወታት ኣይተረኺቡን። መደገጒ ሞዴላት ኣብ ኩነታት ከም ዘሎ ግበሩ።",
+    "zipRejected": "ዝኽፈሉ ፋይል (zip) ምትውሳኽ ኣይክእሉን። ብሓንቲ ፋይል ኣምያይ ናብ ውስኽ ባህሪ ብፋይል conversations.json ምምርጽ ይውሰኽ።",
+    "nothingImportable": "ዚ {source} ምስክር መኩሪ መልእኽቲ ዘሎ ዓወት የለን።",
+    "noMatches": "ዘታነቐን ዓወታት የለን",
+    "listLabel": "ዝውሰኽ ዓወታት"
+  }
 }

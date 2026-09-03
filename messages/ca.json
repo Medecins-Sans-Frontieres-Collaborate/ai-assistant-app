@@ -5171,5 +5171,32 @@
     "noResults": "No hi ha cap carpeta coincident",
     "createFolder": "Nova carpeta “{name}”"
   },
-  "This conversation is already empty": "Aquesta conversa ja és buida"
+  "This conversation is already empty": "Aquesta conversa ja és buida",
+  "conversationImport": {
+    "title": "Importa converses",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "S'han trobat {count, plural, one {# conversa} other {# converses}} en aquesta exportació de {source}.",
+    "skipped": "{count, plural, one {# entrada} other {# entrades}} no s'han pogut llegir i s'ometran.",
+    "textOnly": "Només s'importa el text dels missatges. Els arxius adjunts, imatges, fitxers i sortides d'eines es deixen fora.",
+    "searchPlaceholder": "Filtra per títol",
+    "selectAll": "Selecciona-ho tot",
+    "deselectAll": "Desselecciona-ho tot",
+    "selectedCount": "{selected} de {total} seleccionades",
+    "alreadyImported": "Ja importada",
+    "turnCount": "{count, plural, one {# missatge} other {# missatges}}",
+    "droppedParts": "{count, plural, one {# part} other {# parts}} s'han omès",
+    "placeInFolder": "Posa les converses importades en una carpeta",
+    "folderName": "Nom de la carpeta",
+    "defaultFolderName": "Importat de {source}",
+    "importButton": "Importa {count, plural, one {# conversa} other {# converses}}",
+    "cancel": "Cancel·la",
+    "untitled": "Conversa sense títol",
+    "success": "S'han importat {count, plural, one {# conversa} other {# converses}}",
+    "noModel": "No hi ha cap model disponible per adjuntar a les converses importades. Torna-ho a intentar quan els models estiguin carregats.",
+    "zipRejected": "No es poden importar arxius zip. Descomprimeix l'exportació i tria el fitxer conversations.json del seu interior.",
+    "nothingImportable": "Aquesta exportació de {source} no conté cap conversa amb missatges llegibles.",
+    "noMatches": "Cap conversa coincideix amb el teu filtre",
+    "listLabel": "Converses a importar"
+  }
 }

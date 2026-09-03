@@ -5155,5 +5155,32 @@
     "noResults": "Tsy misy lahatahiry mifanaraka",
     "createFolder": "Lahatahiry vaovao “{name}”"
   },
-  "This conversation is already empty": "Tsy misy hafatra intsony ity resaka ity"
+  "This conversation is already empty": "Tsy misy hafatra intsony ity resaka ity",
+  "conversationImport": {
+    "title": "Ampidiro ny resaka",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Nahitana {count, plural, one {# resaka} other {# resaka}} tamin'ity fanafarana avy amin'i {source} ity.",
+    "skipped": "{count, plural, one {# fidirana} other {# fidirana}} tsy azo novakiana ary tsy hampidirina.",
+    "textOnly": "Ny hafatra soratana ihany no ampidirina. Tsy ao anatin'izany ny attachments, sary, rakitra, ary valin'ny fitaovana.",
+    "searchPlaceholder": "Sivano amin'ny lohateny",
+    "selectAll": "Safidio daholo",
+    "deselectAll": "Esory ny safidy rehetra",
+    "selectedCount": "{selected} amin'ny {total} no voafantina",
+    "alreadyImported": "Efa nampidirina",
+    "turnCount": "{count, plural, one {# hafatra} other {# hafatra}}",
+    "droppedParts": "{count, plural, one {# ampahany} other {# ampahany}} tsy ampidirina",
+    "placeInFolder": "Apetraho anaty lahatahiry ny resaka nampidirina",
+    "folderName": "Anaran'ny lahatahiry",
+    "defaultFolderName": "Nampidirina avy amin'i {source}",
+    "importButton": "Ampidiro {count, plural, one {# resaka} other {# resaka}}",
+    "cancel": "Foano",
+    "untitled": "Resaka tsy misy lohateny",
+    "success": "Nampidirina {count, plural, one {# resaka} other {# resaka}}",
+    "noModel": "Tsy misy modely azo ampiarahina amin'ny resaka nampidirina. Andramo indray rehefa tafiditra tsara ny modely.",
+    "zipRejected": "Tsy azo ampidirina ny rakitra zip. Esory amin'ny zip ilay export ary safidio ny conversations.json ao anatiny.",
+    "nothingImportable": "Tsy misy resaka misy hafatra azo vakiana amin'ity fanafarana avy amin'i {source} ity.",
+    "noMatches": "Tsy misy resaka mifanaraka amin'ny sivanao",
+    "listLabel": "Resaka hampidirina"
+  }
 }

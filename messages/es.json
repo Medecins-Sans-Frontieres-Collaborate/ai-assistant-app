@@ -5171,5 +5171,32 @@
     "noResults": "Ninguna carpeta coincide",
     "createFolder": "Nueva carpeta «{name}»"
   },
-  "This conversation is already empty": "Esta conversación ya está vacía"
+  "This conversation is already empty": "Esta conversación ya está vacía",
+  "conversationImport": {
+    "title": "Importar conversaciones",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Se encontraron {count, plural, one {# conversación} other {# conversaciones}} en esta exportación de {source}.",
+    "skipped": "{count, plural, one {# entrada} other {# entradas}} no se pudieron leer y se omitirán.",
+    "textOnly": "Solo se importa el texto de los mensajes. Los adjuntos, imágenes, archivos y resultados de herramientas no se incluyen.",
+    "searchPlaceholder": "Filtrar por título",
+    "selectAll": "Seleccionar todo",
+    "deselectAll": "Deseleccionar todo",
+    "selectedCount": "{selected} de {total} seleccionados",
+    "alreadyImported": "Ya importado",
+    "turnCount": "{count, plural, one {# mensaje} other {# mensajes}}",
+    "droppedParts": "{count, plural, one {# parte} other {# partes}} omitidas",
+    "placeInFolder": "Colocar conversaciones importadas en una carpeta",
+    "folderName": "Nombre de la carpeta",
+    "defaultFolderName": "Importado de {source}",
+    "importButton": "Importar {count, plural, one {# conversación} other {# conversaciones}}",
+    "cancel": "Cancelar",
+    "untitled": "Conversación sin título",
+    "success": "Se importaron {count, plural, one {# conversación} other {# conversaciones}}",
+    "noModel": "No hay ningún modelo disponible para asociar a las conversaciones importadas. Inténtelo de nuevo una vez que los modelos estén cargados.",
+    "zipRejected": "No se pueden importar archivos zip. Descomprima la exportación y seleccione el archivo conversations.json que se encuentra dentro.",
+    "nothingImportable": "Esta exportación de {source} no contiene conversaciones con mensajes legibles.",
+    "noMatches": "Ninguna conversación coincide con su filtro",
+    "listLabel": "Conversaciones para importar"
+  }
 }

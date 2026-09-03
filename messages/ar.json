@@ -5171,5 +5171,32 @@
     "noResults": "لا توجد مجلدات مطابقة",
     "createFolder": "مجلد جديد “{name}”"
   },
-  "This conversation is already empty": "هذه المحادثة فارغة بالفعل"
+  "This conversation is already empty": "هذه المحادثة فارغة بالفعل",
+  "conversationImport": {
+    "title": "استيراد المحادثات",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "تم العثور على {count, plural, one {# محادثة} other {# محادثات}} في تصدير {source} هذا.",
+    "skipped": "تعذر قراءة {count, plural, one {# إدخال} other {# إدخالات}} وسيتم تخطيها.",
+    "textOnly": "يتم استيراد نص الرسائل فقط. لن يتم تضمين المرفقات أو الصور أو الملفات أو نتائج الأدوات.",
+    "searchPlaceholder": "تصفية حسب العنوان",
+    "selectAll": "تحديد الكل",
+    "deselectAll": "إلغاء تحديد الكل",
+    "selectedCount": "تم تحديد {selected} من {total}",
+    "alreadyImported": "تم الاستيراد مسبقاً",
+    "turnCount": "{count, plural, one {# رسالة} other {# رسائل}}",
+    "droppedParts": "تم استبعاد {count, plural, one {# جزء} other {# أجزاء}}",
+    "placeInFolder": "وضع المحادثات المستوردة في مجلد",
+    "folderName": "اسم المجلد",
+    "defaultFolderName": "تم الاستيراد من {source}",
+    "importButton": "استيراد {count, plural, one {# محادثة} other {# محادثات}}",
+    "cancel": "إلغاء",
+    "untitled": "محادثة بلا عنوان",
+    "success": "تم استيراد {count, plural, one {# محادثة} other {# محادثات}}",
+    "noModel": "لا يوجد أي نموذج متاح لإرفاقه بالمحادثات المستوردة. يرجى المحاولة مجدداً بعد تحميل النماذج.",
+    "zipRejected": "لا يمكن استيراد أرشيفات Zip. فك ضغط التصدير واختر ملف conversations.json الموجود بداخله.",
+    "nothingImportable": "تصدير {source} هذا لا يحتوي على أي محادثات ذات رسائل مقروءة.",
+    "noMatches": "لا توجد محادثات تطابق عامل التصفية الخاص بك",
+    "listLabel": "المحادثات المراد استيرادها"
+  }
 }

@@ -5171,5 +5171,32 @@
     "noResults": "Совпадений не найдено",
     "createFolder": "Новая папка «{name}»"
   },
-  "This conversation is already empty": "Этот диалог уже пуст"
+  "This conversation is already empty": "Этот диалог уже пуст",
+  "conversationImport": {
+    "title": "Импортировать беседы",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Найдено {count, plural, one {# беседа} other {# бесед}} в этом экспорте из {source}.",
+    "skipped": "{count, plural, one {# запись} other {# записей}} не удалось прочитать, они будут пропущены.",
+    "textOnly": "Импортируется только текст сообщений. Вложения, изображения, файлы и результаты инструментов не сохраняются.",
+    "searchPlaceholder": "Фильтр по названию",
+    "selectAll": "Выбрать все",
+    "deselectAll": "Снять выделение",
+    "selectedCount": "Выбрано {selected} из {total}",
+    "alreadyImported": "Уже импортировано",
+    "turnCount": "{count, plural, one {# сообщение} other {# сообщений}}",
+    "droppedParts": "{count, plural, one {# часть} other {# частей}} не импортировано",
+    "placeInFolder": "Поместить импортированные беседы в папку",
+    "folderName": "Имя папки",
+    "defaultFolderName": "Импортировано из {source}",
+    "importButton": "Импортировать {count, plural, one {# беседу} other {# бесед}}",
+    "cancel": "Отмена",
+    "untitled": "Без названия",
+    "success": "Импортировано {count, plural, one {# беседа} other {# бесед}}",
+    "noModel": "Нет доступных моделей для присоединения к импортированным беседам. Повторите попытку после загрузки моделей.",
+    "zipRejected": "Zip-архивы не поддерживаются. Разархивируйте экспорт и выберите файл conversations.json внутри него.",
+    "nothingImportable": "В этом экспорте из {source} нет бесед с читаемыми сообщениями.",
+    "noMatches": "Нет бесед, соответствующих фильтру",
+    "listLabel": "Беседы для импорта"
+  }
 }

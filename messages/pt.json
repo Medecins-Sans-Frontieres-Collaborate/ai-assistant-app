@@ -5171,5 +5171,32 @@
     "noResults": "Nenhuma pasta encontrada",
     "createFolder": "Nova pasta “{name}”"
   },
-  "This conversation is already empty": "Esta conversa já está vazia"
+  "This conversation is already empty": "Esta conversa já está vazia",
+  "conversationImport": {
+    "title": "Importar conversas",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Encontradas {count, plural, one {# conversa} other {# conversas}} nesta exportação do {source}.",
+    "skipped": "{count, plural, one {# entrada} other {# entradas}} não pôde ser lida e será ignorada.",
+    "textOnly": "Apenas o texto das mensagens será importado. Anexos, imagens, arquivos e resultados de ferramentas ficam de fora.",
+    "searchPlaceholder": "Filtrar por título",
+    "selectAll": "Selecionar tudo",
+    "deselectAll": "Desmarcar tudo",
+    "selectedCount": "{selected} de {total} selecionado(s)",
+    "alreadyImported": "Já importado",
+    "turnCount": "{count, plural, one {# mensagem} other {# mensagens}}",
+    "droppedParts": "{count, plural, one {# parte} other {# partes}} ignorada(s)",
+    "placeInFolder": "Colocar conversas importadas em uma pasta",
+    "folderName": "Nome da pasta",
+    "defaultFolderName": "Importado de {source}",
+    "importButton": "Importar {count, plural, one {# conversa} other {# conversas}}",
+    "cancel": "Cancelar",
+    "untitled": "Conversa sem título",
+    "success": "Importado(s) {count, plural, one {# conversa} other {# conversas}}",
+    "noModel": "Nenhum modelo disponível para associar às conversas importadas. Tente novamente quando os modelos forem carregados.",
+    "zipRejected": "Arquivos Zip não podem ser importados. Extraia a exportação e escolha o arquivo conversations.json dentro dela.",
+    "nothingImportable": "Esta exportação do {source} não contém conversas com mensagens legíveis.",
+    "noMatches": "Nenhuma conversa corresponde ao seu filtro",
+    "listLabel": "Conversas para importar"
+  }
 }

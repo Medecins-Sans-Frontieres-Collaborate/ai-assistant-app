@@ -5155,5 +5155,32 @@
     "noResults": "មិនមានថតដែលផ្គូផ្គងទេ",
     "createFolder": "ថតថ្មី “{name}”"
   },
-  "This conversation is already empty": "ការសន្ទនា​នេះ​បាន​ទទេ​រួច​ហើយ"
+  "This conversation is already empty": "ការសន្ទនា​នេះ​បាន​ទទេ​រួច​ហើយ",
+  "conversationImport": {
+    "title": "នាំចូលជជែកគ្នា",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "រកឃើញ {count, plural, one {ការ​ជជែក​គ្នា #} other {ការ​ជជែក​គ្នា #}} នៅក្នុងការនាំចេញ {source} នេះ។",
+    "skipped": "ធាតុ {count, plural, one {#} other {#}} មិនអាចអានបានទេ ហើយនឹងត្រូវរំលង។",
+    "textOnly": "នាំចូលតែអត្ថបទសារប៉ុណ្ណោះ។ ឯកសារ​ភ្ជាប់, រូបភាព, ឯកសារ, និងលទ្ធផលឧបករណ៍នឹងមិនត្រូវរួមបញ្ចូល។",
+    "searchPlaceholder": "ត្រងតាមចំណងជេីង",
+    "selectAll": "ជ្រើស​ទាំងអស់",
+    "deselectAll": "ដកជម្រើស​ទាំងអស់",
+    "selectedCount": "បានជ្រើស {selected} នឹង {total}",
+    "alreadyImported": "បាននាំចូលរួចហើយ",
+    "turnCount": "{count, plural, one {សារ #} other {សារ #}}",
+    "droppedParts": "បានដកចេញ {count, plural, one {ផ្នែក #} other {ផ្នែក #}}",
+    "placeInFolder": "ដាក់ការជជែកបាននាំចូលទៅក្នុងថតឯកសារ",
+    "folderName": "ឈ្មោះថតឯកសារ",
+    "defaultFolderName": "បាននាំចូលពី {source}",
+    "importButton": "នាំចូល {count, plural, one {ការ​ជជែក​គ្នា #} other {ការ​ជជែក​គ្នា #}}",
+    "cancel": "បោះបង់",
+    "untitled": "ការជជែកគ្មានចំណងជើង",
+    "success": "បាននាំចូល {count, plural, one {ការ​ជជែក​គ្នា #} other {ការ​ជជែក​គ្នា #}}",
+    "noModel": "មិនមានម៉ូដែលសម្រាប់ភ្ជាប់ជាមួយការជជែកបាននាំចូលទេ។ សូមព្យាយាមម្តងទៀតបន្ទាប់ពីម៉ូដែលបានផ្ទុក។",
+    "zipRejected": "មិនអាចនាំចូល Zip archive ទេ។ សូមអន្ដរបញ់ការនាំចេញ ហើយជ្រើសឯកសារ conversations.json ខាងក្នុង។",
+    "nothingImportable": "ការនាំចេញ {source} នេះមិនមានការជជែកណាមួយដែលអាចអានសារបានទេ។",
+    "noMatches": "មិនមានការជជែកណាមួយផ្គូផ្គងតម្រូវការរបស់អ្នកទេ",
+    "listLabel": "ការជជែកដែលត្រូវនាំចូល"
+  }
 }

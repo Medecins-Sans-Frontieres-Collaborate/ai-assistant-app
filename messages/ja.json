@@ -5171,5 +5171,32 @@
     "noResults": "一致するフォルダーがありません",
     "createFolder": "新規フォルダー「{name}」"
   },
-  "This conversation is already empty": "この会話はすでに空です"
+  "This conversation is already empty": "この会話はすでに空です",
+  "conversationImport": {
+    "title": "会話のインポート",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "この{source}エクスポートで{count, plural, one {#件の会話} other {#件の会話}}が見つかりました。",
+    "skipped": "{count, plural, one {#件のエントリ} other {#件のエントリ}}は読み取れず、スキップされます。",
+    "textOnly": "メッセージ本文のみがインポートされます。添付ファイル、画像、ファイル、およびツール出力は含まれません。",
+    "searchPlaceholder": "タイトルで絞り込む",
+    "selectAll": "すべて選択",
+    "deselectAll": "すべて選択解除",
+    "selectedCount": "{total}件中{selected}件を選択中",
+    "alreadyImported": "既にインポート済み",
+    "turnCount": "{count, plural, one {#件のメッセージ} other {#件のメッセージ}}",
+    "droppedParts": "{count, plural, one {#件の部分} other {#件の部分}}が除外されました",
+    "placeInFolder": "インポートした会話をフォルダに保存",
+    "folderName": "フォルダ名",
+    "defaultFolderName": "{source}からインポート",
+    "importButton": "{count, plural, one {#件の会話をインポート} other {#件の会話をインポート}}",
+    "cancel": "キャンセル",
+    "untitled": "無題の会話",
+    "success": "{count, plural, one {#件の会話をインポートしました} other {#件の会話をインポートしました}}",
+    "noModel": "インポートした会話に添付するモデルが利用できません。モデルの読み込み後に再度お試しください。",
+    "zipRejected": "Zipアーカイブはインポートできません。エクスポートを解凍し、中のconversations.jsonファイルを選択してください。",
+    "nothingImportable": "この{source}エクスポートには読み取り可能なメッセージの会話がありません。",
+    "noMatches": "フィルターに一致する会話はありません",
+    "listLabel": "インポートする会話"
+  }
 }

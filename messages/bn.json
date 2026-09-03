@@ -5171,5 +5171,32 @@
     "noResults": "কোনো ফোল্ডার মেলেনি",
     "createFolder": "নতুন ফোল্ডার “{name}”"
   },
-  "This conversation is already empty": "এই আলাপটি ইতিমধ্যেই খালি"
+  "This conversation is already empty": "এই আলাপটি ইতিমধ্যেই খালি",
+  "conversationImport": {
+    "title": "আলাপ আমদানি করুন",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "এই {source} এক্সপোর্ট-এ {count, plural, one {#টি আলাপ} other {#টি আলাপ}} পাওয়া গেছে।",
+    "skipped": "{count, plural, one {#টি এন্ট্রি} other {#টি এন্ট্রি}} পড়া যায়নি এবং বাদ যাবে।",
+    "textOnly": "শুধুমাত্র মেসেজ টেক্সট আমদানি করা হবে। সংযুক্তি, ছবি, ফাইল ও টুল আউটপুট অন্তর্ভুক্ত নয়।",
+    "searchPlaceholder": "শিরোনাম দিয়ে ফিল্টার করুন",
+    "selectAll": "সব নির্বাচন করুন",
+    "deselectAll": "সব নির্বাচন বাতিল করুন",
+    "selectedCount": "{total}-এর মধ্যে {selected}টি নির্বাচিত",
+    "alreadyImported": "ইতিমধ্যে আমদানি করা হয়েছে",
+    "turnCount": "{count, plural, one {#টি মেসেজ} other {#টি মেসেজ}}",
+    "droppedParts": "{count, plural, one {#টি অংশ} other {#টি অংশ}} বাদ গেছে",
+    "placeInFolder": "আমদানিকৃত আলাপগুলো একটি ফোল্ডারে দিন",
+    "folderName": "ফোল্ডারের নাম",
+    "defaultFolderName": "{source} থেকে আমদানি",
+    "importButton": "{count, plural, one {#টি আলাপ আমদানি করুন} other {#টি আলাপ আমদানি করুন}}",
+    "cancel": "বাতিল করুন",
+    "untitled": "শিরোনামহীন আলাপ",
+    "success": "{count, plural, one {#টি আলাপ আমদানি হয়েছে} other {#টি আলাপ আমদানি হয়েছে}}",
+    "noModel": "আমদানিকৃত আলাপের সঙ্গে সংযুক্ত করার মতো কোনো মডেল নেই। মডেলগুলো লোড হলে আবার চেষ্টা করুন।",
+    "zipRejected": "Zip আর্কাইভ আমদানি করা যায় না। এক্সপোর্ট খুলুন এবং ভিতরের conversations.json ফাইলটি নির্বাচন করুন।",
+    "nothingImportable": "এই {source} এক্সপোর্ট-এ পড়ার উপযোগী কোনো আলাপ নেই।",
+    "noMatches": "আপনার ফিল্টারের সাথে কোনো আলাপ মেলেনি",
+    "listLabel": "যে আলাপগুলো আমদানি করা হবে"
+  }
 }

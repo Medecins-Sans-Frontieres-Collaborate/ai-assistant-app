@@ -5155,5 +5155,32 @@
     "noResults": "هیچ پۆلێک هاوتا نیە",
     "createFolder": "پۆلی نوێ “{name}”"
   },
-  "This conversation is already empty": "ئەم گفتوگۆیە پێشتر بەتاڵە"
+  "This conversation is already empty": "ئەم گفتوگۆیە پێشتر بەتاڵە",
+  "conversationImport": {
+    "title": "گفتوگۆکان هێنانەوە",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "لە ئەم هەناردەی {source}دا {count, plural, one {# گفتوگۆ} other {# گفتوگۆ}} دۆزرایەوە.",
+    "skipped": "{count, plural, one {# تۆمار} other {# تۆمار}} ناتوانرێن بخوێنرێنەوە و دەرکرابەوە.",
+    "textOnly": "تەنها دەقی نامە هێنراوە. هاوپێچ، وێنە، پەڕگە و دەرچوونی ئامرازان جێهێڵدراون.",
+    "searchPlaceholder": "پاڵاوتن بەپێی ناونیشان",
+    "selectAll": "هەمووی هەلبژێرە",
+    "deselectAll": "هەڵبژاردنەکان بسڕەوە",
+    "selectedCount": "{selected} لە {total} هەلبژێردرا",
+    "alreadyImported": "پێشتر هێنراوەتەوە",
+    "turnCount": "{count, plural, one {# نامە} other {# نامە}}",
+    "droppedParts": "{count, plural, one {# بەش} other {# بەش}} جێهێڵدرا",
+    "placeInFolder": "گفتوگۆی هێنراو لە فۆلدرێک دابنێ",
+    "folderName": "ناوی فۆلدر",
+    "defaultFolderName": "هێنراوە لە {source}",
+    "importButton": "{count, plural, one {# گفتوگۆ هێنەوە} other {# گفتوگۆ هێنەوە}}",
+    "cancel": "پاشگەزبوونەوە",
+    "untitled": "گفتوگۆ بێ ناو",
+    "success": "{count, plural, one {# گفتوگۆ هێنراوە} other {# گفتوگۆ هێنراوە}}",
+    "noModel": "هیچ مۆدێلەک بۆ پێوەستن بە گفتوگۆی هێنراو بەردەست نییە. دووبارە هەوڵبدە پاش بارکردنی مۆدێل.",
+    "zipRejected": "ئەرشیڤی zip ناتوانرێت هێنرێتەوە. ئەرشیڤەکە بکەرەوە و پەڕگەی conversations.json هەڵبژێرە.",
+    "nothingImportable": "ئەم هەناردەی {source} هیچ گفتوگۆیەکی پەیوەندیدار بە نامەی خوێندراو پێناگرێت.",
+    "noMatches": "هیچ گفتوگۆیەک بەپێی پاڵاوتنەکەت نییە",
+    "listLabel": "گفتوگۆ بۆ هێنانەوە"
+  }
 }

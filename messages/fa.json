@@ -5171,5 +5171,32 @@
     "noResults": "پوشه‌ای یافت نشد",
     "createFolder": "پوشه جدید «{name}»"
   },
-  "This conversation is already empty": "این گفتگو قبلاً خالی است"
+  "This conversation is already empty": "این گفتگو قبلاً خالی است",
+  "conversationImport": {
+    "title": "وارد کردن گفتگوها",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "{count, plural, one {# گفتگو} other {# گفتگو}} در این خروجی {source} پیدا شد.",
+    "skipped": "{count, plural, one {# مورد} other {# مورد}} قابل خواندن نیست و حذف می‌شود.",
+    "textOnly": "تنها متن پیام‌ها وارد می‌شود. پیوست‌ها، تصاویر، فایل‌ها و خروجی ابزارها اضافه نمی‌شوند.",
+    "searchPlaceholder": "جستجو بر اساس عنوان",
+    "selectAll": "انتخاب همه",
+    "deselectAll": "لغو انتخاب همه",
+    "selectedCount": "{selected} از {total} انتخاب شد",
+    "alreadyImported": "قبلاً وارد شده است",
+    "turnCount": "{count, plural, one {# پیام} other {# پیام}}",
+    "droppedParts": "{count, plural, one {# بخش} other {# بخش}} اضافه نشد",
+    "placeInFolder": "گفتگوهای واردشده در یک پوشه قرار گیرند",
+    "folderName": "نام پوشه",
+    "defaultFolderName": "وارد شده از {source}",
+    "importButton": "وارد کردن {count, plural, one {# گفتگو} other {# گفتگو}}",
+    "cancel": "انصراف",
+    "untitled": "گفتگوی بدون عنوان",
+    "success": "{count, plural, one {# گفتگو} other {# گفتگو}} وارد شد",
+    "noModel": "هیچ مدلی برای الصاق به گفتگوهای واردشده در دسترس نیست. پس از بارگذاری مدل‌ها دوباره تلاش کنید.",
+    "zipRejected": "آرشیوهای zip قابل وارد کردن نیستند. فایل را از حالت فشرده خارج کرده و فایل conversations.json داخل آن را انتخاب کنید.",
+    "nothingImportable": "این خروجی {source} هیچ گفتگویی با پیام قابل خواندن ندارد.",
+    "noMatches": "هیچ گفتگویی با جستجوی شما مطابقت ندارد",
+    "listLabel": "گفتگوهای قابل وارد کردن"
+  }
 }

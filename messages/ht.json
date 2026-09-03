@@ -5155,5 +5155,32 @@
     "noResults": "Pa gen katab ki koresponn",
     "createFolder": "Nouvo katab “{name}”"
   },
-  "This conversation is already empty": "Konvèsasyon sa a deja vid"
+  "This conversation is already empty": "Konvèsasyon sa a deja vid",
+  "conversationImport": {
+    "title": "Enpòte konvèsasyon",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Jwenn {count, plural, one {# konvèsasyon} other {# konvèsasyon}} nan ekspòtasyon {source} sa a.",
+    "skipped": "{count, plural, one {# antre} other {# antre}} pa ka li epi y ap sote yo.",
+    "textOnly": "Sèlman tèks mesaj yo ap enpòte. Atachman, imaj, fichye, ak rezilta zouti pa enkli.",
+    "searchPlaceholder": "Filtre pa tit",
+    "selectAll": "Chwazi tout",
+    "deselectAll": "Dekoleksyon tout",
+    "selectedCount": "{selected} sou {total} chwazi",
+    "alreadyImported": "Deja enpòte",
+    "turnCount": "{count, plural, one {# mesaj} other {# mesaj}}",
+    "droppedParts": "{count, plural, one {# pati} other {# pati}} pa enkli",
+    "placeInFolder": "Mete konvèsasyon enpòte yo nan yon dosye",
+    "folderName": "Non dosye a",
+    "defaultFolderName": "Enpòte soti nan {source}",
+    "importButton": "Enpòte {count, plural, one {# konvèsasyon} other {# konvèsasyon}}",
+    "cancel": "Anile",
+    "untitled": "Konvèsasyon san tit",
+    "success": "Enpòte {count, plural, one {# konvèsasyon} other {# konvèsasyon}}",
+    "noModel": "Pa gen modèl disponib pou asiyen ak konvèsasyon enpòte yo. Eseye ankò apre modèl yo fin chaje.",
+    "zipRejected": "Pa kapab enpòte achiv Zip. Dekonprese ekspòtasyon an epi chwazi fichye conversations.json ki andedan li.",
+    "nothingImportable": "Ekspòtasyon {source} sa a pa gen okenn konvèsasyon ak mesaj ki ka li.",
+    "noMatches": "Pa gen konvèsasyon ki koresponn ak filtraj ou",
+    "listLabel": "Konvèsasyon pou enpòte"
+  }
 }

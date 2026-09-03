@@ -5155,5 +5155,32 @@
     "noResults": "Palibe mafoda ogwirizana",
     "createFolder": "Foda yatsopano \"{name}\""
   },
-  "This conversation is already empty": "Kambiranoyi kulibe kaya kale"
+  "This conversation is already empty": "Kambiranoyi kulibe kaya kale",
+  "conversationImport": {
+    "title": "Tengani zokambirana",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Zapezeka {count, plural, one {# zokambirana} other {# zokambirana}} mu {source} export iyi.",
+    "skipped": "{count, plural, one {# lolowera} other {# zolowera}} sizingathe kuwerengedwa ndipo zisiyidwa.",
+    "textOnly": "Mawu a uthenga okha ndi omwe atengedwa. Zowonjezera, zithunzi, mafayilo, ndi zotsatira za zida sizikuphatikizidwa.",
+    "searchPlaceholder": "Sefa ndi mutu",
+    "selectAll": "Sankhani zonse",
+    "deselectAll": "Chotsani zonse",
+    "selectedCount": "{selected} mwa {total} zasankhidwa",
+    "alreadyImported": "Zatengedwa kale",
+    "turnCount": "{count, plural, one {# uthenga} other {# mauthenga}}",
+    "droppedParts": "{count, plural, one {# gawo} other {# magawo}} zasiyidwa",
+    "placeInFolder": "Ikani zokambirana zotengedwa mufoda",
+    "folderName": "Dzina la foda",
+    "defaultFolderName": "Zotengedwa kuchokera ku {source}",
+    "importButton": "Tengani {count, plural, one {# zokambirana} other {# zokambirana}}",
+    "cancel": "Lekani",
+    "untitled": "Zokambirana zopanda mutu",
+    "success": "Zatengedwa {count, plural, one {# zokambirana} other {# zokambirana}}",
+    "noModel": "Palibe model yomwe ilipo yolumikizidwa ndi zokambirana zotengedwa. Yesani nthawi ina ikangomaliza kutsegula.",
+    "zipRejected": "Zip archive sizingatengedwe. Tsegulani export, kenako sankhani fayilo ya conversations.json mmenemo.",
+    "nothingImportable": "{source} export iyi ilibe zokambirana zomwe zili ndi mauthenga owerengeka.",
+    "noMatches": "Palibe zokambirana zomwe zikugwirizana ndi sefayi yanu",
+    "listLabel": "Zokambirana zotengedwa"
+  }
 }

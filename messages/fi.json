@@ -5171,5 +5171,32 @@
     "noResults": "Yhtään kansiota ei löytynyt",
     "createFolder": "Uusi kansio “{name}”"
   },
-  "This conversation is already empty": "Tämä keskustelu on jo tyhjä"
+  "This conversation is already empty": "Tämä keskustelu on jo tyhjä",
+  "conversationImport": {
+    "title": "Tuo keskustelut",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Löytyi {count, plural, one {# keskustelu} other {# keskustelua}} tästä {source}-viennistä.",
+    "skipped": "{count, plural, one {# merkintää} other {# merkintää}} ei voitu lukea ja ne ohitetaan.",
+    "textOnly": "Ainoastaan viestien tekstit tuodaan. Liitteet, kuvat, tiedostot ja työkalujen tulokset jätetään pois.",
+    "searchPlaceholder": "Suodata otsikon mukaan",
+    "selectAll": "Valitse kaikki",
+    "deselectAll": "Poista kaikki valinnat",
+    "selectedCount": "{selected} / {total} valittu",
+    "alreadyImported": "Jo tuotu",
+    "turnCount": "{count, plural, one {# viesti} other {# viestiä}}",
+    "droppedParts": "{count, plural, one {# osa} other {# osaa}} jätetty pois",
+    "placeInFolder": "Sijoita tuodut keskustelut kansioon",
+    "folderName": "Kansion nimi",
+    "defaultFolderName": "Tuotu lähteestä {source}",
+    "importButton": "Tuo {count, plural, one {# keskustelu} other {# keskustelua}}",
+    "cancel": "Peruuta",
+    "untitled": "Nimetön keskustelu",
+    "success": "Tuotu {count, plural, one {# keskustelu} other {# keskustelua}}",
+    "noModel": "Yhtään mallia ei ole saatavilla tuoduille keskusteluille. Yritä uudelleen, kun mallit on ladattu.",
+    "zipRejected": "Zip-arkistoja ei voi tuoda. Pura vienti ja valitse sen sisältä conversations.json-tiedosto.",
+    "nothingImportable": "Tämä {source}-vienti ei sisällä keskusteluja, joissa olisi luettavia viestejä.",
+    "noMatches": "Ei keskusteluja, jotka vastaavat suodatinta",
+    "listLabel": "Tuotavat keskustelut"
+  }
 }

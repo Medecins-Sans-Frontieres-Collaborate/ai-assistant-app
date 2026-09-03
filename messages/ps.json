@@ -5155,5 +5155,32 @@
     "noResults": "هیڅ فولډر ونه موندل شو",
     "createFolder": "نوی فولډر “{name}”"
   },
-  "This conversation is already empty": "دا خبرې اترې له مخکې نه خالي دي"
+  "This conversation is already empty": "دا خبرې اترې له مخکې نه خالي دي",
+  "conversationImport": {
+    "title": "ګفتمانونه وارد کړئ",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "په دې {source} صادر کې {count, plural, one {# ګفتمان} other {# ګفتمانونه}} وموندل شول.",
+    "skipped": "{count, plural, one {# ننوتنه} other {# ننوتنې}} لوستل نشوی شول او له پامه غورځول کېږي.",
+    "textOnly": "یوازې د پیغام متن واردېږي. تړل شوي فایلونه، انځورونه، فایلونه، او د ابزارو پایلې نه واردېږي.",
+    "searchPlaceholder": "د سرلیک له مخې فلټر کړئ",
+    "selectAll": "ټول وټاکئ",
+    "deselectAll": "ټول له ټاکنې وباسئ",
+    "selectedCount": "{total} څخه {selected} ټاکل شوي",
+    "alreadyImported": "له مخکې وارد شوی",
+    "turnCount": "{count, plural, one {# پیغام} other {# پیغامونه}}",
+    "droppedParts": "{count, plural, one {# برخه} other {# برخې}} نه دي وارد شوي",
+    "placeInFolder": "وارد شوي ګفتمانونه یوه فولډر ته کېږدئ",
+    "folderName": "د فولډر نوم",
+    "defaultFolderName": "د {source} څخه وارد شوی",
+    "importButton": "{count, plural, one {# ګفتمان وارد کړئ} other {# ګفتمانونه وارد کړئ}}",
+    "cancel": "لغوه کړئ",
+    "untitled": "بې سرلیک ګفتمان",
+    "success": "{count, plural, one {# ګفتمان وارد شو} other {# ګفتمانونه وارد شول}}",
+    "noModel": "هیڅ ماډل شته نه دی چې وارد شوو ګفتمانونو ته وتړل شي. مهرباني وکړئ بیا هڅه وکړئ کله چې ماډلونه پورته شي.",
+    "zipRejected": "Zip آرشیفونه وارد کېدلی نشي. صادره پرانیزئ او پکې conversations.json فایل وټاکئ.",
+    "nothingImportable": "دا {source} صادره کې هېڅ داسې ګفتمان نشته چې لوستل کېدونکي پیغامونه ولري.",
+    "noMatches": "هیڅ ګفتمان ستاسو د فلټر سره نه سمون خوري",
+    "listLabel": "وارد کېدونکي ګفتمانونه"
+  }
 }

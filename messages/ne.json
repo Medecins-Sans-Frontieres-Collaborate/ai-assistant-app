@@ -5155,5 +5155,32 @@
     "noResults": "फोल्डर मिलेन",
     "createFolder": "नयाँ फोल्डर “{name}”"
   },
-  "This conversation is already empty": "यो संवाद पहिले नै खाली छ"
+  "This conversation is already empty": "यो संवाद पहिले नै खाली छ",
+  "conversationImport": {
+    "title": "वार्ताहरू आयात गर्नुहोस्",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "यो {source} निर्यातमा {count, plural, one {# वार्ता} other {# वार्ताहरू}} फेला पर्‍यो।",
+    "skipped": "{count, plural, one {# प्रविष्टि} other {# प्रविष्टिहरू}} पढ्न सकिएन र फड्काइनेछ।",
+    "textOnly": "केवल सन्देशको पाठ आयात गरिन्छ। संलग्नहरू, छविहरू, फाइलहरू, र उपकरणका नतिजाहरू समावेश गरिँदैनन्।",
+    "searchPlaceholder": "शीर्षकद्वारा फिल्टर गर्नुहोस्",
+    "selectAll": "सबै चयन गर्नुहोस्",
+    "deselectAll": "सबै चयन हटाउनुहोस्",
+    "selectedCount": "{total} मध्ये {selected} चयन गरियो",
+    "alreadyImported": "पहिले नै आयात गरिएको",
+    "turnCount": "{count, plural, one {# सन्देश} other {# सन्देशहरू}}",
+    "droppedParts": "{count, plural, one {# भाग} other {# भागहरू}} समावेश गरिएको छैन",
+    "placeInFolder": "आयात गरिएका वार्ताहरू फोल्डरमा राख्नुहोस्",
+    "folderName": "फोल्डरको नाम",
+    "defaultFolderName": "{source} बाट आयात गरिएको",
+    "importButton": "{count, plural, one {# वार्ता आयात गर्नुहोस्} other {# वार्ताहरू आयात गर्नुहोस्}}",
+    "cancel": "रद्द गर्नुहोस्",
+    "untitled": "शीर्षकविहीन वार्ता",
+    "success": "{count, plural, one {# वार्ता आयात गरियो} other {# वार्ताहरू आयात गरिए}}",
+    "noModel": "आयात गरिएका वार्तामा संलग्न गर्न कुनै मोडेल उपलब्ध छैन। मोडेलहरू लोड भएपछि पुन: प्रयास गर्नुहोस्।",
+    "zipRejected": "Zip सङ्ग्रहहरू आयात गर्न सकिंदैन। निर्यातलाई अनजिप गरी भित्रको conversations.json फाइल छान्नुहोस्।",
+    "nothingImportable": "यो {source} निर्यातमा पढ्न मिल्ने सन्देशसहित कुनै वार्ता छैन।",
+    "noMatches": "तपाईंको फिल्टरमा मेल खाने कुनै वार्ता छैन",
+    "listLabel": "आयात गर्नका लागि वार्ताहरू"
+  }
 }

@@ -5171,5 +5171,32 @@
     "noResults": "ምንም ፎልደር አልተገኘም",
     "createFolder": "አዲስ ፎልደር “{name}”"
   },
-  "This conversation is already empty": "ይህ ውይይት አሁንም ባዶ ነው"
+  "This conversation is already empty": "ይህ ውይይት አሁንም ባዶ ነው",
+  "conversationImport": {
+    "title": "ውይይቶች አስገባ",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "በዚህ {source} ኤክስፖርት {count, plural, one {# ውይይት} other {# ውይይቶች}} ተገኝቷል።",
+    "skipped": "{count, plural, one {# መግቢያ} other {# መግቢያዎች}} ማንበብ አልተቻለም ስለዚህ ይወገዳሉ።",
+    "textOnly": "የመልእክት ጽሑፍ ብቻ ይመጣል። አባሪዎች፣ ምስሎች፣ ፋይሎች እና የመሣሪያ ውጤቶች አይገባም።",
+    "searchPlaceholder": "በርዕስ ፍለጋ",
+    "selectAll": "ሁሉንም ይምረጡ",
+    "deselectAll": "ሁሉንም አይምረጡ",
+    "selectedCount": "{selected} ከ {total} ተመርጧል",
+    "alreadyImported": "አስገብቷል",
+    "turnCount": "{count, plural, one {# መልእክት} other {# መልእክቶች}}",
+    "droppedParts": "{count, plural, one {# ክፍል} other {# ክፍሎች}} አይገባም",
+    "placeInFolder": "የተመጣበትን ውይይት ወደ ፎልደር አኑሩ",
+    "folderName": "የፎልደሩ ስም",
+    "defaultFolderName": "ከ {source} የተመጣ",
+    "importButton": "{count, plural, one {# ውይይት} other {# ውይይቶች}} አስገባ",
+    "cancel": "ይቅር",
+    "untitled": "ስም የሌለው ውይይት",
+    "success": "{count, plural, one {# ውይይት} other {# ውይይቶች}} ተሰብስቷል",
+    "noModel": "ለየተመጣበት ውይይቶች ማንኛውም ሞዴል ሊያያዝ አይችሉም። ሞዴሎች ከተጫኑ በኋላ ይሞክሩ።",
+    "zipRejected": "የ Zip ፋይሎች ማስገባት አይቻልም። ኤክስፖርቱን አንቁና conversations.json ፋይል ይምረጡ።",
+    "nothingImportable": "ይህ {source} ኤክስፖርት የሚነበብ መልእክት ያለው ውይይት አይዟትም።",
+    "noMatches": "የሚዛመዱ ውይይቶች አልተገኙም",
+    "listLabel": "ሊመጡ የሚችሉ ውይይቶች"
+  }
 }

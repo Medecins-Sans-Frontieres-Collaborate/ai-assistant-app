@@ -5202,5 +5202,32 @@
     "noResults": "Không có thư mục phù hợp",
     "createFolder": "Thư mục mới “{name}”"
   },
-  "This conversation is already empty": "Cuộc trò chuyện này đã trống"
+  "This conversation is already empty": "Cuộc trò chuyện này đã trống",
+  "conversationImport": {
+    "title": "Nhập hội thoại",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Tìm thấy {count, plural, one {# hội thoại} other {# hội thoại}} trong xuất khẩu {source} này.",
+    "skipped": "{count, plural, one {# mục nhập} other {# mục nhập}} không thể đọc và sẽ bị bỏ qua.",
+    "textOnly": "Chỉ nhập nội dung tin nhắn. Đính kèm, hình ảnh, tập tin và kết quả từ công cụ sẽ bị bỏ qua.",
+    "searchPlaceholder": "Lọc theo tiêu đề",
+    "selectAll": "Chọn tất cả",
+    "deselectAll": "Bỏ chọn tất cả",
+    "selectedCount": "Đã chọn {selected} trên tổng {total}",
+    "alreadyImported": "Đã nhập",
+    "turnCount": "{count, plural, one {# tin nhắn} other {# tin nhắn}}",
+    "droppedParts": "{count, plural, one {# phần} other {# phần}} bị bỏ qua",
+    "placeInFolder": "Đặt các hội thoại đã nhập vào thư mục",
+    "folderName": "Tên thư mục",
+    "defaultFolderName": "Đã nhập từ {source}",
+    "importButton": "Nhập {count, plural, one {# hội thoại} other {# hội thoại}}",
+    "cancel": "Hủy",
+    "untitled": "Hội thoại chưa có tiêu đề",
+    "success": "Đã nhập {count, plural, one {# hội thoại} other {# hội thoại}}",
+    "noModel": "Không có mô hình nào để liên kết với các hội thoại đã nhập. Vui lòng thử lại sau khi các mô hình đã được tải.",
+    "zipRejected": "Không thể nhập tệp zip. Hãy giải nén và chọn tệp conversations.json bên trong.",
+    "nothingImportable": "Xuất khẩu {source} này không chứa hội thoại nào có tin nhắn có thể đọc được.",
+    "noMatches": "Không có hội thoại nào phù hợp với bộ lọc",
+    "listLabel": "Hội thoại cần nhập"
+  }
 }

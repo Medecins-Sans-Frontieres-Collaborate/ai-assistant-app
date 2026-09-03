@@ -5171,5 +5171,32 @@
     "noResults": "Keine passenden Ordner",
     "createFolder": "Neuer Ordner „{name}“"
   },
-  "This conversation is already empty": "Dieses Gespräch ist bereits leer."
+  "This conversation is already empty": "Dieses Gespräch ist bereits leer.",
+  "conversationImport": {
+    "title": "Konversationen importieren",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "{count, plural, one {# Konversation} other {# Konversationen}} im {source}-Export gefunden.",
+    "skipped": "{count, plural, one {# Eintrag} other {# Einträge}} konnten nicht gelesen werden und werden übersprungen.",
+    "textOnly": "Es wird nur der Nachrichtentext importiert. Anhänge, Bilder, Dateien und Tool-Ausgaben bleiben ausgeschlossen.",
+    "searchPlaceholder": "Nach Titel filtern",
+    "selectAll": "Alle auswählen",
+    "deselectAll": "Alle abwählen",
+    "selectedCount": "{selected} von {total} ausgewählt",
+    "alreadyImported": "Bereits importiert",
+    "turnCount": "{count, plural, one {# Nachricht} other {# Nachrichten}}",
+    "droppedParts": "{count, plural, one {# Teil} other {# Teile}} ausgelassen",
+    "placeInFolder": "Importierte Konversationen in einen Ordner legen",
+    "folderName": "Ordnername",
+    "defaultFolderName": "Importiert von {source}",
+    "importButton": "{count, plural, one {# Konversation importieren} other {# Konversationen importieren}}",
+    "cancel": "Abbrechen",
+    "untitled": "Unbenannte Konversation",
+    "success": "{count, plural, one {# Konversation importiert} other {# Konversationen importiert}}",
+    "noModel": "Kein Modell verfügbar, das an importierte Konversationen angehängt werden kann. Versuchen Sie es erneut, sobald Modelle geladen sind.",
+    "zipRejected": "Zip-Archive können nicht importiert werden. Entpacken Sie den Export und wählen Sie die conversations.json-Datei darin aus.",
+    "nothingImportable": "Dieser {source}-Export enthält keine Konversationen mit lesbaren Nachrichten.",
+    "noMatches": "Keine Konversation entspricht Ihrem Filter",
+    "listLabel": "Zu importierende Konversationen"
+  }
 }

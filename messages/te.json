@@ -5171,5 +5171,32 @@
     "noResults": "ఏ ఫోల్డర్‌లు సరిపోలలేదు",
     "createFolder": "కొత్త ఫోల్డర్ “{name}”"
   },
-  "This conversation is already empty": "ఈ సంభాషణ ఇప్పటికే ఖాళీగా ఉంది"
+  "This conversation is already empty": "ఈ సంభాషణ ఇప్పటికే ఖాళీగా ఉంది",
+  "conversationImport": {
+    "title": "సంవాషణలను దిగుమతి చేయండి",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "ఈ {source} ఎక్స్‌పోర్టులో {count, plural, one {# సంభాషణ} other {# సంభాషణలు}} కనుగొనబడింది.",
+    "skipped": "{count, plural, one {# ఎంట్రీ} other {# ఎంట్రీలు}} చదవలేకపోయిండి, దాటవేయబడతాయి.",
+    "textOnly": "కేవలం సందేశం మాత్రమే దిగుమతి చేయబడుతుంది. జతచేసిన ఫైళ్లు, చిత్రాలు, టూల్స్ అవుట్‌పుట్‌లు దిగుమతిలో ఉండవు.",
+    "searchPlaceholder": "శీర్షిక ద్వారా ఫిల్టర్ చేయండి",
+    "selectAll": "అన్నింటినీ ఎంచుకోండి",
+    "deselectAll": "ఎంపికలను తొలగించండి",
+    "selectedCount": "మొత్తం {total} లో {selected} ఎంపిక చేయబడ్డవి",
+    "alreadyImported": "ఇప్పటికే దిగుమతి చేయబడింది",
+    "turnCount": "{count, plural, one {# సందేశం} other {# సందేశాలు}}",
+    "droppedParts": "{count, plural, one {# భాగం} other {# భాగాలు}} వదిలివేయబడ్డాయి",
+    "placeInFolder": "దిగుమతిచేసిన సంభాషణలను ఫోల్డర్లో ఉంచండి",
+    "folderName": "ఫోల్డర్ పేరు",
+    "defaultFolderName": "{source} నుండి దిగుమతి",
+    "importButton": "{count, plural, one {# సంభాషణను} other {# సంభాషణలను}} దిగుమతి చేయండి",
+    "cancel": "రద్దు చేయండి",
+    "untitled": "శీర్షికలేని సంభాషణ",
+    "success": "{count, plural, one {# సంభాషణ} other {# సంభాషణలు}} దిగుమతి అయింది",
+    "noModel": "దిగుమతి చేసిన సంభాషణలకు చేర్చడానికి మోడల్ అందుబాటులో లేదు. మోడళ్లు లోడ్ అయిన తర్వాత మళ్లీ ప్రయత్నించండి.",
+    "zipRejected": "zip ఫైళ్లు దిగుమతి చేయలేరు. ఎక్స్‌పోర్ట్ ఫైల్‌ను అన్జిప్ చేసి అందులోని conversations.json ఫైల్‌ను ఎంచుకోండి.",
+    "nothingImportable": "ఈ {source} ఎక్స్‌పోర్ట్‌లో చదివే సందేశాలున్న సంభాషణలు లేవు.",
+    "noMatches": "మీ ఫిల్టర్‌కు అనుగుణంగా ఏ సంభాషణలు లేవు",
+    "listLabel": "దిగుమతి చేయాల్సిన సంభాషణలు"
+  }
 }

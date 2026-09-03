@@ -5171,5 +5171,32 @@
     "noResults": "Nessuna cartella corrispondente",
     "createFolder": "Nuova cartella “{name}”"
   },
-  "This conversation is already empty": "Questa conversazione è già vuota"
+  "This conversation is already empty": "Questa conversazione è già vuota",
+  "conversationImport": {
+    "title": "Importa conversazioni",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Trovate {count, plural, one {# conversazione} other {# conversazioni}} in questa esportazione {source}.",
+    "skipped": "{count, plural, one {# voce} other {# voci}} non possono essere lette e saranno saltate.",
+    "textOnly": "Viene importato solo il testo dei messaggi. Allegati, immagini, file e risultati degli strumenti sono esclusi.",
+    "searchPlaceholder": "Filtra per titolo",
+    "selectAll": "Seleziona tutto",
+    "deselectAll": "Deseleziona tutto",
+    "selectedCount": "{selected} di {total} selezionate",
+    "alreadyImported": "Già importata",
+    "turnCount": "{count, plural, one {# messaggio} other {# messaggi}}",
+    "droppedParts": "{count, plural, one {# parte} other {# parti}} escluse",
+    "placeInFolder": "Metti le conversazioni importate in una cartella",
+    "folderName": "Nome cartella",
+    "defaultFolderName": "Importata da {source}",
+    "importButton": "Importa {count, plural, one {# conversazione} other {# conversazioni}}",
+    "cancel": "Annulla",
+    "untitled": "Conversazione senza titolo",
+    "success": "Importate {count, plural, one {# conversazione} other {# conversazioni}}",
+    "noModel": "Non è disponibile alcun modello da associare alle conversazioni importate. Riprova dopo il caricamento dei modelli.",
+    "zipRejected": "Non è possibile importare archivi zip. Estrai l’esportazione e seleziona il file conversations.json al suo interno.",
+    "nothingImportable": "Questa esportazione {source} non contiene conversazioni con messaggi leggibili.",
+    "noMatches": "Nessuna conversazione corrisponde al filtro",
+    "listLabel": "Conversazioni da importare"
+  }
 }

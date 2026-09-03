@@ -5155,5 +5155,32 @@
     "noResults": "Galku ma jiro oo la mid ah",
     "createFolder": "Gal cusub “{name}”"
   },
-  "This conversation is already empty": "Wadahadalkan horey ayuu u madhan yahay"
+  "This conversation is already empty": "Wadahadalkan horey ayuu u madhan yahay",
+  "conversationImport": {
+    "title": "Soo dejiso wadahadallo",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Waxaa laga helay {count, plural, one {# wadahadal} other {# wadahadallo}} dhoofinta {source}.",
+    "skipped": "{count, plural, one {# qoraal} other {# qoraallo}} lama akhriyi karo waana la dhaafi doonaa.",
+    "textOnly": "Kaliya fariimaha qoraalka ah ayaa la soo dejinayaa. Lifaaqyada, sawirrada, faylalka, iyo natiijooyinka aaladaha lama bixinayo.",
+    "searchPlaceholder": "Ku shaandhee ciwaan",
+    "selectAll": "Xulo dhammaan",
+    "deselectAll": "Ka saar xulka dhammaan",
+    "selectedCount": "{selected} ka mid ah {total} waa la xulay",
+    "alreadyImported": "Hore ayaa loo soo dejiyay",
+    "turnCount": "{count, plural, one {# fariin} other {# fariimo}}",
+    "droppedParts": "{count, plural, one {# qayb} other {# qaybo}} waa la dhaafay",
+    "placeInFolder": "Wadahadallada la soo dejiyay geli gal",
+    "folderName": "Magaca galka",
+    "defaultFolderName": "Laga soo dejiyay {source}",
+    "importButton": "Soo geli {count, plural, one {# wadahadal} other {# wadahadallo}}",
+    "cancel": "Jooji",
+    "untitled": "Wadahadal aan cinwaan lahayn",
+    "success": "{count, plural, one {# wadahadal} other {# wadahadallo}} waa la soo dejiyay",
+    "noModel": "Wax model ah oo lagu lifaaqo wadahadallada la soo dejiyay lama heli karo. Isku day mar kale marka moodallo la helo.",
+    "zipRejected": "Faylasha Zip lama soo dejin karo. Fura dhoofinta oo dooro faylka conversations.json ee ku jira.",
+    "nothingImportable": "Dhoofinta {source} kuma jiraan wax wadahadallo ah oo lagu akhrin karo fariimahooda.",
+    "noMatches": "Wadahadallo la jaanqaadaya shaandhaynta ma jiro",
+    "listLabel": "Wadahadallo la soo dejinayo"
+  }
 }

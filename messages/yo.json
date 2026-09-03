@@ -5155,5 +5155,32 @@
     "noResults": "Kò sí àpò tó bàa mu",
     "createFolder": "Àpò tuntun “{name}”"
   },
-  "This conversation is already empty": "Ìpèjọ́ sísọ yìí ti ṣòfo tán"
+  "This conversation is already empty": "Ìpèjọ́ sísọ yìí ti ṣòfo tán",
+  "conversationImport": {
+    "title": "Gbe awọn ibaraẹnisọrọ wọle",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "A ri {count, plural, one {# ibaraẹnisọrọ} other {# awọn ibaraẹnisọrọ}} ninu ikojọpọ {source} yii.",
+    "skipped": "{count, plural, one {# ìkọ̀ọkan} other {# àwọn ìkọ̀ọkan}} kò le ka, yóò sí bọ̀.",
+    "textOnly": "Ìtẹ̀sí ìfiránṣẹ́ nìkan ni a gbé wọle. Àwọn asomọ, àwòrán, fáìlì, àti esi irinṣẹ́ ni a fi sílẹ̀.",
+    "searchPlaceholder": "Fíltà pẹ̀lú akọle",
+    "selectAll": "Yan gbogbo wọn",
+    "deselectAll": "Yọ gbogbo yiyan kúrò",
+    "selectedCount": "{selected} nínú {total} ni a yàn",
+    "alreadyImported": "Ti wọlé tẹlẹ",
+    "turnCount": "{count, plural, one {# ìfiránṣẹ́} other {# àwọn ìfiránṣẹ́}}",
+    "droppedParts": "{count, plural, one {# apá} other {# àwọn apá}} ti fi sílẹ̀",
+    "placeInFolder": "Fi awọn ibaraẹnisọrọ ti a gbé wọle sínú àpò",
+    "folderName": "Orúkọ àpò",
+    "defaultFolderName": "Ti gbe wọle láti {source}",
+    "importButton": "Gbe wọle {count, plural, one {# ibaraẹnisọrọ} other {# awọn ibaraẹnisọrọ}}",
+    "cancel": "Fagilé",
+    "untitled": "Ibaraẹnisọrọ aláìkọ̀lé",
+    "success": "Ti gbe wọle {count, plural, one {# ibaraẹnisọrọ} other {# awọn ibaraẹnisọrọ}}",
+    "noModel": "Kò sí àwòrán èlò kankan láti so pọ̀ mọ́ àwọn ibaraẹnisọrọ tí a gbé wọle. Gbìyànjú lẹ́ẹ̀kan síi lẹ́yìn t'awọn àwòrán èlò bá ti kó.",
+    "zipRejected": "A kò le wọ zip archive wòle. Ṣí zip náà, yàn fáìlì conversations.json tó wà nínú rẹ.",
+    "nothingImportable": "Kò sí ibaraẹnisọrọ pẹ̀lú ìfiránṣẹ́ tí a lè ka nínú ikojọpọ {source} yìí.",
+    "noMatches": "Kò sí ibaraẹnisọrọ tó bá ìfíltà rẹ mu",
+    "listLabel": "Àwọn ibaraẹnisọrọ láti gbe wọle"
+  }
 }

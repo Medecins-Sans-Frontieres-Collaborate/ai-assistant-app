@@ -5171,5 +5171,32 @@
     "noResults": "Tidak ada folder yang cocok",
     "createFolder": "Folder baru “{name}”"
   },
-  "This conversation is already empty": "Percakapan ini sudah kosong"
+  "This conversation is already empty": "Percakapan ini sudah kosong",
+  "conversationImport": {
+    "title": "Impor percakapan",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Ditemukan {count, plural, one {# percakapan} other {# percakapan}} dalam ekspor {source} ini.",
+    "skipped": "{count, plural, one {# entri} other {# entri}} tidak dapat dibaca dan akan dilewati.",
+    "textOnly": "Hanya teks pesan yang diimpor. Lampiran, gambar, file, dan output alat tidak diikutsertakan.",
+    "searchPlaceholder": "Filter berdasarkan judul",
+    "selectAll": "Pilih semua",
+    "deselectAll": "Batalkan semua pilihan",
+    "selectedCount": "{selected} dari {total} terpilih",
+    "alreadyImported": "Sudah diimpor",
+    "turnCount": "{count, plural, one {# pesan} other {# pesan}}",
+    "droppedParts": "{count, plural, one {# bagian} other {# bagian}} tidak diikutsertakan",
+    "placeInFolder": "Tempatkan percakapan yang diimpor ke dalam folder",
+    "folderName": "Nama folder",
+    "defaultFolderName": "Diimpor dari {source}",
+    "importButton": "Impor {count, plural, one {# percakapan} other {# percakapan}}",
+    "cancel": "Batal",
+    "untitled": "Percakapan tanpa judul",
+    "success": "Berhasil mengimpor {count, plural, one {# percakapan} other {# percakapan}}",
+    "noModel": "Tidak ada model yang tersedia untuk dihubungkan ke percakapan yang diimpor. Coba lagi setelah model berhasil dimuat.",
+    "zipRejected": "Arsip zip tidak dapat diimpor. Ekstrak file ekspor dan pilih file conversations.json di dalamnya.",
+    "nothingImportable": "Ekspor {source} ini tidak berisi percakapan dengan pesan yang dapat dibaca.",
+    "noMatches": "Tidak ada percakapan yang sesuai dengan filter Anda",
+    "listLabel": "Percakapan yang akan diimpor"
+  }
 }

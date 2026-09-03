@@ -5155,5 +5155,32 @@
     "noResults": "Ba dosiye ezalaka te",
     "createFolder": "Dosiye ya sika “{name}”"
   },
-  "This conversation is already empty": "Lisolo oyo ezali kala lisusu te"
+  "This conversation is already empty": "Lisolo oyo ezali kala lisusu te",
+  "conversationImport": {
+    "title": "Kotambwisa masolo",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Emonani {count, plural, one {# lisolo} other {# masolo}} na export ya {source} oyo.",
+    "skipped": "{count, plural, one {# entrée} other {# entrées}} ekoki te kotángama mpe ekotikama pembeni.",
+    "textOnly": "Kopekoli ekotaka kaka mikanda ya nsango. Bokeseni, bililingi, bafichi, mpe bisaleli ekotisami te.",
+    "searchPlaceholder": "Filtrɛ na titre",
+    "selectAll": "Pona nyonso",
+    "deselectAll": "Rekusa nyonso",
+    "selectedCount": "{selected} na {total} esalámí choix",
+    "alreadyImported": "Ekokaki kotambwisa",
+    "turnCount": "{count, plural, one {# nsango} other {# misango}}",
+    "droppedParts": "{count, plural, one {# elembo} other {# bilembo}} ekotikama pembeni",
+    "placeInFolder": "Tyá masolo okotisi na dossier",
+    "folderName": "Nkombo ya dossier",
+    "defaultFolderName": "Ebotami na {source}",
+    "importButton": "Kotambwisa {count, plural, one {# lisolo} other {# masolo}}",
+    "cancel": "Kobetela",
+    "untitled": "Lisolo ya kozanga nkombo",
+    "success": "Kotambwisi {count, plural, one {# lisolo} other {# masolo}} esalami",
+    "noModel": "Model moko ezali te ya kokanga na masolo okotisi. Sɛnga lisusu ntango model ekoki kozinda.",
+    "zipRejected": "Zip archives ekoki te kotambwisa. Fongola export mpe poná fichier conversations.json na kati.",
+    "nothingImportable": "Export ya {source} oyo ezali na lisolo moko te ya na nsango oyo etangami.",
+    "noMatches": "Lisolo moko te ekokani na filtre na yo",
+    "listLabel": "Masolo ya kotambwisa"
+  }
 }

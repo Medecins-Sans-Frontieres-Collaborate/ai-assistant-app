@@ -5171,5 +5171,32 @@
     "noResults": "Geen overeenkomende mappen",
     "createFolder": "Nieuwe map “{name}”"
   },
-  "This conversation is already empty": "Dit gesprek is al leeg"
+  "This conversation is already empty": "Dit gesprek is al leeg",
+  "conversationImport": {
+    "title": "Gesprekken importeren",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "{count, plural, one {# gesprek} other {# gesprekken}} gevonden in deze {source}-export.",
+    "skipped": "{count, plural, one {# item} other {# items}} konden niet worden gelezen en worden overgeslagen.",
+    "textOnly": "Alleen berichttekst wordt geïmporteerd. Bijlagen, afbeeldingen, bestanden en tool-uitvoer worden weggelaten.",
+    "searchPlaceholder": "Filter op titel",
+    "selectAll": "Alles selecteren",
+    "deselectAll": "Alles deselecteren",
+    "selectedCount": "{selected} van {total} geselecteerd",
+    "alreadyImported": "Al geïmporteerd",
+    "turnCount": "{count, plural, one {# bericht} other {# berichten}}",
+    "droppedParts": "{count, plural, one {# deel} other {# delen}} weggelaten",
+    "placeInFolder": "Zet geïmporteerde gesprekken in een map",
+    "folderName": "Mapnaam",
+    "defaultFolderName": "Geïmporteerd uit {source}",
+    "importButton": "{count, plural, one {# gesprek importeren} other {# gesprekken importeren}}",
+    "cancel": "Annuleren",
+    "untitled": "Naamloos gesprek",
+    "success": "{count, plural, one {# gesprek geïmporteerd} other {# gesprekken geïmporteerd}}",
+    "noModel": "Er is geen model beschikbaar om aan geïmporteerde gesprekken te koppelen. Probeer het opnieuw zodra de modellen geladen zijn.",
+    "zipRejected": "Zip-bestanden kunnen niet worden geïmporteerd. Pak het exportbestand uit en kies het bestand conversations.json erin.",
+    "nothingImportable": "Deze {source}-export bevat geen gesprekken met leesbare berichten.",
+    "noMatches": "Geen gesprekken komen overeen met uw filter",
+    "listLabel": "Gesprekken om te importeren"
+  }
 }

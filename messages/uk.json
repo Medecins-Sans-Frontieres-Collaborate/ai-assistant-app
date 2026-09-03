@@ -5171,5 +5171,32 @@
     "noResults": "Немає відповідних папок",
     "createFolder": "Нова папка «{name}»"
   },
-  "This conversation is already empty": "Ця розмова вже порожня"
+  "This conversation is already empty": "Ця розмова вже порожня",
+  "conversationImport": {
+    "title": "Імпортувати розмови",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Знайдено {count, plural, one {# розмову} few {# розмови} many {# розмов} other {# розмов}} у цьому експорті з {source}.",
+    "skipped": "{count, plural, one {# запис} few {# записи} many {# записів} other {# записів}} не вдалося прочитати, і вони будуть пропущені.",
+    "textOnly": "Імпортується лише текст повідомлень. Вкладення, зображення, файли та результати інструментів не включаються.",
+    "searchPlaceholder": "Фільтрувати за назвою",
+    "selectAll": "Вибрати все",
+    "deselectAll": "Скасувати вибір всього",
+    "selectedCount": "Обрано {selected} з {total}",
+    "alreadyImported": "Вже імпортовано",
+    "turnCount": "{count, plural, one {# повідомлення} few {# повідомлення} many {# повідомлень} other {# повідомлень}}",
+    "droppedParts": "{count, plural, one {# частина} few {# частини} many {# частин} other {# частин}} пропущено",
+    "placeInFolder": "Помістити імпортовані розмови у папку",
+    "folderName": "Назва папки",
+    "defaultFolderName": "Імпортовано з {source}",
+    "importButton": "Імпортувати {count, plural, one {# розмову} few {# розмови} many {# розмов} other {# розмов}}",
+    "cancel": "Скасувати",
+    "untitled": "Розмова без назви",
+    "success": "Імпортовано {count, plural, one {# розмову} few {# розмови} many {# розмов} other {# розмов}}",
+    "noModel": "Для імпортованих розмов немає доступної моделі. Спробуйте ще раз після завантаження моделей.",
+    "zipRejected": "Zip-архіви не можна імпортувати. Розпакуйте експорт та виберіть файл conversations.json всередині нього.",
+    "nothingImportable": "Експорт {source} не містить розмов із читабельними повідомленнями.",
+    "noMatches": "Жодна розмова не відповідає вашому фільтру",
+    "listLabel": "Розмови для імпорту"
+  }
 }

@@ -5155,5 +5155,32 @@
     "noResults": "Ndabändö moko azo yeke",
     "createFolder": "Ndabändö mbârî “{name}”"
   },
-  "This conversation is already empty": "Kuye keti tîrî ti yeke sôh."
+  "This conversation is already empty": "Kuye keti tîrî ti yeke sôh.",
+  "conversationImport": {
+    "title": "Küè maboko ti mo",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "Sô {count, plural, one {# maboko} other {# maboko}} ti yeke sô na tî {source} export.",
+    "skipped": "{count, plural, one {# likundu} other {# likundu}} ké nîko tî kulïngbi na bâka, na pâsû tî gu na mbênî.",
+    "textOnly": "Küè mbi bara na lo si tî ngangu. Fichier so, image, na ndolo so bénî ké pâsû.",
+    "searchPlaceholder": "Sôso na titre",
+    "selectAll": "Bera yeke",
+    "deselectAll": "Kûê bera yeke",
+    "selectedCount": "{selected} na {total} so bera",
+    "alreadyImported": "A küè mo tî tala",
+    "turnCount": "{count, plural, one {# ngangu} other {# ngangu}}",
+    "droppedParts": "{count, plural, one {# ngûbê} other {# ngûbê}} mbi ngangu",
+    "placeInFolder": "Bara küè maboko na dossier",
+    "folderName": "Nga tî dossier",
+    "defaultFolderName": "Küè so tî {source}",
+    "importButton": "Küè {count, plural, one {# maboko} other {# maboko}}",
+    "cancel": "Kûê",
+    "untitled": "Maboko se nîko nga",
+    "success": "Küè {count, plural, one {# maboko} other {# maboko}}",
+    "noModel": "Model pîdî na lâ ti pâra na küè maboko. Zînga ti gâda mô model mo sô na bâka.",
+    "zipRejected": "Fichier zip câ kéküè. Pe lâ fichier, pïsô tambûbû conversations.json ti bâka na lo.",
+    "nothingImportable": "{source} export a yeke na maboko bä ngangu so dîko tî bâka.",
+    "noMatches": "Maboko ö tî sè yeke ti gânda mo na filtre",
+    "listLabel": "Maboko ti küè"
+  }
 }

@@ -5201,5 +5201,32 @@
     "noResults": "کوئی فولڈر نہیں ملا",
     "createFolder": "نیا فولڈر “{name}”"
   },
-  "This conversation is already empty": "یہ گفتگو پہلے ہی خالی ہے"
+  "This conversation is already empty": "یہ گفتگو پہلے ہی خالی ہے",
+  "conversationImport": {
+    "title": "بات چیت درآمد کریں",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "اس {source} ایکسپورٹ میں {count, plural, one {# بات چیت} other {# بات چیتیں}} ملی ہیں۔",
+    "skipped": "{count, plural, one {# اندراج} other {# اندراجات}} پڑھا نہیں جا سکا اور چھوڑ دیا جائے گا۔",
+    "textOnly": "صرف پیغامات کا متن درآمد کیا جائے گا۔ منسلکات، تصاویر، فائلز، اور ٹول کے نتائج شامل نہیں ہوں گے۔",
+    "searchPlaceholder": "عنوان کے مطابق فلٹر کریں",
+    "selectAll": "سب منتخب کریں",
+    "deselectAll": "تمام انتخاب ہٹائیں",
+    "selectedCount": "{total} میں سے {selected} منتخب",
+    "alreadyImported": "پہلے سے درآمد شدہ",
+    "turnCount": "{count, plural, one {# پیغام} other {# پیغامات}}",
+    "droppedParts": "{count, plural, one {# حصہ} other {# حصے}} چھوڑ دیے گئے",
+    "placeInFolder": "درآمد شدہ بات چیتوں کو فولڈر میں رکھیں",
+    "folderName": "فولڈر کا نام",
+    "defaultFolderName": "{source} سے درآمد شدہ",
+    "importButton": "{count, plural, one {# بات چیت درآمد کریں} other {# بات چیتیں درآمد کریں}}",
+    "cancel": "منسوخ کریں",
+    "untitled": "غیر معنون بات چیت",
+    "success": "{count, plural, one {# بات چیت درآمد ہوئی} other {# بات چیتیں درآمد ہوئیں}}",
+    "noModel": "درآمد شدہ بات چیتوں کے ساتھ منسلک کرنے کے لیے کوئی ماڈل دستیاب نہیں ہے۔ ماڈل لوڈ ہونے کے بعد دوبارہ کوشش کریں۔",
+    "zipRejected": "Zip آرکائیو درآمد نہیں کیے جا سکتے۔ ایکسپورٹ کو ان زپ کریں اور اس کے اندر conversations.json فائل منتخب کریں۔",
+    "nothingImportable": "اس {source} ایکسپورٹ میں کوئی قابلِ مطالعہ بات چیت نہیں ہے۔",
+    "noMatches": "آپ کے فلٹر سے کوئی بات چیت مطابقت نہیں رکھتی",
+    "listLabel": "درآمد کرنے کے لیے بات چیتیں"
+  }
 }

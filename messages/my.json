@@ -5171,5 +5171,32 @@
     "noResults": "သင့်တဲ့ဖိုလ်ဒါမရှိပါ",
     "createFolder": "ဖိုလ်ဒါအသစ် “{name}”"
   },
-  "This conversation is already empty": "ဤဆွေးနွေးမှုသည် ထပ်မံပြီးသား အလွတ်ဖြစ်နေပါသည်"
+  "This conversation is already empty": "ဤဆွေးနွေးမှုသည် ထပ်မံပြီးသား အလွတ်ဖြစ်နေပါသည်",
+  "conversationImport": {
+    "title": "စကားပြောမှုများ တင်သွင်းရန်",
+    "sourceChatGpt": "ChatGPT",
+    "sourceClaude": "Claude",
+    "detected": "ဤ {source} မှ ထုတ်ယူမှုတွင် စကားပြောမှု {count, plural, one {# ခု} other {# ခု}} တွေ့ရှိပါသည်။",
+    "skipped": "အကွက် {count, plural, one {# ခု} other {# ခု}} ဖတ်၍မရသဖြင့် ကျော်သွားပါမည်။",
+    "textOnly": "စာသားပါသည့် စာတိုပေးပို့ချက်များသာ တင်သွင်းမည်။ ပူးတွဲချက်များ၊ ပုံများ၊ ဖိုင်များ နှင့် ကိရိယာရလဒ်များ မှလွဲထားသည်။",
+    "searchPlaceholder": "ခေါင်းစဉ်ဖြင့် စစ်ထုတ်ပါ",
+    "selectAll": "အားလုံးေရြးပါ",
+    "deselectAll": "အားလုံးအနုတ်ဆွဲပါ",
+    "selectedCount": "{total} မှ {selected} ခုရွေးထားသည်",
+    "alreadyImported": "ပြီးသားတင်သွင်းပြီးပြီ",
+    "turnCount": "{count, plural, one {# စာတို} other {# စာတိုများ}}",
+    "droppedParts": "အပိုင်း {count, plural, one {# ခု} other {# ခု}} ကို မပါဝင်ပါ",
+    "placeInFolder": "တင်သွင်းပြီးသော စကားပြောမှုများကို ဖိုလ်ဒါတစ်ခုထဲ ထည့်ပါ",
+    "folderName": "ဖိုလ်ဒါအမည်",
+    "defaultFolderName": "{source} မှ တင်သွင်းထားသည်",
+    "importButton": "စကားပြောမှု {count, plural, one {# ခု} other {# ခု}} တင်သွင်းရန်",
+    "cancel": "ပယ်ဖျက်ပါ",
+    "untitled": "ခေါင်းစဉ်မရှိသော စကားပြောမှု",
+    "success": "စကားပြောမှု {count, plural, one {# ခု} other {# ခု}} တင်သွင်းပြီးပါပြီ",
+    "noModel": "တင်သွင်းထားသော စကားပြောမှုများတွင် မော်ဒယ်တပ်ဆင်ရန် မော်ဒယ်မရှိပါ။ မော်ဒယ်များ သိုးတင်ပြီးလျှင်ထပ်မံကြိုးစားပါ။",
+    "zipRejected": "Zip ဖိုင်များကို တင်သွင်း၍မရပါ။ Export ကို Unzip ပြုလုပ်ပြီး conversations.json ဖိုင်ကို ရွေးချယ်ပါ။",
+    "nothingImportable": "ဤ {source} ထုတ်ယူမှုတွင် ဖတ်နိုင်သော မက်ဆေ့ခ်ျပါဝင်သည့် စကားပြောမှုများ မရှိပါ။",
+    "noMatches": "သင့်စစ်ထုတ်ချက်နှင့် ကိုက်ညီသော စကားပြောမှုများမျှမရှိပါ",
+    "listLabel": "တင်သွင်းရန် စကားပြောမှုများ"
+  }
 }
