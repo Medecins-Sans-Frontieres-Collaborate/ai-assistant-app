@@ -505,6 +505,13 @@ export const CONFORMANCE_CASES: readonly ConformanceCase[] = [
     input: lines('Truncated:', '', '$$', raw`\frac{a}{b}`),
     expectation: 'renders-math',
     mustContainText: ['Truncated:'],
+    knownGap:
+      'The screen typesets this (micromark runs an unterminated `$$` to the end of ' +
+      'input), but `toSpeakableText` only rewrites TERMINATED regions — the same ' +
+      'streaming-safety rule the normalizer follows — so a truncated message hands ' +
+      'its raw TeX to the speech synthesizer. Closing it means teaching the speakable ' +
+      'pass about unterminated regions without regressing mid-stream churn.',
+    knownGapFamilies: ['parity'],
     skipStreaming: true,
   },
   {
@@ -519,8 +526,10 @@ export const CONFORMANCE_CASES: readonly ConformanceCase[] = [
       'style INFO STRING and discards it, so an unterminated `$$\\frac{a}{b}` renders as a ' +
       'silent EMPTY equation box — the author’s characters vanish with no error shown. ' +
       'The normalizer deliberately leaves unterminated regions untouched (streaming safety), ' +
-      'so closing this gap needs a render-layer change rather than a string one.',
-    knownGapFamilies: ['leak'],
+      'so closing this gap needs a render-layer change rather than a string one. ' +
+      'The speech path drops it for the same reason `adv-unterminated-display-own-line` ' +
+      'does: only terminated regions are rewritten.',
+    knownGapFamilies: ['leak', 'parity'],
     skipStreaming: true,
   },
   {
@@ -713,6 +722,12 @@ export interface ParityRow {
   readonly exportNote: string;
   readonly tts: RendererSupport;
   readonly ttsNote: string;
+  /**
+   * A substring the spoken text must contain — the downgrade made concrete.
+   * `'equation'` is the placeholder for an expression too structured to say;
+   * anything else is the verbalization (`\frac{a}{b}` → "a over b").
+   */
+  readonly ttsSpoken?: string;
 }
 
 /**
@@ -737,7 +752,8 @@ export const RENDERER_PARITY_MATRIX: readonly ParityRow[] = [
       'marked has no math extension; the $$…$$ source survives verbatim so the reader (or Pandoc/Obsidian/GitHub) can still resolve it',
     tts: 'declared-downgrade',
     ttsNote:
-      'TeX is not speakable; the math span is replaced with a spoken placeholder rather than read out as backslash-frac',
+      'not typeset; a simple expression is VERBALIZED (\\frac{a}{b} → "a over b") and anything too structured falls back to a spoken placeholder — never read out as backslash-frac',
+    ttsSpoken: 'a over b',
   },
   {
     feature: 'inline math',
@@ -746,7 +762,8 @@ export const RENDERER_PARITY_MATRIX: readonly ParityRow[] = [
     export: 'declared-downgrade',
     exportNote: 'same as display math: source survives, no typesetting',
     tts: 'declared-downgrade',
-    ttsNote: 'spoken placeholder',
+    ttsNote: 'verbalized, same contract as display math',
+    ttsSpoken: 'A equals pi r squared',
   },
   {
     feature: 'LaTeX \\[ \\] delimiters',
@@ -756,7 +773,9 @@ export const RENDERER_PARITY_MATRIX: readonly ParityRow[] = [
     exportNote:
       'normalized to $$…$$ BEFORE marked sees it — without that, marked eats the backslashes and the delimiters are unrecoverable',
     tts: 'declared-downgrade',
-    ttsNote: 'spoken placeholder',
+    ttsNote:
+      'the \\[ \\] region is recognised and spoken like any other; this formula is too structured to verbalize, so it becomes the placeholder',
+    ttsSpoken: 'equation',
   },
   {
     feature: 'multi-line environment (aligned)',
@@ -765,7 +784,9 @@ export const RENDERER_PARITY_MATRIX: readonly ParityRow[] = [
     export: 'declared-downgrade',
     exportNote: 'source survives verbatim, on its own lines',
     tts: 'declared-downgrade',
-    ttsNote: 'spoken placeholder',
+    ttsNote:
+      'an aligned derivation cannot be said in a sentence, so it becomes the placeholder rather than a wall of commands',
+    ttsSpoken: 'equation',
   },
   {
     feature: 'currency in prose',
@@ -784,7 +805,8 @@ export const RENDERER_PARITY_MATRIX: readonly ParityRow[] = [
     exportNote: 'fence content is passed through untouched',
     tts: 'declared-downgrade',
     ttsNote:
-      'cleanMarkdown strips fences; code is not read aloud, which is intended',
+      'the speakable pass copies fences through untouched and cleanMarkdown only removes the backticks, so code IS read aloud as words — noted here because it is a real divergence from the screen, not because it is wrong',
+    ttsSpoken: 'echo $HOME and $PATH',
   },
   {
     feature: 'issue #121 regression shape',
@@ -793,6 +815,7 @@ export const RENDERER_PARITY_MATRIX: readonly ParityRow[] = [
     export: 'declared-downgrade',
     exportNote: 'source survives verbatim',
     tts: 'declared-downgrade',
-    ttsNote: 'spoken placeholder',
+    ttsNote: 'too structured to verbalize; becomes the placeholder',
+    ttsSpoken: 'equation',
   },
 ];
