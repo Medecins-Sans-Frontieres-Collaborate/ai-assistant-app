@@ -78,6 +78,16 @@ export interface ConformanceCase {
   /** Substrings that must never appear in the rendered visible text. */
   readonly mustNotContainText?: readonly string[];
   /**
+   * The case must produce a `.katex-display` block, not an inline span.
+   *
+   * `renders-math` alone cannot express this — both are KaTeX nodes — yet the
+   * difference is what the reader sees: centring, big-operator limits, and the
+   * `.katex-display{overflow-x:auto}` scroller that keeps a wide derivation
+   * inside the message bubble (`.katex .base` is `white-space: nowrap`, so an
+   * inline span simply spills).
+   */
+  readonly mustBeDisplayMath?: boolean;
+  /**
    * The case deliberately shows TeX source to the reader (a ```latex fence,
    * prose explaining `\[`). The leak detector then skips its code blocks —
    * but still scans everything outside them.
@@ -153,6 +163,9 @@ export const CONFORMANCE_CASES: readonly ConformanceCase[] = [
     group: 'delimiters',
     input: lines('Answer:', '', raw`\[ \frac{a}{b} \]`, '', 'Done.'),
     expectation: 'renders-math',
+    // `\[` MEANS display, so a one-line `$$…$$` — remark-math's INLINE
+    // construct — is a silent demotion, not a fix.
+    mustBeDisplayMath: true,
     mustContainText: ['Answer:', 'Done.'],
   },
   {
@@ -161,6 +174,7 @@ export const CONFORMANCE_CASES: readonly ConformanceCase[] = [
     group: 'delimiters',
     input: lines(raw`\[`, raw`\frac{a}{b}`, raw`\]`),
     expectation: 'renders-math',
+    mustBeDisplayMath: true,
   },
   {
     id: 'delim-paren-adjacent',
@@ -554,8 +568,121 @@ export const CONFORMANCE_CASES: readonly ConformanceCase[] = [
     group: 'adversarial',
     input: raw`$$\foobarbaz{x}$$`,
     expectation: 'degrades',
-    allowKatexError: true,
+    knownGap:
+      'Streamdown pins rehype-katex with an errorColor, so KaTeX prints ' +
+      '`\foobarbaz` onto the page in a muted colour instead of raising a ' +
+      '.katex-error: the reader sees raw TeX with nothing marking it as broken, ' +
+      'and katexErrors is empty so allowKatexError and the degradation rules ' +
+      'assert nothing. Closing it means overriding the rehype-katex options in ' +
+      'MATH_REHYPE_PLUGINS so an unsupported command degrades visibly.',
+    knownGapFamilies: ['leak'],
   },
+  {
+    // `%` opens a comment in TeX and KaTeX honours it, so the rest of the line
+    // is discarded — with katexCount 1, katexErrors [] and a NON-empty
+    // annotation, which is why every existing guard passes over it.
+    id: 'adv-percent-inline',
+    label: 'a bare % in inline math truncates the rest of the line',
+    group: 'adversarial',
+    input: raw`The coverage is $$45%$$ of target.`,
+    expectation: 'renders-math',
+    mustContainText: ['45%'],
+    knownGap:
+      'this renders as "The coverage is 45 of target" — a rate silently shown ' +
+      'as a bare count, with no error and no empty box to signal it. Closing ' +
+      'it needs a production change (escaping a bare `%` inside `$$…$$` in ' +
+      'normalizeMathDelimiters, and/or a `\\%` bullet in the system prompt), ' +
+      'not a corpus change. `$$45\\%$$` is the correct authoring form and ' +
+      'renders "45%" today.',
+    knownGapFamilies: ['leak'],
+  },
+  {
+    id: 'adv-percent-swallows-row-break',
+    label: 'a bare % eats the \\\\ row break and merges two rows',
+    group: 'adversarial',
+    input: lines('$$', raw`\text{rate} = 50% \\`, raw`\text{other} = 2`, '$$'),
+    expectation: 'renders-math',
+    mustContainText: ['50%', 'other'],
+    knownGap:
+      'the comment runs to end of line, so it takes the `\\\\` row break with ' +
+      'it: two rows of a derivation render as the single row "rate=50other=2" ' +
+      'inside a clean-looking katex-display, with nothing to warn the reader.',
+    knownGapFamilies: ['leak'],
+  },
+
+  // `\[` / `\]` is also markdown's own escape for a literal bracket, so these
+  // are prose whose brackets the author kept on purpose. Converting one DELETES
+  // them: measured, `\[a-z\]` rendered as `a−z`, `\[2\]` as `2`.
+  {
+    id: 'adv-escaped-bracket-char-class',
+    label: 'a regex character class keeps its brackets',
+    group: 'adversarial',
+    input: raw`The character class \[a-z\] matches lowercase letters.`,
+    expectation: 'stays-literal',
+    mustContainText: ['[a-z]'],
+  },
+  {
+    id: 'adv-escaped-bracket-citation',
+    label: 'a citation marker keeps its brackets',
+    group: 'adversarial',
+    input: raw`See the report \[1\] and the annex \[2\].`,
+    expectation: 'stays-literal',
+    mustContainText: ['[1]', '[2]'],
+  },
+  {
+    id: 'adv-escaped-bracket-placeholder',
+    label: 'a form placeholder keeps its brackets',
+    group: 'adversarial',
+    input: raw`Replace \[site 1\] and mark it \[ok\] in the form.`,
+    expectation: 'stays-literal',
+    mustContainText: ['[site 1]', '[ok]'],
+  },
+  {
+    id: 'adv-escaped-paren-range',
+    label: 'a numeric range keeps its parentheses',
+    group: 'adversarial',
+    input: raw`The acceptable range \(0-10\) is documented.`,
+    expectation: 'stays-literal',
+    mustContainText: ['(0-10)'],
+  },
+
+  // An unpaired opener must not reach across a paragraph break for an
+  // unrelated closer. Measured before the bound: the paragraphs fused, a
+  // literal `$$` appeared, and the clause after the false closer was DELETED.
+  {
+    id: 'adv-unpaired-bracket-across-paragraphs',
+    label: 'an unpaired \\[ does not pair with a \\] two paragraphs later',
+    group: 'adversarial',
+    // The second paragraph carries `x = 1` on purpose: without it the region
+    // would be rejected by mathPlausible anyway and this case would prove
+    // nothing about the paragraph bound it exists to pin.
+    input: lines(
+      raw`To show a literal bracket, type \[ in your document.`,
+      '',
+      raw`In section 2, where x = 1, we explain how \] behaves.`,
+    ),
+    expectation: 'stays-literal',
+    mustContainText: ['in your document', 'we explain how'],
+  },
+  {
+    id: 'adv-dropped-closer-across-paragraphs',
+    label: 'a dropped closer does not swallow the paragraphs after it',
+    group: 'adversarial',
+    // No TeX command in the body on purpose: an unterminated region is copied
+    // through verbatim (streaming safety), so a `\pi` here would legitimately
+    // reach the reader as prose and this case would be arguing about that
+    // instead of about the paragraph bound it exists to pin.
+    input: lines(
+      raw`The area is \[ A = 2 r^2 and that is all.`,
+      '',
+      'Next paragraph has a - dash in it.',
+      '',
+      raw`Later we write \] by mistake.`,
+    ),
+    expectation: 'stays-literal',
+    mustContainText: ['Next paragraph has a - dash in it', 'by mistake'],
+  },
+
   {
     id: 'adv-deep-braces',
     label: 'deeply nested braces',
@@ -608,6 +735,40 @@ export const CONFORMANCE_CASES: readonly ConformanceCase[] = [
     mustContainText: ['cost of $5 kits'],
   },
 
+  // A fence legally opens inside a container. Leaving those unprotected let
+  // rule 4 write a visible `\$` into a code block — permanently for a `~~~`
+  // fence, which no later backtick run can accidentally rescue.
+  {
+    id: 'protected-tilde-fence-in-quote',
+    label: 'a tilde fence inside a blockquote protects its dollars',
+    group: 'protected',
+    input: lines('> ~~~sh', '> echo $5,000 and $3,000', '> ~~~'),
+    expectation: 'stays-literal',
+    mustContainText: ['echo $5,000 and $3,000'],
+    mustNotContainText: [raw`\$5,000`],
+  },
+  {
+    id: 'protected-fence-on-list-marker-line',
+    label: 'a fence on a list-marker line, still streaming',
+    group: 'protected',
+    input: lines('- ```bash', '  echo $HOME and $PATH'),
+    expectation: 'stays-literal',
+    mustContainText: ['echo $HOME and $PATH'],
+    mustNotContainText: [raw`\$HOME`],
+  },
+  {
+    // GFM's literal-autolink extension does not process backslash escapes, so
+    // an escape added here survives into the href as `%5C` — a 404 — and shows
+    // as a stray backslash in the link text.
+    id: 'currency-inside-bare-url',
+    label: 'a $ inside a bare URL is part of the link, not currency',
+    group: 'currency',
+    input: 'See https://ex.com/report?amt=$1,000 and the budget is $5,000.',
+    expectation: 'stays-literal',
+    mustContainText: ['https://ex.com/report?amt=$1,000', '$5,000'],
+    mustNotContainText: ['%5C', raw`\$1,000`],
+  },
+
   // ----------------------------------------------------------------------- i18n
   {
     id: 'i18n-cjk-spaced',
@@ -655,6 +816,7 @@ export const CONFORMANCE_CASES: readonly ConformanceCase[] = [
       'This is similar in structure to the general MMR.',
     ),
     expectation: 'renders-math',
+    mustBeDisplayMath: true,
     mustContainText: [
       'Facility-based maternal mortality ratio:',
       'similar in structure',
