@@ -5,11 +5,14 @@ import ThinkingBlock from '@/components/Chat/ChatMessages/ThinkingBlock';
 import '@testing-library/jest-dom';
 import { describe, expect, it, vi } from 'vitest';
 
-// Mock Streamdown component
+// Mock Streamdown component. `defaultRehypePlugins` is part of the mock
+// because ThinkingBlock renders through MathStreamdown, which builds its
+// KaTeX-aware sanitize chain from that export at module load.
 vi.mock('streamdown', () => ({
   Streamdown: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="streamdown">{children}</div>
   ),
+  defaultRehypePlugins: {},
 }));
 
 // Mock Tabler icons
