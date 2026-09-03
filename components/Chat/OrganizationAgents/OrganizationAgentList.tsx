@@ -44,6 +44,32 @@ interface OrganizationAgentListProps {
 }
 
 /**
+ * Model-ID prefixes of the admin-authored agent records that ride the `org-`
+ * id convention. Server-minted ids are `prompt-<hex>` (personas),
+ * `m365-<hex>` (Microsoft 365 agents) and `orgr-<hex>` (admin-authored org RAG
+ * agents) — see app/api/agent-access/{prompt,m365,org}-agents/route.ts; the
+ * picker prefixes them with `org-` to build the match id. A new admin-authored
+ * kind must be added here: anything missing is silently dropped by the
+ * name-based dedupe below.
+ */
+const ADMIN_MANAGED_MATCH_ID_PREFIXES = [
+  'org-prompt-',
+  'org-m365-',
+  'org-orgr-',
+];
+
+/**
+ * True for an admin-created record rather than a Foundry-discovered agent.
+ * All three kinds carry their own model ids, so a display-name collision with
+ * a static organization-agents.json entry is a *different* agent, not a
+ * duplicate — they must never be dropped by the name-based dedupe.
+ */
+const isAdminManagedAgent = (a: FoundryAgentDisplay) =>
+  ADMIN_MANAGED_MATCH_ID_PREFIXES.some((prefix) =>
+    a.matchId?.startsWith(prefix),
+  );
+
+/**
  * Simple list of organization agents for the left sidebar.
  * Shows just the agent name and icon (like ModelCard).
  * Full details are shown in the details panel on the right.
@@ -67,15 +93,9 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
 
   // Merge static + discovered. The name-based dedupe exists solely for
   // Foundry-discovered agents that duplicate a static organization-agents.json
-  // entry under the same display name. Prompt agents (matchId `org-prompt-…`)
-  // and admin-authored org RAG agents (matchId `org-orgr-…`) are
-  // admin-created records with their own model ids — a name collision with a
-  // static agent is a different agent, not a duplicate, so they must never
-  // be dropped by this dedupe.
+  // entry under the same display name; admin-authored records (prompt, M365
+  // and org RAG agents) are exempt — see isAdminManagedAgent above.
   const staticNames = new Set(staticAgents.map((a) => a.name));
-  const isAdminManagedAgent = (a: FoundryAgentDisplay) =>
-    !!a.matchId?.startsWith('org-prompt-') ||
-    !!a.matchId?.startsWith('org-orgr-');
   const uniqueDiscovered = discoveredAgents.filter(
     (a) => isAdminManagedAgent(a) || !staticNames.has(a.name),
   );
