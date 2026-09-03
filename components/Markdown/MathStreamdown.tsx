@@ -3,7 +3,10 @@
 // components/Markdown/MathStreamdown.tsx
 import { FC } from 'react';
 
-import { MATH_REHYPE_PLUGINS } from './mathRehype';
+import {
+  MATH_PARSE_INCOMPLETE_MARKDOWN,
+  MATH_REHYPE_PLUGINS,
+} from './mathRehype';
 
 import { Streamdown } from 'streamdown';
 import type { StreamdownProps } from 'streamdown';
@@ -24,8 +27,15 @@ import type { StreamdownProps } from 'streamdown';
  */
 export const MathStreamdown: FC<StreamdownProps> = ({
   rehypePlugins = MATH_REHYPE_PLUGINS,
+  parseIncompleteMarkdown = MATH_PARSE_INCOMPLETE_MARKDOWN,
   ...props
-}) => <Streamdown rehypePlugins={rehypePlugins} {...props} />;
+}) => (
+  <Streamdown
+    rehypePlugins={rehypePlugins}
+    parseIncompleteMarkdown={parseIncompleteMarkdown}
+    {...props}
+  />
+);
 
 MathStreamdown.displayName = 'MathStreamdown';
 
