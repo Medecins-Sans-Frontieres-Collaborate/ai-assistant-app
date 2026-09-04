@@ -220,7 +220,21 @@ export interface M365MeetingEntry {
   subject: string;
   joinWebUrl: string;
   start?: string;
+  /**
+   * Event end, mirroring `start`. The filtered listing needs it (a meeting
+   * that has not ended cannot have a transcript yet); the plain listing
+   * just carries it.
+   */
+  end?: string;
   organizer?: string;
+  /**
+   * Filtered listing only: how many calendarView occurrences collapsed into
+   * this row when deduping by joinWebUrl. A recurring Teams series expands
+   * to one event per occurrence, all sharing one join URL and one
+   * online-meeting id (and therefore one set of transcripts). Absent for a
+   * single-instance meeting.
+   */
+  occurrences?: number;
 }
 
 export interface M365MeetingArtifact {
@@ -233,6 +247,67 @@ export interface M365MeetingResources {
   organizer?: string;
   transcripts: M365MeetingArtifact[];
   recordings: M365MeetingArtifact[];
+}
+
+/**
+ * Outcome of the server-side artifact probe for one meeting.
+ *
+ * - 'available' — the probe found at least one transcript or recording;
+ *   `resources` is inline so the client needs no expand-time resolve.
+ * - 'pending' — the probe found nothing, but the meeting ended so recently
+ *   that Teams may still be publishing. Kept rather than hidden.
+ * - 'forbidden' — Graph answered 403. That is NOT "no artifacts";
+ *   availability is unknown, so the row is kept and badged.
+ * - 'unprobed' — never asked (cap, wall-clock budget, throttling, or the
+ *   client-side unfiltered listing, which probes nothing at all).
+ *
+ * A meeting that probed clean with zero artifacts is not represented here:
+ * it is dropped from `meetings` and counted in `hiddenCount`. That is the
+ * only outcome that hides a row.
+ */
+export type M365MeetingAvailability =
+  | 'available'
+  | 'pending'
+  | 'forbidden'
+  | 'unprobed';
+
+export interface M365MeetingCandidate extends M365MeetingEntry {
+  availability: M365MeetingAvailability;
+  /** Set only for 'available' — the same shape the lazy resolve returns. */
+  resources?: M365MeetingResources;
+  /**
+   * One of the two artifact listings failed transiently while the other
+   * succeeded: `resources` is real but may under-report.
+   */
+  partial?: boolean;
+}
+
+/** Payload of GET /api/m365/meetings?artifacts=required. */
+export interface M365FilteredMeetingList {
+  /** Newest first. Only 'available' | 'pending' | 'forbidden' rows. */
+  meetings: M365MeetingCandidate[];
+  /**
+   * Every meeting this view dropped, for any reason: probed clean and
+   * empty, cancelled, still running, or unknown. It is what the "Show all
+   * meetings (N hidden)" toggle promises to reveal, so it deliberately
+   * counts more than the provably-empty ones.
+   */
+  hiddenCount: number;
+  /**
+   * The subset of `hiddenCount` whose availability is unknown rather than
+   * disproven — the probe cap or wall-clock budget was reached, or Graph
+   * throttled. Reaching these is what "Show all" is for.
+   */
+  unprobedCount: number;
+  /** The probe cap or wall-clock budget cut the fan-out short. */
+  budgetExhausted?: boolean;
+  /** Graph throttled during the probe phase; the listing still returns 200. */
+  throttled?: boolean;
+  /**
+   * The raw calendar window filled its page before any filtering, so older
+   * meetings in the lookback were never considered.
+   */
+  windowTruncated?: boolean;
 }
 
 export interface M365MeetingTranscript {
