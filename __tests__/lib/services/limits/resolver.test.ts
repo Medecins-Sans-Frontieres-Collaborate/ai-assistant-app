@@ -414,7 +414,7 @@ describe('resolveLimit — matching edge cases', () => {
     expect(resolveLimit(CHAT_MESSAGES, p, principal()).value).toBe(100);
   });
 
-  it('group overrides never match — groupIds is always empty in v1', () => {
+  it('group overrides do not match a principal with no cached group ids', () => {
     const p = policy(
       [{ value: 100 }],
       [
@@ -428,6 +428,20 @@ describe('resolveLimit — matching edge cases', () => {
     const result = resolveLimit(CHAT_MESSAGES, p, principal());
     expect(result.value).toBe(100);
     expect(result.source).toBe('global');
+  });
+
+  it('group overrides match once the membership cache supplies the group id', () => {
+    const gid = '00000000-0000-0000-0000-000000000001';
+    const p = policy(
+      [{ value: 100 }],
+      [override('group', [gid], [{ value: 1 }])],
+    );
+    const result = resolveLimit(
+      CHAT_MESSAGES,
+      p,
+      principal({ groupIds: [gid] }),
+    );
+    expect(result).toMatchObject({ value: 1, source: 'group' });
   });
 
   it('a principal with no mail falls back to GLOBAL, not unlimited and not most-restrictive', () => {
@@ -496,5 +510,200 @@ describe('resolveAllLimits', () => {
       'feature.mcp.roundsPerRequest',
       'feature.upload.megabytesPerFile',
     ]);
+  });
+});
+
+describe('resolveLimit — override ceilings (global tier)', () => {
+  it('a global-tier domain ceiling clamps a global user override that lacks one', () => {
+    const domainCeiling = override(
+      'domain',
+      ['example.org'],
+      [{ value: 100, ceiling: true }],
+    );
+    const p = policy(
+      [],
+      [domainCeiling, override('user', ['ada@example.org'], [{ value: 500 }])],
+    );
+    const result = resolveLimit(CHAT_MESSAGES, p, principal());
+    expect(result.value).toBe(100);
+    expect(result.ceilingApplied).toBe(true);
+    expect(result.ceilingOverrideId).toBe(domainCeiling.id);
+    // Provenance still names the record that WON before the clamp.
+    expect(result.source).toBe('user');
+  });
+
+  it('OCP capped at 100 (ceiling), except alice at 500 (ceiling): most specific ceiling wins', () => {
+    const domainCeiling = override(
+      'domain',
+      ['example.org'],
+      [{ value: 100, ceiling: true }],
+    );
+    const aliceCeiling = override(
+      'user',
+      ['alice@example.org'],
+      [{ value: 500, ceiling: true }],
+    );
+    const bobPlain = override('user', ['bob@example.org'], [{ value: 900 }]);
+    const p = policy([], [domainCeiling, aliceCeiling, bobPlain]);
+
+    const alice = resolveLimit(
+      CHAT_MESSAGES,
+      p,
+      principal({ mail: 'alice@example.org' }),
+    );
+    expect(alice.value).toBe(500);
+    expect(alice.ceilingApplied).toBeUndefined();
+    expect(alice.ceilingOverrideId).toBeUndefined();
+
+    const bob = resolveLimit(
+      CHAT_MESSAGES,
+      p,
+      principal({ mail: 'bob@example.org' }),
+    );
+    expect(bob.value).toBe(100);
+    expect(bob.ceilingApplied).toBe(true);
+    expect(bob.ceilingOverrideId).toBe(domainCeiling.id);
+
+    const carol = resolveLimit(
+      CHAT_MESSAGES,
+      p,
+      principal({ mail: 'carol@example.org' }),
+    );
+    expect(carol).toMatchObject({ value: 100, source: 'domain' });
+    expect(carol.ceilingApplied).toBeUndefined();
+  });
+
+  it('a more specific override ceiling may sit ABOVE a global default ceiling', () => {
+    const domainCeiling = override(
+      'domain',
+      ['example.org'],
+      [{ value: 300, ceiling: true }],
+    );
+    const p = policy(
+      [{ value: 100, ceiling: true }],
+      [domainCeiling, override('user', ['ada@example.org'], [{ value: 900 }])],
+    );
+    const result = resolveLimit(CHAT_MESSAGES, p, principal());
+    expect(result.value).toBe(300);
+    expect(result.ceilingOverrideId).toBe(domainCeiling.id);
+  });
+
+  it('falls back to the global default ceiling when the more specific ceiling record does not match', () => {
+    const p = policy(
+      [{ value: 100, ceiling: true }],
+      [
+        override(
+          'user',
+          ['alice@example.org'],
+          [{ value: 500, ceiling: true }],
+        ),
+        override('user', ['bob@example.org'], [{ value: 900 }]),
+      ],
+    );
+    const bob = resolveLimit(
+      CHAT_MESSAGES,
+      p,
+      principal({ mail: 'bob@example.org' }),
+    );
+    expect(bob.value).toBe(100);
+    expect(bob.ceilingApplied).toBe(true);
+    // The DEFAULT pinned it — no override id to name.
+    expect(bob.ceilingOverrideId).toBeUndefined();
+  });
+
+  it('an override ceiling on another limit key does not clamp this key', () => {
+    const p = policy(
+      [],
+      [
+        override(
+          'domain',
+          ['example.org'],
+          [
+            {
+              limitKey: 'feature.tts.charactersPerDay',
+              value: 10,
+              ceiling: true,
+            },
+          ],
+        ),
+        override('user', ['ada@example.org'], [{ value: 500 }]),
+      ],
+    );
+    const result = resolveLimit(CHAT_MESSAGES, p, principal());
+    expect(result.value).toBe(500);
+    expect(result.ceilingApplied).toBeUndefined();
+  });
+
+  it('a ceiling record does not stop a more specific record from going LOWER', () => {
+    const p = policy(
+      [],
+      [
+        override('domain', ['example.org'], [{ value: 100, ceiling: true }]),
+        override('user', ['ada@example.org'], [{ value: 5 }]),
+      ],
+    );
+    expect(resolveLimit(CHAT_MESSAGES, p, principal()).value).toBe(5);
+  });
+});
+
+describe('resolveLimit — neutrality for policies without delegations', () => {
+  it('mixed-specificity defaults resolve exactly as today: a qualified non-ceiling default shadows an unqualified ceiling default', () => {
+    const p = policy(
+      [
+        { limitKey: MODEL_REQUESTS.key, value: 100, ceiling: true },
+        { limitKey: MODEL_REQUESTS.key, series: 'gpt', value: 500 },
+      ],
+      [
+        override(
+          'user',
+          ['ada@example.org'],
+          [{ limitKey: MODEL_REQUESTS.key, value: 5000 }],
+        ),
+      ],
+    );
+    // Family cell: the series default wins the global layer and carries no
+    // ceiling, so the user override is NOT clamped (pre-delegation behaviour).
+    const family = resolveLimit(
+      MODEL_REQUESTS,
+      p,
+      principal(),
+      undefined,
+      'gpt',
+    );
+    expect(family.value).toBe(5000);
+    expect(family.ceilingApplied).toBeUndefined();
+    // A cell the series default does not speak to falls to the unqualified
+    // ceiling default, which clamps.
+    const other = resolveLimit(MODEL_REQUESTS, p, principal(), 'claude-x');
+    expect(other.value).toBe(100);
+    expect(other.ceilingApplied).toBe(true);
+  });
+
+  it('`delegations: []` resolves byte-for-byte like a policy without the key', () => {
+    const overrides = [
+      override('domain', ['example.org'], [{ value: 200 }]),
+      override('user', ['ada@example.org'], [{ value: 400 }], { priority: 3 }),
+      override(
+        'attribute',
+        ['department:health'],
+        [{ limitKey: 'feature.tts.charactersPerDay', value: 9 }],
+      ),
+    ];
+    const defaults = [{ value: 100, ceiling: true }];
+    const without = policy(defaults, overrides);
+    const withEmpty = policy(defaults, overrides, { delegations: [] });
+    expect(resolveAllLimits(withEmpty, principal())).toEqual(
+      resolveAllLimits(without, principal()),
+    );
+  });
+
+  it('every result carries tier "global" when no delegated override exists', () => {
+    const p = policy(
+      [{ value: 100 }],
+      [override('user', ['ada@example.org'], [{ value: 400 }])],
+    );
+    const all = resolveAllLimits(p, principal());
+    expect(Object.values(all).every((r) => r.tier === 'global')).toBe(true);
+    expect(resolveLimit(CHAT_MESSAGES, null, principal()).tier).toBe('global');
   });
 });
