@@ -1,6 +1,13 @@
 import {
+  __resetGlobalAdminSnapshotForTests,
+  publishGlobalAdminSnapshot,
+} from '@/lib/services/admin/globalAdminsSnapshot';
+import {
   ALL_AGENT_KEYS,
+  demotedRole,
   isGlobalAdmin,
+  isRealGlobalAdmin,
+  mailOf,
   parseGlobalAdminEmails,
   resolveAdminStatus,
 } from '@/lib/services/agentAccess/adminAuth';
@@ -34,6 +41,7 @@ function configWith(
 describe('agentAccess/adminAuth', () => {
   beforeEach(() => {
     mockEnv.AGENT_ACCESS_ADMINS = undefined;
+    __resetGlobalAdminSnapshotForTests();
   });
 
   describe('parseGlobalAdminEmails', () => {
@@ -74,6 +82,114 @@ describe('agentAccess/adminAuth', () => {
     it('returns false for everyone when the env var is unset', () => {
       mockEnv.AGENT_ACCESS_ADMINS = undefined;
       expect(isGlobalAdmin('admin@example.com')).toBe(false);
+    });
+  });
+
+  describe('config global-admin roster (env ∪ snapshot)', () => {
+    it('a config-roster admin is a global admin, matched canonicalized', () => {
+      mockEnv.AGENT_ACCESS_ADMINS = undefined;
+      publishGlobalAdminSnapshot(['config@example.com']);
+
+      expect(isGlobalAdmin('  Config@Example.COM ')).toBe(true);
+      expect(isGlobalAdmin({ mail: 'config@example.com' })).toBe(true);
+      expect(isRealGlobalAdmin('config@example.com')).toBe(true);
+      expect(resolveAdminStatus('config@example.com', configWith([]))).toEqual({
+        isGlobalAdmin: true,
+        isLocalAdmin: false,
+        editableAgentKeys: ALL_AGENT_KEYS,
+      });
+    });
+
+    it('the env roster keeps working while the snapshot is cold (un-lockable bootstrap)', () => {
+      mockEnv.AGENT_ACCESS_ADMINS = 'admin@example.com';
+
+      expect(isGlobalAdmin('admin@example.com')).toBe(true);
+      expect(isGlobalAdmin('config@example.com')).toBe(false);
+    });
+
+    it('the env roster keeps working when the snapshot is loaded and does not name them', () => {
+      mockEnv.AGENT_ACCESS_ADMINS = 'admin@example.com';
+      publishGlobalAdminSnapshot(['config@example.com']);
+
+      expect(isGlobalAdmin('admin@example.com')).toBe(true);
+      expect(isGlobalAdmin('config@example.com')).toBe(true);
+      expect(isGlobalAdmin('user@example.com')).toBe(false);
+    });
+
+    it('a re-published snapshot revokes a removed config admin', () => {
+      publishGlobalAdminSnapshot(['config@example.com']);
+      publishGlobalAdminSnapshot([]);
+
+      expect(isGlobalAdmin('config@example.com')).toBe(false);
+    });
+
+    it('view-as demotion applies to a config-roster admin exactly as to an env admin', () => {
+      publishGlobalAdminSnapshot(['config@example.com']);
+
+      const none = {
+        mail: 'config@example.com',
+        viewAs: { overrides: { adminRole: 'none' as const } },
+      };
+      expect(isGlobalAdmin(none)).toBe(false);
+      expect(resolveAdminStatus(none, configWith([]))).toEqual({
+        isGlobalAdmin: false,
+        isLocalAdmin: false,
+        editableAgentKeys: [],
+      });
+
+      const local = {
+        mail: 'config@example.com',
+        viewAs: {
+          overrides: { adminRole: 'local' as const, localAdminKeys: [KEY_A] },
+        },
+      };
+      expect(isGlobalAdmin(local)).toBe(false);
+      expect(resolveAdminStatus(local, configWith([]))).toEqual({
+        isGlobalAdmin: false,
+        isLocalAdmin: true,
+        editableAgentKeys: [KEY_A],
+      });
+    });
+  });
+
+  describe('exported identity helpers', () => {
+    it('mailOf reads the mail from either identity form', () => {
+      expect(mailOf('a@x.org')).toBe('a@x.org');
+      expect(mailOf({ mail: 'a@x.org' })).toBe('a@x.org');
+      expect(mailOf({ mail: null })).toBeNull();
+      expect(mailOf(null)).toBeNull();
+      expect(mailOf(undefined)).toBeUndefined();
+    });
+
+    it("demotedRole reports only 'local' | 'none'; bare mails and 'global' are never demotions", () => {
+      expect(demotedRole('a@x.org')).toBeUndefined();
+      expect(demotedRole({ mail: 'a@x.org' })).toBeUndefined();
+      expect(
+        demotedRole({
+          mail: 'a@x.org',
+          viewAs: { overrides: { adminRole: 'global' } },
+        }),
+      ).toBeUndefined();
+      expect(
+        demotedRole({
+          mail: 'a@x.org',
+          viewAs: { overrides: { adminRole: 'local' } },
+        }),
+      ).toBe('local');
+      expect(
+        demotedRole({
+          mail: 'a@x.org',
+          viewAs: { overrides: { adminRole: 'none' } },
+        }),
+      ).toBe('none');
+    });
+
+    it('isRealGlobalAdmin ignores view-as (callers pass the bare mail)', () => {
+      mockEnv.AGENT_ACCESS_ADMINS = 'admin@example.com';
+      expect(isRealGlobalAdmin(' Admin@Example.com ')).toBe(true);
+      expect(isRealGlobalAdmin('user@example.com')).toBe(false);
+      expect(isRealGlobalAdmin(null)).toBe(false);
+      expect(isRealGlobalAdmin('')).toBe(false);
     });
   });
 
