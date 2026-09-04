@@ -6,6 +6,7 @@ import {
   IconInfoCircle,
   IconMail,
   IconQuestionMark,
+  IconSparkles,
 } from '@tabler/icons-react';
 import { FC, useEffect, useState } from 'react';
 
@@ -14,6 +15,7 @@ import Link from 'next/link';
 
 import { useOrganizationSupport } from '@/client/hooks/settings/useOrganizationSupport';
 
+import { ReleaseNotesModal } from '@/components/App/ReleaseNotesModal';
 import { OrganizationSelector } from '@/components/Support/OrganizationSelector';
 
 export const HelpSupportSection: FC = () => {
@@ -21,6 +23,7 @@ export const HelpSupportSection: FC = () => {
   const locale = useLocale();
   const { contactConfig } = useOrganizationSupport();
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [showReleaseNotes, setShowReleaseNotes] = useState(false);
   const [topFaqs, setTopFaqs] = useState<
     Array<{ question: string; answer: string }>
   >([]);
@@ -155,6 +158,31 @@ export const HelpSupportSection: FC = () => {
               </div>
             </div>
           )}
+
+          {/* Release Notes Card — the same panel the update banner links to,
+              reachable on phones where the banner has no room for it. */}
+          <button
+            type="button"
+            onClick={() => setShowReleaseNotes(true)}
+            className="group border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-500 dark:hover:border-blue-400 transition-all hover:shadow-md text-left"
+          >
+            <div className="flex items-start gap-3">
+              <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded-lg group-hover:bg-amber-200 dark:group-hover:bg-amber-900/50 transition-colors">
+                <IconSparkles
+                  size={20}
+                  className="text-amber-600 dark:text-amber-400"
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
+                  {t('releaseNotes.settingsTitle')}
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  {t('releaseNotes.settingsDescription')}
+                </p>
+              </div>
+            </div>
+          </button>
         </div>
 
         {/* Organization Selector */}
@@ -215,6 +243,11 @@ export const HelpSupportSection: FC = () => {
           </Link>
         </div>
       </div>
+
+      <ReleaseNotesModal
+        isOpen={showReleaseNotes}
+        onClose={() => setShowReleaseNotes(false)}
+      />
     </div>
   );
 };
