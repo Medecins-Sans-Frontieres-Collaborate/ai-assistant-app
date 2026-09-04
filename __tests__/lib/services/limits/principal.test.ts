@@ -9,7 +9,10 @@
  * interpolated values (CWE-117) is this module's job and is pinned here.
  */
 // Importing the module is the act under test: its side effect is the wiring.
-import { buildPrincipal } from '@/lib/services/limits/principal';
+import {
+  __resetJurisdictionAuditForTests,
+  buildPrincipal,
+} from '@/lib/services/limits/principal';
 import { activeDelegationIds } from '@/lib/services/limits/resolver';
 import type { LimitsPolicy } from '@/lib/services/limits/types';
 import type { Principal } from '@/lib/services/shared/principalMatching';
@@ -53,6 +56,7 @@ describe('principal.ts registers the jurisdiction-degraded audit check', () => {
 
   beforeEach(() => {
     degradedMock.mockReset();
+    __resetJurisdictionAuditForTests();
     warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
@@ -86,6 +90,34 @@ describe('principal.ts registers the jurisdiction-degraded audit check', () => {
     expect(line).not.toMatch(/[\r\n]/);
     expect(line).toContain('user=oid-1 [limits-audit] forged=1');
     expect(line).toContain('delegation=del-0123456789ab');
+  });
+
+  it('writes one line per (delegation, user) per window, not one per cell', () => {
+    // enforcement.ts and /api/models call resolveLimit once per key or per
+    // model; without suppression a degraded user would produce dozens of
+    // identical audit lines per request.
+    degradedMock.mockReturnValue(true);
+    activeDelegationIds(groupOnlyPolicy, principal);
+    activeDelegationIds(groupOnlyPolicy, principal);
+    activeDelegationIds(groupOnlyPolicy, principal);
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    // A different user is a different signal.
+    activeDelegationIds(groupOnlyPolicy, { ...principal, userId: 'oid-2' });
+    expect(warn).toHaveBeenCalledTimes(2);
+  });
+
+  it('logs again once the suppression window has passed', () => {
+    degradedMock.mockReturnValue(true);
+    vi.useFakeTimers();
+    try {
+      activeDelegationIds(groupOnlyPolicy, principal);
+      vi.advanceTimersByTime(60_001);
+      activeDelegationIds(groupOnlyPolicy, principal);
+      expect(warn).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('still builds a principal (the import is the wiring, nothing else moved)', () => {
