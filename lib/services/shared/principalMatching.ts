@@ -99,8 +99,8 @@ export function matchesPrincipal(
     case 'attribute':
       return intersectsTargets(targets, principal.attributes);
     case 'group':
-      // Always false today: groupIds is always []. Kept explicit rather than
-      // `return false` so this activates the day membership lands.
+      // `groupIds` comes from the membership cache (module header); a cold
+      // or failed cache yields [] and grants nothing for this request.
       return intersectsTargets(targets, principal.groupIds);
   }
 }
