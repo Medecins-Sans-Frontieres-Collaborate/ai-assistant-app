@@ -279,6 +279,9 @@ const serverEnvSchema = z.object({
   // Build Information
   GITHUB_SHA: z.string().optional(),
   BUILD_ID: z.string().optional(),
+  // Public repo the "what's new" panel reads releases from (`owner/name`);
+  // defaults to the MSF repository, overridable by forks.
+  GITHUB_RELEASES_REPO: z.string().optional(),
   NEXT_PUBLIC_EMAIL: z.string().email().optional(),
 
   // System Prompt Configuration
