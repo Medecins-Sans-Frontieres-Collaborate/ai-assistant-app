@@ -6,7 +6,7 @@ import {
   IconLoader2,
   IconVideo,
 } from '@tabler/icons-react';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useLocale, useTranslations } from 'next-intl';
@@ -18,10 +18,13 @@ import {
   fetchMeetingTranscript,
   importMeetingRecording,
   listMeetings,
+  listMeetingsWithArtifacts,
   resolveMeeting,
 } from '@/client/services/m365/m365Client';
 
 import type {
+  M365MeetingArtifact,
+  M365MeetingCandidate,
   M365MeetingEntry,
   M365MeetingResources,
   M365MeetingTranscript,
@@ -48,6 +51,25 @@ function errorMessageKey(error: unknown): string {
   return 'errors.generic';
 }
 
+/** A cancelled fetch is the caller's own doing — never user-facing copy. */
+function isAbort(error: unknown): boolean {
+  return error instanceof DOMException && error.name === 'AbortError';
+}
+
+/**
+ * The meeting scopes can be unconsented while the calendar ones are not, in
+ * which case only the filtered listing fails. Falling back to the plain
+ * listing beats a dead error screen.
+ */
+function filterUnavailable(error: unknown): boolean {
+  return (
+    error instanceof M365ClientError &&
+    (error.code === 'M365_CONSENT_MISSING' || error.code === 'M365_FORBIDDEN')
+  );
+}
+
+type ResourceState = M365MeetingResources | 'loading' | 'forbidden' | 'error';
+
 /**
  * "From a meeting": recent Teams meetings from the user's calendar, each
  * expandable to its transcript/recording availability. Transcript imports
@@ -55,6 +77,13 @@ function errorMessageKey(error: unknown): string {
  * storage server-side and hand it to the standard transcription pipeline
  * (tier 2). Delegated throughout — only meetings the user organized or
  * attended resolve.
+ *
+ * Two listing modes. The default asks the server to probe availability and
+ * returns only meetings with something attachable, resources already
+ * resolved — so expanding a row costs nothing and every row is actionable.
+ * "Show all meetings" falls back to the plain calendar listing with the
+ * original lazy per-meeting resolve, which is the escape hatch whenever the
+ * probe could not reach a verdict (denied, throttled, out of budget).
  */
 const M365MeetingImportBody: FC<{
   onClose: () => void;
@@ -64,45 +93,120 @@ const M365MeetingImportBody: FC<{
   const locale = useLocale();
   const { attachImportedUpload } = useM365Attachment();
 
-  const [meetings, setMeetings] = useState<M365MeetingEntry[]>([]);
+  const [mode, setMode] = useState<'filtered' | 'all'>('filtered');
+  const [meetings, setMeetings] = useState<M365MeetingCandidate[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorKey, setErrorKey] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [resources, setResources] = useState<
-    Record<string, M365MeetingResources | 'loading' | 'forbidden' | 'error'>
-  >({});
+  const [resources, setResources] = useState<Record<string, ResourceState>>({});
   const [importing, setImporting] = useState<string | null>(null);
+  const [hiddenCount, setHiddenCount] = useState(0);
+  const [unprobedCount, setUnprobedCount] = useState(0);
+  const [throttled, setThrottled] = useState(false);
+  const [windowTruncated, setWindowTruncated] = useState(false);
+  const [filterFailed, setFilterFailed] = useState(false);
+  const mounted = useRef(true);
+  /**
+   * Bumped on every mode switch. A lazy resolve started in one mode must
+   * not write its answer into the other mode's cache — the two disagree
+   * (the filtered listing seeds server-probed verdicts) and the resolve
+   * has no AbortController of its own.
+   */
+  const generation = useRef(0);
 
   useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
     let cancelled = false;
     setLoading(true);
     setErrorKey(null);
-    listMeetings()
-      .then((found) => {
-        if (!cancelled) setMeetings(found);
-      })
+
+    const load = async () => {
+      if (mode === 'all') {
+        const found = await listMeetings({ signal: controller.signal });
+        if (cancelled) return;
+        setMeetings(
+          found.map((meeting) => ({
+            ...meeting,
+            availability: 'unprobed' as const,
+          })),
+        );
+        setHiddenCount(0);
+        setUnprobedCount(0);
+        setThrottled(false);
+        setWindowTruncated(false);
+        return;
+      }
+
+      const page = await listMeetingsWithArtifacts({
+        signal: controller.signal,
+      });
+      if (cancelled) return;
+      // Consent can be granted, or a transient 403 clear, between attempts:
+      // a successful filtered load must retire the fallback notice.
+      setFilterFailed(false);
+      setMeetings(page.meetings ?? []);
+      setHiddenCount(page.hiddenCount ?? 0);
+      setUnprobedCount(page.unprobedCount ?? 0);
+      setThrottled(!!page.throttled);
+      setWindowTruncated(!!page.windowTruncated);
+      // The server already resolved what it could: seed the expand cache so
+      // opening a row is instant and issues no second round trip.
+      setResources((prev) => {
+        const seeded = { ...prev };
+        for (const meeting of page.meetings ?? []) {
+          if (meeting.resources) {
+            seeded[meeting.eventId] = meeting.resources;
+          } else if (meeting.availability === 'forbidden') {
+            seeded[meeting.eventId] = 'forbidden';
+          }
+        }
+        return seeded;
+      });
+    };
+
+    load()
       .catch((error) => {
-        if (!cancelled) setErrorKey(errorMessageKey(error));
+        if (cancelled || isAbort(error)) return;
+        if (mode === 'filtered' && filterUnavailable(error)) {
+          setFilterFailed(true);
+          setMode('all');
+          return;
+        }
+        setErrorKey(errorMessageKey(error));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
+
     return () => {
       cancelled = true;
+      controller.abort();
     };
-  }, []);
+  }, [mode]);
 
   const toggleExpand = useCallback(
     (meeting: M365MeetingEntry) => {
       const next = expandedId === meeting.eventId ? null : meeting.eventId;
       setExpandedId(next);
       if (next && !resources[meeting.eventId]) {
+        const startedIn = generation.current;
+        const stale = () =>
+          !mounted.current || generation.current !== startedIn;
         setResources((prev) => ({ ...prev, [meeting.eventId]: 'loading' }));
         resolveMeeting(meeting.joinWebUrl)
           .then((resolved) => {
+            if (stale()) return;
             setResources((prev) => ({ ...prev, [meeting.eventId]: resolved }));
           })
           .catch((error) => {
+            if (stale()) return;
             const forbidden =
               error instanceof M365ClientError &&
               error.code === 'M365_FORBIDDEN';
@@ -193,12 +297,84 @@ const M365MeetingImportBody: FC<{
     [locale],
   );
 
+  /** Labels an artifact by its own date — a deduped series carries many. */
+  const artifactLabel = useCallback(
+    (artifact: M365MeetingArtifact, kind: 'transcript' | 'recording') => {
+      const when = formatWhen(artifact.created);
+      if (!when) {
+        return kind === 'transcript'
+          ? t('importTranscript')
+          : t('importRecording');
+      }
+      return kind === 'transcript'
+        ? t('importTranscriptFrom', { when })
+        : t('importRecordingFrom', { when });
+    },
+    [formatWhen, t],
+  );
+
+  const filtered = mode === 'filtered';
+  const toggleMode = useCallback(() => {
+    generation.current += 1;
+    setExpandedId(null);
+    // The two modes disagree about what a row's resources are: filtered
+    // seeds the server's probe verdict (including 'forbidden', which is a
+    // sentinel the lazy path would otherwise never be asked to revisit).
+    // Carrying that over would make "Show all" no escape hatch at all.
+    setResources({});
+    setMode((current) => (current === 'filtered' ? 'all' : 'filtered'));
+  }, []);
+
+  const renderBadges = (meeting: M365MeetingCandidate) => {
+    if (!filtered) return null;
+    const badge = (label: string, tone: 'ok' | 'warn' | 'muted') => (
+      <span
+        key={label}
+        className={`rounded px-1.5 py-0.5 text-[11px] font-medium ${
+          tone === 'ok'
+            ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'
+            : tone === 'warn'
+              ? 'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'
+              : 'bg-gray-100 text-gray-600 dark:bg-neutral-700 dark:text-gray-300'
+        }`}
+      >
+        {label}
+      </span>
+    );
+    if (meeting.availability === 'forbidden') {
+      return badge(t('badgeNoAccess'), 'warn');
+    }
+    if (meeting.availability === 'pending') {
+      return badge(t('badgePending'), 'muted');
+    }
+    const transcripts = meeting.resources?.transcripts.length ?? 0;
+    const recordings = meeting.resources?.recordings.length ?? 0;
+    return (
+      <>
+        {transcripts > 0 &&
+          badge(
+            transcripts > 1
+              ? t('badgeTranscripts', { count: transcripts })
+              : t('badgeTranscript'),
+            'ok',
+          )}
+        {recordings > 0 &&
+          badge(
+            recordings > 1
+              ? t('badgeRecordings', { count: recordings })
+              : t('badgeRecording'),
+            'ok',
+          )}
+      </>
+    );
+  };
+
   return (
     <div className="flex h-[420px] flex-col gap-3">
       <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-neutral-200 dark:border-neutral-700">
         {loading ? (
           <div className="flex h-full items-center justify-center text-sm text-gray-500 dark:text-gray-400">
-            {t('loading')}
+            {filtered ? t('loadingFiltered') : t('loading')}
           </div>
         ) : errorKey ? (
           <div className="flex h-full items-center justify-center px-6 text-center text-sm text-amber-700 dark:text-amber-400">
@@ -206,7 +382,7 @@ const M365MeetingImportBody: FC<{
           </div>
         ) : meetings.length === 0 ? (
           <div className="flex h-full items-center justify-center px-6 text-center text-sm text-gray-500 dark:text-gray-400">
-            {t('empty')}
+            {filtered ? t('emptyFiltered') : t('empty')}
           </div>
         ) : (
           <ul className="divide-y divide-neutral-100 dark:divide-neutral-700/50">
@@ -220,6 +396,7 @@ const M365MeetingImportBody: FC<{
                       type="button"
                       onClick={() => toggleExpand(meeting)}
                       aria-expanded={expanded}
+                      aria-controls={`m365-meeting-${meeting.eventId}`}
                       className="flex min-w-0 flex-1 items-center gap-2 text-left"
                     >
                       {expanded ? (
@@ -242,15 +419,27 @@ const M365MeetingImportBody: FC<{
                           {meeting.subject}
                         </span>
                         <span className="block truncate text-xs text-gray-500 dark:text-gray-400">
-                          {[meeting.organizer, formatWhen(meeting.start)]
+                          {[
+                            meeting.organizer,
+                            formatWhen(meeting.start),
+                            meeting.occurrences && meeting.occurrences > 1
+                              ? t('occurrences', { count: meeting.occurrences })
+                              : null,
+                          ]
                             .filter(Boolean)
                             .join(' · ')}
                         </span>
                       </span>
+                      <span className="flex flex-shrink-0 items-center gap-1">
+                        {renderBadges(meeting)}
+                      </span>
                     </button>
                   </div>
                   {expanded && (
-                    <div className="pb-2 pl-12 pr-3 text-sm">
+                    <div
+                      id={`m365-meeting-${meeting.eventId}`}
+                      className="pb-2 pl-12 pr-3 text-sm"
+                    >
                       {resource === 'loading' || resource === undefined ? (
                         <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                           <IconLoader2 size={14} className="animate-spin" />
@@ -271,7 +460,9 @@ const M365MeetingImportBody: FC<{
                           {resource.transcripts.length === 0 &&
                             resource.recordings.length === 0 && (
                               <p className="text-xs text-gray-500 dark:text-gray-400">
-                                {t('nothingAvailable')}
+                                {meeting.availability === 'pending'
+                                  ? t('pendingHint')
+                                  : t('nothingAvailable')}
                               </p>
                             )}
                           {resource.transcripts.map((artifact) => (
@@ -296,7 +487,7 @@ const M365MeetingImportBody: FC<{
                               ) : (
                                 <IconFileText size={14} />
                               )}
-                              {t('importTranscript')}
+                              {artifactLabel(artifact, 'transcript')}
                             </button>
                           ))}
                           {resource.recordings.map((artifact) => (
@@ -322,7 +513,7 @@ const M365MeetingImportBody: FC<{
                               ) : (
                                 <IconVideo size={14} />
                               )}
-                              {t('importRecording')}
+                              {artifactLabel(artifact, 'recording')}
                             </button>
                           ))}
                         </div>
@@ -335,9 +526,44 @@ const M365MeetingImportBody: FC<{
           </ul>
         )}
       </div>
-      <p className="text-xs text-gray-500 dark:text-gray-500">
-        {t('delegatedNote')}
-      </p>
+      <div className="flex flex-col gap-1">
+        {!loading && (
+          <button
+            type="button"
+            onClick={toggleMode}
+            className="w-fit text-xs font-medium text-indigo-600 hover:underline dark:text-indigo-400"
+          >
+            {filtered
+              ? hiddenCount > 0
+                ? t('showAllWithCount', { count: hiddenCount })
+                : t('showAll')
+              : t('showFiltered')}
+          </button>
+        )}
+        {filterFailed && (
+          <p className="text-xs text-amber-700 dark:text-amber-400">
+            {t('filterUnavailable')}
+          </p>
+        )}
+        {filtered && unprobedCount > 0 && (
+          <p className="text-xs text-gray-500 dark:text-gray-500">
+            {t('someUnchecked', { count: unprobedCount })}
+          </p>
+        )}
+        {filtered && throttled && (
+          <p className="text-xs text-amber-700 dark:text-amber-400">
+            {t('throttledNote')}
+          </p>
+        )}
+        {filtered && windowTruncated && (
+          <p className="text-xs text-gray-500 dark:text-gray-500">
+            {t('windowTruncated')}
+          </p>
+        )}
+        <p className="text-xs text-gray-500 dark:text-gray-500">
+          {filtered ? t('filteringNote') : t('delegatedNote')}
+        </p>
+      </div>
     </div>
   );
 };
