@@ -14,14 +14,37 @@
  */
 import { Session } from 'next-auth';
 
-import { getCachedGroupIdsForUser } from '@/lib/services/m365/groupMembership';
+import { setJurisdictionUnevaluableHook } from '@/lib/services/limits/resolver';
+import {
+  getCachedGroupIdsForUser,
+  isGroupMembershipDegradedForUser,
+} from '@/lib/services/m365/groupMembership';
 import {
   Principal,
   domainOfMail,
   normalizeMail,
 } from '@/lib/services/shared/principalMatching';
 
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+
 export type { Principal };
+
+// Server-side wiring for the resolver's §8 audit line (docs/
+// LIMITS_SCOPED_ADMINS_DESIGN.md): a group-anchored jurisdiction that fails
+// only because the principal's groups are empty AND membership is marked
+// degraded logs `[limits-audit] jurisdiction-unevaluable`. The resolver is
+// pure and client-importable, so it can neither import groupMembership.ts nor
+// the log sanitizer; it reports the structural fact and this hook decides.
+// This module is the server-only seam every limits route already passes
+// through to build a Principal, which makes it the natural registration point.
+// Both interpolated values are sanitized (CWE-117): the delegation id is
+// schema-validated but the oid comes off the session.
+setJurisdictionUnevaluableHook(({ delegationId, userId }) => {
+  if (!isGroupMembershipDegradedForUser(userId)) return;
+  console.warn(
+    `[limits-audit] jurisdiction-unevaluable delegation=${sanitizeForLog(delegationId)} user=${sanitizeForLog(userId)} reason=group-membership-degraded`,
+  );
+});
 
 /** Attribute target prefixes, also used by the admin UI to build pickers. */
 export const ATTRIBUTE_PREFIXES = {
