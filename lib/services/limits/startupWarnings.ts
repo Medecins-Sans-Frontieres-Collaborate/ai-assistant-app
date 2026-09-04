@@ -16,11 +16,19 @@
  * These WARN rather than fail startup: a deployment with no policy authored
  * yet is a perfectly normal state.
  */
+import { GlobalAdminRosterService } from '@/lib/services/admin/GlobalAdminRosterService';
 import { parseGlobalAdminEmails } from '@/lib/services/agentAccess/adminAuth';
 import { LimitsService } from '@/lib/services/limits/LimitsService';
 
 export interface LimitsStartupState {
+  /**
+   * Env roster (AGENT_ACCESS_ADMINS) + config roster
+   * (system/admin/global-admins.json). An unreadable config roster counts 0
+   * here and sets `globalRosterUnreadable` so the wording hedges.
+   */
   globalAdminCount: number;
+  /** True when the config global-admin roster could not be read at boot. */
+  globalRosterUnreadable?: boolean;
   /** True when a policy document exists in storage. */
   policyExists: boolean;
   /** null when the policy blob could not be read. */
@@ -37,11 +45,23 @@ export function buildLimitsStartupWarnings(
   const warnings: string[] = [];
 
   if (state.policyExists && state.globalAdminCount === 0) {
-    warnings.push(
-      'A usage-limits policy is stored but AGENT_ACCESS_ADMINS is empty: the ' +
-        'policy still applies, but nobody can author or change it. Set ' +
-        'AGENT_ACCESS_ADMINS to bootstrap an administrator.',
-    );
+    if (state.globalRosterUnreadable) {
+      warnings.push(
+        'A usage-limits policy is stored, AGENT_ACCESS_ADMINS is empty, and ' +
+          'the global-admin roster (system/admin/global-admins.json) could not ' +
+          'be read. If it is also empty, nobody can author or change the ' +
+          'policy; existing delegations keep working with nobody able to ' +
+          'change them.',
+      );
+    } else {
+      warnings.push(
+        'A usage-limits policy is stored but there are no global admins ' +
+          '(AGENT_ACCESS_ADMINS is empty and the global-admin roster has no ' +
+          'entries): the policy still applies and existing delegations keep ' +
+          'working, but nobody can author or change them. Set ' +
+          'AGENT_ACCESS_ADMINS to bootstrap an administrator.',
+      );
+    }
   }
 
   if (state.configuredLimitCount === null) {
@@ -92,8 +112,23 @@ export async function logLimitsStartupWarnings(): Promise<void> {
     // Leave everything null: the "could not be read" warning covers it.
   }
 
+  // Global admins = env ∪ config roster; the roster service never throws and
+  // reports a failed read through `rosterUnavailable`.
+  let configAdminCount: number | null = null;
+  try {
+    const roster = GlobalAdminRosterService.getInstance();
+    await roster.ensureFresh();
+    const snapshot = roster.getSnapshot();
+    configAdminCount = snapshot.rosterUnavailable
+      ? null
+      : (snapshot.roster?.admins.length ?? 0);
+  } catch {
+    configAdminCount = null;
+  }
+
   const warnings = buildLimitsStartupWarnings({
-    globalAdminCount: parseGlobalAdminEmails().length,
+    globalAdminCount: parseGlobalAdminEmails().length + (configAdminCount ?? 0),
+    globalRosterUnreadable: configAdminCount === null,
     policyExists,
     mode,
     failMode,
