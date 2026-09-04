@@ -232,26 +232,37 @@ function pickGlobalEntry(
 // Jurisdictions
 // ---------------------------------------------------------------------------
 
-type JurisdictionDegradedCheck = (userId: string) => boolean;
+/**
+ * A group-anchored jurisdiction that did NOT match a principal whose group
+ * list is empty. The resolver cannot tell "not a member" from "membership
+ * never loaded" — only the server's group cache knows — so it reports the
+ * structural fact and lets the registered hook decide whether to audit it.
+ */
+export interface JurisdictionUnevaluableEvent {
+  delegationId: string;
+  userId: string;
+}
 
-let jurisdictionDegradedCheck: JurisdictionDegradedCheck | undefined;
+export type JurisdictionUnevaluableHook = (
+  event: JurisdictionUnevaluableEvent,
+) => void;
+
+let jurisdictionUnevaluableHook: JurisdictionUnevaluableHook | undefined;
 
 /**
  * Server wiring for the §8 audit line. The resolver must stay pure and
- * client-importable, and lib/services/m365/groupMembership.ts drags Node
- * dependencies in, so the server registers
- * `isGroupMembershipDegradedForUser` here instead of the resolver importing
- * it. Unset (the default) → the check is skipped; nothing else changes.
+ * client-importable — no Node imports, no logging of its own — while both
+ * the degraded-membership check (lib/services/m365/groupMembership.ts) and
+ * the log sanitizer (lib/utils/server/log) are server modules. So the server
+ * registers a hook here (lib/services/limits/principal.ts) that consults the
+ * cache and writes the `[limits-audit] jurisdiction-unevaluable` line through
+ * `sanitizeForLog`. Unset (the default) → nothing is reported; resolution is
+ * unchanged either way.
  */
-export function setJurisdictionDegradedCheck(
-  check: JurisdictionDegradedCheck | undefined,
+export function setJurisdictionUnevaluableHook(
+  hook: JurisdictionUnevaluableHook | undefined,
 ): void {
-  jurisdictionDegradedCheck = check;
-}
-
-/** Strips anything that could forge a log line; ids and oids are short ASCII. */
-function logToken(value: string): string {
-  return value.replace(/[^\x21-\x7e]/g, '_').slice(0, 128);
+  jurisdictionUnevaluableHook = hook;
 }
 
 /**
@@ -275,9 +286,10 @@ export function withinJurisdiction(
  *
  * Group-anchored jurisdictions read `principal.groupIds`, which is [] when
  * the membership cache is cold or degraded (design §8): such a delegation
- * then silently does not apply. When that is the ONLY reason it failed and
- * the server has marked membership degraded for this user, an audit line is
- * emitted so the asymmetry (a scoped cap that LOWERS fails open) is visible.
+ * then silently does not apply. When that is the ONLY way it could have
+ * failed (the jurisdiction has a group predicate and the principal has no
+ * groups at all), the registered hook is told once per delegation per pass so
+ * the server can audit the asymmetry (a scoped cap that LOWERS fails open).
  */
 export function activeDelegationIds(
   policy: LimitsPolicy | null,
@@ -292,13 +304,14 @@ export function activeDelegationIds(
       continue;
     }
     if (
+      jurisdictionUnevaluableHook &&
       principal.groupIds.length === 0 &&
-      delegation.jurisdiction.some((p) => p.scope === 'group') &&
-      jurisdictionDegradedCheck?.(principal.userId) === true
+      delegation.jurisdiction.some((p) => p.scope === 'group')
     ) {
-      console.warn(
-        `[limits-audit] jurisdiction-unevaluable delegation=${logToken(delegation.id)} user=${logToken(principal.userId)} reason=group-membership-degraded`,
-      );
+      jurisdictionUnevaluableHook({
+        delegationId: delegation.id,
+        userId: principal.userId,
+      });
     }
   }
   return active;
@@ -469,6 +482,25 @@ export function resolveAllLimits(
     );
   }
   return out;
+}
+
+/**
+ * The counter cell a resolved limit debits — and the key the admin preview
+ * reads usage back under. Per-model limits are counted separately per model
+ * id and per series (`model:gpt-5.2.requests`, `family:gpt.requests`) so a
+ * family cap can act as an envelope over its members; everything else uses
+ * the bare limit key. ONE definition, shared by the debit path
+ * (Middleware.ts) and the usage preview (EffectiveLimitsPreview.tsx): the two
+ * previously spelled the key differently and every per-model row read back
+ * as "no usage".
+ */
+export function counterCellName(
+  cell: Pick<ResolvedLimit, 'limitKey' | 'modelId' | 'series'>,
+): string {
+  const suffix = cell.limitKey.split('.').pop();
+  if (cell.modelId) return `model:${cell.modelId.toLowerCase()}.${suffix}`;
+  if (cell.series) return `family:${cell.series.toLowerCase()}.${suffix}`;
+  return cell.limitKey;
 }
 
 /**
