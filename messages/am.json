@@ -840,7 +840,8 @@
     "repeatedFailureNotice": "ይህ በተደጋጋሚ እየተሳካ አይገኝም — ውይይቱ ሊበላሽ ይችላል። አዲስ ውይይት መጀመር ብዙውን ጊዜ ይፈጽማል።",
     "startNewConversation": "አዲስ ውይይት ጀምር",
     "downloadDebugInfo": "የ ዲበግ መረጃ አውርድ",
-    "includeMessageText": "የመልእክቱን ጽሑፍ አካትት"
+    "includeMessageText": "የመልእክቱን ጽሑፍ አካትት",
+    "ttsEquationPlaceholder": "ትክክለኛ ትንታኔ"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -4919,7 +4920,27 @@
         "notConnected": "የMicrosoft 365 ክፍልዎ አይገኝም። ውጣት እና እንደገና ይግቡ።",
         "network": "የኔትዎርክ ችግር — እባክዎን ድጋሚ ይሞክሩ።",
         "generic": "ችግር ተፈጥሯል — እባክዎን ድጋሚ ይሞክሩ።"
-      }
+      },
+      "filteringNote": "የትርጉም ወይም የቅጂ መዝገብ ያለባቸውን ስብሰባዎች ብቻ እየታየ ነው።",
+      "loadingFiltered": "በቅርቡ ተደርጓል የተባሉትን ስብሰባዎች የትርጉም እና መዝገብ በመፈተሽ ላይ...",
+      "emptyFiltered": "ባለፉት 14 ቀናት ውስጥ የሚደርሱበት የትርጉም ወይም መዝገብ ያላቸው ስብሰባዎች የሉም",
+      "showAll": "ሁሉንም ስብሰባዎች አሳይ",
+      "filterUnavailable": "ለማይገኙ ይዟል ስብሰባዎች መዝገብ መፈተሽ አልተቻለም — ሁሉንም ስብሰባዎች እየታየ ነው።",
+      "showAllWithCount": "ሁሉንም ስብሰባዎች አሳይ ({{count}} ተደብቆ ነው)",
+      "showFiltered": "የትርጉም ወይም መዝገብ ያላቸውን ስብሰባዎች ብቻ አሳይ",
+      "badgeTranscript": "ትርጉም",
+      "badgeTranscripts": "{{count}} ትርጉሞች",
+      "badgeRecording": "መዝገብ",
+      "badgeRecordings": "{{count}} መዝገቦች",
+      "badgeNoAccess": "መድረሻ የለም",
+      "badgePending": "በቅድሚያ ላይ ሊሆን ይችላል",
+      "pendingHint": "ይህ ስብሰባ በቅርቡ ተዛረበ — በTeams ትርጉሙን ለማቅረብ ጥቂት ደቂቃዎች ይወስዳል።",
+      "someUnchecked": "{count, plural, one {አንድ ስብሰባ በጊዜው መፈተሽ አልተቻለም — ለመድረስ ሁሉንም ስብሰባዎች አሳይ።} other {# ስብሰባዎች በጊዜው መፈተሽ አልተቻለም — ለመድረስ ሁሉንም ስብሰባዎች አሳይ።}}",
+      "throttledNote": "Microsoft 365 ጥያቄዎችን እያገደበ ነው፣ ስለዚህ አንዳንድ ስብሰባዎች አልተፈተሸም።",
+      "windowTruncated": "የእርስዎ የቀን መቁጠሪያ በጅምላ ስተዋት ነበር፣ ስለዚህ ባለፉት 14 ቀናት ያሉ አሮጌ ስብሰባዎች አልተፈተሹም።",
+      "occurrences": "{{count}} ጊዜያት",
+      "importTranscriptFrom": "ትርጉም አስመጣ ({{when}})",
+      "importRecordingFrom": "መዝገብ አስመጣ ({{when}})"
     },
     "todo": {
       "title": "የMicrosoft To Do ስራዎችን ይፍጠሩ",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "ይህ {source} ኤክስፖርት የሚነበብ መልእክት ያለው ውይይት አይዟትም።",
     "noMatches": "የሚዛመዱ ውይይቶች አልተገኙም",
     "listLabel": "ሊመጡ የሚችሉ ውይይቶች"
+  },
+  "releaseNotes": {
+    "title": "ምን አዲስ ነው",
+    "whatChanged": "ምን ተቀየረ?",
+    "settingsTitle": "ምን አዲስ ነው",
+    "settingsDescription": "በቅርቡ ለከነባድ የተደረጉትን ለውጦች ይመልከቱ",
+    "loading": "የልብ ማብራሪያዎችን በመጫን ላይ...",
+    "unavailable": "የልብ ማብራሪያዎችን አሁን ማግኘት አልተቻለም። በGitHub ላይ ማንበብ ይችላሉ።",
+    "noDetails": "ለዚህ ልብ ምርት ዝርዝሮች አልተመዘገቡም።",
+    "stale": "እነዚህ ማብራሪያዎች በጥቂት ጊዜ በፊት ተቀመጡ ሊያዳዱ ይችላሉ።",
+    "englishOnly": "የልብ ማብራሪያዎች በእንግሊዝኛ ተጻፈዋል።",
+    "viewOnGithub": "ሁሉንም ልቦች በGitHub ላይ ይመልከቱ"
   }
 }

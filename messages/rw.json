@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Birakomeje kunanirana—ikiganiro gishobora kuba cyarangiritse. Gutangira ikiganiro gishya akenshi bikemura iki kibazo.",
     "startNewConversation": "Tangiza ikiganiro gishya",
     "downloadDebugInfo": "Kuramo amakuru yifashishwa mu gukosora ibibazo",
-    "includeMessageText": "Shyiramo ubutumwa bwanditse"
+    "includeMessageText": "Shyiramo ubutumwa bwanditse",
+    "ttsEquationPlaceholder": "imibare"
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",
@@ -4903,7 +4904,27 @@
         "notConnected": "Session yawe ya Microsoft 365 nti iboneka. Gerageza gusohoka no kongera kwinjira.",
         "network": "Ikibazo kuri internet — gerageza kongera.",
         "generic": "Hari ikibazo cyabaye — gerageza kongera."
-      }
+      },
+      "filteringNote": "Birerekana gusa inama zifite inyandiko cyangwa amajwi ushobora kubona.",
+      "loadingFiltered": "Turimo kugenzura inama za vuba niba zifite inyandiko cyangwa amajwi…",
+      "emptyFiltered": "Nta nama ziheruka iminsi 14 zifite inyandiko cyangwa amajwi ushobora kubona",
+      "showAll": "Erekana inama zose",
+      "filterUnavailable": "Ntibyashobotse kugenzura ibiri mu nama — birerekana inama zose.",
+      "showAllWithCount": "Erekana inama zose ({count} zihishwe)",
+      "showFiltered": "Erekana gusa inama zifite inyandiko cyangwa amajwi",
+      "badgeTranscript": "Inyandiko",
+      "badgeTranscripts": "{count} inyandiko",
+      "badgeRecording": "Amajwi",
+      "badgeRecordings": "{count} amajwi",
+      "badgeNoAccess": "Nta burenganzira",
+      "badgePending": "Biracyatunganywa",
+      "pendingHint": "Iyi nama yarangiye vuba — Teams ishobora gufata iminota mike kugirango ishyireho inyandiko.",
+      "someUnchecked": "{count, plural, one {Hari inama itashoboye kugenzurwa ku gihe — erekana inama zose uyigereho.} other {Hari inama # zitashoboye kugenzurwa ku gihe — erekana inama zose uzigereho.}}",
+      "throttledNote": "Microsoft 365 iri kugabanya ubusabe, bityo zimwe mu nama ntizashoboye kugenzurwa.",
+      "windowTruncated": "Kalendar yawe yari yuzuye, bityo inama zimaze iminsi 14 ntabwo zose zagenzuwe.",
+      "occurrences": "{count} byabaye",
+      "importTranscriptFrom": "Tuzana inyandiko ({when})",
+      "importRecordingFrom": "Tuzana amajwi ({when})"
     },
     "todo": {
       "title": "Kora imirimo muri Microsoft To Do",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "Aya masohoka ya {source} ntarimo ibiganiro birimo ubutumwa bushobora gusomwa.",
     "noMatches": "Nta biganiro bihuye n'ishyirahamwe ukoresheje",
     "listLabel": "Ibiganiro byo kwinjiza"
+  },
+  "releaseNotes": {
+    "title": "Ibisanzwe bishya",
+    "whatChanged": "Ibyahindutse ni ibihe?",
+    "settingsTitle": "Ibisanzwe bishya",
+    "settingsDescription": "Reba ibyahindutse mu gukosora kwa vuba",
+    "loading": "Turimo gutunganya inyandiko z'ibyasohotse…",
+    "unavailable": "Inyandiko z'ibyasohotse ntizishoboye gupakirwa ubu. Ushobora kuzasoma kuri GitHub aho.",
+    "noDetails": "Nta bisobanuro byanditswe kuri iri soko.",
+    "stale": "Izi nyandiko zasazwe hashize akanya kandi zishobora kutaba ari zo nshya cyane.",
+    "englishOnly": "Inyandiko z'ibyasohotse zanditse mu Cyongereza.",
+    "viewOnGithub": "Reba ibyo gusohora byose kuri GitHub"
   }
 }

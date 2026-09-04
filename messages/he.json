@@ -872,7 +872,8 @@
     "repeatedFailureNotice": "זה נכשל שוב ושוב — ייתכן שהשיחה התושחתה. בדרך כלל התחלת שיחה חדשה פותרת את הבעיה.",
     "startNewConversation": "התחל שיחה חדשה",
     "downloadDebugInfo": "הורד מידע לאיתור תקלות",
-    "includeMessageText": "כלול את תוכן ההודעה"
+    "includeMessageText": "כלול את תוכן ההודעה",
+    "ttsEquationPlaceholder": "משוואה"
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -4919,7 +4920,27 @@
         "notConnected": "החיבור שלך ל־Microsoft 365 אינו זמין. נסה להתנתק ולהתחבר מחדש.",
         "network": "שגיאת רשת — נא נסה שוב.",
         "generic": "משהו השתבש — נא נסה שוב."
-      }
+      },
+      "filteringNote": "מציג רק פגישות עם תמליל או הקלטה שניתן להגיע אליהן.",
+      "loadingFiltered": "בודק את הפגישות האחרונות עבור תמלילים והקלטות…",
+      "emptyFiltered": "לא נמצאו פגישות מה-14 ימים האחרונים עם תמליל או הקלטה שניתן להגיע אליהם",
+      "showAll": "הצג את כל הפגישות",
+      "filterUnavailable": "לא ניתן היה לבדוק את התוכן של הפגישות — מוצגות כל הפגישות במקום.",
+      "showAllWithCount": "הצג את כל הפגישות ({count} מוסתרות)",
+      "showFiltered": "הצג רק פגישות עם תמליל או הקלטה",
+      "badgeTranscript": "תמליל",
+      "badgeTranscripts": "{count} תמלילים",
+      "badgeRecording": "הקלטה",
+      "badgeRecordings": "{count} הקלטות",
+      "badgeNoAccess": "אין גישה",
+      "badgePending": "עדיין בעיבוד",
+      "pendingHint": "הפגישה הסתיימה לאחרונה — Teams עשוי לקחת מספר דקות לפרסם את התמליל.",
+      "someUnchecked": "{count, plural, one {פגישה אחת לא נבדקה בזמן — הצגת כל הפגישות תאפשר גישה אליה.} other {# פגישות לא נבדקו בזמן — הצגת כל הפגישות תאפשר גישה אליהן.}}",
+      "throttledNote": "Microsoft 365 מגביל בקשות, לכן לא ניתן היה לבדוק חלק מהפגישות.",
+      "windowTruncated": "היומן שלך היה עמוס ולכן פגישות ישנות יותר ב-14 הימים האחרונים לא נבדקו.",
+      "occurrences": "{count} מופעים",
+      "importTranscriptFrom": "ייבוא תמליל ({when})",
+      "importRecordingFrom": "ייבוא הקלטה ({when})"
     },
     "todo": {
       "title": "יצירת משימות ב־Microsoft To Do",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "הייצוא של {source} אינו מכיל שיחות עם הודעות קריאות.",
     "noMatches": "לא נמצאו שיחות התואמות למסנן",
     "listLabel": "שיחות לייבוא"
+  },
+  "releaseNotes": {
+    "title": "מה חדש",
+    "whatChanged": "מה השתנה?",
+    "settingsTitle": "מה חדש",
+    "settingsDescription": "צפו בשינויים בעדכונים האחרונים",
+    "loading": "טוען הערות גרסה…",
+    "unavailable": "לא ניתן לטעון את הערות הגרסה כרגע. אפשר לקרוא אותן ב-GitHub.",
+    "noDetails": "לא תועדו פרטים עבור גרסה זו.",
+    "stale": "הערות אלו נשמרו לפני זמן מה ועשויות שלא להיות העדכניות ביותר.",
+    "englishOnly": "הערות הגרסה נכתבות באנגלית.",
+    "viewOnGithub": "צפו בכל הגרסאות ב-GitHub"
   }
 }

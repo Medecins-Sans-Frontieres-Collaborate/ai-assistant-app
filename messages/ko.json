@@ -897,7 +897,8 @@
     "repeatedFailureNotice": "계속 오류가 발생하고 있습니다. 대화가 손상된 것일 수 있습니다. 새 대화를 시작하면 보통 해결됩니다.",
     "startNewConversation": "새 대화 시작",
     "downloadDebugInfo": "디버그 정보 다운로드",
-    "includeMessageText": "메시지 텍스트 포함"
+    "includeMessageText": "메시지 텍스트 포함",
+    "ttsEquationPlaceholder": "수식"
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -4919,7 +4920,27 @@
         "notConnected": "Microsoft 365 세션을 사용할 수 없습니다. 로그아웃 후 다시 로그인해 보세요.",
         "network": "네트워크 오류 — 다시 시도해 주세요.",
         "generic": "문제가 발생했습니다 — 다시 시도해 주세요."
-      }
+      },
+      "filteringNote": "접근 가능한 녹음 또는 기록이 있는 회의만 표시됩니다.",
+      "loadingFiltered": "최근 회의의 기록 및 녹음을 확인하는 중…",
+      "emptyFiltered": "지난 14일간 접근 가능한 기록 또는 녹음이 있는 회의가 없습니다.",
+      "showAll": "모든 회의 보기",
+      "filterUnavailable": "회의 내용을 확인할 수 없어 모든 회의를 표시합니다.",
+      "showAllWithCount": "모든 회의 보기 ({count}개 숨김)",
+      "showFiltered": "기록 또는 녹음이 있는 회의만 보기",
+      "badgeTranscript": "기록",
+      "badgeTranscripts": "{count}개 기록",
+      "badgeRecording": "녹음",
+      "badgeRecordings": "{count}개 녹음",
+      "badgeNoAccess": "접근 불가",
+      "badgePending": "처리 중일 수 있음",
+      "pendingHint": "이 회의는 최근에 종료되어 Teams에서 기록을 게시하는 데 몇 분이 걸릴 수 있습니다.",
+      "someUnchecked": "{count, plural, one {하나의 회의를 제시간에 확인할 수 없었습니다 — 해당 회의를 보려면 모든 회의를 표시하세요.} other {#개의 회의를 제시간에 확인할 수 없었습니다 — 해당 회의들을 보려면 모든 회의를 표시하세요.}}",
+      "throttledNote": "Microsoft 365에서 요청이 제한되어 일부 회의를 확인할 수 없습니다.",
+      "windowTruncated": "지난 14일 동안 일정이 바빠서 예전 회의 일부는 확인되지 않았습니다.",
+      "occurrences": "{count}회 발생",
+      "importTranscriptFrom": "기록 가져오기 ({when})",
+      "importRecordingFrom": "녹음 가져오기 ({when})"
     },
     "todo": {
       "title": "Microsoft To Do 작업 만들기",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "이 {source} 내보내기에는 읽을 수 있는 메시지가 있는 대화가 없습니다.",
     "noMatches": "필터에 맞는 대화가 없습니다",
     "listLabel": "가져올 대화 목록"
+  },
+  "releaseNotes": {
+    "title": "새로운 소식",
+    "whatChanged": "변경된 내용",
+    "settingsTitle": "새로운 소식",
+    "settingsDescription": "최근 업데이트의 변경 사항 보기",
+    "loading": "릴리즈 노트 불러오는 중…",
+    "unavailable": "현재 릴리즈 노트를 불러올 수 없습니다. 대신 GitHub에서 확인하실 수 있습니다.",
+    "noDetails": "이번 릴리즈에 대한 상세 정보가 기록되지 않았습니다.",
+    "stale": "이 노트는 얼마 전에 저장된 것으로, 최신 정보가 아닐 수 있습니다.",
+    "englishOnly": "릴리즈 노트는 영어로 작성되었습니다.",
+    "viewOnGithub": "GitHub에서 모든 릴리즈 보기"
   }
 }

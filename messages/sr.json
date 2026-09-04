@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Nešto stalno ne uspeva — razgovor je možda oštećen. Pokretanje novog razgovora obično rešava ovaj problem.",
     "startNewConversation": "Započni novi razgovor",
     "downloadDebugInfo": "Preuzmi informacije za otklanjanje grešaka",
-    "includeMessageText": "Uključi tekst poruke"
+    "includeMessageText": "Uključi tekst poruke",
+    "ttsEquationPlaceholder": "jednačina"
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -4903,7 +4904,27 @@
         "notConnected": "Vaša Microsoft 365 sesija nije dostupna. Pokušajte da se odjavite i ponovo prijavite.",
         "network": "Greška u mreži — pokušajte ponovo.",
         "generic": "Nešto nije u redu — pokušajte ponovo."
-      }
+      },
+      "filteringNote": "Prikazuju se samo sastanci sa transkriptom ili snimkom kojem imate pristup.",
+      "loadingFiltered": "Proveravanje vaših nedavnih sastanaka za transkripte i snimke…",
+      "emptyFiltered": "Nijedan sastanak u poslednjih 14 dana nema transkript ili snimak kojem imate pristup",
+      "showAll": "Prikaži sve sastanke",
+      "filterUnavailable": "Nije bilo moguće proveriti sadržaj sastanaka — prikazuju se svi sastanci.",
+      "showAllWithCount": "Prikaži sve sastanke ({count} skriveno)",
+      "showFiltered": "Prikaži samo sastanke sa transkriptom ili snimkom",
+      "badgeTranscript": "Transkript",
+      "badgeTranscripts": "{count} transkripta",
+      "badgeRecording": "Snimak",
+      "badgeRecordings": "{count} snimaka",
+      "badgeNoAccess": "Nema pristupa",
+      "badgePending": "Možda se još uvek obrađuje",
+      "pendingHint": "Ovaj sastanak je nedavno završen — Teams-u može biti potrebno nekoliko minuta da objavi transkript.",
+      "someUnchecked": "{count, plural, one {Jedan sastanak nije mogao biti proveren na vreme — prikažite sve sastanke da biste ga videli.} other {# sastanaka nije moglo biti provereno na vreme — prikažite sve sastanke da biste ih videli.}}",
+      "throttledNote": "Microsoft 365 ograničava zahteve, tako da neki sastanci nisu mogli biti provereni.",
+      "windowTruncated": "Vaš kalendar je dovoljno zauzet da stariji sastanci u poslednjih 14 dana nisu provereni.",
+      "occurrences": "{count} ponavljanja",
+      "importTranscriptFrom": "Uvezi transkript ({when})",
+      "importRecordingFrom": "Uvezi snimak ({when})"
     },
     "todo": {
       "title": "Kreirajte Microsoft To Do zadatke",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "Ovaj {source} izvoz ne sadrži razgovore sa čitljivim porukama.",
     "noMatches": "Nema razgovora koji odgovaraju filteru",
     "listLabel": "Razgovori za uvoz"
+  },
+  "releaseNotes": {
+    "title": "Šta je novo",
+    "whatChanged": "Šta se promenilo?",
+    "settingsTitle": "Šta je novo",
+    "settingsDescription": "Pogledajte šta se promenilo u poslednjim ažuriranjima",
+    "loading": "Učitavanje napomena o izdanju…",
+    "unavailable": "Napomene o izdanju trenutno nije moguće učitati. Možete ih pročitati na GitHub-u.",
+    "noDetails": "Za ovo izdanje nisu zabeleženi detalji.",
+    "stale": "Ove napomene su sačuvane pre izvesnog vremena i možda nisu najnovije.",
+    "englishOnly": "Napomene o izdanju su napisane na engleskom jeziku.",
+    "viewOnGithub": "Prikaži sva izdanja na GitHub-u"
   }
 }

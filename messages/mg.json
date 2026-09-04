@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Miverimberina tsy mahomby ity — mety ho simba ny resaka. Matetika dia afaka manamboatra izany amin'ny fanombohana resaka vaovao.",
     "startNewConversation": "Atombohy resaka vaovao",
     "downloadDebugInfo": "Sintomy ny vaovao fanamboarana",
-    "includeMessageText": "Ampidiro ny lahatsoratra hafatra"
+    "includeMessageText": "Ampidiro ny lahatsoratra hafatra",
+    "ttsEquationPlaceholder": "formula"
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -4903,7 +4904,27 @@
         "notConnected": "Tsy azo idirana ny fivoriana Microsoft 365 anao. Miezaha mivoaka sy miditra indray.",
         "network": "Nisy olana amin’ny tambajotra — azafady andramo indray.",
         "generic": "Nisy olana — azafady andramo indray."
-      }
+      },
+      "filteringNote": "Mampiseho fivoriana ahitana transcript na firaketana azonao idirana fotsiny.",
+      "loadingFiltered": "Mitady transcript sy firaketana amin'ny fivoriana farany nataonao…",
+      "emptyFiltered": "Tsy misy transcript na firaketana azonao idirana amin'ireo fivoriana tao anatin'ny 14 andro farany",
+      "showAll": "Asehoy ny fivoriana rehetra",
+      "filterUnavailable": "Tsy nahazoana nijery votoaty ny fivoriana — aseho daholo ny fivoriana rehetra raha izany.",
+      "showAllWithCount": "Asehoy ny fivoriana rehetra ({count} miafina)",
+      "showFiltered": "Asehoy ireo fivoriana misy transcript na firaketana ihany",
+      "badgeTranscript": "Transcript",
+      "badgeTranscripts": "{count} transcript",
+      "badgeRecording": "Firaketana",
+      "badgeRecordings": "{count} firaketana",
+      "badgeNoAccess": "Tsy mahazo miditra",
+      "badgePending": "Mbola andalam-pikarakarana angamba",
+      "pendingHint": "Vao haingana no nifarana ity fivoriana ity — mety handany fotoana kelikely i Teams vao mamoaka ny transcript.",
+      "someUnchecked": "{count, plural, one {Fivoriana iray tsy voamarina ara-potoana — asehoy ny fivoriana rehetra mba hahazoanao miditra.} other {Fivoriana # tsy voamarina ara-potoana — asehoy ny fivoriana rehetra mba hahazoanao miditra.}}",
+      "throttledNote": "Microsoft 365 dia mampiadana ny fangatahana, ka misy fivoriana tsy voamarina.",
+      "windowTruncated": "Nisavoritaka ny tetiandronao ka tsy voamarina ireo fivoriana tranainy nandritra ny 14 andro farany.",
+      "occurrences": "Fahisehoana {count}",
+      "importTranscriptFrom": "Ampidiro ny transcript ({when})",
+      "importRecordingFrom": "Ampidiro ny firaketana ({when})"
     },
     "todo": {
       "title": "Mamoròna asa Microsoft To Do",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "Tsy misy resaka misy hafatra azo vakiana amin'ity fanafarana avy amin'i {source} ity.",
     "noMatches": "Tsy misy resaka mifanaraka amin'ny sivanao",
     "listLabel": "Resaka hampidirina"
+  },
+  "releaseNotes": {
+    "title": "Vaovao farany",
+    "whatChanged": "Inona no niova?",
+    "settingsTitle": "Vaovao farany",
+    "settingsDescription": "Jereo ny niova tamin'ny fanavaozana farany",
+    "loading": "Amin'ny famakiana ireo naoty famoahana…",
+    "unavailable": "Tsy afaka novakiana amin'izao fotoana izao ny naoty famoahana. Azonao jerena ao amin'ny GitHub izy ireo.",
+    "noDetails": "Tsy nisy antsipiriany voarakitra amin'ity famoahana ity.",
+    "stale": "Teo aloha kely no naorina ireto naoty ireto ka mety tsy mbola farany indrindra.",
+    "englishOnly": "Amin'ny teny anglisy no iarahan'ny naoty famoahana.",
+    "viewOnGithub": "Jereo avokoa ny famoahana rehetra ao amin'ny GitHub"
   }
 }

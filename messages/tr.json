@@ -897,7 +897,8 @@
     "repeatedFailureNotice": "Bu işlem sürekli başarısız oluyor — konuşma bozulmuş olabilir. Genellikle yeni bir konuşma başlatmak sorunu çözer.",
     "startNewConversation": "Yeni bir konuşma başlat",
     "downloadDebugInfo": "Hata ayıklama bilgisini indir",
-    "includeMessageText": "Mesaj metnini dahil et"
+    "includeMessageText": "Mesaj metnini dahil et",
+    "ttsEquationPlaceholder": "denklem"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -4919,7 +4920,27 @@
         "notConnected": "Microsoft 365 oturumunuz kullanılamıyor. Oturumu kapatıp tekrar giriş yapmayı deneyin.",
         "network": "Ağ hatası — lütfen tekrar deneyin.",
         "generic": "Bir hata oluştu — lütfen tekrar deneyin."
-      }
+      },
+      "filteringNote": "Yalnızca erişilebilen transkript veya kaydı olan toplantılar gösteriliyor.",
+      "loadingFiltered": "Son toplantılarınızda transkript ve kayıtlar kontrol ediliyor…",
+      "emptyFiltered": "Son 14 gündeki erişebileceğiniz transkript veya kaydı olan toplantı yok",
+      "showAll": "Tüm toplantıları göster",
+      "filterUnavailable": "Toplantı içerikleri kontrol edilemedi — bunun yerine tüm toplantılar gösteriliyor.",
+      "showAllWithCount": "Tüm toplantıları göster ({count} gizli)",
+      "showFiltered": "Yalnızca transkript veya kaydı olan toplantıları göster",
+      "badgeTranscript": "Transkript",
+      "badgeTranscripts": "{count} transkript",
+      "badgeRecording": "Kayıt",
+      "badgeRecordings": "{count} kayıt",
+      "badgeNoAccess": "Erişim yok",
+      "badgePending": "İşleniyor olabilir",
+      "pendingHint": "Bu toplantı yakın zamanda sona erdi — Teams transkripti yayınlamak için birkaç dakikaya ihtiyaç duyabilir.",
+      "someUnchecked": "{count, plural, one {Bir toplantı zamanında kontrol edilemedi — ulaşmak için tüm toplantıları gösterin.} other {# toplantı zamanında kontrol edilemedi — ulaşmak için tüm toplantıları gösterin.}}",
+      "throttledNote": "Microsoft 365 talepleri kısıtlıyor, bu yüzden bazı toplantılar kontrol edilemedi.",
+      "windowTruncated": "Takviminiz o kadar yoğundu ki, son 14 gündeki daha eski toplantılar kontrol edilemedi.",
+      "occurrences": "{count} kez",
+      "importTranscriptFrom": "Transkripti içe aktar ({when})",
+      "importRecordingFrom": "Kaydı içe aktar ({when})"
     },
     "todo": {
       "title": "Microsoft To Do görevleri oluştur",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Bu {source} dışa aktarımında okunabilir mesajı olan sohbet yok.",
     "noMatches": "Filtrenize uygun sohbet bulunamadı",
     "listLabel": "İçe aktarılacak sohbetler"
+  },
+  "releaseNotes": {
+    "title": "Yenilikler",
+    "whatChanged": "Neler değişti?",
+    "settingsTitle": "Yenilikler",
+    "settingsDescription": "Son güncellemelerde nelerin değiştiğine bakın",
+    "loading": "Sürüm notları yükleniyor…",
+    "unavailable": "Sürüm notları şu anda yüklenemiyor. Bunun yerine GitHub'dan okuyabilirsiniz.",
+    "noDetails": "Bu sürüm için ayrıntı kaydedilmedi.",
+    "stale": "Bu notlar bir süre önce kaydedildi ve en güncel olmayabilir.",
+    "englishOnly": "Sürüm notları İngilizce yazılmıştır.",
+    "viewOnGithub": "Tüm sürümleri GitHub'da görüntüle"
   }
 }

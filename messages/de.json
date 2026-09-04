@@ -843,7 +843,8 @@
     "repeatedFailureNotice": "Dies schlägt wiederholt fehl – das Gespräch könnte beschädigt sein. Meistens hilft es, ein neues Gespräch zu beginnen.",
     "startNewConversation": "Neues Gespräch starten",
     "downloadDebugInfo": "Debug-Informationen herunterladen",
-    "includeMessageText": "Nachrichtentext einschließen"
+    "includeMessageText": "Nachrichtentext einschließen",
+    "ttsEquationPlaceholder": "Gleichung"
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -4919,7 +4920,27 @@
         "notConnected": "Ihre Microsoft 365-Sitzung ist nicht verfügbar. Versuchen Sie, sich ab- und wieder anzumelden.",
         "network": "Netzwerkfehler — bitte versuchen Sie es erneut.",
         "generic": "Es ist ein Fehler aufgetreten — bitte versuchen Sie es erneut."
-      }
+      },
+      "filteringNote": "Es werden nur Besprechungen mit einem zugänglichen Transkript oder einer Aufnahme angezeigt.",
+      "loadingFiltered": "Ihre letzten Besprechungen werden auf Transkripte und Aufnahmen überprüft…",
+      "emptyFiltered": "Keine Besprechungen der letzten 14 Tage enthalten ein Transkript oder eine Aufnahme, auf die Sie zugreifen können",
+      "showAll": "Alle Besprechungen anzeigen",
+      "filterUnavailable": "Besprechungen konnten nicht auf Inhalte geprüft werden — stattdessen werden alle Besprechungen angezeigt.",
+      "showAllWithCount": "Alle Besprechungen anzeigen ({count} ausgeblendet)",
+      "showFiltered": "Nur Besprechungen mit Transkript oder Aufnahme anzeigen",
+      "badgeTranscript": "Transkript",
+      "badgeTranscripts": "{count} Transkripte",
+      "badgeRecording": "Aufnahme",
+      "badgeRecordings": "{count} Aufnahmen",
+      "badgeNoAccess": "Kein Zugriff",
+      "badgePending": "Wird möglicherweise noch verarbeitet",
+      "pendingHint": "Diese Besprechung wurde kürzlich beendet – Teams benötigt eventuell ein paar Minuten, um das Transkript zu veröffentlichen.",
+      "someUnchecked": "{count, plural, one {Eine Besprechung konnte nicht rechtzeitig geprüft werden — zeigen Sie alle Besprechungen an, um darauf zuzugreifen.} other {# Besprechungen konnten nicht rechtzeitig geprüft werden — zeigen Sie alle Besprechungen an, um darauf zuzugreifen.}}",
+      "throttledNote": "Microsoft 365 drosselt Anfragen, daher konnten einige Besprechungen nicht geprüft werden.",
+      "windowTruncated": "Ihr Kalender war so voll, dass ältere Besprechungen der letzten 14 Tage nicht geprüft wurden.",
+      "occurrences": "{count} Vorkommen",
+      "importTranscriptFrom": "Transkript importieren ({when})",
+      "importRecordingFrom": "Aufnahme importieren ({when})"
     },
     "todo": {
       "title": "Microsoft To Do-Aufgaben erstellen",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Dieser {source}-Export enthält keine Konversationen mit lesbaren Nachrichten.",
     "noMatches": "Keine Konversation entspricht Ihrem Filter",
     "listLabel": "Zu importierende Konversationen"
+  },
+  "releaseNotes": {
+    "title": "Neues",
+    "whatChanged": "Was hat sich geändert?",
+    "settingsTitle": "Neues",
+    "settingsDescription": "Erfahren Sie, was sich in den letzten Updates geändert hat",
+    "loading": "Lade Versionshinweise…",
+    "unavailable": "Versionshinweise konnten derzeit nicht geladen werden. Sie können diese stattdessen auf GitHub lesen.",
+    "noDetails": "Für diese Version wurden keine Details erfasst.",
+    "stale": "Diese Hinweise wurden vor einer Weile gespeichert und sind möglicherweise nicht ganz aktuell.",
+    "englishOnly": "Versionshinweise sind auf Englisch verfasst.",
+    "viewOnGithub": "Alle Versionen auf GitHub ansehen"
   }
 }

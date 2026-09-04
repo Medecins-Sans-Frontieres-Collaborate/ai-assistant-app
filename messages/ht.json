@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Sa ap toujou echwe — konvèsasyon an ka gate. Kòmanse yon nouvo konvèsasyon anjeneral rezoud pwoblèm nan.",
     "startNewConversation": "Kòmanse yon nouvo konvèsasyon",
     "downloadDebugInfo": "Telechaje enfòmasyon analiz erè",
-    "includeMessageText": "Enkli tèks mesaj la"
+    "includeMessageText": "Enkli tèks mesaj la",
+    "ttsEquationPlaceholder": "ekwasyon"
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -4903,7 +4904,27 @@
         "notConnected": "Sesyon Microsoft 365 ou pa disponib. Eseye dekonekte epi konekte ankò.",
         "network": "Erè rezo — tanpri eseye ankò.",
         "generic": "Gen yon erè — tanpri eseye ankò."
-      }
+      },
+      "filteringNote": "Afiche sèlman reyinyon ak transkripsyon oswa anrejistreman ou ka jwenn.",
+      "loadingFiltered": "Y ap verifye dènye reyinyon ou yo pou transkripsyon ak anrejistreman…",
+      "emptyFiltered": "Pa gen okenn reyinyon nan 14 dènye jou yo ki gen transkripsyon oswa anrejistreman ou ka jwenn",
+      "showAll": "Montre tout reyinyon yo",
+      "filterUnavailable": "Pakonye te ka verifye kontni reyinyon yo — yo montre tout reyinyon yo olye.",
+      "showAllWithCount": "Montre tout reyinyon yo ({count} kache)",
+      "showFiltered": "Montre sèlman reyinyon ak transkripsyon oswa anrejistreman",
+      "badgeTranscript": "Transkripsyon",
+      "badgeTranscripts": "{count} transkripsyon",
+      "badgeRecording": "Anrejistreman",
+      "badgeRecordings": "{count} anrejistreman",
+      "badgeNoAccess": "Pa gen aksè",
+      "badgePending": "Ka toujou ap trete",
+      "pendingHint": "Reyinyon sa a te fini dènyèman — Teams ka pran kèk minit pou pibliye transkripsyon an.",
+      "someUnchecked": "{count, plural, one {Yon reyinyon pa t ka verifye alè — montre tout reyinyon pou jwenn li.} other {# reyinyon pa t ka verifye alè — montre tout reyinyon pou jwenn yo.}}",
+      "throttledNote": "Microsoft 365 ap limite demann yo, kèk reyinyon pa t ka verifye.",
+      "windowTruncated": "Kalendriye ou te ase chaje konsa kèk ansyen reyinyon pa t ka verifye nan 14 dènye jou yo.",
+      "occurrences": "{count} fwa",
+      "importTranscriptFrom": "Enpòte transkripsyon ({when})",
+      "importRecordingFrom": "Enpòte anrejistreman ({when})"
     },
     "todo": {
       "title": "Kreye Microsoft To Do travay",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "Ekspòtasyon {source} sa a pa gen okenn konvèsasyon ak mesaj ki ka li.",
     "noMatches": "Pa gen konvèsasyon ki koresponn ak filtraj ou",
     "listLabel": "Konvèsasyon pou enpòte"
+  },
+  "releaseNotes": {
+    "title": "Ki sa ki nouvo",
+    "whatChanged": "Ki sa ki chanje?",
+    "settingsTitle": "Ki sa ki nouvo",
+    "settingsDescription": "Wè sa ki chanje nan dènye mizajou yo",
+    "loading": "Y ap chaje nòt lage yo…",
+    "unavailable": "Pakonye ka chaje nòt lage yo kounye a. Ou ka li yo sou GitHub olye.",
+    "noDetails": "Pa gen okenn detay ki te anrejistre pou lage sa a.",
+    "stale": "Nòt sa yo te sove depi kèk tan e yo ka pa pi resan yo.",
+    "englishOnly": "Nòt lage yo ekri an Anglè.",
+    "viewOnGithub": "Gade tout lage yo sou GitHub"
   }
 }

@@ -894,7 +894,8 @@
     "repeatedFailureNotice": "Coś stale nie działa — rozmowa mogła zostać uszkodzona. Zwykle pomaga rozpoczęcie nowej rozmowy.",
     "startNewConversation": "Rozpocznij nową rozmowę",
     "downloadDebugInfo": "Pobierz informacje debugowania",
-    "includeMessageText": "Dołącz treść wiadomości"
+    "includeMessageText": "Dołącz treść wiadomości",
+    "ttsEquationPlaceholder": "równanie"
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -4919,7 +4920,27 @@
         "notConnected": "Twoja sesja Microsoft 365 jest niedostępna. Spróbuj wylogować się i zalogować ponownie.",
         "network": "Błąd sieci — spróbuj ponownie.",
         "generic": "Coś poszło nie tak — spróbuj ponownie."
-      }
+      },
+      "filteringNote": "Pokazywane są tylko spotkania z transkrypcją lub nagraniem, do których masz dostęp.",
+      "loadingFiltered": "Sprawdzanie ostatnich spotkań pod kątem transkrypcji i nagrań…",
+      "emptyFiltered": "Żadne spotkanie z ostatnich 14 dni nie ma dostępnej transkrypcji ani nagrania",
+      "showAll": "Pokaż wszystkie spotkania",
+      "filterUnavailable": "Nie można było sprawdzić zawartości spotkań — pokazywane są wszystkie spotkania.",
+      "showAllWithCount": "Pokaż wszystkie spotkania (ukrytych: {count})",
+      "showFiltered": "Pokaż tylko spotkania z transkrypcją lub nagraniem",
+      "badgeTranscript": "Transkrypcja",
+      "badgeTranscripts": "{count} transkrypcji",
+      "badgeRecording": "Nagranie",
+      "badgeRecordings": "{count} nagrań",
+      "badgeNoAccess": "Brak dostępu",
+      "badgePending": "Może być w trakcie przetwarzania",
+      "pendingHint": "To spotkanie zakończyło się niedawno — Teams może potrzebować kilku minut na udostępnienie transkrypcji.",
+      "someUnchecked": "{count, plural, one {Nie udało się sprawdzić jednego spotkania na czas — pokaż wszystkie spotkania, aby uzyskać do niego dostęp.} other {Nie udało się sprawdzić # spotkań na czas — pokaż wszystkie spotkania, aby uzyskać do nich dostęp.}}",
+      "throttledNote": "Microsoft 365 ogranicza liczbę żądań, więc niektóre spotkania nie mogły zostać sprawdzone.",
+      "windowTruncated": "Twój kalendarz był wystarczająco zajęty, że starsze spotkania z ostatnich 14 dni nie zostały sprawdzone.",
+      "occurrences": "{count} wystąpień",
+      "importTranscriptFrom": "Importuj transkrypcję ({when})",
+      "importRecordingFrom": "Importuj nagranie ({when})"
     },
     "todo": {
       "title": "Twórz zadania Microsoft To Do",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Eksport z {source} nie zawiera rozmów z czytelnymi wiadomościami.",
     "noMatches": "Brak rozmów spełniających kryteria filtra",
     "listLabel": "Rozmowy do importu"
+  },
+  "releaseNotes": {
+    "title": "Co nowego",
+    "whatChanged": "Co się zmieniło?",
+    "settingsTitle": "Co nowego",
+    "settingsDescription": "Zobacz, co zmieniło się w ostatnich aktualizacjach",
+    "loading": "Ładowanie informacji o wydaniu…",
+    "unavailable": "Nie można teraz załadować informacji o wydaniu. Możesz je przeczytać na GitHub.",
+    "noDetails": "Brak zapisanych szczegółów dla tej wersji.",
+    "stale": "Te notatki zostały zapisane jakiś czas temu i mogą nie być najnowsze.",
+    "englishOnly": "Notatki o wydaniu są dostępne tylko w języku angielskim.",
+    "viewOnGithub": "Zobacz wszystkie wydania na GitHub"
   }
 }

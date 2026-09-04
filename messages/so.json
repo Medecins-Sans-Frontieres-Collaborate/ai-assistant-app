@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Arrintu way fashilantay marar badan — wadahadalka waxa laga yaabaa inuu dhaawacmay. Bilaabidda wadahadal cusub badanaa way xallisaa.",
     "startNewConversation": "Bilow wadahadal cusub",
     "downloadDebugInfo": "Soo degso macluumaadka cilad-baarista",
-    "includeMessageText": "Ku dar qoraalka farriinta"
+    "includeMessageText": "Ku dar qoraalka farriinta",
+    "ttsEquationPlaceholder": "isku-darka xisaabta"
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -4903,7 +4904,27 @@
         "notConnected": "Kalfadhigaaga Microsoft 365 lama heli karo. Isku day inaad ka baxdo kadibna dib u soo gasho.",
         "network": "Khalad shabakad — fadlan isku day mar kale.",
         "generic": "Waxbaa khaldamay — fadlan isku day mar kale."
-      }
+      },
+      "filteringNote": "Wuxuu muujinayaa keliya kulamada leh qoraal ama duubis aad geli karto.",
+      "loadingFiltered": "Waxaan hubinayaa kulamadii ugu dambeeyay qoraal iyo duubis…",
+      "emptyFiltered": "Maalmaha 14 ee la soo dhaafay ma jiraan wax kulan ah oo leh qoraal ama duubis aad geli karto",
+      "showAll": "Dhammaan kulamada soo bandhig",
+      "filterUnavailable": "Kulamada laguma eegi karin nuxurka — dhammaan kulamada ayaa la soo bandhigayaa.",
+      "showAllWithCount": "Dhammaan kulamada soo bandhig ({count} la qariyey)",
+      "showFiltered": "Kaliya kulamada leh qoraal ama duubis soo bandhig",
+      "badgeTranscript": "Qoraal",
+      "badgeTranscripts": "{count} qoraal",
+      "badgeRecording": "Duubis",
+      "badgeRecordings": "{count} duubis",
+      "badgeNoAccess": "Lama geli karo",
+      "badgePending": "Weli waa la shaqeynayaa",
+      "pendingHint": "Kulankan wuxuu dhamaaday dhawaan — Teams waxay qaadan kartaa daqiiqado yar in la daabaco qoraalka.",
+      "someUnchecked": "{count, plural, one {Kulan lama eegin waqtigii loo qoondeeyey — dhammaan kulamada soo bandhig si aad u gasho.} other {#{count} kulan lama eegin waqtigii loo qoondeeyey — dhammaan kulamada soo bandhig si aad u gasho.}}",
+      "throttledNote": "Microsoft 365 waxay xadideysaa codsiyada, sidaa darteed kulamo qaarkood lama eegin.",
+      "windowTruncated": "Jadwalkaaga aad buu u mashquulsanaa sidaas darteed kulamadii hore ee 14kii maalmood lama eegin.",
+      "occurrences": "{count} jeer",
+      "importTranscriptFrom": "Soo dejiso qoraal ({when})",
+      "importRecordingFrom": "Soo dejiso duubis ({when})"
     },
     "todo": {
       "title": "Abuur hawlaha Microsoft To Do",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "Dhoofinta {source} kuma jiraan wax wadahadallo ah oo lagu akhrin karo fariimahooda.",
     "noMatches": "Wadahadallo la jaanqaadaya shaandhaynta ma jiro",
     "listLabel": "Wadahadallo la soo dejinayo"
+  },
+  "releaseNotes": {
+    "title": "Maxaa cusub",
+    "whatChanged": "Maxaa is beddelay?",
+    "settingsTitle": "Maxaa cusub",
+    "settingsDescription": "Eeg waxa is beddelay cusbooneysiintii ugu dambeysay",
+    "loading": "Furfuraya qoraallada sii deynta…",
+    "unavailable": "Qoraallada sii deynta lama soo dejin karo hadda. Waxaad kaga akhrisan kartaa GitHub.",
+    "noDetails": "Faahfaahin lama diiwaangelin daabacaaddan.",
+    "stale": "Qoraalladan waxaa la kaydiyay wax yar ka hor waxayna dhici kartaa inaysan ahayn kuwii ugu dambeeyay.",
+    "englishOnly": "Qoraallada sii deynta waxay ku qoran yihiin Ingiriisi.",
+    "viewOnGithub": "Dhammaan sii deynta ka eeg GitHub"
   }
 }

@@ -818,7 +818,8 @@
     "repeatedFailureNotice": "Continua a non funzionare: la conversazione potrebbe essere danneggiata. Di solito avviare una nuova conversazione risolve il problema.",
     "startNewConversation": "Avvia una nuova conversazione",
     "downloadDebugInfo": "Scarica informazioni di debug",
-    "includeMessageText": "Includi il testo dei messaggi"
+    "includeMessageText": "Includi il testo dei messaggi",
+    "ttsEquationPlaceholder": "equazione"
   },
   "sidebar": {
     "collapseSidebar": "Comprimi barra laterale",
@@ -4919,7 +4920,27 @@
         "notConnected": "La tua sessione Microsoft 365 non è disponibile. Prova a uscire e rientrare.",
         "network": "Errore di rete — riprova.",
         "generic": "Si è verificato un errore — riprova."
-      }
+      },
+      "filteringNote": "Visualizzati solo i meeting con una trascrizione o registrazione accessibile.",
+      "loadingFiltered": "Verifica delle trascrizioni e registrazioni dei meeting recenti…",
+      "emptyFiltered": "Nessun meeting degli ultimi 14 giorni ha una trascrizione o registrazione accessibile",
+      "showAll": "Mostra tutti i meeting",
+      "filterUnavailable": "Non è stato possibile verificare i contenuti dei meeting — vengono mostrati tutti i meeting.",
+      "showAllWithCount": "Mostra tutti i meeting ({count} nascosti)",
+      "showFiltered": "Mostra solo i meeting con trascrizione o registrazione",
+      "badgeTranscript": "Trascrizione",
+      "badgeTranscripts": "{count} trascrizioni",
+      "badgeRecording": "Registrazione",
+      "badgeRecordings": "{count} registrazioni",
+      "badgeNoAccess": "Nessun accesso",
+      "badgePending": "Può essere ancora in elaborazione",
+      "pendingHint": "Questo meeting è terminato di recente — Teams può impiegare alcuni minuti a pubblicare la trascrizione.",
+      "someUnchecked": "{count, plural, one {Un meeting non ha potuto essere verificato in tempo — mostra tutti i meeting per accedervi.} other {# meeting non hanno potuto essere verificati in tempo — mostra tutti i meeting per accedervi.}}",
+      "throttledNote": "Microsoft 365 sta limitando le richieste, quindi alcuni meeting non hanno potuto essere verificati.",
+      "windowTruncated": "Il tuo calendario era abbastanza pieno, quindi i meeting più vecchi degli ultimi 14 giorni non sono stati controllati.",
+      "occurrences": "{count} occorrenze",
+      "importTranscriptFrom": "Importa trascrizione ({when})",
+      "importRecordingFrom": "Importa registrazione ({when})"
     },
     "todo": {
       "title": "Crea attività Microsoft To Do",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Questa esportazione {source} non contiene conversazioni con messaggi leggibili.",
     "noMatches": "Nessuna conversazione corrisponde al filtro",
     "listLabel": "Conversazioni da importare"
+  },
+  "releaseNotes": {
+    "title": "Novità",
+    "whatChanged": "Cosa è cambiato?",
+    "settingsTitle": "Novità",
+    "settingsDescription": "Scopri cosa è cambiato negli ultimi aggiornamenti",
+    "loading": "Caricamento delle note di rilascio…",
+    "unavailable": "Le note di rilascio non possono essere caricate in questo momento. Puoi leggerle su GitHub.",
+    "noDetails": "Nessun dettaglio registrato per questa versione.",
+    "stale": "Queste note sono state salvate qualche tempo fa e potrebbero non essere le più recenti.",
+    "englishOnly": "Le note di rilascio sono scritte in inglese.",
+    "viewOnGithub": "Vedi tutte le versioni su GitHub"
   }
 }

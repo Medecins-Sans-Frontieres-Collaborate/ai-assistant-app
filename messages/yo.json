@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Eyi ń tẹsiwaju láti kuna — àpérò náà lè ti bàjẹ́. Bibẹrẹ àpérò tuntun maa n yanjú iṣoro yii.",
     "startNewConversation": "Bẹrẹ àpérò tuntun",
     "downloadDebugInfo": "Ṣàgbàasilẹ ìtòlẹ́sẹẹsẹ àbáyọ",
-    "includeMessageText": "Fi ọrọ ìfiránṣọ̀ kun"
+    "includeMessageText": "Fi ọrọ ìfiránṣọ̀ kun",
+    "ttsEquationPlaceholder": "ẹ̀dá ìṣirò"
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -4903,7 +4904,27 @@
         "notConnected": "Ìbáṣepọ Microsoft 365 rẹ kò sí. Gbìyànjú láti jáde kí o sì tún wọlé.",
         "network": "Àsìṣe nẹ́tíwọ́ọ̀kì — jọwọ gbìyànjú lẹ́ẹ̀kàn síi.",
         "generic": "Ohun kan ṣẹ̀sìn — jọwọ gbìyànjú lẹ́ẹ̀kàn síi."
-      }
+      },
+      "filteringNote": "Ìfihàn àwọn ìpàdé tó ní ìtànkálẹ̀ tàbí àkọsílẹ̀ tó le dé sí.",
+      "loadingFiltered": "Ṣàyẹ̀wò àwọn ìpàdé rẹ tó ṣẹṣẹ ṣẹlẹ fún ìtànkálẹ̀ àti àkọsílẹ̀...",
+      "emptyFiltered": "Kò sí ìpàdé lásìkò ọjọ́ 14 to kọjá tó ní ìtànkálẹ̀ tàbí àkọsílẹ̀ tó le dé sí",
+      "showAll": "Fi gbogbo ìpàdé han",
+      "filterUnavailable": "A kò le ṣàyẹ̀wò ak conteúdo àwọn ìpàdé – n fi gbogbo ìpàdé han dípò rẹ.",
+      "showAllWithCount": "Fi gbogbo ìpàdé han ({count} ti pamọ)",
+      "showFiltered": "Fi àwọn ìpàdé tó ní ìtànkálẹ̀ tàbí àkọsílẹ̀ nikan han",
+      "badgeTranscript": "Ìtànkálẹ̀",
+      "badgeTranscripts": "{count} ìtànkálẹ̀",
+      "badgeRecording": "Àkọsílẹ̀",
+      "badgeRecordings": "{count} àkọsílẹ̀",
+      "badgeNoAccess": "Kò sí ààyè",
+      "badgePending": "Ṣíṣe títúnṣe",
+      "pendingHint": "Ìpàdé yìí parí laipẹ — Teams le gba ìṣòro díẹ̀ kí wọ́n tó pín ìtànkálẹ̀ rẹ.",
+      "someUnchecked": "{count, plural, one {Ìpàdé kan kò le ṣàyẹ̀wò nilẹ̀ — fi gbogbo ìpàdé han láti dé sí.} other {# àwọn ìpàdé kò le ṣàyẹ̀wò nilẹ̀ — fi gbogbo ìpàdé han láti dé sí wọn.}}",
+      "throttledNote": "Microsoft 365 ń dín iye ìbéèrè kù, ní tórí ẹ̀ àwọn ìpàdé kan kò le ṣàyẹ̀wò.",
+      "windowTruncated": "Kalẹ́ńdà rẹ gbóná tó bẹ́ẹ̀ títí àwọn ìpàdé atijọ̀ jù lórí ọjọ́ 14 kò le ṣàyẹ̀wò.",
+      "occurrences": "{count} iṣẹlẹ",
+      "importTranscriptFrom": "Gbe ìtànkálẹ̀ wọlé ({when})",
+      "importRecordingFrom": "Gbe àkọsílẹ̀ wọlé ({when})"
     },
     "todo": {
       "title": "Ṣẹda àwọn ìṣe Microsoft To Do",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "Kò sí ibaraẹnisọrọ pẹ̀lú ìfiránṣẹ́ tí a lè ka nínú ikojọpọ {source} yìí.",
     "noMatches": "Kò sí ibaraẹnisọrọ tó bá ìfíltà rẹ mu",
     "listLabel": "Àwọn ibaraẹnisọrọ láti gbe wọle"
+  },
+  "releaseNotes": {
+    "title": "Kí ni tuntun",
+    "whatChanged": "Kí ni yíí padà?",
+    "settingsTitle": "Kí ni tuntun",
+    "settingsDescription": "Wo àwọn ayípadà tuntun nínú ìmúdójúìyà tó ṣẹṣẹ ṣẹlẹ",
+    "loading": "N gbasilẹ akọsilẹ ìtujade...",
+    "unavailable": "A kò le gbasilẹ akọsilẹ ìtujade ní báyìí. O le ka wọ́n lórí GitHub dípò rẹ.",
+    "noDetails": "Kò sí àlàyé kankan fún ìtujade yìí.",
+    "stale": "Àwọn akọsilẹ wọ̀nyí ni a fipamọ síi díẹ̀ sẹ́yìn, ó ṣeé ṣe kí wọn má jẹ tuntun jùlọ.",
+    "englishOnly": "Àwọn akọsilẹ ìtujade kọ ní Gẹẹsi.",
+    "viewOnGithub": "Wo gbogbo ìtujade lórí GitHub"
   }
 }

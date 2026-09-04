@@ -872,7 +872,8 @@
     "repeatedFailureNotice": "ဤလုပ်ဆောင်ချက်သည် မအောင်မြင်သော်လည်း ပြန်လည်လုပ်ဆောင်ခြင်းအခါတိုင်း မအောင်မြင်နိုင်ပါ။ စကားပြောခြင်းသည် ပျက်စီးနိုင်ပါသည်။ စတင်အသစ်စကားပြောခြင်းဖြင့် ယင်းပြဿနာကို အများအားဖြင့် ဖြေရှင်းနိုင်ပါသည်။",
     "startNewConversation": "စကားပြောအသစ်စတင်ရန်",
     "downloadDebugInfo": "အကောင်းဆုံးပြဿနာရှာဖွေရန်အချက်အလက် ဒေါင်းလုပ်လုပ်ပါ",
-    "includeMessageText": "မက်ဆေ့ချ်စာသား ထည့်ပါ"
+    "includeMessageText": "မက်ဆေ့ချ်စာသား ထည့်ပါ",
+    "ttsEquationPlaceholder": "စာရင်းသည်စာတမ်း"
   },
   "sidebar": {
     "collapseSidebar": "ဘေးဘားကို ကျုံ့ပါ",
@@ -4919,7 +4920,27 @@
         "notConnected": "သင့် Microsoft 365 အစည်းအဝေး မရနိုင်ပါ။ ထွက်ပြီးပြန်ဝင်ကြည့်ပါ။",
         "network": "ကွန်ယက် အမှား — ထပ်မံကြိုးစားပါ။",
         "generic": "တစ်စုံတစ်ခု မှားယွင်းနေသည် — ထပ်မံကြိုးစားပါ။"
-      }
+      },
+      "filteringNote": "သင့်ရနိုင်သည့် transcript သို့မဟုတ် recording ပါသောအစည်းအဝေးများသာပြနေသည်။",
+      "loadingFiltered": "သင့်နောက်ဆုံးအစည်းအဝေးများတွင် transcript နှင့် recording များစစ်ဆေးနေသည်…",
+      "emptyFiltered": "ပြီးခဲ့သည့် ၁၄ ရက်အတွင်း transcript သို့မဟုတ် recording ပါသောအစည်းအဝေး မရှိပါ။",
+      "showAll": "အစည်းအဝေးအားလုံးပြရန်",
+      "filterUnavailable": "အစည်းအဝေးတစ်ချို့တွင် မူကြိုမျာပါလားမစစ်နိုင်သဖြင့် အစည်းအဝေးအားလုံးပြနေသည်။",
+      "showAllWithCount": "အစည်းအဝေးအားလုံးပြရန် ({count} ကိုလွှဲထားသည်)",
+      "showFiltered": "transcript သို့မဟုတ် recording ပါသော အစည်းအဝေးများသာပြရန်",
+      "badgeTranscript": "Transcript",
+      "badgeTranscripts": "Transcripts {count} စောင်",
+      "badgeRecording": "Recording",
+      "badgeRecordings": "Recordings {count} ခု",
+      "badgeNoAccess": "ဝင်ရောက်ရန်ခွင့်မရှိပါ",
+      "badgePending": "Processing ဖြစ်နေစဉ် ဖြစ်နိုင်သည်",
+      "pendingHint": "ဒီအစည်းအဝေးက မကြာသေးမီကဆုံးပြီးပါသည် — Teams သည် transcript မထုတ်ခင်အချိန်အနည်းငယ်အကြာလိုနိုင်ပါတယ်။",
+      "someUnchecked": "{count, plural, one {အစည်းအဝေးတစ်ခုကို အချိန်မီစစ်မရနိုင်ခဲ့ပါ — အစည်းအဝေးအားလုံးပြရန်။} other {အစည်းအဝေး # ခုကို အချိန်မီစစ်မရနိုင်ခဲ့ပါ — အစည်းအဝေးအားလုံးပြပါ။}}",
+      "throttledNote": "Microsoft 365 သည် request များကို ခဏတားဆီးထားပါသဖြင့် အစည်းအဝေးတချို့ကိုစစ်၍မရနိုင်ခဲ့ပါ။",
+      "windowTruncated": "သင့်အကြိုက်က calendar အလွန်ပြည့်နေသဖြင့် နောက်ဆုံး ၁၄ ရက်အတွင်းအဟောင်းအစည်းအဝေးများမစစ်နိုင်ခဲ့ပါ။",
+      "occurrences": "အကြိမ် {count}ကြိမ်",
+      "importTranscriptFrom": "Transcript တင်သွင်းရန် ({when})",
+      "importRecordingFrom": "Recording တင်သွင်းရန် ({when})"
     },
     "todo": {
       "title": "Microsoft To Do တာဝန်အသစ်များဖန်တီးပါ",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "ဤ {source} ထုတ်ယူမှုတွင် ဖတ်နိုင်သော မက်ဆေ့ခ်ျပါဝင်သည့် စကားပြောမှုများ မရှိပါ။",
     "noMatches": "သင့်စစ်ထုတ်ချက်နှင့် ကိုက်ညီသော စကားပြောမှုများမျှမရှိပါ",
     "listLabel": "တင်သွင်းရန် စကားပြောမှုများ"
+  },
+  "releaseNotes": {
+    "title": "ဘာအသစ်တွေပြောင်းလဲလာသလဲ",
+    "whatChanged": "ဘာတွေပြောင်းလဲသွားသလဲ?",
+    "settingsTitle": "ဘာအသစ်တွေပြောင်းလဲလာသလဲ",
+    "settingsDescription": "နောက်ဆုံးအပ်ဒိတ်တွင်ပြောင်းလဲမှုတွေကြည့်ပါ",
+    "loading": "Release notes ကိုလတ်တလောတင်ဆက်နေသည်…",
+    "unavailable": "Release notes ကိုလတ်တလောတင်မရနိုင်ပါ။ GitHub မှာဖတ်နိုင်သည်။",
+    "noDetails": "ဒီ release အတွက်အသေးစိတ် မှတ်တမ်းမရရှိတော့ပါ။",
+    "stale": "ဒီ notes တွေက အနည်းငယ်အရင်က သိမ်းထားတာဖြစ်ပြီး နောက်ဆုံး update မဖြစ်နိုင်ပါ။",
+    "englishOnly": "Release notes များကို အင်္ဂလိပ်ဘာသာဖြင့်ရေးထားသည်။",
+    "viewOnGithub": "GitHub တွင် release အားလုံးကြည့်ရန်"
   }
 }

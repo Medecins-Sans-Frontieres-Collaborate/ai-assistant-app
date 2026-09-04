@@ -928,7 +928,8 @@
     "repeatedFailureNotice": "操作持续失败，可能对话已损坏。通常重新开始一个新对话可解决此问题。",
     "startNewConversation": "开始新对话",
     "downloadDebugInfo": "下载调试信息",
-    "includeMessageText": "包含消息内容"
+    "includeMessageText": "包含消息内容",
+    "ttsEquationPlaceholder": "公式"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -4950,7 +4951,27 @@
         "notConnected": "您的 Microsoft 365 会话不可用。请尝试退出后重新登录。",
         "network": "网络错误——请重试。",
         "generic": "发生错误——请重试。"
-      }
+      },
+      "filteringNote": "仅显示您可访问的带有文字记录或录音的会议。",
+      "loadingFiltered": "正在检查您的近期会议文字记录和录音…",
+      "emptyFiltered": "过去 14 天内没有您可访问的会议文字记录或录音",
+      "showAll": "显示所有会议",
+      "filterUnavailable": "无法检查会议内容 — 改为显示所有会议。",
+      "showAllWithCount": "显示所有会议（已隐藏 {count} 个）",
+      "showFiltered": "仅显示有文字记录或录音的会议",
+      "badgeTranscript": "文字记录",
+      "badgeTranscripts": "{count} 个文字记录",
+      "badgeRecording": "录音",
+      "badgeRecordings": "{count} 个录音",
+      "badgeNoAccess": "无访问权限",
+      "badgePending": "可能仍在处理",
+      "pendingHint": "此会议刚刚结束，Teams 可能需要几分钟来发布文字记录。",
+      "someUnchecked": "{count, plural, one {有 1 个会议未及时检查 — 请显示所有会议以访问。} other {有 # 个会议未及时检查 — 请显示所有会议以访问。}}",
+      "throttledNote": "Microsoft 365 限制了请求，部分会议无法检查。",
+      "windowTruncated": "您的日程较满，过去 14 天更早的会议未被检查。",
+      "occurrences": "{count} 次发生",
+      "importTranscriptFrom": "导入文字记录（{when}）",
+      "importRecordingFrom": "导入录音（{when}）"
     },
     "todo": {
       "title": "创建 Microsoft To Do 任务",
@@ -5229,5 +5250,17 @@
     "nothingImportable": "此{source}导出文件中没有包含可读取消息的对话。",
     "noMatches": "没有符合筛选条件的对话",
     "listLabel": "待导入对话"
+  },
+  "releaseNotes": {
+    "title": "新功能",
+    "whatChanged": "更新内容？",
+    "settingsTitle": "新功能",
+    "settingsDescription": "查看最近更新的变动内容",
+    "loading": "正在加载更新说明…",
+    "unavailable": "更新说明当前无法加载。您可以在 GitHub 上阅读。",
+    "noDetails": "本次版本未记录详细信息。",
+    "stale": "这些说明保存于前一段时间，可能不是最新内容。",
+    "englishOnly": "更新说明仅用英文撰写。",
+    "viewOnGithub": "在 GitHub 查看所有版本"
   }
 }

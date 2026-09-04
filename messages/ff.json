@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Ɓeyda e nder gollal – konngol mum ena waawi heɓde moƴƴi. Fuɗɗo konngol hesere heɓi aduna mbooɗun.",
     "startNewConversation": "Fuɗɗo konngol hesere",
     "downloadDebugInfo": "Aawto caggal jayngol",
-    "includeMessageText": "Naatnu tinnda konngol"
+    "includeMessageText": "Naatnu tinnda konngol",
+    "ttsEquationPlaceholder": "hawtirde"
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -4903,7 +4904,27 @@
         "notConnected": "Microsoft 365 session maa alaa. Yiy trytofa jokkondir e janngude.",
         "network": "Nokho networgal — try awi ko ɗoo.",
         "generic": "Kadi jeɗɗii — try awi ko ɗoo."
-      }
+      },
+      "filteringNote": "Nana holli ko meetingo e kawtal walla jayngol woni adan a hitto.",
+      "loadingFiltered": "Nana yilto meetingo mawɗo ɗiiɗi e kawtal e jayngol…",
+      "emptyFiltered": "Kono ko meetingo ngol 14 ɗiin njedɗi e kawtal walla jayngol adan a hitto",
+      "showAll": "Hollu meetingo fow",
+      "filterUnavailable": "Meetingo waawaa yilte kawtal — holli meetingo fow.",
+      "showAllWithCount": "Hollu meetingo fow ({count} rutii)",
+      "showFiltered": "Hollu ko meetingo e kawtal walla jayngol",
+      "badgeTranscript": "Kawtal",
+      "badgeTranscripts": "{count} kawtal",
+      "badgeRecording": "Jayngol",
+      "badgeRecordings": "{count} jayngol",
+      "badgeNoAccess": "Kala jayngo",
+      "badgePending": "Nana taara baleeri",
+      "pendingHint": "Meetingo ngol jetti caɗeejo — Teams waawi keɓe min doŋ ko ɗiɗi njaɓii kawtal.",
+      "someUnchecked": "{count, plural, one {Ko meetingo gooto waawaa yilte e jam — hollu meetingo fow to a hittoy.} other {# meetingo waawaa yilte e jam — hollu meetingo fow to a hittoy.}}",
+      "throttledNote": "Microsoft 365 mawii yamirooji — ko ɗiɗi meetingo waawaa yilte.",
+      "windowTruncated": "Karantaade maa kuɗi kañum, meetingo mawɗo 14 ɗiin ndiyam waawaa yilte.",
+      "occurrences": "{count} ndemngo",
+      "importTranscriptFrom": "Kanjitir kawtal ({when})",
+      "importRecordingFrom": "Kanjitir jayngol ({when})"
     },
     "todo": {
       "title": "Suɓo Microsoft To Do maantorol",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "Ndeen {source} barki fayi waawitaaba finndeeji e nguurndam waawnde.",
     "noMatches": "Finndeeji wayiɓe fayi ɓurto suɓorgol maa",
     "listLabel": "Finndeeji nataanɗe"
+  },
+  "releaseNotes": {
+    "title": "Ko ngam waɗi",
+    "whatChanged": "Ko ɗiɗi laawii?",
+    "settingsTitle": "Ko ngam waɗi",
+    "settingsDescription": "Yiy ko ɗiɗi laawii e ɓeydital gasa",
+    "loading": "Nana nalla caahu ɓeydital…",
+    "unavailable": "A waawi nalla caahu ɓeydital jooni. A waawi jango ɗe e GitHub.",
+    "noDetails": "Kadi caahu ɓeydital ngol waawaa ñaamde.",
+    "stale": "Ɓeydital ɗi waɗani caɗeejo ndiyam, te ɓe waawaa heɗata fiya.",
+    "englishOnly": "Caahu ɓeydital ɗe waɗɗi e English.",
+    "viewOnGithub": "Yiy ɗiɗol ɓeydital fow e GitHub"
   }
 }

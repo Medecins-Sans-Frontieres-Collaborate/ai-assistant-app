@@ -897,7 +897,8 @@
     "repeatedFailureNotice": "Něco stále selhává — konverzace může být poškozená. Obvykle pomůže začít novou konverzaci.",
     "startNewConversation": "Zahájit novou konverzaci",
     "downloadDebugInfo": "Stáhnout ladicí informace",
-    "includeMessageText": "Zahrnout text zprávy"
+    "includeMessageText": "Zahrnout text zprávy",
+    "ttsEquationPlaceholder": "rovnice"
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -4919,7 +4920,27 @@
         "notConnected": "Vaše relace Microsoft 365 není dostupná. Zkuste se odhlásit a znovu přihlásit.",
         "network": "Chyba sítě — zkuste to znovu.",
         "generic": "Nastala chyba — zkuste to znovu."
-      }
+      },
+      "filteringNote": "Zobrazují se pouze schůzky s přepisem nebo nahrávkou, ke kterým máte přístup.",
+      "loadingFiltered": "Kontrola nedávných schůzek na přepisy a nahrávky…",
+      "emptyFiltered": "Žádná schůzka za posledních 14 dní nemá přepis ani nahrávku, ke které máte přístup",
+      "showAll": "Zobrazit všechny schůzky",
+      "filterUnavailable": "Schůzky nebylo možné zkontrolovat na obsah — místo toho se zobrazují všechny schůzky.",
+      "showAllWithCount": "Zobrazit všechny schůzky ({count} skryto)",
+      "showFiltered": "Zobrazit pouze schůzky s přepisem nebo nahrávkou",
+      "badgeTranscript": "Přepis",
+      "badgeTranscripts": "{count} přepisů",
+      "badgeRecording": "Nahrávka",
+      "badgeRecordings": "{count} nahrávek",
+      "badgeNoAccess": "Bez přístupu",
+      "badgePending": "Může se ještě zpracovávat",
+      "pendingHint": "Tato schůzka skončila nedávno — Teams může zveřejnění přepisu chvíli trvat.",
+      "someUnchecked": "{count, plural, one {Jednu schůzku se nepodařilo včas zkontrolovat — zobrazte všechny schůzky pro přístup k ní.} other {# schůzek se nepodařilo včas zkontrolovat — zobrazte všechny schůzky pro přístup k nim.}}",
+      "throttledNote": "Microsoft 365 omezuje počet požadavků, a proto nebylo možné některé schůzky zkontrolovat.",
+      "windowTruncated": "Váš kalendář byl natolik zaplněný, že starší schůzky za posledních 14 dní nebyly zkontrolovány.",
+      "occurrences": "{count} výskytů",
+      "importTranscriptFrom": "Importovat přepis ({when})",
+      "importRecordingFrom": "Importovat nahrávku ({when})"
     },
     "todo": {
       "title": "Vytvořit úkoly v Microsoft To Do",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Tento export {source} neobsahuje žádné konverzace s čitelnými zprávami.",
     "noMatches": "Žádné konverzace neodpovídají vašemu filtru",
     "listLabel": "Konverzace k importu"
+  },
+  "releaseNotes": {
+    "title": "Novinky",
+    "whatChanged": "Co se změnilo?",
+    "settingsTitle": "Novinky",
+    "settingsDescription": "Podívejte se, co se změnilo v posledních aktualizacích",
+    "loading": "Načítání poznámek k vydání…",
+    "unavailable": "Poznámky k vydání se teď nepodařilo načíst. Můžete si je přečíst na GitHubu.",
+    "noDetails": "Pro toto vydání nebyly zaznamenány žádné podrobnosti.",
+    "stale": "Tyto poznámky byly uloženy před nějakou dobou a nemusí být zcela aktuální.",
+    "englishOnly": "Poznámky k vydání jsou napsány v angličtině.",
+    "viewOnGithub": "Zobrazit všechna vydání na GitHubu"
   }
 }

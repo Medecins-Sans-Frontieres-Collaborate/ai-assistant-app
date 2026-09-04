@@ -864,7 +864,8 @@
     "repeatedFailureNotice": "Ini terus gagal — percakapan mungkin telah rusak. Memulai percakapan baru biasanya dapat memperbaikinya.",
     "startNewConversation": "Mulai percakapan baru",
     "downloadDebugInfo": "Unduh info debug",
-    "includeMessageText": "Sertakan teks pesan"
+    "includeMessageText": "Sertakan teks pesan",
+    "ttsEquationPlaceholder": "persamaan"
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -4919,7 +4920,27 @@
         "notConnected": "Sesi Microsoft 365 Anda tidak tersedia. Coba keluar lalu masuk kembali.",
         "network": "Kesalahan jaringan — silakan coba lagi.",
         "generic": "Terjadi kesalahan — silakan coba lagi."
-      }
+      },
+      "filteringNote": "Menampilkan hanya rapat dengan transkrip atau rekaman yang dapat Anda akses.",
+      "loadingFiltered": "Memeriksa rapat terbaru Anda untuk transkrip dan rekaman…",
+      "emptyFiltered": "Tidak ada rapat dalam 14 hari terakhir yang memiliki transkrip atau rekaman yang dapat Anda akses",
+      "showAll": "Tampilkan semua rapat",
+      "filterUnavailable": "Rapat tidak dapat diperiksa isinya — menampilkan semua rapat sebagai gantinya.",
+      "showAllWithCount": "Tampilkan semua rapat ({count} disembunyikan)",
+      "showFiltered": "Tampilkan hanya rapat dengan transkrip atau rekaman",
+      "badgeTranscript": "Transkrip",
+      "badgeTranscripts": "{count} transkrip",
+      "badgeRecording": "Rekaman",
+      "badgeRecordings": "{count} rekaman",
+      "badgeNoAccess": "Tidak ada akses",
+      "badgePending": "Mungkin masih diproses",
+      "pendingHint": "Rapat ini baru saja selesai — Teams membutuhkan beberapa menit untuk menerbitkan transkripnya.",
+      "someUnchecked": "{count, plural, one {Satu rapat tidak dapat diperiksa tepat waktu — tampilkan semua rapat untuk mengaksesnya.} other {# rapat tidak dapat diperiksa tepat waktu — tampilkan semua rapat untuk mengaksesnya.}}",
+      "throttledNote": "Microsoft 365 membatasi permintaan, sehingga beberapa rapat tidak dapat diperiksa.",
+      "windowTruncated": "Kalender Anda cukup sibuk sehingga rapat yang lebih lama dalam 14 hari terakhir tidak diperiksa.",
+      "occurrences": "{count} kejadian",
+      "importTranscriptFrom": "Impor transkrip ({when})",
+      "importRecordingFrom": "Impor rekaman ({when})"
     },
     "todo": {
       "title": "Buat tugas Microsoft To Do",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Ekspor {source} ini tidak berisi percakapan dengan pesan yang dapat dibaca.",
     "noMatches": "Tidak ada percakapan yang sesuai dengan filter Anda",
     "listLabel": "Percakapan yang akan diimpor"
+  },
+  "releaseNotes": {
+    "title": "Apa yang baru",
+    "whatChanged": "Apa yang berubah?",
+    "settingsTitle": "Apa yang baru",
+    "settingsDescription": "Lihat apa saja yang berubah di pembaruan terbaru",
+    "loading": "Memuat catatan rilis…",
+    "unavailable": "Catatan rilis tidak dapat dimuat saat ini. Anda dapat membacanya di GitHub sebagai gantinya.",
+    "noDetails": "Tidak ada detail yang dicatat untuk rilis ini.",
+    "stale": "Catatan ini disimpan beberapa waktu lalu dan mungkin bukan yang paling terbaru.",
+    "englishOnly": "Catatan rilis ditulis dalam bahasa Inggris.",
+    "viewOnGithub": "Lihat semua rilis di GitHub"
   }
 }

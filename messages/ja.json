@@ -897,7 +897,8 @@
     "repeatedFailureNotice": "この処理は繰り返し失敗しています。会話データが破損している可能性があります。新しい会話を始めると通常、この問題は解決します。",
     "startNewConversation": "新しい会話を始める",
     "downloadDebugInfo": "デバッグ情報をダウンロード",
-    "includeMessageText": "メッセージ本文を含める"
+    "includeMessageText": "メッセージ本文を含める",
+    "ttsEquationPlaceholder": "数式"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -4919,7 +4920,27 @@
         "notConnected": "Microsoft 365のセッションが利用できません。サインアウトして再度サインインしてください。",
         "network": "ネットワークエラー — もう一度お試しください。",
         "generic": "問題が発生しました — もう一度お試しください。"
-      }
+      },
+      "filteringNote": "アクセスできる文字起こしまたは録画付き会議のみ表示しています。",
+      "loadingFiltered": "直近の会議から文字起こしおよび録画を確認しています…",
+      "emptyFiltered": "過去14日間の会議にアクセス可能な文字起こしや録画はありません",
+      "showAll": "すべての会議を表示",
+      "filterUnavailable": "会議の内容を確認できなかったため、すべての会議を表示しています。",
+      "showAllWithCount": "すべての会議を表示（{count}件非表示）",
+      "showFiltered": "文字起こしまたは録画付き会議のみ表示",
+      "badgeTranscript": "文字起こし",
+      "badgeTranscripts": "{count}件の文字起こし",
+      "badgeRecording": "録画",
+      "badgeRecordings": "{count}件の録画",
+      "badgeNoAccess": "アクセス不可",
+      "badgePending": "処理中の可能性あり",
+      "pendingHint": "この会議は最近終了しました。Teamsで文字起こしが公開されるまで数分かかることがあります。",
+      "someUnchecked": "{count, plural, one {1件の会議は時間内に確認できませんでした—すべての会議を表示してアクセスしてください。} other {# 件の会議は時間内に確認できませんでした—すべての会議を表示してアクセスしてください。}}",
+      "throttledNote": "Microsoft 365がリクエスト制限をかけているため、一部の会議を確認できませんでした。",
+      "windowTruncated": "カレンダーが混み合っていたため、過去14日分の古い会議は確認できませんでした。",
+      "occurrences": "{count}回",
+      "importTranscriptFrom": "文字起こしをインポート（{when}）",
+      "importRecordingFrom": "録画をインポート（{when}）"
     },
     "todo": {
       "title": "Microsoft To Do タスクを作成",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "この{source}エクスポートには読み取り可能なメッセージの会話がありません。",
     "noMatches": "フィルターに一致する会話はありません",
     "listLabel": "インポートする会話"
+  },
+  "releaseNotes": {
+    "title": "新機能",
+    "whatChanged": "変更点",
+    "settingsTitle": "新機能",
+    "settingsDescription": "最近のアップデート内容を見る",
+    "loading": "リリースノートを読み込み中…",
+    "unavailable": "現在リリースノートを読み込めません。代わりにGitHubでご覧いただけます。",
+    "noDetails": "このリリースには詳細が記録されていません。",
+    "stale": "これらのノートは少し前に保存されたため、最新でない可能性があります。",
+    "englishOnly": "リリースノートは英語で記載されています。",
+    "viewOnGithub": "GitHubですべてのリリースを見る"
   }
 }

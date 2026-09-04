@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "እዚ ብመደብ ኣይሰርሐን — ዝተወደበ ወይ ተወሳኺ ቃለ-መጠይቕ ክሆን ይኽእል። እቲ ናይ መሓደሪ ቃለ-መጠይቕ ጀምረካ ዝበሃልካ ይፍጸም።",
     "startNewConversation": "ሓድሽ ቃለ-መጠይቕ ጀምር",
     "downloadDebugInfo": "መረጋገጺ መረጃ ውርድ",
-    "includeMessageText": "ናይ መልእኽቲ ጽሑፍ ኣካብዪ"
+    "includeMessageText": "ናይ መልእኽቲ ጽሑፍ ኣካብዪ",
+    "ttsEquationPlaceholder": "ስእሊ ሒሳብ"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -4903,7 +4904,27 @@
         "notConnected": "ስኤስን Microsoft 365 ኣይተርኢን። ወጻኢኩም እና ደጊሞም ግበሩ።",
         "network": "ጸባጻብ ኤርራ — በጃኹም ደጊሙ ፈቱ።",
         "generic": "ትኾኖም ጸገም ተሃድደ — በጃኹም ደጊሙ ፈቱ።"
-      }
+      },
+      "filteringNote": "ብትሕቲ ርከብዎ መንግስታት ኣብዚ መቃንን ምዝገባን ዝኾኑ ብሓላፊኡ እውን ተራእዩ።",
+      "loadingFiltered": "ኣብቲ መብርሂ ናይኩም ቅልተ ሰሚኒ ምዝገባን መቃኑን ኣሎ…",
+      "emptyFiltered": "ኣብ ቅድመ 14 መዓልቲ ምንግስታት ጸብጻብ ወይ መቃኑ ዝኾኑ የለን",
+      "showAll": "ኩሉ ምንግስታት ርአ",
+      "filterUnavailable": "ናይ ምግባር ብዝሕቶ ዝገናአ ከም ዘይተኣኸዱ፣ ስለዚ ኩሉ ምንግስታት ትርአ።",
+      "showAllWithCount": "ኩሉ ምንግስታት ሪአ ({count} ዝተሰውረ)",
+      "showFiltered": "ጸብጻብ ወይ መቃኑ ዝኾኑ ምንግስታት ብቻ ሪአ",
+      "badgeTranscript": "ጸብጻብ",
+      "badgeTranscripts": "{count} ጸብጻብታት",
+      "badgeRecording": "መቃን",
+      "badgeRecordings": "{count} መቃኑታት",
+      "badgeNoAccess": "ኣይትኸውንን",
+      "badgePending": "ክትስተኻል ኣሎና",
+      "pendingHint": "እዚ ምንግስቲ ኣብቲ ቅልተ ተዓቕበ። ብምስናዕ Teams ክሳብ ዝኣትዎ ጸብጻቡ ጥራይ ይወስን።",
+      "someUnchecked": "{count, plural, one {ሓደ ምንግስቲ ብግዜኡ ኣይተቐናአን፣ ሩክባ ኩሉ ምንግስታት ሪአ ክትስርዕ ትኽእል።} other {# ምንግስታት ብግዜኡ ኣይተቐናአኑን፣ ሩክባ ኩሉ ምንግስታት ሪአ ክትስርዕ ትኽእሉ።}}",
+      "throttledNote": "Microsoft 365 ርእየኛ ዝተኸፈነ፣ ስለዚ ተወሳኺ ምንግስታት ክትቐናኡ ኣይተኻኸዱን።",
+      "windowTruncated": "ናይ ቅድመ 14 መዓልቲ ኣብ ቁጽሪ ከምዚ ጻዕሪ ምንግስታት ኣይተቐናኡን።",
+      "occurrences": "{count} ምትኩታት",
+      "importTranscriptFrom": "ጸብጻብ ኣእቱ ({when})",
+      "importRecordingFrom": "መቃኑ ኣእቱ ({when})"
     },
     "todo": {
       "title": "Microsoft To Do ተግባራት ፍጠሩ",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "ዚ {source} ምስክር መኩሪ መልእኽቲ ዘሎ ዓወት የለን።",
     "noMatches": "ዘታነቐን ዓወታት የለን",
     "listLabel": "ዝውሰኽ ዓወታት"
+  },
+  "releaseNotes": {
+    "title": "ሓደሽቲ ዝገበሩ",
+    "whatChanged": "መኣስፋፊኡ ምንታይ ኣሎ?",
+    "settingsTitle": "ሓደሽቲ ዝገበሩ",
+    "settingsDescription": "ኣብ ቅልተ-ሕይወታት ዘተመሓየሽዎ ምንታይ ተቐይሩ ኣይተረኽበሉ",
+    "loading": "ምስጢራተ ምውዳእ…",
+    "unavailable": "ምስጢራተ ምውዳእ ሓሳብኩም ኣብዚ ኣይተመገሱን። ኣብ GitHub ክትኣቱ ትኽእሉ ኢኹም።",
+    "noDetails": "ለዓሊ መረዳእታ ንእዚ ምውዳእ ኣይተመዝገበን።",
+    "stale": "እዚ ሚናታት ብግዜ ትንሳኤ እተኣቱ እዮም እናምዃኑ ከም ክሳብ ቅድሚ ዝኾኑ ኣለዉ።",
+    "englishOnly": "ምስጢራተ ምውዳእ ብእንግሊዝኛ እዩ ዝተጻፈ።",
+    "viewOnGithub": "ኩሉ ምውዳኣት ኣብ GitHub ይርአ"
   }
 }

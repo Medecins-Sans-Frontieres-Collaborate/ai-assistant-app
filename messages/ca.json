@@ -872,7 +872,8 @@
     "repeatedFailureNotice": "Això continua fallant: pot ser que la conversa s’hagi corromput. Normalment, començar una conversa nova resol el problema.",
     "startNewConversation": "Comença una conversa nova",
     "downloadDebugInfo": "Descarrega la informació de depuració",
-    "includeMessageText": "Inclou el text del missatge"
+    "includeMessageText": "Inclou el text del missatge",
+    "ttsEquationPlaceholder": "equació"
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -4919,7 +4920,27 @@
         "notConnected": "La teva sessió de Microsoft 365 no està disponible. Prova de tancar i tornar a iniciar sessió.",
         "network": "Error de xarxa — torna-ho a intentar.",
         "generic": "Hi ha hagut un error — torna-ho a intentar."
-      }
+      },
+      "filteringNote": "Només es mostren reunions amb una transcripció o gravació disponible.",
+      "loadingFiltered": "S'estan comprovant les teves reunions recents per trobar transcripcions i gravacions…",
+      "emptyFiltered": "Cap reunió dels darrers 14 dies té una transcripció o gravació disponible",
+      "showAll": "Mostra totes les reunions",
+      "filterUnavailable": "No s'han pogut comprovar les reunions per contingut — es mostren totes les reunions.",
+      "showAllWithCount": "Mostra totes les reunions ({count} ocultes)",
+      "showFiltered": "Mostra només reunions amb transcripció o gravació",
+      "badgeTranscript": "Transcripció",
+      "badgeTranscripts": "{count} transcripcions",
+      "badgeRecording": "Gravació",
+      "badgeRecordings": "{count} gravacions",
+      "badgeNoAccess": "Sense accés",
+      "badgePending": "Pot estar pendent de processar",
+      "pendingHint": "Aquesta reunió ha acabat fa poc — Teams pot trigar uns minuts a publicar la transcripció.",
+      "someUnchecked": "{count, plural, one {No s'ha pogut comprovar una reunió a temps — mostra totes les reunions per accedir-hi.} other {No s'han pogut comprovar # reunions a temps — mostra totes les reunions per accedir-hi.}}",
+      "throttledNote": "Microsoft 365 està limitant les peticions, així que algunes reunions no s'han pogut comprovar.",
+      "windowTruncated": "El teu calendari estava prou ocupat perquè les reunions més antigues dels darrers 14 dies no s'han comprovat.",
+      "occurrences": "{count} ocurrències",
+      "importTranscriptFrom": "Importa la transcripció ({when})",
+      "importRecordingFrom": "Importa la gravació ({when})"
     },
     "todo": {
       "title": "Crea tasques a Microsoft To Do",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Aquesta exportació de {source} no conté cap conversa amb missatges llegibles.",
     "noMatches": "Cap conversa coincideix amb el teu filtre",
     "listLabel": "Converses a importar"
+  },
+  "releaseNotes": {
+    "title": "Novetats",
+    "whatChanged": "Què ha canviat?",
+    "settingsTitle": "Novetats",
+    "settingsDescription": "Consulta els canvis de les darreres actualitzacions",
+    "loading": "Carregant les notes de la versió…",
+    "unavailable": "No es poden carregar les notes de la versió ara mateix. Pots llegir-les a GitHub.",
+    "noDetails": "No s'han registrat detalls per aquesta versió.",
+    "stale": "Aquestes notes es van desar fa un temps i potser no són les més recents.",
+    "englishOnly": "Les notes de la versió estan escrites en anglès.",
+    "viewOnGithub": "Veure totes les versions a GitHub"
   }
 }

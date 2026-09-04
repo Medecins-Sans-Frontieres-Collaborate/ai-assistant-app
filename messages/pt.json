@@ -843,7 +843,8 @@
     "repeatedFailureNotice": "Isto continua falhando — a conversa pode ter sido corrompida. Iniciar uma nova conversa geralmente resolve o problema.",
     "startNewConversation": "Iniciar uma nova conversa",
     "downloadDebugInfo": "Baixar informações de depuração",
-    "includeMessageText": "Incluir texto da mensagem"
+    "includeMessageText": "Incluir texto da mensagem",
+    "ttsEquationPlaceholder": "equação"
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -4919,7 +4920,27 @@
         "notConnected": "Sua sessão do Microsoft 365 está indisponível. Tente sair e entrar novamente.",
         "network": "Erro de rede — tente novamente.",
         "generic": "Algo deu errado — tente novamente."
-      }
+      },
+      "filteringNote": "Mostrando apenas reuniões com transcrição ou gravação que você pode acessar.",
+      "loadingFiltered": "Verificando suas reuniões recentes por transcrições e gravações…",
+      "emptyFiltered": "Nenhuma reunião dos últimos 14 dias possui transcrição ou gravação acessível",
+      "showAll": "Mostrar todas as reuniões",
+      "filterUnavailable": "As reuniões não puderam ser verificadas — exibindo todas as reuniões.",
+      "showAllWithCount": "Mostrar todas as reuniões ({count} ocultas)",
+      "showFiltered": "Mostrar apenas reuniões com transcrição ou gravação",
+      "badgeTranscript": "Transcrição",
+      "badgeTranscripts": "{count} transcrições",
+      "badgeRecording": "Gravação",
+      "badgeRecordings": "{count} gravações",
+      "badgeNoAccess": "Sem acesso",
+      "badgePending": "Pode ainda estar processando",
+      "pendingHint": "Esta reunião terminou recentemente — o Teams pode demorar alguns minutos para publicar a transcrição.",
+      "someUnchecked": "{count, plural, one {Uma reunião não pôde ser verificada a tempo — mostre todas as reuniões para acessá-la.} other {# reuniões não puderam ser verificadas a tempo — mostre todas as reuniões para acessá-las.}}",
+      "throttledNote": "O Microsoft 365 está limitando as solicitações, então algumas reuniões não puderam ser verificadas.",
+      "windowTruncated": "Sua agenda estava ocupada o suficiente para que reuniões mais antigas dos últimos 14 dias não fossem verificadas.",
+      "occurrences": "{count} ocorrências",
+      "importTranscriptFrom": "Importar transcrição ({when})",
+      "importRecordingFrom": "Importar gravação ({when})"
     },
     "todo": {
       "title": "Criar tarefas no Microsoft To Do",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Esta exportação do {source} não contém conversas com mensagens legíveis.",
     "noMatches": "Nenhuma conversa corresponde ao seu filtro",
     "listLabel": "Conversas para importar"
+  },
+  "releaseNotes": {
+    "title": "Novidades",
+    "whatChanged": "O que mudou?",
+    "settingsTitle": "Novidades",
+    "settingsDescription": "Veja o que mudou nas atualizações recentes",
+    "loading": "Carregando notas da versão…",
+    "unavailable": "As notas da versão não puderam ser carregadas agora. Você pode lê-las no GitHub.",
+    "noDetails": "Nenhum detalhe foi registrado para esta versão.",
+    "stale": "Estas notas foram salvas há algum tempo e podem não ser as mais recentes.",
+    "englishOnly": "As notas da versão estão em inglês.",
+    "viewOnGithub": "Ver todos os lançamentos no GitHub"
   }
 }

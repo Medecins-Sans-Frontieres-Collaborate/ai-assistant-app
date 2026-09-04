@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Kodê na panda ndési — sô mbênî ti sô na yeke a kûê. Sô ngbângbâ tâ kûê kodê pepe ape sô na sirî mbênî.",
     "startNewConversation": "Kûê kodê mbênî",
     "downloadDebugInfo": "Zu debug info",
-    "includeMessageText": "Gbia lângûi na mbi kodê"
+    "includeMessageText": "Gbia lângûi na mbi kodê",
+    "ttsEquationPlaceholder": "équation"
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -4903,7 +4904,27 @@
         "notConnected": "Session ti lo na Microsoft 365 ayeke. Sô lo fangbê wu, kodro na yângâ.",
         "network": "Fongo na réseau — sîngî lo kêtê kûê.",
         "generic": "Tî wè ayeke sôngo — sîngî lo kêtê kûê."
-      }
+      },
+      "filteringNote": "Wunga fängö meeting sô a bê ti transcript so mo tî ködzö avû.",
+      "loadingFiltered": "Gu a tî tîrî meeting tî mo sô yeke transcript na recording…",
+      "emptyFiltered": "Ala meeting na ti 14 ndö tî pase ti yeke transcript na recording mo tî ködzö avû",
+      "showAll": "Wunga meeting kûê",
+      "filterUnavailable": "Meeting ape sirï so a tîrî content — wunga meeting kûê oko.",
+      "showAllWithCount": "Wunga meeting kûê ({count} a ndimi)",
+      "showFiltered": "Wunga meeting sô ga transcript na recording mo tî ködzö avû",
+      "badgeTranscript": "Transcript",
+      "badgeTranscripts": "{count} transcript",
+      "badgeRecording": "Recording",
+      "badgeRecordings": "{count} recording",
+      "badgeNoAccess": "Ala ködzö",
+      "badgePending": "Se leka zo bara",
+      "pendingHint": "Meeting tî i fitini nsèkê — Teams a yèkè gânda tî yeke rè transcript na tango tî mo.",
+      "someUnchecked": "{count, plural, one {Meeting mïngö apékè tîrî na ndâ — wunga meeting kûê tî ködzö avû.} other {# meeting apékè tîrî na ndâ — wunga meeting kûê tî ködzö avû.}}",
+      "throttledNote": "Microsoft 365 ga suku tî demande, si wengi lâ meeting ape sirï so a tîrî.",
+      "windowTruncated": "Kalendrier tî mo ga nyentu mbï na, si meeting ti ndö ti yanga 14 ndö tî pase apékè tîrî.",
+      "occurrences": "{count} occurrence",
+      "importTranscriptFrom": "Ganza transcript ({when})",
+      "importRecordingFrom": "Ganza recording ({when})"
     },
     "todo": {
       "title": "Sâla tânga ti To Do na Microsoft",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "{source} export a yeke na maboko bä ngangu so dîko tî bâka.",
     "noMatches": "Maboko ö tî sè yeke ti gânda mo na filtre",
     "listLabel": "Maboko ti küè"
+  },
+  "releaseNotes": {
+    "title": "Sô mbeti",
+    "whatChanged": "Sô mbi côto?",
+    "settingsTitle": "Sô mbeti",
+    "settingsDescription": "Yéké nga sô mbi côto na likôndo ti gïngö ti tême",
+    "loading": "Gu a yindî release notes…",
+    "unavailable": "Release notes ape sirï so a yindî na tango i. Oko, oko bê nani lo na GitHub.",
+    "noDetails": "Ala sô mbi kulû lâ na release tî azo.",
+    "stale": "Notes ti i yângâ lê biti fetê na ndinî, sô ndêrê bala a tî ôko na mo tî tîrî.",
+    "englishOnly": "Release notes ga zia na English mo ïrè.",
+    "viewOnGithub": "Zia release kûê na GitHub"
   }
 }

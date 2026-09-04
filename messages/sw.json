@@ -897,7 +897,8 @@
     "repeatedFailureNotice": "Hii inaendelea kushindwa — mazungumzo huenda yameharibika. Kuanza mazungumzo mapya kawaida hutatua tatizo hili.",
     "startNewConversation": "Anza mazungumzo mapya",
     "downloadDebugInfo": "Pakua taarifa za utatuzi wa hitilafu",
-    "includeMessageText": "Jumlisha maandishi ya ujumbe"
+    "includeMessageText": "Jumlisha maandishi ya ujumbe",
+    "ttsEquationPlaceholder": "mlinganyo"
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -4919,7 +4920,27 @@
         "notConnected": "Kipindi chako cha Microsoft 365 hakipatikani. Jaribu kujitoa na kuingia tena.",
         "network": "Hitilafu ya mtandao — tafadhali jaribu tena.",
         "generic": "Kuna tatizo limetokea — tafadhali jaribu tena."
-      }
+      },
+      "filteringNote": "Inaonyesha tu mikutano yenye maandishi au rekodi unayoweza kufikia.",
+      "loadingFiltered": "Inakagua mikutano yako ya karibuni kwa maandishi na rekodi…",
+      "emptyFiltered": "Hakuna mikutano kutoka siku 14 zilizopita yenye maandishi au rekodi unayoweza kufikia",
+      "showAll": "Onyesha mikutano yote",
+      "filterUnavailable": "Haiwezekani kukagua maudhui ya mikutano — inaonyesha mikutano yote badala yake.",
+      "showAllWithCount": "Onyesha mikutano yote ({count} iliyofichwa)",
+      "showFiltered": "Onyesha tu mikutano yenye maandishi au rekodi",
+      "badgeTranscript": "Maandishi",
+      "badgeTranscripts": "{count} maandishi",
+      "badgeRecording": "Rekodi",
+      "badgeRecordings": "{count} rekodi",
+      "badgeNoAccess": "Hakuna ufikiaji",
+      "badgePending": "Inaweza bado inachakatwa",
+      "pendingHint": "Mkutano huu umemalizika hivi karibuni — Teams inaweza kuchukua dakika chache kuchapisha maandishi.",
+      "someUnchecked": "{count, plural, one {Mkutano mmoja haukuweza kukaguliwa kwa wakati — onyesha mikutano yote ili kuufikia.} other {Mikutano # haikuweza kukaguliwa kwa wakati — onyesha mikutano yote ili kuifikia.}}",
+      "throttledNote": "Microsoft 365 inazuia maombi, hivyo baadhi ya mikutano haiwezi kukaguliwa.",
+      "windowTruncated": "Kalenda yako ilikuwa na shughuli nyingi kiasi kwamba mikutano ya zamani zaidi katika siku 14 zilizopita haikukaguliwa.",
+      "occurrences": "Matukio {count}",
+      "importTranscriptFrom": "Ingiza maandishi ({when})",
+      "importRecordingFrom": "Ingiza rekodi ({when})"
     },
     "todo": {
       "title": "Unda kazi za Microsoft To Do",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "{source} hii haijumuishi mazungumzo yenye ujumbe unaosomeka.",
     "noMatches": "Hakuna mazungumzo yanayolingana na kichujio chako",
     "listLabel": "Mazungumzo ya kuingiza"
+  },
+  "releaseNotes": {
+    "title": "Nini kipya",
+    "whatChanged": "Nini kimebadilika?",
+    "settingsTitle": "Nini kipya",
+    "settingsDescription": "Tazama kilichobadilika kwenye masasisho ya karibuni",
+    "loading": "Inapakia maelezo ya toleo…",
+    "unavailable": "Maelezo ya toleo hayawezi kupakiwa kwa sasa. Unaweza kuyasoma kwenye GitHub badala yake.",
+    "noDetails": "Hakuna maelezo yaliyorekodiwa kwa toleo hili.",
+    "stale": "Maelezo haya yaliokolewa muda mfupi uliopita na huenda si ya karibuni kabisa.",
+    "englishOnly": "Maelezo ya toleo yameandikwa kwa Kiingereza.",
+    "viewOnGithub": "Tazama matoleo yote kwenye GitHub"
   }
 }

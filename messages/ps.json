@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "دا بار بار ناکامېږي — ښايي خبرې فاسد شوې وي. عموماً نوې خبرې پيلول دا ستونزه حل کوي.",
     "startNewConversation": "نوې خبرې پيل کړئ",
     "downloadDebugInfo": "د Debug معلومات ډاونلوډ کړئ",
-    "includeMessageText": "د پیغام متن هم شامل کړئ"
+    "includeMessageText": "د پیغام متن هم شامل کړئ",
+    "ttsEquationPlaceholder": "معادله"
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -4903,7 +4904,27 @@
         "notConnected": "ستاسو د Microsoft 365 ناسته نشته. وتۍ او بېرته ننه وزئ.",
         "network": "د شبکې ستونزه — مهرباني وکړئ بیا هڅه وکړئ.",
         "generic": "یوه ستونزه رامنځته شوه — مهرباني وکړئ بیا هڅه وکړئ."
-      }
+      },
+      "filteringNote": "یوازې هغه ناستې ښودل کېږي چې تاسو یې ریکارډ یا نقل ته لاسرسی لرئ.",
+      "loadingFiltered": "ستاسو تازه ناستې د نقل او ثبت لپاره کتل کېږي...",
+      "emptyFiltered": "د تېرو ۱۴ ورځو هیڅ ناسته نقل یا ثبت ته لاسرسی نه لري",
+      "showAll": "ټولې ناستې وښایاست",
+      "filterUnavailable": "ناستو منځپانګه نه ده ارزول شوې — ټولې ناستې ښودل کېږي.",
+      "showAllWithCount": "ټولې ناستې وښایاست ({count} پټې دي)",
+      "showFiltered": "یوازې نقل یا ثبت لرونکې ناستې وښایاست",
+      "badgeTranscript": "نقل",
+      "badgeTranscripts": "{count} نقلونه",
+      "badgeRecording": "ریکارډ",
+      "badgeRecordings": "{count} ریکارډونه",
+      "badgeNoAccess": "لاسرسی نشته",
+      "badgePending": "لا هم پروسس کې",
+      "pendingHint": "دا ناسته تازه پای ته رسېدلې — Teams ته څو دقیقې وخت پکار دی تر څو نقل خپور کړي.",
+      "someUnchecked": "{count, plural, one {یوه ناسته په وخت چیک نشوه — رسېدلو لپاره ټولې ناستې وښایاست.} other {# ناستې په وخت چیک نشوې — رسېدلو لپاره ټولې ناستې وښایاست.}}",
+      "throttledNote": "Microsoft 365 غوښتنې محدودوي، له همدې امله ځینې ناستې چیک نشوې.",
+      "windowTruncated": "ستاسو کلینډر دومره بوخت و چې د تېرو ۱۴ ورځو زاړه ناستې نه دي چیک شوې.",
+      "occurrences": "{count} پېښې",
+      "importTranscriptFrom": "نقل وارد کړئ ({when})",
+      "importRecordingFrom": "ریکارډ وارد کړئ ({when})"
     },
     "todo": {
       "title": "د Microsoft To Do دندې جوړ کړئ",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "دا {source} صادره کې هېڅ داسې ګفتمان نشته چې لوستل کېدونکي پیغامونه ولري.",
     "noMatches": "هیڅ ګفتمان ستاسو د فلټر سره نه سمون خوري",
     "listLabel": "وارد کېدونکي ګفتمانونه"
+  },
+  "releaseNotes": {
+    "title": "نوې ځانګړتیاوې",
+    "whatChanged": "څه بدلون راغلی؟",
+    "settingsTitle": "نوې ځانګړتیاوې",
+    "settingsDescription": "وروستیو تازه معلوماتو کې بدلونونه وګورئ",
+    "loading": "د خوشې یادښتونه درلودل کیږي...",
+    "unavailable": "خوشې یادښتونه اوس نشي بارېدلی. تاسو کولای شئ دا په GitHub کې ولولئ.",
+    "noDetails": "د دې خوشې لپاره جزئیات نه دي ثبت شوي.",
+    "stale": "دا یادښتونه څه موده مخکې ثبت شوي او ښايي تر ټولو نوي نه وي.",
+    "englishOnly": "خوشې یادښتونه په انګلیسي لیکل شوي دي.",
+    "viewOnGithub": "ټول خوشې معلومات په GitHub کې وګورئ"
   }
 }

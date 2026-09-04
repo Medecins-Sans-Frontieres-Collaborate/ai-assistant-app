@@ -843,7 +843,8 @@
     "repeatedFailureNotice": "Échec répété — la conversation a peut-être été corrompue. Commencer une nouvelle conversation résout généralement ce problème.",
     "startNewConversation": "Démarrer une nouvelle conversation",
     "downloadDebugInfo": "Télécharger les informations de débogage",
-    "includeMessageText": "Inclure le texte du message"
+    "includeMessageText": "Inclure le texte du message",
+    "ttsEquationPlaceholder": "équation"
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",
@@ -4919,7 +4920,27 @@
         "notConnected": "Votre session Microsoft 365 est indisponible. Essayez de vous déconnecter puis reconnecter.",
         "network": "Erreur réseau — veuillez réessayer.",
         "generic": "Une erreur est survenue — veuillez réessayer."
-      }
+      },
+      "filteringNote": "Affichage uniquement des réunions avec une transcription ou un enregistrement accessible.",
+      "loadingFiltered": "Vérification des transcriptions et enregistrements de vos dernières réunions…",
+      "emptyFiltered": "Aucune réunion des 14 derniers jours n’a de transcription ou d’enregistrement accessible",
+      "showAll": "Afficher toutes les réunions",
+      "filterUnavailable": "Impossible de vérifier le contenu des réunions — affichage de toutes les réunions à la place.",
+      "showAllWithCount": "Afficher toutes les réunions ({count} masquées)",
+      "showFiltered": "Afficher uniquement les réunions avec transcription ou enregistrement",
+      "badgeTranscript": "Transcription",
+      "badgeTranscripts": "{count} transcriptions",
+      "badgeRecording": "Enregistrement",
+      "badgeRecordings": "{count} enregistrements",
+      "badgeNoAccess": "Aucun accès",
+      "badgePending": "Peut encore être en traitement",
+      "pendingHint": "Cette réunion s’est terminée récemment — Teams peut prendre quelques minutes pour publier la transcription.",
+      "someUnchecked": "{count, plural, one {Une réunion n’a pas pu être vérifiée dans les temps — affichez toutes les réunions pour y accéder.} other {# réunions n’ont pas pu être vérifiées dans les temps — affichez toutes les réunions pour y accéder.}}",
+      "throttledNote": "Microsoft 365 limite les requêtes, certaines réunions n’ont donc pas pu être vérifiées.",
+      "windowTruncated": "Votre agenda étant très chargé, les réunions plus anciennes des 14 derniers jours n’ont pas été vérifiées.",
+      "occurrences": "{count} occurrences",
+      "importTranscriptFrom": "Importer la transcription ({when})",
+      "importRecordingFrom": "Importer l’enregistrement ({when})"
     },
     "todo": {
       "title": "Créer des tâches Microsoft To Do",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Cet export {source} ne contient aucune conversation avec des messages lisibles.",
     "noMatches": "Aucune conversation ne correspond à votre filtre",
     "listLabel": "Conversations à importer"
+  },
+  "releaseNotes": {
+    "title": "Nouveautés",
+    "whatChanged": "Qu'est-ce qui a changé ?",
+    "settingsTitle": "Nouveautés",
+    "settingsDescription": "Découvrez les changements des dernières mises à jour",
+    "loading": "Chargement des notes de version…",
+    "unavailable": "Les notes de version ne peuvent pas être chargées pour le moment. Vous pouvez les lire sur GitHub à la place.",
+    "noDetails": "Aucun détail n’a été enregistré pour cette version.",
+    "stale": "Ces notes ont été enregistrées il y a quelque temps et peuvent ne pas être les plus récentes.",
+    "englishOnly": "Les notes de version sont rédigées en anglais.",
+    "viewOnGithub": "Voir toutes les versions sur GitHub"
   }
 }

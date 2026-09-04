@@ -897,7 +897,8 @@
     "repeatedFailureNotice": "Det här misslyckas upprepade gånger — konversationen kan ha blivit korrupt. Att starta en ny konversation löser oftast problemet.",
     "startNewConversation": "Starta en ny konversation",
     "downloadDebugInfo": "Ladda ner felsökningsinformation",
-    "includeMessageText": "Inkludera meddelandetext"
+    "includeMessageText": "Inkludera meddelandetext",
+    "ttsEquationPlaceholder": "ekvation"
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -4919,7 +4920,27 @@
         "notConnected": "Din Microsoft 365-session är inte tillgänglig. Försök att logga ut och in igen.",
         "network": "Nätverksfel — försök igen.",
         "generic": "Något gick fel — försök igen."
-      }
+      },
+      "filteringNote": "Visar endast möten med en transkription eller inspelning som du har tillgång till.",
+      "loadingFiltered": "Kontrollerar dina senaste möten efter transkriptioner och inspelningar…",
+      "emptyFiltered": "Inga möten från de senaste 14 dagarna har en transkription eller inspelning du kan nå",
+      "showAll": "Visa alla möten",
+      "filterUnavailable": "Möten kunde inte kontrolleras för innehåll — visar alla möten istället.",
+      "showAllWithCount": "Visa alla möten ({count} dolda)",
+      "showFiltered": "Visa endast möten med transkription eller inspelning",
+      "badgeTranscript": "Transkription",
+      "badgeTranscripts": "{count} transkriptioner",
+      "badgeRecording": "Inspelning",
+      "badgeRecordings": "{count} inspelningar",
+      "badgeNoAccess": "Ingen åtkomst",
+      "badgePending": "Kan fortfarande bearbetas",
+      "pendingHint": "Detta möte avslutades nyligen — Teams kan ta några minuter att publicera transkriptionen.",
+      "someUnchecked": "{count, plural, one {Ett möte kunde inte kontrolleras i tid — visa alla möten för att nå det.} other {# möten kunde inte kontrolleras i tid — visa alla möten för att nå dem.}}",
+      "throttledNote": "Microsoft 365 begränsar förfrågningar, så vissa möten kunde inte kontrolleras.",
+      "windowTruncated": "Din kalender var tillräckligt full för att äldre möten de senaste 14 dagarna inte kontrollerades.",
+      "occurrences": "{count} tillfällen",
+      "importTranscriptFrom": "Importera transkription ({when})",
+      "importRecordingFrom": "Importera inspelning ({when})"
     },
     "todo": {
       "title": "Skapa Microsoft To Do-uppgifter",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Denna {source}-export innehåller inga konversationer med läsbara meddelanden.",
     "noMatches": "Inga konversationer matchar ditt filter",
     "listLabel": "Konversationer att importera"
+  },
+  "releaseNotes": {
+    "title": "Vad är nytt",
+    "whatChanged": "Vad har ändrats?",
+    "settingsTitle": "Vad är nytt",
+    "settingsDescription": "Se vad som har ändrats i de senaste uppdateringarna",
+    "loading": "Laddar versionsanteckningar…",
+    "unavailable": "Versionsanteckningarna kunde inte laddas just nu. Du kan läsa dem på GitHub istället.",
+    "noDetails": "Inga detaljer registrerades för denna version.",
+    "stale": "Dessa anteckningar sparades för en tid sedan och kanske inte är de allra senaste.",
+    "englishOnly": "Versionsanteckningarna är skrivna på engelska.",
+    "viewOnGithub": "Visa alla versioner på GitHub"
   }
 }

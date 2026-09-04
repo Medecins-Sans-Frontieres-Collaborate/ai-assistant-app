@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Ekoki kaka kobeba — boyokanisi ekoki kozala ebateli te. Kozwa boyokanisi ya sika ezalaka mbala mingi solution.",
     "startNewConversation": "Kobanda boyokanisi ya sika",
     "downloadDebugInfo": "Kozwa ba informasyo ya debug",
-    "includeMessageText": "Tia kati mobeko ya sango"
+    "includeMessageText": "Tia kati mobeko ya sango",
+    "ttsEquationPlaceholder": "ekwesio"
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -4903,7 +4904,27 @@
         "notConnected": "Session na Microsoft 365 ezali te. S'il te plaît bima pe kota lisusu.",
         "network": "Netiwork ezali na likambo — meka lisusu.",
         "generic": "Likweya moko esalemi — meka lisusu."
-      }
+      },
+      "filteringNote": "Ezali kolakisa kaka bitángo na transcript to enregistrement okoki kozwa.",
+      "loadingFiltered": "Kozwa bitango ya suka mpo na ba transcript mpe ba enregistrement…",
+      "emptyFiltered": "Ezali bitango moko te utá mikolo 14 eyálí na transcript to enregistrement okoki kozwa",
+      "showAll": "Lakisá bitángo nionso",
+      "filterUnavailable": "Bitángo ekokaki te kolukama mpo na contenu — kolakisa bitángo nionso na esika yango.",
+      "showAllWithCount": "Lakisá bitángo nionso ({count} ebombami)",
+      "showFiltered": "Lakisá kaka bitángo na transcript to enregistrement",
+      "badgeTranscript": "Transcript",
+      "badgeTranscripts": "{count} ba transcript",
+      "badgeRecording": "Enregistrement",
+      "badgeRecordings": "{count} ba enregistrement",
+      "badgeNoAccess": "Nzela te",
+      "badgePending": "Ekoki kozala naino nyonso",
+      "pendingHint": "Bitango yango esili seko — Teams ekoki kozwa mwa miniti pona kopesa transcript.",
+      "someUnchecked": "{count, plural, one {Bitango moko ekokaki te kolukama na tango — lakisá bitángo nionso mpo okóta yango.} other {# bitángo ekokaki te kolukama na tango — lakisá bitángo nionso mpo okóta yango.}}",
+      "throttledNote": "Microsoft 365 ezali kokitisa mitindo, yango mosusu bitángo ekokaki te kolukama.",
+      "windowTruncated": "Kalendrier na yo ezalaki mingi mpe bitángo ya kala mingi ya mikolo 14 eyálí ekolukamaki te.",
+      "occurrences": "{count} mbala",
+      "importTranscriptFrom": "Somba transcript ({when})",
+      "importRecordingFrom": "Somba enregistrement ({when})"
     },
     "todo": {
       "title": "Kokela misala na Microsoft To Do",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "Export ya {source} oyo ezali na lisolo moko te ya na nsango oyo etangami.",
     "noMatches": "Lisolo moko te ekokani na filtre na yo",
     "listLabel": "Masolo ya kotambwisa"
+  },
+  "releaseNotes": {
+    "title": "Nini ya sika",
+    "whatChanged": "Nini ebongwani?",
+    "settingsTitle": "Nini ya sika",
+    "settingsDescription": "Talá makambo ebongwani na ba misaleli ya suka",
+    "loading": "Kozwa maloba ya kobimisa…",
+    "unavailable": "Maloba ya kobimisa ekoki kozwa sik’oyo te. Okoki kotánga yango na GitHub na esika yango.",
+    "noDetails": "Bokeseni moko elandamaki te na kobimisa oyo.",
+    "stale": "Bamaloba oyo ebombamaki kala moke lelo, ekoki kozala ya kala.",
+    "englishOnly": "Maloba ya kobimisa ekomámá kaka na Lingelesá.",
+    "viewOnGithub": "Talá ba kobimisa nionso na GitHub"
   }
 }

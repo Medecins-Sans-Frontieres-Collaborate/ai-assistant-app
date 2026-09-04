@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Zikuchitika mobwerezabwereza — kukambirana kumeneku kungakhale kwawonongeka. Kuyambiranso kukambirana kwatsopano nthawi zambiri kumathandiza kuthetsa vutoli.",
     "startNewConversation": "Yambitsa kukambirana kwatsopano",
     "downloadDebugInfo": "Tsitsani zambiri za debug",
-    "includeMessageText": "Phatikizani mawu a uthenga"
+    "includeMessageText": "Phatikizani mawu a uthenga",
+    "ttsEquationPlaceholder": "chilinganizo"
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -4903,7 +4904,27 @@
         "notConnected": "Microsoft 365 yanu sikupezeka. Yesani kutuluka ndi kulowa kachiwiri.",
         "network": "Vuto pa netiweki — chonde yesani kachiwiri.",
         "generic": "Pakhala vuto — chonde yesani kachiwiri."
-      }
+      },
+      "filteringNote": "Ikusonyeza zokha misonkhano yokhala ndi transcript kapena kujambulidwa yomwe mungafikire.",
+      "loadingFiltered": "Ikuyang'ana misonkhano yanu yaposachedwa kuti ipeze ma transcript ndi zojambulidwa…",
+      "emptyFiltered": "Palibe misonkhano ya masiku 14 apitawa yokhala ndi transcript kapena kujambulidwa komwe mungafikire",
+      "showAll": "Onetsani misonkhano yonse",
+      "filterUnavailable": "Misonkhano sinafufuzidwe zili — ikuwonetsa misonkhano yonse mmalo mwake.",
+      "showAllWithCount": "Onetsani misonkhano yonse ({count} zobisidwa)",
+      "showFiltered": "Onetsani zokha misonkhano yokhala ndi transcript kapena kujambulidwa",
+      "badgeTranscript": "Transcript",
+      "badgeTranscripts": "{count} ma transcript",
+      "badgeRecording": "Kujambulidwa",
+      "badgeRecordings": "{count} zojambulidwa",
+      "badgeNoAccess": "Palibe mwayi",
+      "badgePending": "Mwinanso ikuukirabe",
+      "pendingHint": "Msonkhanowu watha posachedwa — Teams imatha kutenga mphindi zingapo kuti ipereke transcript.",
+      "someUnchecked": "{count, plural, one {Msonkhano umodzi sunafufuzidwe munthawi yake — onetsani misonkhano yonse kuti mufikire.} other {# misonkhano sinafufuzidwe munthawi yake — onetsani misonkhano yonse kuti mufikirewo.}}",
+      "throttledNote": "Microsoft 365 ikuchepetsa pempho, kotero misonkhano ina sanafufuzidwe.",
+      "windowTruncated": "Ndandanda yanu inali yodzaza kotero misonkhano yakale ya masiku 14 apitawa sinatha kufufuzidwa.",
+      "occurrences": "{count} zochitika",
+      "importTranscriptFrom": "Tengani transcript ({when})",
+      "importRecordingFrom": "Tengani kujambulidwa ({when})"
     },
     "todo": {
       "title": "Pangani Microsoft To Do tasks",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "{source} export iyi ilibe zokambirana zomwe zili ndi mauthenga owerengeka.",
     "noMatches": "Palibe zokambirana zomwe zikugwirizana ndi sefayi yanu",
     "listLabel": "Zokambirana zotengedwa"
+  },
+  "releaseNotes": {
+    "title": "Zatsopano",
+    "whatChanged": "Chasinthidwa chiyani?",
+    "settingsTitle": "Zatsopano",
+    "settingsDescription": "Onani zomwe zasintha mu zosintha zaposachedwa",
+    "loading": "Ikutsegula zolemba zotulutsa…",
+    "unavailable": "Zolemba zotulutsa sizingathe kutsegulidwa pakali pano. Mutha kuziwerenga pa GitHub mmalo mwake.",
+    "noDetails": "Palibe zambiri zalembedwa pa zotulutsa izi.",
+    "stale": "Zolemba izi zidasungidwa kalekale ndipo mwina sizili zaposachedwapa.",
+    "englishOnly": "Zolemba zotulutsa zalembedwa mu Chingerezi.",
+    "viewOnGithub": "Onani zotulutsa zonse pa GitHub"
   }
 }

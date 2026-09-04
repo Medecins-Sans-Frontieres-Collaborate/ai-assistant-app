@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Lokhu kuyaqhubeka kwehluleka — ingxoxo ingase isonakale. Ukuqala ingxoxo entsha kuvamise ukulungisa lokhu.",
     "startNewConversation": "Qala ingxoxo entsha",
     "downloadDebugInfo": "Landa ulwazi lokuhlola amaphutha",
-    "includeMessageText": "Faka umbhalo womyalezo"
+    "includeMessageText": "Faka umbhalo womyalezo",
+    "ttsEquationPlaceholder": "isibalo"
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -4903,7 +4904,27 @@
         "notConnected": "Iseshini yakho ye-Microsoft 365 ayitholakali. Zama ukuphuma ungene futhi.",
         "network": "Iphutha lenethiwekhi — zama futhi.",
         "generic": "Kuvele inkinga — zama futhi."
-      }
+      },
+      "filteringNote": "Kubukiswa kuphela imihlangano enombhalo oqoshiwe noma ukurekhodwa ongakufinyelela.",
+      "loadingFiltered": "Kuhlolwa imihlangano yakamuva ukuthola imibhalo eqoshiwe noma ukurekhodwa…",
+      "emptyFiltered": "Akunamihlangano ezinsukwini eziyi-14 ezedlule enombhalo oqoshiwe noma ukurekhodwa ongakufinyelela",
+      "showAll": "Bonisa yonke imihlangano",
+      "filterUnavailable": "Imihlangano ayikwazanga ukuhlolwa okuqukethwe — kuboniswa yonke imihlangano esikhundleni salokho.",
+      "showAllWithCount": "Bonisa yonke imihlangano ({count} efihliwe)",
+      "showFiltered": "Bonisa kuphela imihlangano enombhalo oqoshiwe noma ukurekhodwa",
+      "badgeTranscript": "Umbhalo oqoshiwe",
+      "badgeTranscripts": "{count} imibhalo eqoshiwe",
+      "badgeRecording": "Ukurekhoda",
+      "badgeRecordings": "{count} ukurekhodwa",
+      "badgeNoAccess": "Akukho ukufinyelela",
+      "badgePending": "Kusaseqhubeka nokucubungula",
+      "pendingHint": "Lo mhlangano usanda kuphela — i-Teams ingathatha imizuzu embalwa ukukhipha umbhalo oqoshiwe.",
+      "someUnchecked": "{count, plural, one {Umhlangano owodwa awuzange uhlolwe ngesikhathi — khombisa yonke imihlangano ukuze uwufinyelele.} other {Imihlangano engu-# ayizange ihlolwe ngesikhathi — khombisa yonke imihlangano ukuze uyifinyelele.}}",
+      "throttledNote": "I-Microsoft 365 ivimbele izicelo, ngakho eminye imihlangano ayikwazanga ukuhlolwa.",
+      "windowTruncated": "Ikhalenda lakho belimatasa kangangokuthi imihlangano endala ezinsukwini eziyi-14 ezedlule ayizange ihlolwe.",
+      "occurrences": "{count} ukwenzeka",
+      "importTranscriptFrom": "Ngenisa umbhalo oqoshiwe ({when})",
+      "importRecordingFrom": "Ngenisa ukurekhoda ({when})"
     },
     "todo": {
       "title": "Dala imisebenzi ye-Microsoft To Do",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "Le {source} yokuthekelisa ayinazo izingxoxo eziqukethe imiyalezo efundekayo.",
     "noMatches": "Azikho izingxoxo ezihambisana nokuhlunga kwakho",
     "listLabel": "Izingxoxo ezizongeniswa"
+  },
+  "releaseNotes": {
+    "title": "Okusha",
+    "whatChanged": "Yini esishintshile?",
+    "settingsTitle": "Okusha",
+    "settingsDescription": "Bheka okushintshile ezibuyekezeni zakamuva",
+    "loading": "Kulayishwa amanothi okukhishwa…",
+    "unavailable": "Amanothi okukhishwa awakwazi ukulayishwa njengamanje. Ungawafunda ku-GitHub esikhundleni salokho.",
+    "noDetails": "Awekho imininingwane eqoshiwe ngalokhu kukhishwa.",
+    "stale": "Lamanothi agcinwe kudala kancane futhi angase angabi okusha sha.",
+    "englishOnly": "Amanothi okukhishwa abhalwe ngesiNgisi.",
+    "viewOnGithub": "Buka zonke izikhishwa ku-GitHub"
   }
 }

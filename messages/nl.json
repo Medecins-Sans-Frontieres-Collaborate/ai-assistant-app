@@ -862,7 +862,8 @@
     "repeatedFailureNotice": "Dit blijft misgaan — het gesprek is mogelijk beschadigd geraakt. Een nieuw gesprek starten lost dit meestal op.",
     "startNewConversation": "Nieuw gesprek starten",
     "downloadDebugInfo": "Debug-informatie downloaden",
-    "includeMessageText": "Berichttekst toevoegen"
+    "includeMessageText": "Berichttekst toevoegen",
+    "ttsEquationPlaceholder": "vergelijking"
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -4919,7 +4920,27 @@
         "notConnected": "Je Microsoft 365-sessie is niet beschikbaar. Probeer uit- en opnieuw in te loggen.",
         "network": "Netwerkfout — probeer het opnieuw.",
         "generic": "Er is iets misgegaan — probeer het opnieuw."
-      }
+      },
+      "filteringNote": "Alleen vergaderingen met een transcript of opname waar u bij kunt worden getoond.",
+      "loadingFiltered": "Uw recente vergaderingen worden gecontroleerd op transcripties en opnamen…",
+      "emptyFiltered": "Geen vergaderingen van de afgelopen 14 dagen bevatten een transcript of opname waar u bij kunt",
+      "showAll": "Alle vergaderingen tonen",
+      "filterUnavailable": "Vergaderingen konden niet worden gecontroleerd op inhoud — alle vergaderingen worden getoond.",
+      "showAllWithCount": "Alle vergaderingen tonen ({count} verborgen)",
+      "showFiltered": "Toon alleen vergaderingen met een transcript of opname",
+      "badgeTranscript": "Transcript",
+      "badgeTranscripts": "{count} transcripties",
+      "badgeRecording": "Opname",
+      "badgeRecordings": "{count} opnamen",
+      "badgeNoAccess": "Geen toegang",
+      "badgePending": "Kan nog in verwerking zijn",
+      "pendingHint": "Deze vergadering is onlangs beëindigd — Teams kan enkele minuten nodig hebben om het transcript te publiceren.",
+      "someUnchecked": "{count, plural, one {Eén vergadering kon niet op tijd worden gecontroleerd — toon alle vergaderingen om deze te bereiken.} other {# vergaderingen konden niet op tijd worden gecontroleerd — toon alle vergaderingen om ze te bereiken.}}",
+      "throttledNote": "Microsoft 365 beperkt het aantal verzoeken, waardoor sommige vergaderingen niet konden worden gecontroleerd.",
+      "windowTruncated": "Uw agenda was druk genoeg dat oudere vergaderingen in de afgelopen 14 dagen niet zijn gecontroleerd.",
+      "occurrences": "{count} keer",
+      "importTranscriptFrom": "Transcript importeren ({when})",
+      "importRecordingFrom": "Opname importeren ({when})"
     },
     "todo": {
       "title": "Microsoft To Do-taken aanmaken",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Deze {source}-export bevat geen gesprekken met leesbare berichten.",
     "noMatches": "Geen gesprekken komen overeen met uw filter",
     "listLabel": "Gesprekken om te importeren"
+  },
+  "releaseNotes": {
+    "title": "Wat is er nieuw",
+    "whatChanged": "Wat is er veranderd?",
+    "settingsTitle": "Wat is er nieuw",
+    "settingsDescription": "Bekijk wat er is veranderd in recente updates",
+    "loading": "Release-opmerkingen laden…",
+    "unavailable": "Release-opmerkingen kunnen nu niet worden geladen. U kunt ze in plaats daarvan op GitHub lezen.",
+    "noDetails": "Voor deze release zijn geen details vastgelegd.",
+    "stale": "Deze opmerkingen zijn enige tijd geleden opgeslagen en mogelijk niet volledig actueel.",
+    "englishOnly": "Release-opmerkingen zijn in het Engels geschreven.",
+    "viewOnGithub": "Bekijk alle releases op GitHub"
   }
 }

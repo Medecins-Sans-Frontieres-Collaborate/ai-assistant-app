@@ -955,7 +955,8 @@
     "repeatedFailureNotice": "Ana ci gaba da samun matsala — yiwuwar tattaunawar ta samu matsala. Fara sabuwar tattaunawa yawanci yana gyara haka.",
     "startNewConversation": "Fara sabuwar tattaunawa",
     "downloadDebugInfo": "Sauke bayanan warware matsala",
-    "includeMessageText": "Hada da rubutun saƙo"
+    "includeMessageText": "Hada da rubutun saƙo",
+    "ttsEquationPlaceholder": "daidaito"
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -4903,7 +4904,27 @@
         "notConnected": "Ba a samu haɗin zaman Microsoft 365 dinka ba. Gwada fita ka dawo ciki.",
         "network": "Kuskuren cibiyar sadarwa — don Allah a sake gwadawa.",
         "generic": "Wani abu ya samu matsala — don Allah a sake gwadawa."
-      }
+      },
+      "filteringNote": "Ana nuna tarurruka kawai da ke da rubutaccen sauti ko rikodi da za ku iya samu.",
+      "loadingFiltered": "Ana bincika sababbin tarurrukanku don rubutu da rikodi…",
+      "emptyFiltered": "Babu taro daga kwanaki 14 da suka wuce da ke da rubutaccen sauti ko rikodi da za ku iya samu",
+      "showAll": "Nuna duk tarurruka",
+      "filterUnavailable": "Ba a iya bincika abubuwan tarurrukan ba — don haka an nuna duk tarurruka.",
+      "showAllWithCount": "Nuna duk tarurruka ({count} an ɓoye)",
+      "showFiltered": "Nuna tarurruka kawai da ke da rubutaccen sauti ko rikodi",
+      "badgeTranscript": "Rubutaccen sauti",
+      "badgeTranscripts": "{count} rubutattun sautuka",
+      "badgeRecording": "Rikodi",
+      "badgeRecordings": "{count} rikodi",
+      "badgeNoAccess": "Ba a samun dama",
+      "badgePending": "Na iya ci gaba da aiki",
+      "pendingHint": "Wannan taron ya kare kwanan nan — Teams na iya ɗaukar ƴan mintuna kafin a fitar da rubutaccen sauti.",
+      "someUnchecked": "{count, plural, one {Ba a iya bincika taro ɗaya a lokaci ba — nuna duk tarurruka don samun shi.} other {Ba a iya bincika tarurruka # a lokaci ba — nuna duk tarurruka don samun su.}}",
+      "throttledNote": "Microsoft 365 na rage buƙatu, don haka ba a iya bincika wasu tarurruka ba.",
+      "windowTruncated": "Jadawalinku ya cika har ba a duba tsoffin tarurruka na kwanaki 14 da suka wuce ba.",
+      "occurrences": "Lokuta {count}",
+      "importTranscriptFrom": "Shigo da rubutaccen sauti ({when})",
+      "importRecordingFrom": "Shigo da rikodi ({when})"
     },
     "todo": {
       "title": "Kirkiri ayyuka a Microsoft To Do",
@@ -5182,5 +5203,17 @@
     "nothingImportable": "Wannan fitarwar {source} ba ta ƙunshi kowace tattaunawa da ake iya karanta saƙonninta ba.",
     "noMatches": "Babu tattaunawar da ta dace da tsarin tacewa naka",
     "listLabel": "Tattaunawar da za a shigo da su"
+  },
+  "releaseNotes": {
+    "title": "Abin sabo",
+    "whatChanged": "Me ya canza?",
+    "settingsTitle": "Abin sabo",
+    "settingsDescription": "Duba abin da ya canza a sabbin sabuntawa",
+    "loading": "Ana loda bayanan sakin…",
+    "unavailable": "Ba a iya loda bayanan sakin yanzu ba. Kuna iya karantawa a GitHub maimakon haka.",
+    "noDetails": "Ba a rubuta cikakkun bayanai game da wannan sakin ba.",
+    "stale": "Wadannan bayanan an adana su kwanakin baya, don haka ba zai zama sabo sosai ba.",
+    "englishOnly": "Bayanan sakin an rubuta su ne cikin Turanci.",
+    "viewOnGithub": "Duba dukkan fitarwa a GitHub"
   }
 }

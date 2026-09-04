@@ -895,7 +895,8 @@
     "repeatedFailureNotice": "Aceasta continuă să eșueze — conversația ar putea fi coruptă. De obicei, pornirea unei conversații noi rezolvă această problemă.",
     "startNewConversation": "Pornește o conversație nouă",
     "downloadDebugInfo": "Descarcă informațiile de depanare",
-    "includeMessageText": "Include textul mesajului"
+    "includeMessageText": "Include textul mesajului",
+    "ttsEquationPlaceholder": "ecuație"
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -4919,7 +4920,27 @@
         "notConnected": "Sesiunea Microsoft 365 nu este disponibilă. Încercați să vă deconectați și să vă reconectați.",
         "network": "Eroare de rețea — încercați din nou.",
         "generic": "A apărut o problemă — încercați din nou."
-      }
+      },
+      "filteringNote": "Sunt afișate doar întâlnirile cu transcriere sau înregistrare la care aveți acces.",
+      "loadingFiltered": "Se verifică întâlnirile recente pentru transcrieri și înregistrări…",
+      "emptyFiltered": "Nicio întâlnire din ultimele 14 zile nu are transcriere sau înregistrare la care aveți acces",
+      "showAll": "Afișează toate întâlnirile",
+      "filterUnavailable": "Întâlnirile nu au putut fi verificate pentru conținut — se afișează toate întâlnirile.",
+      "showAllWithCount": "Afișează toate întâlnirile ({count} ascunse)",
+      "showFiltered": "Afișează doar întâlnirile cu transcriere sau înregistrare",
+      "badgeTranscript": "Transcriere",
+      "badgeTranscripts": "{count} transcrieri",
+      "badgeRecording": "Înregistrare",
+      "badgeRecordings": "{count} înregistrări",
+      "badgeNoAccess": "Fără acces",
+      "badgePending": "Poate fi încă în procesare",
+      "pendingHint": "Această întâlnire s-a încheiat recent — Teams poate dura câteva minute pentru a publica transcrierea.",
+      "someUnchecked": "{count, plural, one {O întâlnire nu a putut fi verificată la timp — afișați toate întâlnirile pentru a o accesa.} other {# întâlniri nu au putut fi verificate la timp — afișați toate întâlnirile pentru a le accesa.}}",
+      "throttledNote": "Microsoft 365 limitează solicitările, astfel că unele întâlniri nu au putut fi verificate.",
+      "windowTruncated": "Calendarul dvs. a fost suficient de aglomerat încât întâlnirile mai vechi din ultimele 14 zile nu au fost verificate.",
+      "occurrences": "{count} apariții",
+      "importTranscriptFrom": "Importă transcrierea ({when})",
+      "importRecordingFrom": "Importă înregistrarea ({when})"
     },
     "todo": {
       "title": "Creați sarcini în Microsoft To Do",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Acest export {source} nu conține nicio conversație cu mesaje ce pot fi citite.",
     "noMatches": "Nicio conversație nu corespunde filtrului",
     "listLabel": "Conversații de importat"
+  },
+  "releaseNotes": {
+    "title": "Ce e nou",
+    "whatChanged": "Ce s-a schimbat?",
+    "settingsTitle": "Ce e nou",
+    "settingsDescription": "Vedeți ce s-a schimbat în actualizările recente",
+    "loading": "Se încarcă notele de lansare…",
+    "unavailable": "Notele de lansare nu pot fi încărcate acum. Le puteți citi pe GitHub.",
+    "noDetails": "Nu au fost înregistrate detalii pentru această versiune.",
+    "stale": "Aceste note au fost salvate acum ceva timp și este posibil să nu fie cele mai recente.",
+    "englishOnly": "Notele de lansare sunt scrise în engleză.",
+    "viewOnGithub": "Vedeți toate versiunile pe GitHub"
   }
 }

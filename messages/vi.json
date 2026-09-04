@@ -898,7 +898,8 @@
     "repeatedFailureNotice": "Việc này liên tục thất bại — cuộc trò chuyện có thể đã bị lỗi. Thường thì bắt đầu một cuộc trò chuyện mới sẽ khắc phục được vấn đề này.",
     "startNewConversation": "Bắt đầu cuộc trò chuyện mới",
     "downloadDebugInfo": "Tải thông tin gỡ lỗi",
-    "includeMessageText": "Bao gồm nội dung tin nhắn"
+    "includeMessageText": "Bao gồm nội dung tin nhắn",
+    "ttsEquationPlaceholder": "phương trình"
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -4950,7 +4951,27 @@
         "notConnected": "Phiên Microsoft 365 của bạn hiện không khả dụng. Thử đăng xuất và đăng nhập lại.",
         "network": "Lỗi mạng — vui lòng thử lại.",
         "generic": "Có lỗi xảy ra — vui lòng thử lại."
-      }
+      },
+      "filteringNote": "Chỉ hiển thị các cuộc họp có bản ghi âm hoặc bản ghi bạn có thể truy cập.",
+      "loadingFiltered": "Đang kiểm tra các cuộc họp gần đây để tìm bản ghi và bản ghi âm…",
+      "emptyFiltered": "Không có cuộc họp nào trong 14 ngày qua có bản ghi hoặc bản ghi âm mà bạn có thể truy cập",
+      "showAll": "Hiển thị tất cả cuộc họp",
+      "filterUnavailable": "Không thể kiểm tra nội dung các cuộc họp — đang hiển thị tất cả cuộc họp.",
+      "showAllWithCount": "Hiển thị tất cả cuộc họp ({count} bị ẩn)",
+      "showFiltered": "Chỉ hiển thị các cuộc họp có bản ghi hoặc ghi âm",
+      "badgeTranscript": "Bản ghi",
+      "badgeTranscripts": "{count} bản ghi",
+      "badgeRecording": "Ghi âm",
+      "badgeRecordings": "{count} bản ghi âm",
+      "badgeNoAccess": "Không có quyền truy cập",
+      "badgePending": "Có thể vẫn đang xử lý",
+      "pendingHint": "Cuộc họp này vừa kết thúc — Teams có thể mất vài phút để xuất bản bản ghi.",
+      "someUnchecked": "{count, plural, one {Một cuộc họp không thể được kiểm tra kịp thời — hãy hiển thị tất cả cuộc họp để truy cập nó.} other {# cuộc họp không thể được kiểm tra kịp thời — hãy hiển thị tất cả cuộc họp để truy cập chúng.}}",
+      "throttledNote": "Microsoft 365 đang giới hạn các yêu cầu, do đó một số cuộc họp không thể kiểm tra được.",
+      "windowTruncated": "Lịch của bạn quá bận nên các cuộc họp cũ hơn trong 14 ngày qua không được kiểm tra.",
+      "occurrences": "{count} lần diễn ra",
+      "importTranscriptFrom": "Nhập bản ghi ({when})",
+      "importRecordingFrom": "Nhập ghi âm ({when})"
     },
     "todo": {
       "title": "Tạo tác vụ Microsoft To Do",
@@ -5229,5 +5250,17 @@
     "nothingImportable": "Xuất khẩu {source} này không chứa hội thoại nào có tin nhắn có thể đọc được.",
     "noMatches": "Không có hội thoại nào phù hợp với bộ lọc",
     "listLabel": "Hội thoại cần nhập"
+  },
+  "releaseNotes": {
+    "title": "Có gì mới",
+    "whatChanged": "Những thay đổi gì?",
+    "settingsTitle": "Có gì mới",
+    "settingsDescription": "Xem những thay đổi trong các bản cập nhật gần đây",
+    "loading": "Đang tải ghi chú phát hành…",
+    "unavailable": "Hiện tại không thể tải ghi chú phát hành. Bạn có thể đọc chúng trên GitHub.",
+    "noDetails": "Không có thông tin chi tiết nào được ghi lại cho bản phát hành này.",
+    "stale": "Những ghi chú này đã được lưu một thời gian trước và có thể chưa phải là mới nhất.",
+    "englishOnly": "Ghi chú phát hành được viết bằng tiếng Anh.",
+    "viewOnGithub": "Xem tất cả các bản phát hành trên GitHub"
   }
 }

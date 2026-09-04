@@ -843,7 +843,8 @@
     "repeatedFailureNotice": "Esto sigue fallando; es posible que la conversación se haya dañado. Normalmente, iniciar una conversación nueva soluciona el problema.",
     "startNewConversation": "Iniciar una nueva conversación",
     "downloadDebugInfo": "Descargar información de depuración",
-    "includeMessageText": "Incluir texto del mensaje"
+    "includeMessageText": "Incluir texto del mensaje",
+    "ttsEquationPlaceholder": "ecuación"
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",
@@ -4919,7 +4920,27 @@
         "notConnected": "Su sesión de Microsoft 365 no está disponible. Pruebe cerrar sesión y volver a entrar.",
         "network": "Error de red — inténtelo de nuevo.",
         "generic": "Algo salió mal — inténtelo de nuevo."
-      }
+      },
+      "filteringNote": "Mostrando solo reuniones con una transcripción o grabación a la que puede acceder.",
+      "loadingFiltered": "Comprobando sus reuniones recientes para ver si tienen transcripciones o grabaciones…",
+      "emptyFiltered": "Ninguna reunión de los últimos 14 días tiene una transcripción o grabación a la que pueda acceder",
+      "showAll": "Mostrar todas las reuniones",
+      "filterUnavailable": "No se pudieron comprobar las reuniones para ver su contenido; se muestran todas las reuniones.",
+      "showAllWithCount": "Mostrar todas las reuniones ({count} ocultas)",
+      "showFiltered": "Mostrar solo reuniones con transcripción o grabación",
+      "badgeTranscript": "Transcripción",
+      "badgeTranscripts": "{count} transcripciones",
+      "badgeRecording": "Grabación",
+      "badgeRecordings": "{count} grabaciones",
+      "badgeNoAccess": "Sin acceso",
+      "badgePending": "Puede estar procesándose",
+      "pendingHint": "Esta reunión terminó recientemente; Teams puede tardar unos minutos en publicar la transcripción.",
+      "someUnchecked": "{count, plural, one {No se pudo comprobar una reunión a tiempo; muestre todas las reuniones para acceder a ella.} other {No se pudieron comprobar # reuniones a tiempo; muestre todas las reuniones para acceder a ellas.}}",
+      "throttledNote": "Microsoft 365 está limitando las solicitudes, así que no se pudieron comprobar algunas reuniones.",
+      "windowTruncated": "Su calendario estuvo lo suficientemente ocupado como para que no se comprobaran reuniones más antiguas de los últimos 14 días.",
+      "occurrences": "{count} ocurrencias",
+      "importTranscriptFrom": "Importar transcripción ({when})",
+      "importRecordingFrom": "Importar grabación ({when})"
     },
     "todo": {
       "title": "Crear tareas en Microsoft To Do",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Esta exportación de {source} no contiene conversaciones con mensajes legibles.",
     "noMatches": "Ninguna conversación coincide con su filtro",
     "listLabel": "Conversaciones para importar"
+  },
+  "releaseNotes": {
+    "title": "Novedades",
+    "whatChanged": "¿Qué ha cambiado?",
+    "settingsTitle": "Novedades",
+    "settingsDescription": "Vea qué ha cambiado en las actualizaciones recientes",
+    "loading": "Cargando notas de la versión…",
+    "unavailable": "No se pudieron cargar las notas de la versión en este momento. Puede leerlas en GitHub.",
+    "noDetails": "No se registraron detalles para esta versión.",
+    "stale": "Estas notas se guardaron hace un tiempo y podrían no ser las más recientes.",
+    "englishOnly": "Las notas de la versión están en inglés.",
+    "viewOnGithub": "Ver todos los lanzamientos en GitHub"
   }
 }

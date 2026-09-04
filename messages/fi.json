@@ -872,7 +872,8 @@
     "repeatedFailureNotice": "Tämä epäonnistuu toistuvasti — keskustelu saattaa olla vioittunut. Uuden keskustelun aloittaminen korjaa yleensä ongelman.",
     "startNewConversation": "Aloita uusi keskustelu",
     "downloadDebugInfo": "Lataa vianmääritystiedot",
-    "includeMessageText": "Sisällytä viestien teksti"
+    "includeMessageText": "Sisällytä viestien teksti",
+    "ttsEquationPlaceholder": "kaava"
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -4919,7 +4920,27 @@
         "notConnected": "Microsoft 365 -istuntosi ei ole käytettävissä. Kokeile kirjautua ulos ja takaisin sisään.",
         "network": "Verkkovirhe — yritä uudelleen.",
         "generic": "Jokin meni pieleen — yritä uudelleen."
-      }
+      },
+      "filteringNote": "Näytetään vain kokoukset, joiden litteraatioon tai tallenteeseen sinulla on pääsy.",
+      "loadingFiltered": "Tarkistetaan uusimpia kokouksiasi litteraatioiden ja tallenteiden osalta…",
+      "emptyFiltered": "Viimeisen 14 päivän kokouksista yksikään ei sisällä litteraatiota tai tallennetta, joihin sinulla on pääsy",
+      "showAll": "Näytä kaikki kokoukset",
+      "filterUnavailable": "Kokousten sisältöä ei voitu tarkistaa — näytetään kaikki kokoukset.",
+      "showAllWithCount": "Näytä kaikki kokoukset ({count} piilotettu)",
+      "showFiltered": "Näytä vain kokoukset, joissa on litteraatio tai tallenne",
+      "badgeTranscript": "Litteraatio",
+      "badgeTranscripts": "{count} litteraatiota",
+      "badgeRecording": "Tallenne",
+      "badgeRecordings": "{count} tallennetta",
+      "badgeNoAccess": "Ei pääsyä",
+      "badgePending": "Saattaa vielä olla käsittelyssä",
+      "pendingHint": "Tämä kokous päättyi äskettäin – Teamsin litteraation julkaisemisessa voi kestää hetken.",
+      "someUnchecked": "{count, plural, one {Yhtä kokousta ei ehditty tarkistaa — näytä kaikki kokoukset päästäksesi siihen.} other {# kokousta ei ehditty tarkistaa — näytä kaikki kokoukset päästäksesi niihin.}}",
+      "throttledNote": "Microsoft 365 hidastaa pyyntöjä, joten kaikkia kokouksia ei voitu tarkistaa.",
+      "windowTruncated": "Kalenterisi oli niin täynnä, että vanhempia kokouksia viimeisten 14 päivän ajalta ei tarkistettu.",
+      "occurrences": "{count} esiintymää",
+      "importTranscriptFrom": "Tuo litteraatio ({when})",
+      "importRecordingFrom": "Tuo tallenne ({when})"
     },
     "todo": {
       "title": "Luo Microsoft To Do -tehtäviä",
@@ -5198,5 +5219,17 @@
     "nothingImportable": "Tämä {source}-vienti ei sisällä keskusteluja, joissa olisi luettavia viestejä.",
     "noMatches": "Ei keskusteluja, jotka vastaavat suodatinta",
     "listLabel": "Tuotavat keskustelut"
+  },
+  "releaseNotes": {
+    "title": "Mitä uutta",
+    "whatChanged": "Mitä muuttui?",
+    "settingsTitle": "Mitä uutta",
+    "settingsDescription": "Katso, mitä viimeisissä päivityksissä on muuttunut",
+    "loading": "Ladataan julkaisutietoja…",
+    "unavailable": "Julkaisutietoja ei voitu ladata juuri nyt. Voit lukea ne GitHubista.",
+    "noDetails": "Tälle julkaisulle ei ole tallennettu tarkempia tietoja.",
+    "stale": "Nämä tiedot tallennettiin hetki sitten, eivätkä ne välttämättä ole aivan viimeisimmät.",
+    "englishOnly": "Julkaisutiedot ovat englanniksi.",
+    "viewOnGithub": "Näytä kaikki julkaisut GitHubissa"
   }
 }
