@@ -32,15 +32,33 @@ export const ViewAsOverridesSchema = z
   .object({
     /**
      * `global` (or absent) keeps the admin's real role; `local` demotes to
-     * a local admin delegated `localAdminKeys`; `none` demotes to a regular
-     * user. Every admin gate in the app reads this through
-     * `resolveAdminStatus` / `isGlobalAdmin`, EXCEPT the view-as controls
-     * themselves, which always use the real identity so the admin can get
-     * back out.
+     * a local admin delegated `localAdminKeys` (and, for usage limits, a
+     * scoped admin named in `limitDelegationIds`); `none` demotes to a
+     * regular user. Every admin gate in the app reads this through
+     * `resolveAdminStatus` / `isGlobalAdmin` / `resolveLimitsAdminStatus`,
+     * EXCEPT the view-as controls themselves, which always use the real
+     * identity so the admin can get back out.
      */
     adminRole: ViewAsAdminRoleSchema.optional(),
     localAdminKeys: z
       .array(z.string().trim().min(1).max(200))
+      .max(50)
+      .optional(),
+    /**
+     * Limits delegations (docs/LIMITS_SCOPED_ADMINS_DESIGN.md §6d) the
+     * demoted admin is treated as named in — so a global admin can see the
+     * limits panel exactly as that scoped admin does. Honoured only with
+     * `adminRole: 'local'`, and only for ids of ENABLED delegations
+     * (`resolveLimitsAdminStatus` intersects at evaluation time, so a stale
+     * or invented id grants nothing).
+     */
+    limitDelegationIds: z
+      .array(
+        z
+          .string()
+          .trim()
+          .regex(/^del-[0-9a-f]{12}$/),
+      )
       .max(50)
       .optional(),
     region: z.enum(['US', 'EU']).optional(),
@@ -58,6 +76,7 @@ export type ViewAsOverrides = z.infer<typeof ViewAsOverridesSchema>;
 export const VIEW_AS_OVERRIDE_KEYS = [
   'adminRole',
   'localAdminKeys',
+  'limitDelegationIds',
   'region',
   'department',
   'companyName',
@@ -78,6 +97,13 @@ export function normalizeViewAsOverrides(
     out.localAdminKeys = input.localAdminKeys.map((k) =>
       k.trim().toLowerCase(),
     );
+  }
+  // Same rule as localAdminKeys: a role-specific key is meaningless (and
+  // must not survive into the signed cookie) under any other role.
+  if (out.adminRole === 'local' && input.limitDelegationIds?.length) {
+    out.limitDelegationIds = [
+      ...new Set(input.limitDelegationIds.map((id) => id.trim())),
+    ];
   }
   if (input.region) out.region = input.region;
   for (const key of [
