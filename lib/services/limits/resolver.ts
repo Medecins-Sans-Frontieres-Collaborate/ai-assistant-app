@@ -1,6 +1,6 @@
 /**
  * Limit resolution — pure, I/O-free, and the whole of the precedence
- * contract. See docs/LIMITS.md.
+ * contract. See docs/LIMITS.md and docs/LIMITS_SCOPED_ADMINS_DESIGN.md §3.
  *
  * Resolution runs per limit KEY, not per record. That sparse merge is the
  * crux: a user override that sets only `chat.messagesPerDay` must not erase
@@ -9,14 +9,34 @@
  * Layer ranks (total, no ambiguity):
  *   catalog(0) < global(1) < domain(2) < attribute(3) < group(4) < user(5)
  *
+ * Within a layer the comparator continues
+ *   tier (global > scoped) → priority → qualifier specificity →
+ *   restrictiveness → id
+ * so at the same layer a global admin's record always outranks a scoped
+ * admin's, and `priority` only orders records of the same tier.
+ *
  * "Most specific wins", so a user-level override may RAISE, lower, or set
  * unlimited — an exception that cannot grant more is not an exception. A
- * global admin who needs a cap nothing may exceed ticks `ceiling` on the
- * global default instead.
+ * global admin who needs a cap nothing may exceed ticks `ceiling` on a
+ * global-tier record instead; the most specific ceiling that applies to the
+ * cell pins it.
+ *
+ * CONTAINMENT (the security property): an override that carries a
+ * `delegationId` competes ONLY for principals inside that delegation's
+ * jurisdiction, whatever its `targets` say. An orphaned or disabled
+ * delegation makes its overrides inert — never global. Save-time verdicts
+ * are UX; this is the control. The set of delegations a principal is inside
+ * is computed ONCE per resolution pass, not per cell.
+ *
+ * Two rules the resolver enforces by TIER so stored data can never out-vote
+ * them: a scoped candidate is compared as `priority: 0`, and a scoped entry
+ * is never a ceiling candidate, regardless of the stored values.
  */
 import {
+  LimitDelegation,
   LimitEntry,
   LimitOverride,
+  LimitTier,
   LimitValue,
   LimitsPolicy,
   OverrideScope,
@@ -33,6 +53,8 @@ import {
   isValidDimension,
 } from '@/config/limits';
 
+export type { LimitTier };
+
 export type LimitSource =
   | 'catalog'
   | 'global'
@@ -48,6 +70,12 @@ const LAYER_RANK: Record<LimitSource, number> = {
   attribute: 3,
   group: 4,
   user: 5,
+};
+
+/** At the same layer, global outranks scoped. */
+const TIER_RANK: Record<LimitTier, number> = {
+  scoped: 0,
+  global: 1,
 };
 
 /** Override scopes map 1:1 onto the layers above `global`. */
@@ -67,10 +95,22 @@ export interface ResolvedLimit {
   window: LimitDefinition['window'];
   /** Which layer won — surfaced in the admin "why" preview and the audit log. */
   source: LimitSource;
+  /**
+   * Which authority tier the winning record belongs to — `scoped` only when
+   * a delegated override won; catalog, global defaults and undelegated
+   * overrides are `global`.
+   */
+  tier: LimitTier;
   /** The winning override's id, when a non-global layer won. */
   overrideId?: string;
-  /** A global `ceiling: true` default clamped the winner down. */
+  /** A global-tier `ceiling: true` record clamped the winner down. */
   ceilingApplied?: boolean;
+  /**
+   * The global-tier OVERRIDE whose ceiling pinned the value — for the "why"
+   * preview and the audit log. Absent when the global default (or nothing)
+   * did the clamping.
+   */
+  ceilingOverrideId?: string;
   /** The compiled `hardCeiling` clamped the winner down. */
   hardCeilingApplied?: boolean;
   /** Set when this cell is qualified by a model id or series. */
@@ -121,8 +161,11 @@ function entryAppliesTo(
 interface Candidate {
   value: LimitValue;
   source: LimitSource;
+  tier: LimitTier;
   priority: number;
   specificity: number;
+  /** Eligible to pin the cell — already false for every scoped record. */
+  ceiling: boolean;
   overrideId?: string;
 }
 
@@ -137,16 +180,22 @@ function beats(a: Candidate, b: Candidate): boolean {
   if (LAYER_RANK[a.source] !== LAYER_RANK[b.source]) {
     return LAYER_RANK[a.source] > LAYER_RANK[b.source];
   }
-  // b. Admin's explicit tie-break lever.
+  // b. Authority tier: at the same layer a global admin's record outranks a
+  //    scoped admin's, so `priority` below only orders records of one tier.
+  if (TIER_RANK[a.tier] !== TIER_RANK[b.tier]) {
+    return TIER_RANK[a.tier] > TIER_RANK[b.tier];
+  }
+  // c. Admin's explicit tie-break lever.
   if (a.priority !== b.priority) return a.priority > b.priority;
-  // c. Qualifier specificity within the layer (modelId > series > none).
+  // d. Qualifier specificity within the layer (modelId > series > none).
   if (a.specificity !== b.specificity) return a.specificity > b.specificity;
-  // d. More restrictive wins — settles two same-rank policies (two domains,
-  //    later two groups) deterministically rather than by array order.
+  // e. More restrictive wins — settles two same-rank policies (two domains,
+  //    two overlapping delegations) deterministically rather than by array
+  //    order.
   const ra = restrictiveness(a.value);
   const rb = restrictiveness(b.value);
   if (ra !== rb) return ra < rb;
-  // e. Lexicographically smallest id — total even for identical records.
+  // f. Lexicographically smallest id — total even for identical records.
   return (a.overrideId ?? '') < (b.overrideId ?? '');
 }
 
@@ -179,22 +228,115 @@ function pickGlobalEntry(
   return winner;
 }
 
+// ---------------------------------------------------------------------------
+// Jurisdictions
+// ---------------------------------------------------------------------------
+
+type JurisdictionDegradedCheck = (userId: string) => boolean;
+
+let jurisdictionDegradedCheck: JurisdictionDegradedCheck | undefined;
+
+/**
+ * Server wiring for the §8 audit line. The resolver must stay pure and
+ * client-importable, and lib/services/m365/groupMembership.ts drags Node
+ * dependencies in, so the server registers
+ * `isGroupMembershipDegradedForUser` here instead of the resolver importing
+ * it. Unset (the default) → the check is skipped; nothing else changes.
+ */
+export function setJurisdictionDegradedCheck(
+  check: JurisdictionDegradedCheck | undefined,
+): void {
+  jurisdictionDegradedCheck = check;
+}
+
+/** Strips anything that could forge a log line; ids and oids are short ASCII. */
+function logToken(value: string): string {
+  return value.replace(/[^\x21-\x7e]/g, '_').slice(0, 128);
+}
+
+/**
+ * Is `principal` inside this delegation's jurisdiction? The predicates are
+ * OR'd; an empty jurisdiction matches nobody. Does NOT consult `enabled` —
+ * that is {@link activeDelegationIds}' job.
+ */
+export function withinJurisdiction(
+  delegation: LimitDelegation,
+  principal: Principal,
+): boolean {
+  return delegation.jurisdiction.some((predicate) =>
+    matchesPrincipal(principal, predicate.scope, predicate.targets),
+  );
+}
+
+/**
+ * The ENABLED delegations whose jurisdiction contains `principal` — the set
+ * a scoped override's `delegationId` must be in to compete. Computed once per
+ * resolution pass and threaded through, never per cell.
+ *
+ * Group-anchored jurisdictions read `principal.groupIds`, which is [] when
+ * the membership cache is cold or degraded (design §8): such a delegation
+ * then silently does not apply. When that is the ONLY reason it failed and
+ * the server has marked membership degraded for this user, an audit line is
+ * emitted so the asymmetry (a scoped cap that LOWERS fails open) is visible.
+ */
+export function activeDelegationIds(
+  policy: LimitsPolicy | null,
+  principal: Principal,
+): Set<string> {
+  const active = new Set<string>();
+  if (!policy) return active;
+  for (const delegation of policy.delegations) {
+    if (!delegation.enabled) continue;
+    if (withinJurisdiction(delegation, principal)) {
+      active.add(delegation.id);
+      continue;
+    }
+    if (
+      principal.groupIds.length === 0 &&
+      delegation.jurisdiction.some((p) => p.scope === 'group') &&
+      jurisdictionDegradedCheck?.(principal.userId) === true
+    ) {
+      console.warn(
+        `[limits-audit] jurisdiction-unevaluable delegation=${logToken(delegation.id)} user=${logToken(principal.userId)} reason=group-membership-degraded`,
+      );
+    }
+  }
+  return active;
+}
+
+/** Global tier always competes; a scoped record only inside its delegation. */
+function withinDelegation(
+  delegationId: string | undefined,
+  active: ReadonlySet<string>,
+): boolean {
+  if (!delegationId) return true;
+  return active.has(delegationId);
+}
+
 function matchingOverrides(
   policy: LimitsPolicy | null,
   principal: Principal,
+  active: ReadonlySet<string>,
 ): LimitOverride[] {
   if (!policy) return [];
   return policy.overrides.filter(
     (override) =>
       override.enabled &&
-      matchesPrincipal(principal, override.scope, override.targets),
+      matchesPrincipal(principal, override.scope, override.targets) &&
+      withinDelegation(override.delegationId, active),
   );
 }
+
+// ---------------------------------------------------------------------------
+// Resolution
+// ---------------------------------------------------------------------------
 
 /**
  * Resolves one limit cell. `modelId`/`series` select which per-model cell is
  * being asked about; a model that declares no series simply never produces a
- * `family:` cell (see resolveModelCells).
+ * `family:` cell (see resolveModelCells). `active` is the precomputed
+ * {@link activeDelegationIds}; callers resolving many cells pass it so the
+ * jurisdiction scan runs once.
  */
 export function resolveLimit(
   def: LimitDefinition,
@@ -202,39 +344,62 @@ export function resolveLimit(
   principal: Principal,
   modelId?: string,
   series?: string,
+  active: ReadonlySet<string> = activeDelegationIds(policy, principal),
 ): ResolvedLimit {
   // 1. Seed from the compiled catalog.
   let winner: Candidate = {
     value: def.defaultValue,
     source: 'catalog',
+    tier: 'global',
     priority: 0,
     specificity: 0,
+    ceiling: false,
   };
 
-  // 2. Global defaults.
+  // 2. Global defaults. The layer's ONE ceiling candidate is pickGlobalEntry's
+  //    winner iff it is flagged — deliberately not "any default with ceiling",
+  //    so a qualified non-ceiling default keeps shadowing an unqualified
+  //    ceiling default exactly as before delegations existed.
   const globalEntry = pickGlobalEntry(policy, def.key, modelId, series);
   if (globalEntry) {
     winner = {
       value: globalEntry.value,
       source: 'global',
+      tier: 'global',
       priority: 0,
       specificity: qualifierSpecificity(globalEntry),
+      ceiling: globalEntry.ceiling,
     };
   }
+  let ceilingWinner: Candidate | undefined = winner.ceiling
+    ? winner
+    : undefined;
 
   // 3-4. Overrides, sparse: only entries that MENTION this key compete. An
-  //      absent key is silence and defers to the layer below.
-  for (const override of matchingOverrides(policy, principal)) {
+  //      absent key is silence and defers to the layer below. A global-tier
+  //      entry flagged `ceiling` ALSO competes for "most specific ceiling".
+  for (const override of matchingOverrides(policy, principal, active)) {
+    const tier: LimitTier = override.delegationId ? 'scoped' : 'global';
     for (const entry of override.entries) {
       if (!entryAppliesTo(entry, def.key, modelId, series)) continue;
       const candidate: Candidate = {
         value: entry.value,
         source: SCOPE_TO_SOURCE[override.scope],
-        priority: override.priority,
+        tier,
+        // By tier, not by trust in storage: scoped records never hold the
+        // priority lever and never pin a cell, whatever was persisted.
+        priority: tier === 'global' ? override.priority : 0,
         specificity: qualifierSpecificity(entry),
+        ceiling: tier === 'global' && entry.ceiling,
         overrideId: override.id,
       };
       if (beats(candidate, winner)) winner = candidate;
+      if (
+        candidate.ceiling &&
+        (!ceilingWinner || beats(candidate, ceilingWinner))
+      ) {
+        ceilingWinner = candidate;
+      }
     }
   }
 
@@ -245,18 +410,24 @@ export function resolveLimit(
     kind: def.kind,
     window: def.window,
     source: winner.source,
+    tier: winner.tier,
     ...(winner.overrideId ? { overrideId: winner.overrideId } : {}),
     ...(modelId ? { modelId } : {}),
     ...(series ? { series } : {}),
   };
 
-  // 5. Admin ceiling: a GLOBAL default marked `ceiling` clamps everything
-  //    above it. This is how a global admin says "no exception may exceed".
-  if (globalEntry?.ceiling) {
-    const clamped = clampNumeric(resolved.value, globalEntry.value);
+  // 5. Admin ceiling: the most specific global-tier record marked `ceiling`
+  //    clamps everything above it. This is how a global admin says "no
+  //    exception — global or scoped — may exceed", while still being able to
+  //    grant a more specific exception by ticking `ceiling` on that too.
+  if (ceilingWinner) {
+    const clamped = clampNumeric(resolved.value, ceilingWinner.value);
     if (clamped !== resolved.value) {
       resolved.value = clamped;
       resolved.ceilingApplied = true;
+      if (ceilingWinner.overrideId) {
+        resolved.ceilingOverrideId = ceilingWinner.overrideId;
+      }
     }
   }
 
@@ -285,9 +456,17 @@ export function resolveAllLimits(
   modelId?: string,
   series?: string,
 ): Record<string, ResolvedLimit> {
+  const active = activeDelegationIds(policy, principal);
   const out: Record<string, ResolvedLimit> = {};
   for (const def of LIMIT_DEFINITIONS) {
-    out[def.key] = resolveLimit(def, policy, principal, modelId, series);
+    out[def.key] = resolveLimit(
+      def,
+      policy,
+      principal,
+      modelId,
+      series,
+      active,
+    );
   }
   return out;
 }
@@ -308,12 +487,15 @@ export function resolveModelCells(
   modelId: string | undefined,
   series: string | undefined,
 ): ResolvedLimit[] {
+  const active = activeDelegationIds(policy, principal);
   const cells: ResolvedLimit[] = [];
   if (modelId && isValidDimension(modelId)) {
-    cells.push(resolveLimit(def, policy, principal, modelId, undefined));
+    cells.push(
+      resolveLimit(def, policy, principal, modelId, undefined, active),
+    );
   }
   if (series && isValidDimension(series)) {
-    cells.push(resolveLimit(def, policy, principal, undefined, series));
+    cells.push(resolveLimit(def, policy, principal, undefined, series, active));
   }
   return cells;
 }
