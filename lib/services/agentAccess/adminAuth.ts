@@ -1,11 +1,21 @@
 /**
  * Admin identity resolution for agent access control.
  *
- * Global admins come from the AGENT_ACCESS_ADMINS env var (bootstrap
- * mechanism, redeploy to change); local admins are delegated per canonical
- * agent key via config.json (editable by global admins in the UI, no
- * redeploy). All matching is on lowercased + trimmed Graph `mail` values.
+ * Global admins = the AGENT_ACCESS_ADMINS env var (bootstrap, un-lockable:
+ * changing it needs a redeploy, and no runtime write can remove it) ∪ the
+ * config roster `system/admin/global-admins.json` (editable by global admins
+ * in the UI, design docs/LIMITS_SCOPED_ADMINS_DESIGN.md §13). Local admins are
+ * delegated per canonical agent key via config.json. All matching is on
+ * lowercased + trimmed Graph `mail` values.
+ *
+ * This module stays SYNCHRONOUS and free of storage imports: the config
+ * roster is read from the pure snapshot in
+ * lib/services/admin/globalAdminsSnapshot.ts, which the Node-only
+ * GlobalAdminRosterService publishes into and the `auth()` session callback
+ * warms once per request. Cold snapshot = env-only, which can fail to
+ * recognise a config admin but can never grant.
  */
+import { isConfigGlobalAdmin } from '@/lib/services/admin/globalAdminsSnapshot';
 import { ViewAsAdminRole } from '@/lib/services/admin/viewAsTypes';
 import { AgentAccessConfig } from '@/lib/services/agentAccess/types';
 
@@ -43,7 +53,16 @@ export function parseGlobalAdminEmails(
 export interface AdminSubject {
   mail?: string | null;
   viewAs?: {
-    overrides: { adminRole?: ViewAsAdminRole; localAdminKeys?: string[] };
+    overrides: {
+      adminRole?: ViewAsAdminRole;
+      localAdminKeys?: string[];
+      /**
+       * Limits delegations the demoted admin is treated as named in (design
+       * §6d); honoured only with adminRole 'local', by
+       * lib/services/limits/limitsAdminAuth.ts — never by this module.
+       */
+      limitDelegationIds?: string[];
+    };
   } | null;
 }
 
@@ -54,21 +73,35 @@ export interface AdminSubject {
  */
 export type AdminIdentity = string | null | undefined | AdminSubject;
 
-function mailOf(identity: AdminIdentity): string | null | undefined {
+/** The mail an identity carries, whichever form it takes. */
+export function mailOf(identity: AdminIdentity): string | null | undefined {
   return typeof identity === 'object' && identity !== null
     ? identity.mail
     : identity;
 }
 
-function demotedRole(identity: AdminIdentity): ViewAsAdminRole | undefined {
+/**
+ * The view-as demotion in force, if any. 'global' is not a demotion and never
+ * reaches callers; a bare mail never carries one.
+ */
+export function demotedRole(
+  identity: AdminIdentity,
+): Extract<ViewAsAdminRole, 'local' | 'none'> | undefined {
   if (typeof identity !== 'object' || identity === null) return undefined;
   const role = identity.viewAs?.overrides.adminRole;
   return role === 'local' || role === 'none' ? role : undefined;
 }
 
-function isRealGlobalAdmin(mail: string | null | undefined): boolean {
-  if (!mail) return false;
-  return parseGlobalAdminEmails().includes(mail.trim().toLowerCase());
+/**
+ * REAL global-admin membership (view-as ignored): env roster ∪ config roster
+ * snapshot. Env is consulted first so the bootstrap works before the roster
+ * has ever loaded.
+ */
+export function isRealGlobalAdmin(mail: string | null | undefined): boolean {
+  const normalized = mail?.trim().toLowerCase();
+  if (!normalized) return false;
+  if (parseGlobalAdminEmails().includes(normalized)) return true;
+  return isConfigGlobalAdmin(normalized);
 }
 
 export function isGlobalAdmin(identity: AdminIdentity): boolean {
