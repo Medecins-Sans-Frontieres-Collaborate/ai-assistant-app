@@ -1,16 +1,20 @@
 'use client';
 
 import { IconAlertTriangle, IconX } from '@tabler/icons-react';
+import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import { useVersionCheck } from '@/client/hooks/app/useVersionCheck';
 import { useUI } from '@/client/hooks/ui/useUI';
 
+import { ReleaseNotesModal } from '@/components/App/ReleaseNotesModal';
+
 export function UpdateBanner() {
   const t = useTranslations();
   const { showChatbar } = useUI();
   const { isUpdateAvailable, dismiss } = useVersionCheck();
+  const [showReleaseNotes, setShowReleaseNotes] = useState(false);
 
   if (!isUpdateAvailable) return null;
 
@@ -46,6 +50,15 @@ export function UpdateBanner() {
                   </div>
 
                   <div className="flex items-center gap-1 md:gap-1.5 flex-shrink-0">
+                    {/* Optional detour: hidden on the narrowest screens, where
+                        the banner has no room for a third control. Settings →
+                        Help & Support carries the same panel for those. */}
+                    <button
+                      onClick={() => setShowReleaseNotes(true)}
+                      className="hidden sm:inline-block px-1.5 md:px-2 py-0.5 md:py-1 text-xs font-medium text-amber-800 dark:text-amber-300 hover:text-amber-900 dark:hover:text-amber-200 hover:underline whitespace-nowrap"
+                    >
+                      {t('releaseNotes.whatChanged')}
+                    </button>
                     <button
                       onClick={() => window.location.reload()}
                       className="px-2 md:px-2.5 py-0.5 md:py-1 text-xs font-medium bg-amber-600 hover:bg-amber-700 text-white rounded transition-colors whitespace-nowrap shadow-md ring-1 ring-amber-400/30 dark:ring-amber-400/50"
@@ -71,6 +84,11 @@ export function UpdateBanner() {
           </div>
         </div>
       </div>
+
+      <ReleaseNotesModal
+        isOpen={showReleaseNotes}
+        onClose={() => setShowReleaseNotes(false)}
+      />
     </div>
   );
 }
