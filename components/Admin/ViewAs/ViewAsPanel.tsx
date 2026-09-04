@@ -46,6 +46,8 @@ interface ViewAsPanelProps {
 interface FormState {
   adminRole: ViewAsAdminRole;
   localAdminKeys: string;
+  /** Newline/comma-separated `del-…` ids; only meaningful under 'local'. */
+  limitDelegationIds: string;
   region: '' | 'US' | 'EU';
   department: string;
   companyName: string;
@@ -57,6 +59,7 @@ interface FormState {
 const EMPTY_FORM: FormState = {
   adminRole: 'global',
   localAdminKeys: '',
+  limitDelegationIds: '',
   region: '',
   department: '',
   companyName: '',
@@ -80,6 +83,7 @@ function formFromOverrides(overrides: ViewAsOverrides): FormState {
   return {
     adminRole: overrides.adminRole ?? 'global',
     localAdminKeys: (overrides.localAdminKeys ?? []).join(', '),
+    limitDelegationIds: (overrides.limitDelegationIds ?? []).join('\n'),
     region: overrides.region ?? '',
     department: overrides.department ?? '',
     companyName: overrides.companyName ?? '',
@@ -100,6 +104,7 @@ function overridesFromForm(form: FormState): ViewAsOverrides {
   return normalizeViewAsOverrides({
     adminRole: form.adminRole,
     localAdminKeys: splitList(form.localAdminKeys),
+    limitDelegationIds: splitList(form.limitDelegationIds),
     region: form.region || undefined,
     department: form.department,
     companyName: form.companyName,
@@ -294,6 +299,21 @@ export const ViewAsPanel: FC<ViewAsPanelProps> = ({ offices }) => {
               onChange={(keys) => set('localAdminKeys', keys.join(', '))}
             />
             <p className={ADMIN_HINT}>{t('role.localKeysHint')}</p>
+            <label
+              htmlFor="view-as-limit-delegations"
+              className={`${ADMIN_LABEL} mt-3`}
+            >
+              {t('role.limitDelegationsLabel')}
+            </label>
+            <textarea
+              id="view-as-limit-delegations"
+              rows={3}
+              className={`${ADMIN_FIELD} w-full font-mono`}
+              placeholder={t('role.limitDelegationsPlaceholder')}
+              value={form.limitDelegationIds}
+              onChange={(e) => set('limitDelegationIds', e.target.value)}
+            />
+            <p className={ADMIN_HINT}>{t('role.limitDelegationsHint')}</p>
           </div>
         )}
         {form.adminRole === 'none' && (
