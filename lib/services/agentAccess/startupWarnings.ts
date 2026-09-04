@@ -19,6 +19,12 @@
 
 export interface AccessControlStartupState {
   enabled: boolean;
+  /**
+   * Env roster (AGENT_ACCESS_ADMINS) + config roster
+   * (system/admin/global-admins.json) — the union isGlobalAdmin evaluates.
+   * When the config roster could not be read it contributes 0 here and
+   * `globalRosterUnreadable` is set, so the wording can hedge.
+   */
   globalAdminCount: number;
   /**
    * Local admins in config.json, or null when the config blob could not be
@@ -26,6 +32,12 @@ export interface AccessControlStartupState {
    * an empty roster we were merely unable to observe.
    */
   localAdminCount: number | null;
+  /**
+   * True when the config global-admin roster could not be read at boot. Like
+   * `localAdminCount: null`, this turns a definite "nobody can author" into a
+   * hedge. Optional so the pure builder's existing callers/tests stay valid.
+   */
+  globalRosterUnreadable?: boolean;
 }
 
 /**
@@ -39,7 +51,7 @@ export function buildAccessControlWarnings(
 
   if (!state.enabled && state.globalAdminCount > 0) {
     warnings.push(
-      `AGENT_ACCESS_ADMINS lists ${state.globalAdminCount} admin(s) but ` +
+      `AGENT_ACCESS_ADMINS and the global-admin roster list ${state.globalAdminCount} admin(s) but ` +
         'AGENT_ACCESS_CONTROL_ENABLED is false: no access rules are enforced, ' +
         'admin routes answer 404, and the admin UI is hidden. Set ' +
         'AGENT_ACCESS_CONTROL_ENABLED=true to activate access control.',
@@ -47,12 +59,20 @@ export function buildAccessControlWarnings(
   }
 
   if (state.enabled && state.globalAdminCount === 0) {
-    if (state.localAdminCount === 0) {
+    if (state.globalRosterUnreadable) {
+      warnings.push(
+        'AGENT_ACCESS_CONTROL_ENABLED is true but AGENT_ACCESS_ADMINS is ' +
+          'empty, and the global-admin roster (system/admin/global-admins.json) ' +
+          'could not be read. If it is also empty and no local admins exist, ' +
+          'nobody can create or change access rules.',
+      );
+    } else if (state.localAdminCount === 0) {
       warnings.push(
         'AGENT_ACCESS_CONTROL_ENABLED is true but there are no global admins ' +
-          '(AGENT_ACCESS_ADMINS is empty) and no local admins in config.json: ' +
-          'existing rules still enforce, but nobody can create or change them. ' +
-          'Set AGENT_ACCESS_ADMINS to bootstrap an administrator.',
+          '(AGENT_ACCESS_ADMINS is empty and the global-admin roster has no ' +
+          'entries) and no local admins in config.json: existing rules still ' +
+          'enforce, but nobody can create or change them. Set ' +
+          'AGENT_ACCESS_ADMINS to bootstrap an administrator.',
       );
     } else if (state.localAdminCount === null) {
       warnings.push(
@@ -79,7 +99,26 @@ export async function logAccessControlStartupWarnings(): Promise<void> {
       await import('@/lib/services/agentAccess/adminAuth');
 
     const enabled = env.AGENT_ACCESS_CONTROL_ENABLED;
-    const globalAdminCount = parseGlobalAdminEmails().length;
+    const envAdminCount = parseGlobalAdminEmails().length;
+
+    // Global admins = env ∪ config roster. The roster service never throws;
+    // `rosterUnavailable` after ensureFresh() means the read failed.
+    let configAdminCount: number | null = null;
+    try {
+      const { GlobalAdminRosterService } =
+        await import('@/lib/services/admin/GlobalAdminRosterService');
+      const roster = GlobalAdminRosterService.getInstance();
+      await roster.ensureFresh();
+      const snapshot = roster.getSnapshot();
+      // No roster blob yet is a definite zero, not an unknown.
+      configAdminCount = snapshot.rosterUnavailable
+        ? null
+        : (snapshot.roster?.admins.length ?? 0);
+    } catch {
+      configAdminCount = null;
+    }
+    const globalRosterUnreadable = configAdminCount === null;
+    const globalAdminCount = envAdminCount + (configAdminCount ?? 0);
 
     // Only pay for the blob read when it could change the outcome — that is
     // the single case where the local-admin count is actually consulted.
@@ -100,6 +139,7 @@ export async function logAccessControlStartupWarnings(): Promise<void> {
       enabled,
       globalAdminCount,
       localAdminCount,
+      globalRosterUnreadable,
     })) {
       console.warn(`[agent-access] ${warning}`);
     }
