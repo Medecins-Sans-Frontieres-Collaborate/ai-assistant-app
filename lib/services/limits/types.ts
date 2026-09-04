@@ -42,9 +42,15 @@ export const LimitEntrySchema = z.object({
   series: z.string().optional(),
   value: LimitValueSchema,
   /**
-   * GLOBAL defaults only: when true, no override may resolve ABOVE this
-   * value. This is the lever that answers "may a per-user exception raise a
-   * cap" — yes by default, no when a global admin ticks Hard ceiling.
+   * GLOBAL-TIER entries only — a global default, or an override WITHOUT a
+   * `delegationId`: when true, nothing may resolve ABOVE this value for the
+   * cells it applies to. Among the ceiling candidates for a cell the MOST
+   * SPECIFIC one (normal comparator) pins the value, so "OCP capped at 100,
+   * except alice at 500" is two ceiling records. This is the lever that
+   * answers "may a more specific record raise a cap" — yes by default, no
+   * when a global admin ticks Hard ceiling. On a scoped (delegated) override
+   * the flag is INERT: the scoped write path strips it and the resolver
+   * ignores it whatever is stored.
    */
   ceiling: z.boolean().default(false),
 });
@@ -63,10 +69,64 @@ export const OverrideScopeSchema = z.enum([
   'domain',
   /** 'department:<v>' | 'company:<v>' | 'office:<v>'. */
   'attribute',
-  /** Entra group object id — PERSISTED, NEVER EVALUATED in v1. */
+  /**
+   * Entra group object id, matched against the delegated-Graph membership
+   * cache (lib/services/m365/groupMembership.ts). A cold or failed cache
+   * yields no groups for that request, so group targets grant nothing then.
+   */
   'group',
 ]);
 export type OverrideScope = z.infer<typeof OverrideScopeSchema>;
+
+/**
+ * Authority tier of a record — DERIVED, never stored: an override that
+ * carries a `delegationId` is `scoped`; one without is `global`, as are the
+ * global defaults and the compiled catalog. At the same layer a global
+ * record always outranks a scoped one.
+ */
+export type LimitTier = 'global' | 'scoped';
+
+/** Server-generated, immutable delegation id. */
+export const DELEGATION_ID_RE = /^del-[0-9a-f]{12}$/;
+
+/**
+ * One OR'd term of a delegation's jurisdiction. Reuses the override
+ * targeting vocabulary on purpose so `matchesPrincipal` is the single
+ * definition of "this user matches this rule" — see principalMatching.ts.
+ */
+export const JurisdictionPredicateSchema = z.object({
+  scope: OverrideScopeSchema,
+  targets: z.array(z.string().max(320)).min(1),
+});
+export type JurisdictionPredicate = z.infer<typeof JurisdictionPredicateSchema>;
+
+/**
+ * A global-admin-authored grant: WHO the scoped admins are and WHAT
+ * jurisdiction their overrides are confined to. Lives inside the policy
+ * document so a delegation and the overrides that reference it are one
+ * CAS'd write, and so the resolver's hot path has the jurisdiction without a
+ * second blob read.
+ *
+ * Arrays are bounded even on the READ side (bounded-on-read rule): a
+ * runaway document must fail loud here, not in the resolver.
+ */
+export const LimitDelegationSchema = z.object({
+  id: z.string().regex(DELEGATION_ID_RE),
+  label: z.string().default(''),
+  /** Disabled → every override under it is INERT (never promoted to global). */
+  enabled: z.boolean().default(true),
+  /** Graph `mail` values, lowercased. */
+  admins: z.array(z.string().max(320)).max(200).default([]),
+  /** OR'd. Empty = matches nobody, i.e. a disabled-in-practice delegation. */
+  jurisdiction: z.array(JurisdictionPredicateSchema).max(50).default([]),
+  /** Per-delegation share of the document's override budget. */
+  maxOverrides: z.number().int().min(0).max(100).default(25),
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type LimitDelegation = z.infer<typeof LimitDelegationSchema>;
 
 export const LimitOverrideSchema = z.object({
   /** Server-generated `lim-<12 hex>`; immutable, and the final tie-break. */
@@ -75,8 +135,19 @@ export const LimitOverrideSchema = z.object({
   enabled: z.boolean().default(true),
   scope: OverrideScopeSchema,
   targets: z.array(z.string().max(320)).default([]),
-  /** Admin tie-break WITHIN a layer. Higher wins. */
+  /**
+   * GLOBAL admin's tie-break WITHIN a layer and tier. Higher wins. Scoped
+   * overrides are stored with 0 (the scoped write path forces it) and are
+   * compared as 0 by the resolver regardless of the stored value.
+   */
   priority: z.number().int().min(-1000).max(1000).default(0),
+  /**
+   * Present ⇒ authority tier `scoped`: the override only ever applies to
+   * principals INSIDE that delegation's jurisdiction, whatever `targets`
+   * say, and loses to any global-tier record at the same layer. Absent ⇒
+   * `global`. Ownership for authorization is THIS field, never `createdBy`.
+   */
+  delegationId: z.string().regex(DELEGATION_ID_RE).optional(),
   /** SPARSE — only the keys this override speaks to. */
   entries: z.array(LimitEntrySchema).default([]),
   createdBy: z.string(),
@@ -97,6 +168,8 @@ export const LimitsPolicySchema = z.object({
   /** Global defaults. A key absent here falls back to the compiled catalog. */
   defaults: z.array(LimitEntrySchema).default([]),
   overrides: z.array(LimitOverrideSchema).default([]),
+  /** Scoped-admin grants (docs/LIMITS_SCOPED_ADMINS_DESIGN.md). */
+  delegations: z.array(LimitDelegationSchema).default([]),
   /**
    * 'observe' resolves and logs every would-block decision but rejects
    * nothing. Ships as this so an admin can watch real org data for a week
@@ -127,13 +200,21 @@ export const LimitsPolicySchema = z.object({
 });
 export type LimitsPolicy = z.infer<typeof LimitsPolicySchema>;
 
-/** Immutable audit copy written alongside every successful policy write. */
+/**
+ * Immutable audit copy written alongside every successful policy write.
+ * Every action snapshots the WHOLE policy, so the trail stays a replayable
+ * sequence of full documents whichever path wrote them.
+ */
 export const LimitsHistoryEntrySchema = z.object({
   version: z.literal(1),
-  action: z.literal('upsert'),
+  /** `upsert` = global admin's full PUT; `scoped-*` = the per-override path. */
+  action: z.enum(['upsert', 'scoped-upsert', 'scoped-delete']),
   policy: LimitsPolicySchema.nullable().default(null),
   updatedBy: z.string(),
   updatedAt: z.string(),
+  /** Set on scoped actions: the delegation acted under and the record touched. */
+  delegationId: z.string().optional(),
+  overrideId: z.string().optional(),
 });
 export type LimitsHistoryEntry = z.infer<typeof LimitsHistoryEntrySchema>;
 
@@ -168,8 +249,29 @@ export function emptyPolicy(updatedBy = 'system'): LimitsPolicy {
   });
 }
 
+function safeHistoryTimestamp(timestamp: string): string {
+  return timestamp.replace(/[^0-9A-Za-z.-]/g, '_');
+}
+
+function safeHistoryUser(updatedBy: string): string {
+  return updatedBy.replace(/[^0-9A-Za-z.@-]/g, '_').slice(0, 64);
+}
+
 export function historyBlobPath(timestamp: string, updatedBy: string): string {
-  const safeTimestamp = timestamp.replace(/[^0-9A-Za-z.-]/g, '_');
-  const safeUser = updatedBy.replace(/[^0-9A-Za-z.@-]/g, '_').slice(0, 64);
-  return `${LIMITS_HISTORY_PREFIX}${safeTimestamp}-${safeUser}.json`;
+  return `${LIMITS_HISTORY_PREFIX}${safeHistoryTimestamp(timestamp)}-${safeHistoryUser(updatedBy)}.json`;
+}
+
+/**
+ * History path for a SCOPED write. The `(timestamp, mail)` path above is
+ * create-only with 412 treated as success, so two per-override saves by one
+ * admin in the same millisecond would silently drop a snapshot; the override
+ * id makes the pair unique.
+ */
+export function scopedHistoryBlobPath(
+  timestamp: string,
+  updatedBy: string,
+  overrideId: string,
+): string {
+  const safeOverride = overrideId.replace(/[^0-9A-Za-z-]/g, '_').slice(0, 32);
+  return `${LIMITS_HISTORY_PREFIX}${safeHistoryTimestamp(timestamp)}-${safeHistoryUser(updatedBy)}-${safeOverride}.json`;
 }
