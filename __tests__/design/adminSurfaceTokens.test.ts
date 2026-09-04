@@ -12,15 +12,26 @@ import { describe, expect, it } from 'vitest';
  * text can — the same trick __tests__/lib/services/limits/catalog.test.ts
  * already uses to keep the limit catalog honest.
  *
- * SCOPE IS DELIBERATELY NARROW: components/Limits and components/Admin only.
- * Running the pairing rule over components/AgentAccess today reports ~70
- * pre-existing violations in files this change does not restyle; a guard that
- * starts red is a guard everyone learns to ignore. Widen it when those files
- * are brought over.
+ * SCOPE IS DELIBERATELY NARROW: components/Limits and components/Admin, plus
+ * the one shared control the limits editors render (`ChipListInput`, which
+ * lives in components/AgentAccess). Running the pairing rule over the rest of
+ * components/AgentAccess today reports ~70 pre-existing violations in files
+ * this change does not restyle; a guard that starts red is a guard everyone
+ * learns to ignore. Widen it when those files are brought over.
+ *
+ * The vocabulary itself (adminClasses.ts) is scanned too: its exported string
+ * constants are class strings, and a token that is only ever used via import
+ * would otherwise be the one place an unpaired colour could hide.
  */
 
 const REPO_ROOT = resolve(__dirname, '../..');
 const SCOPED_DIRS = ['components/Limits', 'components/Admin'];
+/**
+ * Shared controls outside SCOPED_DIRS that admin surfaces render. They get
+ * the colour invariants (2, 3) but not the form-control import rule (1): a
+ * chip input IS the field, it does not wrap one in ADMIN_FIELD.
+ */
+const SHARED_CONTROLS = ['components/AgentAccess/ChipListInput.tsx'];
 
 function walk(dir: string): string[] {
   const full = resolve(REPO_ROOT, dir);
@@ -43,10 +54,23 @@ function walk(dir: string): string[] {
 }
 
 const FILES = SCOPED_DIRS.flatMap(walk);
+const COLOUR_FILES = [
+  ...FILES,
+  ...SHARED_CONTROLS.map((p) => resolve(REPO_ROOT, p)),
+];
 
-/** Every className="…" and className={`…`} literal in a source file. */
-function classStrings(source: string): string[] {
+/**
+ * Every className="…" and className={`…`} literal in a source file. In
+ * adminClasses.ts the class strings are the exported constants instead, so
+ * every `export const NAME = '…'` (single line or wrapped) is read as one.
+ */
+function classStrings(source: string, file: string): string[] {
   const out: string[] = [];
+  if (file.endsWith('adminClasses.ts')) {
+    const constants = source.matchAll(/export const [A-Z_]+ =\s*'([^']*)';/g);
+    for (const m of constants) out.push(m[1]);
+    return out;
+  }
   const quoted = source.matchAll(/className="([^"]*)"/g);
   for (const m of quoted) out.push(m[1]);
   const templated = source.matchAll(/className=\{`([^`]*)`\}/g);
@@ -78,6 +102,34 @@ describe('admin surface conformance', () => {
   it('scans a non-empty set of files', () => {
     // Guards the guard: a broken glob would silently pass everything.
     expect(FILES.length).toBeGreaterThan(4);
+    for (const file of COLOUR_FILES) expect(statSync(file).isFile()).toBe(true);
+  });
+
+  it('reads the admin vocabulary itself as class strings', () => {
+    // Guards the constant matcher: if adminClasses.ts is ever reformatted in a
+    // way the regex misses, the vocabulary would silently drop out of the scan.
+    const vocabulary = FILES.find((f) => f.endsWith('adminClasses.ts'));
+    expect(vocabulary).toBeDefined();
+    const strings = classStrings(
+      readFileSync(vocabulary!, 'utf8'),
+      vocabulary!,
+    );
+    expect(strings.length).toBeGreaterThan(10);
+    expect(strings).toContain('ring-1 ring-red-500 dark:ring-red-400');
+  });
+
+  /**
+   * The shared chip input paints its emphasis rings from the vocabulary, not
+   * from inline literals — otherwise a tone added there would sit outside
+   * every rule below.
+   */
+  it('ChipListInput sources its chip tones from adminClasses', () => {
+    const source = readFileSync(
+      resolve(REPO_ROOT, 'components/AgentAccess/ChipListInput.tsx'),
+      'utf8',
+    );
+    expect(source).toMatch(/from '@\/components\/Admin\/adminClasses'/);
+    expect(source).not.toMatch(/ring-(red|amber)-\d{3}/);
   });
 
   /**
@@ -100,16 +152,17 @@ describe('admin surface conformance', () => {
    * Invariant 2 — a colour utility that paints a surface must declare what it
    * does in dark mode. Variant-prefixed utilities (hover:, focus:, disabled:)
    * are skipped: they describe a state, and their base already carries the
-   * pairing.
+   * pairing. Rings count: an emphasis ring is a painted colour like any other.
    */
   it('colour utilities are paired light/dark', () => {
     const violations: string[] = [];
-    for (const file of FILES) {
-      for (const classString of classStrings(readFileSync(file, 'utf8'))) {
+    for (const file of COLOUR_FILES) {
+      const source = readFileSync(file, 'utf8');
+      for (const classString of classStrings(source, file)) {
         const utilities = classString.split(/\s+/).filter(Boolean);
         for (const utility of utilities) {
           if (/^[a-z-]+:/.test(utility)) continue; // hover:, dark:, focus:…
-          if (!/^(bg|text|border|placeholder)-/.test(utility)) continue;
+          if (!/^(bg|text|border|placeholder|ring)-/.test(utility)) continue;
           if (COLOURLESS.has(utility) || THEME_INVARIANT.has(utility)) continue;
           // Purely structural border widths/sides carry no colour.
           if (/^border(-[trbl])?(-\d+)?$/.test(utility)) continue;
@@ -140,7 +193,7 @@ describe('admin surface conformance', () => {
       ['uppercase tracking-wide', 'ADMIN_HEADING'],
     ];
     const violations: string[] = [];
-    for (const file of FILES) {
+    for (const file of COLOUR_FILES) {
       const source = readFileSync(file, 'utf8');
       for (const [bad, good] of DENYLIST) {
         // adminClasses.ts itself defines the approved strings.
