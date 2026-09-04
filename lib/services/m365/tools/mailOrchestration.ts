@@ -31,6 +31,7 @@
 import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
+import { createLimiter } from '@/lib/services/m365/graphLimiter';
 import type { M365ToolExecutionContext } from '@/lib/services/m365/tools/executor';
 import {
   MailScreenInput,
@@ -207,23 +208,6 @@ export interface CompositeRun {
   timedOut(): boolean;
   /** ≤4 in-flight Graph requests — every Graph call goes through here. */
   schedule<T>(fn: () => Promise<T>): Promise<T>;
-}
-
-function createLimiter(max: number) {
-  let active = 0;
-  const waiters: (() => void)[] = [];
-  return async function schedule<T>(fn: () => Promise<T>): Promise<T> {
-    while (active >= max) {
-      await new Promise<void>((resolve) => waiters.push(resolve));
-    }
-    active++;
-    try {
-      return await fn();
-    } finally {
-      active--;
-      waiters.shift()?.();
-    }
-  };
 }
 
 export function createCompositeRun(
