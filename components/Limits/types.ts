@@ -6,13 +6,19 @@
  * means inherit, a `null` value means explicitly unlimited) survives a round
  * trip through the form.
  */
+import type {
+  ScopedEntryBody,
+  ScopedOverrideBody,
+} from '@/client/hooks/settings/useLimitsAdmin';
+
 import {
+  LimitDelegation,
   LimitEntry,
   LimitOverride,
   LimitsPolicy,
 } from '@/lib/services/limits/types';
 
-import { LimitValueState } from '@/components/Limits/LimitValueInput';
+import type { LimitValueState } from '@/components/Limits/LimitValueInput';
 
 export interface PolicyResponse {
   policy: LimitsPolicy | null;
@@ -89,17 +95,39 @@ export function ceilingsFromEntries(
   return out;
 }
 
-/** Client-side id generator matching the server's `lim-<12 hex>` shape. */
-export function newOverrideId(): string {
+function randomHex12(): string {
   const bytes = new Uint8Array(6);
   crypto.getRandomValues(bytes);
-  const hex = Array.from(bytes)
+  return Array.from(bytes)
     .map((b) => b.toString(16).padStart(2, '0'))
     .join('');
-  return `lim-${hex}`;
 }
 
-export function emptyOverride(scope: LimitOverride['scope']): LimitOverride {
+/** Client-side id generator matching the server's `lim-<12 hex>` shape. */
+export function newOverrideId(): string {
+  return `lim-${randomHex12()}`;
+}
+
+/**
+ * Client-side delegation id in the server's `del-<12 hex>` shape. Used ONLY
+ * as a stable React key / draft handle: the full PUT omits the id for a
+ * delegation created this session and the server generates the stored one
+ * (design §2), so nothing may reference this value across a save.
+ */
+export function newDelegationId(): string {
+  return `del-${randomHex12()}`;
+}
+
+/**
+ * A fresh override. `delegationId` stamps a SCOPED record (created under a
+ * delegation in scoped mode, or assigned by a global admin); priority stays
+ * 0 and no entry carries a ceiling, matching what the scoped write path
+ * forces (design §4).
+ */
+export function emptyOverride(
+  scope: LimitOverride['scope'],
+  delegationId?: string,
+): LimitOverride {
   const now = new Date().toISOString();
   return {
     id: newOverrideId(),
@@ -108,10 +136,59 @@ export function emptyOverride(scope: LimitOverride['scope']): LimitOverride {
     scope,
     targets: [],
     priority: 0,
+    ...(delegationId ? { delegationId } : {}),
     entries: [],
     createdBy: '',
     createdAt: now,
     updatedBy: '',
     updatedAt: now,
+  };
+}
+
+/**
+ * A fresh delegation draft: one empty domain predicate so the editor opens
+ * on the anchored shape (design §8), default budget 25. Timestamps and
+ * authors are placeholders the server overwrites.
+ */
+export function emptyDelegation(): LimitDelegation {
+  const now = new Date().toISOString();
+  return {
+    id: newDelegationId(),
+    label: '',
+    enabled: true,
+    admins: [],
+    jurisdiction: [{ scope: 'domain', targets: [] }],
+    maxOverrides: 25,
+    createdBy: '',
+    createdAt: now,
+    updatedBy: '',
+    updatedAt: now,
+  };
+}
+
+/**
+ * Override draft → strict scoped PUT body (design §5): drops `delegationId`
+ * (it travels in the query string), `priority` (forced to 0 server-side),
+ * every `ceiling` flag (a scoped record never pins a cell — the server
+ * would refuse a `true`), and the audit fields. Blank targets are dropped.
+ */
+export function scopedOverrideBody(
+  override: LimitOverride,
+): ScopedOverrideBody {
+  const entries: ScopedEntryBody[] = override.entries.map((entry) => ({
+    limitKey: entry.limitKey,
+    ...(entry.modelId ? { modelId: entry.modelId } : {}),
+    ...(entry.series ? { series: entry.series } : {}),
+    value: entry.value,
+  }));
+  return {
+    id: override.id,
+    label: override.label,
+    enabled: override.enabled,
+    scope: override.scope,
+    targets: override.targets
+      .map((target) => target.trim())
+      .filter((target) => target.length > 0),
+    entries,
   };
 }
