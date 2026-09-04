@@ -4,6 +4,7 @@ import React from 'react';
 import { LimitEntry, LimitOverride } from '@/lib/services/limits/types';
 
 import { OverrideEditor } from '@/components/Limits/OverrideEditor';
+import type { TargetVerdict } from '@/components/Limits/jurisdiction';
 
 import '@testing-library/jest-dom';
 import { describe, expect, it, vi } from 'vitest';
@@ -37,6 +38,11 @@ function renderEditor(
   extraProps: {
     globalDefaults?: LimitEntry[];
     defaultExpanded?: boolean;
+    variant?: 'global' | 'scoped';
+    appliesTo?: string;
+    verdicts?: TargetVerdict[];
+    rejectedTargets?: string[];
+    delegationOptions?: Array<{ id: string; label: string }>;
   } = {},
 ) {
   const onChange = vi.fn();
@@ -320,6 +326,133 @@ describe('OverrideEditor', () => {
       });
       const next: LimitOverride = onChange.mock.calls[0][0];
       expect(next.priority).toBe(250);
+    });
+  });
+
+  describe('scoped variant (design §6b)', () => {
+    it('hides the priority field and hint', () => {
+      renderEditor(makeOverride(), { variant: 'scoped' });
+      expect(screen.queryByLabelText('priorityLabel')).not.toBeInTheDocument();
+      expect(screen.queryByText('priorityHint')).not.toBeInTheDocument();
+      // Everything else is still editable.
+      expect(screen.getByLabelText('overrideLabelLabel')).toBeInTheDocument();
+    });
+
+    it('shows the applies-to line collapsed and expanded', () => {
+      renderEditor(makeOverride(), {
+        appliesTo: 'applies-line',
+        defaultExpanded: false,
+      });
+      expect(screen.getByText('applies-line')).toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'expandOverride' }));
+      expect(screen.getByText('applies-line')).toBeInTheDocument();
+    });
+  });
+
+  describe('verdicts (design §4)', () => {
+    it('highlights out-of-scope targets on the chip itself and with a header chip', () => {
+      renderEditor(
+        makeOverride({
+          scope: 'user',
+          targets: ['in@ocp.msf.org', 'out@paris.msf.org'],
+        }),
+        {
+          verdicts: [
+            {
+              target: 'in@ocp.msf.org',
+              status: 'in-scope',
+              reason: 'domain-match',
+            },
+            {
+              target: 'out@paris.msf.org',
+              status: 'out-of-scope',
+              reason: 'not-in-domains',
+            },
+          ],
+        },
+      );
+      expect(screen.getByText('out@paris.msf.org')).toHaveAttribute(
+        'title',
+        'verdictOutOfScopeChip',
+      );
+      expect(screen.getByText('out@paris.msf.org').className).toContain(
+        'ring-red-500',
+      );
+      expect(screen.getByText('in@ocp.msf.org')).not.toHaveAttribute('title');
+      expect(screen.getByText('verdictOutOfScopeChip')).toBeInTheDocument();
+      expect(screen.getByText('verdictOutOfScope')).toBeInTheDocument();
+      expect(screen.queryByText('verdictCrossAxis')).not.toBeInTheDocument();
+    });
+
+    it('adds the cross-axis note for an undecidable target', () => {
+      renderEditor(
+        makeOverride({ scope: 'attribute', targets: ['department:health'] }),
+        {
+          verdicts: [
+            {
+              target: 'department:health',
+              status: 'undecidable',
+              reason: 'cross-axis',
+            },
+          ],
+        },
+      );
+      expect(screen.getByText('verdictCrossAxis')).toBeInTheDocument();
+      expect(screen.queryByText('verdictOutOfScope')).not.toBeInTheDocument();
+    });
+
+    it('highlights targets the SERVER rejected even when the client verdict is silent', () => {
+      renderEditor(
+        makeOverride({ scope: 'user', targets: ['x@ocp.msf.org'] }),
+        {
+          verdicts: [
+            {
+              target: 'x@ocp.msf.org',
+              status: 'in-scope',
+              reason: 'domain-match',
+            },
+          ],
+          rejectedTargets: ['X@OCP.MSF.ORG'],
+        },
+      );
+      expect(screen.getByText('x@ocp.msf.org')).toHaveAttribute(
+        'title',
+        'verdictOutOfScopeChip',
+      );
+    });
+  });
+
+  describe('delegation assignment (global panel)', () => {
+    it('assigning a delegation forces priority 0 and clears ceilings', () => {
+      const onChange = renderEditor(makeOverride({ priority: 250 }), {
+        delegationOptions: [{ id: 'del-0000000000aa', label: 'OCP' }],
+      });
+      fireEvent.change(screen.getByLabelText('overrideDelegationLabel'), {
+        target: { value: 'del-0000000000aa' },
+      });
+      const next: LimitOverride = onChange.mock.calls[0][0];
+      expect(next.delegationId).toBe('del-0000000000aa');
+      expect(next.priority).toBe(0);
+      expect(next.entries.every((e) => e.ceiling === false)).toBe(true);
+    });
+
+    it('choosing none drops delegationId entirely', () => {
+      const onChange = renderEditor(
+        makeOverride({ delegationId: 'del-0000000000aa' }),
+        { delegationOptions: [{ id: 'del-0000000000aa', label: 'OCP' }] },
+      );
+      fireEvent.change(screen.getByLabelText('overrideDelegationLabel'), {
+        target: { value: '' },
+      });
+      const next: LimitOverride = onChange.mock.calls[0][0];
+      expect(next).not.toHaveProperty('delegationId');
+    });
+
+    it('renders no delegation select when no options are supplied', () => {
+      renderEditor();
+      expect(
+        screen.queryByLabelText('overrideDelegationLabel'),
+      ).not.toBeInTheDocument();
     });
   });
 });
