@@ -231,15 +231,21 @@ const serverEnvSchema = z.object({
   // rules-blob outage: set to "false" and redeploy.
   AGENT_ACCESS_CONTROL_ENABLED: booleanString(false),
   // Comma-separated global-admin emails (Graph `mail` values, matched
-  // lowercased + trimmed). Bootstrap mechanism — changing it needs a redeploy.
+  // lowercased + trimmed). Bootstrap roster — changing it needs a redeploy.
+  // Additional global admins are configured at runtime in Admin → Global
+  // admins (system/admin/global-admins.json, GlobalAdminRosterService); the
+  // effective set is the union. This env roster is un-lockable: no runtime
+  // write can remove it, and the roster PUT refuses to empty itself while
+  // this is also empty (GLOBAL_ADMINS_LOCKOUT).
   AGENT_ACCESS_ADMINS: z.string().optional(),
 
   // Usage limits (docs/LIMITS.md) have no env gate: the UI is gated by the
   // client-side `usageLimits` LaunchDarkly flag, and the server side is inert
   // until a policy is authored (no policy blob → everything unlimited).
   // Break-glass for a bad policy is the admin UI itself, or deleting the blob.
-  // The admin roster IS shared — limits are authored by the same
-  // AGENT_ACCESS_ADMINS global admins.
+  // The global-admin roster IS shared — limits are authored by the same
+  // AGENT_ACCESS_ADMINS ∪ config-roster global admins, plus scoped admins
+  // named in limits delegations (docs/LIMITS_SCOPED_ADMINS_DESIGN.md).
 
   // Application Configuration
   // Optional explicit override; when unset the default model resolves
