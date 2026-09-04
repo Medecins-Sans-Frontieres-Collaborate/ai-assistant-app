@@ -4,6 +4,7 @@ import MicrosoftEntraID from 'next-auth/providers/microsoft-entra-id';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
+import { GlobalAdminRosterService } from '@/lib/services/admin/GlobalAdminRosterService';
 import { applyViewAs, readViewAs } from '@/lib/services/admin/viewAs';
 import { isGlobalAdmin } from '@/lib/services/agentAccess/adminAuth';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
@@ -446,6 +447,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const actualRegion = token.userRegion ?? resolved.region;
       const userOfficeId = token.userOfficeId ?? resolved.officeId;
       const userOfficeName = token.userOfficeName ?? resolved.officeName;
+
+      // Warms the config global-admin roster (system/admin/global-admins.json)
+      // so every isGlobalAdmin()/resolveAdminStatus() downstream of auth() —
+      // the region override and view-as below, page gates, admin routes —
+      // sees the same ≤60s snapshot. Must run BEFORE the two gates below or
+      // config admins get env-only answers for them. Never throws; cold +
+      // outage = env roster only (lib/services/admin/GlobalAdminRosterService).
+      await GlobalAdminRosterService.getInstance().ensureFresh();
 
       // Apply an optional manual region override (testing/diagnostics). It
       // replaces only the data-plane region — office identity is unchanged —
