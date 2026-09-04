@@ -1,4 +1,5 @@
 import {
+  counterCellName,
   isBlocked,
   isUnlimited,
   resolveAllLimits,
@@ -705,5 +706,22 @@ describe('resolveLimit — neutrality for policies without delegations', () => {
     const all = resolveAllLimits(p, principal());
     expect(Object.values(all).every((r) => r.tier === 'global')).toBe(true);
     expect(resolveLimit(CHAT_MESSAGES, null, principal()).tier).toBe('global');
+  });
+});
+
+describe('counterCellName — the ONE key debit and preview share', () => {
+  it('uses the bare limit key for unqualified cells', () => {
+    expect(counterCellName({ limitKey: 'feature.upload.filesPerDay' })).toBe(
+      'feature.upload.filesPerDay',
+    );
+  });
+
+  it('keys per-model cells as model:<id>.<suffix> and families as family:<series>.<suffix>', () => {
+    expect(
+      counterCellName({ limitKey: 'model.requests', modelId: 'GPT-5.2' }),
+    ).toBe('model:gpt-5.2.requests');
+    expect(counterCellName({ limitKey: 'model.requests', series: 'gpt' })).toBe(
+      'family:gpt.requests',
+    );
   });
 });

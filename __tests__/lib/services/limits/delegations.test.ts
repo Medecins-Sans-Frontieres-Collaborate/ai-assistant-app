@@ -9,7 +9,7 @@ import {
   resolveAllLimits,
   resolveLimit,
   resolveModelCells,
-  setJurisdictionDegradedCheck,
+  setJurisdictionUnevaluableHook,
   withinJurisdiction,
 } from '@/lib/services/limits/resolver';
 import {
@@ -578,9 +578,9 @@ describe('resolveLimit — authority tier', () => {
   });
 });
 
-describe('activeDelegationIds — jurisdiction-unevaluable audit line', () => {
+describe('activeDelegationIds — jurisdiction-unevaluable hook (design §8)', () => {
   afterEach(() => {
-    setJurisdictionDegradedCheck(undefined);
+    setJurisdictionUnevaluableHook(undefined);
     vi.restoreAllMocks();
   });
 
@@ -595,33 +595,38 @@ describe('activeDelegationIds — jurisdiction-unevaluable audit line', () => {
     };
   }
 
-  it('logs once per resolution pass when a group-anchored jurisdiction failed only because membership is degraded', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    setJurisdictionDegradedCheck((userId) => userId === 'oid-1');
+  it('reports once per resolution pass when a group-anchored jurisdiction could only have failed for want of groups', () => {
+    const hook = vi.fn();
+    setJurisdictionUnevaluableHook(hook);
     const { del, p } = groupOnlyPolicy();
     resolveAllLimits(p, principal());
-    expect(warn).toHaveBeenCalledTimes(1);
-    expect(warn.mock.calls[0][0]).toContain(
-      '[limits-audit] jurisdiction-unevaluable',
-    );
-    expect(warn.mock.calls[0][0]).toContain(`delegation=${del.id}`);
-    expect(warn.mock.calls[0][0]).toContain('user=oid-1');
+    expect(hook).toHaveBeenCalledTimes(1);
+    expect(hook).toHaveBeenCalledWith({
+      delegationId: del.id,
+      userId: 'oid-1',
+    });
   });
 
-  it('stays silent when membership is healthy, when the user has groups, or when no check is wired', () => {
+  it('never logs itself — the resolver stays free of console output', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    setJurisdictionUnevaluableHook(() => {});
     const { p } = groupOnlyPolicy();
-    resolveAllLimits(p, principal()); // no check wired
-    setJurisdictionDegradedCheck(() => false);
-    resolveAllLimits(p, principal()); // healthy
-    setJurisdictionDegradedCheck(() => true);
-    resolveAllLimits(p, principal({ groupIds: ['some-other-group'] })); // evaluated, just not a member
+    resolveAllLimits(p, principal());
     expect(warn).not.toHaveBeenCalled();
   });
 
+  it('stays silent when no hook is wired, or when the user has groups (evaluated, just not a member)', () => {
+    const hook = vi.fn();
+    const { p } = groupOnlyPolicy();
+    resolveAllLimits(p, principal()); // no hook wired — must not throw
+    setJurisdictionUnevaluableHook(hook);
+    resolveAllLimits(p, principal({ groupIds: ['some-other-group'] }));
+    expect(hook).not.toHaveBeenCalled();
+  });
+
   it('stays silent for domain/user-anchored jurisdictions and for disabled delegations', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    setJurisdictionDegradedCheck(() => true);
+    const hook = vi.fn();
+    setJurisdictionUnevaluableHook(hook);
     const domainDel = delegation([{ scope: 'domain', targets: ['other.org'] }]);
     const disabledGroupDel = delegation(
       [{ scope: 'group', targets: [GROUP_A] }],
@@ -631,6 +636,21 @@ describe('activeDelegationIds — jurisdiction-unevaluable audit line', () => {
       policy([], [], { delegations: [domainDel, disabledGroupDel] }),
       principal(),
     );
-    expect(warn).not.toHaveBeenCalled();
+    expect(hook).not.toHaveBeenCalled();
+  });
+
+  it('does not report a group-anchored jurisdiction that matched on another predicate', () => {
+    const hook = vi.fn();
+    setJurisdictionUnevaluableHook(hook);
+    const mixed = delegation([
+      { scope: 'group', targets: [GROUP_A] },
+      { scope: 'domain', targets: ['example.org'] },
+    ]);
+    const active = activeDelegationIds(
+      policy([], [], { delegations: [mixed] }),
+      principal(),
+    );
+    expect(active.has(mixed.id)).toBe(true);
+    expect(hook).not.toHaveBeenCalled();
   });
 });
