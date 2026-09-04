@@ -13,6 +13,14 @@
  * per-override ids make a later split into `system/limits/overrides/<id>.json`
  * purely additive if that wall is ever hit.
  *
+ * Scoped admins (docs/LIMITS_SCOPED_ADMINS_DESIGN.md §5) write through the
+ * SAME single document: each per-override save is a read-modify-write under
+ * CAS (`mutatePolicy`) rather than a per-delegation blob, precisely because a
+ * per-delegation blob would reintroduce the fail-open corrupt-record path
+ * this header exists to rule out. The mutator is re-run against a FRESH read
+ * on every 412 so it can re-validate (the delegation may have been narrowed,
+ * disabled or deleted in between) — never compute once and re-upload.
+ *
  * ⚠ Lives beside `system/agent-access/`, never underneath its `rules/`
  * prefix: `listAllRules` is fail-closed, so an alien blob there would brick
  * every Foundry agent invocation.
@@ -33,6 +41,7 @@ import {
   LimitsPolicy,
   LimitsPolicySchema,
   historyBlobPath,
+  scopedHistoryBlobPath,
 } from '@/lib/services/limits/types';
 
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
@@ -93,25 +102,118 @@ export async function writePolicy(
   );
 }
 
+const POLICY_CAS_ATTEMPTS = 3;
+const POLICY_CAS_BASE_BACKOFF_MS = 25;
+
+/** What a {@link PolicyMutator} hands back: the document to write, or a stop. */
+export interface PolicyMutationAbort {
+  /** The HTTP response the route should return instead of writing. */
+  abort: Response;
+}
+export type PolicyMutationOutcome = LimitsPolicy | PolicyMutationAbort;
+
+/**
+ * Receives the CURRENT stored policy (null when none exists yet) and its
+ * ETag on EVERY attempt, so validation runs against fresh data each time.
+ * Must not mutate `current` in place — return a new document.
+ */
+export type PolicyMutator = (
+  current: LimitsPolicy | null,
+  etag: string | null,
+) => PolicyMutationOutcome | Promise<PolicyMutationOutcome>;
+
+export interface MutatePolicyOptions {
+  /** CAS rounds before giving up (default 3). */
+  attempts?: number;
+  /** Base for the jittered exponential backoff between rounds (default 25 ms; 0 disables). */
+  backoffMs?: number;
+  /** Log label. */
+  label?: string;
+}
+
+export type MutatePolicyResult =
+  | { policy: LimitsPolicy; etag: string; abort?: undefined }
+  | { policy?: undefined; etag?: undefined; abort: Response };
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Bounded read-modify-write of the policy under CAS — the scoped write
+ * path's primitive (design §5). Reads storage DIRECTLY (never the ≤60 s
+ * LimitsService snapshot, or every write would burn a guaranteed 412),
+ * invokes `mutate(current, etag)`, and writes the returned document with the
+ * ETag it was derived from. On a 412 it re-reads and re-invokes the mutator;
+ * after `attempts` rounds it throws {@link LimitsConflictError}, which routes
+ * map to 409. A mutator that returns `{ abort }` stops the loop without
+ * writing and the response is handed back verbatim. Read/parse failures
+ * propagate unchanged. Callers still `LimitsService.getInstance().invalidate()`
+ * and write history themselves, as the full PUT does.
+ */
+export async function mutatePolicy(
+  storage: BlobStorage,
+  mutate: PolicyMutator,
+  opts: MutatePolicyOptions = {},
+): Promise<MutatePolicyResult> {
+  const attempts = Math.max(
+    1,
+    Math.floor(opts.attempts ?? POLICY_CAS_ATTEMPTS),
+  );
+  const backoffBase = opts.backoffMs ?? POLICY_CAS_BASE_BACKOFF_MS;
+  const label = opts.label ?? 'limits.mutatePolicy';
+
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    const current = await readPolicy(storage);
+    const outcome = await mutate(
+      current?.policy ?? null,
+      current?.etag ?? null,
+    );
+    if (!('version' in outcome)) return { abort: outcome.abort };
+    const next = LimitsPolicySchema.parse(outcome);
+    try {
+      const etag = await writePolicy(storage, next, current?.etag ?? null);
+      return { policy: next, etag };
+    } catch (error) {
+      if (!(error instanceof AgentAccessConflictError)) throw error;
+      if (attempt >= attempts) {
+        console.warn(
+          `[limits-admin] ${label}: CAS exhausted after ${attempts} attempts`,
+        );
+        throw error;
+      }
+      if (backoffBase > 0) {
+        // Jittered so two replicas that collided do not retry in lockstep.
+        await sleep(backoffBase * 2 ** (attempt - 1) * (0.5 + Math.random()));
+      }
+    }
+  }
+  // Unreachable: the loop returns or throws on its last round.
+  throw new AgentAccessConflictError();
+}
+
 /**
  * Immutable audit copy of every successful policy write. Best-effort by
  * design: a history failure must never fail the write the admin just made,
  * but it IS logged loudly. Written create-only, so a 412 (same timestamp and
- * author, i.e. a retry) is idempotent success rather than an error.
+ * author, i.e. a retry) is idempotent success rather than an error. Entries
+ * that name an `overrideId` (scoped actions) use the per-override path so
+ * two saves in one millisecond cannot collide.
  */
 export async function writeHistoryEntry(
   storage: BlobStorage,
   entry: LimitsHistoryEntry,
 ): Promise<void> {
   const parsed = LimitsHistoryEntrySchema.parse(entry);
+  const blobPath = parsed.overrideId
+    ? scopedHistoryBlobPath(
+        parsed.updatedAt,
+        parsed.updatedBy,
+        parsed.overrideId,
+      )
+    : historyBlobPath(parsed.updatedAt, parsed.updatedBy);
   try {
-    await uploadJson(
-      storage,
-      historyBlobPath(parsed.updatedAt, parsed.updatedBy),
-      parsed,
-      null,
-      'limits.writeHistory',
-    );
+    await uploadJson(storage, blobPath, parsed, null, 'limits.writeHistory');
   } catch (error) {
     if (error instanceof AgentAccessConflictError) return;
     console.error(
