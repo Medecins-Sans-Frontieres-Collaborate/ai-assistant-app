@@ -608,6 +608,18 @@
     "refresh": "Refresh",
     "refreshNow": "Refresh to update"
   },
+  "releaseNotes": {
+    "title": "What's new",
+    "whatChanged": "What changed?",
+    "settingsTitle": "What's new",
+    "settingsDescription": "See what changed in recent updates",
+    "loading": "Loading release notes\u2026",
+    "unavailable": "Release notes couldn't be loaded right now. You can read them on GitHub instead.",
+    "noDetails": "No details were recorded for this release.",
+    "stale": "These notes were saved a little while ago and may not be the very latest.",
+    "englishOnly": "Release notes are written in English.",
+    "viewOnGithub": "View all releases on GitHub"
+  },
   "welcomeV2": {
     "backToChat": "Back to Chat",
     "title": "Welcome to AI Assistant V2",
