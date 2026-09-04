@@ -39,8 +39,28 @@ export type { Principal };
 // through to build a Principal, which makes it the natural registration point.
 // Both interpolated values are sanitized (CWE-117): the delegation id is
 // schema-validated but the oid comes off the session.
+//
+// Rate-limited per (delegation, user): the resolver reports the fact on
+// EVERY resolution pass, and enforcement.ts / /api/models call resolveLimit
+// once per key or per model, so an unthrottled hook would write one line per
+// cell — dozens per request — for the whole time membership stays degraded.
+// One line per window per pair is the audit signal; the window matches the
+// membership cache's negative TTL so a recovery is noticed promptly.
+const AUDIT_SUPPRESS_MS = 60_000;
+const lastAudited = new Map<string, number>();
+
+/** Test seam: the suppression map otherwise leaks across cases. */
+export function __resetJurisdictionAuditForTests(): void {
+  lastAudited.clear();
+}
+
 setJurisdictionUnevaluableHook(({ delegationId, userId }) => {
   if (!isGroupMembershipDegradedForUser(userId)) return;
+  const key = `${delegationId}\u0000${userId}`;
+  const now = Date.now();
+  const last = lastAudited.get(key);
+  if (last !== undefined && now - last < AUDIT_SUPPRESS_MS) return;
+  lastAudited.set(key, now);
   console.warn(
     `[limits-audit] jurisdiction-unevaluable delegation=${sanitizeForLog(delegationId)} user=${sanitizeForLog(userId)} reason=group-membership-degraded`,
   );
