@@ -94,6 +94,24 @@ describe('apiResponse', () => {
       });
     });
 
+    it('carries structured (object) details verbatim, so routes never serialize JSON into a string', async () => {
+      const response = errorResponse(
+        'One or more targets are outside your scope',
+        400,
+        { outOfScope: ['eve@elsewhere.org'] },
+        'LIMITS_OUT_OF_SCOPE',
+      );
+      const json = await response.json();
+
+      expect(response.status).toBe(400);
+      expect(json).toEqual({
+        error: 'One or more targets are outside your scope',
+        details: { outOfScope: ['eve@elsewhere.org'] },
+        code: 'LIMITS_OUT_OF_SCOPE',
+      });
+      expect(typeof json.details).toBe('object');
+    });
+
     it('should not include details or code if not provided', async () => {
       const response = errorResponse('Simple error');
       const json = await response.json();
