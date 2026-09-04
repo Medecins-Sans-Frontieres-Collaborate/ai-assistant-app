@@ -8,6 +8,7 @@ import type {
   M365DriveInfo,
   M365DrivePage,
   M365DriveSort,
+  M365FilteredMeetingList,
   M365MailFilter,
   M365MailImportResult,
   M365MailPage,
@@ -207,11 +208,30 @@ export interface ListMailOptions {
   signal?: AbortSignal;
 }
 
-export async function listMeetings(): Promise<M365MeetingEntry[]> {
+export async function listMeetings(
+  options: { signal?: AbortSignal } = {},
+): Promise<M365MeetingEntry[]> {
   const data = await requestJson<{ meetings: M365MeetingEntry[] }>(
     '/api/m365/meetings',
+    { signal: options.signal },
   );
   return data.meetings;
+}
+
+/**
+ * The same listing filtered server-side to meetings that actually have a
+ * transcript or recording, with each meeting's resources resolved inline
+ * (so expanding a row costs no round trip). Meetings whose availability
+ * could not be determined are counted, not listed — `listMeetings` remains
+ * the "show me everything" fallback.
+ */
+export async function listMeetingsWithArtifacts(
+  options: { signal?: AbortSignal } = {},
+): Promise<M365FilteredMeetingList> {
+  return requestJson<M365FilteredMeetingList>(
+    '/api/m365/meetings?artifacts=required',
+    { signal: options.signal },
+  );
 }
 
 export async function resolveMeeting(
