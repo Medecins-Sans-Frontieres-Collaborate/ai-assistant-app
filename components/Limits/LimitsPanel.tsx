@@ -12,6 +12,7 @@ import {
   ADMIN_BTN_RETRY,
 } from '@/components/Admin/adminClasses';
 import { GlobalLimitsPanel } from '@/components/Limits/GlobalLimitsPanel';
+import { LimitsCostProvider } from '@/components/Limits/LimitsCostContext';
 import { ScopedOverridesTab } from '@/components/Limits/ScopedOverridesTab';
 
 /**
@@ -27,6 +28,10 @@ import { ScopedOverridesTab } from '@/components/Limits/ScopedOverridesTab';
  * configured".
  *
  * The server component gates access; this client is presentation only.
+ *
+ * Both modes share one `LimitsCostProvider` (cost insights design §1): the
+ * flags are read and the pricing index built exactly once, and only when a
+ * cost flag is on.
  */
 export const LimitsPanel: FC = () => {
   const t = useTranslations('limits');
@@ -43,42 +48,44 @@ export const LimitsPanel: FC = () => {
     // Body only. AdminShell owns the page plane (the background that
     // globals.css's unconditional `html, body { background: #171717 }` makes
     // mandatory), the back link and the area switcher.
-    <div>
-      <h1 className="mb-2 text-xl font-bold text-black dark:text-white">
-        {t('title')}
-      </h1>
-      <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
-        {scopedMode ? t('scopedDescription') : t('description')}
-      </p>
-
-      {unavailable ? (
-        <div role="alert" className={ADMIN_BANNER_ERROR}>
-          <p className="flex items-center gap-2">
-            <IconAlertTriangle size={18} />
-            {t('policyUnavailable')}
-          </p>
-          <button
-            type="button"
-            className={`mt-3 ${ADMIN_BTN_RETRY}`}
-            onClick={() => scoped.refetch()}
-          >
-            {t('retry')}
-          </button>
-        </div>
-      ) : scoped.data === undefined ? (
-        <p className="text-sm text-gray-500 dark:text-gray-400" role="status">
-          {t('loading')}
+    <LimitsCostProvider>
+      <div>
+        <h1 className="mb-2 text-xl font-bold text-black dark:text-white">
+          {t('title')}
+        </h1>
+        <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
+          {scopedMode ? t('scopedDescription') : t('description')}
         </p>
-      ) : scoped.data.isGlobalAdmin ? (
-        <GlobalLimitsPanel />
-      ) : (
-        <ScopedOverridesTab
-          view={scoped.data}
-          onRefetch={() => {
-            void scoped.refetch();
-          }}
-        />
-      )}
-    </div>
+
+        {unavailable ? (
+          <div role="alert" className={ADMIN_BANNER_ERROR}>
+            <p className="flex items-center gap-2">
+              <IconAlertTriangle size={18} />
+              {t('policyUnavailable')}
+            </p>
+            <button
+              type="button"
+              className={`mt-3 ${ADMIN_BTN_RETRY}`}
+              onClick={() => scoped.refetch()}
+            >
+              {t('retry')}
+            </button>
+          </div>
+        ) : scoped.data === undefined ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400" role="status">
+            {t('loading')}
+          </p>
+        ) : scoped.data.isGlobalAdmin ? (
+          <GlobalLimitsPanel />
+        ) : (
+          <ScopedOverridesTab
+            view={scoped.data}
+            onRefetch={() => {
+              void scoped.refetch();
+            }}
+          />
+        )}
+      </div>
+    </LimitsCostProvider>
   );
 };
