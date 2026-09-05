@@ -3,7 +3,7 @@
 import { IconSearch } from '@tabler/icons-react';
 import { FC, useMemo, useState } from 'react';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import {
   MyLimit,
@@ -16,6 +16,14 @@ import { counterCellName } from '@/lib/services/limits/resolver';
 import { LimitOverride } from '@/lib/services/limits/types';
 
 import {
+  PricingIndex,
+  ceilingSpendPerDay,
+  lookupPricing,
+  spentSoFarUsd,
+} from '@/lib/utils/app/limitsPricing';
+import { COST_ASSUMPTIONS } from '@/lib/utils/shared/costEstimator';
+
+import {
   ADMIN_BTN_SECONDARY,
   ADMIN_CARD,
   ADMIN_CHECKBOX,
@@ -23,7 +31,10 @@ import {
   ADMIN_FIELD,
   ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
+import { costDisclosure, usdLabel } from '@/components/Limits/CostHint';
+import { useLimitsCost } from '@/components/Limits/LimitsCostContext';
 import { LIMIT_GROUPS } from '@/components/Limits/limitGroups';
+import { LIMITS_NOTE_CARD } from '@/components/Limits/limitsClasses';
 import { EmailAutocompleteInput } from '@/components/UI/EmailAutocompleteInput';
 
 import { getLimitDefinition } from '@/config/limits';
@@ -164,7 +175,11 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
     return qualifier ? `${base} — ${qualifier}` : base;
   };
 
-  /** Counter for this cell: the qualified cell first, then the bare key. */
+  /**
+   * Counter for this cell — the key the debit path writes. No bare-key
+   * fallback: counters only ever exist under `model:` / `family:` cells, and
+   * the route lists a qualified row for every one it fetched.
+   */
   const usageFor = (limit: MyLimit): PreviewUsage | undefined => {
     const usage = result?.usage;
     if (!usage) return undefined;
@@ -174,6 +189,7 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
 
   const showUsageColumn =
     withUsage && result !== null && result.usageUnavailable !== true;
+  const cost = useLimitsCost();
 
   return (
     <section className={`mb-4 ${ADMIN_CARD}`}>
@@ -299,6 +315,13 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
                   </tbody>
                 </table>
               </div>
+              {cost.insights && cost.pricing && (
+                <CostSpendCard
+                  rows={rows}
+                  pricing={cost.pricing}
+                  usage={showUsageColumn ? result.usage : undefined}
+                />
+              )}
             </>
           ) : null}
         </div>
@@ -343,6 +366,95 @@ const UsageCell: FC<UsageCellProps> = ({ limit, usage }) => {
           style={{ width: `${percent}%` }}
         />
       </div>
+    </div>
+  );
+};
+
+interface CostSpendCardProps {
+  rows: MyLimit[];
+  pricing: PricingIndex;
+  /** The counters the preview fetched — only when the usage column is shown. */
+  usage: Record<string, PreviewUsage> | undefined;
+}
+
+/**
+ * The spend card under the preview table (cost insights design §4b): the
+ * most this person can spend per day — the MIN over the conjunctive axes
+ * (messages, per-model caps, tokens), never their sum — and ≈ per month at
+ * 30.4375 days; "no spend ceiling" when nothing binds; and, with the usage
+ * column on, "spent so far" from the counted cells — a FLOOR, not a bill,
+ * with its basis named. Cells the server sent no counter for stay "not
+ * metered" in the table; here they simply do not contribute.
+ *
+ * Mounted only on the ON path, so `useLocale` is never called when the
+ * flag is off.
+ */
+const CostSpendCard: FC<CostSpendCardProps> = ({ rows, pricing, usage }) => {
+  const t = useTranslations('limits');
+  const locale = useLocale();
+  const { profile } = useLimitsCost();
+  const usd = (amount: number) => usdLabel(amount, locale, t);
+
+  const ceiling = useMemo(
+    () => ceilingSpendPerDay(rows, pricing, profile),
+    [rows, pricing, profile],
+  );
+  const spent = useMemo(
+    () => (usage ? spentSoFarUsd(usage, rows, pricing, profile) : undefined),
+    [usage, rows, pricing, profile],
+  );
+
+  const priciestLabel =
+    ceiling.bounded && ceiling.priciestModelId
+      ? (lookupPricing(pricing, ceiling.priciestModelId)?.model.name ??
+        ceiling.priciestModelId)
+      : null;
+
+  return (
+    <div className={`mt-3 ${LIMITS_NOTE_CARD}`} data-testid="limits-cost-card">
+      <div className="font-medium">{t('cost.ceilingTitle')}</div>
+      {!ceiling.bounded ? (
+        <p>{t('cost.ceilingUnbounded')}</p>
+      ) : ceiling.axis === 'blocked' ? (
+        <p>{t('cost.ceilingBlocked')}</p>
+      ) : (
+        <>
+          <p>
+            {t('cost.ceilingPerDay', { amount: usd(ceiling.usdPerDay) })}
+            {' · '}
+            {t('cost.ceilingPerMonth', {
+              amount: usd(
+                ceiling.usdPerDay * COST_ASSUMPTIONS.periodDays.month,
+              ),
+            })}
+          </p>
+          <p className={ADMIN_MUTED}>
+            {t('cost.ceilingAxisLabel', {
+              axis: t(`cost.ceilingAxis.${ceiling.axis}` as never),
+            })}
+            {priciestLabel &&
+              ` · ${t('cost.ceilingPriciest', { model: priciestLabel })}`}
+            {ceiling.approximateMonthConversion &&
+              ` · ${t('cost.ceilingMonthApprox')}`}
+          </p>
+        </>
+      )}
+      {usage !== undefined &&
+        (spent ? (
+          <p className="mt-1">
+            {t('cost.spentSoFar', { amount: usd(spent.usd) })}
+            <span className={`block ${ADMIN_MUTED}`}>
+              {t(`cost.spentBasis.${spent.basis}` as never)}
+              {spent.unpricedCells.length > 0 &&
+                ` · ${t('cost.spentUnpriced', {
+                  cells: spent.unpricedCells.join(', '),
+                })}`}
+            </span>
+          </p>
+        ) : (
+          <p className={`mt-1 ${ADMIN_MUTED}`}>{t('cost.spentNotMetered')}</p>
+        ))}
+      <p className={`mt-1 ${ADMIN_MUTED}`}>{costDisclosure(t)}</p>
     </div>
   );
 };
