@@ -55,8 +55,14 @@ export interface TargetVerdict {
   reason: TargetVerdictReason;
 }
 
-/** Warnings the delegations editor and the scoped GET surface per delegation. */
-export type JurisdictionWarning = 'no-domain-or-user-anchor';
+/**
+ * Warnings the delegations editor and the scoped GET surface per delegation.
+ * - `no-domain-or-user-anchor`: only group/attribute predicates — inherits the
+ *   group cache's failure posture (§8).
+ * - `matches-nobody`: no targets at all — consults no cache, simply applies
+ *   to no one (the client's ScopeSummary draws the same line).
+ */
+export type JurisdictionWarning = 'no-domain-or-user-anchor' | 'matches-nobody';
 
 /** Flags the scoped GET attaches to each override under the caller's delegations. */
 export type OverrideFlag = 'out-of-scope-targets' | 'delegation-disabled';
@@ -206,14 +212,17 @@ export function outOfScopeTargets(
  * A jurisdiction with no `domain`/`user` predicate inherits the group
  * cache's failure posture (design §8): on any Graph failure it silently does
  * not apply for 60 s per replica, and a structural failure re-arms that
- * indefinitely. Worth a warning wherever the delegation is shown.
+ * indefinitely. Worth a warning wherever the delegation is shown. An EMPTY
+ * jurisdiction (no targets on any predicate) is a different fact — it never
+ * consults Graph, it matches nobody — and is flagged as such rather than as
+ * unanchored, so the server and the client's ScopeSummary agree.
  */
 export function jurisdictionWarnings(
   delegation: Pick<LimitDelegation, 'jurisdiction'>,
 ): JurisdictionWarning[] {
-  return summarizeJurisdiction(delegation.jurisdiction).anchored
-    ? []
-    : ['no-domain-or-user-anchor'];
+  const summary = summarizeJurisdiction(delegation.jurisdiction);
+  if (summary.anchored) return [];
+  return summary.hasOpaque ? ['no-domain-or-user-anchor'] : ['matches-nobody'];
 }
 
 /**
