@@ -202,9 +202,10 @@ export interface OpenAIModel {
    * List-price token rates in USD per 1M tokens for this model's standard
    * (Global) deployment. Sourced from the Azure Retail Prices API for
    * Azure-billed models and Anthropic list rates for claude-* — see the
-   * $pricing-note in config/models.json for provenance, caveats, and the
-   * as-of date. Data-only for now: available for cost handling but not yet
-   * rendered anywhere.
+   * $pricing-note in config/models.json for provenance and caveats, and the
+   * top-level `pricingAsOf` / `pricingAssumptionsVersion` (exported below as
+   * PRICING_AS_OF / PRICING_ASSUMPTIONS_VERSION) for the as-of date. Consumed
+   * by lib/utils/shared/costEstimator.ts for the limits admin cost insights.
    */
   pricing?: {
     /** USD per 1M input (prompt) tokens. */
@@ -213,6 +214,26 @@ export interface OpenAIModel {
     outputPer1M: number;
     /** USD per 1M cached input tokens (cache READ rate), where published. */
     cachedInputPer1M?: number;
+    /**
+     * `list` (default) — a dedicated retail meter or first-party list rate.
+     * `serverless-legacy` — no dedicated retail meter; a published legacy
+     * serverless rate, lower-confidence, and the deployment-type multiplier
+     * does not apply.
+     */
+    confidence?: 'list' | 'serverless-legacy';
+    /**
+     * `azure-meter` (default) — billed on an Azure Foundry meter, so the
+     * Global / Data Zone / regional deployment multipliers apply.
+     * `marketplace` — billed through the Marketplace at the provider's API
+     * rates (claude-*); deployment multipliers do NOT apply.
+     */
+    billing?: 'azure-meter' | 'marketplace';
+    /**
+     * A rolling alias (gpt-chat-latest): the meter tracks whatever model the
+     * alias currently routes to, so the recorded rate can change underneath
+     * a stored limit.
+     */
+    alias?: boolean;
   };
 
   /**
@@ -458,6 +479,9 @@ const openAIModelSchema = z.object({
       inputPer1M: z.number(),
       outputPer1M: z.number(),
       cachedInputPer1M: z.number().optional(),
+      confidence: z.enum(['list', 'serverless-legacy']).optional(),
+      billing: z.enum(['azure-meter', 'marketplace']).optional(),
+      alias: z.boolean().optional(),
     })
     .optional(),
   series: z.string().optional(),
@@ -498,6 +522,34 @@ const MODEL_METADATA: Record<string, OpenAIModel> = (() => {
   }
   return parsed.data as Record<string, OpenAIModel>;
 })();
+
+/**
+ * Top-level pricing provenance from config/models.json — the machine-readable
+ * form of the `$pricing-note` prose, so UI disclosures cite the real as-of
+ * date instead of a hand-copied one. Parsed separately from the models map so
+ * a bad value here cannot masquerade as a model metadata error.
+ */
+const PRICING_PROVENANCE = (() => {
+  const parsed = z
+    .object({
+      pricingAsOf: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      pricingAssumptionsVersion: z.string().min(1),
+    })
+    .safeParse(modelMetadata);
+  if (!parsed.success) {
+    throw new Error(
+      `[openai] Invalid config/models.json pricing provenance: ${parsed.error.message}`,
+    );
+  }
+  return parsed.data;
+})();
+
+/** ISO date the `pricing` rates were pulled (config/models.json pricingAsOf). */
+export const PRICING_AS_OF: string = PRICING_PROVENANCE.pricingAsOf;
+
+/** Identifier of the pricing pull, bumped alongside price refreshes. */
+export const PRICING_ASSUMPTIONS_VERSION: string =
+  PRICING_PROVENANCE.pricingAssumptionsVersion;
 
 /**
  * Builds the model configuration map from config/models.json, keyed by
