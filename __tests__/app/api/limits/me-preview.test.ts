@@ -1,7 +1,9 @@
 /**
  * /api/limits/me?as= — the effective-limits preview after scoped admins
- * (design §6c): who may preview whom, the tier/ceiling provenance, the
- * unavailable-is-not-forbidden posture, and opt-in usage.
+ * (design §6c): who may preview whom, the tier/ceiling provenance — which
+ * is PREVIEW-ONLY: the own-limits path never carries the tier or the pinning
+ * record's id/label — the unavailable-is-not-forbidden posture, and opt-in
+ * usage.
  *
  * Two policy sources are mocked on purpose: the `LimitsService` snapshot
  * (what global admins and the caller's own limits resolve against) and the
@@ -355,13 +357,22 @@ describe('GET /api/limits/me?as=', () => {
     expect((await parseJsonResponse(response)).code).toBe('FORBIDDEN');
   });
 
-  it('the caller’s own limits carry tier too', async () => {
+  it('the caller’s OWN limits carry no provenance: no tier, no pinning record id or label (design §6c scopes those to the preview)', async () => {
     mockAuth.mockResolvedValue(session('alice@ocp.msf.org'));
     const body = await parseJsonResponse(await GET(request('')));
-    expect(limitFor(body, 'chat.messagesPerDay')).toMatchObject({
+    const messages = limitFor(body, 'chat.messagesPerDay');
+    expect(messages).toMatchObject({
       value: 60,
-      tier: 'scoped',
-      ceilingLabel: 'OCP cap',
+      source: 'user',
+      overrideId: 'lim-0000000000e1',
+      ceilingApplied: true,
     });
+    expect(messages).not.toHaveProperty('tier');
+    expect(messages).not.toHaveProperty('ceilingOverrideId');
+    expect(messages).not.toHaveProperty('ceilingLabel');
+    // No admin-authored label reaches a plain user through their own limits.
+    const serialized = JSON.stringify(body);
+    expect(serialized).not.toContain('OCP cap');
+    expect(serialized).not.toContain('lim-0000000000c1');
   });
 });

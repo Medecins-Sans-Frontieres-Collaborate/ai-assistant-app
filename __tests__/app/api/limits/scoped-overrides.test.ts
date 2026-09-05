@@ -6,6 +6,14 @@
  * `mutatePolicy` loop runs: every assertion about re-validation on a CAS
  * retry, the 409 after exhaustion, and the exact document written is about
  * the code that will run in production, not a mock of it.
+ *
+ * Also pins the authorize-before-lookup contract (CWE-203): a principal with
+ * no limits-admin role gets one uniform 403 before any id is looked up, and a
+ * scoped admin cannot tell an unknown id from a foreign one — the only 404 is
+ * an OWNED record that vanished between CAS rounds — and the storage-failure
+ * posture: an unreadable stored document is 503 LIMITS_POLICY_UNAVAILABLE
+ * whether it is not JSON or JSON the read schema rejects, never a 500 the
+ * client would attribute to the admin's own edit.
  */
 import { NextRequest } from 'next/server';
 
@@ -267,12 +275,48 @@ describe('/api/limits/scoped/overrides/[id]', () => {
   });
 
   describe('delegation checks (re-run on every CAS round)', () => {
-    it('400s an unknown delegation', async () => {
+    it('400s an unknown delegation only for a GLOBAL admin, who reads the whole document anyway', async () => {
+      mockAuth.mockResolvedValue({
+        user: {
+          id: 'oid-g',
+          displayName: 'Global',
+          mail: 'global@example.com',
+        },
+      });
       const response = await PUT(
         putRequest(NEW_ID, validBody(NEW_ID), 'del-ffffffffffff'),
         params(NEW_ID),
       );
       expect(response.status).toBe(400);
+      expect(uploadJson).not.toHaveBeenCalled();
+    });
+
+    it('answers a scoped admin identically for an unknown, a foreign and a foreign DISABLED delegation', async () => {
+      stored(
+        policyWith({
+          delegations: [
+            delegation(DEL_OCP),
+            delegation(DEL_OTHER, { admins: ['other@paris.msf.org'] }),
+            delegation(DEL_OFF, {
+              admins: ['other@paris.msf.org'],
+              enabled: false,
+            }),
+          ],
+        }),
+      );
+      const bodies: unknown[] = [];
+      for (const id of ['del-ffffffffffff', DEL_OTHER, DEL_OFF]) {
+        const response = await PUT(
+          putRequest(NEW_ID, validBody(NEW_ID), id),
+          params(NEW_ID),
+        );
+        expect(response.status).toBe(403);
+        bodies.push(await parseJsonResponse(response));
+      }
+      expect(bodies[1]).toEqual(bodies[0]);
+      expect(bodies[2]).toEqual(bodies[0]);
+      expect(JSON.stringify(bodies)).not.toContain('disabled');
+      expect(uploadJson).not.toHaveBeenCalled();
     });
 
     it('403s a delegation the caller is not named in', async () => {
@@ -708,10 +752,104 @@ describe('/api/limits/scoped/overrides/[id]', () => {
       expect(uploadJson).not.toHaveBeenCalled();
     });
 
-    it('404s an unknown id', async () => {
-      expect((await DELETE(deleteRequest(NEW_ID), params(NEW_ID))).status).toBe(
-        404,
-      );
+    it('answers an unknown id exactly like a foreign one — 403 LIMITS_FOREIGN_OVERRIDE, never a 404 that reveals it is unstored', async () => {
+      const unknown = await DELETE(deleteRequest(NEW_ID), params(NEW_ID));
+      const foreign = await DELETE(deleteRequest(OTHER_ID), params(OTHER_ID));
+      expect(unknown.status).toBe(403);
+      const body = await parseJsonResponse(unknown);
+      expect(body).toEqual(await parseJsonResponse(foreign));
+      expect(body.code).toBe('LIMITS_FOREIGN_OVERRIDE');
+      expect(uploadJson).not.toHaveBeenCalled();
     });
+
+    it('404s ONLY an owned record that vanished between CAS rounds', async () => {
+      const without = policyWith();
+      without.overrides = without.overrides.filter((o) => o.id !== OWN_ID);
+      vi.mocked(downloadBlob)
+        .mockResolvedValueOnce({
+          buffer: Buffer.from(JSON.stringify(policyWith()), 'utf8'),
+          etag: '"e1"',
+        })
+        .mockResolvedValueOnce({
+          buffer: Buffer.from(JSON.stringify(without), 'utf8'),
+          etag: '"e2"',
+        });
+      vi.mocked(uploadJson).mockRejectedValueOnce(
+        new AgentAccessConflictError(),
+      );
+      const response = await DELETE(deleteRequest(OWN_ID), params(OWN_ID));
+      expect(response.status).toBe(404);
+      expect(uploadJson).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('authorize before lookup (CWE-203)', () => {
+    const nobody = {
+      user: {
+        id: 'oid-n',
+        displayName: 'Nobody',
+        mail: 'nobody@paris.msf.org',
+      },
+    };
+
+    it('a signed-in non-admin gets one uniform 403 from PUT whether the delegation exists, is disabled, or not', async () => {
+      mockAuth.mockResolvedValue(nobody);
+      const bodies: unknown[] = [];
+      for (const id of ['del-ffffffffffff', DEL_OCP, DEL_OFF]) {
+        const response = await PUT(
+          putRequest(NEW_ID, validBody(NEW_ID), id),
+          params(NEW_ID),
+        );
+        expect(response.status).toBe(403);
+        bodies.push(await parseJsonResponse(response));
+      }
+      expect(bodies[1]).toEqual(bodies[0]);
+      expect(bodies[2]).toEqual(bodies[0]);
+      expect((bodies[0] as { code: string }).code).toBe('FORBIDDEN');
+      expect(uploadJson).not.toHaveBeenCalled();
+    });
+
+    it('a signed-in non-admin gets one uniform 403 from DELETE whether the id is stored (global or scoped) or not', async () => {
+      mockAuth.mockResolvedValue(nobody);
+      const bodies: unknown[] = [];
+      for (const id of [NEW_ID, GLOBAL_ID, OWN_ID]) {
+        const response = await DELETE(deleteRequest(id), params(id));
+        expect(response.status).toBe(403);
+        bodies.push(await parseJsonResponse(response));
+      }
+      expect(bodies[1]).toEqual(bodies[0]);
+      expect(bodies[2]).toEqual(bodies[0]);
+      expect((bodies[0] as { code: string }).code).toBe('FORBIDDEN');
+      expect(uploadJson).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('unreadable stored document (design §8)', () => {
+    it.each([
+      ['not JSON', '{not json'],
+      ['JSON the read schema rejects', JSON.stringify({ version: 99 })],
+    ])(
+      'answers 503 LIMITS_POLICY_UNAVAILABLE from PUT and DELETE when the stored policy is %s',
+      async (_label, text) => {
+        vi.mocked(downloadBlob).mockResolvedValue({
+          buffer: Buffer.from(text, 'utf8'),
+          etag: '"e1"',
+        });
+        const put = await PUT(
+          putRequest(NEW_ID, validBody(NEW_ID)),
+          params(NEW_ID),
+        );
+        expect(put.status).toBe(503);
+        expect((await parseJsonResponse(put)).code).toBe(
+          'LIMITS_POLICY_UNAVAILABLE',
+        );
+        const del = await DELETE(deleteRequest(OWN_ID), params(OWN_ID));
+        expect(del.status).toBe(503);
+        expect((await parseJsonResponse(del)).code).toBe(
+          'LIMITS_POLICY_UNAVAILABLE',
+        );
+        expect(uploadJson).not.toHaveBeenCalled();
+      },
+    );
   });
 });

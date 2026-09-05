@@ -8,6 +8,7 @@
  * a 403 that would read as revocation.
  */
 import {
+  PolicyUnreadableError,
   createLimitsBlobStorage,
   readPolicy,
 } from '@/lib/services/limits/limitsStore';
@@ -281,5 +282,17 @@ describe('GET /api/limits/scoped', () => {
     expect(body.data.policyUnavailable).toBe(true);
     expect(body.data.delegations).toEqual([]);
     expect(body.data.overrides).toEqual([]);
+  });
+
+  it('classifies an UNREADABLE stored document (PolicyUnreadableError) the same way — the GET and the write path agree on the outage', async () => {
+    vi.mocked(readPolicy).mockRejectedValue(
+      new PolicyUnreadableError(new SyntaxError('Unexpected token')),
+    );
+    mockAuth.mockResolvedValue(session('ocp-admin@ocp.msf.org'));
+    const response = await GET();
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(200);
+    expect(body.data.policyUnavailable).toBe(true);
+    expect(body.data.delegations).toEqual([]);
   });
 });

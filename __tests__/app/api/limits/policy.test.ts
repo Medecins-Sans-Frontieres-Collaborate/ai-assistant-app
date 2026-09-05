@@ -552,6 +552,57 @@ describe('/api/limits/policy', () => {
       expect(writePolicy).not.toHaveBeenCalled();
     });
 
+    it('400s (with a `targets` issue, never a 500 from the read schema) for a whitespace-only jurisdiction target', async () => {
+      vi.mocked(readPolicy).mockResolvedValue(stored({}));
+      const response = await PUT(
+        putRequest(
+          {
+            ...validBody,
+            delegations: [
+              {
+                ...bodyDelegation,
+                jurisdiction: [{ scope: 'domain', targets: ['   '] }],
+              },
+            ],
+          },
+          { 'if-match': '"etag-1"' },
+        ),
+      );
+      const body = await parseJsonResponse(response);
+      expect(response.status).toBe(400);
+      expect(body.code).toBe('BAD_REQUEST');
+      expect(body.details).toContain('delegations.0.jurisdiction.0.targets');
+      expect(writePolicy).not.toHaveBeenCalled();
+    });
+
+    it('never hands writePolicy a delegation the read schema would reject (whitespace admins are dropped, targets canonical)', async () => {
+      vi.mocked(readPolicy).mockResolvedValue(stored({}));
+      const response = await PUT(
+        putRequest(
+          {
+            ...validBody,
+            delegations: [
+              {
+                ...bodyDelegation,
+                admins: ['   ', ' OCP-Admin@ocp.msf.org '],
+                jurisdiction: [
+                  { scope: 'domain', targets: [' OCP.msf.org ', '   '] },
+                ],
+              },
+            ],
+          },
+          { 'if-match': '"etag-1"' },
+        ),
+      );
+      expect(response.status).toBe(200);
+      const written = vi.mocked(writePolicy).mock.calls[0][1];
+      expect(written.delegations[0].admins).toEqual(['ocp-admin@ocp.msf.org']);
+      expect(written.delegations[0].jurisdiction).toEqual([
+        { scope: 'domain', targets: ['ocp.msf.org'] },
+      ]);
+      expect(LimitsPolicySchema.safeParse(written).success).toBe(true);
+    });
+
     it('rejects duplicate delegation ids', async () => {
       const response = await PUT(
         putRequest({
