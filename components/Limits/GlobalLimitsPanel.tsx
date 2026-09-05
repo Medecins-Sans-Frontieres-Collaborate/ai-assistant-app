@@ -33,9 +33,11 @@ import {
   ADMIN_CHIP_NEUTRAL,
   ADMIN_FIELD,
 } from '@/components/Admin/adminClasses';
+import { CostCalculatorLazy } from '@/components/Limits/CostCalculatorLazy';
 import { DelegationsTab } from '@/components/Limits/DelegationsTab';
 import { EffectiveLimitsPreview } from '@/components/Limits/EffectiveLimitsPreview';
 import { GlobalDefaultsSection } from '@/components/Limits/GlobalDefaultsSection';
+import { useLimitsCost } from '@/components/Limits/LimitsCostContext';
 import { OverrideEditor } from '@/components/Limits/OverrideEditor';
 import { RelevantRulesPopover } from '@/components/Limits/RelevantRulesPopover';
 import {
@@ -50,7 +52,8 @@ import {
   emptyOverride,
 } from '@/components/Limits/types';
 
-type PanelTab = 'defaults' | 'overrides' | 'delegations';
+/** `cost` exists only while `useLimitsCost().calculator` is on. */
+type PanelTab = 'defaults' | 'overrides' | 'delegations' | 'cost';
 
 interface Draft {
   defaults: LimitEntry[];
@@ -119,7 +122,13 @@ function draftFrom(data: PolicyResponse): Draft {
 export const GlobalLimitsPanel: FC = () => {
   const t = useTranslations('limits');
   const queryClient = useQueryClient();
-  const [tab, setTab] = useState<PanelTab>('defaults');
+  const { calculator } = useLimitsCost();
+  const [selectedTab, setSelectedTab] = useState<PanelTab>('defaults');
+  // The cost tab is flag-gated (design §4c). If the flag flips off while it
+  // is selected, fall back to Defaults during render — no effect, no
+  // setState — so the strip and the panel never disagree.
+  const tab: PanelTab =
+    selectedTab === 'cost' && !calculator ? 'defaults' : selectedTab;
   const [draft, setDraft] = useState<Draft>(EMPTY_DRAFT);
   const [etag, setEtag] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -361,9 +370,12 @@ export const GlobalLimitsPanel: FC = () => {
           { id: 'defaults', label: t('tab.defaults') },
           { id: 'overrides', label: t('tab.overrides') },
           { id: 'delegations', label: t('tab.delegations') },
+          ...(calculator
+            ? [{ id: 'cost', label: t('cost.calculator.tab') }]
+            : []),
         ]}
         activeTab={tab}
-        onChange={(id) => setTab(id as PanelTab)}
+        onChange={(id) => setSelectedTab(id as PanelTab)}
         idPrefix="limits"
         ariaLabel={t('tabsLabel')}
       />
@@ -488,6 +500,9 @@ export const GlobalLimitsPanel: FC = () => {
             }}
             disabled={saving}
           />
+        )}
+        {tab === 'cost' && calculator && (
+          <CostCalculatorLazy caps={draft.defaults} mode="global" />
         )}
       </div>
 
