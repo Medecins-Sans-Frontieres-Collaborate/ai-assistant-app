@@ -1,7 +1,9 @@
 {
   "$schema-note": "Baseline model metadata. Source of truth for presentation + routing of KNOWN models. Keyed by model id (matches OpenAIModelID). Azure discovery does NOT return this metadata (context window, sdk, capability flags), so it lives here and can be overlaid by ARM ui-* tags for models added without a code push. See docs/MODEL_DISCOVERY_DESIGN.md.",
   "$retirement-note": "lifecycle / retirementDate / retirementReplacement mirror the Azure Foundry model retirement schedule (learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule) as of its 2026-07-09 revision; refresh manually when that page updates. INFORMATIONAL ONLY, never used for gating: the schedule tracks underlying model VERSIONS, and Azure upgrades deployments in place, so a deployment can outlive its version's retirement (e.g. deployments named gpt-5.2-chat now run a newer underlying model even though the gpt-5.2-chat version is retired). Models absent from the schedule carry no lifecycle fields.",
-  "$pricing-note": "pricing = LIST-PRICE token rates in USD per 1M tokens, pulled 2026-08-20. Azure OpenAI + third-party Foundry models: Azure Retail Prices API (prices.azure.com, serviceName 'Foundry Models'), Global Standard deployment meters — Data Zone runs ~1.1x and regional ~1.21x these rates; batch/provisioned not covered. claude-*: Anthropic first-party list rates (billed via Marketplace at API rates on Foundry); claude-sonnet-5 has intro pricing of 2.00/10.00 through 2026-08-31, standard rate recorded here. mistral-medium-2505, mistral-small-2503, Ministral-3B, Llama-4-Scout, DeepSeek-R1-0528 have no dedicated retail meter (legacy serverless/Marketplace billing); their published serverless list rates are recorded and are lower-confidence. cachedInputPer1M = cached-input READ rate where the provider publishes one (cache-write premiums not modeled). gpt-chat-latest is a rolling alias; its meter (5.00/30.00) tracks whatever chat model Azure currently routes it to. DATA-ONLY for now — not yet displayed in any UI. Refresh manually alongside price changes (e.g. the 2026-07-30 gpt-5.6 terra/luna cuts are reflected).",
+  "$pricing-note": "pricing = LIST-PRICE token rates in USD per 1M tokens, pulled 2026-08-20. Azure OpenAI + third-party Foundry models: Azure Retail Prices API (prices.azure.com, serviceName 'Foundry Models'), Global Standard deployment meters — Data Zone runs ~1.1x and regional ~1.21x these rates; batch/provisioned not covered. claude-*: Anthropic first-party list rates (billed via Marketplace at API rates on Foundry); claude-sonnet-5 has intro pricing of 2.00/10.00 through 2026-08-31, standard rate recorded here. mistral-medium-2505, mistral-small-2503, Ministral-3B, Llama-4-Scout, DeepSeek-R1-0528 have no dedicated retail meter (legacy serverless/Marketplace billing); their published serverless list rates are recorded and are lower-confidence. cachedInputPer1M = cached-input READ rate where the provider publishes one (cache-write premiums not modeled). gpt-chat-latest is a rolling alias; its meter (5.00/30.00) tracks whatever chat model Azure currently routes it to. Displayed by the limits admin cost insights (lib/utils/shared/costEstimator.ts) — pricingAsOf / pricingAssumptionsVersion below and the per-model pricing.confidence / billing / alias fields are the machine-readable form of these caveats. Refresh manually alongside price changes (e.g. the 2026-07-30 gpt-5.6 terra/luna cuts are reflected).",
+  "pricingAsOf": "2026-08-20",
+  "pricingAssumptionsVersion": "2026-08.1",
   "models": {
     "gpt-4.1": {
       "id": "gpt-4.1",
@@ -347,7 +349,8 @@
       "pricing": {
         "inputPer1M": 5.0,
         "outputPer1M": 25.0,
-        "cachedInputPer1M": 0.5
+        "cachedInputPer1M": 0.5,
+        "billing": "marketplace"
       }
     },
     "claude-sonnet-4-6": {
@@ -386,7 +389,8 @@
       "pricing": {
         "inputPer1M": 3.0,
         "outputPer1M": 15.0,
-        "cachedInputPer1M": 0.3
+        "cachedInputPer1M": 0.3,
+        "billing": "marketplace"
       }
     },
     "claude-opus-4-1": {
@@ -424,7 +428,8 @@
       "pricing": {
         "inputPer1M": 15.0,
         "outputPer1M": 75.0,
-        "cachedInputPer1M": 1.5
+        "cachedInputPer1M": 1.5,
+        "billing": "marketplace"
       }
     },
     "claude-haiku-4-5": {
@@ -463,7 +468,8 @@
       "pricing": {
         "inputPer1M": 1.0,
         "outputPer1M": 5.0,
-        "cachedInputPer1M": 0.1
+        "cachedInputPer1M": 0.1,
+        "billing": "marketplace"
       }
     },
     "gpt-5.4": {
@@ -743,7 +749,8 @@
       "pricing": {
         "inputPer1M": 5.0,
         "outputPer1M": 25.0,
-        "cachedInputPer1M": 0.5
+        "cachedInputPer1M": 0.5,
+        "billing": "marketplace"
       }
     },
     "claude-sonnet-4-5": {
@@ -780,7 +787,8 @@
       "pricing": {
         "inputPer1M": 3.0,
         "outputPer1M": 15.0,
-        "cachedInputPer1M": 0.3
+        "cachedInputPer1M": 0.3,
+        "billing": "marketplace"
       }
     },
     "DeepSeek-V3.2": {
@@ -1122,7 +1130,8 @@
       "pricing": {
         "inputPer1M": 10.0,
         "outputPer1M": 50.0,
-        "cachedInputPer1M": 1.0
+        "cachedInputPer1M": 1.0,
+        "billing": "marketplace"
       }
     },
     "claude-sonnet-5": {
@@ -1157,7 +1166,8 @@
       "pricing": {
         "inputPer1M": 3.0,
         "outputPer1M": 15.0,
-        "cachedInputPer1M": 0.3
+        "cachedInputPer1M": 0.3,
+        "billing": "marketplace"
       }
     },
     "claude-opus-4-5": {
@@ -1195,7 +1205,8 @@
       "pricing": {
         "inputPer1M": 5.0,
         "outputPer1M": 25.0,
-        "cachedInputPer1M": 0.5
+        "cachedInputPer1M": 0.5,
+        "billing": "marketplace"
       }
     },
     "mistral-medium-2505": {
@@ -1223,7 +1234,8 @@
       "lifecycle": "ga",
       "pricing": {
         "inputPer1M": 0.4,
-        "outputPer1M": 2.0
+        "outputPer1M": 2.0,
+        "confidence": "serverless-legacy"
       }
     },
     "mistral-small-2503": {
@@ -1252,7 +1264,8 @@
       "lifecycle": "ga",
       "pricing": {
         "inputPer1M": 0.1,
-        "outputPer1M": 0.3
+        "outputPer1M": 0.3,
+        "confidence": "serverless-legacy"
       }
     },
     "Ministral-3B": {
@@ -1281,7 +1294,8 @@
       "lifecycle": "ga",
       "pricing": {
         "inputPer1M": 0.04,
-        "outputPer1M": 0.04
+        "outputPer1M": 0.04,
+        "confidence": "serverless-legacy"
       }
     },
     "DeepSeek-R1-0528": {
@@ -1313,7 +1327,8 @@
       "retirementReplacement": "DeepSeek-V4-Pro",
       "pricing": {
         "inputPer1M": 1.35,
-        "outputPer1M": 5.4
+        "outputPer1M": 5.4,
+        "confidence": "serverless-legacy"
       }
     },
     "Llama-4-Scout-17B-16E-Instruct": {
@@ -1342,7 +1357,8 @@
       "lifecycle": "ga",
       "pricing": {
         "inputPer1M": 0.2,
-        "outputPer1M": 0.78
+        "outputPer1M": 0.78,
+        "confidence": "serverless-legacy"
       }
     },
     "Llama-3.3-70B-Instruct": {
@@ -1468,7 +1484,8 @@
       "pricing": {
         "inputPer1M": 5.0,
         "outputPer1M": 30.0,
-        "cachedInputPer1M": 0.5
+        "cachedInputPer1M": 0.5,
+        "alias": true
       }
     },
     "claude-opus-4-7": {
@@ -1505,7 +1522,8 @@
       "pricing": {
         "inputPer1M": 5.0,
         "outputPer1M": 25.0,
-        "cachedInputPer1M": 0.5
+        "cachedInputPer1M": 0.5,
+        "billing": "marketplace"
       }
     },
     "DeepSeek-V4-Pro": {
