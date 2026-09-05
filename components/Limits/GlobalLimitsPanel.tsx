@@ -104,6 +104,14 @@ function draftFrom(data: PolicyResponse): Draft {
  * per-override, a global admin's If-Match goes stale far more often, and
  * discarding a long edit for that is not acceptable.
  *
+ * "Keep editing" is an INFORMED last-writer-wins: it refetches the policy in
+ * the background and adopts the FRESH etag while leaving the draft alone, so
+ * the next Save can actually succeed — and overwrites whatever the other
+ * admin changed since this draft was loaded. The banner says so. Merely
+ * hiding the banner (the old behaviour) left the stale etag in place, and
+ * since the server compares If-Match before any other check (design §5),
+ * every subsequent Save re-409'd: a dead end dressed up as an exit.
+ *
  * The draft is seeded from each NEW server response during render (the
  * "storing information from previous renders" pattern) and only while not
  * dirty; Reload re-seeds explicitly. No setState in effects.
@@ -117,6 +125,8 @@ export const GlobalLimitsPanel: FC = () => {
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [conflict, setConflict] = useState(false);
+  /** Keep editing is adopting the fresh etag — Save waits for it. */
+  const [adoptingEtag, setAdoptingEtag] = useState(false);
   // Records created this session render expanded (a new card must never be
   // a mystery); new delegations are also PUT WITHOUT an id so the server
   // generates one (design §2).
@@ -170,6 +180,26 @@ export const GlobalLimitsPanel: FC = () => {
     }
   };
 
+  /**
+   * Keep editing after a 409: refetch WITHOUT re-seeding (the draft is dirty,
+   * so the render-time seed leaves it alone) and adopt the server's current
+   * etag, so the next Save is accepted and overwrites the other admin's
+   * changes. If the refetch fails the stale etag stays — the next Save 409s
+   * and the banner returns, which is the honest outcome.
+   */
+  const keepEditing = async () => {
+    setConflict(false);
+    setAdoptingEtag(true);
+    try {
+      const result = await policyQuery.refetch();
+      if (result.data && !result.data.policyUnavailable) {
+        setEtag(result.data.etag);
+      }
+    } finally {
+      setAdoptingEtag(false);
+    }
+  };
+
   const save = async () => {
     setSaving(true);
     try {
@@ -191,9 +221,11 @@ export const GlobalLimitsPanel: FC = () => {
         body: JSON.stringify(body),
       });
       if (response.status === 409) {
-        // Keep the draft; the banner offers Reload / Keep editing.
+        // Keep the draft; the banner offers Reload / Keep editing. Nothing is
+        // reloaded here, so the toast must not say it was (the shared
+        // `conflict` sentence does).
         setConflict(true);
-        toast.error(t('conflict'));
+        toast.error(t('conflictDraftKept'));
         return;
       }
       if (!response.ok) {
@@ -463,7 +495,7 @@ export const GlobalLimitsPanel: FC = () => {
         <div role="alert" className={`mt-6 ${ADMIN_BANNER_WARN}`}>
           <p className="flex items-center gap-2">
             <IconAlertTriangle size={16} aria-hidden="true" />
-            {t('conflictKeepDraft')}
+            {t('conflictKeepDraftOverwrite')}
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             <button
@@ -477,7 +509,8 @@ export const GlobalLimitsPanel: FC = () => {
             <button
               type="button"
               className={ADMIN_BTN_SECONDARY}
-              onClick={() => setConflict(false)}
+              onClick={keepEditing}
+              disabled={saving}
             >
               {t('conflictKeepEditing')}
             </button>
@@ -494,7 +527,7 @@ export const GlobalLimitsPanel: FC = () => {
           type="button"
           className={ADMIN_BTN_PRIMARY}
           onClick={save}
-          disabled={saving || !dirty}
+          disabled={saving || adoptingEtag || !dirty}
         >
           {saving ? t('saving') : t('save')}
         </button>
