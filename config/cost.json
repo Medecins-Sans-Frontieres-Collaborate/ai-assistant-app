@@ -1,0 +1,30 @@
+{
+  "$schema-note": "Every cost-estimate assumption lives HERE, nowhere else — token PRICES stay in config/models.json `pricing`. Edit values freely; bump assumptionsVersion whenever you do so every displayed estimate is traceable to the assumption set that produced it. Validated by lib/utils/shared/costEstimator.ts at module load. The `typical` request profile is deliberately NOT here: it is config/emissions.json typicalRequest, imported, so the cost figure and the CO2 tooltip can never disagree about what a typical request is. Grounding for the defaults is documented in that file's JSDoc.",
+  "assumptionsVersion": "2026-09.1",
+  "periodDays": {
+    "day": 1,
+    "week": 7,
+    "month": 30.4375,
+    "quarter": 91.3125,
+    "year": 365.25
+  },
+  "deploymentMultipliers": {
+    "global": 1,
+    "dataZone": 1.1,
+    "regional": 1.21
+  },
+  "profiles": {
+    "light": {
+      "promptTokens": 400,
+      "completionTokens": 200
+    },
+    "heavy": {
+      "promptTokens": 6000,
+      "completionTokens": 1500
+    }
+  },
+  "dedicatedReasonerOutputMultiplier": 3,
+  "highEffortOutputMultiplier": 2,
+  "defaultCachedShare": 0,
+  "defaultToolRounds": 1
+}
