@@ -22,6 +22,7 @@ import { EffectiveLimitsPreview } from '@/components/Limits/EffectiveLimitsPrevi
 import { ScopeSummary } from '@/components/Limits/ScopeSummary';
 import { ScopedOverrideCard } from '@/components/Limits/ScopedOverrideCard';
 import {
+  hasOpaquePredicate,
   isMailAnchored,
   relevantRulesFor,
 } from '@/components/Limits/jurisdiction';
@@ -65,9 +66,27 @@ export const ScopedOverridesTab: FC<ScopedOverridesTabProps> = ({
     o.flags.includes('out-of-scope-targets'),
   ).length;
   const disabledDelegations = view.delegations.filter((d) => !d.enabled);
-  const anyAnchored = view.delegations.some((d) =>
+  // The preview gate (design §6c) runs over ENABLED delegations only — the
+  // scoped GET also returns disabled ones (inert, still visible to their
+  // author), and counting those would promise a mail preview the server
+  // refuses, or hide the group-only note when it is the honest one.
+  const enabledDelegations = view.delegations.filter((d) => d.enabled);
+  const anyAnchored = enabledDelegations.some((d) =>
     isMailAnchored(d.jurisdiction),
   );
+  const anyOpaque = enabledDelegations.some((d) =>
+    hasOpaquePredicate(d.jurisdiction),
+  );
+  /**
+   * Why a mail preview cannot work, when it cannot: groups/attributes are
+   * opaque to a mail lookup; a jurisdiction with no targets at all (or no
+   * enabled delegation) matches nobody — NOT "defined by groups".
+   */
+  const scopeNote = anyAnchored
+    ? undefined
+    : anyOpaque
+      ? t('previewGroupOnlyScope')
+      : t('previewScopeMatchesNobody');
 
   const pool = useMemo(
     () => ({ overrides: view.overrides, delegations: [] }),
@@ -216,8 +235,8 @@ export const ScopedOverridesTab: FC<ScopedOverridesTabProps> = ({
           <EffectiveLimitsPreview
             overrides={view.overrides}
             dirty={dirtyIds.size > 0}
-            forbiddenMessage={t('previewOutOfScope')}
-            scopeNote={anyAnchored ? undefined : t('previewGroupOnlyScope')}
+            scoped
+            scopeNote={scopeNote}
           />
           {view.delegations.length > 1 ? (
             <div className="space-y-8">
