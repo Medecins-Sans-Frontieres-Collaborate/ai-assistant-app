@@ -53,17 +53,33 @@ export async function streamToBuffer(
   });
 }
 
+export interface DownloadBlobOptions {
+  /**
+   * Client-side deadline for the whole download. The SDK aborts the request
+   * AND its body stream when the signal fires, rejecting with an `AbortError`
+   * (no status, no network code), which `withAzureRetry` therefore does not
+   * retry. Without a signal a stalled connection keeps the promise pending
+   * indefinitely — neither `withAzureRetry` nor `AzureBlobStorage` carries a
+   * time budget — so reads on a request path should pass
+   * `AbortSignal.timeout(…)`.
+   */
+  abortSignal?: AbortSignal;
+}
+
 /** Downloads a blob with its ETag. Returns null (not throws) on 404. */
 export async function downloadBlob(
   storage: BlobStorage,
   blobPath: string,
   label = 'agentAccess.downloadBlob',
+  options: DownloadBlobOptions = {},
 ): Promise<{ buffer: Buffer; etag: string } | null> {
   const client = storage.getBlockBlobClient(blobPath);
   try {
     return await withAzureRetry(
       async () => {
-        const response = await client.download();
+        const response = await client.download(0, undefined, {
+          abortSignal: options.abortSignal,
+        });
         if (!response.readableStreamBody) {
           throw new Error(`No readable stream for blob ${blobPath}`);
         }
