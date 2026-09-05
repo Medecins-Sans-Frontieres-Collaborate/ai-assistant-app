@@ -19,6 +19,7 @@ import {
 import { DelegationEditor } from '@/components/Limits/DelegationEditor';
 import {
   delegationOverlaps,
+  mergeRelevantRules,
   overlapsFor,
   relevantRulesFor,
 } from '@/components/Limits/jurisdiction';
@@ -157,17 +158,21 @@ export const DelegationsTab: FC<DelegationsTabProps> = ({
             delegation={delegation}
             ownedOverrides={owned}
             overlaps={overlapsFor(overlaps, delegation.id)}
-            relevantRules={delegation.jurisdiction.flatMap((predicate) =>
-              relevantRulesFor(
-                predicate.scope,
-                predicate.targets,
-                {
-                  overrides: overrides.filter(
-                    (o) => o.delegationId !== delegation.id,
-                  ),
-                  delegations,
-                },
-                delegation.id,
+            relevantRules={mergeRelevantRules(
+              // One query per predicate; a rule meeting two of them (a
+              // domain plus a user inside it) must still be listed once.
+              delegation.jurisdiction.flatMap((predicate) =>
+                relevantRulesFor(
+                  predicate.scope,
+                  predicate.targets,
+                  {
+                    overrides: overrides.filter(
+                      (o) => o.delegationId !== delegation.id,
+                    ),
+                    delegations,
+                  },
+                  delegation.id,
+                ),
               ),
             )}
             labelFor={labelFor}
