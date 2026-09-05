@@ -75,8 +75,11 @@ interface OverrideEditorProps {
   /**
    * `scoped` = edited by a scoped admin (or a scoped record in the global
    * panel): hides `priority` — scoped records are stored and compared as 0
-   * (design §3b) so the field would be a lie. Ceilings are already hidden
-   * for every override row. Defaults to `global`.
+   * (design §3b) so the field would be a lie — and the per-row Hard ceiling
+   * toggle, which a scoped write is refused for (design §5). The `global`
+   * variant offers the ceiling toggle on every configured row as long as the
+   * record carries no `delegationId` (design §3c: only a global-tier
+   * override entry is a ceiling candidate). Defaults to `global`.
    */
   variant?: 'global' | 'scoped';
   /**
@@ -199,10 +202,12 @@ export const OverrideEditor: FC<OverrideEditorProps> = ({
    * (app/api/limits/policy/route.ts) accepts and persists ceiling on override
    * entries, so that was real data loss.
    *
-   * Preserved rather than stripped: resolver.ts reads only the GLOBAL entry's
-   * ceiling, so an override-level ceiling is inert today — but silently
-   * flipping a stored `true` is mutation, and a future resolver change could
-   * make it meaningful.
+   * On a global-tier override the flag is LIVE: the resolver takes every
+   * global-tier override entry with `ceiling: true` as a ceiling candidate
+   * and the most specific one clamps the cell (design §3c) — this is the
+   * global admin's pin against scoped lifting. `setCeiling` below is the
+   * only UI writer; a `delegationId` record never offers it (the server
+   * normalizes those to false), and `assignDelegation` clears the flags.
    */
   const ceilings = useMemo(
     () => ceilingsFromEntries(override.entries),
@@ -214,6 +219,25 @@ export const OverrideEditor: FC<OverrideEditorProps> = ({
     if (value === undefined) delete next[key];
     update({ entries: draftToEntries(next, ceilings) });
   };
+
+  const setCeiling = (key: string, checked: boolean) =>
+    update({ entries: draftToEntries(draft, { ...ceilings, [key]: checked }) });
+
+  /**
+   * Whether this record may pin a cell. Only the `global` variant AND no
+   * `delegationId`: the scoped write path refuses `ceiling: true` and the
+   * global PUT normalizes it to false on a delegated record, so offering
+   * the toggle there would draft something that can never be stored.
+   */
+  const ceilingAllowed = variant === 'global' && !override.delegationId;
+  const ceilingFor = (limitKey: string) =>
+    ceilingAllowed
+      ? {
+          checked: ceilings[draftKey(limitKey)] ?? false,
+          onToggle: (checked: boolean) =>
+            setCeiling(draftKey(limitKey), checked),
+        }
+      : undefined;
 
   /** A member is configured if its base key OR any scoped cell is present. */
   const isConfigured = (limitKey: string) =>
@@ -491,6 +515,7 @@ export const OverrideEditor: FC<OverrideEditorProps> = ({
                         def={gateDef}
                         draft={draft}
                         onChange={setValue}
+                        ceiling={ceilingFor(gateDef.key)}
                         disabled={disabled}
                       />
                     )}
@@ -500,6 +525,7 @@ export const OverrideEditor: FC<OverrideEditorProps> = ({
                         def={def}
                         draft={draft}
                         onChange={setValue}
+                        ceiling={ceilingFor(def.key)}
                         dimmed={gateOff}
                         dimmedNote={t('overrideGateOffNote', {
                           feature: t(`group.${group.id}` as never),
@@ -512,6 +538,9 @@ export const OverrideEditor: FC<OverrideEditorProps> = ({
               );
             })}
           </div>
+          {ceilingAllowed && configuredGroups.length > 0 && (
+            <p className={ADMIN_HINT}>{t('overrideCeilingHint')}</p>
+          )}
 
           {unrecognized.length > 0 && (
             <div className="mt-3">
