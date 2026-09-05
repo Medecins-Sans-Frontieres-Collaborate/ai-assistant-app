@@ -1,6 +1,11 @@
 'use client';
 
-import { IconAlertTriangle, IconPlus } from '@tabler/icons-react';
+import {
+  IconAlertTriangle,
+  IconChevronDown,
+  IconChevronRight,
+  IconPlus,
+} from '@tabler/icons-react';
 import { FC, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -10,15 +15,18 @@ import {
   ScopedLimitsView,
 } from '@/client/hooks/settings/useLimitsAdmin';
 
-import { LimitOverride } from '@/lib/services/limits/types';
+import { LimitEntry, LimitOverride } from '@/lib/services/limits/types';
 
 import {
   ADMIN_BANNER_WARN,
   ADMIN_BTN_SECONDARY,
+  ADMIN_CARD,
   ADMIN_HEADING,
   ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
+import { CostCalculatorLazy } from '@/components/Limits/CostCalculatorLazy';
 import { EffectiveLimitsPreview } from '@/components/Limits/EffectiveLimitsPreview';
+import { useLimitsCost } from '@/components/Limits/LimitsCostContext';
 import { ScopeSummary } from '@/components/Limits/ScopeSummary';
 import { ScopedOverrideCard } from '@/components/Limits/ScopedOverrideCard';
 import {
@@ -50,8 +58,11 @@ export const ScopedOverridesTab: FC<ScopedOverridesTabProps> = ({
   onRefetch,
 }) => {
   const t = useTranslations('limits');
+  const { calculator } = useLimitsCost();
   const [pendingNew, setPendingNew] = useState<LimitOverride[]>([]);
   const [dirtyIds, setDirtyIds] = useState<Set<string>>(() => new Set());
+  // Collapsed by default so the calculator bundle loads only when asked for.
+  const [calculatorOpen, setCalculatorOpen] = useState(false);
 
   const onDirtyChange = (id: string, dirty: boolean) =>
     setDirtyIds((current) => {
@@ -90,6 +101,19 @@ export const ScopedOverridesTab: FC<ScopedOverridesTabProps> = ({
 
   const pool = useMemo(
     () => ({ overrides: view.overrides, delegations: [] }),
+    [view.overrides],
+  );
+
+  /**
+   * The caps a scoped calculator can cross-check: the scoped admin's OWN
+   * overrides only (enabled, under an enabled delegation) — the scoped GET
+   * never returns the global defaults, and the card says so.
+   */
+  const scopedCaps = useMemo<LimitEntry[]>(
+    () =>
+      view.overrides
+        .filter((o) => o.enabled && !o.flags.includes('delegation-disabled'))
+        .flatMap((o) => o.entries),
     [view.overrides],
   );
 
@@ -238,6 +262,39 @@ export const ScopedOverridesTab: FC<ScopedOverridesTabProps> = ({
             scoped
             scopeNote={scopeNote}
           />
+          {calculator && (
+            // Design §4c: scoped mode stays free of a tab strip (§6b), so the
+            // estimator is a collapsible card under the preview.
+            <section
+              className={ADMIN_CARD}
+              aria-labelledby="limits-scoped-cost-title"
+            >
+              <button
+                type="button"
+                className="flex w-full items-center gap-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-300"
+                aria-expanded={calculatorOpen}
+                aria-controls="limits-scoped-cost-body"
+                onClick={() => setCalculatorOpen((open) => !open)}
+              >
+                {calculatorOpen ? (
+                  <IconChevronDown size={16} aria-hidden="true" />
+                ) : (
+                  <IconChevronRight size={16} aria-hidden="true" />
+                )}
+                <span id="limits-scoped-cost-title">
+                  {t('cost.calculator.tab')}
+                </span>
+              </button>
+              <p className={`mt-1 ${ADMIN_MUTED}`}>
+                {t('cost.calculator.scopedNote')}
+              </p>
+              {calculatorOpen && (
+                <div id="limits-scoped-cost-body" className="mt-3">
+                  <CostCalculatorLazy caps={scopedCaps} mode="scoped" />
+                </div>
+              )}
+            </section>
+          )}
           {view.delegations.length > 1 ? (
             <div className="space-y-8">
               {view.delegations.map((delegation) =>
