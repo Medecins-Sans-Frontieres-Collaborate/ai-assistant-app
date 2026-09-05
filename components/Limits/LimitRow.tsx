@@ -4,7 +4,10 @@ import { FC } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import type { LimitEntry } from '@/lib/services/limits/types';
+
 import { ADMIN_CHECKBOX, ADMIN_MUTED } from '@/components/Admin/adminClasses';
+import { CostHint } from '@/components/Limits/CostHint';
 import { LimitValueInput } from '@/components/Limits/LimitValueInput';
 import { ScopedLimitRows } from '@/components/Limits/ScopedLimitRows';
 import { EntryDraft, draftKey } from '@/components/Limits/types';
@@ -43,6 +46,19 @@ interface LimitRowProps {
   /** Pre-translated consequence copy rendered under the control. */
   consequenceNote?: string;
   disabled?: boolean;
+  /**
+   * Cost insights only: the global default entries, consulted after this
+   * row's own draft for the allowed-model set behind "up to ≈ $X / day at
+   * the priciest allowed model". OverrideEditor passes its `globalDefaults`;
+   * the defaults tab needs nothing (its draft IS the defaults).
+   */
+  globalDefaults?: readonly LimitEntry[];
+  /**
+   * Cost insights only: the row belongs to a SCOPED admin's override, which
+   * never sees the global defaults — the annotation says "as far as this
+   * override can see".
+   */
+  costScopedView?: boolean;
 }
 
 /**
@@ -61,6 +77,8 @@ export const LimitRow: FC<LimitRowProps> = ({
   disableWhenDimmed = false,
   consequenceNote,
   disabled = false,
+  globalDefaults,
+  costScopedView = false,
 }) => {
   const t = useTranslations('limits');
   const key = draftKey(def.key);
@@ -87,6 +105,23 @@ export const LimitRow: FC<LimitRowProps> = ({
             onChange={(value) => onChange(key, value)}
             disabled={effectiveDisabled}
           />
+          {/* Cost annotation (limitsCostInsights): nothing when off, dimmed,
+              blocked, unset, or for keys that do not price. The `!dimmed`
+              guard is DEFENSIVE: only gated groups (webSearch, codeInterpreter,
+              mcp) can dim, and none of them holds a key that prices, so no
+              production tree reaches it today — it states the invariant "a
+              value that cannot take effect carries no cost copy" for a future
+              gated-and-priced key. Covered directly by CostHint.test.tsx
+              ('renders nothing on a dimmed row'). */}
+          {!dimmed && (
+            <CostHint
+              def={def}
+              value={draft[key]}
+              draft={draft}
+              globalDefaults={globalDefaults}
+              scopedView={costScopedView}
+            />
+          )}
           {ceiling && configured && (
             <label className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
               <input
