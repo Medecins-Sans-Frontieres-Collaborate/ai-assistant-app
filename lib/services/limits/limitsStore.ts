@@ -66,7 +66,32 @@ export interface PolicyReadResult {
   etag: string;
 }
 
-/** Reads and parses the policy. Returns null when none has been written yet. */
+/**
+ * The stored policy document was downloaded but could not be turned into a
+ * `LimitsPolicy` — not JSON, or JSON the read schema rejects. ONE typed
+ * error for both halves so every caller classifies "the policy is
+ * unavailable" by ORIGIN rather than by guessing at error classes: a
+ * `SyntaxError` from `JSON.parse` carries neither an Azure status nor a Node
+ * `code`, and would otherwise fall through to a generic 500 that the client
+ * attributes to the admin's own edit (design §8 wants "unavailable, retry").
+ * A storage failure (Azure status, network code) is NOT wrapped — it keeps
+ * its own shape for `statusCodeOf` and the retry helpers.
+ */
+export class PolicyUnreadableError extends Error {
+  constructor(cause: unknown) {
+    super(
+      `Stored limits policy is unreadable: ${cause instanceof Error ? cause.message : String(cause)}`,
+      { cause },
+    );
+    this.name = 'PolicyUnreadableError';
+  }
+}
+
+/**
+ * Reads and parses the policy. Returns null when none has been written yet;
+ * throws {@link PolicyUnreadableError} for a document that exists but cannot
+ * be parsed, and propagates storage failures unchanged.
+ */
 export async function readPolicy(
   storage: BlobStorage,
 ): Promise<PolicyReadResult | null> {
@@ -76,9 +101,14 @@ export async function readPolicy(
     'limits.readPolicy',
   );
   if (result === null) return null;
-  const policy = LimitsPolicySchema.parse(
-    JSON.parse(result.buffer.toString('utf8')),
-  );
+  let policy: LimitsPolicy;
+  try {
+    policy = LimitsPolicySchema.parse(
+      JSON.parse(result.buffer.toString('utf8')),
+    );
+  } catch (error) {
+    throw new PolicyUnreadableError(error);
+  }
   return { policy, etag: result.etag };
 }
 
