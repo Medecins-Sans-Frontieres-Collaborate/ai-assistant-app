@@ -46,6 +46,7 @@ import {
 import {
   MAX_OVERRIDES,
   WriteDelegation,
+  canonicalList,
   clampToHardCeilings,
   formatIssues,
   isValidTimezone,
@@ -84,17 +85,14 @@ function newDelegationId(): string {
   return `del-${randomBytes(6).toString('hex')}`;
 }
 
-function canonicalList(values: readonly string[]): string[] {
-  return [...new Set(values.map((v) => v.trim().toLowerCase()))].filter(
-    Boolean,
-  );
-}
-
 /**
- * Canonicalizes exactly like the matchers do (`trim().toLowerCase()`, see
- * principalMatching.ts and adminAuth.ts) — a different normalizer here would
- * create a second definition of "matches". Group ids and attribute values
- * are lowercased too, which is how `intersectsTargets` compares them.
+ * Assembles the stored record from a body the write schema has ALREADY
+ * canonicalized (`admins` and every predicate's `targets` are trimmed,
+ * lowercased, deduped and blank-free, and a predicate with no surviving
+ * target was refused as a 400 before this runs). `canonicalList` is applied
+ * again only because it is idempotent and keeps this function honest on its
+ * own: it can never turn a validated predicate into an empty one, so the
+ * read-schema parse inside `writePolicy` cannot fail on what it produces.
  */
 function normalizeDelegation(
   input: WriteDelegation,
