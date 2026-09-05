@@ -3,14 +3,28 @@ import React from 'react';
 
 import { LimitEntry, LimitOverride } from '@/lib/services/limits/types';
 
+import { OpenAIModel } from '@/types/openai';
+
+import { LimitsCostProvider } from '@/components/Limits/LimitsCostContext';
 import { OverrideEditor } from '@/components/Limits/OverrideEditor';
 import type { TargetVerdict } from '@/components/Limits/jurisdiction';
 
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+/** Key echo; an `amount` value (cost copy only) is appended as `key:amount`. */
 vi.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations:
+    () => (key: string, params?: Record<string, string | number>) =>
+      params && 'amount' in params ? `${key}:${params.amount}` : key,
+  useLocale: () => 'en',
+}));
+
+/** Flags default to none — the OFF path every pre-existing case runs on. */
+const mockFlags: Record<string, unknown> = {};
+vi.mock('launchdarkly-react-client-sdk', () => ({
+  useFlags: () => mockFlags,
 }));
 
 function makeOverride(overrides: Partial<LimitOverride> = {}): LimitOverride {
@@ -543,5 +557,139 @@ describe('OverrideEditor', () => {
         screen.queryByLabelText('overrideDelegationLabel'),
       ).not.toBeInTheDocument();
     });
+  });
+});
+
+/**
+ * Cost insights (docs/LIMITS_COST_INSIGHTS_DESIGN.md §4a) in the override
+ * editor: the allowed-model set behind "up to ≈ $X at the priciest allowed
+ * model" consults the override's OWN draft first and the `globalDefaults`
+ * prop second (the same prop the gate-off warning already uses); the scoped
+ * variant never sees defaults and says "as far as this override can see".
+ * With the flag undefined nothing renders (every case above).
+ */
+describe('OverrideEditor — cost insights', () => {
+  const fixture = (id: string, inputPer1M: number, outputPer1M: number) =>
+    ({
+      id,
+      name: id,
+      maxLength: 0,
+      tokenLimit: 0,
+      isDisabled: false,
+      pricing: { inputPer1M, outputPer1M },
+    }) as OpenAIModel;
+  /** $0.02 and $0.20 per typical request. */
+  const DEAR = fixture('test-dear', 10, 20);
+  const OTHER = fixture('test-other', 100, 200);
+
+  const blockOther: LimitEntry[] = [
+    {
+      limitKey: 'model.allowed',
+      modelId: 'test-other',
+      value: false,
+      ceiling: false,
+    },
+  ];
+
+  function renderWithCost(
+    override: LimitOverride,
+    extraProps: {
+      globalDefaults?: LimitEntry[];
+      variant?: 'global' | 'scoped';
+    } = {},
+  ) {
+    render(
+      <LimitsCostProvider>
+        <OverrideEditor
+          override={override}
+          onChange={vi.fn()}
+          onRemove={vi.fn()}
+          {...extraProps}
+        />
+      </LimitsCostProvider>,
+    );
+  }
+
+  const hints = () =>
+    screen.queryAllByTestId('limits-cost-hint').map((el) => el.textContent);
+
+  beforeEach(() => {
+    delete mockFlags.limitsCostInsights;
+    useSettingsStore.setState({ models: [DEAR, OTHER] });
+  });
+
+  it('renders no cost copy when the flag is undefined', () => {
+    renderWithCost(makeOverride(), { globalDefaults: blockOther });
+    expect(hints()).toEqual([]);
+  });
+
+  it('bounds a cap at the priciest model the global defaults still allow', () => {
+    mockFlags.limitsCostInsights = true;
+    // chat.messagesPerDay = 100: $20.00 at OTHER, $2.00 once defaults block it.
+    renderWithCost(makeOverride());
+    expect(hints()).toEqual(['cost.upToPriciest:$20.00']);
+  });
+
+  it('threads globalDefaults into the allowed set', () => {
+    mockFlags.limitsCostInsights = true;
+    renderWithCost(makeOverride(), { globalDefaults: blockOther });
+    expect(hints()).toEqual(['cost.upToPriciest:$2.00']);
+  });
+
+  it("lets the override's own draft re-allow what the defaults block", () => {
+    mockFlags.limitsCostInsights = true;
+    renderWithCost(
+      makeOverride({
+        entries: [
+          { limitKey: 'chat.messagesPerDay', value: 100, ceiling: false },
+          {
+            limitKey: 'model.allowed',
+            modelId: 'test-other',
+            value: true,
+            ceiling: false,
+          },
+        ],
+      }),
+      { globalDefaults: blockOther },
+    );
+    expect(hints()).toEqual(['cost.upToPriciest:$20.00']);
+  });
+
+  it('says "as far as this override can see" in the scoped variant', () => {
+    mockFlags.limitsCostInsights = true;
+    renderWithCost(makeOverride(), { variant: 'scoped' });
+    expect(hints()).toEqual([
+      'cost.upToPriciest:$20.00 · cost.scopedVisibility',
+    ]);
+  });
+
+  it('still shows the gate-off warning on a dimmed row with insights on', () => {
+    // No "and no cost hint" claim here: the only rows OverrideEditor can dim
+    // belong to gated groups (webSearch / codeInterpreter / mcp), none of
+    // which holds a key that prices, so a hint assertion could never fail.
+    // LimitRow's defensive `!dimmed` guard is covered on a priceable key in
+    // CostHint.test.tsx ('renders nothing on a dimmed row').
+    mockFlags.limitsCostInsights = true;
+    renderWithCost(
+      makeOverride({
+        entries: [
+          {
+            limitKey: 'feature.webSearch.callsPerDay',
+            value: 10,
+            ceiling: false,
+          },
+        ],
+      }),
+      {
+        globalDefaults: [
+          {
+            limitKey: 'feature.webSearch.enabled',
+            value: false,
+            ceiling: false,
+          },
+        ],
+      },
+    );
+    expect(screen.getByText('overrideGateOffNote')).toBeInTheDocument();
   });
 });

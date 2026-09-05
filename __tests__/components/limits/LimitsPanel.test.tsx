@@ -21,10 +21,21 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
+  useLocale: () => 'en',
 }));
 
 vi.mock('react-hot-toast', () => ({
   default: { success: vi.fn(), error: vi.fn() },
+}));
+
+/**
+ * LaunchDarkly, mutable per test. Empty by default so every pre-existing
+ * case runs with the cost flags OFF (an unserved flag fails closed), exactly
+ * as `useFlags()` outside an LDProvider would.
+ */
+const mockFlags: Record<string, unknown> = {};
+vi.mock('launchdarkly-react-client-sdk', () => ({
+  useFlags: () => mockFlags,
 }));
 
 // ---------------------------------------------------------------------------
@@ -194,6 +205,8 @@ beforeEach(() => {
   calls.length = 0;
   vi.clearAllMocks();
   installFetch();
+  delete mockFlags.limitsCostInsights;
+  delete mockFlags.limitsCostCalculator;
 });
 
 afterEach(() => {
@@ -566,6 +579,44 @@ describe('LimitsPanel — scoped mode', () => {
     expect(screen.queryByText('scopedNoDelegations')).not.toBeInTheDocument();
   });
 
+  /**
+   * Design §4c / §6b: scoped mode never grows a tab strip. With both cost
+   * flags on the estimator is a collapsible card under the preview, checked
+   * against the scoped admin's OWN overrides only, and it loads lazily —
+   * nothing of it renders until the card is expanded.
+   */
+  it('keeps scoped mode free of a tablist and adds the calculator card only with both cost flags', async () => {
+    mockFlags.limitsCostInsights = true;
+    mockFlags.limitsCostCalculator = true;
+    scopedRouting(scopedView());
+    renderPanel();
+
+    expect(await screen.findByText('scopedDescription')).toBeInTheDocument();
+    expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
+    const toggle = screen.getByRole('button', { name: 'cost.calculator.tab' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.getByText('cost.calculator.scopedNote')).toBeInTheDocument();
+    expect(screen.queryByText('cost.calculator.title')).not.toBeInTheDocument();
+
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(
+      await screen.findByText('cost.calculator.title'),
+    ).toBeInTheDocument();
+    expect(getCalls('/api/limits/policy')).toHaveLength(0);
+  });
+
+  it('shows no calculator card in scoped mode with insights alone', async () => {
+    mockFlags.limitsCostInsights = true;
+    scopedRouting(scopedView());
+    renderPanel();
+
+    expect(await screen.findByText('scopedDescription')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'cost.calculator.tab' }),
+    ).not.toBeInTheDocument();
+  });
+
   it('treats a failed mode probe as unavailable, not as scoped mode', async () => {
     responder = () => ({ status: 403, body: { error: 'nope' } });
     renderPanel();
@@ -619,6 +670,54 @@ describe('LimitsPanel — global mode', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('modeLabel')).toBeInTheDocument();
     expect(screen.getByText('description')).toBeInTheDocument();
+  });
+
+  it('has no Cost calculator tab while the cost flags are off', async () => {
+    globalRouting();
+    renderPanel();
+
+    expect(await screen.findByRole('tablist')).toBeInTheDocument();
+    expect(screen.getAllByRole('tab')).toHaveLength(3);
+    expect(
+      screen.queryByRole('tab', { name: 'cost.calculator.tab' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('has no Cost calculator tab with limitsCostCalculator alone (insights is required)', async () => {
+    mockFlags.limitsCostCalculator = true;
+    globalRouting();
+    renderPanel();
+
+    expect(await screen.findByRole('tablist')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('tab', { name: 'cost.calculator.tab' }),
+    ).not.toBeInTheDocument();
+  });
+
+  /**
+   * Design §4c: with BOTH flags on the fourth tab appears; its panel is
+   * the lazily loaded calculator, cross-checked against the defaults draft.
+   */
+  it('adds the Cost calculator tab with both cost flags and renders the estimator in its panel', async () => {
+    mockFlags.limitsCostInsights = true;
+    mockFlags.limitsCostCalculator = true;
+    globalRouting();
+    renderPanel();
+
+    const tab = await screen.findByRole('tab', { name: 'cost.calculator.tab' });
+    expect(screen.getAllByRole('tab')).toHaveLength(4);
+    fireEvent.click(tab);
+
+    const panel = screen.getByRole('tabpanel');
+    expect(panel).toHaveAttribute('id', 'limits-panel-cost');
+    expect(panel).toHaveAttribute('aria-labelledby', 'limits-tab-cost');
+    expect(
+      await within(panel).findByText('cost.calculator.title'),
+    ).toBeInTheDocument();
+    // Draft-based, and it says so (header and cross-check card).
+    expect(
+      within(panel).getAllByText('cost.calculator.draftNote').length,
+    ).toBeGreaterThan(0);
   });
 
   it('always PUTs delegations with the whole policy (stored ids kept, no audit fields)', async () => {
