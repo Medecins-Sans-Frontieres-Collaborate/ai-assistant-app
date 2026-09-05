@@ -118,10 +118,27 @@ export function useLimitsEnabled(): boolean {
   return Boolean(usageLimits);
 }
 
+/**
+ * The server's two-valued verdict behind a `LIMITS_PREVIEW_OUT_OF_SCOPE` 403
+ * (design §6c, `canPreviewMail`): `outside` = the mail is provably outside
+ * every delegation's domains/users; `undecidable` = some delegation has a
+ * group or attribute predicate, so the person MAY be inside and the only
+ * honest answer is "cannot be decided by mail".
+ */
+export type PreviewScopeVerdict = 'undecidable' | 'outside';
+
 interface PreviewForbidden {
   forbidden: true;
   /** `LIMITS_PREVIEW_OUT_OF_SCOPE` for a scoped admin outside their scope. */
   code?: string;
+  /** Only with `LIMITS_PREVIEW_OUT_OF_SCOPE`: which of the two it was. */
+  details?: PreviewScopeVerdict;
+}
+
+function parsePreviewScopeVerdict(
+  value: unknown,
+): PreviewScopeVerdict | undefined {
+  return value === 'undecidable' || value === 'outside' ? value : undefined;
 }
 
 export interface EffectiveLimitsPreviewOptions {
@@ -137,9 +154,11 @@ export interface EffectiveLimitsPreviewOptions {
  * authority tier and the ceiling that pinned it.
  *
  * `mail === null` disables the query entirely (nothing has been asked yet).
- * A 403 is surfaced as `forbidden` (with the server's `code`) rather than
- * thrown: for a scoped admin it means "outside your scope", which the panel
- * must word differently from "not an admin".
+ * A 403 is surfaced as `forbidden` (with the server's `code` and, for
+ * `LIMITS_PREVIEW_OUT_OF_SCOPE`, its `details` verdict) rather than thrown:
+ * for a scoped admin it means "outside your scope" OR "cannot be decided by
+ * mail", which the panel must word differently from each other and from
+ * "not an admin".
  */
 export function useEffectiveLimitsPreview(
   mail: string | null,
@@ -161,7 +180,11 @@ export function useEffectiveLimitsPreview(
           body && typeof body === 'object' && typeof body.code === 'string'
             ? (body.code as string)
             : undefined;
-        return { forbidden: true, code } satisfies PreviewForbidden;
+        const details =
+          body && typeof body === 'object'
+            ? parsePreviewScopeVerdict(body.details)
+            : undefined;
+        return { forbidden: true, code, details } satisfies PreviewForbidden;
       }
       if (!response.ok) {
         throw new Error(`Failed to preview limits: ${response.status}`);
@@ -178,6 +201,9 @@ export function useEffectiveLimitsPreview(
     result: forbidden || data === undefined ? null : data,
     forbidden,
     forbiddenCode: forbidden ? (data as PreviewForbidden).code : undefined,
+    forbiddenDetails: forbidden
+      ? (data as PreviewForbidden).details
+      : undefined,
     isLoading: query.isLoading && query.isFetching,
     error: query.error,
   };
@@ -188,7 +214,9 @@ export function useEffectiveLimitsPreview(
 // PUT/DELETE. Contract: docs/LIMITS_SCOPED_ADMINS_DESIGN.md §5/§6b.
 // ---------------------------------------------------------------------------
 
-export type ScopedDelegationWarning = 'no-domain-or-user-anchor';
+export type ScopedDelegationWarning =
+  | 'no-domain-or-user-anchor'
+  | 'matches-nobody';
 
 /** One of the CALLER's delegations, as the scoped GET exposes it (no admins). */
 export interface ScopedDelegationView {
