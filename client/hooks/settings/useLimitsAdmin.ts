@@ -119,6 +119,55 @@ export function useLimitsEnabled(): boolean {
 }
 
 /**
+ * The two cost-insight gates inside the limits admin
+ * (docs/LIMITS_COST_INSIGHTS_DESIGN.md §1), read together so a consumer
+ * can hand both to a context in one go.
+ */
+export interface LimitsCostFlags {
+  /** `limitsCostInsights`: per-row cost annotations + the preview spend card. */
+  insights: boolean;
+  /** `limitsCostCalculator` AND `limitsCostInsights`: the estimator. */
+  calculator: boolean;
+}
+
+/**
+ * True when the `limitsCostInsights` LaunchDarkly flag is explicitly on.
+ *
+ * Same posture as `useLimitsEnabled`: CLIENT-side only, gates UI (cost
+ * copy is never a security boundary — the prices already ride in the model
+ * list), no localhost escape hatch (the parent `usageLimits` gate has none,
+ * so a child hatch would be reachable only when flags are bootstrapped
+ * anyway). Fail-closed `=== true`: list-price estimates must stay hidden —
+ * and uncomputed — until the flag is deliberately served.
+ */
+export function useLimitsCostInsightsEnabled(): boolean {
+  const { limitsCostInsights } = useFlags();
+  // fail-closed: an unserved or missing flag must hide (and not compute) cost figures
+  return limitsCostInsights === true;
+}
+
+/**
+ * True when the `limitsCostCalculator` flag is on AND `limitsCostInsights`
+ * is on: there is no calculator without the per-row numbers it explains
+ * (design §1). Fail-closed on both.
+ */
+export function useLimitsCostCalculatorEnabled(): boolean {
+  const { limitsCostInsights, limitsCostCalculator } = useFlags();
+  // fail-closed on both flags: the calculator requires the insights it explains
+  return limitsCostInsights === true && limitsCostCalculator === true;
+}
+
+/** Both cost gates in one read (the shape `LimitsCostProvider` consumes). */
+export function useLimitsCostFlags(): LimitsCostFlags {
+  const { limitsCostInsights, limitsCostCalculator } = useFlags();
+  const insights = limitsCostInsights === true;
+  return {
+    insights,
+    calculator: insights && limitsCostCalculator === true,
+  };
+}
+
+/**
  * The server's two-valued verdict behind a `LIMITS_PREVIEW_OUT_OF_SCOPE` 403
  * (design §6c, `canPreviewMail`): `outside` = the mail is provably outside
  * every delegation's domains/users; `undecidable` = some delegation has a
