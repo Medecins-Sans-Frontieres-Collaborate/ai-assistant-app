@@ -344,6 +344,30 @@ export function relevantRulesFor(
   return rules;
 }
 
+/**
+ * Union of several `relevantRulesFor` results (one per predicate of a
+ * jurisdiction, say) with one entry per rule: same `kind` + `id` collapse
+ * into the first occurrence with their `matched` lists merged and deduped.
+ * Without this a rule that meets two predicates (a domain and a user inside
+ * it) is listed once per predicate — doubled rows and duplicate React keys
+ * in RelevantRulesPopover.
+ */
+export function mergeRelevantRules(
+  rules: readonly RelevantRule[],
+): RelevantRule[] {
+  const byKey = new Map<string, RelevantRule>();
+  for (const rule of rules) {
+    const key = `${rule.kind}:${rule.id}`;
+    const existing = byKey.get(key);
+    if (existing) {
+      existing.matched = [...new Set([...existing.matched, ...rule.matched])];
+    } else {
+      byKey.set(key, { ...rule, matched: [...rule.matched] });
+    }
+  }
+  return [...byKey.values()];
+}
+
 // ---------------------------------------------------------------------------
 // Display helpers
 // ---------------------------------------------------------------------------
