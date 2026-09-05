@@ -20,8 +20,9 @@ interface LimitRowProps {
   showDescription?: boolean;
   /**
    * Hard-ceiling toggle state; rendered only when provided AND the row is
-   * configured — override rows never pass it (override-level ceilings are
-   * inert and stay invisible-but-preserved).
+   * configured. The defaults tab always passes it; OverrideEditor passes it
+   * for a global-tier record only (design §3c) and leaves it undefined on
+   * scoped / delegated ones, whose stored flags stay invisible-but-preserved.
    */
   ceiling?: { checked: boolean; onToggle: (checked: boolean) => void };
   /**
