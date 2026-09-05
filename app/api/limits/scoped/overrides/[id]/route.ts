@@ -6,6 +6,7 @@ import { LimitsService } from '@/lib/services/limits/LimitsService';
 import {
   LimitsConflictError,
   PolicyMutationOutcome,
+  PolicyUnreadableError,
   createLimitsBlobStorage,
   mutatePolicy,
   writeHistoryEntry,
@@ -42,7 +43,6 @@ import {
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { auth } from '@/auth';
-import { ZodError } from 'zod';
 
 /**
  * PUT/DELETE /api/limits/scoped/overrides/[id]?delegation=del-… — a scoped
@@ -54,8 +54,8 @@ import { ZodError } from 'zod';
  * and EVERY validation below runs again against the fresh read on every CAS
  * round — the delegation may have been narrowed, disabled or deleted,
  * `maxOverrides` lowered, or the target override deleted by a global admin
- * in between. A replace of an override that vanished mid-way answers 404,
- * never resurrects it.
+ * in between. A replace or delete of an override that vanished mid-way
+ * answers 404, never resurrects it.
  *
  * Closed by shape, not by intent: the body schema is strict and carries no
  * `delegationId` / `priority ≠ 0` / `ceiling: true` / `createdBy`; the
@@ -67,6 +67,17 @@ import { ZodError } from 'zod';
  * the jurisdiction and log the attempt — but containment is the resolver's,
  * so a target that slips through as "undecidable" still cannot reach anyone
  * outside the jurisdiction at runtime.
+ *
+ * Authorize BEFORE any id lookup (CWE-203): `authorize()` admits any
+ * signed-in user with a mail, so both mutators resolve the caller first and
+ * answer a principal who is neither a global admin nor named in any
+ * delegation with one uniform 403 — before the delegation or override id is
+ * looked up. Past that gate a scoped admin still cannot tell "not stored"
+ * from "stored, but not under one of my delegations": PUT answers 403 for an
+ * unknown delegation id exactly as for a foreign one (only a global admin,
+ * who reads the whole document anyway, gets the 400), and DELETE answers
+ * 403 LIMITS_FOREIGN_OVERRIDE for an unknown, global-tier and foreign id
+ * alike. The only 404 is an OWNED record that vanished between CAS rounds.
  */
 
 interface RouteContext {
@@ -193,16 +204,25 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
     assertEtag(etag);
 
     const caller = resolveScopedCaller(user, current);
-    const delegation = current.delegations.find((d) => d.id === delegationId);
-    if (!delegation) return { abort: badRequestResponse('Unknown delegation') };
-    if (!caller.writable.has(delegation.id)) {
+    if (!caller.isGlobalAdmin && caller.visible.length === 0) {
+      return { abort: forbiddenResponse() };
+    }
+    // Looked up among the caller's OWN delegations: an id they are not named
+    // in answers the same 403 whether it exists, is disabled, or never was.
+    const delegation = caller.visible.find((d) => d.id === delegationId);
+    if (!delegation) {
+      if (
+        caller.isGlobalAdmin &&
+        !current.delegations.some((d) => d.id === delegationId)
+      ) {
+        return { abort: badRequestResponse('Unknown delegation') };
+      }
       return {
-        abort: forbiddenResponse(
-          delegation.enabled
-            ? 'You are not an admin of this delegation'
-            : 'This delegation is disabled',
-        ),
+        abort: forbiddenResponse('You are not an admin of this delegation'),
       };
+    }
+    if (!caller.writable.has(delegation.id)) {
+      return { abort: forbiddenResponse('This delegation is disabled') };
     }
 
     const existing = current.overrides.find((o) => o.id === id);
@@ -327,6 +347,8 @@ export async function DELETE(_request: NextRequest, { params }: RouteContext) {
 
   const now = new Date().toISOString();
   let delegationId = '';
+  /** Whether an earlier CAS round saw the record under the caller's delegation. */
+  let sawOwned = false;
 
   const mutate = (
     current: LimitsPolicy | null,
@@ -336,11 +358,23 @@ export async function DELETE(_request: NextRequest, { params }: RouteContext) {
     assertEtag(etag);
 
     const caller = resolveScopedCaller(user, current);
+    if (!caller.isGlobalAdmin && caller.visible.length === 0) {
+      return { abort: forbiddenResponse() };
+    }
+
+    // A global-tier record (no delegationId), another delegation's record
+    // and an id that is not stored at all get ONE answer — a scoped admin
+    // must neither delete a global admin's rule by guessing its id nor learn
+    // which guessed ids exist. The 404 is reserved for a record this caller
+    // owned on an earlier round that a global admin deleted in between.
     const existing = current.overrides.find((o) => o.id === id);
-    if (!existing) return { abort: notFoundResponse('Override') };
-    // A global-tier record (no delegationId) or another delegation's record
-    // is refused BEFORE anything else — a scoped admin must not be able to
-    // delete a global admin's rule by guessing its id.
+    if (!existing) {
+      return {
+        abort: sawOwned
+          ? notFoundResponse('Override')
+          : foreignOverrideResponse(),
+      };
+    }
     const owning = existing.delegationId
       ? caller.visible.find((d) => d.id === existing.delegationId)
       : undefined;
@@ -348,6 +382,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteContext) {
     if (!caller.writable.has(owning.id)) {
       return { abort: forbiddenResponse('This delegation is disabled') };
     }
+    sawOwned = true;
     delegationId = owning.id;
 
     return {
@@ -394,12 +429,15 @@ export async function DELETE(_request: NextRequest, { params }: RouteContext) {
 /**
  * `mutatePolicy` propagates read/parse and non-412 write failures unchanged.
  * A storage error (Azure status, network code) or an unparseable stored
- * document means the policy is unavailable, which the client must render as
- * "unavailable, retry" (design §8) — never as a failure of the admin's own
- * edit, and never as "nothing configured". Anything else is a real 500.
+ * document (`PolicyUnreadableError` — `readPolicy` wraps BOTH a JSON syntax
+ * failure and a read-schema rejection, so this is classified by origin, not
+ * by error class) means the policy is unavailable, which the client must
+ * render as "unavailable, retry" (design §8) — never as a failure of the
+ * admin's own edit, and never as "nothing configured". Anything else,
+ * including a mutator result the read schema rejects, is a real 500.
  */
 function isStorageFailure(error: unknown): boolean {
-  if (error instanceof ZodError) return true;
+  if (error instanceof PolicyUnreadableError) return true;
   if (statusCodeOf(error) !== undefined) return true;
   return (
     typeof error === 'object' &&
