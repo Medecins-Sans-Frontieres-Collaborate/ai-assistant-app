@@ -45,14 +45,44 @@ export interface GlobalAdminsReadResult {
   etag: string;
 }
 
-/** Reads and parses the roster. Returns null when none has been written yet. */
+/**
+ * Client-side deadline on one roster read (see `readGlobalAdmins`). Well
+ * above any healthy read of a few-KB document and below the 60 s cache TTL,
+ * so a stalled storage connection surfaces as ONE bounded failure per
+ * cooldown window instead of a promise that never settles.
+ */
+export const ROSTER_READ_DEADLINE_MS = 15_000;
+
+export interface ReadGlobalAdminsOptions {
+  /** Overrides {@link ROSTER_READ_DEADLINE_MS} (tests). */
+  readDeadlineMs?: number;
+}
+
+/**
+ * Reads and parses the roster. Returns null when none has been written yet.
+ *
+ * Bounded by `ROSTER_READ_DEADLINE_MS` through `downloadBlob`'s abort signal:
+ * `withAzureRetry` has no time budget of its own, so without the signal a
+ * stalled connection would keep this promise pending indefinitely. Past the
+ * deadline the read rejects with an `AbortError`, which
+ * GlobalAdminRosterService treats like any failed refresh (last-known-good or
+ * env-only, plus the failure cooldown). The service additionally bounds the
+ * WAIT on this promise (stale-while-revalidate + a 2.5 s cold deadline), so
+ * no request ever blocks on the full read deadline.
+ */
 export async function readGlobalAdmins(
   storage: BlobStorage,
+  options: ReadGlobalAdminsOptions = {},
 ): Promise<GlobalAdminsReadResult | null> {
   const result = await downloadBlob(
     storage,
     GLOBAL_ADMINS_PATH,
     'globalAdmins.read',
+    {
+      abortSignal: AbortSignal.timeout(
+        options.readDeadlineMs ?? ROSTER_READ_DEADLINE_MS,
+      ),
+    },
   );
   if (result === null) return null;
   const roster = GlobalAdminRosterSchema.parse(
