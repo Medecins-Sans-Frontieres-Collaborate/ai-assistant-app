@@ -37,7 +37,10 @@ import { auth } from '@/auth';
  *
  * Returns ONLY the limits that actually constrain them: a user with no limits
  * gets an empty list, which is the correct amount of noise for the 99% case.
- * Available to any signed-in user; it exposes nothing about anyone else.
+ * Available to any signed-in user; it exposes nothing about anyone else — in
+ * particular NOT the provenance below (tier, pinning record id and label,
+ * which is free text a global admin wrote for other admins); a clamped user
+ * sees `ceilingApplied` at most.
  *
  * `?as=<mail>` is an ADMIN preview that answers "what would this person get,
  * and WHY" — each entry carries the winning layer, authority tier and
@@ -81,20 +84,34 @@ interface MeLimit {
   unit: string;
   window: string;
   source: string;
-  tier: LimitTier;
   overrideId?: string;
   modelId?: string;
   series?: string;
   ceilingApplied?: boolean;
+  /** Preview provenance (design §6c) — absent on the own-limits path. */
+  tier?: LimitTier;
   /** The global-tier OVERRIDE whose ceiling pinned the value, and only its label. */
   ceilingOverrideId?: string;
   ceilingLabel?: string;
 }
 
+interface CollectOptions {
+  /** Keep entries that resolve to unlimited (the preview shows every cell). */
+  includeUnlimited: boolean;
+  /**
+   * Attach the admin-facing provenance — tier, and the id + label of the
+   * global-tier record whose ceiling pinned the value. TRUE ONLY for the
+   * `?as=` preview: an override label is text a global admin typed for other
+   * admins, and the own-limits path promises to expose nothing about anyone
+   * else, so a plain user sees `ceilingApplied` at most.
+   */
+  provenance: boolean;
+}
+
 function collectLimits(
   policy: LimitsPolicy | null,
   principal: Principal,
-  includeUnlimited: boolean,
+  { includeUnlimited, provenance }: CollectOptions,
 ): MeLimit[] {
   const resolved = resolveAllLimits(policy, principal);
   const labelOf = (overrideId: string): string | undefined =>
@@ -102,20 +119,24 @@ function collectLimits(
   return Object.values(resolved)
     .filter((r) => includeUnlimited || !(r.value === null || r.value === true))
     .map((r) => {
-      const ceilingLabel = r.ceilingOverrideId
-        ? labelOf(r.ceilingOverrideId)
-        : undefined;
-      return {
+      const base: MeLimit = {
         limitKey: r.limitKey,
         value: r.value,
         unit: r.unit,
         window: r.window,
         source: r.source,
-        tier: r.tier,
         ...(r.overrideId ? { overrideId: r.overrideId } : {}),
         ...(r.modelId ? { modelId: r.modelId } : {}),
         ...(r.series ? { series: r.series } : {}),
         ...(r.ceilingApplied ? { ceilingApplied: true } : {}),
+      };
+      if (!provenance) return base;
+      const ceilingLabel = r.ceilingOverrideId
+        ? labelOf(r.ceilingOverrideId)
+        : undefined;
+      return {
+        ...base,
+        tier: r.tier,
         ...(r.ceilingOverrideId
           ? { ceilingOverrideId: r.ceilingOverrideId }
           : {}),
@@ -216,7 +237,10 @@ export async function GET(request: NextRequest) {
         // attributes are session-derived, and group membership can only be
         // resolved with the TARGET user's own delegated token.
         notEvaluated: ['attribute', 'group'],
-        limits: collectLimits(policy, preview, true),
+        limits: collectLimits(policy, preview, {
+          includeUnlimited: true,
+          provenance: true,
+        }),
         ...(usage ? { usage } : {}),
         ...(usageUnavailable ? { usageUnavailable } : {}),
       });
@@ -231,7 +255,11 @@ export async function GET(request: NextRequest) {
       enabled: true,
       mode: policy?.mode ?? 'observe',
       policyUnavailable,
-      limits: collectLimits(policy, buildPrincipal(session), false),
+      // No provenance: tier and the pinning record's id/label are preview-only.
+      limits: collectLimits(policy, buildPrincipal(session), {
+        includeUnlimited: false,
+        provenance: false,
+      }),
     });
   } catch (error) {
     return handleApiError(error, 'Failed to resolve limits');
