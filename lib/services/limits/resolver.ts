@@ -326,7 +326,15 @@ function withinDelegation(
   return active.has(delegationId);
 }
 
-function matchingOverrides(
+/**
+ * The overrides that may compete for `principal`: enabled, matching its scope
+ * targets, and — for a scoped record — inside a delegation the principal is
+ * in (`active`, from {@link activeDelegationIds}). This is the resolver's
+ * candidate set; `/api/limits/me` reuses it to enumerate the model / series
+ * qualifiers the preview should resolve, so the two can never disagree about
+ * containment.
+ */
+export function matchingOverrides(
   policy: LimitsPolicy | null,
   principal: Principal,
   active: ReadonlySet<string>,
