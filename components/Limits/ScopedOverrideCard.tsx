@@ -1,5 +1,6 @@
 'use client';
 
+import { IconAlertTriangle } from '@tabler/icons-react';
 import { FC, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -16,6 +17,7 @@ import {
 import { LimitOverride } from '@/lib/services/limits/types';
 
 import {
+  ADMIN_BANNER_WARN,
   ADMIN_BTN_PRIMARY,
   ADMIN_BTN_SECONDARY,
   ADMIN_CHIP_NEUTRAL,
@@ -64,6 +66,13 @@ interface ScopedOverrideCardProps {
  * The draft re-seeds from the server object only while NOT dirty (a refetch
  * must never clobber typing), done during render behind a previous-value
  * guard rather than in an effect (react-hooks/set-state-in-effect).
+ *
+ * The trash icon is the SAME control the global panel renders, but there it
+ * only edits a draft (recoverable until Save) while here it is an immediate,
+ * irreversible server DELETE. So a STORED record asks first — an inline
+ * alertdialog naming the override, mirroring DelegationEditor's
+ * `confirmDelete` — and only a never-saved draft (`isNew`) is discarded on
+ * the spot, since nothing exists on the server to lose.
  */
 export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
   override,
@@ -83,6 +92,7 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
   const [draft, setDraft] = useState<LimitOverride>(override);
   const [dirty, setDirty] = useState(false);
   const [rejected, setRejected] = useState<string[]>([]);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [seededFrom, setSeededFrom] = useState(override);
   if (override !== seededFrom) {
     setSeededFrom(override);
@@ -179,12 +189,18 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
     }
   };
 
-  const handleRemove = async () => {
+  /** Trash icon: a never-saved draft is discarded; a stored record asks. */
+  const requestRemove = () => {
     if (isNew) {
       markDirty(false);
       onDiscardNew();
       return;
     }
+    setConfirmDelete(true);
+  };
+
+  const confirmRemove = async () => {
+    setConfirmDelete(false);
     try {
       await remove.mutateAsync({ id: override.id });
       markDirty(false);
@@ -214,7 +230,7 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
       <OverrideEditor
         override={draft}
         onChange={change}
-        onRemove={handleRemove}
+        onRemove={requestRemove}
         disabled={disabled}
         defaultExpanded={isNew}
         variant="scoped"
@@ -243,6 +259,33 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
         }
         headerActions={<RelevantRulesPopover rules={relevantRules} />}
       />
+      {confirmDelete && (
+        <div role="alertdialog" className={ADMIN_BANNER_WARN}>
+          <p className="flex items-center gap-2">
+            <IconAlertTriangle size={16} aria-hidden="true" />
+            {t('confirmDeleteOverride', {
+              label: draft.label || t('untitledOverride'),
+            })}
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <button
+              type="button"
+              className={ADMIN_BTN_SECONDARY}
+              onClick={confirmRemove}
+              disabled={disabled}
+            >
+              {t('confirmDeleteOverrideAction')}
+            </button>
+            <button
+              type="button"
+              className={ADMIN_BTN_SECONDARY}
+              onClick={() => setConfirmDelete(false)}
+            >
+              {t('cancel')}
+            </button>
+          </div>
+        </div>
+      )}
       <div className="flex flex-wrap items-center gap-3 px-1">
         <button
           type="button"
