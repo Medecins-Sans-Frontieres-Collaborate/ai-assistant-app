@@ -9,6 +9,7 @@ import {
   hasUndecidable,
   isMailAnchored,
   liftableDefaults,
+  mergeRelevantRules,
   narrowedOverrideCount,
   outOfScopeTargets,
   relevantRulesFor,
@@ -354,6 +355,62 @@ describe('relevantRulesFor', () => {
         delegations: [],
       }).map((r) => r.id),
     ).toEqual([groupRule.id]);
+  });
+});
+
+/**
+ * Contract: the Delegations tab queries relevant rules ONCE PER PREDICATE of a
+ * jurisdiction and concatenates. A rule that meets two predicates (a domain
+ * plus a user inside it) must still be listed once — RelevantRulesPopover
+ * keys rows on `${kind}-${id}` and counts them in its aria-label — with the
+ * `matched` targets of both hits merged.
+ */
+describe('mergeRelevantRules', () => {
+  it('collapses the per-predicate duplicates of a mixed jurisdiction to one row each (2 unique of 4)', () => {
+    const self = delegation([
+      DOMAIN_OCP,
+      { scope: 'user', targets: ['alice@ocp.msf.org'] },
+    ]);
+    const aliceCap = override('user', ['alice@ocp.msf.org']);
+    const otherDelegation = delegation([DOMAIN_OCP]);
+    const pool = {
+      overrides: [aliceCap],
+      delegations: [self, otherDelegation],
+    };
+
+    // Exactly what DelegationsTab does before merging.
+    const perPredicate = self.jurisdiction.flatMap((predicate) =>
+      relevantRulesFor(predicate.scope, predicate.targets, pool, self.id),
+    );
+    expect(perPredicate.map((r) => `${r.kind}-${r.id}`)).toEqual([
+      `override-${aliceCap.id}`,
+      `delegation-${otherDelegation.id}`,
+      `override-${aliceCap.id}`,
+      `delegation-${otherDelegation.id}`,
+    ]);
+
+    const merged = mergeRelevantRules(perPredicate);
+    expect(merged.map((r) => `${r.kind}-${r.id}`)).toEqual([
+      `override-${aliceCap.id}`,
+      `delegation-${otherDelegation.id}`,
+    ]);
+    // Both hits' targets survive, deduped: the domain query matched the user
+    // rule by its domain, the user query matched it by mail.
+    expect(merged[0].matched).toEqual(['ocp.msf.org', 'alice@ocp.msf.org']);
+    expect(merged[1].matched).toEqual(['ocp.msf.org', 'alice@ocp.msf.org']);
+  });
+
+  it('keeps an override and a delegation with the same id apart, and leaves inputs untouched', () => {
+    const a = override('user', ['alice@ocp.msf.org'], { id: 'shared-id' });
+    const rules = relevantRulesFor('user', ['alice@ocp.msf.org'], {
+      overrides: [a],
+      delegations: [delegation([DOMAIN_OCP], { id: 'shared-id' })],
+    });
+    expect(rules).toHaveLength(2);
+    const merged = mergeRelevantRules([...rules, ...rules]);
+    expect(merged.map((r) => r.kind)).toEqual(['override', 'delegation']);
+    expect(rules[0].matched).toEqual(['alice@ocp.msf.org']);
+    expect(mergeRelevantRules([])).toEqual([]);
   });
 });
 

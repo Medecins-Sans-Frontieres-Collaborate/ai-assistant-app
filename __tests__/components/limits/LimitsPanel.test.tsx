@@ -388,7 +388,14 @@ describe('LimitsPanel — scoped mode', () => {
     expect(screen.getByLabelText('overrideLabelLabel')).toHaveValue('kept');
   });
 
-  it('deletes through the scoped endpoint', async () => {
+  /**
+   * The trash icon is the same control the global panel uses for a
+   * draft-only removal, but in scoped mode it is an immediate server DELETE
+   * with no undo. A STORED record therefore asks first: an inline
+   * alertdialog naming the override, with Cancel; only the confirm button
+   * issues the DELETE.
+   */
+  it('asks for confirmation before deleting a stored override through the scoped endpoint', async () => {
     scopedRouting(scopedView(), (call) => {
       if (call.method === 'DELETE') {
         return { status: 200, body: envelope({ deleted: true }) };
@@ -402,15 +409,56 @@ describe('LimitsPanel — scoped mode', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: 'removeOverride' }));
 
+    // One click is NOT a delete.
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toHaveTextContent('confirmDeleteOverride');
+    expect(calls.some((c) => c.method === 'DELETE')).toBe(false);
+
+    // Cancel: dialog gone, still nothing sent, record still there.
+    fireEvent.click(within(dialog).getByRole('button', { name: 'cancel' }));
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
+    expect(calls.some((c) => c.method === 'DELETE')).toBe(false);
+    expect(screen.getByLabelText('overrideLabelLabel')).toHaveValue(
+      'OCP interns',
+    );
+
+    // Confirm: exactly one DELETE to the scoped endpoint.
+    fireEvent.click(screen.getByRole('button', { name: 'removeOverride' }));
+    fireEvent.click(
+      within(screen.getByRole('alertdialog')).getByRole('button', {
+        name: 'confirmDeleteOverrideAction',
+      }),
+    );
+
     await waitFor(() =>
       expect(calls.some((c) => c.method === 'DELETE')).toBe(true),
     );
+    expect(calls.filter((c) => c.method === 'DELETE')).toHaveLength(1);
     expect(calls.find((c) => c.method === 'DELETE')?.url).toBe(
       '/api/limits/scoped/overrides/lim-0000000000a1',
     );
     await waitFor(() =>
       expect(toast.success).toHaveBeenCalledWith('scopedDeleted'),
     );
+  });
+
+  it('discards a never-saved override on the spot — nothing to confirm, no DELETE', async () => {
+    scopedRouting(scopedView());
+    renderPanel();
+
+    fireEvent.click(await screen.findByRole('button', { name: 'addOverride' }));
+    const removes = screen.getAllByRole('button', { name: 'removeOverride' });
+    // The new card renders expanded; it is the last trash icon.
+    fireEvent.click(removes[removes.length - 1]);
+
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
+    expect(calls.some((c) => c.method === 'DELETE')).toBe(false);
+    // Only the stored card remains.
+    expect(
+      screen.getAllByRole('button', {
+        name: /expandOverride|collapseOverride/,
+      }),
+    ).toHaveLength(1);
   });
 
   it('creates a new override under the delegation and PUTs it on save', async () => {
@@ -640,8 +688,73 @@ describe('LimitsPanel — global mode', () => {
   /**
    * ADMIN_LIMITS_REVIEW #20: with scoped admins writing per-override the
    * global If-Match goes stale often; a 409 must keep the draft.
+   *
+   * "Keep editing" is an informed last-writer-wins, not a banner dismissal:
+   * the server compares If-Match before any other check (design §5), so the
+   * panel must refetch and adopt the FRESH etag while keeping the draft —
+   * otherwise every later Save is a guaranteed 409 and the draft can never
+   * land. The PUT mock mirrors the route: 409 unless If-Match is current.
    */
-  it('keeps the draft on 409 and offers Reload / Keep editing', async () => {
+  it('Keep editing adopts the fresh etag so the kept draft can be saved', async () => {
+    globalRouting((call) =>
+      call.method === 'PUT'
+        ? call.headers['If-Match'] === '"e2"'
+          ? { status: 200, body: envelope({ etag: '"e3"' }) }
+          : {
+              status: 409,
+              body: { error: 'conflict', code: 'LIMITS_CONFLICT' },
+            }
+        : undefined,
+    );
+    renderPanel();
+
+    const timezone = await screen.findByLabelText('timezoneLabel');
+    fireEvent.change(timezone, { target: { value: 'Europe/Paris' } });
+    // Another admin saved meanwhile: the stored document is now "e2".
+    stored = policyResponse({
+      etag: '"e2"',
+      policy: policy({ timezone: 'Africa/Nairobi' }),
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'save' }));
+
+    await waitFor(() => expect(putCalls()).toHaveLength(1));
+    expect(putCalls()[0].headers['If-Match']).toBe('"e1"');
+    // The toast must not claim anything was reloaded — nothing was.
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith('conflictDraftKept'),
+    );
+    expect(toast.error).not.toHaveBeenCalledWith('conflict');
+    expect(screen.getByText('conflictKeepDraftOverwrite')).toBeInTheDocument();
+    // Draft KEPT — the old behaviour refetched and discarded it.
+    expect(screen.getByLabelText('timezoneLabel')).toHaveValue('Europe/Paris');
+    expect(getCalls('/api/limits/policy')).toHaveLength(1);
+
+    // Keep editing: banner goes, the policy is re-read in the background,
+    // the draft survives that re-read, and the panel stays dirty.
+    fireEvent.click(
+      screen.getByRole('button', { name: 'conflictKeepEditing' }),
+    );
+    expect(
+      screen.queryByText('conflictKeepDraftOverwrite'),
+    ).not.toBeInTheDocument();
+    await waitFor(() => expect(getCalls('/api/limits/policy')).toHaveLength(2));
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'save' })).not.toBeDisabled(),
+    );
+    expect(screen.getByLabelText('timezoneLabel')).toHaveValue('Europe/Paris');
+
+    // Save again: sent with the FRESH etag and accepted.
+    fireEvent.click(screen.getByRole('button', { name: 'save' }));
+    await waitFor(() => expect(putCalls()).toHaveLength(2));
+    expect(putCalls()[1].headers['If-Match']).toBe('"e2"');
+    expect((putCalls()[1].body as { timezone: string }).timezone).toBe(
+      'Europe/Paris',
+    );
+    await waitFor(() => expect(toast.success).toHaveBeenCalledWith('saved'));
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('Reload on 409 re-reads and replaces the draft with the server version', async () => {
     globalRouting((call) =>
       call.method === 'PUT'
         ? { status: 409, body: { error: 'conflict', code: 'LIMITS_CONFLICT' } }
@@ -652,26 +765,12 @@ describe('LimitsPanel — global mode', () => {
     const timezone = await screen.findByLabelText('timezoneLabel');
     fireEvent.change(timezone, { target: { value: 'Europe/Paris' } });
     fireEvent.click(screen.getByRole('button', { name: 'save' }));
-
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('conflict'));
-    expect(screen.getByText('conflictKeepDraft')).toBeInTheDocument();
-    // Draft KEPT — the old behaviour refetched and discarded it.
-    expect(screen.getByLabelText('timezoneLabel')).toHaveValue('Europe/Paris');
-    expect(getCalls('/api/limits/policy')).toHaveLength(1);
-
-    // Keep editing: banner goes, draft stays, still dirty.
-    fireEvent.click(
-      screen.getByRole('button', { name: 'conflictKeepEditing' }),
-    );
-    expect(screen.queryByText('conflictKeepDraft')).not.toBeInTheDocument();
-    expect(screen.getByLabelText('timezoneLabel')).toHaveValue('Europe/Paris');
-    expect(screen.getByRole('button', { name: 'save' })).not.toBeDisabled();
-
-    // Reload: re-reads and replaces the draft with the server's version.
-    fireEvent.click(screen.getByRole('button', { name: 'save' }));
     await waitFor(() =>
-      expect(screen.getByText('conflictKeepDraft')).toBeInTheDocument(),
+      expect(
+        screen.getByText('conflictKeepDraftOverwrite'),
+      ).toBeInTheDocument(),
     );
+
     stored = policyResponse({
       etag: '"e2"',
       policy: policy({ timezone: 'Africa/Nairobi' }),
@@ -682,7 +781,9 @@ describe('LimitsPanel — global mode', () => {
         'Africa/Nairobi',
       ),
     );
-    expect(screen.queryByText('conflictKeepDraft')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('conflictKeepDraftOverwrite'),
+    ).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'save' })).toBeDisabled();
   });
 

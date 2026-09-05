@@ -422,6 +422,95 @@ describe('OverrideEditor', () => {
     });
   });
 
+  /**
+   * Design §3c / docs/LIMITS.md: a global admin pins a cell against scoped
+   * lifting by ticking Hard ceiling on a GLOBAL-TIER override ("OCP capped at
+   * 100 (domain, ceiling), except alice at 500 (user, ceiling)"). The resolver
+   * honours it, so the editor must be able to author it — and must not offer
+   * it where the server would refuse or normalize it away (scoped writes,
+   * `delegationId` records).
+   */
+  describe('override-level ceiling (design §3c)', () => {
+    it('offers the Hard ceiling toggle on every configured row of a global-tier override', () => {
+      renderEditor();
+      // Two configured entries → two toggles, reflecting the stored flags.
+      const toggles = screen.getAllByLabelText('hardCeilingToggle');
+      expect(toggles).toHaveLength(2);
+      expect(toggles[0]).toBeChecked(); // chat.messagesPerDay: ceiling true
+      expect(toggles[1]).not.toBeChecked(); // tts: ceiling false
+      expect(screen.getByText('overrideCeilingHint')).toBeInTheDocument();
+    });
+
+    it('ticking it stores ceiling:true on exactly that entry and preserves the rest', () => {
+      const onChange = renderEditor();
+      const toggles = screen.getAllByLabelText('hardCeilingToggle');
+      fireEvent.click(toggles[1]);
+
+      expect(onChange).toHaveBeenCalledTimes(1);
+      const next: LimitOverride = onChange.mock.calls[0][0];
+      expect(next.entries).toEqual([
+        { limitKey: 'chat.messagesPerDay', value: 100, ceiling: true },
+        {
+          limitKey: 'feature.tts.charactersPerDay',
+          value: 5000,
+          ceiling: true,
+        },
+      ]);
+      // Nothing else on the record moved.
+      expect(next.priority).toBe(0);
+      expect(next).not.toHaveProperty('delegationId');
+    });
+
+    it('unticking it clears only that entry', () => {
+      const onChange = renderEditor();
+      fireEvent.click(screen.getAllByLabelText('hardCeilingToggle')[0]);
+
+      const next: LimitOverride = onChange.mock.calls[0][0];
+      expect(
+        next.entries.find((e) => e.limitKey === 'chat.messagesPerDay')?.ceiling,
+      ).toBe(false);
+      expect(
+        next.entries.find((e) => e.limitKey === 'feature.tts.charactersPerDay')
+          ?.ceiling,
+      ).toBe(false);
+      expect(next.entries).toHaveLength(2);
+    });
+
+    it('never shows the control on a delegationId record, even in the global panel', () => {
+      renderEditor(makeOverride({ delegationId: 'del-0000000000aa' }), {
+        variant: 'global',
+        delegationOptions: [{ id: 'del-0000000000aa', label: 'OCP' }],
+      });
+      expect(screen.getAllByLabelText('valueModeLabel')).toHaveLength(2);
+      expect(
+        screen.queryByLabelText('hardCeilingToggle'),
+      ).not.toBeInTheDocument();
+      expect(screen.queryByText('overrideCeilingHint')).not.toBeInTheDocument();
+    });
+
+    it('never shows the control in the scoped variant', () => {
+      renderEditor(makeOverride(), { variant: 'scoped' });
+      expect(screen.getAllByLabelText('valueModeLabel')).toHaveLength(2);
+      expect(
+        screen.queryByLabelText('hardCeilingToggle'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('disappears the moment the override is handed to a delegation', () => {
+      // Controlled re-render: what assignDelegation emits is what the parent
+      // would pass back, so render the emitted record and check the control.
+      const onChange = renderEditor(makeOverride(), {
+        delegationOptions: [{ id: 'del-0000000000aa', label: 'OCP' }],
+      });
+      expect(screen.getAllByLabelText('hardCeilingToggle')).toHaveLength(2);
+      fireEvent.change(screen.getByLabelText('overrideDelegationLabel'), {
+        target: { value: 'del-0000000000aa' },
+      });
+      const next: LimitOverride = onChange.mock.calls[0][0];
+      expect(next.entries.every((e) => e.ceiling === false)).toBe(true);
+    });
+  });
+
   describe('delegation assignment (global panel)', () => {
     it('assigning a delegation forces priority 0 and clears ceilings', () => {
       const onChange = renderEditor(makeOverride({ priority: 250 }), {

@@ -78,7 +78,7 @@ function okResult(partial: Partial<MyLimitsResponse> = {}) {
 function renderAndCheck(
   props: {
     dirty?: boolean;
-    forbiddenMessage?: string;
+    scoped?: boolean;
     scopeNote?: string;
   } = {},
 ) {
@@ -86,7 +86,7 @@ function renderAndCheck(
     <EffectiveLimitsPreview
       overrides={[CONTRACTORS]}
       dirty={props.dirty ?? false}
-      forbiddenMessage={props.forbiddenMessage}
+      scoped={props.scoped}
       scopeNote={props.scopeNote}
     />,
   );
@@ -172,17 +172,61 @@ describe('EffectiveLimitsPreview', () => {
     expect(screen.getByText('previewForbidden')).toBeInTheDocument();
   });
 
-  it('uses the caller-supplied forbidden copy (scoped admin: outside your scope)', () => {
-    mockPreview.mockReturnValue({
-      result: null,
-      forbidden: true,
-      forbiddenCode: 'LIMITS_PREVIEW_OUT_OF_SCOPE',
-      isLoading: false,
-      error: null,
+  /**
+   * Contract (design §6c): a scoped admin's 403 is three-valued on the wire
+   * — `LIMITS_PREVIEW_OUT_OF_SCOPE` with `details: 'outside'` (provably
+   * outside), the same code with `details: 'undecidable'` (a group/attribute
+   * predicate means the person MAY be inside), or a plain `FORBIDDEN` (no
+   * longer a scoped admin). Each gets its own sentence; "outside your scope"
+   * is a false statement for the other two, and the global "only global
+   * admins" line is false for all three.
+   */
+  describe('scoped 403 wording (design §6c)', () => {
+    const forbidden = (forbiddenCode?: string, forbiddenDetails?: string) => {
+      mockPreview.mockReturnValue({
+        result: null,
+        forbidden: true,
+        forbiddenCode,
+        forbiddenDetails,
+        isLoading: false,
+        error: null,
+      });
+    };
+
+    it("says 'outside your scope' only for the server's outside verdict", () => {
+      forbidden('LIMITS_PREVIEW_OUT_OF_SCOPE', 'outside');
+      renderAndCheck({ scoped: true });
+      expect(screen.getByText('previewOutOfScope')).toBeInTheDocument();
+      expect(screen.queryByText('previewForbidden')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('previewUndecidableScope'),
+      ).not.toBeInTheDocument();
     });
-    renderAndCheck({ forbiddenMessage: 'previewOutOfScope' });
-    expect(screen.getByText('previewOutOfScope')).toBeInTheDocument();
-    expect(screen.queryByText('previewForbidden')).not.toBeInTheDocument();
+
+    it("says 'cannot be decided by mail' for the undecidable verdict, never 'outside'", () => {
+      forbidden('LIMITS_PREVIEW_OUT_OF_SCOPE', 'undecidable');
+      renderAndCheck({ scoped: true });
+      expect(screen.getByText('previewUndecidableScope')).toBeInTheDocument();
+      expect(screen.queryByText('previewOutOfScope')).not.toBeInTheDocument();
+      expect(screen.queryByText('previewForbidden')).not.toBeInTheDocument();
+    });
+
+    it("says 'no longer an admin' for a plain FORBIDDEN in scoped mode", () => {
+      forbidden('FORBIDDEN');
+      renderAndCheck({ scoped: true });
+      expect(screen.getByText('previewNoLongerAdmin')).toBeInTheDocument();
+      expect(screen.queryByText('previewOutOfScope')).not.toBeInTheDocument();
+      expect(screen.queryByText('previewForbidden')).not.toBeInTheDocument();
+    });
+
+    it('keeps the global-admin sentence for a plain FORBIDDEN outside scoped mode', () => {
+      forbidden('FORBIDDEN');
+      renderAndCheck();
+      expect(screen.getByText('previewForbidden')).toBeInTheDocument();
+      expect(
+        screen.queryByText('previewNoLongerAdmin'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   it('renders the scope note under the description', () => {

@@ -224,6 +224,45 @@ describe('DelegationsTab', () => {
       expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });
 
+    /**
+     * Contract: rules are queried once per predicate of the jurisdiction. A
+     * rule meeting two predicates (domain + a user inside it) is listed ONCE
+     * — one row, one count in the trigger's aria-label, no duplicate keys.
+     */
+    it('lists a rule that meets two predicates of the same jurisdiction once', () => {
+      const mixed = delegation({
+        label: 'OCP mixed',
+        jurisdiction: [
+          { scope: 'domain', targets: ['ocp.msf.org'] },
+          { scope: 'user', targets: ['alice@ocp.msf.org'] },
+        ],
+      });
+      const other = delegation({ label: 'OCP other' }); // domain ocp.msf.org
+      const aliceCap = override({ label: 'Alice cap' }); // alice@ocp.msf.org
+      const keyWarnings: string[] = [];
+      const consoleError = vi
+        .spyOn(console, 'error')
+        .mockImplementation((...args: unknown[]) => {
+          keyWarnings.push(args.map(String).join(' '));
+        });
+      try {
+        renderTab([mixed, other], [aliceCap]);
+
+        // The mixed delegation's trigger is the first; `other` has its own.
+        const [trigger] = screen.getAllByRole('button', {
+          name: 'relevantRulesFor',
+        });
+        fireEvent.click(trigger);
+        const tooltip = screen.getByRole('tooltip');
+        expect(within(tooltip).getAllByText('Alice cap')).toHaveLength(1);
+        expect(within(tooltip).getAllByText('OCP other')).toHaveLength(1);
+        expect(within(tooltip).getAllByRole('listitem')).toHaveLength(2);
+        expect(keyWarnings.filter((w) => w.includes('same key'))).toEqual([]);
+      } finally {
+        consoleError.mockRestore();
+      }
+    });
+
     it('renders no trigger when nothing else touches the targets', () => {
       renderTab([delegation()], [override({ targets: ['bob@paris.msf.org'] })]);
       expect(
