@@ -352,7 +352,14 @@ MetricsService.recordTokenUsage(
 **Metrics recorded:**
 
 - `tokens.usage` (Counter) - Total tokens consumed
-- `tokens.cost` (Histogram) - Estimated cost in USD
+- `tokens.cost` (Histogram) - Estimated cost in USD at list price. Supplied by
+  `tokenUsageRecorder` as `estimatedCostUsd` on the tokens argument, computed
+  by `lib/utils/shared/costEstimator.ts` from the served model's `pricing`
+  (`config/models.json`) — the old substring-matched 2024 price table is gone.
+  Unpriceable calls (Foundry agents, BYO / local models, unknown ids) record
+  **no** sample rather than 0 or a guessed rate. The Azure Monitor `TokenUsage`
+  stream deliberately carries no cost column yet (prod DCR schema drift is
+  pending reconciliation).
 
 #### Request Tracking
 
