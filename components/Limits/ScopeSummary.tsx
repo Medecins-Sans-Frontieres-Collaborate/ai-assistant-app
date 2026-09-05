@@ -19,6 +19,7 @@ import {
   ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
 import {
+  hasOpaquePredicate,
   isMailAnchored,
   summarizeJurisdiction,
 } from '@/components/Limits/jurisdiction';
@@ -103,6 +104,13 @@ export const ScopeSummary: FC<ScopeSummaryProps> = ({
           {delegations.map((delegation) => {
             const summary = summarizeJurisdiction(delegation.jurisdiction);
             const anchored = isMailAnchored(delegation.jurisdiction);
+            // Unanchored splits two ways, as DelegationEditor already does:
+            // group/attribute-only (opaque to a mail preview) versus no
+            // targets at all — design §2's "matches nobody" delegation,
+            // which is NOT "defined by groups".
+            const groupOnly =
+              !anchored && hasOpaquePredicate(delegation.jurisdiction);
+            const matchesNobody = !anchored && !groupOnly;
             return (
               <li key={delegation.id} className="text-sm">
                 <div className="flex flex-wrap items-center gap-2">
@@ -114,9 +122,14 @@ export const ScopeSummary: FC<ScopeSummaryProps> = ({
                       {t('delegationDisabledChip')}
                     </span>
                   )}
-                  {!anchored && (
+                  {groupOnly && (
                     <span className={LIMITS_CHIP_WARN}>
                       {t('yourScopeGroupOnlyChip')}
+                    </span>
+                  )}
+                  {matchesNobody && (
+                    <span className={LIMITS_CHIP_WARN}>
+                      {t('yourScopeMatchesNobodyChip')}
                     </span>
                   )}
                   {!expanded && (
@@ -146,9 +159,14 @@ export const ScopeSummary: FC<ScopeSummaryProps> = ({
                         </div>
                       );
                     })}
-                    {!anchored && (
+                    {groupOnly && (
                       <p className={ADMIN_MUTED}>
                         {t('yourScopeGroupOnlyNote')}
+                      </p>
+                    )}
+                    {matchesNobody && (
+                      <p className={ADMIN_MUTED}>
+                        {t('yourScopeMatchesNobodyNote')}
                       </p>
                     )}
                   </div>
