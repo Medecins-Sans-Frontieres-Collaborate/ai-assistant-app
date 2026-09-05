@@ -193,9 +193,27 @@ describe('jurisdictionWarnings / overrideFlags', () => {
       'no-domain-or-user-anchor',
     ]);
     expect(jurisdictionWarnings({ jurisdiction: MIXED })).toEqual([]);
+  });
+
+  // Contract: an EMPTY jurisdiction is not "unanchored" — it consults no group
+  // cache and simply applies to no one — so the server flags it
+  // `matches-nobody`, the same distinction the client's ScopeSummary draws.
+  it('flags an EMPTY jurisdiction matches-nobody, never no-domain-or-user-anchor', () => {
     expect(jurisdictionWarnings({ jurisdiction: [] })).toEqual([
-      'no-domain-or-user-anchor',
+      'matches-nobody',
     ]);
+    // A predicate with no usable targets is empty too (the editor can hold
+    // one mid-edit).
+    expect(
+      jurisdictionWarnings({
+        jurisdiction: [{ scope: 'group', targets: ['  '] }],
+      }),
+    ).toEqual(['matches-nobody']);
+    expect(
+      jurisdictionWarnings({
+        jurisdiction: [{ scope: 'attribute', targets: ['dept:ocp'] }],
+      }),
+    ).toEqual(['no-domain-or-user-anchor']);
   });
 
   it('flags a narrowed override whose targets are now provably outside', () => {

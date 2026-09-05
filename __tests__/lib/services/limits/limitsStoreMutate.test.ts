@@ -3,11 +3,19 @@
  * CAS (design §5) — plus the scoped history path. Storage is faked at the
  * block-blob-client level, as usageStore.test.ts does, so every assertion is
  * about the real conditions sent to Azure.
+ *
+ * Also pins `readPolicy`'s failure classification: a document that exists
+ * but cannot become a `LimitsPolicy` (not JSON, or JSON the read schema
+ * rejects) is ONE typed `PolicyUnreadableError`, while a storage failure
+ * keeps its own shape — the routes turn the former into 503
+ * LIMITS_POLICY_UNAVAILABLE by type, never by guessing at error classes.
  */
 import { AgentAccessConflictError } from '@/lib/services/agentAccess/blobCas';
 import {
   LimitsConflictError,
+  PolicyUnreadableError,
   mutatePolicy,
+  readPolicy,
   writeHistoryEntry,
 } from '@/lib/services/limits/limitsStore';
 import {
@@ -227,7 +235,9 @@ describe('mutatePolicy', () => {
     client.download.mockImplementation(() => downloadOf('{not json', '"e"'));
     const mutate = vi.fn((current: LimitsPolicy | null) => current!);
 
-    await expect(mutatePolicy(storage, mutate, FAST)).rejects.toThrow();
+    await expect(mutatePolicy(storage, mutate, FAST)).rejects.toThrow(
+      PolicyUnreadableError,
+    );
     expect(mutate).not.toHaveBeenCalled();
     expect(client.upload).not.toHaveBeenCalled();
   });
@@ -248,6 +258,48 @@ describe('mutatePolicy', () => {
     client.upload.mockResolvedValue({ etag: '"f"' });
     await mutatePolicy(storage, (current) => current!, FAST);
     expect(storage.upload).not.toHaveBeenCalled();
+  });
+});
+
+describe('readPolicy failure classification', () => {
+  let client: MockClient;
+  let storage: ReturnType<typeof createMockStorage>;
+
+  beforeEach(() => {
+    client = createMockClient();
+    storage = createMockStorage(client);
+  });
+
+  it('wraps a document that is not JSON in PolicyUnreadableError, keeping the parser error as cause', async () => {
+    client.download.mockImplementation(() => downloadOf('{not json', '"e"'));
+    const error = await readPolicy(storage).catch((e: unknown) => e);
+    expect(error).toBeInstanceOf(PolicyUnreadableError);
+    expect((error as PolicyUnreadableError).cause).toBeInstanceOf(SyntaxError);
+    expect((error as Error).message).toMatch(/unreadable/);
+  });
+
+  it('wraps JSON the read schema rejects in the SAME typed error — classification is by origin, not error class', async () => {
+    client.download.mockImplementation(() =>
+      downloadOf({ version: 99 }, '"e"'),
+    );
+    await expect(readPolicy(storage)).rejects.toBeInstanceOf(
+      PolicyUnreadableError,
+    );
+  });
+
+  it('propagates a storage failure UNWRAPPED so its status/code still classify it', async () => {
+    const outage = Object.assign(new Error('storage down'), {
+      statusCode: 503,
+    });
+    client.download.mockRejectedValue(outage);
+    const error = await readPolicy(storage).catch((e: unknown) => e);
+    expect(error).toBe(outage);
+    expect(error).not.toBeInstanceOf(PolicyUnreadableError);
+  });
+
+  it('answers null for a missing document, never an error', async () => {
+    client.download.mockRejectedValue(notFound());
+    await expect(readPolicy(storage)).resolves.toBeNull();
   });
 });
 

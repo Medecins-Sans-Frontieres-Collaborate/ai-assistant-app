@@ -1,4 +1,7 @@
-import { GlobalAdminRosterService } from '@/lib/services/admin/GlobalAdminRosterService';
+import {
+  COLD_DEADLINE_MS,
+  GlobalAdminRosterService,
+} from '@/lib/services/admin/GlobalAdminRosterService';
 import {
   __resetGlobalAdminSnapshotForTests,
   isConfigGlobalAdmin,
@@ -29,6 +32,7 @@ describe('admin/GlobalAdminRosterService', () => {
     vi.setSystemTime(new Date('2026-09-04T10:00:00.000Z'));
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
     GlobalAdminRosterService.resetInstance();
     __resetGlobalAdminSnapshotForTests();
     vi.mocked(createGlobalAdminsBlobStorage).mockReturnValue({} as never);
@@ -145,6 +149,8 @@ describe('admin/GlobalAdminRosterService', () => {
       vi.advanceTimersByTime(61_000);
       vi.mocked(readGlobalAdmins).mockRejectedValue(new Error('storage down'));
       await service.ensureFresh();
+      // The refresh runs in the background once a roster is loaded.
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(service.getSnapshot()).toMatchObject({
         roster,
@@ -155,6 +161,160 @@ describe('admin/GlobalAdminRosterService', () => {
       expect(console.error).toHaveBeenCalledWith(
         expect.stringContaining('last-known-good'),
       );
+    });
+  });
+
+  /**
+   * Contract: ensureFresh() runs inside the auth() session callback on every
+   * request, and the read chain beneath it has no client-side deadline. So a
+   * STALLED (never-settling) storage read must never park callers: a loaded
+   * replica serves last-known-good and revalidates in the background; a cold
+   * replica waits at most COLD_DEADLINE_MS, then degrades to env-only for that
+   * request while the read continues and publishes whenever it settles.
+   */
+  describe('bounded wait on a stalled read', () => {
+    type ReadResult = Awaited<ReturnType<typeof readGlobalAdmins>>;
+
+    function stallNextRead(): (value: ReadResult) => void {
+      let resolveRead: (value: ReadResult) => void = () => {};
+      vi.mocked(readGlobalAdmins).mockImplementationOnce(
+        () =>
+          new Promise<ReadResult>((resolve) => {
+            resolveRead = resolve;
+          }),
+      );
+      return (value) => resolveRead(value);
+    }
+
+    function track(promise: Promise<void>): { settled: boolean } {
+      const state = { settled: false };
+      void promise.then(() => {
+        state.settled = true;
+      });
+      return state;
+    }
+
+    it('loaded + stale: returns immediately with last-known-good while the read stalls', async () => {
+      const service = GlobalAdminRosterService.getInstance();
+      await service.ensureFresh();
+      vi.advanceTimersByTime(61_000);
+      stallNextRead();
+
+      const call = track(service.ensureFresh());
+      // No timer advance at all: a warm replica never waits on storage.
+      await vi.advanceTimersByTimeAsync(0);
+
+      expect(call.settled).toBe(true);
+      expect(readGlobalAdmins).toHaveBeenCalledTimes(2);
+      expect(service.getSnapshot()).toMatchObject({
+        roster,
+        etag: '"e1"',
+        rosterUnavailable: false,
+      });
+      expect(isConfigGlobalAdmin('config@example.com')).toBe(true);
+
+      // Ten minutes of stall later, callers are still not parked and no
+      // second read has been started behind the stalled one.
+      const later = track(service.ensureFresh());
+      await vi.advanceTimersByTimeAsync(600_000);
+      expect(later.settled).toBe(true);
+      expect(readGlobalAdmins).toHaveBeenCalledTimes(2);
+    });
+
+    it('cold: settles at COLD_DEADLINE_MS as env-only (rosterUnavailable) while the read stalls', async () => {
+      stallNextRead();
+      const service = GlobalAdminRosterService.getInstance();
+
+      const call = track(service.ensureFresh());
+      await vi.advanceTimersByTimeAsync(COLD_DEADLINE_MS - 1);
+      expect(call.settled).toBe(false);
+
+      await vi.advanceTimersByTimeAsync(1);
+      expect(call.settled).toBe(true);
+      expect(service.getSnapshot()).toEqual({
+        roster: null,
+        etag: null,
+        rosterUnavailable: true,
+        fetchedAt: null,
+      });
+      expect(isGlobalAdminSnapshotLoaded()).toBe(false);
+      expect(isConfigGlobalAdmin('config@example.com')).toBe(false);
+      expect(console.warn).toHaveBeenCalledWith(
+        expect.stringContaining('serving env roster only'),
+      );
+      // A stall is not a failure: no cooldown was stamped, nothing was logged
+      // as an error.
+      expect(console.error).not.toHaveBeenCalled();
+    });
+
+    it('cold: a later resolve of the stalled read publishes the snapshot for subsequent callers', async () => {
+      const resolveRead = stallNextRead();
+      const service = GlobalAdminRosterService.getInstance();
+      await Promise.all([
+        service.ensureFresh(),
+        vi.advanceTimersByTimeAsync(COLD_DEADLINE_MS),
+      ]);
+      expect(service.getSnapshot().rosterUnavailable).toBe(true);
+
+      vi.advanceTimersByTime(30_000);
+      resolveRead({ roster, etag: '"late"' });
+      await vi.advanceTimersByTimeAsync(0);
+
+      expect(service.getSnapshot()).toEqual({
+        roster,
+        etag: '"late"',
+        rosterUnavailable: false,
+        fetchedAt: Date.now(),
+      });
+      expect(isConfigGlobalAdmin('config@example.com')).toBe(true);
+
+      // Freshness was stamped when the read landed, so the next caller is a
+      // warm no-op rather than a new read.
+      await service.ensureFresh();
+      expect(readGlobalAdmins).toHaveBeenCalledTimes(1);
+    });
+
+    it('cold: callers arriving after the deadline re-await the SAME stalled read (single-flight) and each get their own bounded wait', async () => {
+      const resolveRead = stallNextRead();
+      const service = GlobalAdminRosterService.getInstance();
+
+      const first = track(service.ensureFresh());
+      await vi.advanceTimersByTimeAsync(COLD_DEADLINE_MS);
+      expect(first.settled).toBe(true);
+
+      const second = track(service.ensureFresh());
+      const third = track(service.ensureFresh());
+      await vi.advanceTimersByTimeAsync(COLD_DEADLINE_MS - 1);
+      expect(second.settled).toBe(false);
+      expect(third.settled).toBe(false);
+      expect(readGlobalAdmins).toHaveBeenCalledTimes(1);
+
+      // The read lands just before the second deadline: both callers see it.
+      resolveRead({ roster, etag: '"e1"' });
+      await vi.advanceTimersByTimeAsync(0);
+      expect(second.settled).toBe(true);
+      expect(third.settled).toBe(true);
+      expect(service.getSnapshot().rosterUnavailable).toBe(false);
+      expect(readGlobalAdmins).toHaveBeenCalledTimes(1);
+      // Only one stall warning per stalled read, not one per parked request.
+      expect(console.warn).toHaveBeenCalledTimes(1);
+    });
+
+    it('cold: a read that resolves before the deadline settles the caller at once', async () => {
+      const resolveRead = stallNextRead();
+      const service = GlobalAdminRosterService.getInstance();
+
+      const call = track(service.ensureFresh());
+      await vi.advanceTimersByTimeAsync(100);
+      resolveRead({ roster, etag: '"e1"' });
+      await vi.advanceTimersByTimeAsync(0);
+
+      expect(call.settled).toBe(true);
+      expect(service.getSnapshot().rosterUnavailable).toBe(false);
+      expect(console.warn).not.toHaveBeenCalled();
+      // The deadline timer was cleared: nothing fires later.
+      await vi.advanceTimersByTimeAsync(COLD_DEADLINE_MS);
+      expect(console.warn).not.toHaveBeenCalled();
     });
   });
 
