@@ -34,11 +34,16 @@ interface EffectiveLimitsPreviewProps {
   /** The panel has unsaved edits — the preview reflects the SAVED policy. */
   dirty: boolean;
   /**
-   * Replaces the default 403 copy ("only global admins can preview"). A
-   * scoped admin's 403 means "outside your scope" (design §6c), and reusing
-   * the global sentence there would be a false statement.
+   * The caller is a SCOPED admin. Changes what a 403 means (design §6c): the
+   * server answers `LIMITS_PREVIEW_OUT_OF_SCOPE` with a two-valued `details`
+   * — `outside` (provably outside every delegation's domains/users) or
+   * `undecidable` (a group/attribute predicate means the person MAY be
+   * inside) — and a plain `FORBIDDEN` when the caller is no longer named in
+   * any enabled delegation. Each gets its own sentence; collapsing them into
+   * "outside your scope" would be a false statement for the other two, and
+   * the global "only global admins can preview" line is false for all three.
    */
-  forbiddenMessage?: string;
+  scoped?: boolean;
   /** Pre-translated note under the description — e.g. group-only scope. */
   scopeNote?: string;
 }
@@ -63,7 +68,7 @@ const KEY_ORDER = new Map<string, number>(
 export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
   overrides,
   dirty,
-  forbiddenMessage,
+  scoped = false,
   scopeNote,
 }) => {
   const t = useTranslations('limits');
@@ -72,10 +77,28 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
   const [input, setInput] = useState('');
   const [submitted, setSubmitted] = useState<string | null>(null);
   const [withUsage, setWithUsage] = useState(false);
-  const { result, forbidden, isLoading, error } = useEffectiveLimitsPreview(
-    submitted,
-    { usage: withUsage },
-  );
+  const {
+    result,
+    forbidden,
+    forbiddenCode,
+    forbiddenDetails,
+    isLoading,
+    error,
+  } = useEffectiveLimitsPreview(submitted, { usage: withUsage });
+
+  /**
+   * Which sentence a 403 gets. The server's `code` + `details` are the
+   * authority — the client never re-derives the verdict from the visible
+   * delegations, which include disabled ones the gate ignores.
+   */
+  const forbiddenCopy = (): string => {
+    if (forbiddenCode === 'LIMITS_PREVIEW_OUT_OF_SCOPE') {
+      return forbiddenDetails === 'undecidable'
+        ? t('previewUndecidableScope')
+        : t('previewOutOfScope');
+    }
+    return scoped ? t('previewNoLongerAdmin') : t('previewForbidden');
+  };
 
   const rows = useMemo(() => {
     if (!result) return [];
@@ -199,9 +222,7 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
               {t('previewLoading')}
             </p>
           ) : forbidden ? (
-            <p className={ADMIN_MUTED}>
-              {forbiddenMessage ?? t('previewForbidden')}
-            </p>
+            <p className={ADMIN_MUTED}>{forbiddenCopy()}</p>
           ) : error ? (
             <p className={ADMIN_MUTED}>{t('previewFailed')}</p>
           ) : result ? (
