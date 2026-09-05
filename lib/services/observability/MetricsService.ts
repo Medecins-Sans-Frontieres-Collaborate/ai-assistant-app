@@ -44,19 +44,30 @@ const requestDurationHistogram = meter.createHistogram('request.duration', {
 });
 
 const tokenCostHistogram = meter.createHistogram('tokens.cost', {
-  description: 'Estimated cost per request',
+  description:
+    'Estimated list-price cost per request (USD; see costEstimator.ts)',
   unit: 'usd',
 });
 
 export class MetricsService {
   /**
-   * Record token usage with user context
+   * Record token usage with user context.
+   *
+   * `estimatedCostUsd` is computed by the caller (tokenUsageRecorder.ts) from
+   * the served model's catalog pricing with the shared estimator
+   * (lib/utils/shared/costEstimator.ts) — this service holds no price table
+   * of its own. The `tokens.cost` histogram is recorded ONLY when a finite
+   * estimate is supplied: an unpriceable call (agent, BYO source, local
+   * runtime, unknown model) records tokens but no cost, rather than a
+   * misleading $0.
    */
   static recordTokenUsage(
     tokens: {
       prompt?: number;
       completion?: number;
       total: number;
+      /** Upper-bound list-price estimate in USD; omit when unpriceable. */
+      estimatedCostUsd?: number;
     },
     context: {
       user: Session['user'];
@@ -98,10 +109,11 @@ export class MetricsService {
       });
     }
 
-    // Estimate cost (simplified - adjust based on actual pricing)
-    const estimatedCost = this.estimateCost(tokens.total, context.model);
-    if (estimatedCost > 0) {
-      tokenCostHistogram.record(estimatedCost, attributes);
+    if (
+      typeof tokens.estimatedCostUsd === 'number' &&
+      Number.isFinite(tokens.estimatedCostUsd)
+    ) {
+      tokenCostHistogram.record(tokens.estimatedCostUsd, attributes);
     }
 
     console.log(
@@ -197,35 +209,5 @@ export class MetricsService {
     console.error(
       `[Metrics] Error recorded: ${errorType} - ${context.message || 'No message'}`,
     );
-  }
-
-  /**
-   * Estimate cost based on tokens and model
-   * Prices as of 2024 (adjust as needed)
-   */
-  private static estimateCost(tokens: number, model: string): number {
-    // Simplified cost estimation - update with actual pricing
-    const costPerMillionTokens: Record<string, number> = {
-      'gpt-4': 30.0, // $30 per 1M tokens (average of input/output)
-      'gpt-4o': 5.0, // $5 per 1M tokens
-      'gpt-4.1': 5.0,
-      'gpt-4-turbo': 10.0,
-      'gpt-35-turbo': 1.5,
-      'gpt-5': 15.0, // Reasoning model
-      o1: 40.0, // Premium reasoning
-      o3: 50.0,
-    };
-
-    // Find matching model
-    const modelKey = Object.keys(costPerMillionTokens).find((key) =>
-      model.toLowerCase().includes(key.toLowerCase()),
-    );
-
-    if (!modelKey) {
-      return 0; // Unknown model
-    }
-
-    const costPerToken = costPerMillionTokens[modelKey] / 1_000_000;
-    return tokens * costPerToken;
   }
 }
