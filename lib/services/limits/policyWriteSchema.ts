@@ -117,20 +117,47 @@ export const scopedOverrideBodySchema = z
   .strict();
 export type ScopedOverrideBody = z.infer<typeof scopedOverrideBodySchema>;
 
+/**
+ * Canonicalizes exactly like the matchers do (`trim().toLowerCase()`, see
+ * principalMatching.ts and adminAuth.ts) — a different normalizer would create
+ * a second definition of "matches". Group ids and attribute values are
+ * lowercased too, which is how `intersectsTargets` compares them. Dedupes and
+ * drops entries that are blank once trimmed. Idempotent.
+ */
+export function canonicalList(values: readonly string[]): string[] {
+  return [...new Set(values.map((v) => v.trim().toLowerCase()))].filter(
+    Boolean,
+  );
+}
+
+/**
+ * Jurisdiction targets are canonicalized BEFORE the non-empty rule runs, so
+ * the write schema refuses exactly what the read schema
+ * (`JurisdictionPredicateSchema.targets.min(1)`) would refuse: a predicate
+ * whose targets are all whitespace is a 400 with a `targets` issue here, not
+ * a read-schema throw out of `writePolicy` that surfaces as a 500. A blank
+ * target is dropped rather than reported, matching what the client's body
+ * builder already does.
+ */
 export const jurisdictionPredicateWriteSchema = z
   .object({
     scope: z.enum(['user', 'domain', 'attribute', 'group']),
     targets: z
       .array(z.string().min(1).max(320))
       .min(1)
-      .max(MAX_TARGETS_PER_OVERRIDE),
+      .max(MAX_TARGETS_PER_OVERRIDE)
+      .transform(canonicalList)
+      .refine((targets) => targets.length > 0, {
+        message: 'At least one non-blank target is required',
+      }),
   })
   .strict();
 
 /**
  * Delegation write schema. `id` absent → the server generates one; present →
  * it must be a `del-` id (a client may mint its own, like override ids).
- * `admins` are bounded here and canonicalized by the route.
+ * `admins` are bounded and canonicalized HERE (the route's normalizer is then
+ * a no-op on them); an empty list is legal — a delegation nobody administers.
  */
 export const delegationWriteSchema = z
   .object({
@@ -140,7 +167,8 @@ export const delegationWriteSchema = z
     admins: z
       .array(z.string().min(3).max(320))
       .max(MAX_DELEGATION_ADMINS)
-      .default([]),
+      .default([])
+      .transform(canonicalList),
     jurisdiction: z
       .array(jurisdictionPredicateWriteSchema)
       .max(MAX_JURISDICTION_PREDICATES)
