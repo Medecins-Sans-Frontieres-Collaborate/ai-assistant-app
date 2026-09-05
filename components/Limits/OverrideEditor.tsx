@@ -61,8 +61,10 @@ interface OverrideEditorProps {
   disabled?: boolean;
   /**
    * The draft's global default entries, used ONLY to warn when a cap in
-   * this override targets a feature whose gate is off (here or globally).
-   * Purely informational — resolution is layered and another override may
+   * this override targets a feature whose gate is off (here or globally),
+   * and — with cost insights on — as the second layer of the allowed-model
+   * set behind a row's "at the priciest allowed model" figure. Purely
+   * informational — resolution is layered and another override may
    * re-enable the gate for some principals, so nothing is disabled.
    */
   globalDefaults?: LimitEntry[];
@@ -531,6 +533,8 @@ export const OverrideEditor: FC<OverrideEditorProps> = ({
                           feature: t(`group.${group.id}` as never),
                         })}
                         disabled={disabled}
+                        globalDefaults={globalDefaults}
+                        costScopedView={variant === 'scoped'}
                       />
                     ))}
                   </div>
