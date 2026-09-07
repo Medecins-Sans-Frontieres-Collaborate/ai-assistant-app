@@ -1785,6 +1785,11 @@
       "name": "Kimi K2.6",
       "description": "Moonshot AIのオープンウェイトモデル。エージェント業務、コーディング、長文処理に強みがあります。",
       "tagline": "エージェンティックなオープンウェイトモデル"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "OpenAIのGPT-6フラッグシップモデル。高度なリサーチ、複雑な分析、ソフトウェア開発、長時間の多段階タスクなど、要求の高いエンドツーエンド業務向けに設計されています。コストはGPT-5.6 Solのおよそ2倍です。",
+      "tagline": "OpenAIで最も高性能なモデル"
     }
   },
   "transcription": {

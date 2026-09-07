@@ -1785,6 +1785,11 @@
       "name": "Kimi K2.6",
       "description": "Moonshot AI의 오픈 웨이트 모델. 에이전트 작업, 코딩, 장문 처리에 강점이 있습니다.",
       "tagline": "에이전트형 오픈 웨이트 모델"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "OpenAI의 GPT-6 플래그십 모델입니다. 심층 연구, 복잡한 분석, 소프트웨어 엔지니어링, 다단계 장기 작업 등 고난도 엔드 투 엔드 작업을 위해 설계되었습니다. GPT-5.6 Sol보다 약 2배의 비용이 듭니다.",
+      "tagline": "OpenAI의 가장 강력한 모델"
     }
   },
   "searchMode": {

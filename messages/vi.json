@@ -1915,6 +1915,11 @@
       "name": "Kimi K2.6",
       "description": "Mô hình open-weight của Moonshot AI. Mạnh về các tác vụ đại diện, lập trình và tài liệu dài.",
       "tagline": "Mô hình open-weight đại diện"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Sản phẩm hàng đầu GPT-6 của OpenAI. Được thiết kế cho các công việc đầu-cuối đòi hỏi cao: nghiên cứu chuyên sâu, phân tích phức tạp, kỹ thuật phần mềm và các nhiệm vụ nhiều bước kéo dài. Chi phí khoảng gấp đôi GPT-5.6 Sol.",
+      "tagline": "Mô hình mạnh nhất của OpenAI"
     }
   },
   "searchMode": {

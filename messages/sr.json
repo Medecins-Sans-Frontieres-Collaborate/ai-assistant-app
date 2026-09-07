@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Model otvorene težine kompanije Moonshot AI. Snažan za agentne zadatke, programiranje i duge dokumente.",
       "tagline": "Agentni model otvorene težine"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Vodeći model GPT-6 kompanije OpenAI. Namenjen zahtevnim zadacima od početka do kraja: dubinsko istraživanje, složena analiza, softverski inženjering i dugi višestepeni zadaci. Približno dvostruko skuplji od GPT-5.6 Sol.",
+      "tagline": "Najnapredniji model kompanije OpenAI"
     }
   },
   "searchMode": {

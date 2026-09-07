@@ -1884,6 +1884,11 @@
       "name": "Kimi K2.6",
       "description": "Model open-weight firmy Moonshot AI. Silny w zadaniach agentowych, kodowaniu i pracy z długimi dokumentami.",
       "tagline": "Agentowy model open-weight"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Flagowy model GPT-6 od OpenAI. Zaprojektowany do wymagających zadań end-to-end: zaawansowanych badań, złożonych analiz, inżynierii oprogramowania i długich wieloetapowych zadań. Około dwukrotnie droższy niż GPT-5.6 Sol.",
+      "tagline": "Najbardziej zaawansowany model OpenAI"
     }
   },
   "searchMode": {

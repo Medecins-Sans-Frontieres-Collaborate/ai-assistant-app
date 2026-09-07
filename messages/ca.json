@@ -1884,6 +1884,11 @@
       "name": "Kimi K2.6",
       "description": "Model d'open-weight de Moonshot AI. Destaca en tasques agentives, programació i documents extensos.",
       "tagline": "Model agentiu d'open-weight"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Model insígnia GPT-6 d’OpenAI. Creat per a feines exigents de principi a fi: recerca profunda, anàlisi complexa, enginyeria de programari i tasques llargues i de múltiples passos. Aproximadament el doble de cost que el GPT-5.6 Sol.",
+      "tagline": "El model més potent d’OpenAI"
     }
   },
   "searchMode": {

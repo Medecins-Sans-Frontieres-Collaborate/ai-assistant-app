@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Imashini ya Moonshot AI ifunguye ku bipimo. Ikomeye mu mirimo isaba ubuhanga, mu gukora porogaramu n'ibikoresho birebire.",
       "tagline": "Imashini ifite ubushobozi bwo kwikorera kandi ifunguye ku bipimo"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "GPT-6 ni flagship ya OpenAI. Yakozwe ku mirimo isaba ubushobozi bwinshi kuva ku ntangiriro kugeza ku musozo: ubushakashatsi bwimbitse, isesengura rikomeye, gahunda za mudasobwa no gukora imirimo igoye ifite intambwe nyinshi. Igura hafi kabiri ukurikije iyo GPT-5.6 Sol.",
+      "tagline": "Modeli ifite ubushobozi buhanitse ya OpenAI"
     }
   },
   "searchMode": {

@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Awoṣe open-weight ti Moonshot AI. Lagbara ninu awọn iṣẹ alatunto, kodẹ, ati awọn iwe pẹlẹbẹ gigun.",
       "tagline": "Awoṣe open-weight alatunto"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Ami alágbára GPT-6 ti OpenAI. Ṣe ifọkansi fun iṣẹ-ṣiṣe gidi-gbóògì: ìwádìí jinlẹ̀, àtúpalẹ̀ to ṣòro, ẹ̀rọ sọfitiwia, ati iṣẹ́ pẹ̀lú awọn igbesẹ lọ́pọ̀. O fìyà tó leralera iye GPT-5.6 Sol.",
+      "tagline": "Awoṣe tó lagbara jùlọ lati ọdọ OpenAI"
     }
   },
   "searchMode": {

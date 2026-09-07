@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Moonshot AI mudel ngal open-weight. Danndu e heftinde agent, sunkito e dokomentji ndiyam.",
       "tagline": "Mudel open-weight agentic"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "GPT-6 Astra ngu OpenAI gila no feewi. Wadde gila e hawri goɗɗe: heddore noddoma, naatnude ɗaɗɗi, sosma software, e toɓeeji naatnaari goɗɗe. Kuugal ɗe e hoore GPT-5.6 Sol no waawi no duurnde doble.",
+      "tagline": "Moodel gila e OpenAI mo ɓuri feewi"
     }
   },
   "searchMode": {

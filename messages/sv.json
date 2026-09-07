@@ -1785,6 +1785,11 @@
       "name": "Kimi K2.6",
       "description": "Moonshot AI:s open-weight-modell. Stark på agentuppgifter, kodning och långa dokument.",
       "tagline": "Agentbaserad open-weight-modell"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "OpenAIs flaggskeppsmodell GPT-6. Utformad för krävande arbete från början till slut: avancerad forskning, komplex analys, mjukvaruutveckling samt långa och flerstegsuppgifter. Cirka dubbelt så dyr som GPT-5.6 Sol.",
+      "tagline": "OpenAIs mest kraftfulla modell"
     }
   },
   "searchMode": {

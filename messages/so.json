@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Moodel miisaankiisu furan yahay ee Moonshot AI. Aad ugu fiican hawlaha wakiilnimo, koodh-samaynta, iyo dukumiintiyada dhaadheer.",
       "tagline": "Moodel wakiilnimo ah oo miisaankiisu furan yahay"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Nooca ugu sarreeya ee GPT-6 ee OpenAI. Waxaa loogu talagalay shaqo dhamaystiran oo adag: cilmi-baaris qoto dheer, falanqayn adag, injineernimada software-ka, iyo hawlo dheer oo tillaabooyin badan leh. Qiimihiisa wuxuu ku dhowaad laba laab yahay GPT-5.6 Sol.",
+      "tagline": "Nooca ugu awoodda badan ee OpenAI"
     }
   },
   "searchMode": {

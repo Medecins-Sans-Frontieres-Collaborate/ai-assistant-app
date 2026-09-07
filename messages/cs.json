@@ -1785,6 +1785,11 @@
       "name": "Kimi K2.6",
       "description": "Model s otevřenými váhami od Moonshot AI. Silný v agentních úlohách, programování a práci s dlouhými dokumenty.",
       "tagline": "Agentní model s otevřenými váhami"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Vlajková loď GPT-6 od OpenAI. Navržen pro náročnou komplexní práci: hloubkový výzkum, složitou analýzu, vývoj softwaru a dlouhé vícekrokové úkoly. Přibližně dvojnásobně dražší než GPT-5.6 Sol.",
+      "tagline": "Nejvyspělejší model od OpenAI"
     }
   },
   "searchMode": {

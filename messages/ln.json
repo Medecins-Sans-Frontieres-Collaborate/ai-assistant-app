@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Modeli ya Moonshot AI ya open-weight. Ezali makasi na misala ya basungi, kokoda, mpe bandokima molai.",
       "tagline": "Modeli open-weight ya basungi"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "GPT-6 ya OpenAI ezali modèle na bango ya suka. Ekélami mpo na misala minene: boluki ya mboka-kisi, botánga ya makambo pasi, mosala ya ba programme, mpe misala molai ya ba etape ebele. Mpo na mosolo, ezalaki mbala mibale koleka GPT-5.6 Sol.",
+      "tagline": "Modèle ya OpenAI oyo ezali na makoki mingi koleka"
     }
   },
   "searchMode": {

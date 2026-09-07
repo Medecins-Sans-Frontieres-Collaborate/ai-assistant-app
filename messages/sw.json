@@ -1785,6 +1785,11 @@
       "name": "Kimi K2.6",
       "description": "Mfano wenye uzani wazi kutoka Moonshot AI. Mzuri katika kazi za uwakala, usimbaji, na nyaraka ndefu.",
       "tagline": "Mfano wa uwakala wenye uzani wazi"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Kivutio kikuu cha OpenAI cha GPT-6. Imetengenezwa kwa kazi nzito za kina kutoka mwanzo hadi mwisho: utafiti wa kina, uchambuzi tata, uhandisi wa programu, na kazi ndefu zenye hatua nyingi. Inagharimu takriban mara mbili ya GPT-5.6 Sol.",
+      "tagline": "Mfano wenye uwezo mkubwa zaidi wa OpenAI"
     }
   },
   "searchMode": {

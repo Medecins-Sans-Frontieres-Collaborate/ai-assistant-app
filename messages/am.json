@@ -1782,6 +1782,11 @@
       "name": "Kimi K2.6",
       "description": "የMoonshot AI የበጎ ክብደት ሞዴል። በagentic ተግባራት፣ ኮዲንግና ረጅም ሰነዶች ላይ ጠንካራ ነው።",
       "tagline": "Agentic የበጎ ክብደት ሞዴል"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "የOpenAI GPT-6 በመሪነት የተጠናቀቀ አምራች ነው። ለጥልቅ ምርምር፣ ውስብስብ ትንታኔ፣ ሶፍትዌር እና ረዥም የተደረጉ ተግባራት በሙሉ ለመዳምጠት ተበጥሯል። ከGPT-5.6 Sol ድግም የሚቆጠር ዋጋ አለው።",
+      "tagline": "የOpenAI በጣም ችሎታ ያለው ሞዴል"
     }
   },
   "searchMode": {

@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Samfurin open-weight na Moonshot AI. Ya ƙware a ayyukan wakilci, shirye-shirye, da takardu masu tsawo.",
       "tagline": "Samfurin open-weight mai wakilci"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Babban samfurin OpenAI GPT-6. An gina shi don aikace-aikace masu wahala: bincike mai zurfi, nazari mai rikitarwa, injiniyan software, da dogayen ayyuka masu matakai da yawa. Kusan sau biyu mafi tsada fiye da GPT-5.6 Sol.",
+      "tagline": "Samfurin da ya fi ƙarfin OpenAI"
     }
   },
   "searchMode": {

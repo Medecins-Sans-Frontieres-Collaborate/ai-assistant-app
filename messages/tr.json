@@ -1785,6 +1785,11 @@
       "name": "Kimi K2.6",
       "description": "Moonshot AI'nin açık ağırlık modeli. Temsilci görevlerde, kodlamada ve uzun belgelerde güçlüdür.",
       "tagline": "Temsilci açık ağırlık modeli"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "OpenAI'nin amiral gemisi GPT-6. Zorlu uçtan uca işler için geliştirildi: derin araştırmalar, karmaşık analizler, yazılım mühendisliği ve uzun, çok adımlı görevler. GPT-5.6 Sol'a göre yaklaşık iki kat daha pahalıdır.",
+      "tagline": "OpenAI'nin en yetenekli modeli"
     }
   },
   "searchMode": {

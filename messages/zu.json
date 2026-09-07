@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Imodeli ye-Moonshot AI enesisindo evulekile. Inamandla emisebenzini agentic, ekubhaleni ikhodi, nasemibhalweni emide.",
       "tagline": "Imodeli enesisindo evulekile ye-agentic"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "I-flagship ye-GPT-6 ye-OpenAI. Yakhelwe umsebenzi onzima kusukela ekuqaleni kuze kube sekugcineni: ucwaningo olujulile, ukuhlaziywa okuyinkimbinkimbi, ubunjiniyela besoftware, nemisebenzi emide enamazinga amaningi. Imali yayo icishe iphinde kabili ye-GPT-5.6 Sol.",
+      "tagline": "Imodeli enamandla kakhulu ye-OpenAI"
     }
   },
   "searchMode": {

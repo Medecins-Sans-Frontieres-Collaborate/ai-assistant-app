@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Chitsanzo cha Moonshot AI chotseguka cha kulemera. Champhamvu pa ntchito za agentic, coding, ndi zolemba zazitali.",
       "tagline": "Chitsanzo cha agentic chotseguka cha kulemera"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Mtundu wotsogola wa GPT-6 kuchokera ku OpenAI. Amapangidwa kuti agwire ntchito zofunika kwambiri: kafukufuku wakuya, kusanthula kovuta, kupanga mapulogalamu, ndi ntchito zazitali zokhala ndi magawo angapo. Mtengo wake uli pafupifupi kawiri kuposa wa GPT-5.6 Sol.",
+      "tagline": "Mtundu wa OpenAI wokhoza kwambiri"
     }
   },
   "searchMode": {

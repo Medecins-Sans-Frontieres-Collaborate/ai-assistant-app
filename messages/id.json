@@ -1876,6 +1876,11 @@
       "name": "Kimi K2.6",
       "description": "Model open-weight dari Moonshot AI. Unggul dalam tugas agen, pemrograman, dan dokumen panjang.",
       "tagline": "Model open-weight agentik"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Model andalan GPT-6 dari OpenAI. Dirancang untuk pekerjaan end-to-end yang menuntut: riset mendalam, analisis kompleks, rekayasa perangkat lunak, dan tugas panjang bertahap. Biaya sekitar dua kali lipat dari GPT-5.6 Sol.",
+      "tagline": "Model paling canggih dari OpenAI"
     }
   },
   "searchMode": {

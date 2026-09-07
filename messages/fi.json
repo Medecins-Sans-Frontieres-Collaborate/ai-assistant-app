@@ -1884,6 +1884,11 @@
       "name": "Kimi K2.6",
       "description": "Moonshot AI:n avoin malli. Vahva agenttitehtävissä, ohjelmoinnissa ja pitkissä dokumenteissa.",
       "tagline": "Agenttimainen avoin malli"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "OpenAIn huippumalli GPT-6. Suunniteltu vaativaan kokonaisvaltaiseen työhön: syvälliseen tutkimukseen, monimutkaiseen analyysiin, ohjelmistokehitykseen ja pitkiin monivaiheisiin tehtäviin. Noin kaksinkertainen hinta verrattuna GPT-5.6 Sol -malliin.",
+      "tagline": "OpenAIn edistyksellisin malli"
     }
   },
   "searchMode": {

@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Modeli ya Moonshot AI ifise open-weight. Ikomeye mu mirimo y'abakozi, kuri code, no ku nyandiko ndende.",
       "tagline": "Modeli open-weight ifise ubushobozi bwo gukora nk'umukozi"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Flagship ya GPT-6 ya OpenAI. Yakozwe kugira ngo ikore ibikorwa vyinshi bisaba ubushoboye bwinshi: ubushakashatsi bwimbitse, isesengura rigoye, gutunganya porogaramu, hamwe n'imirimo irama ifise intambwe nyinshi. Igiciro cayo kirenga incuro zibiri ico kuri GPT-5.6 Sol.",
+      "tagline": "Modeli ishoboye kurusha izindi ya OpenAI"
     }
   },
   "searchMode": {

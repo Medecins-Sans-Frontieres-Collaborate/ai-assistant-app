@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Modèl open-weight pa Moonshot AI. Fò nan travay ajan, kòd, ak dokiman long yo.",
       "tagline": "Modèl open-weight ajan"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Dènye modèl GPT-6 OpenAI a. Fèt pou travay ki mande anpil efò soti nan kòmansman rive nan fen : rechèch apwofondi, analiz konplèks, jeni lojisyèl, ak travay long ki gen plizyè etap. Pri li apeprè double GPT-5.6 Sol.",
+      "tagline": "Modèl ki pi pisan OpenAI a"
     }
   },
   "searchMode": {

@@ -1884,6 +1884,11 @@
       "name": "Kimi K2.6",
       "description": "Model open-weight dezvoltat de Moonshot AI. Performant la sarcini agențiale, programare și documente lungi.",
       "tagline": "Model agențial open-weight"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "Modelul de vârf GPT-6 de la OpenAI. Creat pentru sarcini solicitante de la un capăt la altul: cercetare aprofundată, analiză complexă, inginerie software și sarcini lungi, cu mai multe etape. Aproximativ dublul costului GPT-5.6 Sol.",
+      "tagline": "Cel mai performant model al OpenAI"
     }
   },
   "searchMode": {

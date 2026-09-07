@@ -1939,6 +1939,11 @@
       "name": "Kimi K2.6",
       "description": "Modely open-weight an'ny Moonshot AI. Mahay amin'ny asa agentic, kaody, ary antontan-taratasy lava.",
       "tagline": "Modely agentic open-weight"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "GPT-6 Astra, andrin OpenAI. Noforonina ho an'ny asa sarotra manomboka hatramin'ny farany: fikarohana lalina, famakafakana sarotra, injeniera rindranasa, ary asa maro dingana mandritra ny fotoana lava. Manodidina ny avo roa heny amin'ny vidin'ny GPT-5.6 Sol.",
+      "tagline": "Modely matanjaka indrindra an'ny OpenAI"
     }
   },
   "searchMode": {

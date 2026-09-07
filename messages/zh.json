@@ -1816,6 +1816,11 @@
       "name": "Kimi K2.6",
       "description": "Moonshot AI 的开放权重模型。擅长代理任务、编程和长文档处理。",
       "tagline": "具代理能力的开放权重模型"
+    },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "OpenAI 的旗舰 GPT-6。专为高要求的端到端任务打造：深度研究、复杂分析、软件工程及多步骤长任务。价格约为 GPT-5.6 Sol 的两倍。",
+      "tagline": "OpenAI 最强大的模型"
     }
   },
   "searchMode": {
