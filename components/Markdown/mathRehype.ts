@@ -1,8 +1,9 @@
 // components/Markdown/mathRehype.ts
+import type { Element, Nodes, Root } from 'hast';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import type { Options as SanitizeSchema } from 'rehype-sanitize';
 import { defaultRehypePlugins } from 'streamdown';
-import type { PluggableList } from 'unified';
+import type { PluggableList, Plugin } from 'unified';
 
 /**
  * MathML element names KaTeX emits inside `<span class="katex-mathml">`.
@@ -58,8 +59,59 @@ const MATHML_TAG_NAMES = [
  * letting model- or document-authored raw HTML through with them — a
  * `<div style="position:fixed;inset:0;…">` in a poisoned RAG source or an
  * injected answer would then cover the whole viewport.
+ *
+ * The per-tag scope alone is not enough, though: a raw `<span>` in a message
+ * is still a span, and `display:block;position:fixed;inset:0` (or the
+ * Tailwind classes `block fixed inset-0`, which this app's stylesheet really
+ * ships) turns one into the same overlay. That is why
+ * {@link rehypeStripAuthorPresentation} runs BEFORE KaTeX: by the time the
+ * sanitizer sees a span with `style` or `class`, KaTeX is the only thing that
+ * can have put them there.
  */
 const KATEX_SPAN_ATTRIBUTES = ['className', 'style', 'ariaHidden'] as const;
+
+/**
+ * Tags whose `class` the sanitize schema below grants for KaTeX's sake, and
+ * which author-controlled HTML must therefore be stripped of first.
+ * `code` keeps its `language-*` class: remark-rehype emits it for fences and
+ * the default schema value-lists it on its own.
+ */
+const PRESENTATION_CLASS_TAGS = new Set(['span', 'svg', 'path']);
+
+/**
+ * Removes `style` from every element and `class` from the tags above, on the
+ * tree AS IT STANDS BEFORE `rehype-katex` RUNS.
+ *
+ * Streamdown's chain is raw → katex → sanitize → harden. `rehype-raw` has
+ * already turned any raw HTML in the message — the model's, a RAG source's,
+ * a pasted document's — into elements by this point, and KaTeX has not yet
+ * added its own. So what this pass removes is exactly the author-controlled
+ * presentation, and what it leaves for the sanitizer to keep is exactly the
+ * KaTeX-generated presentation. No ancestry or class-name heuristic is
+ * involved (a raw `<span class="katex">` would defeat one), which is what
+ * makes it a boundary rather than a filter.
+ *
+ * Nothing the default schema would have kept is lost: it grants `style`
+ * nowhere and `class` only on `code`, so before the KaTeX widening every
+ * attribute removed here was being removed by the sanitizer anyway.
+ */
+export const rehypeStripAuthorPresentation: Plugin<[], Root> = () => (tree) => {
+  const strip = (node: Nodes): void => {
+    if (node.type === 'element') {
+      const element = node as Element;
+      if (element.properties) {
+        delete element.properties.style;
+        if (PRESENTATION_CLASS_TAGS.has(element.tagName)) {
+          delete element.properties.className;
+        }
+      }
+    }
+    if ('children' in node && Array.isArray(node.children)) {
+      for (const child of node.children) strip(child as Nodes);
+    }
+  };
+  strip(tree);
+};
 
 /**
  * MathML presentation attributes KaTeX emits, granted only on the MathML tags
@@ -141,7 +193,8 @@ export const MATH_SANITIZE_SCHEMA: SanitizeSchema = {
 };
 
 /**
- * Streamdown's default rehype chain with ONLY its `sanitize` step re-armed.
+ * Streamdown's default rehype chain with its `sanitize` step re-armed and
+ * {@link rehypeStripAuthorPresentation} inserted ahead of `katex`.
  *
  * Streamdown runs `rehype-sanitize` AFTER `rehype-katex`, with a schema that
  * allows neither MathML nor `class`/`style`. The measured effect is that every
@@ -153,14 +206,17 @@ export const MATH_SANITIZE_SCHEMA: SanitizeSchema = {
  *
  * `rehype-raw` and `rehype-harden` (link/image/protocol allow-listing) are
  * left untouched, so the only widening is the KaTeX surface above, granted per
- * tag rather than on `*`: model-authored raw HTML gains nothing except on a
- * bare `<span>`, and `rehype-harden` still runs after.
+ * tag rather than on `*` — and, because author-controlled `style`/`class` are
+ * stripped before KaTeX runs, model-authored raw HTML gains nothing from it
+ * on any tag, `<span>` included. `rehype-harden` still runs after.
  */
 export const MATH_REHYPE_PLUGINS: PluggableList = Object.entries(
   defaultRehypePlugins,
-).map(([name, plugin]) =>
-  name === 'sanitize' ? [rehypeSanitize, MATH_SANITIZE_SCHEMA] : plugin,
-);
+).flatMap(([name, plugin]): PluggableList => {
+  if (name === 'katex') return [rehypeStripAuthorPresentation, plugin];
+  if (name === 'sanitize') return [[rehypeSanitize, MATH_SANITIZE_SCHEMA]];
+  return [plugin];
+});
 
 /**
  * Whether Streamdown may run `remend` over a partial block while a message
