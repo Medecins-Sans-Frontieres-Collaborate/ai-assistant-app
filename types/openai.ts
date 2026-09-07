@@ -159,7 +159,7 @@ export interface OpenAIModel {
    * (config/emissions.json maps each class to Wh per 1k tokens). Default
    * when absent: 'standard' (see getModelSizeClass).
    */
-  sizeClass?: 'nano' | 'mini' | 'standard' | 'large';
+  sizeClass?: 'nano' | 'mini' | 'standard' | 'large' | 'xl';
 
   /**
    * FAMILY key shared by every member of the same model family (e.g. 'gpt',
@@ -291,6 +291,10 @@ export enum OpenAIModelID {
   GPT_5_6_SOL = 'gpt-5.6-sol',
   GPT_5_6_TERRA = 'gpt-5.6-terra',
   GPT_5_6_LUNA = 'gpt-5.6-luna',
+  // GPT-6 Astra (2026-09-03) joins the same version-name family as a fourth
+  // variant above Sol: the flagship tier of the next generation, priced ~2x
+  // Sol. Deliberately NOT a family default (no defaultRank) — cost policy.
+  GPT_6_ASTRA = 'gpt-6-astra',
   // Rolling alias Azure names as the replacement for retired gpt-*-chat
   // model versions; the deployment is upgraded in place as new chat models ship.
   GPT_CHAT_LATEST = 'gpt-chat-latest',
@@ -353,7 +357,7 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   // ring gate — hence the extra prod-anchor entries below).
   OpenAIModelID.GPT_5_2, // "GPT" family row
   OpenAIModelID.GPT_5_2_CHAT, // "GPT Chat" family row
-  OpenAIModelID.GPT_5_6_SOL, // "GPT 5.6" family row (Sol → Terra → Luna)
+  OpenAIModelID.GPT_5_6_SOL, // "GPT 5.6 / 6" family row (Astra → Sol → Terra → Luna; Sol fronts it)
   OpenAIModelID.CLAUDE_OPUS_4_8, // "Claude" family row…
   OpenAIModelID.CLAUDE_SONNET_4_6, // …prod anchor + prod face (4.8/5 ring-gated there)
   OpenAIModelID.CLAUDE_FABLE_5, // standalone row
@@ -367,6 +371,7 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   // version chips in the details panel rather than list rows, so position
   // below only breaks ties (usage mode, equal versionRank) and orders the
   // flattened edit-order list.
+  OpenAIModelID.GPT_6_ASTRA,
   OpenAIModelID.GPT_5_6_TERRA,
   OpenAIModelID.GPT_5_6_LUNA,
   OpenAIModelID.GPT_5_5,
@@ -473,7 +478,7 @@ const openAIModelSchema = z.object({
     .optional(),
   retirementDate: z.string().optional(),
   retirementReplacement: z.string().optional(),
-  sizeClass: z.enum(['nano', 'mini', 'standard', 'large']).optional(),
+  sizeClass: z.enum(['nano', 'mini', 'standard', 'large', 'xl']).optional(),
   pricing: z
     .object({
       inputPer1M: z.number(),
