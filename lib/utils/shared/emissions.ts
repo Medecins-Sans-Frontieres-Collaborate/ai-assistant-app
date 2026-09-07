@@ -13,7 +13,12 @@
  *    ~0.24–0.34 Wh (Google's Gemini median 0.24 Wh, 2025; OpenAI's stated
  *    0.34 Wh/query) over roughly 500–800 output tokens → ~0.4 Wh per 1k
  *    tokens for a "standard" model. nano/mini scale down and "large" scales
- *    up by rough parameter-count ratios.
+ *    up by rough parameter-count ratios. "xl" (2026-09, gpt-6-astra) is a
+ *    further 2x over "large": OpenAI publishes no per-query energy for
+ *    Astra, so the ratio is a proxy from its list price (2x GPT-5.6 Sol)
+ *    and its recurrent-depth architecture (several passes over a shared
+ *    layer stack per token, i.e. more decode compute than a single-pass
+ *    model of similar parameter count). Revisit when a measurement exists.
  *  - promptTokenWeight 0.15: prefill is batched and far cheaper per token
  *    than autoregressive decode.
  *  - Reasoning: OpenAI reasoning tokens are INCLUDED in completion_tokens
@@ -53,6 +58,7 @@ const emissionsAssumptionsSchema = z.object({
     mini: z.number().positive(),
     standard: z.number().positive(),
     large: z.number().positive(),
+    xl: z.number().positive(),
   }),
   promptTokenWeight: z.number().min(0).max(1),
   reasoningEffortMultipliers: z.object({
@@ -153,6 +159,7 @@ const SIZE_CLASS_TIER: Record<ModelSizeClass, EmissionsTier> = {
   mini: 'low',
   standard: 'moderate',
   large: 'high',
+  xl: 'high',
 };
 
 /**
