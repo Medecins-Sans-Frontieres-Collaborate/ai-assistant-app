@@ -89,6 +89,10 @@ const METER_MATCHERS = {
   'gpt-5.6-sol': { include: /^5\.6 sol/ },
   'gpt-5.6-terra': { include: /^5\.6 terra/ },
   'gpt-5.6-luna': { include: /^5\.6 luna/ },
+  'gpt-6-astra': {
+    include: /^(GPT )?6 astra/i,
+    note: 'No retail meter as of 2026-09-07 (model shipped 2026-09-03); matcher follows the 5.6 naming convention and is unverified.',
+  },
   'gpt-5': {
     include: /^(GPT 5 |5 pp )/,
     exclude: /Chat|Mini|Nano|pro|codex/i,
