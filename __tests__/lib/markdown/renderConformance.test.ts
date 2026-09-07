@@ -280,6 +280,43 @@ describe('the sanitize step is where rendered equations live or die', () => {
     expect(safe.visibleText).toContain('after');
   });
 
+  // `<span>` is the ONE tag the schema grants `class`/`style` on, so it is
+  // the tag an injected overlay would use. `rehypeStripAuthorPresentation`
+  // runs before KaTeX, so a raw span reaches the sanitizer bare while KaTeX's
+  // own spans (added after the strip) keep theirs.
+  it('does not let a raw <span> use the KaTeX grant to style or class itself', () => {
+    const overlay =
+      '<span style="display:block;position:fixed;inset:0;z-index:9999;background:#fff" class="block fixed inset-0 z-50">x</span> then $$\\frac{a}{b}$$\n\nafter';
+    const safe = renderScreen(overlay);
+    expect(safe.html).not.toContain('position:fixed');
+    expect(safe.html).not.toContain('inset-0');
+    expect(safe.html).not.toContain('class="block');
+    // The span itself survives as an element — the schema allows spans — it
+    // just arrives with nothing on it.
+    expect(safe.html).toContain('<span>x</span>');
+    // …while the equation in the same message still gets everything it needs.
+    expect(safe.katexCount, safe.html).toBeGreaterThan(0);
+    expect(safe.html).toContain('class="katex"');
+    expect(safe.html).toMatch(/<span class="[^"]*" style="/);
+    expect(safe.visibleText).toContain('after');
+  });
+
+  it('does not let raw <svg> markup carry style through either', () => {
+    const safe = renderScreen(
+      '<svg style="position:fixed;inset:0" class="fixed"><path d="M0 0"/></svg>\n\nafter',
+    );
+    expect(safe.html).not.toContain('position:fixed');
+    expect(safe.html).not.toContain('class="fixed"');
+    expect(safe.visibleText).toContain('after');
+  });
+
+  it('leaves the language class on fenced code alone', () => {
+    // remark-rehype emits `class="language-*"` on the <code> of a fence and
+    // the default schema value-lists it; the strip must not touch it.
+    const safe = renderScreen('```python\nprint(1)\n```');
+    expect(safe.html).toContain('language-python');
+  });
+
   it('keeps the SVG layer KaTeX draws stretchy delimiters and arrows with', () => {
     // \xrightarrow, \overbrace and tall \left(...\right) are paths, not
     // glyphs. They were unwrapped to nothing under the stock schema.
