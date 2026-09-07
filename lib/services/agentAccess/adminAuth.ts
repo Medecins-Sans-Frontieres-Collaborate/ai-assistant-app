@@ -93,6 +93,24 @@ export function demotedRole(
 }
 
 /**
+ * The two rosters as ONE set, normalized the way {@link isRealGlobalAdmin}
+ * matches. For counting: a mail present in both AGENT_ACCESS_ADMINS and the
+ * config roster is one administrator, not two, and a startup warning that
+ * says "lists N admin(s)" must agree with what the UI shows.
+ */
+export function globalAdminUnion(
+  envAdmins: readonly string[],
+  rosterAdmins: readonly string[],
+): string[] {
+  const union = new Set<string>();
+  for (const mail of [...envAdmins, ...rosterAdmins]) {
+    const normalized = mail.trim().toLowerCase();
+    if (normalized) union.add(normalized);
+  }
+  return [...union];
+}
+
+/**
  * REAL global-admin membership (view-as ignored): env roster ∪ config roster
  * snapshot. Env is consulted first so the bootstrap works before the roster
  * has ever loaded.

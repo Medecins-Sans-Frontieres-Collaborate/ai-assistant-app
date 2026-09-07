@@ -20,9 +20,10 @@
 export interface AccessControlStartupState {
   enabled: boolean;
   /**
-   * Env roster (AGENT_ACCESS_ADMINS) + config roster
-   * (system/admin/global-admins.json) — the union isGlobalAdmin evaluates.
-   * When the config roster could not be read it contributes 0 here and
+   * Env roster (AGENT_ACCESS_ADMINS) ∪ config roster
+   * (system/admin/global-admins.json) — the set union isGlobalAdmin
+   * evaluates, so an admin listed in both counts once. When the config
+   * roster could not be read it contributes nothing here and
    * `globalRosterUnreadable` is set, so the wording can hedge.
    */
   globalAdminCount: number;
@@ -95,30 +96,33 @@ export function buildAccessControlWarnings(
 export async function logAccessControlStartupWarnings(): Promise<void> {
   try {
     const { env } = await import('@/config/environment');
-    const { parseGlobalAdminEmails } =
+    const { globalAdminUnion, parseGlobalAdminEmails } =
       await import('@/lib/services/agentAccess/adminAuth');
 
     const enabled = env.AGENT_ACCESS_CONTROL_ENABLED;
-    const envAdminCount = parseGlobalAdminEmails().length;
 
-    // Global admins = env ∪ config roster. The roster service never throws;
+    // Global admins = env ∪ config roster — a SET union, so a mail in both
+    // rosters is one admin. The roster service never throws;
     // `rosterUnavailable` after ensureFresh() means the read failed.
-    let configAdminCount: number | null = null;
+    let configAdmins: readonly string[] | null = null;
     try {
       const { GlobalAdminRosterService } =
         await import('@/lib/services/admin/GlobalAdminRosterService');
       const roster = GlobalAdminRosterService.getInstance();
       await roster.ensureFresh();
       const snapshot = roster.getSnapshot();
-      // No roster blob yet is a definite zero, not an unknown.
-      configAdminCount = snapshot.rosterUnavailable
+      // No roster blob yet is a definite empty list, not an unknown.
+      configAdmins = snapshot.rosterUnavailable
         ? null
-        : (snapshot.roster?.admins.length ?? 0);
+        : (snapshot.roster?.admins ?? []);
     } catch {
-      configAdminCount = null;
+      configAdmins = null;
     }
-    const globalRosterUnreadable = configAdminCount === null;
-    const globalAdminCount = envAdminCount + (configAdminCount ?? 0);
+    const globalRosterUnreadable = configAdmins === null;
+    const globalAdminCount = globalAdminUnion(
+      parseGlobalAdminEmails(),
+      configAdmins ?? [],
+    ).length;
 
     // Only pay for the blob read when it could change the outcome — that is
     // the single case where the local-admin count is actually consulted.
