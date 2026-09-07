@@ -196,6 +196,16 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
       // Normalized before BOTH arguments so the .docx and the markdown fallback
       // carry the same delimiters — a shared document must not disagree with
       // the conversation it was shared from (issue #121). Idempotent.
+      //
+      // This deliberately covers the USER's messages too, unlike the screen
+      // (UserMessage renders a user's own text un-normalized). The export
+      // choke point, `markdownToHtml`, normalizes the whole document
+      // internally and promises parity with the screen renderer for every
+      // math region, so the .docx would carry normalized user text whatever
+      // is done here; normalizing only assistant content would merely make the
+      // markdown fallback disagree with the .docx for user messages. Honouring
+      // the screen's per-author policy in exports would need a per-role seam
+      // through markdownToHtml, which is a separate decision.
       const markdown = normalizeMathDelimiters(
         renderShareMarkdown(title, messages, {
           user: t('roleUser'),
