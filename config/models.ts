@@ -100,6 +100,7 @@ const STATIC_LIST_EXCLUSIONS: string[] = [
   OpenAIModelID.GPT_5_6_SOL,
   OpenAIModelID.GPT_5_6_TERRA,
   OpenAIModelID.GPT_5_6_LUNA,
+  OpenAIModelID.GPT_6_ASTRA,
   OpenAIModelID.MISTRAL_MEDIUM_3_5,
   OpenAIModelID.KIMI_K2_6,
   OpenAIModelID.GPT_CHAT_LATEST,
