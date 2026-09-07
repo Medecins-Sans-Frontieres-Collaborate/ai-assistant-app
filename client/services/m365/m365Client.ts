@@ -219,11 +219,17 @@ export async function listMeetings(
 }
 
 /**
- * The same listing filtered server-side to meetings that actually have a
- * transcript or recording, with each meeting's resources resolved inline
- * (so expanding a row costs no round trip). Meetings whose availability
- * could not be determined are counted, not listed — `listMeetings` remains
- * the "show me everything" fallback.
+ * The same listing filtered server-side by artifact availability. Only a
+ * meeting that probed clean with NO transcript or recording is dropped
+ * (`hiddenCount`); every kept row carries `availability`, and only
+ * `'available'` rows have `resources` resolved inline (so expanding one
+ * costs no round trip). `'pending'` rows (ended too recently for Teams to
+ * have published) and `'forbidden'` rows (Graph answered 403, so availability
+ * is unknown) are kept WITHOUT `resources` — callers must branch on
+ * `availability` rather than assume `resources` is set. Meetings that were
+ * never probed (cap, budget, throttling) are counted in `unprobedCount`, not
+ * listed; `listMeetings` remains the "show me everything" fallback.
+ * See `M365MeetingAvailability` in types/m365.ts.
  */
 export async function listMeetingsWithArtifacts(
   options: { signal?: AbortSignal } = {},
