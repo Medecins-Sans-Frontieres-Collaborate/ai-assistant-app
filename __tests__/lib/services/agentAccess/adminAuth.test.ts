@@ -5,6 +5,7 @@ import {
 import {
   ALL_AGENT_KEYS,
   demotedRole,
+  globalAdminUnion,
   isGlobalAdmin,
   isRealGlobalAdmin,
   mailOf,
@@ -339,5 +340,24 @@ describe('agentAccess/adminAuth', () => {
         editableAgentKeys: [],
       });
     });
+  });
+});
+
+describe('globalAdminUnion', () => {
+  it('counts a mail present in both rosters once, after normalization', () => {
+    // The startup warnings report this number; env + config summed would say
+    // "3 admins" for what isGlobalAdmin evaluates as two people.
+    expect(
+      globalAdminUnion(
+        ['Alice@Example.com', 'bob@example.com'],
+        ['alice@example.com ', 'carol@example.com'],
+      ),
+    ).toEqual(['alice@example.com', 'bob@example.com', 'carol@example.com']);
+  });
+
+  it('ignores blank entries and tolerates an empty side', () => {
+    expect(globalAdminUnion([], [])).toEqual([]);
+    expect(globalAdminUnion([' ', 'a@b.org'], [])).toEqual(['a@b.org']);
+    expect(globalAdminUnion([], ['a@b.org', 'a@b.org'])).toEqual(['a@b.org']);
   });
 });
