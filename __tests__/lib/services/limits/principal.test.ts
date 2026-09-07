@@ -10,6 +10,7 @@
  */
 // Importing the module is the act under test: its side effect is the wiring.
 import {
+  __jurisdictionAuditSizeForTests,
   __resetJurisdictionAuditForTests,
   buildPrincipal,
 } from '@/lib/services/limits/principal';
@@ -118,6 +119,46 @@ describe('principal.ts registers the jurisdiction-degraded audit check', () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it('keeps the suppression map bounded, sweeping expired pairs first', () => {
+    // A long-lived replica sees every (delegation, user) pair that ever hit a
+    // degraded lookup; without a bound the map only ever grows.
+    degradedMock.mockReturnValue(true);
+    vi.useFakeTimers();
+    try {
+      for (let i = 0; i < 2000; i++) {
+        activeDelegationIds(groupOnlyPolicy, {
+          ...principal,
+          userId: `u-${i}`,
+        });
+      }
+      expect(__jurisdictionAuditSizeForTests()).toBe(2000);
+
+      // Past the window every entry is dead: the sweep clears them all and
+      // the new pair is the only live one.
+      vi.advanceTimersByTime(60_001);
+      activeDelegationIds(groupOnlyPolicy, { ...principal, userId: 'u-new' });
+      expect(__jurisdictionAuditSizeForTests()).toBe(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('evicts the oldest live pair when a burst overflows inside one window', () => {
+    degradedMock.mockReturnValue(true);
+    for (let i = 0; i < 2001; i++) {
+      activeDelegationIds(groupOnlyPolicy, { ...principal, userId: `u-${i}` });
+    }
+    expect(__jurisdictionAuditSizeForTests()).toBe(2000);
+    expect(warn).toHaveBeenCalledTimes(2001);
+
+    // u-0 was evicted so it audits again (the accepted cost of the bound);
+    // a pair still inside the map stays suppressed.
+    activeDelegationIds(groupOnlyPolicy, { ...principal, userId: 'u-0' });
+    expect(warn).toHaveBeenCalledTimes(2002);
+    activeDelegationIds(groupOnlyPolicy, { ...principal, userId: 'u-1000' });
+    expect(warn).toHaveBeenCalledTimes(2002);
   });
 
   it('still builds a principal (the import is the wiring, nothing else moved)', () => {
