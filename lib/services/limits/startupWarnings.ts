@@ -17,14 +17,18 @@
  * yet is a perfectly normal state.
  */
 import { GlobalAdminRosterService } from '@/lib/services/admin/GlobalAdminRosterService';
-import { parseGlobalAdminEmails } from '@/lib/services/agentAccess/adminAuth';
+import {
+  globalAdminUnion,
+  parseGlobalAdminEmails,
+} from '@/lib/services/agentAccess/adminAuth';
 import { LimitsService } from '@/lib/services/limits/LimitsService';
 
 export interface LimitsStartupState {
   /**
-   * Env roster (AGENT_ACCESS_ADMINS) + config roster
-   * (system/admin/global-admins.json). An unreadable config roster counts 0
-   * here and sets `globalRosterUnreadable` so the wording hedges.
+   * Env roster (AGENT_ACCESS_ADMINS) ∪ config roster
+   * (system/admin/global-admins.json) as a set, so an admin in both counts
+   * once. An unreadable config roster contributes nothing here and sets
+   * `globalRosterUnreadable` so the wording hedges.
    */
   globalAdminCount: number;
   /** True when the config global-admin roster could not be read at boot. */
@@ -112,23 +116,27 @@ export async function logLimitsStartupWarnings(): Promise<void> {
     // Leave everything null: the "could not be read" warning covers it.
   }
 
-  // Global admins = env ∪ config roster; the roster service never throws and
-  // reports a failed read through `rosterUnavailable`.
-  let configAdminCount: number | null = null;
+  // Global admins = env ∪ config roster as a SET (a mail in both is one
+  // admin); the roster service never throws and reports a failed read
+  // through `rosterUnavailable`.
+  let configAdmins: readonly string[] | null = null;
   try {
     const roster = GlobalAdminRosterService.getInstance();
     await roster.ensureFresh();
     const snapshot = roster.getSnapshot();
-    configAdminCount = snapshot.rosterUnavailable
+    configAdmins = snapshot.rosterUnavailable
       ? null
-      : (snapshot.roster?.admins.length ?? 0);
+      : (snapshot.roster?.admins ?? []);
   } catch {
-    configAdminCount = null;
+    configAdmins = null;
   }
 
   const warnings = buildLimitsStartupWarnings({
-    globalAdminCount: parseGlobalAdminEmails().length + (configAdminCount ?? 0),
-    globalRosterUnreadable: configAdminCount === null,
+    globalAdminCount: globalAdminUnion(
+      parseGlobalAdminEmails(),
+      configAdmins ?? [],
+    ).length,
+    globalRosterUnreadable: configAdmins === null,
     policyExists,
     mode,
     failMode,
