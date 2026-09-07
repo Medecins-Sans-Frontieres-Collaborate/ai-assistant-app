@@ -2,7 +2,10 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
+import {
+  apiErrorMessage,
+  unwrapApiData,
+} from '@/client/hooks/settings/useAgentAccessAdmin';
 
 import { GlobalAdminRoster } from '@/lib/services/admin/globalAdminsTypes';
 
@@ -75,16 +78,15 @@ export function useGlobalAdmins() {
       if (!response.ok) {
         const body = (await response.json().catch(() => null)) as {
           code?: string;
-          error?: string;
-          details?: string;
         } | null;
         if (body?.code === 'GLOBAL_ADMINS_LOCKOUT') {
           throw new GlobalAdminsLockout();
         }
         throw new Error(
-          body?.details ||
-            body?.error ||
+          apiErrorMessage(
+            body,
             `Failed to save global admins: ${response.status}`,
+          ),
         );
       }
       return unwrapApiData<{ etag: string }>(await response.json());
