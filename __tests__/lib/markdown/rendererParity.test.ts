@@ -28,6 +28,7 @@
  */
 import { cleanMarkdown } from '@/lib/utils/app/clean';
 import { markdownToHtml } from '@/lib/utils/shared/document/formatConverter';
+import { stripHtmlTags } from '@/lib/utils/shared/html/stripTags';
 import { normalizeMathDelimiters } from '@/lib/utils/shared/markdown/normalizeMath';
 import { toSpeakableText } from '@/lib/utils/shared/markdown/speakableText';
 
@@ -46,13 +47,15 @@ import {
 import { decode } from 'he';
 import { describe, expect, it } from 'vitest';
 
-/** The reader's view of an exported document: tags gone, entities decoded. */
+/**
+ * The reader's view of an exported document: tags gone, entities decoded.
+ * Tag removal goes through the hardened fixpoint stripper rather than a
+ * single-pass regex, so this helper never reads as a sanitizer to CodeQL
+ * (js/incomplete-multi-character-sanitization) even though its output only
+ * ever meets an assertion.
+ */
 const exportedText = (markdown: string): string =>
-  decode(
-    markdownToHtml(markdown)
-      .replace(/<br\s*\/?>/gi, '\n')
-      .replace(/<[^>]+>/g, ''),
-  );
+  decode(stripHtmlTags(markdownToHtml(markdown).replace(/<br\s*\/?>/gi, '\n')));
 
 /**
  * The reader's view of a downloaded `.md` file.
