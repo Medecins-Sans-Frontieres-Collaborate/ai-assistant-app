@@ -2662,6 +2662,11 @@
       "description": "The light, fast tier of OpenAI's GPT-5.6 trio. Best for quick questions and simple tasks at low cost.",
       "tagline": "Light, fast GPT-5.6"
     },
+    "gpt_6_astra": {
+      "name": "GPT-6 Astra",
+      "description": "OpenAI's GPT-6 flagship. Built for demanding end-to-end work: deep research, complex analysis, software engineering, and long multi-step tasks. About twice the cost of GPT-5.6 Sol.",
+      "tagline": "OpenAI's most capable model"
+    },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
       "description": "Mistral's newest mid-size model. A European alternative that balances capability and speed for everyday work.",
