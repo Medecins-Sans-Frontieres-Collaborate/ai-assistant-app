@@ -23,6 +23,11 @@ import React, {
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 
+import {
+  useLimitGates,
+  useMyLimits,
+  useResetCountdown,
+} from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
@@ -125,6 +130,9 @@ function isDocumentTranslationReference(content: string): boolean {
   );
 }
 
+/** Daily TTS counter (docs/LIMITS.md); `null` value = unlimited. */
+const TTS_DAY_LIMIT_KEY = 'feature.tts.charactersPerDay';
+
 interface AssistantMessageProps {
   content: string;
   message?: Message;
@@ -195,6 +203,27 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
       x: number;
       y: number;
     } | null>(null);
+
+    // Route pre-flight (docs/LIMITS_USER_FACING_UX.md §7.4): the speaker
+    // button goes dark once today's `feature.tts.charactersPerDay` budget is
+    // used up, instead of firing a request the server will 403. Anything
+    // short of a reported 0 (no row, usage unreadable, observe mode, flag
+    // off) leaves the button exactly as it is — the server stays the judge.
+    const { featureRemaining } = useLimitGates();
+    const { refetch: refetchLimits } = useMyLimits();
+    const ttsBudget = featureRemaining(TTS_DAY_LIMIT_KEY);
+    const ttsExhausted = ttsBudget?.remaining === 0;
+    // Only count down while exhausted: every rendered message mounts this
+    // hook, and an idle per-minute tick per message buys nothing.
+    const ttsResetsIn = useResetCountdown(
+      ttsExhausted ? ttsBudget?.resetAt : undefined,
+      { onExpired: () => void refetchLimits() },
+    );
+    const ttsDisabledTitle = ttsExhausted
+      ? ttsResetsIn
+        ? `${t('limitsUx.routes.ttsExhausted')} ${t('limitsUx.routes.resetsIn', { resets: ttsResetsIn })}`
+        : t('limitsUx.routes.ttsExhausted')
+      : null;
 
     // Translation state
     const [translationState, setTranslationState] =
@@ -914,10 +943,12 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                     </button>
                   )}
 
-                  {/* Listen button */}
+                  {/* Listen button. Already-generated audio can still be
+                      closed when the budget runs out mid-session — only NEW
+                      synthesis is gated. */}
                   <button
                     className={`transition-colors ${
-                      hasEmbeddedContent
+                      hasEmbeddedContent || (ttsExhausted && !audioUrl)
                         ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
                         : isGeneratingAudio
                           ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
@@ -928,19 +959,28 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                         ? undefined
                         : audioUrl
                           ? handleCloseAudio
-                          : () => handleTTS()
+                          : ttsExhausted
+                            ? undefined
+                            : () => handleTTS()
                     }
                     onContextMenu={(e) => {
                       if (
                         !hasEmbeddedContent &&
                         !isGeneratingAudio &&
-                        !audioUrl
+                        !audioUrl &&
+                        !ttsExhausted
                       ) {
                         e.preventDefault();
                         setTTSContextMenu({ x: e.clientX, y: e.clientY });
                       }
                     }}
-                    disabled={hasEmbeddedContent || isGeneratingAudio}
+                    disabled={
+                      hasEmbeddedContent ||
+                      isGeneratingAudio ||
+                      (ttsExhausted && !audioUrl)
+                    }
+                    aria-disabled={ttsExhausted && !audioUrl ? true : undefined}
+                    data-testid="tts-button"
                     aria-label={
                       audioUrl
                         ? t('chat.stopAudio')
@@ -951,7 +991,9 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                     title={
                       hasEmbeddedContent
                         ? t('chat.actionsDisabledForEmbed')
-                        : t('chat.ttsRightClickHint')
+                        : ttsDisabledTitle && !audioUrl
+                          ? ttsDisabledTitle
+                          : t('chat.ttsRightClickHint')
                     }
                   >
                     {isGeneratingAudio ? (
