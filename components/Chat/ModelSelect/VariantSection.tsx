@@ -23,6 +23,8 @@ import {
 } from '@/types/openai';
 
 import { EmissionsTierIcon } from './EmissionsTierIcon';
+import { ModelLimitBadge } from './ModelLimitBadge';
+import { useModelAvailabilityMap } from './modelLimits';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
@@ -59,6 +61,14 @@ export const VariantSection: FC<VariantSectionProps> = ({
   const { models } = useSettings();
   const pool = familyModels ?? models;
   const hiddenModelIds = useSettingsStore((s) => s.hiddenModelIds);
+  // Usage-limit verdicts: a segment lands on a still-usable version of its
+  // variant when one exists, and is disabled only when the whole variant is
+  // spent.
+  const {
+    lookup: limitFor,
+    isSelectable: isNotExhausted,
+    refetch: refetchLimits,
+  } = useModelAvailabilityMap();
 
   const meta = useMemo(
     // byom ids never exist in the static catalog — the model object itself
@@ -88,18 +98,23 @@ export const VariantSection: FC<VariantSectionProps> = ({
 
   const activeVariant = meta.variant ?? '';
 
+  // Each segment's click target (see pickVariantTarget), resolved once so
+  // the tier icon, the limit badge and the click agree on the same model.
+  const variantTargets = variants.map(
+    (variant) =>
+      pickVariantTarget(variant.members, meta.versionLabel, isNotExhausted) ??
+      variant.members[0],
+  );
+
   // Emissions tier of each segment's click target. Icons render only when
   // the choice actually differs in tier (fail-open flag gate, matching the
   // Usage & Impact section) — a uniform row of leaves would be noise.
-  const variantTiers = variants.map((variant) => {
-    const target =
-      pickVariantTarget(variant.members, meta.versionLabel) ??
-      variant.members[0];
-    return getEmissionsTier(
+  const variantTiers = variantTargets.map((target) =>
+    getEmissionsTier(
       getModelSizeClass(target),
       target.modelType === 'reasoning',
-    );
-  });
+    ),
+  );
   const showTiers = showUsageImpact !== false && new Set(variantTiers).size > 1;
   const tierTooltip = (tier: (typeof variantTiers)[number]) =>
     `${tEmissions(`tier.${tier}`)} — ${tEmissions('tierTooltip', {
@@ -118,27 +133,39 @@ export const VariantSection: FC<VariantSectionProps> = ({
       >
         {variants.map((variant, index) => {
           const isActive = activeVariant === variant.key;
+          const target = variantTargets[index];
+          const targetLimit = limitFor(target.id);
+          // Disabled only when NO version of the variant is usable — the
+          // target is then the natural pick, and its verdict is the reason.
+          const isLimited = !isActive && targetLimit.state !== 'available';
           return (
             <button
               key={variant.key}
               type="button"
               onClick={() => {
-                if (isActive) return;
-                const target = pickVariantTarget(
-                  variant.members,
-                  meta.versionLabel,
-                );
-                if (target) onSelectVariant(target);
+                if (isActive || isLimited) return;
+                onSelectVariant(target);
               }}
               aria-pressed={isActive}
+              aria-disabled={isLimited || undefined}
               title={variant.members[0]?.name}
               className={`rounded-lg border px-2.5 py-1.5 min-h-[36px] text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                 isActive
                   ? 'border-blue-600 bg-blue-600 text-white dark:border-blue-500 dark:bg-blue-500'
-                  : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  : isLimited
+                    ? 'border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 opacity-60 cursor-not-allowed'
+                    : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
               }`}
             >
               {variant.label || variant.members[0]?.name}
+              {isLimited && (
+                <ModelLimitBadge
+                  view={targetLimit}
+                  onExpired={refetchLimits}
+                  size={12}
+                  className="ms-1"
+                />
+              )}
               {showTiers && (
                 <EmissionsTierIcon
                   tier={variantTiers[index]}
