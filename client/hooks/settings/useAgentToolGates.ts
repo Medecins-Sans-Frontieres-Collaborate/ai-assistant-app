@@ -10,6 +10,9 @@ import {
   useLimitGates,
 } from '@/client/hooks/settings/useMyLimits';
 
+import { InterpreterMode } from '@/types/interpreterMode';
+import { SearchMode } from '@/types/searchMode';
+
 import {
   getOrganizationAgentById,
   getOrganizationAgentIdFromModelId,
@@ -190,6 +193,32 @@ let latestGates: ToolLimitGates = OPEN_GATES;
  */
 export function getToolLimitGatesSnapshot(): ToolLimitGates {
   return latestGates;
+}
+
+// ---------------------------------------------------------------------------
+// Request-time application (docs/LIMITS_USER_FACING_UX.md §7.4): a blocked
+// gate must not just LOOK off in the composer, it must actually go out as
+// Off on the wire, without touching the persisted preference. These are pure
+// so `client/stores/chatStore.ts`'s non-React `sendChatRequest` can call them
+// directly with `getToolLimitGatesSnapshot()` — see the WP-D request in the
+// WP-E report for the exact call sites (searchMode, interpreterMode, and the
+// `mcpServers` list build).
+// ---------------------------------------------------------------------------
+
+/** `searchMode` as the request should carry it: forced Off while blocked. */
+export function effectiveSearchMode(
+  searchMode: SearchMode | undefined,
+  gates: Pick<ToolLimitGates, 'webSearch'>,
+): SearchMode | undefined {
+  return gates.webSearch.blocked ? SearchMode.OFF : searchMode;
+}
+
+/** `interpreterMode` as the request should carry it: forced Off while blocked. */
+export function effectiveInterpreterMode(
+  interpreterMode: InterpreterMode,
+  gates: Pick<ToolLimitGates, 'codeInterpreter'>,
+): InterpreterMode {
+  return gates.codeInterpreter.blocked ? InterpreterMode.OFF : interpreterMode;
 }
 
 /**
