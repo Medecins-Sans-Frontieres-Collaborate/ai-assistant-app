@@ -176,21 +176,47 @@ describe('GET /api/limits/me (own limits)', () => {
       });
     });
 
-    it('with an EMPTY policy the compiled numeric defaults alone trigger a day-ledger read', async () => {
-      // Pinned so the cost is a known fact, not a surprise: until the
-      // catalog's M365 budgets default to null (or a policy lifts them),
-      // every caller asking for usage pays one day-ledger GET.
+    it('with an EMPTY policy the compiled numeric defaults do NOT trigger a day-ledger read, and are dropped from limits[]', async () => {
+      // Catalog-sourced numeric defaults (the flag-gated M365 budgets) must
+      // not force storage for a caller with no authored policy at all — the
+      // zero-storage path has to actually be reachable. Dropped from the
+      // response too: showing "M365 tool calls 0/200" to someone who has
+      // never touched the flag-gated feature would be a phantom budget.
       expect(LIFT_COMPILED_COUNTERS.length).toBeGreaterThan(0);
       ledgers({ 'feature.m365.toolCallsPerDay': 3 });
       const data = await get('usage=1');
+      expect(readUsage).not.toHaveBeenCalled();
+      expect(data).not.toHaveProperty('usageUnavailable');
+      expect(limitFor(data, 'feature.m365.toolCallsPerDay')).toBeUndefined();
+    });
+
+    it('a catalog-sourced numeric default rides along for free once a REAL counter forces the same ledger open', async () => {
+      snapshot.policy = policyWith([
+        { limitKey: 'chat.messagesPerDay', value: 100 },
+      ]);
+      ledgers({ 'chat.messagesPerDay': 7, 'feature.m365.toolCallsPerDay': 3 });
+      const data = await get('usage=1');
       expect(readUsage).toHaveBeenCalledTimes(1);
-      expect(readUsage).toHaveBeenCalledWith('oid-caller', 'day', {
-        timezone: TZ,
-      });
       expect(limitFor(data, 'feature.m365.toolCallsPerDay')).toMatchObject({
         value: 200,
         used: 3,
         remaining: 197,
+      });
+    });
+
+    it('a catalog-sourced numeric default is still dropped when the ledger read fails', async () => {
+      snapshot.policy = policyWith([
+        { limitKey: 'chat.messagesPerDay', value: 100 },
+      ]);
+      vi.mocked(readUsage).mockRejectedValue(new Error('blob down'));
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const data = await get('usage=1');
+      warn.mockRestore();
+      expect(data.usageUnavailable).toBe(true);
+      expect(limitFor(data, 'feature.m365.toolCallsPerDay')).toBeUndefined();
+      // The real, policy-authored row still shows, cap-only.
+      expect(limitFor(data, 'chat.messagesPerDay')).toMatchObject({
+        value: 100,
       });
     });
 
@@ -280,24 +306,65 @@ describe('GET /api/limits/me (own limits)', () => {
       expect(data.models.o3).not.toHaveProperty('reason');
     });
 
-    it('reads storage for a per-model cap even when no unqualified row is numeric', async () => {
-      // "Every model 100/day" writes model:/family: counters only; the bare
-      // row is display. The zero-cost check must look at the model cells.
+    it('reads storage for a MODEL-QUALIFIED per-model cap even when no unqualified row is numeric', async () => {
+      // The bare, unqualified `model.requests` row must NOT be what selects
+      // the ledger here — it stays null (unlimited), so this test actually
+      // exercises the per-model branch of meteredLedgers (a bare numeric
+      // default would trigger the day read by itself and mask a regression
+      // in the models-driven loop).
       snapshot.policy = policyWith([
-        { limitKey: 'model.requests', value: 100 },
+        ...LIFT_COMPILED_COUNTERS,
+        { limitKey: 'model.requests', modelId: 'o3', value: 50 },
       ]);
-      ledgers({ 'model:o3.requests': 100, 'family:o-series.requests': 100 });
+      expect(limitFor(await get(''), 'model.requests')).toBeUndefined();
+      ledgers({ 'model:o3.requests': 50 });
       const data = await get('usage=1&models=o3');
+      expect(readUsage).toHaveBeenCalledTimes(1);
       expect(readUsage).toHaveBeenCalledWith('oid-caller', 'day', {
         timezone: TZ,
       });
       expect(data.models.o3).toMatchObject({
         allowed: true,
         reason: 'exhausted',
-        limit: 100,
+        limit: 50,
+        used: 50,
+        remaining: 0,
+      });
+    });
+
+    it('the bare (unqualified) model.requests row never carries used/remaining — enforcement writes only model:/family: cells', async () => {
+      snapshot.policy = policyWith([
+        { limitKey: 'model.requests', value: 100 },
+      ]);
+      ledgers({ 'model:o3.requests': 100, 'family:o-series.requests': 100 });
+      const data = await get('usage=1&models=o3');
+      const row = limitFor(data, 'model.requests');
+      expect(row).toMatchObject({ value: 100 });
+      expect(row).not.toHaveProperty('used');
+      expect(row).not.toHaveProperty('remaining');
+      // Real consumption is visible only through the per-model answer.
+      expect(data.models.o3).toMatchObject({
+        reason: 'exhausted',
         used: 100,
         remaining: 0,
       });
+    });
+
+    it('a hung ledger read times out at 2.5s and answers usageUnavailable rather than stalling', async () => {
+      snapshot.policy = policyWith([
+        { limitKey: 'chat.messagesPerDay', value: 100 },
+      ]);
+      // Never resolves — simulates a stalled blob GET.
+      vi.mocked(readUsage).mockImplementation(() => new Promise(() => {}));
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const responsePromise = get('usage=1');
+      await vi.advanceTimersByTimeAsync(2_500);
+      const data = await responsePromise;
+      warn.mockRestore();
+      expect(data.usageUnavailable).toBe(true);
+      const row = limitFor(data, 'chat.messagesPerDay');
+      expect(row).toMatchObject({ value: 100 });
+      expect(row).not.toHaveProperty('used');
     });
   });
 
@@ -313,6 +380,13 @@ describe('GET /api/limits/me (own limits)', () => {
         'models=o3, gpt-5.2 ,byom-acct-gpt,local-llama,org-x,foundry-y,has space,%3Cscript%3E,o3',
       );
       expect(Object.keys(data.models).sort()).toEqual(['gpt-5.2', 'o3']);
+    });
+
+    it('rejects Object.prototype property names — an unguarded index lookup would resolve them as "catalog" ids', async () => {
+      const data = await get(
+        'models=constructor,toString,valueOf,hasOwnProperty,__proto__,o3',
+      );
+      expect(Object.keys(data.models).sort()).toEqual(['o3']);
     });
 
     it('caps the list at 100 ids', async () => {
