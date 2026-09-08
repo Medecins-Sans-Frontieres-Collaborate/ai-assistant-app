@@ -2,6 +2,7 @@
 
 import {
   IconBrandWindows,
+  IconClock,
   IconPlugConnected,
   IconRobot,
   IconSearch,
@@ -33,6 +34,13 @@ import {
 import { Conversation } from '@/types/chat';
 import { SearchMode } from '@/types/searchMode';
 
+import {
+  pinnedModelAvailability,
+  pinnedModelIdOf,
+  pinnedModelName,
+  useModelAvailabilityMap,
+} from '@/components/Chat/ModelSelect/modelLimits';
+
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
 import { v4 as uuidv4 } from 'uuid';
@@ -57,6 +65,12 @@ interface BrowserItem {
   needsReauth?: boolean;
   /** Agent already attached / connector already on for this chat. */
   activeInChat: boolean;
+  /**
+   * The agent pins a model that is blocked or exhausted for this user —
+   * shown as a note on the row, never as a reason to hide it (the agent
+   * itself is not restricted; the send would 403 on the model).
+   */
+  modelUnavailableNote?: string;
 }
 
 /**
@@ -76,6 +90,7 @@ interface BrowserItem {
 export function AgentBrowserModal() {
   const t = useTranslations('agentAttach');
   const tPin = useTranslations('connectorPin');
+  const tLimits = useTranslations('limitsUx.picker');
   const open = useUIStore((s) => s.agentBrowserOpen);
   const setOpen = useUIStore((s) => s.setAgentBrowserOpen);
   const {
@@ -113,6 +128,7 @@ export function AgentBrowserModal() {
     (s) => s.incrementAgentBrowserUsage,
   );
   const { toolsEnabled: m365ToolsFlagOn } = useM365Enabled();
+  const limitsMap = useModelAvailabilityMap();
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -125,6 +141,22 @@ export function AgentBrowserModal() {
   // Default order: agents (discovery order), then the M365 toolset, then
   // configured connectors. Usage re-ranks on top of this below.
   const allItems = useMemo<BrowserItem[]>(() => {
+    // Only pinned-model kinds can be limited through their model: prompt
+    // agents (once discovery exposes the id) and Foundry swap targets.
+    // "Your-model" kinds ride whatever the picker already vetted.
+    const modelNoteFor = (agent: AvailableAgent): string | undefined => {
+      const semantics = agentModelSemantics(agent.kind);
+      if (semantics === 'your-model') return undefined;
+      const pinnedId = pinnedModelIdOf(agent);
+      if (!pinnedId) return undefined;
+      const view = pinnedModelAvailability(pinnedId, limitsMap, models);
+      if (view.state === 'available') return undefined;
+      return view.state === 'blocked'
+        ? tLimits('agentModelUnavailable', { model: pinnedModelName(pinnedId) })
+        : tLimits('agentModelExhaustedNoReset', {
+            model: pinnedModelName(pinnedId),
+          });
+    };
     const items: BrowserItem[] = agents.map((agent) => ({
       id: agent.id,
       name: agent.name,
@@ -134,6 +166,7 @@ export function AgentBrowserModal() {
       icon: 'agent' as const,
       agent,
       activeInChat: !!attachedAgent && attachedAgent.id === agent.id,
+      modelUnavailableNote: modelNoteFor(agent),
     }));
     if (m365ToolsFlagOn && m365Connected) {
       items.push({
@@ -169,7 +202,10 @@ export function AgentBrowserModal() {
     m365ToolsUserEnabled,
     mcpServers,
     chatDisabledIds,
+    limitsMap,
+    models,
     t,
+    tLimits,
   ]);
 
   const filtered = useMemo(() => {
@@ -492,6 +528,15 @@ export function AgentBrowserModal() {
                       {item.needsReauth && (
                         <p className="text-xs text-amber-600 dark:text-amber-400">
                           {tPin('needsReconnect')}
+                        </p>
+                      )}
+                      {item.modelUnavailableNote && (
+                        <p
+                          data-testid="agent-model-unavailable"
+                          className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400"
+                        >
+                          <IconClock size={12} aria-hidden="true" />
+                          {item.modelUnavailableNote}
                         </p>
                       )}
                     </div>
