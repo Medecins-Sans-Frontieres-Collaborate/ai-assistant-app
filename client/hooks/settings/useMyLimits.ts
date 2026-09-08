@@ -1,10 +1,11 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { MODELS_QUERY_KEY } from '@/client/hooks/settings/useModelsQuery';
 
 import { LimitTier } from '@/lib/services/limits/types';
 
@@ -149,6 +150,50 @@ export function useMyLimits() {
   const limitsEnabled = useLimitsEnabled();
   const models = useSettingsStore((s) => s.models);
   const modelIdsKey = useMemo(() => catalogModelIdsKey(models), [models]);
+  const queryClient = useQueryClient();
+  const modelListSource = useSettingsStore((s) => s.modelListSource);
+  // Wait for `useModelsQuery`'s discovery attempt to settle before firing:
+  // its default-onto-discovery effect changes `modelIdsKey` a moment later,
+  // wasting a counter read for metered users on the superseded static key
+  // (docs/LIMITS_USER_FACING_UX.md §7.3 follow-up).
+  //
+  // On SUCCESS this is read from `modelListSource` rather than the query's
+  // own status: `setModels`/`setModelListSource` are called back-to-back,
+  // synchronously, from the SAME `applyDiscoveredModels` call — so any
+  // component reading both (this hook, via `models` above and
+  // `modelListSource` here) sees them update together in one React commit.
+  // Reading the query's cache status instead raced ahead of that: the
+  // cache notifies on fetch resolution before the sibling component's own
+  // effect has re-applied the store, so a component elsewhere (this hook
+  // is used from several) could observe "settled" for one render with
+  // `modelIdsKey` still pointing at the stale static list.
+  //
+  // On ERROR/empty-list `modelListSource` never leaves `'static'` (the
+  // code keeps the seed), so there is nothing to race there: fall back to
+  // firing once the `['models']` query itself reports `error`, read via
+  // the query CACHE (not a second `useQuery` observer for the key, which
+  // would either double-fetch or — with `enabled: false` — pin the query
+  // pending forever when `useModelsQuery` never mounts at all, e.g. most
+  // unit tests here). No query registered at all reads as "no error", so
+  // that fallback never engages and existing behavior is unchanged.
+  const [modelsQueryErrored, setModelsQueryErrored] = useState(
+    () => queryClient.getQueryState(MODELS_QUERY_KEY)?.status === 'error',
+  );
+  useEffect(() => {
+    const isModelsKey = (key: readonly unknown[]) =>
+      key.length === MODELS_QUERY_KEY.length && key[0] === MODELS_QUERY_KEY[0];
+    // Cache may already hold an errored query by the time this effect runs.
+    setModelsQueryErrored(
+      queryClient.getQueryState(MODELS_QUERY_KEY)?.status === 'error',
+    );
+    const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
+      if (isModelsKey(event.query.queryKey)) {
+        setModelsQueryErrored(event.query.state.status === 'error');
+      }
+    });
+    return unsubscribe;
+  }, [queryClient]);
+  const modelsSettled = modelListSource !== 'static' || modelsQueryErrored;
 
   const { data, isLoading, error, refetch } = useQuery<MyLimitsResponse | null>(
     {
@@ -157,7 +202,7 @@ export function useMyLimits() {
       // until AppInitializer's static seed lands one effect later. Waiting
       // for it avoids a throwaway request with no `models=` that would be
       // superseded immediately.
-      enabled: limitsEnabled && models.length > 0,
+      enabled: limitsEnabled && models.length > 0 && modelsSettled,
       queryFn: async () => {
         const params = new URLSearchParams({ usage: '1' });
         if (modelIdsKey) params.set('models', modelIdsKey);
@@ -251,7 +296,11 @@ export function useModelAvailability(modelId?: string): ModelAvailabilityView {
         reason: entry.reason ?? 'exhausted',
       };
     }
-    return AVAILABLE;
+    // Available, but keep the counters: a low-remaining annotation
+    // (§7.4 "3 left today") needs `remaining`/`limit`/`used` too, and every
+    // consumer of this hook — not just the map-based picker path — must
+    // read the same numbers. See docs/LIMITS_USER_FACING_UX.md §7.4.
+    return { state: 'available', ...detail };
   }, [enforce, models, modelId]);
 }
 
@@ -339,8 +388,11 @@ export function formatResetIn(
   const diff = target - now;
   if (diff <= 0) return null;
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'always' });
-  if (diff >= DAY_MS) return rtf.format(Math.ceil(diff / DAY_MS), 'day');
-  if (diff >= HOUR_MS) return rtf.format(Math.ceil(diff / HOUR_MS), 'hour');
+  // Round (not ceil) for the coarse units: a 61-minute wait reading "in 2
+  // hours" overstates it by nearly a full unit. `diff >= *_MS` in the
+  // branch guard keeps the rounded value at least 1.
+  if (diff >= DAY_MS) return rtf.format(Math.round(diff / DAY_MS), 'day');
+  if (diff >= HOUR_MS) return rtf.format(Math.round(diff / HOUR_MS), 'hour');
   // ceil so the last partial minute reads "in 1 minute", never "in 0 minutes"
   return rtf.format(Math.max(1, Math.ceil(diff / MINUTE_MS)), 'minute');
 }
