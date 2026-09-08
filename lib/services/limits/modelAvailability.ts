@@ -166,7 +166,9 @@ function tighter(a: CellReading, b: CellReading): CellReading {
   const ra = a.remaining ?? a.limit;
   const rb = b.remaining ?? b.limit;
   if (ra !== rb) return ra < rb ? a : b;
-  if (isFamilyCell(a) !== isFamilyCell(b)) return isFamilyCell(a) ? b : a;
+  if (isFamilyCell(a.cell) !== isFamilyCell(b.cell)) {
+    return isFamilyCell(a.cell) ? b : a;
+  }
   return a;
 }
 
