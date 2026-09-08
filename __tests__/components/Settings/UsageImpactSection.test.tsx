@@ -71,8 +71,18 @@ describe('UsageImpactSection', () => {
     });
     render(<UsageImpactSection />);
     // Both: a freshly limited account has no tracked usage yet.
-    expect(screen.getByTestId('your-limits')).toBeInTheDocument();
-    expect(screen.getByText(/No usage tracked yet/i)).toBeInTheDocument();
+    const limitsBlock = screen.getByTestId('your-limits');
+    const emptyState = screen.getByText(/No usage tracked yet/i);
+    expect(limitsBlock).toBeInTheDocument();
+    expect(emptyState).toBeInTheDocument();
+    // Actually assert DOM order, not just that both exist: a refactor that
+    // moved the block into the non-empty branch (hiding it from exactly the
+    // freshly-limited accounts it exists for), or below the empty-state
+    // paragraph, must fail this test.
+    expect(
+      limitsBlock.compareDocumentPosition(emptyState) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
   });
 
   it('shows the empty state when nothing is tracked', () => {
