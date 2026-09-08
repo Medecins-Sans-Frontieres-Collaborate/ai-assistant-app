@@ -154,7 +154,7 @@ describe('GET /api/m365/meetings (listing)', () => {
     ).toEqual(['New sync', 'Old sync']);
   });
 
-  it('never probes, keeps cancelled meetings and does not dedupe without the param', async () => {
+  it('never probes, keeps cancelled meetings and collapses a series without the param', async () => {
     graphJsonMock.mockResolvedValue({
       value: [
         event('e1', 'Standup Mon', graphTime(-2 * DAY), 'https://join/rec', {
@@ -177,20 +177,73 @@ describe('GET /api/m365/meetings (listing)', () => {
     expect(probeMock).not.toHaveBeenCalled();
     // Today's shape exactly: nothing but `meetings`.
     expect(Object.keys(body.data)).toEqual(['meetings']);
+    // The series collapses to its newest occurrence, exactly as the
+    // filtered view collapses it: "Show all (N hidden)" counts join URLs,
+    // so the view it reveals has to be counted in join URLs too.
     expect(
       body.data.meetings.map((m: { subject: string }) => m.subject),
-    ).toEqual(['Scrapped', 'Standup Tue', 'Standup Mon']);
-    // No dedupe: both occurrences of the shared join URL survive.
-    expect(
-      body.data.meetings.filter(
-        (m: { joinWebUrl: string }) => m.joinWebUrl === 'https://join/rec',
-      ),
-    ).toHaveLength(2);
-    // No availability/occurrences decoration on the plain path.
+    ).toEqual(['Scrapped', 'Standup Tue']);
+    const series = body.data.meetings.find(
+      (m: { joinWebUrl: string }) => m.joinWebUrl === 'https://join/rec',
+    );
+    expect(series.occurrences).toBe(2);
+    expect(body.data.meetings[0]).not.toHaveProperty('occurrences');
+    // No availability decoration on the plain path.
     for (const meeting of body.data.meetings) {
       expect(meeting).not.toHaveProperty('availability');
-      expect(meeting).not.toHaveProperty('occurrences');
     }
+  });
+
+  it('hides exactly as many rows as "Show all" reveals on a recurring calendar', async () => {
+    // The contract behind "Show all meetings (N hidden)": plain rows minus
+    // filtered rows equals hiddenCount, recurring series and cancelled
+    // occurrences included. Before the plain listing collapsed series, a
+    // daily standup made N understate the reveal by (occurrences - 1).
+    const calendar = [
+      event('x1', 'Scrapped', graphTime(-2 * DAY), 'https://join/dead', {
+        end: graphTime(-2 * DAY + HOUR),
+        isCancelled: true,
+      }),
+      event('x2', 'Scrapped', graphTime(-1 * DAY), 'https://join/dead', {
+        end: graphTime(-1 * DAY + HOUR),
+        isCancelled: true,
+      }),
+      event('n1', 'All-hands', graphTime(-30 * MINUTE), 'https://join/live', {
+        end: graphTime(30 * MINUTE),
+      }),
+      event('n2', 'All-hands', graphTime(-20 * MINUTE), 'https://join/live', {
+        end: graphTime(40 * MINUTE),
+      }),
+      event('ok1', 'Weekly', graphTime(-2 * DAY), 'https://join/ok', {
+        end: graphTime(-2 * DAY + HOUR),
+      }),
+      event('ok2', 'Weekly', graphTime(-1 * DAY), 'https://join/ok', {
+        end: graphTime(-1 * DAY + HOUR),
+      }),
+      event('e1', 'Empty', graphTime(-3 * DAY), 'https://join/empty', {
+        end: graphTime(-3 * DAY + HOUR),
+      }),
+    ];
+    probeMock.mockResolvedValue(
+      probeResult([
+        {
+          eventId: 'ok2',
+          status: 'available',
+          resources: { meetingId: 'om-4', transcripts: [], recordings: [] },
+        },
+        { eventId: 'e1', status: 'none' },
+      ]),
+    );
+
+    const { data } = await filteredListing(calendar);
+    graphJsonMock.mockResolvedValue({ value: calendar });
+    const plain = await parseJsonResponse(await meetingsGET(request()));
+
+    expect(data.meetings).toHaveLength(1);
+    expect(plain.data.meetings).toHaveLength(4);
+    expect(plain.data.meetings.length - data.meetings.length).toBe(
+      data.hiddenCount,
+    );
   });
 });
 
