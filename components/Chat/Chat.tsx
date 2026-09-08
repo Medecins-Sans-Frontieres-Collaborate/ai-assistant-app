@@ -24,6 +24,7 @@ import { useUI } from '@/client/hooks/ui/useUI';
 
 import { isLocalModel } from '@/lib/services/models/localModels';
 
+import { isAgentShapedModelId } from '@/lib/utils/app/agentAttachment';
 import { downloadChatDebugBundle } from '@/lib/utils/app/export/chatDebugExport';
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
 import { entryToDisplayMessage } from '@/lib/utils/shared/chat/messageVersioning';
@@ -139,6 +140,16 @@ export function Chat({
   // than via useChat — only this component consumes them).
   const lastDenial = useChatStore((s) => s.lastDenial);
   const resendWithoutFeature = useChatStore((s) => s.resendWithoutFeature);
+  // The failed turn used an agent-pinned/swapped model: ModelSelectionMiddleware
+  // re-swaps to it on every attempt, so "Choose another model" cannot fix a
+  // per-model denial here — see ChatError's isAgentModelDenial prop.
+  const isAgentModelDenial = !!(
+    failedConversation &&
+    (isAgentShapedModelId(failedConversation.model?.id) ||
+      failedConversation.model?.isOrganizationAgent === true ||
+      failedConversation.model?.isCustomAgent === true ||
+      !!failedConversation.bot)
+  );
 
   const stopGenerationConfirmSource = useUIStore(
     (state) => state.stopGenerationConfirmSource,
@@ -509,6 +520,24 @@ export function Chat({
     clearError();
   }, [selectedConversation?.id, clearError]);
 
+  // A per-model denial card goes stale the moment the user picks a
+  // different model for this same conversation: refetch() from the
+  // notifyLimitsChanged() call may take a beat, but the picker's choice is
+  // an immediate, deliberate fix. Without this the red "Choose another
+  // model" card sits there — still offering the same action — after it has
+  // already been taken (docs/LIMITS_USER_FACING_UX.md §7.4 follow-up).
+  // Scoped to per-model shapes only: a feature-gate or overall-cap card is
+  // unrelated to which model is selected.
+  const isPerModelDenial =
+    lastDenial?.limitKey === 'model.allowed' ||
+    lastDenial?.limitKey === 'model.requests';
+  useEffect(() => {
+    if (isPerModelDenial) clearError();
+    // Deliberately excludes isPerModelDenial/clearError: only a MODEL id
+    // change should re-run this, not the denial being classified.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedConversation?.model?.id]);
+
   // When the failed turn never produced an assistant message, Regenerate
   // has nothing to add a version to — offer Retry instead.
   const failedTrailingIsUser = (() => {
@@ -815,6 +844,7 @@ export function Chat({
           denial={lastDenial}
           onChooseModel={handleOpenModelSelector}
           onResendWithoutFeature={resendWithoutFeature}
+          isAgentModelDenial={isAgentModelDenial}
         />
 
         {/* Model Switch Prompt (shown after successful retry) */}
