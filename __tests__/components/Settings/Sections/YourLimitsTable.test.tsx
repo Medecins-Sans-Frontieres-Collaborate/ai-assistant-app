@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 
 import type {
   MeLimit,
@@ -60,6 +60,7 @@ function limitsState(
     limits: MeLimit[];
     models: Record<string, ModelAvailability>;
     usageUnavailable: boolean;
+    refetch: ReturnType<typeof vi.fn>;
   }> = {},
 ) {
   return {
@@ -280,23 +281,28 @@ describe('YourLimitsTable', () => {
     expect(screen.getByText('Not available')).toBeInTheDocument();
   });
 
-  it('does not repeat the chat message cap once per model', () => {
+  it('does not repeat the chat message cap once per model, even with a drifted resetAt', () => {
+    // Production shape: the chat row's and the model row's `resetAt` come
+    // from two separate `periods.resetAt()` calls and differ by whatever
+    // millisecond each call landed on — the dedup must not key on them.
     const cap = counter('chat.messagesPerDay', 20, {
       used: 4,
       remaining: 16,
       resetAt,
     });
+    const drifted = new Date(new Date(resetAt).getTime() + 37).toISOString();
     mockUseMyLimits.mockReturnValue(
       limitsState({
         limits: [cap],
         models: {
-          // Same binding cell as the chat row → skipped.
+          // Same (limit, used) as the chat row but a DIFFERENT resetAt →
+          // still skipped, because it's the same binding cell.
           [OpenAIModelID.GPT_5_2]: {
             allowed: true,
             limit: 20,
             used: 4,
             remaining: 16,
-            resetAt,
+            resetAt: drifted,
           },
           // Its own per-model cap → shown.
           [OpenAIModelID.DEEPSEEK_R1]: {
@@ -314,6 +320,158 @@ describe('YourLimitsTable', () => {
     expect(screen.queryByText('GPT-5.2')).not.toBeInTheDocument();
     expect(screen.getByText('DeepSeek-R1')).toBeInTheDocument();
     expect(screen.getByText('1 / 5 requests')).toBeInTheDocument();
+  });
+
+  it('still dedups the chat cap when usage is unavailable and the chat row has no resetAt at all', () => {
+    mockUseMyLimits.mockReturnValue(
+      limitsState({
+        usageUnavailable: true,
+        limits: [counter('chat.messagesPerDay', 20, { used: 4 })],
+        models: {
+          [OpenAIModelID.GPT_5_2]: {
+            allowed: true,
+            limit: 20,
+            used: 4,
+            resetAt,
+          },
+        },
+      }),
+    );
+    render(<YourLimitsTable />);
+    expect(screen.getByText('Messages per day')).toBeInTheDocument();
+    expect(screen.queryByText('GPT-5.2')).not.toBeInTheDocument();
+  });
+
+  it('skips an unqualified model.requests default in favor of the model-specific answer', () => {
+    // A bare `model.requests` row is only the compiled default — no counter
+    // is ever written under the unqualified key — so it must not render a
+    // phantom "0 / N" line next to the real per-model row.
+    mockUseMyLimits.mockReturnValue(
+      limitsState({
+        limits: [
+          {
+            limitKey: 'model.requests',
+            value: 50,
+            unit: 'requests',
+            window: 'day',
+            source: 'global',
+            used: 0,
+            remaining: 50,
+          },
+        ],
+        models: {
+          [OpenAIModelID.GPT_5_2]: {
+            allowed: true,
+            limit: 50,
+            used: 50,
+            remaining: 0,
+            reason: 'exhausted',
+            resetAt,
+          },
+        },
+      }),
+    );
+    render(<YourLimitsTable />);
+    expect(screen.getByText('GPT-5.2')).toBeInTheDocument();
+    expect(screen.getByText('50 / 50 requests')).toBeInTheDocument();
+    expect(screen.queryByText('Messages per model')).not.toBeInTheDocument();
+    expect(screen.queryByText('0 / 50 requests')).not.toBeInTheDocument();
+  });
+
+  it('skips an unqualified model.allowed default (models already carries the per-model verdict)', () => {
+    const rows = selectYourLimitRows(
+      [
+        {
+          limitKey: 'model.allowed',
+          value: false,
+          unit: 'boolean',
+          window: 'none',
+          source: 'global',
+        },
+      ],
+      { [OpenAIModelID.GPT_5_2]: { allowed: false, reason: 'blocked' } },
+      (id) => id,
+    );
+    expect(rows).toEqual([
+      expect.objectContaining({
+        id: `model:${OpenAIModelID.GPT_5_2}`,
+        blocked: true,
+      }),
+    ]);
+  });
+
+  it('collapses a shared family envelope into one row instead of one per model', () => {
+    mockUseMyLimits.mockReturnValue(
+      limitsState({
+        models: {
+          [OpenAIModelID.GPT_5_2]: {
+            allowed: true,
+            limit: 100,
+            used: 40,
+            remaining: 60,
+            resetAt,
+          },
+          [OpenAIModelID.GPT_5_MINI]: {
+            allowed: true,
+            limit: 100,
+            used: 40,
+            remaining: 60,
+            resetAt,
+          },
+        },
+      }),
+    );
+    render(<YourLimitsTable />);
+    expect(screen.getByText('GPT models')).toBeInTheDocument();
+    expect(screen.getByText('40 / 100 requests')).toBeInTheDocument();
+    expect(screen.queryByText('GPT-5.2')).not.toBeInTheDocument();
+    expect(screen.queryByText('GPT-5 Mini')).not.toBeInTheDocument();
+    // One row, one countdown — not two.
+    expect(screen.getAllByText(/^Resets in/)).toHaveLength(1);
+  });
+
+  it('does not collapse two models in the same family whose numbers differ', () => {
+    const rows = selectYourLimitRows(
+      [],
+      {
+        modelA: { allowed: true, limit: 100, used: 40, resetAt },
+        modelB: { allowed: true, limit: 100, used: 12, resetAt },
+      },
+      (id) => id,
+      () => 'GPT',
+    );
+    expect(rows).toHaveLength(2);
+    expect(rows.every((r) => !r.isFamilyRow)).toBe(true);
+  });
+
+  it('refetches once a countdown expires, so an exhausted row does not linger past the reset', async () => {
+    vi.useFakeTimers();
+    try {
+      const refetch = vi.fn();
+      const soon = new Date(Date.now() + 1000).toISOString();
+      mockUseMyLimits.mockReturnValue(
+        limitsState({
+          limits: [
+            counter('chat.messagesPerDay', 20, {
+              used: 20,
+              remaining: 0,
+              resetAt: soon,
+            }),
+          ],
+          refetch,
+        }),
+      );
+      render(<YourLimitsTable />);
+      expect(screen.getByText('Limit reached')).toBeInTheDocument();
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2000);
+      });
+
+      expect(refetch).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('falls back to the id for a model the client cannot name', () => {
@@ -366,6 +524,7 @@ describe('YourLimitsTable label coverage', () => {
       'resetsIn',
       'limitReached',
       'familyLimitReached',
+      'familyRow',
       'usageUnavailable',
     ]) {
       expect(lookup(`limitsUx.mine.${key}`), key).toBeTruthy();
