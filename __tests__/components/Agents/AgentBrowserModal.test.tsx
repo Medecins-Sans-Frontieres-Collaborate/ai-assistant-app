@@ -80,7 +80,13 @@ const limitsState = vi.hoisted(() => ({
   enforce: false,
   models: {} as Record<
     string,
-    { allowed: boolean; reason?: string; remaining?: number; limit?: number }
+    {
+      allowed: boolean;
+      reason?: string;
+      remaining?: number;
+      limit?: number;
+      resetAt?: string;
+    }
   >,
 }));
 vi.mock('@/client/hooks/settings/useMyLimits', async (importOriginal) => {
@@ -334,6 +340,13 @@ describe('AgentBrowserModal', () => {
         expect(
           within(row).getByTestId('agent-model-unavailable'),
         ).toHaveTextContent('agentModelUnavailable');
+        // A permanent block never resets — the lock icon says so; the
+        // clock (implying "comes back later") is wrong here.
+        expect(
+          row.querySelector(
+            '[data-testid="agent-model-unavailable"] .tabler-icon-lock',
+          ),
+        ).not.toBeNull();
         // The agent itself is not restricted: still attachable.
         fireEvent.click(within(row).getByText('Add to this chat'));
         expect(updateConversation).toHaveBeenCalledWith('conv-1', {
@@ -361,9 +374,42 @@ describe('AgentBrowserModal', () => {
       } as AvailableAgent);
       try {
         render(<AgentBrowserModal />);
-        expect(screen.getByTestId('agent-model-unavailable')).toHaveTextContent(
-          'agentModelExhaustedNoReset',
-        );
+        const note = screen.getByTestId('agent-model-unavailable');
+        expect(note).toHaveTextContent('agentModelExhaustedNoReset');
+        // No reset known — a clock (not a lock) still fits, since the cap
+        // itself is transient in principle.
+        expect(note.querySelector('.tabler-icon-clock')).not.toBeNull();
+      } finally {
+        AGENTS.splice(0, AGENTS.length, ...original);
+      }
+    });
+
+    it('includes the reset countdown when the server sent one, matching ModelHeader for the same agent', () => {
+      // Regression: modelNoteFor used to always render the *NoReset variant
+      // regardless of `resetAt`, disagreeing with ModelHeader's wording for
+      // the identical pinned-model state.
+      limitsState.enforce = true;
+      limitsState.models = {
+        'gpt-5.2': {
+          allowed: true,
+          reason: 'exhausted',
+          remaining: 0,
+          limit: 5,
+          resetAt: new Date(Date.now() + 6 * 3600_000).toISOString(),
+        },
+      };
+      const original = AGENTS.splice(0, AGENTS.length);
+      AGENTS.push({
+        ...PINNED[0],
+        pinnedModelId: 'gpt-5.2',
+      } as AvailableAgent);
+      try {
+        render(<AgentBrowserModal />);
+        const note = screen.getByTestId('agent-model-unavailable');
+        // The countdown-bearing variant, not its NoReset sibling (a plain
+        // substring match on "agentModelExhausted" would pass either way).
+        expect(note).toHaveTextContent(/^agentModelExhausted$/);
+        expect(note.querySelector('.tabler-icon-clock')).not.toBeNull();
       } finally {
         AGENTS.splice(0, AGENTS.length, ...original);
       }
