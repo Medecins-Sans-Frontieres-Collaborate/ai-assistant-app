@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { useNewConversation } from '@/client/hooks/conversation/useNewConversation';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('react-hot-toast', () => ({
@@ -64,6 +65,9 @@ describe('useNewConversation', () => {
       searchTerm: '',
       isLoaded: true,
     });
+    // Discovery has settled by default — the realistic post-load state.
+    // The "discovered-only" guard test below overrides this.
+    useSettingsStore.setState({ modelListSource: 'discovery' });
   });
 
   it('creates a conversation in the requested folder with the default model and selects it', () => {
@@ -174,6 +178,29 @@ describe('useNewConversation', () => {
     it('falls back to the first served model when the default is absent too', () => {
       settingsState.defaultModelId = 'model-retired';
       busyWith({ id: 'model-gone', name: 'Gone' });
+      expect(createdModelId()).toBe('model-a');
+    });
+
+    // docs/LIMITS_USER_FACING_UX.md §7.4 follow-up: an absence from `models`
+    // is only decisive once it MEANS something — mirrors
+    // ModelUnavailableNotice's isServedListRefined guard.
+    it('carries over a discovered-only model during the static-seed window (modelListSource not yet refined)', () => {
+      useSettingsStore.setState({ modelListSource: 'static' });
+      // Not a key of OpenAIModels and not in `models` — indistinguishable
+      // from "hidden" without the modelListSource guard.
+      busyWith({ id: 'discovered-elsewhere', name: 'Discovered' });
+      expect(createdModelId()).toBe('discovered-elsewhere');
+    });
+
+    it('falls back during a discovery outage too — "fallback" is a settled source, not a static-seed window', () => {
+      useSettingsStore.setState({ modelListSource: 'fallback' });
+      busyWith({ id: 'discovered-elsewhere', name: 'Discovered' });
+      expect(createdModelId()).toBe('model-a');
+    });
+
+    it('still falls back once discovery has answered and the id is genuinely absent', () => {
+      useSettingsStore.setState({ modelListSource: 'discovery' });
+      busyWith({ id: 'discovered-elsewhere', name: 'Discovered' });
       expect(createdModelId()).toBe('model-a');
     });
 
