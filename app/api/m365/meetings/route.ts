@@ -2,14 +2,15 @@
  * Teams meetings for the §4 meeting-import flow (third pass).
  *
  * GET /api/m365/meetings                         → recent online meetings
- *     (calendarView, past 14 days; listing needs only calendar read — the
- *     tenant granted Calendars.ReadWrite, there is no narrower Calendars.Read
- *     in the grant, which user-facing consent copy should note).
+ *     (calendarView, past 14 days, one row per recurring series; listing
+ *     needs only calendar read — the tenant granted Calendars.ReadWrite,
+ *     there is no narrower Calendars.Read in the grant, which user-facing
+ *     consent copy should note).
  * GET /api/m365/meetings?artifacts=required      → the same listing, but
  *     filtered server-side to meetings that actually have a transcript or
  *     recording, each carrying its resolved resources inline. Costs a
  *     bounded Graph fan-out (see meetingArtifacts.ts); the plain listing
- *     above is unchanged and stays the fallback for "show everything".
+ *     above probes nothing and stays the fallback for "show everything".
  * GET /api/m365/meetings?joinWebUrl=…            → resolve one meeting to its
  *     online-meeting id + available transcripts/recordings.
  * GET /api/m365/meetings?meetingId=…&transcriptId=… → the transcript as
@@ -111,13 +112,18 @@ function normalizeEvent(event: GraphEvent): M365MeetingEntry | null {
  * fills the list, and probes the identical meeting once per occurrence.
  * The most recent occurrence represents the group; the artifact buttons
  * are labelled with each transcript's own date, so nothing is lost.
+ *
+ * BOTH listings collapse this way. The filtered view's `hiddenCount` is a
+ * count of join URLs, and "Show all meetings (N hidden)" swaps to the plain
+ * listing — so the plain listing must count in the same unit, or a
+ * calendar full of standups would reveal far more rows than N advertised.
  */
 function dedupeByJoinWebUrl(meetings: M365MeetingEntry[]): M365MeetingEntry[] {
   const groups = new Map<string, M365MeetingEntry>();
   for (const meeting of meetings) {
     const existing = groups.get(meeting.joinWebUrl);
     if (!existing) {
-      groups.set(meeting.joinWebUrl, { ...meeting, occurrences: 1 });
+      groups.set(meeting.joinWebUrl, meeting);
       continue;
     }
     const newer = (meeting.start ?? '') > (existing.start ?? '');
@@ -126,6 +132,7 @@ function dedupeByJoinWebUrl(meetings: M365MeetingEntry[]): M365MeetingEntry[] {
       occurrences: (existing.occurrences ?? 1) + 1,
     });
   }
+  // `occurrences` is documented as absent for a single-instance meeting.
   return [...groups.values()];
 }
 
@@ -255,8 +262,13 @@ export async function GET(req: NextRequest) {
       .filter((m): m is M365MeetingEntry => m !== null);
 
     if (artifacts !== 'required') {
+      // Cancelled occurrences are kept here on purpose: this is the "show
+      // everything" view, and the filtered view counts a wholly cancelled
+      // series among the rows it hides.
       return successResponse({
-        meetings: normalized.sort(byStartDesc).slice(0, MAX_MEETINGS),
+        meetings: dedupeByJoinWebUrl(normalized)
+          .sort(byStartDesc)
+          .slice(0, MAX_MEETINGS),
       });
     }
 
@@ -266,8 +278,10 @@ export async function GET(req: NextRequest) {
     //
     // hiddenCount is what "Show all meetings (N hidden)" promises, so it
     // counts every meeting this view drops for ANY reason — not just the
-    // ones a probe proved empty. Undercounting it would make the toggle
-    // reveal more rows than it advertised.
+    // ones a probe proved empty. It counts join URLs (one per recurring
+    // series), and the plain listing the toggle reveals is collapsed the
+    // same way, so N is exactly the rows the toggle adds, up to the
+    // MAX_MEETINGS cap on either side.
     const nowMs = end.getTime();
     const cancelled = new Set(
       events.filter((e) => e.isCancelled && e.id).map((e) => e.id),
