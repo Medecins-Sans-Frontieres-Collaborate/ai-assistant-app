@@ -36,6 +36,7 @@ import {
   useAgentToolGates,
   useToolLimitGates,
 } from '@/client/hooks/settings/useAgentToolGates';
+import { useResetCountdown } from '@/client/hooks/settings/useMyLimits';
 import { useCameraSupport } from '@/client/hooks/ui/useCameraSupport';
 import { useDropdownKeyboardNav } from '@/client/hooks/ui/useDropdownKeyboardNav';
 import useEnhancedOutsideClick from '@/client/hooks/ui/useEnhancedOutsideClick';
@@ -543,14 +544,40 @@ const Dropdown: React.FC<DropdownProps> = ({
         : undefined,
     [tGates],
   );
+  // Reset countdowns for the exhausted note — called unconditionally (a
+  // fixed three calls every render, whatever the agent gates hide) so the
+  // user learns WHEN the budget comes back, not just that it is gone.
+  const searchResetLabel = useResetCountdown(
+    toolLimits.webSearch.budget?.resetAt,
+  );
+  const interpreterResetLabel = useResetCountdown(
+    toolLimits.codeInterpreter.budget?.resetAt,
+  );
+  const m365ResetLabel = useResetCountdown(toolLimits.m365.budget?.resetAt);
   // Budget annotations: "N left today" when low, and at 0 a note that the
   // model will answer without the tool — the toggle itself stays usable,
-  // since the server degrades instead of refusing the message.
+  // since the server degrades instead of refusing the message. Blocked also
+  // returns the lock reason as a note: the row's own `title` is otherwise
+  // shadowed by the inner label span's `title` (DropdownMenuItem), which
+  // leaves hovering the row's visible text showing just the label — and
+  // nothing at all on touch. The note is the one copy of the reason that is
+  // actually reachable without a mouse.
   const budgetNoteFor = useCallback(
-    (gate: ToolLimitGate): Pick<MenuItem, 'note' | 'noteTone'> => {
-      if (gate.blocked) return {};
+    (
+      gate: ToolLimitGate,
+      lockReason: string | undefined,
+      resetLabel: string | null,
+    ): Pick<MenuItem, 'note' | 'noteTone'> => {
+      if (gate.blocked) {
+        return lockReason ? { note: lockReason, noteTone: 'muted' } : {};
+      }
       if (gate.exhausted) {
-        return { note: tGates('exhausted'), noteTone: 'warning' };
+        return {
+          note: resetLabel
+            ? tGates('exhaustedResets', { resets: resetLabel })
+            : tGates('exhausted'),
+          noteTone: 'warning',
+        };
       }
       if (gate.low && gate.budget) {
         return {
@@ -563,6 +590,11 @@ const Dropdown: React.FC<DropdownProps> = ({
     [tGates],
   );
   const connectorsLockReason = lockReasonFor(toolLimits.mcp, 'connectors');
+  const searchLockReason = lockReasonFor(toolLimits.webSearch, 'webSearch');
+  const interpreterLockReason = lockReasonFor(
+    toolLimits.codeInterpreter,
+    'codeInterpreter',
+  );
 
   // Per-item icon color is a deliberate carve-out: this menu is scanned often
   // and the hue helps locate actions at a glance. Each color matches its
@@ -683,8 +715,12 @@ const Dropdown: React.FC<DropdownProps> = ({
                 !toolLimits.webSearch.blocked &&
                 searchMode === SearchMode.ALWAYS,
               parentId: 'aiTools',
-              lockReason: lockReasonFor(toolLimits.webSearch, 'webSearch'),
-              ...budgetNoteFor(toolLimits.webSearch),
+              lockReason: searchLockReason,
+              ...budgetNoteFor(
+                toolLimits.webSearch,
+                searchLockReason,
+                searchResetLabel,
+              ),
             },
           ]),
       // Force code execution on the next messages (InterpreterMode.ALWAYS).
@@ -711,11 +747,12 @@ const Dropdown: React.FC<DropdownProps> = ({
                 !toolLimits.codeInterpreter.blocked &&
                 interpreterMode === InterpreterMode.ALWAYS,
               parentId: 'aiTools',
-              lockReason: lockReasonFor(
+              lockReason: interpreterLockReason,
+              ...budgetNoteFor(
                 toolLimits.codeInterpreter,
-                'codeInterpreter',
+                interpreterLockReason,
+                interpreterResetLabel,
               ),
-              ...budgetNoteFor(toolLimits.codeInterpreter),
             },
           ]),
       // Connectors: its own expandable parent listing every CONFIGURED
@@ -791,7 +828,14 @@ const Dropdown: React.FC<DropdownProps> = ({
                     checked: !connectorsLockReason && builtinM365Active,
                     parentId: 'focusConnector',
                     lockReason: connectorsLockReason,
-                    ...budgetNoteFor(toolLimits.m365),
+                    // No lock-reason note here: this row nests under
+                    // Connectors, whose parent already carries the reason as
+                    // its own note (matching every other connector child).
+                    ...budgetNoteFor(
+                      toolLimits.m365,
+                      undefined,
+                      m365ResetLabel,
+                    ),
                   },
                 ]
               : []),
@@ -1126,8 +1170,12 @@ const Dropdown: React.FC<DropdownProps> = ({
       hideWebSearch,
       hideCodeInterpreter,
       toolLimits,
-      lockReasonFor,
       budgetNoteFor,
+      searchResetLabel,
+      interpreterResetLabel,
+      m365ResetLabel,
+      searchLockReason,
+      interpreterLockReason,
       connectorsLockReason,
       hasAiToolChildren,
       showConnectors,
@@ -1189,11 +1237,21 @@ const Dropdown: React.FC<DropdownProps> = ({
   // Wrap each action so activating it records usage (drives "Frequently used").
   // Usage is debounced (see recordSuccessfulToolUsage) so the order only
   // settles after repeated use. Pinning does not count — separate control.
+  //
+  // `DropdownMenuItem` only neutralises the MOUSE path (its button gets
+  // `disabled` / `onClick={undefined}`). Keyboard activation goes through
+  // `useDropdownKeyboardNav`, which calls `flatVisibleItems[selectedIndex]
+  // .onClick()` unconditionally — a locked or disabled row is still in that
+  // list (arrow keys can select it) and Enter would otherwise run the real
+  // action and credit usage even though the row shows locked/disabled. Guard
+  // here so both paths share one inert behavior for a locked or disabled row
+  // (docs/LIMITS_USER_FACING_UX.md §7.4).
   const trackedItems = useMemo(
     () =>
       menuItems.map((item) => ({
         ...item,
         onClick: () => {
+          if (item.lockReason || item.disabled) return;
           recordSuccessfulToolUsage(item.id);
           item.onClick();
         },
