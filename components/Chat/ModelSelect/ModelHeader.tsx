@@ -33,7 +33,17 @@ import { OrganizationAgent } from '@/types/organizationAgent';
 import { Tooltip } from '@/components/UI/Tooltip';
 
 import { TIER_TEXT_CLASSES } from './EmissionsTierIcon';
+import {
+  LowRemainingPill,
+  ModelLimitBadge,
+  useModelLimitCopy,
+} from './ModelLimitBadge';
 import { ModelProviderIcon } from './ModelProviderIcon';
+import {
+  pinnedModelAvailability,
+  pinnedModelName,
+  useModelAvailabilityMap,
+} from './modelLimits';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { getIconComponent } from '@/lib/organizationAgents';
@@ -43,6 +53,8 @@ interface ModelHeaderProps {
   modelConfig?: OpenAIModel | null;
   setMobileView: (view: 'list' | 'details') => void;
   organizationAgent?: OrganizationAgent;
+  /** Catalog model an agent pins the chat to — see ModelDetailsPanel. */
+  pinnedModelId?: string;
   /** When true, uses light text colors for visibility over a background image */
   hasBackgroundImage?: boolean;
 }
@@ -52,6 +64,7 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
   modelConfig,
   setMobileView,
   organizationAgent,
+  pinnedModelId,
   hasBackgroundImage = false,
 }) => {
   const t = useTranslations();
@@ -68,6 +81,19 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
     () => models.find((m) => m.id === selectedModel?.id),
     [models, selectedModel?.id],
   );
+
+  // Usage-limit state of what this header stands for: the model itself, or
+  // — for an agent that pins one — that pinned model. Same badge the list
+  // rows carry, so the state is visible before the picker is even opened
+  // (the header also fronts the current conversation's model).
+  const limitsMap = useModelAvailabilityMap();
+  const limitView = pinnedModelId
+    ? pinnedModelAvailability(pinnedModelId, limitsMap, models)
+    : limitsMap.lookup(selectedModel?.id);
+  const limitCopy = useModelLimitCopy(limitView, {
+    onExpired: limitsMap.refetch,
+    agentModelName: pinnedModelId ? pinnedModelName(pinnedModelId) : undefined,
+  });
 
   // Defensive check - should not happen if parent guards correctly
   if (!selectedModel) {
@@ -174,6 +200,16 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
         >
           {localizedName}
         </h2>
+        {/* onExpired lives on the copy hook above (one countdown owner). */}
+        <ModelLimitBadge
+          view={limitView}
+          agentModelName={
+            pinnedModelId ? pinnedModelName(pinnedModelId) : undefined
+          }
+          size={18}
+          className={hasBackgroundImage ? 'text-amber-300' : ''}
+        />
+        <LowRemainingPill view={limitView} />
         <button
           type="button"
           onClick={() =>
@@ -234,6 +270,18 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
           </p>
         );
       })()}
+
+      {/* The badge's sentence in prose too: the header is the one place a
+          user lands on a spent model without hovering anything. */}
+      {limitCopy && (
+        <p
+          data-testid="model-limit-header-note"
+          className={`text-sm mb-3 ${hasBackgroundImage ? 'text-amber-200' : 'text-amber-700 dark:text-amber-400'}`}
+          style={textShadow}
+        >
+          {limitCopy}
+        </p>
+      )}
 
       {organizationAgent?.maintainedBy && (
         <p
