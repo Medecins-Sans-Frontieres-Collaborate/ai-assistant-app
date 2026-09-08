@@ -49,6 +49,12 @@ interface ModelDetailsPanelProps {
   onDeleteAgent?: (agentId: string) => void;
   // Organization agent props
   organizationAgent?: OrganizationAgent;
+  /**
+   * Catalog model the selected agent pins the conversation to (prompt
+   * agents). The header badges the agent when that model is blocked or
+   * exhausted for this user — the agent itself is never restricted.
+   */
+  pinnedModelId?: string;
 }
 
 export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
@@ -68,6 +74,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
   onEditAgent,
   onDeleteAgent,
   organizationAgent,
+  pinnedModelId,
 }) => {
   const hasAgentImage = organizationAgent?.image;
   const isCustomSourceModel = selectedModel.isCustomSourceModel === true;
@@ -106,6 +113,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
                 modelConfig={modelConfig}
                 setMobileView={setMobileView}
                 organizationAgent={organizationAgent}
+                pinnedModelId={pinnedModelId}
                 hasBackgroundImage
               />
             </div>
@@ -117,6 +125,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
               modelConfig={modelConfig}
               setMobileView={setMobileView}
               organizationAgent={organizationAgent}
+              pinnedModelId={pinnedModelId}
             />
           </div>
         </>
@@ -126,6 +135,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
           modelConfig={modelConfig}
           setMobileView={setMobileView}
           organizationAgent={organizationAgent}
+          pinnedModelId={pinnedModelId}
         />
       )}
 
