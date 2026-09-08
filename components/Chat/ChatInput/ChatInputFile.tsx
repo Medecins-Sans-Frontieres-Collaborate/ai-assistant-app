@@ -9,11 +9,13 @@ import React, {
 } from 'react';
 import toast from 'react-hot-toast';
 
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 
 import { useMyLimits } from '@/client/hooks/settings/useMyLimits';
 
 import { FileUploadService } from '@/client/services/fileUploadService';
+
+import { FILE_SIZE_LIMITS_MB } from '@/lib/utils/app/const';
 
 import {
   ChatInputSubmitTypes,
@@ -107,6 +109,7 @@ const ChatInputFile = ({
 }: ChatInputFileProps) => {
   const t = useTranslations('chatInput');
   const tRoutes = useTranslations('limitsUx.routes');
+  const format = useFormatter();
   const fileInputRef: MutableRefObject<any> = useRef(null);
   const uploadMegabytes = useUploadLimitSync();
 
@@ -157,12 +160,21 @@ const ChatInputFile = ({
         <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs py-1 px-2 rounded shadow-md whitespace-nowrap">
           {t('uploadDocument')}
           {/* Surface the admin cap up front — the user picks a smaller file
-              instead of discovering the cap from the rejection toast. */}
-          {uploadMegabytes !== undefined && (
-            <span className="block text-gray-300">
-              {tRoutes('uploadCapHint', { maxSize: `${uploadMegabytes}MB` })}
-            </span>
-          )}
+              instead of discovering the cap from the rejection toast. Only
+              when the cap undercuts the smallest compiled category cap
+              (images, FILE_SIZE_LIMITS_MB.IMAGE): validateFile still
+              enforces the compiled per-category cap as the floor, so a
+              hint above that would promise a size some category can never
+              reach (e.g. "Files up to 100MB" while a 6MB image still 403s
+              at the compiled 5MB image cap). */}
+          {uploadMegabytes !== undefined &&
+            uploadMegabytes < FILE_SIZE_LIMITS_MB.IMAGE && (
+              <span className="block text-gray-300">
+                {tRoutes('uploadCapHint', {
+                  maxSize: `${format.number(uploadMegabytes)}MB`,
+                })}
+              </span>
+            )}
         </div>
       </div>
     </>
