@@ -41,8 +41,30 @@ vi.mock('@/client/hooks/settings/useSettings', () => ({
 
 let gates = { hideWebSearch: false, hideCodeInterpreter: false };
 
+// Admin usage-limit gates (§7.4). Open by default so the pre-existing suites
+// exercise today's UI; the limits suite below flips them per test.
+const openGate = { blocked: false, exhausted: false, low: false };
+let toolLimits = {
+  webSearch: openGate as {
+    blocked: boolean;
+    exhausted: boolean;
+    low: boolean;
+    budget?: { remaining: number; limit?: number };
+  },
+  codeInterpreter: openGate as {
+    blocked: boolean;
+    exhausted: boolean;
+    low: boolean;
+    budget?: { remaining: number; limit?: number };
+  },
+  mcp: openGate,
+  m365: openGate,
+  enforce: false,
+};
+
 vi.mock('@/client/hooks/settings/useAgentToolGates', () => ({
   useAgentToolGates: () => gates,
+  useToolLimitGates: () => toolLimits,
 }));
 
 /** The row div containing a labelled control group. */
@@ -56,6 +78,13 @@ describe('ToolModeControls', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     gates = { hideWebSearch: false, hideCodeInterpreter: false };
+    toolLimits = {
+      webSearch: openGate,
+      codeInterpreter: openGate,
+      mcp: openGate,
+      m365: openGate,
+      enforce: false,
+    };
     // DeepSeek has no agentId → no Privacy/Azure-AI routing choice.
     selectedConversation = {
       id: 'conv-1',
@@ -188,5 +217,154 @@ describe('ToolModeControls', () => {
     gates = { hideWebSearch: true, hideCodeInterpreter: true };
     rerender(<ToolModeControls />);
     expect(container).toBeEmptyDOMElement();
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// Admin usage limits (docs/LIMITS_USER_FACING_UX.md §7.4): a blocked
+// feature LOCKS its row (disabled, lock icon, reason) and reads as Off
+// without rewriting any stored preference; day budgets annotate the row.
+// The jsdom next-intl mock returns the bare key for namespaces it does
+// not know, so copy is asserted as 'blocked' / 'remaining' / 'exhausted'.
+// ───────────────────────────────────────────────────────────────────
+describe('ToolModeControls — usage-limit gates', () => {
+  const segmentButtons = (label: string) =>
+    Array.from(rowFor(label).querySelectorAll('button')).filter((b) =>
+      ['Off', 'Auto', 'Always'].includes(b.textContent ?? ''),
+    );
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    gates = { hideWebSearch: false, hideCodeInterpreter: false };
+    toolLimits = {
+      webSearch: openGate,
+      codeInterpreter: openGate,
+      mcp: openGate,
+      m365: openGate,
+      enforce: false,
+    };
+    selectedConversation = {
+      id: 'conv-1',
+      model: OpenAIModels[OpenAIModelID.DEEPSEEK_V3_1],
+      defaultSearchMode: SearchMode.INTELLIGENT,
+    };
+    useChatInputStore.setState({
+      searchMode: SearchMode.ALWAYS,
+      interpreterMode: InterpreterMode.ALWAYS,
+    });
+  });
+
+  it('a blocked web search renders disabled with a lock and reads as Off', () => {
+    toolLimits = {
+      ...toolLimits,
+      enforce: true,
+      webSearch: { blocked: true, exhausted: false, low: false },
+    };
+    render(<ToolModeControls />);
+
+    const buttons = segmentButtons('Web search');
+    expect(buttons).toHaveLength(3);
+    buttons.forEach((b) => expect(b).toBeDisabled());
+    // Effective state is Off even though the composer force is ALWAYS...
+    expect(buttons.find((b) => b.textContent === 'Off')).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(screen.getByTestId('tool-lock-webSearch')).toHaveAttribute(
+      'aria-label',
+      'blocked',
+    );
+    // ...and nothing was rewritten.
+    expect(useChatInputStore.getState().searchMode).toBe(SearchMode.ALWAYS);
+    expect(updateConversation).not.toHaveBeenCalled();
+    expect(setDefaultSearchMode).not.toHaveBeenCalled();
+
+    // Clicking a disabled segment is inert.
+    fireEvent.click(buttons.find((b) => b.textContent === 'Always')!);
+    expect(updateConversation).not.toHaveBeenCalled();
+  });
+
+  it('a blocked interpreter locks its row while search stays live', () => {
+    toolLimits = {
+      ...toolLimits,
+      enforce: true,
+      codeInterpreter: { blocked: true, exhausted: false, low: false },
+    };
+    render(<ToolModeControls />);
+
+    segmentButtons('Code interpreter').forEach((b) => expect(b).toBeDisabled());
+    expect(screen.getByTestId('tool-lock-codeInterpreter')).toBeInTheDocument();
+    segmentButtons('Web search').forEach((b) => expect(b).toBeEnabled());
+    expect(screen.queryByTestId('tool-lock-webSearch')).toBeNull();
+    expect(useChatInputStore.getState().interpreterMode).toBe(
+      InterpreterMode.ALWAYS,
+    );
+  });
+
+  it('a low budget annotates the row and keeps the toggle enabled', () => {
+    toolLimits = {
+      ...toolLimits,
+      enforce: true,
+      webSearch: {
+        blocked: false,
+        exhausted: false,
+        low: true,
+        budget: { remaining: 2, limit: 20 },
+      },
+    };
+    render(<ToolModeControls />);
+
+    expect(screen.getByText('remaining')).toBeInTheDocument();
+    segmentButtons('Web search').forEach((b) => expect(b).toBeEnabled());
+    expect(screen.queryByTestId('tool-lock-webSearch')).toBeNull();
+  });
+
+  it('an exhausted budget notes that the model answers without the tool — toggle still enabled', () => {
+    toolLimits = {
+      ...toolLimits,
+      enforce: true,
+      codeInterpreter: {
+        blocked: false,
+        exhausted: true,
+        low: false,
+        budget: { remaining: 0, limit: 5 },
+      },
+    };
+    render(<ToolModeControls />);
+
+    expect(screen.getByText('exhausted')).toBeInTheDocument();
+    const buttons = segmentButtons('Code interpreter');
+    buttons.forEach((b) => expect(b).toBeEnabled());
+    // Still switchable: the server degrades, it does not refuse.
+    fireEvent.click(buttons.find((b) => b.textContent === 'Off')!);
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      defaultInterpreterMode: InterpreterMode.OFF,
+    });
+  });
+
+  it('fails open: with every gate open nothing about the row changes', () => {
+    render(<ToolModeControls />);
+
+    segmentButtons('Web search').forEach((b) => expect(b).toBeEnabled());
+    expect(
+      segmentButtons('Web search').find((b) => b.textContent === 'Always'),
+    ).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.queryByTestId('tool-lock-webSearch')).toBeNull();
+    for (const key of ['blocked', 'remaining', 'exhausted']) {
+      expect(screen.queryByText(key)).toBeNull();
+    }
+  });
+
+  it('an agent gate still wins: a hidden row is not rendered locked', () => {
+    gates = { hideWebSearch: true, hideCodeInterpreter: false };
+    toolLimits = {
+      ...toolLimits,
+      enforce: true,
+      webSearch: { blocked: true, exhausted: false, low: false },
+    };
+    render(<ToolModeControls />);
+
+    expect(screen.queryByText('Web search')).toBeNull();
+    expect(screen.queryByTestId('tool-lock-webSearch')).toBeNull();
   });
 });
