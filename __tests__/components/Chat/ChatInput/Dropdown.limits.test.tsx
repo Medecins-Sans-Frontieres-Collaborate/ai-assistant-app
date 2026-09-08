@@ -85,7 +85,7 @@ type Gate = {
   blocked: boolean;
   exhausted: boolean;
   low: boolean;
-  budget?: { remaining: number; limit?: number };
+  budget?: { remaining: number; limit?: number; resetAt?: string };
 };
 const openGate: Gate = { blocked: false, exhausted: false, low: false };
 const toolLimits = vi.hoisted(() => ({
@@ -94,13 +94,13 @@ const toolLimits = vi.hoisted(() => ({
       blocked: boolean;
       exhausted: boolean;
       low: boolean;
-      budget?: { remaining: number; limit?: number };
+      budget?: { remaining: number; limit?: number; resetAt?: string };
     },
     codeInterpreter: { blocked: false, exhausted: false, low: false } as {
       blocked: boolean;
       exhausted: boolean;
       low: boolean;
-      budget?: { remaining: number; limit?: number };
+      budget?: { remaining: number; limit?: number; resetAt?: string };
     },
     mcp: { blocked: false, exhausted: false, low: false },
     m365: { blocked: false, exhausted: false, low: false },
@@ -155,6 +155,7 @@ describe('Dropdown — usage-limit gates', () => {
       hiddenToolIds: [],
       revealedToolIds: [],
       toolUsageCounts: {},
+      consecutiveToolUsage: { toolId: null, count: 0 },
     });
   });
 
@@ -172,6 +173,12 @@ describe('Dropdown — usage-limit gates', () => {
     expect(search).toHaveAttribute('aria-checked', 'false');
     expect(search).toHaveAttribute('title', 'blocked');
     expect(screen.getByTestId('dropdown-lock-search')).toBeInTheDocument();
+    // The reason is also readable as the row's note, not just an
+    // icon/title an unsighted or touch user cannot reach.
+    expect(screen.getByText('blocked')).toBeInTheDocument();
+    // ...and the label span no longer shadows the button's own tooltip
+    // (the mock t() falls back to the raw key for an unmapped label).
+    expect(screen.getByText('webSearchDropdown')).not.toHaveAttribute('title');
     // The sibling toggle is untouched.
     const interpreter = row('codeInterpreter');
     expect(interpreter).toBeEnabled();
@@ -180,6 +187,42 @@ describe('Dropdown — usage-limit gates', () => {
 
     fireEvent.click(search!);
     expect(useChatInputStore.getState().searchMode).toBe(SearchMode.ALWAYS);
+  });
+
+  it('keyboard Enter on a locked row is inert (does not bypass the mouse-only guard)', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      webSearch: { blocked: true, exhausted: false, low: false },
+    };
+    openMenu();
+    expand('aiTools');
+    // Expanding resets the keyboard selection to the top of the (now longer)
+    // list; walk ArrowDown down to the locked "search" child, wherever it
+    // landed among the sections.
+    const menu = screen.getByRole('menu');
+    for (let i = 0; i < 20; i++) {
+      if (
+        menu.getAttribute('aria-activedescendant') === 'dropdown-item-search'
+      ) {
+        break;
+      }
+      fireEvent.keyDown(menu, { key: 'ArrowDown' });
+    }
+    expect(menu).toHaveAttribute(
+      'aria-activedescendant',
+      'dropdown-item-search',
+    );
+    // Expanding "AI tools" itself records usage for that row — snapshot
+    // after that so the assertion below isolates the locked row's Enter.
+    const usageBeforeEnter = useSettingsStore.getState().consecutiveToolUsage;
+
+    fireEvent.keyDown(menu, { key: 'Enter' });
+
+    expect(useChatInputStore.getState().searchMode).toBe(SearchMode.ALWAYS);
+    expect(useSettingsStore.getState().consecutiveToolUsage).toEqual(
+      usageBeforeEnter,
+    );
   });
 
   it('a blocked interpreter locks its row', () => {
@@ -232,6 +275,31 @@ describe('Dropdown — usage-limit gates', () => {
     expect(useChatInputStore.getState().interpreterMode).toBe(
       InterpreterMode.OFF,
     );
+  });
+
+  it('an exhausted budget with a known resetAt threads the countdown through', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      codeInterpreter: {
+        blocked: false,
+        exhausted: true,
+        low: false,
+        budget: {
+          remaining: 0,
+          limit: 5,
+          resetAt: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(),
+        },
+      },
+    };
+    openMenu();
+    expand('aiTools');
+
+    // The mock t() falls back to the raw key for a namespace it does not
+    // carry, so 'exhaustedResets' rendering (rather than 'exhausted') proves
+    // resetAt reached the note.
+    expect(screen.getByText('exhaustedResets')).toBeInTheDocument();
+    expect(screen.queryByText('exhausted')).toBeNull();
   });
 
   it('a blocked MCP gate locks every connector child and notes it on the parent', () => {
