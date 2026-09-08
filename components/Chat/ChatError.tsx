@@ -18,7 +18,7 @@ import { ErrorCode } from '@/types/errors';
 import { REPEATED_FAILURE_THRESHOLD } from '@/client/stores/chatStore';
 
 /** Features the card can switch off and resend without. */
-export type ResendableFeature = 'webSearch' | 'codeInterpreter';
+export type ResendableFeature = 'webSearch' | 'codeInterpreter' | 'mcp';
 
 /**
  * What a usage-limit denial is about, derived from its (never rendered)
@@ -31,7 +31,7 @@ type DenialShape =
   | { kind: 'modelBlocked' }
   | { kind: 'modelExhausted' }
   | { kind: 'familyExhausted' }
-  | { kind: 'feature'; feature: ResendableFeature | 'mcp' }
+  | { kind: 'feature'; feature: ResendableFeature }
   | { kind: 'cap'; cap: 'messages' | 'tokensDay' | 'tokensMonth' }
   | { kind: 'ceiling' }
   | { kind: 'unknown' };
@@ -105,6 +105,17 @@ interface ChatErrorProps {
   onChooseModel?: () => void;
   /** Switches the gated feature off for this conversation and resends. */
   onResendWithoutFeature?: (feature: ResendableFeature) => void;
+  /**
+   * True when the failed turn's model is agent-pinned or agent-swapped
+   * (an agent-shaped model id, `isOrganizationAgent`/`isCustomAgent`, or a
+   * decoupled `bot` attachment). A per-model denial on an agent invocation
+   * cannot be fixed by "Choose another model": `ModelSelectionMiddleware`
+   * re-swaps to the agent's pinned model on every attempt, so picking a
+   * different model in the picker while the agent stays attached just
+   * reproduces the same 403. Suppresses the picker action in favour of
+   * copy that points at detaching the agent instead.
+   */
+  isAgentModelDenial?: boolean;
 }
 
 /**
@@ -132,6 +143,7 @@ export const ChatError: React.FC<ChatErrorProps> = ({
   denial = null,
   onChooseModel,
   onResendWithoutFeature,
+  isAgentModelDenial = false,
 }) => {
   const t = useTranslations();
   // Privacy default: the debug bundle is metadata-only unless the user
@@ -140,6 +152,16 @@ export const ChatError: React.FC<ChatErrorProps> = ({
 
   const isQuotaDenial = errorCode === ErrorCode.RATE_LIMIT_QUOTA_EXCEEDED;
   const shape = isQuotaDenial ? classifyDenial(denial) : null;
+  // A per-model denial on an agent invocation is a dead end for "Choose
+  // another model": the server re-swaps to the agent's pinned model on the
+  // next attempt regardless of what the picker sends. Only applies to the
+  // per-model shapes — a feature gate or an overall cap is unrelated to the
+  // agent's model.
+  const isAgentDenial =
+    isAgentModelDenial &&
+    (shape?.kind === 'modelBlocked' ||
+      shape?.kind === 'modelExhausted' ||
+      shape?.kind === 'familyExhausted');
   // Localized, relative, in the viewer's timezone — the server sentence
   // only has the UTC instant. Null once the window has rolled over.
   const resetsIn = useResetCountdown(
@@ -154,41 +176,52 @@ export const ChatError: React.FC<ChatErrorProps> = ({
     if (!shape) return null;
     const limit = typeof denial?.limit === 'number' ? denial.limit : undefined;
     let sentence: string | null;
-    switch (shape.kind) {
-      case 'modelBlocked':
-        sentence = t('limitsUx.denial.modelBlocked');
-        break;
-      case 'modelExhausted':
-        sentence = t('limitsUx.denial.modelExhausted', { limit: limit ?? '' });
-        break;
-      case 'familyExhausted':
-        sentence = t('limitsUx.denial.familyExhausted', {
-          limit: limit ?? '',
-        });
-        break;
-      case 'feature':
-        sentence =
-          shape.feature === 'webSearch'
-            ? t('limitsUx.denial.searchBlocked')
-            : shape.feature === 'codeInterpreter'
-              ? t('limitsUx.denial.interpreterBlocked')
-              : t('limitsUx.denial.mcpBlocked');
-        break;
-      case 'cap':
-        sentence =
-          shape.cap === 'messages'
-            ? t('limitsUx.denial.messagesCap', { limit: limit ?? '' })
-            : shape.cap === 'tokensDay'
-              ? t('limitsUx.denial.tokensDayCap')
-              : t('limitsUx.denial.tokensMonthCap');
-        break;
-      case 'ceiling':
-        sentence = t('limitsUx.denial.perRequest', { limit: limit ?? '' });
-        break;
-      default:
-        // Unknown limit key (a newer server): keep the server sentence,
-        // which already avoids provenance, rather than guessing.
-        sentence = null;
+    if (isAgentDenial) {
+      // Blocked, exhausted or family-exhausted all land here for an agent
+      // invocation: whichever it is, re-picking a model in the picker
+      // cannot help while the agent stays attached, so the copy points at
+      // the agent instead of the cap (the reset line, if any, still
+      // applies below).
+      sentence = t('limitsUx.denial.agentModelBlocked');
+    } else {
+      switch (shape.kind) {
+        case 'modelBlocked':
+          sentence = t('limitsUx.denial.modelBlocked');
+          break;
+        case 'modelExhausted':
+          sentence = t('limitsUx.denial.modelExhausted', {
+            limit: limit ?? '',
+          });
+          break;
+        case 'familyExhausted':
+          sentence = t('limitsUx.denial.familyExhausted', {
+            limit: limit ?? '',
+          });
+          break;
+        case 'feature':
+          sentence =
+            shape.feature === 'webSearch'
+              ? t('limitsUx.denial.searchBlocked')
+              : shape.feature === 'codeInterpreter'
+                ? t('limitsUx.denial.interpreterBlocked')
+                : t('limitsUx.denial.mcpBlocked');
+          break;
+        case 'cap':
+          sentence =
+            shape.cap === 'messages'
+              ? t('limitsUx.denial.messagesCap', { limit: limit ?? '' })
+              : shape.cap === 'tokensDay'
+                ? t('limitsUx.denial.tokensDayCap')
+                : t('limitsUx.denial.tokensMonthCap');
+          break;
+        case 'ceiling':
+          sentence = t('limitsUx.denial.perRequest', { limit: limit ?? '' });
+          break;
+        default:
+          // Unknown limit key (a newer server): keep the server sentence,
+          // which already avoids provenance, rather than guessing.
+          sentence = null;
+      }
     }
     if (sentence === null) return null;
     return resetsIn
@@ -242,11 +275,12 @@ export const ChatError: React.FC<ChatErrorProps> = ({
     !!onDownloadDebugInfo;
   const showChooseModel =
     !!onChooseModel &&
+    !isAgentDenial &&
     (shape?.kind === 'modelBlocked' ||
       shape?.kind === 'modelExhausted' ||
       shape?.kind === 'familyExhausted');
   const resendableFeature: ResendableFeature | null =
-    shape?.kind === 'feature' && shape.feature !== 'mcp' ? shape.feature : null;
+    shape?.kind === 'feature' ? shape.feature : null;
   const showResendWithoutFeature =
     !!onResendWithoutFeature && !!resendableFeature;
 
@@ -286,7 +320,9 @@ export const ChatError: React.FC<ChatErrorProps> = ({
                 <span>
                   {resendableFeature === 'webSearch'
                     ? t('limitsUx.denial.turnOffSearchAndResend')
-                    : t('limitsUx.denial.turnOffInterpreterAndResend')}
+                    : resendableFeature === 'codeInterpreter'
+                      ? t('limitsUx.denial.turnOffInterpreterAndResend')
+                      : t('limitsUx.denial.turnOffConnectorsAndResend')}
                 </span>
               </button>
             )}
