@@ -12,6 +12,29 @@ vi.mock('@/client/hooks/settings/useSettings', () => ({
   useSettings: () => ({ models: Object.values(OpenAIModels) }),
 }));
 
+// The "Your limits" block hangs off React Query; stub its data hook so the
+// section renders without a QueryClientProvider. Default: not enforced.
+const mockUseMyLimits = vi.fn();
+vi.mock('@/client/hooks/settings/useMyLimits', async (importOriginal) => ({
+  ...(await importOriginal<
+    typeof import('@/client/hooks/settings/useMyLimits')
+  >()),
+  useMyLimits: () => mockUseMyLimits(),
+}));
+
+const noLimits = {
+  enforce: false,
+  limits: [],
+  models: {},
+  usageUnavailable: false,
+  policyUnavailable: false,
+  mode: 'observe',
+  isLimited: false,
+  isLoading: false,
+  error: null,
+  refetch: vi.fn(),
+};
+
 describe('UsageImpactSection', () => {
   beforeEach(() => {
     useSettingsStore.setState({
@@ -20,6 +43,36 @@ describe('UsageImpactSection', () => {
       estimatedUsageStats: {},
       historicalUsageBackfilledAt: null,
     });
+    mockUseMyLimits.mockReturnValue(noLimits);
+  });
+
+  it('does not render the "Your limits" block when nothing is enforced', () => {
+    render(<UsageImpactSection />);
+    expect(screen.queryByTestId('your-limits')).not.toBeInTheDocument();
+  });
+
+  it('renders the "Your limits" block above the empty state when enforced', () => {
+    mockUseMyLimits.mockReturnValue({
+      ...noLimits,
+      enforce: true,
+      mode: 'enforce',
+      isLimited: true,
+      limits: [
+        {
+          limitKey: 'chat.messagesPerDay',
+          value: 20,
+          unit: 'requests',
+          window: 'day',
+          source: 'global',
+          used: 3,
+          remaining: 17,
+        },
+      ],
+    });
+    render(<UsageImpactSection />);
+    // Both: a freshly limited account has no tracked usage yet.
+    expect(screen.getByTestId('your-limits')).toBeInTheDocument();
+    expect(screen.getByText(/No usage tracked yet/i)).toBeInTheDocument();
   });
 
   it('shows the empty state when nothing is tracked', () => {
