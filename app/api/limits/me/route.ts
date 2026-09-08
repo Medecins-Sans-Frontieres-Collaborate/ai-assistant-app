@@ -7,18 +7,27 @@ import {
   createLimitsBlobStorage,
   readPolicy,
 } from '@/lib/services/limits/limitsStore';
+import {
+  ModelAvailability,
+  UsageWindows,
+  resolveModelAvailability,
+} from '@/lib/services/limits/modelAvailability';
+import { periodKindForWindow, resetAt } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
 import {
   LimitTier,
   ResolvedLimit,
   activeDelegationIds,
+  counterCellName,
   matchingOverrides,
   resolveAllLimits,
   resolveLimit,
+  resolveModelCells,
 } from '@/lib/services/limits/resolver';
 import { canPreviewMail } from '@/lib/services/limits/scopedVerdicts';
 import { LimitEntry, LimitsPolicy } from '@/lib/services/limits/types';
 import { UsageCell, lookupUsage } from '@/lib/services/limits/usageLookup';
+import { readUsage } from '@/lib/services/limits/usageStore';
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import { isValidEmail } from '@/lib/services/m365/tools/shared';
 import {
@@ -37,8 +46,14 @@ import {
 } from '@/lib/utils/server/api/apiResponse';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
+import { OpenAIModelID, OpenAIModels } from '@/types/openai';
+
 import { auth } from '@/auth';
-import { LIMIT_DEFINITIONS, isValidDimension } from '@/config/limits';
+import {
+  LIMIT_DEFINITIONS,
+  getLimitDefinition,
+  isValidDimension,
+} from '@/config/limits';
 
 /**
  * GET /api/limits/me — the caller's effective limits.
@@ -99,6 +114,29 @@ import { LIMIT_DEFINITIONS, isValidDimension } from '@/config/limits';
  * oid via the caller's delegated token, then the day/month ledgers). Every
  * failure yields `usageUnavailable: true` — the preview is a convenience.
  *
+ * The OWN-LIMITS path takes two optional params of its own
+ * (docs/LIMITS_USER_FACING_UX.md §7.1); the `?as=` preview ignores both:
+ *
+ *  - `usage=1` attaches the caller's own consumption. The subject is
+ *    `session.user.id` (the oid the debit path keys counters by), read with
+ *    `readUsage` directly — no Graph call, no `lookupUsage`, no consent
+ *    dependency. Storage is touched ONLY when some counter resolved for this
+ *    principal is numeric, and only the ledgers such a counter lives in: the
+ *    unlimited majority costs zero blob reads, exactly like `reserve()`. Any
+ *    failure answers `usageUnavailable: true`, never an error. With usage,
+ *    each numeric counter row carries `used` / `remaining` / `resetAt`.
+ *  - `models=<ids>` answers per model, for the picker: up to 100 ids, each
+ *    dimension-shaped and in the static catalog (which is where `series`
+ *    comes from); anything else — byom-, local-, org-, foundry- ids, typos
+ *    — is silently skipped. Each accepted id gets a {@link ModelAvailability}
+ *    computed with the SAME conjunctive cells enforcement checks
+ *    (modelAvailability.ts), so the picker can gray an exhausted model or
+ *    family envelope without learning the resolver, and can never disagree
+ *    with the send. The mode is NOT applied here: the client hides/grays only
+ *    in `enforce`, and `mode` is in the payload.
+ *
+ * Neither param changes the no-provenance promise above.
+ *
  * Always answers: there is no server-side feature gate. The `usageLimits`
  * LaunchDarkly flag is client-side only, and the client already gates this
  * fetch on it; a deployment with no authored policy simply resolves an empty
@@ -120,6 +158,141 @@ interface MeLimit {
   /** The global-tier OVERRIDE whose ceiling pinned the value, and only its label. */
   ceilingOverrideId?: string;
   ceilingLabel?: string;
+  /**
+   * Own-limits path with `usage=1`, numeric `counter` rows only: the
+   * caller's consumption this period (0 when no document), what is left,
+   * and when the window rolls over.
+   */
+  used?: number;
+  remaining?: number;
+  resetAt?: string;
+}
+
+/** Hard cap on `models=`; a bad client must not make the server resolve thousands of cells. */
+const MAX_MODEL_IDS = 100;
+
+interface RequestedModel {
+  id: string;
+  series?: string;
+}
+
+/**
+ * The catalog models `models=` asked about: the first {@link MAX_MODEL_IDS}
+ * comma-separated tokens, de-duplicated, dimension-shaped, and present in
+ * the static catalog — the only place a server can learn a model's `series`
+ * without trusting the client's word for its family. Custom-source ids
+ * (`byom-`, `local-`, `org-`, `foundry-`) are never in it and so drop out
+ * here; a byom model that IS metered (`countByomUsage`) is still guarded at
+ * send time — this route just cannot say anything about its family.
+ */
+function requestedModels(param: string | null): RequestedModel[] {
+  if (!param) return [];
+  const out: RequestedModel[] = [];
+  const seen = new Set<string>();
+  for (const raw of param.split(',').slice(0, MAX_MODEL_IDS)) {
+    const id = raw.trim();
+    if (!id || seen.has(id) || !isValidDimension(id)) continue;
+    seen.add(id);
+    const catalog = OpenAIModels[id as OpenAIModelID];
+    if (!catalog) continue;
+    out.push({ id, ...(catalog.series ? { series: catalog.series } : {}) });
+  }
+  return out;
+}
+
+type Ledger = keyof UsageWindows;
+
+/** A numeric `counter` row's ledger, or null for ceilings, gates and unlimited rows. */
+function ledgerOf(row: Pick<MeLimit, 'limitKey' | 'value'>): Ledger | null {
+  const def = getLimitDefinition(row.limitKey);
+  if (!def || def.kind !== 'counter' || typeof row.value !== 'number') {
+    return null;
+  }
+  const kind = periodKindForWindow(def.window);
+  return kind === 'day' || kind === 'month' ? kind : null;
+}
+
+/**
+ * The ledgers a numeric counter for this principal lives in — the unqualified
+ * rows already resolved, plus the per-model cells each requested model would
+ * be metered on (the unqualified `model.requests` row is only a display of
+ * the default; enforcement meters `model:` / `family:` cells, so a policy
+ * with ONLY that default still needs the day ledger). Empty ⇒ zero-cost
+ * path: nothing to attach a counter to, so storage is never touched.
+ */
+function meteredLedgers(
+  rows: MeLimit[],
+  policy: LimitsPolicy | null,
+  principal: Principal,
+  models: RequestedModel[],
+): Set<Ledger> {
+  const ledgers = new Set<Ledger>();
+  for (const row of rows) {
+    const ledger = ledgerOf(row);
+    if (ledger) ledgers.add(ledger);
+  }
+  const perModel = getLimitDefinition('model.requests');
+  if (perModel && models.length > 0) {
+    for (const model of models) {
+      for (const cell of resolveModelCells(
+        perModel,
+        policy,
+        principal,
+        model.id,
+        model.series,
+      )) {
+        const ledger = ledgerOf(cell);
+        if (ledger) ledgers.add(ledger);
+      }
+    }
+  }
+  return ledgers;
+}
+
+/**
+ * The caller's own counters, only the ledgers asked for. `null` on any
+ * failure — the payload says `usageUnavailable`, the picker fails open, and
+ * a blob hiccup never turns "my limits" into a 500.
+ */
+async function readOwnUsage(
+  subjectId: string | undefined,
+  ledgers: ReadonlySet<Ledger>,
+  timezone: string,
+): Promise<UsageWindows | null> {
+  if (!subjectId) return null;
+  try {
+    const [day, month] = await Promise.all([
+      ledgers.has('day') ? readUsage(subjectId, 'day', { timezone }) : {},
+      ledgers.has('month') ? readUsage(subjectId, 'month', { timezone }) : {},
+    ]);
+    return { day, month };
+  } catch (error) {
+    console.warn(
+      `[limits] own usage read failed; answering without counters: ${sanitizeForLog(error)}`,
+    );
+    return null;
+  }
+}
+
+/** Attaches `used` / `remaining` / `resetAt` to every numeric counter row. */
+function attachUsage(
+  rows: MeLimit[],
+  usage: UsageWindows,
+  timezone: string,
+): MeLimit[] {
+  return rows.map((row) => {
+    const ledger = ledgerOf(row);
+    if (!ledger) return row;
+    const value = row.value as number;
+    const used = usage[ledger][counterCellName(row)] ?? 0;
+    const at = resetAt(ledger, timezone);
+    return {
+      ...row,
+      used,
+      remaining: Math.max(0, value - used),
+      ...(at ? { resetAt: at } : {}),
+    };
+  });
 }
 
 interface CollectOptions {
@@ -401,17 +574,55 @@ export async function GET(request: NextRequest) {
     // Never throws.
     await resolveUserGroupIds(request, session);
 
+    const principal = buildPrincipal(session);
+    const timezone = policy?.timezone ?? 'UTC';
+    // No provenance: tier and the pinning record's id/label are preview-only.
+    // No qualified rows either: the picker's per-model answers come from
+    // `models` below, computed conjunctively, not from rows.
+    const limits = collectLimits(policy, principal, {
+      includeUnlimited: false,
+      provenance: false,
+      qualified: false,
+    });
+    const params = request.nextUrl.searchParams;
+    const models = requestedModels(params.get('models'));
+
+    // Own counters: read only when asked AND only when something numeric can
+    // consume them — the unlimited majority never reaches storage.
+    let usage: UsageWindows | null = null;
+    let usageUnavailable = false;
+    if (params.get('usage') === '1') {
+      const ledgers = meteredLedgers(limits, policy, principal, models);
+      if (ledgers.size > 0) {
+        usage = await readOwnUsage(session.user.id, ledgers, timezone);
+        usageUnavailable = usage === null;
+      }
+    }
+
     return successResponse({
       enabled: true,
       mode: policy?.mode ?? 'observe',
       policyUnavailable,
-      // No provenance: tier and the pinning record's id/label are preview-only.
-      // No qualified rows either: nothing user-facing consumes them.
-      limits: collectLimits(policy, buildPrincipal(session), {
-        includeUnlimited: false,
-        provenance: false,
-        qualified: false,
-      }),
+      limits: usage ? attachUsage(limits, usage, timezone) : limits,
+      ...(usageUnavailable ? { usageUnavailable: true } : {}),
+      // Present whenever `models=` was sent, so the client can tell "asked,
+      // none accepted" from "did not ask"; one entry per accepted id.
+      ...(params.has('models')
+        ? {
+            models: Object.fromEntries(
+              models.map((model): [string, ModelAvailability] => [
+                model.id,
+                resolveModelAvailability(
+                  policy,
+                  principal,
+                  model,
+                  usage,
+                  timezone,
+                ),
+              ]),
+            ),
+          }
+        : {}),
     });
   } catch (error) {
     return handleApiError(error, 'Failed to resolve limits');
