@@ -5,14 +5,18 @@ import React from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { isServedCatalogModel } from '@/client/hooks/conversation/useNewConversation';
+import {
+  isServedCatalogModel,
+  isServedListRefined,
+} from '@/client/hooks/conversation/useNewConversation';
+import { notifyLimitsChanged } from '@/client/hooks/settings/limitsUxEvents';
 import {
   useModelAvailability,
   useResetCountdown,
 } from '@/client/hooks/settings/useMyLimits';
 
 import { Conversation } from '@/types/chat';
-import { ModelListSource, OpenAIModelID, OpenAIModels } from '@/types/openai';
+import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
@@ -20,20 +24,6 @@ interface ModelUnavailableNoticeProps {
   conversation: Conversation | null | undefined;
   /** Opens the model picker (the same way the header does). */
   onChooseModel: () => void;
-}
-
-/**
- * The served list has been refined by /api/models. Before that the store
- * holds the static seed, which legitimately lacks discovered-only models —
- * flagging one as "unavailable" during that window would be a flicker, not
- * a fact.
- */
-function isServedListRefined(source: ModelListSource | null): boolean {
-  return (
-    source === 'discovery' ||
-    source === 'discovery-partial' ||
-    source === 'fallback'
-  );
 }
 
 /**
@@ -59,8 +49,14 @@ export function ModelUnavailableNotice({
   // absence means nothing, and the limits payload has no entry for them.
   const catalogId = model && isServedCatalogModel(model) ? model.id : undefined;
   const availability = useModelAvailability(catalogId);
+  // §3b: "on expiry refetch and re-enable" — without this, the sentence
+  // ("has reached its limit for today") outlives the window it describes
+  // in a tab that stays focused past the reset, even once sends to the
+  // model succeed again (staleTime alone would leave it stale for up to
+  // 30s, not the instant the countdown hits zero).
   const resetsIn = useResetCountdown(
     availability.state === 'exhausted' ? availability.resetAt : undefined,
+    { onExpired: notifyLimitsChanged },
   );
 
   if (!model || !catalogId) return null;
