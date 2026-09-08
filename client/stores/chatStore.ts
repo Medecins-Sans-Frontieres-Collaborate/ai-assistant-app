@@ -463,14 +463,28 @@ interface ChatStore {
   retryFailedRequest: () => Promise<void>;
   /**
    * "Turn off <feature> and resend" for a feature-gate denial: the gated
-   * tool was the only reason the request failed, so switching it off for
-   * this conversation and replaying the turn is the one-click fix. Flips
-   * the conversation's default (and the composer's live mode) rather than
-   * the user's global settings default — that preference should come back
-   * when the gate lifts.
+   * tool was the only reason the request failed, so switching it off and
+   * replaying the turn is the one-click fix.
+   *
+   * `webSearch`/`codeInterpreter` flip only the chat-input store's LIVE mode
+   * (plus the explicit `searchMode` argument to `sendMessage`) — never the
+   * conversation's persisted `defaultSearchMode`/`defaultInterpreterMode`,
+   * and never the user's global settings default. `ChatInput` resets the
+   * whole composer (draft, attachments, in-flight uploads) whenever either
+   * conversation field changes, so persisting the flip here would wipe
+   * whatever the user typed while the denial card was showing; the
+   * composer stays off for the rest of this session, matching a manual
+   * toggle, and re-derives from the (unchanged) persisted default on the
+   * next reload or conversation switch.
+   *
+   * `mcp` has no single toggle to flip, so it disables every currently
+   * enabled MCP server (plus the built-in M365 toolset) for this
+   * conversation via `disabledMcpServerIds` and clears any focus pin —
+   * this field isn't read by the composer-reset effect, so it can be
+   * persisted immediately.
    */
   resendWithoutFeature: (
-    feature: 'webSearch' | 'codeInterpreter',
+    feature: 'webSearch' | 'codeInterpreter' | 'mcp',
   ) => Promise<void>;
   /**
    * User-initiated retry of the failed turn on the next fallback-chain
@@ -2469,28 +2483,41 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     let searchMode = failedSearchMode;
     if (feature === 'webSearch') {
       // The turn's search mode travels as an argument (composer state), so
-      // it is overridden here directly; the conversation default is flipped
-      // too so the NEXT message does not hit the same gate.
-      conversationStore.updateConversation(failedConversation.id, {
-        defaultSearchMode: SearchMode.OFF,
-      });
+      // it is overridden here directly. Deliberately NOT persisted onto
+      // `conversation.defaultSearchMode` — see the action's docstring.
       inputStore.setSearchMode(SearchMode.OFF);
-      resendConversation = {
-        ...failedConversation,
-        defaultSearchMode: SearchMode.OFF,
-      };
       searchMode = SearchMode.OFF;
-    } else {
+    } else if (feature === 'codeInterpreter') {
       // sendChatRequest reads the interpreter mode from the chat-input store
       // at send time, so flipping it there is what actually changes the
-      // request; the conversation default keeps it off afterwards.
-      conversationStore.updateConversation(failedConversation.id, {
-        defaultInterpreterMode: InterpreterMode.OFF,
-      });
+      // request. Deliberately NOT persisted onto
+      // `conversation.defaultInterpreterMode` — see the action's docstring.
       inputStore.setInterpreterMode(InterpreterMode.OFF);
+    } else {
+      // 'mcp': no single toggle exists, so drop every currently enabled
+      // server (curated + the M365 builtin toolset) for this conversation.
+      // `mcpServersToSend` is empty exactly when `disabledMcpServerIds`
+      // covers every enabled server and nothing is pinned, which is what
+      // the server's `context.mcpServers.length > 0` gate checks.
+      const settings = useSettingsStore.getState();
+      const enabledServerIds = settings.mcpServers
+        .filter((s) => s.enabled)
+        .map((s) => s.id);
+      const disabledMcpServerIds = Array.from(
+        new Set([
+          ...(failedConversation.disabledMcpServerIds ?? []),
+          ...enabledServerIds,
+          M365_BUILTIN_SERVER_ID,
+        ]),
+      );
+      conversationStore.updateConversation(failedConversation.id, {
+        disabledMcpServerIds,
+        pinnedMcpServerId: undefined,
+      });
       resendConversation = {
         ...failedConversation,
-        defaultInterpreterMode: InterpreterMode.OFF,
+        disabledMcpServerIds,
+        pinnedMcpServerId: undefined,
       };
     }
 
