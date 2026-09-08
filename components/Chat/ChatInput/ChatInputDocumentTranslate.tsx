@@ -723,13 +723,22 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
     </div>
   );
 
-  const translateDisabled =
-    isTranslating || !targetLanguage || !sourceName || translationExhausted;
+  // Keep the exhausted-budget reason out of the native `disabled` set: a
+  // disabled button never fires a click, so the in-handler guard below
+  // (`if (translationExhausted) …`) would be untestable dead code and,
+  // per docs/LIMITS_USER_FACING_UX.md §7.4 review, a future refactor that
+  // dropped `translationExhausted` from here would have nothing left to
+  // protect the server from a doomed request. The other reasons (missing
+  // file/target language, an in-flight request) still natively disable —
+  // there is no server-side guard to fall back on for those.
+  const translateBlockedByFields =
+    isTranslating || !targetLanguage || !sourceName;
+  const translateDisabled = translateBlockedByFields || translationExhausted;
 
   const modalFooter = (
     <button
       onClick={handleTranslate}
-      disabled={translateDisabled}
+      disabled={translateBlockedByFields}
       aria-disabled={translationExhausted ? true : undefined}
       title={exhaustedNotice ?? undefined}
       data-testid="translate-submit"
