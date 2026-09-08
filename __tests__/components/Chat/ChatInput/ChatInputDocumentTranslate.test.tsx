@@ -12,7 +12,16 @@ import type { FeatureRemaining } from '@/client/hooks/settings/useMyLimits';
 import ChatInputDocumentTranslate from '@/components/Chat/ChatInput/ChatInputDocumentTranslate';
 
 import '@testing-library/jest-dom';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('react-hot-toast', () => ({
+  default: Object.assign(vi.fn(), {
+    success: vi.fn(),
+    error: vi.fn(),
+    loading: vi.fn(() => 'toast-1'),
+    dismiss: vi.fn(),
+  }),
+}));
 
 const budgets: Record<string, FeatureRemaining | undefined> = {};
 const refetch = vi.fn();
@@ -87,6 +96,11 @@ describe('ChatInputDocumentTranslate — daily job budget gate', () => {
     vi.stubGlobal('fetch', fetchMock);
   });
 
+  afterEach(async () => {
+    const toast = (await import('react-hot-toast')).default;
+    vi.mocked(toast.error).mockClear();
+  });
+
   it('renders no notice and an enabled Translate button when no counter is reported', () => {
     renderModal();
     chooseTargetLanguage();
@@ -124,7 +138,11 @@ describe('ChatInputDocumentTranslate — daily job budget gate', () => {
     renderModal();
     chooseTargetLanguage();
     const submit = screen.getByTestId('translate-submit');
-    expect(submit).toBeDisabled();
+    // Not natively `disabled`: a real `disabled` button never dispatches a
+    // click, which would make the in-handler budget guard below untestable
+    // dead code (and unreachable for keyboard/AT users). `aria-disabled`
+    // carries the same "don't use this" signal.
+    expect(submit).not.toBeDisabled();
     expect(submit).toHaveAttribute('aria-disabled', 'true');
     expect(submit).toHaveAttribute(
       'title',
@@ -135,8 +153,33 @@ describe('ChatInputDocumentTranslate — daily job budget gate', () => {
     ).toHaveTextContent(
       'limitsUx.routes.translationExhausted limitsUx.routes.resetsIn',
     );
-    // A click on the disabled button must never reach the server.
+    // A click reaches `handleTranslate`'s own budget guard, which refuses
+    // the request itself — never the server.
     fireEvent.click(submit);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('still natively disables Translate when a required field is missing, even with budget remaining', () => {
+    renderModal();
+    // No chooseTargetLanguage(): targetLanguage stays empty.
+    const submit = screen.getByTestId('translate-submit');
+    expect(submit).toBeDisabled();
+    fireEvent.click(submit);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("refuses the click through handleTranslate's own guard, not just the disabled attribute, at 0 remaining", async () => {
+    budgets['feature.translation.jobsPerDay'] = { remaining: 0, limit: 3 };
+    renderModal();
+    chooseTargetLanguage();
+    const submit = screen.getByTestId('translate-submit');
+
+    fireEvent.click(submit);
+
+    const toast = (await import('react-hot-toast')).default;
+    expect(toast.error).toHaveBeenCalledWith(
+      'limitsUx.routes.translationExhausted',
+    );
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
