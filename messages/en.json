@@ -5493,6 +5493,7 @@
       "modelBlocked": "This model isn't available on your account. Choose another model, or contact your administrator.",
       "modelExhausted": "You've used all {limit} requests for this model today.",
       "familyExhausted": "You've used up today's shared budget of {limit} requests for this model family.",
+      "agentModelBlocked": "This agent uses a model that isn't available on your account. Detach the agent or pick a different one.",
       "searchBlocked": "Web search is turned off for your account by an administrator, and this message had it enabled.",
       "interpreterBlocked": "Code interpreter is turned off for your account by an administrator, and this message had it enabled.",
       "mcpBlocked": "Connectors are turned off for your account by an administrator, and this message had connectors enabled. Turn them off to continue.",
@@ -5503,7 +5504,8 @@
       "resets": "Resets {resets}.",
       "chooseAnotherModel": "Choose another model",
       "turnOffSearchAndResend": "Turn off web search and resend",
-      "turnOffInterpreterAndResend": "Turn off code interpreter and resend"
+      "turnOffInterpreterAndResend": "Turn off code interpreter and resend",
+      "turnOffConnectorsAndResend": "Turn off connectors and resend"
     },
     "notice": {
       "unavailable": "{model} isn't available on your account — pick another model to continue.",
@@ -5520,17 +5522,19 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# use left today} other {# uses left today}}",
-      "exhausted": "Daily limit reached — the model will answer without it."
+      "exhausted": "Daily limit reached — the model will answer without it.",
+      "exhaustedResets": "Daily limit reached — the model will answer without it. Resets {resets}."
     },
     "mine": {
       "title": "Your limits",
-      "description": "Limits your organization has set for your account. Counters reset automatically at the end of each period.",
+      "description": "Limits that apply to your account. Counters reset automatically at the end of each period.",
       "notAvailable": "Not available",
       "usedOfLimit": "{used} / {limit} {unit}",
       "limitOnly": "{limit} {unit}",
       "resetsIn": "Resets {resets}",
       "limitReached": "Limit reached",
       "familyLimitReached": "Model family limit reached",
+      "familyRow": "{family} models",
       "usageUnavailable": "Current usage could not be loaded — showing limits only."
     },
     "routes": {
