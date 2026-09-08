@@ -58,6 +58,7 @@ import {
 import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
 import { ModelStatusBadge } from './ModelSelect/ModelStatusBadge';
+import { useModelAvailabilityMap } from './ModelSelect/modelLimits';
 import { SHOW_RECOMMENDED_TAG } from './ModelSelect/showRecommendedTag';
 import { ModelSourceForm } from './ModelSources/ModelSourceForm';
 
@@ -108,6 +109,14 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
   const { models, defaultModelId, setDefaultModelId } = useSettings();
+  // The caller's per-model usage-limit verdicts (one subscription for the
+  // whole list). Everything reads `available` unless the policy is enforced
+  // and readable, so the picker is byte-for-byte today's UI otherwise.
+  const {
+    lookup: limitFor,
+    isSelectable: isNotExhausted,
+    refetch: refetchLimits,
+  } = useModelAvailabilityMap();
 
   // Feature flag: Control organization bots visibility via LaunchDarkly
   // Default to true if LaunchDarkly is not configured (for local development)
@@ -581,6 +590,18 @@ export const ModelSelect: FC<ModelSelectProps> = ({
         return;
       }
 
+      // A model the server would refuse right now (cap used up) is never
+      // put on the conversation or made the default — the row is grayed
+      // and only reveals its reason; this is the backstop for every other
+      // path into here (version chips, variant segments, family rows).
+      if (limitFor(model.id).state !== 'available') {
+        console.warn(
+          '[ModelSelect] Refusing to select a model whose usage limit is reached:',
+          model.id,
+        );
+        return;
+      }
+
       // Switch to details view on mobile when a model is selected
       setMobileView('details');
 
@@ -689,6 +710,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
     [
       selectedConversation,
       availableModels,
+      limitFor,
       setMobileView,
       setDefaultModelId,
       updateConversation,
@@ -1008,6 +1030,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                             : () => requestHide(model.id, model.name)
                         }
                         hideLabel={t('modelSelect.hide')}
+                        limit={limitFor(model.id)}
+                        onLimitExpired={refetchLimits}
                       />
                     );
                   };
@@ -1040,6 +1064,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                         })}
                         onHide={() => requestHide(model.id, model.name)}
                         hideLabel={t('modelSelect.hide')}
+                        limit={limitFor(model.id)}
+                        onLimitExpired={refetchLimits}
                       />
                     );
                   };
@@ -1096,10 +1122,13 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                         // One quiet row per family: the representative
                         // fronts it with an inline variant+version tag;
                         // switching variant/version lives in the details
-                        // panel.
+                        // panel. A spent default yields to a usable
+                        // sibling so the row stays clickable; the row
+                        // grays only when the whole family is spent.
                         const rep = seriesRepresentative(
                           versions,
                           selectedModelId,
+                          isNotExhausted,
                         )!;
                         return renderModelCard(rep, {
                           name: rep.seriesLabel ?? rep.name,
@@ -1234,6 +1263,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                               icon={
                                 <ModelProviderIcon provider={model.provider} />
                               }
+                              limit={limitFor(model.id)}
+                              onLimitExpired={refetchLimits}
                             />
                           );
                         };
@@ -1309,6 +1340,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                                     const rep = seriesRepresentative(
                                       versions,
                                       selectedModelId,
+                                      isNotExhausted,
                                     )!;
                                     return renderSourceRow(rep, {
                                       name: rep.seriesLabel ?? rep.name,
