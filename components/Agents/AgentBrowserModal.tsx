@@ -3,6 +3,7 @@
 import {
   IconBrandWindows,
   IconClock,
+  IconLock,
   IconPlugConnected,
   IconRobot,
   IconSearch,
@@ -17,6 +18,7 @@ import {
   findAttachedAgent,
   useAvailableAgents,
 } from '@/client/hooks/settings/useAvailableAgents';
+import { formatResetIn } from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
@@ -34,6 +36,7 @@ import {
 import { Conversation } from '@/types/chat';
 import { SearchMode } from '@/types/searchMode';
 
+import { modelLimitCopy } from '@/components/Chat/ModelSelect/ModelLimitBadge';
 import {
   pinnedModelAvailability,
   pinnedModelIdOf,
@@ -71,6 +74,8 @@ interface BrowserItem {
    * itself is not restricted; the send would 403 on the model).
    */
   modelUnavailableNote?: string;
+  /** True for a permanent block (never resets) — picks the lock icon over the clock. */
+  modelUnavailableBlocked?: boolean;
 }
 
 /**
@@ -129,6 +134,11 @@ export function AgentBrowserModal() {
   );
   const { toolsEnabled: m365ToolsFlagOn } = useM365Enabled();
   const limitsMap = useModelAvailabilityMap();
+  // A snapshot, not a live tick: this only feeds the row note's static
+  // countdown text (row hooks aren't available inside the allItems
+  // useMemo). Calling Date.now() directly in render is impure; the lazy
+  // initializer form runs once, on mount.
+  const [now] = useState(() => Date.now());
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -143,31 +153,45 @@ export function AgentBrowserModal() {
   const allItems = useMemo<BrowserItem[]>(() => {
     // Only pinned-model kinds can be limited through their model: prompt
     // agents (once discovery exposes the id) and Foundry swap targets.
-    // "Your-model" kinds ride whatever the picker already vetted.
-    const modelNoteFor = (agent: AvailableAgent): string | undefined => {
+    // "Your-model" kinds ride whatever the picker already vetted. Shares
+    // ModelHeader's exact wording (`modelLimitCopy`) — including the reset
+    // countdown when the server sent one — instead of a second, drifting
+    // copy of the sentence.
+    const modelNoteFor = (
+      agent: AvailableAgent,
+    ): { note?: string; blocked?: boolean } => {
       const semantics = agentModelSemantics(agent.kind);
-      if (semantics === 'your-model') return undefined;
+      if (semantics === 'your-model') return {};
       const pinnedId = pinnedModelIdOf(agent);
-      if (!pinnedId) return undefined;
+      if (!pinnedId) return {};
       const view = pinnedModelAvailability(pinnedId, limitsMap, models);
-      if (view.state === 'available') return undefined;
-      return view.state === 'blocked'
-        ? tLimits('agentModelUnavailable', { model: pinnedModelName(pinnedId) })
-        : tLimits('agentModelExhaustedNoReset', {
-            model: pinnedModelName(pinnedId),
-          });
+      if (view.state === 'available') return {};
+      const resets =
+        view.state === 'exhausted' && view.resetAt
+          ? formatResetIn(view.resetAt, now)
+          : null;
+      return {
+        note:
+          modelLimitCopy(tLimits, view, resets, pinnedModelName(pinnedId)) ??
+          undefined,
+        blocked: view.state === 'blocked',
+      };
     };
-    const items: BrowserItem[] = agents.map((agent) => ({
-      id: agent.id,
-      name: agent.name,
-      description: agent.description,
-      kindLabel: t(`kind.${agent.kind}`),
-      semanticsLabel: t(`semantics.${agentModelSemantics(agent.kind)}`),
-      icon: 'agent' as const,
-      agent,
-      activeInChat: !!attachedAgent && attachedAgent.id === agent.id,
-      modelUnavailableNote: modelNoteFor(agent),
-    }));
+    const items: BrowserItem[] = agents.map((agent) => {
+      const { note, blocked } = modelNoteFor(agent);
+      return {
+        id: agent.id,
+        name: agent.name,
+        description: agent.description,
+        kindLabel: t(`kind.${agent.kind}`),
+        semanticsLabel: t(`semantics.${agentModelSemantics(agent.kind)}`),
+        icon: 'agent' as const,
+        agent,
+        activeInChat: !!attachedAgent && attachedAgent.id === agent.id,
+        modelUnavailableNote: note,
+        modelUnavailableBlocked: blocked,
+      };
+    });
     if (m365ToolsFlagOn && m365Connected) {
       items.push({
         id: `connector-${M365_BUILTIN_SERVER_ID}`,
@@ -204,6 +228,7 @@ export function AgentBrowserModal() {
     chatDisabledIds,
     limitsMap,
     models,
+    now,
     t,
     tLimits,
   ]);
@@ -535,7 +560,11 @@ export function AgentBrowserModal() {
                           data-testid="agent-model-unavailable"
                           className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400"
                         >
-                          <IconClock size={12} aria-hidden="true" />
+                          {item.modelUnavailableBlocked ? (
+                            <IconLock size={12} aria-hidden="true" />
+                          ) : (
+                            <IconClock size={12} aria-hidden="true" />
+                          )}
                           {item.modelUnavailableNote}
                         </p>
                       )}
