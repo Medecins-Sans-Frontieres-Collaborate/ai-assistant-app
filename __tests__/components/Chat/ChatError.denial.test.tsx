@@ -142,6 +142,51 @@ describe('ChatError — usage-limit denials', () => {
     expect(screen.getByText('Choose another model')).toBeInTheDocument();
   });
 
+  it('agent-pinned model block: agent copy, no "Choose another model"', () => {
+    const h = renderDenial(
+      { limitKey: 'model.allowed', limit: false, requestModelId: 'o3' },
+      { isAgentModelDenial: true },
+    );
+
+    expect(
+      screen.getByText(/This agent uses a model that isn't available/),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Choose another model')).not.toBeInTheDocument();
+    expect(h.onChooseModel).not.toHaveBeenCalled();
+    noRetryActions();
+  });
+
+  it('agent-pinned model exhaustion: agent copy replaces the cap sentence, keeps the reset line', () => {
+    renderDenial(
+      {
+        limitKey: 'model.requests',
+        limit: 20,
+        used: 20,
+        resetAt: '2026-09-09T00:00:00.000Z',
+        modelId: 'o3',
+        series: 'o-series',
+      },
+      { isAgentModelDenial: true },
+    );
+
+    expect(
+      screen.getByText(/This agent uses a model that isn't available/),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Resets in 6 hours\./)).toBeInTheDocument();
+    expect(screen.queryByText('Choose another model')).not.toBeInTheDocument();
+  });
+
+  it('agent flag is ignored for shapes other than a per-model denial', () => {
+    const h = renderDenial(
+      { limitKey: 'feature.webSearch.enabled', limit: false },
+      { isAgentModelDenial: true },
+    );
+
+    expect(screen.getByText(/Web search is turned off/)).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Turn off web search and resend'));
+    expect(h.onResendWithoutFeature).toHaveBeenCalledWith('webSearch');
+  });
+
   it('web-search gate: "Turn off web search and resend" flips the feature', () => {
     const h = renderDenial({
       limitKey: 'feature.webSearch.enabled',
@@ -165,11 +210,12 @@ describe('ChatError — usage-limit denials', () => {
     expect(h.onResendWithoutFeature).toHaveBeenCalledWith('codeInterpreter');
   });
 
-  it('connector (MCP) gate: copy only — no one-click resend', () => {
-    renderDenial({ limitKey: 'feature.mcp.enabled', limit: false });
+  it('connector (MCP) gate: "Turn off connectors and resend" flips the feature', () => {
+    const h = renderDenial({ limitKey: 'feature.mcp.enabled', limit: false });
 
     expect(screen.getByText(/Connectors are turned off/)).toBeInTheDocument();
-    expect(screen.queryByText(/and resend/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByText('Turn off connectors and resend'));
+    expect(h.onResendWithoutFeature).toHaveBeenCalledWith('mcp');
     noRetryActions();
   });
 
