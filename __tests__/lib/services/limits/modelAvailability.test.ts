@@ -289,4 +289,77 @@ describe('resolveModelAvailability', () => {
       reason: 'blocked',
     });
   });
+
+  it('an exhausted DAY token budget grays every model, even one with room on every other cell', () => {
+    // checkTokenBudget refuses the send outright once the day cap is hit,
+    // regardless of model — the picker must agree instead of showing every
+    // model available right up until the 403.
+    const policy = policyWith([
+      { limitKey: 'chat.tokensPerDay', value: 100_000 },
+      { limitKey: 'model.requests', modelId: 'o3', value: 50 },
+    ]);
+    const usage = {
+      day: { 'chat.tokensPerDay': 100_000, 'model:o3.requests': 1 },
+      month: {},
+    };
+    expect(
+      resolveModelAvailability(policy, alice, O3, usage, TZ),
+    ).toMatchObject({
+      allowed: true,
+      reason: 'exhausted',
+      limit: 100_000,
+      used: 100_000,
+      remaining: 0,
+    });
+  });
+
+  it('an exhausted MONTH token budget binds too, with a month resetAt', () => {
+    const policy = policyWith([
+      { limitKey: 'chat.tokensPerMonth', value: 1_000_000 },
+    ]);
+    const usage = {
+      day: {},
+      month: { 'chat.tokensPerMonth': 1_000_000 },
+    };
+    expect(
+      resolveModelAvailability(policy, alice, O3, usage, TZ),
+    ).toMatchObject({
+      allowed: true,
+      reason: 'exhausted',
+      limit: 1_000_000,
+      remaining: 0,
+      resetAt: resetAt('month', TZ),
+    });
+  });
+
+  it('token budgets are never byom-exempt: they bind a byom model like any other', () => {
+    const policy = policyWith([
+      { limitKey: 'chat.tokensPerDay', value: 50_000 },
+    ]);
+    const byom = { id: 'byom-acct-gpt-5.2', series: 'gpt' };
+    const usage = { day: { 'chat.tokensPerDay': 50_000 }, month: {} };
+    expect(
+      resolveModelAvailability(policy, alice, byom, usage, TZ),
+    ).toMatchObject({ allowed: true, reason: 'exhausted', remaining: 0 });
+  });
+
+  it('a token budget with room does not shadow a real per-model exhaustion', () => {
+    const policy = policyWith([
+      { limitKey: 'chat.tokensPerDay', value: 100_000 },
+      { limitKey: 'model.requests', modelId: 'o3', value: 10 },
+    ]);
+    const usage = {
+      day: { 'chat.tokensPerDay': 1_000, 'model:o3.requests': 10 },
+      month: {},
+    };
+    expect(
+      resolveModelAvailability(policy, alice, O3, usage, TZ),
+    ).toMatchObject({
+      allowed: true,
+      reason: 'exhausted',
+      limit: 10,
+      used: 10,
+      remaining: 0,
+    });
+  });
 });
