@@ -20,6 +20,8 @@ import {
 } from '@/types/openai';
 
 import { EmissionsTierIcon } from './EmissionsTierIcon';
+import { ModelLimitBadge } from './ModelLimitBadge';
+import { useModelAvailabilityMap } from './modelLimits';
 import { SHOW_RECOMMENDED_TAG } from './showRecommendedTag';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -56,6 +58,10 @@ export const VersionSection: FC<VersionSectionProps> = ({
   const { models } = useSettings();
   const pool = familyModels ?? models;
   const hiddenModelIds = useSettingsStore((s) => s.hiddenModelIds);
+  // Usage-limit verdicts: a spent version stays listed (the user should see
+  // it exists and when it comes back) but cannot be picked.
+  const { lookup: limitFor, refetch: refetchLimits } =
+    useModelAvailabilityMap();
 
   const versions = useMemo(() => {
     // byom ids never exist in the static catalog — the model object itself
@@ -104,20 +110,35 @@ export const VersionSection: FC<VersionSectionProps> = ({
           const isActive = selectedModel.id === version.id;
           const isFeatured =
             SHOW_RECOMMENDED_TAG && getModelTier(version) === 'featured';
+          const limit = limitFor(version.id);
+          // The active chip is never disabled even when spent: the badge
+          // says why, and the neighbours are the way out.
+          const isLimited = !isActive && limit.state !== 'available';
           return (
             <button
               key={version.id}
               type="button"
-              onClick={() => onSelectVersion(version)}
+              onClick={isLimited ? undefined : () => onSelectVersion(version)}
               aria-pressed={isActive}
+              aria-disabled={isLimited || undefined}
               title={version.name}
               className={`rounded-lg border px-2.5 py-1.5 min-h-[36px] text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                 isActive
                   ? 'border-blue-600 bg-blue-600 text-white dark:border-blue-500 dark:bg-blue-500'
-                  : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  : isLimited
+                    ? 'border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 opacity-60 cursor-not-allowed'
+                    : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
               }`}
             >
               {version.versionLabel ?? version.name}
+              {limit.state !== 'available' && (
+                <ModelLimitBadge
+                  view={limit}
+                  onExpired={refetchLimits}
+                  size={12}
+                  className={isActive ? 'ms-1 text-amber-200' : 'ms-1'}
+                />
+              )}
               {showTiers && (
                 <EmissionsTierIcon
                   tier={versionTiers[index]}
