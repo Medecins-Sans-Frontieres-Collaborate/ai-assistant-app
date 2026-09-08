@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
+import { useModelsQuery } from '@/client/hooks/settings/useModelsQuery';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import { initMcpCredentialSync } from '@/client/services/mcp/mcpCredentialSync';
@@ -14,14 +15,8 @@ import {
   conversationUsesAgent,
   estimateConversationUsage,
 } from '@/lib/utils/shared/chat/usageBackfill';
-import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
-import {
-  ModelListSource,
-  OpenAIModel,
-  OpenAIModelID,
-  OpenAIModels,
-} from '@/types/openai';
+import { OpenAIModel, OpenAIModelID } from '@/types/openai';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 import {
@@ -103,6 +98,12 @@ export function AppInitializer() {
     void initMcpCredentialSync();
   }, [isAuthenticated]);
 
+  // Live model list (formerly step 4 of the run-once effect below). A query
+  // rather than a one-shot fetch so the picker follows policy saves, window
+  // focus and quota denials — see useModelsQuery. Requires the
+  // QueryClientProvider AppProviders wraps ChatShell (and so this) in.
+  useModelsQuery();
+
   useEffect(() => {
     // Ensure we only initialize once, even in React StrictMode
     if (hasLoadedRef.current) return;
@@ -120,9 +121,9 @@ export function AppInitializer() {
       } = useConversationStore.getState();
 
       // 1. Initialize models list from the vetted static list first, so the
-      // picker renders instantly with current behavior. When model discovery
-      // is on, step 4 below refines this from /api/models (region-correct,
-      // deployment-driven).
+      // picker renders instantly with current behavior. useModelsQuery
+      // (mounted above) refines this from /api/models (region-correct,
+      // deployment-driven) and keeps it fresh across refetches.
       const models: OpenAIModel[] = getStaticModelList();
       setModels(models);
       useSettingsStore.getState().setModelListSource('static');
@@ -208,67 +209,6 @@ export function AppInitializer() {
           backfillError,
         );
         useSettingsStore.getState().markHistoricalBackfillDone();
-      }
-
-      // 4. Refine the model list from live discovery (non-blocking, always
-      // on). The server returns the region-correct, ring-gated list — or the
-      // vetted static list when discovery isn't configured/fails — so any
-      // error here just keeps the static seed. We never block initial render
-      // on this.
-      {
-        void (async () => {
-          try {
-            const res = await fetch('/api/models');
-            if (!res.ok) return;
-            const json = await res.json();
-            // `json?.data?.models` is intentionally guarded by the Array.isArray
-            // check below — an unexpected shape simply leaves the static list.
-            const discovered = json?.data?.models as OpenAIModel[] | undefined;
-            if (Array.isArray(discovered) && discovered.length > 0) {
-              setModels(discovered);
-              useSettingsStore
-                .getState()
-                .setModelListSource(
-                  (json?.data?.source as ModelListSource | undefined) ?? null,
-                );
-
-              // The persisted defaultModelId may no longer exist in the
-              // discovered list (region change, deployment removed, ring
-              // gate), or may exist but not be selectable there. Re-resolve the
-              // env default among SELECTABLE models only — discovered[0] can
-              // be a foreign-region-only model (e.g. EU-only for a US user),
-              // and defaulting onto it would break new conversations.
-              const region = useSettingsStore.getState().userRegion;
-              const selectable = discovered.filter((m) =>
-                isModelSelectableInRegion(m, region),
-              );
-              const currentDefaultId =
-                useSettingsStore.getState().defaultModelId;
-              const stillPresent =
-                currentDefaultId &&
-                selectable.some((m) => m.id === currentDefaultId);
-              if (!stillPresent) {
-                // Resolve against the selectable DISCOVERED models so the
-                // default tracks deployments (latest deployed standard GPT).
-                const envDefaultModelId = getDefaultModel(selectable);
-                const newDefault =
-                  selectable.find((m) => m.id === envDefaultModelId) ||
-                  selectable[0];
-                if (newDefault) {
-                  console.log(
-                    `[AppInitializer] Persisted defaultModelId "${currentDefaultId}" not selectable in discovered list. Re-selecting default: ${newDefault.id}`,
-                  );
-                  setDefaultModelId(newDefault.id as OpenAIModelID);
-                }
-              }
-            }
-          } catch (e) {
-            console.warn(
-              '[AppInitializer] /api/models refine failed; keeping static list',
-              e,
-            );
-          }
-        })();
       }
     } catch (error) {
       console.error('Error initializing app state:', error);
