@@ -14,9 +14,10 @@ import { isLocalModel } from '@/lib/services/models/localModels';
 import { isAgentShapedModelId } from '@/lib/utils/app/agentAttachment';
 
 import { Conversation } from '@/types/chat';
-import { OpenAIModel } from '@/types/openai';
+import { ModelListSource, OpenAIModel, OpenAIModels } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { getOrganizationAgentIdFromModelId } from '@/lib/organizationAgents';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -44,6 +45,23 @@ export function isServedCatalogModel(
     model.id.startsWith('byom-') ||
     model.isCustomSourceModel === true ||
     isLocalModel(model)
+  );
+}
+
+/**
+ * The served list has been refined by /api/models. Before that,
+ * `settingsStore.models` is only the static seed (`AppInitializer`'s step 1
+ * / `config/models.ts` `getStaticModelList`), which legitimately lacks
+ * discovered-only models — treating one as hidden during that window would
+ * be a flicker (or, here, a silent fallback to the default model) rather
+ * than a fact. Shared with `ModelUnavailableNotice` so the two surfaces
+ * cannot drift on when an absence becomes decisive.
+ */
+export function isServedListRefined(source: ModelListSource | null): boolean {
+  return (
+    source === 'discovery' ||
+    source === 'discovery-partial' ||
+    source === 'fallback'
   );
 }
 
@@ -80,6 +98,9 @@ export function useNewConversation(): (folderId?: string | null) => void {
   const currentModelAvailability = useModelAvailability(
     selectedConversation?.model?.id,
   );
+  // Only to judge whether a served-catalog id's absence from `models` is
+  // decisive yet (isServedListRefined below) — mirrors ModelUnavailableNotice.
+  const modelListSource = useSettingsStore((s) => s.modelListSource);
 
   return useCallback(
     (folderId: string | null = null) => {
@@ -118,10 +139,26 @@ export function useNewConversation(): (folderId?: string | null) => void {
       // catalog model only carries over while it is still served (a model
       // the server hid — e.g. blocked by an admin limit — must not follow
       // the user into the next chat) and not exhausted for this user.
+      //
+      // An absence from `models` is decisive only once it MEANS something:
+      // a static-catalog id (in OpenAIModels) missing from even the static
+      // seed is gone for good, but a discovered-only id is legitimately
+      // absent from the static seed itself — judging it before /api/models
+      // has answered would drop it from a ⌘N pressed in that window even
+      // though the server still serves it (mirrors ModelUnavailableNotice).
+      const isServedCatalog =
+        !!currentModel && isServedCatalogModel(currentModel);
+      const isServed =
+        isServedCatalog && models.some((m) => m.id === currentModel!.id);
+      const isHiddenFromCatalog =
+        isServedCatalog &&
+        !isServed &&
+        (currentModel!.id in OpenAIModels ||
+          isServedListRefined(modelListSource));
       const canCarryOver =
         !!currentModel &&
-        (!isServedCatalogModel(currentModel) ||
-          (models.some((m) => m.id === currentModel.id) &&
+        (!isServedCatalog ||
+          (!isHiddenFromCatalog &&
             currentModelAvailability.state === 'available'));
       const modelToUse = canCarryOver
         ? currentModel
@@ -177,6 +214,7 @@ export function useNewConversation(): (folderId?: string | null) => void {
       defaultSearchMode,
       defaultInterpreterMode,
       currentModelAvailability.state,
+      modelListSource,
     ],
   );
 }
