@@ -167,6 +167,50 @@ describe('useModelsQuery', () => {
     ]);
   });
 
+  it('re-applies on every settled fetch, even one that returns a structurally identical list (regression)', async () => {
+    // Structural sharing keeps `data` referentially stable across a
+    // refetch that returns the same list, so a `[data]`-only dependency
+    // would never re-run this. Keying on `dataUpdatedAt` too means a
+    // refetch REPAIRS a store some other code path reset in the meantime,
+    // rather than only reacting to a genuine list change.
+    const discovered = [
+      { id: 'gpt-5.2', name: 'x', maxLength: 1, tokenLimit: 1 },
+    ];
+    const fetchSpy = vi.fn().mockResolvedValue(okModels(discovered));
+    vi.stubGlobal('fetch', fetchSpy);
+    const { client, Wrapper } = makeWrapper();
+
+    const { result } = renderHook(() => useModelsQuery(), { wrapper: Wrapper });
+    await waitFor(() =>
+      expect(useSettingsStore.getState().models.map((m) => m.id)).toEqual([
+        'gpt-5.2',
+      ]),
+    );
+
+    // Something else resets the store (e.g. a stale AppInitializer remount
+    // re-seeding the static list — see AppInitializer.tsx).
+    act(() => {
+      useSettingsStore.getState().setModels([]);
+      useSettingsStore.getState().setModelListSource('static');
+    });
+    expect(useSettingsStore.getState().models).toEqual([]);
+
+    // A refetch resolves to the IDENTICAL list (same shape, new array
+    // instance) — react-query's structural sharing keeps `data`
+    // referentially equal to the previous success.
+    act(() => {
+      void client.invalidateQueries({ queryKey: MODELS_QUERY_KEY });
+    });
+    await waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(2));
+
+    await waitFor(() =>
+      expect(useSettingsStore.getState().models.map((m) => m.id)).toEqual([
+        'gpt-5.2',
+      ]),
+    );
+    expect(useSettingsStore.getState().modelListSource).not.toBe('static');
+  });
+
   it('invalidates ["models"] and ["limits-me"] on the limits:changed event', async () => {
     const fetchSpy = vi
       .fn()

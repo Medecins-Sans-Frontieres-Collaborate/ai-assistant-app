@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 
+import { useModelsQuery } from '@/client/hooks/settings/useModelsQuery';
 import {
   MyLimitsResponse,
   formatResetIn,
@@ -193,6 +194,62 @@ describe('useMyLimits', () => {
     expect(result.current.enforce).toBe(false);
     expect(result.current.limits).toEqual([]);
   });
+
+  it('fires only ONE /api/limits/me request once the models query settles on the discovered list (regression)', async () => {
+    // Mirrors AppInitializer: a static seed is already in the store when
+    // useModelsQuery mounts alongside useMyLimits, sharing one QueryClient.
+    useSettingsStore.getState().setModels([model('static-seed')]);
+    useSettingsStore.getState().setModelListSource('static');
+
+    const fetchSpy = vi.fn(async (input: string) => {
+      const url = String(input);
+      if (url.startsWith('/api/models')) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            data: {
+              models: [
+                { id: 'gpt-5.2', name: 'x', maxLength: 1, tokenLimit: 1 },
+              ],
+            },
+          }),
+        };
+      }
+      return okResponse({});
+    });
+    vi.stubGlobal('fetch', fetchSpy);
+    const { Wrapper } = makeWrapper();
+
+    renderHook(
+      () => {
+        useModelsQuery();
+        return useMyLimits();
+      },
+      { wrapper: Wrapper },
+    );
+
+    await waitFor(() =>
+      expect(useSettingsStore.getState().models.map((m) => m.id)).toEqual([
+        'gpt-5.2',
+      ]),
+    );
+    await waitFor(() => {
+      const limitsCalls = fetchSpy.mock.calls.filter((c) =>
+        String(c[0]).startsWith('/api/limits/me'),
+      );
+      expect(limitsCalls.length).toBeGreaterThan(0);
+    });
+
+    const limitsCalls = fetchSpy.mock.calls.filter((c) =>
+      String(c[0]).startsWith('/api/limits/me'),
+    );
+    // Exactly one request, and it is keyed on the DISCOVERED list, never
+    // the superseded static seed.
+    expect(limitsCalls).toHaveLength(1);
+    const url = new URL(limitsCalls[0][0] as string, 'http://x');
+    expect(url.searchParams.get('models')).toBe('gpt-5.2');
+  });
 });
 
 describe('useModelAvailability', () => {
@@ -210,6 +267,7 @@ describe('useModelAvailability', () => {
     },
     'claude-x': { allowed: true, reason: 'familyExhausted', remaining: 0 },
     'legacy-zero': { allowed: true, remaining: 0 },
+    'low-remaining': { allowed: true, limit: 20, used: 18, remaining: 2 },
   };
 
   beforeEach(() => {
@@ -257,6 +315,23 @@ describe('useModelAvailability', () => {
 
     const fine = renderAvailability('gpt-5.2', { models });
     await waitFor(() => expect(fine.result.current.state).toBe('available'));
+  });
+
+  it('keeps limit/used/remaining/resetAt for an available model (regression)', async () => {
+    // A model with a healthy but non-null counter must not drop it just
+    // because it is still available — every consumer of this hook (not
+    // only the map-based picker path) needs the same numbers for the
+    // §7.4 low-remaining annotation.
+    const low = renderAvailability('low-remaining', { models });
+    // Wait for the real payload, not the fail-open default — both read
+    // state 'available', and the fetch has not necessarily resolved yet.
+    await waitFor(() => expect(low.result.current.remaining).toBe(2));
+    expect(low.result.current).toMatchObject({
+      state: 'available',
+      limit: 20,
+      used: 18,
+      remaining: 2,
+    });
   });
 
   it('fails open for an id absent from the payload and for no id', async () => {
@@ -378,18 +453,32 @@ describe('useLimitGates', () => {
 describe('formatResetIn', () => {
   const now = Date.parse('2026-09-08T10:00:00.000Z');
 
-  it('picks minutes, hours and days, rounding up', () => {
+  it('picks minutes, hours and days, rounding to the nearest unit', () => {
     expect(formatResetIn('2026-09-08T10:00:30.000Z', now, 'en')).toBe(
       'in 1 minute',
     );
     expect(formatResetIn('2026-09-08T10:12:00.000Z', now, 'en')).toBe(
       'in 12 minutes',
     );
+    // 6h12m rounds DOWN to the nearest hour (matches §3b's own example of
+    // "Resets in 6 h 12 m"), not up to the coarsest unit.
     expect(formatResetIn('2026-09-08T16:12:00.000Z', now, 'en')).toBe(
-      'in 7 hours',
+      'in 6 hours',
     );
     expect(formatResetIn('2026-09-11T10:00:00.000Z', now, 'en')).toBe(
       'in 3 days',
+    );
+  });
+
+  it('does not overstate the wait by rounding up (regression)', () => {
+    // 61 minutes must read "in 1 hour", not "in 2 hours" (ceil overstated
+    // this by nearly a full unit — docs/LIMITS_USER_FACING_UX.md §3b).
+    expect(formatResetIn('2026-09-08T11:01:00.000Z', now, 'en')).toBe(
+      'in 1 hour',
+    );
+    // 30d1h must read "in 30 days", not "in 31 days".
+    expect(formatResetIn('2026-10-08T11:00:00.000Z', now, 'en')).toBe(
+      'in 30 days',
     );
   });
 

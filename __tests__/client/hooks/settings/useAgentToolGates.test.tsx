@@ -13,9 +13,14 @@ import {
   WEB_SEARCH_CALLS_KEY,
   WEB_SEARCH_ENABLED_KEY,
   deriveToolLimitGate,
+  effectiveInterpreterMode,
+  effectiveSearchMode,
   getToolLimitGatesSnapshot,
   useToolLimitGates,
 } from '@/client/hooks/settings/useAgentToolGates';
+
+import { InterpreterMode } from '@/types/interpreterMode';
+import { SearchMode } from '@/types/searchMode';
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -165,5 +170,46 @@ describe('useToolLimitGates', () => {
     rerender();
     expect(getToolLimitGatesSnapshot().webSearch.blocked).toBe(false);
     unmount();
+  });
+});
+
+// The request-time rule (§7.4): a blocked gate must send Off, not merely
+// display as Off — this is what `chatStore.sendChatRequest` (WP-D) is
+// expected to call with `getToolLimitGatesSnapshot()`.
+describe('effectiveSearchMode / effectiveInterpreterMode', () => {
+  it('forces Off when the gate is blocked, regardless of the composer value', () => {
+    expect(
+      effectiveSearchMode(SearchMode.INTELLIGENT, {
+        webSearch: { blocked: true, exhausted: false, low: false },
+      }),
+    ).toBe(SearchMode.OFF);
+    expect(
+      effectiveSearchMode(SearchMode.ALWAYS, {
+        webSearch: { blocked: true, exhausted: false, low: false },
+      }),
+    ).toBe(SearchMode.OFF);
+    expect(
+      effectiveInterpreterMode(InterpreterMode.ALWAYS, {
+        codeInterpreter: { blocked: true, exhausted: false, low: false },
+      }),
+    ).toBe(InterpreterMode.OFF);
+  });
+
+  it('passes the value through unchanged when the gate is open', () => {
+    expect(
+      effectiveSearchMode(SearchMode.INTELLIGENT, {
+        webSearch: { blocked: false, exhausted: false, low: false },
+      }),
+    ).toBe(SearchMode.INTELLIGENT);
+    expect(
+      effectiveSearchMode(undefined, {
+        webSearch: { blocked: false, exhausted: false, low: false },
+      }),
+    ).toBeUndefined();
+    expect(
+      effectiveInterpreterMode(InterpreterMode.INTELLIGENT, {
+        codeInterpreter: { blocked: false, exhausted: false, low: false },
+      }),
+    ).toBe(InterpreterMode.INTELLIGENT);
   });
 });
