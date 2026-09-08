@@ -1,8 +1,9 @@
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { formatResetIn } from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
 import {
@@ -23,7 +24,7 @@ import {
 } from '@/types/openai';
 
 import { EmissionsTierIcon } from './EmissionsTierIcon';
-import { ModelLimitBadge } from './ModelLimitBadge';
+import { ModelLimitBadge, modelLimitCopy } from './ModelLimitBadge';
 import { useModelAvailabilityMap } from './modelLimits';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -53,7 +54,13 @@ export const VariantSection: FC<VariantSectionProps> = ({
   familyModels,
 }) => {
   const t = useTranslations('modelSelect');
+  const tLimits = useTranslations('limitsUx.picker');
   const tEmissions = useTranslations('emissions');
+  // A snapshot, not a live tick: this only feeds a static hover tooltip
+  // (the badge itself carries the live countdown via useResetCountdown).
+  // Calling Date.now() directly in render is impure; the lazy initializer
+  // form runs once, on mount, like useResetCountdown's own `now` state.
+  const [now] = useState(() => Date.now());
   const { showUsageImpact } = useFlags();
   // Same source the picker list renders from (the useSettings hook), so the
   // Variant section always matches what the list shows. byom families come in
@@ -138,6 +145,17 @@ export const VariantSection: FC<VariantSectionProps> = ({
           // Disabled only when NO version of the variant is usable — the
           // target is then the natural pick, and its verdict is the reason.
           const isLimited = !isActive && targetLimit.state !== 'available';
+          // Mouse users hover the segment body, not just the tiny clock
+          // icon — the tooltip must carry the reason, not just the name.
+          const limitTitle = isLimited
+            ? modelLimitCopy(
+                tLimits,
+                targetLimit,
+                targetLimit.state === 'exhausted' && targetLimit.resetAt
+                  ? formatResetIn(targetLimit.resetAt, now)
+                  : null,
+              )
+            : null;
           return (
             <button
               key={variant.key}
@@ -148,7 +166,7 @@ export const VariantSection: FC<VariantSectionProps> = ({
               }}
               aria-pressed={isActive}
               aria-disabled={isLimited || undefined}
-              title={variant.members[0]?.name}
+              title={limitTitle ?? variant.members[0]?.name}
               className={`rounded-lg border px-2.5 py-1.5 min-h-[36px] text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                 isActive
                   ? 'border-blue-600 bg-blue-600 text-white dark:border-blue-500 dark:bg-blue-500'
