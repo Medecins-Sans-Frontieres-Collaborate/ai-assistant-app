@@ -72,6 +72,10 @@ describe('ModelCard usage-limit states', () => {
       'title',
       'exhausted',
     );
+    // A clock implies "comes back later" — right for exhausted, wrong for
+    // a permanent block (see the blocked case below).
+    expect(container.querySelector('.tabler-icon-clock')).not.toBeNull();
+    expect(container.querySelector('.tabler-icon-lock')).toBeNull();
 
     fireEvent.click(button);
     expect(onClick).not.toHaveBeenCalled();
@@ -98,12 +102,19 @@ describe('ModelCard usage-limit states', () => {
     );
   });
 
-  it('blocked (stale surface) uses the unavailable sentence and refuses the click', () => {
-    const { onClick } = renderCard({ state: 'blocked', reason: 'blocked' });
+  it('blocked (stale surface) uses the unavailable sentence, a lock icon (not a clock), and refuses the click', () => {
+    const { onClick, container } = renderCard({
+      state: 'blocked',
+      reason: 'blocked',
+    });
     expect(screen.getByTestId('model-limit-badge')).toHaveAttribute(
       'aria-label',
       'unavailable',
     );
+    // A permanent block never resets — the clock badge would wrongly imply
+    // the user just has to wait.
+    expect(container.querySelector('.tabler-icon-lock')).not.toBeNull();
+    expect(container.querySelector('.tabler-icon-clock')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /GPT-5.2/ }));
     expect(onClick).not.toHaveBeenCalled();
   });

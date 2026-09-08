@@ -254,7 +254,11 @@ describe('ModelSelect — usage-limit states', () => {
           model: expect.objectContaining({ id: 'gpt-5.4' }),
         }),
       );
-      expect(mockUseSettings.setDefaultModelId).toHaveBeenCalledWith('gpt-5.4');
+      // The click reached 5.4 only because 5.5 (the family's natural pick)
+      // is spent — a transient state. It must not overwrite the user's
+      // persisted default, which would otherwise silently stick to 5.4
+      // even after 5.5's cap resets tomorrow.
+      expect(mockUseSettings.setDefaultModelId).not.toHaveBeenCalled();
     });
 
     it('keeps fronting the CURRENT model when it is the one that is spent (selection wins)', () => {
@@ -264,6 +268,59 @@ describe('ModelSelect — usage-limit states', () => {
       expect(within(row).getByText('5.2')).toBeInTheDocument();
       expect(row).toHaveAttribute('aria-disabled', 'true');
     });
+
+    it('tapping the grayed CURRENT-model row opens the mobile details view instead of a dead end', () => {
+      // Mobile has no other way into the Version chips once the row that
+      // would open them is grayed (its onClick only toggles the note).
+      limitsState.models = { [OpenAIModelID.GPT_5_2]: exhausted() };
+      const { container } = render(<ModelSelect />);
+      const row = rowNamed('GPT');
+
+      const paneWithClass = (substr: string) =>
+        Array.from(container.querySelectorAll('div')).find((el) =>
+          el.className.includes(substr),
+        ) as HTMLElement;
+      const listPane = paneWithClass('md:w-80');
+      const detailsPane = paneWithClass('flex-1 overflow-y-auto');
+      expect(listPane.className).not.toMatch(/hidden/);
+      expect(detailsPane.className).toMatch(/hidden/);
+
+      fireEvent.click(row);
+
+      // Navigated to details (Version chips live there) without treating
+      // the tap as a selection.
+      expect(listPane.className).toMatch(/hidden/);
+      expect(detailsPane.className).not.toMatch(/hidden/);
+      expect(mockUseConversations.updateConversation).not.toHaveBeenCalled();
+      expect(mockUseSettings.setDefaultModelId).not.toHaveBeenCalled();
+      // The inline note still toggles too (touch parity elsewhere).
+      expect(screen.getByTestId('model-limit-note')).toBeInTheDocument();
+    });
+
+    it('does NOT navigate to details when a limited row is not the current selection', () => {
+      // Conversation stays on DeepSeek; the whole GPT family is exhausted
+      // (nothing to route around to), so tapping GPT must not disturb the
+      // mobile view meant for the DeepSeek row the user is actually on.
+      mockUseConversations.selectedConversation = conversationOn(
+        OpenAIModelID.DEEPSEEK_V3_1,
+      );
+      limitsState.models = Object.fromEntries(
+        mockUseSettings.models
+          .filter((m) => m.series === 'gpt')
+          .map((m) => [m.id, exhausted()]),
+      );
+      const { container } = render(<ModelSelect />);
+      const row = rowNamed('GPT');
+
+      const paneWithClass = (substr: string) =>
+        Array.from(container.querySelectorAll('div')).find((el) =>
+          el.className.includes(substr),
+        ) as HTMLElement;
+      const listPane = paneWithClass('md:w-80');
+
+      fireEvent.click(row);
+      expect(listPane.className).not.toMatch(/hidden/);
+    });
   });
 
   describe('details panel switchers', () => {
@@ -272,7 +329,14 @@ describe('ModelSelect — usage-limit states', () => {
       limitsState.models = { [OpenAIModelID.GPT_5]: exhausted() };
       render(<ModelSelect />);
 
-      const chip = screen.getByTitle('GPT-5');
+      // The chip's OWN tooltip carries the reason now, not just the tiny
+      // badge's — a mouse user hovering the chip body (not the clock icon)
+      // must not just see "GPT-5" with no explanation. Both the chip
+      // <button> and its nested badge <span> carry title="exhausted", so
+      // scope to the button.
+      const chip = screen
+        .getAllByTitle('exhausted')
+        .find((el) => el.tagName === 'BUTTON')!;
       expect(chip).toHaveAttribute('aria-disabled', 'true');
       expect(within(chip).getByTestId('model-limit-badge')).toBeInTheDocument();
       fireEvent.click(chip);
