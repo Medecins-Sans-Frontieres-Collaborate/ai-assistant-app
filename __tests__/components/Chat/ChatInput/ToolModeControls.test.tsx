@@ -49,13 +49,13 @@ let toolLimits = {
     blocked: boolean;
     exhausted: boolean;
     low: boolean;
-    budget?: { remaining: number; limit?: number };
+    budget?: { remaining: number; limit?: number; resetAt?: string };
   },
   codeInterpreter: openGate as {
     blocked: boolean;
     exhausted: boolean;
     low: boolean;
-    budget?: { remaining: number; limit?: number };
+    budget?: { remaining: number; limit?: number; resetAt?: string };
   },
   mcp: openGate,
   m365: openGate,
@@ -340,6 +340,30 @@ describe('ToolModeControls — usage-limit gates', () => {
     expect(updateConversation).toHaveBeenCalledWith('conv-1', {
       defaultInterpreterMode: InterpreterMode.OFF,
     });
+  });
+
+  it('an exhausted budget with a known resetAt uses the countdown copy instead of the bare notice', () => {
+    // The mock t() falls back to the raw key for a namespace it does not
+    // carry, so the two variants are distinguishable by which literal key
+    // renders — this only proves resetAt is threaded through, not the copy.
+    toolLimits = {
+      ...toolLimits,
+      enforce: true,
+      webSearch: {
+        blocked: false,
+        exhausted: true,
+        low: false,
+        budget: {
+          remaining: 0,
+          limit: 20,
+          resetAt: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(),
+        },
+      },
+    };
+    render(<ToolModeControls />);
+
+    expect(screen.getByText('exhaustedResets')).toBeInTheDocument();
+    expect(screen.queryByText('exhausted')).toBeNull();
   });
 
   it('fails open: with every gate open nothing about the row changes', () => {
