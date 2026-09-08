@@ -231,6 +231,10 @@ describe('DropdownMenuItem', () => {
         'aria-label',
         'Web search is off on your account',
       );
+      // The label span must not shadow the button's title with the plain
+      // label — that would be the only thing a hover over the row's text
+      // ever shows.
+      expect(screen.getByText('Test Item')).not.toHaveAttribute('title');
       // A locked toggle never shows the on-state mark, whatever `checked` says.
       expect(button.parentElement?.querySelector('.text-blue-500')).toBeNull();
 
@@ -247,6 +251,9 @@ describe('DropdownMenuItem', () => {
 
       const note = screen.getByText('2 left today');
       expect(note).toHaveClass('text-amber-700');
+      // The note truncates in the fixed-width menu, so a full sentence (e.g.
+      // the Connectors parent's lock reason) needs a title to be readable.
+      expect(note).toHaveAttribute('title', '2 left today');
       expect(screen.getByRole('menuitem')).toBeEnabled();
     });
 
