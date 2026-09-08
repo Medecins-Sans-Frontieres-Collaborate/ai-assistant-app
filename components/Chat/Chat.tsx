@@ -44,6 +44,7 @@ import { SuggestedPrompts } from './EmptyState/SuggestedPrompts';
 import { LoadingScreen } from './LoadingScreen';
 import { ModelSelect } from './ModelSelect';
 import { ModelSwitchPrompt } from './ModelSwitchPrompt';
+import { ModelUnavailableNotice } from './ModelUnavailableNotice';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatStore } from '@/client/stores/chatStore';
@@ -134,6 +135,10 @@ export function Chat({
     retryFailedWithFallbackModel,
   } = useChat();
   const failedConversation = useChatStore((s) => s.failedConversation);
+  // Usage-limit denial details for the error card (read directly rather
+  // than via useChat — only this component consumes them).
+  const lastDenial = useChatStore((s) => s.lastDenial);
+  const resendWithoutFeature = useChatStore((s) => s.resendWithoutFeature);
 
   const stopGenerationConfirmSource = useUIStore(
     (state) => state.stopGenerationConfirmSource,
@@ -731,6 +736,10 @@ export function Chat({
                     the sibling EmptyState and SuggestedPrompts (z-10) while
                     sitting under the drawer and its scrim. */}
                 <div className="w-full max-w-3xl mx-auto relative z-20">
+                  <ModelUnavailableNotice
+                    conversation={selectedConversation}
+                    onChooseModel={handleOpenModelSelector}
+                  />
                   <ChatInput
                     onSend={handleSend}
                     onRegenerate={handleRegenerate}
@@ -803,6 +812,9 @@ export function Chat({
           failureStreakCount={failureStreakCount}
           onStartNewConversation={handleNewConversation}
           onDownloadDebugInfo={handleDownloadDebugInfo}
+          denial={lastDenial}
+          onChooseModel={handleOpenModelSelector}
+          onResendWithoutFeature={resendWithoutFeature}
         />
 
         {/* Model Switch Prompt (shown after successful retry) */}
@@ -828,6 +840,15 @@ export function Chat({
 
         {/* Active Files Panel */}
         <ActiveFilesPanel />
+
+        {/* Selected model hidden by the server or out of budget — offer the
+            picker instead of silently sending to a model that will 403. */}
+        {hasMessages && (
+          <ModelUnavailableNotice
+            conversation={selectedConversation}
+            onChooseModel={handleOpenModelSelector}
+          />
+        )}
 
         {/* Chat Input - Bottom position (hidden in empty state) */}
         {hasMessages && (
