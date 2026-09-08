@@ -77,6 +77,35 @@ vi.mock('@/client/hooks/settings/useFoundryAgents', () => ({
   useFoundryAgents: () => mockFoundryAgents,
 }));
 
+// The picker reads the caller's usage limits through WP-B's React Query
+// hook; these tests render without a QueryClientProvider, so the module is
+// stubbed to "nothing limited" (flag off / observe / no data) — the
+// fail-open branch, under which the picker must be byte-for-byte today's
+// UI. ModelSelect.limits.test.tsx drives the enforced branch.
+vi.mock('@/client/hooks/settings/useMyLimits', async (importOriginal) => {
+  const actual =
+    await importOriginal<
+      typeof import('@/client/hooks/settings/useMyLimits')
+    >();
+  return {
+    ...actual,
+    useLimitsEnabled: () => false,
+    useMyLimits: () => ({
+      limits: [],
+      mode: 'observe' as const,
+      enforce: false,
+      isLimited: false,
+      models: {},
+      usageUnavailable: false,
+      policyUnavailable: false,
+      isLoading: false,
+      error: null,
+      refetch: vi.fn(),
+    }),
+    useModelAvailability: () => ({ state: 'available' as const }),
+  };
+});
+
 // Note: next-intl is mocked globally in vitest.setup.dom.ts
 
 describe('ModelSelect', () => {

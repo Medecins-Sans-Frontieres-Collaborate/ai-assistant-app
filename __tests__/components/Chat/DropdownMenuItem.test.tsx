@@ -207,4 +207,57 @@ describe('DropdownMenuItem', () => {
       expect(screen.getByRole('menuitem')).toBeInTheDocument();
     });
   });
+
+  describe('Policy lock and notes (usage limits §7.4)', () => {
+    it('a lockReason disables the row, shows a lock, and exposes the reason', () => {
+      const onClick = vi.fn();
+      const item = createMenuItem({
+        id: 'search',
+        onClick,
+        toggle: true,
+        checked: true,
+        lockReason: 'Web search is off on your account',
+      });
+      render(<DropdownMenuItem item={item} isSelected={false} />);
+
+      const button = screen.getByRole('menuitemcheckbox');
+      expect(button).toBeDisabled();
+      expect(button).toHaveAttribute('aria-disabled', 'true');
+      expect(button).toHaveAttribute(
+        'title',
+        'Web search is off on your account',
+      );
+      expect(screen.getByTestId('dropdown-lock-search')).toHaveAttribute(
+        'aria-label',
+        'Web search is off on your account',
+      );
+      // A locked toggle never shows the on-state mark, whatever `checked` says.
+      expect(button.parentElement?.querySelector('.text-blue-500')).toBeNull();
+
+      fireEvent.click(button);
+      expect(onClick).not.toHaveBeenCalled();
+    });
+
+    it('renders a note under the label with the requested tone', () => {
+      const item = createMenuItem({
+        note: '2 left today',
+        noteTone: 'warning',
+      });
+      render(<DropdownMenuItem item={item} isSelected={false} />);
+
+      const note = screen.getByText('2 left today');
+      expect(note).toHaveClass('text-amber-700');
+      expect(screen.getByRole('menuitem')).toBeEnabled();
+    });
+
+    it('without lockReason or note the row is unchanged', () => {
+      const item = createMenuItem({ toggle: true, checked: true });
+      render(<DropdownMenuItem item={item} isSelected={false} />);
+
+      const button = screen.getByRole('menuitemcheckbox');
+      expect(button).toBeEnabled();
+      expect(button).not.toHaveAttribute('title');
+      expect(screen.queryByTestId('dropdown-lock-test-item')).toBeNull();
+    });
+  });
 });
