@@ -1,4 +1,5 @@
 import { ApiError } from '@/client/services/api/errors';
+import { M365_BUILTIN_SERVER_ID } from '@/lib/services/m365/tools/toolCatalog';
 
 import { Conversation, MessageType } from '@/types/chat';
 import { InterpreterMode } from '@/types/interpreterMode';
@@ -8,6 +9,7 @@ import { SearchMode } from '@/types/searchMode';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -303,7 +305,7 @@ describe('chatStore usage-limit denials', () => {
   });
 
   describe('resendWithoutFeature', () => {
-    it('turns web search off for the conversation and composer, then resends with search OFF', async () => {
+    it('turns web search off for the composer only and resends with search OFF', async () => {
       const sendSpy = vi.fn().mockResolvedValue(undefined);
       const failed = makeConversation({ defaultSearchMode: SearchMode.ALWAYS });
       useConversationStore.setState({ conversations: [failed] });
@@ -321,25 +323,33 @@ describe('chatStore usage-limit denials', () => {
       expect(sendSpy).toHaveBeenCalledTimes(1);
       const [message, conversation, searchMode] = sendSpy.mock.calls[0];
       expect(message.content).toBe('hello');
-      expect(conversation.defaultSearchMode).toBe(SearchMode.OFF);
+      // The turn's mode travels as the explicit argument — this is what
+      // actually changes the request.
       expect(searchMode).toBe(SearchMode.OFF);
-      expect(
-        useConversationStore
-          .getState()
-          .conversations.find((c) => c.id === CONV_ID)?.defaultSearchMode,
-      ).toBe(SearchMode.OFF);
       expect(useChatInputStore.getState().searchMode).toBe(SearchMode.OFF);
       // Interpreter untouched — only the gated feature changes.
       expect(useChatInputStore.getState().interpreterMode).toBe(
         InterpreterMode.ALWAYS,
       );
+      // Regression guard: `conversation.defaultSearchMode` /
+      // `defaultInterpreterMode` are exactly the two ChatInput.tsx keys its
+      // "new conversation" effect resets on — draft, attachments and any
+      // in-flight upload — so a one-click resend must never persist through
+      // `updateConversation` with either field, and the object handed to
+      // sendMessage must not carry an override either.
+      expect(conversation.defaultSearchMode).toBe(SearchMode.ALWAYS);
+      expect(
+        useConversationStore
+          .getState()
+          .conversations.find((c) => c.id === CONV_ID)?.defaultSearchMode,
+      ).toBe(SearchMode.ALWAYS);
       const state = useChatStore.getState();
       expect(state.error).toBeNull();
       expect(state.lastDenial).toBeNull();
       expect(state.failedConversation).toBeNull();
     });
 
-    it('turns code interpreter off and resends with the original search mode', async () => {
+    it('turns code interpreter off for the composer only, resends with the original search mode', async () => {
       const sendSpy = vi.fn().mockResolvedValue(undefined);
       const failed = makeConversation({
         defaultInterpreterMode: InterpreterMode.ALWAYS,
@@ -354,17 +364,65 @@ describe('chatStore usage-limit denials', () => {
       await useChatStore.getState().resendWithoutFeature('codeInterpreter');
 
       const [, conversation, searchMode] = sendSpy.mock.calls[0];
-      expect(conversation.defaultInterpreterMode).toBe(InterpreterMode.OFF);
       expect(searchMode).toBe(SearchMode.INTELLIGENT);
       expect(useChatInputStore.getState().interpreterMode).toBe(
         InterpreterMode.OFF,
       );
       expect(useChatInputStore.getState().searchMode).toBe(SearchMode.ALWAYS);
+      // Same regression guard as the web-search case, for the interpreter
+      // conversation field.
+      expect(conversation.defaultInterpreterMode).toBe(InterpreterMode.ALWAYS);
       expect(
         useConversationStore
           .getState()
           .conversations.find((c) => c.id === CONV_ID)?.defaultInterpreterMode,
-      ).toBe(InterpreterMode.OFF);
+      ).toBe(InterpreterMode.ALWAYS);
+    });
+
+    it("turns connectors off ('mcp'): disables every enabled server plus the M365 builtin and clears the pin", async () => {
+      const sendSpy = vi.fn().mockResolvedValue(undefined);
+      const failed = makeConversation({
+        pinnedMcpServerId: 'srv-1',
+        disabledMcpServerIds: ['srv-already-off'],
+      });
+      useConversationStore.setState({ conversations: [failed] });
+      useSettingsStore.setState({
+        mcpServers: [
+          { id: 'srv-1', enabled: true } as any,
+          { id: 'srv-2', enabled: true } as any,
+          { id: 'srv-disabled', enabled: false } as any,
+        ],
+      });
+      useChatStore.setState({
+        sendMessage: sendSpy,
+        errorCode: 'RATE_LIMIT_QUOTA_EXCEEDED',
+        lastDenial: { limitKey: 'feature.mcp.enabled', limit: false },
+        failedConversation: failed,
+      });
+
+      await useChatStore.getState().resendWithoutFeature('mcp');
+
+      expect(sendSpy).toHaveBeenCalledTimes(1);
+      const [, conversation] = sendSpy.mock.calls[0];
+      // srv-disabled was never enabled — it should not need listing, but
+      // being harmlessly present would also be fine; what matters is that
+      // every ENABLED server plus the M365 builtin id is included.
+      expect(conversation.disabledMcpServerIds).toEqual(
+        expect.arrayContaining([
+          'srv-already-off',
+          'srv-1',
+          'srv-2',
+          M365_BUILTIN_SERVER_ID,
+        ]),
+      );
+      expect(conversation.pinnedMcpServerId).toBeUndefined();
+      const persisted = useConversationStore
+        .getState()
+        .conversations.find((c) => c.id === CONV_ID);
+      expect(persisted?.disabledMcpServerIds).toEqual(
+        expect.arrayContaining(['srv-1', 'srv-2', M365_BUILTIN_SERVER_ID]),
+      );
+      expect(persisted?.pinnedMcpServerId).toBeUndefined();
     });
 
     it('is a no-op without a failed conversation', async () => {
