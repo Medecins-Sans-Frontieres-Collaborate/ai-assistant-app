@@ -84,19 +84,37 @@ export interface ModelAvailabilityMap {
   refetch: () => void;
 }
 
+// `useMyLimits()` returns `data?.models ?? {}`: a fresh object every render
+// while there is no data (flag off, loading, 401) — precisely the "byte-for-
+// byte today's UI" branch that should be inert. Substituting this frozen
+// constant keeps `lookup`/`isSelectable`/the returned map stable in that
+// branch instead of recomputing (and re-rendering every consumer) on every
+// render. Harmless once real data arrives: an empty `models` object there
+// behaves identically either way.
+const EMPTY_MODELS: Record<string, ModelAvailability> = {};
+
 /** One subscription, many lookups — see the module docblock. */
 export function useModelAvailabilityMap(): ModelAvailabilityMap {
   const { enforce, models, refetch } = useMyLimits();
+  const stableModels = Object.keys(models).length > 0 ? models : EMPTY_MODELS;
   const lookup = useCallback(
-    (modelId?: string) => deriveModelAvailability(models, enforce, modelId),
-    [models, enforce],
+    (modelId?: string) =>
+      deriveModelAvailability(stableModels, enforce, modelId),
+    [stableModels, enforce],
   );
   const isSelectable = useCallback(
     (model: Pick<OpenAIModel, 'id'>) => lookup(model.id).state === 'available',
     [lookup],
   );
+  // `cancelRefetch: false` dedupes concurrent calls onto one in-flight
+  // request (TanStack Query's Query#fetch returns the existing retryer's
+  // promise instead of aborting it) — every exhausted row's badge, plus
+  // every spent Version chip and Variant segment, shares this ONE function
+  // reference and can cross the reset boundary within milliseconds of each
+  // other; without this they would cancel one another's request in a chain,
+  // and each still-executing cancelled fetch costs a blob read server-side.
   const refetchLimits = useCallback(() => {
-    void refetch();
+    void refetch({ cancelRefetch: false });
   }, [refetch]);
   return useMemo(
     () => ({ enforce, lookup, isSelectable, refetch: refetchLimits }),
