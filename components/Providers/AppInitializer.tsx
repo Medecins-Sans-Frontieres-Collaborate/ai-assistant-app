@@ -121,12 +121,30 @@ export function AppInitializer() {
       } = useConversationStore.getState();
 
       // 1. Initialize models list from the vetted static list first, so the
-      // picker renders instantly with current behavior. useModelsQuery
-      // (mounted above) refines this from /api/models (region-correct,
-      // deployment-driven) and keeps it fresh across refetches.
-      const models: OpenAIModel[] = getStaticModelList();
-      setModels(models);
-      useSettingsStore.getState().setModelListSource('static');
+      // picker renders instantly with current behavior on a COLD store.
+      // useModelsQuery (mounted above) refines this from /api/models
+      // (region-correct, deployment-driven) and keeps it fresh across
+      // refetches.
+      //
+      // Guard against re-seeding a store a PRIOR mount already populated:
+      // `settingsStore.models`/`modelListSource` are module-level and NOT
+      // persisted to localStorage (see partialize), so they survive an
+      // AppInitializer remount within the same page load (e.g. a
+      // client-side navigation away from and back to the chat shell).
+      // `useModelsQuery()` is mounted above this effect, so on such a
+      // remount its data-effect runs FIRST (React runs a component's
+      // passive effects in hook declaration order) and can already apply a
+      // warm ['models'] cache hit; without this guard this effect would
+      // then unconditionally clobber that back to the static, unfiltered,
+      // un-ring-gated seed — the exact "blocked model is visible again"
+      // regression docs/LIMITS_USER_FACING_UX.md §1b/§3b describes.
+      const existingModels = useSettingsStore.getState().models;
+      const models: OpenAIModel[] =
+        existingModels.length > 0 ? existingModels : getStaticModelList();
+      if (existingModels.length === 0) {
+        setModels(models);
+        useSettingsStore.getState().setModelListSource('static');
+      }
 
       // 2. Set default model if not already persisted
       if (!defaultModelId && models.length > 0) {
