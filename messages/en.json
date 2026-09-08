@@ -5477,6 +5477,51 @@
     "retry": "Retry"
   },
   "limitsUx": {
+    "picker": {
+      "exhausted": "Limit reached ({used}/{limit}). Resets {resets}.",
+      "exhaustedNoReset": "Limit reached ({used}/{limit}).",
+      "familyExhausted": "Family limit reached ({used}/{limit}). Resets {resets}.",
+      "familyExhaustedNoReset": "Family limit reached ({used}/{limit}).",
+      "unavailable": "Not available on your account.",
+      "remaining": "{remaining} left",
+      "remainingTooltip": "{remaining} of {limit} requests left in this period.",
+      "agentModelUnavailable": "Uses {model}, which isn't available to you.",
+      "agentModelExhausted": "Uses {model}, whose limit is reached. Resets {resets}.",
+      "agentModelExhaustedNoReset": "Uses {model}, whose limit is reached."
+    },
+    "denial": {
+      "modelBlocked": "This model isn't available on your account. Choose another model, or contact your administrator.",
+      "modelExhausted": "You've used all {limit} requests for this model today.",
+      "familyExhausted": "You've used up today's shared budget of {limit} requests for this model family.",
+      "searchBlocked": "Web search is turned off for your account by an administrator, and this message had it enabled.",
+      "interpreterBlocked": "Code interpreter is turned off for your account by an administrator, and this message had it enabled.",
+      "mcpBlocked": "Connectors are turned off for your account by an administrator, and this message had connectors enabled. Turn them off to continue.",
+      "messagesCap": "You've reached your limit of {limit} messages today.",
+      "tokensDayCap": "You've reached your token limit for today.",
+      "tokensMonthCap": "You've reached your token limit for this month.",
+      "perRequest": "This request is bigger than your account allows (maximum {limit} per request). Try a smaller one.",
+      "resets": "Resets {resets}.",
+      "chooseAnotherModel": "Choose another model",
+      "turnOffSearchAndResend": "Turn off web search and resend",
+      "turnOffInterpreterAndResend": "Turn off code interpreter and resend"
+    },
+    "notice": {
+      "unavailable": "{model} isn't available on your account — pick another model to continue.",
+      "exhausted": "{model} has reached its limit for today.",
+      "familyExhausted": "{model} shares a budget with its model family, which is used up for today.",
+      "resets": "Resets {resets}.",
+      "chooseModel": "Choose model"
+    },
+    "gates": {
+      "blocked": "{feature} is turned off for your account by your organization.",
+      "features": {
+        "webSearch": "Web search",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# use left today} other {# uses left today}}",
+      "exhausted": "Daily limit reached — the model will answer without it."
+    },
     "mine": {
       "title": "Your limits",
       "description": "Limits your organization has set for your account. Counters reset automatically at the end of each period.",
@@ -5487,6 +5532,13 @@
       "limitReached": "Limit reached",
       "familyLimitReached": "Model family limit reached",
       "usageUnavailable": "Current usage could not be loaded — showing limits only."
+    },
+    "routes": {
+      "ttsExhausted": "You've reached today's text-to-speech limit.",
+      "translationExhausted": "You've reached today's document translation limit.",
+      "resetsIn": "Resets {resets}.",
+      "uploadTooLarge": "{fileName} is too large — files on your account must be under {maxSize}.",
+      "uploadCapHint": "Files up to {maxSize}"
     }
   }
 }
