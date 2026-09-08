@@ -208,6 +208,11 @@ export interface ListMailOptions {
   signal?: AbortSignal;
 }
 
+/**
+ * Recent online meetings, newest first, one row per recurring series (the
+ * `occurrences` field says how many folded in). Nothing is probed; a row's
+ * artifacts come from `resolveMeeting` on demand.
+ */
 export async function listMeetings(
   options: { signal?: AbortSignal } = {},
 ): Promise<M365MeetingEntry[]> {
