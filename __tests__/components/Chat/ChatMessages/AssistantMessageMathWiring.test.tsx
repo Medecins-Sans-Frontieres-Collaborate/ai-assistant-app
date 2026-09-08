@@ -42,6 +42,18 @@ vi.mock('@/client/hooks/useM365Enabled', () => ({
 
 vi.mock('@/lib/services/translation', () => ({ translateText: vi.fn() }));
 
+// The TTS budget gate reads React Query; this test has no QueryClient and
+// is not about limits, so fail open the way the real hook does without data.
+vi.mock('@/client/hooks/settings/useMyLimits', () => ({
+  useLimitGates: () => ({
+    isFeatureBlocked: () => false,
+    featureRemaining: () => undefined,
+    enforce: false,
+  }),
+  useMyLimits: () => ({ refetch: vi.fn(), limits: [], models: {} }),
+  useResetCountdown: () => null,
+}));
+
 // The exact shape issue #121 reports: a model that never saw the KaTeX rules
 // (an agent whose prompt replaced the base prompt) emits \[ ... \].
 const RAW = 'Area \\[ \\pi r^2 \\] grows.';
