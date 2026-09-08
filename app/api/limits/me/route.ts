@@ -120,11 +120,23 @@ import {
  *  - `usage=1` attaches the caller's own consumption. The subject is
  *    `session.user.id` (the oid the debit path keys counters by), read with
  *    `readUsage` directly — no Graph call, no `lookupUsage`, no consent
- *    dependency. Storage is touched ONLY when some counter resolved for this
- *    principal is numeric, and only the ledgers such a counter lives in: the
- *    unlimited majority costs zero blob reads, exactly like `reserve()`. Any
- *    failure answers `usageUnavailable: true`, never an error. With usage,
- *    each numeric counter row carries `used` / `remaining` / `resetAt`.
+ *    dependency, and raced against a 2.5s timer so a stalled blob read
+ *    degrades to `usageUnavailable` instead of holding the response open.
+ *    Storage is touched ONLY when some REAL (non-`catalog`-sourced) counter
+ *    resolved for this principal is numeric, and only the ledgers such a
+ *    counter lives in: the unlimited majority, and a caller with no
+ *    authored policy at all, costs zero blob reads, exactly like
+ *    `reserve()`. A handful of counters ship with numeric COMPILED defaults
+ *    (the flag-gated M365 tool budgets) — those never force the read by
+ *    themselves and are dropped from `limits[]` unless their ledger got
+ *    read anyway (`dropUnreadCatalogCounters`), so a user who has never
+ *    touched the feature is never shown its budget. Any failure (or
+ *    timeout) answers `usageUnavailable: true`, never an error. With usage,
+ *    each numeric counter row carries `used` / `remaining` / `resetAt` —
+ *    except the UNQUALIFIED row of a `perModel` key (e.g. bare
+ *    `model.requests`), which enforcement never writes a counter under
+ *    (`attachUsage`); its per-model consumption lives only in `models[id]`
+ *    below.
  *  - `models=<ids>` answers per model, for the picker: up to 100 ids, each
  *    dimension-shaped and in the static catalog (which is where `series`
  *    comes from); anything else — byom-, local-, org-, foundry- ids, typos
@@ -193,8 +205,12 @@ function requestedModels(param: string | null): RequestedModel[] {
     const id = raw.trim();
     if (!id || seen.has(id) || !isValidDimension(id)) continue;
     seen.add(id);
+    // Own-property check: `OpenAIModels` is a plain object literal, so an
+    // unguarded index lookup resolves inherited names too (`constructor`,
+    // `toString`, `__proto__`, …), each a truthy function that would
+    // otherwise pass as a "catalog model" and cost a full resolution.
+    if (!Object.prototype.hasOwnProperty.call(OpenAIModels, id)) continue;
     const catalog = OpenAIModels[id as OpenAIModelID];
-    if (!catalog) continue;
     out.push({ id, ...(catalog.series ? { series: catalog.series } : {}) });
   }
   return out;
@@ -213,6 +229,23 @@ function ledgerOf(row: Pick<MeLimit, 'limitKey' | 'value'>): Ledger | null {
 }
 
 /**
+ * Like {@link ledgerOf}, but a `catalog`-sourced numeric row never counts
+ * toward the decision to touch storage: a few counters ship with NUMERIC
+ * compiled defaults (the flag-gated M365 tool budgets), and nobody
+ * authoring a policy is what makes a limit "real" here — a caller with no
+ * policy at all must still take the zero-storage path. A row in the SAME
+ * ledger that a real (non-catalog) counter forces open still gets its usage
+ * attached below; this only controls whether the read is worth paying for
+ * in the first place.
+ */
+function metersStorage(
+  row: Pick<MeLimit, 'limitKey' | 'value' | 'source'>,
+): Ledger | null {
+  if (row.source === 'catalog') return null;
+  return ledgerOf(row);
+}
+
+/**
  * The ledgers a numeric counter for this principal lives in — the unqualified
  * rows already resolved, plus the per-model cells each requested model would
  * be metered on (the unqualified `model.requests` row is only a display of
@@ -228,7 +261,7 @@ function meteredLedgers(
 ): Set<Ledger> {
   const ledgers = new Set<Ledger>();
   for (const row of rows) {
-    const ledger = ledgerOf(row);
+    const ledger = metersStorage(row);
     if (ledger) ledgers.add(ledger);
   }
   const perModel = getLimitDefinition('model.requests');
@@ -241,7 +274,7 @@ function meteredLedgers(
         model.id,
         model.series,
       )) {
-        const ledger = ledgerOf(cell);
+        const ledger = metersStorage(cell);
         if (ledger) ledgers.add(ledger);
       }
     }
@@ -250,9 +283,39 @@ function meteredLedgers(
 }
 
 /**
+ * Drops `catalog`-sourced numeric counter rows whose ledger was never
+ * actually read: shown bare, they would read as a real admin-set budget
+ * ("M365 tool calls 0/200") to every user, including one who has never
+ * touched the flag-gated feature behind it. A row survives once its ledger
+ * WAS fetched (for this row's own sake or riding along with another
+ * counter in the same ledger) and carries real consumption.
+ */
+function dropUnreadCatalogCounters(
+  rows: MeLimit[],
+  fetchedLedgers: ReadonlySet<Ledger>,
+): MeLimit[] {
+  return rows.filter((row) => {
+    if (row.source !== 'catalog') return true;
+    const ledger = ledgerOf(row);
+    return !ledger || fetchedLedgers.has(ledger);
+  });
+}
+
+/**
+ * `readOwnUsage` posture: matches the "same 2.5s posture as other user-path
+ * reads" (§3a). `readUsage` takes no abort signal (usageStore.ts is outside
+ * this file's ownership), so a hung blob GET keeps running in the
+ * background, but the ROUTE stops waiting on it and answers
+ * `usageUnavailable: true` rather than holding the response open.
+ */
+const OWN_USAGE_TIMEOUT_MS = 2_500;
+
+const OWN_USAGE_TIMED_OUT = Symbol('own-usage-timed-out');
+
+/**
  * The caller's own counters, only the ledgers asked for. `null` on any
- * failure — the payload says `usageUnavailable`, the picker fails open, and
- * a blob hiccup never turns "my limits" into a 500.
+ * failure or timeout — the payload says `usageUnavailable`, the picker fails
+ * open, and a blob hiccup never turns "my limits" into a 500 or a stall.
  */
 async function readOwnUsage(
   subjectId: string | undefined,
@@ -261,10 +324,26 @@ async function readOwnUsage(
 ): Promise<UsageWindows | null> {
   if (!subjectId) return null;
   try {
-    const [day, month] = await Promise.all([
+    const fetch = Promise.all([
       ledgers.has('day') ? readUsage(subjectId, 'day', { timezone }) : {},
       ledgers.has('month') ? readUsage(subjectId, 'month', { timezone }) : {},
     ]);
+    const timeout = new Promise<typeof OWN_USAGE_TIMED_OUT>(
+      (resolvePromise) => {
+        setTimeout(
+          () => resolvePromise(OWN_USAGE_TIMED_OUT),
+          OWN_USAGE_TIMEOUT_MS,
+        );
+      },
+    );
+    const result = await Promise.race([fetch, timeout]);
+    if (result === OWN_USAGE_TIMED_OUT) {
+      console.warn(
+        `[limits] own usage read exceeded ${OWN_USAGE_TIMEOUT_MS}ms; answering without counters`,
+      );
+      return null;
+    }
+    const [day, month] = result;
     return { day, month };
   } catch (error) {
     console.warn(
@@ -274,7 +353,16 @@ async function readOwnUsage(
   }
 }
 
-/** Attaches `used` / `remaining` / `resetAt` to every numeric counter row. */
+/**
+ * Attaches `used` / `remaining` / `resetAt` to every numeric counter row —
+ * except a `perModel` definition's UNQUALIFIED row (e.g. the bare
+ * `model.requests` default): enforcement never writes a counter under that
+ * literal cell name, only under `model:<id>.requests` / `family:<series>.
+ * requests` (counterCellName), so the row would always read `used: 0` /
+ * full remaining regardless of actual consumption, contradicting the
+ * per-model answers in `models[]`. The row still shows its cap; it just
+ * never claims to know how much of it is left.
+ */
 function attachUsage(
   rows: MeLimit[],
   usage: UsageWindows,
@@ -283,6 +371,7 @@ function attachUsage(
   return rows.map((row) => {
     const ledger = ledgerOf(row);
     if (!ledger) return row;
+    if (getLimitDefinition(row.limitKey)?.perModel) return row;
     const value = row.value as number;
     const used = usage[ledger][counterCellName(row)] ?? 0;
     const at = resetAt(ledger, timezone);
@@ -587,23 +676,31 @@ export async function GET(request: NextRequest) {
     const params = request.nextUrl.searchParams;
     const models = requestedModels(params.get('models'));
 
-    // Own counters: read only when asked AND only when something numeric can
-    // consume them — the unlimited majority never reaches storage.
+    // Own counters: read only when asked AND only when something REAL
+    // (policy-authored, not a bare compiled default) is numeric — the
+    // unlimited majority never reaches storage, and a catalog-only numeric
+    // default (the flag-gated M365 counters) rides along for free once
+    // something else in its ledger IS real, but never forces the read by
+    // itself (dropUnreadCatalogCounters below).
     let usage: UsageWindows | null = null;
     let usageUnavailable = false;
+    let fetchedLedgers: ReadonlySet<Ledger> = new Set();
     if (params.get('usage') === '1') {
       const ledgers = meteredLedgers(limits, policy, principal, models);
       if (ledgers.size > 0) {
         usage = await readOwnUsage(session.user.id, ledgers, timezone);
         usageUnavailable = usage === null;
+        if (usage !== null) fetchedLedgers = ledgers;
       }
     }
+
+    const shownLimits = dropUnreadCatalogCounters(limits, fetchedLedgers);
 
     return successResponse({
       enabled: true,
       mode: policy?.mode ?? 'observe',
       policyUnavailable,
-      limits: usage ? attachUsage(limits, usage, timezone) : limits,
+      limits: usage ? attachUsage(shownLimits, usage, timezone) : shownLimits,
       ...(usageUnavailable ? { usageUnavailable: true } : {}),
       // Present whenever `models=` was sent, so the client can tell "asked,
       // none accepted" from "did not ask"; one entry per accepted id.
