@@ -5519,5 +5519,70 @@
     "loading": "Caricamento…",
     "loadError": "Impossibile caricare l’elenco degli admin globali.",
     "retry": "Riprova"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Limite raggiunto ({used}/{limit}). Si azzera {resets}.",
+      "exhaustedNoReset": "Limite raggiunto ({used}/{limit}).",
+      "familyExhausted": "Limite di famiglia raggiunto ({used}/{limit}). Si azzera {resets}.",
+      "familyExhaustedNoReset": "Limite di famiglia raggiunto ({used}/{limit}).",
+      "unavailable": "Non disponibile per il tuo account.",
+      "remaining": "{remaining} rimasti",
+      "remainingTooltip": "{remaining} di {limit} richieste rimaste in questo periodo.",
+      "agentModelUnavailable": "Utilizza {model}, che non è disponibile per te.",
+      "agentModelExhausted": "Utilizza {model}, il cui limite è stato raggiunto. Si azzera {resets}.",
+      "agentModelExhaustedNoReset": "Utilizza {model}, il cui limite è stato raggiunto."
+    },
+    "denial": {
+      "modelBlocked": "Questo modello non è disponibile per il tuo account. Scegli un altro modello o contatta l'amministratore.",
+      "modelExhausted": "Hai usato tutte le {limit} richieste disponibili per questo modello oggi.",
+      "familyExhausted": "Hai esaurito il budget condiviso di oggi di {limit} richieste per questa famiglia di modelli.",
+      "searchBlocked": "La ricerca web è stata disattivata per il tuo account da un amministratore, ma era abilitata per questo messaggio.",
+      "interpreterBlocked": "L'interprete del codice è stato disattivato per il tuo account da un amministratore, ma era abilitato per questo messaggio.",
+      "mcpBlocked": "I connettori sono stati disattivati per il tuo account da un amministratore, ma erano abilitati per questo messaggio. Disattivali per continuare.",
+      "messagesCap": "Hai raggiunto il limite di {limit} messaggi oggi.",
+      "tokensDayCap": "Hai raggiunto il limite di token per oggi.",
+      "tokensMonthCap": "Hai raggiunto il limite di token per questo mese.",
+      "perRequest": "Questa richiesta supera il limite consentito dal tuo account (massimo {limit} per richiesta). Prova con una più piccola.",
+      "resets": "Si azzera {resets}.",
+      "chooseAnotherModel": "Scegli un altro modello",
+      "turnOffSearchAndResend": "Disattiva la ricerca web e reinvia",
+      "turnOffInterpreterAndResend": "Disattiva l'interprete del codice e reinvia"
+    },
+    "notice": {
+      "unavailable": "{model} non è disponibile per il tuo account — scegli un altro modello per continuare.",
+      "exhausted": "{model} ha raggiunto il limite per oggi.",
+      "familyExhausted": "{model} condivide il budget con la sua famiglia di modelli, esaurito per oggi.",
+      "resets": "Si azzera {resets}.",
+      "chooseModel": "Scegli modello"
+    },
+    "gates": {
+      "blocked": "{feature} è stato disattivato per il tuo account dalla tua organizzazione.",
+      "features": {
+        "webSearch": "Ricerca web",
+        "codeInterpreter": "Interprete del codice",
+        "connectors": "Connettori"
+      },
+      "remaining": "{count, plural, one {# utilizzo rimasto oggi} other {# utilizzi rimasti oggi}}",
+      "exhausted": "Limite giornaliero raggiunto — il modello risponderà senza di esso."
+    },
+    "mine": {
+      "title": "I tuoi limiti",
+      "description": "Limiti impostati dalla tua organizzazione per il tuo account. I contatori si azzerano automaticamente alla fine di ogni periodo.",
+      "notAvailable": "Non disponibile",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Si azzera {resets}",
+      "limitReached": "Limite raggiunto",
+      "familyLimitReached": "Limite famiglia modello raggiunto",
+      "usageUnavailable": "Impossibile caricare l'uso corrente — vengono mostrati solo i limiti."
+    },
+    "routes": {
+      "ttsExhausted": "Hai raggiunto il limite giornaliero di sintesi vocale.",
+      "translationExhausted": "Hai raggiunto il limite giornaliero di traduzioni di documenti.",
+      "resetsIn": "Si azzera {resets}.",
+      "uploadTooLarge": "{fileName} è troppo grande — i file sul tuo account devono essere inferiori a {maxSize}.",
+      "uploadCapHint": "File fino a {maxSize}"
+    }
   }
 }

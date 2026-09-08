@@ -5519,5 +5519,70 @@
     "loading": "Se încarcă…",
     "loadError": "Lista administratorilor globali nu a putut fi încărcată.",
     "retry": "Reîncearcă"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Limită atinsă ({used}/{limit}). Se resetează {resets}.",
+      "exhaustedNoReset": "Limită atinsă ({used}/{limit}).",
+      "familyExhausted": "Limită pentru familie atinsă ({used}/{limit}). Se resetează {resets}.",
+      "familyExhaustedNoReset": "Limită pentru familie atinsă ({used}/{limit}).",
+      "unavailable": "Nu este disponibil pe contul dumneavoastră.",
+      "remaining": "{remaining} rămase",
+      "remainingTooltip": "{remaining} din {limit} solicitări rămase în această perioadă.",
+      "agentModelUnavailable": "Folosește {model}, care nu este disponibil pentru dumneavoastră.",
+      "agentModelExhausted": "Folosește {model}, a cărui limită a fost atinsă. Se resetează {resets}.",
+      "agentModelExhaustedNoReset": "Folosește {model}, a cărui limită a fost atinsă."
+    },
+    "denial": {
+      "modelBlocked": "Acest model nu este disponibil pe contul dumneavoastră. Alegeți un alt model sau contactați administratorul.",
+      "modelExhausted": "Ați folosit toate cele {limit} solicitări pentru acest model astăzi.",
+      "familyExhausted": "Ați epuizat bugetul partajat de {limit} solicitări pentru această familie de modele astăzi.",
+      "searchBlocked": "Căutarea web a fost dezactivată pe contul dumneavoastră de către un administrator, iar acest mesaj o avea activată.",
+      "interpreterBlocked": "Interpretul de cod a fost dezactivat pe contul dumneavoastră de către un administrator, iar acest mesaj îl avea activat.",
+      "mcpBlocked": "Conectorii au fost dezactivați pe contul dumneavoastră de către un administrator, iar acest mesaj avea conectorii activați. Dezactivați-i pentru a continua.",
+      "messagesCap": "Ați atins limita de {limit} mesaje astăzi.",
+      "tokensDayCap": "Ați atins limita de token-uri pentru astăzi.",
+      "tokensMonthCap": "Ați atins limita de token-uri pentru această lună.",
+      "perRequest": "Această solicitare este mai mare decât permite contul dumneavoastră (maximum {limit} per solicitare). Încercați una mai mică.",
+      "resets": "Se resetează {resets}.",
+      "chooseAnotherModel": "Alegeți un alt model",
+      "turnOffSearchAndResend": "Dezactivați căutarea web și retrimiteți",
+      "turnOffInterpreterAndResend": "Dezactivați interpretul de cod și retrimiteți"
+    },
+    "notice": {
+      "unavailable": "{model} nu este disponibil pe contul dumneavoastră — alegeți un alt model pentru a continua.",
+      "exhausted": "{model} a atins limita pentru astăzi.",
+      "familyExhausted": "{model} împarte bugetul cu familia sa de modele, care a fost epuizat pentru astăzi.",
+      "resets": "Se resetează {resets}.",
+      "chooseModel": "Alegeți modelul"
+    },
+    "gates": {
+      "blocked": "{feature} a fost dezactivat pentru contul dumneavoastră de către organizație.",
+      "features": {
+        "webSearch": "Căutare web",
+        "codeInterpreter": "Interpret de cod",
+        "connectors": "Conectori"
+      },
+      "remaining": "{count, plural, one {# utilizare rămasă astăzi} other {# utilizări rămase astăzi}}",
+      "exhausted": "Limită zilnică atinsă — modelul va răspunde fără ea."
+    },
+    "mine": {
+      "title": "Limitele dumneavoastră",
+      "description": "Limitele stabilite de organizația dumneavoastră pentru contul dumneavoastră. Contoarele se resetează automat la sfârșitul fiecărei perioade.",
+      "notAvailable": "Nu este disponibil",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Se resetează {resets}",
+      "limitReached": "Limită atinsă",
+      "familyLimitReached": "Limită pentru familia de modele atinsă",
+      "usageUnavailable": "Utilizarea curentă nu a putut fi încărcată — se afișează doar limitele."
+    },
+    "routes": {
+      "ttsExhausted": "Ați atins limita zilnică pentru text-to-speech.",
+      "translationExhausted": "Ați atins limita zilnică pentru traducerea de documente.",
+      "resetsIn": "Se resetează {resets}.",
+      "uploadTooLarge": "{fileName} este prea mare — fișierele pe contul dumneavoastră trebuie să fie sub {maxSize}.",
+      "uploadCapHint": "Fișiere de până la {maxSize}"
+    }
   }
 }

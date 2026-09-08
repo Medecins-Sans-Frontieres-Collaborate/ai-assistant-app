@@ -5503,5 +5503,70 @@
     "loading": "Birimo gupakirwa…",
     "loadError": "Urutonde rw’abatekinisiye b’ingenzi ntirwabashije gupakirwa.",
     "retry": "Ongera ugerageze"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Limite igeze ({used}/{limit}). Izasubiraho {resets}.",
+      "exhaustedNoReset": "Limite igeze ({used}/{limit}).",
+      "familyExhausted": "Limite y'umuryango igeze ({used}/{limit}). Izasubiraho {resets}.",
+      "familyExhaustedNoReset": "Limite y'umuryango igeze ({used}/{limit}).",
+      "unavailable": "Ntibiboneka kuri konti yawe.",
+      "remaining": "Hasigaye {remaining}",
+      "remainingTooltip": "Hasigaye {remaining} muri {limit} wasabye muri iki gihe.",
+      "agentModelUnavailable": "Ikoresha {model}, ntibiboneka kuri wowe.",
+      "agentModelExhausted": "Ikoresha {model}, limite yayo igeze. Izasubiraho {resets}.",
+      "agentModelExhaustedNoReset": "Ikoresha {model}, limite yayo igeze."
+    },
+    "denial": {
+      "modelBlocked": "Iyi model ntiboneka kuri konti yawe. Hitamo indi model cyangwa wiyambaze ushinzwe.",
+      "modelExhausted": "Wakoze ibisabwa byose {limit} kuri iyi model uyu munsi.",
+      "familyExhausted": "Wamaze gukoresha ingengo y'imishinga y'uyu munsi ya {limit} kuri iki cyiciro cya model.",
+      "searchBlocked": "Ushinzwe konti yawe yafunze gushakisha kuri internet, kandi ubu butumwa bwari bufunguye.",
+      "interpreterBlocked": "Ushinzwe konti yawe yafunze code interpreter, kandi ubu butumwa bwari bufunguye.",
+      "mcpBlocked": "Connectors zakuwemo kuri konti yawe n'uwayishinze, kandi ubu butumwa bwari bufunguye connectors. Zifunge kugira ngo ukomeze.",
+      "messagesCap": "Wageze kuri limite ya {limit} y'ubutumwa uyu munsi.",
+      "tokensDayCap": "Wageze kuri token limit yo kuri uyu munsi.",
+      "tokensMonthCap": "Wageze kuri token limit y'uku kwezi.",
+      "perRequest": "Ibisabwa birenze ibyo konti yawe yemera (ntibigomba kurenza {limit} kuri buri request). Gerageza ugabanya.",
+      "resets": "Izasubiraho {resets}.",
+      "chooseAnotherModel": "Hitamo indi model",
+      "turnOffSearchAndResend": "Funga web search ubisubize",
+      "turnOffInterpreterAndResend": "Funga code interpreter ubisubize"
+    },
+    "notice": {
+      "unavailable": "{model} ntiiboneka kuri konti yawe — hitamo indi model ukomeze.",
+      "exhausted": "{model} igeze kuri limite yayo y'uyu munsi.",
+      "familyExhausted": "{model} ikoreshwa hamwe n'izindi mu cyiciro kimwe, ingengo yayo y'uyu munsi yamaze gukoreshwa.",
+      "resets": "Izasubiraho {resets}.",
+      "chooseModel": "Hitamo model"
+    },
+    "gates": {
+      "blocked": "{feature} yafunzwe kuri konti yawe n'umuryango wawe.",
+      "features": {
+        "webSearch": "Gushaka kuri internet",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# risigaye uyu munsi} other {# bisigaye uyu munsi}}",
+      "exhausted": "Igihe ntarengwa kigeze — model izasubiza idakoresheje ibi."
+    },
+    "mine": {
+      "title": "Imipaka yawe",
+      "description": "Imipaka yashyizweho n'umuryango kuri konti yawe. Ibipimo bisubiraho byikora buri gihe cyagenwe.",
+      "notAvailable": "Ntibiboneka",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Izasubiraho {resets}",
+      "limitReached": "Limite igeze",
+      "familyLimitReached": "Limite y'itsinda rya model igeze",
+      "usageUnavailable": "Uko bikoreshwa ubu ntibibashije kugaragara — urabona gusa imipaka."
+    },
+    "routes": {
+      "ttsExhausted": "Wageze kuri limite ya text-to-speech y'uyu munsi.",
+      "translationExhausted": "Wageze kuri limite yo guhindura inyandiko y'uyu munsi.",
+      "resetsIn": "Izasubiraho {resets}.",
+      "uploadTooLarge": "{fileName} iraruta igenewe — amadosiye yawe agomba kuba munsi ya {maxSize}.",
+      "uploadCapHint": "Amadosiye atarengeje {maxSize}"
+    }
   }
 }

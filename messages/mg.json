@@ -5503,5 +5503,70 @@
     "loading": "Eo am-pitrohana…",
     "loadError": "Tsy voatonta ny lisitra admin globaly.",
     "retry": "Avereno"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Vita ny fetra ({used}/{limit}). Hanavao amin'ny {resets}.",
+      "exhaustedNoReset": "Vita ny fetra ({used}/{limit}).",
+      "familyExhausted": "Vita ny fetra ho an'ny fianakaviana ({used}/{limit}). Hanavao amin'ny {resets}.",
+      "familyExhaustedNoReset": "Vita ny fetra ho an'ny fianakaviana ({used}/{limit}).",
+      "unavailable": "Tsy misy amin'ny kaontinao.",
+      "remaining": "{remaining} sisa",
+      "remainingTooltip": "{remaining} amin'ny {limit} fangatahana sisa amin'ity fe-potoana ity.",
+      "agentModelUnavailable": "Mampiasa {model}, izay tsy misy aminao.",
+      "agentModelExhausted": "Mampiasa {model} izay efa nihoatra ny fetra. Hanavao amin'ny {resets}.",
+      "agentModelExhaustedNoReset": "Mampiasa {model} izay efa nihoatra ny fetra."
+    },
+    "denial": {
+      "modelBlocked": "Tsy misy amin'ny kaontinao ity modely ity. Fidio modely hafa, na mifandraisa amin'ny mpitantana anao.",
+      "modelExhausted": "Efa nampiasainao avokoa ireo fangatahana {limit} ho an'ity modely ity androany.",
+      "familyExhausted": "Efa lany androany ny teti-bola iraisana {limit} amin'ny modely fianakaviana ity.",
+      "searchBlocked": "Nampiatoan'ny mpitantana ny fikarohana web amin'ny kaontinao, nefa navadika io tamin'ity hafatra ity.",
+      "interpreterBlocked": "Nampiatoan'ny mpitantana ny code interpreter amin'ny kaontinao, nefa navadika io tamin'ity hafatra ity.",
+      "mcpBlocked": "Nampiatoan'ny mpitantana ny connectors amin'ny kaontinao, nefa navadika io tamin'ity hafatra ity. Alefaso amin'ny tsy misy izany mba hanohizana.",
+      "messagesCap": "Efa tonga amin'ny fetra {limit} hafatrao androany ianao.",
+      "tokensDayCap": "Efa tonga amin'ny fetra token anao androany ianao.",
+      "tokensMonthCap": "Efa tonga amin'ny fetra token anao amin'ity volana ity ianao.",
+      "perRequest": "Lehibe loatra ity fangatahana ity noho ny fepetra amin'ny kaontinao (farafahabetsany {limit} isaky ny fangatahana). Andramo atao kely kokoa.",
+      "resets": "Hanavao amin'ny {resets}.",
+      "chooseAnotherModel": "Fidio modely hafa",
+      "turnOffSearchAndResend": "Atsaharo ny fikarohana web ary alefaso indray",
+      "turnOffInterpreterAndResend": "Atsaharo ny code interpreter ary alefaso indray"
+    },
+    "notice": {
+      "unavailable": "Tsy misy amin'ny kaontinao ny {model} — mifidiana modely hafa hanohizana.",
+      "exhausted": "Efa tonga amin'ny fetra androany ny {model}.",
+      "familyExhausted": "Mitovy teti-bola amin'ny fianakaviany ny {model}, izay efa lany androany.",
+      "resets": "Hanavao amin'ny {resets}.",
+      "chooseModel": "Fidio modely"
+    },
+    "gates": {
+      "blocked": "Nosakanan'ny fikambananareo amin'ny kaontinao ny {feature}.",
+      "features": {
+        "webSearch": "Fikarohana web",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# fampiasana sisa anio} other {# fampiasana sisa anio}}",
+      "exhausted": "Vita ny fetra isan'andro — hamaly tsy amin'izany ny modely."
+    },
+    "mine": {
+      "title": "Ny fetra anao",
+      "description": "Fetra napetraky ny fikambananao ho an'ny kaontinao. Miverina ho azy ireo kaonty rehefa mifarana ny fe-potoana tsirairay.",
+      "notAvailable": "Tsy misy",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Hanavao amin'ny {resets}",
+      "limitReached": "Vita ny fetra",
+      "familyLimitReached": "Vita ny fetra amin'ny modely fianakaviana",
+      "usageUnavailable": "Tsy azo aseho ny fampiasana amin'izao fotoana izao — fetra ihany no aseho."
+    },
+    "routes": {
+      "ttsExhausted": "Efa nihoatra ny fetra text-to-speech androany ianao.",
+      "translationExhausted": "Efa nihoatra ny fetra fandikana antontan-taratasy androany ianao.",
+      "resetsIn": "Hanavao amin'ny {resets}.",
+      "uploadTooLarge": "Lehibe loatra {fileName} — tsy maintsy latsaky ny {maxSize} ny rakitra apetrakao.",
+      "uploadCapHint": "Rakitra hatramin'ny {maxSize}"
+    }
   }
 }

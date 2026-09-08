@@ -5503,5 +5503,70 @@
     "loading": "Ana loda…",
     "loadError": "Ba a iya loda jerin masu kula gabaɗaya ba.",
     "retry": "Sake gwadawa"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "An kai iyaka ({used}/{limit}). Za a sake sabunta {resets}.",
+      "exhaustedNoReset": "An kai iyaka ({used}/{limit}).",
+      "familyExhausted": "An kai iyakar dangin samfur ({used}/{limit}). Za a sake sabunta {resets}.",
+      "familyExhaustedNoReset": "An kai iyakar dangin samfur ({used}/{limit}).",
+      "unavailable": "Ba a samu a asusunka ba.",
+      "remaining": "{remaining} ya rage",
+      "remainingTooltip": "{remaining} daga cikin {limit} nawan da suka rage a wannan lokaci.",
+      "agentModelUnavailable": "Ana amfani da {model}, wanda ba a samun shi a gare ka.",
+      "agentModelExhausted": "Ana amfani da {model}, an kai iyaka. Za a sake sabunta {resets}.",
+      "agentModelExhaustedNoReset": "Ana amfani da {model}, an kai iyaka."
+    },
+    "denial": {
+      "modelBlocked": "Wannan samfur ba ya samun a asusunka. Zabi wani samfur, ko tuntuɓi mai kula da tsarin.",
+      "modelExhausted": "Ka riga ka yi amfani da duk {limit} nawan wannan samfur yau.",
+      "familyExhausted": "Ka riga ka cinye kasafin yau na rabawa na {limit} na wannan dangin samfur.",
+      "searchBlocked": "Mai kula da tsarin ya kashe bincike na yanar gizo a asusunka, kuma wannan saƙon yana da shi a kunna.",
+      "interpreterBlocked": "Mai kula da tsarin ya kashe fassarar lamba a asusunka, kuma wannan saƙon yana da shi a kunna.",
+      "mcpBlocked": "Mai kula da tsarin ya kashe connectors a asusunka, kuma wannan saƙon yana da connectors a kunna. Kashe su don cigaba.",
+      "messagesCap": "Ka riga ka kai iyakar saƙonnin yau guda {limit}.",
+      "tokensDayCap": "Ka riga ka kai iyakar token na yau.",
+      "tokensMonthCap": "Ka riga ka kai iyakar token na wannan wata.",
+      "perRequest": "Wannan buƙatar ta fi abin da asusunka ke iya ɗauka (iyaka mafi yawa {limit} kowane buƙata). Gwada da ƙarami.",
+      "resets": "Za a sake sabunta {resets}.",
+      "chooseAnotherModel": "Zabi wani samfur",
+      "turnOffSearchAndResend": "Kashe bincike na yanar gizo ka sake tura",
+      "turnOffInterpreterAndResend": "Kashe fassarar lamba ka sake tura"
+    },
+    "notice": {
+      "unavailable": "{model} ba ya samuwa a asusunka — zabi wani samfur don ci gaba.",
+      "exhausted": "An kai iyakar {model} na yau.",
+      "familyExhausted": "{model} na raba kasafi da danginsa, an cinye na yau.",
+      "resets": "Za a sake sabunta {resets}.",
+      "chooseModel": "Zabi samfur"
+    },
+    "gates": {
+      "blocked": "An kashe {feature} a asusunka daga ƙungiyarka.",
+      "features": {
+        "webSearch": "Bincike na yanar gizo",
+        "codeInterpreter": "Fassarar lamba",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# amfani ya rage yau} other {# amfani ya rage yau}}",
+      "exhausted": "An kai iyaka na yau — samfur zai amsa ba tare da shi ba."
+    },
+    "mine": {
+      "title": "Iyakar ka",
+      "description": "Iyakokin da ƙungiyarka ta sa a asusunka. Ana sake lissafi ta atomatik a ƙarshen kowanne lokaci.",
+      "notAvailable": "Ba a samu ba",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Za a sake sabunta {resets}",
+      "limitReached": "An kai iyaka",
+      "familyLimitReached": "An kai iyakar dangin samfur",
+      "usageUnavailable": "An kasa ɗauko adadin amfani na yanzu — ana nuna iyaka kawai."
+    },
+    "routes": {
+      "ttsExhausted": "Ka riga ka kai iyakar amfani da text-to-speech na yau.",
+      "translationExhausted": "Ka riga ka kai iyakar fassarar takardu na yau.",
+      "resetsIn": "Za a sake sabunta {resets}.",
+      "uploadTooLarge": "{fileName} yana da girma sosai — dole fayiloli a asusunka su kasance ƙasa da {maxSize}.",
+      "uploadCapHint": "Fayiloli har zuwa {maxSize}"
+    }
   }
 }

@@ -5519,5 +5519,70 @@
     "loading": "Carregant…",
     "loadError": "No s’ha pogut carregar la llista d’administradors globals.",
     "retry": "Torna-ho a provar"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "S'ha arribat al límit ({used}/{limit}). Es reinicia {resets}.",
+      "exhaustedNoReset": "S'ha arribat al límit ({used}/{limit}).",
+      "familyExhausted": "S'ha arribat al límit de la família ({used}/{limit}). Es reinicia {resets}.",
+      "familyExhaustedNoReset": "S'ha arribat al límit de la família ({used}/{limit}).",
+      "unavailable": "No està disponible al teu compte.",
+      "remaining": "Queden {remaining}",
+      "remainingTooltip": "Queden {remaining} de {limit} sol·licituds en aquest període.",
+      "agentModelUnavailable": "Utilitza {model}, que no està disponible per a tu.",
+      "agentModelExhausted": "Utilitza {model}, que ha arribat al seu límit. Es reinicia {resets}.",
+      "agentModelExhaustedNoReset": "Utilitza {model}, que ha arribat al seu límit."
+    },
+    "denial": {
+      "modelBlocked": "Aquest model no està disponible al teu compte. Tria un altre model o contacta amb el teu administrador.",
+      "modelExhausted": "Has utilitzat totes les {limit} sol·licituds per a aquest model avui.",
+      "familyExhausted": "Has esgotat el pressupost compartit de {limit} sol·licituds per a aquesta família de models avui.",
+      "searchBlocked": "La cerca web està desactivada al teu compte per un administrador i aquest missatge la tenia activada.",
+      "interpreterBlocked": "El Code interpreter està desactivat al teu compte per un administrador i aquest missatge el tenia activat.",
+      "mcpBlocked": "Els connectors estan desactivats al teu compte per un administrador i aquest missatge tenia connectors activats. Desactiva'ls per continuar.",
+      "messagesCap": "Has arribat al límit de {limit} missatges avui.",
+      "tokensDayCap": "Has arribat al límit de tokens per avui.",
+      "tokensMonthCap": "Has arribat al límit de tokens per aquest mes.",
+      "perRequest": "Aquesta sol·licitud és més gran del que permet el teu compte (màxim {limit} per sol·licitud). Prova amb una de més petita.",
+      "resets": "Es reinicia {resets}.",
+      "chooseAnotherModel": "Tria un altre model",
+      "turnOffSearchAndResend": "Desactiva la cerca web i reenvia",
+      "turnOffInterpreterAndResend": "Desactiva el code interpreter i reenvia"
+    },
+    "notice": {
+      "unavailable": "{model} no està disponible al teu compte — tria un altre model per continuar.",
+      "exhausted": "{model} ha arribat al límit per avui.",
+      "familyExhausted": "{model} comparteix pressupost amb la família de models, que ha esgotat el límit per avui.",
+      "resets": "Es reinicia {resets}.",
+      "chooseModel": "Tria model"
+    },
+    "gates": {
+      "blocked": "{feature} està desactivada al teu compte per la teva organització.",
+      "features": {
+        "webSearch": "Cerca web",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# ús restant avui} other {# usos restants avui}}",
+      "exhausted": "S'ha arribat al límit diari — el model respondrà sense aquesta funció."
+    },
+    "mine": {
+      "title": "Els teus límits",
+      "description": "Límits que la teva organització ha establert pel teu compte. Els comptadors es reinicien automàticament al final de cada període.",
+      "notAvailable": "No disponible",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Es reinicia {resets}",
+      "limitReached": "Límit assolit",
+      "familyLimitReached": "S'ha assolit el límit de la família de models",
+      "usageUnavailable": "No s'ha pogut carregar l'ús actual — només es mostren els límits."
+    },
+    "routes": {
+      "ttsExhausted": "Has arribat al límit diari de text a veu.",
+      "translationExhausted": "Has arribat al límit diari de traducció de documents.",
+      "resetsIn": "Es reinicia {resets}.",
+      "uploadTooLarge": "{fileName} és massa gran — els fitxers al teu compte han de ser inferiors a {maxSize}.",
+      "uploadCapHint": "Fitxers de fins a {maxSize}"
+    }
   }
 }

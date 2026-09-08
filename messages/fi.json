@@ -5519,5 +5519,70 @@
     "loading": "Ladataan…",
     "loadError": "Globaalien ylläpitäjien listaa ei voitu ladata.",
     "retry": "Yritä uudelleen"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Raja saavutettu ({used}/{limit}). Nollautuu {resets}.",
+      "exhaustedNoReset": "Raja saavutettu ({used}/{limit}).",
+      "familyExhausted": "Perhekohtainen raja saavutettu ({used}/{limit}). Nollautuu {resets}.",
+      "familyExhaustedNoReset": "Perhekohtainen raja saavutettu ({used}/{limit}).",
+      "unavailable": "Ei saatavilla tililläsi.",
+      "remaining": "{remaining} jäljellä",
+      "remainingTooltip": "{remaining} / {limit} pyyntöä jäljellä tällä jaksolla.",
+      "agentModelUnavailable": "Käyttää mallia {model}, joka ei ole käytettävissäsi.",
+      "agentModelExhausted": "Käyttää mallia {model}, jonka raja on saavutettu. Nollautuu {resets}.",
+      "agentModelExhaustedNoReset": "Käyttää mallia {model}, jonka raja on saavutettu."
+    },
+    "denial": {
+      "modelBlocked": "Tämä malli ei ole käytettävissä tililläsi. Valitse toinen malli tai ota yhteyttä ylläpitäjään.",
+      "modelExhausted": "Olet käyttänyt kaikki {limit} pyyntöä tälle mallille tänään.",
+      "familyExhausted": "Olet käyttänyt tämän malliperheen jaetun {limit} pyynnön päiväkiintiön.",
+      "searchBlocked": "Verkkohaku on poistettu käytöstä ylläpitäjän toimesta tililläsi, vaikka tälle viestille se olisi ollut käytössä.",
+      "interpreterBlocked": "Koodintulkki on poistettu käytöstä ylläpitäjän toimesta tililläsi, vaikka tälle viestille se olisi ollut käytössä.",
+      "mcpBlocked": "Liitännäiset on poistettu käytöstä ylläpitäjän toimesta tililläsi ja tässä viestissä ne oli käytössä. Poista ne käytöstä jatkaaksesi.",
+      "messagesCap": "Olet saavuttanut tämän päivän {limit} viestin rajan.",
+      "tokensDayCap": "Olet saavuttanut tämän päivän token-rajan.",
+      "tokensMonthCap": "Olet saavuttanut tämän kuukauden token-rajan.",
+      "perRequest": "Tämä pyyntö ylittää tilisi sallitun rajan (enintään {limit} per pyyntö). Yritä pienemmällä pyynnöllä.",
+      "resets": "Nollautuu {resets}.",
+      "chooseAnotherModel": "Valitse toinen malli",
+      "turnOffSearchAndResend": "Poista verkkohaku käytöstä ja lähetä uudelleen",
+      "turnOffInterpreterAndResend": "Poista koodintulkki käytöstä ja lähetä uudelleen"
+    },
+    "notice": {
+      "unavailable": "{model} ei ole käytettävissä tililläsi — valitse toinen malli jatkaaksesi.",
+      "exhausted": "{model} on saavuttanut tämän päivän rajan.",
+      "familyExhausted": "{model} jakaa kiintiön malliperheensä kanssa, ja tämän päivän kiintiö on käytetty.",
+      "resets": "Nollautuu {resets}.",
+      "chooseModel": "Valitse malli"
+    },
+    "gates": {
+      "blocked": "{feature} on poistettu käytöstä organisaatiosi toimesta tililläsi.",
+      "features": {
+        "webSearch": "Verkkohaku",
+        "codeInterpreter": "Koodintulkki",
+        "connectors": "Liitännäiset"
+      },
+      "remaining": "{count, plural, one {# käyttökerta jäljellä tänään} other {# käyttökertaa jäljellä tänään}}",
+      "exhausted": "Päivittäinen raja saavutettu — malli vastaa ilman tätä toimintoa."
+    },
+    "mine": {
+      "title": "Omat rajasi",
+      "description": "Organisaatiosi asettamat rajat tilillesi. Laskurit nollautuvat automaattisesti kunkin jakson lopussa.",
+      "notAvailable": "Ei saatavilla",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Nollautuu {resets}",
+      "limitReached": "Raja saavutettu",
+      "familyLimitReached": "Malliperheen raja saavutettu",
+      "usageUnavailable": "Nykyistä käyttöä ei voitu ladata — näytetään vain rajat."
+    },
+    "routes": {
+      "ttsExhausted": "Olet saavuttanut tämän päivän tekstistä puheeksi -käytön rajan.",
+      "translationExhausted": "Olet saavuttanut tämän päivän asiakirjakäännösten rajan.",
+      "resetsIn": "Nollautuu {resets}.",
+      "uploadTooLarge": "{fileName} on liian suuri — tiedostojen koko tililläsi saa olla enintään {maxSize}.",
+      "uploadCapHint": "Tiedostot enintään {maxSize}"
+    }
   }
 }

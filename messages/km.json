@@ -5503,5 +5503,70 @@
     "loading": "កំពុងផ្ទុក…",
     "loadError": "មិនអាចផ្ទុកបញ្ជីអ្នកគ្រប់គ្រងសកលបានទេ។",
     "retry": "ព្យាយាម​ម្ដងទៀត"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "ឈានដល់កំណត់ ({used}/{limit})។ នឹងកំណត់ឡើងវិញ {resets}។",
+      "exhaustedNoReset": "ឈានដល់កំណត់ ({used}/{limit})។",
+      "familyExhausted": "ឈានដល់កំណត់សម្រាប់គ្រួសារ ({used}/{limit})។ នឹងកំណត់ឡើងវិញ {resets}។",
+      "familyExhaustedNoReset": "ឈានដល់កំណត់សម្រាប់គ្រួសារ ({used}/{limit})។",
+      "unavailable": "មិនមានសម្រាប់គណនីរបស់អ្នកទេ។",
+      "remaining": "នៅសល់ {remaining}",
+      "remainingTooltip": "នៅសល់ {remaining} ក្នុងចំណោម {limit} សំណើក្នុងរយៈពេលនេះ។",
+      "agentModelUnavailable": "ប្រើ {model} ដែលមិនមានសម្រាប់អ្នកទេ។",
+      "agentModelExhausted": "ប្រើ {model} ដែលឈានដល់កំណត់រួចហើយ។ នឹងកំណត់ឡើងវិញ {resets}។",
+      "agentModelExhaustedNoReset": "ប្រើ {model} ដែលឈានដល់កំណត់រួចហើយ។"
+    },
+    "denial": {
+      "modelBlocked": "ម៉ូដែលនេះមិនមានសម្រាប់គណនីរបស់អ្នកទេ។ សូមជ្រើសម៉ូដែលផ្សេងទៀតឬទាក់ទងរដ្ឋបាល។",
+      "modelExhausted": "អ្នកបានប្រើសំណើទាំងអស់ {limit} សម្រាប់ម៉ូដែលនេះថ្ងៃនេះ។",
+      "familyExhausted": "អ្នកបានប្រើប្រាស់កូតសំណែករួម {limit} សម្រាប់គ្រួសារម៉ូដែលនេះថ្ងៃនេះ។",
+      "searchBlocked": "ការ​ស្វែងរក​បណ្ដាញ​ត្រូវបានបិទសម្រាប់គណនីរបស់អ្នកដោយរដ្ឋបាល ហើយសារ​នេះបានបើកវា។",
+      "interpreterBlocked": "Code interpreter ត្រូវបានបិទសម្រាប់គណនីរបស់អ្នកដោយរដ្ឋបាល ហើយសារនេះបានបើកវា។",
+      "mcpBlocked": "Connectors ត្រូវបានបិទសម្រាប់គណនីរបស់អ្នកដោយរដ្ឋបាល ហើយសារនេះបានបើក connectors។ សូមបិទដើម្បីបន្ត។",
+      "messagesCap": "អ្នកបានឈានដល់កំណត់ {limit} សារ​សម្រាប់ថ្ងៃនេះ។",
+      "tokensDayCap": "អ្នកឈានដល់កំណត់ token សម្រាប់ថ្ងៃនេះរួចហើយ។",
+      "tokensMonthCap": "អ្នកឈានដល់កំណត់ token សម្រាប់ខែនេះរួចហើយ។",
+      "perRequest": "សំណើនេះធំពេកសម្រាប់គណនីរបស់អ្នក (អតិបរមា {limit} តែម្ដង)។ សូមសាកល្បងមួយតិចជាងនេះ។",
+      "resets": "នឹងកំណត់ឡើងវិញ {resets}។",
+      "chooseAnotherModel": "ជ្រើសម៉ូដែលផ្សេងទៀត",
+      "turnOffSearchAndResend": "បិទ​​​ស្វែងរក​បណ្តាញ ហើយផ្ញើម្តងទៀត",
+      "turnOffInterpreterAndResend": "បិទ code interpreter ហើយផ្ញើម្តងទៀត"
+    },
+    "notice": {
+      "unavailable": "{model} មិនមានសម្រាប់គណនីរបស់អ្នក — សូមជ្រើសម៉ូដែលផ្សេងដើម្បីបន្ត។",
+      "exhausted": "{model} ឈានដល់កំណត់សម្រាប់ថ្ងៃនេះ។",
+      "familyExhausted": "{model} ប្រើកូតរួមជាមួយគ្រួសារម៉ូដែល និងកូតបានប្រើអស់សម្រាប់ថ្ងៃនេះ។",
+      "resets": "នឹងកំណត់ឡើងវិញ {resets}។",
+      "chooseModel": "ជ្រើសម៉ូដែល"
+    },
+    "gates": {
+      "blocked": "{feature} ត្រូវបានបិទសម្រាប់គណនីរបស់អ្នកដោយស្ថាប័នរបស់អ្នក។",
+      "features": {
+        "webSearch": "ស្វែងរកបណ្ដាញ",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# ដងនៅសល់ថ្ងៃនេះ} other {# ដងនៅសល់ថ្ងៃនេះ}}",
+      "exhausted": "ឈានដល់កំណត់ប្រចាំថ្ងៃ — ម៉ូដែលនឹងឆ្លើយដោយគ្មានវា។"
+    },
+    "mine": {
+      "title": "កំណត់របស់អ្នក",
+      "description": "កំណត់​ដែលអង្គភាពរបស់អ្នកបានកំណត់សម្រាប់គណនីរបស់អ្នក។ ការរាប់ចំនួននឹងកំណត់ឡើងវិញដោយស្វ័យប្រវត្តិនៅចុងរយៈពេលនីមួយៗ។",
+      "notAvailable": "មិនមាន",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "នឹងកំណត់ឡើងវិញ {resets}",
+      "limitReached": "ឈានដល់កំណត់",
+      "familyLimitReached": "ឈានដល់កំណត់គ្រួសារម៉ូដែល",
+      "usageUnavailable": "មិនអាចផ្ទុកការប្រើប្រាស់បច្ចុប្បន្នបានទេ — បង្ហាញតែកំណត់ប៉ុណ្ណោះ។"
+    },
+    "routes": {
+      "ttsExhausted": "អ្នកបានឈានដល់កំណត់ text-to-speech សម្រាប់ថ្ងៃនេះរួចហើយ។",
+      "translationExhausted": "អ្នកបានឈានដល់កំណត់បកប្រែឯកសារសម្រាប់ថ្ងៃនេះហើយ។",
+      "resetsIn": "នឹងកំណត់ឡើងវិញ {resets}។",
+      "uploadTooLarge": "{fileName} ធំពេក — ឯកសារនៅលើគណនីអ្នកត្រូវនៅក្រោម {maxSize}។",
+      "uploadCapHint": "ឯកសាររហូតដល់ {maxSize}"
+    }
   }
 }

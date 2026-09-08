@@ -5503,5 +5503,70 @@
     "loading": "Ikukweza…",
     "loadError": "Mndandanda wa global admin sunatha kukwezedwa.",
     "retry": "Yesaninso"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Mwalimbikira malire ({used}/{limit}). Zikhoza kuyambiranso {resets}.",
+      "exhaustedNoReset": "Mwalimbikira malire ({used}/{limit}).",
+      "familyExhausted": "Mwalimbikira malire a banja ({used}/{limit}). Zikhoza kuyambiranso {resets}.",
+      "familyExhaustedNoReset": "Mwalimbikira malire a banja ({used}/{limit}).",
+      "unavailable": "Sikupezeka pa akaunti yanu.",
+      "remaining": "Zatsala {remaining}",
+      "remainingTooltip": "Zatsala {remaining} mwa {limit} mwa nthawi ino.",
+      "agentModelUnavailable": "Ikuigwiritsa ntchito {model}, yomwe sikupezeka kwa inu.",
+      "agentModelExhausted": "Ikuigwiritsa ntchito {model}, yomwe malire ake afika. Zikhoza kuyambiranso {resets}.",
+      "agentModelExhaustedNoReset": "Ikuigwiritsa ntchito {model}, yomwe malire ake afika."
+    },
+    "denial": {
+      "modelBlocked": "Chitsanzochi sichikupezeka pa akaunti yanu. Sankhani chitsanzo china, kapena funsani woyang'anira akauntiyo.",
+      "modelExhausted": "Mwatha ntchito {limit} pa chitsanzochi lero.",
+      "familyExhausted": "Mwagwiritsa ntchito malire a banja la chitsanzochi a {limit} lero.",
+      "searchBlocked": "Web search yachotsedwa ndi woyang'anira pa akaunti yanu, ndipo uthenga uwu unkafuna kugwiritsa ntchitoyi.",
+      "interpreterBlocked": "Code interpreter yachotsedwa ndi woyang'anira pa akaunti yanu, ndipo uthenga uwu unkafuna kugwiritsa ntchitoyi.",
+      "mcpBlocked": "Connectors zachotsedwa ndi woyang'anira pa akaunti yanu, ndipo uthenga uwu unkafuna connectors. Chotsani connectors kuti mupitirize.",
+      "messagesCap": "Mwafika malire a mauthenga {limit} lero.",
+      "tokensDayCap": "Mwafika malire a ma token a lero.",
+      "tokensMonthCap": "Mwafika malire a ma token a mwezi uno.",
+      "perRequest": "Pempho ili likuposa malire a akaunti yanu (pazipempho zapamwamba {limit}). Yesani yaying'ono.",
+      "resets": "Zikhoza kuyambiranso {resets}.",
+      "chooseAnotherModel": "Sankhani chitsanzo china",
+      "turnOffSearchAndResend": "Chotsani web search ndikutumizanso",
+      "turnOffInterpreterAndResend": "Chotsani code interpreter ndikutumizanso"
+    },
+    "notice": {
+      "unavailable": "{model} sikupezeka pa akaunti yanu — sankhani chitsanzo china kuti mupitirize.",
+      "exhausted": "{model} yafika pa malire a lero.",
+      "familyExhausted": "{model} imagawana malire ndi banja la chitsanzo, lomwe ligtagwiritsidwa ntchito tsopano.",
+      "resets": "Zikhoza kuyambiranso {resets}.",
+      "chooseModel": "Sankhani chitsanzo"
+    },
+    "gates": {
+      "blocked": "{feature} yachotsedwa ndi bungwe lanu pa akaunti yanu.",
+      "features": {
+        "webSearch": "Web search",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# yatsala lero} other {# zatsala lero}}",
+      "exhausted": "Mwafika pa malire a tsiku — chitsanzochi chidzayankha popanda ntchitoyi."
+    },
+    "mine": {
+      "title": "Malire anu",
+      "description": "Malire omwe bungwe lanu layika pa akaunti yanu. Ma counter amasinthidwa zokha pa mapeto a nthawi iliyonse.",
+      "notAvailable": "Sikupezeka",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Zikhoza kuyambiranso {resets}",
+      "limitReached": "Mwafika pa malire",
+      "familyLimitReached": "Mwafika pa malire a banja la chitsanzo",
+      "usageUnavailable": "Ntchito zapano sizingalowe - zikuwonetsa malire okha."
+    },
+    "routes": {
+      "ttsExhausted": "Mwafika pa malire a text-to-speech a lero.",
+      "translationExhausted": "Mwafika pa malire a kutembenuza zikalata a lero.",
+      "resetsIn": "Zikhoza kuyambiranso {resets}.",
+      "uploadTooLarge": "{fileName} ndi yayikulu kwambiri — mafayilo pa akaunti yanu ayenera kukhala osakwana {maxSize}.",
+      "uploadCapHint": "Mafayilo mpaka {maxSize}"
+    }
   }
 }

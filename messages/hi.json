@@ -5519,5 +5519,70 @@
     "loading": "लोड हो रहा है…",
     "loadError": "वैश्विक एडमिन सूची लोड नहीं हो सकी।",
     "retry": "पुनः प्रयास करें"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "सीमा पूरी हुई ({used}/{limit})। {resets} पर रीसेट होता है।",
+      "exhaustedNoReset": "सीमा पूरी हुई ({used}/{limit})।",
+      "familyExhausted": "परिवार की सीमा पूरी हुई ({used}/{limit})। {resets} पर रीसेट होता है।",
+      "familyExhaustedNoReset": "परिवार की सीमा पूरी हुई ({used}/{limit})।",
+      "unavailable": "आपके खाते पर उपलब्ध नहीं है।",
+      "remaining": "{remaining} शेष",
+      "remainingTooltip": "इस अवधि में {limit} अनुरोधों में से {remaining} शेष हैं।",
+      "agentModelUnavailable": "{model} का उपयोग होता है, जो आपके लिए उपलब्ध नहीं है।",
+      "agentModelExhausted": "{model} का उपयोग होता है, जिसकी सीमा पूरी हो गई है। {resets} पर रीसेट होता है।",
+      "agentModelExhaustedNoReset": "{model} का उपयोग होता है, जिसकी सीमा पूरी हो गई है।"
+    },
+    "denial": {
+      "modelBlocked": "यह मॉडल आपके खाते पर उपलब्ध नहीं है। कृपया कोई अन्य मॉडल चुनें या अपने प्रशासक से संपर्क करें।",
+      "modelExhausted": "आपने आज इस मॉडल के लिए सभी {limit} अनुरोध पूरे कर लिए हैं।",
+      "familyExhausted": "आपने इस मॉडल परिवार के लिए आज का साझा बजट {limit} अनुरोधों का उपयोग कर लिया है।",
+      "searchBlocked": "वेब सर्च आपके खाते के लिए किसी प्रशासक द्वारा बंद कर दी गई है, जबकि इस संदेश में यह सक्षम थी।",
+      "interpreterBlocked": "कोड इंटरप्रेटर आपके खाते के लिए किसी प्रशासक द्वारा बंद कर दिया गया है, जबकि इस संदेश में यह सक्षम था।",
+      "mcpBlocked": "कनेक्टर्स आपके खाते के लिए किसी प्रशासक द्वारा बंद कर दिए गए हैं, जबकि इस संदेश में ये सक्षम थे। जारी रखने के लिए इन्हें बंद करें।",
+      "messagesCap": "आपने आज के {limit} संदेशों की सीमा पूरी कर ली है।",
+      "tokensDayCap": "आपने आज के लिए अपना टोकन सीमा पूरी कर ली है।",
+      "tokensMonthCap": "आपने इस माह के लिए अपनी टोकन सीमा पूरी कर ली है।",
+      "perRequest": "यह अनुरोध आपके खाते की सीमा से बड़ा है (प्रत्येक अनुरोध पर अधिकतम {limit})। कृपया छोटा अनुरोध आज़माएँ।",
+      "resets": "{resets} पर रीसेट होता है।",
+      "chooseAnotherModel": "कोई अन्य मॉडल चुनें",
+      "turnOffSearchAndResend": "वेब सर्च बंद करें और पुनः भेजें",
+      "turnOffInterpreterAndResend": "कोड इंटरप्रेटर बंद करें और पुनः भेजें"
+    },
+    "notice": {
+      "unavailable": "{model} आपके खाते पर उपलब्ध नहीं है — जारी रखने के लिए कोई अन्य मॉडल चुनें।",
+      "exhausted": "{model} ने आज की सीमा पूरी कर ली है।",
+      "familyExhausted": "{model} का बजट उसके मॉडल परिवार के साथ साझा होता है, जो आज के लिए पूरा हो चुका है।",
+      "resets": "{resets} पर रीसेट होता है।",
+      "chooseModel": "मॉडल चुनें"
+    },
+    "gates": {
+      "blocked": "{feature} आपकी संस्था द्वारा आपके खाते पर बंद कर दिया गया है।",
+      "features": {
+        "webSearch": "वेब सर्च",
+        "codeInterpreter": "कोड इंटरप्रेटर",
+        "connectors": "कनेक्टर्स"
+      },
+      "remaining": "{count, plural, one {आज # उपयोग शेष} other {आज # उपयोग शेष}}",
+      "exhausted": "दैनिक सीमा पूरी — मॉडल इसके बिना उत्तर देगा।"
+    },
+    "mine": {
+      "title": "आपकी सीमाएँ",
+      "description": "आपकी संस्था द्वारा आपके खाते के लिए निर्धारित सीमाएँ। हर अवधि के अंत में काउंटर स्वतः रीसेट होते हैं।",
+      "notAvailable": "उपलब्ध नहीं है",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "{resets} पर रीसेट",
+      "limitReached": "सीमा पूरी हुई",
+      "familyLimitReached": "मॉडल परिवार की सीमा पूरी हुई",
+      "usageUnavailable": "वर्तमान उपयोग लोड नहीं हो सका — केवल सीमाएँ दिखाई जा रही हैं।"
+    },
+    "routes": {
+      "ttsExhausted": "आपने आज की टेक्स्ट-टू-स्पीच सीमा पूरी कर ली है।",
+      "translationExhausted": "आपने आज की दस्तावेज़ अनुवाद सीमा पूरी कर ली है।",
+      "resetsIn": "{resets} पर रीसेट होता है।",
+      "uploadTooLarge": "{fileName} बहुत बड़ा है — आपके खाते पर फाइलें {maxSize} से कम होनी चाहिए।",
+      "uploadCapHint": "{maxSize} तक की फाइलें"
+    }
   }
 }

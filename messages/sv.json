@@ -5519,5 +5519,70 @@
     "loading": "Laddar…",
     "loadError": "Den globala adminlistan kunde inte laddas.",
     "retry": "Försök igen"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Gräns uppnådd ({used}/{limit}). Återställs {resets}.",
+      "exhaustedNoReset": "Gräns uppnådd ({used}/{limit}).",
+      "familyExhausted": "Familjegräns uppnådd ({used}/{limit}). Återställs {resets}.",
+      "familyExhaustedNoReset": "Familjegräns uppnådd ({used}/{limit}).",
+      "unavailable": "Inte tillgänglig på ditt konto.",
+      "remaining": "{remaining} kvar",
+      "remainingTooltip": "{remaining} av {limit} förfrågningar kvar under denna period.",
+      "agentModelUnavailable": "Använder {model}, som inte är tillgänglig för dig.",
+      "agentModelExhausted": "Använder {model}, vars gräns är uppnådd. Återställs {resets}.",
+      "agentModelExhaustedNoReset": "Använder {model}, vars gräns är uppnådd."
+    },
+    "denial": {
+      "modelBlocked": "Den här modellen är inte tillgänglig på ditt konto. Välj en annan modell eller kontakta din administratör.",
+      "modelExhausted": "Du har använt alla {limit} förfrågningar för denna modell idag.",
+      "familyExhausted": "Du har använt dagens delade gräns på {limit} förfrågningar för denna modellfamilj.",
+      "searchBlocked": "Webbsökning är avstängd på ditt konto av en administratör och detta meddelande hade det aktiverat.",
+      "interpreterBlocked": "Kodtolk är avstängd på ditt konto av en administratör och detta meddelande hade det aktiverat.",
+      "mcpBlocked": "Connectors är avstängda på ditt konto av en administratör och detta meddelande hade connectors aktiverat. Stäng av dem för att fortsätta.",
+      "messagesCap": "Du har nått din gräns på {limit} meddelanden idag.",
+      "tokensDayCap": "Du har nått din token-gräns för idag.",
+      "tokensMonthCap": "Du har nått din token-gräns för denna månad.",
+      "perRequest": "Den här förfrågan är större än vad ditt konto tillåter (max {limit} per förfrågan). Försök med en mindre.",
+      "resets": "Återställs {resets}.",
+      "chooseAnotherModel": "Välj en annan modell",
+      "turnOffSearchAndResend": "Stäng av webbsök och skicka igen",
+      "turnOffInterpreterAndResend": "Stäng av kodtolk och skicka igen"
+    },
+    "notice": {
+      "unavailable": "{model} är inte tillgänglig på ditt konto — välj en annan modell för att fortsätta.",
+      "exhausted": "{model} har nått sin gräns för idag.",
+      "familyExhausted": "{model} delar gräns med sin modellfamilj, som är slut för idag.",
+      "resets": "Återställs {resets}.",
+      "chooseModel": "Välj modell"
+    },
+    "gates": {
+      "blocked": "{feature} är avstängd på ditt konto av din organisation.",
+      "features": {
+        "webSearch": "Webbsökning",
+        "codeInterpreter": "Kodtolk",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# användning kvar idag} other {# användningar kvar idag}}",
+      "exhausted": "Daglig gräns uppnådd — modellen kommer att svara utan den."
+    },
+    "mine": {
+      "title": "Dina gränser",
+      "description": "Gränser som din organisation har satt för ditt konto. Räknare återställs automatiskt i slutet av varje period.",
+      "notAvailable": "Inte tillgänglig",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Återställs {resets}",
+      "limitReached": "Gräns uppnådd",
+      "familyLimitReached": "Modellfamiljens gräns uppnådd",
+      "usageUnavailable": "Aktuell användning kunde inte läsas in — visar endast gränser."
+    },
+    "routes": {
+      "ttsExhausted": "Du har nått dagens gräns för text-till-tal.",
+      "translationExhausted": "Du har nått dagens gräns för dokumentöversättning.",
+      "resetsIn": "Återställs {resets}.",
+      "uploadTooLarge": "{fileName} är för stor — filer på ditt konto måste vara under {maxSize}.",
+      "uploadCapHint": "Filer upp till {maxSize}"
+    }
   }
 }

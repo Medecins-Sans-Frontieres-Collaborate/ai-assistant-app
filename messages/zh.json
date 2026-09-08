@@ -5550,5 +5550,70 @@
     "loading": "正在加载…",
     "loadError": "无法加载全局管理员列表。",
     "retry": "重试"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "已达上限（{used}/{limit}）。将于{resets}重置。",
+      "exhaustedNoReset": "已达上限（{used}/{limit}）。",
+      "familyExhausted": "已达模型家族上限（{used}/{limit}）。将于{resets}重置。",
+      "familyExhaustedNoReset": "已达模型家族上限（{used}/{limit}）。",
+      "unavailable": "您的账户不可用。",
+      "remaining": "剩余{remaining}",
+      "remainingTooltip": "本周期剩余{limit}次请求中的{remaining}次。",
+      "agentModelUnavailable": "使用{model}，但您无权使用该模型。",
+      "agentModelExhausted": "使用{model}，其调用已达上限。将于{resets}重置。",
+      "agentModelExhaustedNoReset": "使用{model}，其调用已达上限。"
+    },
+    "denial": {
+      "modelBlocked": "该模型对您的账户不可用。请选择其他模型，或联系管理员。",
+      "modelExhausted": "今日已用尽该模型的{limit}次请求。",
+      "familyExhausted": "您已用完该模型家族今日共享的{limit}次额度。",
+      "searchBlocked": "管理员已关闭您账户的网页搜索，但此消息启用了该功能。",
+      "interpreterBlocked": "管理员已关闭您账户的代码解释器，但此消息启用了该功能。",
+      "mcpBlocked": "管理员已关闭您账户的连接器，但此消息启用了连接器。请关闭后重试。",
+      "messagesCap": "您今日消息数已达上限（{limit}条）。",
+      "tokensDayCap": "您今日已用完令牌额度。",
+      "tokensMonthCap": "您本月已用完令牌额度。",
+      "perRequest": "此请求超出账户限制（单次最多{limit}）。请尝试更小的请求。",
+      "resets": "将于{resets}重置。",
+      "chooseAnotherModel": "选择其他模型",
+      "turnOffSearchAndResend": "关闭网页搜索并重新发送",
+      "turnOffInterpreterAndResend": "关闭代码解释器并重新发送"
+    },
+    "notice": {
+      "unavailable": "{model}在您的账户不可用 — 请选择其他模型继续。",
+      "exhausted": "{model}今日已达使用上限。",
+      "familyExhausted": "{model}与同家族模型共享额度，今日额度已用完。",
+      "resets": "将于{resets}重置。",
+      "chooseModel": "选择模型"
+    },
+    "gates": {
+      "blocked": "您的组织已禁用{feature}功能。",
+      "features": {
+        "webSearch": "网页搜索",
+        "codeInterpreter": "代码解释器",
+        "connectors": "连接器"
+      },
+      "remaining": "{count, plural, one {今日剩余 # 次} other {今日剩余 # 次}}",
+      "exhausted": "已达每日上限 — 模型将不使用该功能作答。"
+    },
+    "mine": {
+      "title": "您的使用限额",
+      "description": "您账户由组织设置的限额。每个周期结束后计数器会自动重置。",
+      "notAvailable": "不可用",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "将于{resets}重置",
+      "limitReached": "已达上限",
+      "familyLimitReached": "已达模型家族上限",
+      "usageUnavailable": "当前用量无法加载，仅显示限额。"
+    },
+    "routes": {
+      "ttsExhausted": "您今日文本转语音额度已用完。",
+      "translationExhausted": "您今日文档翻译额度已用完。",
+      "resetsIn": "将于{resets}重置。",
+      "uploadTooLarge": "{fileName} 文件过大——您账户上传文件需小于{maxSize}。",
+      "uploadCapHint": "支持最大{maxSize}的文件"
+    }
   }
 }

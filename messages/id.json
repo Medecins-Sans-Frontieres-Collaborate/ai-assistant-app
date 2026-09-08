@@ -5519,5 +5519,70 @@
     "loading": "Memuat…",
     "loadError": "Daftar admin global tidak dapat dimuat.",
     "retry": "Coba lagi"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Batas tercapai ({used}/{limit}). Akan direset {resets}.",
+      "exhaustedNoReset": "Batas tercapai ({used}/{limit}).",
+      "familyExhausted": "Batas keluarga tercapai ({used}/{limit}). Akan direset {resets}.",
+      "familyExhaustedNoReset": "Batas keluarga tercapai ({used}/{limit}).",
+      "unavailable": "Tidak tersedia di akun Anda.",
+      "remaining": "Sisa {remaining}",
+      "remainingTooltip": "{remaining} dari {limit} permintaan tersisa di periode ini.",
+      "agentModelUnavailable": "Menggunakan {model}, yang tidak tersedia untuk Anda.",
+      "agentModelExhausted": "Menggunakan {model}, batas sudah tercapai. Akan direset {resets}.",
+      "agentModelExhaustedNoReset": "Menggunakan {model}, batas sudah tercapai."
+    },
+    "denial": {
+      "modelBlocked": "Model ini tidak tersedia di akun Anda. Pilih model lain, atau hubungi administrator Anda.",
+      "modelExhausted": "Anda telah menggunakan semua {limit} permintaan untuk model ini hari ini.",
+      "familyExhausted": "Anda telah menghabiskan kuota gabungan {limit} permintaan model keluarga hari ini.",
+      "searchBlocked": "Pencarian web dimatikan untuk akun Anda oleh administrator, dan pesan ini mengaktifkannya.",
+      "interpreterBlocked": "Code interpreter dimatikan untuk akun Anda oleh administrator, dan pesan ini mengaktifkannya.",
+      "mcpBlocked": "Connector dimatikan untuk akun Anda oleh administrator, dan pesan ini mengaktifkan connector. Matikan untuk melanjutkan.",
+      "messagesCap": "Anda telah mencapai batas {limit} pesan hari ini.",
+      "tokensDayCap": "Anda telah mencapai batas token harian hari ini.",
+      "tokensMonthCap": "Anda telah mencapai batas token untuk bulan ini.",
+      "perRequest": "Permintaan ini melebihi batas akun Anda (maksimum {limit} per permintaan). Coba lebih kecil.",
+      "resets": "Akan direset {resets}.",
+      "chooseAnotherModel": "Pilih model lain",
+      "turnOffSearchAndResend": "Matikan pencarian web dan kirim ulang",
+      "turnOffInterpreterAndResend": "Matikan code interpreter dan kirim ulang"
+    },
+    "notice": {
+      "unavailable": "{model} tidak tersedia di akun Anda — pilih model lain untuk melanjutkan.",
+      "exhausted": "{model} telah mencapai batasnya hari ini.",
+      "familyExhausted": "{model} berbagi kuota dengan keluarga modelnya, yang sudah habis hari ini.",
+      "resets": "Akan direset {resets}.",
+      "chooseModel": "Pilih model"
+    },
+    "gates": {
+      "blocked": "{feature} dimatikan untuk akun Anda oleh organisasi Anda.",
+      "features": {
+        "webSearch": "Pencarian web",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connector"
+      },
+      "remaining": "{count, plural, one {# kali tersisa hari ini} other {# kali tersisa hari ini}}",
+      "exhausted": "Batas harian tercapai — model akan menjawab tanpa fitur ini."
+    },
+    "mine": {
+      "title": "Batas Anda",
+      "description": "Batas yang ditentukan organisasi untuk akun Anda. Penghitung akan direset otomatis pada akhir setiap periode.",
+      "notAvailable": "Tidak tersedia",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Akan direset {resets}",
+      "limitReached": "Batas tercapai",
+      "familyLimitReached": "Batas keluarga model tercapai",
+      "usageUnavailable": "Penggunaan saat ini tidak dapat dimuat — hanya menampilkan batas."
+    },
+    "routes": {
+      "ttsExhausted": "Anda telah mencapai batas text-to-speech hari ini.",
+      "translationExhausted": "Anda telah mencapai batas terjemahan dokumen hari ini.",
+      "resetsIn": "Akan direset {resets}.",
+      "uploadTooLarge": "{fileName} terlalu besar — file pada akun Anda harus di bawah {maxSize}.",
+      "uploadCapHint": "File hingga {maxSize}"
+    }
   }
 }

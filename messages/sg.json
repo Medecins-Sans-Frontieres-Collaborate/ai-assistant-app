@@ -5503,5 +5503,70 @@
     "loading": "Ti yeke load…",
     "loadError": "Lîsto mbi ti admin ti gobalô ayeke load.",
     "retry": "Küêtê na yimbi"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Limiti ape ti hinga ({used}/{limit}). Li bɛ wa na {resets}.",
+      "exhaustedNoReset": "Limiti ape ti hinga ({used}/{limit}).",
+      "familyExhausted": "Limiti ti sô tî model ti hinga ({used}/{limit}). Li bɛ wa na {resets}.",
+      "familyExhaustedNoReset": "Limiti ti sô tî model ti hinga ({used}/{limit}).",
+      "unavailable": "Ala na kɛ ti aka na ô tî mo.",
+      "remaining": "{remaining} kôzo",
+      "remainingTooltip": "{remaining} tî {limit} sô ape kôzo na wâli tî kêtê azô tî yângâ.",
+      "agentModelUnavailable": "A köngö ti {model} na, ye ala na kɛ ti aka na ô tî mo.",
+      "agentModelExhausted": "A köngö ti {model}, limiti ti hinga. Li bɛ wa na {resets}.",
+      "agentModelExhaustedNoReset": "A köngö ti {model}, limiti ti hinga."
+    },
+    "denial": {
+      "modelBlocked": "Model ô ala na kɛ ti aka na ô tî mo. Tafio model mô, sô yeke kwê na administrator tî mo.",
+      "modelExhausted": "Mo ape {limit} sô a köngö ti model ô na tî lo tî lɛ.",
+      "familyExhausted": "Mo ape kêtê tî limiti ti sô tî model ô ({limit}) na tî lo tî lɛ.",
+      "searchBlocked": "Chercher na Internet alingbi ti administrator tî mo, na na message ô a yeke na.",
+      "interpreterBlocked": "Code interpreter alingbi ti administrator tî mo, na na message ô a yeke na.",
+      "mcpBlocked": "Connectors alingbi ti administrator tî mo, na message ô a yeke connectors. Pa na connectors tî mo ngangu sô mo kûè.",
+      "messagesCap": "Mo ape limiti tî message {limit} tî lo tî lɛ.",
+      "tokensDayCap": "Mo ape limiti tî token tî lo tî lɛ.",
+      "tokensMonthCap": "Mo ape limiti tî token tî yângâ ô.",
+      "perRequest": "Demand ô sô yeke walë ti mo, (maximum {limit} tî demande mô). Kûè  na ô sô ngû tî sèngö.",
+      "resets": "Li bɛ wa na {resets}.",
+      "chooseAnotherModel": "Tafio model mô",
+      "turnOffSearchAndResend": "Pa na rechercher na Internet na resend",
+      "turnOffInterpreterAndResend": "Pa na code interpreter na resend"
+    },
+    "notice": {
+      "unavailable": "{model} ala na kɛ ti aka na ô tî mo — tafio model mô sô mo kûè.",
+      "exhausted": "{model} limiti ti hinga tî lo tî lɛ.",
+      "familyExhausted": "{model} yeke sô tî model, na limiti tî kêtê ape tî lo tî lɛ.",
+      "resets": "Li bɛ wa na {resets}.",
+      "chooseModel": "Tafio model"
+    },
+    "gates": {
+      "blocked": "{feature} alingbi na tî aka na ô tî mo ti organisation tî mo.",
+      "features": {
+        "webSearch": "Chercher na Internet",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# walë ngangu tî lo tî lɛ} other {# walë ngangu tî lo tî lɛ}}",
+      "exhausted": "Limiti tî lo tî lɛ hinga — model ô a yeke nzönï sô ala."
+    },
+    "mine": {
+      "title": "Limiti tî mo",
+      "description": "Limiti sô organisation tî mo a tînya tî aka na ô tî mo. Compteurs ape wa mbênî tî kêtê azô tî yângâ.",
+      "notAvailable": "Ala na kɛ",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Li bɛ wa na {resets}",
+      "limitReached": "Limiti hinga",
+      "familyLimitReached": "Limiti ti sô tî model hinga",
+      "usageUnavailable": "Usage sô yeke mbênî ti yeke sangô — limiti mô pfûn na kîri."
+    },
+    "routes": {
+      "ttsExhausted": "Mo ape limiti tî text-to-speech tî lo tî lɛ.",
+      "translationExhausted": "Mo ape limiti tî traduction tî document tî lo tî lɛ.",
+      "resetsIn": "Li bɛ wa na {resets}.",
+      "uploadTooLarge": "{fileName} yeke mbï yângâ — fichier tî aka tî mo sô yeke gï tî {maxSize}.",
+      "uploadCapHint": "Fichier sô yeke gï tî {maxSize}"
+    }
   }
 }

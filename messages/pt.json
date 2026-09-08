@@ -5519,5 +5519,70 @@
     "loading": "Carregando…",
     "loadError": "Não foi possível carregar a lista de administradores globais.",
     "retry": "Tentar novamente"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Limite atingido ({used}/{limit}). Reinicia {resets}.",
+      "exhaustedNoReset": "Limite atingido ({used}/{limit}).",
+      "familyExhausted": "Limite da família atingido ({used}/{limit}). Reinicia {resets}.",
+      "familyExhaustedNoReset": "Limite da família atingido ({used}/{limit}).",
+      "unavailable": "Não disponível na sua conta.",
+      "remaining": "{remaining} restante(s)",
+      "remainingTooltip": "{remaining} de {limit} solicitações restantes neste período.",
+      "agentModelUnavailable": "Usa {model}, que não está disponível para você.",
+      "agentModelExhausted": "Usa {model}, cujo limite foi atingido. Reinicia {resets}.",
+      "agentModelExhaustedNoReset": "Usa {model}, cujo limite foi atingido."
+    },
+    "denial": {
+      "modelBlocked": "Este modelo não está disponível na sua conta. Escolha outro modelo ou entre em contato com seu administrador.",
+      "modelExhausted": "Você usou todas as {limit} solicitações para este modelo hoje.",
+      "familyExhausted": "Você utilizou o orçamento compartilhado de {limit} solicitações desta família de modelos para hoje.",
+      "searchBlocked": "A busca na web foi desativada para sua conta por um administrador e esta mensagem a tinha ativada.",
+      "interpreterBlocked": "O interpretador de código foi desativado para sua conta por um administrador e esta mensagem o tinha ativado.",
+      "mcpBlocked": "Os conectores foram desativados para sua conta por um administrador e esta mensagem tinha conectores ativados. Desative-os para continuar.",
+      "messagesCap": "Você atingiu seu limite de {limit} mensagens hoje.",
+      "tokensDayCap": "Você atingiu seu limite diário de tokens.",
+      "tokensMonthCap": "Você atingiu seu limite mensal de tokens.",
+      "perRequest": "Esta solicitação é maior do que o permitido para sua conta (máximo {limit} por solicitação). Tente uma menor.",
+      "resets": "Reinicia {resets}.",
+      "chooseAnotherModel": "Escolha outro modelo",
+      "turnOffSearchAndResend": "Desative a busca na web e reenvie",
+      "turnOffInterpreterAndResend": "Desative o interpretador de código e reenvie"
+    },
+    "notice": {
+      "unavailable": "{model} não está disponível na sua conta — escolha outro modelo para continuar.",
+      "exhausted": "{model} atingiu seu limite para hoje.",
+      "familyExhausted": "{model} compartilha orçamento com sua família de modelos, que já foi utilizada hoje.",
+      "resets": "Reinicia {resets}.",
+      "chooseModel": "Escolher modelo"
+    },
+    "gates": {
+      "blocked": "{feature} está desativado na sua conta pela sua organização.",
+      "features": {
+        "webSearch": "Busca na web",
+        "codeInterpreter": "Interpretador de código",
+        "connectors": "Conectores"
+      },
+      "remaining": "{count, plural, one {# uso restante hoje} other {# usos restantes hoje}}",
+      "exhausted": "Limite diário atingido — o modelo irá responder sem esse recurso."
+    },
+    "mine": {
+      "title": "Seus limites",
+      "description": "Limites definidos por sua organização para sua conta. Os contadores são reiniciados automaticamente ao final de cada período.",
+      "notAvailable": "Não disponível",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Reinicia {resets}",
+      "limitReached": "Limite atingido",
+      "familyLimitReached": "Limite da família de modelos atingido",
+      "usageUnavailable": "O uso atual não pôde ser carregado — exibindo apenas os limites."
+    },
+    "routes": {
+      "ttsExhausted": "Você atingiu o limite de conversão de texto em fala de hoje.",
+      "translationExhausted": "Você atingiu o limite de tradução de documentos de hoje.",
+      "resetsIn": "Reinicia {resets}.",
+      "uploadTooLarge": "{fileName} é muito grande — arquivos na sua conta devem ser menores que {maxSize}.",
+      "uploadCapHint": "Arquivos de até {maxSize}"
+    }
   }
 }

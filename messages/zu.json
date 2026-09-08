@@ -5503,5 +5503,70 @@
     "loading": "Kulayishwa…",
     "loadError": "Uhlu lwabaphathi bomhlaba wonke alukwazanga ukulayishwa.",
     "retry": "Phinda uzame"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Umkhawulo usufinyelelwe ({used}/{limit}). Kuzoqala kabusha ngo-{resets}.",
+      "exhaustedNoReset": "Umkhawulo usufinyelelwe ({used}/{limit}).",
+      "familyExhausted": "Umkhawulo womndeni usufinyelelwe ({used}/{limit}). Kuzoqala kabusha ngo-{resets}.",
+      "familyExhaustedNoReset": "Umkhawulo womndeni usufinyelelwe ({used}/{limit}).",
+      "unavailable": "Akutholakali kwi-akhawunti yakho.",
+      "remaining": "Kusele {remaining}",
+      "remainingTooltip": "Kusele {remaining} kwezingu-{limit} izicelo kulesi sikhathi.",
+      "agentModelUnavailable": "Kusetshenziswa u-{model}, ongatholakali kuwe.",
+      "agentModelExhausted": "Kusetshenziswa u-{model}, umkhawulo usuqediwe. Kuzoqala kabusha ngo-{resets}.",
+      "agentModelExhaustedNoReset": "Kusetshenziswa u-{model}, umkhawulo usuqediwe."
+    },
+    "denial": {
+      "modelBlocked": "Lena imodeli ayitholakali kwi-akhawunti yakho. Khetha enye imodeli noma xhumana nomphathi wakho.",
+      "modelExhausted": "Usebenzise zonke izicelo ezingu-{limit} zale modeli namuhla.",
+      "familyExhausted": "Usebenzise yonke imali efakwe ndawonye izicelo ezingu-{limit} kwale modeli yomndeni yanamuhla.",
+      "searchBlocked": "Ukusesha kwewebhu kuvaliwe kwi-akhawunti yakho ngumlawuli, kanti lo myalezo bekusebenza kuhilelelekile.",
+      "interpreterBlocked": "I-Code interpreter ivalwe kwi-akhawunti yakho ngumlawuli, kanti lo myalezo bekusebenza kuhilelelekile.",
+      "mcpBlocked": "Ama-connector avaliwe kwi-akhawunti yakho ngumlawuli, kanti lo myalezo ube namaconnector avuliwe. Awavale ukuze uqhubeke.",
+      "messagesCap": "Usufinyelele umkhawulo wakho wemilayezo engu-{limit} yanamuhla.",
+      "tokensDayCap": "Usufinyelele umkhawulo wakho wama-token wanamuhla.",
+      "tokensMonthCap": "Usufinyelele umkhawulo wakho wama-token wale nyanga.",
+      "perRequest": "Lesi sicelo sidlula umkhawulo ovunyelwe ku-akhawunti yakho (esiphezulu u-{limit} ngesicelo ngayinye). Zama esincane.",
+      "resets": "Kuzoqala kabusha ngo-{resets}.",
+      "chooseAnotherModel": "Khetha enye imodeli",
+      "turnOffSearchAndResend": "Vala ukusesha kwewebhu bese uthumela kabusha",
+      "turnOffInterpreterAndResend": "Vala i-Code interpreter bese uthumela kabusha"
+    },
+    "notice": {
+      "unavailable": "U-{model} akatholakali kwi-akhawunti yakho — khetha enye imodeli ukuze uqhubeke.",
+      "exhausted": "U-{model} usufinyelele umkhawulo wayo wanamuhla.",
+      "familyExhausted": "U-{model} uhambisa imali nomndeni wemodeli, osebenzisa yonke imali yanamuhla.",
+      "resets": "Kuzoqala kabusha ngo-{resets}.",
+      "chooseModel": "Khetha imodeli"
+    },
+    "gates": {
+      "blocked": "U-{feature} uvaliwe kwi-akhawunti yakho yinhlangano yakho.",
+      "features": {
+        "webSearch": "Ukusesha kwewebhu",
+        "codeInterpreter": "I-Code interpreter",
+        "connectors": "Ama-connector"
+      },
+      "remaining": "{count, plural, one {# esisele namuhla} other {# ezisele namuhla}}",
+      "exhausted": "Umkhawulo wansuku zonke usufinyelelwe — imodeli izophendula ingasebenzisi yona."
+    },
+    "mine": {
+      "title": "Umkhawulo wakho",
+      "description": "Imikhawulo yenhlangano yakho ebekiwe kwi-akhawunti yakho. Imininingwane yesibalo izoqala kabusha ngokuzenzakalelayo ekupheleni kwesikhathi ngasinye.",
+      "notAvailable": "Akutholakali",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Kuzoqala kabusha ngo-{resets}",
+      "limitReached": "Umkhawulo usufinyelelwe",
+      "familyLimitReached": "Umkhawulo womndeni wemodeli usufinyelelwe",
+      "usageUnavailable": "Ukusetshenziswa okwamanje akukalayishwa — kukhonjiswa imikhawulo kuphela."
+    },
+    "routes": {
+      "ttsExhausted": "Usufinyelele umkhawulo wanamuhla we-Text-to-Speech.",
+      "translationExhausted": "Usufinyelele umkhawulo wanamuhla wokuhumusha imibhalo.",
+      "resetsIn": "Kuzoqala kabusha ngo-{resets}.",
+      "uploadTooLarge": "Ifayela elithi {fileName} likhulu kakhulu — amafayela akho kumele angaphansi kuka-{maxSize}.",
+      "uploadCapHint": "Amafayela afinyelela ku-{maxSize}"
+    }
   }
 }

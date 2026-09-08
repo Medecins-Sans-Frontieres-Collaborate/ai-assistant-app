@@ -5519,5 +5519,70 @@
     "loading": "පූරණය වෙමින්…",
     "loadError": "ගෝලීය පරිපාලක ලැයිස්තුව පූරණය කළ නොහැක.",
     "retry": "නැවත උත්සාහ කරන්න"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "සීමාවට පැමිණ ඇත ({used}/{limit}) — {resets}දී නැවත සකසයි.",
+      "exhaustedNoReset": "සීමාවට පැමිණ ඇත ({used}/{limit}).",
+      "familyExhausted": "පවුල් සීමාවට පැමිණ ඇත ({used}/{limit}) — {resets}දී නැවත සකසයි.",
+      "familyExhaustedNoReset": "පවුල් සීමාවට පැමිණ ඇත ({used}/{limit}).",
+      "unavailable": "ඔබගේ ගිණුමේ මෙය ලබා ගත නොහැක.",
+      "remaining": "තව {remaining} ක් තිබේ",
+      "remainingTooltip": "මෙම කාලයකදී ඉතිරිව ඇති ඉල්ලීම් {remaining} / {limit}.",
+      "agentModelUnavailable": "{model} භාවිතා කරයි, එය ඔබට ලබා ගත නොහැක.",
+      "agentModelExhausted": "{model} භාවිත සීමාවට පැමිණ ඇත. {resets}දී නැවත සකසයි.",
+      "agentModelExhaustedNoReset": "{model} භාවිත සීමාවට පැමිණ ඇත."
+    },
+    "denial": {
+      "modelBlocked": "මෙම model ඔබගේ ගිණුමේ ලබා ගත නොහැක. වෙනත් model එකක් තෝරන්න හෝ ඔබගේ පරිපාලකයා අමතන්න.",
+      "modelExhausted": "ඔබ අද මෙම model සඳහා ඉල්ලීම් {limit} සියල්ලම පාවිච්චි කර ඇත.",
+      "familyExhausted": "ඔබ අද මෙම model පවුල සදහා බෙදා ගත් ඉල්ලීම් {limit} සියල්ලම පාවිච්චි කර ඇත.",
+      "searchBlocked": "ඔබගේ ගිණුමේ web search පරිපාලකයෙකු විසින් අක්‍රීය කර ඇත, මෙම පණිවිඩයේ එය සක්‍රීයයි.",
+      "interpreterBlocked": "Code interpreter ඔබගේ ගිණුම සඳහා පරිපාලකයෙකු විසින් අක්‍රීය කර ඇත, මෙම පණිවිඩයේ එය සක්‍රීයයි.",
+      "mcpBlocked": "Connectors ඔබගේ ගිණුමට පරිපාලකයෙකු විසින් අක්‍රීය කර ඇත, මෙම පණිවිඩයේ connectors සක්‍රීය විය. ඉදිරියට යාමට එය අක්‍රීය කරන්න.",
+      "messagesCap": "ඔබ අද සඳහා පණිවිඩ {limit} සීමාවට පැමිණ ඇත.",
+      "tokensDayCap": "ඔබ අද වෙනුවෙන් token සීමාවට පැමිණ ඇත.",
+      "tokensMonthCap": "ඔබ මෙම මාසය සඳහා token සීමාවට පැමිණ ඇත.",
+      "perRequest": "ඔබගේ ගිණුමට ඉතා විශාල ඉල්ලීමකි (ඉල්ලීමකට උපරිම {limit}). කුඩා ඉල්ලීමක් උත්සහා කරන්න.",
+      "resets": "{resets}දී නැවත සකසයි.",
+      "chooseAnotherModel": "වෙනත් model එකක් තෝරන්න",
+      "turnOffSearchAndResend": "Web search අක්‍රීය කර නැවත යවන්න",
+      "turnOffInterpreterAndResend": "Code interpreter අක්‍රීය කර නැවත යවන්න"
+    },
+    "notice": {
+      "unavailable": "{model} ඔබගේ ගිණුමට ලබා ගත නොහැක — ඉදිරියට යාමට වෙනත් model එකක් තෝරන්න.",
+      "exhausted": "{model} සඳහා අද සීමාවට පැමිණ ඇත.",
+      "familyExhausted": "{model} එකේ පවුලෙහි බදු මුදල අද පාවිච්චි කර අවසන් කර ඇත.",
+      "resets": "{resets}දී නැවත සකසයි.",
+      "chooseModel": "Model එකක් තෝරන්න"
+    },
+    "gates": {
+      "blocked": "ඔබේ සංවිධානය විසින් {feature} ඔබගේ ගිණුමට අක්‍රීය කර ඇත.",
+      "features": {
+        "webSearch": "Web search",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {අද තව අවස්ථාවක් තියෙනවා} other {අද තව අවස්ථා {count}ක් තියෙනවා}}",
+      "exhausted": "දිනකට සීමාවට පැමිණ ඇත — model එක මෙය නැතිව පිළිතුරු ලබා දෙනු ඇත."
+    },
+    "mine": {
+      "title": "ඔබගේ සීමාවන්",
+      "description": "ඔබගේ සංවිධානය ඔබේ ගිණුමට තැන්පත් කළ සීමාවන්. සම්පූර්ණ කාලය නිමාවෙදී මඟින් අලුත් වෙයි.",
+      "notAvailable": "ලබා ගත නොහැක",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "{resets}දී නැවත සකසයි",
+      "limitReached": "සීමාවට පැමිණ ඇත",
+      "familyLimitReached": "Model පවුල සීමාවට පැමිණ ඇත",
+      "usageUnavailable": "වත්මන් පාවිච්චිය ප්‍රදර්ශනය කළ නොහැක — සීමා පමණක් පෙන්වයි."
+    },
+    "routes": {
+      "ttsExhausted": "ඔබ අද සඳහා text-to-speech සීමාවට පැමිණ ඇත.",
+      "translationExhausted": "ඔබ අද සඳහා ලේඛන පරිවර්තන සීමාවට පැමිණ ඇත.",
+      "resetsIn": "{resets}දී නැවත සකසයි.",
+      "uploadTooLarge": "{fileName} ඉතා විශාලයි — ඔබගේ ගිණුමට ගොනු {maxSize} ට අඩු විය යුතුය.",
+      "uploadCapHint": "{maxSize} දක්වා ගොනු"
+    }
   }
 }

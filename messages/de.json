@@ -5519,5 +5519,70 @@
     "loading": "Laden…",
     "loadError": "Die Liste der globalen Administratoren konnte nicht geladen werden.",
     "retry": "Erneut versuchen"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Limit erreicht ({used}/{limit}). Setzt zurück {resets}.",
+      "exhaustedNoReset": "Limit erreicht ({used}/{limit}).",
+      "familyExhausted": "Familienlimit erreicht ({used}/{limit}). Setzt zurück {resets}.",
+      "familyExhaustedNoReset": "Familienlimit erreicht ({used}/{limit}).",
+      "unavailable": "Für Ihr Konto nicht verfügbar.",
+      "remaining": "{remaining} übrig",
+      "remainingTooltip": "{remaining} von {limit} Anfragen in diesem Zeitraum übrig.",
+      "agentModelUnavailable": "Verwendet {model}, das für Sie nicht verfügbar ist.",
+      "agentModelExhausted": "Verwendet {model}, dessen Limit erreicht ist. Setzt zurück {resets}.",
+      "agentModelExhaustedNoReset": "Verwendet {model}, dessen Limit erreicht ist."
+    },
+    "denial": {
+      "modelBlocked": "Dieses Modell ist auf Ihrem Konto nicht verfügbar. Wählen Sie ein anderes Modell oder wenden Sie sich an Ihre Administratorin/Ihren Administrator.",
+      "modelExhausted": "Sie haben heute alle {limit} Anfragen für dieses Modell genutzt.",
+      "familyExhausted": "Sie haben das heutige gemeinsame Kontingent von {limit} Anfragen für diese Modellfamilie aufgebraucht.",
+      "searchBlocked": "Die Websuche wurde von einer Administratorin/einem Administrator für Ihr Konto deaktiviert, war aber in dieser Nachricht aktiviert.",
+      "interpreterBlocked": "Der Code Interpreter wurde von einer Administratorin/einem Administrator für Ihr Konto deaktiviert, war aber in dieser Nachricht aktiviert.",
+      "mcpBlocked": "Connectors wurden von einer Administratorin/einem Administrator für Ihr Konto deaktiviert, waren aber in dieser Nachricht aktiviert. Deaktivieren Sie sie, um fortzufahren.",
+      "messagesCap": "Sie haben Ihr Limit von {limit} Nachrichten für heute erreicht.",
+      "tokensDayCap": "Sie haben Ihr Token-Limit für heute erreicht.",
+      "tokensMonthCap": "Sie haben Ihr Token-Limit für diesen Monat erreicht.",
+      "perRequest": "Diese Anfrage überschreitet Ihr Kontolimit (maximal {limit} pro Anfrage). Versuchen Sie eine kleinere Anfrage.",
+      "resets": "Setzt zurück {resets}.",
+      "chooseAnotherModel": "Anderes Modell wählen",
+      "turnOffSearchAndResend": "Websuche deaktivieren und erneut senden",
+      "turnOffInterpreterAndResend": "Code Interpreter deaktivieren und erneut senden"
+    },
+    "notice": {
+      "unavailable": "{model} ist für Ihr Konto nicht verfügbar — wählen Sie ein anderes Modell, um fortzufahren.",
+      "exhausted": "{model} hat sein Limit für heute erreicht.",
+      "familyExhausted": "{model} teilt sich ein Kontingent mit seiner Modellfamilie, das für heute aufgebraucht ist.",
+      "resets": "Setzt zurück {resets}.",
+      "chooseModel": "Modell wählen"
+    },
+    "gates": {
+      "blocked": "{feature} wurde von Ihrer Organisation für Ihr Konto deaktiviert.",
+      "features": {
+        "webSearch": "Websuche",
+        "codeInterpreter": "Code Interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# Nutzung heute übrig} other {# Nutzungen heute übrig}}",
+      "exhausted": "Tageslimit erreicht — das Modell antwortet ohne diese Funktion."
+    },
+    "mine": {
+      "title": "Ihre Limits",
+      "description": "Limits, die Ihre Organisation für Ihr Konto festgelegt hat. Die Zähler werden am Ende jeder Periode automatisch zurückgesetzt.",
+      "notAvailable": "Nicht verfügbar",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Setzt zurück {resets}",
+      "limitReached": "Limit erreicht",
+      "familyLimitReached": "Modellfamilien-Limit erreicht",
+      "usageUnavailable": "Aktueller Verbrauch konnte nicht geladen werden — es werden nur die Limits angezeigt."
+    },
+    "routes": {
+      "ttsExhausted": "Sie haben das heutige Text-zu-Sprache-Limit erreicht.",
+      "translationExhausted": "Sie haben das heutige Dokumentübersetzungs-Limit erreicht.",
+      "resetsIn": "Setzt zurück {resets}.",
+      "uploadTooLarge": "{fileName} ist zu groß — Dateien müssen auf Ihrem Konto kleiner als {maxSize} sein.",
+      "uploadCapHint": "Dateien bis {maxSize}"
+    }
   }
 }

@@ -5503,5 +5503,70 @@
     "loading": "Ap chaje…",
     "loadError": "Lis administratè mondyal yo pa t ka chaje.",
     "retry": "Re-ese"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Limit la atenn ({used}/{limit}). Ap pare {resets}.",
+      "exhaustedNoReset": "Limit la atenn ({used}/{limit}).",
+      "familyExhausted": "Limit fanmi an atenn ({used}/{limit}). Ap pare {resets}.",
+      "familyExhaustedNoReset": "Limit fanmi an atenn ({used}/{limit}).",
+      "unavailable": "Non disponib sou kont ou.",
+      "remaining": "Rete {remaining}",
+      "remainingTooltip": "{remaining} sou {limit} demann rete nan peryòd sa a.",
+      "agentModelUnavailable": "L ap itilize {model}, ki pa disponib pou ou.",
+      "agentModelExhausted": "L ap itilize {model}, ki te deja rive limit li. Ap pare {resets}.",
+      "agentModelExhaustedNoReset": "L ap itilize {model}, ki te deja rive limit li."
+    },
+    "denial": {
+      "modelBlocked": "Modèl sa a pa disponib sou kont ou. Chwazi yon lòt modèl oswa kontakte administratè w.",
+      "modelExhausted": "Ou itilize tout {limit} demann pou modèl sa a jodi a.",
+      "familyExhausted": "Ou itilize tout bidjè pataje jodi a ({limit} demann) pou fanmi modèl sa a.",
+      "searchBlocked": "Yon administratè dezaktive rechèch sou entènèt pou kont ou, men mesaj sa a te gen opsyon sa aktive.",
+      "interpreterBlocked": "Yon administratè dezaktive entèprèt kòd pou kont ou, men mesaj sa a te gen opsyon sa aktive.",
+      "mcpBlocked": "Yon administratè dezaktive konektè sou kont ou, men mesaj sa a te gen konektè yo aktive. Dekative yo pou kontinye.",
+      "messagesCap": "Ou rive limit {limit} mesaj pou jodi a.",
+      "tokensDayCap": "Ou rive limit jodi a pou tokèn.",
+      "tokensMonthCap": "Ou rive limit mwa a pou tokèn.",
+      "perRequest": "Demann sa a depase kapasite kont ou (maksimòm {limit} pa demann). Eseye yon kantite pi piti.",
+      "resets": "Ap pare {resets}.",
+      "chooseAnotherModel": "Chwazi yon lòt modèl",
+      "turnOffSearchAndResend": "Dekative rechèch entènèt epi voye ankò",
+      "turnOffInterpreterAndResend": "Dekative entèprèt kòd epi voye ankò"
+    },
+    "notice": {
+      "unavailable": "{model} pa disponib sou kont ou — chwazi yon lòt modèl pou kontinye.",
+      "exhausted": "{model} rive limit pou jodi a.",
+      "familyExhausted": "{model} pataje bidjè ak fanmi modèl li, ki deja itilize pou jodi a.",
+      "resets": "Ap pare {resets}.",
+      "chooseModel": "Chwazi modèl"
+    },
+    "gates": {
+      "blocked": "{feature} dezaktive pa òganizasyon ou sou kont ou.",
+      "features": {
+        "webSearch": "Rechèch entènèt",
+        "codeInterpreter": "Entèprèt kòd",
+        "connectors": "Konektè"
+      },
+      "remaining": "{count, plural, one {# itilizasyon rete jodi a} other {# itilizasyon yo rete jodi a}}",
+      "exhausted": "Limit chak jou atenn — modèl la ap reponn san li."
+    },
+    "mine": {
+      "title": "Limit ou yo",
+      "description": "Limit òganizasyon w mete sou kont ou. Kontè yo ap reponn otomatikman chak fen peryòd.",
+      "notAvailable": "Non disponib",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Ap pare {resets}",
+      "limitReached": "Limit atenn",
+      "familyLimitReached": "Limit fanmi modèl atenn",
+      "usageUnavailable": "Itilizasyon aktyèl pa ka chaje — sèlman ap montre limit yo."
+    },
+    "routes": {
+      "ttsExhausted": "Ou rive limit text-to-speech jodi a.",
+      "translationExhausted": "Ou rive limit tradiksyon dokiman pou jodi a.",
+      "resetsIn": "Ap pare {resets}.",
+      "uploadTooLarge": "{fileName} twò gwo — fichye sou kont ou dwe pi piti pase {maxSize}.",
+      "uploadCapHint": "Fichye jiska {maxSize}"
+    }
   }
 }
