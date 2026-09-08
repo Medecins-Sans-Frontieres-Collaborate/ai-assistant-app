@@ -100,8 +100,12 @@ export function useModelsQuery() {
   });
 
   // Structural sharing keeps `data` referentially stable across refetches
-  // that return the same list, so this only re-applies on a real change.
-  const { data, error } = query;
+  // that return the same list, so `[data]` alone would only re-apply on a
+  // real change. `dataUpdatedAt` also changes on every SETTLED fetch (even
+  // one that resolves to the same list), so this re-applies on every
+  // completed fetch — repairing a store some other code path reset in the
+  // meantime, not just reacting to a genuine list change.
+  const { data, error, dataUpdatedAt } = query;
   useEffect(() => {
     if (!data) return;
     try {
@@ -112,7 +116,7 @@ export function useModelsQuery() {
         e,
       );
     }
-  }, [data]);
+  }, [data, dataUpdatedAt]);
 
   useEffect(() => {
     if (!error) return;
