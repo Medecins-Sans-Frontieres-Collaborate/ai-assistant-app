@@ -28,8 +28,14 @@ export interface YourLimitRow {
   id: string;
   /** i18n suffix under `limits.label` — the admin's catalog copy, reused. */
   labelKey?: string;
-  /** Display name for a per-model row. */
+  /** Display name for a per-model row, or the family label for a collapsed one. */
   modelName?: string;
+  /**
+   * True when several models sharing one family envelope were collapsed
+   * into this single row — `modelName` here is the family label, not a
+   * model name, and the renderer must wrap it accordingly.
+   */
+  isFamilyRow?: boolean;
   unit: LimitUnit;
   /** A boolean gate resolved to `false` (or a model the caller may not use). */
   blocked: boolean;
@@ -41,12 +47,19 @@ export interface YourLimitRow {
   familyExhausted: boolean;
 }
 
-/** Same shape (limit, used, resetAt) ⇒ same counter cell behind both rows. */
+/**
+ * Same (limit, used) ⇒ same counter cell behind both rows. `resetAt` is
+ * deliberately NOT compared: `periods.resetAt` builds a fresh `Date` on
+ * every call, so the chat row's and a same-cell model row's ISO instants
+ * differ by the millisecond each call happened to land on (and the chat row
+ * carries no `resetAt` at all when `usageUnavailable` skipped it), so
+ * comparing it would make this dedup a no-op against the real payload.
+ */
 function sameCell(
-  a: { limit?: number; used?: number; resetAt?: string },
-  b: { limit?: number; used?: number; resetAt?: string },
+  a: { limit?: number; used?: number },
+  b: { limit?: number; used?: number },
 ): boolean {
-  return a.limit === b.limit && a.used === b.used && a.resetAt === b.resetAt;
+  return a.limit === b.limit && a.used === b.used;
 }
 
 /**
@@ -64,11 +77,18 @@ function sameCell(
  * skipped too: the server reports the binding cell per model, and when the
  * only numeric cell is `chat.messagesPerDay` every model would repeat the
  * chat row verbatim.
+ *
+ * `modelFamily`, when given, names the family/series a served model belongs
+ * to (e.g. its `seriesLabel`); model rows that share a family AND an
+ * identical counter cell are collapsed into one row, since every member of
+ * a family-capped series reports the same numbers and listing each one
+ * separately reads as N independent budgets instead of one shared envelope.
  */
 export function selectYourLimitRows(
   limits: readonly MeLimit[],
   models: Readonly<Record<string, ModelAvailability>>,
   modelName: (id: string) => string,
+  modelFamily: (id: string) => string | undefined = () => undefined,
 ): YourLimitRow[] {
   const rows: YourLimitRow[] = [];
   let messageCap: MeLimit | undefined;
@@ -81,6 +101,12 @@ export function selectYourLimitRows(
     // A key this build does not know cannot be labelled without leaking the
     // raw key; the server's send-time denial still explains it.
     if (!def) continue;
+    // `model.allowed` / `model.requests` unqualified rows are only the
+    // compiled DEFAULT: enforcement never writes a counter under the bare
+    // key (it debits `model:<id>.requests` / `family:<series>.requests`),
+    // so this row would freeze at "0 / N" forever while `models` already
+    // carries the real, conjunctively-resolved per-model answer.
+    if (def.perModel) continue;
 
     if (row.value === false) {
       rows.push({
@@ -109,56 +135,95 @@ export function selectYourLimitRows(
     });
   }
 
-  const modelRows: YourLimitRow[] = [];
+  // Each entry pairs the row with the family it belongs to (if any) so the
+  // collapsing pass below can group without leaking that bookkeeping field
+  // into the rows the caller actually renders.
+  const modelEntries: { row: YourLimitRow; family?: string }[] = [];
   for (const [modelId, entry] of Object.entries(models)) {
     if (entry.allowed === false) {
-      modelRows.push({
-        id: `model:${modelId}`,
-        modelName: modelName(modelId),
-        unit: 'requests',
-        blocked: true,
-        familyExhausted: false,
+      modelEntries.push({
+        row: {
+          id: `model:${modelId}`,
+          modelName: modelName(modelId),
+          unit: 'requests',
+          blocked: true,
+          familyExhausted: false,
+        },
       });
       continue;
     }
     if (typeof entry.limit !== 'number') continue;
-    const cell = {
-      limit: entry.limit,
-      used: entry.used,
-      resetAt: entry.resetAt,
-    };
     if (
       messageCap &&
-      sameCell(cell, {
-        limit: messageCap.value as number,
-        used: messageCap.used,
-        resetAt: messageCap.resetAt,
-      })
+      sameCell(
+        { limit: entry.limit, used: entry.used },
+        { limit: messageCap.value as number, used: messageCap.used },
+      )
     ) {
       continue;
     }
-    modelRows.push({
-      id: `model:${modelId}`,
-      modelName: modelName(modelId),
-      unit: 'requests',
-      blocked: false,
-      ...cell,
-      remaining: entry.remaining,
-      familyExhausted: entry.reason === 'familyExhausted',
+    modelEntries.push({
+      row: {
+        id: `model:${modelId}`,
+        modelName: modelName(modelId),
+        unit: 'requests',
+        blocked: false,
+        limit: entry.limit,
+        used: entry.used,
+        resetAt: entry.resetAt,
+        remaining: entry.remaining,
+        familyExhausted: entry.reason === 'familyExhausted',
+      },
+      family: modelFamily(modelId),
     });
   }
-  modelRows.sort((a, b) =>
+
+  const collapsed: YourLimitRow[] = [];
+  const groups = new Map<string, { row: YourLimitRow; family?: string }[]>();
+  for (const entry of modelEntries) {
+    if (entry.row.blocked || !entry.family) {
+      collapsed.push(entry.row);
+      continue;
+    }
+    const key = [
+      entry.family,
+      entry.row.limit,
+      entry.row.used,
+      entry.row.resetAt,
+      entry.row.familyExhausted,
+    ].join('|');
+    const group = groups.get(key);
+    if (group) group.push(entry);
+    else groups.set(key, [entry]);
+  }
+  for (const group of groups.values()) {
+    if (group.length === 1) {
+      collapsed.push(group[0].row);
+      continue;
+    }
+    const { row, family } = group[0];
+    collapsed.push({
+      ...row,
+      id: `family:${family}:${row.limit}:${row.resetAt ?? ''}`,
+      modelName: family,
+      isFamilyRow: true,
+    });
+  }
+  collapsed.sort((a, b) =>
     (a.modelName ?? '').localeCompare(b.modelName ?? ''),
   );
 
-  return [...rows, ...modelRows];
+  return [...rows, ...collapsed];
 }
 
 const numberFmt = new Intl.NumberFormat();
 
-const ResetsIn: FC<{ resetAt?: string }> = ({ resetAt }) => {
+const ResetsIn: FC<{ resetAt?: string; onExpired?: () => void }> = ({
+  resetAt,
+  onExpired,
+}) => {
   const t = useTranslations();
-  const countdown = useResetCountdown(resetAt);
+  const countdown = useResetCountdown(resetAt, { onExpired });
   if (!countdown) return null;
   return (
     <span className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
@@ -168,10 +233,18 @@ const ResetsIn: FC<{ resetAt?: string }> = ({ resetAt }) => {
   );
 };
 
-const LimitRow: FC<{ row: YourLimitRow }> = ({ row }) => {
+const LimitRow: FC<{ row: YourLimitRow; onExpired?: () => void }> = ({
+  row,
+  onExpired,
+}) => {
   const t = useTranslations();
-  const label =
+  const rawLabel =
     row.modelName ?? (row.labelKey ? t(`limits.label.${row.labelKey}`) : '');
+  // A collapsed family row's `modelName` is the family label (e.g. "GPT"),
+  // not a model name — wrap it so it reads as a shared budget, not one model.
+  const label = row.isFamilyRow
+    ? t('limitsUx.mine.familyRow', { family: rawLabel })
+    : rawLabel;
   const unit = t(`limits.unit.${row.unit}`);
   const exhausted = !row.blocked && row.remaining === 0;
 
@@ -215,7 +288,9 @@ const LimitRow: FC<{ row: YourLimitRow }> = ({ row }) => {
             )}
           </span>
         )}
-        {!row.blocked && <ResetsIn resetAt={row.resetAt} />}
+        {!row.blocked && (
+          <ResetsIn resetAt={row.resetAt} onExpired={onExpired} />
+        )}
       </span>
     </li>
   );
@@ -232,7 +307,7 @@ const LimitRow: FC<{ row: YourLimitRow }> = ({ row }) => {
  */
 export const YourLimitsTable: FC = () => {
   const t = useTranslations();
-  const { enforce, limits, models, usageUnavailable } = useMyLimits();
+  const { enforce, limits, models, usageUnavailable, refetch } = useMyLimits();
   const servedModels = useSettingsStore((s) => s.models);
 
   const rows = useMemo(() => {
@@ -241,7 +316,10 @@ export const YourLimitsTable: FC = () => {
       servedModels.find((m) => m.id === id)?.name ??
       OpenAIModels[id as OpenAIModelID]?.name ??
       id;
-    return selectYourLimitRows(limits, models, modelName);
+    const modelFamily = (id: string): string | undefined =>
+      servedModels.find((m) => m.id === id)?.seriesLabel ??
+      OpenAIModels[id as OpenAIModelID]?.seriesLabel;
+    return selectYourLimitRows(limits, models, modelName, modelFamily);
   }, [enforce, limits, models, servedModels]);
 
   if (rows.length === 0) return null;
@@ -259,7 +337,7 @@ export const YourLimitsTable: FC = () => {
       </p>
       <ul className="rounded-lg border border-gray-200 dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700">
         {rows.map((row) => (
-          <LimitRow key={row.id} row={row} />
+          <LimitRow key={row.id} row={row} onExpired={refetch} />
         ))}
       </ul>
       {usageUnavailable && (
