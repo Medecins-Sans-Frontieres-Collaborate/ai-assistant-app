@@ -3,8 +3,9 @@ import { NextRequest } from 'next/server';
 
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { currentPolicy } from '@/lib/services/limits/enforcement';
+import { isModelBlocked } from '@/lib/services/limits/modelAvailability';
 import { buildPrincipal } from '@/lib/services/limits/principal';
-import { isBlocked, resolveLimit } from '@/lib/services/limits/resolver';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import { ModelDiscoveryService } from '@/lib/services/models/ModelDiscoveryService';
 import {
   RegionalDeployments,
@@ -21,7 +22,6 @@ import { ModelListSource, OpenAIModel, OpenAIModels } from '@/types/openai';
 
 import { auth } from '@/auth';
 import { env } from '@/config/environment';
-import { getLimitDefinition } from '@/config/limits';
 import { getCurrentEnvironment, getStaticModelList } from '@/config/models';
 import { DefaultAzureCredential } from '@azure/identity';
 
@@ -34,24 +34,36 @@ import { DefaultAzureCredential } from '@azure/identity';
  * design, and filtering only the happy path would leak the restricted model
  * exactly when discovery is degraded.
  *
+ * Three rules keep the picker and the send in agreement
+ * (docs/LIMITS_USER_FACING_UX.md §7.2):
+ *  - the decision is `isModelBlocked` — the model cell AND the family cell,
+ *    conjunctive, exactly what `checkGate` evaluates — so a model-qualified
+ *    `allowed: true` can no longer shadow a family-level `false` here while
+ *    enforcement still refuses the send;
+ *  - the group cache is warmed with `resolveUserGroupIds` BEFORE
+ *    `buildPrincipal` (which reads it synchronously), as the chat route does,
+ *    so a group-targeted block hides on a cold replica instead of only
+ *    surfacing as a 403;
+ *  - hiding happens ONLY in `enforce` mode. In `observe` the send is allowed,
+ *    so removing the model from the list would be the one user-visible
+ *    change observe mode promised not to make. The list is served unfiltered.
+ *
  * Fails open itself: if the policy cannot be resolved the full list is
  * served, matching how the rest of this route behaves.
  */
 async function filterBlockedModels(
+  request: NextRequest,
   session: Session,
   models: OpenAIModel[],
 ): Promise<OpenAIModel[]> {
   try {
     const policy = await currentPolicy();
-    if (!policy) return models;
+    if (!policy || policy.mode !== 'enforce') return models;
+    // Never throws; [] on a cold or degraded cache, which fails open below.
+    await resolveUserGroupIds(request, session);
     const principal = buildPrincipal(session);
-    const def = getLimitDefinition('model.allowed');
-    if (!def) return models;
     return models.filter(
-      (model) =>
-        !isBlocked(
-          resolveLimit(def, policy, principal, model.id, model.series),
-        ),
+      (model) => !isModelBlocked(policy, principal, model.id, model.series),
     );
   } catch (error) {
     console.error(
@@ -74,6 +86,12 @@ async function filterBlockedModels(
  *
  * Discovery runs under the APP identity (not per-user OBO) — deployed models are
  * region-uniform — so the result is cached per region by ModelDiscoveryService.
+ *
+ * Per-user filtering happens last, on every branch: models the caller is
+ * blocked from by an admin usage limit are dropped — conjunctively (model AND
+ * family cell), after warming the group cache, and ONLY while the policy is
+ * in `enforce` mode (see filterBlockedModels). Exhausted budgets are NOT
+ * applied here; the client grays those from `/api/limits/me?models=`.
  */
 
 // The vetted static list (catalog minus beta/prod exclusions) — served while
@@ -109,7 +127,7 @@ export async function GET(request: NextRequest) {
         }; serving static list`,
       );
       return successResponse({
-        models: await filterBlockedModels(session, STATIC_MODELS),
+        models: await filterBlockedModels(request, session, STATIC_MODELS),
         source: 'static-no-region',
       });
     }
@@ -188,7 +206,7 @@ export async function GET(request: NextRequest) {
       );
     }
     return successResponse({
-      models: await filterBlockedModels(session, models),
+      models: await filterBlockedModels(request, session, models),
       source,
     });
   } catch (error) {
@@ -199,7 +217,7 @@ export async function GET(request: NextRequest) {
       error instanceof Error ? error.message : error,
     );
     return successResponse({
-      models: await filterBlockedModels(session, STATIC_MODELS),
+      models: await filterBlockedModels(request, session, STATIC_MODELS),
       source: 'fallback',
     });
   }
