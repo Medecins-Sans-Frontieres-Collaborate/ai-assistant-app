@@ -59,6 +59,11 @@ vi.mock('@/client/hooks/settings/useMyLimits', () => ({
   useResetCountdown,
 }));
 
+const notifyLimitsChanged = vi.hoisted(() => vi.fn());
+vi.mock('@/client/hooks/settings/limitsUxEvents', () => ({
+  notifyLimitsChanged,
+}));
+
 const SERVED = [
   { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat' },
   { id: 'discovered-only', name: 'Discovered' },
@@ -167,7 +172,24 @@ describe('ModelUnavailableNotice', () => {
     const status = screen.getByRole('status');
     expect(status).toHaveTextContent('GPT-5.2 Chat has reached its limit');
     expect(status).toHaveTextContent('Resets in 2 hours.');
-    expect(useResetCountdown).toHaveBeenCalledWith('2026-09-09T00:00:00.000Z');
+    expect(useResetCountdown).toHaveBeenCalledWith('2026-09-09T00:00:00.000Z', {
+      onExpired: notifyLimitsChanged,
+    });
+  });
+
+  // docs/LIMITS_USER_FACING_UX.md §3b: "on expiry refetch and re-enable" —
+  // without wiring onExpired, the "reached its limit" sentence would
+  // outlive the window it describes until the next 30s poll/focus.
+  it('asks the limits/models queries to refetch when the countdown expires', () => {
+    availabilityById.set('gpt-5.2-chat', {
+      state: 'exhausted',
+      reason: 'exhausted',
+      resetAt: '2020-01-01T00:00:00.000Z',
+    });
+    renderNotice({ id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat' });
+
+    const onExpired = useResetCountdown.mock.calls.at(-1)?.[1]?.onExpired;
+    expect(onExpired).toBe(notifyLimitsChanged);
   });
 
   it('uses the family copy when the shared envelope is used up', () => {
