@@ -587,6 +587,11 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
             <CitationStreamdown
               citations={[]}
               isAnimating={false}
+              // This surface has no streaming state at all — the commentary is
+              // attached to an already-persisted transcript — so "static" is
+              // the correct mode: no block splitting, no incomplete-markdown
+              // completion.
+              mode="static"
               controls={true}
               shikiTheme={['github-light', 'github-dark']}
             >

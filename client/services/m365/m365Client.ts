@@ -8,6 +8,7 @@ import type {
   M365DriveInfo,
   M365DrivePage,
   M365DriveSort,
+  M365FilteredMeetingList,
   M365MailFilter,
   M365MailImportResult,
   M365MailPage,
@@ -207,11 +208,41 @@ export interface ListMailOptions {
   signal?: AbortSignal;
 }
 
-export async function listMeetings(): Promise<M365MeetingEntry[]> {
+/**
+ * Recent online meetings, newest first, one row per recurring series (the
+ * `occurrences` field says how many folded in). Nothing is probed; a row's
+ * artifacts come from `resolveMeeting` on demand.
+ */
+export async function listMeetings(
+  options: { signal?: AbortSignal } = {},
+): Promise<M365MeetingEntry[]> {
   const data = await requestJson<{ meetings: M365MeetingEntry[] }>(
     '/api/m365/meetings',
+    { signal: options.signal },
   );
   return data.meetings;
+}
+
+/**
+ * The same listing filtered server-side by artifact availability. Only a
+ * meeting that probed clean with NO transcript or recording is dropped
+ * (`hiddenCount`); every kept row carries `availability`, and only
+ * `'available'` rows have `resources` resolved inline (so expanding one
+ * costs no round trip). `'pending'` rows (ended too recently for Teams to
+ * have published) and `'forbidden'` rows (Graph answered 403, so availability
+ * is unknown) are kept WITHOUT `resources` — callers must branch on
+ * `availability` rather than assume `resources` is set. Meetings that were
+ * never probed (cap, budget, throttling) are counted in `unprobedCount`, not
+ * listed; `listMeetings` remains the "show me everything" fallback.
+ * See `M365MeetingAvailability` in types/m365.ts.
+ */
+export async function listMeetingsWithArtifacts(
+  options: { signal?: AbortSignal } = {},
+): Promise<M365FilteredMeetingList> {
+  return requestJson<M365FilteredMeetingList>(
+    '/api/m365/meetings?artifacts=required',
+    { signal: options.signal },
+  );
 }
 
 export async function resolveMeeting(

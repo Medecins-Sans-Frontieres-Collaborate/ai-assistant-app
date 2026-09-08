@@ -78,5 +78,10 @@ function describe(
   if (overrides.groupIds?.length) {
     parts.push(t('groups', { count: overrides.groupIds.length }));
   }
+  if (overrides.limitDelegationIds?.length) {
+    parts.push(
+      t('limitDelegations', { count: overrides.limitDelegationIds.length }),
+    );
+  }
   return parts;
 }

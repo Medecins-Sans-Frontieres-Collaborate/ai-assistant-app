@@ -1,4 +1,15 @@
-/* KaTeX CSS for math rendering */
+/* KaTeX CSS for math rendering.
+   NOTE: `app/layout.tsx` ALSO imports 'katex/dist/katex.min.css', after this
+   file. That second copy is redundant, not load-order-significant: KaTeX's own
+   selectors (`.katex ...`, 0-1-0 and up) all out-specify Tailwind preflight's
+   element/universal resets, so nothing in KaTeX is reset by the `@tailwind
+   base` below — the frac/hline rules that only set `border-*-style` get their
+   width from KaTeX's INLINE styles, which beat preflight's `border-width: 0`
+   outright. The one live consequence of the duplicate is that any override
+   further down this file must out-specify KaTeX rather than merely follow
+   them: at equal specificity the second copy, being later in the cascade,
+   wins. The KaTeX overrides at the bottom of this file are written with that
+   in mind. */
 @import 'katex/dist/katex.min.css';
 
 @tailwind base;
@@ -424,4 +435,49 @@ select {
 .dark .katex .mrel,
 .dark .katex .mop {
   color: #e5e7eb;
+}
+
+/* Long display equations must scroll, not overflow the message bubble.
+   KaTeX sets `white-space: nowrap` on `.katex-display > .katex`, so a wide
+   derivation cannot wrap and, with no rule here, simply spilled out of the
+   bubble and under the sidebar (issue #121). Matches the established pattern
+   in this file for `pre` (line ~167) and `.prose table`.
+
+   `overflow-y: hidden` pins the vertical axis so the browser never offers a
+   second scrollbar for a one-line box; the padding is what keeps that from
+   clipping — a bare `overflow: auto` shaves the descenders of integrals,
+   fractions and subscripts, which sit below KaTeX's declared line box.
+
+   These properties are disjoint from the ones katex.min.css sets on
+   `.katex-display` (display / margin / text-align), so the duplicate import
+   noted at the top of this file cannot clobber them. */
+.katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-top: 0.25rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Selecting a rendered equation with the mouse used to copy THREE overlapping
+   transcriptions of it at once — the MathML text, the `<annotation
+   encoding="application/x-tex">` TeX, and the visual layer — concatenated into
+   the unreadable soup reported in issue #121 (denominator before numerator,
+   with a zero-width space). KaTeX emits both layers on purpose: `.katex-html`
+   is the one you SEE (and is `aria-hidden="true"`), while `.katex-mathml` is
+   clipped to 1px and exists for assistive tech.
+
+   Making the MathML layer unselectable leaves exactly one transcription in a
+   native copy, and it is the right one to keep: it is what the user actually
+   sees on screen, so a selection copy returns what was selected.
+
+   `user-select` affects POINTER SELECTION ONLY. It does not remove the element
+   from the accessibility tree and screen readers still read the MathML — this
+   is not an a11y regression, so please do not "fix" it by deleting the rule.
+   (The app's own copy handler, `lib/utils/app/richCopy.ts`, upgrades a
+   selection copy further by substituting the `$$...$$` TeX source; this rule
+   is the floor for surfaces and browsers that never reach it.) */
+.katex-mathml {
+  user-select: none;
+  -webkit-user-select: none;
 }

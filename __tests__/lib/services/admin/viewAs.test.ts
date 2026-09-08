@@ -10,6 +10,7 @@ import {
   normalizeViewAsOverrides,
 } from '@/lib/services/admin/viewAsTypes';
 
+import { createHmac } from 'node:crypto';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockEnv = vi.hoisted(() => ({
@@ -60,6 +61,33 @@ describe('view-as cookie', () => {
     });
   });
 
+  it('round-trips limitDelegationIds and rejects a malformed id on decode', () => {
+    const value = encodeViewAsCookie('oid-1', {
+      adminRole: 'local',
+      limitDelegationIds: ['del-0123456789ab'],
+    })!;
+    expect(decodeViewAsCookie(value, 'oid-1')).toEqual({
+      adminRole: 'local',
+      limitDelegationIds: ['del-0123456789ab'],
+    });
+
+    // A payload carrying an id outside /^del-[0-9a-f]{12}$/ fails the strict
+    // schema on decode → null, exactly like any other tampered field.
+    process.env.AUTH_SECRET = 'test-secret';
+    const forgedPayload = Buffer.from(
+      JSON.stringify({
+        sub: 'oid-1',
+        exp: 4102444800,
+        overrides: { adminRole: 'local', limitDelegationIds: ['bad-id'] },
+      }),
+    ).toString('base64url');
+    // Sign it properly so only the schema can reject it.
+    const sig = createHmac('sha256', 'test-secret')
+      .update(forgedPayload)
+      .digest('base64url');
+    expect(decodeViewAsCookie(`${forgedPayload}.${sig}`, 'oid-1')).toBeNull();
+  });
+
   it('is unavailable without an auth secret', () => {
     delete process.env.AUTH_SECRET;
     delete process.env.NEXTAUTH_SECRET;
@@ -80,6 +108,38 @@ describe('view-as cookie', () => {
 });
 
 describe('normalizeViewAsOverrides', () => {
+  it('keeps limitDelegationIds ONLY under adminRole "local", trimmed and deduped', () => {
+    // Design §6d: the ids ride alongside localAdminKeys and obey the same
+    // role rule — under 'none' or 'global' they must not reach the cookie.
+    expect(
+      normalizeViewAsOverrides({
+        adminRole: 'local',
+        limitDelegationIds: [
+          ' del-0123456789ab ',
+          'del-0123456789ab',
+          'del-abcdef012345',
+        ],
+      }),
+    ).toEqual({
+      adminRole: 'local',
+      limitDelegationIds: ['del-0123456789ab', 'del-abcdef012345'],
+    });
+    expect(
+      normalizeViewAsOverrides({
+        adminRole: 'none',
+        limitDelegationIds: ['del-0123456789ab'],
+      }),
+    ).toEqual({ adminRole: 'none' });
+    expect(
+      isViewAsEmpty(
+        normalizeViewAsOverrides({
+          adminRole: 'global',
+          limitDelegationIds: ['del-0123456789ab'],
+        }),
+      ),
+    ).toBe(true);
+  });
+
   it('drops blanks, "global", and keys that belong to another role', () => {
     const out = normalizeViewAsOverrides({
       adminRole: 'global',

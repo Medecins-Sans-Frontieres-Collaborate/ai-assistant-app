@@ -6,6 +6,7 @@ import {
   IconPlugConnected,
   IconRobot,
   IconRoute,
+  IconShieldLock,
   IconUsersGroup,
 } from '@tabler/icons-react';
 import { ComponentType } from 'react';
@@ -100,6 +101,14 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     group: 'administration',
     labelKey: 'agentAccess.localAdminsTab',
     descriptionKey: 'admin.areaDescription.localAdmins',
+  },
+  'global-admins': {
+    id: 'global-admins',
+    href: '/admin/global-admins',
+    icon: IconShieldLock,
+    group: 'administration',
+    labelKey: 'admin.area.globalAdmins',
+    descriptionKey: 'admin.areaDescription.globalAdmins',
   },
   'view-as': {
     id: 'view-as',

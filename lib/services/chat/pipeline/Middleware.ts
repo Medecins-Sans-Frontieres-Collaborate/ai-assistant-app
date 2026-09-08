@@ -29,6 +29,7 @@ import { resetAt } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
 import {
   ResolvedLimit,
+  counterCellName,
   isBlocked,
   resolveLimit,
 } from '@/lib/services/limits/resolver';
@@ -1563,19 +1564,6 @@ export async function createLimitsMiddleware(
     );
     return {};
   }
-}
-
-/**
- * The counter cell a resolved limit debits. Per-model limits are counted
- * separately per model id and per series (`model:gpt-5.2.requests`,
- * `family:gpt.requests`) so a family cap can act as an envelope over its
- * members; everything else uses the bare limit key.
- */
-function counterCellName(cell: ResolvedLimit): string {
-  const suffix = cell.limitKey.split('.').pop();
-  if (cell.modelId) return `model:${cell.modelId.toLowerCase()}.${suffix}`;
-  if (cell.series) return `family:${cell.series.toLowerCase()}.${suffix}`;
-  return cell.limitKey;
 }
 
 function isSearchActive(searchMode: SearchMode | undefined): boolean {

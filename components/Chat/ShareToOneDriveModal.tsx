@@ -31,6 +31,7 @@ import {
   renderShareMarkdown,
 } from '@/lib/utils/app/share/shareContent';
 import { markdownToHtml } from '@/lib/utils/shared/document/formatConverter';
+import { normalizeMathDelimiters } from '@/lib/utils/shared/markdown/normalizeMath';
 
 import { Conversation, Message } from '@/types/chat';
 
@@ -192,10 +193,25 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
         return;
       }
 
-      const markdown = renderShareMarkdown(title, messages, {
-        user: t('roleUser'),
-        assistant: t('roleAssistant'),
-      });
+      // Normalized before BOTH arguments so the .docx and the markdown fallback
+      // carry the same delimiters — a shared document must not disagree with
+      // the conversation it was shared from (issue #121). Idempotent.
+      //
+      // This deliberately covers the USER's messages too, unlike the screen
+      // (UserMessage renders a user's own text un-normalized). The export
+      // choke point, `markdownToHtml`, normalizes the whole document
+      // internally and promises parity with the screen renderer for every
+      // math region, so the .docx would carry normalized user text whatever
+      // is done here; normalizing only assistant content would merely make the
+      // markdown fallback disagree with the .docx for user messages. Honouring
+      // the screen's per-author policy in exports would need a per-role seam
+      // through markdownToHtml, which is a separate decision.
+      const markdown = normalizeMathDelimiters(
+        renderShareMarkdown(title, messages, {
+          user: t('roleUser'),
+          assistant: t('roleAssistant'),
+        }),
+      );
       const blob = await buildBlob('docx', markdownToHtml(markdown), markdown);
       // The document heading keeps the title as typed; only the FILE name
       // needs OneDrive's character rules applied.

@@ -570,10 +570,18 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
   };
 
   /**
-   * A prompt-agent mutation touches every surface that lists agents: the
-   * admin list itself, the merged rows (rules + /api/agents discovery), the
-   * user-facing picker (['foundry-agents']), and — because creates by local
-   * admins auto-delegate — the config map and the admin's own /me status.
+   * An admin agent mutation — prompt personas here, plus the M365 and org RAG
+   * sections, which both route their saves through this — touches every
+   * surface that lists agents: the admin list itself, the merged rows (rules
+   * + /api/agents discovery), the user-facing picker, and — because creates
+   * by local admins auto-delegate — the config map and the admin's own /me
+   * status.
+   *
+   * The picker reads from two keys since the discovery split
+   * (docs/AGENTS_DISCOVERY_SPLIT_PLAN.md): prompt / M365 / org RAG agents come
+   * from ['app-agents'] (/api/agents) and Foundry rows from ['foundry-agents']
+   * (/api/agents/foundry). Only the former carries what this panel edits, so
+   * dropping it left the admin's own picker stale until a full page reload.
    */
   const invalidatePromptAgentData = async () => {
     await Promise.all([
@@ -584,6 +592,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
       queryClient.invalidateQueries({
         queryKey: ['agent-access-admin-agents'],
       }),
+      queryClient.invalidateQueries({ queryKey: ['app-agents'] }),
       queryClient.invalidateQueries({ queryKey: ['foundry-agents'] }),
       queryClient.invalidateQueries({ queryKey: ['agent-access-config'] }),
       queryClient.invalidateQueries({ queryKey: ['agent-access-me'] }),

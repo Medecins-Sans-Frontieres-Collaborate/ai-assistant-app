@@ -17,6 +17,7 @@ import {
   ADMIN_FIELD,
   ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
+import { CostHint } from '@/components/Limits/CostHint';
 import { LimitValueInput } from '@/components/Limits/LimitValueInput';
 import { seedValueFor } from '@/components/Limits/limitGroups';
 import { EntryDraft, draftKey, parseDraftKey } from '@/components/Limits/types';
@@ -107,22 +108,34 @@ export const ScopedLimitRows: FC<ScopedLimitRowsProps> = ({
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-1.5">
-              <LimitValueInput
+            <div className="flex flex-col items-end gap-1">
+              <div className="flex items-center gap-1.5">
+                <LimitValueInput
+                  def={def}
+                  value={draft[key]}
+                  onChange={(value) => onChange(key, value)}
+                  disabled={disabled}
+                />
+                <button
+                  type="button"
+                  className={ADMIN_BTN_ICON_DANGER}
+                  onClick={() => onChange(key, undefined)}
+                  disabled={disabled}
+                  aria-label={t('removeScopedLimit')}
+                >
+                  <IconTrash size={16} />
+                </button>
+              </div>
+              {/* Cost annotation (limitsCostInsights): the qualifier's own
+                  price — a model's request, a family's min–max — or "no
+                  price data"; nothing for model.allowed or blocked cells. */}
+              <CostHint
                 def={def}
                 value={draft[key]}
-                onChange={(value) => onChange(key, value)}
-                disabled={disabled}
+                modelId={modelId}
+                series={series}
+                draft={draft}
               />
-              <button
-                type="button"
-                className={ADMIN_BTN_ICON_DANGER}
-                onClick={() => onChange(key, undefined)}
-                disabled={disabled}
-                aria-label={t('removeScopedLimit')}
-              >
-                <IconTrash size={16} />
-              </button>
             </div>
           </div>
         );

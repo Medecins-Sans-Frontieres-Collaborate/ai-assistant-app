@@ -81,6 +81,30 @@ describe('/api/admin/view-as', () => {
     expect(cookie?.value).toMatch(/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/);
   });
 
+  it('PUT accepts limitDelegationIds under "local" and rejects malformed ids', async () => {
+    // The strict schema is the only thing standing between a typo and a
+    // cookie that silently matches no delegation — refuse rather than store.
+    expect(
+      (await PUT(put({ adminRole: 'local', limitDelegationIds: ['bad-id'] })))
+        .status,
+    ).toBe(400);
+    expect(
+      (
+        await PUT(
+          put({ adminRole: 'local', limitDelegationIds: ['DEL-0123456789AB'] }),
+        )
+      ).status,
+    ).toBe(400);
+
+    const response = await PUT(
+      put({ adminRole: 'local', limitDelegationIds: ['del-0123456789ab'] }),
+    );
+    expect(response.status).toBe(200);
+    expect(response.cookies.get(VIEW_AS_COOKIE)?.value).toMatch(
+      /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/,
+    );
+  });
+
   it('DELETE clears the cookie', async () => {
     const response = await DELETE();
     expect(response.status).toBe(200);

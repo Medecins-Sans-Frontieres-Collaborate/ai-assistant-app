@@ -33,6 +33,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useForeignConversationImport } from '@/client/hooks/conversation/useForeignConversationImport';
 import { useNewConversation } from '@/client/hooks/conversation/useNewConversation';
 import { useAgentBrowserAvailability } from '@/client/hooks/settings/useAvailableAgents';
 import { useSettings } from '@/client/hooks/settings/useSettings';
@@ -54,6 +55,7 @@ import {
   readFolderFile,
   validateAndPrepareFolderImport,
 } from '@/lib/utils/app/export/folderExport';
+import { isZipArchive } from '@/lib/utils/app/export/foreignImport/detect';
 import { usePlatformModifier } from '@/lib/utils/shared/platform';
 
 import { Conversation } from '@/types/chat';
@@ -67,6 +69,7 @@ import { SidebarHeader } from './components/SidebarHeader';
 import { SidebarResizeHandle } from './components/SidebarResizeHandle';
 import { AgentBrowserModal } from '@/components/Agents/AgentBrowserModal';
 import ShareToOneDriveModal from '@/components/Chat/ShareToOneDriveModal';
+import { ForeignConversationImportModal } from '@/components/Import/ForeignConversationImportModal';
 import { CustomizationsModal } from '@/components/QuickActions/CustomizationsModal';
 import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
@@ -129,6 +132,8 @@ export const Sidebar = memo(function Sidebar() {
     isLoaded,
   } = useConversations();
   const { defaultModelId, models, temperature, systemPrompt } = useSettings();
+  // ChatGPT / Claude exports: recognised after our own formats, picker-driven.
+  const foreignImport = useForeignConversationImport();
 
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [shareConversationTarget, setShareConversationTarget] =
@@ -459,6 +464,13 @@ export const Sidebar = memo(function Sidebar() {
     if (!file) return;
 
     try {
+      // Third-party exports arrive zipped; we don't unpack archives. Point
+      // the user at the conversations.json inside instead of failing on parse.
+      if (await isZipArchive(file)) {
+        toast.error(t('conversationImport.zipRejected'), { duration: 8000 });
+        return;
+      }
+
       // Read the file content
       const fileContent = await file.text();
       const data = JSON.parse(fileContent);
@@ -502,7 +514,7 @@ export const Sidebar = memo(function Sidebar() {
         // Add the conversation to the store
         addConversation(result.conversation);
         toast.success(t('Conversation imported successfully'));
-      } else {
+      } else if (!foreignImport.offer(data)) {
         toast.error(t('Unrecognized file format'));
       }
     } catch (error) {
@@ -1155,6 +1167,15 @@ export const Sidebar = memo(function Sidebar() {
       <CustomizationsModal
         isOpen={isCustomizationsOpen}
         onClose={() => setIsCustomizationsOpen(false)}
+      />
+
+      {/* Picker for ChatGPT / Claude exports dropped on "Import conversation" */}
+      <ForeignConversationImportModal
+        isOpen={foreignImport.pending !== null}
+        detection={foreignImport.pending}
+        existingIds={foreignImport.existingIds}
+        onClose={foreignImport.close}
+        onImport={foreignImport.commit}
       />
 
       {/* Agent browser — self-gating on uiStore.agentBrowserMode */}

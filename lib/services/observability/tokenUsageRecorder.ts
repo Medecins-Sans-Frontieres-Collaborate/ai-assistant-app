@@ -3,7 +3,8 @@
  *
  * ONE place that turns real provider token counts into (a) the authoritative
  * `TokenUsage` Azure Monitor event with its emissions estimate, (b) the OTel
- * counters, and (c) the soft token-quota debit — so every execution path
+ * counters plus the `tokens.cost` list-price estimate, and (c) the soft
+ * token-quota debit — so every execution path
  * (chat.completions, Responses API, Anthropic, MCP tool-loop rounds AND the
  * Foundry agent path, which historically recorded nothing) produces identical
  * rows.
@@ -18,6 +19,10 @@ import { getAzureMonitorLogger } from '@/lib/services/observability/AzureMonitor
 import { MetricsService } from '@/lib/services/observability/MetricsService';
 
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
+import {
+  estimateRequestCost,
+  findPricing,
+} from '@/lib/utils/shared/costEstimator';
 import { estimateCO2Grams } from '@/lib/utils/shared/emissions';
 
 import { RequestTelemetry } from '@/lib/types/logging';
@@ -29,6 +34,41 @@ export interface RecordTokenUsageOptions {
    * (docs/LIMITS.md). Default true — every model call a user triggers counts.
    */
   debit?: boolean;
+}
+
+/**
+ * Upper-bound list-price USD for this call from the SERVED model's catalog
+ * pricing and the real token counts (docs/LIMITS_COST_INSIGHTS_DESIGN.md §4d):
+ * no request profile, output multiplier 1 (the counts already include any
+ * reasoning tokens the provider billed as output), Global Standard rate, no
+ * cached share (the app captures no cached-token telemetry). `undefined` —
+ * never $0 — when the model is unpriceable: agent wrappers (which carry a
+ * base model's pricing by accident), BYO sources billed to the user's own
+ * account, local runtimes, and catalog entries without a price.
+ *
+ * The served config IS the live list handed to `findPricing`: it is the
+ * object the request actually ran against, and `usage.modelId` may be a
+ * provider-reported name the static registry does not know. Never throws —
+ * a provider reporting a malformed count must not cost the telemetry row.
+ */
+export function estimatedCostUsdFor(
+  usage: Pick<TokenUsageMetadata, 'promptTokens' | 'completionTokens'>,
+  servedConfig: OpenAIModel,
+): number | undefined {
+  try {
+    const lookup = findPricing(servedConfig.id, [servedConfig]);
+    if ('excluded' in lookup) return undefined;
+    return estimateRequestCost(lookup.pricing, {
+      promptTokens: usage.promptTokens,
+      completionTokens: usage.completionTokens,
+    }).total;
+  } catch (error) {
+    console.warn(
+      '[tokenUsageRecorder] Cost estimate skipped:',
+      error instanceof Error ? error.message : error,
+    );
+    return undefined;
+  }
 }
 
 export function recordTokenUsage(
@@ -64,11 +104,13 @@ export function recordTokenUsage(
       streamed,
       telemetry,
     });
+    const estimatedCostUsd = estimatedCostUsdFor(usage, servedConfig);
     MetricsService.recordTokenUsage(
       {
         prompt: usage.promptTokens,
         completion: usage.completionTokens,
         total: usage.totalTokens,
+        ...(estimatedCostUsd !== undefined ? { estimatedCostUsd } : {}),
       },
       {
         user,

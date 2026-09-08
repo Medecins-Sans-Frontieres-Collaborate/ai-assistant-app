@@ -3,13 +3,24 @@ import React from 'react';
 
 import { LimitEntry } from '@/lib/services/limits/types';
 
-import { GlobalDefaultsSection } from '@/components/Limits/GlobalDefaultsSection';
+import { OpenAIModel } from '@/types/openai';
 
+import { GlobalDefaultsSection } from '@/components/Limits/GlobalDefaultsSection';
+import { LimitsCostProvider } from '@/components/Limits/LimitsCostContext';
+
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
+  useLocale: () => 'en',
+}));
+
+/** Flags default to none — the OFF path every pre-existing case runs on. */
+const mockFlags: Record<string, unknown> = {};
+vi.mock('launchdarkly-react-client-sdk', () => ({
+  useFlags: () => mockFlags,
 }));
 
 function renderSection(entries: LimitEntry[]) {
@@ -137,5 +148,79 @@ describe('GlobalDefaultsSection', () => {
     for (const select of within(section).getAllByLabelText('valueModeLabel')) {
       expect(select).not.toBeDisabled();
     }
+  });
+});
+
+/**
+ * Cost insights (docs/LIMITS_COST_INSIGHTS_DESIGN.md §4a) on the defaults
+ * tab: with the flag undefined nothing cost-related renders anywhere in the
+ * section (the OFF path every case above already exercises); with
+ * `limitsCostInsights` on and a provider, the hint appears for the keys that
+ * price (chat.messagesPerDay, chat.tokensPerDay, model.requests) and NOT for
+ * feature counters, booleans, model.allowed, or blocked rows.
+ */
+describe('GlobalDefaultsSection — cost insights', () => {
+  const PRICED = {
+    id: 'test-priced',
+    name: 'test-priced',
+    maxLength: 0,
+    tokenLimit: 0,
+    isDisabled: false,
+    pricing: { inputPer1M: 10, outputPer1M: 20 },
+  } as OpenAIModel;
+
+  const ENTRIES: LimitEntry[] = [
+    { limitKey: 'chat.messagesPerDay', value: 10, ceiling: false },
+    { limitKey: 'chat.tokensPerDay', value: 100_000, ceiling: false },
+    { limitKey: 'model.requests', value: 20, ceiling: false },
+    { limitKey: 'feature.tts.charactersPerDay', value: 5000, ceiling: false },
+    { limitKey: 'feature.webSearch.enabled', value: true, ceiling: false },
+    { limitKey: 'chat.tokensPerMonth', value: 0, ceiling: false },
+  ];
+
+  beforeEach(() => {
+    delete mockFlags.limitsCostInsights;
+    useSettingsStore.setState({ models: [PRICED] });
+  });
+
+  const hintsIn = (groupKey: string) =>
+    within(groupSection(groupKey)).queryAllByTestId('limits-cost-hint');
+
+  it('renders no cost copy when the flag is undefined, provider or not', () => {
+    render(
+      <LimitsCostProvider>
+        <GlobalDefaultsSection entries={ENTRIES} onChange={vi.fn()} />
+      </LimitsCostProvider>,
+    );
+    expect(screen.queryAllByTestId('limits-cost-hint')).toHaveLength(0);
+    expect(screen.queryByText(/^cost\./)).not.toBeInTheDocument();
+  });
+
+  it('annotates only the rows that price when the flag is on', () => {
+    mockFlags.limitsCostInsights = true;
+    render(
+      <LimitsCostProvider>
+        <GlobalDefaultsSection entries={ENTRIES} onChange={vi.fn()} />
+      </LimitsCostProvider>,
+    );
+    // chat: messagesPerDay + tokensPerDay priced; tokensPerMonth blocked → not.
+    expect(hintsIn('group.chat').map((el) => el.textContent)).toEqual([
+      'cost.upToPriciest',
+      'cost.upToTokens',
+    ]);
+    // models: model.requests priced; model.allowed (unset boolean) → not.
+    expect(hintsIn('group.models').map((el) => el.textContent)).toEqual([
+      'cost.upToPriciest',
+    ]);
+    // Feature counters and booleans never price.
+    expect(hintsIn('group.readAloud')).toHaveLength(0);
+    expect(hintsIn('group.webSearch')).toHaveLength(0);
+    expect(screen.getAllByTestId('limits-cost-hint')).toHaveLength(3);
+  });
+
+  it('renders nothing for a priced row without a provider', () => {
+    mockFlags.limitsCostInsights = true;
+    render(<GlobalDefaultsSection entries={ENTRIES} onChange={vi.fn()} />);
+    expect(screen.queryAllByTestId('limits-cost-hint')).toHaveLength(0);
   });
 });

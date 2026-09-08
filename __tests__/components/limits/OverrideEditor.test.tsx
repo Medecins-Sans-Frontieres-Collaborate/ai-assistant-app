@@ -3,13 +3,28 @@ import React from 'react';
 
 import { LimitEntry, LimitOverride } from '@/lib/services/limits/types';
 
+import { OpenAIModel } from '@/types/openai';
+
+import { LimitsCostProvider } from '@/components/Limits/LimitsCostContext';
 import { OverrideEditor } from '@/components/Limits/OverrideEditor';
+import type { TargetVerdict } from '@/components/Limits/jurisdiction';
 
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+/** Key echo; an `amount` value (cost copy only) is appended as `key:amount`. */
 vi.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations:
+    () => (key: string, params?: Record<string, string | number>) =>
+      params && 'amount' in params ? `${key}:${params.amount}` : key,
+  useLocale: () => 'en',
+}));
+
+/** Flags default to none — the OFF path every pre-existing case runs on. */
+const mockFlags: Record<string, unknown> = {};
+vi.mock('launchdarkly-react-client-sdk', () => ({
+  useFlags: () => mockFlags,
 }));
 
 function makeOverride(overrides: Partial<LimitOverride> = {}): LimitOverride {
@@ -37,6 +52,11 @@ function renderEditor(
   extraProps: {
     globalDefaults?: LimitEntry[];
     defaultExpanded?: boolean;
+    variant?: 'global' | 'scoped';
+    appliesTo?: string;
+    verdicts?: TargetVerdict[];
+    rejectedTargets?: string[];
+    delegationOptions?: Array<{ id: string; label: string }>;
   } = {},
 ) {
   const onChange = vi.fn();
@@ -321,5 +341,355 @@ describe('OverrideEditor', () => {
       const next: LimitOverride = onChange.mock.calls[0][0];
       expect(next.priority).toBe(250);
     });
+  });
+
+  describe('scoped variant (design §6b)', () => {
+    it('hides the priority field and hint', () => {
+      renderEditor(makeOverride(), { variant: 'scoped' });
+      expect(screen.queryByLabelText('priorityLabel')).not.toBeInTheDocument();
+      expect(screen.queryByText('priorityHint')).not.toBeInTheDocument();
+      // Everything else is still editable.
+      expect(screen.getByLabelText('overrideLabelLabel')).toBeInTheDocument();
+    });
+
+    it('shows the applies-to line collapsed and expanded', () => {
+      renderEditor(makeOverride(), {
+        appliesTo: 'applies-line',
+        defaultExpanded: false,
+      });
+      expect(screen.getByText('applies-line')).toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'expandOverride' }));
+      expect(screen.getByText('applies-line')).toBeInTheDocument();
+    });
+  });
+
+  describe('verdicts (design §4)', () => {
+    it('highlights out-of-scope targets on the chip itself and with a header chip', () => {
+      renderEditor(
+        makeOverride({
+          scope: 'user',
+          targets: ['in@ocp.msf.org', 'out@paris.msf.org'],
+        }),
+        {
+          verdicts: [
+            {
+              target: 'in@ocp.msf.org',
+              status: 'in-scope',
+              reason: 'domain-match',
+            },
+            {
+              target: 'out@paris.msf.org',
+              status: 'out-of-scope',
+              reason: 'not-in-domains',
+            },
+          ],
+        },
+      );
+      expect(screen.getByText('out@paris.msf.org')).toHaveAttribute(
+        'title',
+        'verdictOutOfScopeChip',
+      );
+      expect(screen.getByText('out@paris.msf.org').className).toContain(
+        'ring-red-500',
+      );
+      expect(screen.getByText('in@ocp.msf.org')).not.toHaveAttribute('title');
+      expect(screen.getByText('verdictOutOfScopeChip')).toBeInTheDocument();
+      expect(screen.getByText('verdictOutOfScope')).toBeInTheDocument();
+      expect(screen.queryByText('verdictCrossAxis')).not.toBeInTheDocument();
+    });
+
+    it('adds the cross-axis note for an undecidable target', () => {
+      renderEditor(
+        makeOverride({ scope: 'attribute', targets: ['department:health'] }),
+        {
+          verdicts: [
+            {
+              target: 'department:health',
+              status: 'undecidable',
+              reason: 'cross-axis',
+            },
+          ],
+        },
+      );
+      expect(screen.getByText('verdictCrossAxis')).toBeInTheDocument();
+      expect(screen.queryByText('verdictOutOfScope')).not.toBeInTheDocument();
+    });
+
+    it('highlights targets the SERVER rejected even when the client verdict is silent', () => {
+      renderEditor(
+        makeOverride({ scope: 'user', targets: ['x@ocp.msf.org'] }),
+        {
+          verdicts: [
+            {
+              target: 'x@ocp.msf.org',
+              status: 'in-scope',
+              reason: 'domain-match',
+            },
+          ],
+          rejectedTargets: ['X@OCP.MSF.ORG'],
+        },
+      );
+      expect(screen.getByText('x@ocp.msf.org')).toHaveAttribute(
+        'title',
+        'verdictOutOfScopeChip',
+      );
+    });
+  });
+
+  /**
+   * Design §3c / docs/LIMITS.md: a global admin pins a cell against scoped
+   * lifting by ticking Hard ceiling on a GLOBAL-TIER override ("OCP capped at
+   * 100 (domain, ceiling), except alice at 500 (user, ceiling)"). The resolver
+   * honours it, so the editor must be able to author it — and must not offer
+   * it where the server would refuse or normalize it away (scoped writes,
+   * `delegationId` records).
+   */
+  describe('override-level ceiling (design §3c)', () => {
+    it('offers the Hard ceiling toggle on every configured row of a global-tier override', () => {
+      renderEditor();
+      // Two configured entries → two toggles, reflecting the stored flags.
+      const toggles = screen.getAllByLabelText('hardCeilingToggle');
+      expect(toggles).toHaveLength(2);
+      expect(toggles[0]).toBeChecked(); // chat.messagesPerDay: ceiling true
+      expect(toggles[1]).not.toBeChecked(); // tts: ceiling false
+      expect(screen.getByText('overrideCeilingHint')).toBeInTheDocument();
+    });
+
+    it('ticking it stores ceiling:true on exactly that entry and preserves the rest', () => {
+      const onChange = renderEditor();
+      const toggles = screen.getAllByLabelText('hardCeilingToggle');
+      fireEvent.click(toggles[1]);
+
+      expect(onChange).toHaveBeenCalledTimes(1);
+      const next: LimitOverride = onChange.mock.calls[0][0];
+      expect(next.entries).toEqual([
+        { limitKey: 'chat.messagesPerDay', value: 100, ceiling: true },
+        {
+          limitKey: 'feature.tts.charactersPerDay',
+          value: 5000,
+          ceiling: true,
+        },
+      ]);
+      // Nothing else on the record moved.
+      expect(next.priority).toBe(0);
+      expect(next).not.toHaveProperty('delegationId');
+    });
+
+    it('unticking it clears only that entry', () => {
+      const onChange = renderEditor();
+      fireEvent.click(screen.getAllByLabelText('hardCeilingToggle')[0]);
+
+      const next: LimitOverride = onChange.mock.calls[0][0];
+      expect(
+        next.entries.find((e) => e.limitKey === 'chat.messagesPerDay')?.ceiling,
+      ).toBe(false);
+      expect(
+        next.entries.find((e) => e.limitKey === 'feature.tts.charactersPerDay')
+          ?.ceiling,
+      ).toBe(false);
+      expect(next.entries).toHaveLength(2);
+    });
+
+    it('never shows the control on a delegationId record, even in the global panel', () => {
+      renderEditor(makeOverride({ delegationId: 'del-0000000000aa' }), {
+        variant: 'global',
+        delegationOptions: [{ id: 'del-0000000000aa', label: 'OCP' }],
+      });
+      expect(screen.getAllByLabelText('valueModeLabel')).toHaveLength(2);
+      expect(
+        screen.queryByLabelText('hardCeilingToggle'),
+      ).not.toBeInTheDocument();
+      expect(screen.queryByText('overrideCeilingHint')).not.toBeInTheDocument();
+    });
+
+    it('never shows the control in the scoped variant', () => {
+      renderEditor(makeOverride(), { variant: 'scoped' });
+      expect(screen.getAllByLabelText('valueModeLabel')).toHaveLength(2);
+      expect(
+        screen.queryByLabelText('hardCeilingToggle'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('disappears the moment the override is handed to a delegation', () => {
+      // Controlled re-render: what assignDelegation emits is what the parent
+      // would pass back, so render the emitted record and check the control.
+      const onChange = renderEditor(makeOverride(), {
+        delegationOptions: [{ id: 'del-0000000000aa', label: 'OCP' }],
+      });
+      expect(screen.getAllByLabelText('hardCeilingToggle')).toHaveLength(2);
+      fireEvent.change(screen.getByLabelText('overrideDelegationLabel'), {
+        target: { value: 'del-0000000000aa' },
+      });
+      const next: LimitOverride = onChange.mock.calls[0][0];
+      expect(next.entries.every((e) => e.ceiling === false)).toBe(true);
+    });
+  });
+
+  describe('delegation assignment (global panel)', () => {
+    it('assigning a delegation forces priority 0 and clears ceilings', () => {
+      const onChange = renderEditor(makeOverride({ priority: 250 }), {
+        delegationOptions: [{ id: 'del-0000000000aa', label: 'OCP' }],
+      });
+      fireEvent.change(screen.getByLabelText('overrideDelegationLabel'), {
+        target: { value: 'del-0000000000aa' },
+      });
+      const next: LimitOverride = onChange.mock.calls[0][0];
+      expect(next.delegationId).toBe('del-0000000000aa');
+      expect(next.priority).toBe(0);
+      expect(next.entries.every((e) => e.ceiling === false)).toBe(true);
+    });
+
+    it('choosing none drops delegationId entirely', () => {
+      const onChange = renderEditor(
+        makeOverride({ delegationId: 'del-0000000000aa' }),
+        { delegationOptions: [{ id: 'del-0000000000aa', label: 'OCP' }] },
+      );
+      fireEvent.change(screen.getByLabelText('overrideDelegationLabel'), {
+        target: { value: '' },
+      });
+      const next: LimitOverride = onChange.mock.calls[0][0];
+      expect(next).not.toHaveProperty('delegationId');
+    });
+
+    it('renders no delegation select when no options are supplied', () => {
+      renderEditor();
+      expect(
+        screen.queryByLabelText('overrideDelegationLabel'),
+      ).not.toBeInTheDocument();
+    });
+  });
+});
+
+/**
+ * Cost insights (docs/LIMITS_COST_INSIGHTS_DESIGN.md §4a) in the override
+ * editor: the allowed-model set behind "up to ≈ $X at the priciest allowed
+ * model" consults the override's OWN draft first and the `globalDefaults`
+ * prop second (the same prop the gate-off warning already uses); the scoped
+ * variant never sees defaults and says "as far as this override can see".
+ * With the flag undefined nothing renders (every case above).
+ */
+describe('OverrideEditor — cost insights', () => {
+  const fixture = (id: string, inputPer1M: number, outputPer1M: number) =>
+    ({
+      id,
+      name: id,
+      maxLength: 0,
+      tokenLimit: 0,
+      isDisabled: false,
+      pricing: { inputPer1M, outputPer1M },
+    }) as OpenAIModel;
+  /** $0.02 and $0.20 per typical request. */
+  const DEAR = fixture('test-dear', 10, 20);
+  const OTHER = fixture('test-other', 100, 200);
+
+  const blockOther: LimitEntry[] = [
+    {
+      limitKey: 'model.allowed',
+      modelId: 'test-other',
+      value: false,
+      ceiling: false,
+    },
+  ];
+
+  function renderWithCost(
+    override: LimitOverride,
+    extraProps: {
+      globalDefaults?: LimitEntry[];
+      variant?: 'global' | 'scoped';
+    } = {},
+  ) {
+    render(
+      <LimitsCostProvider>
+        <OverrideEditor
+          override={override}
+          onChange={vi.fn()}
+          onRemove={vi.fn()}
+          {...extraProps}
+        />
+      </LimitsCostProvider>,
+    );
+  }
+
+  const hints = () =>
+    screen.queryAllByTestId('limits-cost-hint').map((el) => el.textContent);
+
+  beforeEach(() => {
+    delete mockFlags.limitsCostInsights;
+    useSettingsStore.setState({ models: [DEAR, OTHER] });
+  });
+
+  it('renders no cost copy when the flag is undefined', () => {
+    renderWithCost(makeOverride(), { globalDefaults: blockOther });
+    expect(hints()).toEqual([]);
+  });
+
+  it('bounds a cap at the priciest model the global defaults still allow', () => {
+    mockFlags.limitsCostInsights = true;
+    // chat.messagesPerDay = 100: $20.00 at OTHER, $2.00 once defaults block it.
+    renderWithCost(makeOverride());
+    expect(hints()).toEqual(['cost.upToPriciest:$20.00']);
+  });
+
+  it('threads globalDefaults into the allowed set', () => {
+    mockFlags.limitsCostInsights = true;
+    renderWithCost(makeOverride(), { globalDefaults: blockOther });
+    expect(hints()).toEqual(['cost.upToPriciest:$2.00']);
+  });
+
+  it("lets the override's own draft re-allow what the defaults block", () => {
+    mockFlags.limitsCostInsights = true;
+    renderWithCost(
+      makeOverride({
+        entries: [
+          { limitKey: 'chat.messagesPerDay', value: 100, ceiling: false },
+          {
+            limitKey: 'model.allowed',
+            modelId: 'test-other',
+            value: true,
+            ceiling: false,
+          },
+        ],
+      }),
+      { globalDefaults: blockOther },
+    );
+    expect(hints()).toEqual(['cost.upToPriciest:$20.00']);
+  });
+
+  it('says "as far as this override can see" in the scoped variant', () => {
+    mockFlags.limitsCostInsights = true;
+    renderWithCost(makeOverride(), { variant: 'scoped' });
+    expect(hints()).toEqual([
+      'cost.upToPriciest:$20.00 · cost.scopedVisibility',
+    ]);
+  });
+
+  it('still shows the gate-off warning on a dimmed row with insights on', () => {
+    // No "and no cost hint" claim here: the only rows OverrideEditor can dim
+    // belong to gated groups (webSearch / codeInterpreter / mcp), none of
+    // which holds a key that prices, so a hint assertion could never fail.
+    // LimitRow's defensive `!dimmed` guard is covered on a priceable key in
+    // CostHint.test.tsx ('renders nothing on a dimmed row').
+    mockFlags.limitsCostInsights = true;
+    renderWithCost(
+      makeOverride({
+        entries: [
+          {
+            limitKey: 'feature.webSearch.callsPerDay',
+            value: 10,
+            ceiling: false,
+          },
+        ],
+      }),
+      {
+        globalDefaults: [
+          {
+            limitKey: 'feature.webSearch.enabled',
+            value: false,
+            ceiling: false,
+          },
+        ],
+      },
+    );
+    expect(screen.getByText('overrideGateOffNote')).toBeInTheDocument();
   });
 });

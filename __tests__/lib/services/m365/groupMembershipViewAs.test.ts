@@ -4,6 +4,8 @@ import {
   clearGroupMembershipCache,
   getCachedGroupIdsForMail,
   getCachedGroupIdsForUser,
+  isGroupMembershipDegraded,
+  isGroupMembershipDegradedForUser,
   resolveUserGroupIds,
 } from '@/lib/services/m365/groupMembership';
 
@@ -49,6 +51,24 @@ describe('group membership under view-as', () => {
     expect(getCachedGroupIdsForMail('admin@example.com')).toEqual([
       'real-group',
     ]);
+  });
+
+  it('is never degraded, even over a failed real lookup', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    // Real lookup fails first, leaving a degraded entry in the real maps...
+    graphJson.mockRejectedValueOnce(new Error('graph down'));
+    await resolveUserGroupIds(req, { user: base } as never);
+    expect(isGroupMembershipDegradedForUser('oid-1')).toBe(true);
+
+    // ...then view-as supplies authoritative membership for the session.
+    await resolveUserGroupIds(req, {
+      user: {
+        ...base,
+        viewAs: { overrides: { groupIds: ['g-test'] }, actual: {} },
+      },
+    } as never);
+    expect(isGroupMembershipDegradedForUser('oid-1')).toBe(false);
+    expect(isGroupMembershipDegraded('admin@example.com')).toBe(false);
   });
 
   it('does not pollute the real cache while active', async () => {

@@ -5,8 +5,9 @@
  * operations: the check is read-only and blocks, this one only counts.
  *
  * ⚠ Known blind spots, which make these counters UNDER-report:
- *  - AIFoundryAgentHandler records no token usage at all, so every org-agent
- *    conversation is invisible here.
+ *  - Foundry agent runs are debited from the usage the Responses API reports
+ *    on `response.completed` (AIFoundryAgentHandler → recordTokenUsage); a
+ *    run that ends without that event records nothing.
  *  - Several auxiliary LLM routes (title, summarize, memories, tone, revise)
  *    construct their own client inline and never reach recordUsage. The
  *    `countAuxiliaryUsage` policy toggle is inert until they are wired.

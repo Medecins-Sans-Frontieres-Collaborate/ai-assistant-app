@@ -9,6 +9,10 @@ import {
 } from '@/client/hooks/useTypeaheadSuggestions';
 
 import {
+  ADMIN_CHIP_RING_DANGER,
+  ADMIN_CHIP_RING_WARN,
+} from '@/components/Admin/adminClasses';
+import {
   TypeaheadDropdown,
   typeaheadDropdownOpen,
 } from '@/components/UI/TypeaheadDropdown';
@@ -35,7 +39,22 @@ interface ChipListInputProps {
   suggest?: TypeaheadFetch;
   /** aria-label for the suggestion listbox (required when suggest is set). */
   suggestionsLabel?: string;
+  /**
+   * Optional per-chip emphasis: 'danger' rings the chip red (a target the
+   * server refused), 'warn' amber (a target that needs a second look).
+   * Undefined leaves the chip as it always was.
+   */
+  chipTone?: (value: string) => 'danger' | 'warn' | undefined;
+  /** Optional per-chip tooltip, typically the reason behind `chipTone`. */
+  chipTitle?: (value: string) => string | undefined;
 }
+
+// Sourced from the admin vocabulary so the light/dark pairing is guarded by
+// __tests__/design/adminSurfaceTokens.test.ts rather than paired by hand.
+const CHIP_TONE_CLASSES = {
+  danger: ADMIN_CHIP_RING_DANGER,
+  warn: ADMIN_CHIP_RING_WARN,
+} as const;
 
 /**
  * Chip-style input for short string lists (allowed domains / user emails).
@@ -56,6 +75,8 @@ export const ChipListInput: FC<ChipListInputProps> = ({
   disabled = false,
   suggest,
   suggestionsLabel,
+  chipTone,
+  chipTitle,
 }) => {
   const [draft, setDraft] = useState('');
   const listId = useId();
@@ -130,24 +151,30 @@ export const ChipListInput: FC<ChipListInputProps> = ({
         disabled ? 'opacity-50' : ''
       }`}
     >
-      {values.map((value) => (
-        <span
-          key={value}
-          className="flex items-center gap-1 rounded-full bg-gray-200 dark:bg-gray-700 px-2 py-0.5 text-xs text-black dark:text-white"
-        >
-          {value}
-          {!disabled && (
-            <button
-              type="button"
-              className="text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white"
-              onClick={() => onChange(values.filter((v) => v !== value))}
-              aria-label={`${removeLabel} ${value}`}
-            >
-              <IconX size={12} />
-            </button>
-          )}
-        </span>
-      ))}
+      {values.map((value) => {
+        const tone = chipTone?.(value);
+        return (
+          <span
+            key={value}
+            title={chipTitle?.(value)}
+            className={`flex items-center gap-1 rounded-full bg-gray-200 dark:bg-gray-700 px-2 py-0.5 text-xs text-black dark:text-white ${
+              tone ? CHIP_TONE_CLASSES[tone] : ''
+            }`}
+          >
+            {value}
+            {!disabled && (
+              <button
+                type="button"
+                className="text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white"
+                onClick={() => onChange(values.filter((v) => v !== value))}
+                aria-label={`${removeLabel} ${value}`}
+              >
+                <IconX size={12} />
+              </button>
+            )}
+          </span>
+        );
+      })}
       <input
         type="text"
         className="min-w-[140px] flex-1 border-none bg-transparent p-0.5 text-sm text-black outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500"

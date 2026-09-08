@@ -5,11 +5,13 @@ import {
   IconChevronDown,
   IconChevronRight,
 } from '@tabler/icons-react';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { Streamdown } from 'streamdown';
+import { normalizeMathDelimiters } from '@/lib/utils/shared/markdown/normalizeMath';
+
+import { MathStreamdown } from '@/components/Markdown/MathStreamdown';
 
 interface ThinkingBlockProps {
   thinking: string;
@@ -27,6 +29,17 @@ export const ThinkingBlock: FC<ThinkingBlockProps> = ({
   // expanding a finished block stays expanded.
   const [manualOverride, setManualOverride] = useState<boolean | null>(null);
   const isExpanded = manualOverride ?? !!isStreaming;
+
+  // Reasoning is model-authored and is the surface most likely to carry a
+  // derivation, so it gets the same render-time delimiter normalization as the
+  // answer. The raw `thinking` string is left untouched for storage/copy.
+  // The empty/undefined guard below runs after hooks, and callers do pass
+  // undefined here (a message with no reasoning at all), so this must tolerate
+  // it rather than assume the declared type.
+  const renderedThinking = useMemo(
+    () => (thinking ? normalizeMathDelimiters(thinking) : thinking),
+    [thinking],
+  );
 
   // While streaming, keep the live view pinned to the newest reasoning
   // (the body is height-capped so the block doesn't shove the page around).
@@ -81,13 +94,17 @@ export const ThinkingBlock: FC<ThinkingBlockProps> = ({
           }`}
         >
           <div className="prose dark:prose-invert prose-sm max-w-none text-gray-700 dark:text-gray-300">
-            <Streamdown
+            <MathStreamdown
               isAnimating={isStreaming}
+              // Live reasoning genuinely is a partial document; a finished
+              // block is not, and must not keep paying for Streamdown's
+              // incomplete-markdown completion.
+              mode={isStreaming ? 'streaming' : 'static'}
               controls={true}
               shikiTheme={['github-light', 'github-dark']}
             >
-              {thinking}
-            </Streamdown>
+              {renderedThinking}
+            </MathStreamdown>
           </div>
         </div>
       )}

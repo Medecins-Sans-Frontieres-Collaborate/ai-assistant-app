@@ -14,14 +14,81 @@
  */
 import { Session } from 'next-auth';
 
-import { getCachedGroupIdsForUser } from '@/lib/services/m365/groupMembership';
+import { setJurisdictionUnevaluableHook } from '@/lib/services/limits/resolver';
+import {
+  getCachedGroupIdsForUser,
+  isGroupMembershipDegradedForUser,
+} from '@/lib/services/m365/groupMembership';
 import {
   Principal,
   domainOfMail,
   normalizeMail,
 } from '@/lib/services/shared/principalMatching';
 
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+
 export type { Principal };
+
+// Server-side wiring for the resolver's §8 audit line (docs/
+// LIMITS_SCOPED_ADMINS_DESIGN.md): a group-anchored jurisdiction that fails
+// only because the principal's groups are empty AND membership is marked
+// degraded logs `[limits-audit] jurisdiction-unevaluable`. The resolver is
+// pure and client-importable, so it can neither import groupMembership.ts nor
+// the log sanitizer; it reports the structural fact and this hook decides.
+// This module is the server-only seam every limits route already passes
+// through to build a Principal, which makes it the natural registration point.
+// Both interpolated values are sanitized (CWE-117): the delegation id is
+// schema-validated but the oid comes off the session.
+//
+// Rate-limited per (delegation, user): the resolver reports the fact on
+// EVERY resolution pass, and enforcement.ts / /api/models call resolveLimit
+// once per key or per model, so an unthrottled hook would write one line per
+// cell — dozens per request — for the whole time membership stays degraded.
+// One line per window per pair is the audit signal; the window matches the
+// membership cache's negative TTL so a recovery is noticed promptly.
+//
+// Bounded like groupMembership.ts's caches (MAX_CACHE_ENTRIES there): an
+// entry is dead once its window has passed, so on overflow the expired ones
+// are swept first and only then, if a burst of live pairs really fills the
+// map, the oldest live entry goes — which at worst repeats one audit line.
+const AUDIT_SUPPRESS_MS = 60_000;
+const MAX_AUDIT_ENTRIES = 2000;
+const lastAudited = new Map<string, number>();
+
+/** Test seam: the suppression map otherwise leaks across cases. */
+export function __resetJurisdictionAuditForTests(): void {
+  lastAudited.clear();
+}
+
+/** Test seam: observes the bound without exposing the map. */
+export function __jurisdictionAuditSizeForTests(): number {
+  return lastAudited.size;
+}
+
+function pruneAudited(now: number): void {
+  if (lastAudited.size < MAX_AUDIT_ENTRIES) return;
+  for (const [key, at] of lastAudited) {
+    if (now - at >= AUDIT_SUPPRESS_MS) lastAudited.delete(key);
+  }
+  if (lastAudited.size >= MAX_AUDIT_ENTRIES) {
+    // Map iteration is insertion-ordered, so the first key is the oldest.
+    const oldest = lastAudited.keys().next().value;
+    if (oldest !== undefined) lastAudited.delete(oldest);
+  }
+}
+
+setJurisdictionUnevaluableHook(({ delegationId, userId }) => {
+  if (!isGroupMembershipDegradedForUser(userId)) return;
+  const key = `${delegationId}\u0000${userId}`;
+  const now = Date.now();
+  const last = lastAudited.get(key);
+  if (last !== undefined && now - last < AUDIT_SUPPRESS_MS) return;
+  pruneAudited(now);
+  lastAudited.set(key, now);
+  console.warn(
+    `[limits-audit] jurisdiction-unevaluable delegation=${sanitizeForLog(delegationId)} user=${sanitizeForLog(userId)} reason=group-membership-degraded`,
+  );
+});
 
 /** Attribute target prefixes, also used by the admin UI to build pickers. */
 export const ATTRIBUTE_PREFIXES = {

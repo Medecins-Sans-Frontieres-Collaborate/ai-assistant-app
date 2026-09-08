@@ -787,6 +787,45 @@ describe('AgentAccessPanel', () => {
     });
   });
 
+  it("invalidates the picker's ['app-agents'] query after a prompt-agent save", async () => {
+    // Prompt / M365 / org RAG agents are served by /api/agents (['app-agents'])
+    // since the discovery split; invalidating only ['foundry-agents'] left the
+    // admin's own picker stale until a reload.
+    const invalidateSpy = vi.spyOn(QueryClient.prototype, 'invalidateQueries');
+    try {
+      renderPanel();
+
+      fireEvent.click(await screen.findByText('Add agent'));
+      fireEvent.change(screen.getByPlaceholderText('e.g. Travel Advisor'), {
+        target: { value: 'Concierge' },
+      });
+      fireEvent.change(
+        screen.getByPlaceholderText(
+          'Instructions that define how this agent behaves',
+        ),
+        { target: { value: 'You are a concierge.' } },
+      );
+      fireEvent.change(screen.getByRole('combobox', { name: 'Model' }), {
+        target: { value: 'gpt-5.2' },
+      });
+      fireEvent.click(screen.getByText('Save'));
+
+      await waitFor(() => expect(agentPostCalls).toHaveLength(1));
+      await waitFor(() =>
+        expect(invalidateSpy).toHaveBeenCalledWith(
+          expect.objectContaining({ queryKey: ['app-agents'] }),
+        ),
+      );
+      // The Foundry half is invalidated too — a save must not narrow the
+      // refresh to one of the two picker queries.
+      expect(invalidateSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ queryKey: ['foundry-agents'] }),
+      );
+    } finally {
+      invalidateSpy.mockRestore();
+    }
+  });
+
   it('local admin with zero delegated keys still sees the Add agent button', async () => {
     meResponse = {
       isGlobalAdmin: false,

@@ -18,7 +18,7 @@
 import { searchM365Agent } from '@/lib/services/m365/agentIndexService';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 
-import { buildConversationContextSections } from '@/lib/utils/app/systemPrompt';
+import { buildAgentPromptSections } from '@/lib/utils/app/systemPrompt';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { Message, MessageType } from '@/types/chat';
@@ -163,7 +163,12 @@ export class M365AgentEnricher extends BasePipelineStage {
         ...(doc.quote ? { quote: doc.quote } : {}),
       }));
 
-      const conversationContext = buildConversationContextSections(
+      // The agent's prompt REPLACES the base prompt, taking the renderer
+      // contract (math/markdown/diagram rules) and the summary/memories
+      // sections with it. Re-append both, agent instructions first so an
+      // agent that overrides formatting still wins on substance
+      // (mirrors RAGEnricher).
+      const agentSections = buildAgentPromptSections(
         context.conversationSummary,
         context.memories,
       );
@@ -190,10 +195,9 @@ export class M365AgentEnricher extends BasePipelineStage {
       return {
         ...context,
         enrichedMessages,
-        systemPrompt:
-          agent.systemPrompt && conversationContext
-            ? `${agent.systemPrompt}\n\n${conversationContext}`
-            : agent.systemPrompt || context.systemPrompt,
+        systemPrompt: agent.systemPrompt
+          ? `${agent.systemPrompt}\n\n${agentSections}`
+          : context.systemPrompt,
         processedContent: {
           ...context.processedContent,
           metadata: {

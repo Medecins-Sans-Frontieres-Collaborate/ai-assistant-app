@@ -1,11 +1,13 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 
 import { useChat } from '@/client/hooks/chat/useChat';
+
+import { normalizeMathDelimiters } from '@/lib/utils/shared/markdown/normalizeMath';
 
 import {
   Conversation,
@@ -15,9 +17,12 @@ import {
 
 // Lazy: keeps Streamdown + Shiki + KaTeX out of the shell bundle until an
 // assistant message actually renders in the rail (same approach as
-// AssistantMessage in the chat surface).
+// AssistantMessage in the chat surface). MathStreamdown is imported rather
+// than Streamdown itself so the KaTeX-aware sanitize schema travels in the
+// same async chunk — importing the plugin list separately would pull
+// Streamdown back into the shell bundle.
 const Streamdown = dynamic(
-  () => import('streamdown').then((m) => m.Streamdown),
+  () => import('@/components/Markdown/MathStreamdown'),
   { ssr: false },
 );
 
@@ -72,9 +77,26 @@ export function WorkflowRailMessages({
     bottomRef.current?.scrollIntoView({ block: 'end' });
   }, [conversation.messages.length, streamingHere, streamingContent]);
 
-  const entries = conversation.messages
-    .map(entryText)
-    .filter((e) => e.role !== 'system' && e.text.trim().length > 0);
+  // Normalized once per message list rather than on every render: the rail
+  // re-renders on each streamed chunk, and re-walking every finished message
+  // for math delimiters each time is pure waste.
+  const entries = useMemo(
+    () =>
+      conversation.messages
+        .map(entryText)
+        .filter((e) => e.role !== 'system' && e.text.trim().length > 0)
+        .map((e) =>
+          e.role === 'assistant'
+            ? { ...e, text: normalizeMathDelimiters(e.text) }
+            : e,
+        ),
+    [conversation.messages],
+  );
+
+  const streamingMarkdown = useMemo(
+    () => (streamingContent ? normalizeMathDelimiters(streamingContent) : ''),
+    [streamingContent],
+  );
 
   if (entries.length === 0 && !streamingHere) {
     return (
@@ -100,14 +122,17 @@ export function WorkflowRailMessages({
             key={index}
             className="prose prose-sm max-w-none text-sm text-gray-800 dark:prose-invert dark:text-gray-100"
           >
-            <Streamdown>{entry.text}</Streamdown>
+            {/* Persisted entries are finished text: "static" skips block
+                splitting and incomplete-markdown completion, which is also
+                what keeps a multi-line `$$ … $$` in one piece. */}
+            <Streamdown mode="static">{entry.text}</Streamdown>
           </div>
         ),
       )}
       {streamingHere && (
         <div className="prose prose-sm max-w-none text-sm text-gray-800 dark:prose-invert dark:text-gray-100">
           {streamingContent ? (
-            <Streamdown>{streamingContent}</Streamdown>
+            <Streamdown mode="streaming">{streamingMarkdown}</Streamdown>
           ) : (
             <p className="animate-pulse text-gray-500 dark:text-gray-400">
               {t('shell.assistantThinking')}

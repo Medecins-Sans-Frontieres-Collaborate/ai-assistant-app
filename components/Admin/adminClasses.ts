@@ -60,7 +60,7 @@ export const ADMIN_BTN_RETRY =
 
 /** Icon-only destructive action (remove a row). */
 export const ADMIN_BTN_ICON_DANGER =
-  'rounded p-1 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-red-900/20 dark:hover:text-red-400';
+  'rounded p-1 text-gray-500 transition-colors hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50 dark:text-gray-400 dark:hover:bg-red-900/20 dark:hover:text-red-400';
 
 export const ADMIN_BANNER_WARN =
   'rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-300';
@@ -70,6 +70,20 @@ export const ADMIN_BANNER_ERROR =
 
 export const ADMIN_CHIP_DANGER =
   'rounded-full bg-red-100 px-2 py-0.5 text-xs text-red-800 dark:bg-red-900/30 dark:text-red-300';
+
+/** Amber chip — a warning that is not an error (narrowed target, overlap). */
+export const ADMIN_CHIP_WARN =
+  'rounded-full bg-amber-50 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-900/20 dark:text-amber-300';
+
+/**
+ * Per-chip emphasis RINGS for `ChipListInput` (components/AgentAccess), which
+ * the limits editors reuse for targets and admins: danger = a target the
+ * server refused, warn = one that needs a second look. Rings rather than
+ * fills because the chip keeps its neutral body; only the outline speaks.
+ */
+export const ADMIN_CHIP_RING_DANGER = 'ring-1 ring-red-500 dark:ring-red-400';
+
+export const ADMIN_CHIP_RING_WARN = 'ring-1 ring-amber-500 dark:ring-amber-400';
 
 /** Neutral chip — a qualifier badge, a scope marker. */
 export const ADMIN_CHIP_NEUTRAL =

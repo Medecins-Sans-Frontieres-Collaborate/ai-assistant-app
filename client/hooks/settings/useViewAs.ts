@@ -2,7 +2,10 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
+import {
+  apiErrorMessage,
+  unwrapApiData,
+} from '@/client/hooks/settings/useAgentAccessAdmin';
 
 import {
   ViewAsOverrides,
@@ -53,9 +56,7 @@ export function useViewAs() {
       });
       if (!response.ok) {
         const body = await response.json().catch(() => null);
-        throw new Error(
-          body?.details || body?.error || `Failed (${response.status})`,
-        );
+        throw new Error(apiErrorMessage(body, `Failed (${response.status})`));
       }
     },
     onSuccess: () => {
