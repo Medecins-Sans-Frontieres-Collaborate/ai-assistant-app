@@ -11,6 +11,7 @@ import {
   useAgentToolGates,
   useToolLimitGates,
 } from '@/client/hooks/settings/useAgentToolGates';
+import { useResetCountdown } from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
 import { InterpreterMode } from '@/types/interpreterMode';
@@ -60,6 +61,15 @@ export const ToolModeControls: FC = () => {
   const setInterpreterMode = useChatInputStore((s) => s.setInterpreterMode);
   const { hideWebSearch, hideCodeInterpreter } = useAgentToolGates();
   const toolLimits = useToolLimitGates();
+  // Called unconditionally (both rows may be hidden by the agent gates, but
+  // that never changes the hook call count across renders) so the exhausted
+  // note can name when the budget comes back, not just that it is gone.
+  const searchResetLabel = useResetCountdown(
+    toolLimits.webSearch.budget?.resetAt,
+  );
+  const interpreterResetLabel = useResetCountdown(
+    toolLimits.codeInterpreter.budget?.resetAt,
+  );
 
   if (!selectedConversation) return null;
   if (hideWebSearch && hideCodeInterpreter) return null;
@@ -195,7 +205,11 @@ export const ToolModeControls: FC = () => {
   );
 
   // Under the row: the lock reason while locked, else the budget annotation.
-  const rowNote = (gate: ToolLimitGate, lockReason: string) => {
+  const rowNote = (
+    gate: ToolLimitGate,
+    lockReason: string,
+    resetLabel: string | null,
+  ) => {
     if (gate.blocked) {
       return (
         <p className="pl-6 text-[11px] text-gray-500 dark:text-gray-400">
@@ -206,7 +220,9 @@ export const ToolModeControls: FC = () => {
     if (gate.exhausted) {
       return (
         <p className="pl-6 text-[11px] text-amber-700 dark:text-amber-400">
-          {tGates('exhausted')}
+          {resetLabel
+            ? tGates('exhaustedResets', { resets: resetLabel })
+            : tGates('exhausted')}
         </p>
       );
     }
@@ -256,7 +272,7 @@ export const ToolModeControls: FC = () => {
               searchLocked ? searchLockReason : undefined,
             )}
           </div>
-          {rowNote(toolLimits.webSearch, searchLockReason)}
+          {rowNote(toolLimits.webSearch, searchLockReason, searchResetLabel)}
           {searchRouting === SearchMode.AGENT && searchState !== 'off' && (
             <p className="pl-6 text-[11px] text-amber-700 dark:text-amber-400">
               {t('agentRoutingNote')}{' '}
@@ -291,7 +307,11 @@ export const ToolModeControls: FC = () => {
               interpreterLocked ? interpreterLockReason : undefined,
             )}
           </div>
-          {rowNote(toolLimits.codeInterpreter, interpreterLockReason)}
+          {rowNote(
+            toolLimits.codeInterpreter,
+            interpreterLockReason,
+            interpreterResetLabel,
+          )}
         </>
       )}
     </div>
