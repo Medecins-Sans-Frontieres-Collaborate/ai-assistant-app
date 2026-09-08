@@ -228,11 +228,11 @@ export interface M365MeetingEntry {
   end?: string;
   organizer?: string;
   /**
-   * Filtered listing only: how many calendarView occurrences collapsed into
-   * this row when deduping by joinWebUrl. A recurring Teams series expands
-   * to one event per occurrence, all sharing one join URL and one
-   * online-meeting id (and therefore one set of transcripts). Absent for a
-   * single-instance meeting.
+   * How many calendarView occurrences collapsed into this row when deduping
+   * by joinWebUrl — both listings collapse a recurring series to one row. A
+   * recurring Teams series expands to one event per occurrence, all sharing
+   * one join URL and one online-meeting id (and therefore one set of
+   * transcripts). Absent for a single-instance meeting.
    */
   occurrences?: number;
 }
@@ -290,7 +290,9 @@ export interface M365FilteredMeetingList {
    * Every meeting this view dropped, for any reason: probed clean and
    * empty, cancelled, still running, or unknown. It is what the "Show all
    * meetings (N hidden)" toggle promises to reveal, so it deliberately
-   * counts more than the provably-empty ones.
+   * counts more than the provably-empty ones. Counted per join URL (a
+   * recurring series is one meeting), which matches the plain listing the
+   * toggle shows, since that listing is collapsed the same way.
    */
   hiddenCount: number;
   /**
