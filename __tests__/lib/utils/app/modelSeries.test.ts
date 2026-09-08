@@ -120,6 +120,82 @@ describe('seriesRepresentative', () => {
   });
 });
 
+describe('seriesRepresentative with an isSelectable gate (usage limits)', () => {
+  const featured = model('gpt-5.2', '5.2', { tier: 'featured' });
+  const newest = model('gpt-5.4', '5.4');
+  const legacy = model('gpt-5', '5', { tier: 'legacy' });
+  const versions = [newest, featured, legacy];
+  const notIn = (ids: string[]) => (m: OpenAIModel) => !ids.includes(m.id);
+
+  it('skips a spent default and fronts the best still-usable sibling', () => {
+    expect(
+      seriesRepresentative(versions, undefined, notIn(['gpt-5.2']))?.id,
+    ).toBe('gpt-5.4');
+  });
+
+  it('keeps the normal preference order among usable members', () => {
+    // Newest spent → featured (5.2) still wins over legacy.
+    expect(
+      seriesRepresentative(versions, undefined, notIn(['gpt-5.4']))?.id,
+    ).toBe('gpt-5.2');
+    // Newest and featured spent → the legacy one is all that's left usable.
+    expect(
+      seriesRepresentative(versions, undefined, notIn(['gpt-5.4', 'gpt-5.2']))
+        ?.id,
+    ).toBe('gpt-5');
+  });
+
+  it('falls back to the ungated pick when the whole family is spent (row grays instead of vanishing)', () => {
+    expect(seriesRepresentative(versions, undefined, () => false)?.id).toBe(
+      'gpt-5.2',
+    );
+  });
+
+  it('lets the current selection win even when it is the spent one', () => {
+    expect(
+      seriesRepresentative(versions, 'gpt-5.2', notIn(['gpt-5.2']))?.id,
+    ).toBe('gpt-5.2');
+  });
+
+  it('is a no-op when every member is usable', () => {
+    expect(seriesRepresentative(versions, undefined, () => true)?.id).toBe(
+      seriesRepresentative(versions, undefined)?.id,
+    );
+  });
+});
+
+describe('pickVariantTarget with an isSelectable gate', () => {
+  const mini54 = model('gpt-5.4-mini', '5.4', { variant: 'mini' });
+  const mini52 = model('gpt-5.2-mini', '5.2', {
+    variant: 'mini',
+    tier: 'featured',
+  });
+  const mini5 = model('gpt-5-mini', '5', { variant: 'mini', tier: 'legacy' });
+  const members = [mini54, mini52, mini5];
+  const notIn = (ids: string[]) => (m: OpenAIModel) => !ids.includes(m.id);
+
+  it('keeps the same-version shortcut while that version is usable', () => {
+    expect(pickVariantTarget(members, '5.4', notIn(['gpt-5-mini']))?.id).toBe(
+      'gpt-5.4-mini',
+    );
+  });
+
+  it('routes past a spent same-version twin to the best usable sibling', () => {
+    expect(pickVariantTarget(members, '5.4', notIn(['gpt-5.4-mini']))?.id).toBe(
+      'gpt-5.2-mini',
+    );
+  });
+
+  it('behaves exactly as ungated when nothing in the variant is usable', () => {
+    expect(pickVariantTarget(members, '5.4', () => false)?.id).toBe(
+      pickVariantTarget(members, '5.4')?.id,
+    );
+    expect(pickVariantTarget(members, undefined, () => false)?.id).toBe(
+      pickVariantTarget(members, undefined)?.id,
+    );
+  });
+});
+
 describe('groupIntoFamilyUnits', () => {
   it('buckets series members into one unit anchored at first appearance, plain rows in place', () => {
     // Ids deliberately not in the catalog: series comes from the objects.
