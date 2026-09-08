@@ -54,6 +54,14 @@ interface ModelCardProps {
   limit?: ModelAvailabilityView;
   /** Fired when the limit's reset time passes while the row is mounted. */
   onLimitExpired?: () => void;
+  /**
+   * Fired (in addition to the inline note toggle) when a limited row is
+   * tapped. `ModelSelect` wires this to open the mobile details view for a
+   * row fronting the CURRENT model — the family's Version/Variant switchers
+   * live there and are otherwise unreachable on mobile once the row itself
+   * is grayed (docs/LIMITS_USER_FACING_UX.md §7.4).
+   */
+  onLimitedTap?: () => void;
 }
 
 /**
@@ -80,6 +88,7 @@ export const ModelCard: FC<ModelCardProps> = ({
   starLabel,
   limit,
   onLimitExpired,
+  onLimitedTap,
 }) => {
   const limitView: ModelAvailabilityView = limit ?? { state: 'available' };
   const isLimited = limitView.state !== 'available';
@@ -144,7 +153,14 @@ export const ModelCard: FC<ModelCardProps> = ({
           the reason instead of selecting. */}
       <button
         type="button"
-        onClick={isLimited ? () => setShowLimitNote((v) => !v) : onClick}
+        onClick={
+          isLimited
+            ? () => {
+                setShowLimitNote((v) => !v);
+                onLimitedTap?.();
+              }
+            : onClick
+        }
         aria-disabled={isLimited || undefined}
         title={isLimited ? (limitCopy ?? undefined) : undefined}
         className={`flex-1 flex items-center justify-between text-left min-h-[40px] gap-2 ${
