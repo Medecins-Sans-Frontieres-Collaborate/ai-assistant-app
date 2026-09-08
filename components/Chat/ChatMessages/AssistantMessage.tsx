@@ -10,6 +10,7 @@ import {
   IconVolume,
   IconVolumeOff,
 } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 import React, {
   FC,
   ReactNode,
@@ -25,7 +26,6 @@ import dynamic from 'next/dynamic';
 
 import {
   useLimitGates,
-  useMyLimits,
   useResetCountdown,
 } from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
@@ -210,14 +210,22 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     // short of a reported 0 (no row, usage unreadable, observe mode, flag
     // off) leaves the button exactly as it is — the server stays the judge.
     const { featureRemaining } = useLimitGates();
-    const { refetch: refetchLimits } = useMyLimits();
+    const queryClient = useQueryClient();
     const ttsBudget = featureRemaining(TTS_DAY_LIMIT_KEY);
     const ttsExhausted = ttsBudget?.remaining === 0;
     // Only count down while exhausted: every rendered message mounts this
     // hook, and an idle per-minute tick per message buys nothing.
     const ttsResetsIn = useResetCountdown(
       ttsExhausted ? ttsBudget?.resetAt : undefined,
-      { onExpired: () => void refetchLimits() },
+      {
+        // A second `useMyLimits()` call here just to reach `refetch` would
+        // double the `['limits-me', …]` observer count for every rendered
+        // assistant message; invalidating the shared query key gets the
+        // same refresh through the one subscription `useLimitGates` already
+        // holds (docs/LIMITS_USER_FACING_UX.md §7.4 follow-up).
+        onExpired: () =>
+          void queryClient.invalidateQueries({ queryKey: ['limits-me'] }),
+      },
     );
     const ttsDisabledTitle = ttsExhausted
       ? ttsResetsIn
@@ -960,7 +968,22 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                         : audioUrl
                           ? handleCloseAudio
                           : ttsExhausted
-                            ? undefined
+                            ? () => {
+                                // Kept out of the native `disabled` set (see
+                                // below) so keyboard/screen-reader users can
+                                // still reach this control; a `title` alone
+                                // is invisible to touch (no hover) and, per
+                                // finding, unreliable on `disabled` controls
+                                // in Firefox. Surface the same reason through
+                                // the existing aria-live loading line.
+                                if (ttsDisabledTitle) {
+                                  setLoadingMessage(ttsDisabledTitle);
+                                  setTimeout(
+                                    () => setLoadingMessage(null),
+                                    6000,
+                                  );
+                                }
+                              }
                             : () => handleTTS()
                     }
                     onContextMenu={(e) => {
@@ -974,11 +997,7 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                         setTTSContextMenu({ x: e.clientX, y: e.clientY });
                       }
                     }}
-                    disabled={
-                      hasEmbeddedContent ||
-                      isGeneratingAudio ||
-                      (ttsExhausted && !audioUrl)
-                    }
+                    disabled={hasEmbeddedContent || isGeneratingAudio}
                     aria-disabled={ttsExhausted && !audioUrl ? true : undefined}
                     data-testid="tts-button"
                     aria-label={
