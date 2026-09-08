@@ -31,6 +31,31 @@ vi.mock('@/client/hooks/settings/useSettings', () => ({
   useSettings: () => ({ models: [], defaultModelId: undefined }),
 }));
 
+// Admin usage-limit gates (§7.4). The real hook needs a QueryClient; the
+// agent gates underneath stay real (they only read the mocked hooks above).
+const openGate = { blocked: false, exhausted: false, low: false };
+const toolLimits = vi.hoisted(() => ({
+  current: {
+    webSearch: { blocked: false, exhausted: false, low: false },
+    codeInterpreter: { blocked: false, exhausted: false, low: false },
+    mcp: { blocked: false, exhausted: false, low: false },
+    m365: { blocked: false, exhausted: false, low: false } as {
+      blocked: boolean;
+      exhausted: boolean;
+      low: boolean;
+      budget?: { remaining: number; limit?: number };
+    },
+    enforce: false,
+  },
+}));
+vi.mock('@/client/hooks/settings/useAgentToolGates', async (importOriginal) => {
+  const actual =
+    await importOriginal<
+      typeof import('@/client/hooks/settings/useAgentToolGates')
+    >();
+  return { ...actual, useToolLimitGates: () => toolLimits.current };
+});
+
 type TestServer = {
   id: string;
   name: string;
@@ -63,6 +88,13 @@ describe('ConnectorPinTray', () => {
     selectedConversation = { id: 'conv-1' };
     setServers([]);
     useChatInputStore.setState({ connectorPinTrayOpen: true });
+    toolLimits.current = {
+      webSearch: openGate,
+      codeInterpreter: openGate,
+      mcp: openGate,
+      m365: openGate,
+      enforce: false,
+    };
   });
 
   it('lists every configured server with its enabled state', () => {
@@ -376,5 +408,158 @@ describe('ConnectorActivityBadge — builtin Microsoft 365', () => {
     useSettingsStore.setState({ m365ToolsUserEnabled: false });
     const { container } = render(<ConnectorActivityBadge />);
     expect(container).toBeEmptyDOMElement();
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// Admin usage limits (docs/LIMITS_USER_FACING_UX.md §7.4): a blocked
+// `feature.mcp.enabled` locks every connector switch (disabled, unchecked,
+// lock + reason) without rewriting the stored toggles; the builtin M365 row
+// annotates its own day budget. The jsdom next-intl mock returns the bare
+// key for unknown namespaces, so copy is asserted as 'blocked' etc.
+// ───────────────────────────────────────────────────────────────────
+describe('ConnectorPinTray — usage-limit gates', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    selectedConversation = { id: 'conv-1' };
+    setServers([]);
+    useChatInputStore.setState({ connectorPinTrayOpen: true });
+    toolLimits.current = {
+      webSearch: openGate,
+      codeInterpreter: openGate,
+      mcp: openGate,
+      m365: openGate,
+      enforce: false,
+    };
+  });
+
+  it('locks every connector row when MCP is blocked, leaving the stored config alone', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      mcp: { blocked: true, exhausted: false, low: false },
+      m365: { blocked: true, exhausted: false, low: false },
+    };
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('GitHub');
+    const checkbox = within(row).getByRole('checkbox');
+    expect(checkbox).toBeDisabled();
+    // Reads as off for this chat even though it is globally enabled...
+    expect(checkbox).not.toBeChecked();
+    expect(within(row).getByText('Global on')).toBeDisabled();
+    expect(within(row).queryByText('Focus')).toBeNull();
+    expect(screen.getByTestId('tray-lock-connectors')).toHaveAttribute(
+      'aria-label',
+      'blocked',
+    );
+    // ...while the footer names the policy instead of the cost hint.
+    expect(screen.getAllByText('blocked').length).toBeGreaterThan(0);
+    expect(screen.queryByText(/more tokens and slower/)).toBeNull();
+    // Nothing rewritten.
+    expect(
+      useSettingsStore.getState().mcpServers.find((s) => s.id === 's1')
+        ?.enabled,
+    ).toBe(true);
+    expect(updateConversation).not.toHaveBeenCalled();
+  });
+
+  it('a locked tray does not claim a focus pin is active', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      mcp: { blocked: true, exhausted: false, low: false },
+      m365: { blocked: true, exhausted: false, low: false },
+    };
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    selectedConversation = { id: 'conv-1', pinnedMcpServerId: 's1' };
+    render(<ConnectorPinTray />);
+
+    expect(screen.queryByText(/Only tools from GitHub/)).toBeNull();
+  });
+
+  it('locks the builtin Microsoft 365 row too', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      mcp: { blocked: true, exhausted: false, low: false },
+      m365: { blocked: true, exhausted: false, low: false },
+    };
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('Microsoft 365');
+    expect(within(row).getByRole('checkbox')).toBeDisabled();
+    expect(within(row).getByRole('checkbox')).not.toBeChecked();
+    expect(within(row).getByText('Global on')).toBeDisabled();
+    expect(within(row).queryByText('Focus')).toBeNull();
+    expect(useSettingsStore.getState().m365ToolsUserEnabled).toBe(true);
+  });
+
+  it('annotates the M365 row with a low budget and keeps it switchable', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      m365: {
+        blocked: false,
+        exhausted: false,
+        low: true,
+        budget: { remaining: 3, limit: 200 },
+      },
+    };
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('Microsoft 365');
+    expect(within(row).getByText('remaining')).toBeInTheDocument();
+    expect(within(row).getByRole('checkbox')).toBeEnabled();
+    expect(within(row).getByText('Focus')).toBeInTheDocument();
+  });
+
+  it('an exhausted M365 budget shows the degrade note, toggle still enabled', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      m365: {
+        blocked: false,
+        exhausted: true,
+        low: false,
+        budget: { remaining: 0, limit: 200 },
+      },
+    };
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('Microsoft 365');
+    expect(within(row).getByText('exhausted')).toBeInTheDocument();
+    fireEvent.click(within(row).getByRole('checkbox'));
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      disabledMcpServerIds: ['builtin-m365'],
+    });
+  });
+
+  it("fails open: with the gates open the tray is exactly today's UI", () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('GitHub');
+    expect(within(row).getByRole('checkbox')).toBeEnabled();
+    expect(within(row).getByRole('checkbox')).toBeChecked();
+    expect(within(row).getByText('Global on')).toBeEnabled();
+    expect(within(row).getByText('Focus')).toBeInTheDocument();
+    expect(screen.queryByTestId('tray-lock-connectors')).toBeNull();
+    for (const key of ['blocked', 'remaining', 'exhausted']) {
+      expect(screen.queryByText(key)).toBeNull();
+    }
   });
 });
