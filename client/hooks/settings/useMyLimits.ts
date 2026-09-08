@@ -182,10 +182,6 @@ export function useMyLimits() {
   useEffect(() => {
     const isModelsKey = (key: readonly unknown[]) =>
       key.length === MODELS_QUERY_KEY.length && key[0] === MODELS_QUERY_KEY[0];
-    // Cache may already hold an errored query by the time this effect runs.
-    setModelsQueryErrored(
-      queryClient.getQueryState(MODELS_QUERY_KEY)?.status === 'error',
-    );
     const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
       if (isModelsKey(event.query.queryKey)) {
         setModelsQueryErrored(event.query.state.status === 'error');
