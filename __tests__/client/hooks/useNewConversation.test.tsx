@@ -3,8 +3,6 @@ import toast from 'react-hot-toast';
 
 import { useNewConversation } from '@/client/hooks/conversation/useNewConversation';
 
-import { SearchMode } from '@/types/searchMode';
-
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -12,18 +10,31 @@ vi.mock('react-hot-toast', () => ({
   default: Object.assign(vi.fn(), { success: vi.fn(), error: vi.fn() }),
 }));
 
+// Mutable so individual tests can move the default or shrink the list.
+const settingsState = vi.hoisted(() => ({
+  defaultModelId: 'model-a' as string | undefined,
+  models: [
+    { id: 'model-a', name: 'Model A' },
+    { id: 'model-b', name: 'Model B' },
+  ] as { id: string; name: string }[],
+  temperature: 0.3,
+  systemPrompt: 'be brief',
+  defaultSearchMode: 'intelligent',
+  defaultInterpreterMode: undefined,
+}));
+
 vi.mock('@/client/hooks/settings/useSettings', () => ({
-  useSettings: () => ({
-    defaultModelId: 'model-a',
-    models: [
-      { id: 'model-a', name: 'Model A' },
-      { id: 'model-b', name: 'Model B' },
-    ],
-    temperature: 0.3,
-    systemPrompt: 'be brief',
-    defaultSearchMode: SearchMode.INTELLIGENT,
-    defaultInterpreterMode: undefined,
-  }),
+  useSettings: () => settingsState,
+}));
+
+// The real hook needs a QueryClientProvider (React Query) and the LD flag;
+// what matters here is only the per-id answer it gives.
+const availabilityById = vi.hoisted(
+  () => new Map<string, { state: string; reason?: string }>(),
+);
+vi.mock('@/client/hooks/settings/useMyLimits', () => ({
+  useModelAvailability: (id?: string) =>
+    (id && availabilityById.get(id)) ?? { state: 'available' },
 }));
 
 const emptyConv = (id: string, folderId: string | null = null) =>
@@ -40,6 +51,12 @@ const emptyConv = (id: string, folderId: string | null = null) =>
 describe('useNewConversation', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    availabilityById.clear();
+    settingsState.defaultModelId = 'model-a';
+    settingsState.models = [
+      { id: 'model-a', name: 'Model A' },
+      { id: 'model-b', name: 'Model B' },
+    ];
     useConversationStore.setState({
       conversations: [],
       selectedConversationId: null,
@@ -111,5 +128,72 @@ describe('useNewConversation', () => {
     expect(useConversationStore.getState().conversations[0].model.id).toBe(
       'model-b',
     );
+  });
+
+  // docs/LIMITS_USER_FACING_UX.md §7.4: a model the server hid or that the
+  // user has used up must not follow the user from chat to chat.
+  describe('model carry-over guard', () => {
+    const busyWith = (model: Record<string, unknown>) => {
+      useConversationStore.setState({
+        conversations: [
+          {
+            ...emptyConv('busy'),
+            model,
+            messages: [{ role: 'user', content: 'hi' }],
+          },
+        ],
+        selectedConversationId: 'busy',
+      });
+    };
+    const createdModelId = () => {
+      const { result } = renderHook(() => useNewConversation());
+      act(() => result.current());
+      return useConversationStore.getState().conversations[0].model.id;
+    };
+
+    it('falls back to the default model when the current one is no longer served', () => {
+      busyWith({ id: 'model-gone', name: 'Gone' });
+      expect(createdModelId()).toBe('model-a');
+    });
+
+    it('falls back to the default model when the current one is exhausted', () => {
+      availabilityById.set('model-b', {
+        state: 'exhausted',
+        reason: 'exhausted',
+      });
+      busyWith({ id: 'model-b', name: 'Model B' });
+      expect(createdModelId()).toBe('model-a');
+    });
+
+    it('falls back to the default model when the current one is blocked', () => {
+      availabilityById.set('model-b', { state: 'blocked', reason: 'blocked' });
+      busyWith({ id: 'model-b', name: 'Model B' });
+      expect(createdModelId()).toBe('model-a');
+    });
+
+    it('falls back to the first served model when the default is absent too', () => {
+      settingsState.defaultModelId = 'model-retired';
+      busyWith({ id: 'model-gone', name: 'Gone' });
+      expect(createdModelId()).toBe('model-a');
+    });
+
+    it('still carries over agents, byom and local models (never in the served list)', () => {
+      busyWith({ id: 'custom-agent-1', name: 'My Agent', isCustomAgent: true });
+      expect(createdModelId()).toBe('custom-agent-1');
+
+      busyWith({
+        id: 'byom-acct-gpt',
+        name: 'Own GPT',
+        isCustomSourceModel: true,
+      });
+      expect(createdModelId()).toBe('byom-acct-gpt');
+
+      busyWith({
+        id: 'local-ollama-llama3',
+        name: 'llama3',
+        isLocalModel: true,
+      });
+      expect(createdModelId()).toBe('local-ollama-llama3');
+    });
   });
 });
