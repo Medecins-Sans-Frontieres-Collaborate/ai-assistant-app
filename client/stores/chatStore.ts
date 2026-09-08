@@ -2,6 +2,9 @@
 
 import toast from 'react-hot-toast';
 
+import { notifyLimitsChanged } from '@/client/hooks/settings/limitsUxEvents';
+
+import { LimitDenialMetadata } from '@/client/services/api/errors';
 import {
   forceSessionExpiredSignOut,
   isSessionExpiredApiError,
@@ -53,6 +56,7 @@ import {
 } from '@/types/chat';
 import { ErrorCode } from '@/types/errors';
 import { ExtractionRequest } from '@/types/extractionRecipe';
+import { InterpreterMode } from '@/types/interpreterMode';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -99,6 +103,18 @@ function clampContextWindowSize(size: number | undefined): number {
     Math.max(size ?? VALIDATION_LIMITS.CLIENT_MAX_MESSAGES, 20),
     VALIDATION_LIMITS.MAX_API_MESSAGES,
   );
+}
+
+/**
+ * The user message a failed turn should replay. Walks backwards so any
+ * partial assistant entry left behind by the failure is skipped.
+ */
+function trailingUserMessage(conversation: Conversation): Message | undefined {
+  const flat = flattenEntriesForAPI(conversation.messages);
+  for (let i = flat.length - 1; i >= 0; i--) {
+    if (flat[i].role === 'user') return flat[i];
+  }
+  return undefined;
 }
 
 /**
@@ -167,6 +183,14 @@ interface ChatStore {
    * `error` is null or the failure carried no code.
    */
   errorCode: string | null;
+  /**
+   * Parsed `metadata` of the most recent admin usage-limit 403
+   * (`RATE_LIMIT_QUOTA_EXCEEDED`), kept next to `errorCode` so the error
+   * card can pick copy and actions by denial shape (per-model, feature
+   * gate, overall cap) and show a localized reset countdown. Null for every
+   * other error; cleared by the next send and by every error clear.
+   */
+  lastDenial: LimitDenialMetadata | null;
   stopRequested: boolean;
   loadingMessage: string | null;
   /**
@@ -300,6 +324,18 @@ interface ChatStore {
   ) => void;
   /** Drops the conversation's failure streak (a turn succeeded). */
   clearErrorStreak: (conversationId: string) => void;
+  /**
+   * Classifies a terminal failure as an admin usage-limit denial or not,
+   * and applies the denial side effects (streak reset, limits refetch).
+   * Shared by the first-attempt and fallback-retry error paths so the two
+   * cannot drift. `denial` is null when the 403 body carried no usable
+   * metadata — the card then falls back to the server sentence.
+   */
+  noteQuotaDenial: (
+    error: unknown,
+    errorCode: string | undefined,
+    conversationId: string | undefined,
+  ) => { isQuotaDenial: boolean; denial: LimitDenialMetadata | null };
   setCurrentMessage: (message: Message | undefined) => void;
   setIsStreaming: (isStreaming: boolean) => void;
   setStreamingContent: (content: string) => void;
@@ -426,6 +462,17 @@ interface ChatStore {
    */
   retryFailedRequest: () => Promise<void>;
   /**
+   * "Turn off <feature> and resend" for a feature-gate denial: the gated
+   * tool was the only reason the request failed, so switching it off for
+   * this conversation and replaying the turn is the one-click fix. Flips
+   * the conversation's default (and the composer's live mode) rather than
+   * the user's global settings default — that preference should come back
+   * when the gate lifts.
+   */
+  resendWithoutFeature: (
+    feature: 'webSearch' | 'codeInterpreter',
+  ) => Promise<void>;
+  /**
    * User-initiated retry of the failed turn on the next fallback-chain
    * model. Unlike the automatic fallback (network/5xx failures only),
    * this is offered in the error UI for EVERY recoverable failure —
@@ -487,6 +534,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   citations: [],
   error: null,
   errorCode: null,
+  lastDenial: null,
   stopRequested: false,
   loadingMessage: null,
   loadingMessageParams: undefined,
@@ -576,6 +624,23 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       return { errorStreaks: next };
     }),
 
+  noteQuotaDenial: (error, errorCode, conversationId) => {
+    if (errorCode !== ErrorCode.RATE_LIMIT_QUOTA_EXCEEDED) {
+      return { isQuotaDenial: false, denial: null };
+    }
+    // Any streak built up before the cap was hit is moot: the escalation
+    // copy is about corrupted conversations, and a quota is not one.
+    if (conversationId) get().clearErrorStreak(conversationId);
+    // The server just proved the client's picture of the user's limits is
+    // stale — ask the picker and the limits query to refetch so the model
+    // grays out / disappears immediately rather than on the next focus.
+    notifyLimitsChanged();
+    return {
+      isQuotaDenial: true,
+      denial: error instanceof ApiError ? error.limitDenial : null,
+    };
+  },
+
   setLastTurnDroppedActiveFileIds: (conversationId, fileIds) =>
     set((state) => {
       const next = { ...state.lastTurnDroppedActiveFileIds };
@@ -597,9 +662,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   setCitations: (citations) => set({ citations }),
 
-  setError: (error) => set({ error, errorCode: null }),
+  setError: (error) => set({ error, errorCode: null, lastDenial: null }),
 
-  clearError: () => set({ error: null, errorCode: null }),
+  clearError: () => set({ error: null, errorCode: null, lastDenial: null }),
 
   requestStop: () => {
     const { abortController } = get();
@@ -624,6 +689,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       citations: [],
       error: null,
       errorCode: null,
+      lastDenial: null,
       stopRequested: false,
       loadingMessage: null,
       loadingMessageParams: undefined,
@@ -853,6 +919,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       streamingConversationId: conversationId,
       error: null,
       errorCode: null,
+      // Every send (first attempt, fallback retry, resend) starts with a
+      // clean denial slate — a stale one would mislabel the next failure.
+      lastDenial: null,
       citations: [],
       loadingMessage: null, // Start with null, will be set after delay
       loadingMessageParams: undefined,
@@ -2026,10 +2095,20 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       void get().finalizeMessage(partialMessage, conversation);
     }
 
+    // An admin usage-limit denial is a policy outcome, not a broken
+    // conversation: it must never feed the repeated-failure escalation
+    // ("this conversation may be corrupted") and it invalidates the client's
+    // picture of what the user may still use.
+    const quotaDenial = get().noteQuotaDenial(
+      error,
+      structuredCode,
+      conversation?.id,
+    );
+
     // One user-visible failure = one streak increment (the escalation
     // trigger). Only this terminal set counts — the abort/session-expired/
     // auto-fallback early returns above never show a banner.
-    if (conversation) {
+    if (conversation && !quotaDenial.isQuotaDenial) {
       get().recordErrorStreak(
         conversation.id,
         errorMessage,
@@ -2041,6 +2120,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     set({
       error: errorMessage,
       errorCode: structuredCode ?? null,
+      lastDenial: quotaDenial.denial,
       isStreaming: false,
       streamingContent: '',
       streamingConversationId: null,
@@ -2317,12 +2397,22 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           ? ((retryError.response?.code as string | undefined) ?? null)
           : null;
 
-      get().recordErrorStreak(conversation.id, errorMessage, retryErrorCode);
+      // Same exclusion as the first-attempt path: a usage-limit denial on
+      // a fallback model is not a corrupted conversation.
+      const quotaDenial = get().noteQuotaDenial(
+        retryError,
+        retryErrorCode ?? undefined,
+        conversation.id,
+      );
+      if (!quotaDenial.isQuotaDenial) {
+        get().recordErrorStreak(conversation.id, errorMessage, retryErrorCode);
+      }
 
       // Show error with regenerate option
       set({
         error: errorMessage,
         errorCode: retryErrorCode,
+        lastDenial: quotaDenial.denial,
         isStreaming: false,
         streamingContent: '',
         streamingConversationId: null,
@@ -2351,27 +2441,69 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const { failedConversation, failedSearchMode } = get();
     if (!failedConversation) return;
 
-    // Walk backwards so we skip any partial assistant entry left from the
-    // failed turn.
-    const flat = flattenEntriesForAPI(failedConversation.messages);
-    let userMessage: Message | undefined;
-    for (let i = flat.length - 1; i >= 0; i--) {
-      if (flat[i].role === 'user') {
-        userMessage = flat[i];
-        break;
-      }
-    }
+    const userMessage = trailingUserMessage(failedConversation);
     if (!userMessage) return;
 
     set({
       error: null,
       errorCode: null,
+      lastDenial: null,
       failedConversation: null,
       failedSearchMode: undefined,
       errorIsRecoverable: true,
     });
 
     await get().sendMessage(userMessage, failedConversation, failedSearchMode);
+  },
+
+  resendWithoutFeature: async (feature) => {
+    const { failedConversation, failedSearchMode } = get();
+    if (!failedConversation) return;
+
+    const userMessage = trailingUserMessage(failedConversation);
+    if (!userMessage) return;
+
+    const conversationStore = useConversationStore.getState();
+    const inputStore = useChatInputStore.getState();
+    let resendConversation: Conversation = failedConversation;
+    let searchMode = failedSearchMode;
+    if (feature === 'webSearch') {
+      // The turn's search mode travels as an argument (composer state), so
+      // it is overridden here directly; the conversation default is flipped
+      // too so the NEXT message does not hit the same gate.
+      conversationStore.updateConversation(failedConversation.id, {
+        defaultSearchMode: SearchMode.OFF,
+      });
+      inputStore.setSearchMode(SearchMode.OFF);
+      resendConversation = {
+        ...failedConversation,
+        defaultSearchMode: SearchMode.OFF,
+      };
+      searchMode = SearchMode.OFF;
+    } else {
+      // sendChatRequest reads the interpreter mode from the chat-input store
+      // at send time, so flipping it there is what actually changes the
+      // request; the conversation default keeps it off afterwards.
+      conversationStore.updateConversation(failedConversation.id, {
+        defaultInterpreterMode: InterpreterMode.OFF,
+      });
+      inputStore.setInterpreterMode(InterpreterMode.OFF);
+      resendConversation = {
+        ...failedConversation,
+        defaultInterpreterMode: InterpreterMode.OFF,
+      };
+    }
+
+    set({
+      error: null,
+      errorCode: null,
+      lastDenial: null,
+      failedConversation: null,
+      failedSearchMode: undefined,
+      errorIsRecoverable: true,
+    });
+
+    await get().sendMessage(userMessage, resendConversation, searchMode);
   },
 
   summarizeFromHeadlines: async () => {
