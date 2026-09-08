@@ -186,7 +186,10 @@ describe('useMyLimits', () => {
 
     const { result } = renderHook(() => useMyLimits(), { wrapper: Wrapper });
 
-    await waitFor(() => expect(result.current.error).not.toBeNull());
+    // retry: 1 → the error state lands after React Query's 1 s retry delay
+    await waitFor(() => expect(result.current.error).not.toBeNull(), {
+      timeout: 4000,
+    });
     expect(result.current.enforce).toBe(false);
     expect(result.current.limits).toEqual([]);
   });
