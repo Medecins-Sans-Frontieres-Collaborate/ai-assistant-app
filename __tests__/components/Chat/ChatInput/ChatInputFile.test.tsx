@@ -154,10 +154,13 @@ describe('ChatInputFile', () => {
     FileUploadService.setEffectiveUploadLimit(null);
   });
 
-  it('mounts the sync and shows the cap in the tooltip when one applies', () => {
-    limits = [row({ value: 20 })];
+  it('mounts the sync and shows the cap in the tooltip when it undercuts every compiled category cap', () => {
+    // Below the smallest compiled category cap (images, 5MB): the hint's
+    // promise ("Files up to …") genuinely holds for anything the user can
+    // attach.
+    limits = [row({ value: 3 })];
     renderInput();
-    expect(FileUploadService.getEffectiveUploadLimit()?.megabytes).toBe(20);
+    expect(FileUploadService.getEffectiveUploadLimit()?.megabytes).toBe(3);
     expect(screen.getByText('uploadCapHint')).toBeInTheDocument();
   });
 
@@ -165,5 +168,16 @@ describe('ChatInputFile', () => {
     renderInput();
     expect(screen.queryByText('uploadCapHint')).not.toBeInTheDocument();
     expect(FileUploadService.getEffectiveUploadLimit()).toBeNull();
+  });
+
+  it('hides the cap hint when the admin cap does not undercut every compiled category cap', () => {
+    // A 20MB admin cap is above the compiled 5MB image cap, so "Files up to
+    // 20MB" would be false for images (validateFile still refuses a 6MB PNG
+    // at the compiled cap). The sync still publishes the cap for
+    // validateFile — only the promise-shaped tooltip line is suppressed.
+    limits = [row({ value: 20 })];
+    renderInput();
+    expect(FileUploadService.getEffectiveUploadLimit()?.megabytes).toBe(20);
+    expect(screen.queryByText('uploadCapHint')).not.toBeInTheDocument();
   });
 });
