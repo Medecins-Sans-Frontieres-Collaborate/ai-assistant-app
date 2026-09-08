@@ -43,7 +43,7 @@ const toolLimits = vi.hoisted(() => ({
       blocked: boolean;
       exhausted: boolean;
       low: boolean;
-      budget?: { remaining: number; limit?: number };
+      budget?: { remaining: number; limit?: number; resetAt?: string };
     },
     enforce: false,
   },
@@ -477,6 +477,31 @@ describe('ConnectorPinTray — usage-limit gates', () => {
     render(<ConnectorPinTray />);
 
     expect(screen.queryByText(/Only tools from GitHub/)).toBeNull();
+    // The row's own "Focused ×" chip must not survive the lock either — it
+    // is otherwise an active-looking, clickable control (it clears the pin)
+    // sitting right next to a disabled, unchecked checkbox.
+    expect(screen.queryByText('Focused')).toBeNull();
+  });
+
+  it('a locked tray does not show the Focused chip on the pinned builtin M365 row', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      mcp: { blocked: true, exhausted: false, low: false },
+      m365: { blocked: true, exhausted: false, low: false },
+    };
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+    selectedConversation = {
+      id: 'conv-1',
+      pinnedMcpServerId: 'builtin-m365',
+    };
+    render(<ConnectorPinTray />);
+
+    expect(screen.queryByText('Focused')).toBeNull();
+    expect(screen.queryByText('Focus')).toBeNull();
   });
 
   it('locks the builtin Microsoft 365 row too', () => {
@@ -546,6 +571,35 @@ describe('ConnectorPinTray — usage-limit gates', () => {
     expect(updateConversation).toHaveBeenCalledWith('conv-1', {
       disabledMcpServerIds: ['builtin-m365'],
     });
+  });
+
+  it('an exhausted M365 budget with a known resetAt threads the countdown through', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      m365: {
+        blocked: false,
+        exhausted: true,
+        low: false,
+        budget: {
+          remaining: 0,
+          limit: 200,
+          resetAt: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(),
+        },
+      },
+    };
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('Microsoft 365');
+    // The mock t() falls back to the raw key for a namespace it does not
+    // carry, so 'exhaustedResets' rendering (rather than 'exhausted') proves
+    // resetAt reached the note.
+    expect(within(row).getByText('exhaustedResets')).toBeInTheDocument();
+    expect(within(row).queryByText('exhausted')).toBeNull();
   });
 
   it("fails open: with the gates open the tray is exactly today's UI", () => {
