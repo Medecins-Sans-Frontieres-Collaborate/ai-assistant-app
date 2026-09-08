@@ -5475,5 +5475,18 @@
     "loading": "Loading…",
     "loadError": "The global admin list could not be loaded.",
     "retry": "Retry"
+  },
+  "limitsUx": {
+    "mine": {
+      "title": "Your limits",
+      "description": "Limits your organization has set for your account. Counters reset automatically at the end of each period.",
+      "notAvailable": "Not available",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Resets {resets}",
+      "limitReached": "Limit reached",
+      "familyLimitReached": "Model family limit reached",
+      "usageUnavailable": "Current usage could not be loaded — showing limits only."
+    }
   }
 }
