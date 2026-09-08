@@ -5531,7 +5531,9 @@
       "resets": "Wuxuu soo cusboonaanayaa {resets}.",
       "chooseAnotherModel": "Dooro muuqaal kale",
       "turnOffSearchAndResend": "Dami raadinta webka oo dib u dir",
-      "turnOffInterpreterAndResend": "Dami code interpreter oo dib u dir"
+      "turnOffInterpreterAndResend": "Dami code interpreter oo dib u dir",
+      "agentModelBlocked": "Wakiilkan waxa uu adeegsanayaa model aan laga helin akoonkaaga. Ka saar wakiilka ama dooro wakiil kale.",
+      "turnOffConnectorsAndResend": "Demi is-dhexgalayaasha oo dib u dir"
     },
     "notice": {
       "unavailable": "{model} laguma heli karo akoonkaaga — dooro mid kale si aad u sii waddo.",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# isticmaal haray maanta} other {# isticmaal haray maanta}}",
-      "exhausted": "Xadka maalintii waa la gaaray — muuqaalka ayaa ka jawaabi doona iyada oo aan la isticmaalin."
+      "exhausted": "Xadka maalintii waa la gaaray — muuqaalka ayaa ka jawaabi doona iyada oo aan la isticmaalin.",
+      "exhaustedResets": "Xadka maalinlaha ah waa la gaadhay — modelku wuu jawaabi doonaa iyada oo aan la isticmaalin. Waxay dib u daadegaayaan {resets}."
     },
     "mine": {
       "title": "Xaddigaaga",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Wuxuu soo cusboonaanayaa {resets}",
       "limitReached": "Xaddiga waa la gaaray",
       "familyLimitReached": "Xaddiga qoyska muuqaalka waa la gaaray",
-      "usageUnavailable": "Isticmaalka hadda lama helin — waxa lagu tusayaa xadadka oo keliya."
+      "usageUnavailable": "Isticmaalka hadda lama helin — waxa lagu tusayaa xadadka oo keliya.",
+      "familyRow": "Modelada {family}"
     },
     "routes": {
       "ttsExhausted": "Waxaad gaadhay xadka text-to-speech ee maanta.",

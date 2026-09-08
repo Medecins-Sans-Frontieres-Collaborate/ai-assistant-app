@@ -5578,7 +5578,9 @@
       "resets": "Sẽ đặt lại vào {resets}.",
       "chooseAnotherModel": "Chọn mô hình khác",
       "turnOffSearchAndResend": "Tắt tìm kiếm web và gửi lại",
-      "turnOffInterpreterAndResend": "Tắt trình thông dịch mã và gửi lại"
+      "turnOffInterpreterAndResend": "Tắt trình thông dịch mã và gửi lại",
+      "agentModelBlocked": "Tác nhân này sử dụng một mô hình không có sẵn cho tài khoản của bạn. Hãy tách tác nhân này hoặc chọn tác nhân khác.",
+      "turnOffConnectorsAndResend": "Tắt các connector và gửi lại"
     },
     "notice": {
       "unavailable": "{model} không khả dụng trên tài khoản của bạn — vui lòng chọn mô hình khác để tiếp tục.",
@@ -5595,7 +5597,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {Còn # lượt hôm nay} other {Còn # lượt hôm nay}}",
-      "exhausted": "Đã đạt giới hạn trong ngày — mô hình sẽ trả lời mà không dùng tính năng này."
+      "exhausted": "Đã đạt giới hạn trong ngày — mô hình sẽ trả lời mà không dùng tính năng này.",
+      "exhaustedResets": "Đã đạt giới hạn hàng ngày — mô hình sẽ trả lời mà không cần đến nó. Đặt lại {resets} lần."
     },
     "mine": {
       "title": "Giới hạn của bạn",
@@ -5606,7 +5609,8 @@
       "resetsIn": "Sẽ đặt lại vào {resets}",
       "limitReached": "Đã đạt giới hạn",
       "familyLimitReached": "Đã đạt giới hạn nhóm mô hình",
-      "usageUnavailable": "Không thể tải dữ liệu sử dụng hiện tại — chỉ hiển thị giới hạn."
+      "usageUnavailable": "Không thể tải dữ liệu sử dụng hiện tại — chỉ hiển thị giới hạn.",
+      "familyRow": "Các mô hình {family}"
     },
     "routes": {
       "ttsExhausted": "Bạn đã đạt giới hạn chuyển văn bản thành giọng nói hôm nay.",

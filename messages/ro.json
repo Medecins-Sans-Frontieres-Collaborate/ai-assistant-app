@@ -5547,7 +5547,9 @@
       "resets": "Se resetează {resets}.",
       "chooseAnotherModel": "Alegeți un alt model",
       "turnOffSearchAndResend": "Dezactivați căutarea web și retrimiteți",
-      "turnOffInterpreterAndResend": "Dezactivați interpretul de cod și retrimiteți"
+      "turnOffInterpreterAndResend": "Dezactivați interpretul de cod și retrimiteți",
+      "agentModelBlocked": "Acest agent folosește un model care nu este disponibil pe contul dvs. Deconectați agentul sau alegeți altul.",
+      "turnOffConnectorsAndResend": "Dezactivați conectorii și retrimiteți"
     },
     "notice": {
       "unavailable": "{model} nu este disponibil pe contul dumneavoastră — alegeți un alt model pentru a continua.",
@@ -5564,7 +5566,8 @@
         "connectors": "Conectori"
       },
       "remaining": "{count, plural, one {# utilizare rămasă astăzi} other {# utilizări rămase astăzi}}",
-      "exhausted": "Limită zilnică atinsă — modelul va răspunde fără ea."
+      "exhausted": "Limită zilnică atinsă — modelul va răspunde fără ea.",
+      "exhaustedResets": "Limită zilnică atinsă — modelul va răspunde fără aceasta. Reîncărcări {resets}."
     },
     "mine": {
       "title": "Limitele dumneavoastră",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Se resetează {resets}",
       "limitReached": "Limită atinsă",
       "familyLimitReached": "Limită pentru familia de modele atinsă",
-      "usageUnavailable": "Utilizarea curentă nu a putut fi încărcată — se afișează doar limitele."
+      "usageUnavailable": "Utilizarea curentă nu a putut fi încărcată — se afișează doar limitele.",
+      "familyRow": "Modele {family}"
     },
     "routes": {
       "ttsExhausted": "Ați atins limita zilnică pentru text-to-speech.",

@@ -5531,7 +5531,9 @@
       "resets": "Ap pare {resets}.",
       "chooseAnotherModel": "Chwazi yon lòt modèl",
       "turnOffSearchAndResend": "Dekative rechèch entènèt epi voye ankò",
-      "turnOffInterpreterAndResend": "Dekative entèprèt kòd epi voye ankò"
+      "turnOffInterpreterAndResend": "Dekative entèprèt kòd epi voye ankò",
+      "agentModelBlocked": "Ajan sa a itilize yon modèl ki pa disponib sou kont ou. Detache ajan an oswa chwazi yon lòt.",
+      "turnOffConnectorsAndResend": "Fèmen konektè yo epi voye ankò"
     },
     "notice": {
       "unavailable": "{model} pa disponib sou kont ou — chwazi yon lòt modèl pou kontinye.",
@@ -5548,7 +5550,8 @@
         "connectors": "Konektè"
       },
       "remaining": "{count, plural, one {# itilizasyon rete jodi a} other {# itilizasyon yo rete jodi a}}",
-      "exhausted": "Limit chak jou atenn — modèl la ap reponn san li."
+      "exhausted": "Limit chak jou atenn — modèl la ap reponn san li.",
+      "exhaustedResets": "Limit chak jou atenn — modèl la ap reponn san sa. Reyajisteman {resets}."
     },
     "mine": {
       "title": "Limit ou yo",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Ap pare {resets}",
       "limitReached": "Limit atenn",
       "familyLimitReached": "Limit fanmi modèl atenn",
-      "usageUnavailable": "Itilizasyon aktyèl pa ka chaje — sèlman ap montre limit yo."
+      "usageUnavailable": "Itilizasyon aktyèl pa ka chaje — sèlman ap montre limit yo.",
+      "familyRow": "Modèl {family}"
     },
     "routes": {
       "ttsExhausted": "Ou rive limit text-to-speech jodi a.",

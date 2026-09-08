@@ -5547,7 +5547,9 @@
       "resets": "{resets}にリセットされます。",
       "chooseAnotherModel": "別のモデルを選択",
       "turnOffSearchAndResend": "Web検索をオフにして再送信",
-      "turnOffInterpreterAndResend": "コードインタープリターをオフにして再送信"
+      "turnOffInterpreterAndResend": "コードインタープリターをオフにして再送信",
+      "agentModelBlocked": "このエージェントはご利用のアカウントでは使えないモデルを使用しています。エージェントを解除するか、別のエージェントを選択してください。",
+      "turnOffConnectorsAndResend": "コネクタをオフにして再送信"
     },
     "notice": {
       "unavailable": "{model}はお客様のアカウントでは利用できません。継続するには他のモデルを選択してください。",
@@ -5564,7 +5566,8 @@
         "connectors": "コネクタ"
       },
       "remaining": "{count, plural, one {本日残り#回} other {本日残り#回}}",
-      "exhausted": "本日の制限に達しました — モデルはそれなしで応答します。"
+      "exhausted": "本日の制限に達しました — モデルはそれなしで応答します。",
+      "exhaustedResets": "1日の上限に達しました — モデルはそれなしで回答します。リセット数：{resets}。"
     },
     "mine": {
       "title": "ご利用限度",
@@ -5575,7 +5578,8 @@
       "resetsIn": "{resets}にリセット",
       "limitReached": "制限に達しました",
       "familyLimitReached": "モデルファミリー制限に達しました",
-      "usageUnavailable": "現在の利用状況を読み込めません。上限のみ表示します。"
+      "usageUnavailable": "現在の利用状況を読み込めません。上限のみ表示します。",
+      "familyRow": "{family} モデル"
     },
     "routes": {
       "ttsExhausted": "本日の音声読み上げの上限に達しました。",

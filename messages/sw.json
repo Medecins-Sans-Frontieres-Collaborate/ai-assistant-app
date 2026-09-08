@@ -5547,7 +5547,9 @@
       "resets": "Kitarejeshwa {resets}.",
       "chooseAnotherModel": "Chagua mfano mwingine",
       "turnOffSearchAndResend": "Zima utafutaji wa wavuti na tuma tena",
-      "turnOffInterpreterAndResend": "Zima kifasiri msimbo na tuma tena"
+      "turnOffInterpreterAndResend": "Zima kifasiri msimbo na tuma tena",
+      "agentModelBlocked": "Ajanzi huyu anatumia modeli ambayo haipatikani kwenye akaunti yako. Ondoa ajanzi au chagua mwingine.",
+      "turnOffConnectorsAndResend": "Zima viunganishi na tuma tena"
     },
     "notice": {
       "unavailable": "{model} haipatikani kwenye akaunti yako — chagua mfano mwingine ili uendelee.",
@@ -5564,7 +5566,8 @@
         "connectors": "Viunganishi"
       },
       "remaining": "{count, plural, one {matumizi # yamebaki leo} other {matumizi # yamebaki leo}}",
-      "exhausted": "Kiwango cha kila siku kimefikiwa — mfano utajibu bila hii."
+      "exhausted": "Kiwango cha kila siku kimefikiwa — mfano utajibu bila hii.",
+      "exhaustedResets": "Kiwango cha kila siku kimefikiwa — modeli itajibu bila hicho. Marudio {resets}."
     },
     "mine": {
       "title": "Vikomo vyako",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Kitarejeshwa {resets}",
       "limitReached": "Kiwango kimefikiwa",
       "familyLimitReached": "Kiwango cha familia ya mfano kimefikiwa",
-      "usageUnavailable": "Matumizi ya sasa yameshindwa kupakiwa — zinaonesha vikomo pekee."
+      "usageUnavailable": "Matumizi ya sasa yameshindwa kupakiwa — zinaonesha vikomo pekee.",
+      "familyRow": "Modeli za {family}"
     },
     "routes": {
       "ttsExhausted": "Umefikia kikomo cha leo cha maandishi kwenda sauti.",

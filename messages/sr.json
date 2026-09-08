@@ -5531,7 +5531,9 @@
       "resets": "Resetuje se {resets}.",
       "chooseAnotherModel": "Izaberite drugi model",
       "turnOffSearchAndResend": "Isključite veb pretragu i pošaljite ponovo",
-      "turnOffInterpreterAndResend": "Isključite interpreter za kod i pošaljite ponovo"
+      "turnOffInterpreterAndResend": "Isključite interpreter za kod i pošaljite ponovo",
+      "agentModelBlocked": "Ovaj agent koristi model koji nije dostupan na vašem nalogu. Uklonite agenta ili izaberite drugog.",
+      "turnOffConnectorsAndResend": "Isključite konektore i pošaljite ponovo"
     },
     "notice": {
       "unavailable": "{model} nije dostupan na vašem nalogu — izaberite drugi model da nastavite.",
@@ -5548,7 +5550,8 @@
         "connectors": "Konektori"
       },
       "remaining": "{count, plural, one {# korišćenje preostalo danas} other {# korišćenja preostalo danas}}",
-      "exhausted": "Dnevni limit je dostignut — model će odgovoriti bez toga."
+      "exhausted": "Dnevni limit je dostignut — model će odgovoriti bez toga.",
+      "exhaustedResets": "Dnevni limit je dostignut — model će odgovoriti bez toga. Resetovanja {resets}."
     },
     "mine": {
       "title": "Vaši limiti",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Resetuje se {resets}",
       "limitReached": "Limit dostignut",
       "familyLimitReached": "Dostignut je limit za porodicu modela",
-      "usageUnavailable": "Trenutna potrošnja ne može da se učita — prikazani su samo limiti."
+      "usageUnavailable": "Trenutna potrošnja ne može da se učita — prikazani su samo limiti.",
+      "familyRow": "Modeli porodice {family}"
     },
     "routes": {
       "ttsExhausted": "Dostigli ste današnji limit za tekst-u-govor.",

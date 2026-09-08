@@ -5531,7 +5531,9 @@
       "resets": "Hanavao amin'ny {resets}.",
       "chooseAnotherModel": "Fidio modely hafa",
       "turnOffSearchAndResend": "Atsaharo ny fikarohana web ary alefaso indray",
-      "turnOffInterpreterAndResend": "Atsaharo ny code interpreter ary alefaso indray"
+      "turnOffInterpreterAndResend": "Atsaharo ny code interpreter ary alefaso indray",
+      "agentModelBlocked": "Mampiasa maodely tsy azo ampiasaina amin'ny kaontinao ity agent ity. Esory ny agent na mifidiana iray hafa.",
+      "turnOffConnectorsAndResend": "Atsaharo ny connectors ary alefaso indray"
     },
     "notice": {
       "unavailable": "Tsy misy amin'ny kaontinao ny {model} — mifidiana modely hafa hanohizana.",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# fampiasana sisa anio} other {# fampiasana sisa anio}}",
-      "exhausted": "Vita ny fetra isan'andro — hamaly tsy amin'izany ny modely."
+      "exhausted": "Vita ny fetra isan'andro — hamaly tsy amin'izany ny modely.",
+      "exhaustedResets": "Vita ny fetra isan'andro — hamaly tsy misy izany ny maodely. Famerenana {resets}."
     },
     "mine": {
       "title": "Ny fetra anao",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Hanavao amin'ny {resets}",
       "limitReached": "Vita ny fetra",
       "familyLimitReached": "Vita ny fetra amin'ny modely fianakaviana",
-      "usageUnavailable": "Tsy azo aseho ny fampiasana amin'izao fotoana izao — fetra ihany no aseho."
+      "usageUnavailable": "Tsy azo aseho ny fampiasana amin'izao fotoana izao — fetra ihany no aseho.",
+      "familyRow": "Maodely {family}"
     },
     "routes": {
       "ttsExhausted": "Efa nihoatra ny fetra text-to-speech androany ianao.",

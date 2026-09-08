@@ -5547,7 +5547,9 @@
       "resets": "מתאפס {resets}.",
       "chooseAnotherModel": "בחר מודל אחר",
       "turnOffSearchAndResend": "כבה חיפוש ברשת ושלח מחדש",
-      "turnOffInterpreterAndResend": "כבה מפרש קוד ושלח מחדש"
+      "turnOffInterpreterAndResend": "כבה מפרש קוד ושלח מחדש",
+      "agentModelBlocked": "הסוכן הזה משתמש במודל שאינו זמין בחשבון שלך. נתק את הסוכן או בחר סוכן אחר.",
+      "turnOffConnectorsAndResend": "כבה מחברים ושלח מחדש"
     },
     "notice": {
       "unavailable": "{model} אינו זמין בחשבונך — בחר מודל אחר להמשך.",
@@ -5564,7 +5566,8 @@
         "connectors": "מחברים"
       },
       "remaining": "{count, plural, one {שימוש אחד נותר היום} other {# שימושים נותרו היום}}",
-      "exhausted": "הגעת למגבלה היומית — המודל יענה ללא פיצ'ר זה."
+      "exhausted": "הגעת למגבלה היומית — המודל יענה ללא פיצ'ר זה.",
+      "exhaustedResets": "הגעת למכסה היומית — המודל יענה בלעדיה. איפוסים {resets}."
     },
     "mine": {
       "title": "המגבלות שלך",
@@ -5575,7 +5578,8 @@
       "resetsIn": "מתאפס {resets}",
       "limitReached": "הגעת למגבלה",
       "familyLimitReached": "הגעת למגבלת משפחת המודלים",
-      "usageUnavailable": "לא ניתן להציג את השימוש הנוכחי — מוצגות המגבלות בלבד."
+      "usageUnavailable": "לא ניתן להציג את השימוש הנוכחי — מוצגות המגבלות בלבד.",
+      "familyRow": "מודלים של {family}"
     },
     "routes": {
       "ttsExhausted": "הגעת למגבלת ההמרה לטקסט-לדיבור היומית.",

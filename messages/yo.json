@@ -5531,7 +5531,9 @@
       "resets": "Yóò tún bọ́ {resets}.",
       "chooseAnotherModel": "Yàn àmọ̀ọ́dẹ̀ míì",
       "turnOffSearchAndResend": "Pa ìwádìí wẹ́bù kí o tún rán",
-      "turnOffInterpreterAndResend": "Pa gírámà ìtumọ̀ kóòdù kí o tún rán"
+      "turnOffInterpreterAndResend": "Pa gírámà ìtumọ̀ kóòdù kí o tún rán",
+      "agentModelBlocked": "Ageni yi nlo awoṣe kan ti ko si lori àkọọlẹ rẹ. Ya ageni kuro tabi yan omiiran.",
+      "turnOffConnectorsAndResend": "Pa awọn asopọ rẹ ki o tun fi ranṣẹ"
     },
     "notice": {
       "unavailable": "{model} kò sí lórí àkọọlẹ rẹ — yàn àmọ̀ọ́dẹ̀ míì láti tẹ̀síwájú.",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {Ìlò kan ṣoṣo tó kù lónìí} other {# ìlò tó kù lónìí}}",
-      "exhausted": "Ìwọn ojoojúmọ dé—àmọ̀ọ́dẹ̀ yóò dáhùn láì lò ó."
+      "exhausted": "Ìwọn ojoojúmọ dé—àmọ̀ọ́dẹ̀ yóò dáhùn láì lò ó.",
+      "exhaustedResets": "Ìlà ójò ojoojúmọ́ ti pé — awoṣe naa yoo dáhùn láìlo. Tupọ {resets}."
     },
     "mine": {
       "title": "Àwọn opin rẹ",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Yóò tún bọ́ {resets}",
       "limitReached": "Ìwọn to peye ti dé",
       "familyLimitReached": "Ìwọn idile àmọ̀ọ́dẹ̀ ti dé",
-      "usageUnavailable": "A kó le kó ìlò to wa lónìí — fífihàn àjọpo opin nìkan."
+      "usageUnavailable": "A kó le kó ìlò to wa lónìí — fífihàn àjọpo opin nìkan.",
+      "familyRow": "Àwọ̀ṣe {family}"
     },
     "routes": {
       "ttsExhausted": "O ti dé opin ìlò ọrọ sí ohùn lónìí.",

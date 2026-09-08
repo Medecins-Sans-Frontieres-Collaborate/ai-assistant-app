@@ -5547,7 +5547,9 @@
       "resets": "Obnovuje se {resets}.",
       "chooseAnotherModel": "Zvolit jiný model",
       "turnOffSearchAndResend": "Vypnout webové vyhledávání a odeslat znovu",
-      "turnOffInterpreterAndResend": "Vypnout interpret kódu a odeslat znovu"
+      "turnOffInterpreterAndResend": "Vypnout interpret kódu a odeslat znovu",
+      "agentModelBlocked": "Tento agent používá model, který není dostupný na vašem účtu. Odpojte agenta nebo vyberte jiného.",
+      "turnOffConnectorsAndResend": "Vypněte konektory a odešlete znovu"
     },
     "notice": {
       "unavailable": "{model} není na vašem účtu dostupný — vyberte jiný model pro pokračování.",
@@ -5564,7 +5566,8 @@
         "connectors": "Konektory"
       },
       "remaining": "{count, plural, one {# použití zbývá dnes} other {# použití zbývá dnes}}",
-      "exhausted": "Dosažen denní limit — model odpoví bez této funkce."
+      "exhausted": "Dosažen denní limit — model odpoví bez této funkce.",
+      "exhaustedResets": "Denní limit byl vyčerpán — model odpoví bez něj. Resetů: {resets}."
     },
     "mine": {
       "title": "Vaše limity",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Obnovuje se {resets}",
       "limitReached": "Dosažen limit",
       "familyLimitReached": "Dosažen limit rodiny modelů",
-      "usageUnavailable": "Aktuální využití nebylo možné načíst — zobrazeny jsou pouze limity."
+      "usageUnavailable": "Aktuální využití nebylo možné načíst — zobrazeny jsou pouze limity.",
+      "familyRow": "Modely {family}"
     },
     "routes": {
       "ttsExhausted": "Dnes jste dosáhli limitu převodu textu na řeč.",

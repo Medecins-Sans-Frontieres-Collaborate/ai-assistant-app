@@ -5547,7 +5547,9 @@
       "resets": "Es reinicia {resets}.",
       "chooseAnotherModel": "Tria un altre model",
       "turnOffSearchAndResend": "Desactiva la cerca web i reenvia",
-      "turnOffInterpreterAndResend": "Desactiva el code interpreter i reenvia"
+      "turnOffInterpreterAndResend": "Desactiva el code interpreter i reenvia",
+      "agentModelBlocked": "Aquest agent utilitza un model que no està disponible al vostre compte. Desvinculeu l'agent o escolliu-ne un altre.",
+      "turnOffConnectorsAndResend": "Desactiveu els connectors i torneu a enviar"
     },
     "notice": {
       "unavailable": "{model} no està disponible al teu compte — tria un altre model per continuar.",
@@ -5564,7 +5566,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# ús restant avui} other {# usos restants avui}}",
-      "exhausted": "S'ha arribat al límit diari — el model respondrà sense aquesta funció."
+      "exhausted": "S'ha arribat al límit diari — el model respondrà sense aquesta funció.",
+      "exhaustedResets": "Límit diari assolit: el model respondrà sense això. Reinicis {resets}."
     },
     "mine": {
       "title": "Els teus límits",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Es reinicia {resets}",
       "limitReached": "Límit assolit",
       "familyLimitReached": "S'ha assolit el límit de la família de models",
-      "usageUnavailable": "No s'ha pogut carregar l'ús actual — només es mostren els límits."
+      "usageUnavailable": "No s'ha pogut carregar l'ús actual — només es mostren els límits.",
+      "familyRow": "Models {family}"
     },
     "routes": {
       "ttsExhausted": "Has arribat al límit diari de text a veu.",

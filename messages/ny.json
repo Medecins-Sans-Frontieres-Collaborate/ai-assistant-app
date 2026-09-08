@@ -5531,7 +5531,9 @@
       "resets": "Zikhoza kuyambiranso {resets}.",
       "chooseAnotherModel": "Sankhani chitsanzo china",
       "turnOffSearchAndResend": "Chotsani web search ndikutumizanso",
-      "turnOffInterpreterAndResend": "Chotsani code interpreter ndikutumizanso"
+      "turnOffInterpreterAndResend": "Chotsani code interpreter ndikutumizanso",
+      "agentModelBlocked": "Wothandiza uyu akugwiritsa ntchito chitsanzo chomwe simungapeze pa akaunti yanu. Chotsani wothandizayo kapena sankhani wina.",
+      "turnOffConnectorsAndResend": "Tulutsani ma connector ndikubwezeranso kutumiza"
     },
     "notice": {
       "unavailable": "{model} sikupezeka pa akaunti yanu — sankhani chitsanzo china kuti mupitirize.",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# yatsala lero} other {# zatsala lero}}",
-      "exhausted": "Mwafika pa malire a tsiku — chitsanzochi chidzayankha popanda ntchitoyi."
+      "exhausted": "Mwafika pa malire a tsiku — chitsanzochi chidzayankha popanda ntchitoyi.",
+      "exhaustedResets": "Mwafika pa malire a tsiku — chitsanzo chidzakuyankhani popanda ichi. Zatsitsimutsidwa {resets}."
     },
     "mine": {
       "title": "Malire anu",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Zikhoza kuyambiranso {resets}",
       "limitReached": "Mwafika pa malire",
       "familyLimitReached": "Mwafika pa malire a banja la chitsanzo",
-      "usageUnavailable": "Ntchito zapano sizingalowe - zikuwonetsa malire okha."
+      "usageUnavailable": "Ntchito zapano sizingalowe - zikuwonetsa malire okha.",
+      "familyRow": "Zitsanzo za {family}"
     },
     "routes": {
       "ttsExhausted": "Mwafika pa malire a text-to-speech a lero.",

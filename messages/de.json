@@ -5547,7 +5547,9 @@
       "resets": "Setzt zurück {resets}.",
       "chooseAnotherModel": "Anderes Modell wählen",
       "turnOffSearchAndResend": "Websuche deaktivieren und erneut senden",
-      "turnOffInterpreterAndResend": "Code Interpreter deaktivieren und erneut senden"
+      "turnOffInterpreterAndResend": "Code Interpreter deaktivieren und erneut senden",
+      "agentModelBlocked": "Dieser Agent verwendet ein Modell, das für Ihr Konto nicht verfügbar ist. Trennen Sie den Agenten oder wählen Sie einen anderen aus.",
+      "turnOffConnectorsAndResend": "Schalten Sie die Connectors aus und senden Sie erneut"
     },
     "notice": {
       "unavailable": "{model} ist für Ihr Konto nicht verfügbar — wählen Sie ein anderes Modell, um fortzufahren.",
@@ -5564,7 +5566,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# Nutzung heute übrig} other {# Nutzungen heute übrig}}",
-      "exhausted": "Tageslimit erreicht — das Modell antwortet ohne diese Funktion."
+      "exhausted": "Tageslimit erreicht — das Modell antwortet ohne diese Funktion.",
+      "exhaustedResets": "Tageslimit erreicht – das Modell antwortet ohne dieses Limit. Zurücksetzungen: {resets}."
     },
     "mine": {
       "title": "Ihre Limits",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Setzt zurück {resets}",
       "limitReached": "Limit erreicht",
       "familyLimitReached": "Modellfamilien-Limit erreicht",
-      "usageUnavailable": "Aktueller Verbrauch konnte nicht geladen werden — es werden nur die Limits angezeigt."
+      "usageUnavailable": "Aktueller Verbrauch konnte nicht geladen werden — es werden nur die Limits angezeigt.",
+      "familyRow": "{family}-Modelle"
     },
     "routes": {
       "ttsExhausted": "Sie haben das heutige Text-zu-Sprache-Limit erreicht.",

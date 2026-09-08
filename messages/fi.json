@@ -5547,7 +5547,9 @@
       "resets": "Nollautuu {resets}.",
       "chooseAnotherModel": "Valitse toinen malli",
       "turnOffSearchAndResend": "Poista verkkohaku käytöstä ja lähetä uudelleen",
-      "turnOffInterpreterAndResend": "Poista koodintulkki käytöstä ja lähetä uudelleen"
+      "turnOffInterpreterAndResend": "Poista koodintulkki käytöstä ja lähetä uudelleen",
+      "agentModelBlocked": "Tämä agentti käyttää mallia, joka ei ole käytettävissä tililläsi. Irrota agentti tai valitse toinen agentti.",
+      "turnOffConnectorsAndResend": "Poista liitännät käytöstä ja lähetä uudelleen"
     },
     "notice": {
       "unavailable": "{model} ei ole käytettävissä tililläsi — valitse toinen malli jatkaaksesi.",
@@ -5564,7 +5566,8 @@
         "connectors": "Liitännäiset"
       },
       "remaining": "{count, plural, one {# käyttökerta jäljellä tänään} other {# käyttökertaa jäljellä tänään}}",
-      "exhausted": "Päivittäinen raja saavutettu — malli vastaa ilman tätä toimintoa."
+      "exhausted": "Päivittäinen raja saavutettu — malli vastaa ilman tätä toimintoa.",
+      "exhaustedResets": "Päivittäinen raja saavutettu — malli vastaa ilman sitä. Nollaukset {resets}."
     },
     "mine": {
       "title": "Omat rajasi",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Nollautuu {resets}",
       "limitReached": "Raja saavutettu",
       "familyLimitReached": "Malliperheen raja saavutettu",
-      "usageUnavailable": "Nykyistä käyttöä ei voitu ladata — näytetään vain rajat."
+      "usageUnavailable": "Nykyistä käyttöä ei voitu ladata — näytetään vain rajat.",
+      "familyRow": "{family}-mallit"
     },
     "routes": {
       "ttsExhausted": "Olet saavuttanut tämän päivän tekstistä puheeksi -käytön rajan.",

@@ -5547,7 +5547,9 @@
       "resets": "Reset {resets}.",
       "chooseAnotherModel": "Kies een ander model",
       "turnOffSearchAndResend": "Schakel webzoekfunctie uit en verzend opnieuw",
-      "turnOffInterpreterAndResend": "Schakel code interpreter uit en verzend opnieuw"
+      "turnOffInterpreterAndResend": "Schakel code interpreter uit en verzend opnieuw",
+      "agentModelBlocked": "Deze agent gebruikt een model dat niet beschikbaar is op uw account. Koppel de agent los of kies een andere.",
+      "turnOffConnectorsAndResend": "Connectoren uitschakelen en opnieuw verzenden"
     },
     "notice": {
       "unavailable": "{model} is niet beschikbaar voor uw account — kies een ander model om verder te gaan.",
@@ -5564,7 +5566,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# gebruik over vandaag} other {# gebruiken over vandaag}}",
-      "exhausted": "Daglimiet bereikt — het model zal antwoorden zonder deze functie."
+      "exhausted": "Daglimiet bereikt — het model zal antwoorden zonder deze functie.",
+      "exhaustedResets": "Dagelijks limiet bereikt — het model zal beantwoorden zonder dit. Resets {resets}."
     },
     "mine": {
       "title": "Uw limieten",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Reset {resets}",
       "limitReached": "Limiet bereikt",
       "familyLimitReached": "Modelfamilielimiet bereikt",
-      "usageUnavailable": "Huidig gebruik kon niet worden geladen — alleen limieten worden getoond."
+      "usageUnavailable": "Huidig gebruik kon niet worden geladen — alleen limieten worden getoond.",
+      "familyRow": "{family} modellen"
     },
     "routes": {
       "ttsExhausted": "U heeft de limiet voor tekst-naar-spraak vandaag bereikt.",

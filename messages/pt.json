@@ -5547,7 +5547,9 @@
       "resets": "Reinicia {resets}.",
       "chooseAnotherModel": "Escolha outro modelo",
       "turnOffSearchAndResend": "Desative a busca na web e reenvie",
-      "turnOffInterpreterAndResend": "Desative o interpretador de código e reenvie"
+      "turnOffInterpreterAndResend": "Desative o interpretador de código e reenvie",
+      "agentModelBlocked": "Este agente usa um modelo que não está disponível na sua conta. Desvincule o agente ou escolha outro.",
+      "turnOffConnectorsAndResend": "Desative os conectores e reenvie"
     },
     "notice": {
       "unavailable": "{model} não está disponível na sua conta — escolha outro modelo para continuar.",
@@ -5564,7 +5566,8 @@
         "connectors": "Conectores"
       },
       "remaining": "{count, plural, one {# uso restante hoje} other {# usos restantes hoje}}",
-      "exhausted": "Limite diário atingido — o modelo irá responder sem esse recurso."
+      "exhausted": "Limite diário atingido — o modelo irá responder sem esse recurso.",
+      "exhaustedResets": "Limite diário atingido — o modelo responderá sem isso. Reinicializações {resets}."
     },
     "mine": {
       "title": "Seus limites",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Reinicia {resets}",
       "limitReached": "Limite atingido",
       "familyLimitReached": "Limite da família de modelos atingido",
-      "usageUnavailable": "O uso atual não pôde ser carregado — exibindo apenas os limites."
+      "usageUnavailable": "O uso atual não pôde ser carregado — exibindo apenas os limites.",
+      "familyRow": "Modelos {family}"
     },
     "routes": {
       "ttsExhausted": "Você atingiu o limite de conversão de texto em fala de hoje.",

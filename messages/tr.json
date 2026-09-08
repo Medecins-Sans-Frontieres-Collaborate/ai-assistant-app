@@ -5547,7 +5547,9 @@
       "resets": "{resets} tarihinde sıfırlanır.",
       "chooseAnotherModel": "Başka bir model seçin",
       "turnOffSearchAndResend": "Web aramasını kapatıp tekrar gönderin",
-      "turnOffInterpreterAndResend": "Kod yorumlayıcısını kapatıp tekrar gönderin"
+      "turnOffInterpreterAndResend": "Kod yorumlayıcısını kapatıp tekrar gönderin",
+      "agentModelBlocked": "Bu asistan, hesabınızda mevcut olmayan bir model kullanıyor. Asistanı kaldırın veya farklı bir tane seçin.",
+      "turnOffConnectorsAndResend": "Bağlayıcıları kapatıp tekrar gönderin"
     },
     "notice": {
       "unavailable": "{model} hesabınızda mevcut değil — devam etmek için başka bir model seçin.",
@@ -5564,7 +5566,8 @@
         "connectors": "Bağlayıcılar"
       },
       "remaining": "{count, plural, one {Bugün # kullanım hakkı kaldı} other {Bugün # kullanım hakkı kaldı}}",
-      "exhausted": "Günlük limit doldu — model bu özelliği olmadan yanıt verecek."
+      "exhausted": "Günlük limit doldu — model bu özelliği olmadan yanıt verecek.",
+      "exhaustedResets": "Günlük limite ulaşıldı — model limitsiz olarak yanıt verecek. Sıfırlamalar {resets}."
     },
     "mine": {
       "title": "Limitleriniz",
@@ -5575,7 +5578,8 @@
       "resetsIn": "{resets} tarihinde sıfırlanır",
       "limitReached": "Limit doldu",
       "familyLimitReached": "Model ailesi limiti doldu",
-      "usageUnavailable": "Mevcut kullanım yüklenemedi — yalnızca limitler gösteriliyor."
+      "usageUnavailable": "Mevcut kullanım yüklenemedi — yalnızca limitler gösteriliyor.",
+      "familyRow": "{family} modelleri"
     },
     "routes": {
       "ttsExhausted": "Bugünkü metinden sese çeviri limitinize ulaştınız.",

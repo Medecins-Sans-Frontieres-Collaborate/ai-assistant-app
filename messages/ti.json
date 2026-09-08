@@ -5531,7 +5531,9 @@
       "chooseAnotherModel": "ንዝሓለፈ ሞዴል ምረጽ",
       "turnOffSearchAndResend": "ድሕሪ ፍለጋ ኣጥፍኡን ዳግመይ ልአኩ",
       "turnOffInterpreterAndResend": "code interpreter ኣጥፍኡን ዳግመይ ልአኩ",
-      "familyExhausted": "ናይሎም ሰባት ሞዴል ሎሚ ተቆራኺ ኣብነት ቦጀት {limit} ጥያቄታት ክትጥቀም ወዲ ምሉእ ትጠቐምካ።"
+      "familyExhausted": "ናይሎም ሰባት ሞዴል ሎሚ ተቆራኺ ኣብነት ቦጀት {limit} ጥያቄታት ክትጥቀም ወዲ ምሉእ ትጠቐምካ።",
+      "agentModelBlocked": "እዚ ኣገንት ዝተኸተለ ሞዴል ብኣካውንትካ ዝተሃለየ አይተረኽበን። ኣገንትን ተኸፍተው ወይ ካብ ሓደ ዝተሃለወ መርፅ.",
+      "turnOffConnectorsAndResend": "ኮነክተርታትን ዝግበሉን ዳግማይ ልኡ"
     },
     "notice": {
       "unavailable": "{model} ኣብ መአንቲ የለን — ካልእ ሞዴል ምረጽ ንዝቀጺል።",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# መጠቐሚ ልዕሊ ዛንቛ ልዕሊ ሎሚ} other {# መጠቐምታት ልዕሊ ዛንቛ ልዕሊ ሎሚ}}",
-      "exhausted": "ውድብ መዓልቲ ተበግደሉ — ሞዴል ብውን ይመልስ።"
+      "exhausted": "ውድብ መዓልቲ ተበግደሉ — ሞዴል ብውን ይመልስ።",
+      "exhaustedResets": "ዕለታዊ ውሳኔ ተሰኪሉ — ሞዴል ብዘይኡ ይመልስ። ዳግማይ ምምሓር {resets}."
     },
     "mine": {
       "title": "ውድብታትኻ",
@@ -5559,7 +5562,8 @@
       "resetsIn": "ዳግማይ ይቐምጣ {resets}",
       "limitReached": "ውድብ ተበግደሉ",
       "familyLimitReached": "ውድብ ሞዴል ቤተሰብ ተበግደሉ",
-      "usageUnavailable": "ኩነታት ተጠቓሚ ምስ ምክትታል ከምዘይተጻወተ — ውድብ ብብሉይ ምስዚ ተርእዩ።"
+      "usageUnavailable": "ኩነታት ተጠቓሚ ምስ ምክትታል ከምዘይተጻወተ — ውድብ ብብሉይ ምስዚ ተርእዩ።",
+      "familyRow": "{family} ሞዴልታት"
     },
     "routes": {
       "ttsExhausted": "ውድብ ድሓን ወደ ድብደባ ለውጢ ሎሚ ተጠቒሙ።",

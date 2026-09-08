@@ -5531,7 +5531,9 @@
       "resets": "Ekozongela {resets}.",
       "chooseAnotherModel": "Pona model mosusu",
       "turnOffSearchAndResend": "Pimela recherche ya Internet mpe tinda lisusu",
-      "turnOffInterpreterAndResend": "Pimela code interpreter mpe tinda lisusu"
+      "turnOffInterpreterAndResend": "Pimela code interpreter mpe tinda lisusu",
+      "agentModelBlocked": "Agent oyo azali kosalela modèle oyo ezalaka te na compte na yo. Kobóya agent topona mosusu.",
+      "turnOffConnectorsAndResend": "Kofungola connectors te mpe kotinda lisusu"
     },
     "notice": {
       "unavailable": "{model} eza te na compte na yo — pona model mosusu pona kokoba.",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# utilisation ezali kaka lelo} other {# utilisations ezali kaka lelo}}",
-      "exhausted": "Limite ya mokolo ekoki — model ekopesa eyano na yango te."
+      "exhausted": "Limite ya mokolo ekoki — model ekopesa eyano na yango te.",
+      "exhaustedResets": "Limite ya mokolo ekoki — modèle ekopesa eyano ata bongo. Reset {resets}."
     },
     "mine": {
       "title": "Baimite na yo",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Ekozongela {resets}",
       "limitReached": "Limite ekoki",
       "familyLimitReached": "Limite ya famille ya model ekoki",
-      "usageUnavailable": "Utilisation ya lelo ekoki te — nani komonisa baimite kaka."
+      "usageUnavailable": "Utilisation ya lelo ekoki te — nani komonisa baimite kaka.",
+      "familyRow": "Ba modèles ya {family}"
     },
     "routes": {
       "ttsExhausted": "Osili kokoma limite ya lelo ya text-to-speech.",

@@ -5547,7 +5547,9 @@
       "resets": "Si azzera {resets}.",
       "chooseAnotherModel": "Scegli un altro modello",
       "turnOffSearchAndResend": "Disattiva la ricerca web e reinvia",
-      "turnOffInterpreterAndResend": "Disattiva l'interprete del codice e reinvia"
+      "turnOffInterpreterAndResend": "Disattiva l'interprete del codice e reinvia",
+      "agentModelBlocked": "Questo agente utilizza un modello non disponibile per il tuo account. Scollega l'agente o scegli un altro.",
+      "turnOffConnectorsAndResend": "Disattiva i connettori e invia di nuovo"
     },
     "notice": {
       "unavailable": "{model} non è disponibile per il tuo account — scegli un altro modello per continuare.",
@@ -5564,7 +5566,8 @@
         "connectors": "Connettori"
       },
       "remaining": "{count, plural, one {# utilizzo rimasto oggi} other {# utilizzi rimasti oggi}}",
-      "exhausted": "Limite giornaliero raggiunto — il modello risponderà senza di esso."
+      "exhausted": "Limite giornaliero raggiunto — il modello risponderà senza di esso.",
+      "exhaustedResets": "Limite giornaliero raggiunto — il modello risponderà senza di esso. Reset {resets}."
     },
     "mine": {
       "title": "I tuoi limiti",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Si azzera {resets}",
       "limitReached": "Limite raggiunto",
       "familyLimitReached": "Limite famiglia modello raggiunto",
-      "usageUnavailable": "Impossibile caricare l'uso corrente — vengono mostrati solo i limiti."
+      "usageUnavailable": "Impossibile caricare l'uso corrente — vengono mostrati solo i limiti.",
+      "familyRow": "Modelli {family}"
     },
     "routes": {
       "ttsExhausted": "Hai raggiunto il limite giornaliero di sintesi vocale.",

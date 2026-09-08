@@ -5578,7 +5578,9 @@
       "resets": "将于{resets}重置。",
       "chooseAnotherModel": "选择其他模型",
       "turnOffSearchAndResend": "关闭网页搜索并重新发送",
-      "turnOffInterpreterAndResend": "关闭代码解释器并重新发送"
+      "turnOffInterpreterAndResend": "关闭代码解释器并重新发送",
+      "agentModelBlocked": "此代理使用的模型在您的账户不可用。请解除代理或选择其他代理。",
+      "turnOffConnectorsAndResend": "关闭连接器并重新发送"
     },
     "notice": {
       "unavailable": "{model}在您的账户不可用 — 请选择其他模型继续。",
@@ -5595,7 +5597,8 @@
         "connectors": "连接器"
       },
       "remaining": "{count, plural, one {今日剩余 # 次} other {今日剩余 # 次}}",
-      "exhausted": "已达每日上限 — 模型将不使用该功能作答。"
+      "exhausted": "已达每日上限 — 模型将不使用该功能作答。",
+      "exhaustedResets": "已达每日限额 — 模型将在无该功能下作答。重置次数：{resets}。"
     },
     "mine": {
       "title": "您的使用限额",
@@ -5606,7 +5609,8 @@
       "resetsIn": "将于{resets}重置",
       "limitReached": "已达上限",
       "familyLimitReached": "已达模型家族上限",
-      "usageUnavailable": "当前用量无法加载，仅显示限额。"
+      "usageUnavailable": "当前用量无法加载，仅显示限额。",
+      "familyRow": "{family}模型"
     },
     "routes": {
       "ttsExhausted": "您今日文本转语音额度已用完。",

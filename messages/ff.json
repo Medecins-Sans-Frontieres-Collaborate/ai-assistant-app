@@ -5531,7 +5531,9 @@
       "resets": "Ina haɗɗi {resets}.",
       "chooseAnotherModel": "Suɓo model goɗɗo",
       "turnOffSearchAndResend": "Woppi web search tee yamiroo",
-      "turnOffInterpreterAndResend": "Woppi code interpreter tee yamiroo"
+      "turnOffInterpreterAndResend": "Woppi code interpreter tee yamiroo",
+      "agentModelBlocked": "Jeyal ngal hono model mo waawaa use e konto maa. Hakkil e agent ngol walla suubii agent dow.",
+      "turnOffConnectorsAndResend": "Sunu connectors ɗe tee yottu."
     },
     "notice": {
       "unavailable": "{model} alaa e ceertu maa — suɓo model goɗɗo tee yamiroo.",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {Tee # waawi yamira e ñalngu} other {Tee # waawi yamira e ñalngu}}",
-      "exhausted": "Teel e ñalngu toowti — model ɗin ena yamira ha mo woppi."
+      "exhausted": "Teel e ñalngu toowti — model ɗin ena yamira ha mo woppi.",
+      "exhaustedResets": "Sariiji ñaawma — model ngal maa jooɗii anndu. Reset {resets}."
     },
     "mine": {
       "title": "Teel maa",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Ina haɗɗi {resets}",
       "limitReached": "Teel toowti",
       "familyLimitReached": "Teel e mumtugol yimɓe model toowti",
-      "usageUnavailable": "Condii junnii waawanii nelda — wondidi teel tan."
+      "usageUnavailable": "Condii junnii waawanii nelda — wondidi teel tan.",
+      "familyRow": "Model ɗe {family}"
     },
     "routes": {
       "ttsExhausted": "A toowti teel Text-to-Speech maa e ñalngu.",

@@ -5531,7 +5531,9 @@
       "resets": "Izasubiraho {resets}.",
       "chooseAnotherModel": "Hitamo indi model",
       "turnOffSearchAndResend": "Funga web search ubisubize",
-      "turnOffInterpreterAndResend": "Funga code interpreter ubisubize"
+      "turnOffInterpreterAndResend": "Funga code interpreter ubisubize",
+      "agentModelBlocked": "Umutangirwamanota akoresha imiterere itaboneka kuri konti yawe. Gira ngo ushyireho undi cyangwa uhitemo undi mutangirwamanota.",
+      "turnOffConnectorsAndResend": "Funga connectors wongere wohereze"
     },
     "notice": {
       "unavailable": "{model} ntiiboneka kuri konti yawe — hitamo indi model ukomeze.",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# risigaye uyu munsi} other {# bisigaye uyu munsi}}",
-      "exhausted": "Igihe ntarengwa kigeze — model izasubiza idakoresheje ibi."
+      "exhausted": "Igihe ntarengwa kigeze — model izasubiza idakoresheje ibi.",
+      "exhaustedResets": "Igihe ntarengwa cy’uyu munsi kigeze — imiterere izasubiza nta cyo ukoresheje. Gusubizaho: {resets}."
     },
     "mine": {
       "title": "Imipaka yawe",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Izasubiraho {resets}",
       "limitReached": "Limite igeze",
       "familyLimitReached": "Limite y'itsinda rya model igeze",
-      "usageUnavailable": "Uko bikoreshwa ubu ntibibashije kugaragara — urabona gusa imipaka."
+      "usageUnavailable": "Uko bikoreshwa ubu ntibibashije kugaragara — urabona gusa imipaka.",
+      "familyRow": "Imiterere za {family}"
     },
     "routes": {
       "ttsExhausted": "Wageze kuri limite ya text-to-speech y'uyu munsi.",

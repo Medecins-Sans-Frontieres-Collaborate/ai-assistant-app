@@ -5531,7 +5531,9 @@
       "resets": "នឹងកំណត់ឡើងវិញ {resets}។",
       "chooseAnotherModel": "ជ្រើសម៉ូដែលផ្សេងទៀត",
       "turnOffSearchAndResend": "បិទ​​​ស្វែងរក​បណ្តាញ ហើយផ្ញើម្តងទៀត",
-      "turnOffInterpreterAndResend": "បិទ code interpreter ហើយផ្ញើម្តងទៀត"
+      "turnOffInterpreterAndResend": "បិទ code interpreter ហើយផ្ញើម្តងទៀត",
+      "agentModelBlocked": "Agent នេះប្រើម៉ូដែលដែលមិនអាចប្រើបានសម្រាប់គណនីរបស់អ្នក។ សូមផ្ដាច់ agent ឬជ្រើសរើសមួយផ្សេងទៀត។",
+      "turnOffConnectorsAndResend": "បិទ connectors ហើយផ្ញើម្តងទៀត"
     },
     "notice": {
       "unavailable": "{model} មិនមានសម្រាប់គណនីរបស់អ្នក — សូមជ្រើសម៉ូដែលផ្សេងដើម្បីបន្ត។",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# ដងនៅសល់ថ្ងៃនេះ} other {# ដងនៅសល់ថ្ងៃនេះ}}",
-      "exhausted": "ឈានដល់កំណត់ប្រចាំថ្ងៃ — ម៉ូដែលនឹងឆ្លើយដោយគ្មានវា។"
+      "exhausted": "ឈានដល់កំណត់ប្រចាំថ្ងៃ — ម៉ូដែលនឹងឆ្លើយដោយគ្មានវា។",
+      "exhaustedResets": "បានឆ្លងកម្រិតប្រចាំថ្ងៃ — ម៉ូដែលនឹងឆ្លើយដោយគ្មានវា។ ការតំលៃសារសារ {resets}។"
     },
     "mine": {
       "title": "កំណត់របស់អ្នក",
@@ -5559,7 +5562,8 @@
       "resetsIn": "នឹងកំណត់ឡើងវិញ {resets}",
       "limitReached": "ឈានដល់កំណត់",
       "familyLimitReached": "ឈានដល់កំណត់គ្រួសារម៉ូដែល",
-      "usageUnavailable": "មិនអាចផ្ទុកការប្រើប្រាស់បច្ចុប្បន្នបានទេ — បង្ហាញតែកំណត់ប៉ុណ្ណោះ។"
+      "usageUnavailable": "មិនអាចផ្ទុកការប្រើប្រាស់បច្ចុប្បន្នបានទេ — បង្ហាញតែកំណត់ប៉ុណ្ណោះ។",
+      "familyRow": "ម៉ូដែល {family}"
     },
     "routes": {
       "ttsExhausted": "អ្នកបានឈានដល់កំណត់ text-to-speech សម្រាប់ថ្ងៃនេះរួចហើយ។",

@@ -5531,7 +5531,9 @@
       "resets": "Kuzoqala kabusha ngo-{resets}.",
       "chooseAnotherModel": "Khetha enye imodeli",
       "turnOffSearchAndResend": "Vala ukusesha kwewebhu bese uthumela kabusha",
-      "turnOffInterpreterAndResend": "Vala i-Code interpreter bese uthumela kabusha"
+      "turnOffInterpreterAndResend": "Vala i-Code interpreter bese uthumela kabusha",
+      "agentModelBlocked": "Le agentisebenzisa imodeli engatholakali ku-akhawunti yakho. Susa le agenti noma ukhethe enye.",
+      "turnOffConnectorsAndResend": "Cisha oxhasi bese uthumela kabusha"
     },
     "notice": {
       "unavailable": "U-{model} akatholakali kwi-akhawunti yakho — khetha enye imodeli ukuze uqhubeke.",
@@ -5548,7 +5550,8 @@
         "connectors": "Ama-connector"
       },
       "remaining": "{count, plural, one {# esisele namuhla} other {# ezisele namuhla}}",
-      "exhausted": "Umkhawulo wansuku zonke usufinyelelwe — imodeli izophendula ingasebenzisi yona."
+      "exhausted": "Umkhawulo wansuku zonke usufinyelelwe — imodeli izophendula ingasebenzisi yona.",
+      "exhaustedResets": "Usuyifinyelele inani losuku — imodeli izophendula ngaphandle kwalo. Izibuyekezwa {resets}."
     },
     "mine": {
       "title": "Umkhawulo wakho",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Kuzoqala kabusha ngo-{resets}",
       "limitReached": "Umkhawulo usufinyelelwe",
       "familyLimitReached": "Umkhawulo womndeni wemodeli usufinyelelwe",
-      "usageUnavailable": "Ukusetshenziswa okwamanje akukalayishwa — kukhonjiswa imikhawulo kuphela."
+      "usageUnavailable": "Ukusetshenziswa okwamanje akukalayishwa — kukhonjiswa imikhawulo kuphela.",
+      "familyRow": "Amanani emodeli {family}"
     },
     "routes": {
       "ttsExhausted": "Usufinyelele umkhawulo wanamuhla we-Text-to-Speech.",

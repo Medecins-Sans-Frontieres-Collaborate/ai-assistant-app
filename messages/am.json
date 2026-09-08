@@ -5547,7 +5547,9 @@
       "resets": "{resets} ይቀየራል።",
       "chooseAnotherModel": "ሌላ ሞዴል ይምረጡ",
       "turnOffSearchAndResend": "የድህረ መረጃ ፍለጋ ያጥፉና ዳግመኛ ይላኩ",
-      "turnOffInterpreterAndResend": "የኮድ ትርጓሜ ያጥፉና ዳግመኛ ይላኩ"
+      "turnOffInterpreterAndResend": "የኮድ ትርጓሜ ያጥፉና ዳግመኛ ይላኩ",
+      "agentModelBlocked": "ይህ ወኪል በመለያዎ ላይ የማይገኝ አብነት ይጠቀማል። ወኪሉን አፍታዉ ወይም ሌላ ይምረጡ።",
+      "turnOffConnectorsAndResend": "ኮኔክተሮቹን ያጥፉና ዳግም ይላኩ"
     },
     "notice": {
       "unavailable": "{model} በአካውንትዎ ላይ አይገኝም — ሌላ ሞዴል ይምረጡ ለመቀጠል።",
@@ -5564,7 +5566,8 @@
         "connectors": "ኮኔክተሮች"
       },
       "remaining": "{count, plural, one {ዛሬ # ጥቅም ቀሪ አለ} other {ዛሬ # ጥቅሞች ቀሩ}}",
-      "exhausted": "የዕለቱ ወሰን ተደርሷል — ሞዴሉ ያለዚህ ይመልሳል።"
+      "exhausted": "የዕለቱ ወሰን ተደርሷል — ሞዴሉ ያለዚህ ይመልሳል።",
+      "exhaustedResets": "ዕለታዊ ገደብ ተደርሷል — አብነቱ ሳያጠቀም ይመልሳል። ዳግምም: {resets}።"
     },
     "mine": {
       "title": "የእርስዎ ወሰኖች",
@@ -5575,7 +5578,8 @@
       "resetsIn": "{resets} ይቀየራል",
       "limitReached": "ወሰኑ ተደርሷል",
       "familyLimitReached": "የሞዴል ቤተሰብ ወሰኑ ተደርሷል",
-      "usageUnavailable": "ወቅታዊ ጥቅም ማከል አልተቻለም — እዚህ ወሰኖችን ብቻ እናሳያለን።"
+      "usageUnavailable": "ወቅታዊ ጥቅም ማከል አልተቻለም — እዚህ ወሰኖችን ብቻ እናሳያለን።",
+      "familyRow": "{family} አብነቶች"
     },
     "routes": {
       "ttsExhausted": "ዛሬ የጽሑፍ ወደ ድምፅ የተመዘገበውን ወሰን ደርሰዋል።",

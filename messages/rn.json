@@ -5531,7 +5531,9 @@
       "resets": "Bizosubira gushingwa {{resets}}.",
       "chooseAnotherModel": "Hitamwo iyindi model",
       "turnOffSearchAndResend": "Gufunga gushakisha kuri web no kongera kurungika",
-      "turnOffInterpreterAndResend": "Gufunga code interpreter no kongera kurungika"
+      "turnOffInterpreterAndResend": "Gufunga code interpreter no kongera kurungika",
+      "agentModelBlocked": "Uyu mushandisi akoresha imodoka itaboneka kuri konti yawe. Sokora uwo mushandisi canke uhitemwo uwundi.",
+      "turnOffConnectorsAndResend": "Zimya connectors wongere utume"
     },
     "notice": {
       "unavailable": "{{model}} ntibiboneka kuri konti yawe — hitamwo iyindi model ugume ubandanya.",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# gukoreshwa gusigaye uyu munsi} other {# gukoreshwa gusigaye uyu munsi}}",
-      "exhausted": "Urugero rwa buri munsi rugeze — model izosubiza idakoresheje."
+      "exhausted": "Urugero rwa buri munsi rugeze — model izosubiza idakoresheje.",
+      "exhaustedResets": "Ingingo ya buri musi igeze — imodoka izishura idakoresheje iyo. Gusanura {resets}."
     },
     "mine": {
       "title": "Ubugererane bwawe",
@@ -5559,7 +5562,8 @@
       "familyLimitReached": "Urugero rw'umuryango wa model rugeze",
       "usageUnavailable": "Uko bikoresha ubu ntivyabashije kuza — bigaragaza gusa ibipimo.",
       "usedOfLimit": "{used} / {limit} {unit}",
-      "limitOnly": "{limit} {unit}"
+      "limitOnly": "{limit} {unit}",
+      "familyRow": "Imodoka za {family}"
     },
     "routes": {
       "ttsExhausted": "Mwageze ku gipimo ca text-to-speech (TTS) ca none.",

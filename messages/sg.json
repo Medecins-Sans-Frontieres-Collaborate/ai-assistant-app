@@ -5531,7 +5531,9 @@
       "resets": "Li bɛ wa na {resets}.",
       "chooseAnotherModel": "Tafio model mô",
       "turnOffSearchAndResend": "Pa na rechercher na Internet na resend",
-      "turnOffInterpreterAndResend": "Pa na code interpreter na resend"
+      "turnOffInterpreterAndResend": "Pa na code interpreter na resend",
+      "agentModelBlocked": "Lîngbi tî na mo mingi ngâ na aka na zo. Kûê lwa na lîngbi tî na mo, wala wa yeke kûê na mo mingi ngû.",
+      "turnOffConnectorsAndResend": "Kûê lo connectors na zo, yâ bàngâ nda yêmbênî"
     },
     "notice": {
       "unavailable": "{model} ala na kɛ ti aka na ô tî mo — tafio model mô sô mo kûè.",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# walë ngangu tî lo tî lɛ} other {# walë ngangu tî lo tî lɛ}}",
-      "exhausted": "Limiti tî lo tî lɛ hinga — model ô a yeke nzönï sô ala."
+      "exhausted": "Limiti tî lo tî lɛ hinga — model ô a yeke nzönï sô ala.",
+      "exhaustedResets": "Limiti tî mûngi na ngû—mo mingi ala na ko yâ ara. Resets {resets}."
     },
     "mine": {
       "title": "Limiti tî mo",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Li bɛ wa na {resets}",
       "limitReached": "Limiti hinga",
       "familyLimitReached": "Limiti ti sô tî model hinga",
-      "usageUnavailable": "Usage sô yeke mbênî ti yeke sangô — limiti mô pfûn na kîri."
+      "usageUnavailable": "Usage sô yeke mbênî ti yeke sangô — limiti mô pfûn na kîri.",
+      "familyRow": "Mo mingi tî {family}"
     },
     "routes": {
       "ttsExhausted": "Mo ape limiti tî text-to-speech tî lo tî lɛ.",

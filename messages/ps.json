@@ -5531,7 +5531,9 @@
       "resets": "بیا تنظیمېږي {resets}.",
       "chooseAnotherModel": "بل ماډل غوره کړئ",
       "turnOffSearchAndResend": "ویب لټون بنده کړئ او بیا واستوئ",
-      "turnOffInterpreterAndResend": "کوډ انټرپرېټر بنده کړئ او بیا واستوئ"
+      "turnOffInterpreterAndResend": "کوډ انټرپرېټر بنده کړئ او بیا واستوئ",
+      "agentModelBlocked": "دا استازی یو داسې ماډل کاروي چې ستاسو په حساب کې شتون نه لري. استازی جلا کړئ یا بل استازی وټاکئ.",
+      "turnOffConnectorsAndResend": "اتصالونه بند کړئ او بیا واستوئ"
     },
     "notice": {
       "unavailable": "{model} ستاسو په حساب کې نشته — د دوام لپاره بل ماډل وټاکئ.",
@@ -5548,7 +5550,8 @@
         "connectors": "کنېکټرونه"
       },
       "remaining": "{count, plural, one {# ځله نن پاتې} other {# ځلې نن پاتې}}",
-      "exhausted": "ورځنۍ محدوده ختمه شوه — ماډل به پرته له دې ځواب ووايي."
+      "exhausted": "ورځنۍ محدوده ختمه شوه — ماډل به پرته له دې ځواب ووايي.",
+      "exhaustedResets": "ورځنی حد ته رسېدلي یاست — ماډل به پرته له دې ځواب ووایي. بیا تنظیمونه {resets}."
     },
     "mine": {
       "title": "ستاسې محدودیتونه",
@@ -5559,7 +5562,8 @@
       "resetsIn": "بیا تنظیمېږي {resets}",
       "limitReached": "محدودیت ته رسېدلی",
       "familyLimitReached": "د ماډل کورنۍ محدودیت ته رسېدلی",
-      "usageUnavailable": "فعلي کارونه نشي ښکاره کېدای — یوازې محدودیتونه ښودل کېږي."
+      "usageUnavailable": "فعلي کارونه نشي ښکاره کېدای — یوازې محدودیتونه ښودل کېږي.",
+      "familyRow": "{family} ماډلونه"
     },
     "routes": {
       "ttsExhausted": "تاسو نن د text-to-speech محدودیت ته رسېدلي یاست.",

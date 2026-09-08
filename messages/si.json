@@ -5547,7 +5547,9 @@
       "resets": "{resets}දී නැවත සකසයි.",
       "chooseAnotherModel": "වෙනත් model එකක් තෝරන්න",
       "turnOffSearchAndResend": "Web search අක්‍රීය කර නැවත යවන්න",
-      "turnOffInterpreterAndResend": "Code interpreter අක්‍රීය කර නැවත යවන්න"
+      "turnOffInterpreterAndResend": "Code interpreter අක්‍රීය කර නැවත යවන්න",
+      "agentModelBlocked": "මෙම ඒජන්ට් සංයුක්ත කර ඇති මාදිලිය ඔබගේ ගිණුමට ලබාගත නොහැක. ඒජන්ට් එක ඉවත් කරන්න හෝ වෙනත් ඒකක් තෝරන්න.",
+      "turnOffConnectorsAndResend": "සම්බන්ධක අක්‍රීය කර නැවත යවනන්න"
     },
     "notice": {
       "unavailable": "{model} ඔබගේ ගිණුමට ලබා ගත නොහැක — ඉදිරියට යාමට වෙනත් model එකක් තෝරන්න.",
@@ -5564,7 +5566,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {අද තව අවස්ථාවක් තියෙනවා} other {අද තව අවස්ථා {count}ක් තියෙනවා}}",
-      "exhausted": "දිනකට සීමාවට පැමිණ ඇත — model එක මෙය නැතිව පිළිතුරු ලබා දෙනු ඇත."
+      "exhausted": "දිනකට සීමාවට පැමිණ ඇත — model එක මෙය නැතිව පිළිතුරු ලබා දෙනු ඇත.",
+      "exhaustedResets": "දිනපතා සීමාවට ළඟා වී ඇත — මාදිලිය එය නොමැතිව පිළිතුරු දේ. නැවත සැකසුම් {resets}."
     },
     "mine": {
       "title": "ඔබගේ සීමාවන්",
@@ -5575,7 +5578,8 @@
       "resetsIn": "{resets}දී නැවත සකසයි",
       "limitReached": "සීමාවට පැමිණ ඇත",
       "familyLimitReached": "Model පවුල සීමාවට පැමිණ ඇත",
-      "usageUnavailable": "වත්මන් පාවිච්චිය ප්‍රදර්ශනය කළ නොහැක — සීමා පමණක් පෙන්වයි."
+      "usageUnavailable": "වත්මන් පාවිච්චිය ප්‍රදර්ශනය කළ නොහැක — සීමා පමණක් පෙන්වයි.",
+      "familyRow": "{family} මාදිලි"
     },
     "routes": {
       "ttsExhausted": "ඔබ අද සඳහා text-to-speech සීමාවට පැමිණ ඇත.",

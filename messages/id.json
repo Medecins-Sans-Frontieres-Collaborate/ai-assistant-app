@@ -5547,7 +5547,9 @@
       "resets": "Akan direset {resets}.",
       "chooseAnotherModel": "Pilih model lain",
       "turnOffSearchAndResend": "Matikan pencarian web dan kirim ulang",
-      "turnOffInterpreterAndResend": "Matikan code interpreter dan kirim ulang"
+      "turnOffInterpreterAndResend": "Matikan code interpreter dan kirim ulang",
+      "agentModelBlocked": "Agen ini menggunakan model yang tidak tersedia di akun Anda. Lepaskan agen ini atau pilih yang lain.",
+      "turnOffConnectorsAndResend": "Matikan konektor dan kirim ulang"
     },
     "notice": {
       "unavailable": "{model} tidak tersedia di akun Anda — pilih model lain untuk melanjutkan.",
@@ -5564,7 +5566,8 @@
         "connectors": "Connector"
       },
       "remaining": "{count, plural, one {# kali tersisa hari ini} other {# kali tersisa hari ini}}",
-      "exhausted": "Batas harian tercapai — model akan menjawab tanpa fitur ini."
+      "exhausted": "Batas harian tercapai — model akan menjawab tanpa fitur ini.",
+      "exhaustedResets": "Batas harian tercapai — model akan menjawab tanpa itu. Reset {resets}."
     },
     "mine": {
       "title": "Batas Anda",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Akan direset {resets}",
       "limitReached": "Batas tercapai",
       "familyLimitReached": "Batas keluarga model tercapai",
-      "usageUnavailable": "Penggunaan saat ini tidak dapat dimuat — hanya menampilkan batas."
+      "usageUnavailable": "Penggunaan saat ini tidak dapat dimuat — hanya menampilkan batas.",
+      "familyRow": "Model {family}"
     },
     "routes": {
       "ttsExhausted": "Anda telah mencapai batas text-to-speech hari ini.",

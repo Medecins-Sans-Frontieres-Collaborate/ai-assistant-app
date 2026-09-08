@@ -5547,7 +5547,9 @@
       "resets": "Réinitialisation {resets}.",
       "chooseAnotherModel": "Choisissez un autre modèle",
       "turnOffSearchAndResend": "Désactiver la recherche web et renvoyer",
-      "turnOffInterpreterAndResend": "Désactiver l'interpréteur de code et renvoyer"
+      "turnOffInterpreterAndResend": "Désactiver l'interpréteur de code et renvoyer",
+      "agentModelBlocked": "Cet agent utilise un modèle qui n'est pas disponible sur votre compte. Détachez l'agent ou choisissez-en un autre.",
+      "turnOffConnectorsAndResend": "Désactivez les connecteurs et renvoyez"
     },
     "notice": {
       "unavailable": "{model} n'est pas disponible sur votre compte — choisissez un autre modèle pour continuer.",
@@ -5564,7 +5566,8 @@
         "connectors": "Connecteurs"
       },
       "remaining": "{count, plural, one {# utilisation restante aujourd’hui} other {# utilisations restantes aujourd’hui}}",
-      "exhausted": "Limite quotidienne atteinte — le modèle répondra sans cette fonctionnalité."
+      "exhausted": "Limite quotidienne atteinte — le modèle répondra sans cette fonctionnalité.",
+      "exhaustedResets": "Limite quotidienne atteinte — le modèle répondra sans cela. Réinitialisations {resets}."
     },
     "mine": {
       "title": "Vos limites",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Réinitialisation {resets}",
       "limitReached": "Limite atteinte",
       "familyLimitReached": "Limite de la famille de modèles atteinte",
-      "usageUnavailable": "L’utilisation actuelle n’a pas pu être chargée — seules les limites sont affichées."
+      "usageUnavailable": "L’utilisation actuelle n’a pas pu être chargée — seules les limites sont affichées.",
+      "familyRow": "Modèles {family}"
     },
     "routes": {
       "ttsExhausted": "Vous avez atteint la limite quotidienne de synthèse vocale.",

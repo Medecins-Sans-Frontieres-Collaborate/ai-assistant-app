@@ -5547,7 +5547,9 @@
       "resets": "Återställs {resets}.",
       "chooseAnotherModel": "Välj en annan modell",
       "turnOffSearchAndResend": "Stäng av webbsök och skicka igen",
-      "turnOffInterpreterAndResend": "Stäng av kodtolk och skicka igen"
+      "turnOffInterpreterAndResend": "Stäng av kodtolk och skicka igen",
+      "agentModelBlocked": "Den här agenten använder en modell som inte är tillgänglig på ditt konto. Koppla bort agenten eller välj en annan.",
+      "turnOffConnectorsAndResend": "Stäng av kontakter och skicka igen"
     },
     "notice": {
       "unavailable": "{model} är inte tillgänglig på ditt konto — välj en annan modell för att fortsätta.",
@@ -5564,7 +5566,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# användning kvar idag} other {# användningar kvar idag}}",
-      "exhausted": "Daglig gräns uppnådd — modellen kommer att svara utan den."
+      "exhausted": "Daglig gräns uppnådd — modellen kommer att svara utan den.",
+      "exhaustedResets": "Daglig gräns uppnådd — modellen kommer att svara utan den. Återställningar {resets}."
     },
     "mine": {
       "title": "Dina gränser",
@@ -5575,7 +5578,8 @@
       "resetsIn": "Återställs {resets}",
       "limitReached": "Gräns uppnådd",
       "familyLimitReached": "Modellfamiljens gräns uppnådd",
-      "usageUnavailable": "Aktuell användning kunde inte läsas in — visar endast gränser."
+      "usageUnavailable": "Aktuell användning kunde inte läsas in — visar endast gränser.",
+      "familyRow": "{family}-modeller"
     },
     "routes": {
       "ttsExhausted": "Du har nått dagens gräns för text-till-tal.",

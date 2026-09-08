@@ -5547,7 +5547,9 @@
       "resets": "يعاد التعيين في {resets}.",
       "chooseAnotherModel": "اختر نموذجاً آخر",
       "turnOffSearchAndResend": "قم بتعطيل البحث في الويب وأعد الإرسال",
-      "turnOffInterpreterAndResend": "قم بتعطيل مفسر الشيفرة وأعد الإرسال"
+      "turnOffInterpreterAndResend": "قم بتعطيل مفسر الشيفرة وأعد الإرسال",
+      "agentModelBlocked": "يستخدم هذا الوكيل نموذجاً غير متاح في حسابك. افصل الوكيل أو اختر وكيلاً آخر.",
+      "turnOffConnectorsAndResend": "أوقف الموصلات وأعد الإرسال"
     },
     "notice": {
       "unavailable": "{model} غير متوفر في حسابك — يرجى اختيار نموذج آخر للمتابعة.",
@@ -5564,7 +5566,8 @@
         "connectors": "الموصلات"
       },
       "remaining": "{count, plural, one {بقي استخدام واحد اليوم} other {بقي {count} استخدامات اليوم}}",
-      "exhausted": "تم الوصول إلى الحد اليومي — سيجيب النموذج بدون هذه الميزة."
+      "exhausted": "تم الوصول إلى الحد اليومي — سيجيب النموذج بدون هذه الميزة.",
+      "exhaustedResets": "تم الوصول إلى الحد اليومي — سيجيب النموذج دون استخدامه. إعادة التعيين {resets}."
     },
     "mine": {
       "title": "حدودك",
@@ -5575,7 +5578,8 @@
       "resetsIn": "يعاد التعيين في {resets}",
       "limitReached": "تم الوصول إلى الحد",
       "familyLimitReached": "تم الوصول إلى حد عائلة النموذج",
-      "usageUnavailable": "تعذر تحميل الاستخدام الحالي — عرض الحدود فقط."
+      "usageUnavailable": "تعذر تحميل الاستخدام الحالي — عرض الحدود فقط.",
+      "familyRow": "نماذج {family}"
     },
     "routes": {
       "ttsExhausted": "لقد وصلت إلى حد تحويل النص إلى كلام لهذا اليوم.",

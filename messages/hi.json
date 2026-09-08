@@ -5547,7 +5547,9 @@
       "resets": "{resets} पर रीसेट होता है।",
       "chooseAnotherModel": "कोई अन्य मॉडल चुनें",
       "turnOffSearchAndResend": "वेब सर्च बंद करें और पुनः भेजें",
-      "turnOffInterpreterAndResend": "कोड इंटरप्रेटर बंद करें और पुनः भेजें"
+      "turnOffInterpreterAndResend": "कोड इंटरप्रेटर बंद करें और पुनः भेजें",
+      "agentModelBlocked": "यह एजेंट ऐसे मॉडल का उपयोग करता है जो आपके खाते पर उपलब्ध नहीं है। एजेंट को अलग करें या कोई दूसरा चुनें।",
+      "turnOffConnectorsAndResend": "कनेक्टर्स बंद करें और पुनः भेजें"
     },
     "notice": {
       "unavailable": "{model} आपके खाते पर उपलब्ध नहीं है — जारी रखने के लिए कोई अन्य मॉडल चुनें।",
@@ -5564,7 +5566,8 @@
         "connectors": "कनेक्टर्स"
       },
       "remaining": "{count, plural, one {आज # उपयोग शेष} other {आज # उपयोग शेष}}",
-      "exhausted": "दैनिक सीमा पूरी — मॉडल इसके बिना उत्तर देगा।"
+      "exhausted": "दैनिक सीमा पूरी — मॉडल इसके बिना उत्तर देगा।",
+      "exhaustedResets": "दैनिक सीमा पूरी हुई — मॉडल बिना इसके उत्तर देगा। पुनर्स्थापन {resets}।"
     },
     "mine": {
       "title": "आपकी सीमाएँ",
@@ -5575,7 +5578,8 @@
       "resetsIn": "{resets} पर रीसेट",
       "limitReached": "सीमा पूरी हुई",
       "familyLimitReached": "मॉडल परिवार की सीमा पूरी हुई",
-      "usageUnavailable": "वर्तमान उपयोग लोड नहीं हो सका — केवल सीमाएँ दिखाई जा रही हैं।"
+      "usageUnavailable": "वर्तमान उपयोग लोड नहीं हो सका — केवल सीमाएँ दिखाई जा रही हैं।",
+      "familyRow": "{family} मॉडल"
     },
     "routes": {
       "ttsExhausted": "आपने आज की टेक्स्ट-टू-स्पीच सीमा पूरी कर ली है।",

@@ -5547,7 +5547,9 @@
       "resets": "{resets} တွင် ပြန်စတင်ပါမည်။",
       "chooseAnotherModel": "မော်ဒယ်အသစ်တစ်ခု ရွေးပါ",
       "turnOffSearchAndResend": "ဝက်ဘ်ရှာဖွေရေးကိုပိတ်ပြီး ပြန်ပို့ပါ",
-      "turnOffInterpreterAndResend": "code interpreter ကိုပိတ်ပြီး ပြန်ပေးပို့ပါ"
+      "turnOffInterpreterAndResend": "code interpreter ကိုပိတ်ပြီး ပြန်ပေးပို့ပါ",
+      "agentModelBlocked": "ဤ agent သည် သင့်အကောင့်တွင် မရနိုင်သည့် model ကို အသုံးပြုသည်။ Agent ကိုဖြုတ်ပါ သို့မဟုတ် အခြား agent တစ်ခု ရွေးချယ်ပါ။",
+      "turnOffConnectorsAndResend": "Connectors များကို ပိတ်ပြီး ထပ်မံပို့ပါ"
     },
     "notice": {
       "unavailable": "{model} သည် သင့်အကောင့်တွင် မရရှိနိုင်ပါ — ဆက်လုပ်ရန် မော်ဒယ်တစ်ခု ရွေးပါ။",
@@ -5564,7 +5566,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {ယနေ့ကျန်သုံးနိုင်မှု ၁ ခု} other {ယနေ့ကျန်သုံးနိုင်မှု # ခု}}",
-      "exhausted": "နေ့စဥ် ကန့်သတ်ချက် ပြည့်သွားပါပြီ — မော်ဒယ်သည် ၎င်းမပါပဲဖြေများပါမည်။"
+      "exhausted": "နေ့စဥ် ကန့်သတ်ချက် ပြည့်သွားပါပြီ — မော်ဒယ်သည် ၎င်းမပါပဲဖြေများပါမည်။",
+      "exhaustedResets": "နေ့စဉ်ကန့်သတ်ချက် ပြည့်သည် — မူလအတိုင်း မော်ဒယ်သည် ဖြေသွားမည်။ ပြန်စခွင့် {resets} ခု။"
     },
     "mine": {
       "title": "သင့်ကန့်သတ်ချက်များ",
@@ -5575,7 +5578,8 @@
       "resetsIn": "{resets} တွင် ပြန်စတင်ပါမည်",
       "limitReached": "ကန့်သတ်ချက် ပြည့်သွားပါသည်",
       "familyLimitReached": "မော်ဒယ်မိသားစု ကန့်သတ်ချက် ပြည့်သွားပါသည်",
-      "usageUnavailable": "လက်ရှိအသုံးပြုမှုကို မဖြစ်နိုင်သဖြင့် ကန့်သတ်ချက်များကိုသာ ပြပါမည်။"
+      "usageUnavailable": "လက်ရှိအသုံးပြုမှုကို မဖြစ်နိုင်သဖြင့် ကန့်သတ်ချက်များကိုသာ ပြပါမည်။",
+      "familyRow": "{family} မော်ဒယ်များ"
     },
     "routes": {
       "ttsExhausted": "ယနေ့အတွက် text-to-speech ကန့်သတ်ချက်ကို ပြည့်သုံးပြီးပါပြီ။",

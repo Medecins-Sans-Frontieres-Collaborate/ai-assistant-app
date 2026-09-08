@@ -5531,7 +5531,9 @@
       "resets": "Za a sake sabunta {resets}.",
       "chooseAnotherModel": "Zabi wani samfur",
       "turnOffSearchAndResend": "Kashe bincike na yanar gizo ka sake tura",
-      "turnOffInterpreterAndResend": "Kashe fassarar lamba ka sake tura"
+      "turnOffInterpreterAndResend": "Kashe fassarar lamba ka sake tura",
+      "agentModelBlocked": "Wannan wakili yana amfani da wani samfurin da ba a samuwa a asusunka ba. Cire wakilin ko zaɓi wani dabam.",
+      "turnOffConnectorsAndResend": "Kashe haɗin kai kuma sake tura"
     },
     "notice": {
       "unavailable": "{model} ba ya samuwa a asusunka — zabi wani samfur don ci gaba.",
@@ -5548,7 +5550,8 @@
         "connectors": "Connectors"
       },
       "remaining": "{count, plural, one {# amfani ya rage yau} other {# amfani ya rage yau}}",
-      "exhausted": "An kai iyaka na yau — samfur zai amsa ba tare da shi ba."
+      "exhausted": "An kai iyaka na yau — samfur zai amsa ba tare da shi ba.",
+      "exhaustedResets": "An kai iyaka na yau — samfurin zai bada amsa ba tare da shi ba. Sake saitawa {resets}."
     },
     "mine": {
       "title": "Iyakar ka",
@@ -5559,7 +5562,8 @@
       "resetsIn": "Za a sake sabunta {resets}",
       "limitReached": "An kai iyaka",
       "familyLimitReached": "An kai iyakar dangin samfur",
-      "usageUnavailable": "An kasa ɗauko adadin amfani na yanzu — ana nuna iyaka kawai."
+      "usageUnavailable": "An kasa ɗauko adadin amfani na yanzu — ana nuna iyaka kawai.",
+      "familyRow": "Samfuran {family}"
     },
     "routes": {
       "ttsExhausted": "Ka riga ka kai iyakar amfani da text-to-speech na yau.",
