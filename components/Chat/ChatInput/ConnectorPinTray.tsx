@@ -17,6 +17,7 @@ import {
   findAttachedAgent,
   useAvailableAgents,
 } from '@/client/hooks/settings/useAvailableAgents';
+import { useResetCountdown } from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
@@ -83,6 +84,7 @@ export const ConnectorPinTray: FC = () => {
   const setTrayOpen = useChatInputStore((s) => s.setConnectorPinTrayOpen);
   const { selectedConversation, updateConversation } = useConversations();
   const { mcp: mcpGate, m365: m365Gate } = useToolLimitGates();
+  const m365ResetLabel = useResetCountdown(m365Gate.budget?.resetAt);
 
   if (!selectedConversation) return null;
   const mcpLocked = mcpGate.blocked;
@@ -102,7 +104,9 @@ export const ConnectorPinTray: FC = () => {
     !chatDisabledIds.includes(M365_BUILTIN_SERVER_ID);
   // The M365 row's own budget line, when the server reported one.
   const m365BudgetNote = m365Gate.exhausted
-    ? tGates('exhausted')
+    ? m365ResetLabel
+      ? tGates('exhaustedResets', { resets: m365ResetLabel })
+      : tGates('exhausted')
     : m365Gate.low && m365Gate.budget
       ? tGates('remaining', { count: m365Gate.budget.remaining })
       : undefined;
@@ -322,7 +326,7 @@ export const ConnectorPinTray: FC = () => {
               >
                 {m365ToolsUserEnabled ? t('globalOn') : t('globalOff')}
               </button>
-              {pinnedIsM365 ? (
+              {pinnedIsM365 && !mcpLocked ? (
                 <button
                   type="button"
                   onClick={() => setPin(undefined)}
@@ -333,6 +337,7 @@ export const ConnectorPinTray: FC = () => {
                   <IconX size={11} aria-hidden="true" />
                 </button>
               ) : (
+                !pinnedIsM365 &&
                 m365ChatEnabled && (
                   <button
                     type="button"
@@ -411,7 +416,7 @@ export const ConnectorPinTray: FC = () => {
                 >
                   {server.enabled ? t('globalOn') : t('globalOff')}
                 </button>
-                {isPinned ? (
+                {isPinned && !mcpLocked ? (
                   <button
                     type="button"
                     onClick={() => setPin(undefined)}
@@ -422,6 +427,7 @@ export const ConnectorPinTray: FC = () => {
                     <IconX size={11} aria-hidden="true" />
                   </button>
                 ) : (
+                  !isPinned &&
                   focusable && (
                     <button
                       type="button"
