@@ -1,6 +1,6 @@
 'use client';
 
-import { IconClock } from '@tabler/icons-react';
+import { IconClock, IconLock } from '@tabler/icons-react';
 import { FC } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -11,6 +11,11 @@ import {
 } from '@/client/hooks/settings/useMyLimits';
 
 import { isLowRemaining } from './modelLimits';
+
+type LimitTranslator = (
+  key: string,
+  values?: Record<string, string | number | Date>,
+) => string;
 
 export interface ModelLimitCopyOptions {
   /**
@@ -26,25 +31,19 @@ export interface ModelLimitCopyOptions {
 }
 
 /**
- * The sentence behind the clock badge, the inline touch note and the
- * header tooltip — one source so every surface says the same thing. `null`
- * when the model is available (nothing to explain). Counts fall back to the
- * cap when the server sent a reason without them (usage unreadable), so the
- * copy never renders "undefined/20". Never names a limit key or layer
- * (docs/LIMITS.md no-provenance rule).
+ * Pure twin of `useModelLimitCopy` — same sentence, no hook. Callers that
+ * cannot call hooks for every row (a `useMemo`, an array `.map()` where the
+ * count varies by render) compute `resets` themselves, e.g. via
+ * `formatResetIn` from `@/client/hooks/settings/useMyLimits`, and pass it
+ * in; live ticking is then the caller's problem, not this function's. Kept
+ * in lock-step with `useModelLimitCopy` below — it is the only body.
  */
-export function useModelLimitCopy(
+export function modelLimitCopy(
+  t: LimitTranslator,
   view: ModelAvailabilityView,
-  { onExpired, agentModelName }: ModelLimitCopyOptions = {},
+  resets: string | null,
+  agentModelName?: string,
 ): string | null {
-  const t = useTranslations('limitsUx.picker');
-  // Countdown only matters while exhausted; an available model's resetAt
-  // (attached to low-remaining rows) would otherwise tick for nothing.
-  const resets = useResetCountdown(
-    view.state === 'exhausted' ? view.resetAt : undefined,
-    { onExpired },
-  );
-
   if (view.state === 'available') return null;
 
   if (agentModelName !== undefined) {
@@ -74,6 +73,28 @@ export function useModelLimitCopy(
   });
 }
 
+/**
+ * The sentence behind the clock badge, the inline touch note and the
+ * header tooltip — one source so every surface says the same thing. `null`
+ * when the model is available (nothing to explain). Counts fall back to the
+ * cap when the server sent a reason without them (usage unreadable), so the
+ * copy never renders "undefined/20". Never names a limit key or layer
+ * (docs/LIMITS.md no-provenance rule).
+ */
+export function useModelLimitCopy(
+  view: ModelAvailabilityView,
+  { onExpired, agentModelName }: ModelLimitCopyOptions = {},
+): string | null {
+  const t = useTranslations('limitsUx.picker');
+  // Countdown only matters while exhausted; an available model's resetAt
+  // (attached to low-remaining rows) would otherwise tick for nothing.
+  const resets = useResetCountdown(
+    view.state === 'exhausted' ? view.resetAt : undefined,
+    { onExpired },
+  );
+  return modelLimitCopy(t, view, resets, agentModelName);
+}
+
 interface ModelLimitBadgeProps {
   view: ModelAvailabilityView;
   onExpired?: () => void;
@@ -98,6 +119,9 @@ export const ModelLimitBadge: FC<ModelLimitBadgeProps> = ({
 }) => {
   const copy = useModelLimitCopy(view, { onExpired, agentModelName });
   if (!copy) return null;
+  // A clock implies "comes back later" — right for a spent counter, wrong
+  // for a permanent block (`model.allowed=false`), which never resets.
+  const Icon = view.state === 'blocked' ? IconLock : IconClock;
   return (
     <span
       data-testid="model-limit-badge"
@@ -106,7 +130,7 @@ export const ModelLimitBadge: FC<ModelLimitBadgeProps> = ({
       role="img"
       className={`shrink-0 inline-flex text-amber-600 dark:text-amber-400 cursor-help ${className}`}
     >
-      <IconClock size={size} aria-hidden="true" />
+      <Icon size={size} aria-hidden="true" />
     </span>
   );
 };
