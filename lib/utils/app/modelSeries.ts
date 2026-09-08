@@ -30,19 +30,43 @@ export function getSeriesVersions(
 }
 
 /**
+ * Predicate narrowing which family members a row or switcher may front and
+ * select. The picker passes "not exhausted by a usage limit": a family whose
+ * default has hit its daily cap should front a sibling that still works
+ * rather than a grayed row the user cannot open. Absent = every member
+ * qualifies.
+ */
+export type SelectablePredicate = (model: OpenAIModel) => boolean;
+
+/**
  * The model that fronts a family row: the current selection when it's in
  * this family, else the best-ranked `defaultRank` member (ties go to the
  * newest, since `versions` arrives newest-first — so "rank 1 on every
  * Sonnet" means "latest available Sonnet"), else the FEATURED version, else
  * the newest non-legacy, else the newest. This is also what clicking the
  * row selects, i.e. the family's default.
+ *
+ * With `isSelectable`, the preference walk runs over the selectable members
+ * first and only falls back to the whole list when none qualifies — so the
+ * row stays clickable while any sibling is usable, and grays out (with the
+ * default's reason) only when the entire family is spent. The current
+ * selection still wins outright: the user is already on that model and the
+ * header carries its badge.
  */
 export function seriesRepresentative(
   versions: OpenAIModel[],
   selectedModelId?: string,
+  isSelectable?: SelectablePredicate,
 ): OpenAIModel | undefined {
   const selected = versions.find((v) => v.id === selectedModelId);
   if (selected) return selected;
+
+  if (isSelectable) {
+    const usable = versions.filter(isSelectable);
+    if (usable.length > 0 && usable.length < versions.length) {
+      return seriesRepresentative(usable, undefined);
+    }
+  }
 
   let preferred: OpenAIModel | undefined;
   for (const v of versions) {
@@ -160,14 +184,27 @@ export function getVariantVersions(
  * The model to select when the user switches to another variant: the same
  * versionLabel within that variant when it exists (keep the user's version),
  * else the variant's representative (featured → newest non-legacy → newest).
+ *
+ * `isSelectable` (see seriesRepresentative) keeps the same-version shortcut
+ * only while that version is usable; an exhausted twin falls through to the
+ * best selectable sibling, and the whole variant is offered ungated only
+ * when nothing in it qualifies (the caller then renders it disabled).
  */
 export function pickVariantTarget(
   variantMembers: OpenAIModel[],
   currentVersionLabel: string | undefined,
+  isSelectable?: SelectablePredicate,
 ): OpenAIModel | undefined {
-  return (
-    (currentVersionLabel !== undefined
+  const sameVersion =
+    currentVersionLabel !== undefined
       ? variantMembers.find((m) => m.versionLabel === currentVersionLabel)
-      : undefined) ?? seriesRepresentative(variantMembers)
-  );
+      : undefined;
+  // No usable member at all: behave exactly as if ungated, so the caller
+  // still gets the natural target to badge and disable.
+  const gate =
+    isSelectable && variantMembers.some(isSelectable)
+      ? isSelectable
+      : undefined;
+  if (sameVersion && (!gate || gate(sameVersion))) return sameVersion;
+  return seriesRepresentative(variantMembers, undefined, gate);
 }
