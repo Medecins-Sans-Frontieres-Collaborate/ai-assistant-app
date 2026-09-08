@@ -14,12 +14,17 @@
  *    the model cell AND the family cell, either one `false` blocks; a model
  *    with no valid cells falls back to the unqualified resolution.
  *  - `resolveModelAvailability` ⇔ the counter set `createLimitsMiddleware`
- *    reserves: `meteredCells('chat.messagesPerDay')` plus
- *    `meteredCells('model.requests', modelId, series)`, read back from the
- *    usage document under the same `counterCellName` keys the debit wrote.
+ *    reserves (`meteredCells('chat.messagesPerDay')` plus
+ *    `meteredCells('model.requests', modelId, series)`) UNION the pre-flight
+ *    token budgets `tokenDebit.ts checkTokenBudget` refuses on
+ *    (`chat.tokensPerDay`, `chat.tokensPerMonth`), read back from the usage
+ *    document under the same cell-name keys the debit/reserve paths wrote.
  * The byom exemption is mirrored too: a `byom-` model skips the gate and its
  * per-model counters unless `policy.countByomUsage`, but still counts against
- * the unqualified message cap, exactly as the middleware charges it.
+ * the unqualified message cap and the token budgets below, exactly as the
+ * middleware (`chat.messagesPerDay`) and `tokenDebit.ts` (`chat.tokensPerDay`
+ * / `chat.tokensPerMonth`, never byom-exempt — the pre-flight check applies
+ * to every model) charge it.
  */
 import { periodKindForWindow, resetAt } from '@/lib/services/limits/periods';
 import {
@@ -195,6 +200,13 @@ export function resolveModelAvailability(
 
   const cells = [
     ...numericCounterCells('chat.messagesPerDay', policy, principal),
+    // Pre-flight token budgets (tokenDebit.ts checkTokenBudget) refuse every
+    // send once hit, regardless of model — fold them in so an exhausted
+    // token cap grays the picker instead of leaving every model "available"
+    // right up until the 403 (docs/LIMITS_USER_FACING_UX.md §8). Not
+    // byom-exempt: the pre-flight check applies to every model.
+    ...numericCounterCells('chat.tokensPerDay', policy, principal),
+    ...numericCounterCells('chat.tokensPerMonth', policy, principal),
     ...(isByomExempt(policy, model.id)
       ? []
       : numericCounterCells(
