@@ -904,6 +904,11 @@ const mockMessages: Record<string, unknown> = {
     },
     version: {
       label: 'Version',
+      showOlder: 'Show older ({count})',
+      hideOlder: 'Hide older',
+    },
+    subVariant: {
+      label: 'Size',
     },
     deployment: {
       title: 'Deployment',
