@@ -46,7 +46,20 @@ function model(partial: Partial<OpenAIModel> & { id: string }): OpenAIModel {
 const TERRA = 'gpt-5.6-terra'; // $0.008 typical
 const LUNA = 'gpt-5.6-luna'; // $0.0008 typical
 const SOL = 'gpt-5.6-sol'; // $0.020 typical
-const FABLE = 'claude-fable-5'; // $0.035 typical — declares NO series
+/**
+ * A model that declares NO series, so it gets a model cell but no family
+ * cell. Synthetic on purpose: every entry in config/models.json now belongs
+ * to a family, so this case is only reachable via discovered-but-unknown
+ * deployments (synthesizeUnknownModel) and byom models — pinning it to a
+ * catalog id made these tests fail the moment that id joined a family.
+ * Priced like Claude Fable ($0.035 typical) to keep the expected sums here
+ * readable.
+ */
+const SERIESLESS = 'seriesless-flagship'; // $0.035 typical — declares NO series
+const SERIESLESS_MODEL = model({
+  id: SERIESLESS,
+  pricing: { inputPer1M: 10, outputPer1M: 50 },
+});
 
 /** A ring serving only the gpt-56 trio (with a byom and an agent that must be ignored). */
 const RING: OpenAIModel[] = [
@@ -176,19 +189,19 @@ describe('allowedModels', () => {
   });
 
   it('an unqualified block reaches the family cell, which a model-level allow cannot shadow', () => {
-    const withFable = buildPricingIndex([
+    const withSeriesless = buildPricingIndex([
       OpenAIModels[TERRA],
       OpenAIModels[LUNA],
-      OpenAIModels[FABLE],
+      SERIESLESS_MODEL,
     ]);
     const draft: CostCell[] = [
       { limitKey: 'model.allowed', value: false },
       { limitKey: 'model.allowed', modelId: TERRA, value: true },
-      { limitKey: 'model.allowed', modelId: FABLE, value: true },
+      { limitKey: 'model.allowed', modelId: SERIESLESS, value: true },
     ];
     // terra: model cell true, family cell (gpt-56) falls back to the
     // unqualified false → blocked. fable has no series, so no family cell.
-    expect(ids(allowedModels(withFable, draft))).toEqual([FABLE]);
+    expect(ids(allowedModels(withSeriesless, draft))).toEqual([SERIESLESS]);
   });
 
   it('ANDs the already-resolved rows /api/limits/me hands the preview', () => {
@@ -419,44 +432,44 @@ describe('ceilingSpendPerDay', () => {
   });
 
   it('models axis: a qualified cap RAISED above the unqualified default is used (case D)', () => {
-    const withFable = buildPricingIndex([
+    const withSeriesless = buildPricingIndex([
       OpenAIModels[TERRA],
       OpenAIModels[LUNA],
-      OpenAIModels[FABLE],
+      SERIESLESS_MODEL,
     ]);
     // The rows /api/limits/me builds: the bare default plus one resolved
-    // row per mentioned qualifier. Enforcement caps terra/luna/fable at
+    // row per mentioned qualifier. Enforcement caps terra/luna/seriesless at
     // 100/100/100 — the bare 5 is shadowed inside every cell, never a
     // third cap — so the ceiling is the family envelope (100 × terra) plus
-    // fable's own 100, not the understated 5-per-model $0.219.
+    // the seriesless model's own 100, not the understated 5-per-model $0.219.
     const rows: CostCell[] = [
       { limitKey: 'model.requests', value: 5 },
       { limitKey: 'model.requests', series: 'gpt-56', value: 100 },
       { limitKey: 'model.requests', modelId: TERRA, value: 100 },
       { limitKey: 'model.requests', modelId: LUNA, value: 100 },
-      { limitKey: 'model.requests', modelId: FABLE, value: 100 },
+      { limitKey: 'model.requests', modelId: SERIESLESS, value: 100 },
     ];
-    const ceiling = ceilingSpendPerDay(rows, withFable, 'typical');
+    const ceiling = ceilingSpendPerDay(rows, withSeriesless, 'typical');
     if (!ceiling.bounded) throw new Error('expected bounded');
     expect(ceiling.axis).toBe('models');
     expect(ceiling.usdPerDay).toBeCloseTo(100 * 0.008 + 100 * 0.035, 10);
   });
 
   it('models axis: a model with no series has no family cell, so its raised cap stands (case D2)', () => {
-    const fableOnly = buildPricingIndex([OpenAIModels[FABLE]]);
+    const seriesLessOnly = buildPricingIndex([SERIESLESS_MODEL]);
     const rows: CostCell[] = [
       { limitKey: 'model.requests', value: 5 },
-      { limitKey: 'model.requests', modelId: FABLE, value: 100 },
+      { limitKey: 'model.requests', modelId: SERIESLESS, value: 100 },
     ];
-    const ceiling = ceilingSpendPerDay(rows, fableOnly, 'typical');
+    const ceiling = ceilingSpendPerDay(rows, seriesLessOnly, 'typical');
     if (!ceiling.bounded) throw new Error('expected bounded');
     expect(ceiling.usdPerDay).toBeCloseTo(100 * 0.035, 10);
 
     // Same policy as draft-over-defaults (the editor's form): the draft's
     // model cell wins over the defaults' unqualified value.
     const draft = ceilingSpendPerDay(
-      [{ limitKey: 'model.requests', modelId: FABLE, value: 100 }],
-      fableOnly,
+      [{ limitKey: 'model.requests', modelId: SERIESLESS, value: 100 }],
+      seriesLessOnly,
       'typical',
       [{ limitKey: 'model.requests', value: 5 }],
     );
@@ -469,9 +482,9 @@ describe('ceilingSpendPerDay', () => {
       ceilingSpendPerDay(
         [
           { limitKey: 'model.requests', value: 5 },
-          { limitKey: 'model.requests', modelId: FABLE, value: null },
+          { limitKey: 'model.requests', modelId: SERIESLESS, value: null },
         ],
-        fableOnly,
+        seriesLessOnly,
         'typical',
       ),
     ).toEqual({ bounded: false });
