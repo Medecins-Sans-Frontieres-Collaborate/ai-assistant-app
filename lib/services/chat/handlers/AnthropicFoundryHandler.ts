@@ -22,6 +22,19 @@ function hashUserEmail(email: string): string {
 }
 
 /**
+ * `thinking.display` is a documented adaptive-thinking field that the pinned
+ * SDK (@anthropic-ai/sdk 0.77.0) does not type yet. It is load-bearing here:
+ * on every adaptive model the default is `omitted`, which streams thinking
+ * blocks with EMPTY text — the reasoning panel would open and stay blank.
+ * Declared as a narrow extension rather than casting the whole param object,
+ * so the rest of the request stays fully type-checked. Drop this alias once
+ * the SDK ships the field.
+ */
+type AdaptiveThinkingConfig = Anthropic.ThinkingConfigAdaptive & {
+  display?: 'summarized' | 'omitted';
+};
+
+/**
  * Handler for Anthropic Claude models via Azure AI Foundry.
  *
  * Key differences from OpenAI handlers:
@@ -42,6 +55,19 @@ export class AnthropicFoundryHandler {
    * requests; MCP loop rounds reuse the instance and keep the context.
    */
   private systemContextFromMessages = '';
+
+  /**
+   * Ceiling for `max_tokens` on the NON-streaming path.
+   *
+   * The SDK refuses any non-streaming request whose projected generation time
+   * exceeds 10 minutes — `60min * max_tokens / 128_000` — and throws
+   * `AnthropicError: Streaming is required…` BEFORE issuing the request. That
+   * puts the real ceiling at ~21.3k tokens, so passing a modern Claude
+   * `tokenLimit` (64k–128k) straight through makes every non-streaming Claude
+   * turn fail. Streaming — the normal chat path — has no such limit and keeps
+   * the model's full tokenLimit.
+   */
+  private static readonly NON_STREAMING_MAX_TOKENS = 16000;
 
   constructor(client: AnthropicFoundry) {
     this.client = client;
@@ -203,7 +229,10 @@ export class AnthropicFoundryHandler {
       model: modelToUse,
       messages,
       system: this.composeSystem(systemPrompt),
-      max_tokens: modelConfig.tokenLimit,
+      max_tokens: Math.min(
+        modelConfig.tokenLimit,
+        AnthropicFoundryHandler.NON_STREAMING_MAX_TOKENS,
+      ),
       stream: false,
     };
 
@@ -225,11 +254,12 @@ export class AnthropicFoundryHandler {
   }
 
   /**
-   * Reasoning-effort → extended-thinking budget. The app reuses the SAME
-   * effort control the GPT reasoning models expose; on Claude it maps to
-   * Anthropic's `thinking.budget_tokens`. `minimal` (or unset) keeps
-   * thinking off — extended thinking is opt-in per conversation because it
-   * adds cost and latency to every turn.
+   * Reasoning-effort → extended-thinking budget, for models on the LEGACY
+   * thinking API (`thinkingApi: 'budget'` — Haiku 4.5 and the 4.5/4.1
+   * generation). The app reuses the SAME effort control the GPT reasoning
+   * models expose. `minimal` (or unset) keeps thinking off — extended
+   * thinking is opt-in per conversation because it adds cost and latency to
+   * every turn.
    */
   private static readonly THINKING_BUDGET_TOKENS: Record<
     'low' | 'medium' | 'high',
@@ -249,6 +279,33 @@ export class AnthropicFoundryHandler {
   ): void {
     if (!modelConfig.supportsExtendedThinking) return;
     if (!reasoningEffort || reasoningEffort === 'minimal') return;
+
+    // Adaptive thinking (Fable 5/5.1, Opus 5/4.8/4.7/4.6, Sonnet 5/4.6).
+    // These reject `budget_tokens` outright, so this is a hard fork, not a
+    // preference. The app's low/medium/high tiers are deliberately the same
+    // names Anthropic's effort scale uses, so they pass straight through;
+    // `xhigh`/`max` are intentionally not reachable — the app's control tops
+    // out at high, which keeps every model on the same three tiers.
+    // Temperature is left exactly as the caller set it: the 4.6 pair accepts
+    // sampling params alongside adaptive thinking, and the models that
+    // reject them carry `supportsTemperature: false` so none is ever set.
+    if (modelConfig.thinkingApi === 'adaptive') {
+      const thinking: AdaptiveThinkingConfig = {
+        type: 'adaptive',
+        display: 'summarized',
+      };
+      params.thinking = thinking;
+      params.output_config = {
+        ...params.output_config,
+        effort: reasoningEffort,
+      };
+      return;
+    }
+
+    // Anything that hasn't declared its thinking API gets no thinking at all
+    // rather than a guessed request shape: a missing marker on a new model
+    // costs the reasoning panel, where guessing wrong is a 400 on every turn.
+    if (modelConfig.thinkingApi !== 'budget') return;
 
     const budget =
       AnthropicFoundryHandler.THINKING_BUDGET_TOKENS[reasoningEffort];
