@@ -72,7 +72,12 @@ export class MetricsService {
     context: {
       user: Session['user'];
       model: string;
-      operation: 'chat' | 'file_processing' | 'agent' | 'transcription';
+      operation:
+        | 'chat'
+        | 'file_processing'
+        | 'agent'
+        | 'transcription'
+        | 'workflow';
       botId?: string;
     },
   ) {
