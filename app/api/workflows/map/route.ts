@@ -17,6 +17,7 @@ import {
   createAzureClient,
 } from '@/lib/services/workflows/shared/workflowLlm';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
+import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
   badRequestResponse,
@@ -52,6 +53,8 @@ interface MapWorkflowRequest {
   instructions?: string;
   /** Preferred model; ineligible/unknown ids fall back server-side. */
   modelId?: string;
+  /** Correlates the run's calls in telemetry; not otherwise used. */
+  conversationId?: string;
 }
 
 interface SearchCitation {
@@ -154,6 +157,15 @@ export async function POST(req: NextRequest) {
         .slice(0, MAX_EXISTING_NAMES)
     : [];
 
+  // Workflow runs debit the shared chat token pool, so they honour its
+  // pre-flight too (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+  const { denied, usage } = await beginWorkflowRun(
+    session,
+    'extract',
+    body.conversationId,
+  );
+  if (denied) return denied;
+
   try {
     let material = sourceText ?? '';
     let citations: SearchCitation[] = [];
@@ -199,6 +211,8 @@ export async function POST(req: NextRequest) {
       ),
       schemaName: 'map_features',
       schema: MAP_FEATURES_SCHEMA as unknown as Record<string, unknown>,
+      usage,
+      usageLabel: 'extract',
     });
 
     const features = result.features
@@ -237,6 +251,7 @@ export async function POST(req: NextRequest) {
       connections,
       dropped,
       truncatedSource: budgeted.truncated,
+      usage: usage.payload(),
       ...(searchQuery ? { searched: true, sources: citations } : {}),
     });
   } catch (error) {

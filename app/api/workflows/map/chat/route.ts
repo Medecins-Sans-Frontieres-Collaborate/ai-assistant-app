@@ -22,6 +22,7 @@ import {
   createWorkflowStream,
 } from '@/lib/services/workflows/shared/workflowLlm';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
+import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
   badRequestResponse,
@@ -47,6 +48,8 @@ interface MapChatRequest {
   features: CompactMapFeature[];
   connections?: Array<{ fromName: string; toName: string; kind: string }>;
   modelId?: string;
+  /** Correlates the run's calls in telemetry; not otherwise used. */
+  conversationId?: string;
 }
 
 /**
@@ -96,6 +99,15 @@ export async function POST(req: NextRequest) {
   const question = messages[messages.length - 1]?.content ?? '';
   const connections = Array.isArray(body.connections) ? body.connections : [];
 
+  // Workflow runs debit the shared chat token pool, so they honour its
+  // pre-flight too (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+  const { denied, usage } = await beginWorkflowRun(
+    session,
+    'rail_chat',
+    body.conversationId,
+  );
+  if (denied) return denied;
+
   const model = resolveWorkflowModelId(body.modelId);
   const { stream, writer } = createWorkflowStream();
 
@@ -127,6 +139,8 @@ export async function POST(req: NextRequest) {
           }
         },
         signal: req.signal,
+        usage,
+        usageLabel: 'rail_chat',
       });
 
       const wantsEdit = answer.trimEnd().endsWith(MAP_EDIT_SENTINEL);
@@ -166,6 +180,8 @@ export async function POST(req: NextRequest) {
             string,
             unknown
           >,
+          usage,
+          usageLabel: 'map_edit',
         });
 
         const features = mutations.addFeatures
@@ -188,6 +204,11 @@ export async function POST(req: NextRequest) {
             data: { features, connections: addConnections },
           });
         }
+      }
+
+      const usagePayload = usage.payload();
+      if (usagePayload) {
+        writer.event({ workflow: 'map', type: 'usage', data: usagePayload });
       }
 
       writer.close();
