@@ -1,9 +1,13 @@
 import {
   getFamilyVariants,
   getSeriesVersions,
+  getVariantVersionGroups,
   getVariantVersions,
+  getVersionMembers,
+  getVersionSubVariants,
   groupIntoFamilyUnits,
   pickVariantTarget,
+  pickVersionTarget,
   seriesRepresentative,
   versionRank,
 } from '@/lib/utils/app/modelSeries';
@@ -330,5 +334,140 @@ describe('pickVariantTarget', () => {
       model('m-featured', '5', { variant: 'mini', tier: 'featured' }),
     ];
     expect(pickVariantTarget(withFeatured, '9.9')?.id).toBe('m-featured');
+  });
+});
+
+// A family whose ONE version ships several models — the shape the
+// sub-variant axis exists for (GPT 5.6's Sol/Terra/Luna, o-series 3's
+// o3/o3-mini). Deliberately declared out of rank order.
+const subVariantFamily = [
+  model('astra', '6', { variant: 'standard' }),
+  model('terra', '5.6', {
+    variant: 'standard',
+    subVariant: 'terra',
+    subVariantLabel: 'Terra',
+    subVariantRank: 2,
+  }),
+  model('luna', '5.6', {
+    variant: 'standard',
+    subVariant: 'luna',
+    subVariantLabel: 'Luna',
+    subVariantRank: 3,
+  }),
+  model('sol', '5.6', {
+    variant: 'standard',
+    subVariant: 'sol',
+    subVariantLabel: 'Sol',
+    subVariantRank: 1,
+    defaultRank: 1,
+  }),
+  model('gpt-5.4', '5.4', { variant: 'standard' }),
+];
+
+describe('getVersionSubVariants', () => {
+  it('orders sub-variants by subVariantRank, not declaration order', () => {
+    const members = getVersionMembers(subVariantFamily, {
+      series: 'gpt',
+      variant: 'standard',
+      versionLabel: '5.6',
+    });
+    expect(getVersionSubVariants(members).map((s) => s.key)).toEqual([
+      'sol',
+      'terra',
+      'luna',
+    ]);
+  });
+
+  it('puts unranked sub-variants last, in order of appearance', () => {
+    const ordered = getVersionSubVariants([
+      model('c', '1', { subVariant: 'c' }),
+      model('a', '1', { subVariant: 'a', subVariantRank: 1 }),
+      model('d', '1', { subVariant: 'd' }),
+    ]);
+    expect(ordered.map((s) => s.key)).toEqual(['a', 'c', 'd']);
+  });
+});
+
+describe('getVariantVersionGroups', () => {
+  it('collapses a version that ships several models into ONE chip', () => {
+    const groups = getVariantVersionGroups(subVariantFamily, {
+      series: 'gpt',
+      variant: 'standard',
+    });
+    // Newest first, and 5.6 appears once rather than three times — the
+    // duplicate-chip collision this axis exists to prevent.
+    expect(groups.map((g) => g.key)).toEqual(['6', '5.6', '5.4']);
+    expect(groups[1].members.map((m) => m.id)).toEqual([
+      'sol',
+      'terra',
+      'luna',
+    ]);
+  });
+
+  it('leaves single-model versions as one-member groups', () => {
+    const groups = getVariantVersionGroups(family, {
+      series: 'gpt',
+      variant: 'mini',
+    });
+    expect(groups.map((g) => g.key)).toEqual(['5', '4.1']);
+    expect(groups.every((g) => g.members.length === 1)).toBe(true);
+  });
+});
+
+describe('pickVersionTarget', () => {
+  const members = getVersionMembers(subVariantFamily, {
+    series: 'gpt',
+    variant: 'standard',
+    versionLabel: '5.6',
+  });
+
+  it("keeps the user's sub-variant when the version offers it", () => {
+    expect(pickVersionTarget(members, 'luna')?.id).toBe('luna');
+  });
+
+  it("falls back to the version's representative when it does not", () => {
+    // No 'nano' sub-variant here, so the defaultRank member fronts it.
+    expect(pickVersionTarget(members, 'nano')?.id).toBe('sol');
+    expect(pickVersionTarget(members, undefined)?.id).toBe('sol');
+  });
+
+  it('skips a sub-variant the caller cannot select', () => {
+    const usable = (m: OpenAIModel) => m.id !== 'luna';
+    expect(pickVersionTarget(members, 'luna', usable)?.id).toBe('sol');
+  });
+
+  it('ignores the gate when NOTHING in the version qualifies', () => {
+    // The caller still needs a target to badge and render disabled.
+    expect(pickVersionTarget(members, 'luna', () => false)?.id).toBe('luna');
+  });
+});
+
+describe('pickVariantTarget across sub-variants', () => {
+  it('keeps version AND sub-variant when the target variant has both', () => {
+    const miniAtSameVersion = [
+      model('mini-5.6-sol', '5.6', {
+        variant: 'mini',
+        subVariant: 'sol',
+        subVariantRank: 1,
+      }),
+      model('mini-5.6-luna', '5.6', {
+        variant: 'mini',
+        subVariant: 'luna',
+        subVariantRank: 2,
+      }),
+    ];
+    expect(
+      pickVariantTarget(miniAtSameVersion, '5.6', undefined, 'luna')?.id,
+    ).toBe('mini-5.6-luna');
+  });
+
+  it('keeps the version when the sub-variant is not offered there', () => {
+    const miniAtSameVersion = [
+      model('mini-5.6', '5.6', { variant: 'mini' }),
+      model('mini-5.4', '5.4', { variant: 'mini' }),
+    ];
+    expect(
+      pickVariantTarget(miniAtSameVersion, '5.6', undefined, 'luna')?.id,
+    ).toBe('mini-5.6');
   });
 });
