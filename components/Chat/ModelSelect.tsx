@@ -1145,13 +1145,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                     visibleModels.some((m) => providerOf(m) === f),
                   );
 
-                  // The inline variant+version tag fronting a family row;
-                  // the 'standard' variant label is suppressed so default
-                  // rows stay short ("GPT · 5.2", not "GPT · Standard 5.2").
+                  // The inline variant+subvariant+version tag fronting a
+                  // family row. The 'standard' variant label is suppressed so
+                  // default rows stay short ("GPT · 5.4", not
+                  // "GPT · Foundational 5.4"); a sub-variant is always shown,
+                  // since it is the only thing distinguishing models that
+                  // share a version ("GPT · Sol 5.6").
                   const familyTag = (rep: OpenAIModel) =>
-                    rep.variantLabel && rep.variant !== 'standard'
-                      ? `${rep.variantLabel} ${rep.versionLabel ?? ''}`.trim()
-                      : rep.versionLabel;
+                    [
+                      rep.variant !== 'standard' ? rep.variantLabel : null,
+                      rep.subVariantLabel,
+                      rep.versionLabel,
+                    ]
+                      .filter(Boolean)
+                      .join(' ') || rep.versionLabel;
 
                   // Series rows + plain rows, preserving list order (first
                   // member encountered anchors its series' position).
