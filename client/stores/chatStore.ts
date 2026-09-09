@@ -3,6 +3,11 @@
 import toast from 'react-hot-toast';
 
 import { notifyLimitsChanged } from '@/client/hooks/settings/limitsUxEvents';
+import {
+  effectiveInterpreterMode as applyInterpreterLimitGate,
+  effectiveSearchMode as applySearchLimitGate,
+  getToolLimitGatesSnapshot,
+} from '@/client/hooks/settings/useAgentToolGates';
 
 import { LimitDenialMetadata } from '@/client/services/api/errors';
 import {
@@ -1332,6 +1337,27 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       conversation.pinnedMcpServerId,
     );
 
+    // Admin usage-limit gates (docs/LIMITS_USER_FACING_UX.md §7.4/§3c): the
+    // composer can SHOW a blocked tool as Off/locked, but the request must
+    // actually carry it as Off — createLimitsMiddleware 403s the whole
+    // message otherwise, on a persisted Always/Auto default or a still-on
+    // connector the tray disabled visually but never wrote to storage.
+    // `getToolLimitGatesSnapshot()` reads the latest gates any mounted
+    // composer surface (ToolModeControls/Dropdown/ConnectorPinTray) has
+    // published; it fails open (nothing blocked) before any of them render.
+    const toolLimitGates = getToolLimitGatesSnapshot();
+    const searchModeForRequest = applySearchLimitGate(
+      effectiveSearchMode,
+      toolLimitGates,
+    );
+    const interpreterModeForRequest =
+      effectiveInterpreterMode === undefined
+        ? undefined
+        : applyInterpreterLimitGate(effectiveInterpreterMode, toolLimitGates);
+    const mcpServersForRequest = toolLimitGates.mcp.blocked
+      ? []
+      : mcpServersToSend;
+
     // Resolve extraction payload from the chat-input store + the persisted
     // recipes. Extraction mode is ephemeral (per-conversation) and recipes
     // travel inline because the server has no recipe store.
@@ -1389,15 +1415,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       reasoningEffort:
         conversation.reasoningEffort || modelToSend.reasoningEffort,
       verbosity: conversation.verbosity || modelToSend.verbosity,
-      searchMode: effectiveSearchMode,
+      searchMode: searchModeForRequest,
       // Advanced search tuning only travels when search can actually run.
       webSearchOptions:
-        effectiveSearchMode === SearchMode.INTELLIGENT ||
-        effectiveSearchMode === SearchMode.ALWAYS
+        searchModeForRequest === SearchMode.INTELLIGENT ||
+        searchModeForRequest === SearchMode.ALWAYS
           ? settings.webSearchOptions
           : undefined,
       precomputedSearchResults: pendingPrecomputedSearchResults ?? undefined,
-      interpreterMode: effectiveInterpreterMode,
+      interpreterMode: interpreterModeForRequest,
       hostedRegion,
       tone, // Pass the full tone object
       signal: abortController?.signal, // Pass abort signal
@@ -1413,21 +1439,26 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       agentSourcePath: modelToSend.agentSource,
       modelSourcePath: modelToSend.modelSource,
       approvalResponses,
-      mcpServers: mcpServersToSend.length ? mcpServersToSend : undefined,
+      mcpServers: mcpServersForRequest.length
+        ? mcpServersForRequest
+        : undefined,
       mcpPendingToolCalls,
       mcpLoopRound,
       mcpPlan,
       // Fifth pass: screen overrides ride the conversation (explicit UI
       // action on a flagged record); shared mailboxes ride settings. Sent
-      // only when the builtin M365 server is in play.
+      // only when the builtin M365 server is in play — which it never is
+      // once `mcp.blocked` cleared the list above.
       m365MailScreenOverrides:
-        mcpServersToSend.some((entry) => 'builtin' in entry && entry.builtin) &&
-        conversation.m365MailScreenOverrides?.length
+        mcpServersForRequest.some(
+          (entry) => 'builtin' in entry && entry.builtin,
+        ) && conversation.m365MailScreenOverrides?.length
           ? conversation.m365MailScreenOverrides.slice(0, 20)
           : undefined,
       m365SharedMailboxes:
-        mcpServersToSend.some((entry) => 'builtin' in entry && entry.builtin) &&
-        settings.m365SharedMailboxes?.length
+        mcpServersForRequest.some(
+          (entry) => 'builtin' in entry && entry.builtin,
+        ) && settings.m365SharedMailboxes?.length
           ? settings.m365SharedMailboxes
           : undefined,
       extraction,
