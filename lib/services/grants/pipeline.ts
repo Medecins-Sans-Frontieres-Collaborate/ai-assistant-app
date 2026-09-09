@@ -1,6 +1,10 @@
 /**
  * Main pipeline orchestrator.
  */
+import { Session } from 'next-auth';
+
+import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflowUsage';
+
 import { loadOCConfig } from './ocConfig';
 import { ProgressEmitter } from './progress';
 import * as enrich from './stages/enrich';
@@ -28,6 +32,13 @@ export interface PipelineParams {
   codeOverrides?: Record<string, string>;
   /** Per-OC prompt override (saved or in-flight) to use instead of the default. */
   promptOverride?: string;
+  /**
+   * The user the run belongs to. Present, its model calls are recorded to
+   * telemetry and debited against the shared token pool — grants is
+   * telemetry-only, with no impact badge
+   * (docs/WORKFLOW_EMISSIONS_DESIGN.md §7a).
+   */
+  user?: Session['user'];
 }
 
 export async function runPipeline(params: PipelineParams): Promise<void> {
@@ -44,7 +55,18 @@ export async function runPipeline(params: PipelineParams): Promise<void> {
     year = new Date().getFullYear(),
     codeOverrides,
     promptOverride,
+    user,
   } = params;
+
+  // Telemetry + quota sink for the whole run. Absent a user the pipeline
+  // still runs — it just records nothing, rather than failing.
+  const usage = user
+    ? new WorkflowUsageCollector({
+        user,
+        action: 'grants:extract',
+        conversationId: runId,
+      })
+    : undefined;
 
   // Create work sub-directories
   const textDir = join(workDir, 'extracted_text');
@@ -88,6 +110,7 @@ export async function runPipeline(params: PipelineParams): Promise<void> {
       maxWorkers,
       year,
       promptOverride,
+      usage,
     });
 
     // ----------------------------------------------------------------

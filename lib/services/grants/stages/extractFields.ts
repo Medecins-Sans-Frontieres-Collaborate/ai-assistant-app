@@ -751,6 +751,7 @@ export async function run(params: {
             fname,
             codes,
             year,
+            usage,
           );
           allRecords.push(...perCode);
           completed++;
