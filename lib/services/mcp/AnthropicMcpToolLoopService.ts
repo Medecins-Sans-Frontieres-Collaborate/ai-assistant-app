@@ -29,11 +29,15 @@ import type Anthropic from '@anthropic-ai/sdk';
  * protocol as the OpenAI loop; only the transcript shapes (tool_use /
  * tool_result blocks) and stream accumulation differ.
  *
- * THINKING GUARD: extended thinking is currently never enabled for Claude in
- * this app (no `thinking` param anywhere). If that ever changes, MCP turns
- * MUST keep thinking disabled — the stateless pause/resume cannot round-trip
- * the signed thinking blocks Anthropic requires when continuing a tool-use
- * turn from a client-persisted, text-only transcript.
+ * THINKING GUARD: MCP turns MUST keep extended thinking disabled — the
+ * stateless pause/resume cannot round-trip the signed thinking blocks
+ * Anthropic requires when continuing a tool-use turn from a
+ * client-persisted, text-only transcript. Enforced by the `buildParams`
+ * closure in StandardChatService, which omits `reasoningEffort`: the handler
+ * only attaches a `thinking` param when an effort above `minimal` is passed,
+ * so a tool-loop request never carries one. Plain (non-MCP) Claude turns DO
+ * request thinking when the user raises effort — keep that argument out of
+ * this path.
  */
 
 export interface AnthropicMcpToolLoopOptions {
