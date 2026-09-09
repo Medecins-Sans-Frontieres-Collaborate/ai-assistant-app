@@ -75,6 +75,9 @@ const STATIC_LIST_EXCLUSIONS: string[] = [
   // (DEFAULT_MODEL_PREFERENCE) and is deployed in both the US and EU
   // accounts, so the static fallback path must be able to resolve it.
   OpenAIModelID.GPT_5_4_NANO,
+  // Deployed in the EU live account only, so the static path — which cannot
+  // verify regional deployments — must not offer it.
+  OpenAIModelID.GPT_5_4_MINI,
   OpenAIModelID.GPT_5_3_CHAT,
   OpenAIModelID.GPT_5,
   OpenAIModelID.GPT_5_CHAT,
