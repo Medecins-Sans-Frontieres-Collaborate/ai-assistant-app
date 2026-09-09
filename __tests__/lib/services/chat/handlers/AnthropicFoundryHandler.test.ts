@@ -268,7 +268,9 @@ describe('AnthropicFoundryHandler', () => {
         model: 'claude-sonnet-4-6',
         messages,
         system: 'You are a helpful assistant.',
-        max_tokens: 64000,
+        // Clamped from the model's 64000 tokenLimit — see the non-streaming
+        // ceiling suite below.
+        max_tokens: 16000,
         temperature: 0.7,
         stream: false,
         metadata: {
@@ -504,9 +506,20 @@ describe('AnthropicFoundryHandler', () => {
   });
 
   describe('extended thinking', () => {
+    // Legacy fixed-budget API — Haiku 4.5 and the 4.5/4.1 generation.
     const thinkingModelConfig: OpenAIModel = {
       ...mockModelConfig,
       supportsExtendedThinking: true,
+      thinkingApi: 'budget',
+    };
+    // Adaptive API — Fable 5/5.1, Opus 5/4.8/4.7, Sonnet 5. These reject
+    // `budget_tokens` AND any explicit temperature with a 400.
+    const adaptiveModelConfig: OpenAIModel = {
+      ...mockModelConfig,
+      id: OpenAIModelID.CLAUDE_OPUS_5,
+      supportsExtendedThinking: true,
+      thinkingApi: 'adaptive',
+      supportsTemperature: false,
     };
     const user = { id: 'u1' } as any;
 
@@ -576,6 +589,58 @@ describe('AnthropicFoundryHandler', () => {
       });
     });
 
+    it('uses the ADAPTIVE shape (never budget_tokens) on adaptive models', () => {
+      const params = handler.buildStreamingRequestParams(
+        adaptiveModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        adaptiveModelConfig,
+        'medium',
+      );
+
+      // `budget_tokens` is a 400 on these models, so the shape must differ.
+      expect(params.thinking).toEqual({
+        type: 'adaptive',
+        display: 'summarized',
+      });
+      expect(params.output_config).toEqual({ effort: 'medium' });
+      // Sampling params are rejected alongside adaptive thinking; the legacy
+      // path's `temperature = 1` must NOT leak here.
+      expect(params.temperature).toBeUndefined();
+    });
+
+    it('keeps adaptive thinking off for minimal effort', () => {
+      const params = handler.buildStreamingRequestParams(
+        adaptiveModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        adaptiveModelConfig,
+        'minimal',
+      );
+      expect(params.thinking).toBeUndefined();
+      expect(params.output_config).toBeUndefined();
+    });
+
+    it('requests no thinking when the model declares no thinking API', () => {
+      // Fail safe: a new Claude entry that forgets `thinkingApi` loses the
+      // reasoning panel rather than 400-ing every turn on a guessed shape.
+      const params = handler.buildStreamingRequestParams(
+        mockModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        { ...mockModelConfig, supportsExtendedThinking: true },
+        'high',
+      );
+      expect(params.thinking).toBeUndefined();
+      expect(params.output_config).toBeUndefined();
+    });
+
     it('strips prior-turn <think> blocks from assistant history', () => {
       const messages: Message[] = [
         { role: 'user', content: 'Q1', messageType: MessageType.TEXT },
@@ -592,6 +657,48 @@ describe('AnthropicFoundryHandler', () => {
       expect(result[1]).toEqual({ role: 'assistant', content: 'A1' });
       // User messages untouched
       expect(result[0]).toEqual({ role: 'user', content: 'Q1' });
+    });
+  });
+
+  describe('non-streaming max_tokens ceiling', () => {
+    const user = { id: 'u1' } as any;
+
+    it('caps max_tokens below the SDK non-streaming limit', () => {
+      // The SDK throws `Streaming is required…` above ~21.3k tokens, so a
+      // modern Claude tokenLimit must not reach the request unclamped.
+      const params = handler.buildNonStreamingRequestParams(
+        mockModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        { ...mockModelConfig, maxLength: 1000000, tokenLimit: 128000 },
+      );
+      expect(params.max_tokens).toBe(16000);
+    });
+
+    it('leaves the streaming path at the model tokenLimit', () => {
+      const params = handler.buildStreamingRequestParams(
+        mockModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        { ...mockModelConfig, maxLength: 1000000, tokenLimit: 128000 },
+      );
+      expect(params.max_tokens).toBe(128000);
+    });
+
+    it('does not raise a model tokenLimit already under the ceiling', () => {
+      const params = handler.buildNonStreamingRequestParams(
+        mockModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        { ...mockModelConfig, tokenLimit: 8000 },
+      );
+      expect(params.max_tokens).toBe(8000);
     });
   });
 });
