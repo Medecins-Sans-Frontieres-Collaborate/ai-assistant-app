@@ -25,7 +25,7 @@ import {
 } from '@/lib/utils/shared/costEstimator';
 import { estimateCO2Grams } from '@/lib/utils/shared/emissions';
 
-import { RequestTelemetry } from '@/lib/types/logging';
+import { RequestTelemetry, TokenUsageSurface } from '@/lib/types/logging';
 import { OpenAIModel, getModelSizeClass } from '@/types/openai';
 
 export interface RecordTokenUsageOptions {
@@ -34,6 +34,14 @@ export interface RecordTokenUsageOptions {
    * (docs/LIMITS.md). Default true — every model call a user triggers counts.
    */
   debit?: boolean;
+  /**
+   * Which surface spent the tokens. Workflow runs debit the SAME pool as chat
+   * — it is the same spend on the same infrastructure — but are separable
+   * afterwards: the debit also increments a shadow counter, the metric and the
+   * log row carry the surface, and the user's own totals can split by it
+   * (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b). Default 'chat'.
+   */
+  surface?: TokenUsageSurface;
 }
 
 /**
@@ -79,6 +87,7 @@ export function recordTokenUsage(
   telemetry?: RequestTelemetry,
   options: RecordTokenUsageOptions = {},
 ): void {
+  const surface = options.surface ?? 'chat';
   try {
     const sizeClass = getModelSizeClass(servedConfig);
     const estimate = estimateCO2Grams({
@@ -102,6 +111,7 @@ export function recordTokenUsage(
       estimatedEnergyWh: estimate.energyWh,
       assumptionsVersion: estimate.assumptionsVersion,
       streamed,
+      surface,
       telemetry,
     });
     const estimatedCostUsd = estimatedCostUsdFor(usage, servedConfig);
@@ -115,7 +125,12 @@ export function recordTokenUsage(
       {
         user,
         model: usage.modelId,
-        operation: telemetry?.agentKind === 'foundry' ? 'agent' : 'chat',
+        operation:
+          surface === 'workflow'
+            ? 'workflow'
+            : telemetry?.agentKind === 'foundry'
+              ? 'agent'
+              : 'chat',
         botId: telemetry?.botId,
       },
     );
@@ -131,7 +146,7 @@ export function recordTokenUsage(
     // to token accounting on any infrastructure, not a property of the blob
     // counter.
     if (options.debit !== false) {
-      void debitTokenUsage(user, usage.totalTokens);
+      void debitTokenUsage(user, usage.totalTokens, surface);
     }
   } catch (error) {
     console.error('[tokenUsageRecorder] Failed to record token usage:', error);
