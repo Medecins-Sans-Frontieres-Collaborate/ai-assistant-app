@@ -5519,5 +5519,74 @@
     "loading": "טוען...",
     "loadError": "לא ניתן היה לטעון את רשימת מנהלי המערכת הגלובליים.",
     "retry": "נסה שנית"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "הגעת למגבלה ({used}/{limit}). מתאפס {resets}.",
+      "exhaustedNoReset": "הגעת למגבלה ({used}/{limit}).",
+      "familyExhausted": "הגעת למגבלת המשפחה ({used}/{limit}). מתאפס {resets}.",
+      "familyExhaustedNoReset": "הגעת למגבלת המשפחה ({used}/{limit}).",
+      "unavailable": "לא זמין בחשבונך.",
+      "remaining": "נותרו {remaining}",
+      "remainingTooltip": "נותרו {remaining} מתוך {limit} בקשות לתקופה זו.",
+      "agentModelUnavailable": "משתמש ב-{model}, שאינו זמין עבורך.",
+      "agentModelExhausted": "משתמש ב-{model}, אשר הגיע למגבלה. מתאפס {resets}.",
+      "agentModelExhaustedNoReset": "משתמש ב-{model}, אשר הגיע למגבלה."
+    },
+    "denial": {
+      "modelBlocked": "מודל זה אינו זמין בחשבונך. בחר מודל אחר או פנה למנהל שלך.",
+      "modelExhausted": "השתמשת בכל {limit} הבקשות למודל זה היום.",
+      "familyExhausted": "ניצלת את מכסת השיתוף היומית של {limit} בקשות למשפחת מודלים זו.",
+      "searchBlocked": "חיפוש ברשת לא מופעל בחשבונך על ידי מנהל, והודעה זו דורשת זאת.",
+      "interpreterBlocked": "מפרש קוד אינו מופעל בחשבונך על ידי מנהל, והודעה זו דורשת זאת.",
+      "mcpBlocked": "מחברים אינם מופעלים בחשבונך על ידי מנהל, והודעה זו דורשת מחברים. כבה אותם כדי להמשיך.",
+      "messagesCap": "הגעת למגבלת {limit} הודעות היום.",
+      "tokensDayCap": "הגעת למגבלת הטוקנים היומית.",
+      "tokensMonthCap": "הגעת למגבלת הטוקנים החודשית.",
+      "perRequest": "בקשה זו חורגת מהמותר בחשבונך (מקסימום {limit} לבקשה). נסה בקשה קטנה יותר.",
+      "resets": "מתאפס {resets}.",
+      "chooseAnotherModel": "בחר מודל אחר",
+      "turnOffSearchAndResend": "כבה חיפוש ברשת ושלח מחדש",
+      "turnOffInterpreterAndResend": "כבה מפרש קוד ושלח מחדש",
+      "agentModelBlocked": "הסוכן הזה משתמש במודל שאינו זמין בחשבון שלך. נתק את הסוכן או בחר סוכן אחר.",
+      "turnOffConnectorsAndResend": "כבה מחברים ושלח מחדש"
+    },
+    "notice": {
+      "unavailable": "{model} אינו זמין בחשבונך — בחר מודל אחר להמשך.",
+      "exhausted": "{model} הגיע למגבלתו להיום.",
+      "familyExhausted": "המודל {model} חולק מכסה עם משפחת המודלים שלו, שנגמרה היום.",
+      "resets": "מתאפס {resets}.",
+      "chooseModel": "בחר מודל"
+    },
+    "gates": {
+      "blocked": "הפיצ'ר {feature} כבוי בחשבונך על ידי הארגון.",
+      "features": {
+        "webSearch": "חיפוש ברשת",
+        "codeInterpreter": "מפרש קוד",
+        "connectors": "מחברים"
+      },
+      "remaining": "{count, plural, one {שימוש אחד נותר היום} other {# שימושים נותרו היום}}",
+      "exhausted": "הגעת למגבלה היומית — המודל יענה ללא פיצ'ר זה.",
+      "exhaustedResets": "הגעת למכסה היומית — המודל יענה בלעדיה. איפוסים {resets}."
+    },
+    "mine": {
+      "title": "המגבלות שלך",
+      "description": "הגבלות שהארגון שלך הגדיר לחשבונך. המונים מתאפסים אוטומטית בסוף כל תקופה.",
+      "notAvailable": "לא זמין",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "מתאפס {resets}",
+      "limitReached": "הגעת למגבלה",
+      "familyLimitReached": "הגעת למגבלת משפחת המודלים",
+      "usageUnavailable": "לא ניתן להציג את השימוש הנוכחי — מוצגות המגבלות בלבד.",
+      "familyRow": "מודלים של {family}"
+    },
+    "routes": {
+      "ttsExhausted": "הגעת למגבלת ההמרה לטקסט-לדיבור היומית.",
+      "translationExhausted": "הגעת למגבלת תרגום המסמכים היומית.",
+      "resetsIn": "מתאפס {resets}.",
+      "uploadTooLarge": "הקובץ {fileName} גדול מדי — קבצים בחשבונך חייבים להיות עד {maxSize}.",
+      "uploadCapHint": "קבצים עד {maxSize}"
+    }
   }
 }

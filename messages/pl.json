@@ -5519,5 +5519,74 @@
     "loading": "Ładowanie…",
     "loadError": "Nie udało się załadować listy globalnych administratorów.",
     "retry": "Ponów próbę"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Osiągnięto limit ({used}/{limit}). Reset nastąpi {resets}.",
+      "exhaustedNoReset": "Osiągnięto limit ({used}/{limit}).",
+      "familyExhausted": "Osiągnięto limit rodziny ({used}/{limit}). Reset nastąpi {resets}.",
+      "familyExhaustedNoReset": "Osiągnięto limit rodziny ({used}/{limit}).",
+      "unavailable": "Niedostępne na Twoim koncie.",
+      "remaining": "Pozostało {remaining}",
+      "remainingTooltip": "Pozostało {remaining} z {limit} żądań w tym okresie.",
+      "agentModelUnavailable": "Korzysta z {model}, który nie jest dla Ciebie dostępny.",
+      "agentModelExhausted": "Korzysta z {model}, którego limit został wyczerpany. Reset nastąpi {resets}.",
+      "agentModelExhaustedNoReset": "Korzysta z {model}, którego limit został wyczerpany."
+    },
+    "denial": {
+      "modelBlocked": "Ten model nie jest dostępny na Twoim koncie. Wybierz inny model lub skontaktuj się z administratorem.",
+      "modelExhausted": "Wykorzystano wszystkie {limit} żądań dla tego modelu dzisiaj.",
+      "familyExhausted": "Wykorzystano dzisiejszy wspólny limit {limit} żądań dla tej rodziny modeli.",
+      "searchBlocked": "Wyszukiwanie w internecie zostało wyłączone dla Twojego konta przez administratora, a ta wiadomość miała je aktywne.",
+      "interpreterBlocked": "Interpreter kodu został wyłączony dla Twojego konta przez administratora, a ta wiadomość miała go aktywnego.",
+      "mcpBlocked": "Konektory zostały wyłączone dla Twojego konta przez administratora, a ta wiadomość miała je włączone. Wyłącz je, aby kontynuować.",
+      "messagesCap": "Osiągnięto dzienny limit {limit} wiadomości.",
+      "tokensDayCap": "Osiągnięto dzienny limit tokenów.",
+      "tokensMonthCap": "Osiągnięto miesięczny limit tokenów.",
+      "perRequest": "To żądanie przekracza dopuszczalny limit na koncie (maksymalnie {limit} na żądanie). Spróbuj z mniejszym.",
+      "resets": "Reset nastąpi {resets}.",
+      "chooseAnotherModel": "Wybierz inny model",
+      "turnOffSearchAndResend": "Wyłącz wyszukiwanie w internecie i wyślij ponownie",
+      "turnOffInterpreterAndResend": "Wyłącz interpreter kodu i wyślij ponownie",
+      "agentModelBlocked": "Ten agent korzysta z modelu, który nie jest dostępny na Twoim koncie. Odłącz agenta lub wybierz innego.",
+      "turnOffConnectorsAndResend": "Wyłącz konektory i wyślij ponownie"
+    },
+    "notice": {
+      "unavailable": "{model} nie jest dostępny na Twoim koncie — wybierz inny model, aby kontynuować.",
+      "exhausted": "{model} osiągnął dzisiejszy limit.",
+      "familyExhausted": "{model} korzysta ze wspólnego limitu rodziny modeli, który na dzisiaj został wyczerpany.",
+      "resets": "Reset nastąpi {resets}.",
+      "chooseModel": "Wybierz model"
+    },
+    "gates": {
+      "blocked": "{feature} został wyłączony na Twoim koncie przez organizację.",
+      "features": {
+        "webSearch": "Wyszukiwanie w internecie",
+        "codeInterpreter": "Interpreter kodu",
+        "connectors": "Konektory"
+      },
+      "remaining": "{count, plural, one {# użycie pozostało dzisiaj} other {# użyć pozostało dzisiaj}}",
+      "exhausted": "Osiągnięto dzienny limit — model odpowie bez tej funkcji.",
+      "exhaustedResets": "Osiągnięto dzienny limit — model odpowie bez tego. Resetów: {resets}."
+    },
+    "mine": {
+      "title": "Twoje limity",
+      "description": "Limity ustawione dla Twojego konta przez organizację. Liczniki resetują się automatycznie na koniec każdego okresu.",
+      "notAvailable": "Niedostępne",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Reset nastąpi {resets}",
+      "limitReached": "Osiągnięto limit",
+      "familyLimitReached": "Osiągnięto limit rodziny modeli",
+      "usageUnavailable": "Nie można załadować bieżącego użycia — wyświetlane są tylko limity.",
+      "familyRow": "Modele {family}"
+    },
+    "routes": {
+      "ttsExhausted": "Osiągnięto dzisiejszy limit zamiany tekstu na mowę.",
+      "translationExhausted": "Osiągnięto dzisiejszy limit tłumaczenia dokumentów.",
+      "resetsIn": "Reset nastąpi {resets}.",
+      "uploadTooLarge": "{fileName} jest za duży — pliki na Twoim koncie muszą mieć mniej niż {maxSize}.",
+      "uploadCapHint": "Pliki do {maxSize}"
+    }
   }
 }

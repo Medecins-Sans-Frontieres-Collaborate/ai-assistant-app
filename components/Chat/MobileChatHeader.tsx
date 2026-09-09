@@ -12,6 +12,7 @@ import { useTranslations } from 'next-intl';
 
 import { useClearConversation } from '@/client/hooks/conversation/useClearConversation';
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useModelAvailability } from '@/client/hooks/settings/useMyLimits';
 import { useUI } from '@/client/hooks/ui/useUI';
 
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
@@ -25,6 +26,8 @@ import {
   XAIIcon,
 } from '@/components/Icons/providers';
 import { WorkflowTabs } from '@/components/Workflows/WorkflowTabs';
+
+import { ModelLimitBadge } from './ModelSelect/ModelLimitBadge';
 
 interface MobileHeaderProps {
   onModelSelectChange: (open: boolean) => void;
@@ -49,6 +52,10 @@ export function MobileChatHeader({ onModelSelectChange }: MobileHeaderProps) {
   const modelProvider =
     OpenAIModels[selectedConversation?.model?.id as OpenAIModelID]?.provider ||
     selectedConversation?.model?.provider;
+  // Parity with the picker's ModelHeader: the current model's usage-limit
+  // badge shows next to its name here too (fail-open — nothing renders
+  // unless the policy is enforced and this model is spent).
+  const modelLimit = useModelAvailability(selectedConversation?.model?.id);
 
   // Helper function to get provider icon
   const getProviderIcon = (provider?: string) => {
@@ -100,6 +107,7 @@ export function MobileChatHeader({ onModelSelectChange }: MobileHeaderProps) {
                 title={t('chat.azureAIAgent')}
               />
             )}
+            <ModelLimitBadge view={modelLimit} size={14} className="ml-1" />
             <IconChevronDown
               size={14}
               className="ml-1 opacity-60 text-black dark:text-white shrink-0"

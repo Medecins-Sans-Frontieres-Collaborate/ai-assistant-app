@@ -5519,5 +5519,74 @@
     "loading": "جاري التحميل…",
     "loadError": "تعذر تحميل قائمة المسؤولين العموميين.",
     "retry": "إعادة المحاولة"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "تم الوصول إلى الحد ({used}/{limit}). يعاد التعيين في {resets}.",
+      "exhaustedNoReset": "تم الوصول إلى الحد ({used}/{limit}).",
+      "familyExhausted": "تم الوصول إلى حد العائلة ({used}/{limit}). يعاد التعيين في {resets}.",
+      "familyExhaustedNoReset": "تم الوصول إلى حد العائلة ({used}/{limit}).",
+      "unavailable": "غير متوفر في حسابك.",
+      "remaining": "بقي {remaining}",
+      "remainingTooltip": "بقي {remaining} من {limit} طلبات خلال هذه الفترة.",
+      "agentModelUnavailable": "يستخدم {model}، وهو غير متوفر لك.",
+      "agentModelExhausted": "يستخدم {model}، وقد تم الوصول إلى الحد. يعاد التعيين في {resets}.",
+      "agentModelExhaustedNoReset": "يستخدم {model}، وقد تم الوصول إلى الحد."
+    },
+    "denial": {
+      "modelBlocked": "هذا النموذج غير متوفر في حسابك. يرجى اختيار نموذج آخر أو التواصل مع المسؤول الخاص بك.",
+      "modelExhausted": "لقد استخدمت كل طلبات {limit} لهذا النموذج اليوم.",
+      "familyExhausted": "لقد استهلكت ميزانية اليوم المشتركة البالغة {limit} طلبات لعائلة هذا النموذج.",
+      "searchBlocked": "تم تعطيل البحث في الويب لحسابك من قِبل المسؤول، وقد تم تفعيله في هذه الرسالة.",
+      "interpreterBlocked": "تم تعطيل مفسر الشيفرة لحسابك من قِبل المسؤول، وقد تم تفعيله في هذه الرسالة.",
+      "mcpBlocked": "تم تعطيل الموصلات لحسابك من قِبل المسؤول، وقد تم تفعيل الموصلات في هذه الرسالة. يرجى تعطيلها للاستمرار.",
+      "messagesCap": "لقد وصلت إلى الحد اليومي وهو {limit} رسالة.",
+      "tokensDayCap": "لقد وصلت إلى حد الرموز المسموح به لهذا اليوم.",
+      "tokensMonthCap": "لقد وصلت إلى حد الرموز المسموح به لهذا الشهر.",
+      "perRequest": "هذا الطلب يتجاوز الحد المسموح به لحسابك (الحد الأقصى {limit} لكل طلب). يرجى تجربة طلب أصغر.",
+      "resets": "يعاد التعيين في {resets}.",
+      "chooseAnotherModel": "اختر نموذجاً آخر",
+      "turnOffSearchAndResend": "قم بتعطيل البحث في الويب وأعد الإرسال",
+      "turnOffInterpreterAndResend": "قم بتعطيل مفسر الشيفرة وأعد الإرسال",
+      "agentModelBlocked": "يستخدم هذا الوكيل نموذجاً غير متاح في حسابك. افصل الوكيل أو اختر وكيلاً آخر.",
+      "turnOffConnectorsAndResend": "أوقف الموصلات وأعد الإرسال"
+    },
+    "notice": {
+      "unavailable": "{model} غير متوفر في حسابك — يرجى اختيار نموذج آخر للمتابعة.",
+      "exhausted": "لقد تم الوصول إلى حد {model} لهذا اليوم.",
+      "familyExhausted": "يشارك {model} ميزانيته مع عائلة النماذج الخاصة به، وقد تم استهلاكها لهذا اليوم.",
+      "resets": "يعاد التعيين في {resets}.",
+      "chooseModel": "اختر نموذجاً"
+    },
+    "gates": {
+      "blocked": "تم تعطيل {feature} في حسابك من قبل مؤسستك.",
+      "features": {
+        "webSearch": "البحث في الويب",
+        "codeInterpreter": "مفسر الشيفرة",
+        "connectors": "الموصلات"
+      },
+      "remaining": "{count, plural, one {بقي استخدام واحد اليوم} other {بقي {count} استخدامات اليوم}}",
+      "exhausted": "تم الوصول إلى الحد اليومي — سيجيب النموذج بدون هذه الميزة.",
+      "exhaustedResets": "تم الوصول إلى الحد اليومي — سيجيب النموذج دون استخدامه. إعادة التعيين {resets}."
+    },
+    "mine": {
+      "title": "حدودك",
+      "description": "الحدود التي وضعتها مؤسستك لحسابك. تتم إعادة تعيين العدادات تلقائيًا في نهاية كل فترة.",
+      "notAvailable": "غير متوفر",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "يعاد التعيين في {resets}",
+      "limitReached": "تم الوصول إلى الحد",
+      "familyLimitReached": "تم الوصول إلى حد عائلة النموذج",
+      "usageUnavailable": "تعذر تحميل الاستخدام الحالي — عرض الحدود فقط.",
+      "familyRow": "نماذج {family}"
+    },
+    "routes": {
+      "ttsExhausted": "لقد وصلت إلى حد تحويل النص إلى كلام لهذا اليوم.",
+      "translationExhausted": "لقد وصلت إلى حد ترجمة المستندات لهذا اليوم.",
+      "resetsIn": "يعاد التعيين في {resets}.",
+      "uploadTooLarge": "الملف {fileName} كبير جدًا — يجب أن تكون الملفات في حسابك أقل من {maxSize}.",
+      "uploadCapHint": "الملفات حتى {maxSize}"
+    }
   }
 }

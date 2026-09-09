@@ -5519,5 +5519,74 @@
     "loading": "Yükleniyor…",
     "loadError": "Global yönetici listesi yüklenemedi.",
     "retry": "Tekrar dene"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Limit doldu ({used}/{limit}). {resets} tarihinde sıfırlanır.",
+      "exhaustedNoReset": "Limit doldu ({used}/{limit}).",
+      "familyExhausted": "Aile limiti doldu ({used}/{limit}). {resets} tarihinde sıfırlanır.",
+      "familyExhaustedNoReset": "Aile limiti doldu ({used}/{limit}).",
+      "unavailable": "Hesabınızda mevcut değil.",
+      "remaining": "{remaining} kaldı",
+      "remainingTooltip": "Bu dönemde {limit} isteğin {remaining} kaldı.",
+      "agentModelUnavailable": "{model} kullanıyor, bu model size açık değil.",
+      "agentModelExhausted": "{model} kullanıyor, limiti doldu. {resets} tarihinde sıfırlanır.",
+      "agentModelExhaustedNoReset": "{model} kullanıyor, limiti doldu."
+    },
+    "denial": {
+      "modelBlocked": "Bu model hesabınızda geçerli değil. Lütfen başka bir model seçin veya yöneticinizle iletişime geçin.",
+      "modelExhausted": "Bugün bu model için {limit} isteğin tamamını kullandınız.",
+      "familyExhausted": "Bu model ailesi için bugünkü {limit} paylaşılan istek bütçesini tükettiniz.",
+      "searchBlocked": "Web araması yöneticiniz tarafından hesabınızda kapatıldı ve bu mesajda etkinleştirilmişti.",
+      "interpreterBlocked": "Kod yorumlayıcı yöneticiniz tarafından hesabınızda kapatıldı ve bu mesajda etkinleştirilmişti.",
+      "mcpBlocked": "Bağlayıcılar yöneticiniz tarafından hesabınızda kapatıldı ve bu mesajda bağlayıcılar etkinleştirilmişti. Devam etmek için devre dışı bırakın.",
+      "messagesCap": "Bugün {limit} mesaj hakkınız doldu.",
+      "tokensDayCap": "Bugünün token limiti doldu.",
+      "tokensMonthCap": "Bu ay için token limitinize ulaştınız.",
+      "perRequest": "Bu istek, hesabınızın izin verdiğinden büyük (istek başına en fazla {limit}). Daha küçük bir istek deneyin.",
+      "resets": "{resets} tarihinde sıfırlanır.",
+      "chooseAnotherModel": "Başka bir model seçin",
+      "turnOffSearchAndResend": "Web aramasını kapatıp tekrar gönderin",
+      "turnOffInterpreterAndResend": "Kod yorumlayıcısını kapatıp tekrar gönderin",
+      "agentModelBlocked": "Bu asistan, hesabınızda mevcut olmayan bir model kullanıyor. Asistanı kaldırın veya farklı bir tane seçin.",
+      "turnOffConnectorsAndResend": "Bağlayıcıları kapatıp tekrar gönderin"
+    },
+    "notice": {
+      "unavailable": "{model} hesabınızda mevcut değil — devam etmek için başka bir model seçin.",
+      "exhausted": "{model} için bugünkü limit doldu.",
+      "familyExhausted": "{model}, model ailesiyle bütçe paylaşıyor ve bugünlük tümü kullanıldı.",
+      "resets": "{resets} tarihinde sıfırlanır.",
+      "chooseModel": "Model seçin"
+    },
+    "gates": {
+      "blocked": "{feature} hesabınız için kuruluşunuz tarafından kapatıldı.",
+      "features": {
+        "webSearch": "Web arama",
+        "codeInterpreter": "Kod yorumlayıcı",
+        "connectors": "Bağlayıcılar"
+      },
+      "remaining": "{count, plural, one {Bugün # kullanım hakkı kaldı} other {Bugün # kullanım hakkı kaldı}}",
+      "exhausted": "Günlük limit doldu — model bu özelliği olmadan yanıt verecek.",
+      "exhaustedResets": "Günlük limite ulaşıldı — model limitsiz olarak yanıt verecek. Sıfırlamalar {resets}."
+    },
+    "mine": {
+      "title": "Limitleriniz",
+      "description": "Kuruluşunuzun hesabınıza tanımladığı limitlerdir. Sayaçlar her dönemin sonunda otomatik olarak sıfırlanır.",
+      "notAvailable": "Mevcut değil",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "{resets} tarihinde sıfırlanır",
+      "limitReached": "Limit doldu",
+      "familyLimitReached": "Model ailesi limiti doldu",
+      "usageUnavailable": "Mevcut kullanım yüklenemedi — yalnızca limitler gösteriliyor.",
+      "familyRow": "{family} modelleri"
+    },
+    "routes": {
+      "ttsExhausted": "Bugünkü metinden sese çeviri limitinize ulaştınız.",
+      "translationExhausted": "Bugünkü belge çeviri limitinize ulaştınız.",
+      "resetsIn": "{resets} tarihinde sıfırlanır.",
+      "uploadTooLarge": "{fileName} çok büyük — hesabınızdaki dosyalar en fazla {maxSize} olmalı.",
+      "uploadCapHint": "En fazla {maxSize} dosyalar"
+    }
   }
 }

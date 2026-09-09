@@ -2,6 +2,7 @@
 
 import {
   IconBrandWindows,
+  IconLock,
   IconPlugConnected,
   IconRobot,
   IconX,
@@ -11,10 +12,12 @@ import { FC } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useToolLimitGates } from '@/client/hooks/settings/useAgentToolGates';
 import {
   findAttachedAgent,
   useAvailableAgents,
 } from '@/client/hooks/settings/useAvailableAgents';
+import { useResetCountdown } from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
@@ -56,11 +59,17 @@ import { useUIStore } from '@/client/stores/uiStore';
  * A pin whose server has since been disabled/removed renders a stale
  * notice — the send path fails open (all tools go through) rather than
  * silently stripping every tool.
+ *
+ * An admin usage limit (`feature.mcp.enabled`, docs/LIMITS_USER_FACING_UX.md
+ * §7.4) LOCKS the whole list: every switch renders disabled and unchecked
+ * with a lock and the reason, the stored toggles are left alone, and the
+ * builtin Microsoft 365 row additionally annotates its own day budget.
  */
 export const ConnectorPinTray: FC = () => {
   const t = useTranslations('connectorPin');
   const tAgent = useTranslations('agentAttach');
   const tM365 = useTranslations('m365.tools');
+  const tGates = useTranslations('limitsUx.gates');
   const { agents } = useAvailableAgents();
   const { models, defaultModelId } = useSettings();
   const setAgentBrowserOpen = useUIStore((s) => s.setAgentBrowserOpen);
@@ -74,16 +83,33 @@ export const ConnectorPinTray: FC = () => {
   const { toolsEnabled: m365ToolsFlagOn } = useM365Enabled();
   const setTrayOpen = useChatInputStore((s) => s.setConnectorPinTrayOpen);
   const { selectedConversation, updateConversation } = useConversations();
+  const { mcp: mcpGate, m365: m365Gate } = useToolLimitGates();
+  const m365ResetLabel = useResetCountdown(m365Gate.budget?.resetAt);
 
   if (!selectedConversation) return null;
+  const mcpLocked = mcpGate.blocked;
+  const mcpLockReason = tGates('blocked', {
+    feature: tGates('features.connectors'),
+  });
   const pinnedId = selectedConversation.pinnedMcpServerId;
   const chatDisabledIds = selectedConversation.disabledMcpServerIds ?? [];
   // Virtual Microsoft 365 row: not a store row — its "global toggle" is
   // m365ToolsUserEnabled, its per-chat toggle and focus pin ride the same
   // disabledMcpServerIds / pinnedMcpServerId machinery as real connectors.
   const m365RowVisible = m365ToolsFlagOn && m365Connected;
+  // Effective state: a lock reads as off everywhere (stored toggles untouched).
   const m365ChatEnabled =
-    m365ToolsUserEnabled && !chatDisabledIds.includes(M365_BUILTIN_SERVER_ID);
+    !mcpLocked &&
+    m365ToolsUserEnabled &&
+    !chatDisabledIds.includes(M365_BUILTIN_SERVER_ID);
+  // The M365 row's own budget line, when the server reported one.
+  const m365BudgetNote = m365Gate.exhausted
+    ? m365ResetLabel
+      ? tGates('exhaustedResets', { resets: m365ResetLabel })
+      : tGates('exhausted')
+    : m365Gate.low && m365Gate.budget
+      ? tGates('remaining', { count: m365Gate.budget.remaining })
+      : undefined;
   const pinnedIsM365 = pinnedId === M365_BUILTIN_SERVER_ID;
   const pinnedServer = pinnedId
     ? mcpServers.find((s) => s.id === pinnedId)
@@ -91,11 +117,15 @@ export const ConnectorPinTray: FC = () => {
   const pinnedName = pinnedIsM365
     ? M365_BUILTIN_SERVER_LABEL
     : (pinnedServer?.name ?? t('unknownConnector'));
-  const pinnedUsable = pinnedIsM365
-    ? m365RowVisible && m365ChatEnabled
-    : !!pinnedServer?.enabled &&
-      !chatDisabledIds.includes(pinnedServer.id) &&
-      !(pinnedServer.authMode === 'oauth' && pinnedServer.oauth?.needsReauth);
+  const pinnedUsable =
+    !mcpLocked &&
+    (pinnedIsM365
+      ? m365RowVisible && m365ChatEnabled
+      : !!pinnedServer?.enabled &&
+        !chatDisabledIds.includes(pinnedServer.id) &&
+        !(
+          pinnedServer.authMode === 'oauth' && pinnedServer.oauth?.needsReauth
+        ));
 
   const setPin = (serverId: string | undefined) => {
     updateConversation(selectedConversation.id, {
@@ -157,6 +187,17 @@ export const ConnectorPinTray: FC = () => {
         <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
           {t('trayTitle')}
         </span>
+        {mcpLocked && (
+          <span
+            role="img"
+            aria-label={mcpLockReason}
+            title={mcpLockReason}
+            data-testid="tray-lock-connectors"
+            className="flex flex-shrink-0 items-center text-gray-400 dark:text-gray-500"
+          >
+            <IconLock size={12} aria-hidden="true" />
+          </span>
+        )}
         <button
           type="button"
           onClick={close}
@@ -218,13 +259,16 @@ export const ConnectorPinTray: FC = () => {
             <li className="flex items-center gap-2">
               <label
                 className={`flex min-w-0 flex-1 items-center gap-2 ${
-                  m365ToolsUserEnabled ? 'cursor-pointer' : 'cursor-default'
+                  m365ToolsUserEnabled && !mcpLocked
+                    ? 'cursor-pointer'
+                    : 'cursor-default'
                 }`}
+                title={mcpLocked ? mcpLockReason : undefined}
               >
                 <input
                   type="checkbox"
                   checked={m365ChatEnabled}
-                  disabled={!m365ToolsUserEnabled}
+                  disabled={!m365ToolsUserEnabled || mcpLocked}
                   onChange={() =>
                     setChatEnabled(M365_BUILTIN_SERVER_ID, !m365ChatEnabled)
                   }
@@ -248,18 +292,33 @@ export const ConnectorPinTray: FC = () => {
                   >
                     {M365_BUILTIN_SERVER_LABEL}
                   </span>
-                  <span className="block truncate text-[11px] text-gray-500 dark:text-gray-400">
-                    {tM365('trayDescription')}
+                  {/* The budget line outranks the generic description:
+                      it is the one thing that changes what happens next. */}
+                  <span
+                    className={`block truncate text-[11px] ${
+                      !mcpLocked && m365Gate.exhausted
+                        ? 'text-amber-700 dark:text-amber-400'
+                        : 'text-gray-500 dark:text-gray-400'
+                    }`}
+                  >
+                    {mcpLocked
+                      ? mcpLockReason
+                      : (m365BudgetNote ?? tM365('trayDescription'))}
                   </span>
                 </span>
               </label>
               <button
                 type="button"
                 onClick={() => setM365ToolsUserEnabled(!m365ToolsUserEnabled)}
-                title={t('globalToggleTitle', {
-                  name: M365_BUILTIN_SERVER_LABEL,
-                })}
-                className={`flex-shrink-0 rounded-md px-1.5 py-0.5 text-[11px] transition-colors ${
+                disabled={mcpLocked}
+                title={
+                  mcpLocked
+                    ? mcpLockReason
+                    : t('globalToggleTitle', {
+                        name: M365_BUILTIN_SERVER_LABEL,
+                      })
+                }
+                className={`flex-shrink-0 rounded-md px-1.5 py-0.5 text-[11px] transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                   m365ToolsUserEnabled
                     ? 'text-gray-400 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
                     : 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40'
@@ -267,7 +326,7 @@ export const ConnectorPinTray: FC = () => {
               >
                 {m365ToolsUserEnabled ? t('globalOn') : t('globalOff')}
               </button>
-              {pinnedIsM365 ? (
+              {pinnedIsM365 && !mcpLocked ? (
                 <button
                   type="button"
                   onClick={() => setPin(undefined)}
@@ -278,6 +337,7 @@ export const ConnectorPinTray: FC = () => {
                   <IconX size={11} aria-hidden="true" />
                 </button>
               ) : (
+                !pinnedIsM365 &&
                 m365ChatEnabled && (
                   <button
                     type="button"
@@ -295,20 +355,25 @@ export const ConnectorPinTray: FC = () => {
               server.authMode === 'oauth' && !!server.oauth?.needsReauth;
             const isPinned = server.id === pinnedId;
             const chatEnabled =
-              server.enabled && !chatDisabledIds.includes(server.id);
+              !mcpLocked &&
+              server.enabled &&
+              !chatDisabledIds.includes(server.id);
             const focusable = chatEnabled && !needsReauth;
             return (
               <li key={server.id} className="flex items-center gap-2">
                 {/* Per-chat switch: only meaningful while globally enabled */}
                 <label
                   className={`flex min-w-0 flex-1 items-center gap-2 ${
-                    server.enabled ? 'cursor-pointer' : 'cursor-default'
+                    server.enabled && !mcpLocked
+                      ? 'cursor-pointer'
+                      : 'cursor-default'
                   }`}
+                  title={mcpLocked ? mcpLockReason : undefined}
                 >
                   <input
                     type="checkbox"
                     checked={chatEnabled}
-                    disabled={!server.enabled}
+                    disabled={!server.enabled || mcpLocked}
                     onChange={() => setChatEnabled(server.id, !chatEnabled)}
                     aria-label={t('toggleServerInChat', {
                       name: server.name,
@@ -337,8 +402,13 @@ export const ConnectorPinTray: FC = () => {
                   onClick={() =>
                     updateMcpServer(server.id, { enabled: !server.enabled })
                   }
-                  title={t('globalToggleTitle', { name: server.name })}
-                  className={`flex-shrink-0 rounded-md px-1.5 py-0.5 text-[11px] transition-colors ${
+                  disabled={mcpLocked}
+                  title={
+                    mcpLocked
+                      ? mcpLockReason
+                      : t('globalToggleTitle', { name: server.name })
+                  }
+                  className={`flex-shrink-0 rounded-md px-1.5 py-0.5 text-[11px] transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                     server.enabled
                       ? 'text-gray-400 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
                       : 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40'
@@ -346,7 +416,7 @@ export const ConnectorPinTray: FC = () => {
                 >
                   {server.enabled ? t('globalOn') : t('globalOff')}
                 </button>
-                {isPinned ? (
+                {isPinned && !mcpLocked ? (
                   <button
                     type="button"
                     onClick={() => setPin(undefined)}
@@ -357,6 +427,7 @@ export const ConnectorPinTray: FC = () => {
                     <IconX size={11} aria-hidden="true" />
                   </button>
                 ) : (
+                  !isPinned &&
                   focusable && (
                     <button
                       type="button"
@@ -377,12 +448,16 @@ export const ConnectorPinTray: FC = () => {
           model picker's former sections; Phase 2 consolidation). */}
       <ToolModeControls />
 
+      {/* Footer: the lock reason wins over the pin/cost hints — a locked
+          tray sends no tools, so neither hint applies. */}
       <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-        {pinnedId
-          ? pinnedUsable
-            ? t('pinnedHint', { name: pinnedName })
-            : t('staleHint')
-          : t('chatToggleHint')}
+        {mcpLocked
+          ? mcpLockReason
+          : pinnedId
+            ? pinnedUsable
+              ? t('pinnedHint', { name: pinnedName })
+              : t('staleHint')
+            : t('chatToggleHint')}
       </p>
     </div>
   );

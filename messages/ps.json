@@ -5503,5 +5503,74 @@
     "loading": "درحال بارولو…",
     "loadError": "د نړیوال admin لیست بار نه شو.",
     "retry": "بیا هڅه وکړئ"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "محدودیت ته ورسېدل ({used}/{limit}). بیا تنظیمېږي {resets}.",
+      "exhaustedNoReset": "محدودیت ته ورسېدل ({used}/{limit}).",
+      "familyExhausted": "د کورنۍ محدودیت ته ورسېدل ({used}/{limit}). بیا تنظیمېږي {resets}.",
+      "familyExhaustedNoReset": "د کورنۍ محدودیت ته ورسېدل ({used}/{limit}).",
+      "unavailable": "ستاسو په حساب کې موجود نه دی.",
+      "remaining": "{remaining} پاتې",
+      "remainingTooltip": "په دې موده کې له {limit} څخه {remaining} غوښتنې پاتې دي.",
+      "agentModelUnavailable": "{model} کاروي، چې تاسو ته شته نه دی.",
+      "agentModelExhausted": "{model} کاروي، چې محدودیت ته رسېدلی. بیا تنظیمېږي {resets}.",
+      "agentModelExhaustedNoReset": "{model} کاروي، چې محدودیت ته رسېدلی."
+    },
+    "denial": {
+      "modelBlocked": "دا ماډل ستاسو په حساب کې نشته. بل ماډل انتخاب کړئ یا خپل اډمین ته مراجعه وکړئ.",
+      "modelExhausted": "تاسو نن لهذا ماډل ټول {limit} غوښتنې کارولي دي.",
+      "familyExhausted": "تاسو د دې ماډل کورنۍ د نننۍ شریکې بودیجې ټولې {limit} غوښتنې کارولي دي.",
+      "searchBlocked": "ویب لټون ستاسو اډمین ستاسو لپاره بند کړی، او دا پیغام ویب لټون فعال درلود.",
+      "interpreterBlocked": "کوډ انټرپرېټر ستاسو اډمین لخوا بند شوی، او دا پیغام کې فعال و.",
+      "mcpBlocked": "کنېکټرونه ستاسو اډمین بند کړي، او دا پیغام کې فعال ول. د دوام لپاره کنېکټرونه بند کړئ.",
+      "messagesCap": "تاسو نن خپلې د {limit} پیغامونو محدودې ته رسېدلي یاست.",
+      "tokensDayCap": "تاسو د نن لپاره د ټوکنو محدودې ته رسېدلي یاست.",
+      "tokensMonthCap": "تاسو د دې میاشتې د ټوکنو محدودې ته رسېدلي یاست.",
+      "perRequest": "دا غوښتنه ستاسو د حساب له اجازه شوې کچې لوړه ده (اعظمي {limit} هره غوښتنه). یوه کوچنۍ هڅه وکړئ.",
+      "resets": "بیا تنظیمېږي {resets}.",
+      "chooseAnotherModel": "بل ماډل غوره کړئ",
+      "turnOffSearchAndResend": "ویب لټون بنده کړئ او بیا واستوئ",
+      "turnOffInterpreterAndResend": "کوډ انټرپرېټر بنده کړئ او بیا واستوئ",
+      "agentModelBlocked": "دا استازی یو داسې ماډل کاروي چې ستاسو په حساب کې شتون نه لري. استازی جلا کړئ یا بل استازی وټاکئ.",
+      "turnOffConnectorsAndResend": "اتصالونه بند کړئ او بیا واستوئ"
+    },
+    "notice": {
+      "unavailable": "{model} ستاسو په حساب کې نشته — د دوام لپاره بل ماډل وټاکئ.",
+      "exhausted": "{model} نن لپاره خپل محدودیت ته رسېدلی.",
+      "familyExhausted": "{model} له خپلې کورنۍ سره بودیجه لري، چې نن لپاره ختمه شوې.",
+      "resets": "بیا تنظیمېږي {resets}.",
+      "chooseModel": "ماډل وټاکئ"
+    },
+    "gates": {
+      "blocked": "{feature} ستاسو لپاره ستاسې ادارې بند کړی.",
+      "features": {
+        "webSearch": "ویب لټون",
+        "codeInterpreter": "کوډ انټرپرېټر",
+        "connectors": "کنېکټرونه"
+      },
+      "remaining": "{count, plural, one {# ځله نن پاتې} other {# ځلې نن پاتې}}",
+      "exhausted": "ورځنۍ محدوده ختمه شوه — ماډل به پرته له دې ځواب ووايي.",
+      "exhaustedResets": "ورځنی حد ته رسېدلي یاست — ماډل به پرته له دې ځواب ووایي. بیا تنظیمونه {resets}."
+    },
+    "mine": {
+      "title": "ستاسې محدودیتونه",
+      "description": "محدودیتونه چې ستاسو اداره ستاسو حساب ته ټاکلي دي. شمېرنې په هره دوره کې خپله له سره تنظیمېږي.",
+      "notAvailable": "نشته",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "بیا تنظیمېږي {resets}",
+      "limitReached": "محدودیت ته رسېدلی",
+      "familyLimitReached": "د ماډل کورنۍ محدودیت ته رسېدلی",
+      "usageUnavailable": "فعلي کارونه نشي ښکاره کېدای — یوازې محدودیتونه ښودل کېږي.",
+      "familyRow": "{family} ماډلونه"
+    },
+    "routes": {
+      "ttsExhausted": "تاسو نن د text-to-speech محدودیت ته رسېدلي یاست.",
+      "translationExhausted": "تاسو نن د اسنادو ژباړې محدودیت ته رسېدلي یاست.",
+      "resetsIn": "بیا تنظیمېږي {resets}.",
+      "uploadTooLarge": "{fileName} ډېر لوی دی — ستاسو په حساب کې باید فایلونه له {maxSize} څخه کوچني وي.",
+      "uploadCapHint": "فایلونه تر {maxSize} پورې"
+    }
   }
 }

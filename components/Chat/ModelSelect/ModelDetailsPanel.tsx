@@ -13,6 +13,7 @@ import { DeploymentDetailsSection } from './DeploymentDetailsSection';
 import { HostedRegionSection } from './HostedRegionSection';
 import { ModelHeader } from './ModelHeader';
 import { RecentSourcesSection } from './RecentSourcesSection';
+import { SubVariantSection } from './SubVariantSection';
 import { VariantSection } from './VariantSection';
 import { VersionSection } from './VersionSection';
 
@@ -49,6 +50,12 @@ interface ModelDetailsPanelProps {
   onDeleteAgent?: (agentId: string) => void;
   // Organization agent props
   organizationAgent?: OrganizationAgent;
+  /**
+   * Catalog model the selected agent pins the conversation to (prompt
+   * agents). The header badges the agent when that model is blocked or
+   * exhausted for this user — the agent itself is never restricted.
+   */
+  pinnedModelId?: string;
 }
 
 export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
@@ -68,6 +75,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
   onEditAgent,
   onDeleteAgent,
   organizationAgent,
+  pinnedModelId,
 }) => {
   const hasAgentImage = organizationAgent?.image;
   const isCustomSourceModel = selectedModel.isCustomSourceModel === true;
@@ -106,6 +114,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
                 modelConfig={modelConfig}
                 setMobileView={setMobileView}
                 organizationAgent={organizationAgent}
+                pinnedModelId={pinnedModelId}
                 hasBackgroundImage
               />
             </div>
@@ -117,6 +126,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
               modelConfig={modelConfig}
               setMobileView={setMobileView}
               organizationAgent={organizationAgent}
+              pinnedModelId={pinnedModelId}
             />
           </div>
         </>
@@ -126,12 +136,16 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
           modelConfig={modelConfig}
           setMobileView={setMobileView}
           organizationAgent={organizationAgent}
+          pinnedModelId={pinnedModelId}
         />
       )}
 
-      {/* Variant + version switchers for family models (list shows one row
-          per family; variant = size/tier axis, version chips follow the
-          active variant) */}
+      {/* Variant → version → sub-variant switchers for family models. The
+          list shows one row per family; these three narrowing axes are how
+          its members are reached. Variant is the capability/size line
+          (Foundational, Chat, o-series, Opus, Sonnet…), version chips follow
+          the active variant, and the sub-variant control appears only where
+          one version ships several models (GPT 5.6's Sol/Terra/Luna). */}
       {!isCustomAgent && !organizationAgent && onSelectVersion && (
         <>
           <VariantSection
@@ -142,6 +156,11 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
           <VersionSection
             selectedModel={selectedModel}
             onSelectVersion={onSelectVersion}
+            familyModels={isCustomSourceModel ? customSourceModels : undefined}
+          />
+          <SubVariantSection
+            selectedModel={selectedModel}
+            onSelectSubVariant={onSelectVersion}
             familyModels={isCustomSourceModel ? customSourceModels : undefined}
           />
         </>

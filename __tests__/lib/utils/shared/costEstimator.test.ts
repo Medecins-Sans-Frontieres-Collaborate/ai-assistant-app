@@ -662,7 +662,7 @@ describe('boundRequests', () => {
     const cells = cellsFor(
       policy([
         { limitKey: 'model.requests', modelId: TERRA, value: 50 },
-        { limitKey: 'model.requests', series: 'gpt-56', value: 500 },
+        { limitKey: 'model.requests', series: 'gpt', value: 500 },
         { limitKey: 'chat.messagesPerDay', value: 30 },
       ]),
       TERRA,
@@ -720,9 +720,7 @@ describe('boundRequests', () => {
     expect(
       boundRequests(
         cellsFor(
-          policy([
-            { limitKey: 'model.allowed', series: 'gpt-56', value: false },
-          ]),
+          policy([{ limitKey: 'model.allowed', series: 'gpt', value: false }]),
           TERRA,
         ),
         TOKENS,
@@ -760,7 +758,7 @@ describe('estimateSpendWithCaps', () => {
   it('(10) entered 20/day under a 30/day message cap: not binding, ceiling $7.31 per user-month', () => {
     const p = policy([
       { limitKey: 'model.requests', modelId: TERRA, value: 50 },
-      { limitKey: 'model.requests', series: 'gpt-56', value: 500 },
+      { limitKey: 'model.requests', series: 'gpt', value: 500 },
       { limitKey: 'chat.messagesPerDay', value: 30 },
     ]);
     const result = estimateSpendWithCaps(baseInput(), LIVE, {
@@ -837,7 +835,7 @@ describe('estimateSpendWithCaps', () => {
 
   it('scales a family envelope over its members proportionally, never summing', () => {
     const p = policy([
-      { limitKey: 'model.requests', series: 'gpt-56', value: 100 },
+      { limitKey: 'model.requests', series: 'gpt', value: 100 },
     ]);
     const cells = {
       [TERRA]: cellsFor(p, TERRA),
@@ -855,7 +853,7 @@ describe('estimateSpendWithCaps', () => {
     const result = estimateSpendWithCaps(input, LIVE, cells);
     // 80 + 80 entered > 100 family envelope → binding.
     expect(result.capBinding).toBe(true);
-    expect(result.bindingCells).toEqual(['family:gpt-56.requests']);
+    expect(result.bindingCells).toEqual(['family:gpt.requests']);
     // At the cap each member alone could reach 100, but the envelope holds
     // the SUM at 100 → 50 + 50, not 100 + 100.
     expect(result.ceiling.requestsPerUserPerPeriod).toBeCloseTo(100, 10);
@@ -867,7 +865,7 @@ describe('estimateSpendWithCaps', () => {
   it('a model sub-cap plus a family envelope: each model at its own cap, sum within the envelope', () => {
     const p = policy([
       { limitKey: 'model.requests', modelId: TERRA, value: 10 },
-      { limitKey: 'model.requests', series: 'gpt-56', value: 100 },
+      { limitKey: 'model.requests', series: 'gpt', value: 100 },
     ]);
     const cells = {
       [TERRA]: cellsFor(p, TERRA),
@@ -892,7 +890,7 @@ describe('estimateSpendWithCaps', () => {
     expect(result.bindingCells).toEqual(
       expect.arrayContaining([
         `model:${TERRA}.requests`,
-        'family:gpt-56.requests',
+        'family:gpt.requests',
       ]),
     );
   });

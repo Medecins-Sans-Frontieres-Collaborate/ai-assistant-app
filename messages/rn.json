@@ -5503,5 +5503,74 @@
     "loading": "Biriko birarikoza…",
     "loadError": "Uru rutonde rw’abayobozi bakuru ntirwashoboye gukora.",
     "retry": "Subira kugerageza"
+  },
+  "limitsUx": {
+    "picker": {
+      "unavailable": "Ntibiboneka kuri konti yawe.",
+      "remaining": "Harasigaye {{remaining}}",
+      "agentModelUnavailable": "Irakoresha {{model}}, ariko ntibiboneka kuri wewe.",
+      "agentModelExhaustedNoReset": "Irakoresha {{model}}, yamaze kurangiza urugero rwayo.",
+      "exhausted": "Igeze ku mupaka ({used}/{limit}). Bizosubira {resets}.",
+      "exhaustedNoReset": "Igeze ku mupaka ({used}/{limit}).",
+      "familyExhausted": "Umupaka w'umuryango wagezweko ({used}/{limit}). Bizosubira {resets}.",
+      "familyExhaustedNoReset": "Umupaka w'umuryango wagezweko ({used}/{limit}).",
+      "remainingTooltip": "Hasigaye {remaining} kuri {limit} y'ivyifuzo muri iki kiringo.",
+      "agentModelExhausted": "Irakoresha {model}, umupaka wayo wagezweko. Bizosubira {resets}."
+    },
+    "denial": {
+      "modelBlocked": "Iyi model ntibiboneka kuri konti yawe. Hitamwo iyindi, canke muvugane n'umuyobozi wawe.",
+      "modelExhausted": "Mwarangije {{limit}} zasabwe kuri iyi model uyu munsi.",
+      "familyExhausted": "Mwarangije urugero rusangiwe rw'uyu munsi rwa {{limit}} zasabwe kuri uyu muryango wa model.",
+      "searchBlocked": "Gushakisha kuri web vyarahagaritswe kuri konti yawe n'umuyobozi, kandi ubu butumwa vyari vyakoreshejwe.",
+      "interpreterBlocked": "Code interpreter vyarahagaritswe kuri konti yawe n'umuyobozi, kandi ubu butumwa vyari vyakoreshejwe.",
+      "mcpBlocked": "Connectors vyarahagaritswe kuri konti yawe n'umuyobozi, kandi ubu butumwa vyari bifise connectors. Bikuremo kugira ubandanye.",
+      "messagesCap": "Mwageze ku rugero rwa {{limit}} z'ubutumwa uyu munsi.",
+      "tokensDayCap": "Mwageze ku rugero rw'inota za none.",
+      "tokensMonthCap": "Mwageze ku rugero rw'inota z'uku kwezi.",
+      "perRequest": "Iri sangwa rinini kurusha ivyo konti yawe yemera (ubumara ntarengwa buri kuri {{limit}} kuri buri sangwa). Gerageza guto.",
+      "resets": "Bizosubira gushingwa {{resets}}.",
+      "chooseAnotherModel": "Hitamwo iyindi model",
+      "turnOffSearchAndResend": "Gufunga gushakisha kuri web no kongera kurungika",
+      "turnOffInterpreterAndResend": "Gufunga code interpreter no kongera kurungika",
+      "agentModelBlocked": "Uyu mushandisi akoresha imodoka itaboneka kuri konti yawe. Sokora uwo mushandisi canke uhitemwo uwundi.",
+      "turnOffConnectorsAndResend": "Zimya connectors wongere utume"
+    },
+    "notice": {
+      "unavailable": "{{model}} ntibiboneka kuri konti yawe — hitamwo iyindi model ugume ubandanya.",
+      "exhausted": "{{model}} imaze kurangiza urugero rwayo rwa none.",
+      "familyExhausted": "{{model}} isangiye urugero n'umuryango wa models, wamaze kurangira uyu munsi.",
+      "resets": "Bizosubira gushingwa {{resets}}.",
+      "chooseModel": "Hitamwo model"
+    },
+    "gates": {
+      "blocked": "{{feature}} vyarahagaritswe kuri konti yawe n'ishirahamwe ryawe.",
+      "features": {
+        "webSearch": "Gushakisha kuri web",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# gukoreshwa gusigaye uyu munsi} other {# gukoreshwa gusigaye uyu munsi}}",
+      "exhausted": "Urugero rwa buri munsi rugeze — model izosubiza idakoresheje.",
+      "exhaustedResets": "Ingingo ya buri musi igeze — imodoka izishura idakoresheje iyo. Gusanura {resets}."
+    },
+    "mine": {
+      "title": "Ubugererane bwawe",
+      "description": "Imipaka ishirahamwe ryawe ryashize kuri konti yawe. Ibipimo vyisubiramwo ku mpera y'ikiringo cose.",
+      "notAvailable": "Ntibiboneka",
+      "resetsIn": "Bizosubira gushingwa {{resets}}",
+      "limitReached": "Urugero rugeze",
+      "familyLimitReached": "Urugero rw'umuryango wa model rugeze",
+      "usageUnavailable": "Uko bikoresha ubu ntivyabashije kuza — bigaragaza gusa ibipimo.",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "familyRow": "Imodoka za {family}"
+    },
+    "routes": {
+      "ttsExhausted": "Mwageze ku gipimo ca text-to-speech (TTS) ca none.",
+      "translationExhausted": "Mwageze ku gipimo co guhindura inyandiko ca none.",
+      "resetsIn": "Bizosubira gushingwa {{resets}}.",
+      "uploadCapHint": "Amadosiye gushika kuri {{maxSize}}",
+      "uploadTooLarge": "{fileName} irakuze cane — amadosiye kuri konte yawe ategerezwa kuba munsi ya {maxSize}."
+    }
   }
 }

@@ -5519,5 +5519,74 @@
     "loading": "በመጫን ላይ…",
     "loadError": "የአጠቃላይ አስተዳዳሪዎች ዝርዝር ማጫን አልተቻለም።",
     "retry": "ደግመው ይሞክሩ"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "ወሰኑ ተደርሷል ({used}/{limit})። {resets} ይቀየራል።",
+      "exhaustedNoReset": "ወሰኑ ተደርሷል ({used}/{limit})።",
+      "familyExhausted": "የቤተሰብ ወሰኑ ተደርሷል ({used}/{limit})። {resets} ይቀየራል።",
+      "familyExhaustedNoReset": "የቤተሰብ ወሰኑ ተደርሷል ({used}/{limit})።",
+      "unavailable": "በአካውንትዎ ላይ አይገኝም።",
+      "remaining": "{remaining} ቀሪ አለ",
+      "remainingTooltip": "በዚህ ጊዜ ወቅት {limit} መካከል {remaining} ጥያቄዎች ቀሩ።",
+      "agentModelUnavailable": "{model} ይጠቀማል፣ ይህ ለእርስዎ አይገኝም።",
+      "agentModelExhausted": "{model} ይጠቀማል፣ ወሰኑ ተደርሷል። {resets} ይቀየራል።",
+      "agentModelExhaustedNoReset": "{model} ይጠቀማል፣ ወሰኑ ተደርሷል።"
+    },
+    "denial": {
+      "modelBlocked": "ይህ ሞዴል በአካውንትዎ ላይ አይገኝም። ሌላ ሞዴል ይምረጡ፣ ወይም አስተዳዳሪዎን ያናግሩ።",
+      "modelExhausted": "ዛሬ ለዚህ ሞዴል {limit} ጥያቄዎችን ሁሉ ጠቀምናል።",
+      "familyExhausted": "የዚህ ሞዴል ቤተሰብ የተጋራውን ቀናት በጀት {limit} ጥያቄዎች በዛሬ ጭረሱታል።",
+      "searchBlocked": "የድህረ መረጃ ፍለጋ በአስተዳዳሪ በአካውንትዎ ላይ ተጠቅሷል፣ ይህ መልእክት ግን ፍለጋ ነበራቸው።",
+      "interpreterBlocked": "የኮድ ትርጓሜ በአስተዳዳሪ በአካውንትዎ ላይ ተጠቅሷል፣ ይህ መልእክት ግን በተባረከ ነበር።",
+      "mcpBlocked": "ኮኔክተሮች በአስተዳዳሪ በአካውንትዎ ላይ ተጠቅሷል፣ ይህ መልእክት ግን ኮኔክተሮች አካትቷል። ለመቀጠል እባክዎን አጥፉት።",
+      "messagesCap": "ዛሬ የእርስዎ የመልእክት {limit} ወሰን ደርሰዋል።",
+      "tokensDayCap": "የዛሬ ሶስት የቶክን ወሰንዎን ደርሰዋል።",
+      "tokensMonthCap": "ለወሩ የቶክን ወሰንዎን ደርሰዋል።",
+      "perRequest": "ይህ ጥያቄ ከአካውንትዎ ወሰን ይበልጣል (በግዴታ {limit} በትንሽ ጥያቄ ይሞክሩ።",
+      "resets": "{resets} ይቀየራል።",
+      "chooseAnotherModel": "ሌላ ሞዴል ይምረጡ",
+      "turnOffSearchAndResend": "የድህረ መረጃ ፍለጋ ያጥፉና ዳግመኛ ይላኩ",
+      "turnOffInterpreterAndResend": "የኮድ ትርጓሜ ያጥፉና ዳግመኛ ይላኩ",
+      "agentModelBlocked": "ይህ ወኪል በመለያዎ ላይ የማይገኝ አብነት ይጠቀማል። ወኪሉን አፍታዉ ወይም ሌላ ይምረጡ።",
+      "turnOffConnectorsAndResend": "ኮኔክተሮቹን ያጥፉና ዳግም ይላኩ"
+    },
+    "notice": {
+      "unavailable": "{model} በአካውንትዎ ላይ አይገኝም — ሌላ ሞዴል ይምረጡ ለመቀጠል።",
+      "exhausted": "{model} የዛሬ ወሰኑን ደርሷል።",
+      "familyExhausted": "{model} ከሞዴል ቤተሰቡ ጋር የተጋራ በጀት አለው፣ ዛሬ ጭረሰ።",
+      "resets": "{resets} ይቀየራል።",
+      "chooseModel": "ሞዴል ይምረጡ"
+    },
+    "gates": {
+      "blocked": "{feature} በድርጅትዎ በአካውንትዎ ላይ ተጠቅሷል።",
+      "features": {
+        "webSearch": "የድህረ መረጃ ፍለጋ",
+        "codeInterpreter": "የኮድ ትርጓሜ",
+        "connectors": "ኮኔክተሮች"
+      },
+      "remaining": "{count, plural, one {ዛሬ # ጥቅም ቀሪ አለ} other {ዛሬ # ጥቅሞች ቀሩ}}",
+      "exhausted": "የዕለቱ ወሰን ተደርሷል — ሞዴሉ ያለዚህ ይመልሳል።",
+      "exhaustedResets": "ዕለታዊ ገደብ ተደርሷል — አብነቱ ሳያጠቀም ይመልሳል። ዳግምም: {resets}።"
+    },
+    "mine": {
+      "title": "የእርስዎ ወሰኖች",
+      "description": "ድርጅትዎ ለአካውንትዎ ያዘጋጀው ወሰን። መቆጣጠሪያዎች በያንዳንዱ ወቅት መጨረሻ በራሱ ይቀየራሉ።",
+      "notAvailable": "አይገኝም",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "{resets} ይቀየራል",
+      "limitReached": "ወሰኑ ተደርሷል",
+      "familyLimitReached": "የሞዴል ቤተሰብ ወሰኑ ተደርሷል",
+      "usageUnavailable": "ወቅታዊ ጥቅም ማከል አልተቻለም — እዚህ ወሰኖችን ብቻ እናሳያለን።",
+      "familyRow": "{family} አብነቶች"
+    },
+    "routes": {
+      "ttsExhausted": "ዛሬ የጽሑፍ ወደ ድምፅ የተመዘገበውን ወሰን ደርሰዋል።",
+      "translationExhausted": "ዛሬ የሰነድ ትርጉም ወሰን ደርሰዋል።",
+      "resetsIn": "{resets} ይቀየራል።",
+      "uploadTooLarge": "{fileName} በጣም ትልቅ ነው — ፋይሎች በአካውንትዎ ላይ {maxSize} በታች ሊሆኑ አለባቸው።",
+      "uploadCapHint": "እስከ {maxSize} ያሉ ፋይሎች"
+    }
   }
 }

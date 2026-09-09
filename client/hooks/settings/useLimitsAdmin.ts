@@ -3,14 +3,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
+import { notifyLimitsChanged } from '@/client/hooks/settings/limitsUxEvents';
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
+import type { MyLimitsResponse } from '@/client/hooks/settings/useMyLimits';
 
 import {
   JurisdictionPredicate,
   LimitDelegation,
   LimitEntry,
   LimitOverride,
-  LimitTier,
   LimitsFailMode,
   LimitsMode,
   OverrideScope,
@@ -18,105 +19,22 @@ import {
 
 import type { TargetVerdict } from '@/components/Limits/jurisdiction';
 
-export interface MyLimit {
-  limitKey: string;
-  value: number | boolean | null;
-  unit: string;
-  window: string;
-  source: string;
-  overrideId?: string;
-  modelId?: string;
-  series?: string;
-  /**
-   * Authority tier of the winning record (design §3b). Optional because a
-   * server predating delegations omits it; absent reads as `global`.
-   */
-  tier?: LimitTier;
-  /** A global-tier ceiling clamped the winner down. */
-  ceilingApplied?: boolean;
-  /** The global-tier OVERRIDE whose ceiling pinned the value, if one did. */
-  ceilingOverrideId?: string;
-  /**
-   * Its label, supplied by the server: a scoped admin cannot see other
-   * global records, but must be able to read WHY their 500 became 100.
-   */
-  ceilingLabel?: string;
-}
-
-/** Current consumption for one limit key, attached to `?as=` previews. */
-export interface PreviewUsage {
-  used: number;
-  window: 'day' | 'month' | 'total';
-}
-
-export interface MyLimitsResponse {
-  enabled: boolean;
-  mode?: 'observe' | 'enforce';
-  policyUnavailable?: boolean;
-  limits: MyLimit[];
-  /** Present on `?as=` admin previews only. */
-  preview?: boolean;
-  subject?: string | null;
-  /** Override layers the preview cannot evaluate (attribute, group). */
-  notEvaluated?: string[];
-  /** The caller is a SCOPED admin and the subject is inside their scope. */
-  scopedPreview?: boolean;
-  /** Present when `usage=1` was asked for and the counters could be read. */
-  usage?: Record<string, PreviewUsage>;
-  /** `usage=1` was asked for but consent/lookup/storage failed — never an error. */
-  usageUnavailable?: boolean;
-}
-
-/**
- * The caller's own effective limits. Returns ONLY limits that actually
- * constrain them, so the common case (nothing limited) is an empty list and
- * the UI can render nothing at all rather than a wall of "Unlimited" rows.
- */
-export function useMyLimits() {
-  const limitsEnabled = useLimitsEnabled();
-
-  const { data, isLoading, error, refetch } = useQuery<MyLimitsResponse | null>(
-    {
-      queryKey: ['limits-me'],
-      enabled: limitsEnabled,
-      queryFn: async () => {
-        const response = await fetch('/api/limits/me');
-        // 401 = signed out; treat as "no limits to show" rather than an error.
-        if (response.status === 401) return null;
-        if (!response.ok) {
-          throw new Error(`Failed to fetch limits: ${response.status}`);
-        }
-        return unwrapApiData<MyLimitsResponse>(await response.json());
-      },
-      staleTime: 60_000,
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  );
-
-  return {
-    limits: data?.limits ?? [],
-    mode: data?.mode ?? 'observe',
-    isLimited: (data?.limits ?? []).length > 0,
-    isLoading,
-    error,
-    refetch,
-  };
-}
-
-/**
- * True when the `usageLimits` LaunchDarkly flag is on for this user.
- *
- * CLIENT-side only, and deliberately so: it gates UI (the admin rail entry,
- * the limits panel, the /api/limits/me fetch), not security — the limits
- * admin page and API routes keep their own server-side global-admin gates.
- * Outside an LDProvider (or before flags load) `useFlags()` returns no keys,
- * so this fails closed to hidden.
- */
-export function useLimitsEnabled(): boolean {
-  const { usageLimits } = useFlags();
-  return Boolean(usageLimits);
-}
+// The caller's own limits (types, `useMyLimits`, `useLimitsEnabled`) live in
+// useMyLimits.ts since the user-facing limit UX
+// (docs/LIMITS_USER_FACING_UX.md §7.3); re-exported so existing imports —
+// the admin panel, LimitsAdminGate, the preview — keep resolving from here.
+export {
+  useLimitsEnabled,
+  useMyLimits,
+} from '@/client/hooks/settings/useMyLimits';
+export type {
+  MeLimit,
+  ModelAvailability,
+  ModelAvailabilityReason,
+  MyLimit,
+  MyLimitsResponse,
+  PreviewUsage,
+} from '@/client/hooks/settings/useMyLimits';
 
 /**
  * The two cost-insight gates inside the limits admin
@@ -446,6 +364,9 @@ export function useSaveScopedOverride() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['limits-scoped'] });
       await queryClient.invalidateQueries({ queryKey: ['limits-preview'] });
+      // The admin's OWN picker/limits may have changed too (they can be
+      // inside their own delegation's scope): refresh the user-facing data.
+      notifyLimitsChanged();
     },
   });
 }
@@ -464,6 +385,7 @@ export function useDeleteScopedOverride() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['limits-scoped'] });
       await queryClient.invalidateQueries({ queryKey: ['limits-preview'] });
+      notifyLimitsChanged();
     },
   });
 }

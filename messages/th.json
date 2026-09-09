@@ -5519,5 +5519,74 @@
     "loading": "กำลังโหลด…",
     "loadError": "ไม่สามารถโหลดรายการผู้ดูแลระบบส่วนกลาง",
     "retry": "ลองอีกครั้ง"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "ถึงขีดจำกัดแล้ว ({used}/{limit}) จะรีเซ็ต {resets}",
+      "exhaustedNoReset": "ถึงขีดจำกัดแล้ว ({used}/{limit})",
+      "familyExhausted": "ถึงขีดจำกัดกลุ่ม ({used}/{limit}) จะรีเซ็ต {resets}",
+      "familyExhaustedNoReset": "ถึงขีดจำกัดกลุ่ม ({used}/{limit})",
+      "unavailable": "ไม่สามารถใช้งานกับบัญชีของคุณ",
+      "remaining": "เหลืออีก {remaining}",
+      "remainingTooltip": "เหลืออีก {remaining} จาก {limit} คำขอในช่วงนี้",
+      "agentModelUnavailable": "ใช้ {model} ซึ่งไม่สามารถใช้งานได้สำหรับคุณ",
+      "agentModelExhausted": "ใช้ {model} ซึ่งถึงขีดจำกัดแล้ว จะรีเซ็ต {resets}",
+      "agentModelExhaustedNoReset": "ใช้ {model} ซึ่งถึงขีดจำกัดแล้ว"
+    },
+    "denial": {
+      "modelBlocked": "โมเดลนี้ไม่สามารถใช้งานกับบัญชีของคุณ กรุณาเลือกโมเดลอื่นหรือ ติดต่อผู้ดูแลระบบของคุณ",
+      "modelExhausted": "คุณใช้ครบ {limit} คำขอสำหรับโมเดลนี้วันนี้แล้ว",
+      "familyExhausted": "คุณใช้ครบโควต้า {limit} คำขอสำหรับกลุ่มโมเดลนี้วันนี้แล้ว",
+      "searchBlocked": "ผู้ดูแลระบบได้ปิดการค้นหาเว็บในบัญชีของคุณ และข้อความนี้ได้เปิดใช้งานค้นหาเว็บ",
+      "interpreterBlocked": "ผู้ดูแลระบบได้ปิด code interpreter ในบัญชีของคุณ และข้อความนี้เปิดใช้งานอยู่",
+      "mcpBlocked": "ผู้ดูแลระบบได้ปิด connectors ในบัญชีของคุณ ข้อความนี้เปิดใช้ connectors กรุณาปิดเพื่อดำเนินการต่อ",
+      "messagesCap": "คุณใช้ข้อความครบ {limit} ข้อความวันนี้แล้ว",
+      "tokensDayCap": "คุณถึงขีดจำกัดโทเคนของวันนี้แล้ว",
+      "tokensMonthCap": "คุณถึงขีดจำกัดโทเคนสำหรับเดือนนี้แล้ว",
+      "perRequest": "คำขอนี้มีขนาดเกินที่บัญชีของคุณอนุญาต (สูงสุด {limit} ต่อคำขอ) กรุณาลองขอที่เล็กลง",
+      "resets": "จะรีเซ็ต {resets}",
+      "chooseAnotherModel": "เลือกโมเดลอื่น",
+      "turnOffSearchAndResend": "ปิดค้นหาเว็บและส่งใหม่",
+      "turnOffInterpreterAndResend": "ปิด code interpreter และส่งใหม่",
+      "agentModelBlocked": "เอเจนต์นี้ใช้โมเดลที่บัญชีของคุณไม่สามารถใช้งานได้ กรุณาถอดเอเจนต์ออกหรือเลือกเอเจนต์อื่น",
+      "turnOffConnectorsAndResend": "ปิดคอนเนคเตอร์แล้วส่งใหม่"
+    },
+    "notice": {
+      "unavailable": "{model} ไม่สามารถใช้งานกับบัญชีของคุณ — เลือกโมเดลอื่นเพื่อดำเนินการต่อ",
+      "exhausted": "{model} ถึงขีดจำกัดสำหรับวันนี้แล้ว",
+      "familyExhausted": "{model} ใช้งบประมาณร่วมกับกลุ่มโมเดล ซึ่งหมดสำหรับวันนี้แล้ว",
+      "resets": "จะรีเซ็ต {resets}",
+      "chooseModel": "เลือกโมเดล"
+    },
+    "gates": {
+      "blocked": "องค์กรของคุณได้ปิด {feature} สำหรับบัญชีของคุณ",
+      "features": {
+        "webSearch": "ค้นหาเว็บ",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {เหลือ # ครั้งสำหรับวันนี้} other {เหลือ # ครั้งสำหรับวันนี้}}",
+      "exhausted": "ถึงขีดจำกัดรายวันแล้ว — โมเดลจะตอบโดยไม่ใช้ฟีเจอร์นี้",
+      "exhaustedResets": "ถึงขีดจำกัดรายวันแล้ว — โมเดลจะตอบโดยไม่ใช้ขีดจำกัดนี้ รีเซ็ต {resets}."
+    },
+    "mine": {
+      "title": "ขีดจำกัดของคุณ",
+      "description": "ขีดจำกัดที่องค์กรของคุณกำหนดให้กับบัญชีของคุณ โดยจะรีเซ็ตอัตโนมัติเมื่อสิ้นสุดแต่ละรอบ",
+      "notAvailable": "ไม่สามารถใช้งานได้",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "จะรีเซ็ต {resets}",
+      "limitReached": "ถึงขีดจำกัดแล้ว",
+      "familyLimitReached": "ถึงขีดจำกัดกลุ่มโมเดลแล้ว",
+      "usageUnavailable": "ไม่สามารถโหลดข้อมูลการใช้งานปัจจุบัน — แสดงเพียงขีดจำกัด",
+      "familyRow": "โมเดล {family}"
+    },
+    "routes": {
+      "ttsExhausted": "คุณถึงขีดจำกัดการแปลงข้อความเป็นเสียงสำหรับวันนี้แล้ว",
+      "translationExhausted": "คุณถึงขีดจำกัดการแปลเอกสารสำหรับวันนี้แล้ว",
+      "resetsIn": "จะรีเซ็ต {resets}",
+      "uploadTooLarge": "{fileName} มีขนาดใหญ่เกินไป — ไฟล์ในบัญชีของคุณต้องไม่เกิน {maxSize}",
+      "uploadCapHint": "ไฟล์ไม่เกิน {maxSize}"
+    }
   }
 }

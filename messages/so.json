@@ -5503,5 +5503,74 @@
     "loading": "Waxaa la load gareynayaa…",
     "loadError": "Liiska maamulayaasha guud lama load gareyn karin.",
     "retry": "Isku day mar kale"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Xaddiga waa la gaaray ({used}/{limit}). Wuxuu soo cusboonaanayaa {resets}.",
+      "exhaustedNoReset": "Xaddiga waa la gaaray ({used}/{limit}).",
+      "familyExhausted": "Xaddiga qoyska waa la gaaray ({used}/{limit}). Wuxuu soo cusboonaanayaa {resets}.",
+      "familyExhaustedNoReset": "Xaddiga qoyska waa la gaaray ({used}/{limit}).",
+      "unavailable": "Kuma jiro akoonkaaga.",
+      "remaining": "{remaining} haray",
+      "remainingTooltip": "{remaining} oo ka mid ah {limit} codsi ayaa haray muddadan.",
+      "agentModelUnavailable": "Waxa uu adeegsadaa {model}, kaas oo adiga aan laguu oggolayn.",
+      "agentModelExhausted": "Waxa uu adeegsadaa {model}, oo xaddigiisa waa la gaaray. Wuxuu soo cusboonaanayaa {resets}.",
+      "agentModelExhaustedNoReset": "Waxa uu adeegsadaa {model}, oo xaddigiisa waa la gaaray."
+    },
+    "denial": {
+      "modelBlocked": "Muuqaalkaan akoonkaaga laguma helo. Fadlan dooro mid kale ama la xiriir maamulahaaga.",
+      "modelExhausted": "Waxaad ka dhammaysay {limit} codsi ee muuqaalkaan maanta.",
+      "familyExhausted": "Waad ka dhammaysay xisaabta wadaagga ah ee qoyska muuqaalkaan maanta: {limit} codsi.",
+      "searchBlocked": "Maamulaha ayaa xidhay raadinta webka akoonkaaga, fariintana waxay ahayd mid la furay.",
+      "interpreterBlocked": "Maamulaha ayaa xidhay code interpreter akoonkaaga, fariintana waxay ahayd mid la furay.",
+      "mcpBlocked": "Maamulaha ayaa xidhay connectors akoonkaaga, fariintana connectors way ku jirtaa. Dami si aad u sii wadato.",
+      "messagesCap": "Waxaad gaadhay xadkaaga {limit} fariimood maanta.",
+      "tokensDayCap": "Waxaad gaadhay xadka token-yada ee maanta.",
+      "tokensMonthCap": "Waxaad gaadhay xadka token-yada ee bisha.",
+      "perRequest": "Codsigan wuu ka weyn yahay inta akoonkaaga ogol yahay (ugu badnaan {limit} codsi kasta). Isku day mid yar.",
+      "resets": "Wuxuu soo cusboonaanayaa {resets}.",
+      "chooseAnotherModel": "Dooro muuqaal kale",
+      "turnOffSearchAndResend": "Dami raadinta webka oo dib u dir",
+      "turnOffInterpreterAndResend": "Dami code interpreter oo dib u dir",
+      "agentModelBlocked": "Wakiilkan waxa uu adeegsanayaa model aan laga helin akoonkaaga. Ka saar wakiilka ama dooro wakiil kale.",
+      "turnOffConnectorsAndResend": "Demi is-dhexgalayaasha oo dib u dir"
+    },
+    "notice": {
+      "unavailable": "{model} laguma heli karo akoonkaaga — dooro mid kale si aad u sii waddo.",
+      "exhausted": "{model} waxa uu gaaray xadkiisii maanta.",
+      "familyExhausted": "{model} waxa uu la wadaagaa xisaab qoyska muuqaalka, taas oo maanta la dhammeeyey.",
+      "resets": "Wuxuu soo cusboonaanayaa {resets}.",
+      "chooseModel": "Dooro muuqaal"
+    },
+    "gates": {
+      "blocked": "{feature} waxa ay ururkaagu u xidhay akoonkaaga.",
+      "features": {
+        "webSearch": "Raadinta webka",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# isticmaal haray maanta} other {# isticmaal haray maanta}}",
+      "exhausted": "Xadka maalintii waa la gaaray — muuqaalka ayaa ka jawaabi doona iyada oo aan la isticmaalin.",
+      "exhaustedResets": "Xadka maalinlaha ah waa la gaadhay — modelku wuu jawaabi doonaa iyada oo aan la isticmaalin. Waxay dib u daadegaayaan {resets}."
+    },
+    "mine": {
+      "title": "Xaddigaaga",
+      "description": "Xuduudaha uu ururkaagu kuu sameeyay akoonkaaga. Tirooyinka waxa ay si toos ah ugu cusboonaanayaan dhammaadka xilli kasta.",
+      "notAvailable": "Lama heli karo",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Wuxuu soo cusboonaanayaa {resets}",
+      "limitReached": "Xaddiga waa la gaaray",
+      "familyLimitReached": "Xaddiga qoyska muuqaalka waa la gaaray",
+      "usageUnavailable": "Isticmaalka hadda lama helin — waxa lagu tusayaa xadadka oo keliya.",
+      "familyRow": "Modelada {family}"
+    },
+    "routes": {
+      "ttsExhausted": "Waxaad gaadhay xadka text-to-speech ee maanta.",
+      "translationExhausted": "Waxaad gaadhay xadka tarjumaada dukumentiyada ee maanta.",
+      "resetsIn": "Wuxuu soo cusboonaanayaa {resets}.",
+      "uploadTooLarge": "{fileName} aad buu u weyn yahay — faylasha akoonkaaga waa inay ka yaraanayaan {maxSize}.",
+      "uploadCapHint": "Faylasha ilaa {maxSize}"
+    }
   }
 }

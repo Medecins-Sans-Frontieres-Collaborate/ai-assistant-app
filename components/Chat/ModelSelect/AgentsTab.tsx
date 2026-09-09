@@ -26,6 +26,7 @@ import { SearchMode } from '@/types/searchMode';
 import { OrganizationAgentList } from '../OrganizationAgents/OrganizationAgentList';
 import { HiddenItemsSection } from './HiddenItemsSection';
 import { ModelDetailsPanel } from './ModelDetailsPanel';
+import { pinnedModelIdOf } from './modelLimits';
 
 import { AgentSource } from '@/client/stores/settingsStore';
 import { getOrganizationAgents } from '@/lib/organizationAgents';
@@ -306,6 +307,13 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   const selectedPromptAgent =
     !selectedStaticOrgAgent && selectedModelId?.startsWith('org-')
       ? appManagedAgents.find((a) => `org-${a.id}` === selectedModelId)
+      : undefined;
+  // Prompt agents pin their model; the details header badges the agent
+  // when that model is blocked or exhausted for this user (the list rows
+  // are OrganizationAgentList's, which has no badge slot yet).
+  const selectedPinnedModelId =
+    selectedPromptAgent?.type === 'prompt'
+      ? pinnedModelIdOf(selectedPromptAgent)
       : undefined;
 
   // For Foundry-discovered agents, synthesize a minimal OrganizationAgent so the
@@ -863,6 +871,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                 setShowModelAdvanced={setShowModelAdvanced}
                 updateConversation={updateConversation}
                 organizationAgent={selectedOrgAgent}
+                pinnedModelId={selectedPinnedModelId}
               />
             )}
           {!selectedSource && !isAgentSelected && (

@@ -51,10 +51,10 @@ function entry(
   return { value: null, ceiling: false, ...partial };
 }
 
-/** Worked example 10's caps: terra 50/day, gpt-56 family 500/day, chat 30/day. */
+/** Worked example 10's caps: terra 50/day, gpt family 500/day, chat 30/day. */
 const EXAMPLE_10: LimitEntry[] = [
   entry({ limitKey: 'model.requests', modelId: TERRA, value: 50 }),
-  entry({ limitKey: 'model.requests', series: 'gpt-56', value: 500 }),
+  entry({ limitKey: 'model.requests', series: 'gpt', value: 500 }),
   entry({ limitKey: 'chat.messagesPerDay', value: 30 }),
 ];
 
@@ -261,9 +261,9 @@ describe('draft-based cells', () => {
     const names = cells[TERRA].map(counterCellName);
     expect(names).toEqual([
       `model:${TERRA}.allowed`,
-      'family:gpt-56.allowed',
+      'family:gpt.allowed',
       `model:${TERRA}.requests`,
-      'family:gpt-56.requests',
+      'family:gpt.requests',
       'chat.messagesPerDay',
       'chat.tokensPerDay',
       'chat.tokensPerMonth',
@@ -272,30 +272,28 @@ describe('draft-based cells', () => {
       cells[TERRA].map((c) => [counterCellName(c), c.value]),
     );
     expect(byName[`model:${TERRA}.requests`]).toBe(50);
-    expect(byName['family:gpt-56.requests']).toBe(500);
+    expect(byName['family:gpt.requests']).toBe(500);
     expect(byName['chat.messagesPerDay']).toBe(30);
     expect(byName['chat.tokensPerDay']).toBeNull();
   });
 
   it('finds the series from the static registry when the index is off', () => {
     const cells = cellsByModelIdFor(EXAMPLE_10, [TERRA], null);
-    expect(cells[TERRA].map(counterCellName)).toContain(
-      'family:gpt-56.requests',
-    );
+    expect(cells[TERRA].map(counterCellName)).toContain('family:gpt.requests');
   });
 
   it('crossCheckCells dedupes shared cells and orders unqualified → family → model', () => {
     const cells = cellsByModelIdFor(EXAMPLE_10, [TERRA, SOL], INDEX);
     const rows = crossCheckCells(cells);
     const names = rows.map((r) => r.cell);
-    expect(names.filter((n) => n === 'family:gpt-56.requests')).toHaveLength(1);
+    expect(names.filter((n) => n === 'family:gpt.requests')).toHaveLength(1);
     expect(names.slice(0, 3)).toEqual([
       'chat.messagesPerDay',
       'chat.tokensPerDay',
       'chat.tokensPerMonth',
     ]);
     const modelIdx = names.indexOf(`model:${TERRA}.requests`);
-    const familyIdx = names.indexOf('family:gpt-56.requests');
+    const familyIdx = names.indexOf('family:gpt.requests');
     expect(familyIdx).toBeLessThan(modelIdx);
     expect(rows.find((r) => r.cell === 'chat.messagesPerDay')).toMatchObject({
       value: 30,

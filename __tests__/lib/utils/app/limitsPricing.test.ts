@@ -46,7 +46,20 @@ function model(partial: Partial<OpenAIModel> & { id: string }): OpenAIModel {
 const TERRA = 'gpt-5.6-terra'; // $0.008 typical
 const LUNA = 'gpt-5.6-luna'; // $0.0008 typical
 const SOL = 'gpt-5.6-sol'; // $0.020 typical
-const FABLE = 'claude-fable-5'; // $0.035 typical — declares NO series
+/**
+ * A model that declares NO series, so it gets a model cell but no family
+ * cell. Synthetic on purpose: every entry in config/models.json now belongs
+ * to a family, so this case is only reachable via discovered-but-unknown
+ * deployments (synthesizeUnknownModel) and byom models — pinning it to a
+ * catalog id made these tests fail the moment that id joined a family.
+ * Priced like Claude Fable ($0.035 typical) to keep the expected sums here
+ * readable.
+ */
+const SERIESLESS = 'seriesless-flagship'; // $0.035 typical — declares NO series
+const SERIESLESS_MODEL = model({
+  id: SERIESLESS,
+  pricing: { inputPer1M: 10, outputPer1M: 50 },
+});
 
 /** A ring serving only the gpt-56 trio (with a byom and an agent that must be ignored). */
 const RING: OpenAIModel[] = [
@@ -158,7 +171,7 @@ describe('allowedModels', () => {
 
   it('drops a whole family disallowed at family level', () => {
     const draft: CostCell[] = [
-      { limitKey: 'model.allowed', series: 'gpt-56', value: false },
+      { limitKey: 'model.allowed', series: 'gpt', value: false },
     ];
     expect(ids(allowedModels(index, draft))).toEqual(['claude-haiku-4-5']);
   });
@@ -169,26 +182,26 @@ describe('allowedModels', () => {
   // the model cell, so terra's `true` cannot rescue the family's `false`.
   it('a family-level block is conjunctive: a model-level allow never rescues it', () => {
     const draft: CostCell[] = [
-      { limitKey: 'model.allowed', series: 'gpt-56', value: false },
+      { limitKey: 'model.allowed', series: 'gpt', value: false },
       { limitKey: 'model.allowed', modelId: TERRA, value: true },
     ];
     expect(ids(allowedModels(index, draft))).toEqual(['claude-haiku-4-5']);
   });
 
   it('an unqualified block reaches the family cell, which a model-level allow cannot shadow', () => {
-    const withFable = buildPricingIndex([
+    const withSeriesless = buildPricingIndex([
       OpenAIModels[TERRA],
       OpenAIModels[LUNA],
-      OpenAIModels[FABLE],
+      SERIESLESS_MODEL,
     ]);
     const draft: CostCell[] = [
       { limitKey: 'model.allowed', value: false },
       { limitKey: 'model.allowed', modelId: TERRA, value: true },
-      { limitKey: 'model.allowed', modelId: FABLE, value: true },
+      { limitKey: 'model.allowed', modelId: SERIESLESS, value: true },
     ];
     // terra: model cell true, family cell (gpt-56) falls back to the
     // unqualified false → blocked. fable has no series, so no family cell.
-    expect(ids(allowedModels(withFable, draft))).toEqual([FABLE]);
+    expect(ids(allowedModels(withSeriesless, draft))).toEqual([SERIESLESS]);
   });
 
   it('ANDs the already-resolved rows /api/limits/me hands the preview', () => {
@@ -197,14 +210,14 @@ describe('allowedModels', () => {
     const rows: CostCell[] = [
       { limitKey: 'model.allowed', value: true },
       { limitKey: 'model.allowed', modelId: TERRA, value: true },
-      { limitKey: 'model.allowed', series: 'gpt-56', value: false },
+      { limitKey: 'model.allowed', series: 'gpt', value: false },
     ];
     expect(ids(allowedModels(index, rows))).toEqual(['claude-haiku-4-5']);
   });
 
   it('consults the global defaults second, and the draft wins where it speaks', () => {
     const defaults: CostCell[] = [
-      { limitKey: 'model.allowed', series: 'gpt-56', value: false },
+      { limitKey: 'model.allowed', series: 'gpt', value: false },
       { limitKey: 'model.allowed', modelId: 'claude-haiku-4-5', value: false },
     ];
     // No defaults → nothing dropped (scoped mode never sees them).
@@ -221,7 +234,7 @@ describe('allowedModels', () => {
     // Re-allowing the FAMILY in the draft is what lifts the block (the draft
     // layer wins the family cell); haiku stays blocked at model level.
     const familyDraft: CostCell[] = [
-      { limitKey: 'model.allowed', series: 'gpt-56', value: true },
+      { limitKey: 'model.allowed', series: 'gpt', value: true },
     ];
     expect(ids(allowedModels(index, familyDraft, defaults))).toEqual(
       [TERRA, LUNA].sort(),
@@ -254,7 +267,7 @@ describe('familyRange', () => {
   const index = buildPricingIndex(RING);
 
   it('spans the cheapest to the priciest enabled member', () => {
-    const range = familyRange('GPT-56', index, 'typical');
+    const range = familyRange('GPT', index, 'typical');
     expect(range).not.toBeNull();
     expect(range!.min).toBeCloseTo(0.0008, 10);
     expect(range!.max).toBeCloseTo(0.02, 10);
@@ -268,7 +281,7 @@ describe('familyRange', () => {
       OpenAIModels[TERRA],
       { ...OpenAIModels[SOL], isDisabled: true },
     ]);
-    const range = familyRange('gpt-56', idx, 'typical');
+    const range = familyRange('gpt', idx, 'typical');
     expect(range!.memberIds).toEqual([TERRA]);
     expect(range!.max).toBeCloseTo(0.008, 10);
   });
@@ -352,7 +365,7 @@ describe('ceilingSpendPerDay', () => {
   // spend at most 10 × the dearest member.
   it('models axis: a family cap is a shared envelope, spent on the dearest member', () => {
     const family = ceilingSpendPerDay(
-      [{ limitKey: 'model.requests', series: 'gpt-56', value: 10 }],
+      [{ limitKey: 'model.requests', series: 'gpt', value: 10 }],
       index,
       'typical',
     );
@@ -367,7 +380,7 @@ describe('ceilingSpendPerDay', () => {
     const conjunctive = ceilingSpendPerDay(
       [
         { limitKey: 'model.requests', value: 100 },
-        { limitKey: 'model.requests', series: 'gpt-56', value: 10 },
+        { limitKey: 'model.requests', series: 'gpt', value: 10 },
         { limitKey: 'model.requests', modelId: TERRA, value: 5 },
       ],
       index,
@@ -384,7 +397,7 @@ describe('ceilingSpendPerDay', () => {
       OpenAIModels[LUNA],
     ]);
     const familyOnly = ceilingSpendPerDay(
-      [{ limitKey: 'model.requests', series: 'gpt-56', value: 100 }],
+      [{ limitKey: 'model.requests', series: 'gpt', value: 100 }],
       trio,
       'typical',
     );
@@ -396,7 +409,7 @@ describe('ceilingSpendPerDay', () => {
     const withUnqualified = ceilingSpendPerDay(
       [
         { limitKey: 'model.requests', value: 200 },
-        { limitKey: 'model.requests', series: 'gpt-56', value: 100 },
+        { limitKey: 'model.requests', series: 'gpt', value: 100 },
       ],
       trio,
       'typical',
@@ -408,7 +421,7 @@ describe('ceilingSpendPerDay', () => {
     // envelope down to the next-dearest: 10 × sol, then 90 × terra.
     const solCapped = ceilingSpendPerDay(
       [
-        { limitKey: 'model.requests', series: 'gpt-56', value: 100 },
+        { limitKey: 'model.requests', series: 'gpt', value: 100 },
         { limitKey: 'model.requests', modelId: SOL, value: 10 },
       ],
       trio,
@@ -419,44 +432,44 @@ describe('ceilingSpendPerDay', () => {
   });
 
   it('models axis: a qualified cap RAISED above the unqualified default is used (case D)', () => {
-    const withFable = buildPricingIndex([
+    const withSeriesless = buildPricingIndex([
       OpenAIModels[TERRA],
       OpenAIModels[LUNA],
-      OpenAIModels[FABLE],
+      SERIESLESS_MODEL,
     ]);
     // The rows /api/limits/me builds: the bare default plus one resolved
-    // row per mentioned qualifier. Enforcement caps terra/luna/fable at
+    // row per mentioned qualifier. Enforcement caps terra/luna/seriesless at
     // 100/100/100 — the bare 5 is shadowed inside every cell, never a
     // third cap — so the ceiling is the family envelope (100 × terra) plus
-    // fable's own 100, not the understated 5-per-model $0.219.
+    // the seriesless model's own 100, not the understated 5-per-model $0.219.
     const rows: CostCell[] = [
       { limitKey: 'model.requests', value: 5 },
-      { limitKey: 'model.requests', series: 'gpt-56', value: 100 },
+      { limitKey: 'model.requests', series: 'gpt', value: 100 },
       { limitKey: 'model.requests', modelId: TERRA, value: 100 },
       { limitKey: 'model.requests', modelId: LUNA, value: 100 },
-      { limitKey: 'model.requests', modelId: FABLE, value: 100 },
+      { limitKey: 'model.requests', modelId: SERIESLESS, value: 100 },
     ];
-    const ceiling = ceilingSpendPerDay(rows, withFable, 'typical');
+    const ceiling = ceilingSpendPerDay(rows, withSeriesless, 'typical');
     if (!ceiling.bounded) throw new Error('expected bounded');
     expect(ceiling.axis).toBe('models');
     expect(ceiling.usdPerDay).toBeCloseTo(100 * 0.008 + 100 * 0.035, 10);
   });
 
   it('models axis: a model with no series has no family cell, so its raised cap stands (case D2)', () => {
-    const fableOnly = buildPricingIndex([OpenAIModels[FABLE]]);
+    const seriesLessOnly = buildPricingIndex([SERIESLESS_MODEL]);
     const rows: CostCell[] = [
       { limitKey: 'model.requests', value: 5 },
-      { limitKey: 'model.requests', modelId: FABLE, value: 100 },
+      { limitKey: 'model.requests', modelId: SERIESLESS, value: 100 },
     ];
-    const ceiling = ceilingSpendPerDay(rows, fableOnly, 'typical');
+    const ceiling = ceilingSpendPerDay(rows, seriesLessOnly, 'typical');
     if (!ceiling.bounded) throw new Error('expected bounded');
     expect(ceiling.usdPerDay).toBeCloseTo(100 * 0.035, 10);
 
     // Same policy as draft-over-defaults (the editor's form): the draft's
     // model cell wins over the defaults' unqualified value.
     const draft = ceilingSpendPerDay(
-      [{ limitKey: 'model.requests', modelId: FABLE, value: 100 }],
-      fableOnly,
+      [{ limitKey: 'model.requests', modelId: SERIESLESS, value: 100 }],
+      seriesLessOnly,
       'typical',
       [{ limitKey: 'model.requests', value: 5 }],
     );
@@ -469,9 +482,9 @@ describe('ceilingSpendPerDay', () => {
       ceilingSpendPerDay(
         [
           { limitKey: 'model.requests', value: 5 },
-          { limitKey: 'model.requests', modelId: FABLE, value: null },
+          { limitKey: 'model.requests', modelId: SERIESLESS, value: null },
         ],
-        fableOnly,
+        seriesLessOnly,
         'typical',
       ),
     ).toEqual({ bounded: false });
@@ -496,7 +509,7 @@ describe('ceilingSpendPerDay', () => {
     // card must not price terra as allowed and report a "messages" ceiling.
     const ceiling = ceilingSpendPerDay(
       [
-        { limitKey: 'model.allowed', series: 'gpt-56', value: false },
+        { limitKey: 'model.allowed', series: 'gpt', value: false },
         { limitKey: 'model.allowed', modelId: TERRA, value: true },
         { limitKey: 'chat.messagesPerDay', value: 30 },
       ],

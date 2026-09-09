@@ -5,6 +5,7 @@ import {
   IconEye,
   IconEyeOff,
   IconInfoCircle,
+  IconLock,
   IconPinned,
   IconPinnedFilled,
   IconPinnedOff,
@@ -36,6 +37,16 @@ export interface MenuItem {
    * frequently used, or matched by a search query.
    */
   parentId?: string;
+  /**
+   * Set when an admin usage limit turned this feature off for the user
+   * (docs/LIMITS_USER_FACING_UX.md §7.4). The row renders disabled with a
+   * lock and this text as its tooltip — the user should learn it is a
+   * policy, not a missing feature.
+   */
+  lockReason?: string;
+  /** Secondary line under the label, e.g. a remaining-budget annotation. */
+  note?: string;
+  noteTone?: 'muted' | 'warning';
 }
 
 interface DropdownMenuItemProps {
@@ -114,10 +125,14 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
     };
   }, []);
 
+  // A policy lock is a disabled row with an explanation attached.
+  const locked = Boolean(item.lockReason);
+  const disabled = Boolean(item.disabled) || locked;
+
   return (
     <div
       className={`group relative flex items-center min-h-11 rounded-md transition-colors duration-150 ${
-        item.disabled
+        disabled
           ? 'opacity-50 text-gray-500 dark:text-gray-500'
           : isSelected
             ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
@@ -129,18 +144,39 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
         data-item-id={item.id}
         className={`flex items-center gap-2.5 flex-1 min-w-0 py-2 pr-3 text-left text-sm focus:outline-none ${
           nested ? 'pl-9' : 'pl-3'
-        } ${item.disabled ? 'cursor-not-allowed' : ''}`}
-        onClick={item.disabled ? undefined : item.onClick}
+        } ${disabled ? 'cursor-not-allowed' : ''}`}
+        onClick={disabled ? undefined : item.onClick}
         role={item.toggle ? 'menuitemcheckbox' : 'menuitem'}
         aria-current={isSelected ? 'true' : undefined}
         aria-checked={item.toggle ? Boolean(item.checked) : undefined}
-        aria-disabled={item.disabled ? 'true' : undefined}
+        aria-disabled={disabled ? 'true' : undefined}
         tabIndex={isSelected ? 0 : -1}
-        disabled={item.disabled}
+        disabled={disabled}
+        title={item.lockReason}
       >
         {item.icon}
-        <span className="truncate" title={item.label}>
-          {item.label}
+        <span className="min-w-0 flex-1">
+          {/* While locked, the button's own `title` (the lock reason) is
+              otherwise shadowed by this span's title for anyone hovering
+              the label text itself — the row's biggest hit target. */}
+          <span
+            className="block truncate"
+            title={locked ? undefined : item.label}
+          >
+            {item.label}
+          </span>
+          {item.note && (
+            <span
+              title={item.note}
+              className={`block truncate text-[11px] font-normal ${
+                item.noteTone === 'warning'
+                  ? 'text-amber-700 dark:text-amber-400'
+                  : 'text-gray-500 dark:text-gray-400'
+              }`}
+            >
+              {item.note}
+            </span>
+          )}
         </span>
       </button>
 
@@ -224,8 +260,22 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
           </div>
         )}
 
+        {/* Policy lock: always visible, since it is the only cue that the
+            row is off by an admin's decision rather than broken. */}
+        {locked && (
+          <span
+            role="img"
+            aria-label={item.lockReason}
+            title={item.lockReason}
+            data-testid={`dropdown-lock-${item.id}`}
+            className="flex items-center text-gray-400 dark:text-gray-500"
+          >
+            <IconLock size={16} aria-hidden="true" />
+          </span>
+        )}
+
         {/* Intent affordance: on-state mark for toggles, chevron for dialogs */}
-        {item.toggle && item.checked && (
+        {item.toggle && item.checked && !locked && (
           <IconCheck size={16} className="text-blue-500" aria-hidden="true" />
         )}
         {item.opensDialog && !item.toggle && !expandable && (

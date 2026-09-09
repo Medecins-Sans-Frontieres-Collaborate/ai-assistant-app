@@ -5503,5 +5503,74 @@
     "loading": "Učitavanje…",
     "loadError": "Lista globalnih administratora nije mogla biti učitana.",
     "retry": "Pokušaj ponovo"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Dostignut je limit ({used}/{limit}). Resetuje se {resets}.",
+      "exhaustedNoReset": "Dostignut je limit ({used}/{limit}).",
+      "familyExhausted": "Dostignut je porodični limit ({used}/{limit}). Resetuje se {resets}.",
+      "familyExhaustedNoReset": "Dostignut je porodični limit ({used}/{limit}).",
+      "unavailable": "Nije dostupno na vašem nalogu.",
+      "remaining": "Preostalo: {remaining}",
+      "remainingTooltip": "Preostalo je {remaining} od ukupno {limit} zahteva u ovom periodu.",
+      "agentModelUnavailable": "Koristi {model}, koji vam nije dostupan.",
+      "agentModelExhausted": "Koristi {model}, čiji je limit dostignut. Resetuje se {resets}.",
+      "agentModelExhaustedNoReset": "Koristi {model}, čiji je limit dostignut."
+    },
+    "denial": {
+      "modelBlocked": "Ovaj model nije dostupan na vašem nalogu. Izaberite drugi model ili kontaktirajte administratora.",
+      "modelExhausted": "Iskoristili ste svih {limit} zahteva za ovaj model danas.",
+      "familyExhausted": "Iskoristili ste današnji zajednički budžet od {limit} zahteva za ovu porodicu modela.",
+      "searchBlocked": "Veb pretragu je administrator isključio na vašem nalogu, a ova poruka je imala uključenu pretragu.",
+      "interpreterBlocked": "Interpreter za kod je administrator isključio na vašem nalogu, a ova poruka je imala uključenu tu opciju.",
+      "mcpBlocked": "Konektori su isključeni na vašem nalogu od strane administratora, a ova poruka ih je imala uključene. Isključite ih da biste nastavili.",
+      "messagesCap": "Dostigli ste svoj današnji limit od {limit} poruka.",
+      "tokensDayCap": "Dostigli ste dnevni limit tokena.",
+      "tokensMonthCap": "Dostigli ste mesečni limit tokena.",
+      "perRequest": "Ovaj zahtev je veći nego što vaš nalog dozvoljava (maksimalno {limit} po zahtevu). Pokušajte sa manjim zahtevom.",
+      "resets": "Resetuje se {resets}.",
+      "chooseAnotherModel": "Izaberite drugi model",
+      "turnOffSearchAndResend": "Isključite veb pretragu i pošaljite ponovo",
+      "turnOffInterpreterAndResend": "Isključite interpreter za kod i pošaljite ponovo",
+      "agentModelBlocked": "Ovaj agent koristi model koji nije dostupan na vašem nalogu. Uklonite agenta ili izaberite drugog.",
+      "turnOffConnectorsAndResend": "Isključite konektore i pošaljite ponovo"
+    },
+    "notice": {
+      "unavailable": "{model} nije dostupan na vašem nalogu — izaberite drugi model da nastavite.",
+      "exhausted": "{model} je dostigao svoj dnevni limit.",
+      "familyExhausted": "{model} deli budžet sa svojom porodicom modela koji je danas potrošen.",
+      "resets": "Resetuje se {resets}.",
+      "chooseModel": "Izaberite model"
+    },
+    "gates": {
+      "blocked": "{feature} je isključen na vašem nalogu od strane vaše organizacije.",
+      "features": {
+        "webSearch": "Veb pretraga",
+        "codeInterpreter": "Interpreter za kod",
+        "connectors": "Konektori"
+      },
+      "remaining": "{count, plural, one {# korišćenje preostalo danas} other {# korišćenja preostalo danas}}",
+      "exhausted": "Dnevni limit je dostignut — model će odgovoriti bez toga.",
+      "exhaustedResets": "Dnevni limit je dostignut — model će odgovoriti bez toga. Resetovanja {resets}."
+    },
+    "mine": {
+      "title": "Vaši limiti",
+      "description": "Limiti koje je vaša organizacija postavila za vaš nalog. Brojači se automatski resetuju na kraju svakog perioda.",
+      "notAvailable": "Nije dostupno",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Resetuje se {resets}",
+      "limitReached": "Limit dostignut",
+      "familyLimitReached": "Dostignut je limit za porodicu modela",
+      "usageUnavailable": "Trenutna potrošnja ne može da se učita — prikazani su samo limiti.",
+      "familyRow": "Modeli porodice {family}"
+    },
+    "routes": {
+      "ttsExhausted": "Dostigli ste današnji limit za tekst-u-govor.",
+      "translationExhausted": "Dostigli ste današnji limit za prevod dokumenata.",
+      "resetsIn": "Resetuje se {resets}.",
+      "uploadTooLarge": "{fileName} je prevelik — fajlovi na vašem nalogu moraju biti manji od {maxSize}.",
+      "uploadCapHint": "Fajlovi do {maxSize}"
+    }
   }
 }

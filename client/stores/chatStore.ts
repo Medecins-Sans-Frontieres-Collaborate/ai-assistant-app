@@ -2,6 +2,14 @@
 
 import toast from 'react-hot-toast';
 
+import { notifyLimitsChanged } from '@/client/hooks/settings/limitsUxEvents';
+import {
+  effectiveInterpreterMode as applyInterpreterLimitGate,
+  effectiveSearchMode as applySearchLimitGate,
+  getToolLimitGatesSnapshot,
+} from '@/client/hooks/settings/useAgentToolGates';
+
+import { LimitDenialMetadata } from '@/client/services/api/errors';
 import {
   forceSessionExpiredSignOut,
   isSessionExpiredApiError,
@@ -53,6 +61,7 @@ import {
 } from '@/types/chat';
 import { ErrorCode } from '@/types/errors';
 import { ExtractionRequest } from '@/types/extractionRecipe';
+import { InterpreterMode } from '@/types/interpreterMode';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -99,6 +108,18 @@ function clampContextWindowSize(size: number | undefined): number {
     Math.max(size ?? VALIDATION_LIMITS.CLIENT_MAX_MESSAGES, 20),
     VALIDATION_LIMITS.MAX_API_MESSAGES,
   );
+}
+
+/**
+ * The user message a failed turn should replay. Walks backwards so any
+ * partial assistant entry left behind by the failure is skipped.
+ */
+function trailingUserMessage(conversation: Conversation): Message | undefined {
+  const flat = flattenEntriesForAPI(conversation.messages);
+  for (let i = flat.length - 1; i >= 0; i--) {
+    if (flat[i].role === 'user') return flat[i];
+  }
+  return undefined;
 }
 
 /**
@@ -167,6 +188,14 @@ interface ChatStore {
    * `error` is null or the failure carried no code.
    */
   errorCode: string | null;
+  /**
+   * Parsed `metadata` of the most recent admin usage-limit 403
+   * (`RATE_LIMIT_QUOTA_EXCEEDED`), kept next to `errorCode` so the error
+   * card can pick copy and actions by denial shape (per-model, feature
+   * gate, overall cap) and show a localized reset countdown. Null for every
+   * other error; cleared by the next send and by every error clear.
+   */
+  lastDenial: LimitDenialMetadata | null;
   stopRequested: boolean;
   loadingMessage: string | null;
   /**
@@ -300,6 +329,18 @@ interface ChatStore {
   ) => void;
   /** Drops the conversation's failure streak (a turn succeeded). */
   clearErrorStreak: (conversationId: string) => void;
+  /**
+   * Classifies a terminal failure as an admin usage-limit denial or not,
+   * and applies the denial side effects (streak reset, limits refetch).
+   * Shared by the first-attempt and fallback-retry error paths so the two
+   * cannot drift. `denial` is null when the 403 body carried no usable
+   * metadata — the card then falls back to the server sentence.
+   */
+  noteQuotaDenial: (
+    error: unknown,
+    errorCode: string | undefined,
+    conversationId: string | undefined,
+  ) => { isQuotaDenial: boolean; denial: LimitDenialMetadata | null };
   setCurrentMessage: (message: Message | undefined) => void;
   setIsStreaming: (isStreaming: boolean) => void;
   setStreamingContent: (content: string) => void;
@@ -426,6 +467,31 @@ interface ChatStore {
    */
   retryFailedRequest: () => Promise<void>;
   /**
+   * "Turn off <feature> and resend" for a feature-gate denial: the gated
+   * tool was the only reason the request failed, so switching it off and
+   * replaying the turn is the one-click fix.
+   *
+   * `webSearch`/`codeInterpreter` flip only the chat-input store's LIVE mode
+   * (plus the explicit `searchMode` argument to `sendMessage`) — never the
+   * conversation's persisted `defaultSearchMode`/`defaultInterpreterMode`,
+   * and never the user's global settings default. `ChatInput` resets the
+   * whole composer (draft, attachments, in-flight uploads) whenever either
+   * conversation field changes, so persisting the flip here would wipe
+   * whatever the user typed while the denial card was showing; the
+   * composer stays off for the rest of this session, matching a manual
+   * toggle, and re-derives from the (unchanged) persisted default on the
+   * next reload or conversation switch.
+   *
+   * `mcp` has no single toggle to flip, so it disables every currently
+   * enabled MCP server (plus the built-in M365 toolset) for this
+   * conversation via `disabledMcpServerIds` and clears any focus pin —
+   * this field isn't read by the composer-reset effect, so it can be
+   * persisted immediately.
+   */
+  resendWithoutFeature: (
+    feature: 'webSearch' | 'codeInterpreter' | 'mcp',
+  ) => Promise<void>;
+  /**
    * User-initiated retry of the failed turn on the next fallback-chain
    * model. Unlike the automatic fallback (network/5xx failures only),
    * this is offered in the error UI for EVERY recoverable failure —
@@ -487,6 +553,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   citations: [],
   error: null,
   errorCode: null,
+  lastDenial: null,
   stopRequested: false,
   loadingMessage: null,
   loadingMessageParams: undefined,
@@ -576,6 +643,23 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       return { errorStreaks: next };
     }),
 
+  noteQuotaDenial: (error, errorCode, conversationId) => {
+    if (errorCode !== ErrorCode.RATE_LIMIT_QUOTA_EXCEEDED) {
+      return { isQuotaDenial: false, denial: null };
+    }
+    // Any streak built up before the cap was hit is moot: the escalation
+    // copy is about corrupted conversations, and a quota is not one.
+    if (conversationId) get().clearErrorStreak(conversationId);
+    // The server just proved the client's picture of the user's limits is
+    // stale — ask the picker and the limits query to refetch so the model
+    // grays out / disappears immediately rather than on the next focus.
+    notifyLimitsChanged();
+    return {
+      isQuotaDenial: true,
+      denial: error instanceof ApiError ? error.limitDenial : null,
+    };
+  },
+
   setLastTurnDroppedActiveFileIds: (conversationId, fileIds) =>
     set((state) => {
       const next = { ...state.lastTurnDroppedActiveFileIds };
@@ -597,9 +681,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   setCitations: (citations) => set({ citations }),
 
-  setError: (error) => set({ error, errorCode: null }),
+  setError: (error) => set({ error, errorCode: null, lastDenial: null }),
 
-  clearError: () => set({ error: null, errorCode: null }),
+  clearError: () => set({ error: null, errorCode: null, lastDenial: null }),
 
   requestStop: () => {
     const { abortController } = get();
@@ -624,6 +708,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       citations: [],
       error: null,
       errorCode: null,
+      lastDenial: null,
       stopRequested: false,
       loadingMessage: null,
       loadingMessageParams: undefined,
@@ -853,6 +938,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       streamingConversationId: conversationId,
       error: null,
       errorCode: null,
+      // Every send (first attempt, fallback retry, resend) starts with a
+      // clean denial slate — a stale one would mislabel the next failure.
+      lastDenial: null,
       citations: [],
       loadingMessage: null, // Start with null, will be set after delay
       loadingMessageParams: undefined,
@@ -1249,6 +1337,27 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       conversation.pinnedMcpServerId,
     );
 
+    // Admin usage-limit gates (docs/LIMITS_USER_FACING_UX.md §7.4/§3c): the
+    // composer can SHOW a blocked tool as Off/locked, but the request must
+    // actually carry it as Off — createLimitsMiddleware 403s the whole
+    // message otherwise, on a persisted Always/Auto default or a still-on
+    // connector the tray disabled visually but never wrote to storage.
+    // `getToolLimitGatesSnapshot()` reads the latest gates any mounted
+    // composer surface (ToolModeControls/Dropdown/ConnectorPinTray) has
+    // published; it fails open (nothing blocked) before any of them render.
+    const toolLimitGates = getToolLimitGatesSnapshot();
+    const searchModeForRequest = applySearchLimitGate(
+      effectiveSearchMode,
+      toolLimitGates,
+    );
+    const interpreterModeForRequest =
+      effectiveInterpreterMode === undefined
+        ? undefined
+        : applyInterpreterLimitGate(effectiveInterpreterMode, toolLimitGates);
+    const mcpServersForRequest = toolLimitGates.mcp.blocked
+      ? []
+      : mcpServersToSend;
+
     // Resolve extraction payload from the chat-input store + the persisted
     // recipes. Extraction mode is ephemeral (per-conversation) and recipes
     // travel inline because the server has no recipe store.
@@ -1306,15 +1415,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       reasoningEffort:
         conversation.reasoningEffort || modelToSend.reasoningEffort,
       verbosity: conversation.verbosity || modelToSend.verbosity,
-      searchMode: effectiveSearchMode,
+      searchMode: searchModeForRequest,
       // Advanced search tuning only travels when search can actually run.
       webSearchOptions:
-        effectiveSearchMode === SearchMode.INTELLIGENT ||
-        effectiveSearchMode === SearchMode.ALWAYS
+        searchModeForRequest === SearchMode.INTELLIGENT ||
+        searchModeForRequest === SearchMode.ALWAYS
           ? settings.webSearchOptions
           : undefined,
       precomputedSearchResults: pendingPrecomputedSearchResults ?? undefined,
-      interpreterMode: effectiveInterpreterMode,
+      interpreterMode: interpreterModeForRequest,
       hostedRegion,
       tone, // Pass the full tone object
       signal: abortController?.signal, // Pass abort signal
@@ -1330,21 +1439,26 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       agentSourcePath: modelToSend.agentSource,
       modelSourcePath: modelToSend.modelSource,
       approvalResponses,
-      mcpServers: mcpServersToSend.length ? mcpServersToSend : undefined,
+      mcpServers: mcpServersForRequest.length
+        ? mcpServersForRequest
+        : undefined,
       mcpPendingToolCalls,
       mcpLoopRound,
       mcpPlan,
       // Fifth pass: screen overrides ride the conversation (explicit UI
       // action on a flagged record); shared mailboxes ride settings. Sent
-      // only when the builtin M365 server is in play.
+      // only when the builtin M365 server is in play — which it never is
+      // once `mcp.blocked` cleared the list above.
       m365MailScreenOverrides:
-        mcpServersToSend.some((entry) => 'builtin' in entry && entry.builtin) &&
-        conversation.m365MailScreenOverrides?.length
+        mcpServersForRequest.some(
+          (entry) => 'builtin' in entry && entry.builtin,
+        ) && conversation.m365MailScreenOverrides?.length
           ? conversation.m365MailScreenOverrides.slice(0, 20)
           : undefined,
       m365SharedMailboxes:
-        mcpServersToSend.some((entry) => 'builtin' in entry && entry.builtin) &&
-        settings.m365SharedMailboxes?.length
+        mcpServersForRequest.some(
+          (entry) => 'builtin' in entry && entry.builtin,
+        ) && settings.m365SharedMailboxes?.length
           ? settings.m365SharedMailboxes
           : undefined,
       extraction,
@@ -2026,10 +2140,20 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       void get().finalizeMessage(partialMessage, conversation);
     }
 
+    // An admin usage-limit denial is a policy outcome, not a broken
+    // conversation: it must never feed the repeated-failure escalation
+    // ("this conversation may be corrupted") and it invalidates the client's
+    // picture of what the user may still use.
+    const quotaDenial = get().noteQuotaDenial(
+      error,
+      structuredCode,
+      conversation?.id,
+    );
+
     // One user-visible failure = one streak increment (the escalation
     // trigger). Only this terminal set counts — the abort/session-expired/
     // auto-fallback early returns above never show a banner.
-    if (conversation) {
+    if (conversation && !quotaDenial.isQuotaDenial) {
       get().recordErrorStreak(
         conversation.id,
         errorMessage,
@@ -2041,6 +2165,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     set({
       error: errorMessage,
       errorCode: structuredCode ?? null,
+      lastDenial: quotaDenial.denial,
       isStreaming: false,
       streamingContent: '',
       streamingConversationId: null,
@@ -2317,12 +2442,22 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           ? ((retryError.response?.code as string | undefined) ?? null)
           : null;
 
-      get().recordErrorStreak(conversation.id, errorMessage, retryErrorCode);
+      // Same exclusion as the first-attempt path: a usage-limit denial on
+      // a fallback model is not a corrupted conversation.
+      const quotaDenial = get().noteQuotaDenial(
+        retryError,
+        retryErrorCode ?? undefined,
+        conversation.id,
+      );
+      if (!quotaDenial.isQuotaDenial) {
+        get().recordErrorStreak(conversation.id, errorMessage, retryErrorCode);
+      }
 
       // Show error with regenerate option
       set({
         error: errorMessage,
         errorCode: retryErrorCode,
+        lastDenial: quotaDenial.denial,
         isStreaming: false,
         streamingContent: '',
         streamingConversationId: null,
@@ -2351,27 +2486,82 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const { failedConversation, failedSearchMode } = get();
     if (!failedConversation) return;
 
-    // Walk backwards so we skip any partial assistant entry left from the
-    // failed turn.
-    const flat = flattenEntriesForAPI(failedConversation.messages);
-    let userMessage: Message | undefined;
-    for (let i = flat.length - 1; i >= 0; i--) {
-      if (flat[i].role === 'user') {
-        userMessage = flat[i];
-        break;
-      }
-    }
+    const userMessage = trailingUserMessage(failedConversation);
     if (!userMessage) return;
 
     set({
       error: null,
       errorCode: null,
+      lastDenial: null,
       failedConversation: null,
       failedSearchMode: undefined,
       errorIsRecoverable: true,
     });
 
     await get().sendMessage(userMessage, failedConversation, failedSearchMode);
+  },
+
+  resendWithoutFeature: async (feature) => {
+    const { failedConversation, failedSearchMode } = get();
+    if (!failedConversation) return;
+
+    const userMessage = trailingUserMessage(failedConversation);
+    if (!userMessage) return;
+
+    const conversationStore = useConversationStore.getState();
+    const inputStore = useChatInputStore.getState();
+    let resendConversation: Conversation = failedConversation;
+    let searchMode = failedSearchMode;
+    if (feature === 'webSearch') {
+      // The turn's search mode travels as an argument (composer state), so
+      // it is overridden here directly. Deliberately NOT persisted onto
+      // `conversation.defaultSearchMode` — see the action's docstring.
+      inputStore.setSearchMode(SearchMode.OFF);
+      searchMode = SearchMode.OFF;
+    } else if (feature === 'codeInterpreter') {
+      // sendChatRequest reads the interpreter mode from the chat-input store
+      // at send time, so flipping it there is what actually changes the
+      // request. Deliberately NOT persisted onto
+      // `conversation.defaultInterpreterMode` — see the action's docstring.
+      inputStore.setInterpreterMode(InterpreterMode.OFF);
+    } else {
+      // 'mcp': no single toggle exists, so drop every currently enabled
+      // server (curated + the M365 builtin toolset) for this conversation.
+      // `mcpServersToSend` is empty exactly when `disabledMcpServerIds`
+      // covers every enabled server and nothing is pinned, which is what
+      // the server's `context.mcpServers.length > 0` gate checks.
+      const settings = useSettingsStore.getState();
+      const enabledServerIds = settings.mcpServers
+        .filter((s) => s.enabled)
+        .map((s) => s.id);
+      const disabledMcpServerIds = Array.from(
+        new Set([
+          ...(failedConversation.disabledMcpServerIds ?? []),
+          ...enabledServerIds,
+          M365_BUILTIN_SERVER_ID,
+        ]),
+      );
+      conversationStore.updateConversation(failedConversation.id, {
+        disabledMcpServerIds,
+        pinnedMcpServerId: undefined,
+      });
+      resendConversation = {
+        ...failedConversation,
+        disabledMcpServerIds,
+        pinnedMcpServerId: undefined,
+      };
+    }
+
+    set({
+      error: null,
+      errorCode: null,
+      lastDenial: null,
+      failedConversation: null,
+      failedSearchMode: undefined,
+      errorIsRecoverable: true,
+    });
+
+    await get().sendMessage(userMessage, resendConversation, searchMode);
   },
 
   summarizeFromHeadlines: async () => {

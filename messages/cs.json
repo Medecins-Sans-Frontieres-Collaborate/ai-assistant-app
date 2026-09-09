@@ -5519,5 +5519,74 @@
     "loading": "Načítání…",
     "loadError": "Seznam globálních administrátorů se nepodařilo načíst.",
     "retry": "Zkusit znovu"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Dosažen limit ({used}/{limit}). Obnovuje se {resets}.",
+      "exhaustedNoReset": "Dosažen limit ({used}/{limit}).",
+      "familyExhausted": "Dosažen limit rodiny ({used}/{limit}). Obnovuje se {resets}.",
+      "familyExhaustedNoReset": "Dosažen limit rodiny ({used}/{limit}).",
+      "unavailable": "Není dostupné na vašem účtu.",
+      "remaining": "Zbývá {remaining}",
+      "remainingTooltip": "Zbývá {remaining} z {limit} požadavků v tomto období.",
+      "agentModelUnavailable": "Používá {model}, který není pro vás dostupný.",
+      "agentModelExhausted": "Používá {model}, jehož limit byl dosažen. Obnovuje se {resets}.",
+      "agentModelExhaustedNoReset": "Používá {model}, jehož limit byl dosažen."
+    },
+    "denial": {
+      "modelBlocked": "Tento model není na vašem účtu dostupný. Vyberte jiný model, nebo kontaktujte svého administrátora.",
+      "modelExhausted": "Vyčerpali jste všech {limit} požadavků pro tento model dnes.",
+      "familyExhausted": "Dnešní sdílený rozpočet {limit} požadavků pro tuto rodinu modelů byl vyčerpán.",
+      "searchBlocked": "Webové vyhledávání bylo na vašem účtu vypnuto administrátorem, ale tato zpráva jej vyžadovala.",
+      "interpreterBlocked": "Interpret kódu byl na vašem účtu vypnut administrátorem, ale tato zpráva jej vyžadovala.",
+      "mcpBlocked": "Konektory byly na vašem účtu vypnuty administrátorem, ale tato zpráva měla konektory povoleny. Deaktivujte je pro pokračování.",
+      "messagesCap": "Dnes jste dosáhli limitu {limit} zpráv.",
+      "tokensDayCap": "Dnes jste dosáhli limitu tokenů.",
+      "tokensMonthCap": "Dosáhli jste měsíčního limitu tokenů.",
+      "perRequest": "Tento požadavek je větší, než váš účet umožňuje (maximum {limit} na požadavek). Zkuste menší požadavek.",
+      "resets": "Obnovuje se {resets}.",
+      "chooseAnotherModel": "Zvolit jiný model",
+      "turnOffSearchAndResend": "Vypnout webové vyhledávání a odeslat znovu",
+      "turnOffInterpreterAndResend": "Vypnout interpret kódu a odeslat znovu",
+      "agentModelBlocked": "Tento agent používá model, který není dostupný na vašem účtu. Odpojte agenta nebo vyberte jiného.",
+      "turnOffConnectorsAndResend": "Vypněte konektory a odešlete znovu"
+    },
+    "notice": {
+      "unavailable": "{model} není na vašem účtu dostupný — vyberte jiný model pro pokračování.",
+      "exhausted": "{model} dosáhl dnešního limitu.",
+      "familyExhausted": "{model} sdílí rozpočet s rodinou modelů, který je pro dnešek vyčerpán.",
+      "resets": "Obnovuje se {resets}.",
+      "chooseModel": "Zvolit model"
+    },
+    "gates": {
+      "blocked": "{feature} je na vašem účtu vypnut vaší organizací.",
+      "features": {
+        "webSearch": "Webové vyhledávání",
+        "codeInterpreter": "Interpret kódu",
+        "connectors": "Konektory"
+      },
+      "remaining": "{count, plural, one {# použití zbývá dnes} other {# použití zbývá dnes}}",
+      "exhausted": "Dosažen denní limit — model odpoví bez této funkce.",
+      "exhaustedResets": "Denní limit byl vyčerpán — model odpoví bez něj. Resetů: {resets}."
+    },
+    "mine": {
+      "title": "Vaše limity",
+      "description": "Limity nastavené vaší organizací pro váš účet. Počítadla se na konci každého období automaticky resetují.",
+      "notAvailable": "Není dostupné",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Obnovuje se {resets}",
+      "limitReached": "Dosažen limit",
+      "familyLimitReached": "Dosažen limit rodiny modelů",
+      "usageUnavailable": "Aktuální využití nebylo možné načíst — zobrazeny jsou pouze limity.",
+      "familyRow": "Modely {family}"
+    },
+    "routes": {
+      "ttsExhausted": "Dnes jste dosáhli limitu převodu textu na řeč.",
+      "translationExhausted": "Dnes jste dosáhli limitu pro překlad dokumentů.",
+      "resetsIn": "Obnovuje se {resets}.",
+      "uploadTooLarge": "{fileName} je příliš velký — soubory na vašem účtu musí mít méně než {maxSize}.",
+      "uploadCapHint": "Soubory do {maxSize}"
+    }
   }
 }

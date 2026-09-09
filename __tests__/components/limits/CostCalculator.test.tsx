@@ -222,20 +222,25 @@ describe('CostCalculator', () => {
 
   it('a family preset replaces the mix with equal shares over its members', () => {
     renderCalculator();
-    fireEvent.change(pickerSelect(), { target: { value: 'family:gpt-56' } });
+    // The GPT family is one family now, so the preset spans every GPT the
+    // ring serves — the 5.6 trio AND gpt-5.4 — and stops at the family edge.
+    fireEvent.change(pickerSelect(), { target: { value: 'family:gpt' } });
     const shares = screen.getAllByLabelText(
       'cost.calculator.shareOf',
     ) as HTMLInputElement[];
-    expect(shares).toHaveLength(3);
-    expect(shares.every((s) => s.value === '33.33')).toBe(true);
+    expect(shares).toHaveLength(4);
+    expect(shares.every((s) => s.value === '25')).toBe(true);
     const table = screen.getByTestId('cost-per-model');
     expect(within(table).getByText('GPT-5.6 Terra')).toBeInTheDocument();
-    expect(within(table).queryByText('GPT-5.4')).not.toBeInTheDocument();
+    expect(within(table).getByText('GPT-5.4')).toBeInTheDocument();
+    expect(
+      within(table).queryByText('Claude Sonnet 4.6'),
+    ).not.toBeInTheDocument();
   });
 
   it('the default-model preset restores a single default row', () => {
     renderCalculator();
-    fireEvent.change(pickerSelect(), { target: { value: 'family:gpt-56' } });
+    fireEvent.change(pickerSelect(), { target: { value: 'family:gpt' } });
     fireEvent.click(
       screen.getByRole('button', { name: 'cost.calculator.presetDefault' }),
     );

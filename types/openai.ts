@@ -80,6 +80,24 @@ export interface OpenAIModel {
    */
   supportsExtendedThinking?: boolean;
   /**
+   * WHICH extended-thinking request shape this Claude model accepts. Anthropic
+   * replaced the fixed-budget API with adaptive thinking, and the two are
+   * mutually exclusive — sending the wrong one is a hard 400, not a
+   * degradation:
+   *
+   * - `adaptive` — `thinking: {type:'adaptive'}` + `output_config.effort`.
+   *   Required on Fable 5/5.1, Opus 5/4.8/4.7 and Sonnet 5, which reject BOTH
+   *   `budget_tokens` and any explicit `temperature`; recommended on Opus 4.6
+   *   and Sonnet 4.6, which still accept either. Models here should also carry
+   *   `supportsTemperature: false` when the model rejects sampling params.
+   * - `budget` — the legacy `thinking: {type:'enabled', budget_tokens: N}`.
+   *   The only shape Haiku 4.5 and the 4.5/4.1 generation accept.
+   *
+   * Absent = no extended thinking is ever requested (read together with
+   * `supportsExtendedThinking`, which gates the feature on/off).
+   */
+  thinkingApi?: 'adaptive' | 'budget';
+  /**
    * Azure OpenAI Responses API support. Flagged models route their plain
    * streaming/non-streaming chat through `responses.create` (reasoning
    * summaries become visible thinking); unflagged models — and every MCP,
@@ -190,6 +208,27 @@ export interface OpenAIModel {
    */
   variantRank?: number;
   /**
+   * Sub-variant key — the THIRD in-row axis, nested inside a single version
+   * of a variant. It exists because some generations ship several models at
+   * ONE version number: GPT 5.6 is Sol/Terra/Luna, and o-series 3 is o3 and
+   * o3-mini. Without this axis those models collide on `versionLabel`, which
+   * is the key the version chips and the switch-preserving targeting run on
+   * — two chips both reading "5.6" and a non-deterministic click target.
+   *
+   * Absent = the version has a single model, which is the common case; the
+   * sub-variant control renders only where a version actually has more than
+   * one. Picker-only, like `variant`.
+   */
+  subVariant?: string;
+  /** Display label of the sub-variant chip (e.g. "Sol", "Mini"). */
+  subVariantLabel?: string;
+  /**
+   * Display position of this sub-variant within its version (1 = first),
+   * encoding the capability hierarchy (e.g. Sol 1, Terra 2, Luna 3).
+   * Unranked sub-variants sort after ranked ones, in order of appearance.
+   */
+  subVariantRank?: number;
+  /**
    * Family-default preference: when nothing in the family is selected, the
    * row fronts (and selects) the AVAILABLE model with the LOWEST rank;
    * same-rank ties go to the newest version, so "rank 1 on every Sonnet"
@@ -271,6 +310,7 @@ export enum OpenAIModelID {
   GPT_5_MINI = 'gpt-5-mini',
   GPT_4_1 = 'gpt-4.1',
   GPT_5_4 = 'gpt-5.4',
+  GPT_5_4_MINI = 'gpt-5.4-mini',
   GPT_5_4_NANO = 'gpt-5.4-nano',
   GPT_5_3_CHAT = 'gpt-5.3-chat',
   GPT_5 = 'gpt-5',
@@ -285,15 +325,16 @@ export enum OpenAIModelID {
   GPT_o4_MINI = 'o4-mini',
   GPT_o3_MINI = 'o3-mini',
   GPT_5_5 = 'gpt-5.5',
-  // The GPT 5.6 trio: a NEW capability hierarchy (Sol flagship → Terra
-  // balanced → Luna light) replacing the standard/mini/nano size axis; its
-  // own picker family ('gpt-56') with Sol/Terra/Luna as variants.
+  // The GPT 5.6 trio: three sizes shipped under ONE version number (Sol
+  // flagship → Terra balanced → Luna light). They are the Foundational
+  // variant at version 5.6, split on the SUB-VARIANT axis — the axis exists
+  // because they would otherwise collide on versionLabel "5.6".
   GPT_5_6_SOL = 'gpt-5.6-sol',
   GPT_5_6_TERRA = 'gpt-5.6-terra',
   GPT_5_6_LUNA = 'gpt-5.6-luna',
-  // GPT-6 Astra (2026-09-03) joins the same version-name family as a fourth
-  // variant above Sol: the flagship tier of the next generation, priced ~2x
-  // Sol. Deliberately NOT a family default (no defaultRank) — cost policy.
+  // GPT-6 Astra (2026-09-03): the next generation's flagship, priced ~2x
+  // Sol, so simply Foundational version 6 (it shipped alone — no sub-variant
+  // split). Deliberately NOT a family default (no defaultRank) — cost policy.
   GPT_6_ASTRA = 'gpt-6-astra',
   // Rolling alias Azure names as the replacement for retired gpt-*-chat
   // model versions; the deployment is upgraded in place as new chat models ship.
@@ -309,6 +350,10 @@ export enum OpenAIModelID {
   CLAUDE_SONNET_5 = 'claude-sonnet-5',
   CLAUDE_OPUS_4_7 = 'claude-opus-4-7',
   CLAUDE_OPUS_4_5 = 'claude-opus-4-5',
+  // Claude 5 flagships (deployed in all four Foundry accounts 2026-09). Both
+  // use the ADAPTIVE thinking API — see `thinkingApi` below.
+  CLAUDE_OPUS_5 = 'claude-opus-5',
+  CLAUDE_FABLE_5_1 = 'claude-fable-5-1',
   // Other providers
   KIMI_K2_6 = 'Kimi-K2.6',
   LLAMA_4_MAVERICK = 'Llama-4-Maverick-17B-128E-Instruct-FP8',
@@ -355,16 +400,16 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   // flagships first with cross-provider variety near the top. A FAMILY row
   // anchors at its first member listed here (first VISIBLE member after the
   // ring gate — hence the extra prod-anchor entries below).
-  OpenAIModelID.GPT_5_2, // "GPT" family row
-  OpenAIModelID.GPT_5_2_CHAT, // "GPT Chat" family row
-  OpenAIModelID.GPT_5_6_SOL, // "GPT 5.6 / 6" family row (Astra → Sol → Terra → Luna; Sol fronts it)
-  OpenAIModelID.CLAUDE_OPUS_4_8, // "Claude" family row…
-  OpenAIModelID.CLAUDE_SONNET_4_6, // …prod anchor + prod face (4.8/5 ring-gated there)
-  OpenAIModelID.CLAUDE_FABLE_5, // standalone row
+  // ONE "GPT" family row: Foundational / Chat / Mini / Nano / o-series are
+  // variant segments of it, not separate rows. Only the anchor is listed
+  // here; every other member sits in the non-representative block below.
+  OpenAIModelID.GPT_5_2,
+  OpenAIModelID.CLAUDE_OPUS_5, // "Claude" family row (deployed in every ring)…
+  OpenAIModelID.CLAUDE_OPUS_4_8, // …anchors instead where 5 isn't served…
+  OpenAIModelID.CLAUDE_SONNET_4_6, // …prod anchor + prod face
   OpenAIModelID.MISTRAL_LARGE_3, // "Mistral" family row
   OpenAIModelID.DEEPSEEK_V3_2, // "DeepSeek" family row (Standard variant leads)…
   OpenAIModelID.DEEPSEEK_R1, // …prod anchor (V3.2 ring-gated there)
-  OpenAIModelID.GPT_o3, // "o-series" family row
   OpenAIModelID.LLAMA_4_MAVERICK, // "Llama" family row
   OpenAIModelID.KIMI_K2_6, // "Kimi" family row
   // Non-representative family members: they surface as variant segments and
@@ -372,6 +417,7 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   // below only breaks ties (usage mode, equal versionRank) and orders the
   // flattened edit-order list.
   OpenAIModelID.GPT_6_ASTRA,
+  OpenAIModelID.GPT_5_6_SOL,
   OpenAIModelID.GPT_5_6_TERRA,
   OpenAIModelID.GPT_5_6_LUNA,
   OpenAIModelID.GPT_5_5,
@@ -380,6 +426,7 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_5_1,
   OpenAIModelID.GPT_5,
   OpenAIModelID.GPT_4O,
+  OpenAIModelID.GPT_5_4_MINI,
   OpenAIModelID.GPT_5_MINI,
   OpenAIModelID.GPT_4_1_MINI,
   OpenAIModelID.GPT_4O_MINI,
@@ -388,10 +435,14 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_4_1_NANO,
   OpenAIModelID.GPT_CHAT_LATEST,
   OpenAIModelID.GPT_5_3_CHAT,
+  OpenAIModelID.GPT_5_2_CHAT,
   OpenAIModelID.GPT_5_1_CHAT,
   OpenAIModelID.GPT_5_CHAT,
+  OpenAIModelID.GPT_o3,
   OpenAIModelID.GPT_o4_MINI,
   OpenAIModelID.GPT_o3_MINI,
+  OpenAIModelID.CLAUDE_FABLE_5_1,
+  OpenAIModelID.CLAUDE_FABLE_5,
   OpenAIModelID.CLAUDE_SONNET_5,
   OpenAIModelID.CLAUDE_OPUS_4_7,
   OpenAIModelID.CLAUDE_OPUS_4_6,
@@ -463,6 +514,7 @@ const openAIModelSchema = z.object({
   supportsTools: z.boolean().optional(),
   supportsCodeInterpreter: z.boolean().optional(),
   supportsExtendedThinking: z.boolean().optional(),
+  thinkingApi: z.enum(['adaptive', 'budget']).optional(),
   supportsResponsesApi: z.boolean().optional(),
   deploymentName: z.string().optional(),
   modelSource: z.string().optional(),
@@ -495,6 +547,9 @@ const openAIModelSchema = z.object({
   variant: z.string().optional(),
   variantLabel: z.string().optional(),
   variantRank: z.number().optional(),
+  subVariant: z.string().optional(),
+  subVariantLabel: z.string().optional(),
+  subVariantRank: z.number().optional(),
   defaultRank: z.number().optional(),
   reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
   supportsReasoningEffort: z.boolean().optional(),

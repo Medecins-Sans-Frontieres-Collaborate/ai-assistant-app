@@ -2,6 +2,8 @@
 
 import {
   IconBrandWindows,
+  IconClock,
+  IconLock,
   IconPlugConnected,
   IconRobot,
   IconSearch,
@@ -16,6 +18,7 @@ import {
   findAttachedAgent,
   useAvailableAgents,
 } from '@/client/hooks/settings/useAvailableAgents';
+import { formatResetIn } from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
@@ -32,6 +35,14 @@ import {
 
 import { Conversation } from '@/types/chat';
 import { SearchMode } from '@/types/searchMode';
+
+import { modelLimitCopy } from '@/components/Chat/ModelSelect/ModelLimitBadge';
+import {
+  pinnedModelAvailability,
+  pinnedModelIdOf,
+  pinnedModelName,
+  useModelAvailabilityMap,
+} from '@/components/Chat/ModelSelect/modelLimits';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
@@ -57,6 +68,14 @@ interface BrowserItem {
   needsReauth?: boolean;
   /** Agent already attached / connector already on for this chat. */
   activeInChat: boolean;
+  /**
+   * The agent pins a model that is blocked or exhausted for this user —
+   * shown as a note on the row, never as a reason to hide it (the agent
+   * itself is not restricted; the send would 403 on the model).
+   */
+  modelUnavailableNote?: string;
+  /** True for a permanent block (never resets) — picks the lock icon over the clock. */
+  modelUnavailableBlocked?: boolean;
 }
 
 /**
@@ -76,6 +95,7 @@ interface BrowserItem {
 export function AgentBrowserModal() {
   const t = useTranslations('agentAttach');
   const tPin = useTranslations('connectorPin');
+  const tLimits = useTranslations('limitsUx.picker');
   const open = useUIStore((s) => s.agentBrowserOpen);
   const setOpen = useUIStore((s) => s.setAgentBrowserOpen);
   const {
@@ -113,6 +133,12 @@ export function AgentBrowserModal() {
     (s) => s.incrementAgentBrowserUsage,
   );
   const { toolsEnabled: m365ToolsFlagOn } = useM365Enabled();
+  const limitsMap = useModelAvailabilityMap();
+  // A snapshot, not a live tick: this only feeds the row note's static
+  // countdown text (row hooks aren't available inside the allItems
+  // useMemo). Calling Date.now() directly in render is impure; the lazy
+  // initializer form runs once, on mount.
+  const [now] = useState(() => Date.now());
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -125,16 +151,47 @@ export function AgentBrowserModal() {
   // Default order: agents (discovery order), then the M365 toolset, then
   // configured connectors. Usage re-ranks on top of this below.
   const allItems = useMemo<BrowserItem[]>(() => {
-    const items: BrowserItem[] = agents.map((agent) => ({
-      id: agent.id,
-      name: agent.name,
-      description: agent.description,
-      kindLabel: t(`kind.${agent.kind}`),
-      semanticsLabel: t(`semantics.${agentModelSemantics(agent.kind)}`),
-      icon: 'agent' as const,
-      agent,
-      activeInChat: !!attachedAgent && attachedAgent.id === agent.id,
-    }));
+    // Only pinned-model kinds can be limited through their model: prompt
+    // agents (once discovery exposes the id) and Foundry swap targets.
+    // "Your-model" kinds ride whatever the picker already vetted. Shares
+    // ModelHeader's exact wording (`modelLimitCopy`) — including the reset
+    // countdown when the server sent one — instead of a second, drifting
+    // copy of the sentence.
+    const modelNoteFor = (
+      agent: AvailableAgent,
+    ): { note?: string; blocked?: boolean } => {
+      const semantics = agentModelSemantics(agent.kind);
+      if (semantics === 'your-model') return {};
+      const pinnedId = pinnedModelIdOf(agent);
+      if (!pinnedId) return {};
+      const view = pinnedModelAvailability(pinnedId, limitsMap, models);
+      if (view.state === 'available') return {};
+      const resets =
+        view.state === 'exhausted' && view.resetAt
+          ? formatResetIn(view.resetAt, now)
+          : null;
+      return {
+        note:
+          modelLimitCopy(tLimits, view, resets, pinnedModelName(pinnedId)) ??
+          undefined,
+        blocked: view.state === 'blocked',
+      };
+    };
+    const items: BrowserItem[] = agents.map((agent) => {
+      const { note, blocked } = modelNoteFor(agent);
+      return {
+        id: agent.id,
+        name: agent.name,
+        description: agent.description,
+        kindLabel: t(`kind.${agent.kind}`),
+        semanticsLabel: t(`semantics.${agentModelSemantics(agent.kind)}`),
+        icon: 'agent' as const,
+        agent,
+        activeInChat: !!attachedAgent && attachedAgent.id === agent.id,
+        modelUnavailableNote: note,
+        modelUnavailableBlocked: blocked,
+      };
+    });
     if (m365ToolsFlagOn && m365Connected) {
       items.push({
         id: `connector-${M365_BUILTIN_SERVER_ID}`,
@@ -169,7 +226,11 @@ export function AgentBrowserModal() {
     m365ToolsUserEnabled,
     mcpServers,
     chatDisabledIds,
+    limitsMap,
+    models,
+    now,
     t,
+    tLimits,
   ]);
 
   const filtered = useMemo(() => {
@@ -492,6 +553,19 @@ export function AgentBrowserModal() {
                       {item.needsReauth && (
                         <p className="text-xs text-amber-600 dark:text-amber-400">
                           {tPin('needsReconnect')}
+                        </p>
+                      )}
+                      {item.modelUnavailableNote && (
+                        <p
+                          data-testid="agent-model-unavailable"
+                          className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400"
+                        >
+                          {item.modelUnavailableBlocked ? (
+                            <IconLock size={12} aria-hidden="true" />
+                          ) : (
+                            <IconClock size={12} aria-hidden="true" />
+                          )}
+                          {item.modelUnavailableNote}
                         </p>
                       )}
                     </div>

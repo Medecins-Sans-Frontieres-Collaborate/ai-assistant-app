@@ -74,6 +74,44 @@ vi.mock('@/client/hooks/useM365Enabled', () => ({
   useM365Enabled: () => ({ toolsEnabled: false }),
 }));
 
+// Usage limits (WP-B hook, React Query underneath — no provider here).
+// Mutable so the pinned-model badge cases below can switch to enforce.
+const limitsState = vi.hoisted(() => ({
+  enforce: false,
+  models: {} as Record<
+    string,
+    {
+      allowed: boolean;
+      reason?: string;
+      remaining?: number;
+      limit?: number;
+      resetAt?: string;
+    }
+  >,
+}));
+vi.mock('@/client/hooks/settings/useMyLimits', async (importOriginal) => {
+  const actual =
+    await importOriginal<
+      typeof import('@/client/hooks/settings/useMyLimits')
+    >();
+  return {
+    ...actual,
+    useLimitsEnabled: () => limitsState.enforce,
+    useMyLimits: () => ({
+      limits: [],
+      mode: limitsState.enforce ? ('enforce' as const) : ('observe' as const),
+      enforce: limitsState.enforce,
+      isLimited: false,
+      models: limitsState.models,
+      usageUnavailable: false,
+      policyUnavailable: false,
+      isLoading: false,
+      error: null,
+      refetch: vi.fn(),
+    }),
+  };
+});
+
 function setServers(servers: unknown[]) {
   useSettingsStore.setState({
     mcpServers: servers as ReturnType<
@@ -90,6 +128,8 @@ describe('AgentBrowserModal', () => {
     availableState.isDiscoveryError = false;
     availableState.empty = false;
     selectedConversation = { id: 'conv-1', model: { id: 'gpt-5.2' } } as never;
+    limitsState.enforce = false;
+    limitsState.models = {};
     setServers([]);
     useSettingsStore.setState({ agentBrowserUsage: {} });
     useUIStore.setState({ agentBrowserOpen: true });
@@ -266,5 +306,141 @@ describe('AgentBrowserModal', () => {
     expect(screen.queryByText('Remove from this chat')).toBeNull();
     fireEvent.click(screen.getAllByText('New chat')[0]);
     expect(addConversation).toHaveBeenCalled();
+  });
+
+  describe('pinned-model usage-limit badge (docs/LIMITS_USER_FACING_UX.md §7.4)', () => {
+    // A prompt agent whose pinned catalog model the client can see. The
+    // field rides AvailableAgent structurally until the discovery payload
+    // and agentAttachment expose it for real.
+    const PINNED: AvailableAgent[] = [
+      {
+        id: 'prompt-gamma',
+        botId: 'prompt-gamma',
+        name: 'Gamma Persona',
+        kind: 'prompt',
+        pinnedModelId: 'o3',
+      } as AvailableAgent,
+    ];
+
+    const renderWithPinned = () => {
+      const original = AGENTS.splice(0, AGENTS.length);
+      AGENTS.push(...PINNED);
+      const result = render(<AgentBrowserModal />);
+      return {
+        ...result,
+        restore: () => AGENTS.splice(0, AGENTS.length, ...original),
+      };
+    };
+
+    it('badges (never hides) an agent whose pinned model the server no longer serves', () => {
+      limitsState.enforce = true; // o3 is a catalog id absent from the served list
+      const { restore } = renderWithPinned();
+      try {
+        const row = screen.getByRole('option', { name: /Gamma Persona/ });
+        expect(
+          within(row).getByTestId('agent-model-unavailable'),
+        ).toHaveTextContent('agentModelUnavailable');
+        // A permanent block never resets — the lock icon says so; the
+        // clock (implying "comes back later") is wrong here.
+        expect(
+          row.querySelector(
+            '[data-testid="agent-model-unavailable"] .tabler-icon-lock',
+          ),
+        ).not.toBeNull();
+        // The agent itself is not restricted: still attachable.
+        fireEvent.click(within(row).getByText('Add to this chat'));
+        expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+          bot: 'prompt-gamma',
+        });
+      } finally {
+        restore();
+      }
+    });
+
+    it('badges an exhausted pinned model with the exhausted wording', () => {
+      limitsState.enforce = true;
+      limitsState.models = {
+        'gpt-5.2': {
+          allowed: true,
+          reason: 'exhausted',
+          remaining: 0,
+          limit: 5,
+        },
+      };
+      const original = AGENTS.splice(0, AGENTS.length);
+      AGENTS.push({
+        ...PINNED[0],
+        pinnedModelId: 'gpt-5.2',
+      } as AvailableAgent);
+      try {
+        render(<AgentBrowserModal />);
+        const note = screen.getByTestId('agent-model-unavailable');
+        expect(note).toHaveTextContent('agentModelExhaustedNoReset');
+        // No reset known — a clock (not a lock) still fits, since the cap
+        // itself is transient in principle.
+        expect(note.querySelector('.tabler-icon-clock')).not.toBeNull();
+      } finally {
+        AGENTS.splice(0, AGENTS.length, ...original);
+      }
+    });
+
+    it('includes the reset countdown when the server sent one, matching ModelHeader for the same agent', () => {
+      // Regression: modelNoteFor used to always render the *NoReset variant
+      // regardless of `resetAt`, disagreeing with ModelHeader's wording for
+      // the identical pinned-model state.
+      limitsState.enforce = true;
+      limitsState.models = {
+        'gpt-5.2': {
+          allowed: true,
+          reason: 'exhausted',
+          remaining: 0,
+          limit: 5,
+          resetAt: new Date(Date.now() + 6 * 3600_000).toISOString(),
+        },
+      };
+      const original = AGENTS.splice(0, AGENTS.length);
+      AGENTS.push({
+        ...PINNED[0],
+        pinnedModelId: 'gpt-5.2',
+      } as AvailableAgent);
+      try {
+        render(<AgentBrowserModal />);
+        const note = screen.getByTestId('agent-model-unavailable');
+        // The countdown-bearing variant, not its NoReset sibling (a plain
+        // substring match on "agentModelExhausted" would pass either way).
+        expect(note).toHaveTextContent(/^agentModelExhausted$/);
+        expect(note.querySelector('.tabler-icon-clock')).not.toBeNull();
+      } finally {
+        AGENTS.splice(0, AGENTS.length, ...original);
+      }
+    });
+
+    it('renders no badge outside enforce mode (fail open), even for an unserved model', () => {
+      limitsState.enforce = false;
+      const { restore } = renderWithPinned();
+      try {
+        expect(screen.queryByTestId('agent-model-unavailable')).toBeNull();
+      } finally {
+        restore();
+      }
+    });
+
+    it('never badges "your-model" kinds — they ride the picker\'s own vetting', () => {
+      limitsState.enforce = true;
+      const original = AGENTS.splice(0, AGENTS.length);
+      AGENTS.push({
+        id: 'orgr-delta',
+        botId: 'orgr-delta',
+        name: 'Delta RAG',
+        kind: 'org',
+        pinnedModelId: 'o3',
+      } as AvailableAgent);
+      try {
+        render(<AgentBrowserModal />);
+        expect(screen.queryByTestId('agent-model-unavailable')).toBeNull();
+      } finally {
+        AGENTS.splice(0, AGENTS.length, ...original);
+      }
+    });
   });
 });

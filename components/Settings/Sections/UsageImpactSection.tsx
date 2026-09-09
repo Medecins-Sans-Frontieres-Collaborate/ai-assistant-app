@@ -18,6 +18,7 @@ import {
 import { OpenAIModelID, OpenAIModels, getModelSizeClass } from '@/types/openai';
 
 import { EmissionsChipSetting } from '@/components/Settings/EmissionsChipSetting';
+import { YourLimitsTable } from '@/components/Settings/Sections/YourLimitsTable';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
@@ -147,6 +148,12 @@ export const UsageImpactSection: FC = () => {
       <div className="mb-6 border-b border-gray-200 pb-6 dark:border-gray-700">
         <EmissionsChipSetting />
       </div>
+
+      {/* Also above the empty-state branch: a freshly limited account has
+          no tracked usage yet but still needs to see what applies to it.
+          Renders nothing unless the policy is enforced and constrains the
+          caller, so most users never see this block. */}
+      <YourLimitsTable />
 
       {summary.isEmpty ? (
         <p className="text-sm text-gray-600 dark:text-gray-400">

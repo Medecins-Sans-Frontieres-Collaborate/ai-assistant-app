@@ -5503,5 +5503,74 @@
     "loading": "Ebimisi…",
     "loadError": "Liste ya ba admin ya monde mobimba ekoki te kobimisama.",
     "retry": "Bemisa lisusu"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Limite ekoki ({used}/{limit}). Ekozongela {resets}.",
+      "exhaustedNoReset": "Limite ekoki ({used}/{limit}).",
+      "familyExhausted": "Limite ya libota ekoki ({used}/{limit}). Ekozongela {resets}.",
+      "familyExhaustedNoReset": "Limite ya libota ekoki ({used}/{limit}).",
+      "unavailable": "Eza te na compte na yo.",
+      "remaining": "{remaining} ekotikala",
+      "remainingTooltip": "{remaining} na {limit} basengi ekotikala na tango oyo.",
+      "agentModelUnavailable": "Ezali kosalela {model}, oyo ezali te pona yo.",
+      "agentModelExhausted": "Ezali kosalela {model}, limite na yango ekoki. Ekozongela {resets}.",
+      "agentModelExhaustedNoReset": "Ezali kosalela {model}, limite na yango ekoki."
+    },
+    "denial": {
+      "modelBlocked": "Model oyo ezali te na compte na yo. Pona model mosusu, to benga administrateur na yo.",
+      "modelExhausted": "Usutilisé masolo nionso {limit} ya model oyo lelo.",
+      "familyExhausted": "Osili kosalela budget ya lelo ya ndenge moko ya model oyo ({limit} basengi) libota.",
+      "searchBlocked": "Recherche ya Internet esili kotelemisama na compte na yo na administrateur, mpe message oyo ezalaki na yango.",
+      "interpreterBlocked": "Code interpreter esili kotelemisama na compte na yo na administrateur, mpe message oyo ezalaki na yango.",
+      "mcpBlocked": "Connectors esili kotelemisama na compte na yo na administrateur, mpe message oyo ezalaki na connectors. Pimela yango pona kokoba.",
+      "messagesCap": "Osili kokoma na limite ya {limit} messages na mokolo oyo.",
+      "tokensDayCap": "Osili kokoma limite ya tokens na mokolo oyo.",
+      "tokensMonthCap": "Osili kokoma limite ya tokens ya sanza oyo.",
+      "perRequest": "Demande oyo eleki ndenge compte na yo ekoki kokabela (maximum {limit} na demande). Meká na demande moke.",
+      "resets": "Ekozongela {resets}.",
+      "chooseAnotherModel": "Pona model mosusu",
+      "turnOffSearchAndResend": "Pimela recherche ya Internet mpe tinda lisusu",
+      "turnOffInterpreterAndResend": "Pimela code interpreter mpe tinda lisusu",
+      "agentModelBlocked": "Agent oyo azali kosalela modèle oyo ezalaka te na compte na yo. Kobóya agent topona mosusu.",
+      "turnOffConnectorsAndResend": "Kofungola connectors te mpe kotinda lisusu"
+    },
+    "notice": {
+      "unavailable": "{model} eza te na compte na yo — pona model mosusu pona kokoba.",
+      "exhausted": "{model} ekomi na limite ya lelo.",
+      "familyExhausted": "{model} ezali na budget moko na famille na yango, mpe eleki na mokolo oyo.",
+      "resets": "Ekozongela {resets}.",
+      "chooseModel": "Pona model"
+    },
+    "gates": {
+      "blocked": "{feature} esili kotelemisama na compte na yo na organisation na bino.",
+      "features": {
+        "webSearch": "Recherche ya Internet",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# utilisation ezali kaka lelo} other {# utilisations ezali kaka lelo}}",
+      "exhausted": "Limite ya mokolo ekoki — model ekopesa eyano na yango te.",
+      "exhaustedResets": "Limite ya mokolo ekoki — modèle ekopesa eyano ata bongo. Reset {resets}."
+    },
+    "mine": {
+      "title": "Baimite na yo",
+      "description": "Baimite organization na bino epesi na compte na yo. Baimite ekozongisama na suka ya eleko.",
+      "notAvailable": "Eza te",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Ekozongela {resets}",
+      "limitReached": "Limite ekoki",
+      "familyLimitReached": "Limite ya famille ya model ekoki",
+      "usageUnavailable": "Utilisation ya lelo ekoki te — nani komonisa baimite kaka.",
+      "familyRow": "Ba modèles ya {family}"
+    },
+    "routes": {
+      "ttsExhausted": "Osili kokoma limite ya lelo ya text-to-speech.",
+      "translationExhausted": "Osili kokoma limite ya lelo ya kobongola ba documents.",
+      "resetsIn": "Ekozongela {resets}.",
+      "uploadTooLarge": "{fileName} eleki monene — bafichier na compte na yo esengeli kozala awa na {maxSize}.",
+      "uploadCapHint": "Bafichier tii na {maxSize}"
+    }
   }
 }

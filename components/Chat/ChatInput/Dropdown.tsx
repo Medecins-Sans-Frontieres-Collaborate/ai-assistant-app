@@ -31,7 +31,12 @@ import { createPortal } from 'react-dom';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
-import { useAgentToolGates } from '@/client/hooks/settings/useAgentToolGates';
+import {
+  ToolLimitGate,
+  useAgentToolGates,
+  useToolLimitGates,
+} from '@/client/hooks/settings/useAgentToolGates';
+import { useResetCountdown } from '@/client/hooks/settings/useMyLimits';
 import { useCameraSupport } from '@/client/hooks/ui/useCameraSupport';
 import { useDropdownKeyboardNav } from '@/client/hooks/ui/useDropdownKeyboardNav';
 import useEnhancedOutsideClick from '@/client/hooks/ui/useEnhancedOutsideClick';
@@ -233,6 +238,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   const t = useTranslations();
   const tUrl = useTranslations('urlFetch');
   const tM365 = useTranslations('m365');
+  const tGates = useTranslations('limitsUx.gates');
 
   const chatInputImageRef = useRef<{ openFilePicker: () => void }>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -526,6 +532,69 @@ const Dropdown: React.FC<DropdownProps> = ({
   // with the capabilities tray (legacy model-id gates + decoupled
   // attachments alike) via useAgentToolGates.
   const { hideWebSearch, hideCodeInterpreter } = useAgentToolGates();
+  // Admin usage limits LOCK (rather than hide) the same controls: the row
+  // stays, disabled with a lock and a reason, so the user learns it is a
+  // policy. All gates are open unless the limits UX is enforced
+  // (docs/LIMITS_USER_FACING_UX.md §7.4).
+  const toolLimits = useToolLimitGates();
+  const lockReasonFor = useCallback(
+    (gate: ToolLimitGate, feature: string) =>
+      gate.blocked
+        ? tGates('blocked', { feature: tGates(`features.${feature}`) })
+        : undefined,
+    [tGates],
+  );
+  // Reset countdowns for the exhausted note — called unconditionally (a
+  // fixed three calls every render, whatever the agent gates hide) so the
+  // user learns WHEN the budget comes back, not just that it is gone.
+  const searchResetLabel = useResetCountdown(
+    toolLimits.webSearch.budget?.resetAt,
+  );
+  const interpreterResetLabel = useResetCountdown(
+    toolLimits.codeInterpreter.budget?.resetAt,
+  );
+  const m365ResetLabel = useResetCountdown(toolLimits.m365.budget?.resetAt);
+  // Budget annotations: "N left today" when low, and at 0 a note that the
+  // model will answer without the tool — the toggle itself stays usable,
+  // since the server degrades instead of refusing the message. Blocked also
+  // returns the lock reason as a note: the row's own `title` is otherwise
+  // shadowed by the inner label span's `title` (DropdownMenuItem), which
+  // leaves hovering the row's visible text showing just the label — and
+  // nothing at all on touch. The note is the one copy of the reason that is
+  // actually reachable without a mouse.
+  const budgetNoteFor = useCallback(
+    (
+      gate: ToolLimitGate,
+      lockReason: string | undefined,
+      resetLabel: string | null,
+    ): Pick<MenuItem, 'note' | 'noteTone'> => {
+      if (gate.blocked) {
+        return lockReason ? { note: lockReason, noteTone: 'muted' } : {};
+      }
+      if (gate.exhausted) {
+        return {
+          note: resetLabel
+            ? tGates('exhaustedResets', { resets: resetLabel })
+            : tGates('exhausted'),
+          noteTone: 'warning',
+        };
+      }
+      if (gate.low && gate.budget) {
+        return {
+          note: tGates('remaining', { count: gate.budget.remaining }),
+          noteTone: 'muted',
+        };
+      }
+      return {};
+    },
+    [tGates],
+  );
+  const connectorsLockReason = lockReasonFor(toolLimits.mcp, 'connectors');
+  const searchLockReason = lockReasonFor(toolLimits.webSearch, 'webSearch');
+  const interpreterLockReason = lockReasonFor(
+    toolLimits.codeInterpreter,
+    'codeInterpreter',
+  );
 
   // Per-item icon color is a deliberate carve-out: this menu is scanned often
   // and the hue helps locate actions at a glance. Each color matches its
@@ -553,11 +622,16 @@ const Dropdown: React.FC<DropdownProps> = ({
     builtinM365Available &&
     m365ToolsUserEnabled &&
     !chatDisabledIds.includes(M365_BUILTIN_SERVER_ID);
+  // While connectors are policy-locked none are EFFECTIVELY active, whatever
+  // the stored toggles say — the count would otherwise promise tools that
+  // the request must not carry.
   const activeConnectorCount = useMemo(
     () =>
-      mcpServers.filter((s) => s.enabled && !chatDisabledIds.includes(s.id))
-        .length + (builtinM365Active ? 1 : 0),
-    [mcpServers, chatDisabledIds, builtinM365Active],
+      connectorsLockReason
+        ? 0
+        : mcpServers.filter((s) => s.enabled && !chatDisabledIds.includes(s.id))
+            .length + (builtinM365Active ? 1 : 0),
+    [connectorsLockReason, mcpServers, chatDisabledIds, builtinM365Active],
   );
   // The Connectors entry appears whenever anything is CONFIGURED — even
   // all-disabled, so a disabled connector can be re-enabled from here
@@ -635,8 +709,18 @@ const Dropdown: React.FC<DropdownProps> = ({
               },
               category: 'tools' as const,
               toggle: true,
-              checked: searchMode === SearchMode.ALWAYS,
+              // A lock reads as Off: the stored preference is untouched and
+              // returns when the gate lifts.
+              checked:
+                !toolLimits.webSearch.blocked &&
+                searchMode === SearchMode.ALWAYS,
               parentId: 'aiTools',
+              lockReason: searchLockReason,
+              ...budgetNoteFor(
+                toolLimits.webSearch,
+                searchLockReason,
+                searchResetLabel,
+              ),
             },
           ]),
       // Force code execution on the next messages (InterpreterMode.ALWAYS).
@@ -659,8 +743,16 @@ const Dropdown: React.FC<DropdownProps> = ({
               },
               category: 'tools' as const,
               toggle: true,
-              checked: interpreterMode === InterpreterMode.ALWAYS,
+              checked:
+                !toolLimits.codeInterpreter.blocked &&
+                interpreterMode === InterpreterMode.ALWAYS,
               parentId: 'aiTools',
+              lockReason: interpreterLockReason,
+              ...budgetNoteFor(
+                toolLimits.codeInterpreter,
+                interpreterLockReason,
+                interpreterResetLabel,
+              ),
             },
           ]),
       // Connectors: its own expandable parent listing every CONFIGURED
@@ -688,6 +780,11 @@ const Dropdown: React.FC<DropdownProps> = ({
                 toggleParentExpanded('focusConnector');
               },
               category: 'tools' as const,
+              // The parent stays expandable so the reason is discoverable;
+              // the children carry the lock.
+              ...(connectorsLockReason
+                ? { note: connectorsLockReason, noteTone: 'warning' as const }
+                : {}),
             },
             ...(builtinM365Available
               ? [
@@ -728,8 +825,17 @@ const Dropdown: React.FC<DropdownProps> = ({
                     },
                     category: 'tools' as const,
                     toggle: true,
-                    checked: builtinM365Active,
+                    checked: !connectorsLockReason && builtinM365Active,
                     parentId: 'focusConnector',
+                    lockReason: connectorsLockReason,
+                    // No lock-reason note here: this row nests under
+                    // Connectors, whose parent already carries the reason as
+                    // its own note (matching every other connector child).
+                    ...budgetNoteFor(
+                      toolLimits.m365,
+                      undefined,
+                      m365ResetLabel,
+                    ),
                   },
                 ]
               : []),
@@ -759,8 +865,12 @@ const Dropdown: React.FC<DropdownProps> = ({
                 },
                 category: 'tools' as const,
                 toggle: true,
-                checked: server.enabled && !chatDisabledIds.includes(server.id),
+                checked:
+                  !connectorsLockReason &&
+                  server.enabled &&
+                  !chatDisabledIds.includes(server.id),
                 disabled: needsReauth,
+                lockReason: connectorsLockReason,
                 parentId: 'focusConnector',
               };
             }),
@@ -1059,6 +1169,14 @@ const Dropdown: React.FC<DropdownProps> = ({
       hasCameraSupport,
       hideWebSearch,
       hideCodeInterpreter,
+      toolLimits,
+      budgetNoteFor,
+      searchResetLabel,
+      interpreterResetLabel,
+      m365ResetLabel,
+      searchLockReason,
+      interpreterLockReason,
+      connectorsLockReason,
       hasAiToolChildren,
       showConnectors,
       activeConnectorCount,
@@ -1119,11 +1237,21 @@ const Dropdown: React.FC<DropdownProps> = ({
   // Wrap each action so activating it records usage (drives "Frequently used").
   // Usage is debounced (see recordSuccessfulToolUsage) so the order only
   // settles after repeated use. Pinning does not count — separate control.
+  //
+  // `DropdownMenuItem` only neutralises the MOUSE path (its button gets
+  // `disabled` / `onClick={undefined}`). Keyboard activation goes through
+  // `useDropdownKeyboardNav`, which calls `flatVisibleItems[selectedIndex]
+  // .onClick()` unconditionally — a locked or disabled row is still in that
+  // list (arrow keys can select it) and Enter would otherwise run the real
+  // action and credit usage even though the row shows locked/disabled. Guard
+  // here so both paths share one inert behavior for a locked or disabled row
+  // (docs/LIMITS_USER_FACING_UX.md §7.4).
   const trackedItems = useMemo(
     () =>
       menuItems.map((item) => ({
         ...item,
         onClick: () => {
+          if (item.lockReason || item.disabled) return;
           recordSuccessfulToolUsage(item.id);
           item.onClick();
         },

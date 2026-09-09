@@ -5503,5 +5503,74 @@
     "loading": "ተሰብስቦም…",
     "loadError": "ዝርዝሩ ናይ ዓለም admin ኣይተሰብሰበን።",
     "retry": "ደጊም ፈትነ"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "ውድብ ተበግደሉ ({used}/{limit})። ዳግማይ ይቐምጣ {resets}።",
+      "exhaustedNoReset": "ውድብ ተበግደሉ ({used}/{limit})።",
+      "familyExhausted": "ቤተሰብ ውድብ ተበግደሉ ({used}/{limit})። ዳግማይ ይቐምጣ {resets}።",
+      "familyExhaustedNoReset": "ቤተሰብ ውድብ ተበግደሉ ({used}/{limit})።",
+      "unavailable": "ኣብ መአንቲ መለኪኡ የለን።",
+      "remaining": "ቀሪ {remaining}",
+      "remainingTooltip": "ብዝተለኸስ {remaining} ከምልእኽቲ {limit} ክትመዝገብ ትብዛሕ ኣብዚ ዝተኣኸበ ክፍሊ።",
+      "agentModelUnavailable": "{model} ይጠቀመ፣ ኣብ መኣንቲ የለን።",
+      "agentModelExhausted": "{model} ይጠቀመ፣ ውድብ ተበግደሉሉ። ዳግማይ ይቐምጣ {resets}።",
+      "agentModelExhaustedNoReset": "{model} ይጠቀመ፣ ውድብ ተበግደሉሉ።"
+    },
+    "denial": {
+      "modelBlocked": "እዚ ሞዴል ኣብ መአንቲ የለን። ምሳና ሞዴል ምረጽ ወይ ኣስተዳዳሪኻን ያንጻር።",
+      "modelExhausted": "ኩሉ {limit} መደበታት ነዚ ሞዴል ዛንቛ ተጠቒሙት።",
+      "searchBlocked": "ናይ ድሕሪ መርሓቕ ፍለጋ ብኣስተዳዳሪ ተዕጢኑልና፣ እዚ መልእኽቲ ድኣ ምስዘመነ።",
+      "interpreterBlocked": "ናይ code interpreter ብኣስተዳዳሪ ተዕጢኑልና፣ እዚ መልእኽቲ ድኣ ምስዘመነ።",
+      "mcpBlocked": "Connectors ብኣስተዳዳሪ ኣብ መአንቲ ተዕጢኑሎም፡ እዚ መልእኽቲ ንዝዘምነሉም ኣጥፍኡ ንቀጺል።",
+      "messagesCap": "ውድብ ብዝተለኸስ {limit} መልእኽቲ ዛንቛ ተጠቒሙ።",
+      "tokensDayCap": "ውድብ ቦኬ ማሕበርቲ ምስተዋወብ ነዚ መዓልቲ ተበግደሉ።",
+      "tokensMonthCap": "ውድብ ቦኬ ማሕበርቲ ወርሒዉ ተበግደሉ።",
+      "perRequest": "እዚ ምልእኽቲ ከም ውድብ መአንቲኻ ውሑድ ይስከም ኣይፍቀደን (ኦሞ {limit} እያ ብምልእኽቲ)። ንአሳነሰ ማለት ፈትን።",
+      "resets": "ዳግማይ ይቐምጣ {resets}።",
+      "chooseAnotherModel": "ንዝሓለፈ ሞዴል ምረጽ",
+      "turnOffSearchAndResend": "ድሕሪ ፍለጋ ኣጥፍኡን ዳግመይ ልአኩ",
+      "turnOffInterpreterAndResend": "code interpreter ኣጥፍኡን ዳግመይ ልአኩ",
+      "familyExhausted": "ናይሎም ሰባት ሞዴል ሎሚ ተቆራኺ ኣብነት ቦጀት {limit} ጥያቄታት ክትጥቀም ወዲ ምሉእ ትጠቐምካ።",
+      "agentModelBlocked": "እዚ ኣገንት ዝተኸተለ ሞዴል ብኣካውንትካ ዝተሃለየ አይተረኽበን። ኣገንትን ተኸፍተው ወይ ካብ ሓደ ዝተሃለወ መርፅ.",
+      "turnOffConnectorsAndResend": "ኮነክተርታትን ዝግበሉን ዳግማይ ልኡ"
+    },
+    "notice": {
+      "unavailable": "{model} ኣብ መአንቲ የለን — ካልእ ሞዴል ምረጽ ንዝቀጺል።",
+      "exhausted": "{model} ውድብ ነዚ መዓልቲ ተበግደሉ።",
+      "familyExhausted": "{model} ንሞዴል ቤተሰብ ኣብዚ ውድብ ተበግደሉ።",
+      "resets": "ዳግማይ ይቐምጣ {resets}።",
+      "chooseModel": "ሞዴል ምረጽ"
+    },
+    "gates": {
+      "blocked": "{feature} ብኣብ ኣካውንትኩም ኣብ ትካል ውሕንንቲኩም ተዕጢኑ።",
+      "features": {
+        "webSearch": "ድሕሪ-መርሓቕ ፍለጋ",
+        "codeInterpreter": "code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {# መጠቐሚ ልዕሊ ዛንቛ ልዕሊ ሎሚ} other {# መጠቐምታት ልዕሊ ዛንቛ ልዕሊ ሎሚ}}",
+      "exhausted": "ውድብ መዓልቲ ተበግደሉ — ሞዴል ብውን ይመልስ።",
+      "exhaustedResets": "ዕለታዊ ውሳኔ ተሰኪሉ — ሞዴል ብዘይኡ ይመልስ። ዳግማይ ምምሓር {resets}."
+    },
+    "mine": {
+      "title": "ውድብታትኻ",
+      "description": "ውድብ ኣብ ሓላፍነት ዝምልከት ምዕባለ ስለተሰናይ፡ መለኪኡ ኣብፋጻዐ ክፍሊ ብሓላፍነት ይቐምጡ።",
+      "notAvailable": "የለን",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "ዳግማይ ይቐምጣ {resets}",
+      "limitReached": "ውድብ ተበግደሉ",
+      "familyLimitReached": "ውድብ ሞዴል ቤተሰብ ተበግደሉ",
+      "usageUnavailable": "ኩነታት ተጠቓሚ ምስ ምክትታል ከምዘይተጻወተ — ውድብ ብብሉይ ምስዚ ተርእዩ።",
+      "familyRow": "{family} ሞዴልታት"
+    },
+    "routes": {
+      "ttsExhausted": "ውድብ ድሓን ወደ ድብደባ ለውጢ ሎሚ ተጠቒሙ።",
+      "translationExhausted": "ውድብ ድሓን ናይ ሰነድ ትርጉም ሎሚ ተጠቒሙ።",
+      "resetsIn": "ዳግማይ ይቐምጣ {resets}።",
+      "uploadTooLarge": "{fileName} እዋን ብዙሕ እያ — ፋይልታት ውሑድ ኣብ መአንቲ ትኾና ኣብ ትልቅነት {maxSize} ታሕቲ ክገቡ።",
+      "uploadCapHint": "ፋይልታት ክሳብ {maxSize}"
+    }
   }
 }

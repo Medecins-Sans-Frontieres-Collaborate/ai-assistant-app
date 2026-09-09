@@ -1,9 +1,13 @@
 import {
   getFamilyVariants,
   getSeriesVersions,
+  getVariantVersionGroups,
   getVariantVersions,
+  getVersionMembers,
+  getVersionSubVariants,
   groupIntoFamilyUnits,
   pickVariantTarget,
+  pickVersionTarget,
   seriesRepresentative,
   versionRank,
 } from '@/lib/utils/app/modelSeries';
@@ -117,6 +121,82 @@ describe('seriesRepresentative', () => {
     expect(seriesRepresentative([pro, v32, v31])?.id).toBe('v4-pro');
     expect(seriesRepresentative([v32, v31])?.id).toBe('v3.2');
     expect(seriesRepresentative([v31])?.id).toBe('v3.1');
+  });
+});
+
+describe('seriesRepresentative with an isSelectable gate (usage limits)', () => {
+  const featured = model('gpt-5.2', '5.2', { tier: 'featured' });
+  const newest = model('gpt-5.4', '5.4');
+  const legacy = model('gpt-5', '5', { tier: 'legacy' });
+  const versions = [newest, featured, legacy];
+  const notIn = (ids: string[]) => (m: OpenAIModel) => !ids.includes(m.id);
+
+  it('skips a spent default and fronts the best still-usable sibling', () => {
+    expect(
+      seriesRepresentative(versions, undefined, notIn(['gpt-5.2']))?.id,
+    ).toBe('gpt-5.4');
+  });
+
+  it('keeps the normal preference order among usable members', () => {
+    // Newest spent → featured (5.2) still wins over legacy.
+    expect(
+      seriesRepresentative(versions, undefined, notIn(['gpt-5.4']))?.id,
+    ).toBe('gpt-5.2');
+    // Newest and featured spent → the legacy one is all that's left usable.
+    expect(
+      seriesRepresentative(versions, undefined, notIn(['gpt-5.4', 'gpt-5.2']))
+        ?.id,
+    ).toBe('gpt-5');
+  });
+
+  it('falls back to the ungated pick when the whole family is spent (row grays instead of vanishing)', () => {
+    expect(seriesRepresentative(versions, undefined, () => false)?.id).toBe(
+      'gpt-5.2',
+    );
+  });
+
+  it('lets the current selection win even when it is the spent one', () => {
+    expect(
+      seriesRepresentative(versions, 'gpt-5.2', notIn(['gpt-5.2']))?.id,
+    ).toBe('gpt-5.2');
+  });
+
+  it('is a no-op when every member is usable', () => {
+    expect(seriesRepresentative(versions, undefined, () => true)?.id).toBe(
+      seriesRepresentative(versions, undefined)?.id,
+    );
+  });
+});
+
+describe('pickVariantTarget with an isSelectable gate', () => {
+  const mini54 = model('gpt-5.4-mini', '5.4', { variant: 'mini' });
+  const mini52 = model('gpt-5.2-mini', '5.2', {
+    variant: 'mini',
+    tier: 'featured',
+  });
+  const mini5 = model('gpt-5-mini', '5', { variant: 'mini', tier: 'legacy' });
+  const members = [mini54, mini52, mini5];
+  const notIn = (ids: string[]) => (m: OpenAIModel) => !ids.includes(m.id);
+
+  it('keeps the same-version shortcut while that version is usable', () => {
+    expect(pickVariantTarget(members, '5.4', notIn(['gpt-5-mini']))?.id).toBe(
+      'gpt-5.4-mini',
+    );
+  });
+
+  it('routes past a spent same-version twin to the best usable sibling', () => {
+    expect(pickVariantTarget(members, '5.4', notIn(['gpt-5.4-mini']))?.id).toBe(
+      'gpt-5.2-mini',
+    );
+  });
+
+  it('behaves exactly as ungated when nothing in the variant is usable', () => {
+    expect(pickVariantTarget(members, '5.4', () => false)?.id).toBe(
+      pickVariantTarget(members, '5.4')?.id,
+    );
+    expect(pickVariantTarget(members, undefined, () => false)?.id).toBe(
+      pickVariantTarget(members, undefined)?.id,
+    );
   });
 });
 
@@ -254,5 +334,140 @@ describe('pickVariantTarget', () => {
       model('m-featured', '5', { variant: 'mini', tier: 'featured' }),
     ];
     expect(pickVariantTarget(withFeatured, '9.9')?.id).toBe('m-featured');
+  });
+});
+
+// A family whose ONE version ships several models — the shape the
+// sub-variant axis exists for (GPT 5.6's Sol/Terra/Luna, o-series 3's
+// o3/o3-mini). Deliberately declared out of rank order.
+const subVariantFamily = [
+  model('astra', '6', { variant: 'standard' }),
+  model('terra', '5.6', {
+    variant: 'standard',
+    subVariant: 'terra',
+    subVariantLabel: 'Terra',
+    subVariantRank: 2,
+  }),
+  model('luna', '5.6', {
+    variant: 'standard',
+    subVariant: 'luna',
+    subVariantLabel: 'Luna',
+    subVariantRank: 3,
+  }),
+  model('sol', '5.6', {
+    variant: 'standard',
+    subVariant: 'sol',
+    subVariantLabel: 'Sol',
+    subVariantRank: 1,
+    defaultRank: 1,
+  }),
+  model('gpt-5.4', '5.4', { variant: 'standard' }),
+];
+
+describe('getVersionSubVariants', () => {
+  it('orders sub-variants by subVariantRank, not declaration order', () => {
+    const members = getVersionMembers(subVariantFamily, {
+      series: 'gpt',
+      variant: 'standard',
+      versionLabel: '5.6',
+    });
+    expect(getVersionSubVariants(members).map((s) => s.key)).toEqual([
+      'sol',
+      'terra',
+      'luna',
+    ]);
+  });
+
+  it('puts unranked sub-variants last, in order of appearance', () => {
+    const ordered = getVersionSubVariants([
+      model('c', '1', { subVariant: 'c' }),
+      model('a', '1', { subVariant: 'a', subVariantRank: 1 }),
+      model('d', '1', { subVariant: 'd' }),
+    ]);
+    expect(ordered.map((s) => s.key)).toEqual(['a', 'c', 'd']);
+  });
+});
+
+describe('getVariantVersionGroups', () => {
+  it('collapses a version that ships several models into ONE chip', () => {
+    const groups = getVariantVersionGroups(subVariantFamily, {
+      series: 'gpt',
+      variant: 'standard',
+    });
+    // Newest first, and 5.6 appears once rather than three times — the
+    // duplicate-chip collision this axis exists to prevent.
+    expect(groups.map((g) => g.key)).toEqual(['6', '5.6', '5.4']);
+    expect(groups[1].members.map((m) => m.id)).toEqual([
+      'sol',
+      'terra',
+      'luna',
+    ]);
+  });
+
+  it('leaves single-model versions as one-member groups', () => {
+    const groups = getVariantVersionGroups(family, {
+      series: 'gpt',
+      variant: 'mini',
+    });
+    expect(groups.map((g) => g.key)).toEqual(['5', '4.1']);
+    expect(groups.every((g) => g.members.length === 1)).toBe(true);
+  });
+});
+
+describe('pickVersionTarget', () => {
+  const members = getVersionMembers(subVariantFamily, {
+    series: 'gpt',
+    variant: 'standard',
+    versionLabel: '5.6',
+  });
+
+  it("keeps the user's sub-variant when the version offers it", () => {
+    expect(pickVersionTarget(members, 'luna')?.id).toBe('luna');
+  });
+
+  it("falls back to the version's representative when it does not", () => {
+    // No 'nano' sub-variant here, so the defaultRank member fronts it.
+    expect(pickVersionTarget(members, 'nano')?.id).toBe('sol');
+    expect(pickVersionTarget(members, undefined)?.id).toBe('sol');
+  });
+
+  it('skips a sub-variant the caller cannot select', () => {
+    const usable = (m: OpenAIModel) => m.id !== 'luna';
+    expect(pickVersionTarget(members, 'luna', usable)?.id).toBe('sol');
+  });
+
+  it('ignores the gate when NOTHING in the version qualifies', () => {
+    // The caller still needs a target to badge and render disabled.
+    expect(pickVersionTarget(members, 'luna', () => false)?.id).toBe('luna');
+  });
+});
+
+describe('pickVariantTarget across sub-variants', () => {
+  it('keeps version AND sub-variant when the target variant has both', () => {
+    const miniAtSameVersion = [
+      model('mini-5.6-sol', '5.6', {
+        variant: 'mini',
+        subVariant: 'sol',
+        subVariantRank: 1,
+      }),
+      model('mini-5.6-luna', '5.6', {
+        variant: 'mini',
+        subVariant: 'luna',
+        subVariantRank: 2,
+      }),
+    ];
+    expect(
+      pickVariantTarget(miniAtSameVersion, '5.6', undefined, 'luna')?.id,
+    ).toBe('mini-5.6-luna');
+  });
+
+  it('keeps the version when the sub-variant is not offered there', () => {
+    const miniAtSameVersion = [
+      model('mini-5.6', '5.6', { variant: 'mini' }),
+      model('mini-5.4', '5.4', { variant: 'mini' }),
+    ];
+    expect(
+      pickVariantTarget(miniAtSameVersion, '5.6', undefined, 'luna')?.id,
+    ).toBe('mini-5.6');
   });
 });

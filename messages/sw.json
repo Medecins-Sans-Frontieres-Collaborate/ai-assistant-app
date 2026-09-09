@@ -5519,5 +5519,74 @@
     "loading": "Inapakia…",
     "loadError": "Orodha ya wasimamizi wa kimataifa imeshindikana kupakiwa.",
     "retry": "Jaribu tena"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Kiwango kimefikiwa ({used}/{limit}). Kitarejeshwa {resets}.",
+      "exhaustedNoReset": "Kiwango kimefikiwa ({used}/{limit}).",
+      "familyExhausted": "Kiwango cha familia kimefikiwa ({used}/{limit}). Kitarejeshwa {resets}.",
+      "familyExhaustedNoReset": "Kiwango cha familia kimefikiwa ({used}/{limit}).",
+      "unavailable": "Haipatikani kwenye akaunti yako.",
+      "remaining": "{remaining} zimebaki",
+      "remainingTooltip": "{remaining} kati ya {limit} maombi zimebaki katika kipindi hiki.",
+      "agentModelUnavailable": "Inatumia {model}, ambayo haipatikani kwako.",
+      "agentModelExhausted": "Inatumia {model}, ambayo imefikia kikomo. Kitarejeshwa {resets}.",
+      "agentModelExhaustedNoReset": "Inatumia {model}, ambayo imefikia kikomo."
+    },
+    "denial": {
+      "modelBlocked": "Mfano huu haupatikani kwenye akaunti yako. Chagua mfano mwingine, au wasiliana na msimamizi wako.",
+      "modelExhausted": "Umetumia maombi yote {limit} kwa mfano huu leo.",
+      "familyExhausted": "Umetumia bajeti ya leo ya pamoja ya maombi {limit} kwa familia ya mfano huu.",
+      "searchBlocked": "Utafutaji wa wavuti umezimwa kwenye akaunti yako na msimamizi, na ujumbe huu ulikuwa umewashwa.",
+      "interpreterBlocked": "Kifasiri msimbo kimezimwa kwenye akaunti yako na msimamizi, na ujumbe huu ulikuwa kimewashwa.",
+      "mcpBlocked": "Viunganishi vimezimwa kwenye akaunti yako na msimamizi, na ujumbe huu ulikuwa na viunganishi vimewashwa. Vizime ili uendelee.",
+      "messagesCap": "Umefikia kikomo chako cha ujumbe {limit} kwa siku.",
+      "tokensDayCap": "Umefikia kikomo cha tokeni zako kwa siku hii.",
+      "tokensMonthCap": "Umefikia kikomo cha tokeni zako kwa mwezi huu.",
+      "perRequest": "Ombi hili ni kubwa kuliko inavyoruhusiwa kwenye akaunti yako (kiwango cha juu ni {limit} kwa ombi). Jaribu ombi dogo zaidi.",
+      "resets": "Kitarejeshwa {resets}.",
+      "chooseAnotherModel": "Chagua mfano mwingine",
+      "turnOffSearchAndResend": "Zima utafutaji wa wavuti na tuma tena",
+      "turnOffInterpreterAndResend": "Zima kifasiri msimbo na tuma tena",
+      "agentModelBlocked": "Ajanzi huyu anatumia modeli ambayo haipatikani kwenye akaunti yako. Ondoa ajanzi au chagua mwingine.",
+      "turnOffConnectorsAndResend": "Zima viunganishi na tuma tena"
+    },
+    "notice": {
+      "unavailable": "{model} haipatikani kwenye akaunti yako — chagua mfano mwingine ili uendelee.",
+      "exhausted": "{model} imefikia kikomo chake kwa leo.",
+      "familyExhausted": "{model} inashiriki bajeti na familia ya mfano huo, ambayo imetumika kwa leo.",
+      "resets": "Kitarejeshwa {resets}.",
+      "chooseModel": "Chagua mfano"
+    },
+    "gates": {
+      "blocked": "{feature} imezimwa kwenye akaunti yako na shirika lako.",
+      "features": {
+        "webSearch": "Utafutaji wa wavuti",
+        "codeInterpreter": "Kifasiri msimbo",
+        "connectors": "Viunganishi"
+      },
+      "remaining": "{count, plural, one {matumizi # yamebaki leo} other {matumizi # yamebaki leo}}",
+      "exhausted": "Kiwango cha kila siku kimefikiwa — mfano utajibu bila hii.",
+      "exhaustedResets": "Kiwango cha kila siku kimefikiwa — modeli itajibu bila hicho. Marudio {resets}."
+    },
+    "mine": {
+      "title": "Vikomo vyako",
+      "description": "Vikomo ambavyo shirika lako limeweka kwenye akaunti yako. Kaunta huanzishwa upya kiotomatiki mwishoni mwa kila kipindi.",
+      "notAvailable": "Haipatikani",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Kitarejeshwa {resets}",
+      "limitReached": "Kiwango kimefikiwa",
+      "familyLimitReached": "Kiwango cha familia ya mfano kimefikiwa",
+      "usageUnavailable": "Matumizi ya sasa yameshindwa kupakiwa — zinaonesha vikomo pekee.",
+      "familyRow": "Modeli za {family}"
+    },
+    "routes": {
+      "ttsExhausted": "Umefikia kikomo cha leo cha maandishi kwenda sauti.",
+      "translationExhausted": "Umefikia kikomo cha leo cha tafsiri ya hati.",
+      "resetsIn": "Kitarejeshwa {resets}.",
+      "uploadTooLarge": "{fileName} ni kubwa sana — faili kwenye akaunti yako lazima ziwe chini ya {maxSize}.",
+      "uploadCapHint": "Faili hadi {maxSize}"
+    }
   }
 }

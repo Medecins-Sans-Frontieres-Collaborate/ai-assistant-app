@@ -1,3 +1,5 @@
+import { LimitsPolicy, LimitsPolicySchema } from '@/lib/services/limits/types';
+
 import { GET } from '@/app/api/models/route';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -34,6 +36,37 @@ vi.mock('@/lib/services/auth/OfficeResolver', () => ({
   OfficeResolver: {
     getModelDiscoveryAccountsForUser: mockGetDiscoveryAccounts,
   },
+}));
+
+// Usage-limits policy snapshot (null = nothing authored → no filtering) and
+// the group-membership cache the principal is built from.
+const limitsState = vi.hoisted(() => ({
+  policy: null as unknown,
+  ensureFreshError: null as Error | null,
+  cachedGroupIds: [] as string[],
+}));
+vi.mock('@/lib/services/limits/LimitsService', () => ({
+  LimitsService: {
+    getInstance: () => ({
+      ensureFresh: async () => {
+        if (limitsState.ensureFreshError) throw limitsState.ensureFreshError;
+      },
+      getSnapshot: () => ({
+        policy: limitsState.policy,
+        policyUnavailable: false,
+        etag: null,
+        fetchedAt: 1,
+      }),
+    }),
+  },
+}));
+const mockResolveUserGroupIds = vi.hoisted(() =>
+  vi.fn(async () => [] as string[]),
+);
+vi.mock('@/lib/services/m365/groupMembership', () => ({
+  resolveUserGroupIds: mockResolveUserGroupIds,
+  getCachedGroupIdsForUser: () => limitsState.cachedGroupIds,
+  isGroupMembershipDegradedForUser: () => false,
 }));
 
 const mockIsModelDisabled = vi.hoisted(() => vi.fn((_id: string) => false));
@@ -99,6 +132,9 @@ async function body(res: Awaited<ReturnType<typeof GET>>) {
 }
 
 beforeEach(() => {
+  limitsState.policy = null;
+  limitsState.ensureFreshError = null;
+  limitsState.cachedGroupIds = [];
   mockEnv.SHOW_MODELS_WITHOUT_METADATA = false;
   mockAuth.mockResolvedValue({
     user: { id: 'user-123', mail: 'eu.user@msf.org' },
@@ -287,5 +323,138 @@ describe('GET /api/models', () => {
     expect(logged).toContain('user-123');
     expect(logged).not.toContain('eu.user@msf.org');
     warnSpy.mockRestore();
+  });
+
+  /**
+   * Per-user limit filtering (docs/LIMITS_USER_FACING_UX.md §7.2): the
+   * picker must agree with the send. Conjunctive cells, groups warmed first,
+   * hide only in enforce, fail open everywhere.
+   */
+  describe('usage-limit filtering', () => {
+    function policyWith(
+      defaults: Array<{
+        limitKey: string;
+        modelId?: string;
+        series?: string;
+        value: boolean | number | null;
+      }>,
+      extra: Partial<LimitsPolicy> = {},
+    ): LimitsPolicy {
+      return LimitsPolicySchema.parse({
+        version: 1,
+        defaults,
+        overrides: [],
+        mode: 'enforce',
+        updatedBy: 'admin',
+        updatedAt: '2026-01-01T00:00:00.000Z',
+        ...extra,
+      });
+    }
+
+    beforeEach(() => {
+      // gpt-5.2 (Foundational) and o3/o4-mini (o-series) are all variants
+      // of the ONE consolidated `gpt` family, so a family block must reach
+      // across variants; claude-sonnet-5 is the other-family control.
+      mockListDeployedModels.mockResolvedValue([
+        deployed('gpt-5.2', 'OpenAI'),
+        deployed('o3', 'OpenAI'),
+        deployed('o4-mini', 'OpenAI'),
+        deployed('claude-sonnet-5', 'Anthropic'),
+      ]);
+    });
+
+    it('a family block hides every member in enforce mode', async () => {
+      limitsState.policy = policyWith([
+        { limitKey: 'model.allowed', series: 'gpt', value: false },
+      ]);
+      const { data } = await body(await GET(req()));
+      expect(data.models.map((m) => m.id).sort()).toEqual(['claude-sonnet-5']);
+    });
+
+    it('a model-level allow does NOT rescue a family block (conjunctive, like the send)', async () => {
+      limitsState.policy = policyWith([
+        { limitKey: 'model.allowed', series: 'gpt', value: false },
+        { limitKey: 'model.allowed', modelId: 'o3', value: true },
+      ]);
+      const { data } = await body(await GET(req()));
+      expect(data.models.map((m) => m.id)).not.toContain('o3');
+    });
+
+    it('hides NOTHING in observe mode — the send is allowed, so the list is unfiltered', async () => {
+      limitsState.policy = policyWith(
+        [{ limitKey: 'model.allowed', series: 'gpt', value: false }],
+        { mode: 'observe' },
+      );
+      const { data } = await body(await GET(req()));
+      expect(data.models.map((m) => m.id).sort()).toEqual([
+        'claude-sonnet-5',
+        'gpt-5.2',
+        'o3',
+        'o4-mini',
+      ]);
+      // Observe mode never needs the principal at all.
+      expect(mockResolveUserGroupIds).not.toHaveBeenCalled();
+    });
+
+    it('warms the group cache BEFORE building the principal, so a group-targeted block hides', async () => {
+      limitsState.policy = policyWith([], {
+        overrides: [
+          {
+            id: 'lim-0000000000a1',
+            label: '',
+            enabled: true,
+            scope: 'group',
+            targets: ['g-restricted'],
+            priority: 0,
+            entries: [
+              { limitKey: 'model.allowed', modelId: 'o3', value: false },
+            ],
+            createdBy: 'admin',
+            createdAt: '2026-01-01T00:00:00.000Z',
+            updatedBy: 'admin',
+            updatedAt: '2026-01-01T00:00:00.000Z',
+          },
+        ],
+      });
+      // Cold cache: membership is only known once the warm-up has run.
+      mockResolveUserGroupIds.mockImplementation(async () => {
+        limitsState.cachedGroupIds = ['g-restricted'];
+        return ['g-restricted'];
+      });
+      const { data } = await body(await GET(req()));
+      expect(mockResolveUserGroupIds).toHaveBeenCalledTimes(1);
+      expect(data.models.map((m) => m.id).sort()).toEqual([
+        'claude-sonnet-5',
+        'gpt-5.2',
+        'o4-mini',
+      ]);
+    });
+
+    it('filters the static fallback branch too', async () => {
+      limitsState.policy = policyWith([
+        { limitKey: 'model.allowed', modelId: 'gpt-5.2', value: false },
+      ]);
+      mockListDeployedModels.mockRejectedValue(new Error('ARM 403'));
+      const { data } = await body(await GET(req()));
+      expect(data.source).toBe('fallback');
+      expect(data.models.map((m) => m.id)).not.toContain('gpt-5.2');
+      expect(data.models.map((m) => m.id)).toContain('o3');
+    });
+
+    it('fails open when the policy cannot be resolved', async () => {
+      limitsState.policy = policyWith([
+        { limitKey: 'model.allowed', series: 'gpt', value: false },
+      ]);
+      limitsState.ensureFreshError = new Error('blob down');
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const { data } = await body(await GET(req()));
+      errorSpy.mockRestore();
+      expect(data.models.map((m) => m.id).sort()).toEqual([
+        'claude-sonnet-5',
+        'gpt-5.2',
+        'o3',
+        'o4-mini',
+      ]);
+    });
   });
 });

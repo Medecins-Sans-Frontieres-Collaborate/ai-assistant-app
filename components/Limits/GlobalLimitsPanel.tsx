@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
+import { notifyLimitsChanged } from '@/client/hooks/settings/limitsUxEvents';
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 import {
   PolicyPutBody,
@@ -248,6 +249,14 @@ export const GlobalLimitsPanel: FC = () => {
       // against the SAVED policy; stale results must not outlive the save.
       await queryClient.invalidateQueries({ queryKey: ['limits-preview'] });
       await queryClient.invalidateQueries({ queryKey: ['limits-scoped'] });
+      // Every SIGNED-IN USER's picker and own-limits view are stale too —
+      // this is the §1b scenario the whole feature was built to fix: an
+      // admin blocks a model, saves, and a user's already-open tab must stop
+      // offering it without waiting out the 30-60s staleTime
+      // (docs/LIMITS_USER_FACING_UX.md §7.3/§8.2). Scoped upserts/deletes
+      // already do this via useLimitsAdmin.ts; the global PUT lives in this
+      // file instead and was the one save path that never fired it.
+      notifyLimitsChanged();
       await reload();
     } catch {
       toast.error(t('saveFailed'));

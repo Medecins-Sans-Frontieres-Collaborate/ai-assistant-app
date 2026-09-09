@@ -5503,5 +5503,74 @@
     "loading": "Naatani…",
     "loadError": "Listi admin global waawaa naatude.",
     "retry": "Fuɗɗi"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Teel toowti ({used}/{limit}). Ina haɗɗi {resets}.",
+      "exhaustedNoReset": "Teel toowti ({used}/{limit}).",
+      "familyExhausted": "Teel e mumtugol yimɓe toowti ({used}/{limit}). Ina haɗɗi {resets}.",
+      "familyExhaustedNoReset": "Teel e mumtugol yimɓe toowti ({used}/{limit}).",
+      "unavailable": "A alaa e ko ceertu maa.",
+      "remaining": "Ko {remaining} jooɗi",
+      "remainingTooltip": "Ko {remaining} e {limit} wawata jooɗi he leydi maa.",
+      "agentModelUnavailable": "Ina huutora {model}, ko mo woodani e ceertu maa.",
+      "agentModelExhausted": "Ina huutora {model}, teel makko toowti. Ina haɗɗi {resets}.",
+      "agentModelExhaustedNoReset": "Ina huutora {model}, teel makko toowti."
+    },
+    "denial": {
+      "modelBlocked": "Model ɗin alaa e ceertu maa. Suɓo model goɗɗo walla hollu to admin maa.",
+      "modelExhausted": "A waɗii {limit} wawata ɗen model ɗin no nden.",
+      "familyExhausted": "A wartii buje mumtugol yimɓe model ɗin, {limit} wawata no nden.",
+      "searchBlocked": "Binndi web search woppaani e ceertu maa, admin maa mo ndaaranii, e binndi ɗin ena woppude.",
+      "interpreterBlocked": "Code interpreter woppaani e ceertu maa, admin maa mo ndaaranii, e binndi ɗin ena woppude.",
+      "mcpBlocked": "Connectors woppaani e ceertu maa, admin maa mo ndaaranii, e binndi ɗin connectors ɗin woppude. Woppi ɗen to nder yamiroo.",
+      "messagesCap": "A toowti teel maa {limit} binndi e ñalngu.",
+      "tokensDayCap": "A toowti teel token maa e ñalngu.",
+      "tokensMonthCap": "A toowti teel token maa e lewru ndin.",
+      "perRequest": "Binndi maa jaarani mo wawataa ceertu maa (winnda {limit} e binndi). Huutori binndi weeyo.",
+      "resets": "Ina haɗɗi {resets}.",
+      "chooseAnotherModel": "Suɓo model goɗɗo",
+      "turnOffSearchAndResend": "Woppi web search tee yamiroo",
+      "turnOffInterpreterAndResend": "Woppi code interpreter tee yamiroo",
+      "agentModelBlocked": "Jeyal ngal hono model mo waawaa use e konto maa. Hakkil e agent ngol walla suubii agent dow.",
+      "turnOffConnectorsAndResend": "Sunu connectors ɗe tee yottu."
+    },
+    "notice": {
+      "unavailable": "{model} alaa e ceertu maa — suɓo model goɗɗo tee yamiroo.",
+      "exhausted": "{model} toowti teel mum e ñalngu.",
+      "familyExhausted": "{model} hakkilana buje mumtugol yimɓe makko, baajo ɗin toowti e ñalngu.",
+      "resets": "Ina haɗɗi {resets}.",
+      "chooseModel": "Suɓo model"
+    },
+    "gates": {
+      "blocked": "{feature} woppaani e ceertu maa ko e mumtugol jamma maa.",
+      "features": {
+        "webSearch": "Web search",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {Tee # waawi yamira e ñalngu} other {Tee # waawi yamira e ñalngu}}",
+      "exhausted": "Teel e ñalngu toowti — model ɗin ena yamira ha mo woppi.",
+      "exhaustedResets": "Sariiji ñaawma — model ngal maa jooɗii anndu. Reset {resets}."
+    },
+    "mine": {
+      "title": "Teel maa",
+      "description": "Teel jamma maa waɗanii e ceertu maa. Kadanji toowtirii kadi e leydi kala.",
+      "notAvailable": "A alaa",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Ina haɗɗi {resets}",
+      "limitReached": "Teel toowti",
+      "familyLimitReached": "Teel e mumtugol yimɓe model toowti",
+      "usageUnavailable": "Condii junnii waawanii nelda — wondidi teel tan.",
+      "familyRow": "Model ɗe {family}"
+    },
+    "routes": {
+      "ttsExhausted": "A toowti teel Text-to-Speech maa e ñalngu.",
+      "translationExhausted": "A toowti teel lenyol binndi maa e ñalngu.",
+      "resetsIn": "Ina haɗɗi {resets}.",
+      "uploadTooLarge": "{fileName} tuubi baɗi — pilaaji e ceertu maa foti mbaɗi ko lees {maxSize}.",
+      "uploadCapHint": "Pilaaji e les {maxSize}"
+    }
   }
 }

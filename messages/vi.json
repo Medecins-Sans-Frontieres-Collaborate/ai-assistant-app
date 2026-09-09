@@ -5550,5 +5550,74 @@
     "loading": "Đang tải…",
     "loadError": "Không thể tải danh sách quản trị viên toàn cục.",
     "retry": "Thử lại"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Đã đạt giới hạn ({used}/{limit}). Sẽ đặt lại vào {resets}.",
+      "exhaustedNoReset": "Đã đạt giới hạn ({used}/{limit}).",
+      "familyExhausted": "Đã đạt giới hạn nhóm ({used}/{limit}). Sẽ đặt lại vào {resets}.",
+      "familyExhaustedNoReset": "Đã đạt giới hạn nhóm ({used}/{limit}).",
+      "unavailable": "Không khả dụng trên tài khoản của bạn.",
+      "remaining": "Còn lại {remaining}",
+      "remainingTooltip": "Còn {remaining} trong tổng số {limit} lượt yêu cầu cho kỳ này.",
+      "agentModelUnavailable": "Sử dụng {model}, hiện không khả dụng cho bạn.",
+      "agentModelExhausted": "Sử dụng {model}, đã đạt giới hạn. Sẽ đặt lại vào {resets}.",
+      "agentModelExhaustedNoReset": "Sử dụng {model}, đã đạt giới hạn."
+    },
+    "denial": {
+      "modelBlocked": "Mô hình này không khả dụng trên tài khoản của bạn. Vui lòng chọn mô hình khác hoặc liên hệ quản trị viên.",
+      "modelExhausted": "Bạn đã dùng hết {limit} lượt yêu cầu cho mô hình này hôm nay.",
+      "familyExhausted": "Bạn đã dùng hết ngân sách chia sẻ {limit} lượt yêu cầu cho nhóm mô hình này hôm nay.",
+      "searchBlocked": "Tìm kiếm web đã bị quản trị viên tắt trên tài khoản của bạn, trong khi tin nhắn này cần bật tính năng đó.",
+      "interpreterBlocked": "Trình thông dịch mã đã bị quản trị viên tắt trên tài khoản của bạn, trong khi tin nhắn này cần bật tính năng đó.",
+      "mcpBlocked": "Connectors đã bị quản trị viên tắt trên tài khoản của bạn, trong khi tin nhắn này cần bật connectors. Vui lòng tắt để tiếp tục.",
+      "messagesCap": "Bạn đã đạt giới hạn {limit} tin nhắn hôm nay.",
+      "tokensDayCap": "Bạn đã đạt giới hạn token trong ngày.",
+      "tokensMonthCap": "Bạn đã đạt giới hạn token trong tháng này.",
+      "perRequest": "Lượt yêu cầu này vượt quá giới hạn tài khoản (tối đa {limit} mỗi lượt). Vui lòng thử với lượt nhỏ hơn.",
+      "resets": "Sẽ đặt lại vào {resets}.",
+      "chooseAnotherModel": "Chọn mô hình khác",
+      "turnOffSearchAndResend": "Tắt tìm kiếm web và gửi lại",
+      "turnOffInterpreterAndResend": "Tắt trình thông dịch mã và gửi lại",
+      "agentModelBlocked": "Tác nhân này sử dụng một mô hình không có sẵn cho tài khoản của bạn. Hãy tách tác nhân này hoặc chọn tác nhân khác.",
+      "turnOffConnectorsAndResend": "Tắt các connector và gửi lại"
+    },
+    "notice": {
+      "unavailable": "{model} không khả dụng trên tài khoản của bạn — vui lòng chọn mô hình khác để tiếp tục.",
+      "exhausted": "{model} đã đạt giới hạn hôm nay.",
+      "familyExhausted": "{model} đang dùng chung ngân sách với nhóm mô hình và đã hết cho hôm nay.",
+      "resets": "Sẽ đặt lại vào {resets}.",
+      "chooseModel": "Chọn mô hình"
+    },
+    "gates": {
+      "blocked": "{feature} đã bị tổ chức của bạn tắt trên tài khoản.",
+      "features": {
+        "webSearch": "Tìm kiếm web",
+        "codeInterpreter": "Trình thông dịch mã",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {Còn # lượt hôm nay} other {Còn # lượt hôm nay}}",
+      "exhausted": "Đã đạt giới hạn trong ngày — mô hình sẽ trả lời mà không dùng tính năng này.",
+      "exhaustedResets": "Đã đạt giới hạn hàng ngày — mô hình sẽ trả lời mà không cần đến nó. Đặt lại {resets} lần."
+    },
+    "mine": {
+      "title": "Giới hạn của bạn",
+      "description": "Giới hạn do tổ chức thiết lập cho tài khoản của bạn. Bộ đếm sẽ tự động đặt lại sau mỗi kỳ.",
+      "notAvailable": "Không khả dụng",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Sẽ đặt lại vào {resets}",
+      "limitReached": "Đã đạt giới hạn",
+      "familyLimitReached": "Đã đạt giới hạn nhóm mô hình",
+      "usageUnavailable": "Không thể tải dữ liệu sử dụng hiện tại — chỉ hiển thị giới hạn.",
+      "familyRow": "Các mô hình {family}"
+    },
+    "routes": {
+      "ttsExhausted": "Bạn đã đạt giới hạn chuyển văn bản thành giọng nói hôm nay.",
+      "translationExhausted": "Bạn đã đạt giới hạn dịch tài liệu hôm nay.",
+      "resetsIn": "Sẽ đặt lại vào {resets}.",
+      "uploadTooLarge": "{fileName} quá lớn — Tệp trên tài khoản phải dưới {maxSize}.",
+      "uploadCapHint": "Tệp tối đa {maxSize}"
+    }
   }
 }

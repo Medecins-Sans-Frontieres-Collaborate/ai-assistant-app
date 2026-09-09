@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
@@ -42,18 +43,35 @@ vi.mock('@/client/hooks/useM365Enabled', () => ({
 
 vi.mock('@/lib/services/translation', () => ({ translateText: vi.fn() }));
 
+// The TTS budget gate reads React Query via `useLimitGates`/`useQueryClient`;
+// this test isn't about limits, so fail open the way the real hook does
+// without data. `useLimitGates` itself is mocked, but `AssistantMessage`
+// also calls the real `useQueryClient()` (only to invalidate on countdown
+// expiry), so a real `QueryClientProvider` still has to wrap the tree below.
+vi.mock('@/client/hooks/settings/useMyLimits', () => ({
+  useLimitGates: () => ({
+    isFeatureBlocked: () => false,
+    featureRemaining: () => undefined,
+    enforce: false,
+  }),
+  useResetCountdown: () => null,
+}));
+
 // The exact shape issue #121 reports: a model that never saw the KaTeX rules
 // (an agent whose prompt replaced the base prompt) emits \[ ... \].
 const RAW = 'Area \\[ \\pi r^2 \\] grows.';
 
 function renderMessage(messageIsStreaming: boolean) {
+  const queryClient = new QueryClient();
   return render(
-    <AssistantMessage
-      content={RAW}
-      messageIsStreaming={messageIsStreaming}
-      messageIndex={0}
-      selectedConversation={null}
-    />,
+    <QueryClientProvider client={queryClient}>
+      <AssistantMessage
+        content={RAW}
+        messageIsStreaming={messageIsStreaming}
+        messageIndex={0}
+        selectedConversation={null}
+      />
+    </QueryClientProvider>,
   );
 }
 

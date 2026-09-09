@@ -5503,5 +5503,74 @@
     "loading": "N ṣàkọsílẹ…",
     "loadError": "A ko le gbasilẹ àkójọ olùṣàkóso àgbáyé.",
     "retry": "Tun gbiyanju"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Iwọn to peye ti de ({used}/{limit}). Yóò tún bọ́ {resets}.",
+      "exhaustedNoReset": "Iwọn to peye ti de ({used}/{limit}).",
+      "familyExhausted": "Iwọn idile to peye ti de ({used}/{limit}). Yóò tún bọ́ {resets}.",
+      "familyExhaustedNoReset": "Iwọn idile to peye ti de ({used}/{limit}).",
+      "unavailable": "Kò sí lórí àkọọlẹ rẹ.",
+      "remaining": "{remaining} tó kù",
+      "remainingTooltip": "{remaining} ninu {limit} ìbéèrè tó kù ní àkókò yìí.",
+      "agentModelUnavailable": "Lo {model}, tí kò wà fún ọ.",
+      "agentModelExhausted": "Lo {model}, tí iwọn rẹ ti péye. Yóò tún bọ́ {resets}.",
+      "agentModelExhaustedNoReset": "Lo {model}, tí iwọn rẹ ti péye."
+    },
+    "denial": {
+      "modelBlocked": "Àmọ̀ọ́dẹ̀ yìí kò sí lórí àkọọlẹ rẹ. Jọ̀wọ́ yàn àmọ̀ọ́dẹ̀ mìíràn tàbí bá alábòójútó rẹ sọ.",
+      "modelExhausted": "O ti lo gbogbo {limit} ìbéèrè fún àmọ̀ọ́dẹ̀ yìí lónìí.",
+      "familyExhausted": "O ti lo ìjẹwọ́ pín tí ọjọ́ yìí fún idile àmọ̀ọ́dẹ̀ yìí tó jẹ {limit} ìbéèrè.",
+      "searchBlocked": "Alábòójútó ti pa ìwádìí wẹ́bù fún àkọọlẹ rẹ, ṣùgbọ́n ifiranṣẹ yi ní ìwádìí wẹ́bù mu.",
+      "interpreterBlocked": "Alábòójútó ti pa gírámà ìtumọ̀ kóòdù fún àkọọlẹ rẹ, ṣùgbọ́n ifiranṣẹ yi ní gírámà ìtumọ̀ kóòdù mu.",
+      "mcpBlocked": "Alábòójútó ti pa connectors fún àkọọlẹ rẹ, ṣùgbọ́n ifiranṣẹ yi ní connectors mu. Pa connectors kí o lè tẹ̀síwájú.",
+      "messagesCap": "O ti dé opin ifiranṣẹ rẹ tó jẹ {limit} lónìí.",
+      "tokensDayCap": "O ti dé opin àmi (token) rẹ fún ọjọ́ yìí.",
+      "tokensMonthCap": "O ti dé opin àmi (token) rẹ fún oṣù yìí.",
+      "perRequest": "Ìbéèrè yìí pọ̀ ju ohun tí àkọọlẹ rẹ gba lọ (púpọ̀ jù {limit} sí ìbéèrè kan). Gbìyànjú kékeré ju bẹ́ẹ lọ.",
+      "resets": "Yóò tún bọ́ {resets}.",
+      "chooseAnotherModel": "Yàn àmọ̀ọ́dẹ̀ míì",
+      "turnOffSearchAndResend": "Pa ìwádìí wẹ́bù kí o tún rán",
+      "turnOffInterpreterAndResend": "Pa gírámà ìtumọ̀ kóòdù kí o tún rán",
+      "agentModelBlocked": "Ageni yi nlo awoṣe kan ti ko si lori àkọọlẹ rẹ. Ya ageni kuro tabi yan omiiran.",
+      "turnOffConnectorsAndResend": "Pa awọn asopọ rẹ ki o tun fi ranṣẹ"
+    },
+    "notice": {
+      "unavailable": "{model} kò sí lórí àkọọlẹ rẹ — yàn àmọ̀ọ́dẹ̀ míì láti tẹ̀síwájú.",
+      "exhausted": "{model} ti dé opin rẹ fún ọjọ́ yìí.",
+      "familyExhausted": "{model} ní ìjọpo pín pẹ̀lú idile àmọ̀ọ́dẹ̀ rẹ, tí a ti lo tán lónìí.",
+      "resets": "Yóò tún bọ́ {resets}.",
+      "chooseModel": "Yàn àmọ̀ọ́dẹ̀"
+    },
+    "gates": {
+      "blocked": "{feature} ti wa ni pipa lórí àkọọlẹ rẹ ní agbari yín.",
+      "features": {
+        "webSearch": "Ìwádìí wẹ́bù",
+        "codeInterpreter": "Gírámà ìtumọ̀ kóòdù",
+        "connectors": "Connectors"
+      },
+      "remaining": "{count, plural, one {Ìlò kan ṣoṣo tó kù lónìí} other {# ìlò tó kù lónìí}}",
+      "exhausted": "Ìwọn ojoojúmọ dé—àmọ̀ọ́dẹ̀ yóò dáhùn láì lò ó.",
+      "exhaustedResets": "Ìlà ójò ojoojúmọ́ ti pé — awoṣe naa yoo dáhùn láìlo. Tupọ {resets}."
+    },
+    "mine": {
+      "title": "Àwọn opin rẹ",
+      "description": "Ìwọn tí agbari rẹ ti ṣètò fún àkọọlẹ rẹ. Ìka-ìsọ̀di yìí máa tún bọ láìsí iṣẹ́ ní ìparí àkókò kọọkan.",
+      "notAvailable": "Kò sí",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Yóò tún bọ́ {resets}",
+      "limitReached": "Ìwọn to peye ti dé",
+      "familyLimitReached": "Ìwọn idile àmọ̀ọ́dẹ̀ ti dé",
+      "usageUnavailable": "A kó le kó ìlò to wa lónìí — fífihàn àjọpo opin nìkan.",
+      "familyRow": "Àwọ̀ṣe {family}"
+    },
+    "routes": {
+      "ttsExhausted": "O ti dé opin ìlò ọrọ sí ohùn lónìí.",
+      "translationExhausted": "O ti dé opin ìtumọ̀ àwùjọ lónìí.",
+      "resetsIn": "Yóò tún bọ́ {resets}.",
+      "uploadTooLarge": "{fileName} pọ̀ ju — àwòrán lórí àkọọlẹ rẹ gbọ́dọ̀ kere ju {maxSize}.",
+      "uploadCapHint": "Àwòrán tó peye sí {maxSize}"
+    }
   }
 }

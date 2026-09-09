@@ -6,7 +6,15 @@ import {
   IconStarFilled,
   IconTrash,
 } from '@tabler/icons-react';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
+
+import { ModelAvailabilityView } from '@/client/hooks/settings/useMyLimits';
+
+import {
+  LowRemainingPill,
+  ModelLimitBadge,
+  useModelLimitCopy,
+} from './ModelSelect/ModelLimitBadge';
 
 interface ModelCardProps {
   id: string;
@@ -37,6 +45,23 @@ interface ModelCardProps {
   onToggleStar?: () => void;
   /** Accessible label for the star toggle in its current state. */
   starLabel?: string;
+  /**
+   * The caller's usage-limit verdict for this model. Anything but
+   * `available` renders the row dimmed and `aria-disabled` with a clock
+   * badge; a click then only reveals the explanation (inline, so touch
+   * users get it too) and never fires `onClick`. Omitted = today's row.
+   */
+  limit?: ModelAvailabilityView;
+  /** Fired when the limit's reset time passes while the row is mounted. */
+  onLimitExpired?: () => void;
+  /**
+   * Fired (in addition to the inline note toggle) when a limited row is
+   * tapped. `ModelSelect` wires this to open the mobile details view for a
+   * row fronting the CURRENT model — the family's Version/Variant switchers
+   * live there and are otherwise unreachable on mobile once the row itself
+   * is grayed (docs/LIMITS_USER_FACING_UX.md §7.4).
+   */
+  onLimitedTap?: () => void;
 }
 
 /**
@@ -61,7 +86,17 @@ export const ModelCard: FC<ModelCardProps> = ({
   starred = false,
   onToggleStar,
   starLabel,
+  limit,
+  onLimitExpired,
+  onLimitedTap,
 }) => {
+  const limitView: ModelAvailabilityView = limit ?? { state: 'available' };
+  const isLimited = limitView.state !== 'available';
+  const limitCopy = useModelLimitCopy(limitView, { onExpired: onLimitExpired });
+  // Touch has no hover, so the first tap on a grayed row prints the tooltip
+  // text under the name; a second tap folds it away again.
+  const [showLimitNote, setShowLimitNote] = useState(false);
+
   return (
     <div
       key={id}
@@ -72,6 +107,7 @@ export const ModelCard: FC<ModelCardProps> = ({
             ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
             : 'bg-white dark:bg-surface-dark border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
         }
+        ${isLimited ? 'opacity-60' : ''}
       `}
     >
       {/* Reorder controls */}
@@ -112,11 +148,24 @@ export const ModelCard: FC<ModelCardProps> = ({
         </div>
       )}
 
-      {/* Main clickable area */}
+      {/* Main clickable area. A limited row keeps a real button (it stays
+          focusable and readable) but is aria-disabled: the click reveals
+          the reason instead of selecting. */}
       <button
         type="button"
-        onClick={onClick}
-        className="flex-1 flex items-center justify-between text-left min-h-[40px] gap-2"
+        onClick={
+          isLimited
+            ? () => {
+                setShowLimitNote((v) => !v);
+                onLimitedTap?.();
+              }
+            : onClick
+        }
+        aria-disabled={isLimited || undefined}
+        title={isLimited ? (limitCopy ?? undefined) : undefined}
+        className={`flex-1 flex items-center justify-between text-left min-h-[40px] gap-2 ${
+          isLimited ? 'cursor-not-allowed' : ''
+        }`}
       >
         <div className="flex items-center gap-2 min-w-0">
           {icon}
@@ -126,10 +175,23 @@ export const ModelCard: FC<ModelCardProps> = ({
                 {name}
               </span>
               {badge}
+              {/* onExpired lives on the copy hook above, not here — two
+                  countdowns would refetch twice per boundary. */}
+              <ModelLimitBadge view={limitView} />
+              <LowRemainingPill view={limitView} />
             </div>
             {tagline && (
               <span className="text-xs text-gray-500 dark:text-gray-400 truncate">
                 {tagline}
+              </span>
+            )}
+            {isLimited && showLimitNote && limitCopy && (
+              <span
+                role="note"
+                data-testid="model-limit-note"
+                className="text-xs text-amber-700 dark:text-amber-400"
+              >
+                {limitCopy}
               </span>
             )}
           </div>

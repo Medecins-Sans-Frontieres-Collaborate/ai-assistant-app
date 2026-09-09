@@ -5519,5 +5519,74 @@
     "loading": "Chargement…",
     "loadError": "La liste des admins globaux n’a pas pu être chargée.",
     "retry": "Réessayer"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "Limite atteinte ({used}/{limit}). Réinitialisation {resets}.",
+      "exhaustedNoReset": "Limite atteinte ({used}/{limit}).",
+      "familyExhausted": "Limite de la famille atteinte ({used}/{limit}). Réinitialisation {resets}.",
+      "familyExhaustedNoReset": "Limite de la famille atteinte ({used}/{limit}).",
+      "unavailable": "Non disponible pour votre compte.",
+      "remaining": "{remaining} restant(s)",
+      "remainingTooltip": "{remaining} sur {limit} requêtes restantes pour cette période.",
+      "agentModelUnavailable": "Utilise {model}, qui n'est pas disponible pour vous.",
+      "agentModelExhausted": "Utilise {model}, dont la limite est atteinte. Réinitialisation {resets}.",
+      "agentModelExhaustedNoReset": "Utilise {model}, dont la limite est atteinte."
+    },
+    "denial": {
+      "modelBlocked": "Ce modèle n'est pas disponible sur votre compte. Choisissez un autre modèle ou contactez votre administrateur.",
+      "modelExhausted": "Vous avez utilisé les {limit} requêtes pour ce modèle aujourd'hui.",
+      "familyExhausted": "Vous avez utilisé le budget partagé de {limit} requêtes pour cette famille de modèles aujourd'hui.",
+      "searchBlocked": "La recherche web est désactivée sur votre compte par un administrateur, alors que ce message l'exigeait.",
+      "interpreterBlocked": "L'interpréteur de code est désactivé sur votre compte par un administrateur, alors que ce message l'exigeait.",
+      "mcpBlocked": "Les connecteurs sont désactivés sur votre compte par un administrateur, alors que ce message nécessitait l’activation des connecteurs. Veuillez les désactiver pour continuer.",
+      "messagesCap": "Vous avez atteint votre limite de {limit} messages aujourd'hui.",
+      "tokensDayCap": "Vous avez atteint votre limite de jetons pour aujourd'hui.",
+      "tokensMonthCap": "Vous avez atteint votre limite de jetons pour ce mois.",
+      "perRequest": "Cette requête est plus grande que ce que votre compte autorise (maximum {limit} par requête). Essayez-en une plus petite.",
+      "resets": "Réinitialisation {resets}.",
+      "chooseAnotherModel": "Choisissez un autre modèle",
+      "turnOffSearchAndResend": "Désactiver la recherche web et renvoyer",
+      "turnOffInterpreterAndResend": "Désactiver l'interpréteur de code et renvoyer",
+      "agentModelBlocked": "Cet agent utilise un modèle qui n'est pas disponible sur votre compte. Détachez l'agent ou choisissez-en un autre.",
+      "turnOffConnectorsAndResend": "Désactivez les connecteurs et renvoyez"
+    },
+    "notice": {
+      "unavailable": "{model} n'est pas disponible sur votre compte — choisissez un autre modèle pour continuer.",
+      "exhausted": "{model} a atteint sa limite pour aujourd'hui.",
+      "familyExhausted": "{model} partage un budget avec sa famille de modèles, qui a été entièrement utilisé aujourd'hui.",
+      "resets": "Réinitialisation {resets}.",
+      "chooseModel": "Choisir un modèle"
+    },
+    "gates": {
+      "blocked": "{feature} est désactivé pour votre compte par votre organisation.",
+      "features": {
+        "webSearch": "Recherche web",
+        "codeInterpreter": "Interpréteur de code",
+        "connectors": "Connecteurs"
+      },
+      "remaining": "{count, plural, one {# utilisation restante aujourd’hui} other {# utilisations restantes aujourd’hui}}",
+      "exhausted": "Limite quotidienne atteinte — le modèle répondra sans cette fonctionnalité.",
+      "exhaustedResets": "Limite quotidienne atteinte — le modèle répondra sans cela. Réinitialisations {resets}."
+    },
+    "mine": {
+      "title": "Vos limites",
+      "description": "Limites définies par votre organisation pour votre compte. Les compteurs sont réinitialisés automatiquement à la fin de chaque période.",
+      "notAvailable": "Non disponible",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "Réinitialisation {resets}",
+      "limitReached": "Limite atteinte",
+      "familyLimitReached": "Limite de la famille de modèles atteinte",
+      "usageUnavailable": "L’utilisation actuelle n’a pas pu être chargée — seules les limites sont affichées.",
+      "familyRow": "Modèles {family}"
+    },
+    "routes": {
+      "ttsExhausted": "Vous avez atteint la limite quotidienne de synthèse vocale.",
+      "translationExhausted": "Vous avez atteint la limite quotidienne de traduction de documents.",
+      "resetsIn": "Réinitialisation {resets}.",
+      "uploadTooLarge": "{fileName} est trop volumineux — les fichiers de votre compte doivent faire moins de {maxSize}.",
+      "uploadCapHint": "Fichiers jusqu’à {maxSize}"
+    }
   }
 }

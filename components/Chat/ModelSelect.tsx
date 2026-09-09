@@ -58,6 +58,7 @@ import {
 import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
 import { ModelStatusBadge } from './ModelSelect/ModelStatusBadge';
+import { useModelAvailabilityMap } from './ModelSelect/modelLimits';
 import { SHOW_RECOMMENDED_TAG } from './ModelSelect/showRecommendedTag';
 import { ModelSourceForm } from './ModelSources/ModelSourceForm';
 
@@ -108,6 +109,14 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
   const { models, defaultModelId, setDefaultModelId } = useSettings();
+  // The caller's per-model usage-limit verdicts (one subscription for the
+  // whole list). Everything reads `available` unless the policy is enforced
+  // and readable, so the picker is byte-for-byte today's UI otherwise.
+  const {
+    lookup: limitFor,
+    isSelectable: isNotExhausted,
+    refetch: refetchLimits,
+  } = useModelAvailabilityMap();
 
   // Feature flag: Control organization bots visibility via LaunchDarkly
   // Default to true if LaunchDarkly is not configured (for local development)
@@ -564,7 +573,19 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   ]);
 
   const handleModelSelect = useCallback(
-    (model: OpenAIModel) => {
+    (
+      model: OpenAIModel,
+      opts?: {
+        /**
+         * The click reached this model only by routing around another
+         * family member's usage cap (a family row fronting a usable
+         * sibling instead of its spent natural default) — the cap is
+         * transient, so it must not permanently overwrite the user's
+         * persisted default model. See renderModelCard/naturalRep.
+         */
+        skipDefaultUpdate?: boolean;
+      },
+    ) => {
       if (!selectedConversation) {
         console.warn(
           '[ModelSelect] No conversation selected, cannot update model',
@@ -576,6 +597,18 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       if (!availableModels.find((m) => m.id === model.id)) {
         console.error(
           '[ModelSelect] Selected model not found in available models:',
+          model.id,
+        );
+        return;
+      }
+
+      // A model the server would refuse right now (cap used up) is never
+      // put on the conversation or made the default — the row is grayed
+      // and only reveals its reason; this is the backstop for every other
+      // path into here (version chips, variant segments, family rows).
+      if (limitFor(model.id).state !== 'available') {
+        console.warn(
+          '[ModelSelect] Refusing to select a model whose usage limit is reached:',
           model.id,
         );
         return;
@@ -604,12 +637,17 @@ export const ModelSelect: FC<ModelSelectProps> = ({
         !scopedToConversation &&
         !isLocalModel(model) &&
         !orgAgentId &&
-        !foundryAgentId
+        !foundryAgentId &&
+        !opts?.skipDefaultUpdate
       ) {
         console.log(
           `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
         );
         setDefaultModelId(model.id as OpenAIModelID);
+      } else if (opts?.skipDefaultUpdate) {
+        console.log(
+          `[ModelSelect] Selecting ${model.id} without changing the default — routed around a sibling's usage cap`,
+        );
       }
 
       const updates: Partial<Conversation> = {};
@@ -689,6 +727,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
     [
       selectedConversation,
       availableModels,
+      limitFor,
       setMobileView,
       setDefaultModelId,
       updateConversation,
@@ -956,7 +995,17 @@ export const ModelSelect: FC<ModelSelectProps> = ({
 
                   const renderModelCard = (
                     model: OpenAIModel,
-                    opts?: { name?: string; versionTag?: string },
+                    opts?: {
+                      name?: string;
+                      versionTag?: string;
+                      /**
+                       * This row fronts `model` only because its family's
+                       * natural (ungated) pick is spent — clicking it is a
+                       * cap workaround, not the user choosing `model` as
+                       * their default. See handleModelSelect.
+                       */
+                      skipDefaultUpdate?: boolean;
+                    },
                   ) => {
                     const isStarred = starredSet.has(model.id);
                     const isFeatured =
@@ -984,7 +1033,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                         tagline={localizedTagline(model)}
                         badge={badge}
                         isSelected={selectedModelId === model.id}
-                        onClick={() => handleModelSelect(model)}
+                        onClick={() =>
+                          handleModelSelect(model, {
+                            skipDefaultUpdate: opts?.skipDefaultUpdate,
+                          })
+                        }
                         icon={
                           <ModelProviderIcon provider={providerOf(model)} />
                         }
@@ -1008,6 +1061,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                             : () => requestHide(model.id, model.name)
                         }
                         hideLabel={t('modelSelect.hide')}
+                        limit={limitFor(model.id)}
+                        onLimitExpired={refetchLimits}
+                        // A row that fronts the CURRENT model — e.g. its
+                        // family's default hit its cap and seriesRepresentative
+                        // keeps fronting the selection anyway — is a mobile
+                        // dead end otherwise: the details panel (Version /
+                        // Variant chips onto a usable sibling) is reachable
+                        // only through this tap, since mobileView starts on
+                        // 'list' and a limited row's onClick never fires.
+                        onLimitedTap={
+                          selectedModelId === model.id
+                            ? () => setMobileView('details')
+                            : undefined
+                        }
                       />
                     );
                   };
@@ -1040,6 +1107,13 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                         })}
                         onHide={() => requestHide(model.id, model.name)}
                         hideLabel={t('modelSelect.hide')}
+                        limit={limitFor(model.id)}
+                        onLimitExpired={refetchLimits}
+                        onLimitedTap={
+                          selectedModelId === model.id
+                            ? () => setMobileView('details')
+                            : undefined
+                        }
                       />
                     );
                   };
@@ -1071,13 +1145,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                     visibleModels.some((m) => providerOf(m) === f),
                   );
 
-                  // The inline variant+version tag fronting a family row;
-                  // the 'standard' variant label is suppressed so default
-                  // rows stay short ("GPT · 5.2", not "GPT · Standard 5.2").
+                  // The inline variant+subvariant+version tag fronting a
+                  // family row. The 'standard' variant label is suppressed so
+                  // default rows stay short ("GPT · 5.4", not
+                  // "GPT · Foundational 5.4"); a sub-variant is always shown,
+                  // since it is the only thing distinguishing models that
+                  // share a version ("GPT · Sol 5.6").
                   const familyTag = (rep: OpenAIModel) =>
-                    rep.variantLabel && rep.variant !== 'standard'
-                      ? `${rep.variantLabel} ${rep.versionLabel ?? ''}`.trim()
-                      : rep.versionLabel;
+                    [
+                      rep.variant !== 'standard' ? rep.variantLabel : null,
+                      rep.subVariantLabel,
+                      rep.versionLabel,
+                    ]
+                      .filter(Boolean)
+                      .join(' ') || rep.versionLabel;
 
                   // Series rows + plain rows, preserving list order (first
                   // member encountered anchors its series' position).
@@ -1096,14 +1177,28 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                         // One quiet row per family: the representative
                         // fronts it with an inline variant+version tag;
                         // switching variant/version lives in the details
-                        // panel.
+                        // panel. A spent default yields to a usable
+                        // sibling so the row stays clickable; the row
+                        // grays only when the whole family is spent.
                         const rep = seriesRepresentative(
+                          versions,
+                          selectedModelId,
+                          isNotExhausted,
+                        )!;
+                        // Did the gate change which model fronts the row?
+                        // Comparing against the ungated pick (same selection
+                        // bias, no isSelectable) isolates exactly the "cap
+                        // workaround" case: a click here selects `rep` to
+                        // keep the row usable, not because the user chose it
+                        // as their new default.
+                        const naturalRep = seriesRepresentative(
                           versions,
                           selectedModelId,
                         )!;
                         return renderModelCard(rep, {
                           name: rep.seriesLabel ?? rep.name,
                           versionTag: familyTag(rep),
+                          skipDefaultUpdate: rep.id !== naturalRep.id,
                         });
                       })}
                     </div>
@@ -1200,7 +1295,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                         // another source's section.
                         const renderSourceRow = (
                           model: OpenAIModel,
-                          opts?: { name?: string; versionTag?: string },
+                          opts?: {
+                            name?: string;
+                            versionTag?: string;
+                            skipDefaultUpdate?: boolean;
+                          },
                         ) => {
                           const infoBadge = badgeFor(model);
                           return (
@@ -1230,9 +1329,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                                 ) : undefined
                               }
                               isSelected={selectedModelId === model.id}
-                              onClick={() => handleModelSelect(model)}
+                              onClick={() =>
+                                handleModelSelect(model, {
+                                  skipDefaultUpdate: opts?.skipDefaultUpdate,
+                                })
+                              }
                               icon={
                                 <ModelProviderIcon provider={model.provider} />
+                              }
+                              limit={limitFor(model.id)}
+                              onLimitExpired={refetchLimits}
+                              onLimitedTap={
+                                selectedModelId === model.id
+                                  ? () => setMobileView('details')
+                                  : undefined
                               }
                             />
                           );
@@ -1309,10 +1419,17 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                                     const rep = seriesRepresentative(
                                       versions,
                                       selectedModelId,
+                                      isNotExhausted,
+                                    )!;
+                                    const naturalRep = seriesRepresentative(
+                                      versions,
+                                      selectedModelId,
                                     )!;
                                     return renderSourceRow(rep, {
                                       name: rep.seriesLabel ?? rep.name,
                                       versionTag: familyTag(rep),
+                                      skipDefaultUpdate:
+                                        rep.id !== naturalRep.id,
                                     });
                                   },
                                 )}

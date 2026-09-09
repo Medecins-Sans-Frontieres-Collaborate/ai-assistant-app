@@ -14,7 +14,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "4.1",
       "defaultRank": 1,
@@ -35,8 +35,8 @@
       "lifecycle": "deprecated",
       "retirementDate": "2026-10-14",
       "pricing": {
-        "inputPer1M": 2.0,
-        "outputPer1M": 8.0,
+        "inputPer1M": 2,
+        "outputPer1M": 8,
         "cachedInputPer1M": 0.5
       }
     },
@@ -49,7 +49,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "5.2",
       "defaultRank": 1,
@@ -77,7 +77,7 @@
       "supportsResponsesApi": true,
       "pricing": {
         "inputPer1M": 1.75,
-        "outputPer1M": 14.0,
+        "outputPer1M": 14,
         "cachedInputPer1M": 0.175
       }
     },
@@ -92,7 +92,7 @@
       "seriesLabel": "GPT",
       "variant": "mini",
       "variantLabel": "Mini",
-      "variantRank": 2,
+      "variantRank": 3,
       "versionLabel": "5",
       "tagline": "Faster and lower cost",
       "description": "A faster, lighter model for quick questions and everyday tasks where you don't need maximum power.",
@@ -114,7 +114,7 @@
       "supportsResponsesApi": true,
       "pricing": {
         "inputPer1M": 0.25,
-        "outputPer1M": 2.0,
+        "outputPer1M": 2,
         "cachedInputPer1M": 0.025
       }
     },
@@ -124,8 +124,8 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-chat",
-      "seriesLabel": "GPT Chat",
+      "series": "gpt",
+      "seriesLabel": "GPT",
       "versionLabel": "5.2",
       "tagline": "Conversations, brainstorming",
       "isRecommended": true,
@@ -148,9 +148,12 @@
       "retirementReplacement": "gpt-chat-latest",
       "pricing": {
         "inputPer1M": 1.75,
-        "outputPer1M": 14.0,
+        "outputPer1M": 14,
         "cachedInputPer1M": 0.175
-      }
+      },
+      "variant": "chat",
+      "variantLabel": "Chat",
+      "variantRank": 2
     },
     "o3": {
       "id": "o3",
@@ -161,11 +164,11 @@
       "temperature": 1,
       "modelType": "reasoning",
       "sizeClass": "large",
-      "series": "o-series",
-      "seriesLabel": "o-series",
-      "variant": "standard",
-      "variantLabel": "Standard",
-      "variantRank": 1,
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "o-series",
+      "variantLabel": "o-series",
+      "variantRank": 5,
       "versionLabel": "3",
       "defaultRank": 1,
       "tagline": "Deep step-by-step reasoning",
@@ -185,10 +188,13 @@
       "retirementDate": "2026-10-16",
       "supportsResponsesApi": true,
       "pricing": {
-        "inputPer1M": 2.0,
-        "outputPer1M": 8.0,
+        "inputPer1M": 2,
+        "outputPer1M": 8,
         "cachedInputPer1M": 0.5
-      }
+      },
+      "subVariant": "standard",
+      "subVariantLabel": "Standard",
+      "subVariantRank": 1
     },
     "Llama-4-Maverick-17B-128E-Instruct-FP8": {
       "id": "Llama-4-Maverick-17B-128E-Instruct-FP8",
@@ -216,7 +222,7 @@
       "lifecycle": "ga",
       "pricing": {
         "inputPer1M": 0.25,
-        "outputPer1M": 1.0
+        "outputPer1M": 1
       }
     },
     "DeepSeek-R1": {
@@ -309,15 +315,15 @@
       "retirementDate": "2026-05-01",
       "retirementReplacement": "grok-4",
       "pricing": {
-        "inputPer1M": 3.0,
-        "outputPer1M": 15.0
+        "inputPer1M": 3,
+        "outputPer1M": 15
       }
     },
     "claude-opus-4-6": {
       "id": "claude-opus-4-6",
       "name": "Claude Opus 4.6",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "sizeClass": "large",
       "series": "claude",
@@ -347,17 +353,18 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 25.0,
+        "inputPer1M": 5,
+        "outputPer1M": 25,
         "cachedInputPer1M": 0.5,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive"
     },
     "claude-sonnet-4-6": {
       "id": "claude-sonnet-4-6",
       "name": "Claude Sonnet 4.6",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "series": "claude",
       "seriesLabel": "Claude",
@@ -387,11 +394,13 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 3.0,
-        "outputPer1M": 15.0,
+        "inputPer1M": 3,
+        "outputPer1M": 15,
         "cachedInputPer1M": 0.3,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive",
+      "sizeClass": "standard"
     },
     "claude-opus-4-1": {
       "id": "claude-opus-4-1",
@@ -426,11 +435,13 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 15.0,
-        "outputPer1M": 75.0,
+        "inputPer1M": 15,
+        "outputPer1M": 75,
         "cachedInputPer1M": 1.5,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "budget",
+      "supportsVision": true
     },
     "claude-haiku-4-5": {
       "id": "claude-haiku-4-5",
@@ -452,7 +463,7 @@
       "isAgent": true,
       "agentId": "claude-haiku-45",
       "provider": "anthropic",
-      "knowledgeCutoffDate": "2025-01",
+      "knowledgeCutoffDate": "2025-02",
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-haiku-4-5",
@@ -461,16 +472,17 @@
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2026-10-19",
+      "retirementDate": "2026-10-15",
       "supportsExtendedThinking": true,
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 1.0,
-        "outputPer1M": 5.0,
+        "inputPer1M": 1,
+        "outputPer1M": 5,
         "cachedInputPer1M": 0.1,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "budget"
     },
     "gpt-5.4": {
       "id": "gpt-5.4",
@@ -482,7 +494,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "5.4",
       "defaultRank": 1,
@@ -506,7 +518,7 @@
       "supportsResponsesApi": true,
       "pricing": {
         "inputPer1M": 2.5,
-        "outputPer1M": 15.0,
+        "outputPer1M": 15,
         "cachedInputPer1M": 0.25
       }
     },
@@ -521,7 +533,7 @@
       "seriesLabel": "GPT",
       "variant": "nano",
       "variantLabel": "Nano",
-      "variantRank": 3,
+      "variantRank": 4,
       "versionLabel": "5.4",
       "tagline": "Smallest and fastest GPT",
       "description": "The smallest, fastest GPT variant. Best for quick, simple tasks at minimal cost.",
@@ -553,8 +565,8 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-chat",
-      "seriesLabel": "GPT Chat",
+      "series": "gpt",
+      "seriesLabel": "GPT",
       "versionLabel": "5.3",
       "tagline": "Newer chat-tuned GPT",
       "description": "A conversational GPT variant tuned for dialogue. Good for casual chats, brainstorming, and supportive discussions.",
@@ -573,9 +585,12 @@
       "retirementReplacement": "gpt-chat-latest",
       "pricing": {
         "inputPer1M": 1.75,
-        "outputPer1M": 14.0,
+        "outputPer1M": 14,
         "cachedInputPer1M": 0.175
-      }
+      },
+      "variant": "chat",
+      "variantLabel": "Chat",
+      "variantRank": 2
     },
     "gpt-5": {
       "id": "gpt-5",
@@ -587,7 +602,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "5",
       "defaultRank": 1,
@@ -612,7 +627,7 @@
       "supportsResponsesApi": true,
       "pricing": {
         "inputPer1M": 1.25,
-        "outputPer1M": 10.0,
+        "outputPer1M": 10,
         "cachedInputPer1M": 0.125
       }
     },
@@ -622,8 +637,8 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-chat",
-      "seriesLabel": "GPT Chat",
+      "series": "gpt",
+      "seriesLabel": "GPT",
       "versionLabel": "5",
       "tagline": "Previous chat-tuned GPT",
       "description": "The chat-tuned GPT-5 variant. Good for everyday conversations and brainstorming.",
@@ -643,9 +658,12 @@
       "retirementReplacement": "gpt-chat-latest",
       "pricing": {
         "inputPer1M": 1.25,
-        "outputPer1M": 10.0,
+        "outputPer1M": 10,
         "cachedInputPer1M": 0.125
-      }
+      },
+      "variant": "chat",
+      "variantLabel": "Chat",
+      "variantRank": 2
     },
     "gpt-4o": {
       "id": "gpt-4o",
@@ -656,7 +674,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "4o",
       "defaultRank": 1,
@@ -678,7 +696,7 @@
       "retirementReplacement": "gpt-5.1",
       "pricing": {
         "inputPer1M": 2.5,
-        "outputPer1M": 10.0,
+        "outputPer1M": 10,
         "cachedInputPer1M": 1.25
       }
     },
@@ -693,7 +711,7 @@
       "seriesLabel": "GPT",
       "variant": "mini",
       "variantLabel": "Mini",
-      "variantRank": 2,
+      "variantRank": 3,
       "versionLabel": "4.1",
       "tagline": "Light previous-generation GPT",
       "description": "A smaller, faster GPT-4.1 variant for quick everyday tasks.",
@@ -719,8 +737,8 @@
     "claude-opus-4-8": {
       "id": "claude-opus-4-8",
       "name": "Claude Opus 4.8",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "sizeClass": "large",
       "series": "claude",
@@ -732,12 +750,11 @@
       "tagline": "Newest and strongest Claude",
       "description": "Anthropic's newest and strongest model. Excellent for long writing, research, coding, and careful analysis.",
       "isDisabled": false,
-      "tier": "featured",
       "hosting": "external",
       "provider": "anthropic",
       "knowledgeCutoffDate": "2026-02",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-opus-4-8",
       "supportsReasoningEffort": true,
       "supportsVerbosity": false,
@@ -747,11 +764,12 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 25.0,
+        "inputPer1M": 5,
+        "outputPer1M": 25,
         "cachedInputPer1M": 0.5,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive"
     },
     "claude-sonnet-4-5": {
       "id": "claude-sonnet-4-5",
@@ -785,11 +803,13 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 3.0,
-        "outputPer1M": 15.0,
+        "inputPer1M": 3,
+        "outputPer1M": 15,
         "cachedInputPer1M": 0.3,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "budget",
+      "sizeClass": "standard"
     },
     "DeepSeek-V3.2": {
       "id": "DeepSeek-V3.2",
@@ -860,7 +880,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "5.1",
       "defaultRank": 1,
@@ -885,7 +905,7 @@
       "supportsResponsesApi": true,
       "pricing": {
         "inputPer1M": 1.25,
-        "outputPer1M": 10.0,
+        "outputPer1M": 10,
         "cachedInputPer1M": 0.125
       }
     },
@@ -895,8 +915,8 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-chat",
-      "seriesLabel": "GPT Chat",
+      "series": "gpt",
+      "seriesLabel": "GPT",
       "versionLabel": "5.1",
       "tagline": "Earlier chat-tuned GPT",
       "description": "An earlier chat-tuned GPT-5 revision. Good for everyday conversations and brainstorming.",
@@ -916,9 +936,12 @@
       "retirementReplacement": "gpt-chat-latest",
       "pricing": {
         "inputPer1M": 1.25,
-        "outputPer1M": 10.0,
+        "outputPer1M": 10,
         "cachedInputPer1M": 0.125
-      }
+      },
+      "variant": "chat",
+      "variantLabel": "Chat",
+      "variantRank": 2
     },
     "gpt-5-nano": {
       "id": "gpt-5-nano",
@@ -931,7 +954,7 @@
       "seriesLabel": "GPT",
       "variant": "nano",
       "variantLabel": "Nano",
-      "variantRank": 3,
+      "variantRank": 4,
       "versionLabel": "5",
       "tagline": "Tiny previous-generation GPT",
       "description": "The smallest GPT-5 variant. Best for quick, simple tasks at minimal cost.",
@@ -969,7 +992,7 @@
       "seriesLabel": "GPT",
       "variant": "nano",
       "variantLabel": "Nano",
-      "variantRank": 3,
+      "variantRank": 4,
       "versionLabel": "4.1",
       "tagline": "Smallest previous-generation GPT",
       "description": "The smallest GPT-4.1 variant. Fine for quick, simple tasks where speed and cost matter most.",
@@ -1003,7 +1026,7 @@
       "seriesLabel": "GPT",
       "variant": "mini",
       "variantLabel": "Mini",
-      "variantRank": 2,
+      "variantRank": 3,
       "versionLabel": "4o",
       "tagline": "Light older multimodal GPT",
       "description": "A small, fast GPT-4o variant. Fine for everyday quick tasks where the latest capability isn't needed.",
@@ -1036,11 +1059,11 @@
       "temperature": 1,
       "modelType": "reasoning",
       "sizeClass": "mini",
-      "series": "o-series",
-      "seriesLabel": "o-series",
-      "variant": "mini",
-      "variantLabel": "Mini",
-      "variantRank": 2,
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "o-series",
+      "variantLabel": "o-series",
+      "variantRank": 5,
       "versionLabel": "4",
       "tagline": "Fast affordable reasoning",
       "description": "A compact reasoning model. Good for math, logic, and step-by-step problems at lower cost than o3.",
@@ -1063,7 +1086,10 @@
         "inputPer1M": 1.1,
         "outputPer1M": 4.4,
         "cachedInputPer1M": 0.275
-      }
+      },
+      "subVariant": "mini",
+      "subVariantLabel": "Mini",
+      "subVariantRank": 2
     },
     "o3-mini": {
       "id": "o3-mini",
@@ -1074,11 +1100,11 @@
       "temperature": 1,
       "modelType": "reasoning",
       "sizeClass": "mini",
-      "series": "o-series",
-      "seriesLabel": "o-series",
-      "variant": "mini",
-      "variantLabel": "Mini",
-      "variantRank": 2,
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "o-series",
+      "variantLabel": "o-series",
+      "variantRank": 5,
       "versionLabel": "3",
       "tagline": "Compact step-by-step reasoning",
       "description": "An earlier compact reasoning model. Handles math, science, and logic puzzles on a budget.",
@@ -1102,15 +1128,18 @@
         "inputPer1M": 1.1,
         "outputPer1M": 4.4,
         "cachedInputPer1M": 0.55
-      }
+      },
+      "subVariant": "mini",
+      "subVariantLabel": "Mini",
+      "subVariantRank": 2
     },
     "claude-fable-5": {
       "id": "claude-fable-5",
       "name": "Claude Fable 5",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
-      "sizeClass": "large",
+      "sizeClass": "xl",
       "tagline": "Anthropic's frontier model",
       "description": "Anthropic's most intelligent model, the first of the Claude 5 family. Excellent for the hardest writing, research, and coding tasks.",
       "isDisabled": false,
@@ -1118,7 +1147,7 @@
       "provider": "anthropic",
       "knowledgeCutoffDate": "2026-01",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-fable-5",
       "supportsReasoningEffort": true,
       "supportsVerbosity": false,
@@ -1128,17 +1157,24 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 10.0,
-        "outputPer1M": 50.0,
-        "cachedInputPer1M": 1.0,
+        "inputPer1M": 10,
+        "outputPer1M": 50,
+        "cachedInputPer1M": 1,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive",
+      "series": "claude",
+      "seriesLabel": "Claude",
+      "variant": "fable",
+      "variantLabel": "Fable",
+      "variantRank": 0,
+      "versionLabel": "5"
     },
     "claude-sonnet-5": {
       "id": "claude-sonnet-5",
       "name": "Claude Sonnet 5",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "series": "claude",
       "seriesLabel": "Claude",
@@ -1152,9 +1188,9 @@
       "isDisabled": false,
       "hosting": "external",
       "provider": "anthropic",
-      "knowledgeCutoffDate": "2026-03",
+      "knowledgeCutoffDate": "2026-01",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-sonnet-5",
       "supportsReasoningEffort": true,
       "supportsVerbosity": false,
@@ -1164,11 +1200,15 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 3.0,
-        "outputPer1M": 15.0,
-        "cachedInputPer1M": 0.3,
+        "inputPer1M": 2,
+        "outputPer1M": 10,
+        "cachedInputPer1M": 0.2,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive",
+      "sizeClass": "standard",
+      "lifecycle": "ga",
+      "retirementDate": "2027-06-30"
     },
     "claude-opus-4-5": {
       "id": "claude-opus-4-5",
@@ -1203,11 +1243,12 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 25.0,
+        "inputPer1M": 5,
+        "outputPer1M": 25,
         "cachedInputPer1M": 0.5,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "budget"
     },
     "mistral-medium-2505": {
       "id": "mistral-medium-2505",
@@ -1234,7 +1275,7 @@
       "lifecycle": "ga",
       "pricing": {
         "inputPer1M": 0.4,
-        "outputPer1M": 2.0,
+        "outputPer1M": 2,
         "confidence": "serverless-legacy"
       }
     },
@@ -1416,8 +1457,8 @@
       "supportsVision": true,
       "lifecycle": "ga",
       "pricing": {
-        "inputPer1M": 3.0,
-        "outputPer1M": 15.0
+        "inputPer1M": 3,
+        "outputPer1M": 15
       }
     },
     "gpt-5.5": {
@@ -1430,7 +1471,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "5.5",
       "defaultRank": 1,
@@ -1453,8 +1494,8 @@
       "retirementDate": "2027-04-23",
       "supportsResponsesApi": true,
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 30.0,
+        "inputPer1M": 5,
+        "outputPer1M": 30,
         "cachedInputPer1M": 0.5
       }
     },
@@ -1464,8 +1505,8 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-chat",
-      "seriesLabel": "GPT Chat",
+      "series": "gpt",
+      "seriesLabel": "GPT",
       "versionLabel": "latest",
       "tagline": "Always the newest chat GPT",
       "description": "A rolling alias that always points to OpenAI's newest chat-tuned model. Azure's replacement for the retired versioned gpt-*-chat models.",
@@ -1482,17 +1523,20 @@
       "lifecycle": "preview",
       "retirementDate": "2026-08-28",
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 30.0,
+        "inputPer1M": 5,
+        "outputPer1M": 30,
         "cachedInputPer1M": 0.5,
         "alias": true
-      }
+      },
+      "variant": "chat",
+      "variantLabel": "Chat",
+      "variantRank": 2
     },
     "claude-opus-4-7": {
       "id": "claude-opus-4-7",
       "name": "Claude Opus 4.7",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "sizeClass": "large",
       "series": "claude",
@@ -1508,7 +1552,7 @@
       "provider": "anthropic",
       "knowledgeCutoffDate": "2026-02",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-opus-4-7",
       "supportsReasoningEffort": true,
       "supportsVerbosity": false,
@@ -1520,11 +1564,12 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 25.0,
+        "inputPer1M": 5,
+        "outputPer1M": 25,
         "cachedInputPer1M": 0.5,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive"
     },
     "DeepSeek-V4-Pro": {
       "id": "DeepSeek-V4-Pro",
@@ -1599,10 +1644,10 @@
       "tokenLimit": 16000,
       "modelType": "omni",
       "sizeClass": "large",
-      "series": "gpt-56",
-      "seriesLabel": "GPT 5.6 / 6",
-      "variant": "sol",
-      "variantLabel": "Sol",
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "defaultRank": 1,
       "versionLabel": "5.6",
@@ -1625,10 +1670,13 @@
       "retirementDate": "2027-07-09",
       "supportsResponsesApi": true,
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 30.0,
+        "inputPer1M": 5,
+        "outputPer1M": 30,
         "cachedInputPer1M": 0.5
-      }
+      },
+      "subVariant": "sol",
+      "subVariantLabel": "Sol",
+      "subVariantRank": 1
     },
     "gpt-5.6-terra": {
       "id": "gpt-5.6-terra",
@@ -1636,11 +1684,11 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-56",
-      "seriesLabel": "GPT 5.6 / 6",
-      "variant": "terra",
-      "variantLabel": "Terra",
-      "variantRank": 2,
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "standard",
+      "variantLabel": "Foundational",
+      "variantRank": 1,
       "versionLabel": "5.6",
       "tagline": "Balanced everyday GPT-5.6",
       "description": "The balanced tier of OpenAI's GPT-5.6 trio. Good for everyday writing, analysis, and coding with quick responses.",
@@ -1661,10 +1709,13 @@
       "retirementDate": "2027-07-09",
       "supportsResponsesApi": true,
       "pricing": {
-        "inputPer1M": 2.0,
-        "outputPer1M": 12.0,
+        "inputPer1M": 2,
+        "outputPer1M": 12,
         "cachedInputPer1M": 0.2
-      }
+      },
+      "subVariant": "terra",
+      "subVariantLabel": "Terra",
+      "subVariantRank": 2
     },
     "gpt-5.6-luna": {
       "id": "gpt-5.6-luna",
@@ -1673,11 +1724,11 @@
       "tokenLimit": 16000,
       "modelType": "omni",
       "sizeClass": "mini",
-      "series": "gpt-56",
-      "seriesLabel": "GPT 5.6 / 6",
-      "variant": "luna",
-      "variantLabel": "Luna",
-      "variantRank": 3,
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "standard",
+      "variantLabel": "Foundational",
+      "variantRank": 1,
       "versionLabel": "5.6",
       "tagline": "Light, fast GPT-5.6",
       "description": "The light, fast tier of OpenAI's GPT-5.6 trio. Best for quick questions and simple tasks at low cost.",
@@ -1701,7 +1752,10 @@
         "inputPer1M": 0.2,
         "outputPer1M": 1.2,
         "cachedInputPer1M": 0.02
-      }
+      },
+      "subVariant": "luna",
+      "subVariantLabel": "Luna",
+      "subVariantRank": 3
     },
     "gpt-6-astra": {
       "id": "gpt-6-astra",
@@ -1710,11 +1764,11 @@
       "tokenLimit": 32000,
       "modelType": "omni",
       "sizeClass": "xl",
-      "series": "gpt-56",
-      "seriesLabel": "GPT 5.6 / 6",
-      "variant": "astra",
-      "variantLabel": "Astra",
-      "variantRank": 0,
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "standard",
+      "variantLabel": "Foundational",
+      "variantRank": 1,
       "versionLabel": "6",
       "tagline": "OpenAI's most capable model",
       "description": "OpenAI's GPT-6 flagship. Built for demanding end-to-end work: deep research, complex analysis, software engineering, and long multi-step tasks. About twice the cost of GPT-5.6 Sol.",
@@ -1735,9 +1789,9 @@
       "retirementDate": "2028-01-11",
       "supportsResponsesApi": true,
       "pricing": {
-        "inputPer1M": 10.0,
-        "outputPer1M": 50.0,
-        "cachedInputPer1M": 1.0,
+        "inputPer1M": 10,
+        "outputPer1M": 50,
+        "cachedInputPer1M": 1,
         "confidence": "list"
       }
     },
@@ -1794,7 +1848,7 @@
       "retirementDate": "2027-04-16",
       "pricing": {
         "inputPer1M": 0.95,
-        "outputPer1M": 4.0,
+        "outputPer1M": 4,
         "cachedInputPer1M": 0.16
       }
     },
@@ -1880,6 +1934,122 @@
       "pricing": {
         "inputPer1M": 0.25,
         "outputPer1M": 1.27
+      }
+    },
+    "claude-opus-5": {
+      "id": "claude-opus-5",
+      "name": "Claude Opus 5",
+      "modelType": "omni",
+      "series": "claude",
+      "seriesLabel": "Claude",
+      "isDisabled": false,
+      "hosting": "external",
+      "provider": "anthropic",
+      "sdk": "anthropic-foundry",
+      "supportsTemperature": false,
+      "supportsReasoningEffort": true,
+      "supportsVerbosity": false,
+      "supportsVision": true,
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "thinkingApi": "adaptive",
+      "reasoningEffort": "minimal",
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
+      "sizeClass": "large",
+      "variant": "opus",
+      "variantLabel": "Opus",
+      "variantRank": 1,
+      "versionLabel": "5",
+      "tier": "featured",
+      "tagline": "Newest and strongest Claude",
+      "description": "Anthropic's newest Opus. Excellent for long writing, research, coding, and careful analysis.",
+      "deploymentName": "claude-opus-5",
+      "pricing": {
+        "inputPer1M": 5,
+        "outputPer1M": 25,
+        "cachedInputPer1M": 0.5,
+        "billing": "marketplace"
+      },
+      "knowledgeCutoffDate": "2026-05",
+      "lifecycle": "ga",
+      "retirementDate": "2027-07-24"
+    },
+    "claude-fable-5-1": {
+      "id": "claude-fable-5-1",
+      "name": "Claude Fable 5.1",
+      "modelType": "omni",
+      "series": "claude",
+      "seriesLabel": "Claude",
+      "isDisabled": false,
+      "hosting": "external",
+      "provider": "anthropic",
+      "sdk": "anthropic-foundry",
+      "supportsTemperature": false,
+      "supportsReasoningEffort": true,
+      "supportsVerbosity": false,
+      "supportsVision": true,
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "thinkingApi": "adaptive",
+      "reasoningEffort": "minimal",
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
+      "sizeClass": "xl",
+      "variant": "fable",
+      "variantLabel": "Fable",
+      "variantRank": 0,
+      "versionLabel": "5.1",
+      "tagline": "Anthropic's frontier model",
+      "description": "Anthropic's most capable model, for the hardest reasoning, research, and coding tasks. Thinking is always on, so every turn costs more than Opus.",
+      "deploymentName": "claude-fable-5-1",
+      "pricing": {
+        "inputPer1M": 10,
+        "outputPer1M": 50,
+        "cachedInputPer1M": 0.25,
+        "billing": "marketplace"
+      },
+      "knowledgeCutoffDate": "2026-06",
+      "lifecycle": "ga",
+      "retirementDate": "2027-09-01"
+    },
+    "gpt-5.4-mini": {
+      "id": "gpt-5.4-mini",
+      "name": "GPT-5.4 Mini",
+      "maxLength": 128000,
+      "tokenLimit": 16000,
+      "modelType": "omni",
+      "sizeClass": "mini",
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "mini",
+      "variantLabel": "Mini",
+      "variantRank": 3,
+      "versionLabel": "5.4",
+      "tagline": "Faster and lower cost",
+      "description": "A faster, lighter GPT-5.4 for quick questions and everyday tasks where you do not need the full model.",
+      "isDisabled": false,
+      "provider": "openai",
+      "knowledgeCutoffDate": "2026-01",
+      "sdk": "azure-openai",
+      "supportsTemperature": false,
+      "reasoningEffort": "low",
+      "supportsReasoningEffort": true,
+      "supportsMinimalReasoning": true,
+      "verbosity": "low",
+      "supportsVerbosity": false,
+      "supportsVision": true,
+      "supportsTools": true,
+      "supportsCodeInterpreter": true,
+      "lifecycle": "ga",
+      "retirementDate": "2027-03-18",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 0.45,
+        "outputPer1M": 3.6,
+        "cachedInputPer1M": 0.045
       }
     }
   }

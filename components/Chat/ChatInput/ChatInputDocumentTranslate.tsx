@@ -25,6 +25,12 @@ import toast from 'react-hot-toast';
 import { useLocale, useTranslations } from 'next-intl';
 
 import {
+  useLimitGates,
+  useMyLimits,
+  useResetCountdown,
+} from '@/client/hooks/settings/useMyLimits';
+
+import {
   DocumentTranslationPendingReference,
   DocumentTranslationReference,
   MAX_DOCUMENT_SIZE,
@@ -48,6 +54,9 @@ import {
   DOCUMENT_TRANSLATION_EXTENSIONS,
   GLOSSARY_ACCEPT_TYPES,
 } from '@/lib/constants/fileTypes';
+
+/** Daily document-translation counter (docs/LIMITS.md); `null` = unlimited. */
+const TRANSLATION_DAY_LIMIT_KEY = 'feature.translation.jobsPerDay';
 
 interface ChatInputDocumentTranslateProps {
   /** Whether the modal is open */
@@ -111,6 +120,19 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
 
   // UI state
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+
+  // Route pre-flight (docs/LIMITS_USER_FACING_UX.md §7.4): at 0 jobs left
+  // the Translate action is disabled with the reason, rather than letting
+  // the user fill in the form and hit the server's 403. Anything short of a
+  // reported 0 fails open — the server remains the security control.
+  const { featureRemaining } = useLimitGates();
+  const { refetch: refetchLimits } = useMyLimits();
+  const translationBudget = featureRemaining(TRANSLATION_DAY_LIMIT_KEY);
+  const translationExhausted = translationBudget?.remaining === 0;
+  const translationResetsIn = useResetCountdown(
+    translationExhausted ? translationBudget?.resetAt : undefined,
+    { onExpired: () => void refetchLimits() },
+  );
 
   // Search state for language dropdowns
   const [targetSearch, setTargetSearch] = useState('');
@@ -216,6 +238,12 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
       return;
     }
 
+    // Belt and braces for a keyboard submit while the button is disabled.
+    if (translationExhausted) {
+      toast.error(t('limitsUx.routes.translationExhausted'));
+      return;
+    }
+
     const knownSize = documentFile?.size ?? m365Source?.size;
     if (knownSize !== undefined && knownSize > MAX_DOCUMENT_SIZE) {
       toast.error(
@@ -298,6 +326,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
     onTranslationComplete,
     onTranslationPending,
     onClose,
+    translationExhausted,
     t,
   ]);
 
@@ -327,8 +356,27 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
     setSourceSearch('');
   }, []);
 
+  const exhaustedNotice = translationExhausted
+    ? translationResetsIn
+      ? `${t('limitsUx.routes.translationExhausted')} ${t('limitsUx.routes.resetsIn', { resets: translationResetsIn })}`
+      : t('limitsUx.routes.translationExhausted')
+    : null;
+
   const modalContent = (
     <div className="space-y-6">
+      {/* Daily budget used up: say so at the top, where the user reads
+          before filling in the form; the footer button is disabled too. */}
+      {exhaustedNotice && (
+        <div
+          role="status"
+          data-testid="translation-exhausted-notice"
+          className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-300"
+        >
+          <IconAlertTriangle size={18} className="mt-0.5 flex-shrink-0" />
+          <span>{exhaustedNotice}</span>
+        </div>
+      )}
+
       {/* Document info */}
       {documentFile ? (
         <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
@@ -675,12 +723,27 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
     </div>
   );
 
+  // Keep the exhausted-budget reason out of the native `disabled` set: a
+  // disabled button never fires a click, so the in-handler guard below
+  // (`if (translationExhausted) …`) would be untestable dead code and,
+  // per docs/LIMITS_USER_FACING_UX.md §7.4 review, a future refactor that
+  // dropped `translationExhausted` from here would have nothing left to
+  // protect the server from a doomed request. The other reasons (missing
+  // file/target language, an in-flight request) still natively disable —
+  // there is no server-side guard to fall back on for those.
+  const translateBlockedByFields =
+    isTranslating || !targetLanguage || !sourceName;
+  const translateDisabled = translateBlockedByFields || translationExhausted;
+
   const modalFooter = (
     <button
       onClick={handleTranslate}
-      disabled={isTranslating || !targetLanguage || !sourceName}
+      disabled={translateBlockedByFields}
+      aria-disabled={translationExhausted ? true : undefined}
+      title={exhaustedNotice ?? undefined}
+      data-testid="translate-submit"
       className={`w-full flex items-center justify-center gap-2 py-3 px-6 text-base font-semibold rounded-lg shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-        isTranslating || !targetLanguage || !sourceName
+        translateDisabled
           ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
           : 'bg-blue-600 hover:bg-blue-700 text-white'
       }`}

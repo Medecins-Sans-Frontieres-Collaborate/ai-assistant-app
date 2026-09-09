@@ -5503,5 +5503,74 @@
     "loading": "بارکردن…",
     "loadError": "لیستی ئەدمینی گشتی نەتوانرا بار بکرێت.",
     "retry": "دووبارە هەوڵ بدە"
+  },
+  "limitsUx": {
+    "picker": {
+      "exhausted": "سنور گەیشتو ({used}/{limit}). دووبارە دێتە سەر {resets}.",
+      "exhaustedNoReset": "سنور گەیشتو ({used}/{limit}).",
+      "familyExhausted": "سنوری خێزان گەیشتو ({used}/{limit}). دووبارە دێتە سەر {resets}.",
+      "familyExhaustedNoReset": "سنوری خێزان گەیشتو ({used}/{limit}).",
+      "unavailable": "لە هەژمارت دا بەردەست نیە.",
+      "remaining": "ماوە {remaining}",
+      "remainingTooltip": "لەمانەدا {remaining} لە {limit} داواکاریەکان ماوە.",
+      "agentModelUnavailable": "{model} بەکاردێت کە لە هەژمارت دا بەردەست نیە.",
+      "agentModelExhausted": "{model} بەکاردێت کە سنوری گەیشتو. دووبارە دێتە سەر {resets}.",
+      "agentModelExhaustedNoReset": "{model} بەکاردێت کە سنوری گەیشتو."
+    },
+    "denial": {
+      "modelBlocked": "ئەم مۆدێلە لە هەژمارت نابێت. مۆدێلێکی تر هەلبژێرە یان پەیوەندی بکە بە بەڕێوبەرەکەت.",
+      "modelExhausted": "هەموو {limit} داواکاری ئەم مۆدێلەمان لەم ڕۆژەدا بەکاردەهێنیت.",
+      "familyExhausted": "بەدەستهێنانی بودجەی هاوبەش لەم مۆدێل خێزانەدا بۆ ئەمڕۆ بەکارهاتو ({limit} داواکاری).",
+      "searchBlocked": "گەڕانی وێب لەلایەن بەڕێوبەرەوە داخراوە بۆ هەژمارت، ئەم نامەش چالاک کردبوو.",
+      "interpreterBlocked": "Code interpreter لەلایەن بەڕێوبەرەوە داخراوە بۆ هەژمارت، ئەم نامەش چالاک کردبوو.",
+      "mcpBlocked": "کۆنێکتەرەکان لەلایەن بەڕێوبەرەوە لە هەژمارت داخراون، ئەم نامەش کۆنێکتەر چالاک بوو. بپارێزە بۆ بەردەوامبوون.",
+      "messagesCap": "سنوری {limit} پەیام بۆ ئەم ڕۆژە تێپەڕیت.",
+      "tokensDayCap": "سنوری tokenی ئەم ڕۆژەت تێپەڕیوە.",
+      "tokensMonthCap": "سنوری tokenی ئەم مانگەت تێپەڕیوە.",
+      "perRequest": "ئەم داواکارییە زۆرترە لە سنوری هەژمارت ({limit} بەرزترین بەتاکە داواکاری). تکایە داواکارییەکی بچوکتەر هەوڵ بدە.",
+      "resets": "دووبارە دێتە سەر {resets}.",
+      "chooseAnotherModel": "مۆدێلێکی تر هەلبژێرە",
+      "turnOffSearchAndResend": "گەڕانی وێب داخە و دووبارە بنێرە",
+      "turnOffInterpreterAndResend": "Code interpreter داخە و دووبارە بنێرە",
+      "agentModelBlocked": "ئەم ئایجەنتە مۆدێلێک بەکاردێنێت کە لە هەژمارتدا بەردەست نییە. ئایجەنتەکە لادە بەر یاخود یەكێکی تر هەڵبژێر.",
+      "turnOffConnectorsAndResend": "کۆنێکتەرەکان ناچالاک بکە و دووبارە بنێرە"
+    },
+    "notice": {
+      "unavailable": "{model} لە هەژمارت بەردەست نیە — بۆ بەردەوامبوون مۆدێلێکی تر هەلبژێرە.",
+      "exhausted": "{model} سنوری خۆی بەسەرچوو بۆ ئەم ڕۆژە.",
+      "familyExhausted": "{model} بە هاوبەشەکانیدا بودجەی هاوبەش بوەکە، ئەمڕۆ تەواو بو.",
+      "resets": "دووبارە دێتە سەر {resets}.",
+      "chooseModel": "مۆدێل هەلبژێرە"
+    },
+    "gates": {
+      "blocked": "{feature} لەلایەن ڕێکخراوەکەتەوە بۆ هەژمارت داخراوە.",
+      "features": {
+        "webSearch": "گەڕانی وێب",
+        "codeInterpreter": "Code interpreter",
+        "connectors": "کۆنێکتەرەکان"
+      },
+      "remaining": "{count, plural, one {# جار ماوە بۆ ئەمڕۆ} other {# جاران ماوە بۆ ئەمڕۆ}}",
+      "exhausted": "سنورە ڕۆژانەیەک گەیشتو — وەڵامی مۆدێل بێ ئەو بەشە دەدات.",
+      "exhaustedResets": "سنوری ڕۆژانە گیرا — مۆدێلەکە بێ ئەوە وەڵام دەدات. دووبارە دانانەوەکان {resets}."
+    },
+    "mine": {
+      "title": "سنورەکانت",
+      "description": "سنورەکانە کە ڕێکخراوت بەرزراوە بۆ هەژمارت. هەژمارەکانت خۆکارانە دووبارە دێنە سەر کۆتایی هەر ماوەیەک.",
+      "notAvailable": "بەردەست نیە",
+      "usedOfLimit": "{used} / {limit} {unit}",
+      "limitOnly": "{limit} {unit}",
+      "resetsIn": "دووبارە دێتە سەر {resets}",
+      "limitReached": "سنور گەیشتو",
+      "familyLimitReached": "سنوری خێزانی مۆدێل گەیشتو",
+      "usageUnavailable": "نەتوانرا بەکارهێنانی ئێستا باربکرێت — تنها سنورەکان دەردەکەون.",
+      "familyRow": "مۆدێلەکانی {family}"
+    },
+    "routes": {
+      "ttsExhausted": "سنوری دەنگکردنی دەق لەم ڕۆژە تێپەڕیت.",
+      "translationExhausted": "سنوری وەرگێڕانی بەڵگەنامەکان بۆ ئەم ڕۆژە تێپەڕیت.",
+      "resetsIn": "دووبارە دێتە سەر {resets}.",
+      "uploadTooLarge": "{fileName} زۆر گەورەیە — پەڕگەکان لە هەژمارت دەبێت کەمتر بەن {maxSize}.",
+      "uploadCapHint": "پەڕگەکان تا {maxSize}"
+    }
   }
 }
