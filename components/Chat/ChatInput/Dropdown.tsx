@@ -5,6 +5,7 @@ import {
   IconCalendarEvent,
   IconCamera,
   IconCirclePlus,
+  IconClipboardCheck,
   IconCode,
   IconFileMusic,
   IconFileText,
@@ -19,6 +20,7 @@ import {
   IconWorld,
 } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { useSession } from 'next-auth/react';
 import React, {
   useCallback,
   useEffect,
@@ -49,6 +51,7 @@ import {
   M365_BUILTIN_SERVER_ID,
   M365_BUILTIN_SERVER_LABEL,
 } from '@/lib/services/m365/tools/toolCatalog';
+import { canAccessProcurement } from '@/lib/services/rfp/access';
 
 import { normalizeForSearch } from '@/lib/utils/app/localeSearch';
 import { isRTL } from '@/lib/utils/app/rtl';
@@ -237,6 +240,8 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   const t = useTranslations();
   const tUrl = useTranslations('urlFetch');
+  const { data: session } = useSession();
+  const showProcurement = canAccessProcurement(session?.user);
   const tM365 = useTranslations('m365');
   const tGates = useTranslations('limitsUx.gates');
 
@@ -1146,10 +1151,37 @@ const Dropdown: React.FC<DropdownProps> = ({
             },
           ]
         : []),
+      ...(showProcurement
+        ? [
+            {
+              id: 'procurement',
+              icon: (
+                <IconClipboardCheck
+                  size={18}
+                  className="text-blue-600 flex-shrink-0"
+                />
+              ),
+              label: 'RFP Scorecard',
+              infoTooltip:
+                'Generate vendor scorecards from RFP responses with reviewable scoring rubrics (restricted access).',
+              onClick: () => {
+                window.open(
+                  `/${locale}/procurement/rfp-analysis`,
+                  '_blank',
+                  'noopener,noreferrer',
+                );
+                closeDropdown();
+              },
+              category: 'transform' as const,
+            },
+          ]
+        : []),
     ],
     [
       t,
       tUrl,
+      showProcurement,
+      locale,
       tM365,
       isM365FilesEnabled,
       isM365MailEnabled,
