@@ -18,6 +18,8 @@ import {
 
 import { OpenAIModel, OpenAIModelID } from '@/types/openai';
 
+import { useUploadLimitSync } from '@/components/Chat/ChatInput/ChatInputFile';
+
 import { useConversationStore } from '@/client/stores/conversationStore';
 import {
   TokenUsageBucket,
@@ -103,6 +105,15 @@ export function AppInitializer() {
   // focus and quota denials — see useModelsQuery. Requires the
   // QueryClientProvider AppProviders wraps ChatShell (and so this) in.
   useModelsQuery();
+
+  // Publishes the admin's resolved feature.upload.megabytesPerFile onto
+  // FileUploadService (docs/LIMITS_USER_FACING_UX.md §7.4/§3e) so every
+  // upload entry point — composer drop/paste, the `+` menu, the extraction
+  // tray, URL/M365/paste attachment — validates against it, not just the
+  // one rendered inside ChatInputFile's own component body (which nothing
+  // in the tree currently mounts). AppInitializer is the one host guaranteed
+  // to render for every signed-in user, exactly like useModelsQuery above.
+  useUploadLimitSync();
 
   useEffect(() => {
     // Ensure we only initialize once, even in React StrictMode
