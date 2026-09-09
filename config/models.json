@@ -35,8 +35,8 @@
       "lifecycle": "deprecated",
       "retirementDate": "2026-10-14",
       "pricing": {
-        "inputPer1M": 2.0,
-        "outputPer1M": 8.0,
+        "inputPer1M": 2,
+        "outputPer1M": 8,
         "cachedInputPer1M": 0.5
       }
     },
@@ -77,7 +77,7 @@
       "supportsResponsesApi": true,
       "pricing": {
         "inputPer1M": 1.75,
-        "outputPer1M": 14.0,
+        "outputPer1M": 14,
         "cachedInputPer1M": 0.175
       }
     },
@@ -114,7 +114,7 @@
       "supportsResponsesApi": true,
       "pricing": {
         "inputPer1M": 0.25,
-        "outputPer1M": 2.0,
+        "outputPer1M": 2,
         "cachedInputPer1M": 0.025
       }
     },
@@ -148,7 +148,7 @@
       "retirementReplacement": "gpt-chat-latest",
       "pricing": {
         "inputPer1M": 1.75,
-        "outputPer1M": 14.0,
+        "outputPer1M": 14,
         "cachedInputPer1M": 0.175
       }
     },
@@ -185,8 +185,8 @@
       "retirementDate": "2026-10-16",
       "supportsResponsesApi": true,
       "pricing": {
-        "inputPer1M": 2.0,
-        "outputPer1M": 8.0,
+        "inputPer1M": 2,
+        "outputPer1M": 8,
         "cachedInputPer1M": 0.5
       }
     },
@@ -216,7 +216,7 @@
       "lifecycle": "ga",
       "pricing": {
         "inputPer1M": 0.25,
-        "outputPer1M": 1.0
+        "outputPer1M": 1
       }
     },
     "DeepSeek-R1": {
@@ -309,15 +309,15 @@
       "retirementDate": "2026-05-01",
       "retirementReplacement": "grok-4",
       "pricing": {
-        "inputPer1M": 3.0,
-        "outputPer1M": 15.0
+        "inputPer1M": 3,
+        "outputPer1M": 15
       }
     },
     "claude-opus-4-6": {
       "id": "claude-opus-4-6",
       "name": "Claude Opus 4.6",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "sizeClass": "large",
       "series": "claude",
@@ -347,17 +347,18 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 25.0,
+        "inputPer1M": 5,
+        "outputPer1M": 25,
         "cachedInputPer1M": 0.5,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive"
     },
     "claude-sonnet-4-6": {
       "id": "claude-sonnet-4-6",
       "name": "Claude Sonnet 4.6",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "series": "claude",
       "seriesLabel": "Claude",
@@ -387,11 +388,13 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 3.0,
-        "outputPer1M": 15.0,
+        "inputPer1M": 3,
+        "outputPer1M": 15,
         "cachedInputPer1M": 0.3,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive",
+      "sizeClass": "standard"
     },
     "claude-opus-4-1": {
       "id": "claude-opus-4-1",
@@ -426,11 +429,13 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 15.0,
-        "outputPer1M": 75.0,
+        "inputPer1M": 15,
+        "outputPer1M": 75,
         "cachedInputPer1M": 1.5,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "budget",
+      "supportsVision": true
     },
     "claude-haiku-4-5": {
       "id": "claude-haiku-4-5",
@@ -466,11 +471,12 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 1.0,
-        "outputPer1M": 5.0,
+        "inputPer1M": 1,
+        "outputPer1M": 5,
         "cachedInputPer1M": 0.1,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "budget"
     },
     "gpt-5.4": {
       "id": "gpt-5.4",
@@ -506,7 +512,7 @@
       "supportsResponsesApi": true,
       "pricing": {
         "inputPer1M": 2.5,
-        "outputPer1M": 15.0,
+        "outputPer1M": 15,
         "cachedInputPer1M": 0.25
       }
     },
@@ -573,7 +579,7 @@
       "retirementReplacement": "gpt-chat-latest",
       "pricing": {
         "inputPer1M": 1.75,
-        "outputPer1M": 14.0,
+        "outputPer1M": 14,
         "cachedInputPer1M": 0.175
       }
     },
@@ -612,7 +618,7 @@
       "supportsResponsesApi": true,
       "pricing": {
         "inputPer1M": 1.25,
-        "outputPer1M": 10.0,
+        "outputPer1M": 10,
         "cachedInputPer1M": 0.125
       }
     },
@@ -643,7 +649,7 @@
       "retirementReplacement": "gpt-chat-latest",
       "pricing": {
         "inputPer1M": 1.25,
-        "outputPer1M": 10.0,
+        "outputPer1M": 10,
         "cachedInputPer1M": 0.125
       }
     },
@@ -678,7 +684,7 @@
       "retirementReplacement": "gpt-5.1",
       "pricing": {
         "inputPer1M": 2.5,
-        "outputPer1M": 10.0,
+        "outputPer1M": 10,
         "cachedInputPer1M": 1.25
       }
     },
@@ -719,8 +725,8 @@
     "claude-opus-4-8": {
       "id": "claude-opus-4-8",
       "name": "Claude Opus 4.8",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "sizeClass": "large",
       "series": "claude",
@@ -732,12 +738,11 @@
       "tagline": "Newest and strongest Claude",
       "description": "Anthropic's newest and strongest model. Excellent for long writing, research, coding, and careful analysis.",
       "isDisabled": false,
-      "tier": "featured",
       "hosting": "external",
       "provider": "anthropic",
       "knowledgeCutoffDate": "2026-02",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-opus-4-8",
       "supportsReasoningEffort": true,
       "supportsVerbosity": false,
@@ -747,11 +752,12 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 25.0,
+        "inputPer1M": 5,
+        "outputPer1M": 25,
         "cachedInputPer1M": 0.5,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive"
     },
     "claude-sonnet-4-5": {
       "id": "claude-sonnet-4-5",
@@ -785,11 +791,13 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 3.0,
-        "outputPer1M": 15.0,
+        "inputPer1M": 3,
+        "outputPer1M": 15,
         "cachedInputPer1M": 0.3,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "budget",
+      "sizeClass": "standard"
     },
     "DeepSeek-V3.2": {
       "id": "DeepSeek-V3.2",
@@ -885,7 +893,7 @@
       "supportsResponsesApi": true,
       "pricing": {
         "inputPer1M": 1.25,
-        "outputPer1M": 10.0,
+        "outputPer1M": 10,
         "cachedInputPer1M": 0.125
       }
     },
@@ -916,7 +924,7 @@
       "retirementReplacement": "gpt-chat-latest",
       "pricing": {
         "inputPer1M": 1.25,
-        "outputPer1M": 10.0,
+        "outputPer1M": 10,
         "cachedInputPer1M": 0.125
       }
     },
@@ -1107,10 +1115,10 @@
     "claude-fable-5": {
       "id": "claude-fable-5",
       "name": "Claude Fable 5",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
-      "sizeClass": "large",
+      "sizeClass": "xl",
       "tagline": "Anthropic's frontier model",
       "description": "Anthropic's most intelligent model, the first of the Claude 5 family. Excellent for the hardest writing, research, and coding tasks.",
       "isDisabled": false,
@@ -1118,7 +1126,7 @@
       "provider": "anthropic",
       "knowledgeCutoffDate": "2026-01",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-fable-5",
       "supportsReasoningEffort": true,
       "supportsVerbosity": false,
@@ -1128,17 +1136,24 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 10.0,
-        "outputPer1M": 50.0,
-        "cachedInputPer1M": 1.0,
+        "inputPer1M": 10,
+        "outputPer1M": 50,
+        "cachedInputPer1M": 1,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive",
+      "series": "claude",
+      "seriesLabel": "Claude",
+      "variant": "fable",
+      "variantLabel": "Fable",
+      "variantRank": 0,
+      "versionLabel": "5"
     },
     "claude-sonnet-5": {
       "id": "claude-sonnet-5",
       "name": "Claude Sonnet 5",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "series": "claude",
       "seriesLabel": "Claude",
@@ -1154,7 +1169,7 @@
       "provider": "anthropic",
       "knowledgeCutoffDate": "2026-03",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-sonnet-5",
       "supportsReasoningEffort": true,
       "supportsVerbosity": false,
@@ -1164,11 +1179,13 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 3.0,
-        "outputPer1M": 15.0,
-        "cachedInputPer1M": 0.3,
+        "inputPer1M": 2,
+        "outputPer1M": 10,
+        "cachedInputPer1M": 0.2,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive",
+      "sizeClass": "standard"
     },
     "claude-opus-4-5": {
       "id": "claude-opus-4-5",
@@ -1203,11 +1220,12 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 25.0,
+        "inputPer1M": 5,
+        "outputPer1M": 25,
         "cachedInputPer1M": 0.5,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "budget"
     },
     "mistral-medium-2505": {
       "id": "mistral-medium-2505",
@@ -1234,7 +1252,7 @@
       "lifecycle": "ga",
       "pricing": {
         "inputPer1M": 0.4,
-        "outputPer1M": 2.0,
+        "outputPer1M": 2,
         "confidence": "serverless-legacy"
       }
     },
@@ -1416,8 +1434,8 @@
       "supportsVision": true,
       "lifecycle": "ga",
       "pricing": {
-        "inputPer1M": 3.0,
-        "outputPer1M": 15.0
+        "inputPer1M": 3,
+        "outputPer1M": 15
       }
     },
     "gpt-5.5": {
@@ -1453,8 +1471,8 @@
       "retirementDate": "2027-04-23",
       "supportsResponsesApi": true,
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 30.0,
+        "inputPer1M": 5,
+        "outputPer1M": 30,
         "cachedInputPer1M": 0.5
       }
     },
@@ -1482,8 +1500,8 @@
       "lifecycle": "preview",
       "retirementDate": "2026-08-28",
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 30.0,
+        "inputPer1M": 5,
+        "outputPer1M": 30,
         "cachedInputPer1M": 0.5,
         "alias": true
       }
@@ -1491,8 +1509,8 @@
     "claude-opus-4-7": {
       "id": "claude-opus-4-7",
       "name": "Claude Opus 4.7",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "sizeClass": "large",
       "series": "claude",
@@ -1508,7 +1526,7 @@
       "provider": "anthropic",
       "knowledgeCutoffDate": "2026-02",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-opus-4-7",
       "supportsReasoningEffort": true,
       "supportsVerbosity": false,
@@ -1520,11 +1538,12 @@
       "supportsMinimalReasoning": true,
       "reasoningEffort": "minimal",
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 25.0,
+        "inputPer1M": 5,
+        "outputPer1M": 25,
         "cachedInputPer1M": 0.5,
         "billing": "marketplace"
-      }
+      },
+      "thinkingApi": "adaptive"
     },
     "DeepSeek-V4-Pro": {
       "id": "DeepSeek-V4-Pro",
@@ -1625,8 +1644,8 @@
       "retirementDate": "2027-07-09",
       "supportsResponsesApi": true,
       "pricing": {
-        "inputPer1M": 5.0,
-        "outputPer1M": 30.0,
+        "inputPer1M": 5,
+        "outputPer1M": 30,
         "cachedInputPer1M": 0.5
       }
     },
@@ -1661,8 +1680,8 @@
       "retirementDate": "2027-07-09",
       "supportsResponsesApi": true,
       "pricing": {
-        "inputPer1M": 2.0,
-        "outputPer1M": 12.0,
+        "inputPer1M": 2,
+        "outputPer1M": 12,
         "cachedInputPer1M": 0.2
       }
     },
@@ -1735,9 +1754,9 @@
       "retirementDate": "2028-01-11",
       "supportsResponsesApi": true,
       "pricing": {
-        "inputPer1M": 10.0,
-        "outputPer1M": 50.0,
-        "cachedInputPer1M": 1.0,
+        "inputPer1M": 10,
+        "outputPer1M": 50,
+        "cachedInputPer1M": 1,
         "confidence": "list"
       }
     },
@@ -1794,7 +1813,7 @@
       "retirementDate": "2027-04-16",
       "pricing": {
         "inputPer1M": 0.95,
-        "outputPer1M": 4.0,
+        "outputPer1M": 4,
         "cachedInputPer1M": 0.16
       }
     },
@@ -1880,6 +1899,79 @@
       "pricing": {
         "inputPer1M": 0.25,
         "outputPer1M": 1.27
+      }
+    },
+    "claude-opus-5": {
+      "id": "claude-opus-5",
+      "name": "Claude Opus 5",
+      "modelType": "omni",
+      "series": "claude",
+      "seriesLabel": "Claude",
+      "isDisabled": false,
+      "hosting": "external",
+      "provider": "anthropic",
+      "sdk": "anthropic-foundry",
+      "supportsTemperature": false,
+      "supportsReasoningEffort": true,
+      "supportsVerbosity": false,
+      "supportsVision": true,
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "thinkingApi": "adaptive",
+      "reasoningEffort": "minimal",
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
+      "sizeClass": "large",
+      "variant": "opus",
+      "variantLabel": "Opus",
+      "variantRank": 1,
+      "versionLabel": "5",
+      "tier": "featured",
+      "tagline": "Newest and strongest Claude",
+      "description": "Anthropic's newest Opus. Excellent for long writing, research, coding, and careful analysis.",
+      "deploymentName": "claude-opus-5",
+      "pricing": {
+        "inputPer1M": 5,
+        "outputPer1M": 25,
+        "cachedInputPer1M": 0.5,
+        "billing": "marketplace"
+      }
+    },
+    "claude-fable-5-1": {
+      "id": "claude-fable-5-1",
+      "name": "Claude Fable 5.1",
+      "modelType": "omni",
+      "series": "claude",
+      "seriesLabel": "Claude",
+      "isDisabled": false,
+      "hosting": "external",
+      "provider": "anthropic",
+      "sdk": "anthropic-foundry",
+      "supportsTemperature": false,
+      "supportsReasoningEffort": true,
+      "supportsVerbosity": false,
+      "supportsVision": true,
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "thinkingApi": "adaptive",
+      "reasoningEffort": "minimal",
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
+      "sizeClass": "xl",
+      "variant": "fable",
+      "variantLabel": "Fable",
+      "variantRank": 0,
+      "versionLabel": "5.1",
+      "tagline": "Anthropic's frontier model",
+      "description": "Anthropic's most capable model, for the hardest reasoning, research, and coding tasks. Thinking is always on, so every turn costs more than Opus.",
+      "deploymentName": "claude-fable-5-1",
+      "pricing": {
+        "inputPer1M": 10,
+        "outputPer1M": 50,
+        "cachedInputPer1M": 0.25,
+        "billing": "marketplace"
       }
     }
   }
