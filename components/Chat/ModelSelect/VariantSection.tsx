@@ -42,11 +42,12 @@ interface VariantSectionProps {
 }
 
 /**
- * Variant switcher for family models — the second in-row axis next to the
- * Version chips (e.g. Standard/Mini/Nano for GPT, Opus/Sonnet/Haiku for
- * Claude, Standard/Reasoning for DeepSeek). Switching keeps the current
- * version when the target variant has it, else jumps to that variant's
- * representative.
+ * Variant switcher for family models — the FIRST narrowing axis inside a
+ * family row, above the Version chips (Foundational/Chat/Mini/Nano/o-series
+ * for GPT, Fable/Opus/Sonnet/Haiku for Claude, Standard/Reasoning for
+ * DeepSeek). Switching keeps as much of the user's position as the target
+ * variant can offer — same version, and same sub-variant within it — else
+ * jumps to that variant's representative.
  */
 export const VariantSection: FC<VariantSectionProps> = ({
   selectedModel,
@@ -109,8 +110,14 @@ export const VariantSection: FC<VariantSectionProps> = ({
   // the tier icon, the limit badge and the click agree on the same model.
   const variantTargets = variants.map(
     (variant) =>
-      pickVariantTarget(variant.members, meta.versionLabel, isNotExhausted) ??
-      variant.members[0],
+      pickVariantTarget(
+        variant.members,
+        meta.versionLabel,
+        isNotExhausted,
+        // Carry the size tier across too, so Terra → o-series lands on the
+        // o-series mini rather than resetting to its flagship.
+        meta.subVariant,
+      ) ?? variant.members[0],
   );
 
   // Emissions tier of each segment's click target. Icons render only when
