@@ -208,6 +208,27 @@ export interface OpenAIModel {
    */
   variantRank?: number;
   /**
+   * Sub-variant key — the THIRD in-row axis, nested inside a single version
+   * of a variant. It exists because some generations ship several models at
+   * ONE version number: GPT 5.6 is Sol/Terra/Luna, and o-series 3 is o3 and
+   * o3-mini. Without this axis those models collide on `versionLabel`, which
+   * is the key the version chips and the switch-preserving targeting run on
+   * — two chips both reading "5.6" and a non-deterministic click target.
+   *
+   * Absent = the version has a single model, which is the common case; the
+   * sub-variant control renders only where a version actually has more than
+   * one. Picker-only, like `variant`.
+   */
+  subVariant?: string;
+  /** Display label of the sub-variant chip (e.g. "Sol", "Mini"). */
+  subVariantLabel?: string;
+  /**
+   * Display position of this sub-variant within its version (1 = first),
+   * encoding the capability hierarchy (e.g. Sol 1, Terra 2, Luna 3).
+   * Unranked sub-variants sort after ranked ones, in order of appearance.
+   */
+  subVariantRank?: number;
+  /**
    * Family-default preference: when nothing in the family is selected, the
    * row fronts (and selects) the AVAILABLE model with the LOWEST rank;
    * same-rank ties go to the newest version, so "rank 1 on every Sonnet"
@@ -520,6 +541,9 @@ const openAIModelSchema = z.object({
   variant: z.string().optional(),
   variantLabel: z.string().optional(),
   variantRank: z.number().optional(),
+  subVariant: z.string().optional(),
+  subVariantLabel: z.string().optional(),
+  subVariantRank: z.number().optional(),
   defaultRank: z.number().optional(),
   reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
   supportsReasoningEffort: z.boolean().optional(),
