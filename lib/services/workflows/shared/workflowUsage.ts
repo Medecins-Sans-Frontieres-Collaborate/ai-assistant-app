@@ -17,7 +17,9 @@
  * `estimateCO2Grams` treats as `default`.
  */
 import { Session } from 'next-auth';
+import { NextResponse } from 'next/server';
 
+import { guardTokenBudget } from '@/lib/services/limits/routeGuard';
 import { recordTokenUsage } from '@/lib/services/observability/tokenUsageRecorder';
 
 import { RequestTelemetry } from '@/lib/types/logging';
@@ -149,4 +151,30 @@ export class WorkflowUsageCollector {
       region: null,
     };
   }
+}
+
+/**
+ * Opens a workflow run: enforces the shared token budget, then hands back the
+ * collector for the run's calls.
+ *
+ * Every workflow route that calls a model goes through this. The pre-flight is
+ * the other half of the debit — without it a user over budget would be blocked
+ * on their next chat message while workflow runs kept adding to the counter
+ * that could never stop them (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+ */
+export async function beginWorkflowRun(
+  session: Session,
+  action: string,
+  conversationId?: unknown,
+): Promise<{ denied: NextResponse | null; usage: WorkflowUsageCollector }> {
+  const budget = await guardTokenBudget(session);
+  return {
+    denied: budget.allowed ? null : (budget.response ?? null),
+    usage: new WorkflowUsageCollector({
+      user: session.user,
+      action,
+      conversationId:
+        typeof conversationId === 'string' ? conversationId : undefined,
+    }),
+  };
 }
