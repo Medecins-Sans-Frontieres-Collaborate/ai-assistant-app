@@ -80,6 +80,24 @@ export interface OpenAIModel {
    */
   supportsExtendedThinking?: boolean;
   /**
+   * WHICH extended-thinking request shape this Claude model accepts. Anthropic
+   * replaced the fixed-budget API with adaptive thinking, and the two are
+   * mutually exclusive — sending the wrong one is a hard 400, not a
+   * degradation:
+   *
+   * - `adaptive` — `thinking: {type:'adaptive'}` + `output_config.effort`.
+   *   Required on Fable 5/5.1, Opus 5/4.8/4.7 and Sonnet 5, which reject BOTH
+   *   `budget_tokens` and any explicit `temperature`; recommended on Opus 4.6
+   *   and Sonnet 4.6, which still accept either. Models here should also carry
+   *   `supportsTemperature: false` when the model rejects sampling params.
+   * - `budget` — the legacy `thinking: {type:'enabled', budget_tokens: N}`.
+   *   The only shape Haiku 4.5 and the 4.5/4.1 generation accept.
+   *
+   * Absent = no extended thinking is ever requested (read together with
+   * `supportsExtendedThinking`, which gates the feature on/off).
+   */
+  thinkingApi?: 'adaptive' | 'budget';
+  /**
    * Azure OpenAI Responses API support. Flagged models route their plain
    * streaming/non-streaming chat through `responses.create` (reasoning
    * summaries become visible thinking); unflagged models — and every MCP,
@@ -309,6 +327,10 @@ export enum OpenAIModelID {
   CLAUDE_SONNET_5 = 'claude-sonnet-5',
   CLAUDE_OPUS_4_7 = 'claude-opus-4-7',
   CLAUDE_OPUS_4_5 = 'claude-opus-4-5',
+  // Claude 5 flagships (deployed in all four Foundry accounts 2026-09). Both
+  // use the ADAPTIVE thinking API — see `thinkingApi` below.
+  CLAUDE_OPUS_5 = 'claude-opus-5',
+  CLAUDE_FABLE_5_1 = 'claude-fable-5-1',
   // Other providers
   KIMI_K2_6 = 'Kimi-K2.6',
   LLAMA_4_MAVERICK = 'Llama-4-Maverick-17B-128E-Instruct-FP8',
@@ -358,9 +380,9 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_5_2, // "GPT" family row
   OpenAIModelID.GPT_5_2_CHAT, // "GPT Chat" family row
   OpenAIModelID.GPT_5_6_SOL, // "GPT 5.6 / 6" family row (Astra → Sol → Terra → Luna; Sol fronts it)
-  OpenAIModelID.CLAUDE_OPUS_4_8, // "Claude" family row…
-  OpenAIModelID.CLAUDE_SONNET_4_6, // …prod anchor + prod face (4.8/5 ring-gated there)
-  OpenAIModelID.CLAUDE_FABLE_5, // standalone row
+  OpenAIModelID.CLAUDE_OPUS_5, // "Claude" family row (deployed in every ring)…
+  OpenAIModelID.CLAUDE_OPUS_4_8, // …anchors instead where 5 isn't served…
+  OpenAIModelID.CLAUDE_SONNET_4_6, // …prod anchor + prod face
   OpenAIModelID.MISTRAL_LARGE_3, // "Mistral" family row
   OpenAIModelID.DEEPSEEK_V3_2, // "DeepSeek" family row (Standard variant leads)…
   OpenAIModelID.DEEPSEEK_R1, // …prod anchor (V3.2 ring-gated there)
@@ -392,6 +414,8 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_5_CHAT,
   OpenAIModelID.GPT_o4_MINI,
   OpenAIModelID.GPT_o3_MINI,
+  OpenAIModelID.CLAUDE_FABLE_5_1,
+  OpenAIModelID.CLAUDE_FABLE_5,
   OpenAIModelID.CLAUDE_SONNET_5,
   OpenAIModelID.CLAUDE_OPUS_4_7,
   OpenAIModelID.CLAUDE_OPUS_4_6,
@@ -463,6 +487,7 @@ const openAIModelSchema = z.object({
   supportsTools: z.boolean().optional(),
   supportsCodeInterpreter: z.boolean().optional(),
   supportsExtendedThinking: z.boolean().optional(),
+  thinkingApi: z.enum(['adaptive', 'budget']).optional(),
   supportsResponsesApi: z.boolean().optional(),
   deploymentName: z.string().optional(),
   modelSource: z.string().optional(),
