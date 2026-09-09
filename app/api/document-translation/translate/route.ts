@@ -7,7 +7,11 @@
  * POST /api/document-translation/translate
  * Content-Type: multipart/form-data
  * Body:
- *   - document: File (required) - The document to translate
+ *   - document: File (required unless driveId+itemId) - The document to translate
+ *   - driveId + itemId: string (optional) - OneDrive/SharePoint source instead
+ *     of `document`; the server fetches the bytes with the caller's delegated
+ *     Graph token and everything downstream is identical to an upload. The
+ *     Translator still only ever sees the staging account.
  *   - targetLanguage: string (required) - Target language code (e.g., 'es', 'fr')
  *   - sourceLanguage: string (optional) - Source language code (auto-detect if omitted)
  *   - glossary: File (optional) - Glossary file (CSV, TSV, or XLIFF)
@@ -19,6 +23,12 @@ import { NextRequest } from 'next/server';
 
 import { DocumentTranslationService } from '@/lib/services/documentTranslation/documentTranslationService';
 import { createTranslationJob } from '@/lib/services/documentTranslation/translationJobStore';
+import { guardLimit } from '@/lib/services/limits/routeGuard';
+import { isValidGraphId } from '@/lib/services/m365/graphApi';
+import {
+  fetchDriveItemBuffer,
+  m365ImportErrorResponse,
+} from '@/lib/services/m365/m365ImportService';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
 import {
@@ -38,6 +48,7 @@ import {
   MAX_DOCUMENT_SIZE,
   MAX_GLOSSARY_SIZE,
   TRANSLATION_EXPIRY_DAYS,
+  TRANSLATION_STAGING_CONTAINER,
   generateTranslatedFilename,
   getDocumentContentType,
   requiresAsyncTranslation,
@@ -74,13 +85,43 @@ export async function POST(request: NextRequest) {
   }
 
   // Extract form fields
-  const document = formData.get('document') as File | null;
+  let document = formData.get('document') as File | null;
   const targetLanguage = formData.get('targetLanguage') as string | null;
   const sourceLanguage = formData.get('sourceLanguage') as string | null;
   const glossary = formData.get('glossary') as File | null;
   const customOutputFilename = formData.get('customOutputFilename') as
     | string
     | null;
+  const driveId = formData.get('driveId');
+  const itemId = formData.get('itemId');
+
+  // M365 source: fetch the bytes server-side and continue exactly as if
+  // they had been uploaded. Provenance (the source's folder) is kept so the
+  // viewer can offer "save next to original".
+  let m365Source: { driveId: string; parentItemId: string } | undefined;
+  if (!document && typeof driveId === 'string' && typeof itemId === 'string') {
+    if (!isValidGraphId(driveId) || !isValidGraphId(itemId)) {
+      return badRequestResponse('Invalid driveId or itemId');
+    }
+    try {
+      const fetched = await fetchDriveItemBuffer(
+        request,
+        { driveId, itemId },
+        { maxBytes: MAX_DOCUMENT_SIZE },
+      );
+      document = new File([new Uint8Array(fetched.data)], fetched.name, {
+        type: fetched.mimeType,
+      });
+      if (fetched.parentFolder) {
+        m365Source = {
+          driveId: fetched.parentFolder.driveId,
+          parentItemId: fetched.parentFolder.itemId,
+        };
+      }
+    } catch (error) {
+      return m365ImportErrorResponse(error);
+    }
+  }
 
   // Validate required fields
   if (!document) {
@@ -100,6 +141,17 @@ export async function POST(request: NextRequest) {
       `Unsupported document format. Supported formats: .txt, .html, .docx, .xlsx, .pptx, .pdf, .msg, .xliff, .csv, .tsv, .mhtml`,
       'UNSUPPORTED_FORMAT',
     );
+  }
+
+  // Usage limit: document translations per day (docs/LIMITS.md). Checked
+  // alongside the existing size gate, before any staging-account work.
+  const translationGuard = await guardLimit(
+    session,
+    'feature.translation.jobsPerDay',
+    { req: request },
+  );
+  if (!translationGuard.allowed && translationGuard.response) {
+    return translationGuard.response;
   }
 
   // Validate document size
@@ -160,11 +212,16 @@ export async function POST(request: NextRequest) {
     const translationService = new DocumentTranslationService();
 
     // PDFs can't go through the synchronous document:translate endpoint —
-    // they take the ASYNC batch path: upload the original, submit a
-    // storageType:'File' batch that writes straight to the standard
-    // translated-blob path, hand back a jobId, and let the client poll
-    // /api/document-translation/status/{jobId}. Everything downstream
-    // (content route, reference format) is shared with the sync path.
+    // they take the ASYNC batch path via the dedicated STAGING storage
+    // account: upload the original to user storage (for display/download)
+    // AND to staging, submit a storageType:'File' batch against short-lived
+    // staging SAS URLs, hand back a jobId, and let the client poll
+    // /api/document-translation/status/{jobId}. The status route copies the
+    // finished translation from staging into the standard translated-blob
+    // path in user storage, so everything downstream (content route,
+    // reference format) is shared with the sync path. The Translator service
+    // only ever touches the staging account — the firewalled user-data
+    // accounts are never exposed to it.
     if (requiresAsyncTranslation(document.name)) {
       const jobId = uuidv4();
       const fileExtension = sanitizeBlobExtension(
@@ -186,18 +243,35 @@ export async function POST(request: NextRequest) {
         session.user,
       );
 
+      // Scratch storage the Translator can reach (SAS-gated, auto-purged
+      // by a 1-day lifecycle rule). Per-region like user storage, so EU
+      // documents stage in the EU account.
+      const stagingStorage = new AzureBlobStorage(
+        getEnvVariable({
+          name: 'AZURE_BLOB_STORAGE_STAGING_NAME',
+          user: session.user,
+        }),
+        TRANSLATION_STAGING_CONTAINER,
+        session.user,
+      );
+
       const originalBlobPath = `${session.user.id}/translations/${jobId}_original.${fileExtension}`;
       const blobPath = `${session.user.id}/translations/${jobId}.${fileExtension}`;
       const contentType = getDocumentContentType(document.name);
+      // User storage copy — serves the original-file download immediately.
       await blobStorage.upload(originalBlobPath, documentBuffer, {
         blobHTTPHeaders: {
           blobContentType: contentType,
           blobContentDisposition: `attachment; filename="${encodeURIComponent(document.name)}"`,
         },
       });
+      // Staging copy — what the Translator actually reads.
+      await stagingStorage.upload(originalBlobPath, documentBuffer, {
+        blobHTTPHeaders: { blobContentType: contentType },
+      });
 
-      // Optional glossary rides along as a read-SAS blob.
-      let glossarySasUrl: string | undefined;
+      // Optional glossary stages alongside the source (read SAS).
+      let glossaryUrl: string | undefined;
       let glossaryFormat: string | undefined;
       if (glossaryBuffer && glossary) {
         const glossaryExt = sanitizeBlobExtension(
@@ -205,8 +279,8 @@ export async function POST(request: NextRequest) {
           'csv',
         );
         const glossaryBlobPath = `${session.user.id}/translations/${jobId}_glossary.${glossaryExt}`;
-        await blobStorage.upload(glossaryBlobPath, glossaryBuffer, {});
-        glossarySasUrl = await blobStorage.generateContainerScopedSasUrl(
+        await stagingStorage.upload(glossaryBlobPath, glossaryBuffer, {});
+        glossaryUrl = await stagingStorage.generateContainerScopedSasUrl(
           glossaryBlobPath,
           4,
           'rl',
@@ -214,33 +288,33 @@ export async function POST(request: NextRequest) {
         glossaryFormat = glossaryExt === 'tsv' ? 'tsv' : glossaryExt;
       }
 
-      // Container-scoped SAS on blob URLs — the exact shape Document
+      // Container-scoped SAS on staging blob URLs — the exact shape Document
       // Translation requires (its target validation needs `list`, which a
       // blob SAS cannot carry; MS samples sign sr=c with sp=rl / sp=wl).
       // Source: read+list. Target: write+list on a blob that does not exist
-      // yet — Azure writes it on completion, at exactly the path the
-      // existing content route serves. Short expiry: jobs finish in minutes.
-      const sourceSasUrl = await blobStorage.generateContainerScopedSasUrl(
+      // yet — Azure writes it on completion; the status route copies it into
+      // user storage at the same path. Short expiry: jobs finish in minutes.
+      const sourceUrl = await stagingStorage.generateContainerScopedSasUrl(
         originalBlobPath,
         4,
         'rl',
       );
-      const targetSasUrl = await blobStorage.generateContainerScopedSasUrl(
+      const targetUrl = await stagingStorage.generateContainerScopedSasUrl(
         blobPath,
         4,
         'wl',
       );
 
       const operationId = await translationService.submitBatchTranslation({
-        sourceSasUrl,
-        targetSasUrl,
+        sourceUrl,
+        targetUrl,
         targetLanguage,
         sourceLanguage: sourceLanguage || undefined,
-        glossarySasUrl,
+        glossaryUrl,
         glossaryFormat,
       });
 
-      createTranslationJob({
+      await createTranslationJob(blobStorage, {
         jobId,
         userId: session.user.id,
         operationId,
@@ -249,6 +323,7 @@ export async function POST(request: NextRequest) {
         ext: fileExtension,
         targetLanguage,
         createdAt: Date.now(),
+        ...(m365Source && { m365Source }),
       });
 
       console.log(
@@ -358,12 +433,15 @@ export async function POST(request: NextRequest) {
       targetLanguage,
       targetLanguageName: targetLangInfo.englishName,
       fileExtension,
+      ...(m365Source && { m365Source }),
     };
 
     return successResponse(reference);
   } catch (error) {
     const errorMessage = ctx.getErrorMessage(error);
-    console.error('[DocumentTranslation] Translation failed:', errorMessage);
+    // Full error object server-side — Azure SDK errors hide the useful
+    // parts (code, statusCode, request URL) outside .message.
+    console.error('[DocumentTranslation] Translation failed:', error);
 
     // Log error (targetLanguage and sourceLanguage are available from outer scope)
     void ctx.logger.logTranslationError({
@@ -372,14 +450,19 @@ export async function POST(request: NextRequest) {
       targetLanguage: targetLanguage || undefined,
       contentLength: document?.size,
       isDocumentTranslation: true,
-      errorCode: errorMessage.includes('AZURE_TRANSLATOR_ENDPOINT')
-        ? 'SERVICE_NOT_CONFIGURED'
-        : 'TRANSLATION_FAILED',
+      errorCode:
+        errorMessage.includes('AZURE_TRANSLATOR_ENDPOINT') ||
+        errorMessage.includes('AZURE_BLOB_STORAGE_STAGING_NAME')
+          ? 'SERVICE_NOT_CONFIGURED'
+          : 'TRANSLATION_FAILED',
       errorMessage,
     });
 
     // Check for specific error types
-    if (errorMessage.includes('AZURE_TRANSLATOR_ENDPOINT')) {
+    if (
+      errorMessage.includes('AZURE_TRANSLATOR_ENDPOINT') ||
+      errorMessage.includes('AZURE_BLOB_STORAGE_STAGING_NAME')
+    ) {
       return errorResponse(
         'Document translation service is not configured. Please contact your administrator.',
         500,

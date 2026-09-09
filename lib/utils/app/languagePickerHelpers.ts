@@ -19,6 +19,12 @@ export interface LanguageOption {
 /**
  * Case-insensitive substring filter over `label`, `sublabel`, and `code`.
  * Empty / whitespace-only queries return the original list unchanged.
+ *
+ * One deliberate ranking rule: a two-character query that exactly matches an
+ * option's code promotes that option to the top — someone typing "de" or
+ * "es" means the ISO code, and the alphabetical order would otherwise bury
+ * it under substring matches (e.g. "es" inside "Burmese"). Exactly two
+ * characters only; every other query keeps the input order.
  */
 export function filterLanguageOptions(
   options: LanguageOption[],
@@ -26,13 +32,23 @@ export function filterLanguageOptions(
 ): LanguageOption[] {
   const trimmed = query.trim().toLowerCase();
   if (!trimmed) return options;
-  return options.filter((opt) => {
+  const filtered = options.filter((opt) => {
     if (opt.label.toLowerCase().includes(trimmed)) return true;
     if (opt.sublabel && opt.sublabel.toLowerCase().includes(trimmed))
       return true;
     if (opt.code.toLowerCase().includes(trimmed)) return true;
     return false;
   });
+  if (trimmed.length === 2) {
+    const exactIndex = filtered.findIndex(
+      (opt) => opt.code.toLowerCase() === trimmed,
+    );
+    if (exactIndex > 0) {
+      const [exact] = filtered.splice(exactIndex, 1);
+      filtered.unshift(exact);
+    }
+  }
+  return filtered;
 }
 
 /**

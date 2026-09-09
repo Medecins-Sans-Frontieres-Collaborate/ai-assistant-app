@@ -5,6 +5,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const PERSISTED_DEFAULTS = {
   enrollmentStatus: 'unset' as const,
+  storageBackend: 'app' as const,
+  storageChosen: false,
+  encryptionMode: 'encrypted' as const,
   localKeyId: null,
   localKeyEpoch: 1,
   lastSyncedVersion: null,
@@ -239,6 +242,15 @@ describe('backupStore', () => {
 
       const result = migrate(null, 0) as Record<string, unknown>;
       expect(result).toEqual(PERSISTED_DEFAULTS);
+    });
+
+    it('migrate defaults v1 blobs (no storageBackend) to app storage', () => {
+      const migrate = useBackupStore.persist.getOptions().migrate!;
+      const v1 = { ...PERSISTED_DEFAULTS } as Record<string, unknown>;
+      delete v1.storageBackend;
+
+      const result = migrate(v1, 1) as Record<string, unknown>;
+      expect(result.storageBackend).toBe('app');
     });
 
     it('migrate passes a valid v1 blob through unchanged', () => {

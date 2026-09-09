@@ -118,7 +118,10 @@ export async function POST(request: NextRequest) {
     if (cached) {
       return successResponse({
         serverLabel: resolved.label,
-        tools: cached.map(({ name, description }) => ({ name, description })),
+        tools: cached.tools.map(({ name, description }) => ({
+          name,
+          description,
+        })),
         cached: true,
       });
     }
@@ -139,7 +142,12 @@ export async function POST(request: NextRequest) {
 
   try {
     const tools = await connection.listTools();
-    setCachedTools(cacheKey, tools);
+    // Also capture initialize `instructions` so a chat right after this
+    // listing reuses them from cache (tool loop reads the same entries).
+    setCachedTools(cacheKey, {
+      tools,
+      instructions: connection.getInstructions?.(),
+    });
     return successResponse({
       serverLabel: resolved.label,
       tools: tools.map(({ name, description }) => ({ name, description })),

@@ -1,3 +1,5 @@
+import { StreamInterruptedError } from '@/lib/utils/shared/chat/streamParser';
+
 import { Conversation } from '@/types/chat';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
@@ -102,6 +104,78 @@ describe('ChatStore - fallback chain', () => {
         );
 
       expect(retrySpy).not.toHaveBeenCalled();
+    });
+
+    it('does not silently retry a server-reported mid-stream failure', () => {
+      // A streamError metadata block means the stream was already underway
+      // (tools may have run) — walking the fallback chain would leave the
+      // user staring at the loader with no indication of what happened.
+      const retrySpy = vi.fn().mockResolvedValue(undefined);
+      useChatStore.setState({
+        retryWithFallbackModel: retrySpy,
+        loadingMessage: 'chat.activity.listingTools',
+      });
+
+      useChatStore
+        .getState()
+        .handleSendError(
+          new StreamInterruptedError(
+            'The assistant hit a problem while using connector tools and the response was interrupted.',
+            'TOOL_LOOP_FAILED',
+          ),
+          makeConversation(OpenAIModelID.GPT_5_2_CHAT),
+        );
+
+      expect(retrySpy).not.toHaveBeenCalled();
+      const state = useChatStore.getState();
+      expect(state.error).toMatch(/connector tools/);
+      // The loader must clear — "stuck on loading" was the reported symptom.
+      expect(state.loadingMessage).toBeNull();
+      expect(state.isStreaming).toBe(false);
+    });
+
+    it('DOES auto-retry a mid-stream failure the server flagged with retry (broken promise partial)', () => {
+      // `retry: true` means the partial output is not worth keeping — e.g.
+      // the text cites a generated file that was never delivered. Keeping
+      // it would show the user a download that doesn't exist, so the store
+      // walks the fallback chain like any transient failure.
+      const retrySpy = vi.fn().mockResolvedValue(undefined);
+      useChatStore.setState({ retryWithFallbackModel: retrySpy });
+
+      useChatStore
+        .getState()
+        .handleSendError(
+          new StreamInterruptedError(
+            'The generated file could not be retrieved from the sandbox.',
+            'GENERATED_FILES_UNAVAILABLE',
+            true,
+          ),
+          makeConversation(OpenAIModelID.GPT_5_2_CHAT),
+        );
+
+      expect(retrySpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('rewords opaque browser network errors instead of showing them raw', () => {
+      // Firefox surfaces a server-side mid-stream abort as
+      // NS_ERROR_NET_PARTIAL_TRANSFER; Chrome as "Failed to fetch". Neither
+      // is a user-facing message. (Custom-agent conversation so the fallback
+      // chain doesn't swallow the error first.)
+      const conversation = {
+        ...makeConversation(OpenAIModelID.GPT_5_2_CHAT),
+        model: { id: 'custom-abc', name: 'My Agent' },
+      } as unknown as Conversation;
+
+      useChatStore
+        .getState()
+        .handleSendError(
+          new TypeError('NS_ERROR_NET_PARTIAL_TRANSFER'),
+          conversation,
+        );
+
+      const state = useChatStore.getState();
+      expect(state.error).not.toContain('NS_ERROR');
+      expect(state.error).toMatch(/connection was interrupted/i);
     });
 
     it('does not retry custom agents', () => {

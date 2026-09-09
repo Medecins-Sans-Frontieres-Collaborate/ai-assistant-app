@@ -174,7 +174,22 @@ export function getFileCategory(
  * @param category - The file category
  * @returns Maximum file size in bytes
  */
-export function getFileSizeLimit(category: FileCategory): number {
+export function getFileSizeLimit(
+  category: FileCategory,
+  /**
+   * Admin-configured per-file cap in MB from
+   * `feature.upload.megabytesPerFile` (docs/LIMITS.md). Only ever LOWERS the
+   * compiled category limit — an admin cannot raise a cap the upload path is
+   * not built to buffer. Absent → today's behaviour exactly.
+   */
+  effectiveMegabytes?: number,
+): number {
+  const compiled = compiledFileSizeLimit(category);
+  if (effectiveMegabytes === undefined) return compiled;
+  return Math.min(compiled, effectiveMegabytes * 1024 * 1024);
+}
+
+function compiledFileSizeLimit(category: FileCategory): number {
   switch (category) {
     case 'image':
       return FILE_SIZE_LIMITS.IMAGE_MAX_BYTES;
@@ -321,9 +336,11 @@ export function validateFileSizeRaw(
   filename: string,
   fileSize: number,
   mimeType?: string,
+  /** Admin-configured per-file cap in MB; see getFileSizeLimit. */
+  effectiveMegabytes?: number,
 ): FileSizeValidationResult {
   const category = getFileCategory(filename, mimeType);
-  const maxSize = getFileSizeLimit(category);
+  const maxSize = getFileSizeLimit(category, effectiveMegabytes);
 
   if (fileSize > maxSize) {
     const limitDisplay = getFileSizeLimitDisplay(category);

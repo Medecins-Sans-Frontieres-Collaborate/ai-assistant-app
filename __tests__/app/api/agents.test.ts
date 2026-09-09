@@ -4,6 +4,7 @@ import { PROMPT_AGENT_SOURCE } from '@/lib/services/agentAccess/types';
 
 import { parseJsonResponse } from './helpers';
 
+import { GET as foundryGET } from '@/app/api/agents/foundry/route';
 import { GET } from '@/app/api/agents/route';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -15,10 +16,12 @@ const getDiscoveryPathsForUser = vi.hoisted(() => vi.fn());
 const listUserAgents = vi.hoisted(() => vi.fn());
 const cacheUserAgentEndpoint = vi.hoisted(() => vi.fn());
 const clearCache = vi.hoisted(() => vi.fn());
+const clearCacheForUser = vi.hoisted(() => vi.fn());
 const accessIsEnabled = vi.hoisted(() => vi.fn());
 const accessEnsureFresh = vi.hoisted(() => vi.fn());
 const accessEvaluate = vi.hoisted(() => vi.fn());
 const accessGetPromptAgents = vi.hoisted(() => vi.fn());
+const accessGetM365Agents = vi.hoisted(() => vi.fn());
 
 vi.mock('@/auth', () => ({ auth: mockAuth, getAccessTokenForOBO }));
 vi.mock('@/lib/services/auth/OfficeResolver', () => ({
@@ -35,6 +38,7 @@ vi.mock('@/lib/services/agents/AgentDiscoveryService', () => ({
       listUserAgents,
       cacheUserAgentEndpoint,
       clearCache,
+      clearCacheForUser,
     }),
   },
 }));
@@ -42,12 +46,22 @@ vi.mock('@/lib/services/auth/appIdentityCredential', () => ({
   createAppIdentityCredential: vi.fn(),
 }));
 vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
+  // Re-exported verbatim: the discovery filter imports them to tell the
+  // one-user degraded-group case apart from a whole-ruleset outage.
+  GROUP_MEMBERSHIP_DEGRADED_REASON: 'group-membership-degraded',
+  isGroupMembershipDegradedReason: (reason: string) =>
+    reason === 'group-membership-degraded' ||
+    reason.endsWith(':group-membership-degraded'),
   AgentAccessService: {
     getInstance: () => ({
       isEnabled: accessIsEnabled,
       ensureFresh: accessEnsureFresh,
       evaluateAccess: accessEvaluate,
       getPromptAgents: accessGetPromptAgents,
+      getM365Agents: accessGetM365Agents,
+      // Org RAG agents ride the same discovery merge; these tests don't
+      // exercise that path.
+      getOrgAgents: () => [],
     }),
   },
 }));
@@ -59,8 +73,22 @@ const ENDPOINT_B = 'https://acct.services.ai.azure.com/api/projects/proj2';
 
 const USER_MAIL = 'user@example.com';
 
-function request(): NextRequest {
+/**
+ * The existing discovery-filter tests exercise the legacy COMBINED payload
+ * (`?include=foundry`), which the fast route still serves for one release.
+ */
+function request(extra = ''): NextRequest {
+  return new NextRequest(
+    `http://localhost:3000/api/agents?include=foundry${extra ? '&' + extra : ''}`,
+  );
+}
+function fastRequest(): NextRequest {
   return new NextRequest('http://localhost:3000/api/agents');
+}
+function foundryRequest(extra = ''): NextRequest {
+  return new NextRequest(
+    `http://localhost:3000/api/agents/foundry${extra ? '?' + extra : ''}`,
+  );
 }
 
 describe('GET /api/agents — access-control discovery filter', () => {
@@ -82,6 +110,7 @@ describe('GET /api/agents — access-control discovery filter', () => {
     accessEnsureFresh.mockResolvedValue(undefined);
     accessEvaluate.mockReturnValue({ decision: 'allow', reason: 'no-rule' });
     accessGetPromptAgents.mockReturnValue([]);
+    accessGetM365Agents.mockReturnValue([]);
   });
 
   it('returns 401 when unauthenticated', async () => {
@@ -257,6 +286,7 @@ describe('GET /api/agents — access-control discovery filter', () => {
             type: 'prompt',
           },
         ],
+        suppressedOrgAgentIds: [],
         regionalPath: null,
         officePaths: [],
       });
@@ -326,6 +356,177 @@ describe('GET /api/agents — access-control discovery filter', () => {
         data.agents.map((a: { agentName: string }) => a.agentName),
       ).toEqual(['agent-a', 'agent-b']);
       expect(accessGetPromptAgents).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('static org agents', () => {
+    it('folds static ids the user is denied into suppressedOrgAgentIds', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessEvaluate.mockImplementation(
+        ({ source, agentName }: { source: string; agentName: string }) =>
+          source === 'org-agent' && agentName === 'msf_communications'
+            ? { decision: 'deny', reason: 'not-allowed' }
+            : { decision: 'allow', reason: 'no-rule' },
+      );
+
+      const response = await GET(request());
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data.suppressedOrgAgentIds).toEqual(['msf_communications']);
+      // Foundry discovery is untouched by the org-agent rule.
+      expect(
+        data.agents.map((a: { agentName: string }) => a.agentName),
+      ).toEqual(['agent-a', 'agent-b']);
+    });
+
+    it('keeps static agents visible on no-rule and on unavailable (visibility-only surface)', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessEvaluate.mockImplementation(({ source }: { source: string }) =>
+        source === 'org-agent'
+          ? { decision: 'unavailable', reason: 'rules-unavailable' }
+          : { decision: 'allow', reason: 'no-rule' },
+      );
+
+      const response = await GET(request());
+      const data = await parseJsonResponse(response);
+
+      expect(data.suppressedOrgAgentIds).toEqual([]);
+    });
+  });
+
+  describe('M365 file-backed agents', () => {
+    const m365Source = (overrides: Record<string, unknown>) => ({
+      sourceId: 'src-1',
+      driveId: 'd1',
+      itemId: 'i1',
+      kind: 'file',
+      title: 'Doc',
+      webUrl: '',
+      status: 'pending',
+      ...overrides,
+    });
+    const m365Agent = (
+      id: string,
+      sources: Array<Record<string, unknown>>,
+    ) => ({
+      id,
+      name: id,
+      description: '',
+      sources,
+    });
+
+    it('hides never-indexed and zero-chunk agents from discovery', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessGetM365Agents.mockReturnValue([
+        m365Agent('m365-indexed0000', [
+          m365Source({ status: 'indexed', indexedChunks: 12 }),
+        ]),
+        m365Agent('m365-neverindexed', [m365Source({})]),
+        m365Agent('m365-emptyextract', [
+          m365Source({ status: 'indexed', indexedChunks: 0 }),
+        ]),
+        m365Agent('m365-errored00000', [
+          m365Source({ status: 'error', indexedChunks: 0 }),
+        ]),
+        // Legacy record: indexed before indexedChunks existed — stays.
+        m365Agent('m365-legacy000000', [m365Source({ status: 'indexed' })]),
+      ]);
+
+      const response = await GET(request());
+      const data = await parseJsonResponse(response);
+
+      const ids = data.agents
+        .filter((a: { type: string }) => a.type === 'm365')
+        .map((a: { id: string }) => a.id);
+      expect(ids).toEqual(['m365-indexed0000', 'm365-legacy000000']);
+    });
+  });
+
+  it('passes the user as the discovery cache owner', async () => {
+    await GET(request());
+    expect(listUserAgents).toHaveBeenCalled();
+    const [, , , owner] = listUserAgents.mock.calls[0];
+    expect(typeof owner).toBe('string');
+    expect(owner.length).toBeGreaterThan(0);
+  });
+
+  it('refresh clears only the caller’s cache, never the whole replica', async () => {
+    await GET(request('refresh=1'));
+    expect(clearCacheForUser).toHaveBeenCalledTimes(1);
+    expect(clearCache).not.toHaveBeenCalled();
+  });
+
+  describe('split routes', () => {
+    it('fast route serves app-defined agents without touching OBO or Foundry', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessGetPromptAgents.mockReturnValue([
+        { id: 'pa-1', name: 'Travel Advisor', description: 'd' },
+      ]);
+      const response = await GET(fastRequest());
+      const body = await response.json();
+      expect(response.status).toBe(200);
+      expect(body.agents.map((a: { id: string }) => a.id)).toEqual(['pa-1']);
+      expect(body.regionalPath).toBeNull();
+      expect(getAccessTokenForOBO).not.toHaveBeenCalled();
+      expect(listUserAgents).not.toHaveBeenCalled();
+      expect(response.headers.get('Server-Timing')).toMatch(/groups;dur=/);
+    });
+
+    it('foundry route discovers, filters, anchors endpoints and reports availability', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessEvaluate.mockImplementation(
+        ({ agentName }: { agentName: string }) => ({
+          decision: agentName === 'agent-b' ? 'deny' : 'allow',
+          reason: 'rule',
+        }),
+      );
+      const response = await foundryGET(foundryRequest());
+      const body = await response.json();
+      expect(response.status).toBe(200);
+      expect(body.unavailable).toBe(false);
+      expect(
+        body.agents.map((a: { agentName: string }) => a.agentName),
+      ).toEqual(['agent-a']);
+      expect(body.regionalPath).toBe(REGIONAL_PATH);
+      expect(cacheUserAgentEndpoint).toHaveBeenCalledWith(
+        USER_MAIL,
+        'agent-a',
+        REGIONAL_PATH,
+        ENDPOINT_A,
+      );
+      expect(cacheUserAgentEndpoint).not.toHaveBeenCalledWith(
+        USER_MAIL,
+        'agent-b',
+        REGIONAL_PATH,
+        ENDPOINT_B,
+      );
+      expect(accessGetPromptAgents).not.toHaveBeenCalled();
+      expect(response.headers.get('Server-Timing')).toMatch(/discovery;dur=/);
+    });
+
+    it('foundry route reports unavailable (not empty) when OBO fails in production', async () => {
+      const previous = process.env.NODE_ENV;
+      (process.env as { NODE_ENV?: string }).NODE_ENV = 'production';
+      getAccessTokenForOBO.mockResolvedValue(null);
+      try {
+        const body = await (await foundryGET(foundryRequest())).json();
+        expect(body).toMatchObject({ agents: [], unavailable: true });
+        expect(listUserAgents).not.toHaveBeenCalled();
+      } finally {
+        (process.env as { NODE_ENV?: string }).NODE_ENV = previous;
+      }
+    });
+
+    it('foundry route refresh clears only the caller’s cache', async () => {
+      await foundryGET(foundryRequest('refresh=1'));
+      expect(clearCacheForUser).toHaveBeenCalledWith(USER_MAIL);
+      expect(clearCache).not.toHaveBeenCalled();
+    });
+
+    it('foundry route 401s without a session', async () => {
+      mockAuth.mockResolvedValue(null);
+      expect((await foundryGET(foundryRequest())).status).toBe(401);
     });
   });
 });

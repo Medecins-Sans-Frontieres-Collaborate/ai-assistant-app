@@ -13,7 +13,7 @@ import { DeploymentDetailsSection } from './DeploymentDetailsSection';
 import { HostedRegionSection } from './HostedRegionSection';
 import { ModelHeader } from './ModelHeader';
 import { RecentSourcesSection } from './RecentSourcesSection';
-import { SearchModeSection } from './SearchModeSection';
+import { SubVariantSection } from './SubVariantSection';
 import { VariantSection } from './VariantSection';
 import { VersionSection } from './VersionSection';
 
@@ -23,14 +23,15 @@ interface ModelDetailsPanelProps {
   selectedModel: OpenAIModel;
   modelConfig?: OpenAIModel | null;
   isCustomAgent: boolean;
-  searchModeEnabled: boolean;
+  /**
+   * Conversation search-mode default, only consulted to hide the advanced
+   * options under AGENT routing. The search/interpreter controls themselves
+   * moved to the composer's capabilities tray (ToolModeControls).
+   */
   displaySearchMode: SearchMode;
-  agentAvailable: boolean;
   showModelAdvanced: boolean;
   selectedConversation: Conversation | null;
   setMobileView: (view: 'list' | 'details') => void;
-  handleToggleSearchMode: () => void;
-  handleSetSearchMode: (mode: SearchMode) => void;
   setShowModelAdvanced: (show: boolean) => void;
   updateConversation: (id: string, updates: Partial<Conversation>) => void;
   /** Selects another version of the selected model's series (base models). */
@@ -49,20 +50,22 @@ interface ModelDetailsPanelProps {
   onDeleteAgent?: (agentId: string) => void;
   // Organization agent props
   organizationAgent?: OrganizationAgent;
+  /**
+   * Catalog model the selected agent pins the conversation to (prompt
+   * agents). The header badges the agent when that model is blocked or
+   * exhausted for this user — the agent itself is never restricted.
+   */
+  pinnedModelId?: string;
 }
 
 export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
   selectedModel,
   modelConfig,
   isCustomAgent,
-  searchModeEnabled,
   displaySearchMode,
-  agentAvailable,
   showModelAdvanced,
   selectedConversation,
   setMobileView,
-  handleToggleSearchMode,
-  handleSetSearchMode,
   setShowModelAdvanced,
   updateConversation,
   onSelectVersion,
@@ -72,6 +75,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
   onEditAgent,
   onDeleteAgent,
   organizationAgent,
+  pinnedModelId,
 }) => {
   const hasAgentImage = organizationAgent?.image;
   const isCustomSourceModel = selectedModel.isCustomSourceModel === true;
@@ -110,6 +114,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
                 modelConfig={modelConfig}
                 setMobileView={setMobileView}
                 organizationAgent={organizationAgent}
+                pinnedModelId={pinnedModelId}
                 hasBackgroundImage
               />
             </div>
@@ -121,6 +126,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
               modelConfig={modelConfig}
               setMobileView={setMobileView}
               organizationAgent={organizationAgent}
+              pinnedModelId={pinnedModelId}
             />
           </div>
         </>
@@ -130,12 +136,16 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
           modelConfig={modelConfig}
           setMobileView={setMobileView}
           organizationAgent={organizationAgent}
+          pinnedModelId={pinnedModelId}
         />
       )}
 
-      {/* Variant + version switchers for family models (list shows one row
-          per family; variant = size/tier axis, version chips follow the
-          active variant) */}
+      {/* Variant → version → sub-variant switchers for family models. The
+          list shows one row per family; these three narrowing axes are how
+          its members are reached. Variant is the capability/size line
+          (Foundational, Chat, o-series, Opus, Sonnet…), version chips follow
+          the active variant, and the sub-variant control appears only where
+          one version ships several models (GPT 5.6's Sol/Terra/Luna). */}
       {!isCustomAgent && !organizationAgent && onSelectVersion && (
         <>
           <VariantSection
@@ -146,6 +156,11 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
           <VersionSection
             selectedModel={selectedModel}
             onSelectVersion={onSelectVersion}
+            familyModels={isCustomSourceModel ? customSourceModels : undefined}
+          />
+          <SubVariantSection
+            selectedModel={selectedModel}
+            onSelectSubVariant={onSelectVersion}
             familyModels={isCustomSourceModel ? customSourceModels : undefined}
           />
         </>
@@ -183,25 +198,8 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
         <RecentSourcesSection agentId={organizationAgent.id} />
       )}
 
-      {/* Hide search mode section for Foundry agents (they decide on their
-          own via web_search_call) and for org agents that explicitly
-          disallow web search. RAG bots keep the section because the
-          pre-router controls their search behavior. */}
-      {!(
-        organizationAgent &&
-        (organizationAgent.type === 'foundry' ||
-          organizationAgent.allowWebSearch === false)
-      ) &&
-        !selectedModel?.id?.startsWith('foundry-') && (
-          <SearchModeSection
-            searchModeEnabled={searchModeEnabled}
-            displaySearchMode={displaySearchMode}
-            agentAvailable={agentAvailable}
-            modelConfig={modelConfig}
-            handleToggleSearchMode={handleToggleSearchMode}
-            handleSetSearchMode={handleSetSearchMode}
-          />
-        )}
+      {/* Search-mode and code-interpreter defaults moved to the composer's
+          capabilities tray (ToolModeControls) — the picker picks models. */}
 
       {displaySearchMode !== SearchMode.AGENT &&
         selectedConversation &&

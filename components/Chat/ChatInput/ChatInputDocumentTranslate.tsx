@@ -2,6 +2,7 @@
 
 import {
   IconAlertTriangle,
+  IconBrandOnedrive,
   IconChevronDown,
   IconExternalLink,
   IconFileText,
@@ -24,13 +25,21 @@ import toast from 'react-hot-toast';
 import { useLocale, useTranslations } from 'next-intl';
 
 import {
+  useLimitGates,
+  useMyLimits,
+  useResetCountdown,
+} from '@/client/hooks/settings/useMyLimits';
+
+import {
   DocumentTranslationPendingReference,
   DocumentTranslationReference,
   MAX_DOCUMENT_SIZE,
   MAX_GLOSSARY_SIZE,
   generateTranslatedFilename,
 } from '@/types/documentTranslation';
+import type { M365DriveEntry } from '@/types/m365';
 
+import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 import Modal from '@/components/UI/Modal';
 import { Tooltip } from '@/components/UI/Tooltip';
 
@@ -41,7 +50,13 @@ import {
   isOfficiallySupportedDocumentTranslationLanguage,
   searchDocumentTranslationLanguages,
 } from '@/lib/constants/documentTranslationLanguages';
-import { GLOSSARY_ACCEPT_TYPES } from '@/lib/constants/fileTypes';
+import {
+  DOCUMENT_TRANSLATION_EXTENSIONS,
+  GLOSSARY_ACCEPT_TYPES,
+} from '@/lib/constants/fileTypes';
+
+/** Daily document-translation counter (docs/LIMITS.md); `null` = unlimited. */
+const TRANSLATION_DAY_LIMIT_KEY = 'feature.translation.jobsPerDay';
 
 interface ChatInputDocumentTranslateProps {
   /** Whether the modal is open */
@@ -50,6 +65,11 @@ interface ChatInputDocumentTranslateProps {
   onClose: () => void;
   /** The document file to translate */
   documentFile: File | null;
+  /**
+   * §1 third pass: allow picking the source from OneDrive/SharePoint when no
+   * local file was chosen. Callers gate on flag + m365Connected.
+   */
+  allowM365Source?: boolean;
   /** Callback when translation completes successfully */
   onTranslationComplete: (reference: DocumentTranslationReference) => void;
   /**
@@ -73,6 +93,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
   isOpen,
   onClose,
   documentFile,
+  allowM365Source = false,
   onTranslationComplete,
   onTranslationPending,
 }) => {
@@ -86,8 +107,32 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
   const [customFilename, setCustomFilename] = useState('');
   const [isTranslating, setIsTranslating] = useState(false);
 
+  // M365 source (mutually exclusive with documentFile — the caller passes
+  // one or the other; the picker fills this when no local file was given).
+  const [m365Source, setM365Source] = useState<{
+    driveId: string;
+    itemId: string;
+    name: string;
+    size?: number;
+  } | null>(null);
+  const [m365PickerOpen, setM365PickerOpen] = useState(false);
+  const sourceName = documentFile?.name ?? m365Source?.name ?? null;
+
   // UI state
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+
+  // Route pre-flight (docs/LIMITS_USER_FACING_UX.md §7.4): at 0 jobs left
+  // the Translate action is disabled with the reason, rather than letting
+  // the user fill in the form and hit the server's 403. Anything short of a
+  // reported 0 fails open — the server remains the security control.
+  const { featureRemaining } = useLimitGates();
+  const { refetch: refetchLimits } = useMyLimits();
+  const translationBudget = featureRemaining(TRANSLATION_DAY_LIMIT_KEY);
+  const translationExhausted = translationBudget?.remaining === 0;
+  const translationResetsIn = useResetCountdown(
+    translationExhausted ? translationBudget?.resetAt : undefined,
+    { onExpired: () => void refetchLimits() },
+  );
 
   // Search state for language dropdowns
   const [targetSearch, setTargetSearch] = useState('');
@@ -115,16 +160,14 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
 
   // Generate default filename when target language changes
   useEffect(() => {
-    if (documentFile && targetLanguage && !customFilename) {
-      setCustomFilename(
-        generateTranslatedFilename(documentFile.name, targetLanguage),
-      );
+    if (sourceName && targetLanguage && !customFilename) {
+      setCustomFilename(generateTranslatedFilename(sourceName, targetLanguage));
     }
-  }, [documentFile, targetLanguage, customFilename]);
+  }, [sourceName, targetLanguage, customFilename]);
 
   // Reset form when modal opens with new file
   useEffect(() => {
-    if (isOpen && documentFile) {
+    if (isOpen) {
       setTargetLanguage('');
       setSourceLanguage('');
       setGlossaryFile(null);
@@ -132,8 +175,11 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
       setTargetSearch('');
       setSourceSearch('');
       setShowAdvancedOptions(false);
+      setM365Source(null);
+      // M365-mode open with no file goes straight to the picker.
+      setM365PickerOpen(allowM365Source && !documentFile);
     }
-  }, [isOpen, documentFile]);
+  }, [isOpen, documentFile, allowM365Source]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -182,7 +228,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
 
   // Handle translation
   const handleTranslate = useCallback(async () => {
-    if (!documentFile) {
+    if (!documentFile && !m365Source) {
       toast.error(t('documentTranslation.noDocumentError'));
       return;
     }
@@ -192,7 +238,14 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
       return;
     }
 
-    if (documentFile.size > MAX_DOCUMENT_SIZE) {
+    // Belt and braces for a keyboard submit while the button is disabled.
+    if (translationExhausted) {
+      toast.error(t('limitsUx.routes.translationExhausted'));
+      return;
+    }
+
+    const knownSize = documentFile?.size ?? m365Source?.size;
+    if (knownSize !== undefined && knownSize > MAX_DOCUMENT_SIZE) {
       toast.error(
         t('documentTranslation.documentTooLarge', {
           maxSize: `${MAX_DOCUMENT_SIZE / 1024 / 1024}MB`,
@@ -205,7 +258,13 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
 
     try {
       const formData = new FormData();
-      formData.append('document', documentFile);
+      if (documentFile) {
+        formData.append('document', documentFile);
+      } else if (m365Source) {
+        // The server fetches the bytes with the caller's delegated token.
+        formData.append('driveId', m365Source.driveId);
+        formData.append('itemId', m365Source.itemId);
+      }
       formData.append('targetLanguage', targetLanguage);
 
       if (sourceLanguage) {
@@ -259,6 +318,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
     }
   }, [
     documentFile,
+    m365Source,
     targetLanguage,
     sourceLanguage,
     glossaryFile,
@@ -266,6 +326,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
     onTranslationComplete,
     onTranslationPending,
     onClose,
+    translationExhausted,
     t,
   ]);
 
@@ -295,10 +356,29 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
     setSourceSearch('');
   }, []);
 
+  const exhaustedNotice = translationExhausted
+    ? translationResetsIn
+      ? `${t('limitsUx.routes.translationExhausted')} ${t('limitsUx.routes.resetsIn', { resets: translationResetsIn })}`
+      : t('limitsUx.routes.translationExhausted')
+    : null;
+
   const modalContent = (
     <div className="space-y-6">
+      {/* Daily budget used up: say so at the top, where the user reads
+          before filling in the form; the footer button is disabled too. */}
+      {exhaustedNotice && (
+        <div
+          role="status"
+          data-testid="translation-exhausted-notice"
+          className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-300"
+        >
+          <IconAlertTriangle size={18} className="mt-0.5 flex-shrink-0" />
+          <span>{exhaustedNotice}</span>
+        </div>
+      )}
+
       {/* Document info */}
-      {documentFile && (
+      {documentFile ? (
         <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
           <IconFileText size={24} className="text-blue-500 flex-shrink-0" />
           <div className="flex-1 min-w-0">
@@ -310,7 +390,40 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
             </p>
           </div>
         </div>
-      )}
+      ) : m365Source ? (
+        <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <IconBrandOnedrive
+            size={24}
+            className="text-blue-500 flex-shrink-0"
+          />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+              {m365Source.name}
+            </p>
+            {m365Source.size !== undefined && (
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {(m365Source.size / 1024).toFixed(1)} KB
+              </p>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => setM365PickerOpen(true)}
+            className="flex-shrink-0 rounded-md border border-neutral-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+          >
+            {t('documentTranslation.changeM365File')}
+          </button>
+        </div>
+      ) : allowM365Source ? (
+        <button
+          type="button"
+          onClick={() => setM365PickerOpen(true)}
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-gray-300 p-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
+        >
+          <IconBrandOnedrive size={20} className="text-blue-500" />
+          {t('documentTranslation.pickFromOneDrive')}
+        </button>
+      ) : null}
 
       {/* Target language (required) */}
       <div className="relative">
@@ -597,11 +710,8 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                 value={customFilename}
                 onChange={(e) => setCustomFilename(e.target.value)}
                 placeholder={
-                  documentFile && targetLanguage
-                    ? generateTranslatedFilename(
-                        documentFile.name,
-                        targetLanguage,
-                      )
+                  sourceName && targetLanguage
+                    ? generateTranslatedFilename(sourceName, targetLanguage)
                     : t('documentTranslation.outputFilenamePlaceholder')
                 }
                 className="w-full px-4 py-2.5 text-sm bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
@@ -613,12 +723,27 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
     </div>
   );
 
+  // Keep the exhausted-budget reason out of the native `disabled` set: a
+  // disabled button never fires a click, so the in-handler guard below
+  // (`if (translationExhausted) …`) would be untestable dead code and,
+  // per docs/LIMITS_USER_FACING_UX.md §7.4 review, a future refactor that
+  // dropped `translationExhausted` from here would have nothing left to
+  // protect the server from a doomed request. The other reasons (missing
+  // file/target language, an in-flight request) still natively disable —
+  // there is no server-side guard to fall back on for those.
+  const translateBlockedByFields =
+    isTranslating || !targetLanguage || !sourceName;
+  const translateDisabled = translateBlockedByFields || translationExhausted;
+
   const modalFooter = (
     <button
       onClick={handleTranslate}
-      disabled={isTranslating || !targetLanguage || !documentFile}
+      disabled={translateBlockedByFields}
+      aria-disabled={translationExhausted ? true : undefined}
+      title={exhaustedNotice ?? undefined}
+      data-testid="translate-submit"
       className={`w-full flex items-center justify-center gap-2 py-3 px-6 text-base font-semibold rounded-lg shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-        isTranslating || !targetLanguage || !documentFile
+        translateDisabled
           ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
           : 'bg-blue-600 hover:bg-blue-700 text-white'
       }`}
@@ -637,18 +762,44 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
     </button>
   );
 
+  // Only accepted formats are pickable; folders always navigate.
+  const translateExtensions = useMemo(
+    () => DOCUMENT_TRANSLATION_EXTENSIONS.map((ext) => ext.replace(/^\./, '')),
+    [],
+  );
+
+  const handleM365Pick = useCallback((entry: M365DriveEntry) => {
+    setM365Source({
+      driveId: entry.driveId,
+      itemId: entry.itemId,
+      name: entry.name,
+      ...(entry.size !== undefined && { size: entry.size }),
+    });
+    setM365PickerOpen(false);
+  }, []);
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      size="lg"
-      title={t('documentTranslation.title')}
-      footer={modalFooter}
-      closeWithButton={true}
-      className="!z-[100]"
-    >
-      {modalContent}
-    </Modal>
+    <>
+      <Modal
+        isOpen={isOpen && !m365PickerOpen}
+        onClose={onClose}
+        size="lg"
+        title={t('documentTranslation.title')}
+        footer={modalFooter}
+        closeWithButton={true}
+        className="!z-[100]"
+      >
+        {modalContent}
+      </Modal>
+      {/* Hide/restore instead of stacking modals (same rule as the save
+          dialog): the translate form disappears while the picker is up. */}
+      <M365FilePickerModal
+        isOpen={isOpen && m365PickerOpen}
+        onClose={() => setM365PickerOpen(false)}
+        onPick={handleM365Pick}
+        acceptExtensions={translateExtensions}
+      />
+    </>
   );
 };
 

@@ -1,14 +1,14 @@
 import { getAzureMonitorLogger } from '@/lib/services/observability';
+import { resolveOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
 import { RAGService } from '@/lib/services/ragService';
 
-import { buildConversationContextSections } from '@/lib/utils/app/systemPrompt';
+import { buildAgentPromptSections } from '@/lib/utils/app/systemPrompt';
 
 import { Message, MessageType } from '@/types/chat';
 
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 
-import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 import OpenAI from 'openai';
 
@@ -36,9 +36,15 @@ import OpenAI from 'openai';
 export class RAGEnricher extends BasePipelineStage {
   readonly name = 'RAGEnricher';
   private tracer = trace.getTracer('rag-enricher');
-  private ragService: RAGService;
   private searchEndpoint: string;
   private searchIndex: string;
+  private openAIClient: OpenAI;
+  /**
+   * One RAGService per search index: admin-authored org agents (and static
+   * entries with a `ragConfig.searchIndex` override) query their own index
+   * on the shared endpoint, everything else rides the default.
+   */
+  private ragServicesByIndex = new Map<string, RAGService>();
 
   constructor(
     searchEndpoint: string,
@@ -48,14 +54,28 @@ export class RAGEnricher extends BasePipelineStage {
     super();
     this.searchEndpoint = searchEndpoint;
     this.searchIndex = searchIndex;
-    this.ragService = new RAGService(searchEndpoint, searchIndex, openAIClient);
+    this.openAIClient = openAIClient;
+  }
+
+  private ragServiceForIndex(searchIndex: string): RAGService {
+    let service = this.ragServicesByIndex.get(searchIndex);
+    if (!service) {
+      service = new RAGService(
+        this.searchEndpoint,
+        searchIndex,
+        this.openAIClient,
+      );
+      this.ragServicesByIndex.set(searchIndex, service);
+    }
+    return service;
   }
 
   shouldRun(context: ChatContext): boolean {
     // botId is used for organization agent ID (e.g., "msf_communications").
-    // Prompt agents also arrive via botId but are handled by
-    // PromptAgentEnricher — they must never trigger a knowledge-base search.
-    return !!context.botId && !context.promptAgent;
+    // Prompt agents and M365 file-backed agents also arrive via botId but
+    // are handled by their own enrichers — they must never trigger an org
+    // knowledge-base search.
+    return !!context.botId && !context.promptAgent && !context.m365Agent;
   }
 
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
@@ -75,9 +95,10 @@ export class RAGEnricher extends BasePipelineStage {
             `[RAGEnricher] Adding RAG with organization agent: ${context.botId}`,
           );
 
-          // Get organization agent configuration
+          // Resolve through the org-agent registry: static config merged
+          // with admin-authored records (admin wins — including disables).
           const agent = context.botId
-            ? getOrganizationAgentById(context.botId)
+            ? await resolveOrgAgentById(context.botId)
             : undefined;
 
           if (!agent) {
@@ -154,13 +175,14 @@ export class RAGEnricher extends BasePipelineStage {
           }
 
           // Perform the RAG search to get relevant documents
-          console.log(`[RAGEnricher] Performing search for agent: ${agent.id}`);
-          const { searchDocs, searchMetadata } =
-            await this.ragService.performSearch(
-              enrichedMessages,
-              agent.id,
-              context.user,
-            );
+          const agentSearchIndex =
+            agent.ragConfig?.searchIndex || this.searchIndex;
+          console.log(
+            `[RAGEnricher] Performing search for agent: ${agent.id} (index: ${agentSearchIndex})`,
+          );
+          const { searchDocs, searchMetadata } = await this.ragServiceForIndex(
+            agentSearchIndex,
+          ).performSearch(enrichedMessages, agent, context.user);
 
           console.log(
             `[RAGEnricher] Search returned ${searchDocs.length} documents`,
@@ -200,10 +222,15 @@ export class RAGEnricher extends BasePipelineStage {
             number: index + 1,
           }));
 
-          // Summary/memories sections already live in context.systemPrompt
-          // (buildSystemPrompt); re-append them when the org agent's own
-          // prompt replaces it so RAG requests keep the sections.
-          const conversationContext = buildConversationContextSections(
+          // The org agent's prompt REPLACES the base prompt, taking the
+          // renderer contract (math/markdown/diagram rules) with it as well
+          // as the summary/memories sections. Re-append both.
+          //
+          // Ordering is deliberate: the agent's own instructions come FIRST
+          // and the shared rules after, so an agent that deliberately
+          // overrides formatting still wins on substance — the rules here
+          // describe what the renderer can display, not what to say.
+          const agentSections = buildAgentPromptSections(
             context.conversationSummary,
             context.memories,
           );
@@ -212,11 +239,12 @@ export class RAGEnricher extends BasePipelineStage {
           const result = {
             ...context,
             enrichedMessages,
-            // Override system prompt with organization agent's system prompt
-            systemPrompt:
-              agent.systemPrompt && conversationContext
-                ? `${agent.systemPrompt}\n\n${conversationContext}`
-                : agent.systemPrompt || context.systemPrompt,
+            // Override system prompt with organization agent's system prompt.
+            // Admin-authored org agents may have an empty prompt (the schema
+            // defaults it to ''), in which case the full base prompt stands.
+            systemPrompt: agent.systemPrompt
+              ? `${agent.systemPrompt}\n\n${agentSections}`
+              : context.systemPrompt,
             processedContent: {
               ...context.processedContent,
               metadata: {
@@ -225,7 +253,7 @@ export class RAGEnricher extends BasePipelineStage {
                 citations,
                 ragConfig: {
                   searchEndpoint: this.searchEndpoint,
-                  searchIndex: this.searchIndex,
+                  searchIndex: agentSearchIndex,
                   organizationAgentId: context.botId,
                   agentName: agent.name,
                   agentSources: agent.sources,
@@ -260,8 +288,9 @@ export class RAGEnricher extends BasePipelineStage {
             query: '', // Privacy: user query content not logged
             resultCount: 0, // Results come from Azure OpenAI, we don't have visibility
             searchType: 'semantic',
-            indexName: this.searchIndex,
+            indexName: agentSearchIndex,
             botId: context.botId,
+            telemetry: context.telemetry,
           });
 
           return result;
@@ -276,6 +305,7 @@ export class RAGEnricher extends BasePipelineStage {
             errorMessage:
               error instanceof Error ? error.message : 'Unknown error',
             botId: context.botId,
+            telemetry: context.telemetry,
           });
 
           span.recordException(error as Error);

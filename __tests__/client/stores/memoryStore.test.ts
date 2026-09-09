@@ -1,6 +1,6 @@
 import { MemoryEntry } from '@/types/memory';
 
-import { useMemoryStore } from '@/client/stores/memoryStore';
+import { MAX_MEMORIES, useMemoryStore } from '@/client/stores/memoryStore';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 // NOTE: plain .ts on purpose — this file runs under BOTH vitest configs
@@ -224,6 +224,105 @@ describe('memoryStore', () => {
 
       expect(useMemoryStore.getState().memories).toEqual([entry]);
     });
+
+    it('never updates or deletes a hand-written entry, but still adds', () => {
+      useMemoryStore.setState({
+        memories: [
+          {
+            ...makeEntry('m1', 'I wrote this', '2026-01-01T00:00:00.000Z'),
+            origin: 'user',
+          },
+          makeEntry('m2', 'auto fact', '2026-01-02T00:00:00.000Z'),
+        ],
+      });
+
+      useMemoryStore.getState().applyOperations([
+        { op: 'update', id: 'm1', text: 'model rewrote it' },
+        { op: 'delete', id: 'm1' },
+        { op: 'update', id: 'm2', text: 'model rewrote the auto one' },
+        { op: 'add', text: 'brand new fact' },
+      ]);
+
+      const memories = useMemoryStore.getState().memories;
+      expect(memories.find((m) => m.id === 'm1')?.text).toBe('I wrote this');
+      expect(memories.find((m) => m.id === 'm2')?.text).toBe(
+        'model rewrote the auto one',
+      );
+      expect(memories.map((m) => m.text)).toContain('brand new fact');
+    });
+  });
+
+  describe('manual entries', () => {
+    it("stamps origin 'user' and leaves auto adds unmarked", () => {
+      useMemoryStore.getState().addMemory('typed by hand', undefined, 'user');
+      useMemoryStore.getState().addMemory('extracted', 'conv-1');
+
+      const [manual, auto] = useMemoryStore.getState().memories;
+      expect(manual.origin).toBe('user');
+      expect(manual.sourceConversationId).toBeUndefined();
+      expect(auto.origin).toBeUndefined();
+    });
+
+    it('reports the outcome of an add attempt', () => {
+      const { addMemory } = useMemoryStore.getState();
+      expect(addMemory('a fact', undefined, 'user')).toBe('added');
+      expect(addMemory('   ', undefined, 'user')).toBe('empty');
+      // Case-insensitive: re-typing the same fact is a mistake, not an edit.
+      expect(addMemory('A FACT', undefined, 'user')).toBe('duplicate');
+      expect(useMemoryStore.getState().memories).toHaveLength(1);
+    });
+
+    it('refuses a manual add at the cap instead of evicting', () => {
+      useMemoryStore.setState({
+        memories: Array.from({ length: MAX_MEMORIES }, (_, i) =>
+          makeEntry(
+            `m${i}`,
+            `fact ${i}`,
+            `2026-01-01T00:00:${String(i).padStart(2, '0')}.000Z`,
+          ),
+        ),
+      });
+
+      expect(
+        useMemoryStore.getState().addMemory('one more', undefined, 'user'),
+      ).toBe('at-capacity');
+      const memories = useMemoryStore.getState().memories;
+      expect(memories).toHaveLength(MAX_MEMORIES);
+      expect(memories[0].text).toBe('fact 0');
+    });
+
+    it('still evicts the oldest for an automatic add at the cap', () => {
+      useMemoryStore.setState({
+        memories: Array.from({ length: MAX_MEMORIES }, (_, i) =>
+          makeEntry(
+            `m${i}`,
+            `fact ${i}`,
+            `2026-01-01T00:00:${String(i).padStart(2, '0')}.000Z`,
+          ),
+        ),
+      });
+
+      expect(useMemoryStore.getState().addMemory('one more', 'conv-1')).toBe(
+        'added',
+      );
+      const memories = useMemoryStore.getState().memories;
+      expect(memories).toHaveLength(MAX_MEMORIES);
+      expect(memories.map((m) => m.text)).not.toContain('fact 0');
+      expect(memories.map((m) => m.text)).toContain('one more');
+    });
+
+    it("promotes an auto entry to 'user' when edited by hand", () => {
+      useMemoryStore.setState({
+        memories: [makeEntry('m1', 'auto fact', '2026-01-01T00:00:00.000Z')],
+      });
+
+      useMemoryStore.getState().updateMemory('m1', 'corrected fact', 'user');
+      expect(useMemoryStore.getState().memories[0].origin).toBe('user');
+
+      // The extraction path passes no origin and must not clear the marker.
+      useMemoryStore.getState().updateMemory('m1', 'model edit');
+      expect(useMemoryStore.getState().memories[0].origin).toBe('user');
+    });
   });
 
   describe('persist migrate', () => {
@@ -310,6 +409,34 @@ describe('memoryStore', () => {
       rehydrate(state);
 
       expect(state.memories.map((m) => m.id)).toEqual(['keep']);
+    });
+
+    it("keeps a real 'user' origin and strips anything else", () => {
+      const state = {
+        memories: [
+          {
+            ...makeEntry('m1', 'hand written', '2026-01-01T00:00:00.000Z'),
+            origin: 'user',
+          },
+          // Tampered storage must not be able to grant protection.
+          {
+            ...makeEntry('m2', 'forged', '2026-01-01T00:00:00.000Z'),
+            origin: 'USER',
+          },
+          {
+            ...makeEntry('m3', 'extracted', '2026-01-01T00:00:00.000Z'),
+            origin: 'auto',
+          },
+        ],
+      } as unknown as StoreState;
+
+      rehydrate(state);
+
+      expect(state.memories.map((m) => m.origin)).toEqual([
+        'user',
+        undefined,
+        undefined,
+      ]);
     });
   });
 });

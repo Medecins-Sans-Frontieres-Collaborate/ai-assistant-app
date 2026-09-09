@@ -150,7 +150,7 @@ describe('RAGService', () => {
 
       const result = await ragService.performSearch(
         messages,
-        'msf_communications',
+        mockOrganizationAgent as any,
         mockUser as any,
       );
 
@@ -166,7 +166,7 @@ describe('RAGService', () => {
 
       await ragService.performSearch(
         messages,
-        'msf_communications',
+        mockOrganizationAgent as any,
         mockUser as any,
       );
 
@@ -187,7 +187,7 @@ describe('RAGService', () => {
 
       await ragService.performSearch(
         messages,
-        'msf_communications',
+        mockOrganizationAgent as any,
         mockUser as any,
       );
 
@@ -249,7 +249,7 @@ describe('RAGService', () => {
       const messages = createTestMessages('Test query');
       const result = await ragService.performSearch(
         messages,
-        'msf_communications',
+        mockOrganizationAgent as any,
         mockUser as any,
       );
 
@@ -291,7 +291,7 @@ describe('RAGService', () => {
       const messages = createTestMessages('Test query');
       const result = await ragService.performSearch(
         messages,
-        'msf_communications',
+        mockOrganizationAgent as any,
         mockUser as any,
       );
 
@@ -299,13 +299,22 @@ describe('RAGService', () => {
       expect(result.searchMetadata.dateRange.newest).toBe('2025-12-20');
     });
 
-    it('should throw error when agent not found', async () => {
+    it('augmentMessages throws when the agent id cannot be resolved', async () => {
+      // performSearch now takes the resolved agent object (callers resolve
+      // through the org-agent registry); the id lookup only remains on the
+      // legacy augmentMessages entry point.
       (getOrganizationAgentById as any).mockReturnValue(undefined);
 
       const messages = createTestMessages('Test query');
 
       await expect(
-        ragService.performSearch(messages, 'unknown_agent', mockUser as any),
+        ragService.augmentMessages(
+          messages,
+          'unknown_agent',
+          'gpt-4.1',
+          false,
+          mockUser as any,
+        ),
       ).rejects.toThrow('Organization agent unknown_agent not found');
     });
 
@@ -320,7 +329,7 @@ describe('RAGService', () => {
 
       await ragService.performSearch(
         messages,
-        'msf_communications',
+        mockOrganizationAgent as any,
         mockUser as any,
       );
 
@@ -341,7 +350,7 @@ describe('RAGService', () => {
 
       await ragService.performSearch(
         messages,
-        'msf_communications',
+        mockOrganizationAgent as any,
         mockUser as any,
       );
 

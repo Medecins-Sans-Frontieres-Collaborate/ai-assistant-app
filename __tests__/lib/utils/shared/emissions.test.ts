@@ -19,7 +19,7 @@ import { describe, expect, it } from 'vitest';
 function expected(
   prompt: number,
   completion: number,
-  size: 'nano' | 'mini' | 'standard' | 'large',
+  size: 'nano' | 'mini' | 'standard' | 'large' | 'xl',
   region: 'US' | 'EU' | 'default',
   opts: {
     effort?: 'minimal' | 'low' | 'medium' | 'high';
@@ -157,6 +157,7 @@ describe('getEmissionsTier', () => {
     expect(getEmissionsTier('mini', false)).toBe('low');
     expect(getEmissionsTier('standard', false)).toBe('moderate');
     expect(getEmissionsTier('large', false)).toBe('high');
+    expect(getEmissionsTier('xl', false)).toBe('high');
   });
 
   it('bumps dedicated reasoners one tier (capped at high)', () => {
@@ -164,6 +165,7 @@ describe('getEmissionsTier', () => {
     expect(getEmissionsTier('mini', true)).toBe('moderate');
     expect(getEmissionsTier('standard', true)).toBe('high');
     expect(getEmissionsTier('large', true)).toBe('high');
+    expect(getEmissionsTier('xl', true)).toBe('high');
   });
 });
 
@@ -186,8 +188,11 @@ describe('estimateTypicalRequestCO2', () => {
   it('is positive and ordered by size class', () => {
     const nano = estimateTypicalRequestCO2('nano', false).gCO2e;
     const large = estimateTypicalRequestCO2('large', false).gCO2e;
+    const xl = estimateTypicalRequestCO2('xl', false).gCO2e;
     expect(nano).toBeGreaterThan(0);
     expect(large).toBeGreaterThan(nano);
+    expect(xl).toBeGreaterThan(large);
+    expect(xl).toBeCloseTo(expected(1000, 500, 'xl', 'default'), 9);
   });
 });
 

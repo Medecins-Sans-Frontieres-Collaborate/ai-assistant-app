@@ -1,0 +1,460 @@
+'use client';
+
+import { IconSearch } from '@tabler/icons-react';
+import { FC, useMemo, useState } from 'react';
+
+import { useLocale, useTranslations } from 'next-intl';
+
+import {
+  MyLimit,
+  PreviewUsage,
+  useEffectiveLimitsPreview,
+} from '@/client/hooks/settings/useLimitsAdmin';
+import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
+
+import { counterCellName } from '@/lib/services/limits/resolver';
+import { LimitOverride } from '@/lib/services/limits/types';
+
+import {
+  PricingIndex,
+  ceilingSpendPerDay,
+  lookupPricing,
+  spentSoFarUsd,
+} from '@/lib/utils/app/limitsPricing';
+import { COST_ASSUMPTIONS } from '@/lib/utils/shared/costEstimator';
+
+import {
+  ADMIN_BTN_SECONDARY,
+  ADMIN_CARD,
+  ADMIN_CHECKBOX,
+  ADMIN_CHIP_NEUTRAL,
+  ADMIN_FIELD,
+  ADMIN_MUTED,
+} from '@/components/Admin/adminClasses';
+import { costDisclosure, usdLabel } from '@/components/Limits/CostHint';
+import { useLimitsCost } from '@/components/Limits/LimitsCostContext';
+import { LIMIT_GROUPS } from '@/components/Limits/limitGroups';
+import { LIMITS_NOTE_CARD } from '@/components/Limits/limitsClasses';
+import { EmailAutocompleteInput } from '@/components/UI/EmailAutocompleteInput';
+
+import { getLimitDefinition } from '@/config/limits';
+
+interface EffectiveLimitsPreviewProps {
+  /** Current draft overrides, for mapping a winning overrideId to a name. */
+  overrides: LimitOverride[];
+  /** The panel has unsaved edits — the preview reflects the SAVED policy. */
+  dirty: boolean;
+  /**
+   * The caller is a SCOPED admin. Changes what a 403 means (design §6c): the
+   * server answers `LIMITS_PREVIEW_OUT_OF_SCOPE` with a two-valued `details`
+   * — `outside` (provably outside every delegation's domains/users) or
+   * `undecidable` (a group/attribute predicate means the person MAY be
+   * inside) — and a plain `FORBIDDEN` when the caller is no longer named in
+   * any enabled delegation. Each gets its own sentence; collapsing them into
+   * "outside your scope" would be a false statement for the other two, and
+   * the global "only global admins can preview" line is false for all three.
+   */
+  scoped?: boolean;
+  /** Pre-translated note under the description — e.g. group-only scope. */
+  scopeNote?: string;
+}
+
+/** Stable display order: group order, then member order within the group. */
+const KEY_ORDER = new Map<string, number>(
+  LIMIT_GROUPS.flatMap((group) => [
+    ...(group.gateKey ? [group.gateKey] : []),
+    ...group.memberKeys,
+  ]).map((key, index) => [key, index]),
+);
+
+/**
+ * "Check what a person actually gets": resolves a user's effective limits
+ * against the SAVED policy via the admin `/api/limits/me?as=` preview, and
+ * names the winning layer for every key — the answer to "which override
+ * wins" that the editor cards alone cannot give. Since delegations it also
+ * says which authority TIER won and, when a ceiling pinned the value, which
+ * record pinned it (design §6c: a scoped admin must see WHY their 500 became
+ * 100), and can attach the subject's current consumption (`&usage=1`).
+ */
+export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
+  overrides,
+  dirty,
+  scoped = false,
+  scopeNote,
+}) => {
+  const t = useTranslations('limits');
+  const tPeople = useTranslations('peopleSuggest');
+  const peopleSuggest = useM365PeopleSuggest();
+  const [input, setInput] = useState('');
+  const [submitted, setSubmitted] = useState<string | null>(null);
+  const [withUsage, setWithUsage] = useState(false);
+  const {
+    result,
+    forbidden,
+    forbiddenCode,
+    forbiddenDetails,
+    isLoading,
+    error,
+  } = useEffectiveLimitsPreview(submitted, { usage: withUsage });
+
+  /**
+   * Which sentence a 403 gets. The server's `code` + `details` are the
+   * authority — the client never re-derives the verdict from the visible
+   * delegations, which include disabled ones the gate ignores.
+   */
+  const forbiddenCopy = (): string => {
+    if (forbiddenCode === 'LIMITS_PREVIEW_OUT_OF_SCOPE') {
+      return forbiddenDetails === 'undecidable'
+        ? t('previewUndecidableScope')
+        : t('previewOutOfScope');
+    }
+    return scoped ? t('previewNoLongerAdmin') : t('previewForbidden');
+  };
+
+  const rows = useMemo(() => {
+    if (!result) return [];
+    return [...result.limits].sort((a, b) => {
+      const orderA = KEY_ORDER.get(a.limitKey) ?? Number.MAX_SAFE_INTEGER;
+      const orderB = KEY_ORDER.get(b.limitKey) ?? Number.MAX_SAFE_INTEGER;
+      if (orderA !== orderB) return orderA - orderB;
+      // Base row before its qualified cells.
+      const qualifierA = a.modelId ?? a.series ?? '';
+      const qualifierB = b.modelId ?? b.series ?? '';
+      return qualifierA.localeCompare(qualifierB);
+    });
+  }, [result]);
+
+  const check = () => {
+    const mail = input.trim().toLowerCase();
+    setSubmitted(mail.length > 0 ? mail : null);
+  };
+
+  const sourceLabel = (limit: MyLimit): string => {
+    if (limit.overrideId) {
+      const match = overrides.find((o) => o.id === limit.overrideId);
+      return t('previewSourceOverride', {
+        label: match?.label || limit.overrideId,
+      });
+    }
+    if (limit.source === 'global') return t('previewSourceGlobal');
+    return t('previewSourceCatalog');
+  };
+
+  /**
+   * Who pinned the value: the server's label for the ceiling record when it
+   * sends one (a scoped admin cannot otherwise see other global records),
+   * else the draft override by id, else the raw id, else the global default.
+   */
+  const ceilingLabel = (limit: MyLimit): string => {
+    if (limit.ceilingLabel) return limit.ceilingLabel;
+    if (limit.ceilingOverrideId) {
+      const match = overrides.find((o) => o.id === limit.ceilingOverrideId);
+      return match?.label || limit.ceilingOverrideId;
+    }
+    return t('previewSourceGlobal');
+  };
+
+  const valueLabel = (limit: MyLimit): string => {
+    const def = getLimitDefinition(limit.limitKey);
+    if (limit.value === false || limit.value === 0) return t('modeBlocked');
+    if (limit.value === null || limit.value === true) {
+      return def?.unit === 'boolean' ? t('modeAllowed') : t('modeUnlimited');
+    }
+    const unit = def ? t(`unit.${def.unit}` as never) : '';
+    const window =
+      def && (def.window === 'day' || def.window === 'month')
+        ? ` / ${t(`window.${def.window}` as never)}`
+        : '';
+    return `${limit.value} ${unit}${window}`.trim();
+  };
+
+  const rowLabel = (limit: MyLimit): string => {
+    const def = getLimitDefinition(limit.limitKey);
+    const base = def ? t(`label.${def.labelKey}` as never) : limit.limitKey;
+    const qualifier = limit.modelId ?? limit.series;
+    return qualifier ? `${base} — ${qualifier}` : base;
+  };
+
+  /**
+   * Counter for this cell — the key the debit path writes. No bare-key
+   * fallback: counters only ever exist under `model:` / `family:` cells, and
+   * the route lists a qualified row for every one it fetched.
+   */
+  const usageFor = (limit: MyLimit): PreviewUsage | undefined => {
+    const usage = result?.usage;
+    if (!usage) return undefined;
+    // Same key the debit path writes (model:<id>.<suffix> / family:…).
+    return usage[counterCellName(limit)];
+  };
+
+  const showUsageColumn =
+    withUsage && result !== null && result.usageUnavailable !== true;
+  const cost = useLimitsCost();
+
+  return (
+    <section className={`mb-4 ${ADMIN_CARD}`}>
+      <h3 className="mb-1 text-sm font-semibold text-black dark:text-white">
+        {t('previewTitle')}
+      </h3>
+      <p className={`mb-2 ${ADMIN_MUTED}`}>{t('previewDescription')}</p>
+      {scopeNote && <p className={`mb-2 ${ADMIN_MUTED}`}>{scopeNote}</p>}
+      <div className="flex flex-wrap items-center gap-2">
+        <EmailAutocompleteInput
+          className={`min-w-[220px] ${ADMIN_FIELD}`}
+          value={input}
+          onChange={setInput}
+          suggest={peopleSuggest}
+          suggestionsLabel={tPeople('listLabel')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') check();
+          }}
+          placeholder={t('previewEmailPlaceholder')}
+          aria-label={t('previewEmailLabel')}
+        />
+        <button
+          type="button"
+          className={ADMIN_BTN_SECONDARY}
+          onClick={check}
+          disabled={input.trim().length === 0}
+        >
+          <IconSearch size={16} />
+          {t('previewRun')}
+        </button>
+        <label className="flex items-center gap-1.5 text-sm text-black dark:text-white">
+          <input
+            type="checkbox"
+            className={ADMIN_CHECKBOX}
+            checked={withUsage}
+            onChange={(e) => setWithUsage(e.target.checked)}
+          />
+          {t('previewShowUsage')}
+        </label>
+      </div>
+
+      {submitted !== null && (
+        <div className="mt-3">
+          {isLoading ? (
+            <p className={ADMIN_MUTED} role="status">
+              {t('previewLoading')}
+            </p>
+          ) : forbidden ? (
+            <p className={ADMIN_MUTED}>{forbiddenCopy()}</p>
+          ) : error ? (
+            <p className={ADMIN_MUTED}>{t('previewFailed')}</p>
+          ) : result ? (
+            <>
+              {dirty && (
+                <p className={`mb-2 ${ADMIN_MUTED}`}>{t('previewUnsaved')}</p>
+              )}
+              {(result.notEvaluated?.length ?? 0) > 0 && (
+                <p className={`mb-2 ${ADMIN_MUTED}`}>
+                  {t('previewNotEvaluated')}
+                </p>
+              )}
+              {withUsage && result.usageUnavailable && (
+                <p className={`mb-2 ${ADMIN_MUTED}`}>
+                  {t('previewUsageUnavailable')}
+                </p>
+              )}
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-200 text-left dark:border-gray-700">
+                      <th className="py-1.5 pr-3 font-medium text-gray-700 dark:text-gray-300">
+                        {t('previewColumnLimit')}
+                      </th>
+                      <th className="py-1.5 pr-3 font-medium text-gray-700 dark:text-gray-300">
+                        {t('previewColumnValue')}
+                      </th>
+                      {showUsageColumn && (
+                        <th className="py-1.5 pr-3 font-medium text-gray-700 dark:text-gray-300">
+                          {t('previewColumnUsage')}
+                        </th>
+                      )}
+                      <th className="py-1.5 font-medium text-gray-700 dark:text-gray-300">
+                        {t('previewColumnSource')}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((limit) => (
+                      <tr
+                        key={`${limit.limitKey}|${limit.modelId ?? ''}|${limit.series ?? ''}`}
+                        className="border-b border-gray-100 dark:border-gray-800"
+                      >
+                        <td className="py-1.5 pr-3 text-black dark:text-white">
+                          {rowLabel(limit)}
+                        </td>
+                        <td className="py-1.5 pr-3 text-black dark:text-white">
+                          {valueLabel(limit)}
+                        </td>
+                        {showUsageColumn && (
+                          <td className="py-1.5 pr-3 text-black dark:text-white">
+                            <UsageCell limit={limit} usage={usageFor(limit)} />
+                          </td>
+                        )}
+                        <td className={`py-1.5 ${ADMIN_MUTED}`}>
+                          <div className="flex flex-wrap items-center gap-1">
+                            <span>{sourceLabel(limit)}</span>
+                            {limit.tier === 'scoped' && (
+                              <span className={ADMIN_CHIP_NEUTRAL}>
+                                {t('tierScoped')}
+                              </span>
+                            )}
+                          </div>
+                          {limit.ceilingApplied && (
+                            <div>
+                              {t('previewCeilingPinned', {
+                                label: ceilingLabel(limit),
+                              })}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {cost.insights && cost.pricing && (
+                <CostSpendCard
+                  rows={rows}
+                  pricing={cost.pricing}
+                  usage={showUsageColumn ? result.usage : undefined}
+                />
+              )}
+            </>
+          ) : null}
+        </div>
+      )}
+    </section>
+  );
+};
+
+interface UsageCellProps {
+  limit: MyLimit;
+  usage: PreviewUsage | undefined;
+}
+
+/**
+ * "used of limit" with a proportion bar for numeric caps; a bare count for
+ * unlimited cells; a dash for booleans and cells the server sent no counter
+ * for (a counter that was never touched is legitimately absent).
+ */
+const UsageCell: FC<UsageCellProps> = ({ limit, usage }) => {
+  const t = useTranslations('limits');
+  if (!usage || typeof limit.value === 'boolean') {
+    return <span aria-hidden="true">—</span>;
+  }
+  if (limit.value === null) {
+    return <span>{t('previewUsageUnlimited', { used: usage.used })}</span>;
+  }
+  const ratio = limit.value > 0 ? usage.used / limit.value : 1;
+  const percent = Math.max(0, Math.min(100, Math.round(ratio * 100)));
+  const exhausted = usage.used >= limit.value;
+  return (
+    <div className="min-w-[120px]">
+      <div>{t('previewUsageOf', { used: usage.used, limit: limit.value })}</div>
+      <div
+        className="mt-1 h-1.5 w-full overflow-hidden rounded bg-gray-200 dark:bg-gray-700"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent}
+      >
+        <div
+          className={`h-full ${exhausted ? 'bg-red-600' : 'bg-blue-600'}`}
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+    </div>
+  );
+};
+
+interface CostSpendCardProps {
+  rows: MyLimit[];
+  pricing: PricingIndex;
+  /** The counters the preview fetched — only when the usage column is shown. */
+  usage: Record<string, PreviewUsage> | undefined;
+}
+
+/**
+ * The spend card under the preview table (cost insights design §4b): the
+ * most this person can spend per day — the MIN over the conjunctive axes
+ * (messages, per-model caps, tokens), never their sum — and ≈ per month at
+ * 30.4375 days; "no spend ceiling" when nothing binds; and, with the usage
+ * column on, "spent so far" from the counted cells — a FLOOR, not a bill,
+ * with its basis named. Cells the server sent no counter for stay "not
+ * metered" in the table; here they simply do not contribute.
+ *
+ * Mounted only on the ON path, so `useLocale` is never called when the
+ * flag is off.
+ */
+const CostSpendCard: FC<CostSpendCardProps> = ({ rows, pricing, usage }) => {
+  const t = useTranslations('limits');
+  const locale = useLocale();
+  const { profile } = useLimitsCost();
+  const usd = (amount: number) => usdLabel(amount, locale, t);
+
+  const ceiling = useMemo(
+    () => ceilingSpendPerDay(rows, pricing, profile),
+    [rows, pricing, profile],
+  );
+  const spent = useMemo(
+    () => (usage ? spentSoFarUsd(usage, rows, pricing, profile) : undefined),
+    [usage, rows, pricing, profile],
+  );
+
+  const priciestLabel =
+    ceiling.bounded && ceiling.priciestModelId
+      ? (lookupPricing(pricing, ceiling.priciestModelId)?.model.name ??
+        ceiling.priciestModelId)
+      : null;
+
+  return (
+    <div className={`mt-3 ${LIMITS_NOTE_CARD}`} data-testid="limits-cost-card">
+      <div className="font-medium">{t('cost.ceilingTitle')}</div>
+      {!ceiling.bounded ? (
+        <p>{t('cost.ceilingUnbounded')}</p>
+      ) : ceiling.axis === 'blocked' ? (
+        <p>{t('cost.ceilingBlocked')}</p>
+      ) : (
+        <>
+          <p>
+            {t('cost.ceilingPerDay', { amount: usd(ceiling.usdPerDay) })}
+            {' · '}
+            {t('cost.ceilingPerMonth', {
+              amount: usd(
+                ceiling.usdPerDay * COST_ASSUMPTIONS.periodDays.month,
+              ),
+            })}
+          </p>
+          <p className={ADMIN_MUTED}>
+            {t('cost.ceilingAxisLabel', {
+              axis: t(`cost.ceilingAxis.${ceiling.axis}` as never),
+            })}
+            {priciestLabel &&
+              ` · ${t('cost.ceilingPriciest', { model: priciestLabel })}`}
+            {ceiling.approximateMonthConversion &&
+              ` · ${t('cost.ceilingMonthApprox')}`}
+          </p>
+        </>
+      )}
+      {usage !== undefined &&
+        (spent ? (
+          <p className="mt-1">
+            {t('cost.spentSoFar', { amount: usd(spent.usd) })}
+            <span className={`block ${ADMIN_MUTED}`}>
+              {t(`cost.spentBasis.${spent.basis}` as never)}
+              {spent.unpricedCells.length > 0 &&
+                ` · ${t('cost.spentUnpriced', {
+                  cells: spent.unpricedCells.join(', '),
+                })}`}
+            </span>
+          </p>
+        ) : (
+          <p className={`mt-1 ${ADMIN_MUTED}`}>{t('cost.spentNotMetered')}</p>
+        ))}
+      <p className={`mt-1 ${ADMIN_MUTED}`}>{costDisclosure(t)}</p>
+    </div>
+  );
+};

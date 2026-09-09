@@ -7,9 +7,17 @@ import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
  * Provides consistent response formats across all API routes
  */
 
+/**
+ * Machine-readable error detail. A plain string is the common case; a route
+ * whose refusal names several things at once (e.g. `LIMITS_OUT_OF_SCOPE`
+ * → `{ outOfScope: string[] }`) sends a JSON object so the client never has
+ * to re-parse a serialized string. Consumers narrow with `typeof`.
+ */
+export type ApiErrorDetails = string | Record<string, unknown>;
+
 export interface ApiErrorResponse {
   error: string;
-  details?: string;
+  details?: ApiErrorDetails;
   code?: string;
 }
 
@@ -24,18 +32,20 @@ export interface ApiSuccessResponse<T = any> {
  *
  * @param error - Error message or Error object
  * @param status - HTTP status code (default: 500)
- * @param details - Additional error details
+ * @param details - Additional error details: a string, or a JSON object when
+ *   the client needs structure (see {@link ApiErrorDetails})
  * @param code - Error code for client-side handling
  * @returns NextResponse with standardized error format
  *
  * @example
  * return errorResponse('User not found', 404);
  * return errorResponse(new Error('Invalid input'), 400, 'Field "email" is required');
+ * return errorResponse('Targets refused', 400, { outOfScope: ['a@b.org'] }, 'LIMITS_OUT_OF_SCOPE');
  */
 export function errorResponse(
   error: string | Error,
   status: number = 500,
-  details?: string,
+  details?: ApiErrorDetails,
   code?: string,
 ): NextResponse<ApiErrorResponse> {
   const errorMessage = error instanceof Error ? error.message : error;

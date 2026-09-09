@@ -62,6 +62,7 @@ export class AgentChatHandler extends BasePipelineStage {
         context.userCredential,
         agentEndpoint,
         context.approvalResponses,
+        { telemetry: context.telemetry },
       );
 
       const duration = Date.now() - startTime;
@@ -76,6 +77,7 @@ export class AgentChatHandler extends BasePipelineStage {
         duration,
         model: context.modelId,
         botId: context.botId,
+        telemetry: context.telemetry,
       });
 
       return {
@@ -93,6 +95,7 @@ export class AgentChatHandler extends BasePipelineStage {
         errorMessage: error instanceof Error ? error.message : 'Unknown error',
         model: context.modelId,
         botId: context.botId,
+        telemetry: context.telemetry,
       });
 
       throw error;

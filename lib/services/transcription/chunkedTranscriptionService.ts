@@ -15,6 +15,7 @@ import {
   isAudioSplittingAvailable,
   splitAudioFile,
 } from '@/lib/utils/server/audio/audioSplitter';
+import { BlobStorage } from '@/lib/utils/server/blob/blob';
 
 import {
   TranscriptionError,
@@ -23,7 +24,6 @@ import {
 } from '@/types/transcription';
 
 import {
-  ChunkedJob,
   completeJob,
   createJob,
   failJob,
@@ -116,8 +116,14 @@ export class ChunkedTranscriptionService {
    * Starts an async chunked transcription job.
    *
    * Returns immediately with job ID; processing continues in background.
-   * Use getStatus() or the status API to poll for progress.
+   * Use the status API to poll for progress.
    *
+   * NOTE: chunk files are local to this replica; the background loop must
+   * complete here. Only the job state (in `storage`) is multi-replica-safe.
+   *
+   * @param storage - Session-scoped blob client for job state. Held by the
+   *   background loop for the whole job (DefaultAzureCredential refreshes
+   *   its own tokens, so a long job doesn't outlive its auth).
    * @param audioPath - Path to the audio file to transcribe
    * @param filename - Original filename for display
    * @param userId - ID of the user who owns this job (for authorization)
@@ -125,6 +131,7 @@ export class ChunkedTranscriptionService {
    * @returns Job ID and total chunk count
    */
   async startJob(
+    storage: BlobStorage,
     audioPath: string,
     filename: string,
     userId: string,
@@ -161,41 +168,42 @@ export class ChunkedTranscriptionService {
     );
 
     // Create job in store
-    createJob(jobId, userId, chunkCount, chunkPaths, filename);
+    await createJob(storage, jobId, userId, chunkCount, chunkPaths, filename);
 
     // Start async processing (don't await - runs in background)
-    this.processChunksAsync(jobId, chunkPaths, filename, options).catch(
-      (error) => {
-        console.error(
-          `[ChunkedTranscription] Background processing error for ${jobId}:`,
-          error,
+    this.processChunksAsync(
+      storage,
+      jobId,
+      userId,
+      chunkPaths,
+      filename,
+      options,
+    ).catch(async (error) => {
+      console.error(
+        `[ChunkedTranscription] Background processing error for ${jobId}:`,
+        error,
+      );
+      try {
+        const errorClass = (error as TranscriptionError)?.errorClass;
+        await failJob(
+          storage,
+          jobId,
+          userId,
+          error.message || 'Unknown error',
+          errorClass,
         );
-        try {
-          const errorClass = (error as TranscriptionError)?.errorClass;
-          failJob(jobId, error.message || 'Unknown error', errorClass);
-        } catch (failError) {
-          console.error(
-            `[ChunkedTranscription] Could not mark job ${jobId} failed:`,
-            failError,
-          );
-        }
-      },
-    );
+      } catch (failError) {
+        console.error(
+          `[ChunkedTranscription] Could not mark job ${jobId} failed:`,
+          failError,
+        );
+      }
+    });
 
     return {
       jobId,
       totalChunks: chunkCount,
     };
-  }
-
-  /**
-   * Gets the current status of a job.
-   *
-   * @param jobId - Job identifier
-   * @returns Job status, or undefined if not found
-   */
-  getStatus(jobId: string): ChunkedJob | undefined {
-    return getJob(jobId);
   }
 
   /**
@@ -216,7 +224,9 @@ export class ChunkedTranscriptionService {
    *   workers from claiming new chunks (and aborts their in-flight retries).
    */
   private async processChunksAsync(
+    storage: BlobStorage,
     jobId: string,
+    userId: string,
     chunkPaths: string[],
     filename: string,
     options?: ChunkedTranscriptionOptions,
@@ -233,8 +243,8 @@ export class ChunkedTranscriptionService {
     let cancelled = false;
     let fatalError: Error | null = null;
 
-    const isJobCancelled = (): boolean => {
-      const current = getJob(jobId);
+    const isJobCancelled = async (): Promise<boolean> => {
+      const current = await getJob(storage, jobId, userId);
       return !current || current.status === 'cancelled';
     };
     const shouldAbort = (): boolean => cancelled || fatalError !== null;
@@ -247,7 +257,7 @@ export class ChunkedTranscriptionService {
         if (index >= totalChunks) return;
 
         // Cooperative cancel check before claiming Whisper capacity.
-        if (isJobCancelled()) {
+        if (await isJobCancelled()) {
           cancelled = true;
           return;
         }
@@ -267,8 +277,10 @@ export class ChunkedTranscriptionService {
           );
           results.push({ index, transcript });
           // updateProgress no-ops once the job is terminal (e.g. cancelled
-          // while this chunk was in flight), so this can't resurrect it.
-          updateProgress(jobId, results.length, index);
+          // while this chunk was in flight), so this can't resurrect it. The
+          // updatedAt bump it performs is also what keeps the poll path's
+          // STALE_JOB_MS check from failing a live job.
+          await updateProgress(storage, jobId, userId, results.length, index);
           options?.onProgress?.(results.length, totalChunks);
         } catch (error) {
           if (!fatalError) {
@@ -281,12 +293,12 @@ export class ChunkedTranscriptionService {
     };
 
     try {
-      updateProgress(jobId, 0, 0);
+      await updateProgress(storage, jobId, userId, 0, 0);
 
       const workerCount = Math.min(MAX_CONCURRENT_CHUNKS, totalChunks);
       await Promise.all(Array.from({ length: workerCount }, () => worker()));
 
-      if (cancelled || isJobCancelled()) {
+      if (cancelled || (await isJobCancelled())) {
         console.log(
           `[ChunkedTranscription] Job ${jobId} cancelled; aborted remaining chunks`,
         );
@@ -308,7 +320,7 @@ export class ChunkedTranscriptionService {
       );
 
       // Mark job as complete
-      completeJob(jobId, combinedTranscript);
+      await completeJob(storage, jobId, userId, combinedTranscript);
 
       console.log(
         `[ChunkedTranscription] Job ${jobId} completed: ${combinedTranscript.length} chars`,
@@ -321,7 +333,7 @@ export class ChunkedTranscriptionService {
         `[ChunkedTranscription] Job ${jobId} failed (${errorClass ?? 'unclassified'}):`,
         errorMessage,
       );
-      failJob(jobId, errorMessage, errorClass);
+      await failJob(storage, jobId, userId, errorMessage, errorClass);
       throw error;
     } finally {
       // Always clean up chunk files

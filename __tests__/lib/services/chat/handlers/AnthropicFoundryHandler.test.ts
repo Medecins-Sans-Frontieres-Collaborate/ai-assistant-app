@@ -182,6 +182,68 @@ describe('AnthropicFoundryHandler', () => {
     });
   });
 
+  describe('in-array system message capture', () => {
+    // Enricher-injected knowledge-base context arrives as system-role
+    // messages; Anthropic only takes user/assistant in `messages`, so the
+    // content must ride the `system` parameter instead of being dropped.
+    const ragMessages: Message[] = [
+      {
+        role: 'system',
+        content: 'Available sources:\n\nSource 1:\nContent: chunk text',
+        messageType: MessageType.TEXT,
+      },
+      { role: 'user', content: 'Question?', messageType: MessageType.TEXT },
+    ];
+
+    it('appends captured system content to the streaming system param', () => {
+      const prepared = handler.prepareMessages(ragMessages, mockModelConfig);
+      const params = handler.buildStreamingRequestParams(
+        mockModelConfig.id,
+        prepared,
+        'Agent prompt',
+        0.5,
+        { id: 'u1' },
+        mockModelConfig,
+      );
+      expect(params.system).toBe(
+        'Agent prompt\n\nAvailable sources:\n\nSource 1:\nContent: chunk text',
+      );
+      expect(params.messages).toEqual([{ role: 'user', content: 'Question?' }]);
+    });
+
+    it('appends captured system content to the non-streaming system param', () => {
+      const prepared = handler.prepareMessages(ragMessages, mockModelConfig);
+      const params = handler.buildNonStreamingRequestParams(
+        mockModelConfig.id,
+        prepared,
+        'Agent prompt',
+        0.5,
+        { id: 'u1' },
+        mockModelConfig,
+      );
+      expect(params.system).toBe(
+        'Agent prompt\n\nAvailable sources:\n\nSource 1:\nContent: chunk text',
+      );
+    });
+
+    it('clears captured context on a subsequent prepareMessages call', () => {
+      handler.prepareMessages(ragMessages, mockModelConfig);
+      handler.prepareMessages(
+        [{ role: 'user', content: 'Plain', messageType: MessageType.TEXT }],
+        mockModelConfig,
+      );
+      const params = handler.buildStreamingRequestParams(
+        mockModelConfig.id,
+        [],
+        'Agent prompt',
+        0.5,
+        { id: 'u1' },
+        mockModelConfig,
+      );
+      expect(params.system).toBe('Agent prompt');
+    });
+  });
+
   describe('buildNonStreamingRequestParams', () => {
     it('should build correct non-streaming request params', () => {
       const messages: Anthropic.MessageParam[] = [
@@ -206,7 +268,9 @@ describe('AnthropicFoundryHandler', () => {
         model: 'claude-sonnet-4-6',
         messages,
         system: 'You are a helpful assistant.',
-        max_tokens: 64000,
+        // Clamped from the model's 64000 tokenLimit — see the non-streaming
+        // ceiling suite below.
+        max_tokens: 16000,
         temperature: 0.7,
         stream: false,
         metadata: {
@@ -438,6 +502,203 @@ describe('AnthropicFoundryHandler', () => {
 
       expect(mockClient.messages.create).toHaveBeenCalledWith(params);
       expect(result).toBe(mockResponse);
+    });
+  });
+
+  describe('extended thinking', () => {
+    // Legacy fixed-budget API — Haiku 4.5 and the 4.5/4.1 generation.
+    const thinkingModelConfig: OpenAIModel = {
+      ...mockModelConfig,
+      supportsExtendedThinking: true,
+      thinkingApi: 'budget',
+    };
+    // Adaptive API — Fable 5/5.1, Opus 5/4.8/4.7, Sonnet 5. These reject
+    // `budget_tokens` AND any explicit temperature with a 400.
+    const adaptiveModelConfig: OpenAIModel = {
+      ...mockModelConfig,
+      id: OpenAIModelID.CLAUDE_OPUS_5,
+      supportsExtendedThinking: true,
+      thinkingApi: 'adaptive',
+      supportsTemperature: false,
+    };
+    const user = { id: 'u1' } as any;
+
+    it('enables thinking with a budget mapped from reasoning effort', () => {
+      const params = handler.buildStreamingRequestParams(
+        thinkingModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        thinkingModelConfig,
+        'medium',
+      );
+
+      expect(params.thinking).toEqual({
+        type: 'enabled',
+        budget_tokens: 4096,
+      });
+      // API constraint: temperature must be 1 with thinking enabled
+      expect(params.temperature).toBe(1);
+      // max_tokens must exceed the budget
+      expect(params.max_tokens).toBeGreaterThan(4096);
+    });
+
+    it('keeps thinking OFF for minimal/unset effort', () => {
+      for (const effort of ['minimal', undefined] as const) {
+        const params = handler.buildStreamingRequestParams(
+          thinkingModelConfig.id,
+          [{ role: 'user', content: 'Hello' }],
+          'prompt',
+          0.5,
+          user,
+          thinkingModelConfig,
+          effort,
+        );
+        expect(params.thinking).toBeUndefined();
+        expect(params.temperature).toBe(0.5);
+      }
+    });
+
+    it('never enables thinking on models without the flag', () => {
+      const params = handler.buildStreamingRequestParams(
+        mockModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        mockModelConfig, // no supportsExtendedThinking
+        'high',
+      );
+      expect(params.thinking).toBeUndefined();
+    });
+
+    it('applies thinking on the non-streaming builder too', () => {
+      const params = handler.buildNonStreamingRequestParams(
+        thinkingModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        thinkingModelConfig,
+        'high',
+      );
+      expect(params.thinking).toEqual({
+        type: 'enabled',
+        budget_tokens: 8192,
+      });
+    });
+
+    it('uses the ADAPTIVE shape (never budget_tokens) on adaptive models', () => {
+      const params = handler.buildStreamingRequestParams(
+        adaptiveModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        adaptiveModelConfig,
+        'medium',
+      );
+
+      // `budget_tokens` is a 400 on these models, so the shape must differ.
+      expect(params.thinking).toEqual({
+        type: 'adaptive',
+        display: 'summarized',
+      });
+      expect(params.output_config).toEqual({ effort: 'medium' });
+      // Sampling params are rejected alongside adaptive thinking; the legacy
+      // path's `temperature = 1` must NOT leak here.
+      expect(params.temperature).toBeUndefined();
+    });
+
+    it('keeps adaptive thinking off for minimal effort', () => {
+      const params = handler.buildStreamingRequestParams(
+        adaptiveModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        adaptiveModelConfig,
+        'minimal',
+      );
+      expect(params.thinking).toBeUndefined();
+      expect(params.output_config).toBeUndefined();
+    });
+
+    it('requests no thinking when the model declares no thinking API', () => {
+      // Fail safe: a new Claude entry that forgets `thinkingApi` loses the
+      // reasoning panel rather than 400-ing every turn on a guessed shape.
+      const params = handler.buildStreamingRequestParams(
+        mockModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        { ...mockModelConfig, supportsExtendedThinking: true },
+        'high',
+      );
+      expect(params.thinking).toBeUndefined();
+      expect(params.output_config).toBeUndefined();
+    });
+
+    it('strips prior-turn <think> blocks from assistant history', () => {
+      const messages: Message[] = [
+        { role: 'user', content: 'Q1', messageType: MessageType.TEXT },
+        {
+          role: 'assistant',
+          content: '<think>\nold reasoning\n</think>\n\nA1',
+          messageType: MessageType.TEXT,
+        },
+        { role: 'user', content: 'Q2', messageType: MessageType.TEXT },
+      ];
+
+      const result = handler.prepareMessages(messages, thinkingModelConfig);
+
+      expect(result[1]).toEqual({ role: 'assistant', content: 'A1' });
+      // User messages untouched
+      expect(result[0]).toEqual({ role: 'user', content: 'Q1' });
+    });
+  });
+
+  describe('non-streaming max_tokens ceiling', () => {
+    const user = { id: 'u1' } as any;
+
+    it('caps max_tokens below the SDK non-streaming limit', () => {
+      // The SDK throws `Streaming is required…` above ~21.3k tokens, so a
+      // modern Claude tokenLimit must not reach the request unclamped.
+      const params = handler.buildNonStreamingRequestParams(
+        mockModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        { ...mockModelConfig, maxLength: 1000000, tokenLimit: 128000 },
+      );
+      expect(params.max_tokens).toBe(16000);
+    });
+
+    it('leaves the streaming path at the model tokenLimit', () => {
+      const params = handler.buildStreamingRequestParams(
+        mockModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        { ...mockModelConfig, maxLength: 1000000, tokenLimit: 128000 },
+      );
+      expect(params.max_tokens).toBe(128000);
+    });
+
+    it('does not raise a model tokenLimit already under the ceiling', () => {
+      const params = handler.buildNonStreamingRequestParams(
+        mockModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        { ...mockModelConfig, tokenLimit: 8000 },
+      );
+      expect(params.max_tokens).toBe(8000);
     });
   });
 });

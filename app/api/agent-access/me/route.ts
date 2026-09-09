@@ -32,7 +32,7 @@ export async function GET() {
     // (≤60s stale, same as rule evaluation).
     await service.ensureFresh();
     const { config } = service.getSnapshot();
-    const status = resolveAdminStatus(session.user.mail, config);
+    const status = resolveAdminStatus(session.user, config);
     return successResponse(status);
   } catch (error) {
     return handleApiError(error, 'Failed to resolve admin status');

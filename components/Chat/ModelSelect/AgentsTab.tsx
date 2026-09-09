@@ -26,6 +26,7 @@ import { SearchMode } from '@/types/searchMode';
 import { OrganizationAgentList } from '../OrganizationAgents/OrganizationAgentList';
 import { HiddenItemsSection } from './HiddenItemsSection';
 import { ModelDetailsPanel } from './ModelDetailsPanel';
+import { pinnedModelIdOf } from './modelLimits';
 
 import { AgentSource } from '@/client/stores/settingsStore';
 import { getOrganizationAgents } from '@/lib/organizationAgents';
@@ -89,12 +90,28 @@ interface AgentsTabProps {
   handleModelSelect: (model: OpenAIModel) => void;
   organizationAgentModels: OpenAIModel[];
   foundryAgents: DiscoveredAgent[];
+  /** Static org-agent ids currently overridden or disabled by admin records. */
+  suppressedOrgAgentIds?: string[];
   /** Resource path for the user's regional default Foundry project (US or EU). */
   regionalPath: string | null;
   /** Office-specific Foundry project paths beyond the regional default. */
   officePaths: string[];
   selectedModelId: string | null | undefined;
   isLoadingFoundryAgents?: boolean;
+  /**
+   * The fast half of discovery (/api/agents) failed with nothing cached. Every
+   * admin-managed agent — prompt, M365 and org RAG — is missing from
+   * `foundryAgents` while this is set; only the bundled static entries remain.
+   */
+  isFoundryAgentsError?: boolean;
+  /** Foundry discovery (the slow half) failed or reported itself unavailable. */
+  isDiscoveryError?: boolean;
+  /**
+   * Plain refetch of whichever half failed. Distinct from `onRefreshAgents`,
+   * which also busts the server-side discovery cache — recovering from a
+   * transient failure shouldn't pay for a full re-enumeration.
+   */
+  onRetryAgents?: () => void;
   onRefreshAgents: () => void;
   // Agent sources
   agentSources: AgentSource[];
@@ -109,15 +126,11 @@ interface AgentsTabProps {
   selectedModel: OpenAIModel | undefined;
   modelConfig: OpenAIModel | null | undefined;
   isCustomAgent: boolean;
-  searchModeEnabled: boolean;
   displaySearchMode: SearchMode;
-  agentAvailable: boolean;
   showModelAdvanced: boolean;
   selectedConversation: Conversation | null;
   mobileView: 'list' | 'details';
   setMobileView: (view: 'list' | 'details') => void;
-  handleToggleSearchMode: () => void;
-  handleSetSearchMode: (mode: SearchMode) => void;
   setShowModelAdvanced: (show: boolean) => void;
   updateConversation: (id: string, updates: Partial<Conversation>) => void;
 }
@@ -126,10 +139,14 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   handleModelSelect,
   organizationAgentModels,
   foundryAgents,
+  suppressedOrgAgentIds = [],
   regionalPath,
   officePaths,
   selectedModelId,
   isLoadingFoundryAgents,
+  isFoundryAgentsError,
+  isDiscoveryError,
+  onRetryAgents,
   onRefreshAgents,
   agentSources,
   onAddSource,
@@ -142,25 +159,32 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   selectedModel,
   modelConfig,
   isCustomAgent,
-  searchModeEnabled,
   displaySearchMode,
-  agentAvailable,
   showModelAdvanced,
   selectedConversation,
   mobileView,
   setMobileView,
-  handleToggleSearchMode,
-  handleSetSearchMode,
   setShowModelAdvanced,
   updateConversation,
 }) => {
   const t = useTranslations('agentsTab');
   const tModel = useTranslations('modelSelect');
+  // The two error rows below reuse AgentBrowserModal's copy verbatim, so they
+  // read from its namespace rather than duplicating the strings under
+  // `agentsTab` — `agentAttach` is already translated in every locale, and
+  // en-only keys here would render as raw key paths for the 53 others.
+  const tAttach = useTranslations('agentAttach');
   const hideLabel = tModel('hide');
   const { exploreBots } = useFlags();
   const { data: session } = useSession();
 
-  const organizationAgents = getOrganizationAgents();
+  // Static config entries the server reports as admin-overridden or
+  // admin-disabled drop out — the admin record (type 'org' below) replaces
+  // them, or nothing does.
+  const suppressedIdSet = new Set(suppressedOrgAgentIds);
+  const organizationAgents = getOrganizationAgents().filter(
+    (a) => !suppressedIdSet.has(a.id),
+  );
   const isBotsEnabled = exploreBots !== false;
 
   // Region/office labels. Office name is user-defined config (place name), so it
@@ -189,23 +213,43 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   // scheme (they have no Foundry source path).
   const officePathSet = new Set(officePaths);
   const promptAgents = foundryAgents.filter((a) => a.type === 'prompt');
+  // M365 file-backed agents render alongside prompt agents (org-managed,
+  // `org-<id>` ids, no Foundry source path). Admin-authored org RAG agents
+  // (type 'org') ride the same convention.
+  const m365Agents = foundryAgents.filter((a) => a.type === 'm365');
+  const orgAdminAgents = foundryAgents.filter((a) => a.type === 'org');
+  const appManagedAgents = [...promptAgents, ...m365Agents, ...orgAdminAgents];
+  const isFoundryDiscovered = (a: DiscoveredAgent) =>
+    a.type !== 'prompt' && a.type !== 'm365' && a.type !== 'org';
   const regionalAgents = foundryAgents.filter(
-    (a) => a.type !== 'prompt' && (!a.source || a.source === regionalPath),
+    (a) => isFoundryDiscovered(a) && (!a.source || a.source === regionalPath),
   );
   const officeFoundryAgents = foundryAgents.filter(
-    (a) => a.type !== 'prompt' && a.source && officePathSet.has(a.source),
+    (a) => isFoundryDiscovered(a) && a.source && officePathSet.has(a.source),
   );
   const getSourceAgents = (sourcePath: string) =>
     foundryAgents.filter((a) => a.source === sourcePath);
-  // Region/office org agents are gated by the discovery flag (exploreBots);
-  // custom (BYO) sources rendered below are not. The region section shows when
-  // there's any static org agent OR a discovered regional agent, so a
-  // discovery-only region isn't hidden just because it has no static agents.
-  const hasOrganizationAgents =
+  // Anything the region section can actually list: a static org agent, a
+  // discovered regional agent, or an admin-managed one. A discovery-only
+  // region isn't hidden just because it has no static agents.
+  const hasOrgAgentRows =
+    organizationAgents.length > 0 ||
+    regionalAgents.length > 0 ||
+    appManagedAgents.length > 0;
+  // A failed half is *why* this section can look empty, so keep it mounted to
+  // host the error row rather than hiding the explanation. Both halves count:
+  // a dead fast half hides every admin-managed agent, a dead slow half every
+  // discovered one, and either can be the sole reason the list is bare — the
+  // bundled static entries are few, and a group-scoped admin rule can suppress
+  // the lot. Flag-gated like the section itself, which the empty state below
+  // relies on: with exploreBots off there is no row to render.
+  const isShowingAgentsError =
     isBotsEnabled &&
-    (organizationAgents.length > 0 ||
-      regionalAgents.length > 0 ||
-      promptAgents.length > 0);
+    (isFoundryAgentsError === true || isDiscoveryError === true);
+  // Region/office org agents are gated by the discovery flag (exploreBots);
+  // custom (BYO) sources rendered below are not.
+  const hasOrganizationAgents =
+    (isBotsEnabled && hasOrgAgentRows) || isShowingAgentsError;
   const hasOfficeSection =
     isBotsEnabled && officeName != null && officeFoundryAgents.length > 0;
 
@@ -239,9 +283,9 @@ export const AgentsTab: FC<AgentsTabProps> = ({
       }
     };
     organizationAgents.forEach((a) => consider(`org-${a.id}`, a.name));
-    promptAgents.forEach((a) => consider(`org-${a.id}`, a.name));
+    appManagedAgents.forEach((a) => consider(`org-${a.id}`, a.name));
     foundryAgents
-      .filter((a) => a.type !== 'prompt')
+      .filter(isFoundryDiscovered)
       .forEach((a) => consider(foundryModelId(a), a.name));
     return Array.from(byId.values());
   })();
@@ -262,7 +306,14 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   // never route through the Foundry execution path).
   const selectedPromptAgent =
     !selectedStaticOrgAgent && selectedModelId?.startsWith('org-')
-      ? promptAgents.find((a) => `org-${a.id}` === selectedModelId)
+      ? appManagedAgents.find((a) => `org-${a.id}` === selectedModelId)
+      : undefined;
+  // Prompt agents pin their model; the details header badges the agent
+  // when that model is blocked or exhausted for this user (the list rows
+  // are OrganizationAgentList's, which has no badge slot yet).
+  const selectedPinnedModelId =
+    selectedPromptAgent?.type === 'prompt'
+      ? pinnedModelIdOf(selectedPromptAgent)
       : undefined;
 
   // For Foundry-discovered agents, synthesize a minimal OrganizationAgent so the
@@ -341,45 +392,72 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                   />
                 </button>
               </div>
-              <OrganizationAgentList
-                onSelect={(agent) => {
-                  // Static org agents use `org-{id}`; foundry display agents
-                  // carry a precomputed `matchId` from the parent.
-                  const matchId =
-                    'matchId' in agent && agent.matchId
-                      ? agent.matchId
-                      : `org-${agent.id}`;
-                  const agentModel = organizationAgentModels.find(
-                    (m) => m.id === matchId,
-                  );
-                  if (agentModel) {
-                    handleModelSelect(agentModel);
-                    setMobileView('details');
-                  }
-                }}
-                selectedAgentId={selectedModelId ?? undefined}
-                discoveredAgents={[
-                  ...regionalAgents.map((a) => ({
-                    id: a.id,
-                    name: a.name,
-                    description: a.description,
-                    icon: a.icon,
-                    color: a.color,
-                    matchId: foundryModelId(a),
-                  })),
-                  ...promptAgents.map((a) => ({
-                    id: a.id,
-                    name: a.name,
-                    description: a.description,
-                    icon: a.icon,
-                    color: a.color,
-                    matchId: `org-${a.id}`,
-                  })),
-                ]}
-                hiddenIds={hiddenIds}
-                onHide={onHideAgent}
-                hideLabel={hideLabel}
-              />
+              {isFoundryAgentsError && (
+                // ['app-agents'] is fetched once per page load from a
+                // permanently-mounted hook, so a single transient failure used
+                // to strand every admin-managed agent for the rest of the
+                // session with no signal at all — the section simply rendered
+                // the bundled static entries and looked complete. Say so here,
+                // where the missing agents would have been, and offer a retry.
+                <div
+                  data-testid="agents-load-error"
+                  className="mb-1.5 flex flex-wrap items-center gap-2 rounded-md border border-amber-300 bg-amber-50 px-2 py-1.5 text-xs text-amber-700 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-400"
+                >
+                  <span>{tAttach('loadError')}</span>
+                  <button
+                    type="button"
+                    onClick={onRetryAgents}
+                    className="rounded border border-amber-300 px-2 py-0.5 text-amber-800 hover:bg-amber-100 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/40"
+                  >
+                    {tAttach('retry')}
+                  </button>
+                </div>
+              )}
+              {/* Skipped when the section exists only to host an error row:
+                  the list's own "none configured" card would contradict the
+                  message directly above it. */}
+              {hasOrgAgentRows && (
+                <OrganizationAgentList
+                  onSelect={(agent) => {
+                    // Static org agents use `org-{id}`; foundry display agents
+                    // carry a precomputed `matchId` from the parent.
+                    const matchId =
+                      'matchId' in agent && agent.matchId
+                        ? agent.matchId
+                        : `org-${agent.id}`;
+                    const agentModel = organizationAgentModels.find(
+                      (m) => m.id === matchId,
+                    );
+                    if (agentModel) {
+                      handleModelSelect(agentModel);
+                      setMobileView('details');
+                    }
+                  }}
+                  selectedAgentId={selectedModelId ?? undefined}
+                  discoveredAgents={[
+                    ...regionalAgents.map((a) => ({
+                      id: a.id,
+                      name: a.name,
+                      description: a.description,
+                      icon: a.icon,
+                      color: a.color,
+                      matchId: foundryModelId(a),
+                    })),
+                    ...appManagedAgents.map((a) => ({
+                      id: a.id,
+                      name: a.name,
+                      description: a.description,
+                      icon: a.icon,
+                      color: a.color,
+                      matchId: `org-${a.id}`,
+                    })),
+                  ]}
+                  hiddenIds={hiddenIds}
+                  suppressedStaticIds={suppressedOrgAgentIds}
+                  onHide={onHideAgent}
+                  hideLabel={hideLabel}
+                />
+              )}
               {isLoadingFoundryAgents && (
                 <div className="space-y-1 mt-1">
                   {[1, 2].map((i) => (
@@ -395,6 +473,26 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                   ))}
                 </div>
               )}
+              {!isFoundryAgentsError &&
+                !isLoadingFoundryAgents &&
+                isDiscoveryError && (
+                  // Quieter than the fast-half row: Foundry discovery only adds
+                  // regional/office rows on top of what already rendered, so it
+                  // reads as a footnote rather than a banner.
+                  <p
+                    data-testid="agents-discovery-error"
+                    className="mt-1.5 flex flex-wrap items-center gap-2 px-1 text-xs text-amber-700 dark:text-amber-400"
+                  >
+                    <span>{tAttach('discoveryError')}</span>
+                    <button
+                      type="button"
+                      onClick={onRetryAgents}
+                      className="rounded border border-amber-300 px-2 py-0.5 text-amber-800 hover:bg-amber-100 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/40"
+                    >
+                      {tAttach('retry')}
+                    </button>
+                  </p>
+                )}
             </section>
           )}
 
@@ -528,9 +626,15 @@ export const AgentsTab: FC<AgentsTabProps> = ({
           })}
 
           {/* Empty state — nothing to show in any section. Keeps the Connect
-              button below as the call to action instead of leaving it bare. */}
+              button below as the call to action instead of leaving it bare.
+              Suppressed whenever an error row is rendering instead: "none
+              available" is a claim we can't make when the list is empty only
+              because a fetch died. With exploreBots off there is no error row
+              (the section is flag-gated) and the agents are hidden by policy
+              rather than by the failure, so the card stays and is truthful. */}
           {organizationAgentModels.length === 0 &&
-            agentSources.length === 0 && (
+            agentSources.length === 0 &&
+            !isShowingAgentsError && (
               <div className="rounded-lg border border-dashed border-gray-300 dark:border-gray-700 px-4 py-6 text-center">
                 <IconHexagon
                   size={24}
@@ -760,17 +864,14 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                 selectedModel={selectedModel}
                 modelConfig={modelConfig}
                 isCustomAgent={isCustomAgent}
-                searchModeEnabled={searchModeEnabled}
                 displaySearchMode={displaySearchMode}
-                agentAvailable={agentAvailable}
                 showModelAdvanced={showModelAdvanced}
                 selectedConversation={selectedConversation}
                 setMobileView={setMobileView}
-                handleToggleSearchMode={handleToggleSearchMode}
-                handleSetSearchMode={handleSetSearchMode}
                 setShowModelAdvanced={setShowModelAdvanced}
                 updateConversation={updateConversation}
                 organizationAgent={selectedOrgAgent}
+                pinnedModelId={selectedPinnedModelId}
               />
             )}
           {!selectedSource && !isAgentSelected && (

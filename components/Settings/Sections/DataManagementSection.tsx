@@ -473,13 +473,15 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
           </div>
         )}
 
-        {/* Backup & Restore */}
+        {/* Export & Import — deliberately NOT called "backup": the cloud
+            backup feature owns that word (it renders above this section in
+            the merged Data & Backup pane when its flag allows). */}
         <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
           <h3 className="text-md font-bold mb-4 text-black dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
-            {t('settings.Backup & Restore')}
+            {t('settings.Export & Import')}
           </h3>
           <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
-            {t('settings.backupDescription')}
+            {t('settings.exportImportDescription')}
           </p>
           <div className="flex flex-col space-y-2">
             <SidebarButton

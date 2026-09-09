@@ -1,0 +1,15 @@
+{
+  "id": "ambiguous-clarify",
+  "description": "Under-specified request; good answers ask one targeted question or state assumptions, weak ones guess silently.",
+  "tags": ["single-turn", "judgement"],
+  "rubric": "Either asks a single focused clarifying question or proceeds with explicitly stated assumptions. Must not produce a long generic answer.",
+  "turns": [
+    {
+      "user": "Can you translate this for the team?"
+    },
+    {
+      "user": "Sorry — it's the announcement from earlier, into French and Arabic, for the Dakar and Amman offices.",
+      "expect": "Recognises that no announcement text exists in this conversation and asks for it (or says it cannot see it). Must not invent one."
+    }
+  ]
+}

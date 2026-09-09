@@ -70,6 +70,10 @@ vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
       evaluateAccess: accessEvaluate,
       getPromptAgentById: accessGetPromptAgentById,
       getSnapshot: accessGetSnapshot,
+      // The m365/org guards run alongside the prompt guard; these tests
+      // exercise prompt/Foundry paths, so both resolve to nothing.
+      getM365AgentById: () => null,
+      getOrgAgentById: () => null,
     }),
   },
   emitAccessAudit,
@@ -146,13 +150,15 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
         source: VALID_PATH,
         agentName: 'my-agent',
       });
-      expect(emitAccessAudit).toHaveBeenCalledWith({
-        userMail: 'u@msf.org',
-        agentName: 'my-agent',
-        source: VALID_PATH,
-        decision: 'allow',
-        reason: 'public',
-      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userMail: 'u@msf.org',
+          agentName: 'my-agent',
+          source: VALID_PATH,
+          decision: 'allow',
+          reason: 'public',
+        }),
+      );
       expect(result.foundryEndpoint).toBe(ALLOWED_ENDPOINT);
       expect(result.userCredential).toBeDefined();
       expect(getFoundryToken).toHaveBeenCalled();
@@ -362,13 +368,15 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
         source: null,
         agentName: 'finance-bot',
       });
-      expect(emitAccessAudit).toHaveBeenCalledWith({
-        userMail: 'u@msf.org',
-        agentName: 'finance-bot',
-        source: null,
-        decision: 'deny',
-        reason: 'not-allowed',
-      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userMail: 'u@msf.org',
+          agentName: 'finance-bot',
+          source: null,
+          decision: 'deny',
+          reason: 'not-allowed',
+        }),
+      );
       // No credential machinery was touched on this path.
       expect(getAccessTokenForOBO).not.toHaveBeenCalled();
       expect(getFoundryToken).not.toHaveBeenCalled();
@@ -416,6 +424,29 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
       expect(emitAccessAudit).toHaveBeenCalledWith(
         expect.objectContaining({ decision: 'unavailable' }),
       );
+    });
+
+    it("blocks a degraded group lookup too ('unavailable' is never an allow)", async () => {
+      // Fix 4 makes a failed Entra membership lookup report 'unavailable'
+      // so discovery stops hiding the agent. The invocation guard must be
+      // unmoved by that: it keys on `decision !== 'allow'`, not the reason.
+      accessEvaluate.mockReturnValue({
+        decision: 'unavailable',
+        reason: 'group-membership-degraded',
+      });
+
+      await expect(
+        createCredentialMiddleware(
+          makeNonFoundryAgentContext('org-finance-bot'),
+          mockReq,
+        ),
+      ).rejects.toMatchObject({
+        code: ErrorCode.AGENT_UNAVAILABLE,
+        metadata: {
+          accessDecision: 'unavailable',
+          accessReason: 'group-membership-degraded',
+        },
+      });
     });
 
     it('allow keeps the path byte-identical to before the guard ({} returned)', async () => {
@@ -522,13 +553,15 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
         source: 'prompt-agent',
         agentName: 'prompt-abc123def456',
       });
-      expect(emitAccessAudit).toHaveBeenCalledWith({
-        userMail: 'u@msf.org',
-        agentName: 'prompt-abc123def456',
-        source: 'prompt-agent',
-        decision: 'deny',
-        reason: 'not-allowed',
-      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userMail: 'u@msf.org',
+          agentName: 'prompt-abc123def456',
+          source: 'prompt-agent',
+          decision: 'deny',
+          reason: 'not-allowed',
+        }),
+      );
       // No credential machinery was touched on this path.
       expect(getAccessTokenForOBO).not.toHaveBeenCalled();
       expect(getFoundryToken).not.toHaveBeenCalled();
@@ -617,10 +650,10 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
       expect(emitAccessAudit).not.toHaveBeenCalled();
     });
 
-    it('static rag botId (non-prompt-agent) never touches the access service at all', async () => {
-      // Ids are server-generated `prompt-<hex>`, so a non-prefixed botId
-      // (static RAG chat) must not even pay the ensureFresh() refresh —
-      // keeps storage retries off the static-RAG hot path during outages.
+    it('static rag botId (non-prompt-agent) is evaluated under the org-agent source and passes with no rule', async () => {
+      // A built-in config agent with no admin record is guarded by the rule
+      // stored under the same `org-agent::<id>` key an override would use —
+      // no rule → allow, so the historical behavior is unchanged.
       const result = await createCredentialMiddleware(
         makePromptAgentContext({
           promptAgent: undefined,
@@ -630,8 +663,88 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
       );
 
       expect(result).toEqual({});
-      expect(accessEnsureFresh).not.toHaveBeenCalled();
       expect(accessGetPromptAgentById).not.toHaveBeenCalled();
+      expect(accessEvaluate).toHaveBeenCalledWith({
+        userMail: 'u@msf.org',
+        source: 'org-agent',
+        agentName: 'msf_communications',
+      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          agentName: 'msf_communications',
+          source: 'org-agent',
+          decision: 'allow',
+        }),
+      );
+    });
+
+    it('static rag botId + deny rule: blocked and audited', async () => {
+      accessEvaluate.mockReturnValue({
+        decision: 'deny',
+        reason: 'not-allowed',
+      });
+
+      await expect(
+        createCredentialMiddleware(
+          makePromptAgentContext({
+            promptAgent: undefined,
+            botId: 'msf_communications',
+          }),
+          mockReq,
+        ),
+      ).rejects.toMatchObject({
+        code: ErrorCode.AGENT_UNAVAILABLE,
+        metadata: { accessDecision: 'deny', accessReason: 'not-allowed' },
+      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userMail: 'u@msf.org',
+          agentName: 'msf_communications',
+          source: 'org-agent',
+          decision: 'deny',
+          reason: 'not-allowed',
+        }),
+      );
+    });
+
+    it('static rag botId + rules unavailable: serves rule-free (fail-open, audited)', async () => {
+      // Unlike `orgr-` ids, a built-in agent must survive a storage outage.
+      accessGetSnapshot.mockReturnValue({ rulesUnavailable: true });
+      accessEvaluate.mockReturnValue({
+        decision: 'unavailable',
+        reason: 'rules-unavailable',
+      });
+
+      const result = await createCredentialMiddleware(
+        makePromptAgentContext({
+          promptAgent: undefined,
+          botId: 'msf_communications',
+        }),
+        mockReq,
+      );
+
+      expect(result).toEqual({});
+      expect(accessEvaluate).not.toHaveBeenCalled();
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          agentName: 'msf_communications',
+          source: 'org-agent',
+          decision: 'allow',
+          reason: 'rules-unavailable-static-fallback',
+        }),
+      );
+    });
+
+    it('unknown botId (neither record nor static agent) never evaluates', async () => {
+      const result = await createCredentialMiddleware(
+        makePromptAgentContext({
+          promptAgent: undefined,
+          botId: 'no_such_agent',
+        }),
+        mockReq,
+      );
+
+      expect(result).toEqual({});
       expect(accessEvaluate).not.toHaveBeenCalled();
     });
 
@@ -656,13 +769,15 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
         },
       });
 
-      expect(emitAccessAudit).toHaveBeenCalledWith({
-        userMail: 'u@msf.org',
-        agentName: 'prompt-abc123def456',
-        source: 'prompt-agent',
-        decision: 'unavailable',
-        reason: 'rules-unavailable',
-      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userMail: 'u@msf.org',
+          agentName: 'prompt-abc123def456',
+          source: 'prompt-agent',
+          decision: 'unavailable',
+          reason: 'rules-unavailable',
+        }),
+      );
       expect(accessEvaluate).not.toHaveBeenCalled();
     });
 

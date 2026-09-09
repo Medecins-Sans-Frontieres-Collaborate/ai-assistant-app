@@ -26,6 +26,13 @@ import {
  * its token_endpoint at 169.254.169.254 must be rejected. Any drift toward
  * accepting client-supplied endpoints turns the proxy into an SSRF /
  * credential relay — do not add such parameters.
+ *
+ * The one non-discovery source of endpoints is an admin-authored connector
+ * record (resolved.oauthEndpoints): ADMIN-stored, write-time validated, and
+ * resolved server-side through the same access-checked path as the connector
+ * URL itself — never taken from the request. Needed for providers that
+ * publish no discovery metadata at all (NetSuite's endpoints are
+ * per-account). Those endpoints are re-validated here too.
  */
 
 /** Minimal slice of RFC 8414 authorization-server metadata we rely on. */
@@ -43,6 +50,12 @@ export interface McpOauthContext {
   metadata: McpAuthServerMetadata;
   /** RFC 9728 resource indicator, when the server publishes one. */
   resource?: string;
+  /**
+   * Distinct refresh endpoint, only for connectors that store one. The token
+   * route substitutes it for metadata.token_endpoint on refresh_token grants;
+   * absent means refresh uses the token endpoint (the OAuth 2.0 norm).
+   */
+  refreshTokenEndpoint?: string;
 }
 
 export interface ResolveOauthContextOptions {
@@ -133,6 +146,37 @@ export async function resolveOauthContext(
       400,
       'MCP_SERVER_REJECTED',
     );
+  }
+
+  // Admin-stored endpoints replace discovery outright: providers that need
+  // them publish no metadata to discover, and mixing the two sources would
+  // make it ambiguous which one is authoritative. No cache involvement —
+  // building this context is pure, and caching would serve a 5-min-stale
+  // copy of endpoints an admin may have just corrected.
+  if (resolved.oauthEndpoints) {
+    const { authorizationUrl, tokenUrl, refreshUrl } = resolved.oauthEndpoints;
+    // Same bar as discovered endpoints: write-time validation protects the
+    // stored record, this protects the request path even if a blob was
+    // hand-edited underneath the admin API.
+    await validateDiscoveredEndpoint(
+      'authorization_endpoint',
+      authorizationUrl,
+    );
+    await validateDiscoveredEndpoint('token_endpoint', tokenUrl);
+    await validateDiscoveredEndpoint('refresh token_endpoint', refreshUrl);
+    return {
+      resolved,
+      // Fallback base only — the SDK uses metadata.token_endpoint verbatim
+      // whenever it is set, which it always is here.
+      authorizationServerUrl: new URL(tokenUrl).origin,
+      metadata: {
+        authorization_endpoint: authorizationUrl,
+        token_endpoint: tokenUrl,
+      },
+      ...(refreshUrl && refreshUrl !== tokenUrl
+        ? { refreshTokenEndpoint: refreshUrl }
+        : {}),
+    };
   }
 
   const cached = cache.get(resolved.url);
@@ -259,11 +303,60 @@ export function getStaticOauthClient(
  * fallback to DCR, because falling back would authenticate as the wrong
  * client and fail confusingly at the vendor instead of here.
  */
+/**
+ * Admin-stored OAuth app for a catalog key (Admin → Connectors), or null.
+ * Precedence: an admin record beats the MCP_OAUTH_* env vars — an admin who
+ * writes a record is deliberately overriding deployment config — and env
+ * remains the fallback so nothing breaks before any record exists (or when
+ * agent access control is disabled entirely).
+ *
+ * Unseal failures surface as the same 503 as connector secrets rather than
+ * silently falling through to env: the env app is very likely a DIFFERENT
+ * OAuth client, and authenticating as the wrong client fails confusingly at
+ * the vendor instead of here.
+ */
+async function getAdminCatalogOauthClient(
+  catalogKey: string,
+): Promise<{ clientId: string; clientSecret?: string } | null> {
+  const { AgentAccessService } =
+    await import('@/lib/services/agentAccess/AgentAccessService');
+  const service = AgentAccessService.getInstance();
+  if (!service.isEnabled()) return null;
+  await service.ensureFresh();
+  const app = service.getCatalogOauthApp(catalogKey);
+  if (!app) return null;
+
+  if (!app.clientSecret) {
+    return { clientId: app.clientId };
+  }
+  const { ConnectorSecretIntegrityError, unsealConnectorSecret } =
+    await import('@/lib/services/agentAccess/connectorSecretCrypto');
+  try {
+    return {
+      clientId: app.clientId,
+      clientSecret: unsealConnectorSecret(app.id, app.clientSecret),
+    };
+  } catch (error) {
+    if (error instanceof ConnectorSecretIntegrityError) {
+      throw new McpOauthError(
+        'This connector’s stored client secret could not be read; an administrator must re-enter it',
+        503,
+        'CONNECTOR_SECRET_UNREADABLE',
+      );
+    }
+    throw error;
+  }
+}
+
 export async function getOauthClientCredentials(
   entry: Pick<McpServerRequestEntry, 'catalogKey' | 'connectorId'>,
 ): Promise<{ clientId: string; clientSecret?: string } | null> {
   if (entry.connectorId === undefined) {
-    return getStaticOauthClient(entry.catalogKey);
+    if (entry.catalogKey === undefined) return null;
+    return (
+      (await getAdminCatalogOauthClient(entry.catalogKey)) ??
+      getStaticOauthClient(entry.catalogKey)
+    );
   }
 
   const { AgentAccessService } =
@@ -317,12 +410,24 @@ export async function getOauthClientCredentials(
  * Arbitrary (non-catalog) servers are deliberately absent: their DCR support
  * is unknown until discovery runs, so their UI keeps offering the attempt.
  */
-export function getCatalogOauthAppAvailability(): Record<string, boolean> {
+export async function getCatalogOauthAppAvailability(): Promise<
+  Record<string, boolean>
+> {
+  // One snapshot consult for all keys: admin-stored apps count as available
+  // exactly like env-configured ones. When agent access control is off, the
+  // getter returns null for every key and this reduces to the env answer.
+  const { AgentAccessService } =
+    await import('@/lib/services/agentAccess/AgentAccessService');
+  const service = AgentAccessService.getInstance();
+  if (service.isEnabled()) {
+    await service.ensureFresh();
+  }
   const availability: Record<string, boolean> = {};
   for (const entry of Object.values(MCP_CATALOG)) {
     if (entry.auth.style !== 'oauth' && !entry.alsoSupportsOauth) continue;
     availability[entry.key] =
       entry.supportsDynamicRegistration === true ||
+      service.getCatalogOauthApp(entry.key) !== null ||
       getStaticOauthClient(entry.key) !== null;
   }
   return availability;

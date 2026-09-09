@@ -194,3 +194,104 @@ describe('createFoundryTokenCredential', () => {
     ).rejects.toThrow(/Refusing to issue Foundry token/);
   });
 });
+
+// ── owner-keyed cache ─────────────────────────────────────────────────────────
+describe('listUserAgents — owner-keyed cache', () => {
+  const armCalls = () =>
+    (
+      global.fetch as unknown as { mock: { calls: unknown[][] } }
+    ).mock.calls.filter((c) => String(c[0]).includes('/applications?')).length;
+
+  it('survives an access-token rotation for the same user', async () => {
+    mockArmFetch([armApp('a')]);
+    await service.listUserAgents(
+      'arm-token-1',
+      RESOURCE_PATH,
+      null,
+      'Ann@Example.org',
+    );
+    await service.listUserAgents(
+      'arm-token-2',
+      RESOURCE_PATH,
+      null,
+      'ann@example.org',
+    );
+    expect(armCalls()).toBe(1);
+  });
+
+  it('never serves one user’s list to another', async () => {
+    mockArmFetch([armApp('a')]);
+    await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      null,
+      'ann@example.org',
+    );
+    await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      null,
+      'bob@example.org',
+    );
+    expect(armCalls()).toBe(2);
+  });
+
+  it('keeps ARM-only and ARM+Foundry results apart for the same user', async () => {
+    mockArmFetch([armApp('a')]);
+    mockAgentsList.mockReturnValue(asyncFrom([]));
+    await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      null,
+      'ann@example.org',
+    );
+    await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      'foundry-token',
+      'ann@example.org',
+    );
+    expect(armCalls()).toBe(2);
+  });
+
+  it('clearCacheForUser drops only that user’s entries and endpoint anchors', async () => {
+    mockArmFetch([armApp('a')]);
+    await service.listUserAgents('t', RESOURCE_PATH, null, 'ann@example.org');
+    await service.listUserAgents('t', RESOURCE_PATH, null, 'bob@example.org');
+    service.cacheUserAgentEndpoint(
+      'ann@example.org',
+      'a',
+      RESOURCE_PATH,
+      'https://x.services.ai.azure.com/api/projects/p',
+    );
+    service.cacheUserAgentEndpoint(
+      'bob@example.org',
+      'a',
+      RESOURCE_PATH,
+      'https://y.services.ai.azure.com/api/projects/p',
+    );
+
+    service.clearCacheForUser('ANN@example.org');
+    expect(
+      service.lookupUserAgentEndpoint('ann@example.org', 'a', RESOURCE_PATH),
+    ).toBeNull();
+    expect(
+      service.lookupUserAgentEndpoint('bob@example.org', 'a', RESOURCE_PATH),
+    ).not.toBeNull();
+
+    await service.listUserAgents('t', RESOURCE_PATH, null, 'bob@example.org'); // still cached
+    expect(armCalls()).toBe(2);
+    await service.listUserAgents('t', RESOURCE_PATH, null, 'ann@example.org'); // re-discovers
+    expect(armCalls()).toBe(3);
+  });
+
+  it('deduplicates concurrent cold discoveries for the same key', async () => {
+    mockArmFetch([armApp('a')]);
+    const [x, y] = await Promise.all([
+      service.listUserAgents('t', RESOURCE_PATH, null, 'ann@example.org'),
+      service.listUserAgents('t', RESOURCE_PATH, null, 'ann@example.org'),
+    ]);
+    expect(armCalls()).toBe(1);
+    expect(x).toBe(y);
+  });
+});

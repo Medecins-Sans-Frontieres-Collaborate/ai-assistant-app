@@ -1,0 +1,12 @@
+{
+  "id": "factual-short",
+  "description": "Single-turn factual question; small models tend to pad or hedge.",
+  "tags": ["single-turn", "factual"],
+  "rubric": "Correct core fact, no padding, no invented specifics.",
+  "turns": [
+    {
+      "user": "What is the difference between cholera and typhoid in terms of transmission and the first-line treatment approach in a field setting?",
+      "expect": "Both faecal-oral; cholera = rehydration first (ORS/IV), antibiotics adjunct; typhoid = antibiotics essential. Should not invent dosages."
+    }
+  ]
+}

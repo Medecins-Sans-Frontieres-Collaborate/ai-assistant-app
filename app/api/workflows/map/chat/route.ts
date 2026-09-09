@@ -10,6 +10,10 @@ import {
   buildMutationsSystemPrompt,
   buildMutationsUserPrompt,
 } from '@/lib/services/workflows/map/chatPrompts';
+import {
+  isWorkflowEnabled,
+  workflowDisabledResponse,
+} from '@/lib/services/workflows/policy/guard';
 import { truncateToTokenBudget } from '@/lib/services/workflows/shared/textBudget';
 import {
   callStreamedText,
@@ -26,6 +30,7 @@ import {
 import { normalizeEventRange } from '@/lib/utils/shared/date/eventRange';
 import { NamedConnection } from '@/lib/utils/shared/geo/connections';
 import { isValidCoordinate } from '@/lib/utils/shared/geo/geojson';
+import { MAP_MAX_FEATURES } from '@/lib/utils/shared/geo/mapLimits';
 
 import { auth } from '@/auth';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
@@ -33,7 +38,7 @@ import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 export const maxDuration = 300;
 
 const DIGEST_TOKEN_BUDGET = 24_000;
-const MAX_FEATURES = 2_000;
+const MAX_FEATURES = MAP_MAX_FEATURES;
 const MAX_MESSAGES = 12;
 const MAX_MESSAGE_CHARS = 1_000;
 
@@ -54,6 +59,11 @@ interface MapChatRequest {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session) return unauthorizedResponse();
+  // Admin workflow policy (docs/ADMIN_WORKFLOWS_AND_VIEW_AS.md): a workflow an
+  // admin switched off is refused server-side, not just hidden.
+  if (!(await isWorkflowEnabled('map'))) {
+    return workflowDisabledResponse('map');
+  }
 
   let body: MapChatRequest;
   try {

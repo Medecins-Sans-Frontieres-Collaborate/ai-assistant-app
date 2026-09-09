@@ -1,3 +1,5 @@
+import { NextRequest } from 'next/server';
+
 import { deleteBackupPrefix } from '@/lib/services/backup/server/backupBlobStore';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 
@@ -44,7 +46,9 @@ describe('/api/backup DELETE', () => {
   it('returns 401 when unauthenticated', async () => {
     vi.mocked(auth).mockResolvedValue(null as any);
 
-    const response = await DELETE();
+    const response = await DELETE(
+      new NextRequest('http://localhost:3000/api/backup'),
+    );
 
     expect(response.status).toBe(401);
     expect(deleteBackupPrefix).not.toHaveBeenCalled();
@@ -56,7 +60,9 @@ describe('/api/backup DELETE', () => {
       user: { ...mockSession.user, id: undefined },
     } as any);
 
-    const response = await DELETE();
+    const response = await DELETE(
+      new NextRequest('http://localhost:3000/api/backup'),
+    );
 
     expect(response.status).toBe(401);
     expect(deleteBackupPrefix).not.toHaveBeenCalled();
@@ -65,7 +71,9 @@ describe('/api/backup DELETE', () => {
   it('wipes the backup prefix and reports the count', async () => {
     vi.mocked(deleteBackupPrefix).mockResolvedValue(5);
 
-    const response = await DELETE();
+    const response = await DELETE(
+      new NextRequest('http://localhost:3000/api/backup'),
+    );
     const data = await parseJsonResponse(response);
 
     expect(response.status).toBe(200);
@@ -79,7 +87,9 @@ describe('/api/backup DELETE', () => {
   it('is idempotent — deleting a non-existent backup succeeds with 0', async () => {
     vi.mocked(deleteBackupPrefix).mockResolvedValue(0);
 
-    const response = await DELETE();
+    const response = await DELETE(
+      new NextRequest('http://localhost:3000/api/backup'),
+    );
     const data = await parseJsonResponse(response);
 
     expect(response.status).toBe(200);

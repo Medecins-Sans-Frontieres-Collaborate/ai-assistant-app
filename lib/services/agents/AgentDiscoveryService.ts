@@ -69,8 +69,8 @@ interface DiscoveredAgent {
   agentName: string;
   /** Agent version pinned by the Application's deployment */
   agentVersion?: string;
-  /** Source type — 'foundry' for ARM-discovered agents, 'prompt' for app-defined prompt agents */
-  type: 'foundry' | 'prompt';
+  /** Source type — 'foundry' for ARM-discovered agents, 'prompt' for app-defined prompt agents, 'org' for admin-authored org RAG agents */
+  type: 'foundry' | 'prompt' | 'm365' | 'org';
   /** ARM resource path this agent was discovered from */
   source?: string;
   /** Foundry project endpoint for invoking this agent */
@@ -85,9 +85,20 @@ interface DiscoveredAgent {
   category?: string;
   /** Maintainer info (from ui-maintained-by tag) */
   maintainedBy?: string;
+  /** Org RAG agents only — whether the web-search toggle is allowed. */
+  allowWebSearch?: boolean;
+  /** Org RAG agents only — whether the code-interpreter toggle is allowed. */
+  allowCodeInterpreter?: boolean;
+  /**
+   * Org RAG agents only — true when this id names a static config agent
+   * this record overrides; the client replaces the bundled entry.
+   */
+  overridesStatic?: boolean;
 }
 
 interface CachedAgentList {
+  /** Lower-cased user identity the entry belongs to (owner-keyed entries). */
+  owner?: string;
   agents: DiscoveredAgent[];
   expiresAt: number;
 }
@@ -109,6 +120,12 @@ const ENDPOINT_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h, matches client useFou
 export class AgentDiscoveryService {
   private static instance: AgentDiscoveryService | null = null;
   private cache = new Map<string, CachedAgentList>();
+  /**
+   * Cold discoveries in flight, by cache key: concurrent callers for the
+   * same user + path (two tabs, a reload during a slow load) share one
+   * ARM/data-plane round-trip instead of stampeding.
+   */
+  private inflightRequests = new Map<string, Promise<DiscoveredAgent[]>>();
   // Per-user cache mapping (userMail, agentName) → resolved Foundry endpoint.
   // Populated whenever /api/agents discovery succeeds for a user. The chat path
   // reads from this so the host the OBO token gets attached to is never
@@ -133,6 +150,13 @@ export class AgentDiscoveryService {
     armToken: string,
     resourcePath: string,
     foundryToken?: string | null,
+    /**
+     * The user the tokens belong to (mail or id). When given, the cache is
+     * keyed by USER rather than by token hash, so the hourly access-token
+     * rotation no longer defeats the hour-long cache. The caller vouches
+     * that `armToken` was minted for this user (OBO from their session).
+     */
+    cacheOwner?: string,
   ): Promise<DiscoveredAgent[]> {
     // Defense-in-depth: callers already validate resourcePath, but re-check
     // here so the ARM URL construction has a locally explicit dataflow guard
@@ -141,17 +165,50 @@ export class AgentDiscoveryService {
       throw new Error('Invalid Foundry resource path');
     }
 
-    // Check cache. The result set depends on the Foundry token too (it gates
-    // the data-plane union below), so fold its identity into the key — otherwise
-    // an ARM-only list cached on a call without a Foundry token would be served
-    // back on a later call that *does* have one, hiding all new-model agents.
-    const foundryKeyPart = foundryToken ? this.hashKey(foundryToken) : 'none';
-    const cacheKey = `${this.hashKey(armToken)}:${foundryKeyPart}:${resourcePath}`;
+    // Check cache. The result set depends on whether a Foundry token was
+    // available too (it gates the data-plane union below), so fold that into
+    // the key — otherwise an ARM-only list cached on a call without a
+    // Foundry token would be served back on a later call that *does* have
+    // one, hiding all new-model agents. Owner-keyed entries fold in the
+    // token's PRESENCE; legacy token-keyed entries fold in its identity.
+    const owner = cacheOwner?.trim().toLowerCase();
+    const foundryKeyPart = owner
+      ? foundryToken
+        ? 'foundry'
+        : 'none'
+      : foundryToken
+        ? this.hashKey(foundryToken)
+        : 'none';
+    const cacheKey = owner
+      ? `user:${owner}:${foundryKeyPart}:${resourcePath}`
+      : `${this.hashKey(armToken)}:${foundryKeyPart}:${resourcePath}`;
     const cached = this.cache.get(cacheKey);
     if (cached && Date.now() < cached.expiresAt) {
       return cached.agents;
     }
+    const inflight = this.inflightRequests.get(cacheKey);
+    if (inflight) return inflight;
 
+    const request = this.discoverUncached(
+      armToken,
+      resourcePath,
+      foundryToken,
+      cacheKey,
+      owner,
+    ).finally(() => {
+      this.inflightRequests.delete(cacheKey);
+    });
+    this.inflightRequests.set(cacheKey, request);
+    return request;
+  }
+
+  private async discoverUncached(
+    armToken: string,
+    resourcePath: string,
+    foundryToken: string | null | undefined,
+    cacheKey: string,
+    owner: string | undefined,
+  ): Promise<DiscoveredAgent[]> {
     const url = `https://management.azure.com${resourcePath}/applications?api-version=${ARM_API_VERSION}`;
 
     const response = await fetch(url, {
@@ -228,6 +285,7 @@ export class AgentDiscoveryService {
     this.cache.set(cacheKey, {
       agents,
       expiresAt: Date.now() + CACHE_TTL_MS,
+      ...(owner && { owner }),
     });
 
     console.log(
@@ -460,11 +518,31 @@ export class AgentDiscoveryService {
   }
 
   /**
-   * Clears all entries from the cache. Used when user explicitly refreshes.
+   * Clears all entries from the cache (every user on this replica). Kept
+   * for operational resets; a user's own reload button should call
+   * {@link clearCacheForUser} so one person's refresh doesn't cold-start
+   * discovery for everyone.
    */
   clearCache(): void {
     this.cache.clear();
     this.userAgentEndpoints.clear();
+  }
+
+  /**
+   * Clears one user's discovery results and endpoint anchors. Owner-keyed
+   * list entries are matched by owner; legacy token-keyed entries can't be
+   * attributed and are left to expire.
+   */
+  clearCacheForUser(user: string | null | undefined): void {
+    const owner = user?.trim().toLowerCase();
+    if (!owner) return;
+    for (const [key, value] of this.cache) {
+      if (value.owner === owner) this.cache.delete(key);
+    }
+    const prefix = `${owner}:`;
+    for (const key of this.userAgentEndpoints.keys()) {
+      if (key.startsWith(prefix)) this.userAgentEndpoints.delete(key);
+    }
   }
 
   /**

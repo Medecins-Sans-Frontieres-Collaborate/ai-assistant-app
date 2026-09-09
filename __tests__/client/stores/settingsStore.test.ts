@@ -906,6 +906,7 @@ You should be concise.`;
         contextWindowSize: 80,
         memoriesEnabled: false,
         memoriesFlagEnabled: false,
+        memoryCapturePaused: false,
       });
     });
 
@@ -915,6 +916,14 @@ You should be concise.`;
 
       expect(useSettingsStore.getState().memoriesEnabled).toBe(true);
       expect(useSettingsStore.getState().memoriesFlagEnabled).toBe(true);
+    });
+
+    it('toggles the capture pause independently of the opt-in', () => {
+      useSettingsStore.getState().setMemoriesEnabled(true);
+      useSettingsStore.getState().setMemoryCapturePaused(true);
+
+      expect(useSettingsStore.getState().memoryCapturePaused).toBe(true);
+      expect(useSettingsStore.getState().memoriesEnabled).toBe(true);
     });
 
     it('sets the context window size within bounds', () => {
@@ -935,12 +944,14 @@ You should be concise.`;
       useSettingsStore.setState({
         contextWindowSize: 150,
         memoriesEnabled: true,
+        memoryCapturePaused: true,
       });
 
       useSettingsStore.getState().resetSettings();
 
       expect(useSettingsStore.getState().contextWindowSize).toBe(80);
       expect(useSettingsStore.getState().memoriesEnabled).toBe(false);
+      expect(useSettingsStore.getState().memoryCapturePaused).toBe(false);
     });
   });
 });

@@ -1,5 +1,7 @@
+import { OpenAIModelID, OpenAIModels } from '@/types/openai';
+
 import { env } from '@/config/environment';
-import { getDefaultModel } from '@/config/models';
+import { getDefaultModel, isModelDisabled } from '@/config/models';
 
 // Re-export for backward compatibility
 // The actual implementation is now in systemPrompt.ts
@@ -16,8 +18,27 @@ export const DEFAULT_USE_KNOWLEDGE_BASE = env.DEFAULT_USE_KNOWLEDGE_BASE;
 
 export const OPENAI_API_VERSION = env.OPENAI_API_VERSION;
 
-// Env override first, else the dynamic ring default (latest standard GPT).
-export const DEFAULT_MODEL = env.DEFAULT_MODEL || getDefaultModel();
+/**
+ * Env override first — but only when it names a model that exists in the
+ * catalog and is enabled in this ring. A typo'd or stale id would otherwise
+ * flow straight into ModelSelector's invalid-model substitution and be
+ * served as an unresolvable default. Else the dynamic ring default (the
+ * cost-policy preference; see getDefaultModel).
+ */
+function resolveDefaultModel(): string {
+  const override = env.DEFAULT_MODEL;
+  if (!override) return getDefaultModel();
+  const model = OpenAIModels[override as OpenAIModelID];
+  if (!model || model.isDisabled || isModelDisabled(override)) {
+    console.warn(
+      `[const] DEFAULT_MODEL="${override}" is not an available model; ignoring the override and using the dynamic default.`,
+    );
+    return getDefaultModel();
+  }
+  return override;
+}
+
+export const DEFAULT_MODEL = resolveDefaultModel();
 
 export const FORCE_LOGOUT_ON_REFRESH_FAILURE =
   env.FORCE_LOGOUT_ON_REFRESH_FAILURE;
@@ -155,7 +176,7 @@ export const VALIDATION_LIMITS = {
 
 // Default model for AI analysis operations (tone analysis, prompt revision, etc.)
 // Must match an Azure AI Foundry deployment name
-export const DEFAULT_ANALYSIS_MODEL = 'gpt-5.2';
+export const DEFAULT_ANALYSIS_MODEL = 'gpt-5.4';
 
 // Default max tokens for AI analysis operations
 export const DEFAULT_ANALYSIS_MAX_TOKENS = 100000;

@@ -8,6 +8,7 @@ import {
 } from '@/lib/utils/shared/geo/connections';
 import { featureEventRange } from '@/lib/utils/shared/geo/eventTime';
 import { isValidCoordinate } from '@/lib/utils/shared/geo/geojson';
+import { MAP_MAX_FEATURES } from '@/lib/utils/shared/geo/mapLimits';
 
 import {
   Conversation,
@@ -24,7 +25,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const MAX_RAIL_MESSAGES = 12;
 const MAX_MESSAGE_CHARS = 1_000;
-const MAX_FEATURES = 2_000;
+const MAX_FEATURES = MAP_MAX_FEATURES;
 const DESCRIPTION_CHARS = 160;
 
 function entryToChatMessage(

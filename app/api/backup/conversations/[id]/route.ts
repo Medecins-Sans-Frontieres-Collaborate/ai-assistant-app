@@ -9,8 +9,17 @@ import {
   writeImmutableBlob,
 } from '@/lib/services/backup/server/backupBlobStore';
 import {
+  deleteDriveBlob,
+  driveConversationPath,
+  readDriveBlob,
+  writeDriveImmutableBlob,
+} from '@/lib/services/backup/server/backupDriveStore';
+import {
+  BackupBackendId,
+  driveErrorResponse,
   rateLimitedResponse,
   readBoundedBody,
+  resolveBackupBackend,
 } from '@/lib/services/backup/server/routeHelpers';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { RateLimiter } from '@/lib/services/shared/RateLimiter';
@@ -45,12 +54,15 @@ const limiter = RateLimiter.createScoped(240, 1);
 interface BlobRequestContext {
   session: Session;
   userId: string;
+  backend: BackupBackendId;
+  /** App-storage blob path (app backend) / drive-relative path (onedrive). */
   blobPath: string;
 }
 
 /**
- * Shared guard chain: auth → rate limit → id/rev validation → path build.
- * Returns a NextResponse on failure so handlers can early-return it.
+ * Shared guard chain: auth → rate limit → backend + id/rev validation →
+ * path build. Returns a NextResponse on failure so handlers can
+ * early-return it.
  */
 async function resolveContext(
   request: NextRequest,
@@ -65,6 +77,10 @@ async function resolveContext(
   if (!limit.allowed) {
     return rateLimitedResponse(limit);
   }
+  const backend = resolveBackupBackend(request);
+  if (backend === null) {
+    return badRequestResponse('Invalid backend parameter');
+  }
 
   const { id } = await params;
   if (!isValidConversationId(id)) {
@@ -75,10 +91,20 @@ async function resolveContext(
     return badRequestResponse('Invalid or missing rev parameter');
   }
 
-  return { session, userId, blobPath: conversationBlobPath(userId, id, rev) };
+  return {
+    session,
+    userId,
+    backend,
+    blobPath:
+      backend === 'onedrive'
+        ? driveConversationPath(id, rev)
+        : conversationBlobPath(userId, id, rev),
+  };
 }
 
 function storageErrorResponse(scope: string, error: unknown): NextResponse {
+  const driveResponse = driveErrorResponse(error);
+  if (driveResponse) return driveResponse;
   const { errorClass, status, message } = classifyStorageError(error);
   console.error(
     `[BackupConversationRoute] ${scope} failed (class=${errorClass}, status=${status}):`,
@@ -103,8 +129,12 @@ export async function PUT(
   }
 
   try {
-    const storage = createBlobStorageClient(ctx.session);
-    await writeImmutableBlob(storage, ctx.blobPath, body);
+    if (ctx.backend === 'onedrive') {
+      await writeDriveImmutableBlob(request, ctx.blobPath, body);
+    } else {
+      const storage = createBlobStorageClient(ctx.session);
+      await writeImmutableBlob(storage, ctx.blobPath, body);
+    }
     return successResponse({ size: body.byteLength });
   } catch (error) {
     return storageErrorResponse('PUT', error);
@@ -119,8 +149,10 @@ export async function GET(
   if (ctx instanceof NextResponse) return ctx;
 
   try {
-    const storage = createBlobStorageClient(ctx.session);
-    const buffer = await readBlob(storage, ctx.blobPath);
+    const buffer =
+      ctx.backend === 'onedrive'
+        ? await readDriveBlob(request, ctx.blobPath)
+        : await readBlob(createBlobStorageClient(ctx.session), ctx.blobPath);
     if (buffer === null) {
       return errorResponse(
         'Backup blob not found',
@@ -149,9 +181,13 @@ export async function DELETE(
   if (ctx instanceof NextResponse) return ctx;
 
   try {
-    const storage = createBlobStorageClient(ctx.session);
     // Orphan cleanup after a successful CAS — idempotent by design.
-    const deleted = await storage.deleteIfExists(ctx.blobPath);
+    const deleted =
+      ctx.backend === 'onedrive'
+        ? await deleteDriveBlob(request, ctx.blobPath)
+        : await createBlobStorageClient(ctx.session).deleteIfExists(
+            ctx.blobPath,
+          );
     return successResponse({ deleted });
   } catch (error) {
     return storageErrorResponse('DELETE', error);

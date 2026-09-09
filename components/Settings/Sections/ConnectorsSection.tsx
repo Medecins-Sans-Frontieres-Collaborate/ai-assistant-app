@@ -10,11 +10,14 @@ import { useTranslations } from 'next-intl';
 import { useAvailableConnectors } from '@/client/hooks/settings/useAvailableConnectors';
 import { useMcpOauthAvailability } from '@/client/hooks/settings/useMcpOauthAvailability';
 
+import { BuiltinM365Row } from '@/components/Settings/Connectors/BuiltinM365Row';
+
 import { AdminConnectorRow } from '../Connectors/AdminConnectorRow';
 import { ConnectorBrowser } from '../Connectors/ConnectorBrowser';
 import { CuratedConnectorRow } from '../Connectors/CuratedConnectorRow';
 import { McpServerForm } from '../Connectors/McpServerForm';
 import { McpServerRow } from '../Connectors/McpServerRow';
+import { ToolApprovalRulesManager } from '../Connectors/ToolApprovalRulesManager';
 
 import {
   McpServerConfig,
@@ -139,6 +142,10 @@ export const ConnectorsSection: FC = () => {
         {t('localOnlyNote')}
       </p>
 
+      {/* Built-in first-party toolsets render alongside connectors — same
+          controls, no URL/auth editing. */}
+      <BuiltinM365Row />
+
       {/* Connected first: what the user already has is the thing they came
           back to change. Everything on offer lives below, behind an add. */}
       {connectedCatalog.length + connectedAdmin.length > 0 && (
@@ -192,6 +199,11 @@ export const ConnectorsSection: FC = () => {
           ) : null;
         }}
       />
+
+      {/* Global tool approval policy — only meaningful once something is
+          connected, but rules for not-yet-seen tools are the point, so it
+          shows whenever ANY connector exists. */}
+      {mcpServers.length > 0 && <ToolApprovalRulesManager />}
 
       {/* Arbitrary servers — only when the LD flag allows it at all */}
       {arbitraryFlagOn && (

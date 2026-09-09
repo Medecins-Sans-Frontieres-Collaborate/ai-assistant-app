@@ -38,6 +38,24 @@ export function unwrapApiData<T>(body: unknown): T {
 }
 
 /**
+ * Picks a human-readable message out of a failed API response body.
+ *
+ * `details` is `ApiErrorDetails` (lib/utils/server/api/apiResponse.ts): a
+ * string in the common case, but a JSON object for routes whose refusal
+ * names several things at once (`LIMITS_OUT_OF_SCOPE` → `{ outOfScope }`).
+ * Only a string is a message — an object would render as "[object Object]"
+ * — so a structured `details` falls through to `error`, then to `fallback`.
+ */
+export function apiErrorMessage(body: unknown, fallback: string): string {
+  if (body && typeof body === 'object') {
+    const { details, error } = body as { details?: unknown; error?: unknown };
+    if (typeof details === 'string' && details) return details;
+    if (typeof error === 'string' && error) return error;
+  }
+  return fallback;
+}
+
+/**
  * Fetches the current user's agent-access admin status. When the feature is
  * disabled (AgentAccessEnabledContext false) NO request fires at all and the
  * hook reports me=null / isAdmin=false; a 401 (signed out) also resolves to

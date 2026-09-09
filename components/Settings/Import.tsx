@@ -4,6 +4,8 @@ import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
+import { isZipArchive } from '@/lib/utils/app/export/foreignImport/detect';
+
 import { SupportedExportFormats } from '@/types/export';
 
 import { SidebarButton } from '../Sidebar/SidebarButton';
@@ -22,20 +24,27 @@ export const Import: FC<Props> = ({ onImport }) => {
         tabIndex={-1}
         type="file"
         accept=".json"
-        onChange={(e) => {
+        onChange={async (e) => {
           if (!e.target.files?.length) return;
 
+          const input = e.target;
           const file = e.target.files[0];
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            try {
-              const json = JSON.parse(e.target?.result as string);
-              onImport(json);
-            } catch (error) {
-              toast.error(t('importBackupParseError'));
+          try {
+            // ChatGPT / Claude exports are zips; we don't unpack archives.
+            if (await isZipArchive(file)) {
+              toast.error(t('conversationImport.zipRejected'), {
+                duration: 8000,
+              });
+              return;
             }
-          };
-          reader.readAsText(file);
+            const json = JSON.parse(await file.text());
+            onImport(json);
+          } catch (error) {
+            toast.error(t('importBackupParseError'));
+          } finally {
+            // Allow re-selecting the same file after a failed attempt.
+            input.value = '';
+          }
         }}
       />
 

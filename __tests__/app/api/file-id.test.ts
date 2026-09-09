@@ -144,8 +144,18 @@ describe('/api/file/[id]', () => {
       expect(data.error).toBe('Invalid file identifier');
     });
 
-    it('rejects extension longer than 4 characters', async () => {
+    it('accepts extensions up to 12 characters (sanitizeBlobExtension bound)', async () => {
       const idWithLongExtension = `${validSha256}.jsonld`;
+      const request = createRequest(idWithLongExtension);
+      const response = await GET(request, {
+        params: Promise.resolve({ id: idWithLongExtension }),
+      });
+
+      expect(response.status).toBe(200);
+    });
+
+    it('rejects extensions longer than 12 characters', async () => {
+      const idWithLongExtension = `${validSha256}.aaaaaaaaaaaaa`;
       const request = createRequest(idWithLongExtension);
       const response = await GET(request, {
         params: Promise.resolve({ id: idWithLongExtension }),
@@ -154,6 +164,26 @@ describe('/api/file/[id]', () => {
 
       expect(response.status).toBe(400);
       expect(data.error).toBe('Invalid file identifier');
+    });
+
+    it('accepts UUID-named references (streamed M365 imports, chunked uploads)', async () => {
+      const uuidId = '01234567-89ab-4cde-8f01-23456789abcd.m4a';
+      const request = createRequest(uuidId);
+      const response = await GET(request, {
+        params: Promise.resolve({ id: uuidId }),
+      });
+
+      expect(response.status).toBe(200);
+    });
+
+    it('rejects malformed UUIDs', async () => {
+      const badUuid = '01234567-89ab-4cde-8f01-23456789abcz.m4a';
+      const request = createRequest(badUuid);
+      const response = await GET(request, {
+        params: Promise.resolve({ id: badUuid }),
+      });
+
+      expect(response.status).toBe(400);
     });
 
     it('rejects ID with multiple dots', async () => {

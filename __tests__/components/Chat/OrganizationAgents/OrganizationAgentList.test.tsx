@@ -87,6 +87,56 @@ describe('OrganizationAgentList', () => {
     );
   });
 
+  it('does not hide an M365 agent whose name collides with a static agent', () => {
+    const onSelect = vi.fn();
+    render(
+      <OrganizationAgentList
+        onSelect={onSelect}
+        discoveredAgents={[
+          {
+            id: 'm365-abcdefabcdef',
+            name: 'MSF Communications',
+            description: 'Admin-indexed SharePoint folder',
+            matchId: 'org-m365-abcdefabcdef',
+          },
+        ]}
+      />,
+    );
+
+    // `m365-<hex>` ids (app/api/agent-access/m365-agents/route.ts) are
+    // admin-authored records like prompt agents — the name dedupe must not
+    // swallow them.
+    const rows = screen.getAllByRole('button', { name: /MSF Communications/ });
+    expect(rows).toHaveLength(2);
+
+    fireEvent.click(rows[1]);
+    expect(onSelect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'm365-abcdefabcdef',
+        matchId: 'org-m365-abcdefabcdef',
+      }),
+    );
+  });
+
+  it('does not hide an admin org RAG agent whose name collides with a static agent', () => {
+    render(
+      <OrganizationAgentList
+        onSelect={vi.fn()}
+        discoveredAgents={[
+          {
+            id: 'orgr-abcdefabcdef',
+            name: 'MSF Communications',
+            matchId: 'org-orgr-abcdefabcdef',
+          },
+        ]}
+      />,
+    );
+
+    expect(
+      screen.getAllByRole('button', { name: /MSF Communications/ }),
+    ).toHaveLength(2);
+  });
+
   it('renders prompt agents with unique names alongside static agents', () => {
     render(
       <OrganizationAgentList

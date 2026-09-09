@@ -12,6 +12,15 @@ import {
   buildSpecBlock,
   buildToneBlock,
 } from '@/lib/services/workflows/document/prompts';
+import {
+  isWorkflowEnabled,
+  workflowDisabledResponse,
+} from '@/lib/services/workflows/policy/guard';
+import {
+  structureGuideToSpec,
+  toneGuideToToneInput,
+} from '@/lib/services/workflows/shared/guidePrompts';
+import { resolveSlotGuide } from '@/lib/services/workflows/shared/guideResolution';
 import { truncateToTokenBudget } from '@/lib/services/workflows/shared/textBudget';
 import {
   callStreamedText,
@@ -55,6 +64,10 @@ interface DocumentWorkflowRequest {
   spec?: import('@/types/workflow').DocumentSpec;
   /** Attached voice/tone rules. */
   tone?: ToneInput;
+  /** Admin structure guide filling the spec slot (exclusive with spec). */
+  specGuideId?: string;
+  /** Admin tone guide filling the tone slot (exclusive with tone). */
+  toneGuideId?: string;
   /** Selected quality criteria rubrics upheld while writing. */
   qualityGuidance?: QualityGuidanceItem[];
   modelId?: string;
@@ -68,6 +81,11 @@ interface DocumentWorkflowRequest {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session) return unauthorizedResponse();
+  // Admin workflow policy (docs/ADMIN_WORKFLOWS_AND_VIEW_AS.md): a workflow an
+  // admin switched off is refused server-side, not just hidden.
+  if (!(await isWorkflowEnabled('document'))) {
+    return workflowDisabledResponse('document');
+  }
 
   let body: DocumentWorkflowRequest;
   try {
@@ -103,6 +121,45 @@ export async function POST(req: NextRequest) {
     ? body.references.slice(0, MAX_REFERENCES)
     : [];
 
+  // Exactly one occupant per slot: a local spec and an admin structure guide
+  // are competing prescriptions the model cannot follow simultaneously.
+  if (body.spec && body.specGuideId) {
+    return badRequestResponse(
+      'Attach either a spec or a structure guide, not both',
+    );
+  }
+  if (body.tone && body.toneGuideId) {
+    return badRequestResponse('Attach either a tone or a tone guide, not both');
+  }
+  // Slot guides resolve server-side (fail-closed, access re-checked) BEFORE
+  // the stream opens so a stale/revoked reference is a clean 400, not a
+  // mid-stream failure.
+  const userMail = session.user?.mail ?? undefined;
+  // Slot guides convert to the REAL DocumentSpec/ToneInput shapes and flow
+  // through the same buildSpecBlock/buildToneBlock as local attachments.
+  let guideSpec: import('@/types/workflow').DocumentSpec | undefined;
+  if (typeof body.specGuideId === 'string' && body.specGuideId) {
+    const resolved = await resolveSlotGuide({
+      userMail,
+      guideId: body.specGuideId,
+      expectedKind: 'structure',
+      workflow: 'document',
+    });
+    if ('error' in resolved) return badRequestResponse(resolved.error);
+    guideSpec = structureGuideToSpec(resolved.guide) ?? undefined;
+  }
+  let guideTone: ToneInput | undefined;
+  if (typeof body.toneGuideId === 'string' && body.toneGuideId) {
+    const resolved = await resolveSlotGuide({
+      userMail,
+      guideId: body.toneGuideId,
+      expectedKind: 'tone',
+      workflow: 'document',
+    });
+    if ('error' in resolved) return badRequestResponse(resolved.error);
+    guideTone = toneGuideToToneInput(resolved.guide) ?? undefined;
+  }
+
   const { stream, writer } = createWorkflowStream();
 
   // Run the LLM work after returning the stream so the client sees
@@ -132,9 +189,15 @@ export async function POST(req: NextRequest) {
         body.spec.sections.length <= MAX_SPEC_SECTIONS
       ) {
         extraBlocks += buildSpecBlock(body.spec);
+      } else if (guideSpec) {
+        // Guide-derived specs are capped at write time (≤ MAX_GUIDE_SECTIONS
+        // = MAX_SPEC_SECTIONS), so no re-check here.
+        extraBlocks += buildSpecBlock(guideSpec);
       }
       if (body.tone?.voiceRules) {
         extraBlocks += buildToneBlock(body.tone);
+      } else if (guideTone) {
+        extraBlocks += buildToneBlock(guideTone);
       }
       const guidance = Array.isArray(body.qualityGuidance)
         ? body.qualityGuidance

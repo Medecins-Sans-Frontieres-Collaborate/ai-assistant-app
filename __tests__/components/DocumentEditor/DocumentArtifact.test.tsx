@@ -6,6 +6,7 @@ import { useTheme } from '@/client/hooks/ui/useTheme';
 import DocumentArtifact from '@/components/DocumentEditor/DocumentArtifact';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock dependencies
@@ -36,6 +37,9 @@ describe('DocumentArtifact', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Keep the export menu on its plain-download shape: M365 connects by
+    // default (settingsStore v57) and would add Save-to-OneDrive entries.
+    useSettingsStore.setState({ m365Connected: false });
 
     // Mock useTheme
     (useTheme as any).mockReturnValue('light');

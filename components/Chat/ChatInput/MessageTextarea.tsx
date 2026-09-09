@@ -1,14 +1,16 @@
 import React, { KeyboardEvent, MutableRefObject } from 'react';
 
-import { SearchMode } from '@/types/searchMode';
-
 interface MessageTextareaProps {
   textareaRef: MutableRefObject<HTMLTextAreaElement | null>;
   value: string;
   placeholder: string;
   disabled: boolean;
-  searchMode: SearchMode;
-  selectedToneId: string | null;
+  /**
+   * Whether a badge row (forced search / forced code execution / tone) is
+   * showing below the text. Reserves bottom padding so badges get their own
+   * row instead of overlapping the text and controls.
+   */
+  hasBadgeRow: boolean;
   textareaScrollHeight: number;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
@@ -27,8 +29,7 @@ export const MessageTextarea: React.FC<MessageTextareaProps> = ({
   value,
   placeholder,
   disabled,
-  searchMode,
-  selectedToneId,
+  hasBadgeRow,
   textareaScrollHeight,
   onChange,
   onKeyDown,
@@ -41,9 +42,7 @@ export const MessageTextarea: React.FC<MessageTextareaProps> = ({
     <textarea
       ref={textareaRef}
       className={`m-0 w-full resize-none border-0 bg-transparent p-0 pr-24 text-black dark:bg-transparent dark:text-white focus:outline-none focus:ring-0 focus:border-0 ${
-        searchMode === SearchMode.ALWAYS || selectedToneId
-          ? 'pt-3 pb-[88px] pl-3'
-          : 'py-3.5 pl-10 md:py-3 md:pl-10'
+        hasBadgeRow ? 'pt-3 pb-[88px] pl-3' : 'py-3.5 pl-10 md:py-3 md:pl-10'
       }`}
       style={{
         resize: 'none',

@@ -1,360 +1,439 @@
+/**
+ * Tests for the blob-backed chunked transcription job store.
+ *
+ * Runs against an in-memory fake BlobStorage with ETag simulation (etag
+ * bumps on every write; ifMatch / ifNoneMatch honored like Azure) so the
+ * CAS semantics — the part that replaced the old fs advisory lock — are
+ * exercised for real rather than mocked away.
+ */
 import {
   ChunkedJob,
+  JOB_CANCELLED_MESSAGE,
+  JOB_INTERRUPTED_MESSAGE,
+  STALE_JOB_MS,
   cancelJob,
   completeJob,
   createJob,
+  deleteJob,
   failJob,
   getJob,
   getJobForUser,
-  markInterruptedJobsFailed,
-  sweepOrphanedChunkDirs,
   updateProgress,
 } from '@/lib/services/transcription/chunkedJobStore';
 
-import * as os from 'os';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { BlobStorage } from '@/lib/utils/server/blob/blob';
 
-// The store hardcodes its directory; mock fs so each test sees an isolated
-// in-memory layer rather than touching /tmp.
-const memoryFs = new Map<string, string>();
+import { Readable } from 'stream';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('fs', () => {
-  // Lock dirs created by acquireJobLock; tracked so re-acquisition conflicts
-  // behave like the real fs (mkdirSync throws when the dir exists).
-  const dirs = new Set<string>();
-  const mkdirSync = vi.fn((p: string, opts?: { recursive?: boolean }) => {
-    if (dirs.has(p) && !opts?.recursive) {
-      throw new Error(`EEXIST: ${p}`);
-    }
-    dirs.add(p);
-  });
-  const rmdirSync = vi.fn((p: string) => {
-    dirs.delete(p);
-  });
-  const statSync = vi.fn((p: string) => {
-    if (!dirs.has(p) && !memoryFs.has(p)) throw new Error(`ENOENT: ${p}`);
-    return { mtimeMs: Date.now() };
-  });
-  const rmSync = vi.fn((p: string) => {
-    dirs.delete(p);
-    for (const key of [...memoryFs.keys()]) {
-      if (key === p || key.startsWith(p + '/')) memoryFs.delete(key);
-    }
-  });
-  const existsSync = (p: string) =>
-    memoryFs.has(p) || dirs.has(p) || p === '/tmp/chunked-transcription-jobs';
-  const writeFileSync = (p: string, data: string) => {
-    memoryFs.set(p, data);
-  };
-  const renameSync = (from: string, to: string) => {
-    const v = memoryFs.get(from);
-    if (v === undefined) throw new Error(`ENOENT: ${from}`);
-    memoryFs.set(to, v);
-    memoryFs.delete(from);
-  };
-  const readFileSync = (p: string) => {
-    const v = memoryFs.get(p);
-    if (v === undefined) throw new Error(`ENOENT: ${p}`);
-    return v;
-  };
-  const unlinkSync = (p: string) => {
-    if (!memoryFs.delete(p)) throw new Error(`ENOENT: ${p}`);
-  };
-  const readdirSync = (dir: string, opts?: { withFileTypes?: boolean }) => {
-    const names = new Set<string>();
-    for (const key of [...memoryFs.keys(), ...dirs]) {
-      if (key.startsWith(dir + '/')) {
-        names.add(key.slice(dir.length + 1).split('/')[0]);
-      }
-    }
-    if (!opts?.withFileTypes) return [...names];
-    return [...names].map((name) => ({
-      name,
-      isDirectory: () =>
-        dirs.has(`${dir}/${name}`) ||
-        [...memoryFs.keys()].some((k) => k.startsWith(`${dir}/${name}/`)),
-    }));
-  };
-
-  const api = {
-    mkdirSync,
-    rmdirSync,
-    statSync,
-    rmSync,
-    existsSync,
-    writeFileSync,
-    renameSync,
-    readFileSync,
-    unlinkSync,
-    readdirSync,
-  };
-  return { ...api, default: api };
-});
-
-// Helper: clear the lock-dir registry between tests via rmSync on root paths.
-function seedFile(path: string, content = 'x'): void {
-  memoryFs.set(path, content);
+interface StoredBlob {
+  content: string;
+  etag: number;
 }
 
-describe('chunkedJobStore', () => {
-  const jobId = '11111111-2222-3333-4444-555555555555';
-  const ownerId = 'owner-user';
-  const otherId = 'other-user';
+function azureError(statusCode: number, message: string): Error {
+  return Object.assign(new Error(message), { statusCode });
+}
+
+/**
+ * In-memory stand-in for the subset of BlobStorage the store uses:
+ * getBlockBlobClient().download/upload (with ETag conditions) and
+ * deleteIfExists. `onBeforeUpload` fires inside upload BEFORE the
+ * precondition check, letting tests inject a competing write to force a 412
+ * deterministically.
+ */
+class FakeBlobStorage {
+  blobs = new Map<string, StoredBlob>();
+  uploadAttempts: string[] = [];
+  deletedPaths: string[] = [];
+  onBeforeUpload: ((blobName: string) => void) | null = null;
+  private nextEtag = 1;
+
+  getBlockBlobClient(blobName: string) {
+    return {
+      download: async () => {
+        const blob = this.blobs.get(blobName);
+        if (!blob) throw azureError(404, `BlobNotFound: ${blobName}`);
+        return {
+          etag: `"${blob.etag}"`,
+          readableStreamBody: Readable.from([
+            Buffer.from(blob.content, 'utf8'),
+          ]),
+        };
+      },
+      upload: async (
+        content: Buffer,
+        _length: number,
+        options?: {
+          conditions?: { ifMatch?: string; ifNoneMatch?: string };
+        },
+      ) => {
+        this.uploadAttempts.push(blobName);
+        this.onBeforeUpload?.(blobName);
+        const existing = this.blobs.get(blobName);
+        const conditions = options?.conditions ?? {};
+        if (conditions.ifNoneMatch === '*' && existing) {
+          throw azureError(409, `BlobAlreadyExists: ${blobName}`);
+        }
+        if (conditions.ifMatch !== undefined) {
+          if (!existing || `"${existing.etag}"` !== conditions.ifMatch) {
+            throw azureError(412, `ConditionNotMet: ${blobName}`);
+          }
+        }
+        this.setRaw(blobName, content.toString('utf8'));
+        return { etag: `"${this.blobs.get(blobName)!.etag}"` };
+      },
+    };
+  }
+
+  async deleteIfExists(blobName: string): Promise<boolean> {
+    this.deletedPaths.push(blobName);
+    return this.blobs.delete(blobName);
+  }
+
+  /** Direct write bypassing conditions — simulates another writer winning. */
+  setRaw(blobName: string, content: string): void {
+    this.blobs.set(blobName, { content, etag: this.nextEtag++ });
+  }
+
+  readJson(blobName: string): ChunkedJob | undefined {
+    const blob = this.blobs.get(blobName);
+    return blob ? (JSON.parse(blob.content) as ChunkedJob) : undefined;
+  }
+}
+
+const jobId = '11111111-2222-3333-4444-555555555555';
+const ownerId = 'owner-user';
+const otherId = 'other-user';
+const jobPath = `${ownerId}/transcription-jobs/${jobId}.json`;
+
+describe('chunkedJobStore (blob-backed)', () => {
+  let fake: FakeBlobStorage;
+  let storage: BlobStorage;
 
   beforeEach(() => {
-    memoryFs.clear();
+    vi.restoreAllMocks();
+    fake = new FakeBlobStorage();
+    storage = fake as unknown as BlobStorage;
   });
 
-  afterEach(() => {
-    memoryFs.clear();
-  });
+  async function createOwnedJob(
+    totalChunks = 2,
+    chunkPaths: string[] = ['/tmp/a.mp3', '/tmp/b.mp3'],
+  ): Promise<void> {
+    await createJob(storage, jobId, ownerId, totalChunks, chunkPaths, 'a.mp3');
+  }
+
+  /** Rewrites a stored field directly, preserving CAS realism elsewhere. */
+  function patchStoredJob(patch: Partial<ChunkedJob>): void {
+    const job = fake.readJson(jobPath);
+    expect(job).toBeDefined();
+    fake.setRaw(jobPath, JSON.stringify({ ...job, ...patch }));
+  }
 
   describe('createJob + getJob', () => {
-    it('stores userId alongside the job', () => {
-      createJob(jobId, ownerId, 2, ['/tmp/a.mp3', '/tmp/b.mp3'], 'speech.mp3');
+    it('stores the record at the user-scoped path', async () => {
+      await createOwnedJob();
 
-      const job = getJob(jobId) as ChunkedJob;
-      expect(job).toBeDefined();
+      expect(fake.blobs.has(jobPath)).toBe(true);
+      const job = (await getJob(storage, jobId, ownerId)) as ChunkedJob;
       expect(job.userId).toBe(ownerId);
       expect(job.totalChunks).toBe(2);
       expect(job.status).toBe('pending');
     });
 
-    it('rejects non-UUID jobIds', () => {
-      expect(() => createJob('not-a-uuid', ownerId, 1, [], 'file.mp3')).toThrow(
+    it('refuses to overwrite an existing record (ifNoneMatch: *)', async () => {
+      await createOwnedJob();
+      await expect(createOwnedJob()).rejects.toThrow(/BlobAlreadyExists/);
+    });
+
+    it('returns undefined for a missing job', async () => {
+      const missingId = '99999999-9999-9999-9999-999999999999';
+      expect(await getJob(storage, missingId, ownerId)).toBeUndefined();
+    });
+  });
+
+  describe('JOB_ID_REGEX path guard', () => {
+    it('createJob rejects non-UUID jobIds before touching storage', async () => {
+      await expect(
+        createJob(storage, '../escape', ownerId, 1, [], 'x.mp3'),
+      ).rejects.toThrow(/Invalid job ID/);
+      expect(fake.uploadAttempts).toEqual([]);
+    });
+
+    it('getJob treats a malformed id as not found without a blob read', async () => {
+      expect(await getJob(storage, 'not-a-uuid', ownerId)).toBeUndefined();
+    });
+
+    it('getJobForUser treats a traversal-shaped id as not found', async () => {
+      expect(
+        await getJobForUser(storage, '../../${otherId}/x', ownerId),
+      ).toBeUndefined();
+    });
+
+    it('mutations reject malformed ids', async () => {
+      await expect(updateProgress(storage, 'nope', ownerId, 1)).rejects.toThrow(
         /Invalid job ID/,
       );
     });
   });
 
-  describe('getJobForUser', () => {
-    beforeEach(() => {
-      createJob(jobId, ownerId, 1, [], 'file.mp3');
+  describe('getJobForUser ownership', () => {
+    beforeEach(async () => {
+      await createOwnedJob();
     });
 
-    it('returns the job when the userId matches', () => {
-      expect(getJobForUser(jobId, ownerId)?.userId).toBe(ownerId);
+    it('returns the job for the owner', async () => {
+      const job = await getJobForUser(storage, jobId, ownerId);
+      expect(job?.userId).toBe(ownerId);
     });
 
-    it('returns undefined when the userId does not match', () => {
-      expect(getJobForUser(jobId, otherId)).toBeUndefined();
+    it('returns undefined for another user (path-scoped: no record there)', async () => {
+      expect(await getJobForUser(storage, jobId, otherId)).toBeUndefined();
     });
 
-    it('returns undefined when the job does not exist', () => {
+    it('returns undefined when the stored userId mismatches the path owner', async () => {
+      // Defense in depth: a record planted under the wrong prefix is refused.
+      patchStoredJob({ userId: otherId });
+      expect(await getJobForUser(storage, jobId, ownerId)).toBeUndefined();
+    });
+  });
+
+  describe('mutations', () => {
+    it('updateProgress bumps progress and updatedAt', async () => {
+      await createOwnedJob(3, []);
+      const before = fake.readJson(jobPath)!.updatedAt;
+      vi.spyOn(Date, 'now').mockReturnValue(before + 1234);
+
+      await updateProgress(storage, jobId, ownerId, 1, 1);
+
+      const job = fake.readJson(jobPath)!;
+      expect(job.status).toBe('processing');
+      expect(job.completedChunks).toBe(1);
+      expect(job.currentChunk).toBe(1);
+      expect(job.updatedAt).toBe(before + 1234);
+    });
+
+    it('completeJob stores the transcript and marks succeeded', async () => {
+      await createOwnedJob(2, []);
+      await completeJob(storage, jobId, ownerId, 'the text');
+      const job = fake.readJson(jobPath)!;
+      expect(job.status).toBe('succeeded');
+      expect(job.transcript).toBe('the text');
+      expect(job.completedChunks).toBe(2);
+    });
+
+    it('failJob persists error and errorClass', async () => {
+      await createOwnedJob(1, []);
+      await failJob(storage, jobId, ownerId, 'Azure said no', 'auth');
+      const job = fake.readJson(jobPath)!;
+      expect(job.status).toBe('failed');
+      expect(job.error).toBe('Azure said no');
+      expect(job.errorClass).toBe('auth');
+    });
+
+    it('mutations throw when the job is missing', async () => {
       const missingId = '99999999-9999-9999-9999-999999999999';
-      expect(getJobForUser(missingId, ownerId)).toBeUndefined();
-    });
-  });
-
-  describe('progress mutators throw when the job is missing', () => {
-    const missingId = '99999999-9999-9999-9999-999999999999';
-
-    it('updateProgress throws', () => {
-      expect(() => updateProgress(missingId, 1)).toThrow(/not found/);
-    });
-
-    it('completeJob throws', () => {
-      expect(() => completeJob(missingId, 'text')).toThrow(/not found/);
-    });
-
-    it('failJob throws', () => {
-      expect(() => failJob(missingId, 'err')).toThrow(/not found/);
-    });
-  });
-
-  describe('failJob persists errorClass', () => {
-    it('stores the provided errorClass alongside the error message', () => {
-      createJob(jobId, ownerId, 1, [], 'file.mp3');
-      failJob(jobId, 'Azure said no', 'auth');
-      const job = getJob(jobId);
-      expect(job?.errorClass).toBe('auth');
-      expect(job?.error).toBe('Azure said no');
-      expect(job?.status).toBe('failed');
-    });
-
-    it('leaves errorClass undefined when not provided', () => {
-      createJob(jobId, ownerId, 1, [], 'file.mp3');
-      failJob(jobId, 'mystery');
-      expect(getJob(jobId)?.errorClass).toBeUndefined();
-    });
-  });
-
-  describe('atomic writes', () => {
-    it('does not leave tmp files behind after createJob', () => {
-      createJob(jobId, ownerId, 1, [], 'file.mp3');
-      const leftovers = [...memoryFs.keys()].filter((k) => k.endsWith('.tmp'));
-      expect(leftovers).toEqual([]);
-    });
-
-    it('does not leave tmp files behind after updateProgress', () => {
-      createJob(jobId, ownerId, 2, [], 'file.mp3');
-      updateProgress(jobId, 1, 0);
-      const leftovers = [...memoryFs.keys()].filter((k) => k.endsWith('.tmp'));
-      expect(leftovers).toEqual([]);
-    });
-  });
-
-  describe('markInterruptedJobsFailed', () => {
-    const jobA = '11111111-1111-1111-1111-111111111111';
-    const jobB = '22222222-2222-2222-2222-222222222222';
-    const jobC = '33333333-3333-3333-3333-333333333333';
-
-    it('marks pending/processing jobs failed but leaves terminal jobs alone', () => {
-      createJob(jobA, ownerId, 1, [], 'pending.mp3');
-      createJob(jobB, ownerId, 1, [], 'processing.mp3');
-      updateProgress(jobB, 0, 0);
-      createJob(jobC, ownerId, 1, [], 'done.mp3');
-      completeJob(jobC, 'hello');
-
-      const marked = markInterruptedJobsFailed();
-
-      expect(marked.sort()).toEqual([jobA, jobB].sort());
-      expect(getJob(jobA)?.status).toBe('failed');
-      expect(getJob(jobB)?.status).toBe('failed');
-      expect(getJob(jobC)?.status).toBe('succeeded');
-      expect(getJob(jobA)?.error).toMatch(/server restart/i);
-    });
-
-    it('tags interrupted jobs with errorClass=transient so clients suggest retry', () => {
-      createJob(jobA, ownerId, 1, [], 'pending.mp3');
-      markInterruptedJobsFailed();
-      expect(getJob(jobA)?.errorClass).toBe('transient');
-    });
-
-    it('is a no-op when no jobs exist', () => {
-      expect(markInterruptedJobsFailed()).toEqual([]);
-    });
-
-    it('removes the interrupted job’s chunk files and per-job dir', () => {
-      const chunkDir = `${os.tmpdir()}/chunked-transcription/${jobA}`;
-      const chunkPaths = [`${chunkDir}/audio_chunk_000.mp3`];
-      seedFile(chunkPaths[0]);
-      createJob(jobA, ownerId, 1, chunkPaths, 'pending.mp3');
-
-      markInterruptedJobsFailed();
-
-      // Status reconciled AND disk reclaimed — interrupted chunks can never
-      // be consumed by the (now dead) in-process pipeline.
-      expect(getJob(jobA)?.status).toBe('failed');
-      expect(memoryFs.has(chunkPaths[0])).toBe(false);
-    });
-  });
-
-  describe('sweepOrphanedChunkDirs', () => {
-    const activeJob = '11111111-1111-1111-1111-111111111111';
-    const doneJob = '22222222-2222-2222-2222-222222222222';
-
-    it('removes dirs without a live job record, keeps active ones', () => {
-      const root = `${os.tmpdir()}/chunked-transcription`;
-      seedFile(`${root}/${activeJob}/a_chunk_000.mp3`);
-      seedFile(`${root}/${doneJob}/b_chunk_000.mp3`);
-      seedFile(`${root}/no-record-at-all/c_chunk_000.mp3`);
-
-      createJob(activeJob, ownerId, 1, [], 'active.mp3');
-      createJob(doneJob, ownerId, 1, [], 'done.mp3');
-      completeJob(doneJob, 'transcript');
-
-      const removed = sweepOrphanedChunkDirs();
-
-      expect(removed.sort()).toEqual([doneJob, 'no-record-at-all'].sort());
-      expect(memoryFs.has(`${root}/${activeJob}/a_chunk_000.mp3`)).toBe(true);
-      expect(memoryFs.has(`${root}/${doneJob}/b_chunk_000.mp3`)).toBe(false);
-      expect(memoryFs.has(`${root}/no-record-at-all/c_chunk_000.mp3`)).toBe(
-        false,
+      await expect(
+        updateProgress(storage, missingId, ownerId, 1),
+      ).rejects.toThrow(/not found/);
+      await expect(
+        completeJob(storage, missingId, ownerId, 'text'),
+      ).rejects.toThrow(/not found/);
+      await expect(failJob(storage, missingId, ownerId, 'err')).rejects.toThrow(
+        /not found/,
+      );
+      await expect(cancelJob(storage, missingId, ownerId)).rejects.toThrow(
+        /not found/,
       );
     });
+  });
 
-    it('is a no-op when the chunk root does not exist', () => {
-      expect(sweepOrphanedChunkDirs()).toEqual([]);
+  describe('CAS retry on 412', () => {
+    it('re-reads and re-applies when a concurrent updateProgress wins the race', async () => {
+      await createOwnedJob(3, []);
+
+      // Simulate a sibling worker (possibly another replica) landing its
+      // progress write between this call's read and write: the first upload
+      // attempt hits a bumped etag, 412s, and the retry applies on top of
+      // the fresh state.
+      let injected = false;
+      fake.onBeforeUpload = () => {
+        if (injected) return;
+        injected = true;
+        const job = fake.readJson(jobPath)!;
+        fake.setRaw(
+          jobPath,
+          JSON.stringify({
+            ...job,
+            status: 'processing',
+            completedChunks: 1,
+            currentChunk: 0,
+          }),
+        );
+      };
+
+      await updateProgress(storage, jobId, ownerId, 2, 2);
+
+      const job = fake.readJson(jobPath)!;
+      expect(job.completedChunks).toBe(2);
+      expect(job.currentChunk).toBe(2);
+      // First attempt 412'd, second succeeded.
+      expect(fake.uploadAttempts.filter((p) => p === jobPath).length).toBe(3); // create + 2 CAS attempts
+    });
+
+    it('a lost race against cancelJob leaves the job cancelled (no clobber)', async () => {
+      await createOwnedJob(3, []);
+
+      let injected = false;
+      fake.onBeforeUpload = () => {
+        if (injected) return;
+        injected = true;
+        const job = fake.readJson(jobPath)!;
+        fake.setRaw(
+          jobPath,
+          JSON.stringify({
+            ...job,
+            status: 'cancelled',
+            error: JOB_CANCELLED_MESSAGE,
+          }),
+        );
+      };
+
+      // The CAS retry re-reads, sees the terminal state, and no-ops.
+      await updateProgress(storage, jobId, ownerId, 1, 0);
+
+      const job = fake.readJson(jobPath)!;
+      expect(job.status).toBe('cancelled');
+      expect(job.completedChunks).toBe(0);
     });
   });
 
-  describe('cancelJob', () => {
-    it('marks a running job as cancelled', () => {
-      createJob(jobId, ownerId, 2, [], 'file.mp3');
-      cancelJob(jobId);
-      expect(getJob(jobId)?.status).toBe('cancelled');
-      expect(getJob(jobId)?.error).toMatch(/cancelled/i);
+  describe('cancelJob (cooperative cancel between chunks)', () => {
+    it('marks a running job cancelled; the loop then observes it via getJob', async () => {
+      await createOwnedJob(3, []);
+      await updateProgress(storage, jobId, ownerId, 1, 1);
+
+      await cancelJob(storage, jobId, ownerId);
+
+      // This is exactly the read the processing loop performs between
+      // chunks (isJobCancelled) — it must see the cancellation.
+      const observed = await getJob(storage, jobId, ownerId);
+      expect(observed?.status).toBe('cancelled');
+      expect(observed?.error).toBe(JOB_CANCELLED_MESSAGE);
     });
 
-    it('is a no-op on a succeeded job', () => {
-      createJob(jobId, ownerId, 1, [], 'file.mp3');
-      completeJob(jobId, 'hi');
-      cancelJob(jobId);
-      expect(getJob(jobId)?.status).toBe('succeeded');
+    it('is a no-op on a succeeded job', async () => {
+      await createOwnedJob(1, []);
+      await completeJob(storage, jobId, ownerId, 'hi');
+      await cancelJob(storage, jobId, ownerId);
+      expect(fake.readJson(jobPath)!.status).toBe('succeeded');
     });
 
-    it('is a no-op on an already-cancelled job', () => {
-      createJob(jobId, ownerId, 2, [], 'file.mp3');
-      cancelJob(jobId);
-      const firstUpdatedAt = getJob(jobId)?.updatedAt;
-      cancelJob(jobId);
-      expect(getJob(jobId)?.status).toBe('cancelled');
-      // updatedAt stays pinned to the original cancel write — no re-save.
-      expect(getJob(jobId)?.updatedAt).toBe(firstUpdatedAt);
-    });
+    it('late progress/completion after cancel cannot resurrect the job', async () => {
+      await createOwnedJob(2, []);
+      await cancelJob(storage, jobId, ownerId);
 
-    it('is a no-op on a failed job', () => {
-      createJob(jobId, ownerId, 2, [], 'file.mp3');
-      failJob(jobId, 'boom', 'permanent');
-      cancelJob(jobId);
-      expect(getJob(jobId)?.status).toBe('failed');
-      expect(getJob(jobId)?.error).toBe('boom');
-    });
+      await updateProgress(storage, jobId, ownerId, 2, 1);
+      await completeJob(storage, jobId, ownerId, 'late transcript');
+      await failJob(storage, jobId, ownerId, 'late error', 'transient');
 
-    it('throws when the job does not exist', () => {
-      const missingId = '99999999-9999-9999-9999-999999999999';
-      expect(() => cancelJob(missingId)).toThrow(/not found/);
+      const job = fake.readJson(jobPath)!;
+      expect(job.status).toBe('cancelled');
+      expect(job.transcript).toBeUndefined();
+      expect(job.error).toBe(JOB_CANCELLED_MESSAGE);
     });
   });
 
-  describe('terminal state is preserved against late writes', () => {
-    // A background chunk that finishes after the user cancelled (or after
-    // failJob ran) must not clobber the terminal status. These tests pin
-    // that invariant so the cancel-race fix doesn't regress.
-    it('updateProgress is a no-op once a job is cancelled', () => {
-      createJob(jobId, ownerId, 3, [], 'file.mp3');
-      cancelJob(jobId);
-      updateProgress(jobId, 2, 1);
-      const job = getJob(jobId);
-      expect(job?.status).toBe('cancelled');
-      expect(job?.completedChunks).toBe(0);
+  describe('stale-processing lazy failure (restart semantics)', () => {
+    it('transforms a silent in-flight job to failed/transient at poll time and persists it', async () => {
+      await createOwnedJob(3, []);
+      await updateProgress(storage, jobId, ownerId, 1, 1);
+      patchStoredJob({ updatedAt: Date.now() - STALE_JOB_MS - 1 });
+
+      const polled = await getJobForUser(storage, jobId, ownerId);
+
+      expect(polled?.status).toBe('failed');
+      expect(polled?.error).toBe(JOB_INTERRUPTED_MESSAGE);
+      expect(polled?.errorClass).toBe('transient');
+
+      // Persisted, not just transformed in-flight.
+      const stored = fake.readJson(jobPath)!;
+      expect(stored.status).toBe('failed');
+      expect(stored.error).toBe(JOB_INTERRUPTED_MESSAGE);
     });
 
-    it('updateProgress is a no-op once a job has failed', () => {
-      createJob(jobId, ownerId, 3, [], 'file.mp3');
-      failJob(jobId, 'boom', 'permanent');
-      updateProgress(jobId, 2, 1);
-      expect(getJob(jobId)?.status).toBe('failed');
+    it('leaves a recently-updated processing job alone', async () => {
+      await createOwnedJob(3, []);
+      await updateProgress(storage, jobId, ownerId, 1, 1);
+
+      const polled = await getJobForUser(storage, jobId, ownerId);
+      expect(polled?.status).toBe('processing');
     });
 
-    it('completeJob is a no-op once a job is cancelled', () => {
-      createJob(jobId, ownerId, 2, [], 'file.mp3');
-      cancelJob(jobId);
-      completeJob(jobId, 'the finished transcript');
-      const job = getJob(jobId);
-      expect(job?.status).toBe('cancelled');
-      expect(job?.transcript).toBeUndefined();
+    it('leaves terminal jobs alone regardless of age', async () => {
+      await createOwnedJob(1, []);
+      await completeJob(storage, jobId, ownerId, 'done');
+      patchStoredJob({ updatedAt: Date.now() - STALE_JOB_MS * 10 });
+
+      const polled = await getJobForUser(storage, jobId, ownerId);
+      expect(polled?.status).toBe('succeeded');
+      expect(polled?.transcript).toBe('done');
     });
 
-    it('failJob is a no-op once a job is cancelled', () => {
-      createJob(jobId, ownerId, 2, [], 'file.mp3');
-      cancelJob(jobId);
-      failJob(jobId, 'late chunk error', 'transient');
-      const job = getJob(jobId);
-      expect(job?.status).toBe('cancelled');
-      // The cancel message is preserved; the late-failure error never lands.
-      expect(job?.error).toMatch(/cancelled/i);
-      expect(job?.errorClass).toBeUndefined();
+    it('still returns the failed transform when the persist loses a CAS race', async () => {
+      await createOwnedJob(3, []);
+      patchStoredJob({
+        status: 'processing',
+        updatedAt: Date.now() - STALE_JOB_MS - 1,
+      });
+
+      // Competing write between the poll's read and its persist: the 412 is
+      // swallowed, the stored (fresh) record is untouched, and the caller
+      // still gets the transformed view for THIS poll.
+      let injected = false;
+      fake.onBeforeUpload = () => {
+        if (injected) return;
+        injected = true;
+        const job = fake.readJson(jobPath)!;
+        fake.setRaw(jobPath, JSON.stringify({ ...job, updatedAt: Date.now() }));
+      };
+
+      const polled = await getJobForUser(storage, jobId, ownerId);
+      expect(polled?.status).toBe('failed');
+      // The competing (alive) record won the write.
+      expect(fake.readJson(jobPath)!.status).toBe('processing');
+    });
+  });
+
+  describe('lazy retention deletion', () => {
+    it('treats a record older than 24h as gone and deletes it best-effort', async () => {
+      await createOwnedJob(1, []);
+      await completeJob(storage, jobId, ownerId, 'old transcript');
+      patchStoredJob({ createdAt: Date.now() - 25 * 60 * 60 * 1000 });
+
+      expect(await getJob(storage, jobId, ownerId)).toBeUndefined();
+      expect(fake.deletedPaths).toContain(jobPath);
+      expect(fake.blobs.has(jobPath)).toBe(false);
     });
 
-    it('failJob is a no-op once a job has succeeded', () => {
-      createJob(jobId, ownerId, 1, [], 'file.mp3');
-      completeJob(jobId, 'transcript');
-      failJob(jobId, 'late error', 'transient');
-      const job = getJob(jobId);
-      expect(job?.status).toBe('succeeded');
-      expect(job?.transcript).toBe('transcript');
+    it('keeps a record younger than 24h', async () => {
+      await createOwnedJob(1, []);
+      await completeJob(storage, jobId, ownerId, 'recent');
+      patchStoredJob({ createdAt: Date.now() - 23 * 60 * 60 * 1000 });
+
+      const job = await getJob(storage, jobId, ownerId);
+      expect(job?.transcript).toBe('recent');
+    });
+  });
+
+  describe('deleteJob', () => {
+    it('removes the record idempotently', async () => {
+      await createOwnedJob(1, []);
+      await deleteJob(storage, jobId, ownerId);
+      expect(fake.blobs.has(jobPath)).toBe(false);
+      // Second delete is a silent no-op.
+      await deleteJob(storage, jobId, ownerId);
     });
   });
 });

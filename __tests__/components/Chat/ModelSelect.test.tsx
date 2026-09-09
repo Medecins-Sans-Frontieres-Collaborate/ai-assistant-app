@@ -77,6 +77,35 @@ vi.mock('@/client/hooks/settings/useFoundryAgents', () => ({
   useFoundryAgents: () => mockFoundryAgents,
 }));
 
+// The picker reads the caller's usage limits through WP-B's React Query
+// hook; these tests render without a QueryClientProvider, so the module is
+// stubbed to "nothing limited" (flag off / observe / no data) — the
+// fail-open branch, under which the picker must be byte-for-byte today's
+// UI. ModelSelect.limits.test.tsx drives the enforced branch.
+vi.mock('@/client/hooks/settings/useMyLimits', async (importOriginal) => {
+  const actual =
+    await importOriginal<
+      typeof import('@/client/hooks/settings/useMyLimits')
+    >();
+  return {
+    ...actual,
+    useLimitsEnabled: () => false,
+    useMyLimits: () => ({
+      limits: [],
+      mode: 'observe' as const,
+      enforce: false,
+      isLimited: false,
+      models: {},
+      usageUnavailable: false,
+      policyUnavailable: false,
+      isLoading: false,
+      error: null,
+      refetch: vi.fn(),
+    }),
+    useModelAvailability: () => ({ state: 'available' as const }),
+  };
+});
+
 // Note: next-intl is mocked globally in vitest.setup.dom.ts
 
 describe('ModelSelect', () => {
@@ -113,9 +142,18 @@ describe('ModelSelect', () => {
       render(<ModelSelect />);
 
       // One row per family, fronted by the representative with an inline
-      // variant/version tag ('standard' variant labels are suppressed).
+      // variant/sub-variant/version tag (the 'standard' variant label is
+      // suppressed). Chat and o-series are VARIANTS of the one GPT family
+      // now, so neither gets a row of its own.
       expect(screen.getByText('GPT').closest('button')).not.toBeNull();
-      expect(screen.getByText('GPT Chat').closest('button')).not.toBeNull();
+      expect(screen.queryByText('GPT Chat')).toBeNull();
+      // o-series is a VARIANT of the GPT family now, so it appears as a chip
+      // in the Variant control rather than as a list row of its own.
+      expect(
+        within(screen.getByRole('group', { name: 'Variant' })).getByText(
+          'o-series',
+        ),
+      ).toBeInTheDocument();
       expect(screen.getByText('DeepSeek').closest('button')).not.toBeNull();
       // Claude fronts the latest Sonnet (family default); Llama fronts
       // Maverick 4 (non-standard variants keep their label in the tag).
@@ -123,11 +161,10 @@ describe('ModelSelect', () => {
       expect(screen.getByText('Maverick 4')).toBeInTheDocument();
     });
 
-    it('displays search mode toggle for all models', () => {
+    it('renders no search-mode controls (they moved to the capabilities tray)', () => {
       render(<ModelSelect />);
 
-      // All models should have Search Mode toggle
-      expect(screen.getByText('Search Mode')).toBeInTheDocument();
+      expect(screen.queryByText('Search Mode')).toBeNull();
     });
 
     it('displays provider icons for each model', () => {
@@ -177,7 +214,10 @@ describe('ModelSelect', () => {
       render(<ModelSelect />);
 
       // Selected model is GPT-5.2; the details panel's Version section lists
-      // the whole GPT series. Chips carry the full model name as tooltip.
+      // the active variant's versions. Chips carry the full model name as
+      // tooltip. GPT-5 is `tier: 'legacy'`, so it only appears once the
+      // older-versions disclosure is open.
+      fireEvent.click(screen.getByText(/^Show older/));
       fireEvent.click(screen.getByTitle('GPT-5'));
 
       await waitFor(() => {
@@ -208,8 +248,8 @@ describe('ModelSelect', () => {
     });
   });
 
-  describe('Search Mode Toggle', () => {
-    it('displays Search Mode toggle for models with agent capabilities', () => {
+  describe('Search Mode Controls (moved to capabilities tray)', () => {
+    it('renders neither search-mode nor agent-routing controls in the picker', () => {
       mockUseConversations.selectedConversation = {
         id: 'conv-1',
         name: 'Test',
@@ -220,52 +260,15 @@ describe('ModelSelect', () => {
         prompt: '',
         temperature: 0.7,
         folderId: null,
-        defaultSearchMode: SearchMode.INTELLIGENT, // INTELLIGENT mode
+        defaultSearchMode: SearchMode.INTELLIGENT,
       };
 
       render(<ModelSelect />);
 
-      // Should show Search Mode by default
-      expect(screen.getByText('Search Mode')).toBeInTheDocument();
-      // Azure AI Agent Mode toggle should be nested inside Search Mode
-      expect(screen.getByText(/Azure AI Agent Mode/)).toBeInTheDocument();
-    });
-
-    it('displays Search Mode toggle for all models', () => {
-      mockUseConversations.selectedConversation = {
-        id: 'conv-1',
-        name: 'Test',
-        messages: [],
-        model: OpenAIModels[OpenAIModelID.DEEPSEEK_V3_1],
-        prompt: '',
-        temperature: 0.7,
-        folderId: null,
-      };
-
-      render(<ModelSelect />);
-
-      // All models should have Search Mode toggle
-      expect(screen.getByText('Search Mode')).toBeInTheDocument();
-    });
-
-    it('displays search mode descriptions correctly', () => {
-      mockUseConversations.selectedConversation = {
-        id: 'conv-1',
-        name: 'Test',
-        messages: [],
-        model: OpenAIModels[OpenAIModelID.LLAMA_4_MAVERICK],
-        prompt: '',
-        temperature: 0.7,
-        folderId: null,
-      };
-
-      render(<ModelSelect />);
-
-      // Should show Search Mode with description
-      expect(screen.getByText('Search Mode')).toBeInTheDocument();
-      expect(
-        screen.getByText(/Will use web search when needed/),
-      ).toBeInTheDocument();
+      // Phase 2 consolidation: the picker picks models; search and
+      // interpreter defaults live in ToolModeControls (composer tray).
+      expect(screen.queryByText('Search Mode')).toBeNull();
+      expect(screen.queryByText(/Azure AI Agent Mode/)).toBeNull();
     });
   });
 
@@ -492,13 +495,25 @@ describe('ModelSelect', () => {
     });
 
     it('marks dedicated reasoning models with a quiet icon, not a section', () => {
+      // o-series is a VARIANT of the GPT family now, so no row is
+      // permanently fronted by a reasoning model. The badge follows the
+      // selection instead: a family row fronts whatever the user has picked.
+      mockUseConversations.selectedConversation = {
+        id: 'conv-1',
+        name: 'Test',
+        messages: [],
+        model: OpenAIModels[OpenAIModelID.GPT_o3],
+        prompt: '',
+        temperature: 0.7,
+        folderId: null,
+      };
+
       render(<ModelSelect />);
 
       // No Reasoning/General sub-headers anymore…
       expect(screen.queryByText('General')).not.toBeInTheDocument();
-      // …instead the o-series row (fronted by o3) carries the tooltip'd
-      // brain icon. DeepSeek's row fronts the standard variant, so its
-      // reasoning members mark themselves via the Variant control instead.
+      // …instead the GPT row, now fronted by o3, carries the tooltip'd
+      // brain icon.
       expect(
         screen.getAllByLabelText(/Reasoning model:/).length,
       ).toBeGreaterThanOrEqual(1);
@@ -545,24 +560,31 @@ describe('ModelSelect', () => {
     it('lists all series versions in the details panel Version section', () => {
       render(<ModelSelect />);
 
-      // Selected model is GPT-5.2 → Version section covers the GPT series,
-      // legacy versions included.
+      // Selected model is GPT-5.2 → Version section covers the Foundational
+      // variant. Superseded versions collapse behind the disclosure so the
+      // consolidated family's strip stays readable.
       expect(screen.getByText('Version')).toBeInTheDocument();
       expect(screen.getByTitle('GPT-5.4')).toBeInTheDocument();
+      expect(screen.queryByTitle('GPT-4o')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByText(/^Show older/));
       expect(screen.getByTitle('GPT-4o')).toBeInTheDocument();
     });
 
     it('scopes Version chips to the active variant and switches variants via the Variant control', async () => {
       render(<ModelSelect />);
 
-      // Selected model is GPT-5.2 (standard variant) → the Variant control
-      // offers the family's size variants, and the Version chips exclude
-      // mini/nano members.
+      // Selected model is GPT-5.2 (Foundational) → the Variant control
+      // offers every line in the consolidated family, and the Version chips
+      // exclude the other variants' members.
       expect(screen.getByText('Variant')).toBeInTheDocument();
       const variantGroup = screen.getByRole('group', { name: 'Variant' });
-      expect(within(variantGroup).getByText('Standard')).toBeInTheDocument();
+      expect(
+        within(variantGroup).getByText('Foundational'),
+      ).toBeInTheDocument();
+      expect(within(variantGroup).getByText('Chat')).toBeInTheDocument();
       expect(within(variantGroup).getByText('Mini')).toBeInTheDocument();
       expect(within(variantGroup).getByText('Nano')).toBeInTheDocument();
+      expect(within(variantGroup).getByText('o-series')).toBeInTheDocument();
       const versionGroup = screen.getByRole('group', { name: 'Version' });
       expect(
         within(versionGroup).queryByTitle('GPT-5 Mini'),
@@ -570,22 +592,22 @@ describe('ModelSelect', () => {
       expect(within(versionGroup).getByTitle('GPT-5.4')).toBeInTheDocument();
 
       // Switching to Mini: no 5.2 mini exists, so the ragged-matrix fallback
-      // selects the variant's representative (GPT-5 Mini).
+      // selects the variant's representative — the newest non-legacy Mini.
       fireEvent.click(within(variantGroup).getByText('Mini'));
 
       await waitFor(() => {
         expect(mockUseSettings.setDefaultModelId).toHaveBeenCalledWith(
-          OpenAIModelID.GPT_5_MINI,
+          OpenAIModelID.GPT_5_4_MINI,
         );
       });
     });
 
-    it('does not render a Variant control for single-variant families', () => {
+    it('renders no axis control for a family with nothing to switch', () => {
       mockUseConversations.selectedConversation = {
         id: 'conv-1',
         name: 'Test',
         messages: [],
-        model: OpenAIModels[OpenAIModelID.GPT_5_2_CHAT],
+        model: OpenAIModels[OpenAIModelID.KIMI_K2_6],
         prompt: '',
         temperature: 0.7,
         folderId: null,
@@ -593,9 +615,55 @@ describe('ModelSelect', () => {
 
       render(<ModelSelect />);
 
-      // GPT Chat has versions but no variants.
-      expect(screen.getByText('Version')).toBeInTheDocument();
+      // Kimi is a single-member family: no variants, no sibling versions,
+      // and so no sub-variants either. Every control stays out of the way.
       expect(screen.queryByText('Variant')).not.toBeInTheDocument();
+      expect(screen.queryByText('Version')).not.toBeInTheDocument();
+      expect(screen.queryByText('Size')).not.toBeInTheDocument();
+    });
+
+    it('renders the Size control only where one version ships several models', () => {
+      // GPT-5.2 is alone at its version — no third axis to offer.
+      render(<ModelSelect />);
+      expect(screen.getByText('Version')).toBeInTheDocument();
+      expect(screen.queryByText('Size')).not.toBeInTheDocument();
+    });
+
+    it('offers a version\u2019s sub-variants and keeps the version chip active across them', async () => {
+      mockUseConversations.selectedConversation = {
+        id: 'conv-1',
+        name: 'Test',
+        messages: [],
+        model: OpenAIModels[OpenAIModelID.GPT_5_6_TERRA],
+        prompt: '',
+        temperature: 0.7,
+        folderId: null,
+      };
+
+      render(<ModelSelect />);
+
+      // GPT 5.6 ships Sol/Terra/Luna under ONE version number: the version
+      // strip shows a single "5.6" chip and the Size control splits it.
+      const versionGroup = screen.getByRole('group', { name: 'Version' });
+      expect(within(versionGroup).getAllByText('5.6')).toHaveLength(1);
+      const sizeGroup = screen.getByRole('group', { name: 'Size' });
+      expect(within(sizeGroup).getByText('Sol')).toBeInTheDocument();
+      expect(within(sizeGroup).getByText('Terra')).toBeInTheDocument();
+      expect(within(sizeGroup).getByText('Luna')).toBeInTheDocument();
+      // The version chip stays active while a sub-variant is selected — the
+      // selection is still 5.6, just a different size within it.
+      expect(within(versionGroup).getByText('5.6')).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      );
+
+      fireEvent.click(within(sizeGroup).getByText('Luna'));
+
+      await waitFor(() => {
+        expect(mockUseSettings.setDefaultModelId).toHaveBeenCalledWith(
+          OpenAIModelID.GPT_5_6_LUNA,
+        );
+      });
     });
 
     it('hides no-longer-relevant GPT size rows from the list', () => {
@@ -784,7 +852,7 @@ describe('ModelSelect', () => {
       type: 'prompt',
     };
 
-    it('maps a prompt agent to an org- picker model and selecting it sets conversation.bot', async () => {
+    it('selecting a prompt agent ATTACHES it (bot only) and leaves the model alone', async () => {
       mockFoundryAgents.foundryAgents = [promptAgent];
 
       render(<ModelSelect />);
@@ -799,28 +867,18 @@ describe('ModelSelect', () => {
           expect.objectContaining({
             // botId is the only key the server uses to resolve the persona.
             bot: 'prompt-abc123def456',
-            model: expect.objectContaining({
-              id: 'org-prompt-abc123def456',
-              name: 'Policy Assistant',
-              description: 'Answers policy questions',
-              isOrganizationAgent: true,
-            }),
           }),
         );
       });
 
-      // The mapped model must NOT carry Foundry routing fields — an agentId
-      // would promote the request into the Foundry agent execution path —
-      // while the cosmetic base-model spread keeps real token limits.
+      // Attach semantics (agent/model decoupling): the conversation keeps
+      // its real model — no synthesized org- model is written, so nothing
+      // here can carry Foundry routing fields or become the default model.
       const updates = mockUseConversations.updateConversation.mock.calls.at(
         -1,
       )![1] as Partial<Conversation>;
-      expect(updates.model?.agentId).toBeUndefined();
-      expect(updates.model?.agentSource).toBeUndefined();
-      expect(updates.model?.foundryEndpoint).toBeUndefined();
-      expect(updates.model?.tokenLimit).toBe(
-        OpenAIModels[OpenAIModelID.GPT_4_1].tokenLimit,
-      );
+      expect(updates.model).toBeUndefined();
+      expect(mockUseSettings.setDefaultModelId).not.toHaveBeenCalled();
     });
 
     it('gates prompt agents behind exploreBots like other org-managed agents', () => {

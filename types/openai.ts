@@ -28,6 +28,14 @@ export interface OpenAIModel {
   isAgent?: boolean;
   isCustomAgent?: boolean; // User-created custom agent (vs built-in agent)
   isOrganizationAgent?: boolean; // Organization-defined agent (e.g., MSF Communications bot)
+  /**
+   * Admin-authored org RAG agents only: tool-toggle gates carried on the
+   * model object because these agents are not in the static config the
+   * client-side gates (chatStore / ChatInput dropdown) look up. When
+   * present (boolean), the model-object value wins over the static lookup.
+   */
+  allowWebSearch?: boolean;
+  allowCodeInterpreter?: boolean;
   agentId?: string; // Azure AI Foundry agent name (or legacy asst_xxx ID)
   /** Agent version the Application's deployment routes to. Required in the
    * agent_reference body when invoking via the project endpoint. */
@@ -58,6 +66,46 @@ export interface OpenAIModel {
    * models without it silently skip MCP even when servers are configured.
    */
   supportsTools?: boolean;
+  /**
+   * Whether this model can run the Responses-API `code_interpreter` tool
+   * natively (Phase 2 inline execution). Absent = false. Phase 1's sub-tool
+   * round-trip works for EVERY model regardless of this flag — the flag only
+   * marks models that could execute in-turn without the round-trip.
+   */
+  supportsCodeInterpreter?: boolean;
+  /**
+   * Anthropic extended thinking (visible reasoning). When set, the shared
+   * reasoning-effort control maps to a `thinking.budget_tokens` tier in the
+   * Anthropic handler ('minimal' or unset = thinking off).
+   */
+  supportsExtendedThinking?: boolean;
+  /**
+   * WHICH extended-thinking request shape this Claude model accepts. Anthropic
+   * replaced the fixed-budget API with adaptive thinking, and the two are
+   * mutually exclusive — sending the wrong one is a hard 400, not a
+   * degradation:
+   *
+   * - `adaptive` — `thinking: {type:'adaptive'}` + `output_config.effort`.
+   *   Required on Fable 5/5.1, Opus 5/4.8/4.7 and Sonnet 5, which reject BOTH
+   *   `budget_tokens` and any explicit `temperature`; recommended on Opus 4.6
+   *   and Sonnet 4.6, which still accept either. Models here should also carry
+   *   `supportsTemperature: false` when the model rejects sampling params.
+   * - `budget` — the legacy `thinking: {type:'enabled', budget_tokens: N}`.
+   *   The only shape Haiku 4.5 and the 4.5/4.1 generation accept.
+   *
+   * Absent = no extended thinking is ever requested (read together with
+   * `supportsExtendedThinking`, which gates the feature on/off).
+   */
+  thinkingApi?: 'adaptive' | 'budget';
+  /**
+   * Azure OpenAI Responses API support. Flagged models route their plain
+   * streaming/non-streaming chat through `responses.create` (reasoning
+   * summaries become visible thinking); unflagged models — and every MCP,
+   * extraction, and fallback-chain turn — stay on chat.completions. Any
+   * Responses-path failure degrades to chat.completions at runtime, so the
+   * flag is a routing preference, not a hard capability gate.
+   */
+  supportsResponsesApi?: boolean;
   deploymentName?: string; // Azure AI Foundry deployment name (for third-party models)
 
   /**
@@ -129,7 +177,7 @@ export interface OpenAIModel {
    * (config/emissions.json maps each class to Wh per 1k tokens). Default
    * when absent: 'standard' (see getModelSizeClass).
    */
-  sizeClass?: 'nano' | 'mini' | 'standard' | 'large';
+  sizeClass?: 'nano' | 'mini' | 'standard' | 'large' | 'xl';
 
   /**
    * FAMILY key shared by every member of the same model family (e.g. 'gpt',
@@ -160,6 +208,27 @@ export interface OpenAIModel {
    */
   variantRank?: number;
   /**
+   * Sub-variant key — the THIRD in-row axis, nested inside a single version
+   * of a variant. It exists because some generations ship several models at
+   * ONE version number: GPT 5.6 is Sol/Terra/Luna, and o-series 3 is o3 and
+   * o3-mini. Without this axis those models collide on `versionLabel`, which
+   * is the key the version chips and the switch-preserving targeting run on
+   * — two chips both reading "5.6" and a non-deterministic click target.
+   *
+   * Absent = the version has a single model, which is the common case; the
+   * sub-variant control renders only where a version actually has more than
+   * one. Picker-only, like `variant`.
+   */
+  subVariant?: string;
+  /** Display label of the sub-variant chip (e.g. "Sol", "Mini"). */
+  subVariantLabel?: string;
+  /**
+   * Display position of this sub-variant within its version (1 = first),
+   * encoding the capability hierarchy (e.g. Sol 1, Terra 2, Luna 3).
+   * Unranked sub-variants sort after ranked ones, in order of appearance.
+   */
+  subVariantRank?: number;
+  /**
    * Family-default preference: when nothing in the family is selected, the
    * row fronts (and selects) the AVAILABLE model with the LOWEST rank;
    * same-rank ties go to the newest version, so "rank 1 on every Sonnet"
@@ -167,6 +236,44 @@ export interface OpenAIModel {
    * members are only faced via the featured/newest fallbacks.
    */
   defaultRank?: number;
+
+  /**
+   * List-price token rates in USD per 1M tokens for this model's standard
+   * (Global) deployment. Sourced from the Azure Retail Prices API for
+   * Azure-billed models and Anthropic list rates for claude-* — see the
+   * $pricing-note in config/models.json for provenance and caveats, and the
+   * top-level `pricingAsOf` / `pricingAssumptionsVersion` (exported below as
+   * PRICING_AS_OF / PRICING_ASSUMPTIONS_VERSION) for the as-of date. Consumed
+   * by lib/utils/shared/costEstimator.ts for the limits admin cost insights.
+   */
+  pricing?: {
+    /** USD per 1M input (prompt) tokens. */
+    inputPer1M: number;
+    /** USD per 1M output (completion) tokens. */
+    outputPer1M: number;
+    /** USD per 1M cached input tokens (cache READ rate), where published. */
+    cachedInputPer1M?: number;
+    /**
+     * `list` (default) — a dedicated retail meter or first-party list rate.
+     * `serverless-legacy` — no dedicated retail meter; a published legacy
+     * serverless rate, lower-confidence, and the deployment-type multiplier
+     * does not apply.
+     */
+    confidence?: 'list' | 'serverless-legacy';
+    /**
+     * `azure-meter` (default) — billed on an Azure Foundry meter, so the
+     * Global / Data Zone / regional deployment multipliers apply.
+     * `marketplace` — billed through the Marketplace at the provider's API
+     * rates (claude-*); deployment multipliers do NOT apply.
+     */
+    billing?: 'azure-meter' | 'marketplace';
+    /**
+     * A rolling alias (gpt-chat-latest): the meter tracks whatever model the
+     * alias currently routes to, so the recorded rate can change underneath
+     * a stored limit.
+     */
+    alias?: boolean;
+  };
 
   /**
    * Azure Foundry lifecycle stage of the underlying model version, mirrored
@@ -203,6 +310,7 @@ export enum OpenAIModelID {
   GPT_5_MINI = 'gpt-5-mini',
   GPT_4_1 = 'gpt-4.1',
   GPT_5_4 = 'gpt-5.4',
+  GPT_5_4_MINI = 'gpt-5.4-mini',
   GPT_5_4_NANO = 'gpt-5.4-nano',
   GPT_5_3_CHAT = 'gpt-5.3-chat',
   GPT_5 = 'gpt-5',
@@ -217,12 +325,17 @@ export enum OpenAIModelID {
   GPT_o4_MINI = 'o4-mini',
   GPT_o3_MINI = 'o3-mini',
   GPT_5_5 = 'gpt-5.5',
-  // The GPT 5.6 trio: a NEW capability hierarchy (Sol flagship → Terra
-  // balanced → Luna light) replacing the standard/mini/nano size axis; its
-  // own picker family ('gpt-56') with Sol/Terra/Luna as variants.
+  // The GPT 5.6 trio: three sizes shipped under ONE version number (Sol
+  // flagship → Terra balanced → Luna light). They are the Foundational
+  // variant at version 5.6, split on the SUB-VARIANT axis — the axis exists
+  // because they would otherwise collide on versionLabel "5.6".
   GPT_5_6_SOL = 'gpt-5.6-sol',
   GPT_5_6_TERRA = 'gpt-5.6-terra',
   GPT_5_6_LUNA = 'gpt-5.6-luna',
+  // GPT-6 Astra (2026-09-03): the next generation's flagship, priced ~2x
+  // Sol, so simply Foundational version 6 (it shipped alone — no sub-variant
+  // split). Deliberately NOT a family default (no defaultRank) — cost policy.
+  GPT_6_ASTRA = 'gpt-6-astra',
   // Rolling alias Azure names as the replacement for retired gpt-*-chat
   // model versions; the deployment is upgraded in place as new chat models ship.
   GPT_CHAT_LATEST = 'gpt-chat-latest',
@@ -237,6 +350,10 @@ export enum OpenAIModelID {
   CLAUDE_SONNET_5 = 'claude-sonnet-5',
   CLAUDE_OPUS_4_7 = 'claude-opus-4-7',
   CLAUDE_OPUS_4_5 = 'claude-opus-4-5',
+  // Claude 5 flagships (deployed in all four Foundry accounts 2026-09). Both
+  // use the ADAPTIVE thinking API — see `thinkingApi` below.
+  CLAUDE_OPUS_5 = 'claude-opus-5',
+  CLAUDE_FABLE_5_1 = 'claude-fable-5-1',
   // Other providers
   KIMI_K2_6 = 'Kimi-K2.6',
   LLAMA_4_MAVERICK = 'Llama-4-Maverick-17B-128E-Instruct-FP8',
@@ -266,10 +383,12 @@ export enum OpenAIModelID {
 // via metadata without editing an enum here.
 
 // Last-resort fallback model id, used when no default can be resolved. Must
-// be a standard-variant GPT that is enabled in EVERY ring (the dynamic
-// default in config/models.ts getDefaultModel() is preferred everywhere a
-// ring-aware answer is possible).
-export const fallbackModelID = OpenAIModelID.GPT_5_2;
+// be a standard-variant GPT that is enabled in EVERY ring and deployed in
+// BOTH the US and EU accounts (the dynamic default in config/models.ts
+// getDefaultModel() is preferred everywhere a ring-aware answer is
+// possible). gpt-5.4 rather than gpt-5.2: the EU gpt-5.2 deployment
+// actually serves 5.5, which the cost policy avoids.
+export const fallbackModelID = OpenAIModelID.GPT_5_4;
 
 /**
  * Default display order for models in the model selection UI.
@@ -281,22 +400,24 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   // flagships first with cross-provider variety near the top. A FAMILY row
   // anchors at its first member listed here (first VISIBLE member after the
   // ring gate — hence the extra prod-anchor entries below).
-  OpenAIModelID.GPT_5_2, // "GPT" family row
-  OpenAIModelID.GPT_5_2_CHAT, // "GPT Chat" family row
-  OpenAIModelID.GPT_5_6_SOL, // "GPT 5.6" family row (Sol → Terra → Luna)
-  OpenAIModelID.CLAUDE_OPUS_4_8, // "Claude" family row…
-  OpenAIModelID.CLAUDE_SONNET_4_6, // …prod anchor + prod face (4.8/5 ring-gated there)
-  OpenAIModelID.CLAUDE_FABLE_5, // standalone row
+  // ONE "GPT" family row: Foundational / Chat / Mini / Nano / o-series are
+  // variant segments of it, not separate rows. Only the anchor is listed
+  // here; every other member sits in the non-representative block below.
+  OpenAIModelID.GPT_5_2,
+  OpenAIModelID.CLAUDE_OPUS_5, // "Claude" family row (deployed in every ring)…
+  OpenAIModelID.CLAUDE_OPUS_4_8, // …anchors instead where 5 isn't served…
+  OpenAIModelID.CLAUDE_SONNET_4_6, // …prod anchor + prod face
   OpenAIModelID.MISTRAL_LARGE_3, // "Mistral" family row
   OpenAIModelID.DEEPSEEK_V3_2, // "DeepSeek" family row (Standard variant leads)…
   OpenAIModelID.DEEPSEEK_R1, // …prod anchor (V3.2 ring-gated there)
-  OpenAIModelID.GPT_o3, // "o-series" family row
   OpenAIModelID.LLAMA_4_MAVERICK, // "Llama" family row
   OpenAIModelID.KIMI_K2_6, // "Kimi" family row
   // Non-representative family members: they surface as variant segments and
   // version chips in the details panel rather than list rows, so position
   // below only breaks ties (usage mode, equal versionRank) and orders the
   // flattened edit-order list.
+  OpenAIModelID.GPT_6_ASTRA,
+  OpenAIModelID.GPT_5_6_SOL,
   OpenAIModelID.GPT_5_6_TERRA,
   OpenAIModelID.GPT_5_6_LUNA,
   OpenAIModelID.GPT_5_5,
@@ -305,6 +426,7 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_5_1,
   OpenAIModelID.GPT_5,
   OpenAIModelID.GPT_4O,
+  OpenAIModelID.GPT_5_4_MINI,
   OpenAIModelID.GPT_5_MINI,
   OpenAIModelID.GPT_4_1_MINI,
   OpenAIModelID.GPT_4O_MINI,
@@ -313,10 +435,14 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_4_1_NANO,
   OpenAIModelID.GPT_CHAT_LATEST,
   OpenAIModelID.GPT_5_3_CHAT,
+  OpenAIModelID.GPT_5_2_CHAT,
   OpenAIModelID.GPT_5_1_CHAT,
   OpenAIModelID.GPT_5_CHAT,
+  OpenAIModelID.GPT_o3,
   OpenAIModelID.GPT_o4_MINI,
   OpenAIModelID.GPT_o3_MINI,
+  OpenAIModelID.CLAUDE_FABLE_5_1,
+  OpenAIModelID.CLAUDE_FABLE_5,
   OpenAIModelID.CLAUDE_SONNET_5,
   OpenAIModelID.CLAUDE_OPUS_4_7,
   OpenAIModelID.CLAUDE_OPUS_4_6,
@@ -386,6 +512,10 @@ const openAIModelSchema = z.object({
   supportsTemperature: z.boolean().optional(),
   supportsVision: z.boolean().optional(),
   supportsTools: z.boolean().optional(),
+  supportsCodeInterpreter: z.boolean().optional(),
+  supportsExtendedThinking: z.boolean().optional(),
+  thinkingApi: z.enum(['adaptive', 'budget']).optional(),
+  supportsResponsesApi: z.boolean().optional(),
   deploymentName: z.string().optional(),
   modelSource: z.string().optional(),
   isCustomSourceModel: z.boolean().optional(),
@@ -400,13 +530,26 @@ const openAIModelSchema = z.object({
     .optional(),
   retirementDate: z.string().optional(),
   retirementReplacement: z.string().optional(),
-  sizeClass: z.enum(['nano', 'mini', 'standard', 'large']).optional(),
+  sizeClass: z.enum(['nano', 'mini', 'standard', 'large', 'xl']).optional(),
+  pricing: z
+    .object({
+      inputPer1M: z.number(),
+      outputPer1M: z.number(),
+      cachedInputPer1M: z.number().optional(),
+      confidence: z.enum(['list', 'serverless-legacy']).optional(),
+      billing: z.enum(['azure-meter', 'marketplace']).optional(),
+      alias: z.boolean().optional(),
+    })
+    .optional(),
   series: z.string().optional(),
   seriesLabel: z.string().optional(),
   versionLabel: z.string().optional(),
   variant: z.string().optional(),
   variantLabel: z.string().optional(),
   variantRank: z.number().optional(),
+  subVariant: z.string().optional(),
+  subVariantLabel: z.string().optional(),
+  subVariantRank: z.number().optional(),
   defaultRank: z.number().optional(),
   reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
   supportsReasoningEffort: z.boolean().optional(),
@@ -439,6 +582,34 @@ const MODEL_METADATA: Record<string, OpenAIModel> = (() => {
   }
   return parsed.data as Record<string, OpenAIModel>;
 })();
+
+/**
+ * Top-level pricing provenance from config/models.json — the machine-readable
+ * form of the `$pricing-note` prose, so UI disclosures cite the real as-of
+ * date instead of a hand-copied one. Parsed separately from the models map so
+ * a bad value here cannot masquerade as a model metadata error.
+ */
+const PRICING_PROVENANCE = (() => {
+  const parsed = z
+    .object({
+      pricingAsOf: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      pricingAssumptionsVersion: z.string().min(1),
+    })
+    .safeParse(modelMetadata);
+  if (!parsed.success) {
+    throw new Error(
+      `[openai] Invalid config/models.json pricing provenance: ${parsed.error.message}`,
+    );
+  }
+  return parsed.data;
+})();
+
+/** ISO date the `pricing` rates were pulled (config/models.json pricingAsOf). */
+export const PRICING_AS_OF: string = PRICING_PROVENANCE.pricingAsOf;
+
+/** Identifier of the pricing pull, bumped alongside price refreshes. */
+export const PRICING_ASSUMPTIONS_VERSION: string =
+  PRICING_PROVENANCE.pricingAssumptionsVersion;
 
 /**
  * Builds the model configuration map from config/models.json, keyed by

@@ -28,8 +28,9 @@ import { useTones } from '@/client/hooks/settings/useTones';
 
 import { Conversation, Message } from '@/types/chat';
 
+import { MathStreamdown } from '@/components/Markdown/MathStreamdown';
+
 import { useArtifactStore } from '@/client/stores/artifactStore';
-import { Streamdown } from 'streamdown';
 
 interface UserMessageProps {
   message: Message;
@@ -278,12 +279,18 @@ export const UserMessage: FC<UserMessageProps> = memo(
                       </div>
 
                       <div className="prose prose-invert prose-p:my-2 text-white max-w-none mb-2">
-                        <Streamdown
+                        {/* Deliberately NOT math-normalized: this is the
+                            user's own text. Someone who typed `\(` may have
+                            meant to show LaTeX source, and there is no
+                            upstream prompt to correct instead. `mode` is
+                            static because a user message is never streaming. */}
+                        <MathStreamdown
+                          mode="static"
                           controls={true}
                           shikiTheme={['github-light', 'github-dark']}
                         >
                           {localMessageContent}
-                        </Streamdown>
+                        </MathStreamdown>
                       </div>
 
                       <button
@@ -321,12 +328,15 @@ export const UserMessage: FC<UserMessageProps> = memo(
                         children ? 'mt-2' : ''
                       }`}
                     >
-                      <Streamdown
+                      {/* Deliberately NOT math-normalized — the user wrote
+                          this. See the expanded-prompt view above. */}
+                      <MathStreamdown
+                        mode="static"
                         controls={true}
                         shikiTheme={['github-light', 'github-dark']}
                       >
                         {localMessageContent}
-                      </Streamdown>
+                      </MathStreamdown>
                     </div>
                   )}
                   {toneId && (

@@ -2,13 +2,11 @@ import {
   IconBrain,
   IconDatabase,
   IconDeviceDesktop,
-  IconDeviceMobile,
   IconHelp,
   IconLeaf,
   IconMessage,
   IconPlugConnected,
   IconSettings,
-  IconShieldLock,
   IconUserShield,
 } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
@@ -16,7 +14,8 @@ import { ComponentType } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { useAgentAccessAdmin } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { useAdminAreas } from '@/client/hooks/settings/useAdminAreas';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import { SettingsSection } from './types';
 
@@ -68,6 +67,8 @@ export function useSettingsNav(): SettingsNavItem[] {
     enableMemories,
     localModels,
   } = useFlags();
+  const { filesEnabled: m365FilesEnabled, mailEnabled: m365MailEnabled } =
+    useM365Enabled();
 
   // Fail-open: undefined (LD unconfigured/unserved) → shown. Flip to false in
   // LaunchDarkly to hide the section.
@@ -84,9 +85,19 @@ export function useSettingsNav(): SettingsNavItem[] {
   // control (Chrome's Local Network Access permission, enterprise policy), so
   // the flag is the feature's kill switch — it must never default on.
   const isLocalModelsEnabled = localModels === true;
+  // Fail-closed with a localhost escape hatch (see useM365Enabled). Either
+  // capability shows the Connections section (the section itself explains
+  // what's available).
+  const isConnectionsEnabled = m365FilesEnabled || m365MailEnabled;
 
-  // Visibility only — the admin page's server component is the real gate.
-  const { isAdmin: isAgentAccessAdmin } = useAgentAccessAdmin();
+  // ONE entry for every admin area. Visibility only — each admin page's
+  // server component is the real gate.
+  //
+  // Resolved server-side rather than from useAgentAccessAdmin: that hook's
+  // query is disabled when AGENT_ACCESS_CONTROL_ENABLED is false, so a
+  // deployment running usage limits WITHOUT agent access used to show a global
+  // admin no admin entry at all.
+  const { isAdmin: hasAnyAdminArea } = useAdminAreas();
 
   const section = (
     id: SettingsSection,
@@ -101,11 +112,14 @@ export function useSettingsNav(): SettingsNavItem[] {
       t('settings.Chat Settings'),
       IconMessage,
     ),
-    ...(isConnectorsEnabled
+    // ONE entry for everything the user connects to the app: Microsoft 365
+    // and MCP connectors were near-synonym siblings ("Connections" vs
+    // "Connectors"); the pane shows whichever blocks the flags allow.
+    ...(isConnectorsEnabled || isConnectionsEnabled
       ? [
           section(
-            SettingsSection.CONNECTORS,
-            t('settings.Connectors'),
+            SettingsSection.CONNECTIONS,
+            t('settings.Connections'),
             IconPlugConnected,
           ),
         ]
@@ -119,9 +133,6 @@ export function useSettingsNav(): SettingsNavItem[] {
           ),
         ]
       : []),
-    ...(isBackupEnabled
-      ? [section(SettingsSection.BACKUP, t('settings.Backup'), IconShieldLock)]
-      : []),
     ...(isMemoriesEnabled
       ? [section(SettingsSection.MEMORIES, t('settings.Memories'), IconBrain)]
       : []),
@@ -134,26 +145,26 @@ export function useSettingsNav(): SettingsNavItem[] {
           ),
         ]
       : []),
-    ...(isAgentAccessAdmin
+    ...(hasAnyAdminArea
       ? [
           {
             kind: 'link' as const,
-            href: '/admin/agent-access',
-            label: t('settings.Agent Access'),
+            href: '/admin',
+            label: t('settings.Admin'),
             icon: IconUserShield,
           },
         ]
       : []),
+    // Cloud backup lives INSIDE this pane when its flag allows — the label
+    // widens so users looking for "backup" find the right (only) place.
     section(
       SettingsSection.DATA_MANAGEMENT,
-      t('settings.Data Management'),
+      isBackupEnabled
+        ? t('settings.DataBackup')
+        : t('settings.Data Management'),
       IconDatabase,
     ),
-    section(
-      SettingsSection.MOBILE_APP,
-      t('settings.Mobile App'),
-      IconDeviceMobile,
-    ),
+    // Help & Support hosts the Mobile App card as a subsection.
     section(
       SettingsSection.HELP_SUPPORT,
       t('settings.Help & Support'),

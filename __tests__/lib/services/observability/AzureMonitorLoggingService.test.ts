@@ -279,7 +279,7 @@ describe('AzureMonitorLoggingService', () => {
 
       const loggedEntry = JSON.parse(logCall![1]);
       expect(loggedEntry.EventType).toBe(LogEventType.FileSuccess);
-      expect(loggedEntry.Filename).toBe('document.pdf');
+      expect(loggedEntry.FileName).toBe('document.pdf');
       expect(loggedEntry.FileSize).toBe(1024000);
       expect(loggedEntry.FileType).toBe('application/pdf');
       expect(loggedEntry.ChunkCount).toBe(5);
@@ -475,7 +475,7 @@ describe('AzureMonitorLoggingService', () => {
 
       const loggedEntry = JSON.parse(logCall![1]);
       expect(loggedEntry.EventType).toBe(LogEventType.TranscriptionSuccess);
-      expect(loggedEntry.Filename).toBe('meeting.mp3');
+      expect(loggedEntry.FileName).toBe('meeting.mp3');
       expect(loggedEntry.FileSize).toBe(10000000);
       expect(loggedEntry.TranscriptionType).toBe('whisper');
       expect(loggedEntry.AudioDuration).toBe(3600);
@@ -557,6 +557,7 @@ describe('AzureMonitorLoggingService', () => {
       await logger.logBatch(
         [
           {
+            TimeGenerated: new Date().toISOString(),
             Timestamp: new Date().toISOString(),
             EventType: LogEventType.ChatCompletion,
             UserId: 'user-1',
@@ -567,6 +568,7 @@ describe('AzureMonitorLoggingService', () => {
             HasRAG: false,
           },
           {
+            TimeGenerated: new Date().toISOString(),
             Timestamp: new Date().toISOString(),
             EventType: LogEventType.ChatCompletion,
             UserId: 'user-2',
@@ -964,6 +966,198 @@ describe('AzureMonitorLoggingService', () => {
       // Wait for completion to avoid test warnings about open handles
       await result;
 
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('request telemetry + new events', () => {
+    const telemetry = {
+      botId: 'prompt-abc',
+      agentKind: 'prompt' as const,
+      agentName: 'Persona',
+      agentSource: 'admin',
+      agentApplied: true,
+      conversationId: 'conv-1',
+      requestId: 'req-1',
+      loopRound: 2,
+    };
+
+    function lastEntry(consoleSpy: ReturnType<typeof vi.spyOn>, type: string) {
+      const call = consoleSpy.mock.calls.find(
+        (c) => typeof c[0] === 'string' && c[0].includes(type),
+      );
+      expect(call).toBeDefined();
+      return JSON.parse(call![1] as string);
+    }
+
+    it('stamps TimeGenerated alongside Timestamp on every entry', async () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const logger = AzureMonitorLoggingService.getInstance();
+      await logger.logChatCompletion(
+        {
+          user: mockUser,
+          model: 'gpt-5.2',
+          messageCount: 1,
+          duration: 10,
+          hasFiles: false,
+          hasImages: false,
+          hasRAG: false,
+        },
+        true,
+      );
+      const entry = lastEntry(consoleSpy, 'ChatCompletion');
+      expect(entry.TimeGenerated).toBe(entry.Timestamp);
+      expect(new Date(entry.TimeGenerated).toISOString()).toBe(
+        entry.TimeGenerated,
+      );
+      consoleSpy.mockRestore();
+    });
+
+    it('threads RequestTelemetry into the base fields of ChatCompletion', async () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const logger = AzureMonitorLoggingService.getInstance();
+      await logger.logChatCompletion(
+        {
+          user: mockUser,
+          model: 'gpt-5.2',
+          messageCount: 1,
+          duration: 10,
+          hasFiles: false,
+          hasImages: false,
+          hasRAG: false,
+          telemetry,
+        },
+        true,
+      );
+      const entry = lastEntry(consoleSpy, 'ChatCompletion');
+      expect(entry).toEqual(
+        expect.objectContaining({
+          BotId: 'prompt-abc',
+          AgentKind: 'prompt',
+          AgentName: 'Persona',
+          AgentSource: 'admin',
+          AgentApplied: true,
+          ConversationId: 'conv-1',
+          RequestId: 'req-1',
+          LoopRound: 2,
+        }),
+      );
+      consoleSpy.mockRestore();
+    });
+
+    it('lets an explicit botId win over telemetry.botId', async () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const logger = AzureMonitorLoggingService.getInstance();
+      await logger.logTokenUsage(
+        {
+          user: mockUser,
+          model: 'gpt-5.2',
+          region: 'EU',
+          promptTokens: 1,
+          completionTokens: 2,
+          totalTokens: 3,
+          sizeClass: 'standard',
+          estimatedCO2Grams: 0,
+          estimatedEnergyWh: 0,
+          assumptionsVersion: 'v1',
+          streamed: true,
+          botId: 'explicit',
+          telemetry,
+        },
+        true,
+      );
+      const entry = lastEntry(consoleSpy, 'TokenUsage');
+      expect(entry.BotId).toBe('explicit');
+      expect(entry.Region).toBe('EU');
+      expect(entry.PromptTokens).toBe(1);
+      consoleSpy.mockRestore();
+    });
+
+    it('falls back to telemetry.botId on TokenUsage when botId is omitted', async () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const logger = AzureMonitorLoggingService.getInstance();
+      await logger.logTokenUsage(
+        {
+          user: mockUser,
+          model: 'gpt-5.2',
+          region: null,
+          promptTokens: 1,
+          completionTokens: 2,
+          totalTokens: 3,
+          sizeClass: 'standard',
+          estimatedCO2Grams: 0,
+          estimatedEnergyWh: 0,
+          assumptionsVersion: 'v1',
+          streamed: false,
+          telemetry,
+        },
+        true,
+      );
+      const entry = lastEntry(consoleSpy, 'TokenUsage');
+      expect(entry.BotId).toBe('prompt-abc');
+      expect(entry.Region).toBe('default');
+      consoleSpy.mockRestore();
+    });
+
+    it('logToolCall emits ToolName/ToolServer/Status', async () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const logger = AzureMonitorLoggingService.getInstance();
+      await logger.logToolCall(
+        {
+          user: mockUser,
+          toolName: 'mail_search',
+          toolServer: 'builtin-m365',
+          success: false,
+          duration: 42,
+          errorMessage: 'throttled',
+          model: 'gpt-5.2',
+          telemetry,
+        },
+        true,
+      );
+      const entry = lastEntry(consoleSpy, 'ToolCall');
+      expect(entry).toEqual(
+        expect.objectContaining({
+          EventType: LogEventType.ToolCall,
+          ToolName: 'mail_search',
+          ToolServer: 'builtin-m365',
+          Status: 'error',
+          ErrorMessage: 'throttled',
+          Duration: 42,
+          ModelUsed: 'gpt-5.2',
+          ConversationId: 'conv-1',
+          LoopRound: 2,
+        }),
+      );
+      consoleSpy.mockRestore();
+    });
+
+    it("logAgentAccess uses the guard's agent identity and maps a null source to 'unresolved'", async () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const logger = AzureMonitorLoggingService.getInstance();
+      await logger.logAgentAccess(
+        {
+          user: mockUser,
+          agentName: 'finance-bot',
+          agentSource: null,
+          decision: 'deny',
+          reason: 'not-allowed',
+          telemetry,
+        },
+        true,
+      );
+      const entry = lastEntry(consoleSpy, 'AgentAccess');
+      expect(entry).toEqual(
+        expect.objectContaining({
+          EventType: LogEventType.AgentAccess,
+          AgentName: 'finance-bot',
+          AgentSource: 'unresolved',
+          AccessDecision: 'deny',
+          AccessReason: 'not-allowed',
+          RequestId: 'req-1',
+          BotId: 'prompt-abc',
+        }),
+      );
       consoleSpy.mockRestore();
     });
   });

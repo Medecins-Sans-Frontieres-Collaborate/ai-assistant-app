@@ -30,6 +30,13 @@ vi.mock('katex/dist/katex.min.css', () => ({}));
 // Mock next-intl for component tests with common translations.
 // This provides a global mock that looks up translations from a messages object.
 const mockMessages: Record<string, unknown> = {
+  // Root-namespace key (messages/en.json has a top-level "close").
+  close: 'Close',
+  peopleSuggest: {
+    listLabel: 'Suggestions from your organization',
+    searching: 'Searching your organization…',
+    noMatches: 'No directory matches — you can enter the address manually',
+  },
   common: {
     cancel: 'Cancel',
     undo: 'Undo',
@@ -42,8 +49,42 @@ const mockMessages: Record<string, unknown> = {
     variables: 'Variables',
     search: 'Search',
     beta: 'Beta',
+    tryAgain: 'Try again',
+  },
+  admin: {
+    title: 'Admin',
+    openSettings: 'Open settings',
+    areaNavLabel: 'Admin areas',
   },
   chat: {
+    attachedFileExpired:
+      'An attached file is no longer available — uploaded files are stored for a limited time. It has been removed from this conversation. Try again without it, or upload the file again.',
+    repeatedFailureNotice:
+      'This keeps failing — the conversation may have become corrupted. Starting a fresh conversation usually fixes this.',
+    startNewConversation: 'Start a new conversation',
+    downloadDebugInfo: 'Download debug info',
+    includeMessageText: 'Include message text',
+    toolSummary: {
+      usedTools: 'Used {count} tools',
+      failedCount: '{count} failed',
+      statusApproved: 'Approved',
+      statusAutoApproved: 'Auto-approved',
+      statusAutoDenied: 'Auto-denied',
+      statusFailed: 'Failed',
+      statusIncomplete: 'Incomplete',
+      viaService: 'via {service}',
+      downloadFile: 'Download',
+      executedCode: 'Executed code',
+      codeOutput: 'Output',
+    },
+    interimSearch: {
+      title: 'Headlines found — deep search still running',
+      hint: 'The deep Bing search can take up to 90 seconds. Answer now from the {count} headlines already found, or wait for the merged result.',
+      summarizeNow: 'Summarize from headlines now',
+      sourcesCount: '{count} sources',
+      showAll: 'Show all {count} sources',
+      showFewer: 'Show fewer',
+    },
     fullSizePreview: 'Full size preview',
     imageContent: 'Image Content',
     thinking: 'Thinking...',
@@ -67,6 +108,30 @@ const mockMessages: Record<string, unknown> = {
     failedToOpenDocEditor:
       'Failed to open file in document editor. Please try again.',
     imageAlt: 'Image {number}',
+    consent: {
+      batchPendingHint: '{count} tool requests pending',
+      approveAllButton: 'Approve all',
+      denyAllButton: 'Deny all',
+      runToolTitle: 'Run <code>{tool}</code>?',
+      runToolGeneric: 'Run this tool?',
+      viaService: 'via {service}',
+      approveButton: 'Approve',
+      approveOptionsLabel: 'Approve options',
+      approveOnce: 'Approve once',
+      alwaysApproveThisTool: 'Always approve this tool',
+      alwaysApproveAllTools: 'Always approve all tools',
+      alwaysApproveEverywhere: 'Always approve this tool — in every chat',
+      denyButton: 'Deny',
+      denyOptionsLabel: 'Deny options',
+      denyOnce: 'Deny once',
+      neverAllowEverywhere: 'Never allow this tool — in every chat',
+      deniedByRuleHint:
+        'Blocked by your rule — manage in Settings → Connectors.',
+      keyboardHint: '{modifier}+⏎ approve · esc deny',
+      submittingState: 'Submitting your decision',
+      approvedState: 'Approved — agent resumed',
+      deniedState: 'Denied',
+    },
   },
   fileUpload: {
     attachment: 'attachment',
@@ -172,6 +237,152 @@ const mockMessages: Record<string, unknown> = {
       description: 'Connect a Foundry project below to discover its agents.',
     },
   },
+  connectorPin: {
+    toggleLabel: 'Manage connector tools',
+    menuLabel: 'Connectors',
+    menuLabelCount: 'Connectors ({count} active)',
+    tooltip:
+      'See which connector tools are active, switch them off for this chat or everywhere, or focus on one.',
+    toggleServerInChat: 'Use {name} in this chat',
+    globalToggleTitle:
+      'Turn {name} on or off everywhere (same as Settings → Connectors)',
+    globalOn: 'Global on',
+    globalOff: 'Global off',
+    chatToggleHint:
+      'Checkboxes control this chat only; the global button matches Settings → Connectors. Every active connector adds its tools to each message — more tokens and slower responses.',
+    trayLabel: 'Connector tools',
+    trayTitle: 'Connector tools for this chat',
+    toggleServer: 'Enable {name}',
+    needsReconnect: 'Reconnect in Settings',
+    focusAction: 'Focus',
+    focusedChip: 'Focused',
+    pinnedHint: 'Only tools from {name} will be used in this conversation.',
+    staleHint:
+      'The focused connector is disconnected or disabled — reconnect it in Settings → Connectors, or remove the focus. Until then all active tools are used.',
+    costHint:
+      "Every active connector adds its tools to each message you send — more tokens and slower responses. Switch off what you're not using.",
+    noEligibleConnectors:
+      'No connectors configured. Connect one in Settings → Connectors first.',
+    unknownConnector: 'Removed connector',
+    unpin: 'Remove focus',
+    dismiss: 'Close',
+    badgeCount: '{count} tools',
+    badgeTooltip:
+      'Connector tools are active on every message — they add tokens and response time. Click to manage.',
+  },
+  toolModes: {
+    webSearch: 'Web search',
+    codeInterpreter: 'Code interpreter',
+    off: 'Off',
+    auto: 'Auto',
+    always: 'Always',
+    routingPrivacy: 'Privacy',
+    routingAgent: 'Azure AI',
+    agentRoutingNote:
+      'Azure AI search sends queries through Azure AI Foundry, which may retain them.',
+    learnMore: 'Learn more',
+  },
+  agentAttach: {
+    browserTitle: 'Agents',
+    browserSubtitle:
+      "Add agents and connectors to this chat, or start a new chat with an agent. Most work with whatever model you've chosen.",
+    searchPlaceholder: 'Search agents and connectors…',
+    loading: 'Loading agents…',
+    loadError:
+      "Your agents couldn't be loaded just now. This is usually temporary.",
+    discoveryLoading: 'Looking for Foundry agents…',
+    discoveryError: "Foundry agents couldn't be loaded.",
+    retry: 'Try again',
+    noMatches: 'Nothing matches your search.',
+    noAgents: 'No agents available.',
+    addToChat: 'Add to this chat',
+    removeFromChat: 'Remove from this chat',
+    newChat: 'New chat',
+    attached: 'Attached',
+    detach: 'Detach',
+    change: 'Change',
+    browse: 'Browse agents…',
+    noAgent: 'No agent attached',
+    close: 'Close',
+    kind: {
+      rag: 'Knowledge',
+      prompt: 'Persona',
+      m365: 'Knowledge (Microsoft 365)',
+      org: 'Knowledge',
+      foundry: 'Foundry agent',
+      connector: 'Connector',
+    },
+    semantics: {
+      'your-model': 'uses your model',
+      'pinned-model': 'model set by admin',
+      'own-model': 'runs on its own model',
+    },
+  },
+  m365: {
+    tools: {
+      alwaysConfirmNote:
+        'This action always asks for confirmation — it can’t be auto-approved.',
+      batchToggleHint:
+        'Uncheck items you don’t want — only checked items are created.',
+      batchAllUnchecked:
+        'Nothing selected — approving would create nothing. Deny instead if you want none.',
+      consentCard: {
+        listLine: 'List: {name}',
+        to: 'To',
+        cc: 'Cc',
+        bcc: 'Bcc',
+        external: 'External',
+        replyAllCallout:
+          'Reply-all — this reply goes to everyone on the original message.',
+        subject: 'Subject',
+        fileLine: 'Attach file: {name}',
+        draftLine: 'Draft: {id}',
+      },
+    },
+    playbooks: {
+      dismissChip: 'Dismiss {title}',
+      chipLabel: 'Playbook: {title}',
+      menuLabel: 'Microsoft 365 playbooks',
+      menuTooltip:
+        'Curated multi-step chains over your calendar, mail and tasks — they gather first, propose, and only write after you agree',
+      meetingFollowThrough: {
+        title: 'Meeting follow-through',
+        description:
+          'Summary, action items, follow-up draft and (if needed) the next meeting — from this transcript',
+      },
+      morningTriage: {
+        title: 'Morning triage',
+        description:
+          'What came in, what’s waiting on you, and today’s calendar — one briefing',
+      },
+      chipsSettingLabel: 'Suggest Microsoft 365 playbooks',
+      chipsSettingHint:
+        'Show playbook suggestions above the message box when they apply (e.g. after importing a meeting transcript).',
+    },
+  },
+  toolApprovals: {
+    title: 'Tool approvals',
+    description:
+      "Rules that apply in every conversation: automatically allow or block specific connector tools. You can add tools you haven't been prompted for yet.",
+    actionApprove: 'Always allow',
+    actionReject: 'Always block',
+    scopeServer: 'on {name}',
+    scopeAny: 'Any connector',
+    removeRule: 'Remove rule for {tool}',
+    toolNameLabel: 'Tool name',
+    toolNamePlaceholder: 'Tool name, e.g. create_issue',
+    scopeLabel: 'Connector scope',
+    actionLabel: 'Action',
+    addRule: 'Add rule',
+    rejectPrecedenceNote:
+      'Block rules always win — over allow rules and over any per-conversation auto-approval.',
+    policyAsk: 'Ask',
+    policyAllow: 'Allow',
+    policyBlock: 'Block',
+    policyGroupLabel: 'Approval policy for {tool}',
+    listHint:
+      'Set what happens when the assistant wants to run each tool — in every conversation. Ask is the default; Block always wins.',
+  },
   agentAccess: {
     title: 'Access & Connectors',
     description:
@@ -217,11 +428,70 @@ const mockMessages: Record<string, unknown> = {
     connectorClientSecretHint:
       'Encrypted before it is stored, and never shown again.',
     connectorScopesLabel: 'Scopes (space-separated, optional)',
+    connectorOauthAuthUrlLabel: 'Authorization URL (optional)',
+    connectorOauthTokenUrlLabel: 'Token URL (optional)',
+    connectorOauthRefreshUrlLabel: 'Refresh URL (optional)',
+    connectorOauthEndpointsHint:
+      "Leave the endpoint URLs blank to discover them automatically. Set them for providers that don't support discovery, like NetSuite.",
+    connectorOauthRefreshUrlHint:
+      'Leave blank to refresh against the token URL.',
+    connectorOauthEndpointsPairWarning:
+      'Authorization URL and token URL must be set together (the refresh URL needs both).',
     rulesUnavailableWarning:
       'Access rules could not be loaded from storage. Agent invocation is currently blocked and rules cannot be edited.',
     retry: 'Retry',
     rulesTab: 'Agent rules',
     localAdminsTab: 'Local admins',
+    delegatedAgentsLabel: 'Delegated agents',
+    noDelegatedAgents: 'No agents available to delegate.',
+    unknownAgentKey: 'Unknown agent key',
+    canonicalKeyLabel: 'Key',
+    copyKey: 'Copy key',
+    agentKeySearchPlaceholder:
+      'Search agents, guides, connectors… or paste a key',
+    agentKeyAddCustom: 'Add "{key}" as typed',
+    agentKeyRemove: 'Remove {name}',
+    hideAgent: 'Hide',
+    unhideAgent: 'Unhide',
+    hideAgentHint: 'Hide this agent from your admin list.',
+    unhideAgentHint: 'Show this agent in your admin list again.',
+    hiddenBadge: 'Hidden',
+    // ICU plurals in the real keys; the mock t() only does {param}
+    hiddenAgentsCount: '{count} hidden agents',
+    hiddenAgentsShowing: 'Showing {count} hidden agents',
+    hiddenAgentsShow: 'Show',
+    hiddenAgentsHide: 'Hide again',
+    allAgentsHidden:
+      'All agents here are hidden from your view — use Show to reveal them.',
+    localAdminGroup: {
+      agents: 'Agents',
+      promptAgents: 'Prompt agents',
+      m365Agents: 'Microsoft 365 agents',
+      orgAgents: 'Knowledge agents',
+      guides: 'Guides',
+      connectors: 'Connectors',
+      datasets: 'Map datasets',
+      unknown: 'Delegated but not found',
+    },
+    localAdminGroupUnavailable:
+      'This list is temporarily unavailable — existing delegations are kept.',
+    localAdminBuiltIn: 'built-in',
+    // The real key is an ICU plural; the mock t() only does {param}
+    localAdminSummary: '{count} delegated: {names}',
+    localAdminSummaryMore: '{names} and {more} more',
+    localAdminNoDelegations:
+      'No delegations yet — a local admin with no agents can only see the admin area.',
+    localAdminSelectedCount: '{selected} of {total} selected',
+    localAdminCopyFrom: 'Copy from',
+    localAdminClearAll: 'Clear all',
+    localAdminSelectGroup: 'Select all',
+    localAdminClearGroup: 'Clear',
+    localAdminSearchPlaceholder: 'Search agents, guides, connectors…',
+    localAdminDuplicateEmail:
+      'This email is already listed — merge the two entries.',
+    localAdminExpand: 'Show delegations',
+    localAdminCollapse: 'Hide delegations',
+    localAdminDiscard: 'Discard changes',
     noAgents: 'No agents to manage.',
     sourceLabel: 'Source',
     notDiscoverable: 'Not discoverable by you',
@@ -242,10 +512,15 @@ const mockMessages: Record<string, unknown> = {
     chipAddHint: 'Press Enter to add',
     removeChip: 'Remove',
     groupsLabel: 'Allowed groups',
-    groupsPendingConsent:
-      "Group-based access is pending tenant admin consent and can't be edited yet.",
+    groupsPlaceholder: 'Entra group object ID',
+    groupSearchPlaceholder: 'Search groups by name…',
+    groupSearchNoResults: 'No groups match that name.',
+    groupSearchError:
+      'Group search failed. You can still paste a group object ID below.',
+    groupSearchHint:
+      "Type at least 2 characters to search your organization's groups, or paste a group object ID directly. Access follows the member list in Microsoft Entra.",
     restrictedEmptyWarning:
-      'No users or domains are listed — nobody will be able to use this agent.',
+      'No users, domains, or groups are listed — nobody will be able to use this agent.',
     save: 'Save',
     saving: 'Saving…',
     cancel: 'Cancel',
@@ -472,13 +747,30 @@ const mockMessages: Record<string, unknown> = {
     privacyNote:
       'Facts are stored only in this browser and included in your chats to personalize replies.',
     empty:
-      'No memories yet. Facts worth remembering are saved automatically from your conversations.',
+      'No memories yet. Add one above, or let the assistant save facts from your conversations.',
     savedOn: 'Saved {date}',
     deleteMemory: 'Delete memory',
     clearAll: 'Clear all memories',
     clearAllConfirmQuestion: 'Delete all memories? This cannot be undone.',
     clearAllConfirm: 'Delete all',
     cancel: 'Cancel',
+    pauseToggle: 'Pause saving new memories',
+    pauseNote:
+      'Memories you already have keep personalizing your chats — nothing new is saved until you resume.',
+    addLabel: 'Add a memory',
+    addPlaceholder:
+      'Something the assistant should remember, e.g. "Prefers concise answers"',
+    addMemory: 'Add memory',
+    editMemory: 'Edit memory',
+    saveMemory: 'Save',
+    addedByYou: 'Added by you',
+    storedCount: '{count} of {max} memories saved',
+    charCount: '{count}/{max} characters',
+    noLineBreaksHint:
+      'Line breaks are removed — a memory is stored as one line.',
+    duplicate: 'That memory is already saved.',
+    atCapacity:
+      "You've reached the {max}-memory limit. Delete one to add another.",
   },
   contextWindow: {
     label: 'Context window',
@@ -487,6 +779,46 @@ const mockMessages: Record<string, unknown> = {
     more: 'More messages',
     description:
       'Older messages beyond this limit are summarized and sent as context.',
+  },
+  settings: {
+    webSearch: {
+      title: 'Web Search',
+      description:
+        'Controls how live web searches run when Search Mode is active. Changes apply immediately.',
+      providerLabel: 'Search provider',
+      providerAuto: 'Automatic (recommended)',
+      providerAutoDescription:
+        'Uses the deployment default — currently the combined news search below.',
+      providerNews: 'Combined news (GDELT + Google News)',
+      providerNewsDescription:
+        'Queries both sources in parallel and merges the results, so either one failing never breaks a search. Best balance of speed, source diversity, and working article links.',
+      providerGoogleNews: 'Google News only',
+      providerGoogleNewsDescription:
+        'Anonymous and fast — only the search query reaches Google (no account or cookies) and results arrive in about a second. Note: it mostly scans headlines and short snippets, not full articles, so answers can stay surface-level.',
+      providerGdelt: 'GDELT only',
+      providerGdeltDescription:
+        'Open research database of world news with direct publisher links, which lets follow-up questions read the full articles. Strictly rate-limited — back-to-back searches may queue for a few seconds.',
+      providerBing: 'Bing grounding (via Microsoft)',
+      providerBingDescription:
+        'Reads full pages for deeper summaries and covers the general web, not just news. However, searches routinely take 30–90 seconds and result quality is often inconsistent from one search to the next.',
+      providerBingResponses: 'Bing fast search (Azure OpenAI)',
+      providerBingResponsesDescription:
+        'The same Bing web coverage as Bing grounding, run as a single direct model call instead of a Foundry agent — typically much faster. New option under evaluation against Bing grounding.',
+      providerCombined: 'Deep search with early headlines (Bing + Google News)',
+      providerCombinedDescription:
+        'Runs Bing grounding and Google News together: headlines appear within seconds while the deep Bing search keeps working, and you can choose to answer from the headlines right away instead of waiting out the slow search. When Bing finishes, both result sets are merged.',
+      sourcesLabel: 'Sources per search',
+      sourcesDescription:
+        'How many distinct sources a search keeps as citations. Research-style questions may automatically widen this.',
+      freshnessLabel: 'Preferred recency',
+      freshnessDescription:
+        'How recent results should be. Automatic lets each question decide (breaking news prefers the last day).',
+      freshness_auto: 'Automatic',
+      freshness_day: 'Past day',
+      freshness_week: 'Past week',
+      freshness_month: 'Past month',
+      freshness_any: 'Any time',
+    },
   },
   usageImpact: {
     empty: 'No usage tracked yet.',
@@ -572,6 +904,11 @@ const mockMessages: Record<string, unknown> = {
     },
     version: {
       label: 'Version',
+      showOlder: 'Show older ({count})',
+      hideOlder: 'Hide older',
+    },
+    subVariant: {
+      label: 'Size',
     },
     deployment: {
       title: 'Deployment',

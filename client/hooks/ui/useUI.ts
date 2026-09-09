@@ -22,6 +22,8 @@ export function useUI() {
     togglePromptbar: preferences.togglePromptbar,
     setTheme: preferences.setTheme,
     toggleTheme: preferences.toggleTheme,
+    sidebarWidth: preferences.sidebarWidth,
+    setSidebarWidth: preferences.setSidebarWidth,
 
     // Ephemeral modal states
     isSettingsOpen: modalState.isSettingsOpen,

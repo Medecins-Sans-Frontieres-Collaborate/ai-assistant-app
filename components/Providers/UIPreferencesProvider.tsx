@@ -10,7 +10,12 @@ import {
 
 import { CookieService } from '@/lib/services/cookieService';
 
-import { DEFAULT_UI_PREFERENCES, ThemeMode, UIPreferences } from '@/types/ui';
+import {
+  DEFAULT_UI_PREFERENCES,
+  ThemeMode,
+  UIPreferences,
+  clampSidebarWidth,
+} from '@/types/ui';
 
 interface UIPreferencesContextValue extends UIPreferences {
   setShowChatbar: (show: boolean) => void;
@@ -19,6 +24,8 @@ interface UIPreferencesContextValue extends UIPreferences {
   togglePromptbar: () => void;
   setTheme: (theme: ThemeMode) => void;
   toggleTheme: () => void;
+  /** Persists the expanded sidebar width (clamped to the allowed range). */
+  setSidebarWidth: (width: number) => void;
 }
 
 const UIPreferencesContext = createContext<UIPreferencesContextValue | null>(
@@ -105,6 +112,11 @@ export function UIPreferencesProvider({
       })),
     [updatePreferences],
   );
+  const setSidebarWidth = useCallback(
+    (width: number) =>
+      updatePreferences({ sidebarWidth: clampSidebarWidth(width) }),
+    [updatePreferences],
+  );
 
   const value = useMemo<UIPreferencesContextValue>(
     () => ({
@@ -115,6 +127,7 @@ export function UIPreferencesProvider({
       togglePromptbar,
       setTheme,
       toggleTheme,
+      setSidebarWidth,
     }),
     [
       preferences,
@@ -124,6 +137,7 @@ export function UIPreferencesProvider({
       togglePromptbar,
       setTheme,
       toggleTheme,
+      setSidebarWidth,
     ],
   );
 

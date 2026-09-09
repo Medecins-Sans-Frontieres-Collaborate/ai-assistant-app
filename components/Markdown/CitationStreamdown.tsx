@@ -8,10 +8,16 @@ import React, {
   useState,
 } from 'react';
 
+import { normalizeMathDelimiters } from '@/lib/utils/shared/markdown/normalizeMath';
+
 import { Citation } from '@/types/rag';
 
 import { CitationItem } from '../Chat/Citations/CitationItem';
 import { MarkdownTable } from './MarkdownTable';
+import {
+  MATH_PARSE_INCOMPLETE_MARKDOWN,
+  MATH_REHYPE_PLUGINS,
+} from './mathRehype';
 
 import { Streamdown } from 'streamdown';
 import type { StreamdownProps } from 'streamdown';
@@ -22,6 +28,19 @@ type Components = Record<string, ComponentType<any>>;
 interface CitationStreamdownProps extends Omit<StreamdownProps, 'components'> {
   citations?: Citation[];
   components?: Components;
+
+  /**
+   * Rewrite `\( … \)` / `\[ … \]` to the `$$` delimiters remark-math actually
+   * understands here, and pull multi-line `$$` blocks into the shape
+   * Streamdown's block splitter can keep together. Defaults to `true` because
+   * every caller today renders MODEL-authored markdown, where raw LaTeX is a
+   * defect we own.
+   *
+   * Pass `false` for text a PERSON wrote (a user's own message, org-authored
+   * legal copy): they may have meant to show LaTeX source literally, and
+   * unlike a model there is no upstream prompt we can correct instead.
+   */
+  normalizeMath?: boolean;
 
   mermaid?: {
     config?: any;
@@ -42,7 +61,16 @@ type HoverState = {
  * - This component only handles rendering and UI interactions (hover tooltips)
  */
 export const CitationStreamdown: FC<CitationStreamdownProps> = memo(
-  ({ citations = [], components = {}, isAnimating = false, ...props }) => {
+  ({
+    citations = [],
+    components = {},
+    isAnimating = false,
+    normalizeMath = true,
+    rehypePlugins = MATH_REHYPE_PLUGINS,
+    parseIncompleteMarkdown = MATH_PARSE_INCOMPLETE_MARKDOWN,
+    children,
+    ...props
+  }) => {
     const [hoveredCitation, setHoveredCitation] = useState<HoverState>(null);
     const [tooltipPosition, setTooltipPosition] = useState<{
       top: number;
@@ -145,49 +173,82 @@ export const CitationStreamdown: FC<CitationStreamdownProps> = memo(
         // can still override via `components.table`.
         table: MarkdownTable,
         ...components,
-        p({ children, ...props }: any) {
+        // `node` (the hast AST node react-markdown passes to component
+        // overrides) must not reach a DOM tag — it would serialize as a
+        // literal node="[object Object]" attribute. Custom components keep
+        // receiving it per the react-markdown contract.
+        p({ children, node, ...props }: any) {
           const processedChildren = processChildren(children);
           const CustomP = components.p as any;
           if (CustomP) {
-            return <CustomP {...props}>{processedChildren}</CustomP>;
+            return (
+              <CustomP node={node} {...props}>
+                {processedChildren}
+              </CustomP>
+            );
           }
           return <p {...props}>{processedChildren}</p>;
         },
-        li({ children, ...props }: any) {
+        li({ children, node, ...props }: any) {
           const processedChildren = processChildren(children);
           const CustomLi = components.li as any;
           if (CustomLi) {
-            return <CustomLi {...props}>{processedChildren}</CustomLi>;
+            return (
+              <CustomLi node={node} {...props}>
+                {processedChildren}
+              </CustomLi>
+            );
           }
           return <li {...props}>{processedChildren}</li>;
         },
-        strong({ children, ...props }: any) {
+        strong({ children, node, ...props }: any) {
           const processedChildren = processChildren(children);
           const CustomStrong = components.strong as any;
           if (CustomStrong) {
-            return <CustomStrong {...props}>{processedChildren}</CustomStrong>;
+            return (
+              <CustomStrong node={node} {...props}>
+                {processedChildren}
+              </CustomStrong>
+            );
           }
           return <strong {...props}>{processedChildren}</strong>;
         },
-        em({ children, ...props }: any) {
+        em({ children, node, ...props }: any) {
           const processedChildren = processChildren(children);
           const CustomEm = components.em as any;
           if (CustomEm) {
-            return <CustomEm {...props}>{processedChildren}</CustomEm>;
+            return (
+              <CustomEm node={node} {...props}>
+                {processedChildren}
+              </CustomEm>
+            );
           }
           return <em {...props}>{processedChildren}</em>;
         },
       };
     }, [components, citations, handleCitationHover]);
 
+    // Render-time only: the STORED message keeps the model's original text, so
+    // the Copy button, exports and any future re-render all still see what the
+    // model actually wrote, and old conversations are fixed without a
+    // migration. Memoized because a normalization pass on every keystroke-level
+    // re-render of a long message is pure waste (the function itself returns
+    // the same reference for the common no-math case).
+    const renderedChildren = React.useMemo(() => {
+      if (!normalizeMath || typeof children !== 'string') return children;
+      return normalizeMathDelimiters(children);
+    }, [children, normalizeMath]);
+
     return (
       <>
         <Streamdown
           components={enhancedComponents}
           isAnimating={isAnimating}
+          rehypePlugins={rehypePlugins}
+          parseIncompleteMarkdown={parseIncompleteMarkdown}
           {...props}
         >
-          {props.children}
+          {renderedChildren}
         </Streamdown>
         {renderTooltip()}
       </>

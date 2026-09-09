@@ -1,0 +1,16 @@
+{
+  "$note": "Named goal→aspirational pairs. Select with EVAL_PAIR=<name> or override with EVAL_GOAL / EVAL_ASPIRATIONAL model ids from config/models.json.",
+  "default": "gpt-nano",
+  "pairs": {
+    "gpt-nano": { "goal": "gpt-5.4", "aspirational": "gpt-5.4-nano" },
+    "gpt-mini": { "goal": "gpt-5.4", "aspirational": "gpt-5-mini" },
+    "claude-haiku": {
+      "goal": "claude-sonnet-5",
+      "aspirational": "claude-haiku-4-5"
+    },
+    "cross-family": {
+      "goal": "claude-sonnet-5",
+      "aspirational": "gpt-5.4-nano"
+    }
+  }
+}

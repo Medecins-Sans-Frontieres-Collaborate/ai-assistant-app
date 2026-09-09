@@ -10,11 +10,17 @@ import {
   Message,
 } from '@/types/chat';
 import { ExtractionRequest } from '@/types/extractionRecipe';
-import { McpPendingToolCall, McpServerRequestEntry } from '@/types/mcp';
+import { InterpreterMode } from '@/types/interpreterMode';
+import {
+  McpPendingToolCall,
+  McpPlan,
+  McpServerRequestEntry,
+} from '@/types/mcp';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference, StreamingSpeedConfig } from '@/types/settings';
 import { Tone } from '@/types/tone';
+import { PrecomputedSearchResults, WebSearchOptions } from '@/types/webSearch';
 
 import { apiClient } from '../api';
 
@@ -152,8 +158,19 @@ export class ChatService {
       reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
       verbosity?: 'low' | 'medium' | 'high';
       botId?: string;
+      /**
+       * True when botId is an EXPLICIT attachment (capabilities tray) riding
+       * a real model — unlocks decoupled agent resolution server-side.
+       */
+      agentAttached?: boolean;
+      /** Telemetry-only: conversation.id, so server logs can group a turn's rounds. */
+      conversationId?: string;
       threadId?: string;
       searchMode?: SearchMode;
+      webSearchOptions?: WebSearchOptions;
+      /** "Summarize from headlines" echo — replaces a fresh search. */
+      precomputedSearchResults?: PrecomputedSearchResults;
+      interpreterMode?: InterpreterMode;
       hostedRegion?: 'US' | 'EU';
       forcedAgentType?: string;
       isEditorOpen?: boolean;
@@ -176,12 +193,18 @@ export class ChatService {
       mcpServers?: McpServerRequestEntry[];
       mcpPendingToolCalls?: McpPendingToolCall[];
       mcpLoopRound?: number;
+      /** MCP turn plan echoed on approval resume (see types/mcp.ts). */
+      mcpPlan?: McpPlan;
       /** Structured-data extraction payload (see types/extractionRecipe.ts). */
       extraction?: ExtractionRequest;
       /** Summary of earlier windowed-out messages (see ChatBody). */
       conversationSummary?: string;
       /** Long-term user memory snippets (see ChatBody). */
       memories?: string[];
+      /** Phishing-screen override message ids (see ChatBody). */
+      m365MailScreenOverrides?: string[];
+      /** Configured shared mailbox addresses (see ChatBody). */
+      m365SharedMailboxes?: string[];
     },
   ): Promise<ReadableStream<Uint8Array>> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
@@ -195,8 +218,13 @@ export class ChatService {
       reasoningEffort: options?.reasoningEffort,
       verbosity: options?.verbosity,
       botId: options?.botId,
+      agentAttached: options?.agentAttached,
+      conversationId: options?.conversationId,
       threadId: options?.threadId,
       searchMode: options?.searchMode,
+      webSearchOptions: options?.webSearchOptions,
+      precomputedSearchResults: options?.precomputedSearchResults,
+      interpreterMode: options?.interpreterMode,
       hostedRegion: options?.hostedRegion,
       forcedAgentType: options?.forcedAgentType,
       isEditorOpen: options?.isEditorOpen,
@@ -216,9 +244,12 @@ export class ChatService {
       mcpServers: options?.mcpServers,
       mcpPendingToolCalls: options?.mcpPendingToolCalls,
       mcpLoopRound: options?.mcpLoopRound,
+      mcpPlan: options?.mcpPlan,
       extraction: options?.extraction,
       conversationSummary: options?.conversationSummary,
       memories: options?.memories,
+      m365MailScreenOverrides: options?.m365MailScreenOverrides,
+      m365SharedMailboxes: options?.m365SharedMailboxes,
     };
 
     const { body, report } = trimBodyToByteBudget(rawBody);
@@ -254,6 +285,13 @@ export class ChatService {
       reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
       verbosity?: 'low' | 'medium' | 'high';
       botId?: string;
+      /**
+       * True when botId is an EXPLICIT attachment (capabilities tray) riding
+       * a real model — unlocks decoupled agent resolution server-side.
+       */
+      agentAttached?: boolean;
+      /** Telemetry-only: conversation.id, so server logs can group a turn's rounds. */
+      conversationId?: string;
       threadId?: string;
       searchMode?: SearchMode;
       forcedAgentType?: string;
@@ -276,6 +314,8 @@ export class ChatService {
       reasoningEffort: options?.reasoningEffort,
       verbosity: options?.verbosity,
       botId: options?.botId,
+      agentAttached: options?.agentAttached,
+      conversationId: options?.conversationId,
       threadId: options?.threadId,
       searchMode: options?.searchMode,
       forcedAgentType: options?.forcedAgentType,

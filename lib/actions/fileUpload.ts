@@ -3,6 +3,7 @@
 import { Session } from 'next-auth';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import { resolveEffectiveUploadMegabytes } from '@/lib/services/limits/uploadLimit';
 
 import Hasher from '@/lib/utils/app/hash';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
@@ -134,6 +135,13 @@ export async function uploadFileAction(
       return { success: false, error: executableValidation.error };
     }
 
+    // Admin-configured per-file cap (docs/LIMITS.md feature.upload.
+    // megabytesPerFile), resolved once and applied to BOTH checks below —
+    // same rule app/api/file/upload/route.ts applies to the ≤10MB XHR path,
+    // now also covering this Server Action path for files over that
+    // threshold (docs/LIMITS_USER_FACING_UX.md §8.6). Fails open.
+    const effectiveMegabytes = await resolveEffectiveUploadMegabytes(session);
+
     // Early rejection: check declared size before buffering the file.
     // This is advisory only — the authoritative check runs against actual
     // buffer length at the validateFileSizeRaw call below, so a false
@@ -146,6 +154,7 @@ export async function uploadFileAction(
           filename,
           parsed,
           mimeType ?? undefined,
+          effectiveMegabytes,
         );
         if (!earlyCheck.valid) {
           return { success: false, error: earlyCheck.error };
@@ -162,6 +171,7 @@ export async function uploadFileAction(
       filename,
       fileData.length,
       mimeType ?? undefined,
+      effectiveMegabytes,
     );
     if (!sizeValidation.valid) {
       return {
@@ -310,8 +320,17 @@ export async function initChunkedUploadAction(
       return { success: false, error: 'Total size exceeds maximum' };
     }
 
-    // Validate file size using category-based limits
-    const sizeValidation = validateFileSizeRaw(filename, totalSize, mimeType);
+    // Validate file size using category-based limits, including the
+    // admin-configured feature.upload.megabytesPerFile cap — this is the
+    // >10MB Server Action path app/api/file/upload/route.ts's ≤10MB XHR
+    // check never covers (docs/LIMITS_USER_FACING_UX.md §8.6).
+    const effectiveMegabytes = await resolveEffectiveUploadMegabytes(session);
+    const sizeValidation = validateFileSizeRaw(
+      filename,
+      totalSize,
+      mimeType,
+      effectiveMegabytes,
+    );
     if (!sizeValidation.valid) {
       return { success: false, error: sizeValidation.error };
     }

@@ -2,6 +2,7 @@
 
 import {
   IconAlertTriangle,
+  IconBrandOnedrive,
   IconDownload,
   IconFileText,
   IconLanguage,
@@ -12,12 +13,22 @@ import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
+
+import {
+  M365ClientError,
+  saveToOneDrive,
+} from '@/client/services/m365/m365Client';
+
 import { isAssistantMessageGroup } from '@/types/chat';
 import { TRANSLATION_EXPIRY_DAYS } from '@/types/documentTranslation';
+import type { M365SaveDestination } from '@/types/m365';
 
+import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 import { Tooltip } from '@/components/UI/Tooltip';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { getDocumentTranslationLanguageByCode } from '@/lib/constants/documentTranslationLanguages';
 
 /**
@@ -25,7 +36,7 @@ import { getDocumentTranslationLanguageByCode } from '@/lib/constants/documentTr
  * Format: [Translation: filename | lang:code | blob:jobId | ext:extension | expires:ISO_TIMESTAMP]
  */
 const TRANSLATION_REFERENCE_REGEX =
-  /^\[Translation:\s*(.+?)\s*\|\s*lang:([a-zA-Z-]+)\s*\|\s*blob:([a-fA-F0-9-]+)\s*\|\s*ext:([a-zA-Z0-9]+)\s*\|\s*expires:(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z)\]$/;
+  /^\[Translation:\s*(.+?)\s*\|\s*lang:([a-zA-Z-]+)\s*\|\s*blob:([a-fA-F0-9-]+)\s*\|\s*ext:([a-zA-Z0-9]+)\s*\|\s*expires:(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z)(?:\s*\|\s*src:([A-Za-z0-9!$_.,=-]+):([A-Za-z0-9!$_.,=-]+))?\]$/;
 
 /**
  * Parsed document translation reference.
@@ -41,6 +52,8 @@ interface TranslationReference {
   extension: string;
   /** Expiration date */
   expiresAt: Date;
+  /** M365 source folder (from the marker's src segment), when present. */
+  m365Source?: { driveId: string; parentItemId: string };
 }
 
 /**
@@ -60,6 +73,10 @@ export function parseTranslationReference(
     jobId: match[3],
     extension: match[4],
     expiresAt: new Date(match[5]),
+    ...(match[6] &&
+      match[7] && {
+        m365Source: { driveId: match[6], parentItemId: match[7] },
+      }),
   };
 }
 
@@ -155,8 +172,14 @@ export function formatTranslationReference(
   jobId: string,
   extension: string,
   expiresAt: string,
+  m365Source?: { driveId: string; parentItemId: string },
 ): string {
-  return `[Translation: ${filename} | lang:${languageCode} | blob:${jobId} | ext:${extension} | expires:${expiresAt}]`;
+  // The optional src segment carries the M365 source folder so a reloaded
+  // conversation can still offer "save next to original".
+  const src = m365Source
+    ? ` | src:${m365Source.driveId}:${m365Source.parentItemId}`
+    : '';
+  return `[Translation: ${filename} | lang:${languageCode} | blob:${jobId} | ext:${extension} | expires:${expiresAt}${src}]`;
 }
 
 /**
@@ -256,6 +279,7 @@ const PendingDocumentTranslation: FC<{
                 data.reference.jobId,
                 data.reference.fileExtension,
                 data.reference.expiresAt,
+                data.reference.m365Source,
               ),
               t('documentTranslation.translationSuccess'),
             );
@@ -388,6 +412,81 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
   const isUnofficialLanguage =
     !!languageInfo && !languageInfo.officiallySupported;
 
+  // §1 third pass: save the finished translation back to OneDrive. Gated
+  // like every M365 surface: flag AND per-user connect opt-in.
+  const { translationEnabled } = useM365Enabled();
+  const m365Connected = useSettingsStore((s) => s.m365Connected);
+  const canSaveToOneDrive = translationEnabled && m365Connected;
+  const [isSaving, setIsSaving] = useState(false);
+  const [savePickerOpen, setSavePickerOpen] = useState(false);
+
+  const fetchTranslatedBlob = useCallback(async (): Promise<Blob> => {
+    if (!reference) throw new Error('No reference');
+    const response = await fetch(
+      `/api/document-translation/content/${reference.jobId}?filename=${encodeURIComponent(reference.filename)}&ext=${reference.extension}`,
+    );
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error(t('documentTranslation.documentNotFound'));
+      }
+      throw new Error(t('documentTranslation.downloadFailed'));
+    }
+    return response.blob();
+  }, [reference, t]);
+
+  // Every save is an explicit user action on a named target — the folder
+  // pick (or the labelled next-to-original button) is the confirmation.
+  const saveTranslationTo = useCallback(
+    async (target: { driveId: string; parentId?: string }) => {
+      if (!reference || isExpired || isSaving) return;
+      setIsSaving(true);
+      const toastId = toast.loading(t('documentTranslation.savingToOneDrive'));
+      try {
+        const blob = await fetchTranslatedBlob();
+        const result = await saveToOneDrive(blob, reference.filename, target);
+        toast.success(
+          result.webUrl ? (
+            <span>
+              {t('documentTranslation.savedToOneDrive', {
+                name: result.name,
+              })}{' '}
+              <a
+                href={result.webUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="font-medium text-blue-600 underline dark:text-blue-400"
+              >
+                {t('documentTranslation.openInOneDrive')}
+              </a>
+            </span>
+          ) : (
+            t('documentTranslation.savedToOneDrive', { name: result.name })
+          ),
+          { id: toastId, duration: 6000 },
+        );
+      } catch (error) {
+        const key =
+          error instanceof M365ClientError && error.code === 'M365_FORBIDDEN'
+            ? 'documentTranslation.saveForbidden'
+            : 'documentTranslation.saveToOneDriveFailed';
+        toast.error(t(key), { id: toastId });
+      } finally {
+        setIsSaving(false);
+      }
+    },
+    [reference, isExpired, isSaving, fetchTranslatedBlob, t],
+  );
+
+  const handlePickSaveFolder = useCallback(
+    (destination: M365SaveDestination) => {
+      void saveTranslationTo({
+        driveId: destination.driveId,
+        parentId: destination.itemId ?? undefined,
+      });
+    },
+    [saveTranslationTo],
+  );
+
   // Handle download
   const handleDownload = useCallback(async () => {
     if (!reference || isExpired) return;
@@ -483,29 +582,73 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
             </div>
           </div>
 
-          {/* Download button */}
-          <button
-            onClick={handleDownload}
-            disabled={isDownloading || isExpired}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-              isDownloading || isExpired
-                ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 text-white'
-            }`}
-          >
-            {isDownloading ? (
+          <div className="flex flex-shrink-0 items-center gap-2">
+            {/* OneDrive save-back: "next to original" when the source came
+                from M365 (write access permitting), else via folder picker. */}
+            {canSaveToOneDrive && !isExpired && (
               <>
-                <IconLoader2 size={16} className="animate-spin" />
-                {t('documentTranslation.downloading')}
-              </>
-            ) : (
-              <>
-                <IconDownload size={16} />
-                {t('documentTranslation.download')}
+                {reference.m365Source && (
+                  <button
+                    onClick={() =>
+                      void saveTranslationTo({
+                        driveId: reference.m365Source!.driveId,
+                        parentId: reference.m365Source!.parentItemId,
+                      })
+                    }
+                    disabled={isSaving}
+                    className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600"
+                    title={t('documentTranslation.saveNextToOriginalHint')}
+                  >
+                    <IconBrandOnedrive size={16} className="text-blue-500" />
+                    {t('documentTranslation.saveNextToOriginal')}
+                  </button>
+                )}
+                <button
+                  onClick={() => setSavePickerOpen(true)}
+                  disabled={isSaving}
+                  className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600"
+                >
+                  {isSaving ? (
+                    <IconLoader2 size={16} className="animate-spin" />
+                  ) : (
+                    <IconBrandOnedrive size={16} className="text-blue-500" />
+                  )}
+                  {t('documentTranslation.saveToOneDrive')}
+                </button>
               </>
             )}
-          </button>
+
+            {/* Download button */}
+            <button
+              onClick={handleDownload}
+              disabled={isDownloading || isExpired}
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                isDownloading || isExpired
+                  ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 text-white'
+              }`}
+            >
+              {isDownloading ? (
+                <>
+                  <IconLoader2 size={16} className="animate-spin" />
+                  {t('documentTranslation.downloading')}
+                </>
+              ) : (
+                <>
+                  <IconDownload size={16} />
+                  {t('documentTranslation.download')}
+                </>
+              )}
+            </button>
+          </div>
         </div>
+
+        {/* Folder picker for the OneDrive save-back */}
+        <M365FilePickerModal
+          isOpen={savePickerOpen}
+          onClose={() => setSavePickerOpen(false)}
+          onPickFolder={handlePickSaveFolder}
+        />
 
         {/* Expiration info */}
         <div className="px-4 py-3">

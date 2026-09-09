@@ -16,12 +16,53 @@ import {
   DISALLOWED_MIME_TYPES,
 } from '@/lib/constants/disallowedFileTypes';
 import {
+  formatBytes,
+  getFileCategory,
   getMaxSizeForFile,
   validateFileSize,
 } from '@/lib/constants/fileLimits';
 
 // Threshold for using Server Action (files larger than 10MB use Server Action)
 const SERVER_ACTION_THRESHOLD = 10 * 1024 * 1024; // 10MB
+
+const MEGABYTE = 1024 * 1024;
+
+/**
+ * The caller's admin-configured per-file cap (`feature.upload.megabytesPerFile`,
+ * docs/LIMITS_USER_FACING_UX.md §7.4), pushed in by `useUploadLimitSync` so
+ * the size check can run BEFORE the upload starts instead of the user
+ * learning about it from the server's 403 after the progress bar appeared.
+ */
+export interface EffectiveUploadLimit {
+  /** Resolved cap in MB. Only ever LOWERS a compiled category cap. */
+  megabytes: number;
+  /**
+   * Localized "too large" sentence for the resolved cap. Optional because
+   * this module is not React-aware: without it the compiled English pattern
+   * (`… files must be under …`) is reused with the effective size.
+   */
+  formatError?: (fileName: string, maxSize: string) => string;
+}
+
+/**
+ * Module-level rather than a parameter threaded through every upload entry
+ * point (drop, paste, camera, "+" menu, extraction tray all converge on
+ * `uploadMultipleFiles`): one hook near the composer keeps it current and
+ * clears it on unmount. `null` = no admin cap known → compiled caps only,
+ * which is exactly today's behaviour and the fail-open posture.
+ */
+let effectiveUploadLimit: EffectiveUploadLimit | null = null;
+
+/**
+ * "Image" / "Video" / "File" — the same subject the compiled-cap message
+ * uses (`validateFileSize` in lib/constants/fileLimits.ts), so the admin-cap
+ * fallback sentence reads identically apart from the number.
+ */
+function categoryLabel(file: File): string {
+  const category = getFileCategory(file.name, file.type);
+  if (category === 'unknown') return 'File';
+  return category.charAt(0).toUpperCase() + category.slice(1);
+}
 
 // Chunked upload configuration
 const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB per chunk
@@ -189,10 +230,33 @@ export class FileUploadService {
   }
 
   /**
+   * Publish (or clear, with `null`) the caller's admin per-file cap. Called
+   * from `useUploadLimitSync`; safe to call from anywhere else that learns
+   * the cap first.
+   */
+  static setEffectiveUploadLimit(limit: EffectiveUploadLimit | null): void {
+    effectiveUploadLimit = limit;
+  }
+
+  /** The cap currently in force, for the composer hint and for tests. */
+  static getEffectiveUploadLimit(): EffectiveUploadLimit | null {
+    return effectiveUploadLimit;
+  }
+
+  /**
    * Validate file before upload.
    * Checks file type allowlist and size limits.
+   *
+   * The size check is two-layered: the compiled per-category cap first (the
+   * floor — an admin cannot raise what the upload path is built to buffer),
+   * then the admin cap when one is known. Checking in that order means the
+   * message always names the cap that actually bound. `effectiveMegabytes`
+   * lets a non-React caller (or a test) bypass the module-level value.
    */
-  static validateFile(file: File): { valid: boolean; error?: string } {
+  static validateFile(
+    file: File,
+    effectiveMegabytes?: number,
+  ): { valid: boolean; error?: string } {
     // Check if file type is allowed
     if (!this.isFileAllowed(file)) {
       return {
@@ -207,6 +271,27 @@ export class FileUploadService {
       return {
         valid: false,
         error: sizeValidation.error,
+      };
+    }
+
+    const adminCap = effectiveMegabytes ?? effectiveUploadLimit?.megabytes;
+    if (
+      typeof adminCap === 'number' &&
+      Number.isFinite(adminCap) &&
+      file.size > adminCap * MEGABYTE
+    ) {
+      const maxSize = formatBytes(adminCap * MEGABYTE);
+      // Only trust the injected formatter when the override came from the
+      // same place; an explicit parameter is a different caller's cap.
+      const formatError =
+        effectiveMegabytes === undefined
+          ? effectiveUploadLimit?.formatError
+          : undefined;
+      return {
+        valid: false,
+        error: formatError
+          ? formatError(file.name, maxSize)
+          : `${categoryLabel(file)} files must be under ${maxSize}`,
       };
     }
 

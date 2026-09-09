@@ -1,5 +1,7 @@
 import { Session } from 'next-auth';
 
+import { stripThinking } from '@/lib/utils/app/stream/thinking';
+
 import { Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 
@@ -46,16 +48,35 @@ export class DeepSeekHandler extends ModelHandler {
       );
     }
 
+    // In-array system messages (enricher-injected RAG/file context) become
+    // user messages in place — same no-system policy as the prompt merge
+    // below; dropping or forwarding them as 'system' both misbehave.
+    const normalizedMessages = messages.map(
+      (msg): Message =>
+        msg.role === 'system' ? { ...msg, role: 'user' } : msg,
+    );
+
     // Deep copy messages to avoid mutation
-    const messagesToUse = messages.map(
+    const messagesToUse = normalizedMessages.map(
       (msg, index): OpenAI.Chat.Completions.ChatCompletionMessageParam => {
+        // R1 reasoning from earlier turns persists as inline <think> blocks
+        // in assistant content. DeepSeek's guidance is to NOT feed prior
+        // reasoning back — strip it from history.
+        if (msg.role === 'assistant' && typeof msg.content === 'string') {
+          return {
+            role: msg.role,
+            content: stripThinking(msg.content) || msg.content,
+          };
+        }
         // Don't modify messages until we find the first user message
         if (!modifiedSystemPrompt || msg.role !== 'user') {
           return { role: msg.role, content: msg.content as any };
         }
 
         // Only modify the first user message
-        const firstUserIndex = messages.findIndex((m) => m.role === 'user');
+        const firstUserIndex = normalizedMessages.findIndex(
+          (m) => m.role === 'user',
+        );
         if (index !== firstUserIndex) {
           return { role: msg.role, content: msg.content as any };
         }

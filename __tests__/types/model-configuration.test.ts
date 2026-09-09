@@ -1,4 +1,8 @@
-import { OpenAIModelID, OpenAIModels } from '@/types/openai';
+import {
+  DEFAULT_MODEL_ORDER,
+  OpenAIModelID,
+  OpenAIModels,
+} from '@/types/openai';
 
 import { describe, expect, it } from 'vitest';
 
@@ -171,6 +175,17 @@ describe('Model Configuration', () => {
   });
 
   describe('Model Completeness', () => {
+    it('DEFAULT_MODEL_ORDER lists every model exactly once', () => {
+      // The order list doubles as the flattened edit-order list, so a model
+      // missing from it silently loses its picker position — and inside a
+      // consolidated family that means a whole version chip disappears with
+      // nothing failing. Collapsing the GPT families dropped gpt-5.2-chat
+      // exactly this way.
+      const ordered = [...DEFAULT_MODEL_ORDER].sort();
+      expect(ordered).toEqual([...new Set(ordered)]);
+      expect(ordered).toEqual(Object.values(OpenAIModelID).sort());
+    });
+
     it('all models should have required fields', () => {
       Object.values(OpenAIModels).forEach((model) => {
         expect(model.id).toBeDefined();

@@ -99,6 +99,13 @@ export function PromptsTab({ prompts, folders, onClose }: PromptsTabProps) {
     updatePrompt(promptId, { folderId });
   };
 
+  // "New folder …" row in the move picker: create + move in one step.
+  const handleCreateFolderAndMove = (promptId: string, name: string) => {
+    const folder: FolderInterface = { id: uuidv4(), name, type: 'prompt' };
+    addFolder(folder);
+    updatePrompt(promptId, { folderId: folder.id });
+  };
+
   const handleDeletePrompt = (promptId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (window.confirm(t('Are you sure you want to delete this prompt?'))) {
@@ -432,6 +439,7 @@ Include:
                             }}
                             onDelete={(e) => handleDeletePrompt(prompt.id, e)}
                             onMoveToFolder={handleMoveToFolder}
+                            onCreateFolderAndMove={handleCreateFolderAndMove}
                             onExport={() => handleExportSingle(prompt)}
                           />
                         </div>
@@ -482,6 +490,7 @@ Include:
                       }}
                       onDelete={(e) => handleDeletePrompt(prompt.id, e)}
                       onMoveToFolder={handleMoveToFolder}
+                      onCreateFolderAndMove={handleCreateFolderAndMove}
                       onExport={() => handleExportSingle(prompt)}
                     />
                   </div>

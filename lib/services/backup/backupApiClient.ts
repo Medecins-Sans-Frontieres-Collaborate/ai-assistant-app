@@ -1,6 +1,7 @@
 import type {
   BackupApi,
   BackupApiErrorCode,
+  BackupBackend,
   BackupManifest,
   ManifestFetchResult,
 } from '@/lib/services/backup/types';
@@ -78,7 +79,20 @@ async function errorFromResponse(res: Response): Promise<BackupApiError> {
 
 type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 
-export function createBackupApiClient(fetchImpl?: FetchLike): BackupApi {
+/**
+ * `backend` routes every request at the selected storage backend; 'app'
+ * (the default) omits the param entirely so the wire shape is unchanged
+ * for existing enrollments.
+ */
+export function createBackupApiClient(
+  fetchImpl?: FetchLike,
+  backend: BackupBackend = 'app',
+): BackupApi {
+  const withBackend = (url: string): string =>
+    backend === 'app'
+      ? url
+      : `${url}${url.includes('?') ? '&' : '?'}backend=${backend}`;
+
   const doFetch: FetchLike = async (input, init) => {
     const f = fetchImpl ?? globalThis.fetch;
     for (let attempt = 0; ; attempt++) {
@@ -108,10 +122,12 @@ export function createBackupApiClient(fetchImpl?: FetchLike): BackupApi {
   };
 
   const blobUrl = (id: string, rev: string): string =>
-    `/api/backup/conversations/${encodeURIComponent(id)}?rev=${encodeURIComponent(rev)}`;
+    withBackend(
+      `/api/backup/conversations/${encodeURIComponent(id)}?rev=${encodeURIComponent(rev)}`,
+    );
 
   const foldersUrl = (rev: string): string =>
-    `/api/backup/folders?rev=${encodeURIComponent(rev)}`;
+    withBackend(`/api/backup/folders?rev=${encodeURIComponent(rev)}`);
 
   const expectOk = async (res: Response): Promise<void> => {
     if (!res.ok) throw await errorFromResponse(res);
@@ -135,7 +151,9 @@ export function createBackupApiClient(fetchImpl?: FetchLike): BackupApi {
 
   return {
     async getManifest(): Promise<ManifestFetchResult | null> {
-      const res = await doFetch('/api/backup/manifest', { method: 'GET' });
+      const res = await doFetch(withBackend('/api/backup/manifest'), {
+        method: 'GET',
+      });
       if (res.status === 404) return null;
       if (!res.ok) throw await errorFromResponse(res);
       return await readJsonData<ManifestFetchResult>(res);
@@ -149,7 +167,7 @@ export function createBackupApiClient(fetchImpl?: FetchLike): BackupApi {
         'Content-Type': 'application/json',
       };
       if (opts.ifMatchEtag !== null) headers['If-Match'] = opts.ifMatchEtag;
-      const res = await doFetch('/api/backup/manifest', {
+      const res = await doFetch(withBackend('/api/backup/manifest'), {
         method: 'PUT',
         headers,
         body: JSON.stringify(manifest),
@@ -183,7 +201,9 @@ export function createBackupApiClient(fetchImpl?: FetchLike): BackupApi {
     },
 
     async deleteBackup(): Promise<void> {
-      await expectOk(await doFetch('/api/backup', { method: 'DELETE' }));
+      await expectOk(
+        await doFetch(withBackend('/api/backup'), { method: 'DELETE' }),
+      );
     },
   };
 }

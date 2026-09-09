@@ -11,6 +11,11 @@ import {
 } from '@/types/workflow';
 
 import {
+  GuidePromptInput,
+  buildGuideCriterionBlocks,
+  guideRubricLine,
+} from '../shared/guidePrompts';
+import {
   WorkflowStreamWriter,
   callStreamedText,
   callStructured,
@@ -181,10 +186,12 @@ export interface TranslationAssessmentOptions {
   sourceText: string;
   translation: string;
   targetLanguage: string;
-  /** Built-in ids and/or 'custom:<uuid>' ids, already validated. */
+  /** Built-in ids, 'custom:<uuid>' ids, and/or 'guide:<id>' ids. */
   criterionIds: string[];
   /** Rubrics for the custom ids in `criterionIds`. */
   customById: Map<string, { name: string; rubric: string }>;
+  /** Resolved criterion-kind guides for the 'guide:' ids (route-resolved). */
+  guides?: GuidePromptInput[];
   glossaryEntries: GlossaryEntry[];
   modelId?: string;
 }
@@ -218,10 +225,15 @@ export async function runTranslationAssessment(
 ): Promise<TranslationAssessmentResult> {
   // Built over the REQUESTED ids (not by filtering the built-in list), so
   // custom criteria reach the prompt instead of being silently dropped.
+  const guidesByCriterionId = new Map(
+    (options.guides ?? []).map((g) => [g.criterionId, g]),
+  );
   const rubric = options.criterionIds
-    .map((id) =>
-      criterionRubricLine(id, builtinRubricLine(id), options.customById),
-    )
+    .map((id) => {
+      const guide = guidesByCriterionId.get(id);
+      if (guide) return guideRubricLine(guide);
+      return criterionRubricLine(id, builtinRubricLine(id), options.customById);
+    })
     .filter((line): line is string => line !== null);
   const glossaryBlock = buildGlossaryBlock(
     options.glossaryEntries,
@@ -232,7 +244,11 @@ export async function runTranslationAssessment(
   const result = await callStructured<LlmAssessment>({
     client,
     model: options.modelId,
-    system: buildAssessmentSystemPrompt(rubric, glossaryBlock),
+    system: buildAssessmentSystemPrompt(
+      rubric,
+      glossaryBlock,
+      buildGuideCriterionBlocks(options.guides ?? [], options.sourceText),
+    ),
     user: buildAssessmentUserPrompt(
       options.sourceText,
       options.translation,

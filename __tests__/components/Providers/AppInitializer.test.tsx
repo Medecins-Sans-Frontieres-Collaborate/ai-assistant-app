@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, waitFor } from '@testing-library/react';
 
 import { OpenAIModelID } from '@/types/openai';
@@ -21,12 +22,27 @@ vi.mock('next-auth/react', () => ({
 describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
   const settingsInitial = useSettingsStore.getState();
   const conversationInitial = useConversationStore.getState();
+  // AppInitializer now mounts useModelsQuery() (React Query) unconditionally
+  // per docs/LIMITS_USER_FACING_UX.md — a fresh, retry-disabled client per
+  // test keeps the ['models'] cache from leaking between assertions.
+  let queryClient: QueryClient;
+
+  function renderAppInitializer() {
+    return render(
+      <QueryClientProvider client={queryClient}>
+        <AppInitializer />
+      </QueryClientProvider>,
+    );
+  }
 
   beforeEach(() => {
     vi.restoreAllMocks();
     mockSession.data = null;
     useSettingsStore.setState(settingsInitial, true);
     useConversationStore.setState(conversationInitial, true);
+    queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
   });
 
   afterEach(() => {
@@ -40,7 +56,7 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
     });
     vi.stubGlobal('fetch', fetchSpy);
 
-    render(<AppInitializer />);
+    renderAppInitializer();
 
     // Static seed happened immediately…
     expect(useSettingsStore.getState().models.length).toBeGreaterThan(0);
@@ -75,7 +91,7 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
       }),
     );
 
-    render(<AppInitializer />);
+    renderAppInitializer();
 
     await waitFor(() =>
       expect(useSettingsStore.getState().models.map((m) => m.id)).toContain(
@@ -115,7 +131,7 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
       'setDefaultModelId',
     );
 
-    render(<AppInitializer />);
+    renderAppInitializer();
 
     await waitFor(() =>
       expect(useSettingsStore.getState().models.map((m) => m.id)).toContain(
@@ -134,7 +150,7 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
     );
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-    render(<AppInitializer />);
+    renderAppInitializer();
 
     // Give the failed refine a chance to settle; the static seed stays.
     await new Promise((r) => setTimeout(r, 10));
@@ -157,7 +173,7 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
       }),
     );
 
-    render(<AppInitializer />);
+    renderAppInitializer();
 
     await waitFor(() =>
       expect(useSettingsStore.getState().modelListSource).toBe(
@@ -173,7 +189,7 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
     // flags and the fail-closed `=== true` mirror must land on false.
     useSettingsStore.setState({ memoriesFlagEnabled: true });
 
-    render(<AppInitializer />);
+    renderAppInitializer();
 
     await waitFor(() =>
       expect(useSettingsStore.getState().memoriesFlagEnabled).toBe(false),
@@ -190,7 +206,7 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
     mockSession.data = { user: { region: 'US' } };
     vi.stubGlobal('fetch', vi.fn());
 
-    render(<AppInitializer />);
+    renderAppInitializer();
 
     await waitFor(() =>
       expect(useSettingsStore.getState().userRegion).toBe('US'),
@@ -235,7 +251,7 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
       }),
     );
 
-    render(<AppInitializer />);
+    renderAppInitializer();
 
     await waitFor(() => expect(setDefaultSpy).toHaveBeenCalledWith('us-model'));
   });

@@ -5,14 +5,37 @@ import {
   AgentAccessService,
   emitAccessAudit,
 } from '@/lib/services/agentAccess/AgentAccessService';
-import { PROMPT_AGENT_SOURCE } from '@/lib/services/agentAccess/types';
+import {
+  M365_AGENT_SOURCE,
+  ORG_AGENT_SOURCE,
+  PROMPT_AGENT_SOURCE,
+} from '@/lib/services/agentAccess/types';
 import { AgentDiscoveryService } from '@/lib/services/agents/AgentDiscoveryService';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
 import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
+import {
+  LimitCheckResult,
+  applyMode,
+  checkGate,
+  currentPolicy,
+  denialMessage,
+  effectiveCeiling,
+  meteredCells,
+} from '@/lib/services/limits/enforcement';
+import { isModelBlocked } from '@/lib/services/limits/modelAvailability';
+import { resetAt } from '@/lib/services/limits/periods';
+import { buildPrincipal } from '@/lib/services/limits/principal';
+import { ResolvedLimit, counterCellName } from '@/lib/services/limits/resolver';
+import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
+import { reserve } from '@/lib/services/limits/usageStore';
+import { checkAgentSourceAccess } from '@/lib/services/m365/agentSourceAccess';
+import { M365Error } from '@/lib/services/m365/graphApi';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import { resolveCustomSourceModel } from '@/lib/services/models/customModelSources';
+import { resolveOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
 import { ModelSelector, RateLimiter } from '@/lib/services/shared';
 
 import {
@@ -28,15 +51,21 @@ import {
 } from '@/lib/utils/shared/armPath';
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
+import { RequestTelemetry } from '@/lib/types/logging';
 import { ChatBody } from '@/types/chat';
 import { ErrorCode, PipelineError } from '@/types/errors';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
 import { ChatContext } from './ChatContext';
 
 import { auth, getAccessTokenForOBO } from '@/auth';
+import { env } from '@/config/environment';
+import { getDefaultModel, getFallbackChain } from '@/config/models';
+import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { TokenCredential } from '@azure/identity';
+import { randomUUID } from 'crypto';
 
 /**
  * Middleware function that processes a request and returns partial ChatContext.
@@ -83,6 +112,19 @@ export const authMiddleware: Middleware = async (req) => {
     throw PipelineError.critical(
       ErrorCode.AUTH_FAILED,
       'Unauthorized: No valid session found',
+    );
+  }
+
+  // A session whose access-token refresh failed (rotated client secret,
+  // revoked refresh token — auth.ts sets 'RefreshAccessTokenError' or
+  // 'RefreshTokenMissing') still decodes and would otherwise sail through,
+  // only to fail unpredictably downstream. Reject it here with a DISTINCT
+  // code so the client can force a sign-out instead of a dead-end banner.
+  if (session.error) {
+    throw PipelineError.critical(
+      ErrorCode.AUTH_SESSION_EXPIRED,
+      'Session expired: access-token refresh failed. Sign in again.',
+      { sessionError: session.error },
     );
   }
 
@@ -153,7 +195,12 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       reasoningEffort,
       verbosity,
       botId,
+      conversationId,
+      agentAttached,
       searchMode,
+      webSearchOptions,
+      precomputedSearchResults,
+      interpreterMode,
       hostedRegion,
       threadId,
       forcedAgentType,
@@ -170,6 +217,9 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       mcpServers,
       mcpPendingToolCalls,
       mcpLoopRound,
+      mcpPlan,
+      m365MailScreenOverrides,
+      m365SharedMailboxes,
       extraction,
       conversationSummary,
       memories,
@@ -201,6 +251,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
     // Store raw user prompt - system prompt will be built in buildChatContext
     // after auth middleware has provided user info
     return {
+      requestId: randomUUID(),
       model,
       messages,
       rawUserPrompt: prompt,
@@ -215,12 +266,22 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       mcpServers,
       mcpPendingToolCalls,
       mcpLoopRound,
+      mcpPlan,
+      // Explicit UI action ids for flagged mail (validated shape/caps in
+      // InputValidator) — consumed by the builtin M365 executor only.
+      m365MailScreenOverrides,
+      m365SharedMailboxes,
       temperature,
       stream,
       reasoningEffort,
       verbosity,
       botId,
+      conversationId,
+      agentAttached,
       searchMode,
+      webSearchOptions,
+      precomputedSearchResults,
+      interpreterMode,
       hostedRegion,
       threadId,
       forcedAgentType,
@@ -285,6 +346,20 @@ export const createSystemPromptMiddleware = (
     userPrompt: context.rawUserPrompt,
     conversationSummary: context.conversationSummary,
     memories: context.memories,
+    // Capability awareness: with the interpreter on, models should OFFER
+    // code execution and file generation (e.g. "export this conversation's
+    // data as a spreadsheet") instead of claiming they can't produce files.
+    codeInterpreterAvailable:
+      env.CODE_INTERPRETER_ENABLED &&
+      (context.interpreterMode === InterpreterMode.INTELLIGENT ||
+        context.interpreterMode === InterpreterMode.ALWAYS),
+    // Parallel section for auto web search: how to answer WITH injected
+    // results (ground + cite) vs. a normal turn WITHOUT them (no live
+    // data — don't fabricate currency). AGENT mode is excluded: those
+    // turns execute on the Foundry agent path with its own instructions.
+    webSearchActive:
+      context.searchMode === SearchMode.INTELLIGENT ||
+      context.searchMode === SearchMode.ALWAYS,
   };
 
   // Add user info if enabled and user is available
@@ -550,6 +625,8 @@ export const createCredentialMiddleware = async (
       // unknown/deleted `prompt-` botId falls through silently below — same
       // silent-degrade as removed static agents.
       emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
         userMail: context.user?.mail,
         agentName: context.botId!,
         source: PROMPT_AGENT_SOURCE,
@@ -568,6 +645,8 @@ export const createCredentialMiddleware = async (
         agentName: promptAgent.id,
       });
       emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
         userMail: context.user?.mail,
         agentName: promptAgent.id,
         source: PROMPT_AGENT_SOURCE,
@@ -577,6 +656,163 @@ export const createCredentialMiddleware = async (
       if (decision.decision !== 'allow') {
         console.error(
           `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}) for prompt-agent invocation; blocking`,
+        );
+        throw agentAccessDenied(decision.decision, decision.reason);
+      }
+    }
+  }
+
+  // M365 file-backed agents: the same layer-1 guard as prompt agents, PLUS
+  // the layer-2 content trim (docs/M365_SECOND_PASS_AGENTS_DESIGN.md): the
+  // requesting user's OWN Graph token must open at least one of the agent's
+  // sources, and retrieval downstream is hard-filtered to that subset via
+  // context.m365AccessibleSourceIds. This runs in middleware (not the
+  // enricher) because middleware can reject the request — the pipeline
+  // swallows stage errors — and the model must never be called for a user
+  // with zero accessible sources.
+  if (
+    accessService.isEnabled() &&
+    (context.m365Agent || context.botId?.startsWith('m365-'))
+  ) {
+    await accessService.ensureFresh();
+    const m365Agent =
+      context.m365Agent ??
+      (context.botId ? accessService.getM365AgentById(context.botId) : null);
+    if (!m365Agent && accessService.getSnapshot().rulesUnavailable) {
+      emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
+        userMail: context.user?.mail,
+        agentName: context.botId!,
+        source: M365_AGENT_SOURCE,
+        decision: 'unavailable',
+        reason: 'rules-unavailable',
+      });
+      console.error(
+        '[CredentialMiddleware] Agent access unavailable (rules-unavailable) for m365-agent invocation; blocking',
+      );
+      throw agentAccessDenied('unavailable', 'rules-unavailable');
+    }
+    if (m365Agent) {
+      const decision = accessService.evaluateAccess({
+        userMail: context.user?.mail,
+        source: M365_AGENT_SOURCE,
+        agentName: m365Agent.id,
+      });
+      emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
+        userMail: context.user?.mail,
+        agentName: m365Agent.id,
+        source: M365_AGENT_SOURCE,
+        decision: decision.decision,
+        reason: decision.reason,
+      });
+      if (decision.decision !== 'allow') {
+        console.error(
+          `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}) for m365-agent invocation; blocking`,
+        );
+        throw agentAccessDenied(decision.decision, decision.reason);
+      }
+
+      // Layer 2 — trim to the sources the user's own token can open. Audit
+      // records counts only, never file names or content.
+      try {
+        const access = await checkAgentSourceAccess(
+          req,
+          context.user?.id ?? context.session?.user?.id ?? 'unknown',
+          m365Agent,
+        );
+        console.log(
+          `[agent-access-audit] m365-layer2 agent=${sanitizeForLog(m365Agent.id)} accessible=${access.accessibleSourceIds.length}/${m365Agent.sources.length} folderItems=${access.accessibleFolderItems.length}`,
+        );
+        if (access.accessibleSourceIds.length === 0) {
+          throw agentAccessDenied('deny', 'm365-no-file-access');
+        }
+        return {
+          m365AccessibleSourceIds: access.accessibleSourceIds,
+          m365AccessibleFolderItems: access.accessibleFolderItems,
+        };
+      } catch (error) {
+        if (error instanceof M365Error) {
+          // No usable Graph session (not connected / consent pending):
+          // fail closed with the unavailable copy — the preflight endpoint
+          // gives the client the actionable connect/request-access UX.
+          throw agentAccessDenied('unavailable', `m365-${error.kind}`);
+        }
+        throw error;
+      }
+    }
+  }
+
+  // Org RAG agents: the same layer-1 guard as prompt agents. Admin records
+  // (server-generated `orgr-` ids or overrides of static config ids) are
+  // evaluated against the rule stored under `org-agent::<id>`; a STATIC
+  // config agent with no record is evaluated under the very same key, so
+  // an admin can restrict a built-in agent without overriding it (no rule
+  // → allow, so this is a no-op until a rule exists). The cold-start
+  // fail-closed arm applies to `orgr-` ids only: a static-id botId whose
+  // rules cannot be verified degrades to the rule-free static entry,
+  // exactly like a deployment where the record never existed (blocking
+  // there would take every static agent down with a storage outage).
+  if (accessService.isEnabled() && context.botId) {
+    await accessService.ensureFresh();
+    const orgRecord = accessService.getOrgAgentById(context.botId);
+    if (
+      !orgRecord &&
+      context.botId.startsWith('orgr-') &&
+      accessService.getSnapshot().rulesUnavailable
+    ) {
+      emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
+        userMail: context.user?.mail,
+        agentName: context.botId,
+        source: ORG_AGENT_SOURCE,
+        decision: 'unavailable',
+        reason: 'rules-unavailable',
+      });
+      console.error(
+        '[CredentialMiddleware] Agent access unavailable (rules-unavailable) for org-agent invocation; blocking',
+      );
+      throw agentAccessDenied('unavailable', 'rules-unavailable');
+    }
+    const staticAgent = orgRecord
+      ? null
+      : getOrganizationAgentById(context.botId);
+    if (staticAgent && accessService.getSnapshot().rulesUnavailable) {
+      // Static fail-open (see above): audited so the degradation is visible.
+      emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
+        userMail: context.user?.mail,
+        agentName: staticAgent.id,
+        source: ORG_AGENT_SOURCE,
+        decision: 'allow',
+        reason: 'rules-unavailable-static-fallback',
+      });
+      console.warn(
+        '[CredentialMiddleware] Agent access rules unavailable; serving static org agent rule-free',
+      );
+    } else if (orgRecord || staticAgent) {
+      const agentName = orgRecord ? orgRecord.id : staticAgent!.id;
+      const decision = accessService.evaluateAccess({
+        userMail: context.user?.mail,
+        source: ORG_AGENT_SOURCE,
+        agentName,
+      });
+      emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
+        userMail: context.user?.mail,
+        agentName,
+        source: ORG_AGENT_SOURCE,
+        decision: decision.decision,
+        reason: decision.reason,
+      });
+      if (decision.decision !== 'allow') {
+        console.error(
+          `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}) for org-agent invocation; blocking`,
         );
         throw agentAccessDenied(decision.decision, decision.reason);
       }
@@ -627,6 +863,8 @@ export const createCredentialMiddleware = async (
           agentName: nonFoundryAgentName,
         });
         emitAccessAudit({
+          user: context.user,
+          telemetry: auditTelemetry(context),
           userMail: context.user?.mail,
           agentName: nonFoundryAgentName,
           source: null,
@@ -764,6 +1002,8 @@ export const createCredentialMiddleware = async (
         agentName,
       });
       emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
         userMail,
         agentName,
         source: accessSource,
@@ -884,18 +1124,24 @@ export const createModelSelectionMiddleware = async (
   // would misroute the request into the Foundry execution path.
   //
   // Scoped to requests whose MODEL actually selects the prompt agent
-  // (`org-<botId>`): conversation.bot is sent on every request and survives
-  // model switches that don't go through ModelSelect (WorkflowModelSelect /
-  // useModelSelection update the model without clearing bot), so a stale
-  // botId must never hijack an explicitly selected different model — in
-  // particular it must never swap a byom-/foundry- selection onto an
-  // app-hosted deployment. The `prompt-` prefix check (ids are
-  // server-generated `prompt-<hex>`) also keeps static RAG botIds off the
-  // access-service path entirely — no ensureFresh() on their hot path.
+  // (`org-<botId>`) — OR that carry the explicit `agentAttached` signal from
+  // the capabilities tray (the user attached the agent to the conversation
+  // independent of the model). Without either, conversation.bot is treated
+  // as potentially stale: it is sent on every request and, pre-tray,
+  // survived model switches that don't go through ModelSelect
+  // (WorkflowModelSelect / useModelSelection update the model without
+  // clearing bot), so a stale botId must never hijack an explicitly
+  // selected different model — in particular it must never swap a
+  // byom-/foundry- selection onto an app-hosted deployment. Old clients
+  // never send agentAttached, so their stale bots stay inert. The `prompt-`
+  // prefix check (ids are server-generated `prompt-<hex>`) also keeps
+  // static RAG botIds off the access-service path entirely — no
+  // ensureFresh() on their hot path.
+  const explicitlyAttached = context.agentAttached === true;
   const accessService = AgentAccessService.getInstance();
   if (
     context.botId?.startsWith('prompt-') &&
-    modelId === `org-${context.botId}` &&
+    (modelId === `org-${context.botId}` || explicitlyAttached) &&
     accessService.isEnabled()
   ) {
     await accessService.ensureFresh();
@@ -926,8 +1172,428 @@ export const createModelSelectionMiddleware = async (
     }
   }
 
+  // M365 file-backed agent resolution — same shape and same guards as the
+  // prompt-agent branch above (a request is one or the other; both key on
+  // `org-<botId>`). Differences: `chatModelId: null` means "ride the
+  // default" (the agent tracks catalog upgrades), and the RAG retrieval
+  // happens later in M365AgentEnricher rather than via a system prompt.
+  // Knowledge agents are "uses your model" under explicit attachment: when
+  // the tray attached the agent alongside a REAL model, that model wins and
+  // the admin chatModelId acts only as the legacy-selection default.
+  const legacyM365Selection = modelId === `org-${context.botId}`;
+  if (
+    context.botId?.startsWith('m365-') &&
+    (legacyM365Selection || explicitlyAttached) &&
+    accessService.isEnabled()
+  ) {
+    await accessService.ensureFresh();
+    const m365Agent = accessService.getM365AgentById(context.botId);
+    if (m365Agent) {
+      selection.m365Agent = m365Agent;
+      // Same Foundry-misroute protection as prompt agents.
+      selection.agentMode = false;
+      if (!legacyM365Selection) {
+        // Explicit attachment with a real model: retrieval enriches the
+        // request's own model — no swap.
+      } else if (m365Agent.chatModelId) {
+        const configured = OpenAIModels[
+          m365Agent.chatModelId as OpenAIModelID
+        ] as OpenAIModel | undefined;
+        if (configured) {
+          selection.modelId = configured.id;
+          selection.model = configured;
+        } else {
+          console.error(
+            `[ModelSelectionMiddleware] M365 agent ${sanitizeForLog(m365Agent.id)} references unknown model '${sanitizeForLog(m365Agent.chatModelId)}'; keeping default model behavior`,
+          );
+        }
+      } else {
+        const defaultId = getDefaultModel();
+        const fallback = OpenAIModels[defaultId as OpenAIModelID] as
+          | OpenAIModel
+          | undefined;
+        if (fallback) {
+          selection.modelId = fallback.id;
+          selection.model = fallback;
+        }
+      }
+      console.log(
+        `[ModelSelectionMiddleware] Resolved m365 agent ${sanitizeForLog(m365Agent.id)} → model ${sanitizeForLog(selection.modelId ?? modelId)}`,
+      );
+    }
+  }
+
+  // Admin-authored org RAG agent resolution — same shape as the prompt/m365
+  // branches, keyed on an admin RECORD existing for this botId (`orgr-` ids
+  // or overrides of static config ids). Static agents WITHOUT a record keep
+  // their historical behavior (client-side baseModelId cosmetics riding the
+  // DeploymentNotFound fallback); with a record, the admin-chosen base model
+  // (or the catalog default) actually executes. This puts overridden static
+  // botIds on the access-service path — deliberate: an override cannot be
+  // honored without consulting the store.
+  const legacyOrgSelection = modelId === `org-${context.botId}`;
+  if (
+    context.botId &&
+    !context.botId.startsWith('prompt-') &&
+    !context.botId.startsWith('m365-') &&
+    (legacyOrgSelection || explicitlyAttached) &&
+    accessService.isEnabled()
+  ) {
+    await accessService.ensureFresh();
+    const orgRecord = accessService.getOrgAgentById(context.botId);
+    if (
+      orgRecord &&
+      orgRecord.enabled &&
+      orgRecord.validation.status === 'ok'
+    ) {
+      // Same Foundry-misroute protection as prompt agents.
+      selection.agentMode = false;
+      // Knowledge agents are "uses your model" under explicit attachment:
+      // the admin baseModelId only replaces the legacy fake `org-` model.
+      if (legacyOrgSelection) {
+        const chosenId = orgRecord.baseModelId ?? getDefaultModel();
+        const configured = OpenAIModels[chosenId as OpenAIModelID] as
+          | OpenAIModel
+          | undefined;
+        if (configured) {
+          selection.modelId = configured.id;
+          selection.model = configured;
+        } else {
+          console.error(
+            `[ModelSelectionMiddleware] Org agent ${sanitizeForLog(orgRecord.id)} references unknown model '${sanitizeForLog(chosenId)}'; keeping default model behavior`,
+          );
+        }
+      }
+      console.log(
+        `[ModelSelectionMiddleware] Resolved org agent ${sanitizeForLog(orgRecord.id)} → model ${sanitizeForLog(selection.modelId ?? modelId)}`,
+      );
+    }
+  }
+
   return selection;
 };
+
+/**
+ * Correlation-only telemetry for access-guard audit rows. The guards run
+ * BEFORE createTelemetryMiddleware (they can reject the request), so the
+ * agent kind/name are not resolved yet — the guard supplies its own agent
+ * identity; this just carries the ids that tie the row to the request.
+ */
+function auditTelemetry(context: Partial<ChatContext>): RequestTelemetry {
+  return {
+    botId: context.botId,
+    conversationId: context.conversationId,
+    requestId: context.requestId,
+    loopRound: context.mcpLoopRound,
+  };
+}
+
+/**
+ * Builds `context.telemetry` — the per-request agent + correlation context
+ * that every Azure Monitor event for this request carries.
+ *
+ * ⚠ MUST run AFTER createModelSelectionMiddleware and
+ * createCredentialMiddleware: it reports what the pipeline ACTUALLY resolved
+ * (promptAgent / m365Agent / Foundry agentMode / org RAG agent), not what the
+ * client asked for. `agentApplied: false` with a botId means the client sent
+ * a bot the server ignored (stale/unattached, deleted, failed validation) —
+ * the case that previously logged an indistinguishable BotId.
+ *
+ * Never throws: telemetry must not be able to fail a chat request.
+ */
+export const createTelemetryMiddleware = async (
+  context: Partial<ChatContext>,
+): Promise<Partial<ChatContext>> => {
+  const requestId = context.requestId ?? randomUUID();
+  const telemetry: RequestTelemetry = {
+    botId: context.botId,
+    conversationId: context.conversationId,
+    requestId,
+    loopRound: context.mcpLoopRound,
+  };
+
+  try {
+    const botId = context.botId;
+    if (context.promptAgent) {
+      Object.assign(telemetry, {
+        agentKind: 'prompt',
+        agentName: context.promptAgent.name,
+        agentSource: 'admin',
+        agentApplied: true,
+      } satisfies Partial<RequestTelemetry>);
+    } else if (context.m365Agent) {
+      Object.assign(telemetry, {
+        agentKind: 'm365',
+        agentName: context.m365Agent.name,
+        agentSource: 'admin',
+        agentApplied: true,
+      } satisfies Partial<RequestTelemetry>);
+    } else if (context.agentMode && context.model?.agentId) {
+      // Foundry agent execution path (AgentEnricher → AgentChatHandler).
+      Object.assign(telemetry, {
+        agentKind: 'foundry',
+        agentName: context.model.name || context.model.agentId,
+        agentSource: context.agentSourcePath ?? 'catalog',
+        agentApplied: true,
+      } satisfies Partial<RequestTelemetry>);
+    } else if (botId?.startsWith('prompt-')) {
+      Object.assign(telemetry, { agentKind: 'prompt', agentApplied: false });
+    } else if (botId?.startsWith('m365-')) {
+      Object.assign(telemetry, { agentKind: 'm365', agentApplied: false });
+    } else if (botId) {
+      // Static / admin org RAG agent. RAGEnricher runs for ANY remaining
+      // botId and resolves through the same registry (cached), so this
+      // mirrors exactly whether retrieval will happen.
+      const resolved = await resolveOrgAgentById(botId);
+      if (resolved) {
+        const accessService = AgentAccessService.getInstance();
+        const adminRecord = accessService.isEnabled()
+          ? accessService.getOrgAgentById(botId)
+          : null;
+        Object.assign(telemetry, {
+          agentKind: 'rag',
+          agentName: resolved.name,
+          agentSource: adminRecord ? 'admin' : 'static',
+          agentApplied: true,
+        } satisfies Partial<RequestTelemetry>);
+      } else {
+        Object.assign(telemetry, { agentKind: 'rag', agentApplied: false });
+      }
+    }
+  } catch (error) {
+    console.warn(
+      '[TelemetryMiddleware] Agent resolution for telemetry failed; logging correlation ids only:',
+      error instanceof Error ? error.message : error,
+    );
+  }
+
+  return { requestId, telemetry };
+};
+
+/**
+ * Resolves admin-configured usage limits for this caller and REJECTS the
+ * request when one is exceeded (docs/LIMITS.md).
+ *
+ * ⚠ MUST run LAST in buildChatContext, after createCredentialMiddleware.
+ * Three reasons, all load-bearing:
+ *  1. `modelId`/`model` are final here — including byom and prompt-agent
+ *     swaps — so a per-model limit is checked against the model that will
+ *     actually be served, not the one the client asked for.
+ *  2. `searchMode` / `interpreterMode` / `mcpServers` are populated, so the
+ *     feature gates can see what this request will actually do.
+ *  3. Nothing after it in buildChatContext can throw (only metrics init and
+ *     a console.log follow), so a counter reservation can never be stranded
+ *     by a later stage failing. The chat route's catch block receives only
+ *     the error and never the context, so a compensating release() called
+ *     from there would be unreachable — running last removes the need for one.
+ *
+ * Fails OPEN on any internal error: a quota is a cost control, and a storage
+ * blip must not become a chat outage. Denials are surfaced as
+ * RATE_LIMIT_QUOTA_EXCEEDED, which the route maps to 403 (NOT 429 — see the
+ * comment there).
+ */
+export async function createLimitsMiddleware(
+  context: ChatContext,
+): Promise<Partial<ChatContext>> {
+  try {
+    const policy = await currentPolicy();
+    // No policy authored (or never loaded): everything resolves to the
+    // compiled catalog defaults, i.e. unlimited — nothing to check or count.
+    if (policy === null) {
+      return {};
+    }
+
+    const principal = buildPrincipal({ user: context.user } as Session);
+    const modelId = context.modelId;
+    const series = context.model?.series;
+
+    // byom models run against the USER'S OWN Foundry account under their own
+    // OBO token and cost the org nothing, so per-model caps are skipped
+    // unless an admin opts in.
+    const byomExempt =
+      !policy?.countByomUsage && (modelId?.startsWith('byom-') ?? false);
+
+    const gates: Array<[string, boolean]> = [
+      ['feature.webSearch.enabled', isSearchActive(context.searchMode)],
+      [
+        'feature.codeInterpreter.enabled',
+        context.interpreterMode !== undefined &&
+          context.interpreterMode !== InterpreterMode.OFF,
+      ],
+      ['feature.mcp.enabled', (context.mcpServers?.length ?? 0) > 0],
+    ];
+
+    // Model availability first: it is the limit an admin is most likely to
+    // have set, and the clearest thing to tell a user.
+    if (!byomExempt) {
+      const modelGate = checkGate(
+        policy,
+        principal,
+        'model.allowed',
+        modelId,
+        series,
+      );
+      throwIfDenied(modelGate, context);
+    }
+
+    for (const [limitKey, active] of gates) {
+      if (!active) continue;
+      throwIfDenied(checkGate(policy, principal, limitKey), context);
+    }
+
+    // ── Counters. `chat.messagesPerDay`, `model:<id>.requests` and
+    //    `family:<series>.requests` are CONJUNCTIVE — all must pass — and are
+    //    debited in ONE compare-and-swap so a request can never consume one
+    //    budget without the other.
+    //
+    //    An MCP tool-loop continuation is the same logical message as the turn
+    //    that started it, so only round 0 is counted; otherwise a single
+    //    question costs a user five messages.
+    const isToolLoopContinuation = (context.mcpLoopRound ?? 0) > 0;
+    if (!isToolLoopContinuation) {
+      const cells = [
+        ...meteredCells(policy, principal, 'chat.messagesPerDay'),
+        ...(byomExempt
+          ? []
+          : meteredCells(policy, principal, 'model.requests', modelId, series)),
+      ];
+      if (cells.length > 0) {
+        const reservation = await reserve(
+          principal.userId,
+          'day',
+          cells.map((cell) => ({
+            cell: counterCellName(cell),
+            cost: 1,
+            limit: cell.value as number,
+            limitKey: cell.limitKey,
+            source: cell.source,
+            ...(cell.modelId ? { modelId: cell.modelId } : {}),
+            ...(cell.series ? { series: cell.series } : {}),
+          })),
+          {
+            timezone: policy?.timezone ?? 'UTC',
+            failMode: policy?.failMode ?? 'open',
+          },
+        );
+        if (!reservation.allowed && reservation.denial) {
+          throwIfDenied(
+            applyMode(policy, principal, {
+              limitKey: reservation.denial.limitKey,
+              limit: reservation.denial.limit,
+              used: reservation.denial.used,
+              resetAt: reservation.denial.resetAt,
+              source: (reservation.denial.source ??
+                'global') as ResolvedLimit['source'],
+              ...(reservation.denial.modelId
+                ? { modelId: reservation.denial.modelId }
+                : {}),
+              ...(reservation.denial.series
+                ? { series: reservation.denial.series }
+                : {}),
+            }),
+            context,
+          );
+        }
+      }
+    }
+
+    // Pre-flight token budget: read-only, and only reaches storage when a
+    // token limit is actually configured for this principal. Soft by nature —
+    // see lib/services/limits/tokenDebit.ts.
+    if (!isToolLoopContinuation) {
+      const overBudget = await checkTokenBudget(context.user);
+      if (overBudget) {
+        throwIfDenied(
+          applyMode(policy, principal, {
+            limitKey: overBudget.limitKey,
+            limit: overBudget.limit,
+            used: overBudget.used,
+            resetAt: resetAt(
+              overBudget.limitKey === 'chat.tokensPerMonth' ? 'month' : 'day',
+              policy?.timezone ?? 'UTC',
+            ),
+            source: 'global',
+          }),
+          context,
+        );
+      }
+    }
+
+    // Ceilings downstream code CLAMPS to rather than rejecting on.
+    const ceilings: Record<string, number> = {};
+    for (const key of ['feature.mcp.roundsPerRequest']) {
+      const value = effectiveCeiling(policy, principal, key);
+      if (value !== undefined) ceilings[key] = value;
+    }
+
+    // Precompute which fallback targets this caller is blocked from, so a
+    // DeploymentNotFound retry cannot silently reroute to a model an admin
+    // denied them. `isModelBlocked` checks the model cell AND (when the
+    // model declares one) its family cell — the same conjunctive resolution
+    // `checkGate` uses at send time and `/api/models` uses in the picker
+    // (docs/LIMITS_USER_FACING_UX.md §8.1) — so a family-level
+    // `model.allowed=false` keeps every member out of the fallback chain,
+    // not just a model individually named in policy. Pure resolution — no
+    // storage, no per-model round trip.
+    const blockedModelIds = policy
+      ? getFallbackChain().filter((id) =>
+          isModelBlocked(
+            policy,
+            principal,
+            id,
+            OpenAIModels[id as OpenAIModelID]?.series,
+          ),
+        )
+      : [];
+
+    return {
+      limits: {
+        policy,
+        principal,
+        ceilings,
+        blockedModelIds,
+        ...(byomExempt ? { byomExempt } : {}),
+      },
+    };
+  } catch (error) {
+    if (error instanceof PipelineError) throw error;
+    // FAIL OPEN — see the module docblock in LimitsService.
+    console.error(
+      `[limits] middleware FAIL-OPEN (request allowed): ${sanitizeForLog(error)}`,
+    );
+    return {};
+  }
+}
+
+function isSearchActive(searchMode: SearchMode | undefined): boolean {
+  return searchMode !== undefined && searchMode !== SearchMode.OFF;
+}
+
+/**
+ * Converts a denial into the pipeline error the route renders. Observe mode
+ * never reaches here with `allowed: false`, so the mode switch stays in one
+ * place (applyMode) rather than being re-implemented per call site.
+ */
+function throwIfDenied(result: LimitCheckResult, context: ChatContext): void {
+  if (result.allowed || !result.denial) return;
+  const { denial } = result;
+  // The MESSAGE is what the user reads (ApiError.getUserMessage surfaces it
+  // verbatim for rate-limit codes); the METADATA is for support and the
+  // client's error card. The internal limit key stays out of the sentence.
+  throw PipelineError.critical(
+    ErrorCode.RATE_LIMIT_QUOTA_EXCEEDED,
+    denialMessage(denial),
+    {
+      limitKey: denial.limitKey,
+      limit: denial.limit,
+      ...(denial.used !== undefined ? { used: denial.used } : {}),
+      ...(denial.resetAt ? { resetAt: denial.resetAt } : {}),
+      ...(denial.modelId ? { modelId: denial.modelId } : {}),
+      ...(denial.series ? { series: denial.series } : {}),
+      requestModelId: context.modelId,
+    },
+  );
+}
 
 /**
  * Builds the initial ChatContext from a NextRequest.
@@ -939,6 +1605,16 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
     authMiddleware,
     requestParsingMiddleware,
   ]);
+
+  // Keep the raw request on the context: request-bound in-process tools
+  // (builtin M365 executor) mint delegated Graph tokens from it.
+  context.request = req;
+
+  // Group-membership warm-up MUST precede createCredentialMiddleware and
+  // createLimitsMiddleware: both evaluate group-scoped rules via sync cache
+  // reads (getCachedGroupIdsForMail / getCachedGroupIdsForUser). Never
+  // throws; a no-op while the 10-minute TTL holds.
+  await resolveUserGroupIds(req, context.session ?? null);
 
   // Apply middleware that depends on previous middleware
   context = {
@@ -966,6 +1642,18 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
   context = {
     ...context,
     ...(await createCredentialMiddleware(context, req)),
+  };
+
+  context = {
+    ...context,
+    ...(await createTelemetryMiddleware(context)),
+  };
+
+  // Usage limits LAST: the model is final, the feature flags are populated,
+  // and nothing after this can throw. See createLimitsMiddleware.
+  context = {
+    ...context,
+    ...(await createLimitsMiddleware(context)),
   };
 
   // Initialize metrics

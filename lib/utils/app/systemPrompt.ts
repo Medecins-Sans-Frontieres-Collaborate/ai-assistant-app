@@ -15,6 +15,77 @@
  */
 
 /**
+ * Formatting rules that are a CONTRACT WITH THE RENDERER, not editorial
+ * taste: the chat UI renders markdown through Streamdown -> remark-math ->
+ * KaTeX, which understands `$`/`$$` delimiters and nothing else. A model
+ * that defaults to `\( ... \)` / `\[ ... \]` (what GPT/o-series do with no
+ * guidance) produces raw LaTeX on screen — issue #121.
+ *
+ * Exported, and interpolated into DEFAULT_BASE_SYSTEM_PROMPT below so there
+ * is exactly ONE copy of the text, because every path that REPLACES the base
+ * prompt with an agent's own prompt has to re-append it (see
+ * buildAgentPromptSections).
+ *
+ * Renderer coupling to keep in sync: `$$` is the ONLY delimiter that renders
+ * here, inline or display. Streamdown pins remark-math with
+ * `singleDollarTextMath: false` (measured on 1.6.11), so `$E = mc^2$` reaches
+ * the reader as literal text — which is why the inline bullet below asks for
+ * `$$` on one line, and why the render-time normalizer rewrites `\( ... \)`
+ * to `$$ ... $$` rather than `$ ... $`. If `singleDollarTextMath` is ever
+ * turned on, the inline bullet and `normalizeMathDelimiters` change together.
+ */
+export const RESPONSE_FORMATTING_PROMPT_SECTION = `## Response Formatting
+
+### Markdown
+- Use GitHub-flavored markdown for formatting
+- Use headers (##, ###) to organize longer responses
+- Use code blocks with language identifiers: \`\`\`typescript, \`\`\`python
+- Use inline \`code\` for file names, function names, and technical terms
+
+### Code Blocks
+- Always specify the language for syntax highlighting
+- For file references, indicate the path when helpful
+- Prefer complete, runnable examples over fragments
+- Even in scripts, please use well-named and wrapped functions / classes, as appropriate
+
+### Mathematical Notation / Formulas
+- Write mathematics as LaTeX inside DOUBLE dollar delimiters (rendered with KaTeX) unless the user requests otherwise
+- Inline math: \`$$ ... $$\` kept on ONE line inside the sentence — e.g. \`the ratio $$E = mc^2$$ holds\`
+- Display math: \`$$\` alone on its own line above and below the expression, with a blank line before and after the block
+- Single dollar signs are NOT math delimiters here — \`$5,000\` is a price, and \`$x$\` would be shown to the user as literal text
+- Never use \`\\( ... \\)\`, \`\\[ ... \\]\`, or a \`\`\`latex code fence — this app does not render them and the user sees raw LaTeX
+- Keep a display block continuous: no blank lines inside \`$$ ... $$\` (inside \`aligned\`/\`cases\`, break lines with \`\\\\\`)
+- Write a literal percent sign as \`\\%\` — a bare \`%\` opens a TeX comment and silently deletes the rest of the line (including a \`\\\\\` row break)
+- Prefer display math for complex equations, proofs, and multi-step derivations`;
+
+/**
+ * Mermaid guidance — same renderer-contract reasoning as
+ * RESPONSE_FORMATTING_PROMPT_SECTION: an agent prompt that replaces the base
+ * prompt loses it, and the model then emits diagram syntax the app cannot
+ * render.
+ */
+export const DIAGRAMS_PROMPT_SECTION = `## Diagrams
+
+When visual explanation helps, use Mermaid diagrams in fenced code blocks.
+
+### Flowchart Syntax (most common errors happen here)
+- Always use node IDs with labels: \`A["Start"] --> B["End"]\` NOT \`["Start"] --> ["End"]\`
+- Include direction: \`flowchart TD\` (top-down) or \`flowchart LR\` (left-right)
+- Node IDs must be alphanumeric without spaces
+- Escape special characters in labels: \`&\` → \`&amp;\`, \`<\` → \`&lt;\`
+
+### Supported Diagram Types
+- \`flowchart\` - Processes, workflows (use instead of deprecated \`graph\`)
+- \`sequenceDiagram\` - Actor interactions over time
+- \`stateDiagram-v2\` - State machines
+- \`classDiagram\` - UML class relationships
+- \`erDiagram\` - Database entity relationships
+- \`pie\` - Proportional data
+- \`gantt\` - Project timelines
+- \`mindmap\` - Hierarchical ideas
+- \`journey\` - User experience flows`;
+
+/**
  * Default base system prompt content.
  * Can be overridden via BASE_SYSTEM_PROMPT environment variable.
  */
@@ -46,10 +117,11 @@ If asked about the AI Assistant's features, privacy, or usage guidelines, provid
   - Audio/video transcription with optional translation
   - File uploads
   - Camera (useful on mobile devices)
-- We do not currently natively integrate with other tools or services, even M365 services, that access user data. Any operations here require the user to copy and paste the content into the application.
+- Unless a "Connected Tools (MCP)" section appears later in this prompt, we do not natively integrate with other tools or services that access user data — any such operations require the user to copy and paste the content into the application. When that section IS present, the connectors it lists are genuinely available to you in this conversation.
+- Microsoft 365 integration may be available if the user has connected it in Settings → Connections: attaching files from OneDrive/SharePoint, importing emails or email threads as attachments (all via the plus icon), and saving exports to OneDrive (via the Download menu). These are user-driven UI actions — you cannot browse or fetch M365 content yourself; suggest the plus-icon options when relevant.
 - Users can use voice inputs rather than typing. Clicking the record icon will start this, but they have to click again to stop when done.
 - Every assistant response has a Download button in its action bar (below the message, next to Copy, Regenerate, and Open as Document). It exports the response as Markdown, HTML, Word (.docx), Plain Text, or PDF.
-- You cannot attach, send, or generate files yourself. When a user asks you to "send", "email", "download", "export", or "save" a response as a file, direct them to the Download button rather than promising a file, and do not ask for more information to "create" the download — the export happens entirely in the UI from content you have already written.
+- Whether you can GENERATE files yourself depends on the Code Interpreter — follow the "Files & Exports" or "Code Execution & File Generation" section later in this prompt.
 
 ## Communication
 
@@ -81,47 +153,9 @@ You are an AI tool, not a human colleague or subject matter expert:
 - Be clear that you do not know everything about the application and any advice there is generic
 - Be clear, when relevant, that you do not know anything about the user outside of the current conversation. So you cannot make assessments made on other conversations or context 
 
-## Response Formatting
+${RESPONSE_FORMATTING_PROMPT_SECTION}
 
-### Markdown
-- Use GitHub-flavored markdown for formatting
-- Use headers (##, ###) to organize longer responses
-- Use code blocks with language identifiers: \`\`\`typescript, \`\`\`python
-- Use inline \`code\` for file names, function names, and technical terms
-
-### Code Blocks
-- Always specify the language for syntax highlighting
-- For file references, indicate the path when helpful
-- Prefer complete, runnable examples over fragments
-- Even in scripts, please use well-named and wrapped functions / classes, as appropriate
-
-### Mathematical Notation / Formulas
-- Use KaTeX for mathematical proofs, equations, and formulas unless the user requests otherwise
-- Always use double dollar signs for math: \`$$E = mc^2$$\`
-- For display/block math, place \`$$...$$\` on its own line with blank lines before and after
-- For inline math within sentences, use \`$$...$$\` inline with the text
-- Prefer display math for complex equations, proofs, and multi-step derivations
-
-## Diagrams
-
-When visual explanation helps, use Mermaid diagrams in fenced code blocks.
-
-### Flowchart Syntax (most common errors happen here)
-- Always use node IDs with labels: \`A["Start"] --> B["End"]\` NOT \`["Start"] --> ["End"]\`
-- Include direction: \`flowchart TD\` (top-down) or \`flowchart LR\` (left-right)
-- Node IDs must be alphanumeric without spaces
-- Escape special characters in labels: \`&\` → \`&amp;\`, \`<\` → \`&lt;\`
-
-### Supported Diagram Types
-- \`flowchart\` - Processes, workflows (use instead of deprecated \`graph\`)
-- \`sequenceDiagram\` - Actor interactions over time
-- \`stateDiagram-v2\` - State machines
-- \`classDiagram\` - UML class relationships
-- \`erDiagram\` - Database entity relationships
-- \`pie\` - Proportional data
-- \`gantt\` - Project timelines
-- \`mindmap\` - Hierarchical ideas
-- \`journey\` - User experience flows
+${DIAGRAMS_PROMPT_SECTION}
 
 ## Reasoning
 
@@ -202,7 +236,59 @@ export interface SystemPromptOptions {
   conversationSummary?: string;
   /** Long-term user memory snippets (Memories feature) */
   memories?: string[];
+  /**
+   * Whether the code interpreter is active for this conversation
+   * (interpreterMode on + env gate). Adds a capabilities section so models
+   * offer file generation/analysis instead of claiming they can't produce
+   * files — e.g. exporting earlier conversation content as a spreadsheet.
+   */
+  codeInterpreterAvailable?: boolean;
+  /**
+   * Whether automatic web search is active for this conversation
+   * (searchMode INTELLIGENT/ALWAYS). Adds a section telling models how to
+   * behave WITH injected results (ground + cite) and WITHOUT them (no live
+   * data this turn — don't fabricate currency or claim to have browsed).
+   */
+  webSearchActive?: boolean;
 }
+
+/**
+ * Capabilities section rendered when automatic web search is active.
+ * Covers both conditions a turn can be in — results injected vs. a normal
+ * response with no live data. Exported for prompt-overriding paths.
+ */
+export const WEB_SEARCH_PROMPT_SECTION =
+  '## Web Search\n' +
+  'Live web search runs automatically before your turn when the question needs current information.\n' +
+  '- When the user message contains a "Web Search results:" block: ground your answer in those results and cite sources with separate bracketed markers like [1][2] (never [1, 2]). Do not repeat source URLs, titles, or dates in your text — citations are displayed to the user separately.\n' +
+  '- When there is NO such block: no live search ran for this turn. Answer from your knowledge, do not fabricate current facts or claim to have browsed the web, and note when time-sensitive information may be out of date. The user can force a search with the "Web Search" toggle in the composer.';
+
+/**
+ * Capabilities section rendered when the code interpreter is active.
+ * Exported so prompt-overriding paths (org-agent prompts) can re-append it.
+ */
+export const CODE_INTERPRETER_PROMPT_SECTION =
+  '## Code Execution & File Generation\n' +
+  'A sandboxed Python code interpreter is available in this conversation. It can:\n' +
+  '- Analyze attached files (CSV, Excel, JSON, documents, images) with real code, not estimation\n' +
+  '- Run calculations, statistics, and simulations, and generate charts\n' +
+  '- CREATE downloadable files (.xlsx, .csv, .docx, .png, …) — including from content earlier in this conversation, e.g. exporting discussed data as a spreadsheet or turning notes into a document\n' +
+  'Generated files are automatically shown to the user with previews and download links. ' +
+  'When the user asks for output "as a file", a spreadsheet, a document, or a chart, FAVOR producing a real file via code execution over pasting content as markdown or pointing at the Download button (the Download button remains fine for exporting the response text itself). ' +
+  'Refer to generated files by filename only — never invent links.';
+
+/**
+ * File-output guidance rendered when the code interpreter is NOT active:
+ * the assistant cannot generate files, so downloads happen via the UI —
+ * and the user can enable the Code Interpreter for real file generation.
+ * Mutually exclusive with CODE_INTERPRETER_PROMPT_SECTION (which favors
+ * genuine file creation); keeping both static would be contradictory.
+ */
+export const NO_FILE_GENERATION_PROMPT_SECTION =
+  '## Files & Exports\n' +
+  'You cannot attach, send, or generate files yourself in this conversation (the Code Interpreter is off). ' +
+  'When a user asks you to "send", "email", "download", "export", or "save" a response as a file, direct them to the Download button in the response action bar (Markdown, HTML, Word (.docx), Plain Text, or PDF) rather than promising a file — the export happens entirely in the UI from content you have already written, so do not ask for more information to "create" it. ' +
+  'If they want a genuinely generated file (e.g. an .xlsx spreadsheet, a .csv export, or a chart image), let them know they can enable the Code Interpreter in the model settings panel.';
 
 /**
  * Renders the '## Earlier Conversation Summary' and '## User Memories'
@@ -241,6 +327,83 @@ export function buildConversationContextSections(
         memoryItems.map((m) => `- ${m}`).join('\n'),
     );
   }
+
+  return sections.join('\n\n');
+}
+
+/**
+ * Top-level headings a replaced prompt must not lose, because they describe
+ * what the RENDERER can display rather than a style preference.
+ */
+const FORMATTING_SECTION_HEADINGS = [
+  '## Response Formatting',
+  '## Diagrams',
+] as const;
+
+/**
+ * Slices one top-level `## ` section out of a prompt, heading included,
+ * stopping at the next top-level heading (so the `### ` subsections come
+ * along). Anchored to a line start so a `### Response Formatting` subheading
+ * elsewhere can never be mistaken for the section itself.
+ *
+ * Returns undefined when the prompt has no such section — the signal that an
+ * operator override carries different structure and the caller must fall
+ * back to the built-in constants.
+ */
+function extractPromptSection(
+  prompt: string,
+  heading: string,
+): string | undefined {
+  const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = new RegExp(`(?:^|\\n)${escaped}\\n`).exec(prompt);
+  if (!match) return undefined;
+
+  const body = prompt.slice(match.index + match[0].length);
+  const next = body.search(/\n## /);
+  return `${heading}\n${next === -1 ? body : body.slice(0, next)}`.trimEnd();
+}
+
+/**
+ * Everything an agent prompt that REPLACES context.systemPrompt has to get
+ * back: the formatting/diagram rules plus the conversation-context block.
+ *
+ * Why the rules are READ OUT of the effective base prompt instead of being
+ * emitted from the constants directly: BASE_SYSTEM_PROMPT is overridable via
+ * an env var, and a deployment that rewrote `## Response Formatting` must get
+ * ITS wording on agent paths too — otherwise agent responses would silently
+ * follow different rules than normal chat, and appending the built-in copy on
+ * top of an override that already has its own section would inject a stale
+ * duplicate the model has to reconcile. Extraction keeps the two in lockstep
+ * by construction, with a single source of truth.
+ *
+ * The constants are the fallback for an override that carries NO such
+ * section: the `$`/`$$` delimiter rules are a renderer contract, and an agent
+ * with no math guidance at all emits `\( ... \)` and the user sees raw LaTeX
+ * (issue #121). An operator who deliberately strips the section still gets
+ * the built-in rules; that is the intended trade — the alternative
+ * (returning nothing) reinstates the reported bug on overridden deployments.
+ *
+ * `basePrompt` is injectable for tests; production callers pass nothing.
+ */
+export function buildAgentPromptSections(
+  conversationSummary?: string,
+  memories?: string[],
+  basePrompt: string = BASE_SYSTEM_PROMPT,
+): string {
+  const extracted = FORMATTING_SECTION_HEADINGS.map((heading) =>
+    extractPromptSection(basePrompt, heading),
+  ).filter((section): section is string => !!section);
+
+  const sections =
+    extracted.length > 0
+      ? extracted
+      : [RESPONSE_FORMATTING_PROMPT_SECTION, DIAGRAMS_PROMPT_SECTION];
+
+  const conversationContext = buildConversationContextSections(
+    conversationSummary,
+    memories,
+  );
+  if (conversationContext) sections.push(conversationContext);
 
   return sections.join('\n\n');
 }
@@ -300,6 +463,21 @@ function buildDynamicContext(options: SystemPromptOptions): string {
       }
       parts.push(userSection);
     }
+  }
+
+  // Tool capability awareness (only when the feature is active for this
+  // conversation, so prompts stay lean when it's off)
+  if (options.webSearchActive) {
+    parts.push('\n' + WEB_SEARCH_PROMPT_SECTION);
+  }
+  // File-output guidance is interpreter-aware and mutually exclusive: with
+  // the interpreter ON, favor real file generation; with it OFF, the model
+  // must not promise files — UI download or suggest enabling the
+  // interpreter. The static base prompt defers to whichever renders here.
+  if (options.codeInterpreterAvailable) {
+    parts.push('\n' + CODE_INTERPRETER_PROMPT_SECTION);
+  } else {
+    parts.push('\n' + NO_FILE_GENERATION_PROMPT_SECTION);
   }
 
   // Compaction summary + memories sections (same block RAGEnricher re-appends

@@ -70,6 +70,8 @@ export interface OrganizationAgent {
   ragConfig?: RAGConfig;
   /** Allow web search alongside RAG (RAG agents only) */
   allowWebSearch?: boolean;
+  /** Allow sandboxed code execution alongside RAG (RAG agents only) */
+  allowCodeInterpreter?: boolean;
 
   // ========================================
   // Foundry Agent Fields (type: 'foundry')

@@ -171,6 +171,11 @@ export interface MessageToolArtifacts {
    */
   toolCalls?: ToolCallRecord[];
   /**
+   * MCP turn plan captured from the stream. Echoed back to the (stateless)
+   * server on approval resume so plan progress survives the pause.
+   */
+  mcpPlan?: import('./mcp').McpPlan;
+  /**
    * Persisted consent / OAuth prompts emitted during this turn. Saved so a turn
    * that contained only a consent card (no assistant text) still renders its
    * card after the stream finalizes and on conversation reload.
@@ -280,6 +285,14 @@ export interface ChatBody {
   prompt: string;
   temperature: number;
   botId: string | undefined;
+  /**
+   * Explicit agent-attachment signal: botId was attached to the
+   * conversation via the capabilities tray, independent of the model.
+   * See InputValidator's ChatBodySchema for the server-side contract.
+   */
+  agentAttached?: boolean;
+  /** Telemetry-only correlation id (conversation.id); never used for routing. */
+  conversationId?: string;
   stream?: boolean;
   threadId?: string; // Azure AI Agent thread ID
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
@@ -347,6 +360,21 @@ export interface ChatBody {
   /** 0-based MCP tool-loop round counter; the server caps it (see loop). */
   mcpLoopRound?: number;
   /**
+   * Message ids whose phishing-screen flag the user explicitly overrode
+   * ("show it anyway") via the flagged tool-record UI. Persisted in
+   * conversation state client-side and echoed on each request; the M365
+   * mail tools honor ONLY this payload field, never a tool argument. Caps:
+   * 20 ids x 512 chars, Graph-id charset (enforced in InputValidator).
+   */
+  m365MailScreenOverrides?: string[];
+  /** Shared mailbox addresses the user configured (fifth pass tier 3). */
+  m365SharedMailboxes?: string[];
+  /**
+   * MCP turn plan echoed back on approval resume so plan progress survives
+   * the stateless pause (same protocol as mcpPendingToolCalls).
+   */
+  mcpPlan?: import('./mcp').McpPlan;
+  /**
    * Structured data extraction payload. Up to 3 recipes; the chat pipeline
    * picks this up via `ExtractionEnricher` and issues a strict JSON-schema
    * call (`StandardChatHandler` honours `context.responseFormat`).
@@ -384,13 +412,27 @@ export interface Conversation {
   prompt: string;
   temperature: number;
   folderId: string | null;
+  /**
+   * Attached agent id (org/prompt/m365/orgr/static ids; sent as `botId`).
+   * Historically written only as a mirror of an agent-shaped `model.id`;
+   * since the capabilities tray it is independently settable, so a bot
+   * alongside a REAL model means "agent attached to this conversation"
+   * (the request then carries `agentAttached: true`).
+   */
   bot?: string;
+  /**
+   * Real model id remembered when attaching a Foundry agent swapped the
+   * conversation model onto the agent's synthesized entry; detach restores
+   * it. Absent for knowledge/persona attachments (model never changes).
+   */
+  agentPrevModelId?: string;
   createdAt?: string;
   updatedAt?: string;
   threadId?: string; // Azure AI Agent thread ID
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
   defaultSearchMode?: import('./searchMode').SearchMode; // Default search mode for this conversation
+  defaultInterpreterMode?: import('./interpreterMode').InterpreterMode; // Default code-interpreter mode for this conversation
   /**
    * Which region's hosted instance this conversation chats with. Set from
    * the details panel (US users, dually-hosted models) or implicitly when a
@@ -398,6 +440,27 @@ export interface Conversation {
    * server forces EU regardless.
    */
   hostedRegion?: 'US' | 'EU';
+  /**
+   * McpServerConfig.id of a connector this conversation is FOCUSED on: when
+   * set (and the server is still enabled), only that connector's tools are
+   * declared to the model — other connected servers are omitted for the
+   * turn. Cleared from the chip in the chat input. A stale id (server
+   * removed/disabled) is ignored rather than blocking the chat.
+   */
+  pinnedMcpServerId?: string;
+  /**
+   * McpServerConfig.ids switched off FOR THIS CONVERSATION in the connector
+   * tray. Purely subtractive on top of the global enabled set — a server
+   * disabled globally stays off regardless, and re-enabling globally does
+   * not resurrect it in chats that opted out. Unknown/stale ids are inert.
+   */
+  disabledMcpServerIds?: string[];
+  /**
+   * Message ids whose phishing-screen flag the user explicitly overrode via
+   * the tool-record affordance (fifth pass). Sent with every request so the
+   * mail tools can label-and-show those bodies; never model-writable.
+   */
+  m365MailScreenOverrides?: string[];
   // Active file context (optional; initialized via migration)
   activeFiles?: ActiveFile[];
   activeFilesTokenBudget?: number;
@@ -524,11 +587,48 @@ export interface FilePreview {
 }
 
 // Tool Router Types
-export type ToolType = 'web_search';
+export type ToolType = 'web_search' | 'code_interpreter';
 
 export interface ToolRouterResponse {
   tools: ToolType[];
   searchQuery?: string;
+  /**
+   * Full ordered query list for multi-aspect questions (first entry ===
+   * searchQuery). Usually length 1 — the router is instructed to prefer a
+   * single query and only split genuinely separable information needs.
+   * Hard-capped at 5.
+   */
+  searchQueries?: string[];
+  /**
+   * Recency the query implies ('day' for breaking news, 'week'/'month' for
+   * recent developments). Only meaningful when tools includes 'web_search'
+   * and the user's freshness setting is 'auto'.
+   */
+  searchRecency?: 'day' | 'week' | 'month';
+  /**
+   * True for research-style questions that benefit from MORE sources than
+   * the configured default (comparisons, surveys, "give me an overview").
+   */
+  searchComprehensive?: boolean;
+  /**
+   * True when the user is asking a follow-up about search results already
+   * cited earlier in the conversation — the enricher then re-fetches those
+   * cited articles for their full text instead of (or before) running a
+   * fresh search. Only produced when the request offered prior citations.
+   */
+  searchFollowUp?: boolean;
+  /**
+   * What the interpreter should do, phrased as a self-contained task.
+   * Present when tools includes 'code_interpreter'.
+   */
+  codeTask?: string;
+  /**
+   * True when the classifier call itself failed and the empty tools list is
+   * a FALLBACK, not a decision. Callers surface this to the user — a dead
+   * router (expired credential, schema rejection) must not be
+   * indistinguishable from "no tools needed".
+   */
+  degraded?: boolean;
   reasoning?: string; // Optional reasoning for debugging
 }
 
@@ -536,6 +636,28 @@ export interface ToolRouterRequest {
   messages: Message[];
   currentMessage: string;
   forceWebSearch?: boolean; // When true, always use web search (search mode enabled)
+  forceCodeInterpreter?: boolean; // When true, always run the code interpreter (InterpreterMode.ALWAYS)
+  /**
+   * Whether the router should even CONSIDER code execution. False when
+   * interpreterMode is OFF (or the feature is env-disabled) so the
+   * classifier prompt/schema stay identical to the pre-interpreter shape.
+   */
+  considerCodeExecution?: boolean;
+  /**
+   * Whether earlier assistant turns carry web-search citations the user
+   * could be following up on. Gates the searchFollowUp classification so
+   * the prompt/schema stay unchanged for citation-less conversations.
+   */
+  hasPriorSearchCitations?: boolean;
+  /**
+   * Whether the user supplied their own source material this turn
+   * (uploaded files/images/audio or a large pasted text block). The
+   * classifier then defaults to needsWebSearch=false — web results would
+   * dilute the provided sources — unless the message explicitly asks for
+   * a search. SearchMode.ALWAYS bypasses the classifier entirely and is
+   * unaffected.
+   */
+  hasUserProvidedContent?: boolean;
 }
 
 // Persistent File Context types

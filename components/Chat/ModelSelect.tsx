@@ -21,6 +21,7 @@ import { useLocalRuntimeModels } from '@/client/hooks/useLocalRuntimeModels';
 
 import { isLocalModel } from '@/lib/services/models/localModels';
 
+import { isAgentShapedModelId } from '@/lib/utils/app/agentAttachment';
 import { shortSourceHash } from '@/lib/utils/app/agentId';
 import { modelIdToLocaleKey } from '@/lib/utils/app/locales';
 import {
@@ -57,6 +58,7 @@ import {
 import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
 import { ModelStatusBadge } from './ModelSelect/ModelStatusBadge';
+import { useModelAvailabilityMap } from './ModelSelect/modelLimits';
 import { SHOW_RECOMMENDED_TAG } from './ModelSelect/showRecommendedTag';
 import { ModelSourceForm } from './ModelSources/ModelSourceForm';
 
@@ -106,8 +108,15 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   const { exploreBots, enableClaudeModels, enableBYOModels } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
-  const { models, defaultModelId, setDefaultModelId, setDefaultSearchMode } =
-    useSettings();
+  const { models, defaultModelId, setDefaultModelId } = useSettings();
+  // The caller's per-model usage-limit verdicts (one subscription for the
+  // whole list). Everything reads `available` unless the policy is enforced
+  // and readable, so the picker is byte-for-byte today's UI otherwise.
+  const {
+    lookup: limitFor,
+    isSelectable: isNotExhausted,
+    refetch: refetchLimits,
+  } = useModelAvailabilityMap();
 
   // Feature flag: Control organization bots visibility via LaunchDarkly
   // Default to true if LaunchDarkly is not configured (for local development)
@@ -116,18 +125,25 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   // Dynamically discovered Foundry agents (RBAC-filtered per user)
   const {
     foundryAgents,
+    suppressedOrgAgentIds,
     regionalPath,
     officePaths,
     isLoadingFoundryAgents,
+    isDiscoveryLoading,
+    isFoundryAgentsError,
+    isDiscoveryError,
     refetchFoundryAgents,
+    retryFoundryAgents,
   } = useFoundryAgents();
 
   const selectedModelId = selectedConversation?.model?.id || defaultModelId;
 
-  // Check if the currently selected model is a custom/foundry agent
+  // Open on the Agents tab when an agent is selected — a legacy
+  // custom/foundry model id, or a decoupled attachment (conversation.bot).
   const isSelectedModelAgent =
     selectedModelId?.startsWith('custom-') ||
     selectedModelId?.startsWith('foundry-') ||
+    !!selectedConversation?.bot ||
     false;
 
   // Custom hooks for state management
@@ -337,8 +353,14 @@ export const ModelSelect: FC<ModelSelectProps> = ({
         );
 
     // Static agents from organization-agents.json (RAG agents + any static
-    // Foundry agents) are org-managed, so they're skipped when the flag is off.
-    const staticAgents = isBotsEnabled ? getOrganizationAgents() : [];
+    // Foundry agents) are org-managed, so they're skipped when the flag is
+    // off. Entries the server reports as admin-overridden or admin-disabled
+    // are dropped here — the admin record (served below with type 'org')
+    // replaces them, or nothing does (a no-deploy retire).
+    const suppressedIds = new Set(suppressedOrgAgentIds);
+    const staticAgents = isBotsEnabled
+      ? getOrganizationAgents().filter((a) => !suppressedIds.has(a.id))
+      : [];
     const staticModels = staticAgents.map((agent) => {
       const baseModelId =
         (agent.baseModelId as OpenAIModelID) || OpenAIModelID.GPT_4_1;
@@ -374,8 +396,46 @@ export const ModelSelect: FC<ModelSelectProps> = ({
         isOrganizationAgent: true,
       }));
 
+    // M365 file-backed agents (type: 'm365') ride the same org- convention
+    // as prompt agents: the server resolves retrieval + chat model from
+    // botId, and agentId must stay unset (no Foundry promotion).
+    const m365AgentModels = visibleFoundryAgents
+      .filter((agent) => agent.type === 'm365')
+      .map((agent) => ({
+        ...OpenAIModels[OpenAIModelID.GPT_4_1],
+        id: `org-${agent.id}`,
+        name: agent.name,
+        description: agent.description,
+        modelType: undefined,
+        agentId: undefined,
+        isOrganizationAgent: true,
+      }));
+
+    // Admin-authored org RAG agents (type: 'org') ride the same org- id
+    // convention as static RAG agents — conversation.bot carries the agent
+    // id and the server resolves retrieval, system prompt, and chat model
+    // from it. Unlike prompt/m365 agents they carry their tool-toggle gates
+    // on the model object (the client-side gates can't find them in the
+    // static config). agentId must stay unset (no Foundry promotion).
+    const orgAdminAgentModels = visibleFoundryAgents
+      .filter((agent) => agent.type === 'org')
+      .map((agent) => ({
+        ...OpenAIModels[OpenAIModelID.GPT_4_1],
+        id: `org-${agent.id}`,
+        name: agent.name,
+        description: agent.description,
+        modelType: undefined,
+        agentId: undefined,
+        isOrganizationAgent: true,
+        allowWebSearch: agent.allowWebSearch === true,
+        allowCodeInterpreter: agent.allowCodeInterpreter === true,
+      }));
+
     const discoveredFoundryAgents = visibleFoundryAgents.filter(
-      (agent) => agent.type !== 'prompt',
+      (agent) =>
+        agent.type !== 'prompt' &&
+        agent.type !== 'm365' &&
+        agent.type !== 'org',
     );
 
     // Dynamically discovered Foundry agents from ARM API (RBAC-filtered per user).
@@ -408,8 +468,14 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       (m) => !m.agentId || !dynamicAgentNames.has(m.agentId),
     );
 
-    return [...deduplicatedStatic, ...dynamicModels, ...promptAgentModels];
-  }, [isBotsEnabled, foundryAgents, customAgentSources]);
+    return [
+      ...deduplicatedStatic,
+      ...dynamicModels,
+      ...promptAgentModels,
+      ...m365AgentModels,
+      ...orgAdminAgentModels,
+    ];
+  }, [isBotsEnabled, foundryAgents, customAgentSources, suppressedOrgAgentIds]);
 
   // Combine base models, organization/discovered agents, and custom-source models
   // baseModels and customSourceModels are already filtered; agents are
@@ -447,10 +513,32 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   const agentAvailable =
     modelConfig?.agentId !== undefined || selectedModel?.agentId !== undefined;
 
+  // Agents-tab selection: a decoupled attachment (capabilities tray) keeps
+  // the REAL model in selectedModelId, so the tab resolves its highlight
+  // from the attached bot instead; legacy coupled selections keep their
+  // agent-shaped model id and the exact objects they always got.
+  const attachedAgentModelId = selectedConversation?.bot
+    ? `org-${selectedConversation.bot}`
+    : selectedModelId &&
+        (selectedModelId.startsWith('foundry-') ||
+          selectedModelId.startsWith('custom-') ||
+          selectedModelId.startsWith('org-'))
+      ? selectedModelId
+      : undefined;
+  const agentsTabIsLegacySelection = attachedAgentModelId === selectedModelId;
+  const agentsTabSelectedModel = attachedAgentModelId
+    ? agentsTabIsLegacySelection
+      ? selectedModel
+      : availableModels.find((m) => m.id === attachedAgentModelId)
+    : undefined;
+  const agentsTabModelConfig = agentsTabIsLegacySelection ? modelConfig : null;
+  const agentsTabIsCustomAgent = agentsTabIsLegacySelection
+    ? isCustomAgent
+    : false;
+
   // Get current search mode from conversation (default to INTELLIGENT for privacy)
   const currentSearchMode =
     selectedConversation?.defaultSearchMode ?? SearchMode.INTELLIGENT;
-  const searchModeEnabled = currentSearchMode !== SearchMode.OFF;
 
   // For non-agent models, if AGENT mode is somehow set, display as INTELLIGENT in UI
   const displaySearchMode =
@@ -485,7 +573,19 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   ]);
 
   const handleModelSelect = useCallback(
-    (model: OpenAIModel) => {
+    (
+      model: OpenAIModel,
+      opts?: {
+        /**
+         * The click reached this model only by routing around another
+         * family member's usage cap (a family row fronting a usable
+         * sibling instead of its spent natural default) — the cap is
+         * transient, so it must not permanently overwrite the user's
+         * persisted default model. See renderModelCard/naturalRep.
+         */
+        skipDefaultUpdate?: boolean;
+      },
+    ) => {
       if (!selectedConversation) {
         console.warn(
           '[ModelSelect] No conversation selected, cannot update model',
@@ -502,62 +602,111 @@ export const ModelSelect: FC<ModelSelectProps> = ({
         return;
       }
 
+      // A model the server would refuse right now (cap used up) is never
+      // put on the conversation or made the default — the row is grayed
+      // and only reveals its reason; this is the backstop for every other
+      // path into here (version chips, variant segments, family rows).
+      if (limitFor(model.id).state !== 'available') {
+        console.warn(
+          '[ModelSelect] Refusing to select a model whose usage limit is reached:',
+          model.id,
+        );
+        return;
+      }
+
       // Switch to details view on mobile when a model is selected
       setMobileView('details');
 
+      const orgAgentId = getOrganizationAgentIdFromModelId(model.id);
+      const foundryAgentId = isFoundryAgentId(model.id);
+      // Foundry-style entries genuinely replace the model (execution happens
+      // inside Foundry): dynamic foundry- ids, and static org- entries that
+      // carry an agentId. Everything else org- shaped is a knowledge/persona
+      // agent — an ATTACHMENT that leaves the conversation's model alone.
+      const isFoundryStyleAgent =
+        !!foundryAgentId || (!!orgAgentId && model.agentId !== undefined);
+      const isKnowledgeAgent = !!orgAgentId && !isFoundryStyleAgent;
+
       // Set as default model for future conversations — skipped when the
-      // picker is scoped to one conversation (see scopedToConversation), and
-      // for local models: they exist only while their runtime is detected, so
-      // a persisted local default would leave a fresh session pointing at a
-      // model that isn't in any list until the user re-runs detection.
-      if (!scopedToConversation && !isLocalModel(model)) {
+      // picker is scoped to one conversation (see scopedToConversation),
+      // for local models (they exist only while their runtime is detected,
+      // so a persisted local default would leave a fresh session pointing
+      // at a model that isn't in any list until re-detection), and for
+      // AGENTS: an agent is an attachment now, never the default model.
+      if (
+        !scopedToConversation &&
+        !isLocalModel(model) &&
+        !orgAgentId &&
+        !foundryAgentId &&
+        !opts?.skipDefaultUpdate
+      ) {
         console.log(
           `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
         );
         setDefaultModelId(model.id as OpenAIModelID);
+      } else if (opts?.skipDefaultUpdate) {
+        console.log(
+          `[ModelSelect] Selecting ${model.id} without changing the default — routed around a sibling's usage cap`,
+        );
       }
 
-      // Update conversation with selected model
-      // Initialize defaultSearchMode to INTELLIGENT (privacy-focused) if not already set
-      const updates: Partial<Conversation> = {
-        model: model,
-      };
+      const updates: Partial<Conversation> = {};
 
-      // Set bot ID for organization agents (enables RAG) or Foundry agents
-      const orgAgentId = getOrganizationAgentIdFromModelId(model.id);
-      const foundryAgentId = isFoundryAgentId(model.id);
-      if (orgAgentId) {
-        updates.bot = orgAgentId;
+      if (isKnowledgeAgent) {
+        // Attach semantics (capabilities tray parity): bot only, the
+        // conversation keeps whatever real model it has. A legacy fake
+        // agent-model on the conversation is left for detach/model-pick to
+        // resolve — attaching from here never creates a new one.
+        updates.bot = orgAgentId!;
         console.log(
-          `[ModelSelect] Setting bot to organization agent: ${orgAgentId}`,
+          `[ModelSelect] Attaching organization agent: ${orgAgentId}`,
         );
-      } else if (foundryAgentId) {
-        // Dynamic Foundry agents don't use bot ID — agent routing is via agentId
-        // Clear any previous bot setting
-        updates.bot = undefined;
-        console.log(
-          `[ModelSelect] Selected dynamic Foundry agent: ${model.id}`,
-        );
-      } else if (selectedConversation.bot) {
-        // Clear bot if switching away from an organization agent
-        updates.bot = undefined;
-        console.log(`[ModelSelect] Clearing bot (switched to non-org agent)`);
-      }
+      } else if (isFoundryStyleAgent) {
+        // Model swap with a remembered restore point, mirroring
+        // attachAgentUpdates: detach puts the user's real model back.
+        updates.model = model;
+        updates.bot = orgAgentId ?? undefined;
+        updates.agentPrevModelId = isAgentShapedModelId(
+          selectedConversation.model?.id,
+        )
+          ? selectedConversation.agentPrevModelId
+          : selectedConversation.model?.id;
+        updates.threadId = undefined;
+        console.log(`[ModelSelect] Selected Foundry agent: ${model.id}`);
+      } else {
+        updates.model = model;
+        if (
+          selectedConversation.bot &&
+          selectedConversation.model?.id === `org-${selectedConversation.bot}`
+        ) {
+          // Leaving a LEGACY agent selection (bot mirroring an org- model):
+          // picking a plain model still means "leave the agent". A decoupled
+          // attachment (bot beside a real model, set from the capabilities
+          // tray) deliberately survives model switches — detach is explicit.
+          updates.bot = undefined;
+          console.log(`[ModelSelect] Clearing bot (switched to non-org agent)`);
+        }
+        // Any switch onto a plain model invalidates a remembered Foundry
+        // restore point — the user just chose their model directly.
+        if (selectedConversation.agentPrevModelId) {
+          updates.agentPrevModelId = undefined;
+        }
 
-      // Check if the new model supports agents (check both static config and model object for org agents)
-      const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
-      const newModelHasAgent =
-        newModelConfig?.agentId !== undefined || model.agentId !== undefined;
+        // Check if the new model supports agents (static config or model object)
+        const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
+        const newModelHasAgent =
+          newModelConfig?.agentId !== undefined || model.agentId !== undefined;
 
-      // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
-      if (
-        !newModelHasAgent &&
-        selectedConversation.defaultSearchMode === SearchMode.AGENT
-      ) {
-        updates.defaultSearchMode = SearchMode.INTELLIGENT;
-        console.log(
-          `[ModelSelect] Resetting AGENT mode to INTELLIGENT for non-agent model`,
-        );
+        // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
+        if (
+          !newModelHasAgent &&
+          selectedConversation.defaultSearchMode === SearchMode.AGENT
+        ) {
+          updates.defaultSearchMode = SearchMode.INTELLIGENT;
+          console.log(
+            `[ModelSelect] Resetting AGENT mode to INTELLIGENT for non-agent model`,
+          );
+        }
       }
 
       // Only set defaultSearchMode if it's not already set on the conversation
@@ -569,7 +718,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       }
 
       console.log(
-        `[ModelSelect] Updating conversation ${selectedConversation.id} with model: ${model.id}`,
+        `[ModelSelect] Updating conversation ${selectedConversation.id} with selection: ${model.id}`,
       );
       updateConversation(selectedConversation.id, updates);
 
@@ -578,6 +727,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
     [
       selectedConversation,
       availableModels,
+      limitFor,
       setMobileView,
       setDefaultModelId,
       updateConversation,
@@ -585,53 +735,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({
     ],
   );
 
-  const handleToggleSearchMode = useCallback(() => {
-    if (!selectedConversation) return;
-
-    const newMode = searchModeEnabled ? SearchMode.OFF : SearchMode.INTELLIGENT;
-
-    console.log(
-      `[ModelSelect] Toggling Search Mode: ${currentSearchMode} → ${newMode}`,
-    );
-
-    // Update current conversation
-    updateConversation(selectedConversation.id, {
-      defaultSearchMode: newMode,
-    });
-
-    // Set as default search mode for future conversations
-    setDefaultSearchMode(newMode);
-  }, [
-    selectedConversation,
-    searchModeEnabled,
-    currentSearchMode,
-    updateConversation,
-    setDefaultSearchMode,
-  ]);
-
-  const handleSetSearchMode = useCallback(
-    (mode: SearchMode) => {
-      if (!selectedConversation) return;
-
-      console.log(
-        `[ModelSelect] Setting Search Mode: ${currentSearchMode} → ${mode}`,
-      );
-
-      // Update current conversation
-      updateConversation(selectedConversation.id, {
-        defaultSearchMode: mode,
-      });
-
-      // Set as default search mode for future conversations
-      setDefaultSearchMode(mode);
-    },
-    [
-      selectedConversation,
-      currentSearchMode,
-      updateConversation,
-      setDefaultSearchMode,
-    ],
-  );
+  // Search-mode and interpreter defaults are edited from the composer's
+  // capabilities tray (ToolModeControls) — the picker only picks models.
 
   const handleSaveAgentSource = useCallback(
     (source: AgentSource) => {
@@ -890,7 +995,17 @@ export const ModelSelect: FC<ModelSelectProps> = ({
 
                   const renderModelCard = (
                     model: OpenAIModel,
-                    opts?: { name?: string; versionTag?: string },
+                    opts?: {
+                      name?: string;
+                      versionTag?: string;
+                      /**
+                       * This row fronts `model` only because its family's
+                       * natural (ungated) pick is spent — clicking it is a
+                       * cap workaround, not the user choosing `model` as
+                       * their default. See handleModelSelect.
+                       */
+                      skipDefaultUpdate?: boolean;
+                    },
                   ) => {
                     const isStarred = starredSet.has(model.id);
                     const isFeatured =
@@ -918,7 +1033,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                         tagline={localizedTagline(model)}
                         badge={badge}
                         isSelected={selectedModelId === model.id}
-                        onClick={() => handleModelSelect(model)}
+                        onClick={() =>
+                          handleModelSelect(model, {
+                            skipDefaultUpdate: opts?.skipDefaultUpdate,
+                          })
+                        }
                         icon={
                           <ModelProviderIcon provider={providerOf(model)} />
                         }
@@ -942,6 +1061,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                             : () => requestHide(model.id, model.name)
                         }
                         hideLabel={t('modelSelect.hide')}
+                        limit={limitFor(model.id)}
+                        onLimitExpired={refetchLimits}
+                        // A row that fronts the CURRENT model — e.g. its
+                        // family's default hit its cap and seriesRepresentative
+                        // keeps fronting the selection anyway — is a mobile
+                        // dead end otherwise: the details panel (Version /
+                        // Variant chips onto a usable sibling) is reachable
+                        // only through this tap, since mobileView starts on
+                        // 'list' and a limited row's onClick never fires.
+                        onLimitedTap={
+                          selectedModelId === model.id
+                            ? () => setMobileView('details')
+                            : undefined
+                        }
                       />
                     );
                   };
@@ -974,6 +1107,13 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                         })}
                         onHide={() => requestHide(model.id, model.name)}
                         hideLabel={t('modelSelect.hide')}
+                        limit={limitFor(model.id)}
+                        onLimitExpired={refetchLimits}
+                        onLimitedTap={
+                          selectedModelId === model.id
+                            ? () => setMobileView('details')
+                            : undefined
+                        }
                       />
                     );
                   };
@@ -1005,13 +1145,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                     visibleModels.some((m) => providerOf(m) === f),
                   );
 
-                  // The inline variant+version tag fronting a family row;
-                  // the 'standard' variant label is suppressed so default
-                  // rows stay short ("GPT · 5.2", not "GPT · Standard 5.2").
+                  // The inline variant+subvariant+version tag fronting a
+                  // family row. The 'standard' variant label is suppressed so
+                  // default rows stay short ("GPT · 5.4", not
+                  // "GPT · Foundational 5.4"); a sub-variant is always shown,
+                  // since it is the only thing distinguishing models that
+                  // share a version ("GPT · Sol 5.6").
                   const familyTag = (rep: OpenAIModel) =>
-                    rep.variantLabel && rep.variant !== 'standard'
-                      ? `${rep.variantLabel} ${rep.versionLabel ?? ''}`.trim()
-                      : rep.versionLabel;
+                    [
+                      rep.variant !== 'standard' ? rep.variantLabel : null,
+                      rep.subVariantLabel,
+                      rep.versionLabel,
+                    ]
+                      .filter(Boolean)
+                      .join(' ') || rep.versionLabel;
 
                   // Series rows + plain rows, preserving list order (first
                   // member encountered anchors its series' position).
@@ -1030,14 +1177,28 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                         // One quiet row per family: the representative
                         // fronts it with an inline variant+version tag;
                         // switching variant/version lives in the details
-                        // panel.
+                        // panel. A spent default yields to a usable
+                        // sibling so the row stays clickable; the row
+                        // grays only when the whole family is spent.
                         const rep = seriesRepresentative(
+                          versions,
+                          selectedModelId,
+                          isNotExhausted,
+                        )!;
+                        // Did the gate change which model fronts the row?
+                        // Comparing against the ungated pick (same selection
+                        // bias, no isSelectable) isolates exactly the "cap
+                        // workaround" case: a click here selects `rep` to
+                        // keep the row usable, not because the user chose it
+                        // as their new default.
+                        const naturalRep = seriesRepresentative(
                           versions,
                           selectedModelId,
                         )!;
                         return renderModelCard(rep, {
                           name: rep.seriesLabel ?? rep.name,
                           versionTag: familyTag(rep),
+                          skipDefaultUpdate: rep.id !== naturalRep.id,
                         });
                       })}
                     </div>
@@ -1134,7 +1295,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                         // another source's section.
                         const renderSourceRow = (
                           model: OpenAIModel,
-                          opts?: { name?: string; versionTag?: string },
+                          opts?: {
+                            name?: string;
+                            versionTag?: string;
+                            skipDefaultUpdate?: boolean;
+                          },
                         ) => {
                           const infoBadge = badgeFor(model);
                           return (
@@ -1164,9 +1329,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                                 ) : undefined
                               }
                               isSelected={selectedModelId === model.id}
-                              onClick={() => handleModelSelect(model)}
+                              onClick={() =>
+                                handleModelSelect(model, {
+                                  skipDefaultUpdate: opts?.skipDefaultUpdate,
+                                })
+                              }
                               icon={
                                 <ModelProviderIcon provider={model.provider} />
+                              }
+                              limit={limitFor(model.id)}
+                              onLimitExpired={refetchLimits}
+                              onLimitedTap={
+                                selectedModelId === model.id
+                                  ? () => setMobileView('details')
+                                  : undefined
                               }
                             />
                           );
@@ -1243,10 +1419,17 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                                     const rep = seriesRepresentative(
                                       versions,
                                       selectedModelId,
+                                      isNotExhausted,
+                                    )!;
+                                    const naturalRep = seriesRepresentative(
+                                      versions,
+                                      selectedModelId,
                                     )!;
                                     return renderSourceRow(rep, {
                                       name: rep.seriesLabel ?? rep.name,
                                       versionTag: familyTag(rep),
+                                      skipDefaultUpdate:
+                                        rep.id !== naturalRep.id,
                                     });
                                   },
                                 )}
@@ -1383,14 +1566,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                     )?.name
                   }
                   isCustomAgent={isCustomAgent}
-                  searchModeEnabled={searchModeEnabled}
                   displaySearchMode={displaySearchMode}
-                  agentAvailable={agentAvailable}
                   showModelAdvanced={showModelAdvanced}
                   selectedConversation={selectedConversation}
                   setMobileView={setMobileView}
-                  handleToggleSearchMode={handleToggleSearchMode}
-                  handleSetSearchMode={handleSetSearchMode}
                   setShowModelAdvanced={setShowModelAdvanced}
                   updateConversation={updateConversation}
                 />
@@ -1411,10 +1590,17 @@ export const ModelSelect: FC<ModelSelectProps> = ({
           handleModelSelect={handleModelSelect}
           organizationAgentModels={organizationAgentModels}
           foundryAgents={foundryAgents}
+          suppressedOrgAgentIds={suppressedOrgAgentIds}
           regionalPath={regionalPath}
           officePaths={officePaths}
-          selectedModelId={selectedModelId}
-          isLoadingFoundryAgents={isLoadingFoundryAgents}
+          selectedModelId={attachedAgentModelId ?? null}
+          isLoadingFoundryAgents={isLoadingFoundryAgents || isDiscoveryLoading}
+          isFoundryAgentsError={isFoundryAgentsError}
+          isDiscoveryError={isDiscoveryError}
+          // Retry, not refresh: the ↻ button below busts the server-side
+          // discovery cache, which is the wrong (and slower) remedy for a
+          // request that simply failed in flight.
+          onRetryAgents={() => retryFoundryAgents()}
           onRefreshAgents={() => refetchFoundryAgents()}
           agentSources={customAgentSources}
           onAddSource={() => {
@@ -1427,18 +1613,14 @@ export const ModelSelect: FC<ModelSelectProps> = ({
           onHideAgent={requestHide}
           onUnhideAgent={unhideModel}
           // Props for details panel
-          selectedModel={selectedModel}
-          modelConfig={modelConfig}
-          isCustomAgent={isCustomAgent}
-          searchModeEnabled={searchModeEnabled}
+          selectedModel={agentsTabSelectedModel}
+          modelConfig={agentsTabModelConfig}
+          isCustomAgent={agentsTabIsCustomAgent}
           displaySearchMode={displaySearchMode}
-          agentAvailable={agentAvailable}
           showModelAdvanced={showModelAdvanced}
           selectedConversation={selectedConversation}
           mobileView={mobileView}
           setMobileView={setMobileView}
-          handleToggleSearchMode={handleToggleSearchMode}
-          handleSetSearchMode={handleSetSearchMode}
           setShowModelAdvanced={setShowModelAdvanced}
           updateConversation={updateConversation}
         />

@@ -386,6 +386,7 @@ describe('Keyboard Shortcuts Utilities', () => {
         'toggleTheme',
         'regenerateResponse',
         'copyLastResponse',
+        'pasteOptions',
       ];
 
       for (const action of expectedActions) {

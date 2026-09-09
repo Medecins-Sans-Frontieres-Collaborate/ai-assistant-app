@@ -1,13 +1,21 @@
 import {
   IconBraces,
+  IconBrandOnedrive,
+  IconBrandWindows,
+  IconCalendarEvent,
   IconCamera,
   IconCirclePlus,
   IconClipboardCheck,
+  IconCode,
   IconFileMusic,
   IconFileText,
   IconLanguage,
   IconLink,
+  IconMailDown,
   IconPaperclip,
+  IconPlugConnected,
+  IconRoute,
+  IconSparkles,
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
@@ -25,11 +33,24 @@ import { createPortal } from 'react-dom';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import {
+  ToolLimitGate,
+  useAgentToolGates,
+  useToolLimitGates,
+} from '@/client/hooks/settings/useAgentToolGates';
+import { useResetCountdown } from '@/client/hooks/settings/useMyLimits';
 import { useCameraSupport } from '@/client/hooks/ui/useCameraSupport';
 import { useDropdownKeyboardNav } from '@/client/hooks/ui/useDropdownKeyboardNav';
 import useEnhancedOutsideClick from '@/client/hooks/ui/useEnhancedOutsideClick';
 import { useIsMobile } from '@/client/hooks/ui/useIsMobile';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
+import { fillComposerWithPlaybook } from '@/client/services/m365/playbooks/playbookLauncher';
+import { M365_PLAYBOOKS } from '@/client/services/m365/playbooks/playbookRegistry';
+import {
+  M365_BUILTIN_SERVER_ID,
+  M365_BUILTIN_SERVER_LABEL,
+} from '@/lib/services/m365/tools/toolCatalog';
 import { canAccessProcurement } from '@/lib/services/rfp/access';
 
 import { normalizeForSearch } from '@/lib/utils/app/localeSearch';
@@ -44,14 +65,17 @@ import {
   DocumentTranslationPendingReference,
   DocumentTranslationReference,
 } from '@/types/documentTranslation';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { SearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
+import { TRANSCRIPT_BLOB_THRESHOLD } from '@/types/transcription';
 
 import ChatInputDocumentTranslate from '@/components/Chat/ChatInput/ChatInputDocumentTranslate';
 import ChatInputImage from '@/components/Chat/ChatInput/ChatInputImage';
 import ChatInputImageCapture from '@/components/Chat/ChatInput/ChatInputImageCapture';
 import ChatInputTranslate from '@/components/Chat/ChatInput/ChatInputTranslate';
 import { DropdownSearchInput } from '@/components/Chat/ChatInput/DropdownSearchInput';
+import M365MeetingImportModal from '@/components/Chat/ChatInput/M365MeetingImportModal';
 import {
   formatPendingTranslationReference,
   formatTranslationReference,
@@ -62,6 +86,8 @@ import Modal from '@/components/UI/Modal';
 import { DropdownCategoryGroup } from './DropdownCategoryGroup';
 import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
 import { DropdownMoreSection } from './DropdownMoreSection';
+import M365FilePickerModal from './M365FilePickerModal';
+import M365MailImportModal from './M365MailImportModal';
 import UrlAttachModal from './UrlAttachModal';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
@@ -71,10 +97,18 @@ import {
   DOCUMENT_TRANSLATION_ACCEPT_TYPES,
   TRANSCRIPTION_ACCEPT_TYPES,
 } from '@/lib/constants/fileTypes';
-import {
-  getOrganizationAgentById,
-  getOrganizationAgentIdFromModelId,
-} from '@/lib/organizationAgents';
+
+/**
+ * New conversations are created with an empty name (see
+ * `lib/utils/app/conversationInit.ts`); 'New Conversation' is the legacy
+ * default that older stored conversations may still carry. This mirrors the
+ * untitled checks in `chatStore` auto-naming and
+ * `client/services/workflows/workflowTitle.ts`.
+ */
+const LEGACY_UNTITLED_CONVERSATION_NAME = 'New Conversation';
+
+const isUntitledConversation = (name: string | undefined): boolean =>
+  !name || name === LEGACY_UNTITLED_CONVERSATION_NAME;
 
 interface DropdownProps {
   onCameraClick: () => void;
@@ -107,15 +141,43 @@ const Dropdown: React.FC<DropdownProps> = ({
   const textFieldValue = useChatInputStore((state) => state.textFieldValue);
   const searchMode = useChatInputStore((state) => state.searchMode);
   const setSearchMode = useChatInputStore((state) => state.setSearchMode);
+  const interpreterMode = useChatInputStore((state) => state.interpreterMode);
+  const setInterpreterMode = useChatInputStore(
+    (state) => state.setInterpreterMode,
+  );
   const extractionMode = useChatInputStore((state) => state.extractionMode);
   const setExtractionMode = useChatInputStore(
     (state) => state.setExtractionMode,
   );
+  const setConnectorPinTrayOpen = useChatInputStore(
+    (state) => state.setConnectorPinTrayOpen,
+  );
+  const mcpServers = useSettingsStore((state) => state.mcpServers);
+  const updateMcpServer = useSettingsStore((state) => state.updateMcpServer);
   // Structured-data extraction is gated by a LaunchDarkly flag (fail-open).
   // Off in prod until go-ahead; when disabled the toggle is omitted so users
   // can't turn extraction on. See docs/LAUNCHDARKLY_FLAGS.md.
   const { structuredDataExtraction } = useFlags();
   const isExtractionEnabled = structuredDataExtraction !== false;
+  // M365 entries are flag-gated (fail-closed, localhost escape hatch — see
+  // useM365Enabled) AND require the per-user connect opt-in from Settings →
+  // Connections — nothing appears from signing in alone
+  // (docs/M365_FIRST_PASS_DESIGN.md).
+  const m365Connected = useSettingsStore((state) => state.m365Connected);
+  const {
+    filesEnabled: m365FilesFlag,
+    mailEnabled: m365MailFlag,
+    translationEnabled: m365TranslationFlag,
+    meetingsEnabled: m365MeetingsFlag,
+    playbooksEnabled: m365PlaybooksFlag,
+    toolsEnabled: m365ToolsFlag,
+  } = useM365Enabled();
+  const isM365FilesEnabled = m365FilesFlag && m365Connected;
+  const isM365MailEnabled = m365MailFlag && m365Connected;
+  const isM365TranslationEnabled = m365TranslationFlag && m365Connected;
+  const isM365MeetingsEnabled = m365MeetingsFlag && m365Connected;
+  const isM365ToolsEnabled = m365ToolsFlag && m365Connected;
+  const isM365PlaybooksEnabled = m365PlaybooksFlag && m365Connected;
   const setTranscriptionStatus = useChatInputStore(
     (state) => state.setTranscriptionStatus,
   );
@@ -139,6 +201,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isTranslateOpen, setIsTranslateOpen] = useState(false);
   const [isDocumentTranslateOpen, setIsDocumentTranslateOpen] = useState(false);
+  const [isMeetingImportOpen, setIsMeetingImportOpen] = useState(false);
   const [documentToTranslate, setDocumentToTranslate] = useState<File | null>(
     null,
   );
@@ -150,6 +213,8 @@ const Dropdown: React.FC<DropdownProps> = ({
   // Parent rows whose nested sources are currently revealed (e.g. `attach`).
   const [expandedParentIds, setExpandedParentIds] = useState<string[]>([]);
   const [urlModalOpen, setUrlModalOpen] = useState(false);
+  const [m365PickerOpen, setM365PickerOpen] = useState(false);
+  const [m365MailOpen, setM365MailOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -177,6 +242,8 @@ const Dropdown: React.FC<DropdownProps> = ({
   const tUrl = useTranslations('urlFetch');
   const { data: session } = useSession();
   const showProcurement = canAccessProcurement(session?.user);
+  const tM365 = useTranslations('m365');
+  const tGates = useTranslations('limitsUx.gates');
 
   const chatInputImageRef = useRef<{ openFilePicker: () => void }>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -223,6 +290,82 @@ const Dropdown: React.FC<DropdownProps> = ({
     closeDropdown();
   }, [closeDropdown]);
 
+  // §4 tier 1: a meeting transcript becomes a standard transcript message —
+  // blob-stored above the threshold (TranscriptViewer + expiry reuse), inline
+  // below it. Same message-pair shape as the translation import.
+  const handleMeetingTranscriptImport = useCallback(
+    async (
+      transcript: import('@/types/m365').M365MeetingTranscript,
+      meeting: import('@/types/m365').M365MeetingEntry,
+    ) => {
+      if (!selectedConversation) {
+        setIsMeetingImportOpen(false);
+        return;
+      }
+      let assistantContent: string;
+      const bytes = new TextEncoder().encode(transcript.transcript).length;
+      if (bytes > TRANSCRIPT_BLOB_THRESHOLD) {
+        try {
+          const jobId = crypto.randomUUID();
+          const response = await fetch('/api/transcription/store', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              jobId,
+              transcript: transcript.transcript,
+              filename: transcript.fileName,
+            }),
+          });
+          const json = await response.json();
+          if (!response.ok || !json?.data?.expiresAt) {
+            throw new Error(json?.error || 'store failed');
+          }
+          assistantContent = `[Transcript: ${transcript.fileName} | blob:${jobId} | expires:${json.data.expiresAt}]`;
+        } catch {
+          // Blob store failing must not lose the transcript — inline it.
+          assistantContent = `[Transcript: ${transcript.fileName}]\n${transcript.transcript}`;
+        }
+      } else {
+        assistantContent = `[Transcript: ${transcript.fileName}]\n${transcript.transcript}`;
+      }
+
+      const userMessage: Message = {
+        role: 'user',
+        content: tM365('meetings.importedMessage', {
+          subject: meeting.subject,
+        }),
+        messageType: 'TEXT',
+      };
+      const assistantMessage: AssistantMessageGroup = {
+        type: 'assistant_group',
+        versions: [
+          {
+            content: assistantContent,
+            messageType: 'TEXT',
+            createdAt: new Date().toISOString(),
+          },
+        ],
+        activeIndex: 0,
+      };
+      const updates: {
+        messages: (Message | AssistantMessageGroup)[];
+        name?: string;
+      } = {
+        messages: [
+          ...selectedConversation.messages,
+          userMessage,
+          assistantMessage,
+        ],
+      };
+      if (isUntitledConversation(selectedConversation.name)) {
+        updates.name = meeting.subject;
+      }
+      updateConversation(selectedConversation.id, updates);
+      setIsMeetingImportOpen(false);
+    },
+    [selectedConversation, updateConversation, tM365],
+  );
+
   // Handle document translation completion - add user message with file + assistant message
   const handleDocumentTranslationComplete = useCallback(
     (reference: DocumentTranslationReference) => {
@@ -253,6 +396,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         reference.jobId,
         reference.fileExtension,
         reference.expiresAt,
+        reference.m365Source,
       );
 
       const assistantMessage: AssistantMessageGroup = {
@@ -280,11 +424,10 @@ const Dropdown: React.FC<DropdownProps> = ({
       };
 
       // Auto-title empty conversations
-      if (
-        !selectedConversation.name ||
-        selectedConversation.name === 'New Conversation'
-      ) {
-        updates.name = `Translation: ${reference.originalFilename}`;
+      if (isUntitledConversation(selectedConversation.name)) {
+        updates.name = t('dropdown.translationConversationTitle', {
+          filename: reference.originalFilename,
+        });
       }
 
       updateConversation(selectedConversation.id, updates);
@@ -293,7 +436,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       setIsDocumentTranslateOpen(false);
       setDocumentToTranslate(null);
     },
-    [selectedConversation, updateConversation],
+    [selectedConversation, updateConversation, t],
   );
 
   // Async (batch, PDF) path: same message pair, but the assistant message
@@ -349,18 +492,17 @@ const Dropdown: React.FC<DropdownProps> = ({
           assistantMessage,
         ],
       };
-      if (
-        !selectedConversation.name ||
-        selectedConversation.name === 'New Conversation'
-      ) {
-        updates.name = `Translation: ${pending.originalFilename}`;
+      if (isUntitledConversation(selectedConversation.name)) {
+        updates.name = t('dropdown.translationConversationTitle', {
+          filename: pending.originalFilename,
+        });
       }
       updateConversation(selectedConversation.id, updates);
 
       setIsDocumentTranslateOpen(false);
       setDocumentToTranslate(null);
     },
-    [selectedConversation, updateConversation],
+    [selectedConversation, updateConversation, t],
   );
 
   // Helper function to toggle search mode (always sets to ALWAYS when enabled)
@@ -374,19 +516,90 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   }, [searchMode, setSearchMode, selectedConversation?.defaultSearchMode]);
 
-  // Foundry agents and org agents with allowWebSearch:false manage their own
-  // search behavior — hide the toggle so it can't contradict the agent.
-  const hideWebSearch = useMemo(() => {
-    const modelId = selectedConversation?.model?.id;
-    if (!modelId) return false;
-    if (modelId.startsWith('foundry-')) return true;
-    const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
-    if (!orgAgentId) return false;
-    const agent = getOrganizationAgentById(orgAgentId);
-    if (!agent) return false;
-    if (agent.type === 'foundry') return true;
-    return agent.allowWebSearch === false;
-  }, [selectedConversation?.model?.id]);
+  // Helper function to toggle interpreter force mode (mirrors search: the
+  // toggle flips ALWAYS on, and off returns to the conversation's default)
+  const toggleInterpreterMode = useCallback(() => {
+    if (interpreterMode === InterpreterMode.ALWAYS) {
+      setInterpreterMode(
+        selectedConversation?.defaultInterpreterMode ?? InterpreterMode.OFF,
+      );
+    } else {
+      setInterpreterMode(InterpreterMode.ALWAYS);
+    }
+  }, [
+    interpreterMode,
+    setInterpreterMode,
+    selectedConversation?.defaultInterpreterMode,
+  ]);
+
+  // Foundry agents and org agents that don't opt in manage their own tool
+  // behavior — hide the toggles so they can't contradict the agent. Shared
+  // with the capabilities tray (legacy model-id gates + decoupled
+  // attachments alike) via useAgentToolGates.
+  const { hideWebSearch, hideCodeInterpreter } = useAgentToolGates();
+  // Admin usage limits LOCK (rather than hide) the same controls: the row
+  // stays, disabled with a lock and a reason, so the user learns it is a
+  // policy. All gates are open unless the limits UX is enforced
+  // (docs/LIMITS_USER_FACING_UX.md §7.4).
+  const toolLimits = useToolLimitGates();
+  const lockReasonFor = useCallback(
+    (gate: ToolLimitGate, feature: string) =>
+      gate.blocked
+        ? tGates('blocked', { feature: tGates(`features.${feature}`) })
+        : undefined,
+    [tGates],
+  );
+  // Reset countdowns for the exhausted note — called unconditionally (a
+  // fixed three calls every render, whatever the agent gates hide) so the
+  // user learns WHEN the budget comes back, not just that it is gone.
+  const searchResetLabel = useResetCountdown(
+    toolLimits.webSearch.budget?.resetAt,
+  );
+  const interpreterResetLabel = useResetCountdown(
+    toolLimits.codeInterpreter.budget?.resetAt,
+  );
+  const m365ResetLabel = useResetCountdown(toolLimits.m365.budget?.resetAt);
+  // Budget annotations: "N left today" when low, and at 0 a note that the
+  // model will answer without the tool — the toggle itself stays usable,
+  // since the server degrades instead of refusing the message. Blocked also
+  // returns the lock reason as a note: the row's own `title` is otherwise
+  // shadowed by the inner label span's `title` (DropdownMenuItem), which
+  // leaves hovering the row's visible text showing just the label — and
+  // nothing at all on touch. The note is the one copy of the reason that is
+  // actually reachable without a mouse.
+  const budgetNoteFor = useCallback(
+    (
+      gate: ToolLimitGate,
+      lockReason: string | undefined,
+      resetLabel: string | null,
+    ): Pick<MenuItem, 'note' | 'noteTone'> => {
+      if (gate.blocked) {
+        return lockReason ? { note: lockReason, noteTone: 'muted' } : {};
+      }
+      if (gate.exhausted) {
+        return {
+          note: resetLabel
+            ? tGates('exhaustedResets', { resets: resetLabel })
+            : tGates('exhausted'),
+          noteTone: 'warning',
+        };
+      }
+      if (gate.low && gate.budget) {
+        return {
+          note: tGates('remaining', { count: gate.budget.remaining }),
+          noteTone: 'muted',
+        };
+      }
+      return {};
+    },
+    [tGates],
+  );
+  const connectorsLockReason = lockReasonFor(toolLimits.mcp, 'connectors');
+  const searchLockReason = lockReasonFor(toolLimits.webSearch, 'webSearch');
+  const interpreterLockReason = lockReasonFor(
+    toolLimits.codeInterpreter,
+    'codeInterpreter',
+  );
 
   // Per-item icon color is a deliberate carve-out: this menu is scanned often
   // and the hue helps locate actions at a glance. Each color matches its
@@ -395,9 +608,95 @@ const Dropdown: React.FC<DropdownProps> = ({
   // camera: red). Color is always paired with an icon shape and a label so it
   // is never the only distinguishing factor.
   //
+  // Chat-active connectors (globally enabled minus this conversation's
+  // opt-outs) — shown as a count on the Connectors row.
+  const chatDisabledIds = useMemo(
+    () => selectedConversation?.disabledMcpServerIds ?? [],
+    [selectedConversation?.disabledMcpServerIds],
+  );
+  const m365ToolsUserEnabled = useSettingsStore(
+    (state) => state.m365ToolsUserEnabled,
+  );
+  const setM365ToolsUserEnabled = useSettingsStore(
+    (state) => state.setM365ToolsUserEnabled,
+  );
+  // The builtin toolset is a first-class connector in this menu: same
+  // toggle semantics, same per-chat opt-out id.
+  const builtinM365Available = isM365ToolsEnabled;
+  const builtinM365Active =
+    builtinM365Available &&
+    m365ToolsUserEnabled &&
+    !chatDisabledIds.includes(M365_BUILTIN_SERVER_ID);
+  // While connectors are policy-locked none are EFFECTIVELY active, whatever
+  // the stored toggles say — the count would otherwise promise tools that
+  // the request must not carry.
+  const activeConnectorCount = useMemo(
+    () =>
+      connectorsLockReason
+        ? 0
+        : mcpServers.filter((s) => s.enabled && !chatDisabledIds.includes(s.id))
+            .length + (builtinM365Active ? 1 : 0),
+    [connectorsLockReason, mcpServers, chatDisabledIds, builtinM365Active],
+  );
+  // The Connectors entry appears whenever anything is CONFIGURED — even
+  // all-disabled, so a disabled connector can be re-enabled from here
+  // instead of a trip to Settings.
+  const showConnectors = mcpServers.length > 0 || builtinM365Available;
+  const hasAiToolChildren = !hideWebSearch || !hideCodeInterpreter;
+
+  // One click always flips whether the server runs in THIS chat: a
+  // globally-off server is switched on everywhere (plus cleared from the
+  // chat opt-outs); an on one just toggles the per-chat opt-out.
+  const toggleConnectorForChat = useCallback(
+    (serverId: string) => {
+      if (!selectedConversation) return;
+      const server = mcpServers.find((s) => s.id === serverId);
+      if (!server) return;
+      const disabled = selectedConversation.disabledMcpServerIds ?? [];
+      if (!server.enabled) {
+        updateMcpServer(serverId, { enabled: true });
+        if (disabled.includes(serverId)) {
+          updateConversation(selectedConversation.id, {
+            disabledMcpServerIds: disabled.filter((id) => id !== serverId),
+          });
+        }
+        return;
+      }
+      updateConversation(selectedConversation.id, {
+        disabledMcpServerIds: disabled.includes(serverId)
+          ? disabled.filter((id) => id !== serverId)
+          : [...disabled, serverId],
+      });
+    },
+    [selectedConversation, mcpServers, updateMcpServer, updateConversation],
+  );
+
   // Define menu items - memoized to avoid ref access issues during render.
   const menuItems: MenuItem[] = useMemo(
     () => [
+      // Capability toggles (what the AI can DO this turn) nest under one
+      // parent, mirroring the attach → file/link pattern. Pinning or
+      // frequent use of a child auto-promotes it back to a top-level row.
+      ...(hasAiToolChildren
+        ? [
+            {
+              id: 'aiTools',
+              icon: (
+                <IconSparkles
+                  size={18}
+                  className="text-blue-500 flex-shrink-0"
+                />
+              ),
+              label: t('dropdown.aiTools'),
+              infoTooltip: t('dropdown.aiToolsTooltip'),
+              // Expands in place; the row has no action of its own.
+              onClick: () => {
+                toggleParentExpanded('aiTools');
+              },
+              category: 'tools' as const,
+            },
+          ]
+        : []),
       // Foundry / restricted org agents hide the web-search toggle entirely.
       ...(hideWebSearch
         ? []
@@ -413,11 +712,226 @@ const Dropdown: React.FC<DropdownProps> = ({
                 toggleSearchMode();
                 closeDropdown();
               },
-              category: 'web' as const,
+              category: 'tools' as const,
               toggle: true,
-              checked: searchMode === SearchMode.ALWAYS,
+              // A lock reads as Off: the stored preference is untouched and
+              // returns when the gate lifts.
+              checked:
+                !toolLimits.webSearch.blocked &&
+                searchMode === SearchMode.ALWAYS,
+              parentId: 'aiTools',
+              lockReason: searchLockReason,
+              ...budgetNoteFor(
+                toolLimits.webSearch,
+                searchLockReason,
+                searchResetLabel,
+              ),
             },
           ]),
+      // Force code execution on the next messages (InterpreterMode.ALWAYS).
+      ...(hideCodeInterpreter
+        ? []
+        : [
+            {
+              id: 'codeInterpreter',
+              icon: (
+                <IconCode
+                  size={18}
+                  className="text-emerald-600 flex-shrink-0"
+                />
+              ),
+              label: t('codeInterpreterDropdown'),
+              infoTooltip: t('dropdown.codeInterpreterTooltip'),
+              onClick: () => {
+                toggleInterpreterMode();
+                closeDropdown();
+              },
+              category: 'tools' as const,
+              toggle: true,
+              checked:
+                !toolLimits.codeInterpreter.blocked &&
+                interpreterMode === InterpreterMode.ALWAYS,
+              parentId: 'aiTools',
+              lockReason: interpreterLockReason,
+              ...budgetNoteFor(
+                toolLimits.codeInterpreter,
+                interpreterLockReason,
+                interpreterResetLabel,
+              ),
+            },
+          ]),
+      // Connectors: its own expandable parent listing every CONFIGURED
+      // server (even all-disabled, so re-enabling never requires Settings).
+      // Each child toggles that server's active status for this chat; the
+      // trailing row opens the tray for focus pins and global switches.
+      ...(showConnectors
+        ? [
+            {
+              id: 'focusConnector',
+              icon: (
+                <IconPlugConnected
+                  size={18}
+                  className="text-cyan-600 flex-shrink-0"
+                />
+              ),
+              label:
+                activeConnectorCount > 0
+                  ? t('connectorPin.menuLabelCount', {
+                      count: activeConnectorCount,
+                    })
+                  : t('connectorPin.menuLabel'),
+              infoTooltip: t('connectorPin.tooltip'),
+              onClick: () => {
+                toggleParentExpanded('focusConnector');
+              },
+              category: 'tools' as const,
+              // The parent stays expandable so the reason is discoverable;
+              // the children carry the lock.
+              ...(connectorsLockReason
+                ? { note: connectorsLockReason, noteTone: 'warning' as const }
+                : {}),
+            },
+            ...(builtinM365Available
+              ? [
+                  {
+                    id: `connector-${M365_BUILTIN_SERVER_ID}`,
+                    icon: (
+                      <IconBrandWindows
+                        size={18}
+                        className="text-blue-500 flex-shrink-0"
+                      />
+                    ),
+                    label: M365_BUILTIN_SERVER_LABEL,
+                    infoTooltip: tM365('tools.trayDescription'),
+                    onClick: () => {
+                      if (!selectedConversation) return;
+                      const disabled =
+                        selectedConversation.disabledMcpServerIds ?? [];
+                      if (!m365ToolsUserEnabled) {
+                        setM365ToolsUserEnabled(true);
+                        if (disabled.includes(M365_BUILTIN_SERVER_ID)) {
+                          updateConversation(selectedConversation.id, {
+                            disabledMcpServerIds: disabled.filter(
+                              (id) => id !== M365_BUILTIN_SERVER_ID,
+                            ),
+                          });
+                        }
+                        return;
+                      }
+                      updateConversation(selectedConversation.id, {
+                        disabledMcpServerIds: disabled.includes(
+                          M365_BUILTIN_SERVER_ID,
+                        )
+                          ? disabled.filter(
+                              (id) => id !== M365_BUILTIN_SERVER_ID,
+                            )
+                          : [...disabled, M365_BUILTIN_SERVER_ID],
+                      });
+                    },
+                    category: 'tools' as const,
+                    toggle: true,
+                    checked: !connectorsLockReason && builtinM365Active,
+                    parentId: 'focusConnector',
+                    lockReason: connectorsLockReason,
+                    // No lock-reason note here: this row nests under
+                    // Connectors, whose parent already carries the reason as
+                    // its own note (matching every other connector child).
+                    ...budgetNoteFor(
+                      toolLimits.m365,
+                      undefined,
+                      m365ResetLabel,
+                    ),
+                  },
+                ]
+              : []),
+            ...mcpServers.map((server) => {
+              const needsReauth =
+                server.authMode === 'oauth' && !!server.oauth?.needsReauth;
+              return {
+                id: `connector-${server.id}`,
+                icon: (
+                  <IconPlugConnected
+                    size={18}
+                    className={`flex-shrink-0 ${
+                      needsReauth ? 'text-amber-500' : 'text-cyan-600'
+                    }`}
+                  />
+                ),
+                label: server.name,
+                infoTooltip: needsReauth
+                  ? t('connectorPin.needsReconnect')
+                  : t('connectorPin.toggleServerInChat', {
+                      name: server.name,
+                    }),
+                // Stays open — toggling several connectors in a row is the
+                // expected gesture.
+                onClick: () => {
+                  toggleConnectorForChat(server.id);
+                },
+                category: 'tools' as const,
+                toggle: true,
+                checked:
+                  !connectorsLockReason &&
+                  server.enabled &&
+                  !chatDisabledIds.includes(server.id),
+                disabled: needsReauth,
+                lockReason: connectorsLockReason,
+                parentId: 'focusConnector',
+              };
+            }),
+            {
+              id: 'connector-manage',
+              icon: (
+                <IconPlugConnected
+                  size={18}
+                  className="text-gray-500 flex-shrink-0"
+                />
+              ),
+              label: t('connectorPin.toggleLabel'),
+              infoTooltip: t('connectorPin.tooltip'),
+              onClick: () => {
+                setConnectorPinTrayOpen(true);
+                closeDropdown();
+              },
+              category: 'tools' as const,
+              opensDialog: true,
+              parentId: 'focusConnector',
+            },
+          ]
+        : []),
+      // Microsoft 365 playbooks: one expandable parent listing the curated
+      // chains. Picking one fills the composer with its prompt — nothing is
+      // sent, so this is a starting point the user can still edit.
+      ...(isM365PlaybooksEnabled
+        ? [
+            {
+              id: 'm365Playbooks',
+              icon: (
+                <IconRoute size={18} className="text-blue-500 flex-shrink-0" />
+              ),
+              label: tM365('playbooks.menuLabel'),
+              infoTooltip: tM365('playbooks.menuTooltip'),
+              onClick: () => {
+                toggleParentExpanded('m365Playbooks');
+              },
+              category: 'tools' as const,
+            },
+            ...M365_PLAYBOOKS.map((playbook) => ({
+              id: `m365Playbook-${playbook.id}`,
+              icon: (
+                <IconRoute size={18} className="text-blue-500 flex-shrink-0" />
+              ),
+              label: tM365(`playbooks.${playbook.titleKey}`),
+              infoTooltip: tM365(`playbooks.${playbook.descriptionKey}`),
+              onClick: () => {
+                void fillComposerWithPlaybook(playbook.id);
+                closeDropdown();
+              },
+              category: 'tools' as const,
+              parentId: 'm365Playbooks',
+            })),
+          ]
+        : []),
       {
         id: 'tone',
         icon: (
@@ -437,7 +951,9 @@ const Dropdown: React.FC<DropdownProps> = ({
           setIsToneOpen(true);
           closeDropdown();
         },
-        category: 'web',
+        // Tone shapes the response style — it lives with the other
+        // response-shaping actions, not the capability toggles.
+        category: 'transform',
         disabled: tones.length === 0,
         opensDialog: true,
       },
@@ -474,6 +990,51 @@ const Dropdown: React.FC<DropdownProps> = ({
         // it. The modal lives outside the menu, so closing the menu is safe.
         parentId: 'attach',
       },
+      ...(isM365FilesEnabled
+        ? [
+            {
+              id: 'attach-m365',
+              icon: (
+                <IconBrandOnedrive
+                  size={18}
+                  className="flex-shrink-0 text-blue-500"
+                />
+              ),
+              label: tM365('attach.menuLabel'),
+              infoTooltip: tM365('attach.menuTooltip'),
+              onClick: () => {
+                setM365PickerOpen(true);
+                closeDropdown();
+              },
+              category: 'media' as const,
+              opensDialog: true,
+              // Another alternate source for `attach`, like attach-link.
+              parentId: 'attach',
+            },
+          ]
+        : []),
+      ...(isM365MailEnabled
+        ? [
+            {
+              id: 'attach-m365-mail',
+              icon: (
+                <IconMailDown
+                  size={18}
+                  className="flex-shrink-0 text-sky-600"
+                />
+              ),
+              label: tM365('mail.menuLabel'),
+              infoTooltip: tM365('mail.menuTooltip'),
+              onClick: () => {
+                setM365MailOpen(true);
+                closeDropdown();
+              },
+              category: 'media' as const,
+              opensDialog: true,
+              parentId: 'attach',
+            },
+          ]
+        : []),
       {
         id: 'transcribe',
         icon: (
@@ -528,6 +1089,50 @@ const Dropdown: React.FC<DropdownProps> = ({
         category: 'transform',
         opensDialog: true,
       },
+      ...(isM365TranslationEnabled
+        ? [
+            {
+              id: 'translateM365Document',
+              icon: (
+                <IconBrandOnedrive
+                  size={18}
+                  className="text-blue-500 flex-shrink-0"
+                />
+              ),
+              label: tM365('translate.menuLabel'),
+              infoTooltip: tM365('translate.menuTooltip'),
+              onClick: () => {
+                // No local file: the modal opens straight into the picker.
+                setDocumentToTranslate(null);
+                setIsDocumentTranslateOpen(true);
+                closeDropdown();
+              },
+              category: 'transform' as const,
+              opensDialog: true,
+            },
+          ]
+        : []),
+      ...(isM365MeetingsEnabled
+        ? [
+            {
+              id: 'attachMeeting',
+              icon: (
+                <IconCalendarEvent
+                  size={18}
+                  className="text-indigo-500 flex-shrink-0"
+                />
+              ),
+              label: tM365('meetings.menuLabel'),
+              infoTooltip: tM365('meetings.menuTooltip'),
+              onClick: () => {
+                setIsMeetingImportOpen(true);
+                closeDropdown();
+              },
+              category: 'transform' as const,
+              opensDialog: true,
+            },
+          ]
+        : []),
       ...(hasCameraSupport
         ? [
             {
@@ -577,14 +1182,44 @@ const Dropdown: React.FC<DropdownProps> = ({
       tUrl,
       showProcurement,
       locale,
+      tM365,
+      isM365FilesEnabled,
+      isM365MailEnabled,
+      builtinM365Active,
+      builtinM365Available,
+      m365ToolsUserEnabled,
+      setM365ToolsUserEnabled,
+      selectedConversation,
+      updateConversation,
+      isM365TranslationEnabled,
+      isM365MeetingsEnabled,
+      isM365PlaybooksEnabled,
       searchMode,
+      interpreterMode,
       selectedToneId,
       tones,
       hasCameraSupport,
       hideWebSearch,
+      hideCodeInterpreter,
+      toolLimits,
+      budgetNoteFor,
+      searchResetLabel,
+      interpreterResetLabel,
+      m365ResetLabel,
+      searchLockReason,
+      interpreterLockReason,
+      connectorsLockReason,
+      hasAiToolChildren,
+      showConnectors,
+      activeConnectorCount,
+      mcpServers,
+      chatDisabledIds,
+      toggleConnectorForChat,
       isExtractionEnabled,
       extractionMode,
       setExtractionMode,
+      setConnectorPinTrayOpen,
+      toggleParentExpanded,
       closeDropdown,
       setIsToneOpen,
       setIsTranslateOpen,
@@ -593,6 +1228,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       handleTranscribeClick,
       handleDocumentTranslateClick,
       toggleSearchMode,
+      toggleInterpreterMode,
     ],
   );
 
@@ -633,12 +1269,21 @@ const Dropdown: React.FC<DropdownProps> = ({
   // Wrap each action so activating it records usage (drives "Frequently used").
   // Usage is debounced (see recordSuccessfulToolUsage) so the order only
   // settles after repeated use. Pinning does not count — separate control.
+  //
+  // `DropdownMenuItem` only neutralises the MOUSE path (its button gets
+  // `disabled` / `onClick={undefined}`). Keyboard activation goes through
+  // `useDropdownKeyboardNav`, which calls `flatVisibleItems[selectedIndex]
+  // .onClick()` unconditionally — a locked or disabled row is still in that
+  // list (arrow keys can select it) and Enter would otherwise run the real
+  // action and credit usage even though the row shows locked/disabled. Guard
+  // here so both paths share one inert behavior for a locked or disabled row
+  // (docs/LIMITS_USER_FACING_UX.md §7.4).
   const trackedItems = useMemo(
     () =>
-      // eslint-disable-next-line react-hooks/refs -- onClick handlers reference refs only when invoked, not during render
       menuItems.map((item) => ({
         ...item,
         onClick: () => {
+          if (item.lockReason || item.disabled) return;
           recordSuccessfulToolUsage(item.id);
           item.onClick();
         },
@@ -736,6 +1381,13 @@ const Dropdown: React.FC<DropdownProps> = ({
         key: 'transform',
         label: t('dropdown.categoryTransform'),
         items: byCategory('transform'),
+      },
+      // Capability toggles + connectors sit LAST among the regular
+      // sections, directly above "More".
+      {
+        key: 'tools',
+        label: t('dropdown.categoryTools'),
+        items: byCategory('tools'),
       },
       { key: 'more', label: t('dropdown.sectionMore'), items: hiddenItems },
     ].filter((section) => section.items.length > 0);
@@ -1126,6 +1778,16 @@ const Dropdown: React.FC<DropdownProps> = ({
         onClose={() => setUrlModalOpen(false)}
       />
 
+      <M365FilePickerModal
+        isOpen={m365PickerOpen}
+        onClose={() => setM365PickerOpen(false)}
+      />
+
+      <M365MailImportModal
+        isOpen={m365MailOpen}
+        onClose={() => setM365MailOpen(false)}
+      />
+
       {/* Hidden file input for all file types: images, documents, data, code, audio, and video */}
       <input
         ref={fileInputRef}
@@ -1182,8 +1844,18 @@ const Dropdown: React.FC<DropdownProps> = ({
           setDocumentToTranslate(null);
         }}
         documentFile={documentToTranslate}
+        allowM365Source={isM365TranslationEnabled}
         onTranslationComplete={handleDocumentTranslationComplete}
         onTranslationPending={handleDocumentTranslationPending}
+      />
+
+      {/* Meeting import (§4) */}
+      <M365MeetingImportModal
+        isOpen={isMeetingImportOpen}
+        onClose={() => setIsMeetingImportOpen(false)}
+        onImportTranscript={(transcript, meeting) => {
+          void handleMeetingTranscriptImport(transcript, meeting);
+        }}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import { OpenAIModelID, OpenAIModels } from '@/types/openai';
+import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import {
   getCurrentEnvironment,
@@ -75,28 +75,57 @@ describe('Model Configuration', () => {
   });
 
   describe('getDefaultModel', () => {
-    // The default is DYNAMIC: the newest standard-variant GPT enabled in the
-    // ring — rings with NOT_YET_ROLLED_OUT gates resolve to the newest
-    // un-gated one. These pins move whenever a newer standard GPT lands in
-    // the catalog (or is un-gated); that's the feature, not drift.
-    it('returns the latest standard GPT for localhost', () => {
+    // The cost-policy preference (DEFAULT_MODEL_PREFERENCE, currently
+    // gpt-5.4) wins in every ring where it is present; the dynamic
+    // latest-standard-GPT rule is the tail behavior when no preference
+    // resolves. These pins move when the preference list changes; that's
+    // the feature, not drift.
+    it('returns the preferred default for localhost', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', undefined);
-      expect(getDefaultModel()).toBe('gpt-5.5');
+      expect(getDefaultModel()).toBe('gpt-5.4');
     });
 
-    it('returns the latest standard GPT for dev', () => {
+    it('returns the preferred default for dev', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'dev');
-      expect(getDefaultModel()).toBe('gpt-5.5');
+      expect(getDefaultModel()).toBe('gpt-5.4');
     });
 
-    it('returns the latest un-gated standard GPT for prod', () => {
+    it('returns the preferred default for prod', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
-      expect(getDefaultModel()).toBe('gpt-5.2');
+      expect(getDefaultModel()).toBe('gpt-5.4');
     });
 
-    it('returns the latest un-gated standard GPT for production', () => {
+    it('returns the preferred default for production', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'production');
-      expect(getDefaultModel()).toBe('gpt-5.2');
+      expect(getDefaultModel()).toBe('gpt-5.4');
+    });
+
+    it('falls back to the latest standard GPT when the preference is not served', () => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
+      const served = [
+        OpenAIModels[OpenAIModelID.GPT_5_2],
+        OpenAIModels[OpenAIModelID.GPT_5],
+      ];
+      expect(getDefaultModel(served)).toBe('gpt-5.2');
+    });
+
+    it('skips a preference that is not selectable in the caller region', () => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
+      const served: OpenAIModel[] = [
+        { ...OpenAIModels[OpenAIModelID.GPT_5_4], hostedIn: ['US'] },
+        { ...OpenAIModels[OpenAIModelID.GPT_5_2], hostedIn: ['US', 'EU'] },
+      ];
+      expect(getDefaultModel(served, 'EU')).toBe('gpt-5.2');
+      expect(getDefaultModel(served, 'US')).toBe('gpt-5.4');
+    });
+
+    it('prefers gpt-5.4 over newer served standard GPTs (cost policy)', () => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'dev');
+      const served = [
+        OpenAIModels[OpenAIModelID.GPT_5_5],
+        OpenAIModels[OpenAIModelID.GPT_5_4],
+      ];
+      expect(getDefaultModel(served)).toBe('gpt-5.4');
     });
   });
 
@@ -187,6 +216,121 @@ describe('Model Configuration', () => {
           expect(excluded).not.toContain(fallback.id);
         }
       }
+    });
+  });
+
+  describe('dynamic fallback (served model list)', () => {
+    beforeEach(() => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
+    });
+
+    const mkModel = (
+      id: string,
+      over: Partial<OpenAIModel> = {},
+    ): OpenAIModel =>
+      ({
+        id,
+        name: id,
+        maxLength: 100000,
+        tokenLimit: 16000,
+        ...over,
+      }) as OpenAIModel;
+
+    // A served ring where the static chain has rotted: no gpt-5.2*, no
+    // gpt-5-mini, DeepSeek-V3.1 gone (deprecated). The latest standard GPT
+    // is gpt-5.6-sol.
+    const served: OpenAIModel[] = [
+      mkModel('gpt-5.6-sol', {
+        series: 'gpt',
+        variant: 'standard',
+        versionLabel: '5.6',
+      }),
+      mkModel('gpt-5.5', {
+        series: 'gpt',
+        variant: 'standard',
+        versionLabel: '5.5',
+      }),
+      mkModel('DeepSeek-V3.2', { series: 'deepseek', versionLabel: '3.2' }),
+      mkModel('my-org-agent', { isOrganizationAgent: true }),
+      mkModel('o3-batch', { stream: false, versionLabel: '3' }),
+    ];
+
+    it('leads with the served default and never names an unserved model', () => {
+      const chain = getFallbackChain(served);
+      expect(chain[0]).toBe('gpt-5.6-sol');
+      const servedIds = new Set(served.map((m) => m.id));
+      for (const id of chain) {
+        expect(servedIds.has(id)).toBe(true);
+      }
+    });
+
+    it('extends the chain past the rotted static tail with eligible served models', () => {
+      const chain = getFallbackChain(served);
+      // GPT models first (newest first), then other providers; agents and
+      // non-streaming models never appear.
+      expect(chain).toEqual(['gpt-5.6-sol', 'gpt-5.5', 'DeepSeek-V3.2']);
+    });
+
+    it('resolves discovered-only models that are absent from the static catalog', () => {
+      const fallback = getFallbackModel(['gpt-5.6-sol'], [], {
+        availableModels: served,
+      });
+      expect(fallback?.id).toBe('gpt-5.5');
+    });
+
+    it('tries the preferred default (user setting) before the chain', () => {
+      const fallback = getFallbackModel(['gpt-5.6-sol'], [], {
+        availableModels: served,
+        preferredDefaultId: 'DeepSeek-V3.2',
+      });
+      expect(fallback?.id).toBe('DeepSeek-V3.2');
+    });
+
+    it('skips the preferred default when it is the model that just failed', () => {
+      const fallback = getFallbackModel(['DeepSeek-V3.2'], [], {
+        availableModels: served,
+        preferredDefaultId: 'DeepSeek-V3.2',
+      });
+      expect(fallback?.id).toBe('gpt-5.6-sol');
+    });
+
+    it('skips the preferred default when it is not fallback-eligible', () => {
+      const fallback = getFallbackModel([], [], {
+        availableModels: served,
+        preferredDefaultId: 'my-org-agent',
+      });
+      expect(fallback?.id).toBe('gpt-5.6-sol');
+    });
+
+    it('respects the user region', () => {
+      const regional: OpenAIModel[] = [
+        mkModel('gpt-5.6-sol', {
+          series: 'gpt',
+          variant: 'standard',
+          versionLabel: '5.6',
+          hostedIn: ['US'],
+        }),
+        mkModel('gpt-5.5', {
+          series: 'gpt',
+          variant: 'standard',
+          versionLabel: '5.5',
+          hostedIn: ['US', 'EU'],
+        }),
+      ];
+      const fallback = getFallbackModel([], [], {
+        availableModels: regional,
+        userRegion: 'EU',
+      });
+      expect(fallback?.id).toBe('gpt-5.5');
+    });
+
+    it('returns null when every served model has been attempted', () => {
+      const fallback = getFallbackModel(
+        ['gpt-5.6-sol', 'gpt-5.5', 'DeepSeek-V3.2'],
+        [],
+        { availableModels: served },
+      );
+      expect(fallback).toBeNull();
     });
   });
 

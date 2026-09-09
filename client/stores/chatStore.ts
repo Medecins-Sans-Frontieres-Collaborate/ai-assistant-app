@@ -2,6 +2,18 @@
 
 import toast from 'react-hot-toast';
 
+import { notifyLimitsChanged } from '@/client/hooks/settings/limitsUxEvents';
+import {
+  effectiveInterpreterMode as applyInterpreterLimitGate,
+  effectiveSearchMode as applySearchLimitGate,
+  getToolLimitGatesSnapshot,
+} from '@/client/hooks/settings/useAgentToolGates';
+
+import { LimitDenialMetadata } from '@/client/services/api/errors';
+import {
+  forceSessionExpiredSignOut,
+  isSessionExpiredApiError,
+} from '@/client/services/auth/sessionExpiry';
 import {
   LocalRuntimeError,
   localChatService,
@@ -10,13 +22,19 @@ import { updateConversationCompaction } from '@/client/services/compactionServic
 import { ensureFreshOauthToken } from '@/client/services/mcp/mcpOauth';
 import { extractMemories } from '@/client/services/memoryService';
 import { generateConversationTitle } from '@/client/services/titleService';
+import {
+  M365_BUILTIN_SERVER_ID,
+  M365_BUILTIN_SERVER_LABEL,
+} from '@/lib/services/m365/tools/toolCatalog';
 import { isLocalModel } from '@/lib/services/models/localModels';
 
+import { isDecoupledAgentAttachment } from '@/lib/utils/app/agentAttachment';
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import { buildConversationContextSections } from '@/lib/utils/app/systemPrompt';
 import { getCompactionBoundary } from '@/lib/utils/shared/chat/conversationCompaction';
 import { findMessageIndexForApprovalId } from '@/lib/utils/shared/chat/findMessageIndexForApprovalId';
+import { applyMcpPin } from '@/lib/utils/shared/chat/mcpPin';
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
 import {
   createMessageGroup,
@@ -25,7 +43,10 @@ import {
   messageToVersion,
 } from '@/lib/utils/shared/chat/messageVersioning';
 import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
-import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
+import {
+  StreamInterruptedError,
+  StreamParser,
+} from '@/lib/utils/shared/chat/streamParser';
 import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
 import { AgentType } from '@/types/agent';
@@ -38,7 +59,9 @@ import {
   MessageType,
   ToolCallRecord,
 } from '@/types/chat';
+import { ErrorCode } from '@/types/errors';
 import { ExtractionRequest } from '@/types/extractionRecipe';
+import { InterpreterMode } from '@/types/interpreterMode';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -47,6 +70,7 @@ import {
 } from '@/types/openai';
 import { Citation } from '@/types/rag';
 import { SearchMode } from '@/types/searchMode';
+import { PrecomputedSearchResults } from '@/types/webSearch';
 
 import { useChatInputStore } from './chatInputStore';
 import { useConversationStore } from './conversationStore';
@@ -57,11 +81,22 @@ import { useUIStore } from './uiStore';
 import { ApiError, chatService } from '@/client/services';
 import { getFallbackModel, isModelDisabled } from '@/config/models';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
-import { ConsentRequestPayload } from '@/lib/streamMarkers';
+import {
+  ConsentRequestPayload,
+  SearchInterimPayload,
+} from '@/lib/streamMarkers';
 import { create } from 'zustand';
 
 /** Sentinel key for OAuth resume state when a server has no label. */
 const NO_SERVER_LABEL = '__no_label__';
+
+/**
+ * Consecutive identical failures in one conversation before the error
+ * banner escalates ("this conversation may be corrupted — start a fresh
+ * one" + debug-info download). Exported so the banner component and tests
+ * share the boundary.
+ */
+export const REPEATED_FAILURE_THRESHOLD = 3;
 
 /**
  * Clamps the user-adjustable context window size. Mirrors the settingsStore
@@ -73,6 +108,35 @@ function clampContextWindowSize(size: number | undefined): number {
     Math.max(size ?? VALIDATION_LIMITS.CLIENT_MAX_MESSAGES, 20),
     VALIDATION_LIMITS.MAX_API_MESSAGES,
   );
+}
+
+/**
+ * The user message a failed turn should replay. Walks backwards so any
+ * partial assistant entry left behind by the failure is skipped.
+ */
+function trailingUserMessage(conversation: Conversation): Message | undefined {
+  const flat = flattenEntriesForAPI(conversation.messages);
+  for (let i = flat.length - 1; i >= 0; i--) {
+    if (flat[i].role === 'user') return flat[i];
+  }
+  return undefined;
+}
+
+/**
+ * Fallback-resolution context from the client's live state: the discovery-
+ * served model list (so the fallback never targets an undeployed model),
+ * the user's configured default model (tried first — the most predictable
+ * substitute), and the user's region. Every chatStore fallback lookup goes
+ * through this so the chain tracks the dynamic model system instead of the
+ * static catalog.
+ */
+function dynamicFallbackOpts() {
+  const settings = useSettingsStore.getState();
+  return {
+    availableModels: settings.models.length > 0 ? settings.models : undefined,
+    preferredDefaultId: settings.defaultModelId || null,
+    userRegion: settings.userRegion ?? null,
+  };
 }
 
 /** Returns a new Set without `item`, or the same set when `item` isn't present
@@ -117,6 +181,21 @@ interface ChatStore {
   streamingConversationId: string | null;
   citations: Citation[];
   error: string | null;
+  /**
+   * Structured server error code accompanying `error` (e.g. FILE_NOT_FOUND
+   * for an expired attachment). Lets components render localized,
+   * code-specific copy instead of the raw server string. Null whenever
+   * `error` is null or the failure carried no code.
+   */
+  errorCode: string | null;
+  /**
+   * Parsed `metadata` of the most recent admin usage-limit 403
+   * (`RATE_LIMIT_QUOTA_EXCEEDED`), kept next to `errorCode` so the error
+   * card can pick copy and actions by denial shape (per-model, feature
+   * gate, overall cap) and show a localized reset countdown. Null for every
+   * other error; cleared by the next send and by every error clear.
+   */
+  lastDenial: LimitDenialMetadata | null;
   stopRequested: boolean;
   loadingMessage: string | null;
   /**
@@ -129,6 +208,19 @@ interface ChatStore {
   streamingConsentRequests: ConsentRequestPayload[];
   /** Live tool call records during streaming; rendered as the summary. */
   streamingToolCalls: ToolCallRecord[];
+  /**
+   * Interim headlines from a combined (Bing + news) search — rendered on
+   * the in-progress message with a "Summarize from headlines" action while
+   * the Bing leg is still running.
+   */
+  streamingInterimSearch: SearchInterimPayload | null;
+  /** Search mode of the in-flight turn, kept for headline resends. */
+  streamingSearchMode: SearchMode | undefined;
+  /**
+   * One-shot echo payload for a "Summarize from headlines" resend; consumed
+   * (and cleared) by the next sendChatRequest.
+   */
+  pendingPrecomputedSearchResults: PrecomputedSearchResults | null;
   abortController: AbortController | null;
 
   // Retry-related state
@@ -169,6 +261,20 @@ interface ChatStore {
   lastTurnDroppedActiveFileIds: Record<string, string[]>;
 
   /**
+   * Consecutive-identical-failure streak per conversation, keyed by
+   * conversation id. Incremented at every terminal banner-set site (same
+   * message → count+1, different message → restart at 1), cleared when a
+   * turn for that conversation succeeds. Page-load scoped like the rest of
+   * this store — a streak is a live-session signal, not durable history.
+   * `errorCode` is the latest structured code, kept for the debug bundle;
+   * matching is on the message string only.
+   */
+  errorStreaks: Record<
+    string,
+    { message: string; errorCode: string | null; count: number }
+  >;
+
+  /**
    * Map of MCP approval_request_id → user decision (true=approve). Resolved
    * approvals are stored here so the consent card can render its "Approved"
    * / "Denied" terminal state without re-prompting. Reset per page load —
@@ -180,6 +286,16 @@ interface ChatStore {
   /** Approval ids that errored or were aborted. Prevents the auto-approve
    *  effect from retrying the same id indefinitely after a failure. */
   failedApprovals: Set<string>;
+  /**
+   * Map of MCP approval_request_id → argument JSON the user edited on the
+   * consent card (sixth pass: per-item toggles on a `tasks_create` batch).
+   * The native resume is stateless — the server executes the `argumentsJson`
+   * the CLIENT echoes back in `mcpPendingToolCalls` — so a per-item edit is
+   * expressed purely as an override applied when that payload is assembled.
+   * Entries are consumed (dropped) once their resume succeeds; a failed
+   * resume keeps them so the card's retry resends the same edited batch.
+   */
+  approvalArgumentOverrides: Map<string, string>;
 
   /**
    * Per-server "Continue in flight" markers, keyed by server label
@@ -205,6 +321,26 @@ interface ChatStore {
     conversationId: string,
     fileIds: string[],
   ) => void;
+  /** Extends or restarts the conversation's failure streak (see errorStreaks). */
+  recordErrorStreak: (
+    conversationId: string,
+    message: string,
+    errorCode: string | null,
+  ) => void;
+  /** Drops the conversation's failure streak (a turn succeeded). */
+  clearErrorStreak: (conversationId: string) => void;
+  /**
+   * Classifies a terminal failure as an admin usage-limit denial or not,
+   * and applies the denial side effects (streak reset, limits refetch).
+   * Shared by the first-attempt and fallback-retry error paths so the two
+   * cannot drift. `denial` is null when the 403 body carried no usable
+   * metadata — the card then falls back to the server sentence.
+   */
+  noteQuotaDenial: (
+    error: unknown,
+    errorCode: string | undefined,
+    conversationId: string | undefined,
+  ) => { isQuotaDenial: boolean; denial: LimitDenialMetadata | null };
   setCurrentMessage: (message: Message | undefined) => void;
   setIsStreaming: (isStreaming: boolean) => void;
   setStreamingContent: (content: string) => void;
@@ -248,6 +384,11 @@ interface ChatStore {
    * `alwaysApprove*` match — so the tool usage summary can label
    * auto-approved calls accordingly and the consent card can suppress
    * its display when the user never had a choice.
+   *
+   * `modifiedArgumentsJson` lets the card narrow what an approval actually
+   * runs (batch consent cards with items unchecked). It replaces the pending
+   * call's arguments in the resume payload; other pending calls are
+   * untouched. Ignored for denials — a denied call never executes.
    */
   submitApproval: (
     approvalRequestId: string,
@@ -255,6 +396,7 @@ interface ChatStore {
     conversation: Conversation,
     sourceMessageIndex?: number,
     source?: 'manual' | 'auto-approved' | 'auto-denied',
+    modifiedArgumentsJson?: string,
   ) => Promise<void>;
   processStream: (
     stream: ReadableStream<Uint8Array>,
@@ -324,6 +466,46 @@ interface ChatStore {
    * assistant group to append a version to.
    */
   retryFailedRequest: () => Promise<void>;
+  /**
+   * "Turn off <feature> and resend" for a feature-gate denial: the gated
+   * tool was the only reason the request failed, so switching it off and
+   * replaying the turn is the one-click fix.
+   *
+   * `webSearch`/`codeInterpreter` flip only the chat-input store's LIVE mode
+   * (plus the explicit `searchMode` argument to `sendMessage`) — never the
+   * conversation's persisted `defaultSearchMode`/`defaultInterpreterMode`,
+   * and never the user's global settings default. `ChatInput` resets the
+   * whole composer (draft, attachments, in-flight uploads) whenever either
+   * conversation field changes, so persisting the flip here would wipe
+   * whatever the user typed while the denial card was showing; the
+   * composer stays off for the rest of this session, matching a manual
+   * toggle, and re-derives from the (unchanged) persisted default on the
+   * next reload or conversation switch.
+   *
+   * `mcp` has no single toggle to flip, so it disables every currently
+   * enabled MCP server (plus the built-in M365 toolset) for this
+   * conversation via `disabledMcpServerIds` and clears any focus pin —
+   * this field isn't read by the composer-reset effect, so it can be
+   * persisted immediately.
+   */
+  resendWithoutFeature: (
+    feature: 'webSearch' | 'codeInterpreter' | 'mcp',
+  ) => Promise<void>;
+  /**
+   * User-initiated retry of the failed turn on the next fallback-chain
+   * model. Unlike the automatic fallback (network/5xx failures only),
+   * this is offered in the error UI for EVERY recoverable failure —
+   * including server-reported mid-stream ones, where switching model is a
+   * deliberate user choice rather than a silent substitution.
+   */
+  retryFailedWithFallbackModel: () => Promise<void>;
+  /**
+   * "Summarize from headlines now": aborts the in-flight combined search
+   * (Bing still running) and resends the same user message with the
+   * already-received interim headlines echoed back — the server merges
+   * them as the search result without searching again.
+   */
+  summarizeFromHeadlines: () => Promise<void>;
   dismissModelSwitchPrompt: () => void;
   acceptModelSwitch: (alwaysSwitch?: boolean) => void;
 
@@ -370,11 +552,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   streamingConversationId: null,
   citations: [],
   error: null,
+  errorCode: null,
+  lastDenial: null,
   stopRequested: false,
   loadingMessage: null,
   loadingMessageParams: undefined,
   streamingConsentRequests: [],
   streamingToolCalls: [],
+  streamingInterimSearch: null,
+  streamingSearchMode: undefined,
+  pendingPrecomputedSearchResults: null,
   abortController: null,
 
   // Retry-related initial state
@@ -396,9 +583,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   // Dropped active file IDs by conversation (most recent turn only)
   lastTurnDroppedActiveFileIds: {},
+  errorStreaks: {},
   submittedApprovals: new Map<string, boolean>(),
   submittingApprovals: new Set<string>(),
   failedApprovals: new Set<string>(),
+  approvalArgumentOverrides: new Map<string, string>(),
   pendingOAuthResume: {},
 
   setPendingOAuthResume: (info) =>
@@ -432,6 +621,45 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   // Actions
   setRegeneratingIndex: (index) => set({ regeneratingIndex: index }),
+  recordErrorStreak: (conversationId, message, errorCode) =>
+    set((state) => {
+      const prev = state.errorStreaks[conversationId];
+      return {
+        errorStreaks: {
+          ...state.errorStreaks,
+          [conversationId]:
+            prev?.message === message
+              ? { message, errorCode, count: prev.count + 1 }
+              : { message, errorCode, count: 1 },
+        },
+      };
+    }),
+
+  clearErrorStreak: (conversationId) =>
+    set((state) => {
+      if (!(conversationId in state.errorStreaks)) return state;
+      const next = { ...state.errorStreaks };
+      delete next[conversationId];
+      return { errorStreaks: next };
+    }),
+
+  noteQuotaDenial: (error, errorCode, conversationId) => {
+    if (errorCode !== ErrorCode.RATE_LIMIT_QUOTA_EXCEEDED) {
+      return { isQuotaDenial: false, denial: null };
+    }
+    // Any streak built up before the cap was hit is moot: the escalation
+    // copy is about corrupted conversations, and a quota is not one.
+    if (conversationId) get().clearErrorStreak(conversationId);
+    // The server just proved the client's picture of the user's limits is
+    // stale — ask the picker and the limits query to refetch so the model
+    // grays out / disappears immediately rather than on the next focus.
+    notifyLimitsChanged();
+    return {
+      isQuotaDenial: true,
+      denial: error instanceof ApiError ? error.limitDenial : null,
+    };
+  },
+
   setLastTurnDroppedActiveFileIds: (conversationId, fileIds) =>
     set((state) => {
       const next = { ...state.lastTurnDroppedActiveFileIds };
@@ -453,9 +681,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   setCitations: (citations) => set({ citations }),
 
-  setError: (error) => set({ error }),
+  setError: (error) => set({ error, errorCode: null, lastDenial: null }),
 
-  clearError: () => set({ error: null }),
+  clearError: () => set({ error: null, errorCode: null, lastDenial: null }),
 
   requestStop: () => {
     const { abortController } = get();
@@ -479,11 +707,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       streamingConversationId: null,
       citations: [],
       error: null,
+      errorCode: null,
+      lastDenial: null,
       stopRequested: false,
       loadingMessage: null,
       loadingMessageParams: undefined,
       streamingConsentRequests: [],
       streamingToolCalls: [],
+      streamingInterimSearch: null,
+      streamingSearchMode: undefined,
+      pendingPrecomputedSearchResults: null,
       abortController: null,
       // Reset retry state
       isRetrying: false,
@@ -543,6 +776,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       // Initialize streaming state
       get().initializeStreamingState(conversation.id, loadingMessage);
+      // Remember the turn's search mode so a "Summarize from headlines"
+      // resend can replay it faithfully.
+      set({ streamingSearchMode: searchMode });
 
       // Schedule loading message display (only if response is slow)
       showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
@@ -701,11 +937,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       streamingContent: '',
       streamingConversationId: conversationId,
       error: null,
+      errorCode: null,
+      // Every send (first attempt, fallback retry, resend) starts with a
+      // clean denial slate — a stale one would mislabel the next failure.
+      lastDenial: null,
       citations: [],
       loadingMessage: null, // Start with null, will be set after delay
       loadingMessageParams: undefined,
       streamingConsentRequests: [],
       streamingToolCalls: [],
+      streamingInterimSearch: null,
       stopRequested: false,
       abortController,
     });
@@ -792,14 +1033,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       console.warn(
         `[chatStore] Model "${conversation.model.id}" no longer exists, using fallback model`,
       );
-      // Try settings default, then the fallback chain
-      const fallbackId = settings.defaultModelId || fallbackModelID;
+      // The user's default leads (via preferredDefaultId), then the dynamic
+      // chain over the served list; the static ultimate fallback only
+      // matters when the live list is empty AND the chain resolves nothing.
       const rescuedModel =
-        OpenAIModels[fallbackId] ?? getFallbackModel([conversation.model.id]);
+        getFallbackModel([conversation.model.id], [], dynamicFallbackOpts()) ??
+        OpenAIModels[fallbackModelID];
 
       if (!rescuedModel) {
         throw new Error(
-          `No valid model available. Requested: ${conversation.model.id}, Fallback: ${fallbackId}`,
+          `No valid model available. Requested: ${conversation.model.id}`,
         );
       }
       latestModelConfig = rescuedModel;
@@ -866,6 +1109,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Memories require BOTH the user opt-in and the LD flag mirror —
     // flipping the flag off stops memories from being SENT, not just shown.
+    // memoryCapturePaused is deliberately NOT checked here: pausing stops new
+    // memories being learned, it does not stop the saved ones being used.
     // Same Foundry approval-resume exclusion as the summary. Select the 60
     // most recently UPDATED (the store array is insertion-ordered and
     // updateMemory edits in place, so a tail slice would drop freshly
@@ -886,14 +1131,27 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Echo the whole pending batch back (not just the answered ones): the
     // server auto-denies unanswered calls, mirroring the Foundry behavior.
+    // Card-side argument edits (per-item batch toggles) are applied here and
+    // only here: the stateless loop executes exactly the argumentsJson we
+    // echo, so an override narrows the call without any server change.
+    const argumentOverrides = get().approvalArgumentOverrides;
     const mcpPendingToolCalls = isMcpResume
       ? mcpPendingConsents.map((c) => ({
           id: c.approval_request_id!,
           serverId: c.server_id!,
           toolName: c.tool_name ?? '',
-          argumentsJson: c.tool_arguments ?? '{}',
+          argumentsJson:
+            argumentOverrides.get(c.approval_request_id!) ??
+            c.tool_arguments ??
+            '{}',
         }))
       : undefined;
+    // Plan echo: the turn plan persisted on the same message that carries
+    // the pending consents — progress and retry state survive the pause.
+    const mcpPlan =
+      isMcpResume && lastFlatMessage?.mcpPlan
+        ? lastFlatMessage.mcpPlan
+        : undefined;
     // Round counter for the server's loop cap. Each consent round appends one
     // assistant message, so the trailing-assistant run length approximates
     // the round index (validator clamps at 10 anyway).
@@ -967,15 +1225,40 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // otherwise strip searchMode for them.
     const isPromptAgentPersona =
       conversation.model.id.startsWith('org-prompt-');
+    // Admin-authored org RAG agents are not in the static registry; their
+    // gates ride the model object (set by ModelSelect from /api/agents).
+    // When the model carries a boolean it wins — for overrides of static
+    // ids it is fresher than the bundled config.
     const orgAgentSearchAllowed = isPromptAgentPersona
       ? true
       : isOrganizationAgent && conversation.model.id.startsWith('org-')
-        ? getOrganizationAgentById(conversation.model.id.slice('org-'.length))
-            ?.allowWebSearch === true
+        ? typeof conversation.model.allowWebSearch === 'boolean'
+          ? conversation.model.allowWebSearch
+          : getOrganizationAgentById(conversation.model.id.slice('org-'.length))
+              ?.allowWebSearch === true
         : false;
     const isAgentInvocation = isOrganizationAgent || isCustomAgent;
     const effectiveSearchMode =
       isAgentInvocation && !orgAgentSearchAllowed ? undefined : searchMode;
+
+    // Interpreter mode rides the same org-agent gate as search: static org
+    // agents only run code when their config opts in (allowCodeInterpreter,
+    // re-checked server-side); prompt-agent personas behave like plain
+    // models. Read from the chat-input store (per-conversation, like
+    // extraction) rather than threaded through call signatures.
+    const interpreterMode = useChatInputStore.getState().interpreterMode;
+    const orgAgentInterpreterAllowed = isPromptAgentPersona
+      ? true
+      : isOrganizationAgent && conversation.model.id.startsWith('org-')
+        ? typeof conversation.model.allowCodeInterpreter === 'boolean'
+          ? conversation.model.allowCodeInterpreter
+          : getOrganizationAgentById(conversation.model.id.slice('org-'.length))
+              ?.allowCodeInterpreter === true
+        : false;
+    const effectiveInterpreterMode =
+      isAgentInvocation && !orgAgentInterpreterAllowed
+        ? undefined
+        : interpreterMode;
 
     // Native MCP servers for this turn. Skipped for agent invocations (the
     // Foundry runtime does its own tool orchestration). Curated entries need
@@ -986,6 +1269,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       ? []
       : settings.mcpServers
           .filter((s) => s.enabled)
+          // Per-conversation opt-outs from the connector tray.
+          .filter((s) => !conversation.disabledMcpServerIds?.includes(s.id))
           .filter(
             (s) =>
               s.catalogKey ||
@@ -998,7 +1283,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Per-server auth: oauth servers refresh through the proxy first (single-
     // flight) and are EXCLUDED when no live access token exists (needsReauth);
     // bearer/header servers need their token; 'none' servers go bare.
-    const mcpServersToSend = (
+    const networkMcpEntries = (
       await Promise.all(
         mcpCandidates.map(async (s) => {
           let effectiveToken: string | undefined;
@@ -1024,6 +1309,54 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         }),
       )
     ).filter((s): s is NonNullable<typeof s> => s !== null);
+
+    // Builtin Microsoft 365 toolset: a url-less, token-less marker entry the
+    // server resolves in-process. Gated on the LD flag mirror, the per-user
+    // M365 connection, the global toolset toggle, and the per-chat opt-out —
+    // and skipped for agent invocations like every other MCP entry.
+    const m365ToolsActive =
+      !isAgentInvocation &&
+      settings.m365ToolsFlagEnabled &&
+      settings.m365Connected &&
+      settings.m365ToolsUserEnabled &&
+      !conversation.disabledMcpServerIds?.includes(M365_BUILTIN_SERVER_ID);
+    // The focus pin applies to the COMBINED list, so pinning the M365 row
+    // (or any connector) narrows the turn to just that server's tools.
+    const mcpServersToSend = applyMcpPin(
+      m365ToolsActive
+        ? [
+            ...networkMcpEntries,
+            {
+              id: M365_BUILTIN_SERVER_ID,
+              name: M365_BUILTIN_SERVER_LABEL,
+              builtin: true,
+            },
+          ]
+        : networkMcpEntries,
+      // A pinned connector focuses the turn: only its tools are declared.
+      conversation.pinnedMcpServerId,
+    );
+
+    // Admin usage-limit gates (docs/LIMITS_USER_FACING_UX.md §7.4/§3c): the
+    // composer can SHOW a blocked tool as Off/locked, but the request must
+    // actually carry it as Off — createLimitsMiddleware 403s the whole
+    // message otherwise, on a persisted Always/Auto default or a still-on
+    // connector the tray disabled visually but never wrote to storage.
+    // `getToolLimitGatesSnapshot()` reads the latest gates any mounted
+    // composer surface (ToolModeControls/Dropdown/ConnectorPinTray) has
+    // published; it fails open (nothing blocked) before any of them render.
+    const toolLimitGates = getToolLimitGatesSnapshot();
+    const searchModeForRequest = applySearchLimitGate(
+      effectiveSearchMode,
+      toolLimitGates,
+    );
+    const interpreterModeForRequest =
+      effectiveInterpreterMode === undefined
+        ? undefined
+        : applyInterpreterLimitGate(effectiveInterpreterMode, toolLimitGates);
+    const mcpServersForRequest = toolLimitGates.mcp.blocked
+      ? []
+      : mcpServersToSend;
 
     // Resolve extraction payload from the chat-input store + the persisted
     // recipes. Extraction mode is ephemeral (per-conversation) and recipes
@@ -1061,16 +1394,36 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         ? 'EU'
         : undefined);
 
+    // One-shot echo for "Summarize from headlines" resends: consume the
+    // pending payload so it can never leak into a later, unrelated send.
+    const { pendingPrecomputedSearchResults } = get();
+    if (pendingPrecomputedSearchResults) {
+      set({ pendingPrecomputedSearchResults: null });
+    }
+
     return await chatService.chat(modelToSend, messagesForAPI, {
       prompt: settings.systemPrompt,
       temperature: settings.temperature,
       stream: modelSupportsStreaming,
       botId: conversation.bot,
+      conversationId: conversation.id,
+      // Decoupled attachment (capabilities tray): a bot riding a REAL model
+      // is an explicit attach; legacy `org-`-shaped models keep the
+      // historical scoped resolution instead.
+      agentAttached: isDecoupledAgentAttachment(conversation) || undefined,
       threadId: conversation.threadId,
       reasoningEffort:
         conversation.reasoningEffort || modelToSend.reasoningEffort,
       verbosity: conversation.verbosity || modelToSend.verbosity,
-      searchMode: effectiveSearchMode,
+      searchMode: searchModeForRequest,
+      // Advanced search tuning only travels when search can actually run.
+      webSearchOptions:
+        searchModeForRequest === SearchMode.INTELLIGENT ||
+        searchModeForRequest === SearchMode.ALWAYS
+          ? settings.webSearchOptions
+          : undefined,
+      precomputedSearchResults: pendingPrecomputedSearchResults ?? undefined,
+      interpreterMode: interpreterModeForRequest,
       hostedRegion,
       tone, // Pass the full tone object
       signal: abortController?.signal, // Pass abort signal
@@ -1086,9 +1439,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       agentSourcePath: modelToSend.agentSource,
       modelSourcePath: modelToSend.modelSource,
       approvalResponses,
-      mcpServers: mcpServersToSend.length ? mcpServersToSend : undefined,
+      mcpServers: mcpServersForRequest.length
+        ? mcpServersForRequest
+        : undefined,
       mcpPendingToolCalls,
       mcpLoopRound,
+      mcpPlan,
+      // Fifth pass: screen overrides ride the conversation (explicit UI
+      // action on a flagged record); shared mailboxes ride settings. Sent
+      // only when the builtin M365 server is in play — which it never is
+      // once `mcp.blocked` cleared the list above.
+      m365MailScreenOverrides:
+        mcpServersForRequest.some(
+          (entry) => 'builtin' in entry && entry.builtin,
+        ) && conversation.m365MailScreenOverrides?.length
+          ? conversation.m365MailScreenOverrides.slice(0, 20)
+          : undefined,
+      m365SharedMailboxes:
+        mcpServersForRequest.some(
+          (entry) => 'builtin' in entry && entry.builtin,
+        ) && settings.m365SharedMailboxes?.length
+          ? settings.m365SharedMailboxes
+          : undefined,
       extraction,
       conversationSummary,
       memories: memoryTexts.length > 0 ? memoryTexts : undefined,
@@ -1227,6 +1599,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       if (result.toolCallsChanged) {
         set({ streamingToolCalls: streamParser.getToolCallRecords?.() ?? [] });
       }
+      if (result.searchInterimChanged) {
+        set({ streamingInterimSearch: streamParser.getSearchInterim() });
+      }
 
       // Clear loading timeout once content arrives
       if (result.hasReceivedContent && showLoadingTimeout) {
@@ -1295,6 +1670,21 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
     }
 
+    // A cleanly-ended stream can still report failure in-band (terminal
+    // `streamError` metadata — e.g. the MCP tool loop crashing mid-round).
+    // Raised AFTER the needs-reauth pass above so connector state still
+    // updates; the callers' error paths surface it with whatever partial
+    // tool records / consent cards are in the streaming slices.
+    const streamError = streamParser.getStreamError?.();
+    if (streamError) {
+      throw new StreamInterruptedError(
+        streamError.message,
+        streamError.code,
+        streamError.retry === true,
+        streamError.fileUrl,
+      );
+    }
+
     return {
       finalContent,
       threadId: streamParser.getThreadId(),
@@ -1324,6 +1714,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const { regeneratingIndex } = get();
     const hasPendingTranscription =
       pendingTranscriptions && pendingTranscriptions.length > 0;
+
+    // A completed turn ends the conversation's failure streak. Guarded:
+    // handleSendError also finalizes a PARTIAL message flagged `error:
+    // true`, and a failed turn must not reset its own streak.
+    if (assistantMessage.error !== true) {
+      get().clearErrorStreak(conversation.id);
+    }
 
     if (regeneratingIndex !== null) {
       // Adding a new version to an existing message group
@@ -1376,13 +1773,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           //
           // Generate AI title async (fire and forget - updates when ready)
           const conversationId = conversation.id;
-          const modelId = conversation.model.id;
           const messageGroups = [
             ...conversation.messages,
             createMessageGroup(assistantMessage),
           ];
 
-          generateConversationTitle(messageGroups, modelId)
+          generateConversationTitle(messageGroups)
             .then((result) => {
               if (!result?.title) return;
               // Re-read before writing: the user may have renamed the
@@ -1433,7 +1829,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           contextWindowSize,
         );
       }
-      if (settings.memoriesEnabled && settings.memoriesFlagEnabled) {
+      // memoryCapturePaused gates capture ONLY — see the injection block
+      // above, which deliberately keeps sending what is already saved.
+      if (
+        settings.memoriesEnabled &&
+        settings.memoriesFlagEnabled &&
+        !settings.memoryCapturePaused
+      ) {
         void extractMemories(finalConversation, flat);
       }
     }
@@ -1471,6 +1873,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       loadingMessageParams: undefined,
       streamingConsentRequests: [],
       streamingToolCalls: [],
+      streamingInterimSearch: null,
+      streamingSearchMode: undefined,
       abortController: null,
       stopRequested: false,
     });
@@ -1489,11 +1893,43 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         streamingContent: '',
         streamingConversationId: null,
         loadingMessage: null,
+        streamingInterimSearch: null,
         abortController: null,
         stopRequested: false,
         error: null, // Don't show error for user-initiated stops
+        errorCode: null,
         isRetrying: false,
       });
+      return;
+    }
+
+    // A 401 whose code says the session itself is dead (e.g. token refresh
+    // failing after a client-secret rotation). No banner could help — every
+    // retry fails identically until the user signs in again. The submitted
+    // question is already safe: handleSend persists it to the conversation
+    // store (localStorage) BEFORE the request fires, and signOut doesn't
+    // clear localStorage — after re-login the trailing user message shows
+    // the "Generate response" button. Settle streaming state quietly, then
+    // force re-authentication; the signin page shows the SessionExpired card.
+    if (isSessionExpiredApiError(error)) {
+      console.error('[chatStore] Session expired — forcing sign-out');
+      set({
+        isStreaming: false,
+        streamingContent: '',
+        streamingConversationId: null,
+        loadingMessage: null,
+        streamingInterimSearch: null,
+        streamingToolCalls: [],
+        streamingConsentRequests: [],
+        abortController: null,
+        stopRequested: false,
+        isRetrying: false,
+        error: null, // no dead-end banner — we navigate to signin instead
+        errorCode: null,
+        failedConversation: null,
+        failedSearchMode: undefined,
+      });
+      forceSessionExpiredSignOut();
       return;
     }
 
@@ -1513,10 +1949,26 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // conversation the user deliberately kept on their own machine off to
     // Azure. A local failure must surface as a local failure.
     const { isRetrying } = get();
+    // Server-reported mid-stream failures (streamError metadata) are not
+    // silently retried on a fallback model: the stream was already underway
+    // — tool calls may have run — and the user has been staring at a
+    // loader; surface the failure with its partial context immediately.
+    // EXCEPT when the server flagged `retry`: the partial is a broken
+    // promise (a generated file that doesn't exist, or no content at all),
+    // so a fallback retry is forced — keeping it would be worse.
+    const isStreamInterrupted =
+      error instanceof StreamInterruptedError && !error.retry;
+    // The 429 exemption exists for MODEL-level rate limits (an Azure TPM
+    // ceiling), which another model genuinely can absorb. Our own per-USER
+    // limits — the burst limiter and admin usage limits — are keyed on the
+    // user, so every fallback model hits them identically: retrying the chain
+    // just fires N doomed requests and delays the message the user needs to
+    // see. Identified by error code, since status cannot tell them apart.
     const isNonRetryableClientError =
-      error instanceof ApiError &&
-      error.isClientError() &&
-      error.status !== 429;
+      (error instanceof ApiError &&
+        error.isClientError() &&
+        (error.status !== 429 || error.isRateLimitError())) ||
+      isStreamInterrupted;
     const modelId = conversation?.model?.id ?? '';
     const isNonFallbackModel =
       conversation?.model?.isOrganizationAgent ||
@@ -1526,7 +1978,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       modelId.startsWith('custom-') ||
       isLocalModel(conversation?.model);
     const nextFallbackModel = conversation
-      ? getFallbackModel([conversation.model.id])
+      ? getFallbackModel([conversation.model.id], [], dynamicFallbackOpts())
       : null;
 
     if (
@@ -1597,13 +2049,78 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       errorMessage = error.message;
     }
 
-    // Reword opaque "network error"-style messages when we have partial
-    // state — most useful for mid-stream agent failures (Foundry tool
-    // timeouts, upstream connectors going down). The card below carries the
-    // tool details.
-    if (hasPartialState && /network error|fetch failed/i.test(errorMessage)) {
-      errorMessage =
-        'The agent stopped responding before finishing. Some tool calls may have completed — see the partial result.';
+    // Structured code accompanying the failure — from the in-band stream
+    // error (streaming path) or the JSON error body (HTTP path).
+    const structuredCode =
+      error instanceof StreamInterruptedError
+        ? error.code
+        : error instanceof ApiError
+          ? (error.response?.code as string | undefined)
+          : undefined;
+
+    // An expired attachment (FILE_NOT_FOUND) needs repair, not just a
+    // banner: the dead `file_url` lives in the persisted history, so every
+    // future turn would re-validate the missing blob and fail identically.
+    // Flag the file in the Active Files tray and strip the dead reference,
+    // so "Try again" (and every later turn) sends a clean history.
+    let conversationForRetry = conversation || null;
+    if (structuredCode === ErrorCode.FILE_NOT_FOUND && conversation) {
+      let failedFileUrl =
+        error instanceof StreamInterruptedError
+          ? error.fileUrl
+          : error instanceof ApiError
+            ? ((error.response?.metadata?.fileUrl ??
+                error.response?.details?.[0]?.metadata?.fileUrl) as
+                | string
+                | undefined)
+            : undefined;
+      // Defensive: if the server didn't name the file, target the most
+      // recent attachment in history — the conversation must never stay
+      // permanently broken.
+      if (!failedFileUrl) {
+        const flat = flattenEntriesForAPI(conversation.messages);
+        for (let i = flat.length - 1; i >= 0 && !failedFileUrl; i--) {
+          const content = flat[i].content;
+          if (flat[i].role !== 'user' || !Array.isArray(content)) continue;
+          const filePart = content.find((p) => p.type === 'file_url');
+          if (filePart && 'url' in filePart) failedFileUrl = filePart.url;
+        }
+      }
+      if (failedFileUrl) {
+        const conversationStore = useConversationStore.getState();
+        conversationStore.markActiveFileError(
+          conversation.id,
+          failedFileUrl,
+          errorMessage,
+        );
+        conversationStore.stripExpiredFileFromMessages(
+          conversation.id,
+          failedFileUrl,
+        );
+        // The snapshot captured at send time still contains the dead
+        // file_url — retryFailedRequest replays it verbatim, so refresh it
+        // to the sanitized conversation.
+        conversationForRetry =
+          useConversationStore
+            .getState()
+            .conversations.find((c) => c.id === conversation.id) ??
+          conversation;
+      }
+    }
+
+    // Browser network-failure strings are not for humans: Firefox throws
+    // NS_ERROR_* codes (e.g. NS_ERROR_NET_PARTIAL_TRANSFER when the server
+    // aborts mid-stream), Chrome says "Failed to fetch", Safari "Load
+    // failed". Reword them all; with partial state, point at the partial
+    // result instead.
+    const isOpaqueNetworkError =
+      /network ?error|fetch failed|failed to fetch|load failed|NS_ERROR|error in body stream/i.test(
+        errorMessage,
+      );
+    if (isOpaqueNetworkError) {
+      errorMessage = hasPartialState
+        ? 'The agent stopped responding before finishing. Some tool calls may have completed — see the partial result.'
+        : 'The connection was interrupted before the response finished. Check your connection and try again.';
     }
 
     // Persist the partial assistant message so the tool summary survives
@@ -1623,9 +2140,32 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       void get().finalizeMessage(partialMessage, conversation);
     }
 
+    // An admin usage-limit denial is a policy outcome, not a broken
+    // conversation: it must never feed the repeated-failure escalation
+    // ("this conversation may be corrupted") and it invalidates the client's
+    // picture of what the user may still use.
+    const quotaDenial = get().noteQuotaDenial(
+      error,
+      structuredCode,
+      conversation?.id,
+    );
+
+    // One user-visible failure = one streak increment (the escalation
+    // trigger). Only this terminal set counts — the abort/session-expired/
+    // auto-fallback early returns above never show a banner.
+    if (conversation && !quotaDenial.isQuotaDenial) {
+      get().recordErrorStreak(
+        conversation.id,
+        errorMessage,
+        structuredCode ?? null,
+      );
+    }
+
     // Show error and store conversation for regenerate
     set({
       error: errorMessage,
+      errorCode: structuredCode ?? null,
+      lastDenial: quotaDenial.denial,
       isStreaming: false,
       streamingContent: '',
       streamingConversationId: null,
@@ -1635,7 +2175,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       abortController: null,
       stopRequested: false,
       isRetrying: false,
-      failedConversation: conversation || null,
+      failedConversation: conversationForRetry,
       failedSearchMode: searchMode,
       errorIsRecoverable,
     });
@@ -1646,14 +2186,23 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     searchMode?: SearchMode,
     attemptedModelIds: string[] = [conversation.model.id],
   ) => {
-    const fallbackModel = getFallbackModel(attemptedModelIds);
+    const fallbackModel = getFallbackModel(
+      attemptedModelIds,
+      [],
+      dynamicFallbackOpts(),
+    );
     if (!fallbackModel) {
       console.error(
         '[chatStore] Fallback chain exhausted, attempted:',
         attemptedModelIds,
       );
+      // Shared by banner and streak so the two can't drift apart — streak
+      // matching is on the exact message string.
+      const exhaustedMessage = 'Failed to send message. Please try again.';
+      get().recordErrorStreak(conversation.id, exhaustedMessage, null);
       set({
-        error: 'Failed to send message. Please try again.',
+        error: exhaustedMessage,
+        errorCode: null,
         isStreaming: false,
         isRetrying: false,
       });
@@ -1697,6 +2246,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       // Initialize streaming state
       get().initializeStreamingState(retryConversation.id, loadingMessage);
+      set({ streamingSearchMode: searchMode });
 
       // Schedule loading message display
       showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
@@ -1854,14 +2404,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
 
       // Try the next model in the fallback chain, unless this failure would
-      // hit every model the same way (4xx other than rate limiting)
+      // hit every model the same way (4xx other than rate limiting). A
+      // per-user rate/usage limit is exactly such a failure despite being a
+      // 429 — see the matching check in the send path.
       const isNonRetryableClientError =
         retryError instanceof ApiError &&
         retryError.isClientError() &&
-        retryError.status !== 429;
+        (retryError.status !== 429 || retryError.isRateLimitError());
       const nextAttemptedIds = [...attemptedModelIds, fallbackModel.id];
 
-      if (!isNonRetryableClientError && getFallbackModel(nextAttemptedIds)) {
+      if (
+        !isNonRetryableClientError &&
+        getFallbackModel(nextAttemptedIds, [], dynamicFallbackOpts())
+      ) {
         toast.dismiss(toastId);
         return get().retryWithFallbackModel(
           conversation,
@@ -1882,10 +2437,27 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       } else if (retryError instanceof Error) {
         errorMessage = retryError.message;
       }
+      const retryErrorCode =
+        retryError instanceof ApiError
+          ? ((retryError.response?.code as string | undefined) ?? null)
+          : null;
+
+      // Same exclusion as the first-attempt path: a usage-limit denial on
+      // a fallback model is not a corrupted conversation.
+      const quotaDenial = get().noteQuotaDenial(
+        retryError,
+        retryErrorCode ?? undefined,
+        conversation.id,
+      );
+      if (!quotaDenial.isQuotaDenial) {
+        get().recordErrorStreak(conversation.id, errorMessage, retryErrorCode);
+      }
 
       // Show error with regenerate option
       set({
         error: errorMessage,
+        errorCode: retryErrorCode,
+        lastDenial: quotaDenial.denial,
         isStreaming: false,
         streamingContent: '',
         streamingConversationId: null,
@@ -1899,13 +2471,147 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
+  retryFailedWithFallbackModel: async () => {
+    const { failedConversation, failedSearchMode } = get();
+    if (!failedConversation) return;
+    set({
+      error: null,
+      errorCode: null,
+      errorIsRecoverable: true,
+    });
+    await get().retryWithFallbackModel(failedConversation, failedSearchMode);
+  },
+
   retryFailedRequest: async () => {
     const { failedConversation, failedSearchMode } = get();
     if (!failedConversation) return;
 
-    // Walk backwards so we skip any partial assistant entry left from the
-    // failed turn.
-    const flat = flattenEntriesForAPI(failedConversation.messages);
+    const userMessage = trailingUserMessage(failedConversation);
+    if (!userMessage) return;
+
+    set({
+      error: null,
+      errorCode: null,
+      lastDenial: null,
+      failedConversation: null,
+      failedSearchMode: undefined,
+      errorIsRecoverable: true,
+    });
+
+    await get().sendMessage(userMessage, failedConversation, failedSearchMode);
+  },
+
+  resendWithoutFeature: async (feature) => {
+    const { failedConversation, failedSearchMode } = get();
+    if (!failedConversation) return;
+
+    const userMessage = trailingUserMessage(failedConversation);
+    if (!userMessage) return;
+
+    const conversationStore = useConversationStore.getState();
+    const inputStore = useChatInputStore.getState();
+    let resendConversation: Conversation = failedConversation;
+    let searchMode = failedSearchMode;
+    if (feature === 'webSearch') {
+      // The turn's search mode travels as an argument (composer state), so
+      // it is overridden here directly. Deliberately NOT persisted onto
+      // `conversation.defaultSearchMode` — see the action's docstring.
+      inputStore.setSearchMode(SearchMode.OFF);
+      searchMode = SearchMode.OFF;
+    } else if (feature === 'codeInterpreter') {
+      // sendChatRequest reads the interpreter mode from the chat-input store
+      // at send time, so flipping it there is what actually changes the
+      // request. Deliberately NOT persisted onto
+      // `conversation.defaultInterpreterMode` — see the action's docstring.
+      inputStore.setInterpreterMode(InterpreterMode.OFF);
+    } else {
+      // 'mcp': no single toggle exists, so drop every currently enabled
+      // server (curated + the M365 builtin toolset) for this conversation.
+      // `mcpServersToSend` is empty exactly when `disabledMcpServerIds`
+      // covers every enabled server and nothing is pinned, which is what
+      // the server's `context.mcpServers.length > 0` gate checks.
+      const settings = useSettingsStore.getState();
+      const enabledServerIds = settings.mcpServers
+        .filter((s) => s.enabled)
+        .map((s) => s.id);
+      const disabledMcpServerIds = Array.from(
+        new Set([
+          ...(failedConversation.disabledMcpServerIds ?? []),
+          ...enabledServerIds,
+          M365_BUILTIN_SERVER_ID,
+        ]),
+      );
+      conversationStore.updateConversation(failedConversation.id, {
+        disabledMcpServerIds,
+        pinnedMcpServerId: undefined,
+      });
+      resendConversation = {
+        ...failedConversation,
+        disabledMcpServerIds,
+        pinnedMcpServerId: undefined,
+      };
+    }
+
+    set({
+      error: null,
+      errorCode: null,
+      lastDenial: null,
+      failedConversation: null,
+      failedSearchMode: undefined,
+      errorIsRecoverable: true,
+    });
+
+    await get().sendMessage(userMessage, resendConversation, searchMode);
+  },
+
+  summarizeFromHeadlines: async () => {
+    const {
+      isStreaming,
+      streamingInterimSearch,
+      streamingConversationId,
+      streamingSearchMode,
+      abortController,
+    } = get();
+    if (!isStreaming || !streamingInterimSearch || !streamingConversationId) {
+      return;
+    }
+    const conversation = useConversationStore
+      .getState()
+      .conversations.find((c) => c.id === streamingConversationId);
+    if (!conversation) return;
+
+    // Capture before aborting — the abort teardown clears the streaming
+    // slices (including the interim payload).
+    const payload: PrecomputedSearchResults = {
+      queries: streamingInterimSearch.queries,
+      entries: streamingInterimSearch.entries,
+    };
+    const searchMode = streamingSearchMode ?? SearchMode.INTELLIGENT;
+
+    console.log(
+      '[chatStore] Summarize from headlines: aborting the Bing wait and resending with echoed headlines',
+    );
+    abortController?.abort();
+
+    // Wait for the aborted request's teardown to finish (its catch path
+    // resets the streaming state) so it can't clobber the resend's fresh
+    // state. Bounded — if teardown somehow never lands, bail rather than
+    // fire a second request on top of a live one.
+    const deadline = Date.now() + 5000;
+    while (get().isStreaming && Date.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, 25));
+    }
+    if (get().isStreaming) {
+      console.warn(
+        '[chatStore] Summarize from headlines: stream teardown timed out; not resending',
+      );
+      return;
+    }
+
+    // The aborted turn never finalized an assistant message, so the
+    // conversation still ends with the user message — resend it (same
+    // shape as retryFailedRequest).
+    const flat = flattenEntriesForAPI(conversation.messages);
     let userMessage: Message | undefined;
     for (let i = flat.length - 1; i >= 0; i--) {
       if (flat[i].role === 'user') {
@@ -1915,14 +2621,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
     if (!userMessage) return;
 
-    set({
-      error: null,
-      failedConversation: null,
-      failedSearchMode: undefined,
-      errorIsRecoverable: true,
-    });
-
-    await get().sendMessage(userMessage, failedConversation, failedSearchMode);
+    set({ pendingPrecomputedSearchResults: payload });
+    try {
+      await get().sendMessage(userMessage, conversation, searchMode);
+    } finally {
+      // Normally consumed by sendChatRequest; clear defensively in case
+      // the send failed before reaching it.
+      if (get().pendingPrecomputedSearchResults) {
+        set({ pendingPrecomputedSearchResults: null });
+      }
+    }
   },
 
   dismissModelSwitchPrompt: () => {
@@ -1977,7 +2685,87 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     conversation,
     sourceMessageIndex,
     source,
+    modifiedArgumentsJson,
   ) => {
+    // Record the card's argument edit BEFORE the batch gate: the deciding
+    // click may only be an interim decision (early return below), and the
+    // sibling click that finally dispatches must still find this override.
+    if (approve && modifiedArgumentsJson !== undefined) {
+      set((state) => {
+        const next = new Map(state.approvalArgumentOverrides);
+        next.set(approvalRequestId, modifiedArgumentsJson);
+        return { approvalArgumentOverrides: next };
+      });
+    }
+
+    // ── MULTI-TOOL BATCH GATE (native MCP only) ──────────────────────────
+    // A native consent round can pause on SEVERAL pending calls at once, and
+    // the stateless resume must carry a decision for every one of them — the
+    // server auto-denies any call without an explicit response. Dispatching
+    // on the first click would therefore silently deny the siblings
+    // (approve get_me → get_teams auto-denied). So decisions are recorded
+    // one at a time WITHOUT resuming, and the LAST undecided approval
+    // dispatches the whole batch. Foundry approvals (no server_id) keep
+    // per-approval dispatch — their thread holds state server-side.
+    const sourceIdx =
+      sourceMessageIndex ??
+      findMessageIndexForApprovalId(conversation, approvalRequestId) ??
+      undefined;
+    const sourceDisplay =
+      sourceIdx !== undefined && conversation.messages[sourceIdx]
+        ? entryToDisplayMessage(conversation.messages[sourceIdx])
+        : undefined;
+    const batchConsents = (sourceDisplay?.consentRequests ?? []).filter(
+      (c) => c.kind === 'approval' && !!c.server_id && !!c.approval_request_id,
+    );
+    const isNativeBatch = batchConsents.some(
+      (c) => c.approval_request_id === approvalRequestId,
+    );
+    if (isNativeBatch) {
+      const persisted = sourceDisplay?.approvalOutcomes ?? {};
+      const undecidedSiblings = batchConsents.filter(
+        (c) =>
+          c.approval_request_id !== approvalRequestId &&
+          !get().submittedApprovals.has(c.approval_request_id!) &&
+          !(c.approval_request_id! in persisted),
+      );
+      if (undecidedSiblings.length > 0) {
+        // Interim decision: record + persist so the card flips, but hold the
+        // resume until the batch is complete. Idempotent per id.
+        let recorded = false;
+        set((state) => {
+          if (
+            state.submittedApprovals.has(approvalRequestId) ||
+            state.submittingApprovals.has(approvalRequestId)
+          ) {
+            return state;
+          }
+          recorded = true;
+          const submitted = new Map(state.submittedApprovals);
+          submitted.set(approvalRequestId, approve);
+          return {
+            submittedApprovals: submitted,
+            failedApprovals: setWithout(
+              state.failedApprovals,
+              approvalRequestId,
+            ),
+          };
+        });
+        if (recorded && sourceIdx !== undefined) {
+          useConversationStore
+            .getState()
+            .recordApprovalOutcome(
+              conversation.id,
+              sourceIdx,
+              approvalRequestId,
+              approve,
+              source,
+            );
+        }
+        return;
+      }
+    }
+
     // Atomic check-and-lock. An approval submit starts a brand-new stream
     // (initializeStreamingState + sendChatRequest), so only ONE may run at a
     // time: if a chat is already streaming, or another approval is mid-flight,
@@ -2011,15 +2799,23 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // outcome on the source message, and tear down streaming state. Shared by
     // the success path and the "duplicate (already recorded)" path.
     const finalizeSubmitted = () => {
+      // Ids whose pending calls this resume consumed — their argument
+      // overrides have been sent and must not leak into a later round.
+      const dispatchedIds = isNativeBatch
+        ? batchConsents.map((c) => c.approval_request_id!)
+        : [approvalRequestId];
       set((state) => {
         const submitted = new Map(state.submittedApprovals);
         submitted.set(approvalRequestId, approve);
         const submitting = new Set(state.submittingApprovals);
         submitting.delete(approvalRequestId);
+        const overrides = new Map(state.approvalArgumentOverrides);
+        for (const id of dispatchedIds) overrides.delete(id);
         return {
           submittedApprovals: submitted,
           submittingApprovals: submitting,
           failedApprovals: setWithout(state.failedApprovals, approvalRequestId),
+          approvalArgumentOverrides: overrides,
         };
       });
       if (sourceMessageIndex !== undefined) {
@@ -2046,9 +2842,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       get().initializeStreamingState(conversation.id, loadingMessage);
       showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
 
-      const stream = await get().sendChatRequest(conversation, undefined, [
-        { approval_request_id: approvalRequestId, approve },
-      ]);
+      // Native batch: every pending call gets its recorded decision (this
+      // click supplied the last one). Anything unrecorded — impossible via
+      // the gate above, but a hand-edited blob could get here — falls to
+      // an explicit deny rather than the server's silent auto-deny sweep.
+      const { submittedApprovals: decided } = get();
+      const approvalResponses = isNativeBatch
+        ? batchConsents.map((c) => ({
+            approval_request_id: c.approval_request_id!,
+            approve:
+              c.approval_request_id === approvalRequestId
+                ? approve
+                : (decided.get(c.approval_request_id!) ??
+                  sourceDisplay?.approvalOutcomes?.[c.approval_request_id!] ??
+                  false),
+          }))
+        : [{ approval_request_id: approvalRequestId, approve }];
+
+      const stream = await get().sendChatRequest(
+        conversation,
+        undefined,
+        approvalResponses,
+      );
 
       const streamParser = new StreamParser();
       const {

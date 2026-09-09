@@ -6,7 +6,10 @@ import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
+import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
+
 import { ChipListInput } from './ChipListInput';
+import { GroupSearchPicker } from './GroupSearchPicker';
 import { MergedAgentRow } from './types';
 
 type EditorAccessType = 'everyone' | 'restricted';
@@ -33,8 +36,8 @@ interface RuleEditorProps {
 /**
  * Inline editor for one agent's access rule. "Everyone" maps to no rule
  * (deletes an existing rule via If-Match); "Restricted" PUTs a restricted
- * rule with chip-input domains/users. The Groups section is rendered but
- * disabled — group grants are schema-only pending tenant admin consent.
+ * rule with chip-input domains/users plus Entra group object ids (matched
+ * against the user's cached transitive membership — third pass §5).
  */
 export const RuleEditor: FC<RuleEditorProps> = ({
   row,
@@ -43,6 +46,8 @@ export const RuleEditor: FC<RuleEditorProps> = ({
   onConflictReload,
 }) => {
   const t = useTranslations('agentAccess');
+  const tPeople = useTranslations('peopleSuggest');
+  const peopleSuggest = useM365PeopleSuggest();
 
   const storedAccess = row.stored?.rule.access;
   const [accessType, setAccessType] = useState<EditorAccessType>(
@@ -53,6 +58,9 @@ export const RuleEditor: FC<RuleEditorProps> = ({
   );
   const [allowUsers, setAllowUsers] = useState<string[]>(
     storedAccess?.allowUsers ?? [],
+  );
+  const [allowGroups, setAllowGroups] = useState<string[]>(
+    storedAccess?.allowGroups ?? [],
   );
   const [isSaving, setIsSaving] = useState(false);
   const [isConflict, setIsConflict] = useState(false);
@@ -112,8 +120,7 @@ export const RuleEditor: FC<RuleEditorProps> = ({
             type: 'restricted',
             allowDomains,
             allowUsers,
-            // Preserved untouched: groups are not editable in v1.
-            allowGroups: storedAccess?.allowGroups ?? [],
+            allowGroups,
           },
         }),
       });
@@ -137,7 +144,8 @@ export const RuleEditor: FC<RuleEditorProps> = ({
   const restrictedListsEmpty =
     accessType === 'restricted' &&
     allowDomains.length === 0 &&
-    allowUsers.length === 0;
+    allowUsers.length === 0 &&
+    allowGroups.length === 0;
 
   return (
     <div className="mt-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-4">
@@ -209,25 +217,29 @@ export const RuleEditor: FC<RuleEditorProps> = ({
               placeholder={t('allowUsersPlaceholder')}
               addHint={t('chipAddHint')}
               removeLabel={t('removeChip')}
+              suggest={peopleSuggest}
+              suggestionsLabel={tPeople('listLabel')}
             />
           </div>
 
-          {/* Groups: scaffold only, visibly disabled pending tenant consent */}
-          <div aria-disabled="true">
-            <label className="mb-1 block text-sm font-medium text-gray-400 dark:text-gray-500">
+          <div>
+            <label className="mb-1 block text-sm font-medium text-black dark:text-white">
               {t('groupsLabel')}
             </label>
-            <ChipListInput
-              values={storedAccess?.allowGroups ?? []}
-              onChange={() => undefined}
-              placeholder=""
-              addHint=""
-              removeLabel={t('removeChip')}
-              disabled
+            <GroupSearchPicker
+              values={allowGroups}
+              onChange={setAllowGroups}
+              labels={{
+                searchPlaceholder: t('groupSearchPlaceholder'),
+                searchHint: t('groupSearchHint'),
+                noResults: t('groupSearchNoResults'),
+                searchError: t('groupSearchError'),
+                chipPlaceholder: t('groupsPlaceholder'),
+                addHint: t('chipAddHint'),
+                removeLabel: t('removeChip'),
+                flagOffHint: t('groupsFlagOff'),
+              }}
             />
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-              {t('groupsPendingConsent')}
-            </p>
           </div>
 
           {restrictedListsEmpty && (

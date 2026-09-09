@@ -1,0 +1,619 @@
+import { fireEvent, render, screen, within } from '@testing-library/react';
+
+import type { Conversation } from '@/types/chat';
+
+import { ConnectorActivityBadge } from '@/components/Chat/ChatInput/ConnectorActivityBadge';
+import { ConnectorPinTray } from '@/components/Chat/ChatInput/ConnectorPinTray';
+
+import { useChatInputStore } from '@/client/stores/chatInputStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
+import '@testing-library/jest-dom';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+const updateConversation = vi.fn();
+let selectedConversation: Partial<Conversation> | null;
+
+vi.mock('@/client/hooks/conversation/useConversations', () => ({
+  useConversations: () => ({
+    selectedConversation,
+    updateConversation,
+  }),
+}));
+
+// The agent section pulls the discovered-agent list (React Query + LD flags
+// underneath) — stub it so the connector rows under test render standalone.
+vi.mock('@/client/hooks/settings/useAvailableAgents', () => ({
+  useAvailableAgents: () => ({ agents: [], isLoading: false }),
+  findAttachedAgent: () => undefined,
+}));
+
+vi.mock('@/client/hooks/settings/useSettings', () => ({
+  useSettings: () => ({ models: [], defaultModelId: undefined }),
+}));
+
+// Admin usage-limit gates (§7.4). The real hook needs a QueryClient; the
+// agent gates underneath stay real (they only read the mocked hooks above).
+const openGate = { blocked: false, exhausted: false, low: false };
+const toolLimits = vi.hoisted(() => ({
+  current: {
+    webSearch: { blocked: false, exhausted: false, low: false },
+    codeInterpreter: { blocked: false, exhausted: false, low: false },
+    mcp: { blocked: false, exhausted: false, low: false },
+    m365: { blocked: false, exhausted: false, low: false } as {
+      blocked: boolean;
+      exhausted: boolean;
+      low: boolean;
+      budget?: { remaining: number; limit?: number; resetAt?: string };
+    },
+    enforce: false,
+  },
+}));
+vi.mock('@/client/hooks/settings/useAgentToolGates', async (importOriginal) => {
+  const actual =
+    await importOriginal<
+      typeof import('@/client/hooks/settings/useAgentToolGates')
+    >();
+  return { ...actual, useToolLimitGates: () => toolLimits.current };
+});
+
+type TestServer = {
+  id: string;
+  name: string;
+  enabled: boolean;
+  authMode: 'none' | 'bearer' | 'oauth';
+  oauth?: { needsReauth?: boolean };
+};
+
+function setServers(servers: TestServer[]) {
+  useSettingsStore.setState({
+    mcpServers: servers as unknown as ReturnType<
+      typeof useSettingsStore.getState
+    >['mcpServers'],
+    // These suites exercise plain MCP connectors; keep the builtin M365 row
+    // out of the tray (m365Connected defaults to true since v57). The
+    // builtin-row suites below opt back in explicitly.
+    m365Connected: false,
+  });
+}
+
+function rowFor(name: string): HTMLElement {
+  const row = screen.getByText(name).closest('li');
+  expect(row).not.toBeNull();
+  return row as HTMLElement;
+}
+
+describe('ConnectorPinTray', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    selectedConversation = { id: 'conv-1' };
+    setServers([]);
+    useChatInputStore.setState({ connectorPinTrayOpen: true });
+    toolLimits.current = {
+      webSearch: openGate,
+      codeInterpreter: openGate,
+      mcp: openGate,
+      m365: openGate,
+      enforce: false,
+    };
+  });
+
+  it('lists every configured server with its enabled state', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: true, authMode: 'oauth' },
+      { id: 's2', name: 'Disabled', enabled: false, authMode: 'bearer' },
+    ]);
+    render(<ConnectorPinTray />);
+
+    expect(within(rowFor('GitHub')).getByRole('checkbox')).toBeChecked();
+    expect(within(rowFor('Disabled')).getByRole('checkbox')).not.toBeChecked();
+  });
+
+  it('the row checkbox disables the server for THIS chat only', () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    render(<ConnectorPinTray />);
+
+    fireEvent.click(within(rowFor('GitHub')).getByRole('checkbox'));
+
+    // Global config untouched; the opt-out lands on the conversation.
+    expect(
+      useSettingsStore.getState().mcpServers.find((s) => s.id === 's1')
+        ?.enabled,
+    ).toBe(true);
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      disabledMcpServerIds: ['s1'],
+    });
+  });
+
+  it('re-checking removes the per-chat opt-out', () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    selectedConversation = { id: 'conv-1', disabledMcpServerIds: ['s1'] };
+    render(<ConnectorPinTray />);
+
+    const checkbox = within(rowFor('GitHub')).getByRole('checkbox');
+    expect(checkbox).not.toBeChecked();
+    fireEvent.click(checkbox);
+
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      disabledMcpServerIds: [],
+    });
+  });
+
+  it('the global button flips the server everywhere and revives a disabled one', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: false, authMode: 'none' },
+    ]);
+    render(<ConnectorPinTray />);
+
+    // Chat checkbox is inert while globally off.
+    expect(within(rowFor('GitHub')).getByRole('checkbox')).toBeDisabled();
+
+    fireEvent.click(within(rowFor('GitHub')).getByText('Global off'));
+    expect(
+      useSettingsStore.getState().mcpServers.find((s) => s.id === 's1')
+        ?.enabled,
+    ).toBe(true);
+  });
+
+  it('a chat-disabled server is not focusable', () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    selectedConversation = { id: 'conv-1', disabledMcpServerIds: ['s1'] };
+    render(<ConnectorPinTray />);
+
+    expect(within(rowFor('GitHub')).queryByText('Focus')).toBeNull();
+  });
+
+  it('focuses a usable server from its row', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: true, authMode: 'oauth' },
+      { id: 's2', name: 'NetSuite', enabled: true, authMode: 'oauth' },
+    ]);
+    render(<ConnectorPinTray />);
+
+    fireEvent.click(within(rowFor('NetSuite')).getByText('Focus'));
+
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      pinnedMcpServerId: 's2',
+    });
+  });
+
+  it('offers no Focus on disabled or reauth-needed servers', () => {
+    // A needs-reauth connector would contribute zero tools — offering it as
+    // a "focus" would be a lie.
+    setServers([
+      { id: 's1', name: 'Off', enabled: false, authMode: 'bearer' },
+      {
+        id: 's2',
+        name: 'Expired',
+        enabled: true,
+        authMode: 'oauth',
+        oauth: { needsReauth: true },
+      },
+    ]);
+    render(<ConnectorPinTray />);
+
+    expect(screen.queryByText('Focus')).not.toBeInTheDocument();
+    expect(
+      within(rowFor('Expired')).getByText('Reconnect in Settings'),
+    ).toBeInTheDocument();
+  });
+
+  it('shows the focused server and unpins from its chip', () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    selectedConversation = { id: 'conv-1', pinnedMcpServerId: 's1' };
+    render(<ConnectorPinTray />);
+
+    expect(screen.getByText(/Only tools from GitHub/)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Focused'));
+
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      pinnedMcpServerId: undefined,
+    });
+  });
+
+  it('flags a stale pin instead of pretending the focus still applies', () => {
+    // The send path fails open on a stale pin (all tools go through), so
+    // the tray must say that rather than claim the focus is active.
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: false, authMode: 'none' },
+    ]);
+    selectedConversation = { id: 'conv-1', pinnedMcpServerId: 's1' };
+    render(<ConnectorPinTray />);
+
+    expect(screen.getByText(/disconnected or disabled/)).toBeInTheDocument();
+  });
+
+  it('spells out the token/latency cost when nothing is focused', () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    render(<ConnectorPinTray />);
+
+    expect(screen.getByText(/more tokens and slower/)).toBeInTheDocument();
+  });
+
+  it('explains when nothing is configured yet', () => {
+    render(<ConnectorPinTray />);
+
+    expect(screen.getByText(/No connectors configured/)).toBeInTheDocument();
+  });
+});
+
+describe('ConnectorActivityBadge', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    selectedConversation = { id: 'conv-1' };
+    setServers([]);
+    useChatInputStore.setState({ connectorPinTrayOpen: false });
+  });
+
+  it('renders nothing while no connector is active', () => {
+    setServers([
+      { id: 's1', name: 'Off', enabled: false, authMode: 'bearer' },
+      {
+        id: 's2',
+        name: 'Expired',
+        enabled: true,
+        authMode: 'oauth',
+        oauth: { needsReauth: true },
+      },
+    ]);
+    const { container } = render(<ConnectorActivityBadge />);
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('auto-hides when every connector is opted out for this chat', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: true, authMode: 'none' },
+      { id: 's2', name: 'NetSuite', enabled: true, authMode: 'none' },
+    ]);
+    selectedConversation = {
+      id: 'conv-1',
+      disabledMcpServerIds: ['s1', 's2'],
+    };
+    const { container } = render(<ConnectorActivityBadge />);
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('counts only chat-active connectors', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: true, authMode: 'none' },
+      { id: 's2', name: 'NetSuite', enabled: true, authMode: 'none' },
+    ]);
+    selectedConversation = { id: 'conv-1', disabledMcpServerIds: ['s1'] };
+    render(<ConnectorActivityBadge />);
+
+    // Only NetSuite is active for this chat → its name, not "2 tools".
+    expect(screen.getByText('NetSuite')).toBeInTheDocument();
+  });
+
+  it('shows the active count and opens the tray on click', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: true, authMode: 'oauth' },
+      { id: 's2', name: 'NetSuite', enabled: true, authMode: 'none' },
+    ]);
+    render(<ConnectorActivityBadge />);
+
+    fireEvent.click(screen.getByText('2 tools'));
+
+    expect(useChatInputStore.getState().connectorPinTrayOpen).toBe(true);
+  });
+
+  it('names a single active connector instead of "1 tools"', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: true, authMode: 'oauth' },
+    ]);
+    render(<ConnectorActivityBadge />);
+
+    expect(screen.getByText('GitHub')).toBeInTheDocument();
+    expect(screen.queryByText(/1 tools/)).not.toBeInTheDocument();
+  });
+
+  it('names the focused connector instead of a count', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: true, authMode: 'oauth' },
+      { id: 's2', name: 'NetSuite', enabled: true, authMode: 'none' },
+    ]);
+    selectedConversation = { id: 'conv-1', pinnedMcpServerId: 's2' };
+    render(<ConnectorActivityBadge />);
+
+    expect(screen.getByText('NetSuite')).toBeInTheDocument();
+    expect(screen.queryByText('2 tools')).not.toBeInTheDocument();
+  });
+});
+
+describe('ConnectorPinTray — virtual Microsoft 365 row', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    selectedConversation = { id: 'conv-1' };
+    setServers([]);
+    useChatInputStore.setState({ connectorPinTrayOpen: true });
+    // jsdom runs on localhost, so useM365Enabled().toolsEnabled is true via
+    // the documented localhost escape hatch — only the store gates remain.
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+  });
+
+  it('renders the row when M365 is connected, even with no configured servers', () => {
+    render(<ConnectorPinTray />);
+    expect(screen.getByText('Microsoft 365')).toBeInTheDocument();
+  });
+
+  it('hides the row when M365 is not connected', () => {
+    useSettingsStore.setState({ m365Connected: false });
+    render(<ConnectorPinTray />);
+    expect(screen.queryByText('Microsoft 365')).not.toBeInTheDocument();
+  });
+
+  it('per-chat checkbox writes builtin-m365 into disabledMcpServerIds', () => {
+    render(<ConnectorPinTray />);
+    fireEvent.click(within(rowFor('Microsoft 365')).getByRole('checkbox'));
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      disabledMcpServerIds: ['builtin-m365'],
+    });
+  });
+
+  it('global toggle flips m365ToolsUserEnabled and dims the chat checkbox', () => {
+    render(<ConnectorPinTray />);
+    const row = rowFor('Microsoft 365');
+    fireEvent.click(within(row).getByText('Global on'));
+    expect(useSettingsStore.getState().m365ToolsUserEnabled).toBe(false);
+  });
+
+  it('chat checkbox is disabled while the global toggle is off', () => {
+    useSettingsStore.setState({ m365ToolsUserEnabled: false });
+    render(<ConnectorPinTray />);
+    expect(
+      within(rowFor('Microsoft 365')).getByRole('checkbox'),
+    ).toBeDisabled();
+  });
+
+  it('focus action pins builtin-m365 on the conversation', () => {
+    render(<ConnectorPinTray />);
+    fireEvent.click(within(rowFor('Microsoft 365')).getByText('Focus'));
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      pinnedMcpServerId: 'builtin-m365',
+    });
+  });
+});
+
+describe('ConnectorActivityBadge — builtin Microsoft 365', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    selectedConversation = { id: 'conv-1' };
+    setServers([]);
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+  });
+
+  it('counts the toolset active and names it when it is the only one', () => {
+    render(<ConnectorActivityBadge />);
+    expect(screen.getByText('Microsoft 365')).toBeInTheDocument();
+  });
+
+  it('renders nothing when the conversation disabled it per-chat', () => {
+    selectedConversation = {
+      id: 'conv-1',
+      disabledMcpServerIds: ['builtin-m365'],
+    };
+    const { container } = render(<ConnectorActivityBadge />);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('renders nothing when the global toolset toggle is off', () => {
+    useSettingsStore.setState({ m365ToolsUserEnabled: false });
+    const { container } = render(<ConnectorActivityBadge />);
+    expect(container).toBeEmptyDOMElement();
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// Admin usage limits (docs/LIMITS_USER_FACING_UX.md §7.4): a blocked
+// `feature.mcp.enabled` locks every connector switch (disabled, unchecked,
+// lock + reason) without rewriting the stored toggles; the builtin M365 row
+// annotates its own day budget. The jsdom next-intl mock returns the bare
+// key for unknown namespaces, so copy is asserted as 'blocked' etc.
+// ───────────────────────────────────────────────────────────────────
+describe('ConnectorPinTray — usage-limit gates', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    selectedConversation = { id: 'conv-1' };
+    setServers([]);
+    useChatInputStore.setState({ connectorPinTrayOpen: true });
+    toolLimits.current = {
+      webSearch: openGate,
+      codeInterpreter: openGate,
+      mcp: openGate,
+      m365: openGate,
+      enforce: false,
+    };
+  });
+
+  it('locks every connector row when MCP is blocked, leaving the stored config alone', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      mcp: { blocked: true, exhausted: false, low: false },
+      m365: { blocked: true, exhausted: false, low: false },
+    };
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('GitHub');
+    const checkbox = within(row).getByRole('checkbox');
+    expect(checkbox).toBeDisabled();
+    // Reads as off for this chat even though it is globally enabled...
+    expect(checkbox).not.toBeChecked();
+    expect(within(row).getByText('Global on')).toBeDisabled();
+    expect(within(row).queryByText('Focus')).toBeNull();
+    expect(screen.getByTestId('tray-lock-connectors')).toHaveAttribute(
+      'aria-label',
+      'blocked',
+    );
+    // ...while the footer names the policy instead of the cost hint.
+    expect(screen.getAllByText('blocked').length).toBeGreaterThan(0);
+    expect(screen.queryByText(/more tokens and slower/)).toBeNull();
+    // Nothing rewritten.
+    expect(
+      useSettingsStore.getState().mcpServers.find((s) => s.id === 's1')
+        ?.enabled,
+    ).toBe(true);
+    expect(updateConversation).not.toHaveBeenCalled();
+  });
+
+  it('a locked tray does not claim a focus pin is active', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      mcp: { blocked: true, exhausted: false, low: false },
+      m365: { blocked: true, exhausted: false, low: false },
+    };
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    selectedConversation = { id: 'conv-1', pinnedMcpServerId: 's1' };
+    render(<ConnectorPinTray />);
+
+    expect(screen.queryByText(/Only tools from GitHub/)).toBeNull();
+    // The row's own "Focused ×" chip must not survive the lock either — it
+    // is otherwise an active-looking, clickable control (it clears the pin)
+    // sitting right next to a disabled, unchecked checkbox.
+    expect(screen.queryByText('Focused')).toBeNull();
+  });
+
+  it('a locked tray does not show the Focused chip on the pinned builtin M365 row', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      mcp: { blocked: true, exhausted: false, low: false },
+      m365: { blocked: true, exhausted: false, low: false },
+    };
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+    selectedConversation = {
+      id: 'conv-1',
+      pinnedMcpServerId: 'builtin-m365',
+    };
+    render(<ConnectorPinTray />);
+
+    expect(screen.queryByText('Focused')).toBeNull();
+    expect(screen.queryByText('Focus')).toBeNull();
+  });
+
+  it('locks the builtin Microsoft 365 row too', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      mcp: { blocked: true, exhausted: false, low: false },
+      m365: { blocked: true, exhausted: false, low: false },
+    };
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('Microsoft 365');
+    expect(within(row).getByRole('checkbox')).toBeDisabled();
+    expect(within(row).getByRole('checkbox')).not.toBeChecked();
+    expect(within(row).getByText('Global on')).toBeDisabled();
+    expect(within(row).queryByText('Focus')).toBeNull();
+    expect(useSettingsStore.getState().m365ToolsUserEnabled).toBe(true);
+  });
+
+  it('annotates the M365 row with a low budget and keeps it switchable', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      m365: {
+        blocked: false,
+        exhausted: false,
+        low: true,
+        budget: { remaining: 3, limit: 200 },
+      },
+    };
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('Microsoft 365');
+    expect(within(row).getByText('remaining')).toBeInTheDocument();
+    expect(within(row).getByRole('checkbox')).toBeEnabled();
+    expect(within(row).getByText('Focus')).toBeInTheDocument();
+  });
+
+  it('an exhausted M365 budget shows the degrade note, toggle still enabled', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      m365: {
+        blocked: false,
+        exhausted: true,
+        low: false,
+        budget: { remaining: 0, limit: 200 },
+      },
+    };
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('Microsoft 365');
+    expect(within(row).getByText('exhausted')).toBeInTheDocument();
+    fireEvent.click(within(row).getByRole('checkbox'));
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      disabledMcpServerIds: ['builtin-m365'],
+    });
+  });
+
+  it('an exhausted M365 budget with a known resetAt threads the countdown through', () => {
+    toolLimits.current = {
+      ...toolLimits.current,
+      enforce: true,
+      m365: {
+        blocked: false,
+        exhausted: true,
+        low: false,
+        budget: {
+          remaining: 0,
+          limit: 200,
+          resetAt: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(),
+        },
+      },
+    };
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('Microsoft 365');
+    // The mock t() falls back to the raw key for a namespace it does not
+    // carry, so 'exhaustedResets' rendering (rather than 'exhausted') proves
+    // resetAt reached the note.
+    expect(within(row).getByText('exhaustedResets')).toBeInTheDocument();
+    expect(within(row).queryByText('exhausted')).toBeNull();
+  });
+
+  it("fails open: with the gates open the tray is exactly today's UI", () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    render(<ConnectorPinTray />);
+
+    const row = rowFor('GitHub');
+    expect(within(row).getByRole('checkbox')).toBeEnabled();
+    expect(within(row).getByRole('checkbox')).toBeChecked();
+    expect(within(row).getByText('Global on')).toBeEnabled();
+    expect(within(row).getByText('Focus')).toBeInTheDocument();
+    expect(screen.queryByTestId('tray-lock-connectors')).toBeNull();
+    for (const key of ['blocked', 'remaining', 'exhausted']) {
+      expect(screen.queryByText(key)).toBeNull();
+    }
+  });
+});

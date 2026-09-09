@@ -3,7 +3,7 @@ import { AnthropicFoundryHandler } from '@/lib/services/chat/handlers/AnthropicF
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 
 import { ApprovalResponse } from '@/types/chat';
-import { McpPendingToolCall } from '@/types/mcp';
+import { McpPendingToolCall, McpPlan } from '@/types/mcp';
 import { Citation } from '@/types/rag';
 
 import {
@@ -15,6 +15,7 @@ import { createAnthropicToolUseAccumulator } from './anthropicToolUseAccumulator
 import {
   AssembledRound,
   ServerWithTools,
+  ToolLoopCoreOptions,
   ToolLoopProviderStrategy,
   runToolLoopCore,
 } from './toolLoopCore';
@@ -28,11 +29,15 @@ import type Anthropic from '@anthropic-ai/sdk';
  * protocol as the OpenAI loop; only the transcript shapes (tool_use /
  * tool_result blocks) and stream accumulation differ.
  *
- * THINKING GUARD: extended thinking is currently never enabled for Claude in
- * this app (no `thinking` param anywhere). If that ever changes, MCP turns
- * MUST keep thinking disabled — the stateless pause/resume cannot round-trip
- * the signed thinking blocks Anthropic requires when continuing a tool-use
- * turn from a client-persisted, text-only transcript.
+ * THINKING GUARD: MCP turns MUST keep extended thinking disabled — the
+ * stateless pause/resume cannot round-trip the signed thinking blocks
+ * Anthropic requires when continuing a tool-use turn from a
+ * client-persisted, text-only transcript. Enforced by the `buildParams`
+ * closure in StandardChatService, which omits `reasoningEffort`: the handler
+ * only attaches a `thinking` param when an effort above `minimal` is passed,
+ * so a tool-loop request never carries one. Plain (non-MCP) Claude turns DO
+ * request thinking when the user raises effort — keep that argument out of
+ * this path.
  */
 
 export interface AnthropicMcpToolLoopOptions {
@@ -45,6 +50,8 @@ export interface AnthropicMcpToolLoopOptions {
   pendingToolCalls?: McpPendingToolCall[];
   approvalResponses?: ApprovalResponse[];
   loopRound: number;
+  /** Admin-configured round cap (docs/LIMITS.md); absent → MAX_TOOL_ROUNDS. */
+  maxRounds?: number;
   userId: string;
   citations?: Citation[];
   usage: {
@@ -52,12 +59,29 @@ export interface AnthropicMcpToolLoopOptions {
     region: 'US' | 'EU' | null;
     onUsage: (usage: TokenUsageMetadata) => void;
   };
+  /** Telemetry sink for each executed tool call (see ToolLoopCoreOptions). */
+  onToolCall?: ToolLoopCoreOptions<unknown>['onToolCall'];
+  /** Turn planning (see ToolLoopCoreOptions). */
+  planner?: ToolLoopCoreOptions<Anthropic.MessageParam>['planner'];
+  existingPlan?: McpPlan;
+  userMessageText?: string;
+  /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
+  builtinExecutor?: ToolLoopCoreOptions<Anthropic.MessageParam>['builtinExecutor'];
 }
 
 function buildAnthropicStrategy(
   options: AnthropicMcpToolLoopOptions,
 ): ToolLoopProviderStrategy<Anthropic.MessageParam> {
+  // Connector-provided usage notes (sanitized by the core). Anthropic keeps
+  // the system prompt out of the transcript, so the addendum is folded into
+  // params.system on every round rather than into a message.
+  let systemAddendum = '';
+
   return {
+    applySystemAddendum(addendum) {
+      systemAddendum = addendum;
+    },
+
     reconstructTranscript(messages, pending) {
       return reconstructAnthropicTranscript(messages, pending);
     },
@@ -76,6 +100,14 @@ function buildAnthropicStrategy(
       write,
     ): Promise<AssembledRound> {
       const params = options.buildParams(messages);
+      if (systemAddendum) {
+        params.system =
+          typeof params.system === 'string'
+            ? `${params.system}\n\n${systemAddendum}`
+            : params.system === undefined
+              ? systemAddendum
+              : [...params.system, { type: 'text', text: systemAddendum }];
+      }
       const anthropicTools = serversWithTools.flatMap(({ server, tools }) =>
         mcpToolsToAnthropicTools(server.id, tools),
       );
@@ -124,8 +156,14 @@ export async function runAnthropicMcpToolLoop(
     pendingToolCalls: options.pendingToolCalls,
     approvalResponses: options.approvalResponses,
     loopRound: options.loopRound,
+    maxRounds: options.maxRounds,
     userId: options.userId,
     citations: options.citations,
     usage: options.usage,
+    onToolCall: options.onToolCall,
+    planner: options.planner,
+    existingPlan: options.existingPlan,
+    userMessageText: options.userMessageText,
+    builtinExecutor: options.builtinExecutor,
   });
 }

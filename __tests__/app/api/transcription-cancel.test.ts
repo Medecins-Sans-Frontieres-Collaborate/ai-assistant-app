@@ -13,6 +13,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/auth', () => ({ auth: vi.fn() }));
 
+vi.mock('@/lib/services/blobStorageFactory', () => ({
+  createBlobStorageClient: vi.fn().mockReturnValue({ fake: 'blob-storage' }),
+}));
+
 vi.mock('@/lib/services/transcription/chunkedJobStore', () => ({
   cancelJob: vi.fn(),
   getJobForUser: vi.fn(),
@@ -75,6 +79,6 @@ describe('/api/transcription/cancel/[jobId]', () => {
       params: Promise.resolve({ jobId }),
     });
     expect(res.status).toBe(200);
-    expect(cancelJob).toHaveBeenCalledWith(jobId);
+    expect(cancelJob).toHaveBeenCalledWith(expect.anything(), jobId, ownerId);
   });
 });

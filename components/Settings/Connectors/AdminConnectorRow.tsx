@@ -15,6 +15,7 @@ import { useMcpTools } from '@/client/hooks/settings/useMcpTools';
 
 import { connectMcpOauth } from '@/client/services/mcp/mcpOauth';
 
+import { ToolCountDisclosure } from './ToolCountDisclosure';
 import { validateMcpServer } from './validateMcpServer';
 
 import {
@@ -201,10 +202,11 @@ export const AdminConnectorRow: FC<AdminConnectorRowProps> = ({
           {config ? (
             <div className="mt-3 space-y-2">
               <div className="flex flex-wrap items-center gap-4">
-                {!isLoadingTools && tools.length > 0 && (
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {t('toolCount', { count: tools.length })}
-                  </span>
+                {!isLoadingTools && (
+                  <ToolCountDisclosure
+                    serverLabel={connector.name}
+                    tools={tools}
+                  />
                 )}
                 {needsReauth && canStartOauth && (
                   <button

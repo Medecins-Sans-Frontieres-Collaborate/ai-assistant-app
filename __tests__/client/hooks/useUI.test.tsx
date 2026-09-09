@@ -17,6 +17,8 @@ describe('useUI', () => {
     showChatbar: true,
     showPromptbar: true,
     theme: 'light' as const,
+    sidebarWidth: 260,
+    setSidebarWidth: vi.fn(),
     setShowChatbar: vi.fn(),
     toggleChatbar: vi.fn(),
     setShowPromptbar: vi.fn(),

@@ -14,9 +14,11 @@ export type UserRegion = 'US' | 'EU';
 /**
  * Cookie that carries a manual region override for testing/diagnostics.
  *
- * Deliberately NOT httpOnly: the client reads it to render the override
- * warning banner without a round-trip, and the server reads it in the auth
- * session callback to route the user's data to the overridden region.
+ * Deliberately NOT httpOnly so the client can set/clear it from the
+ * `?regionOverride=` param without a round-trip. It is honoured by the auth
+ * session callback ONLY when the real identity is a global admin
+ * (AGENT_ACCESS_ADMINS); for anyone else it is inert, and the banner is
+ * driven by the session's `regionOverridden`, not by the cookie's presence.
  */
 export const REGION_OVERRIDE_COOKIE = 'region_override';
 

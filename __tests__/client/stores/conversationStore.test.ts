@@ -1050,6 +1050,155 @@ describe('conversationStore', () => {
     });
   });
 
+  describe('Expired active file repair', () => {
+    const fileUrl = '/api/file/abc123.pdf';
+
+    const makeConversationWithFile = (): Conversation =>
+      ({
+        id: 'conv-file',
+        name: 'With file',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: 'summarize this report' },
+              {
+                type: 'file_url',
+                url: fileUrl,
+                originalFilename: 'report.pdf',
+              },
+            ],
+            messageType: undefined,
+          },
+          { role: 'assistant', content: 'Summary…', messageType: undefined },
+          {
+            role: 'user',
+            content: 'thanks, one more thing',
+            messageType: undefined,
+          },
+        ],
+        model: {
+          id: 'gpt-4',
+          name: 'GPT-4',
+          maxLength: 4000,
+          tokenLimit: 4000,
+        },
+        prompt: '',
+        temperature: 0.7,
+        folderId: null,
+        activeFiles: [
+          {
+            id: `${fileUrl}-1`,
+            url: fileUrl,
+            originalFilename: 'report.pdf',
+            addedAt: '2026-08-01T00:00:00.000Z',
+            sourceMessageId: 'msg-1',
+            status: 'ready',
+            pinned: true,
+          },
+        ],
+      }) as Conversation;
+
+    beforeEach(() => {
+      useConversationStore.setState({
+        conversations: [makeConversationWithFile()],
+        selectedConversationId: 'conv-file',
+      });
+    });
+
+    describe('markActiveFileError', () => {
+      it('flags the matching file as error and unpins it', () => {
+        useConversationStore
+          .getState()
+          .markActiveFileError('conv-file', fileUrl, 'File expired');
+
+        const file =
+          useConversationStore.getState().conversations[0].activeFiles?.[0];
+        expect(file?.status).toBe('error');
+        expect(file?.errorMessage).toBe('File expired');
+        expect(file?.pinned).toBe(false);
+      });
+
+      it('is a no-op for a non-matching url', () => {
+        const before = useConversationStore.getState().conversations[0];
+
+        useConversationStore
+          .getState()
+          .markActiveFileError('conv-file', '/api/file/other.pdf', 'nope');
+
+        expect(useConversationStore.getState().conversations[0]).toBe(before);
+      });
+
+      it('is a no-op for an unknown conversation id', () => {
+        const before = useConversationStore.getState().conversations[0];
+
+        useConversationStore
+          .getState()
+          .markActiveFileError('missing-conv', fileUrl, 'nope');
+
+        expect(useConversationStore.getState().conversations[0]).toBe(before);
+      });
+    });
+
+    describe('stripExpiredFileFromMessages', () => {
+      it('removes the matching file_url part and injects a note into the text', () => {
+        useConversationStore
+          .getState()
+          .stripExpiredFileFromMessages('conv-file', fileUrl);
+
+        const messages =
+          useConversationStore.getState().conversations[0].messages;
+        // [text, file_url] collapses to a plain string once only text remains.
+        const first = messages[0] as { content: unknown };
+        expect(typeof first.content).toBe('string');
+        expect(first.content).toContain('"report.pdf"');
+        expect(first.content).toContain('no longer available');
+        expect(first.content).toContain('summarize this report');
+        expect(JSON.stringify(messages)).not.toContain(fileUrl);
+      });
+
+      it('leaves other messages and assistant groups untouched', () => {
+        const group = {
+          type: 'assistant_group',
+          activeIndex: 0,
+          versions: [],
+        };
+        useConversationStore.setState((state) => ({
+          conversations: state.conversations.map((c) => ({
+            ...c,
+            messages: [
+              ...c.messages,
+              group as unknown as Conversation['messages'][number],
+            ],
+          })),
+        }));
+
+        useConversationStore
+          .getState()
+          .stripExpiredFileFromMessages('conv-file', fileUrl);
+
+        const messages =
+          useConversationStore.getState().conversations[0].messages;
+        expect(messages[1]).toEqual({
+          role: 'assistant',
+          content: 'Summary…',
+          messageType: undefined,
+        });
+        expect(messages[3]).toEqual(group);
+      });
+
+      it('is a no-op when no message references the url', () => {
+        const before = useConversationStore.getState().conversations[0];
+
+        useConversationStore
+          .getState()
+          .stripExpiredFileFromMessages('conv-file', '/api/file/other.pdf');
+
+        expect(useConversationStore.getState().conversations[0]).toBe(before);
+      });
+    });
+  });
+
   describe('State Isolation', () => {
     it('changes do not affect subsequent tests', () => {
       const conversation = { id: '1', name: 'Test' } as Conversation;

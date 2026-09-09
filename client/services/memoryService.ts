@@ -20,11 +20,11 @@ const EXTRACTION_MAX_MESSAGES = 6;
  * Extracts durable user facts from the latest messages and applies the
  * returned add/update/delete operations to the memory store.
  *
- * Callers gate on `memoriesEnabled && memoriesFlagEnabled` — this service
- * assumes the feature is on when invoked, but rechecks both gates (and
- * whether clearMemories ran) once the fetch resolves, so an in-flight
- * extraction can never resurrect memories the user just cleared or write
- * new ones after they opted out.
+ * Callers gate on `memoriesEnabled && memoriesFlagEnabled &&
+ * !memoryCapturePaused` — this service assumes the feature is on when
+ * invoked, but rechecks all three gates (and whether clearMemories ran) once
+ * the fetch resolves, so an in-flight extraction can never resurrect memories
+ * the user just cleared or write new ones after they opted out or paused.
  *
  * @param conversation - The conversation (provenance for added memories)
  * @param flatMessages - Flattened messages (flattenEntriesForAPI output)
@@ -42,9 +42,15 @@ export async function extractMemories(
       return;
     }
 
-    const existingMemories = useMemoryStore
-      .getState()
-      .memories.map((m) => ({ id: m.id, text: m.text }));
+    // `locked` marks hand-written entries. applyOperations already refuses
+    // model updates/deletes against them, but telling the model up front
+    // stops it "correcting" one via delete+add — the delete would be dropped
+    // and the add would land, leaving a near-duplicate behind.
+    const existingMemories = useMemoryStore.getState().memories.map((m) => ({
+      id: m.id,
+      text: m.text,
+      ...(m.origin === 'user' ? { locked: true } : {}),
+    }));
     // Snapshot before the fetch: if clearMemories bumps this while the
     // request is in flight, the result must be dropped.
     const generationBefore = useMemoryStore.getState().clearGeneration;
@@ -76,10 +82,14 @@ export async function extractMemories(
       return;
     }
 
-    // Re-check both gates: the user may have opted out (or the flag flipped)
-    // while the request was in flight.
+    // Re-check every gate: the user may have opted out, paused capture, or
+    // seen the flag flip while the request was in flight.
     const settings = useSettingsStore.getState();
-    if (!settings.memoriesEnabled || !settings.memoriesFlagEnabled) {
+    if (
+      !settings.memoriesEnabled ||
+      !settings.memoriesFlagEnabled ||
+      settings.memoryCapturePaused
+    ) {
       return;
     }
     // Clear-all race: drop the result if the user wiped their memories

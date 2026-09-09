@@ -41,7 +41,22 @@ export function getErrorMessage(
   fallback: string = 'Unknown error',
 ): string {
   if (error instanceof Error) {
-    return error.message;
+    if (error.message) {
+      return error.message;
+    }
+    // Azure SDK RestErrors can carry a BLANK message with the real signal in
+    // code/statusCode (storage auth failures do this) — surface those
+    // instead of returning ''.
+    const { code, statusCode } = error as {
+      code?: unknown;
+      statusCode?: unknown;
+    };
+    const parts = [
+      error.name !== 'Error' ? error.name : undefined,
+      typeof code === 'string' ? code : undefined,
+      typeof statusCode === 'number' ? `HTTP ${statusCode}` : undefined,
+    ].filter(Boolean);
+    return parts.length > 0 ? parts.join(' ') : fallback;
   }
   if (typeof error === 'string') {
     return error;

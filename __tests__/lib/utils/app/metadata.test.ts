@@ -64,4 +64,31 @@ describe('parseMetadataFromContent — multi-block', () => {
     expect(parsed.usage).toBeUndefined();
     expect(parsed.metadataStartIndex).toBeNull();
   });
+
+  it('streamError.fileUrl round-trips (expired-attachment repair path)', () => {
+    const parsed = parseMetadataFromContent(
+      block({
+        streamError: {
+          message: 'An attached file is no longer available',
+          code: 'FILE_NOT_FOUND',
+          fileUrl: '/api/file/abc123.pdf',
+        },
+      }),
+    );
+    expect(parsed.streamError).toEqual({
+      message: 'An attached file is no longer available',
+      code: 'FILE_NOT_FOUND',
+      fileUrl: '/api/file/abc123.pdf',
+    });
+  });
+
+  it('drops a non-string streamError.fileUrl', () => {
+    const parsed = parseMetadataFromContent(
+      `\n\n<<<METADATA_START>>>${JSON.stringify({
+        streamError: { message: 'boom', fileUrl: 42 },
+      })}<<<METADATA_END>>>`,
+    );
+    expect(parsed.streamError?.message).toBe('boom');
+    expect(parsed.streamError?.fileUrl).toBeUndefined();
+  });
 });

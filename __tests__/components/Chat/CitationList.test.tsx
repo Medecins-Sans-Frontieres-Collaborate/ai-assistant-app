@@ -212,15 +212,42 @@ describe('CitationList', () => {
       expect(screen.getByText('3')).toBeInTheDocument();
     });
 
-    it('handles citations without URLs', () => {
+    it('ignores citations without URLs (unrenderable as sources)', () => {
+      // URL-less entries are inline-marker phantoms from the search agent —
+      // counting them made the header ("4 Sources") disagree with the
+      // rendered rows. All-phantom lists render nothing at all.
       const citationsWithoutUrls: Citation[] = [
         { title: 'Article 1', url: '', date: '2024-01-01', number: 1 },
         { title: 'Article 2', url: '', date: '2024-01-02', number: 2 },
       ];
 
-      render(<CitationList citations={citationsWithoutUrls} />);
+      const { container } = render(
+        <CitationList citations={citationsWithoutUrls} />,
+      );
+      expect(container.firstChild).toBeNull();
+    });
+
+    it('counts only URL-bearing citations in a mixed list', () => {
+      const mixed: Citation[] = [
+        { title: 'source', url: '', date: '', number: 1 },
+        {
+          title: 'Real Article',
+          url: 'https://example.com/a',
+          date: '2024-01-01',
+          number: 2,
+        },
+        {
+          title: 'Other Article',
+          url: 'https://example.com/b',
+          date: '2024-01-02',
+          number: 3,
+        },
+      ];
+
+      render(<CitationList citations={mixed} />);
 
       expect(screen.getByText('2')).toBeInTheDocument();
+      expect(screen.getByText('Sources')).toBeInTheDocument();
     });
   });
 

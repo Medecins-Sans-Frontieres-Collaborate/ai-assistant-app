@@ -1,13 +1,27 @@
 import { Session } from 'next-auth';
 
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
+import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 
 import { ChatBody, Message } from '@/types/chat';
 import { ErrorCode, PipelineError } from '@/types/errors';
 import { ExtractionRequest } from '@/types/extractionRecipe';
+import { InterpreterMode } from '@/types/interpreterMode';
+import {
+  MAX_PLAN_STEPS,
+  MAX_PLAN_STEP_DESCRIPTION_CHARS,
+  MAX_PLAN_STEP_TOOLS,
+} from '@/types/mcp';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
+import {
+  MAX_SEARCH_RESULT_COUNT,
+  MIN_SEARCH_RESULT_COUNT,
+  PrecomputedSearchResults,
+  WEB_SEARCH_PROVIDER_OPTIONS,
+  WebSearchOptions,
+} from '@/types/webSearch';
 
 import { z } from 'zod';
 
@@ -301,7 +315,88 @@ const ChatBodySchema = z
     reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
     verbosity: z.enum(['low', 'medium', 'high']).optional(),
     botId: z.string().max(100, 'Bot ID too long').optional(),
+    // Telemetry-only correlation id (conversation.id); never routes anything.
+    conversationId: z.string().max(100, 'Conversation ID too long').optional(),
+    // Explicit agent-attachment signal (capabilities tray): the user attached
+    // botId's agent to this conversation, independent of the model. Unlocks
+    // the server-side agent resolution that is otherwise scoped to legacy
+    // `org-<botId>` model ids — old clients never send it, so a stale bot on
+    // a pre-tray conversation can't hijack an explicitly selected model.
+    agentAttached: z.boolean().optional(),
     searchMode: z.nativeEnum(SearchMode).optional(),
+    webSearchOptions: z
+      .object({
+        resultCount: z
+          .number()
+          .int()
+          .min(MIN_SEARCH_RESULT_COUNT)
+          .max(MAX_SEARCH_RESULT_COUNT),
+        freshness: z.enum(['auto', 'day', 'week', 'month', 'any']),
+        // Optional for backward compatibility (older clients omit it);
+        // sanitizeWebSearchOptions falls back to the store default
+        // (DEFAULT_WEB_SEARCH_OPTIONS.provider) server-side.
+        provider: z
+          .enum(
+            WEB_SEARCH_PROVIDER_OPTIONS as [
+              (typeof WEB_SEARCH_PROVIDER_OPTIONS)[number],
+              ...typeof WEB_SEARCH_PROVIDER_OPTIONS,
+            ],
+          )
+          .optional(),
+      })
+      .optional(),
+    // "Summarize from headlines" resend: the interim headlines the client
+    // already received for THIS message, echoed back so the server merges
+    // them as the search result instead of searching again (stateless
+    // server — same echo pattern as mcpPlan). Bounded: display data only.
+    // URLs are http(s)-only — they end up as clickable citations, so
+    // javascript:/data: schemes must be rejected at the boundary.
+    precomputedSearchResults: z
+      .object({
+        queries: z.array(z.string().max(500)).min(1).max(5),
+        entries: z
+          .array(
+            z.object({
+              title: z.string().max(500),
+              url: z
+                .string()
+                .max(2000)
+                .regex(/^https?:\/\//i, 'Must be an http(s) URL'),
+              date: z.string().max(100),
+              sourceName: z.string().max(200).optional(),
+              sourceUrl: z
+                .string()
+                .max(2000)
+                .regex(/^https?:\/\//i, 'Must be an http(s) URL')
+                .optional(),
+              snippet: z.string().max(1500).optional(),
+            }),
+          )
+          .min(1)
+          .max(MAX_SEARCH_RESULT_COUNT),
+      })
+      .optional(),
+    interpreterMode: z.nativeEnum(InterpreterMode).optional(),
+    // MCP turn plan echoed on approval resume (stateless server). Bounded
+    // here; StandardChatService re-sanitizes before use.
+    mcpPlan: z
+      .object({
+        steps: z
+          .array(
+            z.object({
+              description: z.string().max(MAX_PLAN_STEP_DESCRIPTION_CHARS),
+              tools: z.array(z.string().max(128)).max(MAX_PLAN_STEP_TOOLS),
+              retried: z.boolean().optional(),
+            }),
+          )
+          .max(MAX_PLAN_STEPS),
+        currentStep: z
+          .number()
+          .int()
+          .min(0)
+          .max(MAX_PLAN_STEPS - 1),
+      })
+      .optional(),
     // Which region's hosted instance to chat with (cross-region routing).
     // Validated as a strict enum; the server additionally forces EU users to
     // EU in resolveChatRegion regardless of this value.
@@ -359,6 +454,12 @@ const ChatBodySchema = z
             id: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/),
             name: z.string().min(1).max(100),
             catalogKey: z.string().max(64).optional(),
+            // Admin-connector entries (server-resolved + access-checked, like
+            // catalogKey). Mirrors app/api/mcp/tools/route.ts.
+            connectorId: z.string().max(64).optional(),
+            // First-party builtin toolset marker (builtin-m365) — the server
+            // constructs the synthetic entry itself; no url/token ride along.
+            builtin: z.boolean().optional(),
             url: z
               .string()
               .max(2048)
@@ -396,6 +497,22 @@ const ChatBodySchema = z
       .max(10)
       .optional(),
     mcpLoopRound: z.number().int().min(0).max(10).optional(),
+    // Mail-screen override ids (fifth-pass hostile-mail hardening): message
+    // ids the user explicitly revealed via the flagged-result UI control.
+    // The M365 executor honors ONLY this payload field — never a tool
+    // argument — so an injected email cannot self-unlock. Charset mirrors
+    // graphApi's GRAPH_ID_REGEX (not imported: graphApi statically pulls
+    // next-auth, which must stay out of this module graph).
+    m365MailScreenOverrides: z
+      .array(z.string().regex(/^[A-Za-z0-9!$_.,=-]{1,512}$/))
+      .max(20)
+      .optional(),
+    // Shared mailbox addresses the user configured (Settings → Connections).
+    // The mail tools only ever target addresses on this list.
+    m365SharedMailboxes: z
+      .array(z.string().email().max(320))
+      .max(10)
+      .optional(),
     isEditorOpen: z.boolean().optional(),
     activeFiles: z.array(ActiveFileSchema).max(50).optional(),
     activeFilesTokensUsed: z.number().int().min(0).optional(),
@@ -436,6 +553,9 @@ export class InputValidator {
    */
   public validateChatRequest(body: unknown): ChatBody & {
     searchMode?: SearchMode;
+    webSearchOptions?: WebSearchOptions;
+    precomputedSearchResults?: PrecomputedSearchResults;
+    interpreterMode?: InterpreterMode;
     threadId?: string;
     forcedAgentType?: string;
     tone?: Tone;
@@ -462,6 +582,9 @@ export class InputValidator {
       // Cast to include key property (it's auto-generated in the actual request)
       return result.data as ChatBody & {
         searchMode?: SearchMode;
+        webSearchOptions?: WebSearchOptions;
+        precomputedSearchResults?: PrecomputedSearchResults;
+        interpreterMode?: InterpreterMode;
         threadId?: string;
         forcedAgentType?: string;
         extraction?: ExtractionRequest;
@@ -611,6 +734,10 @@ export class InputValidator {
         throw error;
       }
 
+      if (isBlobNotFoundError(error)) {
+        throw expiredFilePipelineError(fileUrl, error);
+      }
+
       throw PipelineError.critical(
         ErrorCode.VALIDATION_FAILED,
         'Failed to validate file size',
@@ -622,4 +749,27 @@ export class InputValidator {
       );
     }
   }
+}
+
+/**
+ * The blob backing a `file_url` is gone — uploads live in a container with a
+ * lifecycle delete rule, so this normally means the file expired. Thrown with
+ * a DISTINCT code (vs the generic VALIDATION_FAILED) and the offending
+ * `fileUrl` in metadata so the client can flag the file in the Active Files
+ * tray and strip the dead reference instead of failing every future turn.
+ * The message is streamed to the user verbatim — keep it client-safe.
+ */
+export function expiredFilePipelineError(
+  fileUrl: string,
+  error: unknown,
+): PipelineError {
+  return PipelineError.critical(
+    ErrorCode.FILE_NOT_FOUND,
+    'An attached file is no longer available — uploaded files are stored for a limited time. Send your message without it, or upload the file again.',
+    {
+      fileUrl,
+      originalError: error instanceof Error ? error.message : String(error),
+    },
+    error instanceof Error ? error : undefined,
+  );
 }

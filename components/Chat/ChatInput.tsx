@@ -52,20 +52,27 @@ import {
   MessageType,
   TextMessageContent,
 } from '@/types/chat';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { Prompt } from '@/types/prompt';
 import { SearchMode } from '@/types/searchMode';
 
+import { AgentChip } from '@/components/Chat/ChatInput/AgentChip';
 import { ArtifactContextBar } from '@/components/Chat/ChatInput/ArtifactContextBar';
 import ChatFileUploadPreviews from '@/components/Chat/ChatInput/ChatFileUploadPreviews';
 import ChatInputFile from '@/components/Chat/ChatInput/ChatInputFile';
 import ChatInputImageCapture, {
   ChatInputImageCaptureRef,
 } from '@/components/Chat/ChatInput/ChatInputImageCapture';
+import { ConnectorActivityBadge } from '@/components/Chat/ChatInput/ConnectorActivityBadge';
+import { ConnectorPinTray } from '@/components/Chat/ChatInput/ConnectorPinTray';
 import { ExtractionTray } from '@/components/Chat/ChatInput/ExtractionTray';
 import { InputControlsBar } from '@/components/Chat/ChatInput/InputControlsBar';
+import { InterpreterModeBadge } from '@/components/Chat/ChatInput/InterpreterModeBadge';
+import { M365PlaybookChips } from '@/components/Chat/ChatInput/M365PlaybookChips';
 import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
 import { ToneBadge } from '@/components/Chat/ChatInput/ToneBadge';
+import { M365AgentAccessBanner } from '@/components/Chat/M365AgentAccessBanner';
 
 import { PromptList } from './ChatInput/PromptList';
 import { VariableModal } from './ChatInput/VariableModal';
@@ -106,7 +113,7 @@ export const ChatInput = ({
   // Zustand hooks
   const { selectedConversation, folders } = useConversations();
   const { isStreaming, requestStop } = useChat();
-  const { prompts } = useSettings();
+  const { prompts, defaultInterpreterMode } = useSettings();
   const { tones } = useTones();
   const { isArtifactOpen, fileName, language, closeArtifact } =
     useArtifactStore();
@@ -150,7 +157,14 @@ export const ChatInput = ({
   );
   const searchMode = useChatInputStore((state) => state.searchMode);
   const setSearchMode = useChatInputStore((state) => state.setSearchMode);
+  const interpreterMode = useChatInputStore((state) => state.interpreterMode);
+  const setInterpreterMode = useChatInputStore(
+    (state) => state.setInterpreterMode,
+  );
   const extractionMode = useChatInputStore((state) => state.extractionMode);
+  const connectorPinTrayOpen = useChatInputStore(
+    (state) => state.connectorPinTrayOpen,
+  );
   // Structured-data extraction is gated by a LaunchDarkly flag (fail-open).
   // Off in prod until go-ahead; when disabled the tray never renders.
   // See docs/LAUNCHDARKLY_FLAGS.md.
@@ -219,12 +233,19 @@ export const ChatInput = ({
 
   const cameraRef = useRef<ChatInputImageCaptureRef>(null);
 
-  // Reset input when conversation changes
+  // Reset input when conversation changes. The interpreter default falls
+  // back to the SETTINGS default when the conversation has no override —
+  // this is what makes code interpreter "default enabled" for new chats.
   useEffect(() => {
-    resetForNewConversation(selectedConversation?.defaultSearchMode);
+    resetForNewConversation(
+      selectedConversation?.defaultSearchMode,
+      selectedConversation?.defaultInterpreterMode ?? defaultInterpreterMode,
+    );
   }, [
     selectedConversation?.id,
     selectedConversation?.defaultSearchMode,
+    selectedConversation?.defaultInterpreterMode,
+    defaultInterpreterMode,
     resetForNewConversation,
   ]);
 
@@ -503,6 +524,14 @@ export const ChatInput = ({
       ? 'Search the web'
       : placeholderText;
 
+  // Any forced-mode/tone badge expands the composer into its two-row
+  // layout: taller container, textarea padded above, badges on their own
+  // row below (same treatment for search, code execution, and tone).
+  const hasBadgeRow =
+    searchMode === SearchMode.ALWAYS ||
+    interpreterMode === InterpreterMode.ALWAYS ||
+    !!selectedToneId;
+
   return (
     <div
       {...getRootProps()}
@@ -567,6 +596,20 @@ export const ChatInput = ({
         {/* Structured Extraction Tray — recipe chip row above the composer */}
         {isExtractionEnabled && extractionMode && <ExtractionTray />}
 
+        {/* Connector focus tray — pinned when the conversation carries a
+            pin, or open in picking state from the + menu */}
+        {(selectedConversation?.pinnedMcpServerId || connectorPinTrayOpen) && (
+          <ConnectorPinTray />
+        )}
+
+        {/* M365 agent source-access preflight (renders only when an M365
+            file-backed agent is selected AND some sources are denied) */}
+        <M365AgentAccessBanner botId={selectedConversation?.bot} />
+
+        {/* Playbook suggestions — self-gating (flag, user toggle and each
+            playbook's precondition are all checked inside). */}
+        <M365PlaybookChips />
+
         <div className="items-center pt-4">
           <div className="flex justify-center items-center space-x-2 px-2 md:px-4">
             <ChatInputImageCapture
@@ -587,15 +630,14 @@ export const ChatInput = ({
                 narrow viewports. */}
             <div className="relative mx-auto w-full min-w-0 max-w-3xl flex-grow px-2 sm:px-4">
               <div
-                className={`relative flex w-full flex-col rounded-full border border-gray-300 bg-white dark:border-0 dark:bg-surface-dark-input dark:text-white focus-within:outline-none focus-within:ring-0 z-0 ${searchMode === SearchMode.ALWAYS || selectedToneId ? 'min-h-[80px] !rounded-3xl' : ''} ${isMultiline && searchMode !== SearchMode.ALWAYS && !selectedToneId ? '!rounded-2xl' : ''}`}
+                className={`relative flex w-full flex-col rounded-full border border-gray-300 bg-white dark:border-0 dark:bg-surface-dark-input dark:text-white focus-within:outline-none focus-within:ring-0 z-0 ${hasBadgeRow ? 'min-h-[80px] !rounded-3xl' : ''} ${isMultiline && !hasBadgeRow ? '!rounded-2xl' : ''}`}
               >
                 <MessageTextarea
                   textareaRef={textareaRef}
                   value={textFieldValue}
                   placeholder={inputPlaceholder}
                   disabled={preventSubmission()}
-                  searchMode={searchMode}
-                  selectedToneId={selectedToneId}
+                  hasBadgeRow={hasBadgeRow}
                   textareaScrollHeight={textareaScrollHeight}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
@@ -608,9 +650,7 @@ export const ChatInput = ({
                 {/* Bottom row with badges and controls */}
                 <div
                   className={`absolute left-2 flex items-center gap-2 z-[10001] transition-all duration-200 ${
-                    searchMode === SearchMode.ALWAYS ||
-                    selectedToneId ||
-                    isMultiline
+                    hasBadgeRow || isMultiline
                       ? 'bottom-2'
                       : 'top-1/2 transform -translate-y-1/2'
                   }`}
@@ -633,9 +673,7 @@ export const ChatInput = ({
                 {/* Badges displayed after dropdown */}
                 <div
                   className={`absolute left-14 flex items-center gap-2 z-[10000] transition-all duration-200 ${
-                    searchMode === SearchMode.ALWAYS ||
-                    selectedToneId ||
-                    isMultiline
+                    hasBadgeRow || isMultiline
                       ? 'bottom-2'
                       : 'top-1/2 transform -translate-y-1/2'
                   }`}
@@ -646,6 +684,17 @@ export const ChatInput = ({
                         setSearchMode(
                           selectedConversation?.defaultSearchMode ??
                             SearchMode.OFF,
+                        )
+                      }
+                    />
+                  )}
+
+                  {interpreterMode === InterpreterMode.ALWAYS && (
+                    <InterpreterModeBadge
+                      onRemove={() =>
+                        setInterpreterMode(
+                          selectedConversation?.defaultInterpreterMode ??
+                            defaultInterpreterMode,
                         )
                       }
                     />
@@ -689,6 +738,18 @@ export const ChatInput = ({
                     column so split view is respected. */}
                 <div className="absolute bottom-full mb-2 right-2 z-[9999]">
                   <EmissionsChip conversation={selectedConversation} />
+                </div>
+
+                {/* Capability indicators (attached agent + active
+                    connectors) — left-aligned mirror of the emissions chip,
+                    ABOVE the pill: inside it the badges overlapped the
+                    placeholder text. Anchored to the pill container, so they
+                    follow the input in the empty-chat (centered) layout too.
+                    Both render nothing when inactive, so the default
+                    conversation adds zero chrome. */}
+                <div className="absolute bottom-full mb-2 left-2 z-[9999] flex items-center gap-1.5">
+                  <AgentChip />
+                  <ConnectorActivityBadge />
                 </div>
 
                 {showPromptList && filteredPrompts.length > 0 && (

@@ -1,17 +1,20 @@
 import { Session } from 'next-auth';
 
-import { PromptAgent } from '@/lib/services/agentAccess/types';
+import { M365Agent, PromptAgent } from '@/lib/services/agentAccess/types';
 import { ModelSelector } from '@/lib/services/shared';
 
+import { RequestTelemetry } from '@/lib/types/logging';
 import { ActiveFile, ApprovalResponse, Message } from '@/types/chat';
 import {
   ExtractionRequest,
   ExtractionResponseFormat,
 } from '@/types/extractionRecipe';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference } from '@/types/settings';
 import { Tone } from '@/types/tone';
+import { WebSearchOptions } from '@/types/webSearch';
 
 import { TokenCredential } from '@azure/identity';
 
@@ -171,6 +174,28 @@ export interface ChatContext {
   mcpServers?: import('@/types/mcp').McpServerRequestEntry[];
   mcpPendingToolCalls?: import('@/types/mcp').McpPendingToolCall[];
   mcpLoopRound?: number;
+  /** Turn plan echoed by the client on approval resume. */
+  mcpPlan?: import('@/types/mcp').McpPlan;
+
+  /**
+   * Phishing-screen override ids from the request payload (explicit UI
+   * action on a flagged mail result). Threaded into the builtin M365
+   * executor as screenOverrideIds; the mail tools honor ONLY this field,
+   * never a tool argument.
+   */
+  m365MailScreenOverrides?: string[];
+
+  /** Shared mailbox addresses from the payload (fifth pass tier 3). */
+  m365SharedMailboxes?: string[];
+
+  /**
+   * The incoming NextRequest, stored by buildChatContext. Needed by
+   * request-bound in-process tools (the builtin M365 executor mints
+   * delegated Graph tokens from the request's auth cookies). Optional so
+   * tests can build contexts without one; consumers must degrade when
+   * absent.
+   */
+  request?: import('next/server').NextRequest;
 
   // ========================================
   // FEATURE FLAGS
@@ -178,8 +203,69 @@ export interface ChatContext {
   /** Bot/knowledge base ID for RAG */
   botId?: string;
 
+  /**
+   * Client conversation id (conversation.id). Telemetry only — never used
+   * for routing or authorization. Lets log rows from the tool-loop rounds of
+   * one user turn be collapsed, and enables per-conversation analytics.
+   */
+  conversationId?: string;
+
+  /** Server-generated id for this HTTP request (telemetry correlation). */
+  requestId?: string;
+
+  /**
+   * Resolved per-request telemetry (agent kind/name/source/applied +
+   * correlation ids), built by createTelemetryMiddleware AFTER model
+   * selection and the credential/access guards so it reflects what the
+   * pipeline actually did. Threaded into every Azure Monitor log event.
+   */
+  telemetry?: RequestTelemetry;
+
+  /**
+   * Explicit signal that `botId` was ATTACHED to the conversation via the
+   * capabilities tray (decoupled from the model). Widens the prompt/m365/org
+   * agent resolution in createModelSelectionMiddleware beyond the legacy
+   * `org-<botId>` model-id scoping; never set by old clients, so stale bots
+   * on pre-tray conversations stay inert.
+   */
+  agentAttached?: boolean;
+
   /** Search mode for tool routing */
   searchMode?: SearchMode;
+
+  /**
+   * User-tunable search options (source count, freshness preference).
+   * Validated/bounded by InputValidator; absent = defaults.
+   */
+  webSearchOptions?: WebSearchOptions;
+
+  /**
+   * "Summarize from headlines" resend: interim headlines the client already
+   * received for this message, echoed back to be merged as THE search
+   * result instead of running a fresh search. Validated/bounded by
+   * InputValidator.
+   */
+  precomputedSearchResults?: import('@/types/webSearch').PrecomputedSearchResults;
+
+  /**
+   * Code-interpreter mode for tool routing (off / intelligent / always).
+   * `always` is the user's "Run code" force toggle. Server-side the feature
+   * is additionally gated by env.CODE_INTERPRETER_ENABLED.
+   */
+  interpreterMode?: InterpreterMode;
+
+  /**
+   * Set by ToolRouterEnricher when the PICKED model can run the
+   * code_interpreter tool natively on the Responses path (Phase 2): the
+   * enricher skips the sub-tool round-trip and StandardChatService attaches
+   * the tool in-turn instead. `inputFiles` are the raw attachment bytes —
+   * never log this object.
+   */
+  nativeCodeInterpreter?: {
+    /** InterpreterMode.ALWAYS — the model is instructed to actually run code. */
+    forced: boolean;
+    inputFiles: import('../tools/CodeInterpreterTool').CodeInterpreterInputFile[];
+  };
 
   /**
    * Requested hosting region for this conversation (cross-region routing).
@@ -199,6 +285,29 @@ export interface ChatContext {
    * Never routes into the Foundry execution path (no agentId is ever set).
    */
   promptAgent?: PromptAgent;
+
+  /**
+   * M365 file-backed RAG agent resolved server-side from `botId`
+   * (docs/M365_SECOND_PASS_AGENTS_DESIGN.md). Set by
+   * createModelSelectionMiddleware; drives M365AgentEnricher's retrieval and
+   * the credential middleware's two-layer access guard. Never routes into
+   * the Foundry execution path.
+   */
+  m365Agent?: M365Agent;
+
+  /**
+   * Layer-2 trim result: the agent's source ids the REQUESTING USER'S own
+   * Graph token can open, verified by the credential middleware. Retrieval
+   * is hard-filtered to this subset — never read sources outside it.
+   */
+  m365AccessibleSourceIds?: string[];
+
+  /**
+   * Layer-2 trim for folder sources: child file item ids visible to the
+   * requesting user inside accessible folders. Folder chunks are retrieved
+   * per-item from this list, never by the folder-level verdict alone.
+   */
+  m365AccessibleFolderItems?: { driveId: string; itemId: string }[];
 
   /** Thread ID for continuing conversations */
   threadId?: string;
@@ -248,7 +357,20 @@ export interface ChatContext {
    * AGENT_ACTIVITY marker into the response stream. The route handler
    * installs this when it sets up the streaming response.
    */
-  emitActivity?: (translationKey: string) => Promise<void>;
+  emitActivity?: (
+    translationKey: string,
+    params?: Record<string, string>,
+  ) => Promise<void>;
+
+  /**
+   * Optional async helper to write a RAW pre-encoded stream marker (e.g. a
+   * TOOL_CALL_RECORD from `lib/streamMarkers`) into the response stream.
+   * Same transport as emitActivity; installed by the route handler. Used by
+   * enrichers that complete a tool run BEFORE the model stream starts (code
+   * interpreter) so the record reaches the client on the same channel the
+   * MCP tool loop uses.
+   */
+  emitMarker?: (marker: string) => Promise<void>;
 
   // ========================================
   // PIPELINE STATE (Modified by stages)
@@ -343,12 +465,32 @@ export interface ChatContext {
     resetTime: number;
     retryAfter?: number;
   };
+
+  /**
+   * Admin-configured usage limits already resolved for this caller and this
+   * model (docs/LIMITS.md). Populated once by createLimitsMiddleware so
+   * downstream enrichers and the MCP tool loop consult the SAME decision
+   * rather than re-resolving — re-resolution mid-request could see a
+   * different policy snapshot after a 60s TTL boundary.
+   *
+   * Undefined when the feature is disabled: every consumer must treat that
+   * as "no limits", never as "blocked".
+   */
+  limits?: import('@/lib/services/limits/context').ChatLimits;
 }
 
 /**
  * Decides whether a request should execute via the Foundry-agent code path
  * (vs. the standard handler path). Centralized so the routing rule is
  * consistent across enrichers + the final handler dispatch.
+ *
+ * Files/images intentionally force the STANDARD path: the Foundry agent
+ * handler flattens attachments to placeholder text ("[Image attached]"),
+ * losing their content. This is NOT a capability gap for tools anymore —
+ * the standard path runs web search and the code interpreter via
+ * ToolRouterEnricher, and the interpreter receives the raw attached files.
+ * Revisit for Phase 2 (native in-turn code interpreter) once the agent
+ * path can carry real file payloads.
  */
 export function shouldExecuteAsAgent(
   context: Pick<ChatContext, 'agentMode' | 'model' | 'hasFiles' | 'hasImages'>,

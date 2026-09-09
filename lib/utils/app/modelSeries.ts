@@ -30,19 +30,43 @@ export function getSeriesVersions(
 }
 
 /**
+ * Predicate narrowing which family members a row or switcher may front and
+ * select. The picker passes "not exhausted by a usage limit": a family whose
+ * default has hit its daily cap should front a sibling that still works
+ * rather than a grayed row the user cannot open. Absent = every member
+ * qualifies.
+ */
+export type SelectablePredicate = (model: OpenAIModel) => boolean;
+
+/**
  * The model that fronts a family row: the current selection when it's in
  * this family, else the best-ranked `defaultRank` member (ties go to the
  * newest, since `versions` arrives newest-first — so "rank 1 on every
  * Sonnet" means "latest available Sonnet"), else the FEATURED version, else
  * the newest non-legacy, else the newest. This is also what clicking the
  * row selects, i.e. the family's default.
+ *
+ * With `isSelectable`, the preference walk runs over the selectable members
+ * first and only falls back to the whole list when none qualifies — so the
+ * row stays clickable while any sibling is usable, and grays out (with the
+ * default's reason) only when the entire family is spent. The current
+ * selection still wins outright: the user is already on that model and the
+ * header carries its badge.
  */
 export function seriesRepresentative(
   versions: OpenAIModel[],
   selectedModelId?: string,
+  isSelectable?: SelectablePredicate,
 ): OpenAIModel | undefined {
   const selected = versions.find((v) => v.id === selectedModelId);
   if (selected) return selected;
+
+  if (isSelectable) {
+    const usable = versions.filter(isSelectable);
+    if (usable.length > 0 && usable.length < versions.length) {
+      return seriesRepresentative(usable, undefined);
+    }
+  }
 
   let preferred: OpenAIModel | undefined;
   for (const v of versions) {
@@ -156,18 +180,162 @@ export function getVariantVersions(
   );
 }
 
+/** One sub-variant chip within a version: its key, label, and the model it selects. */
+export interface VersionSubVariant {
+  /** `subVariant` metadata key; '' groups members that declare none. */
+  key: string;
+  label: string;
+  model: OpenAIModel;
+}
+
+/**
+ * Sub-variants present at one version, ordered by `subVariantRank` (the
+ * capability hierarchy within the version, e.g. Sol → Terra → Luna).
+ * Unranked sub-variants sort last, in order of first appearance.
+ *
+ * A version normally holds exactly one model, so this usually returns a
+ * single entry and the caller renders no control at all.
+ */
+export function getVersionSubVariants(
+  versionMembers: OpenAIModel[],
+): VersionSubVariant[] {
+  return versionMembers
+    .map((model) => ({
+      key: model.subVariant ?? '',
+      label: model.subVariantLabel ?? '',
+      model,
+      rank: model.subVariantRank ?? Infinity,
+    }))
+    .sort((a, b) => a.rank - b.rank)
+    .map(({ key, label, model }) => ({ key, label, model }));
+}
+
+/** One version chip: the shared label and every sub-variant shipped under it. */
+export interface VariantVersion {
+  /** `versionLabel`, or the single member's id when the version is unlabelled. */
+  key: string;
+  label: string;
+  /** Sub-variants at this version, in `subVariantRank` order. */
+  members: OpenAIModel[];
+}
+
+/**
+ * Versions of `model`'s variant, newest first, COLLAPSING sub-variants into
+ * one entry each. This is what the Version chip strip shows: one chip per
+ * version of the active variant, however many models ship under it.
+ *
+ * Grouping is what makes the sub-variant axis work at all — GPT 5.6 ships
+ * Sol/Terra/Luna and o-series 3 ships o3/o3-mini, so without it the strip
+ * renders duplicate chips reading the same version number and every
+ * "keep the user's version" lookup resolves to an arbitrary one of them.
+ */
+export function getVariantVersionGroups(
+  models: OpenAIModel[],
+  model: Pick<OpenAIModel, 'series' | 'variant'>,
+): VariantVersion[] {
+  const byKey = new Map<string, VariantVersion>();
+  for (const m of getVariantVersions(models, model)) {
+    const key = m.versionLabel ?? m.id;
+    const existing = byKey.get(key);
+    if (existing) {
+      existing.members.push(m);
+    } else {
+      byKey.set(key, { key, label: m.versionLabel ?? m.name, members: [m] });
+    }
+  }
+  // getVariantVersions already ordered by versionRank, so insertion order is
+  // newest-first; only the members within a group need the sub-variant sort.
+  return [...byKey.values()].map((group) => ({
+    ...group,
+    members: getVersionSubVariants(group.members).map((s) => s.model),
+  }));
+}
+
+/**
+ * Family members restricted to `model`'s variant AND version, in
+ * `subVariantRank` order — the models one version chip stands for.
+ */
+export function getVersionMembers(
+  models: OpenAIModel[],
+  model: Pick<OpenAIModel, 'series' | 'variant' | 'versionLabel'>,
+): OpenAIModel[] {
+  return (
+    getVariantVersionGroups(models, model).find(
+      (group) => group.key === model.versionLabel,
+    )?.members ?? []
+  );
+}
+
+/**
+ * Picks within a candidate set, preferring the user's current sub-variant so
+ * a variant or version switch keeps the size tier they were on (Terra → a
+ * different version stays on Terra where that version has one). Falls back
+ * to the set's representative when the sub-variant isn't offered there.
+ */
+function preferSubVariant(
+  candidates: OpenAIModel[],
+  currentSubVariant: string | undefined,
+  gate?: SelectablePredicate,
+): OpenAIModel | undefined {
+  if (currentSubVariant !== undefined) {
+    const sameSubVariant = candidates.filter(
+      (m) => (m.subVariant ?? '') === currentSubVariant,
+    );
+    if (sameSubVariant.length > 0) {
+      const pick = seriesRepresentative(sameSubVariant, undefined, gate);
+      if (pick && (!gate || gate(pick))) return pick;
+    }
+  }
+  return seriesRepresentative(candidates, undefined, gate);
+}
+
 /**
  * The model to select when the user switches to another variant: the same
- * versionLabel within that variant when it exists (keep the user's version),
- * else the variant's representative (featured → newest non-legacy → newest).
+ * versionLabel within that variant when it exists (keep the user's version,
+ * and within it their sub-variant), else the variant's representative
+ * (featured → newest non-legacy → newest).
+ *
+ * `isSelectable` (see seriesRepresentative) keeps the same-version shortcut
+ * only while that version is usable; an exhausted twin falls through to the
+ * best selectable sibling, and the whole variant is offered ungated only
+ * when nothing in it qualifies (the caller then renders it disabled).
  */
 export function pickVariantTarget(
   variantMembers: OpenAIModel[],
   currentVersionLabel: string | undefined,
+  isSelectable?: SelectablePredicate,
+  currentSubVariant?: string,
 ): OpenAIModel | undefined {
-  return (
-    (currentVersionLabel !== undefined
-      ? variantMembers.find((m) => m.versionLabel === currentVersionLabel)
-      : undefined) ?? seriesRepresentative(variantMembers)
-  );
+  // No usable member at all: behave exactly as if ungated, so the caller
+  // still gets the natural target to badge and disable.
+  const gate =
+    isSelectable && variantMembers.some(isSelectable)
+      ? isSelectable
+      : undefined;
+  const sameVersion =
+    currentVersionLabel !== undefined
+      ? variantMembers.filter((m) => m.versionLabel === currentVersionLabel)
+      : [];
+  if (sameVersion.length > 0) {
+    const pick = preferSubVariant(sameVersion, currentSubVariant, gate);
+    if (pick && (!gate || gate(pick))) return pick;
+  }
+  return preferSubVariant(variantMembers, currentSubVariant, gate);
+}
+
+/**
+ * The model to select when the user clicks another VERSION chip: their
+ * current sub-variant at that version when it ships one, else that version's
+ * representative. Versions with a single model always return it.
+ */
+export function pickVersionTarget(
+  versionMembers: OpenAIModel[],
+  currentSubVariant: string | undefined,
+  isSelectable?: SelectablePredicate,
+): OpenAIModel | undefined {
+  const gate =
+    isSelectable && versionMembers.some(isSelectable)
+      ? isSelectable
+      : undefined;
+  return preferSubVariant(versionMembers, currentSubVariant, gate);
 }

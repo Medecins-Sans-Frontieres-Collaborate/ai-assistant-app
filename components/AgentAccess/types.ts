@@ -1,6 +1,14 @@
 import type {
   AgentAccessConfig,
   AgentAccessRule,
+  Guide,
+  M365Agent,
+  M365ManifestFolder,
+  M365ManifestItem,
+  M365SourceCounts,
+  MapDataset,
+  MapDatasetMeta,
+  OrgRagAgent,
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 
@@ -49,8 +57,11 @@ export interface DiscoveredAgentSummary {
   agentName: string;
   source?: string;
   description?: string;
-  /** 'prompt' = app-defined prompt agent; absent/'foundry' = Foundry agent. */
-  type?: 'foundry' | 'prompt';
+  /**
+   * 'prompt' = app-defined prompt agent; 'm365' = M365 file-backed agent;
+   * absent/'foundry' = Foundry agent.
+   */
+  type?: 'foundry' | 'prompt' | 'm365';
 }
 
 export interface AgentsApiResponse {
@@ -80,6 +91,160 @@ export interface AdminPromptAgentsResponse {
 }
 
 /**
+ * Client mirror of M365_AGENT_SOURCE (value import forbidden here — see the
+ * module comment above). The pseudo-source half of every M365 agent's
+ * canonical key.
+ */
+export const CLIENT_M365_AGENT_SOURCE = 'm365-agent';
+
+/**
+ * One M365 agent as served by GET /api/agent-access/m365-agents (the etag
+ * feeds the If-Match CAS on PUT/DELETE).
+ */
+export interface AdminStoredM365Agent {
+  canonicalKey: string;
+  agent: M365Agent;
+  etag: string;
+}
+
+export interface AdminM365AgentsResponse {
+  m365Agents: AdminStoredM365Agent[];
+  /** Same outage contract as promptAgentsUnavailable. */
+  m365AgentsUnavailable?: boolean;
+  fetchedAt?: number | null;
+  /** Server's env-configured per-agent document cap (M365_AGENT_MAX_DOCUMENTS). */
+  maxDocuments?: number;
+  /** Server's env-configured per-agent byte budget (M365_AGENT_MAX_SOURCE_MB). */
+  maxBytes?: number;
+  /** Latest index job per agent id (seventh pass, phase 2). */
+  jobs?: Record<string, ClientIndexJobSummary>;
+}
+
+/** Mirror of IndexJobSummary (agentIndexJobStore) for the admin client. */
+export interface ClientIndexJobSummary {
+  jobId: string;
+  agentId: string;
+  status: 'running' | 'succeeded' | 'failed' | 'cancelled';
+  mode: 'full' | 'refresh';
+  /** Refresh jobs: what changed since the last manifest. */
+  changes?: ClientSourceChanges;
+  /** Running but without a heartbeat — resumable by any admin. */
+  stale: boolean;
+  startedBy: string;
+  startedAt: string;
+  updatedAt: string;
+  finishedAt?: string;
+  total: number;
+  done: number;
+  indexed: number;
+  failed: number;
+  noText: number;
+  missing: number;
+  error?: string;
+}
+
+/** One source's plan as returned by POST /api/agent-access/m365-agents/plan. */
+export interface ClientSourcePlan {
+  driveId: string;
+  itemId: string;
+  missing: boolean;
+  truncated: boolean;
+  deltaLink?: string;
+  folders: M365ManifestFolder[];
+  items: M365ManifestItem[];
+  counts: M365SourceCounts;
+}
+
+export interface ClientAgentPlan {
+  plans: ClientSourcePlan[];
+  totalDocuments: number;
+  totalBytes: number;
+  maxDocuments: number;
+  maxBytes: number;
+  overDocumentCap: boolean;
+  overByteCap: boolean;
+}
+
+/**
+ * Client mirror of ORG_AGENT_SOURCE (value import forbidden here — see the
+ * module comment above). The pseudo-source half of every org RAG agent's
+ * canonical key.
+ */
+export const CLIENT_ORG_AGENT_SOURCE = 'org-agent';
+
+/**
+ * One org RAG agent as served by GET /api/agent-access/org-agents (the etag
+ * feeds the If-Match CAS on PUT/DELETE).
+ */
+export interface AdminStoredOrgAgent {
+  canonicalKey: string;
+  agent: OrgRagAgent;
+  etag: string;
+}
+
+/**
+ * One audit entry from GET /api/agent-access/history. The envelope fields
+ * are entity-agnostic; the per-entity payload (orgAgent, promptAgent, …)
+ * rides along verbatim — consumers narrow to the field they expect.
+ */
+export interface AdminHistoryEntry {
+  version: 1;
+  canonicalKey: string;
+  action: 'upsert' | 'delete';
+  updatedBy: string;
+  updatedAt: string;
+  /** Present on org-agent entries: the full record as written (null = delete tombstone). */
+  orgAgent?: OrgRagAgent | null;
+}
+
+export interface AdminHistoryResponse {
+  canonicalKey: string;
+  entries: AdminHistoryEntry[];
+  /** True when older entries were cut off at the server's cap. */
+  truncated?: boolean;
+}
+
+/**
+ * The editable-field subset of an org RAG agent — what a built-in
+ * (config/organization-agents.json) entry can supply. Also the prefill
+ * shape the editor accepts (a stored record satisfies it structurally).
+ */
+export type OrgAgentDraft = Omit<
+  OrgRagAgent,
+  | 'version'
+  | 'validation'
+  | 'createdBy'
+  | 'createdAt'
+  | 'updatedBy'
+  | 'updatedAt'
+>;
+
+/**
+ * One built-in org RAG agent as served by GET /api/agent-access/org-agents.
+ * Read-only (it lives in the deployment config); access rules apply to it
+ * by canonical key exactly like a stored record, and `overridden` means an
+ * admin record with the same id already replaces it.
+ */
+export interface AdminStaticOrgAgent {
+  canonicalKey: string;
+  agent: OrgAgentDraft;
+  overridden: boolean;
+}
+
+export interface AdminOrgAgentsResponse {
+  orgAgents: AdminStoredOrgAgent[];
+  /** Built-in config agents (listed for access editing / override). */
+  staticAgents?: AdminStaticOrgAgent[];
+  /** Same outage contract as promptAgentsUnavailable. */
+  orgAgentsUnavailable?: boolean;
+  fetchedAt?: number | null;
+  /** Static config agent ids offered as override targets. */
+  staticAgentIds?: string[];
+  /** Creation is global-admin only; the server reports whether to offer it. */
+  canCreate?: boolean;
+}
+
+/**
  * Client mirror of MCP_CONNECTOR_SOURCE (value import forbidden here — see
  * the module comment above). The pseudo-source half of every connector's
  * canonical key.
@@ -101,6 +266,9 @@ export interface AdminConnectorView {
   tokenHelpUrl?: string;
   oauthClientId?: string;
   oauthScopes: string[];
+  oauthAuthorizationUrl?: string;
+  oauthTokenUrl?: string;
+  oauthRefreshUrl?: string;
   hasClientSecret: boolean;
   createdBy: string;
   createdAt: string;
@@ -125,6 +293,57 @@ export interface AdminConnectorsResponse {
    */
   secretSealingAvailable?: boolean;
   fetchedAt?: number | null;
+}
+
+/**
+ * Client mirror of GUIDE_SOURCE (value import forbidden here — see the
+ * module comment above). The pseudo-source half of every guide's canonical
+ * key.
+ */
+export const CLIENT_GUIDE_SOURCE = 'guide';
+
+/**
+ * A guide as served by GET /api/agent-access/guides (full record including
+ * body; the etag feeds the If-Match CAS on PUT/DELETE).
+ */
+export interface AdminStoredGuide {
+  canonicalKey: string;
+  guide: Guide;
+  etag: string;
+}
+
+export interface AdminGuidesResponse {
+  guides: AdminStoredGuide[];
+  /** Same outage contract as rulesUnavailable — empty ≠ "none exist". */
+  guidesUnavailable?: boolean;
+  fetchedAt?: number | null;
+}
+
+/**
+ * Client mirror of MAP_DATASET_SOURCE (value import forbidden here — see
+ * the module comment above). The pseudo-source half of every dataset's
+ * canonical key.
+ */
+export const CLIENT_MAP_DATASET_SOURCE = 'map-dataset';
+
+/** One dataset META row as served by GET /api/agent-access/map-datasets. */
+export interface AdminStoredDatasetMeta {
+  canonicalKey: string;
+  meta: MapDatasetMeta;
+}
+
+export interface AdminMapDatasetsResponse {
+  datasets: AdminStoredDatasetMeta[];
+  /** Same outage contract as rulesUnavailable — empty ≠ "none exist". */
+  datasetsUnavailable?: boolean;
+  fetchedAt?: number | null;
+}
+
+/** GET/PUT /api/agent-access/map-datasets/[id] payload (data-blob etag). */
+export interface AdminMapDatasetResponse {
+  dataset: MapDataset;
+  etag: string;
+  canonicalKey: string;
 }
 
 /**
@@ -157,4 +376,26 @@ export function clientCanonicalAgentKey(
   agentName: string,
 ): string {
   return `${source.trim().toLowerCase()}::${agentName.trim().toLowerCase()}`;
+}
+
+export interface ClientSourceChanges {
+  added: number;
+  modified: number;
+  removed: number;
+  unchanged: number;
+}
+
+/** GET /api/agent-access/m365-agents/changes response. */
+export interface ClientRefreshPreview {
+  preview: {
+    sources: {
+      sourceId: string;
+      changes: ClientSourceChanges;
+      incremental: boolean;
+      missing: boolean;
+      error?: string;
+    }[];
+    changes: ClientSourceChanges;
+  } | null;
+  lastIndexedAt: string | null;
 }

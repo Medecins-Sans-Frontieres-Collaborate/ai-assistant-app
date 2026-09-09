@@ -85,8 +85,8 @@ export function BackupSyncBanner() {
       <div className="flex">
         {/* Spacer for sidebar on desktop - matches sidebar width */}
         <div
-          className={`hidden md:block transition-all duration-300 ${
-            showChatbar ? 'w-[260px]' : 'w-14'
+          className={`sidebar-width-target hidden md:block transition-all duration-300 ${
+            showChatbar ? 'w-[var(--sidebar-width,260px)]' : 'w-14'
           }`}
         />
         <div className="flex-1 pointer-events-auto">

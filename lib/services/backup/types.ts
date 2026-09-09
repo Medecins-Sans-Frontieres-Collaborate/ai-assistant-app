@@ -6,6 +6,14 @@
  * here; only ids, revisions, timestamps, sizes, and the key fingerprint.
  */
 
+/**
+ * Where the encrypted backup lives: the app-managed Azure container
+ * ('app') or the user's own OneDrive app folder ('onedrive'). Local
+ * browser storage always keeps the working copy either way — the backend
+ * only decides where the encrypted mirror is stored.
+ */
+export type BackupBackend = 'app' | 'onedrive';
+
 export interface BackupManifestEntry {
   /** Revision suffix of the current immutable ciphertext blob for this conversation. */
   rev: string;

@@ -7,6 +7,11 @@ import {
 } from '@/types/workflow';
 
 import { buildAssessmentSchema } from '../shared/assessmentSchema';
+import {
+  GuidePromptInput,
+  buildGuideCriterionBlocks,
+  guideRubricLine,
+} from '../shared/guidePrompts';
 import { callStructured, createAzureClient } from '../shared/workflowLlm';
 import {
   ToneInput,
@@ -61,10 +66,17 @@ export interface DocumentAssessmentOptions {
   docMarkdown: string;
   /** Scope the assessment to this excerpt (verbatim substring). */
   selection?: string;
-  /** Built-in ids and/or 'custom:<uuid>' ids. */
+  /** Built-in ids, 'custom:<uuid>' ids, and/or 'guide:<id>' ids. */
   criterionIds: string[];
   /** Definitions for the custom ids (validated by the route). */
   customById: Map<string, { name: string; rubric: string }>;
+  /** Resolved criterion-kind guides for the 'guide:' ids (route-resolved). */
+  guides?: GuidePromptInput[];
+  /**
+   * A structure guide arrives here already converted to a DocumentSpec (and
+   * a tone guide to a ToneInput) by the route — one spec path, one tone
+   * path, guide or not.
+   */
   spec?: DocumentSpec;
   tone?: ToneInput;
   /** Profile-detected language/conventions, fed back as context. */
@@ -90,9 +102,14 @@ const MAX_ASSESSMENT_EDITS = 20;
 export async function runDocumentAssessment(
   options: DocumentAssessmentOptions,
 ): Promise<DocumentAssessmentResult> {
+  const guidesByCriterionId = new Map(
+    (options.guides ?? []).map((g) => [g.criterionId, g]),
+  );
   const rubricLines = options.criterionIds.map((id) => {
     const builtin = DOCUMENT_QUALITY_CRITERIA.find((c) => c.id === id);
     if (builtin) return builtin.promptDescription;
+    const guide = guidesByCriterionId.get(id);
+    if (guide) return guideRubricLine(guide);
     const custom = options.customById.get(id);
     return `${custom?.name ?? id}: ${custom?.rubric ?? ''}`;
   });
@@ -104,6 +121,10 @@ export async function runDocumentAssessment(
     system: buildDocAssessmentSystemPrompt(rubricLines, {
       specBlock: options.spec ? buildSpecBlock(options.spec) : undefined,
       toneBlock: options.tone ? buildToneBlock(options.tone) : undefined,
+      guideBlocks: buildGuideCriterionBlocks(
+        options.guides ?? [],
+        options.docMarkdown,
+      ),
       language: options.language,
       conventionNotes: options.conventionNotes,
       hasSelection: !!options.selection,

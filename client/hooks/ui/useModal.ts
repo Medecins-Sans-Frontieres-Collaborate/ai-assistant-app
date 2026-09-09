@@ -1,5 +1,9 @@
 import { RefObject, useEffect, useRef } from 'react';
 
+/** Selector for elements that can receive keyboard focus */
+export const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 /**
  * useModal
  *
@@ -7,6 +11,7 @@ import { RefObject, useEffect, useRef } from 'react';
  * - Outside clicks to close the modal
  * - Escape key press to close the modal
  * - Focus trapping within the modal
+ * - Restoring focus to the previously focused element on close
  * - Preventing scroll on body when modal is open
  * - cleanup on unmount
  *
@@ -69,6 +74,60 @@ const useModal = (
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose, preventEscapeKey]);
+
+  // Trap Tab focus within the modal. Only engages while focus is inside the
+  // modal so a stacked modal (e.g. one opened from settings) is not fought over.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleTabKey = (event: KeyboardEvent) => {
+      const modal = modalRef.current;
+      if (event.key !== 'Tab' || !modal) return;
+
+      const active = document.activeElement;
+      if (!active || !modal.contains(active)) return;
+
+      const focusable = modal.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
+      if (focusable.length === 0) {
+        // Nothing to cycle through; keep focus on the container
+        event.preventDefault();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleTabKey);
+
+    return () => {
+      document.removeEventListener('keydown', handleTabKey);
+    };
+  }, [isOpen]);
+
+  // Restore focus to the element that was focused before the modal opened
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previouslyFocused = document.activeElement;
+
+    return () => {
+      if (
+        previouslyFocused instanceof HTMLElement &&
+        document.contains(previouslyFocused)
+      ) {
+        previouslyFocused.focus();
+      }
+    };
+  }, [isOpen]);
 
   // Prevent body scrolling when modal is open
   useEffect(() => {

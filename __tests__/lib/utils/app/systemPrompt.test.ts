@@ -1,8 +1,11 @@
 import {
   BASE_SYSTEM_PROMPT,
   DEFAULT_USER_PROMPT,
+  DIAGRAMS_PROMPT_SECTION,
+  RESPONSE_FORMATTING_PROMPT_SECTION,
   SystemPromptOptions,
   SystemPromptUserInfo,
+  buildAgentPromptSections,
   buildConversationContextSections,
   buildSystemPrompt,
   extractUserPrompt,
@@ -40,6 +43,120 @@ describe('systemPrompt', () => {
       expect(BASE_SYSTEM_PROMPT).toContain('Mermaid');
       expect(BASE_SYSTEM_PROMPT).toContain('flowchart');
       expect(BASE_SYSTEM_PROMPT).toContain('sequenceDiagram');
+    });
+
+    it('math guidance names the delimiters the renderer actually supports', () => {
+      const section = RESPONSE_FORMATTING_PROMPT_SECTION;
+
+      // Written as a template literal, so a single un-doubled backslash
+      // would silently compile away — assert on the runtime characters.
+      expect(section).toContain('### Mathematical Notation / Formulas');
+      // `$$` is the ONLY delimiter that renders: Streamdown pins remark-math
+      // with `singleDollarTextMath: false`, so guidance naming `$x$` as inline
+      // math would be telling models to emit text the app cannot typeset.
+      expect(section).toContain('`$$ ... $$` kept on ONE line');
+      expect(section).toContain('Single dollar signs are NOT math delimiters');
+      expect(section).not.toContain('`$E = mc^2$`');
+      expect(section).not.toContain('SINGLE dollar signs');
+      expect(section).toContain('Never use `\\( ... \\)`, `\\[ ... \\]`');
+      expect(section).toContain('```latex');
+      expect(section).toContain('no blank lines inside `$$ ... $$`');
+      // The pre-fix wording told models to use $$ for INLINE math too
+      expect(section).not.toContain('For inline math within sentences');
+    });
+
+    it('interpolates each shared section into the base prompt exactly once', () => {
+      // Guards against an accidental double-interpolation leaving the model
+      // two conflicting copies of the formatting rules.
+      expect(
+        BASE_SYSTEM_PROMPT.split(RESPONSE_FORMATTING_PROMPT_SECTION).length - 1,
+      ).toBe(1);
+      expect(BASE_SYSTEM_PROMPT.split(DIAGRAMS_PROMPT_SECTION).length - 1).toBe(
+        1,
+      );
+    });
+  });
+
+  describe('buildAgentPromptSections', () => {
+    it('returns the formatting and diagram rules', () => {
+      const result = buildAgentPromptSections();
+
+      expect(result).toContain('## Response Formatting');
+      expect(result).toContain('### Mathematical Notation / Formulas');
+      expect(result).toContain('## Diagrams');
+      expect(result).toContain('$$');
+      // The rules must not themselves demonstrate the broken delimiters
+      // outside the "Never use" bullet that forbids them.
+      expect(result).not.toContain('\\(x\\)');
+    });
+
+    it('extracts the sections verbatim from the default base prompt', () => {
+      // Extraction and the exported constants must not drift apart.
+      expect(buildAgentPromptSections()).toBe(
+        `${RESPONSE_FORMATTING_PROMPT_SECTION}\n\n${DIAGRAMS_PROMPT_SECTION}`,
+      );
+    });
+
+    it('honors an operator BASE_SYSTEM_PROMPT override without duplicating', () => {
+      const override = [
+        '# Custom',
+        '',
+        '## Response Formatting',
+        '- use pigeons',
+        '',
+        '## Other',
+        'unrelated',
+        '',
+      ].join('\n');
+
+      const result = buildAgentPromptSections(undefined, undefined, override);
+
+      expect(result).toBe('## Response Formatting\n- use pigeons');
+      // The operator's wording wins; the built-in copy is NOT appended too
+      expect(result).not.toContain('Mathematical Notation');
+      expect(result).not.toContain('unrelated');
+    });
+
+    it('falls back to the built-in rules when an override has no formatting section', () => {
+      const result = buildAgentPromptSections(
+        undefined,
+        undefined,
+        '# Custom\n\nJust be nice.\n',
+      );
+
+      // The delimiter rules are a renderer contract, so an override that
+      // drops them entirely must not leave agents with no math guidance.
+      expect(result).toBe(
+        `${RESPONSE_FORMATTING_PROMPT_SECTION}\n\n${DIAGRAMS_PROMPT_SECTION}`,
+      );
+    });
+
+    it('appends the conversation-context sections after the rules', () => {
+      const result = buildAgentPromptSections('We discussed budgets.', [
+        'Prefers concise answers',
+      ]);
+
+      expect(result).toContain('## Response Formatting');
+      expect(result).toContain('## Earlier Conversation Summary');
+      expect(result).toContain('We discussed budgets.');
+      expect(result).toContain('## User Memories');
+      expect(result).toContain('- Prefers concise answers');
+      expect(result.indexOf('## Response Formatting')).toBeLessThan(
+        result.indexOf('## Earlier Conversation Summary'),
+      );
+    });
+
+    it('does not require a section subheading to be a top-level match', () => {
+      // `### Response Formatting` must not be mistaken for the section.
+      const result = buildAgentPromptSections(
+        undefined,
+        undefined,
+        '# Custom\n\n### Response Formatting\n- nested\n',
+      );
+
+      expect(result).toBe(
+        `${RESPONSE_FORMATTING_PROMPT_SECTION}\n\n${DIAGRAMS_PROMPT_SECTION}`,
+      );
     });
   });
 
@@ -400,6 +517,64 @@ describe('systemPrompt', () => {
 
       expect(result.match(/^- /gm)).toHaveLength(1);
       expect(result).toContain('- Real memory');
+    });
+  });
+
+  describe('tool capability sections', () => {
+    it('includes the code interpreter section only when available', () => {
+      const withCI = buildSystemPrompt({ codeInterpreterAvailable: true });
+      expect(withCI).toContain('## Code Execution & File Generation');
+      expect(withCI).toContain('CREATE downloadable files');
+
+      const without = buildSystemPrompt({});
+      expect(without).not.toContain('## Code Execution & File Generation');
+    });
+
+    it('file-output guidance is interpreter-aware and never contradictory', () => {
+      // Interpreter OFF: cannot generate files → UI download or suggest
+      // enabling the interpreter.
+      const off = buildSystemPrompt({});
+      expect(off).toContain('## Files & Exports');
+      expect(off).toContain('cannot attach, send, or generate files');
+      expect(off).toContain('Download button');
+      expect(off).toContain('enable the Code Interpreter');
+
+      // Interpreter ON: favor real file generation; the "cannot generate
+      // files" prohibition must be GONE.
+      const on = buildSystemPrompt({ codeInterpreterAvailable: true });
+      expect(on).not.toContain('cannot attach, send, or generate files');
+      expect(on).not.toContain('## Files & Exports');
+      expect(on).toContain('FAVOR producing a real file via code execution');
+
+      // The static base defers to the dynamic section in both cases.
+      for (const prompt of [off, on]) {
+        expect(prompt).toContain(
+          'depends on the Code Interpreter — follow the',
+        );
+      }
+    });
+
+    it('includes the web search section only when active', () => {
+      const withSearch = buildSystemPrompt({ webSearchActive: true });
+      expect(withSearch).toContain('## Web Search');
+      // Covers BOTH turn conditions: results injected vs. none this turn
+      expect(withSearch).toContain('"Web Search results:" block');
+      expect(withSearch).toContain('NO such block');
+      expect(withSearch).toContain('do not fabricate current facts');
+
+      const without = buildSystemPrompt({});
+      expect(without).not.toContain('## Web Search');
+    });
+
+    it('renders both sections together when both tools are active', () => {
+      const result = buildSystemPrompt({
+        webSearchActive: true,
+        codeInterpreterAvailable: true,
+      });
+      const searchIdx = result.indexOf('## Web Search');
+      const ciIdx = result.indexOf('## Code Execution & File Generation');
+      expect(searchIdx).toBeGreaterThan(-1);
+      expect(ciIdx).toBeGreaterThan(searchIdx);
     });
   });
 });

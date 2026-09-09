@@ -80,15 +80,18 @@ export class RAGService {
       // Initialize citation tracking for this request
       this.initCitationTracking(true);
 
+      // Static-config lookup only: this legacy entry point is not used by
+      // the pipeline (RAGEnricher resolves agents through the org-agent
+      // registry and calls performSearch directly with the agent object).
+      const agent = getOrganizationAgentById(agentId);
+      if (!agent) throw new Error(`Organization agent ${agentId} not found`);
+
       const { searchDocs, searchMetadata } = await this.performSearch(
         messages,
-        agentId,
+        agent,
         user,
       );
       this.searchDocs = searchDocs;
-
-      const agent = getOrganizationAgentById(agentId);
-      if (!agent) throw new Error(`Organization agent ${agentId} not found`);
 
       const systemPrompt = agent.systemPrompt || '';
 
@@ -291,7 +294,7 @@ The frontend automatically shows source information. Just cite inline and end yo
    * Uses query reformulation for follow-up questions to capture conversation context.
    *
    * @param {Message[]} messages - The conversation messages to extract query from.
-   * @param {string} agentId - The ID of the organization agent making the search request.
+   * @param {OrganizationAgent} agent - The resolved organization agent (static or admin-authored).
    * @param {Session['user']} user - User information for logging.
    * @returns {Promise<{searchDocs: SearchResult[], searchMetadata: {dateRange: DateRange, resultCount: number}}>}
    *          Returns search results and metadata including date range of results.
@@ -299,15 +302,12 @@ The frontend automatically shows source information. Just cite inline and end yo
    */
   public async performSearch(
     messages: Message[],
-    agentId: string,
+    agent: OrganizationAgent,
     user: Session['user'],
   ) {
     const startTime = Date.now();
 
     try {
-      const agent = getOrganizationAgentById(agentId);
-      if (!agent) throw new Error(`Organization agent ${agentId} not found`);
-
       // Always reformulate queries to handle temporal references and improve search
       const query = await this.reformulateQuery(messages);
 
@@ -413,7 +413,7 @@ The frontend automatically shows source information. Just cite inline and end yo
       // Log successful search
       console.log('[RAGService] Search completed:', {
         duration: Date.now() - startTime,
-        agentId,
+        agentId: agent.id,
         resultsCount: searchDocs.length,
         dateRange: searchMetadata.dateRange,
         userId: user?.id,
@@ -428,7 +428,7 @@ The frontend automatically shows source information. Just cite inline and end yo
       console.error('[RAGService] Search error:', {
         duration: Date.now() - startTime,
         error: error instanceof Error ? error.message : String(error),
-        agentId,
+        agentId: agent.id,
         userId: user?.id,
       });
       throw error;

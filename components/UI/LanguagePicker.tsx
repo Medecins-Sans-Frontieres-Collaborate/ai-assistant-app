@@ -261,6 +261,12 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
   return createPortal(
     <div
       ref={dropdownRef}
+      // Portaled to document.body, so containers with outside-click close
+      // (notably SettingDialog) read clicks in here as "outside" and would
+      // dismiss themselves mid-selection — unmounting the row before its
+      // click handler runs. This marker is SettingDialog's opt-out contract
+      // for its portaled children; inert everywhere else.
+      data-settings-portal=""
       className="fixed z-[100] w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden animate-fade-in"
       style={{
         top: `${position.top}px`,

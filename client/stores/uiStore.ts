@@ -55,6 +55,20 @@ interface UIStore {
   /** Active encrypted-backup modal, hosted by BackupModals in ChatShell. */
   backupModalView: BackupModalView | null;
 
+  /**
+   * Agent/connector browser modal, hosted by Sidebar. Opened from the
+   * sidebar and the capabilities tray; "Add to this chat" is always the
+   * primary action, so entry point carries no behavioral difference.
+   */
+  agentBrowserOpen: boolean;
+
+  /**
+   * Folder open in the main panel (FolderView) instead of a chat. Not
+   * persisted: a reload lands on the selected conversation as always. Any
+   * change of the selected conversation closes it (FolderView watches).
+   */
+  openFolderId: string | null;
+
   // Actions
   setIsSettingsOpen: (isOpen: boolean) => void;
   setIsBotModalOpen: (isOpen: boolean) => void;
@@ -65,6 +79,9 @@ interface UIStore {
   setIsCustomizationsOpen: (isOpen: boolean) => void;
   setCustomizationsInitialTab: (tab: CustomizationsTabKey | null) => void;
   setBackupModalView: (view: BackupModalView | null) => void;
+  setAgentBrowserOpen: (open: boolean) => void;
+  openFolder: (folderId: string) => void;
+  closeFolder: () => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -78,6 +95,8 @@ export const useUIStore = create<UIStore>((set) => ({
   isCustomizationsOpen: false,
   customizationsInitialTab: null,
   backupModalView: null,
+  agentBrowserOpen: false,
+  openFolderId: null,
 
   // Actions
   setIsSettingsOpen: (isOpen) => set({ isSettingsOpen: isOpen }),
@@ -91,4 +110,7 @@ export const useUIStore = create<UIStore>((set) => ({
   setIsCustomizationsOpen: (isOpen) => set({ isCustomizationsOpen: isOpen }),
   setCustomizationsInitialTab: (tab) => set({ customizationsInitialTab: tab }),
   setBackupModalView: (view) => set({ backupModalView: view }),
+  setAgentBrowserOpen: (open) => set({ agentBrowserOpen: open }),
+  openFolder: (folderId) => set({ openFolderId: folderId }),
+  closeFolder: () => set({ openFolderId: null }),
 }));

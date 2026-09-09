@@ -43,5 +43,10 @@ export function createInitialWorkflowState(
         sources: [],
         updatedAt,
       };
+    case 'grants':
+      return {
+        kind: 'grants',
+        updatedAt,
+      };
   }
 }

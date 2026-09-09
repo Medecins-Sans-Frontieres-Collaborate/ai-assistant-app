@@ -529,10 +529,7 @@ export function useTranscriptionPolling(): void {
           conversation.messages.length > 0 &&
           !isLocalModel(conversation.model)
         ) {
-          generateConversationTitle(
-            conversation.messages,
-            conversation.model.id,
-          )
+          generateConversationTitle(conversation.messages)
             .then((result) => {
               if (!result?.title) return;
               // Re-read: a rename during the round trip wins over the

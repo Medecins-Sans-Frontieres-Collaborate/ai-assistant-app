@@ -15,6 +15,7 @@ import {
 } from '@/lib/utils/server/api/apiResponse';
 
 import { auth } from '@/auth';
+import { MCP_CATALOG } from '@/config/mcpCatalog';
 import { z } from 'zod';
 
 /**
@@ -67,10 +68,27 @@ export async function POST(request: NextRequest) {
     const context = await resolveOauthContext(parsed.data.server, {
       resolveConnector: await createConnectorResolver(session),
     });
+    const auth = context.resolved.auth;
+    // Scopes CONFIGURED for the resolved entry, as opposed to everything the
+    // server advertises: the browser puts exactly these on the authorization
+    // request. Admin connectors carry them on their oauth auth config;
+    // catalog entries on `oauthScopes` (which also covers bearer-style
+    // entries connecting via alsoSupportsOauth, e.g. GitHub — where a
+    // scope-less token sees public data only). NetSuite-style providers
+    // reject an authorize call whose scope is absent or not a subset of
+    // what their app registration enables.
+    const catalogScopes = parsed.data.server.catalogKey
+      ? MCP_CATALOG[parsed.data.server.catalogKey]?.oauthScopes
+      : undefined;
+    const requestScopes =
+      (auth.style === 'oauth' && auth.scopes?.length
+        ? auth.scopes
+        : catalogScopes) ?? [];
     return successResponse({
       serverLabel: context.resolved.label,
       authorizationEndpoint: context.metadata.authorization_endpoint ?? null,
       scopesSupported: context.metadata.scopes_supported ?? [],
+      requestScopes,
       resource: context.resource ?? null,
       registrationSupported: !!context.metadata.registration_endpoint,
     });

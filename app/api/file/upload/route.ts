@@ -2,6 +2,8 @@ import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import { guardLimit } from '@/lib/services/limits/routeGuard';
+import { resolveEffectiveUploadMegabytes } from '@/lib/services/limits/uploadLimit';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 
 import Hasher from '@/lib/utils/app/hash';
@@ -91,12 +93,24 @@ function isValidMimeType(value: string): boolean {
 function computeStreamCap(
   category: FileCategory,
   isMultipart: boolean,
+  effectiveMegabytes?: number,
 ): number {
-  const rawCap = getFileSizeLimit(category);
+  const rawCap = getFileSizeLimit(category, effectiveMegabytes);
   return isMultipart
     ? rawCap + MULTIPART_OVERHEAD_BYTES
     : Math.ceil(rawCap * 1.4) + MULTIPART_OVERHEAD_BYTES;
 }
+
+/**
+ * The admin-configured per-file cap in MB for this caller, or undefined when
+ * unlimited. Fails open — an unreadable policy must not block uploads.
+ *
+ * Thin alias kept so every call site below reads unchanged; the resolution
+ * itself now lives in `lib/services/limits/uploadLimit.ts`, shared with the
+ * Server Action upload path (`lib/actions/fileUpload.ts`) that applies the
+ * SAME cap above the 10MB threshold where this route is never hit.
+ */
+const effectiveUploadMegabytes = resolveEffectiveUploadMegabytes;
 
 /**
  * Per-request inputs derived from query params + content-type. Lifted from
@@ -276,6 +290,24 @@ export async function POST(request: NextRequest) {
       return errorResponse('Unauthorized', 401);
     }
 
+    // Admin-configured per-file cap (docs/LIMITS.md). Resolved ONCE here and
+    // threaded through all three size gates — the advisory Content-Length
+    // check, the streaming body cap, and the authoritative post-buffer check —
+    // so they can never disagree about how big a file may be.
+    const uploadMegabytes = await effectiveUploadMegabytes(session);
+
+    // Files-per-day counter, checked after auth and before any buffering.
+    const uploadGuard = await guardLimit(
+      session,
+      'feature.upload.filesPerDay',
+      {
+        req: request,
+      },
+    );
+    if (!uploadGuard.allowed && uploadGuard.response) {
+      return uploadGuard.response;
+    }
+
     // Advisory early rejection from Content-Length — cheap and pre-buffer.
     // The authoritative check happens via `readBoundedBody` below.
     const contentLength = request.headers.get('content-length');
@@ -286,6 +318,7 @@ export async function POST(request: NextRequest) {
           filename,
           declaredSize,
           mimeType ?? undefined,
+          uploadMegabytes,
         );
         if (!earlyCheck.valid) {
           return payloadTooLargeResponse(earlyCheck.error ?? 'File too large');
@@ -302,7 +335,7 @@ export async function POST(request: NextRequest) {
     const category = getFileCategory(filename, mimeType ?? undefined);
     const buffered = await readBoundedBody(
       request,
-      computeStreamCap(category, isMultipart),
+      computeStreamCap(category, isMultipart, uploadMegabytes),
     );
     if (buffered === null) {
       return payloadTooLargeResponse('Request body exceeds file size limit');
@@ -357,6 +390,7 @@ export async function POST(request: NextRequest) {
       filename,
       fileSize,
       mimeType ?? undefined,
+      uploadMegabytes,
     );
     if (!sizeValidation.valid) {
       return payloadTooLargeResponse(sizeValidation.error ?? 'File too large');

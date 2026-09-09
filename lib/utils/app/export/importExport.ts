@@ -146,7 +146,26 @@ export const exportData = () => {
 export const importData = (
   data: SupportedExportFormats,
 ): LatestExportFormat => {
-  const { history, folders, prompts, tones, customAgents } = cleanData(data);
+  const {
+    history: rawHistory,
+    folders,
+    prompts,
+    tones,
+    customAgents,
+  } = cleanData(data);
+
+  // Old export formats predate the timestamp fields. Stamp those (and only
+  // those) with the import time: the encrypted-backup sync resolves
+  // conflicts by last-writer-wins on updatedAt, and a timestamp-less
+  // conversation would lose every comparison — most visibly, a remote
+  // deletion tombstone would silently re-delete it on the next sync.
+  // Restoring from a file is an explicit user action; it should win.
+  const importedAt = new Date().toISOString();
+  const history = rawHistory.map((conversation) =>
+    conversation.updatedAt || conversation.createdAt
+      ? conversation
+      : { ...conversation, updatedAt: importedAt },
+  );
 
   // Read existing data from Zustand store (works with v5 per-conversation keys)
   const conversationState = useConversationStore.getState();

@@ -1,6 +1,7 @@
 import { Session } from 'next-auth';
 
 import { DEFAULT_SYSTEM_PROMPT } from '@/lib/utils/app/const';
+import { stripThinking } from '@/lib/utils/app/stream/thinking';
 
 import { ImageMessageContent, Message, TextMessageContent } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
@@ -21,6 +22,19 @@ function hashUserEmail(email: string): string {
 }
 
 /**
+ * `thinking.display` is a documented adaptive-thinking field that the pinned
+ * SDK (@anthropic-ai/sdk 0.77.0) does not type yet. It is load-bearing here:
+ * on every adaptive model the default is `omitted`, which streams thinking
+ * blocks with EMPTY text — the reasoning panel would open and stay blank.
+ * Declared as a narrow extension rather than casting the whole param object,
+ * so the rest of the request stays fully type-checked. Drop this alias once
+ * the SDK ships the field.
+ */
+type AdaptiveThinkingConfig = Anthropic.ThinkingConfigAdaptive & {
+  display?: 'summarized' | 'omitted';
+};
+
+/**
  * Handler for Anthropic Claude models via Azure AI Foundry.
  *
  * Key differences from OpenAI handlers:
@@ -31,6 +45,29 @@ function hashUserEmail(email: string): string {
  */
 export class AnthropicFoundryHandler {
   private client: AnthropicFoundry;
+  /**
+   * Text of in-array system messages captured by the latest prepareMessages
+   * call. Enrichers (RAG, M365 agents, file summaries) inject retrieved
+   * context as system-role messages; Anthropic only accepts user/assistant
+   * roles in `messages`, so this content must ride the `system` parameter —
+   * dropping it severs agents from their sources while citations still
+   * render. Handler instances are per-request, so this never crosses
+   * requests; MCP loop rounds reuse the instance and keep the context.
+   */
+  private systemContextFromMessages = '';
+
+  /**
+   * Ceiling for `max_tokens` on the NON-streaming path.
+   *
+   * The SDK refuses any non-streaming request whose projected generation time
+   * exceeds 10 minutes — `60min * max_tokens / 128_000` — and throws
+   * `AnthropicError: Streaming is required…` BEFORE issuing the request. That
+   * puts the real ceiling at ~21.3k tokens, so passing a modern Claude
+   * `tokenLimit` (64k–128k) straight through makes every non-streaming Claude
+   * turn fail. Streaming — the normal chat path — has no such limit and keeps
+   * the model's full tokenLimit.
+   */
+  private static readonly NON_STREAMING_MAX_TOKENS = 16000;
 
   constructor(client: AnthropicFoundry) {
     this.client = client;
@@ -43,9 +80,40 @@ export class AnthropicFoundryHandler {
     return this.client;
   }
 
+  /** The system param: base prompt plus captured in-array system content. */
+  private composeSystem(systemPrompt: string): string {
+    const base = systemPrompt || DEFAULT_SYSTEM_PROMPT;
+    return this.systemContextFromMessages
+      ? `${base}\n\n${this.systemContextFromMessages}`
+      : base;
+  }
+
+  /** Flattens a message's content to plain text (text parts only). */
+  private flattenToText(content: Message['content']): string {
+    if (typeof content === 'string') return content;
+    if (Array.isArray(content)) {
+      return content
+        .filter((c) => c.type === 'text' && 'text' in c)
+        .map((c) => (c as TextMessageContent).text)
+        .join('\n');
+    }
+    if (
+      content &&
+      typeof content === 'object' &&
+      'type' in content &&
+      content.type === 'text'
+    ) {
+      return (content as TextMessageContent).text;
+    }
+    return '';
+  }
+
   /**
    * Convert OpenAI-style messages to Anthropic format.
-   * Anthropic uses a separate system parameter and doesn't support 'system' role in messages.
+   * Anthropic uses a separate system parameter and doesn't support 'system'
+   * role in messages — in-array system messages (enricher-injected context)
+   * are captured here and appended to the system parameter by the
+   * buildRequestParams methods.
    *
    * @param messages - Messages in OpenAI format
    * @param modelConfig - Model configuration (unused but kept for consistency with other handlers)
@@ -55,14 +123,26 @@ export class AnthropicFoundryHandler {
     messages: Message[],
     modelConfig: OpenAIModel,
   ): Anthropic.MessageParam[] {
+    this.systemContextFromMessages = messages
+      .filter((msg) => msg.role === 'system')
+      .map((msg) => this.flattenToText(msg.content))
+      .filter(Boolean)
+      .join('\n\n');
     return messages
-      .filter((msg) => msg.role !== 'system') // System is handled separately
+      .filter((msg) => msg.role !== 'system') // System rides the system param
       .map((msg): Anthropic.MessageParam => {
         // Handle string content
         if (typeof msg.content === 'string') {
           return {
             role: msg.role as 'user' | 'assistant',
-            content: msg.content,
+            // Assistant history may carry inline <think> blocks (extended
+            // thinking is streamed to the client in that format). Anthropic
+            // guidance is to NOT send prior-turn thinking back — strip it
+            // so the model doesn't see (and bill for) its own old reasoning.
+            content:
+              msg.role === 'assistant'
+                ? stripThinking(msg.content) || msg.content
+                : msg.content,
           };
         }
 
@@ -140,6 +220,7 @@ export class AnthropicFoundryHandler {
     temperature: number,
     user: Session['user'],
     modelConfig: OpenAIModel,
+    reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high',
   ): Anthropic.MessageCreateParamsNonStreaming {
     const modelToUse = this.getModelIdForRequest(modelId, modelConfig);
     const supportsTemperature = modelConfig?.supportsTemperature !== false;
@@ -147,8 +228,11 @@ export class AnthropicFoundryHandler {
     const params: Anthropic.MessageCreateParamsNonStreaming = {
       model: modelToUse,
       messages,
-      system: systemPrompt || DEFAULT_SYSTEM_PROMPT,
-      max_tokens: modelConfig.tokenLimit,
+      system: this.composeSystem(systemPrompt),
+      max_tokens: Math.min(
+        modelConfig.tokenLimit,
+        AnthropicFoundryHandler.NON_STREAMING_MAX_TOKENS,
+      ),
       stream: false,
     };
 
@@ -156,6 +240,8 @@ export class AnthropicFoundryHandler {
     if (supportsTemperature) {
       params.temperature = temperature;
     }
+
+    this.applyExtendedThinking(params, modelConfig, reasoningEffort);
 
     // Add user metadata if available (hash email for privacy compliance)
     if (user?.mail) {
@@ -165,6 +251,70 @@ export class AnthropicFoundryHandler {
     }
 
     return params;
+  }
+
+  /**
+   * Reasoning-effort → extended-thinking budget, for models on the LEGACY
+   * thinking API (`thinkingApi: 'budget'` — Haiku 4.5 and the 4.5/4.1
+   * generation). The app reuses the SAME effort control the GPT reasoning
+   * models expose. `minimal` (or unset) keeps thinking off — extended
+   * thinking is opt-in per conversation because it adds cost and latency to
+   * every turn.
+   */
+  private static readonly THINKING_BUDGET_TOKENS: Record<
+    'low' | 'medium' | 'high',
+    number
+  > = {
+    low: 2048,
+    medium: 4096,
+    high: 8192,
+  };
+
+  private applyExtendedThinking(
+    params:
+      | Anthropic.MessageCreateParamsNonStreaming
+      | Anthropic.MessageCreateParamsStreaming,
+    modelConfig: OpenAIModel,
+    reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high',
+  ): void {
+    if (!modelConfig.supportsExtendedThinking) return;
+    if (!reasoningEffort || reasoningEffort === 'minimal') return;
+
+    // Adaptive thinking (Fable 5/5.1, Opus 5/4.8/4.7/4.6, Sonnet 5/4.6).
+    // These reject `budget_tokens` outright, so this is a hard fork, not a
+    // preference. The app's low/medium/high tiers are deliberately the same
+    // names Anthropic's effort scale uses, so they pass straight through;
+    // `xhigh`/`max` are intentionally not reachable — the app's control tops
+    // out at high, which keeps every model on the same three tiers.
+    // Temperature is left exactly as the caller set it: the 4.6 pair accepts
+    // sampling params alongside adaptive thinking, and the models that
+    // reject them carry `supportsTemperature: false` so none is ever set.
+    if (modelConfig.thinkingApi === 'adaptive') {
+      const thinking: AdaptiveThinkingConfig = {
+        type: 'adaptive',
+        display: 'summarized',
+      };
+      params.thinking = thinking;
+      params.output_config = {
+        ...params.output_config,
+        effort: reasoningEffort,
+      };
+      return;
+    }
+
+    // Anything that hasn't declared its thinking API gets no thinking at all
+    // rather than a guessed request shape: a missing marker on a new model
+    // costs the reasoning panel, where guessing wrong is a 400 on every turn.
+    if (modelConfig.thinkingApi !== 'budget') return;
+
+    const budget =
+      AnthropicFoundryHandler.THINKING_BUDGET_TOKENS[reasoningEffort];
+    params.thinking = { type: 'enabled', budget_tokens: budget };
+    // API constraints with thinking enabled: temperature must be 1, and
+    // max_tokens must be strictly greater than budget_tokens (the budget
+    // counts against it).
+    params.temperature = 1;
+    params.max_tokens = Math.max(params.max_tokens, budget + 2048);
   }
 
   /**
@@ -185,6 +335,7 @@ export class AnthropicFoundryHandler {
     temperature: number,
     user: Session['user'],
     modelConfig: OpenAIModel,
+    reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high',
   ): Anthropic.MessageCreateParamsStreaming {
     const modelToUse = this.getModelIdForRequest(modelId, modelConfig);
     const supportsTemperature = modelConfig?.supportsTemperature !== false;
@@ -192,7 +343,7 @@ export class AnthropicFoundryHandler {
     const params: Anthropic.MessageCreateParamsStreaming = {
       model: modelToUse,
       messages,
-      system: systemPrompt || DEFAULT_SYSTEM_PROMPT,
+      system: this.composeSystem(systemPrompt),
       max_tokens: modelConfig.tokenLimit,
       stream: true,
     };
@@ -201,6 +352,8 @@ export class AnthropicFoundryHandler {
     if (supportsTemperature) {
       params.temperature = temperature;
     }
+
+    this.applyExtendedThinking(params, modelConfig, reasoningEffort);
 
     // Add user metadata if available (hash email for privacy compliance)
     if (user?.mail) {

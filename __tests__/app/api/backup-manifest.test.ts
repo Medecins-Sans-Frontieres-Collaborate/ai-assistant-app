@@ -5,6 +5,10 @@ import {
   readManifest,
   writeManifest,
 } from '@/lib/services/backup/server/backupBlobStore';
+import {
+  readDriveManifest,
+  writeDriveManifest,
+} from '@/lib/services/backup/server/backupDriveStore';
 import { BackupManifest } from '@/lib/services/backup/types';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 
@@ -34,6 +38,21 @@ vi.mock(
       ...actual,
       readManifest: vi.fn(),
       writeManifest: vi.fn(),
+    };
+  },
+);
+
+vi.mock(
+  '@/lib/services/backup/server/backupDriveStore',
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import('@/lib/services/backup/server/backupDriveStore')
+      >();
+    return {
+      ...actual,
+      readDriveManifest: vi.fn(),
+      writeDriveManifest: vi.fn(),
     };
   },
 );
@@ -85,7 +104,9 @@ describe('/api/backup/manifest', () => {
     it('returns 401 when unauthenticated', async () => {
       vi.mocked(auth).mockResolvedValue(null as any);
 
-      const response = await GET();
+      const response = await GET(
+        new NextRequest('http://localhost:3000/api/backup/manifest'),
+      );
 
       expect(response.status).toBe(401);
       expect(readManifest).not.toHaveBeenCalled();
@@ -97,7 +118,9 @@ describe('/api/backup/manifest', () => {
         user: { ...mockSession.user, id: undefined },
       } as any);
 
-      const response = await GET();
+      const response = await GET(
+        new NextRequest('http://localhost:3000/api/backup/manifest'),
+      );
 
       expect(response.status).toBe(401);
     });
@@ -105,7 +128,9 @@ describe('/api/backup/manifest', () => {
     it('returns 404 BACKUP_NOT_FOUND when no manifest exists', async () => {
       vi.mocked(readManifest).mockResolvedValue(null);
 
-      const response = await GET();
+      const response = await GET(
+        new NextRequest('http://localhost:3000/api/backup/manifest'),
+      );
       const data = await parseJsonResponse(response);
 
       expect(response.status).toBe(404);
@@ -116,7 +141,9 @@ describe('/api/backup/manifest', () => {
       const manifest = makeManifest();
       vi.mocked(readManifest).mockResolvedValue({ manifest, etag: '"e1"' });
 
-      const response = await GET();
+      const response = await GET(
+        new NextRequest('http://localhost:3000/api/backup/manifest'),
+      );
       const data = await parseJsonResponse(response);
 
       expect(response.status).toBe(200);
@@ -388,6 +415,93 @@ describe('/api/backup/manifest', () => {
 
       const response = await PUT(
         putRequest(makeManifest({ version: 8 }), { 'if-match': '"e1"' }),
+      );
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(409);
+      expect(data.code).toBe('BACKUP_VERSION_CONFLICT');
+    });
+  });
+
+  describe('backend selection', () => {
+    it('GET routes ?backend=onedrive to the drive store', async () => {
+      const manifest = makeManifest();
+      vi.mocked(readDriveManifest).mockResolvedValue({
+        manifest,
+        etag: '"{D},1"',
+      });
+
+      const response = await GET(
+        new NextRequest(
+          'http://localhost:3000/api/backup/manifest?backend=onedrive',
+        ),
+      );
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data.data.etag).toBe('"{D},1"');
+      expect(readDriveManifest).toHaveBeenCalled();
+      expect(readManifest).not.toHaveBeenCalled();
+    });
+
+    it('GET rejects unknown backend values', async () => {
+      const response = await GET(
+        new NextRequest(
+          'http://localhost:3000/api/backup/manifest?backend=dropbox',
+        ),
+      );
+      expect(response.status).toBe(400);
+      expect(readManifest).not.toHaveBeenCalled();
+      expect(readDriveManifest).not.toHaveBeenCalled();
+    });
+
+    it('PUT routes ?backend=onedrive through drive read + CAS write', async () => {
+      vi.mocked(readDriveManifest).mockResolvedValue({
+        manifest: makeManifest({ version: 2 }),
+        etag: '"{D},1"',
+      });
+      vi.mocked(writeDriveManifest).mockResolvedValue('"{D},2"');
+
+      const response = await PUT(
+        new NextRequest(
+          'http://localhost:3000/api/backup/manifest?backend=onedrive',
+          {
+            method: 'PUT',
+            body: JSON.stringify(makeManifest({ version: 3 })),
+            headers: { 'If-Match': '"{D},1"' },
+          },
+        ),
+      );
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data.data.etag).toBe('"{D},2"');
+      expect(writeDriveManifest).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ version: 3 }),
+        '"{D},1"',
+      );
+      expect(writeManifest).not.toHaveBeenCalled();
+    });
+
+    it('PUT maps a drive CAS loss to 409 BACKUP_VERSION_CONFLICT', async () => {
+      vi.mocked(readDriveManifest).mockResolvedValue({
+        manifest: makeManifest({ version: 2 }),
+        etag: '"{D},1"',
+      });
+      vi.mocked(writeDriveManifest).mockRejectedValue(
+        new BackupConflictError(),
+      );
+
+      const response = await PUT(
+        new NextRequest(
+          'http://localhost:3000/api/backup/manifest?backend=onedrive',
+          {
+            method: 'PUT',
+            body: JSON.stringify(makeManifest({ version: 3 })),
+            headers: { 'If-Match': '"{D},1"' },
+          },
+        ),
       );
       const data = await parseJsonResponse(response);
 

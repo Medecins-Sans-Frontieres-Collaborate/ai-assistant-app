@@ -285,10 +285,34 @@ describe('conversationUsesAgent / isAgentModel', () => {
         }),
       ),
     ).toBe(true);
-    expect(conversationUsesAgent(conversation([], { bot: 'comms' }))).toBe(
-      true,
-    );
     expect(conversationUsesAgent(conversation([]))).toBe(false);
+  });
+
+  it('a decoupled attachment (bot beside a real model) stays tracked', () => {
+    // Agent/model decoupling: knowledge/persona agents attach via `bot` but
+    // execute on the standard path — usage and emissions remain real, so
+    // attaching one must not hide the emissions chip or skip backfill.
+    expect(conversationUsesAgent(conversation([], { bot: 'comms' }))).toBe(
+      false,
+    );
+    expect(
+      conversationUsesAgent(
+        conversation([], {
+          bot: 'comms',
+          model: { id: 'gpt-5.2', name: 'GPT-5.2' } as OpenAIModel,
+        }),
+      ),
+    ).toBe(false);
+    // A LEGACY coupled selection (bot mirroring its org- model) is still an
+    // agent conversation — the fake model makes back-calculation wrong.
+    expect(
+      conversationUsesAgent(
+        conversation([], {
+          bot: 'comms',
+          model: { id: 'org-comms', name: 'Comms' } as OpenAIModel,
+        }),
+      ),
+    ).toBe(true);
   });
 
   it('does NOT treat isAgent:true base models as agents (regression)', () => {

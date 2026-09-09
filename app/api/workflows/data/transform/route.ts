@@ -6,6 +6,10 @@ import {
 } from '@/lib/services/workflows/data/prompts';
 import { transformResponseSchema } from '@/lib/services/workflows/data/tableSchema';
 import {
+  isWorkflowEnabled,
+  workflowDisabledResponse,
+} from '@/lib/services/workflows/policy/guard';
+import {
   callStructured,
   createAzureClient,
 } from '@/lib/services/workflows/shared/workflowLlm';
@@ -71,6 +75,11 @@ function coerce(value: string, type: DataColumnType): unknown {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session) return unauthorizedResponse();
+  // Admin workflow policy (docs/ADMIN_WORKFLOWS_AND_VIEW_AS.md): a workflow an
+  // admin switched off is refused server-side, not just hidden.
+  if (!(await isWorkflowEnabled('data-analysis'))) {
+    return workflowDisabledResponse('data-analysis');
+  }
 
   let body: DataTransformRequest;
   try {

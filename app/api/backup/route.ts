@@ -1,9 +1,17 @@
+import { NextRequest } from 'next/server';
+
 import { deleteBackupPrefix } from '@/lib/services/backup/server/backupBlobStore';
+import { deleteDriveBackup } from '@/lib/services/backup/server/backupDriveStore';
+import {
+  driveErrorResponse,
+  resolveBackupBackend,
+} from '@/lib/services/backup/server/routeHelpers';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { RateLimiter } from '@/lib/services/shared/RateLimiter';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import {
+  badRequestResponse,
   errorResponse,
   successResponse,
   unauthorizedResponse,
@@ -13,17 +21,20 @@ import { classifyStorageError } from '@/lib/utils/server/blob/storageErrors';
 import { auth } from '@/auth';
 
 /**
- * DELETE `/api/backup` — wipes every blob under the caller's
- * `${userId}/backup/` prefix (manifest + all ciphertext). Used by the
- * "Turn off & delete backup" flow; the client separately writes a disabled
- * tombstone manifest so other devices see "disabled", not "never existed".
- * Idempotent: deleting an absent backup succeeds with `deleted: 0`.
+ * DELETE `/api/backup[?backend=]` — wipes the caller's backup in the selected
+ * storage backend: every blob under `${userId}/backup/` for app storage, or
+ * the `Apps/AI Assistant/Backup` OneDrive folder for the onedrive backend.
+ * Used by the "Turn off & delete backup" flow and by backend switching (the
+ * old location is wiped after a successful migration push); the client
+ * separately writes a disabled tombstone manifest so other devices see
+ * "disabled", not "never existed". Idempotent: deleting an absent backup
+ * succeeds with `deleted: 0`.
  */
 
 /** Wipes are rare, destructive, and enumerate the whole prefix — keep tight. */
 const limiter = RateLimiter.createScoped(10, 1);
 
-export async function DELETE() {
+export async function DELETE(request: NextRequest) {
   const session = await auth();
   if (!session?.user) return unauthorizedResponse();
   const userId = getUserIdFromSession(session);
@@ -32,12 +43,20 @@ export async function DELETE() {
   if (!limiter.checkLimit(userId).allowed) {
     return errorResponse('Too many requests', 429, undefined, 'RATE_LIMITED');
   }
+  const backend = resolveBackupBackend(request);
+  if (backend === null) {
+    return badRequestResponse('Invalid backend parameter');
+  }
 
   try {
-    const storage = createBlobStorageClient(session);
-    const deleted = await deleteBackupPrefix(storage, userId);
+    const deleted =
+      backend === 'onedrive'
+        ? await deleteDriveBackup(request)
+        : await deleteBackupPrefix(createBlobStorageClient(session), userId);
     return successResponse({ deleted });
   } catch (error) {
+    const driveResponse = driveErrorResponse(error);
+    if (driveResponse) return driveResponse;
     const { errorClass, status, message } = classifyStorageError(error);
     console.error(
       `[BackupRoute] DELETE failed (class=${errorClass}, status=${status}):`,

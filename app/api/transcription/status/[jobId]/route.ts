@@ -12,6 +12,7 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 
+import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { userOwnsBatchJob } from '@/lib/services/transcription/batchJobRegistry';
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
 import {
@@ -55,8 +56,14 @@ export async function GET(
 
   // First, check if this is a chunked transcription job owned by this user.
   // getJobForUser returns undefined on ownership mismatch, which is
-  // indistinguishable from "not found" — prevents jobId enumeration.
-  const chunkedJob = getJobForUser(jobId, session.user.id);
+  // indistinguishable from "not found" — prevents jobId enumeration. It also
+  // lazily fails jobs whose processing loop stopped writing progress
+  // (STALE_JOB_MS), which is how restarts surface to pollers.
+  const chunkedJob = await getJobForUser(
+    createBlobStorageClient(session),
+    jobId,
+    session.user.id,
+  );
   if (chunkedJob) {
     // Map internal status to API status. Cancelled collapses into Failed
     // for the wire format so existing clients don't need to learn a new

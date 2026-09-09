@@ -415,13 +415,13 @@ describe('/api/chat/prompts/revise', () => {
       expect(callArgs.max_tokens).toBeUndefined();
     });
 
-    it('uses correct model (gpt-5.2)', async () => {
+    it('uses correct model (gpt-5.4)', async () => {
       const request = createReviseRequest({});
       await POST(request);
 
       expect(mockCreate).toHaveBeenCalledWith(
         expect.objectContaining({
-          model: 'gpt-5.2',
+          model: 'gpt-5.4',
         }),
       );
     });

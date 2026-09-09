@@ -12,6 +12,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 let mockFlags: Record<string, unknown> = {};
 
+// The admin workflow policy hook is react-query backed; these tests render
+// without a QueryClientProvider, and the policy is not what they exercise.
+vi.mock('@/client/hooks/workflows/useWorkflowPolicy', () => ({
+  useWorkflowPolicy: () => ({
+    isWorkflowEnabled: () => true,
+    isLoading: false,
+  }),
+}));
+
 vi.mock('launchdarkly-react-client-sdk', () => ({
   useFlags: () => mockFlags,
 }));

@@ -101,6 +101,13 @@ vi.mock('@/lib/utils/server/blob/blob', () => ({
   getBlobBase64String: vi.fn(),
 }));
 
+// Session-scoped blob client for chunked job state; the chunked path passes
+// it as startJob's first argument.
+const fakeJobStateStorage = vi.hoisted(() => ({ fake: 'blob-storage' }));
+vi.mock('@/lib/services/blobStorageFactory', () => ({
+  createBlobStorageClient: vi.fn().mockReturnValue(fakeJobStateStorage),
+}));
+
 // fs: real fs.promises.stat is used by FileProcessor to get file sizes; mock
 // it to return a controllable size. The download/read/cleanup use the
 // FileProcessingService mock below.
@@ -298,6 +305,7 @@ describe('FileProcessor A/V branch', () => {
         '/tmp/clip.m4v',
       );
       expect(chunkedMocks.startJob).toHaveBeenCalledWith(
+        fakeJobStateStorage,
         extractedPath,
         'clip.m4v',
         'test-user-123',
@@ -357,6 +365,7 @@ describe('FileProcessor A/V branch', () => {
       // Must NOT go to Whisper — the extracted mp3 is over the cap.
       expect(whisperMocks.transcribe).not.toHaveBeenCalled();
       expect(chunkedMocks.startJob).toHaveBeenCalledWith(
+        fakeJobStateStorage,
         extractedPath,
         'memo.opus',
         'test-user-123',

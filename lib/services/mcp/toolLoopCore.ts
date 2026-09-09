@@ -1,3 +1,6 @@
+import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
+import { ToolCallTelemetry } from '@/lib/services/observability/tokenUsageRecorder';
+
 import {
   StreamMetadata,
   TokenUsageMetadata,
@@ -5,7 +8,7 @@ import {
 } from '@/lib/utils/app/metadata';
 
 import { ApprovalResponse } from '@/types/chat';
-import { McpPendingToolCall } from '@/types/mcp';
+import { McpPendingToolCall, McpPlan, McpPlanStep } from '@/types/mcp';
 import { Citation } from '@/types/rag';
 
 import { connectMcp, isMcpAuthError } from './McpClientService';
@@ -15,6 +18,13 @@ import {
   toolResultToRecordMarker,
 } from './mcpEventMappers';
 import { DENIED_TOOL_RESULT } from './mcpEventMappers';
+import {
+  RETRY_NUDGE,
+  buildPlanSystemAddendum,
+  isEmptyToolResult,
+  stepIndexForTool,
+} from './mcpPlan';
+import { buildConnectorInstructionsAddendum } from './mcpSystemContext';
 import { AssembledToolCall } from './openaiToolCallAccumulator';
 import { parseToolArguments, partitionApprovals } from './toolLoopReducer';
 import { fromModelToolName } from './toolNameMapping';
@@ -47,6 +57,8 @@ const LIST_TOOLS_BUDGET_MS = 10_000;
 export interface ServerWithTools {
   server: ResolvedMcpServer;
   tools: McpToolDefinition[];
+  /** Server-declared usage guidance from the initialize handshake. */
+  instructions?: string;
 }
 
 /** One pending call's outcome, fed back to the model by the strategy. */
@@ -100,6 +112,12 @@ export interface ToolLoopProviderStrategy<TMessage> {
     allowToolUse: boolean,
     write: (text: string) => void,
   ): Promise<AssembledRound>;
+  /**
+   * Receive the connector-instructions addendum (trusted servers'
+   * sanitized initialize `instructions`) to fold into every model round's
+   * system prompt. Called once, after LIST_TOOLS, before any round.
+   */
+  applySystemAddendum?(addendum: string): void;
 }
 
 export interface ToolLoopCoreOptions<TMessage> {
@@ -109,6 +127,12 @@ export interface ToolLoopCoreOptions<TMessage> {
   pendingToolCalls?: McpPendingToolCall[];
   approvalResponses?: ApprovalResponse[];
   loopRound: number;
+  /**
+   * Admin-configured cap from `feature.mcp.roundsPerRequest` (docs/LIMITS.md).
+   * Absent → the compiled MAX_TOOL_ROUNDS, so behaviour is unchanged when
+   * usage limits are disabled or unconfigured.
+   */
+  maxRounds?: number;
   userId: string;
   citations?: Citation[];
   usage: {
@@ -117,18 +141,71 @@ export interface ToolLoopCoreOptions<TMessage> {
     reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
     onUsage: (usage: TokenUsageMetadata) => void;
   };
+  /** Telemetry sink for each EXECUTED tool call (approved + dispatched). */
+  onToolCall?: (info: ToolCallTelemetry) => void;
+  /**
+   * Turn planner (first round only): given the user's request and the tool
+   * catalog, returns 1-N steps or null (loop runs plan-less). Best-effort —
+   * planner failures must never sink the turn.
+   */
+  planner?: (
+    userMessage: string,
+    serversWithTools: ServerWithTools[],
+  ) => Promise<McpPlanStep[] | null>;
+  /** Plan echoed back by the client on approval resume (already sanitized). */
+  existingPlan?: McpPlan;
+  /** Last user message text, for the planner. */
+  userMessageText?: string;
+  /**
+   * In-process executor for `provenance: 'builtin'` servers (the M365
+   * toolset). Listing and dispatch route here instead of an MCP connection;
+   * a builtin server without an executor degrades to zero tools.
+   */
+  builtinExecutor?: M365BuiltinExecutor;
 }
 
 export async function listToolsForServers(
   servers: ResolvedMcpServer[],
   userId: string,
+  builtinExecutor?: M365BuiltinExecutor,
 ): Promise<{ serversWithTools: ServerWithTools[]; failedLabels: string[] }> {
   const failedLabels: string[] = [];
   const results = await Promise.all(
     servers.map(async (server): Promise<ServerWithTools> => {
+      if (server.provenance === 'builtin') {
+        // Builtin servers list in-process: no connection, and no
+        // toolSchemaCache entry — its (userId, url, authToken) key shape
+        // never applies to a url-less synthetic server, and the executor
+        // does its own consent-probe caching.
+        if (!builtinExecutor) return { server, tools: [] };
+        try {
+          const tools = await withBudget(
+            builtinExecutor.listTools(),
+            LIST_TOOLS_BUDGET_MS,
+          );
+          return {
+            server,
+            tools: tools.map((tool) => ({
+              name: tool.name,
+              description: tool.description,
+              inputSchema: tool.inputSchema,
+            })),
+            instructions: builtinExecutor.instructions,
+          };
+        } catch {
+          // Same degrade-don't-fail posture as network servers below.
+          failedLabels.push(server.label);
+          return { server, tools: [] };
+        }
+      }
       const cacheKey = toolCacheKey(userId, server.url, server.authToken);
       const cached = getCachedTools(cacheKey);
-      if (cached) return { server, tools: cached };
+      if (cached)
+        return {
+          server,
+          tools: cached.tools,
+          instructions: cached.instructions,
+        };
       try {
         const connection = await withBudget(
           connectMcp(server),
@@ -139,8 +216,9 @@ export async function listToolsForServers(
             connection.listTools(),
             LIST_TOOLS_BUDGET_MS,
           );
-          setCachedTools(cacheKey, tools);
-          return { server, tools };
+          const instructions = connection.getInstructions?.();
+          setCachedTools(cacheKey, { tools, instructions });
+          return { server, tools, instructions };
         } finally {
           await connection.close();
         }
@@ -183,6 +261,7 @@ export async function runToolLoopCore<TMessage>(
         const { serversWithTools, failedLabels } = await listToolsForServers(
           options.servers,
           options.userId,
+          options.builtinExecutor,
         );
         for (const label of failedLabels) {
           write(
@@ -195,6 +274,81 @@ export async function runToolLoopCore<TMessage>(
         const serverById = new Map(
           options.servers.map((server) => [server.id, server]),
         );
+
+        // ── PLAN (first round only): decompose the request into steps with
+        // recommended tools. Resumed rounds reuse the client-echoed plan.
+        let turnPlan: McpPlan | null = options.existingPlan ?? null;
+        if (
+          !turnPlan &&
+          options.planner &&
+          options.userMessageText &&
+          options.loopRound === 0 &&
+          !options.pendingToolCalls?.length
+        ) {
+          write(emitAgentActivity('chat.activity.planningSteps'));
+          try {
+            const steps = await options.planner(
+              options.userMessageText,
+              serversWithTools,
+            );
+            if (steps && steps.length > 0) {
+              turnPlan = { steps, currentStep: 0 };
+            }
+          } catch (error) {
+            console.warn(
+              '[toolLoopCore] Planner failed; continuing plan-less:',
+              error instanceof Error ? error.message : error,
+            );
+          }
+        }
+
+        /**
+         * Shows the plan step in the loader. Emits the retry variant when
+         * the step already burned its empty-result retry (i.e. this
+         * execution IS the retry).
+         */
+        const emitPlanStepActivity = (isRetry: boolean) => {
+          if (!turnPlan) return;
+          const step = turnPlan.steps[turnPlan.currentStep];
+          if (!step) return;
+          write(
+            emitAgentActivity(
+              isRetry
+                ? 'chat.activity.planStepRetry'
+                : 'chat.activity.planStep',
+              {
+                current: String(turnPlan.currentStep + 1),
+                total: String(turnPlan.steps.length),
+                description: step.description,
+              },
+            ),
+          );
+        };
+
+        // Connector-provided usage notes → system prompt, with the trust
+        // gate, sanitization, cap, and framing all in the builder. The plan
+        // addendum rides the same single applySystemAddendum call.
+        const instructionsAddendum = buildConnectorInstructionsAddendum(
+          serversWithTools.map(({ server, instructions }) => ({
+            label: server.label,
+            trusted: server.trusted,
+            instructions,
+          })),
+        );
+        const combinedAddendum = [
+          instructionsAddendum,
+          turnPlan ? buildPlanSystemAddendum(turnPlan) : '',
+        ]
+          .filter(Boolean)
+          .join('\n\n');
+        if (combinedAddendum) {
+          options.strategy.applySystemAddendum?.(combinedAddendum);
+        }
+
+        // Show step 1 while the first model round streams.
+        if (turnPlan && !options.pendingToolCalls?.length) {
+          emitPlanStepActivity(false);
+        }
 
         let messages = [...options.preparedMessages];
 
@@ -248,16 +402,56 @@ export async function runToolLoopCore<TMessage>(
               continue;
             }
 
-            write(
-              emitAgentActivity('chat.activity.usingNamedToolWithService', {
-                tool: call.toolName,
-                service: server.label,
-              }),
-            );
+            // Plan-aware loader: map this call onto the plan and show the
+            // step (or its retry). The plan is OVERARCHING — a tool no step
+            // explicitly recommends still belongs to the current step, so
+            // the numbered narrative never degrades back to bare tool
+            // names mid-plan.
+            let matchedStepIndex: number | null = null;
+            if (turnPlan) {
+              matchedStepIndex =
+                stepIndexForTool(turnPlan, call.toolName) ??
+                turnPlan.currentStep;
+              const isRetry =
+                matchedStepIndex === turnPlan.currentStep &&
+                turnPlan.steps[matchedStepIndex].retried === true;
+              turnPlan.currentStep = matchedStepIndex;
+              emitPlanStepActivity(isRetry);
+            } else {
+              write(
+                emitAgentActivity('chat.activity.usingNamedToolWithService', {
+                  tool: call.toolName,
+                  service: server.label,
+                }),
+              );
+            }
             try {
-              const connection = await connectMcp(server);
+              // Builtin dispatch: in-process execution, no connection to
+              // open or close. The executor never throws (failures come
+              // back as isError results), so the catch below only fires
+              // for network servers or executor-contract violations.
+              const connection =
+                server.provenance === 'builtin' && options.builtinExecutor
+                  ? null
+                  : await connectMcp(server);
               try {
-                const result = await connection.callTool(call.toolName, args);
+                const result = connection
+                  ? await connection.callTool(call.toolName, args)
+                  : await options
+                      .builtinExecutor!.callTool(call.toolName, args, {
+                        // Composite tools stream progress ("scanning 214
+                        // messages…") through the loop's activity channel.
+                        emitActivity: (detail) =>
+                          write(
+                            emitAgentActivity('chat.activity.m365Progress', {
+                              detail,
+                            }),
+                          ),
+                      })
+                      .then((r) => ({
+                        text: r.resultText,
+                        isError: r.isError,
+                      }));
                 write(
                   toolResultToRecordMarker(
                     call,
@@ -266,15 +460,36 @@ export async function runToolLoopCore<TMessage>(
                     Date.now() - startedAt,
                   ),
                 );
+                options.onToolCall?.({
+                  toolName: call.toolName,
+                  serverId: server.id,
+                  serverLabel: server.label,
+                  durationMs: Date.now() - startedAt,
+                  success: !result.isError,
+                  errorMessage: result.isError ? result.text : undefined,
+                });
+                let resultText = result.isError
+                  ? `Tool failed: ${result.text}`
+                  : result.text || '(empty result)';
+                // One retry per plan step: an empty/failed result earns the
+                // model a single adjusted-arguments retry nudge; the step is
+                // marked so a second emptiness moves on quietly.
+                if (
+                  turnPlan &&
+                  matchedStepIndex !== null &&
+                  !turnPlan.steps[matchedStepIndex].retried &&
+                  isEmptyToolResult(resultText, result.isError)
+                ) {
+                  turnPlan.steps[matchedStepIndex].retried = true;
+                  resultText += RETRY_NUDGE;
+                }
                 results.push({
                   call,
-                  text: result.isError
-                    ? `Tool failed: ${result.text}`
-                    : result.text || '(empty result)',
+                  text: resultText,
                   isError: result.isError,
                 });
               } finally {
-                await connection.close();
+                await connection?.close();
               }
             } catch (error) {
               const isAuth = isMcpAuthError(error);
@@ -294,9 +509,29 @@ export async function runToolLoopCore<TMessage>(
                   Date.now() - startedAt,
                 ),
               );
+              options.onToolCall?.({
+                toolName: call.toolName,
+                serverId: server.id,
+                serverLabel: server.label,
+                durationMs: Date.now() - startedAt,
+                success: false,
+                errorMessage,
+              });
+              let failureText = `Tool failed: ${errorMessage}`;
+              // Auth failures aren't retryable with different arguments —
+              // the nudge would just burn a round.
+              if (
+                !isAuth &&
+                turnPlan &&
+                matchedStepIndex !== null &&
+                !turnPlan.steps[matchedStepIndex].retried
+              ) {
+                turnPlan.steps[matchedStepIndex].retried = true;
+                failureText += RETRY_NUDGE;
+              }
               results.push({
                 call,
-                text: `Tool failed: ${errorMessage}`,
+                text: failureText,
                 isError: true,
               });
             }
@@ -311,7 +546,7 @@ export async function runToolLoopCore<TMessage>(
         const round = await options.strategy.runModelRound(
           messages,
           serversWithTools,
-          options.loopRound < MAX_TOOL_ROUNDS,
+          options.loopRound < (options.maxRounds ?? MAX_TOOL_ROUNDS),
           write,
         );
 
@@ -368,6 +603,10 @@ export async function runToolLoopCore<TMessage>(
         const metadata: StreamMetadata = {};
         if (options.citations?.length) metadata.citations = options.citations;
         if (round.thinking) metadata.thinking = round.thinking;
+        // The plan (with progress + retry state) rides the terminal block so
+        // the client can echo it back on approval resume — same stateless
+        // protocol as mcpPendingToolCalls.
+        if (turnPlan) metadata.mcpPlan = turnPlan;
         if (aggregate.total > 0) {
           metadata.usage = {
             promptTokens: aggregate.prompt,
@@ -378,12 +617,41 @@ export async function runToolLoopCore<TMessage>(
             reasoningEffort: options.usage.reasoningEffort,
           };
         }
-        if (metadata.citations || metadata.usage || metadata.thinking) {
+        if (
+          metadata.citations ||
+          metadata.usage ||
+          metadata.thinking ||
+          metadata.mcpPlan
+        ) {
           appendMetadataToStream(controller, metadata);
         }
         controller.close();
       } catch (error) {
-        controller.error(error);
+        // The real cause lives HERE only — the client gets a generic,
+        // code-tagged message, so without this log a mid-loop failure is
+        // undiagnosable.
+        console.error(
+          '[toolLoopCore] Tool loop failed mid-stream:',
+          error instanceof Error ? `${error.name}: ${error.message}` : error,
+        );
+        // End the stream CLEANLY with an in-band error instead of killing
+        // the socket: controller.error() aborts the response mid-transfer,
+        // which reaches the browser as an opaque network failure (Firefox:
+        // NS_ERROR_NET_PARTIAL_TRANSFER) carrying no information at all.
+        try {
+          appendMetadataToStream(controller, {
+            streamError: {
+              code: 'TOOL_LOOP_FAILED',
+              message:
+                'The assistant hit a problem while using connector tools and the response was interrupted.',
+            },
+          });
+          controller.close();
+        } catch {
+          // Enqueueing failed (stream already errored/cancelled) — the
+          // abort path is all that's left.
+          controller.error(error);
+        }
       }
     },
   });

@@ -14,8 +14,10 @@ interface VirtualConversationListProps {
   handleSelectConversation: (id: string) => void;
   handleDeleteConversation: (id: string, e: React.MouseEvent) => void;
   handleMoveToFolder: (conversationId: string, folderId: string | null) => void;
+  handleCreateFolderAndMove?: (conversationId: string, name: string) => void;
   handleRenameConversation: (id: string, currentName: string) => void;
   handleExportConversation: (conversation: Conversation) => void;
+  handleShareConversation?: (conversation: Conversation) => void;
   folders: FolderInterface[];
   t: (key: string) => string;
   /** Estimated row height in px. Real heights are measured at runtime. */
@@ -42,8 +44,10 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
   handleSelectConversation,
   handleDeleteConversation,
   handleMoveToFolder,
+  handleCreateFolderAndMove,
   handleRenameConversation,
   handleExportConversation,
+  handleShareConversation,
   folders,
   t,
   rowHeight = 44,
@@ -60,8 +64,10 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
       handleSelectConversation={handleSelectConversation}
       handleDeleteConversation={handleDeleteConversation}
       handleMoveToFolder={handleMoveToFolder}
+      handleCreateFolderAndMove={handleCreateFolderAndMove}
       handleRenameConversation={handleRenameConversation}
       handleExportConversation={handleExportConversation}
+      handleShareConversation={handleShareConversation}
       folders={folders}
       t={t}
     />
@@ -132,8 +138,10 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
                 handleSelectConversation={handleSelectConversation}
                 handleDeleteConversation={handleDeleteConversation}
                 handleMoveToFolder={handleMoveToFolder}
+                handleCreateFolderAndMove={handleCreateFolderAndMove}
                 handleRenameConversation={handleRenameConversation}
                 handleExportConversation={handleExportConversation}
+                handleShareConversation={handleShareConversation}
                 folders={folders}
                 t={t}
               />

@@ -11,6 +11,15 @@ import { useConversationStore } from '@/client/stores/conversationStore';
 import '@testing-library/jest-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+// The admin workflow policy hook is react-query backed; these tests render
+// without a QueryClientProvider, and the policy is not what they exercise.
+vi.mock('@/client/hooks/workflows/useWorkflowPolicy', () => ({
+  useWorkflowPolicy: () => ({
+    isWorkflowEnabled: () => true,
+    isLoading: false,
+  }),
+}));
+
 vi.mock('@/client/hooks/ui/useUI', () => ({
   useUI: () => ({ toggleChatbar: vi.fn() }),
 }));

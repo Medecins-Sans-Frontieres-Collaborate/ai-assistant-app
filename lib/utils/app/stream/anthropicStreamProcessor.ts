@@ -39,6 +39,12 @@ export function createAnthropicStreamProcessor(
       const encoder = createStreamEncoder();
       let allContent = '';
       let allThinking = '';
+      // Whether we're inside a live-streamed <think> wrapper. Thinking
+      // deltas are re-emitted inline in the tag format the client already
+      // parses into the collapsible ThinkingBlock, so the reasoning is
+      // visible AS it happens instead of arriving silently in terminal
+      // metadata.
+      let thinkingOpen = false;
       let controllerClosed = false;
       let inputTokens = 0;
       let outputTokens = 0;
@@ -85,6 +91,12 @@ export function createAnthropicStreamProcessor(
 
               // Handle text_delta events
               if (delta.type === 'text_delta' && delta.text) {
+                // Thinking always precedes the answer — close the live
+                // think wrapper when real content starts.
+                if (thinkingOpen) {
+                  thinkingOpen = false;
+                  controller.enqueue(encoder.encode('\n</think>\n\n'));
+                }
                 const textChunk = delta.text;
                 allContent += textChunk;
                 controller.enqueue(encoder.encode(textChunk));
@@ -94,14 +106,23 @@ export function createAnthropicStreamProcessor(
               if (delta.type === 'thinking_delta' && 'thinking' in delta) {
                 const thinkingChunk = (delta as Anthropic.ThinkingDelta)
                   .thinking;
+                if (!thinkingOpen) {
+                  thinkingOpen = true;
+                  controller.enqueue(encoder.encode('<think>\n'));
+                }
                 allThinking += thinkingChunk;
-                // Note: We don't stream thinking content to the user directly
-                // It will be included in metadata at the end
+                controller.enqueue(encoder.encode(thinkingChunk));
               }
             }
           }
 
           if (!controllerClosed) {
+            // A thinking-only stream (stopped before any answer text) must
+            // still close the wrapper or the open tag leaks as body text.
+            if (thinkingOpen) {
+              thinkingOpen = false;
+              controller.enqueue(encoder.encode('\n</think>\n\n'));
+            }
             // Merge citations
             const allCitations: Citation[] = [];
             if (webSearchCitations && webSearchCitations.length > 0) {

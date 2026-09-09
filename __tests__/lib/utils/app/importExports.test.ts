@@ -10,6 +10,7 @@ import {
   isExportFormatV4,
   isLatestExportFormat,
 } from '@/lib/utils/app/export/importExport';
+import { importData } from '@/lib/utils/app/export/importExport';
 
 import { ExportFormatV1, ExportFormatV2, ExportFormatV4 } from '@/types/export';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
@@ -306,5 +307,60 @@ describe('cleanData Functions', () => {
       expect(obj.customAgents).toEqual([]);
       expect(obj.history).toHaveLength(1);
     });
+  });
+});
+
+describe('importData timestamp stamping', () => {
+  it('stamps import time on conversations lacking BOTH timestamp fields', () => {
+    // Legacy exports predate updatedAt/createdAt. Without a real timestamp
+    // the backup sync's last-writer-wins would resolve every conflict
+    // against the imported copy (a remote tombstone would re-delete it).
+    const result = importData({
+      version: 5,
+      history: [
+        {
+          id: 'legacy-1',
+          name: 'old',
+          messages: [],
+          model: { id: 'gpt-5.5' },
+          prompt: '',
+          temperature: 1,
+          folderId: null,
+        },
+        {
+          id: 'kept-1',
+          name: 'has updatedAt',
+          messages: [],
+          model: { id: 'gpt-5.5' },
+          prompt: '',
+          temperature: 1,
+          folderId: null,
+          updatedAt: '2026-01-01T00:00:00.000Z',
+        },
+        {
+          id: 'kept-2',
+          name: 'has createdAt only',
+          messages: [],
+          model: { id: 'gpt-5.5' },
+          prompt: '',
+          temperature: 1,
+          folderId: null,
+          createdAt: '2026-02-02T00:00:00.000Z',
+        },
+      ],
+      folders: [],
+      prompts: [],
+      tones: [],
+      customAgents: [],
+    } as never);
+
+    const byId = new Map(result.history.map((c) => [c.id, c]));
+    const legacy = byId.get('legacy-1')!;
+    expect(legacy.updatedAt).toBeTruthy();
+    expect(Date.parse(legacy.updatedAt!)).toBeGreaterThan(Date.now() - 60_000);
+    // Existing timestamps are never rewritten.
+    expect(byId.get('kept-1')!.updatedAt).toBe('2026-01-01T00:00:00.000Z');
+    expect(byId.get('kept-2')!.updatedAt).toBeUndefined();
+    expect(byId.get('kept-2')!.createdAt).toBe('2026-02-02T00:00:00.000Z');
   });
 });

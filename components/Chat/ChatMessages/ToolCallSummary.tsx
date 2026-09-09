@@ -9,13 +9,47 @@ import {
   IconTool,
 } from '@tabler/icons-react';
 import { FC, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
+
+import { M365_BUILTIN_SERVER_ID } from '@/lib/services/m365/tools/toolCatalog';
 
 import { formatToolArguments } from '@/lib/utils/shared/chat/formatToolArguments';
 import { highlightJsonTokens } from '@/lib/utils/shared/jsonHighlight';
 
 import type { ToolCallRecord } from '@/types/chat';
+
+import { useConversationStore } from '@/client/stores/conversationStore';
+
+/** The tier-1 withheld sentinel (mailReadTools renders it verbatim). */
+const MAIL_WITHHELD_SENTINEL = 'WITHHELD: flagged by the phishing screen';
+
+/**
+ * The override affordance only works where a single message id is
+ * recoverable from the call arguments (mail_get_message /
+ * mail_create_reply_draft targets). Thread/search flags surface as text;
+ * the model can be asked to fetch the specific message, whose record then
+ * carries the affordance.
+ */
+function flaggedMailMessageId(call: ToolCallRecord): string | null {
+  if (call.server_id !== M365_BUILTIN_SERVER_ID) return null;
+  if (!call.name.startsWith('mail_')) return null;
+  const haystack = `${call.output ?? ''}\n${call.error ?? ''}`;
+  if (
+    !haystack.includes(MAIL_WITHHELD_SENTINEL) &&
+    !haystack.includes('flagged by the phishing screen')
+  ) {
+    return null;
+  }
+  try {
+    const args = JSON.parse(call.arguments ?? '{}') as Record<string, unknown>;
+    const id = args.messageId;
+    return typeof id === 'string' && id.length > 0 ? id : null;
+  } catch {
+    return null;
+  }
+}
 
 interface ToolCallSummaryProps {
   toolCalls: ToolCallRecord[];
@@ -96,8 +130,16 @@ interface ToolCallRowProps {
 const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
   const t = useTranslations('chat.toolSummary');
   const failed = call.status === 'failed';
+  // Code-interpreter records carry Python source in arguments ({ code })
+  // and generated files. Render the code as code (not highlighted JSON)
+  // and always show generated files — they're the deliverable, so they
+  // must be visible without expanding the row.
+  const isCodeInterpreter = call.name === 'code_interpreter';
   // Failed rows open by default so the error text shows without a click.
-  const [detailsOpen, setDetailsOpen] = useState(failed);
+  // Code-interpreter rows too: the executed code is the transparency
+  // record for any calculation, so expanding the strip must reveal it
+  // without a second click per row.
+  const [detailsOpen, setDetailsOpen] = useState(failed || isCodeInterpreter);
   const incomplete = call.status === 'incomplete';
   const succeeded = call.status === 'completed';
 
@@ -122,9 +164,16 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
           ? t('statusAutoDenied')
           : t('statusApproved');
 
-  const prettyArgs = formatToolArguments(call.arguments);
+  const interpreterCode = isCodeInterpreter
+    ? parseInterpreterCode(call.arguments)
+    : null;
 
-  const hasDetails = !!prettyArgs || !!call.output || !!call.error;
+  const prettyArgs = isCodeInterpreter
+    ? null
+    : formatToolArguments(call.arguments);
+
+  const hasDetails =
+    !!prettyArgs || !!interpreterCode || !!call.output || !!call.error;
 
   return (
     <li className="text-xs">
@@ -164,21 +213,103 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
               </code>
             </pre>
           )}
+          {interpreterCode && (
+            <div>
+              <div className="mb-0.5 text-[0.65rem] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                {t('executedCode')}
+              </div>
+              <pre className="max-h-64 max-w-full overflow-auto rounded border border-gray-200 bg-gray-50 px-2 py-1 text-[0.7rem] leading-snug text-gray-700 dark:border-gray-700/60 dark:bg-gray-900/60 dark:text-gray-300">
+                <code className="font-mono">{interpreterCode}</code>
+              </pre>
+            </div>
+          )}
           {call.output && (
-            <pre className="max-h-32 max-w-full overflow-auto rounded border border-emerald-200/60 bg-emerald-50 px-2 py-1 text-[0.7rem] leading-snug text-emerald-900 dark:border-emerald-700/40 dark:bg-emerald-900/15 dark:text-emerald-100">
-              {call.output}
-            </pre>
+            <div>
+              {isCodeInterpreter && (
+                <div className="mb-0.5 text-[0.65rem] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                  {t('codeOutput')}
+                </div>
+              )}
+              <pre className="max-h-32 max-w-full overflow-auto rounded border border-emerald-200/60 bg-emerald-50 px-2 py-1 text-[0.7rem] leading-snug text-emerald-900 dark:border-emerald-700/40 dark:bg-emerald-900/15 dark:text-emerald-100">
+                {call.output}
+              </pre>
+            </div>
           )}
           {call.error && (
             <pre className="max-h-32 max-w-full overflow-auto rounded border border-red-200/60 bg-red-50 px-2 py-1 text-[0.7rem] leading-snug text-red-900 dark:border-red-700/40 dark:bg-red-900/15 dark:text-red-100">
               {call.error}
             </pre>
           )}
+          <FlaggedMailOverride call={call} />
         </div>
       )}
+
+      {/* Generated files intentionally do NOT render here — they are the
+          run's deliverable and render prominently on the message itself
+          via GeneratedFilesPanel. */}
     </li>
   );
 };
+
+/**
+ * Explicit, user-only override for a phishing-flagged mail body (fifth
+ * pass): persists the message id on the conversation, from where it rides
+ * every subsequent request payload — the executor honors ONLY that field,
+ * so an injected email can never self-unlock.
+ */
+const FlaggedMailOverride: FC<{ call: ToolCallRecord }> = ({ call }) => {
+  const t = useTranslations('chat.toolSummary');
+  const selectedConversationId = useConversationStore(
+    (s) => s.selectedConversationId,
+  );
+  const conversation = useConversationStore((s) =>
+    s.conversations.find((c) => c.id === selectedConversationId),
+  );
+  const updateConversation = useConversationStore((s) => s.updateConversation);
+
+  const messageId = flaggedMailMessageId(call);
+  if (!messageId || !conversation) return null;
+
+  const overridden =
+    conversation.m365MailScreenOverrides?.includes(messageId) ?? false;
+
+  if (overridden) {
+    return (
+      <p className="text-[0.7rem] text-amber-700 dark:text-amber-400">
+        {t('mailFlagOverridden')}
+      </p>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        updateConversation(conversation.id, {
+          m365MailScreenOverrides: [
+            ...(conversation.m365MailScreenOverrides ?? []),
+            messageId,
+          ].slice(0, 20),
+        });
+        toast(t('mailFlagOverrideToast'), { duration: 6000 });
+      }}
+      className="rounded-md border border-amber-300 px-2 py-0.5 text-[0.7rem] text-amber-800 hover:bg-amber-50 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/20"
+    >
+      {t('mailFlagShowAnyway')}
+    </button>
+  );
+};
+
+/** Extracts the Python source from a code-interpreter record's arguments. */
+function parseInterpreterCode(args: string | null): string | null {
+  if (!args) return null;
+  try {
+    const parsed = JSON.parse(args) as { code?: unknown };
+    return typeof parsed.code === 'string' && parsed.code ? parsed.code : null;
+  } catch {
+    return null;
+  }
+}
 
 function formatDuration(ms: number): string {
   if (ms < 1000) return `${ms}ms`;

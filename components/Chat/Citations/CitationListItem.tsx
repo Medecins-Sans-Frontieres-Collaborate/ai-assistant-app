@@ -32,7 +32,12 @@ export const CitationListItem: React.FC<CitationListItemProps> = ({
     }
   };
 
-  const { hostname, cleanDomain } = processUrl(citation.url);
+  // Prefer the true publisher (aggregator fallbacks would show every row
+  // as the same domain and hide source diversity).
+  const { hostname, cleanDomain } = processUrl(
+    citation.sourceUrl || citation.url,
+  );
+  const displayName = citation.sourceName || cleanDomain;
 
   const formatDate = (dateStr: string): string => {
     if (!dateStr || dateStr.trim() === '') return '';
@@ -63,6 +68,11 @@ export const CitationListItem: React.FC<CitationListItemProps> = ({
 
       <span className="flex-grow min-w-0 text-sm text-gray-800 dark:text-white truncate mx-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
         {citation.title}
+        {citation.locator && (
+          <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+            {citation.locator}
+          </span>
+        )}
       </span>
 
       <div className="flex items-center flex-shrink-0 gap-3 text-xs text-gray-500 dark:text-gray-400">
@@ -75,7 +85,7 @@ export const CitationListItem: React.FC<CitationListItemProps> = ({
             height={12}
             className="flex-shrink-0"
           />
-          <span className="truncate max-w-[80px]">{cleanDomain}</span>
+          <span className="truncate max-w-[80px]">{displayName}</span>
         </div>
 
         {formattedDate && (

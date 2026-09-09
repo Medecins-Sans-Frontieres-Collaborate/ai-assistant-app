@@ -3,6 +3,7 @@ import React from 'react';
 
 import { MessageDownloadMenu } from '@/components/Chat/ChatMessages/MessageDownloadMenu';
 
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -47,6 +48,10 @@ vi.mock('@/lib/utils/shared/document/formatConverter', () => ({
 
 describe('MessageDownloadMenu', () => {
   beforeEach(() => {
+    // This suite covers the plain download column; M365 is connected by
+    // default (settingsStore v57), which would add the Save-to-OneDrive
+    // column and duplicate every format label.
+    useSettingsStore.setState({ m365Connected: false });
     downloadFileMock.mockClear();
     exportToPDFMock.mockClear();
     exportToPDFMock.mockResolvedValue(undefined);
@@ -103,6 +108,30 @@ describe('MessageDownloadMenu', () => {
       'response.md',
       'text/markdown',
     );
+  });
+
+  it('normalizes math delimiters in the .md payload, which never passes through markdownToHtml', () => {
+    // The md branch writes this string to disk verbatim (the test above pins
+    // that markdownToHtml is not called), so its math correctness rests on
+    // `prepare`'s own normalizeMathDelimiters call and nothing else. Drop that
+    // call and a user downloading Markdown and Word from the same menu on the
+    // same message gets `\[ \frac{a}{b} \]` in one and `$$ \frac{a}{b} $$` in
+    // the other — the renderer divergence (issue #121, C6) on the one surface
+    // the export choke point cannot reach. `normalizeMathDelimiters` is real
+    // here; only formatConverter is mocked.
+    render(
+      <MessageDownloadMenu
+        content={'The ratio is\n\n\\[ \\frac{a}{b} \\]\n'}
+        fileName="response"
+      />,
+    );
+    openMenu();
+    fireEvent.click(screen.getByText('Markdown (.md)'));
+
+    const [written] = downloadFileMock.mock.calls[0] as [string];
+    expect(written).toContain('\\frac{a}{b}');
+    expect(written).toContain('$$');
+    expect(written).not.toContain('\\[');
   });
 
   it('exports HTML through the markdown→HTML pipeline and sanitizes before write', async () => {

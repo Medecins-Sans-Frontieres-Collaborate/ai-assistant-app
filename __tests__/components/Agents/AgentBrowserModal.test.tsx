@@ -1,0 +1,446 @@
+import { fireEvent, render, screen, within } from '@testing-library/react';
+
+import type { AvailableAgent } from '@/lib/utils/app/agentAttachment';
+
+import type { Conversation } from '@/types/chat';
+
+import { AgentBrowserModal } from '@/components/Agents/AgentBrowserModal';
+
+import { useSettingsStore } from '@/client/stores/settingsStore';
+import { useUIStore } from '@/client/stores/uiStore';
+import '@testing-library/jest-dom';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+const updateConversation = vi.fn();
+const addConversation = vi.fn();
+const selectConversation = vi.fn();
+let selectedConversation: Partial<Conversation> | null;
+
+vi.mock('@/client/hooks/conversation/useConversations', () => ({
+  useConversations: () => ({
+    conversations: [],
+    selectedConversation,
+    addConversation,
+    selectConversation,
+    updateConversation,
+  }),
+}));
+
+const AGENTS: AvailableAgent[] = [
+  { id: 'orgr-alpha', botId: 'orgr-alpha', name: 'Alpha Agent', kind: 'org' },
+  {
+    id: 'prompt-beta',
+    botId: 'prompt-beta',
+    name: 'Beta Persona',
+    kind: 'prompt',
+  },
+];
+
+const availableState = vi.hoisted(() => ({
+  isError: false,
+  isDiscoveryLoading: false,
+  isDiscoveryError: false,
+  retry: vi.fn(),
+  empty: false,
+}));
+
+vi.mock('@/client/hooks/settings/useAvailableAgents', () => ({
+  useAvailableAgents: () => ({
+    agents: availableState.empty ? [] : AGENTS,
+    isLoading: false,
+    isError: availableState.isError,
+    isDiscoveryLoading: availableState.isDiscoveryLoading,
+    isDiscoveryError: availableState.isDiscoveryError,
+    retry: availableState.retry,
+  }),
+  findAttachedAgent: (
+    agents: AvailableAgent[],
+    conv: { bot?: string } | null,
+  ) => agents.find((a) => a.botId === conv?.bot),
+}));
+
+vi.mock('@/client/hooks/settings/useSettings', () => ({
+  useSettings: () => ({
+    models: [{ id: 'gpt-5.2', name: 'GPT-5.2' }],
+    defaultModelId: 'gpt-5.2',
+    systemPrompt: '',
+    temperature: 0.5,
+    defaultSearchMode: undefined,
+    defaultInterpreterMode: undefined,
+  }),
+}));
+
+vi.mock('@/client/hooks/useM365Enabled', () => ({
+  useM365Enabled: () => ({ toolsEnabled: false }),
+}));
+
+// Usage limits (WP-B hook, React Query underneath — no provider here).
+// Mutable so the pinned-model badge cases below can switch to enforce.
+const limitsState = vi.hoisted(() => ({
+  enforce: false,
+  models: {} as Record<
+    string,
+    {
+      allowed: boolean;
+      reason?: string;
+      remaining?: number;
+      limit?: number;
+      resetAt?: string;
+    }
+  >,
+}));
+vi.mock('@/client/hooks/settings/useMyLimits', async (importOriginal) => {
+  const actual =
+    await importOriginal<
+      typeof import('@/client/hooks/settings/useMyLimits')
+    >();
+  return {
+    ...actual,
+    useLimitsEnabled: () => limitsState.enforce,
+    useMyLimits: () => ({
+      limits: [],
+      mode: limitsState.enforce ? ('enforce' as const) : ('observe' as const),
+      enforce: limitsState.enforce,
+      isLimited: false,
+      models: limitsState.models,
+      usageUnavailable: false,
+      policyUnavailable: false,
+      isLoading: false,
+      error: null,
+      refetch: vi.fn(),
+    }),
+  };
+});
+
+function setServers(servers: unknown[]) {
+  useSettingsStore.setState({
+    mcpServers: servers as ReturnType<
+      typeof useSettingsStore.getState
+    >['mcpServers'],
+  });
+}
+
+describe('AgentBrowserModal', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    availableState.isError = false;
+    availableState.isDiscoveryLoading = false;
+    availableState.isDiscoveryError = false;
+    availableState.empty = false;
+    selectedConversation = { id: 'conv-1', model: { id: 'gpt-5.2' } } as never;
+    limitsState.enforce = false;
+    limitsState.models = {};
+    setServers([]);
+    useSettingsStore.setState({ agentBrowserUsage: {} });
+    useUIStore.setState({ agentBrowserOpen: true });
+  });
+
+  it('explains a failed discovery and offers Retry instead of "No agents"', () => {
+    availableState.isError = true;
+    availableState.empty = true;
+    render(<AgentBrowserModal />);
+    expect(
+      screen.getByText(/Your agents couldn't be loaded just now/),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('No agents available.')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    expect(availableState.retry).toHaveBeenCalledTimes(1);
+  });
+
+  it('flags a failed app-agent load with Retry even when static rows still render', () => {
+    availableState.isError = true;
+    render(<AgentBrowserModal />);
+    expect(screen.getAllByRole('option').length).toBeGreaterThan(0);
+    expect(
+      screen.getByText(/Your agents couldn't be loaded just now/),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    expect(availableState.retry).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the load error and Retry visible while the user types a query', () => {
+    availableState.isError = true;
+    availableState.empty = true;
+    render(<AgentBrowserModal />);
+    fireEvent.change(screen.getByRole('combobox'), {
+      target: { value: 'alpha' },
+    });
+    expect(
+      screen.getByText(/Your agents couldn't be loaded just now/),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('No matches.')).toBeNull();
+    expect(
+      screen.getByRole('button', { name: 'Try again' }),
+    ).toBeInTheDocument();
+  });
+
+  it('shows the loaded rows with a footer while Foundry discovery is still running', () => {
+    availableState.isDiscoveryLoading = true;
+    render(<AgentBrowserModal />);
+    expect(screen.getByText('Looking for Foundry agents…')).toBeInTheDocument();
+    expect(screen.getAllByRole('option').length).toBeGreaterThan(0);
+  });
+
+  it('offers a retry line when only Foundry discovery failed', () => {
+    availableState.isDiscoveryError = true;
+    render(<AgentBrowserModal />);
+    expect(
+      screen.getByText("Foundry agents couldn't be loaded."),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    expect(availableState.retry).toHaveBeenCalledTimes(1);
+  });
+
+  it('lists agents and connectors together, kind-labelled', () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    render(<AgentBrowserModal />);
+
+    expect(screen.getByText('Alpha Agent')).toBeInTheDocument();
+    expect(screen.getByText('GitHub')).toBeInTheDocument();
+    expect(screen.getByText('Connector')).toBeInTheDocument();
+    expect(screen.getAllByText(/Knowledge|Persona/).length).toBeGreaterThan(0);
+  });
+
+  it('orders by usage with the default order as tiebreaker', () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    useSettingsStore.setState({
+      agentBrowserUsage: { 'connector-s1': 5, 'prompt-beta': 2 },
+    });
+    render(<AgentBrowserModal />);
+
+    const options = screen.getAllByRole('option');
+    expect(options[0]).toHaveTextContent('GitHub');
+    expect(options[1]).toHaveTextContent('Beta Persona');
+    expect(options[2]).toHaveTextContent('Alpha Agent');
+  });
+
+  it('"Add to this chat" is the primary action and attaches without creating a chat', () => {
+    render(<AgentBrowserModal />);
+
+    fireEvent.click(screen.getAllByText('Add to this chat')[0]);
+
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      bot: 'orgr-alpha',
+    });
+    expect(addConversation).not.toHaveBeenCalled();
+  });
+
+  it('ArrowDown + Enter attaches the highlighted row', () => {
+    const input = () => screen.getByRole('combobox');
+    render(<AgentBrowserModal />);
+
+    fireEvent.keyDown(input(), { key: 'ArrowDown' });
+    fireEvent.keyDown(input(), { key: 'Enter' });
+
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      bot: 'prompt-beta',
+    });
+  });
+
+  it('Escape clears the query first, then closes', () => {
+    render(<AgentBrowserModal />);
+    const input = screen.getByRole('combobox');
+
+    fireEvent.change(input, { target: { value: 'alpha' } });
+    fireEvent.keyDown(input, { key: 'Escape' });
+    expect((input as HTMLInputElement).value).toBe('');
+    expect(useUIStore.getState().agentBrowserOpen).toBe(true);
+
+    fireEvent.keyDown(input, { key: 'Escape' });
+    expect(useUIStore.getState().agentBrowserOpen).toBe(false);
+  });
+
+  it('Enter on a connector row toggles it on for this chat and records usage', () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    selectedConversation = {
+      id: 'conv-1',
+      model: { id: 'gpt-5.2' },
+      disabledMcpServerIds: ['s1'],
+    } as never;
+    const input = () => screen.getByRole('combobox');
+    render(<AgentBrowserModal />);
+
+    fireEvent.change(input(), { target: { value: 'github' } });
+    fireEvent.keyDown(input(), { key: 'Enter' });
+
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      disabledMcpServerIds: [],
+    });
+    expect(useSettingsStore.getState().agentBrowserUsage['connector-s1']).toBe(
+      1,
+    );
+  });
+
+  it('enabling a globally-off connector revives it globally in one click', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: false, authMode: 'none' },
+    ]);
+    render(<AgentBrowserModal />);
+
+    const row = screen.getByText('GitHub').closest('li') as HTMLElement;
+    fireEvent.click(within(row).getByText('Add to this chat'));
+
+    expect(
+      useSettingsStore.getState().mcpServers.find((s) => s.id === 's1')
+        ?.enabled,
+    ).toBe(true);
+  });
+
+  it('an active connector offers removal instead', () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    render(<AgentBrowserModal />);
+
+    fireEvent.click(screen.getByText('Remove from this chat'));
+
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      disabledMcpServerIds: ['s1'],
+    });
+  });
+
+  it('with no conversation, New chat is the agents-only fallback and connectors offer no action', () => {
+    selectedConversation = null;
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    render(<AgentBrowserModal />);
+
+    expect(screen.queryByText('Add to this chat')).toBeNull();
+    expect(screen.queryByText('Remove from this chat')).toBeNull();
+    fireEvent.click(screen.getAllByText('New chat')[0]);
+    expect(addConversation).toHaveBeenCalled();
+  });
+
+  describe('pinned-model usage-limit badge (docs/LIMITS_USER_FACING_UX.md §7.4)', () => {
+    // A prompt agent whose pinned catalog model the client can see. The
+    // field rides AvailableAgent structurally until the discovery payload
+    // and agentAttachment expose it for real.
+    const PINNED: AvailableAgent[] = [
+      {
+        id: 'prompt-gamma',
+        botId: 'prompt-gamma',
+        name: 'Gamma Persona',
+        kind: 'prompt',
+        pinnedModelId: 'o3',
+      } as AvailableAgent,
+    ];
+
+    const renderWithPinned = () => {
+      const original = AGENTS.splice(0, AGENTS.length);
+      AGENTS.push(...PINNED);
+      const result = render(<AgentBrowserModal />);
+      return {
+        ...result,
+        restore: () => AGENTS.splice(0, AGENTS.length, ...original),
+      };
+    };
+
+    it('badges (never hides) an agent whose pinned model the server no longer serves', () => {
+      limitsState.enforce = true; // o3 is a catalog id absent from the served list
+      const { restore } = renderWithPinned();
+      try {
+        const row = screen.getByRole('option', { name: /Gamma Persona/ });
+        expect(
+          within(row).getByTestId('agent-model-unavailable'),
+        ).toHaveTextContent('agentModelUnavailable');
+        // A permanent block never resets — the lock icon says so; the
+        // clock (implying "comes back later") is wrong here.
+        expect(
+          row.querySelector(
+            '[data-testid="agent-model-unavailable"] .tabler-icon-lock',
+          ),
+        ).not.toBeNull();
+        // The agent itself is not restricted: still attachable.
+        fireEvent.click(within(row).getByText('Add to this chat'));
+        expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+          bot: 'prompt-gamma',
+        });
+      } finally {
+        restore();
+      }
+    });
+
+    it('badges an exhausted pinned model with the exhausted wording', () => {
+      limitsState.enforce = true;
+      limitsState.models = {
+        'gpt-5.2': {
+          allowed: true,
+          reason: 'exhausted',
+          remaining: 0,
+          limit: 5,
+        },
+      };
+      const original = AGENTS.splice(0, AGENTS.length);
+      AGENTS.push({
+        ...PINNED[0],
+        pinnedModelId: 'gpt-5.2',
+      } as AvailableAgent);
+      try {
+        render(<AgentBrowserModal />);
+        const note = screen.getByTestId('agent-model-unavailable');
+        expect(note).toHaveTextContent('agentModelExhaustedNoReset');
+        // No reset known — a clock (not a lock) still fits, since the cap
+        // itself is transient in principle.
+        expect(note.querySelector('.tabler-icon-clock')).not.toBeNull();
+      } finally {
+        AGENTS.splice(0, AGENTS.length, ...original);
+      }
+    });
+
+    it('includes the reset countdown when the server sent one, matching ModelHeader for the same agent', () => {
+      // Regression: modelNoteFor used to always render the *NoReset variant
+      // regardless of `resetAt`, disagreeing with ModelHeader's wording for
+      // the identical pinned-model state.
+      limitsState.enforce = true;
+      limitsState.models = {
+        'gpt-5.2': {
+          allowed: true,
+          reason: 'exhausted',
+          remaining: 0,
+          limit: 5,
+          resetAt: new Date(Date.now() + 6 * 3600_000).toISOString(),
+        },
+      };
+      const original = AGENTS.splice(0, AGENTS.length);
+      AGENTS.push({
+        ...PINNED[0],
+        pinnedModelId: 'gpt-5.2',
+      } as AvailableAgent);
+      try {
+        render(<AgentBrowserModal />);
+        const note = screen.getByTestId('agent-model-unavailable');
+        // The countdown-bearing variant, not its NoReset sibling (a plain
+        // substring match on "agentModelExhausted" would pass either way).
+        expect(note).toHaveTextContent(/^agentModelExhausted$/);
+        expect(note.querySelector('.tabler-icon-clock')).not.toBeNull();
+      } finally {
+        AGENTS.splice(0, AGENTS.length, ...original);
+      }
+    });
+
+    it('renders no badge outside enforce mode (fail open), even for an unserved model', () => {
+      limitsState.enforce = false;
+      const { restore } = renderWithPinned();
+      try {
+        expect(screen.queryByTestId('agent-model-unavailable')).toBeNull();
+      } finally {
+        restore();
+      }
+    });
+
+    it('never badges "your-model" kinds — they ride the picker\'s own vetting', () => {
+      limitsState.enforce = true;
+      const original = AGENTS.splice(0, AGENTS.length);
+      AGENTS.push({
+        id: 'orgr-delta',
+        botId: 'orgr-delta',
+        name: 'Delta RAG',
+        kind: 'org',
+        pinnedModelId: 'o3',
+      } as AvailableAgent);
+      try {
+        render(<AgentBrowserModal />);
+        expect(screen.queryByTestId('agent-model-unavailable')).toBeNull();
+      } finally {
+        AGENTS.splice(0, AGENTS.length, ...original);
+      }
+    });
+  });
+});

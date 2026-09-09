@@ -1,12 +1,15 @@
 'use client';
 
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useForeignConversationImport } from '@/client/hooks/conversation/useForeignConversationImport';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useCreateReducer } from '@/client/hooks/ui/useCreateReducer';
 import { useUI } from '@/client/hooks/ui/useUI';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import { exportData, importData } from '@/lib/utils/app/export/importExport';
 import { getSettings, saveSettings } from '@/lib/utils/app/settings';
@@ -15,11 +18,14 @@ import { getStorageUsage } from '@/lib/utils/app/storage/storageMonitor';
 import { SearchMode } from '@/types/searchMode';
 import { DEFAULT_STREAMING_SPEED, Settings } from '@/types/settings';
 
+import { ForeignConversationImportModal } from '@/components/Import/ForeignConversationImportModal';
+
 import packageJson from '../../package.json';
 import { MigrationDialog } from '../Migration/MigrationDialog';
 import { MobileSettingsHeader } from './MobileSettingsHeader';
 import { BackupSection } from './Sections/BackupSection';
 import { ChatSettingsSection } from './Sections/ChatSettingsSection';
+import { ConnectionsSection } from './Sections/ConnectionsSection';
 import { ConnectorsSection } from './Sections/ConnectorsSection';
 import { DataManagementSection } from './Sections/DataManagementSection';
 import { GeneralSection } from './Sections/GeneralSection';
@@ -67,12 +73,23 @@ export function SettingDialog() {
   });
 
   const [storageData, setStorageData] = useState<any>(null);
+  // "Import Backup" also accepts ChatGPT / Claude conversations.json files;
+  // those open a picker instead of running the full-backup merge.
+  const foreignImport = useForeignConversationImport();
   const [fullProfile, setFullProfile] = useState<any>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState<SettingsSection>(
     SettingsSection.GENERAL,
   );
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
+  // Merged-pane gating (mirrors useSettingsNav's polarity exactly): the
+  // Connections pane shows whichever blocks are allowed; Data & Backup
+  // embeds the cloud-backup controls only when served `true` (fail-closed).
+  const { mcpConnectors, enableEncryptedBackups } = useFlags();
+  const mcpConnectorsEnabled = mcpConnectors !== false;
+  const encryptedBackupsEnabled = enableEncryptedBackups === true;
+  const { filesEnabled: m365Files, mailEnabled: m365Mail } = useM365Enabled();
+  const m365ConnectionsEnabled = m365Files || m365Mail;
   const [showMigrationDialog, setShowMigrationDialog] = useState(false);
 
   // Load settings and storage on client side only
@@ -238,6 +255,7 @@ export function SettingDialog() {
   };
 
   const handleImportConversations = (data: any) => {
+    if (foreignImport.offer(data)) return;
     try {
       // Use the proper importData function which handles all data types:
       // conversations, folders, prompts, tones, and custom agents
@@ -330,15 +348,19 @@ export function SettingDialog() {
                   />
                 )}
 
-                {activeSection === SettingsSection.CONNECTORS && (
-                  <ConnectorsSection />
+                {/* One pane for everything the user connects: the M365
+                    account block and the MCP connectors block, each behind
+                    its own flag (the nav entry shows when either allows). */}
+                {activeSection === SettingsSection.CONNECTIONS && (
+                  <>
+                    {m365ConnectionsEnabled && <ConnectionsSection />}
+                    {mcpConnectorsEnabled && <ConnectorsSection />}
+                  </>
                 )}
 
                 {activeSection === SettingsSection.USAGE_IMPACT && (
                   <UsageImpactSection />
                 )}
-
-                {activeSection === SettingsSection.BACKUP && <BackupSection />}
 
                 {activeSection === SettingsSection.MEMORIES && (
                   <MemoriesSection />
@@ -348,24 +370,29 @@ export function SettingDialog() {
                   <LocalModelsSection />
                 )}
 
+                {/* "Data & Backup": the cloud-backup controls sit on top of
+                    the local-data tools when the flag allows, so one pane
+                    owns every answer to "where is my data". */}
                 {activeSection === SettingsSection.DATA_MANAGEMENT && (
-                  <DataManagementSection
-                    handleClearConversations={handleClearConversations}
-                    handleImportConversations={handleImportConversations}
-                    handleExportData={handleExportData}
-                    handleReset={handleReset}
-                    onClose={() => setIsSettingsOpen(false)}
-                    checkStorage={checkStorage}
-                    onOpenMigration={() => setShowMigrationDialog(true)}
-                  />
-                )}
-
-                {activeSection === SettingsSection.MOBILE_APP && (
-                  <MobileAppSection />
+                  <>
+                    {encryptedBackupsEnabled && <BackupSection />}
+                    <DataManagementSection
+                      handleClearConversations={handleClearConversations}
+                      handleImportConversations={handleImportConversations}
+                      handleExportData={handleExportData}
+                      handleReset={handleReset}
+                      onClose={() => setIsSettingsOpen(false)}
+                      checkStorage={checkStorage}
+                      onOpenMigration={() => setShowMigrationDialog(true)}
+                    />
+                  </>
                 )}
 
                 {activeSection === SettingsSection.HELP_SUPPORT && (
-                  <HelpSupportSection />
+                  <>
+                    <HelpSupportSection />
+                    <MobileAppSection />
+                  </>
                 )}
               </div>
             </div>
@@ -377,6 +404,15 @@ export function SettingDialog() {
       <MigrationDialog
         isOpen={showMigrationDialog}
         onComplete={() => setShowMigrationDialog(false)}
+      />
+
+      {/* Picker for ChatGPT / Claude exports dropped on "Import Backup" */}
+      <ForeignConversationImportModal
+        isOpen={foreignImport.pending !== null}
+        detection={foreignImport.pending}
+        existingIds={foreignImport.existingIds}
+        onClose={foreignImport.close}
+        onImport={foreignImport.commit}
       />
     </div>
   );

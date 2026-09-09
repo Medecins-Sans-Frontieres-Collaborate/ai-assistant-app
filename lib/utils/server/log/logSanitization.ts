@@ -36,13 +36,19 @@ export function sanitizeForLog(value: unknown): string {
   // Remove control characters and normalize whitespace: this is what prevents
   // log injection via newlines, carriage returns, ANSI escape codes, etc.
   //
-  // NOTE: CodeQL does NOT recognise this function as a CWE-117 barrier, so
-  // call sites still raise js/log-injection even though they are safe. The
-  // literal alternation below was originally written in the belief that it
-  // would be modelled where a `[\r\n]+` class would not — it isn't, and the
-  // spelling makes no difference to the scanner. Keep it or not on
-  // readability grounds; making the alerts stop needs a custom CodeQL model
-  // pack declaring this a sanitizer, not a different regex.
+  // NOTE: stock CodeQL does NOT recognise this function as a CWE-117
+  // barrier — the stripping happens inside `replace` chains it models as
+  // value-preserving — so call sites used to raise js/log-injection even
+  // though they are safe. That is now handled by the project query
+  // `msf/log-injection` (.github/codeql/queries/LogInjection.ql), which
+  // declares these helpers as sanitizers; the stock query is filtered out
+  // in .github/codeql/codeql-config.yml so the two cannot double-report.
+  //
+  // Consequence for edits here: this function is load-bearing for the
+  // scanner's correctness, not just tidy output. If it ever stops removing
+  // CR/LF and control characters, the CodeQL barrier becomes a lie and real
+  // log injection goes unreported. The literal alternation below is
+  // equivalent to a `[\r\n]+` class; keep whichever reads better.
   return (
     stringValue
       .replace(/\r\n|\r|\n/g, ' ') // Replace newlines with spaces
@@ -74,4 +80,20 @@ export function perfLog(label: string, startTime: number, extra?: string) {
   if (process.env.NODE_ENV === 'production') return;
   const ms = (performance.now() - startTime).toFixed(1);
   console.log(`[Perf] ${label}: ${ms}ms${extra ? ` ${extra}` : ''}`);
+}
+
+/**
+ * Schema-only description of a zod failure for logs: issue paths and
+ * codes, never the received values (which came from stored/user data).
+ */
+export function zodIssueSummary(error: {
+  issues: readonly { path: readonly PropertyKey[]; code: string }[];
+}): string {
+  return error.issues
+    .slice(0, 5)
+    .map(
+      (issue) =>
+        `${issue.path.map((p) => String(p)).join('.') || '<root>'}:${issue.code}`,
+    )
+    .join(', ');
 }

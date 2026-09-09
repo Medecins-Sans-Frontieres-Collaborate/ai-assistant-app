@@ -11,6 +11,7 @@ import {
   ImageMessageContent,
   TranscriptionJobStatus,
 } from '@/types/chat';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { SearchMode } from '@/types/searchMode';
 
 import { onFileUpload } from '@/client/handlers/chatInput/file-upload';
@@ -63,6 +64,8 @@ interface ChatInputState {
 
   // Search mode & tone
   searchMode: SearchMode;
+  /** Per-conversation code-interpreter mode (mirrors searchMode semantics). */
+  interpreterMode: InterpreterMode;
   selectedToneId: string | null;
 
   /**
@@ -73,6 +76,14 @@ interface ChatInputState {
   extractionMode: boolean;
   /** Up to 3 selected recipe IDs (UI enforces the cap). */
   extractionRecipeIds: string[];
+
+  /**
+   * Whether the connector-focus tray is open while NO connector is pinned
+   * yet (the picking state). Once a pin exists, the tray renders from the
+   * conversation's persisted `pinnedMcpServerId` instead. Ephemeral —
+   * resets between conversations.
+   */
+  connectorPinTrayOpen: boolean;
 
   // Upload state
   filePreviews: FilePreview[];
@@ -112,6 +123,7 @@ interface ChatInputState {
 
   // Actions - Search mode & tone
   setSearchMode: (mode: SearchMode) => void;
+  setInterpreterMode: (mode: InterpreterMode) => void;
   setSelectedToneId: (id: string | null) => void;
 
   // Actions - Extraction
@@ -119,6 +131,9 @@ interface ChatInputState {
   addExtractionRecipeId: (id: string) => void;
   removeExtractionRecipeId: (id: string) => void;
   clearExtractionRecipeIds: () => void;
+
+  // Actions - Connector focus
+  setConnectorPinTrayOpen: (open: boolean) => void;
 
   // Actions - Upload
   setFilePreviews: (
@@ -152,7 +167,10 @@ interface ChatInputState {
   // Actions - General
   clearInput: () => void;
   clearUploadState: () => void;
-  resetForNewConversation: (defaultSearchMode?: SearchMode) => void;
+  resetForNewConversation: (
+    defaultSearchMode?: SearchMode,
+    defaultInterpreterMode?: InterpreterMode,
+  ) => void;
 }
 
 export const useChatInputStore = create<ChatInputState>((set, get) => ({
@@ -173,11 +191,15 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
 
   // Initial state - Search mode & tone
   searchMode: SearchMode.OFF,
+  interpreterMode: InterpreterMode.OFF,
   selectedToneId: null,
 
   // Initial state - Extraction (ephemeral; per-conversation)
   extractionMode: false,
   extractionRecipeIds: [],
+
+  // Initial state - Connector focus (ephemeral; per-conversation)
+  connectorPinTrayOpen: false,
 
   // Initial state - Upload
   filePreviews: [],
@@ -232,10 +254,13 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
 
   // Actions - Search mode & tone
   setSearchMode: (mode) => set({ searchMode: mode }),
+  setInterpreterMode: (mode) => set({ interpreterMode: mode }),
   setSelectedToneId: (id) => set({ selectedToneId: id }),
 
   // Actions - Extraction
   setExtractionMode: (enabled) => set({ extractionMode: enabled }),
+
+  setConnectorPinTrayOpen: (open) => set({ connectorPinTrayOpen: open }),
   addExtractionRecipeId: (id) =>
     set((state) => {
       if (
@@ -406,7 +431,10 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
     });
   },
 
-  resetForNewConversation: (defaultSearchMode = SearchMode.OFF) => {
+  resetForNewConversation: (
+    defaultSearchMode = SearchMode.OFF,
+    defaultInterpreterMode = InterpreterMode.OFF,
+  ) => {
     const prior = get().uploadAbortController;
     if (prior && !prior.signal.aborted) {
       prior.abort();
@@ -416,9 +444,11 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       uploadAbortController: null,
       textFieldValue: '',
       searchMode: defaultSearchMode,
+      interpreterMode: defaultInterpreterMode,
       selectedToneId: null,
       extractionMode: false,
       extractionRecipeIds: [],
+      connectorPinTrayOpen: false,
       filePreviews: [],
       fileFieldValue: null,
       imageFieldValue: null,

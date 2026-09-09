@@ -12,7 +12,15 @@ import {
 
 import { auth } from '@/auth';
 
-const isValidSha256Hash = (id: string | string[] | undefined): boolean => {
+// Buffered uploads/imports are content-hash-named (sha256); streamed M365
+// imports and chunked uploads are UUID-named. Both are valid references.
+const VALID_HASH_REGEX: RegExp = /^[0-9a-f]{64}$/;
+const VALID_UUID_REGEX: RegExp =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+// Matches sanitizeBlobExtension's bound (alphanumeric, up to 12 chars).
+const VALID_EXTENSION_REGEX: RegExp = /^[A-Za-z0-9]{1,12}$/;
+
+const isValidFileId = (id: string | string[] | undefined): boolean => {
   if (typeof id !== 'string' || id.length < 1) {
     console.error(
       `Invalid id type '${typeof id}' for object: ${JSON.stringify(id)}`,
@@ -22,13 +30,10 @@ const isValidSha256Hash = (id: string | string[] | undefined): boolean => {
   const idParts: string[] = id.split('.');
   if (idParts.length > 2) return false;
 
-  const [idHash, idExtension] = idParts;
-  if (idExtension && idExtension.length > 4) return false;
+  const [idBase, idExtension] = idParts;
+  if (idExtension && !VALID_EXTENSION_REGEX.test(idExtension)) return false;
 
-  const SHA256_HASH_LENGTH: number = 64;
-  const VALID_HASH_REGEX: RegExp = /^[0-9a-f]{64}$/;
-
-  return idHash.length === SHA256_HASH_LENGTH && VALID_HASH_REGEX.test(idHash);
+  return VALID_HASH_REGEX.test(idBase) || VALID_UUID_REGEX.test(idBase);
 };
 
 export async function GET(
@@ -42,7 +47,7 @@ export async function GET(
   const { searchParams } = new URL(request.url);
   const requestedFileType = searchParams.get('filetype');
 
-  if (!isValidSha256Hash(id)) {
+  if (!isValidFileId(id)) {
     return NextResponse.json(
       { error: 'Invalid file identifier' },
       { status: 400 },

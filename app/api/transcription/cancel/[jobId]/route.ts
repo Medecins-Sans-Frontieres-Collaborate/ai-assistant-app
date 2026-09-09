@@ -8,6 +8,7 @@
  */
 import { NextRequest } from 'next/server';
 
+import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import {
   JOB_ID_REGEX,
   cancelJob,
@@ -39,14 +40,15 @@ export async function POST(_request: NextRequest, { params }: RouteParams) {
     return badRequestResponse('Invalid jobId format', 'INVALID_JOB_ID');
   }
 
-  const job = getJobForUser(jobId, session.user.id);
+  const storage = createBlobStorageClient(session);
+  const job = await getJobForUser(storage, jobId, session.user.id);
   if (!job) {
     // Indistinguishable 404: either unknown job or not yours.
     return notFoundResponse('Transcription job');
   }
 
   try {
-    cancelJob(jobId);
+    await cancelJob(storage, jobId, session.user.id);
   } catch (error) {
     return errorResponse(
       error instanceof Error ? error.message : 'Unknown error',

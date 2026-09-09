@@ -1,6 +1,22 @@
 export interface ParsedMessage {
   thinking?: string;
   content: string;
+  /**
+   * True when the text ends inside an UNCLOSED think block (streaming:
+   * the model is still reasoning). Only reported with `includeUnclosed`.
+   */
+  thinkingInProgress?: boolean;
+}
+
+export interface ParseThinkingOptions {
+  /**
+   * Also treat a trailing UNCLOSED `<think>` block as thinking. Used on
+   * the streaming render path so in-progress reasoning shows inside the
+   * ThinkingBlock instead of leaking into the message body as raw text.
+   * Keep OFF for persisted/history parsing, where an unclosed tag is more
+   * likely literal prose than a live stream.
+   */
+  includeUnclosed?: boolean;
 }
 
 /**
@@ -13,7 +29,10 @@ export interface ParsedMessage {
  *
  * Returns both the thinking content and the remaining message content.
  */
-export function parseThinkingContent(text: string): ParsedMessage {
+export function parseThinkingContent(
+  text: string,
+  options?: ParseThinkingOptions,
+): ParsedMessage {
   if (!text || typeof text !== 'string') {
     return { content: text };
   }
@@ -24,22 +43,40 @@ export function parseThinkingContent(text: string): ParsedMessage {
 
   const matches = [...text.matchAll(thinkingRegex)];
 
-  if (matches.length === 0) {
-    return { content: text };
-  }
-
   // Extract all thinking blocks
   const thinkingBlocks = matches.map((match) => match[1].trim());
+
+  // Remove closed thinking blocks from content
+  let content = matches.length > 0 ? text.replace(thinkingRegex, '') : text;
+  let thinkingInProgress = false;
+
+  // Streaming: a trailing open tag without its close means the model is
+  // mid-reasoning — everything after the tag is thinking, not body text.
+  if (options?.includeUnclosed) {
+    const openMatch = content.match(/<think(?:ing)?>/i);
+    if (openMatch && openMatch.index !== undefined) {
+      const inProgress = content
+        .slice(openMatch.index + openMatch[0].length)
+        .trim();
+      if (inProgress) {
+        thinkingBlocks.push(inProgress);
+      }
+      content = content.slice(0, openMatch.index);
+      thinkingInProgress = true;
+    }
+  }
+
+  if (thinkingBlocks.length === 0 && !thinkingInProgress) {
+    return { content: text };
+  }
 
   // Combine multiple thinking blocks with separators
   const thinking = thinkingBlocks.join('\n\n---\n\n');
 
-  // Remove thinking blocks from content
-  const content = text.replace(thinkingRegex, '').trim();
-
   return {
-    thinking,
-    content,
+    thinking: thinking || undefined,
+    content: content.trim(),
+    thinkingInProgress,
   };
 }
 

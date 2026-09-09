@@ -301,3 +301,121 @@ describe('FileUploadService.uploadImage', () => {
     expect(cacheImageBase64Mock).not.toHaveBeenCalled();
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// validateFile with the admin per-file cap (docs/LIMITS_USER_FACING_UX.md
+// §7.4). The compiled category caps stay the floor; the resolved
+// `feature.upload.megabytesPerFile` can only lower them.
+// ───────────────────────────────────────────────────────────────────
+const MB = 1024 * 1024;
+
+function fakeFile(name: string, type: string, size: number): File {
+  return { name, type, size } as unknown as File;
+}
+
+describe('FileUploadService.validateFile — effective upload cap', () => {
+  afterEach(() => {
+    FileUploadService.setEffectiveUploadLimit(null);
+  });
+
+  it('keeps the compiled category cap when no admin cap is known (fail open)', () => {
+    expect(FileUploadService.getEffectiveUploadLimit()).toBeNull();
+    // 5MB image cap compiled: 4MB passes, 6MB fails with the compiled text.
+    expect(
+      FileUploadService.validateFile(fakeFile('a.png', 'image/png', 4 * MB)),
+    ).toEqual({ valid: true });
+    const tooBig = FileUploadService.validateFile(
+      fakeFile('a.png', 'image/png', 6 * MB),
+    );
+    expect(tooBig.valid).toBe(false);
+    expect(tooBig.error).toBe('Image files must be under 5MB');
+  });
+
+  it('rejects above the override even when the compiled cap would allow it', () => {
+    const result = FileUploadService.validateFile(
+      fakeFile('report.pdf', 'application/pdf', 30 * MB),
+      20,
+    );
+    expect(result.valid).toBe(false);
+    // The message names the cap that actually bound — the admin one.
+    expect(result.error).toBe('Document files must be under 20MB');
+    expect(
+      FileUploadService.validateFile(
+        fakeFile('report.pdf', 'application/pdf', 19 * MB),
+        20,
+      ),
+    ).toEqual({ valid: true });
+  });
+
+  it('never raises a compiled cap: effective = min(compiled, resolved)', () => {
+    // Admin says 100MB, but images are compiled at 5MB — 6MB still fails,
+    // and with the COMPILED wording since that is the binding cap.
+    const result = FileUploadService.validateFile(
+      fakeFile('big.png', 'image/png', 6 * MB),
+      100,
+    );
+    expect(result.valid).toBe(false);
+    expect(result.error).toBe('Image files must be under 5MB');
+  });
+
+  it('reads the module-level cap set by the composer hook, with its localized message', () => {
+    FileUploadService.setEffectiveUploadLimit({
+      megabytes: 10,
+      formatError: (fileName, maxSize) => `LOCALIZED ${fileName} ${maxSize}`,
+    });
+    expect(FileUploadService.getEffectiveUploadLimit()?.megabytes).toBe(10);
+    const result = FileUploadService.validateFile(
+      fakeFile('notes.txt', 'text/plain', 11 * MB),
+    );
+    expect(result).toEqual({
+      valid: false,
+      error: 'LOCALIZED notes.txt 10MB',
+    });
+    // Just under the cap passes.
+    expect(
+      FileUploadService.validateFile(
+        fakeFile('notes.txt', 'text/plain', 10 * MB),
+      ),
+    ).toEqual({ valid: true });
+  });
+
+  it('an explicit override wins over the module-level cap and does not borrow its formatter', () => {
+    FileUploadService.setEffectiveUploadLimit({
+      megabytes: 1,
+      formatError: () => 'SHOULD NOT APPEAR',
+    });
+    // Override of 20MB is more permissive than the stored 1MB: 5MB passes.
+    expect(
+      FileUploadService.validateFile(
+        fakeFile('notes.txt', 'text/plain', 5 * MB),
+        20,
+      ),
+    ).toEqual({ valid: true });
+    const over = FileUploadService.validateFile(
+      fakeFile('notes.txt', 'text/plain', 25 * MB),
+      20,
+    );
+    expect(over.error).toBe('Document files must be under 20MB');
+  });
+
+  it('clearing the cap restores compiled-only validation', () => {
+    FileUploadService.setEffectiveUploadLimit({ megabytes: 1 });
+    expect(
+      FileUploadService.validateFile(fakeFile('a.txt', 'text/plain', 2 * MB))
+        .valid,
+    ).toBe(false);
+    FileUploadService.setEffectiveUploadLimit(null);
+    expect(
+      FileUploadService.validateFile(fakeFile('a.txt', 'text/plain', 2 * MB)),
+    ).toEqual({ valid: true });
+  });
+
+  it('still refuses disallowed types before looking at any size cap', () => {
+    const result = FileUploadService.validateFile(
+      fakeFile('evil.exe', 'application/x-msdownload', 1),
+      100,
+    );
+    expect(result.valid).toBe(false);
+    expect(result.error).toMatch(/Invalid file type/);
+  });
+});

@@ -1,0 +1,158 @@
+'use client';
+
+import { FC } from 'react';
+
+import { useTranslations } from 'next-intl';
+
+import type { LimitEntry } from '@/lib/services/limits/types';
+
+import { ADMIN_CHECKBOX, ADMIN_MUTED } from '@/components/Admin/adminClasses';
+import { CostHint } from '@/components/Limits/CostHint';
+import { LimitValueInput } from '@/components/Limits/LimitValueInput';
+import { ScopedLimitRows } from '@/components/Limits/ScopedLimitRows';
+import { EntryDraft, draftKey } from '@/components/Limits/types';
+
+import { LimitDefinition } from '@/config/limits';
+
+interface LimitRowProps {
+  def: LimitDefinition;
+  /** The whole draft — ScopedLimitRows finds its cells by prefix. */
+  draft: EntryDraft;
+  onChange: (key: string, value: EntryDraft[string]) => void;
+  /** Catalog description under the label (defaults tab). */
+  showDescription?: boolean;
+  /**
+   * Hard-ceiling toggle state; rendered only when provided AND the row is
+   * configured. The defaults tab always passes it; OverrideEditor passes it
+   * for a global-tier record only (design §3c) and leaves it undefined on
+   * scoped / delegated ones, whose stored flags stay invisible-but-preserved.
+   */
+  ceiling?: { checked: boolean; onToggle: (checked: boolean) => void };
+  /**
+   * The row's feature gate is off, so this value cannot take effect. The
+   * row dims and shows `dimmedNote`; the draft is NEVER written — the
+   * value must survive the gate being turned back on.
+   */
+  dimmed?: boolean;
+  /** Pre-translated note explaining why the row is dimmed. */
+  dimmedNote?: string;
+  /**
+   * Whether dimming also disables the inputs. True on the defaults tab
+   * (the gate below it is the single source of truth); false in override
+   * cards, where a higher-priority layer may re-enable the gate for some
+   * of the targeted people, so editing must stay possible.
+   */
+  disableWhenDimmed?: boolean;
+  /** Pre-translated consequence copy rendered under the control. */
+  consequenceNote?: string;
+  disabled?: boolean;
+  /**
+   * Cost insights only: the global default entries, consulted after this
+   * row's own draft for the allowed-model set behind "up to ≈ $X / day at
+   * the priciest allowed model". OverrideEditor passes its `globalDefaults`;
+   * the defaults tab needs nothing (its draft IS the defaults).
+   */
+  globalDefaults?: readonly LimitEntry[];
+  /**
+   * Cost insights only: the row belongs to a SCOPED admin's override, which
+   * never sees the global defaults — the annotation says "as far as this
+   * override can see".
+   */
+  costScopedView?: boolean;
+}
+
+/**
+ * One limit row, shared by the defaults tab and the override editor. Label
+ * (+ optional description), the universal value control, the optional
+ * hard-ceiling toggle, and nested per-model rows for perModel keys.
+ */
+export const LimitRow: FC<LimitRowProps> = ({
+  def,
+  draft,
+  onChange,
+  showDescription = false,
+  ceiling,
+  dimmed = false,
+  dimmedNote,
+  disableWhenDimmed = false,
+  consequenceNote,
+  disabled = false,
+  globalDefaults,
+  costScopedView = false,
+}) => {
+  const t = useTranslations('limits');
+  const key = draftKey(def.key);
+  const configured = draft[key] !== undefined;
+  const effectiveDisabled = disabled || (dimmed && disableWhenDimmed);
+
+  return (
+    <div className={dimmed ? 'opacity-60' : undefined}>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="min-w-[200px] flex-1">
+          <div className="text-sm font-medium text-black dark:text-white">
+            {t(`label.${def.labelKey}` as never)}
+          </div>
+          {showDescription && (
+            <div className={ADMIN_MUTED}>
+              {t(`descriptionByKey.${def.labelKey}` as never)}
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col items-end gap-1">
+          <LimitValueInput
+            def={def}
+            value={draft[key]}
+            onChange={(value) => onChange(key, value)}
+            disabled={effectiveDisabled}
+          />
+          {/* Cost annotation (limitsCostInsights): nothing when off, dimmed,
+              blocked, unset, or for keys that do not price. The `!dimmed`
+              guard is DEFENSIVE: only gated groups (webSearch, codeInterpreter,
+              mcp) can dim, and none of them holds a key that prices, so no
+              production tree reaches it today — it states the invariant "a
+              value that cannot take effect carries no cost copy" for a future
+              gated-and-priced key. Covered directly by CostHint.test.tsx
+              ('renders nothing on a dimmed row'). */}
+          {!dimmed && (
+            <CostHint
+              def={def}
+              value={draft[key]}
+              draft={draft}
+              globalDefaults={globalDefaults}
+              scopedView={costScopedView}
+            />
+          )}
+          {ceiling && configured && (
+            <label className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+              <input
+                type="checkbox"
+                className={ADMIN_CHECKBOX}
+                checked={ceiling.checked}
+                onChange={(e) => ceiling.onToggle(e.target.checked)}
+                disabled={effectiveDisabled}
+              />
+              {t('hardCeilingToggle')}
+            </label>
+          )}
+        </div>
+        {/* Per-family and per-model rows. A family cap is an envelope over
+            its models, not an alternative to them — the resolver checks
+            both. */}
+        {def.perModel && (
+          <div className="w-full">
+            <ScopedLimitRows
+              def={def}
+              draft={draft}
+              onChange={onChange}
+              disabled={effectiveDisabled}
+            />
+          </div>
+        )}
+      </div>
+      {dimmed && dimmedNote && <p className={ADMIN_MUTED}>{dimmedNote}</p>}
+      {!dimmed && consequenceNote && (
+        <p className={ADMIN_MUTED}>{consequenceNote}</p>
+      )}
+    </div>
+  );
+};

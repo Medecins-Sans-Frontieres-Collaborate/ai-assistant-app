@@ -47,3 +47,6 @@ pnpm-lock.yaml
 **/public/sw.js.map
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
+
+# model-parity eval outputs (evals/README.md)
+/evals/results

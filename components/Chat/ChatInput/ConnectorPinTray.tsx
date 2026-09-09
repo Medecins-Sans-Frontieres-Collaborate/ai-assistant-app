@@ -1,0 +1,464 @@
+'use client';
+
+import {
+  IconBrandWindows,
+  IconLock,
+  IconPlugConnected,
+  IconRobot,
+  IconX,
+} from '@tabler/icons-react';
+import { FC } from 'react';
+
+import { useTranslations } from 'next-intl';
+
+import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useToolLimitGates } from '@/client/hooks/settings/useAgentToolGates';
+import {
+  findAttachedAgent,
+  useAvailableAgents,
+} from '@/client/hooks/settings/useAvailableAgents';
+import { useResetCountdown } from '@/client/hooks/settings/useMyLimits';
+import { useSettings } from '@/client/hooks/settings/useSettings';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
+
+import {
+  M365_BUILTIN_SERVER_ID,
+  M365_BUILTIN_SERVER_LABEL,
+} from '@/lib/services/m365/tools/toolCatalog';
+
+import {
+  agentModelSemantics,
+  detachAgentUpdates,
+  isAgentShapedModelId,
+} from '@/lib/utils/app/agentAttachment';
+
+import { ToolModeControls } from '@/components/Chat/ChatInput/ToolModeControls';
+
+import { useChatInputStore } from '@/client/stores/chatInputStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
+import { useUIStore } from '@/client/stores/uiStore';
+
+/**
+ * Inline connector tray above the composer: one row per configured MCP
+ * server with a PER-CONVERSATION on/off switch, a global on/off action
+ * (mirrors Settings → Connectors), and a per-conversation FOCUS action
+ * (only the focused connector's tools are declared to the model; see
+ * `applyMcpPin`).
+ *
+ * The per-chat switch is subtractive: it writes the server's id into the
+ * conversation's `disabledMcpServerIds`, leaving the global config alone —
+ * so "not in this chat" no longer means "off everywhere". A globally
+ * disabled server shows its chat switch dimmed with a "global off" action
+ * to bring it back without a trip to Settings.
+ *
+ * Opened from the `+` menu or the connector badge; also forced open while a
+ * focus pin is set so the pin is never invisible state. The footer spells
+ * out the cost angle: every enabled connector adds tool declarations
+ * (tokens) and a listing round-trip to each message.
+ *
+ * A pin whose server has since been disabled/removed renders a stale
+ * notice — the send path fails open (all tools go through) rather than
+ * silently stripping every tool.
+ *
+ * An admin usage limit (`feature.mcp.enabled`, docs/LIMITS_USER_FACING_UX.md
+ * §7.4) LOCKS the whole list: every switch renders disabled and unchecked
+ * with a lock and the reason, the stored toggles are left alone, and the
+ * builtin Microsoft 365 row additionally annotates its own day budget.
+ */
+export const ConnectorPinTray: FC = () => {
+  const t = useTranslations('connectorPin');
+  const tAgent = useTranslations('agentAttach');
+  const tM365 = useTranslations('m365.tools');
+  const tGates = useTranslations('limitsUx.gates');
+  const { agents } = useAvailableAgents();
+  const { models, defaultModelId } = useSettings();
+  const setAgentBrowserOpen = useUIStore((s) => s.setAgentBrowserOpen);
+  const mcpServers = useSettingsStore((s) => s.mcpServers);
+  const updateMcpServer = useSettingsStore((s) => s.updateMcpServer);
+  const m365Connected = useSettingsStore((s) => s.m365Connected);
+  const m365ToolsUserEnabled = useSettingsStore((s) => s.m365ToolsUserEnabled);
+  const setM365ToolsUserEnabled = useSettingsStore(
+    (s) => s.setM365ToolsUserEnabled,
+  );
+  const { toolsEnabled: m365ToolsFlagOn } = useM365Enabled();
+  const setTrayOpen = useChatInputStore((s) => s.setConnectorPinTrayOpen);
+  const { selectedConversation, updateConversation } = useConversations();
+  const { mcp: mcpGate, m365: m365Gate } = useToolLimitGates();
+  const m365ResetLabel = useResetCountdown(m365Gate.budget?.resetAt);
+
+  if (!selectedConversation) return null;
+  const mcpLocked = mcpGate.blocked;
+  const mcpLockReason = tGates('blocked', {
+    feature: tGates('features.connectors'),
+  });
+  const pinnedId = selectedConversation.pinnedMcpServerId;
+  const chatDisabledIds = selectedConversation.disabledMcpServerIds ?? [];
+  // Virtual Microsoft 365 row: not a store row — its "global toggle" is
+  // m365ToolsUserEnabled, its per-chat toggle and focus pin ride the same
+  // disabledMcpServerIds / pinnedMcpServerId machinery as real connectors.
+  const m365RowVisible = m365ToolsFlagOn && m365Connected;
+  // Effective state: a lock reads as off everywhere (stored toggles untouched).
+  const m365ChatEnabled =
+    !mcpLocked &&
+    m365ToolsUserEnabled &&
+    !chatDisabledIds.includes(M365_BUILTIN_SERVER_ID);
+  // The M365 row's own budget line, when the server reported one.
+  const m365BudgetNote = m365Gate.exhausted
+    ? m365ResetLabel
+      ? tGates('exhaustedResets', { resets: m365ResetLabel })
+      : tGates('exhausted')
+    : m365Gate.low && m365Gate.budget
+      ? tGates('remaining', { count: m365Gate.budget.remaining })
+      : undefined;
+  const pinnedIsM365 = pinnedId === M365_BUILTIN_SERVER_ID;
+  const pinnedServer = pinnedId
+    ? mcpServers.find((s) => s.id === pinnedId)
+    : undefined;
+  const pinnedName = pinnedIsM365
+    ? M365_BUILTIN_SERVER_LABEL
+    : (pinnedServer?.name ?? t('unknownConnector'));
+  const pinnedUsable =
+    !mcpLocked &&
+    (pinnedIsM365
+      ? m365RowVisible && m365ChatEnabled
+      : !!pinnedServer?.enabled &&
+        !chatDisabledIds.includes(pinnedServer.id) &&
+        !(
+          pinnedServer.authMode === 'oauth' && pinnedServer.oauth?.needsReauth
+        ));
+
+  const setPin = (serverId: string | undefined) => {
+    updateConversation(selectedConversation.id, {
+      pinnedMcpServerId: serverId,
+    });
+  };
+
+  const setChatEnabled = (serverId: string, enabled: boolean) => {
+    const next = enabled
+      ? chatDisabledIds.filter((id) => id !== serverId)
+      : [...chatDisabledIds, serverId];
+    updateConversation(selectedConversation.id, {
+      disabledMcpServerIds: next,
+    });
+  };
+
+  const close = () => setTrayOpen(false);
+
+  // Agent section state — the attached agent (decoupled bot OR legacy
+  // agent-shaped model), its model semantics, and the detach action.
+  const attachedAgent = findAttachedAgent(agents, selectedConversation);
+  const modelIsAgentShaped = isAgentShapedModelId(
+    selectedConversation.model?.id,
+  );
+  const hasAgent =
+    !!attachedAgent || !!selectedConversation.bot || modelIsAgentShaped;
+  const agentName =
+    attachedAgent?.name ??
+    (modelIsAgentShaped
+      ? selectedConversation.model.name
+      : selectedConversation.bot) ??
+    '';
+  const agentSemantics = attachedAgent
+    ? agentModelSemantics(attachedAgent.kind)
+    : modelIsAgentShaped
+      ? 'own-model'
+      : 'your-model';
+  const detachAgent = () => {
+    const fallbackModel =
+      models.find((m) => m.id === defaultModelId) ?? models[0];
+    updateConversation(
+      selectedConversation.id,
+      detachAgentUpdates(selectedConversation, models, fallbackModel),
+    );
+  };
+
+  return (
+    <div
+      className="relative mx-3 my-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1c1c1c] px-3 py-2"
+      role="region"
+      aria-label={t('trayLabel')}
+    >
+      <div className="flex items-center gap-2">
+        <IconPlugConnected
+          size={14}
+          className="flex-shrink-0 text-blue-500"
+          aria-hidden="true"
+        />
+        <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+          {t('trayTitle')}
+        </span>
+        {mcpLocked && (
+          <span
+            role="img"
+            aria-label={mcpLockReason}
+            title={mcpLockReason}
+            data-testid="tray-lock-connectors"
+            className="flex flex-shrink-0 items-center text-gray-400 dark:text-gray-500"
+          >
+            <IconLock size={12} aria-hidden="true" />
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={close}
+          className="ml-auto rounded-md p-1 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label={t('dismiss')}
+          title={t('dismiss')}
+        >
+          <IconX size={14} />
+        </button>
+      </div>
+
+      {/* Agent — one quiet row: the attached agent with its model
+          semantics and a Detach action, or a browse entry point. */}
+      <div className="mt-2 flex items-center gap-2 border-b border-gray-200 pb-2 dark:border-gray-700">
+        <IconRobot
+          size={14}
+          className={`flex-shrink-0 ${hasAgent ? 'text-violet-500' : 'text-gray-400 dark:text-gray-500'}`}
+          aria-hidden="true"
+        />
+        {hasAgent ? (
+          <>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-xs text-gray-800 dark:text-gray-200">
+                {agentName}
+              </span>
+              <span className="block truncate text-[11px] text-gray-500 dark:text-gray-400">
+                {tAgent(`semantics.${agentSemantics}`)}
+              </span>
+            </span>
+            <button
+              type="button"
+              onClick={detachAgent}
+              className="flex-shrink-0 rounded-md px-2 py-0.5 text-xs text-gray-500 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100 transition-colors"
+            >
+              {tAgent('detach')}
+            </button>
+          </>
+        ) : (
+          <span className="min-w-0 flex-1 truncate text-xs text-gray-500 dark:text-gray-400">
+            {tAgent('noAgent')}
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={() => setAgentBrowserOpen(true)}
+          className="flex-shrink-0 rounded-md px-2 py-0.5 text-xs text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+        >
+          {hasAgent ? tAgent('change') : tAgent('browse')}
+        </button>
+      </div>
+
+      {mcpServers.length === 0 && !m365RowVisible ? (
+        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+          {t('noEligibleConnectors')}
+        </p>
+      ) : (
+        <ul className="mt-2 space-y-1">
+          {m365RowVisible && (
+            <li className="flex items-center gap-2">
+              <label
+                className={`flex min-w-0 flex-1 items-center gap-2 ${
+                  m365ToolsUserEnabled && !mcpLocked
+                    ? 'cursor-pointer'
+                    : 'cursor-default'
+                }`}
+                title={mcpLocked ? mcpLockReason : undefined}
+              >
+                <input
+                  type="checkbox"
+                  checked={m365ChatEnabled}
+                  disabled={!m365ToolsUserEnabled || mcpLocked}
+                  onChange={() =>
+                    setChatEnabled(M365_BUILTIN_SERVER_ID, !m365ChatEnabled)
+                  }
+                  aria-label={t('toggleServerInChat', {
+                    name: M365_BUILTIN_SERVER_LABEL,
+                  })}
+                  className="h-3.5 w-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-40 dark:border-gray-600 dark:bg-gray-800"
+                />
+                <IconBrandWindows
+                  size={14}
+                  className="flex-shrink-0 text-blue-500"
+                  aria-hidden="true"
+                />
+                <span className="min-w-0">
+                  <span
+                    className={`block truncate text-xs ${
+                      m365ChatEnabled
+                        ? 'text-gray-800 dark:text-gray-200'
+                        : 'text-gray-400 dark:text-gray-500'
+                    }`}
+                  >
+                    {M365_BUILTIN_SERVER_LABEL}
+                  </span>
+                  {/* The budget line outranks the generic description:
+                      it is the one thing that changes what happens next. */}
+                  <span
+                    className={`block truncate text-[11px] ${
+                      !mcpLocked && m365Gate.exhausted
+                        ? 'text-amber-700 dark:text-amber-400'
+                        : 'text-gray-500 dark:text-gray-400'
+                    }`}
+                  >
+                    {mcpLocked
+                      ? mcpLockReason
+                      : (m365BudgetNote ?? tM365('trayDescription'))}
+                  </span>
+                </span>
+              </label>
+              <button
+                type="button"
+                onClick={() => setM365ToolsUserEnabled(!m365ToolsUserEnabled)}
+                disabled={mcpLocked}
+                title={
+                  mcpLocked
+                    ? mcpLockReason
+                    : t('globalToggleTitle', {
+                        name: M365_BUILTIN_SERVER_LABEL,
+                      })
+                }
+                className={`flex-shrink-0 rounded-md px-1.5 py-0.5 text-[11px] transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                  m365ToolsUserEnabled
+                    ? 'text-gray-400 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    : 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40'
+                }`}
+              >
+                {m365ToolsUserEnabled ? t('globalOn') : t('globalOff')}
+              </button>
+              {pinnedIsM365 && !mcpLocked ? (
+                <button
+                  type="button"
+                  onClick={() => setPin(undefined)}
+                  className="flex-shrink-0 inline-flex items-center gap-1 rounded-md bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 px-2 py-0.5 text-xs text-blue-800 dark:text-blue-200 hover:bg-blue-100 dark:hover:bg-blue-800/50 transition-colors"
+                  title={t('unpin')}
+                >
+                  {t('focusedChip')}
+                  <IconX size={11} aria-hidden="true" />
+                </button>
+              ) : (
+                !pinnedIsM365 &&
+                m365ChatEnabled && (
+                  <button
+                    type="button"
+                    onClick={() => setPin(M365_BUILTIN_SERVER_ID)}
+                    className="flex-shrink-0 rounded-md px-2 py-0.5 text-xs text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                  >
+                    {t('focusAction')}
+                  </button>
+                )
+              )}
+            </li>
+          )}
+          {mcpServers.map((server) => {
+            const needsReauth =
+              server.authMode === 'oauth' && !!server.oauth?.needsReauth;
+            const isPinned = server.id === pinnedId;
+            const chatEnabled =
+              !mcpLocked &&
+              server.enabled &&
+              !chatDisabledIds.includes(server.id);
+            const focusable = chatEnabled && !needsReauth;
+            return (
+              <li key={server.id} className="flex items-center gap-2">
+                {/* Per-chat switch: only meaningful while globally enabled */}
+                <label
+                  className={`flex min-w-0 flex-1 items-center gap-2 ${
+                    server.enabled && !mcpLocked
+                      ? 'cursor-pointer'
+                      : 'cursor-default'
+                  }`}
+                  title={mcpLocked ? mcpLockReason : undefined}
+                >
+                  <input
+                    type="checkbox"
+                    checked={chatEnabled}
+                    disabled={!server.enabled || mcpLocked}
+                    onChange={() => setChatEnabled(server.id, !chatEnabled)}
+                    aria-label={t('toggleServerInChat', {
+                      name: server.name,
+                    })}
+                    className="h-3.5 w-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-40 dark:border-gray-600 dark:bg-gray-800"
+                  />
+                  <span
+                    className={`truncate text-xs ${
+                      chatEnabled
+                        ? 'text-gray-800 dark:text-gray-200'
+                        : 'text-gray-400 dark:text-gray-500'
+                    }`}
+                  >
+                    {server.name}
+                  </span>
+                </label>
+                {needsReauth && (
+                  <span className="flex-shrink-0 text-xs text-amber-600 dark:text-amber-400">
+                    {t('needsReconnect')}
+                  </span>
+                )}
+                {/* Global on/off: mirrors Settings → Connectors, so a
+                    globally-off server can be brought back right here. */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateMcpServer(server.id, { enabled: !server.enabled })
+                  }
+                  disabled={mcpLocked}
+                  title={
+                    mcpLocked
+                      ? mcpLockReason
+                      : t('globalToggleTitle', { name: server.name })
+                  }
+                  className={`flex-shrink-0 rounded-md px-1.5 py-0.5 text-[11px] transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                    server.enabled
+                      ? 'text-gray-400 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
+                      : 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40'
+                  }`}
+                >
+                  {server.enabled ? t('globalOn') : t('globalOff')}
+                </button>
+                {isPinned && !mcpLocked ? (
+                  <button
+                    type="button"
+                    onClick={() => setPin(undefined)}
+                    className="flex-shrink-0 inline-flex items-center gap-1 rounded-md bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 px-2 py-0.5 text-xs text-blue-800 dark:text-blue-200 hover:bg-blue-100 dark:hover:bg-blue-800/50 transition-colors"
+                    title={t('unpin')}
+                  >
+                    {t('focusedChip')}
+                    <IconX size={11} aria-hidden="true" />
+                  </button>
+                ) : (
+                  !isPinned &&
+                  focusable && (
+                    <button
+                      type="button"
+                      onClick={() => setPin(server.id)}
+                      className="flex-shrink-0 rounded-md px-2 py-0.5 text-xs text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                    >
+                      {t('focusAction')}
+                    </button>
+                  )
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+      {/* Tools — web search & code interpreter as Off/Auto/Always (the
+          model picker's former sections; Phase 2 consolidation). */}
+      <ToolModeControls />
+
+      {/* Footer: the lock reason wins over the pin/cost hints — a locked
+          tray sends no tools, so neither hint applies. */}
+      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        {mcpLocked
+          ? mcpLockReason
+          : pinnedId
+            ? pinnedUsable
+              ? t('pinnedHint', { name: pinnedName })
+              : t('staleHint')
+            : t('chatToggleHint')}
+      </p>
+    </div>
+  );
+};

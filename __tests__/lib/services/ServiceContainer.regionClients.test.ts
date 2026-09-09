@@ -45,15 +45,21 @@ describe('ServiceContainer.getChatClientsForRegion', () => {
     );
   });
 
-  it('omits the OpenAI-compatible client without a region-scoped API key (account-scoped keys)', () => {
+  it('builds the OpenAI-compatible client without a region-scoped API key (Entra-preferred auth)', () => {
+    // Regression of the old behavior: the client used to be omitted without
+    // a region key. Entra tokens are account-agnostic (the wrapper injects a
+    // fresh bearer per request), so the client is now always built; the key
+    // is only the fallback when token acquisition fails.
     mockEnv.AZURE_AI_FOUNDRY_ENDPOINT_EU =
       'https://acct-eu.services.ai.azure.com/api/projects/default';
 
     const clients =
       ServiceContainer.getInstance().getChatClientsForRegion('EU');
 
-    expect(clients.openAIClient).toBeUndefined();
-    // Entra-authenticated clients don't need a key and are still built.
+    expect(clients.openAIClient).toBeDefined();
+    expect(String(clients.openAIClient!.baseURL)).toContain(
+      'acct-eu.services.ai.azure.com/openai/v1',
+    );
     expect(clients.azureOpenAIClient).toBeDefined();
     expect(clients.anthropicFoundryClient).toBeDefined();
   });

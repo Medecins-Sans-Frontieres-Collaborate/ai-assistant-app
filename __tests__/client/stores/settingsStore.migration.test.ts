@@ -7,6 +7,13 @@ import {
   DEFAULT_MAP_TIMELAPSE,
   MAX_CARDS_MAX,
 } from '@/lib/utils/shared/geo/timelapsePacing';
+import {
+  DEFAULT_PASTE_ATTACHMENT_CHARS,
+  LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS,
+} from '@/lib/utils/shared/paste/pastedText';
+
+import { InterpreterMode } from '@/types/interpreterMode';
+import { DEFAULT_WEB_SEARCH_OPTIONS } from '@/types/webSearch';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { describe, expect, it } from 'vitest';
@@ -684,5 +691,386 @@ describe('settingsStore migration (v43 → v44)', () => {
       EMISSIONS_CHIP_VISIBILITY_DEFAULT,
     );
     expect(result.emissionsChipAutoHideMs).toBe(EMISSIONS_CHIP_AUTOHIDE_MIN_MS);
+  });
+});
+
+describe('settingsStore migration (v45 → v46)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills defaultInterpreterMode to INTELLIGENT (default enabled)', () => {
+    const result = migrate({}, 45) as Record<string, unknown>;
+
+    expect(result.defaultInterpreterMode).toBe(InterpreterMode.INTELLIGENT);
+  });
+
+  it('preserves a deliberate OFF choice on re-migration', () => {
+    const result = migrate(
+      { defaultInterpreterMode: InterpreterMode.OFF },
+      45,
+    ) as Record<string, unknown>;
+
+    expect(result.defaultInterpreterMode).toBe(InterpreterMode.OFF);
+  });
+
+  it('repairs an unrecognized value', () => {
+    const result = migrate({ defaultInterpreterMode: 'turbo' }, 45) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.defaultInterpreterMode).toBe(InterpreterMode.INTELLIGENT);
+  });
+});
+
+describe('settingsStore migration (v46 → v47)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills default web-search options', () => {
+    const result = migrate({}, 46) as Record<string, unknown>;
+
+    expect(result.webSearchOptions).toEqual(DEFAULT_WEB_SEARCH_OPTIONS);
+  });
+
+  it('preserves valid persisted options and clamps invalid ones', () => {
+    const result = migrate(
+      { webSearchOptions: { resultCount: 12, freshness: 'week' } },
+      46,
+    ) as Record<string, unknown>;
+    // Absent provider backfills to the store default — 'combined' since
+    // combined (Bing + headlines) became the product default.
+    expect(result.webSearchOptions).toEqual({
+      resultCount: 12,
+      freshness: 'week',
+      provider: 'combined',
+    });
+
+    const repaired = migrate(
+      { webSearchOptions: { resultCount: 99, freshness: 'yesteryear' } },
+      46,
+    ) as Record<string, unknown>;
+    expect(repaired.webSearchOptions).toEqual({
+      resultCount: 15,
+      freshness: 'auto',
+      provider: 'combined',
+    });
+  });
+});
+
+describe('settingsStore migration (v47 → v48)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills the provider field on existing options', () => {
+    const result = migrate(
+      { webSearchOptions: { resultCount: 10, freshness: 'day' } },
+      47,
+    ) as Record<string, unknown>;
+
+    expect(result.webSearchOptions).toEqual({
+      resultCount: 10,
+      freshness: 'day',
+      provider: 'combined',
+    });
+  });
+
+  it('keeps a valid persisted provider and repairs an invalid one', () => {
+    for (const valid of ['google-news', 'bing-agent', 'bing-responses']) {
+      const kept = migrate(
+        {
+          webSearchOptions: {
+            resultCount: 8,
+            freshness: 'auto',
+            provider: valid,
+          },
+        },
+        47,
+      ) as Record<string, unknown>;
+      expect((kept.webSearchOptions as Record<string, unknown>).provider).toBe(
+        valid,
+      );
+    }
+
+    const repaired = migrate(
+      {
+        webSearchOptions: {
+          resultCount: 8,
+          freshness: 'auto',
+          provider: 'altavista',
+        },
+      },
+      47,
+    ) as Record<string, unknown>;
+    expect(
+      (repaired.webSearchOptions as Record<string, unknown>).provider,
+    ).toBe('combined');
+  });
+});
+
+/**
+ * v48 → v49: the pause-capture toggle for Memories. Negative polarity is
+ * deliberate — an absent or malformed key repairs to "not paused", which is
+ * how the feature behaved before the toggle existed.
+ */
+describe('settingsStore migration (v48 → v49)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills memoryCapturePaused=false when migrating from v48', () => {
+    const result = migrate({ memoriesEnabled: true }, 48) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.memoryCapturePaused).toBe(false);
+    // The opt-in itself must survive untouched.
+    expect(result.memoriesEnabled).toBe(true);
+  });
+
+  it('preserves an explicit pause on a current-version store', () => {
+    const result = migrate({ memoryCapturePaused: true }, 49) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.memoryCapturePaused).toBe(true);
+  });
+
+  it('repairs a non-boolean value', () => {
+    const result = migrate({ memoryCapturePaused: 'yes' }, 48) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.memoryCapturePaused).toBe(false);
+  });
+});
+
+/**
+ * v50 → v51: the remembered "Save to OneDrive" destination. Backfill to the
+ * defaults these users already have — default app folder (null), dialog shown.
+ */
+describe('settingsStore migration (v50 → v51)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills m365SaveDestination=null and m365SaveSkipPicker=false when migrating from v50', () => {
+    const result = migrate({ m365Connected: true }, 50) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365SaveDestination).toBeNull();
+    expect(result.m365SaveSkipPicker).toBe(false);
+    // The connection opt-in itself must survive untouched.
+    expect(result.m365Connected).toBe(true);
+  });
+
+  it('preserves a remembered destination on a current-version store', () => {
+    const destination = {
+      driveId: 'd1',
+      itemId: 'i1',
+      name: 'Reports',
+      pathLabel: 'OneDrive › Reports',
+    };
+    const result = migrate(
+      { m365SaveDestination: destination, m365SaveSkipPicker: true },
+      51,
+    ) as Record<string, unknown>;
+
+    expect(result.m365SaveDestination).toEqual(destination);
+    expect(result.m365SaveSkipPicker).toBe(true);
+  });
+
+  it('repairs a non-boolean skip-picker value', () => {
+    const result = migrate({ m365SaveSkipPicker: 'yes' }, 50) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365SaveSkipPicker).toBe(false);
+  });
+});
+
+/**
+ * v53 → v54: the playbook suggestion chips toggle (sixth pass). Backfilled
+ * ON — the chips are precondition-gated and dismissible, and the LD flag
+ * still gates the feature — but an explicit off must survive.
+ */
+describe('settingsStore migration (v53 → v54)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills m365PlaybookChipsEnabled=true when migrating from v53', () => {
+    const result = migrate({ m365Connected: true }, 53) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PlaybookChipsEnabled).toBe(true);
+    expect(result.m365Connected).toBe(true);
+  });
+
+  it('preserves an explicit opt-out on a current-version store', () => {
+    const result = migrate({ m365PlaybookChipsEnabled: false }, 54) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PlaybookChipsEnabled).toBe(false);
+  });
+
+  it('repairs a non-boolean value', () => {
+    const result = migrate({ m365PlaybookChipsEnabled: 'yes' }, 53) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PlaybookChipsEnabled).toBe(true);
+  });
+});
+
+/**
+ * v54 → v55: the remembered attach-picker location. Backfilled to null —
+ * open at the OneDrive root, exactly what these users already had.
+ */
+describe('settingsStore migration (v54 → v55)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills m365PickerLocation=null when migrating from v54', () => {
+    const result = migrate({ m365Connected: true }, 54) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PickerLocation).toBeNull();
+    expect(result.m365Connected).toBe(true);
+  });
+
+  it('preserves an existing location on a current-version store', () => {
+    const location = {
+      tab: 'sharepoint',
+      crumbs: [{ label: 'HR', siteId: 's1' }],
+      sort: 'lastModified',
+      dir: 'desc',
+    };
+    const result = migrate({ m365PickerLocation: location }, 55) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PickerLocation).toEqual(location);
+  });
+});
+
+/**
+ * v56 → v57: Microsoft 365 goes connected-by-default. Pre-57 state cannot
+ * distinguish "never decided" from "explicitly disconnected" (both stored
+ * false), so this one migration flips everyone to connected and starts
+ * recording deliberate choices in m365ConnectedUserSet. From v57 on, an
+ * explicit choice (userSet=true) must survive any future default change.
+ */
+describe('settingsStore migration (v56 → v57)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('flips a never-decided user (field absent, disconnected) to connected', () => {
+    const result = migrate({ m365Connected: false }, 56) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365Connected).toBe(true);
+    expect(result.m365ConnectedUserSet).toBe(false);
+  });
+
+  it('keeps an already-connected demo user connected (field absent)', () => {
+    const result = migrate({ m365Connected: true }, 56) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365Connected).toBe(true);
+    expect(result.m365ConnectedUserSet).toBe(false);
+  });
+
+  it('respects an explicit disconnect once the choice field exists', () => {
+    // e.g. state written after v57 shipped, re-run through migrate
+    const result = migrate(
+      { m365Connected: false, m365ConnectedUserSet: true },
+      56,
+    ) as Record<string, unknown>;
+
+    expect(result.m365Connected).toBe(false);
+    expect(result.m365ConnectedUserSet).toBe(true);
+  });
+
+  it('connects a very old store through the full migration chain', () => {
+    // Pre-v50 state has no m365 fields at all: v50 backfills disconnected,
+    // v57 then flips to connected-by-default.
+    const result = migrate({}, 49) as Record<string, unknown>;
+
+    expect(result.m365Connected).toBe(true);
+    expect(result.m365ConnectedUserSet).toBe(false);
+  });
+});
+
+/**
+ * The v57 companion behavior: Connect/Disconnect in Settings is the only
+ * writer of m365ConnectedUserSet, so any explicit click marks the state as
+ * a deliberate choice.
+ */
+describe('setM365Connected records a deliberate choice', () => {
+  it('marks userSet on explicit disconnect', () => {
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ConnectedUserSet: false,
+    });
+    useSettingsStore.getState().setM365Connected(false);
+
+    expect(useSettingsStore.getState().m365Connected).toBe(false);
+    expect(useSettingsStore.getState().m365ConnectedUserSet).toBe(true);
+  });
+
+  it('marks userSet on explicit reconnect', () => {
+    useSettingsStore.setState({
+      m365Connected: false,
+      m365ConnectedUserSet: false,
+    });
+    useSettingsStore.getState().setM365Connected(true);
+
+    expect(useSettingsStore.getState().m365Connected).toBe(true);
+    expect(useSettingsStore.getState().m365ConnectedUserSet).toBe(true);
+  });
+});
+
+/**
+ * v57 → v58: the large-paste default rose from 2,000 characters to ~2,000
+ * words. Only a store still holding the OLD default is moved; any value the
+ * user set themselves (including 0 = off) must survive.
+ */
+describe('settingsStore migration (v57 → v58)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('moves a user still on the old 2,000-character default to the new default', () => {
+    const result = migrate(
+      { pasteAsAttachmentChars: LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS },
+      57,
+    ) as Record<string, unknown>;
+
+    expect(result.pasteAsAttachmentChars).toBe(DEFAULT_PASTE_ATTACHMENT_CHARS);
+  });
+
+  it('keeps a custom threshold and an explicit off (0)', () => {
+    expect(
+      (migrate({ pasteAsAttachmentChars: 5000 }, 57) as Record<string, unknown>)
+        .pasteAsAttachmentChars,
+    ).toBe(5000);
+    expect(
+      (migrate({ pasteAsAttachmentChars: 0 }, 57) as Record<string, unknown>)
+        .pasteAsAttachmentChars,
+    ).toBe(0);
+  });
+
+  it('lands a pre-v40 store (no field yet) on the new default via the chain', () => {
+    // v40 backfills the field with clamp(undefined) = current default, which
+    // is not the legacy value, so v58 leaves it alone — already correct.
+    const result = migrate({}, 39) as Record<string, unknown>;
+
+    expect(result.pasteAsAttachmentChars).toBe(DEFAULT_PASTE_ATTACHMENT_CHARS);
   });
 });

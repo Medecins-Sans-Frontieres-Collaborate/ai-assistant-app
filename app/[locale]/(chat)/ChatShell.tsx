@@ -8,14 +8,18 @@ import { LocalStorageService } from '@/client/services/storage/localStorageServi
 
 import { shouldShowStorageWarning } from '@/lib/utils/app/storage/storageMonitor';
 
+import { ViewAsBanner } from '@/components/Admin/ViewAs/ViewAsBanner';
 import { UpdateBanner } from '@/components/App/UpdateBanner';
 import { BackupModals } from '@/components/Backup/BackupModals';
 import { BackupSyncBanner } from '@/components/Backup/BackupSyncBanner';
 import { MigrationDialog } from '@/components/Migration/MigrationDialog';
 import { AppInitializer } from '@/components/Providers/AppInitializer';
+import { RegionOverrideBanner } from '@/components/RegionOverride/RegionOverrideBanner';
 import { SettingDialog } from '@/components/Settings/SettingDialog';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { StorageWarningDialog } from '@/components/Storage/StorageWarningDialog';
+
+import { usePathname } from '@/lib/navigation';
 
 /**
  * Check if migration dialog should be shown.
@@ -38,7 +42,14 @@ function shouldShowMigrationDialog(): boolean {
  * Children are the page content that can change/remount freely
  */
 export function ChatShell({ children }: { children: React.ReactNode }) {
-  const { showChatbar } = useUI();
+  const { showChatbar, sidebarWidth } = useUI();
+  // Admin is a full-page surface like the help center: the conversation
+  // sidebar is not interactable there and only confuses the UI, so it is
+  // not rendered and the content takes the full viewport. Admin stays
+  // inside this shell (rather than its own route group) so the settings
+  // modal host below remains mounted — AdminShell's gear opens it directly.
+  const pathname = usePathname();
+  const isAdminRoute = pathname === '/admin' || pathname.startsWith('/admin/');
   // Use lazy initialization to check for legacy data on first render
   const [showMigrationDialog, setShowMigrationDialog] = useState(
     shouldShowMigrationDialog,
@@ -79,8 +90,22 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <>
+    // `display: contents` wrapper: no box of its own, it only carries the
+    // `--sidebar-width` custom property (from the persisted preference, so
+    // SSR paints the right width with no post-hydration jump) down to the
+    // sidebar, the content offset and the fixed banners' spacers. The drag
+    // handle writes the live width here during a resize (see
+    // SidebarResizeHandle), which is why the div is also tagged.
+    <div
+      className="contents"
+      data-sidebar-width-root
+      style={{ '--sidebar-width': `${sidebarWidth}px` } as React.CSSProperties}
+    >
       <UpdateBanner />
+      {/* Both banners read the session, so they live inside AppProviders
+          (SessionProvider) rather than the locale layout. */}
+      <RegionOverrideBanner />
+      <ViewAsBanner />
       <BackupSyncBanner />
       <MigrationDialog
         isOpen={showMigrationDialog}
@@ -97,12 +122,18 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
           under the URL bar. `w-full` rather than `w-screen` because `100vw`
           includes the scrollbar gutter and overflows horizontally. */}
       <div className="flex h-dvh w-full overflow-hidden">
-        <Sidebar />
+        {!isAdminRoute && <Sidebar />}
 
         <div
-          className={`flex min-w-0 flex-1 transition-all duration-300 ease-in-out ${
-            showChatbar ? 'md:ml-[260px]' : 'md:ml-14'
-          }`}
+          className={
+            isAdminRoute
+              ? 'flex min-w-0 flex-1'
+              : `sidebar-width-target flex min-w-0 flex-1 transition-all duration-300 ease-in-out ${
+                  showChatbar
+                    ? 'md:ml-[var(--sidebar-width,260px)]'
+                    : 'md:ml-14'
+                }`
+          }
         >
           {children}
         </div>
@@ -111,6 +142,6 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
         {/* Encrypted-backup modal host + sync triggers (flag-gated inside). */}
         <BackupModals />
       </div>
-    </>
+    </div>
   );
 }

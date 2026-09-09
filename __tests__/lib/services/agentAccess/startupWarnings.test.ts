@@ -73,17 +73,51 @@ describe('buildAccessControlWarnings', () => {
     expect(warning).not.toContain('nobody can create or change them');
   });
 
+  it('hedges when the config global-admin roster could not be read', () => {
+    // Global admins = env ∪ config roster. An unreadable roster is an unknown,
+    // not a zero: a storage outage must not produce a false "nobody can
+    // author" alarm — and it takes precedence over the local-admin count,
+    // which cannot settle the question either way.
+    for (const localAdminCount of [0, 2, null]) {
+      const warnings = buildAccessControlWarnings({
+        enabled: true,
+        globalAdminCount: 0,
+        localAdminCount,
+        globalRosterUnreadable: true,
+      });
+
+      expect(warnings).toHaveLength(1);
+      expect(warnings[0]).toContain('global-admin roster');
+      expect(warnings[0]).toContain('could not be read');
+      expect(warnings[0]).not.toContain('nobody can create or change them');
+    }
+  });
+
+  it('counts config-roster admins as global admins (no warning when only the roster is populated)', () => {
+    expect(
+      buildAccessControlWarnings({
+        enabled: true,
+        globalAdminCount: 1,
+        localAdminCount: 0,
+        globalRosterUnreadable: false,
+      }),
+    ).toEqual([]);
+  });
+
   it('never emits both warnings at once (they are mutually exclusive)', () => {
     for (const enabled of [true, false]) {
       for (const globalAdminCount of [0, 1]) {
         for (const localAdminCount of [0, 1, null]) {
-          expect(
-            buildAccessControlWarnings({
-              enabled,
-              globalAdminCount,
-              localAdminCount,
-            }).length,
-          ).toBeLessThanOrEqual(1);
+          for (const globalRosterUnreadable of [true, false, undefined]) {
+            expect(
+              buildAccessControlWarnings({
+                enabled,
+                globalAdminCount,
+                localAdminCount,
+                globalRosterUnreadable,
+              }).length,
+            ).toBeLessThanOrEqual(1);
+          }
         }
       }
     }

@@ -5,11 +5,14 @@ import ThinkingBlock from '@/components/Chat/ChatMessages/ThinkingBlock';
 import '@testing-library/jest-dom';
 import { describe, expect, it, vi } from 'vitest';
 
-// Mock Streamdown component
+// Mock Streamdown component. `defaultRehypePlugins` is part of the mock
+// because ThinkingBlock renders through MathStreamdown, which builds its
+// KaTeX-aware sanitize chain from that export at module load.
 vi.mock('streamdown', () => ({
   Streamdown: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="streamdown">{children}</div>
   ),
+  defaultRehypePlugins: {},
 }));
 
 // Mock Tabler icons
@@ -81,10 +84,72 @@ describe('ThinkingBlock', () => {
     });
 
     it('applies shimmer animation class when streaming', () => {
-      render(<ThinkingBlock thinking="Thinking..." isStreaming={true} />);
+      render(<ThinkingBlock thinking="Deep analysis" isStreaming={true} />);
 
       const streamingText = screen.getByText('Thinking...');
       expect(streamingText).toHaveClass('animate-shimmer');
+    });
+  });
+
+  describe('Streaming auto-expand/collapse', () => {
+    it('is expanded by default while streaming', () => {
+      render(<ThinkingBlock thinking="Live reasoning" isStreaming={true} />);
+
+      expect(screen.getByTestId('streamdown')).toBeInTheDocument();
+      expect(screen.getByTestId('icon-chevron-down')).toBeInTheDocument();
+    });
+
+    it('auto-collapses when the stream concludes', () => {
+      const { rerender } = render(
+        <ThinkingBlock thinking="Live reasoning" isStreaming={true} />,
+      );
+      expect(screen.getByTestId('streamdown')).toBeInTheDocument();
+
+      rerender(<ThinkingBlock thinking="Live reasoning" isStreaming={false} />);
+
+      expect(screen.queryByTestId('streamdown')).not.toBeInTheDocument();
+      expect(screen.getByText('View reasoning process')).toBeInTheDocument();
+    });
+
+    it('a manual collapse mid-stream wins and stays collapsed', () => {
+      const { rerender } = render(
+        <ThinkingBlock thinking="Live reasoning" isStreaming={true} />,
+      );
+
+      fireEvent.click(screen.getByRole('button'));
+      expect(screen.queryByTestId('streamdown')).not.toBeInTheDocument();
+
+      // Still collapsed as the stream continues and after it ends
+      rerender(<ThinkingBlock thinking="More reasoning" isStreaming={true} />);
+      expect(screen.queryByTestId('streamdown')).not.toBeInTheDocument();
+      rerender(<ThinkingBlock thinking="More reasoning" isStreaming={false} />);
+      expect(screen.queryByTestId('streamdown')).not.toBeInTheDocument();
+    });
+
+    it('a manual expand after the stream stays expanded', () => {
+      const { rerender } = render(
+        <ThinkingBlock thinking="Reasoning" isStreaming={true} />,
+      );
+      rerender(<ThinkingBlock thinking="Reasoning" isStreaming={false} />);
+      expect(screen.queryByTestId('streamdown')).not.toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole('button'));
+      expect(screen.getByTestId('streamdown')).toBeInTheDocument();
+    });
+
+    it('caps the live view height while streaming only', () => {
+      const { rerender } = render(
+        <ThinkingBlock thinking="Reasoning" isStreaming={true} />,
+      );
+      expect(
+        screen.getByTestId('streamdown').parentElement?.parentElement,
+      ).toHaveClass('max-h-60');
+
+      rerender(<ThinkingBlock thinking="Reasoning" isStreaming={false} />);
+      fireEvent.click(screen.getByRole('button'));
+      expect(
+        screen.getByTestId('streamdown').parentElement?.parentElement,
+      ).not.toHaveClass('max-h-60');
     });
   });
 

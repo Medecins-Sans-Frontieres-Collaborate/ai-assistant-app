@@ -36,9 +36,17 @@ function toSafeMap<T>(record: Record<string, T>): Map<string, T> {
   return map;
 }
 
+/**
+ * Legacy conversations predate the timestamp fields entirely. The epoch
+ * fallback sorts identically to the old '' in LWW (toMillis → 0 for both)
+ * but is a VALID manifest timestamp — an empty string fails the server's
+ * validation and one legacy conversation would poison every manifest write.
+ */
+const EPOCH_ISO = new Date(0).toISOString();
+
 /** Best-known local modification time of a conversation. */
 export function conversationUpdatedAt(conversation: Conversation): string {
-  return conversation.updatedAt ?? conversation.createdAt ?? '';
+  return conversation.updatedAt || conversation.createdAt || EPOCH_ISO;
 }
 
 function emptyPlan(): MergePlan {

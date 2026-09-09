@@ -61,6 +61,7 @@ describe('chatStore compaction + memories wiring', () => {
       contextWindowSize: 80,
       memoriesEnabled: false,
       memoriesFlagEnabled: false,
+      memoryCapturePaused: false,
       mcpServers: [],
     });
     useMemoryStore.setState({ memories: [] });
@@ -160,6 +161,26 @@ describe('chatStore compaction + memories wiring', () => {
       useSettingsStore.setState({
         memoriesEnabled: true,
         memoriesFlagEnabled: true,
+      });
+      useMemoryStore.setState({ memories: memoryEntries });
+
+      await useChatStore.getState().sendChatRequest(makeConversation());
+
+      expect(sentOptions().memories).toEqual([
+        'Works at Contoso',
+        'Prefers concise answers',
+      ]);
+    });
+
+    it('are STILL attached when capture is paused', async () => {
+      // The whole point of the pause toggle: it stops new memories being
+      // LEARNED, not saved ones being USED. Adding memoryCapturePaused to the
+      // injection gate would silently gut the feature — this test is the
+      // tripwire for that.
+      useSettingsStore.setState({
+        memoriesEnabled: true,
+        memoriesFlagEnabled: true,
+        memoryCapturePaused: true,
       });
       useMemoryStore.setState({ memories: memoryEntries });
 

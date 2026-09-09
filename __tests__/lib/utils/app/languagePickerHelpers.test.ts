@@ -46,6 +46,42 @@ describe('filterLanguageOptions', () => {
   it('returns empty array when nothing matches', () => {
     expect(filterLanguageOptions(options, 'xyzzzz')).toEqual([]);
   });
+
+  it('a two-character exact code match ranks first', () => {
+    // "es" is a substring of "Burmese" (label) — the exact code still wins.
+    const withBurmeseFirst: LanguageOption[] = [
+      { code: 'my', label: 'Burmese' },
+      { code: 'et', label: 'Estonian' },
+      { code: 'es', label: 'Spanish' },
+    ];
+    expect(
+      filterLanguageOptions(withBurmeseFirst, 'es').map((o) => o.code),
+    ).toEqual(['es', 'my', 'et']);
+    // Case-insensitive.
+    expect(
+      filterLanguageOptions(withBurmeseFirst, 'ES').map((o) => o.code),
+    ).toEqual(['es', 'my', 'et']);
+  });
+
+  it('code promotion applies ONLY to exactly two characters', () => {
+    const list: LanguageOption[] = [
+      { code: 'my', label: 'Burmese' },
+      { code: 'msa', label: 'Malay' },
+    ];
+    // Three-char query matching a code exactly keeps input order…
+    expect(filterLanguageOptions(list, 'msa').map((o) => o.code)).toEqual([
+      'msa',
+    ]);
+    // …and a one-char query never reorders.
+    const oneChar: LanguageOption[] = [
+      { code: 'ab', label: 'Abkhazian' },
+      { code: 'a', label: 'A-lang' },
+    ];
+    expect(filterLanguageOptions(oneChar, 'a').map((o) => o.code)).toEqual([
+      'ab',
+      'a',
+    ]);
+  });
 });
 
 describe('sortLanguageOptionsByLabel', () => {

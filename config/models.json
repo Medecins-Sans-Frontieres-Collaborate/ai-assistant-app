@@ -1,6 +1,9 @@
 {
   "$schema-note": "Baseline model metadata. Source of truth for presentation + routing of KNOWN models. Keyed by model id (matches OpenAIModelID). Azure discovery does NOT return this metadata (context window, sdk, capability flags), so it lives here and can be overlaid by ARM ui-* tags for models added without a code push. See docs/MODEL_DISCOVERY_DESIGN.md.",
   "$retirement-note": "lifecycle / retirementDate / retirementReplacement mirror the Azure Foundry model retirement schedule (learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule) as of its 2026-07-09 revision; refresh manually when that page updates. INFORMATIONAL ONLY, never used for gating: the schedule tracks underlying model VERSIONS, and Azure upgrades deployments in place, so a deployment can outlive its version's retirement (e.g. deployments named gpt-5.2-chat now run a newer underlying model even though the gpt-5.2-chat version is retired). Models absent from the schedule carry no lifecycle fields.",
+  "$pricing-note": "pricing = LIST-PRICE token rates in USD per 1M tokens, pulled 2026-08-20. Azure OpenAI + third-party Foundry models: Azure Retail Prices API (prices.azure.com, serviceName 'Foundry Models'), Global Standard deployment meters — Data Zone runs ~1.1x and regional ~1.21x these rates; batch/provisioned not covered. claude-*: Anthropic first-party list rates (billed via Marketplace at API rates on Foundry); claude-sonnet-5 has intro pricing of 2.00/10.00 through 2026-08-31, standard rate recorded here. mistral-medium-2505, mistral-small-2503, Ministral-3B, Llama-4-Scout, DeepSeek-R1-0528 have no dedicated retail meter (legacy serverless/Marketplace billing); their published serverless list rates are recorded and are lower-confidence. cachedInputPer1M = cached-input READ rate where the provider publishes one (cache-write premiums not modeled). gpt-chat-latest is a rolling alias; its meter (5.00/30.00) tracks whatever chat model Azure currently routes it to. Displayed by the limits admin cost insights (lib/utils/shared/costEstimator.ts) — pricingAsOf / pricingAssumptionsVersion below and the per-model pricing.confidence / billing / alias fields are the machine-readable form of these caveats. Refresh manually alongside price changes (e.g. the 2026-07-30 gpt-5.6 terra/luna cuts are reflected). gpt-6-astra (added 2026-09-07): NO Azure retail meter existed yet (shipped 2026-09-03); rates are the Global Standard list prices from the Azure launch blog (10.00/50.00, cached 1.00; US Data Zone +10%). Prompts over 272K input tokens bill the ENTIRE request at 2x input / 1.5x output — maxLength is capped at 272000 so the app never crosses that boundary; refresh from the retail API once the meter appears.",
+  "pricingAsOf": "2026-08-20",
+  "pricingAssumptionsVersion": "2026-08.1",
   "models": {
     "gpt-4.1": {
       "id": "gpt-4.1",
@@ -11,7 +14,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "4.1",
       "defaultRank": 1,
@@ -28,8 +31,14 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
-      "retirementDate": "2026-10-14"
+      "retirementDate": "2026-10-14",
+      "pricing": {
+        "inputPer1M": 2,
+        "outputPer1M": 8,
+        "cachedInputPer1M": 0.5
+      }
     },
     "gpt-5.2": {
       "id": "gpt-5.2",
@@ -40,7 +49,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "5.2",
       "defaultRank": 1,
@@ -62,8 +71,15 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2026-12-12"
+      "retirementDate": "2026-12-12",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 1.75,
+        "outputPer1M": 14,
+        "cachedInputPer1M": 0.175
+      }
     },
     "gpt-5-mini": {
       "id": "gpt-5-mini",
@@ -76,7 +92,7 @@
       "seriesLabel": "GPT",
       "variant": "mini",
       "variantLabel": "Mini",
-      "variantRank": 2,
+      "variantRank": 3,
       "versionLabel": "5",
       "tagline": "Faster and lower cost",
       "description": "A faster, lighter model for quick questions and everyday tasks where you don't need maximum power.",
@@ -92,8 +108,15 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-02-06"
+      "retirementDate": "2027-02-06",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 0.25,
+        "outputPer1M": 2,
+        "cachedInputPer1M": 0.025
+      }
     },
     "gpt-5.2-chat": {
       "id": "gpt-5.2-chat",
@@ -101,8 +124,8 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-chat",
-      "seriesLabel": "GPT Chat",
+      "series": "gpt",
+      "seriesLabel": "GPT",
       "versionLabel": "5.2",
       "tagline": "Conversations, brainstorming",
       "isRecommended": true,
@@ -119,9 +142,18 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "retired",
       "retirementDate": "2026-06-29",
-      "retirementReplacement": "gpt-chat-latest"
+      "retirementReplacement": "gpt-chat-latest",
+      "pricing": {
+        "inputPer1M": 1.75,
+        "outputPer1M": 14,
+        "cachedInputPer1M": 0.175
+      },
+      "variant": "chat",
+      "variantLabel": "Chat",
+      "variantRank": 2
     },
     "o3": {
       "id": "o3",
@@ -132,11 +164,11 @@
       "temperature": 1,
       "modelType": "reasoning",
       "sizeClass": "large",
-      "series": "o-series",
-      "seriesLabel": "o-series",
-      "variant": "standard",
-      "variantLabel": "Standard",
-      "variantRank": 1,
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "o-series",
+      "variantLabel": "o-series",
+      "variantRank": 5,
       "versionLabel": "3",
       "defaultRank": 1,
       "tagline": "Deep step-by-step reasoning",
@@ -151,8 +183,18 @@
       "supportsMinimalReasoning": false,
       "supportsVerbosity": false,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2026-10-16"
+      "retirementDate": "2026-10-16",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 2,
+        "outputPer1M": 8,
+        "cachedInputPer1M": 0.5
+      },
+      "subVariant": "standard",
+      "subVariantLabel": "Standard",
+      "subVariantRank": 1
     },
     "Llama-4-Maverick-17B-128E-Instruct-FP8": {
       "id": "Llama-4-Maverick-17B-128E-Instruct-FP8",
@@ -177,7 +219,11 @@
       "deploymentName": "Llama-4-Maverick-17B-128E-Instruct-FP8",
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "lifecycle": "ga"
+      "lifecycle": "ga",
+      "pricing": {
+        "inputPer1M": 0.25,
+        "outputPer1M": 1
+      }
     },
     "DeepSeek-R1": {
       "id": "DeepSeek-R1",
@@ -205,7 +251,11 @@
       "supportsVerbosity": false,
       "lifecycle": "legacy",
       "retirementDate": "2026-08-13",
-      "retirementReplacement": "DeepSeek-V4-Pro"
+      "retirementReplacement": "DeepSeek-V4-Pro",
+      "pricing": {
+        "inputPer1M": 1.35,
+        "outputPer1M": 5.4
+      }
     },
     "DeepSeek-V3.1": {
       "id": "DeepSeek-V3.1",
@@ -233,7 +283,11 @@
       "supportsVerbosity": false,
       "lifecycle": "legacy",
       "retirementDate": "2026-07-13",
-      "retirementReplacement": "DeepSeek-V4-Flash"
+      "retirementReplacement": "DeepSeek-V4-Flash",
+      "pricing": {
+        "inputPer1M": 1.23,
+        "outputPer1M": 4.94
+      }
     },
     "grok-3": {
       "id": "grok-3",
@@ -259,13 +313,17 @@
       "supportsVision": true,
       "lifecycle": "retired",
       "retirementDate": "2026-05-01",
-      "retirementReplacement": "grok-4"
+      "retirementReplacement": "grok-4",
+      "pricing": {
+        "inputPer1M": 3,
+        "outputPer1M": 15
+      }
     },
     "claude-opus-4-6": {
       "id": "claude-opus-4-6",
       "name": "Claude Opus 4.6",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "sizeClass": "large",
       "series": "claude",
@@ -285,18 +343,28 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-opus-4-6",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2027-02-02"
+      "retirementDate": "2027-02-02",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal",
+      "pricing": {
+        "inputPer1M": 5,
+        "outputPer1M": 25,
+        "cachedInputPer1M": 0.5,
+        "billing": "marketplace"
+      },
+      "thinkingApi": "adaptive"
     },
     "claude-sonnet-4-6": {
       "id": "claude-sonnet-4-6",
       "name": "Claude Sonnet 4.6",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "series": "claude",
       "seriesLabel": "Claude",
@@ -316,12 +384,23 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-sonnet-4-6",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2027-02-10"
+      "retirementDate": "2027-02-10",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal",
+      "pricing": {
+        "inputPer1M": 3,
+        "outputPer1M": 15,
+        "cachedInputPer1M": 0.3,
+        "billing": "marketplace"
+      },
+      "thinkingApi": "adaptive",
+      "sizeClass": "standard"
     },
     "claude-opus-4-1": {
       "id": "claude-opus-4-1",
@@ -346,12 +425,23 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-opus-4-1",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsTools": true,
       "lifecycle": "preview",
       "retirementDate": "2026-08-05",
-      "retirementReplacement": "claude-opus-4-8"
+      "retirementReplacement": "claude-opus-4-8",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal",
+      "pricing": {
+        "inputPer1M": 15,
+        "outputPer1M": 75,
+        "cachedInputPer1M": 1.5,
+        "billing": "marketplace"
+      },
+      "thinkingApi": "budget",
+      "supportsVision": true
     },
     "claude-haiku-4-5": {
       "id": "claude-haiku-4-5",
@@ -373,16 +463,26 @@
       "isAgent": true,
       "agentId": "claude-haiku-45",
       "provider": "anthropic",
-      "knowledgeCutoffDate": "2025-01",
+      "knowledgeCutoffDate": "2025-02",
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-haiku-4-5",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2026-10-19"
+      "retirementDate": "2026-10-15",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal",
+      "pricing": {
+        "inputPer1M": 1,
+        "outputPer1M": 5,
+        "cachedInputPer1M": 0.1,
+        "billing": "marketplace"
+      },
+      "thinkingApi": "budget"
     },
     "gpt-5.4": {
       "id": "gpt-5.4",
@@ -394,7 +494,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "5.4",
       "defaultRank": 1,
@@ -412,8 +512,15 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-03-05"
+      "retirementDate": "2027-03-05",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 2.5,
+        "outputPer1M": 15,
+        "cachedInputPer1M": 0.25
+      }
     },
     "gpt-5.4-nano": {
       "id": "gpt-5.4-nano",
@@ -426,7 +533,7 @@
       "seriesLabel": "GPT",
       "variant": "nano",
       "variantLabel": "Nano",
-      "variantRank": 3,
+      "variantRank": 4,
       "versionLabel": "5.4",
       "tagline": "Smallest and fastest GPT",
       "description": "The smallest, fastest GPT variant. Best for quick, simple tasks at minimal cost.",
@@ -442,8 +549,15 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-03-18"
+      "retirementDate": "2027-03-18",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 0.2,
+        "outputPer1M": 1.25,
+        "cachedInputPer1M": 0.02
+      }
     },
     "gpt-5.3-chat": {
       "id": "gpt-5.3-chat",
@@ -451,8 +565,8 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-chat",
-      "seriesLabel": "GPT Chat",
+      "series": "gpt",
+      "seriesLabel": "GPT",
       "versionLabel": "5.3",
       "tagline": "Newer chat-tuned GPT",
       "description": "A conversational GPT variant tuned for dialogue. Good for casual chats, brainstorming, and supportive discussions.",
@@ -465,9 +579,18 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "retired",
       "retirementDate": "2026-06-29",
-      "retirementReplacement": "gpt-chat-latest"
+      "retirementReplacement": "gpt-chat-latest",
+      "pricing": {
+        "inputPer1M": 1.75,
+        "outputPer1M": 14,
+        "cachedInputPer1M": 0.175
+      },
+      "variant": "chat",
+      "variantLabel": "Chat",
+      "variantRank": 2
     },
     "gpt-5": {
       "id": "gpt-5",
@@ -479,7 +602,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "5",
       "defaultRank": 1,
@@ -498,8 +621,15 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-02-06"
+      "retirementDate": "2027-02-06",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 1.25,
+        "outputPer1M": 10,
+        "cachedInputPer1M": 0.125
+      }
     },
     "gpt-5-chat": {
       "id": "gpt-5-chat",
@@ -507,8 +637,8 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-chat",
-      "seriesLabel": "GPT Chat",
+      "series": "gpt",
+      "seriesLabel": "GPT",
       "versionLabel": "5",
       "tagline": "Previous chat-tuned GPT",
       "description": "The chat-tuned GPT-5 variant. Good for everyday conversations and brainstorming.",
@@ -522,9 +652,18 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "retired",
       "retirementDate": "2026-06-29",
-      "retirementReplacement": "gpt-chat-latest"
+      "retirementReplacement": "gpt-chat-latest",
+      "pricing": {
+        "inputPer1M": 1.25,
+        "outputPer1M": 10,
+        "cachedInputPer1M": 0.125
+      },
+      "variant": "chat",
+      "variantLabel": "Chat",
+      "variantRank": 2
     },
     "gpt-4o": {
       "id": "gpt-4o",
@@ -535,7 +674,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "4o",
       "defaultRank": 1,
@@ -551,9 +690,15 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
       "retirementDate": "2026-10-01",
-      "retirementReplacement": "gpt-5.1"
+      "retirementReplacement": "gpt-5.1",
+      "pricing": {
+        "inputPer1M": 2.5,
+        "outputPer1M": 10,
+        "cachedInputPer1M": 1.25
+      }
     },
     "gpt-4.1-mini": {
       "id": "gpt-4.1-mini",
@@ -566,7 +711,7 @@
       "seriesLabel": "GPT",
       "variant": "mini",
       "variantLabel": "Mini",
-      "variantRank": 2,
+      "variantRank": 3,
       "versionLabel": "4.1",
       "tagline": "Light previous-generation GPT",
       "description": "A smaller, faster GPT-4.1 variant for quick everyday tasks.",
@@ -580,14 +725,20 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
-      "retirementDate": "2026-10-14"
+      "retirementDate": "2026-10-14",
+      "pricing": {
+        "inputPer1M": 0.4,
+        "outputPer1M": 1.6,
+        "cachedInputPer1M": 0.1
+      }
     },
     "claude-opus-4-8": {
       "id": "claude-opus-4-8",
       "name": "Claude Opus 4.8",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "sizeClass": "large",
       "series": "claude",
@@ -599,17 +750,26 @@
       "tagline": "Newest and strongest Claude",
       "description": "Anthropic's newest and strongest model. Excellent for long writing, research, coding, and careful analysis.",
       "isDisabled": false,
-      "tier": "featured",
       "hosting": "external",
       "provider": "anthropic",
       "knowledgeCutoffDate": "2026-02",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-opus-4-8",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal",
+      "pricing": {
+        "inputPer1M": 5,
+        "outputPer1M": 25,
+        "cachedInputPer1M": 0.5,
+        "billing": "marketplace"
+      },
+      "thinkingApi": "adaptive"
     },
     "claude-sonnet-4-5": {
       "id": "claude-sonnet-4-5",
@@ -633,12 +793,23 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-sonnet-4-5",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2026-10-19"
+      "retirementDate": "2026-10-19",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal",
+      "pricing": {
+        "inputPer1M": 3,
+        "outputPer1M": 15,
+        "cachedInputPer1M": 0.3,
+        "billing": "marketplace"
+      },
+      "thinkingApi": "budget",
+      "sizeClass": "standard"
     },
     "DeepSeek-V3.2": {
       "id": "DeepSeek-V3.2",
@@ -664,7 +835,11 @@
       "avoidSystemPrompt": true,
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "lifecycle": "ga"
+      "lifecycle": "ga",
+      "pricing": {
+        "inputPer1M": 0.58,
+        "outputPer1M": 1.68
+      }
     },
     "Mistral-Large-3": {
       "id": "Mistral-Large-3",
@@ -689,7 +864,11 @@
       "deploymentName": "Mistral-Large-3",
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "lifecycle": "ga"
+      "lifecycle": "ga",
+      "pricing": {
+        "inputPer1M": 0.5,
+        "outputPer1M": 1.5
+      }
     },
     "gpt-5.1": {
       "id": "gpt-5.1",
@@ -701,7 +880,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "5.1",
       "defaultRank": 1,
@@ -720,8 +899,15 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-05-15"
+      "retirementDate": "2027-05-15",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 1.25,
+        "outputPer1M": 10,
+        "cachedInputPer1M": 0.125
+      }
     },
     "gpt-5.1-chat": {
       "id": "gpt-5.1-chat",
@@ -729,8 +915,8 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-chat",
-      "seriesLabel": "GPT Chat",
+      "series": "gpt",
+      "seriesLabel": "GPT",
       "versionLabel": "5.1",
       "tagline": "Earlier chat-tuned GPT",
       "description": "An earlier chat-tuned GPT-5 revision. Good for everyday conversations and brainstorming.",
@@ -744,9 +930,18 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "retired",
       "retirementDate": "2026-06-29",
-      "retirementReplacement": "gpt-chat-latest"
+      "retirementReplacement": "gpt-chat-latest",
+      "pricing": {
+        "inputPer1M": 1.25,
+        "outputPer1M": 10,
+        "cachedInputPer1M": 0.125
+      },
+      "variant": "chat",
+      "variantLabel": "Chat",
+      "variantRank": 2
     },
     "gpt-5-nano": {
       "id": "gpt-5-nano",
@@ -759,7 +954,7 @@
       "seriesLabel": "GPT",
       "variant": "nano",
       "variantLabel": "Nano",
-      "variantRank": 3,
+      "variantRank": 4,
       "versionLabel": "5",
       "tagline": "Tiny previous-generation GPT",
       "description": "The smallest GPT-5 variant. Best for quick, simple tasks at minimal cost.",
@@ -776,8 +971,15 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-02-06"
+      "retirementDate": "2027-02-06",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 0.05,
+        "outputPer1M": 0.4,
+        "cachedInputPer1M": 0.005
+      }
     },
     "gpt-4.1-nano": {
       "id": "gpt-4.1-nano",
@@ -790,7 +992,7 @@
       "seriesLabel": "GPT",
       "variant": "nano",
       "variantLabel": "Nano",
-      "variantRank": 3,
+      "variantRank": 4,
       "versionLabel": "4.1",
       "tagline": "Smallest previous-generation GPT",
       "description": "The smallest GPT-4.1 variant. Fine for quick, simple tasks where speed and cost matter most.",
@@ -804,8 +1006,14 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
-      "retirementDate": "2026-10-14"
+      "retirementDate": "2026-10-14",
+      "pricing": {
+        "inputPer1M": 0.1,
+        "outputPer1M": 0.4,
+        "cachedInputPer1M": 0.025
+      }
     },
     "gpt-4o-mini": {
       "id": "gpt-4o-mini",
@@ -818,7 +1026,7 @@
       "seriesLabel": "GPT",
       "variant": "mini",
       "variantLabel": "Mini",
-      "variantRank": 2,
+      "variantRank": 3,
       "versionLabel": "4o",
       "tagline": "Light older multimodal GPT",
       "description": "A small, fast GPT-4o variant. Fine for everyday quick tasks where the latest capability isn't needed.",
@@ -832,9 +1040,15 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
       "retirementDate": "2026-10-01",
-      "retirementReplacement": "gpt-4.1-mini"
+      "retirementReplacement": "gpt-4.1-mini",
+      "pricing": {
+        "inputPer1M": 0.15,
+        "outputPer1M": 0.6,
+        "cachedInputPer1M": 0.075
+      }
     },
     "o4-mini": {
       "id": "o4-mini",
@@ -845,11 +1059,11 @@
       "temperature": 1,
       "modelType": "reasoning",
       "sizeClass": "mini",
-      "series": "o-series",
-      "seriesLabel": "o-series",
-      "variant": "mini",
-      "variantLabel": "Mini",
-      "variantRank": 2,
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "o-series",
+      "variantLabel": "o-series",
+      "variantRank": 5,
       "versionLabel": "4",
       "tagline": "Fast affordable reasoning",
       "description": "A compact reasoning model. Good for math, logic, and step-by-step problems at lower cost than o3.",
@@ -864,8 +1078,18 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
-      "retirementDate": "2026-10-16"
+      "retirementDate": "2026-10-16",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 1.1,
+        "outputPer1M": 4.4,
+        "cachedInputPer1M": 0.275
+      },
+      "subVariant": "mini",
+      "subVariantLabel": "Mini",
+      "subVariantRank": 2
     },
     "o3-mini": {
       "id": "o3-mini",
@@ -876,11 +1100,11 @@
       "temperature": 1,
       "modelType": "reasoning",
       "sizeClass": "mini",
-      "series": "o-series",
-      "seriesLabel": "o-series",
-      "variant": "mini",
-      "variantLabel": "Mini",
-      "variantRank": 2,
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "o-series",
+      "variantLabel": "o-series",
+      "variantRank": 5,
       "versionLabel": "3",
       "tagline": "Compact step-by-step reasoning",
       "description": "An earlier compact reasoning model. Handles math, science, and logic puzzles on a budget.",
@@ -895,17 +1119,27 @@
       "supportsMinimalReasoning": false,
       "supportsVerbosity": false,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
       "retirementDate": "2026-10-01",
-      "retirementReplacement": "o4-mini"
+      "retirementReplacement": "o4-mini",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 1.1,
+        "outputPer1M": 4.4,
+        "cachedInputPer1M": 0.55
+      },
+      "subVariant": "mini",
+      "subVariantLabel": "Mini",
+      "subVariantRank": 2
     },
     "claude-fable-5": {
       "id": "claude-fable-5",
       "name": "Claude Fable 5",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
-      "sizeClass": "large",
+      "sizeClass": "xl",
       "tagline": "Anthropic's frontier model",
       "description": "Anthropic's most intelligent model, the first of the Claude 5 family. Excellent for the hardest writing, research, and coding tasks.",
       "isDisabled": false,
@@ -913,18 +1147,34 @@
       "provider": "anthropic",
       "knowledgeCutoffDate": "2026-01",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-fable-5",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal",
+      "pricing": {
+        "inputPer1M": 10,
+        "outputPer1M": 50,
+        "cachedInputPer1M": 1,
+        "billing": "marketplace"
+      },
+      "thinkingApi": "adaptive",
+      "series": "claude",
+      "seriesLabel": "Claude",
+      "variant": "fable",
+      "variantLabel": "Fable",
+      "variantRank": 0,
+      "versionLabel": "5"
     },
     "claude-sonnet-5": {
       "id": "claude-sonnet-5",
       "name": "Claude Sonnet 5",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "series": "claude",
       "seriesLabel": "Claude",
@@ -938,14 +1188,27 @@
       "isDisabled": false,
       "hosting": "external",
       "provider": "anthropic",
-      "knowledgeCutoffDate": "2026-03",
+      "knowledgeCutoffDate": "2026-01",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-sonnet-5",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal",
+      "pricing": {
+        "inputPer1M": 2,
+        "outputPer1M": 10,
+        "cachedInputPer1M": 0.2,
+        "billing": "marketplace"
+      },
+      "thinkingApi": "adaptive",
+      "sizeClass": "standard",
+      "lifecycle": "ga",
+      "retirementDate": "2027-06-30"
     },
     "claude-opus-4-5": {
       "id": "claude-opus-4-5",
@@ -970,12 +1233,22 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-opus-4-5",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2026-10-19"
+      "retirementDate": "2026-10-19",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal",
+      "pricing": {
+        "inputPer1M": 5,
+        "outputPer1M": 25,
+        "cachedInputPer1M": 0.5,
+        "billing": "marketplace"
+      },
+      "thinkingApi": "budget"
     },
     "mistral-medium-2505": {
       "id": "mistral-medium-2505",
@@ -999,7 +1272,12 @@
       "deploymentName": "mistral-medium-2505",
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "lifecycle": "ga"
+      "lifecycle": "ga",
+      "pricing": {
+        "inputPer1M": 0.4,
+        "outputPer1M": 2,
+        "confidence": "serverless-legacy"
+      }
     },
     "mistral-small-2503": {
       "id": "mistral-small-2503",
@@ -1024,7 +1302,12 @@
       "deploymentName": "mistral-small-2503",
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "lifecycle": "ga"
+      "lifecycle": "ga",
+      "pricing": {
+        "inputPer1M": 0.1,
+        "outputPer1M": 0.3,
+        "confidence": "serverless-legacy"
+      }
     },
     "Ministral-3B": {
       "id": "Ministral-3B",
@@ -1049,7 +1332,12 @@
       "deploymentName": "Ministral-3B",
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "lifecycle": "ga"
+      "lifecycle": "ga",
+      "pricing": {
+        "inputPer1M": 0.04,
+        "outputPer1M": 0.04,
+        "confidence": "serverless-legacy"
+      }
     },
     "DeepSeek-R1-0528": {
       "id": "DeepSeek-R1-0528",
@@ -1077,7 +1365,12 @@
       "supportsVerbosity": false,
       "lifecycle": "legacy",
       "retirementDate": "2026-07-13",
-      "retirementReplacement": "DeepSeek-V4-Pro"
+      "retirementReplacement": "DeepSeek-V4-Pro",
+      "pricing": {
+        "inputPer1M": 1.35,
+        "outputPer1M": 5.4,
+        "confidence": "serverless-legacy"
+      }
     },
     "Llama-4-Scout-17B-16E-Instruct": {
       "id": "Llama-4-Scout-17B-16E-Instruct",
@@ -1102,7 +1395,12 @@
       "deploymentName": "Llama-4-Scout-17B-16E-Instruct",
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "lifecycle": "ga"
+      "lifecycle": "ga",
+      "pricing": {
+        "inputPer1M": 0.2,
+        "outputPer1M": 0.78,
+        "confidence": "serverless-legacy"
+      }
     },
     "Llama-3.3-70B-Instruct": {
       "id": "Llama-3.3-70B-Instruct",
@@ -1127,7 +1425,11 @@
       "deploymentName": "Llama-3.3-70B-Instruct",
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "lifecycle": "ga"
+      "lifecycle": "ga",
+      "pricing": {
+        "inputPer1M": 0.71,
+        "outputPer1M": 0.71
+      }
     },
     "grok-4": {
       "id": "grok-4",
@@ -1153,7 +1455,11 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "lifecycle": "ga"
+      "lifecycle": "ga",
+      "pricing": {
+        "inputPer1M": 3,
+        "outputPer1M": 15
+      }
     },
     "gpt-5.5": {
       "id": "gpt-5.5",
@@ -1165,7 +1471,7 @@
       "series": "gpt",
       "seriesLabel": "GPT",
       "variant": "standard",
-      "variantLabel": "Standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "versionLabel": "5.5",
       "defaultRank": 1,
@@ -1183,8 +1489,15 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-04-23"
+      "retirementDate": "2027-04-23",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 5,
+        "outputPer1M": 30,
+        "cachedInputPer1M": 0.5
+      }
     },
     "gpt-chat-latest": {
       "id": "gpt-chat-latest",
@@ -1192,8 +1505,8 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-chat",
-      "seriesLabel": "GPT Chat",
+      "series": "gpt",
+      "seriesLabel": "GPT",
       "versionLabel": "latest",
       "tagline": "Always the newest chat GPT",
       "description": "A rolling alias that always points to OpenAI's newest chat-tuned model. Azure's replacement for the retired versioned gpt-*-chat models.",
@@ -1206,14 +1519,24 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "preview",
-      "retirementDate": "2026-08-28"
+      "retirementDate": "2026-08-28",
+      "pricing": {
+        "inputPer1M": 5,
+        "outputPer1M": 30,
+        "cachedInputPer1M": 0.5,
+        "alias": true
+      },
+      "variant": "chat",
+      "variantLabel": "Chat",
+      "variantRank": 2
     },
     "claude-opus-4-7": {
       "id": "claude-opus-4-7",
       "name": "Claude Opus 4.7",
-      "maxLength": 200000,
-      "tokenLimit": 64000,
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
       "modelType": "omni",
       "sizeClass": "large",
       "series": "claude",
@@ -1229,14 +1552,24 @@
       "provider": "anthropic",
       "knowledgeCutoffDate": "2026-02",
       "sdk": "anthropic-foundry",
-      "supportsTemperature": true,
+      "supportsTemperature": false,
       "deploymentName": "claude-opus-4-7",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2027-04-06"
+      "retirementDate": "2027-04-06",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal",
+      "pricing": {
+        "inputPer1M": 5,
+        "outputPer1M": 25,
+        "cachedInputPer1M": 0.5,
+        "billing": "marketplace"
+      },
+      "thinkingApi": "adaptive"
     },
     "DeepSeek-V4-Pro": {
       "id": "DeepSeek-V4-Pro",
@@ -1264,7 +1597,12 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "lifecycle": "ga",
-      "retirementDate": "2027-08-20"
+      "retirementDate": "2027-08-20",
+      "pricing": {
+        "inputPer1M": 1.74,
+        "outputPer1M": 3.48,
+        "cachedInputPer1M": 0.145
+      }
     },
     "DeepSeek-V4-Flash": {
       "id": "DeepSeek-V4-Flash",
@@ -1292,7 +1630,12 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "lifecycle": "ga",
-      "retirementDate": "2027-08-20"
+      "retirementDate": "2027-08-20",
+      "pricing": {
+        "inputPer1M": 0.19,
+        "outputPer1M": 0.51,
+        "cachedInputPer1M": 0.028
+      }
     },
     "gpt-5.6-sol": {
       "id": "gpt-5.6-sol",
@@ -1301,10 +1644,10 @@
       "tokenLimit": 16000,
       "modelType": "omni",
       "sizeClass": "large",
-      "series": "gpt-56",
-      "seriesLabel": "GPT 5.6",
-      "variant": "sol",
-      "variantLabel": "Sol",
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "standard",
+      "variantLabel": "Foundational",
       "variantRank": 1,
       "defaultRank": 1,
       "versionLabel": "5.6",
@@ -1322,8 +1665,18 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-07-09"
+      "retirementDate": "2027-07-09",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 5,
+        "outputPer1M": 30,
+        "cachedInputPer1M": 0.5
+      },
+      "subVariant": "sol",
+      "subVariantLabel": "Sol",
+      "subVariantRank": 1
     },
     "gpt-5.6-terra": {
       "id": "gpt-5.6-terra",
@@ -1331,11 +1684,11 @@
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "omni",
-      "series": "gpt-56",
-      "seriesLabel": "GPT 5.6",
-      "variant": "terra",
-      "variantLabel": "Terra",
-      "variantRank": 2,
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "standard",
+      "variantLabel": "Foundational",
+      "variantRank": 1,
       "versionLabel": "5.6",
       "tagline": "Balanced everyday GPT-5.6",
       "description": "The balanced tier of OpenAI's GPT-5.6 trio. Good for everyday writing, analysis, and coding with quick responses.",
@@ -1351,8 +1704,18 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-07-09"
+      "retirementDate": "2027-07-09",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 2,
+        "outputPer1M": 12,
+        "cachedInputPer1M": 0.2
+      },
+      "subVariant": "terra",
+      "subVariantLabel": "Terra",
+      "subVariantRank": 2
     },
     "gpt-5.6-luna": {
       "id": "gpt-5.6-luna",
@@ -1361,11 +1724,11 @@
       "tokenLimit": 16000,
       "modelType": "omni",
       "sizeClass": "mini",
-      "series": "gpt-56",
-      "seriesLabel": "GPT 5.6",
-      "variant": "luna",
-      "variantLabel": "Luna",
-      "variantRank": 3,
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "standard",
+      "variantLabel": "Foundational",
+      "variantRank": 1,
       "versionLabel": "5.6",
       "tagline": "Light, fast GPT-5.6",
       "description": "The light, fast tier of OpenAI's GPT-5.6 trio. Best for quick questions and simple tasks at low cost.",
@@ -1381,8 +1744,56 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-07-09"
+      "retirementDate": "2027-07-09",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 0.2,
+        "outputPer1M": 1.2,
+        "cachedInputPer1M": 0.02
+      },
+      "subVariant": "luna",
+      "subVariantLabel": "Luna",
+      "subVariantRank": 3
+    },
+    "gpt-6-astra": {
+      "id": "gpt-6-astra",
+      "name": "GPT-6 Astra",
+      "maxLength": 272000,
+      "tokenLimit": 32000,
+      "modelType": "omni",
+      "sizeClass": "xl",
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "standard",
+      "variantLabel": "Foundational",
+      "variantRank": 1,
+      "versionLabel": "6",
+      "tagline": "OpenAI's most capable model",
+      "description": "OpenAI's GPT-6 flagship. Built for demanding end-to-end work: deep research, complex analysis, software engineering, and long multi-step tasks. About twice the cost of GPT-5.6 Sol.",
+      "isDisabled": false,
+      "provider": "openai",
+      "knowledgeCutoffDate": "2026-04",
+      "sdk": "azure-openai",
+      "supportsTemperature": false,
+      "reasoningEffort": "medium",
+      "supportsReasoningEffort": true,
+      "supportsMinimalReasoning": false,
+      "verbosity": "medium",
+      "supportsVerbosity": true,
+      "supportsVision": true,
+      "supportsTools": true,
+      "supportsCodeInterpreter": true,
+      "lifecycle": "ga",
+      "retirementDate": "2028-01-11",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 10,
+        "outputPer1M": 50,
+        "cachedInputPer1M": 1,
+        "confidence": "list"
+      }
     },
     "mistral-medium-3-5": {
       "id": "mistral-medium-3-5",
@@ -1405,7 +1816,11 @@
       "supportsTemperature": true,
       "deploymentName": "mistral-medium-3-5",
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "pricing": {
+        "inputPer1M": 1.5,
+        "outputPer1M": 7.5
+      }
     },
     "Kimi-K2.6": {
       "id": "Kimi-K2.6",
@@ -1430,7 +1845,12 @@
       "supportsVerbosity": false,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2027-04-16"
+      "retirementDate": "2027-04-16",
+      "pricing": {
+        "inputPer1M": 0.95,
+        "outputPer1M": 4,
+        "cachedInputPer1M": 0.16
+      }
     },
     "grok-4-1-fast-reasoning": {
       "id": "grok-4-1-fast-reasoning",
@@ -1453,7 +1873,11 @@
       "supportsTemperature": true,
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "lifecycle": "ga"
+      "lifecycle": "ga",
+      "pricing": {
+        "inputPer1M": 0.2,
+        "outputPer1M": 0.5
+      }
     },
     "grok-4-1-fast-non-reasoning": {
       "id": "grok-4-1-fast-non-reasoning",
@@ -1476,7 +1900,11 @@
       "supportsTemperature": true,
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "lifecycle": "ga"
+      "lifecycle": "ga",
+      "pricing": {
+        "inputPer1M": 0.2,
+        "outputPer1M": 0.5
+      }
     },
     "grok-3-mini": {
       "id": "grok-3-mini",
@@ -1502,7 +1930,127 @@
       "supportsVerbosity": false,
       "lifecycle": "retired",
       "retirementDate": "2026-05-01",
-      "retirementReplacement": "grok-4-1-fast-reasoning"
+      "retirementReplacement": "grok-4-1-fast-reasoning",
+      "pricing": {
+        "inputPer1M": 0.25,
+        "outputPer1M": 1.27
+      }
+    },
+    "claude-opus-5": {
+      "id": "claude-opus-5",
+      "name": "Claude Opus 5",
+      "modelType": "omni",
+      "series": "claude",
+      "seriesLabel": "Claude",
+      "isDisabled": false,
+      "hosting": "external",
+      "provider": "anthropic",
+      "sdk": "anthropic-foundry",
+      "supportsTemperature": false,
+      "supportsReasoningEffort": true,
+      "supportsVerbosity": false,
+      "supportsVision": true,
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "thinkingApi": "adaptive",
+      "reasoningEffort": "minimal",
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
+      "sizeClass": "large",
+      "variant": "opus",
+      "variantLabel": "Opus",
+      "variantRank": 1,
+      "versionLabel": "5",
+      "tier": "featured",
+      "tagline": "Newest and strongest Claude",
+      "description": "Anthropic's newest Opus. Excellent for long writing, research, coding, and careful analysis.",
+      "deploymentName": "claude-opus-5",
+      "pricing": {
+        "inputPer1M": 5,
+        "outputPer1M": 25,
+        "cachedInputPer1M": 0.5,
+        "billing": "marketplace"
+      },
+      "knowledgeCutoffDate": "2026-05",
+      "lifecycle": "ga",
+      "retirementDate": "2027-07-24"
+    },
+    "claude-fable-5-1": {
+      "id": "claude-fable-5-1",
+      "name": "Claude Fable 5.1",
+      "modelType": "omni",
+      "series": "claude",
+      "seriesLabel": "Claude",
+      "isDisabled": false,
+      "hosting": "external",
+      "provider": "anthropic",
+      "sdk": "anthropic-foundry",
+      "supportsTemperature": false,
+      "supportsReasoningEffort": true,
+      "supportsVerbosity": false,
+      "supportsVision": true,
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "thinkingApi": "adaptive",
+      "reasoningEffort": "minimal",
+      "maxLength": 1000000,
+      "tokenLimit": 128000,
+      "sizeClass": "xl",
+      "variant": "fable",
+      "variantLabel": "Fable",
+      "variantRank": 0,
+      "versionLabel": "5.1",
+      "tagline": "Anthropic's frontier model",
+      "description": "Anthropic's most capable model, for the hardest reasoning, research, and coding tasks. Thinking is always on, so every turn costs more than Opus.",
+      "deploymentName": "claude-fable-5-1",
+      "pricing": {
+        "inputPer1M": 10,
+        "outputPer1M": 50,
+        "cachedInputPer1M": 0.25,
+        "billing": "marketplace"
+      },
+      "knowledgeCutoffDate": "2026-06",
+      "lifecycle": "ga",
+      "retirementDate": "2027-09-01"
+    },
+    "gpt-5.4-mini": {
+      "id": "gpt-5.4-mini",
+      "name": "GPT-5.4 Mini",
+      "maxLength": 128000,
+      "tokenLimit": 16000,
+      "modelType": "omni",
+      "sizeClass": "mini",
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "mini",
+      "variantLabel": "Mini",
+      "variantRank": 3,
+      "versionLabel": "5.4",
+      "tagline": "Faster and lower cost",
+      "description": "A faster, lighter GPT-5.4 for quick questions and everyday tasks where you do not need the full model.",
+      "isDisabled": false,
+      "provider": "openai",
+      "knowledgeCutoffDate": "2026-01",
+      "sdk": "azure-openai",
+      "supportsTemperature": false,
+      "reasoningEffort": "low",
+      "supportsReasoningEffort": true,
+      "supportsMinimalReasoning": true,
+      "verbosity": "low",
+      "supportsVerbosity": false,
+      "supportsVision": true,
+      "supportsTools": true,
+      "supportsCodeInterpreter": true,
+      "lifecycle": "ga",
+      "retirementDate": "2027-03-18",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 0.45,
+        "outputPer1M": 3.6,
+        "cachedInputPer1M": 0.045
+      }
     }
   }
 }

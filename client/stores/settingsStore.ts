@@ -2,6 +2,7 @@
 
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
+import { ToolApprovalRule } from '@/lib/utils/shared/chat/toolApprovalRules';
 import {
   EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
   EMISSIONS_CHIP_VISIBILITY_DEFAULT,
@@ -16,16 +17,19 @@ import {
 } from '@/lib/utils/shared/geo/timelapsePacing';
 import {
   DEFAULT_PASTE_ATTACHMENT_CHARS,
+  LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS,
   clampPasteAttachmentChars,
 } from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
 
+import { InterpreterMode, isInterpreterMode } from '@/types/interpreterMode';
 import {
   LOCAL_RUNTIMES,
   LocalRuntime,
   LocalRuntimeStatus,
   isValidPort,
 } from '@/types/localRuntime';
+import type { M365PickerLocation, M365SaveDestination } from '@/types/m365';
 import {
   DEFAULT_MODEL_ORDER,
   ModelListSource,
@@ -46,6 +50,11 @@ import {
 import { SavedStructure } from '@/types/structure';
 import { Tone } from '@/types/tone';
 import { DEFAULT_TTS_SETTINGS, TTSSettings } from '@/types/tts';
+import {
+  DEFAULT_WEB_SEARCH_OPTIONS,
+  WebSearchOptions,
+  sanitizeWebSearchOptions,
+} from '@/types/webSearch';
 import {
   CustomTranslationLanguage,
   DocumentCustomCriterion,
@@ -224,6 +233,10 @@ interface SettingsStore {
   systemPrompt: string;
   defaultModelId: OpenAIModelID | undefined;
   defaultSearchMode: SearchMode;
+  /** Advanced web-search tuning (source count, freshness preference). */
+  webSearchOptions: WebSearchOptions;
+  /** Default code-interpreter mode for new conversations (mirrors defaultSearchMode). */
+  defaultInterpreterMode: InterpreterMode;
   autoSwitchOnFailure: boolean;
   displayNamePreference: DisplayNamePreference;
   customDisplayName: string;
@@ -263,6 +276,13 @@ interface SettingsStore {
   translationCriteria: TranslationCustomCriterion[];
   /** MCP servers the user connected (Connectors settings section). */
   mcpServers: McpServerConfig[];
+  /**
+   * Global MCP tool approval policy: auto-approve / auto-reject rules that
+   * apply in EVERY conversation (the per-conversation alwaysApprove* fields
+   * layer on top; reject rules beat all approvals). Managed from consent
+   * cards and Settings → Connectors.
+   */
+  toolApprovalRules: ToolApprovalRule[];
   /** User opt-in for adding/sending arbitrary (non-catalog) MCP servers. */
   allowArbitraryMcpServers: boolean;
   /**
@@ -282,6 +302,14 @@ interface SettingsStore {
   /** User opt-in for cross-conversation Memories (default off). */
   memoriesEnabled: boolean;
   /**
+   * Pauses automatic memory CAPTURE while leaving injection untouched: the
+   * memories already saved keep reaching the system prompt, but no new ones
+   * are extracted. Negative polarity is deliberate — an undefined value
+   * (skipped or partial migration) is falsy and so means "behave as before",
+   * never "silently stop capturing".
+   */
+  memoryCapturePaused: boolean;
+  /**
    * Runtime-only mirror of the LaunchDarkly `enableMemories` flag, set by
    * AppInitializer so vanilla stores (chatStore) can gate without hook
    * access (same pattern as mcpArbitraryFlagEnabled). Fail-closed: defaults
@@ -296,6 +324,13 @@ interface SettingsStore {
    * the ID stays here until the user restores it.
    */
   hiddenModelIds: string[];
+  /**
+   * Canonical agent keys (`<source>::<id>`) an admin hid from THEIR OWN
+   * admin lists (Agents tab, Microsoft 365 agents, Knowledge agents). A
+   * per-browser preference — it never affects what users see or what other
+   * admins see; "Show hidden" reveals and unhides.
+   */
+  hiddenAdminAgentKeys: string[];
   /**
    * Model IDs the user has starred (same key space as hiddenModelIds: base
    * models and agents alike). Starred models surface first in the picker's
@@ -369,6 +404,13 @@ interface SettingsStore {
   // Slash menu usage tracking
   slashMenuUsageCounts: Record<string, number>;
 
+  /**
+   * Agent-browser selection counts, keyed by browser item id (agent id or
+   * `connector-<id>`). Orders the browser list by usage — most-selected
+   * first, default order as tiebreaker — mirroring modelUsageStats.
+   */
+  agentBrowserUsage: Record<string, number>;
+
   // Chat input "+" dropdown tool personalization
   pinnedToolIds: string[];
   toolUsageCounts: Record<string, number>;
@@ -391,6 +433,8 @@ interface SettingsStore {
   setSystemPrompt: (prompt: string) => void;
   setDefaultModelId: (id: OpenAIModelID | undefined) => void;
   setDefaultSearchMode: (mode: SearchMode) => void;
+  setWebSearchOptions: (options: Partial<WebSearchOptions>) => void;
+  setDefaultInterpreterMode: (mode: InterpreterMode) => void;
   setAutoSwitchOnFailure: (enabled: boolean) => void;
   setDisplayNamePreference: (preference: DisplayNamePreference) => void;
   setCustomDisplayName: (name: string) => void;
@@ -476,11 +520,29 @@ interface SettingsStore {
   deleteMcpServer: (id: string) => void;
   setAllowArbitraryMcpServers: (enabled: boolean) => void;
   setMcpArbitraryFlagEnabled: (enabled: boolean) => void;
+  /** Replaces any existing rule for the same tool/server scope. */
+  addToolApprovalRule: (
+    rule: Omit<ToolApprovalRule, 'id' | 'createdAt'>,
+  ) => void;
+  removeToolApprovalRule: (id: string) => void;
+  /**
+   * Sets ONE tool's effective policy for ONE server: clears every rule that
+   * currently applies to that tool on that server (scoped or unscoped —
+   * otherwise a lingering unscoped block would silently override the new
+   * choice), then stores a server-scoped rule; 'ask' stores nothing,
+   * restoring the default prompt-every-time behavior.
+   */
+  setToolApprovalPolicy: (
+    toolName: string,
+    serverLabel: string,
+    policy: 'approve' | 'reject' | 'ask',
+  ) => void;
 
   // Context Window / Memories Actions
   setContextWindowSize: (size: number) => void;
   setMemoriesEnabled: (enabled: boolean) => void;
   setMemoriesFlagEnabled: (enabled: boolean) => void;
+  setMemoryCapturePaused: (paused: boolean) => void;
 
   // Saved Structure Actions
   setSavedStructures: (structures: SavedStructure[]) => void;
@@ -491,6 +553,8 @@ interface SettingsStore {
   // Hidden Model/Agent Actions
   hideModel: (id: string) => void;
   unhideModel: (id: string) => void;
+  hideAdminAgent: (canonicalKey: string) => void;
+  unhideAdminAgent: (canonicalKey: string) => void;
 
   // Starred Model/Agent Actions
   starModel: (id: string) => void;
@@ -519,6 +583,7 @@ interface SettingsStore {
   incrementModelUsage: (modelId: string) => void;
   recordSuccessfulModelUsage: (modelId: string) => void;
   resetModelOrder: () => void;
+  incrementAgentBrowserUsage: (itemId: string) => void;
 
   // Organization Actions
   setOrganizationPreference: (org: MSFOrganization | null) => void;
@@ -657,6 +722,76 @@ interface SettingsStore {
   ) => void;
   setSuggestRevisionsLargeRewriteRatio: (ratio: number) => void;
 
+  /**
+   * Per-user Microsoft 365 connection. CONNECTED BY DEFAULT (since v57) —
+   * the tenant-wide admin consent covers the OAuth side, and the LD flags
+   * still gate every M365 surface, so this is the user-facing off switch
+   * rather than an opt-in gate. Users disconnect (or reconnect) in
+   * Settings → Connections; docs/M365_GRAPH_PERMISSIONS_REQUEST.md tracks
+   * the policy history (originally explicit opt-in).
+   */
+  m365Connected: boolean;
+  /**
+   * True once the USER has clicked Connect/Disconnect themselves (set only
+   * by setM365Connected). Distinguishes a deliberate choice from the
+   * default: migrations may flip the default for users who never chose
+   * (userSet false / absent), but must never override an explicit
+   * disconnect (userSet true). Keep for future default changes.
+   */
+  m365ConnectedUserSet: boolean;
+  setM365Connected: (connected: boolean) => void;
+
+  /**
+   * Global user toggle for the builtin Microsoft 365 toolset (the connector
+   * tray's virtual row). Default ON: connecting M365 is itself the opt-in,
+   * this is the "off everywhere" switch. Persisted.
+   */
+  m365ToolsUserEnabled: boolean;
+  setM365ToolsUserEnabled: (enabled: boolean) => void;
+  /**
+   * Shared mailbox SMTP addresses the user says they can read (fifth pass
+   * tier 3). Graph cannot enumerate these; the user maintains the list in
+   * Settings → Connections and mail tools only ever target addresses on
+   * it. Persisted.
+   */
+  m365SharedMailboxes: string[];
+  setM365SharedMailboxes: (mailboxes: string[]) => void;
+  /**
+   * Whether playbook suggestion chips may appear above the composer (sixth
+   * pass, docs/M365_SIXTH_PASS_CROSS_SERVICE_WORKFLOWS.md). Default ON:
+   * chips only render when a precondition already holds and each one is
+   * dismissible, but proactive suggestions can read as pushy — this is the
+   * per-user off switch. The menu entries are unaffected. Persisted.
+   */
+  m365PlaybookChipsEnabled: boolean;
+  setM365PlaybookChipsEnabled: (enabled: boolean) => void;
+  /**
+   * Runtime-only mirror of the LaunchDarkly `m365Tools` gate, set by
+   * AppInitializer so chatStore (vanilla, no hook access) can gate what
+   * gets SENT (same pattern as mcpArbitraryFlagEnabled). Fail-closed:
+   * defaults to false. NOT persisted.
+   */
+  m365ToolsFlagEnabled: boolean;
+  setM365ToolsFlagEnabled: (enabled: boolean) => void;
+
+  /**
+   * Remembered "Save to OneDrive" folder. null = the default app folder
+   * (Apps/AI Assistant). When skip-picker is on, saves go straight to the
+   * remembered destination without showing the dialog.
+   */
+  m365SaveDestination: M365SaveDestination | null;
+  m365SaveSkipPicker: boolean;
+  setM365SaveDestination: (destination: M365SaveDestination | null) => void;
+  setM365SaveSkipPicker: (skip: boolean) => void;
+
+  /**
+   * Last browsed location in the attach-from-OneDrive picker. null = open
+   * at the OneDrive root. Written by the picker on navigation only (never
+   * on search) and dropped fail-open when the folder no longer loads.
+   */
+  m365PickerLocation: M365PickerLocation | null;
+  setM365PickerLocation: (location: M365PickerLocation | null) => void;
+
   // Reset
   resetSettings: () => void;
 }
@@ -686,6 +821,8 @@ export const useSettingsStore = create<SettingsStore>()(
       systemPrompt: DEFAULT_SYSTEM_PROMPT,
       defaultModelId: undefined,
       defaultSearchMode: SearchMode.INTELLIGENT, // Privacy-focused intelligent search by default
+      webSearchOptions: DEFAULT_WEB_SEARCH_OPTIONS,
+      defaultInterpreterMode: InterpreterMode.INTELLIGENT, // Code interpreter on by default (auto-routed)
       autoSwitchOnFailure: false,
       displayNamePreference: DEFAULT_DISPLAY_NAME_PREFERENCE,
       customDisplayName: DEFAULT_CUSTOM_DISPLAY_NAME,
@@ -704,12 +841,15 @@ export const useSettingsStore = create<SettingsStore>()(
       documentCriteria: [],
       translationCriteria: [],
       mcpServers: [],
+      toolApprovalRules: [],
       allowArbitraryMcpServers: false,
       mcpArbitraryFlagEnabled: false,
       contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
       memoriesEnabled: false,
       memoriesFlagEnabled: false,
+      memoryCapturePaused: false,
       hiddenModelIds: [],
+      hiddenAdminAgentKeys: [],
       starredModelIds: [],
       tokenUsageStats: {},
       tokenUsageFirstTrackedAt: null,
@@ -731,6 +871,9 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Slash menu usage tracking
       slashMenuUsageCounts: {},
+
+      // Agent-browser usage ordering
+      agentBrowserUsage: {},
 
       // Chat input "+" dropdown tool personalization
       pinnedToolIds: [],
@@ -769,6 +912,15 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromButton: true,
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
+      m365Connected: true,
+      m365ConnectedUserSet: false,
+      m365ToolsUserEnabled: true,
+      m365SharedMailboxes: [],
+      m365PlaybookChipsEnabled: true,
+      m365ToolsFlagEnabled: false,
+      m365SaveDestination: null,
+      m365SaveSkipPicker: false,
+      m365PickerLocation: null,
       suggestRevisions: true,
       suggestRevisionsExceptions: {
         largeRewrites: true,
@@ -784,6 +936,15 @@ export const useSettingsStore = create<SettingsStore>()(
       setDefaultModelId: (id) => set({ defaultModelId: id }),
 
       setDefaultSearchMode: (mode) => set({ defaultSearchMode: mode }),
+      setWebSearchOptions: (options) =>
+        set((state) => ({
+          webSearchOptions: sanitizeWebSearchOptions({
+            ...state.webSearchOptions,
+            ...options,
+          }),
+        })),
+      setDefaultInterpreterMode: (mode) =>
+        set({ defaultInterpreterMode: mode }),
 
       setAutoSwitchOnFailure: (enabled) =>
         set({ autoSwitchOnFailure: enabled }),
@@ -1042,6 +1203,59 @@ export const useSettingsStore = create<SettingsStore>()(
       setAllowArbitraryMcpServers: (enabled) =>
         set({ allowArbitraryMcpServers: enabled }),
 
+      addToolApprovalRule: (rule) =>
+        set((state) => ({
+          toolApprovalRules: [
+            // One rule per (tool, scope): re-adding flips the action instead
+            // of accumulating contradictory rules the evaluator would then
+            // have to referee beyond its reject-wins tiebreak.
+            ...state.toolApprovalRules.filter(
+              (existing) =>
+                existing.toolName !== rule.toolName ||
+                (existing.serverLabel ?? '').trim().toLowerCase() !==
+                  (rule.serverLabel ?? '').trim().toLowerCase(),
+            ),
+            {
+              ...rule,
+              id: crypto.randomUUID(),
+              createdAt: new Date().toISOString(),
+            },
+          ],
+        })),
+
+      removeToolApprovalRule: (id) =>
+        set((state) => ({
+          toolApprovalRules: state.toolApprovalRules.filter(
+            (rule) => rule.id !== id,
+          ),
+        })),
+
+      setToolApprovalPolicy: (toolName, serverLabel, policy) =>
+        set((state) => {
+          const label = serverLabel.trim().toLowerCase();
+          const kept = state.toolApprovalRules.filter(
+            (rule) =>
+              rule.toolName !== toolName ||
+              (!!rule.serverLabel &&
+                rule.serverLabel.trim().toLowerCase() !== label),
+          );
+          return {
+            toolApprovalRules:
+              policy === 'ask'
+                ? kept
+                : [
+                    ...kept,
+                    {
+                      toolName,
+                      serverLabel,
+                      action: policy,
+                      id: crypto.randomUUID(),
+                      createdAt: new Date().toISOString(),
+                    },
+                  ],
+          };
+        }),
+
       setMcpArbitraryFlagEnabled: (enabled) =>
         set({ mcpArbitraryFlagEnabled: enabled }),
 
@@ -1059,6 +1273,8 @@ export const useSettingsStore = create<SettingsStore>()(
       setMemoriesFlagEnabled: (enabled) =>
         set({ memoriesFlagEnabled: enabled }),
 
+      setMemoryCapturePaused: (paused) => set({ memoryCapturePaused: paused }),
+
       // Hidden Model/Agent Actions. Hiding unstars: a model can't be both
       // surfaced in "Your models" and hidden from the picker.
       hideModel: (id) =>
@@ -1074,6 +1290,25 @@ export const useSettingsStore = create<SettingsStore>()(
       unhideModel: (id) =>
         set((state) => ({
           hiddenModelIds: state.hiddenModelIds.filter((m) => m !== id),
+        })),
+
+      hideAdminAgent: (canonicalKey) =>
+        set((state) =>
+          state.hiddenAdminAgentKeys.includes(canonicalKey)
+            ? state
+            : {
+                hiddenAdminAgentKeys: [
+                  ...state.hiddenAdminAgentKeys,
+                  canonicalKey,
+                ],
+              },
+        ),
+
+      unhideAdminAgent: (canonicalKey) =>
+        set((state) => ({
+          hiddenAdminAgentKeys: state.hiddenAdminAgentKeys.filter(
+            (k) => k !== canonicalKey,
+          ),
         })),
 
       // Starred Model/Agent Actions. Starring unhides (see hideModel).
@@ -1236,6 +1471,14 @@ export const useSettingsStore = create<SettingsStore>()(
           modelOrderMode: 'usage' as ModelOrderMode,
           customModelOrder: [],
         }),
+
+      incrementAgentBrowserUsage: (itemId) =>
+        set((state) => ({
+          agentBrowserUsage: {
+            ...state.agentBrowserUsage,
+            [itemId]: (state.agentBrowserUsage[itemId] ?? 0) + 1,
+          },
+        })),
 
       // Organization Actions
       setOrganizationPreference: (org) => set({ organizationPreference: org }),
@@ -1406,6 +1649,48 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ autoClearResolvedEdits: enabled }),
 
       setSuggestRevisions: (enabled) => set({ suggestRevisions: enabled }),
+      setM365Connected: (connected) =>
+        // Only called from user-facing Connect/Disconnect controls, so it
+        // also records that the state is now a deliberate choice — future
+        // default-flip migrations must leave this user alone.
+        set(
+          connected
+            ? { m365Connected: true, m365ConnectedUserSet: true }
+            : {
+                // Disconnecting drops the remembered save folder too — a stale
+                // drive id must not leak into the next connection. Shared
+                // mailboxes go with it: the list is meaningless without a
+                // connected account.
+                m365Connected: false,
+                m365ConnectedUserSet: true,
+                m365SaveDestination: null,
+                m365SaveSkipPicker: false,
+                m365PickerLocation: null,
+                m365SharedMailboxes: [],
+              },
+        ),
+
+      setM365ToolsUserEnabled: (enabled) =>
+        set({ m365ToolsUserEnabled: enabled }),
+      setM365SharedMailboxes: (mailboxes) =>
+        set({
+          m365SharedMailboxes: mailboxes
+            .map((mailbox) => mailbox.trim().toLowerCase())
+            .filter((mailbox, index, all) =>
+              mailbox.includes('@') ? all.indexOf(mailbox) === index : false,
+            )
+            .slice(0, 10),
+        }),
+      setM365PlaybookChipsEnabled: (enabled) =>
+        set({ m365PlaybookChipsEnabled: enabled }),
+      setM365ToolsFlagEnabled: (enabled) =>
+        set({ m365ToolsFlagEnabled: enabled }),
+
+      setM365SaveDestination: (destination) =>
+        set({ m365SaveDestination: destination }),
+      setM365SaveSkipPicker: (skip) => set({ m365SaveSkipPicker: skip }),
+      setM365PickerLocation: (location) =>
+        set({ m365PickerLocation: location }),
 
       setSuggestRevisionsException: (key, enabled) =>
         set((state) => ({
@@ -1430,6 +1715,8 @@ export const useSettingsStore = create<SettingsStore>()(
           temperature: DEFAULT_TEMPERATURE,
           systemPrompt: DEFAULT_SYSTEM_PROMPT,
           defaultSearchMode: SearchMode.INTELLIGENT,
+          webSearchOptions: DEFAULT_WEB_SEARCH_OPTIONS,
+          defaultInterpreterMode: InterpreterMode.INTELLIGENT,
           displayNamePreference: DEFAULT_DISPLAY_NAME_PREFERENCE,
           customDisplayName: DEFAULT_CUSTOM_DISPLAY_NAME,
           prompts: [],
@@ -1440,10 +1727,13 @@ export const useSettingsStore = create<SettingsStore>()(
           // Wipes connector tokens too — Reset Settings clears everything,
           // and lingering secrets after a "reset" would be worse.
           mcpServers: [],
+          toolApprovalRules: [],
           allowArbitraryMcpServers: false,
           contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
           memoriesEnabled: false,
+          memoryCapturePaused: false,
           hiddenModelIds: [],
+          hiddenAdminAgentKeys: [],
           starredModelIds: [],
           tokenUsageStats: {},
           tokenUsageFirstTrackedAt: null,
@@ -1481,17 +1771,25 @@ export const useSettingsStore = create<SettingsStore>()(
             structuralReorders: false,
           },
           suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
+          m365Connected: true,
+          m365ConnectedUserSet: false,
+          m365SaveDestination: null,
+          m365SaveSkipPicker: false,
+          m365PickerLocation: null,
+          m365PlaybookChipsEnabled: true,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 44, // Increment this when schema changes to trigger migrations
+      version: 59, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
         systemPrompt: state.systemPrompt,
         defaultModelId: state.defaultModelId,
         defaultSearchMode: state.defaultSearchMode,
+        webSearchOptions: state.webSearchOptions,
+        defaultInterpreterMode: state.defaultInterpreterMode,
         autoSwitchOnFailure: state.autoSwitchOnFailure,
         displayNamePreference: state.displayNamePreference,
         customDisplayName: state.customDisplayName,
@@ -1535,9 +1833,12 @@ export const useSettingsStore = create<SettingsStore>()(
             : undefined,
         })),
         allowArbitraryMcpServers: state.allowArbitraryMcpServers,
+        toolApprovalRules: state.toolApprovalRules,
         contextWindowSize: state.contextWindowSize,
         memoriesEnabled: state.memoriesEnabled,
+        memoryCapturePaused: state.memoryCapturePaused,
         hiddenModelIds: state.hiddenModelIds,
+        hiddenAdminAgentKeys: state.hiddenAdminAgentKeys,
         starredModelIds: state.starredModelIds,
         tokenUsageStats: state.tokenUsageStats,
         tokenUsageFirstTrackedAt: state.tokenUsageFirstTrackedAt,
@@ -1557,6 +1858,7 @@ export const useSettingsStore = create<SettingsStore>()(
         reasoningEffort: state.reasoningEffort,
         verbosity: state.verbosity,
         slashMenuUsageCounts: state.slashMenuUsageCounts,
+        agentBrowserUsage: state.agentBrowserUsage,
         pinnedToolIds: state.pinnedToolIds,
         toolUsageCounts: state.toolUsageCounts,
         hiddenToolIds: state.hiddenToolIds,
@@ -1573,6 +1875,16 @@ export const useSettingsStore = create<SettingsStore>()(
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
         autoClearResolvedEdits: state.autoClearResolvedEdits,
         suggestRevisions: state.suggestRevisions,
+        m365Connected: state.m365Connected,
+        m365ConnectedUserSet: state.m365ConnectedUserSet,
+        // m365ToolsFlagEnabled is deliberately NOT persisted (LD mirror,
+        // same rationale as mcpArbitraryFlagEnabled above).
+        m365ToolsUserEnabled: state.m365ToolsUserEnabled,
+        m365SharedMailboxes: state.m365SharedMailboxes,
+        m365PlaybookChipsEnabled: state.m365PlaybookChipsEnabled,
+        m365SaveDestination: state.m365SaveDestination,
+        m365SaveSkipPicker: state.m365SaveSkipPicker,
+        m365PickerLocation: state.m365PickerLocation,
         suggestRevisionsExceptions: state.suggestRevisionsExceptions,
         suggestRevisionsLargeRewriteRatio:
           state.suggestRevisionsLargeRewriteRatio,
@@ -2027,6 +2339,135 @@ export const useSettingsStore = create<SettingsStore>()(
           state.emissionsChipAutoHideMs = clampEmissionsChipAutoHideMs(
             state.emissionsChipAutoHideMs as number,
           );
+        }
+
+        // Version 44 → 45: Add global MCP tool approval rules.
+        if (version < 45) {
+          if (!Array.isArray(state.toolApprovalRules)) {
+            state.toolApprovalRules = [];
+          }
+        }
+
+        // Version 45 → 46: Add default code-interpreter mode (on by default).
+        if (version < 46) {
+          if (!isInterpreterMode(state.defaultInterpreterMode)) {
+            state.defaultInterpreterMode = InterpreterMode.INTELLIGENT;
+          }
+        }
+
+        // Version 46 → 47: Add advanced web-search options (sanitize repairs
+        // both absent and malformed persisted values).
+        // Version 47 → 48: Add the search provider option (same repair).
+        if (version < 48) {
+          state.webSearchOptions = sanitizeWebSearchOptions(
+            state.webSearchOptions,
+          );
+        }
+
+        // Version 48 → 49: Pause-capture toggle for Memories. Backfill to
+        // not-paused so an existing opt-in keeps capturing as it did.
+        if (version < 49) {
+          if (typeof state.memoryCapturePaused !== 'boolean') {
+            state.memoryCapturePaused = false;
+          }
+        }
+
+        // Version 49 → 50: Microsoft 365 opt-in. Backfill to disconnected —
+        // M365 access is explicit per-user opt-in, never a default.
+        if (version < 50) {
+          if (typeof state.m365Connected !== 'boolean') {
+            state.m365Connected = false;
+          }
+        }
+
+        // Version 50 → 51: Remembered "Save to OneDrive" destination.
+        // Backfill to the defaults (default app folder, dialog shown) —
+        // matching the behavior these users already have.
+        if (version < 51) {
+          if (state.m365SaveDestination === undefined) {
+            state.m365SaveDestination = null;
+          }
+          if (typeof state.m365SaveSkipPicker !== 'boolean') {
+            state.m365SaveSkipPicker = false;
+          }
+        }
+
+        // Version 51 → 52: Global toggle for the builtin M365 toolset.
+        // Backfill to ON — connecting M365 is the opt-in; this is only the
+        // "off everywhere" switch, and the LD flag still gates everything.
+        if (version < 52) {
+          if (typeof state.m365ToolsUserEnabled !== 'boolean') {
+            state.m365ToolsUserEnabled = true;
+          }
+        }
+
+        // Version 52 → 53: shared mailbox address list (fifth pass tier 3).
+        if (version < 53) {
+          if (!Array.isArray(state.m365SharedMailboxes)) {
+            state.m365SharedMailboxes = [];
+          }
+        }
+
+        // Version 53 → 54: playbook suggestion chips (sixth pass). Backfill
+        // to ON — the chips are precondition-gated and dismissible, and the
+        // LD flag still gates the whole feature.
+        if (version < 54) {
+          if (typeof state.m365PlaybookChipsEnabled !== 'boolean') {
+            state.m365PlaybookChipsEnabled = true;
+          }
+        }
+
+        // Version 54 → 55: remembered attach-picker location. Backfill to
+        // null — open at the OneDrive root, as these users always have.
+        if (version < 55) {
+          if (state.m365PickerLocation === undefined) {
+            state.m365PickerLocation = null;
+          }
+        }
+
+        // Version 55 → 56: agent-browser usage ordering
+        if (version < 56) {
+          if (
+            state.agentBrowserUsage === undefined ||
+            state.agentBrowserUsage === null ||
+            typeof state.agentBrowserUsage !== 'object'
+          ) {
+            state.agentBrowserUsage = {};
+          }
+        }
+
+        // Version 56 → 57: M365 goes connected-by-default. Pre-57 state
+        // cannot distinguish "never decided" from "explicitly disconnected"
+        // (both stored false), so this ONE migration flips everyone to
+        // connected and starts recording deliberate choices in
+        // m365ConnectedUserSet — accepted trade-off while the rollout is a
+        // small demo subset; anyone re-disconnecting now sticks forever.
+        // Future default changes must check m365ConnectedUserSet and leave
+        // users who chose (true) alone.
+        if (version < 57) {
+          if (typeof state.m365ConnectedUserSet !== 'boolean') {
+            state.m365Connected = true;
+            state.m365ConnectedUserSet = false;
+          }
+        }
+
+        // Version 57 → 58: the large-paste default rose from 2,000 characters
+        // to ~2,000 words. Only users still on the OLD default move to the
+        // new one; a value they set themselves (including 0 = off) is kept.
+        if (version < 58) {
+          if (
+            state.pasteAsAttachmentChars ===
+            LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS
+          ) {
+            state.pasteAsAttachmentChars = DEFAULT_PASTE_ATTACHMENT_CHARS;
+          }
+        }
+
+        // Version 58 → 59: per-admin hidden agent keys for the admin lists.
+        if (version < 59) {
+          if (!Array.isArray(state.hiddenAdminAgentKeys)) {
+            state.hiddenAdminAgentKeys = [];
+          }
         }
 
         return state;

@@ -3,11 +3,14 @@ import {
   IconCopy,
   IconFileText,
   IconLanguage,
+  IconListCheck,
   IconLoader2,
   IconRefresh,
+  IconShare2,
   IconVolume,
   IconVolumeOff,
 } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 import React, {
   FC,
   ReactNode,
@@ -21,13 +24,20 @@ import React, {
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 
+import {
+  useLimitGates,
+  useResetCountdown,
+} from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import { translateText } from '@/lib/services/translation';
 
 import { appendCitationsToMarkdown } from '@/lib/utils/app/export/citationExport';
 import { getAutonym } from '@/lib/utils/app/locales';
 import { parseThinkingContent } from '@/lib/utils/app/stream/thinking';
+import { rewriteSandboxLinks } from '@/lib/utils/shared/chat/sandboxLinks';
+import { toSpeakableText } from '@/lib/utils/shared/markdown/speakableText';
 import { generateAudioFilename } from '@/lib/utils/shared/string/slugify';
 
 import {
@@ -41,22 +51,31 @@ import { MessageTranslationState } from '@/types/translation';
 import { TTSSettings } from '@/types/tts';
 
 import AudioPlayer from '@/components/Chat/AudioPlayer';
+import { ApprovalBatchActions } from '@/components/Chat/ChatMessages/ApprovalBatchActions';
 import {
   ConsentCard,
   ConsentRequest,
 } from '@/components/Chat/ChatMessages/ConsentCard';
 import { DocumentTranslationContent } from '@/components/Chat/ChatMessages/DocumentTranslationContent';
+import { GeneratedFilesPanel } from '@/components/Chat/ChatMessages/GeneratedFilesPanel';
+import { InterimSearchPanel } from '@/components/Chat/ChatMessages/InterimSearchPanel';
+import M365TodoTasksModal, {
+  extractTaskCandidates,
+} from '@/components/Chat/ChatMessages/M365TodoTasksModal';
+import { MessageDownloadMenu } from '@/components/Chat/ChatMessages/MessageDownloadMenu';
 import { ThinkingBlock } from '@/components/Chat/ChatMessages/ThinkingBlock';
 import { ToolCallSummary } from '@/components/Chat/ChatMessages/ToolCallSummary';
 import { TranscriptContent } from '@/components/Chat/ChatMessages/TranscriptContent';
 import { TranslationDropdown } from '@/components/Chat/ChatMessages/TranslationDropdown';
 import { VersionNavigation } from '@/components/Chat/ChatMessages/VersionNavigation';
 import { CitationList } from '@/components/Chat/Citations/CitationList';
+import ShareToOneDriveModal from '@/components/Chat/ShareToOneDriveModal';
 import { TTSContextMenu } from '@/components/Chat/TTS/TTSContextMenu';
 import { StreamdownWithCodeButtons } from '@/components/Markdown/StreamdownWithCodeButtons';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatStore } from '@/client/stores/chatStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import {
   extractConsentRequests,
   stripIncompleteStreamMarkers,
@@ -102,7 +121,7 @@ function isBlobTranscriptReference(content: string): boolean {
 function isDocumentTranslationReference(content: string): boolean {
   const trimmed = content.trim();
   return (
-    /^\[Translation:\s*.+?\s*\|\s*lang:[a-zA-Z-]+\s*\|\s*blob:[a-fA-F0-9-]+\s*\|\s*ext:[a-zA-Z0-9]+\s*\|\s*expires:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z\]$/.test(
+    /^\[Translation:\s*.+?\s*\|\s*lang:[a-zA-Z-]+\s*\|\s*blob:[a-fA-F0-9-]+\s*\|\s*ext:[a-zA-Z0-9]+\s*\|\s*expires:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z(?:\s*\|\s*src:[A-Za-z0-9!$_.,=-]+:[A-Za-z0-9!$_.,=-]+)?\]$/.test(
       trimmed,
     ) ||
     /^\[TranslationPending:\s*.+?\s*\|\s*lang:[a-zA-Z-]+\s*\|\s*job:[a-fA-F0-9-]+\s*\|\s*ext:[a-zA-Z0-9]+\s*\|\s*submitted:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z\]$/.test(
@@ -110,6 +129,9 @@ function isDocumentTranslationReference(content: string): boolean {
     )
   );
 }
+
+/** Daily TTS counter (docs/LIMITS.md); `null` value = unlimited. */
+const TTS_DAY_LIMIT_KEY = 'feature.tts.charactersPerDay';
 
 interface AssistantMessageProps {
   content: string;
@@ -144,6 +166,9 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     const [processedContent, setProcessedContent] = useState('');
     const [citations, setCitations] = useState<Citation[]>([]);
     const [thinking, setThinking] = useState<string>('');
+    // True while the stream is inside an unclosed think block (reasoning
+    // still arriving) — drives the ThinkingBlock's live shimmer state.
+    const [thinkingLive, setThinkingLive] = useState<boolean>(false);
     const [consentRequests, setConsentRequests] = useState<ConsentRequest[]>(
       [],
     );
@@ -152,6 +177,10 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
       (s) => s.streamingConsentRequests,
     );
     const streamingToolCalls = useChatStore((s) => s.streamingToolCalls);
+    // Interim headlines from a combined search (Bing leg still running).
+    const streamingInterimSearch = useChatStore(
+      (s) => s.streamingInterimSearch,
+    );
     const [isGeneratingAudio, setIsGeneratingAudio] = useState<boolean>(false);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [audioSourceLocale, setAudioSourceLocale] = useState<string | null>(
@@ -161,11 +190,48 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
     const [messageCopied, setMessageCopied] = useState(false);
 
+    // §4 output tie-in: action items → Microsoft To Do (user-confirmed
+    // batch). Flag + connect opt-in, and only when the text has list items.
+    const { meetingsEnabled: m365MeetingsFlag, sharingEnabled } =
+      useM365Enabled();
+    const m365Connected = useSettingsStore((s) => s.m365Connected);
+    const [showTodoModal, setShowTodoModal] = useState(false);
+    const [showShareModal, setShowShareModal] = useState(false);
+
     // TTS context menu state
     const [ttsContextMenu, setTTSContextMenu] = useState<{
       x: number;
       y: number;
     } | null>(null);
+
+    // Route pre-flight (docs/LIMITS_USER_FACING_UX.md §7.4): the speaker
+    // button goes dark once today's `feature.tts.charactersPerDay` budget is
+    // used up, instead of firing a request the server will 403. Anything
+    // short of a reported 0 (no row, usage unreadable, observe mode, flag
+    // off) leaves the button exactly as it is — the server stays the judge.
+    const { featureRemaining } = useLimitGates();
+    const queryClient = useQueryClient();
+    const ttsBudget = featureRemaining(TTS_DAY_LIMIT_KEY);
+    const ttsExhausted = ttsBudget?.remaining === 0;
+    // Only count down while exhausted: every rendered message mounts this
+    // hook, and an idle per-minute tick per message buys nothing.
+    const ttsResetsIn = useResetCountdown(
+      ttsExhausted ? ttsBudget?.resetAt : undefined,
+      {
+        // A second `useMyLimits()` call here just to reach `refetch` would
+        // double the `['limits-me', …]` observer count for every rendered
+        // assistant message; invalidating the shared query key gets the
+        // same refresh through the one subscription `useLimitGates` already
+        // holds (docs/LIMITS_USER_FACING_UX.md §7.4 follow-up).
+        onExpired: () =>
+          void queryClient.invalidateQueries({ queryKey: ['limits-me'] }),
+      },
+    );
+    const ttsDisabledTitle = ttsExhausted
+      ? ttsResetsIn
+        ? `${t('limitsUx.routes.ttsExhausted')} ${t('limitsUx.routes.resetsIn', { resets: ttsResetsIn })}`
+        : t('limitsUx.routes.ttsExhausted')
+      : null;
 
     // Translation state
     const [translationState, setTranslationState] =
@@ -226,9 +292,17 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
 
     // Process content once per change - simplified logic
     useEffect(() => {
-      // Parse thinking content from the raw content
-      const { thinking: inlineThinking, content: contentWithoutThinking } =
-        parseThinkingContent(content);
+      // Parse thinking content from the raw content. While streaming, an
+      // UNCLOSED <think> block means the model is mid-reasoning — route it
+      // into the ThinkingBlock (with the live shimmer) instead of letting
+      // raw reasoning text leak into the message body.
+      const {
+        thinking: inlineThinking,
+        content: contentWithoutThinking,
+        thinkingInProgress,
+      } = parseThinkingContent(content, {
+        includeUnclosed: messageIsStreaming,
+      });
 
       let mainContent = contentWithoutThinking;
       let citationsData: Citation[] = [];
@@ -346,6 +420,7 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
 
       setProcessedContent(mainContent);
       setThinking(finalThinking);
+      setThinkingLive(!!thinkingInProgress);
       setCitations(citationsData);
       setConsentRequests(parsedConsents);
     }, [
@@ -359,11 +434,39 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     // Displayed content (original or translated) - must be declared before handlers that use it
     const displayedContent = useMemo(() => {
       const { currentLocale, translations } = translationState;
-      if (currentLocale && translations[currentLocale]) {
-        return translations[currentLocale].translatedText;
+      const base =
+        currentLocale && translations[currentLocale]
+          ? translations[currentLocale].translatedText
+          : processedContent;
+      // Sandbox links survive in persisted messages (saved before the
+      // server-side strip) and in native code-interpreter streams, where
+      // the model's text goes straight to the client. Re-point them at the
+      // persisted file when one matches; degrade to plain text otherwise.
+      const generatedFiles = (
+        message?.toolCalls?.length
+          ? message.toolCalls
+          : messageIsStreaming
+            ? streamingToolCalls
+            : (message?.toolCalls ?? [])
+      ).flatMap((call) => call.generated_files ?? []);
+      return rewriteSandboxLinks(base, generatedFiles);
+    }, [
+      translationState,
+      processedContent,
+      message?.toolCalls,
+      messageIsStreaming,
+      streamingToolCalls,
+    ]);
+
+    // Citation numbers the message text actually cites — drives the source
+    // dropdown's per-citation evidence rows (quote paired with its pages).
+    const citedNumbers = useMemo(() => {
+      const numbers = new Set<number>();
+      for (const match of processedContent.matchAll(/\[(\d{1,3})\]/g)) {
+        numbers.add(Number(match[1]));
       }
-      return processedContent;
-    }, [translationState, processedContent]);
+      return [...numbers];
+    }, [processedContent]);
 
     // Generate contextual filename for audio downloads (1-indexed for human readability)
     const audioDownloadFilename = useMemo(() => {
@@ -395,8 +498,19 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
 
           // Build request body with user's TTS settings for server-side voice resolution
           // Send explicit voice override if provided, otherwise send settings for resolution
+          //
+          // The synthesizer reads its input literally, so raw TeX comes out as
+          // "backslash frac open brace a close brace". `toSpeakableText` says
+          // what can be said in a sentence and collapses the rest to a spoken
+          // placeholder. It runs HERE rather than on the server because the
+          // server's `cleanMarkdown` strips emphasis with a `[*_]{1,3}` rule
+          // that would shred `x_1` before anything could verbalize it — and
+          // because shrinking the text client-side also, correctly, shrinks
+          // what the `feature.tts.charactersPerDay` guard has to count.
           const requestBody = {
-            text: displayedContent,
+            text: toSpeakableText(displayedContent, {
+              equationPlaceholder: t('chat.ttsEquationPlaceholder'),
+            }),
             voiceName: overrides.globalVoice || undefined,
             rate: overrides.rate ?? ttsSettings.rate,
             pitch: overrides.pitch ?? ttsSettings.pitch,
@@ -598,11 +712,16 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
             className="flex flex-col"
             style={{ width: '100%', maxWidth: '100%', minWidth: 0 }}
           >
-            {/* Thinking block - displayed before main content */}
+            {/* Thinking block - displayed before main content. Shimmers
+                while the reasoning is still arriving (unclosed think block
+                or no answer text yet), so users can tell live reasoning
+                apart from the final response below it. */}
             {thinking && (
               <ThinkingBlock
                 thinking={thinking}
-                isStreaming={messageIsStreaming && !processedContent}
+                isStreaming={
+                  messageIsStreaming && (thinkingLive || !processedContent)
+                }
               />
             )}
 
@@ -665,6 +784,15 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                       <CitationStreamdown
                         citations={citations}
                         isAnimating={messageIsStreaming}
+                        // "streaming" splits the text into blocks and runs
+                        // Streamdown's incomplete-markdown completion on every
+                        // chunk (which is what auto-closes a half-typed `$$`
+                        // into a churning KaTeX error). A finished message can
+                        // never gain more text, so it must not keep paying for
+                        // that: "static" renders the whole string in one pass,
+                        // which is also the only mode that keeps a multi-line
+                        // `$$ … $$` block intact.
+                        mode={messageIsStreaming ? 'streaming' : 'static'}
                         controls={true}
                         shikiTheme={['github-light', 'github-dark']}
                         // Mermaid is the most expensive parser in the
@@ -687,34 +815,46 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
 
             {/* Prefer persisted; fall back to live stream; legacy regex
                 extraction is the last resort. */}
-            {(message?.consentRequests && message.consentRequests.length > 0
-              ? (message.consentRequests as ConsentRequest[])
-              : messageIsStreaming
-                ? (streamingConsentRequests as ConsentRequest[])
-                : consentRequests
-            ).map((req, i) => {
-              const persistedOutcome =
-                req.kind === 'approval' && req.approval_request_id
-                  ? message?.approvalOutcomes?.[req.approval_request_id]
-                  : undefined;
-              const persistedSource =
-                req.kind === 'approval' && req.approval_request_id
-                  ? message?.approvalSources?.[req.approval_request_id]
-                  : undefined;
+            {(() => {
+              const activeConsents =
+                message?.consentRequests && message.consentRequests.length > 0
+                  ? (message.consentRequests as ConsentRequest[])
+                  : messageIsStreaming
+                    ? (streamingConsentRequests as ConsentRequest[])
+                    : consentRequests;
               return (
-                <ConsentCard
-                  key={
-                    req.kind === 'oauth'
-                      ? `oauth:${req.consent_url ?? i}`
-                      : `approval:${req.approval_request_id ?? i}`
-                  }
-                  request={req}
-                  messageIndex={messageIndex}
-                  persistedOutcome={persistedOutcome}
-                  persistedSource={persistedSource}
-                />
+                <>
+                  <ApprovalBatchActions
+                    requests={activeConsents}
+                    messageIndex={messageIndex}
+                    approvalOutcomes={message?.approvalOutcomes}
+                  />
+                  {activeConsents.map((req, i) => {
+                    const persistedOutcome =
+                      req.kind === 'approval' && req.approval_request_id
+                        ? message?.approvalOutcomes?.[req.approval_request_id]
+                        : undefined;
+                    const persistedSource =
+                      req.kind === 'approval' && req.approval_request_id
+                        ? message?.approvalSources?.[req.approval_request_id]
+                        : undefined;
+                    return (
+                      <ConsentCard
+                        key={
+                          req.kind === 'oauth'
+                            ? `oauth:${req.consent_url ?? i}`
+                            : `approval:${req.approval_request_id ?? i}`
+                        }
+                        request={req}
+                        messageIndex={messageIndex}
+                        persistedOutcome={persistedOutcome}
+                        persistedSource={persistedSource}
+                      />
+                    );
+                  })}
+                </>
               );
-            })}
+            })()}
 
             {/* MCP tool usage summary — prefer persisted, live if mid-stream. */}
             {(() => {
@@ -726,15 +866,37 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                     : message?.toolCalls;
               if (!liveCalls || liveCalls.length === 0) return null;
               return (
-                <ToolCallSummary
-                  toolCalls={liveCalls}
-                  approvalSources={message?.approvalSources}
-                />
+                <>
+                  {/* Code-interpreter deliverables (charts, exports) render
+                      prominently on the message — never only inside the
+                      collapsed tool strip. */}
+                  <GeneratedFilesPanel toolCalls={liveCalls} />
+                  <ToolCallSummary
+                    toolCalls={liveCalls}
+                    approvalSources={message?.approvalSources}
+                  />
+                </>
               );
             })()}
 
+            {/* Interim headlines from a combined search — only on the live
+                placeholder (no persisted content or tool records) and only
+                until the model starts producing output. A thinking block
+                counts as output: the search is over by then, and keeping
+                the panel mounted through the layout change replays its
+                entrance animation. */}
+            {messageIsStreaming &&
+              streamingInterimSearch &&
+              !processedContent.trim() &&
+              !thinking &&
+              !message?.toolCalls?.length && (
+                <InterimSearchPanel interim={streamingInterimSearch} />
+              )}
+
             {/* Citations - shown after content but before action buttons */}
-            {citations.length > 0 && <CitationList citations={citations} />}
+            {citations.length > 0 && (
+              <CitationList citations={citations} citedNumbers={citedNumbers} />
+            )}
 
             {/* Action buttons at the bottom of the message - only show when not streaming */}
             {!messageIsStreaming && (
@@ -789,10 +951,12 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                     </button>
                   )}
 
-                  {/* Listen button */}
+                  {/* Listen button. Already-generated audio can still be
+                      closed when the budget runs out mid-session — only NEW
+                      synthesis is gated. */}
                   <button
                     className={`transition-colors ${
-                      hasEmbeddedContent
+                      hasEmbeddedContent || (ttsExhausted && !audioUrl)
                         ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
                         : isGeneratingAudio
                           ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
@@ -803,19 +967,39 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                         ? undefined
                         : audioUrl
                           ? handleCloseAudio
-                          : () => handleTTS()
+                          : ttsExhausted
+                            ? () => {
+                                // Kept out of the native `disabled` set (see
+                                // below) so keyboard/screen-reader users can
+                                // still reach this control; a `title` alone
+                                // is invisible to touch (no hover) and, per
+                                // finding, unreliable on `disabled` controls
+                                // in Firefox. Surface the same reason through
+                                // the existing aria-live loading line.
+                                if (ttsDisabledTitle) {
+                                  setLoadingMessage(ttsDisabledTitle);
+                                  setTimeout(
+                                    () => setLoadingMessage(null),
+                                    6000,
+                                  );
+                                }
+                              }
+                            : () => handleTTS()
                     }
                     onContextMenu={(e) => {
                       if (
                         !hasEmbeddedContent &&
                         !isGeneratingAudio &&
-                        !audioUrl
+                        !audioUrl &&
+                        !ttsExhausted
                       ) {
                         e.preventDefault();
                         setTTSContextMenu({ x: e.clientX, y: e.clientY });
                       }
                     }}
                     disabled={hasEmbeddedContent || isGeneratingAudio}
+                    aria-disabled={ttsExhausted && !audioUrl ? true : undefined}
+                    data-testid="tts-button"
                     aria-label={
                       audioUrl
                         ? t('chat.stopAudio')
@@ -826,7 +1010,9 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                     title={
                       hasEmbeddedContent
                         ? t('chat.actionsDisabledForEmbed')
-                        : t('chat.ttsRightClickHint')
+                        : ttsDisabledTitle && !audioUrl
+                          ? ttsDisabledTitle
+                          : t('chat.ttsRightClickHint')
                     }
                   >
                     {isGeneratingAudio ? (
@@ -906,6 +1092,40 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                   >
                     <IconFileText size={18} />
                   </button>
+
+                  {/* Download / export button */}
+                  <MessageDownloadMenu
+                    content={displayedContent}
+                    citations={citations}
+                    disabled={hasEmbeddedContent}
+                    disabledTitle={t('chat.actionsDisabledForEmbed')}
+                  />
+
+                  {/* Share this message to OneDrive */}
+                  {sharingEnabled && m365Connected && !hasEmbeddedContent && (
+                    <button
+                      onClick={() => setShowShareModal(true)}
+                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
+                      title={t('share.title')}
+                    >
+                      <IconShare2 size={18} />
+                    </button>
+                  )}
+
+                  {/* Create To Do tasks (§4) */}
+                  {m365MeetingsFlag &&
+                    m365Connected &&
+                    !hasEmbeddedContent &&
+                    extractTaskCandidates(displayedContent).length > 0 && (
+                      <button
+                        className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
+                        onClick={() => setShowTodoModal(true)}
+                        aria-label={t('chat.createTodoTasks')}
+                        title={t('chat.createTodoTasks')}
+                      >
+                        <IconListCheck size={18} />
+                      </button>
+                    )}
                 </div>
               </div>
             )}
@@ -931,6 +1151,24 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                   downloadFilename={audioDownloadFilename}
                 />
               </>
+            )}
+
+            {showShareModal && (
+              <ShareToOneDriveModal
+                isOpen={showShareModal}
+                onClose={() => setShowShareModal(false)}
+                conversation={selectedConversation}
+                messageContent={displayedContent}
+              />
+            )}
+
+            {/* To Do batch-confirm modal (§4) */}
+            {showTodoModal && (
+              <M365TodoTasksModal
+                isOpen={showTodoModal}
+                onClose={() => setShowTodoModal(false)}
+                content={displayedContent}
+              />
             )}
 
             {/* Translation dropdown */}

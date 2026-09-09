@@ -1,3 +1,4 @@
+import { InterpreterMode } from '@/types/interpreterMode';
 import { SearchMode } from '@/types/searchMode';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
@@ -174,6 +175,38 @@ describe('chatInputStore', () => {
 
       expect(useChatInputStore.getState().searchMode).toBe(
         SearchMode.INTELLIGENT,
+      );
+    });
+
+    it('resets interpreterMode to OFF by default', () => {
+      useChatInputStore.setState({
+        interpreterMode: InterpreterMode.ALWAYS,
+      });
+
+      useChatInputStore.getState().resetForNewConversation();
+
+      expect(useChatInputStore.getState().interpreterMode).toBe(
+        InterpreterMode.OFF,
+      );
+    });
+
+    it('accepts a default interpreter mode', () => {
+      useChatInputStore
+        .getState()
+        .resetForNewConversation(SearchMode.OFF, InterpreterMode.INTELLIGENT);
+
+      expect(useChatInputStore.getState().interpreterMode).toBe(
+        InterpreterMode.INTELLIGENT,
+      );
+    });
+  });
+
+  describe('setInterpreterMode', () => {
+    it('updates interpreterMode', () => {
+      useChatInputStore.getState().setInterpreterMode(InterpreterMode.ALWAYS);
+
+      expect(useChatInputStore.getState().interpreterMode).toBe(
+        InterpreterMode.ALWAYS,
       );
     });
   });

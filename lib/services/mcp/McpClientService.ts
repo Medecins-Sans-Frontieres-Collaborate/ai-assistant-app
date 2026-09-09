@@ -24,6 +24,12 @@ export interface McpToolCallResult {
 
 export interface McpConnection {
   listTools(): Promise<McpToolDefinition[]>;
+  /**
+   * The server's `instructions` from the initialize result — spec-intended
+   * system-prompt guidance. Available synchronously once connected. Optional
+   * so test doubles that never touch it stay minimal.
+   */
+  getInstructions?(): string | undefined;
   callTool(
     name: string,
     args: unknown,
@@ -134,6 +140,7 @@ export async function connectMcp(
 
 function wrapClient(client: {
   listTools: () => Promise<{ tools: unknown[] }>;
+  getInstructions?: () => string | undefined;
   callTool: (
     params: { name: string; arguments?: Record<string, unknown> },
     resultSchema?: undefined,
@@ -142,6 +149,19 @@ function wrapClient(client: {
   close: () => Promise<void>;
 }): McpConnection {
   return {
+    getInstructions() {
+      try {
+        const instructions = client.getInstructions?.();
+        return typeof instructions === 'string' && instructions.trim()
+          ? instructions
+          : undefined;
+      } catch {
+        // The SDK throws if called before initialize completes; a missing
+        // instructions field must never break a connection.
+        return undefined;
+      }
+    },
+
     async listTools() {
       const result = await withTimeout(
         client.listTools(),

@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import { renderHook } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 
 import { usePasteChatInput } from '@/client/hooks/ui/usePasteChatInput';
 
@@ -25,6 +25,7 @@ vi.mock('@/client/hooks/chat/usePastedTextAttachment', () => ({
 function createPasteEvent(options: {
   imageFiles?: File[];
   text?: string;
+  html?: string;
   target?: EventTarget;
 }): ClipboardEvent {
   const event = new Event('paste', {
@@ -41,7 +42,8 @@ function createPasteEvent(options: {
     value: {
       items,
       files: options.imageFiles ?? [],
-      getData: () => options.text ?? '',
+      getData: (type: string) =>
+        type === 'text/html' ? (options.html ?? '') : (options.text ?? ''),
     },
   });
   if (options.target) {
@@ -103,9 +105,21 @@ describe('usePasteChatInput', () => {
     const focusSpy = vi.spyOn(textarea, 'focus');
     const textareaRef = { current: textarea };
 
-    renderHook(() => usePasteChatInput({ textareaRef, enabled }));
+    const hook = renderHook(() => usePasteChatInput({ textareaRef, enabled }));
 
-    return { textarea, focusSpy };
+    return { textarea, focusSpy, hook };
+  }
+
+  function pressPasteOptionsChord(init: KeyboardEventInit = {}) {
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'v',
+        ctrlKey: true,
+        shiftKey: true,
+        bubbles: true,
+        ...init,
+      }),
+    );
   }
 
   it('uploads a pasted image with a unique name and focuses the textarea', () => {
@@ -196,7 +210,9 @@ describe('usePasteChatInput', () => {
     expect(files[1].name).toMatch(/\.jpeg$/);
   });
 
-  it('attaches the image and drops the text on mixed clipboard content', () => {
+  it('inserts the text and ignores the image on mixed clipboard content', () => {
+    // Word/Excel/PowerPoint put a PNG rendering of the selection next to the
+    // text; the text is what the user copied.
     setup();
     const image = new File(['x'], 'image.png', { type: 'image/png' });
 
@@ -208,8 +224,265 @@ describe('usePasteChatInput', () => {
       }),
     );
 
-    expect(handleFileUpload).toHaveBeenCalledTimes(1);
-    expect(useChatInputStore.getState().textFieldValue).toBe('');
+    expect(handleFileUpload).not.toHaveBeenCalled();
+    expect(useChatInputStore.getState().textFieldValue).toBe('copied text');
+  });
+
+  it('leaves mixed clipboard content to native handling inside the textarea', () => {
+    const { textarea } = setup();
+    const image = new File(['x'], 'image.png', { type: 'image/png' });
+
+    const dispatchResult = window.dispatchEvent(
+      createPasteEvent({
+        imageFiles: [image],
+        text: 'copied text',
+        target: textarea,
+      }),
+    );
+
+    expect(dispatchResult).toBe(true);
+    expect(handleFileUpload).not.toHaveBeenCalled();
+  });
+
+  describe('paste with options (Ctrl/Cmd+Shift+V)', () => {
+    const image = new File(['x'], 'image.png', { type: 'image/png' });
+
+    it('opens a chooser listing only what the clipboard holds', async () => {
+      const { hook } = setup();
+
+      await act(async () => {
+        pressPasteOptionsChord();
+        window.dispatchEvent(
+          createPasteEvent({
+            imageFiles: [image],
+            text: 'copied text',
+            target: document.body,
+          }),
+        );
+      });
+
+      expect(
+        hook.result.current.pasteChooser?.options.map((o) => o.id),
+      ).toEqual(['text', 'attachText', 'image']);
+      expect(handleFileUpload).not.toHaveBeenCalled();
+      expect(useChatInputStore.getState().textFieldValue).toBe('');
+    });
+
+    it('includes Markdown options when the HTML carries formatting', async () => {
+      const { hook } = setup();
+
+      await act(async () => {
+        pressPasteOptionsChord({ key: 'V', ctrlKey: false, metaKey: true });
+        window.dispatchEvent(
+          createPasteEvent({
+            text: 'Heading body',
+            html: '<h1>Heading</h1><p><b>body</b></p>',
+            target: document.body,
+          }),
+        );
+      });
+
+      // First HTML paste in the file: the DOMPurify module loads lazily.
+      await waitFor(() =>
+        expect(
+          hook.result.current.pasteChooser?.options.map((o) => o.id),
+        ).toEqual(['text', 'markdown', 'attachText', 'attachMarkdown']),
+      );
+    });
+
+    it('applies the chosen option and closes the chooser', async () => {
+      const { hook, focusSpy } = setup();
+
+      await act(async () => {
+        pressPasteOptionsChord();
+        window.dispatchEvent(
+          createPasteEvent({
+            imageFiles: [image],
+            text: 'copied text',
+            target: document.body,
+          }),
+        );
+      });
+      act(() => {
+        hook.result.current.pasteChooser?.select('image');
+      });
+
+      expect(handleFileUpload).toHaveBeenCalledTimes(1);
+      expect(hook.result.current.pasteChooser).toBeNull();
+      expect(focusSpy).toHaveBeenCalled();
+    });
+
+    it('inserts plain text at the caret when chosen, regardless of size', async () => {
+      const { hook, textarea } = setup();
+      useSettingsStore.setState({ pasteAsAttachmentChars: 500 });
+      useChatInputStore.setState({ textFieldValue: 'AB' });
+      textarea.value = 'AB';
+      textarea.setSelectionRange(1, 1);
+      const big = 'x'.repeat(1000);
+
+      await act(async () => {
+        pressPasteOptionsChord();
+        window.dispatchEvent(createPasteEvent({ text: big, target: textarea }));
+      });
+      act(() => {
+        hook.result.current.pasteChooser?.select('text');
+      });
+
+      expect(useChatInputStore.getState().textFieldValue).toBe(`A${big}B`);
+      expect(mockAttachPastedText).not.toHaveBeenCalled();
+    });
+
+    it('inserts Markdown or attaches it when chosen', async () => {
+      const { hook } = setup();
+      const html = '<p><b>bold</b> text</p>';
+
+      await act(async () => {
+        pressPasteOptionsChord();
+        window.dispatchEvent(
+          createPasteEvent({ text: 'bold text', html, target: document.body }),
+        );
+      });
+      act(() => {
+        hook.result.current.pasteChooser?.select('markdown');
+      });
+      expect(useChatInputStore.getState().textFieldValue).toBe('**bold** text');
+
+      await act(async () => {
+        pressPasteOptionsChord();
+        window.dispatchEvent(
+          createPasteEvent({ text: 'bold text', html, target: document.body }),
+        );
+      });
+      act(() => {
+        hook.result.current.pasteChooser?.select('attachMarkdown');
+      });
+      expect(mockAttachPastedText).toHaveBeenCalledWith('**bold** text');
+    });
+
+    it('attaches a link when chosen even with auto-fetch off', async () => {
+      const { hook } = setup();
+      useSettingsStore.setState({ autoFetchPastedLinks: false });
+
+      await act(async () => {
+        pressPasteOptionsChord();
+        window.dispatchEvent(
+          createPasteEvent({
+            text: 'https://example.org/page',
+            target: document.body,
+          }),
+        );
+      });
+      expect(
+        hook.result.current.pasteChooser?.options.map((o) => o.id),
+      ).toContain('link');
+      act(() => {
+        hook.result.current.pasteChooser?.select('link');
+      });
+
+      expect(mockAttachUrl).toHaveBeenCalledWith('https://example.org/page');
+    });
+
+    it('skips the chooser when only one option is available', async () => {
+      const { hook } = setup();
+
+      await act(async () => {
+        pressPasteOptionsChord();
+        window.dispatchEvent(
+          createPasteEvent({ imageFiles: [image], target: document.body }),
+        );
+      });
+
+      expect(hook.result.current.pasteChooser).toBeNull();
+      expect(handleFileUpload).toHaveBeenCalledTimes(1);
+    });
+
+    it('does nothing for an empty clipboard', async () => {
+      const { hook } = setup();
+
+      let dispatchResult = false;
+      await act(async () => {
+        pressPasteOptionsChord();
+        dispatchResult = window.dispatchEvent(
+          createPasteEvent({ target: document.body }),
+        );
+      });
+
+      expect(dispatchResult).toBe(true);
+      expect(hook.result.current.pasteChooser).toBeNull();
+    });
+
+    it('dismisses the chooser and refocuses the composer', async () => {
+      const { hook, focusSpy } = setup();
+
+      await act(async () => {
+        pressPasteOptionsChord();
+        window.dispatchEvent(
+          createPasteEvent({
+            imageFiles: [image],
+            text: 'copied text',
+            target: document.body,
+          }),
+        );
+      });
+      act(() => {
+        hook.result.current.pasteChooser?.dismiss();
+      });
+
+      expect(hook.result.current.pasteChooser).toBeNull();
+      expect(focusSpy).toHaveBeenCalled();
+      expect(handleFileUpload).not.toHaveBeenCalled();
+    });
+
+    it('consumes the chord so the next paste is a normal paste again', async () => {
+      const { hook } = setup();
+
+      await act(async () => {
+        pressPasteOptionsChord();
+        window.dispatchEvent(
+          createPasteEvent({
+            imageFiles: [image],
+            text: 'first',
+            target: document.body,
+          }),
+        );
+      });
+      act(() => {
+        window.dispatchEvent(
+          createPasteEvent({
+            imageFiles: [image],
+            text: 'second',
+            target: document.body,
+          }),
+        );
+      });
+
+      expect(hook.result.current.pasteChooser).toBeNull();
+      expect(useChatInputStore.getState().textFieldValue).toBe('second');
+    });
+
+    it('does not treat a plain Ctrl+V as a paste-with-options request', async () => {
+      const { hook } = setup();
+
+      act(() => {
+        window.dispatchEvent(
+          new KeyboardEvent('keydown', {
+            key: 'v',
+            ctrlKey: true,
+            bubbles: true,
+          }),
+        );
+        window.dispatchEvent(
+          createPasteEvent({
+            imageFiles: [image],
+            text: 'copied text',
+            target: document.body,
+          }),
+        );
+      });
+
+      expect(hook.result.current.pasteChooser).toBeNull();
+      expect(useChatInputStore.getState().textFieldValue).toBe('copied text');
+    });
   });
 
   it('appends pasted text and focuses the textarea when unfocused', () => {
@@ -505,7 +778,7 @@ describe('usePasteChatInput — oversized pastes', () => {
     document.body.removeChild(otherInput);
   });
 
-  it('prefers the image branch when the clipboard holds both', () => {
+  it('attaches the text, not the image, when a long Word paste holds both', () => {
     setup();
     const image = new File(['x'], 'image.png', { type: 'image/png' });
 
@@ -517,6 +790,9 @@ describe('usePasteChatInput — oversized pastes', () => {
       }),
     );
 
-    expect(mockAttachPastedText).not.toHaveBeenCalled();
+    expect(mockAttachPastedText).toHaveBeenCalledWith(big);
+    expect(
+      useChatInputStore.getState().handleFileUpload,
+    ).not.toHaveBeenCalled();
   });
 });

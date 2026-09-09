@@ -127,6 +127,18 @@ export const DEFAULT_SHORTCUTS: Record<ShortcutAction, KeyboardShortcut> = {
     contextRequired: 'hasMessages',
     disableInInput: false,
   },
+  // Listed for the help modal only. The behavior lives in usePasteChatInput,
+  // which observes the chord on keydown and acts on the paste event that the
+  // browser fires from it — so the dispatcher must never preventDefault here.
+  pasteOptions: {
+    id: 'paste-options',
+    key: 'v',
+    modifiers: ['ctrl', 'shift'],
+    labelKey: 'shortcuts.pasteOptions',
+    categoryKey: 'shortcuts.categoryInput',
+    contextRequired: 'notStreaming',
+    disableInInput: false,
+  },
 };
 
 /**

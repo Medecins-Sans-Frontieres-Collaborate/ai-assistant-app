@@ -101,6 +101,16 @@ const serverEnvSchema = z.object({
   AZURE_BLOB_STORAGE_NAME_EU: z.string().optional(),
   AZURE_BLOB_STORAGE_CONTAINER: z.string().optional(),
   AZURE_BLOB_STORAGE_IMAGE_CONTAINER: z.string().optional(),
+  /**
+   * Centralized admin/system data location (agent-access rules, usage-limit
+   * counters, admin guides, map datasets, …). Defaults to the EU account
+   * (data residency: this data references users of every region, and only
+   * EU placement satisfies "EU data never leaves the EU") in a dedicated
+   * container OUTSIDE any lifecycle-delete rule. See lib/services/
+   * adminBlobStorage.ts and docs/ADMIN_BLOB_STORAGE.md.
+   */
+  AZURE_BLOB_STORAGE_ADMIN_NAME: z.string().optional(),
+  AZURE_BLOB_STORAGE_ADMIN_CONTAINER: z.string().optional(),
   STORAGE_RESOURCE_ID: z.string().optional(),
   STORAGE_DATA_SOURCE_CONTAINER: z.string().optional(),
 
@@ -112,6 +122,79 @@ const serverEnvSchema = z.object({
   SEARCH_INDEXER: z.string().optional(),
   SEARCH_ENDPOINT_API_KEY: z.string().optional(), // Legacy: Used by OpenAI data_sources feature in documentSummary.ts
   ALLOW_INDEX_DOWNTIME: booleanString(false),
+  // M365 file-backed agents (docs/M365_SECOND_PASS_AGENTS_DESIGN.md).
+  // Endpoint defaults to SEARCH_ENDPOINT; override to pin the shared
+  // m365-agents index to a specific region's Search service (residency
+  // decision: an agent whose audience spans US+EU is hosted in EU).
+  M365_AGENTS_SEARCH_ENDPOINT: z.string().url().optional(),
+  M365_AGENTS_SEARCH_INDEX: z.string().default('m365-agents'),
+  // Documents per M365 agent (after folder expansion). Layer-2 probes run
+  // as Graph $batch calls (20/request), so the ceiling is indexing wall
+  // time and per-user probe latency, not probe fan-out. 200 is a hard
+  // sanity bound — the synchronous index route has a 300s budget.
+  M365_AGENT_MAX_DOCUMENTS: z.coerce.number().int().min(1).max(200).default(50),
+  /**
+   * Sum of the sizes of an M365 agent's indexable files (MB). Known from
+   * Graph metadata, so the plan view can refuse an oversized tree before a
+   * single download.
+   */
+  M365_AGENT_MAX_SOURCE_MB: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(4096)
+    .default(512),
+  /**
+   * Vision-capable chat deployment used to describe images and OCR scanned
+   * PDFs when an admin prepares such a file for an M365 agent (phase 4).
+   */
+  M365_AGENT_VISION_MODEL: z.string().default('gpt-5-mini'),
+
+  // Web search backend:
+  //  - 'news': GDELT + Google News RSS queried IN PARALLEL and merged —
+  //    each feed is the other's backup, so one failing/empty source never
+  //    sinks the search. Seconds-fast, no LLM round-trip. Default.
+  //  - 'gdelt': GDELT DOC API alone — keyless, real publisher URLs.
+  //  - 'google-news': Google News RSS alone + link decoding.
+  //  - 'bing-agent': the Foundry agent with Bing grounding — broader web
+  //    coverage but 30-90s round-trips and flaky result quality.
+  //  - 'combined': Bing agent + Google News feed concurrently; headlines
+  //    stream to the client while Bing runs, then the results merge.
+  //  - 'bing-responses': the native web_search tool on the Azure OpenAI
+  //    Responses API — same Bing grounding as 'bing-agent' but a direct
+  //    model call instead of a Foundry agent run.
+  WEB_SEARCH_PROVIDER: z
+    .enum([
+      'news',
+      'gdelt',
+      'google-news',
+      'bing-agent',
+      'bing-responses',
+      'combined',
+    ])
+    .default('news'),
+
+  // Web search round-trip budget (ms). Applies to whichever provider runs.
+  // Bing grounding via the Foundry search agent is simply slow (observed
+  // >45s regularly; nothing app-side can speed it up) — the wait is made
+  // legible instead: live query loader, elapsed timer, and a color ramp
+  // that drifts warmer over time. On timeout the turn degrades to a
+  // knowledge answer with an honest notice.
+  WEB_SEARCH_TIMEOUT_MS: z.coerce.number().int().min(5000).default(120000),
+
+  // Code interpreter (sandboxed Python via Foundry Responses API).
+  // Kill switch: default ON so interpreter is available out of the box;
+  // set false to disable the feature server-side regardless of client mode.
+  CODE_INTERPRETER_ENABLED: booleanString(true),
+  // Deployment that backs the interpreter sub-tool round-trip (must support
+  // the Responses-API code_interpreter tool in the project's region).
+  CODE_INTERPRETER_MODEL: z.string().default('gpt-5.4'),
+
+  // Deployment used by the 'bing-responses' web-search provider (Responses
+  // API native web_search tool). Must be a Responses-capable deployment in
+  // the default Foundry project, with the web_search tool enabled on the
+  // subscription.
+  WEB_SEARCH_RESPONSES_MODEL: z.string().default('gpt-5.4'),
 
   // MCP (Model Context Protocol) connectors
   // Server-side gate for ARBITRARY (non-catalog) MCP server URLs — defense in
@@ -148,8 +231,21 @@ const serverEnvSchema = z.object({
   // rules-blob outage: set to "false" and redeploy.
   AGENT_ACCESS_CONTROL_ENABLED: booleanString(false),
   // Comma-separated global-admin emails (Graph `mail` values, matched
-  // lowercased + trimmed). Bootstrap mechanism — changing it needs a redeploy.
+  // lowercased + trimmed). Bootstrap roster — changing it needs a redeploy.
+  // Additional global admins are configured at runtime in Admin → Global
+  // admins (system/admin/global-admins.json, GlobalAdminRosterService); the
+  // effective set is the union. This env roster is un-lockable: no runtime
+  // write can remove it, and the roster PUT refuses to empty itself while
+  // this is also empty (GLOBAL_ADMINS_LOCKOUT).
   AGENT_ACCESS_ADMINS: z.string().optional(),
+
+  // Usage limits (docs/LIMITS.md) have no env gate: the UI is gated by the
+  // client-side `usageLimits` LaunchDarkly flag, and the server side is inert
+  // until a policy is authored (no policy blob → everything unlimited).
+  // Break-glass for a bad policy is the admin UI itself, or deleting the blob.
+  // The global-admin roster IS shared — limits are authored by the same
+  // AGENT_ACCESS_ADMINS ∪ config-roster global admins, plus scoped admins
+  // named in limits delegations (docs/LIMITS_SCOPED_ADMINS_DESIGN.md).
 
   // Application Configuration
   // Optional explicit override; when unset the default model resolves
@@ -175,9 +271,23 @@ const serverEnvSchema = z.object({
   LAUNCHDARKLY_SDK_KEY: z.string().optional(),
   LAUNCHDARKLY_CLIENT_ID: z.string().optional(),
 
+  // Grant Pipeline - Azure OpenAI overrides (falls back to main Azure OpenAI config)
+  GRANT_PIPELINE_OPENAI_ENDPOINT: z.string().url().optional(),
+  GRANT_PIPELINE_OPENAI_DEPLOYMENT: z.string().optional(),
+  GRANT_PIPELINE_OPENAI_KEY: z.string().optional(),
+
+  // Grant Pipeline - Azure Document Intelligence (falls back to main DI config)
+  AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT: z.string().url().optional(),
+  AZURE_DOCUMENT_INTELLIGENCE_KEY: z.string().optional(),
+  GRANT_PIPELINE_DI_ENDPOINT: z.string().url().optional(),
+  GRANT_PIPELINE_DI_KEY: z.string().optional(),
+
   // Build Information
   GITHUB_SHA: z.string().optional(),
   BUILD_ID: z.string().optional(),
+  // Public repo the "what's new" panel reads releases from (`owner/name`);
+  // defaults to the MSF repository, overridable by forks.
+  GITHUB_RELEASES_REPO: z.string().optional(),
   NEXT_PUBLIC_EMAIL: z.string().email().optional(),
 
   // System Prompt Configuration

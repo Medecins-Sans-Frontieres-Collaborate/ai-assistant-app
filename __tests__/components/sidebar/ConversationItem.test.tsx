@@ -115,4 +115,46 @@ describe('ConversationItem', () => {
     expect(input).toBeInTheDocument();
     expect(document.querySelector('[data-dropdown-portal]')).toBeNull();
   });
+
+  it('lets the rename input receive spaces (row activation keys do not swallow them)', () => {
+    const { handlers } = renderItem();
+    openMenu();
+    fireEvent.click(screen.getByText('Rename'));
+    const input = screen.getByDisplayValue('Budget review');
+
+    // fireEvent returns false when a handler called preventDefault(); a
+    // default-prevented keydown is exactly what stopped the browser inserting
+    // the space character.
+    expect(fireEvent.keyDown(input, { key: ' ' })).toBe(true);
+    expect(fireEvent.keyDown(input, { key: 'a' })).toBe(true);
+    expect(handlers.handleSelectConversation).not.toHaveBeenCalled();
+  });
+
+  it('still activates the row itself with Enter and Space', () => {
+    const { handlers, container } = renderItem();
+    const row = container.firstChild as HTMLElement;
+
+    fireEvent.keyDown(row, { key: 'Enter' });
+    fireEvent.keyDown(row, { key: ' ' });
+    expect(handlers.handleSelectConversation).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not treat keys on the Options button as row activation', () => {
+    const { handlers } = renderItem();
+    const options = screen.getByRole('button', { name: 'Options' });
+
+    // Enter/Space on the button must reach the button's own click behaviour
+    // instead of being default-prevented and turned into a row selection.
+    expect(fireEvent.keyDown(options, { key: 'Enter' })).toBe(true);
+    expect(fireEvent.keyDown(options, { key: ' ' })).toBe(true);
+    expect(handlers.handleSelectConversation).not.toHaveBeenCalled();
+  });
+
+  it('exposes the full name as a title so truncated names are readable on hover', () => {
+    renderItem();
+    expect(screen.getByText('Budget review')).toHaveAttribute(
+      'title',
+      'Budget review',
+    );
+  });
 });

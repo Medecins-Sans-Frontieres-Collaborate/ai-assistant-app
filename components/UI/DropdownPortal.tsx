@@ -53,52 +53,72 @@ export function DropdownPortal({
   // know the real menu height. useLayoutEffect runs synchronously before paint,
   // so the corrected position is committed without a one-frame flicker at the
   // previous open's stale coordinates.
+  //
+  // Placement is re-run whenever the menu's own box changes size (via
+  // ResizeObserver): a menu that grows after opening — e.g. an inline
+  // "Move to folder" submenu expanding to list many folders — used to keep
+  // its original top and run off the bottom of the viewport, leaving the
+  // last entries unreachable (the page body never scrolls).
   useIsomorphicLayoutEffect(() => {
     if (!isOpen) return;
     if (!triggerRef.current || !dropdownRef.current) return;
 
-    const triggerRect = triggerRef.current.getBoundingClientRect();
-    const menuRect = dropdownRef.current.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const viewportWidth = window.innerWidth;
+    const computePosition = () => {
+      if (!triggerRef.current || !dropdownRef.current) return;
 
-    const spaceBelow = viewportHeight - triggerRect.bottom;
-    const spaceAbove = triggerRect.top;
-    const placeAbove =
-      menuRect.height + TRIGGER_GAP_PX > spaceBelow && spaceAbove > spaceBelow;
+      const triggerRect = triggerRef.current.getBoundingClientRect();
+      const menuRect = dropdownRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
 
-    const rawTop = placeAbove
-      ? triggerRect.top - menuRect.height - TRIGGER_GAP_PX
-      : triggerRect.bottom + TRIGGER_GAP_PX;
+      const spaceBelow = viewportHeight - triggerRect.bottom;
+      const spaceAbove = triggerRect.top;
+      const placeAbove =
+        menuRect.height + TRIGGER_GAP_PX > spaceBelow &&
+        spaceAbove > spaceBelow;
 
-    const maxTop = Math.max(
-      VIEWPORT_INSET_PX,
-      viewportHeight - menuRect.height - VIEWPORT_INSET_PX,
-    );
-    const top = Math.min(Math.max(rawTop, VIEWPORT_INSET_PX), maxTop);
+      const rawTop = placeAbove
+        ? triggerRect.top - menuRect.height - TRIGGER_GAP_PX
+        : triggerRect.bottom + TRIGGER_GAP_PX;
 
-    let anchorX = align === 'left' ? triggerRect.left : triggerRect.right;
-
-    if (align === 'right' && anchorX - menuRect.width < VIEWPORT_INSET_PX) {
-      // Dropdown would clip the viewport's left edge — slide it right by
-      // setting its right edge such that the left edge sits at VIEWPORT_INSET_PX.
-      anchorX = Math.min(
-        menuRect.width + VIEWPORT_INSET_PX,
-        viewportWidth - VIEWPORT_INSET_PX,
-      );
-    } else if (
-      align === 'left' &&
-      anchorX + menuRect.width > viewportWidth - VIEWPORT_INSET_PX
-    ) {
-      // Dropdown would clip the viewport's right edge — pull it back so its
-      // right edge sits at viewportWidth - VIEWPORT_INSET_PX.
-      anchorX = Math.max(
+      const maxTop = Math.max(
         VIEWPORT_INSET_PX,
-        viewportWidth - menuRect.width - VIEWPORT_INSET_PX,
+        viewportHeight - menuRect.height - VIEWPORT_INSET_PX,
       );
-    }
+      const top = Math.min(Math.max(rawTop, VIEWPORT_INSET_PX), maxTop);
 
-    setPosition({ top, anchorX });
+      let anchorX = align === 'left' ? triggerRect.left : triggerRect.right;
+
+      if (align === 'right' && anchorX - menuRect.width < VIEWPORT_INSET_PX) {
+        // Dropdown would clip the viewport's left edge — slide it right by
+        // setting its right edge such that the left edge sits at VIEWPORT_INSET_PX.
+        anchorX = Math.min(
+          menuRect.width + VIEWPORT_INSET_PX,
+          viewportWidth - VIEWPORT_INSET_PX,
+        );
+      } else if (
+        align === 'left' &&
+        anchorX + menuRect.width > viewportWidth - VIEWPORT_INSET_PX
+      ) {
+        // Dropdown would clip the viewport's right edge — pull it back so its
+        // right edge sits at viewportWidth - VIEWPORT_INSET_PX.
+        anchorX = Math.max(
+          VIEWPORT_INSET_PX,
+          viewportWidth - menuRect.width - VIEWPORT_INSET_PX,
+        );
+      }
+
+      setPosition({ top, anchorX });
+    };
+
+    computePosition();
+
+    // jsdom and very old browsers lack ResizeObserver; placement then only
+    // happens on open, which is the previous behaviour.
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(() => computePosition());
+    observer.observe(dropdownRef.current);
+    return () => observer.disconnect();
   }, [isOpen, triggerRef, align]);
 
   // Close on click outside

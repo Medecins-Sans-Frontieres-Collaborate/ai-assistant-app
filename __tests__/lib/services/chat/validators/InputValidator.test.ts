@@ -5,6 +5,7 @@ import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 
 import { ErrorCode, PipelineError } from '@/types/errors';
+import { InterpreterMode } from '@/types/interpreterMode';
 
 import { describe, expect, it } from 'vitest';
 
@@ -130,6 +131,48 @@ describe('InputValidator', () => {
         expect((error as PipelineError).message).toContain(
           'Failed to validate file size',
         );
+      }
+    });
+
+    it('classifies a missing blob (RestError-style 404) as FILE_NOT_FOUND', async () => {
+      const validator = new InputValidator();
+      const fileUrl = '/api/file/abc123.pdf';
+      const mockGetFileSize = async () => {
+        throw Object.assign(
+          new Error('BlobNotFound: The specified blob does not exist.'),
+          { statusCode: 404, code: 'BlobNotFound' },
+        );
+      };
+
+      try {
+        await validator.validateFileSize(fileUrl, mockUser, mockGetFileSize);
+        expect.fail('Should have thrown PipelineError');
+      } catch (error) {
+        expect(error).toBeInstanceOf(PipelineError);
+        const pipelineError = error as PipelineError;
+        expect(pipelineError.code).toBe(ErrorCode.FILE_NOT_FOUND);
+        expect(pipelineError.metadata?.fileUrl).toBe(fileUrl);
+        // Client-safe message: streamed to the user verbatim.
+        expect(pipelineError.message).toContain('no longer available');
+        expect(pipelineError.message).not.toContain('BlobNotFound');
+      }
+    });
+
+    it('classifies a bare 404 message without statusCode as FILE_NOT_FOUND', async () => {
+      const validator = new InputValidator();
+      const mockGetFileSize = async () => {
+        throw new Error('Request failed with status 404');
+      };
+
+      try {
+        await validator.validateFileSize(
+          '/api/file/gone.docx',
+          mockUser,
+          mockGetFileSize,
+        );
+        expect.fail('Should have thrown PipelineError');
+      } catch (error) {
+        expect((error as PipelineError).code).toBe(ErrorCode.FILE_NOT_FOUND);
       }
     });
 
@@ -491,6 +534,63 @@ describe('validateChatRequest - conversationSummary and memories', () => {
   });
 });
 
+describe('validateChatRequest - m365MailScreenOverrides', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+
+  it('accepts Graph-id-shaped override ids and round-trips them', () => {
+    const validator = new InputValidator();
+    const ids = ['AAMkAGI2NGVhZTVlLTI3ZjMtNGQ1Yy1iMDEy_x=', 'msg-2.body,id'];
+    expect(
+      validator.validateChatRequest({ ...base, m365MailScreenOverrides: ids })
+        .m365MailScreenOverrides,
+    ).toEqual(ids);
+  });
+
+  it('is optional', () => {
+    const validator = new InputValidator();
+    expect(
+      validator.validateChatRequest(base).m365MailScreenOverrides,
+    ).toBeUndefined();
+  });
+
+  it('accepts at most 20 ids', () => {
+    const validator = new InputValidator();
+    const twenty = Array.from({ length: 20 }, (_, i) => `id-${i}`);
+    expect(
+      validator.validateChatRequest({
+        ...base,
+        m365MailScreenOverrides: twenty,
+      }).m365MailScreenOverrides,
+    ).toHaveLength(20);
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        m365MailScreenOverrides: [...twenty, 'id-20'],
+      }),
+    ).toThrow(PipelineError);
+  });
+
+  it('rejects ids outside the Graph-id charset or over 512 chars', () => {
+    const validator = new InputValidator();
+    for (const bad of [
+      "id' or 1=1",
+      'id with spaces',
+      'id/with/slashes',
+      'a'.repeat(513),
+    ]) {
+      expect(() =>
+        validator.validateChatRequest({
+          ...base,
+          m365MailScreenOverrides: [bad],
+        }),
+      ).toThrow(PipelineError);
+    }
+  });
+});
+
 describe('validateChatRequest - hostedRegion', () => {
   const base = {
     model: { id: 'gpt-5.2', name: 'GPT-5.2' },
@@ -523,6 +623,210 @@ describe('validateChatRequest - hostedRegion', () => {
       validator.validateChatRequest({
         ...base,
         hostedRegion: 'https://evil.example',
+      }),
+    ).toThrow();
+  });
+});
+
+describe('validateChatRequest - interpreterMode', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+
+  it('accepts every InterpreterMode value', () => {
+    const validator = new InputValidator();
+    for (const mode of Object.values(InterpreterMode)) {
+      expect(
+        validator.validateChatRequest({ ...base, interpreterMode: mode })
+          .interpreterMode,
+      ).toBe(mode);
+    }
+  });
+
+  it('is optional', () => {
+    const validator = new InputValidator();
+    expect(validator.validateChatRequest(base).interpreterMode).toBeUndefined();
+  });
+
+  it('rejects values outside the enum', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({ ...base, interpreterMode: 'turbo' }),
+    ).toThrow();
+    expect(() =>
+      validator.validateChatRequest({ ...base, interpreterMode: 'agent' }),
+    ).toThrow();
+  });
+});
+
+describe('validateChatRequest - webSearchOptions.provider', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+
+  it('keeps the provider selection (the regression: it used to be stripped)', () => {
+    const validator = new InputValidator();
+    for (const provider of [
+      'auto',
+      'news',
+      'google-news',
+      'gdelt',
+      'bing-agent',
+      'bing-responses',
+      'combined',
+    ]) {
+      const result = validator.validateChatRequest({
+        ...base,
+        webSearchOptions: { resultCount: 8, freshness: 'any', provider },
+      });
+      expect(result.webSearchOptions?.provider).toBe(provider);
+    }
+  });
+
+  it('accepts webSearchOptions without a provider (older clients)', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      webSearchOptions: { resultCount: 8, freshness: 'any' },
+    });
+    expect(result.webSearchOptions?.provider).toBeUndefined();
+  });
+
+  it('rejects unknown providers', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        webSearchOptions: {
+          resultCount: 8,
+          freshness: 'any',
+          provider: 'altavista',
+        },
+      }),
+    ).toThrow();
+  });
+});
+
+describe('validateChatRequest - precomputedSearchResults', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+  const entry = {
+    title: 'Headline',
+    url: 'https://example.com/a',
+    date: '2026-07-23',
+    sourceName: 'example.com',
+    snippet: 'Snippet text',
+  };
+
+  it('accepts a bounded echo payload', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      precomputedSearchResults: { queries: ['q1', 'q2'], entries: [entry] },
+    });
+    expect(result.precomputedSearchResults?.entries).toHaveLength(1);
+    expect(result.precomputedSearchResults?.queries).toEqual(['q1', 'q2']);
+  });
+
+  it('rejects non-http(s) entry URLs (clickable-citation injection)', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q'],
+          entries: [{ ...entry, url: 'javascript:alert(1)' }],
+        },
+      }),
+    ).toThrow();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q'],
+          entries: [{ ...entry, sourceUrl: 'data:text/html,x' }],
+        },
+      }),
+    ).toThrow();
+  });
+
+  it('rejects empty entries and oversized lists', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: { queries: ['q'], entries: [] },
+      }),
+    ).toThrow();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q'],
+          entries: Array.from({ length: 40 }, (_, i) => ({
+            ...entry,
+            url: `https://example.com/${i}`,
+          })),
+        },
+      }),
+    ).toThrow();
+  });
+});
+
+describe('validateChatRequest - mcpServers entries', () => {
+  const base = {
+    messages: [{ role: 'user' as const, content: 'hi' }],
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+  };
+
+  it('accepts a builtin marker entry (builtin-m365)', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      mcpServers: [
+        { id: 'builtin-m365', name: 'Microsoft 365', builtin: true },
+      ],
+    });
+    expect(result.mcpServers).toEqual([
+      { id: 'builtin-m365', name: 'Microsoft 365', builtin: true },
+    ]);
+  });
+
+  it('accepts an admin-connector entry carrying connectorId', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      mcpServers: [
+        { id: 'conn-1', name: 'NetSuite', connectorId: 'connector-abc123' },
+      ],
+    });
+    expect(result.mcpServers?.[0].connectorId).toBe('connector-abc123');
+  });
+
+  it('still rejects unknown fields (schema stays strict)', () => {
+    const validator = new InputValidator();
+    try {
+      validator.validateChatRequest({
+        ...base,
+        mcpServers: [{ id: 'x', name: 'X', somethingElse: 'nope' }],
+      });
+      expect.fail('Should have thrown PipelineError');
+    } catch (error) {
+      expect(error).toBeInstanceOf(PipelineError);
+      expect((error as PipelineError).code).toBe(ErrorCode.VALIDATION_FAILED);
+    }
+  });
+
+  it('rejects a non-boolean builtin value', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        mcpServers: [{ id: 'builtin-m365', name: 'M365', builtin: 'yes' }],
       }),
     ).toThrow();
   });

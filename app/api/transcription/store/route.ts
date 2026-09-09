@@ -10,17 +10,12 @@
  */
 import { NextRequest } from 'next/server';
 
-import {
-  JOB_ID_REGEX,
-  getJob,
-  getJobForUser,
-} from '@/lib/services/transcription/chunkedJobStore';
+import { JOB_ID_REGEX } from '@/lib/services/transcription/chunkedJobStore';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
 import {
   badRequestResponse,
   errorResponse,
-  notFoundResponse,
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
@@ -77,17 +72,11 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // If the jobId corresponds to a known chunked job, require ownership.
-  // Batch jobs don't have a local record — we fall back to the user-prefixed
-  // blob path as the boundary in that case (each user can only write into
-  // their own `${userId}/transcripts/` folder via this endpoint).
-  const knownChunkedJob = getJob(jobId);
-  if (knownChunkedJob) {
-    const ownedJob = getJobForUser(jobId, session.user.id);
-    if (!ownedJob) {
-      return notFoundResponse('Transcription job');
-    }
-  }
+  // No job-record ownership check is needed here: chunked job records are
+  // stored under `${userId}/transcription-jobs/`, so another user's jobId is
+  // unaddressable from this session, and the user-prefixed blob path below
+  // is the write boundary either way (each user can only write into their
+  // own `${userId}/transcripts/` folder via this endpoint).
 
   try {
     const blobStorage = new AzureBlobStorage(

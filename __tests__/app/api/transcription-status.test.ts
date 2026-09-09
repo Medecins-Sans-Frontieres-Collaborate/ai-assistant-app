@@ -12,6 +12,10 @@ vi.mock('@/auth', () => ({
   auth: vi.fn(),
 }));
 
+vi.mock('@/lib/services/blobStorageFactory', () => ({
+  createBlobStorageClient: vi.fn().mockReturnValue({ fake: 'blob-storage' }),
+}));
+
 vi.mock('@/lib/services/transcription/chunkedJobStore', () => ({
   getJobForUser: vi.fn(),
   JOB_ID_REGEX:
@@ -74,7 +78,11 @@ describe('/api/transcription/status/[jobId]', () => {
     const body = await parseJsonResponse(response);
 
     expect(response.status).toBe(200);
-    expect(getJobForUser).toHaveBeenCalledWith(jobId, ownerId);
+    expect(getJobForUser).toHaveBeenCalledWith(
+      expect.anything(),
+      jobId,
+      ownerId,
+    );
     expect(body.data?.status ?? body.status).toBe('Running');
     expect(body.data?.progress ?? body.progress).toEqual({
       completed: 1,
@@ -93,7 +101,11 @@ describe('/api/transcription/status/[jobId]', () => {
     // Falls through to the batch path; with batch service "not configured"
     // the route returns 404.
     expect(response.status).toBe(404);
-    expect(getJobForUser).toHaveBeenCalledWith(jobId, ownerId);
+    expect(getJobForUser).toHaveBeenCalledWith(
+      expect.anything(),
+      jobId,
+      ownerId,
+    );
   });
 
   it('returns 400 when jobId is not a UUID', async () => {

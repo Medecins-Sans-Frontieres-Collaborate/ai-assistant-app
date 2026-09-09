@@ -66,6 +66,15 @@ export const ConnectorEditor: FC<ConnectorEditorProps> = ({
   const [scopes, setScopes] = useState(
     (existing?.connector.oauthScopes ?? []).join(' '),
   );
+  const [oauthAuthorizationUrl, setOauthAuthorizationUrl] = useState(
+    existing?.connector.oauthAuthorizationUrl ?? '',
+  );
+  const [oauthTokenUrl, setOauthTokenUrl] = useState(
+    existing?.connector.oauthTokenUrl ?? '',
+  );
+  const [oauthRefreshUrl, setOauthRefreshUrl] = useState(
+    existing?.connector.oauthRefreshUrl ?? '',
+  );
   const [setupHint, setSetupHint] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isConflict, setIsConflict] = useState(false);
@@ -89,16 +98,30 @@ export const ConnectorEditor: FC<ConnectorEditorProps> = ({
         : preset.authStyle,
     );
     setTokenHelpUrl(preset.tokenHelpUrl ?? '');
+    setScopes((preset.oauthScopes ?? []).join(' '));
+    setOauthAuthorizationUrl(preset.oauthAuthorizationUrlTemplate ?? '');
+    setOauthTokenUrl(preset.oauthTokenUrlTemplate ?? '');
+    setOauthRefreshUrl(preset.oauthRefreshUrlTemplate ?? '');
     setSetupHint(preset.setupHint);
   };
 
   const urlStillTemplated = /\{[^}]+\}/.test(url);
+  const endpointsStillTemplated = /\{[^}]+\}/.test(
+    oauthAuthorizationUrl + oauthTokenUrl + oauthRefreshUrl,
+  );
+  // Authorization + token URLs are a pair (server-enforced too); refresh
+  // rides on top of the pair. All three blank = automatic discovery.
+  const endpointsCoherent = oauthAuthorizationUrl.trim()
+    ? oauthTokenUrl.trim().length > 0
+    : !oauthTokenUrl.trim() && !oauthRefreshUrl.trim();
   const canSave =
     name.trim().length > 0 &&
     url.trim().length > 0 &&
     !urlStillTemplated &&
     (authStyle !== 'oauth' ||
       (oauthClientId.trim().length > 0 &&
+        !endpointsStillTemplated &&
+        endpointsCoherent &&
         // On create the secret is mandatory; on edit an empty box keeps the
         // stored one, so it is only mandatory when none is stored yet.
         (oauthClientSecret.trim().length > 0 || hasStoredSecret)));
@@ -129,6 +152,17 @@ export const ConnectorEditor: FC<ConnectorEditorProps> = ({
             : {}),
           ...(isOauth
             ? { oauthScopes: scopes.split(/\s+/).filter(Boolean) }
+            : {}),
+          // Blank fields are omitted (not sent empty): omission is what the
+          // server stores as "use automatic discovery".
+          ...(isOauth && oauthAuthorizationUrl.trim()
+            ? { oauthAuthorizationUrl: oauthAuthorizationUrl.trim() }
+            : {}),
+          ...(isOauth && oauthTokenUrl.trim()
+            ? { oauthTokenUrl: oauthTokenUrl.trim() }
+            : {}),
+          ...(isOauth && oauthRefreshUrl.trim()
+            ? { oauthRefreshUrl: oauthRefreshUrl.trim() }
             : {}),
         }),
       });
@@ -362,6 +396,58 @@ export const ConnectorEditor: FC<ConnectorEditorProps> = ({
                 spellCheck={false}
               />
             </div>
+            <div>
+              <label className={labelClass} htmlFor={`${baseId}-authUrl`}>
+                {t('connectorOauthAuthUrlLabel')}
+              </label>
+              <input
+                id={`${baseId}-authUrl`}
+                className={inputClass}
+                value={oauthAuthorizationUrl}
+                onChange={(e) => setOauthAuthorizationUrl(e.target.value)}
+                spellCheck={false}
+              />
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                {t('connectorOauthEndpointsHint')}
+              </p>
+            </div>
+            <div>
+              <label className={labelClass} htmlFor={`${baseId}-tokenUrl`}>
+                {t('connectorOauthTokenUrlLabel')}
+              </label>
+              <input
+                id={`${baseId}-tokenUrl`}
+                className={inputClass}
+                value={oauthTokenUrl}
+                onChange={(e) => setOauthTokenUrl(e.target.value)}
+                spellCheck={false}
+              />
+            </div>
+            <div>
+              <label className={labelClass} htmlFor={`${baseId}-refreshUrl`}>
+                {t('connectorOauthRefreshUrlLabel')}
+              </label>
+              <input
+                id={`${baseId}-refreshUrl`}
+                className={inputClass}
+                value={oauthRefreshUrl}
+                onChange={(e) => setOauthRefreshUrl(e.target.value)}
+                spellCheck={false}
+              />
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                {t('connectorOauthRefreshUrlHint')}
+              </p>
+            </div>
+            {endpointsStillTemplated && (
+              <p className="text-xs text-amber-600 dark:text-amber-400">
+                {t('connectorUrlPlaceholderWarning')}
+              </p>
+            )}
+            {!endpointsCoherent && (
+              <p className="text-xs text-amber-600 dark:text-amber-400">
+                {t('connectorOauthEndpointsPairWarning')}
+              </p>
+            )}
           </>
         )}
       </div>

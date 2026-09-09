@@ -179,6 +179,29 @@ interface ConversationStore {
   ) => void;
   clearAllActiveFiles: (conversationId: string) => void;
   setPinned: (conversationId: string, fileId: string, pinned: boolean) => void;
+  /**
+   * Flags the active file backed by `fileUrl` as failed (the server reported
+   * its blob gone — uploads expire after a few days) and unpins it so it
+   * stops counting as good context and the eviction logic can reclaim its
+   * slot. Keyed by URL, not id, because the server only knows the URL.
+   */
+  markActiveFileError: (
+    conversationId: string,
+    fileUrl: string,
+    errorMessage: string,
+  ) => void;
+  /**
+   * Removes every `file_url` content part matching `fileUrl` from the
+   * conversation's message history, leaving an inline note in its place
+   * (client-side mirror of the server's sanitizeFileUrlsOnError, but
+   * URL-targeted). Without this, FileProcessor's history walk-back would
+   * re-validate the dead blob on every future turn and fail the whole
+   * conversation forever.
+   */
+  stripExpiredFileFromMessages: (
+    conversationId: string,
+    fileUrl: string,
+  ) => void;
   deductActiveFilesTokens: (conversationId: string, tokens: number) => void;
   /**
    * Persists an MCP tool-approval outcome on the source message. Index points
@@ -744,6 +767,82 @@ export const useConversationStore = create<ConversationStore>()(
         }));
       },
 
+      markActiveFileError: (conversationId, fileUrl, errorMessage) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            const existing = c.activeFiles ?? [];
+            if (!existing.some((f) => f.url === fileUrl)) return c;
+            return {
+              ...c,
+              activeFiles: existing.map((f) =>
+                f.url === fileUrl
+                  ? {
+                      ...f,
+                      status: 'error' as const,
+                      errorMessage,
+                      pinned: false,
+                    }
+                  : f,
+              ),
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        })),
+
+      stripExpiredFileFromMessages: (conversationId, fileUrl) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            let changed = false;
+            const messages = c.messages.map((entry) => {
+              // file_url parts only exist on plain (user) messages.
+              if (isAssistantMessageGroup(entry)) return entry;
+              if (!Array.isArray(entry.content)) return entry;
+
+              const removed = entry.content.find(
+                (part) => part.type === 'file_url' && part.url === fileUrl,
+              );
+              if (!removed) return entry;
+              changed = true;
+
+              const kept = entry.content.filter(
+                (part) => !(part.type === 'file_url' && part.url === fileUrl),
+              );
+              const filename =
+                'originalFilename' in removed && removed.originalFilename
+                  ? ` "${removed.originalFilename}"`
+                  : '';
+              const notice = `[Note: The attached file${filename} is no longer available and was removed]`;
+
+              // Prepend the notice to an existing text part, or add one.
+              const textIndex = kept.findIndex((part) => part.type === 'text');
+              const withNotice =
+                textIndex >= 0
+                  ? kept.map((part, i) =>
+                      i === textIndex && part.type === 'text'
+                        ? { ...part, text: `${notice}\n\n${part.text}` }
+                        : part,
+                    )
+                  : [{ type: 'text' as const, text: notice }, ...kept];
+
+              // Collapse to a plain string when only text remains — the
+              // same shape the server's sanitizer produces.
+              const only = withNotice.length === 1 ? withNotice[0] : null;
+              return {
+                ...entry,
+                content: only && only.type === 'text' ? only.text : withNotice,
+              };
+            });
+            if (!changed) return c;
+            return {
+              ...c,
+              messages,
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        })),
+
       deductActiveFilesTokens: (conversationId, tokens) => {
         set((state) => ({
           conversations: state.conversations.map((c) => {
@@ -851,7 +950,7 @@ export const useConversationStore = create<ConversationStore>()(
     }),
     {
       name: 'conversation-storage',
-      version: 7, // v7: backup tombstones (deletedConversations) + foldersUpdatedAt
+      version: 8, // v8: clear stale bot mirrors (agent/model decoupling)
       storage: createJSONStorage(() => perConversationStorage),
       partialize: (state) => ({
         conversations: state.conversations,
@@ -954,6 +1053,24 @@ export const useConversationStore = create<ConversationStore>()(
             Array.isArray(state.folders) && state.folders.length > 0
               ? new Date().toISOString()
               : null;
+        }
+
+        if (version < 8) {
+          // Agent/model decoupling: `bot` used to be a mirror of an
+          // agent-shaped model id, and two write paths (useModelSelection,
+          // WorkflowModelSelect) left it stale after a model switch. From
+          // v8 a bot beside a REAL model means "agent attached" and the
+          // request carries agentAttached — so historical stale mirrors
+          // must be dropped once, or they'd surface as surprise
+          // attachments. A bot matching its `org-<bot>` model is a live
+          // legacy selection and is kept.
+          state.conversations = state.conversations.map((conv) => {
+            if (conv.bot && conv.model?.id !== `org-${conv.bot}`) {
+              const { bot: _bot, ...rest } = conv;
+              return rest as Conversation;
+            }
+            return conv;
+          });
         }
 
         return state;

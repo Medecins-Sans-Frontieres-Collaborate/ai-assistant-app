@@ -1,11 +1,15 @@
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { formatResetIn } from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
-import { getVariantVersions } from '@/lib/utils/app/modelSeries';
+import {
+  getVariantVersionGroups,
+  pickVersionTarget,
+} from '@/lib/utils/app/modelSeries';
 import {
   ASSUMPTIONS_VERSION,
   getEmissionsTier,
@@ -20,6 +24,8 @@ import {
 } from '@/types/openai';
 
 import { EmissionsTierIcon } from './EmissionsTierIcon';
+import { ModelLimitBadge, modelLimitCopy } from './ModelLimitBadge';
+import { useModelAvailabilityMap } from './modelLimits';
 import { SHOW_RECOMMENDED_TAG } from './showRecommendedTag';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -48,7 +54,14 @@ export const VersionSection: FC<VersionSectionProps> = ({
   familyModels,
 }) => {
   const t = useTranslations('modelSelect');
+  const tLimits = useTranslations('limitsUx.picker');
   const tEmissions = useTranslations('emissions');
+  // A snapshot, not a live tick: this only feeds a static hover tooltip
+  // (the badge itself carries the live countdown via useResetCountdown).
+  // Calling Date.now() directly in render is impure; the lazy initializer
+  // form runs once, on mount, like useResetCountdown's own `now` state.
+  const [now] = useState(() => Date.now());
+  const [showOlder, setShowOlder] = useState(false);
   const { showUsageImpact } = useFlags();
   // Same source the picker list renders from (the useSettings hook), so the
   // Version section always matches what the list shows. byom families come in
@@ -56,6 +69,10 @@ export const VersionSection: FC<VersionSectionProps> = ({
   const { models } = useSettings();
   const pool = familyModels ?? models;
   const hiddenModelIds = useSettingsStore((s) => s.hiddenModelIds);
+  // Usage-limit verdicts: a spent version stays listed (the user should see
+  // it exists and when it comes back) but cannot be picked.
+  const { lookup: limitFor, refetch: refetchLimits } =
+    useModelAvailabilityMap();
 
   const versions = useMemo(() => {
     // byom ids never exist in the static catalog — the model object itself
@@ -65,20 +82,51 @@ export const VersionSection: FC<VersionSectionProps> = ({
       : (OpenAIModels[selectedModel.id as OpenAIModelID] ?? selectedModel);
     const hidden = new Set(hiddenModelIds);
     // Chips cover the ACTIVE variant only; other variants live in the
-    // VariantSection control above.
-    return getVariantVersions(pool, {
+    // VariantSection control above. Sub-variants (GPT 5.6's Sol/Terra/Luna,
+    // o-series 3's o3/o3-mini) collapse into ONE chip per version — the
+    // SubVariantSection below splits the active one.
+    return getVariantVersionGroups(pool, {
       series: meta.series ?? selectedModel.series,
       variant: meta.variant ?? selectedModel.variant,
-    }).filter((m) => !hidden.has(m.id));
+    })
+      .map((group) => ({
+        ...group,
+        members: group.members.filter((m) => !hidden.has(m.id)),
+      }))
+      .filter((group) => group.members.length > 0);
   }, [pool, hiddenModelIds, selectedModel]);
+
+  // Older versions collapse behind a disclosure: consolidating the GPT
+  // families put up to nine chips on one strip, and `tier: 'legacy'` already
+  // means "superseded, keep reachable". A group counts as older only when
+  // EVERY model in it is legacy, and the group holding the current selection
+  // is always shown so the active chip can never hide itself.
+  const isLegacyGroup = (group: (typeof versions)[number]) =>
+    group.members.every((m) => getModelTier(m) === 'legacy') &&
+    !group.members.some((m) => m.id === selectedModel.id);
+  const olderCount = versions.filter(isLegacyGroup).length;
+  const shownVersions = showOlder
+    ? versions
+    : versions.filter((group) => !isLegacyGroup(group));
 
   if (versions.length < 2) return null;
 
+  // The model each chip stands for and would select: the user's current
+  // sub-variant where that version ships one, else the version's
+  // representative. Resolved once so the label, the tier icon, the limit
+  // badge and the click all agree on the same model.
+  const versionTargets = shownVersions.map(
+    (group) =>
+      pickVersionTarget(group.members, selectedModel.subVariant) ??
+      group.members[0],
+  );
+
   // Emissions tier per version chip. Same-variant versions usually share a
-  // size class, but not always (e.g. GPT standard 5.2 is 'standard' while
-  // 5.4 is 'large') — icons render only when the choice actually differs in
-  // tier (fail-open flag gate, matching the Usage & Impact section).
-  const versionTiers = versions.map((version) =>
+  // size class, but not always (e.g. GPT foundational 5.2 is 'standard'
+  // while 5.4 is 'large') — icons render only when the choice actually
+  // differs in tier (fail-open flag gate, matching the Usage & Impact
+  // section).
+  const versionTiers = versionTargets.map((version) =>
     getEmissionsTier(
       getModelSizeClass(version),
       version.modelType === 'reasoning',
@@ -100,24 +148,53 @@ export const VersionSection: FC<VersionSectionProps> = ({
         aria-label={t('version.label')}
         className="flex flex-wrap items-center gap-1"
       >
-        {versions.map((version, index) => {
-          const isActive = selectedModel.id === version.id;
+        {shownVersions.map((group, index) => {
+          const version = versionTargets[index];
+          // Active when the SELECTION sits anywhere in this version — a
+          // sub-variant switch must not move the highlighted version chip.
+          const isActive = group.members.some((m) => m.id === selectedModel.id);
           const isFeatured =
             SHOW_RECOMMENDED_TAG && getModelTier(version) === 'featured';
+          const limit = limitFor(version.id);
+          // The active chip is never disabled even when spent: the badge
+          // says why, and the neighbours are the way out.
+          const isLimited = !isActive && limit.state !== 'available';
+          // Mouse users hover the chip body, not just the tiny clock icon —
+          // the tooltip must carry the reason, not just the model name.
+          const limitTitle = isLimited
+            ? modelLimitCopy(
+                tLimits,
+                limit,
+                limit.state === 'exhausted' && limit.resetAt
+                  ? formatResetIn(limit.resetAt, now)
+                  : null,
+              )
+            : null;
           return (
             <button
-              key={version.id}
+              key={group.key}
               type="button"
-              onClick={() => onSelectVersion(version)}
+              onClick={isLimited ? undefined : () => onSelectVersion(version)}
               aria-pressed={isActive}
-              title={version.name}
+              aria-disabled={isLimited || undefined}
+              title={limitTitle ?? version.name}
               className={`rounded-lg border px-2.5 py-1.5 min-h-[36px] text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                 isActive
                   ? 'border-blue-600 bg-blue-600 text-white dark:border-blue-500 dark:bg-blue-500'
-                  : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  : isLimited
+                    ? 'border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 opacity-60 cursor-not-allowed'
+                    : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
               }`}
             >
-              {version.versionLabel ?? version.name}
+              {group.label}
+              {limit.state !== 'available' && (
+                <ModelLimitBadge
+                  view={limit}
+                  onExpired={refetchLimits}
+                  size={12}
+                  className={isActive ? 'ms-1 text-amber-200' : 'ms-1'}
+                />
+              )}
               {showTiers && (
                 <EmissionsTierIcon
                   tier={versionTiers[index]}
@@ -139,6 +216,18 @@ export const VersionSection: FC<VersionSectionProps> = ({
             </button>
           );
         })}
+        {olderCount > 0 && (
+          <button
+            type="button"
+            onClick={() => setShowOlder(!showOlder)}
+            aria-expanded={showOlder}
+            className="rounded-lg px-2 py-1.5 min-h-[36px] text-xs font-medium text-gray-600 dark:text-gray-400 underline underline-offset-2 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          >
+            {showOlder
+              ? t('version.hideOlder')
+              : t('version.showOlder', { count: olderCount })}
+          </button>
+        )}
       </div>
     </div>
   );

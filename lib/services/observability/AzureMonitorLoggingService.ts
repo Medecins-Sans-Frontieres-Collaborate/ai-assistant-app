@@ -17,6 +17,7 @@ import { Session } from 'next-auth';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import {
+  AgentAccessLogEntry,
   AgentErrorLogEntry,
   AgentExecutionLogEntry,
   BaseLogEntry,
@@ -33,6 +34,7 @@ import {
   LogEntry,
   LogEventType,
   LoggingUserContext,
+  RequestTelemetry,
   SearchErrorLogEntry,
   SearchLogEntry,
   TTSErrorLogEntry,
@@ -40,6 +42,7 @@ import {
   TokenUsageLogEntry,
   ToneAnalysisErrorLogEntry,
   ToneAnalysisSuccessLogEntry,
+  ToolCallLogEntry,
   TranscriptionErrorLogEntry,
   TranscriptionQueuedLogEntry,
   TranscriptionSuccessLogEntry,
@@ -67,7 +70,7 @@ export class AzureMonitorLoggingService {
   private constructor() {
     this.endpoint = env.LOGS_INJESTION_ENDPOINT;
     this.ruleId = env.DATA_COLLECTION_RULE_ID;
-    this.streamName = env.STREAM_NAME || 'Custom-ChatBotLogs_CL';
+    this.streamName = env.STREAM_NAME || 'Custom-aiplatform_CL';
     this.environment = env.NEXT_PUBLIC_ENV || 'localhost';
 
     // Enable only if both endpoint and rule ID are configured
@@ -151,10 +154,18 @@ export class AzureMonitorLoggingService {
       duration?: number;
       correlationId?: string;
       requestId?: string;
+      /**
+       * Per-request agent + correlation context. Explicit options above win
+       * over the telemetry values only where both are set.
+       */
+      telemetry?: RequestTelemetry;
     },
   ): BaseLogEntry {
+    const now = new Date().toISOString();
+    const t = options?.telemetry;
     return {
-      Timestamp: new Date().toISOString(),
+      TimeGenerated: now,
+      Timestamp: now,
       EventType: eventType,
       UserId: user.id,
       UserEmail: user.email,
@@ -164,16 +175,22 @@ export class AzureMonitorLoggingService {
       UserJobTitle: user.jobTitle,
       UserDepartment: user.department,
       UserCompanyName: user.companyName,
-      BotId: options?.botId,
+      BotId: options?.botId ?? t?.botId,
       Env: this.environment,
       Duration: options?.duration,
       AgentId: options?.agentId,
       AgentType: options?.agentType,
+      AgentKind: t?.agentKind,
+      AgentName: t?.agentName,
+      AgentSource: t?.agentSource,
+      AgentApplied: t?.agentApplied,
+      ConversationId: t?.conversationId,
+      LoopRound: t?.loopRound,
       ModelUsed: options?.modelUsed,
       MessageCount: options?.messageCount,
       Temperature: options?.temperature,
       CorrelationId: options?.correlationId,
-      RequestId: options?.requestId,
+      RequestId: options?.requestId ?? t?.requestId,
     };
   }
 
@@ -248,6 +265,7 @@ export class AzureMonitorLoggingService {
       totalTokens?: number;
       botId?: string;
       reasoningEffort?: string;
+      telemetry?: RequestTelemetry;
     },
     shouldAwait: boolean = false,
   ): Promise<void> {
@@ -259,6 +277,7 @@ export class AzureMonitorLoggingService {
         temperature: params.temperature,
         duration: params.duration,
         botId: params.botId,
+        telemetry: params.telemetry,
       }),
       EventType: LogEventType.ChatCompletion,
       HasFiles: params.hasFiles,
@@ -296,6 +315,7 @@ export class AzureMonitorLoggingService {
       assumptionsVersion: string;
       streamed: boolean;
       botId?: string;
+      telemetry?: RequestTelemetry;
     },
     shouldAwait: boolean = false,
   ): Promise<void> {
@@ -304,6 +324,7 @@ export class AzureMonitorLoggingService {
       ...this.createBaseEntry(LogEventType.TokenUsage, userContext, {
         modelUsed: params.model,
         botId: params.botId,
+        telemetry: params.telemetry,
       }),
       EventType: LogEventType.TokenUsage,
       Model: params.model,
@@ -317,7 +338,7 @@ export class AzureMonitorLoggingService {
       EstimatedEnergyWh: params.estimatedEnergyWh,
       AssumptionsVersion: params.assumptionsVersion,
       Streamed: params.streamed,
-      BotId: params.botId,
+      BotId: params.botId ?? params.telemetry?.botId,
     };
 
     await this.uploadLogs([entry], shouldAwait);
@@ -339,6 +360,7 @@ export class AzureMonitorLoggingService {
       operation?: string;
       model?: string;
       botId?: string;
+      telemetry?: RequestTelemetry;
     },
     shouldAwait: boolean = false,
   ): Promise<void> {
@@ -350,6 +372,7 @@ export class AzureMonitorLoggingService {
       ...this.createBaseEntry(LogEventType.Error, userContext, {
         modelUsed: params.model,
         botId: params.botId,
+        telemetry: params.telemetry,
       }),
       EventType: LogEventType.Error,
       ErrorCode: params.errorCode,
@@ -387,7 +410,7 @@ export class AzureMonitorLoggingService {
         duration: params.duration,
       }),
       EventType: LogEventType.FileSuccess,
-      Filename: sanitizeForLog(params.filename),
+      FileName: sanitizeForLog(params.filename),
       FileSize: params.fileSize,
       FileType: params.fileType,
       ChunkCount: params.chunkCount,
@@ -417,7 +440,7 @@ export class AzureMonitorLoggingService {
     const entry: FileErrorLogEntry = {
       ...this.createBaseEntry(LogEventType.FileError, userContext),
       EventType: LogEventType.FileError,
-      Filename: sanitizeForLog(params.filename),
+      FileName: sanitizeForLog(params.filename),
       FileSize: params.fileSize,
       FileType: params.fileType,
       ErrorCode: params.errorCode,
@@ -442,6 +465,7 @@ export class AzureMonitorLoggingService {
       indexName?: string;
       duration?: number;
       botId?: string;
+      telemetry?: RequestTelemetry;
     },
     shouldAwait: boolean = false,
   ): Promise<void> {
@@ -450,6 +474,7 @@ export class AzureMonitorLoggingService {
       ...this.createBaseEntry(LogEventType.Search, userContext, {
         duration: params.duration,
         botId: params.botId,
+        telemetry: params.telemetry,
       }),
       EventType: LogEventType.Search,
       Query: sanitizeForLog(params.query.slice(0, 500)), // Truncate long queries
@@ -475,6 +500,7 @@ export class AzureMonitorLoggingService {
       errorCode: string;
       errorMessage: string;
       botId?: string;
+      telemetry?: RequestTelemetry;
     },
     shouldAwait: boolean = false,
   ): Promise<void> {
@@ -482,6 +508,7 @@ export class AzureMonitorLoggingService {
     const entry: SearchErrorLogEntry = {
       ...this.createBaseEntry(LogEventType.SearchError, userContext, {
         botId: params.botId,
+        telemetry: params.telemetry,
       }),
       EventType: LogEventType.SearchError,
       Query: params.query
@@ -512,6 +539,7 @@ export class AzureMonitorLoggingService {
       duration?: number;
       model?: string;
       botId?: string;
+      telemetry?: RequestTelemetry;
     },
     shouldAwait: boolean = false,
   ): Promise<void> {
@@ -523,6 +551,7 @@ export class AzureMonitorLoggingService {
         modelUsed: params.model,
         duration: params.duration,
         botId: params.botId,
+        telemetry: params.telemetry,
       }),
       EventType: LogEventType.AgentExecution,
       AgentId: params.agentId,
@@ -551,6 +580,7 @@ export class AzureMonitorLoggingService {
       errorMessage: string;
       model?: string;
       botId?: string;
+      telemetry?: RequestTelemetry;
     },
     shouldAwait: boolean = false,
   ): Promise<void> {
@@ -561,6 +591,7 @@ export class AzureMonitorLoggingService {
         agentType: params.agentType,
         modelUsed: params.model,
         botId: params.botId,
+        telemetry: params.telemetry,
       }),
       EventType: LogEventType.AgentError,
       AgentId: params.agentId,
@@ -597,7 +628,7 @@ export class AzureMonitorLoggingService {
         duration: params.duration,
       }),
       EventType: LogEventType.TranscriptionSuccess,
-      Filename: sanitizeForLog(params.filename),
+      FileName: sanitizeForLog(params.filename),
       FileSize: params.fileSize,
       TranscriptionType: params.transcriptionType,
       AudioDuration: params.audioDuration,
@@ -628,7 +659,7 @@ export class AzureMonitorLoggingService {
     const entry: TranscriptionErrorLogEntry = {
       ...this.createBaseEntry(LogEventType.TranscriptionError, userContext),
       EventType: LogEventType.TranscriptionError,
-      Filename: params.filename ? sanitizeForLog(params.filename) : undefined,
+      FileName: params.filename ? sanitizeForLog(params.filename) : undefined,
       FileSize: params.fileSize,
       TranscriptionType: params.transcriptionType,
       ErrorCode: params.errorCode,
@@ -660,7 +691,7 @@ export class AzureMonitorLoggingService {
     const entry: TranscriptionQueuedLogEntry = {
       ...this.createBaseEntry(LogEventType.TranscriptionQueued, userContext),
       EventType: LogEventType.TranscriptionQueued,
-      Filename: sanitizeForLog(params.filename),
+      FileName: sanitizeForLog(params.filename),
       FileSize: params.fileSize,
       JobId: params.jobId,
       TotalChunks: params.totalChunks,
@@ -995,6 +1026,81 @@ export class AzureMonitorLoggingService {
       FileType: params.fileType,
       ErrorCode: params.errorCode,
       ErrorMessage: sanitizeForLog(params.errorMessage),
+    };
+
+    await this.uploadLogs([entry], shouldAwait);
+  }
+
+  /**
+   * Logs one executed tool call from the MCP / M365 tool loop.
+   * Fire-and-forget; one row per call so usage can be broken down by tool
+   * and connector.
+   */
+  async logToolCall(
+    params: {
+      user: Session['user'];
+      toolName: string;
+      toolServer: string;
+      success: boolean;
+      duration?: number;
+      errorMessage?: string;
+      model?: string;
+      telemetry?: RequestTelemetry;
+    },
+    shouldAwait: boolean = false,
+  ): Promise<void> {
+    const userContext = this.extractUserContext(params.user);
+    const entry: ToolCallLogEntry = {
+      ...this.createBaseEntry(LogEventType.ToolCall, userContext, {
+        modelUsed: params.model,
+        duration: params.duration,
+        telemetry: params.telemetry,
+      }),
+      EventType: LogEventType.ToolCall,
+      ToolName: sanitizeForLog(params.toolName),
+      ToolServer: sanitizeForLog(params.toolServer),
+      Status: params.success ? 'success' : 'error',
+      ErrorMessage: params.errorMessage
+        ? sanitizeForLog(params.errorMessage)
+        : undefined,
+    };
+
+    await this.uploadLogs([entry], shouldAwait);
+  }
+
+  /**
+   * Logs one agent-access guard decision (the queryable twin of the
+   * `[agent-access-audit]` console line).
+   */
+  async logAgentAccess(
+    params: {
+      user: Session['user'];
+      agentName: string;
+      agentSource?: string | null;
+      decision: 'allow' | 'deny' | 'unavailable';
+      reason: string;
+      botId?: string;
+      telemetry?: RequestTelemetry;
+    },
+    shouldAwait: boolean = false,
+  ): Promise<void> {
+    const userContext = this.extractUserContext(params.user);
+    const base = this.createBaseEntry(LogEventType.AgentAccess, userContext, {
+      botId: params.botId,
+      telemetry: params.telemetry,
+    });
+    const entry: AgentAccessLogEntry = {
+      ...base,
+      EventType: LogEventType.AgentAccess,
+      // The guard's own identity for the agent wins over the (possibly
+      // not-yet-resolved) telemetry values.
+      AgentName: sanitizeForLog(params.agentName),
+      AgentSource:
+        params.agentSource === undefined
+          ? base.AgentSource
+          : (params.agentSource ?? 'unresolved'),
+      AccessDecision: params.decision,
+      AccessReason: sanitizeForLog(params.reason),
     };
 
     await this.uploadLogs([entry], shouldAwait);

@@ -14,6 +14,12 @@ export interface ConsentRequest {
   approval_request_id?: string;
   /** MCP server / connector identifier (e.g. "NetSuite"). May be null. */
   server_label?: string | null;
+  /**
+   * Native-MCP server id (McpServerConfig.id); absent on Foundry-agent
+   * approvals. `builtin-m365` marks the first-party M365 toolset, whose
+   * write tools must confirm on every call.
+   */
+  server_id?: string | null;
   /** Tool/function name being invoked — only for kind: 'approval'. */
   tool_name?: string | null;
   /** JSON-serialized arguments the agent will pass to the tool — display-only. */

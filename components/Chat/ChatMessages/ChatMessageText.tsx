@@ -1,5 +1,7 @@
 import React, { Dispatch, FC, KeyboardEvent, SetStateAction } from 'react';
 
+import { handleRichCopy } from '@/lib/utils/app/richCopy';
+
 import { Conversation, Message, VersionInfo } from '@/types/chat';
 
 import { AssistantMessage } from '@/components/Chat/ChatMessages/AssistantMessage';
@@ -61,6 +63,7 @@ export const ChatMessageText: FC<ChatMessageTextProps> = ({
     <div
       className="group text-gray-800 dark:text-gray-100"
       style={{ overflowWrap: 'anywhere' }}
+      onCopy={handleRichCopy}
     >
       {role === 'assistant' ? (
         <AssistantMessage

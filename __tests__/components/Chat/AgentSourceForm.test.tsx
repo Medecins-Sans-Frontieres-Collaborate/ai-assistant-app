@@ -21,9 +21,9 @@ interface TreeFixture {
 
 /**
  * Routes the tree-discovery /api/agents/browse?level=tree call (and the
- * connection-check /api/agents call) to canned responses by URL.
+ * connection-check /api/agents/foundry call) to canned responses by URL.
  *
- * Mirrors the real /api/agents route: agents discovered from the requested
+ * Mirrors the real /api/agents/foundry route: agents discovered from the requested
  * `sources` path are tagged with that path via `source` (the form filters on
  * it). Fixtures may carry an explicit `source` to simulate entries from other
  * buckets (regional paths, prompt agents).
@@ -38,7 +38,7 @@ function stubTreeFetch(routes: { tree?: TreeFixture; agents?: unknown[] }) {
         truncated: false,
         ...routes.tree,
       };
-    } else if (url.includes('/api/agents?')) {
+    } else if (url.includes('/api/agents/foundry?')) {
       const requestedSource =
         new URL(url, 'http://localhost').searchParams.get('sources') ?? '';
       body = {
