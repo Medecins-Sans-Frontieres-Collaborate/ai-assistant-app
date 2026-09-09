@@ -11,6 +11,7 @@ import {
   resolveSlotGuide,
 } from '@/lib/services/workflows/shared/guideResolution';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
+import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 import { runTranslationAssessment } from '@/lib/services/workflows/translation/translationOrchestrator';
 
 import {
@@ -52,6 +53,8 @@ interface TranslationAssessRequest {
    * local glossary — same attachment the translate route accepts. */
   glossaryGuideId?: string;
   modelId?: string;
+  /** Correlates the run's calls in telemetry; not otherwise used. */
+  conversationId?: string;
 }
 
 /**
@@ -154,6 +157,15 @@ export async function POST(req: NextRequest) {
     localEntries,
   ).slice(0, MAX_GLOSSARY_ENTRIES);
 
+  // Workflow runs debit the shared chat token pool, so they honour its
+  // pre-flight too (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+  const { denied, usage } = await beginWorkflowRun(
+    session,
+    'assess',
+    body.conversationId,
+  );
+  if (denied) return denied;
+
   try {
     const result = await runTranslationAssessment({
       sourceText,
@@ -166,9 +178,10 @@ export async function POST(req: NextRequest) {
       guides: guideResolution.guides,
       glossaryEntries,
       modelId: resolveWorkflowModelId(body.modelId),
+      usage,
     });
 
-    return successResponse(result);
+    return successResponse({ ...result, usage: usage.payload() });
   } catch (error) {
     console.error('[workflows/translation/assess] Failed:', error);
     return handleApiError(error, 'Assessment failed');

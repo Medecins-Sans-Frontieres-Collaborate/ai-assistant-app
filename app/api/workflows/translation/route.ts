@@ -9,6 +9,7 @@ import { mergeGlossaryEntries } from '@/lib/services/workflows/shared/glossaryPr
 import { resolveSlotGuide } from '@/lib/services/workflows/shared/guideResolution';
 import { createWorkflowStream } from '@/lib/services/workflows/shared/workflowLlm';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
+import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 import { runTranslationWorkflow } from '@/lib/services/workflows/translation/translationOrchestrator';
 
 import {
@@ -44,6 +45,8 @@ interface TranslationWorkflowRequest {
   mode: 'quick' | 'agentic';
   maxReviewRounds?: number;
   modelId?: string;
+  /** Correlates the run's calls in telemetry; not otherwise used. */
+  conversationId?: string;
 }
 
 /**
@@ -117,6 +120,15 @@ export async function POST(req: NextRequest) {
     localEntries,
   ).slice(0, MAX_GLOSSARY_ENTRIES);
 
+  // Workflow runs debit the shared chat token pool, so they honour its
+  // pre-flight too (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+  const { denied, usage } = await beginWorkflowRun(
+    session,
+    body.mode === 'agentic' ? 'translate:agentic' : 'translate',
+    body.conversationId,
+  );
+  if (denied) return denied;
+
   const { stream, writer } = createWorkflowStream();
 
   void (async () => {
@@ -130,6 +142,7 @@ export async function POST(req: NextRequest) {
         modelId: resolveWorkflowModelId(body.modelId),
         writer,
         signal: req.signal,
+        usage,
       });
       writer.close();
     } catch (error) {
