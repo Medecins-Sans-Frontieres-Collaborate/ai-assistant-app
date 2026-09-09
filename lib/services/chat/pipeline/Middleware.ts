@@ -25,14 +25,10 @@ import {
   effectiveCeiling,
   meteredCells,
 } from '@/lib/services/limits/enforcement';
+import { isModelBlocked } from '@/lib/services/limits/modelAvailability';
 import { resetAt } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
-import {
-  ResolvedLimit,
-  counterCellName,
-  isBlocked,
-  resolveLimit,
-} from '@/lib/services/limits/resolver';
+import { ResolvedLimit, counterCellName } from '@/lib/services/limits/resolver';
 import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
 import { reserve } from '@/lib/services/limits/usageStore';
 import { checkAgentSourceAccess } from '@/lib/services/m365/agentSourceAccess';
@@ -66,7 +62,6 @@ import { ChatContext } from './ChatContext';
 
 import { auth, getAccessTokenForOBO } from '@/auth';
 import { env } from '@/config/environment';
-import { getLimitDefinition } from '@/config/limits';
 import { getDefaultModel, getFallbackChain } from '@/config/models';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { TokenCredential } from '@azure/identity';
@@ -1533,16 +1528,20 @@ export async function createLimitsMiddleware(
 
     // Precompute which fallback targets this caller is blocked from, so a
     // DeploymentNotFound retry cannot silently reroute to a model an admin
-    // denied them. Pure resolution — no storage, no per-model round trip.
+    // denied them. `isModelBlocked` checks the model cell AND (when the
+    // model declares one) its family cell — the same conjunctive resolution
+    // `checkGate` uses at send time and `/api/models` uses in the picker
+    // (docs/LIMITS_USER_FACING_UX.md §8.1) — so a family-level
+    // `model.allowed=false` keeps every member out of the fallback chain,
+    // not just a model individually named in policy. Pure resolution — no
+    // storage, no per-model round trip.
     const blockedModelIds = policy
       ? getFallbackChain().filter((id) =>
-          isBlocked(
-            resolveLimit(
-              getLimitDefinition('model.allowed')!,
-              policy,
-              principal,
-              id,
-            ),
+          isModelBlocked(
+            policy,
+            principal,
+            id,
+            OpenAIModels[id as OpenAIModelID]?.series,
           ),
         )
       : [];
