@@ -12,6 +12,11 @@
  *    construct their own client inline and never reach recordUsage. The
  *    `countAuxiliaryUsage` policy toggle is inert until they are wired.
  *
+ * Conversation workflows DO debit here (via recordTokenUsage with
+ * surface: 'workflow'), and their routes run the pre-flight check too — a
+ * debit without a brake would be a ratchet. See
+ * docs/WORKFLOW_EMISSIONS_DESIGN.md §7b.
+ *
  * Enforcing a token quota against a known-incomplete counter produces "I
  * barely used it" complaints, which is why request-metric limits ship first
  * and the admin UI labels token limits approximate. See docs/LIMITS.md.
@@ -25,7 +30,30 @@ import { reserve } from '@/lib/services/limits/usageStore';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
+import { TokenUsageSurface } from '@/lib/types/logging';
+
 const TOKEN_KEYS = ['chat.tokensPerDay', 'chat.tokensPerMonth'] as const;
+
+/**
+ * Suffix of the SHADOW counter cell that records how much of a token budget
+ * was spent by conversation workflows rather than chat
+ * (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+ *
+ * Workflow tokens debit the real cell exactly like chat tokens — same pool,
+ * same cap. The shadow cell only makes the split visible afterwards. It rides
+ * the SAME compare-and-swap (one GET, one PUT, no extra round-trip), the usage
+ * document's `counters` map takes arbitrary names, and `meteredCells` never
+ * resolves this one, so it can never gate a request.
+ */
+export const SURFACE_CELL_SUFFIX = '#workflow';
+
+/** The shadow cell name for a token limit key, or null for plain chat. */
+export function surfaceShadowCell(
+  limitKey: string,
+  surface: TokenUsageSurface,
+): string | null {
+  return surface === 'workflow' ? `${limitKey}${SURFACE_CELL_SUFFIX}` : null;
+}
 
 /**
  * Adds `totalTokens` to whichever token counters are configured for this
@@ -40,6 +68,7 @@ const TOKEN_KEYS = ['chat.tokensPerDay', 'chat.tokensPerMonth'] as const;
 export async function debitTokenUsage(
   user: Session['user'] | undefined,
   totalTokens: number,
+  surface: TokenUsageSurface = 'chat',
 ): Promise<void> {
   if (!user?.id || !Number.isFinite(totalTokens) || totalTokens <= 0) return;
 
@@ -56,11 +85,10 @@ export async function debitTokenUsage(
       );
       if (!periodKind) continue;
 
-      await reserve(
-        principal.userId,
-        periodKind,
-        cells.map((cell) => ({
-          cell: cell.limitKey,
+      // The real cell plus, for a workflow run, its shadow twin — in ONE
+      // reservation, so the split can never drift from the total it splits.
+      const counters = cells.flatMap((cell) => {
+        const base = {
           cost: totalTokens,
           // The debit must land even when it exceeds the cap, so the
           // reservation is made against an effectively infinite ceiling and
@@ -70,14 +98,22 @@ export async function debitTokenUsage(
           limit: Number.MAX_SAFE_INTEGER,
           limitKey: cell.limitKey,
           source: cell.source,
-        })),
-        {
-          timezone: policy.timezone,
-          // Never fail a request that already succeeded because a counter
-          // write failed.
-          failMode: 'open',
-        },
-      );
+        };
+        const shadow = surfaceShadowCell(cell.limitKey, surface);
+        return shadow
+          ? [
+              { ...base, cell: cell.limitKey },
+              { ...base, cell: shadow },
+            ]
+          : [{ ...base, cell: cell.limitKey }];
+      });
+
+      await reserve(principal.userId, periodKind, counters, {
+        timezone: policy.timezone,
+        // Never fail a request that already succeeded because a counter
+        // write failed.
+        failMode: 'open',
+      });
     }
   } catch (error) {
     console.error(
