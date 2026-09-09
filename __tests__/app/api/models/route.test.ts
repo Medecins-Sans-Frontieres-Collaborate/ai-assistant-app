@@ -352,25 +352,28 @@ describe('GET /api/models', () => {
     }
 
     beforeEach(() => {
-      // o3 + o4-mini share the o-series family; gpt-5.2 is the control.
+      // gpt-5.2 (Foundational) and o3/o4-mini (o-series) are all variants
+      // of the ONE consolidated `gpt` family, so a family block must reach
+      // across variants; claude-sonnet-5 is the other-family control.
       mockListDeployedModels.mockResolvedValue([
         deployed('gpt-5.2', 'OpenAI'),
         deployed('o3', 'OpenAI'),
         deployed('o4-mini', 'OpenAI'),
+        deployed('claude-sonnet-5', 'Anthropic'),
       ]);
     });
 
     it('a family block hides every member in enforce mode', async () => {
       limitsState.policy = policyWith([
-        { limitKey: 'model.allowed', series: 'o-series', value: false },
+        { limitKey: 'model.allowed', series: 'gpt', value: false },
       ]);
       const { data } = await body(await GET(req()));
-      expect(data.models.map((m) => m.id).sort()).toEqual(['gpt-5.2']);
+      expect(data.models.map((m) => m.id).sort()).toEqual(['claude-sonnet-5']);
     });
 
     it('a model-level allow does NOT rescue a family block (conjunctive, like the send)', async () => {
       limitsState.policy = policyWith([
-        { limitKey: 'model.allowed', series: 'o-series', value: false },
+        { limitKey: 'model.allowed', series: 'gpt', value: false },
         { limitKey: 'model.allowed', modelId: 'o3', value: true },
       ]);
       const { data } = await body(await GET(req()));
@@ -379,11 +382,12 @@ describe('GET /api/models', () => {
 
     it('hides NOTHING in observe mode — the send is allowed, so the list is unfiltered', async () => {
       limitsState.policy = policyWith(
-        [{ limitKey: 'model.allowed', series: 'o-series', value: false }],
+        [{ limitKey: 'model.allowed', series: 'gpt', value: false }],
         { mode: 'observe' },
       );
       const { data } = await body(await GET(req()));
       expect(data.models.map((m) => m.id).sort()).toEqual([
+        'claude-sonnet-5',
         'gpt-5.2',
         'o3',
         'o4-mini',
@@ -420,6 +424,7 @@ describe('GET /api/models', () => {
       const { data } = await body(await GET(req()));
       expect(mockResolveUserGroupIds).toHaveBeenCalledTimes(1);
       expect(data.models.map((m) => m.id).sort()).toEqual([
+        'claude-sonnet-5',
         'gpt-5.2',
         'o4-mini',
       ]);
@@ -438,13 +443,14 @@ describe('GET /api/models', () => {
 
     it('fails open when the policy cannot be resolved', async () => {
       limitsState.policy = policyWith([
-        { limitKey: 'model.allowed', series: 'o-series', value: false },
+        { limitKey: 'model.allowed', series: 'gpt', value: false },
       ]);
       limitsState.ensureFreshError = new Error('blob down');
       const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { data } = await body(await GET(req()));
       errorSpy.mockRestore();
       expect(data.models.map((m) => m.id).sort()).toEqual([
+        'claude-sonnet-5',
         'gpt-5.2',
         'o3',
         'o4-mini',
