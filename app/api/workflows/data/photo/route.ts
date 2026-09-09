@@ -18,6 +18,7 @@ import {
   createAzureClient,
 } from '@/lib/services/workflows/shared/workflowLlm';
 import { resolveVisionWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
+import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 
 import { FILE_COUNT_LIMITS, FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
@@ -55,6 +56,8 @@ interface DataPhotoRequest {
   columns?: DataColumn[];
   instructions?: string;
   modelId?: string;
+  /** Correlates the run's calls in telemetry; not otherwise used. */
+  conversationId?: string;
 }
 
 function isValidColumn(value: unknown): value is DataColumn {
@@ -91,6 +94,15 @@ export async function POST(req: NextRequest) {
   } catch {
     return badRequestResponse('Invalid JSON body');
   }
+
+  // Workflow runs debit the shared chat token pool, so they honour its
+  // pre-flight too (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+  const { denied, usage } = await beginWorkflowRun(
+    session,
+    'photo',
+    body.conversationId,
+  );
+  if (denied) return denied;
 
   if (!Array.isArray(body.imageRefs) || body.imageRefs.length === 0) {
     return badRequestResponse('imageRefs is required');
@@ -159,8 +171,10 @@ export async function POST(req: NextRequest) {
         ],
         schemaName: 'photo_infer',
         schema: photoInferResponseSchema(),
+        usage,
+        usageLabel: 'photo:infer',
       });
-      return successResponse(result);
+      return successResponse({ ...result, usage: usage.payload() });
     }
 
     const columns = body.columns as DataColumn[];
@@ -179,8 +193,10 @@ export async function POST(req: NextRequest) {
       ],
       schemaName: 'photo_extract',
       schema: extractionResponseSchema(columns),
+      usage,
+      usageLabel: 'photo:extract',
     });
-    return successResponse({ rows: result.rows });
+    return successResponse({ rows: result.rows, usage: usage.payload() });
   } catch (error) {
     console.error('[workflows/data/photo] Failed:', sanitizeForLog(error));
     return handleApiError(error, 'Photo extraction failed');

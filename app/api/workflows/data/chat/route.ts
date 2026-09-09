@@ -16,6 +16,7 @@ import {
   createWorkflowStream,
 } from '@/lib/services/workflows/shared/workflowLlm';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
+import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
   badRequestResponse,
@@ -43,6 +44,8 @@ interface DataChatRequest {
   stats: ColumnProfile[];
   totalRowCount: number;
   modelId?: string;
+  /** Correlates the run's calls in telemetry; not otherwise used. */
+  conversationId?: string;
 }
 
 /**
@@ -92,6 +95,15 @@ export async function POST(req: NextRequest) {
       content: m.content.slice(0, MAX_MESSAGE_CHARS),
     }));
 
+  // Workflow runs debit the shared chat token pool, so they honour its
+  // pre-flight too (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+  const { denied, usage } = await beginWorkflowRun(
+    session,
+    'rail_chat',
+    body.conversationId,
+  );
+  if (denied) return denied;
+
   const model = resolveWorkflowModelId(body.modelId);
   const { stream, writer } = createWorkflowStream();
 
@@ -120,7 +132,17 @@ export async function POST(req: NextRequest) {
         user: buildDataChatUserPrompt(digest, messages),
         onDelta: (delta) => writer.text(delta),
         signal: req.signal,
+        usage,
+        usageLabel: 'rail_chat',
       });
+      const usagePayload = usage.payload();
+      if (usagePayload) {
+        writer.event({
+          workflow: 'data-analysis',
+          type: 'usage',
+          data: usagePayload,
+        });
+      }
       writer.close();
     } catch (error) {
       console.error('[workflows/data/chat] Failed:', error);
