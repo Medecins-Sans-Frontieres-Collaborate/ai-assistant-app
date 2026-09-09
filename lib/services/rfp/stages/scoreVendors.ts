@@ -198,7 +198,10 @@ export async function run(params: {
   }
 
   progress.stageStart('score_vendors', jobs.length || 1);
-  const flush = () => writeFileSync(cachePath, JSON.stringify(scores, null, 2));
+  const flush = () =>
+    writeFileSync(cachePath, JSON.stringify(scores, null, 2), {
+      mode: 0o600,
+    });
   if (!jobs.length) {
     console.log('  (all scores cached)');
     progress.stageDone('score_vendors');

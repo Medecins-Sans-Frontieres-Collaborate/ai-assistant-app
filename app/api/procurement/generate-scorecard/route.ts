@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
     await writeFile(
       questionnairePath,
       Buffer.from(await questionnaireFile.arrayBuffer()),
+      { mode: 0o600 },
     );
     console.log(`[${runId}] Saved questionnaire: ${questionnaireFile.name}`);
 
@@ -91,6 +92,7 @@ export async function POST(request: NextRequest) {
     await writeFile(
       criteriaGridPath,
       Buffer.from(await criteriaGridFile.arrayBuffer()),
+      { mode: 0o600 },
     );
     console.log(`[${runId}] Saved criteria grid: ${criteriaGridFile.name}`);
 
@@ -115,7 +117,9 @@ export async function POST(request: NextRequest) {
 
     // 6. Save criteria config inside the run's work dir
     const criteriaPath = join(workDir, 'criteria.json');
-    await writeFile(criteriaPath, JSON.stringify(criteriaConfig, null, 2));
+    await writeFile(criteriaPath, JSON.stringify(criteriaConfig, null, 2), {
+      mode: 0o600,
+    });
 
     // 7. Save vendor files
     const vendorPaths: Record<string, string> = {};
@@ -123,7 +127,9 @@ export async function POST(request: NextRequest) {
       const { name, file } = vendorFiles[i];
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(-100);
       const vendorPath = join(uploadsDir, `vendor_${i}_${safeName}`);
-      await writeFile(vendorPath, Buffer.from(await file.arrayBuffer()));
+      await writeFile(vendorPath, Buffer.from(await file.arrayBuffer()), {
+        mode: 0o600,
+      });
       vendorPaths[name] = vendorPath;
       console.log(`[${runId}] Saved vendor ${name}: ${file.name}`);
     }
@@ -153,6 +159,7 @@ export async function POST(request: NextRequest) {
     await writeFile(
       join(workDir, 'metadata.json'),
       JSON.stringify(metadata, null, 2),
+      { mode: 0o600 },
     );
 
     // 9. Launch the pipeline in-process (fire-and-forget); pauses after

@@ -261,7 +261,9 @@ export async function run(params: {
 
   progress.stageStart('extract_responses', jobs.length || 1);
   const flush = () =>
-    writeFileSync(cachePath, JSON.stringify(responses, null, 2));
+    writeFileSync(cachePath, JSON.stringify(responses, null, 2), {
+      mode: 0o600,
+    });
 
   if (!jobs.length) {
     // All batches cached — still run the stub + integrity passes below,
@@ -481,6 +483,7 @@ export async function run(params: {
   writeFileSync(
     join(dirname(cachePath), 'extraction_flags.json'),
     JSON.stringify(extFlags, null, 2),
+    { mode: 0o600 },
   );
   if (extFlags.length) {
     console.log(

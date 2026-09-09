@@ -130,7 +130,9 @@ export class ProgressEmitter {
         dir,
         `.progress-${Date.now()}-${Math.random().toString(36).slice(2)}`,
       );
-      writeFileSync(tmpPath, JSON.stringify(this.state, null, 2));
+      writeFileSync(tmpPath, JSON.stringify(this.state, null, 2), {
+        mode: 0o600,
+      });
       renameSync(tmpPath, this.path);
     } catch (e) {
       console.error(`[progress] flush failed: ${e}`);

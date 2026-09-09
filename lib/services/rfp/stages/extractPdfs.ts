@@ -104,14 +104,14 @@ export async function run(params: {
   mkdirSync(outDir, { recursive: true, mode: 0o700 });
 
   const qText = await extractPdfText(questionnairePdf);
-  writeFileSync(join(outDir, 'questionnaire.txt'), qText);
+  writeFileSync(join(outDir, 'questionnaire.txt'), qText, { mode: 0o600 });
   console.log(`  questionnaire: ${qText.length.toLocaleString()} chars`);
 
   const textPaths: Record<string, string> = {};
   for (const [vendor, pdf] of Object.entries(vendorPdfs)) {
     const out = join(outDir, `${safeVendorStem(vendor)}.txt`);
     const text = await extractPdfText(pdf);
-    writeFileSync(out, text);
+    writeFileSync(out, text, { mode: 0o600 });
     textPaths[vendor] = out;
     console.log(`  ${vendor}: ${text.length.toLocaleString()} chars`);
   }

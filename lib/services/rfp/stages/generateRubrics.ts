@@ -145,7 +145,9 @@ export async function run(params: {
 
   progress.stageStart('generate_rubrics', jobs.length || 1);
   const flush = () =>
-    writeFileSync(cachePath, JSON.stringify(rubrics, null, 2));
+    writeFileSync(cachePath, JSON.stringify(rubrics, null, 2), {
+      mode: 0o600,
+    });
   if (!jobs.length) {
     console.log('  (all rubrics cached)');
     progress.stageDone('generate_rubrics');

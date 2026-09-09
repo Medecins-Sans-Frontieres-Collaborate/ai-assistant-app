@@ -115,11 +115,13 @@ export async function PUT(
     }
 
     const rubricsPath = join(workDir, 'cache', 'rubrics.json');
-    await writeFile(rubricsPath, JSON.stringify(body.rubrics, null, 2));
+    await writeFile(rubricsPath, JSON.stringify(body.rubrics, null, 2), {
+      mode: 0o600,
+    });
 
     // Clear any cached scores so they're regenerated with updated rubrics
     const scoresPath = join(workDir, 'cache', 'scores.json');
-    await writeFile(scoresPath, '{}');
+    await writeFile(scoresPath, '{}', { mode: 0o600 });
 
     return NextResponse.json({ success: true });
   } catch (error) {
