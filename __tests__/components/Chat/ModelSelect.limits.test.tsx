@@ -236,22 +236,23 @@ describe('ModelSelect — usage-limit states', () => {
   describe('family rows', () => {
     it('fronts a still-usable sibling when the family default is spent, so the row stays clickable', () => {
       // Nothing in the GPT family is selected (conversation on DeepSeek):
-      // the default representative is the newest rank-1 member, GPT-5.5.
+      // the default representative is the newest rank-1 member, GPT-5.6 Sol.
       mockUseConversations.selectedConversation = conversationOn(
         OpenAIModelID.DEEPSEEK_V3_1,
       );
-      limitsState.models = { 'gpt-5.5': exhausted() };
+      limitsState.models = { 'gpt-5.6-sol': exhausted() };
       render(<ModelSelect />);
 
       const row = rowNamed('GPT');
       expect(row).not.toHaveAttribute('aria-disabled');
-      // The inline version tag names the sibling that now fronts the row.
-      expect(within(row).getByText('5.4')).toBeInTheDocument();
+      // The inline tag names the sibling that now fronts the row — the next
+      // rank-1 member once Sol is out.
+      expect(within(row).getByText('5.5')).toBeInTheDocument();
       fireEvent.click(row);
       expect(mockUseConversations.updateConversation).toHaveBeenCalledWith(
         'conv-1',
         expect.objectContaining({
-          model: expect.objectContaining({ id: 'gpt-5.4' }),
+          model: expect.objectContaining({ id: 'gpt-5.5' }),
         }),
       );
       // The click reached 5.4 only because 5.5 (the family's natural pick)
@@ -325,9 +326,12 @@ describe('ModelSelect — usage-limit states', () => {
 
   describe('details panel switchers', () => {
     it('disables an exhausted Version chip and refuses to select it', () => {
-      // Conversation on GPT-5.2; GPT-5 (same standard variant) is spent.
+      // Conversation on GPT-5.2; GPT-5 (same Foundational variant) is spent.
+      // GPT-5 is `tier: 'legacy'`, so open the older-versions disclosure
+      // before its chip is on the strip at all.
       limitsState.models = { [OpenAIModelID.GPT_5]: exhausted() };
       render(<ModelSelect />);
+      fireEvent.click(screen.getByText(/^Show older/));
 
       // The chip's OWN tooltip carries the reason now, not just the tiny
       // badge's — a mouse user hovering the chip body (not the clock icon)
