@@ -113,14 +113,12 @@ describe('chatStore failure streaks', () => {
   });
 
   it('keeps the latest structured error code on the streak', () => {
-    useChatStore
-      .getState()
-      .handleSendError(
-        new ApiError('bad request', 400, 'Bad Request', {
-          code: 'VALIDATION_FAILED',
-        }),
-        makeConversation(),
-      );
+    useChatStore.getState().handleSendError(
+      new ApiError('bad request', 400, 'Bad Request', {
+        code: 'VALIDATION_FAILED',
+      }),
+      makeConversation(),
+    );
 
     expect(streakFor('conv-streak')?.errorCode).toBe('VALIDATION_FAILED');
   });
