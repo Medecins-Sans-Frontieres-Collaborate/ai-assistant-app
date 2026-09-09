@@ -2,12 +2,8 @@ import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
-import {
-  currentPolicy,
-  effectiveCeiling,
-} from '@/lib/services/limits/enforcement';
-import { buildPrincipal } from '@/lib/services/limits/principal';
 import { guardLimit } from '@/lib/services/limits/routeGuard';
+import { resolveEffectiveUploadMegabytes } from '@/lib/services/limits/uploadLimit';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 
 import Hasher from '@/lib/utils/app/hash';
@@ -108,22 +104,13 @@ function computeStreamCap(
 /**
  * The admin-configured per-file cap in MB for this caller, or undefined when
  * unlimited. Fails open — an unreadable policy must not block uploads.
+ *
+ * Thin alias kept so every call site below reads unchanged; the resolution
+ * itself now lives in `lib/services/limits/uploadLimit.ts`, shared with the
+ * Server Action upload path (`lib/actions/fileUpload.ts`) that applies the
+ * SAME cap above the 10MB threshold where this route is never hit.
  */
-async function effectiveUploadMegabytes(
-  session: Session,
-): Promise<number | undefined> {
-  try {
-    const policy = await currentPolicy();
-    if (!policy) return undefined;
-    return effectiveCeiling(
-      policy,
-      buildPrincipal(session),
-      'feature.upload.megabytesPerFile',
-    );
-  } catch {
-    return undefined;
-  }
-}
+const effectiveUploadMegabytes = resolveEffectiveUploadMegabytes;
 
 /**
  * Per-request inputs derived from query params + content-type. Lifted from
