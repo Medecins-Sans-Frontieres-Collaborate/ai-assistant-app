@@ -198,7 +198,12 @@ export const LIMIT_DEFINITIONS: readonly LimitDefinition[] = [
     // is actually built to buffer.
     hardCeiling: Math.floor((1.5 * 1024 * MEGABYTE) / MEGABYTE),
     category: 'files',
-    enforcedAt: 'app/api/file/upload/route.ts effectiveUploadMegabytes',
+    // Resolution lives in one shared helper so the ≤10MB XHR route
+    // (app/api/file/upload/route.ts) and the >10MB Server Action path
+    // (lib/actions/fileUpload.ts) can never apply different caps
+    // (docs/LIMITS_USER_FACING_UX.md §8.6).
+    enforcedAt:
+      'lib/services/limits/uploadLimit.ts resolveEffectiveUploadMegabytes',
     labelKey: 'uploadMegabytesPerFile',
   },
   {
