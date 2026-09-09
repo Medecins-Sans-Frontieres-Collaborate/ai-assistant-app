@@ -1492,7 +1492,9 @@
       "euOnlyNote": "{name} 托管于欧盟 Azure 区域，与其的对话将在该区域处理。"
     },
     "version": {
-      "label": "版本"
+      "label": "版本",
+      "showOlder": "显示较早的（{count}）",
+      "hideOlder": "隐藏较早的"
     },
     "reasoningModel": "推理模型：先逐步思考再作答。速度较慢，擅长解决复杂问题。",
     "variant": {
@@ -1523,6 +1525,9 @@
       "freshness_month": "最近一个月",
       "freshness_any": "任意时间",
       "hint": "自动可根据每个问题设置时效性（如新闻优先选择最近一天），研究类问题可比默认使用更多来源。"
+    },
+    "subVariant": {
+      "label": "大小"
     }
   },
   "models": {

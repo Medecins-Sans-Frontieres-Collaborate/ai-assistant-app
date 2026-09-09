@@ -1461,7 +1461,9 @@
       "euOnlyNote": "{name} est hébergé dans la région Azure de l’UE ; les conversations avec ce modèle y sont traitées."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Afficher les plus anciennes ({count})",
+      "hideOlder": "Masquer les plus anciennes"
     },
     "reasoningModel": "Modèle de raisonnement : réfléchit étape par étape avant de répondre. Plus lent, mais meilleur pour les problèmes complexes.",
     "variant": {
@@ -1492,6 +1494,9 @@
       "freshness_month": "Dernier mois",
       "freshness_any": "N'importe quand",
       "hint": "Le mode auto laisse chaque question définir sa propre actualité (par ex. les actualités privilégient le dernier jour), et les questions de type recherche peuvent utiliser plus de sources que la valeur par défaut."
+    },
+    "subVariant": {
+      "label": "Taille"
     }
   },
   "models": {

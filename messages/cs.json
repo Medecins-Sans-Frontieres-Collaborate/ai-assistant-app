@@ -1461,7 +1461,9 @@
       "euOnlyNote": "{name} je hostován v EU Azure regionu; konverzace s ním jsou zpracovány tam."
     },
     "version": {
-      "label": "Verze"
+      "label": "Verze",
+      "showOlder": "Zobrazit starší ({count})",
+      "hideOlder": "Skrýt starší"
     },
     "reasoningModel": "Model pro uvažování: před odpovědí přemýšlí krok za krokem. Pomalejší, vhodnější na složité úlohy.",
     "variant": {
@@ -1492,6 +1494,9 @@
       "freshness_month": "Poslední měsíc",
       "freshness_any": "Kdykoli",
       "hint": "Automaticky umožní každé otázce nastavit vlastní aktuálnost (např. zprávy preferují poslední den) a výzkumné otázky mohou použít více zdrojů než výchozí nastavení."
+    },
+    "subVariant": {
+      "label": "Velikost"
     }
   },
   "models": {

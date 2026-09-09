@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} eopesi na region ya Azure ya EU; masolo na yango ekozwa traitement kuna."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Lakisa ya kala ({count})",
+      "hideOlder": "Kimba ya kala"
     },
     "reasoningModel": "Modèle ya mawa-mawa: ezalaka kokanisa mokolo-mokolo liboso eyanola. Ezali ntembe-moko, kasi eleki malamu na mikakatano.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Sanzi oyo euti koleka",
       "freshness_any": "Tango nyonso",
       "hint": "Auto ezali kotinda motuna na tango ebongi (ndakisa, sango esengeli tango ya lelo), mpe mituna ya recherche ekoki kosalela basource mingi koleka ndenge esalemi na ndenge ya suka."
+    },
+    "subVariant": {
+      "label": "Monene"
     }
   },
   "models": {

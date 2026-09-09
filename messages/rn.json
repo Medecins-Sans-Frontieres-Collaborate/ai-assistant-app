@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} yashizwe mu gace ka EU ka Azure; ibiganiro bihakorerwa."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Erekana izishaje ({count})",
+      "hideOlder": "Hisha izishaje"
     },
     "reasoningModel": "Model yo kwiyumvira: irabanza kwiyumvira yitonze imbere yo kwishura. Irateba ariko irakora neza ku bibazo bigoye.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Ukwezi guheze",
       "freshness_any": "Igihe ico ari co cose",
       "hint": "Auto ireka buri kibazo kigena igihe gishasha kijanye n'ico gikora (nk'amakuru yipfuza umunsi uheze), ibibazo vya research bishobora gukoresha ivy'inyongera kurusha ibisanzwe."
+    },
+    "subVariant": {
+      "label": "Ingano"
     }
   },
   "models": {

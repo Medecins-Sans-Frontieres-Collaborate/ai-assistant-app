@@ -1591,7 +1591,9 @@
       "euOnlyNote": "{name} được lưu trữ tại khu vực Azure EU; các cuộc hội thoại với mô hình sẽ được xử lý tại đó."
     },
     "version": {
-      "label": "Phiên bản"
+      "label": "Phiên bản",
+      "showOlder": "Hiện các bản cũ hơn ({count})",
+      "hideOlder": "Ẩn các bản cũ hơn"
     },
     "reasoningModel": "Mô hình suy luận: suy nghĩ từng bước trước khi trả lời. Chậm hơn, xử lý tốt hơn các vấn đề khó.",
     "variant": {
@@ -1622,6 +1624,9 @@
       "freshness_month": "Tháng trước",
       "freshness_any": "Bất kỳ lúc nào",
       "hint": "Tùy chọn Tự động cho phép mỗi câu hỏi đặt mức độ cập nhật riêng (ví dụ: tin tức ưu tiên ngày gần nhất), và các câu hỏi kiểu nghiên cứu có thể sử dụng nhiều nguồn hơn mặc định."
+    },
+    "subVariant": {
+      "label": "Kích thước"
     }
   },
   "models": {

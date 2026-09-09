@@ -1461,7 +1461,9 @@
       "euOnlyNote": "{name} är hostad i EU Azure-regionen; samtal med den behandlas där."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Visa äldre ({count})",
+      "hideOlder": "Dölj äldre"
     },
     "reasoningModel": "Resonerande modell: tänker stegvis innan svar. Långsammare, bättre på svåra problem.",
     "variant": {
@@ -1492,6 +1494,9 @@
       "freshness_month": "Senaste månaden",
       "freshness_any": "När som helst",
       "hint": "Auto låter varje fråga välja aktuellhet själv (t.ex. nyheter föredrar senaste dagen), och frågor av forskningskaraktär kan använda fler källor än standard."
+    },
+    "subVariant": {
+      "label": "Storlek"
     }
   },
   "models": {

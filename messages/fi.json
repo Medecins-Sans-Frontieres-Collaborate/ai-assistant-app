@@ -1560,7 +1560,9 @@
       "euOnlyNote": "{name} isännöidään EU:n Azure-alueella; keskustelut sen kanssa käsitellään siellä."
     },
     "version": {
-      "label": "Versio"
+      "label": "Versio",
+      "showOlder": "Näytä vanhemmat ({count})",
+      "hideOlder": "Piilota vanhemmat"
     },
     "reasoningModel": "Päättelymalli: ajattelee vaiheittain ennen vastaamista. Hitaampi, parempi haastavissa ongelmissa.",
     "variant": {
@@ -1591,6 +1593,9 @@
       "freshness_month": "Viimeisin kuukausi",
       "freshness_any": "Milloin tahansa",
       "hint": "Auto antaa jokaiselle kysymykselle oman ajankohtaisuutensa (esim. uutiset suosivat viimeisintä päivää), ja tutkimustyyppisissä kysymyksissä voidaan käyttää oletusta enemmän lähteitä."
+    },
+    "subVariant": {
+      "label": "Koko"
     }
   },
   "models": {

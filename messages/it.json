@@ -1560,7 +1560,9 @@
       "euOnlyNote": "{name} è ospitato nella regione Azure UE; le conversazioni con questo modello vengono elaborate lì."
     },
     "version": {
-      "label": "Versione"
+      "label": "Versione",
+      "showOlder": "Mostra versioni precedenti ({count})",
+      "hideOlder": "Nascondi versioni precedenti"
     },
     "reasoningModel": "Modello di ragionamento: ragiona passo-passo prima di rispondere. Più lento, migliore nei problemi complessi.",
     "variant": {
@@ -1591,6 +1593,9 @@
       "freshness_month": "Ultimo mese",
       "freshness_any": "Qualsiasi momento",
       "hint": "La modalità Automatica consente a ciascuna domanda di impostare la propria priorità di aggiornamento (ad esempio, le notizie preferiscono l’ultimo giorno) e le domande di tipo ricerca possono usare più fonti rispetto al predefinito."
+    },
+    "subVariant": {
+      "label": "Dimensione"
     }
   },
   "models": {

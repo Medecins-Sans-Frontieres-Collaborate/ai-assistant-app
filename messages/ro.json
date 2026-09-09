@@ -1560,7 +1560,9 @@
       "euOnlyNote": "{name} este găzduit în regiunea Azure din UE; conversațiile cu acesta sunt procesate acolo."
     },
     "version": {
-      "label": "Versiune"
+      "label": "Versiune",
+      "showOlder": "Afișează versiunile mai vechi ({count})",
+      "hideOlder": "Ascunde versiunile mai vechi"
     },
     "reasoningModel": "Model de raționament: gândește pas cu pas înainte de a răspunde. Mai lent, dar mai eficient pentru probleme dificile.",
     "variant": {
@@ -1591,6 +1593,9 @@
       "freshness_month": "Ultima lună",
       "freshness_any": "Oricând",
       "hint": "Auto permite fiecărei întrebări să stabilească propria actualitate (de exemplu, știrile preferă ultima zi), iar întrebările de tip cercetare pot folosi mai multe surse decât implicit."
+    },
+    "subVariant": {
+      "label": "Dimensiune"
     }
   },
   "models": {

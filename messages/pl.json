@@ -1560,7 +1560,9 @@
       "euOnlyNote": "{name} jest hostowany w regionie Azure UE; rozmowy z nim są tam przetwarzane."
     },
     "version": {
-      "label": "Wersja"
+      "label": "Wersja",
+      "showOlder": "Pokaż starsze ({count})",
+      "hideOlder": "Ukryj starsze"
     },
     "reasoningModel": "Model rozumowania: analizuje krok po kroku przed udzieleniem odpowiedzi. Wolniejszy, lepszy przy trudnych problemach.",
     "variant": {
@@ -1591,6 +1593,9 @@
       "freshness_month": "Ostatni miesiąc",
       "freshness_any": "Dowolny czas",
       "hint": "Opcja Auto pozwala każdemu pytaniu ustawić własną aktualność (np. wiadomości preferują ostatni dzień), a pytania badawcze mogą korzystać z większej liczby źródeł niż domyślnie."
+    },
+    "subVariant": {
+      "label": "Rozmiar"
     }
   },
   "models": {

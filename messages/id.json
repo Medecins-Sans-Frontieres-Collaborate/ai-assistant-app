@@ -1552,7 +1552,9 @@
       "euOnlyNote": "{name} dihosting di wilayah Azure Uni Eropa; percakapan dengannya diproses di sana."
     },
     "version": {
-      "label": "Versi"
+      "label": "Versi",
+      "showOlder": "Tampilkan yang lebih lama ({count})",
+      "hideOlder": "Sembunyikan yang lebih lama"
     },
     "reasoningModel": "Model penalaran: berpikir langkah demi langkah sebelum menjawab. Lebih lambat, namun lebih baik untuk masalah yang sulit.",
     "variant": {
@@ -1583,6 +1585,9 @@
       "freshness_month": "Sebulan terakhir",
       "freshness_any": "Kapan saja",
       "hint": "Otomatis memungkinkan setiap pertanyaan menentukan masa berlaku sendiri (misalnya berita memilih hari terakhir), dan pertanyaan bergaya riset dapat menggunakan lebih banyak sumber daripada standar."
+    },
+    "subVariant": {
+      "label": "Ukuran"
     }
   },
   "models": {

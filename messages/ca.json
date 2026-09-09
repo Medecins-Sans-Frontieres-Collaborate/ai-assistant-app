@@ -1560,7 +1560,9 @@
       "euOnlyNote": "{name} està allotjat a la regió Azure de la UE; les converses amb aquest model es processen allà."
     },
     "version": {
-      "label": "Versió"
+      "label": "Versió",
+      "showOlder": "Mostra anteriors ({count})",
+      "hideOlder": "Amaga anteriors"
     },
     "reasoningModel": "Model de raonament: pensa pas a pas abans de respondre. Més lent, millor per a problemes complexos.",
     "variant": {
@@ -1591,6 +1593,9 @@
       "freshness_month": "Últim mes",
       "freshness_any": "Qualsevol moment",
       "hint": "Auto permet que cada pregunta defineixi la seva pròpia recència (p. ex., les notícies prefereixen el darrer dia) i les preguntes d'investigació poden utilitzar més fonts que per defecte."
+    },
+    "subVariant": {
+      "label": "Mida"
     }
   },
   "models": {

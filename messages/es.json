@@ -1461,7 +1461,9 @@
       "euOnlyNote": "{name} está alojado en la región Azure de la UE; las conversaciones con él se procesan allí."
     },
     "version": {
-      "label": "Versión"
+      "label": "Versión",
+      "showOlder": "Mostrar anteriores ({count})",
+      "hideOlder": "Ocultar anteriores"
     },
     "reasoningModel": "Modelo de razonamiento: piensa paso a paso antes de responder. Más lento, mejor para problemas complejos.",
     "variant": {
@@ -1492,6 +1494,9 @@
       "freshness_month": "Último mes",
       "freshness_any": "Cualquier momento",
       "hint": "Auto permite que cada pregunta defina su propia antigüedad (por ejemplo, las noticias prefieren el último día), y las preguntas de tipo investigación pueden usar más fuentes que el valor predeterminado."
+    },
+    "subVariant": {
+      "label": "Tamaño"
     }
   },
   "models": {

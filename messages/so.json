@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} waxaa lagu martigelinayaa gobolka Azure ee EU; wadahadalada lala yeesho waa halkaas lagu farsameeyaa."
     },
     "version": {
-      "label": "Nooca"
+      "label": "Nooca",
+      "showOlder": "Muuji kuwii hore ({count})",
+      "hideOlder": "Qari kuwii hore"
     },
     "reasoningModel": "Moodelka xisaabaadka: wuxuu fikirayaa tilaabo-tillaabo ka hor inta uusan jawaabin. Wuxuu gaabis yahay, laakin wuu ka wanaagsan yahay dhibaatooyinka adag.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Bishii la soo dhaafay",
       "freshness_any": "Wakhti kasta",
       "hint": "Auto waxay su'aal kasta u ogolaanaysaa inay dejiso waqtiga la doonayo (tusaale, wararka waxay mudnaanta siinayaan maalinta la soo dhaafay), su'aalaha cilmi-baarista ayaa laga yaabaa inay adeegsadaan ilo ka badan kuwa caadiga ah."
+    },
+    "subVariant": {
+      "label": "Cabbirka"
     }
   },
   "models": {

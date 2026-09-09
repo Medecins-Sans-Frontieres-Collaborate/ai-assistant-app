@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} soowdi e ɓurndi Azure e EU; hitaande e mo on mbaawi ngon."
     },
     "version": {
-      "label": "Ndogu"
+      "label": "Ndogu",
+      "showOlder": "Hollu ɓeen ɓurnde ({count})",
+      "hideOlder": "Fottu ɓeen ɓurnde"
     },
     "reasoningModel": "Moodel jajjannde: njaaja sikke-jeye e wowli. Hemɓude, ammbita mo haala gollu ɗiɗi.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Lewru jooɗiiɗo",
       "freshness_any": "Hitaande kala",
       "hint": "Auto ena heddii goɗɗo laatan waawde waawnde mum (misal, jaɓɓorgo tabital dongila lewru), tee gese holli ka moƴƴude baɗte to gese mum."
+    },
+    "subVariant": {
+      "label": "Jummorde"
     }
   },
   "models": {

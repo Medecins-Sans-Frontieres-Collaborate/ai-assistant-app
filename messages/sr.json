@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} se hostuje u EU Azure regionu; razgovori sa ovim modelom se tamo obrađuju."
     },
     "version": {
-      "label": "Verzija"
+      "label": "Verzija",
+      "showOlder": "Prikaži starije ({count})",
+      "hideOlder": "Sakrij starije"
     },
     "reasoningModel": "Model za rezonovanje: razmišlja korak po korak pre odgovora. Sporiji, ali bolji kod teških problema.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Poslednji mesec",
       "freshness_any": "Bilo kada",
       "hint": "Opcija 'Auto' omogućava svakom pitanju da odredi željenu svežinu (npr. vesti preferiraju poslednji dan), dok istraživačka pitanja mogu koristiti više izvora od podrazumevanog."
+    },
+    "subVariant": {
+      "label": "Veličina"
     }
   },
   "models": {

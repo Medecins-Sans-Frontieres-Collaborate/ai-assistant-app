@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} ni a gbalejo sí agbègbè Azure EU; gbogbo ibànilẹ́rọ pẹ̀lú rẹ ni a máa ṣe níbẹ̀."
     },
     "version": {
-      "label": "Ẹ̀dà"
+      "label": "Ẹ̀dà",
+      "showOlder": "Fi arọpo ẹyọ atijọ han ({count})",
+      "hideOlder": "Tẹ̀ ẹyọ atijọ pa"
     },
     "reasoningModel": "Àwòrán ìròyìn: ń rò lẹ́ẹ̀kansi ṣáájú ìdáhùn. Dájújẹ, dára jùlọ ní àwọn iṣoro tó le.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Oṣù to kọja",
       "freshness_any": "Àkókò kankan",
       "hint": "‘Auto’ maa jẹ kó ìbéèrè kọọkan yan àkókò tirẹ (àpẹẹrẹ, ìròyìn maa fẹ́ ọjọ́ kan péré), àwọn ìbéèrè ìwádìí le lo oríṣìíríṣìí orísun ju àtọkasi lọ."
+    },
+    "subVariant": {
+      "label": "Iwọn"
     }
   },
   "models": {

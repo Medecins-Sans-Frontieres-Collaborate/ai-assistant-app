@@ -1617,7 +1617,9 @@
       "euOnlyNote": "Ao amin'ny faritra Azure EU i {name} no tsimbinina; ao ihany koa no karakaraina ny resaka miaraka aminy."
     },
     "version": {
-      "label": "Dikan-teny"
+      "label": "Dikan-teny",
+      "showOlder": "Asehoy ireo taloha ({count})",
+      "hideOlder": "Afeno ireo taloha"
     },
     "reasoningModel": "Modely fandalinana: mieritreritra tsikelikely alohan'ny mamaly. Miadana kokoa, fa tsara amin'ny olana sarotra.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Volana lasa",
       "freshness_any": "Fotoana rehetra",
       "hint": "Ny Auto dia mamela ny fanontaniana tsirairay hametraka ny fahavantsarany (oh: ny vaovaon-draharaha dia aleony amin’ny andro lasa), ary mety hisafidy loharano maro kokoa ny fanontaniana amin’ny endrika fikarohana noho ny masontsivana mahazatra."
+    },
+    "subVariant": {
+      "label": "Habe"
     }
   },
   "models": {

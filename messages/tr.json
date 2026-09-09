@@ -1461,7 +1461,9 @@
       "euOnlyNote": "{name}, AB Azure bölgesinde barındırılır; onunla yapılan konuşmalar orada işlenir."
     },
     "version": {
-      "label": "Sürüm"
+      "label": "Sürüm",
+      "showOlder": "Daha eskiyi göster ({count})",
+      "hideOlder": "Daha eskileri gizle"
     },
     "reasoningModel": "Muhakeme modeli: Yanıtlamadan önce adım adım düşünür. Daha yavaş, zor problemlerde daha iyi sonuç verir.",
     "variant": {
@@ -1492,6 +1494,9 @@
       "freshness_month": "Geçen ay",
       "freshness_any": "Herhangi bir zaman",
       "hint": "Otomatik ayar, her sorunun kendi güncelliğini belirlemesine olanak tanır (ör. haberler için geçen gün tercih edilir) ve araştırma tarzı sorular varsayılandan daha fazla kaynak kullanabilir."
+    },
+    "subVariant": {
+      "label": "Boyut"
     }
   },
   "models": {

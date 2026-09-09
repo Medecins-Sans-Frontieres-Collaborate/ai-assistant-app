@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} ibanjwe esifundeni se-EU Azure; ingxoxo nayo icutshungulwa khona."
     },
     "version": {
-      "label": "Inguqulo"
+      "label": "Inguqulo",
+      "showOlder": "Bonisa ezindala ({count})",
+      "hideOlder": "Fihla ezindala"
     },
     "reasoningModel": "Imodeli yokucabanga: icabanga isinyathelo nesinyathelo ngaphambi kokuphendula. Iyahamba kancane, kodwa ingcono ezinkingeni ezinzima.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Inyanga edlule",
       "freshness_any": "Noma nini",
       "hint": "I-'Auto' ivumela umbuzo ngamunye ukuba uzikhethele isikhathi sakhe (isb. izindaba zikhetha usuku), kanti imibuzo yokucwaninga ingase isebenzise imithombo engaphezu kweyejwayelekile."
+    },
+    "subVariant": {
+      "label": "Usayizi"
     }
   },
   "models": {

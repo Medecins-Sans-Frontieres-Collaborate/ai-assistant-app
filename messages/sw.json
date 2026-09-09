@@ -1461,7 +1461,9 @@
       "euOnlyNote": "{name} imeshikiliwa katika eneo la Azure la EU; mazungumzo nayo yanachakatwa huko."
     },
     "version": {
-      "label": "Toleo"
+      "label": "Toleo",
+      "showOlder": "Onyesha za zamani ({count})",
+      "hideOlder": "Ficha za zamani"
     },
     "reasoningModel": "Modeli ya hoja: hufikiri hatua kwa hatua kabla ya kujibu. Polepole, bora zaidi kwenye masuala magumu.",
     "variant": {
@@ -1492,6 +1494,9 @@
       "freshness_month": "Mwezi uliopita",
       "freshness_any": "Wakati wowote",
       "hint": "Chaguo la Auto huacha kila swali lichague ukaribu wake (mfano, habari hutumia siku iliyopita), na maswali ya utafiti yanaweza kutumia vyanzo vingi kuliko kiwango cha kawaida."
+    },
+    "subVariant": {
+      "label": "Ukubwa"
     }
   },
   "models": {

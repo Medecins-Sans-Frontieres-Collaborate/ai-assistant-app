@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} héberge nan zòn Azure Inyon Ewopeyen an; konvèsasyon ak li ap trete la."
     },
     "version": {
-      "label": "Vèsyon"
+      "label": "Vèsyon",
+      "showOlder": "Montre ansyen yo ({count})",
+      "hideOlder": "Kache ansyen yo"
     },
     "reasoningModel": "Modèl rezònman: panse etap pa etap anvan li reponn. Pito dousman, pi efikas pou pwoblèm ki difisil.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Dènye mwa a",
       "freshness_any": "Nenpòt lè",
       "hint": "Oto mete recency selon chak kesyon (egzanp nouvèl vle dènye jou a), epi kesyon rechèch ka sèvi ak plis sous pase sa ki default."
+    },
+    "subVariant": {
+      "label": "Gwosè"
     }
   },
   "models": {

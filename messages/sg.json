@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} lo ngangu na Azure region ti EU; lengu sô héri eke tâ larê."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Wéngbi ti ziani na yângâ ({count})",
+      "hideOlder": "Fârapi ti ziani na yângâ"
     },
     "reasoningModel": "Modɛli ti kûê tî nzönî : ayeke sôh tî yeke mû kundû kûê tî mû bara. Alingo, mbi yeke bâra mo yângâ na zingo so ayékè nganza.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Mbeni mo na mbonga a yeke",
       "freshness_any": "Gbegbegbe na tango",
       "hint": "Auto ape na sé kété na lo na za ïrï kûê (mbeti iya, na balë ti 24h ïrï zo zo), na kêtê ti kêtê na gorô na yeke hinga mingi mbi bala so."
+    },
+    "subVariant": {
+      "label": "Mbukulu"
     }
   },
   "models": {

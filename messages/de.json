@@ -1458,7 +1458,9 @@
       "euOnlyNote": "{name} wird in der EU-Azure-Region gehostet; Unterhaltungen damit werden dort verarbeitet."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Ältere anzeigen ({count})",
+      "hideOlder": "Ältere ausblenden"
     },
     "reasoningModel": "Reasoning-Modell: denkt Schritt für Schritt vor der Antwort. Langsamer, besser bei schwierigen Aufgaben.",
     "variant": {
@@ -1489,6 +1491,9 @@
       "freshness_month": "Letzter Monat",
       "freshness_any": "Jederzeit",
       "hint": "Bei Automatisch legt jede Frage selbst die Aktualität fest (z.B. Nachrichten bevorzugen den letzten Tag), und wissenschaftliche Fragen können mehr Quellen als die Vorgabe nutzen."
+    },
+    "subVariant": {
+      "label": "Größe"
     }
   },
   "models": {

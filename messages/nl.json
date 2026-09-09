@@ -1502,7 +1502,9 @@
       "euOnlyNote": "{name} wordt gehost in de EU Azure-regio; gesprekken daarmee worden daar verwerkt."
     },
     "version": {
-      "label": "Versie"
+      "label": "Versie",
+      "showOlder": "Oudere versies weergeven ({count})",
+      "hideOlder": "Oudere versies verbergen"
     },
     "reasoningModel": "Redeneermodel: denkt stap voor stap na voor het beantwoorden. Langzamer, beter bij complexe problemen.",
     "variant": {
@@ -1533,6 +1535,9 @@
       "freshness_month": "Afgelopen maand",
       "freshness_any": "Altijd",
       "hint": "Automatisch laat elke vraag zijn eigen actualiteit bepalen (bijv. nieuws geeft de voorkeur aan de afgelopen dag), en onderzoeksvragen kunnen meer bronnen gebruiken dan standaard."
+    },
+    "subVariant": {
+      "label": "Grootte"
     }
   },
   "models": {

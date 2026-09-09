@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} ili mu EU Azure region; kukambirana nako kumachitika kumeneko."
     },
     "version": {
-      "label": "Mtundu"
+      "label": "Mtundu",
+      "showOlder": "Onetsani zakale ({count})",
+      "hideOlder": "Bisani zakale"
     },
     "reasoningModel": "Mtundu wa reasoning: umaganizira sitepe ndi sitepe musanapereke yankho. Umachedwa, koma wabwino pa mavuto ovuta.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Mwezi watha",
       "freshness_any": "Nthawi iliyonse",
       "hint": "Auto imalola funso lililonse kusankha nthawi yake (mwachitsanzo, nkhani amakonda tsiku la m'mbuyo), ndipo mafunso a kafukufuku angagwiritse ntchito magwero ambiri kuposa mmene zili mwachisawawa."
+    },
+    "subVariant": {
+      "label": "Kukula"
     }
   },
   "models": {
