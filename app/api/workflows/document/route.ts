@@ -28,6 +28,7 @@ import {
   createWorkflowStream,
 } from '@/lib/services/workflows/shared/workflowLlm';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
+import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
   badRequestResponse,
@@ -71,6 +72,8 @@ interface DocumentWorkflowRequest {
   /** Selected quality criteria rubrics upheld while writing. */
   qualityGuidance?: QualityGuidanceItem[];
   modelId?: string;
+  /** Correlates the run's calls in telemetry; not otherwise used. */
+  conversationId?: string;
 }
 
 /**
@@ -160,6 +163,15 @@ export async function POST(req: NextRequest) {
     guideTone = toneGuideToToneInput(resolved.guide) ?? undefined;
   }
 
+  // Workflow runs debit the shared chat token pool, so they honour its
+  // pre-flight too (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+  const { denied, usage } = await beginWorkflowRun(
+    session,
+    body.mode === 'revise' ? 'revise' : 'write',
+    body.conversationId,
+  );
+  if (denied) return denied;
+
   const { stream, writer } = createWorkflowStream();
 
   // Run the LLM work after returning the stream so the client sees
@@ -240,7 +252,18 @@ export async function POST(req: NextRequest) {
         user,
         onDelta: (delta) => writer.text(delta),
         signal: req.signal,
+        usage,
+        usageLabel: body.mode === 'revise' ? 'revise' : 'write',
       });
+
+      const usagePayload = usage.payload();
+      if (usagePayload) {
+        writer.event({
+          workflow: 'document',
+          type: 'usage',
+          data: usagePayload,
+        });
+      }
 
       writer.event({
         workflow: 'document',

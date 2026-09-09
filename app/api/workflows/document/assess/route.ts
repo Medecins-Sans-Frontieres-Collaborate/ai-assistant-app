@@ -17,6 +17,7 @@ import {
   resolveSlotGuide,
 } from '@/lib/services/workflows/shared/guideResolution';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
+import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
   badRequestResponse,
@@ -70,6 +71,8 @@ interface DocumentAssessRequest {
   /** Fresh client-side profile; server re-profiles when absent. */
   profile?: DocumentProfile;
   modelId?: string;
+  /** Correlates the run's calls in telemetry; not otherwise used. */
+  conversationId?: string;
 }
 
 /**
@@ -235,12 +238,20 @@ export async function POST(req: NextRequest) {
   }
 
   const modelId = resolveWorkflowModelId(body.modelId);
+  // Workflow runs debit the shared chat token pool, so they honour its
+  // pre-flight too (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+  const { denied, usage } = await beginWorkflowRun(
+    session,
+    'assess',
+    body.conversationId,
+  );
+  if (denied) return denied;
 
   try {
     // Profile: reuse a fresh client-supplied one, else compute.
     let profile = body.profile;
     if (!profile) {
-      const result = await runDocumentProfile({ docMarkdown, modelId });
+      const result = await runDocumentProfile({ docMarkdown, modelId, usage });
       profile = {
         ...result,
         contentHash: 0, // client stamps the hash of its own markdown
@@ -254,6 +265,7 @@ export async function POST(req: NextRequest) {
         criteria: [],
         overallSummary: '',
         edits: [],
+        usage: usage.payload(),
       });
     }
 
@@ -268,9 +280,10 @@ export async function POST(req: NextRequest) {
       language: profile.language,
       conventionNotes: profile.conventionNotes,
       modelId,
+      usage,
     });
 
-    return successResponse({ profile, ...assessment });
+    return successResponse({ profile, ...assessment, usage: usage.payload() });
   } catch (error) {
     console.error('[workflows/document/assess] Failed:', error);
     return handleApiError(error, 'Assessment failed');
