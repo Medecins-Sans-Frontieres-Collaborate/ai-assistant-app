@@ -435,6 +435,7 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_4_1_NANO,
   OpenAIModelID.GPT_CHAT_LATEST,
   OpenAIModelID.GPT_5_3_CHAT,
+  OpenAIModelID.GPT_5_2_CHAT,
   OpenAIModelID.GPT_5_1_CHAT,
   OpenAIModelID.GPT_5_CHAT,
   OpenAIModelID.GPT_o3,
