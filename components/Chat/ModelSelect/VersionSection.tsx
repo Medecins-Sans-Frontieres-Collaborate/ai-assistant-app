@@ -6,7 +6,10 @@ import { useTranslations } from 'next-intl';
 import { formatResetIn } from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
-import { getVariantVersions } from '@/lib/utils/app/modelSeries';
+import {
+  getVariantVersionGroups,
+  pickVersionTarget,
+} from '@/lib/utils/app/modelSeries';
 import {
   ASSUMPTIONS_VERSION,
   getEmissionsTier,
@@ -58,6 +61,7 @@ export const VersionSection: FC<VersionSectionProps> = ({
   // Calling Date.now() directly in render is impure; the lazy initializer
   // form runs once, on mount, like useResetCountdown's own `now` state.
   const [now] = useState(() => Date.now());
+  const [showOlder, setShowOlder] = useState(false);
   const { showUsageImpact } = useFlags();
   // Same source the picker list renders from (the useSettings hook), so the
   // Version section always matches what the list shows. byom families come in
@@ -212,6 +216,18 @@ export const VersionSection: FC<VersionSectionProps> = ({
             </button>
           );
         })}
+        {olderCount > 0 && (
+          <button
+            type="button"
+            onClick={() => setShowOlder(!showOlder)}
+            aria-expanded={showOlder}
+            className="rounded-lg px-2 py-1.5 min-h-[36px] text-xs font-medium text-gray-600 dark:text-gray-400 underline underline-offset-2 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          >
+            {showOlder
+              ? t('version.hideOlder')
+              : t('version.showOlder', { count: olderCount })}
+          </button>
+        )}
       </div>
     </div>
   );
