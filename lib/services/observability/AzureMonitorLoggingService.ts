@@ -314,6 +314,7 @@ export class AzureMonitorLoggingService {
       estimatedEnergyWh: number;
       assumptionsVersion: string;
       streamed: boolean;
+      surface?: string;
       botId?: string;
       telemetry?: RequestTelemetry;
     },
@@ -338,6 +339,7 @@ export class AzureMonitorLoggingService {
       EstimatedEnergyWh: params.estimatedEnergyWh,
       AssumptionsVersion: params.assumptionsVersion,
       Streamed: params.streamed,
+      Surface: params.surface,
       BotId: params.botId ?? params.telemetry?.botId,
     };
 
