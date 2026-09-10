@@ -1,3 +1,5 @@
+import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRecorder';
+
 import { NamedConnection } from '@/lib/utils/shared/geo/connections';
 
 import { MapFeature } from '@/types/workflow';
@@ -26,7 +28,16 @@ export interface ExtractionResult {
  */
 export async function extractMapFeatures(
   input: { sourceText: string } | { searchQuery: string },
-  options: { existingNames: string[]; modelId?: string },
+  options: {
+    existingNames: string[];
+    modelId?: string;
+    /**
+     * Attributes the run's token spend to this conversation's ledger. Absent
+     * for the admin dataset editor, which has no conversation — the spend
+     * still reaches telemetry and the account totals server-side.
+     */
+    conversationId?: string;
+  },
 ): Promise<ExtractionResult> {
   const response = await fetch('/api/workflows/map', {
     method: 'POST',
@@ -35,11 +46,16 @@ export async function extractMapFeatures(
       ...input,
       existingNames: options.existingNames,
       modelId: options.modelId,
+      conversationId: options.conversationId,
     }),
   });
   const parsed = await response.json().catch(() => null);
   if (!response.ok || !parsed?.success) {
     throw new Error(parsed?.error || `Request failed (${response.status})`);
+  }
+
+  if (options.conversationId) {
+    recordWorkflowUsage(options.conversationId, parsed.data?.usage);
   }
 
   return {
