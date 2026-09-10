@@ -181,7 +181,7 @@ export async function POST(req: NextRequest) {
       usage,
     });
 
-    return successResponse({ ...result, usage: usage.payload() });
+    return successResponse({ ...result, ...usage.fields() });
   } catch (error) {
     console.error('[workflows/translation/assess] Failed:', error);
     return handleApiError(error, 'Assessment failed');

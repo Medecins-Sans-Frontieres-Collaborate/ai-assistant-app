@@ -265,7 +265,7 @@ export async function POST(req: NextRequest) {
         criteria: [],
         overallSummary: '',
         edits: [],
-        usage: usage.payload(),
+        ...usage.fields(),
       });
     }
 
@@ -283,7 +283,7 @@ export async function POST(req: NextRequest) {
       usage,
     });
 
-    return successResponse({ profile, ...assessment, usage: usage.payload() });
+    return successResponse({ profile, ...assessment, ...usage.fields() });
   } catch (error) {
     console.error('[workflows/document/assess] Failed:', error);
     return handleApiError(error, 'Assessment failed');

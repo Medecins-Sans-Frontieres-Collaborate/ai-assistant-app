@@ -251,7 +251,7 @@ export async function POST(req: NextRequest) {
       connections,
       dropped,
       truncatedSource: budgeted.truncated,
-      usage: usage.payload(),
+      ...usage.fields(),
       ...(searchQuery ? { searched: true, sources: citations } : {}),
     });
   } catch (error) {
