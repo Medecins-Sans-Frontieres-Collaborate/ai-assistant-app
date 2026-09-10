@@ -1,11 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { forwardRef, useImperativeHandle } from 'react';
 
 import { htmlToMarkdown } from '@/lib/utils/shared/document/exportUtils';
 import { stampEditAnchors } from '@/lib/utils/shared/review/editLocation';
@@ -22,12 +17,17 @@ import '@testing-library/jest-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 /**
- * Editing while a review is open (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §4).
+ * The workspace's side of editing during a review
+ * (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §4, §6a): what it does with the gate's
+ * answer, and — the promise that matters most — that a suggestion accepted
+ * AFTER the user has typed applies to the document they now have instead of
+ * regenerating it from a stale snapshot.
  *
- * Two promises: text outside a suggestion is free to change and the queue
- * survives it; and a suggestion accepted AFTER the user has typed applies to
- * the document they now have — the markdown snapshot must not quietly
- * regenerate `docHtml` without their edit.
+ * The editor is a stub. jsdom cannot deliver keystrokes to ProseMirror, and
+ * the gate's mechanics have their own test against the real editor
+ * (RichTextEditorOverwriteGate); here the stub reports typing the way the
+ * real editor does: `onOverwriteEdits` first when a suggestion is in the way,
+ * `onChange` with the new HTML when the change lands.
  */
 
 vi.mock('@/client/hooks/workflows/useWorkflowStream', () => ({
@@ -38,6 +38,51 @@ vi.mock('@/client/services/workflows/workflowTitle', () => ({
 }));
 vi.mock('@/client/services/workflows/documentAssessment', () => ({
   assessDocument: vi.fn(),
+}));
+
+const undo = vi.hoisted(() => vi.fn());
+vi.mock('@/components/Workflows/Document/RichTextEditor', () => ({
+  RichTextEditor: forwardRef(function StubEditor(
+    props: {
+      contentHtml: string;
+      onChange: (html: string) => void;
+      onOverwriteEdits?: (ids: string[]) => boolean;
+      previewEdits?: readonly { id: string }[];
+    },
+    ref,
+  ) {
+    useImperativeHandle(ref, () => ({
+      replaceRange: () => null,
+      getHTML: () => props.contentHtml,
+      insertText: () => true,
+      undo,
+    }));
+    return (
+      <div>
+        <div data-testid="doc">{props.contentHtml}</div>
+        <div data-testid="marks">{props.previewEdits?.length ?? 0}</div>
+        <button
+          type="button"
+          onClick={() =>
+            props.onChange(props.contentHtml.replace('The', 'TheX'))
+          }
+        >
+          type-outside
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            const ids = (props.previewEdits ?? []).map((e) => e.id);
+            if (props.onOverwriteEdits?.(ids)) {
+              props.onChange(props.contentHtml.replace('opened', 'opXened'));
+            }
+          }}
+        >
+          type-inside
+        </button>
+      </div>
+    );
+  }),
 }));
 
 const DOC_HTML = '<p>The clinic opened in March and stayed open.</p>';
@@ -114,39 +159,11 @@ function state(): DocumentWorkflowState {
     .workflowState as DocumentWorkflowState;
 }
 
-function typeAt(pm: HTMLElement, offset: number, text: string) {
-  const paragraph = pm.querySelector('p');
-  if (!paragraph) throw new Error('no paragraph');
-  const walker = document.createTreeWalker(paragraph, NodeFilter.SHOW_TEXT);
-  let remaining = offset;
-  let node = walker.nextNode();
-  while (node && remaining > (node.textContent?.length ?? 0)) {
-    remaining -= node.textContent?.length ?? 0;
-    node = walker.nextNode();
-  }
-  if (!node) throw new Error('offset past end');
-  const range = document.createRange();
-  range.setStart(node, remaining);
-  range.collapse(true);
-  const selection = window.getSelection();
-  selection?.removeAllRanges();
-  selection?.addRange(range);
-  pm.dispatchEvent(
-    new InputEvent('beforeinput', {
-      bubbles: true,
-      cancelable: true,
-      inputType: 'insertText',
-      data: text,
-    }),
-  );
-}
-
-async function mountWithMarks() {
+async function mountWithReview() {
   renderWorkspace();
   await waitFor(() =>
-    expect(document.querySelector('.edit-suggestion-mark')).toBeTruthy(),
+    expect(screen.getByTestId('marks').textContent).toBe('1'),
   );
-  return document.querySelector('.ProseMirror') as HTMLElement;
 }
 
 describe('Document workflow — editing during a review', () => {
@@ -160,20 +177,19 @@ describe('Document workflow — editing during a review', () => {
   });
 
   it('keeps the queue when text outside a suggestion is edited', async () => {
-    const pm = await mountWithMarks();
+    await mountWithReview();
 
-    act(() => typeAt(pm, 3, 'X')); // inside "The"
+    fireEvent.click(screen.getByText('type-outside'));
 
     await waitFor(() => expect(state().docHtml).toContain('TheX'));
     expect(state().assessment?.edits[0].status).toBe('pending');
-    // The suggestion is still marked where it now sits.
-    expect(document.querySelector('.edit-suggestion-mark')).toBeTruthy();
+    expect(screen.getByTestId('marks').textContent).toBe('1');
   });
 
   it('applies an accepted suggestion to the document the user now has', async () => {
-    const pm = await mountWithMarks();
+    await mountWithReview();
 
-    act(() => typeAt(pm, 3, 'X'));
+    fireEvent.click(screen.getByText('type-outside'));
     await waitFor(() => expect(state().docHtml).toContain('TheX'));
 
     fireEvent.click(screen.getByRole('button', { name: 'Accept' }));
@@ -181,32 +197,35 @@ describe('Document workflow — editing during a review', () => {
     await waitFor(() =>
       expect(state().assessment?.edits[0].status).toBe('accepted'),
     );
-    // Both survive: the user's keystroke AND the accepted change.
+    // Both survive: the user's keystroke AND the accepted change. Before the
+    // unfreeze this regenerated docHtml from the snapshot and lost the X.
     expect(state().docHtml).toContain('TheX');
     expect(state().docHtml).toContain('opened in April');
     expect(state().docHtml).not.toContain('March');
   });
 
   it('moves a suggestion to "not applied" when its passage is typed over', async () => {
-    const pm = await mountWithMarks();
+    await mountWithReview();
 
-    act(() => typeAt(pm, 12, 'X')); // inside "opened"
+    fireEvent.click(screen.getByText('type-inside'));
 
     await waitFor(() =>
       expect(state().assessment?.edits[0].status).toBe('unapplicable'),
     );
-    expect(state().docHtml).toContain('X');
+    expect(state().docHtml).toContain('opXened');
+    expect(screen.getByTestId('marks').textContent).toBe('0');
   });
 
   it('holds the first such keystroke back until the rule has been explained', async () => {
     useSettingsStore.setState({ reviewOverwriteAcknowledged: false });
-    const pm = await mountWithMarks();
+    await mountWithReview();
 
-    act(() => typeAt(pm, 12, 'X'));
+    fireEvent.click(screen.getByText('type-inside'));
 
     await waitFor(() =>
       expect(screen.getByText('Editing a suggested passage')).toBeTruthy(),
     );
+    // Held back: nothing changed yet.
     expect(state().docHtml).toBe(DOC_HTML);
     expect(state().assessment?.edits[0].status).toBe('pending');
 
@@ -218,5 +237,21 @@ describe('Document workflow — editing during a review', () => {
       expect(state().assessment?.edits[0].status).toBe('unapplicable'),
     );
     expect(useSettingsStore.getState().reviewOverwriteAcknowledged).toBe(true);
+  });
+
+  it('leaves everything as it was when the explanation is cancelled', async () => {
+    useSettingsStore.setState({ reviewOverwriteAcknowledged: false });
+    await mountWithReview();
+
+    fireEvent.click(screen.getByText('type-inside'));
+    await waitFor(() =>
+      expect(screen.getByText('Editing a suggested passage')).toBeTruthy(),
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    expect(state().docHtml).toBe(DOC_HTML);
+    expect(state().assessment?.edits[0].status).toBe('pending');
+    expect(useSettingsStore.getState().reviewOverwriteAcknowledged).toBe(false);
   });
 });
