@@ -192,7 +192,7 @@ describe('Document workflow — editing during a review', () => {
     fireEvent.click(screen.getByText('type-outside'));
     await waitFor(() => expect(state().docHtml).toContain('TheX'));
 
-    fireEvent.click(screen.getByRole('button', { name: 'Accept' }));
+    fireEvent.click(screen.getByRole('button', { name: 'acceptEdit' }));
 
     await waitFor(() =>
       expect(state().assessment?.edits[0].status).toBe('accepted'),
@@ -223,14 +223,16 @@ describe('Document workflow — editing during a review', () => {
     fireEvent.click(screen.getByText('type-inside'));
 
     await waitFor(() =>
-      expect(screen.getByText('Editing a suggested passage')).toBeTruthy(),
+      expect(screen.getByText('document.overwriteEditTitle')).toBeTruthy(),
     );
     // Held back: nothing changed yet.
     expect(state().docHtml).toBe(DOC_HTML);
     expect(state().assessment?.edits[0].status).toBe('pending');
 
     fireEvent.click(
-      screen.getByRole('button', { name: 'Drop the suggestion and edit' }),
+      screen.getByRole('button', {
+        name: 'document.overwriteEditConfirmOne',
+      }),
     );
 
     await waitFor(() =>
@@ -245,7 +247,7 @@ describe('Document workflow — editing during a review', () => {
 
     fireEvent.click(screen.getByText('type-inside'));
     await waitFor(() =>
-      expect(screen.getByText('Editing a suggested passage')).toBeTruthy(),
+      expect(screen.getByText('document.overwriteEditTitle')).toBeTruthy(),
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
