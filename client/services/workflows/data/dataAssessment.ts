@@ -1,5 +1,7 @@
 'use client';
 
+import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRecorder';
+
 import { ColumnProfile, DataColumn } from '@/types/workflow';
 
 export interface AssessDataInput {
@@ -13,6 +15,8 @@ export interface AssessDataInput {
   sampled: boolean;
   totalRowCount: number;
   modelId?: string;
+  /** Attributes the run's token spend to this conversation's ledger. */
+  conversationId?: string;
   signal?: AbortSignal;
 }
 
@@ -45,6 +49,9 @@ export async function assessData(
   const parsed = await response.json().catch(() => null);
   if (!response.ok || !parsed?.success) {
     throw new Error(parsed?.error || `Assessment failed (${response.status})`);
+  }
+  if (input.conversationId) {
+    recordWorkflowUsage(input.conversationId, parsed.data?.usage);
   }
   return parsed.data as AssessDataOutput;
 }
