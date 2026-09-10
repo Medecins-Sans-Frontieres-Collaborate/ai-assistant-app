@@ -704,8 +704,12 @@ export interface MapSourceRecord {
   name: string;
   addedAt: string;
   featureCount: number;
-  /** How the material arrived. Absent on records saved before this field. */
-  kind?: 'text' | 'file' | 'search' | 'chat' | 'url' | 'dataset';
+  /**
+   * How the material arrived. Absent on records saved before this field.
+   * 'import' is a structured file (GeoJSON, KML, CSV…) read directly — no
+   * model involved, so its coordinates are the file's own statements.
+   */
+  kind?: 'text' | 'file' | 'search' | 'chat' | 'url' | 'dataset' | 'import';
   /** Admin dataset this source snapshot came from, for kind 'dataset'. */
   datasetId?: string;
   /** The web search query, for kind 'search'. */
