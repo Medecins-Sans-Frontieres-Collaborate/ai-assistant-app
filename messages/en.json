@@ -3395,7 +3395,10 @@
         "photo": "Photo extraction",
         "map_edit": "Map update",
         "rail_chat": "Chat"
-      }
+      },
+      "estimate": "~{passes} passes · ~{grams} g CO₂e",
+      "estimateTooltip": "Rough estimate for this run before it starts, from the length of the source, the selected model and how many passes the chosen settings make (assumptions v{version}). Each pass re-sends the source, so prompt tokens dominate. The actual figure appears after the run.",
+      "estimateAtMost": "up to ~{passes} passes · ~{grams} g CO₂e"
     }
   },
   "usageImpact": {
@@ -5569,7 +5572,8 @@
       "limitReached": "Limit reached",
       "familyLimitReached": "Model family limit reached",
       "familyRow": "{family} models",
-      "usageUnavailable": "Current usage could not be loaded — showing limits only."
+      "usageUnavailable": "Current usage could not be loaded — showing limits only.",
+      "usedByWorkflows": "of which {used} from workflows"
     },
     "routes": {
       "ttsExhausted": "You've reached today's text-to-speech limit.",
