@@ -15,6 +15,7 @@ import {
   buildGuideCriterionBlocks,
   guideRubricLine,
 } from '../shared/guidePrompts';
+import { MAX_REVIEW_ROUNDS } from '../shared/workflowLimits';
 import {
   WorkflowStreamWriter,
   callStreamedText,
@@ -41,7 +42,7 @@ import {
 } from './schemas';
 
 /** Same bounded-rounds discipline as toolLoopCore's MAX_TOOL_ROUNDS. */
-export const MAX_REVIEW_ROUNDS = 3;
+export { MAX_REVIEW_ROUNDS } from '../shared/workflowLimits';
 
 interface ReviewResult {
   verdict: 'approve' | 'revise';
