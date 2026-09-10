@@ -1658,12 +1658,21 @@
       "editTranslation": "Edit",
       "doneEditing": "Done",
       "pasteTranslationPlaceholder": "Type or paste a translation to work on…",
-      "editingBlockedPendingEdits": "Resolve or reject the pending suggested edits first",
       "pendingCount": "{count} pending",
       "closeReview": "Close quality review",
       "showReview": "Show review",
       "showReviewPending": "Show review ({count} pending)",
-      "criterionRubricTooLong": "This rubric is {over} characters over the limit. It is sent with every assessment, so it must be trimmed before this criterion can be used."
+      "criterionRubricTooLong": "This rubric is {over} characters over the limit. It is sent with every assessment, so it must be trimmed before this criterion can be used.",
+      "editingPendingHint": "{count} suggestions pending — they aren't marked while editing, and typing over one drops it.",
+      "editingPendingHintOne": "1 suggestion pending — it isn't marked while editing, and typing over it drops it.",
+      "overwriteEditTitle": "Editing a suggested passage",
+      "overwriteEditMessage": "This text has a pending suggestion. Editing it drops the suggestion — it moves to “not applied” in the review list, where you can still undo that. Text outside suggestions can be edited freely while a review is open. You won't be asked again.",
+      "overwriteEditConfirmOne": "Drop the suggestion and keep my change",
+      "overwriteEditConfirmMany": "Drop {count} suggestions and keep my change",
+      "suggestionDroppedOne": "Suggestion dropped — you edited its passage.",
+      "suggestionDroppedMany": "{count} suggestions dropped — you edited their passages.",
+      "pendingRunActionTranslate": "Translating again",
+      "pendingRunActionAssess": "Re-assessing"
     },
     "document": {
       "emptyTitle": "Describe the document you want",
@@ -1734,7 +1743,6 @@
       "clearResolved": "Clear resolved",
       "clearResolvedHint": "Remove accepted, rejected, and unapplicable edits from this list",
       "autoClearResolved": "Automatically clear resolved edits",
-      "editingBlockedPendingEdits": "Resolve or reject the pending suggested edits first",
       "pendingCount": "{count} pending",
       "closeReview": "Close quality review",
       "showReview": "Show review",
@@ -1799,7 +1807,7 @@
       "editorModeRich": "Rich text",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Switch back to rich text to see suggested edits; markdown and HTML views can’t mark them.",
+      "editorModeLockedEdits": "Switch back to rich text to see suggested edits; markdown and HTML views can't mark them.",
       "suggestChanges": "Suggest changes",
       "suggestChangesHint": "Review the revision as individual suggestions instead of rewriting the document straight away.",
       "suggestChangesSelectionNote": "Revisions to a selection are applied directly — the selection is already the scope you chose.",
@@ -1813,11 +1821,13 @@
       "fallbackNoChanges": "No changes were needed.",
       "criterionRubricTooLong": "This rubric is {over} characters over the limit. It is sent with every assessment, so it must be trimmed before this criterion can be used.",
       "overwriteEditTitle": "Editing a suggested passage",
-      "overwriteEditMessage": "This text has a pending suggestion. Editing it drops the suggestion — it moves to “not applied” in the review list, where you can still undo that. Text outside suggestions can be edited freely while a review is open. You won’t be asked again.",
+      "overwriteEditMessage": "This text has a pending suggestion. Editing it drops the suggestion — it moves to “not applied” in the review list, where you can still undo that. Text outside suggestions can be edited freely while a review is open. You won't be asked again.",
       "overwriteEditConfirmOne": "Drop the suggestion and edit",
       "overwriteEditConfirmMany": "Drop {count} suggestions and edit",
       "suggestionDroppedOne": "Suggestion dropped — you edited its passage.",
-      "suggestionDroppedMany": "{count} suggestions dropped — you edited their passages."
+      "suggestionDroppedMany": "{count} suggestions dropped — you edited their passages.",
+      "pendingRunActionRevise": "Revising the document",
+      "pendingRunActionAssess": "Re-assessing"
     },
     "data": {
       "emptyTitle": "Import data to analyze",
@@ -2165,7 +2175,14 @@
       "guideSectionOptional": "optional",
       "guideSourceTerm": "Source term",
       "guideTargetTerm": "Required translation",
-      "guideNote": "Note"
+      "guideNote": "Note",
+      "pendingRun": {
+        "title": "{count} suggestions still pending",
+        "body": "{action} can change any part of the text, including passages with suggestions you haven't decided yet, and a new assessment replaces the current list. Decide the remaining suggestions first.",
+        "acceptAll": "Accept all remaining",
+        "rejectAll": "Reject all",
+        "cancel": "Cancel"
+      }
     },
     "shell": {
       "showConversation": "Show conversation",
@@ -3433,7 +3450,7 @@
     "chipAutoHideUnit": "seconds",
     "chipAutoHideHint": "Between {min} and {max} seconds.",
     "byWorkflow": "By workflow",
-    "byWorkflowNote": "Part of the totals above, shown separately — not extra usage. Grants runs are counted toward your organisation’s reporting and your token budget, but not in this local total."
+    "byWorkflowNote": "Part of the totals above, shown separately — not extra usage. Grants runs are counted toward your organisation's reporting and your token budget, but not in this local total."
   },
   "connectors": {
     "title": "Connectors",
