@@ -1,11 +1,23 @@
 /**
- * Locating pending edits in the working text — for PREVIEW ONLY.
+ * Locating pending edits in the working text.
  *
- * Application still resolves `before` at apply time (see editApplication.ts);
- * these offsets exist purely so the UI can point at the span a card refers
- * to. They are safe because both workspaces freeze the text while edits are
- * unresolved, so nothing shifts underneath a highlight.
+ * Two consumers, and the distinction matters:
+ *
+ *  - PREVIEW — the highlighters recompute these offsets against the CURRENT
+ *    text on every change, so a highlight always points at where the text
+ *    stands now. (The document's ProseMirror plugin rebuilds on
+ *    `tr.docChanged`; the translation pane recomputes on render.)
+ *  - ANCHORING — {@link stampEditAnchors} records ONCE, when the assessment is
+ *    minted, where each edit's target sat and what preceded it. Application
+ *    then scores occurrences on that context (and only then on distance)
+ *    instead of taking the first, which is what keeps a suggestion pointing
+ *    at the passage the reviewer actually read once the text is no longer
+ *    frozen (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §2-3).
+ *
+ * Both use the same greedy assignment below, so an edit's stored anchor and
+ * its highlight always mean the same occurrence.
  */
+import { ANCHOR_CONTEXT_CHARS } from './editApplication';
 
 export interface LocatableEdit {
   id: string;
@@ -118,4 +130,39 @@ export function resolvePreviewText(
     return { before: strippedBefore, after: stripMarkdownMarkers(after) };
   }
   return null;
+}
+
+/**
+ * Records where each edit's target sits in the text it was assessed against,
+ * and what immediately precedes it.
+ *
+ * Called once, where an assessment's edits are minted. Edits whose `before`
+ * cannot be found are returned unchanged and simply carry no anchor: they
+ * fall back to first-occurrence matching, which is no worse than the
+ * behaviour they would have had anyway.
+ *
+ * The `id` must already be assigned — anchoring is per-edit, and two edits
+ * proposing the same `before` must get the two different occurrences that
+ * {@link locateEdits} assigns them, not the same one twice.
+ */
+export function stampEditAnchors<T extends LocatableEdit>(
+  text: string,
+  edits: readonly T[],
+): Array<T & { anchorStart?: number; anchorContext?: string }> {
+  if (!text) return [...edits];
+  const starts = new Map(
+    locateEdits(text, edits).map((location) => [location.id, location.start]),
+  );
+  return edits.map((edit) => {
+    const anchorStart = starts.get(edit.id);
+    if (anchorStart === undefined) return edit;
+    return {
+      ...edit,
+      anchorStart,
+      anchorContext: text.slice(
+        Math.max(0, anchorStart - ANCHOR_CONTEXT_CHARS),
+        anchorStart,
+      ),
+    };
+  });
 }
