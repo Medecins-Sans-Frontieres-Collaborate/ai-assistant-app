@@ -1,5 +1,7 @@
 'use client';
 
+import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRecorder';
+
 import {
   DocumentProfile,
   DocumentSpec,
@@ -22,6 +24,8 @@ export interface AssessDocumentInput {
   toneGuideId?: string;
   profile?: DocumentProfile;
   modelId?: string;
+  /** Attributes the run's token spend to this conversation's ledger. */
+  conversationId?: string;
   signal?: AbortSignal;
 }
 
@@ -52,6 +56,9 @@ export async function assessDocument(
   const parsed = await response.json().catch(() => null);
   if (!response.ok || !parsed?.success) {
     throw new Error(parsed?.error || `Assessment failed (${response.status})`);
+  }
+  if (input.conversationId) {
+    recordWorkflowUsage(input.conversationId, parsed.data?.usage);
   }
   return parsed.data as AssessDocumentOutput;
 }
