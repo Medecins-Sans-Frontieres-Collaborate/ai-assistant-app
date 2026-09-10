@@ -357,6 +357,17 @@ interface SettingsStore {
    */
   estimatedUsageStats: Record<string, TokenUsageBucket>;
   /**
+   * Token usage of conversation workflows, bucketed by workflow type
+   * (docs/WORKFLOW_EMISSIONS_DESIGN.md §5f). A SUBSET of tokenUsageStats —
+   * the same raw counts are also bucketed there by model, exactly as chat's
+   * are, so lifetime totals need no special case. This exists purely so the
+   * UI can answer "how much of that was workflows, and which ones".
+   *
+   * Grants is absent by design: it is telemetry-only (§7a), so its spend
+   * reaches Azure Monitor and the token quota but never the client.
+   */
+  workflowUsageStats: Record<string, TokenUsageBucket>;
+  /**
    * ISO timestamp stamped when the one-time historical backfill ran (or was
    * intentionally skipped). Non-null = never run it again — including for
    * conversations imported later (accepted limitation).
@@ -562,6 +573,11 @@ interface SettingsStore {
 
   // Token usage tracking (see tokenUsageStats)
   recordTokenUsage: (usage: TokenUsageMetadata) => void;
+  /** Adds one workflow run's raw counts to its type's bucket (§5f). */
+  recordWorkflowTypeUsage: (
+    workflowType: string,
+    counts: { promptTokens: number; completionTokens: number },
+  ) => void;
   resetTokenUsageStats: () => void;
   /**
    * Folds back-calculated historical buckets into estimatedUsageStats AND
@@ -854,6 +870,7 @@ export const useSettingsStore = create<SettingsStore>()(
       tokenUsageStats: {},
       tokenUsageFirstTrackedAt: null,
       estimatedUsageStats: {},
+      workflowUsageStats: {},
       historicalUsageBackfilledAt: null,
       modelListSource: null,
       userRegion: null,
@@ -1349,11 +1366,28 @@ export const useSettingsStore = create<SettingsStore>()(
           };
         }),
 
+      recordWorkflowTypeUsage: (workflowType, counts) =>
+        set((state) => {
+          const bucket = state.workflowUsageStats[workflowType];
+          return {
+            workflowUsageStats: {
+              ...state.workflowUsageStats,
+              [workflowType]: {
+                promptTokens: (bucket?.promptTokens ?? 0) + counts.promptTokens,
+                completionTokens:
+                  (bucket?.completionTokens ?? 0) + counts.completionTokens,
+                requests: (bucket?.requests ?? 0) + 1,
+              },
+            },
+          };
+        }),
+
       resetTokenUsageStats: () =>
         set({
           tokenUsageStats: {},
           tokenUsageFirstTrackedAt: null,
           estimatedUsageStats: {},
+          workflowUsageStats: {},
           // Stamp (not null) so the one-time backfill doesn't resurrect the
           // history the user just chose to clear.
           historicalUsageBackfilledAt: new Date().toISOString(),
@@ -1781,7 +1815,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 59, // Increment this when schema changes to trigger migrations
+      version: 60, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1843,6 +1877,7 @@ export const useSettingsStore = create<SettingsStore>()(
         tokenUsageStats: state.tokenUsageStats,
         tokenUsageFirstTrackedAt: state.tokenUsageFirstTrackedAt,
         estimatedUsageStats: state.estimatedUsageStats,
+        workflowUsageStats: state.workflowUsageStats,
         historicalUsageBackfilledAt: state.historicalUsageBackfilledAt,
         savedStructures: state.savedStructures,
         streamingSpeed: state.streamingSpeed,
@@ -2467,6 +2502,19 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 59) {
           if (!Array.isArray(state.hiddenAdminAgentKeys)) {
             state.hiddenAdminAgentKeys = [];
+          }
+        }
+
+        // Version 59 → 60: per-workflow-type usage buckets. Starts empty for
+        // everyone — workflow spend was not recorded before this version, and
+        // back-filling it is impossible (workflow output does not live in the
+        // transcript, so there is nothing to back-calculate from).
+        if (version < 60) {
+          if (
+            state.workflowUsageStats == null ||
+            typeof state.workflowUsageStats !== 'object'
+          ) {
+            state.workflowUsageStats = {};
           }
         }
 
