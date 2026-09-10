@@ -343,6 +343,16 @@ export interface DocumentAssessment {
    * excerpt, which is a substring, so application is unchanged).
    */
   docMarkdown: string;
+  /**
+   * `stringHash` of the `docHtml` this snapshot was derived from. While it
+   * still matches, decisions apply against the exact snapshot (no
+   * markdown↔HTML drift between consecutive accepts); once the user has
+   * typed, it no longer matches and the markdown is re-derived from the live
+   * document, so a suggestion applies to the text the user actually has
+   * (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §4). Absent on records from before
+   * the editor was unfrozen — treated as stale, the safe direction.
+   */
+  docHtmlHash?: number;
   /** What was assessed; absent = document (pre-scope records). */
   scope?: 'document' | 'selection';
   /** The assessed excerpt, for display, when scope is 'selection'. */
