@@ -1799,7 +1799,7 @@
       "editorModeRich": "Rich text",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Resolve the suggested edits before switching editor mode.",
+      "editorModeLockedEdits": "Switch back to rich text to see suggested edits; markdown and HTML views can’t mark them.",
       "suggestChanges": "Suggest changes",
       "suggestChangesHint": "Review the revision as individual suggestions instead of rewriting the document straight away.",
       "suggestChangesSelectionNote": "Revisions to a selection are applied directly — the selection is already the scope you chose.",
@@ -1811,7 +1811,13 @@
       "fallbackReorder": "Applied directly — sections were moved, which does not split into reviewable suggestions.",
       "fallbackUnanchorable": "Applied directly — the changes could not be matched to specific passages.",
       "fallbackNoChanges": "No changes were needed.",
-      "criterionRubricTooLong": "This rubric is {over} characters over the limit. It is sent with every assessment, so it must be trimmed before this criterion can be used."
+      "criterionRubricTooLong": "This rubric is {over} characters over the limit. It is sent with every assessment, so it must be trimmed before this criterion can be used.",
+      "overwriteEditTitle": "Editing a suggested passage",
+      "overwriteEditMessage": "This text has a pending suggestion. Editing it drops the suggestion — it moves to “not applied” in the review list, where you can still undo that. Text outside suggestions can be edited freely while a review is open. You won’t be asked again.",
+      "overwriteEditConfirmOne": "Drop the suggestion and edit",
+      "overwriteEditConfirmMany": "Drop {count} suggestions and edit",
+      "suggestionDroppedOne": "Suggestion dropped — you edited its passage.",
+      "suggestionDroppedMany": "{count} suggestions dropped — you edited their passages."
     },
     "data": {
       "emptyTitle": "Import data to analyze",
