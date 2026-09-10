@@ -3566,7 +3566,10 @@
         "map_edit": "Kobongisa kati ya carte",
         "rail_chat": "Kosolola"
       },
-      "disclaimer": "Bokeseni mpo na eteni moko esalemi na mizaleli ya ba-token oyo ebimaki, na ndenge ya ba-moyene ya bato nyonso mpe na kokota mwa makanisi v{version}. Eteni moko ezali ba-appel mingi ya modèle, mpe motindo mobimba ya mokanda elongwana na moko na moko, yango wana ba-token ya prompt ezali mingi. Ba-eteni oyo esalemaki liboso kotala ebandaki te ekotami te. Ezali kaka bokeseni, kaka te mwana."
+      "disclaimer": "Bokeseni mpo na eteni moko esalemi na mizaleli ya ba-token oyo ebimaki, na ndenge ya ba-moyene ya bato nyonso mpe na kokota mwa makanisi v{version}. Eteni moko ezali ba-appel mingi ya modèle, mpe motindo mobimba ya mokanda elongwana na moko na moko, yango wana ba-token ya prompt ezali mingi. Ba-eteni oyo esalemaki liboso kotala ebandaki te ekotami te. Ezali kaka bokeseni, kaka te mwana.",
+      "estimate": "~{passes} bitá · ~{grams} g CO₂e",
+      "estimateTooltip": "Esaleli ya pamba mpo na bitamboli oyo ezalaka te yebani liboso ete ebandi, kolanda molai ya elilingi, modele oyo oponi mpe ndenge mitindo esalaka bitá (makoki v{version}). Bitá nyonso etindaka elilingi lisusu, yango wana ba maloba ya kombo ekómaka mingi. Mingi ya solo ekomonana sima ya bitamboli.",
+      "estimateAtMost": "kutu na ~{passes} bitá · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "Limite ekoki",
       "familyLimitReached": "Limite ya famille ya model ekoki",
       "usageUnavailable": "Utilisation ya lelo ekoki te — nani komonisa baimite kaka.",
-      "familyRow": "Ba modèles ya {family}"
+      "familyRow": "Ba modèles ya {family}",
+      "usedByWorkflows": "epai {used} euti na bitamboli"
     },
     "routes": {
       "ttsExhausted": "Osili kokoma limite ya lelo ya text-to-speech.",

@@ -3582,7 +3582,10 @@
         "photo": "Extração de foto",
         "map_edit": "Atualização de mapa",
         "rail_chat": "Chat"
-      }
+      },
+      "estimate": "~{passes} execuções · ~{grams} g CO₂e",
+      "estimateTooltip": "Estimativa aproximada para esta execução antes de começar, baseada no tamanho da fonte, no modelo selecionado e no número de execuções definido pelas configurações escolhidas (pressupostos v{version}). Cada execução envia novamente a fonte, portanto, os tokens de prompt predominam. O valor real será exibido após a execução.",
+      "estimateAtMost": "até ~{passes} execuções · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Limite atingido",
       "familyLimitReached": "Limite da família de modelos atingido",
       "usageUnavailable": "O uso atual não pôde ser carregado — exibindo apenas os limites.",
-      "familyRow": "Modelos {family}"
+      "familyRow": "Modelos {family}",
+      "usedByWorkflows": "dos quais {used} provenientes de fluxos de trabalho"
     },
     "routes": {
       "ttsExhausted": "Você atingiu o limite de conversão de texto em fala de hoje.",

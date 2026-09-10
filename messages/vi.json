@@ -3613,7 +3613,10 @@
         "photo": "Trích xuất ảnh",
         "map_edit": "Cập nhật bản đồ",
         "rail_chat": "Trò chuyện"
-      }
+      },
+      "estimate": "~{passes} lượt · ~{grams} g CO₂e",
+      "estimateTooltip": "Ước tính sơ bộ cho lần chạy này trước khi bắt đầu, dựa trên độ dài nguồn, mô hình đã chọn và số lượt mà thiết lập hiện tại thực hiện (giả định v{version}). Mỗi lượt sẽ gửi lại nguồn, vì vậy số lượng token của prompt là chủ yếu. Số liệu thực tế sẽ xuất hiện sau khi chạy xong.",
+      "estimateAtMost": "tối đa ~{passes} lượt · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5644,7 +5647,8 @@
       "limitReached": "Đã đạt giới hạn",
       "familyLimitReached": "Đã đạt giới hạn nhóm mô hình",
       "usageUnavailable": "Không thể tải dữ liệu sử dụng hiện tại — chỉ hiển thị giới hạn.",
-      "familyRow": "Các mô hình {family}"
+      "familyRow": "Các mô hình {family}",
+      "usedByWorkflows": "trong đó {used} từ các quy trình công việc"
     },
     "routes": {
       "ttsExhausted": "Bạn đã đạt giới hạn chuyển văn bản thành giọng nói hôm nay.",

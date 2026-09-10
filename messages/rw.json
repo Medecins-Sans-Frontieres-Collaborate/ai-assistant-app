@@ -3566,7 +3566,10 @@
         "photo": "Gukuramo amafoto",
         "map_edit": "Guhindura karita",
         "rail_chat": "Ikiganiro"
-      }
+      },
+      "estimate": "~{passes} guca · ~{grams} g CO₂e",
+      "estimateTooltip": "Iyi ni igipimo cy'ikigereranyo cy'uru rugendo mbere y'uko rutangira, gishingiye ku burebure bw'isoko, icyitegererezo cyatoranyijwe n'uburyo gahunda yahisemo zikora kenshi (ibipimo byatekerejweho v{version}). Buri guca kohereza isoko inshuro nyinshi, bityo amafaranga y’utumenyetso tugitangira niyo menshi. Umubare nyawo uzagaragara nyuma yo kurangiza.",
+      "estimateAtMost": "kugeza kuri ~{passes} guca · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "Limite igeze",
       "familyLimitReached": "Limite y'itsinda rya model igeze",
       "usageUnavailable": "Uko bikoreshwa ubu ntibibashije kugaragara — urabona gusa imipaka.",
-      "familyRow": "Imiterere za {family}"
+      "familyRow": "Imiterere za {family}",
+      "usedByWorkflows": "muri byo {used} byaturutse muri workflows"
     },
     "routes": {
       "ttsExhausted": "Wageze kuri limite ya text-to-speech y'uyu munsi.",

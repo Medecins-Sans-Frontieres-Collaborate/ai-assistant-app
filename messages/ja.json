@@ -3582,7 +3582,10 @@
         "photo": "写真抽出",
         "map_edit": "地図更新",
         "rail_chat": "チャット"
-      }
+      },
+      "estimate": "約{passes}回 · 約{grams}g CO₂e",
+      "estimateTooltip": "この実行開始前の概算値です。ソースの長さ、選択したモデル、設定によるパス回数から算出されます（仮定 v{version}）。各パスごとにソースが再送信されるため、プロンプトトークンが大部分を占めます。実際の値は実行後に表示されます。",
+      "estimateAtMost": "最大約{passes}回 · 約{grams}g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "制限に達しました",
       "familyLimitReached": "モデルファミリー制限に達しました",
       "usageUnavailable": "現在の利用状況を読み込めません。上限のみ表示します。",
-      "familyRow": "{family} モデル"
+      "familyRow": "{family} モデル",
+      "usedByWorkflows": "うち{used}はワークフローによる使用"
     },
     "routes": {
       "ttsExhausted": "本日の音声読み上げの上限に達しました。",

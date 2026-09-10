@@ -3582,7 +3582,10 @@
         "photo": "Uchimbaji wa picha",
         "map_edit": "Sasisha ramani",
         "rail_chat": "Ongea"
-      }
+      },
+      "estimate": "~{passes} mizunguko · ~{grams} g CO₂e",
+      "estimateTooltip": "Makadirio ya awali kwa mchakato huu kabla ya kuanza, kutokana na urefu wa chanzo, muundo uliochaguliwa na idadi ya mizunguko kwa mipangilio uliyochagua (dhana toleo la v{version}). Kila mzunguko hutuma chanzo upya, hivyo tokeni za mwanzoni ndizo kuu. Takwimu halisi zitaonekana baada ya kukamilika.",
+      "estimateAtMost": "hadi ~{passes} mizunguko · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Kiwango kimefikiwa",
       "familyLimitReached": "Kiwango cha familia ya mfano kimefikiwa",
       "usageUnavailable": "Matumizi ya sasa yameshindwa kupakiwa — zinaonesha vikomo pekee.",
-      "familyRow": "Modeli za {family}"
+      "familyRow": "Modeli za {family}",
+      "usedByWorkflows": "ambapo {used} imetumika kwenye michakato"
     },
     "routes": {
       "ttsExhausted": "Umefikia kikomo cha leo cha maandishi kwenda sauti.",

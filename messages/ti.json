@@ -3566,7 +3566,10 @@
         "photo": "ምእዋጋ ፎቶ",
         "map_edit": "ምቕያር ካርታ",
         "rail_chat": "ተወያይ"
-      }
+      },
+      "estimate": "~{passes} መቐየሪ ግዜ · ~{grams} ግራም CO₂e",
+      "estimateTooltip": "እዚ ምልክት ግምት ብፍናይ ምህዳስ ቀዳም ከኣ, ካብ ርዝመት ቅድሚ ጽሑፍ፣ ዝመረፀሉ መደበርን እንታይ ያህል ምምደብ እተመርጾ ቅንጺታት ዝገበረሉ። (assumptions v{version})። ክሳብ ናይ ሓዳስ መቐየሪ ግዜ ምስምደብ ገና ቅድመ ጽሑፉ ይእክበረ። ዋና ውጽኢቱ ክንደይ ይገልጹ ዝበለ ድማ ደሓስ ምምደብ ውሽጢ ይመጽእ።",
+      "estimateAtMost": "ክበል ዝኾነ ~{passes} መቐየሪ ግዜ · ~{grams} ግራም CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "ውድብ ተበግደሉ",
       "familyLimitReached": "ውድብ ሞዴል ቤተሰብ ተበግደሉ",
       "usageUnavailable": "ኩነታት ተጠቓሚ ምስ ምክትታል ከምዘይተጻወተ — ውድብ ብብሉይ ምስዚ ተርእዩ።",
-      "familyRow": "{family} ሞዴልታት"
+      "familyRow": "{family} ሞዴልታት",
+      "usedByWorkflows": "ካብዚ ዝተጠቐመ {used} ካብ ውሉፍ ስራሕ እዩ"
     },
     "routes": {
       "ttsExhausted": "ውድብ ድሓን ወደ ድብደባ ለውጢ ሎሚ ተጠቒሙ።",

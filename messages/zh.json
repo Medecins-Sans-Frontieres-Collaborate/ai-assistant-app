@@ -3613,7 +3613,10 @@
         "photo": "照片提取",
         "map_edit": "地图更新",
         "rail_chat": "聊天"
-      }
+      },
+      "estimate": "约 {passes} 次循环 · 约 {grams} 克 CO₂e",
+      "estimateTooltip": "此为运行前的粗略估算，基于原文长度、所选模型以及设置中指定的循环次数（假设条件 v{version}）。每次循环都会重新发送原文，因此提示词的数量占主要部分。实际数值将在运行后显示。",
+      "estimateAtMost": "最多约 {passes} 次循环 · 约 {grams} 克 CO₂e"
     }
   },
   "table": {
@@ -5644,7 +5647,8 @@
       "limitReached": "已达上限",
       "familyLimitReached": "已达模型家族上限",
       "usageUnavailable": "当前用量无法加载，仅显示限额。",
-      "familyRow": "{family}模型"
+      "familyRow": "{family}模型",
+      "usedByWorkflows": "其中 {used} 来自工作流"
     },
     "routes": {
       "ttsExhausted": "您今日文本转语音额度已用完。",

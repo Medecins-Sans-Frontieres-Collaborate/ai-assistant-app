@@ -3582,7 +3582,10 @@
         "photo": "የፎቶ መመርመሪያ",
         "map_edit": "የካርታ አዘምን",
         "rail_chat": "ውይይት"
-      }
+      },
+      "estimate": "~{passes} ግብዓቶች · ~{grams} ግራም CO₂e",
+      "estimateTooltip": "ከዚህ ቀደም ሲጀምር የዚህን እንቅስቃሴ ጠረጣሪ ግምት፣ ከመረጡት ሞዴል እና በቅድሚያ ቅደም ተከተል ማደሪያዎች የሚፈጠሩትን ስንት ግብዓት ከሚሆን አካል እና የምንጭ ርዝመት በመመከቻ (ሀሳቦች v{version}) የተገለፀው። እያንዳንዱ ግብዓት ምንጩን ዳግመኛ ይላካል ስለዚህ prompt ቶከኖች ይበዛሉ። እውነተኛው ቁጥር ከውጤቱ በኋላ ይታያል።",
+      "estimateAtMost": "ከ ~{passes} ግብዓቶች እስከ · ~{grams} ግራም CO₂e ብዙውን"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "ወሰኑ ተደርሷል",
       "familyLimitReached": "የሞዴል ቤተሰብ ወሰኑ ተደርሷል",
       "usageUnavailable": "ወቅታዊ ጥቅም ማከል አልተቻለም — እዚህ ወሰኖችን ብቻ እናሳያለን።",
-      "familyRow": "{family} አብነቶች"
+      "familyRow": "{family} አብነቶች",
+      "usedByWorkflows": "ከዚህ {used} በድርሻ እንቅስቃሴዎች ተጠቅመዋል"
     },
     "routes": {
       "ttsExhausted": "ዛሬ የጽሑፍ ወደ ድምፅ የተመዘገበውን ወሰን ደርሰዋል።",

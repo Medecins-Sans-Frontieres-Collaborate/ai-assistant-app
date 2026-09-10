@@ -3582,7 +3582,10 @@
         "photo": "Extracción de fotos",
         "map_edit": "Actualización de mapa",
         "rail_chat": "Chat"
-      }
+      },
+      "estimate": "~{passes} pasadas · ~{grams} g CO₂e",
+      "estimateTooltip": "Estimación aproximada para esta ejecución antes de que comience, según la longitud de la fuente, el modelo seleccionado y cuántas pasadas hacen los ajustes elegidos (suposiciones v{version}). Cada pasada reenvía la fuente, por lo que los tokens del prompt predominan. La cifra real aparecerá después de la ejecución.",
+      "estimateAtMost": "hasta ~{passes} pasadas · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Límite alcanzado",
       "familyLimitReached": "Límite de familia de modelos alcanzado",
       "usageUnavailable": "No se pudo cargar el uso actual; mostrando solo los límites.",
-      "familyRow": "Modelos {family}"
+      "familyRow": "Modelos {family}",
+      "usedByWorkflows": "de los cuales {used} de flujos de trabajo"
     },
     "routes": {
       "ttsExhausted": "Ha alcanzado el límite diario de texto a voz.",

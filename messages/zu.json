@@ -3566,7 +3566,10 @@
         "photo": "Ukukhipha isithombe",
         "map_edit": "Ukuvuselela imephu",
         "rail_chat": "Ingxoxo"
-      }
+      },
+      "estimate": "~{passes} ukuqhubeka · ~{grams} g CO₂e",
+      "estimateTooltip": "Isilinganiso esingelona esokuqinisekile salo msebenzi ngaphambi kokuthi uqale, ngokobude bomthombo, imodeli ekhethiwe kanye nokuthi izilungiselelo ozikhethile zenza kangaki (ukuqagela v{version}). Ukuphindaphinda ngakunye kubuyisela umthombo, ngakho amaphrompt tokens ayakhokha kakhulu. Inani langempela lizovela emva kokuphela komsebenzi.",
+      "estimateAtMost": "kufika ku ~{passes} ukuqhubeka · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "Umkhawulo usufinyelelwe",
       "familyLimitReached": "Umkhawulo womndeni wemodeli usufinyelelwe",
       "usageUnavailable": "Ukusetshenziswa okwamanje akukalayishwa — kukhonjiswa imikhawulo kuphela.",
-      "familyRow": "Amanani emodeli {family}"
+      "familyRow": "Amanani emodeli {family}",
+      "usedByWorkflows": "okungu-{used} okuvela kuma-workflow"
     },
     "routes": {
       "ttsExhausted": "Usufinyelele umkhawulo wanamuhla we-Text-to-Speech.",

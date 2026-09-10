@@ -3566,7 +3566,10 @@
         "photo": "Ɓurndugol foto",
         "map_edit": "Golle karte",
         "rail_chat": "Hattude"
-      }
+      },
+      "estimate": "~{passes} gollal · ~{grams} g CO₂e",
+      "estimateTooltip": "Nana faaloral waylondiral jooɗnde ilo, jokkitorde dokkal yahii, ndimaande filmorde e haa e golle ɗii anndiraa (njonni v{version}). Ko gollal goo e miijiraa source, kono prompt tokens ɗaa njiyii. Njoɓdi jonii njaɓnii nder goonga jooɗnde.",
+      "estimateAtMost": "no feewi ~{passes} gollal · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "Teel toowti",
       "familyLimitReached": "Teel e mumtugol yimɓe model toowti",
       "usageUnavailable": "Condii junnii waawanii nelda — wondidi teel tan.",
-      "familyRow": "Model ɗe {family}"
+      "familyRow": "Model ɗe {family}",
+      "usedByWorkflows": "nga {used} e gollal"
     },
     "routes": {
       "ttsExhausted": "A toowti teel Text-to-Speech maa e ñalngu.",

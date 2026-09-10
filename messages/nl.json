@@ -3582,7 +3582,10 @@
         "photo": "Foto-extractie",
         "map_edit": "Kaartupdate",
         "rail_chat": "Chat"
-      }
+      },
+      "estimate": "~{passes} keer · ~{grams} g CO₂e",
+      "estimateTooltip": "Ruime schatting voor deze run vóór de start, gebaseerd op de lengte van de bron, het geselecteerde model en het aantal keer dat de gekozen instellingen worden doorlopen (aannames v{version}). Elke keer wordt de bron opnieuw verzonden, waardoor prompttokens de grootste impact hebben. De werkelijke waarde verschijnt na afloop van de run.",
+      "estimateAtMost": "maximaal ~{passes} keer · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Limiet bereikt",
       "familyLimitReached": "Modelfamilielimiet bereikt",
       "usageUnavailable": "Huidig gebruik kon niet worden geladen — alleen limieten worden getoond.",
-      "familyRow": "{family} modellen"
+      "familyRow": "{family} modellen",
+      "usedByWorkflows": "waarvan {used} door workflows"
     },
     "routes": {
       "ttsExhausted": "U heeft de limiet voor tekst-naar-spraak vandaag bereikt.",

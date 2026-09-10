@@ -3582,7 +3582,10 @@
         "photo": "Fotoextrahering",
         "map_edit": "Kartuppdatering",
         "rail_chat": "Chatt"
-      }
+      },
+      "estimate": "~{passes} passager · ~{grams} g CO₂e",
+      "estimateTooltip": "Grov uppskattning för denna körning innan den startar, baserat på källans längd, vald modell och hur många pass de valda inställningarna kräver (antaganden v{version}). Varje pass skickar om källan, så prompttokens dominerar. Den faktiska siffran visas efter körningen.",
+      "estimateAtMost": "upp till ~{passes} passager · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Gräns uppnådd",
       "familyLimitReached": "Modellfamiljens gräns uppnådd",
       "usageUnavailable": "Aktuell användning kunde inte läsas in — visar endast gränser.",
-      "familyRow": "{family}-modeller"
+      "familyRow": "{family}-modeller",
+      "usedByWorkflows": "varav {used} från arbetsflöden"
     },
     "routes": {
       "ttsExhausted": "Du har nått dagens gräns för text-till-tal.",

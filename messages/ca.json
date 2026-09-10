@@ -3582,7 +3582,10 @@
         "photo": "Extracció de fotografies",
         "map_edit": "Actualització del mapa",
         "rail_chat": "Xat"
-      }
+      },
+      "estimate": "~{passes} passades · ~{grams} g CO₂e",
+      "estimateTooltip": "Estimació aproximada per a aquesta execució abans de començar, segons la llargada de la font, el model seleccionat i el nombre de passades que fan els paràmetres triats (supòsits v{version}). Cada passada torna a enviar la font, així que els tokens del prompt predominen. La xifra real apareixerà després de l'execució.",
+      "estimateAtMost": "fins a ~{passes} passades · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Límit assolit",
       "familyLimitReached": "S'ha assolit el límit de la família de models",
       "usageUnavailable": "No s'ha pogut carregar l'ús actual — només es mostren els límits.",
-      "familyRow": "Models {family}"
+      "familyRow": "Models {family}",
+      "usedByWorkflows": "dels quals {used} de fluxos de treball"
     },
     "routes": {
       "ttsExhausted": "Has arribat al límit diari de text a veu.",

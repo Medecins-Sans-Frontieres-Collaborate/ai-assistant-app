@@ -3582,7 +3582,10 @@
         "photo": "Extrakce fotek",
         "map_edit": "Aktualizace mapy",
         "rail_chat": "Chat"
-      }
+      },
+      "estimate": "~{passes} průchodů · ~{grams} g CO₂e",
+      "estimateTooltip": "Hrubý odhad pro tento běh před spuštěním, na základě délky zdroje, vybraného modelu a počtu průchodů podle zvolených nastavení (předpoklady v{version}). Každý průchod znovu odesílá zdroj, takže rozhodující jsou prompt tokeny. Skutečný údaj se zobrazí po dokončení běhu.",
+      "estimateAtMost": "maximálně ~{passes} průchodů · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Dosažen limit",
       "familyLimitReached": "Dosažen limit rodiny modelů",
       "usageUnavailable": "Aktuální využití nebylo možné načíst — zobrazeny jsou pouze limity.",
-      "familyRow": "Modely {family}"
+      "familyRow": "Modely {family}",
+      "usedByWorkflows": "z toho {used} z workflow"
     },
     "routes": {
       "ttsExhausted": "Dnes jste dosáhli limitu převodu textu na řeč.",

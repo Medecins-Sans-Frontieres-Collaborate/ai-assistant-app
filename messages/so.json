@@ -3566,7 +3566,10 @@
         "photo": "Soo saaridda sawir",
         "map_edit": "Cusboonaysiin khariidad",
         "rail_chat": "Sheekeysi"
-      }
+      },
+      "estimate": "~{passes} mar · ~{grams} g CO₂e",
+      "estimateTooltip": "Qiyaas guud oo loo sameeyay hawlgalkaan ka hor inta uusan bilaaban, iyadoo laga eegayo dhererka ilaha, moodelka la doortay iyo tirada marar ee la sameynayo (xisaabti v{version}). Mar kasta oo la marayo ilaha waa la diraa, sidaas darteed dhammaan tokens-ka prompt-ka ayaa ugu badan. Natiijada dhabta ah waxay muuqan doontaa marka hawlgalka dhammaado.",
+      "estimateAtMost": "ugu badnaan ~{passes} mar · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "Xaddiga waa la gaaray",
       "familyLimitReached": "Xaddiga qoyska muuqaalka waa la gaaray",
       "usageUnavailable": "Isticmaalka hadda lama helin — waxa lagu tusayaa xadadka oo keliya.",
-      "familyRow": "Modelada {family}"
+      "familyRow": "Modelada {family}",
+      "usedByWorkflows": "kaas oo {used} looga isticmaalay hawlgallada"
     },
     "routes": {
       "ttsExhausted": "Waxaad gaadhay xadka text-to-speech ee maanta.",

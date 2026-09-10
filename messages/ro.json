@@ -3582,7 +3582,10 @@
         "photo": "Extracție foto",
         "map_edit": "Actualizare hartă",
         "rail_chat": "Chat"
-      }
+      },
+      "estimate": "~{passes} treceri · ~{grams} g CO₂e",
+      "estimateTooltip": "Estimare aproximativă pentru această rulare înainte de începere, bazată pe lungimea sursei, modelul selectat și câte treceri realizează setările alese (presupuneri v{version}). Fiecare trecere retransmite sursa, deci tokenii de prompt predomină. Valoarea reală apare după rulare.",
+      "estimateAtMost": "cel mult ~{passes} treceri · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Limită atinsă",
       "familyLimitReached": "Limită pentru familia de modele atinsă",
       "usageUnavailable": "Utilizarea curentă nu a putut fi încărcată — se afișează doar limitele.",
-      "familyRow": "Modele {family}"
+      "familyRow": "Modele {family}",
+      "usedByWorkflows": "din care {used} din fluxurile de lucru"
     },
     "routes": {
       "ttsExhausted": "Ați atins limita zilnică pentru text-to-speech.",

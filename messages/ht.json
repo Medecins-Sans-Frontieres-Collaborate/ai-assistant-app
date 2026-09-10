@@ -3566,7 +3566,10 @@
         "photo": "Ekstraksyon foto",
         "map_edit": "Mizajou kat",
         "rail_chat": "Chat"
-      }
+      },
+      "estimate": "~{passes} pas · ~{grams} g CO₂e",
+      "estimateTooltip": "Estimasyon apeprè pou kous sa a anvan li kòmanse, soti nan longè sous la, modèl ou chwazi a ak kantite pas paramèt ou chwazi yo ap fè (sipozisyon v{version}). Chak pas re-voye sous la, kidonk prompt tokens yo dominen. Chif reyèl la ap parèt apre kous la.",
+      "estimateAtMost": "jiska ~{passes} pas · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "Limit atenn",
       "familyLimitReached": "Limit fanmi modèl atenn",
       "usageUnavailable": "Itilizasyon aktyèl pa ka chaje — sèlman ap montre limit yo.",
-      "familyRow": "Modèl {family}"
+      "familyRow": "Modèl {family}",
+      "usedByWorkflows": "ki gen ladan {used} pa workflows"
     },
     "routes": {
       "ttsExhausted": "Ou rive limit text-to-speech jodi a.",

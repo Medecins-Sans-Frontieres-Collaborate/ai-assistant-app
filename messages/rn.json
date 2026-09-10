@@ -3566,7 +3566,10 @@
         "photo": "Gukuramwo ifoto",
         "map_edit": "Guhindura karata",
         "rail_chat": "Ganiro"
-      }
+      },
+      "estimate": "~{passes} guca · ~{grams} g CO₂e",
+      "estimateTooltip": "Ivyo ni ibiharuro vy'ishure vy'igikorwa kigiye gutangura, bivuye ku burebure bw'inkomoko, ku civugo cahitwamwo hamwe n'ingene ivyo washatse biteguye gusubirwamwo (ivyiyumviro v{version}). Gusubiramwo rimwe rero, bisubiramwo n'inkomoko, bityo amajambo ya prompt akaba menshi. Igiharuro nyaco kiboneka aho igikorwa kirangiriye.",
+      "estimateAtMost": "ntibirenga ~{passes} guca · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "usageUnavailable": "Uko bikoresha ubu ntivyabashije kuza — bigaragaza gusa ibipimo.",
       "usedOfLimit": "{used} / {limit} {unit}",
       "limitOnly": "{limit} {unit}",
-      "familyRow": "Imodoka za {family}"
+      "familyRow": "Imodoka za {family}",
+      "usedByWorkflows": "murivyo {used} bivuye mu migirwa"
     },
     "routes": {
       "ttsExhausted": "Mwageze ku gipimo ca text-to-speech (TTS) ca none.",

@@ -3582,7 +3582,10 @@
         "photo": "Extraction de photo",
         "map_edit": "Mise à jour de la carte",
         "rail_chat": "Discussion"
-      }
+      },
+      "estimate": "~{passes} passes · ~{grams} g CO₂e",
+      "estimateTooltip": "Estimation approximative pour cet essai avant de commencer, basée sur la longueur de la source, le modèle sélectionné et le nombre de passes défini dans les paramètres choisis (hypothèses v{version}). Chaque passe renvoie la source, donc les jetons de prompt prédominent. La valeur réelle apparaît après l'exécution.",
+      "estimateAtMost": "jusqu'à ~{passes} passes · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Limite atteinte",
       "familyLimitReached": "Limite de la famille de modèles atteinte",
       "usageUnavailable": "L’utilisation actuelle n’a pas pu être chargée — seules les limites sont affichées.",
-      "familyRow": "Modèles {family}"
+      "familyRow": "Modèles {family}",
+      "usedByWorkflows": "dont {used} provenant des workflows"
     },
     "routes": {
       "ttsExhausted": "Vous avez atteint la limite quotidienne de synthèse vocale.",

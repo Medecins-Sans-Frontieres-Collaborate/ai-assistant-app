@@ -3566,7 +3566,10 @@
         "photo": "Kôi ti photo",
         "map_edit": "Sûngö ti carte",
         "rail_chat": "Kûê"
-      }
+      },
+      "estimate": "~{passes} ti na lo · ~{grams} g CO₂e",
+      "estimateTooltip": "Awësö ti mou gïrï na fäkö tëngi awaï, gïrï ti nî na mo to na gbüngö, modelï wa zo tena na mo yeke na, sôkï kombïgï ti settings wa yeke. (assumption v{version}). Ti na lo so e yeke sôkï na kodro, ndaxö so prompt tokens e sô na. Mbïoko wa so appelez na londo na mo lo.",
+      "estimateAtMost": "na yèkè ~{passes} ti na lo · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "Limiti hinga",
       "familyLimitReached": "Limiti ti sô tî model hinga",
       "usageUnavailable": "Usage sô yeke mbênî ti yeke sangô — limiti mô pfûn na kîri.",
-      "familyRow": "Mo mingi tî {family}"
+      "familyRow": "Mo mingi tî {family}",
+      "usedByWorkflows": "na mbi {used} ti workflows"
     },
     "routes": {
       "ttsExhausted": "Mo ape limiti tî text-to-speech tî lo tî lɛ.",

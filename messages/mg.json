@@ -3566,7 +3566,10 @@
         "photo": "Fakan-tsarin-kevitra",
         "map_edit": "Fanavaozana sarintany",
         "rail_chat": "Adihevitra"
-      }
+      },
+      "estimate": "~{passes} fihodinana · ~{grams} g CO₂e",
+      "estimateTooltip": "Fanombanana eo ho eo alohan'ny hanombohan'ity fihodinana ity, arakaraka ny halavan'ny loharano, ny modely voafidy, ary ny isa fihodinana apetraky ny fikirakirana (hevi-dalina v{version}). Averina mandefa ny loharano isaky ny fihodinana ka manan-danja ny prompt tokens. Hiseho ny tena isa rehefa vita ny fihodinana.",
+      "estimateAtMost": "hatramin'ny ~{passes} fihodinana · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "Vita ny fetra",
       "familyLimitReached": "Vita ny fetra amin'ny modely fianakaviana",
       "usageUnavailable": "Tsy azo aseho ny fampiasana amin'izao fotoana izao — fetra ihany no aseho.",
-      "familyRow": "Maodely {family}"
+      "familyRow": "Maodely {family}",
+      "usedByWorkflows": "izay {used} avy amin'ny workflows"
     },
     "routes": {
       "ttsExhausted": "Efa nihoatra ny fetra text-to-speech androany ianao.",

@@ -3566,7 +3566,10 @@
         "photo": "Fitar da hoto",
         "map_edit": "Sabunta taswira",
         "rail_chat": "Tattaunawa"
-      }
+      },
+      "estimate": "~{passes} zagaye · ~{grams} g CO₂e",
+      "estimateTooltip": "Kimantawa mai sauki na wannan aikin kafin a fara, daga tsawon tushen, samfurin da aka zaɓa da yawan zagaye da saitunan suka haifar (hasashe v{version}). Kowanne zagaye yana aika tushen, don haka adadin prompt tokens yana rinjaya. Adadin daidai zai bayyana bayan an gama aikin.",
+      "estimateAtMost": "zuwa ~{passes} zagaye · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "An kai iyaka",
       "familyLimitReached": "An kai iyakar dangin samfur",
       "usageUnavailable": "An kasa ɗauko adadin amfani na yanzu — ana nuna iyaka kawai.",
-      "familyRow": "Samfuran {family}"
+      "familyRow": "Samfuran {family}",
+      "usedByWorkflows": "ciki har da {used} daga ayyuka"
     },
     "routes": {
       "ttsExhausted": "Ka riga ka kai iyakar amfani da text-to-speech na yau.",

@@ -3566,7 +3566,10 @@
         "photo": "Ekstrakcija fotografija",
         "map_edit": "Ažuriranje mape",
         "rail_chat": "Ćaskanje"
-      }
+      },
+      "estimate": "~{passes} prolaza · ~{grams} g CO₂e",
+      "estimateTooltip": "Približna procena za ovu obradu pre početka, na osnovu dužine izvora, izabranog modela i broja prolaza prema podešenim opcijama (pretpostavke v{version}). Svaki prolaz ponovo šalje izvor, tako da prompt tokeni preovlađuju. Prava vrednost biće prikazana nakon završetka obrade.",
+      "estimateAtMost": "do ~{passes} prolaza · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "Limit dostignut",
       "familyLimitReached": "Dostignut je limit za porodicu modela",
       "usageUnavailable": "Trenutna potrošnja ne može da se učita — prikazani su samo limiti.",
-      "familyRow": "Modeli porodice {family}"
+      "familyRow": "Modeli porodice {family}",
+      "usedByWorkflows": "od toga {used} iz radnih tokova"
     },
     "routes": {
       "ttsExhausted": "Dostigli ste današnji limit za tekst-u-govor.",

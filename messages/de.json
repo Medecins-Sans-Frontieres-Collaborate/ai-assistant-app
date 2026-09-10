@@ -3582,7 +3582,10 @@
         "photo": "Foto-Extraktion",
         "map_edit": "Kartenaktualisierung",
         "rail_chat": "Chat"
-      }
+      },
+      "estimate": "~{passes} Durchläufe · ~{grams} g CO₂e",
+      "estimateTooltip": "Grobe Schätzung für diesen Durchlauf vor dem Start, basierend auf der Länge der Quelle, dem ausgewählten Modell und der Anzahl der Durchläufe mit den gewählten Einstellungen (Annahmen v{version}). Jede Runde sendet die Quelle erneut, daher überwiegen Prompt-Tokens. Der tatsächliche Wert erscheint nach Abschluss des Durchlaufs.",
+      "estimateAtMost": "bis zu ~{passes} Durchläufe · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Limit erreicht",
       "familyLimitReached": "Modellfamilien-Limit erreicht",
       "usageUnavailable": "Aktueller Verbrauch konnte nicht geladen werden — es werden nur die Limits angezeigt.",
-      "familyRow": "{family}-Modelle"
+      "familyRow": "{family}-Modelle",
+      "usedByWorkflows": "davon {used} aus Workflows"
     },
     "routes": {
       "ttsExhausted": "Sie haben das heutige Text-zu-Sprache-Limit erreicht.",

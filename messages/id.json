@@ -3582,7 +3582,10 @@
         "photo": "Ekstraksi foto",
         "map_edit": "Pembaruan peta",
         "rail_chat": "Chat"
-      }
+      },
+      "estimate": "~{passes} putaran · ~{grams} g CO₂e",
+      "estimateTooltip": "Perkiraan kasar untuk proses ini sebelum dimulai, berdasarkan panjang sumber, model yang dipilih, dan berapa kali pengaturan yang dipilih melakukan putaran (asumsi v{version}). Setiap putaran mengirim ulang sumber, sehingga prompt token yang paling berpengaruh. Angka sebenarnya akan muncul setelah proses selesai.",
+      "estimateAtMost": "maksimal ~{passes} putaran · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Batas tercapai",
       "familyLimitReached": "Batas keluarga model tercapai",
       "usageUnavailable": "Penggunaan saat ini tidak dapat dimuat — hanya menampilkan batas.",
-      "familyRow": "Model {family}"
+      "familyRow": "Model {family}",
+      "usedByWorkflows": "sebanyak {used} dari alur kerja"
     },
     "routes": {
       "ttsExhausted": "Anda telah mencapai batas text-to-speech hari ini.",

@@ -3566,7 +3566,10 @@
         "photo": "Ìyọ àwòrán",
         "map_edit": "Ìmúdájúwé maapu",
         "rail_chat": "Ìbánisọ̀rọ̀"
-      }
+      },
+      "estimate": "~{passes} irin-ajo · ~{grams} g CO₂e",
+      "estimateTooltip": "Ìṣírò pẹlẹbẹ fún ìpamọ̀ yi kí ó tó bẹ̀rẹ̀, láti ipari orisun, àwoṣe tó yàn ati iye irin-ajo ti eto aṣayan ṣe (ìràntí v{version}). Irin-ajo kọọkan tún fi orisun ránṣẹ́, nítorí náà, àwọn tokini agbéwọlé ló pọ̀jù. Iye gidi yóò farahàn lẹ́yìn tí ìpamọ̀ bá parí.",
+      "estimateAtMost": "tó pọ̀ jù lọ ~{passes} irin-ajo · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "Ìwọn to peye ti dé",
       "familyLimitReached": "Ìwọn idile àmọ̀ọ́dẹ̀ ti dé",
       "usageUnavailable": "A kó le kó ìlò to wa lónìí — fífihàn àjọpo opin nìkan.",
-      "familyRow": "Àwọ̀ṣe {family}"
+      "familyRow": "Àwọ̀ṣe {family}",
+      "usedByWorkflows": "ninu eyi {used} láti awọn iṣẹ́ṣiṣẹ́"
     },
     "routes": {
       "ttsExhausted": "O ti dé opin ìlò ọrọ sí ohùn lónìí.",

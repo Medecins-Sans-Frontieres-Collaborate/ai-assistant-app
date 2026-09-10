@@ -3582,7 +3582,10 @@
         "photo": "Valokuvien poiminta",
         "map_edit": "Karttapäivitys",
         "rail_chat": "Keskustelu"
-      }
+      },
+      "estimate": "~{passes} ajoa · ~{grams} g CO₂e",
+      "estimateTooltip": "Suuntaviivainen arvio tästä suorituksesta ennen aloitusta, perustuen lähteen pituuteen, valittuun malliin ja valituilla asetuksilla ajettavien ajojen lukumäärään (oletukset v{version}). Jokainen ajo lähettää lähteen uudelleen, joten prompt-tokeneilla on suurin vaikutus. Todellinen arvo näkyy suorituksen jälkeen.",
+      "estimateAtMost": "enintään ~{passes} ajoa · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Raja saavutettu",
       "familyLimitReached": "Malliperheen raja saavutettu",
       "usageUnavailable": "Nykyistä käyttöä ei voitu ladata — näytetään vain rajat.",
-      "familyRow": "{family}-mallit"
+      "familyRow": "{family}-mallit",
+      "usedByWorkflows": "josta {used} työnkuluista"
     },
     "routes": {
       "ttsExhausted": "Olet saavuttanut tämän päivän tekstistä puheeksi -käytön rajan.",

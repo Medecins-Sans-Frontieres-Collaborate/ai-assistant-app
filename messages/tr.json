@@ -3582,7 +3582,10 @@
         "photo": "Fotoğraf çıkarma",
         "map_edit": "Harita güncelleme",
         "rail_chat": "Sohbet"
-      }
+      },
+      "estimate": "~{passes} geçiş · ~{grams} g CO₂e",
+      "estimateTooltip": "Çalıştırma başlamadan önce, kaynak uzunluğu, seçilen model ve ayarların kaç kez çalıştığına göre yapılan kaba bir tahmindir (varsayımlar v{version}). Her geçiş kaynağı tekrar gönderir, bu nedenle prompt token'ları ağırlık kazanır. Gerçek değer, çalıştırma tamamlandıktan sonra görüntülenecektir.",
+      "estimateAtMost": "en fazla ~{passes} geçiş · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Limit doldu",
       "familyLimitReached": "Model ailesi limiti doldu",
       "usageUnavailable": "Mevcut kullanım yüklenemedi — yalnızca limitler gösteriliyor.",
-      "familyRow": "{family} modelleri"
+      "familyRow": "{family} modelleri",
+      "usedByWorkflows": "bunların {used} tanesi iş akışlarından"
     },
     "routes": {
       "ttsExhausted": "Bugünkü metinden sese çeviri limitinize ulaştınız.",

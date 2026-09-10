@@ -3582,7 +3582,10 @@
         "photo": "Ekstrakcja zdjęć",
         "map_edit": "Aktualizacja mapy",
         "rail_chat": "Czat"
-      }
+      },
+      "estimate": "~{passes} przebiegów · ~{grams} g CO₂e",
+      "estimateTooltip": "Przybliżony szacunek dla tego uruchomienia przed jego rozpoczęciem — na podstawie długości źródła, wybranego modelu i liczby przebiegów według ustawień (założenia v{version}). Każdy przebieg ponownie przesyła źródło, więc dominują tokeny promptu. Rzeczywista wartość pojawi się po zakończeniu uruchomienia.",
+      "estimateAtMost": "do ~{passes} przebiegów · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5613,7 +5616,8 @@
       "limitReached": "Osiągnięto limit",
       "familyLimitReached": "Osiągnięto limit rodziny modeli",
       "usageUnavailable": "Nie można załadować bieżącego użycia — wyświetlane są tylko limity.",
-      "familyRow": "Modele {family}"
+      "familyRow": "Modele {family}",
+      "usedByWorkflows": "z czego {used} z workflowów"
     },
     "routes": {
       "ttsExhausted": "Osiągnięto dzisiejszy limit zamiany tekstu na mowę.",

@@ -3566,7 +3566,10 @@
         "photo": "Kutulutsa zithunzi",
         "map_edit": "Kusintha mapu",
         "rail_chat": "Kuyankhulana"
-      }
+      },
+      "estimate": "~{passes} zopitirira · ~{grams} g CO₂e",
+      "estimateTooltip": "Kuyerekezera kosavuta kumene kuyambira pa kutalika kwa choyambira, chitsanzo chosankhidwa komanso kuchuluka kwa zopitirira zomwe mawonekedwe asankha (kukhazikitsa v{version}). Zopitirira zonse zimatumizanso choyambira, choncho ma prompt tokens amakula kwambiri. Nambala yeniyeni iwoneka patatha kuthamanga.",
+      "estimateAtMost": "mpaka ~{passes} zopitirira · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5597,7 +5600,8 @@
       "limitReached": "Mwafika pa malire",
       "familyLimitReached": "Mwafika pa malire a banja la chitsanzo",
       "usageUnavailable": "Ntchito zapano sizingalowe - zikuwonetsa malire okha.",
-      "familyRow": "Zitsanzo za {family}"
+      "familyRow": "Zitsanzo za {family}",
+      "usedByWorkflows": "mwa izi {used} kuchokera kuma workflows"
     },
     "routes": {
       "ttsExhausted": "Mwafika pa malire a text-to-speech a lero.",
