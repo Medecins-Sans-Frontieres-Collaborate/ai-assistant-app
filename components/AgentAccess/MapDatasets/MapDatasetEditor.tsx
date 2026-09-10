@@ -20,7 +20,17 @@ import {
   urlErrorKey,
 } from '@/client/services/url/urlFetchClient';
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
+import {
+  applyEnrichment,
+  enrichFeatures,
+} from '@/client/services/workflows/map/importEnrich';
 import { extractMapFeatures } from '@/client/services/workflows/map/mapExtraction';
+import {
+  ConfirmedImport,
+  PreparedImport,
+  materializeImport,
+  prepareImportFromFile,
+} from '@/client/services/workflows/map/mapImport';
 import type {
   MapDataset,
   MapDatasetSourceRecord,
@@ -37,6 +47,7 @@ import { MAX_DATASET_FEATURES } from '@/lib/utils/shared/geo/mapLimits';
 import { MapConnection, MapFeature } from '@/types/workflow';
 
 import { FeatureList } from '../../Workflows/Map/FeatureList';
+import { ImportDialog } from '../../Workflows/Map/ImportDialog';
 import type { MapFocus } from '../../Workflows/Map/MapView';
 import { AdminMapDatasetResponse } from '../types';
 import { DatasetFeatureForm } from './DatasetFeatureForm';
@@ -77,6 +88,10 @@ export function MapDatasetEditor({ datasetId }: MapDatasetEditorProps) {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [features, setFeatures] = useState<MapFeature[]>([]);
+  // A structured file awaiting the import preview; nothing lands until confirmed.
+  const [pendingImport, setPendingImport] = useState<PreparedImport | null>(
+    null,
+  );
   const [connections, setConnections] = useState<MapConnection[]>([]);
   const [sources, setSources] = useState<MapDatasetSourceRecord[]>([]);
   const [dirty, setDirty] = useState(false);
@@ -309,12 +324,55 @@ export function MapDatasetEditor({ datasetId }: MapDatasetEditorProps) {
     await runGeneration({ sourceText: trimmed }, t('pastedTextSource'), 'text');
   };
 
+  /**
+   * Lands a confirmed import in the draft dataset and, if asked, has the
+   * model fill in category/description/country for the points that lack
+   * them — never their coordinates.
+   */
+  const handleImportConfirm = async (confirmed: ConfirmedImport) => {
+    setPendingImport(null);
+    const materialized = materializeImport(confirmed, features);
+    if (materialized.features.length === 0) return;
+    appendGenerated(
+      materialized.features,
+      materialized.connections,
+      materialized.record,
+    );
+    if (confirmed.stats.skipped.capped > 0) {
+      setComposerNotice(
+        `${t('capReached', { max: String(MAX_DATASET_FEATURES) })} ${tMap('import.capHint')}`,
+      );
+    }
+    if (!confirmed.enrich) return;
+    setGenerating(true);
+    try {
+      const patches = await enrichFeatures(materialized.features, {});
+      setFeatures((prev) => applyEnrichment(prev, patches));
+      markDirty();
+    } catch (err) {
+      setComposerNotice(
+        err instanceof Error ? err.message : t('generationFailed'),
+      );
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   const handleUploadFile = async (files: FileList | null) => {
     const file = files?.[0];
     if (!file || generating) return;
     setGenerating(true);
     setComposerNotice(null);
     try {
+      // Location data is read directly — a dataset is most often authored
+      // from a spreadsheet, and its coordinates are statements, not material
+      // for the model to interpret. Prose still goes to the model.
+      const prepared = await prepareImportFromFile(file);
+      if (prepared) {
+        setPendingImport(prepared);
+        setGenerating(false);
+        return;
+      }
       const extracted = await uploadAndExtractText(file);
       if (!extracted.text.trim()) {
         setComposerNotice(t('fileEmpty', { name: file.name }));
@@ -541,11 +599,20 @@ export function MapDatasetEditor({ datasetId }: MapDatasetEditorProps) {
                   <IconPaperclip size={16} aria-hidden />
                   <input
                     type="file"
-                    accept=".pdf,.doc,.docx,.txt,.md,.csv,.json,.xlsx"
+                    accept=".pdf,.doc,.docx,.txt,.md,.csv,.tsv,.json,.geojson,.kml,.kmz,.xlsx"
                     hidden
                     onChange={(e) => void handleUploadFile(e.target.files)}
                   />
                 </label>
+              )}
+              {pendingImport && (
+                <ImportDialog
+                  source={pendingImport}
+                  existing={features}
+                  capacity={Math.max(0, MAX_DATASET_FEATURES - features.length)}
+                  onConfirm={(confirmed) => void handleImportConfirm(confirmed)}
+                  onCancel={() => setPendingImport(null)}
+                />
               )}
               <button
                 type="button"
