@@ -166,3 +166,46 @@ export function stampEditAnchors<T extends LocatableEdit>(
     };
   });
 }
+
+/** A located suggestion in whatever coordinate space the caller uses. */
+export interface SpanRange {
+  id: string;
+  from: number;
+  to: number;
+}
+
+/**
+ * Does a change to `[from, to)` alter the text INSIDE a suggestion's span?
+ * (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §4, boundary rule)
+ *
+ * Strict interior only. Typing immediately before or after a suggestion, or
+ * deleting the character that abuts it, leaves the suggested text itself
+ * intact — and leaves `before` findable — so it must not count. A pure
+ * insertion (`from === to`) therefore has to land strictly between the
+ * span's ends; a replacement has to overlap its interior.
+ */
+export function rangeTouchesSpan(
+  span: Pick<SpanRange, 'from' | 'to'>,
+  from: number,
+  to: number,
+): boolean {
+  if (from === to) return span.from < from && from < span.to;
+  return from < span.to && to > span.from;
+}
+
+/**
+ * Ids of the spans any of `ranges` alters, in span order, each at most once —
+ * a selection dragged across two suggestions and deleted names both.
+ */
+export function touchedSpanIds(
+  spans: readonly SpanRange[],
+  ranges: readonly { from: number; to: number }[],
+): string[] {
+  const touched: string[] = [];
+  for (const span of spans) {
+    if (ranges.some((range) => rangeTouchesSpan(span, range.from, range.to))) {
+      touched.push(span.id);
+    }
+  }
+  return touched;
+}
