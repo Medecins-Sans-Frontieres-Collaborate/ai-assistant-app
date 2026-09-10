@@ -30,8 +30,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
  * `onChange` with the new HTML when the change lands.
  */
 
+const runWorkflowStream = vi.hoisted(() => vi.fn());
 vi.mock('@/client/hooks/workflows/useWorkflowStream', () => ({
-  useWorkflowStream: () => ({ runWorkflowStream: vi.fn() }),
+  useWorkflowStream: () => ({ runWorkflowStream }),
 }));
 vi.mock('@/client/services/workflows/workflowTitle', () => ({
   nameWorkflowConversation: vi.fn(),
@@ -255,5 +256,75 @@ describe('Document workflow — editing during a review', () => {
     expect(state().docHtml).toBe(DOC_HTML);
     expect(state().assessment?.edits[0].status).toBe('pending');
     expect(useSettingsStore.getState().reviewOverwriteAcknowledged).toBe(false);
+  });
+
+  describe('AI run while suggestions are pending (§6b)', () => {
+    async function askForRevision() {
+      await mountWithReview();
+      const box = screen.getByPlaceholderText('document.revisePlaceholder');
+      fireEvent.change(box, { target: { value: 'tighten the prose' } });
+      fireEvent.keyDown(box, { key: 'Enter' });
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: 'acceptAll' })).toBeTruthy(),
+      );
+    }
+
+    it('gates the run behind the three-action dialog', async () => {
+      await askForRevision();
+
+      expect(runWorkflowStream).not.toHaveBeenCalled();
+      expect(state().assessment?.edits[0].status).toBe('pending');
+    });
+
+    it('accept-all runs against the POST-decision text', async () => {
+      // The run itself replaces the review afterwards (a revision produces a
+      // fresh queue), so the state that matters is the state AT the moment
+      // the run fires — captured from inside the mock.
+      let statusAtRun: string | undefined;
+      runWorkflowStream.mockImplementation(async () => {
+        statusAtRun = state().assessment?.edits[0]?.status;
+      });
+      await askForRevision();
+
+      fireEvent.click(screen.getByRole('button', { name: 'acceptAll' }));
+
+      await waitFor(() => expect(runWorkflowStream).toHaveBeenCalled());
+      expect(statusAtRun).toBe('accepted');
+      // The stale-closure trap: had the run fired from the dialog handler it
+      // would have read the render's old docHtml and sent "March".
+      const body = runWorkflowStream.mock.calls[0][0].body as {
+        currentDocMarkdown?: string;
+      };
+      expect(body.currentDocMarkdown).toContain('opened in April');
+      expect(body.currentDocMarkdown).not.toContain('March');
+    });
+
+    it('reject-all clears the queue and runs with the text unchanged', async () => {
+      let statusAtRun: string | undefined;
+      let docAtRun: string | undefined;
+      runWorkflowStream.mockImplementation(async () => {
+        statusAtRun = state().assessment?.edits[0]?.status;
+        docAtRun = state().docHtml;
+      });
+      await askForRevision();
+
+      fireEvent.click(screen.getByRole('button', { name: 'rejectAll' }));
+
+      await waitFor(() => expect(runWorkflowStream).toHaveBeenCalled());
+      expect(statusAtRun).toBe('rejected');
+      expect(docAtRun).toBe(DOC_HTML);
+    });
+
+    it('cancel runs nothing and keeps the queue', async () => {
+      await askForRevision();
+
+      fireEvent.click(screen.getByRole('button', { name: 'cancel' }));
+
+      await waitFor(() =>
+        expect(screen.queryByRole('button', { name: 'acceptAll' })).toBeNull(),
+      );
+      expect(runWorkflowStream).not.toHaveBeenCalled();
+      expect(state().assessment?.edits[0].status).toBe('pending');
+    });
   });
 });

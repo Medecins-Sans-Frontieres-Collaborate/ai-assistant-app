@@ -119,4 +119,32 @@ describe('RichTextEditor overwrite gate', () => {
       'Hello brZZe new world',
     );
   });
+
+  it('names only the suggestion actually typed over when several are marked', async () => {
+    const gate = vi.fn(() => true);
+    const ref = createRef<RichTextEditorHandle>();
+    const { container } = render(
+      <RichTextEditor
+        ref={ref}
+        contentHtml="<p>Hello brave new world</p>"
+        onChange={vi.fn()}
+        editable
+        previewEdits={[
+          { id: 'e1', before: 'brave', after: 'bold' },
+          { id: 'e2', before: 'world', after: 'earth' },
+        ]}
+        onOverwriteEdits={gate}
+      />,
+    );
+    await waitFor(() => {
+      expect(container.querySelectorAll('.edit-suggestion-mark')).toHaveLength(
+        2,
+      );
+    });
+
+    act(() => ref.current!.insertText(INSIDE_BRAVE, INSIDE_BRAVE, 'X'));
+
+    expect(gate).toHaveBeenCalledTimes(1);
+    expect(gate).toHaveBeenCalledWith(['e1']);
+  });
 });
