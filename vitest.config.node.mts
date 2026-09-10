@@ -19,6 +19,10 @@ export default defineConfig({
       // to limits/ because __tests__/components/Chat has a stale .test.ts
       // that predates both configs and does not pass.
       '__tests__/components/limits/**/*.test.ts',
+      // Same reason: components/Workflows/artifactKey.ts is pure data (no
+      // DOM), so its test is a .test.ts that neither config would otherwise
+      // match — it would report green by never running.
+      '__tests__/components/Workflows/**/*.test.ts',
     ],
     environment: 'node',
     setupFiles: ['./vitest.setup.node.ts'],
