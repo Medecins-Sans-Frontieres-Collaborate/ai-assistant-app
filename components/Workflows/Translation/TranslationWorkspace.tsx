@@ -32,6 +32,7 @@ import {
   sortLanguageOptionsByLabel,
 } from '@/lib/utils/app/languagePickerHelpers';
 import { isCustomCriterionId } from '@/lib/utils/shared/review/customCriteria';
+import { stampEditAnchors } from '@/lib/utils/shared/review/editLocation';
 import {
   guideCriterionId,
   isGuideCriterionId,
@@ -509,11 +510,17 @@ export function TranslationWorkspace({
           id: uuidv4(),
           criteria: result.criteria,
           overallSummary: result.overallSummary,
-          edits: result.edits.map((edit) => ({
-            ...edit,
-            id: uuidv4(),
-            status: 'pending' as const,
-          })),
+          // Anchored against the translation as assessed, so each edit keeps
+          // pointing at the occurrence the reviewer was shown even once the
+          // text around it changes (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §3).
+          edits: stampEditAnchors(
+            translation,
+            result.edits.map((edit) => ({
+              ...edit,
+              id: uuidv4(),
+              status: 'pending' as const,
+            })),
+          ),
           createdAt: new Date().toISOString(),
           labels,
         },

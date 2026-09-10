@@ -63,6 +63,7 @@ import {
   applyEdit,
   applyEditsInOrder,
 } from '@/lib/utils/shared/review/editApplication';
+import { stampEditAnchors } from '@/lib/utils/shared/review/editLocation';
 import {
   guideCriterionId,
   isGuideCriterionKind,
@@ -814,11 +815,17 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           id: uuidv4(),
           criteria: result.criteria,
           overallSummary: result.overallSummary,
-          edits: result.edits.map((edit) => ({
-            ...edit,
-            id: uuidv4(),
-            status: 'pending' as const,
-          })),
+          // Anchored against the markdown as assessed — edits are written in
+          // markdown terms, so that is the text their offsets must describe
+          // (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §3).
+          edits: stampEditAnchors(
+            docMarkdown,
+            result.edits.map((edit) => ({
+              ...edit,
+              id: uuidv4(),
+              status: 'pending' as const,
+            })),
+          ),
           docMarkdown,
           scope: selection ? ('selection' as const) : ('document' as const),
           selectionText: selection?.text,
