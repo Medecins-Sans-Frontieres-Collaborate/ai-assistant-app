@@ -49,6 +49,12 @@ export interface RichTextEditorHandle {
   /** Replaces the given range with HTML and returns the new doc HTML. */
   replaceRange: (from: number, to: number, html: string) => string | null;
   getHTML: () => string | null;
+  /**
+   * Inserts plain text over a range AS IF TYPED: unlike `replaceRange`, it
+   * goes through the overwrite gate and lands in the undo history like a
+   * keystroke. Returns false when the gate held it back.
+   */
+  insertText: (from: number, to: number, text: string) => boolean;
   /** Steps the editor's own history back once; false when there is nothing to undo. */
   undo: () => boolean;
 }
@@ -199,6 +205,10 @@ export const RichTextEditor = forwardRef<
         return editor.getHTML();
       },
       getHTML: () => editor?.getHTML() ?? null,
+      insertText: (from, to, text) => {
+        if (!editor) return false;
+        return editor.chain().focus().insertContentAt({ from, to }, text).run();
+      },
       undo: () => {
         if (!editor || !editor.can().undo()) return false;
         return editor.chain().focus().undo().run();
