@@ -10,7 +10,7 @@ import {
   IconSparkles,
   IconX,
 } from '@tabler/icons-react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useLocale, useTranslations } from 'next-intl';
@@ -104,6 +104,7 @@ import { CriteriaManager } from '../Shared/Review/CriteriaManager';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
 import { EditQuickActions } from '../Shared/Review/EditQuickActions';
 import { GuidePicker } from '../Shared/Review/GuidePicker';
+import { PendingEditsDialog } from '../Shared/Review/PendingEditsDialog';
 import { WorkflowWorkspaceProps } from '../registry';
 import { DocumentProfilePanel } from './DocumentProfilePanel';
 import { ReferencePanel } from './ReferencePanel';
@@ -407,7 +408,9 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   // instruction refers to rather than the instruction itself, so it is held
   // beside the composer and folded back in at run time.
   const instructionRef = useRef<HTMLTextAreaElement>(null);
-  const composerBlocked = isBusy || hasUnresolvedEdits || syncConflict;
+  // Pending suggestions no longer block the composer: an AI run while they
+  // are open goes through the PendingEditsDialog gate in handleRun instead.
+  const composerBlocked = isBusy || syncConflict;
   const {
     chips,
     hasChips,
@@ -541,10 +544,15 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     if (
       (!instruction.trim() && !hasChips) ||
       isBusy ||
-      hasUnresolvedEdits ||
       syncConflict ||
       !state
     ) {
+      return;
+    }
+    // A revision can rewrite any passage, decided or not: settle the queue
+    // first (§6b). The run is re-issued from the gate once it is.
+    if (hasUnresolvedEdits) {
+      setReviewGate('run');
       return;
     }
     const trimmed = composeWithChips(instruction);
@@ -782,8 +790,13 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   );
 
   const handleAssess = useCallback(async () => {
-    if (!state || isBusy || hasUnresolvedEdits || syncConflict) return;
+    if (!state || isBusy || syncConflict) return;
     if (!hasDocument || selectedCriteria.size === 0) return;
+    // A new assessment replaces the queue outright: settle it first (§6b).
+    if (hasUnresolvedEdits) {
+      setReviewGate('assess');
+      return;
+    }
     setAssessError(null);
     setAssessing(true);
     try {
@@ -1431,6 +1444,37 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     [streamHtml, docHtml],
   );
 
+  /**
+   * An AI run asked for while suggestions were still pending
+   * (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §6b). The dialog decides the queue in
+   * bulk; the run itself is QUEUED rather than called from the dialog's
+   * handler, and fires from the effect below once the store shows no pending
+   * edits — by which point this component has re-rendered and the handler's
+   * closure holds the post-decision text. Calling the handler straight after
+   * `resolveAll` would read the render's stale closure and send the model the
+   * pre-decision document, silently discarding what the user just accepted.
+   */
+  const [reviewGate, setReviewGate] = useState<'run' | 'assess' | null>(null);
+  const [queuedAction, setQueuedAction] = useState<'run' | 'assess' | null>(
+    null,
+  );
+  const decidePendingAndRun = useCallback(
+    (decision: 'accepted' | 'rejected') => {
+      const kind = reviewGate;
+      setReviewGate(null);
+      if (!kind) return;
+      resolveAll(decision);
+      setQueuedAction(kind);
+    },
+    [reviewGate, resolveAll],
+  );
+  useEffect(() => {
+    if (!queuedAction || hasUnresolvedEdits) return;
+    setQueuedAction(null);
+    if (queuedAction === 'run') void handleRun();
+    else void handleAssess();
+  }, [queuedAction, hasUnresolvedEdits, handleRun, handleAssess]);
+
   /* ---------------- Source editing (markdown / HTML modes) ------------- */
 
   // Streaming and pending review edits are rich-text surfaces — the former
@@ -1705,7 +1749,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             <input
               type="checkbox"
               checked={suggestRevisions && !selection}
-              disabled={isBusy || hasUnresolvedEdits || selection !== null}
+              disabled={isBusy || selection !== null}
               onChange={(e) => setSuggestOverride(e.target.checked)}
               className="h-3.5 w-3.5 accent-gray-600 disabled:opacity-50 dark:accent-gray-400"
             />
@@ -1727,11 +1771,6 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           }}
           rows={2}
           disabled={composerBlocked}
-          title={
-            hasUnresolvedEdits
-              ? t('document.editingBlockedPendingEdits')
-              : undefined
-          }
           placeholder={
             selection && hasDocument
               ? t('document.reviseSelectionPlaceholder')
@@ -2104,17 +2143,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               <button
                 type="button"
                 onClick={() => void handleAssess()}
-                disabled={
-                  isBusy ||
-                  hasUnresolvedEdits ||
-                  syncConflict ||
-                  selectedCriteria.size === 0
-                }
-                title={
-                  hasUnresolvedEdits
-                    ? t('document.editingBlockedPendingEdits')
-                    : undefined
-                }
+                disabled={isBusy || syncConflict || selectedCriteria.size === 0}
                 className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-900 hover:bg-gray-300 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-elevated dark:text-gray-100 dark:hover:bg-gray-700"
               >
                 <IconClipboardCheck size={14} aria-hidden />
@@ -2236,6 +2265,21 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           if (entry) void openFromM365(entry);
         }}
         onCancel={() => setPendingM365Open(null)}
+      />
+
+      {/* An AI run asked for with suggestions still pending: decide the queue
+          in bulk, then the run follows with the post-decision text (§6b). */}
+      <PendingEditsDialog
+        isOpen={reviewGate !== null}
+        pendingCount={previewEdits.length}
+        actionLabel={
+          reviewGate === 'assess'
+            ? t('document.pendingRunActionAssess')
+            : t('document.pendingRunActionRevise')
+        }
+        onAcceptAll={() => decidePendingAndRun('accepted')}
+        onRejectAll={() => decidePendingAndRun('rejected')}
+        onCancel={() => setReviewGate(null)}
       />
 
       {/* First keystroke over a suggested passage: explain once, then act.

@@ -11,7 +11,8 @@ import {
   IconPlayerStopFilled,
   IconUpload,
 } from '@tabler/icons-react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
@@ -32,7 +33,12 @@ import {
   sortLanguageOptionsByLabel,
 } from '@/lib/utils/app/languagePickerHelpers';
 import { isCustomCriterionId } from '@/lib/utils/shared/review/customCriteria';
-import { stampEditAnchors } from '@/lib/utils/shared/review/editLocation';
+import {
+  changedRange,
+  locateEdits,
+  stampEditAnchors,
+  touchedSpanIds,
+} from '@/lib/utils/shared/review/editLocation';
 import {
   guideCriterionId,
   isGuideCriterionId,
@@ -62,6 +68,7 @@ import {
   TranslationWorkflowState,
 } from '@/types/workflow';
 
+import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 import { LanguagePicker } from '@/components/UI/LanguagePicker';
 
 import { RunEstimateHint } from '../Impact/RunEstimateHint';
@@ -70,6 +77,7 @@ import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaManager } from '../Shared/Review/CriteriaManager';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
 import { GuidePicker } from '../Shared/Review/GuidePicker';
+import { PendingEditsDialog } from '../Shared/Review/PendingEditsDialog';
 import { WorkflowWorkspaceProps } from '../registry';
 import { AnalysisPanel } from './AnalysisPanel';
 import { GlossaryManager } from './GlossaryManager';
@@ -103,6 +111,12 @@ export function TranslationWorkspace({
   const setAutoClearResolvedEdits = useSettingsStore(
     (s) => s.setAutoClearResolvedEdits,
   );
+  const reviewOverwriteAcknowledged = useSettingsStore(
+    (s) => s.reviewOverwriteAcknowledged,
+  );
+  const setReviewOverwriteAcknowledged = useSettingsStore(
+    (s) => s.setReviewOverwriteAcknowledged,
+  );
   const translationCriteria = useSettingsStore((s) => s.translationCriteria);
   const addTranslationCriterion = useSettingsStore(
     (s) => s.addTranslationCriterion,
@@ -131,6 +145,13 @@ export function TranslationWorkspace({
   const [copied, setCopied] = useState(false);
   const [editingTarget, setEditingTarget] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(true);
+  // A held-back change to the translation — the suggestions it would have
+  // overwritten and the text it would have produced — while the one-time
+  // explanation is up (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §5, §6a).
+  const [overwritePrompt, setOverwritePrompt] = useState<{
+    ids: string[];
+    next: string;
+  } | null>(null);
   const [assessing, setAssessing] = useState(false);
   const [assessError, setAssessError] = useState<string | null>(null);
   // Built-ins on by default; custom criteria start off, so adding one
@@ -355,6 +376,12 @@ export function TranslationWorkspace({
     if (!state || isRunning) return;
     const text = sourceText.trim();
     if (!text || !targetLanguage) return;
+    // A fresh translation replaces the text the suggestions point at:
+    // settle the queue first (§6b). Re-issued from the gate once it is.
+    if (hasUnresolvedEdits) {
+      setReviewGate('translate');
+      return;
+    }
     clearError(conversationId);
 
     // Reset the paper trail for this run.
@@ -463,7 +490,11 @@ export function TranslationWorkspace({
     const source = sourceText.trim();
     const translation = state.finalText ?? '';
     if (!source || !translation.trim() || selectedCriteria.size === 0) return;
-    if (hasUnresolvedEdits) return;
+    // A new assessment replaces the queue outright: settle it first (§6b).
+    if (hasUnresolvedEdits) {
+      setReviewGate('assess');
+      return;
+    }
 
     setAssessError(null);
     setAssessing(true);
@@ -645,6 +676,119 @@ export function TranslationWorkspace({
     [conversationId, updateWorkflowState],
   );
 
+  /**
+   * Typing over a suggested passage (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §6a).
+   * The suggestions move to "not applied": their anchor text no longer
+   * exists, and that — not a judgement on them — is the truthful record.
+   */
+  const dropEdits = useCallback(
+    (ids: string[]) => {
+      const dropped = new Set(ids);
+      updateWorkflowState(conversationId, (prev) => {
+        const p = prev as TranslationWorkflowState;
+        if (!p.assessment) return p;
+        const now = new Date().toISOString();
+        const edits = p.assessment.edits.map((e) =>
+          dropped.has(e.id) && e.status === 'pending'
+            ? { ...e, status: 'unapplicable' as const, resolvedAt: now }
+            : e,
+        );
+        return {
+          ...p,
+          assessment: {
+            ...p.assessment,
+            edits: autoClearResolvedEdits
+              ? withoutResolvedEdits(edits, { keepUnapplicable: true })
+              : edits,
+          },
+          updatedAt: now,
+        };
+      });
+    },
+    [conversationId, updateWorkflowState, autoClearResolvedEdits],
+  );
+
+  const notifyDropped = useCallback(
+    (ids: string[], previousText: string) => {
+      toast(
+        (instance) => (
+          <div className="flex items-center gap-3">
+            <span>
+              {ids.length > 1
+                ? t('translation.suggestionDroppedMany', {
+                    count: String(ids.length),
+                  })
+                : t('translation.suggestionDroppedOne')}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                // Text first, so the suggestion's passage exists again by the
+                // time it is back in the queue. This restores the translation
+                // as it was before the change — anything typed since goes
+                // with it, the ordinary meaning of Undo.
+                patchState({ finalText: previousText });
+                ids.forEach(revertEdit);
+                toast.dismiss(instance.id);
+              }}
+              className="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              {t('common.undo')}
+            </button>
+          </div>
+        ),
+        { duration: 8000 },
+      );
+    },
+    [patchState, revertEdit, t],
+  );
+
+  /**
+   * The translation textarea's overwrite gate (§5, "warn without showing").
+   *
+   * A textarea has no transactions to inspect, only its previous and next
+   * values — and any one operation differs in exactly one contiguous run, so
+   * `changedRange` locates it exactly, and the pending suggestions are
+   * located in the previous text the same way the read-only view marks
+   * them. First time: the change is held back (not writing it leaves the
+   * controlled textarea where it was) and explained; confirming applies the
+   * held change, so nothing typed is lost. Thereafter: it lands, the
+   * suggestions it overwrote are dropped, and a notice offers undo.
+   */
+  const handleTargetChange = useCallback(
+    (next: string) => {
+      const previous = state?.finalText ?? '';
+      if (previewEdits.length > 0) {
+        const range = changedRange(previous, next);
+        if (range) {
+          const spans = locateEdits(previous, previewEdits).map((l) => ({
+            id: l.id,
+            from: l.start,
+            to: l.end,
+          }));
+          const touched = touchedSpanIds(spans, [range]);
+          if (touched.length > 0) {
+            if (!reviewOverwriteAcknowledged) {
+              setOverwritePrompt({ ids: touched, next });
+              return;
+            }
+            dropEdits(touched);
+            notifyDropped(touched, previous);
+          }
+        }
+      }
+      patchState({ finalText: next });
+    },
+    [
+      state?.finalText,
+      previewEdits,
+      reviewOverwriteAcknowledged,
+      dropEdits,
+      notifyDropped,
+      patchState,
+    ],
+  );
+
   /** Drops the decision record, leaving only edits still awaiting a call. */
   const clearResolved = useCallback(() => {
     updateWorkflowState(conversationId, (prev) => {
@@ -713,18 +857,49 @@ export function TranslationWorkspace({
     [conversationId, updateWorkflowState],
   );
 
+  /**
+   * An AI run asked for while suggestions were still pending
+   * (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §6b). The dialog decides the queue in
+   * bulk; the run itself is QUEUED rather than called from the dialog's
+   * handler, and fires from the effect below once the store shows no pending
+   * edits — by which point this component has re-rendered and the handler's
+   * closure holds the post-decision text. Calling the handler straight after
+   * `resolveAll` would read the render's stale closure and send the model the
+   * pre-decision document, silently discarding what the user just accepted.
+   */
+  const [reviewGate, setReviewGate] = useState<'translate' | 'assess' | null>(
+    null,
+  );
+  const [queuedAction, setQueuedAction] = useState<
+    'translate' | 'assess' | null
+  >(null);
+  const decidePendingAndRun = useCallback(
+    (decision: 'accepted' | 'rejected') => {
+      const kind = reviewGate;
+      setReviewGate(null);
+      if (!kind) return;
+      resolveAll(decision);
+      setQueuedAction(kind);
+    },
+    [reviewGate, resolveAll],
+  );
+  useEffect(() => {
+    if (!queuedAction || hasUnresolvedEdits) return;
+    setQueuedAction(null);
+    if (queuedAction === 'translate') void handleTranslate();
+    else void handleAssess();
+  }, [queuedAction, hasUnresolvedEdits, handleTranslate, handleAssess]);
+
   if (!state) return null;
 
   const canTranslate =
     !isRunning &&
     !assessing &&
-    !hasUnresolvedEdits &&
     sourceText.trim().length > 0 &&
     !!targetLanguage;
   const canAssess =
     !isRunning &&
     !assessing &&
-    !hasUnresolvedEdits &&
     !!targetLanguage &&
     sourceText.trim().length > 0 &&
     (state.finalText ?? '').trim().length > 0 &&
@@ -993,14 +1168,16 @@ export function TranslationWorkspace({
                   <button
                     type="button"
                     onClick={() => setEditingTarget((editing) => !editing)}
-                    disabled={isRunning || assessing || hasUnresolvedEdits}
+                    // Pending suggestions no longer lock the translation:
+                    // text they don't cover is free to change, and typing
+                    // over one goes through handleTargetChange's gate
+                    // (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §5).
+                    disabled={isRunning || assessing}
                     aria-pressed={editingTarget}
                     title={
-                      hasUnresolvedEdits
-                        ? t('translation.editingBlockedPendingEdits')
-                        : editingTarget
-                          ? t('translation.doneEditing')
-                          : t('translation.editTranslation')
+                      editingTarget
+                        ? t('translation.doneEditing')
+                        : t('translation.editTranslation')
                     }
                     className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
                   >
@@ -1025,12 +1202,25 @@ export function TranslationWorkspace({
                 </span>
               </div>
               {editingTarget ? (
-                <textarea
-                  value={state.finalText ?? ''}
-                  onChange={(e) => patchState({ finalText: e.target.value })}
-                  placeholder={t('translation.pasteTranslationPlaceholder')}
-                  className="min-h-0 flex-1 resize-none bg-transparent p-3 text-sm text-gray-900 placeholder-gray-500 focus:outline-none dark:text-gray-100 dark:placeholder-gray-400"
-                />
+                <>
+                  {/* The textarea cannot mark suggestions, so while editing
+                      the user is told what is at stake instead (§5 v1). */}
+                  {hasUnresolvedEdits && (
+                    <p className="border-b border-amber-200 bg-amber-50 px-3 py-1.5 text-xs text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-200">
+                      {previewEdits.length > 1
+                        ? t('translation.editingPendingHint', {
+                            count: String(previewEdits.length),
+                          })
+                        : t('translation.editingPendingHintOne')}
+                    </p>
+                  )}
+                  <textarea
+                    value={state.finalText ?? ''}
+                    onChange={(e) => handleTargetChange(e.target.value)}
+                    placeholder={t('translation.pasteTranslationPlaceholder')}
+                    className="min-h-0 flex-1 resize-none bg-transparent p-3 text-sm text-gray-900 placeholder-gray-500 focus:outline-none dark:text-gray-100 dark:placeholder-gray-400"
+                  />
+                </>
               ) : (
                 <div className="min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap p-3 text-sm text-gray-900 dark:text-gray-100">
                   {targetText ? (
@@ -1109,11 +1299,6 @@ export function TranslationWorkspace({
                   type="button"
                   onClick={() => void handleAssess()}
                   disabled={!canAssess}
-                  title={
-                    hasUnresolvedEdits
-                      ? t('translation.editingBlockedPendingEdits')
-                      : undefined
-                  }
                   className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-900 hover:bg-gray-300 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-elevated dark:text-gray-100 dark:hover:bg-gray-700"
                 >
                   <IconClipboardCheck size={14} aria-hidden />
@@ -1184,6 +1369,45 @@ export function TranslationWorkspace({
           <GlossaryManager onClose={() => setGlossariesOpen(false)} />
         </div>
       )}
+
+      {/* An AI run asked for with suggestions still pending: decide the queue
+          in bulk, then the run follows with the post-decision text (§6b). */}
+      <PendingEditsDialog
+        isOpen={reviewGate !== null}
+        pendingCount={previewEdits.length}
+        actionLabel={
+          reviewGate === 'assess'
+            ? t('translation.pendingRunActionAssess')
+            : t('translation.pendingRunActionTranslate')
+        }
+        onAcceptAll={() => decidePendingAndRun('accepted')}
+        onRejectAll={() => decidePendingAndRun('rejected')}
+        onCancel={() => setReviewGate(null)}
+      />
+
+      {/* First change over a suggested passage: explain once, then act.
+          Confirming applies the held change — nothing typed is lost. */}
+      <ConfirmDialog
+        isOpen={overwritePrompt !== null}
+        title={t('translation.overwriteEditTitle')}
+        message={t('translation.overwriteEditMessage')}
+        confirmLabel={
+          (overwritePrompt?.ids.length ?? 0) > 1
+            ? t('translation.overwriteEditConfirmMany', {
+                count: String(overwritePrompt?.ids.length ?? 0),
+              })
+            : t('translation.overwriteEditConfirmOne')
+        }
+        onConfirm={() => {
+          if (!overwritePrompt) return;
+          const { ids, next } = overwritePrompt;
+          setOverwritePrompt(null);
+          setReviewOverwriteAcknowledged(true);
+          dropEdits(ids);
+          patchState({ finalText: next });
+        }}
+        onCancel={() => setOverwritePrompt(null)}
+      />
     </div>
   );
 }
