@@ -1,9 +1,31 @@
 /**
  * Pure edit-application and diff helpers, shared by the translation and
  * document review flows. Edits locate their `before` substring AT APPLY
- * TIME (first occurrence) against the current working text — locating
- * earlier would go stale as other edits land. No text normalization
- * anywhere: matching runs on the exact persisted string.
+ * TIME against the current working text — locating earlier would go stale as
+ * other edits land. No text normalization anywhere: matching runs on the
+ * exact persisted string.
+ *
+ * ── Which occurrence? (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §3) ────────────
+ * This only matters once the working text can change while edits are pending.
+ * First-occurrence matching is safe under a frozen text and dangerous without
+ * it: if the user's own typing introduces an EARLIER copy of `before`,
+ * `indexOf` silently retargets the suggestion, and accepting it rewrites a
+ * passage the reviewer never saw. Staleness was never the risk — that already
+ * degrades cleanly to `unapplicable` — mis-application was.
+ *
+ * So a patch may carry two hints recorded when the assessment was made:
+ * `anchorStart` (where its target sat) and `anchorContext` (the text
+ * immediately before it). Candidates are scored on CONTEXT FIRST, distance
+ * second.
+ *
+ * Context has to win, because offsets move and surroundings do not: a user who
+ * inserts a paragraph above the target pushes it far from `anchorStart` while
+ * possibly leaving a decoy copy of `before` near the old offset. Distance alone
+ * picks the decoy; matching surroundings picks the passage the reviewer read.
+ *
+ * Patches without hints (everything assessed before this existed, and the data
+ * workflow, which anchors by row id instead) behave exactly as they did: first
+ * occurrence wins.
  */
 
 /** A contiguous changed run in a whole-text diff (display chip). */
@@ -16,6 +38,18 @@ export interface EditPatch {
   id: string;
   before: string;
   after: string;
+  /**
+   * Offset of this edit's target in the text it was assessed against. Absent
+   * on pre-anchor edits and wherever the caller has no meaningful offset;
+   * see the module header for what it buys.
+   */
+  anchorStart?: number;
+  /**
+   * The text immediately preceding the target when the assessment was made,
+   * capped at {@link ANCHOR_CONTEXT_CHARS}. The stronger of the two hints —
+   * surroundings survive edits elsewhere in the document, offsets do not.
+   */
+  anchorContext?: string;
 }
 
 export interface ApplyOutcome {
@@ -23,10 +57,82 @@ export interface ApplyOutcome {
   applied: boolean;
 }
 
-/** First-occurrence apply; `applied: false` when `before` is empty/absent. */
+/**
+ * How much preceding text is kept as an edit's context fingerprint. Long
+ * enough to be distinctive across repeated phrasing, short enough that twenty
+ * of them add well under a kilobyte to a stored assessment.
+ */
+export const ANCHOR_CONTEXT_CHARS = 40;
+
+/** Length of the longest common suffix of two strings. */
+function commonSuffixLength(a: string, b: string): number {
+  let count = 0;
+  while (
+    count < a.length &&
+    count < b.length &&
+    a[a.length - 1 - count] === b[b.length - 1 - count]
+  ) {
+    count += 1;
+  }
+  return count;
+}
+
+/** The hints an edit may carry about which occurrence it means. */
+export type EditAnchor = Pick<EditPatch, 'anchorStart' | 'anchorContext'>;
+
+/**
+ * Offset of the occurrence of `before` this patch means, or -1 when the text
+ * contains none.
+ *
+ * With no hints, the first occurrence — byte-identical to the old behaviour.
+ * With hints, every occurrence is scored: how much of `anchorContext` it is
+ * still preceded by, and only then how close it sits to `anchorStart`.
+ *
+ * Occurrences are walked non-overlapping, matching `countOccurrences` and the
+ * preview highlighter.
+ */
+export function locateEditTarget(
+  text: string,
+  before: string,
+  anchor: EditAnchor = {},
+): number {
+  if (!before) return -1;
+  const { anchorStart, anchorContext } = anchor;
+  const hasStart = anchorStart !== undefined && Number.isFinite(anchorStart);
+  const hasContext = !!anchorContext;
+  if (!hasStart && !hasContext) return text.indexOf(before);
+
+  let best = -1;
+  let bestContext = -1;
+  let bestDistance = Infinity;
+  let index = text.indexOf(before);
+  while (index !== -1) {
+    const context = hasContext
+      ? commonSuffixLength(anchorContext, text.slice(0, index))
+      : 0;
+    const distance = hasStart
+      ? Math.abs(index - (anchorStart as number))
+      : index;
+    if (
+      context > bestContext ||
+      (context === bestContext && distance < bestDistance)
+    ) {
+      best = index;
+      bestContext = context;
+      bestDistance = distance;
+    }
+    index = text.indexOf(before, index + before.length);
+  }
+  return best;
+}
+
+/**
+ * Applies one patch at its anchored occurrence (see {@link locateEditTarget}).
+ * `applied: false` when `before` is empty or absent from the text — the caller
+ * turns that into the `unapplicable` status rather than a silent no-op.
+ */
 export function applyEdit(text: string, patch: EditPatch): ApplyOutcome {
-  if (!patch.before) return { text, applied: false };
-  const index = text.indexOf(patch.before);
+  const index = locateEditTarget(text, patch.before, patch);
   if (index === -1) return { text, applied: false };
   return {
     text:
@@ -60,6 +166,9 @@ export interface ApplyAllResult {
  * leftmost locatable remaining patch in the CURRENT text, apply it, and
  * repeat — so earlier applications can't silently corrupt later offsets.
  * Deterministic regardless of the input order of patches.
+ *
+ * "Leftmost" is measured at each patch's ANCHORED position, so ordering and
+ * application agree about which occurrence a patch means.
  */
 export function applyEditsInOrder(
   text: string,
@@ -75,8 +184,7 @@ export function applyEditsInOrder(
     let bestPosition = Infinity;
     for (let i = 0; i < remaining.length; i++) {
       const patch = remaining[i];
-      if (!patch.before) continue;
-      const position = current.indexOf(patch.before);
+      const position = locateEditTarget(current, patch.before, patch);
       if (position !== -1 && position < bestPosition) {
         bestPosition = position;
         bestIndex = i;
