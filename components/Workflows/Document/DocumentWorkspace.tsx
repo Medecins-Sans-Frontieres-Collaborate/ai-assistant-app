@@ -1645,8 +1645,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             <RunEstimateHint
               model={conversation?.model}
               sourceText={
-                scopedSelection?.text ??
-                (hasDocument ? htmlToMarkdown(docHtml) : '')
+                selection?.text ?? (hasDocument ? htmlToMarkdown(docHtml) : '')
               }
               passes={1}
               // A revision rewrites what it was given, so the completion is
