@@ -114,6 +114,9 @@ export interface TranslationPendingEdit extends TranslationEdit {
   id: string;
   status: TranslationEditStatus;
   resolvedAt?: string;
+  /** See {@link ReviewEdit.anchorStart}. */
+  anchorStart?: number;
+  anchorContext?: string;
 }
 
 /**
@@ -225,6 +228,17 @@ export interface ReviewEdit {
   severity: 'minor' | 'major';
   status: ReviewEditStatus;
   resolvedAt?: string;
+  /**
+   * Where `before` sat in the text this edit was assessed against, and what
+   * immediately preceded it — recorded once at mint time. Application scores
+   * candidate occurrences on that context first and this offset second, so a
+   * suggestion keeps pointing at the passage the reviewer read even after the
+   * text around it changes (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §3). Absent on
+   * edits minted before anchoring existed, and on edits whose target could not
+   * be located.
+   */
+  anchorStart?: number;
+  anchorContext?: string;
 }
 
 export interface ReviewCriterionRating {
