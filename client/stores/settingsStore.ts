@@ -715,6 +715,14 @@ interface SettingsStore {
    */
   reviewOverwriteAcknowledged: boolean;
   /**
+   * Confidence given to imported map points whose file carries no
+   * `confidence` column. A file that states coordinates is asserting them,
+   * so the shipped default is 'high'; a team that knows its spreadsheets
+   * are rough can lower it once here and still change individual rows at
+   * import time.
+   */
+  mapImportDefaultConfidence: 'high' | 'medium' | 'low';
+  /**
    * Default state of the "Suggest changes" checkbox on the Document composer:
    * a revision comes back as reviewable suggestions instead of overwriting the
    * document. Per-run the user can still tick it either way.
@@ -739,6 +747,7 @@ interface SettingsStore {
   setConfirmStopFromKeyboard: (enabled: boolean) => void;
   setAutoClearResolvedEdits: (enabled: boolean) => void;
   setReviewOverwriteAcknowledged: (acknowledged: boolean) => void;
+  setMapImportDefaultConfidence: (value: 'high' | 'medium' | 'low') => void;
   setSuggestRevisions: (enabled: boolean) => void;
   setSuggestRevisionsException: (
     key: 'largeRewrites' | 'structuralReorders',
@@ -938,6 +947,7 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
       reviewOverwriteAcknowledged: false,
+      mapImportDefaultConfidence: 'high',
       m365Connected: true,
       m365ConnectedUserSet: false,
       m365ToolsUserEnabled: true,
@@ -1692,6 +1702,8 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ autoClearResolvedEdits: enabled }),
       setReviewOverwriteAcknowledged: (acknowledged) =>
         set({ reviewOverwriteAcknowledged: acknowledged }),
+      setMapImportDefaultConfidence: (value) =>
+        set({ mapImportDefaultConfidence: value }),
 
       setSuggestRevisions: (enabled) => set({ suggestRevisions: enabled }),
       setM365Connected: (connected) =>
@@ -1811,6 +1823,7 @@ export const useSettingsStore = create<SettingsStore>()(
           confirmStopFromKeyboard: true,
           autoClearResolvedEdits: false,
           reviewOverwriteAcknowledged: false,
+          mapImportDefaultConfidence: 'high',
           suggestRevisions: true,
           suggestRevisionsExceptions: {
             largeRewrites: true,
@@ -1827,7 +1840,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 61, // Increment this when schema changes to trigger migrations
+      version: 62, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1922,6 +1935,7 @@ export const useSettingsStore = create<SettingsStore>()(
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
         autoClearResolvedEdits: state.autoClearResolvedEdits,
         reviewOverwriteAcknowledged: state.reviewOverwriteAcknowledged,
+        mapImportDefaultConfidence: state.mapImportDefaultConfidence,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
         m365ConnectedUserSet: state.m365ConnectedUserSet,
@@ -2536,6 +2550,17 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 61) {
           if (typeof state.reviewOverwriteAcknowledged !== 'boolean') {
             state.reviewOverwriteAcknowledged = false;
+          }
+        }
+
+        // Version 61 → 62: default confidence for imported map points.
+        if (version < 62) {
+          if (
+            !['high', 'medium', 'low'].includes(
+              state.mapImportDefaultConfidence as string,
+            )
+          ) {
+            state.mapImportDefaultConfidence = 'high';
           }
         }
 
