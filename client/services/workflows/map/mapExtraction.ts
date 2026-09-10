@@ -27,7 +27,13 @@ export interface ExtractionResult {
  * writes, rail messages, naming) stays with the callers.
  */
 export async function extractMapFeatures(
-  input: { sourceText: string } | { searchQuery: string },
+  input:
+    | {
+        sourceText: string;
+        /** Steering for the extraction (the route caps it at 2,000 chars). */
+        instructions?: string;
+      }
+    | { searchQuery: string },
   options: {
     existingNames: string[];
     modelId?: string;
