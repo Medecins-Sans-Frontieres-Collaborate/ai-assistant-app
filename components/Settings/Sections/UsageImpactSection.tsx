@@ -38,9 +38,23 @@ function parseKey(key: string): {
 
 const numberFmt = new Intl.NumberFormat();
 
+/**
+ * Workflow type → its `workflows.types.*` i18n key. Mirrors WORKFLOW_META
+ * but is declared here rather than imported: registryMeta.ts pulls Tabler
+ * icons, and Settings has no reason to load them.
+ */
+const WORKFLOW_I18N_KEY: Record<string, string> = {
+  translation: 'translation',
+  document: 'document',
+  'data-analysis': 'dataAnalysis',
+  map: 'map',
+  grants: 'grants',
+};
+
 export const UsageImpactSection: FC = () => {
   const t = useTranslations();
   const tokenUsageStats = useSettingsStore((s) => s.tokenUsageStats);
+  const workflowUsageStats = useSettingsStore((s) => s.workflowUsageStats);
   const estimatedUsageStats = useSettingsStore((s) => s.estimatedUsageStats);
   const firstTrackedAt = useSettingsStore((s) => s.tokenUsageFirstTrackedAt);
   const resetTokenUsageStats = useSettingsStore((s) => s.resetTokenUsageStats);
@@ -106,6 +120,23 @@ export const UsageImpactSection: FC = () => {
     accumulate(tokenUsageStats, false);
     accumulate(estimatedUsageStats, true);
 
+    // Workflow rows are a SPLIT of the totals above, not an addition: the same
+    // raw counts already sit in the model buckets. Priced with the default
+    // grid and no reasoning multiplier, matching how workflow routes actually
+    // run (region-blind home clients, no effort parameter).
+    const workflowRows = Object.entries(workflowUsageStats)
+      .map(([workflowType, bucket]) => {
+        const { gCO2e } = estimateCO2Grams({
+          promptTokens: bucket.promptTokens,
+          completionTokens: bucket.completionTokens,
+          sizeClass: 'standard',
+          isDedicatedReasoner: false,
+          region: null,
+        });
+        return { workflowType, requests: bucket.requests, gCO2e };
+      })
+      .sort((a, b) => b.gCO2e - a.gCO2e);
+
     const topModels = [...byModel.entries()]
       .sort((a, b) => b[1].gCO2e - a[1].gCO2e)
       .slice(0, 5);
@@ -122,11 +153,12 @@ export const UsageImpactSection: FC = () => {
       estimatedRequests,
       topModels,
       regions,
+      workflowRows,
       isEmpty:
         Object.keys(tokenUsageStats).length === 0 &&
         Object.keys(estimatedUsageStats).length === 0,
     };
-  }, [tokenUsageStats, estimatedUsageStats, models]);
+  }, [tokenUsageStats, estimatedUsageStats, workflowUsageStats, models]);
 
   const smartphoneCharges =
     summary.totalCO2 > 0 ? summary.totalCO2 / SMARTPHONE_CHARGE_GRAMS : 0;
@@ -298,6 +330,38 @@ export const UsageImpactSection: FC = () => {
               ))}
             </div>
           </div>
+
+          {/* Per-workflow split — a view of the same totals, not an addition */}
+          {summary.workflowRows.length > 0 && (
+            <div>
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                {t('usageImpact.byWorkflow')}
+              </h3>
+              <div className="space-y-1">
+                {summary.workflowRows.map((row) => (
+                  <div
+                    key={row.workflowType}
+                    className="flex items-center justify-between text-sm"
+                  >
+                    <span className="text-gray-800 dark:text-gray-200 truncate">
+                      {t(
+                        `workflows.types.${WORKFLOW_I18N_KEY[row.workflowType] ?? row.workflowType}.label`,
+                      )}
+                    </span>
+                    <span className="text-gray-500 dark:text-gray-400 shrink-0 ps-3">
+                      {t('usageImpact.modelRow', {
+                        requests: numberFmt.format(row.requests),
+                        grams: numberFmt.format(Math.round(row.gCO2e)),
+                      })}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
+                {t('usageImpact.byWorkflowNote')}
+              </p>
+            </div>
+          )}
 
           {/* Disclosure + reset */}
           <p className="text-xs text-gray-500 dark:text-gray-400">
