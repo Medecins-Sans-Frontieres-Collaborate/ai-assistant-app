@@ -2,6 +2,8 @@
 
 import { useCallback } from 'react';
 
+import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRecorder';
+
 import { useWorkflowRunStore } from '@/client/stores/workflowRunStore';
 import { WorkflowEventPayload, scanStreamEvents } from '@/lib/streamMarkers';
 
@@ -85,6 +87,11 @@ export function useWorkflowStream() {
               if (event.payload.type === 'error') {
                 const data = event.payload.data as { message?: string };
                 failed = data?.message ?? 'Workflow failed';
+              } else if (event.payload.type === 'usage') {
+                // Handled here rather than by each workspace: token spend is
+                // the same fact regardless of which workflow produced it
+                // (docs/WORKFLOW_EMISSIONS_DESIGN.md §4c).
+                recordWorkflowUsage(conversationId, event.payload.data);
               } else {
                 onEvent?.(event.payload);
               }
