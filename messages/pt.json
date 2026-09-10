@@ -2831,7 +2831,17 @@
       "guides": "Guias da organização",
       "organizationTerminology": "Terminologia da organização",
       "noOrganizationTerminology": "Sem terminologia da organização",
-      "terminologyGuideUnavailable": "Guia indisponível"
+      "terminologyGuideUnavailable": "Guia indisponível",
+      "editingPendingHint": "{count} sugestões pendentes — elas não são marcadas durante a edição, e ao digitar sobre uma, ela é descartada.",
+      "editingPendingHintOne": "1 sugestão pendente — ela não é marcada durante a edição, e ao digitar sobre ela, ela é descartada.",
+      "overwriteEditTitle": "Editando uma passagem sugerida",
+      "overwriteEditMessage": "Este texto possui uma sugestão pendente. Editá-lo descarta a sugestão — ela será movida para \"não aplicada\" na lista de revisão, onde ainda é possível desfazer. Texto fora das sugestões pode ser editado livremente enquanto a revisão estiver aberta. Você não será perguntado novamente.",
+      "overwriteEditConfirmOne": "Descartar a sugestão e manter minha alteração",
+      "overwriteEditConfirmMany": "Descartar {count} sugestões e manter minha alteração",
+      "suggestionDroppedOne": "Sugestão descartada — você editou essa passagem.",
+      "suggestionDroppedMany": "{count} sugestões descartadas — você editou essas passagens.",
+      "pendingRunActionTranslate": "Traduzindo novamente",
+      "pendingRunActionAssess": "Reavaliando"
     },
     "document": {
       "emptyTitle": "Descreva o documento desejado",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Esta rubrica excede o limite em {over} caracteres. Ela é enviada em cada avaliação, portanto deve ser reduzida antes de usar este critério.",
       "guides": "Guias da organização",
       "guidesOptgroup": "Guias da organização",
-      "guideUnavailable": "Guia indisponível"
+      "guideUnavailable": "Guia indisponível",
+      "overwriteEditTitle": "Editando uma passagem sugerida",
+      "overwriteEditMessage": "Este texto possui uma sugestão pendente. Editá-lo descarta a sugestão — ela será movida para \"não aplicada\" na lista de revisão, onde ainda é possível desfazer. Texto fora das sugestões pode ser editado livremente enquanto a revisão estiver aberta. Você não será perguntado novamente.",
+      "overwriteEditConfirmOne": "Descartar a sugestão e editar",
+      "overwriteEditConfirmMany": "Descartar {count} sugestões e editar",
+      "suggestionDroppedOne": "Sugestão descartada — você editou essa passagem.",
+      "suggestionDroppedMany": "{count} sugestões descartadas — você editou essas passagens.",
+      "pendingRunActionRevise": "Revisando o documento",
+      "pendingRunActionAssess": "Reavaliando"
     },
     "data": {
       "emptyTitle": "Importe dados para analisar",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "opcional",
       "guideSourceTerm": "Termo de origem",
       "guideTargetTerm": "Tradução obrigatória",
-      "guideNote": "Nota"
+      "guideNote": "Nota",
+      "pendingRun": {
+        "title": "{count} sugestões ainda pendentes",
+        "body": "{action} pode alterar qualquer parte do texto, inclusive passagens com sugestões ainda não definidas, e uma nova avaliação substitui a lista atual. Decida as sugestões restantes primeiro.",
+        "acceptAll": "Aceitar todas as restantes",
+        "rejectAll": "Rejeitar todas",
+        "cancel": "Cancelar"
+      }
     }
   },
   "connectors": {

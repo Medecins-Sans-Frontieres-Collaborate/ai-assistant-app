@@ -2862,7 +2862,17 @@
       "guides": "Hướng dẫn của tổ chức",
       "organizationTerminology": "Thuật ngữ của tổ chức",
       "noOrganizationTerminology": "Không có thuật ngữ của tổ chức",
-      "terminologyGuideUnavailable": "Không có hướng dẫn"
+      "terminologyGuideUnavailable": "Không có hướng dẫn",
+      "editingPendingHint": "{count} đề xuất đang chờ — chúng sẽ không được đánh dấu khi chỉnh sửa và nhập đè lên sẽ bỏ đề xuất đó.",
+      "editingPendingHintOne": "1 đề xuất đang chờ — nó sẽ không được đánh dấu khi chỉnh sửa và nhập đè lên sẽ bỏ đề xuất đó.",
+      "overwriteEditTitle": "Đang chỉnh sửa đoạn được đề xuất",
+      "overwriteEditMessage": "Văn bản này có đề xuất đang chờ. Khi chỉnh sửa, đề xuất sẽ bị bỏ — nó sẽ chuyển sang mục “chưa áp dụng” trong danh sách xem lại, bạn vẫn có thể hoàn tác hành động đó. Có thể chỉnh sửa tự do các phần văn bản ngoài phạm vi đề xuất khi màn hình đánh giá đang mở. Bạn sẽ không được hỏi lại.",
+      "overwriteEditConfirmOne": "Bỏ đề xuất và giữ thay đổi của tôi",
+      "overwriteEditConfirmMany": "Bỏ {count} đề xuất và giữ thay đổi của tôi",
+      "suggestionDroppedOne": "Đã bỏ đề xuất — bạn đã chỉnh sửa đoạn văn này.",
+      "suggestionDroppedMany": "Đã bỏ {count} đề xuất — bạn đã chỉnh sửa các đoạn đó.",
+      "pendingRunActionTranslate": "Đang dịch lại",
+      "pendingRunActionAssess": "Đang đánh giá lại"
     },
     "document": {
       "emptyTitle": "Mô tả tài liệu bạn muốn",
@@ -3010,7 +3020,15 @@
       "criterionRubricTooLong": "Bảng tiêu chí này vượt quá giới hạn {over} ký tự. Nó được gửi kèm mỗi lần đánh giá nên cần rút gọn trước khi dùng tiêu chí này.",
       "guides": "Hướng dẫn của tổ chức",
       "guidesOptgroup": "Hướng dẫn của tổ chức",
-      "guideUnavailable": "Không có hướng dẫn"
+      "guideUnavailable": "Không có hướng dẫn",
+      "overwriteEditTitle": "Đang chỉnh sửa đoạn được đề xuất",
+      "overwriteEditMessage": "Văn bản này có đề xuất đang chờ. Khi chỉnh sửa, đề xuất sẽ bị bỏ — nó sẽ chuyển sang mục “chưa áp dụng” trong danh sách xem lại, bạn vẫn có thể hoàn tác hành động đó. Có thể chỉnh sửa tự do các phần văn bản ngoài phạm vi đề xuất khi màn hình đánh giá đang mở. Bạn sẽ không được hỏi lại.",
+      "overwriteEditConfirmOne": "Bỏ đề xuất và chỉnh sửa",
+      "overwriteEditConfirmMany": "Bỏ {count} đề xuất và chỉnh sửa",
+      "suggestionDroppedOne": "Đã bỏ đề xuất — bạn đã chỉnh sửa đoạn văn này.",
+      "suggestionDroppedMany": "Đã bỏ {count} đề xuất — bạn đã chỉnh sửa các đoạn đó.",
+      "pendingRunActionRevise": "Đang chỉnh sửa tài liệu",
+      "pendingRunActionAssess": "Đang đánh giá lại"
     },
     "data": {
       "emptyTitle": "Nhập dữ liệu để phân tích",
@@ -3386,7 +3404,14 @@
       "guideSectionOptional": "tùy chọn",
       "guideSourceTerm": "Thuật ngữ nguồn",
       "guideTargetTerm": "Dịch bắt buộc",
-      "guideNote": "Ghi chú"
+      "guideNote": "Ghi chú",
+      "pendingRun": {
+        "title": "{count} đề xuất vẫn đang chờ",
+        "body": "{action} có thể thay đổi bất kỳ phần nào của văn bản, bao gồm cả những đoạn có đề xuất mà bạn chưa quyết định, và đánh giá mới sẽ thay thế danh sách hiện tại. Hãy quyết định các đề xuất còn lại trước.",
+        "acceptAll": "Chấp nhận tất cả còn lại",
+        "rejectAll": "Từ chối tất cả",
+        "cancel": "Hủy"
+      }
     }
   },
   "connectors": {

@@ -2831,7 +2831,17 @@
       "guides": "組織ガイド",
       "organizationTerminology": "組織用語集",
       "noOrganizationTerminology": "組織用語集なし",
-      "terminologyGuideUnavailable": "ガイドが利用できません"
+      "terminologyGuideUnavailable": "ガイドが利用できません",
+      "editingPendingHint": "{count} 件の提案が保留中です — 編集中はマークされず、上書きすると提案は削除されます。",
+      "editingPendingHintOne": "1 件の提案が保留中です — 編集中はマークされず、上書きすると提案は削除されます。",
+      "overwriteEditTitle": "提案された文章の編集",
+      "overwriteEditMessage": "このテキストには保留中の提案があります。編集すると提案は削除され、「未適用」に移動します（レビューリストで元に戻すこともできます）。提案外のテキストは、レビュー中も自由に編集できます。この確認は今後表示されません。",
+      "overwriteEditConfirmOne": "提案を削除して変更を保持",
+      "overwriteEditConfirmMany": "{count} 件の提案を削除して変更を保持",
+      "suggestionDroppedOne": "提案を削除しました — 対象の文章を編集しました。",
+      "suggestionDroppedMany": "{count} 件の提案を削除しました — 対象の文章を編集しました。",
+      "pendingRunActionTranslate": "再翻訳中",
+      "pendingRunActionAssess": "再評価中"
     },
     "document": {
       "emptyTitle": "作成したい文書の説明",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "このルーブリックは上限を{over}文字超えています。すべての評価に送信されるため、この基準を使用するには短縮が必要です。",
       "guides": "組織ガイド",
       "guidesOptgroup": "組織ガイド",
-      "guideUnavailable": "ガイドが利用できません"
+      "guideUnavailable": "ガイドが利用できません",
+      "overwriteEditTitle": "提案された文章の編集",
+      "overwriteEditMessage": "このテキストには保留中の提案があります。編集すると提案は削除され、「未適用」に移動します（レビューリストで元に戻すこともできます）。提案外のテキストは、レビュー中も自由に編集できます。この確認は今後表示されません。",
+      "overwriteEditConfirmOne": "提案を削除して編集",
+      "overwriteEditConfirmMany": "{count} 件の提案を削除して編集",
+      "suggestionDroppedOne": "提案を削除しました — 対象の文章を編集しました。",
+      "suggestionDroppedMany": "{count} 件の提案を削除しました — 対象の文章を編集しました。",
+      "pendingRunActionRevise": "ドキュメントを修正中",
+      "pendingRunActionAssess": "再評価中"
     },
     "data": {
       "emptyTitle": "分析するデータをインポート",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "任意",
       "guideSourceTerm": "原文用語",
       "guideTargetTerm": "必須訳語",
-      "guideNote": "注記"
+      "guideNote": "注記",
+      "pendingRun": {
+        "title": "{count} 件の提案がまだ保留中です",
+        "body": "{action} は未決定の提案を含むテキスト全体の内容を変更する可能性があり、新しい評価が現在のリストに置き換わります。先に残りの提案を処理してください。",
+        "acceptAll": "残りをすべて承認",
+        "rejectAll": "すべて却下",
+        "cancel": "キャンセル"
+      }
     }
   },
   "connectors": {

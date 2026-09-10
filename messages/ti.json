@@ -2815,7 +2815,17 @@
       "guides": "መምርሒ ውድብ",
       "organizationTerminology": "ቃላት ውድብ",
       "noOrganizationTerminology": "ውድብ ቃላት የለን",
-      "terminologyGuideUnavailable": "መምርሒ ኣይተረኣየን"
+      "terminologyGuideUnavailable": "መምርሒ ኣይተረኣየን",
+      "editingPendingHint": "{count} ኣቐዲሙ ምምኽር ኣሎ — ኣብ ምምሃይሽ ዝተመሃነ የኮነን፣ ንዓቲ ክብል ክብል ከይጸንሐ።",
+      "editingPendingHintOne": "1 ኣቐዲሙ ምምኽር ኣሎ — ኣብ ምምሃይሽ ዝተመሃነ የኮነን፣ ንዓቲ ክብል ክብል ከይጸንሐ።",
+      "overwriteEditTitle": "ምምሃይሽ ናይ ተጻወታይ ምኽር",
+      "overwriteEditMessage": "እዚ ጽሑፍ ኣቐዲሙ ምምኽር ኣሎ። ምምሃይሽ እዚ ምኽር ይጽንሕዎ — ኣብ ዝተለወጠ “ዘይተሓጎሰ” ዝበለ ዝርዝር ክንሕብ ይኽእል፣ ምፍታን እዚ ውን ንተመላእ ትኽእላ ኢኻ። ጽሑፋት ዝሃለወ ደሓን ኣብ ክፋል ተጻወታይ እካ ንምምሃይሽ ክትኽእል። ካብ ዚ ድማ ኣይትሕተትናን ኢና።",
+      "overwriteEditConfirmOne": "ምምኽር ክብል ክብል ናይ ውድብ ኣሃዛሚ ጽሑፍ ምቅባል",
+      "overwriteEditConfirmMany": "{count} ምምኽራት ክብል ክብል ናይ ውድብ ኣሃዛሚ ጽሑፍ ምቅባል",
+      "suggestionDroppedOne": "ምምኽር ተውድቆ — ኣብ ጽሑፉ ክብል ክብል ትህሂት።",
+      "suggestionDroppedMany": "{count} ምምኽራት ተውድቆ — ኣብ ነታቶም ጽሑፋት ስራሕ ተውቢትዎ።",
+      "pendingRunActionTranslate": "እንተዘይቀየረ ምትርጉም",
+      "pendingRunActionAssess": "እንተዘይቀየረ ምዕጽማት"
     },
     "document": {
       "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "እዚ መስፈርሒ ብ {over}፡ ቁምፊ ግዜ ውፅኢቱ። ብኣኽባር ኣብ ኩሉ ውሳኔ ይልኣል፡፡ ቅድሚ ክተግበሩ ፣ ከይደፍኡዎ።",
       "guides": "መምርሒ ውድብ",
       "guidesOptgroup": "መምርሒ ውድብ",
-      "guideUnavailable": "መምርሒ ኣይተረኣየን"
+      "guideUnavailable": "መምርሒ ኣይተረኣየን",
+      "overwriteEditTitle": "ምምሃይሽ ናይ ተጻወታይ ምኽር",
+      "overwriteEditMessage": "እዚ ጽሑፍ ኣቐዲሙ ምምኽር ኣሎ። ምምሃይሽ እዚ ምኽር ይጽንሕዎ — ኣብ ዝተለወጠ “ዘይተሓጎሰ” ዝበለ ዝርዝር ክንሕብ ይኽእል፣ ምፍታን እዚ ውን ንተመላእ ትኽእላ ኢኻ። ጽሑፋት ዝሃለወ ደሓን ኣብ ክፋል ተጻወታይ እካ ንምምሃይሽ ክትኽእል። ካብ ዚ ድማ ኣይትሕተትናን ኢና።",
+      "overwriteEditConfirmOne": "ምምኽር ክብል ክብል ምምሃይሽ",
+      "overwriteEditConfirmMany": "{count} ምምኽራት ክብል ክብል ምምሃይሽ",
+      "suggestionDroppedOne": "ምምኽር ተውድቆ — ኣብ ጽሑፉ ክብል ክብል ትህሂት።",
+      "suggestionDroppedMany": "{count} ምምኽራት ተውድቆ — ኣብ ነታቶም ጽሑፋት ስራሕ ተውቢትዎ።",
+      "pendingRunActionRevise": "እንተዘይቀየረ ምምሃይሽ ጽሑፍ",
+      "pendingRunActionAssess": "እንተዘይቀየረ ምዕጽማት"
     },
     "data": {
       "emptyTitle": "ዳታ ኣስገብር ንምርመራ",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "ኣራእይ",
       "guideSourceTerm": "ኣቕሓ ቃል",
       "guideTargetTerm": "ኣስፈላጦ ትርጉም",
-      "guideNote": "ማስታወሻ"
+      "guideNote": "ማስታወሻ",
+      "pendingRun": {
+        "title": "{count} ምምኽራት ኣላ ዘይተጽሕፉ።",
+        "body": "{action} ክኸውን ይኽእል፣ በዚ ምኽራት ኣይተውሉን ምዃኑ ጽሑፋት ሙሉእ ክለውጠሉ ይኽእሉ፣ እናተሕደሰ ምዕጽማት ድማ ናይ ሕፂና ዝርዝር ክትኸውን ይኽእል። ቀደም ንነበሩ ምምኽራት ቅድሚ ዚ ሓሳብ።",
+        "acceptAll": "ምስሉ ትስዕቲ ንኩሎም ተቐቢሉ",
+        "rejectAll": "ኩሎም ኣልቦ",
+        "cancel": "ሰርዝ"
+      }
     }
   },
   "connectors": {

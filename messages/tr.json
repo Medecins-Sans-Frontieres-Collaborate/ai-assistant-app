@@ -2831,7 +2831,17 @@
       "guides": "Kurum rehberleri",
       "organizationTerminology": "Kurum terminolojisi",
       "noOrganizationTerminology": "Kurum terminolojisi yok",
-      "terminologyGuideUnavailable": "Rehber mevcut değil"
+      "terminologyGuideUnavailable": "Rehber mevcut değil",
+      "editingPendingHint": "{count} öneri beklemede — düzenleme sırasında işaretlenmezler ve üzerine yazdığınızda silinirler.",
+      "editingPendingHintOne": "1 öneri beklemede — düzenleme sırasında işaretlenmez ve üzerine yazarsanız silinir.",
+      "overwriteEditTitle": "Önerilen bir bölümü düzenliyorsunuz",
+      "overwriteEditMessage": "Bu metinde bekleyen bir öneri var. Düzenlediğinizde öneri silinir — inceleme listesindeki \"uygulanmadı\" bölümüne alınır ve hâlâ geri alabilirsiniz. İnceleme açıkken, öneri dışındaki metinleri serbestçe düzenleyebilirsiniz. Bu uyarı bir daha gösterilmeyecek.",
+      "overwriteEditConfirmOne": "Öneriyi sil ve değişikliğimi koru",
+      "overwriteEditConfirmMany": "{count} öneriyi sil ve değişikliğimi koru",
+      "suggestionDroppedOne": "Öneri silindi — ilgili bölümde değişiklik yaptınız.",
+      "suggestionDroppedMany": "{count} öneri silindi — ilgili bölümlerde değişiklik yaptınız.",
+      "pendingRunActionTranslate": "Tekrar çeviriliyor",
+      "pendingRunActionAssess": "Yeniden değerlendiriliyor"
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Bu rubrik, sınırı {over} karakter aşmaktadır. Her değerlendirme ile gönderildiği için, bu kriter kullanılmadan önce kısaltılmalıdır.",
       "guides": "Kurum rehberleri",
       "guidesOptgroup": "Kurum rehberleri",
-      "guideUnavailable": "Rehber mevcut değil"
+      "guideUnavailable": "Rehber mevcut değil",
+      "overwriteEditTitle": "Önerilen bir bölümü düzenliyorsunuz",
+      "overwriteEditMessage": "Bu metinde bekleyen bir öneri var. Düzenlediğinizde öneri silinir — inceleme listesindeki \"uygulanmadı\" bölümüne alınır ve hâlâ geri alabilirsiniz. İnceleme açıkken, öneri dışındaki metinleri serbestçe düzenleyebilirsiniz. Bu uyarı bir daha gösterilmeyecek.",
+      "overwriteEditConfirmOne": "Öneriyi sil ve düzenle",
+      "overwriteEditConfirmMany": "{count} öneriyi sil ve düzenle",
+      "suggestionDroppedOne": "Öneri silindi — ilgili bölümde değişiklik yaptınız.",
+      "suggestionDroppedMany": "{count} öneri silindi — ilgili bölümlerde değişiklik yaptınız.",
+      "pendingRunActionRevise": "Belge revize ediliyor",
+      "pendingRunActionAssess": "Yeniden değerlendiriliyor"
     },
     "data": {
       "emptyTitle": "Analiz için veri içe aktar",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "isteğe bağlı",
       "guideSourceTerm": "Kaynak terim",
       "guideTargetTerm": "Gerekli çeviri",
-      "guideNote": "Not"
+      "guideNote": "Not",
+      "pendingRun": {
+        "title": "{count} öneri hâlâ beklemede",
+        "body": "{action}, daha karar vermediğiniz öneriler dahil metnin her bölümünü değiştirebilir ve yeni bir değerlendirme mevcut listeyi değiştirir. Kalan önerileri önce karara bağlayın.",
+        "acceptAll": "Tüm kalanları kabul et",
+        "rejectAll": "Tümünü reddet",
+        "cancel": "İptal et"
+      }
     }
   },
   "connectors": {

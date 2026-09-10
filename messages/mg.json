@@ -2815,7 +2815,17 @@
       "guides": "Torolàlana avy amin'ny fikambanana",
       "organizationTerminology": "Voambolana avy amin'ny fikambanana",
       "noOrganizationTerminology": "Tsy misy voambolana avy amin'ny fikambanana",
-      "terminologyGuideUnavailable": "Tsy misy ny torolàlana"
+      "terminologyGuideUnavailable": "Tsy misy ny torolàlana",
+      "editingPendingHint": "Misy soso-kevitra {count} miandry — tsy asiana marika izy ireny rehefa manitsy, ary raha manoratra eo amboniny dia esorina.",
+      "editingPendingHintOne": "Misy soso-kevitra 1 miandry — tsy asiana marika izy rehefa manitsy, ary raha manoratra eo amboniny dia esorina.",
+      "overwriteEditTitle": "Fanovana lahatsoratra soso-kevitra",
+      "overwriteEditMessage": "Ity lahatsoratra ity dia mbola misy soso-kevitra miandry. Raha manitsy dia esorina ilay soso-kevitra — mifindra ho amin'ny lisitra \"tsy nampiharina\" izy, izay mbola azonao averina. Azonao atao malalaka ny manitsy ny lahatsoratra ivelan'ny soso-kevitra raha mbola misokatra ny fanamarinana. Tsy hangatahina aminao intsony ity fanamafisana ity.",
+      "overwriteEditConfirmOne": "Esory ilay soso-kevitra ary tehirizo ny fanovako",
+      "overwriteEditConfirmMany": "Esory ny soso-kevitra {count} ary tehirizo ny fanovako",
+      "suggestionDroppedOne": "Voasesy ilay soso-kevitra — nanova ny anjara lahatsorany ianao.",
+      "suggestionDroppedMany": "Soso-kevitra {count} voasesy — nanova ny anjara lahatsorany ianao.",
+      "pendingRunActionTranslate": "Mandika indray",
+      "pendingRunActionAssess": "Mamerenana fanombanana"
     },
     "document": {
       "emptyTitle": "Lazao ny antontan-taratasy ilainao",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Mihoatra ny fetra amin'ny tarehintsoratra {over} ity rubric ity. Alefa amin'ny fanombanana tsirairay izany, ka tsy maintsy ahena alohan'ny fampiasana ity fepetra ity.",
       "guides": "Torolàlana avy amin'ny fikambanana",
       "guidesOptgroup": "Torolàlana avy amin'ny fikambanana",
-      "guideUnavailable": "Tsy misy ny torolàlana"
+      "guideUnavailable": "Tsy misy ny torolàlana",
+      "overwriteEditTitle": "Fanovana lahatsoratra soso-kevitra",
+      "overwriteEditMessage": "Ity lahatsoratra ity dia mbola misy soso-kevitra miandry. Raha manitsy dia esorina ilay soso-kevitra — mifindra ho amin'ny lisitra \"tsy nampiharina\" izy, izay mbola azonao averina. Azonao atao malalaka ny manitsy ny lahatsoratra ivelan'ny soso-kevitra raha mbola misokatra ny fanamarinana. Tsy hangatahina aminao intsony ity fanamafisana ity.",
+      "overwriteEditConfirmOne": "Esory ilay soso-kevitra ary havaozy",
+      "overwriteEditConfirmMany": "Esory ny soso-kevitra {count} ary havaozy",
+      "suggestionDroppedOne": "Voasesy ilay soso-kevitra — nanova ny anjara lahatsorany ianao.",
+      "suggestionDroppedMany": "Soso-kevitra {count} voasesy — nanova ny anjara lahatsorany ianao.",
+      "pendingRunActionRevise": "Manitsy ny antontan-taratasy",
+      "pendingRunActionAssess": "Mamerenana fanombanana"
     },
     "data": {
       "emptyTitle": "Ampidiro angon-drakitra hojerena",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "tsy voatery",
       "guideSourceTerm": "Teny niaviana",
       "guideTargetTerm": "Dikan-teny takiana",
-      "guideNote": "Fanamarihana"
+      "guideNote": "Fanamarihana",
+      "pendingRun": {
+        "title": "Soso-kevitra {count} mbola miandry",
+        "body": "Afaka manova faritra rehetra ao amin'ny lahatsoratra ny {action}, anisan'izany ireo misy soso-kevitra mbola tsy noraisinao fanapahan-kevitra, ary soloan'ny fanombanana vaovao ny lisitra ankehitriny. Raiso aloha ny fanapahan-kevitra amin'ireo sisa.",
+        "acceptAll": "Ekeo daholo ny sisa rehetra",
+        "rejectAll": "Lavina daholo",
+        "cancel": "Nofoanana"
+      }
     }
   },
   "connectors": {

@@ -2815,7 +2815,17 @@
       "guides": "Gid òganizasyon",
       "organizationTerminology": "Tèminoloji òganizasyon",
       "noOrganizationTerminology": "Pa gen tèminoloji òganizasyon",
-      "terminologyGuideUnavailable": "Gid pa disponib"
+      "terminologyGuideUnavailable": "Gid pa disponib",
+      "editingPendingHint": "{count} sijesyon ann atant — yo pa make pandan wap modifye, epi si ou tape sou yo, ou efase yo.",
+      "editingPendingHintOne": "1 sijesyon ann atant — li pa make pandan wap modifye, epi si ou tape sou li, ou efase li.",
+      "overwriteEditTitle": "Wap modifye yon pasaj ki te sijere",
+      "overwriteEditMessage": "Tèk sa a gen yon sijesyon ann atant. Si ou modifye li, wap efase sijesyon an — li ap pase \"pa aplike\" nan lis revizyon an, kote ou toujou ka anile sa. Ou ka modifye tèk ki pa sijesyon lib pandan revizyon an ouvè. Yo pap mande ou ankò.",
+      "overwriteEditConfirmOne": "Efase sijesyon an epi kenbe chanjman mwen",
+      "overwriteEditConfirmMany": "Efase {count} sijesyon epi kenbe chanjman mwen",
+      "suggestionDroppedOne": "Sijesyon efase — ou modifye pasaj li a.",
+      "suggestionDroppedMany": "{count} sijesyon efase — ou modifye pasaj yo.",
+      "pendingRunActionTranslate": "Nap tradui ankò",
+      "pendingRunActionAssess": "Nap re-evalye"
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Ribrik sa depase pa {over} karaktè. Li voye ak chak evalyasyon, kidonk ou dwe koupe l avan ou ka itilize kritè sa a.",
       "guides": "Gid òganizasyon",
       "guidesOptgroup": "Gid òganizasyon",
-      "guideUnavailable": "Gid pa disponib"
+      "guideUnavailable": "Gid pa disponib",
+      "overwriteEditTitle": "Wap modifye yon pasaj ki te sijere",
+      "overwriteEditMessage": "Tèk sa a gen yon sijesyon ann atant. Si ou modifye li, wap efase sijesyon an — li ap pase \"pa aplike\" nan lis revizyon an, kote ou toujou ka anile sa. Ou ka modifye tèk ki pa sijesyon lib pandan revizyon an ouvè. Yo pap mande ou ankò.",
+      "overwriteEditConfirmOne": "Efase sijesyon an epi modifye",
+      "overwriteEditConfirmMany": "Efase {count} sijesyon epi modifye",
+      "suggestionDroppedOne": "Sijesyon efase — ou modifye pasaj li a.",
+      "suggestionDroppedMany": "{count} sijesyon efase — ou modifye pasaj yo.",
+      "pendingRunActionRevise": "Nap revize dokiman an",
+      "pendingRunActionAssess": "Nap re-evalye"
     },
     "data": {
       "emptyTitle": "Enpòte done pou analize",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "opsyonèl",
       "guideSourceTerm": "Tèm sous",
       "guideTargetTerm": "Tradiksyon obligatwa",
-      "guideNote": "Nòt"
+      "guideNote": "Nòt",
+      "pendingRun": {
+        "title": "{count} sijesyon toujou ann atant",
+        "body": "{action} ka modifye nenpòt pati nan tèk la, enkli pasaj ki gen sijesyon ou poko deside, epi yon nouvo evalyasyon pral ranplase lis aktyèl la. Fè chwa w sou rès sijesyon yo anvan.",
+        "acceptAll": "Aksepte tout rès yo",
+        "rejectAll": "Rejte tout",
+        "cancel": "Anile"
+      }
     }
   },
   "connectors": {

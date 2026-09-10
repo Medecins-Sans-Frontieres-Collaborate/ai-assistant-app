@@ -2815,7 +2815,17 @@
       "guides": "Gidooji ngesaaji jaɓɓorgo",
       "organizationTerminology": "Luggii jaɓɓorgo",
       "noOrganizationTerminology": "Luggii jaɓɓorgo alaa",
-      "terminologyGuideUnavailable": "Gido alaa"
+      "terminologyGuideUnavailable": "Gido alaa",
+      "editingPendingHint": "{count} gollal ndiyam — wonaa laatnude so tawii ina defteede, tee so a deftee kesum, gollal ngol mbaydi.",
+      "editingPendingHintOne": "Gollal ndiyam 1 — wonaa laatnude so tawii ina defteede, tee so a deftee, gollal ngol mbaydi.",
+      "overwriteEditTitle": "Defteede fiilan gollal",
+      "overwriteEditMessage": "Ndaɗo on gollal ndiyam. So a deftee, gollal ngol mbaydi — ina waawni e “mbaydi” e lenyol caɗeele, tee aɗa waawi neɗɗa. Ndaɗo ɗiɗi kala bana gollal waawi defteede so lenyol caɗeele uddita. Wonaa waawi laawol nbawtora e jogorɗe.",
+      "overwriteEditConfirmOne": "Mbaydi gollal ngol tee jokkondir yam defte",
+      "overwriteEditConfirmMany": "Mbaydi {count} gollal tee jokkondir yam defte",
+      "suggestionDroppedOne": "Gollal ngol mbaydi — a deftee ndaɗo makko.",
+      "suggestionDroppedMany": "{count} gollal mbaydi — a deftee ndaɗo makko.",
+      "pendingRunActionTranslate": "Ina tuɓɓitere e yimɓe",
+      "pendingRunActionAssess": "Ina rewisira"
     },
     "document": {
       "emptyTitle": "Winndu lan binndi dannde maa",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Rubric on ko {over} ɓirtaari ɓuri doole. Ko ɗum feewi waɗude e caɗeele kala, kono ɗum waawi so tawtii e dow laabi.",
       "guides": "Gidooji ngesaaji jaɓɓorgo",
       "guidesOptgroup": "Gidooji ngesaaji jaɓɓorgo",
-      "guideUnavailable": "Gido alaa"
+      "guideUnavailable": "Gido alaa",
+      "overwriteEditTitle": "Defteede fiilan gollal",
+      "overwriteEditMessage": "Ndaɗo on gollal ndiyam. So a deftee, gollal ngol mbaydi — ina waawni e “mbaydi” e lenyol caɗeele, tee aɗa waawi neɗɗa. Ndaɗo ɗiɗi kala bana gollal waawi defteede so lenyol caɗeele uddita. Wonaa waawi laawol nbawtora e jogorɗe.",
+      "overwriteEditConfirmOne": "Mbaydi gollal ngol tee defte",
+      "overwriteEditConfirmMany": "Mbaydi {count} gollal tee defte",
+      "suggestionDroppedOne": "Gollal ngol mbaydi — a deftee ndaɗo makko.",
+      "suggestionDroppedMany": "{count} gollal mbaydi — a deftee ndaɗo makko.",
+      "pendingRunActionRevise": "Ina defteende dokumint",
+      "pendingRunActionAssess": "Ina rewisira"
     },
     "data": {
       "emptyTitle": "Kilot data ngol analiseede",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "majju jam",
       "guideSourceTerm": "Luggi nganndu",
       "guideTargetTerm": "Pularnde juulnde",
-      "guideNote": "Tilasta"
+      "guideNote": "Tilasta",
+      "pendingRun": {
+        "title": "{count} gollal ndiyam mbaydi",
+        "body": "{action} ina waawi waylita dee caɗeele doronto, e ndaɗo ɗiɗi feewi gollal maa a ene jogiima, tee rewisar makko bayyi lenyol ngol yimɓe. Fiññi e gollal mbaydi.",
+        "acceptAll": "Tawi gollal fow mbaydi",
+        "rejectAll": "Mbaydi fow",
+        "cancel": "Haay"
+      }
     }
   },
   "connectors": {

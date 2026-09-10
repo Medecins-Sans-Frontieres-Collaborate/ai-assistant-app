@@ -2815,7 +2815,17 @@
       "guides": "Imfashanyigisho z’umuryango",
       "organizationTerminology": "Imvugo ikoreshwa n’umuryango",
       "noOrganizationTerminology": "Nta mvugo y’umuryango ihari",
-      "terminologyGuideUnavailable": "Imfashanyigisho ntiboneka"
+      "terminologyGuideUnavailable": "Imfashanyigisho ntiboneka",
+      "editingPendingHint": "Hari {count} byifuzo bitaremezwa — ntibigarazwa mugihe uri gukora impinduka, kandi iyo wanditseho, biremezwa.",
+      "editingPendingHintOne": "Hari igitekerezo 1 kitaremezwa — ntikigaragara mugihe uri gukora impinduka, kandi iyo wanditseho, kiremezwa.",
+      "overwriteEditTitle": "Uri gukora impinduka ku gitekerezo cyatanzwe",
+      "overwriteEditMessage": "Iyi nyandiko ifite igitekerezo kitarasuzumwa. Kugikoraho bigihagarika — gihita kijya mu “ntabwo byashyizweho” ku rutonde rwo gusesengura, kandi ushobora gusubiza inyuma icyo gikorwa. Inyandiko itarimo ibitekerezo ishobora guhindurwa uko ubishaka mugihe isuzuma rifunguye. Ntuzongera kubibazwa.",
+      "overwriteEditConfirmOne": "Hagarika igitekerezo ariko wemeze impinduka zanjye",
+      "overwriteEditConfirmMany": "Hagarika ibitekerezo {count} ariko wemeze impinduka zanjye",
+      "suggestionDroppedOne": "Igitekerezo gihagaritswe — wahinduye aho cyari kiri.",
+      "suggestionDroppedMany": "Ibitekerezo {count} byahagaritswe — wahinduye aho byari biri.",
+      "pendingRunActionTranslate": "Kongera guhindura",
+      "pendingRunActionAssess": "Kongera gusesengura"
     },
     "document": {
       "emptyTitle": "Sobanura inyandiko ushaka",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Iyi rubric irengeje inyuguti {over} zemewe. Iyoherezwa hamwe n'ubugenzuzi bwose, bityo igomba kugabanywa mbere yo gukoreshwa muri iki gipimo.",
       "guides": "Imfashanyigisho z’umuryango",
       "guidesOptgroup": "Imfashanyigisho z’umuryango",
-      "guideUnavailable": "Imfashanyigisho ntiboneka"
+      "guideUnavailable": "Imfashanyigisho ntiboneka",
+      "overwriteEditTitle": "Uri gukora impinduka ku gitekerezo cyatanzwe",
+      "overwriteEditMessage": "Iyi nyandiko ifite igitekerezo kitarasuzumwa. Kugikoraho bigihagarika — gihita kijya mu “ntabwo byashyizweho” ku rutonde rwo gusesengura, kandi ushobora gusubiza inyuma icyo gikorwa. Inyandiko itarimo ibitekerezo ishobora guhindurwa uko ubishaka mugihe isuzuma rifunguye. Ntuzongera kubibazwa.",
+      "overwriteEditConfirmOne": "Hagarika igitekerezo kandi uhindure",
+      "overwriteEditConfirmMany": "Hagarika ibitekerezo {count} kandi uhindure",
+      "suggestionDroppedOne": "Igitekerezo gihagaritswe — wahinduye aho cyari kiri.",
+      "suggestionDroppedMany": "Ibitekerezo {count} byahagaritswe — wahinduye aho byari biri.",
+      "pendingRunActionRevise": "Gukosora inyandiko",
+      "pendingRunActionAssess": "Kongera gusesengura"
     },
     "data": {
       "emptyTitle": "Injiza amakuru kugirango asuzumwe",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "si ngombwa",
       "guideSourceTerm": "Ijambo ry’inkomoko",
       "guideTargetTerm": "Ibisabwa guhindurwamo",
-      "guideNote": "Icyitonderwa"
+      "guideNote": "Icyitonderwa",
+      "pendingRun": {
+        "title": "Hari ibitekerezo {count} bigitegereje kwemezwa",
+        "body": "{action} birashobora guhindura igice icyo ari cyo cyose cy'inyandiko, harimo n'ibice biriho ibitekerezo utarafataho umwanzuro, kandi isuzuma rishya risimbura urutonde ruriho ubu. Banza ufate umwanzuro ku bisigaye.",
+        "acceptAll": "Emerera ibisigaye byose",
+        "rejectAll": "Hakana byose",
+        "cancel": "Hagarika"
+      }
     }
   },
   "connectors": {

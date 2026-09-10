@@ -2831,7 +2831,17 @@
       "guides": "Przewodniki organizacji",
       "organizationTerminology": "Terminologia organizacji",
       "noOrganizationTerminology": "Brak terminologii organizacji",
-      "terminologyGuideUnavailable": "Przewodnik niedostępny"
+      "terminologyGuideUnavailable": "Przewodnik niedostępny",
+      "editingPendingHint": "{count} sugestii oczekuje — nie są oznaczone podczas edycji, a ich nadpisanie usuwa sugestię.",
+      "editingPendingHintOne": "1 sugestia oczekuje — nie jest oznaczona podczas edycji, a jej nadpisanie usuwa sugestię.",
+      "overwriteEditTitle": "Edycja sugerowanego fragmentu",
+      "overwriteEditMessage": "Ten tekst ma oczekującą sugestię. Edytując go, usuwasz sugestię — zostaje przeniesiona do listy recenzji jako „niezastosowana”, gdzie nadal możesz to cofnąć. Tekst spoza sugestii możesz edytować swobodnie podczas trwającej recenzji. To pytanie nie pojawi się ponownie.",
+      "overwriteEditConfirmOne": "Usuń sugestię i zachowaj moją zmianę",
+      "overwriteEditConfirmMany": "Usuń {count} sugestii i zachowaj moją zmianę",
+      "suggestionDroppedOne": "Sugestia usunięta — edytowano jej fragment.",
+      "suggestionDroppedMany": "Usunięto {count} sugestii — edytowano ich fragmenty.",
+      "pendingRunActionTranslate": "Ponowne tłumaczenie",
+      "pendingRunActionAssess": "Ponowna ocena"
     },
     "document": {
       "emptyTitle": "Opisz dokument, który chcesz uzyskać",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Ta rubryka przekracza limit o {over} znaków. Jest wysyłana z każdą oceną, więc musi zostać skrócona, zanim taki kryterium będzie można użyć.",
       "guides": "Przewodniki organizacji",
       "guidesOptgroup": "Przewodniki organizacji",
-      "guideUnavailable": "Przewodnik niedostępny"
+      "guideUnavailable": "Przewodnik niedostępny",
+      "overwriteEditTitle": "Edycja sugerowanego fragmentu",
+      "overwriteEditMessage": "Ten tekst ma oczekującą sugestię. Edytując go, usuwasz sugestię — zostaje przeniesiona do listy recenzji jako „niezastosowana”, gdzie nadal możesz to cofnąć. Tekst spoza sugestii można edytować swobodnie podczas trwającej recenzji. To pytanie nie pojawi się ponownie.",
+      "overwriteEditConfirmOne": "Usuń sugestię i edytuj",
+      "overwriteEditConfirmMany": "Usuń {count} sugestii i edytuj",
+      "suggestionDroppedOne": "Sugestia usunięta — edytowano jej fragment.",
+      "suggestionDroppedMany": "Usunięto {count} sugestii — edytowano ich fragmenty.",
+      "pendingRunActionRevise": "Redagowanie dokumentu",
+      "pendingRunActionAssess": "Ponowna ocena"
     },
     "data": {
       "emptyTitle": "Zaimportuj dane do analizy",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "opcjonalne",
       "guideSourceTerm": "Termin źródłowy",
       "guideTargetTerm": "Wymagane tłumaczenie",
-      "guideNote": "Uwaga"
+      "guideNote": "Uwaga",
+      "pendingRun": {
+        "title": "{count} sugestii nadal oczekuje",
+        "body": "{action} może zmienić dowolną część tekstu, w tym fragmenty z sugestiami, których jeszcze nie zatwierdzono, a nowa ocena zastępuje bieżącą listę. Najpierw zdecyduj o pozostałych sugestiach.",
+        "acceptAll": "Akceptuj wszystkie pozostałe",
+        "rejectAll": "Odrzuć wszystkie",
+        "cancel": "Anuluj"
+      }
     }
   },
   "connectors": {

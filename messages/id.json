@@ -2831,7 +2831,17 @@
       "guides": "Panduan organisasi",
       "organizationTerminology": "Terminologi organisasi",
       "noOrganizationTerminology": "Tidak ada terminologi organisasi",
-      "terminologyGuideUnavailable": "Panduan tidak tersedia"
+      "terminologyGuideUnavailable": "Panduan tidak tersedia",
+      "editingPendingHint": "{count} saran tertunda — tidak ditandai saat mengedit, dan menimpa dengan mengetik akan menghapusnya.",
+      "editingPendingHintOne": "1 saran tertunda — tidak ditandai saat mengedit, dan menimpa dengan mengetik akan menghapusnya.",
+      "overwriteEditTitle": "Mengedit bagian yang disarankan",
+      "overwriteEditMessage": "Teks ini memiliki saran yang tertunda. Mengeditnya akan menghapus saran tersebut — saran akan dipindahkan ke daftar review sebagai “tidak diterapkan”, dan Anda masih dapat membatalkannya. Teks di luar saran dapat diedit bebas selama review berlangsung. Anda tidak akan diminta konfirmasi lagi.",
+      "overwriteEditConfirmOne": "Hapus saran dan simpan perubahan saya",
+      "overwriteEditConfirmMany": "Hapus {count} saran dan simpan perubahan saya",
+      "suggestionDroppedOne": "Saran dihapus — Anda telah mengedit bagiannya.",
+      "suggestionDroppedMany": "{count} saran dihapus — Anda telah mengedit bagiannya.",
+      "pendingRunActionTranslate": "Menerjemahkan ulang",
+      "pendingRunActionAssess": "Menilai ulang"
     },
     "document": {
       "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Rubrik ini {over} karakter melebihi batas. Rubrik ini dikirim dengan setiap penilaian, sehingga harus dipangkas sebelum kriteria ini dapat digunakan.",
       "guides": "Panduan organisasi",
       "guidesOptgroup": "Panduan organisasi",
-      "guideUnavailable": "Panduan tidak tersedia"
+      "guideUnavailable": "Panduan tidak tersedia",
+      "overwriteEditTitle": "Mengedit bagian yang disarankan",
+      "overwriteEditMessage": "Teks ini memiliki saran yang tertunda. Mengeditnya akan menghapus saran tersebut — saran akan dipindahkan ke daftar review sebagai “tidak diterapkan”, dan Anda masih dapat membatalkannya. Teks di luar saran dapat diedit bebas selama review berlangsung. Anda tidak akan diminta konfirmasi lagi.",
+      "overwriteEditConfirmOne": "Hapus saran dan edit",
+      "overwriteEditConfirmMany": "Hapus {count} saran dan edit",
+      "suggestionDroppedOne": "Saran dihapus — Anda telah mengedit bagiannya.",
+      "suggestionDroppedMany": "{count} saran dihapus — Anda telah mengedit bagiannya.",
+      "pendingRunActionRevise": "Merevisi dokumen",
+      "pendingRunActionAssess": "Menilai ulang"
     },
     "data": {
       "emptyTitle": "Impor data untuk dianalisis",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "opsional",
       "guideSourceTerm": "Istilah sumber",
       "guideTargetTerm": "Terjemahan wajib",
-      "guideNote": "Catatan"
+      "guideNote": "Catatan",
+      "pendingRun": {
+        "title": "{count} saran masih tertunda",
+        "body": "{action} dapat mengubah bagian mana pun dari teks, termasuk bagian yang memiliki saran yang belum Anda putuskan, dan penilaian baru akan menggantikan daftar saat ini. Selesaikan sisa saran terlebih dahulu.",
+        "acceptAll": "Terima semua sisa",
+        "rejectAll": "Tolak semua",
+        "cancel": "Batal"
+      }
     }
   },
   "connectors": {

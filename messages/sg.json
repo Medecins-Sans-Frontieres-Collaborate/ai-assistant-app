@@ -2815,7 +2815,17 @@
       "guides": "Dörö tî organisation",
       "organizationTerminology": "Sû tî organisation",
       "noOrganizationTerminology": "Sû tî organisation apëpe",
-      "terminologyGuideUnavailable": "Dörö apêpe"
+      "terminologyGuideUnavailable": "Dörö apêpe",
+      "editingPendingHint": "{count} likambeni na ndéngbi ti gbara — a ke ti zo marka na yângâ, na yângâ mo yeke na kodro, sô ayeke na mo na kodro a ga su mo.",
+      "editingPendingHintOne": "Likambeni eke kaka oko ti gba — a ke ti zo marka na yângâ, na yângâ mo yeke na kodro, sô ayeke na mo na kodro a ga su mo.",
+      "overwriteEditTitle": "Na yângâ likambeni tiko",
+      "overwriteEditMessage": "Mo na likambeni ti ke na ndéngbi ti gba. Sô mo yângâ na mo, likambeni ti gba na su — a ye na “ngunda na siriri” na mbiye ti tîrî ti balêgi, mo sô bê tîrî na wâ. Tekê na mbênî a be, na yângâ na ndângô biani likambeni, mo kenè na yângâ na yângâ. Kozo na biani na mo ga kotî na mo maye.",
+      "overwriteEditConfirmOne": "Su likambeni ti gba na kâ na yângâ ti mbi",
+      "overwriteEditConfirmMany": "Su {count} likambeni ti gba na kâ na yângâ ti mbi",
+      "suggestionDroppedOne": "Likambeni ti gba na su — mo yângâ na bagian na mo.",
+      "suggestionDroppedMany": "{count} likambeni ti gba na su — mo yângâ na bagian na wâne.",
+      "pendingRunActionTranslate": "Na zîngîti mbi na translate",
+      "pendingRunActionAssess": "Na zîgü ti analyze"
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Rubric ti lo ayeke {over} caractère tî sô a sû tî tolé. Lo yeke falé na assessment kûê-kûê, ala lo köta mbïrï sô lo yeke ti yeke ïrïti criterion sô.",
       "guides": "Dörö tî organisation",
       "guidesOptgroup": "Dörö tî organisation",
-      "guideUnavailable": "Dörö apêpe"
+      "guideUnavailable": "Dörö apêpe",
+      "overwriteEditTitle": "Na yângâ likambeni tiko",
+      "overwriteEditMessage": "Mo na likambeni ti ke na ndéngbi ti gba. Sô mo yângâ na mo, likambeni ti gba na su — a ye na “ngunda na siriri” na mbiye ti tîrî ti balêgi, mo sô bê tîrî na wâ. Tekê na mbênî a be, na yângâ na ndângô biani likambeni, mo kenè na yângâ na yângâ. Kozo na biani na mo ga kotî na mo maye.",
+      "overwriteEditConfirmOne": "Su likambeni ti gba na yângâ",
+      "overwriteEditConfirmMany": "Su {count} likambeni ti gba na yângâ",
+      "suggestionDroppedOne": "Likambeni ti gba na su — mo yângâ na bagian na mo.",
+      "suggestionDroppedMany": "{count} likambeni ti gba na su — mo yângâ na bagian na wâne.",
+      "pendingRunActionRevise": "Na bê tîrî ti document",
+      "pendingRunActionAssess": "Na zîgü ti analyze"
     },
     "data": {
       "emptyTitle": "Mandra data tî anali",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "ngbangbangû",
       "guideSourceTerm": "Dungö tî bôkô",
       "guideTargetTerm": "Sû tî hùndângö",
-      "guideNote": "Küê"
+      "guideNote": "Küê",
+      "pendingRun": {
+        "title": "{count} likambeni ti ke na ndéngbi ti gba",
+        "body": "{action} apê na yângâ mbi na ndângô biani, da mbi ti likambeni ti ke na ndéngbi ti gba sô mo sise kwê na mo, na zîgü mbênî apê na yângâ mbi siriri. Asekia likambeni ti gba na biani na yeke.",
+        "acceptAll": "Kwê so likambeni ti gba na biani",
+        "rejectAll": "Su a na biani",
+        "cancel": "Nzo"
+      }
     }
   },
   "connectors": {

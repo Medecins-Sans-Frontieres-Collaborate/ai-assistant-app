@@ -2831,7 +2831,17 @@
       "guides": "Organisationsguider",
       "organizationTerminology": "Organisationens terminologi",
       "noOrganizationTerminology": "Ingen organisationsterminologi",
-      "terminologyGuideUnavailable": "Guide ej tillgänglig"
+      "terminologyGuideUnavailable": "Guide ej tillgänglig",
+      "editingPendingHint": "{count} förslag väntar — de markeras inte när du redigerar, och om du skriver över ett tas det bort.",
+      "editingPendingHintOne": "1 förslag väntar — det markeras inte när du redigerar, och om du skriver över det tas det bort.",
+      "overwriteEditTitle": "Redigerar ett föreslaget avsnitt",
+      "overwriteEditMessage": "Den här texten har ett väntande förslag. Om du redigerar tas förslaget bort — det hamnar under ”ej tillämpade” i granskningslistan, där du fortfarande kan ångra. Text utanför förslag kan redigeras fritt medan en granskning är öppen. Du kommer inte få denna fråga igen.",
+      "overwriteEditConfirmOne": "Ta bort förslaget och behåll min ändring",
+      "overwriteEditConfirmMany": "Ta bort {count} förslag och behåll min ändring",
+      "suggestionDroppedOne": "Förslag borttaget — du redigerade dess avsnitt.",
+      "suggestionDroppedMany": "{count} förslag borttagna — du redigerade deras avsnitt.",
+      "pendingRunActionTranslate": "Översätter igen",
+      "pendingRunActionAssess": "Omvärderar"
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Denna rubrik överskrider gränsen med {over} tecken. Den skickas med varje bedömning och måste förkortas innan detta kriterium kan användas.",
       "guides": "Organisationsguider",
       "guidesOptgroup": "Organisationsguider",
-      "guideUnavailable": "Guide ej tillgänglig"
+      "guideUnavailable": "Guide ej tillgänglig",
+      "overwriteEditTitle": "Redigerar ett föreslaget avsnitt",
+      "overwriteEditMessage": "Den här texten har ett väntande förslag. Om du redigerar tas förslaget bort — det hamnar under ”ej tillämpade” i granskningslistan, där du fortfarande kan ångra. Text utanför förslag kan redigeras fritt medan en granskning är öppen. Du kommer inte få denna fråga igen.",
+      "overwriteEditConfirmOne": "Ta bort förslaget och redigera",
+      "overwriteEditConfirmMany": "Ta bort {count} förslag och redigera",
+      "suggestionDroppedOne": "Förslag borttaget — du redigerade dess avsnitt.",
+      "suggestionDroppedMany": "{count} förslag borttagna — du redigerade deras avsnitt.",
+      "pendingRunActionRevise": "Reviderar dokumentet",
+      "pendingRunActionAssess": "Omvärderar"
     },
     "data": {
       "emptyTitle": "Importera data för analys",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "valfri",
       "guideSourceTerm": "Källterm",
       "guideTargetTerm": "Obligatorisk översättning",
-      "guideNote": "Notering"
+      "guideNote": "Notering",
+      "pendingRun": {
+        "title": "{count} förslag väntar fortfarande",
+        "body": "{action} kan ändra alla delar av texten, även avsnitt med förslag du inte bestämt om än, och en ny utvärdering ersätter den nuvarande listan. Ta ställning till de återstående förslagen först.",
+        "acceptAll": "Acceptera alla återstående",
+        "rejectAll": "Avslå alla",
+        "cancel": "Avbryt"
+      }
     }
   },
   "connectors": {

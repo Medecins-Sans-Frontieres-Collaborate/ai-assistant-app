@@ -2831,7 +2831,17 @@
       "guides": "מדריכי הארגון",
       "organizationTerminology": "מונחי הארגון",
       "noOrganizationTerminology": "אין מונחי ארגון",
-      "terminologyGuideUnavailable": "המדריך אינו זמין"
+      "terminologyGuideUnavailable": "המדריך אינו זמין",
+      "editingPendingHint": "{count} הצעות ממתינות — הן אינן מסומנות במהלך העריכה, וכתיבה מעליהן תסיר אותן.",
+      "editingPendingHintOne": "הצעה אחת ממתינה — היא אינה מסומנת במהלך העריכה, וכתיבה מעליה תסיר אותה.",
+      "overwriteEditTitle": "עריכת קטע מוצע",
+      "overwriteEditMessage": "לטקסט הזה יש הצעה ממתינה. עריכתו תסיר את ההצעה — היא תעבור ל\"לא יושמה\" ברשימת הסקירה, שם ניתן לבטל זאת. טקסט שאינו חלק מהצעות ניתן לערוך בחופשיות כאשר הסקירה פתוחה. לא תישאל שוב.",
+      "overwriteEditConfirmOne": "הסר את ההצעה ושמור את השינוי שלי",
+      "overwriteEditConfirmMany": "הסר {count} הצעות ושמור את השינוי שלי",
+      "suggestionDroppedOne": "ההצעה הוסרה — ערכת את הקטע שלה.",
+      "suggestionDroppedMany": "{count} הצעות הוסרו — ערכת את הקטעים שלהן.",
+      "pendingRunActionTranslate": "תרגום מחדש",
+      "pendingRunActionAssess": "הערכה מחדש"
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "המדריך הזה חורג ב-{over} תווים מהמגבלה. הוא נשלח עם כל הערכה, לכן יש לקצר אותו לפני שניתן יהיה להשתמש בקריטריון זה.",
       "guides": "מדריכי הארגון",
       "guidesOptgroup": "מדריכי הארגון",
-      "guideUnavailable": "המדריך אינו זמין"
+      "guideUnavailable": "המדריך אינו זמין",
+      "overwriteEditTitle": "עריכת קטע מוצע",
+      "overwriteEditMessage": "לטקסט הזה יש הצעה ממתינה. עריכתו תסיר את ההצעה — היא תעבור ל\"לא יושמה\" ברשימת הסקירה, שם ניתן לבטל זאת. טקסט שאינו חלק מהצעות ניתן לערוך בחופשיות כאשר הסקירה פתוחה. לא תישאל שוב.",
+      "overwriteEditConfirmOne": "הסר את ההצעה וערוך",
+      "overwriteEditConfirmMany": "הסר {count} הצעות וערוך",
+      "suggestionDroppedOne": "ההצעה הוסרה — ערכת את הקטע שלה.",
+      "suggestionDroppedMany": "{count} הצעות הוסרו — ערכת את הקטעים שלהן.",
+      "pendingRunActionRevise": "מתקן את המסמך",
+      "pendingRunActionAssess": "הערכה מחדש"
     },
     "data": {
       "emptyTitle": "ייבאו נתונים לניתוח",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "רשות",
       "guideSourceTerm": "מונח מקור",
       "guideTargetTerm": "תרגום דרוש",
-      "guideNote": "הערה"
+      "guideNote": "הערה",
+      "pendingRun": {
+        "title": "{count} הצעות עדיין ממתינות",
+        "body": "{action} עשוי לשנות כל חלק בטקסט, כולל קטעים עם הצעות שעדיין לא החלטת עליהן, והערכה חדשה תחליף את הרשימה הנוכחית. אנא הכר תחילה לגבי ההצעות שנותרו.",
+        "acceptAll": "אשר את כל הנותרים",
+        "rejectAll": "דחה את כולם",
+        "cancel": "ביטול"
+      }
     }
   },
   "connectors": {

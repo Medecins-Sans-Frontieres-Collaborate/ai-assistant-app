@@ -2831,7 +2831,17 @@
       "guides": "የድርጅቱ መመሪያዎች",
       "organizationTerminology": "የድርጅቱ ቃላት",
       "noOrganizationTerminology": "የድርጅቱ ቃላት የሉም",
-      "terminologyGuideUnavailable": "መመሪያ አልተገኘም"
+      "terminologyGuideUnavailable": "መመሪያ አልተገኘም",
+      "editingPendingHint": "{count} ጥያቄዎች በትዕዛዝ ላይ ናቸው — በማረም ወቅት አይከታተሉም፣ እና ከፍ ላይ ሲፃፉ ይበሉ።",
+      "editingPendingHintOne": "1 ጥያቄ በትዕዛዝ ላይ ነው — በማረም ወቅት አይከታተልም፣ እና ከፍ ላይ ሲፃፉ ይበላል።",
+      "overwriteEditTitle": "የተጠየቀ ክፍል በማረም ላይ",
+      "overwriteEditMessage": "ይህ ጽሑፍ ገና ያልተወሰነ ጥያቄ አለው። ማረማት ጥያቄውን ይነሳበታል — ማቅረቡ 'አልተተገበረም' በሚባለው ዝርዝር ይገባል፣ እዚያም መተው አልፎ ማንሳት ይችላሉ። በጥያቄ ውስጥ ያልሆኑ ጽሑፎች በክፍት ግምገማ ወቅት በነፃ ማረም ይችላሉ። ይህን መተው አትጠየቁም።",
+      "overwriteEditConfirmOne": "ጥያቄውን ተውና ለውጤዬን አቆይ",
+      "overwriteEditConfirmMany": "{count} ጥያቄዎችን ተውና ለውጤዬን አቆይ",
+      "suggestionDroppedOne": "ጥያቄው ተተውቷል — ክፍሉን ማርከዋትናችው።",
+      "suggestionDroppedMany": "{count} ጥያቄዎች ተተውቷል — ክፍላቸውን ማረምካችው።",
+      "pendingRunActionTranslate": "እንደገና ትርጉም በማድረግ ላይ",
+      "pendingRunActionAssess": "በድጋሚ ግምገማ በማድረግ ላይ"
     },
     "document": {
       "emptyTitle": "የሚፈልጉትን ሰነድ ይግለጹ",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "ይህ ሩብሪክ {over} ቁምፊ ከወሰኑ በላይ ነው። ከእያንዳንዱ ግምገማ ጋር ይላካል፣ ስለዚህ ከዚህ በፊት መቀነስ አለበት።",
       "guides": "የድርጅቱ መመሪያዎች",
       "guidesOptgroup": "የድርጅቱ መመሪያዎች",
-      "guideUnavailable": "መመሪያ አልተገኘም"
+      "guideUnavailable": "መመሪያ አልተገኘም",
+      "overwriteEditTitle": "የተጠየቀ ክፍል በማረም ላይ",
+      "overwriteEditMessage": "ይህ ጽሑፍ ገና ያልተወሰነ ጥያቄ አለው። ማረማት ጥያቄውን ይነሳበታል — ማቅረቡ 'አልተተገበረም' በሚባለው ዝርዝር ይገባል፣ እዚያም መተው አልፎ ማንሳት ይችላሉ። በጥያቄ ውስጥ ያልሆኑ ጽሑፎች በክፍት ግምገማ ወቅት በነፃ ማረም ይችላሉ። ይህን መተው አትጠየቁም።",
+      "overwriteEditConfirmOne": "ጥያቄውን ተውና ያስተካክሉ",
+      "overwriteEditConfirmMany": "{count} ጥያቄዎችን ተውና ያስተካክሉ",
+      "suggestionDroppedOne": "ጥያቄው ተተውቷል — ክፍሉን ማርከዋትናችው።",
+      "suggestionDroppedMany": "{count} ጥያቄዎች ተተውቷል — ክፍላቸውን ማረምካችው።",
+      "pendingRunActionRevise": "ዶክመንቱን በማስተካከል ላይ",
+      "pendingRunActionAssess": "በድጋሚ ግምገማ በማድረግ ላይ"
     },
     "data": {
       "emptyTitle": "ለትንተና ውሂብ አስገባ",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "አማራጭ",
       "guideSourceTerm": "የመነሻ ቃል",
       "guideTargetTerm": "አስፈላጊ ትርጉም",
-      "guideNote": "ማስታወሻ"
+      "guideNote": "ማስታወሻ",
+      "pendingRun": {
+        "title": "{count} ጥያቄዎች ገና በትዕዛዝ ላይ ናቸው",
+        "body": "{action} የጽሑፉን ማንኛውንም ክፍል ሊቀይር ይችላል፣ ገና ውሳኔ ላይ ያልወሰኑትን ጥያቄዎች ጨምሮ፣ እና አዲሱ ግምገማ አሁኑን ዝርዝር ይቀይራል። ቀሪዎቹን ጥያቄዎች መመርጥ አስቀድሞ ይውሰኑ።",
+        "acceptAll": "ሁሉንም ቀሪዎቹን ይቀበሉ",
+        "rejectAll": "ሁሉንም ይተዉ",
+        "cancel": "ይቅር"
+      }
     }
   },
   "connectors": {

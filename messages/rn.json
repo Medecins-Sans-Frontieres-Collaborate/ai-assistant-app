@@ -2815,7 +2815,17 @@
       "guides": "Imfashanyigisho z'ishirahamwe",
       "organizationTerminology": "Inyito z'ishirahamwe",
       "noOrganizationTerminology": "Nta nyito z'ishirahamwe",
-      "terminologyGuideUnavailable": "Imfashanyigisho ntiboneka"
+      "terminologyGuideUnavailable": "Imfashanyigisho ntiboneka",
+      "editingPendingHint": "Ivyiyumviro {count} birategereje — ntivyerekanwa uri imbere yo kubihindura, kandi nukandika hejuru yabyo biboneka.",
+      "editingPendingHintOne": "Iciyumviro 1 kirategereje — nticanditswe uri imbere yo kugihindura, kandi nukandika hejuru yaco kiravaho.",
+      "overwriteEditTitle": "Uriko urahindura igice catanze iciyumviro",
+      "overwriteEditMessage": "Iri jambo rifise iciyumviro kirindiriye kwemezwa. Ugihinduye iciyumviro kirahita kivaho — kijanwa mu “nticashizweko” ku rutonde rw’ugusuzuma, aho ushobora kugisubizayo. Ahandi hatariho ivyiyumviro urashobora kuhahindura uko ushaka igihe ugusuzuma kugifunguye. Ntuza sababwa kandi.",
+      "overwriteEditConfirmOne": "Bireke iciyumviro, umpeze ihinduka ryanje",
+      "overwriteEditConfirmMany": "Bireke ivyiyumviro {count}, umpeze ihinduka ryanje",
+      "suggestionDroppedOne": "Iciyumviro kirakuwemo — wahinduye igice caco.",
+      "suggestionDroppedMany": "Ivyiyumviro {count} birakuwemo — wahinduye ibice vyavyo.",
+      "pendingRunActionTranslate": "Kuri gusubiramwo ubusubirizi",
+      "pendingRunActionAssess": "Kuri gusubiramwo isuzuma"
     },
     "document": {
       "emptyTitle": "Sobanura igitabo ushaka",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Iyi rubric irarengeje inyuguti {over} kurenza urugero. Ijatwa hamwe n’iryo genzura ryose, bivanye n'ivyo, igomba kugabanuka imbere yo gukoreshwa.",
       "guides": "Imfashanyigisho z'ishirahamwe",
       "guidesOptgroup": "Imfashanyigisho z'ishirahamwe",
-      "guideUnavailable": "Imfashanyigisho ntiboneka"
+      "guideUnavailable": "Imfashanyigisho ntiboneka",
+      "overwriteEditTitle": "Uriko urahindura igice catanze iciyumviro",
+      "overwriteEditMessage": "Iri jambo rifise iciyumviro kirindiriye kwemezwa. Ugihinduye iciyumviro kirahita kivaho — kijanwa mu “nticashizweko” ku rutonde rw’ugusuzuma, aho ushobora kugisubizayo. Ahandi hatariho ivyiyumviro urashobora kuhahindura uko ushaka igihe ugusuzuma kugifunguye. Ntuza sababwa kandi.",
+      "overwriteEditConfirmOne": "Bireke iciyumviro ubone kugihindura",
+      "overwriteEditConfirmMany": "Bireke ivyiyumviro {count} ubone kugihindura",
+      "suggestionDroppedOne": "Iciyumviro kirakuwemo — wahinduye igice caco.",
+      "suggestionDroppedMany": "Ivyiyumviro {count} birakuwemo — wahinduye ibice vyavyo.",
+      "pendingRunActionRevise": "Uri gusubiramwo inyandiko",
+      "pendingRunActionAssess": "Kuri gusubiramwo isuzuma"
     },
     "data": {
       "emptyTitle": "Kwinjiza amakuru kugira usuzume",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "birashoboka",
       "guideSourceTerm": "Ijambo ry'inkomoko",
       "guideTargetTerm": "Inyandurizo isabwa",
-      "guideNote": "Icatumye"
+      "guideNote": "Icatumye",
+      "pendingRun": {
+        "title": "Ivyiyumviro {count} biracategereje",
+        "body": "{action} birashobora guhindura igice cose c'ijambo, harimwo n'ibice bifise ivyiyumviro utarafata ingingo, kandi isuzuma rishasha risubirira urutonde ruhari. Rabanza utohore ivyiyumviro vyasigaye.",
+        "acceptAll": "Emera vyose bisigaye",
+        "rejectAll": "Hakana vyose",
+        "cancel": "Sesa"
+      }
     }
   },
   "connectors": {

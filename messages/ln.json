@@ -2815,7 +2815,17 @@
       "guides": "Batoli ya organisation",
       "organizationTerminology": "Maloba ya organisation",
       "noOrganizationTerminology": "Maloba ya organisation ezali te",
-      "terminologyGuideUnavailable": "Motoli ezali te"
+      "terminologyGuideUnavailable": "Motoli ezali te",
+      "editingPendingHint": "Bokebi {count} ezali na kozela—ezalaka na elembo te ntango ozali kosala, mpe soki okomi likolo ya moko, esimbelaka te.",
+      "editingPendingHintOne": "Sugeransé 1 ezali na kozela—ezalaka na elembo te ntango ozali kosala, mpe soki okomi likolo nayo, esimbelaka te.",
+      "overwriteEditTitle": "Kosala mbongwana na eteni esengamaki",
+      "overwriteEditMessage": "Ndelo oyo ezali na sugeransé ezali na kozela. Kosala mbongwana wana ekosilisa sugeransé yango—ekokende na \"epesami te\" na liste ya revision, epai okoki naino kokitisa yango. Okoki kosala mbongwana na ndelo mosusu libre ntango revision efungami. Okotunamaka lisusu te.",
+      "overwriteEditConfirmOne": "Kanda sugeransé mpe tika mbongwana na ngai",
+      "overwriteEditConfirmMany": "Kanda sugeransé {count} mpe tika mbongwana na ngai",
+      "suggestionDroppedOne": "Sugeransé ekangami—osalaki mbongwana na eteni oyo.",
+      "suggestionDroppedMany": "Sugeransé {count} ekangami—osalaki mbongwana na biteni yango.",
+      "pendingRunActionTranslate": "Kokota lisusu",
+      "pendingRunActionAssess": "Kosambisa lisusu"
     },
     "document": {
       "emptyTitle": "Sosola mokanda olingi",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Rubrique oyo eleki {over} ba-karactère na ndelo. Ebatelaka na nyonso ya ba-évaluation, ndenge wana soki tomonisi ndelo, ezali na posa ya kokitisa yango mpo criterion oyo esangaka.",
       "guides": "Batoli ya organisation",
       "guidesOptgroup": "Batoli ya organisation",
-      "guideUnavailable": "Motoli ezali te"
+      "guideUnavailable": "Motoli ezali te",
+      "overwriteEditTitle": "Kosala mbongwana na eteni esengamaki",
+      "overwriteEditMessage": "Ndelo oyo ezali na sugeransé ezali na kozela. Kosala mbongwana wana ekosilisa sugeransé yango—ekokende na \"epesami te\" na liste ya revision, epai okoki naino kokitisa yango. Okoki kosala mbongwana na ndelo mosusu libre ntango revision efungami. Okotunamaka lisusu te.",
+      "overwriteEditConfirmOne": "Kanda sugeransé mpe sala mbongwana",
+      "overwriteEditConfirmMany": "Kanda sugeransé {count} mpe sala mbongwana",
+      "suggestionDroppedOne": "Sugeransé ekangami—osalaki mbongwana na eteni oyo.",
+      "suggestionDroppedMany": "Sugeransé {count} ekangami—osalaki mbongwana na biteni yango.",
+      "pendingRunActionRevise": "Kosalisa mbongwana na dokima",
+      "pendingRunActionAssess": "Kosambisa lisusu"
     },
     "data": {
       "emptyTitle": "Bokota ba data mpo epesa anàlizé",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "kopona",
       "guideSourceTerm": "Mot ya liboso",
       "guideTargetTerm": "Kobongola esengeli",
-      "guideNote": "Noti"
+      "guideNote": "Noti",
+      "pendingRun": {
+        "title": "Sugeransé {count} naino ezali na kozela",
+        "body": "{action} ekoki kobongola ndambo nyonso ya ndelo, ata biteni oyo ezali naino na sugeransé osaleli te, mpe assessment ya sika ekosilisa liste ya lelo. Banda boya sugeransé ezali naino.",
+        "acceptAll": "Senga nyonso oyo ezali naino",
+        "rejectAll": "Kokanga nyonso",
+        "cancel": "Kabolaka"
+      }
     }
   },
   "connectors": {

@@ -2831,7 +2831,17 @@
       "guides": "Ghiduri ale organizației",
       "organizationTerminology": "Termenologie organizațională",
       "noOrganizationTerminology": "Nu există terminologie organizațională",
-      "terminologyGuideUnavailable": "Ghid indisponibil"
+      "terminologyGuideUnavailable": "Ghid indisponibil",
+      "editingPendingHint": "{count} sugestii în așteptare — nu sunt marcate în timp ce editați, iar dacă scrieți peste una, aceasta va fi eliminată.",
+      "editingPendingHintOne": "1 sugestie în așteptare — nu este marcată în timpul editării, iar dacă scrieți peste ea, va fi eliminată.",
+      "overwriteEditTitle": "Editarea unui pasaj sugerat",
+      "overwriteEditMessage": "Acest text are o sugestie în așteptare. Dacă îl editați, sugestia va fi eliminată — aceasta se va muta la „neaplicat” în lista de revizuire, unde puteți anula această acțiune. Textul din afara sugestiilor poate fi editat liber cât timp este deschisă revizuirea. Nu veți mai fi întrebat din nou.",
+      "overwriteEditConfirmOne": "Elimină sugestia și păstrează modificarea",
+      "overwriteEditConfirmMany": "Elimină {count} sugestii și păstrează modificarea",
+      "suggestionDroppedOne": "Sugestie eliminată — ați editat acest pasaj.",
+      "suggestionDroppedMany": "{count} sugestii eliminate — ați editat pasajele respective.",
+      "pendingRunActionTranslate": "Se retraduce",
+      "pendingRunActionAssess": "Se reevaluează"
     },
     "document": {
       "emptyTitle": "Descrieți documentul dorit",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Această rubrică depășește limita cu {over} caractere. Este trimisă cu fiecare evaluare, deci trebuie scurtată înainte ca acest criteriu să poată fi folosit.",
       "guides": "Ghiduri ale organizației",
       "guidesOptgroup": "Ghiduri ale organizației",
-      "guideUnavailable": "Ghid indisponibil"
+      "guideUnavailable": "Ghid indisponibil",
+      "overwriteEditTitle": "Editarea unui pasaj sugerat",
+      "overwriteEditMessage": "Acest text are o sugestie în așteptare. Dacă îl editați, sugestia va fi eliminată — aceasta se va muta la „neaplicat” în lista de revizuire, unde puteți anula această acțiune. Textul din afara sugestiilor poate fi editat liber cât timp este deschisă revizuirea. Nu veți mai fi întrebat din nou.",
+      "overwriteEditConfirmOne": "Elimină sugestia și editează",
+      "overwriteEditConfirmMany": "Elimină {count} sugestii și editează",
+      "suggestionDroppedOne": "Sugestie eliminată — ați editat acest pasaj.",
+      "suggestionDroppedMany": "{count} sugestii eliminate — ați editat pasajele respective.",
+      "pendingRunActionRevise": "Se revizuiește documentul",
+      "pendingRunActionAssess": "Se reevaluează"
     },
     "data": {
       "emptyTitle": "Importați date pentru analiză",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "opțional",
       "guideSourceTerm": "Termen sursă",
       "guideTargetTerm": "Traducere necesară",
-      "guideNote": "Notă"
+      "guideNote": "Notă",
+      "pendingRun": {
+        "title": "{count} sugestii încă în așteptare",
+        "body": "{action} poate modifica orice parte a textului, inclusiv pasajele cu sugestii asupra cărora nu ați decis încă, iar o nouă evaluare va înlocui lista curentă. Decideți mai întâi asupra sugestiilor rămase.",
+        "acceptAll": "Acceptă toate rămase",
+        "rejectAll": "Respinge toate",
+        "cancel": "Anulează"
+      }
     }
   },
   "connectors": {

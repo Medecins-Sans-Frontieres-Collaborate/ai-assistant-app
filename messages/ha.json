@@ -2815,7 +2815,17 @@
       "guides": "Jagororin ƙungiya",
       "organizationTerminology": "Kamusin ƙungiya",
       "noOrganizationTerminology": "Babu kamusin ƙungiya",
-      "terminologyGuideUnavailable": "Jagora bai samuwa ba"
+      "terminologyGuideUnavailable": "Jagora bai samuwa ba",
+      "editingPendingHint": "Akwai shawarwari {count} da ke jiran dubawa — ba a nuna su yayin gyarawa, kuma yin rubutu a kansu yana cire su.",
+      "editingPendingHintOne": "Akwai shawara 1 da ke jiran dubawa — ba a nuna ta yayin gyarawa, kuma yin rubutu a kanta yana cire ta.",
+      "overwriteEditTitle": "Ana gyara wani sashi da aka ba da shawara",
+      "overwriteEditMessage": "Wannan rubutu yana da shawara da ba a amince da ita ba. Yin gyara zai cire shawarar — za ta koma \"ba a aiwatar ba\" a jerin dubawa, inda za ka iya komawa baya idan kana so. Za a iya gyaggyara rubutu da ke waje da shawara yadda kake so yayin da dubawa ke bude. Ba za a sake tambayarka ba.",
+      "overwriteEditConfirmOne": "Cire shawarar, a bar canjin da na yi",
+      "overwriteEditConfirmMany": "Cire shawarrwari {count}, a bar canjin da na yi",
+      "suggestionDroppedOne": "An cire shawara — ka gyara sashe nata.",
+      "suggestionDroppedMany": "An cire shawarrwari {count} — ka gyara sassan su.",
+      "pendingRunActionTranslate": "Sake fassara",
+      "pendingRunActionAssess": "Sake tantancewa"
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Wannan rubutun ya kai {over} haruffa fiye da iyaka. Ana aikawa da shi a kowane kimantawa, don haka dole a rage shi kafin a iya amfani da wannan mizanin.",
       "guides": "Jagororin ƙungiya",
       "guidesOptgroup": "Jagororin ƙungiya",
-      "guideUnavailable": "Jagora bai samuwa ba"
+      "guideUnavailable": "Jagora bai samuwa ba",
+      "overwriteEditTitle": "Ana gyara wani sashi da aka ba da shawara",
+      "overwriteEditMessage": "Wannan rubutu yana da shawara da ba a amince da ita ba. Yin gyara zai cire shawarar — za ta koma \"ba a aiwatar ba\" a jerin dubawa, inda har yanzu za ka iya komawa baya. Za a iya gyaggyara rubutu da ke waje da shawara yadda kake so yayin da dubawa ke bude. Ba za a sake tambayarka ba.",
+      "overwriteEditConfirmOne": "Cire shawarar, a yi gyara",
+      "overwriteEditConfirmMany": "Cire shawarrwari {count}, a yi gyara",
+      "suggestionDroppedOne": "An cire shawara — ka gyara sashe nata.",
+      "suggestionDroppedMany": "An cire shawarrwari {count} — ka gyara sassan su.",
+      "pendingRunActionRevise": "Ana sake gyara takarda",
+      "pendingRunActionAssess": "Sake tantancewa"
     },
     "data": {
       "emptyTitle": "Shigo da bayanai don nazari",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "zaɓi",
       "guideSourceTerm": "Kalmar asali",
       "guideTargetTerm": "Fassarar da ake buƙata",
-      "guideNote": "Lura"
+      "guideNote": "Lura",
+      "pendingRun": {
+        "title": "Akwai shawarwari {count} da ke jiran dubawa",
+        "body": "{action} na iya sauya kowanne bangare na rubutu, ciki har da sassan da ke da shawarwari da ba ka yanke hukunci ba tukuna, kuma sabon tantancewa zai maye gurbin jerin yanzu. Ka yanke shawarar saura da farko.",
+        "acceptAll": "Amince da duk saura",
+        "rejectAll": "Ki duk",
+        "cancel": "Soke"
+      }
     }
   },
   "connectors": {

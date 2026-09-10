@@ -2831,7 +2831,17 @@
       "guides": "Guies de l'organització",
       "organizationTerminology": "Terminologia de l'organització",
       "noOrganizationTerminology": "Sense terminologia de l'organització",
-      "terminologyGuideUnavailable": "Guia no disponible"
+      "terminologyGuideUnavailable": "Guia no disponible",
+      "editingPendingHint": "{count} suggeriments pendents: no es marquen mentre s'edita, i si escrius-hi a sobre, es descarten.",
+      "editingPendingHintOne": "1 suggeriment pendent: no es marca mentre s'edita, i si s'hi escriu a sobre, es descarta.",
+      "overwriteEditTitle": "S'està editant un fragment suggerit",
+      "overwriteEditMessage": "Aquest text té un suggeriment pendent. Si l'edites, el suggeriment es descarta — passa a \"no aplicat\" a la llista de revisió, on encara el pots desfer. Pots editar lliurement el text fora dels suggeriments mentre la revisió està oberta. No se't tornarà a preguntar.",
+      "overwriteEditConfirmOne": "Descarta el suggeriment i conserva el meu canvi",
+      "overwriteEditConfirmMany": "Descarta {count} suggeriments i conserva el meu canvi",
+      "suggestionDroppedOne": "S'ha descartat el suggeriment — has editat el seu fragment.",
+      "suggestionDroppedMany": "S'han descartat {count} suggeriments — has editat els seus fragments.",
+      "pendingRunActionTranslate": "Traducció de nou",
+      "pendingRunActionAssess": "Reavaluant"
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Aquesta rúbrica supera el límit en {over} caràcters. S’envia amb cada avaluació, així que cal retallar-la abans que aquest criteri es pugui utilitzar.",
       "guides": "Guies de l'organització",
       "guidesOptgroup": "Guies de l'organització",
-      "guideUnavailable": "Guia no disponible"
+      "guideUnavailable": "Guia no disponible",
+      "overwriteEditTitle": "S'està editant un fragment suggerit",
+      "overwriteEditMessage": "Aquest text té un suggeriment pendent. Si l'edites, el suggeriment es descarta — passa a \"no aplicat\" a la llista de revisió, on encara el pots desfer. Pots editar lliurement el text fora dels suggeriments mentre la revisió està oberta. No se't tornarà a preguntar.",
+      "overwriteEditConfirmOne": "Descarta el suggeriment i edita",
+      "overwriteEditConfirmMany": "Descarta {count} suggeriments i edita",
+      "suggestionDroppedOne": "S'ha descartat el suggeriment — has editat el seu fragment.",
+      "suggestionDroppedMany": "S'han descartat {count} suggeriments — has editat els seus fragments.",
+      "pendingRunActionRevise": "Revisant el document",
+      "pendingRunActionAssess": "Reavaluant"
     },
     "data": {
       "emptyTitle": "Importa dades per analitzar",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "opcional",
       "guideSourceTerm": "Terme d'origen",
       "guideTargetTerm": "Traducció requerida",
-      "guideNote": "Nota"
+      "guideNote": "Nota",
+      "pendingRun": {
+        "title": "{count} suggeriments encara pendents",
+        "body": "{action} pot modificar qualsevol part del text, inclosos els fragments amb suggeriments pendents, i una nova avaluació substituirà la llista actual. Decideix primer sobre els suggeriments pendents.",
+        "acceptAll": "Accepta tots els pendents",
+        "rejectAll": "Rebutja'ls tots",
+        "cancel": "Cancel·la"
+      }
     }
   },
   "connectors": {

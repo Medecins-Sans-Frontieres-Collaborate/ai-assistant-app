@@ -2831,7 +2831,17 @@
       "guides": "Organisatiegidsen",
       "organizationTerminology": "Organisatieterminologie",
       "noOrganizationTerminology": "Geen organisatieterminologie",
-      "terminologyGuideUnavailable": "Gids niet beschikbaar"
+      "terminologyGuideUnavailable": "Gids niet beschikbaar",
+      "editingPendingHint": "{count} suggesties in behandeling — ze worden niet gemarkeerd tijdens het bewerken, en eroverheen typen verwijdert ze.",
+      "editingPendingHintOne": "1 suggestie in behandeling — deze wordt niet gemarkeerd tijdens het bewerken, en eroverheen typen verwijdert deze.",
+      "overwriteEditTitle": "Een voorgestelde passage bewerken",
+      "overwriteEditMessage": "Deze tekst heeft een suggestie in behandeling. Bewerken verwijdert de suggestie — deze verplaatst naar 'niet toegepast' in de beoordelingslijst, waar u dit nog ongedaan kunt maken. Tekst buiten suggesties kan vrij worden bewerkt zolang een beoordeling openstaat. U krijgt deze vraag niet opnieuw.",
+      "overwriteEditConfirmOne": "Suggestie verwijderen en mijn wijziging behouden",
+      "overwriteEditConfirmMany": "{count} suggesties verwijderen en mijn wijziging behouden",
+      "suggestionDroppedOne": "Suggestie verwijderd — u heeft de passage bewerkt.",
+      "suggestionDroppedMany": "{count} suggesties verwijderd — u heeft hun passages bewerkt.",
+      "pendingRunActionTranslate": "Opnieuw vertalen",
+      "pendingRunActionAssess": "Opnieuw beoordelen"
     },
     "document": {
       "emptyTitle": "Beschrijf het gewenste document",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Deze beoordelingscriteria zijn {over} tekens boven de limiet. Ze worden bij elke beoordeling meegestuurd, dus ze moeten worden ingekort voordat dit criterium gebruikt kan worden.",
       "guides": "Organisatiegidsen",
       "guidesOptgroup": "Organisatiegidsen",
-      "guideUnavailable": "Gids niet beschikbaar"
+      "guideUnavailable": "Gids niet beschikbaar",
+      "overwriteEditTitle": "Een voorgestelde passage bewerken",
+      "overwriteEditMessage": "Deze tekst heeft een suggestie in behandeling. Bewerken verwijdert de suggestie — deze verplaatst naar 'niet toegepast' in de beoordelingslijst, waar u dit nog ongedaan kunt maken. Tekst buiten suggesties kan vrij worden bewerkt zolang een beoordeling openstaat. U krijgt deze vraag niet opnieuw.",
+      "overwriteEditConfirmOne": "Suggestie verwijderen en bewerken",
+      "overwriteEditConfirmMany": "{count} suggesties verwijderen en bewerken",
+      "suggestionDroppedOne": "Suggestie verwijderd — u heeft de passage bewerkt.",
+      "suggestionDroppedMany": "{count} suggesties verwijderd — u heeft hun passages bewerkt.",
+      "pendingRunActionRevise": "Document herzien",
+      "pendingRunActionAssess": "Opnieuw beoordelen"
     },
     "data": {
       "emptyTitle": "Importeer data om te analyseren",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "optioneel",
       "guideSourceTerm": "Brontterm",
       "guideTargetTerm": "Vereiste vertaling",
-      "guideNote": "Opmerking"
+      "guideNote": "Opmerking",
+      "pendingRun": {
+        "title": "{count} suggesties nog in behandeling",
+        "body": "{action} kan elk deel van de tekst wijzigen, inclusief passages met suggesties waarover u nog geen beslissing hebt genomen; een nieuwe beoordeling vervangt de huidige lijst. Behandel eerst de resterende suggesties.",
+        "acceptAll": "Alles accepteren",
+        "rejectAll": "Alles weigeren",
+        "cancel": "Annuleren"
+      }
     }
   },
   "connectors": {

@@ -2831,7 +2831,17 @@
       "guides": "أدلة المنظمة",
       "organizationTerminology": "مصطلحات المنظمة",
       "noOrganizationTerminology": "لا توجد مصطلحات للمنظمة",
-      "terminologyGuideUnavailable": "الدليل غير متوفر"
+      "terminologyGuideUnavailable": "الدليل غير متوفر",
+      "editingPendingHint": "هناك {count} اقتراحات معلقة — لن يتم تمييزها أثناء التحرير، وعند الكتابة فوق أحدها سيتم حذفه.",
+      "editingPendingHintOne": "هناك اقتراح واحد معلق — لن يتم تمييزه أثناء التحرير، وعند الكتابة فوقه سيتم حذفه.",
+      "overwriteEditTitle": "تحرير مقطع مقترح",
+      "overwriteEditMessage": "يحتوي هذا النص على اقتراح معلق. سيؤدي تحريره إلى حذف الاقتراح — سينتقل إلى \"غير مطبق\" في قائمة المراجعة حيث يمكنك التراجع عن ذلك. يمكن تحرير النص خارج الاقتراحات بحرية أثناء فتح المراجعة. لن يتم سؤالك مجددًا.",
+      "overwriteEditConfirmOne": "احذف الاقتراح واحتفظ بتعديلي",
+      "overwriteEditConfirmMany": "احذف {count} من الاقتراحات واحتفظ بتعديلي",
+      "suggestionDroppedOne": "تم حذف الاقتراح — لقد قمت بتحرير المقطع.",
+      "suggestionDroppedMany": "تم حذف {count} اقتراحات — لقد قمت بتحرير المقاطع.",
+      "pendingRunActionTranslate": "إعادة الترجمة",
+      "pendingRunActionAssess": "إعادة التقييم"
     },
     "document": {
       "emptyTitle": "صف المستند الذي تريده",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "هذه المعايير تتجاوز الحد المسموح به بـ {over} حرف. يتم إرسالها مع كل تقييم، لذلك يجب تقليصها قبل استخدام هذا المعيار.",
       "guides": "أدلة المنظمة",
       "guidesOptgroup": "أدلة المنظمة",
-      "guideUnavailable": "الدليل غير متوفر"
+      "guideUnavailable": "الدليل غير متوفر",
+      "overwriteEditTitle": "تحرير مقطع مقترح",
+      "overwriteEditMessage": "يحتوي هذا النص على اقتراح معلق. سيؤدي تحريره إلى حذف الاقتراح — سينتقل إلى \"غير مطبق\" في قائمة المراجعة حيث يمكنك التراجع عن ذلك. يمكن تحرير النص خارج الاقتراحات بحرية أثناء فتح المراجعة. لن يتم سؤالك مجددًا.",
+      "overwriteEditConfirmOne": "احذف الاقتراح وحرر",
+      "overwriteEditConfirmMany": "احذف {count} من الاقتراحات وحرر",
+      "suggestionDroppedOne": "تم حذف الاقتراح — لقد قمت بتحرير المقطع.",
+      "suggestionDroppedMany": "تم حذف {count} اقتراحات — لقد قمت بتحرير المقاطع.",
+      "pendingRunActionRevise": "مراجعة المستند",
+      "pendingRunActionAssess": "إعادة التقييم"
     },
     "data": {
       "emptyTitle": "استيراد بيانات للتحليل",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "اختياري",
       "guideSourceTerm": "المصطلح الأصلي",
       "guideTargetTerm": "الترجمة المطلوبة",
-      "guideNote": "ملاحظة"
+      "guideNote": "ملاحظة",
+      "pendingRun": {
+        "title": "لا تزال هناك {count} اقتراحات معلقة",
+        "body": "يمكن أن يغير {action} أي جزء من النص، بما في ذلك المقاطع التي بها اقتراحات لم تتخذ قرارًا بشأنها بعد، وسيتم استبدال قائمة المراجعة الحالية بتقييم جديد. يرجى اتخاذ قرار بشأن الاقتراحات المتبقية أولاً.",
+        "acceptAll": "قبول جميع المتبقي",
+        "rejectAll": "رفض الكل",
+        "cancel": "إلغاء"
+      }
     }
   },
   "connectors": {

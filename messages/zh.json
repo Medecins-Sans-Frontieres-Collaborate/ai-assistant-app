@@ -2862,7 +2862,17 @@
       "guides": "组织指南",
       "organizationTerminology": "组织术语",
       "noOrganizationTerminology": "无组织术语",
-      "terminologyGuideUnavailable": "指南不可用"
+      "terminologyGuideUnavailable": "指南不可用",
+      "editingPendingHint": "有 {count} 条建议待处理 — 编辑时不会标记，输入新内容会放弃建议。",
+      "editingPendingHintOne": "1 条建议待处理 — 编辑时不会标记，输入新内容会放弃建议。",
+      "overwriteEditTitle": "正在编辑建议段落",
+      "overwriteEditMessage": "此段文本有待处理的建议。编辑该段会放弃建议——它将转移到审核列表的“未应用”中，您仍可撤销。审核开启时，建议外的内容可随意编辑。此后不会再次提示。",
+      "overwriteEditConfirmOne": "放弃该建议并保留我的更改",
+      "overwriteEditConfirmMany": "放弃 {count} 条建议并保留我的更改",
+      "suggestionDroppedOne": "已放弃建议——您已编辑该段落。",
+      "suggestionDroppedMany": "已放弃 {count} 条建议——您已编辑这些段落。",
+      "pendingRunActionTranslate": "再次翻译中",
+      "pendingRunActionAssess": "重新评估中"
     },
     "document": {
       "emptyTitle": "描述您需要的文档",
@@ -3010,7 +3020,15 @@
       "criterionRubricTooLong": "该评判标准超出限制 {over} 个字符。它会随每次评估发送，因此在使用此标准前必须进行裁剪。",
       "guides": "组织指南",
       "guidesOptgroup": "组织指南",
-      "guideUnavailable": "指南不可用"
+      "guideUnavailable": "指南不可用",
+      "overwriteEditTitle": "正在编辑建议段落",
+      "overwriteEditMessage": "此段文本有待处理的建议。编辑该段会放弃建议——它将转移到审核列表的“未应用”中，您仍可撤销。审核开启时，建议外的内容可随意编辑。此后不会再次提示。",
+      "overwriteEditConfirmOne": "放弃该建议并编辑",
+      "overwriteEditConfirmMany": "放弃 {count} 条建议并编辑",
+      "suggestionDroppedOne": "已放弃建议——您已编辑该段落。",
+      "suggestionDroppedMany": "已放弃 {count} 条建议——您已编辑这些段落。",
+      "pendingRunActionRevise": "正在修订文档",
+      "pendingRunActionAssess": "重新评估中"
     },
     "data": {
       "emptyTitle": "导入数据进行分析",
@@ -3386,7 +3404,14 @@
       "guideSectionOptional": "可选",
       "guideSourceTerm": "源术语",
       "guideTargetTerm": "要求翻译",
-      "guideNote": "备注"
+      "guideNote": "备注",
+      "pendingRun": {
+        "title": "还有 {count} 条建议待处理",
+        "body": "{action} 可能会更改文本的任何部分，包括尚未处理的建议段落，且新的评估会替换当前列表。请先完成剩余建议的处理。",
+        "acceptAll": "接受全部剩余建议",
+        "rejectAll": "全部拒绝",
+        "cancel": "取消"
+      }
     }
   },
   "connectors": {

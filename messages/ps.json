@@ -2815,7 +2815,17 @@
       "guides": "د سازمان لارښودونه",
       "organizationTerminology": "د سازمان اصطلاحات",
       "noOrganizationTerminology": "د سازمان کوم اصطلاحات نشته",
-      "terminologyGuideUnavailable": "لارښود نشته"
+      "terminologyGuideUnavailable": "لارښود نشته",
+      "editingPendingHint": "{count} وړاندیزونه پاتې دي — د ایډیټ کولو پر مهال نښه نه لري، او که پرې ولیکئ، ورک به شي.",
+      "editingPendingHintOne": "۱ وړاندیز پاتې دی — د ایډیټ کولو پر مهال نښه نه لري، او که پرې ولیکئ، ورک به شي.",
+      "overwriteEditTitle": "د وړاندیز شوي ټوټې ایډیټول",
+      "overwriteEditMessage": "دې متن ته یو نامنظور وړاندیز شته. ایډیټ کول یې وړاندیز له منځه وړي — دا به د ارزونې لیست کې «نه پلي شوي» ته ولاړ شي او بېرته اخیستلای یې شئ. د ایډیټ پر مهال له وړاندیزونو پرته متن په آزاده توګه بدلولای شئ، تر څو چې ارزونه خلاصه وي. بیا به له تاسو نه پوښتل کېږي.",
+      "overwriteEditConfirmOne": "وړاندیز پریږدم او خپله بدلون ساتم",
+      "overwriteEditConfirmMany": "{count} وړاندیزونه پریږدم او خپله بدلون ساتم",
+      "suggestionDroppedOne": "وړاندیز پریښودل شو — تاسې یې ټوټه ایډیټ کړه.",
+      "suggestionDroppedMany": "{count} وړاندیزونه پریښودل شول — تاسې یې ټوټې ایډیټ کړې.",
+      "pendingRunActionTranslate": "بیا ژباړه روانه ده",
+      "pendingRunActionAssess": "بیا ارزونه روانه ده"
     },
     "document": {
       "emptyTitle": "هغه سند تشریح کړئ چې غواړئ",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "دا اصول د حد څخه {over} حروف لوړ دي. دا له هرې ارزونې سره لیږي، باید لنډ شي تر څو وکارول شي.",
       "guides": "د سازمان لارښودونه",
       "guidesOptgroup": "د سازمان لارښودونه",
-      "guideUnavailable": "لارښود نشته"
+      "guideUnavailable": "لارښود نشته",
+      "overwriteEditTitle": "د وړاندیز شوي ټوټې ایډیټول",
+      "overwriteEditMessage": "دې متن ته یو نامنظور وړاندیز شته. ایډیټ کول یې وړاندیز له منځه وړي — دا به د ارزونې لیست کې «نه پلي شوي» ته ولاړ شي او بېرته اخیستلای یې شئ. د ایډیټ پر مهال له وړاندیزونو پرته متن په آزاده توګه بدلولای شئ، تر څو چې ارزونه خلاصه وي. بیا به له تاسو نه پوښتل کېږي.",
+      "overwriteEditConfirmOne": "وړاندیز پریږدم او ایډیټ کوم",
+      "overwriteEditConfirmMany": "{count} وړاندیزونه پریږدم او ایډیټ کوم",
+      "suggestionDroppedOne": "وړاندیز پریښودل شو — تاسې یې ټوټه ایډیټ کړه.",
+      "suggestionDroppedMany": "{count} وړاندیزونه پریښودل شول — تاسې یې ټوټې ایډیټ کړې.",
+      "pendingRunActionRevise": "سند بیاکتنه روانه ده",
+      "pendingRunActionAssess": "بیا ارزونه روانه ده"
     },
     "data": {
       "emptyTitle": "د تحلیل لپاره معلومات وارد کړئ",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "اختیاري",
       "guideSourceTerm": "مبدأ اصطلاح",
       "guideTargetTerm": "اړینه ژباړه",
-      "guideNote": "یادونه"
+      "guideNote": "یادونه",
+      "pendingRun": {
+        "title": "{count} وړاندیزونه لا هم پاتې دي",
+        "body": "{action} کولای شي د متن هره برخه بدله کړي، حتا هغه ټوټې چې لا یې وړاندیزونه نه دي منل شوي، او نوی ارزیابي به اوسنی لیست بدل کړي. اول پاتې وړاندیزونه وټاکئ.",
+        "acceptAll": "ټول پاتې ومنئ",
+        "rejectAll": "ټول رد کړئ",
+        "cancel": "لغوه کړئ"
+      }
     }
   },
   "connectors": {

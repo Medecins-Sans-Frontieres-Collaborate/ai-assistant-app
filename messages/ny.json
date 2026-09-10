@@ -2815,7 +2815,17 @@
       "guides": "Malangizo a bungwe",
       "organizationTerminology": "Matanthauzidwe a bungwe",
       "noOrganizationTerminology": "Palibe matanthauzidwe a bungwe",
-      "terminologyGuideUnavailable": "Malangizo kulibe"
+      "terminologyGuideUnavailable": "Malangizo kulibe",
+      "editingPendingHint": "Zingongole {count} zikadali zikuonera — sizizindikiridwa mukamakonza, ndipo kulemba pamwamba pake kumachotsa.",
+      "editingPendingHintOne": "Pali cholimbikitsa chimodzi chikadali — sichizindikiridwa mukamakonza, ndipo mukalemba pamwamba pake chimachotsedwa.",
+      "overwriteEditTitle": "Mukukonza ndime yomwe yakhazikitsidwa",
+      "overwriteEditMessage": "Lembo ili lili ndi cholimbikitsa chikadali. Mukalikonza, cholimbikitsacho chimachotsedwa — chimapita ku “sinasankhidwe” pa mndandanda wa kuunikira, komwe mutha kuzibwezeretsa. Malembo opanda malingaliro akhoza kukonzedwa momasuka review ikatseguka. Simudzafunsidwanso nthawi ina.",
+      "overwriteEditConfirmOne": "Chotsani cholimbikitsacho ndipo sungani zosintha zanga",
+      "overwriteEditConfirmMany": "Chotsani malingaliro {count} ndikusunga zosintha zanga",
+      "suggestionDroppedOne": "Cholimbikitsa chachotsedwa — mwasintha ndime yake.",
+      "suggestionDroppedMany": "Zolimbikitsa {count} zachotsedwa — mwasintha ndime zake.",
+      "pendingRunActionTranslate": "Kumasulira kachiwiri",
+      "pendingRunActionAssess": "Kuwunikanso"
     },
     "document": {
       "emptyTitle": "Fotokozani chikalata chomwe mukufuna",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Rubric iyi yapitilira malire ndi zilembo {over}. Amatumizidwa ndi chiweruzo chilichonse, choncho iyenera kuchepetsedwa musanagwiritse ntchito chikhalidwechi.",
       "guides": "Malangizo a bungwe",
       "guidesOptgroup": "Malangizo a bungwe",
-      "guideUnavailable": "Malangizo kulibe"
+      "guideUnavailable": "Malangizo kulibe",
+      "overwriteEditTitle": "Mukukonza ndime yomwe yakhazikitsidwa",
+      "overwriteEditMessage": "Lembo ili lili ndi cholimbikitsa chikadali. Mukalikonza, cholimbikitsacho chimachotsedwa — chimapita ku “sinasankhidwe” pa mndandanda wa kuunikira, komwe mutha kuzibwezeretsa. Malembo opanda malingaliro akhoza kukonzedwa momasuka review ikatseguka. Simudzafunsidwanso nthawi ina.",
+      "overwriteEditConfirmOne": "Chotsani cholimbikitsacho ndikusintha",
+      "overwriteEditConfirmMany": "Chotsani malingaliro {count} ndikusintha",
+      "suggestionDroppedOne": "Cholimbikitsa chachotsedwa — mwasintha ndime yake.",
+      "suggestionDroppedMany": "Zolimbikitsa {count} zachotsedwa — mwasintha ndime zake.",
+      "pendingRunActionRevise": "Kukonzanso chikalata",
+      "pendingRunActionAssess": "Kuwunikanso"
     },
     "data": {
       "emptyTitle": "Tengani deta kuti muyese",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "ngati mukufuna",
       "guideSourceTerm": "Mawu oyambilira",
       "guideTargetTerm": "Kumasulira kofunikira",
-      "guideNote": "Zindikirani"
+      "guideNote": "Zindikirani",
+      "pendingRun": {
+        "title": "Zolimbikitsa {count} zikadali zikuonera",
+        "body": "{action} ikhoza kusintha gawo lililonse la lembo, kuphatikiza magawo okhala ndi malingaliro omwe simunasankhepo, ndipo kuwunikira kwatsopano kumasinthana ndi mndandanda wamakono. Sankhani kaye malingaliro otsalawo.",
+        "acceptAll": "Landirani zonse zotsalira",
+        "rejectAll": "Kana zonse",
+        "cancel": "Sinthani"
+      }
     }
   },
   "connectors": {

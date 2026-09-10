@@ -2815,7 +2815,17 @@
       "guides": "Ìtọnisọna agbari",
       "organizationTerminology": "Ìtúmọ̀ ọ̀rọ̀ agbari",
       "noOrganizationTerminology": "Kò sí ìtúmọ̀ ọ̀rọ̀ agbari",
-      "terminologyGuideUnavailable": "Ìtọnisọna kò sí"
+      "terminologyGuideUnavailable": "Ìtọnisọna kò sí",
+      "editingPendingHint": "{count} awọn iṣeduro wa lolu — a kò fi wọn han nigba títúnṣe, tí o bá kọ kọja wọn àfi wọn sílẹ.",
+      "editingPendingHintOne": "Iṣeduro kan wa lolu — a kò fi han nigba títúnṣe, tí o bá kọ kọja rẹ àfi sílẹ.",
+      "overwriteEditTitle": "Títúnṣe abala tí a daba",
+      "overwriteEditMessage": "Ìtẹ̀sílẹ̀ yìí ní iṣeduro kan tó ń dúró de. Títúnṣe rẹ máa yọ iṣeduro náà — wọn á lọ sí “kò fi sílò” nínú àtòjọ ìyẹ̀wò, níbi tí o ti le bọwọ padà. O lè túnse apá ti kò ní iṣeduro lórí fífi àyẹ̀wò sílẹ̀. A kò ní béèrè lọwọ rẹ lẹẹkansi.",
+      "overwriteEditConfirmOne": "Yọ iṣeduro náà ká fi ayípadà mi silẹ",
+      "overwriteEditConfirmMany": "Yọ {count} awọn iṣeduro ká fi ayípadà mi silẹ",
+      "suggestionDroppedOne": "A ti yọ iṣeduro náà — o ti tún ṣe apá rẹ.",
+      "suggestionDroppedMany": "A ti yọ {count} awọn iṣeduro — o ti tún ṣe àwon apá wọn.",
+      "pendingRunActionTranslate": "Atunyẹwo itumọ́",
+      "pendingRunActionAssess": "Atunyẹwo"
     },
     "document": {
       "emptyTitle": "Ṣàpèjúwe iwe ti o fẹ",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Ìkànnì àtúpalẹ̀ yìí ti kọja ààlà ní {over} àmi lẹ́kunrẹ́rẹ́. A máa fì ranṣẹ́ pẹ̀lú ìtọ́jú kọọkan, nítorí náà ó gbọ́dọ̀ dín kù kí a tó lè lo àfihàn yìí.",
       "guides": "Ìtọnisọna agbari",
       "guidesOptgroup": "Ìtọnisọna agbari",
-      "guideUnavailable": "Ìtọnisọna kò sí"
+      "guideUnavailable": "Ìtọnisọna kò sí",
+      "overwriteEditTitle": "Títúnṣe abala tí a daba",
+      "overwriteEditMessage": "Ìtẹ̀sílẹ̀ yìí ní iṣeduro kan tó ń dúró de. Títúnṣe rẹ máa yọ iṣeduro náà — wọn á lọ sí “kò fi sílò” nínú àtòjọ ìyẹ̀wò, níbi tí o ti le bọwọ padà. O lè túnse apá ti kò ní iṣeduro lórí fífi àyẹ̀wò sílẹ̀. A kò ní béèrè lọwọ rẹ lẹẹkansi.",
+      "overwriteEditConfirmOne": "Yọ iṣeduro náà ká túnse",
+      "overwriteEditConfirmMany": "Yọ {count} awọn iṣeduro ká túnse",
+      "suggestionDroppedOne": "A ti yọ iṣeduro náà — o ti tún ṣe apá rẹ.",
+      "suggestionDroppedMany": "A ti yọ {count} awọn iṣeduro — o ti tún ṣe àwon apá wọn.",
+      "pendingRunActionRevise": "Atúnṣe ìwé",
+      "pendingRunActionAssess": "Atunyẹwo"
     },
     "data": {
       "emptyTitle": "Fọwọ́ ìwòye wá",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "àmúlòṣùgbọ́n",
       "guideSourceTerm": "Ọ̀rọ̀ orísun",
       "guideTargetTerm": "Ìtúmọ̀ tó yẹ",
-      "guideNote": "Akíyèsí"
+      "guideNote": "Akíyèsí",
+      "pendingRun": {
+        "title": "{count} awọn iṣeduro ṣi dúró de",
+        "body": "{action} lè yí apá kankan ti ọrọ padà, pẹ̀lú wọn tí a ṣe iṣeduro lórí tí o kò ti pinnu, àti àyẹ̀wò tuntun yóò rọ́pò àtòjọ ìṣàkóso. Jọ̀wọ́, pinnu àwọn iṣeduro tó kù kọ́kọ́.",
+        "acceptAll": "Gba gbogbo tí kò fi sílẹ̀",
+        "rejectAll": "Kọ gbogbo rẹ",
+        "cancel": "Fagilé"
+      }
     }
   },
   "connectors": {

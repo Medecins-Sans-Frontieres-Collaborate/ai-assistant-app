@@ -2815,7 +2815,17 @@
       "guides": "Hagayaasha ururka",
       "organizationTerminology": "Erey-bixinta ururka",
       "noOrganizationTerminology": "Lama hayo erey-bixin urur",
-      "terminologyGuideUnavailable": "Hagayaasha lama heli karo"
+      "terminologyGuideUnavailable": "Hagayaasha lama heli karo",
+      "editingPendingHint": "{count} talo ayaa sugaysa — lama calaamadiyo marka la tafatinayo, marka aad wax ku qorto dushooda way tirtiraysaa.",
+      "editingPendingHintOne": "1 talo ayaa sugaysa — lama calaamadiyo marka la tafatinayo, marka aad wax ku qorto dusheeda way tirtiraysaa.",
+      "overwriteEditTitle": "Wax ka beddelaya talo la soo jeediyay",
+      "overwriteEditMessage": "Qoraalkan waxaa ku jirta talo sugaysa. Tafattirka wuu baabi'inayaa taladaas — waxay u guuraysaa \"lama dhaqan gelin\" liiska dib-u-eegista, welina waad ka laaban kartaa. Qoraalka aan la talin waxaa si xor ah loo tafatiri karaa inta dib-u-eegis furan tahay. Mar kale laguma weydiindo.",
+      "overwriteEditConfirmOne": "Tirtir talada oo dhawoobo wax ka beddelkeyga",
+      "overwriteEditConfirmMany": "Tirtir {count} talo oo dhawoobo wax ka beddelkeyga",
+      "suggestionDroppedOne": "Talo waa la tirtiray — waad beddeshay qoraalkeeda.",
+      "suggestionDroppedMany": "{count} talo waa la tirtiray — waad beddeshay qoraaladooda.",
+      "pendingRunActionTranslate": "Mar kale turjumaya",
+      "pendingRunActionAssess": "Dib-u-eegis mar kale"
     },
     "document": {
       "emptyTitle": "Sharax dukumintiga aad rabto",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Qodobkan waa {over} xaraf kor u dhaafay xadka. Waxa la socdaa qiimeynta kasta, sidaas darteed waa in la gaabiyo ka hor inta aan la isticmaalin qodobkan.",
       "guides": "Hagayaasha ururka",
       "guidesOptgroup": "Hagayaasha ururka",
-      "guideUnavailable": "Hagaha lama heli karo"
+      "guideUnavailable": "Hagaha lama heli karo",
+      "overwriteEditTitle": "Wax ka beddelaya talo la soo jeediyay",
+      "overwriteEditMessage": "Qoraalkan waxaa ku jirta talo sugaysa. Tafattirka wuu baabi'inayaa taladaas — waxay u guuraysaa \"lama dhaqan gelin\" liiska dib-u-eegista, welina waad ka laaban kartaa. Qoraalka aan la talin waxaa si xor ah loo tafatiri karaa inta dib-u-eegis furan tahay. Mar kale laguma weydiindo.",
+      "overwriteEditConfirmOne": "Tirtir talada oo tafati",
+      "overwriteEditConfirmMany": "Tirtir {count} talo oo tafati",
+      "suggestionDroppedOne": "Talo waa la tirtiray — waad beddeshay qoraalkeeda.",
+      "suggestionDroppedMany": "{count} talo waa la tirtiray — waad beddeshay qoraaladooda.",
+      "pendingRunActionRevise": "Dib u eegis ku samaynaya dukumeentiga",
+      "pendingRunActionAssess": "Dib-u-eegis mar kale"
     },
     "data": {
       "emptyTitle": "Keenso xog si loo falanqeeyo",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "ikhtiyaari",
       "guideSourceTerm": "Ereyga asalka",
       "guideTargetTerm": "Tarjumaad loo baahanyahay",
-      "guideNote": "Ogeysiis"
+      "guideNote": "Ogeysiis",
+      "pendingRun": {
+        "title": "{count} talo wali sugaysa",
+        "body": "{action} waxay wax ka beddeli kartaa qayb kasta oo qoraalka ah, oo ay ku jiraan meelaha talooyinka la bixiyay ee aanad weli go'aan ka gaarin, qiimeyn cusubna waxa ay beddeshaa liiska hadda jira. Go'aan ka gaadh talooyinka haray marka hore.",
+        "acceptAll": "Dhammaan haray aqbal",
+        "rejectAll": "Dhammaan diid",
+        "cancel": "Jooji"
+      }
     }
   },
   "connectors": {

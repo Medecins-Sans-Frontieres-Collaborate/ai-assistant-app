@@ -2815,7 +2815,17 @@
       "guides": "Imihlahlandlela yenhlangano",
       "organizationTerminology": "Imigomo yenhlangano",
       "noOrganizationTerminology": "Awekho amagama enhlangano",
-      "terminologyGuideUnavailable": "Umhlahlandlela awutholakali"
+      "terminologyGuideUnavailable": "Umhlahlandlela awutholakali",
+      "editingPendingHint": "{count} iziphakamiso ezisalindile — aziphawulwanga ngenkathi uhlelela, futhi uma ubhala phezu kwazo iyakhishwa.",
+      "editingPendingHintOne": "1 isiphakamiso isalindile — ayiphawuleki ngenkathi uhlelela, futhi uma ubhala phezu kwayo iyakhishwa.",
+      "overwriteEditTitle": "Ukuhlela isigaba esiphakanyisiwe",
+      "overwriteEditMessage": "Lo mbhalo unesiphakamiso esisalindile. Uma uwuhlela, isiphakamiso siyakhishwa — siya kokuthi \"akangasetshenziswa\" ohlwini lokubuyekeza, futhi usakwazi ukubuyisela emuva. Umbhalo ongaphandle kwezaziso ungahlelelwa ngokukhululeka uma ukubuyekeza kuvuliwe. Awusoze wabuza futhi.",
+      "overwriteEditConfirmOne": "Khupha isiphakamiso bese ugcina ushintsho lwami",
+      "overwriteEditConfirmMany": "Khupha iziphakamiso ezingu-{count} bese ugcina ushintsho lwami",
+      "suggestionDroppedOne": "Isiphakamiso sikhishiwe — uhlele isigaba saso.",
+      "suggestionDroppedMany": "{count} iziphakamiso zikhishiwe — uhlele izigaba zazo.",
+      "pendingRunActionTranslate": "Ukuhunyushwa futhi",
+      "pendingRunActionAssess": "Ukuhlola kabusha"
     },
     "document": {
       "emptyTitle": "Chaza umbhalo ofunayo",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Lena irubhrikhi idlule ngo-{over} izimpawu kumkhawulo. Ithunyelwa ngokuhlolwa ngakunye, ngakho kufanele yehlelwe ngaphambi kokusetshenziswa kwalesi simiso.",
       "guides": "Imihlahlandlela yenhlangano",
       "guidesOptgroup": "Imihlahlandlela yenhlangano",
-      "guideUnavailable": "Umhlahlandlela awutholakali"
+      "guideUnavailable": "Umhlahlandlela awutholakali",
+      "overwriteEditTitle": "Ukuhlela isigaba esiphakanyisiwe",
+      "overwriteEditMessage": "Lo mbhalo unesiphakamiso esisalindile. Uma uwuhlela, isiphakamiso siyakhishwa — siya kokuthi \"akangasetshenziswa\" ohlwini lokubuyekeza, futhi usakwazi ukubuyisela emuva. Umbhalo ongaphandle kwezaziso ungahlelelwa ngokukhululeka uma ukubuyekeza kuvuliwe. Awusoze wabuza futhi.",
+      "overwriteEditConfirmOne": "Khupha isiphakamiso bese uhlelela",
+      "overwriteEditConfirmMany": "Khupha iziphakamiso ezingu-{count} bese uhlelela",
+      "suggestionDroppedOne": "Isiphakamiso sikhishiwe — uhlele isigaba saso.",
+      "suggestionDroppedMany": "{count} iziphakamiso zikhishiwe — uhlele izigaba zazo.",
+      "pendingRunActionRevise": "Ukubuyekeza umbhalo",
+      "pendingRunActionAssess": "Ukuhlola kabusha"
     },
     "data": {
       "emptyTitle": "Faka idatha ukuze ihlaziywe",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "okuzikhethela",
       "guideSourceTerm": "Igama lomthombo",
       "guideTargetTerm": "Ukuhumusha okudingekayo",
-      "guideNote": "Inothi"
+      "guideNote": "Inothi",
+      "pendingRun": {
+        "title": "{count} iziphakamiso zisalindile",
+        "body": "{action} ingashintsha noma iyiphi ingxenye yombhalo, kuhlanganise nezigaba ezineziziphakamiso ongakazinqumi, futhi ukuhlolwa okusha kuthatha indawo yohlu lwamanje. Qala unqume ngeziphakamiso ezisele.",
+        "acceptAll": "Yamukela konke okusele",
+        "rejectAll": "Lahla konke",
+        "cancel": "Khansela"
+      }
     }
   },
   "connectors": {

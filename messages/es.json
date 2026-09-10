@@ -2831,7 +2831,17 @@
       "guides": "Guías de la organización",
       "organizationTerminology": "Terminología de la organización",
       "noOrganizationTerminology": "Sin terminología de la organización",
-      "terminologyGuideUnavailable": "Guía no disponible"
+      "terminologyGuideUnavailable": "Guía no disponible",
+      "editingPendingHint": "{count} sugerencias pendientes: no se marcan mientras edita, y si escribe sobre una se descarta.",
+      "editingPendingHintOne": "1 sugerencia pendiente: no se marca mientras edita, y si escribe sobre ella se descarta.",
+      "overwriteEditTitle": "Editando un pasaje sugerido",
+      "overwriteEditMessage": "Este texto tiene una sugerencia pendiente. Al editarlo, se descarta la sugerencia: pasa a “no aplicadas” en la lista de revisión, donde aún puede deshacerlo. Puede editar libremente el texto fuera de las sugerencias mientras la revisión esté abierta. No se le volverá a preguntar.",
+      "overwriteEditConfirmOne": "Descartar la sugerencia y guardar mi cambio",
+      "overwriteEditConfirmMany": "Descartar {count} sugerencias y guardar mi cambio",
+      "suggestionDroppedOne": "Sugerencia descartada: editó su pasaje.",
+      "suggestionDroppedMany": "{count} sugerencias descartadas: editó sus pasajes.",
+      "pendingRunActionTranslate": "Traduciendo nuevamente",
+      "pendingRunActionAssess": "Reevaluando"
     },
     "document": {
       "emptyTitle": "Describa el documento que desea",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Esta rúbrica supera el límite en {over} caracteres. Se envía con cada evaluación, por lo que debe recortarse antes de que se pueda utilizar este criterio.",
       "guides": "Guías de la organización",
       "guidesOptgroup": "Guías de la organización",
-      "guideUnavailable": "Guía no disponible"
+      "guideUnavailable": "Guía no disponible",
+      "overwriteEditTitle": "Editando un pasaje sugerido",
+      "overwriteEditMessage": "Este texto tiene una sugerencia pendiente. Al editarlo, se descarta la sugerencia: pasa a “no aplicadas” en la lista de revisión, donde aún puede deshacerlo. Puede editar libremente el texto fuera de las sugerencias mientras la revisión esté abierta. No se le volverá a preguntar.",
+      "overwriteEditConfirmOne": "Descartar la sugerencia y editar",
+      "overwriteEditConfirmMany": "Descartar {count} sugerencias y editar",
+      "suggestionDroppedOne": "Sugerencia descartada: editó su pasaje.",
+      "suggestionDroppedMany": "{count} sugerencias descartadas: editó sus pasajes.",
+      "pendingRunActionRevise": "Revisando el documento",
+      "pendingRunActionAssess": "Reevaluando"
     },
     "data": {
       "emptyTitle": "Importar datos para analizar",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "opcional",
       "guideSourceTerm": "Término original",
       "guideTargetTerm": "Traducción obligatoria",
-      "guideNote": "Nota"
+      "guideNote": "Nota",
+      "pendingRun": {
+        "title": "{count} sugerencias pendientes",
+        "body": "{action} puede cambiar cualquier parte del texto, incluidas las partes con sugerencias que aún no ha decidido, y una nueva evaluación reemplaza la lista actual. Decida primero sobre las sugerencias restantes.",
+        "acceptAll": "Aceptar todas las restantes",
+        "rejectAll": "Rechazar todas",
+        "cancel": "Cancelar"
+      }
     }
   },
   "connectors": {

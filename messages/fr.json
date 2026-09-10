@@ -2831,7 +2831,17 @@
       "guides": "Guides de l'organisation",
       "organizationTerminology": "Terminologie de l'organisation",
       "noOrganizationTerminology": "Aucune terminologie de l'organisation",
-      "terminologyGuideUnavailable": "Guide non disponible"
+      "terminologyGuideUnavailable": "Guide non disponible",
+      "editingPendingHint": "{count} suggestions en attente — elles ne sont pas signalées pendant l’édition, et écrire dessus les supprime.",
+      "editingPendingHintOne": "1 suggestion en attente — elle n’est pas signalée pendant l’édition, et écrire dessus la supprime.",
+      "overwriteEditTitle": "Modification d’un passage suggéré",
+      "overwriteEditMessage": "Ce texte a une suggestion en attente. L’éditer supprime la suggestion — elle passe dans « non appliquées » dans la liste de révision, où vous pouvez toujours annuler. Les textes hors suggestion peuvent être modifiés librement pendant une révision. Vous ne serez plus averti.",
+      "overwriteEditConfirmOne": "Supprimer la suggestion et conserver ma modification",
+      "overwriteEditConfirmMany": "Supprimer {count} suggestions et conserver ma modification",
+      "suggestionDroppedOne": "Suggestion supprimée — vous avez modifié son passage.",
+      "suggestionDroppedMany": "{count} suggestions supprimées — vous avez modifié leurs passages.",
+      "pendingRunActionTranslate": "Nouvelle traduction en cours",
+      "pendingRunActionAssess": "Réévaluation en cours"
     },
     "document": {
       "emptyTitle": "Décrivez le document souhaité",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Ce critère dépasse de {over} caractères la limite autorisée. Il est envoyé avec chaque évaluation : il doit être raccourci avant de pouvoir être utilisé.",
       "guides": "Guides de l'organisation",
       "guidesOptgroup": "Guides de l'organisation",
-      "guideUnavailable": "Guide non disponible"
+      "guideUnavailable": "Guide non disponible",
+      "overwriteEditTitle": "Modification d’un passage suggéré",
+      "overwriteEditMessage": "Ce texte a une suggestion en attente. L’éditer supprime la suggestion — elle passe dans « non appliquées » dans la liste de révision, où vous pouvez toujours annuler. Les textes hors suggestion peuvent être modifiés librement pendant une révision. Vous ne serez plus averti.",
+      "overwriteEditConfirmOne": "Supprimer la suggestion et modifier",
+      "overwriteEditConfirmMany": "Supprimer {count} suggestions et modifier",
+      "suggestionDroppedOne": "Suggestion supprimée — vous avez modifié son passage.",
+      "suggestionDroppedMany": "{count} suggestions supprimées — vous avez modifié leurs passages.",
+      "pendingRunActionRevise": "Révision du document en cours",
+      "pendingRunActionAssess": "Réévaluation en cours"
     },
     "data": {
       "emptyTitle": "Importer des données à analyser",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "optionnel",
       "guideSourceTerm": "Terme source",
       "guideTargetTerm": "Traduction requise",
-      "guideNote": "Note"
+      "guideNote": "Note",
+      "pendingRun": {
+        "title": "{count} suggestions encore en attente",
+        "body": "{action} peut modifier n’importe quelle partie du texte, y compris les passages avec des suggestions non décidées, et une nouvelle évaluation remplace la liste actuelle. Décidez des suggestions restantes d’abord.",
+        "acceptAll": "Tout accepter",
+        "rejectAll": "Tout rejeter",
+        "cancel": "Annuler"
+      }
     }
   },
   "connectors": {

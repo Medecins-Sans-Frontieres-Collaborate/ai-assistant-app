@@ -2815,7 +2815,17 @@
       "guides": "Vodiči organizacije",
       "organizationTerminology": "Terminologija organizacije",
       "noOrganizationTerminology": "Nema terminologije organizacije",
-      "terminologyGuideUnavailable": "Vodič nije dostupan"
+      "terminologyGuideUnavailable": "Vodič nije dostupan",
+      "editingPendingHint": "{count} predloga je na čekanju — nisu označeni tokom uređivanja, a ukoliko ih prepišete, biće odbačeni.",
+      "editingPendingHintOne": "1 predlog je na čekanju — nije označen tokom uređivanja, a ukoliko ga prepišete, biće odbačen.",
+      "overwriteEditTitle": "Uređivanje predloženog odlomka",
+      "overwriteEditMessage": "Ovaj tekst ima predlog na čekanju. Uređivanje ga odbacuje — prelazi u „nije primenjeno“ na listi za pregled, gde to još uvek možete poništiti. Tekst izvan predloga možete slobodno uređivati dok je pregled otvoren. Ova poruka neće biti ponovljena.",
+      "overwriteEditConfirmOne": "Odbaci predlog i zadrži moju izmenu",
+      "overwriteEditConfirmMany": "Odbaci {count} predloga i zadrži moju izmenu",
+      "suggestionDroppedOne": "Predlog je odbačen — izmenili ste njegov odlomak.",
+      "suggestionDroppedMany": "{count} predloga je odbačeno — izmenili ste njihove odlomke.",
+      "pendingRunActionTranslate": "Ponovno prevođenje",
+      "pendingRunActionAssess": "Ponovno procenjivanje"
     },
     "document": {
       "emptyTitle": "Opišite dokument koji želite",
@@ -2963,7 +2973,15 @@
       "criterionRubricTooLong": "Ova smernica je duža za {over} znakova od dozvoljenog. Šalje se uz svaku procenu, pa mora biti skraćena pre nego što se ovaj kriterijum može koristiti.",
       "guides": "Vodiči organizacije",
       "guidesOptgroup": "Vodiči organizacije",
-      "guideUnavailable": "Vodič nije dostupan"
+      "guideUnavailable": "Vodič nije dostupan",
+      "overwriteEditTitle": "Uređivanje predloženog odlomka",
+      "overwriteEditMessage": "Ovaj tekst ima predlog na čekanju. Uređivanjem se predlog odbacuje — prelazi u „nije primenjeno“ na listi za pregled, gde možete da poništite tu radnju. Tekst izvan predloga možete uređivati slobodno dok je pregled otvoren. Više nećete biti pitani.",
+      "overwriteEditConfirmOne": "Odbaci predlog i izmeni",
+      "overwriteEditConfirmMany": "Odbaci {count} predloga i izmeni",
+      "suggestionDroppedOne": "Predlog je odbačen — izmenili ste njegov odlomak.",
+      "suggestionDroppedMany": "{count} predloga je odbačeno — izmenili ste njihove odlomke.",
+      "pendingRunActionRevise": "Revizija dokumenta",
+      "pendingRunActionAssess": "Ponovno procenjivanje"
     },
     "data": {
       "emptyTitle": "Uvezite podatke za analizu",
@@ -3339,7 +3357,14 @@
       "guideSectionOptional": "opciono",
       "guideSourceTerm": "Izvorni termin",
       "guideTargetTerm": "Obavezan prevod",
-      "guideNote": "Napomena"
+      "guideNote": "Napomena",
+      "pendingRun": {
+        "title": "{count} predloga još uvek na čekanju",
+        "body": "{action} može izmeniti bilo koji deo teksta, uključujući odlomke sa predlozima o kojima još niste odlučili, a nova procena menja trenutnu listu. Prvo odlučite o preostalim predlozima.",
+        "acceptAll": "Prihvati sve preostale",
+        "rejectAll": "Odbaci sve",
+        "cancel": "Otkaži"
+      }
     }
   },
   "connectors": {

@@ -2831,7 +2831,17 @@
       "guides": "Organisaation ohjeet",
       "organizationTerminology": "Organisaation terminologia",
       "noOrganizationTerminology": "Ei organisaation terminologiaa",
-      "terminologyGuideUnavailable": "Ohje ei saatavilla"
+      "terminologyGuideUnavailable": "Ohje ei saatavilla",
+      "editingPendingHint": "{count} ehdotusta odottaa — niitä ei merkitä muokkauksen aikana, ja kirjoittamalla ehdotuksen yli se poistetaan.",
+      "editingPendingHintOne": "1 ehdotus odottaa — sitä ei merkitä muokkauksen aikana, ja kirjoittamalla sen yli se poistetaan.",
+      "overwriteEditTitle": "Ehdotetun kohdan muokkaus",
+      "overwriteEditMessage": "Tässä tekstissä on odottava ehdotus. Muokkaaminen poistaa ehdotuksen — se siirtyy tilaan \"ei hyväksytty\" tarkistuslistalle, missä voit edelleen perua sen. Voit muokata kohteita, joissa ei ole ehdotuksia, vapaasti niin kauan kuin tarkistus on auki. Tätä kysytään vain kerran.",
+      "overwriteEditConfirmOne": "Poista ehdotus ja pidä muutokseni",
+      "overwriteEditConfirmMany": "Poista {count} ehdotusta ja pidä muutokseni",
+      "suggestionDroppedOne": "Ehdotus poistettu — muokkasit kyseistä kohtaa.",
+      "suggestionDroppedMany": "{count} ehdotusta poistettu — muokkasit kyseisiä kohtia.",
+      "pendingRunActionTranslate": "Käännetään uudelleen",
+      "pendingRunActionAssess": "Arvioidaan uudelleen"
     },
     "document": {
       "emptyTitle": "Kuvaile haluamaasi asiakirjaa",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Tämä arviointikriteeri ylittää rajan {over} merkillä. Se lähetetään jokaisen arvioinnin yhteydessä, joten sitä täytyy lyhentää ennen tämän kriteerin käyttöä.",
       "guides": "Organisaation ohjeet",
       "guidesOptgroup": "Organisaation ohjeet",
-      "guideUnavailable": "Ohje ei saatavilla"
+      "guideUnavailable": "Ohje ei saatavilla",
+      "overwriteEditTitle": "Ehdotetun kohdan muokkaus",
+      "overwriteEditMessage": "Tässä tekstissä on odottava ehdotus. Muokkaaminen poistaa ehdotuksen — se siirtyy tilaan \"ei hyväksytty\" tarkistuslistalle, missä voit edelleen perua sen. Voit muokata kohteita, joissa ei ole ehdotuksia, vapaasti niin kauan kuin tarkistus on auki. Tätä kysytään vain kerran.",
+      "overwriteEditConfirmOne": "Poista ehdotus ja muokkaa",
+      "overwriteEditConfirmMany": "Poista {count} ehdotusta ja muokkaa",
+      "suggestionDroppedOne": "Ehdotus poistettu — muokkasit kyseistä kohtaa.",
+      "suggestionDroppedMany": "{count} ehdotusta poistettu — muokkasit kyseisiä kohtia.",
+      "pendingRunActionRevise": "Muokataan asiakirjaa",
+      "pendingRunActionAssess": "Arvioidaan uudelleen"
     },
     "data": {
       "emptyTitle": "Tuo analysoitavaa dataa",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "valinnainen",
       "guideSourceTerm": "Lähdetermi",
       "guideTargetTerm": "Vaadittu käännös",
-      "guideNote": "Huomautus"
+      "guideNote": "Huomautus",
+      "pendingRun": {
+        "title": "{count} ehdotusta vielä odottaa",
+        "body": "{action} voi muuttaa mitä tahansa tekstin osaa, myös kohtia joissa on vielä päättämättömiä ehdotuksia, ja uusi arviointi korvaa nykyisen listan. Käsittele ensin jäljellä olevat ehdotukset.",
+        "acceptAll": "Hyväksy kaikki jäljellä olevat",
+        "rejectAll": "Hylkää kaikki",
+        "cancel": "Peruuta"
+      }
     }
   },
   "connectors": {

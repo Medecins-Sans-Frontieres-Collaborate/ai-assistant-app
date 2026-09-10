@@ -2831,7 +2831,17 @@
       "guides": "Guide dell'organizzazione",
       "organizationTerminology": "Terminologia dell'organizzazione",
       "noOrganizationTerminology": "Nessuna terminologia dell'organizzazione",
-      "terminologyGuideUnavailable": "Guida non disponibile"
+      "terminologyGuideUnavailable": "Guida non disponibile",
+      "editingPendingHint": "{count} suggerimenti in sospeso — non sono contrassegnati durante la modifica e sovrascrivendoli vengono eliminati.",
+      "editingPendingHintOne": "1 suggerimento in sospeso — non è contrassegnato durante la modifica e sovrascrivendolo viene eliminato.",
+      "overwriteEditTitle": "Modifica di un passaggio suggerito",
+      "overwriteEditMessage": "Questo testo ha un suggerimento in sospeso. Modificandolo, il suggerimento viene eliminato — viene spostato nella lista di revisione sotto \"non applicato\", dove potrai comunque annullare l’azione. Il testo al di fuori dei suggerimenti può essere modificato liberamente mentre la revisione è aperta. Non ti verrà più chiesto.",
+      "overwriteEditConfirmOne": "Elimina il suggerimento e mantieni la mia modifica",
+      "overwriteEditConfirmMany": "Elimina {count} suggerimenti e mantieni la mia modifica",
+      "suggestionDroppedOne": "Suggerimento eliminato — hai modificato il passaggio.",
+      "suggestionDroppedMany": "{count} suggerimenti eliminati — hai modificato i rispettivi passaggi.",
+      "pendingRunActionTranslate": "Nuova traduzione in corso",
+      "pendingRunActionAssess": "Nuova valutazione"
     },
     "document": {
       "emptyTitle": "Descrivi il documento desiderato",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Questa rubrica supera di {over} caratteri il limite. Viene inviata con ogni valutazione, quindi deve essere ridotta prima di poter usare questo criterio.",
       "guides": "Guide dell'organizzazione",
       "guidesOptgroup": "Guide dell'organizzazione",
-      "guideUnavailable": "Guida non disponibile"
+      "guideUnavailable": "Guida non disponibile",
+      "overwriteEditTitle": "Modifica di un passaggio suggerito",
+      "overwriteEditMessage": "Questo testo ha un suggerimento in sospeso. Modificandolo, il suggerimento viene eliminato — viene spostato nella lista di revisione sotto \"non applicato\", dove potrai comunque annullare l’azione. Il testo al di fuori dei suggerimenti può essere modificato liberamente mentre la revisione è aperta. Non ti verrà più chiesto.",
+      "overwriteEditConfirmOne": "Elimina il suggerimento e modifica",
+      "overwriteEditConfirmMany": "Elimina {count} suggerimenti e modifica",
+      "suggestionDroppedOne": "Suggerimento eliminato — hai modificato il passaggio.",
+      "suggestionDroppedMany": "{count} suggerimenti eliminati — hai modificato i rispettivi passaggi.",
+      "pendingRunActionRevise": "Revisione del documento in corso",
+      "pendingRunActionAssess": "Nuova valutazione"
     },
     "data": {
       "emptyTitle": "Importa dati da analizzare",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "facoltativo",
       "guideSourceTerm": "Termine di origine",
       "guideTargetTerm": "Traduzione richiesta",
-      "guideNote": "Nota"
+      "guideNote": "Nota",
+      "pendingRun": {
+        "title": "{count} suggerimenti ancora in sospeso",
+        "body": "{action} può modificare qualsiasi parte del testo, incluse sezioni con suggerimenti non ancora decisi, e una nuova valutazione sostituirà l’elenco attuale. Decidi prima i suggerimenti rimanenti.",
+        "acceptAll": "Accetta tutti i rimanenti",
+        "rejectAll": "Rifiuta tutti",
+        "cancel": "Annulla"
+      }
     }
   },
   "connectors": {

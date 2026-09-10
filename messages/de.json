@@ -2831,7 +2831,17 @@
       "guides": "Organisationsleitfäden",
       "organizationTerminology": "Organisationsterminologie",
       "noOrganizationTerminology": "Keine Organisationsterminologie",
-      "terminologyGuideUnavailable": "Leitfaden nicht verfügbar"
+      "terminologyGuideUnavailable": "Leitfaden nicht verfügbar",
+      "editingPendingHint": "{count} Vorschläge offen — sie werden beim Bearbeiten nicht markiert, und beim Überschreiben wird ein Vorschlag verworfen.",
+      "editingPendingHintOne": "1 Vorschlag offen — er wird beim Bearbeiten nicht markiert, und beim Überschreiben wird der Vorschlag verworfen.",
+      "overwriteEditTitle": "Einen vorgeschlagenen Abschnitt bearbeiten",
+      "overwriteEditMessage": "Dieser Text enthält einen offenen Vorschlag. Wenn Sie ihn bearbeiten, wird der Vorschlag verworfen — er erscheint dann als „nicht übernommen“ in der Prüfliste, wo Sie das rückgängig machen können. Text außerhalb von Vorschlägen kann während einer offenen Überprüfung frei bearbeitet werden. Diese Abfrage erscheint nicht erneut.",
+      "overwriteEditConfirmOne": "Vorschlag verwerfen und meine Änderung behalten",
+      "overwriteEditConfirmMany": "{count} Vorschläge verwerfen und meine Änderung behalten",
+      "suggestionDroppedOne": "Vorschlag verworfen — Sie haben den Abschnitt bearbeitet.",
+      "suggestionDroppedMany": "{count} Vorschläge verworfen — Sie haben die Abschnitte bearbeitet.",
+      "pendingRunActionTranslate": "Erneut übersetzen",
+      "pendingRunActionAssess": "Erneut beurteilen"
     },
     "document": {
       "emptyTitle": "Beschreiben Sie das gewünschte Dokument",
@@ -2979,7 +2989,15 @@
       "criterionRubricTooLong": "Diese Rubrik überschreitet das Limit um {over} Zeichen. Sie wird bei jeder Bewertung gesendet und muss daher gekürzt werden, bevor dieses Kriterium verwendet werden kann.",
       "guides": "Organisationsleitfäden",
       "guidesOptgroup": "Organisationsleitfäden",
-      "guideUnavailable": "Leitfaden nicht verfügbar"
+      "guideUnavailable": "Leitfaden nicht verfügbar",
+      "overwriteEditTitle": "Einen vorgeschlagenen Abschnitt bearbeiten",
+      "overwriteEditMessage": "Dieser Text enthält einen offenen Vorschlag. Wenn Sie ihn bearbeiten, wird der Vorschlag verworfen — er erscheint dann als „nicht übernommen“ in der Prüfliste, wo Sie das rückgängig machen können. Text außerhalb von Vorschlägen kann während einer offenen Überprüfung frei bearbeitet werden. Diese Abfrage erscheint nicht erneut.",
+      "overwriteEditConfirmOne": "Vorschlag verwerfen und bearbeiten",
+      "overwriteEditConfirmMany": "{count} Vorschläge verwerfen und bearbeiten",
+      "suggestionDroppedOne": "Vorschlag verworfen — Sie haben den Abschnitt bearbeitet.",
+      "suggestionDroppedMany": "{count} Vorschläge verworfen — Sie haben die Abschnitte bearbeitet.",
+      "pendingRunActionRevise": "Dokument überarbeiten",
+      "pendingRunActionAssess": "Erneut beurteilen"
     },
     "data": {
       "emptyTitle": "Daten zum Analysieren importieren",
@@ -3355,7 +3373,14 @@
       "guideSectionOptional": "optional",
       "guideSourceTerm": "Quellbegriff",
       "guideTargetTerm": "Erforderliche Übersetzung",
-      "guideNote": "Hinweis"
+      "guideNote": "Hinweis",
+      "pendingRun": {
+        "title": "{count} Vorschläge noch offen",
+        "body": "{action} kann jeden Teil des Textes ändern, auch Abschnitte mit offenen Vorschlägen, über die Sie noch nicht entschieden haben. Eine neue Beurteilung ersetzt die aktuelle Liste. Treffen Sie zuerst eine Entscheidung zu den verbleibenden Vorschlägen.",
+        "acceptAll": "Alle verbleibenden übernehmen",
+        "rejectAll": "Alle ablehnen",
+        "cancel": "Abbrechen"
+      }
     }
   },
   "connectors": {
