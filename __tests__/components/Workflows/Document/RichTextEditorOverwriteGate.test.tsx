@@ -1,49 +1,37 @@
 import { act, render, waitFor } from '@testing-library/react';
+import { createRef } from 'react';
 
-import { RichTextEditor } from '@/components/Workflows/Document/RichTextEditor';
+import {
+  RichTextEditor,
+  RichTextEditorHandle,
+} from '@/components/Workflows/Document/RichTextEditor';
 
 import { describe, expect, it, vi } from 'vitest';
 
 /**
- * The overwrite gate (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §4, §6a) with a REAL
- * Tiptap editor: the question is whether ProseMirror's `filterTransaction`
- * sees the right spans and honours the answer, which a mock cannot show.
+ * The overwrite gate (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §4, §6a) against a
+ * REAL Tiptap editor: whether ProseMirror's `filterTransaction` sees the
+ * right spans and honours the answer is exactly what a mock could not show.
+ *
+ * jsdom delivers neither `beforeinput` nor DOM mutations to ProseMirror, so
+ * typing is driven through the handle's `insertText`, which dispatches the
+ * same kind of transaction a keystroke does.
  */
 
 const EDITS = [{ id: 'e1', before: 'brave new', after: 'bold old' }];
 
-/** Places the caret at a character offset within the first paragraph and types. */
-function typeAt(pm: HTMLElement, offset: number, text: string) {
-  const paragraph = pm.querySelector('p');
-  if (!paragraph) throw new Error('no paragraph');
-  const walker = document.createTreeWalker(paragraph, NodeFilter.SHOW_TEXT);
-  let remaining = offset;
-  let node = walker.nextNode();
-  while (node && remaining > (node.textContent?.length ?? 0)) {
-    remaining -= node.textContent?.length ?? 0;
-    node = walker.nextNode();
-  }
-  if (!node) throw new Error('offset past end');
-  const range = document.createRange();
-  range.setStart(node, remaining);
-  range.collapse(true);
-  const selection = window.getSelection();
-  selection?.removeAllRanges();
-  selection?.addRange(range);
-  pm.dispatchEvent(
-    new InputEvent('beforeinput', {
-      bubbles: true,
-      cancelable: true,
-      inputType: 'insertText',
-      data: text,
-    }),
-  );
-}
+// <p>Hello brave new world</p>: text starts at position 1, so "brave" (text
+// offset 6) begins at position 7.
+const INSIDE_HELLO = 3;
+const SPAN_START = 7;
+const INSIDE_BRAVE = 9;
 
 async function mount(gate: (ids: string[]) => boolean) {
+  const ref = createRef<RichTextEditorHandle>();
   const onChange = vi.fn();
   const { container } = render(
     <RichTextEditor
+      ref={ref}
       contentHtml="<p>Hello brave new world</p>"
       onChange={onChange}
       editable
@@ -54,53 +42,81 @@ async function mount(gate: (ids: string[]) => boolean) {
   await waitFor(() => {
     expect(container.querySelector('.edit-suggestion-mark')).toBeTruthy();
   });
-  return {
-    pm: container.querySelector('.ProseMirror') as HTMLElement,
-    onChange,
-  };
+  const pm = container.querySelector('.ProseMirror') as HTMLElement;
+  const type = (pos: number, text: string) =>
+    act(() => ref.current!.insertText(pos, pos, text));
+  return { pm, onChange, type };
 }
 
 describe('RichTextEditor overwrite gate', () => {
   it('lets typing outside a suggestion through without asking', async () => {
     const gate = vi.fn(() => false);
-    const { pm, onChange } = await mount(gate);
+    const { pm, onChange, type } = await mount(gate);
 
-    act(() => typeAt(pm, 2, 'X')); // inside "Hello"
+    await type(INSIDE_HELLO, 'X');
 
-    await waitFor(() => expect(onChange).toHaveBeenCalled());
     expect(gate).not.toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalled();
     expect(pm.textContent).toBe('HeXllo brave new world');
   });
 
   it('asks before typing inside a suggestion, and holds the keystroke on no', async () => {
     const gate = vi.fn(() => false);
-    const { pm, onChange } = await mount(gate);
+    const { pm, onChange, type } = await mount(gate);
 
-    act(() => typeAt(pm, 8, 'X')); // inside "brave"
+    await type(INSIDE_BRAVE, 'X');
 
     expect(gate).toHaveBeenCalledWith(['e1']);
-    expect(pm.textContent).toBe('Hello brave new world');
     expect(onChange).not.toHaveBeenCalled();
+    expect(pm.textContent).toBe('Hello brave new world');
   });
 
   it('lets the keystroke land on yes', async () => {
     const gate = vi.fn(() => true);
-    const { pm, onChange } = await mount(gate);
+    const { pm, onChange, type } = await mount(gate);
 
-    act(() => typeAt(pm, 8, 'X'));
+    await type(INSIDE_BRAVE, 'X');
 
     expect(gate).toHaveBeenCalledWith(['e1']);
-    await waitFor(() => expect(onChange).toHaveBeenCalled());
+    expect(onChange).toHaveBeenCalled();
     expect(pm.textContent).toBe('Hello brXave new world');
   });
 
   it('does not ask for an insertion at the edge of a suggestion', async () => {
     const gate = vi.fn(() => false);
-    const { pm, onChange } = await mount(gate);
+    const { pm, onChange, type } = await mount(gate);
 
-    act(() => typeAt(pm, 6, 'X')); // exactly where "brave" begins
+    await type(SPAN_START, 'X');
 
-    await waitFor(() => expect(onChange).toHaveBeenCalled());
     expect(gate).not.toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalled();
+    expect(pm.textContent).toBe('Hello Xbrave new world');
+  });
+
+  it('exempts a programmatic replaceRange from the gate', async () => {
+    const gate = vi.fn(() => false);
+    const ref = createRef<RichTextEditorHandle>();
+    const { container } = render(
+      <RichTextEditor
+        ref={ref}
+        contentHtml="<p>Hello brave new world</p>"
+        onChange={vi.fn()}
+        editable
+        previewEdits={EDITS}
+        onOverwriteEdits={gate}
+      />,
+    );
+    await waitFor(() => {
+      expect(container.querySelector('.edit-suggestion-mark')).toBeTruthy();
+    });
+
+    act(() => {
+      ref.current!.replaceRange(INSIDE_BRAVE, INSIDE_BRAVE + 2, 'ZZ');
+    });
+
+    expect(gate).not.toHaveBeenCalled();
+    expect(container.querySelector('.ProseMirror')?.textContent).toBe(
+      'Hello brZZe new world',
+    );
   });
 });
