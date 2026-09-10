@@ -131,6 +131,17 @@ export class WorkflowUsageCollector {
     return this.calls.length;
   }
 
+  /**
+   * Spread into a JSON route's payload: `{ usage }` when there is something
+   * to report, and NOTHING at all when there is not. Deliberately not
+   * `usage: null` — a route that made no model call should not grow a key,
+   * and the client's recorder ignores absent and malformed payloads alike.
+   */
+  fields(): { usage?: WorkflowUsagePayload } {
+    const payload = this.payload();
+    return payload ? { usage: payload } : {};
+  }
+
   /** The run's totals, for the client echo. Null when nothing was recorded. */
   payload(): WorkflowUsagePayload | null {
     if (this.calls.length === 0) return null;
