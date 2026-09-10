@@ -708,6 +708,13 @@ interface SettingsStore {
   /** Drop accepted/rejected review edits from the queue automatically. */
   autoClearResolvedEdits: boolean;
   /**
+   * The user has been told once that typing inside a suggested passage drops
+   * that suggestion (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §6a). Before: the
+   * first such keystroke is held back and explained. After: it lands, the
+   * suggestion moves to "not applied", and a notice offers undo.
+   */
+  reviewOverwriteAcknowledged: boolean;
+  /**
    * Default state of the "Suggest changes" checkbox on the Document composer:
    * a revision comes back as reviewable suggestions instead of overwriting the
    * document. Per-run the user can still tick it either way.
@@ -731,6 +738,7 @@ interface SettingsStore {
   setConfirmStopFromButton: (enabled: boolean) => void;
   setConfirmStopFromKeyboard: (enabled: boolean) => void;
   setAutoClearResolvedEdits: (enabled: boolean) => void;
+  setReviewOverwriteAcknowledged: (acknowledged: boolean) => void;
   setSuggestRevisions: (enabled: boolean) => void;
   setSuggestRevisionsException: (
     key: 'largeRewrites' | 'structuralReorders',
@@ -929,6 +937,7 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromButton: true,
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
+      reviewOverwriteAcknowledged: false,
       m365Connected: true,
       m365ConnectedUserSet: false,
       m365ToolsUserEnabled: true,
@@ -1681,6 +1690,8 @@ export const useSettingsStore = create<SettingsStore>()(
 
       setAutoClearResolvedEdits: (enabled) =>
         set({ autoClearResolvedEdits: enabled }),
+      setReviewOverwriteAcknowledged: (acknowledged) =>
+        set({ reviewOverwriteAcknowledged: acknowledged }),
 
       setSuggestRevisions: (enabled) => set({ suggestRevisions: enabled }),
       setM365Connected: (connected) =>
@@ -1799,6 +1810,7 @@ export const useSettingsStore = create<SettingsStore>()(
           confirmStopFromButton: true,
           confirmStopFromKeyboard: true,
           autoClearResolvedEdits: false,
+          reviewOverwriteAcknowledged: false,
           suggestRevisions: true,
           suggestRevisionsExceptions: {
             largeRewrites: true,
@@ -1815,7 +1827,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 60, // Increment this when schema changes to trigger migrations
+      version: 61, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1909,6 +1921,7 @@ export const useSettingsStore = create<SettingsStore>()(
         confirmStopFromButton: state.confirmStopFromButton,
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
         autoClearResolvedEdits: state.autoClearResolvedEdits,
+        reviewOverwriteAcknowledged: state.reviewOverwriteAcknowledged,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
         m365ConnectedUserSet: state.m365ConnectedUserSet,
@@ -2515,6 +2528,14 @@ export const useSettingsStore = create<SettingsStore>()(
             typeof state.workflowUsageStats !== 'object'
           ) {
             state.workflowUsageStats = {};
+          }
+        }
+
+        // Version 60 → 61: the one-time "typing over a suggestion" notice.
+        // Everyone starts unacknowledged — the rule is new to them.
+        if (version < 61) {
+          if (typeof state.reviewOverwriteAcknowledged !== 'boolean') {
+            state.reviewOverwriteAcknowledged = false;
           }
         }
 
