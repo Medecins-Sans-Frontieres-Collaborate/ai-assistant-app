@@ -62,6 +62,7 @@ import {
 
 import { LanguagePicker } from '@/components/UI/LanguagePicker';
 
+import { RunEstimateHint } from '../Impact/RunEstimateHint';
 import { AnnotatedText } from '../Shared/Review/AnnotatedText';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaManager } from '../Shared/Review/CriteriaManager';
@@ -859,6 +860,19 @@ export function TranslationWorkspace({
             </button>
           ))}
         </div>
+
+        {/* What this run will cost, while quick/agentic is still a choice. */}
+        {!isRunning && (
+          <RunEstimateHint
+            model={conversation?.model}
+            sourceText={state.sourceText}
+            // Quick is one pass. Agentic adds the analysis pass and up to
+            // maxReviewRounds review passes, each re-reading source + draft.
+            passes={
+              state.mode === 'agentic' ? 2 + MAX_REVIEW_ROUNDS_DISPLAY : 1
+            }
+          />
+        )}
 
         {isRunning ? (
           <button
