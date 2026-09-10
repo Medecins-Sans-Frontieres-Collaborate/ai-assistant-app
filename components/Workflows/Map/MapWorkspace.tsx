@@ -71,6 +71,7 @@ import {
 
 import { EventPrecision, MapFeature, MapWorkflowState } from '@/types/workflow';
 
+import { RunEstimateHint } from '../Impact/RunEstimateHint';
 import { WorkflowWorkspaceProps } from '../registry';
 import { CategoryFilterBar } from './CategoryFilterBar';
 import { DatasetPicker } from './DatasetPicker';
@@ -799,6 +800,20 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                 : t('map.mapIt')}
         </button>
       </div>
+      {/* Extraction reads the pasted material and returns a short feature
+          list, so the completion is a small fraction of the input. In search
+          mode the material is fetched server-side and cannot be measured
+          here, so no figure is offered rather than a wrong one. */}
+      {!busy && !searchMode && !urlCandidate && (
+        <p className="mt-2">
+          <RunEstimateHint
+            model={conversation?.model}
+            sourceText={sourceText}
+            passes={1}
+            completionRatio={0.15}
+          />
+        </p>
+      )}
       <p className="mt-2 max-w-[75ch] text-xs text-gray-500 dark:text-gray-400">
         {t('map.disclaimer')}
       </p>
