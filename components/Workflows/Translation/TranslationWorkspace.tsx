@@ -25,6 +25,7 @@ import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtrac
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
 import { assessTranslation } from '@/client/services/workflows/translationAssessment';
 import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
+import { AGENTIC_TRANSLATION_MAX_PASSES } from '@/lib/services/workflows/shared/workflowLimits';
 
 import {
   LanguageOption,
@@ -867,10 +868,12 @@ export function TranslationWorkspace({
             model={conversation?.model}
             sourceText={state.sourceText}
             // Quick is one pass. Agentic adds the analysis pass and up to
-            // maxReviewRounds review passes, each re-reading source + draft.
+            // MAX_REVIEW_ROUNDS reviews, each re-reading source + draft —
+            // an upper bound, since the loop stops early on approval.
             passes={
-              state.mode === 'agentic' ? 2 + MAX_REVIEW_ROUNDS_DISPLAY : 1
+              state.mode === 'agentic' ? AGENTIC_TRANSLATION_MAX_PASSES : 1
             }
+            atMost={state.mode === 'agentic'}
           />
         )}
 

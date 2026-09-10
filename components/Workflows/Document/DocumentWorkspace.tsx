@@ -96,6 +96,7 @@ import { DropdownPortal } from '@/components/UI/DropdownPortal';
 import { ExportFormatMenu } from '@/components/UI/ExportFormatMenu';
 import Modal from '@/components/UI/Modal';
 
+import { RunEstimateHint } from '../Impact/RunEstimateHint';
 import { PastedTextChips } from '../Shared/PastedTextChips';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaManager } from '../Shared/Review/CriteriaManager';
@@ -1632,10 +1633,28 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           </button>
         )}
       </div>
-      {isRunning && (
+      {isRunning ? (
         <p className="mt-2 animate-pulse text-xs text-gray-500 dark:text-gray-400">
           {t('document.writing')}
         </p>
+      ) : (
+        // A revise pass re-sends the whole document; a first draft sends only
+        // the instruction, so there is nothing to predict from yet.
+        hasDocument && (
+          <p className="mt-2">
+            <RunEstimateHint
+              model={conversation?.model}
+              sourceText={
+                scopedSelection?.text ??
+                (hasDocument ? htmlToMarkdown(docHtml) : '')
+              }
+              passes={1}
+              // A revision rewrites what it was given, so the completion is
+              // roughly the length of the input.
+              completionRatio={1}
+            />
+          </p>
+        )
       )}
     </div>
   );
