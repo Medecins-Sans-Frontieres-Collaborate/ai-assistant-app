@@ -43,6 +43,12 @@ export interface YourLimitRow {
   used?: number;
   remaining?: number;
   resetAt?: string;
+  /**
+   * Of `used`, the part spent by conversation workflows. Shown as a sub-line
+   * so the shared budget stays one number with one cap, while still saying
+   * where it went (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+   */
+  usedByWorkflows?: number;
   /** The family envelope, not this model's own cap, is what ran out. */
   familyExhausted: boolean;
 }
@@ -131,6 +137,7 @@ export function selectYourLimitRows(
       used: row.used,
       remaining: row.remaining,
       resetAt: row.resetAt,
+      usedByWorkflows: row.usedByWorkflows,
       familyExhausted: false,
     });
   }
@@ -279,6 +286,15 @@ const LimitRow: FC<{ row: YourLimitRow; onExpired?: () => void }> = ({
           {row.blocked && <IconLock size={14} />}
           {value.trim()}
         </span>
+        {/* Where the budget went. Stated only when workflows actually spent
+            some of it — one cap, one number, but the split is visible. */}
+        {typeof row.usedByWorkflows === 'number' && row.usedByWorkflows > 0 && (
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {t('limitsUx.mine.usedByWorkflows', {
+              used: numberFmt.format(row.usedByWorkflows),
+            })}
+          </span>
+        )}
         {exhausted && (
           <span className="text-xs text-amber-700 dark:text-amber-400">
             {t(
