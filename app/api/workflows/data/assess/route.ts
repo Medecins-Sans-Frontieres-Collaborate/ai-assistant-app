@@ -163,7 +163,7 @@ export async function POST(req: NextRequest) {
       criteria: result.criteria,
       edits,
       overallSummary: result.overallSummary,
-      usage: usage.payload(),
+      ...usage.fields(),
     });
   } catch (error) {
     console.error('[workflows/data/assess] Failed:', error);

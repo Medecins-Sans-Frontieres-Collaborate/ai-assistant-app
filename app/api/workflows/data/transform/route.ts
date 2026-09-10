@@ -166,7 +166,7 @@ export async function POST(req: NextRequest) {
       columns,
       rows,
       explanation: result.explanation,
-      usage: usage.payload(),
+      ...usage.fields(),
     });
   } catch (error) {
     console.error('[workflows/data/transform] Failed:', error);

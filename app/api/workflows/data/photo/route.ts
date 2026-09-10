@@ -174,7 +174,7 @@ export async function POST(req: NextRequest) {
         usage,
         usageLabel: 'photo:infer',
       });
-      return successResponse({ ...result, usage: usage.payload() });
+      return successResponse({ ...result, ...usage.fields() });
     }
 
     const columns = body.columns as DataColumn[];
@@ -196,7 +196,7 @@ export async function POST(req: NextRequest) {
       usage,
       usageLabel: 'photo:extract',
     });
-    return successResponse({ rows: result.rows, usage: usage.payload() });
+    return successResponse({ rows: result.rows, ...usage.fields() });
   } catch (error) {
     console.error('[workflows/data/photo] Failed:', sanitizeForLog(error));
     return handleApiError(error, 'Photo extraction failed');

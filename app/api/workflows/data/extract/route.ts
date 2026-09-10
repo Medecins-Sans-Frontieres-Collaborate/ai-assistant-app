@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
     return successResponse({
       rows: result.rows,
       truncatedSource: budgeted.truncated,
-      usage: usage.payload(),
+      ...usage.fields(),
     });
   } catch (error) {
     console.error('[workflows/data/extract] Failed:', error);
