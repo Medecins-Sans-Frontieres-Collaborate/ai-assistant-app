@@ -90,6 +90,7 @@ import {
 
 import CameraCaptureModal from '@/components/UI/CameraCaptureModal';
 
+import { RunEstimateHint } from '../Impact/RunEstimateHint';
 import { PastedTextChips } from '../Shared/PastedTextChips';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
@@ -1762,6 +1763,18 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                 : t('data.transform')}
             </button>
           </div>
+          {/* A transform sends the scoped table and gets a table back, so
+              the completion is about the size of the input. */}
+          {busy === null && hasTable && (
+            <p className="mt-1.5">
+              <RunEstimateHint
+                model={conversation?.model}
+                sourceText={JSON.stringify(scopedRows)}
+                passes={1}
+                completionRatio={1}
+              />
+            </p>
+          )}
           {scopedRows.length > 500 && (
             <p className="mt-1.5 text-xs text-amber-700 dark:text-amber-400">
               {t('data.transformCapHint', { max: '500' })}
