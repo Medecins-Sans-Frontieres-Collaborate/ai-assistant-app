@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "I-chip ayikaze iboniswe. Izibalo zisalandelwa futhi zivele kuleli khasi.",
     "chipAutoHideLabel": "Nyamalala ngemva",
     "chipAutoHideUnit": "amasekhondi",
-    "chipAutoHideHint": "Phakathi kuka-{min} no-{max} amasekhondi."
+    "chipAutoHideHint": "Phakathi kuka-{min} no-{max} amasekhondi.",
+    "byWorkflow": "Ngokwe-workflow",
+    "byWorkflowNote": "Ingxenye yemiphumela engenhla, ekhishwe ngokuhlukile — akusiyona enye ukusetshenziswa. Ukugijima kwe-grant kubizwa kubikwa kwenhlangano yakho kanye nesabelomali sakho samathokheni, kodwa akukho kuleli zinga lendawo."
   },
   "extraction": {
     "toggleLabel": "Khipha idatha ehlelekile",
@@ -3538,6 +3540,33 @@
         "hidden": "Fihla"
       },
       "visibilityHint": "Okwenziwa ngokuzenzakalelayo kubonisa i-chip uma inani libuyekezwa noma uma ubeka igundane phezu kwayo. Ungashintsha lokhu futhi kokuthi Izilungiselelo › Ukusetshenziswa & Umthelela."
+    },
+    "workflow": {
+      "title": "Le workspace (okulinganiselwe)",
+      "workspace": "Le workspace",
+      "currentArtifact": "Umsebenzi wamanje",
+      "lastRun": "Ukugijima kokugcina",
+      "lastRunDetail": "{action} · {calls} ukubiza imodeli",
+      "today": "Namuhla",
+      "railChat": "Xoxa kule workspace",
+      "byAction": "Ngokwesinyathelo",
+      "delta": "+{grams} g",
+      "ariaLabel": "Umlando we-carbon okhawulelwe wale workspace: {grams} amagremu e-CO₂ efanayo. Bonisa ukuhlukaniswa.",
+      "disclaimer": "Izilinganiso zokugijima ngakunye zisuselwa enanini lamathokheni abikiwe, kusetshenziswa ezijwayelekile ezishicilelwe nemibono v{version}. Ukugijima okukodwa kuhilela ukubiza imodeli kaningi, futhi yonke imithombo ihamba nayo ngakunye, ngakho amathokheni e-prompt ayawubusa. Ukugijima okwakungakazeki ukuqapha akubaliwe. Akuyona inkomba eqondile.",
+      "actions": {
+        "translate": "Ukuhumusha",
+        "analysis": "Ukuhlaziywa komthombo",
+        "review": "Izikhathi zokubuyekeza",
+        "write": "Ukubhala",
+        "revise": "Ukuhlelwa kabusha",
+        "profile": "Iphrofayela yomqulu",
+        "assess": "Ukuhlola ikhwalithi",
+        "extract": "Ukukhipha",
+        "transform": "Ukuguqula",
+        "photo": "Ukukhipha isithombe",
+        "map_edit": "Ukuvuselela imephu",
+        "rail_chat": "Ingxoxo"
+      }
     }
   },
   "table": {

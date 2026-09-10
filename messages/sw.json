@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "Chipu haiwezi kuonekana. Jumla bado inafuatiliwa na itaonekana kwenye ukurasa huu.",
     "chipAutoHideLabel": "Fifisha baada ya",
     "chipAutoHideUnit": "sekunde",
-    "chipAutoHideHint": "Kati ya {min} na {max} sekunde."
+    "chipAutoHideHint": "Kati ya {min} na {max} sekunde.",
+    "byWorkflow": "Kwa mpangilio wa kazi",
+    "byWorkflowNote": "Sehemu ya jumla hapo juu, inaonyeshwa kando — si matumizi ya ziada. Utekelezaji wa ruzuku unahesabiwa kwenye taarifa ya shirika lako na bajeti yako ya tokeni, lakini si kwenye jumla hii ya hapa."
   },
   "extraction": {
     "toggleLabel": "Dondoa data iliyo na muundo",
@@ -3554,6 +3556,33 @@
         "hidden": "Ficha"
       },
       "visibilityHint": "Otomatiki itaonyesha chipu wakati makadirio yanasasishwa au unapobonya juu yake. Badilisha hili tena kwenye Mipangilio › Matumizi & Athari."
+    },
+    "workflow": {
+      "title": "Sehemu hii ya kazi (kadirio)",
+      "workspace": "Sehemu hii ya kazi",
+      "currentArtifact": "Kazi ya sasa",
+      "lastRun": "Mara ya mwisho kutekelezwa",
+      "lastRunDetail": "{action} · {calls} miito ya modeli",
+      "today": "Leo",
+      "railChat": "Ongea kwenye sehemu hii ya kazi",
+      "byAction": "Kwa hatua",
+      "delta": "+{grams} g",
+      "ariaLabel": "Makadirio ya kiwango cha hewa ukaa sehemu hii ya kazi: gramu {grams} za CO₂ sawia. Onyesha mgawanyiko.",
+      "disclaimer": "Makadirio kwa kila utekelezaji kutoka kwa idadi ya tokeni zilizoripotiwa, yakitumia wastani na dhana zilizochapishwa v{version}. Utekelezaji mmoja ni miito kadhaa ya modeli, na chanzo kizima husafiri kila mara, hivyo tokeni za muulizo hutawala. Utekelezaji kabla ya ufuatiliaji hauhesabiwi. Hii si kipimo halisi.",
+      "actions": {
+        "translate": "Tafsiri",
+        "analysis": "Uchambuzi wa chanzo",
+        "review": "Mzunguko wa mapitio",
+        "write": "Uandishi",
+        "revise": "Marekebisho",
+        "profile": "Wasifu wa hati",
+        "assess": "Tathmini ya ubora",
+        "extract": "Uchimbaji",
+        "transform": "Badilisha",
+        "photo": "Uchimbaji wa picha",
+        "map_edit": "Sasisha ramani",
+        "rail_chat": "Ongea"
+      }
     }
   },
   "table": {

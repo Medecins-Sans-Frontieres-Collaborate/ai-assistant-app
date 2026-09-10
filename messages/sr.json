@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "Oznaka nikada nije prikazana. Zbirni podaci se i dalje prate i prikazuju na ovoj stranici.",
     "chipAutoHideLabel": "Nestani nakon",
     "chipAutoHideUnit": "sekundi",
-    "chipAutoHideHint": "Između {min} i {max} sekundi."
+    "chipAutoHideHint": "Između {min} i {max} sekundi.",
+    "byWorkflow": "Po workflow-u",
+    "byWorkflowNote": "Deo ukupnih vrednosti prikazanih iznad, prikazan odvojeno — ne predstavlja dodatnu upotrebu. Grant pokretanja se računaju u izveštaje vaše organizacije i vaš token budžet, ali ne i u ovaj lokalni zbir."
   },
   "extraction": {
     "toggleLabel": "Ekstrahuj strukturirane podatke",
@@ -3538,6 +3540,33 @@
         "hidden": "Sakrij"
       },
       "visibilityHint": "Automatski prikazuje oznaku kada se procena osveži ili pređete mišem preko nje. Ovo možete ponovo promeniti u Podešavanja › Upotreba i uticaj."
+    },
+    "workflow": {
+      "title": "Ovaj workspace (procena)",
+      "workspace": "Ovaj workspace",
+      "currentArtifact": "Trenutni rad",
+      "lastRun": "Poslednje pokretanje",
+      "lastRunDetail": "{action} · {calls} poziva modela",
+      "today": "Danas",
+      "railChat": "Ćaskanje u ovom workspace-u",
+      "byAction": "Po koraku",
+      "delta": "+{grams} g",
+      "ariaLabel": "Procenjeni karbonski otisak ovog workspace-a: {grams} grama CO₂ ekvivalenta. Prikaži detalje.",
+      "disclaimer": "Procene po pokretanju zasnovane na prijavljenom broju tokena, koristeći objavljene proseke i pretpostavke v{version}. Jedno pokretanje sadrži više poziva modela, a ceo izvor se prenosi sa svakim, tako da prompt tokeni dominiraju. Pokretanja pre početka praćenja nisu uračunata. Nije merenje.",
+      "actions": {
+        "translate": "Prevod",
+        "analysis": "Analiza izvora",
+        "review": "Runde pregleda",
+        "write": "Pisanje",
+        "revise": "Revizija",
+        "profile": "Profil dokumenta",
+        "assess": "Procena kvaliteta",
+        "extract": "Ekstrakcija",
+        "transform": "Transformacija",
+        "photo": "Ekstrakcija fotografija",
+        "map_edit": "Ažuriranje mape",
+        "rail_chat": "Ćaskanje"
+      }
     }
   },
   "table": {

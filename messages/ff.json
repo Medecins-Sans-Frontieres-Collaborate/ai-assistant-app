@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "Chip on mballu so wonaa refti. Jaaɓnirgal balɗe hokka ko e hello ngo.",
     "chipAutoHideLabel": "Sakkito ngam",
     "chipAutoHideUnit": "hawndu",
-    "chipAutoHideHint": "He {min} e {max} hawndu."
+    "chipAutoHideHint": "He {min} e {max} hawndu.",
+    "byWorkflow": "Fayde workflow",
+    "byWorkflowNote": "Kofal e ton ndiyam sabu, golli e hoore mum — min njaha suudu use. Wanneeji grant ndiyam koo e ngeemnde organisation maa e tawa e token, ngal kawtal ngol wawan caaɗaani."
   },
   "extraction": {
     "toggleLabel": "Fowndo ɗiɗi e jamfa",
@@ -3538,6 +3540,33 @@
         "hidden": "Mballu"
       },
       "visibilityHint": "Auto on holli chip so tawii njoɓɗo rewtii walla so a woodi duunde ko. Aɗa waawi topptude ɗum kadi e Settings › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Wormegol ngol (caggal ndaare)",
+      "workspace": "Wormegol ngol",
+      "currentArtifact": "Golle woni",
+      "lastRun": "Golle jeɗɗi",
+      "lastRunDetail": "{action} · {calls} wanneeje model",
+      "today": "Hannde",
+      "railChat": "Hattude ci wormegol ngol",
+      "byAction": "Fayde mataki",
+      "delta": "+{grams} g",
+      "ariaLabel": "Caggal ndaare carbon e wormegol ngol: {grams} gram CO₂ ɗaɗol. Holli fissagol.",
+      "disclaimer": "Caggal ndaare kalkan goɗɗe e ko ndiyam token ɓe hebi, ngol fayda laawol konkere e doggol makko v{version}. Golle goɗɗe nduɗɗi wanneeji model ɓe jaɓi, te ceede source foti nayi e kala goɗɗum, kadi ko ɗam 'prompt tokens' ndiyam. Golle ɗe ummo trakking ngam feewi waawa faaɓitaade. Ko caggal ndaare no waawi.",
+      "actions": {
+        "translate": "Tarjamol",
+        "analysis": "Ɓeydital ceertooje",
+        "review": "Jeere seŋo",
+        "write": "Windugol",
+        "revise": "Pulroogol",
+        "profile": "Ceertorɗe dokumeent",
+        "assess": "Sitirgol to bannge",
+        "extract": "Ɓurndugol",
+        "transform": "Waylugol",
+        "photo": "Ɓurndugol foto",
+        "map_edit": "Golle karte",
+        "rail_chat": "Hattude"
+      }
     }
   },
   "table": {

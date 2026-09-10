@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "La pastille n’est jamais affichée. Les totaux restent suivis et s’affichent sur cette page.",
     "chipAutoHideLabel": "Disparaît après",
     "chipAutoHideUnit": "secondes",
-    "chipAutoHideHint": "Entre {min} et {max} secondes."
+    "chipAutoHideHint": "Entre {min} et {max} secondes.",
+    "byWorkflow": "Par flux de travail",
+    "byWorkflowNote": "Fait partie des totaux ci-dessus, affiché séparément — il ne s'agit pas d'une utilisation supplémentaire. Les exécutions de subventions sont comptées dans le reporting de votre organisation et dans votre budget de jetons, mais pas dans ce total local."
   },
   "extraction": {
     "toggleLabel": "Extraire des données structurées",
@@ -3554,6 +3556,33 @@
         "hidden": "Masquer"
       },
       "visibilityHint": "Le mode automatique affiche la pastille lorsque l’estimation est mise à jour ou au survol. Vous pouvez modifier ce réglage dans Paramètres › Utilisation & Impact."
+    },
+    "workflow": {
+      "title": "Cet espace de travail (estimation)",
+      "workspace": "Cet espace de travail",
+      "currentArtifact": "Travail en cours",
+      "lastRun": "Dernière exécution",
+      "lastRunDetail": "{action} · {calls} appels au modèle",
+      "today": "Aujourd'hui",
+      "railChat": "Discussion dans cet espace de travail",
+      "byAction": "Par étape",
+      "delta": "+{grams} g",
+      "ariaLabel": "Empreinte carbone estimée de cet espace de travail : {grams} grammes d'équivalent CO₂. Afficher le détail.",
+      "disclaimer": "Estimations par exécution basées sur les comptes de jetons rapportés, à l’aide d’indices moyens publiés et d’hypothèses v{version}. Une exécution correspond à plusieurs appels au modèle, et la totalité de la source voyage à chaque appel, donc les jetons de prompt sont prédominants. Les exécutions d’avant le début du suivi ne sont pas comptabilisées. Pas une mesure réelle.",
+      "actions": {
+        "translate": "Traduction",
+        "analysis": "Analyse de la source",
+        "review": "Tours de relecture",
+        "write": "Rédaction",
+        "revise": "Révision",
+        "profile": "Profil du document",
+        "assess": "Évaluation de la qualité",
+        "extract": "Extraction",
+        "transform": "Transformation",
+        "photo": "Extraction de photo",
+        "map_edit": "Mise à jour de la carte",
+        "rail_chat": "Discussion"
+      }
     }
   },
   "table": {

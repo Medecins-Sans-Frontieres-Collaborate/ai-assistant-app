@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "Gunkin ba zai bayyana ba. Za a ci gaba da lissafa jimlolin kuma zai bayyana a wannan shafi.",
     "chipAutoHideLabel": "Ya ɓace bayan",
     "chipAutoHideUnit": "daƙiƙu",
-    "chipAutoHideHint": "Tsakanin {min} da {max} daƙiƙu."
+    "chipAutoHideHint": "Tsakanin {min} da {max} daƙiƙu.",
+    "byWorkflow": "Ta tsarin aiki",
+    "byWorkflowNote": "Sashe ne daga jimillar da ke sama, an nuna daban—ba ƙarin amfani ba. Ana kirga gudun tallafi cikin rahoton kungiyarku da kasafin lambobinku, amma ba a kirga shi a wannan jimillar ta gida ba."
   },
   "extraction": {
     "toggleLabel": "Ciro bayani tsari",
@@ -3538,6 +3540,33 @@
         "hidden": "Boye"
       },
       "visibilityHint": "Ta atomatik zai nuna gunkin idan an sabunta hasashe ko ka matsa sama da shi. Za ka iya canza wannan daga Saituna › Amfani & Tasiri."
+    },
+    "workflow": {
+      "title": "Wannan wurin aiki (kimantawa)",
+      "workspace": "Wannan wurin aiki",
+      "currentArtifact": "Aikin yanzu",
+      "lastRun": "Gudun karshe",
+      "lastRunDetail": "{action} · {calls} kira na samfur",
+      "today": "Yau",
+      "railChat": "Tattaunawa a wannan wurin aiki",
+      "byAction": "Ta mataki",
+      "delta": "+{grams} g",
+      "ariaLabel": "Kimantaccen sawun carbon na wannan wurin aiki: {grams} gram na CO₂ kwatankwacin. Nuna rarrabawa.",
+      "disclaimer": "Kimantawa na kowane gudu daga yawan alamar da aka ruwaito, ta amfani da matsakaici da hasashe da aka wallafa v{version}. Gudun guda yana dauke da kiran samfur da dama, kuma dukkan asali yana tafiya tare da kowanne, don haka lambobin tambaya sun fi yawa. Gudun da aka yi kafin fara sa ido ba a kirga su. Ba auna ne ba.",
+      "actions": {
+        "translate": "Fassara",
+        "analysis": "Binciken asali",
+        "review": "Zagaye na duba",
+        "write": "Rubutu",
+        "revise": "Gyara",
+        "profile": "Bayanan takarda",
+        "assess": "Kimanta inganci",
+        "extract": "Fitarwa",
+        "transform": "Sauyawa",
+        "photo": "Fitar da hoto",
+        "map_edit": "Sabunta taswira",
+        "rail_chat": "Tattaunawa"
+      }
     }
   },
   "table": {

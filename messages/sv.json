@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "Chipet visas aldrig. Totalvärden registreras fortfarande och syns på denna sida.",
     "chipAutoHideLabel": "Tona ut efter",
     "chipAutoHideUnit": "sekunder",
-    "chipAutoHideHint": "Mellan {min} och {max} sekunder."
+    "chipAutoHideHint": "Mellan {min} och {max} sekunder.",
+    "byWorkflow": "Per arbetsflöde",
+    "byWorkflowNote": "Del av summorna ovan, visas separat — inte extra användning. Beviljade körningar räknas mot din organisations rapportering och tokenbudget, men inte i denna lokala summa."
   },
   "extraction": {
     "toggleLabel": "Extrahera strukturerad data",
@@ -3554,6 +3556,33 @@
         "hidden": "Dölj"
       },
       "visibilityHint": "Auto visar chipet när uppskattningen uppdateras eller när du hovrar över det. Du kan ändra detta igen under Inställningar › Användning & påverkan."
+    },
+    "workflow": {
+      "title": "Detta arbetsutrymme (uppskattat)",
+      "workspace": "Detta arbetsutrymme",
+      "currentArtifact": "Aktuellt arbete",
+      "lastRun": "Senaste körning",
+      "lastRunDetail": "{action} · {calls} modellanrop",
+      "today": "Idag",
+      "railChat": "Chatta i detta arbetsutrymme",
+      "byAction": "Per steg",
+      "delta": "+{grams} g",
+      "ariaLabel": "Uppskattat koldioxidavtryck för detta arbetsutrymme: {grams} gram CO₂-ekvivalent. Visa fördelning.",
+      "disclaimer": "Uppskattning per körning baserat på rapporterat antal token, med publicerade genomsnitt och antaganden v{version}. En körning är flera modellanrop, och hela källan skickas med varje anrop, vilket gör att prompttoken dominerar. Körningar innan spårningen startade räknas inte. Ingen faktisk mätning.",
+      "actions": {
+        "translate": "Översättning",
+        "analysis": "Källanalys",
+        "review": "Granskningsrundor",
+        "write": "Skrivning",
+        "revise": "Bearbetning",
+        "profile": "Dokumentprofil",
+        "assess": "Kvalitetsbedömning",
+        "extract": "Extrahering",
+        "transform": "Omvandling",
+        "photo": "Fotoextrahering",
+        "map_edit": "Kartuppdatering",
+        "rail_chat": "Chatt"
+      }
     }
   },
   "table": {

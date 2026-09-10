@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "Der Chip wird nie angezeigt. Die Gesamtsummen werden weiterhin erfasst und auf dieser Seite angezeigt.",
     "chipAutoHideLabel": "Ausblenden nach",
     "chipAutoHideUnit": "Sekunden",
-    "chipAutoHideHint": "Zwischen {min} und {max} Sekunden."
+    "chipAutoHideHint": "Zwischen {min} und {max} Sekunden.",
+    "byWorkflow": "Nach Workflow",
+    "byWorkflowNote": "Teil der obigen Gesamtwerte, separat dargestellt – keine zusätzliche Nutzung. Grant-Durchläufe werden für das Reporting Ihrer Organisation und Ihr Token-Budget gezählt, aber nicht in dieser lokalen Summe."
   },
   "extraction": {
     "toggleLabel": "Strukturierte Daten extrahieren",
@@ -3554,6 +3556,33 @@
         "hidden": "Ausblenden"
       },
       "visibilityHint": "Automatisch zeigt den Chip an, wenn die Schätzung aktualisiert wird oder Sie mit der Maus darüber fahren. Dies kann in den Einstellungen › Nutzung & Auswirkungen erneut geändert werden."
+    },
+    "workflow": {
+      "title": "Dieser Arbeitsbereich (geschätzt)",
+      "workspace": "Dieser Arbeitsbereich",
+      "currentArtifact": "Aktuelle Arbeit",
+      "lastRun": "Letzter Durchlauf",
+      "lastRunDetail": "{action} · {calls} Modellaufrufe",
+      "today": "Heute",
+      "railChat": "Chat in diesem Arbeitsbereich",
+      "byAction": "Nach Schritt",
+      "delta": "+{grams} g",
+      "ariaLabel": "Geschätzter CO₂-Fußabdruck dieses Arbeitsbereichs: {grams} Gramm CO₂-Äquivalent. Aufschlüsselung anzeigen.",
+      "disclaimer": "Schätzungen pro Durchlauf basierend auf gemeldeten Token-Anzahlen, unter Verwendung veröffentlichter Mittelwerte und Annahmen v{version}. Ein Durchlauf umfasst mehrere Modellaufrufe; der gesamte Quelltext wird dabei jeweils mitgeschickt, daher dominieren Prompt-Token. Durchläufe vor Beginn der Nachverfolgung werden nicht gezählt. Keine exakte Messung.",
+      "actions": {
+        "translate": "Übersetzung",
+        "analysis": "Quellenanalyse",
+        "review": "Überprüfungsrunden",
+        "write": "Schreiben",
+        "revise": "Überarbeitung",
+        "profile": "Dokumentenprofil",
+        "assess": "Qualitätsbewertung",
+        "extract": "Extraktion",
+        "transform": "Umwandeln",
+        "photo": "Foto-Extraktion",
+        "map_edit": "Kartenaktualisierung",
+        "rail_chat": "Chat"
+      }
     }
   },
   "table": {

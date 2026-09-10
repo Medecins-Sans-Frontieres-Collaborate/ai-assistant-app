@@ -2626,7 +2626,9 @@
     "chipHiddenHint": "信息条不会显示，但总计仍会被记录并显示在此页面。",
     "chipAutoHideLabel": "淡出时长",
     "chipAutoHideUnit": "秒",
-    "chipAutoHideHint": "介于 {min} 到 {max} 秒之间。"
+    "chipAutoHideHint": "介于 {min} 到 {max} 秒之间。",
+    "byWorkflow": "按工作流程",
+    "byWorkflowNote": "上方总计中的一部分，单独展示——不是额外使用量。资助运行计入您所在机构的报告和 token 配额中，但不计入本地总数。"
   },
   "extraction": {
     "toggleLabel": "提取结构化数据",
@@ -3585,6 +3587,33 @@
         "hidden": "隐藏"
       },
       "visibilityHint": "自动：在估算更新或鼠标悬停时显示信息条。可在 设置 › 使用与影响 中再次更改。"
+    },
+    "workflow": {
+      "title": "此工作区（预估）",
+      "workspace": "此工作区",
+      "currentArtifact": "当前工作",
+      "lastRun": "上次运行",
+      "lastRunDetail": "{action} · {calls} 次模型调用",
+      "today": "今天",
+      "railChat": "在此工作区聊天",
+      "byAction": "按步骤",
+      "delta": "+{grams} 克",
+      "ariaLabel": "此工作区的碳足迹预估：{grams} 克二氧化碳当量。显示明细。",
+      "disclaimer": "基于已报告的 token 数量和公开均值及假设（版本 v{version}）进行每次运行的预估。一次运行包含多次模型调用，全体源数据每次都传递，因此提示 tokens 为主。开始追踪前的运行未计入。不作为实际测量。",
+      "actions": {
+        "translate": "翻译",
+        "analysis": "源分析",
+        "review": "审校轮次",
+        "write": "写作",
+        "revise": "修订",
+        "profile": "文档概况",
+        "assess": "质量评估",
+        "extract": "提取",
+        "transform": "转换",
+        "photo": "照片提取",
+        "map_edit": "地图更新",
+        "rail_chat": "聊天"
+      }
     }
   },
   "table": {

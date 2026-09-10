@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "El xip no es mostra mai. Els totals encara es registren i apareixen en aquesta pàgina.",
     "chipAutoHideLabel": "Esvaeix després de",
     "chipAutoHideUnit": "segons",
-    "chipAutoHideHint": "Entre {min} i {max} segons."
+    "chipAutoHideHint": "Entre {min} i {max} segons.",
+    "byWorkflow": "Per flux de treball",
+    "byWorkflowNote": "Forma part dels totals anteriors, mostrat per separat — no és ús addicional. Les execucions de les subvencions es compten per a l’informe de la vostra organització i el pressupost de tokens, però no en aquest total local."
   },
   "extraction": {
     "toggleLabel": "Extreu dades estructurades",
@@ -3554,6 +3556,33 @@
         "hidden": "Amaga"
       },
       "visibilityHint": "El mode automàtic mostra el xip quan s’actualitza l’estimació o en passar-hi el cursor. Pots canviar això de nou a Configuració › Ús i Impacte."
+    },
+    "workflow": {
+      "title": "Aquest espai de treball (estimació)",
+      "workspace": "Aquest espai de treball",
+      "currentArtifact": "Treball actual",
+      "lastRun": "Última execució",
+      "lastRunDetail": "{action} · {calls} crides de model",
+      "today": "Avui",
+      "railChat": "Xat en aquest espai de treball",
+      "byAction": "Per pas",
+      "delta": "+{grams} g",
+      "ariaLabel": "Empremta de carboni estimada d’aquest espai de treball: {grams} grams de CO₂ equivalent. Mostra el detall.",
+      "disclaimer": "Estimacions per execució amb nombres de tokens reportats, utilitzant mitjanes i supòsits publicats v{version}. Una execució correspon a diverses crides de model, i tota la font es transmet a cada una, així que els tokens de prompt són predominants. Les execucions fetes abans de l’inici del seguiment no es compten. No és una mesura.",
+      "actions": {
+        "translate": "Traducció",
+        "analysis": "Anàlisi de la font",
+        "review": "Rondes de revisió",
+        "write": "Redacció",
+        "revise": "Revisió",
+        "profile": "Perfil del document",
+        "assess": "Avaluació de qualitat",
+        "extract": "Extracció",
+        "transform": "Transformar",
+        "photo": "Extracció de fotografies",
+        "map_edit": "Actualització del mapa",
+        "rail_chat": "Xat"
+      }
     }
   },
   "table": {

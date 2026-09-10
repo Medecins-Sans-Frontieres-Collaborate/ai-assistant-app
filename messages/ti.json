@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "ቻይፑ ክኸውን ኣይተረከበን። ጠቕላላ መዓልቲ ግምቲ መዝግቡ ይቕፀልና፡ ኣብዚ ገጽ ይርከብ።",
     "chipAutoHideLabel": "ካብ ዝተሓደሰ መዓልቲ ዕፀይ",
     "chipAutoHideUnit": "ሰከንድ",
-    "chipAutoHideHint": "ካብ {min} ናብ {max} ሰከንድ ውስጢ።"
+    "chipAutoHideHint": "ካብ {min} ናብ {max} ሰከንድ ውስጢ።",
+    "byWorkflow": "ብ ስራሕ-ትሕዝቶ",
+    "byWorkflowNote": "ካብ ላዕሊ ፅንዓት መካእኑ ይሕብየሉ፣ ብቕልፎ ዝተረኸበ ኣይኮነን። ምትካላይ ዝተሰገሩ ኣኽሊ ምስ ውሉዳ ትካል ድማ ኣብ ቧደንቲ እንተደሊእ የቛርኦም፣ ንዚ ቦታዊ ፅንዓት ዘይስፈን።"
   },
   "extraction": {
     "toggleLabel": "ውክልናዊ ዳታ ምልባስ",
@@ -3538,6 +3540,33 @@
         "hidden": "ኣይትረኣይ"
       },
       "visibilityHint": "\"ብሓላፍነት\" ቻይፑ ኣብ እቲ ግምት ካብ ሓደስነቱ ወይ ካብ ስትራይ ምስ ትቕለል እዩ የርከቡ። እዚ ኣብ ቅንጡ፡ Usage & Impact ውሽጢ ቀይርዎ።"
+    },
+    "workflow": {
+      "title": "ዝገመተ ውህብታ ድሕሪት (workspace)",
+      "workspace": "እዚ ውህብታ ድሕሪት",
+      "currentArtifact": "ሓሳብ ስለ ሎሚ",
+      "lastRun": "መዓልቲ ኣኽሊ",
+      "lastRunDetail": "{action} · {calls} ሞዴል ጥራይ",
+      "today": "ሎሚ",
+      "railChat": "ኣብኡ ውህብታ ድሕሪት ተወያይ",
+      "byAction": "ብ መደብ",
+      "delta": "+{grams} ግራም",
+      "ariaLabel": "ዝገመተ ካርቦን እግሪ እዚ ውህብታ ድሕሪት: {grams} ግራም CO₂ ከተወዳእ. ዝርዝር ኣርኣዩ.",
+      "disclaimer": "እቲ ግምት ክንደይ ግንዛቤ ንዝተኣህዋስ ቶከን ቁጽሪ ብዝታተለ ናይ መርፍ መወዳእታታትን ግምታታትን v{version} ተጠቐምኩም፡፡ ኣንዳንድ ኣኽሊ ብዝሓለፉ ሞዴል ጥራያት ኣሉ፡፡ ኩሉ ሰነድ ብእያኡ ዝምለስ ካብ መደብ ኣኽሊ ይስደዶ፣ ብዝተሸጋገሩ ቶከኖች ይዕብዩ፡፡ ቅድሚ tracking ዝተጀመረ ዘሎ ኣኽሊ ኣይተልአኹን፡፡ መለምዓት ኣይኮነን፡፡",
+      "actions": {
+        "translate": "ትርጉም",
+        "analysis": "ምሉእ መርመራ ምንጪ",
+        "review": "እተቐየሩ ንዕይታታት",
+        "write": "መጻእን",
+        "revise": "ምትካላላይ",
+        "profile": "መግለጺ ሰነድ",
+        "assess": "ጥራይ ግምገማ",
+        "extract": "ምእዋጋ",
+        "transform": "ምቅያር",
+        "photo": "ምእዋጋ ፎቶ",
+        "map_edit": "ምቕያር ካርታ",
+        "rail_chat": "ተወያይ"
+      }
     }
   },
   "table": {

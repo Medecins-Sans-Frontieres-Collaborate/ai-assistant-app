@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "Tsy aseho mihitsy ny chip. Mbola voarakitra sy aseho amin'ity pejy ity ny fitambaran'izany.",
     "chipAutoHideLabel": "Manjavona aorian'ny",
     "chipAutoHideUnit": "segondra",
-    "chipAutoHideHint": "Eo anelanelan'ny {min} sy {max} segondra."
+    "chipAutoHideHint": "Eo anelanelan'ny {min} sy {max} segondra.",
+    "byWorkflow": "Araka ny fikirakirana",
+    "byWorkflowNote": "Anisan'ny totaly etsy ambony, aseho misaraka — tsy fandraisana fanampiny. Voaisa anatin'ny tatitra sy tetibola token'ny fikambananareo ireo fitsidihana 'grants', saingy tsy tafiditra ato amin'ity totaly eto an-toerana ity."
   },
   "extraction": {
     "toggleLabel": "Alaivo ny angona voaendrika",
@@ -3538,6 +3540,33 @@
         "hidden": "Afeno"
       },
       "visibilityHint": "Asehon'ny Auto ny chip rehefa misy fanavaozana amin'ny vinavina na rehefa soratana amin'izay ianao. Azonao ovaina indray eto: Settings › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Ity sehatra ity (tombanana)",
+      "workspace": "Ity sehatra ity",
+      "currentArtifact": "Asa ankehitriny",
+      "lastRun": "Fampiharana farany",
+      "lastRunDetail": "{action} · {calls} fiantsoana modely",
+      "today": "Anio",
+      "railChat": "Miady hevitra ato amin'ity sehatra ity",
+      "byAction": "Araka ny dingana",
+      "delta": "+{grams} g",
+      "ariaLabel": "Ny tombam-bidin'ny dioksidan'ny karbôna amin'ity sehatra ity: {grams} grama CO₂ mitovy amin'izany. Asehoy ny antsipiriany.",
+      "disclaimer": "Vinavinaina amin'ny isan'ny token-n'ny tatitra tsirairay, ampiasaina ny salan'isa sy vinavina navoaka v{version}. Fampiharana iray dia misy fiantsoana modely maromaro, ary mandeha miaraka amin'ny loharano rehetra avy izy ireo, ka betsaka kokoa ny token-n'ny prompt. Tsy misy isaina ireo talohan'ny fanombohan'ny fanarahana. Tsy fandrefesana voatanisa.",
+      "actions": {
+        "translate": "Fandikana",
+        "analysis": "Fanadihadiana loharano",
+        "review": "Dingana fitsirihana",
+        "write": "Fanoratana",
+        "revise": "Fanitsiana",
+        "profile": "Mombamomba ny taratasy",
+        "assess": "Fanombanana kalitao",
+        "extract": "Fakan-kevitra",
+        "transform": "Fanovàna",
+        "photo": "Fakan-tsarin-kevitra",
+        "map_edit": "Fanavaozana sarintany",
+        "rail_chat": "Adihevitra"
+      }
     }
   },
   "table": {

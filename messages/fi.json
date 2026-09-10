@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "Siru ei näy koskaan. Kokonaismäärät ovat silti seurattavissa ja näkyvät tällä sivulla.",
     "chipAutoHideLabel": "Häivytä pois jälkeen",
     "chipAutoHideUnit": "sekuntia",
-    "chipAutoHideHint": "{min}–{max} sekuntia."
+    "chipAutoHideHint": "{min}–{max} sekuntia.",
+    "byWorkflow": "Työnkulun mukaan",
+    "byWorkflowNote": "Yllä esitettyjen kokonaisuuksien osa, näytetään erikseen – ei lisäkäyttöä. Grants-ajot lasketaan organisaationne raportointiin ja token-budjettiin, mutta eivät tähän paikalliseen kokonaisuuteen."
   },
   "extraction": {
     "toggleLabel": "Luo jäsenneltyä dataa",
@@ -3554,6 +3556,33 @@
         "hidden": "Piilota"
       },
       "visibilityHint": "Automaattinen näyttää sirun, kun arvio päivittyy tai viet hiiren sen päälle. Voit muuttaa tätä asetuksissa kohdasta Käyttö ja vaikutus."
+    },
+    "workflow": {
+      "title": "Tämä työtila (arvio)",
+      "workspace": "Tämä työtila",
+      "currentArtifact": "Nykyinen työ",
+      "lastRun": "Viimeisin ajo",
+      "lastRunDetail": "{action} · {calls} mallikutsua",
+      "today": "Tänään",
+      "railChat": "Keskustele tässä työtilassa",
+      "byAction": "Vaiheittain",
+      "delta": "+{grams} g",
+      "ariaLabel": "Tämän työtilan arvioitu hiilijalanjälki: {grams} grammaa CO₂-ekvivalenttia. Näytä erittely.",
+      "disclaimer": "Ajojen arviot perustuvat raportoituihin token-määriin, julkaistuihin keskiarvoihin ja oletuksiin v{version}. Yksi ajo sisältää useita mallikutsuja, ja koko lähde kulkee jokaisen mukana, joten kehystokenit hallitsevat. Ennen seurannan alkamista tehdyt ajot eivät ole mukana. Ei mittaustulos.",
+      "actions": {
+        "translate": "Käännös",
+        "analysis": "Lähdeanalyysi",
+        "review": "Tarkistuskierrokset",
+        "write": "Kirjoitus",
+        "revise": "Muokkaus",
+        "profile": "Dokumentin profiili",
+        "assess": "Laadun arviointi",
+        "extract": "Poiminta",
+        "transform": "Muunnos",
+        "photo": "Valokuvien poiminta",
+        "map_edit": "Karttapäivitys",
+        "rail_chat": "Keskustelu"
+      }
     }
   },
   "table": {

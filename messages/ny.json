@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "Chip siiwonetsedwa nthawi iliyonse. Komabe, chiwerengero chonse chikadalipo patsamba lino.",
     "chipAutoHideLabel": "Zimirira patapita",
     "chipAutoHideUnit": "masekondi",
-    "chipAutoHideHint": "Pakatikati pa {min} ndi {max} masekondi."
+    "chipAutoHideHint": "Pakatikati pa {min} ndi {max} masekondi.",
+    "byWorkflow": "Mwa njira yogwirira ntchito",
+    "byWorkflowNote": "Gawo la ndalama zomwe zili pamwambapa, zikusonyezedwa payekha — osati kugwiritsa ntchito kwina. Mayeso a Grants amawerengedwa ku lipoti la bungwe lanu komanso pa malire a token anu, koma osaphatikizidwa mu chiwerengero cha pano."
   },
   "extraction": {
     "toggleLabel": "Tengani deta yamakonzedwe",
@@ -3538,6 +3540,33 @@
         "hidden": "Bisani"
       },
       "visibilityHint": "Auto imasonyeza chip ikangotuluka chiwerengero chatsopano kapena mukayika mbewa pa chip. Muthanso kusintha izi mu Zikhazikiko › Kugwiritsa ndi Zotsatira."
+    },
+    "workflow": {
+      "title": "Malo ogwirira ntchito awa (zowerengeka)",
+      "workspace": "Malo ogwirira ntchito awa",
+      "currentArtifact": "Ntchito yomwe ikuchitika",
+      "lastRun": "Nthawi yomaliza kuchita",
+      "lastRunDetail": "{action} · {calls} zitanthauzo za model",
+      "today": "Lero",
+      "railChat": "Kuyankhulana mu malo awa a ntchito",
+      "byAction": "Mwa sitepe",
+      "delta": "+{grams} g",
+      "ariaLabel": "Zowerengeka za mpweya wa carbon mu malo ogwirira ntchito awa: {grams} magalamu a CO₂ ofanana. Onetsani magawano.",
+      "disclaimer": "Ziwerengero pa aliyense chifukwa cha manambala a token omwe atanenedwa, pogwiritsa ntchito averejiyo zomwe zalembedwa ndi maganizo, mtundu wa {version}. Kachitidwe kamodzi kumatanthauza kuitana kwa model angapo, ndipo gwero lonse limapita pa chilichonse, choncho tokeni za prompt ndi zochuluka kwambiri. Zochitika zomwe zinachitika poyamba asanayambe kuwerenga sizikuphatikizidwa. Sizowerengera zenizeni.",
+      "actions": {
+        "translate": "Kumasulira",
+        "analysis": "Kusanthula gwero",
+        "review": "Kuwunika mobwerezabwereza",
+        "write": "Kulemba",
+        "revise": "Kukonzanso",
+        "profile": "Mbiri ya chikalata",
+        "assess": "Kuwunika bwino",
+        "extract": "Kutulutsa",
+        "transform": "Kusintha",
+        "photo": "Kutulutsa zithunzi",
+        "map_edit": "Kusintha mapu",
+        "rail_chat": "Kuyankhulana"
+      }
     }
   },
   "table": {

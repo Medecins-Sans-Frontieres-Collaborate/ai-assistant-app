@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "Chip ntiba igaragara. Ibipimo vyose biguma bikurikiranwa kandi biboneka kuri uru rupapuro.",
     "chipAutoHideLabel": "Igume igaragara amezi",
     "chipAutoHideUnit": "amasegonda",
-    "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda."
+    "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda.",
+    "byWorkflow": "Bitegekanijwe",
+    "byWorkflowNote": "Igice gihuye n'ibiri hejuru, kigaragazwa ukwaco — si ukoresho ngirakamaro. Ibiganiro vya grants bibarwa ku vyegeranyo vy’ishirahamwe hamwe n’umupimo wawe w’utumenyetso, ariko ntibigira uruhara muri aka gatoya ka hano."
   },
   "extraction": {
     "toggleLabel": "Kuyungurura amakuru ateguye",
@@ -3538,6 +3540,33 @@
         "hidden": "Ntibigaragara"
       },
       "visibilityHint": "Auto ishusha chip iyo umwimbu uhindutse canke iyo uyitoye. Ushobora guhindura ivyo muri Settings › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Ikaratasi iyi (vyibaze)",
+      "workspace": "Ikaratasi iyi",
+      "currentArtifact": "Akazi kariko",
+      "lastRun": "Iherezo riheruka",
+      "lastRunDetail": "{action} · {calls} isabukuru y'icigwa",
+      "today": "Uno musi",
+      "railChat": "Ganiro muri iyi karatasi",
+      "byAction": "Kubihaniro",
+      "delta": "+{grams} g",
+      "ariaLabel": "Vyibaze ibisigazwa vya karubone muri iyi karatasi: {grams} garama za CO₂ bingana. Erekana ukugabanagura.",
+      "disclaimer": "Ukugeza kuri buri kamwe gushingiye ku mubare w'utumenyetso tumaze kuvugwa, dukoresheje impuzandengo zisohowe hamwe n'ivyiyumviro v{version}. Kamwe karimwo ingshobo ya kenshi, kandi ivyose biragenda na buremwe, bityo utumenyetso twa prompt turatwara vyinshi. Ibi bikorwa vyabaye imbere yo gutangura ukurikirana ntibiri mu muhingura. Si igipimo.",
+      "actions": {
+        "translate": "Guhindura",
+        "analysis": "Isesengura ry'umushinge",
+        "review": "Urusubirizo rwo gusubira kuraba",
+        "write": "Kwandika",
+        "revise": "Kuvugurura",
+        "profile": "Umwidondoro w'urwandiko",
+        "assess": "Isuzumwa ry'ubwiza",
+        "extract": "Gukuramwo",
+        "transform": "Guhindura",
+        "photo": "Gukuramwo ifoto",
+        "map_edit": "Guhindura karata",
+        "rail_chat": "Ganiro"
+      }
     }
   },
   "table": {

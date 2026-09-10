@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "A kì yóò fi chip hàn rárá. Àpapọ̀ ṣi n tẹle ati wí lórí ojúewé yìí.",
     "chipAutoHideLabel": "Dànù lẹ́yìn",
     "chipAutoHideUnit": "ìṣẹ́jú ààyá",
-    "chipAutoHideHint": "Láàrin {min} sí {max} ìṣẹ́jú ààyá."
+    "chipAutoHideHint": "Láàrin {min} sí {max} ìṣẹ́jú ààyá.",
+    "byWorkflow": "Gẹ́gẹ́ bí iṣẹ́",
+    "byWorkflowNote": "Apá kan ninu apapọ ti o wa lókè, à fihan pàtàkì — ẹ̀rọ míì kì í kópa. Àwọn ìjùmọ̀ṣe Grant ni wọ́n fi kà fún ìròyìn àjọ rẹ àti ìṣètò àkóónú rẹ, ṣùgbọ́n wọ́n kò kà nínú àpapọ̀ abẹ́là yìí."
   },
   "extraction": {
     "toggleLabel": "Yọ data eto jade",
@@ -3538,6 +3540,33 @@
         "hidden": "Pa mọ́"
       },
       "visibilityHint": "‘Auto’ máa fi chip hàn nígbà tí àfikún bá ti yẹ̀ wò tàbí tí o bá fi àmì sí lórí rẹ. O le yí e pada yìí ní Eto › Lílò & Ìpapọ̀."
+    },
+    "workflow": {
+      "title": "Ibi iṣẹ́ yìí (àfikún)",
+      "workspace": "Ibi iṣẹ́ yìí",
+      "currentArtifact": "Iṣẹ́ tó wà lórí",
+      "lastRun": "Ìjùmọ̀ṣe tó kọjá",
+      "lastRunDetail": "{action} · {calls} ìpè àwòrán",
+      "today": "Lónìí",
+      "railChat": "Ìbánisọ̀rọ̀ nínú ibi iṣẹ́ yìí",
+      "byAction": "Gẹ́gẹ́ bí ìtọ́sílẹ̀",
+      "delta": "+{grams} g",
+      "ariaLabel": "Àfikún àtúnjúwe àkúnya carbon ibi iṣẹ́ yìí: {grams} giramu ti CO₂ tó dájú. Ṣí àtòjọ",
+      "disclaimer": "Àfikún pàtó fún gbogbo ìjùmọ̀ṣe látàrí iye àkóónú tó jẹ́ pẹ̀lú àfikún ayélujára àti àsopọ̀ àtúnrò v{version}. Ìjùmọ̀ṣe kọọkan ní ìpè àwòrán púpọ̀, gbogbo àkóónú sì ń tọ̀ lọ pẹ̀lú ọkọọkan, nítorí náà, àkóónú prompt ló pọ̀ jù. Ìjùmọ̀ṣe tí wọ́n ṣe ṣáájú ibẹrẹ ìṣàkóso kò kà. Kò kà sí ìyẹ̀wò gidi.",
+      "actions": {
+        "translate": "Ìtumọ̀",
+        "analysis": "Ìtúnlò orísun",
+        "review": "Ìtúnrò",
+        "write": "Ìkọ́wé",
+        "revise": "Ìtúnṣe",
+        "profile": "Àkànṣe àkọsílẹ̀",
+        "assess": "Ìtẹ̀jú àyẹ̀wò",
+        "extract": "Ìyọkúrò",
+        "transform": "Ìyípadà",
+        "photo": "Ìyọ àwòrán",
+        "map_edit": "Ìmúdájúwé maapu",
+        "rail_chat": "Ìbánisọ̀rọ̀"
+      }
     }
   },
   "table": {

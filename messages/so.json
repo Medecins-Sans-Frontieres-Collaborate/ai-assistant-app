@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "Chip-ka marna lama muujiyo. Wadarta wali waa laga raadin karaa oo waxay ka muuqanaysaa boggan.",
     "chipAutoHideLabel": "Libdho kadib",
     "chipAutoHideUnit": "ilbiriqsi",
-    "chipAutoHideHint": "U dhaxaysa {min} iyo {max} ilbiriqsi."
+    "chipAutoHideHint": "U dhaxaysa {min} iyo {max} ilbiriqsi.",
+    "byWorkflow": "Sida socodka shaqada",
+    "byWorkflowNote": "Qeyb ka mid ah wadarta kor ku xusan, si gooni ah loo muujiyay — isticmaalka dheeraad ah ma aha. Socodyada deeqaha waxaa loo tiriyaa warbixinta ururkiinna iyo miisaaniyadda tokens-ka, laakin kuma jiraan wadarta halkan maxalliga ah."
   },
   "extraction": {
     "toggleLabel": "Ka saar xog habaysan",
@@ -3538,6 +3540,33 @@
         "hidden": "Qari"
       },
       "visibilityHint": "Toos wuxuu muujiyaa chip-ka marka qiyaasta la cusbooneysiiyo ama aad dul istaagto. Waxaad tan markale ka beddeli kartaa Dejinta › Isticmaalka & Saameynta."
+    },
+    "workflow": {
+      "title": "Meesha shaqadan (qiyaas ah)",
+      "workspace": "Meesha shaqadan",
+      "currentArtifact": "Shaqada hadda",
+      "lastRun": "Socodkii u dambeeyay",
+      "lastRunDetail": "{action} · {calls} wicitaano moodel",
+      "today": "Maanta",
+      "railChat": "Kala sheekeyso meesha shaqadan",
+      "byAction": "Tallaabo kasta",
+      "delta": "+{grams} g",
+      "ariaLabel": "Qiyaasta raad kaarboonka ee meesha shaqadan: {grams} garaam oo u dhigma CO₂. Muuji faahfaahin.",
+      "disclaimer": "Qiyaas kasta oo socod ah waxay ku salaysan tahay tirada tokens la sheegay, iyadoo la adeegsanayo celcelis iyo mala-awaal la daabacay v{version}. Hal socod waxay ka koobantahay dhowr wicitaan moodel ah, dhammaan ilo-dhaqeedka ayaa socda wacitaan kasta, sidaas darteed taako tokens ayaa badan. Socodyada ka hor inta aan la bilaabin raad raaca lama tirin. Ma ahan cabbir rasmi ah.",
+      "actions": {
+        "translate": "Tarjumid",
+        "analysis": "Falanqayn il",
+        "review": "Dib-u-eegid",
+        "write": "Qorid",
+        "revise": "Dib-u-habayn",
+        "profile": "Astaanta dukumiintiga",
+        "assess": "Qiimayn tayo",
+        "extract": "Saarid",
+        "transform": "Beddelid",
+        "photo": "Soo saaridda sawir",
+        "map_edit": "Cusboonaysiin khariidad",
+        "rail_chat": "Sheekeysi"
+      }
     }
   },
   "table": {

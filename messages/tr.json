@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "Çip hiç gösterilmez. Toplamlar yine de takip edilip bu sayfada görünür.",
     "chipAutoHideLabel": "Sonrasında kaybol",
     "chipAutoHideUnit": "saniye",
-    "chipAutoHideHint": "{min} ile {max} saniye arasında."
+    "chipAutoHideHint": "{min} ile {max} saniye arasında.",
+    "byWorkflow": "İş akışına göre",
+    "byWorkflowNote": "Yukarıdaki toplamların bir parçası olup ayrıca gösterilir — ek kullanım değildir. Hibe çalışmalarınız kurumunuzun raporlamasına ve token bütçenize yansıtılır, ancak bu yerel toplamda sayılmaz."
   },
   "extraction": {
     "toggleLabel": "Yapılandırılmış veriyi çıkar",
@@ -3554,6 +3556,33 @@
         "hidden": "Gizle"
       },
       "visibilityHint": "Otomatik, çip güncellendiğinde veya üzerine geldiğinizde gösterir. Bunu Ayarlar › Kullanım ve Etki bölümünden tekrar değiştirebilirsiniz."
+    },
+    "workflow": {
+      "title": "Bu çalışma alanı (tahmini)",
+      "workspace": "Bu çalışma alanı",
+      "currentArtifact": "Mevcut çalışma",
+      "lastRun": "Son çalışma",
+      "lastRunDetail": "{action} · {calls} model çağrısı",
+      "today": "Bugün",
+      "railChat": "Bu çalışma alanında sohbet",
+      "byAction": "Adıma göre",
+      "delta": "+{grams} g",
+      "ariaLabel": "Bu çalışma alanının tahmini karbon ayak izi: {grams} gram CO₂ eşdeğeri. Dağılımı göster.",
+      "disclaimer": "Çalışma başına tahminler, bildirilen token sayılarına ve yayımlanmış ortalamalar ile varsayımlara (v{version}) dayanır. Bir çalışma, birkaç model çağrısı içerir ve tüm kaynak her bir çağrıyla taşınır; bu nedenle prompt tokenları baskındır. Takip başlamadan önceki çalışmalar sayılmaz. Bir ölçüm değildir.",
+      "actions": {
+        "translate": "Çeviri",
+        "analysis": "Kaynak analizi",
+        "review": "Gözden geçirme turları",
+        "write": "Yazma",
+        "revise": "Revizyon",
+        "profile": "Doküman profili",
+        "assess": "Kalite değerlendirmesi",
+        "extract": "Çıkarma",
+        "transform": "Dönüştürme",
+        "photo": "Fotoğraf çıkarma",
+        "map_edit": "Harita güncelleme",
+        "rail_chat": "Sohbet"
+      }
     }
   },
   "table": {

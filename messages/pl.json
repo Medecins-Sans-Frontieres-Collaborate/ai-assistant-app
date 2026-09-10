@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "Wskaźnik nie jest wyświetlany. Suma nadal jest rejestrowana i widoczna na tej stronie.",
     "chipAutoHideLabel": "Zanikanie po",
     "chipAutoHideUnit": "sekundach",
-    "chipAutoHideHint": "Od {min} do {max} sekund."
+    "chipAutoHideHint": "Od {min} do {max} sekund.",
+    "byWorkflow": "Według procesu",
+    "byWorkflowNote": "Część powyższych sum, pokazana osobno — bez dodatkowego zużycia. Uruchomienia grantowe są liczone do raportów Twojej organizacji i budżetu tokenów, ale nie w tej lokalnej sumie."
   },
   "extraction": {
     "toggleLabel": "Wyodrębnij dane strukturalne",
@@ -3554,6 +3556,33 @@
         "hidden": "Ukryj"
       },
       "visibilityHint": "Opcja „Automatycznie” pokazuje wskaźnik, gdy szacowanie jest aktualizowane lub po najechaniu kursorem. Możesz to zmienić ponownie w Ustawieniach › Użycie i wpływ."
+    },
+    "workflow": {
+      "title": "To środowisko pracy (szacowane)",
+      "workspace": "To środowisko pracy",
+      "currentArtifact": "Bieżąca praca",
+      "lastRun": "Ostatnie uruchomienie",
+      "lastRunDetail": "{action} · {calls} wywołań modelu",
+      "today": "Dzisiaj",
+      "railChat": "Czat w tym środowisku pracy",
+      "byAction": "Według etapu",
+      "delta": "+{grams} g",
+      "ariaLabel": "Szacowany ślad węglowy tego środowiska pracy: {grams} gramów równoważnika CO₂. Pokaż szczegóły.",
+      "disclaimer": "Szacunki na uruchomienie na podstawie zgłoszonych liczby tokenów, korzystając z opublikowanych średnich i założeń v{version}. Jedno uruchomienie to kilka wywołań modelu, a cały materiał źródłowy przesyłany jest za każdym razem, więc przeważają tokeny z promptów. Uruchomienia sprzed rozpoczęcia śledzenia nie są liczone. To nie jest pomiar.",
+      "actions": {
+        "translate": "Tłumaczenie",
+        "analysis": "Analiza źródła",
+        "review": "Rundy recenzji",
+        "write": "Pisanie",
+        "revise": "Korekta",
+        "profile": "Profil dokumentu",
+        "assess": "Ocena jakości",
+        "extract": "Ekstrakcja",
+        "transform": "Transformacja",
+        "photo": "Ekstrakcja zdjęć",
+        "map_edit": "Aktualizacja mapy",
+        "rail_chat": "Czat"
+      }
     }
   },
   "table": {

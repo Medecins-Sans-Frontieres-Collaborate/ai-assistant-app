@@ -2626,7 +2626,9 @@
     "chipHiddenHint": "Chip sẽ không bao giờ hiển thị. Tổng số vẫn được ghi nhận và hiển thị tại trang này.",
     "chipAutoHideLabel": "Tự động mờ sau",
     "chipAutoHideUnit": "giây",
-    "chipAutoHideHint": "Từ {min} đến {max} giây."
+    "chipAutoHideHint": "Từ {min} đến {max} giây.",
+    "byWorkflow": "Theo quy trình",
+    "byWorkflowNote": "Một phần của tổng số trên, hiển thị riêng — không phải sử dụng thêm. Các lần chạy tại khoá tài trợ được tính vào báo cáo của tổ chức bạn và ngân sách token, nhưng không tính vào tổng cục bộ này."
   },
   "extraction": {
     "toggleLabel": "Trích xuất dữ liệu có cấu trúc",
@@ -3585,6 +3587,33 @@
         "hidden": "Ẩn"
       },
       "visibilityHint": "Chế độ Tự động sẽ hiển thị chip khi ước tính được cập nhật hoặc khi bạn di chuột vào. Bạn có thể thay đổi lại trong Cài đặt › Sử dụng & Tác động."
+    },
+    "workflow": {
+      "title": "Không gian làm việc này (ước tính)",
+      "workspace": "Không gian làm việc này",
+      "currentArtifact": "Công việc hiện tại",
+      "lastRun": "Lần chạy gần nhất",
+      "lastRunDetail": "{action} · {calls} lần gọi mô hình",
+      "today": "Hôm nay",
+      "railChat": "Trò chuyện trong không gian làm việc này",
+      "byAction": "Theo bước",
+      "delta": "+{grams} g",
+      "ariaLabel": "Ước tính dấu chân carbon của không gian làm việc này: {grams} gam CO₂ tương đương. Hiển thị chi tiết.",
+      "disclaimer": "Ước tính trên mỗi lần chạy dựa trên số lượng token được báo cáo, sử dụng số trung bình và giả định đã công bố v{version}. Mỗi lần chạy gồm nhiều lần gọi mô hình, toàn bộ nguồn đi kèm với từng lần, nên token của prompt chiếm đa số. Những lần chạy trước khi bắt đầu theo dõi sẽ không được tính. Đây không phải là phép đo thực tế.",
+      "actions": {
+        "translate": "Dịch thuật",
+        "analysis": "Phân tích nguồn",
+        "review": "Vòng duyệt",
+        "write": "Viết",
+        "revise": "Chỉnh sửa",
+        "profile": "Hồ sơ tài liệu",
+        "assess": "Đánh giá chất lượng",
+        "extract": "Trích xuất",
+        "transform": "Chuyển đổi",
+        "photo": "Trích xuất ảnh",
+        "map_edit": "Cập nhật bản đồ",
+        "rail_chat": "Trò chuyện"
+      }
     }
   },
   "table": {

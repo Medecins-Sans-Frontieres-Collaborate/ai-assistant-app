@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "Chip ekomonana te. Total ezali kaka kosukolama mpe ekomonana awa.",
     "chipAutoHideLabel": "Ebongwana sima ya",
     "chipAutoHideUnit": "sekonde",
-    "chipAutoHideHint": "Kati na {min} na {max} sekonde."
+    "chipAutoHideHint": "Kati na {min} na {max} sekonde.",
+    "byWorkflow": "Na ndenge ya workflow",
+    "byWorkflowNote": "Eza kati na total oyo likoló, ezali komonama se na ndenge na yango— ezali lisusu elongi te. Ba runs ya Grant etalelaka rapor oyo ya organisation na yo mpe budget ya token, kasi ezali te na total oyo ya esika oyo."
   },
   "extraction": {
     "toggleLabel": "Kolongola donnee na forme ya mobongisi",
@@ -3538,6 +3540,33 @@
         "hidden": "Kobomba"
       },
       "visibilityHint": "Auto ekolakisa chip soki ba estimate ebongwani to soki okomiti na yango. Okoki kobongola yango lisusu na Paramètres › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Esika mosala oyo (epesami motuya)",
+      "workspace": "Esika mosala oyo",
+      "currentArtifact": "Mosala ya sikoyo",
+      "lastRun": "Mosala ya suka",
+      "lastRunDetail": "{action} · {calls} kobenga modèle",
+      "today": "Lelo",
+      "railChat": "Kosolola na esika mosala oyo",
+      "byAction": "Na etape",
+      "delta": "+{grams} g",
+      "ariaLabel": "Mokonzi ya carbone oyo eteyami mpo na esika mosala oyo: {grams} grammes ya CO₂ ekokanisami. Lakisa batonga.",
+      "actions": {
+        "translate": "Kopandisa",
+        "analysis": "Kosepela na ebongiseli",
+        "review": "Ba tour ya eyekoli",
+        "write": "Kokoma",
+        "revise": "Kokoma lisusu",
+        "profile": "Profil ya mokanda",
+        "assess": "Kotanola kalite",
+        "extract": "Kopikola",
+        "transform": "Kobongola",
+        "photo": "Kopikola foto",
+        "map_edit": "Kobongisa kati ya carte",
+        "rail_chat": "Kosolola"
+      },
+      "disclaimer": "Bokeseni mpo na eteni moko esalemi na mizaleli ya ba-token oyo ebimaki, na ndenge ya ba-moyene ya bato nyonso mpe na kokota mwa makanisi v{version}. Eteni moko ezali ba-appel mingi ya modèle, mpe motindo mobimba ya mokanda elongwana na moko na moko, yango wana ba-token ya prompt ezali mingi. Ba-eteni oyo esalemaki liboso kotala ebandaki te ekotami te. Ezali kaka bokeseni, kaka te mwana."
     }
   },
   "table": {

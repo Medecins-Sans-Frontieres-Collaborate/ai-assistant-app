@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "O chip nunca é exibido. Os totais ainda são acompanhados e aparecem nesta página.",
     "chipAutoHideLabel": "Desaparecer após",
     "chipAutoHideUnit": "segundos",
-    "chipAutoHideHint": "Entre {min} e {max} segundos."
+    "chipAutoHideHint": "Entre {min} e {max} segundos.",
+    "byWorkflow": "Por fluxo de trabalho",
+    "byWorkflowNote": "Parte dos totais acima, apresentada separadamente — não é uso extra. Execuções de subvenções são contabilizadas no relatório da sua organização e no seu orçamento de tokens, mas não neste total local."
   },
   "extraction": {
     "toggleLabel": "Extrair dados estruturados",
@@ -3554,6 +3556,33 @@
         "hidden": "Ocultar"
       },
       "visibilityHint": "O modo Automático exibe o chip quando a estimativa é atualizada ou ao passar o mouse sobre ele. Você pode alterar essa configuração em Configurações › Uso e Impacto."
+    },
+    "workflow": {
+      "title": "Este espaço de trabalho (estimativa)",
+      "workspace": "Este espaço de trabalho",
+      "currentArtifact": "Trabalho atual",
+      "lastRun": "Última execução",
+      "lastRunDetail": "{action} · {calls} chamadas de modelo",
+      "today": "Hoje",
+      "railChat": "Chat neste espaço de trabalho",
+      "byAction": "Por etapa",
+      "delta": "+{grams} g",
+      "ariaLabel": "Pegada de carbono estimada deste espaço de trabalho: {grams} gramas de CO₂ equivalente. Exibir detalhamento.",
+      "disclaimer": "Estimativas por execução com base na contagem de tokens relatada, usando médias publicadas e premissas v{version}. Uma execução consiste em várias chamadas de modelo, e toda a fonte acompanha cada uma, então os tokens do prompt predominam. Execuções anteriores ao início do acompanhamento não são contabilizadas. Não é uma medição.",
+      "actions": {
+        "translate": "Tradução",
+        "analysis": "Análise do original",
+        "review": "Rodadas de revisão",
+        "write": "Redação",
+        "revise": "Revisão",
+        "profile": "Perfil do documento",
+        "assess": "Avaliação de qualidade",
+        "extract": "Extração",
+        "transform": "Transformar",
+        "photo": "Extração de foto",
+        "map_edit": "Atualização de mapa",
+        "rail_chat": "Chat"
+      }
     }
   },
   "table": {

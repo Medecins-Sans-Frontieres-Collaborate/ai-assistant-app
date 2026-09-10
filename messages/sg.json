@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "Chip ape wa. Bê ti totals ké sô ayeke na page wa.",
     "chipAutoHideLabel": "Fô na",
     "chipAutoHideUnit": "sekônde",
-    "chipAutoHideHint": "Lâ sô {min} na {max} sekônde."
+    "chipAutoHideHint": "Lâ sô {min} na {max} sekônde.",
+    "byWorkflow": "Na workflow",
+    "byWorkflowNote": "Tî bara totâ mbi wala, a yeke na tî biani—sô a köta usage. Run ti grants a zî ti laporan ti organisation na ti budget ti token, tî wala a köta na tî totâ lokal."
   },
   "extraction": {
     "toggleLabel": "Hâ lâ tî data ti yângâ",
@@ -3538,6 +3540,33 @@
         "hidden": "Hida"
       },
       "visibilityHint": "Auto ape na chip sô ti estimá ti dzî na bê ti loo sè mbi yângâ ti yéké. O yeke fâla tî cîni na Settings › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Workplace âli (sômbéni)",
+      "workspace": "Workplace âli",
+      "currentArtifact": "Sêse ti mosusu",
+      "lastRun": "Mosusu ya gbakala",
+      "lastRunDetail": "{action} · {calls} model calls",
+      "today": "Löndo",
+      "railChat": "Kûê na workplace âli",
+      "byAction": "Na ndengê",
+      "delta": "+{grams} g",
+      "ariaLabel": "Sômbéni ti carbon footprint ti workplace âli: {grams} grama ti CO₂. Zingo mbênî.",
+      "disclaimer": "Sômbéni na tundusu kôdörö ti run, na lângo ti kôdörö ti token, na mbeti ti average na assumption v{version}. Run mîngi sô mô model calls, mô source na yeke sô mô ndê, ndê ndô token ti prompt a yapê. Run ti ûse ti sô tî loba yângâ a yeke. Sômbéni a yeke measurement.",
+      "actions": {
+        "translate": "Kombere",
+        "analysis": "Ködörö ti source",
+        "review": "Ködörö ti lâkisî",
+        "write": "Kôzo",
+        "revise": "Gbènzêngö",
+        "profile": "Profil ti doküma",
+        "assess": "Sômbéni ti kêtê",
+        "extract": "Kôi",
+        "transform": "Sûngö",
+        "photo": "Kôi ti photo",
+        "map_edit": "Sûngö ti carte",
+        "rail_chat": "Kûê"
+      }
     }
   },
   "table": {

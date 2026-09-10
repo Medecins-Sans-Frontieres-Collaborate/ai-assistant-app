@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "칩이 표시되지 않습니다. 누적치는 이 페이지에서 계속 확인할 수 있습니다.",
     "chipAutoHideLabel": "다음 후 사라짐",
     "chipAutoHideUnit": "초",
-    "chipAutoHideHint": "{min}초에서 {max}초 사이."
+    "chipAutoHideHint": "{min}초에서 {max}초 사이.",
+    "byWorkflow": "워크플로우별",
+    "byWorkflowNote": "위의 합계에 포함된 일부를 별도로 표시한 것으로, 추가 사용이 아닙니다. 승인된 실행은 귀하의 조직 보고 및 토큰 예산에는 포함되지만, 이 로컬 총계에는 포함되지 않습니다."
   },
   "extraction": {
     "toggleLabel": "구조화 데이터 추출",
@@ -3554,6 +3556,33 @@
         "hidden": "숨김"
       },
       "visibilityHint": "자동은 추정치가 업데이트되거나 마우스를 올릴 때 칩을 표시합니다. 이 설정은 환경설정 › 사용량 및 영향에서 다시 변경할 수 있습니다."
+    },
+    "workflow": {
+      "title": "이 작업 공간(추정)",
+      "workspace": "이 작업 공간",
+      "currentArtifact": "현재 작업",
+      "lastRun": "마지막 실행",
+      "lastRunDetail": "{action} · 모델 호출 {calls}회",
+      "today": "오늘",
+      "railChat": "이 작업 공간에서 채팅",
+      "byAction": "단계별",
+      "delta": "+{grams}g",
+      "ariaLabel": "이 작업 공간의 추정 탄소발자국: CO₂ 환산 {grams}그램. 세부 내역 보기.",
+      "disclaimer": "보고된 토큰 수를 기반으로 한 실행당 추정치로, 공개된 평균과 가정(v{version})을 사용합니다. 한 번의 실행은 여러 번의 모델 호출로 이루어지며, 매번 전체 소스가 전송되어 프롬프트 토큰 비중이 큽니다. 추적이 시작되기 전 실행은 포함되지 않습니다. 실제 측정은 아닙니다.",
+      "actions": {
+        "translate": "번역",
+        "analysis": "원문 분석",
+        "review": "검토 단계",
+        "write": "작성",
+        "revise": "수정",
+        "profile": "문서 프로필",
+        "assess": "품질 평가",
+        "extract": "추출",
+        "transform": "변환",
+        "photo": "사진 추출",
+        "map_edit": "지도 업데이트",
+        "rail_chat": "채팅"
+      }
     }
   },
   "table": {

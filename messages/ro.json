@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "Insigna nu este afișată niciodată. Totalurile rămân înregistrate și apar pe această pagină.",
     "chipAutoHideLabel": "Se estompează după",
     "chipAutoHideUnit": "secunde",
-    "chipAutoHideHint": "Între {min} și {max} secunde."
+    "chipAutoHideHint": "Între {min} și {max} secunde.",
+    "byWorkflow": "Pe flux de lucru",
+    "byWorkflowNote": "Parte din totalurile de mai sus, prezentate separat — nu este utilizare suplimentară. Rulările pentru granturi sunt incluse în raportarea organizației și în bugetul dvs. de tokeni, dar nu și în acest total local."
   },
   "extraction": {
     "toggleLabel": "Extrage date structurate",
@@ -3554,6 +3556,33 @@
         "hidden": "Ascunde"
       },
       "visibilityHint": "Modul automat afișează insigna când estimarea se actualizează sau la trecerea mouse-ului peste. Poți schimba această opțiune oricând din Setări › Utilizare & Impact."
+    },
+    "workflow": {
+      "title": "Acest spațiu de lucru (estimat)",
+      "workspace": "Acest spațiu de lucru",
+      "currentArtifact": "Lucrare curentă",
+      "lastRun": "Ultima rulare",
+      "lastRunDetail": "{action} · {calls} apeluri model",
+      "today": "Astăzi",
+      "railChat": "Chat în acest spațiu de lucru",
+      "byAction": "Pe etapă",
+      "delta": "+{grams} g",
+      "ariaLabel": "Amprenta estimată de carbon a acestui spațiu de lucru: {grams} grame echivalent CO₂. Afișează detalii.",
+      "disclaimer": "Estimări pe fiecare rulare, bazate pe numărul raportat de tokeni, folosind medii publicate și presupuneri v{version}. O rulare include mai multe apeluri model, iar întreaga sursă este transmisă la fiecare, așadar tokenii din prompt predomină. Rulările anterioare începerii urmăririi nu sunt incluse. Nu reprezintă o măsurare.",
+      "actions": {
+        "translate": "Traducere",
+        "analysis": "Analiza sursei",
+        "review": "Runde de revizuire",
+        "write": "Redactare",
+        "revise": "Revizuire",
+        "profile": "Profil document",
+        "assess": "Evaluare calitate",
+        "extract": "Extracție",
+        "transform": "Transformare",
+        "photo": "Extracție foto",
+        "map_edit": "Actualizare hartă",
+        "rail_chat": "Chat"
+      }
     }
   },
   "table": {

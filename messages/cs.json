@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "Čip se nikdy nezobrazuje. Součty jsou stále sledovány a zobrazeny na této stránce.",
     "chipAutoHideLabel": "Vyprší po",
     "chipAutoHideUnit": "sekundách",
-    "chipAutoHideHint": "Mezi {min} a {max} sekundami."
+    "chipAutoHideHint": "Mezi {min} a {max} sekundami.",
+    "byWorkflow": "Podle pracovního postupu",
+    "byWorkflowNote": "Část výše uvedených součtů, zobrazená zvlášť — nejedná se o dodatečnou spotřebu. Spuštění grantů se započítávají do hlášení vaší organizace a rozpočtu tokenů, ale nejsou zahrnuta v tomto místním součtu."
   },
   "extraction": {
     "toggleLabel": "Extrahovat strukturovaná data",
@@ -3554,6 +3556,33 @@
         "hidden": "Skrýt"
       },
       "visibilityHint": "Při volbě Automaticky se čip zobrazí, když se odhad aktualizuje nebo na něj najedete myší. Toto nastavení můžete kdykoli změnit v Nastavení › Využití a dopad."
+    },
+    "workflow": {
+      "title": "Tento pracovní prostor (odhadováno)",
+      "workspace": "Tento pracovní prostor",
+      "currentArtifact": "Aktuální práce",
+      "lastRun": "Poslední spuštění",
+      "lastRunDetail": "{action} · {calls} volání modelu",
+      "today": "Dnes",
+      "railChat": "Chat v tomto pracovním prostoru",
+      "byAction": "Podle kroku",
+      "delta": "+{grams} g",
+      "ariaLabel": "Odhadovaná uhlíková stopa tohoto pracovního prostoru: {grams} gramů ekvivalentu CO₂. Zobrazit rozpis.",
+      "disclaimer": "Odhady na spuštění vycházejí z hlášených počtů tokenů, s použitím publikovaných průměrů a předpokladů v{version}. Jedno spuštění obsahuje několik volání modelu a zdrojový text je pokaždé odesílán celý, takže převládají tokeny promptu. Spuštění před zahájením sledování nejsou započítána. Nejedná se o měření.",
+      "actions": {
+        "translate": "Překlad",
+        "analysis": "Analýza zdroje",
+        "review": "Kola kontroly",
+        "write": "Psání",
+        "revise": "Revize",
+        "profile": "Profil dokumentu",
+        "assess": "Hodnocení kvality",
+        "extract": "Extrakce",
+        "transform": "Transformace",
+        "photo": "Extrakce fotek",
+        "map_edit": "Aktualizace mapy",
+        "rail_chat": "Chat"
+      }
     }
   },
   "table": {

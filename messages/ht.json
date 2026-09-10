@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "Chip la pap janm parèt. Total yo toujou ap kontabilize epi parèt sou paj sa a.",
     "chipAutoHideLabel": "Disparèt apre",
     "chipAutoHideUnit": "segond",
-    "chipAutoHideHint": "Ant {min} ak {max} segond."
+    "chipAutoHideHint": "Ant {min} ak {max} segond.",
+    "byWorkflow": "Pa workflow",
+    "byWorkflowNote": "Pati nan total ki anlè yo, montre separeman — pa itilize anplis. Egzekisyon Grant yo konte pou rapò òganizasyon w la ak bidjè token ou, men yo pa ladan total lokal sa a."
   },
   "extraction": {
     "toggleLabel": "Extra done estriktire",
@@ -3538,6 +3540,33 @@
         "hidden": "Kache"
       },
       "visibilityHint": "Otomatik ap montre chip la lè estimasyon an ap mete ajou oswa ou pase sourit sou li. Ou ka chanje sa ankò nan Anviwònman › Itilizasyon & Enpak."
+    },
+    "workflow": {
+      "title": "Espas travay sa a (evalye)",
+      "workspace": "Espas travay sa a",
+      "currentArtifact": "Travay aktyèl",
+      "lastRun": "Dènye ekzekisyon",
+      "lastRunDetail": "{action} · {calls} apèl modèl",
+      "today": "Jodi a",
+      "railChat": "Chat nan espas travay sa a",
+      "byAction": "Pa etap",
+      "delta": "+{grams} g",
+      "ariaLabel": "Anprint kabòn estime pou espas travay sa a: {grams} gram CO₂ ekivalan. Montre detay yo.",
+      "disclaimer": "Estimasyon pa ekzekisyon soti nan kantite token rapòte, avèk mwayèn ak sipozisyon piblikasyon v{version}. Yon ekzekisyon gen plizyè apèl modèl, epi tout sous la deplase ak chak apèl, se konsa prompt tokens yo domine. Ekzekisyon anvan swiv lan pa konte. Sa a pa yon mezi.",
+      "actions": {
+        "translate": "Tradiksyon",
+        "analysis": "Analiz sous",
+        "review": "Rond revizyon",
+        "write": "Ekri",
+        "revise": "Revizyon",
+        "profile": "Profil dokiman",
+        "assess": "Evalyasyon kalite",
+        "extract": "Ekstraksyon",
+        "transform": "Transfòme",
+        "photo": "Ekstraksyon foto",
+        "map_edit": "Mizajou kat",
+        "rail_chat": "Chat"
+      }
     }
   },
   "table": {

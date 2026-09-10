@@ -2595,7 +2595,9 @@
     "chipHiddenHint": "Chip tidak pernah ditampilkan. Total tetap dicatat dan muncul di halaman ini.",
     "chipAutoHideLabel": "Menghilang setelah",
     "chipAutoHideUnit": "detik",
-    "chipAutoHideHint": "Antara {min} dan {max} detik."
+    "chipAutoHideHint": "Antara {min} dan {max} detik.",
+    "byWorkflow": "Menurut alur kerja",
+    "byWorkflowNote": "Bagian dari total di atas, ditampilkan terpisah — bukan penggunaan tambahan. Jalankan grant dihitung dalam pelaporan organisasi dan anggaran token Anda, namun tidak termasuk dalam total lokal ini."
   },
   "extraction": {
     "toggleLabel": "Ekstrak data terstruktur",
@@ -3554,6 +3556,33 @@
         "hidden": "Sembunyikan"
       },
       "visibilityHint": "Otomatis akan menampilkan chip saat estimasi diperbarui atau saat Anda mengarahkan kursor. Ubah pengaturan ini kembali di Pengaturan › Penggunaan & Dampak."
+    },
+    "workflow": {
+      "title": "Workspace ini (perkiraan)",
+      "workspace": "Workspace ini",
+      "currentArtifact": "Pekerjaan saat ini",
+      "lastRun": "Jalankan terakhir",
+      "lastRunDetail": "{action} · {calls} panggilan model",
+      "today": "Hari ini",
+      "railChat": "Chat di workspace ini",
+      "byAction": "Berdasarkan langkah",
+      "delta": "+{grams} g",
+      "ariaLabel": "Perkiraan jejak karbon workspace ini: {grams} gram setara CO₂. Tampilkan rincian.",
+      "disclaimer": "Perkiraan per jalankan berdasarkan jumlah token yang dilaporkan, menggunakan rata-rata dan asumsi yang dipublikasikan v{version}. Satu jalankan terdiri dari beberapa panggilan model, dan seluruh sumber ikut setiap kali, sehingga token prompt mendominasi. Jalankan sebelum pelacakan dimulai tidak dihitung. Ini bukan pengukuran.",
+      "actions": {
+        "translate": "Terjemahan",
+        "analysis": "Analisis sumber",
+        "review": "Putaran tinjauan",
+        "write": "Penulisan",
+        "revise": "Revisi",
+        "profile": "Profil dokumen",
+        "assess": "Penilaian kualitas",
+        "extract": "Ekstraksi",
+        "transform": "Transformasi",
+        "photo": "Ekstraksi foto",
+        "map_edit": "Pembaruan peta",
+        "rail_chat": "Chat"
+      }
     }
   },
   "table": {

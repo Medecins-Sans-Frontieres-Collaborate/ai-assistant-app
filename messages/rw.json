@@ -2579,7 +2579,9 @@
     "chipHiddenHint": "Chip ntizagaragaraga na rimwe. Ingereranyo ziracyasohoka kandi zigaragara kuri uru rupapuro.",
     "chipAutoHideLabel": "Ihishwe nyuma",
     "chipAutoHideUnit": "amasegonda",
-    "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda."
+    "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda.",
+    "byWorkflow": "Ku murongo w’akazi",
+    "byWorkflowNote": "Igice cy’umubare rusange uri hejuru, cyerekanywe ukwacyo — si imikoreshereze y’inyongera. Imikoreshereze y’ubufasha ibarirwa muri raporo y’umuryango wawe no mu mubare w’utumenyetso mwemerewe, ariko ntibarwa muri uyu mubare w’aho uri."
   },
   "extraction": {
     "toggleLabel": "Sohora amakuru ateguye",
@@ -3538,6 +3540,33 @@
         "hidden": "Bihishe"
       },
       "visibilityHint": "Ibyikora, chip iragaragara iyo igipimo kivuguruwe cyangwa iyo uyikoreyeho. Ushobora kubihindura nanone muri Settings › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Ubu butangamo akazi (ikigereranyo)",
+      "workspace": "Ubu butangamo akazi",
+      "currentArtifact": "Aho ugeze ubu",
+      "lastRun": "Igihe gishize uko bikorwa",
+      "lastRunDetail": "{action} · {calls} guhamagara model",
+      "today": "Uyu munsi",
+      "railChat": "Ganira muri ubu butangamo akazi",
+      "byAction": "Ku cyiciro",
+      "delta": "+{grams} g",
+      "ariaLabel": "Ikigereranyo cy’ingaruka za karubone muri ubu butangamo akazi: {grams} garama za CO₂ inyongera. Erekana ibisobanuro birambuye.",
+      "disclaimer": "Ibyavuyemo kuri buri gukoresha bishingiye ku mubare w’utumenyetso watangajwe, hifashishijwe imibare isanzwe rusange n’ibyatekerejweho v{version}. Igikorwa kimwe kigizwe no guhamagara model kenshi, kandi inkuru yose ijyana buri gihe, bityo utumenyetso tw'ibisabwa tukaba aritwo twinshi. Ibikorwa byakozwe mbere y’uko gukurikirana bitangira ntibibariwemo. Si urugero rufatika.",
+      "actions": {
+        "translate": "Guhindura",
+        "analysis": "Isesengura ry’inkomoko",
+        "review": "Icyiciro cyo gusubiramo",
+        "write": "Kwandika",
+        "revise": "Gukosora",
+        "profile": "Umwirondoro w’igikoresho",
+        "assess": "Isuzuma ry’ubwiza",
+        "extract": "Gushyira hanze",
+        "transform": "Guhindura",
+        "photo": "Gukuramo amafoto",
+        "map_edit": "Guhindura karita",
+        "rail_chat": "Ikiganiro"
+      }
     }
   },
   "table": {
