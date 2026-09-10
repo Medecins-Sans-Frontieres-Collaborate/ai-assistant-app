@@ -2157,6 +2157,97 @@
         "area": "Dashed circle: approximate extent of a district, region, or country",
         "container": "Faint outline: an area whose contents are mapped individually",
         "precisionHalo": "Soft dashed ring (during a time lapse): the event is only dated to a month or a year, so its exact timing is uncertain"
+      },
+      "import": {
+        "title": "Import locations from {name}",
+        "formatLine": "Read as {format}. Coordinates come straight from the file — no AI involved.",
+        "format": {
+          "geojson": "GeoJSON",
+          "kml": "KML",
+          "csv": "CSV",
+          "tsv": "TSV",
+          "json": "JSON"
+        },
+        "summary": "{count} location(s) ready to import",
+        "summaryNone": "Nothing to import yet — choose which columns hold the required fields.",
+        "skipped": {
+          "no_coordinates": "{count} row(s) skipped: no coordinates",
+          "invalid_coordinates": "{count} row(s) skipped: coordinates out of range",
+          "projected_coordinates": "{count} row(s) skipped: values look like projected metres, not degrees",
+          "duplicate": "{count} row(s) skipped: already on the map",
+          "capped": "{count} row(s) beyond the limit of {max} locations."
+        },
+        "capHint": "For larger datasets, please contact MSF GIS.",
+        "swapped": "{count} lat/lon pair(s) looked reversed and were swapped",
+        "approximated": "{count} area(s) or line(s) placed at their centre with a covering radius",
+        "unnamed": "{count} unnamed point(s) were numbered",
+        "undated": "{count} date(s) could not be read; those points are undated",
+        "droppedValues": "{count} value(s) outside the accepted vocabulary were dropped",
+        "ignoredHeaders": "Columns not read: {headers}",
+        "notes": {
+          "geometry_collection_flattened": "Geometry collections were split into their parts.",
+          "unsupported_geometry": "{count} {type} geometry(ies) could not be placed.",
+          "kml_folders_flattened": "KML folders were flattened; every placemark is imported."
+        },
+        "mapping": {
+          "title": "Columns",
+          "adjust": "Adjust columns",
+          "needed": "Choose which columns hold the required fields.",
+          "none": "— not in file —",
+          "ambiguous": "also matched by {headers}"
+        },
+        "fields": {
+          "name": "Name",
+          "lat": "Latitude",
+          "lon": "Longitude",
+          "coordinates": "Combined coordinates",
+          "description": "Description",
+          "category": "Category",
+          "event_start": "Event start",
+          "event_end": "Event end",
+          "event_precision": "Date precision",
+          "event_ongoing": "Ongoing",
+          "granularity": "Granularity",
+          "approx_radius_km": "Radius (km)",
+          "prominence": "Prominence",
+          "confidence": "Confidence",
+          "confidence_reason": "Confidence reason",
+          "country_code": "Country code",
+          "parent": "Parent place",
+          "source": "Source",
+          "source_url": "Source link"
+        },
+        "defaultConfidence": {
+          "label": "Confidence for rows without their own"
+        },
+        "confidence": {
+          "high": "High",
+          "medium": "Medium",
+          "low": "Low"
+        },
+        "rows": {
+          "title": "Review each point",
+          "confidence": "Confidence for {name}"
+        },
+        "enrich": {
+          "label": "After importing, fill in the missing category, description and country for {count} location(s) with AI",
+          "hint": "This uses the model and counts toward your usage. Coordinates are never changed."
+        },
+        "guide": {
+          "title": "Field guide",
+          "intro": "Column names are matched loosely — case, spaces, hyphens and underscores don’t matter. GeoJSON properties and KML data fields use the same names.",
+          "required": "Required",
+          "optional": "Optional",
+          "aliases": "Also accepted: {aliases}",
+          "download": "Download template CSV"
+        },
+        "confirm": "Import {count}",
+        "enriching": "Filling in details…",
+        "railRequest": "Import locations from {source}",
+        "railDone": "Imported {count} location(s) from {source}.",
+        "railEnrichRequest": "Fill in missing details for {count} imported location(s)",
+        "railEnrichDone": "Filled in details for {count} location(s).",
+        "unresolvedConnections": "{count} connection(s) in the file referred to places that are not on the map."
       }
     },
     "shared": {
