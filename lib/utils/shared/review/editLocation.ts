@@ -209,3 +209,31 @@ export function touchedSpanIds(
   }
   return touched;
 }
+
+/**
+ * The range of `before` that a single edit operation replaced to produce
+ * `after`, in `before`'s coordinates — `from === to` for a pure insertion.
+ *
+ * For a plain textarea this is the only way to learn what a change touched:
+ * there is no transaction to inspect, just the previous and next values. Any
+ * one operation (a keystroke, a deletion, a paste over a selection, an IME
+ * commit) differs from the previous value in exactly one contiguous run, so
+ * the common prefix and suffix bound it exactly. Null when nothing changed.
+ */
+export function changedRange(
+  before: string,
+  after: string,
+): { from: number; to: number } | null {
+  if (before === after) return null;
+  const max = Math.min(before.length, after.length);
+  let prefix = 0;
+  while (prefix < max && before[prefix] === after[prefix]) prefix += 1;
+  let suffix = 0;
+  while (
+    suffix < max - prefix &&
+    before[before.length - 1 - suffix] === after[after.length - 1 - suffix]
+  ) {
+    suffix += 1;
+  }
+  return { from: prefix, to: before.length - suffix };
+}
