@@ -3369,6 +3369,33 @@
         "hidden": "Hide"
       },
       "visibilityHint": "Auto shows the chip when the estimate updates or you hover it. Change this again in Settings › Usage & Impact."
+    },
+    "workflow": {
+      "title": "This workspace (estimated)",
+      "workspace": "This workspace",
+      "currentArtifact": "Current work",
+      "lastRun": "Last run",
+      "lastRunDetail": "{action} · {calls} model calls",
+      "today": "Today",
+      "railChat": "Chat in this workspace",
+      "byAction": "By step",
+      "delta": "+{grams} g",
+      "ariaLabel": "Estimated carbon footprint of this workspace: {grams} grams of CO₂ equivalent. Show breakdown.",
+      "disclaimer": "Per-run estimates from reported token counts, using published averages and assumptions v{version}. One run is several model calls, and the whole source travels with each one, so prompt tokens dominate. Runs from before tracking began are not counted. Not a measurement.",
+      "actions": {
+        "translate": "Translation",
+        "analysis": "Source analysis",
+        "review": "Review rounds",
+        "write": "Writing",
+        "revise": "Revision",
+        "profile": "Document profile",
+        "assess": "Quality assessment",
+        "extract": "Extraction",
+        "transform": "Transform",
+        "photo": "Photo extraction",
+        "map_edit": "Map update",
+        "rail_chat": "Chat"
+      }
     }
   },
   "usageImpact": {
@@ -3383,7 +3410,7 @@
     "regionDefault": "Default",
     "modelRow": "{requests} req · {grams} g",
     "estimatedPortion": "Includes ~{grams} g CO₂e ({requests} requests) estimated from chats that predate tracking — back-calculated from stored message text, not measured token counts.",
-    "disclosure": "Estimates based on assumptions v{version} · since {since} · standard chat only (agents and knowledge-base answers not counted). Totals include back-calculated estimates for chats from before tracking began.",
+    "disclosure": "Estimates based on assumptions v{version} · since {since} · chat and workflow runs (agents and knowledge-base answers not counted). Totals include back-calculated estimates for chats from before tracking began.",
     "reset": "Reset usage stats",
     "chipTitle": "Emissions chip",
     "chipDescription": "The estimated carbon footprint of the current conversation, shown above the chat input.",
@@ -3395,7 +3422,9 @@
     "chipHiddenHint": "The chip is never shown. Totals are still tracked and appear on this page.",
     "chipAutoHideLabel": "Fade out after",
     "chipAutoHideUnit": "seconds",
-    "chipAutoHideHint": "Between {min} and {max} seconds."
+    "chipAutoHideHint": "Between {min} and {max} seconds.",
+    "byWorkflow": "By workflow",
+    "byWorkflowNote": "Part of the totals above, shown separately — not extra usage. Grants runs are counted toward your organisation’s reporting and your token budget, but not in this local total."
   },
   "connectors": {
     "title": "Connectors",
