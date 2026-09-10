@@ -35,6 +35,7 @@ import {
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
 import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
+import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRecorder';
 import { profileTable } from '@/lib/services/workflows/data/columnStats';
 import {
   applyDerivedColumns,
@@ -548,6 +549,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           // to extract values for them.
           columns: columns.filter((c) => !c.formula),
           modelId: conversation?.model?.id,
+          conversationId,
         }),
       });
       const parsed = await response.json();
@@ -556,6 +558,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           parsed?.error || `Extraction failed (${response.status})`,
         );
       }
+      recordWorkflowUsage(conversationId, parsed.data?.usage);
       const sourceId = uuidv4();
       const newRows = admitRows(parsed.data.rows as Rows, columns);
       const merged = mergeRows(newRows);
@@ -639,6 +642,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           imageRefs,
           columns: columns.filter((c) => !c.formula),
           modelId,
+          conversationId,
         });
         const newRows = admitRows(result.rows as Rows, columns);
         const merged = mergeRows(newRows);
@@ -657,7 +661,11 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           },
         );
       } else {
-        const inference = await photoInfer({ imageRefs, modelId });
+        const inference = await photoInfer({
+          imageRefs,
+          modelId,
+          conversationId,
+        });
         const table = photoInferToTable(inference);
         const newRows = admitRows(table.rows, table.columns);
         addedCount = newRows.length;
@@ -724,6 +732,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           engine: 'llm',
           scoped,
           modelId: conversation?.model?.id,
+          conversationId,
         }),
       });
       const parsed = await response.json();
@@ -732,6 +741,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           parsed?.error || `Transform failed (${response.status})`,
         );
       }
+      recordWorkflowUsage(conversationId, parsed.data?.usage);
       // The LLM round-trip loses format/formula metadata — re-attach
       // for columns that kept their id and number type. (Materialized
       // derived values in the result are stripped again in applyTable;

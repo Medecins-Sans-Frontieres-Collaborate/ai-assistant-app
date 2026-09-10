@@ -379,6 +379,7 @@ export function TranslationWorkspace({
           glossaryEntries: activeGlossary?.entries ?? [],
           glossaryGuideId: state.glossaryGuideId,
           modelId: conversation?.model?.id,
+          conversationId,
         },
         onText: (fullText) => setTargetDraft(fullText),
         onEvent: (event) => {
@@ -490,6 +491,7 @@ export function TranslationWorkspace({
         glossaryEntries: activeGlossary?.entries ?? [],
         glossaryGuideId: state.glossaryGuideId,
         modelId: conversation?.model?.id,
+        conversationId,
       });
       // Snapshot custom labels so this assessment still reads correctly
       // after the criterion is renamed or deleted.

@@ -385,6 +385,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       const result = await extractMapFeatures(input, {
         existingNames: features.map((f) => f.name),
         modelId: conversation?.model?.id,
+        conversationId,
       });
 
       const sourceId = uuidv4();

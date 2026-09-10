@@ -556,6 +556,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           references,
           ...buildWritingConstraints(),
           modelId: conversation?.model?.id,
+          conversationId,
         },
         onText: (fullText) => {
           finalMarkdown = fullText;
@@ -793,6 +794,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           : undefined,
         profile: freshProfile,
         modelId: conversation?.model?.id,
+        conversationId,
       });
 
       const labels: Record<string, string> = {};
@@ -1060,6 +1062,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           docMarkdown,
           criteria: [],
           modelId: conversation?.model?.id,
+          conversationId,
         });
         updateWorkflowState(conversationId, (prev) => ({
           ...(prev as DocumentWorkflowState),
