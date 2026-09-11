@@ -2,6 +2,7 @@
 
 import {
   IconArrowLeft,
+  IconFileImport,
   IconPaperclip,
   IconPlus,
   IconWorld,
@@ -92,6 +93,28 @@ export function MapDatasetEditor({ datasetId }: MapDatasetEditorProps) {
   const [pendingImport, setPendingImport] = useState<PreparedImport | null>(
     null,
   );
+
+  /** Explicit import: a non-location file is refused, not sent to the model. */
+  const handleImportFile = async (files: FileList | null) => {
+    const file = files?.[0];
+    if (!file || generating) return;
+    setGenerating(true);
+    setComposerNotice(null);
+    try {
+      const prepared = await prepareImportFromFile(file);
+      if (!prepared) {
+        setComposerNotice(tMap('import.notLocationData', { name: file.name }));
+        return;
+      }
+      setPendingImport(prepared);
+    } catch (err) {
+      setComposerNotice(
+        err instanceof Error ? err.message : t('generationFailed'),
+      );
+    } finally {
+      setGenerating(false);
+    }
+  };
   const [connections, setConnections] = useState<MapConnection[]>([]);
   const [sources, setSources] = useState<MapDatasetSourceRecord[]>([]);
   const [dirty, setDirty] = useState(false);
@@ -602,6 +625,21 @@ export function MapDatasetEditor({ datasetId }: MapDatasetEditorProps) {
                     accept=".pdf,.doc,.docx,.txt,.md,.csv,.tsv,.json,.geojson,.kml,.kmz,.xlsx"
                     hidden
                     onChange={(e) => void handleUploadFile(e.target.files)}
+                  />
+                </label>
+              )}
+              {!searchMode && (
+                <label
+                  aria-label={tMap('importFile')}
+                  title={tMap('importFileHint')}
+                  className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+                >
+                  <IconFileImport size={16} aria-hidden />
+                  <input
+                    type="file"
+                    accept=".geojson,.json,.kml,.kmz,.csv,.tsv,.xlsx,.xls"
+                    hidden
+                    onChange={(e) => void handleImportFile(e.target.files)}
                   />
                 </label>
               )}
