@@ -3,6 +3,7 @@
 import {
   IconDatabase,
   IconDownload,
+  IconFileImport,
   IconHistory,
   IconInfoCircle,
   IconPaperclip,
@@ -178,6 +179,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const [focus, setFocus] = useState<MapFocus | null>(null);
   const focusNonceRef = useRef(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const importInputRef = useRef<HTMLInputElement>(null);
 
   const features = useMemo(() => state?.features ?? [], [state?.features]);
   const hasFeatures = features.length > 0;
@@ -510,6 +512,31 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setPhase('idle');
+    }
+  };
+
+  /**
+   * The explicit import entry point. Unlike the paperclip, a file that turns
+   * out not to be location data is refused with a pointer to the paperclip
+   * rather than quietly handed to the model — the person said "import".
+   */
+  const handleImportFile = async (files: FileList | null) => {
+    const file = files?.[0];
+    if (!file) return;
+    setPhase('extracting');
+    setError(null);
+    try {
+      const prepared = await prepareImportFromFile(file);
+      if (!prepared) {
+        setError(t('map.import.notLocationData', { name: file.name }));
+        return;
+      }
+      setPendingImport({ prepared, fromPaste: false });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setPhase('idle');
+      if (importInputRef.current) importInputRef.current.value = '';
     }
   };
 
@@ -891,6 +918,25 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             <IconPaperclip size={16} aria-hidden />
           </button>
         )}
+        {!searchMode && (
+          <button
+            type="button"
+            onClick={() => importInputRef.current?.click()}
+            disabled={busy}
+            aria-label={t('map.importFile')}
+            title={t('map.importFileHint')}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+          >
+            <IconFileImport size={16} aria-hidden />
+          </button>
+        )}
+        <input
+          ref={importInputRef}
+          type="file"
+          accept=".geojson,.json,.kml,.kmz,.csv,.tsv,.xlsx,.xls"
+          hidden
+          onChange={(e) => void handleImportFile(e.target.files)}
+        />
         {/* Admin-curated datasets; hidden when none are shared with this
             user (also covers the feature being off — no flag on the client). */}
         {datasets.length > 0 && (
