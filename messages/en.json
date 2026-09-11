@@ -2033,7 +2033,7 @@
     "map": {
       "emptyTitle": "Put your data on a map",
       "emptyBody": "Paste a sitrep, line list, meeting notes, or any text naming places — or paste a link, or attach a document. Locations are identified and mapped with a confidence rating; you can then export them for ArcGIS or other GIS tools.",
-      "inputPlaceholder": "Paste text naming locations, or a link to a web page…",
+      "inputPlaceholder": "Paste text naming locations, a link to a web page, or GeoJSON / CSV rows to import…",
       "uploadFile": "Attach a file",
       "sourceLabel": "Source: {name}",
       "pastedSource": "Pasted text",
@@ -2247,8 +2247,11 @@
         "railDone": "Imported {count} location(s) from {source}.",
         "railEnrichRequest": "Fill in missing details for {count} imported location(s)",
         "railEnrichDone": "Filled in details for {count} location(s).",
-        "unresolvedConnections": "{count} connection(s) in the file referred to places that are not on the map."
-      }
+        "unresolvedConnections": "{count} connection(s) in the file referred to places that are not on the map.",
+        "notLocationData": "{name} doesn't contain location data (no coordinates or GeoJSON found). To have the AI read it as text, use the attach button instead."
+      },
+      "importFile": "Import locations from a file",
+      "importFileHint": "Import GeoJSON, KML/KMZ, CSV, TSV or Excel — coordinates are read straight from the file, no AI."
     },
     "shared": {
       "guideKind": {
