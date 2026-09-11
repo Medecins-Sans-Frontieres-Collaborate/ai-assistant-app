@@ -1617,7 +1617,9 @@
       "euOnlyNote": "Ao amin'ny faritra Azure EU i {name} no tsimbinina; ao ihany koa no karakaraina ny resaka miaraka aminy."
     },
     "version": {
-      "label": "Dikan-teny"
+      "label": "Dikan-teny",
+      "showOlder": "Asehoy ireo taloha ({count})",
+      "hideOlder": "Afeno ireo taloha"
     },
     "reasoningModel": "Modely fandalinana: mieritreritra tsikelikely alohan'ny mamaly. Miadana kokoa, fa tsara amin'ny olana sarotra.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Volana lasa",
       "freshness_any": "Fotoana rehetra",
       "hint": "Ny Auto dia mamela ny fanontaniana tsirairay hametraka ny fahavantsarany (oh: ny vaovaon-draharaha dia aleony amin’ny andro lasa), ary mety hisafidy loharano maro kokoa ny fanontaniana amin’ny endrika fikarohana noho ny masontsivana mahazatra."
+    },
+    "subVariant": {
+      "label": "Habe"
     }
   },
   "models": {
@@ -2574,7 +2579,9 @@
     "chipHiddenHint": "Tsy aseho mihitsy ny chip. Mbola voarakitra sy aseho amin'ity pejy ity ny fitambaran'izany.",
     "chipAutoHideLabel": "Manjavona aorian'ny",
     "chipAutoHideUnit": "segondra",
-    "chipAutoHideHint": "Eo anelanelan'ny {min} sy {max} segondra."
+    "chipAutoHideHint": "Eo anelanelan'ny {min} sy {max} segondra.",
+    "byWorkflow": "Araka ny fikirakirana",
+    "byWorkflowNote": "Anisan'ny totaly etsy ambony, aseho misaraka — tsy fandraisana fanampiny. Voaisa anatin'ny tatitra sy tetibola token'ny fikambananareo ireo fitsidihana 'grants', saingy tsy tafiditra ato amin'ity totaly eto an-toerana ity."
   },
   "extraction": {
     "toggleLabel": "Alaivo ny angona voaendrika",
@@ -2808,7 +2815,17 @@
       "guides": "Torolàlana avy amin'ny fikambanana",
       "organizationTerminology": "Voambolana avy amin'ny fikambanana",
       "noOrganizationTerminology": "Tsy misy voambolana avy amin'ny fikambanana",
-      "terminologyGuideUnavailable": "Tsy misy ny torolàlana"
+      "terminologyGuideUnavailable": "Tsy misy ny torolàlana",
+      "editingPendingHint": "Misy soso-kevitra {count} miandry — tsy asiana marika izy ireny rehefa manitsy, ary raha manoratra eo amboniny dia esorina.",
+      "editingPendingHintOne": "Misy soso-kevitra 1 miandry — tsy asiana marika izy rehefa manitsy, ary raha manoratra eo amboniny dia esorina.",
+      "overwriteEditTitle": "Fanovana lahatsoratra soso-kevitra",
+      "overwriteEditMessage": "Ity lahatsoratra ity dia mbola misy soso-kevitra miandry. Raha manitsy dia esorina ilay soso-kevitra — mifindra ho amin'ny lisitra \"tsy nampiharina\" izy, izay mbola azonao averina. Azonao atao malalaka ny manitsy ny lahatsoratra ivelan'ny soso-kevitra raha mbola misokatra ny fanamarinana. Tsy hangatahina aminao intsony ity fanamafisana ity.",
+      "overwriteEditConfirmOne": "Esory ilay soso-kevitra ary tehirizo ny fanovako",
+      "overwriteEditConfirmMany": "Esory ny soso-kevitra {count} ary tehirizo ny fanovako",
+      "suggestionDroppedOne": "Voasesy ilay soso-kevitra — nanova ny anjara lahatsorany ianao.",
+      "suggestionDroppedMany": "Soso-kevitra {count} voasesy — nanova ny anjara lahatsorany ianao.",
+      "pendingRunActionTranslate": "Mandika indray",
+      "pendingRunActionAssess": "Mamerenana fanombanana"
     },
     "document": {
       "emptyTitle": "Lazao ny antontan-taratasy ilainao",
@@ -2956,7 +2973,15 @@
       "criterionRubricTooLong": "Mihoatra ny fetra amin'ny tarehintsoratra {over} ity rubric ity. Alefa amin'ny fanombanana tsirairay izany, ka tsy maintsy ahena alohan'ny fampiasana ity fepetra ity.",
       "guides": "Torolàlana avy amin'ny fikambanana",
       "guidesOptgroup": "Torolàlana avy amin'ny fikambanana",
-      "guideUnavailable": "Tsy misy ny torolàlana"
+      "guideUnavailable": "Tsy misy ny torolàlana",
+      "overwriteEditTitle": "Fanovana lahatsoratra soso-kevitra",
+      "overwriteEditMessage": "Ity lahatsoratra ity dia mbola misy soso-kevitra miandry. Raha manitsy dia esorina ilay soso-kevitra — mifindra ho amin'ny lisitra \"tsy nampiharina\" izy, izay mbola azonao averina. Azonao atao malalaka ny manitsy ny lahatsoratra ivelan'ny soso-kevitra raha mbola misokatra ny fanamarinana. Tsy hangatahina aminao intsony ity fanamafisana ity.",
+      "overwriteEditConfirmOne": "Esory ilay soso-kevitra ary havaozy",
+      "overwriteEditConfirmMany": "Esory ny soso-kevitra {count} ary havaozy",
+      "suggestionDroppedOne": "Voasesy ilay soso-kevitra — nanova ny anjara lahatsorany ianao.",
+      "suggestionDroppedMany": "Soso-kevitra {count} voasesy — nanova ny anjara lahatsorany ianao.",
+      "pendingRunActionRevise": "Manitsy ny antontan-taratasy",
+      "pendingRunActionAssess": "Mamerenana fanombanana"
     },
     "data": {
       "emptyTitle": "Ampidiro angon-drakitra hojerena",
@@ -3332,7 +3357,14 @@
       "guideSectionOptional": "tsy voatery",
       "guideSourceTerm": "Teny niaviana",
       "guideTargetTerm": "Dikan-teny takiana",
-      "guideNote": "Fanamarihana"
+      "guideNote": "Fanamarihana",
+      "pendingRun": {
+        "title": "Soso-kevitra {count} mbola miandry",
+        "body": "Afaka manova faritra rehetra ao amin'ny lahatsoratra ny {action}, anisan'izany ireo misy soso-kevitra mbola tsy noraisinao fanapahan-kevitra, ary soloan'ny fanombanana vaovao ny lisitra ankehitriny. Raiso aloha ny fanapahan-kevitra amin'ireo sisa.",
+        "acceptAll": "Ekeo daholo ny sisa rehetra",
+        "rejectAll": "Lavina daholo",
+        "cancel": "Nofoanana"
+      }
     }
   },
   "connectors": {
@@ -3533,6 +3565,36 @@
         "hidden": "Afeno"
       },
       "visibilityHint": "Asehon'ny Auto ny chip rehefa misy fanavaozana amin'ny vinavina na rehefa soratana amin'izay ianao. Azonao ovaina indray eto: Settings › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Ity sehatra ity (tombanana)",
+      "workspace": "Ity sehatra ity",
+      "currentArtifact": "Asa ankehitriny",
+      "lastRun": "Fampiharana farany",
+      "lastRunDetail": "{action} · {calls} fiantsoana modely",
+      "today": "Anio",
+      "railChat": "Miady hevitra ato amin'ity sehatra ity",
+      "byAction": "Araka ny dingana",
+      "delta": "+{grams} g",
+      "ariaLabel": "Ny tombam-bidin'ny dioksidan'ny karbôna amin'ity sehatra ity: {grams} grama CO₂ mitovy amin'izany. Asehoy ny antsipiriany.",
+      "disclaimer": "Vinavinaina amin'ny isan'ny token-n'ny tatitra tsirairay, ampiasaina ny salan'isa sy vinavina navoaka v{version}. Fampiharana iray dia misy fiantsoana modely maromaro, ary mandeha miaraka amin'ny loharano rehetra avy izy ireo, ka betsaka kokoa ny token-n'ny prompt. Tsy misy isaina ireo talohan'ny fanombohan'ny fanarahana. Tsy fandrefesana voatanisa.",
+      "actions": {
+        "translate": "Fandikana",
+        "analysis": "Fanadihadiana loharano",
+        "review": "Dingana fitsirihana",
+        "write": "Fanoratana",
+        "revise": "Fanitsiana",
+        "profile": "Mombamomba ny taratasy",
+        "assess": "Fanombanana kalitao",
+        "extract": "Fakan-kevitra",
+        "transform": "Fanovàna",
+        "photo": "Fakan-tsarin-kevitra",
+        "map_edit": "Fanavaozana sarintany",
+        "rail_chat": "Adihevitra"
+      },
+      "estimate": "~{passes} fihodinana · ~{grams} g CO₂e",
+      "estimateTooltip": "Fanombanana eo ho eo alohan'ny hanombohan'ity fihodinana ity, arakaraka ny halavan'ny loharano, ny modely voafidy, ary ny isa fihodinana apetraky ny fikirakirana (hevi-dalina v{version}). Averina mandefa ny loharano isaky ny fihodinana ka manan-danja ny prompt tokens. Hiseho ny tena isa rehefa vita ny fihodinana.",
+      "estimateAtMost": "hatramin'ny ~{passes} fihodinana · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5563,7 +5625,8 @@
       "limitReached": "Vita ny fetra",
       "familyLimitReached": "Vita ny fetra amin'ny modely fianakaviana",
       "usageUnavailable": "Tsy azo aseho ny fampiasana amin'izao fotoana izao — fetra ihany no aseho.",
-      "familyRow": "Maodely {family}"
+      "familyRow": "Maodely {family}",
+      "usedByWorkflows": "izay {used} avy amin'ny workflows"
     },
     "routes": {
       "ttsExhausted": "Efa nihoatra ny fetra text-to-speech androany ianao.",

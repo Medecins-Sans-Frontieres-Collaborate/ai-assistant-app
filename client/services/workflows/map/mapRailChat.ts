@@ -1,5 +1,6 @@
 'use client';
 
+import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRecorder';
 import { CompactMapFeature } from '@/lib/services/workflows/map/chatPrompts';
 
 import {
@@ -211,6 +212,7 @@ export async function sendRailMessage(
         features: (state?.features ?? []).map(compactFeature),
         connections: existingConnections,
         modelId: conversation.model?.id,
+        conversationId: conversation.id,
       }),
       signal,
     });
@@ -240,6 +242,8 @@ export async function sendRailMessage(
         if (event.type === 'workflow_event') {
           if (event.payload.type === 'chat_mutations') {
             mutations = event.payload.data as ChatMutations;
+          } else if (event.payload.type === 'usage') {
+            recordWorkflowUsage(conversation.id, event.payload.data);
           } else if (event.payload.type === 'error') {
             failed =
               (event.payload.data as { message?: string })?.message ??

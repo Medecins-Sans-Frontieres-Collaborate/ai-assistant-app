@@ -1,5 +1,6 @@
 'use client';
 
+import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRecorder';
 import { DIGEST_SAMPLE_ROWS } from '@/lib/services/workflows/data/chatPrompts';
 import { profileTable } from '@/lib/services/workflows/data/columnStats';
 import { applyDerivedColumns } from '@/lib/services/workflows/data/derived';
@@ -99,6 +100,7 @@ export async function sendRailMessage(
         stats,
         totalRowCount: rows.length,
         modelId: conversation.model?.id,
+        conversationId: conversation.id,
       }),
       signal,
     });
@@ -125,7 +127,12 @@ export async function sendRailMessage(
       const scan = scanStreamEvents(buffered, processedIndex);
       processedIndex = scan.nextIndex;
       for (const event of scan.events) {
-        if (event.type === 'workflow_event' && event.payload.type === 'error') {
+        if (event.type === 'workflow_event' && event.payload.type === 'usage') {
+          recordWorkflowUsage(conversation.id, event.payload.data);
+        } else if (
+          event.type === 'workflow_event' &&
+          event.payload.type === 'error'
+        ) {
           failed =
             (event.payload.data as { message?: string })?.message ??
             'Data chat failed';

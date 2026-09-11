@@ -114,6 +114,9 @@ export interface TranslationPendingEdit extends TranslationEdit {
   id: string;
   status: TranslationEditStatus;
   resolvedAt?: string;
+  /** See {@link ReviewEdit.anchorStart}. */
+  anchorStart?: number;
+  anchorContext?: string;
 }
 
 /**
@@ -225,6 +228,17 @@ export interface ReviewEdit {
   severity: 'minor' | 'major';
   status: ReviewEditStatus;
   resolvedAt?: string;
+  /**
+   * Where `before` sat in the text this edit was assessed against, and what
+   * immediately preceded it — recorded once at mint time. Application scores
+   * candidate occurrences on that context first and this offset second, so a
+   * suggestion keeps pointing at the passage the reviewer read even after the
+   * text around it changes (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §3). Absent on
+   * edits minted before anchoring existed, and on edits whose target could not
+   * be located.
+   */
+  anchorStart?: number;
+  anchorContext?: string;
 }
 
 export interface ReviewCriterionRating {
@@ -329,6 +343,16 @@ export interface DocumentAssessment {
    * excerpt, which is a substring, so application is unchanged).
    */
   docMarkdown: string;
+  /**
+   * `stringHash` of the `docHtml` this snapshot was derived from. While it
+   * still matches, decisions apply against the exact snapshot (no
+   * markdown↔HTML drift between consecutive accepts); once the user has
+   * typed, it no longer matches and the markdown is re-derived from the live
+   * document, so a suggestion applies to the text the user actually has
+   * (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §4). Absent on records from before
+   * the editor was unfrozen — treated as stale, the safe direction.
+   */
+  docHtmlHash?: number;
   /** What was assessed; absent = document (pre-scope records). */
   scope?: 'document' | 'selection';
   /** The assessed excerpt, for display, when scope is 'selection'. */
@@ -680,8 +704,12 @@ export interface MapSourceRecord {
   name: string;
   addedAt: string;
   featureCount: number;
-  /** How the material arrived. Absent on records saved before this field. */
-  kind?: 'text' | 'file' | 'search' | 'chat' | 'url' | 'dataset';
+  /**
+   * How the material arrived. Absent on records saved before this field.
+   * 'import' is a structured file (GeoJSON, KML, CSV…) read directly — no
+   * model involved, so its coordinates are the file's own statements.
+   */
+  kind?: 'text' | 'file' | 'search' | 'chat' | 'url' | 'dataset' | 'import';
   /** Admin dataset this source snapshot came from, for kind 'dataset'. */
   datasetId?: string;
   /** The web search query, for kind 'search'. */

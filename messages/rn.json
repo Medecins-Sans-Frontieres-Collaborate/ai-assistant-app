@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} yashizwe mu gace ka EU ka Azure; ibiganiro bihakorerwa."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Erekana izishaje ({count})",
+      "hideOlder": "Hisha izishaje"
     },
     "reasoningModel": "Model yo kwiyumvira: irabanza kwiyumvira yitonze imbere yo kwishura. Irateba ariko irakora neza ku bibazo bigoye.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Ukwezi guheze",
       "freshness_any": "Igihe ico ari co cose",
       "hint": "Auto ireka buri kibazo kigena igihe gishasha kijanye n'ico gikora (nk'amakuru yipfuza umunsi uheze), ibibazo vya research bishobora gukoresha ivy'inyongera kurusha ibisanzwe."
+    },
+    "subVariant": {
+      "label": "Ingano"
     }
   },
   "models": {
@@ -2574,7 +2579,9 @@
     "chipHiddenHint": "Chip ntiba igaragara. Ibipimo vyose biguma bikurikiranwa kandi biboneka kuri uru rupapuro.",
     "chipAutoHideLabel": "Igume igaragara amezi",
     "chipAutoHideUnit": "amasegonda",
-    "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda."
+    "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda.",
+    "byWorkflow": "Bitegekanijwe",
+    "byWorkflowNote": "Igice gihuye n'ibiri hejuru, kigaragazwa ukwaco — si ukoresho ngirakamaro. Ibiganiro vya grants bibarwa ku vyegeranyo vy’ishirahamwe hamwe n’umupimo wawe w’utumenyetso, ariko ntibigira uruhara muri aka gatoya ka hano."
   },
   "extraction": {
     "toggleLabel": "Kuyungurura amakuru ateguye",
@@ -2808,7 +2815,17 @@
       "guides": "Imfashanyigisho z'ishirahamwe",
       "organizationTerminology": "Inyito z'ishirahamwe",
       "noOrganizationTerminology": "Nta nyito z'ishirahamwe",
-      "terminologyGuideUnavailable": "Imfashanyigisho ntiboneka"
+      "terminologyGuideUnavailable": "Imfashanyigisho ntiboneka",
+      "editingPendingHint": "Ivyiyumviro {count} birategereje — ntivyerekanwa uri imbere yo kubihindura, kandi nukandika hejuru yabyo biboneka.",
+      "editingPendingHintOne": "Iciyumviro 1 kirategereje — nticanditswe uri imbere yo kugihindura, kandi nukandika hejuru yaco kiravaho.",
+      "overwriteEditTitle": "Uriko urahindura igice catanze iciyumviro",
+      "overwriteEditMessage": "Iri jambo rifise iciyumviro kirindiriye kwemezwa. Ugihinduye iciyumviro kirahita kivaho — kijanwa mu “nticashizweko” ku rutonde rw’ugusuzuma, aho ushobora kugisubizayo. Ahandi hatariho ivyiyumviro urashobora kuhahindura uko ushaka igihe ugusuzuma kugifunguye. Ntuza sababwa kandi.",
+      "overwriteEditConfirmOne": "Bireke iciyumviro, umpeze ihinduka ryanje",
+      "overwriteEditConfirmMany": "Bireke ivyiyumviro {count}, umpeze ihinduka ryanje",
+      "suggestionDroppedOne": "Iciyumviro kirakuwemo — wahinduye igice caco.",
+      "suggestionDroppedMany": "Ivyiyumviro {count} birakuwemo — wahinduye ibice vyavyo.",
+      "pendingRunActionTranslate": "Kuri gusubiramwo ubusubirizi",
+      "pendingRunActionAssess": "Kuri gusubiramwo isuzuma"
     },
     "document": {
       "emptyTitle": "Sobanura igitabo ushaka",
@@ -2956,7 +2973,15 @@
       "criterionRubricTooLong": "Iyi rubric irarengeje inyuguti {over} kurenza urugero. Ijatwa hamwe n’iryo genzura ryose, bivanye n'ivyo, igomba kugabanuka imbere yo gukoreshwa.",
       "guides": "Imfashanyigisho z'ishirahamwe",
       "guidesOptgroup": "Imfashanyigisho z'ishirahamwe",
-      "guideUnavailable": "Imfashanyigisho ntiboneka"
+      "guideUnavailable": "Imfashanyigisho ntiboneka",
+      "overwriteEditTitle": "Uriko urahindura igice catanze iciyumviro",
+      "overwriteEditMessage": "Iri jambo rifise iciyumviro kirindiriye kwemezwa. Ugihinduye iciyumviro kirahita kivaho — kijanwa mu “nticashizweko” ku rutonde rw’ugusuzuma, aho ushobora kugisubizayo. Ahandi hatariho ivyiyumviro urashobora kuhahindura uko ushaka igihe ugusuzuma kugifunguye. Ntuza sababwa kandi.",
+      "overwriteEditConfirmOne": "Bireke iciyumviro ubone kugihindura",
+      "overwriteEditConfirmMany": "Bireke ivyiyumviro {count} ubone kugihindura",
+      "suggestionDroppedOne": "Iciyumviro kirakuwemo — wahinduye igice caco.",
+      "suggestionDroppedMany": "Ivyiyumviro {count} birakuwemo — wahinduye ibice vyavyo.",
+      "pendingRunActionRevise": "Uri gusubiramwo inyandiko",
+      "pendingRunActionAssess": "Kuri gusubiramwo isuzuma"
     },
     "data": {
       "emptyTitle": "Kwinjiza amakuru kugira usuzume",
@@ -3332,7 +3357,14 @@
       "guideSectionOptional": "birashoboka",
       "guideSourceTerm": "Ijambo ry'inkomoko",
       "guideTargetTerm": "Inyandurizo isabwa",
-      "guideNote": "Icatumye"
+      "guideNote": "Icatumye",
+      "pendingRun": {
+        "title": "Ivyiyumviro {count} biracategereje",
+        "body": "{action} birashobora guhindura igice cose c'ijambo, harimwo n'ibice bifise ivyiyumviro utarafata ingingo, kandi isuzuma rishasha risubirira urutonde ruhari. Rabanza utohore ivyiyumviro vyasigaye.",
+        "acceptAll": "Emera vyose bisigaye",
+        "rejectAll": "Hakana vyose",
+        "cancel": "Sesa"
+      }
     }
   },
   "connectors": {
@@ -3533,6 +3565,36 @@
         "hidden": "Ntibigaragara"
       },
       "visibilityHint": "Auto ishusha chip iyo umwimbu uhindutse canke iyo uyitoye. Ushobora guhindura ivyo muri Settings › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Ikaratasi iyi (vyibaze)",
+      "workspace": "Ikaratasi iyi",
+      "currentArtifact": "Akazi kariko",
+      "lastRun": "Iherezo riheruka",
+      "lastRunDetail": "{action} · {calls} isabukuru y'icigwa",
+      "today": "Uno musi",
+      "railChat": "Ganiro muri iyi karatasi",
+      "byAction": "Kubihaniro",
+      "delta": "+{grams} g",
+      "ariaLabel": "Vyibaze ibisigazwa vya karubone muri iyi karatasi: {grams} garama za CO₂ bingana. Erekana ukugabanagura.",
+      "disclaimer": "Ukugeza kuri buri kamwe gushingiye ku mubare w'utumenyetso tumaze kuvugwa, dukoresheje impuzandengo zisohowe hamwe n'ivyiyumviro v{version}. Kamwe karimwo ingshobo ya kenshi, kandi ivyose biragenda na buremwe, bityo utumenyetso twa prompt turatwara vyinshi. Ibi bikorwa vyabaye imbere yo gutangura ukurikirana ntibiri mu muhingura. Si igipimo.",
+      "actions": {
+        "translate": "Guhindura",
+        "analysis": "Isesengura ry'umushinge",
+        "review": "Urusubirizo rwo gusubira kuraba",
+        "write": "Kwandika",
+        "revise": "Kuvugurura",
+        "profile": "Umwidondoro w'urwandiko",
+        "assess": "Isuzumwa ry'ubwiza",
+        "extract": "Gukuramwo",
+        "transform": "Guhindura",
+        "photo": "Gukuramwo ifoto",
+        "map_edit": "Guhindura karata",
+        "rail_chat": "Ganiro"
+      },
+      "estimate": "~{passes} guca · ~{grams} g CO₂e",
+      "estimateTooltip": "Ivyo ni ibiharuro vy'ishure vy'igikorwa kigiye gutangura, bivuye ku burebure bw'inkomoko, ku civugo cahitwamwo hamwe n'ingene ivyo washatse biteguye gusubirwamwo (ivyiyumviro v{version}). Gusubiramwo rimwe rero, bisubiramwo n'inkomoko, bityo amajambo ya prompt akaba menshi. Igiharuro nyaco kiboneka aho igikorwa kirangiriye.",
+      "estimateAtMost": "ntibirenga ~{passes} guca · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5563,7 +5625,8 @@
       "usageUnavailable": "Uko bikoresha ubu ntivyabashije kuza — bigaragaza gusa ibipimo.",
       "usedOfLimit": "{used} / {limit} {unit}",
       "limitOnly": "{limit} {unit}",
-      "familyRow": "Imodoka za {family}"
+      "familyRow": "Imodoka za {family}",
+      "usedByWorkflows": "murivyo {used} bivuye mu migirwa"
     },
     "routes": {
       "ttsExhausted": "Mwageze ku gipimo ca text-to-speech (TTS) ca none.",

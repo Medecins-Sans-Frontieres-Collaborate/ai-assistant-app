@@ -41,7 +41,12 @@ export function hasResolvedEdits(
 
 /**
  * The patch that undoes an accepted edit: swap the two sides and let the
- * normal first-occurrence apply put the original text back.
+ * normal apply put the original text back.
+ *
+ * The anchor rides along. Accepting put `after` where `before` was, so the
+ * offset still describes roughly where to look — which keeps an undo from
+ * landing on some other copy of the replacement text elsewhere in the
+ * document (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §3).
  *
  * Returns null for a pure deletion (`after` is empty) — there is no string
  * to search for, so its position is unrecoverable and the caller must
@@ -49,5 +54,17 @@ export function hasResolvedEdits(
  */
 export function invertPatch(edit: EditPatch): EditPatch | null {
   if (!edit.after) return null;
-  return { id: edit.id, before: edit.after, after: edit.before };
+  return {
+    id: edit.id,
+    before: edit.after,
+    after: edit.before,
+    ...(edit.anchorStart !== undefined
+      ? { anchorStart: edit.anchorStart }
+      : {}),
+    // The context is what precedes the span, and accepting replaced only the
+    // span itself — so it still describes where to look.
+    ...(edit.anchorContext !== undefined
+      ? { anchorContext: edit.anchorContext }
+      : {}),
+  };
 }

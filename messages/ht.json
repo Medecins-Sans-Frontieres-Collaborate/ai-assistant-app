@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} héberge nan zòn Azure Inyon Ewopeyen an; konvèsasyon ak li ap trete la."
     },
     "version": {
-      "label": "Vèsyon"
+      "label": "Vèsyon",
+      "showOlder": "Montre ansyen yo ({count})",
+      "hideOlder": "Kache ansyen yo"
     },
     "reasoningModel": "Modèl rezònman: panse etap pa etap anvan li reponn. Pito dousman, pi efikas pou pwoblèm ki difisil.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Dènye mwa a",
       "freshness_any": "Nenpòt lè",
       "hint": "Oto mete recency selon chak kesyon (egzanp nouvèl vle dènye jou a), epi kesyon rechèch ka sèvi ak plis sous pase sa ki default."
+    },
+    "subVariant": {
+      "label": "Gwosè"
     }
   },
   "models": {
@@ -2574,7 +2579,9 @@
     "chipHiddenHint": "Chip la pap janm parèt. Total yo toujou ap kontabilize epi parèt sou paj sa a.",
     "chipAutoHideLabel": "Disparèt apre",
     "chipAutoHideUnit": "segond",
-    "chipAutoHideHint": "Ant {min} ak {max} segond."
+    "chipAutoHideHint": "Ant {min} ak {max} segond.",
+    "byWorkflow": "Pa workflow",
+    "byWorkflowNote": "Pati nan total ki anlè yo, montre separeman — pa itilize anplis. Egzekisyon Grant yo konte pou rapò òganizasyon w la ak bidjè token ou, men yo pa ladan total lokal sa a."
   },
   "extraction": {
     "toggleLabel": "Extra done estriktire",
@@ -2808,7 +2815,17 @@
       "guides": "Gid òganizasyon",
       "organizationTerminology": "Tèminoloji òganizasyon",
       "noOrganizationTerminology": "Pa gen tèminoloji òganizasyon",
-      "terminologyGuideUnavailable": "Gid pa disponib"
+      "terminologyGuideUnavailable": "Gid pa disponib",
+      "editingPendingHint": "{count} sijesyon ann atant — yo pa make pandan wap modifye, epi si ou tape sou yo, ou efase yo.",
+      "editingPendingHintOne": "1 sijesyon ann atant — li pa make pandan wap modifye, epi si ou tape sou li, ou efase li.",
+      "overwriteEditTitle": "Wap modifye yon pasaj ki te sijere",
+      "overwriteEditMessage": "Tèk sa a gen yon sijesyon ann atant. Si ou modifye li, wap efase sijesyon an — li ap pase \"pa aplike\" nan lis revizyon an, kote ou toujou ka anile sa. Ou ka modifye tèk ki pa sijesyon lib pandan revizyon an ouvè. Yo pap mande ou ankò.",
+      "overwriteEditConfirmOne": "Efase sijesyon an epi kenbe chanjman mwen",
+      "overwriteEditConfirmMany": "Efase {count} sijesyon epi kenbe chanjman mwen",
+      "suggestionDroppedOne": "Sijesyon efase — ou modifye pasaj li a.",
+      "suggestionDroppedMany": "{count} sijesyon efase — ou modifye pasaj yo.",
+      "pendingRunActionTranslate": "Nap tradui ankò",
+      "pendingRunActionAssess": "Nap re-evalye"
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",
@@ -2956,7 +2973,15 @@
       "criterionRubricTooLong": "Ribrik sa depase pa {over} karaktè. Li voye ak chak evalyasyon, kidonk ou dwe koupe l avan ou ka itilize kritè sa a.",
       "guides": "Gid òganizasyon",
       "guidesOptgroup": "Gid òganizasyon",
-      "guideUnavailable": "Gid pa disponib"
+      "guideUnavailable": "Gid pa disponib",
+      "overwriteEditTitle": "Wap modifye yon pasaj ki te sijere",
+      "overwriteEditMessage": "Tèk sa a gen yon sijesyon ann atant. Si ou modifye li, wap efase sijesyon an — li ap pase \"pa aplike\" nan lis revizyon an, kote ou toujou ka anile sa. Ou ka modifye tèk ki pa sijesyon lib pandan revizyon an ouvè. Yo pap mande ou ankò.",
+      "overwriteEditConfirmOne": "Efase sijesyon an epi modifye",
+      "overwriteEditConfirmMany": "Efase {count} sijesyon epi modifye",
+      "suggestionDroppedOne": "Sijesyon efase — ou modifye pasaj li a.",
+      "suggestionDroppedMany": "{count} sijesyon efase — ou modifye pasaj yo.",
+      "pendingRunActionRevise": "Nap revize dokiman an",
+      "pendingRunActionAssess": "Nap re-evalye"
     },
     "data": {
       "emptyTitle": "Enpòte done pou analize",
@@ -3332,7 +3357,14 @@
       "guideSectionOptional": "opsyonèl",
       "guideSourceTerm": "Tèm sous",
       "guideTargetTerm": "Tradiksyon obligatwa",
-      "guideNote": "Nòt"
+      "guideNote": "Nòt",
+      "pendingRun": {
+        "title": "{count} sijesyon toujou ann atant",
+        "body": "{action} ka modifye nenpòt pati nan tèk la, enkli pasaj ki gen sijesyon ou poko deside, epi yon nouvo evalyasyon pral ranplase lis aktyèl la. Fè chwa w sou rès sijesyon yo anvan.",
+        "acceptAll": "Aksepte tout rès yo",
+        "rejectAll": "Rejte tout",
+        "cancel": "Anile"
+      }
     }
   },
   "connectors": {
@@ -3533,6 +3565,36 @@
         "hidden": "Kache"
       },
       "visibilityHint": "Otomatik ap montre chip la lè estimasyon an ap mete ajou oswa ou pase sourit sou li. Ou ka chanje sa ankò nan Anviwònman › Itilizasyon & Enpak."
+    },
+    "workflow": {
+      "title": "Espas travay sa a (evalye)",
+      "workspace": "Espas travay sa a",
+      "currentArtifact": "Travay aktyèl",
+      "lastRun": "Dènye ekzekisyon",
+      "lastRunDetail": "{action} · {calls} apèl modèl",
+      "today": "Jodi a",
+      "railChat": "Chat nan espas travay sa a",
+      "byAction": "Pa etap",
+      "delta": "+{grams} g",
+      "ariaLabel": "Anprint kabòn estime pou espas travay sa a: {grams} gram CO₂ ekivalan. Montre detay yo.",
+      "disclaimer": "Estimasyon pa ekzekisyon soti nan kantite token rapòte, avèk mwayèn ak sipozisyon piblikasyon v{version}. Yon ekzekisyon gen plizyè apèl modèl, epi tout sous la deplase ak chak apèl, se konsa prompt tokens yo domine. Ekzekisyon anvan swiv lan pa konte. Sa a pa yon mezi.",
+      "actions": {
+        "translate": "Tradiksyon",
+        "analysis": "Analiz sous",
+        "review": "Rond revizyon",
+        "write": "Ekri",
+        "revise": "Revizyon",
+        "profile": "Profil dokiman",
+        "assess": "Evalyasyon kalite",
+        "extract": "Ekstraksyon",
+        "transform": "Transfòme",
+        "photo": "Ekstraksyon foto",
+        "map_edit": "Mizajou kat",
+        "rail_chat": "Chat"
+      },
+      "estimate": "~{passes} pas · ~{grams} g CO₂e",
+      "estimateTooltip": "Estimasyon apeprè pou kous sa a anvan li kòmanse, soti nan longè sous la, modèl ou chwazi a ak kantite pas paramèt ou chwazi yo ap fè (sipozisyon v{version}). Chak pas re-voye sous la, kidonk prompt tokens yo dominen. Chif reyèl la ap parèt apre kous la.",
+      "estimateAtMost": "jiska ~{passes} pas · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5563,7 +5625,8 @@
       "limitReached": "Limit atenn",
       "familyLimitReached": "Limit fanmi modèl atenn",
       "usageUnavailable": "Itilizasyon aktyèl pa ka chaje — sèlman ap montre limit yo.",
-      "familyRow": "Modèl {family}"
+      "familyRow": "Modèl {family}",
+      "usedByWorkflows": "ki gen ladan {used} pa workflows"
     },
     "routes": {
       "ttsExhausted": "Ou rive limit text-to-speech jodi a.",

@@ -1,6 +1,7 @@
 'use client';
 
 import { FileUploadService } from '@/client/services/fileUploadService';
+import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRecorder';
 import { PhotoInferResult } from '@/lib/services/workflows/data/photoIngest';
 
 import { downscaleImage } from '@/client/utils/downscaleImage';
@@ -34,6 +35,8 @@ export async function photoInfer(input: {
   imageRefs: string[];
   instructions?: string;
   modelId?: string;
+  /** Attributes the run's token spend to this conversation's ledger. */
+  conversationId?: string;
 }): Promise<PhotoInferResult> {
   return callPhotoRoute<PhotoInferResult>({ ...input, mode: 'infer' });
 }
@@ -43,6 +46,8 @@ export async function photoExtract(input: {
   columns: DataColumn[];
   instructions?: string;
   modelId?: string;
+  /** Attributes the run's token spend to this conversation's ledger. */
+  conversationId?: string;
 }): Promise<{ rows: Record<string, unknown>[] }> {
   return callPhotoRoute<{ rows: Record<string, unknown>[] }>({
     ...input,
@@ -61,6 +66,10 @@ async function callPhotoRoute<T>(body: Record<string, unknown>): Promise<T> {
     throw new Error(
       parsed?.error || `Photo extraction failed (${response.status})`,
     );
+  }
+  const conversationId = body.conversationId;
+  if (typeof conversationId === 'string') {
+    recordWorkflowUsage(conversationId, parsed.data?.usage);
   }
   return parsed.data as T;
 }

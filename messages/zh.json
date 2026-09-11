@@ -1492,7 +1492,9 @@
       "euOnlyNote": "{name} 托管于欧盟 Azure 区域，与其的对话将在该区域处理。"
     },
     "version": {
-      "label": "版本"
+      "label": "版本",
+      "showOlder": "显示较早的（{count}）",
+      "hideOlder": "隐藏较早的"
     },
     "reasoningModel": "推理模型：先逐步思考再作答。速度较慢，擅长解决复杂问题。",
     "variant": {
@@ -1523,6 +1525,9 @@
       "freshness_month": "最近一个月",
       "freshness_any": "任意时间",
       "hint": "自动可根据每个问题设置时效性（如新闻优先选择最近一天），研究类问题可比默认使用更多来源。"
+    },
+    "subVariant": {
+      "label": "大小"
     }
   },
   "models": {
@@ -2621,7 +2626,9 @@
     "chipHiddenHint": "信息条不会显示，但总计仍会被记录并显示在此页面。",
     "chipAutoHideLabel": "淡出时长",
     "chipAutoHideUnit": "秒",
-    "chipAutoHideHint": "介于 {min} 到 {max} 秒之间。"
+    "chipAutoHideHint": "介于 {min} 到 {max} 秒之间。",
+    "byWorkflow": "按工作流程",
+    "byWorkflowNote": "上方总计中的一部分，单独展示——不是额外使用量。资助运行计入您所在机构的报告和 token 配额中，但不计入本地总数。"
   },
   "extraction": {
     "toggleLabel": "提取结构化数据",
@@ -2855,7 +2862,17 @@
       "guides": "组织指南",
       "organizationTerminology": "组织术语",
       "noOrganizationTerminology": "无组织术语",
-      "terminologyGuideUnavailable": "指南不可用"
+      "terminologyGuideUnavailable": "指南不可用",
+      "editingPendingHint": "有 {count} 条建议待处理 — 编辑时不会标记，输入新内容会放弃建议。",
+      "editingPendingHintOne": "1 条建议待处理 — 编辑时不会标记，输入新内容会放弃建议。",
+      "overwriteEditTitle": "正在编辑建议段落",
+      "overwriteEditMessage": "此段文本有待处理的建议。编辑该段会放弃建议——它将转移到审核列表的“未应用”中，您仍可撤销。审核开启时，建议外的内容可随意编辑。此后不会再次提示。",
+      "overwriteEditConfirmOne": "放弃该建议并保留我的更改",
+      "overwriteEditConfirmMany": "放弃 {count} 条建议并保留我的更改",
+      "suggestionDroppedOne": "已放弃建议——您已编辑该段落。",
+      "suggestionDroppedMany": "已放弃 {count} 条建议——您已编辑这些段落。",
+      "pendingRunActionTranslate": "再次翻译中",
+      "pendingRunActionAssess": "重新评估中"
     },
     "document": {
       "emptyTitle": "描述您需要的文档",
@@ -3003,7 +3020,15 @@
       "criterionRubricTooLong": "该评判标准超出限制 {over} 个字符。它会随每次评估发送，因此在使用此标准前必须进行裁剪。",
       "guides": "组织指南",
       "guidesOptgroup": "组织指南",
-      "guideUnavailable": "指南不可用"
+      "guideUnavailable": "指南不可用",
+      "overwriteEditTitle": "正在编辑建议段落",
+      "overwriteEditMessage": "此段文本有待处理的建议。编辑该段会放弃建议——它将转移到审核列表的“未应用”中，您仍可撤销。审核开启时，建议外的内容可随意编辑。此后不会再次提示。",
+      "overwriteEditConfirmOne": "放弃该建议并编辑",
+      "overwriteEditConfirmMany": "放弃 {count} 条建议并编辑",
+      "suggestionDroppedOne": "已放弃建议——您已编辑该段落。",
+      "suggestionDroppedMany": "已放弃 {count} 条建议——您已编辑这些段落。",
+      "pendingRunActionRevise": "正在修订文档",
+      "pendingRunActionAssess": "重新评估中"
     },
     "data": {
       "emptyTitle": "导入数据进行分析",
@@ -3379,7 +3404,14 @@
       "guideSectionOptional": "可选",
       "guideSourceTerm": "源术语",
       "guideTargetTerm": "要求翻译",
-      "guideNote": "备注"
+      "guideNote": "备注",
+      "pendingRun": {
+        "title": "还有 {count} 条建议待处理",
+        "body": "{action} 可能会更改文本的任何部分，包括尚未处理的建议段落，且新的评估会替换当前列表。请先完成剩余建议的处理。",
+        "acceptAll": "接受全部剩余建议",
+        "rejectAll": "全部拒绝",
+        "cancel": "取消"
+      }
     }
   },
   "connectors": {
@@ -3580,6 +3612,36 @@
         "hidden": "隐藏"
       },
       "visibilityHint": "自动：在估算更新或鼠标悬停时显示信息条。可在 设置 › 使用与影响 中再次更改。"
+    },
+    "workflow": {
+      "title": "此工作区（预估）",
+      "workspace": "此工作区",
+      "currentArtifact": "当前工作",
+      "lastRun": "上次运行",
+      "lastRunDetail": "{action} · {calls} 次模型调用",
+      "today": "今天",
+      "railChat": "在此工作区聊天",
+      "byAction": "按步骤",
+      "delta": "+{grams} 克",
+      "ariaLabel": "此工作区的碳足迹预估：{grams} 克二氧化碳当量。显示明细。",
+      "disclaimer": "基于已报告的 token 数量和公开均值及假设（版本 v{version}）进行每次运行的预估。一次运行包含多次模型调用，全体源数据每次都传递，因此提示 tokens 为主。开始追踪前的运行未计入。不作为实际测量。",
+      "actions": {
+        "translate": "翻译",
+        "analysis": "源分析",
+        "review": "审校轮次",
+        "write": "写作",
+        "revise": "修订",
+        "profile": "文档概况",
+        "assess": "质量评估",
+        "extract": "提取",
+        "transform": "转换",
+        "photo": "照片提取",
+        "map_edit": "地图更新",
+        "rail_chat": "聊天"
+      },
+      "estimate": "约 {passes} 次循环 · 约 {grams} 克 CO₂e",
+      "estimateTooltip": "此为运行前的粗略估算，基于原文长度、所选模型以及设置中指定的循环次数（假设条件 v{version}）。每次循环都会重新发送原文，因此提示词的数量占主要部分。实际数值将在运行后显示。",
+      "estimateAtMost": "最多约 {passes} 次循环 · 约 {grams} 克 CO₂e"
     }
   },
   "table": {
@@ -5610,7 +5672,8 @@
       "limitReached": "已达上限",
       "familyLimitReached": "已达模型家族上限",
       "usageUnavailable": "当前用量无法加载，仅显示限额。",
-      "familyRow": "{family}模型"
+      "familyRow": "{family}模型",
+      "usedByWorkflows": "其中 {used} 来自工作流"
     },
     "routes": {
       "ttsExhausted": "您今日文本转语音额度已用完。",

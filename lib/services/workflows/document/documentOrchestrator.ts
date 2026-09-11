@@ -13,6 +13,7 @@ import {
   guideRubricLine,
 } from '../shared/guidePrompts';
 import { callStructured, createAzureClient } from '../shared/workflowLlm';
+import { WorkflowUsageCollector } from '../shared/workflowUsage';
 import {
   ToneInput,
   buildDocAssessmentSystemPrompt,
@@ -45,6 +46,7 @@ export interface DocumentProfileResult {
 export async function runDocumentProfile(options: {
   docMarkdown: string;
   modelId?: string;
+  usage?: WorkflowUsageCollector;
 }): Promise<DocumentProfileResult> {
   const client = createAzureClient();
   return callStructured<DocumentProfileResult>({
@@ -54,6 +56,8 @@ export async function runDocumentProfile(options: {
     user: buildProfileUserPrompt(options.docMarkdown),
     schemaName: 'document_profile',
     schema: PROFILE_SCHEMA as unknown as Record<string, unknown>,
+    usage: options.usage,
+    usageLabel: 'profile',
   });
 }
 
@@ -63,6 +67,8 @@ export type DocumentEditProposal = Omit<TranslationEdit, 'criterion'> & {
 };
 
 export interface DocumentAssessmentOptions {
+  /** Token accounting sink (docs/WORKFLOW_EMISSIONS_DESIGN.md §4a). */
+  usage?: WorkflowUsageCollector;
   docMarkdown: string;
   /** Scope the assessment to this excerpt (verbatim substring). */
   selection?: string;
@@ -132,6 +138,8 @@ export async function runDocumentAssessment(
     user: buildDocAssessmentUserPrompt(options.docMarkdown, options.selection),
     schemaName: 'document_assessment',
     schema: buildAssessmentSchema(options.criterionIds),
+    usage: options.usage,
+    usageLabel: 'assess',
   });
 
   const requested = new Set(options.criterionIds);

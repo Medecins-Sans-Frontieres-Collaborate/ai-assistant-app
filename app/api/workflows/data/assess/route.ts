@@ -18,6 +18,7 @@ import {
   createAzureClient,
 } from '@/lib/services/workflows/shared/workflowLlm';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
+import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
   badRequestResponse,
@@ -46,6 +47,8 @@ interface DataAssessRequest {
   sampled: boolean;
   totalRowCount: number;
   modelId?: string;
+  /** Correlates the run's calls in telemetry; not otherwise used. */
+  conversationId?: string;
 }
 
 interface DataAssessLlmResponse {
@@ -108,6 +111,15 @@ export async function POST(req: NextRequest) {
   }
   const stats = Array.isArray(body.stats) ? body.stats : [];
 
+  // Workflow runs debit the shared chat token pool, so they honour its
+  // pre-flight too (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+  const { denied, usage } = await beginWorkflowRun(
+    session,
+    'assess',
+    body.conversationId,
+  );
+  if (denied) return denied;
+
   try {
     const rubrics = DATA_QUALITY_CRITERIA.filter((c) =>
       criterionIds.includes(c.id),
@@ -130,6 +142,8 @@ export async function POST(req: NextRequest) {
       }),
       schemaName: 'data_quality_assessment',
       schema: buildDataAssessmentSchema(criterionIds),
+      usage,
+      usageLabel: 'assess',
     });
 
     // Drop edits that don't anchor to a sent row / real column.
@@ -149,6 +163,7 @@ export async function POST(req: NextRequest) {
       criteria: result.criteria,
       edits,
       overallSummary: result.overallSummary,
+      ...usage.fields(),
     });
   } catch (error) {
     console.error('[workflows/data/assess] Failed:', error);

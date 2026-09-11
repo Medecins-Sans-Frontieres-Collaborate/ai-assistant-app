@@ -908,7 +908,11 @@ export const MapDatasetSourceRecordSchema = z.object({
   name: z.string().min(1),
   addedAt: z.string(),
   featureCount: z.number().int().nonnegative(),
-  kind: z.enum(['text', 'file', 'search', 'url']).optional(),
+  // Mirrors MapSourceRecord.kind. 'dataset' and 'import' were missing, so a
+  // workspace snapshot that had loaded a dataset could not be saved as one.
+  kind: z
+    .enum(['text', 'file', 'search', 'chat', 'url', 'dataset', 'import'])
+    .optional(),
   query: z.string().optional(),
   url: z.string().optional(),
 });

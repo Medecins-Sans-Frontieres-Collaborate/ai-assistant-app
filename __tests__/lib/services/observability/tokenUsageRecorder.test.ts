@@ -92,7 +92,7 @@ describe('recordTokenUsage', () => {
       GPT_5_2_COST_10_5,
       10,
     );
-    expect(debit).toHaveBeenCalledWith(user, 15);
+    expect(debit).toHaveBeenCalledWith(user, 15, 'chat');
   });
 
   it('does NOT add a cost column to the Azure Monitor row (DCR schema is unchanged)', () => {
@@ -124,7 +124,7 @@ describe('recordTokenUsage', () => {
     );
     // Tokens are still logged and debited — only the price is unknowable.
     expect(logTokenUsage).toHaveBeenCalledTimes(1);
-    expect(debit).toHaveBeenCalledWith(user, 15);
+    expect(debit).toHaveBeenCalledWith(user, 15, 'chat');
   });
 
   it("uses the 'agent' operation for Foundry agent usage", () => {
@@ -156,7 +156,7 @@ describe('recordTokenUsage', () => {
     expect(recordMetric.mock.calls[0][0]).not.toHaveProperty(
       'estimatedCostUsd',
     );
-    expect(debit).toHaveBeenCalledWith(user, 4);
+    expect(debit).toHaveBeenCalledWith(user, 4, 'chat');
     warn.mockRestore();
   });
 });
@@ -244,5 +244,21 @@ describe('recordToolCall', () => {
       model: 'gpt-5.2',
       telemetry: { requestId: 'req-1', loopRound: 1 },
     });
+  });
+
+  it('tags a workflow call on the metric, the log row and the debit', () => {
+    recordTokenUsage(usage, model, user, false, undefined, {
+      surface: 'workflow',
+    });
+
+    expect(logTokenUsage).toHaveBeenCalledWith(
+      expect.objectContaining({ surface: 'workflow' }),
+    );
+    expect(recordMetric).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ operation: 'workflow' }),
+    );
+    // Same pool as chat — the surface only makes the spend separable.
+    expect(debit).toHaveBeenCalledWith(user, 15, 'workflow');
   });
 });

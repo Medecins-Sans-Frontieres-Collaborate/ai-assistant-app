@@ -1,3 +1,5 @@
+import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflowUsage';
+
 import {
   DEFAULT_ANALYSIS_MAX_TOKENS,
   DEFAULT_ANALYSIS_MODEL,
@@ -47,6 +49,15 @@ export interface StructuredCallOptions {
   schema: Record<string, unknown>;
   model?: string;
   maxTokens?: number;
+  /**
+   * Token accounting sink. Supplying it is what puts this call into the
+   * user's quota, the telemetry stream and the impact badge; a call site
+   * that omits it is invisible, so pass one everywhere a user triggered
+   * the work (docs/WORKFLOW_EMISSIONS_DESIGN.md §4a).
+   */
+  usage?: WorkflowUsageCollector;
+  /** Phase name for the usage row ('analysis', 'review:2', 'extract'…). */
+  usageLabel?: string;
 }
 
 /**
@@ -64,6 +75,8 @@ export async function callStructured<T>(
     schema,
     model = DEFAULT_ANALYSIS_MODEL,
     maxTokens = DEFAULT_ANALYSIS_MAX_TOKENS,
+    usage,
+    usageLabel = schemaName,
   } = options;
 
   const response = await client.chat.completions.create({
@@ -78,6 +91,11 @@ export async function callStructured<T>(
       json_schema: { name: schemaName, strict: true, schema },
     },
   });
+
+  // Recorded before the validity checks below: a refusal or an empty
+  // completion still burned the tokens, and dropping them here would make
+  // the counter under-report exactly when something went wrong.
+  usage?.recordRaw(response.usage, model, usageLabel);
 
   const choice = response.choices?.[0];
   if (!choice) {
@@ -104,6 +122,8 @@ export interface StreamedTextCallOptions {
   /** Called per token delta. */
   onDelta: (delta: string) => void;
   signal?: AbortSignal;
+  usage?: WorkflowUsageCollector;
+  usageLabel?: string;
 }
 
 /** Streams a plain-text completion, returning the full accumulated text. */
@@ -118,6 +138,8 @@ export async function callStreamedText(
     maxTokens = DEFAULT_ANALYSIS_MAX_TOKENS,
     onDelta,
     signal,
+    usage,
+    usageLabel = 'stream',
   } = options;
 
   const stream = await client.chat.completions.create(
@@ -129,12 +151,18 @@ export async function callStreamedText(
       ],
       max_completion_tokens: maxTokens,
       stream: true,
+      // Without this the provider never sends counts for a streamed call and
+      // the work is invisible to the quota and the badge. It arrives as a
+      // final chunk with an EMPTY `choices` array, which the delta read
+      // below already skips.
+      stream_options: { include_usage: true },
     },
     { signal },
   );
 
   let full = '';
   for await (const chunk of stream) {
+    if (chunk.usage) usage?.recordRaw(chunk.usage, model, usageLabel);
     const delta = chunk.choices?.[0]?.delta?.content;
     if (delta) {
       full += delta;

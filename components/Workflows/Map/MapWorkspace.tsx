@@ -3,6 +3,7 @@
 import {
   IconDatabase,
   IconDownload,
+  IconFileImport,
   IconHistory,
   IconInfoCircle,
   IconPaperclip,
@@ -31,7 +32,18 @@ import {
   LoadableMapDataset,
   loadDatasetIntoWorkspace,
 } from '@/client/services/workflows/map/datasetLoad';
+import {
+  applyEnrichment,
+  enrichFeatures,
+} from '@/client/services/workflows/map/importEnrich';
 import { extractMapFeatures } from '@/client/services/workflows/map/mapExtraction';
+import {
+  ConfirmedImport,
+  PreparedImport,
+  materializeImport,
+  prepareImportFromFile,
+  prepareImportFromText,
+} from '@/client/services/workflows/map/mapImport';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
 import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
 
@@ -71,11 +83,13 @@ import {
 
 import { EventPrecision, MapFeature, MapWorkflowState } from '@/types/workflow';
 
+import { RunEstimateHint } from '../Impact/RunEstimateHint';
 import { WorkflowWorkspaceProps } from '../registry';
 import { CategoryFilterBar } from './CategoryFilterBar';
 import { DatasetPicker } from './DatasetPicker';
 import { DateRangeFilter } from './DateRangeFilter';
 import { FeatureList } from './FeatureList';
+import { ImportDialog } from './ImportDialog';
 import type { MapFocus } from './MapView';
 import { TimelineControl } from './TimelineControl';
 import { TimelineJumpBanner } from './TimelineJumpBanner';
@@ -124,9 +138,9 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const [searchMode, setSearchMode] = useState(false);
   // 'fetching' is the URL path's extra leg, so the button can say what it is
   // waiting on rather than showing one undifferentiated spinner label.
-  const [phase, setPhase] = useState<'idle' | 'fetching' | 'extracting'>(
-    'idle',
-  );
+  const [phase, setPhase] = useState<
+    'idle' | 'fetching' | 'extracting' | 'enriching'
+  >('idle');
   const busy = phase !== 'idle';
 
   // Stray typing and pasting land in the source box. No `onAttach`: this
@@ -149,6 +163,12 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   });
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  // A structured file or paste awaiting the import preview. Nothing is on
+  // the map until the person confirms what the preview shows.
+  const [pendingImport, setPendingImport] = useState<{
+    prepared: PreparedImport;
+    fromPaste: boolean;
+  } | null>(null);
   const [datasetPickerOpen, setDatasetPickerOpen] = useState(false);
   const [loadingDatasetId, setLoadingDatasetId] = useState<string | null>(null);
   // Admin-curated datasets; empty when the feature is off or none shared.
@@ -159,6 +179,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const [focus, setFocus] = useState<MapFocus | null>(null);
   const focusNonceRef = useRef(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const importInputRef = useRef<HTMLInputElement>(null);
 
   const features = useMemo(() => state?.features ?? [], [state?.features]);
   const hasFeatures = features.length > 0;
@@ -385,6 +406,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       const result = await extractMapFeatures(input, {
         existingNames: features.map((f) => f.name),
         modelId: conversation?.model?.id,
+        conversationId,
       });
 
       const sourceId = uuidv4();
@@ -493,12 +515,46 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     }
   };
 
+  /**
+   * The explicit import entry point. Unlike the paperclip, a file that turns
+   * out not to be location data is refused with a pointer to the paperclip
+   * rather than quietly handed to the model — the person said "import".
+   */
+  const handleImportFile = async (files: FileList | null) => {
+    const file = files?.[0];
+    if (!file) return;
+    setPhase('extracting');
+    setError(null);
+    try {
+      const prepared = await prepareImportFromFile(file);
+      if (!prepared) {
+        setError(t('map.import.notLocationData', { name: file.name }));
+        return;
+      }
+      setPendingImport({ prepared, fromPaste: false });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setPhase('idle');
+      if (importInputRef.current) importInputRef.current.value = '';
+    }
+  };
+
   const handleUploadFile = async (files: FileList | null) => {
     const file = files?.[0];
     if (!file) return;
     setPhase('extracting');
     setError(null);
     try {
+      // Location data (GeoJSON, KML/KMZ, a spreadsheet with coordinates) is
+      // read directly — its coordinates are the file's own statements, and
+      // handing them to the model would only let it re-guess them. Anything
+      // else is prose and goes to the model as before.
+      const prepared = await prepareImportFromFile(file);
+      if (prepared) {
+        setPendingImport({ prepared, fromPaste: false });
+        return;
+      }
       const extracted = await uploadAndExtractText(file);
       if (!extracted.text.trim()) {
         throw new Error(t('document.referenceEmpty', { name: file.name }));
@@ -669,8 +725,124 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     }
   };
 
+  /**
+   * Fills in what the file left blank, on request only. Coordinates stay
+   * exactly as imported; the model is asked for category, description and
+   * country, and only empty fields take its answer. This IS a model call —
+   * it costs tokens and shows on the impact badge like any run.
+   */
+  const runEnrichment = async (ids: string[]) => {
+    setPhase('enriching');
+    setError(null);
+    try {
+      const current =
+        (
+          useConversationStore
+            .getState()
+            .conversations.find((c) => c.id === conversationId)
+            ?.workflowState as MapWorkflowState | undefined
+        )?.features ?? [];
+      const wanted = new Set(ids);
+      const targets = current.filter((f) => wanted.has(f.id));
+      const patches = await enrichFeatures(targets, {
+        modelId: conversation?.model?.id,
+        conversationId,
+      });
+      updateWorkflowState(conversationId, (prev) => {
+        const p = prev as MapWorkflowState;
+        return {
+          ...p,
+          features: applyEnrichment(p.features, patches),
+          updatedAt: new Date().toISOString(),
+        };
+      });
+      appendWorkflowRailMessages(
+        conversationId,
+        t('map.import.railEnrichRequest', { count: String(targets.length) }),
+        t('map.import.railEnrichDone', { count: String(patches.size) }),
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setPhase('idle');
+    }
+  };
+
+  /** Lands a confirmed import: ids, a source record, connections, the rail. */
+  const handleImportConfirm = (confirmed: ConfirmedImport) => {
+    const fromPaste = pendingImport?.fromPaste ?? false;
+    setPendingImport(null);
+    const materialized = materializeImport(confirmed, features);
+    if (materialized.features.length === 0) return;
+
+    updateWorkflowState(conversationId, (prev) => {
+      const p = prev as MapWorkflowState;
+      return {
+        ...p,
+        features: [...p.features, ...materialized.features],
+        connections: [...(p.connections ?? []), ...materialized.connections],
+        sources: [...p.sources, materialized.record],
+        updatedAt: new Date().toISOString(),
+      };
+    });
+    if (features.length === 0) {
+      nameWorkflowConversation(conversationId, {
+        label: confirmed.sourceName,
+        sample: materialized.features
+          .slice(0, 20)
+          .map((f) => f.name)
+          .join(', '),
+        workflow: 'Map',
+      });
+    }
+    const notices: string[] = [];
+    if (materialized.unresolvedConnections > 0) {
+      notices.push(
+        t('map.import.unresolvedConnections', {
+          count: String(materialized.unresolvedConnections),
+        }),
+      );
+    }
+    if (confirmed.stats.skipped.capped > 0) {
+      notices.push(
+        `${t('map.featureCapExceeded', { max: String(MAX_FEATURES) })} ${t('map.import.capHint')}`,
+      );
+    }
+    setNotice(notices.length > 0 ? notices.join(' ') : null);
+    appendWorkflowRailMessages(
+      conversationId,
+      t('map.import.railRequest', { source: confirmed.sourceName }),
+      t('map.import.railDone', {
+        count: String(materialized.features.length),
+        source: confirmed.sourceName,
+      }),
+    );
+    if (fromPaste) setSourceText('');
+    if (confirmed.enrich) {
+      void runEnrichment(materialized.features.map((f) => f.id));
+    }
+  };
+
   const handleSubmit = () => {
     if (!trimmedSource || busy) return;
+    // Pasted GeoJSON or a few CSV lines are an import, not material for the
+    // model; a malformed one is reported rather than quietly sent on.
+    if (!searchMode) {
+      try {
+        const prepared = prepareImportFromText(
+          trimmedSource,
+          t('map.pastedSource'),
+        );
+        if (prepared) {
+          setError(null);
+          setPendingImport({ prepared, fromPaste: true });
+          return;
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : String(err));
+        return;
+      }
+    }
     if (urlCandidate) {
       void handleFetchUrl(trimmedSource);
       return;
@@ -746,6 +918,25 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             <IconPaperclip size={16} aria-hidden />
           </button>
         )}
+        {!searchMode && (
+          <button
+            type="button"
+            onClick={() => importInputRef.current?.click()}
+            disabled={busy}
+            aria-label={t('map.importFile')}
+            title={t('map.importFileHint')}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+          >
+            <IconFileImport size={16} aria-hidden />
+          </button>
+        )}
+        <input
+          ref={importInputRef}
+          type="file"
+          accept=".geojson,.json,.kml,.kmz,.csv,.tsv,.xlsx,.xls"
+          hidden
+          onChange={(e) => void handleImportFile(e.target.files)}
+        />
         {/* Admin-curated datasets; hidden when none are shared with this
             user (also covers the feature being off — no flag on the client). */}
         {datasets.length > 0 && (
@@ -775,10 +966,19 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         <input
           ref={fileInputRef}
           type="file"
-          accept=".pdf,.doc,.docx,.txt,.md,.csv,.json,.xlsx"
+          accept=".pdf,.doc,.docx,.txt,.md,.csv,.tsv,.json,.geojson,.kml,.kmz,.xlsx"
           hidden
           onChange={(e) => void handleUploadFile(e.target.files)}
         />
+        {pendingImport && (
+          <ImportDialog
+            source={pendingImport.prepared}
+            existing={features}
+            capacity={Math.max(0, MAX_FEATURES - features.length)}
+            onConfirm={handleImportConfirm}
+            onCancel={() => setPendingImport(null)}
+          />
+        )}
         <button
           type="button"
           onClick={handleSubmit}
@@ -788,9 +988,11 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           {busy
             ? phase === 'fetching'
               ? t('map.fetchingPage')
-              : searchMode
-                ? t('map.searching')
-                : t('map.finding')
+              : phase === 'enriching'
+                ? t('map.import.enriching')
+                : searchMode
+                  ? t('map.searching')
+                  : t('map.finding')
             : searchMode
               ? t('map.searchAndMap')
               : urlCandidate
@@ -798,6 +1000,20 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                 : t('map.mapIt')}
         </button>
       </div>
+      {/* Extraction reads the pasted material and returns a short feature
+          list, so the completion is a small fraction of the input. In search
+          mode the material is fetched server-side and cannot be measured
+          here, so no figure is offered rather than a wrong one. */}
+      {!busy && !searchMode && !urlCandidate && (
+        <p className="mt-2">
+          <RunEstimateHint
+            model={conversation?.model}
+            sourceText={sourceText}
+            passes={1}
+            completionRatio={0.15}
+          />
+        </p>
+      )}
       <p className="mt-2 max-w-[75ch] text-xs text-gray-500 dark:text-gray-400">
         {t('map.disclaimer')}
       </p>

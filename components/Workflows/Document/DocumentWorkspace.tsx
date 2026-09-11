@@ -10,7 +10,7 @@ import {
   IconSparkles,
   IconX,
 } from '@tabler/icons-react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useLocale, useTranslations } from 'next-intl';
@@ -63,6 +63,7 @@ import {
   applyEdit,
   applyEditsInOrder,
 } from '@/lib/utils/shared/review/editApplication';
+import { stampEditAnchors } from '@/lib/utils/shared/review/editLocation';
 import {
   guideCriterionId,
   isGuideCriterionKind,
@@ -96,12 +97,14 @@ import { DropdownPortal } from '@/components/UI/DropdownPortal';
 import { ExportFormatMenu } from '@/components/UI/ExportFormatMenu';
 import Modal from '@/components/UI/Modal';
 
+import { RunEstimateHint } from '../Impact/RunEstimateHint';
 import { PastedTextChips } from '../Shared/PastedTextChips';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaManager } from '../Shared/Review/CriteriaManager';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
 import { EditQuickActions } from '../Shared/Review/EditQuickActions';
 import { GuidePicker } from '../Shared/Review/GuidePicker';
+import { PendingEditsDialog } from '../Shared/Review/PendingEditsDialog';
 import { WorkflowWorkspaceProps } from '../registry';
 import { DocumentProfilePanel } from './DocumentProfilePanel';
 import { ReferencePanel } from './ReferencePanel';
@@ -173,6 +176,27 @@ type M365SaveResultWithIds = M365SaveResult & {
   driveId?: string;
 };
 
+/**
+ * The markdown a review decision applies against.
+ *
+ * The assessment keeps a markdown snapshot so consecutive accepts stay exact
+ * (no markdown↔HTML drift between them). But the editor is no longer frozen
+ * while edits are pending: once the user has typed, the snapshot describes a
+ * document that no longer exists, and applying a suggestion to it would
+ * regenerate `docHtml` WITHOUT their changes. So the snapshot is trusted only
+ * while `docHtmlHash` still matches the live document, and re-derived from it
+ * otherwise (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §4). A record without a hash
+ * predates the unfreeze and is treated as stale — the safe direction.
+ */
+function reviewMarkdown(p: DocumentWorkflowState): string {
+  const assessment = p.assessment;
+  if (!assessment) return htmlToMarkdown(p.docHtml);
+  return assessment.docHtmlHash !== undefined &&
+    assessment.docHtmlHash === stringHash(p.docHtml)
+    ? assessment.docMarkdown
+    : htmlToMarkdown(p.docHtml);
+}
+
 export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const t = useTranslations('workflows');
   const conversation = useConversationStore((s) =>
@@ -208,6 +232,12 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const setAutoClearResolvedEdits = useSettingsStore(
     (s) => s.setAutoClearResolvedEdits,
   );
+  const reviewOverwriteAcknowledged = useSettingsStore(
+    (s) => s.reviewOverwriteAcknowledged,
+  );
+  const setReviewOverwriteAcknowledged = useSettingsStore(
+    (s) => s.setReviewOverwriteAcknowledged,
+  );
   const suggestRevisionsDefault = useSettingsStore((s) => s.suggestRevisions);
   const suggestRevisionsExceptions = useSettingsStore(
     (s) => s.suggestRevisionsExceptions,
@@ -222,6 +252,9 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const [assessing, setAssessing] = useState(false);
   const [assessError, setAssessError] = useState<string | null>(null);
   const [reviewOpen, setReviewOpen] = useState(true);
+  // Ids of the suggestions a held-back keystroke would have overwritten, while
+  // the one-time explanation is up (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §6a).
+  const [overwritePrompt, setOverwritePrompt] = useState<string[] | null>(null);
   const [specsOpen, setSpecsOpen] = useState(false);
   const [criteriaOpen, setCriteriaOpen] = useState(false);
   const [uploadingBasis, setUploadingBasis] = useState(false);
@@ -375,7 +408,9 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   // instruction refers to rather than the instruction itself, so it is held
   // beside the composer and folded back in at run time.
   const instructionRef = useRef<HTMLTextAreaElement>(null);
-  const composerBlocked = isBusy || hasUnresolvedEdits || syncConflict;
+  // Pending suggestions no longer block the composer: an AI run while they
+  // are open goes through the PendingEditsDialog gate in handleRun instead.
+  const composerBlocked = isBusy || syncConflict;
   const {
     chips,
     hasChips,
@@ -509,10 +544,15 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     if (
       (!instruction.trim() && !hasChips) ||
       isBusy ||
-      hasUnresolvedEdits ||
       syncConflict ||
       !state
     ) {
+      return;
+    }
+    // A revision can rewrite any passage, decided or not: settle the queue
+    // first (§6b). The run is re-issued from the gate once it is.
+    if (hasUnresolvedEdits) {
+      setReviewGate('run');
       return;
     }
     const trimmed = composeWithChips(instruction);
@@ -556,6 +596,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           references,
           ...buildWritingConstraints(),
           modelId: conversation?.model?.id,
+          conversationId,
         },
         onText: (fullText) => {
           finalMarkdown = fullText;
@@ -611,6 +652,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                 status: 'pending' as const,
               })),
               docMarkdown: priorMarkdown,
+              docHtmlHash: stringHash(docHtml),
               scope: 'document' as const,
               labels: {
                 [REVISION_CRITERION]: t('document.revisionCriterionLabel'),
@@ -727,9 +769,12 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
 
   const handleEditorChange = useCallback(
     (html: string) => {
-      // syncConflict freezes editing exactly like pending review edits do —
-      // the document must hold still while the user resolves the conflict.
-      if (isRunning || hasUnresolvedEdits || syncConflict) return;
+      // syncConflict freezes editing — the document must hold still while
+      // the user resolves the conflict. Pending review edits do not: the
+      // assessment's markdown snapshot is re-derived from the live document
+      // at decision time (see reviewMarkdown), so a suggestion accepted after
+      // the user has typed applies to the text they actually have.
+      if (isRunning || syncConflict) return;
       updateWorkflowState(conversationId, (prev) => {
         const p = prev as DocumentWorkflowState;
         // An empty Tiptap document serializes to `<p></p>`, not `''`. Writing
@@ -741,18 +786,17 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         return { ...p, docHtml: next, updatedAt: new Date().toISOString() };
       });
     },
-    [
-      conversationId,
-      isRunning,
-      hasUnresolvedEdits,
-      syncConflict,
-      updateWorkflowState,
-    ],
+    [conversationId, isRunning, syncConflict, updateWorkflowState],
   );
 
   const handleAssess = useCallback(async () => {
-    if (!state || isBusy || hasUnresolvedEdits || syncConflict) return;
+    if (!state || isBusy || syncConflict) return;
     if (!hasDocument || selectedCriteria.size === 0) return;
+    // A new assessment replaces the queue outright: settle it first (§6b).
+    if (hasUnresolvedEdits) {
+      setReviewGate('assess');
+      return;
+    }
     setAssessError(null);
     setAssessing(true);
     try {
@@ -793,6 +837,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           : undefined,
         profile: freshProfile,
         modelId: conversation?.model?.id,
+        conversationId,
       });
 
       const labels: Record<string, string> = {};
@@ -811,12 +856,19 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           id: uuidv4(),
           criteria: result.criteria,
           overallSummary: result.overallSummary,
-          edits: result.edits.map((edit) => ({
-            ...edit,
-            id: uuidv4(),
-            status: 'pending' as const,
-          })),
+          // Anchored against the markdown as assessed — edits are written in
+          // markdown terms, so that is the text their offsets must describe
+          // (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §3).
+          edits: stampEditAnchors(
+            docMarkdown,
+            result.edits.map((edit) => ({
+              ...edit,
+              id: uuidv4(),
+              status: 'pending' as const,
+            })),
+          ),
           docMarkdown,
+          docHtmlHash: stringHash(docHtml),
           scope: selection ? ('selection' as const) : ('document' as const),
           selectionText: selection?.text,
           labels,
@@ -868,7 +920,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         const edit = p.assessment.edits.find((e) => e.id === editId);
         if (!edit || edit.status !== 'pending') return p;
 
-        let docMarkdown = p.assessment.docMarkdown;
+        let docMarkdown = reviewMarkdown(p);
         let status: ReviewEditStatus = decision;
         let html = p.docHtml;
         let title = p.title;
@@ -894,6 +946,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           assessment: {
             ...p.assessment,
             docMarkdown,
+            docHtmlHash: stringHash(html),
             // Unapplicable edits survive auto-clear: a change that silently
             // failed to land is the one the user most needs to still see.
             edits: autoClearResolvedEdits
@@ -922,7 +975,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         const edit = p.assessment.edits.find((e) => e.id === editId);
         if (!edit || edit.status === 'pending') return p;
 
-        let docMarkdown = p.assessment.docMarkdown;
+        let docMarkdown = reviewMarkdown(p);
         let html = p.docHtml;
         let title = p.title;
         if (edit.status === 'accepted') {
@@ -941,6 +994,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           assessment: {
             ...p.assessment,
             docMarkdown,
+            docHtmlHash: stringHash(html),
             edits: p.assessment.edits.map((e) =>
               e.id === editId
                 ? { ...e, status: 'pending' as const, resolvedAt: undefined }
@@ -952,6 +1006,95 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       });
     },
     [conversationId, updateWorkflowState],
+  );
+
+  /**
+   * Typing over a suggested passage (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §6a).
+   *
+   * The suggestions whose text the user just changed move to "not applied":
+   * their anchor no longer exists, and that — not a judgement on the
+   * suggestion — is the truthful record. Reversible from the review list, and
+   * from the notice's undo, which also puts the text back.
+   */
+  const dropEdits = useCallback(
+    (ids: string[]) => {
+      const dropped = new Set(ids);
+      updateWorkflowState(conversationId, (prev) => {
+        const p = prev as DocumentWorkflowState;
+        if (!p.assessment) return p;
+        const now = new Date().toISOString();
+        const edits = p.assessment.edits.map((e) =>
+          dropped.has(e.id) && e.status === 'pending'
+            ? { ...e, status: 'unapplicable' as const, resolvedAt: now }
+            : e,
+        );
+        return {
+          ...p,
+          assessment: {
+            ...p.assessment,
+            edits: autoClearResolvedEdits
+              ? withoutResolvedEdits(edits, { keepUnapplicable: true })
+              : edits,
+          },
+          updatedAt: now,
+        };
+      });
+    },
+    [conversationId, updateWorkflowState, autoClearResolvedEdits],
+  );
+
+  const notifyDropped = useCallback(
+    (ids: string[]) => {
+      toast(
+        (instance) => (
+          <div className="flex items-center gap-3">
+            <span>
+              {ids.length > 1
+                ? t('document.suggestionDroppedMany', {
+                    count: String(ids.length),
+                  })
+                : t('document.suggestionDroppedOne')}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                // Text first, so the suggestion's anchor exists again by the
+                // time it is back in the queue. Undo takes the editor's latest
+                // history step: consecutive typing groups, so this may also
+                // take back what was typed right after — the ordinary
+                // meaning of Undo in an editor.
+                editorRef.current?.undo();
+                ids.forEach(revertEdit);
+                toast.dismiss(instance.id);
+              }}
+              className="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              {t('common.undo')}
+            </button>
+          </div>
+        ),
+        { duration: 8000 },
+      );
+    },
+    [revertEdit, t],
+  );
+
+  /**
+   * The editor's overwrite gate, answered synchronously mid-keystroke. First
+   * time: hold the keystroke and explain. Thereafter: let it land, drop the
+   * suggestions it overwrote, and say so with an undo.
+   */
+  const handleOverwriteEdits = useCallback(
+    (ids: string[]): boolean => {
+      if (!reviewOverwriteAcknowledged) {
+        setOverwritePrompt(ids);
+        return false;
+      }
+      dropEdits(ids);
+      notifyDropped(ids);
+      return true;
+    },
+    [reviewOverwriteAcknowledged, dropEdits, notifyDropped],
   );
 
   /** Drops the decision record, leaving only edits still awaiting a call. */
@@ -996,15 +1139,17 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           };
         }
 
-        const result = applyEditsInOrder(p.assessment.docMarkdown, pending);
+        const result = applyEditsInOrder(reviewMarkdown(p), pending);
         const failed = new Set(result.failedIds);
+        const html = markdownToHtml(result.text);
         return {
           ...p,
-          docHtml: markdownToHtml(result.text),
+          docHtml: html,
           title: extractTitle(result.text) || p.title,
           assessment: {
             ...p.assessment,
             docMarkdown: result.text,
+            docHtmlHash: stringHash(html),
             edits: p.assessment.edits.map((e) =>
               e.status !== 'pending'
                 ? e
@@ -1060,6 +1205,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           docMarkdown,
           criteria: [],
           modelId: conversation?.model?.id,
+          conversationId,
         });
         updateWorkflowState(conversationId, (prev) => ({
           ...(prev as DocumentWorkflowState),
@@ -1297,6 +1443,37 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     () => (streamHtml !== null ? streamHtml : docHtml),
     [streamHtml, docHtml],
   );
+
+  /**
+   * An AI run asked for while suggestions were still pending
+   * (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §6b). The dialog decides the queue in
+   * bulk; the run itself is QUEUED rather than called from the dialog's
+   * handler, and fires from the effect below once the store shows no pending
+   * edits — by which point this component has re-rendered and the handler's
+   * closure holds the post-decision text. Calling the handler straight after
+   * `resolveAll` would read the render's stale closure and send the model the
+   * pre-decision document, silently discarding what the user just accepted.
+   */
+  const [reviewGate, setReviewGate] = useState<'run' | 'assess' | null>(null);
+  const [queuedAction, setQueuedAction] = useState<'run' | 'assess' | null>(
+    null,
+  );
+  const decidePendingAndRun = useCallback(
+    (decision: 'accepted' | 'rejected') => {
+      const kind = reviewGate;
+      setReviewGate(null);
+      if (!kind) return;
+      resolveAll(decision);
+      setQueuedAction(kind);
+    },
+    [reviewGate, resolveAll],
+  );
+  useEffect(() => {
+    if (!queuedAction || hasUnresolvedEdits) return;
+    setQueuedAction(null);
+    if (queuedAction === 'run') void handleRun();
+    else void handleAssess();
+  }, [queuedAction, hasUnresolvedEdits, handleRun, handleAssess]);
 
   /* ---------------- Source editing (markdown / HTML modes) ------------- */
 
@@ -1572,7 +1749,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             <input
               type="checkbox"
               checked={suggestRevisions && !selection}
-              disabled={isBusy || hasUnresolvedEdits || selection !== null}
+              disabled={isBusy || selection !== null}
               onChange={(e) => setSuggestOverride(e.target.checked)}
               className="h-3.5 w-3.5 accent-gray-600 disabled:opacity-50 dark:accent-gray-400"
             />
@@ -1594,11 +1771,6 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           }}
           rows={2}
           disabled={composerBlocked}
-          title={
-            hasUnresolvedEdits
-              ? t('document.editingBlockedPendingEdits')
-              : undefined
-          }
           placeholder={
             selection && hasDocument
               ? t('document.reviseSelectionPlaceholder')
@@ -1629,10 +1801,27 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           </button>
         )}
       </div>
-      {isRunning && (
+      {isRunning ? (
         <p className="mt-2 animate-pulse text-xs text-gray-500 dark:text-gray-400">
           {t('document.writing')}
         </p>
+      ) : (
+        // A revise pass re-sends the whole document; a first draft sends only
+        // the instruction, so there is nothing to predict from yet.
+        hasDocument && (
+          <p className="mt-2">
+            <RunEstimateHint
+              model={conversation?.model}
+              sourceText={
+                selection?.text ?? (hasDocument ? htmlToMarkdown(docHtml) : '')
+              }
+              passes={1}
+              // A revision rewrites what it was given, so the completion is
+              // roughly the length of the input.
+              completionRatio={1}
+            />
+          </p>
+        )
       )}
     </div>
   );
@@ -1876,13 +2065,13 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                 ref={editorRef}
                 contentHtml={editorHtml}
                 onChange={handleEditorChange}
-                editable={
-                  !isRunning &&
-                  !assessing &&
-                  !hasUnresolvedEdits &&
-                  !syncConflict
-                }
+                // Pending review edits no longer freeze the editor: text the
+                // review has no opinion about is free to change, and typing
+                // over a suggestion goes through the overwrite gate below
+                // (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §4).
+                editable={!isRunning && !assessing && !syncConflict}
                 onSelectionUpdate={setSelection}
+                onOverwriteEdits={handleOverwriteEdits}
                 previewEdits={previewEdits}
                 activeEditId={preview.activeId}
                 pinnedEditId={preview.pinnedId}
@@ -1954,17 +2143,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               <button
                 type="button"
                 onClick={() => void handleAssess()}
-                disabled={
-                  isBusy ||
-                  hasUnresolvedEdits ||
-                  syncConflict ||
-                  selectedCriteria.size === 0
-                }
-                title={
-                  hasUnresolvedEdits
-                    ? t('document.editingBlockedPendingEdits')
-                    : undefined
-                }
+                disabled={isBusy || syncConflict || selectedCriteria.size === 0}
                 className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-900 hover:bg-gray-300 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-elevated dark:text-gray-100 dark:hover:bg-gray-700"
               >
                 <IconClipboardCheck size={14} aria-hidden />
@@ -2086,6 +2265,44 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           if (entry) void openFromM365(entry);
         }}
         onCancel={() => setPendingM365Open(null)}
+      />
+
+      {/* An AI run asked for with suggestions still pending: decide the queue
+          in bulk, then the run follows with the post-decision text (§6b). */}
+      <PendingEditsDialog
+        isOpen={reviewGate !== null}
+        pendingCount={previewEdits.length}
+        actionLabel={
+          reviewGate === 'assess'
+            ? t('document.pendingRunActionAssess')
+            : t('document.pendingRunActionRevise')
+        }
+        onAcceptAll={() => decidePendingAndRun('accepted')}
+        onRejectAll={() => decidePendingAndRun('rejected')}
+        onCancel={() => setReviewGate(null)}
+      />
+
+      {/* First keystroke over a suggested passage: explain once, then act.
+          The keystroke itself was held back; confirming drops the suggestion
+          so the next one lands on unmarked text. */}
+      <ConfirmDialog
+        isOpen={overwritePrompt !== null}
+        title={t('document.overwriteEditTitle')}
+        message={t('document.overwriteEditMessage')}
+        confirmLabel={
+          (overwritePrompt?.length ?? 0) > 1
+            ? t('document.overwriteEditConfirmMany', {
+                count: String(overwritePrompt?.length ?? 0),
+              })
+            : t('document.overwriteEditConfirmOne')
+        }
+        onConfirm={() => {
+          const ids = overwritePrompt ?? [];
+          setOverwritePrompt(null);
+          setReviewOverwriteAcknowledged(true);
+          dropEdits(ids);
+        }}
+        onCancel={() => setOverwritePrompt(null)}
       />
 
       {/* Conflict resolution — explicit, no merge (v1). Editing stays frozen

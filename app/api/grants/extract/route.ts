@@ -194,6 +194,7 @@ export async function POST(request: NextRequest) {
       year: Number(year) || new Date().getFullYear(),
       codeOverrides: codeOverrides || {},
       promptOverride: resolvedPromptOverride,
+      user: session.user,
     }).catch((err) => {
       console.error(
         `[${runId}] Pipeline failed:`,

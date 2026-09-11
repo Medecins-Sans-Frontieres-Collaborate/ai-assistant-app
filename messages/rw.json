@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} ibitswe muri Azure region yo mu Burayi; ibiganiro ukoresha byo bikorerwa aho."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Erekana izishaje ({count})",
+      "hideOlder": "Hisha izishaje"
     },
     "reasoningModel": "Reasoning model: ibanza gutekereza mu byiciro mbere yo gusubiza. Itinda gato, ariko ikora neza ku bibazo bikomeye.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Ukwezi gushize",
       "freshness_any": "Igihe icyo ari cyo cyose",
       "hint": "Auto ireka buri kibazo kigenwe igihe cyacyo gishya (nko mu makuru hakoreshwa umunsi ushize), naho ibibazo by’ubushakashatsi bishobora gukoresha amasoko menshi kurenza ibisanzwe."
+    },
+    "subVariant": {
+      "label": "Ingano"
     }
   },
   "models": {
@@ -2574,7 +2579,9 @@
     "chipHiddenHint": "Chip ntizagaragaraga na rimwe. Ingereranyo ziracyasohoka kandi zigaragara kuri uru rupapuro.",
     "chipAutoHideLabel": "Ihishwe nyuma",
     "chipAutoHideUnit": "amasegonda",
-    "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda."
+    "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda.",
+    "byWorkflow": "Ku murongo w’akazi",
+    "byWorkflowNote": "Igice cy’umubare rusange uri hejuru, cyerekanywe ukwacyo — si imikoreshereze y’inyongera. Imikoreshereze y’ubufasha ibarirwa muri raporo y’umuryango wawe no mu mubare w’utumenyetso mwemerewe, ariko ntibarwa muri uyu mubare w’aho uri."
   },
   "extraction": {
     "toggleLabel": "Sohora amakuru ateguye",
@@ -2808,7 +2815,17 @@
       "guides": "Imfashanyigisho z’umuryango",
       "organizationTerminology": "Imvugo ikoreshwa n’umuryango",
       "noOrganizationTerminology": "Nta mvugo y’umuryango ihari",
-      "terminologyGuideUnavailable": "Imfashanyigisho ntiboneka"
+      "terminologyGuideUnavailable": "Imfashanyigisho ntiboneka",
+      "editingPendingHint": "Hari {count} byifuzo bitaremezwa — ntibigarazwa mugihe uri gukora impinduka, kandi iyo wanditseho, biremezwa.",
+      "editingPendingHintOne": "Hari igitekerezo 1 kitaremezwa — ntikigaragara mugihe uri gukora impinduka, kandi iyo wanditseho, kiremezwa.",
+      "overwriteEditTitle": "Uri gukora impinduka ku gitekerezo cyatanzwe",
+      "overwriteEditMessage": "Iyi nyandiko ifite igitekerezo kitarasuzumwa. Kugikoraho bigihagarika — gihita kijya mu “ntabwo byashyizweho” ku rutonde rwo gusesengura, kandi ushobora gusubiza inyuma icyo gikorwa. Inyandiko itarimo ibitekerezo ishobora guhindurwa uko ubishaka mugihe isuzuma rifunguye. Ntuzongera kubibazwa.",
+      "overwriteEditConfirmOne": "Hagarika igitekerezo ariko wemeze impinduka zanjye",
+      "overwriteEditConfirmMany": "Hagarika ibitekerezo {count} ariko wemeze impinduka zanjye",
+      "suggestionDroppedOne": "Igitekerezo gihagaritswe — wahinduye aho cyari kiri.",
+      "suggestionDroppedMany": "Ibitekerezo {count} byahagaritswe — wahinduye aho byari biri.",
+      "pendingRunActionTranslate": "Kongera guhindura",
+      "pendingRunActionAssess": "Kongera gusesengura"
     },
     "document": {
       "emptyTitle": "Sobanura inyandiko ushaka",
@@ -2956,7 +2973,15 @@
       "criterionRubricTooLong": "Iyi rubric irengeje inyuguti {over} zemewe. Iyoherezwa hamwe n'ubugenzuzi bwose, bityo igomba kugabanywa mbere yo gukoreshwa muri iki gipimo.",
       "guides": "Imfashanyigisho z’umuryango",
       "guidesOptgroup": "Imfashanyigisho z’umuryango",
-      "guideUnavailable": "Imfashanyigisho ntiboneka"
+      "guideUnavailable": "Imfashanyigisho ntiboneka",
+      "overwriteEditTitle": "Uri gukora impinduka ku gitekerezo cyatanzwe",
+      "overwriteEditMessage": "Iyi nyandiko ifite igitekerezo kitarasuzumwa. Kugikoraho bigihagarika — gihita kijya mu “ntabwo byashyizweho” ku rutonde rwo gusesengura, kandi ushobora gusubiza inyuma icyo gikorwa. Inyandiko itarimo ibitekerezo ishobora guhindurwa uko ubishaka mugihe isuzuma rifunguye. Ntuzongera kubibazwa.",
+      "overwriteEditConfirmOne": "Hagarika igitekerezo kandi uhindure",
+      "overwriteEditConfirmMany": "Hagarika ibitekerezo {count} kandi uhindure",
+      "suggestionDroppedOne": "Igitekerezo gihagaritswe — wahinduye aho cyari kiri.",
+      "suggestionDroppedMany": "Ibitekerezo {count} byahagaritswe — wahinduye aho byari biri.",
+      "pendingRunActionRevise": "Gukosora inyandiko",
+      "pendingRunActionAssess": "Kongera gusesengura"
     },
     "data": {
       "emptyTitle": "Injiza amakuru kugirango asuzumwe",
@@ -3332,7 +3357,14 @@
       "guideSectionOptional": "si ngombwa",
       "guideSourceTerm": "Ijambo ry’inkomoko",
       "guideTargetTerm": "Ibisabwa guhindurwamo",
-      "guideNote": "Icyitonderwa"
+      "guideNote": "Icyitonderwa",
+      "pendingRun": {
+        "title": "Hari ibitekerezo {count} bigitegereje kwemezwa",
+        "body": "{action} birashobora guhindura igice icyo ari cyo cyose cy'inyandiko, harimo n'ibice biriho ibitekerezo utarafataho umwanzuro, kandi isuzuma rishya risimbura urutonde ruriho ubu. Banza ufate umwanzuro ku bisigaye.",
+        "acceptAll": "Emerera ibisigaye byose",
+        "rejectAll": "Hakana byose",
+        "cancel": "Hagarika"
+      }
     }
   },
   "connectors": {
@@ -3533,6 +3565,36 @@
         "hidden": "Bihishe"
       },
       "visibilityHint": "Ibyikora, chip iragaragara iyo igipimo kivuguruwe cyangwa iyo uyikoreyeho. Ushobora kubihindura nanone muri Settings › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Ubu butangamo akazi (ikigereranyo)",
+      "workspace": "Ubu butangamo akazi",
+      "currentArtifact": "Aho ugeze ubu",
+      "lastRun": "Igihe gishize uko bikorwa",
+      "lastRunDetail": "{action} · {calls} guhamagara model",
+      "today": "Uyu munsi",
+      "railChat": "Ganira muri ubu butangamo akazi",
+      "byAction": "Ku cyiciro",
+      "delta": "+{grams} g",
+      "ariaLabel": "Ikigereranyo cy’ingaruka za karubone muri ubu butangamo akazi: {grams} garama za CO₂ inyongera. Erekana ibisobanuro birambuye.",
+      "disclaimer": "Ibyavuyemo kuri buri gukoresha bishingiye ku mubare w’utumenyetso watangajwe, hifashishijwe imibare isanzwe rusange n’ibyatekerejweho v{version}. Igikorwa kimwe kigizwe no guhamagara model kenshi, kandi inkuru yose ijyana buri gihe, bityo utumenyetso tw'ibisabwa tukaba aritwo twinshi. Ibikorwa byakozwe mbere y’uko gukurikirana bitangira ntibibariwemo. Si urugero rufatika.",
+      "actions": {
+        "translate": "Guhindura",
+        "analysis": "Isesengura ry’inkomoko",
+        "review": "Icyiciro cyo gusubiramo",
+        "write": "Kwandika",
+        "revise": "Gukosora",
+        "profile": "Umwirondoro w’igikoresho",
+        "assess": "Isuzuma ry’ubwiza",
+        "extract": "Gushyira hanze",
+        "transform": "Guhindura",
+        "photo": "Gukuramo amafoto",
+        "map_edit": "Guhindura karita",
+        "rail_chat": "Ikiganiro"
+      },
+      "estimate": "~{passes} guca · ~{grams} g CO₂e",
+      "estimateTooltip": "Iyi ni igipimo cy'ikigereranyo cy'uru rugendo mbere y'uko rutangira, gishingiye ku burebure bw'isoko, icyitegererezo cyatoranyijwe n'uburyo gahunda yahisemo zikora kenshi (ibipimo byatekerejweho v{version}). Buri guca kohereza isoko inshuro nyinshi, bityo amafaranga y’utumenyetso tugitangira niyo menshi. Umubare nyawo uzagaragara nyuma yo kurangiza.",
+      "estimateAtMost": "kugeza kuri ~{passes} guca · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5563,7 +5625,8 @@
       "limitReached": "Limite igeze",
       "familyLimitReached": "Limite y'itsinda rya model igeze",
       "usageUnavailable": "Uko bikoreshwa ubu ntibibashije kugaragara — urabona gusa imipaka.",
-      "familyRow": "Imiterere za {family}"
+      "familyRow": "Imiterere za {family}",
+      "usedByWorkflows": "muri byo {used} byaturutse muri workflows"
     },
     "routes": {
       "ttsExhausted": "Wageze kuri limite ya text-to-speech y'uyu munsi.",

@@ -1461,7 +1461,9 @@
       "euOnlyNote": "{name}은(는) EU Azure 지역에서 호스팅되며, 대화 또한 그곳에서 처리됩니다."
     },
     "version": {
-      "label": "버전"
+      "label": "버전",
+      "showOlder": "이전 버전 표시 ({count})",
+      "hideOlder": "이전 버전 숨기기"
     },
     "reasoningModel": "추론 모델: 답변 전에 단계별로 사고합니다. 느리지만 복잡한 문제에 더 적합합니다.",
     "variant": {
@@ -1492,6 +1494,9 @@
       "freshness_month": "지난 한 달",
       "freshness_any": "모든 시간",
       "hint": "자동을 선택하면 각 질문마다 최신성 기준이 결정됩니다(예: 뉴스는 지난 하루 선호). 연구형 질문은 기본값보다 더 많은 자료를 활용할 수 있습니다."
+    },
+    "subVariant": {
+      "label": "크기"
     }
   },
   "models": {
@@ -2590,7 +2595,9 @@
     "chipHiddenHint": "칩이 표시되지 않습니다. 누적치는 이 페이지에서 계속 확인할 수 있습니다.",
     "chipAutoHideLabel": "다음 후 사라짐",
     "chipAutoHideUnit": "초",
-    "chipAutoHideHint": "{min}초에서 {max}초 사이."
+    "chipAutoHideHint": "{min}초에서 {max}초 사이.",
+    "byWorkflow": "워크플로우별",
+    "byWorkflowNote": "위의 합계에 포함된 일부를 별도로 표시한 것으로, 추가 사용이 아닙니다. 승인된 실행은 귀하의 조직 보고 및 토큰 예산에는 포함되지만, 이 로컬 총계에는 포함되지 않습니다."
   },
   "extraction": {
     "toggleLabel": "구조화 데이터 추출",
@@ -2824,7 +2831,17 @@
       "guides": "조직 안내서",
       "organizationTerminology": "조직 용어집",
       "noOrganizationTerminology": "조직 용어집 없음",
-      "terminologyGuideUnavailable": "안내서 이용 불가"
+      "terminologyGuideUnavailable": "안내서 이용 불가",
+      "editingPendingHint": "{count}개의 제안이 보류 중입니다 — 편집 중에는 표시되지 않으며, 입력하면 제안이 사라집니다.",
+      "editingPendingHintOne": "1개의 제안이 보류 중입니다 — 편집 중에는 표시되지 않으며, 입력하면 제안이 사라집니다.",
+      "overwriteEditTitle": "제안된 부분 편집 중",
+      "overwriteEditMessage": "이 텍스트에는 보류 중인 제안이 있습니다. 편집하면 제안이 삭제되고 검토 목록의 “미적용”으로 이동합니다. 거기서 실행 취소도 가능합니다. 검토가 열려 있으면 제안이 없는 부분은 자유롭게 편집할 수 있습니다. 다시 묻지 않습니다.",
+      "overwriteEditConfirmOne": "제안을 삭제하고 내 변경사항 유지",
+      "overwriteEditConfirmMany": "{count}개의 제안을 삭제하고 내 변경사항 유지",
+      "suggestionDroppedOne": "제안이 삭제되었습니다 — 해당 부분을 편집했습니다.",
+      "suggestionDroppedMany": "{count}개의 제안이 삭제되었습니다 — 해당 부분을 편집했습니다.",
+      "pendingRunActionTranslate": "다시 번역 중",
+      "pendingRunActionAssess": "재평가 중"
     },
     "document": {
       "emptyTitle": "원하는 문서를 설명하세요",
@@ -2972,7 +2989,15 @@
       "criterionRubricTooLong": "이 평가지표는 제한을 {over}자 초과합니다. 모든 평가와 함께 전송되므로, 이 기준을 사용하려면 길이를 줄여야 합니다.",
       "guides": "조직 안내서",
       "guidesOptgroup": "조직 안내서",
-      "guideUnavailable": "안내서 이용 불가"
+      "guideUnavailable": "안내서 이용 불가",
+      "overwriteEditTitle": "제안된 부분 편집 중",
+      "overwriteEditMessage": "이 텍스트에는 보류 중인 제안이 있습니다. 편집하면 제안이 삭제되고 검토 목록의 “미적용”으로 이동합니다. 거기서 실행 취소도 가능합니다. 검토가 열려 있으면 제안이 없는 부분은 자유롭게 편집할 수 있습니다. 다시 묻지 않습니다.",
+      "overwriteEditConfirmOne": "제안을 삭제하고 편집",
+      "overwriteEditConfirmMany": "{count}개의 제안을 삭제하고 편집",
+      "suggestionDroppedOne": "제안이 삭제되었습니다 — 해당 부분을 편집했습니다.",
+      "suggestionDroppedMany": "{count}개의 제안이 삭제되었습니다 — 해당 부분을 편집했습니다.",
+      "pendingRunActionRevise": "문서 수정 중",
+      "pendingRunActionAssess": "재평가 중"
     },
     "data": {
       "emptyTitle": "분석할 데이터 가져오기",
@@ -3348,7 +3373,14 @@
       "guideSectionOptional": "선택",
       "guideSourceTerm": "원본 용어",
       "guideTargetTerm": "필수 번역어",
-      "guideNote": "참고"
+      "guideNote": "참고",
+      "pendingRun": {
+        "title": "{count}개의 제안이 아직 보류 중입니다",
+        "body": "{action}은 선택하지 않은 제안이 포함된 부분을 비롯해 텍스트의 모든 부분을 변경할 수 있으며, 새 평가가 현재 목록을 대체합니다. 남은 제안을 먼저 결정하세요.",
+        "acceptAll": "남은 모든 항목 수락",
+        "rejectAll": "모두 거부",
+        "cancel": "취소"
+      }
     }
   },
   "connectors": {
@@ -3549,6 +3581,36 @@
         "hidden": "숨김"
       },
       "visibilityHint": "자동은 추정치가 업데이트되거나 마우스를 올릴 때 칩을 표시합니다. 이 설정은 환경설정 › 사용량 및 영향에서 다시 변경할 수 있습니다."
+    },
+    "workflow": {
+      "title": "이 작업 공간(추정)",
+      "workspace": "이 작업 공간",
+      "currentArtifact": "현재 작업",
+      "lastRun": "마지막 실행",
+      "lastRunDetail": "{action} · 모델 호출 {calls}회",
+      "today": "오늘",
+      "railChat": "이 작업 공간에서 채팅",
+      "byAction": "단계별",
+      "delta": "+{grams}g",
+      "ariaLabel": "이 작업 공간의 추정 탄소발자국: CO₂ 환산 {grams}그램. 세부 내역 보기.",
+      "disclaimer": "보고된 토큰 수를 기반으로 한 실행당 추정치로, 공개된 평균과 가정(v{version})을 사용합니다. 한 번의 실행은 여러 번의 모델 호출로 이루어지며, 매번 전체 소스가 전송되어 프롬프트 토큰 비중이 큽니다. 추적이 시작되기 전 실행은 포함되지 않습니다. 실제 측정은 아닙니다.",
+      "actions": {
+        "translate": "번역",
+        "analysis": "원문 분석",
+        "review": "검토 단계",
+        "write": "작성",
+        "revise": "수정",
+        "profile": "문서 프로필",
+        "assess": "품질 평가",
+        "extract": "추출",
+        "transform": "변환",
+        "photo": "사진 추출",
+        "map_edit": "지도 업데이트",
+        "rail_chat": "채팅"
+      },
+      "estimate": "~{passes}회 반복 · ~{grams}g CO₂e",
+      "estimateTooltip": "이 실행 전에 소스 길이, 선택한 모델, 설정에 따른 반복 횟수로 대략 추정한 값입니다(가정 v{version}). 반복 횟수만큼 소스를 다시 전송하므로, 프롬프트 토큰이 대부분을 차지합니다. 실제 값은 실행 후에 표시됩니다.",
+      "estimateAtMost": "최대 ~{passes}회 반복 · ~{grams}g CO₂e"
     }
   },
   "table": {
@@ -5579,7 +5641,8 @@
       "limitReached": "한도에 도달함",
       "familyLimitReached": "모델 패밀리 한도에 도달함",
       "usageUnavailable": "현재 사용량을 불러올 수 없습니다 — 한도만 표시합니다.",
-      "familyRow": "{family} 모델"
+      "familyRow": "{family} 모델",
+      "usedByWorkflows": "이 중 {used}는 워크플로우에서 사용됨"
     },
     "routes": {
       "ttsExhausted": "오늘 텍스트-음성 변환 한도에 도달하셨습니다.",

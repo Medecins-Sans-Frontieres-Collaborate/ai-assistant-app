@@ -3,6 +3,8 @@
  *
  * Uses Azure OpenAI to extract structured project information.
  */
+import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflowUsage';
+
 import { aliasMentions, deriveDocAliases } from '../aliasMap';
 import { getDeployment, getGrantOpenAIClient } from '../grantOpenAIClient';
 import type { OCConfig } from '../ocConfig';
@@ -65,6 +67,7 @@ async function llmExtract(
   docText: string,
   maxRetries: number = 3,
   temperature: number = 0.0,
+  usage?: WorkflowUsageCollector,
 ): Promise<AnyRecord> {
   const MAX_INPUT_CHARS = 300000;
   let fullPrompt = prompt + docText;
@@ -87,6 +90,10 @@ async function llmExtract(
         temperature,
         max_tokens: 16384,
       });
+      // Telemetry + quota only — grants has no impact badge
+      // (docs/WORKFLOW_EMISSIONS_DESIGN.md §7a). Recorded per attempt: a
+      // retried call spent its tokens twice.
+      usage?.recordRaw(resp.usage, deploymentName, 'grants:extract');
       const choice = resp.choices[0];
       const content = choice.message.content || '';
       if (!content.trim()) {
@@ -207,6 +214,7 @@ async function extractPerCode(
   sourceFile: string,
   codes: string[],
   year: number,
+  usage?: WorkflowUsageCollector,
 ): Promise<AnyRecord[]> {
   const results: AnyRecord[] = [];
   const upper = fullText.toUpperCase();
@@ -299,6 +307,9 @@ async function extractPerCode(
       deploymentName,
       prompt,
       codeHint + excerpt,
+      3,
+      0.0,
+      usage,
     );
     if ('error' in result) {
       console.log(`      x ${code}: ${result.error}`);
@@ -348,6 +359,9 @@ async function extractPerCode(
           deploymentName,
           prompt,
           focusHint + focusExcerpt,
+          3,
+          0.0,
+          usage,
         );
         if (!('error' in focused)) {
           const frec: AnyRecord =
@@ -506,6 +520,7 @@ async function extractCompilation(
   prompt: string,
   fullText: string,
   sourceFile: string,
+  usage?: WorkflowUsageCollector,
 ): Promise<AnyRecord[]> {
   const sections = splitCompilation(fullText);
   if (Object.keys(sections).length === 0) {
@@ -524,7 +539,15 @@ async function extractCompilation(
     const codeHint = `\n\nIMPORTANT: This section is for project code ${code}. Extract data for this project only.\n\n`;
     const docText = codeHint + sectionText;
 
-    const result = await llmExtract(client, deploymentName, prompt, docText);
+    const result = await llmExtract(
+      client,
+      deploymentName,
+      prompt,
+      docText,
+      3,
+      0.0,
+      usage,
+    );
     if ('error' in result) {
       console.log(`      x ${code}: ${result.error}`);
       continue;
@@ -616,6 +639,8 @@ export async function run(params: {
   /** Full prompt template to use instead of the code default (from a saved or
    *  in-flight per-OC override). Falls back to buildExtractionPrompt when empty. */
   promptOverride?: string;
+  /** Telemetry-only token accounting for the run (§7a). */
+  usage?: WorkflowUsageCollector;
 }): Promise<void> {
   const {
     ocCfg,
@@ -625,6 +650,7 @@ export async function run(params: {
     maxWorkers = 3,
     year = 2026,
     promptOverride,
+    usage,
   } = params;
 
   console.log('\n' + '='.repeat(60));
@@ -687,6 +713,7 @@ export async function run(params: {
       prompt,
       txt,
       fname,
+      usage,
     );
     allRecords.push(...compResults);
     completed++;
@@ -724,6 +751,7 @@ export async function run(params: {
             fname,
             codes,
             year,
+            usage,
           );
           allRecords.push(...perCode);
           completed++;
@@ -735,7 +763,15 @@ export async function run(params: {
           return;
         }
 
-        const result = await llmExtract(client, deploymentName, prompt, txt);
+        const result = await llmExtract(
+          client,
+          deploymentName,
+          prompt,
+          txt,
+          3,
+          0.0,
+          usage,
+        );
         const processed = extractSingle(result, fname);
         completed++;
 

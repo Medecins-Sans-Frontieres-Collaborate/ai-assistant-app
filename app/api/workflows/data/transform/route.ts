@@ -14,6 +14,7 @@ import {
   createAzureClient,
 } from '@/lib/services/workflows/shared/workflowLlm';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
+import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
   badRequestResponse,
@@ -44,6 +45,8 @@ interface DataTransformRequest {
    */
   scoped?: boolean;
   modelId?: string;
+  /** Correlates the run's calls in telemetry; not otherwise used. */
+  conversationId?: string;
 }
 
 interface TransformLlmResponse {
@@ -109,6 +112,15 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Workflow runs debit the shared chat token pool, so they honour its
+  // pre-flight too (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+  const { denied, usage } = await beginWorkflowRun(
+    session,
+    'transform',
+    body.conversationId,
+  );
+  if (denied) return denied;
+
   try {
     const client = createAzureClient();
     const result = await callStructured<TransformLlmResponse>({
@@ -122,6 +134,8 @@ export async function POST(req: NextRequest) {
       ),
       schemaName: 'data_transform',
       schema: transformResponseSchema(),
+      usage,
+      usageLabel: 'transform',
     });
 
     if (body.scoped === true) {
@@ -152,6 +166,7 @@ export async function POST(req: NextRequest) {
       columns,
       rows,
       explanation: result.explanation,
+      ...usage.fields(),
     });
   } catch (error) {
     console.error('[workflows/data/transform] Failed:', error);

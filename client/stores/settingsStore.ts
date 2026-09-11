@@ -357,6 +357,17 @@ interface SettingsStore {
    */
   estimatedUsageStats: Record<string, TokenUsageBucket>;
   /**
+   * Token usage of conversation workflows, bucketed by workflow type
+   * (docs/WORKFLOW_EMISSIONS_DESIGN.md §5f). A SUBSET of tokenUsageStats —
+   * the same raw counts are also bucketed there by model, exactly as chat's
+   * are, so lifetime totals need no special case. This exists purely so the
+   * UI can answer "how much of that was workflows, and which ones".
+   *
+   * Grants is absent by design: it is telemetry-only (§7a), so its spend
+   * reaches Azure Monitor and the token quota but never the client.
+   */
+  workflowUsageStats: Record<string, TokenUsageBucket>;
+  /**
    * ISO timestamp stamped when the one-time historical backfill ran (or was
    * intentionally skipped). Non-null = never run it again — including for
    * conversations imported later (accepted limitation).
@@ -562,6 +573,11 @@ interface SettingsStore {
 
   // Token usage tracking (see tokenUsageStats)
   recordTokenUsage: (usage: TokenUsageMetadata) => void;
+  /** Adds one workflow run's raw counts to its type's bucket (§5f). */
+  recordWorkflowTypeUsage: (
+    workflowType: string,
+    counts: { promptTokens: number; completionTokens: number },
+  ) => void;
   resetTokenUsageStats: () => void;
   /**
    * Folds back-calculated historical buckets into estimatedUsageStats AND
@@ -692,6 +708,21 @@ interface SettingsStore {
   /** Drop accepted/rejected review edits from the queue automatically. */
   autoClearResolvedEdits: boolean;
   /**
+   * The user has been told once that typing inside a suggested passage drops
+   * that suggestion (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §6a). Before: the
+   * first such keystroke is held back and explained. After: it lands, the
+   * suggestion moves to "not applied", and a notice offers undo.
+   */
+  reviewOverwriteAcknowledged: boolean;
+  /**
+   * Confidence given to imported map points whose file carries no
+   * `confidence` column. A file that states coordinates is asserting them,
+   * so the shipped default is 'high'; a team that knows its spreadsheets
+   * are rough can lower it once here and still change individual rows at
+   * import time.
+   */
+  mapImportDefaultConfidence: 'high' | 'medium' | 'low';
+  /**
    * Default state of the "Suggest changes" checkbox on the Document composer:
    * a revision comes back as reviewable suggestions instead of overwriting the
    * document. Per-run the user can still tick it either way.
@@ -715,6 +746,8 @@ interface SettingsStore {
   setConfirmStopFromButton: (enabled: boolean) => void;
   setConfirmStopFromKeyboard: (enabled: boolean) => void;
   setAutoClearResolvedEdits: (enabled: boolean) => void;
+  setReviewOverwriteAcknowledged: (acknowledged: boolean) => void;
+  setMapImportDefaultConfidence: (value: 'high' | 'medium' | 'low') => void;
   setSuggestRevisions: (enabled: boolean) => void;
   setSuggestRevisionsException: (
     key: 'largeRewrites' | 'structuralReorders',
@@ -854,6 +887,7 @@ export const useSettingsStore = create<SettingsStore>()(
       tokenUsageStats: {},
       tokenUsageFirstTrackedAt: null,
       estimatedUsageStats: {},
+      workflowUsageStats: {},
       historicalUsageBackfilledAt: null,
       modelListSource: null,
       userRegion: null,
@@ -912,6 +946,8 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromButton: true,
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
+      reviewOverwriteAcknowledged: false,
+      mapImportDefaultConfidence: 'high',
       m365Connected: true,
       m365ConnectedUserSet: false,
       m365ToolsUserEnabled: true,
@@ -1349,11 +1385,28 @@ export const useSettingsStore = create<SettingsStore>()(
           };
         }),
 
+      recordWorkflowTypeUsage: (workflowType, counts) =>
+        set((state) => {
+          const bucket = state.workflowUsageStats[workflowType];
+          return {
+            workflowUsageStats: {
+              ...state.workflowUsageStats,
+              [workflowType]: {
+                promptTokens: (bucket?.promptTokens ?? 0) + counts.promptTokens,
+                completionTokens:
+                  (bucket?.completionTokens ?? 0) + counts.completionTokens,
+                requests: (bucket?.requests ?? 0) + 1,
+              },
+            },
+          };
+        }),
+
       resetTokenUsageStats: () =>
         set({
           tokenUsageStats: {},
           tokenUsageFirstTrackedAt: null,
           estimatedUsageStats: {},
+          workflowUsageStats: {},
           // Stamp (not null) so the one-time backfill doesn't resurrect the
           // history the user just chose to clear.
           historicalUsageBackfilledAt: new Date().toISOString(),
@@ -1647,6 +1700,10 @@ export const useSettingsStore = create<SettingsStore>()(
 
       setAutoClearResolvedEdits: (enabled) =>
         set({ autoClearResolvedEdits: enabled }),
+      setReviewOverwriteAcknowledged: (acknowledged) =>
+        set({ reviewOverwriteAcknowledged: acknowledged }),
+      setMapImportDefaultConfidence: (value) =>
+        set({ mapImportDefaultConfidence: value }),
 
       setSuggestRevisions: (enabled) => set({ suggestRevisions: enabled }),
       setM365Connected: (connected) =>
@@ -1765,6 +1822,8 @@ export const useSettingsStore = create<SettingsStore>()(
           confirmStopFromButton: true,
           confirmStopFromKeyboard: true,
           autoClearResolvedEdits: false,
+          reviewOverwriteAcknowledged: false,
+          mapImportDefaultConfidence: 'high',
           suggestRevisions: true,
           suggestRevisionsExceptions: {
             largeRewrites: true,
@@ -1781,7 +1840,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 59, // Increment this when schema changes to trigger migrations
+      version: 62, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1843,6 +1902,7 @@ export const useSettingsStore = create<SettingsStore>()(
         tokenUsageStats: state.tokenUsageStats,
         tokenUsageFirstTrackedAt: state.tokenUsageFirstTrackedAt,
         estimatedUsageStats: state.estimatedUsageStats,
+        workflowUsageStats: state.workflowUsageStats,
         historicalUsageBackfilledAt: state.historicalUsageBackfilledAt,
         savedStructures: state.savedStructures,
         streamingSpeed: state.streamingSpeed,
@@ -1874,6 +1934,8 @@ export const useSettingsStore = create<SettingsStore>()(
         confirmStopFromButton: state.confirmStopFromButton,
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
         autoClearResolvedEdits: state.autoClearResolvedEdits,
+        reviewOverwriteAcknowledged: state.reviewOverwriteAcknowledged,
+        mapImportDefaultConfidence: state.mapImportDefaultConfidence,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
         m365ConnectedUserSet: state.m365ConnectedUserSet,
@@ -2467,6 +2529,38 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 59) {
           if (!Array.isArray(state.hiddenAdminAgentKeys)) {
             state.hiddenAdminAgentKeys = [];
+          }
+        }
+
+        // Version 59 → 60: per-workflow-type usage buckets. Starts empty for
+        // everyone — workflow spend was not recorded before this version, and
+        // back-filling it is impossible (workflow output does not live in the
+        // transcript, so there is nothing to back-calculate from).
+        if (version < 60) {
+          if (
+            state.workflowUsageStats == null ||
+            typeof state.workflowUsageStats !== 'object'
+          ) {
+            state.workflowUsageStats = {};
+          }
+        }
+
+        // Version 60 → 61: the one-time "typing over a suggestion" notice.
+        // Everyone starts unacknowledged — the rule is new to them.
+        if (version < 61) {
+          if (typeof state.reviewOverwriteAcknowledged !== 'boolean') {
+            state.reviewOverwriteAcknowledged = false;
+          }
+        }
+
+        // Version 61 → 62: default confidence for imported map points.
+        if (version < 62) {
+          if (
+            !['high', 'medium', 'low'].includes(
+              state.mapImportDefaultConfidence as string,
+            )
+          ) {
+            state.mapImportDefaultConfidence = 'high';
           }
         }
 

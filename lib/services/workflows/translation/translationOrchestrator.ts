@@ -15,12 +15,14 @@ import {
   buildGuideCriterionBlocks,
   guideRubricLine,
 } from '../shared/guidePrompts';
+import { MAX_REVIEW_ROUNDS } from '../shared/workflowLimits';
 import {
   WorkflowStreamWriter,
   callStreamedText,
   callStructured,
   createAzureClient,
 } from '../shared/workflowLlm';
+import { WorkflowUsageCollector } from '../shared/workflowUsage';
 import {
   analysisToNotes,
   buildAnalysisSystemPrompt,
@@ -40,7 +42,7 @@ import {
 } from './schemas';
 
 /** Same bounded-rounds discipline as toolLoopCore's MAX_TOOL_ROUNDS. */
-export const MAX_REVIEW_ROUNDS = 3;
+export { MAX_REVIEW_ROUNDS } from '../shared/workflowLimits';
 
 interface ReviewResult {
   verdict: 'approve' | 'revise';
@@ -58,6 +60,8 @@ export interface TranslationRunOptions {
   modelId?: string;
   writer: WorkflowStreamWriter;
   signal?: AbortSignal;
+  /** Token accounting for the whole run (all phases). */
+  usage?: WorkflowUsageCollector;
 }
 
 /**
@@ -76,6 +80,7 @@ export async function runTranslationWorkflow(
     modelId,
     writer,
     signal,
+    usage,
   } = options;
   const maxRounds = Math.min(
     Math.max(options.maxReviewRounds ?? MAX_REVIEW_ROUNDS, 0),
@@ -96,6 +101,8 @@ export async function runTranslationWorkflow(
       user: buildAnalysisUserPrompt(sourceText, targetLanguage),
       schemaName: 'translation_analysis',
       schema: ANALYSIS_SCHEMA as unknown as Record<string, unknown>,
+      usage,
+      usageLabel: 'analysis',
     });
     writer.event({
       workflow: 'translation',
@@ -117,6 +124,8 @@ export async function runTranslationWorkflow(
     user: buildTranslationUserPrompt(sourceText, targetLanguage),
     onDelta: (delta) => writer.text(delta),
     signal,
+    usage,
+    usageLabel: 'translate',
   });
 
   // Phase 3 — bounded review rounds (agentic only)
@@ -142,6 +151,8 @@ export async function runTranslationWorkflow(
         ),
         schemaName: 'translation_review',
         schema: REVIEW_SCHEMA as unknown as Record<string, unknown>,
+        usage,
+        usageLabel: `review:${round}`,
       });
 
       rounds = round;
@@ -171,6 +182,17 @@ export async function runTranslationWorkflow(
     }
   }
 
+  // Usage before completion: the client folds it into the conversation's
+  // ledger, and a run that ends here has finished spending.
+  const usagePayload = usage?.payload();
+  if (usagePayload) {
+    writer.event({
+      workflow: 'translation',
+      type: 'usage',
+      data: usagePayload,
+    });
+  }
+
   writer.event({
     workflow: 'translation',
     type: 'complete',
@@ -194,6 +216,7 @@ export interface TranslationAssessmentOptions {
   guides?: GuidePromptInput[];
   glossaryEntries: GlossaryEntry[];
   modelId?: string;
+  usage?: WorkflowUsageCollector;
 }
 
 export interface TranslationAssessmentResult {
@@ -256,6 +279,8 @@ export async function runTranslationAssessment(
     ),
     schemaName: 'translation_assessment',
     schema: buildAssessmentSchema(options.criterionIds),
+    usage: options.usage,
+    usageLabel: 'assess',
   });
 
   const requested = new Set(options.criterionIds);

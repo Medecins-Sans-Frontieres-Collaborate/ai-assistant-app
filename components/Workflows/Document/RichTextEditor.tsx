@@ -20,6 +20,7 @@ import type { PinPoint } from '../Shared/Review/EditQuickActions';
 import {
   EditPreview,
   type PreviewEdit,
+  editPreviewBypassMeta,
   editPreviewKey,
 } from './EditPreviewExtension';
 
@@ -48,6 +49,14 @@ export interface RichTextEditorHandle {
   /** Replaces the given range with HTML and returns the new doc HTML. */
   replaceRange: (from: number, to: number, html: string) => string | null;
   getHTML: () => string | null;
+  /**
+   * Inserts plain text over a range AS IF TYPED: unlike `replaceRange`, it
+   * goes through the overwrite gate and lands in the undo history like a
+   * keystroke. Returns false when the gate held it back.
+   */
+  insertText: (from: number, to: number, text: string) => boolean;
+  /** Steps the editor's own history back once; false when there is nothing to undo. */
+  undo: () => boolean;
 }
 
 interface RichTextEditorProps {
@@ -66,6 +75,12 @@ interface RichTextEditorProps {
   pinnedEditId?: string | null;
   /** A marked span was clicked (null when dismissed). */
   onPinEdit?: (id: string | null) => void;
+  /**
+   * The user is about to type over one or more marked spans. Return true to
+   * let the change land, false to hold it back. Omit to leave suggestions
+   * unguarded (the workspace has made the editor read-only instead).
+   */
+  onOverwriteEdits?: (ids: string[]) => boolean;
   /**
    * Accept/reject UI for the pinned edit, floated at the click point. Takes
    * the position so the workspace stays out of the editor's coordinate space.
@@ -93,6 +108,7 @@ export const RichTextEditor = forwardRef<
     activeEditId = null,
     pinnedEditId = null,
     onPinEdit,
+    onOverwriteEdits,
     renderQuickActions,
   },
   ref,
@@ -179,10 +195,24 @@ export const RichTextEditor = forwardRef<
     () => ({
       replaceRange: (from, to, html) => {
         if (!editor) return null;
-        editor.chain().focus().insertContentAt({ from, to }, html).run();
+        editor
+          .chain()
+          .focus()
+          // A programmatic rewrite, not the user typing over a suggestion.
+          .setMeta(editPreviewBypassMeta, true)
+          .insertContentAt({ from, to }, html)
+          .run();
         return editor.getHTML();
       },
       getHTML: () => editor?.getHTML() ?? null,
+      insertText: (from, to, text) => {
+        if (!editor) return false;
+        return editor.chain().focus().insertContentAt({ from, to }, text).run();
+      },
+      undo: () => {
+        if (!editor || !editor.can().undo()) return false;
+        return editor.chain().focus().undo().run();
+      },
     }),
     [editor],
   );
@@ -208,6 +238,7 @@ export const RichTextEditor = forwardRef<
         activeId: activeEditId,
         pinnedId: pinnedEditId,
         onPin: onPinEdit ? handlePin : null,
+        onOverwrite: onOverwriteEdits ?? null,
       }),
     );
     // Decorations land synchronously with the dispatch, so the previewed
@@ -218,7 +249,15 @@ export const RichTextEditor = forwardRef<
         .querySelector('.edit-suggestion-active')
         ?.scrollIntoView({ block: 'nearest' });
     }
-  }, [editor, previewEdits, activeEditId, pinnedEditId, onPinEdit, handlePin]);
+  }, [
+    editor,
+    previewEdits,
+    activeEditId,
+    pinnedEditId,
+    onPinEdit,
+    handlePin,
+    onOverwriteEdits,
+  ]);
 
   // Apply external content changes (streaming revisions, applied edits, state
   // rehydration) without disturbing the person typing.

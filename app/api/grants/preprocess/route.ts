@@ -22,6 +22,7 @@ import {
 } from '@/lib/services/grants/runPaths';
 import { canUseGrants } from '@/lib/services/grants/serverAccess';
 import * as extractText from '@/lib/services/grants/stages/extractText';
+import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflowUsage';
 
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 
@@ -150,6 +151,7 @@ async function extractNameAndCode(
   text: string,
   codeRegex: string,
   codePrefix: string = '',
+  usage?: WorkflowUsageCollector,
 ): Promise<{ rawProjectName: string; projectCodeIfPresent: string }> {
   const prefixNote = codePrefix
     ? ` NOTE: in these documents the code is frequently written WITHOUT the "${codePrefix}" prefix (e.g. "BF103" or "ML 107" next to a "CODE PROJET"/"Project Code" label, for a full code like ${codePrefix}BF103/${codePrefix}ML107). If you see such a partial code, return it EXACTLY as written — do NOT add the "${codePrefix}" prefix yourself, and NEVER discard a code just because the prefix is missing.`
@@ -173,6 +175,7 @@ async function extractNameAndCode(
         temperature: 0,
         max_tokens: 400,
       });
+      usage?.recordRaw(resp.usage, deployment, 'grants:preprocess');
       const content = resp.choices?.[0]?.message?.content || '';
       if (!content.trim()) {
         await new Promise((r) => setTimeout(r, 2 ** attempt * 1000));
@@ -206,6 +209,7 @@ async function lookupProjectNameForCode(
   deployment: string,
   text: string,
   code: string,
+  usage?: WorkflowUsageCollector,
 ): Promise<string> {
   // The clean project name often appears in a project list/table further down the
   // document, not at the codes first mention (which is frequently a budget line
@@ -260,6 +264,7 @@ async function lookupProjectNameForCode(
         temperature: 0,
         max_tokens: 200,
       });
+      usage?.recordRaw(resp.usage, deployment, 'grants:preprocess');
       const content = resp.choices?.[0]?.message?.content || '';
       if (!content.trim()) {
         await new Promise((r) => setTimeout(r, 2 ** attempt * 1000));
@@ -291,6 +296,7 @@ async function recoverMissingCode(
   bareNumber: string,
   country: string,
   allocationName: string,
+  usage?: WorkflowUsageCollector,
 ): Promise<{ found: boolean; evidence: string; narrativeName: string }> {
   // Excerpt = document head (title/context) + windows around the first few
   // bare-number occurrences, capped so the request stays small.
@@ -325,6 +331,7 @@ async function recoverMissingCode(
         temperature: 0,
         max_tokens: 300,
       });
+      usage?.recordRaw(resp.usage, deployment, 'grants:preprocess');
       const content = resp.choices?.[0]?.message?.content || '';
       if (!content.trim()) {
         await new Promise((r) => setTimeout(r, 2 ** attempt * 1000));
@@ -441,6 +448,12 @@ async function runCoverageCheck(params: {
     // 3. Lightweight LLM micro-pass per document → { rawProjectName, code }.
     const client = getGrantOpenAIClient();
     const deployment = getDeployment();
+    // Telemetry + quota only; grants has no impact badge (§7a).
+    const usage = new WorkflowUsageCollector({
+      user: session.user,
+      action: 'grants:preprocess',
+      conversationId: runId,
+    });
     const { readFileSync } = await import('node:fs');
 
     const docs: DocExtract[] = [];
@@ -464,6 +477,7 @@ async function runCoverageCheck(params: {
               text,
               ocCfg.code_regex,
               ocCfg.code_prefix,
+              usage,
             );
           return {
             file: filename,
@@ -521,6 +535,7 @@ async function runCoverageCheck(params: {
               deployment,
               doc.text,
               row.projectCodeInNarrative || row.projectCode,
+              usage,
             );
             if (name) row.projectNameInNarrative = name;
           }),
@@ -569,6 +584,7 @@ async function runCoverageCheck(params: {
               deployment,
               doc.text,
               row.projectCodeInNarrative || row.projectCode,
+              usage,
             );
             if (!name) return;
             row.projectNameInNarrative = name;
@@ -649,6 +665,7 @@ async function runCoverageCheck(params: {
                 bareNumber,
                 country,
                 e?.name || row.projectName,
+                usage,
               );
               if (res.found) {
                 row.recovered = true;

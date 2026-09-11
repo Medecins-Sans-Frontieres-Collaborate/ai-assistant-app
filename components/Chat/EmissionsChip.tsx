@@ -7,25 +7,19 @@ import { useTranslations } from 'next-intl';
 import { useConversationEmissions } from '@/client/hooks/chat/useConversationEmissions';
 
 import {
-  ASSUMPTIONS_VERSION,
-  EMISSIONS_CHIP_VISIBILITY_OPTIONS,
   EmissionsChipVisibility,
-  activityDurationParts,
   clampEmissionsChipAutoHideMs,
-  estimateActivityEquivalents,
 } from '@/lib/utils/shared/emissions';
 
 import { Conversation } from '@/types/chat';
 
-import { useSettingsStore } from '@/client/stores/settingsStore';
+import {
+  ImpactReadout,
+  ImpactRow,
+  formatGrams,
+} from '@/components/Emissions/ImpactReadout';
 
-/** <1 g shows decimals ("0.42"); larger values round to whole grams. */
-const formatGrams = (grams: number): string =>
-  grams < 1
-    ? grams.toFixed(2)
-    : grams < 10
-      ? grams.toFixed(1)
-      : `${Math.round(grams)}`;
+import { useSettingsStore } from '@/client/stores/settingsStore';
 
 interface EmissionsChipProps {
   conversation: Conversation | null | undefined;
@@ -43,7 +37,6 @@ export const EmissionsChip: FC<EmissionsChipProps> = ({ conversation }) => {
   const summary = useConversationEmissions(conversation);
   const visibility = useSettingsStore((s) => s.emissionsChipVisibility);
   const autoHideMs = useSettingsStore((s) => s.emissionsChipAutoHideMs);
-  const setVisibility = useSettingsStore((s) => s.setEmissionsChipVisibility);
   const [isOpen, setIsOpen] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
   const [recentlyUpdated, setRecentlyUpdated] = useState(false);
@@ -117,14 +110,26 @@ export const EmissionsChip: FC<EmissionsChipProps> = ({ conversation }) => {
     showsToday ? summary.todayG : summary.totalG,
   );
 
-  const row = (label: string, grams: number) => (
-    <div className="flex items-center justify-between gap-3">
-      <span className="text-gray-600 dark:text-gray-400">{label}</span>
-      <span className="text-gray-900 dark:text-gray-100 shrink-0">
-        {t('emissions.chip.label', { grams: formatGrams(grams) })}
-      </span>
-    </div>
-  );
+  const rows: ImpactRow[] = [
+    ...(showsToday
+      ? [{ label: t('emissions.chip.today'), grams: summary.todayG }]
+      : []),
+    { label: t('emissions.chip.total'), grams: summary.totalG },
+    ...(summary.hasEstimated && summary.measuredG > 0
+      ? [{ label: t('emissions.chip.measured'), grams: summary.measuredG }]
+      : []),
+    ...(summary.hasEstimated
+      ? [{ label: t('emissions.chip.estimated'), grams: summary.estimatedG }]
+      : []),
+    ...(summary.lastRequestG != null
+      ? [
+          {
+            label: t('emissions.chip.lastRequest'),
+            grams: summary.lastRequestG,
+          },
+        ]
+      : []),
+  ];
 
   return (
     <div
@@ -157,81 +162,12 @@ export const EmissionsChip: FC<EmissionsChipProps> = ({ conversation }) => {
     >
       {isOpen && (
         <div className="absolute bottom-full right-0 mb-2 w-72 rounded-lg border border-gray-200 bg-white p-3 text-xs shadow-lg dark:border-gray-700 dark:bg-surface-dark z-[10000]">
-          <p className="mb-2 font-semibold text-gray-900 dark:text-gray-100">
-            {t('emissions.chip.title')}
-          </p>
-          <div className="space-y-1">
-            {showsToday && row(t('emissions.chip.today'), summary.todayG)}
-            {row(t('emissions.chip.total'), summary.totalG)}
-            {summary.hasEstimated &&
-              summary.measuredG > 0 &&
-              row(t('emissions.chip.measured'), summary.measuredG)}
-            {summary.hasEstimated &&
-              row(t('emissions.chip.estimated'), summary.estimatedG)}
-            {summary.lastRequestG != null &&
-              row(t('emissions.chip.lastRequest'), summary.lastRequestG)}
-          </div>
-          <div className="mt-2 border-t border-gray-200 pt-2 dark:border-gray-700">
-            <p className="mb-1 font-medium text-gray-700 dark:text-gray-300">
-              {t('emissions.equivalents.title')}
-            </p>
-            <div className="space-y-0.5">
-              {estimateActivityEquivalents(summary.totalG).map((equivalent) => {
-                const { unit, value } = activityDurationParts(
-                  equivalent.seconds,
-                );
-                return (
-                  <div
-                    key={equivalent.key}
-                    className="flex items-center justify-between gap-3"
-                  >
-                    <span className="text-gray-600 dark:text-gray-400">
-                      {t(`emissions.activities.${equivalent.key}`)}
-                    </span>
-                    <span className="text-gray-900 dark:text-gray-100 shrink-0">
-                      {t(`emissions.duration.${unit}`, { value })}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <p className="mt-2 border-t border-gray-200 pt-2 text-[10px] leading-snug text-gray-500 dark:border-gray-700 dark:text-gray-400">
-            {t('emissions.chip.disclaimer', { version: ASSUMPTIONS_VERSION })}
-          </p>
-          {/* Mode switcher — the chip's own settings are otherwise three
-              clicks away, and "Hide" needs its undo stated in place. */}
-          <div className="mt-2 border-t border-gray-200 pt-2 dark:border-gray-700">
-            <div
-              role="group"
-              aria-label={t('emissions.chip.visibilityGroup')}
-              className="flex items-center gap-1"
-            >
-              <span className="me-1 text-[10px] text-gray-500 dark:text-gray-400">
-                {t('emissions.chip.visibilityLabel')}
-              </span>
-              {EMISSIONS_CHIP_VISIBILITY_OPTIONS.map(
-                (mode: EmissionsChipVisibility) => (
-                  <button
-                    key={mode}
-                    type="button"
-                    onClick={() => setVisibility(mode)}
-                    aria-pressed={visibility === mode}
-                    className={`rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors focus:outline-none focus:ring-1 focus:ring-blue-500 ${
-                      visibility === mode
-                        ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100'
-                        : 'text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
-                    }`}
-                  >
-                    {t(`emissions.chip.visibility.${mode}`)}
-                  </button>
-                ),
-              )}
-            </div>
-            <p className="mt-1 text-[10px] leading-snug text-gray-500 dark:text-gray-400">
-              {t('emissions.chip.visibilityHint')}
-            </p>
-          </div>
+          <ImpactReadout
+            title={t('emissions.chip.title')}
+            rows={rows}
+            equivalentsFrom={summary.totalG}
+            disclaimerKey="emissions.chip.disclaimer"
+          />
         </div>
       )}
       <button

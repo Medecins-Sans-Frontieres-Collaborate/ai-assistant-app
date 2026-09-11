@@ -18,6 +18,10 @@ import {
 } from '@/types/chat';
 import { FolderInterface } from '@/types/folder';
 import { WorkflowState, isConversationWorkflowType } from '@/types/workflow';
+import {
+  WORKFLOW_USAGE_LEDGER_LIMIT,
+  WorkflowRunUsage,
+} from '@/types/workflowUsage';
 
 import {
   ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT,
@@ -107,6 +111,13 @@ interface ConversationStore {
     id: string,
     updater: (prev: WorkflowState | undefined) => WorkflowState,
   ) => void;
+  /**
+   * Appends one workflow run's token spend to the conversation's ledger
+   * (docs/WORKFLOW_EMISSIONS_DESIGN.md §4c). Ring-buffered to
+   * WORKFLOW_USAGE_LEDGER_LIMIT so a long-lived workspace cannot grow the
+   * conversation without bound.
+   */
+  recordWorkflowRunUsage: (id: string, run: WorkflowRunUsage) => void;
   deleteConversation: (id: string) => void;
   selectConversation: (id: string | null) => void;
   setIsLoaded: (isLoaded: boolean) => void;
@@ -333,6 +344,27 @@ export const useConversationStore = create<ConversationStore>()(
             return { ...c, ...patch, updatedAt: new Date().toISOString() };
           }),
         })),
+
+      recordWorkflowRunUsage: (id, run) =>
+        set((state) => {
+          let changed = false;
+          const conversations = state.conversations.map((c) => {
+            if (c.id !== id) return c;
+            changed = true;
+            const ledger = [...(c.workflowUsage ?? []), run];
+            return {
+              ...c,
+              workflowUsage:
+                ledger.length > WORKFLOW_USAGE_LEDGER_LIMIT
+                  ? ledger.slice(-WORKFLOW_USAGE_LEDGER_LIMIT)
+                  : ledger,
+              // Deliberately NOT touching updatedAt: recording what a run
+              // cost is bookkeeping about work already done, and must not
+              // reorder the sidebar or look like a fresh edit.
+            };
+          });
+          return changed ? { conversations } : state;
+        }),
 
       updateWorkflowState: (id, updater) =>
         set((state) => {

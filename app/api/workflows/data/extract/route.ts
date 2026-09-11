@@ -15,6 +15,7 @@ import {
   createAzureClient,
 } from '@/lib/services/workflows/shared/workflowLlm';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
+import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
   badRequestResponse,
@@ -37,6 +38,8 @@ interface DataExtractRequest {
   columns: DataColumn[];
   instructions?: string;
   modelId?: string;
+  /** Correlates the run's calls in telemetry; not otherwise used. */
+  conversationId?: string;
 }
 
 function isValidColumn(value: unknown): value is DataColumn {
@@ -87,6 +90,15 @@ export async function POST(req: NextRequest) {
     return badRequestResponse('Invalid column definition');
   }
 
+  // Workflow runs debit the shared chat token pool, so they honour its
+  // pre-flight too (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+  const { denied, usage } = await beginWorkflowRun(
+    session,
+    'extract',
+    body.conversationId,
+  );
+  if (denied) return denied;
+
   try {
     const budgeted = await truncateToTokenBudget(
       sourceText,
@@ -106,11 +118,14 @@ export async function POST(req: NextRequest) {
       ),
       schemaName: 'data_extraction',
       schema: extractionResponseSchema(columns),
+      usage,
+      usageLabel: 'extract',
     });
 
     return successResponse({
       rows: result.rows,
       truncatedSource: budgeted.truncated,
+      ...usage.fields(),
     });
   } catch (error) {
     console.error('[workflows/data/extract] Failed:', error);

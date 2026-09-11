@@ -1560,7 +1560,9 @@
       "euOnlyNote": "{name} מאוחסן באזור Azure של האיחוד האירופי; שיחות עמו מעובדות שם."
     },
     "version": {
-      "label": "גרסה"
+      "label": "גרסה",
+      "showOlder": "הצג גרסאות ישנות ({count})",
+      "hideOlder": "הסתר גרסאות ישנות"
     },
     "reasoningModel": "מודל חשיבה: מנתח שלב-אחר-שלב לפני מתן תשובה. איטי יותר, טוב יותר בבעיות קשות.",
     "variant": {
@@ -1591,6 +1593,9 @@
       "freshness_month": "חודש אחרון",
       "freshness_any": "כל זמן",
       "hint": "בחירה אוטומטית מאפשרת לכל שאלה לקבוע את עדכניות התשובה (לדוג' חדשות יעדיפו את היום האחרון), ושאלות בסגנון מחקר עשויות להשתמש ביותר מקורות מהברירת מחדל."
+    },
+    "subVariant": {
+      "label": "גודל"
     }
   },
   "models": {
@@ -2590,7 +2595,9 @@
     "chipHiddenHint": "הרכיב לא מוצג לעולם. הסיכומים עדיין נשמרים ומוצגים בדף זה.",
     "chipAutoHideLabel": "העלם לאחר",
     "chipAutoHideUnit": "שניות",
-    "chipAutoHideHint": "בין ‎{min}‎ ל-‎{max}‎ שניות."
+    "chipAutoHideHint": "בין ‎{min}‎ ל-‎{max}‎ שניות.",
+    "byWorkflow": "לפי תהליך עבודה",
+    "byWorkflowNote": "חלק מהסיכומים למעלה, מוצג בנפרד — אינו שימוש נוסף. ריצות מענקים נספרות לדיווח הארגון ולתקציב הטוקנים שלך, אך לא בסך המקומי הזה."
   },
   "extraction": {
     "toggleLabel": "חלץ נתונים מובְנָים",
@@ -2824,7 +2831,17 @@
       "guides": "מדריכי הארגון",
       "organizationTerminology": "מונחי הארגון",
       "noOrganizationTerminology": "אין מונחי ארגון",
-      "terminologyGuideUnavailable": "המדריך אינו זמין"
+      "terminologyGuideUnavailable": "המדריך אינו זמין",
+      "editingPendingHint": "{count} הצעות ממתינות — הן אינן מסומנות במהלך העריכה, וכתיבה מעליהן תסיר אותן.",
+      "editingPendingHintOne": "הצעה אחת ממתינה — היא אינה מסומנת במהלך העריכה, וכתיבה מעליה תסיר אותה.",
+      "overwriteEditTitle": "עריכת קטע מוצע",
+      "overwriteEditMessage": "לטקסט הזה יש הצעה ממתינה. עריכתו תסיר את ההצעה — היא תעבור ל\"לא יושמה\" ברשימת הסקירה, שם ניתן לבטל זאת. טקסט שאינו חלק מהצעות ניתן לערוך בחופשיות כאשר הסקירה פתוחה. לא תישאל שוב.",
+      "overwriteEditConfirmOne": "הסר את ההצעה ושמור את השינוי שלי",
+      "overwriteEditConfirmMany": "הסר {count} הצעות ושמור את השינוי שלי",
+      "suggestionDroppedOne": "ההצעה הוסרה — ערכת את הקטע שלה.",
+      "suggestionDroppedMany": "{count} הצעות הוסרו — ערכת את הקטעים שלהן.",
+      "pendingRunActionTranslate": "תרגום מחדש",
+      "pendingRunActionAssess": "הערכה מחדש"
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",
@@ -2972,7 +2989,15 @@
       "criterionRubricTooLong": "המדריך הזה חורג ב-{over} תווים מהמגבלה. הוא נשלח עם כל הערכה, לכן יש לקצר אותו לפני שניתן יהיה להשתמש בקריטריון זה.",
       "guides": "מדריכי הארגון",
       "guidesOptgroup": "מדריכי הארגון",
-      "guideUnavailable": "המדריך אינו זמין"
+      "guideUnavailable": "המדריך אינו זמין",
+      "overwriteEditTitle": "עריכת קטע מוצע",
+      "overwriteEditMessage": "לטקסט הזה יש הצעה ממתינה. עריכתו תסיר את ההצעה — היא תעבור ל\"לא יושמה\" ברשימת הסקירה, שם ניתן לבטל זאת. טקסט שאינו חלק מהצעות ניתן לערוך בחופשיות כאשר הסקירה פתוחה. לא תישאל שוב.",
+      "overwriteEditConfirmOne": "הסר את ההצעה וערוך",
+      "overwriteEditConfirmMany": "הסר {count} הצעות וערוך",
+      "suggestionDroppedOne": "ההצעה הוסרה — ערכת את הקטע שלה.",
+      "suggestionDroppedMany": "{count} הצעות הוסרו — ערכת את הקטעים שלהן.",
+      "pendingRunActionRevise": "מתקן את המסמך",
+      "pendingRunActionAssess": "הערכה מחדש"
     },
     "data": {
       "emptyTitle": "ייבאו נתונים לניתוח",
@@ -3348,7 +3373,14 @@
       "guideSectionOptional": "רשות",
       "guideSourceTerm": "מונח מקור",
       "guideTargetTerm": "תרגום דרוש",
-      "guideNote": "הערה"
+      "guideNote": "הערה",
+      "pendingRun": {
+        "title": "{count} הצעות עדיין ממתינות",
+        "body": "{action} עשוי לשנות כל חלק בטקסט, כולל קטעים עם הצעות שעדיין לא החלטת עליהן, והערכה חדשה תחליף את הרשימה הנוכחית. אנא הכר תחילה לגבי ההצעות שנותרו.",
+        "acceptAll": "אשר את כל הנותרים",
+        "rejectAll": "דחה את כולם",
+        "cancel": "ביטול"
+      }
     }
   },
   "connectors": {
@@ -3549,6 +3581,36 @@
         "hidden": "הסתר"
       },
       "visibilityHint": "באופן אוטומטי הרכיב יוצג כשההערכה מתעדכנת או כאשר מרחפים מעליו. ניתן לשנות זאת שוב בהגדרות › שימוש והשפעה."
+    },
+    "workflow": {
+      "title": "סביבת עבודה זו (הערכה)",
+      "workspace": "סביבת עבודה זו",
+      "currentArtifact": "עבודה נוכחית",
+      "lastRun": "הרצה אחרונה",
+      "lastRunDetail": "{action} · {calls} קריאות למודל",
+      "today": "היום",
+      "railChat": "צ'אט בסביבת עבודה זו",
+      "byAction": "לפי שלב",
+      "delta": "+{grams} גרם",
+      "ariaLabel": "הערכת טביעת הרגל הפחמנית של סביבת עבודה זו: {grams} גרם של CO₂ שווה ערך. הצג פירוט.",
+      "disclaimer": "הערכות פר הרצה מחושבות על פי ספירת טוקנים מדווחת, תוך שימוש בממוצעים ונתונים שפורסמו v{version}. כל הרצה כוללת מספר קריאות למודל, והמקור המלא נשלח בכל קריאה, כך שטוקנים של הפרומפט דומיננטיים. הרצות מלפני תחילת המעקב לא נספרות. לא מדידה.",
+      "actions": {
+        "translate": "תרגום",
+        "analysis": "ניתוח מקור",
+        "review": "סבבי ביקורת",
+        "write": "כתיבה",
+        "revise": "שכתוב",
+        "profile": "פרופיל מסמך",
+        "assess": "הערכת איכות",
+        "extract": "חילוץ",
+        "transform": "המרה",
+        "photo": "חילוץ תמונות",
+        "map_edit": "עדכון מפה",
+        "rail_chat": "צ'אט"
+      },
+      "estimate": "כ־{passes} מחזורים · כ־{grams} גרם CO₂e",
+      "estimateTooltip": "הערכה גסה להרצה זו לפני תחילתה, על סמך אורך המקור, המודל הנבחר ומספר המחזורים שההגדרות מבצעות (הנחות גרסה v{version}). כל מחזור שולח מחדש את המקור, לכן טוקני פרומפט דומיננטיים. הנתון בפועל מופיע לאחר ההרצה.",
+      "estimateAtMost": "עד כ־{passes} מחזורים · כ־{grams} גרם CO₂e"
     }
   },
   "table": {
@@ -5579,7 +5641,8 @@
       "limitReached": "הגעת למגבלה",
       "familyLimitReached": "הגעת למגבלת משפחת המודלים",
       "usageUnavailable": "לא ניתן להציג את השימוש הנוכחי — מוצגות המגבלות בלבד.",
-      "familyRow": "מודלים של {family}"
+      "familyRow": "מודלים של {family}",
+      "usedByWorkflows": "מתוכם {used} מתהליכי עבודה"
     },
     "routes": {
       "ttsExhausted": "הגעת למגבלת ההמרה לטקסט-לדיבור היומית.",

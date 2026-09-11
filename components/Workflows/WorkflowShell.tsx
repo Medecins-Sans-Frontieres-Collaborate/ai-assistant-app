@@ -15,6 +15,7 @@ import { useWorkflowPolicy } from '@/client/hooks/workflows/useWorkflowPolicy';
 
 import { Tooltip } from '@/components/UI/Tooltip';
 
+import { WorkflowImpactBadge } from './Impact/WorkflowImpactBadge';
 import { WorkflowModelSelect } from './WorkflowModelSelect';
 import { WorkflowRail } from './WorkflowRail';
 import { WorkflowTabs, useWorkflowTabsEnabled } from './WorkflowTabs';
@@ -175,6 +176,14 @@ export function WorkflowShell() {
             </button>
           ))}
         </div>
+
+        {/* Estimated impact of this workspace's runs. Trailing edge, opposite
+            the model selector: model on one edge, its consequence on the
+            other (docs/WORKFLOW_EMISSIONS_DESIGN.md §5a). Grants is
+            telemetry-only (§7a) and shows none. */}
+        {type !== 'grants' && (
+          <WorkflowImpactBadge conversation={selectedConversation} />
+        )}
 
         {/* Desktop: rail toggle */}
         <div className="hidden md:block">

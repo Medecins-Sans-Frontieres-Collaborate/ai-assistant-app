@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} lo ngangu na Azure region ti EU; lengu sô héri eke tâ larê."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Wéngbi ti ziani na yângâ ({count})",
+      "hideOlder": "Fârapi ti ziani na yângâ"
     },
     "reasoningModel": "Modɛli ti kûê tî nzönî : ayeke sôh tî yeke mû kundû kûê tî mû bara. Alingo, mbi yeke bâra mo yângâ na zingo so ayékè nganza.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Mbeni mo na mbonga a yeke",
       "freshness_any": "Gbegbegbe na tango",
       "hint": "Auto ape na sé kété na lo na za ïrï kûê (mbeti iya, na balë ti 24h ïrï zo zo), na kêtê ti kêtê na gorô na yeke hinga mingi mbi bala so."
+    },
+    "subVariant": {
+      "label": "Mbukulu"
     }
   },
   "models": {
@@ -2574,7 +2579,9 @@
     "chipHiddenHint": "Chip ape wa. Bê ti totals ké sô ayeke na page wa.",
     "chipAutoHideLabel": "Fô na",
     "chipAutoHideUnit": "sekônde",
-    "chipAutoHideHint": "Lâ sô {min} na {max} sekônde."
+    "chipAutoHideHint": "Lâ sô {min} na {max} sekônde.",
+    "byWorkflow": "Na workflow",
+    "byWorkflowNote": "Tî bara totâ mbi wala, a yeke na tî biani—sô a köta usage. Run ti grants a zî ti laporan ti organisation na ti budget ti token, tî wala a köta na tî totâ lokal."
   },
   "extraction": {
     "toggleLabel": "Hâ lâ tî data ti yângâ",
@@ -2808,7 +2815,17 @@
       "guides": "Dörö tî organisation",
       "organizationTerminology": "Sû tî organisation",
       "noOrganizationTerminology": "Sû tî organisation apëpe",
-      "terminologyGuideUnavailable": "Dörö apêpe"
+      "terminologyGuideUnavailable": "Dörö apêpe",
+      "editingPendingHint": "{count} likambeni na ndéngbi ti gbara — a ke ti zo marka na yângâ, na yângâ mo yeke na kodro, sô ayeke na mo na kodro a ga su mo.",
+      "editingPendingHintOne": "Likambeni eke kaka oko ti gba — a ke ti zo marka na yângâ, na yângâ mo yeke na kodro, sô ayeke na mo na kodro a ga su mo.",
+      "overwriteEditTitle": "Na yângâ likambeni tiko",
+      "overwriteEditMessage": "Mo na likambeni ti ke na ndéngbi ti gba. Sô mo yângâ na mo, likambeni ti gba na su — a ye na “ngunda na siriri” na mbiye ti tîrî ti balêgi, mo sô bê tîrî na wâ. Tekê na mbênî a be, na yângâ na ndângô biani likambeni, mo kenè na yângâ na yângâ. Kozo na biani na mo ga kotî na mo maye.",
+      "overwriteEditConfirmOne": "Su likambeni ti gba na kâ na yângâ ti mbi",
+      "overwriteEditConfirmMany": "Su {count} likambeni ti gba na kâ na yângâ ti mbi",
+      "suggestionDroppedOne": "Likambeni ti gba na su — mo yângâ na bagian na mo.",
+      "suggestionDroppedMany": "{count} likambeni ti gba na su — mo yângâ na bagian na wâne.",
+      "pendingRunActionTranslate": "Na zîngîti mbi na translate",
+      "pendingRunActionAssess": "Na zîgü ti analyze"
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",
@@ -2956,7 +2973,15 @@
       "criterionRubricTooLong": "Rubric ti lo ayeke {over} caractère tî sô a sû tî tolé. Lo yeke falé na assessment kûê-kûê, ala lo köta mbïrï sô lo yeke ti yeke ïrïti criterion sô.",
       "guides": "Dörö tî organisation",
       "guidesOptgroup": "Dörö tî organisation",
-      "guideUnavailable": "Dörö apêpe"
+      "guideUnavailable": "Dörö apêpe",
+      "overwriteEditTitle": "Na yângâ likambeni tiko",
+      "overwriteEditMessage": "Mo na likambeni ti ke na ndéngbi ti gba. Sô mo yângâ na mo, likambeni ti gba na su — a ye na “ngunda na siriri” na mbiye ti tîrî ti balêgi, mo sô bê tîrî na wâ. Tekê na mbênî a be, na yângâ na ndângô biani likambeni, mo kenè na yângâ na yângâ. Kozo na biani na mo ga kotî na mo maye.",
+      "overwriteEditConfirmOne": "Su likambeni ti gba na yângâ",
+      "overwriteEditConfirmMany": "Su {count} likambeni ti gba na yângâ",
+      "suggestionDroppedOne": "Likambeni ti gba na su — mo yângâ na bagian na mo.",
+      "suggestionDroppedMany": "{count} likambeni ti gba na su — mo yângâ na bagian na wâne.",
+      "pendingRunActionRevise": "Na bê tîrî ti document",
+      "pendingRunActionAssess": "Na zîgü ti analyze"
     },
     "data": {
       "emptyTitle": "Mandra data tî anali",
@@ -3332,7 +3357,14 @@
       "guideSectionOptional": "ngbangbangû",
       "guideSourceTerm": "Dungö tî bôkô",
       "guideTargetTerm": "Sû tî hùndângö",
-      "guideNote": "Küê"
+      "guideNote": "Küê",
+      "pendingRun": {
+        "title": "{count} likambeni ti ke na ndéngbi ti gba",
+        "body": "{action} apê na yângâ mbi na ndângô biani, da mbi ti likambeni ti ke na ndéngbi ti gba sô mo sise kwê na mo, na zîgü mbênî apê na yângâ mbi siriri. Asekia likambeni ti gba na biani na yeke.",
+        "acceptAll": "Kwê so likambeni ti gba na biani",
+        "rejectAll": "Su a na biani",
+        "cancel": "Nzo"
+      }
     }
   },
   "connectors": {
@@ -3533,6 +3565,36 @@
         "hidden": "Hida"
       },
       "visibilityHint": "Auto ape na chip sô ti estimá ti dzî na bê ti loo sè mbi yângâ ti yéké. O yeke fâla tî cîni na Settings › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Workplace âli (sômbéni)",
+      "workspace": "Workplace âli",
+      "currentArtifact": "Sêse ti mosusu",
+      "lastRun": "Mosusu ya gbakala",
+      "lastRunDetail": "{action} · {calls} model calls",
+      "today": "Löndo",
+      "railChat": "Kûê na workplace âli",
+      "byAction": "Na ndengê",
+      "delta": "+{grams} g",
+      "ariaLabel": "Sômbéni ti carbon footprint ti workplace âli: {grams} grama ti CO₂. Zingo mbênî.",
+      "disclaimer": "Sômbéni na tundusu kôdörö ti run, na lângo ti kôdörö ti token, na mbeti ti average na assumption v{version}. Run mîngi sô mô model calls, mô source na yeke sô mô ndê, ndê ndô token ti prompt a yapê. Run ti ûse ti sô tî loba yângâ a yeke. Sômbéni a yeke measurement.",
+      "actions": {
+        "translate": "Kombere",
+        "analysis": "Ködörö ti source",
+        "review": "Ködörö ti lâkisî",
+        "write": "Kôzo",
+        "revise": "Gbènzêngö",
+        "profile": "Profil ti doküma",
+        "assess": "Sômbéni ti kêtê",
+        "extract": "Kôi",
+        "transform": "Sûngö",
+        "photo": "Kôi ti photo",
+        "map_edit": "Sûngö ti carte",
+        "rail_chat": "Kûê"
+      },
+      "estimate": "~{passes} ti na lo · ~{grams} g CO₂e",
+      "estimateTooltip": "Awësö ti mou gïrï na fäkö tëngi awaï, gïrï ti nî na mo to na gbüngö, modelï wa zo tena na mo yeke na, sôkï kombïgï ti settings wa yeke. (assumption v{version}). Ti na lo so e yeke sôkï na kodro, ndaxö so prompt tokens e sô na. Mbïoko wa so appelez na londo na mo lo.",
+      "estimateAtMost": "na yèkè ~{passes} ti na lo · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5563,7 +5625,8 @@
       "limitReached": "Limiti hinga",
       "familyLimitReached": "Limiti ti sô tî model hinga",
       "usageUnavailable": "Usage sô yeke mbênî ti yeke sangô — limiti mô pfûn na kîri.",
-      "familyRow": "Mo mingi tî {family}"
+      "familyRow": "Mo mingi tî {family}",
+      "usedByWorkflows": "na mbi {used} ti workflows"
     },
     "routes": {
       "ttsExhausted": "Mo ape limiti tî text-to-speech tî lo tî lɛ.",

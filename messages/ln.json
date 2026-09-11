@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} eopesi na region ya Azure ya EU; masolo na yango ekozwa traitement kuna."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Lakisa ya kala ({count})",
+      "hideOlder": "Kimba ya kala"
     },
     "reasoningModel": "Modèle ya mawa-mawa: ezalaka kokanisa mokolo-mokolo liboso eyanola. Ezali ntembe-moko, kasi eleki malamu na mikakatano.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Sanzi oyo euti koleka",
       "freshness_any": "Tango nyonso",
       "hint": "Auto ezali kotinda motuna na tango ebongi (ndakisa, sango esengeli tango ya lelo), mpe mituna ya recherche ekoki kosalela basource mingi koleka ndenge esalemi na ndenge ya suka."
+    },
+    "subVariant": {
+      "label": "Monene"
     }
   },
   "models": {
@@ -2574,7 +2579,9 @@
     "chipHiddenHint": "Chip ekomonana te. Total ezali kaka kosukolama mpe ekomonana awa.",
     "chipAutoHideLabel": "Ebongwana sima ya",
     "chipAutoHideUnit": "sekonde",
-    "chipAutoHideHint": "Kati na {min} na {max} sekonde."
+    "chipAutoHideHint": "Kati na {min} na {max} sekonde.",
+    "byWorkflow": "Na ndenge ya workflow",
+    "byWorkflowNote": "Eza kati na total oyo likoló, ezali komonama se na ndenge na yango— ezali lisusu elongi te. Ba runs ya Grant etalelaka rapor oyo ya organisation na yo mpe budget ya token, kasi ezali te na total oyo ya esika oyo."
   },
   "extraction": {
     "toggleLabel": "Kolongola donnee na forme ya mobongisi",
@@ -2808,7 +2815,17 @@
       "guides": "Batoli ya organisation",
       "organizationTerminology": "Maloba ya organisation",
       "noOrganizationTerminology": "Maloba ya organisation ezali te",
-      "terminologyGuideUnavailable": "Motoli ezali te"
+      "terminologyGuideUnavailable": "Motoli ezali te",
+      "editingPendingHint": "Bokebi {count} ezali na kozela—ezalaka na elembo te ntango ozali kosala, mpe soki okomi likolo ya moko, esimbelaka te.",
+      "editingPendingHintOne": "Sugeransé 1 ezali na kozela—ezalaka na elembo te ntango ozali kosala, mpe soki okomi likolo nayo, esimbelaka te.",
+      "overwriteEditTitle": "Kosala mbongwana na eteni esengamaki",
+      "overwriteEditMessage": "Ndelo oyo ezali na sugeransé ezali na kozela. Kosala mbongwana wana ekosilisa sugeransé yango—ekokende na \"epesami te\" na liste ya revision, epai okoki naino kokitisa yango. Okoki kosala mbongwana na ndelo mosusu libre ntango revision efungami. Okotunamaka lisusu te.",
+      "overwriteEditConfirmOne": "Kanda sugeransé mpe tika mbongwana na ngai",
+      "overwriteEditConfirmMany": "Kanda sugeransé {count} mpe tika mbongwana na ngai",
+      "suggestionDroppedOne": "Sugeransé ekangami—osalaki mbongwana na eteni oyo.",
+      "suggestionDroppedMany": "Sugeransé {count} ekangami—osalaki mbongwana na biteni yango.",
+      "pendingRunActionTranslate": "Kokota lisusu",
+      "pendingRunActionAssess": "Kosambisa lisusu"
     },
     "document": {
       "emptyTitle": "Sosola mokanda olingi",
@@ -2956,7 +2973,15 @@
       "criterionRubricTooLong": "Rubrique oyo eleki {over} ba-karactère na ndelo. Ebatelaka na nyonso ya ba-évaluation, ndenge wana soki tomonisi ndelo, ezali na posa ya kokitisa yango mpo criterion oyo esangaka.",
       "guides": "Batoli ya organisation",
       "guidesOptgroup": "Batoli ya organisation",
-      "guideUnavailable": "Motoli ezali te"
+      "guideUnavailable": "Motoli ezali te",
+      "overwriteEditTitle": "Kosala mbongwana na eteni esengamaki",
+      "overwriteEditMessage": "Ndelo oyo ezali na sugeransé ezali na kozela. Kosala mbongwana wana ekosilisa sugeransé yango—ekokende na \"epesami te\" na liste ya revision, epai okoki naino kokitisa yango. Okoki kosala mbongwana na ndelo mosusu libre ntango revision efungami. Okotunamaka lisusu te.",
+      "overwriteEditConfirmOne": "Kanda sugeransé mpe sala mbongwana",
+      "overwriteEditConfirmMany": "Kanda sugeransé {count} mpe sala mbongwana",
+      "suggestionDroppedOne": "Sugeransé ekangami—osalaki mbongwana na eteni oyo.",
+      "suggestionDroppedMany": "Sugeransé {count} ekangami—osalaki mbongwana na biteni yango.",
+      "pendingRunActionRevise": "Kosalisa mbongwana na dokima",
+      "pendingRunActionAssess": "Kosambisa lisusu"
     },
     "data": {
       "emptyTitle": "Bokota ba data mpo epesa anàlizé",
@@ -3332,7 +3357,14 @@
       "guideSectionOptional": "kopona",
       "guideSourceTerm": "Mot ya liboso",
       "guideTargetTerm": "Kobongola esengeli",
-      "guideNote": "Noti"
+      "guideNote": "Noti",
+      "pendingRun": {
+        "title": "Sugeransé {count} naino ezali na kozela",
+        "body": "{action} ekoki kobongola ndambo nyonso ya ndelo, ata biteni oyo ezali naino na sugeransé osaleli te, mpe assessment ya sika ekosilisa liste ya lelo. Banda boya sugeransé ezali naino.",
+        "acceptAll": "Senga nyonso oyo ezali naino",
+        "rejectAll": "Kokanga nyonso",
+        "cancel": "Kabolaka"
+      }
     }
   },
   "connectors": {
@@ -3533,6 +3565,36 @@
         "hidden": "Kobomba"
       },
       "visibilityHint": "Auto ekolakisa chip soki ba estimate ebongwani to soki okomiti na yango. Okoki kobongola yango lisusu na Paramètres › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Esika mosala oyo (epesami motuya)",
+      "workspace": "Esika mosala oyo",
+      "currentArtifact": "Mosala ya sikoyo",
+      "lastRun": "Mosala ya suka",
+      "lastRunDetail": "{action} · {calls} kobenga modèle",
+      "today": "Lelo",
+      "railChat": "Kosolola na esika mosala oyo",
+      "byAction": "Na etape",
+      "delta": "+{grams} g",
+      "ariaLabel": "Mokonzi ya carbone oyo eteyami mpo na esika mosala oyo: {grams} grammes ya CO₂ ekokanisami. Lakisa batonga.",
+      "actions": {
+        "translate": "Kopandisa",
+        "analysis": "Kosepela na ebongiseli",
+        "review": "Ba tour ya eyekoli",
+        "write": "Kokoma",
+        "revise": "Kokoma lisusu",
+        "profile": "Profil ya mokanda",
+        "assess": "Kotanola kalite",
+        "extract": "Kopikola",
+        "transform": "Kobongola",
+        "photo": "Kopikola foto",
+        "map_edit": "Kobongisa kati ya carte",
+        "rail_chat": "Kosolola"
+      },
+      "disclaimer": "Bokeseni mpo na eteni moko esalemi na mizaleli ya ba-token oyo ebimaki, na ndenge ya ba-moyene ya bato nyonso mpe na kokota mwa makanisi v{version}. Eteni moko ezali ba-appel mingi ya modèle, mpe motindo mobimba ya mokanda elongwana na moko na moko, yango wana ba-token ya prompt ezali mingi. Ba-eteni oyo esalemaki liboso kotala ebandaki te ekotami te. Ezali kaka bokeseni, kaka te mwana.",
+      "estimate": "~{passes} bitá · ~{grams} g CO₂e",
+      "estimateTooltip": "Esaleli ya pamba mpo na bitamboli oyo ezalaka te yebani liboso ete ebandi, kolanda molai ya elilingi, modele oyo oponi mpe ndenge mitindo esalaka bitá (makoki v{version}). Bitá nyonso etindaka elilingi lisusu, yango wana ba maloba ya kombo ekómaka mingi. Mingi ya solo ekomonana sima ya bitamboli.",
+      "estimateAtMost": "kutu na ~{passes} bitá · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5563,7 +5625,8 @@
       "limitReached": "Limite ekoki",
       "familyLimitReached": "Limite ya famille ya model ekoki",
       "usageUnavailable": "Utilisation ya lelo ekoki te — nani komonisa baimite kaka.",
-      "familyRow": "Ba modèles ya {family}"
+      "familyRow": "Ba modèles ya {family}",
+      "usedByWorkflows": "epai {used} euti na bitamboli"
     },
     "routes": {
       "ttsExhausted": "Osili kokoma limite ya lelo ya text-to-speech.",

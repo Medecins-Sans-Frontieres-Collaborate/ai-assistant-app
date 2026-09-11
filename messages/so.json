@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} waxaa lagu martigelinayaa gobolka Azure ee EU; wadahadalada lala yeesho waa halkaas lagu farsameeyaa."
     },
     "version": {
-      "label": "Nooca"
+      "label": "Nooca",
+      "showOlder": "Muuji kuwii hore ({count})",
+      "hideOlder": "Qari kuwii hore"
     },
     "reasoningModel": "Moodelka xisaabaadka: wuxuu fikirayaa tilaabo-tillaabo ka hor inta uusan jawaabin. Wuxuu gaabis yahay, laakin wuu ka wanaagsan yahay dhibaatooyinka adag.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Bishii la soo dhaafay",
       "freshness_any": "Wakhti kasta",
       "hint": "Auto waxay su'aal kasta u ogolaanaysaa inay dejiso waqtiga la doonayo (tusaale, wararka waxay mudnaanta siinayaan maalinta la soo dhaafay), su'aalaha cilmi-baarista ayaa laga yaabaa inay adeegsadaan ilo ka badan kuwa caadiga ah."
+    },
+    "subVariant": {
+      "label": "Cabbirka"
     }
   },
   "models": {
@@ -2574,7 +2579,9 @@
     "chipHiddenHint": "Chip-ka marna lama muujiyo. Wadarta wali waa laga raadin karaa oo waxay ka muuqanaysaa boggan.",
     "chipAutoHideLabel": "Libdho kadib",
     "chipAutoHideUnit": "ilbiriqsi",
-    "chipAutoHideHint": "U dhaxaysa {min} iyo {max} ilbiriqsi."
+    "chipAutoHideHint": "U dhaxaysa {min} iyo {max} ilbiriqsi.",
+    "byWorkflow": "Sida socodka shaqada",
+    "byWorkflowNote": "Qeyb ka mid ah wadarta kor ku xusan, si gooni ah loo muujiyay — isticmaalka dheeraad ah ma aha. Socodyada deeqaha waxaa loo tiriyaa warbixinta ururkiinna iyo miisaaniyadda tokens-ka, laakin kuma jiraan wadarta halkan maxalliga ah."
   },
   "extraction": {
     "toggleLabel": "Ka saar xog habaysan",
@@ -2808,7 +2815,17 @@
       "guides": "Hagayaasha ururka",
       "organizationTerminology": "Erey-bixinta ururka",
       "noOrganizationTerminology": "Lama hayo erey-bixin urur",
-      "terminologyGuideUnavailable": "Hagayaasha lama heli karo"
+      "terminologyGuideUnavailable": "Hagayaasha lama heli karo",
+      "editingPendingHint": "{count} talo ayaa sugaysa — lama calaamadiyo marka la tafatinayo, marka aad wax ku qorto dushooda way tirtiraysaa.",
+      "editingPendingHintOne": "1 talo ayaa sugaysa — lama calaamadiyo marka la tafatinayo, marka aad wax ku qorto dusheeda way tirtiraysaa.",
+      "overwriteEditTitle": "Wax ka beddelaya talo la soo jeediyay",
+      "overwriteEditMessage": "Qoraalkan waxaa ku jirta talo sugaysa. Tafattirka wuu baabi'inayaa taladaas — waxay u guuraysaa \"lama dhaqan gelin\" liiska dib-u-eegista, welina waad ka laaban kartaa. Qoraalka aan la talin waxaa si xor ah loo tafatiri karaa inta dib-u-eegis furan tahay. Mar kale laguma weydiindo.",
+      "overwriteEditConfirmOne": "Tirtir talada oo dhawoobo wax ka beddelkeyga",
+      "overwriteEditConfirmMany": "Tirtir {count} talo oo dhawoobo wax ka beddelkeyga",
+      "suggestionDroppedOne": "Talo waa la tirtiray — waad beddeshay qoraalkeeda.",
+      "suggestionDroppedMany": "{count} talo waa la tirtiray — waad beddeshay qoraaladooda.",
+      "pendingRunActionTranslate": "Mar kale turjumaya",
+      "pendingRunActionAssess": "Dib-u-eegis mar kale"
     },
     "document": {
       "emptyTitle": "Sharax dukumintiga aad rabto",
@@ -2956,7 +2973,15 @@
       "criterionRubricTooLong": "Qodobkan waa {over} xaraf kor u dhaafay xadka. Waxa la socdaa qiimeynta kasta, sidaas darteed waa in la gaabiyo ka hor inta aan la isticmaalin qodobkan.",
       "guides": "Hagayaasha ururka",
       "guidesOptgroup": "Hagayaasha ururka",
-      "guideUnavailable": "Hagaha lama heli karo"
+      "guideUnavailable": "Hagaha lama heli karo",
+      "overwriteEditTitle": "Wax ka beddelaya talo la soo jeediyay",
+      "overwriteEditMessage": "Qoraalkan waxaa ku jirta talo sugaysa. Tafattirka wuu baabi'inayaa taladaas — waxay u guuraysaa \"lama dhaqan gelin\" liiska dib-u-eegista, welina waad ka laaban kartaa. Qoraalka aan la talin waxaa si xor ah loo tafatiri karaa inta dib-u-eegis furan tahay. Mar kale laguma weydiindo.",
+      "overwriteEditConfirmOne": "Tirtir talada oo tafati",
+      "overwriteEditConfirmMany": "Tirtir {count} talo oo tafati",
+      "suggestionDroppedOne": "Talo waa la tirtiray — waad beddeshay qoraalkeeda.",
+      "suggestionDroppedMany": "{count} talo waa la tirtiray — waad beddeshay qoraaladooda.",
+      "pendingRunActionRevise": "Dib u eegis ku samaynaya dukumeentiga",
+      "pendingRunActionAssess": "Dib-u-eegis mar kale"
     },
     "data": {
       "emptyTitle": "Keenso xog si loo falanqeeyo",
@@ -3332,7 +3357,14 @@
       "guideSectionOptional": "ikhtiyaari",
       "guideSourceTerm": "Ereyga asalka",
       "guideTargetTerm": "Tarjumaad loo baahanyahay",
-      "guideNote": "Ogeysiis"
+      "guideNote": "Ogeysiis",
+      "pendingRun": {
+        "title": "{count} talo wali sugaysa",
+        "body": "{action} waxay wax ka beddeli kartaa qayb kasta oo qoraalka ah, oo ay ku jiraan meelaha talooyinka la bixiyay ee aanad weli go'aan ka gaarin, qiimeyn cusubna waxa ay beddeshaa liiska hadda jira. Go'aan ka gaadh talooyinka haray marka hore.",
+        "acceptAll": "Dhammaan haray aqbal",
+        "rejectAll": "Dhammaan diid",
+        "cancel": "Jooji"
+      }
     }
   },
   "connectors": {
@@ -3533,6 +3565,36 @@
         "hidden": "Qari"
       },
       "visibilityHint": "Toos wuxuu muujiyaa chip-ka marka qiyaasta la cusbooneysiiyo ama aad dul istaagto. Waxaad tan markale ka beddeli kartaa Dejinta › Isticmaalka & Saameynta."
+    },
+    "workflow": {
+      "title": "Meesha shaqadan (qiyaas ah)",
+      "workspace": "Meesha shaqadan",
+      "currentArtifact": "Shaqada hadda",
+      "lastRun": "Socodkii u dambeeyay",
+      "lastRunDetail": "{action} · {calls} wicitaano moodel",
+      "today": "Maanta",
+      "railChat": "Kala sheekeyso meesha shaqadan",
+      "byAction": "Tallaabo kasta",
+      "delta": "+{grams} g",
+      "ariaLabel": "Qiyaasta raad kaarboonka ee meesha shaqadan: {grams} garaam oo u dhigma CO₂. Muuji faahfaahin.",
+      "disclaimer": "Qiyaas kasta oo socod ah waxay ku salaysan tahay tirada tokens la sheegay, iyadoo la adeegsanayo celcelis iyo mala-awaal la daabacay v{version}. Hal socod waxay ka koobantahay dhowr wicitaan moodel ah, dhammaan ilo-dhaqeedka ayaa socda wacitaan kasta, sidaas darteed taako tokens ayaa badan. Socodyada ka hor inta aan la bilaabin raad raaca lama tirin. Ma ahan cabbir rasmi ah.",
+      "actions": {
+        "translate": "Tarjumid",
+        "analysis": "Falanqayn il",
+        "review": "Dib-u-eegid",
+        "write": "Qorid",
+        "revise": "Dib-u-habayn",
+        "profile": "Astaanta dukumiintiga",
+        "assess": "Qiimayn tayo",
+        "extract": "Saarid",
+        "transform": "Beddelid",
+        "photo": "Soo saaridda sawir",
+        "map_edit": "Cusboonaysiin khariidad",
+        "rail_chat": "Sheekeysi"
+      },
+      "estimate": "~{passes} mar · ~{grams} g CO₂e",
+      "estimateTooltip": "Qiyaas guud oo loo sameeyay hawlgalkaan ka hor inta uusan bilaaban, iyadoo laga eegayo dhererka ilaha, moodelka la doortay iyo tirada marar ee la sameynayo (xisaabti v{version}). Mar kasta oo la marayo ilaha waa la diraa, sidaas darteed dhammaan tokens-ka prompt-ka ayaa ugu badan. Natiijada dhabta ah waxay muuqan doontaa marka hawlgalka dhammaado.",
+      "estimateAtMost": "ugu badnaan ~{passes} mar · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5563,7 +5625,8 @@
       "limitReached": "Xaddiga waa la gaaray",
       "familyLimitReached": "Xaddiga qoyska muuqaalka waa la gaaray",
       "usageUnavailable": "Isticmaalka hadda lama helin — waxa lagu tusayaa xadadka oo keliya.",
-      "familyRow": "Modelada {family}"
+      "familyRow": "Modelada {family}",
+      "usedByWorkflows": "kaas oo {used} looga isticmaalay hawlgallada"
     },
     "routes": {
       "ttsExhausted": "Waxaad gaadhay xadka text-to-speech ee maanta.",

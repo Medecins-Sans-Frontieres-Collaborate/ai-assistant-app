@@ -54,6 +54,9 @@ export type AgentKind = 'rag' | 'prompt' | 'm365' | 'foundry';
  * ⚠ Every field here must be a declared column in the DCR stream
  * (`scripts/update-log-ingestion-schema.py`) or it is dropped at ingestion.
  */
+/** Which product surface a model call was made from. */
+export type TokenUsageSurface = 'chat' | 'workflow';
+
 export interface RequestTelemetry {
   /** Agent id as sent by the client (conversation.bot); may be stale. */
   botId?: string;
@@ -199,6 +202,14 @@ export interface TokenUsageLogEntry extends BaseLogEntry {
   AssumptionsVersion: string;
   /** Whether the response was streamed. */
   Streamed: boolean;
+  /**
+   * Which surface spent the tokens ('chat' | 'workflow').
+   *
+   * ⚠ The prod DCR stream is still the 22-column v1 schema, which silently
+   * DROPS unknown fields — until it is reconciled (docs/LOG_INGESTION_SCHEMA.md)
+   * workflow rows land in TokenUsage indistinguishable from chat rows.
+   */
+  Surface?: string;
   /** Bot/knowledge base ID when RAG was involved. */
   BotId?: string;
 }

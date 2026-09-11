@@ -35,6 +35,7 @@ import {
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
 import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
+import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRecorder';
 import { profileTable } from '@/lib/services/workflows/data/columnStats';
 import {
   applyDerivedColumns,
@@ -89,6 +90,7 @@ import {
 
 import CameraCaptureModal from '@/components/UI/CameraCaptureModal';
 
+import { RunEstimateHint } from '../Impact/RunEstimateHint';
 import { PastedTextChips } from '../Shared/PastedTextChips';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
@@ -548,6 +550,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           // to extract values for them.
           columns: columns.filter((c) => !c.formula),
           modelId: conversation?.model?.id,
+          conversationId,
         }),
       });
       const parsed = await response.json();
@@ -556,6 +559,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           parsed?.error || `Extraction failed (${response.status})`,
         );
       }
+      recordWorkflowUsage(conversationId, parsed.data?.usage);
       const sourceId = uuidv4();
       const newRows = admitRows(parsed.data.rows as Rows, columns);
       const merged = mergeRows(newRows);
@@ -639,6 +643,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           imageRefs,
           columns: columns.filter((c) => !c.formula),
           modelId,
+          conversationId,
         });
         const newRows = admitRows(result.rows as Rows, columns);
         const merged = mergeRows(newRows);
@@ -657,7 +662,11 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           },
         );
       } else {
-        const inference = await photoInfer({ imageRefs, modelId });
+        const inference = await photoInfer({
+          imageRefs,
+          modelId,
+          conversationId,
+        });
         const table = photoInferToTable(inference);
         const newRows = admitRows(table.rows, table.columns);
         addedCount = newRows.length;
@@ -724,6 +733,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           engine: 'llm',
           scoped,
           modelId: conversation?.model?.id,
+          conversationId,
         }),
       });
       const parsed = await response.json();
@@ -732,6 +742,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           parsed?.error || `Transform failed (${response.status})`,
         );
       }
+      recordWorkflowUsage(conversationId, parsed.data?.usage);
       // The LLM round-trip loses format/formula metadata — re-attach
       // for columns that kept their id and number type. (Materialized
       // derived values in the result are stripped again in applyTable;
@@ -1752,6 +1763,18 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                 : t('data.transform')}
             </button>
           </div>
+          {/* A transform sends the scoped table and gets a table back, so
+              the completion is about the size of the input. */}
+          {busy === null && hasTable && (
+            <p className="mt-1.5">
+              <RunEstimateHint
+                model={conversation?.model}
+                sourceText={JSON.stringify(scopedRows)}
+                passes={1}
+                completionRatio={1}
+              />
+            </p>
+          )}
           {scopedRows.length > 500 && (
             <p className="mt-1.5 text-xs text-amber-700 dark:text-amber-400">
               {t('data.transformCapHint', { max: '500' })}

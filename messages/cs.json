@@ -1461,7 +1461,9 @@
       "euOnlyNote": "{name} je hostován v EU Azure regionu; konverzace s ním jsou zpracovány tam."
     },
     "version": {
-      "label": "Verze"
+      "label": "Verze",
+      "showOlder": "Zobrazit starší ({count})",
+      "hideOlder": "Skrýt starší"
     },
     "reasoningModel": "Model pro uvažování: před odpovědí přemýšlí krok za krokem. Pomalejší, vhodnější na složité úlohy.",
     "variant": {
@@ -1492,6 +1494,9 @@
       "freshness_month": "Poslední měsíc",
       "freshness_any": "Kdykoli",
       "hint": "Automaticky umožní každé otázce nastavit vlastní aktuálnost (např. zprávy preferují poslední den) a výzkumné otázky mohou použít více zdrojů než výchozí nastavení."
+    },
+    "subVariant": {
+      "label": "Velikost"
     }
   },
   "models": {
@@ -2590,7 +2595,9 @@
     "chipHiddenHint": "Čip se nikdy nezobrazuje. Součty jsou stále sledovány a zobrazeny na této stránce.",
     "chipAutoHideLabel": "Vyprší po",
     "chipAutoHideUnit": "sekundách",
-    "chipAutoHideHint": "Mezi {min} a {max} sekundami."
+    "chipAutoHideHint": "Mezi {min} a {max} sekundami.",
+    "byWorkflow": "Podle pracovního postupu",
+    "byWorkflowNote": "Část výše uvedených součtů, zobrazená zvlášť — nejedná se o dodatečnou spotřebu. Spuštění grantů se započítávají do hlášení vaší organizace a rozpočtu tokenů, ale nejsou zahrnuta v tomto místním součtu."
   },
   "extraction": {
     "toggleLabel": "Extrahovat strukturovaná data",
@@ -2824,7 +2831,17 @@
       "guides": "Organizační příručky",
       "organizationTerminology": "Organizační terminologie",
       "noOrganizationTerminology": "Žádná organizační terminologie",
-      "terminologyGuideUnavailable": "Příručka není dostupná"
+      "terminologyGuideUnavailable": "Příručka není dostupná",
+      "editingPendingHint": "{count} návrhů čeká — při úpravě nejsou označeny a přepsáním jeden odstraníte.",
+      "editingPendingHintOne": "1 návrh čeká — při úpravě není označen a přepsáním ho odstraníte.",
+      "overwriteEditTitle": "Úprava navržené pasáže",
+      "overwriteEditMessage": "Tento text má čekající návrh. Úpravou ho odstraníte — přesune se do sekce „nepoužito“ v seznamu k revizi, kde můžete akci vrátit zpět. Text mimo návrhy lze upravovat libovolně, dokud je revize otevřená. Toto upozornění již neuvidíte.",
+      "overwriteEditConfirmOne": "Odmítnout návrh a ponechat mou změnu",
+      "overwriteEditConfirmMany": "Odmítnout {count} návrhů a ponechat mou změnu",
+      "suggestionDroppedOne": "Návrh byl odstraněn — upravili jste jeho pasáž.",
+      "suggestionDroppedMany": "{count} návrhů bylo odstraněno — upravili jste jejich pasáže.",
+      "pendingRunActionTranslate": "Opětovný překlad",
+      "pendingRunActionAssess": "Nové hodnocení"
     },
     "document": {
       "emptyTitle": "Popište požadovaný dokument",
@@ -2972,7 +2989,15 @@
       "criterionRubricTooLong": "Tato kritéria překračují limit o {over} znaků. Odesílají se s každým hodnocením, proto je nutné je zkrátit, než je lze použít.",
       "guides": "Organizační příručky",
       "guidesOptgroup": "Organizační příručky",
-      "guideUnavailable": "Příručka není dostupná"
+      "guideUnavailable": "Příručka není dostupná",
+      "overwriteEditTitle": "Úprava navržené pasáže",
+      "overwriteEditMessage": "Tento text má čekající návrh. Úpravou ho odstraníte — přesune se do sekce „nepoužito“ v seznamu k revizi, kde můžete akci vrátit zpět. Text mimo návrhy lze upravovat libovolně, dokud je revize otevřená. Toto upozornění již neuvidíte.",
+      "overwriteEditConfirmOne": "Odmítnout návrh a upravit",
+      "overwriteEditConfirmMany": "Odmítnout {count} návrhů a upravit",
+      "suggestionDroppedOne": "Návrh byl odstraněn — upravili jste jeho pasáž.",
+      "suggestionDroppedMany": "{count} návrhů bylo odstraněno — upravili jste jejich pasáže.",
+      "pendingRunActionRevise": "Revidování dokumentu",
+      "pendingRunActionAssess": "Nové hodnocení"
     },
     "data": {
       "emptyTitle": "Importujte data k analýze",
@@ -3348,7 +3373,14 @@
       "guideSectionOptional": "volitelné",
       "guideSourceTerm": "Vstupní pojem",
       "guideTargetTerm": "Požadovaný překlad",
-      "guideNote": "Poznámka"
+      "guideNote": "Poznámka",
+      "pendingRun": {
+        "title": "{count} návrhů stále čeká",
+        "body": "{action} může změnit libovolnou část textu, včetně pasáží s návrhy, o kterých jste zatím nerozhodli, a nové hodnocení nahradí stávající seznam. Nejprve rozhodněte o zbývajících návrzích.",
+        "acceptAll": "Přijmout všechny zbývající",
+        "rejectAll": "Zamítnout vše",
+        "cancel": "Zrušit"
+      }
     }
   },
   "connectors": {
@@ -3549,6 +3581,36 @@
         "hidden": "Skrýt"
       },
       "visibilityHint": "Při volbě Automaticky se čip zobrazí, když se odhad aktualizuje nebo na něj najedete myší. Toto nastavení můžete kdykoli změnit v Nastavení › Využití a dopad."
+    },
+    "workflow": {
+      "title": "Tento pracovní prostor (odhadováno)",
+      "workspace": "Tento pracovní prostor",
+      "currentArtifact": "Aktuální práce",
+      "lastRun": "Poslední spuštění",
+      "lastRunDetail": "{action} · {calls} volání modelu",
+      "today": "Dnes",
+      "railChat": "Chat v tomto pracovním prostoru",
+      "byAction": "Podle kroku",
+      "delta": "+{grams} g",
+      "ariaLabel": "Odhadovaná uhlíková stopa tohoto pracovního prostoru: {grams} gramů ekvivalentu CO₂. Zobrazit rozpis.",
+      "disclaimer": "Odhady na spuštění vycházejí z hlášených počtů tokenů, s použitím publikovaných průměrů a předpokladů v{version}. Jedno spuštění obsahuje několik volání modelu a zdrojový text je pokaždé odesílán celý, takže převládají tokeny promptu. Spuštění před zahájením sledování nejsou započítána. Nejedná se o měření.",
+      "actions": {
+        "translate": "Překlad",
+        "analysis": "Analýza zdroje",
+        "review": "Kola kontroly",
+        "write": "Psání",
+        "revise": "Revize",
+        "profile": "Profil dokumentu",
+        "assess": "Hodnocení kvality",
+        "extract": "Extrakce",
+        "transform": "Transformace",
+        "photo": "Extrakce fotek",
+        "map_edit": "Aktualizace mapy",
+        "rail_chat": "Chat"
+      },
+      "estimate": "~{passes} průchodů · ~{grams} g CO₂e",
+      "estimateTooltip": "Hrubý odhad pro tento běh před spuštěním, na základě délky zdroje, vybraného modelu a počtu průchodů podle zvolených nastavení (předpoklady v{version}). Každý průchod znovu odesílá zdroj, takže rozhodující jsou prompt tokeny. Skutečný údaj se zobrazí po dokončení běhu.",
+      "estimateAtMost": "maximálně ~{passes} průchodů · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5579,7 +5641,8 @@
       "limitReached": "Dosažen limit",
       "familyLimitReached": "Dosažen limit rodiny modelů",
       "usageUnavailable": "Aktuální využití nebylo možné načíst — zobrazeny jsou pouze limity.",
-      "familyRow": "Modely {family}"
+      "familyRow": "Modely {family}",
+      "usedByWorkflows": "z toho {used} z workflow"
     },
     "routes": {
       "ttsExhausted": "Dnes jste dosáhli limitu převodu textu na řeč.",

@@ -1502,7 +1502,9 @@
       "euOnlyNote": "{name} wordt gehost in de EU Azure-regio; gesprekken daarmee worden daar verwerkt."
     },
     "version": {
-      "label": "Versie"
+      "label": "Versie",
+      "showOlder": "Oudere versies weergeven ({count})",
+      "hideOlder": "Oudere versies verbergen"
     },
     "reasoningModel": "Redeneermodel: denkt stap voor stap na voor het beantwoorden. Langzamer, beter bij complexe problemen.",
     "variant": {
@@ -1533,6 +1535,9 @@
       "freshness_month": "Afgelopen maand",
       "freshness_any": "Altijd",
       "hint": "Automatisch laat elke vraag zijn eigen actualiteit bepalen (bijv. nieuws geeft de voorkeur aan de afgelopen dag), en onderzoeksvragen kunnen meer bronnen gebruiken dan standaard."
+    },
+    "subVariant": {
+      "label": "Grootte"
     }
   },
   "models": {
@@ -2590,7 +2595,9 @@
     "chipHiddenHint": "De chip wordt nooit getoond. Totalen worden nog steeds bijgehouden en zijn op deze pagina te zien.",
     "chipAutoHideLabel": "Vervagen na",
     "chipAutoHideUnit": "seconden",
-    "chipAutoHideHint": "Tussen {min} en {max} seconden."
+    "chipAutoHideHint": "Tussen {min} en {max} seconden.",
+    "byWorkflow": "Per workflow",
+    "byWorkflowNote": "Onderdeel van bovenstaande totalen, apart weergegeven — geen extra gebruik. Grants-runs tellen mee voor de rapportage van uw organisatie en uw tokenbudget, maar niet in dit lokale totaal."
   },
   "extraction": {
     "toggleLabel": "Gestructureerde gegevens extraheren",
@@ -2824,7 +2831,17 @@
       "guides": "Organisatiegidsen",
       "organizationTerminology": "Organisatieterminologie",
       "noOrganizationTerminology": "Geen organisatieterminologie",
-      "terminologyGuideUnavailable": "Gids niet beschikbaar"
+      "terminologyGuideUnavailable": "Gids niet beschikbaar",
+      "editingPendingHint": "{count} suggesties in behandeling — ze worden niet gemarkeerd tijdens het bewerken, en eroverheen typen verwijdert ze.",
+      "editingPendingHintOne": "1 suggestie in behandeling — deze wordt niet gemarkeerd tijdens het bewerken, en eroverheen typen verwijdert deze.",
+      "overwriteEditTitle": "Een voorgestelde passage bewerken",
+      "overwriteEditMessage": "Deze tekst heeft een suggestie in behandeling. Bewerken verwijdert de suggestie — deze verplaatst naar 'niet toegepast' in de beoordelingslijst, waar u dit nog ongedaan kunt maken. Tekst buiten suggesties kan vrij worden bewerkt zolang een beoordeling openstaat. U krijgt deze vraag niet opnieuw.",
+      "overwriteEditConfirmOne": "Suggestie verwijderen en mijn wijziging behouden",
+      "overwriteEditConfirmMany": "{count} suggesties verwijderen en mijn wijziging behouden",
+      "suggestionDroppedOne": "Suggestie verwijderd — u heeft de passage bewerkt.",
+      "suggestionDroppedMany": "{count} suggesties verwijderd — u heeft hun passages bewerkt.",
+      "pendingRunActionTranslate": "Opnieuw vertalen",
+      "pendingRunActionAssess": "Opnieuw beoordelen"
     },
     "document": {
       "emptyTitle": "Beschrijf het gewenste document",
@@ -2972,7 +2989,15 @@
       "criterionRubricTooLong": "Deze beoordelingscriteria zijn {over} tekens boven de limiet. Ze worden bij elke beoordeling meegestuurd, dus ze moeten worden ingekort voordat dit criterium gebruikt kan worden.",
       "guides": "Organisatiegidsen",
       "guidesOptgroup": "Organisatiegidsen",
-      "guideUnavailable": "Gids niet beschikbaar"
+      "guideUnavailable": "Gids niet beschikbaar",
+      "overwriteEditTitle": "Een voorgestelde passage bewerken",
+      "overwriteEditMessage": "Deze tekst heeft een suggestie in behandeling. Bewerken verwijdert de suggestie — deze verplaatst naar 'niet toegepast' in de beoordelingslijst, waar u dit nog ongedaan kunt maken. Tekst buiten suggesties kan vrij worden bewerkt zolang een beoordeling openstaat. U krijgt deze vraag niet opnieuw.",
+      "overwriteEditConfirmOne": "Suggestie verwijderen en bewerken",
+      "overwriteEditConfirmMany": "{count} suggesties verwijderen en bewerken",
+      "suggestionDroppedOne": "Suggestie verwijderd — u heeft de passage bewerkt.",
+      "suggestionDroppedMany": "{count} suggesties verwijderd — u heeft hun passages bewerkt.",
+      "pendingRunActionRevise": "Document herzien",
+      "pendingRunActionAssess": "Opnieuw beoordelen"
     },
     "data": {
       "emptyTitle": "Importeer data om te analyseren",
@@ -3348,7 +3373,14 @@
       "guideSectionOptional": "optioneel",
       "guideSourceTerm": "Brontterm",
       "guideTargetTerm": "Vereiste vertaling",
-      "guideNote": "Opmerking"
+      "guideNote": "Opmerking",
+      "pendingRun": {
+        "title": "{count} suggesties nog in behandeling",
+        "body": "{action} kan elk deel van de tekst wijzigen, inclusief passages met suggesties waarover u nog geen beslissing hebt genomen; een nieuwe beoordeling vervangt de huidige lijst. Behandel eerst de resterende suggesties.",
+        "acceptAll": "Alles accepteren",
+        "rejectAll": "Alles weigeren",
+        "cancel": "Annuleren"
+      }
     }
   },
   "connectors": {
@@ -3549,6 +3581,36 @@
         "hidden": "Verbergen"
       },
       "visibilityHint": "De chip wordt automatisch getoond wanneer de schatting wordt bijgewerkt of wanneer u eroverheen beweegt. U kunt dit later aanpassen in Instellingen › Gebruik & Impact."
+    },
+    "workflow": {
+      "title": "Deze werkruimte (geschat)",
+      "workspace": "Deze werkruimte",
+      "currentArtifact": "Huidig werk",
+      "lastRun": "Laatste run",
+      "lastRunDetail": "{action} · {calls} modeloproepen",
+      "today": "Vandaag",
+      "railChat": "Chat in deze werkruimte",
+      "byAction": "Per stap",
+      "delta": "+{grams} g",
+      "ariaLabel": "Geschatte ecologische voetafdruk van deze werkruimte: {grams} gram CO₂-equivalent. Toon uitsplitsing.",
+      "disclaimer": "Schattingen per run op basis van gerapporteerde aantallen tokens en gepubliceerde gemiddelden en aannames v{version}. Eén run omvat meerdere modeloproepen, waarbij de gehele bron bij elke oproep wordt verstuurd; prompttokens hebben dus de grootste invloed. Runs van vóór het begin van de tracking worden niet meegeteld. Geen meting.",
+      "actions": {
+        "translate": "Vertalen",
+        "analysis": "Bronanalyse",
+        "review": "Reviewrondes",
+        "write": "Schrijven",
+        "revise": "Revisie",
+        "profile": "Documentprofiel",
+        "assess": "Kwaliteitsbeoordeling",
+        "extract": "Extractie",
+        "transform": "Transformatie",
+        "photo": "Foto-extractie",
+        "map_edit": "Kaartupdate",
+        "rail_chat": "Chat"
+      },
+      "estimate": "~{passes} keer · ~{grams} g CO₂e",
+      "estimateTooltip": "Ruime schatting voor deze run vóór de start, gebaseerd op de lengte van de bron, het geselecteerde model en het aantal keer dat de gekozen instellingen worden doorlopen (aannames v{version}). Elke keer wordt de bron opnieuw verzonden, waardoor prompttokens de grootste impact hebben. De werkelijke waarde verschijnt na afloop van de run.",
+      "estimateAtMost": "maximaal ~{passes} keer · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5579,7 +5641,8 @@
       "limitReached": "Limiet bereikt",
       "familyLimitReached": "Modelfamilielimiet bereikt",
       "usageUnavailable": "Huidig gebruik kon niet worden geladen — alleen limieten worden getoond.",
-      "familyRow": "{family} modellen"
+      "familyRow": "{family} modellen",
+      "usedByWorkflows": "waarvan {used} door workflows"
     },
     "routes": {
       "ttsExhausted": "U heeft de limiet voor tekst-naar-spraak vandaag bereikt.",

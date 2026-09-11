@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} ኣብ EU Azure ክልል ተዳልየ እዩ፡ ዕማጽኦታቱ ኣብዚ ይተሕርፉ።"
     },
     "version": {
-      "label": "መንገዲ"
+      "label": "መንገዲ",
+      "showOlder": "ነዋሕነት ኣረጋግፅ ({count})",
+      "hideOlder": "ነዋሕነት ደብቂ"
     },
     "reasoningModel": "ሞዴል ምስማር፡ ዳግማይ ብደሓን ይሓትት እንዳ ይመልስ። ዝቐርሰን ምርጡ ብዓበይቲ ጸገማታት።",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "ኣባህሪ ወርሒ",
       "freshness_any": "ኩሉ ዘመን",
       "hint": "Auto ክሳብ ኣብ እያ ሕቶ ናይቶ ሓዱሽነት መደብ ይመርጽ (ለኣብ ዜና ብዝሓላ መዓልቲ ይሓፍል), ንምምሕዳር ምስ መሰረታዊ መደብ ዝተለወጠ ብዝበለ ምንጪታት ይጠቕም።"
+    },
+    "subVariant": {
+      "label": "ውፅኢት"
     }
   },
   "models": {
@@ -2574,7 +2579,9 @@
     "chipHiddenHint": "ቻይፑ ክኸውን ኣይተረከበን። ጠቕላላ መዓልቲ ግምቲ መዝግቡ ይቕፀልና፡ ኣብዚ ገጽ ይርከብ።",
     "chipAutoHideLabel": "ካብ ዝተሓደሰ መዓልቲ ዕፀይ",
     "chipAutoHideUnit": "ሰከንድ",
-    "chipAutoHideHint": "ካብ {min} ናብ {max} ሰከንድ ውስጢ።"
+    "chipAutoHideHint": "ካብ {min} ናብ {max} ሰከንድ ውስጢ።",
+    "byWorkflow": "ብ ስራሕ-ትሕዝቶ",
+    "byWorkflowNote": "ካብ ላዕሊ ፅንዓት መካእኑ ይሕብየሉ፣ ብቕልፎ ዝተረኸበ ኣይኮነን። ምትካላይ ዝተሰገሩ ኣኽሊ ምስ ውሉዳ ትካል ድማ ኣብ ቧደንቲ እንተደሊእ የቛርኦም፣ ንዚ ቦታዊ ፅንዓት ዘይስፈን።"
   },
   "extraction": {
     "toggleLabel": "ውክልናዊ ዳታ ምልባስ",
@@ -2808,7 +2815,17 @@
       "guides": "መምርሒ ውድብ",
       "organizationTerminology": "ቃላት ውድብ",
       "noOrganizationTerminology": "ውድብ ቃላት የለን",
-      "terminologyGuideUnavailable": "መምርሒ ኣይተረኣየን"
+      "terminologyGuideUnavailable": "መምርሒ ኣይተረኣየን",
+      "editingPendingHint": "{count} ኣቐዲሙ ምምኽር ኣሎ — ኣብ ምምሃይሽ ዝተመሃነ የኮነን፣ ንዓቲ ክብል ክብል ከይጸንሐ።",
+      "editingPendingHintOne": "1 ኣቐዲሙ ምምኽር ኣሎ — ኣብ ምምሃይሽ ዝተመሃነ የኮነን፣ ንዓቲ ክብል ክብል ከይጸንሐ።",
+      "overwriteEditTitle": "ምምሃይሽ ናይ ተጻወታይ ምኽር",
+      "overwriteEditMessage": "እዚ ጽሑፍ ኣቐዲሙ ምምኽር ኣሎ። ምምሃይሽ እዚ ምኽር ይጽንሕዎ — ኣብ ዝተለወጠ “ዘይተሓጎሰ” ዝበለ ዝርዝር ክንሕብ ይኽእል፣ ምፍታን እዚ ውን ንተመላእ ትኽእላ ኢኻ። ጽሑፋት ዝሃለወ ደሓን ኣብ ክፋል ተጻወታይ እካ ንምምሃይሽ ክትኽእል። ካብ ዚ ድማ ኣይትሕተትናን ኢና።",
+      "overwriteEditConfirmOne": "ምምኽር ክብል ክብል ናይ ውድብ ኣሃዛሚ ጽሑፍ ምቅባል",
+      "overwriteEditConfirmMany": "{count} ምምኽራት ክብል ክብል ናይ ውድብ ኣሃዛሚ ጽሑፍ ምቅባል",
+      "suggestionDroppedOne": "ምምኽር ተውድቆ — ኣብ ጽሑፉ ክብል ክብል ትህሂት።",
+      "suggestionDroppedMany": "{count} ምምኽራት ተውድቆ — ኣብ ነታቶም ጽሑፋት ስራሕ ተውቢትዎ።",
+      "pendingRunActionTranslate": "እንተዘይቀየረ ምትርጉም",
+      "pendingRunActionAssess": "እንተዘይቀየረ ምዕጽማት"
     },
     "document": {
       "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",
@@ -2956,7 +2973,15 @@
       "criterionRubricTooLong": "እዚ መስፈርሒ ብ {over}፡ ቁምፊ ግዜ ውፅኢቱ። ብኣኽባር ኣብ ኩሉ ውሳኔ ይልኣል፡፡ ቅድሚ ክተግበሩ ፣ ከይደፍኡዎ።",
       "guides": "መምርሒ ውድብ",
       "guidesOptgroup": "መምርሒ ውድብ",
-      "guideUnavailable": "መምርሒ ኣይተረኣየን"
+      "guideUnavailable": "መምርሒ ኣይተረኣየን",
+      "overwriteEditTitle": "ምምሃይሽ ናይ ተጻወታይ ምኽር",
+      "overwriteEditMessage": "እዚ ጽሑፍ ኣቐዲሙ ምምኽር ኣሎ። ምምሃይሽ እዚ ምኽር ይጽንሕዎ — ኣብ ዝተለወጠ “ዘይተሓጎሰ” ዝበለ ዝርዝር ክንሕብ ይኽእል፣ ምፍታን እዚ ውን ንተመላእ ትኽእላ ኢኻ። ጽሑፋት ዝሃለወ ደሓን ኣብ ክፋል ተጻወታይ እካ ንምምሃይሽ ክትኽእል። ካብ ዚ ድማ ኣይትሕተትናን ኢና።",
+      "overwriteEditConfirmOne": "ምምኽር ክብል ክብል ምምሃይሽ",
+      "overwriteEditConfirmMany": "{count} ምምኽራት ክብል ክብል ምምሃይሽ",
+      "suggestionDroppedOne": "ምምኽር ተውድቆ — ኣብ ጽሑፉ ክብል ክብል ትህሂት።",
+      "suggestionDroppedMany": "{count} ምምኽራት ተውድቆ — ኣብ ነታቶም ጽሑፋት ስራሕ ተውቢትዎ።",
+      "pendingRunActionRevise": "እንተዘይቀየረ ምምሃይሽ ጽሑፍ",
+      "pendingRunActionAssess": "እንተዘይቀየረ ምዕጽማት"
     },
     "data": {
       "emptyTitle": "ዳታ ኣስገብር ንምርመራ",
@@ -3332,7 +3357,14 @@
       "guideSectionOptional": "ኣራእይ",
       "guideSourceTerm": "ኣቕሓ ቃል",
       "guideTargetTerm": "ኣስፈላጦ ትርጉም",
-      "guideNote": "ማስታወሻ"
+      "guideNote": "ማስታወሻ",
+      "pendingRun": {
+        "title": "{count} ምምኽራት ኣላ ዘይተጽሕፉ።",
+        "body": "{action} ክኸውን ይኽእል፣ በዚ ምኽራት ኣይተውሉን ምዃኑ ጽሑፋት ሙሉእ ክለውጠሉ ይኽእሉ፣ እናተሕደሰ ምዕጽማት ድማ ናይ ሕፂና ዝርዝር ክትኸውን ይኽእል። ቀደም ንነበሩ ምምኽራት ቅድሚ ዚ ሓሳብ።",
+        "acceptAll": "ምስሉ ትስዕቲ ንኩሎም ተቐቢሉ",
+        "rejectAll": "ኩሎም ኣልቦ",
+        "cancel": "ሰርዝ"
+      }
     }
   },
   "connectors": {
@@ -3533,6 +3565,36 @@
         "hidden": "ኣይትረኣይ"
       },
       "visibilityHint": "\"ብሓላፍነት\" ቻይፑ ኣብ እቲ ግምት ካብ ሓደስነቱ ወይ ካብ ስትራይ ምስ ትቕለል እዩ የርከቡ። እዚ ኣብ ቅንጡ፡ Usage & Impact ውሽጢ ቀይርዎ።"
+    },
+    "workflow": {
+      "title": "ዝገመተ ውህብታ ድሕሪት (workspace)",
+      "workspace": "እዚ ውህብታ ድሕሪት",
+      "currentArtifact": "ሓሳብ ስለ ሎሚ",
+      "lastRun": "መዓልቲ ኣኽሊ",
+      "lastRunDetail": "{action} · {calls} ሞዴል ጥራይ",
+      "today": "ሎሚ",
+      "railChat": "ኣብኡ ውህብታ ድሕሪት ተወያይ",
+      "byAction": "ብ መደብ",
+      "delta": "+{grams} ግራም",
+      "ariaLabel": "ዝገመተ ካርቦን እግሪ እዚ ውህብታ ድሕሪት: {grams} ግራም CO₂ ከተወዳእ. ዝርዝር ኣርኣዩ.",
+      "disclaimer": "እቲ ግምት ክንደይ ግንዛቤ ንዝተኣህዋስ ቶከን ቁጽሪ ብዝታተለ ናይ መርፍ መወዳእታታትን ግምታታትን v{version} ተጠቐምኩም፡፡ ኣንዳንድ ኣኽሊ ብዝሓለፉ ሞዴል ጥራያት ኣሉ፡፡ ኩሉ ሰነድ ብእያኡ ዝምለስ ካብ መደብ ኣኽሊ ይስደዶ፣ ብዝተሸጋገሩ ቶከኖች ይዕብዩ፡፡ ቅድሚ tracking ዝተጀመረ ዘሎ ኣኽሊ ኣይተልአኹን፡፡ መለምዓት ኣይኮነን፡፡",
+      "actions": {
+        "translate": "ትርጉም",
+        "analysis": "ምሉእ መርመራ ምንጪ",
+        "review": "እተቐየሩ ንዕይታታት",
+        "write": "መጻእን",
+        "revise": "ምትካላላይ",
+        "profile": "መግለጺ ሰነድ",
+        "assess": "ጥራይ ግምገማ",
+        "extract": "ምእዋጋ",
+        "transform": "ምቅያር",
+        "photo": "ምእዋጋ ፎቶ",
+        "map_edit": "ምቕያር ካርታ",
+        "rail_chat": "ተወያይ"
+      },
+      "estimate": "~{passes} መቐየሪ ግዜ · ~{grams} ግራም CO₂e",
+      "estimateTooltip": "እዚ ምልክት ግምት ብፍናይ ምህዳስ ቀዳም ከኣ, ካብ ርዝመት ቅድሚ ጽሑፍ፣ ዝመረፀሉ መደበርን እንታይ ያህል ምምደብ እተመርጾ ቅንጺታት ዝገበረሉ። (assumptions v{version})። ክሳብ ናይ ሓዳስ መቐየሪ ግዜ ምስምደብ ገና ቅድመ ጽሑፉ ይእክበረ። ዋና ውጽኢቱ ክንደይ ይገልጹ ዝበለ ድማ ደሓስ ምምደብ ውሽጢ ይመጽእ።",
+      "estimateAtMost": "ክበል ዝኾነ ~{passes} መቐየሪ ግዜ · ~{grams} ግራም CO₂e"
     }
   },
   "table": {
@@ -5563,7 +5625,8 @@
       "limitReached": "ውድብ ተበግደሉ",
       "familyLimitReached": "ውድብ ሞዴል ቤተሰብ ተበግደሉ",
       "usageUnavailable": "ኩነታት ተጠቓሚ ምስ ምክትታል ከምዘይተጻወተ — ውድብ ብብሉይ ምስዚ ተርእዩ።",
-      "familyRow": "{family} ሞዴልታት"
+      "familyRow": "{family} ሞዴልታት",
+      "usedByWorkflows": "ካብዚ ዝተጠቐመ {used} ካብ ውሉፍ ስራሕ እዩ"
     },
     "routes": {
       "ttsExhausted": "ውድብ ድሓን ወደ ድብደባ ለውጢ ሎሚ ተጠቒሙ።",

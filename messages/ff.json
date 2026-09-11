@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} soowdi e ɓurndi Azure e EU; hitaande e mo on mbaawi ngon."
     },
     "version": {
-      "label": "Ndogu"
+      "label": "Ndogu",
+      "showOlder": "Hollu ɓeen ɓurnde ({count})",
+      "hideOlder": "Fottu ɓeen ɓurnde"
     },
     "reasoningModel": "Moodel jajjannde: njaaja sikke-jeye e wowli. Hemɓude, ammbita mo haala gollu ɗiɗi.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Lewru jooɗiiɗo",
       "freshness_any": "Hitaande kala",
       "hint": "Auto ena heddii goɗɗo laatan waawde waawnde mum (misal, jaɓɓorgo tabital dongila lewru), tee gese holli ka moƴƴude baɗte to gese mum."
+    },
+    "subVariant": {
+      "label": "Jummorde"
     }
   },
   "models": {
@@ -2574,7 +2579,9 @@
     "chipHiddenHint": "Chip on mballu so wonaa refti. Jaaɓnirgal balɗe hokka ko e hello ngo.",
     "chipAutoHideLabel": "Sakkito ngam",
     "chipAutoHideUnit": "hawndu",
-    "chipAutoHideHint": "He {min} e {max} hawndu."
+    "chipAutoHideHint": "He {min} e {max} hawndu.",
+    "byWorkflow": "Fayde workflow",
+    "byWorkflowNote": "Kofal e ton ndiyam sabu, golli e hoore mum — min njaha suudu use. Wanneeji grant ndiyam koo e ngeemnde organisation maa e tawa e token, ngal kawtal ngol wawan caaɗaani."
   },
   "extraction": {
     "toggleLabel": "Fowndo ɗiɗi e jamfa",
@@ -2808,7 +2815,17 @@
       "guides": "Gidooji ngesaaji jaɓɓorgo",
       "organizationTerminology": "Luggii jaɓɓorgo",
       "noOrganizationTerminology": "Luggii jaɓɓorgo alaa",
-      "terminologyGuideUnavailable": "Gido alaa"
+      "terminologyGuideUnavailable": "Gido alaa",
+      "editingPendingHint": "{count} gollal ndiyam — wonaa laatnude so tawii ina defteede, tee so a deftee kesum, gollal ngol mbaydi.",
+      "editingPendingHintOne": "Gollal ndiyam 1 — wonaa laatnude so tawii ina defteede, tee so a deftee, gollal ngol mbaydi.",
+      "overwriteEditTitle": "Defteede fiilan gollal",
+      "overwriteEditMessage": "Ndaɗo on gollal ndiyam. So a deftee, gollal ngol mbaydi — ina waawni e “mbaydi” e lenyol caɗeele, tee aɗa waawi neɗɗa. Ndaɗo ɗiɗi kala bana gollal waawi defteede so lenyol caɗeele uddita. Wonaa waawi laawol nbawtora e jogorɗe.",
+      "overwriteEditConfirmOne": "Mbaydi gollal ngol tee jokkondir yam defte",
+      "overwriteEditConfirmMany": "Mbaydi {count} gollal tee jokkondir yam defte",
+      "suggestionDroppedOne": "Gollal ngol mbaydi — a deftee ndaɗo makko.",
+      "suggestionDroppedMany": "{count} gollal mbaydi — a deftee ndaɗo makko.",
+      "pendingRunActionTranslate": "Ina tuɓɓitere e yimɓe",
+      "pendingRunActionAssess": "Ina rewisira"
     },
     "document": {
       "emptyTitle": "Winndu lan binndi dannde maa",
@@ -2956,7 +2973,15 @@
       "criterionRubricTooLong": "Rubric on ko {over} ɓirtaari ɓuri doole. Ko ɗum feewi waɗude e caɗeele kala, kono ɗum waawi so tawtii e dow laabi.",
       "guides": "Gidooji ngesaaji jaɓɓorgo",
       "guidesOptgroup": "Gidooji ngesaaji jaɓɓorgo",
-      "guideUnavailable": "Gido alaa"
+      "guideUnavailable": "Gido alaa",
+      "overwriteEditTitle": "Defteede fiilan gollal",
+      "overwriteEditMessage": "Ndaɗo on gollal ndiyam. So a deftee, gollal ngol mbaydi — ina waawni e “mbaydi” e lenyol caɗeele, tee aɗa waawi neɗɗa. Ndaɗo ɗiɗi kala bana gollal waawi defteede so lenyol caɗeele uddita. Wonaa waawi laawol nbawtora e jogorɗe.",
+      "overwriteEditConfirmOne": "Mbaydi gollal ngol tee defte",
+      "overwriteEditConfirmMany": "Mbaydi {count} gollal tee defte",
+      "suggestionDroppedOne": "Gollal ngol mbaydi — a deftee ndaɗo makko.",
+      "suggestionDroppedMany": "{count} gollal mbaydi — a deftee ndaɗo makko.",
+      "pendingRunActionRevise": "Ina defteende dokumint",
+      "pendingRunActionAssess": "Ina rewisira"
     },
     "data": {
       "emptyTitle": "Kilot data ngol analiseede",
@@ -3332,7 +3357,14 @@
       "guideSectionOptional": "majju jam",
       "guideSourceTerm": "Luggi nganndu",
       "guideTargetTerm": "Pularnde juulnde",
-      "guideNote": "Tilasta"
+      "guideNote": "Tilasta",
+      "pendingRun": {
+        "title": "{count} gollal ndiyam mbaydi",
+        "body": "{action} ina waawi waylita dee caɗeele doronto, e ndaɗo ɗiɗi feewi gollal maa a ene jogiima, tee rewisar makko bayyi lenyol ngol yimɓe. Fiññi e gollal mbaydi.",
+        "acceptAll": "Tawi gollal fow mbaydi",
+        "rejectAll": "Mbaydi fow",
+        "cancel": "Haay"
+      }
     }
   },
   "connectors": {
@@ -3533,6 +3565,36 @@
         "hidden": "Mballu"
       },
       "visibilityHint": "Auto on holli chip so tawii njoɓɗo rewtii walla so a woodi duunde ko. Aɗa waawi topptude ɗum kadi e Settings › Usage & Impact."
+    },
+    "workflow": {
+      "title": "Wormegol ngol (caggal ndaare)",
+      "workspace": "Wormegol ngol",
+      "currentArtifact": "Golle woni",
+      "lastRun": "Golle jeɗɗi",
+      "lastRunDetail": "{action} · {calls} wanneeje model",
+      "today": "Hannde",
+      "railChat": "Hattude ci wormegol ngol",
+      "byAction": "Fayde mataki",
+      "delta": "+{grams} g",
+      "ariaLabel": "Caggal ndaare carbon e wormegol ngol: {grams} gram CO₂ ɗaɗol. Holli fissagol.",
+      "disclaimer": "Caggal ndaare kalkan goɗɗe e ko ndiyam token ɓe hebi, ngol fayda laawol konkere e doggol makko v{version}. Golle goɗɗe nduɗɗi wanneeji model ɓe jaɓi, te ceede source foti nayi e kala goɗɗum, kadi ko ɗam 'prompt tokens' ndiyam. Golle ɗe ummo trakking ngam feewi waawa faaɓitaade. Ko caggal ndaare no waawi.",
+      "actions": {
+        "translate": "Tarjamol",
+        "analysis": "Ɓeydital ceertooje",
+        "review": "Jeere seŋo",
+        "write": "Windugol",
+        "revise": "Pulroogol",
+        "profile": "Ceertorɗe dokumeent",
+        "assess": "Sitirgol to bannge",
+        "extract": "Ɓurndugol",
+        "transform": "Waylugol",
+        "photo": "Ɓurndugol foto",
+        "map_edit": "Golle karte",
+        "rail_chat": "Hattude"
+      },
+      "estimate": "~{passes} gollal · ~{grams} g CO₂e",
+      "estimateTooltip": "Nana faaloral waylondiral jooɗnde ilo, jokkitorde dokkal yahii, ndimaande filmorde e haa e golle ɗii anndiraa (njonni v{version}). Ko gollal goo e miijiraa source, kono prompt tokens ɗaa njiyii. Njoɓdi jonii njaɓnii nder goonga jooɗnde.",
+      "estimateAtMost": "no feewi ~{passes} gollal · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5563,7 +5625,8 @@
       "limitReached": "Teel toowti",
       "familyLimitReached": "Teel e mumtugol yimɓe model toowti",
       "usageUnavailable": "Condii junnii waawanii nelda — wondidi teel tan.",
-      "familyRow": "Model ɗe {family}"
+      "familyRow": "Model ɗe {family}",
+      "usedByWorkflows": "nga {used} e gollal"
     },
     "routes": {
       "ttsExhausted": "A toowti teel Text-to-Speech maa e ñalngu.",

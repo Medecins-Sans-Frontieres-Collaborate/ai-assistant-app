@@ -1461,7 +1461,9 @@
       "euOnlyNote": "{name} imeshikiliwa katika eneo la Azure la EU; mazungumzo nayo yanachakatwa huko."
     },
     "version": {
-      "label": "Toleo"
+      "label": "Toleo",
+      "showOlder": "Onyesha za zamani ({count})",
+      "hideOlder": "Ficha za zamani"
     },
     "reasoningModel": "Modeli ya hoja: hufikiri hatua kwa hatua kabla ya kujibu. Polepole, bora zaidi kwenye masuala magumu.",
     "variant": {
@@ -1492,6 +1494,9 @@
       "freshness_month": "Mwezi uliopita",
       "freshness_any": "Wakati wowote",
       "hint": "Chaguo la Auto huacha kila swali lichague ukaribu wake (mfano, habari hutumia siku iliyopita), na maswali ya utafiti yanaweza kutumia vyanzo vingi kuliko kiwango cha kawaida."
+    },
+    "subVariant": {
+      "label": "Ukubwa"
     }
   },
   "models": {
@@ -2590,7 +2595,9 @@
     "chipHiddenHint": "Chipu haiwezi kuonekana. Jumla bado inafuatiliwa na itaonekana kwenye ukurasa huu.",
     "chipAutoHideLabel": "Fifisha baada ya",
     "chipAutoHideUnit": "sekunde",
-    "chipAutoHideHint": "Kati ya {min} na {max} sekunde."
+    "chipAutoHideHint": "Kati ya {min} na {max} sekunde.",
+    "byWorkflow": "Kwa mpangilio wa kazi",
+    "byWorkflowNote": "Sehemu ya jumla hapo juu, inaonyeshwa kando — si matumizi ya ziada. Utekelezaji wa ruzuku unahesabiwa kwenye taarifa ya shirika lako na bajeti yako ya tokeni, lakini si kwenye jumla hii ya hapa."
   },
   "extraction": {
     "toggleLabel": "Dondoa data iliyo na muundo",
@@ -2824,7 +2831,17 @@
       "guides": "Mwongozo wa shirika",
       "organizationTerminology": "Tafsiri za shirika",
       "noOrganizationTerminology": "Hakuna tafsiri za shirika",
-      "terminologyGuideUnavailable": "Mwongozo haupatikani"
+      "terminologyGuideUnavailable": "Mwongozo haupatikani",
+      "editingPendingHint": "Pendekezo {count} bado halijashughulikiwa — halitaonekana ukiwa unahariri, na ukiandika juu yake linapotea.",
+      "editingPendingHintOne": "Pendekezo 1 bado halijashughulikiwa — haliitaonekana ukiwa unahariri, na ukiandika juu yake linapotea.",
+      "overwriteEditTitle": "Unahariri sehemu iliyopendekezwa",
+      "overwriteEditMessage": "Maandishi haya yana pendekezo linalosubiri. Ukiyahariri, pendekezo litaondolewa — litawekwa kwenye orodha ya 'halijatumika', ambapo bado unaweza kutengua hilo. Maandishi nje ya mapendekezo yanaweza kuhaririwa kwa uhuru wakati uhakiki umefunguliwa. Hutoulizwa tena.",
+      "overwriteEditConfirmOne": "Ondoa pendekezo na niache mabadiliko yangu",
+      "overwriteEditConfirmMany": "Ondoa mapendekezo {count} na niache mabadiliko yangu",
+      "suggestionDroppedOne": "Pendekezo limeondolewa — umehariri sehemu yake.",
+      "suggestionDroppedMany": "Mapendekezo {count} yameondolewa — umehariri sehemu zake.",
+      "pendingRunActionTranslate": "Inatafsiri tena",
+      "pendingRunActionAssess": "Inapitia upya"
     },
     "document": {
       "emptyTitle": "Eleza unachohitaji kwenye hati",
@@ -2972,7 +2989,15 @@
       "criterionRubricTooLong": "Rubric hii imezidi herufi {over} kuliko kikomo. Hutumwa na kila tathmini, hivyo lazima ipunguzwe kabla ya kutumia kigezo hiki.",
       "guides": "Mwongozo wa shirika",
       "guidesOptgroup": "Mwongozo wa shirika",
-      "guideUnavailable": "Mwongozo haupatikani"
+      "guideUnavailable": "Mwongozo haupatikani",
+      "overwriteEditTitle": "Unahariri sehemu iliyopendekezwa",
+      "overwriteEditMessage": "Maandishi haya yana pendekezo linalosubiri. Ukiyahariri, pendekezo litaondolewa — litawekwa kwenye orodha ya 'halijatumika', ambapo bado unaweza kutengua hilo. Maandishi nje ya mapendekezo yanaweza kuhaririwa kwa uhuru wakati uhakiki umefunguliwa. Hutoulizwa tena.",
+      "overwriteEditConfirmOne": "Ondoa pendekezo na hariri",
+      "overwriteEditConfirmMany": "Ondoa mapendekezo {count} na hariri",
+      "suggestionDroppedOne": "Pendekezo limeondolewa — umehariri sehemu yake.",
+      "suggestionDroppedMany": "Mapendekezo {count} yameondolewa — umehariri sehemu zake.",
+      "pendingRunActionRevise": "Inafanyia hati marekebisho",
+      "pendingRunActionAssess": "Inapitia upya"
     },
     "data": {
       "emptyTitle": "Ingiza data ili kuchanganua",
@@ -3348,7 +3373,14 @@
       "guideSectionOptional": "hiari",
       "guideSourceTerm": "Neno asili",
       "guideTargetTerm": "Tafsiri inayohitajika",
-      "guideNote": "Tanbihi"
+      "guideNote": "Tanbihi",
+      "pendingRun": {
+        "title": "Mapendekezo {count} bado yanangoja",
+        "body": "{action} inaweza kubadilisha sehemu yoyote ya maandishi, ikijumuisha sehemu zenye mapendekezo ambayo bado hujafanya uamuzi, na tathmini mpya itachukua nafasi ya orodha ya sasa. Kamilisha mapendekezo yanayosalia kwanza.",
+        "acceptAll": "Kubali yote yaliyosalia",
+        "rejectAll": "Kataa yote",
+        "cancel": "Ghairi"
+      }
     }
   },
   "connectors": {
@@ -3549,6 +3581,36 @@
         "hidden": "Ficha"
       },
       "visibilityHint": "Otomatiki itaonyesha chipu wakati makadirio yanasasishwa au unapobonya juu yake. Badilisha hili tena kwenye Mipangilio › Matumizi & Athari."
+    },
+    "workflow": {
+      "title": "Sehemu hii ya kazi (kadirio)",
+      "workspace": "Sehemu hii ya kazi",
+      "currentArtifact": "Kazi ya sasa",
+      "lastRun": "Mara ya mwisho kutekelezwa",
+      "lastRunDetail": "{action} · {calls} miito ya modeli",
+      "today": "Leo",
+      "railChat": "Ongea kwenye sehemu hii ya kazi",
+      "byAction": "Kwa hatua",
+      "delta": "+{grams} g",
+      "ariaLabel": "Makadirio ya kiwango cha hewa ukaa sehemu hii ya kazi: gramu {grams} za CO₂ sawia. Onyesha mgawanyiko.",
+      "disclaimer": "Makadirio kwa kila utekelezaji kutoka kwa idadi ya tokeni zilizoripotiwa, yakitumia wastani na dhana zilizochapishwa v{version}. Utekelezaji mmoja ni miito kadhaa ya modeli, na chanzo kizima husafiri kila mara, hivyo tokeni za muulizo hutawala. Utekelezaji kabla ya ufuatiliaji hauhesabiwi. Hii si kipimo halisi.",
+      "actions": {
+        "translate": "Tafsiri",
+        "analysis": "Uchambuzi wa chanzo",
+        "review": "Mzunguko wa mapitio",
+        "write": "Uandishi",
+        "revise": "Marekebisho",
+        "profile": "Wasifu wa hati",
+        "assess": "Tathmini ya ubora",
+        "extract": "Uchimbaji",
+        "transform": "Badilisha",
+        "photo": "Uchimbaji wa picha",
+        "map_edit": "Sasisha ramani",
+        "rail_chat": "Ongea"
+      },
+      "estimate": "~{passes} mizunguko · ~{grams} g CO₂e",
+      "estimateTooltip": "Makadirio ya awali kwa mchakato huu kabla ya kuanza, kutokana na urefu wa chanzo, muundo uliochaguliwa na idadi ya mizunguko kwa mipangilio uliyochagua (dhana toleo la v{version}). Kila mzunguko hutuma chanzo upya, hivyo tokeni za mwanzoni ndizo kuu. Takwimu halisi zitaonekana baada ya kukamilika.",
+      "estimateAtMost": "hadi ~{passes} mizunguko · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5579,7 +5641,8 @@
       "limitReached": "Kiwango kimefikiwa",
       "familyLimitReached": "Kiwango cha familia ya mfano kimefikiwa",
       "usageUnavailable": "Matumizi ya sasa yameshindwa kupakiwa — zinaonesha vikomo pekee.",
-      "familyRow": "Modeli za {family}"
+      "familyRow": "Modeli za {family}",
+      "usedByWorkflows": "ambapo {used} imetumika kwenye michakato"
     },
     "routes": {
       "ttsExhausted": "Umefikia kikomo cha leo cha maandishi kwenda sauti.",

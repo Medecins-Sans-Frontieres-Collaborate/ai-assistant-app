@@ -25,6 +25,7 @@ import {
   resolveModelCells,
 } from '@/lib/services/limits/resolver';
 import { canPreviewMail } from '@/lib/services/limits/scopedVerdicts';
+import { SURFACE_CELL_SUFFIX } from '@/lib/services/limits/tokenDebit';
 import { LimitEntry, LimitsPolicy } from '@/lib/services/limits/types';
 import { UsageCell, lookupUsage } from '@/lib/services/limits/usageLookup';
 import { readUsage } from '@/lib/services/limits/usageStore';
@@ -178,6 +179,14 @@ interface MeLimit {
   used?: number;
   remaining?: number;
   resetAt?: string;
+  /**
+   * Of `used`, how much came from conversation workflows rather than chat —
+   * read from the shadow counter the debit writes alongside the real cell
+   * (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b). Absent when nothing did, so the
+   * UI shows the split only when there IS one. Never gates anything: the cap
+   * applies to `used` as a whole.
+   */
+  usedByWorkflows?: number;
 }
 
 /** Hard cap on `models=`; a bad client must not make the server resolve thousands of cells. */
@@ -373,12 +382,15 @@ function attachUsage(
     if (!ledger) return row;
     if (getLimitDefinition(row.limitKey)?.perModel) return row;
     const value = row.value as number;
-    const used = usage[ledger][counterCellName(row)] ?? 0;
+    const cell = counterCellName(row);
+    const used = usage[ledger][cell] ?? 0;
+    const byWorkflows = usage[ledger][`${cell}${SURFACE_CELL_SUFFIX}`] ?? 0;
     const at = resetAt(ledger, timezone);
     return {
       ...row,
       used,
       remaining: Math.max(0, value - used),
+      ...(byWorkflows > 0 ? { usedByWorkflows: byWorkflows } : {}),
       ...(at ? { resetAt: at } : {}),
     };
   });

@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} ana adana shi a yankin Azure na EU; ana sarrafa tattaunawa da shi a can."
     },
     "version": {
-      "label": "Sigar"
+      "label": "Sigar",
+      "showOlder": "Nuna tsofaffi ({count})",
+      "hideOlder": "Boye tsofaffi"
     },
     "reasoningModel": "Samfurin tunani: yana amfani da tsarin mataki-mataki kafin amsa. Yana da jinkiri, amma yafi dacewa da matsaloli masu wahala.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Watan da ya gabata",
       "freshness_any": "Kowane lokaci",
       "hint": "Auto yana bari kowace tambaya ta daidaita lokacinta (misali, labarai suna fi so rana daya ta gabata), kuma tambayoyin bincike na iya amfani da ƙarin tushe fiye da tsoho."
+    },
+    "subVariant": {
+      "label": "Girma"
     }
   },
   "models": {
@@ -2574,7 +2579,9 @@
     "chipHiddenHint": "Gunkin ba zai bayyana ba. Za a ci gaba da lissafa jimlolin kuma zai bayyana a wannan shafi.",
     "chipAutoHideLabel": "Ya ɓace bayan",
     "chipAutoHideUnit": "daƙiƙu",
-    "chipAutoHideHint": "Tsakanin {min} da {max} daƙiƙu."
+    "chipAutoHideHint": "Tsakanin {min} da {max} daƙiƙu.",
+    "byWorkflow": "Ta tsarin aiki",
+    "byWorkflowNote": "Sashe ne daga jimillar da ke sama, an nuna daban—ba ƙarin amfani ba. Ana kirga gudun tallafi cikin rahoton kungiyarku da kasafin lambobinku, amma ba a kirga shi a wannan jimillar ta gida ba."
   },
   "extraction": {
     "toggleLabel": "Ciro bayani tsari",
@@ -2808,7 +2815,17 @@
       "guides": "Jagororin ƙungiya",
       "organizationTerminology": "Kamusin ƙungiya",
       "noOrganizationTerminology": "Babu kamusin ƙungiya",
-      "terminologyGuideUnavailable": "Jagora bai samuwa ba"
+      "terminologyGuideUnavailable": "Jagora bai samuwa ba",
+      "editingPendingHint": "Akwai shawarwari {count} da ke jiran dubawa — ba a nuna su yayin gyarawa, kuma yin rubutu a kansu yana cire su.",
+      "editingPendingHintOne": "Akwai shawara 1 da ke jiran dubawa — ba a nuna ta yayin gyarawa, kuma yin rubutu a kanta yana cire ta.",
+      "overwriteEditTitle": "Ana gyara wani sashi da aka ba da shawara",
+      "overwriteEditMessage": "Wannan rubutu yana da shawara da ba a amince da ita ba. Yin gyara zai cire shawarar — za ta koma \"ba a aiwatar ba\" a jerin dubawa, inda za ka iya komawa baya idan kana so. Za a iya gyaggyara rubutu da ke waje da shawara yadda kake so yayin da dubawa ke bude. Ba za a sake tambayarka ba.",
+      "overwriteEditConfirmOne": "Cire shawarar, a bar canjin da na yi",
+      "overwriteEditConfirmMany": "Cire shawarrwari {count}, a bar canjin da na yi",
+      "suggestionDroppedOne": "An cire shawara — ka gyara sashe nata.",
+      "suggestionDroppedMany": "An cire shawarrwari {count} — ka gyara sassan su.",
+      "pendingRunActionTranslate": "Sake fassara",
+      "pendingRunActionAssess": "Sake tantancewa"
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",
@@ -2956,7 +2973,15 @@
       "criterionRubricTooLong": "Wannan rubutun ya kai {over} haruffa fiye da iyaka. Ana aikawa da shi a kowane kimantawa, don haka dole a rage shi kafin a iya amfani da wannan mizanin.",
       "guides": "Jagororin ƙungiya",
       "guidesOptgroup": "Jagororin ƙungiya",
-      "guideUnavailable": "Jagora bai samuwa ba"
+      "guideUnavailable": "Jagora bai samuwa ba",
+      "overwriteEditTitle": "Ana gyara wani sashi da aka ba da shawara",
+      "overwriteEditMessage": "Wannan rubutu yana da shawara da ba a amince da ita ba. Yin gyara zai cire shawarar — za ta koma \"ba a aiwatar ba\" a jerin dubawa, inda har yanzu za ka iya komawa baya. Za a iya gyaggyara rubutu da ke waje da shawara yadda kake so yayin da dubawa ke bude. Ba za a sake tambayarka ba.",
+      "overwriteEditConfirmOne": "Cire shawarar, a yi gyara",
+      "overwriteEditConfirmMany": "Cire shawarrwari {count}, a yi gyara",
+      "suggestionDroppedOne": "An cire shawara — ka gyara sashe nata.",
+      "suggestionDroppedMany": "An cire shawarrwari {count} — ka gyara sassan su.",
+      "pendingRunActionRevise": "Ana sake gyara takarda",
+      "pendingRunActionAssess": "Sake tantancewa"
     },
     "data": {
       "emptyTitle": "Shigo da bayanai don nazari",
@@ -3332,7 +3357,14 @@
       "guideSectionOptional": "zaɓi",
       "guideSourceTerm": "Kalmar asali",
       "guideTargetTerm": "Fassarar da ake buƙata",
-      "guideNote": "Lura"
+      "guideNote": "Lura",
+      "pendingRun": {
+        "title": "Akwai shawarwari {count} da ke jiran dubawa",
+        "body": "{action} na iya sauya kowanne bangare na rubutu, ciki har da sassan da ke da shawarwari da ba ka yanke hukunci ba tukuna, kuma sabon tantancewa zai maye gurbin jerin yanzu. Ka yanke shawarar saura da farko.",
+        "acceptAll": "Amince da duk saura",
+        "rejectAll": "Ki duk",
+        "cancel": "Soke"
+      }
     }
   },
   "connectors": {
@@ -3533,6 +3565,36 @@
         "hidden": "Boye"
       },
       "visibilityHint": "Ta atomatik zai nuna gunkin idan an sabunta hasashe ko ka matsa sama da shi. Za ka iya canza wannan daga Saituna › Amfani & Tasiri."
+    },
+    "workflow": {
+      "title": "Wannan wurin aiki (kimantawa)",
+      "workspace": "Wannan wurin aiki",
+      "currentArtifact": "Aikin yanzu",
+      "lastRun": "Gudun karshe",
+      "lastRunDetail": "{action} · {calls} kira na samfur",
+      "today": "Yau",
+      "railChat": "Tattaunawa a wannan wurin aiki",
+      "byAction": "Ta mataki",
+      "delta": "+{grams} g",
+      "ariaLabel": "Kimantaccen sawun carbon na wannan wurin aiki: {grams} gram na CO₂ kwatankwacin. Nuna rarrabawa.",
+      "disclaimer": "Kimantawa na kowane gudu daga yawan alamar da aka ruwaito, ta amfani da matsakaici da hasashe da aka wallafa v{version}. Gudun guda yana dauke da kiran samfur da dama, kuma dukkan asali yana tafiya tare da kowanne, don haka lambobin tambaya sun fi yawa. Gudun da aka yi kafin fara sa ido ba a kirga su. Ba auna ne ba.",
+      "actions": {
+        "translate": "Fassara",
+        "analysis": "Binciken asali",
+        "review": "Zagaye na duba",
+        "write": "Rubutu",
+        "revise": "Gyara",
+        "profile": "Bayanan takarda",
+        "assess": "Kimanta inganci",
+        "extract": "Fitarwa",
+        "transform": "Sauyawa",
+        "photo": "Fitar da hoto",
+        "map_edit": "Sabunta taswira",
+        "rail_chat": "Tattaunawa"
+      },
+      "estimate": "~{passes} zagaye · ~{grams} g CO₂e",
+      "estimateTooltip": "Kimantawa mai sauki na wannan aikin kafin a fara, daga tsawon tushen, samfurin da aka zaɓa da yawan zagaye da saitunan suka haifar (hasashe v{version}). Kowanne zagaye yana aika tushen, don haka adadin prompt tokens yana rinjaya. Adadin daidai zai bayyana bayan an gama aikin.",
+      "estimateAtMost": "zuwa ~{passes} zagaye · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5563,7 +5625,8 @@
       "limitReached": "An kai iyaka",
       "familyLimitReached": "An kai iyakar dangin samfur",
       "usageUnavailable": "An kasa ɗauko adadin amfani na yanzu — ana nuna iyaka kawai.",
-      "familyRow": "Samfuran {family}"
+      "familyRow": "Samfuran {family}",
+      "usedByWorkflows": "ciki har da {used} daga ayyuka"
     },
     "routes": {
       "ttsExhausted": "Ka riga ka kai iyakar amfani da text-to-speech na yau.",

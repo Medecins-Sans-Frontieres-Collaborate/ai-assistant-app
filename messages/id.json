@@ -1552,7 +1552,9 @@
       "euOnlyNote": "{name} dihosting di wilayah Azure Uni Eropa; percakapan dengannya diproses di sana."
     },
     "version": {
-      "label": "Versi"
+      "label": "Versi",
+      "showOlder": "Tampilkan yang lebih lama ({count})",
+      "hideOlder": "Sembunyikan yang lebih lama"
     },
     "reasoningModel": "Model penalaran: berpikir langkah demi langkah sebelum menjawab. Lebih lambat, namun lebih baik untuk masalah yang sulit.",
     "variant": {
@@ -1583,6 +1585,9 @@
       "freshness_month": "Sebulan terakhir",
       "freshness_any": "Kapan saja",
       "hint": "Otomatis memungkinkan setiap pertanyaan menentukan masa berlaku sendiri (misalnya berita memilih hari terakhir), dan pertanyaan bergaya riset dapat menggunakan lebih banyak sumber daripada standar."
+    },
+    "subVariant": {
+      "label": "Ukuran"
     }
   },
   "models": {
@@ -2590,7 +2595,9 @@
     "chipHiddenHint": "Chip tidak pernah ditampilkan. Total tetap dicatat dan muncul di halaman ini.",
     "chipAutoHideLabel": "Menghilang setelah",
     "chipAutoHideUnit": "detik",
-    "chipAutoHideHint": "Antara {min} dan {max} detik."
+    "chipAutoHideHint": "Antara {min} dan {max} detik.",
+    "byWorkflow": "Menurut alur kerja",
+    "byWorkflowNote": "Bagian dari total di atas, ditampilkan terpisah — bukan penggunaan tambahan. Jalankan grant dihitung dalam pelaporan organisasi dan anggaran token Anda, namun tidak termasuk dalam total lokal ini."
   },
   "extraction": {
     "toggleLabel": "Ekstrak data terstruktur",
@@ -2824,7 +2831,17 @@
       "guides": "Panduan organisasi",
       "organizationTerminology": "Terminologi organisasi",
       "noOrganizationTerminology": "Tidak ada terminologi organisasi",
-      "terminologyGuideUnavailable": "Panduan tidak tersedia"
+      "terminologyGuideUnavailable": "Panduan tidak tersedia",
+      "editingPendingHint": "{count} saran tertunda — tidak ditandai saat mengedit, dan menimpa dengan mengetik akan menghapusnya.",
+      "editingPendingHintOne": "1 saran tertunda — tidak ditandai saat mengedit, dan menimpa dengan mengetik akan menghapusnya.",
+      "overwriteEditTitle": "Mengedit bagian yang disarankan",
+      "overwriteEditMessage": "Teks ini memiliki saran yang tertunda. Mengeditnya akan menghapus saran tersebut — saran akan dipindahkan ke daftar review sebagai “tidak diterapkan”, dan Anda masih dapat membatalkannya. Teks di luar saran dapat diedit bebas selama review berlangsung. Anda tidak akan diminta konfirmasi lagi.",
+      "overwriteEditConfirmOne": "Hapus saran dan simpan perubahan saya",
+      "overwriteEditConfirmMany": "Hapus {count} saran dan simpan perubahan saya",
+      "suggestionDroppedOne": "Saran dihapus — Anda telah mengedit bagiannya.",
+      "suggestionDroppedMany": "{count} saran dihapus — Anda telah mengedit bagiannya.",
+      "pendingRunActionTranslate": "Menerjemahkan ulang",
+      "pendingRunActionAssess": "Menilai ulang"
     },
     "document": {
       "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",
@@ -2972,7 +2989,15 @@
       "criterionRubricTooLong": "Rubrik ini {over} karakter melebihi batas. Rubrik ini dikirim dengan setiap penilaian, sehingga harus dipangkas sebelum kriteria ini dapat digunakan.",
       "guides": "Panduan organisasi",
       "guidesOptgroup": "Panduan organisasi",
-      "guideUnavailable": "Panduan tidak tersedia"
+      "guideUnavailable": "Panduan tidak tersedia",
+      "overwriteEditTitle": "Mengedit bagian yang disarankan",
+      "overwriteEditMessage": "Teks ini memiliki saran yang tertunda. Mengeditnya akan menghapus saran tersebut — saran akan dipindahkan ke daftar review sebagai “tidak diterapkan”, dan Anda masih dapat membatalkannya. Teks di luar saran dapat diedit bebas selama review berlangsung. Anda tidak akan diminta konfirmasi lagi.",
+      "overwriteEditConfirmOne": "Hapus saran dan edit",
+      "overwriteEditConfirmMany": "Hapus {count} saran dan edit",
+      "suggestionDroppedOne": "Saran dihapus — Anda telah mengedit bagiannya.",
+      "suggestionDroppedMany": "{count} saran dihapus — Anda telah mengedit bagiannya.",
+      "pendingRunActionRevise": "Merevisi dokumen",
+      "pendingRunActionAssess": "Menilai ulang"
     },
     "data": {
       "emptyTitle": "Impor data untuk dianalisis",
@@ -3348,7 +3373,14 @@
       "guideSectionOptional": "opsional",
       "guideSourceTerm": "Istilah sumber",
       "guideTargetTerm": "Terjemahan wajib",
-      "guideNote": "Catatan"
+      "guideNote": "Catatan",
+      "pendingRun": {
+        "title": "{count} saran masih tertunda",
+        "body": "{action} dapat mengubah bagian mana pun dari teks, termasuk bagian yang memiliki saran yang belum Anda putuskan, dan penilaian baru akan menggantikan daftar saat ini. Selesaikan sisa saran terlebih dahulu.",
+        "acceptAll": "Terima semua sisa",
+        "rejectAll": "Tolak semua",
+        "cancel": "Batal"
+      }
     }
   },
   "connectors": {
@@ -3549,6 +3581,36 @@
         "hidden": "Sembunyikan"
       },
       "visibilityHint": "Otomatis akan menampilkan chip saat estimasi diperbarui atau saat Anda mengarahkan kursor. Ubah pengaturan ini kembali di Pengaturan › Penggunaan & Dampak."
+    },
+    "workflow": {
+      "title": "Workspace ini (perkiraan)",
+      "workspace": "Workspace ini",
+      "currentArtifact": "Pekerjaan saat ini",
+      "lastRun": "Jalankan terakhir",
+      "lastRunDetail": "{action} · {calls} panggilan model",
+      "today": "Hari ini",
+      "railChat": "Chat di workspace ini",
+      "byAction": "Berdasarkan langkah",
+      "delta": "+{grams} g",
+      "ariaLabel": "Perkiraan jejak karbon workspace ini: {grams} gram setara CO₂. Tampilkan rincian.",
+      "disclaimer": "Perkiraan per jalankan berdasarkan jumlah token yang dilaporkan, menggunakan rata-rata dan asumsi yang dipublikasikan v{version}. Satu jalankan terdiri dari beberapa panggilan model, dan seluruh sumber ikut setiap kali, sehingga token prompt mendominasi. Jalankan sebelum pelacakan dimulai tidak dihitung. Ini bukan pengukuran.",
+      "actions": {
+        "translate": "Terjemahan",
+        "analysis": "Analisis sumber",
+        "review": "Putaran tinjauan",
+        "write": "Penulisan",
+        "revise": "Revisi",
+        "profile": "Profil dokumen",
+        "assess": "Penilaian kualitas",
+        "extract": "Ekstraksi",
+        "transform": "Transformasi",
+        "photo": "Ekstraksi foto",
+        "map_edit": "Pembaruan peta",
+        "rail_chat": "Chat"
+      },
+      "estimate": "~{passes} putaran · ~{grams} g CO₂e",
+      "estimateTooltip": "Perkiraan kasar untuk proses ini sebelum dimulai, berdasarkan panjang sumber, model yang dipilih, dan berapa kali pengaturan yang dipilih melakukan putaran (asumsi v{version}). Setiap putaran mengirim ulang sumber, sehingga prompt token yang paling berpengaruh. Angka sebenarnya akan muncul setelah proses selesai.",
+      "estimateAtMost": "maksimal ~{passes} putaran · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5579,7 +5641,8 @@
       "limitReached": "Batas tercapai",
       "familyLimitReached": "Batas keluarga model tercapai",
       "usageUnavailable": "Penggunaan saat ini tidak dapat dimuat — hanya menampilkan batas.",
-      "familyRow": "Model {family}"
+      "familyRow": "Model {family}",
+      "usedByWorkflows": "sebanyak {used} dari alur kerja"
     },
     "routes": {
       "ttsExhausted": "Anda telah mencapai batas text-to-speech hari ini.",

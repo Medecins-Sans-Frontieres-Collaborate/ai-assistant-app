@@ -1458,7 +1458,9 @@
       "euOnlyNote": "{name} wird in der EU-Azure-Region gehostet; Unterhaltungen damit werden dort verarbeitet."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Ältere anzeigen ({count})",
+      "hideOlder": "Ältere ausblenden"
     },
     "reasoningModel": "Reasoning-Modell: denkt Schritt für Schritt vor der Antwort. Langsamer, besser bei schwierigen Aufgaben.",
     "variant": {
@@ -1489,6 +1491,9 @@
       "freshness_month": "Letzter Monat",
       "freshness_any": "Jederzeit",
       "hint": "Bei Automatisch legt jede Frage selbst die Aktualität fest (z.B. Nachrichten bevorzugen den letzten Tag), und wissenschaftliche Fragen können mehr Quellen als die Vorgabe nutzen."
+    },
+    "subVariant": {
+      "label": "Größe"
     }
   },
   "models": {
@@ -2590,7 +2595,9 @@
     "chipHiddenHint": "Der Chip wird nie angezeigt. Die Gesamtsummen werden weiterhin erfasst und auf dieser Seite angezeigt.",
     "chipAutoHideLabel": "Ausblenden nach",
     "chipAutoHideUnit": "Sekunden",
-    "chipAutoHideHint": "Zwischen {min} und {max} Sekunden."
+    "chipAutoHideHint": "Zwischen {min} und {max} Sekunden.",
+    "byWorkflow": "Nach Workflow",
+    "byWorkflowNote": "Teil der obigen Gesamtwerte, separat dargestellt – keine zusätzliche Nutzung. Grant-Durchläufe werden für das Reporting Ihrer Organisation und Ihr Token-Budget gezählt, aber nicht in dieser lokalen Summe."
   },
   "extraction": {
     "toggleLabel": "Strukturierte Daten extrahieren",
@@ -2824,7 +2831,17 @@
       "guides": "Organisationsleitfäden",
       "organizationTerminology": "Organisationsterminologie",
       "noOrganizationTerminology": "Keine Organisationsterminologie",
-      "terminologyGuideUnavailable": "Leitfaden nicht verfügbar"
+      "terminologyGuideUnavailable": "Leitfaden nicht verfügbar",
+      "editingPendingHint": "{count} Vorschläge offen — sie werden beim Bearbeiten nicht markiert, und beim Überschreiben wird ein Vorschlag verworfen.",
+      "editingPendingHintOne": "1 Vorschlag offen — er wird beim Bearbeiten nicht markiert, und beim Überschreiben wird der Vorschlag verworfen.",
+      "overwriteEditTitle": "Einen vorgeschlagenen Abschnitt bearbeiten",
+      "overwriteEditMessage": "Dieser Text enthält einen offenen Vorschlag. Wenn Sie ihn bearbeiten, wird der Vorschlag verworfen — er erscheint dann als „nicht übernommen“ in der Prüfliste, wo Sie das rückgängig machen können. Text außerhalb von Vorschlägen kann während einer offenen Überprüfung frei bearbeitet werden. Diese Abfrage erscheint nicht erneut.",
+      "overwriteEditConfirmOne": "Vorschlag verwerfen und meine Änderung behalten",
+      "overwriteEditConfirmMany": "{count} Vorschläge verwerfen und meine Änderung behalten",
+      "suggestionDroppedOne": "Vorschlag verworfen — Sie haben den Abschnitt bearbeitet.",
+      "suggestionDroppedMany": "{count} Vorschläge verworfen — Sie haben die Abschnitte bearbeitet.",
+      "pendingRunActionTranslate": "Erneut übersetzen",
+      "pendingRunActionAssess": "Erneut beurteilen"
     },
     "document": {
       "emptyTitle": "Beschreiben Sie das gewünschte Dokument",
@@ -2972,7 +2989,15 @@
       "criterionRubricTooLong": "Diese Rubrik überschreitet das Limit um {over} Zeichen. Sie wird bei jeder Bewertung gesendet und muss daher gekürzt werden, bevor dieses Kriterium verwendet werden kann.",
       "guides": "Organisationsleitfäden",
       "guidesOptgroup": "Organisationsleitfäden",
-      "guideUnavailable": "Leitfaden nicht verfügbar"
+      "guideUnavailable": "Leitfaden nicht verfügbar",
+      "overwriteEditTitle": "Einen vorgeschlagenen Abschnitt bearbeiten",
+      "overwriteEditMessage": "Dieser Text enthält einen offenen Vorschlag. Wenn Sie ihn bearbeiten, wird der Vorschlag verworfen — er erscheint dann als „nicht übernommen“ in der Prüfliste, wo Sie das rückgängig machen können. Text außerhalb von Vorschlägen kann während einer offenen Überprüfung frei bearbeitet werden. Diese Abfrage erscheint nicht erneut.",
+      "overwriteEditConfirmOne": "Vorschlag verwerfen und bearbeiten",
+      "overwriteEditConfirmMany": "{count} Vorschläge verwerfen und bearbeiten",
+      "suggestionDroppedOne": "Vorschlag verworfen — Sie haben den Abschnitt bearbeitet.",
+      "suggestionDroppedMany": "{count} Vorschläge verworfen — Sie haben die Abschnitte bearbeitet.",
+      "pendingRunActionRevise": "Dokument überarbeiten",
+      "pendingRunActionAssess": "Erneut beurteilen"
     },
     "data": {
       "emptyTitle": "Daten zum Analysieren importieren",
@@ -3348,7 +3373,14 @@
       "guideSectionOptional": "optional",
       "guideSourceTerm": "Quellbegriff",
       "guideTargetTerm": "Erforderliche Übersetzung",
-      "guideNote": "Hinweis"
+      "guideNote": "Hinweis",
+      "pendingRun": {
+        "title": "{count} Vorschläge noch offen",
+        "body": "{action} kann jeden Teil des Textes ändern, auch Abschnitte mit offenen Vorschlägen, über die Sie noch nicht entschieden haben. Eine neue Beurteilung ersetzt die aktuelle Liste. Treffen Sie zuerst eine Entscheidung zu den verbleibenden Vorschlägen.",
+        "acceptAll": "Alle verbleibenden übernehmen",
+        "rejectAll": "Alle ablehnen",
+        "cancel": "Abbrechen"
+      }
     }
   },
   "connectors": {
@@ -3549,6 +3581,36 @@
         "hidden": "Ausblenden"
       },
       "visibilityHint": "Automatisch zeigt den Chip an, wenn die Schätzung aktualisiert wird oder Sie mit der Maus darüber fahren. Dies kann in den Einstellungen › Nutzung & Auswirkungen erneut geändert werden."
+    },
+    "workflow": {
+      "title": "Dieser Arbeitsbereich (geschätzt)",
+      "workspace": "Dieser Arbeitsbereich",
+      "currentArtifact": "Aktuelle Arbeit",
+      "lastRun": "Letzter Durchlauf",
+      "lastRunDetail": "{action} · {calls} Modellaufrufe",
+      "today": "Heute",
+      "railChat": "Chat in diesem Arbeitsbereich",
+      "byAction": "Nach Schritt",
+      "delta": "+{grams} g",
+      "ariaLabel": "Geschätzter CO₂-Fußabdruck dieses Arbeitsbereichs: {grams} Gramm CO₂-Äquivalent. Aufschlüsselung anzeigen.",
+      "disclaimer": "Schätzungen pro Durchlauf basierend auf gemeldeten Token-Anzahlen, unter Verwendung veröffentlichter Mittelwerte und Annahmen v{version}. Ein Durchlauf umfasst mehrere Modellaufrufe; der gesamte Quelltext wird dabei jeweils mitgeschickt, daher dominieren Prompt-Token. Durchläufe vor Beginn der Nachverfolgung werden nicht gezählt. Keine exakte Messung.",
+      "actions": {
+        "translate": "Übersetzung",
+        "analysis": "Quellenanalyse",
+        "review": "Überprüfungsrunden",
+        "write": "Schreiben",
+        "revise": "Überarbeitung",
+        "profile": "Dokumentenprofil",
+        "assess": "Qualitätsbewertung",
+        "extract": "Extraktion",
+        "transform": "Umwandeln",
+        "photo": "Foto-Extraktion",
+        "map_edit": "Kartenaktualisierung",
+        "rail_chat": "Chat"
+      },
+      "estimate": "~{passes} Durchläufe · ~{grams} g CO₂e",
+      "estimateTooltip": "Grobe Schätzung für diesen Durchlauf vor dem Start, basierend auf der Länge der Quelle, dem ausgewählten Modell und der Anzahl der Durchläufe mit den gewählten Einstellungen (Annahmen v{version}). Jede Runde sendet die Quelle erneut, daher überwiegen Prompt-Tokens. Der tatsächliche Wert erscheint nach Abschluss des Durchlaufs.",
+      "estimateAtMost": "bis zu ~{passes} Durchläufe · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5579,7 +5641,8 @@
       "limitReached": "Limit erreicht",
       "familyLimitReached": "Modellfamilien-Limit erreicht",
       "usageUnavailable": "Aktueller Verbrauch konnte nicht geladen werden — es werden nur die Limits angezeigt.",
-      "familyRow": "{family}-Modelle"
+      "familyRow": "{family}-Modelle",
+      "usedByWorkflows": "davon {used} aus Workflows"
     },
     "routes": {
       "ttsExhausted": "Sie haben das heutige Text-zu-Sprache-Limit erreicht.",

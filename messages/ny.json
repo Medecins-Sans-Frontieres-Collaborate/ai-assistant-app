@@ -1617,7 +1617,9 @@
       "euOnlyNote": "{name} ili mu EU Azure region; kukambirana nako kumachitika kumeneko."
     },
     "version": {
-      "label": "Mtundu"
+      "label": "Mtundu",
+      "showOlder": "Onetsani zakale ({count})",
+      "hideOlder": "Bisani zakale"
     },
     "reasoningModel": "Mtundu wa reasoning: umaganizira sitepe ndi sitepe musanapereke yankho. Umachedwa, koma wabwino pa mavuto ovuta.",
     "variant": {
@@ -1648,6 +1650,9 @@
       "freshness_month": "Mwezi watha",
       "freshness_any": "Nthawi iliyonse",
       "hint": "Auto imalola funso lililonse kusankha nthawi yake (mwachitsanzo, nkhani amakonda tsiku la m'mbuyo), ndipo mafunso a kafukufuku angagwiritse ntchito magwero ambiri kuposa mmene zili mwachisawawa."
+    },
+    "subVariant": {
+      "label": "Kukula"
     }
   },
   "models": {
@@ -2574,7 +2579,9 @@
     "chipHiddenHint": "Chip siiwonetsedwa nthawi iliyonse. Komabe, chiwerengero chonse chikadalipo patsamba lino.",
     "chipAutoHideLabel": "Zimirira patapita",
     "chipAutoHideUnit": "masekondi",
-    "chipAutoHideHint": "Pakatikati pa {min} ndi {max} masekondi."
+    "chipAutoHideHint": "Pakatikati pa {min} ndi {max} masekondi.",
+    "byWorkflow": "Mwa njira yogwirira ntchito",
+    "byWorkflowNote": "Gawo la ndalama zomwe zili pamwambapa, zikusonyezedwa payekha — osati kugwiritsa ntchito kwina. Mayeso a Grants amawerengedwa ku lipoti la bungwe lanu komanso pa malire a token anu, koma osaphatikizidwa mu chiwerengero cha pano."
   },
   "extraction": {
     "toggleLabel": "Tengani deta yamakonzedwe",
@@ -2808,7 +2815,17 @@
       "guides": "Malangizo a bungwe",
       "organizationTerminology": "Matanthauzidwe a bungwe",
       "noOrganizationTerminology": "Palibe matanthauzidwe a bungwe",
-      "terminologyGuideUnavailable": "Malangizo kulibe"
+      "terminologyGuideUnavailable": "Malangizo kulibe",
+      "editingPendingHint": "Zingongole {count} zikadali zikuonera — sizizindikiridwa mukamakonza, ndipo kulemba pamwamba pake kumachotsa.",
+      "editingPendingHintOne": "Pali cholimbikitsa chimodzi chikadali — sichizindikiridwa mukamakonza, ndipo mukalemba pamwamba pake chimachotsedwa.",
+      "overwriteEditTitle": "Mukukonza ndime yomwe yakhazikitsidwa",
+      "overwriteEditMessage": "Lembo ili lili ndi cholimbikitsa chikadali. Mukalikonza, cholimbikitsacho chimachotsedwa — chimapita ku “sinasankhidwe” pa mndandanda wa kuunikira, komwe mutha kuzibwezeretsa. Malembo opanda malingaliro akhoza kukonzedwa momasuka review ikatseguka. Simudzafunsidwanso nthawi ina.",
+      "overwriteEditConfirmOne": "Chotsani cholimbikitsacho ndipo sungani zosintha zanga",
+      "overwriteEditConfirmMany": "Chotsani malingaliro {count} ndikusunga zosintha zanga",
+      "suggestionDroppedOne": "Cholimbikitsa chachotsedwa — mwasintha ndime yake.",
+      "suggestionDroppedMany": "Zolimbikitsa {count} zachotsedwa — mwasintha ndime zake.",
+      "pendingRunActionTranslate": "Kumasulira kachiwiri",
+      "pendingRunActionAssess": "Kuwunikanso"
     },
     "document": {
       "emptyTitle": "Fotokozani chikalata chomwe mukufuna",
@@ -2956,7 +2973,15 @@
       "criterionRubricTooLong": "Rubric iyi yapitilira malire ndi zilembo {over}. Amatumizidwa ndi chiweruzo chilichonse, choncho iyenera kuchepetsedwa musanagwiritse ntchito chikhalidwechi.",
       "guides": "Malangizo a bungwe",
       "guidesOptgroup": "Malangizo a bungwe",
-      "guideUnavailable": "Malangizo kulibe"
+      "guideUnavailable": "Malangizo kulibe",
+      "overwriteEditTitle": "Mukukonza ndime yomwe yakhazikitsidwa",
+      "overwriteEditMessage": "Lembo ili lili ndi cholimbikitsa chikadali. Mukalikonza, cholimbikitsacho chimachotsedwa — chimapita ku “sinasankhidwe” pa mndandanda wa kuunikira, komwe mutha kuzibwezeretsa. Malembo opanda malingaliro akhoza kukonzedwa momasuka review ikatseguka. Simudzafunsidwanso nthawi ina.",
+      "overwriteEditConfirmOne": "Chotsani cholimbikitsacho ndikusintha",
+      "overwriteEditConfirmMany": "Chotsani malingaliro {count} ndikusintha",
+      "suggestionDroppedOne": "Cholimbikitsa chachotsedwa — mwasintha ndime yake.",
+      "suggestionDroppedMany": "Zolimbikitsa {count} zachotsedwa — mwasintha ndime zake.",
+      "pendingRunActionRevise": "Kukonzanso chikalata",
+      "pendingRunActionAssess": "Kuwunikanso"
     },
     "data": {
       "emptyTitle": "Tengani deta kuti muyese",
@@ -3332,7 +3357,14 @@
       "guideSectionOptional": "ngati mukufuna",
       "guideSourceTerm": "Mawu oyambilira",
       "guideTargetTerm": "Kumasulira kofunikira",
-      "guideNote": "Zindikirani"
+      "guideNote": "Zindikirani",
+      "pendingRun": {
+        "title": "Zolimbikitsa {count} zikadali zikuonera",
+        "body": "{action} ikhoza kusintha gawo lililonse la lembo, kuphatikiza magawo okhala ndi malingaliro omwe simunasankhepo, ndipo kuwunikira kwatsopano kumasinthana ndi mndandanda wamakono. Sankhani kaye malingaliro otsalawo.",
+        "acceptAll": "Landirani zonse zotsalira",
+        "rejectAll": "Kana zonse",
+        "cancel": "Sinthani"
+      }
     }
   },
   "connectors": {
@@ -3533,6 +3565,36 @@
         "hidden": "Bisani"
       },
       "visibilityHint": "Auto imasonyeza chip ikangotuluka chiwerengero chatsopano kapena mukayika mbewa pa chip. Muthanso kusintha izi mu Zikhazikiko › Kugwiritsa ndi Zotsatira."
+    },
+    "workflow": {
+      "title": "Malo ogwirira ntchito awa (zowerengeka)",
+      "workspace": "Malo ogwirira ntchito awa",
+      "currentArtifact": "Ntchito yomwe ikuchitika",
+      "lastRun": "Nthawi yomaliza kuchita",
+      "lastRunDetail": "{action} · {calls} zitanthauzo za model",
+      "today": "Lero",
+      "railChat": "Kuyankhulana mu malo awa a ntchito",
+      "byAction": "Mwa sitepe",
+      "delta": "+{grams} g",
+      "ariaLabel": "Zowerengeka za mpweya wa carbon mu malo ogwirira ntchito awa: {grams} magalamu a CO₂ ofanana. Onetsani magawano.",
+      "disclaimer": "Ziwerengero pa aliyense chifukwa cha manambala a token omwe atanenedwa, pogwiritsa ntchito averejiyo zomwe zalembedwa ndi maganizo, mtundu wa {version}. Kachitidwe kamodzi kumatanthauza kuitana kwa model angapo, ndipo gwero lonse limapita pa chilichonse, choncho tokeni za prompt ndi zochuluka kwambiri. Zochitika zomwe zinachitika poyamba asanayambe kuwerenga sizikuphatikizidwa. Sizowerengera zenizeni.",
+      "actions": {
+        "translate": "Kumasulira",
+        "analysis": "Kusanthula gwero",
+        "review": "Kuwunika mobwerezabwereza",
+        "write": "Kulemba",
+        "revise": "Kukonzanso",
+        "profile": "Mbiri ya chikalata",
+        "assess": "Kuwunika bwino",
+        "extract": "Kutulutsa",
+        "transform": "Kusintha",
+        "photo": "Kutulutsa zithunzi",
+        "map_edit": "Kusintha mapu",
+        "rail_chat": "Kuyankhulana"
+      },
+      "estimate": "~{passes} zopitirira · ~{grams} g CO₂e",
+      "estimateTooltip": "Kuyerekezera kosavuta kumene kuyambira pa kutalika kwa choyambira, chitsanzo chosankhidwa komanso kuchuluka kwa zopitirira zomwe mawonekedwe asankha (kukhazikitsa v{version}). Zopitirira zonse zimatumizanso choyambira, choncho ma prompt tokens amakula kwambiri. Nambala yeniyeni iwoneka patatha kuthamanga.",
+      "estimateAtMost": "mpaka ~{passes} zopitirira · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5563,7 +5625,8 @@
       "limitReached": "Mwafika pa malire",
       "familyLimitReached": "Mwafika pa malire a banja la chitsanzo",
       "usageUnavailable": "Ntchito zapano sizingalowe - zikuwonetsa malire okha.",
-      "familyRow": "Zitsanzo za {family}"
+      "familyRow": "Zitsanzo za {family}",
+      "usedByWorkflows": "mwa izi {used} kuchokera kuma workflows"
     },
     "routes": {
       "ttsExhausted": "Mwafika pa malire a text-to-speech a lero.",

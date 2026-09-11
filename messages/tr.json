@@ -1461,7 +1461,9 @@
       "euOnlyNote": "{name}, AB Azure bölgesinde barındırılır; onunla yapılan konuşmalar orada işlenir."
     },
     "version": {
-      "label": "Sürüm"
+      "label": "Sürüm",
+      "showOlder": "Daha eskiyi göster ({count})",
+      "hideOlder": "Daha eskileri gizle"
     },
     "reasoningModel": "Muhakeme modeli: Yanıtlamadan önce adım adım düşünür. Daha yavaş, zor problemlerde daha iyi sonuç verir.",
     "variant": {
@@ -1492,6 +1494,9 @@
       "freshness_month": "Geçen ay",
       "freshness_any": "Herhangi bir zaman",
       "hint": "Otomatik ayar, her sorunun kendi güncelliğini belirlemesine olanak tanır (ör. haberler için geçen gün tercih edilir) ve araştırma tarzı sorular varsayılandan daha fazla kaynak kullanabilir."
+    },
+    "subVariant": {
+      "label": "Boyut"
     }
   },
   "models": {
@@ -2590,7 +2595,9 @@
     "chipHiddenHint": "Çip hiç gösterilmez. Toplamlar yine de takip edilip bu sayfada görünür.",
     "chipAutoHideLabel": "Sonrasında kaybol",
     "chipAutoHideUnit": "saniye",
-    "chipAutoHideHint": "{min} ile {max} saniye arasında."
+    "chipAutoHideHint": "{min} ile {max} saniye arasında.",
+    "byWorkflow": "İş akışına göre",
+    "byWorkflowNote": "Yukarıdaki toplamların bir parçası olup ayrıca gösterilir — ek kullanım değildir. Hibe çalışmalarınız kurumunuzun raporlamasına ve token bütçenize yansıtılır, ancak bu yerel toplamda sayılmaz."
   },
   "extraction": {
     "toggleLabel": "Yapılandırılmış veriyi çıkar",
@@ -2824,7 +2831,17 @@
       "guides": "Kurum rehberleri",
       "organizationTerminology": "Kurum terminolojisi",
       "noOrganizationTerminology": "Kurum terminolojisi yok",
-      "terminologyGuideUnavailable": "Rehber mevcut değil"
+      "terminologyGuideUnavailable": "Rehber mevcut değil",
+      "editingPendingHint": "{count} öneri beklemede — düzenleme sırasında işaretlenmezler ve üzerine yazdığınızda silinirler.",
+      "editingPendingHintOne": "1 öneri beklemede — düzenleme sırasında işaretlenmez ve üzerine yazarsanız silinir.",
+      "overwriteEditTitle": "Önerilen bir bölümü düzenliyorsunuz",
+      "overwriteEditMessage": "Bu metinde bekleyen bir öneri var. Düzenlediğinizde öneri silinir — inceleme listesindeki \"uygulanmadı\" bölümüne alınır ve hâlâ geri alabilirsiniz. İnceleme açıkken, öneri dışındaki metinleri serbestçe düzenleyebilirsiniz. Bu uyarı bir daha gösterilmeyecek.",
+      "overwriteEditConfirmOne": "Öneriyi sil ve değişikliğimi koru",
+      "overwriteEditConfirmMany": "{count} öneriyi sil ve değişikliğimi koru",
+      "suggestionDroppedOne": "Öneri silindi — ilgili bölümde değişiklik yaptınız.",
+      "suggestionDroppedMany": "{count} öneri silindi — ilgili bölümlerde değişiklik yaptınız.",
+      "pendingRunActionTranslate": "Tekrar çeviriliyor",
+      "pendingRunActionAssess": "Yeniden değerlendiriliyor"
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",
@@ -2972,7 +2989,15 @@
       "criterionRubricTooLong": "Bu rubrik, sınırı {over} karakter aşmaktadır. Her değerlendirme ile gönderildiği için, bu kriter kullanılmadan önce kısaltılmalıdır.",
       "guides": "Kurum rehberleri",
       "guidesOptgroup": "Kurum rehberleri",
-      "guideUnavailable": "Rehber mevcut değil"
+      "guideUnavailable": "Rehber mevcut değil",
+      "overwriteEditTitle": "Önerilen bir bölümü düzenliyorsunuz",
+      "overwriteEditMessage": "Bu metinde bekleyen bir öneri var. Düzenlediğinizde öneri silinir — inceleme listesindeki \"uygulanmadı\" bölümüne alınır ve hâlâ geri alabilirsiniz. İnceleme açıkken, öneri dışındaki metinleri serbestçe düzenleyebilirsiniz. Bu uyarı bir daha gösterilmeyecek.",
+      "overwriteEditConfirmOne": "Öneriyi sil ve düzenle",
+      "overwriteEditConfirmMany": "{count} öneriyi sil ve düzenle",
+      "suggestionDroppedOne": "Öneri silindi — ilgili bölümde değişiklik yaptınız.",
+      "suggestionDroppedMany": "{count} öneri silindi — ilgili bölümlerde değişiklik yaptınız.",
+      "pendingRunActionRevise": "Belge revize ediliyor",
+      "pendingRunActionAssess": "Yeniden değerlendiriliyor"
     },
     "data": {
       "emptyTitle": "Analiz için veri içe aktar",
@@ -3348,7 +3373,14 @@
       "guideSectionOptional": "isteğe bağlı",
       "guideSourceTerm": "Kaynak terim",
       "guideTargetTerm": "Gerekli çeviri",
-      "guideNote": "Not"
+      "guideNote": "Not",
+      "pendingRun": {
+        "title": "{count} öneri hâlâ beklemede",
+        "body": "{action}, daha karar vermediğiniz öneriler dahil metnin her bölümünü değiştirebilir ve yeni bir değerlendirme mevcut listeyi değiştirir. Kalan önerileri önce karara bağlayın.",
+        "acceptAll": "Tüm kalanları kabul et",
+        "rejectAll": "Tümünü reddet",
+        "cancel": "İptal et"
+      }
     }
   },
   "connectors": {
@@ -3549,6 +3581,36 @@
         "hidden": "Gizle"
       },
       "visibilityHint": "Otomatik, çip güncellendiğinde veya üzerine geldiğinizde gösterir. Bunu Ayarlar › Kullanım ve Etki bölümünden tekrar değiştirebilirsiniz."
+    },
+    "workflow": {
+      "title": "Bu çalışma alanı (tahmini)",
+      "workspace": "Bu çalışma alanı",
+      "currentArtifact": "Mevcut çalışma",
+      "lastRun": "Son çalışma",
+      "lastRunDetail": "{action} · {calls} model çağrısı",
+      "today": "Bugün",
+      "railChat": "Bu çalışma alanında sohbet",
+      "byAction": "Adıma göre",
+      "delta": "+{grams} g",
+      "ariaLabel": "Bu çalışma alanının tahmini karbon ayak izi: {grams} gram CO₂ eşdeğeri. Dağılımı göster.",
+      "disclaimer": "Çalışma başına tahminler, bildirilen token sayılarına ve yayımlanmış ortalamalar ile varsayımlara (v{version}) dayanır. Bir çalışma, birkaç model çağrısı içerir ve tüm kaynak her bir çağrıyla taşınır; bu nedenle prompt tokenları baskındır. Takip başlamadan önceki çalışmalar sayılmaz. Bir ölçüm değildir.",
+      "actions": {
+        "translate": "Çeviri",
+        "analysis": "Kaynak analizi",
+        "review": "Gözden geçirme turları",
+        "write": "Yazma",
+        "revise": "Revizyon",
+        "profile": "Doküman profili",
+        "assess": "Kalite değerlendirmesi",
+        "extract": "Çıkarma",
+        "transform": "Dönüştürme",
+        "photo": "Fotoğraf çıkarma",
+        "map_edit": "Harita güncelleme",
+        "rail_chat": "Sohbet"
+      },
+      "estimate": "~{passes} geçiş · ~{grams} g CO₂e",
+      "estimateTooltip": "Çalıştırma başlamadan önce, kaynak uzunluğu, seçilen model ve ayarların kaç kez çalıştığına göre yapılan kaba bir tahmindir (varsayımlar v{version}). Her geçiş kaynağı tekrar gönderir, bu nedenle prompt token'ları ağırlık kazanır. Gerçek değer, çalıştırma tamamlandıktan sonra görüntülenecektir.",
+      "estimateAtMost": "en fazla ~{passes} geçiş · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5579,7 +5641,8 @@
       "limitReached": "Limit doldu",
       "familyLimitReached": "Model ailesi limiti doldu",
       "usageUnavailable": "Mevcut kullanım yüklenemedi — yalnızca limitler gösteriliyor.",
-      "familyRow": "{family} modelleri"
+      "familyRow": "{family} modelleri",
+      "usedByWorkflows": "bunların {used} tanesi iş akışlarından"
     },
     "routes": {
       "ttsExhausted": "Bugünkü metinden sese çeviri limitinize ulaştınız.",

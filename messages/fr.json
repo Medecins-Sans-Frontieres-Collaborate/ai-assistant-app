@@ -1461,7 +1461,9 @@
       "euOnlyNote": "{name} est hébergé dans la région Azure de l’UE ; les conversations avec ce modèle y sont traitées."
     },
     "version": {
-      "label": "Version"
+      "label": "Version",
+      "showOlder": "Afficher les plus anciennes ({count})",
+      "hideOlder": "Masquer les plus anciennes"
     },
     "reasoningModel": "Modèle de raisonnement : réfléchit étape par étape avant de répondre. Plus lent, mais meilleur pour les problèmes complexes.",
     "variant": {
@@ -1492,6 +1494,9 @@
       "freshness_month": "Dernier mois",
       "freshness_any": "N'importe quand",
       "hint": "Le mode auto laisse chaque question définir sa propre actualité (par ex. les actualités privilégient le dernier jour), et les questions de type recherche peuvent utiliser plus de sources que la valeur par défaut."
+    },
+    "subVariant": {
+      "label": "Taille"
     }
   },
   "models": {
@@ -2590,7 +2595,9 @@
     "chipHiddenHint": "La pastille n’est jamais affichée. Les totaux restent suivis et s’affichent sur cette page.",
     "chipAutoHideLabel": "Disparaît après",
     "chipAutoHideUnit": "secondes",
-    "chipAutoHideHint": "Entre {min} et {max} secondes."
+    "chipAutoHideHint": "Entre {min} et {max} secondes.",
+    "byWorkflow": "Par flux de travail",
+    "byWorkflowNote": "Fait partie des totaux ci-dessus, affiché séparément — il ne s'agit pas d'une utilisation supplémentaire. Les exécutions de subventions sont comptées dans le reporting de votre organisation et dans votre budget de jetons, mais pas dans ce total local."
   },
   "extraction": {
     "toggleLabel": "Extraire des données structurées",
@@ -2824,7 +2831,17 @@
       "guides": "Guides de l'organisation",
       "organizationTerminology": "Terminologie de l'organisation",
       "noOrganizationTerminology": "Aucune terminologie de l'organisation",
-      "terminologyGuideUnavailable": "Guide non disponible"
+      "terminologyGuideUnavailable": "Guide non disponible",
+      "editingPendingHint": "{count} suggestions en attente — elles ne sont pas signalées pendant l’édition, et écrire dessus les supprime.",
+      "editingPendingHintOne": "1 suggestion en attente — elle n’est pas signalée pendant l’édition, et écrire dessus la supprime.",
+      "overwriteEditTitle": "Modification d’un passage suggéré",
+      "overwriteEditMessage": "Ce texte a une suggestion en attente. L’éditer supprime la suggestion — elle passe dans « non appliquées » dans la liste de révision, où vous pouvez toujours annuler. Les textes hors suggestion peuvent être modifiés librement pendant une révision. Vous ne serez plus averti.",
+      "overwriteEditConfirmOne": "Supprimer la suggestion et conserver ma modification",
+      "overwriteEditConfirmMany": "Supprimer {count} suggestions et conserver ma modification",
+      "suggestionDroppedOne": "Suggestion supprimée — vous avez modifié son passage.",
+      "suggestionDroppedMany": "{count} suggestions supprimées — vous avez modifié leurs passages.",
+      "pendingRunActionTranslate": "Nouvelle traduction en cours",
+      "pendingRunActionAssess": "Réévaluation en cours"
     },
     "document": {
       "emptyTitle": "Décrivez le document souhaité",
@@ -2972,7 +2989,15 @@
       "criterionRubricTooLong": "Ce critère dépasse de {over} caractères la limite autorisée. Il est envoyé avec chaque évaluation : il doit être raccourci avant de pouvoir être utilisé.",
       "guides": "Guides de l'organisation",
       "guidesOptgroup": "Guides de l'organisation",
-      "guideUnavailable": "Guide non disponible"
+      "guideUnavailable": "Guide non disponible",
+      "overwriteEditTitle": "Modification d’un passage suggéré",
+      "overwriteEditMessage": "Ce texte a une suggestion en attente. L’éditer supprime la suggestion — elle passe dans « non appliquées » dans la liste de révision, où vous pouvez toujours annuler. Les textes hors suggestion peuvent être modifiés librement pendant une révision. Vous ne serez plus averti.",
+      "overwriteEditConfirmOne": "Supprimer la suggestion et modifier",
+      "overwriteEditConfirmMany": "Supprimer {count} suggestions et modifier",
+      "suggestionDroppedOne": "Suggestion supprimée — vous avez modifié son passage.",
+      "suggestionDroppedMany": "{count} suggestions supprimées — vous avez modifié leurs passages.",
+      "pendingRunActionRevise": "Révision du document en cours",
+      "pendingRunActionAssess": "Réévaluation en cours"
     },
     "data": {
       "emptyTitle": "Importer des données à analyser",
@@ -3348,7 +3373,14 @@
       "guideSectionOptional": "optionnel",
       "guideSourceTerm": "Terme source",
       "guideTargetTerm": "Traduction requise",
-      "guideNote": "Note"
+      "guideNote": "Note",
+      "pendingRun": {
+        "title": "{count} suggestions encore en attente",
+        "body": "{action} peut modifier n’importe quelle partie du texte, y compris les passages avec des suggestions non décidées, et une nouvelle évaluation remplace la liste actuelle. Décidez des suggestions restantes d’abord.",
+        "acceptAll": "Tout accepter",
+        "rejectAll": "Tout rejeter",
+        "cancel": "Annuler"
+      }
     }
   },
   "connectors": {
@@ -3549,6 +3581,36 @@
         "hidden": "Masquer"
       },
       "visibilityHint": "Le mode automatique affiche la pastille lorsque l’estimation est mise à jour ou au survol. Vous pouvez modifier ce réglage dans Paramètres › Utilisation & Impact."
+    },
+    "workflow": {
+      "title": "Cet espace de travail (estimation)",
+      "workspace": "Cet espace de travail",
+      "currentArtifact": "Travail en cours",
+      "lastRun": "Dernière exécution",
+      "lastRunDetail": "{action} · {calls} appels au modèle",
+      "today": "Aujourd'hui",
+      "railChat": "Discussion dans cet espace de travail",
+      "byAction": "Par étape",
+      "delta": "+{grams} g",
+      "ariaLabel": "Empreinte carbone estimée de cet espace de travail : {grams} grammes d'équivalent CO₂. Afficher le détail.",
+      "disclaimer": "Estimations par exécution basées sur les comptes de jetons rapportés, à l’aide d’indices moyens publiés et d’hypothèses v{version}. Une exécution correspond à plusieurs appels au modèle, et la totalité de la source voyage à chaque appel, donc les jetons de prompt sont prédominants. Les exécutions d’avant le début du suivi ne sont pas comptabilisées. Pas une mesure réelle.",
+      "actions": {
+        "translate": "Traduction",
+        "analysis": "Analyse de la source",
+        "review": "Tours de relecture",
+        "write": "Rédaction",
+        "revise": "Révision",
+        "profile": "Profil du document",
+        "assess": "Évaluation de la qualité",
+        "extract": "Extraction",
+        "transform": "Transformation",
+        "photo": "Extraction de photo",
+        "map_edit": "Mise à jour de la carte",
+        "rail_chat": "Discussion"
+      },
+      "estimate": "~{passes} passes · ~{grams} g CO₂e",
+      "estimateTooltip": "Estimation approximative pour cet essai avant de commencer, basée sur la longueur de la source, le modèle sélectionné et le nombre de passes défini dans les paramètres choisis (hypothèses v{version}). Chaque passe renvoie la source, donc les jetons de prompt prédominent. La valeur réelle apparaît après l'exécution.",
+      "estimateAtMost": "jusqu'à ~{passes} passes · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5579,7 +5641,8 @@
       "limitReached": "Limite atteinte",
       "familyLimitReached": "Limite de la famille de modèles atteinte",
       "usageUnavailable": "L’utilisation actuelle n’a pas pu être chargée — seules les limites sont affichées.",
-      "familyRow": "Modèles {family}"
+      "familyRow": "Modèles {family}",
+      "usedByWorkflows": "dont {used} provenant des workflows"
     },
     "routes": {
       "ttsExhausted": "Vous avez atteint la limite quotidienne de synthèse vocale.",

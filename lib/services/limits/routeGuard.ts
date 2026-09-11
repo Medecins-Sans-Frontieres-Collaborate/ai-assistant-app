@@ -17,9 +17,10 @@ import {
   denialMessage,
   meteredCells,
 } from '@/lib/services/limits/enforcement';
-import { periodKindForWindow } from '@/lib/services/limits/periods';
+import { periodKindForWindow, resetAt } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
 import { ResolvedLimit } from '@/lib/services/limits/resolver';
+import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
 import {
   CounterRequest,
   release,
@@ -176,4 +177,47 @@ function quotaResponse(denial: {
     }),
     'RATE_LIMIT_QUOTA_EXCEEDED',
   );
+}
+
+/**
+ * Pre-flight token budget for routes outside the chat pipeline that debit the
+ * shared `chat.tokens*` pool — today the conversation-workflow routes
+ * (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b).
+ *
+ * Without this the debit would be a ratchet with no brake: a user over budget
+ * would be stopped at their next chat message while workflow runs continued
+ * indefinitely, each one adding to a counter that could never stop it. The
+ * chat pipeline runs the same check in createLimitsMiddleware.
+ *
+ * Read-only, reaches storage only when a token limit is actually configured
+ * for the caller, respects observe mode, and fails open.
+ */
+export async function guardTokenBudget(
+  session: Session | null,
+): Promise<GuardResult> {
+  try {
+    const overBudget = await checkTokenBudget(session?.user);
+    if (!overBudget) return ALLOWED;
+
+    const policy = await currentPolicy();
+    const principal = buildPrincipal(session);
+    const denial = {
+      limitKey: overBudget.limitKey,
+      limit: overBudget.limit,
+      used: overBudget.used,
+      resetAt: resetAt(
+        overBudget.limitKey === 'chat.tokensPerMonth' ? 'month' : 'day',
+        policy?.timezone ?? 'UTC',
+      ),
+      source: 'global' as const,
+    };
+    const decision = applyMode(policy, principal, denial);
+    if (decision.allowed) return ALLOWED;
+    return { allowed: false, response: quotaResponse(denial) };
+  } catch (error) {
+    console.error(
+      `[limits] token budget guard FAIL-OPEN: ${sanitizeForLog(error)}`,
+    );
+    return ALLOWED;
+  }
 }

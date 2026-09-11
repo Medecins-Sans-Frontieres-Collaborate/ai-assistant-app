@@ -1560,7 +1560,9 @@
       "euOnlyNote": "{name} è ospitato nella regione Azure UE; le conversazioni con questo modello vengono elaborate lì."
     },
     "version": {
-      "label": "Versione"
+      "label": "Versione",
+      "showOlder": "Mostra versioni precedenti ({count})",
+      "hideOlder": "Nascondi versioni precedenti"
     },
     "reasoningModel": "Modello di ragionamento: ragiona passo-passo prima di rispondere. Più lento, migliore nei problemi complessi.",
     "variant": {
@@ -1591,6 +1593,9 @@
       "freshness_month": "Ultimo mese",
       "freshness_any": "Qualsiasi momento",
       "hint": "La modalità Automatica consente a ciascuna domanda di impostare la propria priorità di aggiornamento (ad esempio, le notizie preferiscono l’ultimo giorno) e le domande di tipo ricerca possono usare più fonti rispetto al predefinito."
+    },
+    "subVariant": {
+      "label": "Dimensione"
     }
   },
   "models": {
@@ -2590,7 +2595,9 @@
     "chipHiddenHint": "Il chip non viene mai mostrato. I totali vengono comunque registrati e appaiono in questa pagina.",
     "chipAutoHideLabel": "Svanisci dopo",
     "chipAutoHideUnit": "secondi",
-    "chipAutoHideHint": "Tra {min} e {max} secondi."
+    "chipAutoHideHint": "Tra {min} e {max} secondi.",
+    "byWorkflow": "Per flusso di lavoro",
+    "byWorkflowNote": "Fanno parte dei totali sopra indicati, visualizzati separatamente — non è uso aggiuntivo. Le esecuzioni di Grant sono conteggiate per la reportistica dell’organizzazione e il budget di token, ma non nel totale locale."
   },
   "extraction": {
     "toggleLabel": "Estrai dati strutturati",
@@ -2824,7 +2831,17 @@
       "guides": "Guide dell'organizzazione",
       "organizationTerminology": "Terminologia dell'organizzazione",
       "noOrganizationTerminology": "Nessuna terminologia dell'organizzazione",
-      "terminologyGuideUnavailable": "Guida non disponibile"
+      "terminologyGuideUnavailable": "Guida non disponibile",
+      "editingPendingHint": "{count} suggerimenti in sospeso — non sono contrassegnati durante la modifica e sovrascrivendoli vengono eliminati.",
+      "editingPendingHintOne": "1 suggerimento in sospeso — non è contrassegnato durante la modifica e sovrascrivendolo viene eliminato.",
+      "overwriteEditTitle": "Modifica di un passaggio suggerito",
+      "overwriteEditMessage": "Questo testo ha un suggerimento in sospeso. Modificandolo, il suggerimento viene eliminato — viene spostato nella lista di revisione sotto \"non applicato\", dove potrai comunque annullare l’azione. Il testo al di fuori dei suggerimenti può essere modificato liberamente mentre la revisione è aperta. Non ti verrà più chiesto.",
+      "overwriteEditConfirmOne": "Elimina il suggerimento e mantieni la mia modifica",
+      "overwriteEditConfirmMany": "Elimina {count} suggerimenti e mantieni la mia modifica",
+      "suggestionDroppedOne": "Suggerimento eliminato — hai modificato il passaggio.",
+      "suggestionDroppedMany": "{count} suggerimenti eliminati — hai modificato i rispettivi passaggi.",
+      "pendingRunActionTranslate": "Nuova traduzione in corso",
+      "pendingRunActionAssess": "Nuova valutazione"
     },
     "document": {
       "emptyTitle": "Descrivi il documento desiderato",
@@ -2972,7 +2989,15 @@
       "criterionRubricTooLong": "Questa rubrica supera di {over} caratteri il limite. Viene inviata con ogni valutazione, quindi deve essere ridotta prima di poter usare questo criterio.",
       "guides": "Guide dell'organizzazione",
       "guidesOptgroup": "Guide dell'organizzazione",
-      "guideUnavailable": "Guida non disponibile"
+      "guideUnavailable": "Guida non disponibile",
+      "overwriteEditTitle": "Modifica di un passaggio suggerito",
+      "overwriteEditMessage": "Questo testo ha un suggerimento in sospeso. Modificandolo, il suggerimento viene eliminato — viene spostato nella lista di revisione sotto \"non applicato\", dove potrai comunque annullare l’azione. Il testo al di fuori dei suggerimenti può essere modificato liberamente mentre la revisione è aperta. Non ti verrà più chiesto.",
+      "overwriteEditConfirmOne": "Elimina il suggerimento e modifica",
+      "overwriteEditConfirmMany": "Elimina {count} suggerimenti e modifica",
+      "suggestionDroppedOne": "Suggerimento eliminato — hai modificato il passaggio.",
+      "suggestionDroppedMany": "{count} suggerimenti eliminati — hai modificato i rispettivi passaggi.",
+      "pendingRunActionRevise": "Revisione del documento in corso",
+      "pendingRunActionAssess": "Nuova valutazione"
     },
     "data": {
       "emptyTitle": "Importa dati da analizzare",
@@ -3348,7 +3373,14 @@
       "guideSectionOptional": "facoltativo",
       "guideSourceTerm": "Termine di origine",
       "guideTargetTerm": "Traduzione richiesta",
-      "guideNote": "Nota"
+      "guideNote": "Nota",
+      "pendingRun": {
+        "title": "{count} suggerimenti ancora in sospeso",
+        "body": "{action} può modificare qualsiasi parte del testo, incluse sezioni con suggerimenti non ancora decisi, e una nuova valutazione sostituirà l’elenco attuale. Decidi prima i suggerimenti rimanenti.",
+        "acceptAll": "Accetta tutti i rimanenti",
+        "rejectAll": "Rifiuta tutti",
+        "cancel": "Annulla"
+      }
     }
   },
   "connectors": {
@@ -3549,6 +3581,36 @@
         "hidden": "Nascondi"
       },
       "visibilityHint": "La modalità automatica mostra il chip quando la stima si aggiorna o quando ci passi sopra con il mouse. Puoi modificarlo di nuovo in Impostazioni › Utilizzo e Impatto."
+    },
+    "workflow": {
+      "title": "Questo workspace (stimato)",
+      "workspace": "Questo workspace",
+      "currentArtifact": "Lavoro corrente",
+      "lastRun": "Ultima esecuzione",
+      "lastRunDetail": "{action} · {calls} chiamate al modello",
+      "today": "Oggi",
+      "railChat": "Chatta in questo workspace",
+      "byAction": "Per fase",
+      "delta": "+{grams} g",
+      "ariaLabel": "Impronta di carbonio stimata di questo workspace: {grams} grammi di CO₂ equivalente. Mostra dettagli.",
+      "disclaimer": "Stime per ogni esecuzione dai conteggi di token riportati, usando medie pubblicate e ipotesi v{version}. Una esecuzione comprende più chiamate al modello, e l'intera fonte viaggia con ciascuna, quindi i token del prompt prevalgono. Le esecuzioni precedenti all'inizio del monitoraggio non sono conteggiate. Non è una misurazione.",
+      "actions": {
+        "translate": "Traduzione",
+        "analysis": "Analisi della fonte",
+        "review": "Revisioni",
+        "write": "Scrittura",
+        "revise": "Revisione",
+        "profile": "Profilo documento",
+        "assess": "Valutazione qualità",
+        "extract": "Estrazione",
+        "transform": "Trasformazione",
+        "photo": "Estrazione foto",
+        "map_edit": "Aggiornamento mappa",
+        "rail_chat": "Chat"
+      },
+      "estimate": "~{passes} passaggi · ~{grams} g CO₂e",
+      "estimateTooltip": "Stima approssimativa per questa esecuzione prima dell'avvio, calcolata sulla lunghezza della sorgente, il modello selezionato e il numero di passaggi delle impostazioni scelte (ipotesi v{version}). Ogni passaggio reinvia la sorgente, quindi i token di prompt prevalgono. Il valore effettivo appare dopo l'esecuzione.",
+      "estimateAtMost": "fino a ~{passes} passaggi · ~{grams} g CO₂e"
     }
   },
   "table": {
@@ -5579,7 +5641,8 @@
       "limitReached": "Limite raggiunto",
       "familyLimitReached": "Limite famiglia modello raggiunto",
       "usageUnavailable": "Impossibile caricare l'uso corrente — vengono mostrati solo i limiti.",
-      "familyRow": "Modelli {family}"
+      "familyRow": "Modelli {family}",
+      "usedByWorkflows": "di cui {used} dai flussi di lavoro"
     },
     "routes": {
       "ttsExhausted": "Hai raggiunto il limite giornaliero di sintesi vocale.",

@@ -499,6 +499,16 @@ export interface Conversation {
    */
   workflowState?: import('./workflow').WorkflowState;
   /**
+   * Per-run token spend of the workflow workspace, newest last and capped at
+   * WORKFLOW_USAGE_LEDGER_LIMIT (docs/WORKFLOW_EMISSIONS_DESIGN.md §4c).
+   *
+   * Type-agnostic ON PURPOSE — it lives here rather than inside each of the
+   * five WorkflowState shapes, which are already under a size guard and would
+   * each need their own copy. Raw counts only; CO2e is computed at display
+   * time. Write via conversationStore.recordWorkflowRunUsage.
+   */
+  workflowUsage?: import('./workflowUsage').WorkflowRunUsage[];
+  /**
    * Conversation compaction state. `summary` covers entries
    * `1..upToEntryIndex-1` (exclusive index; entry 0 is always sent verbatim).
    * Entry indices map 1:1 to flattened message indices.

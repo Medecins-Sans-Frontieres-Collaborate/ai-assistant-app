@@ -2,11 +2,12 @@ import { diffWords } from '@/lib/utils/shared/review/editApplication';
 import {
   locateEdits,
   resolvePreviewText,
+  touchedSpanIds,
 } from '@/lib/utils/shared/review/editLocation';
 
 import { Extension } from '@tiptap/core';
 import { Node as PMNode } from '@tiptap/pm/model';
-import { Plugin, PluginKey } from '@tiptap/pm/state';
+import { Plugin, PluginKey, Transaction } from '@tiptap/pm/state';
 import { Decoration, DecorationSet } from '@tiptap/pm/view';
 
 export interface PreviewEdit {
@@ -27,6 +28,17 @@ export interface EditPreviewState {
    * user actually clicked rather than at the end of the span.
    */
   onPin: ((id: string | null, event?: MouseEvent) => void) | null;
+  /**
+   * A transaction is about to change text INSIDE one or more suggestion
+   * spans (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §6a). Return true to let it
+   * through — the caller records the casualties — or false to veto it, so
+   * the caller can explain first. Null when the workspace has frozen the
+   * editor instead and no gate is needed.
+   *
+   * Called synchronously from inside ProseMirror's dispatch, so it must
+   * decide from state it already holds; it cannot wait on a dialog.
+   */
+  onOverwrite: ((ids: string[]) => boolean) | null;
 }
 
 /** A located edit in ProseMirror coordinates. */
@@ -49,7 +61,32 @@ const EMPTY: EditPreviewState = {
   activeId: null,
   pinnedId: null,
   onPin: null,
+  onOverwrite: null,
 };
+
+/**
+ * Transaction meta that exempts a programmatic rewrite from the overwrite
+ * gate — an applied edit or a scoped revision is not the user typing over a
+ * suggestion. Tiptap's own `setContent(…, { emitUpdate: false })` marks its
+ * transactions `preventUpdate`, which the gate honours for the same reason.
+ */
+export const editPreviewBypassMeta = 'editPreviewBypass';
+
+/**
+ * The ranges of the ORIGINAL document a transaction replaces, one per step.
+ * A later step's positions are in the intermediate document it applied to,
+ * so each is mapped back through the inverse of the steps before it.
+ */
+function replacedRanges(tr: Transaction): { from: number; to: number }[] {
+  const ranges: { from: number; to: number }[] = [];
+  tr.steps.forEach((step, index) => {
+    const back = tr.mapping.slice(0, index).invert();
+    step.getMap().forEach((oldStart, oldEnd) => {
+      ranges.push({ from: back.map(oldStart, -1), to: back.map(oldEnd, 1) });
+    });
+  });
+  return ranges;
+}
 
 /**
  * Flattens the doc to plain text alongside a string-offset → PM-position
@@ -198,6 +235,23 @@ export const EditPreview = Extension.create({
             const value = meta ?? previous.value;
             return { value, ...buildPreview(newState.doc, value) };
           },
+        },
+        // The overwrite gate. Runs against the PRE-transaction state, whose
+        // spans describe where the suggestions currently sit; the caller's
+        // answer decides whether the change lands.
+        filterTransaction(tr, editorState) {
+          if (!tr.docChanged) return true;
+          if (
+            tr.getMeta('preventUpdate') ||
+            tr.getMeta(editPreviewBypassMeta)
+          ) {
+            return true;
+          }
+          const plugin = editPreviewKey.getState(editorState);
+          const gate = plugin?.value.onOverwrite;
+          if (!gate || !plugin || plugin.spans.length === 0) return true;
+          const touched = touchedSpanIds(plugin.spans, replacedRanges(tr));
+          return touched.length === 0 ? true : gate(touched);
         },
         props: {
           decorations(editorState) {

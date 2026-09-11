@@ -54,6 +54,14 @@ export interface MeLimit {
   remaining?: number;
   /** ISO instant of the next period boundary in the policy's timezone. */
   resetAt?: string;
+  /**
+   * Of `used`, the part spent by conversation workflows rather than chat —
+   * from the shadow counter the debit writes beside the real cell
+   * (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b). Absent when none was. Token
+   * cells only: the shadow is written for `chat.tokens*`, which are not
+   * per-model.
+   */
+  usedByWorkflows?: number;
 }
 
 /** Back-compat alias — the admin preview components import this name. */
