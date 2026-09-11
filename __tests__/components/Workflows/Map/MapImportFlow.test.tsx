@@ -170,4 +170,15 @@ describe('Map workflow — importing a structured file', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
     expect(state().features).toHaveLength(0);
   });
+
+  it('shows an explicit import control beside the attach button', async () => {
+    renderWorkspace();
+    await screen.findByPlaceholderText('map.inputPlaceholder');
+    expect(
+      screen.getByRole('button', { name: 'map.importFile' }),
+    ).toBeEnabled();
+    expect(
+      screen.getByRole('button', { name: 'map.uploadFile' }),
+    ).toBeEnabled();
+  });
 });
