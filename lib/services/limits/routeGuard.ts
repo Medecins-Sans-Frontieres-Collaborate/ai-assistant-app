@@ -147,6 +147,7 @@ export async function guardLimit(
       limitKey: result.denial.limitKey,
       limit: result.denial.limit,
       used: result.denial.used,
+      ...(result.denial.unavailable ? { unavailable: true } : {}),
       resetAt: result.denial.resetAt,
       source: (result.denial.source ?? 'global') as ResolvedLimit['source'],
     });
@@ -165,6 +166,7 @@ function quotaResponse(denial: {
   limit: number | false;
   used?: number;
   resetAt?: string;
+  unavailable?: boolean;
 }): NextResponse {
   return errorResponse(
     denialMessage({ ...denial, source: 'global' }),
@@ -205,6 +207,7 @@ export async function guardTokenBudget(
       limitKey: overBudget.limitKey,
       limit: overBudget.limit,
       used: overBudget.used,
+      ...(overBudget.unavailable ? { unavailable: true } : {}),
       resetAt: resetAt(
         overBudget.limitKey === 'chat.tokensPerMonth' ? 'month' : 'day',
         policy?.timezone ?? 'UTC',
