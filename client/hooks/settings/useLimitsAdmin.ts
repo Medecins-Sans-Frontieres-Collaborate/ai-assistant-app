@@ -7,6 +7,10 @@ import { notifyLimitsChanged } from '@/client/hooks/settings/limitsUxEvents';
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 import type { MyLimitsResponse } from '@/client/hooks/settings/useMyLimits';
 
+import type {
+  JurisdictionWarning,
+  OverrideFlag,
+} from '@/lib/services/limits/scopedVerdicts';
 import {
   JurisdictionPredicate,
   LimitDelegation,
@@ -16,6 +20,8 @@ import {
   LimitsMode,
   OverrideScope,
 } from '@/lib/services/limits/types';
+import { LIMITS_ERROR_CODES } from '@/lib/services/limits/wire';
+import type { ScopedLimitsView } from '@/lib/services/limits/wire';
 
 import type { TargetVerdict } from '@/components/Limits/jurisdiction';
 
@@ -181,45 +187,17 @@ export function useEffectiveLimitsPreview(
 // PUT/DELETE. Contract: docs/LIMITS_SCOPED_ADMINS_DESIGN.md §5/§6b.
 // ---------------------------------------------------------------------------
 
-export type ScopedDelegationWarning =
-  | 'no-domain-or-user-anchor'
-  | 'matches-nobody';
+// The scoped view is the SERVER's contract (lib/services/limits/wire.ts,
+// client-safe) — imported, not re-declared, so the two cannot drift. The
+// warning/flag aliases keep the names existing components import.
+export type {
+  ScopedDelegationView,
+  ScopedLimitsView,
+  ScopedOverrideView,
+} from '@/lib/services/limits/wire';
 
-/** One of the CALLER's delegations, as the scoped GET exposes it (no admins). */
-export interface ScopedDelegationView {
-  id: string;
-  label: string;
-  enabled: boolean;
-  jurisdiction: JurisdictionPredicate[];
-  maxOverrides: number;
-  overrideCount: number;
-  warnings: ScopedDelegationWarning[];
-}
-
-export type ScopedOverrideFlag = 'out-of-scope-targets' | 'delegation-disabled';
-
-/**
- * An override under one of the caller's delegations, with the SERVER's
- * post-narrowing verdicts (design §6b: computed on GET so a stored record
- * that is now provably outside its jurisdiction gets flagged by the same
- * rules the write path uses).
- */
-export type ScopedOverrideView = LimitOverride & {
-  delegationId: string;
-  verdicts: TargetVerdict[];
-  flags: ScopedOverrideFlag[];
-};
-
-export interface ScopedLimitsView {
-  /** True → the caller is a GLOBAL admin and the full panel applies. */
-  isGlobalAdmin: boolean;
-  mode: LimitsMode;
-  timezone: string;
-  /** Storage read failed — render an error + Retry, NEVER an empty list. */
-  policyUnavailable: boolean;
-  delegations: ScopedDelegationView[];
-  overrides: ScopedOverrideView[];
-}
+export type ScopedDelegationWarning = JurisdictionWarning;
+export type ScopedOverrideFlag = OverrideFlag;
 
 /**
  * The panel's mode probe AND the scoped admin's data source. Any non-2xx is
@@ -293,13 +271,16 @@ async function scopedErrorFrom(response: Response): Promise<ScopedLimitsError> {
       ? record.error
       : `Scoped limits request failed: ${response.status}`;
   const outOfScope =
-    code === 'LIMITS_OUT_OF_SCOPE' ? extractOutOfScope(record.details) : [];
+    code === LIMITS_ERROR_CODES.OUT_OF_SCOPE
+      ? extractOutOfScope(record.details)
+      : [];
   return new ScopedLimitsError({
     status: response.status,
     code,
     message: error,
     details:
-      typeof record.details === 'string' && code !== 'LIMITS_OUT_OF_SCOPE'
+      typeof record.details === 'string' &&
+      code !== LIMITS_ERROR_CODES.OUT_OF_SCOPE
         ? record.details
         : undefined,
     outOfScope,
