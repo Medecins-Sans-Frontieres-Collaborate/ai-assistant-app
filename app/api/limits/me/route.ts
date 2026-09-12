@@ -282,10 +282,10 @@ function dropUnreadCatalogCounters(
 
 /**
  * `readOwnUsage` posture: matches the "same 2.5s posture as other user-path
- * reads" (§3a). `readUsage` takes no abort signal (usageStore.ts is outside
- * this file's ownership), so a hung blob GET keeps running in the
- * background, but the ROUTE stops waiting on it and answers
- * `usageUnavailable: true` rather than holding the response open.
+ * reads" (§3a). `readUsage` carries its own per-operation deadline
+ * (usageStore.ts USAGE_IO_DEADLINE_MS) which is longer than this one; the
+ * ROUTE stops waiting first and answers `usageUnavailable: true` rather than
+ * holding the response open.
  */
 const OWN_USAGE_TIMEOUT_MS = 2_500;
 

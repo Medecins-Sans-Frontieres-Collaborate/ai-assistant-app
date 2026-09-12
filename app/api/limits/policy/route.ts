@@ -313,7 +313,7 @@ export async function PUT(request: NextRequest) {
           scoped ? { ...entry, ceiling: false } : entry,
         ),
         // Ownership metadata is preserved from the STORED record, never
-        // taken from the body (ADMIN_LIMITS_REVIEW #18).
+        // taken from the body.
         createdBy: existing?.createdBy ?? userMail,
         createdAt: existing?.createdAt ?? now,
         updatedBy: userMail,
