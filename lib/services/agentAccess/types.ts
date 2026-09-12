@@ -23,6 +23,9 @@ export const AGENT_ACCESS_CATALOG_OAUTH_PREFIX = `${AGENT_ACCESS_PREFIX}catalog-
 export const AGENT_ACCESS_MAP_DATASET_META_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/meta/`;
 export const AGENT_ACCESS_MAP_DATASET_DATA_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/data/`;
 export const AGENT_ACCESS_M365_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agents/`;
+export const AGENT_ACCESS_FORM_TEMPLATES_PREFIX = `${AGENT_ACCESS_PREFIX}form-templates/`;
+/** Original DOCX/PDF uploads behind admin form templates (binary, not JSON). */
+export const AGENT_ACCESS_FORM_TEMPLATE_ORIGINALS_PREFIX = `${AGENT_ACCESS_PREFIX}form-template-originals/`;
 /**
  * Per-agent source manifests (docs/M365_SEVENTH_PASS_RECURSIVE_AGENT_SOURCES.md)
  * live OUTSIDE the agents prefix: listAllM365Agents rejects (loudly) any blob
@@ -73,6 +76,13 @@ export const CATALOG_OAUTH_SOURCE = 'catalog-oauth';
  * local-admin delegation, and history machinery for free.
  */
 export const MAP_DATASET_SOURCE = 'map-dataset';
+
+/**
+ * Pseudo-source for admin-curated form-fill templates in canonical keys
+ * (`form-template::<id>`) — docs/FORM_FILL_WORKFLOW.md. Same rationale as
+ * the other entity sources: rules, delegation and history for free.
+ */
+export const FORM_TEMPLATE_SOURCE = 'form-template';
 
 /**
  * Pseudo-source for M365 file-backed RAG agents in canonical keys
@@ -860,6 +870,45 @@ export const GuideHistoryEntrySchema = z.object({
 export type GuideHistoryEntry = z.infer<typeof GuideHistoryEntrySchema>;
 
 /* ------------------------------------------------------------------ */
+/* Form templates (form-fill workflow, admin-curated)                  */
+/* ------------------------------------------------------------------ */
+
+/**
+ * An admin-authored form-fill template. The `template` payload is the
+ * workflow's own FormTemplate shape (sections, fields, layout, original,
+ * rules) and is validated by the form workflow's zod schema at the write
+ * routes and re-validated on read there — this record schema only pins the
+ * envelope so a malformed payload degrades alone (listAll soft-skips).
+ */
+export const AdminFormTemplateSchema = z.object({
+  version: z.literal(1),
+  /** Server-generated `formtpl-<hex>`; immutable — canonical keys hang off it. */
+  id: z.string().min(1),
+  name: z.string().min(1),
+  description: z.string().default(''),
+  template: z.record(z.string(), z.unknown()),
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type AdminFormTemplate = z.infer<typeof AdminFormTemplateSchema>;
+
+export const AdminFormTemplateHistoryEntrySchema = z.object({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  record: AdminFormTemplateSchema.nullable(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type AdminFormTemplateHistoryEntry = z.infer<
+  typeof AdminFormTemplateHistoryEntrySchema
+>;
+
+export const FORM_TEMPLATE_ID_PATTERN = /^formtpl-[a-f0-9]{12}$/;
+
+/* ------------------------------------------------------------------ */
 /* Map datasets                                                        */
 /* ------------------------------------------------------------------ */
 
@@ -1070,6 +1119,18 @@ export function connectorBlobPath(id: string): string {
  */
 export function guideBlobPath(id: string): string {
   return `${AGENT_ACCESS_GUIDES_PREFIX}${id}.json`;
+}
+
+export function formTemplateBlobPath(id: string): string {
+  return `${AGENT_ACCESS_FORM_TEMPLATES_PREFIX}${id}.json`;
+}
+
+/** `<id>.<docx|pdf>` under the originals prefix (binary blob). */
+export function formTemplateOriginalBlobPath(
+  id: string,
+  ext: 'docx' | 'pdf',
+): string {
+  return `${AGENT_ACCESS_FORM_TEMPLATE_ORIGINALS_PREFIX}${id}.${ext}`;
 }
 
 /**
