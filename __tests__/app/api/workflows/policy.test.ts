@@ -79,6 +79,7 @@ const validBody = {
     'data-analysis': { enabled: true },
     map: { enabled: false },
     grants: { enabled: true },
+    'form-fill': { enabled: true },
   },
 };
 
