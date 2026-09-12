@@ -5,6 +5,7 @@ import { FC, useMemo } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { MAX_OVERRIDES } from '@/lib/services/limits/policyWriteSchema';
 import {
   LimitDelegation,
   LimitEntry,
@@ -26,8 +27,8 @@ import {
 } from '@/components/Limits/jurisdiction';
 import { LIMITS_NOTE_CARD } from '@/components/Limits/limitsClasses';
 
-/** The document's override budget (limitsStore MAX_OVERRIDES), design §5. */
-export const DOCUMENT_OVERRIDE_CAP = 200;
+/** The document's override budget — the server's own constant, design §5. */
+export const DOCUMENT_OVERRIDE_CAP = MAX_OVERRIDES;
 
 export interface DelegationsPatch {
   delegations?: LimitDelegation[];
