@@ -21,7 +21,11 @@
  * verdicts at authoring time, and the server computes them on GET for the
  * post-narrowing chip — one implementation, never two that drift.
  */
-import { resolveLimit, restrictiveness } from '@/lib/services/limits/resolver';
+import {
+  matchingOverrides,
+  resolveLimit,
+  restrictiveness,
+} from '@/lib/services/limits/resolver';
 import {
   JurisdictionPredicate,
   LimitDelegation,
@@ -322,15 +326,26 @@ export function countRaises(
   };
   const principals = syntheticPrincipals(override.scope, override.targets);
   if (principals.length === 0) return 0;
+  // Narrow the policy ONCE per synthetic principal to the overrides that
+  // actually match it: `resolveLimit` re-filters per call, and entries ×
+  // principals calls over the full override array was ~1,250 full passes
+  // per scoped save at the schema bounds (re-run on every CAS round).
+  const perPrincipal = principals.map((principal) => ({
+    principal,
+    policy: {
+      ...globalOnly,
+      overrides: matchingOverrides(globalOnly, principal, NO_DELEGATIONS),
+    },
+  }));
   let raises = 0;
   for (const entry of override.entries as LimitEntry[]) {
     const def = getLimitDefinition(entry.limitKey);
     if (!def) continue;
     const proposed = restrictiveness(entry.value);
-    const raised = principals.some((principal) => {
+    const raised = perPrincipal.some(({ principal, policy: narrowed }) => {
       const base = resolveLimit(
         def,
-        globalOnly,
+        narrowed,
         principal,
         entry.modelId,
         entry.series,
