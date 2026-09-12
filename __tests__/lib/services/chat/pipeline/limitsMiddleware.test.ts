@@ -1,6 +1,7 @@
 import { createLimitsMiddleware } from '@/lib/services/chat/pipeline/Middleware';
 import { mintContinuationToken } from '@/lib/services/limits/continuationToken';
 import { checkGate, meteredCells } from '@/lib/services/limits/enforcement';
+import { buildPrincipal } from '@/lib/services/limits/principal';
 import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
 import { reserve } from '@/lib/services/limits/usageStore';
 
@@ -170,6 +171,21 @@ describe('createLimitsMiddleware — continuation metering', () => {
   it('always meters round 0', async () => {
     await createLimitsMiddleware(context({ mcpLoopRound: 0 }));
     expect(reserve).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('createLimitsMiddleware — id-less principal', () => {
+  it('counts nothing for a principal with no subject id (guardLimit parity), gates still run', async () => {
+    vi.clearAllMocks();
+    vi.mocked(buildPrincipal).mockReturnValueOnce({
+      userId: '',
+      attributes: [],
+      groupIds: [],
+    } as never);
+    await createLimitsMiddleware(context({}));
+    expect(reserve).not.toHaveBeenCalled();
+    expect(checkTokenBudget).not.toHaveBeenCalled();
+    expect(checkGate).toHaveBeenCalled();
   });
 });
 
