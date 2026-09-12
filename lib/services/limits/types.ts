@@ -35,7 +35,7 @@ export const LimitEntrySchema = z.object({
   limitKey: z.string().min(1),
   /**
    * Model qualifier; at most one of the two. Absent → applies to every model.
-   * NOTE: `series` is OPTIONAL on OpenAIModel (types/openai.ts:163), so a
+   * NOTE: `series` is OPTIONAL on OpenAIModel (types/openai.ts), so a
    * model that declares none simply never produces a `family:` candidate.
    */
   modelId: z.string().optional(),
@@ -55,6 +55,13 @@ export const LimitEntrySchema = z.object({
   ceiling: z.boolean().default(false),
 });
 export type LimitEntry = z.infer<typeof LimitEntrySchema>;
+
+// `.passthrough()` on the record schemas below is the rolling-deploy rule:
+// `writePolicy` re-parses the whole document with these READ schemas, so an
+// older replica's PUT or `mutatePolicy` round would otherwise strip any
+// field a newer replica had added (and the scoped path spreads `...current`
+// on purpose to keep the rest of the document intact). Unknown keys ride
+// along; the strict write schemas still refuse them at the API boundary.
 
 /**
  * ONE scope per override record, deliberately: a record that carried both
@@ -110,51 +117,55 @@ export type JurisdictionPredicate = z.infer<typeof JurisdictionPredicateSchema>;
  * Arrays are bounded even on the READ side (bounded-on-read rule): a
  * runaway document must fail loud here, not in the resolver.
  */
-export const LimitDelegationSchema = z.object({
-  id: z.string().regex(DELEGATION_ID_RE),
-  label: z.string().default(''),
-  /** Disabled → every override under it is INERT (never promoted to global). */
-  enabled: z.boolean().default(true),
-  /** Graph `mail` values, lowercased. */
-  admins: z.array(z.string().max(320)).max(200).default([]),
-  /** OR'd. Empty = matches nobody, i.e. a disabled-in-practice delegation. */
-  jurisdiction: z.array(JurisdictionPredicateSchema).max(50).default([]),
-  /** Per-delegation share of the document's override budget. */
-  maxOverrides: z.number().int().min(0).max(100).default(25),
-  createdBy: z.string(),
-  createdAt: z.string(),
-  updatedBy: z.string(),
-  updatedAt: z.string(),
-});
+export const LimitDelegationSchema = z
+  .object({
+    id: z.string().regex(DELEGATION_ID_RE),
+    label: z.string().default(''),
+    /** Disabled → every override under it is INERT (never promoted to global). */
+    enabled: z.boolean().default(true),
+    /** Graph `mail` values, lowercased. */
+    admins: z.array(z.string().max(320)).max(200).default([]),
+    /** OR'd. Empty = matches nobody, i.e. a disabled-in-practice delegation. */
+    jurisdiction: z.array(JurisdictionPredicateSchema).max(50).default([]),
+    /** Per-delegation share of the document's override budget. */
+    maxOverrides: z.number().int().min(0).max(100).default(25),
+    createdBy: z.string(),
+    createdAt: z.string(),
+    updatedBy: z.string(),
+    updatedAt: z.string(),
+  })
+  .passthrough();
 export type LimitDelegation = z.infer<typeof LimitDelegationSchema>;
 
-export const LimitOverrideSchema = z.object({
-  /** Server-generated `lim-<12 hex>`; immutable, and the final tie-break. */
-  id: z.string().regex(/^lim-[0-9a-f]{12}$/),
-  label: z.string().default(''),
-  enabled: z.boolean().default(true),
-  scope: OverrideScopeSchema,
-  targets: z.array(z.string().max(320)).default([]),
-  /**
-   * GLOBAL admin's tie-break WITHIN a layer and tier. Higher wins. Scoped
-   * overrides are stored with 0 (the scoped write path forces it) and are
-   * compared as 0 by the resolver regardless of the stored value.
-   */
-  priority: z.number().int().min(-1000).max(1000).default(0),
-  /**
-   * Present ⇒ authority tier `scoped`: the override only ever applies to
-   * principals INSIDE that delegation's jurisdiction, whatever `targets`
-   * say, and loses to any global-tier record at the same layer. Absent ⇒
-   * `global`. Ownership for authorization is THIS field, never `createdBy`.
-   */
-  delegationId: z.string().regex(DELEGATION_ID_RE).optional(),
-  /** SPARSE — only the keys this override speaks to. */
-  entries: z.array(LimitEntrySchema).default([]),
-  createdBy: z.string(),
-  createdAt: z.string(),
-  updatedBy: z.string(),
-  updatedAt: z.string(),
-});
+export const LimitOverrideSchema = z
+  .object({
+    /** Server-generated `lim-<12 hex>`; immutable, and the final tie-break. */
+    id: z.string().regex(/^lim-[0-9a-f]{12}$/),
+    label: z.string().default(''),
+    enabled: z.boolean().default(true),
+    scope: OverrideScopeSchema,
+    targets: z.array(z.string().max(320)).default([]),
+    /**
+     * GLOBAL admin's tie-break WITHIN a layer and tier. Higher wins. Scoped
+     * overrides are stored with 0 (the scoped write path forces it) and are
+     * compared as 0 by the resolver regardless of the stored value.
+     */
+    priority: z.number().int().min(-1000).max(1000).default(0),
+    /**
+     * Present ⇒ authority tier `scoped`: the override only ever applies to
+     * principals INSIDE that delegation's jurisdiction, whatever `targets`
+     * say, and loses to any global-tier record at the same layer. Absent ⇒
+     * `global`. Ownership for authorization is THIS field, never `createdBy`.
+     */
+    delegationId: z.string().regex(DELEGATION_ID_RE).optional(),
+    /** SPARSE — only the keys this override speaks to. */
+    entries: z.array(LimitEntrySchema).default([]),
+    createdBy: z.string(),
+    createdAt: z.string(),
+    updatedBy: z.string(),
+    updatedAt: z.string(),
+  })
+  .passthrough();
 export type LimitOverride = z.infer<typeof LimitOverrideSchema>;
 
 export const LimitsModeSchema = z.enum(['observe', 'enforce']);
@@ -163,41 +174,43 @@ export type LimitsMode = z.infer<typeof LimitsModeSchema>;
 export const LimitsFailModeSchema = z.enum(['open', 'closed']);
 export type LimitsFailMode = z.infer<typeof LimitsFailModeSchema>;
 
-export const LimitsPolicySchema = z.object({
-  version: z.literal(1),
-  /** Global defaults. A key absent here falls back to the compiled catalog. */
-  defaults: z.array(LimitEntrySchema).default([]),
-  overrides: z.array(LimitOverrideSchema).default([]),
-  /** Scoped-admin grants (docs/LIMITS_SCOPED_ADMINS_DESIGN.md). */
-  delegations: z.array(LimitDelegationSchema).default([]),
-  /**
-   * 'observe' resolves and logs every would-block decision but rejects
-   * nothing. Ships as this so an admin can watch real org data for a week
-   * before limits bite, and flip to 'enforce' with no redeploy.
-   */
-  mode: LimitsModeSchema.default('observe'),
-  /**
-   * Behaviour when the policy or a counter is unreadable. 'open' is the
-   * deliberate INVERSION of AgentAccessService, which fails closed because
-   * it is a security control — a quota is a cost control, and failing closed
-   * turns a blob outage into a total chat outage for the whole org.
-   */
-  failMode: LimitsFailModeSchema.default('open'),
-  /**
-   * Single org-wide IANA zone for period boundaries. Resolved via
-   * Intl.DateTimeFormat, so every replica agrees without a new dependency.
-   */
-  timezone: z.string().default('UTC'),
-  /**
-   * `byom-` models run against the USER'S OWN Foundry account under their own
-   * OBO token and cost the org nothing, so they are exempt by default.
-   */
-  countByomUsage: z.boolean().default(false),
-  /** Background LLM calls (title, summarize, memories, tone, revise). */
-  countAuxiliaryUsage: z.boolean().default(false),
-  updatedBy: z.string(),
-  updatedAt: z.string(),
-});
+export const LimitsPolicySchema = z
+  .object({
+    version: z.literal(1),
+    /** Global defaults. A key absent here falls back to the compiled catalog. */
+    defaults: z.array(LimitEntrySchema).default([]),
+    overrides: z.array(LimitOverrideSchema).default([]),
+    /** Scoped-admin grants (docs/LIMITS_SCOPED_ADMINS_DESIGN.md). */
+    delegations: z.array(LimitDelegationSchema).default([]),
+    /**
+     * 'observe' resolves and logs every would-block decision but rejects
+     * nothing. Ships as this so an admin can watch real org data for a week
+     * before limits bite, and flip to 'enforce' with no redeploy.
+     */
+    mode: LimitsModeSchema.default('observe'),
+    /**
+     * Behaviour when the policy or a counter is unreadable. 'open' is the
+     * deliberate INVERSION of AgentAccessService, which fails closed because
+     * it is a security control — a quota is a cost control, and failing closed
+     * turns a blob outage into a total chat outage for the whole org.
+     */
+    failMode: LimitsFailModeSchema.default('open'),
+    /**
+     * Single org-wide IANA zone for period boundaries. Resolved via
+     * Intl.DateTimeFormat, so every replica agrees without a new dependency.
+     */
+    timezone: z.string().default('UTC'),
+    /**
+     * `byom-` models run against the USER'S OWN Foundry account under their own
+     * OBO token and cost the org nothing, so they are exempt by default.
+     */
+    countByomUsage: z.boolean().default(false),
+    /** Background LLM calls (title, summarize, memories, tone, revise). */
+    countAuxiliaryUsage: z.boolean().default(false),
+    updatedBy: z.string(),
+    updatedAt: z.string(),
+  })
+  .passthrough();
 export type LimitsPolicy = z.infer<typeof LimitsPolicySchema>;
 
 /**
@@ -245,17 +258,6 @@ export const UsageDocSchema = z.object({
   lastWriteId: z.string().optional(),
 });
 export type UsageDoc = z.infer<typeof UsageDocSchema>;
-
-/** The empty policy an unconfigured deployment behaves as. */
-export function emptyPolicy(updatedBy = 'system'): LimitsPolicy {
-  return LimitsPolicySchema.parse({
-    version: 1,
-    defaults: [],
-    overrides: [],
-    updatedBy,
-    updatedAt: new Date(0).toISOString(),
-  });
-}
 
 function safeHistoryTimestamp(timestamp: string): string {
   return timestamp.replace(/[^0-9A-Za-z.-]/g, '_');
