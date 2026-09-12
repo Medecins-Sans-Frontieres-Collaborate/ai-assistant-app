@@ -128,6 +128,13 @@ export type ConsentRequestPayload =
        * display; the client should NOT use this for dispatch.
        */
       tool_arguments?: string | null;
+      /**
+       * Server-signed proof this card was issued for the caller
+       * (lib/services/limits/continuationToken.ts). Echoed back on resume as
+       * `mcpPendingToolCalls[].continuationToken`; a resume without it is
+       * metered as a new message. Opaque to the client.
+       */
+      continuation_token?: string | null;
     };
 
 /**
