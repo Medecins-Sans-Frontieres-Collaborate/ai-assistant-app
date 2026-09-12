@@ -48,5 +48,16 @@ export function createInitialWorkflowState(
         kind: 'grants',
         updatedAt,
       };
+    case 'form-fill':
+      // No document until a template is attached — ids are generated at
+      // attach time, so a fresh state stays deterministic for the
+      // pristine check in workflowDirty.ts.
+      return {
+        kind: 'form-fill',
+        documents: [],
+        sources: [],
+        notes: [],
+        updatedAt,
+      };
   }
 }
