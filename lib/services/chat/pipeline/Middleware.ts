@@ -1468,13 +1468,16 @@ export async function createLimitsMiddleware(
     //    counter (lib/services/limits/continuationToken.ts). A round that
     //    fails verification is metered as a new message, never rejected.
     let dayCounters: Readonly<Record<string, number>> | undefined;
+    // No subject id → nothing to count under (the same fail-open guardLimit
+    // takes); gates above still applied. Unreachable with Entra in practice.
+    const countable = principal.userId !== '';
     const isToolLoopContinuation = isVerifiedContinuation(
       principal.userId,
       context.mcpLoopRound,
       context.mcpPendingToolCalls,
       context.mcpServers?.length ?? 0,
     );
-    if (!isToolLoopContinuation) {
+    if (!isToolLoopContinuation && countable) {
       const cells = [
         ...meteredCells(
           policy,
@@ -1540,7 +1543,7 @@ export async function createLimitsMiddleware(
     // Pre-flight token budget: read-only, and only reaches storage when a
     // token limit is actually configured for this principal. Soft by nature —
     // see lib/services/limits/tokenDebit.ts.
-    if (!isToolLoopContinuation) {
+    if (!isToolLoopContinuation && countable) {
       // The day ledger was just read (and written) by the reservation above;
       // the pre-flight reuses it rather than downloading the same blob again.
       const overBudget = await checkTokenBudget(context.user, {
