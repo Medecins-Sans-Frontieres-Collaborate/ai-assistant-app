@@ -1,5 +1,6 @@
 import { createLimitsMiddleware } from '@/lib/services/chat/pipeline/Middleware';
 import { mintContinuationToken } from '@/lib/services/limits/continuationToken';
+import { checkGate, meteredCells } from '@/lib/services/limits/enforcement';
 import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
 import { reserve } from '@/lib/services/limits/usageStore';
 
@@ -40,6 +41,9 @@ vi.mock('@/lib/services/limits/enforcement', () => ({
     failMode: 'open',
     timezone: 'UTC',
     countByomUsage: false,
+    defaults: [],
+    overrides: [],
+    delegations: [],
   })),
   checkGate: vi.fn(() => ({ allowed: true })),
   meteredCells: vi.fn((_p: unknown, _pr: unknown, key: string) =>
@@ -166,5 +170,34 @@ describe('createLimitsMiddleware — continuation metering', () => {
   it('always meters round 0', async () => {
     await createLimitsMiddleware(context({ mcpLoopRound: 0 }));
     expect(reserve).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('createLimitsMiddleware — one jurisdiction scan, one day-ledger read', () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("hands the reservation's counters to the token pre-flight and threads one active set everywhere", async () => {
+    vi.mocked(reserve).mockResolvedValueOnce({
+      allowed: true,
+      debited: [],
+      counters: { 'chat.messagesPerDay': 3, 'chat.tokensPerDay': 42 },
+    });
+    const out = await createLimitsMiddleware(context({}));
+    expect(checkTokenBudget).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'oid-1' }),
+      expect.objectContaining({
+        dayCounters: { 'chat.messagesPerDay': 3, 'chat.tokensPerDay': 42 },
+        active: expect.any(Set),
+      }),
+    );
+    // Every gate / cell resolution received the same precomputed set.
+    const active = (out.limits as { active: ReadonlySet<string> }).active;
+    expect(active).toBeInstanceOf(Set);
+    for (const call of vi.mocked(checkGate).mock.calls) {
+      expect(call[5]).toBe(active);
+    }
+    for (const call of vi.mocked(meteredCells).mock.calls) {
+      expect(call[5]).toBe(active);
+    }
   });
 });
