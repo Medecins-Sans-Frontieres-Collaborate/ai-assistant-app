@@ -44,7 +44,7 @@ interface ScopedLimitRowsProps {
  * the family an envelope and the model a sub-cap rather than implying the
  * more specific one replaces the other.
  *
- * ⚠ A NEW SCOPED ROW IS NEVER SEEDED AT "UNLIMITED". `pickGlobalEntry` ranks
+ * ⚠ A NEW SCOPED ROW IS NEVER SEEDED AT "UNLIMITED". The resolver ranks
  * by qualifier specificity BEFORE restrictiveness, so a family entry of null
  * (specificity 1) would beat an unqualified 100 (specificity 0) and silently
  * make that entire family unlimited. Boolean keys seed blocked, counters seed
