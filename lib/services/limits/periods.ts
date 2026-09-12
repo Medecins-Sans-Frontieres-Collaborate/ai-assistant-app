@@ -10,25 +10,44 @@
  */
 import { PeriodKind } from '@/lib/services/limits/types';
 
-/** Falls back to UTC rather than throwing on an unknown/garbage zone. */
-function partsIn(
-  timezone: string,
-  at: Date,
-): { year: string; month: string; day: string } {
-  const format = (tz: string) =>
+/**
+ * One formatter per zone, built once. `new Intl.DateTimeFormat` costs
+ * ~40 µs against ~1 µs per `formatToParts`, and `resetAt` below calls this
+ * up to ~100 times per answer — per counter cell per model in the picker
+ * probe, which put 200-350 ms of synchronous CPU on every `/api/limits/me`
+ * for a metered user before this cache existed. A garbage zone caches the
+ * UTC formatter under its own name, so the fallback is paid once too.
+ */
+const formatters = new Map<string, Intl.DateTimeFormat>();
+const MAX_FORMATTERS = 64;
+
+function formatterFor(timezone: string): Intl.DateTimeFormat {
+  const cached = formatters.get(timezone);
+  if (cached) return cached;
+  const build = (tz: string) =>
     new Intl.DateTimeFormat('en-CA', {
       timeZone: tz,
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
-    }).formatToParts(at);
-
-  let parts: Intl.DateTimeFormatPart[];
+    });
+  let formatter: Intl.DateTimeFormat;
   try {
-    parts = format(timezone);
+    formatter = build(timezone);
   } catch {
-    parts = format('UTC');
+    formatter = build('UTC');
   }
+  if (formatters.size >= MAX_FORMATTERS) formatters.clear();
+  formatters.set(timezone, formatter);
+  return formatter;
+}
+
+/** Falls back to UTC rather than throwing on an unknown/garbage zone. */
+function partsIn(
+  timezone: string,
+  at: Date,
+): { year: string; month: string; day: string } {
+  const parts = formatterFor(timezone).formatToParts(at);
   const pick = (type: string) =>
     parts.find((p) => p.type === type)?.value ?? '0000';
   return { year: pick('year'), month: pick('month'), day: pick('day') };
@@ -64,6 +83,28 @@ export function resetAt(
 ): string | undefined {
   if (kind === 'total') return undefined;
   const current = currentPeriod(kind, timezone, at);
+  // The boundary is a function of the PERIOD, not of `at`: every instant in
+  // today's period rolls over at the same moment. Memoized per
+  // (kind, zone, period) so the walk below runs once per period per replica
+  // rather than once per cell per request.
+  const memoKey = `${kind}|${timezone}|${current}`;
+  const memoized = resetAtMemo.get(memoKey);
+  if (memoized !== undefined) return memoized;
+  const computed = walkToBoundary(kind, timezone, at, current);
+  if (resetAtMemo.size >= MAX_RESET_MEMO) resetAtMemo.clear();
+  resetAtMemo.set(memoKey, computed);
+  return computed;
+}
+
+const resetAtMemo = new Map<string, string>();
+const MAX_RESET_MEMO = 256;
+
+function walkToBoundary(
+  kind: PeriodKind,
+  timezone: string,
+  at: Date,
+  current: string,
+): string {
   // Coarse hop first (a day at a time), then a 15-minute walk back to the
   // exact boundary. Bounded: at most 32 + 96 iterations.
   const DAY_MS = 24 * 60 * 60 * 1000;
