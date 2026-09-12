@@ -11,8 +11,11 @@
 import {
   canonicalList,
   delegationWriteSchema,
+  entrySchema,
   formatIssues,
   jurisdictionPredicateWriteSchema,
+  overrideSchema,
+  scopedOverrideBodySchema,
 } from '@/lib/services/limits/policyWriteSchema';
 import { JurisdictionPredicateSchema } from '@/lib/services/limits/types';
 
@@ -87,5 +90,61 @@ describe('delegationWriteSchema', () => {
     expect(result.success).toBe(false);
     if (result.success) return;
     expect(formatIssues(result.error)).toContain('jurisdiction.0.targets');
+  });
+});
+
+describe('value shape follows the catalog unit (review 2026-09-12)', () => {
+  it('refuses a boolean on a numeric key — `true` would read as unlimited past every ceiling', () => {
+    const numeric = entrySchema.safeParse({
+      limitKey: 'feature.upload.megabytesPerFile',
+      value: true,
+    });
+    expect(numeric.success).toBe(false);
+    const gate = entrySchema.safeParse({
+      limitKey: 'feature.webSearch.enabled',
+      value: 5,
+    });
+    expect(gate.success).toBe(false);
+  });
+
+  it('accepts the shapes the editor produces', () => {
+    expect(
+      entrySchema.safeParse({ limitKey: 'chat.messagesPerDay', value: 0 })
+        .success,
+    ).toBe(true);
+    expect(
+      entrySchema.safeParse({ limitKey: 'chat.messagesPerDay', value: null })
+        .success,
+    ).toBe(true);
+    expect(
+      entrySchema.safeParse({ limitKey: 'feature.mcp.enabled', value: false })
+        .success,
+    ).toBe(true);
+  });
+});
+
+describe('override targets are stored canonical (review 2026-09-12)', () => {
+  it('trims, lowercases, dedupes and drops blanks on both write schemas', () => {
+    const raw = [' Ada@Example.org ', 'ada@example.org', '   ', 'Bob@x.org'];
+    const global = overrideSchema.safeParse({
+      id: 'lim-000000000001',
+      scope: 'user',
+      targets: raw,
+      entries: [],
+    });
+    expect(global.success && global.data.targets).toEqual([
+      'ada@example.org',
+      'bob@x.org',
+    ]);
+    const scoped = scopedOverrideBodySchema.safeParse({
+      id: 'lim-000000000001',
+      scope: 'user',
+      targets: raw,
+      entries: [],
+    });
+    expect(scoped.success && scoped.data.targets).toEqual([
+      'ada@example.org',
+      'bob@x.org',
+    ]);
   });
 });
