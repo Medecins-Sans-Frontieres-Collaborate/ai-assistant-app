@@ -47,8 +47,16 @@ interface ScopedOverrideCardProps {
   /** Created this session, not yet saved — Discard drops it entirely. */
   isNew?: boolean;
   onDiscardNew: () => void;
-  /** A save or delete round-tripped (success or conflict) — parent refetches. */
+  /** A save or delete SUCCEEDED — the parent refetches and, for a new card, retires the draft. */
   onSettled: () => void;
+  /**
+   * The server view moved on under a refused write (409, or an owned record
+   * that vanished) — the parent refetches the surrounding data but the draft
+   * is KEPT. Distinct from `onSettled` on purpose: for a never-saved card the
+   * parent's `onSettled` retires the pending copy, which on a conflict would
+   * silently discard the admin's targets and entries.
+   */
+  onStale: () => void;
   onDirtyChange: (id: string, dirty: boolean) => void;
 }
 
@@ -84,6 +92,7 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
   isNew = false,
   onDiscardNew,
   onSettled,
+  onStale,
   onDirtyChange,
 }) => {
   const t = useTranslations('limits');
@@ -184,7 +193,7 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
         error instanceof ScopedLimitsError &&
         (error.code === 'LIMITS_CONFLICT' || error.code === 'NOT_FOUND')
       ) {
-        onSettled();
+        onStale();
       }
     }
   };
@@ -209,7 +218,7 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
     } catch (error) {
       toast.error(explain(error));
       if (error instanceof ScopedLimitsError && error.code === 'NOT_FOUND') {
-        onSettled();
+        onStale();
       }
     }
   };
