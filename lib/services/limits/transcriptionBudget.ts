@@ -14,6 +14,7 @@ import { Session } from 'next-auth';
 import {
   applyMode,
   currentPolicy,
+  denialMessage,
   meteredCells,
 } from '@/lib/services/limits/enforcement';
 import { buildPrincipal } from '@/lib/services/limits/principal';
@@ -72,10 +73,14 @@ export async function guardTranscriptionMinutes(
       limitKey: result.denial.limitKey,
       limit: result.denial.limit,
       used: result.denial.used,
+      ...(result.denial.unavailable ? { unavailable: true } : {}),
       resetAt: result.denial.resetAt,
       source: 'global',
     });
     if (decision.allowed) return ALLOWED;
+    if (result.denial.unavailable) {
+      return { allowed: false, message: denialMessage(decision.denial!) };
+    }
 
     const resets = result.denial.resetAt
       ? ` Resets ${new Date(result.denial.resetAt).toUTCString()}.`
