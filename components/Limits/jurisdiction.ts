@@ -332,34 +332,59 @@ export interface RulePool {
  * user target inside a domain rule, and a domain target that contains a
  * user rule's mail. Group/attribute are equality-only.
  */
+/**
+ * Per-array caches for the relevant-rules queries. The admin panel asks
+ * "which other rules touch these targets" for EVERY card on EVERY render,
+ * and a keystroke re-renders; rebuilding a canonical Set per (card, rule)
+ * pair was measured at seconds per render at policy scale. Draft edits
+ * replace only the touched record, so every other record's `targets` array
+ * keeps its identity and hits the cache.
+ */
+const canonSets = new WeakMap<readonly string[], ReadonlySet<string>>();
+const domainSets = new WeakMap<readonly string[], ReadonlySet<string>>();
+
+function canonSetOf(targets: readonly string[]): ReadonlySet<string> {
+  const cached = canonSets.get(targets);
+  if (cached) return cached;
+  const built = new Set(uniq(targets));
+  canonSets.set(targets, built);
+  return built;
+}
+
+/** The mail domains of a user-rule's targets. */
+function domainSetOf(mails: readonly string[]): ReadonlySet<string> {
+  const cached = domainSets.get(mails);
+  if (cached) return cached;
+  const built = new Set<string>();
+  for (const mail of mails) {
+    const domain = domainOfMail(mail);
+    if (domain !== undefined) built.add(domain);
+  }
+  domainSets.set(mails, built);
+  return built;
+}
+
 function matchedTargets(
   scope: OverrideScope,
   targets: readonly string[],
   ruleScope: OverrideScope,
   ruleTargets: readonly string[],
 ): string[] {
-  const rule = uniq(ruleTargets);
-  const ruleSet = new Set(rule);
-  const canonTargets = targets.map((t) => ({ raw: t, canon: canon(t) }));
-
+  if (targets.length === 0 || ruleTargets.length === 0) return [];
   if (scope === ruleScope) {
-    return canonTargets.filter((t) => ruleSet.has(t.canon)).map((t) => t.raw);
+    const ruleSet = canonSetOf(ruleTargets);
+    return targets.filter((t) => ruleSet.has(canon(t)));
   }
   if (scope === 'user' && ruleScope === 'domain') {
-    return canonTargets
-      .filter((t) => {
-        const domain = domainOfMail(t.raw);
-        return domain !== undefined && ruleSet.has(domain);
-      })
-      .map((t) => t.raw);
+    const ruleSet = canonSetOf(ruleTargets);
+    return targets.filter((t) => {
+      const domain = domainOfMail(t);
+      return domain !== undefined && ruleSet.has(domain);
+    });
   }
   if (scope === 'domain' && ruleScope === 'user') {
-    const ruleDomains = new Set(
-      rule.map((mail) => domainOfMail(mail)).filter((d) => d !== undefined),
-    );
-    return canonTargets
-      .filter((t) => ruleDomains.has(t.canon))
-      .map((t) => t.raw);
+    const ruleDomains = domainSetOf(ruleTargets);
+    return targets.filter((t) => ruleDomains.has(canon(t)));
   }
   return [];
 }
