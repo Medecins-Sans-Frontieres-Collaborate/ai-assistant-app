@@ -6,11 +6,12 @@
  *    rename cannot silently reset someone's quota.
  *  - `mail` keys POLICY TARGETING, because that is what an admin types.
  *
- * The `attribute` scope is what actually delivers the "groups" override axis
- * today: real Entra group membership is not on the session (pending tenant
- * consent — see docs/M365_GRAPH_PERMISSIONS_REQUEST.md), whereas
- * `department` / `companyName` / `officeId` are, and in most orgs "group" in
- * an admin's head means "the Health department".
+ * The `attribute` scope (`department` / `companyName` / `officeId`, all on
+ * the session) is the cheap "groups" axis — no directory call, and in most
+ * orgs "group" in an admin's head means "the Health department". Real Entra
+ * group membership comes from the delegated-Graph cache
+ * (lib/services/m365/groupMembership.ts): warmed per request by the routes,
+ * `[]` when cold or degraded, so a `group` target then grants nothing.
  */
 import { Session } from 'next-auth';
 
@@ -90,7 +91,7 @@ setJurisdictionUnevaluableHook(({ delegationId, userId }) => {
   );
 });
 
-/** Attribute target prefixes, also used by the admin UI to build pickers. */
+/** Attribute target prefixes (`department:<v>` etc.), the `attribute` scope's vocabulary. */
 export const ATTRIBUTE_PREFIXES = {
   department: 'department',
   company: 'company',
