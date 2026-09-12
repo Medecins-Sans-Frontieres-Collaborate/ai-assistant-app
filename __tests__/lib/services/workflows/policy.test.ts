@@ -51,7 +51,14 @@ describe('workflow policy resolution', () => {
       policy({ grants: { enabled: true } }),
     );
     expect(Object.keys(all).sort()).toEqual(
-      ['data-analysis', 'document', 'grants', 'map', 'translation'].sort(),
+      [
+        'data-analysis',
+        'document',
+        'form-fill',
+        'grants',
+        'map',
+        'translation',
+      ].sort(),
     );
     expect(all.grants).toBe(true);
   });
