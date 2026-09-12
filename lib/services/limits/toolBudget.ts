@@ -22,7 +22,7 @@ import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 /**
  * Reserves one unit of `limitKey` for this request.
  *
- * Returns true when the tool may run — including when limits are disabled,
+ * Returns true when the tool may run — including when no policy is authored,
  * unlimited for this caller, in observe mode, or when storage failed and the
  * policy says fail open. Only an actual enforced denial returns false.
  */
@@ -35,6 +35,8 @@ export async function consumeToolBudget(
 
   try {
     const { policy, principal, active } = limits;
+    // Same posture as guardLimit: no subject id, nothing to count under.
+    if (!principal.userId) return true;
     const cells = meteredCells(
       policy,
       principal,
