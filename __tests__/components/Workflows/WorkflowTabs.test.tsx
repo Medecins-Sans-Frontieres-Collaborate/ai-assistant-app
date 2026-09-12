@@ -108,7 +108,7 @@ describe('WorkflowTabs', () => {
     it('renders on localhost even without the flag', () => {
       setHostname('localhost');
       render(<WorkflowTabs />);
-      expect(screen.getAllByRole('tab')).toHaveLength(5);
+      expect(screen.getAllByRole('tab')).toHaveLength(6);
     });
 
     it('renders nothing once the conversation has messages', () => {
@@ -129,9 +129,9 @@ describe('WorkflowTabs', () => {
       mockFlags = { conversationWorkflows: true };
     });
 
-    it('renders Chat plus the four workflows', () => {
+    it('renders Chat plus the five workflows', () => {
       render(<WorkflowTabs />);
-      expect(screen.getAllByRole('tab')).toHaveLength(5);
+      expect(screen.getAllByRole('tab')).toHaveLength(6);
       expect(screen.getByRole('tab', { name: CHAT })).toBeInTheDocument();
       expect(
         screen.getByRole('tab', { name: TRANSLATION }),
