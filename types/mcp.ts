@@ -68,6 +68,12 @@ export interface McpPendingToolCall {
   toolName: string;
   /** Arguments exactly as the model emitted them. */
   argumentsJson: string;
+  /**
+   * The approval card's server-signed continuation token, echoed back so the
+   * limits middleware can tell a genuine resume from a hand-crafted
+   * "round 1" request. Absent → the round is metered as a new message.
+   */
+  continuationToken?: string;
 }
 
 /** Tool definition as returned by /api/mcp/tools for the settings UI. */
