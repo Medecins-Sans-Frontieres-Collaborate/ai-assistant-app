@@ -35,6 +35,7 @@ import {
   uploadJson,
 } from '@/lib/services/agentAccess/blobCas';
 import {
+  LIMITS_HISTORY_PREFIX,
   LIMITS_POLICY_PATH,
   LimitsHistoryEntry,
   LimitsHistoryEntrySchema,
@@ -251,5 +252,44 @@ export async function writeHistoryEntry(
     console.error(
       `[limits-admin] HISTORY WRITE FAILED by=${sanitizeForLog(parsed.updatedBy)}: ${sanitizeForLog(error)}`,
     );
+    return;
+  }
+  await pruneHistory(storage);
+}
+
+/**
+ * How many full-policy snapshots the audit trail keeps. Every write — the
+ * global PUT and every per-override scoped save — stores one, the admin
+ * container has no lifecycle rule (by design: admin data must not expire
+ * silently), and nothing ever read the prefix back, so it grew without
+ * bound. A count, not an age: a quiet policy keeps its last N changes
+ * however old they are, and a busy one cannot fill the container.
+ */
+export const HISTORY_RETAIN = 200;
+
+/**
+ * Best-effort trim of `system/limits/history/` to the newest
+ * {@link HISTORY_RETAIN} entries, ordered by the blob's own lastModified
+ * (the path embeds the write timestamp but is only lexically sortable
+ * within one format). Runs after a successful history write; a listing or
+ * delete failure is logged and never surfaces to the admin's save.
+ */
+export async function pruneHistory(storage: BlobStorage): Promise<number> {
+  try {
+    const blobs = await storage.listBlobsDetailed(LIMITS_HISTORY_PREFIX);
+    if (blobs.length <= HISTORY_RETAIN) return 0;
+    const stale = [...blobs]
+      .sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime())
+      .slice(HISTORY_RETAIN);
+    let removed = 0;
+    for (const blob of stale) {
+      if (await storage.deleteIfExists(blob.name)) removed += 1;
+    }
+    return removed;
+  } catch (error) {
+    console.error(
+      `[limits-admin] history prune failed (non-fatal): ${sanitizeForLog(error)}`,
+    );
+    return 0;
   }
 }
