@@ -235,6 +235,14 @@ export const UsageDocSchema = z.object({
   period: z.string().min(1),
   counters: z.record(z.string(), z.number().nonnegative()).default({}),
   updatedAt: z.string(),
+  /**
+   * Id of the reserve/release call that produced this version. A conditional
+   * PUT that committed but whose response was lost is retried by the SDK
+   * layer, fails with 412, and would otherwise be re-applied by the CAS loop
+   * on re-read — a double debit (or double refund). Seeing its own id here
+   * tells the loop the write already landed.
+   */
+  lastWriteId: z.string().optional(),
 });
 export type UsageDoc = z.infer<typeof UsageDocSchema>;
 
