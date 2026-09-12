@@ -72,7 +72,7 @@ const ALLOWED: GuardResult = { allowed: true };
 /**
  * Enforces a limit for a signed-in caller.
  *
- * Returns `{ allowed: true }` when the feature is disabled, when the limit is
+ * Returns `{ allowed: true }` when no policy is authored, when the limit is
  * unlimited for this caller, in observe mode, and on any internal failure
  * where the policy says fail open — a quota is a cost control, and a storage
  * blip must never become a feature outage.
