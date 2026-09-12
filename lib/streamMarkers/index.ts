@@ -153,7 +153,7 @@ export interface ConsentOutcomePayload {
  * event body, typed by the workflow's own module.
  */
 export interface WorkflowEventPayload {
-  workflow: 'translation' | 'document' | 'data-analysis' | 'map';
+  workflow: 'translation' | 'document' | 'data-analysis' | 'map' | 'form-fill';
   type: string;
   data: unknown;
 }
