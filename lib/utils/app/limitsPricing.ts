@@ -10,7 +10,7 @@
  * the numbers are and are not.
  *
  * Conventions shared with the resolver (lib/services/limits/resolver.ts
- * resolveModelCells / pickGlobalEntry / entryAppliesTo), which this adapter
+ * resolveModelCells / entryAppliesTo / the global-default candidates), which this adapter
  * MUST mirror or the spend ceiling stops being an upper bound:
  *  - model ids and series compare case-insensitively (stored qualifiers are
  *    lowercased); a `null` cap is UNBOUNDED (never $0);
@@ -26,6 +26,7 @@
  *    envelope over its members — never a per-member allowance;
  *  - an upper bound takes the MIN over axes and never sums them.
  */
+import { restrictiveness } from '@/lib/services/limits/resolver';
 import type { LimitValue } from '@/lib/services/limits/types';
 
 import {
@@ -186,16 +187,9 @@ function sameId(a: string | undefined, b: string | undefined): boolean {
   return !!a && !!b && a.toLowerCase() === b.toLowerCase();
 }
 
-/**
- * Restrictiveness ordering, the resolver's same-specificity tie-break
- * (resolver.ts restrictiveness): false < 0 < 1 < … < null < true.
- */
-function restrictiveness(value: LimitValue): number {
-  if (value === false) return -1;
-  if (value === true) return Number.POSITIVE_INFINITY;
-  if (value === null) return Number.MAX_SAFE_INTEGER;
-  return value;
-}
+// `restrictiveness` — the resolver's own same-specificity tie-break — is
+// imported, not copied: a local copy is exactly how this estimator would
+// stop being an upper bound on enforcement.
 
 /** Which of a per-model key's two conjunctive cells is being resolved. */
 type CellKind = 'model' | 'family';
