@@ -14,6 +14,7 @@
  */
 import { ChatContext } from '@/lib/services/chat/pipeline/ChatContext';
 import { applyMode, meteredCells } from '@/lib/services/limits/enforcement';
+import { ResolvedLimit } from '@/lib/services/limits/resolver';
 import { reserve } from '@/lib/services/limits/usageStore';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -33,8 +34,15 @@ export async function consumeToolBudget(
   if (!limits) return true;
 
   try {
-    const { policy, principal } = limits;
-    const cells = meteredCells(policy, principal, limitKey);
+    const { policy, principal, active } = limits;
+    const cells = meteredCells(
+      policy,
+      principal,
+      limitKey,
+      undefined,
+      undefined,
+      active,
+    );
     // Unlimited for this caller → zero storage operations.
     if (cells.length === 0) return true;
 
@@ -61,7 +69,10 @@ export async function consumeToolBudget(
       used: result.denial.used,
       ...(result.denial.unavailable ? { unavailable: true } : {}),
       resetAt: result.denial.resetAt,
-      source: 'global',
+      // The layer that produced the cap — the audit line is what an admin
+      // watches in observe mode, and it used to say 'global' for every tool
+      // denial whatever override actually decided.
+      source: (result.denial.source ?? 'global') as ResolvedLimit['source'],
     });
     return decision.allowed;
   } catch (error) {
