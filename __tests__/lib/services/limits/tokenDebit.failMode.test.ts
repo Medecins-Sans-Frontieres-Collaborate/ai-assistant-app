@@ -49,17 +49,28 @@ describe('checkTokenBudget failMode', () => {
       limitKey: 'chat.tokensPerDay',
       limit: 1000,
       used: 0,
+      source: 'global',
       unavailable: true,
     });
   });
 
-  it('still reports a genuine overage as before', async () => {
+  it('still reports a genuine overage as before, with the deciding layer', async () => {
     policyRef.current = { failMode: 'closed', timezone: 'UTC' };
     vi.mocked(readUsage).mockResolvedValue({ 'chat.tokensPerDay': 1000 });
     expect(await checkTokenBudget(user)).toEqual({
       limitKey: 'chat.tokensPerDay',
       limit: 1000,
       used: 1000,
+      source: 'global',
     });
+  });
+
+  it('reads the day ledger from the caller-supplied counters instead of storage', async () => {
+    policyRef.current = { failMode: 'open', timezone: 'UTC' };
+    const result = await checkTokenBudget(user, {
+      dayCounters: { 'chat.tokensPerDay': 1000 },
+    });
+    expect(result?.used).toBe(1000);
+    expect(readUsage).not.toHaveBeenCalled();
   });
 });
