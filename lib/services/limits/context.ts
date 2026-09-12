@@ -14,6 +14,13 @@ export interface ChatLimits {
   policy: LimitsPolicy | null;
   principal: Principal;
   /**
+   * Delegations whose jurisdiction contains the principal, computed ONCE in
+   * createLimitsMiddleware (resolver `activeDelegationIds`) and reused by
+   * every later enforcement point in the request (tool budgets, fallback
+   * checks) instead of rescanning the jurisdictions per cell.
+   */
+  active?: ReadonlySet<string>;
+  /**
    * Effective per-request ceilings that call sites CLAMP to rather than
    * reject on (tool-loop rounds, upload size). Absent key = unlimited.
    */
