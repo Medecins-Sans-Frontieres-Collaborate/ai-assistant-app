@@ -27,6 +27,7 @@ export function truncateToolOutput(output: string): string {
 export function pendingCallToConsentMarker(
   call: McpPendingToolCall,
   serverLabel: string,
+  continuationToken?: string | null,
 ): string {
   return emitConsentRequest({
     kind: 'approval',
@@ -35,6 +36,7 @@ export function pendingCallToConsentMarker(
     server_label: serverLabel,
     tool_name: call.toolName,
     tool_arguments: call.argumentsJson,
+    ...(continuationToken ? { continuation_token: continuationToken } : {}),
   });
 }
 

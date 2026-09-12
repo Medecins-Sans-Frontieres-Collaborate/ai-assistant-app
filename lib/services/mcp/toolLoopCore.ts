@@ -1,3 +1,4 @@
+import { mintContinuationToken } from '@/lib/services/limits/continuationToken';
 import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
 import { ToolCallTelemetry } from '@/lib/services/observability/tokenUsageRecorder';
 
@@ -596,6 +597,9 @@ export async function runToolLoopCore<TMessage>(
                 argumentsJson: call.argumentsJson,
               },
               resolved.server.label,
+              // Proof of issuance for the resume's limits check — see
+              // lib/services/limits/continuationToken.ts.
+              mintContinuationToken(options.userId, call.id),
             ),
           );
         }
