@@ -647,8 +647,8 @@ describe('resolveLimit — override ceilings (global tier)', () => {
   });
 });
 
-describe('resolveLimit — neutrality for policies without delegations', () => {
-  it('mixed-specificity defaults resolve exactly as today: a qualified non-ceiling default shadows an unqualified ceiling default', () => {
+describe('resolveLimit — global defaults go through the one comparator (review 2026-09-12)', () => {
+  it("an unqualified ceiling default pins a qualified non-ceiling default's cell too", () => {
     const p = policy(
       [
         { limitKey: MODEL_REQUESTS.key, value: 100, ceiling: true },
@@ -662,8 +662,9 @@ describe('resolveLimit — neutrality for policies without delegations', () => {
         ),
       ],
     );
-    // Family cell: the series default wins the global layer and carries no
-    // ceiling, so the user override is NOT clamped (pre-delegation behaviour).
+    // Family cell: the series default is the layer's VALUE (500 would apply
+    // with no override), but the unqualified ceiling still pins the cell —
+    // "Hard ceiling" on the bare default means what the admin ticked.
     const family = resolveLimit(
       MODEL_REQUESTS,
       p,
@@ -671,13 +672,70 @@ describe('resolveLimit — neutrality for policies without delegations', () => {
       undefined,
       'gpt',
     );
-    expect(family.value).toBe(5000);
-    expect(family.ceilingApplied).toBeUndefined();
+    expect(family.value).toBe(100);
+    expect(family.ceilingApplied).toBe(true);
+    // Without the override the series default is the value, clamped too.
+    const noOverride = resolveLimit(
+      MODEL_REQUESTS,
+      policy(p.defaults, []),
+      principal(),
+      undefined,
+      'gpt',
+    );
+    expect(noOverride.value).toBe(100);
     // A cell the series default does not speak to falls to the unqualified
     // ceiling default, which clamps.
     const other = resolveLimit(MODEL_REQUESTS, p, principal(), 'claude-x');
     expect(other.value).toBe(100);
     expect(other.ceilingApplied).toBe(true);
+  });
+
+  it('a more specific ceiling default outranks a less specific one, as override ceilings do', () => {
+    const p = policy(
+      [
+        { limitKey: MODEL_REQUESTS.key, value: 100, ceiling: true },
+        {
+          limitKey: MODEL_REQUESTS.key,
+          series: 'gpt',
+          value: 300,
+          ceiling: true,
+        },
+      ],
+      [
+        override(
+          'user',
+          ['ada@example.org'],
+          [{ limitKey: MODEL_REQUESTS.key, value: 5000 }],
+        ),
+      ],
+    );
+    const family = resolveLimit(
+      MODEL_REQUESTS,
+      p,
+      principal(),
+      undefined,
+      'gpt',
+    );
+    expect(family.value).toBe(300);
+    const other = resolveLimit(MODEL_REQUESTS, p, principal(), 'claude-x');
+    expect(other.value).toBe(100);
+  });
+
+  it('two defaults for ONE cell cannot make the flagged one vanish', () => {
+    const p = policy(
+      [
+        { value: 100, ceiling: true },
+        { value: 50, ceiling: false },
+      ],
+      [override('user', ['ada@example.org'], [{ value: 500 }])],
+    );
+    // 50 is the layer's value (more restrictive on a tie), 100 still pins.
+    expect(
+      resolveLimit(CHAT_MESSAGES, policy(p.defaults, []), principal()).value,
+    ).toBe(50);
+    const withOverride = resolveLimit(CHAT_MESSAGES, p, principal());
+    expect(withOverride.value).toBe(100);
+    expect(withOverride.ceilingApplied).toBe(true);
   });
 
   it('`delegations: []` resolves byte-for-byte like a policy without the key', () => {
