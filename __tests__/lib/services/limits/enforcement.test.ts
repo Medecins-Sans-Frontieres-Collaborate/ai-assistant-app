@@ -1,4 +1,7 @@
-import { denialMessage } from '@/lib/services/limits/enforcement';
+import {
+  denialMessage,
+  effectiveCeiling,
+} from '@/lib/services/limits/enforcement';
 
 import { describe, expect, it } from 'vitest';
 
@@ -105,5 +108,51 @@ describe('denialMessage', () => {
     });
     expect(message).toContain('3');
     expect(message).not.toContain('not.a.real.key');
+  });
+});
+
+describe('fail-closed and observe-mode contracts (review 2026-09-12)', () => {
+  it('an `unavailable` denial says the counter was unreachable, never "reached"', () => {
+    const message = denialMessage({
+      limitKey: 'chat.messagesPerDay',
+      limit: 10,
+      used: 0,
+      unavailable: true,
+      source: 'global',
+    });
+    expect(message).toMatch(/temporarily unavailable/);
+    expect(message).not.toMatch(/reached/);
+  });
+
+  it('effectiveCeiling clamps nothing in observe mode and everything in enforce', () => {
+    const principal = { userId: 'oid-1', attributes: [], groupIds: [] };
+    const base = {
+      version: 1 as const,
+      defaults: [
+        { limitKey: 'feature.mcp.roundsPerRequest', value: 2, ceiling: false },
+      ],
+      overrides: [],
+      delegations: [],
+      failMode: 'open' as const,
+      timezone: 'UTC',
+      countByomUsage: false,
+      countAuxiliaryUsage: false,
+      updatedBy: 'x',
+      updatedAt: 'x',
+    };
+    expect(
+      effectiveCeiling(
+        { ...base, mode: 'observe' },
+        principal,
+        'feature.mcp.roundsPerRequest',
+      ),
+    ).toBeUndefined();
+    expect(
+      effectiveCeiling(
+        { ...base, mode: 'enforce' },
+        principal,
+        'feature.mcp.roundsPerRequest',
+      ),
+    ).toBe(2);
   });
 });

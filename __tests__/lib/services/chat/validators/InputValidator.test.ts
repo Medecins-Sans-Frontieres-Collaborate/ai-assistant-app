@@ -796,6 +796,25 @@ describe('validateChatRequest - mcpServers entries', () => {
     ]);
   });
 
+  it('accepts a continuationToken on an echoed pending tool call', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      mcpServers: [{ id: 'github', name: 'GitHub' }],
+      mcpPendingToolCalls: [
+        {
+          id: 'call_1',
+          serverId: 'github',
+          toolName: 'list_prs',
+          argumentsJson: '{}',
+          continuationToken: 'v1.1.abc',
+        },
+      ],
+      mcpLoopRound: 1,
+    });
+    expect(result.mcpPendingToolCalls?.[0].continuationToken).toBe('v1.1.abc');
+  });
+
   it('accepts an admin-connector entry carrying connectorId', () => {
     const validator = new InputValidator();
     const result = validator.validateChatRequest({

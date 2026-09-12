@@ -478,3 +478,85 @@ describe('AgentAccessConflictError reuse', () => {
     );
   });
 });
+
+/**
+ * Robustness review 2026-09-12: a conditional PUT that COMMITS but whose
+ * response is lost is retried by the SDK layer, fails with 412, and the CAS
+ * loop re-reads — which used to re-apply the increment (one request charged
+ * twice, and "charged then denied" at the cap). The document now carries
+ * the id of the write that produced it, so the loop recognizes its own
+ * landed write. And a per-operation deadline is reported to failMode, never
+ * retried like a 5xx.
+ */
+describe('reserve — lost-response retry and deadlines', () => {
+  let client: MockClient;
+  let storage: ReturnType<typeof createMockStorage>;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    client = createMockClient();
+    storage = createMockStorage(client);
+  });
+
+  it('does not debit twice when the committed PUT is retried and 412s', async () => {
+    let stored: UsageDoc | null = null;
+    client.download.mockImplementation(async () => {
+      if (!stored) throw notFound();
+      return downloadOf(stored, '"etag-2"');
+    });
+    let uploads = 0;
+    client.upload.mockImplementation(async (content: Buffer) => {
+      uploads += 1;
+      if (uploads === 1) {
+        // The write lands, then the response is lost on the wire.
+        stored = JSON.parse(content.toString('utf8')) as UsageDoc;
+        throw Object.assign(new Error('socket hang up'), {
+          code: 'ECONNRESET',
+        });
+      }
+      // The SDK-layer retry: the blob now exists → If-None-Match fails.
+      throw preconditionFailed();
+    });
+
+    const result = await reserve('oid-1', 'day', [counter({ limit: 1 })], {
+      storage,
+      now: NOW,
+      failMode: 'closed',
+    });
+
+    expect(result.allowed).toBe(true);
+    expect(result.debited).toHaveLength(1);
+    expect(stored!.counters['chat.messagesPerDay']).toBe(1);
+    expect(stored!.lastWriteId).toEqual(expect.any(String));
+    expect(uploads).toBe(2);
+  });
+
+  it('treats a deadline abort as final: one attempt, then failMode', async () => {
+    client.download.mockRejectedValue(
+      Object.assign(new Error('The operation was aborted.'), {
+        name: 'AbortError',
+      }),
+    );
+    const result = await reserve('oid-1', 'day', [counter()], {
+      storage,
+      now: NOW,
+      failMode: 'closed',
+    });
+    expect(result.allowed).toBe(false);
+    expect(result.denial?.unavailable).toBe(true);
+    expect(result.denial?.used).toBe(0);
+    expect(client.download).toHaveBeenCalledTimes(1);
+  });
+
+  it('passes an abort signal to every storage operation', async () => {
+    client.download.mockRejectedValue(notFound());
+    client.upload.mockResolvedValue({ etag: '"etag-1"' });
+    await reserve('oid-1', 'day', [counter()], { storage, now: NOW });
+    expect(client.download.mock.calls[0][2]?.abortSignal).toBeInstanceOf(
+      AbortSignal,
+    );
+    expect(client.upload.mock.calls[0][2]?.abortSignal).toBeInstanceOf(
+      AbortSignal,
+    );
+  });
+});
