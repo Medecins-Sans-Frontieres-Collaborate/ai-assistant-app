@@ -48,6 +48,7 @@ export const ADMIN_AREA_IDS = [
   'connectors',
   'guides',
   'map-datasets',
+  'form-templates',
   'limits',
   'workflows',
   'local-admins',
@@ -106,7 +107,13 @@ export async function resolveAdminAreas(
     if (config === null) configUnavailable = true;
     status = resolveAdminStatus(user, config);
     if (status.isGlobalAdmin || status.isLocalAdmin) {
-      areas.push('agents', 'connectors', 'guides', 'map-datasets');
+      areas.push(
+        'agents',
+        'connectors',
+        'guides',
+        'map-datasets',
+        'form-templates',
+      );
     }
     // The delegation map decides who else may edit rules, so it stays
     // global-admin only — matching AgentAccessPanel's own tab filter.
