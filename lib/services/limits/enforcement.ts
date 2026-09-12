@@ -36,6 +36,12 @@ export interface LimitDenial {
   used?: number;
   /** ISO instant the window rolls over; omitted for non-windowed limits. */
   resetAt?: string;
+  /**
+   * Fail-CLOSED denial: the counter could not be read or written and the
+   * policy's `failMode` chose to refuse. `used` is not a reading then, and
+   * the user-facing sentence must say "unavailable", not "reached".
+   */
+  unavailable?: boolean;
   /** Which layer produced the winning value — shown to admins, not users. */
   source: ResolvedLimit['source'];
   modelId?: string;
@@ -68,6 +74,7 @@ export function emitLimitAudit(
     `[limits-audit] decision=${decision} key=${sanitizeForLog(denial.limitKey)} ` +
       `limit=${denial.limit} used=${denial.used ?? '<n/a>'} ` +
       `source=${sanitizeForLog(denial.source)} ` +
+      (denial.unavailable ? 'reason=counter-unavailable ' : '') +
       `user=${sanitizeForLog(principal.mail ?? principal.userId ?? '<none>')}` +
       (denial.modelId ? ` model=${sanitizeForLog(denial.modelId)}` : '') +
       (denial.series ? ` family=${sanitizeForLog(denial.series)}` : ''),
@@ -108,6 +115,10 @@ export function applyMode(
  * (e.g. 'Request body too large (max 10MB)').
  */
 export function denialMessage(denial: LimitDenial): string {
+  // Counter unreadable under failMode 'closed': nothing was reached.
+  if (denial.unavailable) {
+    return 'Usage counters are temporarily unavailable, so this request was not allowed. Please try again in a moment.';
+  }
   const def = getLimitDefinition(denial.limitKey);
   const resets = denial.resetAt
     ? ` Resets ${new Date(denial.resetAt).toUTCString()}.`
@@ -203,13 +214,18 @@ export function checkCeiling(
 /**
  * The effective numeric value of a ceiling for a principal, for call sites
  * that need to CLAMP rather than reject (upload stream caps, tool-loop
- * rounds). Returns undefined when unlimited.
+ * rounds). Returns undefined when unlimited — and in OBSERVE mode, whatever
+ * the policy says: observe must change nothing for users (docs/LIMITS.md),
+ * and a clamp applied silently is a rejection by another name. Call sites
+ * that know the request's size use `checkCeiling` alongside this so observe
+ * mode still gets its would-block audit line.
  */
 export function effectiveCeiling(
   policy: LimitsPolicy | null,
   principal: Principal,
   limitKey: string,
 ): number | undefined {
+  if ((policy?.mode ?? 'observe') === 'observe') return undefined;
   const def = getLimitDefinition(limitKey);
   if (!def) return undefined;
   const resolved = resolveLimit(def, policy, principal);
