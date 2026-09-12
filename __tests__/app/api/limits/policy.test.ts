@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import {
+  PolicyUnreadableError,
   createLimitsBlobStorage,
   readPolicy,
   writeHistoryEntry,
@@ -601,6 +602,42 @@ describe('/api/limits/policy', () => {
         { scope: 'domain', targets: ['ocp.msf.org'] },
       ]);
       expect(LimitsPolicySchema.safeParse(written).success).toBe(true);
+    });
+
+    it('rejects two defaults for one limit cell (review 2026-09-12)', async () => {
+      vi.mocked(readPolicy).mockResolvedValue(null);
+      const response = await PUT(
+        putRequest({
+          ...validBody,
+          defaults: [
+            { limitKey: 'chat.messagesPerDay', value: 100, ceiling: true },
+            { limitKey: 'chat.messagesPerDay', value: 50 },
+          ],
+        }),
+      );
+      expect(response.status).toBe(400);
+      // Different qualifiers are different cells and stay accepted.
+      vi.mocked(writePolicy).mockResolvedValue('"e2"');
+      const ok = await PUT(
+        putRequest({
+          ...validBody,
+          defaults: [
+            { limitKey: 'model.requests', value: 100 },
+            { limitKey: 'model.requests', series: 'gpt', value: 50 },
+          ],
+        }),
+      );
+      expect(ok.status).toBe(200);
+    });
+
+    it('answers 503 LIMITS_POLICY_UNAVAILABLE when the stored document is unreadable (review 2026-09-12)', async () => {
+      vi.mocked(readPolicy).mockRejectedValue(
+        new PolicyUnreadableError(new SyntaxError('Unexpected end of JSON')),
+      );
+      const response = await PUT(putRequest(validBody, { 'If-Match': '"e"' }));
+      expect(response.status).toBe(503);
+      const body = await response.json();
+      expect(body.code).toBe('LIMITS_POLICY_UNAVAILABLE');
     });
 
     it('rejects duplicate delegation ids', async () => {
