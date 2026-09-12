@@ -95,6 +95,25 @@ describe('useMyLimits', () => {
     expect(result.current.enforce).toBe(true);
   });
 
+  it('coalesces concurrent refetches into ONE request (reset-boundary fan-out)', async () => {
+    const fetchSpy = vi.fn().mockResolvedValue(okResponse({}));
+    vi.stubGlobal('fetch', fetchSpy);
+    const { Wrapper } = makeWrapper();
+    const { result } = renderHook(() => useMyLimits(), { wrapper: Wrapper });
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+
+    // Every exhausted row fires onExpired at the same instant.
+    await act(async () => {
+      await Promise.all([
+        result.current.refetch(),
+        result.current.refetch(),
+        result.current.refetch(),
+      ]);
+    });
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+  });
+
   it('does not fetch at all when the usageLimits flag is off (fail open)', async () => {
     flags.usageLimits = undefined;
     const fetchSpy = vi.fn();
