@@ -21,13 +21,12 @@
  * verdicts at authoring time, and the server computes them on GET for the
  * post-narrowing chip — one implementation, never two that drift.
  */
-import { resolveLimit } from '@/lib/services/limits/resolver';
+import { resolveLimit, restrictiveness } from '@/lib/services/limits/resolver';
 import {
   JurisdictionPredicate,
   LimitDelegation,
   LimitEntry,
   LimitOverride,
-  LimitValue,
   LimitsPolicy,
   OverrideScope,
 } from '@/lib/services/limits/types';
@@ -273,17 +272,6 @@ export function canPreviewMail(
 // ---------------------------------------------------------------------------
 // Audit: how many entries RAISE over the global tier
 // ---------------------------------------------------------------------------
-
-/**
- * Same ordering as the resolver's tie-break — false < 0 < … < n < null < true
- * — kept local so this module stays independent of resolver internals.
- */
-function restrictiveness(value: LimitValue): number {
-  if (value === false) return -1;
-  if (value === true) return Number.POSITIVE_INFINITY;
-  if (value === null) return Number.MAX_SAFE_INTEGER;
-  return value;
-}
 
 /** How many targets a raise count inspects — bounds the work per write. */
 const RAISE_SAMPLE_TARGETS = 25;
