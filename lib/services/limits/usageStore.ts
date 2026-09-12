@@ -120,6 +120,12 @@ export interface ReserveResult {
   failedOpen?: boolean;
   /** Cells actually debited — the input for a compensating release(). */
   debited?: CounterRequest[];
+  /**
+   * The window's counters AFTER the write, when one happened. Lets a caller
+   * that needs another reading from the same document (the token pre-flight
+   * reads the day ledger the reservation just wrote) skip a second GET.
+   */
+  counters?: Readonly<Record<string, number>>;
 }
 
 const ALLOWED_NO_OP: ReserveResult = { allowed: true };
@@ -204,7 +210,7 @@ export async function reserve(
       // Our own write already landed (the PUT committed, its response was
       // lost, the SDK retry hit 412): success, never a second increment.
       if (doc.lastWriteId === writeId) {
-        return { allowed: true, debited: counters };
+        return { allowed: true, debited: counters, counters: doc.counters };
       }
 
       // ── The check that makes this exact: inside the loop, against the
@@ -247,7 +253,7 @@ export async function reserve(
         'limits.writeUsage',
         ioDeadline(),
       );
-      return { allowed: true, debited: counters };
+      return { allowed: true, debited: counters, counters: next.counters };
     } catch (error) {
       if (error instanceof AgentAccessConflictError) {
         if (attempt < CAS_ATTEMPTS) {
