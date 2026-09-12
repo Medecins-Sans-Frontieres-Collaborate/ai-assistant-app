@@ -720,6 +720,17 @@ describe('LimitsPanel — global mode', () => {
     ).toBeGreaterThan(0);
   });
 
+  it('warns before Save when the timezone differs from the stored one — counters restart', async () => {
+    globalRouting();
+    renderPanel();
+    const timezone = await screen.findByLabelText('timezoneLabel');
+    expect(screen.queryByText('timezoneChangeWarning')).not.toBeInTheDocument();
+    fireEvent.change(timezone, { target: { value: 'Europe/Paris' } });
+    expect(screen.getByText('timezoneChangeWarning')).toBeInTheDocument();
+    fireEvent.change(timezone, { target: { value: 'UTC' } });
+    expect(screen.queryByText('timezoneChangeWarning')).not.toBeInTheDocument();
+  });
+
   it('always PUTs delegations with the whole policy (stored ids kept, no audit fields)', async () => {
     globalRouting((call) =>
       call.method === 'PUT'
