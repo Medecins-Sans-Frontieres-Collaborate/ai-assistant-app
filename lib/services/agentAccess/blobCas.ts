@@ -105,6 +105,7 @@ export async function uploadJson(
   payload: unknown,
   ifMatchEtag: string | null,
   label: string,
+  options: DownloadBlobOptions = {},
 ): Promise<string> {
   const client = storage.getBlockBlobClient(blobPath);
   const content = Buffer.from(JSON.stringify(payload), 'utf8');
@@ -116,6 +117,7 @@ export async function uploadJson(
           conditions: ifMatchEtag
             ? { ifMatch: ifMatchEtag }
             : { ifNoneMatch: '*' },
+          ...(options.abortSignal ? { abortSignal: options.abortSignal } : {}),
         }),
       { label },
     );
