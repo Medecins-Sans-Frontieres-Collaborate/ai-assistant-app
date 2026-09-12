@@ -16,6 +16,7 @@ import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
 import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
+import { isVerifiedContinuation } from '@/lib/services/limits/continuationToken';
 import {
   LimitCheckResult,
   applyMode,
@@ -1448,8 +1449,17 @@ export async function createLimitsMiddleware(
     //
     //    An MCP tool-loop continuation is the same logical message as the turn
     //    that started it, so only round 0 is counted; otherwise a single
-    //    question costs a user five messages.
-    const isToolLoopContinuation = (context.mcpLoopRound ?? 0) > 0;
+    //    question costs a user five messages. "Continuation" is decided by
+    //    the server-signed token on every pending call, NOT by the client's
+    //    round counter alone — a bare `mcpLoopRound: 1` used to skip every
+    //    counter (lib/services/limits/continuationToken.ts). A round that
+    //    fails verification is metered as a new message, never rejected.
+    const isToolLoopContinuation = isVerifiedContinuation(
+      principal.userId,
+      context.mcpLoopRound,
+      context.mcpPendingToolCalls,
+      context.mcpServers?.length ?? 0,
+    );
     if (!isToolLoopContinuation) {
       const cells = [
         ...meteredCells(policy, principal, 'chat.messagesPerDay'),
@@ -1481,6 +1491,7 @@ export async function createLimitsMiddleware(
               limitKey: reservation.denial.limitKey,
               limit: reservation.denial.limit,
               used: reservation.denial.used,
+              ...(reservation.denial.unavailable ? { unavailable: true } : {}),
               resetAt: reservation.denial.resetAt,
               source: (reservation.denial.source ??
                 'global') as ResolvedLimit['source'],
@@ -1508,6 +1519,7 @@ export async function createLimitsMiddleware(
             limitKey: overBudget.limitKey,
             limit: overBudget.limit,
             used: overBudget.used,
+            ...(overBudget.unavailable ? { unavailable: true } : {}),
             resetAt: resetAt(
               overBudget.limitKey === 'chat.tokensPerMonth' ? 'month' : 'day',
               policy?.timezone ?? 'UTC',

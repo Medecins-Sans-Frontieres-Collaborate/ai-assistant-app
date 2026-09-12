@@ -491,11 +491,16 @@ const ChatBodySchema = z
             serverId: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/),
             toolName: z.string().min(1).max(256),
             argumentsJson: z.string().max(20000),
+            // Server-signed continuation proof (limits/continuationToken.ts);
+            // verified, never trusted, by the limits middleware.
+            continuationToken: z.string().max(256).optional(),
           })
           .strict(),
       )
       .max(10)
       .optional(),
+    // Client-supplied and therefore NOT what decides whether a round is
+    // metered — that is the signed token above (see createLimitsMiddleware).
     mcpLoopRound: z.number().int().min(0).max(10).optional(),
     // Mail-screen override ids (fifth-pass hostile-mail hardening): message
     // ids the user explicitly revealed via the flagged-result UI control.
