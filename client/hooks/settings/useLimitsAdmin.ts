@@ -54,33 +54,6 @@ export interface LimitsCostFlags {
   calculator: boolean;
 }
 
-/**
- * True when the `limitsCostInsights` LaunchDarkly flag is explicitly on.
- *
- * Same posture as `useLimitsEnabled`: CLIENT-side only, gates UI (cost
- * copy is never a security boundary — the prices already ride in the model
- * list), no localhost escape hatch (the parent `usageLimits` gate has none,
- * so a child hatch would be reachable only when flags are bootstrapped
- * anyway). Fail-closed `=== true`: list-price estimates must stay hidden —
- * and uncomputed — until the flag is deliberately served.
- */
-export function useLimitsCostInsightsEnabled(): boolean {
-  const { limitsCostInsights } = useFlags();
-  // fail-closed: an unserved or missing flag must hide (and not compute) cost figures
-  return limitsCostInsights === true;
-}
-
-/**
- * True when the `limitsCostCalculator` flag is on AND `limitsCostInsights`
- * is on: there is no calculator without the per-row numbers it explains
- * (design §1). Fail-closed on both.
- */
-export function useLimitsCostCalculatorEnabled(): boolean {
-  const { limitsCostInsights, limitsCostCalculator } = useFlags();
-  // fail-closed on both flags: the calculator requires the insights it explains
-  return limitsCostInsights === true && limitsCostCalculator === true;
-}
-
 /** Both cost gates in one read (the shape `LimitsCostProvider` consumes). */
 export function useLimitsCostFlags(): LimitsCostFlags {
   const { limitsCostInsights, limitsCostCalculator } = useFlags();
