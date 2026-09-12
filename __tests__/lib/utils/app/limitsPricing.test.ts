@@ -20,7 +20,7 @@ import { describe, expect, it } from 'vitest';
 /**
  * The limits adapter's contract (docs/LIMITS_COST_INSIGHTS_DESIGN.md §3a),
  * which MUST mirror enforcement (resolver.ts resolveModelCells /
- * pickGlobalEntry / entryAppliesTo — every expectation below was cross-checked
+ * global-default candidates / entryAppliesTo — every expectation below was cross-checked
  * against min over those cells and checkGate): a case-insensitive pricing
  * index with static-registry fallback; a per-model key has TWO conjunctive
  * cells — the MODEL cell and (only with a `series`) the FAMILY cell — each
