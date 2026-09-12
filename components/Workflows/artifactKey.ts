@@ -75,6 +75,16 @@ export function artifactOf(state: WorkflowState | undefined): WorkflowArtifact {
     case 'grants':
       // Telemetry only (§7a) — no ledger, so this is never consulted.
       return WORKSPACE;
+    case 'form-fill': {
+      // Each document is its own artifact: filling a second form in the
+      // same conversation is a second deliverable with its own spend.
+      const active = state.documents.find(
+        (d) => d.id === state.activeDocumentId,
+      );
+      return active
+        ? { id: `form:${active.id}`, label: active.template.name }
+        : WORKSPACE;
+    }
     default:
       return WORKSPACE;
   }
