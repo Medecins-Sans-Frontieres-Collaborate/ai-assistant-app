@@ -126,12 +126,22 @@ export async function debitTokenUsage(
  * Pre-flight, read-only: is this user already over a token budget? Called
  * from createLimitsMiddleware before any generation starts.
  */
+export interface TokenBudgetExceeded {
+  limitKey: string;
+  limit: number;
+  used: number;
+  /** The counter could not be read and the policy's failMode is 'closed'. */
+  unavailable?: boolean;
+}
+
 export async function checkTokenBudget(
   user: Session['user'] | undefined,
-): Promise<{ limitKey: string; limit: number; used: number } | null> {
+): Promise<TokenBudgetExceeded | null> {
   if (!user?.id) return null;
+  let policy: Awaited<ReturnType<typeof currentPolicy>> = null;
+  let metered: { limitKey: string; limit: number } | undefined;
   try {
-    const policy = await currentPolicy();
+    policy = await currentPolicy();
     if (!policy) return null;
     const principal = buildPrincipal({ user } as Session);
     const { readUsage } = await import('@/lib/services/limits/usageStore');
@@ -139,6 +149,7 @@ export async function checkTokenBudget(
     for (const limitKey of TOKEN_KEYS) {
       const cells = meteredCells(policy, principal, limitKey);
       if (cells.length === 0) continue;
+      metered ??= { limitKey, limit: cells[0].value as number };
       const periodKind = limitKey === 'chat.tokensPerMonth' ? 'month' : 'day';
       const counters = await readUsage(principal.userId, periodKind, {
         timezone: policy.timezone,
@@ -152,7 +163,17 @@ export async function checkTokenBudget(
     }
     return null;
   } catch (error) {
-    // FAIL OPEN — a counter read failure must not block chat.
+    // The counter read failed. Honour the policy's failMode exactly as the
+    // reservation path does (docs/LIMITS.md): 'open' lets the request through
+    // uncounted, 'closed' refuses it and says the counter was unavailable.
+    // `metered` is only set once a token limit is known to apply, so an
+    // unmetered caller is never refused for an outage they never touched.
+    if (policy?.failMode === 'closed' && metered) {
+      console.error(
+        `[limits] token budget check FAIL-CLOSED: ${sanitizeForLog(error)}`,
+      );
+      return { ...metered, used: 0, unavailable: true };
+    }
     console.error(
       `[limits] token budget check FAIL-OPEN: ${sanitizeForLog(error)}`,
     );
