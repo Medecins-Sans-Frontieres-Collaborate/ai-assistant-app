@@ -29,7 +29,11 @@ import {
 import { isModelBlocked } from '@/lib/services/limits/modelAvailability';
 import { resetAt } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
-import { ResolvedLimit, counterCellName } from '@/lib/services/limits/resolver';
+import {
+  ResolvedLimit,
+  activeDelegationIds,
+  counterCellName,
+} from '@/lib/services/limits/resolver';
 import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
 import { reserve } from '@/lib/services/limits/usageStore';
 import { checkAgentSourceAccess } from '@/lib/services/m365/agentSourceAccess';
@@ -1407,6 +1411,11 @@ export async function createLimitsMiddleware(
     const principal = buildPrincipal({ user: context.user } as Session);
     const modelId = context.modelId;
     const series = context.model?.series;
+    // The delegations this principal is inside — scanned ONCE here and
+    // threaded through every resolution below (and, via ChatContext.limits,
+    // through the tool budgets later in the request). Before this each of
+    // the ~16 cell resolutions per request rescanned every jurisdiction.
+    const active = activeDelegationIds(policy, principal);
 
     // byom models run against the USER'S OWN Foundry account under their own
     // OBO token and cost the org nothing, so per-model caps are skipped
@@ -1433,13 +1442,17 @@ export async function createLimitsMiddleware(
         'model.allowed',
         modelId,
         series,
+        active,
       );
       throwIfDenied(modelGate, context);
     }
 
-    for (const [limitKey, active] of gates) {
-      if (!active) continue;
-      throwIfDenied(checkGate(policy, principal, limitKey), context);
+    for (const [limitKey, inUse] of gates) {
+      if (!inUse) continue;
+      throwIfDenied(
+        checkGate(policy, principal, limitKey, undefined, undefined, active),
+        context,
+      );
     }
 
     // ── Counters. `chat.messagesPerDay`, `model:<id>.requests` and
@@ -1454,6 +1467,7 @@ export async function createLimitsMiddleware(
     //    round counter alone — a bare `mcpLoopRound: 1` used to skip every
     //    counter (lib/services/limits/continuationToken.ts). A round that
     //    fails verification is metered as a new message, never rejected.
+    let dayCounters: Readonly<Record<string, number>> | undefined;
     const isToolLoopContinuation = isVerifiedContinuation(
       principal.userId,
       context.mcpLoopRound,
@@ -1462,10 +1476,24 @@ export async function createLimitsMiddleware(
     );
     if (!isToolLoopContinuation) {
       const cells = [
-        ...meteredCells(policy, principal, 'chat.messagesPerDay'),
+        ...meteredCells(
+          policy,
+          principal,
+          'chat.messagesPerDay',
+          undefined,
+          undefined,
+          active,
+        ),
         ...(byomExempt
           ? []
-          : meteredCells(policy, principal, 'model.requests', modelId, series)),
+          : meteredCells(
+              policy,
+              principal,
+              'model.requests',
+              modelId,
+              series,
+              active,
+            )),
       ];
       if (cells.length > 0) {
         const reservation = await reserve(
@@ -1485,6 +1513,7 @@ export async function createLimitsMiddleware(
             failMode: policy?.failMode ?? 'open',
           },
         );
+        dayCounters = reservation.counters;
         if (!reservation.allowed && reservation.denial) {
           throwIfDenied(
             applyMode(policy, principal, {
@@ -1512,7 +1541,12 @@ export async function createLimitsMiddleware(
     // token limit is actually configured for this principal. Soft by nature —
     // see lib/services/limits/tokenDebit.ts.
     if (!isToolLoopContinuation) {
-      const overBudget = await checkTokenBudget(context.user);
+      // The day ledger was just read (and written) by the reservation above;
+      // the pre-flight reuses it rather than downloading the same blob again.
+      const overBudget = await checkTokenBudget(context.user, {
+        dayCounters,
+        active,
+      });
       if (overBudget) {
         throwIfDenied(
           applyMode(policy, principal, {
@@ -1524,7 +1558,7 @@ export async function createLimitsMiddleware(
               overBudget.limitKey === 'chat.tokensPerMonth' ? 'month' : 'day',
               policy?.timezone ?? 'UTC',
             ),
-            source: 'global',
+            source: overBudget.source,
           }),
           context,
         );
@@ -1534,7 +1568,7 @@ export async function createLimitsMiddleware(
     // Ceilings downstream code CLAMPS to rather than rejecting on.
     const ceilings: Record<string, number> = {};
     for (const key of ['feature.mcp.roundsPerRequest']) {
-      const value = effectiveCeiling(policy, principal, key);
+      const value = effectiveCeiling(policy, principal, key, active);
       if (value !== undefined) ceilings[key] = value;
     }
 
@@ -1554,6 +1588,7 @@ export async function createLimitsMiddleware(
             principal,
             id,
             OpenAIModels[id as OpenAIModelID]?.series,
+            active,
           ),
         )
       : [];
@@ -1562,6 +1597,7 @@ export async function createLimitsMiddleware(
       limits: {
         policy,
         principal,
+        active,
         ceilings,
         blockedModelIds,
         ...(byomExempt ? { byomExempt } : {}),
