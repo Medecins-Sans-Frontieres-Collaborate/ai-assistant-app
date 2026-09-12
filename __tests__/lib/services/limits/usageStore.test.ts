@@ -560,3 +560,57 @@ describe('reserve — lost-response retry and deadlines', () => {
     );
   });
 });
+
+describe('reserve — input and ETag hardening (review 2026-09-12 LOW)', () => {
+  let client: MockClient;
+  let storage: ReturnType<typeof createMockStorage>;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    client = createMockClient();
+    storage = createMockStorage(client);
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  it('refuses a non-finite or negative cost before touching storage', async () => {
+    await expect(
+      reserve('oid-1', 'day', [counter({ cost: Number.NaN })], {
+        storage,
+        now: NOW,
+      }),
+    ).rejects.toThrow(TypeError);
+    await expect(
+      reserve('oid-1', 'day', [counter({ cost: -1 })], { storage, now: NOW }),
+    ).rejects.toThrow(TypeError);
+    expect(client.download).not.toHaveBeenCalled();
+  });
+
+  it('treats a download with no ETag as a final failure, not a 412 loop', async () => {
+    client.download.mockResolvedValue(downloadOf({}, ''));
+    const result = await reserve('oid-1', 'day', [counter()], {
+      storage,
+      now: NOW,
+      failMode: 'closed',
+    });
+    expect(result.allowed).toBe(false);
+    expect(result.denial?.unavailable).toBe(true);
+    expect(client.download).toHaveBeenCalledTimes(1);
+    expect(client.upload).not.toHaveBeenCalled();
+  });
+
+  it('logs a corrupt document instead of resetting it silently', async () => {
+    client.download.mockResolvedValue({
+      etag: '"etag-1"',
+      readableStreamBody: Readable.from([Buffer.from('{not json', 'utf8')]),
+    });
+    client.upload.mockResolvedValue({ etag: '"etag-2"' });
+    const result = await reserve('oid-1', 'day', [counter()], {
+      storage,
+      now: NOW,
+    });
+    expect(result.allowed).toBe(true);
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining('usage document is not JSON'),
+    );
+  });
+});
