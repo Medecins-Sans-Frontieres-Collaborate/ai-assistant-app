@@ -26,6 +26,7 @@ import { Session } from 'next-auth';
 import { currentPolicy, meteredCells } from '@/lib/services/limits/enforcement';
 import { periodKindForWindow } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
+import { ResolvedLimit } from '@/lib/services/limits/resolver';
 import { reserve } from '@/lib/services/limits/usageStore';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -130,16 +131,32 @@ export interface TokenBudgetExceeded {
   limitKey: string;
   limit: number;
   used: number;
+  /** Which policy layer produced the cap — for the audit line. */
+  source: ResolvedLimit['source'];
   /** The counter could not be read and the policy's failMode is 'closed'. */
   unavailable?: boolean;
 }
 
+export interface TokenBudgetOptions {
+  /**
+   * The caller's DAY counters as already read this request (the message
+   * reservation returns the document it wrote). Saves the second GET of the
+   * very same blob; the month ledger is still read when a monthly cap applies.
+   */
+  dayCounters?: Readonly<Record<string, number>>;
+  /** Precomputed active delegations (resolver `activeDelegationIds`). */
+  active?: ReadonlySet<string>;
+}
+
 export async function checkTokenBudget(
   user: Session['user'] | undefined,
+  options: TokenBudgetOptions = {},
 ): Promise<TokenBudgetExceeded | null> {
   if (!user?.id) return null;
   let policy: Awaited<ReturnType<typeof currentPolicy>> = null;
-  let metered: { limitKey: string; limit: number } | undefined;
+  let metered:
+    | Pick<TokenBudgetExceeded, 'limitKey' | 'limit' | 'source'>
+    | undefined;
   try {
     policy = await currentPolicy();
     if (!policy) return null;
@@ -147,17 +164,36 @@ export async function checkTokenBudget(
     const { readUsage } = await import('@/lib/services/limits/usageStore');
 
     for (const limitKey of TOKEN_KEYS) {
-      const cells = meteredCells(policy, principal, limitKey);
+      const cells = meteredCells(
+        policy,
+        principal,
+        limitKey,
+        undefined,
+        undefined,
+        options.active,
+      );
       if (cells.length === 0) continue;
-      metered ??= { limitKey, limit: cells[0].value as number };
+      metered ??= {
+        limitKey,
+        limit: cells[0].value as number,
+        source: cells[0].source,
+      };
       const periodKind = limitKey === 'chat.tokensPerMonth' ? 'month' : 'day';
-      const counters = await readUsage(principal.userId, periodKind, {
-        timezone: policy.timezone,
-      });
+      const counters =
+        periodKind === 'day' && options.dayCounters
+          ? options.dayCounters
+          : await readUsage(principal.userId, periodKind, {
+              timezone: policy.timezone,
+            });
       for (const cell of cells) {
         const used = counters[cell.limitKey] ?? 0;
         if (used >= (cell.value as number)) {
-          return { limitKey: cell.limitKey, limit: cell.value as number, used };
+          return {
+            limitKey: cell.limitKey,
+            limit: cell.value as number,
+            used,
+            source: cell.source,
+          };
         }
       }
     }
