@@ -18,6 +18,7 @@ import {
 } from '@/components/Admin/adminClasses';
 import { DelegationEditor } from '@/components/Limits/DelegationEditor';
 import {
+  LiftableEntry,
   delegationOverlaps,
   mergeRelevantRules,
   overlapsFor,
@@ -84,16 +85,52 @@ export const DelegationsTab: FC<DelegationsTabProps> = ({
   const ownedBy = (id: string) =>
     overrides.filter((o) => o.delegationId === id);
 
-  const liftDefault = (entry: LimitEntry) =>
-    onChange({
-      defaults: defaults.map((candidate) =>
-        candidate.limitKey === entry.limitKey &&
-        candidate.modelId === entry.modelId &&
-        candidate.series === entry.series
-          ? { ...candidate, ceiling: true }
-          : candidate,
-      ),
-    });
+  const sameCell = (a: LimitEntry, b: LimitEntry) =>
+    a.limitKey === b.limitKey &&
+    a.modelId === b.modelId &&
+    a.series === b.series;
+
+  /** Pin one liftable row — see `liftableEntries` for the three sources. */
+  const lift = (item: LiftableEntry) => {
+    const { entry } = item;
+    switch (item.source) {
+      case 'default':
+        onChange({
+          defaults: defaults.map((candidate) =>
+            sameCell(candidate, entry)
+              ? { ...candidate, ceiling: true }
+              : candidate,
+          ),
+        });
+        return;
+      case 'catalog':
+        // Configure the compiled default at its own value, pinned: the
+        // resolver reads ceilings off entries, so a catalog-only key has
+        // nothing to pin until a default exists for it.
+        onChange({
+          defaults: [
+            ...defaults,
+            { limitKey: entry.limitKey, value: entry.value, ceiling: true },
+          ],
+        });
+        return;
+      case 'override':
+        onChange({
+          overrides: overrides.map((override) =>
+            override.id === item.overrideId
+              ? {
+                  ...override,
+                  entries: override.entries.map((candidate) =>
+                    sameCell(candidate, entry)
+                      ? { ...candidate, ceiling: true }
+                      : candidate,
+                  ),
+                }
+              : override,
+          ),
+        });
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -177,6 +214,7 @@ export const DelegationsTab: FC<DelegationsTabProps> = ({
             )}
             labelFor={labelFor}
             globalDefaults={defaults}
+            globalOverrides={overrides}
             onChange={(next) =>
               onChange({
                 delegations: delegations.map((d) =>
@@ -204,7 +242,7 @@ export const DelegationsTab: FC<DelegationsTabProps> = ({
                 ),
               })
             }
-            onLiftDefault={liftDefault}
+            onLiftDefault={lift}
             disabled={disabled}
             defaultExpanded={newIds.has(delegation.id)}
             isNew={newIds.has(delegation.id)}
