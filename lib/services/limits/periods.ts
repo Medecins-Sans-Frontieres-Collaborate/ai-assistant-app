@@ -109,6 +109,7 @@ function walkToBoundary(
   // exact boundary. Bounded: at most 32 + 96 iterations.
   const DAY_MS = 24 * 60 * 60 * 1000;
   const QUARTER_HOUR_MS = 15 * 60 * 1000;
+  const MINUTE_MS = 60 * 1000;
   const maxDays = kind === 'month' ? 32 : 2;
 
   let coarse = at.getTime();
@@ -120,6 +121,18 @@ function walkToBoundary(
   for (let i = 0; i < 96; i++) {
     const next = walked + QUARTER_HOUR_MS;
     if (currentPeriod(kind, timezone, new Date(next)) !== current) {
+      // Inside the 15-minute bucket, find the exact minute: a zone whose
+      // offset is not a multiple of 15 minutes, or a caller in the last
+      // bucket of the day, otherwise saw a reset up to 14 minutes late.
+      // Memoized per period, so the extra ≤15 steps run once per replica.
+      let minute = walked;
+      for (let j = 0; j < 15; j++) {
+        const candidate = minute + MINUTE_MS;
+        if (currentPeriod(kind, timezone, new Date(candidate)) !== current) {
+          return new Date(candidate).toISOString();
+        }
+        minute = candidate;
+      }
       return new Date(next).toISOString();
     }
     walked = next;
