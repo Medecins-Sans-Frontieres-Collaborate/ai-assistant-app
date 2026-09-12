@@ -1144,6 +1144,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             argumentOverrides.get(c.approval_request_id!) ??
             c.tool_arguments ??
             '{}',
+          // Echo the server's continuation proof so the resume is not
+          // metered as a fresh message (lib/services/limits/continuationToken.ts).
+          ...(c.continuation_token
+            ? { continuationToken: c.continuation_token }
+            : {}),
         }))
       : undefined;
     // Plan echo: the turn plan persisted on the same message that carries
