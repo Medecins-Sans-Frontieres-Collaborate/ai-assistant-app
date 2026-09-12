@@ -59,6 +59,7 @@ export async function consumeToolBudget(
       limitKey: result.denial.limitKey,
       limit: result.denial.limit,
       used: result.denial.used,
+      ...(result.denial.unavailable ? { unavailable: true } : {}),
       resetAt: result.denial.resetAt,
       source: 'global',
     });
