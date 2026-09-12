@@ -55,18 +55,34 @@ const entryBase = z.object({
 
 type EntryLike = z.infer<typeof entryBase>;
 
-/** The three cross-field rules every entry write obeys, whatever its `ceiling` shape. */
+/** The cross-field rules every entry write obeys, whatever its `ceiling` shape. */
 function refineEntry<E extends EntryLike>(schema: z.ZodType<E>): z.ZodType<E> {
-  return schema
-    .refine((e) => !(e.modelId && e.series), {
-      message: 'An entry may carry at most one of modelId / series',
-    })
-    .refine((e) => !e.modelId || getLimitDefinition(e.limitKey)?.perModel, {
-      message: 'This limit cannot be qualified by a model',
-    })
-    .refine((e) => !e.series || getLimitDefinition(e.limitKey)?.perModel, {
-      message: 'This limit cannot be qualified by a series',
-    });
+  return (
+    schema
+      // Value shape follows the catalog unit: a boolean gate takes true/false,
+      // everything else a number or null. A `true` on a numeric key used to
+      // pass, and the resolver reads `true` as "allowed" — past every ceiling,
+      // the compiled hardCeiling included.
+      .refine(
+        (e) => {
+          const unit = getLimitDefinition(e.limitKey)?.unit;
+          if (unit === undefined) return true; // limitKey refine reports it
+          return unit === 'boolean'
+            ? typeof e.value === 'boolean'
+            : typeof e.value !== 'boolean';
+        },
+        { message: 'Value shape does not match the limit unit' },
+      )
+      .refine((e) => !(e.modelId && e.series), {
+        message: 'An entry may carry at most one of modelId / series',
+      })
+      .refine((e) => !e.modelId || getLimitDefinition(e.limitKey)?.perModel, {
+        message: 'This limit cannot be qualified by a model',
+      })
+      .refine((e) => !e.series || getLimitDefinition(e.limitKey)?.perModel, {
+        message: 'This limit cannot be qualified by a series',
+      })
+  );
 }
 
 /** Global write: `ceiling` is the global admin's pin (design §3c). */
@@ -85,12 +101,23 @@ export const scopedEntrySchema = refineEntry(
   entryBase.extend({ ceiling: z.literal(false).optional() }).strict(),
 );
 
+/**
+ * Override targets are stored CANONICAL (trim + lowercase + dedupe + blank-
+ * free), exactly like jurisdiction targets and delegation admins — the
+ * matchers compare canonically anyway, so storing the raw spelling only
+ * bought a per-target lowercase on every resolution pass.
+ */
+const overrideTargets = z
+  .array(z.string().min(1).max(320))
+  .max(MAX_TARGETS_PER_OVERRIDE)
+  .transform(canonicalList);
+
 export const overrideSchema = z.object({
   id: z.string().regex(OVERRIDE_ID_RE),
   label: z.string().max(200).default(''),
   enabled: z.boolean().default(true),
   scope: z.enum(['user', 'domain', 'attribute', 'group']),
-  targets: z.array(z.string().min(1).max(320)).max(MAX_TARGETS_PER_OVERRIDE),
+  targets: overrideTargets,
   priority: z.number().int().min(-1000).max(1000).default(0),
   /** Present ⇒ scoped tier; must name a delegation in the same document. */
   delegationId: z.string().regex(DELEGATION_ID_RE).optional(),
@@ -110,7 +137,7 @@ export const scopedOverrideBodySchema = z
     label: z.string().max(200).default(''),
     enabled: z.boolean().default(true),
     scope: z.enum(['user', 'domain', 'attribute', 'group']),
-    targets: z.array(z.string().min(1).max(320)).max(MAX_TARGETS_PER_OVERRIDE),
+    targets: overrideTargets,
     priority: z.literal(0).optional(),
     entries: z.array(scopedEntrySchema).max(MAX_ENTRIES_PER_OVERRIDE),
   })
