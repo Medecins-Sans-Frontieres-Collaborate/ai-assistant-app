@@ -94,11 +94,13 @@ export class PolicyUnreadableError extends Error {
  */
 export async function readPolicy(
   storage: BlobStorage,
+  options: { abortSignal?: AbortSignal } = {},
 ): Promise<PolicyReadResult | null> {
   const result = await downloadBlob(
     storage,
     LIMITS_POLICY_PATH,
     'limits.readPolicy',
+    options,
   );
   if (result === null) return null;
   let policy: LimitsPolicy;
