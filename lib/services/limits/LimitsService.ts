@@ -32,11 +32,26 @@ import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 const POLICY_CACHE_TTL_MS = 60_000;
 /**
- * After a failed refresh, replicas holding a last-known-good policy serve it
- * without touching storage for this long, so an outage does not make every
- * request pay full storage-retry latency.
+ * After a failed refresh, no request re-attempts storage for this long —
+ * warm (serving last-known-good) OR cold (serving compiled defaults). The
+ * cold case matters most: without it every request on a replica that has
+ * never loaded re-ran the full storage retry stack and waited for it.
  */
 const REFRESH_FAILURE_COOLDOWN_MS = 5_000;
+/**
+ * Client-side deadline for ONE policy read. `withAzureRetry` and the SDK have
+ * no time budget of their own, so without this a stalled socket kept the
+ * refresh promise — and every request awaiting it — pending indefinitely.
+ * The abort is not retried by either layer (no status, no network code).
+ */
+export const POLICY_READ_DEADLINE_MS = 5_000;
+/**
+ * The longest a COLD caller waits for the first read before proceeding with
+ * compiled defaults (the documented fail-open). The read itself carries on
+ * so later callers benefit from it. Warm callers never wait: the TTL refresh
+ * is stale-while-revalidate.
+ */
+export const COLD_DEADLINE_MS = 2_500;
 
 export interface LimitsSnapshot {
   policy: LimitsPolicy | null;
@@ -63,6 +78,7 @@ export class LimitsService {
   private epoch = 0;
   private lastRefreshFailureAt = 0;
   private refreshInFlight: Promise<void> | null = null;
+  private stallLogged = false;
 
   static getInstance(): LimitsService {
     if (!LimitsService.instance) {
@@ -91,10 +107,10 @@ export class LimitsService {
       return;
     }
     if (
-      this.loadedOnce &&
       this.lastRefreshFailureAt !== 0 &&
       Date.now() - this.lastRefreshFailureAt < REFRESH_FAILURE_COOLDOWN_MS
     ) {
+      // Cooldown applies regardless of loadedOnce — see the constant.
       return;
     }
     if (!this.refreshInFlight) {
@@ -102,7 +118,42 @@ export class LimitsService {
         this.refreshInFlight = null;
       });
     }
-    await this.refreshInFlight;
+    if (this.loadedOnce) {
+      // Stale-while-revalidate: a request that lands on TTL expiry gets the
+      // last-known-good policy now; the refresh completes in the background.
+      return;
+    }
+    await this.awaitColdRefresh(this.refreshInFlight);
+  }
+
+  /**
+   * Waits for the in-flight cold read or `COLD_DEADLINE_MS`, whichever comes
+   * first. Past the deadline the caller proceeds with compiled defaults and
+   * `policyUnavailable: true`; the read is NOT cancelled here — its own
+   * `POLICY_READ_DEADLINE_MS` bounds it, and letting it finish is what lets
+   * the next caller find a loaded snapshot.
+   */
+  private async awaitColdRefresh(inFlight: Promise<void>): Promise<void> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let deadlineHit = false;
+    const deadline = new Promise<void>((resolve) => {
+      timer = setTimeout(() => {
+        deadlineHit = true;
+        resolve();
+      }, COLD_DEADLINE_MS);
+      timer.unref?.();
+    });
+    try {
+      await Promise.race([inFlight, deadline]);
+    } finally {
+      if (timer !== undefined) clearTimeout(timer);
+    }
+    if (deadlineHit && !this.loadedOnce && !this.stallLogged) {
+      this.stallLogged = true;
+      console.error(
+        `[limits] cold policy read still pending after ${COLD_DEADLINE_MS}ms; serving compiled defaults (FAIL-OPEN) until it settles`,
+      );
+    }
   }
 
   /**
@@ -136,13 +187,16 @@ export class LimitsService {
   private async refresh(): Promise<void> {
     const epochAtEntry = this.epoch;
     try {
-      const result = await readPolicy(this.getStorage());
+      const result = await readPolicy(this.getStorage(), {
+        abortSignal: AbortSignal.timeout(POLICY_READ_DEADLINE_MS),
+      });
       // A missing blob is a valid, fully-loaded state: no policy has been
       // authored yet, so everything resolves from the compiled catalog.
       this.policy = result?.policy ?? null;
       this.etag = result?.etag ?? null;
       this.loadedOnce = true;
       this.lastRefreshFailureAt = 0;
+      this.stallLogged = false;
       if (this.epoch === epochAtEntry) {
         this.fetchedAt = Date.now();
       }
