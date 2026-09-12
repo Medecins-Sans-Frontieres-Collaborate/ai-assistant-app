@@ -18,6 +18,7 @@ import {
   meteredCells,
 } from '@/lib/services/limits/enforcement';
 import { buildPrincipal } from '@/lib/services/limits/principal';
+import { ResolvedLimit } from '@/lib/services/limits/resolver';
 import { reserve } from '@/lib/services/limits/usageStore';
 
 import { getAudioDuration } from '@/lib/utils/server/audio/audioSplitter';
@@ -75,7 +76,7 @@ export async function guardTranscriptionMinutes(
       used: result.denial.used,
       ...(result.denial.unavailable ? { unavailable: true } : {}),
       resetAt: result.denial.resetAt,
-      source: 'global',
+      source: (result.denial.source ?? 'global') as ResolvedLimit['source'],
     });
     if (decision.allowed) return ALLOWED;
     if (result.denial.unavailable) {
