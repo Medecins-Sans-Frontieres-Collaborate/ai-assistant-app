@@ -212,7 +212,7 @@ export async function guardTokenBudget(
         overBudget.limitKey === 'chat.tokensPerMonth' ? 'month' : 'day',
         policy?.timezone ?? 'UTC',
       ),
-      source: 'global' as const,
+      source: overBudget.source,
     };
     const decision = applyMode(policy, principal, denial);
     if (decision.allowed) return ALLOWED;
