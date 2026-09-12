@@ -14,6 +14,7 @@ import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
 import { counterCellName } from '@/lib/services/limits/resolver';
 import { LimitOverride } from '@/lib/services/limits/types';
+import { LIMITS_ERROR_CODES } from '@/lib/services/limits/wire';
 
 import {
   PricingIndex,
@@ -103,7 +104,7 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
    * delegations, which include disabled ones the gate ignores.
    */
   const forbiddenCopy = (): string => {
-    if (forbiddenCode === 'LIMITS_PREVIEW_OUT_OF_SCOPE') {
+    if (forbiddenCode === LIMITS_ERROR_CODES.PREVIEW_OUT_OF_SCOPE) {
       return forbiddenDetails === 'undecidable'
         ? t('previewUndecidableScope')
         : t('previewOutOfScope');
