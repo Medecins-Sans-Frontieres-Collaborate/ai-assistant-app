@@ -22,7 +22,14 @@ import { DELEGATION_ID_RE } from '@/lib/services/limits/types';
 import { DIMENSION_RE, LIMIT_KEYS, getLimitDefinition } from '@/config/limits';
 import { z } from 'zod';
 
-/** Bounds the single-document design: ~1MB worst case, KBs realistically. */
+/**
+ * Bounds the single-document design. Realistic policies are KBs; at the
+ * schema's own extremes (200 overrides × 500 targets × 320 chars, 50
+ * delegations × 50 predicates × 500 targets) the document reaches hundreds
+ * of MB, which every replica parses on each 60 s refresh — the bounds are a
+ * safety net against runaway input, not a size the app is tuned for. The
+ * admin UI's own inputs stay far below them.
+ */
 export const MAX_OVERRIDES = 200;
 export const MAX_ENTRIES_PER_OVERRIDE = 50;
 export const MAX_TARGETS_PER_OVERRIDE = 500;
