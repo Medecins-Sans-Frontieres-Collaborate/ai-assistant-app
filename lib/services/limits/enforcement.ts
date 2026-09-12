@@ -24,11 +24,7 @@ import { LimitsPolicy } from '@/lib/services/limits/types';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
-import {
-  LIMIT_DEFINITIONS,
-  LimitDefinition,
-  getLimitDefinition,
-} from '@/config/limits';
+import { getLimitDefinition } from '@/config/limits';
 
 export interface LimitDenial {
   limitKey: string;
@@ -281,8 +277,4 @@ export async function currentPolicy(): Promise<LimitsPolicy | null> {
   const service = LimitsService.getInstance();
   await service.ensureFresh();
   return service.getSnapshot().policy;
-}
-
-export function allCounterDefinitions(): LimitDefinition[] {
-  return LIMIT_DEFINITIONS.filter((d) => d.kind === 'counter');
 }
