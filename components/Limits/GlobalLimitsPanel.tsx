@@ -244,7 +244,27 @@ export const GlobalLimitsPanel: FC = () => {
         return;
       }
       toast.success(t('saved'));
-      setDirty(false);
+      // Adopt the SAVED document from the PUT response itself — its etag and
+      // the server-minted delegation ids — rather than relying on a follow-up
+      // GET. If that GET failed, the old code kept the stale etag (every
+      // later Save 409'd) and kept the session-created delegations marked
+      // new, so the next Save re-sent them WITHOUT ids and the server minted
+      // a second id for each while dropping the first. A response without a
+      // policy (not what the route sends) falls back to the refetch.
+      const saved = unwrapApiData<Partial<PolicyResponse>>(
+        await response.json(),
+      );
+      if (saved.policy && saved.etag) {
+        const fresh: PolicyResponse = {
+          policy: saved.policy,
+          etag: saved.etag,
+          policyUnavailable: false,
+        };
+        queryClient.setQueryData<PolicyResponse>(['limits-policy'], fresh);
+        applyServer(fresh);
+      } else {
+        setDirty(false);
+      }
       // The effective-limits preview and the scoped view both resolve
       // against the SAVED policy; stale results must not outlive the save.
       await queryClient.invalidateQueries({ queryKey: ['limits-preview'] });
@@ -257,7 +277,7 @@ export const GlobalLimitsPanel: FC = () => {
       // already do this via useLimitsAdmin.ts; the global PUT lives in this
       // file instead and was the one save path that never fired it.
       notifyLimitsChanged();
-      await reload();
+      if (!saved.policy || !saved.etag) await reload();
     } catch {
       toast.error(t('saveFailed'));
     } finally {
@@ -451,6 +471,14 @@ export const GlobalLimitsPanel: FC = () => {
                         <span className={ADMIN_CHIP_NEUTRAL}>
                           {t('tierScoped')} ·{' '}
                           {delegation.label || t('untitledDelegation')}
+                        </span>
+                      )}
+                      {delegation && !delegation.enabled && (
+                        <span
+                          className={ADMIN_CHIP_NEUTRAL}
+                          title={t('disabledDelegationNote')}
+                        >
+                          {t('delegationDisabledChip')}
                         </span>
                       )}
                       {orphaned && (
