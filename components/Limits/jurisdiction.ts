@@ -32,9 +32,12 @@ import {
   LimitEntry,
   LimitOverride,
   LimitTier,
+  LimitValue,
   OverrideScope,
 } from '@/lib/services/limits/types';
 import { domainOfMail } from '@/lib/services/shared/principalMatching';
+
+import { LIMIT_DEFINITIONS } from '@/config/limits';
 
 // ---------------------------------------------------------------------------
 // Verdicts — ONE implementation, shared with the server
@@ -130,9 +133,89 @@ export function narrowedOverrideCount(
 export function liftableDefaults(
   defaults: readonly LimitEntry[],
 ): LimitEntry[] {
-  return defaults.filter(
-    (entry) => !entry.ceiling && entry.value !== null && entry.value !== true,
+  return defaults.filter((entry) => raisable(entry.value, entry.ceiling));
+}
+
+function raisable(value: LimitValue, ceiling: boolean): boolean {
+  return !ceiling && value !== null && value !== true;
+}
+
+export type LiftableSource = 'default' | 'catalog' | 'override';
+
+/** One thing a delegation could raise, with where it comes from. */
+export interface LiftableEntry {
+  source: LiftableSource;
+  /** For `catalog`: synthesized from the compiled default, `ceiling: false`. */
+  entry: LimitEntry;
+  /** `override` only. */
+  overrideId?: string;
+  overrideLabel?: string;
+  overrideScope?: OverrideScope;
+}
+
+/**
+ * EVERYTHING a scoped admin may raise, not only the configured defaults —
+ * the delegations editor is where a global admin decides what to pin before
+ * delegating, so an incomplete list here understates the grant:
+ *  - configured global defaults without a ceiling (`liftableDefaults`);
+ *  - compiled catalog defaults for keys with NO configured base default —
+ *    a finite value there (the M365 counters, MCP rounds) has no ceiling
+ *    until a default is configured, so a scoped record may lift it to
+ *    unlimited (or the compiled hard ceiling, where one exists);
+ *  - global-tier overrides at the domain, attribute or group layer: a scoped
+ *    override at a MORE specific layer outranks them (layer beats tier —
+ *    resolver.ts `beats`). A global USER-layer override is never listed:
+ *    nothing scoped can outrank it at the same layer.
+ */
+export function liftableEntries(
+  defaults: readonly LimitEntry[],
+  overrides: readonly LimitOverride[],
+): LiftableEntry[] {
+  const out: LiftableEntry[] = liftableDefaults(defaults).map((entry) => ({
+    source: 'default',
+    entry,
+  }));
+  const configuredBase = new Set(
+    defaults
+      .filter((entry) => !entry.modelId && !entry.series)
+      .map((entry) => entry.limitKey),
   );
+  for (const def of LIMIT_DEFINITIONS) {
+    if (configuredBase.has(def.key)) continue;
+    if (!raisable(def.defaultValue, false)) continue;
+    out.push({
+      source: 'catalog',
+      entry: { limitKey: def.key, value: def.defaultValue, ceiling: false },
+    });
+  }
+  for (const override of overrides) {
+    if (override.delegationId || !override.enabled) continue;
+    if (override.scope === 'user') continue;
+    for (const entry of override.entries) {
+      if (!raisable(entry.value, entry.ceiling)) continue;
+      out.push({
+        source: 'override',
+        entry,
+        overrideId: override.id,
+        overrideLabel: override.label,
+        overrideScope: override.scope,
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * Shape check for a delegation admin entry — the same pattern the server's
+ * `isValidEmail` uses (lib/services/m365/tools/shared.ts, server-only by
+ * module graph). Admins are matched on the session's Graph `mail`, so an
+ * entry that is not a mail address can never match anyone.
+ */
+const MAIL_SHAPE_RE = /^[^\s@'"<>]+@[^\s@'"<>]+\.[^\s@'"<>]+$/;
+
+export function looksLikeMail(value: string): boolean {
+  const trimmed = value.trim();
+  return trimmed.length <= 320 && MAIL_SHAPE_RE.test(trimmed);
 }
 
 // ---------------------------------------------------------------------------
