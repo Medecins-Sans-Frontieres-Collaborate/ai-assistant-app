@@ -324,7 +324,10 @@ export async function initChunkedUploadAction(
     // admin-configured feature.upload.megabytesPerFile cap — this is the
     // >10MB Server Action path app/api/file/upload/route.ts's ≤10MB XHR
     // check never covers (docs/LIMITS_USER_FACING_UX.md §8.6).
-    const effectiveMegabytes = await resolveEffectiveUploadMegabytes(session);
+    const effectiveMegabytes = await resolveEffectiveUploadMegabytes(
+      session,
+      totalSize,
+    );
     const sizeValidation = validateFileSizeRaw(
       filename,
       totalSize,
