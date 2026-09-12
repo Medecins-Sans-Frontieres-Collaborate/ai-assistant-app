@@ -98,7 +98,7 @@ describe('family and model cells compose conjunctively', () => {
 
 describe('the seeding rule ScopedLimitRows depends on', () => {
   /**
-   * Why a new scoped row is NEVER seeded at null: pickGlobalEntry ranks by
+   * Why a new scoped row is NEVER seeded at null: the resolver ranks by
    * qualifier specificity BEFORE restrictiveness, so a family entry of null
    * outranks an unqualified number and silently un-limits the whole family.
    */
