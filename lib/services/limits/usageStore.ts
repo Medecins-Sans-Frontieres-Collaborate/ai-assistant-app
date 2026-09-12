@@ -47,11 +47,28 @@ import {
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 
 /** 412 → jittered retry. Six attempts covers realistic same-user concurrency. */
 const CAS_ATTEMPTS = 6;
 const BASE_BACKOFF_MS = 10;
+/**
+ * Client-side deadline per storage operation. Neither `withAzureRetry` nor
+ * the SDK carries a time budget, so without this a stalled socket held the
+ * chat request open indefinitely and `failMode` never got a say. A timeout
+ * is NOT transient (see `isTransient`): it is reported straight to the
+ * failMode decision rather than retried six more times.
+ */
+export const USAGE_IO_DEADLINE_MS = 4_000;
+
+function ioDeadline(): { abortSignal: AbortSignal } {
+  return { abortSignal: AbortSignal.timeout(USAGE_IO_DEADLINE_MS) };
+}
+
+function isAbort(error: unknown): boolean {
+  const name = (error as { name?: unknown })?.name;
+  return name === 'AbortError' || name === 'TimeoutError';
+}
 
 /**
  * Sharded by a hash prefix so no flat listing is unbounded, and so an expired
@@ -88,6 +105,8 @@ export interface ReserveDenial {
   cell: string;
   limit: number;
   used: number;
+  /** Fail-CLOSED denial: storage was unreachable; `used` is not a reading. */
+  unavailable?: boolean;
   resetAt?: string;
   source?: string;
   modelId?: string;
@@ -154,10 +173,16 @@ export async function reserve(
   const period = currentPeriod(periodKind, timezone, options.now);
   const storage = options.storage ?? createLimitsBlobStorage();
   const path = usageBlobPath(subjectId, periodKind, period);
+  const writeId = randomUUID();
 
   for (let attempt = 1; attempt <= CAS_ATTEMPTS; attempt++) {
     try {
-      const downloaded = await downloadBlob(storage, path, 'limits.readUsage');
+      const downloaded = await downloadBlob(
+        storage,
+        path,
+        'limits.readUsage',
+        ioDeadline(),
+      );
       let doc: UsageDoc;
       let etag: string | null;
       if (downloaded === null) {
@@ -175,6 +200,11 @@ export async function reserve(
           parsed.success && parsed.data.period === period
             ? parsed.data
             : freshDoc(subjectId, periodKind, period);
+      }
+      // Our own write already landed (the PUT committed, its response was
+      // lost, the SDK retry hit 412): success, never a second increment.
+      if (doc.lastWriteId === writeId) {
+        return { allowed: true, debited: counters };
       }
 
       // ── The check that makes this exact: inside the loop, against the
@@ -202,13 +232,21 @@ export async function reserve(
         ...doc,
         counters: { ...doc.counters },
         updatedAt: new Date().toISOString(),
+        lastWriteId: writeId,
       };
       for (const counter of counters) {
         next.counters[counter.cell] =
           (next.counters[counter.cell] ?? 0) + counter.cost;
       }
 
-      await uploadJson(storage, path, next, etag, 'limits.writeUsage');
+      await uploadJson(
+        storage,
+        path,
+        next,
+        etag,
+        'limits.writeUsage',
+        ioDeadline(),
+      );
       return { allowed: true, debited: counters };
     } catch (error) {
       if (error instanceof AgentAccessConflictError) {
@@ -233,6 +271,8 @@ export async function reserve(
         console.error('[limits] FAIL-OPEN: usage not counted, request allowed');
         return { allowed: true, failedOpen: true };
       }
+      // Fail CLOSED: the counter is unreadable, not exhausted — say so
+      // (`unavailable`) rather than fabricating a consumption figure.
       return {
         allowed: false,
         failedOpen: false,
@@ -240,7 +280,8 @@ export async function reserve(
           limitKey: counters[0].limitKey,
           cell: counters[0].cell,
           limit: counters[0].limit,
-          used: counters[0].limit,
+          used: 0,
+          unavailable: true,
           resetAt: resetAt(periodKind, timezone, options.now),
         },
       };
@@ -249,7 +290,13 @@ export async function reserve(
   return ALLOWED_NO_OP;
 }
 
+/**
+ * Worth another CAS round: a 5xx or a status-less network error. A client
+ * abort (the per-operation deadline) is deliberately NOT — it already waited
+ * as long as the request can afford.
+ */
 function isTransient(error: unknown): boolean {
+  if (isAbort(error)) return false;
   const status =
     (error as { statusCode?: number; status?: number })?.statusCode ??
     (error as { status?: number })?.status;
@@ -277,19 +324,28 @@ export async function release(
   const period = currentPeriod(periodKind, timezone, options.now);
   const storage = options.storage ?? createLimitsBlobStorage();
   const path = usageBlobPath(subjectId, periodKind, period);
+  const writeId = randomUUID();
 
   for (let attempt = 1; attempt <= CAS_ATTEMPTS; attempt++) {
     try {
-      const downloaded = await downloadBlob(storage, path, 'limits.readUsage');
+      const downloaded = await downloadBlob(
+        storage,
+        path,
+        'limits.readUsage',
+        ioDeadline(),
+      );
       if (downloaded === null) return;
       const parsed = UsageDocSchema.safeParse(
         JSON.parse(downloaded.buffer.toString('utf8')),
       );
       if (!parsed.success || parsed.data.period !== period) return;
+      // Same lost-response guard as reserve: our refund already landed.
+      if (parsed.data.lastWriteId === writeId) return;
       const next: UsageDoc = {
         ...parsed.data,
         counters: { ...parsed.data.counters },
         updatedAt: new Date().toISOString(),
+        lastWriteId: writeId,
       };
       for (const counter of counters) {
         next.counters[counter.cell] = Math.max(
@@ -303,6 +359,7 @@ export async function release(
         next,
         downloaded.etag,
         'limits.writeUsage',
+        ioDeadline(),
       );
       return;
     } catch (error) {
@@ -333,6 +390,7 @@ export async function readUsage(
     storage,
     usageBlobPath(subjectId, periodKind, period),
     'limits.readUsage',
+    ioDeadline(),
   );
   if (downloaded === null) return {};
   const parsed = UsageDocSchema.safeParse(
