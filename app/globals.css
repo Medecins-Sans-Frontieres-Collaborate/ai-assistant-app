@@ -481,3 +481,40 @@ select {
   user-select: none;
   -webkit-user-select: none;
 }
+
+/* Form-fill workflow: rendered-document preview slots (status = colour). */
+.form-preview .form-slot {
+  border-radius: 0.2rem;
+  padding: 0 0.15rem;
+  cursor: pointer;
+}
+.form-preview .form-slot-empty {
+  color: rgb(185 28 28);
+  background: rgb(254 226 226 / 0.6);
+  font-style: italic;
+}
+.form-preview .form-slot-partial {
+  background: rgb(254 243 199 / 0.7);
+  text-decoration: underline wavy rgb(217 119 6);
+  text-underline-offset: 3px;
+}
+.form-preview .form-slot-filled {
+  background: rgb(220 252 231 / 0.5);
+}
+.form-preview .form-slot-na {
+  color: rgb(107 114 128);
+}
+.form-preview .form-slot-selected {
+  outline: 2px solid rgb(37 99 235);
+  outline-offset: 1px;
+}
+.dark .form-preview .form-slot-empty {
+  color: rgb(252 165 165);
+  background: rgb(127 29 29 / 0.3);
+}
+.dark .form-preview .form-slot-partial {
+  background: rgb(120 53 15 / 0.35);
+}
+.dark .form-preview .form-slot-filled {
+  background: rgb(20 83 45 / 0.35);
+}
