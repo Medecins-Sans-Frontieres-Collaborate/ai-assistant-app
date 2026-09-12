@@ -22,6 +22,7 @@ import {
 } from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
 
+import { FormTemplate } from '@/types/formFill';
 import { InterpreterMode, isInterpreterMode } from '@/types/interpreterMode';
 import {
   LOCAL_RUNTIMES,
@@ -270,6 +271,8 @@ interface SettingsStore {
   customLanguages: CustomTranslationLanguage[];
   /** Reusable document format templates (document workflow). */
   documentSpecs: DocumentSpec[];
+  /** Fillable form templates (form-fill workflow). */
+  formTemplates: FormTemplate[];
   /** User-defined document quality criteria (document workflow). */
   documentCriteria: DocumentCustomCriterion[];
   /** User-defined MQM-style criteria for the translation workflow. */
@@ -476,6 +479,13 @@ interface SettingsStore {
     updates: Partial<Omit<DocumentSpec, 'id'>>,
   ) => void;
   deleteDocumentSpec: (id: string) => void;
+  // Form template actions (form-fill workflow)
+  addFormTemplate: (template: FormTemplate) => void;
+  updateFormTemplate: (
+    id: string,
+    updates: Partial<Omit<FormTemplate, 'id'>>,
+  ) => void;
+  deleteFormTemplate: (id: string) => void;
   addDocumentCriterion: (criterion: DocumentCustomCriterion) => void;
   updateDocumentCriterion: (
     id: string,
@@ -871,6 +881,7 @@ export const useSettingsStore = create<SettingsStore>()(
       glossaries: [],
       customLanguages: [],
       documentSpecs: [],
+      formTemplates: [],
       documentCriteria: [],
       translationCriteria: [],
       mcpServers: [],
@@ -1058,6 +1069,26 @@ export const useSettingsStore = create<SettingsStore>()(
       deleteDocumentSpec: (id) =>
         set((state) => ({
           documentSpecs: state.documentSpecs.filter((s) => s.id !== id),
+        })),
+
+      // Form template actions (form-fill workflow)
+      addFormTemplate: (template) =>
+        set((state) => ({
+          formTemplates: [...state.formTemplates, template],
+        })),
+
+      updateFormTemplate: (id, updates) =>
+        set((state) => ({
+          formTemplates: state.formTemplates.map((t) =>
+            t.id === id
+              ? { ...t, ...updates, updatedAt: new Date().toISOString() }
+              : t,
+          ),
+        })),
+
+      deleteFormTemplate: (id) =>
+        set((state) => ({
+          formTemplates: state.formTemplates.filter((t) => t.id !== id),
         })),
 
       addDocumentCriterion: (criterion) =>
@@ -1840,7 +1871,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 62, // Increment this when schema changes to trigger migrations
+      version: 63, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1863,6 +1894,7 @@ export const useSettingsStore = create<SettingsStore>()(
         glossaries: state.glossaries,
         customLanguages: state.customLanguages,
         documentSpecs: state.documentSpecs,
+        formTemplates: state.formTemplates,
         documentCriteria: state.documentCriteria,
         translationCriteria: state.translationCriteria,
         // NOTE: mcpArbitraryFlagEnabled and memoriesFlagEnabled are
@@ -2564,6 +2596,11 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Version 62 → 63: form-fill templates.
+        if (version < 63) {
+          if (!Array.isArray(state.formTemplates)) state.formTemplates = [];
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -2711,6 +2748,9 @@ export const useSettingsStore = create<SettingsStore>()(
           // rationale as mcpServers) so `.map`/`.filter` never throw.
           if (!Array.isArray(state.savedStructures)) {
             state.savedStructures = [];
+          }
+          if (!Array.isArray(state.formTemplates)) {
+            state.formTemplates = [];
           }
         }
       },
