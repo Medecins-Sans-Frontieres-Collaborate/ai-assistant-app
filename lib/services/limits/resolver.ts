@@ -49,7 +49,6 @@ import {
 import {
   LIMIT_DEFINITIONS,
   LimitDefinition,
-  getLimitDefinition,
   isValidDimension,
 } from '@/config/limits';
 
@@ -536,8 +535,4 @@ export function isUnlimited(resolved: ResolvedLimit | undefined): boolean {
 /** Convenience for boolean gates: `false` means blocked. */
 export function isBlocked(resolved: ResolvedLimit | undefined): boolean {
   return resolved?.value === false;
-}
-
-export function limitDefinitionFor(key: string): LimitDefinition | undefined {
-  return getLimitDefinition(key);
 }
