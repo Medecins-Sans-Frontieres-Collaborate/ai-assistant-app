@@ -178,6 +178,27 @@ export function useMyLimits() {
   const policyUnavailable = data?.policyUnavailable === true;
   const limits = data?.limits ?? [];
 
+  // Coalesced refetch. Every exhausted row and picker badge fires
+  // `onExpired` at the SAME reset boundary, and TanStack's default
+  // `cancelRefetch: true` turns N calls into N requests with N-1 of them
+  // thrown away — each costing the server a full `/me?models=` resolution.
+  // While one refetch is in flight, later callers share its promise.
+  const inFlightRef = useRef<ReturnType<typeof refetch> | null>(null);
+  const coalescedRefetch = useCallback(
+    (refetchOptions?: Parameters<typeof refetch>[0]) => {
+      if (inFlightRef.current) return inFlightRef.current;
+      const pending = refetch({
+        cancelRefetch: false,
+        ...refetchOptions,
+      }).finally(() => {
+        inFlightRef.current = null;
+      });
+      inFlightRef.current = pending;
+      return pending;
+    },
+    [refetch],
+  );
+
   return {
     limits,
     mode,
@@ -194,7 +215,7 @@ export function useMyLimits() {
     policyUnavailable,
     isLoading,
     error,
-    refetch,
+    refetch: coalescedRefetch,
   };
 }
 
