@@ -134,6 +134,24 @@ const serverEnvSchema = z.object({
   // sanity bound — the synchronous index route has a 300s budget.
   M365_AGENT_MAX_DOCUMENTS: z.coerce.number().int().min(1).max(200).default(50),
   /**
+   * Per-agent document-cap overrides (admin editor). A LOCAL admin may raise
+   * an agent's cap up to the first value on their own (the confirm dialog is
+   * there to make them reconsider); anything above needs a GLOBAL admin, who
+   * is bounded by the second. Both bound the effective cap for indexing.
+   */
+  M365_AGENT_LOCAL_ADMIN_MAX_DOCUMENTS: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(1000)
+    .default(100),
+  M365_AGENT_MAX_DOCUMENTS_CEILING: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(1000)
+    .default(200),
+  /**
    * Sum of the sizes of an M365 agent's indexable files (MB). Known from
    * Graph metadata, so the plan view can refuse an oversized tree before a
    * single download.
