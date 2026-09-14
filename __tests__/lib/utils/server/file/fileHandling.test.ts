@@ -1,4 +1,10 @@
-import { loadDocumentFromPath } from '@/lib/utils/server/file/fileHandling';
+import {
+  NoExtractableTextError,
+  PdfExtractionError,
+  countPdfPages,
+  loadDocumentFromPath,
+  looksLikeGarbledText,
+} from '@/lib/utils/server/file/fileHandling';
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -49,10 +55,39 @@ vi.mock('fs', async () => {
   };
 });
 
+const getDocumentMock = vi.fn();
+vi.mock('pdfjs-dist/legacy/build/pdf.mjs', () => ({
+  GlobalWorkerOptions: { workerSrc: '' },
+  getDocument: (...args: unknown[]) => getDocumentMock(...args),
+}));
+
+/** pdfjs stub: pages of the given texts (empty array = unreadable/scanned). */
+function pdfjsPages(pageTexts: string[]) {
+  getDocumentMock.mockReturnValue({
+    promise: Promise.resolve({
+      numPages: pageTexts.length,
+      getPage: async (n: number) => ({
+        getTextContent: async () => ({
+          items: pageTexts[n - 1]
+            ? pageTexts[n - 1].split(' ').map((str) => ({ str }))
+            : [],
+        }),
+      }),
+    }),
+  });
+}
+
+function pdfjsThrows(message: string) {
+  getDocumentMock.mockReturnValue({
+    promise: Promise.reject(new Error(message)),
+  });
+}
+
 const XLSX_MIME =
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 beforeEach(() => {
+  getDocumentMock.mockReset();
   execFileMock.mockReset();
   readdirMock.mockReset();
   readFileMock.mockReset();
@@ -319,5 +354,180 @@ describe('xlsxToText via loadDocumentFromPath', () => {
       '/tmp/xlsx-fail',
       expect.objectContaining({ recursive: true, force: true }),
     );
+  });
+});
+
+describe('pdfToText chain via loadDocumentFromPath', () => {
+  const PDF = Buffer.from('%PDF-1.4 stub');
+  const calls = (cmd: string) =>
+    execFileMock.mock.calls.filter(([c]) => c === cmd);
+
+  beforeEach(() => {
+    readFileMock.mockResolvedValue(PDF);
+  });
+
+  it('returns pdfjs text without touching the CLI tools', async () => {
+    pdfjsPages(['Hello world from page one']);
+    const out = await loadDocumentFromPath(
+      '/input/a.pdf',
+      'application/pdf',
+      'a.pdf',
+    );
+    expect(out).toContain('Hello world from page one');
+    expect(execFileMock).not.toHaveBeenCalled();
+  });
+
+  it('a well-formed scan (pdfjs + pdftotext empty) → NoExtractableTextError, no Ghostscript', async () => {
+    pdfjsPages(['']);
+    execFileMock.mockResolvedValue({ stdout: '  \n', stderr: '' });
+    await expect(
+      loadDocumentFromPath('/input/scan.pdf', 'application/pdf', 'scan.pdf'),
+    ).rejects.toBeInstanceOf(NoExtractableTextError);
+    expect(calls('pdftotext')).toHaveLength(1);
+    expect(calls('gs')).toHaveLength(0);
+  });
+
+  it('treats glyph-id gibberish as no text rather than indexing it', async () => {
+    pdfjsPages([
+      '\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u000e\u000f'.repeat(6),
+    ]);
+    execFileMock.mockResolvedValue({
+      stdout:
+        '\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD'.repeat(
+          6,
+        ),
+      stderr: '',
+    });
+    await expect(
+      loadDocumentFromPath('/input/g.pdf', 'application/pdf', 'g.pdf'),
+    ).rejects.toBeInstanceOf(NoExtractableTextError);
+  });
+
+  it('repairs with Ghostscript when both extractors threw, then reads the repaired file', async () => {
+    pdfjsThrows('Invalid XRef stream header');
+    let repairedPath = '';
+    execFileMock.mockImplementation((cmd: string, args: readonly string[]) => {
+      if (cmd === 'pdftotext' && args[0] === '/input/broken.pdf') {
+        return Promise.reject(
+          new Error("Syntax Error: Couldn't read xref table"),
+        );
+      }
+      if (cmd === 'gs') {
+        repairedPath = args[1];
+        expect(args).toEqual(
+          expect.arrayContaining([
+            '-o',
+            '-sDEVICE=pdfwrite',
+            '/input/broken.pdf',
+          ]),
+        );
+        return Promise.resolve({ stdout: '', stderr: '' });
+      }
+      if (cmd === 'pdftotext' && args[0] === repairedPath) {
+        return Promise.resolve({
+          stdout: 'Recovered paragraph of perfectly readable prose.',
+          stderr: '',
+        });
+      }
+      return Promise.reject(new Error(`unexpected ${cmd}`));
+    });
+    const out = await loadDocumentFromPath(
+      '/input/broken.pdf',
+      'application/pdf',
+      'broken.pdf',
+    );
+    expect(out).toBe('Recovered paragraph of perfectly readable prose.');
+    expect(calls('gs')).toHaveLength(1);
+    expect(unlinkMock).toHaveBeenCalledWith(repairedPath);
+  });
+
+  it('names every cause when pdfjs, pdftotext and Ghostscript all fail', async () => {
+    pdfjsThrows('password required');
+    execFileMock.mockImplementation((cmd: string) =>
+      Promise.reject(
+        new Error(cmd === 'gs' ? 'gs exited 1' : 'Incorrect password'),
+      ),
+    );
+    const promise = loadDocumentFromPath(
+      '/input/enc.pdf',
+      'application/pdf',
+      'enc.pdf',
+    );
+    await expect(promise).rejects.toBeInstanceOf(PdfExtractionError);
+    await expect(promise).rejects.toThrow(
+      /pdfjs: password required; pdftotext: Incorrect password; ghostscript: gs exited 1/,
+    );
+  });
+
+  it('forwards the AbortSignal to Ghostscript too', async () => {
+    const controller = new AbortController();
+    pdfjsThrows('boom');
+    execFileMock.mockImplementation(
+      (cmd: string, _args: readonly string[], opts: { signal?: unknown }) => {
+        expect(opts.signal).toBe(controller.signal);
+        return cmd === 'gs'
+          ? Promise.resolve({ stdout: '', stderr: '' })
+          : Promise.resolve({
+              stdout: 'Readable text after everything',
+              stderr: '',
+            });
+      },
+    );
+    await loadDocumentFromPath('/input/s.pdf', 'application/pdf', 's.pdf', {
+      signal: controller.signal,
+    });
+  });
+});
+
+describe('looksLikeGarbledText', () => {
+  it('passes prose, numeric tables, page markers and short strings', () => {
+    expect(
+      looksLikeGarbledText(
+        'The quick brown fox jumps over the lazy dog, twice.',
+      ),
+    ).toBe(false);
+    expect(
+      looksLikeGarbledText(
+        '2024  1,234.50  5,678.00  -12.5%\n2025  2,345.75  6,789.10  +3.2%',
+      ),
+    ).toBe(false);
+    expect(
+      looksLikeGarbledText(
+        '--- Page 1 ---\nBudget (EUR) — Q1/Q2; totals: 100%',
+      ),
+    ).toBe(false);
+    expect(looksLikeGarbledText('\u0001\u0002')).toBe(false);
+    expect(
+      looksLikeGarbledText('Straße — naïve café, 東京, Москва: fine text!'),
+    ).toBe(false);
+  });
+
+  it('flags control-character glyph dumps and replacement-character soup', () => {
+    expect(
+      looksLikeGarbledText('\u0001\u0002\u0003\u0004\u0005'.repeat(10)),
+    ).toBe(true);
+    expect(looksLikeGarbledText('ab\uFFFDcd\uFFFDef\uFFFD'.repeat(6))).toBe(
+      true,
+    );
+  });
+});
+
+describe('countPdfPages', () => {
+  it('uses pdfjs when it can open the file', async () => {
+    pdfjsPages(['a', 'b', 'c']);
+    await expect(countPdfPages(Buffer.from('%PDF'))).resolves.toBe(3);
+    expect(execFileMock).not.toHaveBeenCalled();
+  });
+
+  it('falls back to pdfinfo and cleans up its temp file', async () => {
+    pdfjsThrows('bad xref');
+    execFileMock.mockResolvedValue({
+      stdout: 'Title: x\nPages:          12\nEncrypted: no\n',
+      stderr: '',
+    });
+    await expect(countPdfPages(Buffer.from('%PDF'))).resolves.toBe(12);
+    expect(execFileMock.mock.calls[0][0]).toBe('pdfinfo');
+    expect(writeFileMock).toHaveBeenCalledTimes(1);
+    expect(unlinkMock).toHaveBeenCalledTimes(1);
   });
 });
