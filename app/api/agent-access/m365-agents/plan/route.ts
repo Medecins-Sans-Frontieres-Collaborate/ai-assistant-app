@@ -24,7 +24,11 @@ import {
   canonicalAgentKey,
 } from '@/lib/services/agentAccess/types';
 import { readDerivedIndex } from '@/lib/services/m365/agentDerivedTextStore';
-import { planSources } from '@/lib/services/m365/agentSourcePlanner';
+import {
+  effectiveMaxDocuments,
+  planSources,
+  roleMaxDocuments,
+} from '@/lib/services/m365/agentSourcePlanner';
 import {
   GRAPH_ID_REGEX,
   M365Error,
@@ -81,6 +85,11 @@ const bodySchema = z
       .trim()
       .regex(/^m365-[a-f0-9]{12}$/)
       .optional(),
+    /**
+     * The draft's per-agent cap override. Clamped to the caller's role
+     * ceiling so the meter never shows a cap the save would refuse.
+     */
+    maxDocuments: z.number().int().min(1).max(1000).optional(),
   })
   .strict();
 
@@ -137,10 +146,16 @@ export async function POST(request: NextRequest) {
 
     let plan;
     try {
+      const requestedCap = parsed.data.maxDocuments;
+      const maxDocuments =
+        requestedCap === undefined
+          ? effectiveMaxDocuments(undefined)
+          : Math.min(requestedCap, roleMaxDocuments(status.isGlobalAdmin));
       plan = await planSources(
         request,
         session.user.id,
         parsed.data.sources.map((source) => ({ ...source, prepared })),
+        { maxDocuments },
       );
     } catch (error) {
       if (error instanceof M365Error) return m365ErrorResponse(error);
