@@ -42,7 +42,71 @@ interface M365SourcePlanViewProps {
   ocrMaxPages?: number;
   /** Auto-OCR per-file page cap, for the "too many pages" note. */
   autoOcrMaxPagesPerFile?: number;
+  /**
+   * Open the details (subfolder tree + file lists) without a click — the
+   * editor sets this on the largest source when the plan is over the cap,
+   * so the trim controls are in front of the admin, not behind "Details".
+   */
+  autoExpand?: boolean;
+  /**
+   * How many of THIS source's documents still fit under the effective cap
+   * given the other sources. When it is below the source's included count
+   * the "Keep newest N" action is offered; undefined hides it.
+   */
+  keepNewestLimit?: number;
   onChange: (patch: Partial<SourceSelection>) => void;
+}
+
+export type PlanSortKey = 'name' | 'size' | 'modified';
+
+/**
+ * Newest-first selection for "Keep newest N": the included indexable
+ * items sorted by modified date (undated last, then by name), split into
+ * the N to keep and the ids to exclude. Pure — the confirm copy and the
+ * tests read the same numbers the click applies.
+ */
+export function planKeepNewest(
+  items: readonly M365ManifestItem[],
+  keep: number,
+): { keepIds: string[]; excludeIds: string[] } {
+  const included = items
+    .filter((item) => item.tier === 'indexable')
+    .slice()
+    .sort((a, b) => {
+      const da = a.lastModified ?? '';
+      const db = b.lastModified ?? '';
+      if (da !== db)
+        return da === '' ? 1 : db === '' ? -1 : db.localeCompare(da);
+      return a.name.localeCompare(b.name);
+    });
+  const safeKeep = Math.max(0, keep);
+  return {
+    keepIds: included.slice(0, safeKeep).map((i) => i.itemId),
+    excludeIds: included.slice(safeKeep).map((i) => i.itemId),
+  };
+}
+
+export function sortPlanItems(
+  items: readonly M365ManifestItem[],
+  sortBy: PlanSortKey,
+): M365ManifestItem[] {
+  const byName = (a: M365ManifestItem, b: M365ManifestItem) =>
+    `${a.path}/${a.name}`.localeCompare(`${b.path}/${b.name}`);
+  const sorted = items.slice();
+  if (sortBy === 'size') {
+    sorted.sort((a, b) => b.size - a.size || byName(a, b));
+  } else if (sortBy === 'modified') {
+    sorted.sort((a, b) => {
+      const da = a.lastModified ?? '';
+      const db = b.lastModified ?? '';
+      if (da !== db)
+        return da === '' ? 1 : db === '' ? -1 : db.localeCompare(da);
+      return byName(a, b);
+    });
+  } else {
+    sorted.sort(byName);
+  }
+  return sorted;
 }
 
 /** Default caps when the listing has not served them (matches env defaults). */
@@ -322,10 +386,16 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
   onPrepared,
   ocrMaxPages = DEFAULT_OCR_MAX_PAGES,
   autoOcrMaxPagesPerFile = DEFAULT_AUTO_OCR_MAX_PAGES_PER_FILE,
+  autoExpand = false,
+  keepNewestLimit,
   onChange,
 }) => {
   const t = useTranslations('agentAccess');
   const [expanded, setExpanded] = useState(false);
+  const [sortBy, setSortBy] = useState<PlanSortKey>('name');
+  useEffect(() => {
+    if (autoExpand) setExpanded(true);
+  }, [autoExpand]);
   const [preparing, setPreparing] = useState<Set<string>>(new Set());
   const [pendingJobs, setPendingJobs] = useState<Set<string>>(new Set());
   const unmountedRef = useRef(false);
@@ -544,12 +614,38 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
     }));
   }, [plan, excluded]);
 
+  /** Folder ids that are excluded directly or through an excluded ancestor. */
+  const excludedFolderIds = useMemo(() => {
+    const set = new Set<string>();
+    for (const folder of plan?.folders ?? []) {
+      if (
+        excluded.has(folder.itemId) ||
+        isAncestorExcluded(folder, plan?.folders ?? [], excluded)
+      ) {
+        set.add(folder.itemId);
+      }
+    }
+    return set;
+  }, [plan, excluded]);
+  /** A file whose containing folder (or one above it) is unticked. */
+  const folderExcluded = (item: M365ManifestItem) =>
+    excludedFolderIds.has(item.parentItemId);
+
   const groups = useMemo(() => {
     const items = plan?.items ?? [];
     const byTier = {
-      indexable: items.filter((i) => i.tier === 'indexable'),
+      // Files unticked by id stay in the indexable list (unchecked) so
+      // they can be ticked back in place instead of hunting through
+      // "Skipped"; folder-excluded ones show there disabled.
+      indexable: items.filter(
+        (i) =>
+          i.tier === 'indexable' ||
+          (i.tier === 'skipped' && i.reason === 'excluded'),
+      ),
       needsPreparation: items.filter((i) => i.tier === 'needsPreparation'),
-      skipped: items.filter((i) => i.tier === 'skipped'),
+      skipped: items.filter(
+        (i) => i.tier === 'skipped' && i.reason !== 'excluded',
+      ),
     };
     return byTier;
   }, [plan]);
@@ -559,6 +655,55 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
     if (next.has(itemId)) next.delete(itemId);
     else next.add(itemId);
     onChange({ excludedItemIds: [...next] });
+  };
+
+  const toggleFile = (item: M365ManifestItem) => {
+    if (folderExcluded(item)) return;
+    const next = new Set(selection.excludedItemIds);
+    if (next.has(item.itemId)) next.delete(item.itemId);
+    else next.add(item.itemId);
+    onChange({ excludedItemIds: [...next] });
+  };
+
+  /** Ids of files (not folders) excluded by id in this source. */
+  const fileExclusions = useMemo(() => {
+    const fileIds = new Set((plan?.items ?? []).map((i) => i.itemId));
+    return selection.excludedItemIds.filter((id) => fileIds.has(id));
+  }, [plan, selection.excludedItemIds]);
+
+  const includedIndexable = groups.indexable.filter(
+    (i) => i.tier === 'indexable',
+  ).length;
+  const offerKeepNewest =
+    keepNewestLimit !== undefined &&
+    keepNewestLimit >= 0 &&
+    includedIndexable > keepNewestLimit;
+
+  const keepNewest = () => {
+    if (!plan || keepNewestLimit === undefined) return;
+    const { excludeIds } = planKeepNewest(plan.items, keepNewestLimit);
+    if (excludeIds.length === 0) return;
+    const confirmed = window.confirm(
+      t('m365PlanKeepNewestConfirm', {
+        keep: keepNewestLimit,
+        exclude: excludeIds.length,
+      }),
+    );
+    if (!confirmed) return;
+    onChange({
+      excludedItemIds: [
+        ...new Set([...selection.excludedItemIds, ...excludeIds]),
+      ],
+    });
+  };
+
+  const includeAllFiles = () => {
+    const fileIds = new Set(fileExclusions);
+    onChange({
+      excludedItemIds: selection.excludedItemIds.filter(
+        (id) => !fileIds.has(id),
+      ),
+    });
   };
 
   const commitExtensions = () => {
@@ -737,6 +882,46 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
 
       {expanded && plan && (
         <div className="space-y-2 rounded-md border border-gray-200 p-2 dark:border-gray-700">
+          {autoExpand && (
+            <p className="text-amber-700 dark:text-amber-400">
+              {t('m365PlanTrimHint')}
+            </p>
+          )}
+          {(plan.items.length > 0 || offerKeepNewest) && (
+            <div className="flex flex-wrap items-center gap-2">
+              <label className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+                <span>{t('m365PlanSortLabel')}</span>
+                <select
+                  aria-label={t('m365PlanSortLabel')}
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as PlanSortKey)}
+                  className="rounded border border-gray-300 bg-white px-1 py-0.5 text-xs dark:border-gray-600 dark:bg-surface-dark-elevated"
+                >
+                  <option value="name">{t('m365PlanSort.name')}</option>
+                  <option value="size">{t('m365PlanSort.size')}</option>
+                  <option value="modified">{t('m365PlanSort.modified')}</option>
+                </select>
+              </label>
+              {offerKeepNewest && (
+                <button
+                  type="button"
+                  onClick={keepNewest}
+                  className="rounded-md border border-blue-300 px-2 py-0.5 font-medium text-blue-700 hover:bg-blue-50 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900/20"
+                >
+                  {t('m365PlanKeepNewest', { count: keepNewestLimit })}
+                </button>
+              )}
+              {fileExclusions.length > 0 && (
+                <button
+                  type="button"
+                  onClick={includeAllFiles}
+                  className="rounded-md border border-neutral-300 px-2 py-0.5 text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                >
+                  {t('m365PlanIncludeAll', { count: fileExclusions.length })}
+                </button>
+              )}
+            </div>
+          )}
           {folderRows.length > 0 && (
             <div>
               <p className="mb-1 font-semibold text-gray-700 dark:text-gray-300">
@@ -795,7 +980,20 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
             title={t('m365PlanGroupIndexable')}
             items={groups.indexable}
             statusByItem={statusByItem}
+            sortBy={sortBy}
+            selectable={{
+              isChecked: (item) => item.tier === 'indexable',
+              isDisabled: folderExcluded,
+              onToggle: toggleFile,
+            }}
             renderNote={(item) => {
+              if (item.tier !== 'indexable') {
+                return (
+                  <span className="text-gray-400">
+                    {t('m365PlanFileExcluded')}
+                  </span>
+                );
+              }
               const status = statusByItem.get(item.itemId);
               const isPdf = item.name.toLowerCase().endsWith('.pdf');
               const ocrNote = ocrNoteFor(status, t, autoOcrMaxPagesPerFile);
@@ -845,6 +1043,7 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
             title={t('m365PlanGroupNeedsPreparation')}
             items={groups.needsPreparation}
             statusByItem={statusByItem}
+            sortBy={sortBy}
             renderNote={(item) => (
               <span className="flex items-center gap-1.5">
                 <span className="text-amber-700 dark:text-amber-400">
@@ -858,6 +1057,7 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
             title={t('m365PlanGroupSkipped')}
             items={groups.skipped}
             statusByItem={statusByItem}
+            sortBy={sortBy}
             renderNote={(item) => (
               <span className="text-gray-500 dark:text-gray-400">
                 {t(`m365SkipReason.${item.reason ?? 'unsupported'}`)}
@@ -890,13 +1090,26 @@ interface FileGroupProps {
   title: string;
   items: M365ManifestItem[];
   statusByItem: Map<string, M365ManifestItem>;
+  sortBy?: PlanSortKey;
+  /** File-level include checkboxes (indexable group). */
+  selectable?: {
+    isChecked: (item: M365ManifestItem) => boolean;
+    isDisabled: (item: M365ManifestItem) => boolean;
+    onToggle: (item: M365ManifestItem) => void;
+  };
   renderNote: (item: M365ManifestItem) => React.ReactNode;
 }
 
-const FileGroup: FC<FileGroupProps> = ({ title, items, renderNote }) => {
+const FileGroup: FC<FileGroupProps> = ({
+  title,
+  items,
+  sortBy = 'name',
+  selectable,
+  renderNote,
+}) => {
   const t = useTranslations('agentAccess');
   if (items.length === 0) return null;
-  const shown = items.slice(0, MAX_ROWS_PER_GROUP);
+  const shown = sortPlanItems(items, sortBy).slice(0, MAX_ROWS_PER_GROUP);
   return (
     <div>
       <p className="mb-1 font-semibold text-gray-700 dark:text-gray-300">
@@ -906,8 +1119,19 @@ const FileGroup: FC<FileGroupProps> = ({ title, items, renderNote }) => {
         {shown.map((item) => (
           <li
             key={item.itemId}
-            className="flex items-center gap-2 text-gray-800 dark:text-gray-200"
+            className={`flex items-center gap-2 text-gray-800 dark:text-gray-200 ${
+              selectable && !selectable.isChecked(item) ? 'opacity-60' : ''
+            }`}
           >
+            {selectable && (
+              <input
+                type="checkbox"
+                aria-label={t('m365PlanIncludeFile', { name: item.name })}
+                checked={selectable.isChecked(item)}
+                disabled={selectable.isDisabled(item)}
+                onChange={() => selectable.onToggle(item)}
+              />
+            )}
             <span className="min-w-0 flex-1 truncate" title={item.name}>
               {item.path ? `${item.path}/` : ''}
               {item.name}
