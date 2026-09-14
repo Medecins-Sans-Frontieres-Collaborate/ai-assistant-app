@@ -360,6 +360,11 @@ export async function GET() {
       // matches what POST/PUT will actually accept.
       maxDocuments: MAX_M365_AGENT_DOCUMENTS,
       maxBytes: MAX_M365_AGENT_SOURCE_BYTES,
+      // OCR budgets (env), served so the editor can state them next to
+      // the auto-OCR toggle and the Prepare-all confirm.
+      autoOcrMaxPagesPerRun: env.M365_AGENT_AUTO_OCR_MAX_PAGES_PER_RUN,
+      autoOcrMaxPagesPerFile: env.M365_AGENT_AUTO_OCR_MAX_PAGES_PER_FILE,
+      ocrMaxPages: env.M365_AGENT_OCR_MAX_PAGES,
       jobs: Object.fromEntries(
         Object.entries(jobs).filter(([agentId]) =>
           visible.some((entry) => entry.m365Agent.id === agentId),
