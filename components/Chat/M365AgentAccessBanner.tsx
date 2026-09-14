@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  IconAlertTriangle,
   IconCloudLock,
   IconExternalLink,
   IconLockOpen,
@@ -24,6 +25,14 @@ interface PreflightResponse {
   connected: boolean;
   agentName?: string;
   sources: PreflightSource[];
+}
+
+/** Preflight HTTP failure, carrying the status so a 404 (layer-1 deny or a
+ * deleted agent) renders differently from a transport/throttle error. */
+class PreflightError extends Error {
+  constructor(readonly status: number) {
+    super(`Preflight failed (${status})`);
+  }
 }
 
 /**
@@ -52,7 +61,7 @@ export const M365AgentAccessBanner: FC<{ botId: string | undefined }> = ({
         `/api/m365/agents/${encodeURIComponent(botId!)}/access`,
       );
       if (!response.ok) {
-        throw new Error(`Preflight failed (${response.status})`);
+        throw new PreflightError(response.status);
       }
       const body = await response.json();
       return body.data as PreflightResponse;
@@ -64,7 +73,42 @@ export const M365AgentAccessBanner: FC<{ botId: string | undefined }> = ({
     refetchOnWindowFocus: false,
   });
 
-  if (!agentsEnabled || !isM365Agent || !preflight.data) return null;
+  if (!agentsEnabled || !isM365Agent) return null;
+
+  // Preflight failed (502 Graph transport/throttle, 503 rules unavailable,
+  // timeout) or the agent is not reachable for this user (404: layer-1 deny
+  // or deleted). Hiding the banner here left the user to discover the
+  // problem only when their message was rejected — say it up front.
+  if (preflight.isError) {
+    const status =
+      preflight.error instanceof PreflightError ? preflight.error.status : 0;
+    const notAvailable = status === 404;
+    return (
+      <div
+        role="status"
+        className="mx-2 mb-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-200 md:mx-4"
+      >
+        <div className="flex items-start gap-2">
+          <IconAlertTriangle size={18} className="mt-0.5 flex-shrink-0" />
+          <div className="min-w-0 flex-1">
+            <p>{notAvailable ? t('notAvailable') : t('verifyFailed')}</p>
+            {!notAvailable && (
+              <button
+                type="button"
+                onClick={() => void preflight.refetch()}
+                disabled={preflight.isFetching}
+                className="mt-1 text-xs font-medium underline disabled:opacity-50"
+              >
+                {t('retry')}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!preflight.data) return null;
 
   const { connected, sources } = preflight.data;
   const denied = sources.filter((s) => !s.accessible);
