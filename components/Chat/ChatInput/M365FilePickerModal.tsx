@@ -15,6 +15,7 @@ import {
   IconLoader2,
   IconMusic,
   IconPhoto,
+  IconPlus,
   IconSearch,
   IconUsersGroup,
   IconVideo,
@@ -43,6 +44,7 @@ import {
   DriveView,
   M365_SEARCH_DEBOUNCE_MS,
   M365_SEARCH_MIN_CHARS,
+  getDriveRoot,
   getTeamDrive,
   listDrivePage,
   listJoinedTeams,
@@ -326,6 +328,9 @@ const M365FilePickerBody: FC<{
   const [loadingMore, setLoadingMore] = useState(false);
   const [loadMoreFailed, setLoadMoreFailed] = useState(false);
   const [errorKey, setErrorKey] = useState<string | null>(null);
+  // Source pickers resolving a library/team root to a real item (one Graph
+  // call) before handing it to onPick; disables the Add buttons meanwhile.
+  const [addingRoot, setAddingRoot] = useState(false);
   const [searchErrorKey, setSearchErrorKey] = useState<string | null>(null);
   const [sort, setSort] = useState<M365DriveSort>(
     initialLocation && SORT_FIELDS.includes(initialLocation.sort)
@@ -956,6 +961,116 @@ const M365FilePickerBody: FC<{
     onClose();
   };
 
+  /**
+   * Source pickers: add a whole drive (a SharePoint document library or a
+   * team's Files) as one folder source. Agent sources are stored by item id,
+   * so the `root` alias is resolved to the real root item first.
+   */
+  const pickDriveRoot = async (driveId: string, fallbackName: string) => {
+    if (!onPick || addingRoot) return;
+    setAddingRoot(true);
+    setErrorKey(null);
+    try {
+      const root = await getDriveRoot(driveId);
+      // Graph names every drive root literally "root"; the library name
+      // the admin clicked is what they expect to see on the source.
+      pickFile({
+        driveId,
+        itemId: root.itemId,
+        name: fallbackName,
+        isFolder: true,
+        ...(root.webUrl && { webUrl: root.webUrl }),
+        ...(root.childCount !== undefined && { childCount: root.childCount }),
+      });
+    } catch (error) {
+      setErrorKey(errorMessageKey(error));
+    } finally {
+      setAddingRoot(false);
+    }
+  };
+
+  /** Teams: resolve the team drive, then add its root. */
+  const pickTeamFiles = async (team: M365TeamEntry) => {
+    if (!onPick || addingRoot) return;
+    setAddingRoot(true);
+    setErrorKey(null);
+    try {
+      const drive = await getTeamDrive(team.groupId);
+      const root = await getDriveRoot(drive.driveId);
+      pickFile({
+        driveId: drive.driveId,
+        itemId: root.itemId,
+        name: team.name,
+        isFolder: true,
+        ...(root.webUrl && { webUrl: root.webUrl }),
+        ...(root.childCount !== undefined && { childCount: root.childCount }),
+      });
+    } catch (error) {
+      setErrorKey(errorMessageKey(error));
+    } finally {
+      setAddingRoot(false);
+    }
+  };
+
+  // Source pickers: the location currently being browsed, as one folder
+  // source. A folder crumb is added by id; a library or team-drive root
+  // (no folder crumb yet) goes through pickDriveRoot. Null at the OneDrive
+  // root (its driveId is unknown client-side) and on the site/library and
+  // team lists (nothing is being browsed yet).
+  let currentSource:
+    | { kind: 'item'; entry: M365DriveEntry }
+    | { kind: 'root'; driveId: string; name: string }
+    | null = null;
+  if (onPick && !searchActive) {
+    if (tab === 'onedrive' && lastCrumb?.driveId && lastCrumb.itemId) {
+      currentSource = {
+        kind: 'item',
+        entry: {
+          driveId: lastCrumb.driveId,
+          itemId: lastCrumb.itemId,
+          name: lastCrumb.label,
+          isFolder: true,
+        },
+      };
+    } else if (
+      tab === 'sharepoint' &&
+      sharePointPhase === 'browse' &&
+      crumbs[1]?.driveId
+    ) {
+      currentSource =
+        lastCrumb?.itemId && lastCrumb.driveId
+          ? {
+              kind: 'item',
+              entry: {
+                driveId: lastCrumb.driveId,
+                itemId: lastCrumb.itemId,
+                name: lastCrumb.label,
+                isFolder: true,
+              },
+            }
+          : { kind: 'root', driveId: crumbs[1].driveId, name: crumbs[1].label };
+    } else if (tab === 'teams' && crumbs[0]?.driveId) {
+      currentSource =
+        lastCrumb?.itemId && lastCrumb.driveId
+          ? {
+              kind: 'item',
+              entry: {
+                driveId: lastCrumb.driveId,
+                itemId: lastCrumb.itemId,
+                name: lastCrumb.label,
+                isFolder: true,
+              },
+            }
+          : { kind: 'root', driveId: crumbs[0].driveId, name: crumbs[0].label };
+    }
+  }
+  const currentSourceLabel =
+    currentSource?.kind === 'root'
+      ? tab === 'teams'
+        ? t('addTeamFiles')
+        : t('addLibrary')
+      : t('addCurrentFolder');
+
   // The folder currently being browsed, when it is an addressable save
   // target: OneDrive needs a real folder crumb (the root's driveId is never
   // known client-side — the app-folder default already covers "just my
@@ -1461,11 +1576,11 @@ const M365FilePickerBody: FC<{
           ) : (
             <ul>
               {teams.map((team) => (
-                <li key={team.groupId}>
+                <li key={team.groupId} className="flex items-center">
                   <button
                     type="button"
                     onClick={() => openTeam(team)}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
+                    className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
                   >
                     <IconUsersGroup
                       size={18}
@@ -1473,6 +1588,16 @@ const M365FilePickerBody: FC<{
                     />
                     <span className="truncate">{team.name}</span>
                   </button>
+                  {onPick && (
+                    <button
+                      type="button"
+                      disabled={addingRoot}
+                      onClick={() => void pickTeamFiles(team)}
+                      className="mr-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                    >
+                      {t('addTeamFiles')}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -1546,7 +1671,7 @@ const M365FilePickerBody: FC<{
         ) : tab === 'sharepoint' && sharePointPhase === 'libraries' ? (
           <ul>
             {libraries.map((library) => (
-              <li key={library.driveId}>
+              <li key={library.driveId} className="flex items-center">
                 <button
                   type="button"
                   onClick={() => {
@@ -1557,7 +1682,7 @@ const M365FilePickerBody: FC<{
                       { label: library.name, driveId: library.driveId },
                     ]);
                   }}
-                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
+                  className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
                 >
                   <IconFolder
                     size={18}
@@ -1565,6 +1690,18 @@ const M365FilePickerBody: FC<{
                   />
                   <span className="truncate">{library.name}</span>
                 </button>
+                {onPick && (
+                  <button
+                    type="button"
+                    disabled={addingRoot}
+                    onClick={() =>
+                      void pickDriveRoot(library.driveId, library.name)
+                    }
+                    className="mr-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                  >
+                    {t('addLibrary')}
+                  </button>
+                )}
               </li>
             ))}
           </ul>
@@ -1680,8 +1817,10 @@ const M365FilePickerBody: FC<{
                       <button
                         type="button"
                         onClick={() => pickFile(entry)}
-                        className="mr-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                        title={t('addFolderHint')}
+                        className="mr-2 flex flex-shrink-0 items-center gap-1 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
                       >
+                        <IconPlus size={12} />
                         {t('addFolder')}
                       </button>
                     )}
@@ -1803,6 +1942,41 @@ const M365FilePickerBody: FC<{
           >
             {t('attachSelected', { count: selected.size })}
           </button>
+        </div>
+      )}
+
+      {/* Source-picker footer: adds the location being browsed (a folder,
+          a whole document library, or a team's Files) as one source, and
+          says how folders work — rows navigate, Add picks. */}
+      {onPick && (
+        <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-gray-50 px-3 py-2 dark:border-neutral-700 dark:bg-neutral-800">
+          <IconFolder size={18} className="flex-shrink-0 text-amber-500" />
+          <span className="min-w-0 flex-1 truncate text-xs text-gray-600 dark:text-gray-400">
+            {currentSource
+              ? [rootLabel, ...crumbLabels(crumbs)].join(' › ')
+              : t('pickHint')}
+          </span>
+          {currentSource && (
+            <button
+              type="button"
+              disabled={addingRoot}
+              onClick={() => {
+                if (!currentSource) return;
+                if (currentSource.kind === 'item')
+                  pickFile(currentSource.entry);
+                else
+                  void pickDriveRoot(currentSource.driveId, currentSource.name);
+              }}
+              className="flex flex-shrink-0 items-center gap-1 rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {addingRoot ? (
+                <IconLoader2 size={14} className="animate-spin" />
+              ) : (
+                <IconPlus size={14} />
+              )}
+              {currentSourceLabel}
+            </button>
+          )}
         </div>
       )}
 
