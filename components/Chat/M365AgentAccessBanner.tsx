@@ -24,6 +24,12 @@ interface PreflightSource {
 interface PreflightResponse {
   connected: boolean;
   agentName?: string;
+  /**
+   * Graph gave no definitive answer for at least one source (throttled or
+   * errored): the server did not cache the verdict, and "no access" would
+   * be a false claim — say "couldn't verify" and offer a retry instead.
+   */
+  unverifiable?: boolean;
   sources: PreflightSource[];
 }
 
@@ -79,7 +85,12 @@ export const M365AgentAccessBanner: FC<{ botId: string | undefined }> = ({
   // timeout) or the agent is not reachable for this user (404: layer-1 deny
   // or deleted). Hiding the banner here left the user to discover the
   // problem only when their message was rejected — say it up front.
-  if (preflight.isError) {
+  const unverifiable =
+    !preflight.isError &&
+    preflight.data?.connected === true &&
+    preflight.data.unverifiable === true &&
+    preflight.data.sources.some((s) => !s.accessible);
+  if (preflight.isError || unverifiable) {
     const status =
       preflight.error instanceof PreflightError ? preflight.error.status : 0;
     const notAvailable = status === 404;
