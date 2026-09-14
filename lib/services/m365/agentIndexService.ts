@@ -1060,9 +1060,26 @@ export interface AutoOcrBudget {
   maxPagesPerFile: number;
 }
 
+/** OCR text produced by the auto-OCR path, offered to the caller to cache. */
+export interface AutoOcrOutput {
+  itemId: string;
+  name: string;
+  eTag: string;
+  text: string;
+  pages: number;
+  engine: 'di' | 'vision';
+}
+
 export interface IndexJobItemOptions {
   /** Present when the agent has `autoOcr` on and the run still has budget. */
   autoOcr?: AutoOcrBudget;
+  /**
+   * Cache hook for auto-OCR text (billed per page): the job service stores
+   * it as a derived-text record keyed by the item's eTag, so a later
+   * Re-index all reads the cache instead of paying for the same pages
+   * again. Failures to cache never fail the item.
+   */
+  persistOcr?: (output: AutoOcrOutput) => Promise<void>;
   signal?: AbortSignal;
 }
 
@@ -1151,6 +1168,22 @@ export async function indexJobItem(
         });
         ocrText = result.text;
         ocrPages = result.pages;
+        if (options.persistOcr && item.eTag && ocrText.trim()) {
+          try {
+            await options.persistOcr({
+              itemId: item.itemId,
+              name: pdfBytes.name,
+              eTag: item.eTag,
+              text: ocrText,
+              pages: result.pages,
+              engine: result.engine,
+            });
+          } catch (cacheError) {
+            console.warn(
+              `[m365-agents] could not cache auto-OCR text for ${sanitizeForLog(item.itemId)}: ${sanitizeForLog(cacheError)}`,
+            );
+          }
+        }
       } catch (ocrError) {
         budget.remainingPages += pages;
         if (ocrError instanceof OcrEngineUnavailableError) {

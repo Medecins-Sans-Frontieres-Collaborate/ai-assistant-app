@@ -37,6 +37,7 @@ import type {
 import {
   readDerivedIndex,
   readDerivedText,
+  writeDerivedText,
 } from '@/lib/services/m365/agentDerivedTextStore';
 import {
   IndexJobSummary,
@@ -566,7 +567,29 @@ async function runIndexJobStep(
                 ? { eTag: derived.eTag, text: derived.text }
                 : null;
             },
-            autoOcr ? { autoOcr } : undefined,
+            autoOcr
+              ? {
+                  autoOcr,
+                  // Cache what was paid for: the next run (or Re-index all)
+                  // reads the derived text instead of OCR'ing again.
+                  persistOcr: async (output) => {
+                    await writeDerivedText(
+                      storage,
+                      {
+                        version: 1,
+                        agentId,
+                        itemId: output.itemId,
+                        eTag: output.eTag,
+                        kind: 'pdfOcr',
+                        preparedAt: now(),
+                        model: `auto-ocr:${output.engine}`,
+                        text: output.text,
+                      },
+                      output.name,
+                    );
+                  },
+                }
+              : undefined,
           ),
         }),
       );
