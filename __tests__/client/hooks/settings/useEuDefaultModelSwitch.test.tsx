@@ -8,7 +8,7 @@ import { OpenAIModel, OpenAIModelID } from '@/types/openai';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 const model = (id: string): OpenAIModel =>
   ({ id, name: id, maxLength: 1, tokenLimit: 1 }) as OpenAIModel;
