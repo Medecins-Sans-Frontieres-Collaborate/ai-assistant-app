@@ -804,7 +804,8 @@
       "toolRoutingUnavailable": "ٹول روٹنگ دستیاب نہیں — بغیر ٹولز جواب دیا جا رہا ہے…",
       "webSearchLimitReached": "روزانہ ویب سرچ کی حد مکمل ہو گئی — بغیر سرچ کے جواب دیا جا رہا ہے…",
       "codeInterpreterLimitReached": "روزانہ کوڈ چلانے کی حد مکمل ہو گئی — بغیر کوڈ چلائے جواب دیا جا رہا ہے…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "نالج بیس تلاش ناکام ہوگئی — جواب میں ایجنٹ کی دستاویزات استعمال نہیں ہوں گی"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ٹول استعمال ہوا} other {# ٹولز استعمال ہوئے}}",
@@ -4722,7 +4723,42 @@
     "openFormTemplateEditor": "ترمیم",
     "deleteFormTemplate": "حذف کریں",
     "deleteFormTemplateConfirm": "ٹیمپلیٹ \"{name}\" کو حذف کریں؟ جو گفتگوئیں پہلے سے اس کو استعمال کر رہی ہیں، وہ اپنی اسنیپ شاٹ رکھیں گی۔",
-    "confirmDeleteFormTemplate": "ٹیمپلیٹ حذف کریں"
+    "confirmDeleteFormTemplate": "ٹیمپلیٹ حذف کریں",
+    "m365SessionDisconnected": "آپ کے اکاؤنٹ کے لیے Microsoft 365 منقطع ہے۔ ذرائع آپ کی اپنی Microsoft 365 رسائی سے اسکین اور انڈیکس کیے جاتے ہیں، لہٰذا پہلے سیٹنگز › کنیکشنز میں کنیکٹ کریں۔",
+    "m365SessionNotConnected": "آپ کا Microsoft 365 سیشن دستیاب نہیں ہے، اس لیے ذرائع اسکین یا انڈیکس نہیں ہو سکتے۔ سائن آؤٹ کر کے دوبارہ سائن ان کریں، پھر سیٹنگز › کنیکشنز چیک کریں۔",
+    "m365SessionConsentMissing": "آپ کی تنظیم نے ابھی تک وہ Microsoft 365 اجازتیں منظور نہیں کیں جو فائلیں اسکین اور انڈیکس کرنے کے لیے ضروری ہیں۔ اپنے ٹیننٹ ایڈمنسٹریٹر سے رابطہ کریں۔",
+    "m365OpenConnections": "سیٹنگز › کنیکشنز کھولیں",
+    "m365ActionNeedsConnection": "Microsoft 365 کنیکشن درکار ہے",
+    "m365PlanFailedSaveAnyway": "آپ پھر بھی محفوظ کر سکتے ہیں — دستاویزات کی حد انڈیکس کے وقت دوبارہ چیک کی جائے گی۔",
+    "m365AgentRunVisible": "اب صارفین کے لیے ظاہر ہے — دیگر صارفین کو اسے دیکھنے کے لیے ایپ ریفریش کرنی پڑ سکتی ہے۔",
+    "m365AgentRunHidden": "ابھی تک صارفین سے مخفی: کوئی دستاویز انڈیکس نہیں ہوئی۔ نیچے دی گئی وجوہات دیکھیں۔",
+    "m365AgentAttentionFiles": "{count, plural, one {# فائل کو توجہ کی ضرورت ہے} other {# فائلوں کو توجہ کی ضرورت ہے}}",
+    "m365AgentAttentionLoading": "فائل کی تفصیلات لوڈ ہو رہی ہیں…",
+    "m365AgentAttentionFailed": "فائل کی تفصیلات لوڈ نہیں ہو سکیں۔",
+    "m365AgentAttentionNone": "آخری رن کے لیے کسی فائل کی تفصیلی معلومات ریکارڈ نہیں ہوئیں۔",
+    "m365AgentAutoOcrLabel": "انڈیکسنگ کے دوران PDF فائلوں پر خودکار OCR کریں",
+    "m365AgentAutoOcrHelp": "پہلے سے بند ہے — OCR ہر صفحہ پر چارج ہوتا ہے۔ جب فعال ہو، ہر انڈیکس رن کے دوران زیادہ سے زیادہ {perRun} صفحات اور ہر فائل میں {perFile} صفحات تک اسکینڈ PDF فائلوں پر OCR کیا جائے گا؛ بڑی یا بجٹ سے زیادہ فائلیں Prepare (OCR) آپشن رکھیں گی۔",
+    "m365AgentIndexRetry": "دوبارہ کوشش کریں",
+    "m365PrepareAllButton": "تمام اسکینڈ PDF تیار کریں ({count})",
+    "m365PrepareAllConfirm": "ابھی OCR کریں {count, plural, one {# اسکینڈ PDF} other {# اسکینڈ PDF فائلیں}}، ایک کے بعد ایک؟ OCR ہر صفحہ پر چارج ہوتا ہے؛ ہر فائل کی حد {pages} صفحات ہے۔ یہ ٹیب کھلا رکھیں۔",
+    "m365PrepareAllProgress": "تیار ہو رہی ہے {current} از {total} · {name}",
+    "m365PrepareAllCancel": "اس فائل کے بعد منسوخ کریں",
+    "m365PrepareAllCancelling": "موجودہ فائل مکمل ہو رہی ہے، پھر رک جائے گا…",
+    "m365PrepareAllDone": "{prepared} از {total} فائلیں تیار ہو گئیں۔ انہیں انڈیکس کرنے کے لیے ریفریش چلائیں۔",
+    "m365PrepareAllFailures": "{count, plural, one {# فائل} other {# فائلیں}} تیار نہیں کی جا سکیں:",
+    "m365ItemOcrPages": "{count, plural, one {# صفحہ OCR ہوا} other {# صفحات OCR ہوئے}}",
+    "m365ItemOcrSkipped": {
+      "budget": "اس رن کے لیے OCR بجٹ خرچ ہو چکا — Prepare (OCR) استعمال کریں",
+      "tooManyPages": "آٹو-OCR کی حد سے زیادہ صفحات (حد {perFile}) — Prepare (OCR) استعمال کریں",
+      "engineUnavailable": "OCR انجن ترتیب نہیں دیا گیا — ایڈمنسٹریٹر سے رابطہ کریں"
+    },
+    "m365AgentIndexStepLost": "کئی بار کوشش کے بعد انڈیکسنگ جاب سے رابطہ ختم ہو گیا — یہ اب بھی سرور پر ریکارڈ ہے۔ جاری رکھنے کے لیے Resume استعمال کریں۔",
+    "m365AgentDiscardEditsConfirm": "کیا آپ اس ایجنٹ میں اپنی غیر محفوظ کردہ ترامیم ضائع کرنا چاہتے ہیں؟",
+    "m365PlanFileUnsupported": "انڈیکس نہیں ہوگا — .{ext} فائلیں سپورٹ نہیں کی جاتیں۔ PDF، DOCX، XLSX یا PPTX میں تبدیل کریں۔",
+    "m365PlanFileSkipped": "انڈیکس نہیں ہوگا — {reason}",
+    "m365PlanFileNeedsPreparation": "تیاری ہونے تک انڈیکس نہیں ہوگا — {hint}",
+    "m365PlanFileLastRun": "آخری رن: {status}",
+    "m365ItemNoTextOcr": "کوئی متن نہیں ملا — اسکینڈ؟ Prepare (OCR) استعمال کریں"
   },
   "localModels": {
     "title": "لوکل ماڈلز",
@@ -5524,7 +5560,12 @@
       },
       "sitesNoResults": "\"{query}\" کے لیے کوئی سائٹس نہیں ملیں",
       "sitesEmpty": "کوئی SharePoint سائٹس دستیاب نہیں۔ نام سے تلاش کرنے کی کوشش کریں۔",
-      "itemCount": "{count, plural, one {# آئٹم} other {# آئٹمز}}"
+      "itemCount": "{count, plural, one {# آئٹم} other {# آئٹمز}}",
+      "pickHint": "کسی فولڈر پر کلک کر کے اسے براوز کریں، یا Add استعمال کریں تاکہ اس میں موجود ہر چیز کو انڈیکس کریں۔ مکمل ڈاکیومنٹ لائبریریز اور ٹیم فائلز بھی شامل کی جا سکتی ہیں۔",
+      "addFolderHint": "اس فولڈر اور اس میں موجود ہر چیز کو ایک سورس کے طور پر شامل کریں",
+      "addCurrentFolder": "یہ فولڈر شامل کریں",
+      "addLibrary": "لائبریری شامل کریں",
+      "addTeamFiles": "ٹیم کی فائلز شامل کریں"
     },
     "mail": {
       "menuLabel": "ای میل درآمد کریں…",
@@ -5628,7 +5669,10 @@
       "ownedBy": "مالک: {owner}",
       "requestAccess": "رسائی کی درخواست کریں",
       "noneHint": "فائل کھولیں اور اس کے مالک سے رسائی کی درخواست کریں؛ رسائی ملنے کے بعد ایجنٹ کام کرے گا۔",
-      "partialHint": "فائل کھولیں اور رسائی کی درخواست کریں — منظوری کے بعد جوابات میں شامل کر لیا جائے گا۔"
+      "partialHint": "فائل کھولیں اور رسائی کی درخواست کریں — منظوری کے بعد جوابات میں شامل کر لیا جائے گا۔",
+      "verifyFailed": "اس ایجنٹ کی فائلوں تک آپ کی رسائی کی تصدیق نہیں ہو سکی۔ جب تک دوبارہ کوشش نہ کی جائے، جوابات نامکمل ہو سکتے ہیں۔",
+      "retry": "دوبارہ کوشش کریں",
+      "notAvailable": "یہ ایجنٹ آپ کے لیے دستیاب نہیں۔ رسائی کے لیے اس کے ایڈمنسٹریٹر سے رابطہ کریں۔"
     },
     "translate": {
       "menuLabel": "ون ڈرائیو / شیئرپوائنٹ سے ترجمہ کریں",

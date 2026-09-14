@@ -861,7 +861,8 @@
       "toolRoutingUnavailable": "Preusmeravanje alata nije dostupno — odgovaranje bez alata…",
       "webSearchLimitReached": "Dnevni limit za pretragu je dostignut — odgovaranje bez pretrage…",
       "codeInterpreterLimitReached": "Dnevni limit za izvršavanje koda je dostignut — odgovaranje bez pokretanja koda…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Pretraga baze znanja nije uspela — odgovor neće koristiti dokumente agenta"
     },
     "toolSummary": {
       "usedTools": "Korišćen{count, plural, one {# alat} other {# alata}}",
@@ -4676,7 +4677,42 @@
     "openFormTemplateEditor": "Uredi",
     "deleteFormTemplate": "Obriši",
     "deleteFormTemplateConfirm": "Obrisati šablon \"{name}\"? Razgovori koji ga već koriste zadržaće svoju verziju.",
-    "confirmDeleteFormTemplate": "Obriši šablon"
+    "confirmDeleteFormTemplate": "Obriši šablon",
+    "m365SessionDisconnected": "Microsoft 365 je isključen za vaš nalog. Izvori se skeniraju i indeksiraju koristeći vaš sopstveni Microsoft 365 pristup, pa ga prvo povežite u Podešavanjima › Povezivanja.",
+    "m365SessionNotConnected": "Vaša Microsoft 365 sesija nije dostupna, pa izvori ne mogu biti skenirani ili indeksirani. Odjavite se i ponovo prijavite, zatim proverite Podešavanja › Povezivanja.",
+    "m365SessionConsentMissing": "Vaša organizacija još uvek nije odobrila potrebne dozvole za Microsoft 365 za skeniranje i indeksiranje fajlova. Obratite se administratoru stanara.",
+    "m365OpenConnections": "Otvorite Podešavanja › Povezivanja",
+    "m365ActionNeedsConnection": "Potreban je Microsoft 365 povezivanje",
+    "m365PlanFailedSaveAnyway": "I dalje možete sačuvati — ograničenje dokumenata će biti provereno kada pokrenete indeksiranje.",
+    "m365AgentRunVisible": "Sada vidljivo korisnicima — drugi korisnici možda moraju da ponovo učitaju aplikaciju da bi je videli.",
+    "m365AgentRunHidden": "Još uvek nije vidljivo korisnicima: nijedan dokument nije indeksiran. Pogledajte razloge ispod.",
+    "m365AgentAttentionFiles": "{count, plural, one {# fajl zahteva pažnju} other {# fajlova zahtevaju pažnju}}",
+    "m365AgentAttentionLoading": "Učitavanje detalja o fajlovima…",
+    "m365AgentAttentionFailed": "Nije moguće učitati detalje o fajlu.",
+    "m365AgentAttentionNone": "Nema zabeleženih detalja po fajlovima za poslednje pokretanje.",
+    "m365AgentAutoOcrLabel": "Automatski OCR skeniranih PDF-ova tokom indeksiranja",
+    "m365AgentAutoOcrHelp": "Podrazumevano isključeno — OCR se naplaćuje po stranici. Kada je uključeno, svaki indeksni prolaz radi OCR na skeniranim PDF-ovima do {perRun} stranica po jednom pokretanju i {perFile} stranica po fajlu; veći ili skupi fajlovi zadržavaju opciju Pripremi (OCR).",
+    "m365AgentIndexRetry": "Pokušaj ponovo",
+    "m365PrepareAllButton": "Pripremi sve skenirane PDF-ove ({count})",
+    "m365PrepareAllConfirm": "OCR {count, plural, one {# skenirani PDF} other {# skeniranih PDF-ova}} sada, jedan po jedan? OCR se naplaćuje po stranici; svaki fajl je ograničen na {pages} stranica. Ostavite ovu karticu otvorenom.",
+    "m365PrepareAllProgress": "Pripremanje {current} od {total} · {name}",
+    "m365PrepareAllCancel": "Otkaži posle ovog fajla",
+    "m365PrepareAllCancelling": "Završava se trenutni fajl, zatim se prekida…",
+    "m365PrepareAllDone": "Pripremljeno {prepared} od {total} fajlova. Pokrenite Osveži za indeksiranje.",
+    "m365PrepareAllFailures": "{count, plural, one {# fajl} other {# fajlova}} nije mogao biti pripremljen:",
+    "m365ItemOcrPages": "OCR-irano {count, plural, one {# stranica} other {# stranica}}",
+    "m365ItemOcrSkipped": {
+      "budget": "OCR budžet za ovo pokretanje je potrošen — koristite Pripremi (OCR)",
+      "tooManyPages": "Previše stranica za automatski OCR (ograničenje {perFile}) — koristite Pripremi (OCR)",
+      "engineUnavailable": "OCR engine nije podešen — obratite se administratoru"
+    },
+    "m365AgentIndexStepLost": "Izgubljen kontakt sa zadatkom za indeksiranje nakon više pokušaja — i dalje je zabeležen na serveru. Koristite Nastavi za nastavak.",
+    "m365AgentDiscardEditsConfirm": "Odbaciti nesačuvane izmene za ovog agenta?",
+    "m365PlanFileUnsupported": "Neće biti indeksiran — .{ext} fajlovi nisu podržani. Konvertujte u PDF, DOCX, XLSX ili PPTX.",
+    "m365PlanFileSkipped": "Neće biti indeksiran — {reason}",
+    "m365PlanFileNeedsPreparation": "Nije indeksiran dok se ne pripremi — {hint}",
+    "m365PlanFileLastRun": "Poslednje pokretanje: {status}",
+    "m365ItemNoTextOcr": "nema pronađenog teksta — skeniran? koristite Pripremi (OCR)"
   },
   "localModels": {
     "title": "Lokalni modeli",
@@ -5478,7 +5514,12 @@
       },
       "sitesNoResults": "Nijedan sajt nije pronađen za „{query}“",
       "sitesEmpty": "Nema dostupnih SharePoint sajtova. Pokušajte da pretražite po imenu.",
-      "itemCount": "{count, plural, one {# stavka} few {# stavke} other {# stavki}}"
+      "itemCount": "{count, plural, one {# stavka} few {# stavke} other {# stavki}}",
+      "pickHint": "Kliknite na fasciklu da biste je pregledali, ili koristite Dodaj da biste indeksirali sve što se u njoj nalazi. Takođe možete dodati cele biblioteke dokumenata i timske fajlove.",
+      "addFolderHint": "Dodajte ovu fasciklu i sve u njoj kao jedan izvor",
+      "addCurrentFolder": "Dodaj ovu fasciklu",
+      "addLibrary": "Dodaj biblioteku",
+      "addTeamFiles": "Dodaj timske fajlove"
     },
     "mail": {
       "menuLabel": "Uvezi email…",
@@ -5582,7 +5623,10 @@
       "ownedBy": "vlasnik: {owner}",
       "requestAccess": "Zatražite pristup",
       "noneHint": "Otvorite fajl da zatražite pristup od vlasnika; agent će raditi kada pristup bude odobren.",
-      "partialHint": "Otvorite fajl da zatražite pristup — odgovori će ga uključiti automatski kada bude odobreno."
+      "partialHint": "Otvorite fajl da zatražite pristup — odgovori će ga uključiti automatski kada bude odobreno.",
+      "verifyFailed": "Nije moguće potvrditi vaš pristup fajlovima ovog agenta. Odgovori mogu biti nepotpuni dok ne pokušate ponovo.",
+      "retry": "Pokušaj ponovo",
+      "notAvailable": "Ovaj agent vam nije dostupan. Zatražite pristup od administratora."
     },
     "translate": {
       "menuLabel": "Prevedi iz OneDrive / SharePoint",

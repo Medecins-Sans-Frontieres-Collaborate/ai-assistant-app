@@ -801,7 +801,8 @@
       "toolRoutingUnavailable": "Rutarea către instrumente indisponibilă — se răspunde fără instrumente…",
       "webSearchLimitReached": "Limita zilnică de căutare web atinsă — se răspunde fără căutare…",
       "codeInterpreterLimitReached": "Limita zilnică pentru rularea codului atinsă — se răspunde fără a executa cod…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Căutarea în baza de cunoștințe a eșuat — răspunsul nu va folosi documentele agentului"
     },
     "toolSummary": {
       "usedTools": "Folosit {count, plural, one {# instrument} other {# instrumente}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "Editează",
     "deleteFormTemplate": "Șterge",
     "deleteFormTemplateConfirm": "Ștergeți șablonul \"{name}\"? Conversațiile care îl folosesc deja își păstrează instantaneul.",
-    "confirmDeleteFormTemplate": "Șterge șablonul"
+    "confirmDeleteFormTemplate": "Șterge șablonul",
+    "m365SessionDisconnected": "Microsoft 365 este deconectat pentru contul dumneavoastră. Sursele sunt scanate și indexate cu propriul acces Microsoft 365, deci conectați-l mai întâi în Setări › Conexiuni.",
+    "m365SessionNotConnected": "Sesiunea dvs. Microsoft 365 nu este disponibilă, astfel că sursele nu pot fi scanate sau indexate. Deconectați-vă și reconectați-vă, apoi verificați Setări › Conexiuni.",
+    "m365SessionConsentMissing": "Organizația dvs. nu a aprobat încă permisiunile Microsoft 365 necesare pentru scanarea și indexarea fișierelor. Contactați administratorul tenantului.",
+    "m365OpenConnections": "Deschideți Setări › Conexiuni",
+    "m365ActionNeedsConnection": "Necesită conexiune Microsoft 365",
+    "m365PlanFailedSaveAnyway": "Puteți salva în continuare — limita de documente va fi verificată din nou la indexare.",
+    "m365AgentRunVisible": "Acum este vizibil pentru utilizatori — este posibil ca alți utilizatori să fie nevoiți să reîncarce aplicația pentru a-l vedea.",
+    "m365AgentRunHidden": "Încă invizibil pentru utilizatori: niciun document nu a fost indexat. Consultați motivele de mai jos.",
+    "m365AgentAttentionFiles": "{count, plural, one {# fișier necesită atenție} other {# fișiere necesită atenție}}",
+    "m365AgentAttentionLoading": "Se încarcă detaliile fișierului…",
+    "m365AgentAttentionFailed": "Detaliile fișierului nu au putut fi încărcate.",
+    "m365AgentAttentionNone": "Nu există detalii pe fișier salvate pentru ultima rulare.",
+    "m365AgentAutoOcrLabel": "PDF-urile scanate sunt procesate automat cu OCR în timpul indexării",
+    "m365AgentAutoOcrHelp": "Dezactivat implicit — OCR-ul se taxează per pagină. Dacă este activat, fiecare indexare procesează cu OCR PDF-urile scanate până la {perRun} pagini per rulare și {perFile} pagini per fișier; fișierele mai mari sau care depășesc bugetul păstrează opțiunea Pregătește (OCR).",
+    "m365AgentIndexRetry": "Reîncercați",
+    "m365PrepareAllButton": "Pregătește toate PDF-urile scanate ({count})",
+    "m365PrepareAllConfirm": "Aplicați acum OCR la {count, plural, one {# PDF scanat} other {# PDF-uri scanate}}, unul după altul? OCR-ul se taxează pe pagină; fiecare fișier este limitat la {pages} pagini. Păstrați acest tab deschis.",
+    "m365PrepareAllProgress": "Se pregătește {current} din {total} · {name}",
+    "m365PrepareAllCancel": "Anulează după acest fișier",
+    "m365PrepareAllCancelling": "Se finalizează fișierul curent, apoi se oprește…",
+    "m365PrepareAllDone": "S-au pregătit {prepared} din {total} fișiere. Rulați Actualizare pentru a le indexa.",
+    "m365PrepareAllFailures": "{count, plural, one {# fișier} other {# fișiere}} nu au putut fi pregătite:",
+    "m365ItemOcrPages": "OCR aplicat la {count, plural, one {# pagină} other {# pagini}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Bugetul OCR pentru această rulare a fost epuizat — folosiți Pregătește (OCR)",
+      "tooManyPages": "Prea multe pagini pentru auto-OCR (limita este {perFile}) — folosiți Pregătește (OCR)",
+      "engineUnavailable": "Nicio platformă OCR configurată — contactați un administrator"
+    },
+    "m365AgentIndexStepLost": "Conexiunea cu procesul de indexare s-a pierdut după mai multe încercări — este totuși înregistrat pe server. Folosiți Reia pentru a continua.",
+    "m365AgentDiscardEditsConfirm": "Renunțați la modificările nesalvate pentru acest agent?",
+    "m365PlanFileUnsupported": "Nu va fi indexat — fișierele .{ext} nu sunt acceptate. Conversiați în PDF, DOCX, XLSX sau PPTX.",
+    "m365PlanFileSkipped": "Nu va fi indexat — {reason}",
+    "m365PlanFileNeedsPreparation": "Nu va fi indexat până nu este pregătit — {hint}",
+    "m365PlanFileLastRun": "Ultima rulare: {status}",
+    "m365ItemNoTextOcr": "nu s-a găsit text — scanat? folosiți Pregătește (OCR)"
   },
   "localModels": {
     "title": "Modele locale",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "Nu au fost găsite site-uri pentru “{query}”",
       "sitesEmpty": "Nu există site-uri SharePoint disponibile. Încercați să căutați după nume.",
-      "itemCount": "{count, plural, one {# element} other {# elemente}}"
+      "itemCount": "{count, plural, one {# element} other {# elemente}}",
+      "pickHint": "Faceți clic pe un folder pentru a-l naviga sau folosiți Adaugă pentru a indexa tot conținutul. Se pot adăuga și biblioteci întregi sau fișierele echipei.",
+      "addFolderHint": "Adăugați acest folder și tot conținutul ca o singură sursă",
+      "addCurrentFolder": "Adăugați acest folder",
+      "addLibrary": "Adăugați biblioteca",
+      "addTeamFiles": "Adăugați fișierele echipei"
     },
     "mail": {
       "menuLabel": "Importați e-mail…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "deținut de {owner}",
       "requestAccess": "Solicită acces",
       "noneHint": "Deschideți un fișier pentru a solicita acces de la proprietar; agentul va funcționa după acordarea accesului.",
-      "partialHint": "Deschideți un fișier pentru a solicita acces — răspunsurile îl vor include automat după aprobare."
+      "partialHint": "Deschideți un fișier pentru a solicita acces — răspunsurile îl vor include automat după aprobare.",
+      "verifyFailed": "Nu s-a putut verifica accesul la fișierele acestui agent. Răspunsurile pot fi incomplete până la o nouă încercare.",
+      "retry": "Reîncercați",
+      "notAvailable": "Acest agent nu vă este disponibil. Contactați administratorul său pentru acces."
     },
     "translate": {
       "menuLabel": "Tradu din OneDrive / SharePoint",

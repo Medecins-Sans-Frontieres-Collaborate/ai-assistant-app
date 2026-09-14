@@ -803,7 +803,8 @@
       "toolRoutingUnavailable": "Směrování nástrojů není dostupné — odpovídám bez nástrojů…",
       "webSearchLimitReached": "Denní limit webového vyhledávání byl vyčerpán — odpovídám bez vyhledávání…",
       "codeInterpreterLimitReached": "Denní limit spuštění kódu byl vyčerpán — odpovídám bez spuštění kódu…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Vyhledávání v databázi znalostí selhalo — odpověď nebude využívat dokumenty agenta."
     },
     "toolSummary": {
       "usedTools": "Použito {count, plural, one {# nástroj} few {# nástroje} other {# nástrojů}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "Upravit",
     "deleteFormTemplate": "Smazat",
     "deleteFormTemplateConfirm": "Opravdu smazat šablonu „{name}“? Rozhovory, které ji již používají, si ponechají její snímek.",
-    "confirmDeleteFormTemplate": "Smazat šablonu"
+    "confirmDeleteFormTemplate": "Smazat šablonu",
+    "m365SessionDisconnected": "Microsoft 365 není u vašeho účtu připojen. Zdroje se skenují a indexují s vaším přístupem do Microsoft 365, nejprve jej připojte v Nastavení › Připojení.",
+    "m365SessionNotConnected": "Vaše relace Microsoft 365 není dostupná, proto nelze zdroje skenovat nebo indexovat. Odhlaste se a znovu přihlaste a poté zkontrolujte Nastavení › Připojení.",
+    "m365SessionConsentMissing": "Vaše organizace zatím neschválila oprávnění Microsoft 365 potřebná pro skenování a indexování souborů. Požádejte správce tenantů.",
+    "m365OpenConnections": "Otevřete Nastavení › Připojení",
+    "m365ActionNeedsConnection": "Vyžaduje připojení k Microsoft 365",
+    "m365PlanFailedSaveAnyway": "Přesto můžete uložit — limit dokumentů se znovu ověří při indexaci.",
+    "m365AgentRunVisible": "Nyní viditelné pro uživatele — ostatní uživatelé možná musí aplikaci znovu načíst.",
+    "m365AgentRunHidden": "Stále skryto před uživateli: žádný dokument nebyl indexován. Viz důvody níže.",
+    "m365AgentAttentionFiles": "{count, plural, one {# soubor vyžaduje pozornost} other {# souborů vyžaduje pozornost}}",
+    "m365AgentAttentionLoading": "Načítání detailů souboru…",
+    "m365AgentAttentionFailed": "Nepodařilo se načíst detaily souboru.",
+    "m365AgentAttentionNone": "Při posledním spuštění nebyly zaznamenány žádné podrobnosti o jednotlivých souborech.",
+    "m365AgentAutoOcrLabel": "Automaticky OCR skenované PDF při indexaci",
+    "m365AgentAutoOcrHelp": "Výchozí nastavení je vypnuto — OCR je účtováno za stránku. Pokud je zapnuto, každé indexování provede OCR skenovaných PDF až do {perRun} stran na běh a {perFile} stran na soubor; větší nebo dražší soubory ponechají možnost Připravit (OCR).",
+    "m365AgentIndexRetry": "Zkusit znovu",
+    "m365PrepareAllButton": "Připravit všechny skenované PDF ({count})",
+    "m365PrepareAllConfirm": "OCR {count, plural, one {# skenované PDF} other {# skenovaných PDF}} nyní, jeden po druhém? OCR je účtováno za stránku; každý soubor je omezen na {pages} stran. Nechte tuto kartu otevřenou.",
+    "m365PrepareAllProgress": "Připravuji {current} z {total} · {name}",
+    "m365PrepareAllCancel": "Zrušit po tomto souboru",
+    "m365PrepareAllCancelling": "Dokončuji aktuální soubor, poté zastavuji…",
+    "m365PrepareAllDone": "Připraveno {prepared} z {total} souborů. Pro indexaci spusťte Obnovit.",
+    "m365PrepareAllFailures": "{count, plural, one {# soubor} other {# souborů}} se nepodařilo připravit:",
+    "m365ItemOcrPages": "OCR provedeno na {count, plural, one {# stránce} other {# stránkách}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Rozpočet na OCR pro tento běh byl vyčerpán — použijte Připravit (OCR)",
+      "tooManyPages": "Příliš mnoho stran pro automatizované OCR (limit {perFile}) — použijte Připravit (OCR)",
+      "engineUnavailable": "OCR engine není nakonfigurován — kontaktujte správce"
+    },
+    "m365AgentIndexStepLost": "Po několika pokusech ztraceno spojení s indexační úlohou — stále je evidována na serveru. Pokračujte tlačítkem Obnovit.",
+    "m365AgentDiscardEditsConfirm": "Zahodit neuložené úpravy tohoto agenta?",
+    "m365PlanFileUnsupported": "Nebude indexováno — soubory .{ext} nejsou podporovány. Převádějte do PDF, DOCX, XLSX nebo PPTX.",
+    "m365PlanFileSkipped": "Nebude indexováno — {reason}",
+    "m365PlanFileNeedsPreparation": "Nebude indexováno, dokud nebude připraveno — {hint}",
+    "m365PlanFileLastRun": "Poslední běh: {status}",
+    "m365ItemNoTextOcr": "nebyl nalezen žádný text — skenováno? použijte Připravit (OCR)"
   },
   "localModels": {
     "title": "Lokální modely",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "Nenalezeny žádné weby pro „{query}“",
       "sitesEmpty": "Nejsou dostupné žádné SharePoint weby. Zkuste hledat podle názvu.",
-      "itemCount": "{count, plural, one {# položka} few {# položky} other {# položek}}"
+      "itemCount": "{count, plural, one {# položka} few {# položky} other {# položek}}",
+      "pickHint": "Klikněte na složku pro procházení, nebo použijte Přidat pro indexaci jejího obsahu. Můžete také přidat celé knihovny dokumentů i týmové soubory.",
+      "addFolderHint": "Přidejte tuto složku a vše v ní jako jeden zdroj",
+      "addCurrentFolder": "Přidat tuto složku",
+      "addLibrary": "Přidat knihovnu",
+      "addTeamFiles": "Přidat týmové soubory"
     },
     "mail": {
       "menuLabel": "Importovat e-mail…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "vlastník: {owner}",
       "requestAccess": "Požádat o přístup",
       "noneHint": "Otevřete soubor a požádejte jeho vlastníka o přístup; agent bude fungovat po schválení.",
-      "partialHint": "Otevřete soubor pro žádost o přístup — odpovědi jej budou zahrnovat po schválení."
+      "partialHint": "Otevřete soubor pro žádost o přístup — odpovědi jej budou zahrnovat po schválení.",
+      "verifyFailed": "Nepodařilo se ověřit přístup k souborům tohoto agenta. Odpovědi mohou být neúplné, dokud to znovu nezkusíte.",
+      "retry": "Zkusit znovu",
+      "notAvailable": "Tento agent vám není dostupný. Požádejte jeho správce o přístup."
     },
     "translate": {
       "menuLabel": "Přeložit z OneDrive / SharePoint",

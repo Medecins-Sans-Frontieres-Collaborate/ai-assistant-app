@@ -803,7 +803,8 @@
       "toolRoutingUnavailable": "Verktygsdirigering ej tillgänglig — svarar utan verktyg…",
       "webSearchLimitReached": "Daglig gräns för webbsök har uppnåtts — svarar utan sökning…",
       "codeInterpreterLimitReached": "Daglig gräns för kodkörning har uppnåtts — svarar utan att köra kod…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Sökning i kunskapsbasen misslyckades — svaret kommer inte att använda agentens dokument."
     },
     "toolSummary": {
       "usedTools": "Använt {count, plural, one {# verktyg} other {# verktyg}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "Redigera",
     "deleteFormTemplate": "Ta bort",
     "deleteFormTemplateConfirm": "Ta bort mallen \"{name}\"? Konversationer som redan använder den behåller sin ögonblicksbild.",
-    "confirmDeleteFormTemplate": "Ta bort mall"
+    "confirmDeleteFormTemplate": "Ta bort mall",
+    "m365SessionDisconnected": "Microsoft 365 är frånkopplat för ditt konto. Källor skannas och indexeras med din egen Microsoft 365-åtkomst, så anslut under Inställningar › Anslutningar först.",
+    "m365SessionNotConnected": "Din Microsoft 365-session är inte tillgänglig, så källor kan inte skannas eller indexeras. Logga ut och in igen, kontrollera sedan Inställningar › Anslutningar.",
+    "m365SessionConsentMissing": "Din organisation har ännu inte godkänt de Microsoft 365-behörigheter som behövs för att skanna och indexera filer. Kontakta din administratör.",
+    "m365OpenConnections": "Öppna Inställningar › Anslutningar",
+    "m365ActionNeedsConnection": "Kräver en Microsoft 365-anslutning",
+    "m365PlanFailedSaveAnyway": "Du kan fortfarande spara — dokumentbegränsningen kontrolleras igen vid indexering.",
+    "m365AgentRunVisible": "Nu synligt för användare — andra användare kan behöva ladda om appen för att se det.",
+    "m365AgentRunHidden": "Fortfarande dolt för användare: inget dokument har indexerats. Se orsakerna nedan.",
+    "m365AgentAttentionFiles": "{count, plural, one {# fil kräver uppmärksamhet} other {# filer kräver uppmärksamhet}}",
+    "m365AgentAttentionLoading": "Laddar filinformation…",
+    "m365AgentAttentionFailed": "Kunde inte ladda filinformation.",
+    "m365AgentAttentionNone": "Inga filspecifika detaljer registrerade för senaste körningen.",
+    "m365AgentAutoOcrLabel": "OCR-skanna PDF:er automatiskt vid indexering",
+    "m365AgentAutoOcrHelp": "Av som standard — OCR debiteras per sida. När aktiverat OCR-skannas PDF-filer vid varje indexering, upp till {perRun} sidor per körning och {perFile} sidor per fil; större eller överskridna filer behåller alternativet Förbered (OCR).",
+    "m365AgentIndexRetry": "Försök igen",
+    "m365PrepareAllButton": "Förbered alla skannade PDF:er ({count})",
+    "m365PrepareAllConfirm": "OCR:a {count, plural, one {# skannad PDF} other {# skannade PDF:er}} nu, en åt gången? OCR debiteras per sida; varje fil är begränsad till {pages} sidor. Håll denna flik öppen.",
+    "m365PrepareAllProgress": "Förbereder {current} av {total} · {name}",
+    "m365PrepareAllCancel": "Avbryt efter denna fil",
+    "m365PrepareAllCancelling": "Avslutar nuvarande fil, avslutar sedan…",
+    "m365PrepareAllDone": "Förberedde {prepared} av {total} filer. Kör Uppdatera för att indexera dem.",
+    "m365PrepareAllFailures": "{count, plural, one {# fil} other {# filer}} kunde inte förberedas:",
+    "m365ItemOcrPages": "OCR:ade {count, plural, one {# sida} other {# sidor}}",
+    "m365ItemOcrSkipped": {
+      "budget": "OCR-budgeten för denna körning är slut — använd Förbered (OCR)",
+      "tooManyPages": "För många sidor för auto-OCR (gräns {perFile}) — använd Förbered (OCR)",
+      "engineUnavailable": "Ingen OCR-motor konfigurerad — kontakta en administratör"
+    },
+    "m365AgentIndexStepLost": "Förlorade kontakten med indexeringsjobbet efter flera försök — det är fortfarande registrerat på servern. Använd Återuppta för att fortsätta.",
+    "m365AgentDiscardEditsConfirm": "Vill du kassera dina osparade ändringar för denna agent?",
+    "m365PlanFileUnsupported": "Kommer inte att indexeras — .{ext}-filer stöds inte. Konvertera till PDF, DOCX, XLSX eller PPTX.",
+    "m365PlanFileSkipped": "Kommer inte att indexeras — {reason}",
+    "m365PlanFileNeedsPreparation": "Indexeras ej förrän förberedd — {hint}",
+    "m365PlanFileLastRun": "Senaste körning: {status}",
+    "m365ItemNoTextOcr": "ingen text hittades — skannad? använd Förbered (OCR)"
   },
   "localModels": {
     "title": "Lokala modeller",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "Inga webbplatser hittades för “{query}”",
       "sitesEmpty": "Inga SharePoint-webbplatser tillgängliga. Prova att söka på namn.",
-      "itemCount": "{count, plural, one {# objekt} other {# objekt}}"
+      "itemCount": "{count, plural, one {# objekt} other {# objekt}}",
+      "pickHint": "Klicka på en mapp för att bläddra, eller använd Lägg till för att indexera allt i den. Hela dokumentbibliotek och teamfiler kan också läggas till.",
+      "addFolderHint": "Lägg till denna mapp och allt i den som en källa",
+      "addCurrentFolder": "Lägg till denna mapp",
+      "addLibrary": "Lägg till bibliotek",
+      "addTeamFiles": "Lägg till teamfiler"
     },
     "mail": {
       "menuLabel": "Importera e-post…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "ägs av {owner}",
       "requestAccess": "Begär åtkomst",
       "noneHint": "Öppna en fil för att begära åtkomst från ägaren; agenten fungerar när åtkomst har beviljats.",
-      "partialHint": "Öppna en fil för att begära åtkomst — svaret kommer automatiskt att inkludera den när åtkomst beviljats."
+      "partialHint": "Öppna en fil för att begära åtkomst — svaret kommer automatiskt att inkludera den när åtkomst beviljats.",
+      "verifyFailed": "Kunde inte verifiera din åtkomst till den här agentens filer. Svar kan vara ofullständiga tills detta har försökt igen.",
+      "retry": "Försök igen",
+      "notAvailable": "Denna agent är inte tillgänglig för dig. Kontakta dess administratör för åtkomst."
     },
     "translate": {
       "menuLabel": "Översätt från OneDrive / SharePoint",

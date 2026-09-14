@@ -861,7 +861,8 @@
       "toolRoutingUnavailable": "Tsy afaka mampiasa fitaovana — mamaly tsy misy fitaovana…",
       "webSearchLimitReached": "Tonga ny fetra fitadiavana amin’ny internet isan’andro — mamaly tsy misy fitadiavana…",
       "codeInterpreterLimitReached": "Tonga ny fetra fanatanterahana kaody isan’andro — mamaly tsy misy kaody tanterahana…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Tsy nahomby ny fikarohana amin'ny tahiry fahalalana — tsy hampiasa antontan-taratasy an'ny agent ny valiny"
     },
     "toolSummary": {
       "usedTools": "Fitaovana nampiasaina {count, plural, one {#} other {#}}",
@@ -4676,7 +4677,42 @@
     "openFormTemplateEditor": "Hanova",
     "deleteFormTemplate": "Fafana",
     "deleteFormTemplateConfirm": "Fafana ve ny modely \"{name}\"? Hijanona ho voatahiry amin'ny snapshot-ny ankehitriny ireo resaka efa mampiasa izany.",
-    "confirmDeleteFormTemplate": "Fafana ny modely"
+    "confirmDeleteFormTemplate": "Fafana ny modely",
+    "m365SessionDisconnected": "Tapaka amin'ny kaontinao ny Microsoft 365. Sivanina sy aseho amin'ny Microsoft 365 anao manokana ny loharano, ka ampifandraiso amin'ny Settings › Connections aloha.",
+    "m365SessionNotConnected": "Tsy misy amin'izao fotoana izao ny fivoriana Microsoft 365 anao, noho izany tsy afaka asiana sivana na aseho ireo loharano. Mivoaha sy midira indray, dia jereo ny Settings › Connections.",
+    "m365SessionConsentMissing": "Tsy mbola neken'ny fikambananareo ny fahazoan-dalana ilaina amin'ny Microsoft 365 hanasivana sy hanindrahindra rakitra. Mangataha amin'ny mpitantana tenant.",
+    "m365OpenConnections": "Sokafy ny Settings › Connections",
+    "m365ActionNeedsConnection": "Mila fifandraisana amin'ny Microsoft 365",
+    "m365PlanFailedSaveAnyway": "Afaka mitahiry ihany ianao — averina jerena indray ny fetra amin'ny antontan-taratasy rehefa manindrahindra.",
+    "m365AgentRunVisible": "Efa hita amin'ireo mpampiasa — mety mila mamerina manokatra ny app ny hafa vao mahita izany.",
+    "m365AgentRunHidden": "Mbola tsy hita amin'ny mpampiasa: tsy mbola nisy antontan-taratasy naindrahindra. Jereo eto ambany ny antony.",
+    "m365AgentAttentionFiles": "{count, plural, one {# antontan-taratasy mila jerena} other {# antontan-taratasy mila jerena}}",
+    "m365AgentAttentionLoading": "Hamaky antsipiriany ny antontan-taratasy…",
+    "m365AgentAttentionFailed": "Tsy afaka namaky antsipiriany ny antontan-taratasy.",
+    "m365AgentAttentionNone": "Tsy nisy antsipirian’ny antontan-taratasy voarakitra tamin’ny fandefasana farany.",
+    "m365AgentAutoOcrLabel": "OCR mandeha ho azy ho an'ny PDF voasivana mandritra ny fanindrahindrana",
+    "m365AgentAutoOcrHelp": "Tsy mandeha ho azy — aloa isaky ny pejy ny OCR. Raha ampiasaina, avoaka ho azy ny PDF voasivana mandritra ny fanindrahindrana, hatramin'ny pejy {perRun} isaky ny mandefa sy {perFile} isaky ny antontan-taratasy; ireo lehibe na mihoatra ny teti-bola dia mbola azo atao Prepare (OCR).",
+    "m365AgentIndexRetry": "Avereno indray",
+    "m365PrepareAllButton": "Manomàna PDF voasivana rehetra ({count})",
+    "m365PrepareAllConfirm": "Hanomana OCR {count, plural, one {# PDF voasivana} other {# PDF voasivana}} izao ve, mifandimby? Alaina isaky ny pejy ny OCR; voafetra ho pejy {pages} isaky ny antontan-taratasy. Avelao misokatra ity tabilao ity.",
+    "m365PrepareAllProgress": "Manomana {current} amin'ny {total} · {name}",
+    "m365PrepareAllCancel": "Atsaharo aorian'ity antontan-taratasy ity",
+    "m365PrepareAllCancelling": "Afarana ny antontan-taratasy ankehitriny, dia atsahatra…",
+    "m365PrepareAllDone": "Vita ny fanomanana antontan-taratasy {prepared} amin'ny {total}. Ataovy Refresh mba hanindrahindra azy ireo.",
+    "m365PrepareAllFailures": "{count, plural, one {# antontan-taratasy} other {# antontan-taratasy}} tsy afaka vaoomanina:",
+    "m365ItemOcrPages": "Vita OCR {count, plural, one {# pejy} other {# pejy}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Lany ny teti-bola OCR ho an'ity fandefasana ity — ampiasao ny Prepare (OCR)",
+      "tooManyPages": "Be loatra ny pejy ho an'ny auto-OCR (fetra {perFile}) — ampiasao ny Prepare (OCR)",
+      "engineUnavailable": "Tsy misy engine OCR voahefana — angataho amin'ny mpitantana"
+    },
+    "m365AgentIndexStepLost": "Tsy nahazo aina tamin'ny indexing rehefa avy andrana maromaro — mbola voarakitra eny amin'ny server izany. Ampiasao Resume hanohizana.",
+    "m365AgentDiscardEditsConfirm": "Halevonina ny fanovana tsy voatahiry nataonao amin'ity agent ity?",
+    "m365PlanFileUnsupported": "Tsy hojerena — tsy tohanana ny rakitra .{ext}. Ataovy PDF, DOCX, XLSX na PPTX aloha.",
+    "m365PlanFileSkipped": "Tsy hojerena — {reason}",
+    "m365PlanFileNeedsPreparation": "Tsy hojerena raha tsy mialoha — {hint}",
+    "m365PlanFileLastRun": "Fandefasana farany: {status}",
+    "m365ItemNoTextOcr": "tsy nahitana soratra — voasivana ve? ampiasao ny Prepare (OCR)"
   },
   "localModels": {
     "title": "Model eo an-toerana",
@@ -5478,7 +5514,12 @@
       },
       "sitesNoResults": "Tsy misy tranonkala hita ho an'ny “{query}”",
       "sitesEmpty": "Tsy misy tranonkala SharePoint azo ampiasaina. Andramo karohina amin'ny anarana.",
-      "itemCount": "{count, plural, one {# singa} other {# singa} }"
+      "itemCount": "{count, plural, one {# singa} other {# singa} }",
+      "pickHint": "Kitiho ny folder raha hijery, na ampiasao Add hanondroana ireo rehetra ao anatiny. Afaka ampiana ihany koa ireo trano fitahirizana antontan-taratasy sy rakitra ekipanareo.",
+      "addFolderHint": "Ampio ity folder ity sy ny rehetra ao anatiny ho loharano iray",
+      "addCurrentFolder": "Ampio ity folder ity",
+      "addLibrary": "Ampio Library",
+      "addTeamFiles": "Ampio rakitra ekipa"
     },
     "mail": {
       "menuLabel": "Ampidiro mailaka…",
@@ -5582,7 +5623,10 @@
       "ownedBy": "an'ny {owner}",
       "requestAccess": "Angataho ny fahazoan-dalana",
       "noneHint": "Sokafy ny rakitra mba hangataka fahazoan-dalana amin'ny tompony; hiasa ilay agent rehefa nahazo alalana.",
-      "partialHint": "Sokafy ny rakitra mba hangataka fahazoan-dalana — ho tafiditra ho azy ao amin'ny valiny izany raha vao voaray."
+      "partialHint": "Sokafy ny rakitra mba hangataka fahazoan-dalana — ho tafiditra ho azy ao amin'ny valiny izany raha vao voaray.",
+      "verifyFailed": "Tsy afaka nanamarina ny fahazoanao idirana amin’ny antontan-taratasy an’ity agent ity. Mety tsy feno ny valiny raha tsy averina indray.",
+      "retry": "Avereno indray",
+      "notAvailable": "Tsy azonao ampiasaina ity agent ity. Angataho amin’ny mpitantana hanome fahazoan-dalana."
     },
     "translate": {
       "menuLabel": "Adikao avy amin'ny OneDrive / SharePoint",

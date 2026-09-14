@@ -770,7 +770,8 @@
       "toolRoutingUnavailable": "Rute alat tidak tersedia — menjawab tanpa alat…",
       "webSearchLimitReached": "Batas pencarian web harian tercapai — menjawab tanpa pencarian…",
       "codeInterpreterLimitReached": "Batas eksekusi kode harian tercapai — menjawab tanpa menjalankan kode…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Pencarian di basis pengetahuan gagal — jawaban tidak akan menggunakan dokumen agen"
     },
     "toolSummary": {
       "usedTools": "Digunakan {count, plural, one {# alat} other {# alat}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "Edit",
     "deleteFormTemplate": "Hapus",
     "deleteFormTemplateConfirm": "Hapus templat \"{name}\"? Percakapan yang sudah menggunakannya akan tetap menyimpan salinannya.",
-    "confirmDeleteFormTemplate": "Hapus templat"
+    "confirmDeleteFormTemplate": "Hapus templat",
+    "m365SessionDisconnected": "Microsoft 365 terputus dari akun Anda. Sumber akan dipindai dan diindeks menggunakan akses Microsoft 365 Anda sendiri, jadi sambungkan terlebih dahulu di Pengaturan › Koneksi.",
+    "m365SessionNotConnected": "Sesi Microsoft 365 Anda tidak tersedia, sehingga sumber tidak dapat dipindai atau diindeks. Keluar dan masuk kembali, lalu cek Pengaturan › Koneksi.",
+    "m365SessionConsentMissing": "Organisasi Anda belum menyetujui izin Microsoft 365 yang diperlukan untuk memindai dan mengindeks file. Hubungi administrator penyewa Anda.",
+    "m365OpenConnections": "Buka Pengaturan › Koneksi",
+    "m365ActionNeedsConnection": "Memerlukan koneksi Microsoft 365",
+    "m365PlanFailedSaveAnyway": "Anda tetap dapat menyimpan — batas dokumen akan dicek kembali saat pengindeksan.",
+    "m365AgentRunVisible": "Sekarang terlihat oleh pengguna — pengguna lain mungkin perlu memuat ulang aplikasi untuk melihatnya.",
+    "m365AgentRunHidden": "Masih tersembunyi dari pengguna: tidak ada dokumen yang diindeks. Lihat alasan di bawah.",
+    "m365AgentAttentionFiles": "{count, plural, one {# file perlu perhatian} other {# file perlu perhatian}}",
+    "m365AgentAttentionLoading": "Memuat detail file…",
+    "m365AgentAttentionFailed": "Tidak dapat memuat detail file.",
+    "m365AgentAttentionNone": "Tidak ada detail per file yang tercatat pada proses terakhir.",
+    "m365AgentAutoOcrLabel": "PDF hasil scan di-OCR otomatis saat pengindeksan",
+    "m365AgentAutoOcrHelp": "Nonaktif secara default — OCR dikenakan biaya per halaman. Saat aktif, setiap pengindeksan akan melakukan OCR pada PDF hasil scan hingga {perRun} halaman per proses dan {perFile} halaman per file; file yang lebih besar atau melebihi anggaran tetap menggunakan opsi Persiapkan (OCR).",
+    "m365AgentIndexRetry": "Coba lagi",
+    "m365PrepareAllButton": "Persiapkan seluruh PDF hasil scan ({count})",
+    "m365PrepareAllConfirm": "Lakukan OCR pada {count, plural, one {# PDF hasil scan} other {# PDF hasil scan}} sekarang, satu per satu? OCR dikenakan biaya per halaman; setiap file dibatasi {pages} halaman. Biarkan tab ini tetap terbuka.",
+    "m365PrepareAllProgress": "Mempersiapkan {current} dari {total} · {name}",
+    "m365PrepareAllCancel": "Batalkan setelah file ini",
+    "m365PrepareAllCancelling": "Menyelesaikan file saat ini, lalu berhenti…",
+    "m365PrepareAllDone": "Telah dipersiapkan {prepared} dari {total} file. Jalankan Refresh untuk mengindeks.",
+    "m365PrepareAllFailures": "{count, plural, one {# file} other {# file}} tidak dapat dipersiapkan:",
+    "m365ItemOcrPages": "OCR pada {count, plural, one {# halaman} other {# halaman}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Anggaran OCR untuk proses ini sudah habis — gunakan Persiapkan (OCR)",
+      "tooManyPages": "Halaman terlalu banyak untuk auto-OCR (batas {perFile}) — gunakan Persiapkan (OCR)",
+      "engineUnavailable": "Mesin OCR belum dikonfigurasi — hubungi administrator"
+    },
+    "m365AgentIndexStepLost": "Koneksi dengan pekerjaan pengindeksan hilang setelah beberapa kali percobaan — tetap tercatat di server. Gunakan Lanjutkan untuk melanjutkan.",
+    "m365AgentDiscardEditsConfirm": "Buang perubahan yang belum disimpan pada agen ini?",
+    "m365PlanFileUnsupported": "Tidak akan diindeks — file .{ext} tidak didukung. Konversi ke PDF, DOCX, XLSX, atau PPTX.",
+    "m365PlanFileSkipped": "Tidak akan diindeks — {reason}",
+    "m365PlanFileNeedsPreparation": "Tidak diindeks sampai dipersiapkan — {hint}",
+    "m365PlanFileLastRun": "Proses terakhir: {status}",
+    "m365ItemNoTextOcr": "teks tidak ditemukan — hasil scan? gunakan Persiapkan (OCR)"
   },
   "localModels": {
     "title": "Model lokal",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "Tidak ada situs ditemukan untuk “{query}”",
       "sitesEmpty": "Tidak ada situs SharePoint yang tersedia. Coba cari berdasarkan nama.",
-      "itemCount": "{count, plural, one {# item} other {# item} }"
+      "itemCount": "{count, plural, one {# item} other {# item} }",
+      "pickHint": "Klik folder untuk membuka isinya, atau gunakan Tambahkan untuk mengindeks semua yang ada di dalamnya. Seluruh perpustakaan dokumen dan file tim juga bisa ditambahkan.",
+      "addFolderHint": "Tambahkan folder ini beserta seluruh isinya sebagai satu sumber",
+      "addCurrentFolder": "Tambahkan folder ini",
+      "addLibrary": "Tambahkan perpustakaan",
+      "addTeamFiles": "Tambahkan file tim"
     },
     "mail": {
       "menuLabel": "Impor email…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "dimiliki oleh {owner}",
       "requestAccess": "Minta akses",
       "noneHint": "Buka file untuk meminta akses dari pemiliknya; agen akan berfungsi setelah akses diberikan.",
-      "partialHint": "Buka file untuk meminta akses — setelah diizinkan, jawabannya akan otomatis menyertakannya."
+      "partialHint": "Buka file untuk meminta akses — setelah diizinkan, jawabannya akan otomatis menyertakannya.",
+      "verifyFailed": "Tidak dapat memverifikasi akses Anda ke file agen ini. Jawaban mungkin tidak lengkap sampai ini dicoba kembali.",
+      "retry": "Coba lagi",
+      "notAvailable": "Agen ini tidak tersedia untuk Anda. Hubungi administrator agen ini untuk mendapatkan akses."
     },
     "translate": {
       "menuLabel": "Terjemahkan dari OneDrive / SharePoint",

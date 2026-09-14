@@ -861,7 +861,8 @@
       "toolRoutingUnavailable": "Sô ti tool alatâ mwâle — mo yeke na bâ tool…",
       "webSearchLimitReached": "Limite ti mo na fâ web sô rî — mo yeke na bâ fâ…",
       "codeInterpreterLimitReached": "Limite ti sô na sô kôde sô rî — mo yeke na bâ sô kôde…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Sépêse ti mo ana ti bi tî sô ôko — azêlï lo ti agent ape na ko tî ayeke-linga ye."
     },
     "toolSummary": {
       "usedTools": "Tool {count, plural, one {# ya kötï} other {# ya kötï}}",
@@ -4676,7 +4677,42 @@
     "openFormTemplateEditor": "Sûngörö",
     "deleteFormTemplate": "Mâle",
     "deleteFormTemplateConfirm": "Oko mâle gbânanî \"{name}\"? Sobê mbi bêtî kodro na yângâ di yeke kodrë sô agbegbé.",
-    "confirmDeleteFormTemplate": "Mâle gbânanî"
+    "confirmDeleteFormTemplate": "Mâle gbânanî",
+    "m365SessionDisconnected": "Microsoft 365 ape na gbanga oko yângä. Mbênî ape na zî pû tî Microsoft 365 mo tî gâkodro ase sô yângä, kôzo yäa mbênî na Settings › Connections.",
+    "m365SessionNotConnected": "Microsoft 365 tî mo ape na gï tî mbi, kôzo mbênî ape na zî ana. Fâ mo sô àbâ yângä, sô yeke Settings › Connections.",
+    "m365SessionConsentMissing": "Organisation tî mo ape na zî gbângâ lâ permissions tî Microsoft 365 sô ayeke-linga tî zo zî ayeke-indexi dosié. Kûê ti tenant administrator mo.",
+    "m365OpenConnections": "Ouvri Settings › Connections",
+    "m365ActionNeedsConnection": "Mbênî tî Microsoft 365 ape na yângä",
+    "m365PlanFailedSaveAnyway": "Ape na yeke ti pèpègä — ti kêtê tî dosié ayeke sépê lo sô ayeke-indexi.",
+    "m365AgentRunVisible": "Linga na ti zo sênga — zo a sènga ayeke-köde appli mo tî yeke sènga lo.",
+    "m365AgentRunHidden": "Ape na linga ti zo: dosié môko ape na indexi. Sö sô ayeke ndö lo zyê na mbade.",
+    "m365AgentAttentionFiles": "{count, plural, one {# dosié sô alingbi azê} other {# dosié sô alingbi azê}}",
+    "m365AgentAttentionLoading": "Alînga zî ayeke dosié...",
+    "m365AgentAttentionFailed": "Ape na lïngbi zî tî dosié.",
+    "m365AgentAttentionNone": "Ala tî ndönî zî dosié tî run ti sî.",
+    "m365AgentAutoOcrLabel": "OCR ayeke-linga PDFs ayeke-scan na ti indexi",
+    "m365AgentAutoOcrHelp": "Sombi na limû — OCR ti tî pêgi môko ti pèpègä. Sô yêgbängö, run môko na indexi ayeke-OCR PDFs ana ti {perRun} pêgi na run môko, {perFile} pêgi na dosié môko; dosié sô ayeke-zo ti tî/budget ayeke-kûê Prepare (OCR).",
+    "m365AgentIndexRetry": "Sênda sî",
+    "m365PrepareAllButton": "Prepare PDFs ayeke-scan kõtõso ({count})",
+    "m365PrepareAllConfirm": "OCR {count, plural, one {# PDF ayeke-scan} other {# PDFs ayeke-scan}} na lo, i kõtõ i kõtõ? OCR ti tî pêgi môko; dosié môko ti tî {pages} pêgi. Pêsê tab sô lä mbi linga.",
+    "m365PrepareAllProgress": "Ayeke-prepare {current} na {total} · {name}",
+    "m365PrepareAllCancel": "Kûê sô dosié a fî tî séré",
+    "m365PrepareAllCancelling": "Ayeke-syè ti dosié yeke gbêtî, sô ayeke-kûê...",
+    "m365PrepareAllDone": "Dosié {prepared} na {total} ayeke-prepare. Ayeke-run Refresh ti indexi yângö.",
+    "m365PrepareAllFailures": "{count, plural, one {# dosié} other {# dosié}} ape na prepare:",
+    "m365ItemOcrPages": "OCR ayeke-linga {count, plural, one {# pêgi} other {# pêgi}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Budget tî OCR tî run mo ayeke-saa — yeke Prepare (OCR)",
+      "tooManyPages": "Pêgi ayê so tî auto-OCR (limiti {perFile}) — yeke Prepare (OCR)",
+      "engineUnavailable": "OCR engine ape na configure — kûê administrator"
+    },
+    "m365AgentIndexStepLost": "Gbângâ na indexi job ayeke-saa na sô apesene, kôzo ayeke-zî na sèvè. Yeke Resume ti fî lo.",
+    "m365AgentDiscardEditsConfirm": "Ayeke-kûê edits mo sô ayape-gbêtî ti agent môko?",
+    "m365PlanFileUnsupported": "Ape na indexi — dosié .{ext} ape na sô linga. Kêtê ti kúê na PDF, DOCX, XLSX sô PPTX.",
+    "m365PlanFileSkipped": "Ape na indexi — {reason}",
+    "m365PlanFileNeedsPreparation": "Ape na indexi tî mayi prepare — {hint}",
+    "m365PlanFileLastRun": "Last run: {status}",
+    "m365ItemNoTextOcr": "Ala zî ayeke-ndongi — ape na scan? yeke Prepare (OCR)"
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",
@@ -5478,7 +5514,12 @@
       },
       "sitesNoResults": "Ala site ape kɛ tî “{query}”",
       "sitesEmpty": "Site SharePoint ape teni. Sèngä mbênî ti sôkô tî lo.",
-      "itemCount": "{count, plural, one {# zo} other {# zo na}}"
+      "itemCount": "{count, plural, one {# zo} other {# zo na}}",
+      "pickHint": "Klicki na dossier ti fî ti yângö, sô yeke Add ti indexi mbênî kêtêngö. Bibliothèque tî dosié kõtõ ayeke-yeke, é pi team files.",
+      "addFolderHint": "Ayeke-î dossier mo na allem sô yângö kêtêngö na mbênî môko",
+      "addCurrentFolder": "Ayeke-î dossier mo",
+      "addLibrary": "Ayeke-î bibliothèque",
+      "addTeamFiles": "Ayeke-î team files"
     },
     "mail": {
       "menuLabel": "Kombere email…",
@@ -5582,7 +5623,10 @@
       "ownedBy": "na {owner} sô yè.",
       "requestAccess": "Sôngô tene",
       "noneHint": "Ouvrir fichier ti sôngô tene tî propriétaire; agent a yeke vû yékê ti tene apê.",
-      "partialHint": "Ouvrir fichier ti sôngô tene — réponse a yeke fâlo tî tene apê."
+      "partialHint": "Ouvrir fichier ti sôngô tene — réponse a yeke fâlo tî tene apê.",
+      "verifyFailed": "Ape na verify access mo na dosié ti agent môko. Bäa ayeke-gbêtî na apesene ti verify sî.",
+      "retry": "Sênda sî",
+      "notAvailable": "Agent môko ape na yângä na mo. Kûê administrator môko ti pèpègä."
     },
     "translate": {
       "menuLabel": "Traduire sô OneDrive / SharePoint",

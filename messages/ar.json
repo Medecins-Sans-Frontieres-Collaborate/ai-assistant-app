@@ -749,7 +749,8 @@
       "toolRoutingUnavailable": "توجيه الأدوات غير متوفر — سيتم الإجابة بدون أدوات…",
       "webSearchLimitReached": "تم الوصول إلى حد البحث اليومي — سيتم الإجابة بدون بحث…",
       "codeInterpreterLimitReached": "تم الوصول إلى حد تشغيل الشيفرة اليومي — سيتم الإجابة بدون تشغيل الشيفرة…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "فشل البحث في قاعدة المعرفة — الإجابة لن تعتمد على مستندات الوكيل"
     },
     "toolSummary": {
       "usedTools": "تم استخدام {count, plural, one {أداة واحدة} other {{count} أدوات}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "تعديل",
     "deleteFormTemplate": "حذف",
     "deleteFormTemplateConfirm": "هل تريد حذف القالب \"{name}\"؟ المحادثات التي تستعمله حالياً تحتفظ بنسختها.",
-    "confirmDeleteFormTemplate": "حذف القالب"
+    "confirmDeleteFormTemplate": "حذف القالب",
+    "m365SessionDisconnected": "تم فصل Microsoft 365 عن حسابك. يتم فحص المصادر وفهرستها باستخدام وصول Microsoft 365 الخاص بك، لذا يرجى ربطه أولاً من الإعدادات › الاتصالات.",
+    "m365SessionNotConnected": "جلسة Microsoft 365 الخاصة بك غير متوفرة، لذلك لا يمكن فحص أو فهرسة المصادر. سجل الخروج ثم الدخول مجددًا، ثم تحقق من الإعدادات › الاتصالات.",
+    "m365SessionConsentMissing": "لم توافق مؤسستك بعد على أذونات Microsoft 365 اللازمة للفحص والفهرسة. يرجى التواصل مع مسؤول النظام.",
+    "m365OpenConnections": "افتح الإعدادات › الاتصالات",
+    "m365ActionNeedsConnection": "يتطلب اتصالاً بـ Microsoft 365",
+    "m365PlanFailedSaveAnyway": "يمكنك الحفظ على أي حال — سيتم التحقق من حد الوثائق مرة أخرى عند الفهرسة.",
+    "m365AgentRunVisible": "أصبح مرئيًا الآن للمستخدمين — قد يحتاج المستخدمون الآخرون لتحديث التطبيق لرؤيته.",
+    "m365AgentRunHidden": "ما زال مخفياً عن المستخدمين: لم يتم فهرسة أي مستند. راجع الأسباب أدناه.",
+    "m365AgentAttentionFiles": "{count, plural, one {ملف واحد يحتاج الانتباه} other {# ملفات تحتاج الانتباه}}",
+    "m365AgentAttentionLoading": "جارٍ تحميل تفاصيل الملفات…",
+    "m365AgentAttentionFailed": "تعذر تحميل تفاصيل الملفات.",
+    "m365AgentAttentionNone": "لا توجد تفاصيل لكل ملف مسجلة في آخر تشغيل.",
+    "m365AgentAutoOcrLabel": "تم إجراء OCR تلقائيًا على ملفات PDF الممسوحة ضوئيًا أثناء الفهرسة",
+    "m365AgentAutoOcrHelp": "معطل افتراضيًا — يتم احتساب تكلفة OCR حسب الصفحة. عند التفعيل، يجري OCR لكل عملية فهرسة حتى {perRun} صفحة لكل عملية و{perFile} صفحة لكل ملف؛ الملفات الأكبر أو التي تجاوزت الميزانية تحتفظ بخيار \"إعداد (OCR)\".",
+    "m365AgentIndexRetry": "إعادة المحاولة",
+    "m365PrepareAllButton": "حضّر جميع ملفات PDF الممسوحة ضوئيًا ({count})",
+    "m365PrepareAllConfirm": "هل تريد إجراء OCR لـ {count, plural, one {ملف PDF ممسوح ضوئيًا واحد} other {# ملفات PDF ممسوحة ضوئيًا}} الآن، واحدًا تلو الآخر؟ يتم احتساب تكلفة OCR حسب الصفحة؛ كل ملف محدود بـ {pages} صفحة. يرجى إبقاء هذا التبويب مفتوحًا.",
+    "m365PrepareAllProgress": "جاري التحضير {current} من {total} · {name}",
+    "m365PrepareAllCancel": "إلغاء بعد هذا الملف",
+    "m365PrepareAllCancelling": "يتم إنهاء الملف الحالي، ثم التوقف…",
+    "m365PrepareAllDone": "تم تحضير {prepared} من {total} ملف. قم بتشغيل التحديث لفهرستها.",
+    "m365PrepareAllFailures": "تعذر تحضير {count, plural, one {ملف واحد} other {# ملفات}}:",
+    "m365ItemOcrPages": "تم إجراء OCR على {count, plural, one {صفحة واحدة} other {# صفحات}}",
+    "m365ItemOcrSkipped": {
+      "budget": "تم استهلاك ميزانية OCR لهذا التشغيل — استخدم إعداد (OCR)",
+      "tooManyPages": "عدد الصفحات كبير جدًا لـ OCR التلقائي (الحد {perFile}) — استخدم إعداد (OCR)",
+      "engineUnavailable": "لم يتم ضبط محرك OCR — يرجى التواصل مع المسؤول"
+    },
+    "m365AgentIndexStepLost": "فُقد الاتصال بمهمة الفهرسة بعد عدة محاولات — ما زالت مسجلة على الخادم. استخدم الاستئناف للمتابعة.",
+    "m365AgentDiscardEditsConfirm": "هل تريد تجاهل تعديلاتك غير المحفوظة على هذا الوكيل؟",
+    "m365PlanFileUnsupported": "لن يتم فهرسته — ملفات .{ext} غير مدعومة. يرجى التحويل إلى PDF أو DOCX أو XLSX أو PPTX.",
+    "m365PlanFileSkipped": "لن يتم فهرسته — {reason}",
+    "m365PlanFileNeedsPreparation": "لن يُفهرس حتى يتم تجهيزه — {hint}",
+    "m365PlanFileLastRun": "آخر تشغيل: {status}",
+    "m365ItemNoTextOcr": "لم يتم العثور على نص — ممسوح ضوئيًا؟ استخدم إعداد (OCR)"
   },
   "localModels": {
     "title": "النماذج المحلية",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "لم يتم العثور على مواقع لـ “{query}”",
       "sitesEmpty": "لا توجد مواقع SharePoint متاحة. حاول البحث بالاسم.",
-      "itemCount": "{count, plural, one {عنصر واحد} other {# عناصر}}"
+      "itemCount": "{count, plural, one {عنصر واحد} other {# عناصر}}",
+      "pickHint": "انقر على مجلد للتصفح أو استخدم إضافة لفهرسة كل ما بداخله. يمكن أيضًا إضافة مكتبات المستندات الكاملة وملفات الفريق.",
+      "addFolderHint": "أضف هذا المجلد وكل ما فيه كمصدر واحد",
+      "addCurrentFolder": "أضف هذا المجلد",
+      "addLibrary": "أضف المكتبة",
+      "addTeamFiles": "أضف ملفات الفريق"
     },
     "mail": {
       "menuLabel": "استيراد بريد إلكتروني…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "مملوك بواسطة {owner}",
       "requestAccess": "طلب الوصول",
       "noneHint": "افتح ملفًا لطلب الوصول من المالك؛ سيعمل الوكيل عند منح الإذن.",
-      "partialHint": "افتح ملفًا لطلب الوصول — ستُدرج الإجابات الملف تلقائيًا عند الموافقة."
+      "partialHint": "افتح ملفًا لطلب الوصول — ستُدرج الإجابات الملف تلقائيًا عند الموافقة.",
+      "verifyFailed": "تعذر التحقق من وصولك إلى ملفات هذا الوكيل. قد تكون الإجابات غير مكتملة حتى تتم إعادة المحاولة.",
+      "retry": "إعادة المحاولة",
+      "notAvailable": "هذا الوكيل غير متاح لك. يرجى التواصل مع مسؤول الوكيل للحصول على إذن الوصول."
     },
     "translate": {
       "menuLabel": "ترجمة من OneDrive / SharePoint",

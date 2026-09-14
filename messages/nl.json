@@ -768,7 +768,8 @@
       "toolRoutingUnavailable": "Tool-routering niet beschikbaar — beantwoorden zonder tools…",
       "webSearchLimitReached": "Dagelijks limiet voor webzoeken bereikt — beantwoorden zonder zoekfunctie…",
       "codeInterpreterLimitReached": "Dagelijks limiet voor code-uitvoering bereikt — beantwoorden zonder code uit te voeren…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Zoeken in de kennisbank is mislukt — het antwoord gebruikt geen documenten van de agent."
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# tool gebruikt} other {# tools gebruikt}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "Bewerken",
     "deleteFormTemplate": "Verwijderen",
     "deleteFormTemplateConfirm": "Sjabloon \"{name}\" verwijderen? Gesprekken die het al gebruiken behouden hun versie.",
-    "confirmDeleteFormTemplate": "Sjabloon verwijderen"
+    "confirmDeleteFormTemplate": "Sjabloon verwijderen",
+    "m365SessionDisconnected": "Microsoft 365 is niet verbonden met uw account. Bronnen worden gescand en geïndexeerd met uw eigen Microsoft 365-toegang, dus verbind deze eerst via Instellingen › Verbindingen.",
+    "m365SessionNotConnected": "Uw Microsoft 365-sessie is niet beschikbaar, dus bronnen kunnen niet worden gescand of geïndexeerd. Log uit en weer in, en controleer Instellingen › Verbindingen.",
+    "m365SessionConsentMissing": "Uw organisatie heeft de vereiste Microsoft 365-machtigingen om bestanden te scannen en indexeren nog niet goedgekeurd. Vraag uw tenantbeheerder.",
+    "m365OpenConnections": "Open Instellingen › Verbindingen",
+    "m365ActionNeedsConnection": "Vereist een Microsoft 365-verbinding",
+    "m365PlanFailedSaveAnyway": "U kunt nog steeds opslaan — de documentlimiet wordt opnieuw gecontroleerd bij het indexeren.",
+    "m365AgentRunVisible": "Nu zichtbaar voor gebruikers — andere gebruikers moeten mogelijk de app herladen om dit te zien.",
+    "m365AgentRunHidden": "Nog niet zichtbaar voor gebruikers: er is geen document geïndexeerd. Zie onderstaande redenen.",
+    "m365AgentAttentionFiles": "{count, plural, one {# bestand vereist aandacht} other {# bestanden vereisen aandacht}}",
+    "m365AgentAttentionLoading": "Bestandsdetails laden…",
+    "m365AgentAttentionFailed": "Kon bestandsdetails niet laden.",
+    "m365AgentAttentionNone": "Geen bestandsdetails geregistreerd voor de laatste run.",
+    "m365AgentAutoOcrLabel": "PDF's automatisch met OCR gescand tijdens indexeren",
+    "m365AgentAutoOcrHelp": "Standaard uitgeschakeld — OCR wordt per pagina afgerekend. Indien ingeschakeld, voert elke indexeerbewerking OCR uit op gescande PDF's tot {perRun} pagina's per run en {perFile} pagina's per bestand; grotere of te dure bestanden behouden de optie Voorbereiden (OCR).",
+    "m365AgentIndexRetry": "Opnieuw proberen",
+    "m365PrepareAllButton": "Alle gescande PDF's voorbereiden ({count})",
+    "m365PrepareAllConfirm": "OCR {count, plural, one {# gescande PDF} other {# gescande PDF's}} nu, één voor één? OCR wordt per pagina afgerekend; elk bestand is beperkt tot {pages} pagina's. Houd dit tabblad open.",
+    "m365PrepareAllProgress": "Bezig met voorbereiden: {current} van {total} · {name}",
+    "m365PrepareAllCancel": "Na dit bestand annuleren",
+    "m365PrepareAllCancelling": "Bezig met het huidige bestand afronden, daarna stoppen…",
+    "m365PrepareAllDone": "Voorbereid: {prepared} van {total} bestanden. Klik op Verversen om ze te indexeren.",
+    "m365PrepareAllFailures": "{count, plural, one {# bestand} other {# bestanden}} konden niet worden voorbereid:",
+    "m365ItemOcrPages": "OCR uitgevoerd op {count, plural, one {# pagina} other {# pagina's}}",
+    "m365ItemOcrSkipped": {
+      "budget": "OCR-budget voor deze run is op — gebruik Voorbereiden (OCR)",
+      "tooManyPages": "Te veel pagina's voor auto-OCR (limiet {perFile}) — gebruik Voorbereiden (OCR)",
+      "engineUnavailable": "Geen OCR-engine geconfigureerd — vraag een beheerder"
+    },
+    "m365AgentIndexStepLost": "Contact met de indexeeropdracht verloren na meerdere pogingen — deze is nog steeds op de server geregistreerd. Gebruik Hervatten om door te gaan.",
+    "m365AgentDiscardEditsConfirm": "Niet-opgeslagen wijzigingen aan deze agent weggooien?",
+    "m365PlanFileUnsupported": "Wordt niet geïndexeerd — .{ext}-bestanden worden niet ondersteund. Converteer naar PDF, DOCX, XLSX of PPTX.",
+    "m365PlanFileSkipped": "Wordt niet geïndexeerd — {reason}",
+    "m365PlanFileNeedsPreparation": "Niet geïndexeerd totdat deze is voorbereid — {hint}",
+    "m365PlanFileLastRun": "Laatste run: {status}",
+    "m365ItemNoTextOcr": "geen tekst gevonden — gescand? gebruik Voorbereiden (OCR)"
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "Geen sites gevonden voor “{query}”",
       "sitesEmpty": "Geen SharePoint-sites beschikbaar. Probeer te zoeken op naam.",
-      "itemCount": "{count, plural, one {# item} other {# items}}"
+      "itemCount": "{count, plural, one {# item} other {# items}}",
+      "pickHint": "Klik op een map om deze te bekijken, of gebruik Toevoegen om alles erin te indexeren. Hele documentbibliotheken en team-bestanden kunnen ook worden toegevoegd.",
+      "addFolderHint": "Deze map en alles erin als één bron toevoegen",
+      "addCurrentFolder": "Deze map toevoegen",
+      "addLibrary": "Bibliotheek toevoegen",
+      "addTeamFiles": "Team-bestanden toevoegen"
     },
     "mail": {
       "menuLabel": "E-mail importeren…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "eigendom van {owner}",
       "requestAccess": "Toegang aanvragen",
       "noneHint": "Open een bestand om toegang aan te vragen bij de eigenaar; de agent werkt zodra toegang is verleend.",
-      "partialHint": "Open een bestand om toegang aan te vragen — antwoorden bevatten het automatisch zodra toegang is gegeven."
+      "partialHint": "Open een bestand om toegang aan te vragen — antwoorden bevatten het automatisch zodra toegang is gegeven.",
+      "verifyFailed": "Uw toegang tot de bestanden van deze agent kon niet worden geverifieerd. Antwoorden kunnen onvolledig zijn totdat dit opnieuw is geprobeerd.",
+      "retry": "Opnieuw proberen",
+      "notAvailable": "Deze agent is niet beschikbaar voor u. Vraag de beheerder om toegang."
     },
     "translate": {
       "menuLabel": "Vertalen vanuit OneDrive / SharePoint",

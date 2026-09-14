@@ -861,7 +861,8 @@
       "toolRoutingUnavailable": "Ba a samu damar amfani da kayan aiki ba — amsawa ba tare da kayan aiki…",
       "webSearchLimitReached": "An kai iyakar binciken intanet na yau — amsawa ba tare da bincike…",
       "codeInterpreterLimitReached": "An kai iyakar amfani da lambar yau — amsawa ba tare da gudanar da lamba…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Bincike a cikin tushen ilimi ya gaza — amsar ba za ta yi amfani da takardun wakilin ba"
     },
     "toolSummary": {
       "usedTools": "An yi amfani da {count, plural, one {# kayan aiki} other {# kayan aiki}}",
@@ -4676,7 +4677,42 @@
     "openFormTemplateEditor": "Gyara",
     "deleteFormTemplate": "Goge",
     "deleteFormTemplateConfirm": "A goge samfurin \"{name}\"? Hiran da suka riga sun yi amfani da shi za su ci gaba da daidaitattun bayanansu.",
-    "confirmDeleteFormTemplate": "Goge samfurin"
+    "confirmDeleteFormTemplate": "Goge samfurin",
+    "m365SessionDisconnected": "Microsoft 365 yana a kashe daga asusunka. Ana duba da tsara tushe ne da samun damarka ta Microsoft 365, don haka fara haɗawa daga Saituna › Haɗa.",
+    "m365SessionNotConnected": "Zaɓin Microsoft 365 naka baya samuwa, saboda haka ba za a iya duba ko tsara tushe ba. Fita ka sake shiga, sannan duba Saituna › Haɗa.",
+    "m365SessionConsentMissing": "Kungiyarku ba ta amince da izinin Microsoft 365 da ake buƙata don duba da tsara fayiloli ba tukuna. Tuntubi mai gudanar da tenant dinku.",
+    "m365OpenConnections": "Buɗe Saituna › Haɗa",
+    "m365ActionNeedsConnection": "Ana buƙatar haɗin Microsoft 365",
+    "m365PlanFailedSaveAnyway": "Za ka iya adanawa — za a sake duba iyakar takardu lokacin tsara su.",
+    "m365AgentRunVisible": "Yanzu ana iya gani ga masu amfani — wasu na iya buƙatar sake buɗe manhaja don ganin wannan.",
+    "m365AgentRunHidden": "Har yanzu an ɓoye daga masu amfani: ba a tsara kowanne takardu ba. Duba dalilan da ke ƙasa.",
+    "m365AgentAttentionFiles": "{count, plural, one {fayil ɗaya na buƙatar kulawa} other {fayiloli # na buƙatar kulawa}}",
+    "m365AgentAttentionLoading": "Ana loda cikakken bayani game da fayil... ",
+    "m365AgentAttentionFailed": "Ba a iya loda cikakken bayanin fayil ba.",
+    "m365AgentAttentionNone": "Ba a adana cikakkun bayanai na kowane fayil ba a aikin karshe.",
+    "m365AgentAutoOcrLabel": "Ana amfani da OCR a PDFs masu duba kansu ta atomatik lokacin tsara su",
+    "m365AgentAutoOcrHelp": "A kashe a tsoho — ana cajin OCR a kowane shafi. Idan an kunna, kowanne tsara zai yi OCR ga PDFs masu duba kansu har zuwa {perRun} shafuka a kowanne gudanarwa da {perFile} shafuka a kowanne fayil; manyan fayiloli ko waɗanda suka fi kasafin kuɗi za su ƙyale zaɓin Shirya (OCR).",
+    "m365AgentIndexRetry": "Sake ƙoƙari",
+    "m365PrepareAllButton": "Shirya duk PDFs da aka duba ({count})",
+    "m365PrepareAllConfirm": "A yi OCR ga {count, plural, one {PDF ɗin da aka duba #} other {PDFs da aka duba #}} yanzu, ɗaya bayan ɗaya? Ana cajin OCR a kowane shafi; za a iyakance kowanne fayil da shafuka {pages}. Ka bar wannan shafin a buɗe.",
+    "m365PrepareAllProgress": "Ana shiryawa {current} daga {total} · {name}",
+    "m365PrepareAllCancel": "Soke bayan wannan fayil din",
+    "m365PrepareAllCancelling": "Akan gama a kan fayil din yanzu, sannan a tsaya...",
+    "m365PrepareAllDone": "An shirya fayiloli {prepared} daga cikin {total}. Ka danna Sabunta don tsara su.",
+    "m365PrepareAllFailures": "{count, plural, one {Ba a iya shiryawa fayil ɗaya (#)} other {Ba a iya shiryawa fayiloli #}}:",
+    "m365ItemOcrPages": "An yi OCR ga {count, plural, one {shafi ɗaya (#)} other {shafuka #}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Kasafin OCR na wannan gudanarwar ya ƙare — yi amfani da Shirya (OCR)",
+      "tooManyPages": "Shafuka da yawa don auto-OCR (iyaka {perFile}) — yi amfani da Shirya (OCR)",
+      "engineUnavailable": "Ba a saita injin OCR ba — tambayi mai gudanarwa"
+    },
+    "m365AgentIndexStepLost": "An rasa haɗi da aikin tsara bayan gwada sau da yawa — an adana shi a kan sabar. Yi amfani da Cigaba don ci gaba.",
+    "m365AgentDiscardEditsConfirm": "A jefar da gyare-gyaren da ba a adana ba na wannan wakili?",
+    "m365PlanFileUnsupported": "Ba za a tsara ba — .{ext} fayiloli ba a tallafawa. Mai da su PDF, DOCX, XLSX ko PPTX.",
+    "m365PlanFileSkipped": "Ba za a tsara ba — {reason}",
+    "m365PlanFileNeedsPreparation": "Ba za a tsara ba har sai an shirya — {hint}",
+    "m365PlanFileLastRun": "Gudanarwa ta ƙarshe: {status}",
+    "m365ItemNoTextOcr": "ba a sami rubutu ba — an duba? Yi amfani da Shirya (OCR)"
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -5478,7 +5514,12 @@
       },
       "sitesNoResults": "Babu wuraren da aka samu don “{query}”",
       "sitesEmpty": "Babu wuraren SharePoint da ake da su. Yi ƙoƙarin bincika da suna.",
-      "itemCount": "{count, plural, one {# abu} other {# abubuwa}}"
+      "itemCount": "{count, plural, one {# abu} other {# abubuwa}}",
+      "pickHint": "Danna babban fayil domin bincika shi, ko amfani da Ƙara don tsara duk abin da ke cikinsa. Hakanan za a iya ƙara duk ɗakin karatu ko fayilolin ƙungiya.",
+      "addFolderHint": "Ƙara wannan babban fayil da duk abin da ke cikinsa azaman tushe guda",
+      "addCurrentFolder": "Ƙara wannan babban fayil",
+      "addLibrary": "Ƙara ɗakin karatu",
+      "addTeamFiles": "Ƙara fayilolin ƙungiya"
     },
     "mail": {
       "menuLabel": "Shigo da imel…",
@@ -5582,7 +5623,10 @@
       "ownedBy": "mallakar {owner}",
       "requestAccess": "Nemi izini",
       "noneHint": "Buɗe fayil don neman izini daga mai shi; wakilin zai yi aiki idan aka amince maka.",
-      "partialHint": "Buɗe fayil don neman izini — idan an amince, amsoshi za su haɗa da shi kai tsaye."
+      "partialHint": "Buɗe fayil don neman izini — idan an amince, amsoshi za su haɗa da shi kai tsaye.",
+      "verifyFailed": "Ba a samu tabbatar da damar ku ga fayilolin wannan wakili ba. Amsoshi na iya zama ba cikakku ba har sai an sake ƙoƙari.",
+      "retry": "Sake ƙoƙari",
+      "notAvailable": "Ba ka da damar amfani da wannan wakili. Tuntubi mai gudanarwa don samun izini."
     },
     "translate": {
       "menuLabel": "Fassara daga OneDrive / SharePoint",

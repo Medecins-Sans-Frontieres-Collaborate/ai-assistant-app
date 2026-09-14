@@ -749,7 +749,8 @@
       "toolRoutingUnavailable": "টুল রাউটিং উপলব্ধ নয় — টুল ছাড়া উত্তর দেয়া হচ্ছে…",
       "webSearchLimitReached": "দৈনিক ওয়েব অনুসন্ধান সীমা পূর্ণ হয়েছে — অনুসন্ধান ছাড়া উত্তর দেয়া হচ্ছে…",
       "codeInterpreterLimitReached": "দৈনিক কোড এক্সিকিউশন সীমা পূর্ণ — কোড চলানো ছাড়া উত্তর দেয়া হচ্ছে…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "নলেজ-বেস অনুসন্ধান ব্যর্থ হয়েছে — এই উত্তরে এজেন্টের ডকুমেন্ট ব্যবহার হবে না।"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {#টি টুল ব্যবহৃত} other {#টি টুল ব্যবহৃত}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "সম্পাদনা করুন",
     "deleteFormTemplate": "মুছে ফেলুন",
     "deleteFormTemplateConfirm": "টেমপ্লেট \"{name}\" মুছে ফেলবেন? যেসব কথোপকথনে এটি ব্যবহার হয়েছে তাদের স্ন্যাপশট সংরক্ষিত থাকবে।",
-    "confirmDeleteFormTemplate": "টেমপ্লেট মুছে ফেলুন"
+    "confirmDeleteFormTemplate": "টেমপ্লেট মুছে ফেলুন",
+    "m365SessionDisconnected": "Microsoft 365 আপনার অ্যাকাউন্টের জন্য সংযোগ বিচ্ছিন্ন। সোর্সসমূহ আপনার নিজস্ব Microsoft 365 এক্সেস দিয়ে স্ক্যান ও ইনডেক্স করা হয়, প্রথমে Settings › Connections-এ সংযোগ করুন।",
+    "m365SessionNotConnected": "আপনার Microsoft 365 সেশন অনুপলব্ধ, তাই সোর্সসমূহ স্ক্যান বা ইনডেক্স করা যাবে না। সাইন আউট করে আবার লগইন করুন, তারপর Settings › Connections-এ যাচাই করুন।",
+    "m365SessionConsentMissing": "আপনার সংস্থা এখনো Microsoft 365 পারমিশন অনুমোদন করেনি যা ফাইল স্ক্যান ও ইনডেক্স করতে প্রয়োজন। আপনার টেন্যান্ট অ্যাডমিনিস্ট্রেটরের সাথে যোগাযোগ করুন।",
+    "m365OpenConnections": "Settings › Connections খুলুন",
+    "m365ActionNeedsConnection": "Microsoft 365 সংযোগ প্রয়োজন",
+    "m365PlanFailedSaveAnyway": "আপনি এখনও সংরক্ষণ করতে পারেন — ইনডেক্স করার সময় ডকুমেন্ট সীমা পুনরায় চেক করা হবে।",
+    "m365AgentRunVisible": "এখন ব্যবহারকারীদের জন্য দৃশ্যমান — অন্য ব্যবহারকারীদের এটি দেখতে অ্যাপ পুনরায় লোড করতে হতে পারে।",
+    "m365AgentRunHidden": "এখনও ব্যবহারকারীদের কাছ থেকে গোপন: কোনো ডকুমেন্ট ইনডেক্স করা হয়নি। নিচের কারণগুলি দেখুন।",
+    "m365AgentAttentionFiles": "{count, plural, one {# ফাইলের নজর দরকার} other {# ফাইলের নজর দরকার}}",
+    "m365AgentAttentionLoading": "ফাইল বিস্তারিত লোড হচ্ছে…",
+    "m365AgentAttentionFailed": "ফাইলের বিস্তারিত লোড করা যায়নি।",
+    "m365AgentAttentionNone": "সর্বশেষ চলায় প্রতিটি ফাইলের জন্য কোনও বিস্তারিত রেকর্ড করা হয়নি।",
+    "m365AgentAutoOcrLabel": "ইনডেক্স করার সময় স্বয়ংক্রিয়ভাবে স্ক্যান করা PDF-এ OCR প্রয়োগ করুন",
+    "m365AgentAutoOcrHelp": "ডিফল্টভাবে বন্ধ — OCR প্রতিপৃষ্ঠায় বিল করা হয়। চালু থাকলে, প্রতিটি ইনডেক্স রান-এ স্ক্যান করা PDF সর্বোচ্চ {perRun} পৃষ্ঠা প্রতি রান এবং {perFile} পৃষ্ঠা প্রতি ফাইল পর্যন্ত OCR হবে; বড় বা বাজেট অতিক্রমকারী ফাইলের জন্য Prepare (OCR) অপশন থাকবে।",
+    "m365AgentIndexRetry": "পুনরায় চেষ্টা করুন",
+    "m365PrepareAllButton": "সমস্ত স্ক্যান করা PDF প্রস্তুত করুন ({count})",
+    "m365PrepareAllConfirm": "এখনই OCR {count, plural, one {# স্ক্যান করা PDF} other {# স্ক্যান করা PDFগুলো}} একটির পর একটি? OCR প্রতিপৃষ্ঠায় বিল প্রযোজ্য; প্রতি ফাইল {pages} পৃষ্ঠায় সীমাবদ্ধ। এই ট্যাবটি খোলা রাখুন।",
+    "m365PrepareAllProgress": "প্রস্তুত হচ্ছে {current} / {total} · {name}",
+    "m365PrepareAllCancel": "এই ফাইলের পরে বাতিল করুন",
+    "m365PrepareAllCancelling": "বর্তমান ফাইলটি শেষ করে, তারপর বন্ধ করা হবে…",
+    "m365PrepareAllDone": "{total} ফাইলের মধ্যে {prepared} টি প্রস্তুত হয়েছে। ইনডেক্স করতে Refresh চালান।",
+    "m365PrepareAllFailures": "{count, plural, one {# ফাইলটি} other {# ফাইলগুলো}} প্রস্তুত করা যায়নি:",
+    "m365ItemOcrPages": "OCR হয়েছে {count, plural, one {# পৃষ্ঠা} other {# পৃষ্ঠা}}",
+    "m365ItemOcrSkipped": {
+      "budget": "এই রান-এর জন্য OCR বাজেট শেষ — Prepare (OCR) ব্যবহার করুন",
+      "tooManyPages": "অটো-OCR-এর জন্য খুব বেশি পৃষ্ঠা (সীমা {perFile}) — Prepare (OCR) ব্যবহার করুন",
+      "engineUnavailable": "কোনও OCR ইঞ্জিন কনফিগার করা নেই — অ্যাডমিনিস্ট্রেটরের সাথে যোগাযোগ করুন"
+    },
+    "m365AgentIndexStepLost": "একাধিক প্রচেষ্টার পরে ইনডেক্সিং জব-এর সাথে সংযোগ হারিয়েছে — এটি সার্ভারে এখনও রেকর্ডকৃত। চালিয়ে যেতে Resume ব্যবহার করুন।",
+    "m365AgentDiscardEditsConfirm": "এই এজেন্টের আপনার অসমাপ্ত এডিট বাতিল করবেন?",
+    "m365PlanFileUnsupported": "ইনডেক্স করা হবে না — .{ext} ফাইল সমর্থিত নয়। PDF, DOCX, XLSX অথবা PPTX-এ রূপান্তর করুন।",
+    "m365PlanFileSkipped": "ইনডেক্স করা হবে না — {reason}",
+    "m365PlanFileNeedsPreparation": "প্রস্তুত না হলে ইনডেক্স হবে না — {hint}",
+    "m365PlanFileLastRun": "সর্বশেষ চলা: {status}",
+    "m365ItemNoTextOcr": "কোনও টেক্সট পাওয়া যায়নি — স্ক্যান করা? Prepare (OCR) ব্যবহার করুন"
   },
   "localModels": {
     "title": "স্থানীয় মডেলসমূহ",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "“{query}” এর জন্য কোনো সাইট পাওয়া যায়নি",
       "sitesEmpty": "কোনো SharePoint সাইট উপলব্ধ নেই। নাম দিয়ে খুঁজে দেখুন।",
-      "itemCount": "{count, plural, one {#টি আইটেম} other {#টি আইটেম}}"
+      "itemCount": "{count, plural, one {#টি আইটেম} other {#টি আইটেম}}",
+      "pickHint": "একটি ফোল্ডারে ক্লিক করে ব্রাউজ করুন, অথবা Add ব্যবহার করে এর সবকিছু ইনডেক্স করুন। পুরো ডকুমেন্ট লাইব্রেরি ও টিম ফাইলও যোগ করা যায়।",
+      "addFolderHint": "এই ফোল্ডার ও এর সবকিছু একটি সোর্স হিসেবে যোগ করুন",
+      "addCurrentFolder": "এই ফোল্ডার যোগ করুন",
+      "addLibrary": "লাইব্রেরি যোগ করুন",
+      "addTeamFiles": "টিম ফাইলসমূহ যোগ করুন"
     },
     "mail": {
       "menuLabel": "ইমেইল ইম্পোর্ট করুন…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "{owner} দ্বারা মালিকানাধীন",
       "requestAccess": "অ্যাক্সেসের অনুরোধ করুন",
       "noneHint": "ফাইল খুলে মালিকের কাছে অ্যাক্সেসের জন্য অনুরোধ করুন; অ্যাক্সেস পাওয়ার পরে এজেন্ট কাজ করবে।",
-      "partialHint": "একটি ফাইল খুলে অ্যাক্সেসের অনুরোধ করুন — অনুমোদন পেলে উত্তরগুলোতে তা অন্তর্ভুক্ত হবে।"
+      "partialHint": "একটি ফাইল খুলে অ্যাক্সেসের অনুরোধ করুন — অনুমোদন পেলে উত্তরগুলোতে তা অন্তর্ভুক্ত হবে।",
+      "verifyFailed": "এই এজেন্টের ফাইলগুলিতে আপনার প্রবেশাধিকার যাচাই করা যায়নি। পুনরায় চেষ্টা না করা পর্যন্ত উত্তর অসম্পূর্ণ হতে পারে।",
+      "retry": "পুনরায় চেষ্টা করুন",
+      "notAvailable": "এই এজেন্টটি আপনার জন্য উপলব্ধ নয়। অ্যাক্সেসের জন্য অ্যাডমিনিস্ট্রেটরের সাথে যোগাযোগ করুন।"
     },
     "translate": {
       "menuLabel": "OneDrive / SharePoint থেকে অনুবাদ করুন",

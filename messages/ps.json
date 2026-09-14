@@ -861,7 +861,8 @@
       "toolRoutingUnavailable": "د وسیلو مسیر نه شته — بدون له وسیلو ځواب ورکوو…",
       "webSearchLimitReached": "د ورځني ویب لټون حد ته ورسېدل — بدون له لټون ځواب ورکوو…",
       "codeInterpreterLimitReached": "د ورځني کوډ اجرا حد ته ورسېدل — بدون له کوډ چلولو ځواب ورکوو…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "د پوهې بنسټ لټون پاتې راغی — ځواب به د اجنټ اسنادو نه کاروي"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# وسیله کارول شوې} other {# وسایل کارول شوي}}",
@@ -4676,7 +4677,42 @@
     "openFormTemplateEditor": "ایډیټ",
     "deleteFormTemplate": "لرې کول",
     "deleteFormTemplateConfirm": "د \"{name}\" نمونه لرې کړم؟ هغه خبرې اترې چې دا کاروي، خپل حالت ساتي.",
-    "confirmDeleteFormTemplate": "نمونه لرې کړه"
+    "confirmDeleteFormTemplate": "نمونه لرې کړه",
+    "m365SessionDisconnected": "Microsoft 365 ستاسو اکاونټ لپاره بې ارتباطه دی. سرچینې ستاسې د خپل Microsoft 365 لاسرسي له لارې سکین او اندېکس کېږي، نو مخکې یې د تنظیماتو › ارتباطاتو څخه ونښلوئ.",
+    "m365SessionNotConnected": "ستاسو Microsoft 365 غونډه نشته، نو سرچینې نشي سکین یا اندېکس کېدای. وتړئ او بیا ننوځئ، بیا تنظیمات › ارتباطات وګورئ.",
+    "m365SessionConsentMissing": "ستاسو سازمان لا تر اوسه د Microsoft 365 اړینې اجازې نه دي منظورې کړې. له خپل tenant administrator څخه وپوښتئ.",
+    "m365OpenConnections": "تنظیمات › ارتباطات پرانیزئ",
+    "m365ActionNeedsConnection": "د Microsoft 365 ارتباط ته اړتیا لري",
+    "m365PlanFailedSaveAnyway": "تاسو لا هم خوندي کولی شئ — د اسنادو محدودیت به د اندېکس پر مهال بیا وکتل شي.",
+    "m365AgentRunVisible": "اوس کاروونکو ته ښکاره ده — نور کاروونکي ښايي اپلکېشن بیا تازه کړي څو دا وویني.",
+    "m365AgentRunHidden": "لا هم کاروونکو ته پټ دی: هېڅ سند نه دی اندېکس شوی. لاندې دلایل وګورئ.",
+    "m365AgentAttentionFiles": "{count, plural, one {# فایل ته پام ته اړتیا لري} other {# فایلونو ته پام ته اړتیا لري}}",
+    "m365AgentAttentionLoading": "د فایل جزییات پورته کېږي…",
+    "m365AgentAttentionFailed": "د فایل جزییات ونه شوای پورته کول.",
+    "m365AgentAttentionNone": "د وروستي اجرا لپاره هېڅ فایل انفرادي جزییات ثبت شوي نه‌دي.",
+    "m365AgentAutoOcrLabel": "PDF اسناد پر اندېکس کولو اتوماتیک OCR کېږي",
+    "m365AgentAutoOcrHelp": "پخپله خاموش (Off) ده — OCR پر پاڼه حسابېږي. فعاله و که، هر اندېکس د اجرا پر مهال {perRun} پاڼو او هر فایل ته {perFile} پاڼو پورې OCR کوي؛ لوی یا بودیجې څخه زیات فایلونه د Prepare (OCR) انتخاب ساتي.",
+    "m365AgentIndexRetry": "بیا هڅه وکړئ",
+    "m365PrepareAllButton": "ټول سکین شوي PDFونه چمتو کړئ ({count})",
+    "m365PrepareAllConfirm": "اوس {count, plural, one {# سکین شوی PDF} other {# سکین شوي PDFونه}} OCR کوئ، یو په بل پسې؟ OCR پر پاڼه حسابېږي؛ هر فایل تر {pages} پاڼو محدود دی. دا ټب پرانستې وساتئ.",
+    "m365PrepareAllProgress": "{current} له {total} څخه چمتو کېږي · {name}",
+    "m365PrepareAllCancel": "د دې فایل وروسته لغوه کړئ",
+    "m365PrepareAllCancelling": "اوسنی فایل خلاصېږي، بیا تم کېږي…",
+    "m365PrepareAllDone": "{prepared} له {total} فایلونه چمتو شول. د اندېکس لپاره Refresh وچلوئ.",
+    "m365PrepareAllFailures": "{count, plural, one {# فایل} other {# فایلونه}} ونه شوای چمتو کېدای:",
+    "m365ItemOcrPages": "{count, plural, one {# پاڼه} other {# پاڼې}} OCR شوې",
+    "m365ItemOcrSkipped": {
+      "budget": "د دې اجرا لپاره OCR بودیجه خلاصه شوې — Prepare (OCR) وکاروئ",
+      "tooManyPages": "د اتوماتیک OCR لپاره ډېرې پاڼې (محدودیت {perFile}) — Prepare (OCR) وکاروئ",
+      "engineUnavailable": "د OCR ماشین تنظیم شوی نه‌شته — له اډمین څخه وپوښتئ"
+    },
+    "m365AgentIndexStepLost": "له اندېکس کولو دنده سره تماس له څو هڅو وروسته له لاسه لاړې — لا هم سرور کې ثبت شوې. دوام لپاره Resume وکاروئ.",
+    "m365AgentDiscardEditsConfirm": "خپلې نه خوندي شوې سمونې له دې اجنټ څخه وغورځوئ؟",
+    "m365PlanFileUnsupported": "اندېکس نه شي کېدای — .{ext} فایلونه نه ملاتړېږي. PDF, DOCX, XLSX یا PPTX ته یې واړوئ.",
+    "m365PlanFileSkipped": "اندېکس نه شي کېدای — {reason}",
+    "m365PlanFileNeedsPreparation": "چمتو کولو تر وخته اندېکس نه شي کېدای — {hint}",
+    "m365PlanFileLastRun": "وروستۍ اجرا: {status}",
+    "m365ItemNoTextOcr": "متن ونه موندل شو — سکین شوی؟ Prepare (OCR) وکاروئ"
   },
   "localModels": {
     "title": "محلي ماډلونه",
@@ -5478,7 +5514,12 @@
       },
       "sitesNoResults": "د “{query}” لپاره هېڅ سایټ ونه موندل شو",
       "sitesEmpty": "هیڅ SharePoint سایټ شتون نه لري. هڅه وکړئ د نوم له مخې پلټنه وکړئ.",
-      "itemCount": "{count, plural, one {# توکی} other {# توکي}}"
+      "itemCount": "{count, plural, one {# توکی} other {# توکي}}",
+      "pickHint": "یو فولډر کلیک کړئ تر څو یې وګورئ، یا Add وکاروئ چې ټول محتوا یې اندېکس کړئ. بشپړ کتابتونونه او د ډلې فایلونه هم زیاتولی شئ.",
+      "addFolderHint": "دا فولډر او ټول محتوا یې د یوې سرچینې په توګه زیات کړئ",
+      "addCurrentFolder": "دا فولډر زیات کړئ",
+      "addLibrary": "کتابتون زیات کړئ",
+      "addTeamFiles": "د ډلې فایلونه زیات کړئ"
     },
     "mail": {
       "menuLabel": "برېښنالیک وارد کړئ…",
@@ -5582,7 +5623,10 @@
       "ownedBy": "د {owner} ملکیت",
       "requestAccess": "لاسرسي غوښتنه وکړئ",
       "noneHint": "فایل خلاص کړئ تر څو د مالک څخه اجازه وغواړئ؛ کله چې لاسرسی ورکړل شي، ایجنټ به کار وکړي.",
-      "partialHint": "فایل خلاص کړئ تر څو اجازه وغواړئ — کله چې ورکړل شي، ځوابونو کې به شامل وي."
+      "partialHint": "فایل خلاص کړئ تر څو اجازه وغواړئ — کله چې ورکړل شي، ځوابونو کې به شامل وي.",
+      "verifyFailed": "ستاسو د لاسرسي تایید ونه شوای د دې اجنټ فایلونو ته. تر تایید پورې ځوابونه ممکن بشپړ نه وي.",
+      "retry": "بیا هڅه وکړئ",
+      "notAvailable": "دا اجنټ تاسو ته نشته. د لاسرسي لپاره یې له اډمین څخه وپوښتئ."
     },
     "translate": {
       "menuLabel": "له OneDrive / SharePoint څخه ژباړه",

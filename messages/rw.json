@@ -861,7 +861,8 @@
       "toolRoutingUnavailable": "Ikoreshwa ry'ibikoresho ntirihari — turasubiza tutabikoresheje…",
       "webSearchLimitReached": "Iyo ushakiraga kuri murandasi bigeze ku gipimo ntarengwa — turasubiza tutabikoze…",
       "codeInterpreterLimitReached": "Imikoreshereze ya code nshya igeze ku gipimo ntarengwa — turasubiza tutabanje gukoresha code…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Ubushakashatsi muri banki y'ubumenyi bwananiwe — igisubizo ntikizakoresha inyandiko z'uyu mushinzwe."
     },
     "toolSummary": {
       "usedTools": "Hakozweho {count, plural, one {igikoresho 1} other {ibikoresho #}}",
@@ -4676,7 +4677,42 @@
     "openFormTemplateEditor": "Hindura",
     "deleteFormTemplate": "Siba",
     "deleteFormTemplateConfirm": "Usibe icyitegererezo \"{name}\"? Inyandiko zimaze kugikoresha zizagumana kopi yacyo.",
-    "confirmDeleteFormTemplate": "Siba icyitegererezo"
+    "confirmDeleteFormTemplate": "Siba icyitegererezo",
+    "m365SessionDisconnected": "Microsoft 365 ntabwo ihujwe kuri konti yawe. Amasoko asuzumwa kandi agashyirwa muri sisitemu ukoresheje uruhushya rwawe rwa Microsoft 365, rero banza ubihuze muri Igenamiterere › Ihuzanzira.",
+    "m365SessionNotConnected": "Igihe cyawe cya Microsoft 365 nticyabashije kuboneka, ntibishoboka ko amasoko asuzumwa cyangwa agakorerwa isuzuma. Sohoka usubiremo, hanyuma urebe Igenamiterere › Ihuzanzira.",
+    "m365SessionConsentMissing": "Isosiyete yawe ntiriyemerera uruhushya rwa Microsoft 365 rukenewe kugirango dosiye zisuzumwe. Saba umuyobozi wa sisitemu (tenant administrator).",
+    "m365OpenConnections": "Fungura Igenamiterere › Ihuzanzira",
+    "m365ActionNeedsConnection": "Bisaba ihuzanzira rya Microsoft 365",
+    "m365PlanFailedSaveAnyway": "Uratanga kubika— umubare wa dosiye uzagenzurwa nanone igihe ukoresheje isuzuma.",
+    "m365AgentRunVisible": "Igaragara ku bakoresha kuri ubu — abandi bashobora gusabwa kongera gufungura porogaramu kugira ngo bayibone.",
+    "m365AgentRunHidden": "Iracyahishwe ku bakoresha: nta nyandiko n'imwe yagiye muri sisitemu. Reba impamvu hasi.",
+    "m365AgentAttentionFiles": "{count, plural, one {# dosiye ikeneye kwitabwaho} other {# dosiye zikenewe kwitabwaho}}",
+    "m365AgentAttentionLoading": "Turimo gusoma ibisobanuro bya dosiye…",
+    "m365AgentAttentionFailed": "Ntibyashobotse kubona ibisobanuro bya dosiye.",
+    "m365AgentAttentionNone": "Nta bisobanuro byihariye kuri dosiye byafashwe kuri uku gukoresha guheruka.",
+    "m365AgentAutoOcrLabel": "PDF zapanzwe na OCR mu buryo bwikora igihe zishyirwa muri sisitemu",
+    "m365AgentAutoOcrHelp": "Biba bifunze mu busanzwe — OCR isora buri rupapuro. Igihe yafunguwe, buri gihe ushyize muri sisitemu ishyira muri OCR PDF zapanzwe kugera kuri {perRun} impapuro buri gukoresha na {perFile} impapuro kuri dosiye; dosiye nini cyangwa zarengeje ingengo y'imari zigumana amahitamo ya Tegura (OCR).",
+    "m365AgentIndexRetry": "Gerageza kongera",
+    "m365PrepareAllButton": "Tegura PDF zapanzwe zose ({count})",
+    "m365PrepareAllConfirm": "Ukeneye gutegura na OCR {count, plural, one {# PDF zapanzwe} other {# PDF zapanzwe}} aka kanya, imwe ikurikiye indi? OCR isora kuri buri rupapuro; buri dosiye ntirenza impapuro {pages}. Guma kuri iyi paji ifunguye.",
+    "m365PrepareAllProgress": "Gutegura {current} kuri {total} · {name}",
+    "m365PrepareAllCancel": "Hagarika nyuma y'iyi dosiye",
+    "m365PrepareAllCancelling": "Kurangiza dosiye iriho, hanyuma duhagarike…",
+    "m365PrepareAllDone": "Hateguwe {prepared} muri {total} dosiye. Koresha Kuvugurura (Refresh) kugira ngo uzishyire muri sisitemu.",
+    "m365PrepareAllFailures": "{count, plural, one {# dosiye} other {# dosiye}} ntizashoboye gutegurwa:",
+    "m365ItemOcrPages": "OCR yakozwe kuri {count, plural, one {# ipaji} other {# amapaji}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Ingengo y'imari ya OCR kuri ubu gukoresha yarangiye — kora kuri Tegura (OCR)",
+      "tooManyPages": "Amapaji menshi cyane kuri auto-OCR (ntarenza {perFile}) — kora kuri Tegura (OCR)",
+      "engineUnavailable": "Nta engine ya OCR yashyizweho — saba administrator"
+    },
+    "m365AgentIndexStepLost": "Habayeho gutakaza ihuriro n'umurimo wo gushyira muri sisitemu nyuma y'igerageza ritari rimwe — biracyanditswe kuri server. Koresha Komeza (Resume) kugirango ukomeze.",
+    "m365AgentDiscardEditsConfirm": "Wifuza guta impinduka utarabika kuri uyu mushinzwe?",
+    "m365PlanFileUnsupported": "Ntizashyirwa muri sisitemu — .{ext} ntishyigikiwe. Hindura kuri PDF, DOCX, XLSX cyangwa PPTX.",
+    "m365PlanFileSkipped": "Ntizashyirwa muri sisitemu — {reason}",
+    "m365PlanFileNeedsPreparation": "Ntizashyirwa muri sisitemu kugeza iteguye — {hint}",
+    "m365PlanFileLastRun": "Gukoresha guheruka: {status}",
+    "m365ItemNoTextOcr": "nta magambo abonywe — yigeze isuzumwa? Koresha Tegura (OCR)"
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",
@@ -5478,7 +5514,12 @@
       },
       "sitesNoResults": "Nta mbuga zabonetse kuri “{query}”",
       "sitesEmpty": "Nta mbuga za SharePoint ziboneka. Gerageza gushakisha ukoresheje izina.",
-      "itemCount": "{count, plural, one {# kintu} other {# bintu}}"
+      "itemCount": "{count, plural, one {# kintu} other {# bintu}}",
+      "pickHint": "Kanda kuri folder uyisuzume, cyangwa kanda Ongeramo ngo ushyiremo byose. Ubusitani bwose bwa document (libraries) na dosiye za team nabyo birashobora kongerwa.",
+      "addFolderHint": "Ongeramo iyi folder n'ibiri imbere yayo byose nk'isoko imwe",
+      "addCurrentFolder": "Ongeramo iyi folder",
+      "addLibrary": "Ongeramo library",
+      "addTeamFiles": "Ongeramo dosiye z'itsinda"
     },
     "mail": {
       "menuLabel": "Ohereza email…",
@@ -5582,7 +5623,10 @@
       "ownedBy": "bibikwa na {owner}",
       "requestAccess": "Saba uburenganzira",
       "noneHint": "Fungura idosiye usabe uburenganzira ku nyirayo; muyoboro uzakora nuhabwa uburenganzira.",
-      "partialHint": "Fungura idosiye usabe uburenganzira—imuhita iza mu bisubizo nuhabwa uburenganzira."
+      "partialHint": "Fungura idosiye usabe uburenganzira—imuhita iza mu bisubizo nuhabwa uburenganzira.",
+      "verifyFailed": "Ntibyashobotse kugenzura uburenganzira bwawe kuri dosiye z'uyu mushinzwe. Ibisubizo bishobora kutuzura kugeza wongeye kugerageza.",
+      "retry": "Gerageza kongera",
+      "notAvailable": "Uyu mushinzwe ntabwo ubashije kumugeraho. Saba administrator we uburenganzira."
     },
     "translate": {
       "menuLabel": "Hindura ururimi kuri OneDrive / SharePoint",

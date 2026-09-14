@@ -803,7 +803,8 @@
       "toolRoutingUnavailable": "Araç yönlendirmesi kullanılamıyor — araçsız yanıtlanıyor…",
       "webSearchLimitReached": "Günlük web arama sınırına ulaşıldı — aramasız yanıtlanıyor…",
       "codeInterpreterLimitReached": "Günlük kod çalıştırma sınırına ulaşıldı — kod çalıştırmadan yanıtlanıyor…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Bilgi tabanı araması başarısız oldu — yanıt, aracının belgelerini kullanmayacak"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# araç kullanıldı} other {# araç kullanıldı}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "Düzenle",
     "deleteFormTemplate": "Sil",
     "deleteFormTemplateConfirm": "\"{name}\" şablonunu silmek istiyor musunuz? Bunu kullanan mevcut görüşmeler kendi anlık görüntüsünü korur.",
-    "confirmDeleteFormTemplate": "Şablonu sil"
+    "confirmDeleteFormTemplate": "Şablonu sil",
+    "m365SessionDisconnected": "Microsoft 365 hesabınız için bağlantınız kesildi. Kaynaklar, kendi Microsoft 365 erişiminizle taranır ve indekslenir; önce Ayarlar › Bağlantılar'dan bağlanın.",
+    "m365SessionNotConnected": "Microsoft 365 oturumunuz mevcut değil, bu nedenle kaynaklar taranamaz veya indekslenemez. Oturumu kapatıp tekrar açın ve ardından Ayarlar › Bağlantılar'ı kontrol edin.",
+    "m365SessionConsentMissing": "Kuruluşunuz, dosyaları taramak ve indekslemek için gereken Microsoft 365 izinlerini henüz onaylamadı. Tenant yöneticinize başvurun.",
+    "m365OpenConnections": "Ayarlar › Bağlantılar’ı aç",
+    "m365ActionNeedsConnection": "Microsoft 365 bağlantısı gerekir",
+    "m365PlanFailedSaveAnyway": "Yine de kaydedebilirsiniz — belge sınırı, indeksleme sırasında tekrar kontrol edilir.",
+    "m365AgentRunVisible": "Şimdi kullanıcılar için görünür — diğer kullanıcıların görünmesi için uygulamayı yeniden yüklemesi gerekebilir.",
+    "m365AgentRunHidden": "Kullanıcılar için hâlâ gizli: hiçbir belge indekslenmedi. Aşağıdaki nedenlere bakın.",
+    "m365AgentAttentionFiles": "{count, plural, one {# dosya dikkat gerektiriyor} other {# dosya dikkat gerektiriyor}}",
+    "m365AgentAttentionLoading": "Dosya ayrıntıları yükleniyor…",
+    "m365AgentAttentionFailed": "Dosya ayrıntıları yüklenemedi.",
+    "m365AgentAttentionNone": "Son çalıştırmada dosya bazında hiçbir ayrıntı kaydedilmedi.",
+    "m365AgentAutoOcrLabel": "İndeksleme sırasında taranmış PDF'ler otomatik olarak OCR'lanır",
+    "m365AgentAutoOcrHelp": "Varsayılan olarak kapalıdır — OCR sayfa başı ücretlendirilir. Açık olduğunda, her indekslemede taranmış PDF'ler her çalıştırmada en fazla {perRun} sayfa ve dosya başı {perFile} sayfa olarak OCR'lanır; daha büyük veya bütçeyi aşan dosyalar için Hazırla (OCR) seçeneği sunulur.",
+    "m365AgentIndexRetry": "Tekrar dene",
+    "m365PrepareAllButton": "Tüm taranmış PDF'leri hazırla ({count})",
+    "m365PrepareAllConfirm": "Şimdi {count, plural, one {# taranmış PDF'yi} other {# taranmış PDF'yi}} sırayla OCR'la? OCR sayfa başı ücretlidir; her dosya için en fazla {pages} sayfa işlenir. Bu sekmeyi açık tutun.",
+    "m365PrepareAllProgress": "Hazırlanıyor: {current}/{total} · {name}",
+    "m365PrepareAllCancel": "Bu dosyadan sonra iptal et",
+    "m365PrepareAllCancelling": "Mevcut dosya tamamlandıktan sonra duracak…",
+    "m365PrepareAllDone": "{total} dosyanın {prepared} tanesi hazırlandı. Onları indekslemek için Yenile'yi çalıştırın.",
+    "m365PrepareAllFailures": "{count, plural, one {# dosya} other {# dosya}} hazırlanamadı:",
+    "m365ItemOcrPages": "{count, plural, one {# sayfa OCR yapıldı} other {# sayfa OCR yapıldı}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Bu çalıştırma için OCR bütçesi harcandı — Hazırla (OCR) kullanın",
+      "tooManyPages": "Otomatik OCR için çok fazla sayfa (sınır {perFile}) — Hazırla (OCR) kullanın",
+      "engineUnavailable": "OCR motoru yapılandırılmamış — bir yöneticiden destek isteyin"
+    },
+    "m365AgentIndexStepLost": "Birkaç denemeden sonra indeksleme işiyle iletişim kaybedildi — hâlâ sunucuda kayırlı. Devam etmek için Sürdür'ü kullanın.",
+    "m365AgentDiscardEditsConfirm": "Kaydedilmemiş değişiklikleriniz bu ajanda silinsin mi?",
+    "m365PlanFileUnsupported": "İndekslenmeyecek — .{ext} dosyaları desteklenmiyor. PDF, DOCX, XLSX veya PPTX’e dönüştürün.",
+    "m365PlanFileSkipped": "İndekslenmeyecek — {reason}",
+    "m365PlanFileNeedsPreparation": "Hazırlanana kadar indekslenmeyecek — {hint}",
+    "m365PlanFileLastRun": "Son çalıştırma: {status}",
+    "m365ItemNoTextOcr": "metin bulunamadı — taranmış mı? Hazırla (OCR) kullanın"
   },
   "localModels": {
     "title": "Yerel modeller",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "“{query}” için site bulunamadı",
       "sitesEmpty": "Kullanılabilir SharePoint sitesi yok. İsimle aramayı deneyin.",
-      "itemCount": "{count, plural, one {# öğe} other {# öğe}}"
+      "itemCount": "{count, plural, one {# öğe} other {# öğe}}",
+      "pickHint": "Bir klasörü gezmek için tıklayın veya içindekilerin tamamını indekslemek için Ekle'yi kullanın. Tüm belge kitaplıkları ve ekip dosyaları da eklenebilir.",
+      "addFolderHint": "Bu klasörü ve içindekilerin tamamını tek bir kaynak olarak ekle",
+      "addCurrentFolder": "Bu klasörü ekle",
+      "addLibrary": "Kitaplığı ekle",
+      "addTeamFiles": "Ekip dosyalarını ekle"
     },
     "mail": {
       "menuLabel": "E-posta içe aktar…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "{owner} tarafından sahip",
       "requestAccess": "Erişim iste",
       "noneHint": "Erişim istemek için bir dosya açın; erişim verildiğinde ajan çalışacaktır.",
-      "partialHint": "Erişim için bir dosya açın — erişim verildiğinde yanıtlar otomatik olarak dahil edilecektir."
+      "partialHint": "Erişim için bir dosya açın — erişim verildiğinde yanıtlar otomatik olarak dahil edilecektir.",
+      "verifyFailed": "Bu ajan dosyalarına erişiminiz doğrulanamadı. Bu tekrar denenene kadar yanıtlar eksik olabilir.",
+      "retry": "Tekrar dene",
+      "notAvailable": "Bu ajana erişiminiz yok. Erişim için yöneticisine başvurun."
     },
     "translate": {
       "menuLabel": "OneDrive / SharePoint'ten çevir",

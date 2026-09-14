@@ -746,7 +746,8 @@
       "toolRoutingUnavailable": "የመሳሪያ መምጣጠኛ አይገኝም — ያለ መሳሪያ መልስ…",
       "webSearchLimitReached": "የቀኑ የድህረገፅ ፍለጋ ገደብ ተደርሷል — ያለ ፍለጋ መልስ…",
       "codeInterpreterLimitReached": "የቀኑ የኮድ አስኬድ ገደብ ተደርሷል — ያለ ኮድ አስኬድ መልስ…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "የእውቀት ማጣቀሻ ፍለጋ አልተሳካም — መልሱ የወኪሉን ሰነዶች አይጠቀምም"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳሪያ} other {# መሳሪያዎች}} ተጠቅመዋል",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "አርትዕ",
     "deleteFormTemplate": "ሰርዝ",
     "deleteFormTemplateConfirm": "አብነቱን \"{name}\" ልሰርዝ? አሁን በመጠቀም ላይ ያሉ ውይይቶች የአብነቱን ፎቅ ይጠብቃሉ።",
-    "confirmDeleteFormTemplate": "አብነቱን ሰርዝ"
+    "confirmDeleteFormTemplate": "አብነቱን ሰርዝ",
+    "m365SessionDisconnected": "Microsoft 365 ከመለያዎ ተቋርጧል። ምንጮች በራስዎ Microsoft 365 መዳረሻ ይቃናሉ እና ይገጣጠማሉ፤ ስለዚህ ከመጀመሪያ Settings › Connections ውስጥ ያገናኙት።",
+    "m365SessionNotConnected": "የMicrosoft 365 ክፍለ ጊዜዎ አልተገናኘም፤ ምንጮች ሊቃኙ ወይም ሊገጣጠሙ አይችሉም። ይውጡ እና እንደገና ይግቡ፣ ከዚያም Settings › Connections ያረጋግጡ።",
+    "m365SessionConsentMissing": "ድርጅታችሁ ፋይሎችን ለመቃኘትና ለመጠቀም የ Microsoft 365 ፈቃዶችን አልፈቀደም። ከቤተሰቡ አስተዳዳሪ ይጠይቁ።",
+    "m365OpenConnections": "Settings › Connections ይክፈቱ",
+    "m365ActionNeedsConnection": "የMicrosoft 365 ግንኙነት ያስፈልጋል",
+    "m365PlanFailedSaveAnyway": "መዝግብ ይችላሉ — የሰነድ ገደብ በማግኘት ላይ እንደገና ይከሰታል።",
+    "m365AgentRunVisible": "አሁን ለተጠቃሚዎች የሚታይ — ሌሎች ተጠቃሚዎች ለማየት መተግበሪያውን እንደገና ማቅረብ ይኖርባቸዋል።",
+    "m365AgentRunHidden": "ከተጠቃሚዎች አልታየም፤ አንድም ሰነድ አልተገጠመም። ዝርዝሮችን ከታች ይመልከቱ።",
+    "m365AgentAttentionFiles": "{count, plural, one {# ፋይል አስተዳደር ያስፈልጋል} other {# ፋይሎች አስተዳደር ያስፈልጋሉ}}",
+    "m365AgentAttentionLoading": "የፋይሉን ዝርዝር በመጫን ላይ…",
+    "m365AgentAttentionFailed": "የፋይል ዝርዝሮችን ማግኘት አልተቻለም።",
+    "m365AgentAttentionNone": "ለመጨረሻው ስራ የተቀመጡ የፋይል ዝርዝሮች የሉም።",
+    "m365AgentAutoOcrLabel": "PDF የተሸተቱን በሚያደርጉበት ጊዜ OCR በራስ-ሰር ይተገበራል",
+    "m365AgentAutoOcrHelp": "በነባር የተጠፋ ነው — OCR በ ገፅ ይከፈላል። በሚኖረው ጊዜ፣ እያንዳንዱ ቃኘት OCR የተሸተቱን PDF እስከ {perRun} የቃኘት ገፆችና {perFile} በፋይል ያሉ ገፆችን ይመልከታል፤ የበለፀጉ ወይም ከበጀቱ በላይ ፋይሎች የPrepare (OCR) አማራጭን ይቀጥላሉ።",
+    "m365AgentIndexRetry": "እንደገና ይሞክሩ",
+    "m365PrepareAllButton": "ሁሉንም የታከሉ ፋይሎች ዝግጁ ያድርጉ ({count})",
+    "m365PrepareAllConfirm": "ወዲያውኑ OCR {count, plural, one {# የታከለ PDF} other {# የታከሉ PDFዎች}} በተከታታይ ልናደርግ? OCR በገፅ ይከፈላል፤ እያንዳንዱ ፋይል እስከ {pages} ገፆች ነው። ይህንን ታብ ክፈት ያድርጉበት።",
+    "m365PrepareAllProgress": "በማዘጋጀት ላይ {current} ከ {total} · {name}",
+    "m365PrepareAllCancel": "ከዚህ ፋይል በኋላ አቁም",
+    "m365PrepareAllCancelling": "የአሁኑን ፋይል ማጠናቀቅ ከዛ መድበን…",
+    "m365PrepareAllDone": "{prepared} ከ {total} ፋይሎች ተዘጋጁ። ለማግኘት Refresh ይሞክሩ።",
+    "m365PrepareAllFailures": "{count, plural, one {# ፋይል} other {# ፋይሎች}} ማዘጋጀት አልተቻለም፦",
+    "m365ItemOcrPages": "{count, plural, one {# ገፅ በ OCR ተደርጓል} other {# ገፆች በ OCR ተደርጓል}}",
+    "m365ItemOcrSkipped": {
+      "budget": "የዚህ ቅጂ OCR በጀት ተጠናቋል — Prepare (OCR) ይጠቀሙ",
+      "tooManyPages": "ለauto-OCR ገፆች ብዙ ናቸው (ገደብ {perFile}) — Prepare (OCR) ይጠቀሙ",
+      "engineUnavailable": "የOCR ኤንጂን አልተዘጋጀም — ከአስተዳዳሪ ይጠይቁ"
+    },
+    "m365AgentIndexStepLost": "ከማግኘት ስራው ጋር ግንኙነት ከሰፈነ ሞክሮ በኋላ ተቋርጧል — አንደኛ በሰርቨሩ ላይ ተቀምጧል። Resume በመጠቀም ይቀጥሉ።",
+    "m365AgentDiscardEditsConfirm": "ያልተቀመጡትን ማስተካከያዎች ለዚህ ውክልና እንደሚጣሉ ይወዳድሩ?",
+    "m365PlanFileUnsupported": "አይቃኙም — .{ext} ፋይሎች አይደገፉም። ወደ PDF, DOCX, XLSX ወይም PPTX ይቀይሩ።",
+    "m365PlanFileSkipped": "አይቃኙም — {reason}",
+    "m365PlanFileNeedsPreparation": "እስከማዘጋጀቱ ድረስ አይቃኙም — {hint}",
+    "m365PlanFileLastRun": "የመጨረሻው ስራ፦ {status}",
+    "m365ItemNoTextOcr": "ጽሑፍ አልተገኘም — ተቆርጧል? Prepare (OCR) ይጠቀሙ"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "ስለ “{query}” ምንም ጣቢያዎች አልተገኙም",
       "sitesEmpty": "ምንም SharePoint ጣቢያዎች አይገኙም። በስም ፈልጉ።",
-      "itemCount": "{count, plural, one {# እቃ} other {# እቃዎች}}"
+      "itemCount": "{count, plural, one {# እቃ} other {# እቃዎች}}",
+      "pickHint": "ፎልደር ለመመልከት ይጫኑ፣ ወይም Add በመጠቀም ውስጡን ሁሉ ለመቃኘት ይጨምሩ። ሁሉም የሰነድ ቤተ-መዛግብትና የቡድን ፋይሎች ማካተት ይችላሉ።",
+      "addFolderHint": "ይህን ፎልደርና ውስጡን ሁሉ አንድ ምንጭ በማድረግ ያክሉት",
+      "addCurrentFolder": "ይህን ፎልደር ያክሉ",
+      "addLibrary": "ቤተ-መዛግብት ያክሉ",
+      "addTeamFiles": "የቡድን ፋይሎች ያክሉ"
     },
     "mail": {
       "menuLabel": "ኢሜይል አስመጣ…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "ባለቤት {owner}",
       "requestAccess": "መዳረሻ ይጠይቁ",
       "noneHint": "የባለቤቱን ፋይል በመክፈት መዳረሻ ይጠይቁ፤ መዳረሻ ካገኙ ወኪሉ ይሰራል።",
-      "partialHint": "ፋይል በመክፈት መዳረሻ ይጠይቁ — መዳረሻ ካገኙ መልሱ በራሱ ይጨመራል።"
+      "partialHint": "ፋይል በመክፈት መዳረሻ ይጠይቁ — መዳረሻ ካገኙ መልሱ በራሱ ይጨመራል።",
+      "verifyFailed": "ወደዚህ የውክልና ፋይሎች መዳረሻ ማረጋገጥ አልቻሉም። ይሄ እስከተመለሰ ድረስ መልሶች የተሟላ አይሆኑም።",
+      "retry": "እንደገና ይሞክሩ",
+      "notAvailable": "ይህ ውክልና ለእርስዎ አይገኝም። ከአስተዳዳሪው ይደርሱ።"
     },
     "translate": {
       "menuLabel": "ከOneDrive / SharePoint አስተርጓሚ",

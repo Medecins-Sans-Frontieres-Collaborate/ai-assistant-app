@@ -803,7 +803,8 @@
       "toolRoutingUnavailable": "도구 연결 불가 — 도구 없이 답변합니다…",
       "webSearchLimitReached": "일일 웹 검색 한도 도달 — 검색 없이 답변합니다…",
       "codeInterpreterLimitReached": "일일 코드 실행 한도 도달 — 코드 실행 없이 답변합니다…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "지식 기반 검색에 실패했습니다 — 답변에 에이전트 문서가 사용되지 않습니다."
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {#개 도구 사용} other {#개 도구 사용}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "편집",
     "deleteFormTemplate": "삭제",
     "deleteFormTemplateConfirm": "템플릿 \"{name}\"을(를) 삭제하시겠습니까? 이미 사용 중인 대화는 해당 스냅샷을 유지합니다.",
-    "confirmDeleteFormTemplate": "템플릿 삭제"
+    "confirmDeleteFormTemplate": "템플릿 삭제",
+    "m365SessionDisconnected": "귀하의 계정에서 Microsoft 365가 연결 해제되었습니다. 소스는 귀하의 Microsoft 365 접근권으로 스캔 및 인덱싱되므로 설정 › 연결에서 먼저 연결하세요.",
+    "m365SessionNotConnected": "Microsoft 365 세션을 사용할 수 없어 소스를 스캔하거나 인덱싱할 수 없습니다. 로그아웃 후 다시 로그인하고, 설정 › 연결을 확인하세요.",
+    "m365SessionConsentMissing": "귀하의 조직에서 파일 스캔 및 인덱싱에 필요한 Microsoft 365 권한을 아직 승인하지 않았습니다. 테넌트 관리자에게 문의하세요.",
+    "m365OpenConnections": "설정 › 연결 열기",
+    "m365ActionNeedsConnection": "Microsoft 365 연결 필요",
+    "m365PlanFailedSaveAnyway": "그래도 저장할 수 있습니다 — 인덱싱 시 문서 제한이 다시 확인됩니다.",
+    "m365AgentRunVisible": "사용자에게 표시됨 — 다른 사용자는 앱을 새로고침해야 볼 수 있습니다.",
+    "m365AgentRunHidden": "아직 사용자에게 숨김: 인덱싱된 문서가 없습니다. 아래 사유를 확인하세요.",
+    "m365AgentAttentionFiles": "{count, plural, one {#개의 파일이 주의 필요} other {#개의 파일이 주의 필요}}",
+    "m365AgentAttentionLoading": "파일 세부정보 불러오는 중…",
+    "m365AgentAttentionFailed": "파일 세부정보를 불러올 수 없습니다.",
+    "m365AgentAttentionNone": "최근 실행에 대한 파일별 세부정보가 기록되지 않았습니다.",
+    "m365AgentAutoOcrLabel": "인덱싱 중 자동으로 PDF OCR 스캔",
+    "m365AgentAutoOcrHelp": "기본값은 꺼짐 — OCR은 페이지당 과금됩니다. 켜면, 각 인덱싱 실행에서 스캔된 PDF를 실행당 최대 {perRun}페이지, 파일당 최대 {perFile}페이지까지 OCR 처리합니다. 더 크거나 예산 초과 파일은 준비(OCR) 옵션을 유지합니다.",
+    "m365AgentIndexRetry": "재시도",
+    "m365PrepareAllButton": "스캔된 PDF 모두 준비({count})",
+    "m365PrepareAllConfirm": "지금 OCR {count, plural, one {#개의 스캔된 PDF} other {#개의 스캔된 PDF}}를 차례로 진행할까요? OCR은 페이지당 과금되며, 각 파일은 최대 {pages}페이지로 제한됩니다. 이 탭을 열어두세요.",
+    "m365PrepareAllProgress": "{total}개 중 {current} 준비 중 · {name}",
+    "m365PrepareAllCancel": "이 파일 이후 취소",
+    "m365PrepareAllCancelling": "현재 파일 완료 후 중단합니다…",
+    "m365PrepareAllDone": "{total}개 중 {prepared}개의 파일을 준비했습니다. 새로고침을 실행하면 인덱싱할 수 있습니다.",
+    "m365PrepareAllFailures": "{count, plural, one {#개의 파일} other {#개의 파일}}을(를) 준비할 수 없습니다:",
+    "m365ItemOcrPages": "OCR 처리된 {count, plural, one {#페이지} other {#페이지}}",
+    "m365ItemOcrSkipped": {
+      "budget": "이 실행의 OCR 예산이 소진되었습니다 — 준비(OCR) 사용",
+      "tooManyPages": "자동 OCR 한도({perFile}) 초과 — 준비(OCR) 사용",
+      "engineUnavailable": "OCR 엔진이 구성되지 않았습니다 — 관리자에게 문의하세요"
+    },
+    "m365AgentIndexStepLost": "여러 번 시도 후 인덱싱 작업과의 연결이 끊겼습니다 — 서버에는 기록되어 있습니다. 계속하려면 재개를 이용하세요.",
+    "m365AgentDiscardEditsConfirm": "이 에이전트의 저장되지 않은 편집 내용을 폐기할까요?",
+    "m365PlanFileUnsupported": "인덱싱되지 않습니다 — .{ext} 파일은 지원되지 않습니다. PDF, DOCX, XLSX 또는 PPTX로 변환하세요.",
+    "m365PlanFileSkipped": "인덱싱되지 않습니다 — {reason}",
+    "m365PlanFileNeedsPreparation": "준비 전까지 인덱싱되지 않음 — {hint}",
+    "m365PlanFileLastRun": "마지막 실행: {status}",
+    "m365ItemNoTextOcr": "텍스트 없음 — 스캔본인가요? 준비(OCR) 사용"
   },
   "localModels": {
     "title": "로컬 모델",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "“{query}”에 대한 사이트를 찾을 수 없습니다.",
       "sitesEmpty": "사용 가능한 SharePoint 사이트가 없습니다. 이름으로 검색해 보세요.",
-      "itemCount": "{count, plural, one {#개 항목} other {#개 항목}}"
+      "itemCount": "{count, plural, one {#개 항목} other {#개 항목}}",
+      "pickHint": "폴더를 클릭해 탐색하거나, 추가를 사용해 전체를 인덱스하세요. 문서 라이브러리 및 팀 파일 전체도 추가할 수 있습니다.",
+      "addFolderHint": "이 폴더와 내부의 모든 항목을 하나의 소스로 추가",
+      "addCurrentFolder": "이 폴더 추가",
+      "addLibrary": "라이브러리 추가",
+      "addTeamFiles": "팀 파일 추가"
     },
     "mail": {
       "menuLabel": "이메일 가져오기…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "소유자: {owner}",
       "requestAccess": "접근 요청",
       "noneHint": "파일을 열어 소유자에게 접근을 요청하세요. 접근 권한이 부여되면 에이전트가 작동합니다.",
-      "partialHint": "파일을 열어 접근을 요청하세요 — 승인되면 답변에 자동으로 포함됩니다."
+      "partialHint": "파일을 열어 접근을 요청하세요 — 승인되면 답변에 자동으로 포함됩니다.",
+      "verifyFailed": "이 에이전트의 파일에 대한 접근 권한을 확인할 수 없습니다. 재시도 전까지 답변이 불완전할 수 있습니다.",
+      "retry": "재시도",
+      "notAvailable": "이 에이전트는 사용할 수 없습니다. 관리자에게 접근 권한을 요청하세요."
     },
     "translate": {
       "menuLabel": "OneDrive / SharePoint에서 번역",

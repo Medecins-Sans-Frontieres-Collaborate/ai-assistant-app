@@ -861,7 +861,8 @@
       "toolRoutingUnavailable": "Tool routing alaa — nana fowde e jamfa tool…",
       "webSearchLimitReached": "Limmorgol web search maa e o jooɗii — nana fowde e jamfa search…",
       "codeInterpreterLimitReached": "Limmorgol code execution maa e o jooɗii — nana fowde e jamfa running code…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Naatde-ɗaaɗo goonga so tawii waawaa annditir—joopondirde mbayka agent maa waawaa ummorɗe."
     },
     "toolSummary": {
       "usedTools": "Njoɓɗo {count, plural, one {# nguurndam} other {# nguurndeeji}}",
@@ -4676,7 +4677,42 @@
     "openFormTemplateEditor": "Taƴto",
     "deleteFormTemplate": "Momtu",
     "deleteFormTemplateConfirm": "A waɗa momtude template \"{name}\"? Tawtinagol ɗee, ko waɗii fayde, ɗe waɗi haa faamii snapshot mum.",
-    "confirmDeleteFormTemplate": "Momtu template"
+    "confirmDeleteFormTemplate": "Momtu template",
+    "m365SessionDisconnected": "Microsoft 365 warataa he hesanu maa. Daartol e doggol gariragol e Microsoft 365 maa, kono hono he Settings › Connections.",
+    "m365SessionNotConnected": "Hesanu maa Microsoft 365 waawataa daartude, tee daartol waawaa gariragol walla mbaykangol. Yiyyit e-ɗaa arɗu, so woodani, yewtude Settings › Connections.",
+    "m365SessionConsentMissing": "Kumpital maa yettoraa ollaade Microsoft 365 mbayngel waɗde daartol e gariragol file-ji. Laawto tenant administrator maa.",
+    "m365OpenConnections": "Uddit Settings › Connections",
+    "m365ActionNeedsConnection": "Daanee ileeji Microsoft 365",
+    "m365PlanFailedSaveAnyway": "A waawi danndude—leeral buɗɗo fayde e kala gariragol.",
+    "m365AgentRunVisible": "Jooni ummora he jannde—kadi janngudeeɓe ɓe laawanii rewannde app ngal ɗum gollere.",
+    "m365AgentRunHidden": "Still ummiɗaani he jannde: file-so ko daranii. Yiyit mbayka woodani ɗoo dow.",
+    "m365AgentAttentionFiles": "{count, plural, one {# file daanee yettude} other {# file-ji daanee yettude}}",
+    "m365AgentAttentionLoading": "Naatude e fayde file... ",
+    "m365AgentAttentionFailed": "Waawaa naatude fayde file-ji.",
+    "m365AgentAttentionNone": "Fayde file kanko yettaani ndaaran e run cuɓiiɗo.",
+    "m365AgentAutoOcrLabel": "OCR mbaɗi PDFs garirɓe seeɗa e gariragol",
+    "m365AgentAutoOcrHelp": "Koomtii tun—OCR mbaawi e cadaa makko. So woodani, kala garirgol ocr-ɗi PDFs garirɓe he {perRun} cadaa run maa e {perFile} cadaa file maa; file-ji ɗiɗi walla fayde noon ummora loowgol Prepare (OCR).",
+    "m365AgentIndexRetry": "Naatstu",
+    "m365PrepareAllButton": "Loowtu kala scanned PDFs ({count})",
+    "m365PrepareAllConfirm": "OCR {count, plural, one {# scanned PDF} other {# scanned PDFs}} jooni, gila gila. OCR mbaawi e cadaa; file kala uddita e {pages} cadaa. Waawi woppude tabi ngal luumo.",
+    "m365PrepareAllProgress": "Loowtude {current} e {total} · {name}",
+    "m365PrepareAllCancel": "Haaytu njahdu e file ngol",
+    "m365PrepareAllCancelling": "Yemoto e file ngol, ummotira…",
+    "m365PrepareAllDone": "Loowtiri {prepared} e {total} file-ji. Run Refresh nde garir.",
+    "m365PrepareAllFailures": "{count, plural, one {# file} other {# file-ji}} waawani loowtude:",
+    "m365ItemOcrPages": "OCR'd {count, plural, one {# cada} other {# cadaaji}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Caggal OCR run ngol boolii—loowgol Prepare (OCR)",
+      "tooManyPages": "Cadaaji hebrii caggal auto-OCR (ummora {perFile})—loowgol Prepare (OCR)",
+      "engineUnavailable": "OCR engine yettaani—laawto administrator"
+    },
+    "m365AgentIndexStepLost": "Koolii daartagol garirgol e run ngol e balɗe fayi—ndaarani e server. Loowtu Resume nde gollu.",
+    "m365AgentDiscardEditsConfirm": "Naata waɗnude baaniima edits ɗe agent ngol?",
+    "m365PlanFileUnsupported": "Waawaani garir—.{ext} files tee dañaani. Woofta PDF, DOCX, XLSX walla PPTX.",
+    "m365PlanFileSkipped": "Waawaani garir—{reason}",
+    "m365PlanFileNeedsPreparation": "Waawaani garir gam tee dañaani—{hint}",
+    "m365PlanFileLastRun": "Run cuɓiiɗo: {status}",
+    "m365ItemNoTextOcr": "Alam text—file mbaɗi scanning? loowgol Prepare (OCR)"
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",
@@ -5478,7 +5514,12 @@
       },
       "sitesNoResults": "Alaa soowte ndeeɗo ɗum “{query}”",
       "sitesEmpty": "Alaa SharePoint soowte. Jokkondir fii innde.",
-      "itemCount": "{count, plural, one {# boowal} other {# boowale}}"
+      "itemCount": "{count, plural, one {# boowal} other {# boowale}}",
+      "pickHint": "Nottu folder yuɓɓitii fii yiyi, ko o dow Add nde daarta kala file makko. E tagi, libraries walla team files-ji ɗoo waawi darti.",
+      "addFolderHint": "Dar folder ngol e kala file makko diwgol ko ndiyam",
+      "addCurrentFolder": "Dar folder ngol",
+      "addLibrary": "Dar library",
+      "addTeamFiles": "Dar team files"
     },
     "mail": {
       "menuLabel": "Nannude imeel...",
@@ -5582,7 +5623,10 @@
       "ownedBy": "timmondirɗo {owner}",
       "requestAccess": "Njiɗo dilla",
       "noneHint": "Uddit fiilde nde njiɗi dilla e timmondirɗo; agent maa ndu gollo maa baa dilla fow.",
-      "partialHint": "Uddit fiilde nde njiɗi dilla — jawdi maa ndiyam so dilla mbaɗa."
+      "partialHint": "Uddit fiilde nde njiɗi dilla — jawdi maa ndiyam so dilla mbaɗa.",
+      "verifyFailed": "Waawaani heɓtude huutorɗe agent ngol file makko. Jawdi waawi ceerrude tee loowtu njahdu.",
+      "retry": "Naatstu",
+      "notAvailable": "Agent ngol waawani huutora. Laawto administrator makko heɓude huutorɗe."
     },
     "translate": {
       "menuLabel": "Nanaaba e OneDrive / SharePoint",

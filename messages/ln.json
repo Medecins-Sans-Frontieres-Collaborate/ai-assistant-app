@@ -861,7 +861,8 @@
       "toolRoutingUnavailable": "Tool routing ezali te — kozongisa eyano na tools te…",
       "webSearchLimitReached": "Limiti ya motif ya Web esili — kozongisa eyano na recherche te…",
       "codeInterpreterLimitReached": "Motango ya mokolo ya execution ya code esili — eyano ezali na code te…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Recherche na base ya boyebi ekwe, eyano eko salela makomi ya agent te"
     },
     "toolSummary": {
       "usedTools": "Outils esalelamaki: {count, plural, one {# outil} other {# ba outils}}",
@@ -4676,7 +4677,42 @@
     "openFormTemplateEditor": "Kobonga",
     "deleteFormTemplate": "Kolongola",
     "deleteFormTemplateConfirm": "Kolongola modèle \"{name}\"? Ba conversations oyo esalelaka yango sikoyo ekobomba version na yango.",
-    "confirmDeleteFormTemplate": "Kolongola modèle"
+    "confirmDeleteFormTemplate": "Kolongola modèle",
+    "m365SessionDisconnected": "Microsoft 365 ekosangani lisusu te na compte na yo. Biyebisi eskanami mpe e-indexami na accès na yo moko ya Microsoft 365. Sambwisa yango liboso na Paramètres › Connexions.",
+    "m365SessionNotConnected": "Session na yo ya Microsoft 365 ezalaka te, boye mabaku ekoki koskanama to ko-indexama te. Sortir, kende lisusu, mpe talela Paramètres › Connexions.",
+    "m365SessionConsentMissing": "Organisation na bino endimi nanu te ba permissions esengeli ya Microsoft 365 mpo na koskana mpe ko-indexa ba fichiers. Tuna administrateur ya tenant.",
+    "m365OpenConnections": "Ouvrir Paramètres › Connexions",
+    "m365ActionNeedsConnection": "Elanda Microsoft 365 connection",
+    "m365PlanFailedSaveAnyway": "Okoki kaka kobomba — limite ya document eko vérifier lisusu tango oko-indexa.",
+    "m365AgentRunVisible": "Sikoyo ezali komonana epai ya ba utilisateurs — peut-être ba utilisateurs mosusu basengeli ko recharger application mpo bamonaka.",
+    "m365AgentRunHidden": "Ezali naino kobombama epai ya ba utilisateurs: document moko te e-indexami. Tala makambo na se.",
+    "m365AgentAttentionFiles": "{count, plural, one {Dosie moko esengeli kotalama} other {Ba dosie {#} esengeli kotalama}}",
+    "m365AgentAttentionLoading": "Kozwa ba détails ya dosie…",
+    "m365AgentAttentionFailed": "Ekokaki te kozwa ba détails ya dosie.",
+    "m365AgentAttentionNone": "Ba détails ya dosie moko na moko ezalaki nanu na run ya suka te.",
+    "m365AgentAutoOcrLabel": "OCR eskanaki ba PDFs automatiquement na tango ya indexation",
+    "m365AgentAutoOcrHelp": "Ezalaka te na suka — OCR efutamaka mpo na page. Soki ezali, run nyonso ya index epesaka OCR na ba PDFs eskanami tii na {perRun} pages na run moko mpe {perFile} pages na dosie moko; ba fichiers minene to ba dépassi budget basalela kaka option Prepare (OCR).",
+    "m365AgentIndexRetry": "Kozongela",
+    "m365PrepareAllButton": "Prépare ba PDFs eskanami nionso ({count})",
+    "m365PrepareAllProgress": "Ezalaki kosala préparation ya {current} na {total} · {name}",
+    "m365PrepareAllCancel": "Kolongola nsima ya dosie oyo",
+    "m365PrepareAllCancelling": "Ekozua dosie oyo ya sikoyo, bongo ekokima…",
+    "m365PrepareAllDone": "Préparé {prepared} na {total} ba fichiers. Salela Refresh mpo na ko-indexa yango.",
+    "m365PrepareAllFailures": "{count, plural, one {Dosie moko} other {ba fichiers {#}}} ekokaki te ko préparer :",
+    "m365ItemOcrPages": "OCR ekosali {count, plural, one {page moko} other {ba pages {#}}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Budget ya OCR ekosili mpo na run oyo — salela Prepare (OCR)",
+      "tooManyPages": "Ba pages mingi mingi mpo na auto-OCR (limite {perFile}) — salela Prepare (OCR)",
+      "engineUnavailable": "OCR engine esalemi te — tuna administrateur"
+    },
+    "m365AgentIndexStepLost": "Boyokani na kodexama ebungi sima ya ba essais mingi — ezalaka nanu na serveur. Salela Resume mpo kokoba.",
+    "m365AgentDiscardEditsConfirm": "Kolongola ba modifications na yo oza nanu o bombaki te na agent oyo?",
+    "m365PlanFileUnsupported": "Eko-indexama te — ba fichiers .{ext} esalemaka te. Convertir na PDF, DOCX, XLSX to PPTX.",
+    "m365PlanFileSkipped": "Eko-indexama te — {reason}",
+    "m365PlanFileNeedsPreparation": "Eko-indexama te kino ekosila ko préparer — {hint}",
+    "m365PlanFileLastRun": "Run ya suka : {status}",
+    "m365ItemNoTextOcr": "texte moko te ezwami — eskanami? salela Prepare (OCR)",
+    "m365PrepareAllConfirm": "Okosala OCR na {count, plural, one {# PDF eskané} other {# ba PDF eskané}} sik’oyo, moko libanda ya mosusu? OCR ezali kofongolama na motuya ya lokasa; fichier moko na moko ekoki kokamata kaka {pages} ba lokasa. Tika onganga oyo efungoli."
   },
   "localModels": {
     "title": "Bamodelo ya esika",
@@ -5478,7 +5514,12 @@
       },
       "sitesNoResults": "Ba site moko te emonani mpo na “{query}”",
       "sitesEmpty": "Ba SharePoint site ezali te. Meleka koluka na kombo.",
-      "itemCount": "{count, plural, one {# eloko} other {# biloko}}"
+      "itemCount": "{count, plural, one {# eloko} other {# biloko}}",
+      "pickHint": "Fina dossier mpo na kotala yango, to salela Ajouter mpo na ko-indexa nioso elandami. Bibliothèques mobimba to ba fichiers ya équipe ekoki kobakisama pe.",
+      "addFolderHint": "Augmenter dossier oyo mpe tout ce qu'il y a na kati lokola source moko",
+      "addCurrentFolder": "Augmenter dossier oyo",
+      "addLibrary": "Augmenter library",
+      "addTeamFiles": "Augmenter ba fichiers ya équipe"
     },
     "mail": {
       "menuLabel": "Kokota email…",
@@ -5582,7 +5623,10 @@
       "ownedBy": "esalemi na {owner}",
       "requestAccess": "Senga nzela ya kokota",
       "noneHint": "Fungola fichier mpo osenga nzela na moko azali na yango; agent akosala soki bapesi nzela.",
-      "partialHint": "Fungola fichier mpo osenga nzela — soki bapesi, eyano ekotangama na yango na kokende."
+      "partialHint": "Fungola fichier mpo osenga nzela — soki bapesi, eyano ekotangama na yango na kokende.",
+      "verifyFailed": "Ekokaki te ko vérifier accès na yo na ba fichiers ya agent oyo. Ba eyano ekoki kozala incomplet tii tango eko sakanama lisusu.",
+      "retry": "Zongela lisusu",
+      "notAvailable": "Agent oyo ezali na accès te epai na yo. Tuna administrateur na yango mpo na accès."
     },
     "translate": {
       "menuLabel": "Kokoma na lokota mosusu utá OneDrive / SharePoint",

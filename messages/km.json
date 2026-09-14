@@ -861,7 +861,8 @@
       "toolRoutingUnavailable": "មិនមានការបញ្ជូនសម្រាប់ឧបករណ៍ — កំពុងឆ្លើយតបដោយគ្មានឧបករណ៍…",
       "webSearchLimitReached": "គ្រប់លំហាត់ស្វែងរក​តាមអ៊ីនធឺណិតប្រចាំថ្ងៃរួចហើយ — កំពុងឆ្លើយតបដោយគ្មានការស្វែងរក…",
       "codeInterpreterLimitReached": "បានឈានដល់កំណត់ប្រតិបត្តិកូដប្រចាំថ្ងៃ — កំពុងឆ្លើយតបដោយគ្មានការចាប់ផ្ដើមកូដ…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "ការស្វែងរកសំណួរព័ត៌មានបរាជ័យ — ចម្លើយនេះនឹងមិនប្រើឯកសាររបស់ agent ទេ។"
     },
     "toolSummary": {
       "usedTools": "បានប្រើ {count, plural, one {# ឧបករណ៍} other {# ឧបករណ៍}}",
@@ -4676,7 +4677,42 @@
     "openFormTemplateEditor": "កែប្រែ",
     "deleteFormTemplate": "លុប",
     "deleteFormTemplateConfirm": "លុបពុម្ព \"{name}\"? ការសន្ទនាដែលបានប្រើរួចនឹងរក្សាទុកស្ថានភាពនោះ។",
-    "confirmDeleteFormTemplate": "លុបពុម្ព"
+    "confirmDeleteFormTemplate": "លុបពុម្ព",
+    "m365SessionDisconnected": "Microsoft 365 ត្រូវបានផ្តាច់ចេញពីគណនីរបស់អ្នក។ ប្រភពទិន្នន័យត្រូវបានស្កេន និងបង្កើតលិបិក្រមដោយប្រើ Microsoft 365 របស់អ្នក ដូច្នេះសូមភ្ជាប់វាសាមគ្គីនៅក្នុង ការកំណត់ › ការភ្ជាប់ ជាមុនសិន។",
+    "m365SessionNotConnected": "សម័យ Microsoft 365 របស់អ្នកមិនអាចប្រើបានទេ ដូច្នេះមិនអាចស្កេនឬបង្កើតលិបិក្រមប្រភពទេ។ សូមចេញ ហើយចូលឡើងវិញ រួចពិនិត្យ ការកំណត់ › ការភ្ជាប់។",
+    "m365SessionConsentMissing": "អង្គភាពរបស់អ្នកមិនទាន់អនុម័តសិទ្ធិ Microsoft 365 ដែលចាំបាច់សម្រាប់ស្កេន និងបង្កើតលិបិក្រមឯកសារ។ សូមទាក់ទងគ្រប់គ្រង tenant របស់អ្នក។",
+    "m365OpenConnections": "បើក ការកំណត់ › ការភ្ជាប់",
+    "m365ActionNeedsConnection": "ត្រូវការភ្ជាប់ Microsoft 365 មុន",
+    "m365PlanFailedSaveAnyway": "អ្នកនៅតែអាចរក្សាទុកបាន — ដែនកំណត់ឯកសារ នឹងត្រូវពិនិត្យម្តងទៀតនៅពេលបង្កើតលិបិក្រម។",
+    "m365AgentRunVisible": "ឥឡូវឃើញដល់អ្នកប្រើប្រាស់ — អ្នកប្រើប្រាស់ផ្សេងៗអាចត្រូវបិទបើកកម្មវិធីឡើងវិញ ដើម្បីឃើញវា។",
+    "m365AgentRunHidden": "នៅតែលាក់ពីអ្នកប្រើប្រាស់៖ មិនមានឯកសារណាមួយត្រូវបានបង្កើតលិបិក្រមទេ។ សូមមើលហេតុផលខាងក្រោម។",
+    "m365AgentAttentionFiles": "{count, plural, one {ឯកសារ # ត្រូវការយកចិត្តទុកដាក់} other {ឯកសារ # ត្រូវការយកចិត្តទុកដាក់}}",
+    "m365AgentAttentionLoading": "កំពុងផ្ទុកព័ត៌មានលម្អិតអំពីឯកសារ...",
+    "m365AgentAttentionFailed": "មិនអាចផ្ទុកព័ត៌មានលម្អិតអំពីឯកសារ។",
+    "m365AgentAttentionNone": "មិនមានព័ត៌មានលម្អិតតាមឯកសារសម្រាប់ដំណើរការបច្ចុប្បន្នទេ។",
+    "m365AgentAutoOcrLabel": "OCR ស្កេន PDF អូតូម៉ាតិកនៅពេលបង្កើតលិបិក្រម",
+    "m365AgentAutoOcrHelp": "បិទដោយលំនាំដើម — OCR គិតថ្លៃតាមចំនួនទំព័រ។ នៅពេលបើក នីតិកម្មនីមួយៗអាច OCR PDF ស្កេនបានដល់ {perRun} ទំព័រប្រតិទិន និង {perFile} ទំព័រប្រឯកសារ; ឯកសារធំបំផុត ឬលើសថវិកាលើកលែងការផ្តល់ជម្រើស Prepare (OCR)។",
+    "m365AgentIndexRetry": "ព្យាយាមម្ដងទៀត",
+    "m365PrepareAllButton": "រៀបចំ PDF ស្កេនទាំងអស់ ({count})",
+    "m365PrepareAllConfirm": "ប្រើ OCR {count, plural, one {PDF ស្កេន #} other {PDF ស្កេន #}} ឥឡូវនេះមួយៗតាមគ្នា? OCR គិតថ្លៃតាមទំព័រ; ឯកសារនីមួយៗមានដែនកំណត់ {pages} ទំព័រ។ សូមទុកផ្ទាំងនេះបើក។",
+    "m365PrepareAllProgress": "កំពុងរៀបចំ {current} នៃ {total} · {name}",
+    "m365PrepareAllCancel": "បោះបង់បន្ទាប់ពីឯកសារនេះ",
+    "m365PrepareAllCancelling": "កំពុងបញ្ចប់ឯកសារបច្ចុប្បន្ន បន្ទាប់មកនឹងឈប់...",
+    "m365PrepareAllDone": "បានរៀបចំ {prepared} នៃ {total} ឯកសារ។ ចាប់ផ្ដើម Refresh ដើម្បីបង្កើតលិបិក្រម។",
+    "m365PrepareAllFailures": "{count, plural, one {ឯកសារ #} other {ឯកសារ #}} មិនអាចរៀបចំបានទេ៖",
+    "m365ItemOcrPages": "បាន OCR {count, plural, one {ទំព័រ #} other {ទំព័រ #}}",
+    "m365ItemOcrSkipped": {
+      "budget": "ថវិកា OCR សម្រាប់ដំណើរការនេះបានប្រើអស់ — ប្រើ Prepare (OCR)",
+      "tooManyPages": "ចំនួនទំព័រច្រើនពេកសម្រាប់ auto-OCR (ដែនកំណត់ {perFile}) — ប្រើ Prepare (OCR)",
+      "engineUnavailable": "មិនមានប្រព័ន្ធ OCR — សូមទាក់ទងអ្នកគ្រប់គ្រង"
+    },
+    "m365AgentIndexStepLost": "បាត់ការភ្ជាប់ជាមួយកិច្ចការបង្កើតលិបិក្រមពីរបីដង — តែវានៅត្រូវបានកត់នៅលើ server។ ប្រើ Resume ដើម្បីបន្ត។",
+    "m365AgentDiscardEditsConfirm": "លុបចោលការកែប្រែដែលមិនបានរក្សាទុកទៅ agent នេះ?",
+    "m365PlanFileUnsupported": "មិនត្រូវបានបង្កើតលិបិក្រមទេ — ឯកសារ .{ext} មិនត្រូវគាំទ្រទេ។ សូមបម្លែងទៅ PDF, DOCX, XLSX ឬ PPTX។",
+    "m365PlanFileSkipped": "មិនត្រូវបានបង្កើតលិបិក្រមទេ — {reason}",
+    "m365PlanFileNeedsPreparation": "មិនបានបង្កើតលិបិក្រមរហូតទាល់តែបានរៀបចំ — {hint}",
+    "m365PlanFileLastRun": "ដំណើរការចុងក្រោយ៖ {status}",
+    "m365ItemNoTextOcr": "រកមិនឃើញអត្ថបទ — តើស្កេនមែនទេ? ប្រើ Prepare (OCR)"
   },
   "localModels": {
     "title": "ម៉ូឌែលក្នុងតំបន់",
@@ -5478,7 +5514,12 @@
       },
       "sitesNoResults": "រកមិនឃើញគេហទំព័រ សម្រាប់ “{query}”",
       "sitesEmpty": "គ្មានគេហទំព័រ SharePoint សម្រាប់ប្រើ។ សូមស្វែងរកតាមឈ្មោះ។",
-      "itemCount": "{count, plural, one {# ធាតុ} other {# ធាតុ}}"
+      "itemCount": "{count, plural, one {# ធាតុ} other {# ធាតុ}}",
+      "pickHint": "ចុចលើថតដើម្បីរកមើល ឬប្រើបូក ដើម្បីបញ្ចូលអ្វីៗទាំងអស់នៅក្នុងថតនោះទៅលិបិក្រម។ សាលាបណ្តុំនិពន្ធឯកសារទាំងមូល និងឯកសារក្រុមក៏អាចបន្ថែមបាន។",
+      "addFolderHint": "បន្ថែមថតនេះ និងអ្វីៗក្នុងខ្លួនវាជាប្រភពតែមួយ",
+      "addCurrentFolder": "បន្ថែមថតនេះ",
+      "addLibrary": "បន្ថែមបណ្ណាល័យ",
+      "addTeamFiles": "បន្ថែមឯកសារក្រុម"
     },
     "mail": {
       "menuLabel": "នាំចូលអ៊ីមែល…",
@@ -5582,7 +5623,10 @@
       "ownedBy": "ជាកម្មសិទ្ធិរបស់ {owner}",
       "requestAccess": "ស្នើសិទ្ធចូល",
       "noneHint": "បើកឯកសារមួយដើម្បីស្នើសិទ្ធចូលពីម្ចាស់។ Agent នឹងដំណើរការបន្ទាប់ពីមានសិទ្ធ។",
-      "partialHint": "បើកឯកសារមួយដើម្បីស្នើសិទ្ធចូល — ចំលើយនឹងរួមបញ្ចូលវា­ដោយស្វ័យប្រវត្តិយោយស្របពេលមានសិទ្ធ។"
+      "partialHint": "បើកឯកសារមួយដើម្បីស្នើសិទ្ធចូល — ចំលើយនឹងរួមបញ្ចូលវា­ដោយស្វ័យប្រវត្តិយោយស្របពេលមានសិទ្ធ។",
+      "verifyFailed": "មិនអាចផ្ទៀងផ្ទាត់សិទ្ធិចូលឯកសាររបស់ agent នេះទេ។ ចម្លើយអាចមិនពេញលេញរហូតដល់ព្យាយាមឡើងវិញ។",
+      "retry": "ព្យាយាមម្ដងទៀត",
+      "notAvailable": "Agent នេះមិនមានសិទ្ធិឲ្យអ្នកទេ។ សូមទាក់ទងអ្នកគ្រប់គ្រង agent។"
     },
     "translate": {
       "menuLabel": "បកប្រែពី OneDrive / SharePoint",

@@ -749,7 +749,8 @@
       "toolRoutingUnavailable": "Enrutamiento de herramientas no disponible — respondiendo sin herramientas…",
       "webSearchLimitReached": "Límite diario de búsqueda web alcanzado — respondiendo sin búsqueda…",
       "codeInterpreterLimitReached": "Límite diario de ejecución de código alcanzado — respondiendo sin ejecutar código…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "La búsqueda en la base de conocimientos falló — la respuesta no usará los documentos del agente."
     },
     "toolSummary": {
       "usedTools": "Se usó {count, plural, one {# herramienta} other {# herramientas}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "Editar",
     "deleteFormTemplate": "Eliminar",
     "deleteFormTemplateConfirm": "¿Eliminar la plantilla \"{name}\"? Las conversaciones que ya la usan mantienen su versión guardada.",
-    "confirmDeleteFormTemplate": "Eliminar plantilla"
+    "confirmDeleteFormTemplate": "Eliminar plantilla",
+    "m365SessionDisconnected": "Microsoft 365 está desconectado de su cuenta. Las fuentes se escanean e indexan con su propio acceso a Microsoft 365, así que conéctelo primero en Configuración › Conexiones.",
+    "m365SessionNotConnected": "Su sesión de Microsoft 365 no está disponible, por lo que no se pueden escanear ni indexar fuentes. Cierre sesión y vuelva a iniciarla, luego revise Configuración › Conexiones.",
+    "m365SessionConsentMissing": "Su organización aún no ha aprobado los permisos de Microsoft 365 necesarios para escanear e indexar archivos. Solicítelo a su administrador de tenant.",
+    "m365OpenConnections": "Abrir Configuración › Conexiones",
+    "m365ActionNeedsConnection": "Requiere una conexión a Microsoft 365",
+    "m365PlanFailedSaveAnyway": "Aún puede guardar — el límite de documentos se verificará de nuevo al indexar.",
+    "m365AgentRunVisible": "Ahora visible para los usuarios — otros usuarios pueden necesitar recargar la aplicación para verlo.",
+    "m365AgentRunHidden": "Aún oculto para los usuarios: no se indexó ningún documento. Vea los motivos a continuación.",
+    "m365AgentAttentionFiles": "{count, plural, one {# archivo requiere atención} other {# archivos requieren atención}}",
+    "m365AgentAttentionLoading": "Cargando detalles del archivo…",
+    "m365AgentAttentionFailed": "No se pudieron cargar los detalles del archivo.",
+    "m365AgentAttentionNone": "No se registraron detalles por archivo en la última ejecución.",
+    "m365AgentAutoOcrLabel": "PDF escaneados con OCR automáticamente durante la indexación",
+    "m365AgentAutoOcrHelp": "Desactivado por defecto — el OCR se factura por página. Al activarlo, cada indexación realiza OCR a PDFs escaneados hasta {perRun} páginas por ejecución y {perFile} páginas por archivo; los archivos más grandes o fuera de presupuesto mantienen la opción Preparar (OCR).",
+    "m365AgentIndexRetry": "Reintentar",
+    "m365PrepareAllButton": "Preparar todos los PDFs escaneados ({count})",
+    "m365PrepareAllConfirm": "¿Realizar OCR ahora a {count, plural, one {# PDF escaneado} other {# PDFs escaneados}}, uno tras otro? El OCR se factura por página; cada archivo tiene un límite de {pages} páginas. Mantenga esta pestaña abierta.",
+    "m365PrepareAllProgress": "Preparando {current} de {total} · {name}",
+    "m365PrepareAllCancel": "Cancelar después de este archivo",
+    "m365PrepareAllCancelling": "Finalizando el archivo actual, luego deteniendo…",
+    "m365PrepareAllDone": "Se prepararon {prepared} de {total} archivos. Ejecute Actualizar para indexarlos.",
+    "m365PrepareAllFailures": "No se pudieron preparar {count, plural, one {# archivo} other {# archivos}}:",
+    "m365ItemOcrPages": "OCR realizado en {count, plural, one {# página} other {# páginas}}",
+    "m365ItemOcrSkipped": {
+      "budget": "El presupuesto de OCR para esta ejecución se ha agotado — use Preparar (OCR)",
+      "tooManyPages": "Demasiadas páginas para auto-OCR (límite {perFile}) — use Preparar (OCR)",
+      "engineUnavailable": "No hay un motor OCR configurado — consulte con un administrador"
+    },
+    "m365AgentIndexStepLost": "Se perdió el contacto con la tarea de indexación tras varios intentos — aún está registrada en el servidor. Use Reanudar para continuar.",
+    "m365AgentDiscardEditsConfirm": "¿Descartar sus cambios no guardados en este agente?",
+    "m365PlanFileUnsupported": "No se indexará — archivos .{ext} no son compatibles. Convierta a PDF, DOCX, XLSX o PPTX.",
+    "m365PlanFileSkipped": "No se indexará — {reason}",
+    "m365PlanFileNeedsPreparation": "No se indexará hasta estar preparado — {hint}",
+    "m365PlanFileLastRun": "Última ejecución: {status}",
+    "m365ItemNoTextOcr": "no se encontró texto — ¿escaneado? utilice Preparar (OCR)"
   },
   "localModels": {
     "title": "Modelos locales",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "No se encontraron sitios para “{query}”",
       "sitesEmpty": "No hay sitios de SharePoint disponibles. Intente buscar por nombre.",
-      "itemCount": "{count, plural, one {# elemento} other {# elementos}}"
+      "itemCount": "{count, plural, one {# elemento} other {# elementos}}",
+      "pickHint": "Haga clic en una carpeta para explorarlo, o use Añadir para indexar todo su contenido. También se pueden añadir bibliotecas de documentos completas y archivos de equipo.",
+      "addFolderHint": "Añada esta carpeta y todo su contenido como una sola fuente",
+      "addCurrentFolder": "Añadir esta carpeta",
+      "addLibrary": "Añadir biblioteca",
+      "addTeamFiles": "Añadir archivos de equipo"
     },
     "mail": {
       "menuLabel": "Importar correo…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "pertenece a {owner}",
       "requestAccess": "Solicitar acceso",
       "noneHint": "Abra un archivo para solicitar acceso a su propietario; el agente funcionará cuando se conceda el acceso.",
-      "partialHint": "Abra un archivo para solicitar acceso — las respuestas lo incluirán automáticamente cuando se conceda."
+      "partialHint": "Abra un archivo para solicitar acceso — las respuestas lo incluirán automáticamente cuando se conceda.",
+      "verifyFailed": "No se pudo verificar su acceso a los archivos de este agente. Las respuestas pueden estar incompletas hasta que se reintente.",
+      "retry": "Reintentar",
+      "notAvailable": "Este agente no está disponible para usted. Solicite acceso al administrador correspondiente."
     },
     "translate": {
       "menuLabel": "Traducir desde OneDrive / SharePoint",

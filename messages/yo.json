@@ -861,7 +861,8 @@
       "toolRoutingUnavailable": "Ìtọ́jú irinṣẹ́ kò sí — ìdáhùn láìlò irinṣẹ́…",
       "webSearchLimitReached": "Ìyókù àwárí lórí wẹẹbu kún — ìdáhùn láìṣàwárí…",
       "codeInterpreterLimitReached": "Ìpẹ̀kún ìmú ṣiṣẹ́ kóòdù ti péjọ — ìdáhùn láìṣiṣẹ́ kóòdù…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Ìṣàwárí ibi ipamọ ìmọ̀ ṣìṣe kù – ìdáhùn kì yóò lo àwọn akọsilẹ̀ aṣojú"
     },
     "toolSummary": {
       "usedTools": "Lo {count, plural, one {# ohun ìṣàkóso} other {# àwọn ohun ìṣàkóso}}",
@@ -4676,7 +4677,42 @@
     "openFormTemplateEditor": "Ṣàtúnṣe",
     "deleteFormTemplate": "Pa kọ́",
     "deleteFormTemplateConfirm": "Ṣe fẹ́ pa àpẹẹrẹ \"{name}\"? Àwọn ijíròrò tí ó ti ń lò ó yóò tọju àkóónú wọn.",
-    "confirmDeleteFormTemplate": "Pa àpẹẹrẹ kọ́"
+    "confirmDeleteFormTemplate": "Pa àpẹẹrẹ kọ́",
+    "m365SessionDisconnected": "Microsoft 365 ti yapa lórí àkọọlẹ rẹ. Àwọn orísun ni a nṣàwárí àti àtòjọ pẹ̀lú iraye Microsoft 365 tirẹ, jọ̀wọ́ so pọ̀ rẹ ní Settings › Connections kókọ.",
+    "m365SessionNotConnected": "Ìpò Microsoft 365 rẹ kò sí, nítorí náà, a kò le ṣàwárí tàbí ṣe àtòjọ àwọn orísun. Jọ̀wọ́ jáde kí o wọlé padà, lẹhinna ṣàyẹ̀wò Settings › Connections.",
+    "m365SessionConsentMissing": "Ẹgbẹ́ rẹ kò tíì fọwọ́sowọpọ̀ fún àwọn àṣẹ Microsoft 365 tó yẹ kí a lè ṣàwárí àti àtòjọ àwọn fáìlì. Bèrè lọ́wọ́ alábòójútó tenant yín.",
+    "m365OpenConnections": "Ṣí Settings › Connections",
+    "m365ActionNeedsConnection": "Microsoft 365 gbọdọ̀ jẹ́ asopọ",
+    "m365PlanFailedSaveAnyway": "O tún lè fipamọ́ – a máa ṣàyẹ̀wò Ààbò àpapọ̀ fáìlì lẹẹkan síi nígbà tí o bá nṣe àtòjọ.",
+    "m365AgentRunVisible": "Báyìí dájú fún àwọn oníṣe láti rí – àwọn mìíràn lè nílò láti tún app náà ṣí kí wón tó rí.",
+    "m365AgentRunHidden": "Ṣì bòṣeku kuro lọ́dọ̀ àwọn oníṣe: kò sí fáìlì tí a ti ṣe àtòjọ. Wo àwọn ìdí lókè.",
+    "m365AgentAttentionFiles": "{count, plural, one {# fáìlì nílò ìfọkànsin} other {# àwọn fáìlì nílò ìfọkànsin}}",
+    "m365AgentAttentionLoading": "N gbìn àwọn àlàyé fáìlì...",
+    "m365AgentAttentionFailed": "Kò le gbìn àlàyé fáìlì.",
+    "m365AgentAttentionNone": "Kò sí àlàyé fáìlì kọọkan tó gbasilẹ fún ìṣiṣẹ́ tó kẹ́yìn.",
+    "m365AgentAutoOcrLabel": "A n ṣe OCR fún PDFs tí a ti ṣànṣàkọ́ lẹ́sẹ̀kẹsẹ̀ nígbà àtòjọ",
+    "m365AgentAutoOcrHelp": "O pẹ̀lú aiyipada – a ń sanwo OCR pẹ̀lú ojúewé kọọkan. Nígbà tó ṣí, ọkọọkan iranti àtòjọ maa ṣe OCR fún PDFs tó ti ṣànṣàkọ̀ tó pọjú {perRun} ojúewé ní iṣẹ́ kan àti {perFile} ojúewé fáìlì kọọkan; àwọn fáìlì tó tóbi jù tàbí tó kọja ààbò yóò ní aṣayan Prepare (OCR).",
+    "m365AgentIndexRetry": "Ṣàgbàyè sé",
+    "m365PrepareAllButton": "Prepare gbogbo PDFs tí a ti ṣànṣàkọ́ ({count})",
+    "m365PrepareAllConfirm": "Ṣe OCR {count, plural, one {# PDF tó ti ṣànṣàkọ́} other {# àwọn PDFs tó ti ṣànṣàkọ́}} báyìí, lẹ́yìn ara wọn? A ń sanwo OCR pẹ̀lú ojúewé kọọkan; ojúewé kọọkan fáìlì kọọkan ni ààbò {pages}. Máa pa tábù yìí ṣí.",
+    "m365PrepareAllProgress": "N ṣètò {current} nínú {total} · {name}",
+    "m365PrepareAllCancel": "Fagilé lẹ́yìn fáìlì yìí",
+    "m365PrepareAllCancelling": "Parí fáìlì tó wà lọ́wọ́, lẹ́yìn náà a dúró...",
+    "m365PrepareAllDone": "A ti pèsè {prepared} nínú {total} àwọn fáìlì. Lo Refresh láti ṣe àtòjọ wọn.",
+    "m365PrepareAllFailures": "{count, plural, one {# fáìlì} other {# àwọn fáìlì}} kò le pèsè:",
+    "m365ItemOcrPages": "OCR ṣe {count, plural, one {# ojúewé} other {# ojúewé}}",
+    "m365ItemOcrSkipped": {
+      "budget": "A fi gbogbo ìdákẹ́jọ OCR tán fún ìṣiṣẹ́ yìí – lo Prepare (OCR)",
+      "tooManyPages": "Ọjúewé pọ̀ ju fún auto-OCR (ààbò {perFile}) – lo Prepare (OCR)",
+      "engineUnavailable": "Ẹrọ OCR kò tíì ṣètò – bèrè lọ́wọ́ alábòójútó"
+    },
+    "m365AgentIndexStepLost": "A padanu asopọ pẹ̀lú iṣẹ́ àtòjọ lẹ́yìn akitiyan púpọ̀ – a gbasilẹ rẹ lórí server ṣi. Lo Resume láti bá a lọ.",
+    "m365AgentDiscardEditsConfirm": "Ṣe o fẹ́ fagilé àwọn àtúnṣe tí o kò tíì fipamọ́ sí aṣojú yìí?",
+    "m365PlanFileUnsupported": "Kò ní ṣe àtòjọ – .{ext} kò jẹ́ ẹ̀tọ́. Yípadà sí PDF, DOCX, XLSX tàbí PPTX.",
+    "m365PlanFileSkipped": "Kò ní ṣe àtòjọ – {reason}",
+    "m365PlanFileNeedsPreparation": "Kì í ṣe àtòjọ títí tí a ó fi pèsè – {hint}",
+    "m365PlanFileLastRun": "Ìṣiṣẹ́ tó kẹ́yìn: {status}",
+    "m365ItemNoTextOcr": "kò sí ọrọ̀ kankan – ṣàwárí? lo Prepare (OCR)"
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",
@@ -5478,7 +5514,12 @@
       },
       "sitesNoResults": "Àyẹ̀wò kò rí síta kankan fún “{query}”",
       "sitesEmpty": "Kò sí SharePoint sites tó wà. Gbìyànjú láti wá orúkọ.",
-      "itemCount": "{count, plural, one {# nkan} other {# àwọn nkan}}"
+      "itemCount": "{count, plural, one {# nkan} other {# àwọn nkan}}",
+      "pickHint": "Tẹ lórí folda kan láti ṣàwárí rẹ, tàbí lo Add láti ṣe àtòjọ gbogbo nínú rẹ. Gbogbo ile-ikawe iwe-ìkọ àti àwọn fáìlì ẹgbẹ́ tún lè fi kun.",
+      "addFolderHint": "Fi folda yìí àti gbogbo ohun inú rẹ kun gẹ́gẹ́ bí orísun kan",
+      "addCurrentFolder": "Fi folda yìí kun",
+      "addLibrary": "Fi akọọ́kọ́we kun",
+      "addTeamFiles": "Fi àwọn fáìlì ẹgbẹ́ kun"
     },
     "mail": {
       "menuLabel": "Gbe imeeli wọlé…",
@@ -5582,7 +5623,10 @@
       "ownedBy": "tí {owner} ní",
       "requestAccess": "Bèrè àṣẹ",
       "noneHint": "Ṣí faili kan láti béèrè àṣẹ lọ̀dọ̀ eni tí o ní i; alákóso yìí máa ṣiṣẹ́ lẹ́yìn tí wọ́n fọwọ́sowọ́pọ̀ àṣẹ naa.",
-      "partialHint": "Ṣí faili kan láti béèrè àṣẹ — wón máa fi i kun ìdáhùn lára lẹ́yìn tí wọ́n fọwọ́sowọ́pọ̀."
+      "partialHint": "Ṣí faili kan láti béèrè àṣẹ — wón máa fi i kun ìdáhùn lára lẹ́yìn tí wọ́n fọwọ́sowọ́pọ̀.",
+      "verifyFailed": "Kò le jẹ́rìí iraye si àwọn fáìlì aṣojú yìí. Àwọn ìdáhùn lè má pé titi tí a ó fi tun gbìyànjú.",
+      "retry": "Ṣàgbàyè",
+      "notAvailable": "Aṣojú yìí kò sí fún rẹ. Ṣàbẹ̀wò sọdọ alábòójútó rẹ fún iraye."
     },
     "translate": {
       "menuLabel": "Tumọ̀ láti OneDrive / SharePoint",

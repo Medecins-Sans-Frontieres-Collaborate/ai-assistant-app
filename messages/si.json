@@ -770,7 +770,8 @@
       "toolRoutingUnavailable": "මෙවලම් මාර්ගය ලැබිය නොහැක — මෙවලම් නොමැතිව පිළිතුරු දෙනවා…",
       "webSearchLimitReached": "දෛනික වෙබ් සෙවුම් සීමාව ළඟා වී ඇත — සෙවුම නොමැතිව පිළිතුරු දෙනවා…",
       "codeInterpreterLimitReached": "දෛනික කේත කළමණාකරණ සීමාව ළඟයි — කේතය ක්‍රියාත්මක නොකෙරේ…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "දැනුම් ගබඩා සෙවීම අසාර්ථකය — පිළිතුරට නියෝජිතයාගේ ලේඛන භාවිතා නොවේ"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {මෙවලමක් භාවිතා විය} other {මෙවලම් # ක් භාවිතා විය}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "සංස්කරණය කරන්න",
     "deleteFormTemplate": "මකන්න",
     "deleteFormTemplateConfirm": "\"{name}\" ටෙම්ප්ලේට් මකාදමන්නද? දැනටමත් එය භාවිතා කරමින් සිටින සංවාද සඳහා snapshot එක තබා ගන්නා ඇත.",
-    "confirmDeleteFormTemplate": "ටෙම්ප්ලේට් මකන්න"
+    "confirmDeleteFormTemplate": "ටෙම්ප්ලේට් මකන්න",
+    "m365SessionDisconnected": "ඔබගේ ගිණුමට Microsoft 365 සම්බන්ධ වී නැත. මූලාශ්‍ර ඔබේම Microsoft 365 ප්‍රවේශය සමඟ සොයාගෙන දර්ශනය කෙරේ, එනිසා Settings › Connections තුළ පළමුව සම්බන්ධ කරන්න.",
+    "m365SessionNotConnected": "ඔබගේ Microsoft 365 වාරය ලබාගත නොහැක, ඒ නිසා මූලාශ්‍ර සොයාගන්න හෝ දර්ශනය කර Impossible. පිටවීම හා නැවත පිවිසීම සිදී Settings › Connections පරීක්ෂා කරන්න.",
+    "m365SessionConsentMissing": "ගොනු සොයාගැනීමට හා දර්ශනය කිරීමට අවශ්‍ය Microsoft 365 අවසර ඔබගේ ආයතනය විසින් තවම අනුමත කර නොමැත. ඔබේ tenant පරිපාලකයා වෙත අයඳින්න.",
+    "m365OpenConnections": "Settings › Connections විවෘත කරන්න",
+    "m365ActionNeedsConnection": "Microsoft 365 සම්බන්ධතාවයක් අවශ්‍යයි",
+    "m365PlanFailedSaveAnyway": "ඔබට තවමත් සුරැකි කළ හැක — ලේඛන සීමාව index කිරීමේදී නැවත පිරික්සයි.",
+    "m365AgentRunVisible": "දැනට පරිශීලකයින්ට පෙනේ — අනෙකුත් පරිශීලකයන්ට දැකීමට යෙදුම නැවත පූ‍රණය කළ යුතු විය හැක.",
+    "m365AgentRunHidden": "තවමත් පරිශීලකයින්ට සැඟවී ඇත: කිසිදු ලේඛනයක් දර්ශනය කෙරී නැත. පහත හේතු බලන්න.",
+    "m365AgentAttentionFiles": "{count, plural, one {ගොනුවකට අවධානය අවශ්‍යයි} other {ගොනු {count}කට අවධානය අවශ්‍යයි}}",
+    "m365AgentAttentionLoading": "ගොනු විස්තර ලැබෙමින් පවතියි…",
+    "m365AgentAttentionFailed": "ගොනු විස්තර ලබාගත නොහැක.",
+    "m365AgentAttentionNone": "අවසන් වාරය සඳහා වෙන් වූ ගොනු විස්තර කිසිවක් සටහන් කර නැත.",
+    "m365AgentAutoOcrLabel": "Index කිරීමේදී OCR සමඟ Scanned PDF ස්වයංක්‍රීයව සැකසීම",
+    "m365AgentAutoOcrHelp": "පෙරනිමි ලෙස අක්‍රියයි — OCR එක පිටුවකට ගාස්තු ගෙවිය යුතුයි. සක්‍රිය කළ විට, එක් එක් Index සඳහා පිටු {perRun}කට සහ එක් ගොනුවකට පිටු {perFile}ක් ත්‍යාගකොට පමණක් OCR කරන ලදී; විශාල හෝ අතිරික්ත ලාභය ඉක්මවන ගොනු සඳහා Prepare (OCR) විකල්පය තවදුරටත් පවතී.",
+    "m365AgentIndexRetry": "නැවත උත්සාහ කරන්න",
+    "m365PrepareAllButton": "සියලු අ_SCAN_ කළ PDF ({count}) ටියාරි කරන්න",
+    "m365PrepareAllConfirm": "දැන් OCR {count, plural, one {# Scanned PDF} other {# Scanned PDFs}} එකින් එක OCR කරන්නද? OCR එක පිටුවකට ගාස්තු යටත් වන අතර එක් ගොනුවකට උපරිමය පිටු {pages}කයි. මෙම ටැබ් එක විවෘත තබාගන්න.",
+    "m365PrepareAllProgress": "ටියාරි කරමින් {current} / {total} · {name}",
+    "m365PrepareAllCancel": "මෙම ගොනුවෙන් පසු නවත්වන්න",
+    "m365PrepareAllCancelling": "දැනට ඇති ගොනුව නිමකරමින්, පසුව නවත්වයි…",
+    "m365PrepareAllDone": "ගොනු {total}කින් {prepared}ක් ටියාරි කළා. Index කිරීමට Refresh ක්‍රියා කරන්න.",
+    "m365PrepareAllFailures": "{count, plural, one {ගොනුවක්} other {ගොනු #ක්}} ටියාරි කළ නොහැක:",
+    "m365ItemOcrPages": "OCR කළා {count, plural, one {# පිටුවක්} other {# පිටු}}",
+    "m365ItemOcrSkipped": {
+      "budget": "මෙම වාරයට OCR ඇල්ලීම වියදම්වී ඇත — Prepare (OCR) භාවිතා කරන්න",
+      "tooManyPages": "auto-OCR සඳහා පිටු අගය ඉක්මවයි (සීමාව {perFile}) — Prepare (OCR) භාවිතා කරන්න",
+      "engineUnavailable": "OCR engine එකක් සකසා නැත — පරිපාලකයෙකුගෙන් විමසන්න"
+    },
+    "m365AgentIndexStepLost": "ඉන්දෙක්ස් කිරීමේ පහරෙන් කිහිප වරක් පසුව සම්බන්ධතාවය අහිමිවිය — එය තවම server එකේ සටහන් වේ. Continue කිරීමට Resume භාවිතා කරන්න.",
+    "m365AgentDiscardEditsConfirm": "මෙම නියෝජිතය සඳහා සුරැකි නොකළ සංස්කරණ ඉවත දැමන්නද?",
+    "m365PlanFileUnsupported": "දර්ශනය නොවේ — .{ext} ගොනු සහය නොදක්වයි. PDF, DOCX, XLSX හෝ PPTX වෙත පරිවර්තනය කරන්න.",
+    "m365PlanFileSkipped": "දර්ශනය නොවේ — {reason}",
+    "m365PlanFileNeedsPreparation": "ටියාරි කර නොමැතිව දර්ශනය නොවේ — {hint}",
+    "m365PlanFileLastRun": "අවසන් වාරය: {status}",
+    "m365ItemNoTextOcr": "පෙළක් හමු නොවුණි — scan කළාද? Prepare (OCR) භාවිතා කරන්න"
   },
   "localModels": {
     "title": "ප්‍රාදේශීය ආදර්ශ",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "“{query}” සඳහා වෙබ් අඩවි සොයා ගැනීමට නොහැකියි",
       "sitesEmpty": "SharePoint වෙබ් අඩවි නොමැත. නාමයෙන් සෙවීමට උත්සාහ කරන්න.",
-      "itemCount": "{count, plural, one {අයිතමය #ක්} other {අයිතම #ක්}}"
+      "itemCount": "{count, plural, one {අයිතමය #ක්} other {අයිතම #ක්}}",
+      "pickHint": "ෆෝල්ඩරයක් පිරික්සීමට ක්ලික් කරන්න, නැතිනම් එය තුළ ඇති සියල්ල index කිරීමට Add භාවිතා කරන්න. සම්පූර්ණ ලේඛන පුස්තකාල සහ කණ්ඩායම් ගොනු ද එකතු කළ හැක.",
+      "addFolderHint": "මෙම ෆෝල්ඩරය සහ ඒ තුළ ඇති සියල්ල එක් මූලාශ්‍රයක් ලෙස එකතු කරන්න",
+      "addCurrentFolder": "මෙම ෆෝල්ඩරය එකතු කරන්න",
+      "addLibrary": "පුස්තකාලය එකතු කරන්න",
+      "addTeamFiles": "කණ්ඩායම් ගොනු එකතු කරන්න"
     },
     "mail": {
       "menuLabel": "ඊමේල් ආයාත කරන්න…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "{owner} ملکත්වයයි",
       "requestAccess": "ප්‍රවේශය ඉල්ලා සිටින්න",
       "noneHint": "ගොනුවක් විවෘත කර එය හිමිකරුගෙන් ප්‍රවේශය ඉල්ලන්න; ප්‍රවේශය ලබාදී විමෙන් පසු නියෝජිතයා ක්‍රියා කරනවා.",
-      "partialHint": "ප්‍රවේශය සඳහා ගොනුවක් විවෘත කරන්න — ප්‍රවේශය ලැබුනාට පසු පිළිතුරු එය ස්වයංක්‍රීයව අඩංගු වේ."
+      "partialHint": "ප්‍රවේශය සඳහා ගොනුවක් විවෘත කරන්න — ප්‍රවේශය ලැබුනාට පසු පිළිතුරු එය ස්වයංක්‍රීයව අඩංගු වේ.",
+      "verifyFailed": "මෙම නියෝජිතයාගේ ගොනු සඳහා ඔබගේ ප්‍රවේශය සත්‍යාපනය කළ නොහැක. නැවත උත්සාහ කරන තුරු පිළිතුරු අසම්පූර්ණ විය හැක.",
+      "retry": "නැවත උත්සාහ කරන්න",
+      "notAvailable": "මෙම නියෝජිතයා ඔබට ලබාගත නොහැක. ප්‍රවේශය සඳහා නිලධාරියා වෙත අයඳින්න."
     },
     "translate": {
       "menuLabel": "OneDrive / SharePoint වෙතින් පරිවර්තනය",

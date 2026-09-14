@@ -778,7 +778,8 @@
       "toolRoutingUnavailable": "L'encaminament d'eines no està disponible — es respon sense eines…",
       "webSearchLimitReached": "S'ha assolit el límit diari de cerques web — es respon sense buscar…",
       "codeInterpreterLimitReached": "S'ha assolit el límit diari d'execució de codi — es respon sense executar codi…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Error en la cerca de la base de coneixement — la resposta no utilitzarà els documents de l’agent"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# eina utilitzada} other {# eines utilitzades}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "Edita",
     "deleteFormTemplate": "Elimina",
     "deleteFormTemplateConfirm": "Vols eliminar la plantilla \"{name}\"? Les converses que ja la fan servir conservaran la seva còpia.",
-    "confirmDeleteFormTemplate": "Elimina la plantilla"
+    "confirmDeleteFormTemplate": "Elimina la plantilla",
+    "m365SessionDisconnected": "Microsoft 365 està desconnectat del vostre compte. Les fonts es processen i indexen amb el vostre propi accés a Microsoft 365; connecteu-lo primer a Configuració › Connexions.",
+    "m365SessionNotConnected": "La sessió de Microsoft 365 no està disponible, així que no es poden escanejar ni indexar les fonts. Tanqueu i torneu a iniciar la sessió i comproveu Configuració › Connexions.",
+    "m365SessionConsentMissing": "La vostra organització encara no ha aprovat els permisos de Microsoft 365 necessaris per escanejar i indexar fitxers. Demaneu-ho a l'administrador del tenant.",
+    "m365OpenConnections": "Obre Configuració › Connexions",
+    "m365ActionNeedsConnection": "Requereix una connexió a Microsoft 365",
+    "m365PlanFailedSaveAnyway": "Podeu desar igualment — el límit de documents es tornarà a comprovar quan indexeu.",
+    "m365AgentRunVisible": "Ara visible per als usuaris — altres usuaris potser han de recarregar l’aplicació per veure-ho.",
+    "m365AgentRunHidden": "Encara amagat als usuaris: no s'ha indexat cap document. Consulteu els motius a continuació.",
+    "m365AgentAttentionFiles": "{count, plural, one {Cal atendre # fitxer} other {Cal atendre # fitxers}}",
+    "m365AgentAttentionLoading": "S'estan carregant els detalls dels fitxers…",
+    "m365AgentAttentionFailed": "No s'han pogut carregar els detalls dels fitxers.",
+    "m365AgentAttentionNone": "No s'ha enregistrat cap detall per fitxer en l’última execució.",
+    "m365AgentAutoOcrLabel": "PDF escanejats amb OCR automàticament durant la indexació",
+    "m365AgentAutoOcrHelp": "Desactivat per defecte — l'OCR es factura per pàgina. Si està activat, en cada indexació es fa OCR als PDF escanejats fins a {perRun} pàgines per execució i {perFile} pàgines per fitxer; els fitxers més grans o que superin el pressupost mantenen l’opció Preparar (OCR).",
+    "m365AgentIndexRetry": "Torna-ho a provar",
+    "m365PrepareAllButton": "Prepara tots els PDF escanejats ({count})",
+    "m365PrepareAllConfirm": "Voleu fer OCR a {count, plural, one {# PDF escanejat} other {# PDF escanejats}} ara, un rere l'altre? L'OCR es factura per pàgina; cada fitxer té un límit de {pages} pàgines. Manteniu aquesta pestanya oberta.",
+    "m365PrepareAllProgress": "Preparant {current} de {total} · {name}",
+    "m365PrepareAllCancel": "Cancel·la després d’aquest fitxer",
+    "m365PrepareAllCancelling": "S’està acabant el fitxer actual, després s’aturarà…",
+    "m365PrepareAllDone": "Preparats {prepared} de {total} fitxers. Executeu Actualitza per indexar-los.",
+    "m365PrepareAllFailures": "No s'han pogut preparar {count, plural, one {# fitxer} other {# fitxers}}:",
+    "m365ItemOcrPages": "OCR a {count, plural, one {# pàgina} other {# pàgines}}",
+    "m365ItemOcrSkipped": {
+      "budget": "El pressupost OCR d’aquesta execució està esgotat — utilitzeu Preparar (OCR)",
+      "tooManyPages": "Massa pàgines per a OCR automàtic (límit {perFile}) — utilitzeu Preparar (OCR)",
+      "engineUnavailable": "No hi ha cap motor OCR configurat — demaneu-ho a l'administrador"
+    },
+    "m365AgentIndexStepLost": "S’ha perdut el contacte amb la indexació després de diversos intents — encara es registra al servidor. Feu servir Reprendre per continuar.",
+    "m365AgentDiscardEditsConfirm": "Voleu descartar els canvis sense desar d’aquest agent?",
+    "m365PlanFileUnsupported": "No s'indexarà — els fitxers .{ext} no són compatibles. Convertiu-los a PDF, DOCX, XLSX o PPTX.",
+    "m365PlanFileSkipped": "No s'indexarà — {reason}",
+    "m365PlanFileNeedsPreparation": "No s’indexarà fins que estigui preparat — {hint}",
+    "m365PlanFileLastRun": "Darrera execució: {status}",
+    "m365ItemNoTextOcr": "no s’ha trobat text — escanejat? utilitzeu Preparar (OCR)"
   },
   "localModels": {
     "title": "Models locals",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "No s'han trobat llocs per a «{query}»",
       "sitesEmpty": "No hi ha cap lloc de SharePoint disponible. Proveu de buscar pel nom.",
-      "itemCount": "{count, plural, one {# element} other {# elements}}"
+      "itemCount": "{count, plural, one {# element} other {# elements}}",
+      "pickHint": "Feu clic a una carpeta per navegar-hi, o utilitzeu Afegir per indexar-ho tot. També es poden afegir biblioteques de documents senceres i fitxers d’equip.",
+      "addFolderHint": "Afegeix aquesta carpeta i tot el que conté com una sola font",
+      "addCurrentFolder": "Afegeix aquesta carpeta",
+      "addLibrary": "Afegeix biblioteca",
+      "addTeamFiles": "Afegeix fitxers d’equip"
     },
     "mail": {
       "menuLabel": "Importa un correu…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "propietat de {owner}",
       "requestAccess": "Sol·licita accés",
       "noneHint": "Obre un fitxer per sol·licitar accés al propietari; l’agent funcionarà quan s’hagi concedit l’accés.",
-      "partialHint": "Obre un fitxer per sol·licitar accés — les respostes l’inclouran automàticament un cop concedit."
+      "partialHint": "Obre un fitxer per sol·licitar accés — les respostes l’inclouran automàticament un cop concedit.",
+      "verifyFailed": "No s’ha pogut verificar l’accés als fitxers d’aquest agent. Les respostes poden ser incompletes fins que es torni a intentar.",
+      "retry": "Torna-ho a provar",
+      "notAvailable": "Aquest agent no està disponible per a vosaltres. Demaneu accés al seu administrador."
     },
     "translate": {
       "menuLabel": "Tradueix des de OneDrive / SharePoint",

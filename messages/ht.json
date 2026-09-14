@@ -861,7 +861,8 @@
       "toolRoutingUnavailable": "Routaj zouti pa disponib — ap reponn san zouti…",
       "webSearchLimitReached": "Limit rechèch entènèt chak jou rive — ap reponn san rechèch…",
       "codeInterpreterLimitReached": "Limit ekzekisyon kòd chak jou rive — ap reponn san kouri kòd…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Rechèch nan baz konesans lan echwe — repons lan pap itilize dokiman ajan an"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# zouti itilize} other {# zouti yo itilize}}",
@@ -4676,7 +4677,42 @@
     "openFormTemplateEditor": "Modifye",
     "deleteFormTemplate": "Efase",
     "deleteFormTemplateConfirm": "Efase modèl \"{name}\"? Konvèsasyon ki te deja itilize li ap kenbe kopi pa yo.",
-    "confirmDeleteFormTemplate": "Efase modèl la"
+    "confirmDeleteFormTemplate": "Efase modèl la",
+    "m365SessionDisconnected": "Microsoft 365 dekonèkte pou kont ou. Sous yo analize ak aksè pa w sou Microsoft 365, konekte l anvan nan Anviwònman › Koneksyon.",
+    "m365SessionNotConnected": "Sesyon Microsoft 365 ou pa disponib, sous yo pap ka analize oswa endèks. Dekonekte epi reloge, epi tcheke Anviwònman › Koneksyon.",
+    "m365SessionConsentMissing": "Òganizasyon w poko apwouve pèmisyon Microsoft 365 yo pou analize ak endèks fichye yo. Mande administratè tenant ou.",
+    "m365OpenConnections": "Louvri Anviwònman › Koneksyon",
+    "m365ActionNeedsConnection": "Bezwen yon koneksyon Microsoft 365",
+    "m365PlanFailedSaveAnyway": "Ou ka toujou sove — limit dokiman an ap tcheke ankò lè wap endèks.",
+    "m365AgentRunVisible": "Kounye a vizib pou itilizatè yo — lòt itilizatè ka bezwen relanse app la pou wè li.",
+    "m365AgentRunHidden": "Toujou kache pou itilizatè yo: pa gen okenn dokiman ki te endèks. Gade rezon yo anba a.",
+    "m365AgentAttentionFiles": "{count, plural, one {# fichye bezwen atansyon} other {# fichye bezwen atansyon}}",
+    "m365AgentAttentionLoading": "Chaje detay fichye yo…",
+    "m365AgentAttentionFailed": "Pa ka chaje detay fichye yo.",
+    "m365AgentAttentionNone": "Pa gen detay pou chak fichye ki anrejistre pou dènye egzekisyon an.",
+    "m365AgentAutoOcrLabel": "PDF eskane otomatikman ak OCR pandan endèks",
+    "m365AgentAutoOcrHelp": "Etenn pa default — OCR ap peye chak paj. Si ouvè, chak endèks ka fè OCR PDF eskane jiska {perRun} paj pa kouri ak {perFile} paj pa fichye; fichye pi gwo oswa ki depase bidjè yo kenbe opsyon Prepare (OCR).",
+    "m365AgentIndexRetry": "Repran",
+    "m365PrepareAllButton": "Prepare tout PDF eskane yo ({count})",
+    "m365PrepareAllConfirm": "Fè OCR {count, plural, one {# PDF eskane} other {# PDF eskane yo}} kounye a, yonn apre lòt? OCR ap peye pa paj; chak fichye gen yon plafon {pages} paj. Kenbe tab sa a louvri.",
+    "m365PrepareAllProgress": "Ap prepare {current} sou {total} · {name}",
+    "m365PrepareAllCancel": "Anile apre fichye sa a",
+    "m365PrepareAllCancelling": "Ap fini fichye aktyèl la, apre sa ap sispann…",
+    "m365PrepareAllDone": "Prepare {prepared} sou {total} fichye. Kouri Mizajou pou endèks yo.",
+    "m365PrepareAllFailures": "{count, plural, one {# fichye} other {# fichye}} pa t ka prepare:",
+    "m365ItemOcrPages": "OCR fèt sou {count, plural, one {# paj} other {# paj}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Bidjè OCR pou kouri sa a deja depanse — itilize Prepare (OCR)",
+      "tooManyPages": "Trop paj pou OCR otomatik (limit {perFile}) — itilize Prepare (OCR)",
+      "engineUnavailable": "Pa gen motè OCR configuré — mande yon administratè"
+    },
+    "m365AgentIndexStepLost": "Pèdi kontak ak travay endèksasyon an apre plizyè tantativ — toujou anrejistre sou sèvè a. Sèvi ak Kontinye pou swiv.",
+    "m365AgentDiscardEditsConfirm": "Vle jete chanjman ou poko sove yo sou ajan sa a?",
+    "m365PlanFileUnsupported": "Pap endèks — fichye .{ext} pa sipòte. Konvèti yo nan PDF, DOCX, XLSX oswa PPTX.",
+    "m365PlanFileSkipped": "Pap endèks — {reason}",
+    "m365PlanFileNeedsPreparation": "Pap endèks jiskaske prepare — {hint}",
+    "m365PlanFileLastRun": "Dènye kouri: {status}",
+    "m365ItemNoTextOcr": "pa jwenn okenn tèks — eskane? itilize Prepare (OCR)"
   },
   "localModels": {
     "title": "Modèl lokal",
@@ -5478,7 +5514,12 @@
       },
       "sitesNoResults": "Pa jwenn okenn sit pou “{query}”",
       "sitesEmpty": "Pa gen okenn sit SharePoint disponib. Eseye fè rechèch ak non an.",
-      "itemCount": "{count, plural, one {# atik} other {# atik yo}}"
+      "itemCount": "{count, plural, one {# atik} other {# atik yo}}",
+      "pickHint": "Klike sou yon katab pou navige ladan li, oswa itilize Ajoute pou endèks tout sa ki ladan li. Tout bibliyotèk dokiman ak fichye ekip yo ka ajoute tou.",
+      "addFolderHint": "Ajoute katab sa a ak tout sa ki ladan li kòm yon sèl sous",
+      "addCurrentFolder": "Ajoute katab sa a",
+      "addLibrary": "Ajoute bibliyotèk la",
+      "addTeamFiles": "Ajoute fichye ekip yo"
     },
     "mail": {
       "menuLabel": "Enpòte imèl…",
@@ -5582,7 +5623,10 @@
       "ownedBy": "posede pa {owner}",
       "requestAccess": "Mande aksè",
       "noneHint": "Louvri fichye a pou mande aksè bò kote pwopriyetè li; ajan an ap fonksyone lè yo otorize aksè a.",
-      "partialHint": "Louvri fichye a pou mande aksè — repons yo ap enkli l otomatikman lè aksè a apwouve."
+      "partialHint": "Louvri fichye a pou mande aksè — repons yo ap enkli l otomatikman lè aksè a apwouve.",
+      "verifyFailed": "Pa t ka verifye aksè ou a fichye ajan sa a. Repons yo ka pa konplè jouk li eseye ankò.",
+      "retry": "Repran",
+      "notAvailable": "Ajan sa a pa disponib pou ou. Mande administratè a pou aksè."
     },
     "translate": {
       "menuLabel": "Tradui soti OneDrive / SharePoint",

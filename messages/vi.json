@@ -804,7 +804,8 @@
       "toolRoutingUnavailable": "Định tuyến công cụ không khả dụng — trả lời mà không dùng công cụ…",
       "webSearchLimitReached": "Đã đạt giới hạn tìm kiếm web hàng ngày — trả lời mà không tìm kiếm…",
       "codeInterpreterLimitReached": "Đã đạt giới hạn thực thi mã hàng ngày — trả lời mà không chạy mã…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Tìm kiếm cơ sở tri thức thất bại — câu trả lời sẽ không sử dụng tài liệu của tác nhân"
     },
     "toolSummary": {
       "usedTools": "Đã sử dụng {count, plural, one {# công cụ} other {# công cụ}}",
@@ -4723,7 +4724,42 @@
     "openFormTemplateEditor": "Chỉnh sửa",
     "deleteFormTemplate": "Xóa",
     "deleteFormTemplateConfirm": "Xóa mẫu \"{name}\"? Các cuộc trò chuyện đã sử dụng mẫu này sẽ giữ lại bản sao lưu.",
-    "confirmDeleteFormTemplate": "Xóa mẫu"
+    "confirmDeleteFormTemplate": "Xóa mẫu",
+    "m365SessionDisconnected": "Microsoft 365 đã bị ngắt kết nối với tài khoản của bạn. Nguồn sẽ được quét và lập chỉ mục bằng quyền truy cập Microsoft 365 của bạn, hãy kết nối trong Cài đặt › Kết nối.",
+    "m365SessionNotConnected": "Phiên Microsoft 365 của bạn hiện không khả dụng, do đó không thể quét hoặc lập chỉ mục nguồn. Đăng xuất và đăng nhập lại, sau đó kiểm tra Cài đặt › Kết nối.",
+    "m365SessionConsentMissing": "Tổ chức của bạn chưa phê duyệt quyền Microsoft 365 cần thiết để quét và lập chỉ mục tệp. Vui lòng liên hệ quản trị viên tenant.",
+    "m365OpenConnections": "Mở Cài đặt › Kết nối",
+    "m365ActionNeedsConnection": "Cần có kết nối Microsoft 365",
+    "m365PlanFailedSaveAnyway": "Bạn vẫn có thể lưu — giới hạn tài liệu sẽ được kiểm tra lại khi lập chỉ mục.",
+    "m365AgentRunVisible": "Đã hiển thị với người dùng — người dùng khác có thể cần tải lại ứng dụng để nhìn thấy.",
+    "m365AgentRunHidden": "Vẫn đang ẩn với người dùng: chưa có tài liệu nào được lập chỉ mục. Xem lý do bên dưới.",
+    "m365AgentAttentionFiles": "{count, plural, one {# tệp cần chú ý} other {# tệp cần chú ý}}",
+    "m365AgentAttentionLoading": "Đang tải chi tiết tệp…",
+    "m365AgentAttentionFailed": "Không thể tải chi tiết tệp.",
+    "m365AgentAttentionNone": "Không ghi nhận chi tiết từng tệp cho lần chạy cuối.",
+    "m365AgentAutoOcrLabel": "Tự động quét OCR PDF trong quá trình lập chỉ mục",
+    "m365AgentAutoOcrHelp": "Tắt mặc định — OCR tính phí theo số trang. Khi bật, mỗi lần lập chỉ mục sẽ OCR PDF quét tối đa {perRun} trang mỗi lần chạy và {perFile} trang mỗi tệp; tệp lớn hơn hoặc quá ngân sách sẽ giữ tùy chọn Chuẩn bị (OCR).",
+    "m365AgentIndexRetry": "Thử lại",
+    "m365PrepareAllButton": "Chuẩn bị tất cả PDF đã quét ({count})",
+    "m365PrepareAllConfirm": "OCR {count, plural, one {# PDF đã quét} other {# PDF đã quét}} ngay bây giờ, từng tệp một? OCR tính phí theo số trang; mỗi tệp tối đa {pages} trang. Giữ tab này mở.",
+    "m365PrepareAllProgress": "Đang chuẩn bị {current} trên tổng số {total} · {name}",
+    "m365PrepareAllCancel": "Hủy sau tệp này",
+    "m365PrepareAllCancelling": "Đang hoàn tất tệp hiện tại, sau đó sẽ dừng…",
+    "m365PrepareAllDone": "Đã chuẩn bị {prepared} trên tổng số {total} tệp. Chạy Làm mới để lập chỉ mục.",
+    "m365PrepareAllFailures": "{count, plural, one {Không thể chuẩn bị # tệp} other {Không thể chuẩn bị # tệp}}:",
+    "m365ItemOcrPages": "Đã OCR {count, plural, one {# trang} other {# trang}}",
+    "m365ItemOcrSkipped": {
+      "budget": "Ngân sách OCR cho lần chạy này đã hết — sử dụng Chuẩn bị (OCR)",
+      "tooManyPages": "Quá nhiều trang cho tự động OCR (giới hạn {perFile}) — sử dụng Chuẩn bị (OCR)",
+      "engineUnavailable": "Chưa cấu hình động cơ OCR — liên hệ quản trị viên"
+    },
+    "m365AgentIndexStepLost": "Mất kết nối với công việc lập chỉ mục sau vài lần thử — vẫn được ghi lại trên máy chủ. Sử dụng Tiếp tục để tiếp tục.",
+    "m365AgentDiscardEditsConfirm": "Hủy các chỉnh sửa chưa lưu cho tác nhân này?",
+    "m365PlanFileUnsupported": "Sẽ không được lập chỉ mục — tệp .{ext} không được hỗ trợ. Chuyển đổi sang PDF, DOCX, XLSX hoặc PPTX.",
+    "m365PlanFileSkipped": "Sẽ không được lập chỉ mục — {reason}",
+    "m365PlanFileNeedsPreparation": "Chưa lập chỉ mục cho đến khi chuẩn bị — {hint}",
+    "m365PlanFileLastRun": "Lần chạy cuối: {status}",
+    "m365ItemNoTextOcr": "không tìm thấy văn bản — quét? sử dụng Chuẩn bị (OCR)"
   },
   "localModels": {
     "title": "Mô hình cục bộ",
@@ -5525,7 +5561,12 @@
       },
       "sitesNoResults": "Không tìm thấy trang web nào cho “{query}”",
       "sitesEmpty": "Không có trang SharePoint nào. Vui lòng thử tìm kiếm theo tên.",
-      "itemCount": "{count, plural, one {# mục} other {# mục}}"
+      "itemCount": "{count, plural, one {# mục} other {# mục}}",
+      "pickHint": "Nhấp vào một thư mục để duyệt, hoặc dùng Thêm để lập chỉ mục tất cả trong đó. Cũng có thể thêm thư viện tài liệu hoặc tệp nhóm.",
+      "addFolderHint": "Thêm thư mục này và tất cả nội dung bên trong làm một nguồn",
+      "addCurrentFolder": "Thêm thư mục này",
+      "addLibrary": "Thêm thư viện",
+      "addTeamFiles": "Thêm tệp nhóm"
     },
     "mail": {
       "menuLabel": "Nhập email…",
@@ -5629,7 +5670,10 @@
       "ownedBy": "thuộc sở hữu của {owner}",
       "requestAccess": "Yêu cầu quyền truy cập",
       "noneHint": "Mở một tệp để yêu cầu quyền truy cập từ chủ sở hữu; agent sẽ hoạt động khi được cấp quyền.",
-      "partialHint": "Mở một tệp để yêu cầu quyền truy cập — câu trả lời sẽ tự động bao gồm khi được cấp quyền."
+      "partialHint": "Mở một tệp để yêu cầu quyền truy cập — câu trả lời sẽ tự động bao gồm khi được cấp quyền.",
+      "verifyFailed": "Không thể xác minh quyền truy cập của bạn vào tệp của tác nhân này. Câu trả lời có thể chưa đầy đủ cho đến khi thử lại.",
+      "retry": "Thử lại",
+      "notAvailable": "Bạn không có quyền truy cập tác nhân này. Liên hệ quản trị viên để được quyền truy cập."
     },
     "translate": {
       "menuLabel": "Dịch từ OneDrive / SharePoint",

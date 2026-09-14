@@ -749,7 +749,8 @@
       "toolRoutingUnavailable": "Tool-Routing nicht verfügbar – Antwort ohne Tools…",
       "webSearchLimitReached": "Tägliches Web-Suchlimit erreicht – Antwort ohne Suche…",
       "codeInterpreterLimitReached": "Tägliches Code-Ausführungslimit erreicht – Antwort ohne Code-Ausführung…",
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "knowledgeSearchFailed": "Suche in der Wissensdatenbank fehlgeschlagen — die Antwort verwendet keine Dokumente des Agents."
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# Tool verwendet} other {# Tools verwendet}}",
@@ -4692,7 +4693,42 @@
     "openFormTemplateEditor": "Bearbeiten",
     "deleteFormTemplate": "Löschen",
     "deleteFormTemplateConfirm": "Vorlage „{name}“ löschen? Gespräche, die sie bereits nutzen, behalten ihren Stand.",
-    "confirmDeleteFormTemplate": "Vorlage löschen"
+    "confirmDeleteFormTemplate": "Vorlage löschen",
+    "m365SessionDisconnected": "Microsoft 365 ist für Ihr Konto getrennt. Quellen werden mit Ihrem eigenen Microsoft 365-Zugang gescannt und indexiert. Verbinden Sie diesen zuerst unter Einstellungen › Verbindungen.",
+    "m365SessionNotConnected": "Ihre Microsoft 365-Sitzung ist nicht verfügbar, daher können Quellen nicht gescannt oder indexiert werden. Melden Sie sich ab und wieder an und prüfen Sie dann Einstellungen › Verbindungen.",
+    "m365SessionConsentMissing": "Ihre Organisation hat die für das Scannen und Indexieren benötigten Microsoft 365-Berechtigungen noch nicht genehmigt. Wenden Sie sich an Ihren Tenant-Administrator.",
+    "m365OpenConnections": "Einstellungen › Verbindungen öffnen",
+    "m365ActionNeedsConnection": "Microsoft 365-Verbindung erforderlich",
+    "m365PlanFailedSaveAnyway": "Sie können dennoch speichern — das Dokumentenlimit wird beim Indexieren erneut geprüft.",
+    "m365AgentRunVisible": "Jetzt für Benutzer sichtbar — andere Benutzer müssen die App möglicherweise neu laden, um dies zu sehen.",
+    "m365AgentRunHidden": "Noch für Benutzer verborgen: Es wurde kein Dokument indexiert. Gründe siehe unten.",
+    "m365AgentAttentionFiles": "{count, plural, one {# Datei benötigt Aufmerksamkeit} other {# Dateien benötigen Aufmerksamkeit}}",
+    "m365AgentAttentionLoading": "Dateidetails werden geladen…",
+    "m365AgentAttentionFailed": "Dateidetails konnten nicht geladen werden.",
+    "m365AgentAttentionNone": "Keine Dateidetails für den letzten Lauf erfasst.",
+    "m365AgentAutoOcrLabel": "PDFs bei der Indexierung automatisch per OCR scannen",
+    "m365AgentAutoOcrHelp": "Standardmäßig deaktiviert — OCR wird pro Seite abgerechnet. Wenn aktiviert, werden bei jedem Lauf gescannte PDFs mit bis zu {perRun} Seiten pro Lauf und {perFile} Seiten pro Datei per OCR bearbeitet; größere oder zu teure Dateien behalten die Option „Vorbereiten (OCR)“.",
+    "m365AgentIndexRetry": "Wiederholen",
+    "m365PrepareAllButton": "Alle gescannten PDFs vorbereiten ({count})",
+    "m365PrepareAllConfirm": "Jetzt {count, plural, one {# gescanntes PDF} other {# gescannte PDFs}} nacheinander per OCR verarbeiten? OCR wird pro Seite abgerechnet; jede Datei ist auf {pages} Seiten begrenzt. Lassen Sie diesen Tab geöffnet.",
+    "m365PrepareAllProgress": "Vorbereitung {current} von {total} · {name}",
+    "m365PrepareAllCancel": "Nach dieser Datei abbrechen",
+    "m365PrepareAllCancelling": "Aktuelle Datei wird beendet, dann wird gestoppt…",
+    "m365PrepareAllDone": "{prepared} von {total} Dateien vorbereitet. Führen Sie „Aktualisieren“ aus, um sie zu indexieren.",
+    "m365PrepareAllFailures": "{count, plural, one {# Datei} other {# Dateien}} konnten nicht vorbereitet werden:",
+    "m365ItemOcrPages": "{count, plural, one {# Seite per OCR erkannt} other {# Seiten per OCR erkannt}}",
+    "m365ItemOcrSkipped": {
+      "budget": "OCR-Budget für diesen Lauf aufgebraucht — nutzen Sie „Vorbereiten (OCR)“",
+      "tooManyPages": "Zu viele Seiten für Auto-OCR (Limit {perFile}) — nutzen Sie „Vorbereiten (OCR)“",
+      "engineUnavailable": "Kein OCR-Modul konfiguriert — Administrator kontaktieren"
+    },
+    "m365AgentIndexStepLost": "Verbindung zum Indexierungsjob nach mehreren Versuchen verloren – er ist weiterhin auf dem Server verzeichnet. Nutzen Sie „Fortsetzen“.",
+    "m365AgentDiscardEditsConfirm": "Möchten Sie Ihre ungespeicherten Änderungen an diesem Agenten verwerfen?",
+    "m365PlanFileUnsupported": "Wird nicht indexiert — .{ext}-Dateien werden nicht unterstützt. Konvertieren Sie sie in PDF, DOCX, XLSX oder PPTX.",
+    "m365PlanFileSkipped": "Wird nicht indexiert — {reason}",
+    "m365PlanFileNeedsPreparation": "Wird bis zur Vorbereitung nicht indexiert — {hint}",
+    "m365PlanFileLastRun": "Letzter Lauf: {status}",
+    "m365ItemNoTextOcr": "kein Text gefunden — gescannt? Nutzen Sie „Vorbereiten (OCR)“"
   },
   "localModels": {
     "title": "Lokale Modelle",
@@ -5494,7 +5530,12 @@
       },
       "sitesNoResults": "Keine Sites für „{query}“ gefunden",
       "sitesEmpty": "Keine SharePoint-Sites verfügbar. Bitte versuchen Sie es mit einer Namenssuche.",
-      "itemCount": "{count, plural, one {# Element} other {# Elemente}}"
+      "itemCount": "{count, plural, one {# Element} other {# Elemente}}",
+      "pickHint": "Klicken Sie auf einen Ordner, um ihn zu durchsuchen, oder verwenden Sie „Hinzufügen“, um alles darin zu indexieren. Ganze Dokumentbibliotheken und Teamdateien können ebenfalls hinzugefügt werden.",
+      "addFolderHint": "Diesen Ordner und alles darin als eine Quelle hinzufügen",
+      "addCurrentFolder": "Diesen Ordner hinzufügen",
+      "addLibrary": "Bibliothek hinzufügen",
+      "addTeamFiles": "Teamdateien hinzufügen"
     },
     "mail": {
       "menuLabel": "E-Mail importieren…",
@@ -5598,7 +5639,10 @@
       "ownedBy": "Besitzer: {owner}",
       "requestAccess": "Zugriff anfordern",
       "noneHint": "Öffnen Sie eine Datei, um Zugriff vom Eigentümer anzufordern; der Agent funktioniert, sobald der Zugriff gewährt ist.",
-      "partialHint": "Öffnen Sie eine Datei, um Zugriff anzufordern – Antworten enthalten sie automatisch, sobald der Zugriff gewährt ist."
+      "partialHint": "Öffnen Sie eine Datei, um Zugriff anzufordern – Antworten enthalten sie automatisch, sobald der Zugriff gewährt ist.",
+      "verifyFailed": "Ihr Zugriff auf die Dateien dieses Agents konnte nicht überprüft werden. Antworten könnten unvollständig sein, bis dies wiederholt wird.",
+      "retry": "Wiederholen",
+      "notAvailable": "Dieser Agent steht Ihnen nicht zur Verfügung. Bitten Sie den Administrator um Zugriff."
     },
     "translate": {
       "menuLabel": "Übersetzen aus OneDrive / SharePoint",
