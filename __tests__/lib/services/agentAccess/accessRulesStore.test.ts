@@ -9,6 +9,7 @@ import {
   readRule,
   writeConfig,
   writeHistoryEntry,
+  writeM365AgentManifest,
   writePromptAgent,
   writePromptAgentHistoryEntry,
   writeRule,
@@ -204,6 +205,23 @@ describe('accessRulesStore', () => {
       await expect(writeRule(storage, sampleRule, '"e"')).rejects.toEqual({
         statusCode: 403,
       });
+    });
+  });
+
+  describe('writeM365AgentManifest', () => {
+    it('overwrites unconditionally — a second index run must not 409 on the first run’s manifest', async () => {
+      client.upload.mockResolvedValue({ etag: '"m2"' });
+      await writeM365AgentManifest(storage, {
+        version: 1,
+        agentId: 'm365-aaaaaaaaaaaa',
+        updatedAt: '2026-09-14T00:00:00.000Z',
+        sources: [],
+      });
+      const [, , options] = client.upload.mock.calls[0];
+      expect(options).not.toHaveProperty('conditions');
+      expect(storage.getBlockBlobClient).toHaveBeenCalledWith(
+        expect.stringContaining('m365-agent-manifests/m365-aaaaaaaaaaaa.json'),
+      );
     });
   });
 
