@@ -62,6 +62,7 @@ import {
   ClientIndexJobSummary,
   ClientRefreshPreview,
   ClientSourcePlan,
+  M365DocumentCapCeilings,
   clientCanonicalAgentKey,
 } from './types';
 
@@ -344,6 +345,11 @@ const DEFAULT_MAX_SOURCES = 50;
 const DEFAULT_MAX_BYTES = 512 * 1024 * 1024;
 /** Auto-OCR per-run page budget default (env M365_AGENT_AUTO_OCR_MAX_PAGES_PER_RUN). */
 const DEFAULT_AUTO_OCR_MAX_PAGES_PER_RUN = 200;
+/** Role ceilings for the per-agent cap override until the listing serves them. */
+const DEFAULT_CAP_CEILINGS: M365DocumentCapCeilings = {
+  localAdmin: 100,
+  globalAdmin: 200,
+};
 /** Selection edits re-plan after this pause (metadata calls only). */
 const PLAN_DEBOUNCE_MS = 400;
 /**
@@ -461,6 +467,10 @@ interface M365AgentEditorProps {
   ocrMaxPages: number;
   autoOcrMaxPagesPerRun: number;
   autoOcrMaxPagesPerFile: number;
+  /** Role ceilings for the per-agent document cap override. */
+  capCeilings: M365DocumentCapCeilings;
+  /** Global admins get a numeric limit input; local admins a bounded raise. */
+  isGlobalAdmin: boolean;
   /** Starts an index job for the agent being edited (existing agents). */
   onStartIndex?: (mode: 'full' | 'refresh') => void;
   onSaved: () => void;
@@ -482,6 +492,8 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   ocrMaxPages,
   autoOcrMaxPagesPerRun,
   autoOcrMaxPagesPerFile,
+  capCeilings,
+  isGlobalAdmin,
   onStartIndex,
   onSaved,
   onCancel,
@@ -507,6 +519,17 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   );
   // Off by default: OCR is billed per page, so it is an explicit opt-in.
   const [autoOcr, setAutoOcr] = useState(existing?.agent.autoOcr ?? false);
+  /**
+   * Per-agent document cap (null = the env default). Raising it is a
+   * deliberate, confirmed act: the point is to make the admin reconsider
+   * before a bigger agent is embedded, probed per user and answered.
+   */
+  const [maxDocumentsOverride, setMaxDocumentsOverride] = useState<
+    number | null
+  >(existing?.agent.maxDocumentsOverride ?? null);
+  const [capInput, setCapInput] = useState('');
+  /** Server refused the override for this role (M365_CAP_ABOVE_ROLE). */
+  const [capError, setCapError] = useState<string | null>(null);
   const [sources, setSources] = useState<EditorSource[]>(
     (existing?.agent.sources ?? []).map(toEditorSource),
   );
@@ -580,7 +603,10 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   // Re-plan whenever the selection changes (debounced). The plan is what
   // the server enforces at save and index time, so the numbers shown are
   // the numbers that count.
-  const selectionKey = JSON.stringify(sources.map(toSourcePayload));
+  const selectionKey = JSON.stringify({
+    sources: sources.map(toSourcePayload),
+    maxDocuments: maxDocumentsOverride,
+  });
   useEffect(() => {
     if (sources.length === 0) {
       setPlan(null);
@@ -598,6 +624,11 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           body: JSON.stringify({
             sources: sources.map(toSourcePayload),
             ...(existing ? { agentId: existing.agent.id } : {}),
+            // The draft's cap: the server clamps it to the caller's role
+            // ceiling and answers with the EFFECTIVE cap.
+            ...(maxDocumentsOverride !== null
+              ? { maxDocuments: maxDocumentsOverride }
+              : {}),
           }),
         });
         if (requestId !== planRequest.current) return;
@@ -650,6 +681,46 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   };
 
   const overCap = !!plan && (plan.overDocumentCap || plan.overByteCap);
+  /** The cap the server will enforce for this draft (plan wins when present). */
+  const effectiveCap = plan?.maxDocuments ?? maxDocumentsOverride ?? maxSources;
+  const roleCeiling = isGlobalAdmin
+    ? capCeilings.globalAdmin
+    : capCeilings.localAdmin;
+  const needed = plan?.totalDocuments ?? 0;
+  /** Local-admin raise target: the need rounded up to the next 10, capped. */
+  const localRaiseTarget = Math.min(
+    Math.ceil(needed / 10) * 10,
+    capCeilings.localAdmin,
+  );
+  const needsGlobalAdmin = !isGlobalAdmin && needed > capCeilings.localAdmin;
+  /** Largest source by included documents — where trimming pays off most. */
+  const largestSourceKey = useMemo(() => {
+    if (!plan?.overDocumentCap) return null;
+    let best: { key: string; count: number } | null = null;
+    for (const sourcePlan of plan.plans) {
+      const count = sourcePlan.counts.indexable;
+      if (!best || count > best.count) {
+        best = { key: sourceKey(sourcePlan), count };
+      }
+    }
+    return best?.key ?? null;
+  }, [plan]);
+  /** Documents of one source that still fit under the cap next to the others. */
+  const keepNewestLimitFor = (sourcePlan: ClientSourcePlan | undefined) => {
+    if (!plan?.overDocumentCap || !sourcePlan) return undefined;
+    const others = plan.totalDocuments - sourcePlan.counts.indexable;
+    return Math.max(0, effectiveCap - others);
+  };
+
+  const applyCap = (value: number) => {
+    const limit = Math.max(1, Math.min(Math.floor(value), roleCeiling));
+    const confirmed = window.confirm(
+      t('m365CapRaiseConfirm', { limit, default: maxSources }),
+    );
+    if (!confirmed) return;
+    setCapError(null);
+    setMaxDocumentsOverride(limit === maxSources ? null : limit);
+  };
   const [isSaving, setIsSaving] = useState(false);
   /**
    * 409 state: the record that won the race (null = deleted meanwhile).
@@ -720,6 +791,8 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       systemPrompt.trim() !== existing.agent.systemPrompt ||
       (chatModelId || null) !== (existing.agent.chatModelId ?? null) ||
       autoOcr !== (existing.agent.autoOcr ?? false) ||
+      (maxDocumentsOverride ?? null) !==
+        (existing.agent.maxDocumentsOverride ?? null) ||
       JSON.stringify(sources.map(toSourcePayload)) !==
         JSON.stringify(
           existing.agent.sources.map(toEditorSource).map(toSourcePayload),
@@ -735,6 +808,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       [t('agentDescriptionPlaceholder')]: description.trim(),
       [t('m365AgentSystemPromptPlaceholder')]: systemPrompt.trim(),
       [t('agentModelLabel')]: chatModelId || '',
+      [t('m365CapRaiseInputLabel')]: String(maxDocumentsOverride ?? maxSources),
       [t('m365AgentSources')]: sourcesSummary(sources),
     };
     const theirs: Record<string, string> = {
@@ -742,6 +816,9 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       [t('agentDescriptionPlaceholder')]: latest.description,
       [t('m365AgentSystemPromptPlaceholder')]: latest.systemPrompt,
       [t('agentModelLabel')]: latest.chatModelId ?? '',
+      [t('m365CapRaiseInputLabel')]: String(
+        latest.maxDocumentsOverride ?? maxSources,
+      ),
       [t('m365AgentSources')]: sourcesSummary(latest.sources),
     };
     return Object.keys(yours)
@@ -755,6 +832,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     setDescription(latest.agent.description);
     setSystemPrompt(latest.agent.systemPrompt);
     setChatModelId(latest.agent.chatModelId ?? '');
+    setMaxDocumentsOverride(latest.agent.maxDocumentsOverride ?? null);
     setSources(latest.agent.sources.map(toEditorSource));
   };
 
@@ -801,6 +879,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           chatModelId: chatModelId || null,
           topK: existing?.agent.ragConfig.topK ?? 10,
           autoOcr,
+          maxDocumentsOverride,
           sources: sources.map(toSourcePayload),
         }),
       });
@@ -810,6 +889,12 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       }
       if (!response.ok) {
         const body = await response.json().catch(() => null);
+        if (response.status === 400 && body?.code === 'M365_CAP_ABOVE_ROLE') {
+          // Role ceiling: keep the draft, say what the ceiling is, and let
+          // the admin lower the number or ask a global admin.
+          setCapError(body.error || t('m365CapAboveRole'));
+          return;
+        }
         if (response.status === 400 && body?.error) toast.error(body.error);
         setSaveError(true);
         return;
@@ -1048,9 +1133,14 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
               <span className="font-semibold">
                 {t('m365CapDocuments', {
                   count: plan?.totalDocuments ?? 0,
-                  max: maxSources,
+                  max: effectiveCap,
                 })}
               </span>
+              {maxDocumentsOverride !== null && (
+                <span className="ml-2 text-gray-600 dark:text-gray-400">
+                  {t('m365CapOverrideNote', { limit: maxDocumentsOverride })}
+                </span>
+              )}
               {' · '}
               {t('m365CapBytes', {
                 bytes: formatBytes(plan?.totalBytes ?? 0),
@@ -1062,8 +1152,86 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                 </span>
               )}
               {plan?.overDocumentCap && (
+                <div className="mt-1 space-y-1">
+                  <p>{t('m365CapOverDocuments', { max: effectiveCap })}</p>
+                  <p>{t('m365PlanTrimHint')}</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {isGlobalAdmin ? (
+                      <>
+                        <label className="flex items-center gap-1">
+                          <span>{t('m365CapRaiseInputLabel')}</span>
+                          <input
+                            type="number"
+                            min={1}
+                            max={capCeilings.globalAdmin}
+                            value={
+                              capInput ||
+                              String(
+                                Math.min(
+                                  Math.max(localRaiseTarget, needed),
+                                  capCeilings.globalAdmin,
+                                ),
+                              )
+                            }
+                            onChange={(e) => setCapInput(e.target.value)}
+                            aria-label={t('m365CapRaiseInputLabel')}
+                            className="w-20 rounded border border-gray-300 bg-white px-1.5 py-0.5 text-xs text-gray-900 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100"
+                          />
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            applyCap(
+                              Number(capInput) ||
+                                Math.min(
+                                  Math.max(localRaiseTarget, needed),
+                                  capCeilings.globalAdmin,
+                                ),
+                            )
+                          }
+                          className="rounded-md border border-red-300 px-2 py-0.5 font-medium text-red-800 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/40"
+                        >
+                          {t('m365CapRaiseApply')}
+                        </button>
+                      </>
+                    ) : (
+                      localRaiseTarget > effectiveCap && (
+                        <button
+                          type="button"
+                          onClick={() => applyCap(localRaiseTarget)}
+                          className="rounded-md border border-red-300 px-2 py-0.5 font-medium text-red-800 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/40"
+                        >
+                          {t('m365CapRaiseButton', { limit: localRaiseTarget })}
+                        </button>
+                      )
+                    )}
+                  </div>
+                  {needsGlobalAdmin && (
+                    <p className="text-red-700 dark:text-red-400">
+                      {t('m365CapNeedsGlobalAdmin', {
+                        limit: capCeilings.localAdmin,
+                      })}
+                    </p>
+                  )}
+                </div>
+              )}
+              {maxDocumentsOverride !== null && (
                 <p className="mt-1">
-                  {t('m365CapOverDocuments', { max: maxSources })}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCapError(null);
+                      setMaxDocumentsOverride(null);
+                    }}
+                    className="underline"
+                  >
+                    {t('m365CapResetDefault', { default: maxSources })}
+                  </button>
+                </p>
+              )}
+              {capError && (
+                <p role="alert" className="mt-1 text-red-700 dark:text-red-400">
+                  {capError}
                 </p>
               )}
               {plan?.overByteCap && (
@@ -1146,6 +1314,10 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                     onPrepared={() => setPlanVersion((v) => v + 1)}
                     ocrMaxPages={ocrMaxPages}
                     autoOcrMaxPagesPerFile={autoOcrMaxPagesPerFile}
+                    autoExpand={largestSourceKey === sourceKey(source)}
+                    keepNewestLimit={keepNewestLimitFor(
+                      planBySourceKey.get(sourceKey(source)),
+                    )}
                     onChange={(patch) => updateSelection(source, patch)}
                   />
                 </li>
@@ -1496,6 +1668,9 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   const autoOcrMaxPagesPerFile =
     agentsQuery.data?.autoOcrMaxPagesPerFile ??
     DEFAULT_AUTO_OCR_MAX_PAGES_PER_FILE;
+  const capCeilings: M365DocumentCapCeilings =
+    agentsQuery.data?.maxDocumentsCeilings ?? DEFAULT_CAP_CEILINGS;
+  const isGlobalAdmin = agentsQuery.data?.isGlobalAdmin === true;
 
   return (
     <div className="mt-6 border-t border-gray-200 pt-4 dark:border-gray-700">
@@ -1528,6 +1703,8 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
             ocrMaxPages={ocrMaxPages}
             autoOcrMaxPagesPerRun={autoOcrMaxPagesPerRun}
             autoOcrMaxPagesPerFile={autoOcrMaxPagesPerFile}
+            capCeilings={capCeilings}
+            isGlobalAdmin={isGlobalAdmin}
             onSaved={() => {
               setIsCreating(false);
               invalidate();
@@ -1665,6 +1842,17 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                       </span>
                     </div>
                     <CanonicalKeyChip canonicalKey={entry.canonicalKey} />
+                    {entry.agent.maxDocumentsOverride !== undefined && (
+                      <span
+                        className="inline-block rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
+                        title={entry.agent.maxDocumentsOverrideAt}
+                      >
+                        {t('m365AgentLimitBadge', {
+                          limit: entry.agent.maxDocumentsOverride,
+                          who: entry.agent.maxDocumentsOverrideBy ?? '',
+                        })}
+                      </span>
+                    )}
                     {contentSources === 0 ? (
                       <p className="text-xs font-medium text-red-700 dark:text-red-400">
                         {t('m365AgentStatusNotIndexed')}
@@ -1987,6 +2175,8 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                     ocrMaxPages={ocrMaxPages}
                     autoOcrMaxPagesPerRun={autoOcrMaxPagesPerRun}
                     autoOcrMaxPagesPerFile={autoOcrMaxPagesPerFile}
+                    capCeilings={capCeilings}
+                    isGlobalAdmin={isGlobalAdmin}
                     onStartIndex={(mode) =>
                       void startIndex(entry.agent.id, mode)
                     }
