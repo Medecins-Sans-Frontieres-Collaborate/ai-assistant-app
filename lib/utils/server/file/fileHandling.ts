@@ -9,7 +9,7 @@ import {
   requiresContentValidation,
   validateDocumentContent,
 } from '@/lib/constants/fileLimits';
-import { execFile } from 'child_process';
+import { execFile, spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import fs from 'fs';
 import { lookup } from 'mime-types';
@@ -299,22 +299,65 @@ export async function countPdfPages(buffer: Buffer): Promise<number> {
       pdfjsError instanceof Error ? pdfjsError.message : pdfjsError,
     );
   }
-  const tempPath = buildTempFilePath('pages.pdf');
-  await fs.promises.writeFile(tempPath, new Uint8Array(buffer), {
-    mode: 0o600,
+  // Piped over stdin (`pdfinfo -`): the bytes came off the network and never
+  // need to touch the filesystem for a page count.
+  const { stdout } = await execWithStdin('pdfinfo', ['-'], buffer);
+  const match = /^Pages:\s+(\d+)/m.exec(stdout);
+  if (!match) throw new Error('pdfinfo reported no page count');
+  return Number(match[1]);
+}
+
+/**
+ * Runs a converter that accepts its input on stdin, with the same timeout,
+ * kill signal and output cap as the file-based converters. Non-zero exit
+ * rejects with the tool's stderr (trimmed).
+ */
+function execWithStdin(
+  cmd: string,
+  args: readonly string[],
+  input: Buffer,
+  options?: ExtractionOptions,
+): Promise<{ stdout: string }> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(cmd, args, {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      timeout: CONVERTER_EXEC_OPTS.timeout,
+      killSignal: CONVERTER_EXEC_OPTS.killSignal,
+      ...(options?.signal ? { signal: options.signal } : {}),
+    });
+    const out: Buffer[] = [];
+    const err: Buffer[] = [];
+    let outBytes = 0;
+    child.stdout.on('data', (chunk: Buffer) => {
+      outBytes += chunk.length;
+      if (outBytes > CONVERTER_EXEC_OPTS.maxBuffer) {
+        child.kill(CONVERTER_EXEC_OPTS.killSignal);
+        reject(new Error(`${cmd} output exceeded the size cap`));
+        return;
+      }
+      out.push(chunk);
+    });
+    child.stderr.on('data', (chunk: Buffer) => err.push(chunk));
+    child.on('error', reject);
+    child.on('close', (code) => {
+      if (code === 0) {
+        resolve({ stdout: Buffer.concat(out).toString('utf8') });
+      } else {
+        reject(
+          new Error(
+            `${cmd} exited with ${code ?? 'signal'}: ${Buffer.concat(err)
+              .toString('utf8')
+              .trim()
+              .slice(0, 300)}`,
+          ),
+        );
+      }
+    });
+    // The tool may exit before consuming all input (EPIPE) — the close
+    // handler already reports the outcome.
+    child.stdin.on('error', () => undefined);
+    child.stdin.end(input);
   });
-  try {
-    const { stdout } = await execFileAsync(
-      'pdfinfo',
-      [tempPath],
-      CONVERTER_EXEC_OPTS,
-    );
-    const match = /^Pages:\s+(\d+)/m.exec(stdout);
-    if (!match) throw new Error('pdfinfo reported no page count');
-    return Number(match[1]);
-  } finally {
-    await retryRemoveFile(tempPath, 1);
-  }
 }
 
 /**
