@@ -53,7 +53,11 @@ import {
   graphJson,
 } from '@/lib/services/m365/graphApi';
 
-import { loadDocument } from '@/lib/utils/server/file/fileHandling';
+import {
+  NoExtractableTextError,
+  countPdfPages,
+  loadDocument,
+} from '@/lib/utils/server/file/fileHandling';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { env } from '@/config/environment';
@@ -668,7 +672,13 @@ export async function downloadItemBytes(
 async function downloadAndExtract(
   req: NextRequest,
   item: M365ManifestItem,
-): Promise<{ text: string; lastModified?: string }> {
+): Promise<{
+  text: string;
+  lastModified?: string;
+  /** The downloaded bytes, so an OCR pass needs no second download. */
+  buffer: Buffer;
+  name: string;
+}> {
   const downloaded = await downloadItemBytes(
     req,
     item.driveId,
@@ -683,13 +693,28 @@ async function downloadAndExtract(
     throw new Error(signature.error ?? 'File content does not match its type');
   }
   const file = new File([new Uint8Array(downloaded.buffer)], downloaded.name);
-  return {
-    text: await withTimeout(
+  let text: string;
+  try {
+    text = await withTimeout(
       (signal) => loadDocument(file, { signal }),
       EXTRACTION_TIMEOUT_MS,
       'Extraction',
-    ),
+    );
+  } catch (error) {
+    // A well-formed PDF with no text layer is not a failure of this item;
+    // it is the `noText` outcome (and auto-OCR's input). Real extraction
+    // failures keep propagating with their reasons.
+    if (error instanceof NoExtractableTextError) {
+      text = '';
+    } else {
+      throw error;
+    }
+  }
+  return {
+    text,
     lastModified: downloaded.lastModified,
+    buffer: downloaded.buffer,
+    name: downloaded.name,
   };
 }
 
@@ -1023,6 +1048,39 @@ export type DerivedTextReader = (
   itemId: string,
 ) => Promise<{ eTag: string; text: string } | null>;
 
+/**
+ * Auto-OCR budget for one index run, SHARED by every item of a batch
+ * (items run concurrently). `remainingPages` is decremented synchronously
+ * — before any await on the OCR call — so the per-run cap stays hard even
+ * with three items in flight; a failed or unavailable OCR refunds its
+ * reservation. OCR is billed per page, hence both caps.
+ */
+export interface AutoOcrBudget {
+  remainingPages: number;
+  maxPagesPerFile: number;
+}
+
+export interface IndexJobItemOptions {
+  /** Present when the agent has `autoOcr` on and the run still has budget. */
+  autoOcr?: AutoOcrBudget;
+  signal?: AbortSignal;
+}
+
+function noTextOutcome(
+  item: M365ManifestItem,
+  extra: Pick<M365ManifestItem, 'ocrPages' | 'ocrSkipped'> = {},
+): M365ManifestItem {
+  return {
+    ...item,
+    status: 'noText',
+    indexedChunks: 0,
+    error: undefined,
+    ocrPages: undefined,
+    ocrSkipped: undefined,
+    ...extra,
+  };
+}
+
 export async function indexJobItem(
   req: NextRequest,
   agentId: string,
@@ -1030,10 +1088,13 @@ export async function indexJobItem(
   sourceId: string,
   item: M365ManifestItem,
   readDerived?: DerivedTextReader,
+  options: IndexJobItemOptions = {},
 ): Promise<M365ManifestItem> {
   try {
     let text: string;
     let lastModified: string | undefined;
+    let pdfBytes: { buffer: Buffer; name: string } | undefined;
+    let ocrPages: number | undefined;
     if (item.prepared) {
       // Prepared file: the derived text stands in for extraction. It must
       // match the item's current eTag — otherwise the file changed after
@@ -1047,14 +1108,73 @@ export async function indexJobItem(
       text = derived.text;
       lastModified = item.lastModified;
     } else {
-      ({ text, lastModified } = await downloadAndExtract(req, item));
+      const extracted = await downloadAndExtract(req, item);
+      ({ text, lastModified } = extracted);
+      if (extensionOf(extracted.name) === 'pdf') {
+        pdfBytes = { buffer: extracted.buffer, name: extracted.name };
+      }
     }
-    const chunks = chunkDocument(text);
+    let chunks = chunkDocument(text);
     if (chunks.length === 0) {
       console.warn(
         `[m365-agents] extraction yielded no text for agent ${sanitizeForLog(agentId)} item ${sanitizeForLog(item.itemId)} (scanned/image-only file?)`,
       );
-      return { ...item, status: 'noText', indexedChunks: 0, error: undefined };
+      const budget = options.autoOcr;
+      if (!budget || !pdfBytes) return noTextOutcome(item);
+
+      // Auto-OCR: only within the run's page budget and the per-file cap.
+      let pages: number;
+      try {
+        pages = await countPdfPages(pdfBytes.buffer);
+      } catch (countError) {
+        console.warn(
+          `[m365-agents] could not count pages for ${sanitizeForLog(item.itemId)}; leaving as noText: ${sanitizeForLog(countError)}`,
+        );
+        return noTextOutcome(item);
+      }
+      if (pages > budget.maxPagesPerFile) {
+        return noTextOutcome(item, { ocrSkipped: 'tooManyPages' });
+      }
+      if (pages > budget.remainingPages) {
+        return noTextOutcome(item, { ocrSkipped: 'budget' });
+      }
+      // Reserve synchronously (same tick) so concurrent items cannot
+      // oversubscribe the shared budget while this OCR call is in flight.
+      budget.remainingPages -= pages;
+      const { OcrEngineUnavailableError, ocrPdfBuffer } =
+        await import('@/lib/services/m365/agentPreparationService');
+      let ocrText: string;
+      try {
+        const result = await ocrPdfBuffer(pdfBytes.buffer, pdfBytes.name, {
+          maxPages: pages,
+          signal: options.signal,
+        });
+        ocrText = result.text;
+        ocrPages = result.pages;
+      } catch (ocrError) {
+        budget.remainingPages += pages;
+        if (ocrError instanceof OcrEngineUnavailableError) {
+          return noTextOutcome(item, { ocrSkipped: 'engineUnavailable' });
+        }
+        return {
+          ...item,
+          status: 'failed',
+          indexedChunks: 0,
+          ocrPages: undefined,
+          ocrSkipped: undefined,
+          error: `OCR: ${
+            ocrError instanceof Error
+              ? ocrError.message.slice(0, 280)
+              : 'Unknown error'
+          }`,
+        };
+      }
+      chunks = chunkDocument(ocrText);
+      if (chunks.length === 0) {
+        // Paid for the pages, found nothing (blank scan): keep the count so
+        // the run's usage is honest, and leave the Prepare offer in place.
+        return noTextOutcome(item, { ocrPages });
+      }
     }
     const vectors = await embedTexts(
       chunks.map((c) => c.chunk),
@@ -1082,6 +1202,8 @@ export async function indexJobItem(
       status: 'indexed',
       indexedChunks: docs.length,
       error: undefined,
+      ocrPages,
+      ocrSkipped: undefined,
     };
   } catch (error) {
     if (
