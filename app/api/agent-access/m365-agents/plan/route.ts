@@ -15,7 +15,10 @@
 import { NextRequest } from 'next/server';
 
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
-import { createAgentAccessBlobStorage } from '@/lib/services/agentAccess/accessRulesStore';
+import {
+  createAgentAccessBlobStorage,
+  readM365Agent,
+} from '@/lib/services/agentAccess/accessRulesStore';
 import { resolveAdminStatus } from '@/lib/services/agentAccess/adminAuth';
 import { canEditKey } from '@/lib/services/agentAccess/adminRouteHelpers';
 import {
@@ -125,6 +128,13 @@ export async function POST(request: NextRequest) {
     }
 
     let prepared: Record<string, M365DerivedIndexEntry> | undefined;
+    // The agent's stored cap override, when the caller may edit it: a value
+    // that merely repeats what is already saved is judged against the
+    // GLOBAL ceiling, so a local admin editing an agent a global admin
+    // raised past their own ceiling is not shown "over cap" and locked out
+    // of saving unrelated edits (the save route accepts an unchanged value
+    // the same way).
+    let storedOverride: number | undefined;
     if (
       parsed.data.agentId &&
       canEditKey(
@@ -132,25 +142,31 @@ export async function POST(request: NextRequest) {
         canonicalAgentKey(M365_AGENT_SOURCE, parsed.data.agentId),
       )
     ) {
+      const storage = createAgentAccessBlobStorage();
       try {
-        prepared = (
-          await readDerivedIndex(
-            createAgentAccessBlobStorage(),
-            parsed.data.agentId,
-          )
-        ).index.items;
+        prepared = (await readDerivedIndex(storage, parsed.data.agentId)).index
+          .items;
       } catch {
         prepared = undefined; // plan without preparation info
+      }
+      try {
+        storedOverride = (await readM365Agent(storage, parsed.data.agentId))
+          ?.m365Agent.maxDocumentsOverride;
+      } catch {
+        storedOverride = undefined;
       }
     }
 
     let plan;
     try {
       const requestedCap = parsed.data.maxDocuments;
+      const unchanged =
+        requestedCap !== undefined && requestedCap === storedOverride;
+      const ceiling = roleMaxDocuments(unchanged || status.isGlobalAdmin);
       const maxDocuments =
         requestedCap === undefined
           ? effectiveMaxDocuments(undefined)
-          : Math.min(requestedCap, roleMaxDocuments(status.isGlobalAdmin));
+          : Math.min(requestedCap, ceiling);
       plan = await planSources(
         request,
         session.user.id,
