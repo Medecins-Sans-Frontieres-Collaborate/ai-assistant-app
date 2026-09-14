@@ -34,6 +34,7 @@ import {
   selectStaleChunkIds,
 } from '@/lib/services/m365/agentIndexJobStore';
 import {
+  ENUMERATION_CEILING,
   MAX_M365_AGENT_DOCUMENTS,
   MAX_M365_AGENT_SOURCE_BYTES,
   MAX_M365_SOURCE_FILE_BYTES,
@@ -835,7 +836,9 @@ async function planJobSources(
   userId: string,
   manifest: M365AgentManifest | null = null,
   prepared: Record<string, M365DerivedIndexEntry> | undefined = undefined,
+  options: { enforceCaps?: boolean } = {},
 ): Promise<M365IndexJobSource[]> {
+  const enforceCaps = options.enforceCaps ?? true;
   const manifestBySourceId = new Map(
     (manifest?.sources ?? []).map((s) => [s.sourceId, s]),
   );
@@ -925,19 +928,25 @@ async function planJobSources(
     }
   }
 
-  const counts = sources
-    .flatMap((s) => s.items)
-    .filter((i) => i.tier === 'indexable');
-  const totalDocuments = counts.length;
-  const maxDocuments = effectiveMaxDocuments(agent.maxDocumentsOverride);
-  if (totalDocuments > maxDocuments) {
+  if (!enforceCaps) return sources;
+  const verdict = assessPlannedSources(sources, agent);
+  // A truncated listing would index an arbitrary first slice of a library
+  // and present it as the whole thing — refuse, like the save does.
+  if (verdict.truncatedSourceId) {
     throw new M365Error(
-      `Agent expands to ${totalDocuments} documents, more than the ${maxDocuments} allowed — exclude subfolders, filter by type, or remove sources`,
+      `Source ${verdict.truncatedSourceId} is too large to scan completely (more than ${ENUMERATION_CEILING} matching items) — pick a subfolder or narrow the file-type filter`,
       'graph_error',
       400,
     );
   }
-  const totalBytes = counts.reduce((n, item) => n + item.size, 0);
+  if (verdict.overCap) {
+    throw new M365Error(
+      `Agent expands to ${verdict.totalDocuments} documents, more than the ${verdict.maxDocuments} allowed — exclude subfolders, filter by type, or remove sources`,
+      'graph_error',
+      400,
+    );
+  }
+  const { totalBytes } = verdict;
   if (totalBytes > MAX_M365_AGENT_SOURCE_BYTES) {
     throw new M365Error(
       `Agent sources total ${Math.round(totalBytes / (1024 * 1024))}MB, more than the ${Math.round(MAX_M365_AGENT_SOURCE_BYTES / (1024 * 1024))}MB allowed — exclude subfolders or large files`,
@@ -1014,10 +1023,46 @@ export interface RefreshPreviewSource {
   error?: string;
 }
 
+/** Reported by the preview instead of thrown: the banner says it, Refresh stays disabled. */
+export interface RefreshOverCap {
+  totalDocuments: number;
+  maxDocuments: number;
+}
+
+/**
+ * Cap verdict over planned sources (pure): what an index run would refuse.
+ * Shared by the enforcing path (throws) and the preview (reports).
+ */
+export function assessPlannedSources(
+  sources: Pick<M365IndexJobSource, 'sourceId' | 'truncated' | 'items'>[],
+  agent: Pick<M365Agent, 'maxDocumentsOverride'>,
+): {
+  totalDocuments: number;
+  maxDocuments: number;
+  overCap: boolean;
+  totalBytes: number;
+  truncatedSourceId?: string;
+} {
+  const indexable = sources
+    .flatMap((s) => s.items)
+    .filter((i) => i.tier === 'indexable');
+  const totalDocuments = indexable.length;
+  const maxDocuments = effectiveMaxDocuments(agent.maxDocumentsOverride);
+  const truncated = sources.find((s) => s.truncated);
+  return {
+    totalDocuments,
+    maxDocuments,
+    overCap: totalDocuments > maxDocuments,
+    totalBytes: indexable.reduce((n, item) => n + item.size, 0),
+    ...(truncated && { truncatedSourceId: truncated.sourceId }),
+  };
+}
+
 /**
  * "What would a refresh do?" — the change detection behind the editor's
- * banner (design §7). Metadata only; no job, no writes. Throws the cap
- * errors a refresh would, so the admin learns early.
+ * banner (design §7). Metadata only; no job, no writes. Cap problems a
+ * refresh would refuse are returned as data (`overCap`, `truncated`), not
+ * thrown: the admin opened the editor to fix exactly that.
  */
 export async function previewRefresh(
   req: NextRequest,
@@ -1025,8 +1070,24 @@ export async function previewRefresh(
   userId: string,
   manifest: M365AgentManifest,
   prepared?: Record<string, M365DerivedIndexEntry>,
-): Promise<{ sources: RefreshPreviewSource[]; changes: M365SourceChanges }> {
-  const planned = await planJobSources(req, agent, userId, manifest, prepared);
+): Promise<{
+  sources: RefreshPreviewSource[];
+  changes: M365SourceChanges;
+  overCap?: RefreshOverCap;
+  truncated?: boolean;
+}> {
+  const planned = await planJobSources(req, agent, userId, manifest, prepared, {
+    enforceCaps: false,
+  });
+  const totalDocuments = planned
+    .flatMap((s) => s.items)
+    .filter((i) => i.tier === 'indexable').length;
+  const maxDocuments = effectiveMaxDocuments(agent.maxDocumentsOverride);
+  const overCap =
+    totalDocuments > maxDocuments
+      ? { totalDocuments, maxDocuments }
+      : undefined;
+  const truncated = planned.some((s) => s.truncated) || undefined;
   const sources = planned.map(
     (s): RefreshPreviewSource => ({
       sourceId: s.sourceId,
@@ -1036,7 +1097,12 @@ export async function previewRefresh(
       ...(s.error && { error: s.error }),
     }),
   );
-  return { sources, changes: sumChanges(sources.map((s) => s.changes)) };
+  return {
+    sources,
+    changes: sumChanges(sources.map((s) => s.changes)),
+    ...(overCap && { overCap }),
+    ...(truncated && { truncated }),
+  };
 }
 
 /**
