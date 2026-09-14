@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Batas tersebut melebihi yang dapat ditetapkan oleh peran Anda — hubungi global admin.",
     "m365AgentLimitBadge": "Batas {limit} (ditetapkan oleh {who})",
     "m365PlanTrimHint": "Pilih apa yang ingin disertakan: hapus centang subfolder atau file, filter berdasarkan tipe, atau simpan hanya yang terbaru.",
-    "m365PlanKeepNewest": "Simpan {count} terbaru",
-    "m365PlanKeepNewestConfirm": "Simpan {keep} file terbaru yang dimodifikasi dan kecualikan {exclude} lainnya?",
-    "m365PlanIncludeAll": "Sertakan semua lagi ({count} dikecualikan)",
+    "m365PlanKeepNewest": "Simpan {count, plural, one {# berkas terbaru} other {# berkas terbaru}}",
+    "m365PlanKeepNewestConfirm": "Simpan {keep, plural, one {# berkas yang terakhir dimodifikasi} other {# berkas yang terakhir dimodifikasi}} dan kecualikan {exclude, plural, one {# berkas} other {# berkas}} lainnya?",
+    "m365PlanIncludeAll": "Sertakan semua lagi ({count, plural, one {# berkas dikecualikan} other {# berkas dikecualikan}})",
     "m365PlanIncludeFile": "Sertakan {name}",
     "m365PlanFileExcluded": "dikecualikan",
     "m365PlanSortLabel": "Urutkan berdasarkan",
@@ -4749,7 +4749,11 @@
       "name": "Nama",
       "size": "Ukuran",
       "modified": "Diubah"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# dokumen} other {# dokumen}}, batas {max} — kurangi jumlah atau tingkatkan batas sebelum memuat ulang",
+    "m365AgentLimitBadgePlain": "Batas {limit}",
+    "m365PlanShowAllRows": "Tampilkan semua {count, plural, one {# berkas} other {# berkas}}",
+    "m365PlanShowFewerRows": "Tampilkan lebih sedikit"
   },
   "localModels": {
     "title": "Model lokal",

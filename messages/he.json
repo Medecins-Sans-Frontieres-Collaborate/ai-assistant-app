@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "מגבלה זו גבוהה ממה שהתפקיד שלך מאפשר — פנה למנהל מערכת כללי.",
     "m365AgentLimitBadge": "מגבלה {limit} (הוגדר על ידי {who})",
     "m365PlanTrimHint": "בחר מה לכלול: הסר סימון מתיקיות משנה או קבצים, סנן לפי סוג, או השאר רק את החדשים ביותר.",
-    "m365PlanKeepNewest": "השאר את {count} החדשים ביותר",
-    "m365PlanKeepNewestConfirm": "להשאיר את {keep} הקבצים בעריכה האחרונה ולהוציא את {exclude} האחרים?",
-    "m365PlanIncludeAll": "כלול הכל מחדש ({count} הוצאו)",
+    "m365PlanKeepNewest": "שמור את {count, plural, one {# הקובץ החדש ביותר} other {# הקבצים החדשים ביותר}}",
+    "m365PlanKeepNewestConfirm": "לשמור את {keep, plural, one {# הקובץ שבוצע בו שינוי לאחרונה} other {# הקבצים שבוצע בהם שינוי לאחרונה}} ולהחריג את {exclude, plural, one {# הקובץ האחר} other {# הקבצים האחרים}}?",
+    "m365PlanIncludeAll": "כלול את כולם שוב ({count, plural, one {# קובץ לא נכלל} other {# קבצים לא נכללו}})",
     "m365PlanIncludeFile": "כלול את {name}",
     "m365PlanFileExcluded": "הוצא",
     "m365PlanSortLabel": "מיין לפי",
@@ -4749,7 +4749,11 @@
       "name": "שם",
       "size": "גודל",
       "modified": "תאריך שינוי"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# מסמך} other {# מסמכים}}, מוגבל ל-{max} — צמצמו או הגדילו את המגבלה לפני רענון",
+    "m365AgentLimitBadgePlain": "מגבלה {limit}",
+    "m365PlanShowAllRows": "הצג את כל {count, plural, one {# קובץ} other {# קבצים}}",
+    "m365PlanShowFewerRows": "הצג פחות"
   },
   "localModels": {
     "title": "מודלים מקומיים",

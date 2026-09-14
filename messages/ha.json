@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Wannan iyakar ta fi wanda matsayinka zai iya saita — tuntubi babban mai gudanarwa.",
     "m365AgentLimitBadge": "Iyaka {limit} (wanda {who} ya saita)",
     "m365PlanTrimHint": "Zabi abin da za a haɗa: cire manyan fayil ko fayiloli, tace nau’in fayil, ko ajiye sabbi kaɗai.",
-    "m365PlanKeepNewest": "Ajiye sabbi {count}",
-    "m365PlanKeepNewestConfirm": "Ajiye fayil {keep} da aka fi sabuntawa kuma a cire sauran {exclude}?",
-    "m365PlanIncludeAll": "Haɗa dukkan su sake ({count} an cire)",
+    "m365PlanKeepNewest": "Ajiye sabbin {count, plural, one {# fayil} other {# fayiloli}}",
+    "m365PlanKeepNewestConfirm": "Ajiye {keep, plural, one {# fayil da aka fi gyara kwanan nan} other {# fayilolin da aka fi gyara kwanan nan}} kuma a cire sauran {exclude, plural, one {# fayil} other {# fayiloli}}?",
+    "m365PlanIncludeAll": "Sake haɗa duka ({count, plural, one {# fayil da aka cire} other {# fayiloli da aka cire}})",
     "m365PlanIncludeFile": "Haɗa {name}",
     "m365PlanFileExcluded": "an cire",
     "m365PlanSortLabel": "Tsara ta",
@@ -4733,7 +4733,11 @@
       "name": "Suna",
       "size": "Girma",
       "modified": "An gyara"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# takarda} other {# takardu}}, iyaka {max} — a rage ko ƙara iyaka kafin sabuntawa",
+    "m365AgentLimitBadgePlain": "Iyaka {limit}",
+    "m365PlanShowAllRows": "Nuna duk {count, plural, one {# fayil} other {# fayiloli}}",
+    "m365PlanShowFewerRows": "Nuna kaɗan"
   },
   "localModels": {
     "title": "Samfuran cikin gida",

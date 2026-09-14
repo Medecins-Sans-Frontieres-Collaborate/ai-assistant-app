@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Urwo rugero ruruta ibyo ushobora gushyiraho — saba umuyobozi mukuru.",
     "m365AgentLimitBadge": "Umubare ntarengwa {limit} (washyizweho na {who})",
     "m365PlanTrimHint": "Hitamo ibyo uzashyiramo: kuraho imigendekere y’amadosiye acamo cyangwa dosiye, ongera urutonde hakurikijwe ubwoko, cyangwa usigare ushyizemo ibishya gusa.",
-    "m365PlanKeepNewest": "Hugukira ibishya {count}",
-    "m365PlanKeepNewestConfirm": "Hagarika {keep} byahinduwe vuba kurusha ibindi naho ibindi {exclude} ubihagarike?",
-    "m365PlanIncludeAll": "Shyiramo byose nanone (harimo {count} byari byarahagaritswe)",
+    "m365PlanKeepNewest": "Bika {count, plural, one {# dosiye nshya} other {# dosiye nshya}}",
+    "m365PlanKeepNewestConfirm": "Ushaka kubika {keep, plural, one {# dosiye yahinduwe vuba} other {# dosiye zahinduwe vuba}} no gukuramo izindi {exclude, plural, one {# dosiye} other {# dosiye}}?",
+    "m365PlanIncludeAll": "Ongeramo zose ({count, plural, one {# dosiye ikuweho} other {# dosiye zikuwemo}})",
     "m365PlanIncludeFile": "Shyiramo {name}",
     "m365PlanFileExcluded": "byatewe hanze",
     "m365PlanSortLabel": "Ongeraho hakurikijwe",
@@ -4733,7 +4733,11 @@
       "name": "Izina",
       "size": "Ingano",
       "modified": "Byahinduwe"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# inyandiko} other {# nyandiko}}, ntarengwa ni {max} — gabanya cyangwa wunguke ntarengwa mbere yo kongera gusubizamo",
+    "m365AgentLimitBadgePlain": "Ntarengwa {limit}",
+    "m365PlanShowAllRows": "Erekana byose {count, plural, one {# dosiye} other {# dosiye}}",
+    "m365PlanShowFewerRows": "Erekana bike"
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",

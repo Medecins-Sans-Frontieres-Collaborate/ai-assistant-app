@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Limite ti ado so lo tî mbênî rôle lo si tî la — za sô global admin.",
     "m365AgentLimitBadge": "Limite {limit} (mo tî {who})",
     "m365PlanTrimHint": "Falï sô mo yeke dènè: sô subfolders mô fichiers, filtre na type, tî ye da sô tî na yeke ti mû.",
-    "m365PlanKeepNewest": "Gbadirini tî mû na {count}",
-    "m365PlanKeepNewestConfirm": "Gbadirini fichier {keep} so mû tî sèngëlë, sô yeke kôdrö {exclude}?",
-    "m365PlanIncludeAll": "Dènè na aminî nî ndangö ({count} sô nde tî bi dènè)",
+    "m365PlanKeepNewest": "Kûtî sô yèngê tî {count, plural, one {# dòkûmento} other {# dòkûmento-mbi}}",
+    "m365PlanKeepNewestConfirm": "Kûtî {keep, plural, one {# dòkûmento sô gbâgâ tî sûka} other {# dòkûmento-mbi sô gbâgâ tî sûka}} na pèngè {exclude, plural, one {# dòkûmento} other {# dòkûmento-mbi}} ?",
+    "m365PlanIncludeAll": "Kûlû tî sô sâra kpûë na mbênî ({count, plural, one {# dòkûmento sô pèngè} other {# dòkûmento-mbi sô pèngè}})",
     "m365PlanIncludeFile": "Dènè {name}",
     "m365PlanFileExcluded": "bi dènè",
     "m365PlanSortLabel": "Sô na",
@@ -4733,7 +4733,11 @@
       "name": "Ngbênî",
       "size": "Pôndo",
       "modified": "Yändi"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# fòndâ} other {# fòndâ-mbi}}, limitî {max} — kokanga sôkô mbi lâ tî aghâ na yeke sôkô mbênî",
+    "m365AgentLimitBadgePlain": "Limitî {limit}",
+    "m365PlanShowAllRows": "Gbenî sô sâra {count, plural, one {# dòkûmento} other {# dòkûmento-mbi}}",
+    "m365PlanShowFewerRows": "Yeke ndùkù"
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",

@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "ዚ ገደብ ካብ የተወሰነ ክህሎት ብላዕዋ እዩ — ናይ ዓለም አብሲል ሓደ ጠይቡ።",
     "m365AgentLimitBadge": "ገደብ {limit} (ብ{who} ዝተወሰነ)",
     "m365PlanTrimHint": "ንምሉእ ዝተወሰኡ ኣይትምሓሩ፡ ንዓናት ቦታታት ወይ ፋይሎታት ኣትኽፈሉ፡ ብዝርዝር ኣትፈልጡ፡ ወይ ሓዳስ ንዓብ ሓዳስ ይቕጽፉ።",
-    "m365PlanKeepNewest": "ሓዳስ {count} ዕቕዶ ውህሉ",
-    "m365PlanKeepNewestConfirm": "እቲ {keep} ናይ መጨረሻ ዝተስዕሞ ፋይሎታት ብናይ ዓለም ኣትምሓሩ ምስመውዷ {exclude}?",
-    "m365PlanIncludeAll": "ኩሉ ኣእቱ ድማ ኣትኽውን ({count} ዝተሰርዑ)",
+    "m365PlanKeepNewest": "ንሕሱስ ዝተሓደሰ {count, plural, one {# ፋይል} other {# ፋይላት}} ይኣቱ",
+    "m365PlanKeepNewestConfirm": "ን{keep, plural, one {# ብዝተመጻኡ ሓደሽ ፋይል} other {# ብዝተመጻኡ ሓደሽ ፋይላት}} ብምሉእ ኣርእዩ፣ እቲ {exclude, plural, one {# ፋይል} other {# ፋይላት}} ይትውጽኡ?",
+    "m365PlanIncludeAll": "ድገም ኩሉ ኣእተዉ ({count, plural, one {# ፋይል ተተወዲኡ} other {# ፋይላት ተተወዲኡ}})",
     "m365PlanIncludeFile": "{name} ኣእቱ",
     "m365PlanFileExcluded": "ዝተሰርዐ",
     "m365PlanSortLabel": "ንምምሕዳር ብ...",
@@ -4733,7 +4733,11 @@
       "name": "ሽም",
       "size": "መጠን",
       "modified": "ተስዓሞ"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# ሰነድ} other {# ሰነዳት}}, ውሱስ {max} — ከዝተመደበ ዉሱስ ቅኑዕ ወይ ኣልቦ ካብዚ ንላዕሊ ምልጣ፣ ከምትካ ኣርእዬ ኣደርቡ",
+    "m365AgentLimitBadgePlain": "ውሱስ {limit}",
+    "m365PlanShowAllRows": "ኩሉ ኣርኣዩ {count, plural, one {# ፋይል} other {# ፋይላት}}",
+    "m365PlanShowFewerRows": "ንእሽቶ ኣርኣዩ"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",

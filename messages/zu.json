@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Lowo mkhawulo uphakeme kunalokho ongakwazi ukusetha ngendima yakho — cela umphathi omkhulu.",
     "m365AgentLimitBadge": "Umkhawulo {limit} (usethwe ngu-{who})",
     "m365PlanTrimHint": "Khetha okuzofakwa: susa ukuthikha ezinqamuleleni noma kumafayela, hlunga ngohlobo, noma gcina awasha kakhulu.",
-    "m365PlanKeepNewest": "Gcina ama-{count} amasha",
-    "m365PlanKeepNewestConfirm": "Ugcine amafayela angu-{keep} ahlelwe ngokusha bese ususa angu-{exclude}?",
-    "m365PlanIncludeAll": "Faka konke futhi ({count} kususiwe)",
+    "m365PlanKeepNewest": "Gcina okusha kakhulu {count, plural, one {# ifayela} other {# amafayela}}",
+    "m365PlanKeepNewestConfirm": "Gcina {keep, plural, one {# ifayela eliguqulwe lakamuva} other {# amafayela aguqulwe akamuva}} bese ususa {exclude, plural, one {# ifayela} other {# amafayela}}?",
+    "m365PlanIncludeAll": "Faka konke futhi ({count, plural, one {# ifayela elikhethiwe} other {# amafayela akhethiwe}})",
     "m365PlanIncludeFile": "Faka u-{name}",
     "m365PlanFileExcluded": "kususiwe",
     "m365PlanSortLabel": "Hlela ngo",
@@ -4733,7 +4733,11 @@
       "name": "Igama",
       "size": "Usayizi",
       "modified": "Kuguqulwe"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# umbhalo} other {# imibhalo}}, umkhawulo {max} — sebenzisa noma khuphula umkhawulo ngaphambi kokuvuselela",
+    "m365AgentLimitBadgePlain": "Umkhawulo {limit}",
+    "m365PlanShowAllRows": "Bonisa konke {count, plural, one {# ifayela} other {# amafayela}}",
+    "m365PlanShowFewerRows": "Bonisa okumbalwa"
   },
   "localModels": {
     "title": "Amamodeli endaweni",

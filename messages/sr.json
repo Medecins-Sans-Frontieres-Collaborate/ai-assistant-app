@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "To ograničenje je iznad onoga što vaša uloga može da postavi — obratite se globalnom administratoru.",
     "m365AgentLimitBadge": "Ograničenje {limit} (postavio {who})",
     "m365PlanTrimHint": "Prilagodite šta da uključite: odčekirajte podfoldere ili fajlove, filtrirajte po tipu ili zadržite samo najnovije.",
-    "m365PlanKeepNewest": "Zadrži najnovijih {count}",
-    "m365PlanKeepNewestConfirm": "Zadržati {keep} najnovije izmenjene fajlove i isključiti preostalih {exclude}?",
-    "m365PlanIncludeAll": "Ponovo uključi sve ({count} isključeno)",
+    "m365PlanKeepNewest": "Zadrži najnovijih {count, plural, one {# fajl} other {# fajlova}}",
+    "m365PlanKeepNewestConfirm": "Zadržati {keep, plural, one {# najnovije izmenjeni fajl} other {# najnovije izmenjenih fajlova}} i isključiti preostalih {exclude, plural, one {# fajl} other {# fajlova}}?",
+    "m365PlanIncludeAll": "Ponovo uključi sve ({count, plural, one {# fajl isključen} other {# fajlova isključeno}})",
     "m365PlanIncludeFile": "Uključi {name}",
     "m365PlanFileExcluded": "isključeno",
     "m365PlanSortLabel": "Sortiraj po",
@@ -4733,7 +4733,11 @@
       "name": "Nazivu",
       "size": "Veličini",
       "modified": "Izmenjeno"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# dokument} other {# dokumenata}}, ograničenje {max} — smanjite broj ili povećajte ograničenje pre osvežavanja",
+    "m365AgentLimitBadgePlain": "Ograničenje {limit}",
+    "m365PlanShowAllRows": "Prikaži svih {count, plural, one {# fajl} other {# fajlova}}",
+    "m365PlanShowFewerRows": "Prikaži manje"
   },
   "localModels": {
     "title": "Lokalni modeli",

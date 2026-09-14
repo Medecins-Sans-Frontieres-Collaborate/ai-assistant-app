@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Den gränsen är högre än vad din roll får sätta – be en global administratör.",
     "m365AgentLimitBadge": "Gräns {limit} (satt av {who})",
     "m365PlanTrimHint": "Välj vad som ska ingå: avmarkera undermappar eller filer, filtrera efter typ, eller behåll endast de senaste.",
-    "m365PlanKeepNewest": "Behåll de senaste {count}",
-    "m365PlanKeepNewestConfirm": "Behåll de {keep} senast ändrade filerna och exkludera de {exclude} andra?",
-    "m365PlanIncludeAll": "Inkludera alla igen ({count} exkluderade)",
+    "m365PlanKeepNewest": "Behåll de senaste {count, plural, one {# filen} other {# filerna}}",
+    "m365PlanKeepNewestConfirm": "Behåll {keep, plural, one {# senast ändrade filen} other {# senast ändrade filerna}} och exkludera de andra {exclude, plural, one {# filen} other {# filerna}}?",
+    "m365PlanIncludeAll": "Inkludera alla igen ({count, plural, one {# fil exkluderad} other {# filer exkluderade}})",
     "m365PlanIncludeFile": "Inkludera {name}",
     "m365PlanFileExcluded": "exkluderad",
     "m365PlanSortLabel": "Sortera efter",
@@ -4749,7 +4749,11 @@
       "name": "Namn",
       "size": "Storlek",
       "modified": "Ändrad"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# dokument} other {# dokument}}, gräns {max} — minska antalet eller höj gränsen innan du uppdaterar",
+    "m365AgentLimitBadgePlain": "Gräns {limit}",
+    "m365PlanShowAllRows": "Visa alla {count, plural, one {# fil} other {# filer}}",
+    "m365PlanShowFewerRows": "Visa färre"
   },
   "localModels": {
     "title": "Lokala modeller",

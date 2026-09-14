@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Io fetra io dia mihoatra izay azonao apetraka amin'ny anjara asanao — angataho amin'ny global admin.",
     "m365AgentLimitBadge": "Fetra {limit} (napetraky ny {who})",
     "m365PlanTrimHint": "Safidio izay tiana ampidirina: esory amin'ny safidy ny subfolders na rakitra, sivano amin'ny karazana, na tazony ireo farany vao nohavaozina.",
-    "m365PlanKeepNewest": "Tazomy ireo vaovao indrindra {count}",
-    "m365PlanKeepNewestConfirm": "Tazomina ve ny rakitra {keep} vao nohavaozina indrindra ary esorina ny {exclude} ambiny?",
-    "m365PlanIncludeAll": "Ampidiro daholo indray ( {count} nesorina )",
+    "m365PlanKeepNewest": "Tazony ny {count, plural, one {# rakitra vaovao indrindra} other {# rakitra vaovao indrindra}}",
+    "m365PlanKeepNewestConfirm": "Tazony ny {keep, plural, one {# rakitra nohavaozina farany} other {# rakitra nohavaozina farany}} ary esory ny {exclude, plural, one {# rakitra hafa} other {# rakitra hafa}}?",
+    "m365PlanIncludeAll": "Ampidiro daholo indray ({count, plural, one {# rakitra nesorina} other {# rakitra nesorina}})",
     "m365PlanIncludeFile": "Ampidiro {name}",
     "m365PlanFileExcluded": "nesorina",
     "m365PlanSortLabel": "Ampifanaraho araka ny",
@@ -4733,7 +4733,11 @@
       "name": "Anarana",
       "size": "Habe",
       "modified": "Nohavaozina"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# antontan-taratasy} other {# antontan-taratasy}}, fetra {max} — esory na ampio ny fetra alohan'ny hanavaozana",
+    "m365AgentLimitBadgePlain": "Fetra {limit}",
+    "m365PlanShowAllRows": "Asehoy daholo ny {count, plural, one {# rakitra} other {# rakitra}}",
+    "m365PlanShowFewerRows": "Asehoy vitsy kokoa"
   },
   "localModels": {
     "title": "Model eo an-toerana",

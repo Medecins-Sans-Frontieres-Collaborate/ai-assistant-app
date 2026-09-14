@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "دا حد د ستاسو د نقش له صلاحیت پورته دی — له نړیوال اډمن څخه مرسته وغواړئ.",
     "m365AgentLimitBadge": "حد {limit} (د {who} لخوا ټاکل شوی)",
     "m365PlanTrimHint": "څه شامل کړئ غوره کړئ: فرعي پوښۍ یا فایلونه غیر فعال کړئ، د ډول له مخې فلټر کړئ، یا یوازې نوي فایلونه پاتې کړئ.",
-    "m365PlanKeepNewest": "یوازې نوي {count} وساتئ",
-    "m365PlanKeepNewestConfirm": "غواړئ {keep} تر ټولو نوي سمبال شوي فایلونه وساتئ او نور {exclude} لرې کړئ؟",
-    "m365PlanIncludeAll": "ټول بیا شامل کړئ ({count} مستثنی شوي)",
+    "m365PlanKeepNewest": "تر ټولو نوي وساتئ {count, plural, one {# فایل} other {# فایلونه}}",
+    "m365PlanKeepNewestConfirm": "ایا غواړئ یوازې {keep, plural, one {# تر ټولو نوي تغیر شوی فایل} other {# تر ټولو نوي تغیر شوي فایلونه}} وساتئ او پاتې {exclude, plural, one {# فایل} other {# فایلونه}} لرې کړئ؟",
+    "m365PlanIncludeAll": "ټول بېرته شامل کړئ ({count, plural, one {# فایل لرې شوی} other {# فایلونه لرې شوي}})",
     "m365PlanIncludeFile": "{name} شامل کړئ",
     "m365PlanFileExcluded": "مستثنی شوی",
     "m365PlanSortLabel": "مرتب کړئ پر",
@@ -4733,7 +4733,11 @@
       "name": "نوم",
       "size": "اندازه",
       "modified": "بدل شوی"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# سند} other {# اسناد}}، حد {max} — له بیا تازه کولو مخکې اسناد کم یا حد زیات کړئ",
+    "m365AgentLimitBadgePlain": "حد {limit}",
+    "m365PlanShowAllRows": "ټول ښکاره کړئ {count, plural, one {# فایل} other {# فایلونه}}",
+    "m365PlanShowFewerRows": "لږ ښکاره کړئ"
   },
   "localModels": {
     "title": "محلي ماډلونه",

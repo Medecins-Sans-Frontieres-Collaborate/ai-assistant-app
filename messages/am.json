@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "ይህ ገደብ ከእርስዎ ሚና የሚፈቀደው በላይ ነው — ከአጠቃላይ አስተዳዳሪ ይጠይቁ።",
     "m365AgentLimitBadge": "ገደብ {limit} (በ {who} ተዘግቷል)",
     "m365PlanTrimHint": "የሚካተቱትን ይጨምሩ ወይም ያጥፉ፤ ፎልደሮች ወይም ፋይሎችን ይሰርዙ፣ በአይነት ይተርጉሙ፣ ወይም በቅርቡ የተቀየሩትን ብቻ ያቁሙ።",
-    "m365PlanKeepNewest": "አዳዲስ {count} ይቆዩ",
-    "m365PlanKeepNewestConfirm": "በቅርቡ የተሻሻሉት {keep} ፋይሎች ይቀሩ፣ የቀሩት {exclude} ይቀሩ ይለቀሱ?",
-    "m365PlanIncludeAll": "ሁሉንም ደግሞ ካተቱ ({count} የተወገዱ)",
+    "m365PlanKeepNewest": "የቅርብ ጊዜ ያደረጉትን ይጠቁሙ {count, plural, one {# ፋይል} other {# ፋይሎች}}",
+    "m365PlanKeepNewestConfirm": "{keep, plural, one {# በቅርቡ የተለዋዋጩትን ፋይል} other {# በቅርቡ የተለዋዋጩትን ፋይሎች}} ይይዙና ከዚያ በስተቀር {exclude, plural, one {# ፋይል} other {# ፋይሎች}} ያስወግዱ?",
+    "m365PlanIncludeAll": "ሁሉንም ድጋሚ አካትት ({count, plural, one {# ፋይል ከተሰወጠ} other {# ፋይሎች ከተሰወጡ}})",
     "m365PlanIncludeFile": "{name} ካትቱ",
     "m365PlanFileExcluded": "የተወገደ",
     "m365PlanSortLabel": "ምደባ በ",
@@ -4749,7 +4749,11 @@
       "name": "ስም",
       "size": "መጠን",
       "modified": "የተሻሻለ"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# ዶኩመንት} other {# ዶኩመንቶች}}, ገደብ {max} — ማደስ ከመደገፉ በፊት አንዳንዱን ያስወግዱ ወይም ገደቡን ያሳድጉ",
+    "m365AgentLimitBadgePlain": "ገደብ {limit}",
+    "m365PlanShowAllRows": "ሁሉንም አሳይ {count, plural, one {# ፋይል} other {# ፋይሎች}}",
+    "m365PlanShowFewerRows": "ጥቂቶቹን አሳይ"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",

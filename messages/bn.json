@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "এই সীমা আপনার রোলে নির্ধারণের অনুমতি নেই — দয়া করে গ্লোবাল অ্যাডমিনকে জানান।",
     "m365AgentLimitBadge": "সীমা {limit} (নির্ধারণ করেছেন {who})",
     "m365PlanTrimHint": "কী অন্তর্ভুক্ত করবেন ছাঁটাই করুন: সাবফোল্ডার বা ফাইল আনচেক করুন, টাইপ অনুযায়ী ফিল্টার করুন, অথবা শুধু নতুনগুলো রাখুন।",
-    "m365PlanKeepNewest": "নতুন {count} টি রাখুন",
-    "m365PlanKeepNewestConfirm": "সবচেয়ে সাম্প্রতিকভাবে পরিবর্তিত {keep}টি ফাইল রাখবেন এবং বাকি {exclude}টি বাদ দেবেন?",
-    "m365PlanIncludeAll": "সব আবার অন্তর্ভুক্ত করুন ({count}টি বাদ)",
+    "m365PlanKeepNewest": "সর্বশেষ {count, plural, one {#টি ফাইল} other {#টি ফাইল}} রাখুন",
+    "m365PlanKeepNewestConfirm": "{keep, plural, one {#টি সবচেয়ে সাম্প্রতিক সংশোধিত ফাইল} other {#টি সবচেয়ে সাম্প্রতিক সংশোধিত ফাইল}} রাখবেন এবং বাকি {exclude, plural, one {#টি ফাইল} other {#টি ফাইল}} বাদ দেবেন?",
+    "m365PlanIncludeAll": "সব পুনরায় অন্তর্ভুক্ত করুন ({count, plural, one {#টি ফাইল বাদ} other {#টি ফাইল বাদ}})",
     "m365PlanIncludeFile": "{name} অন্তর্ভুক্ত করুন",
     "m365PlanFileExcluded": "বাদ দেওয়া হয়েছে",
     "m365PlanSortLabel": "ক্রম অনুযায়ী সাজান",
@@ -4749,7 +4749,11 @@
       "name": "নাম",
       "size": "আকার",
       "modified": "পরিবর্তিত"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {#টি নথি} other {#টি নথি}}, সর্বোচ্চ সীমা {max} — রিফ্রেশ করার আগে কমান বা সীমা বাড়ান",
+    "m365AgentLimitBadgePlain": "সীমা {limit}",
+    "m365PlanShowAllRows": "সব {count, plural, one {#টি ফাইল} other {#টি ফাইল}} দেখান",
+    "m365PlanShowFewerRows": "কম দেখান"
   },
   "localModels": {
     "title": "স্থানীয় মডেলসমূহ",

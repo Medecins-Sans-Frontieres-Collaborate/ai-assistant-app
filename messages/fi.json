@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Tämä raja ylittää oman roolisi oikeudet — pyydä apua yleiseltä ylläpitäjältä.",
     "m365AgentLimitBadge": "Raja {limit} (asettanut {who})",
     "m365PlanTrimHint": "Rajaa sisältöä: poista alikansiot tai tiedostoja, suodata tyypin mukaan tai pidä vain uusimmat.",
-    "m365PlanKeepNewest": "Pidä uusimmat {count}",
-    "m365PlanKeepNewestConfirm": "Pidetäänkö {keep} viimeksi muokattua tiedostoa ja jätetään muut {exclude} pois?",
-    "m365PlanIncludeAll": "Sisällytä kaikki uudelleen ({count} pois jätetty)",
+    "m365PlanKeepNewest": "Säilytä uusimmat {count, plural, one {# tiedosto} other {# tiedostoa}}",
+    "m365PlanKeepNewestConfirm": "Säilytetäänkö {keep, plural, one {# viimeksi muokattu tiedosto} other {# viimeksi muokattua tiedostoa}} ja jätetäänkö pois {exclude, plural, one {# tiedosto} other {# tiedostoa}}?",
+    "m365PlanIncludeAll": "Sisällytä kaikki uudelleen ({count, plural, one {# tiedosto pois jätetty} other {# tiedostoa pois jätetty}})",
     "m365PlanIncludeFile": "Sisällytä {name}",
     "m365PlanFileExcluded": "poissuljettu",
     "m365PlanSortLabel": "Järjestä",
@@ -4749,7 +4749,11 @@
       "name": "Nimi",
       "size": "Koko",
       "modified": "Muokattu"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# asiakirja} other {# asiakirjaa}}, raja {max} — vähennä tai nosta rajaa ennen päivittämistä",
+    "m365AgentLimitBadgePlain": "Raja {limit}",
+    "m365PlanShowAllRows": "Näytä kaikki {count, plural, one {# tiedosto} other {# tiedostoa}}",
+    "m365PlanShowFewerRows": "Näytä vähemmän"
   },
   "localModels": {
     "title": "Paikalliset mallit",

@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "កំណត់នោះលើសកំណត់ដែលតួនាទីរបស់អ្នកអាចកំណត់បាន—សូមស្នើរឱ្យអ្នកគ្រប់គ្រងសកលជួយ។",
     "m365AgentLimitBadge": "កំណត់ {limit} (កំណត់ដោយ {who})",
     "m365PlanTrimHint": "ជ្រៀតជ្រែកអ្វីៗសម្រាប់បញ្ចូល៖ ដោះញញឹម subfolder ឬឯកសារ, ត្រងតាមប្រភេទ ឬទុកតែថ្មីបំផុត។",
-    "m365PlanKeepNewest": "ទុកតែថ្មីបំផុត {count}",
-    "m365PlanKeepNewestConfirm": "ទុក {keep} ឯកសារដែលកែប្រែថ្មីបំផុត និងមិនបញ្ចូល {exclude} ខាងក្រៅ?",
-    "m365PlanIncludeAll": "បញ្ចូលទាំងអស់ម្តងទៀត ({count} មិនបានបញ្ចូល)",
+    "m365PlanKeepNewest": "រក្សាទុកថ្មីបម្លាស់បំផុត {count, plural, one {ឯកសារ #} other {ឯកសារ #}}",
+    "m365PlanKeepNewestConfirm": "តើលោកអ្នកចង់រក្សាទុក {keep, plural, one {ឯកសារ ដែលទើបតែផ្លាស់ប្តូរថ្មីបំផុត #} other {ឯកសារ ដែលទើបតែផ្លាស់ប្តូរថ្មីបំផុត #}} និងដករំលែង {exclude, plural, one {ឯកសារ #} other {ឯកសារ #}} ដែរ ឬទេ?",
+    "m365PlanIncludeAll": "បញ្ចូលវិញទាំងអស់ (បានដកចេញ {count, plural, one {ឯកសារ #} other {ឯកសារ #}})",
     "m365PlanIncludeFile": "បញ្ចូល {name}",
     "m365PlanFileExcluded": "មិនបានបញ្ចូល",
     "m365PlanSortLabel": "តម្រៀបតាម",
@@ -4733,7 +4733,11 @@
       "name": "ឈ្មោះ",
       "size": "ទំហំ",
       "modified": "កែប្រែ"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {ឯកសារ #} other {ឯកសារ #}}, ដែនកំណត់ {max} — សូមកាត់ចេញឬបង្កើនដែនកំណត់មុនពេលធ្វើបច្ចុប្បន្នភាពឡើងវិញ",
+    "m365AgentLimitBadgePlain": "ដែនកំណត់ {limit}",
+    "m365PlanShowAllRows": "បង្ហាញទាំងអស់ {count, plural, one {ឯកសារ #} other {ឯកសារ #}}",
+    "m365PlanShowFewerRows": "បង្ហាញតិចលើស"
   },
   "localModels": {
     "title": "ម៉ូឌែលក្នុងតំបន់",

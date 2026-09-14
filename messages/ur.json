@@ -4769,9 +4769,9 @@
     "m365CapAboveRole": "یہ حد آپ کے کردار سے زیادہ ہے — عالمی ایڈمن سے رابطہ کریں۔",
     "m365AgentLimitBadge": "حد {limit} (سیٹ کرنے والے: {who})",
     "m365PlanTrimHint": "شامل کرنے کے لیے چھانٹی کریں: ذیلی فولڈرز یا فائلیں انچیک کریں، قسم کے لحاظ سے فلٹر کریں، یا صرف نئی ترین رکھیں۔",
-    "m365PlanKeepNewest": "تازہ ترین {count} رکھیں",
-    "m365PlanKeepNewestConfirm": "کیا صرف حال ہی میں ترمیم شدہ {keep} فائلیں رکھنی ہیں اور بقیہ {exclude} کو خارج کرنا ہے؟",
-    "m365PlanIncludeAll": "سب کو دوبارہ شامل کریں ({count} خارج شدہ)",
+    "m365PlanKeepNewest": "جدید ترین {count, plural, one {# فائل} other {# فائلیں}} رکھیں",
+    "m365PlanKeepNewestConfirm": "{keep, plural, one {# حال ہی میں ترمیم شدہ فائل} other {# حال ہی میں ترمیم شدہ فائلیں}} رکھیں اور باقی {exclude, plural, one {# فائل} other {# فائلیں}} نکال دیں؟",
+    "m365PlanIncludeAll": "دوبارہ سب شامل کریں ({count, plural, one {# فائل خارج کی گئی} other {# فائلیں خارج کی گئیں}})",
     "m365PlanIncludeFile": "{name} کو شامل کریں",
     "m365PlanFileExcluded": "خارج شدہ",
     "m365PlanSortLabel": "ترتیب دیں بذریعہ",
@@ -4779,7 +4779,11 @@
       "name": "نام",
       "size": "حجم",
       "modified": "ترمیم شدہ"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# دستاویز} other {# دستاویزات}}, حد {max} — ریفریش کرنے سے پہلے تراشیں یا حد بڑھائیں",
+    "m365AgentLimitBadgePlain": "حد {limit}",
+    "m365PlanShowAllRows": "تمام {count, plural, one {# فائل} other {# فائلیں}} دکھائیں",
+    "m365PlanShowFewerRows": "کم دکھائیں"
   },
   "localModels": {
     "title": "لوکل ماڈلز",

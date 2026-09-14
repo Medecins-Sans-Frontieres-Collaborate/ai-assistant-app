@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Цей ліміт перевищує дозволений для вашої ролі — зверніться до глобального адміністратора.",
     "m365AgentLimitBadge": "Ліміт {limit} (встановив {who})",
     "m365PlanTrimHint": "Виберіть, що включати: зніміть позначку з підпапок або файлів, відфільтруйте за типом чи залиште лише найновіші.",
-    "m365PlanKeepNewest": "Зберігати найновіші {count}",
-    "m365PlanKeepNewestConfirm": "Зберегти {keep} останніх змінених файлів і виключити інші {exclude}?",
-    "m365PlanIncludeAll": "Знову включити всі (виключено {count})",
+    "m365PlanKeepNewest": "Зберегти нові {count, plural, one {# файл} other {# файли}}",
+    "m365PlanKeepNewestConfirm": "Зберегти {keep, plural, one {# останній змінений файл} other {# останні змінені файли}} і виключити ще {exclude, plural, one {# файл} other {# файли}}?",
+    "m365PlanIncludeAll": "Включити всі знову ({count, plural, one {# файл виключено} other {# файли виключено}})",
     "m365PlanIncludeFile": "Включити {name}",
     "m365PlanFileExcluded": "виключено",
     "m365PlanSortLabel": "Сортувати за",
@@ -4749,7 +4749,11 @@
       "name": "Назва",
       "size": "Розмір",
       "modified": "Змінено"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# документ} other {# документи}}, ліміт {max} — скоротіть або підніміть ліміт перед оновленням",
+    "m365AgentLimitBadgePlain": "Ліміт {limit}",
+    "m365PlanShowAllRows": "Показати всі {count, plural, one {# файл} other {# файли}}",
+    "m365PlanShowFewerRows": "Показати менше"
   },
   "localModels": {
     "title": "Локальні моделі",

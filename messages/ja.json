@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "その上限はあなたのロールで設定できる範囲を超えています。グローバル管理者に依頼してください。",
     "m365AgentLimitBadge": "上限 {limit}（{who}が設定）",
     "m365PlanTrimHint": "含める内容を調整：サブフォルダーやファイルのチェックを外す、種類で絞る、最新のみ残す、など。",
-    "m365PlanKeepNewest": "最新{count}件を残す",
-    "m365PlanKeepNewestConfirm": "直近で変更された{keep}件のファイルを残し、残り{exclude}件を除外しますか？",
-    "m365PlanIncludeAll": "すべて再度含める（{count}件除外中）",
+    "m365PlanKeepNewest": "最新の{count, plural, one {# 件のファイル} other {# 件のファイル}}を保持",
+    "m365PlanKeepNewestConfirm": "{keep, plural, one {# 件の最新更新ファイル} other {# 件の最新更新ファイル}}を保持し、その他の{exclude, plural, one {# 件のファイル} other {# 件のファイル}}を除外しますか？",
+    "m365PlanIncludeAll": "すべて含める（{count, plural, one {# 件のファイルを除外} other {# 件のファイルを除外}}）",
     "m365PlanIncludeFile": "{name}を含める",
     "m365PlanFileExcluded": "除外中",
     "m365PlanSortLabel": "並び替え",
@@ -4749,7 +4749,11 @@
       "name": "名前",
       "size": "サイズ",
       "modified": "更新日"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# 件のドキュメント} other {# 件のドキュメント}}、上限 {max} — 更新する前に調整または上限を引き上げてください",
+    "m365AgentLimitBadgePlain": "上限 {limit}",
+    "m365PlanShowAllRows": "すべて表示（{count, plural, one {# 件のファイル} other {# 件のファイル}}）",
+    "m365PlanShowFewerRows": "表示を減らす"
   },
   "localModels": {
     "title": "ローカルモデル",

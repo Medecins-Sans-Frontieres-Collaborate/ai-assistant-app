@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "ඔබගේ භූමිකාවෙන් සකස් කළ හැකි සීමාවට වඩා මෙය වැඩිය — ගෝලීය පරිපාලකයෙකුගෙන් ඉල්ලා සිටින්න.",
     "m365AgentLimitBadge": "සීමාව {limit} ({who} විසින් සකසා ඇත)",
     "m365PlanTrimHint": "එක්කරන දෑ සීමා කරන්න: උපෆෝල්ඩර හෝ ගොනු ඉවත් කරන්න, වර්ග අනුව පෙරහන්න, හෝ නව්‍යම දේ පමණක් තබාගන්න.",
-    "m365PlanKeepNewest": "නව්‍යම {count} තබාගන්න",
-    "m365PlanKeepNewestConfirm": "සමීපව සංශෝධනය කළ ලියවිලි {keep} තබා තවත් {exclude} බැහැර කරන්නද?",
-    "m365PlanIncludeAll": "සියල්ල නැවත එක් කරන්න ({count} බැහැර කර ඇත)",
+    "m365PlanKeepNewest": "නවතම {count, plural, one {ගොනුව #} other {ගොනු #}} තබා ගන්න",
+    "m365PlanKeepNewestConfirm": "{keep, plural, one {ඉකුත් සංශෝධිත ගොනුව #} other {ඉකුත් සංශෝධිත ගොනු #}} තබා ගෙන අනෙක් {exclude, plural, one {ගොනුව #} other {ගොනු #}} වැළැක්වීමට කැමතිද?",
+    "m365PlanIncludeAll": "සියල්ල නැවත ඇතුළත් කරන්න ({count, plural, one {ගොනුව # එපා කරන ලදි} other {ගොනු # එපා කරන ලදි}})",
     "m365PlanIncludeFile": "{name} එක් කරන්න",
     "m365PlanFileExcluded": "බැහැර කෙරී ඇත",
     "m365PlanSortLabel": "පෙළගැස්වීම අනුව",
@@ -4749,7 +4749,11 @@
       "name": "නම",
       "size": "ප්‍රමාණය",
       "modified": "වෙනස් කළ දිනය"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {ලේඛනය #} other {ලේඛන #}}, සීමාව {max} — නැවත යාවත්කාලීන කිරීම පෙර සීමාව කපා හෝ වැඩි කරන්න",
+    "m365AgentLimitBadgePlain": "සීමාව {limit}",
+    "m365PlanShowAllRows": "සියළුම {count, plural, one {ගොනුව #} other {ගොනු #} } පෙන්වන්න",
+    "m365PlanShowFewerRows": "අඩු විදිහට පෙන්වන්න"
   },
   "localModels": {
     "title": "ප්‍රාදේශීය ආදර්ශ",

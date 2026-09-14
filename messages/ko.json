@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "설정하려는 한도가 권한 범위보다 높습니다 — 전역 관리자에게 문의하세요.",
     "m365AgentLimitBadge": "한도 {limit} (설정자: {who})",
     "m365PlanTrimHint": "포함할 항목 다듬기: 하위 폴더나 파일의 선택을 해제하거나, 유형별로 필터링하거나, 최신 항목만 남겨둘 수 있습니다.",
-    "m365PlanKeepNewest": "최신 {count}개만 유지",
-    "m365PlanKeepNewestConfirm": "가장 최근에 수정된 {keep}개 파일만 남기고 나머지 {exclude}개를 제외할까요?",
-    "m365PlanIncludeAll": "모두 다시 포함하기({count}개 제외됨)",
+    "m365PlanKeepNewest": "최신 {count, plural, one {#개 파일} other {#개 파일}}만 유지",
+    "m365PlanKeepNewestConfirm": "가장 최근에 수정된 {keep, plural, one {#개 파일} other {#개 파일}}을 유지하고, 나머지 {exclude, plural, one {#개 파일} other {#개 파일}}을 제외하시겠습니까?",
+    "m365PlanIncludeAll": "모두 다시 포함 ({count, plural, one {#개 파일 제외됨} other {#개 파일 제외됨}})",
     "m365PlanIncludeFile": "{name} 포함",
     "m365PlanFileExcluded": "제외됨",
     "m365PlanSortLabel": "정렬 기준",
@@ -4749,7 +4749,11 @@
       "name": "이름",
       "size": "크기",
       "modified": "수정일"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {#개 문서} other {#개 문서}}, 제한 {max} — 새로고침 전에 수정 또는 제한을 늘려주세요.",
+    "m365AgentLimitBadgePlain": "제한 {limit}",
+    "m365PlanShowAllRows": "모든 {count, plural, one {#개 파일} other {#개 파일}} 보기",
+    "m365PlanShowFewerRows": "간단히 보기"
   },
   "localModels": {
     "title": "로컬 모델",

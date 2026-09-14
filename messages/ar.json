@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "هذا الحد أعلى مما يمكنك تعيينه وفقاً لدورك — الرجاء طلب المساعدة من المسؤول العام.",
     "m365AgentLimitBadge": "الحد {limit} (عيّنه {who})",
     "m365PlanTrimHint": "حدد ما تريد تضمينه: قم بإلغاء تحديد المجلدات الفرعية أو الملفات، أو فلتر حسب النوع، أو احتفظ بالأحدث فقط.",
-    "m365PlanKeepNewest": "الاحتفاظ بأحدث {count}",
-    "m365PlanKeepNewestConfirm": "هل ترغب في الاحتفاظ بـ {keep} من الملفات المعدلة حديثاً واستبعاد {exclude} الأخرى؟",
-    "m365PlanIncludeAll": "تضمين الكل مجدداً (تم استبعاد {count})",
+    "m365PlanKeepNewest": "الاحتفاظ بأحدث {count, plural, one {# ملف} other {# ملفات}}",
+    "m365PlanKeepNewestConfirm": "الاحتفاظ بـ {keep, plural, one {# ملف تم تعديله مؤخرًا} other {# ملفات تم تعديلها مؤخرًا}} واستبعاد {exclude, plural, one {# ملف} other {# ملفات}} الأخرى؟",
+    "m365PlanIncludeAll": "تضمين الكل مرة أخرى ({count, plural, one {# ملف مستبعد} other {# ملفات مستبعدة}})",
     "m365PlanIncludeFile": "تضمين {name}",
     "m365PlanFileExcluded": "مستبعد",
     "m365PlanSortLabel": "ترتيب حسب",
@@ -4749,7 +4749,11 @@
       "name": "الاسم",
       "size": "الحجم",
       "modified": "تاريخ التعديل"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# مستند} other {# مستندات}}، الحد الأقصى {max} — قم بالاقتطاع أو رفع الحد قبل التحديث",
+    "m365AgentLimitBadgePlain": "الحد {limit}",
+    "m365PlanShowAllRows": "عرض كل {count, plural, one {# ملف} other {# ملفات}}",
+    "m365PlanShowFewerRows": "عرض أقل"
   },
   "localModels": {
     "title": "النماذج المحلية",

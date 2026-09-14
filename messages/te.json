@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "ఆ పరిమితి మీరు సెట్ చేయగలది కంటే ఎక్కువ — గ్లోబల్ అడ్మిన్‌ను అడగండి.",
     "m365AgentLimitBadge": "పరిమితం {limit} (సెట్ చేసిన వారు {who})",
     "m365PlanTrimHint": "ఏవీ చేర్చాలి అనేది మెరుగుదల చేయండి: ఉప-ఫోల్డర్‌లు లేదా ఫైళ్ళను అనచెక్ చేయండి, టైప్ ద్వారా ఫిల్టర్ చేయండి, లేదా కొత్తవే ఉంచండి.",
-    "m365PlanKeepNewest": "కొత్తవి {count} ఉంచండి",
-    "m365PlanKeepNewestConfirm": "చివరిగా మార్చబడిన {keep} ఫైళ్లను ఉంచి మిగతా {exclude} ను తొలగించాలా?",
-    "m365PlanIncludeAll": "అన్నీ మళ్లీ చేర్చండి ({count} తొలగించబడ్డవి)",
+    "m365PlanKeepNewest": "తాజా {count, plural, one {# ఫైల్} other {# ఫైళ్లు}} ఉంచు",
+    "m365PlanKeepNewestConfirm": "{keep, plural, one {# ఇటీవల మారిన ఫైల్} other {# ఇటీవల మారిన ఫైళ్లు}} ఉంచి మిగిలిన {exclude, plural, one {# ఫైల్} other {# ఫైళ్లు}} తొలగించాలా?",
+    "m365PlanIncludeAll": "మళ్లీ మొత్తం చేర్చు ({count, plural, one {# ఫైల్ తొలగించబడింది} other {# ఫైళ్లు తొలగించబడ్డాయి}})",
     "m365PlanIncludeFile": "{name} చేర్చండి",
     "m365PlanFileExcluded": "తొలగించబడింది",
     "m365PlanSortLabel": "ఇదివరి ఆధారంగా",
@@ -4749,7 +4749,11 @@
       "name": "పేరు",
       "size": "పరిమాణం",
       "modified": "మార్చబడిన"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# డాక్యుమెంట్} other {# డాక్యుమెంట్లు}}, లిమిట్ {max} — రిఫ్రెష్ చేసే ముందు ట్రిమ్ చేయండి లేదా లిమిట్ పెంచండి",
+    "m365AgentLimitBadgePlain": "లిమిట్ {limit}",
+    "m365PlanShowAllRows": "అన్నీ చూపించు {count, plural, one {# ఫైల్} other {# ఫైళ్లు}}",
+    "m365PlanShowFewerRows": "కొంత తక్కువగా చూపించు"
   },
   "localModels": {
     "title": "లోకల్ మోడల్స్",

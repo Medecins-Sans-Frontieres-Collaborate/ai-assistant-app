@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Opin yẹn kọja iye ti ipa rẹ le ṣeto — beere lọwọ oludari agbaye.",
     "m365AgentLimitBadge": "Opin {limit} (ti {who} ṣeto)",
     "m365PlanTrimHint": "Yan kini lati fi kun: yọ awọn apò-ọwọ kekere tabi faili, ṣe àlẹmọ nipasẹ iru, tabi pa awọn tuntun jùlọ mọ́.",
-    "m365PlanKeepNewest": "Pa awọn tuntun jùlọ mọ́ {count}",
-    "m365PlanKeepNewestConfirm": "Pa awọn faili ti a ṣe àtúnse kẹhin {keep} mọ́ ki o yọ awọn miiran {exclude}?",
-    "m365PlanIncludeAll": "Fikun gbogbo lẹẹkansi ({count} ti yọ)",
+    "m365PlanKeepNewest": "Pa awọn tuntun julo {count, plural, one {# faili} other {# awon faili}}",
+    "m365PlanKeepNewestConfirm": "Ṣe o fẹ pa {keep, plural, one {# faili ti a ṣe atunse laipẹ julọ} other {# awon faili ti a ṣe atunse laipẹ julọ}} mọ ki o si yọ {exclude, plural, one {# faili} other {# awon faili}} kuro?",
+    "m365PlanIncludeAll": "Fi gbogbo pada sii ({count, plural, one {# faili ti a yọ kuro} other {# awon faili ti a yọ kuro}})",
     "m365PlanIncludeFile": "Fikun {name}",
     "m365PlanFileExcluded": "ti yọ",
     "m365PlanSortLabel": "Tito nipasẹ",
@@ -4733,7 +4733,11 @@
       "name": "Orukọ",
       "size": "Iwọn",
       "modified": "Atúnṣe"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# iwe-ipamọ} other {# awon iwe-ipamọ}}, iye to pọ ju ni {max} — ge tabi gbe opin ga ṣaaju ki o to tun ṣe igbesoke",
+    "m365AgentLimitBadgePlain": "Iye to pọ ju {limit}",
+    "m365PlanShowAllRows": "Fi gbogbo {count, plural, one {# faili} other {# awon faili}} han",
+    "m365PlanShowFewerRows": "Fi diẹ sii"
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",

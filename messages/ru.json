@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Этот лимит превышает ваши права — обратитесь к глобальному администратору.",
     "m365AgentLimitBadge": "Лимит {limit} (установил {who})",
     "m365PlanTrimHint": "Ограничьте включаемое: снимите отметки с подпапок или файлов, отфильтруйте по типу или оставьте только новые.",
-    "m365PlanKeepNewest": "Оставить новые {count}",
-    "m365PlanKeepNewestConfirm": "Оставить {keep} последних изменённых файлов и исключить остальные {exclude}?",
-    "m365PlanIncludeAll": "Включить все снова (исключено: {count})",
+    "m365PlanKeepNewest": "Оставить последние {count, plural, one {# файл} other {# файлов}}",
+    "m365PlanKeepNewestConfirm": "Оставить {keep, plural, one {# последний изменённый файл} other {# последних изменённых файлов}} и исключить {exclude, plural, one {# файл} other {# файлов}}?",
+    "m365PlanIncludeAll": "Включить все снова ({count, plural, one {# файл исключён} other {# файлов исключено}})",
     "m365PlanIncludeFile": "Включить {name}",
     "m365PlanFileExcluded": "исключено",
     "m365PlanSortLabel": "Сортировать по",
@@ -4749,7 +4749,11 @@
       "name": "Имя",
       "size": "Размер",
       "modified": "Изменён"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# документ} other {# документов}}, лимит {max} — уменьшите число или увеличьте лимит перед обновлением",
+    "m365AgentLimitBadgePlain": "Лимит {limit}",
+    "m365PlanShowAllRows": "Показать все {count, plural, one {# файл} other {# файлов}}",
+    "m365PlanShowFewerRows": "Показать меньше"
   },
   "localModels": {
     "title": "Локальные модели",

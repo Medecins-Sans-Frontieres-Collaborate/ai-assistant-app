@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Ndelo wana eleki oyo rôle na yo ekoki kotya — tuná admin général.",
     "m365AgentLimitBadge": "Ndelo {limit} (motó oyo atíki: {who})",
     "m365PlanTrimHint": "Pona nini ekotala: bondimela te ba subfolder to ba file, senganisa ndenge ya file, to tika kaka ya sika.",
-    "m365PlanKeepNewest": "Tika kaka ya sika {count}",
-    "m365PlanKeepNewestConfirm": "Tika ba file ya sika {keep} oyo babongisami mingi, mpe katisa mosusu {exclude}?",
-    "m365PlanIncludeAll": "Kangela nyonso lisusu ({count} elongi te)",
+    "m365PlanKeepNewest": "Tia kaka ya sika koleka {count, plural, one {# fichier} other {# ba fichier}}",
+    "m365PlanKeepNewestConfirm": "Tia kaka {keep, plural, one {# fichier ya suka oyo ebongisami} other {# ba fichier ya suka oyo ebongisami}} mpe longola {exclude, plural, one {# fichier mosusu} other {# ba fichier mosusu}}?",
+    "m365PlanIncludeAll": "Zongisa nyonso lisusu ({count, plural, one {# fichier elongwi} other {# ba fichier elongwi}})",
     "m365PlanIncludeFile": "Kangela {name}",
     "m365PlanFileExcluded": "elongi te",
     "m365PlanSortLabel": "Tata mbala",
@@ -4733,7 +4733,11 @@
       "name": "Nkombo",
       "size": "Monene",
       "modified": "Ebongisami"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# ndakisa ya mokanda} other {# ndakisa ya mikanda}}, ndelo {max} — longola to sanza ndelo liboso ya kosukisa sika",
+    "m365AgentLimitBadgePlain": "Ndelo {limit}",
+    "m365PlanShowAllRows": "Lakisa nyonso {count, plural, one {# ndakisa ya fichier} other {# ndakisa ya ba fichier}}",
+    "m365PlanShowFewerRows": "Lakisa mingi te"
   },
   "localModels": {
     "title": "Bamodelo ya esika",

@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "ဤကန့်သတ်ချက်သည် သင့်အခန်းကဏ္ဍခွင့်ပြုချက်ထက် မြင့်နေပါသည် — global admin ကို တောင်းဆိုပါ။",
     "m365AgentLimitBadge": "ကန့်သတ်ချက် {limit} (ထည့်သွင်းသူ — {who})",
     "m365PlanTrimHint": "ထည့်သွင်းရန်ကို ပြောင်းရွှေ့ပါ: subfolder သို့မဟုတ် ဖိုင်များ ပြန်ရွေးချယ်ခြင်း၊ အမျိုးအစားဖြင့် စစ်ထုတ်ခြင်း သို့မဟုတ် အသစ်ဆုံးများသာ ထားရှိပါ။",
-    "m365PlanKeepNewest": "အသစ်ဆုံး {count} ခုသာ ထားရှိပါ",
-    "m365PlanKeepNewestConfirm": "ကြာရွတ်သုံးခြင်းပြုလုပ်ထားသော {keep} ခုသာ ထားရှိပြီး အခြား {exclude} ခုကို ချန်ထားမည်လား?",
-    "m365PlanIncludeAll": "အားလုံးထည့်ပါ ({count} ခု ချန်ထားသည်)",
+    "m365PlanKeepNewest": "နောက်ဆုံးအပ်ဒိတ်ဖြစ်သော {count, plural, one {ဖိုင် # ခု} other {ဖိုင် # ခု}} သိမ်းထားပါ",
+    "m365PlanKeepNewestConfirm": "နောက်ဆုံးတည်းဖြတ်ထားသည့် {keep, plural, one {ဖိုင် # ခု} other {ဖိုင် # ခု}} ကိုသာ သိမ်းထားပြီး ကျန်ရှိသော {exclude, plural, one {ဖိုင် # ခု} other {ဖိုင် # ခု}} မပြုသိမ်းတော့ဘူးလား?",
+    "m365PlanIncludeAll": "အားလုံးကို ထပ်မံပါဝင်စေပါ ({count, plural, one {ဖိုင် # ခု ချန်ထား} other {ဖိုင် # ခု ချန်ထား}})",
     "m365PlanIncludeFile": "{name} ကိုထည့်ပါ",
     "m365PlanFileExcluded": "ချန်ထားသည်",
     "m365PlanSortLabel": "အလိုက်စဉ်ရန်",
@@ -4749,7 +4749,11 @@
       "name": "နာမည်",
       "size": "အရွယ်အစား",
       "modified": "ပြင်ဆင်ချိန်"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {စာရွက်စာတမ်း # စာရွက်} other {စာရွက်စာတမ်း # စာရွက်များ}}, ဝင်ခွင့်ကန့်သတ်ချက် {max} — မသစ်လွှတ်မီ လျှော့ချပါ၊ သို့မဟုတ် ကန့်သတ်မှုကို တိုးထားပါ။",
+    "m365AgentLimitBadgePlain": "ကန့်သတ်ချက် {limit}",
+    "m365PlanShowAllRows": "{count, plural, one {ဖိုင် # ခု} other {ဖိုင် # ခု}} ဆားလုံး ပြပါ",
+    "m365PlanShowFewerRows": "အနည်းငယ်သာ ပြပါ"
   },
   "localModels": {
     "title": "ဒေသတွင်း မော်ဒယ်များ",

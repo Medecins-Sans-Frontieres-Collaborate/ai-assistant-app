@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Malire amenewo ndi ochuluka kuposa omwe udindo wanu ungakhazikitse — funsani global admin.",
     "m365AgentLimitBadge": "Malire {limit} (wakhazikitsa {who})",
     "m365PlanTrimHint": "Sankhani zomwe muyike: chotsani ma subfolder kapena mafayela, sungani mitundu ya mafayela, kapena siyani za tsopano zokha.",
-    "m365PlanKeepNewest": "Siyani zaposachedwa {count}",
-    "m365PlanKeepNewestConfirm": "Siyani mafayela {keep} amene asinthidwa posachedwa ndipo chotsani ena {exclude}?",
-    "m365PlanIncludeAll": "Yikanso zonse ({count} zachotsedwa)",
+    "m365PlanKeepNewest": "Sungani {count, plural, one {# fayilo yatsopano kwambiri} other {# mafayilo atsopano kwambiri}}",
+    "m365PlanKeepNewestConfirm": "Sungani {keep, plural, one {# fayilo yomwe yasintha posachedwa kwambiri} other {# mafayilo omwe asinthidwa posachedwa kwambiri}} ndikutulutsa {exclude, plural, one {# fayilo} other {# mafayilo} ena}?",
+    "m365PlanIncludeAll": "Ikani zonse kachiwiri ({count, plural, one {# fayilo yatulutsidwa} other {# mafayilo atulutsidwa}})",
     "m365PlanIncludeFile": "Ikani {name}",
     "m365PlanFileExcluded": "yachotsedwa",
     "m365PlanSortLabel": "Sanja malinga ndi",
@@ -4733,7 +4733,11 @@
       "name": "Dzina",
       "size": "Kukula",
       "modified": "Zasinthidwa"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# chikalata} other {# zikalata}}, malire {max} — chepetsani kapena kukweza malire musanachitenso kusintha",
+    "m365AgentLimitBadgePlain": "Malire {limit}",
+    "m365PlanShowAllRows": "Onetsani zonse {count, plural, one {# fayilo} other {# mafayilo}}",
+    "m365PlanShowFewerRows": "Onetsani zochepa"
   },
   "localModels": {
     "title": "Mitundu yapafupi",

@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Tento limit přesahuje možnosti vašeho oprávnění – obraťte se na globálního administrátora.",
     "m365AgentLimitBadge": "Limit {limit} (nastavil {who})",
     "m365PlanTrimHint": "Upravte, co zahrnout: odškrtněte podsložky nebo soubory, filtrujte podle typu nebo ponechte pouze nejnovější.",
-    "m365PlanKeepNewest": "Ponechat nejnovějších {count}",
-    "m365PlanKeepNewestConfirm": "Ponechat {keep} nejnověji upravených souborů a vyloučit ostatních {exclude}?",
-    "m365PlanIncludeAll": "Zahrnout vše znovu ({count} vyloučeno)",
+    "m365PlanKeepNewest": "Ponechat nejnovější {count, plural, one {# soubor} other {# soubory}}",
+    "m365PlanKeepNewestConfirm": "Ponechat {keep, plural, one {# naposledy upravený soubor} other {# naposledy upravené soubory}} a vyloučit dalších {exclude, plural, one {# soubor} other {# souborů}}?",
+    "m365PlanIncludeAll": "Zahrnout všechny znovu ({count, plural, one {# soubor vyloučen} other {# souborů vyloučeno}})",
     "m365PlanIncludeFile": "Zahrnout {name}",
     "m365PlanFileExcluded": "vyloučeno",
     "m365PlanSortLabel": "Řadit podle",
@@ -4749,7 +4749,11 @@
       "name": "Název",
       "size": "Velikost",
       "modified": "Upraveno"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# dokument} other {# dokumentů}}, limit {max} — upravte nebo zvýšte limit před aktualizací",
+    "m365AgentLimitBadgePlain": "Limit {limit}",
+    "m365PlanShowAllRows": "Zobrazit všechny {count, plural, one {# soubor} other {# soubory}}",
+    "m365PlanShowFewerRows": "Zobrazit méně"
   },
   "localModels": {
     "title": "Lokální modely",

@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "यो सीमा तपाईंको भूमिकाले तोक्न सक्ने भन्दा बढी छ — ग्लोबल एडमिनलाई सोध्नुहोस्।",
     "m365AgentLimitBadge": "सीमा {limit} ({who} द्वारा सेट गरिएको)",
     "m365PlanTrimHint": "के समावेश गर्ने छान्नुहोस्: उपफोल्डर वा फाइलहरू अनचेक गर्नुहोस्, प्रकारअनुसार छान्नुहोस्, वा सबैभन्दा नयाँ मात्र राख्नुहोस्।",
-    "m365PlanKeepNewest": "नयाँ {count} मात्र राख्नुहोस्",
-    "m365PlanKeepNewestConfirm": "{keep} सबैभन्दा भर्खर परिमार्जन भएका फाइलहरू राख्ने र बाँकी {exclude} हटाउने?",
-    "m365PlanIncludeAll": "सबै फेरि समावेश गर्नुहोस् ({count} हटाइएका)",
+    "m365PlanKeepNewest": "नयाँ {count, plural, one {# फाइल} other {# फाइलहरू}} राख्नुहोस्",
+    "m365PlanKeepNewestConfirm": "{keep, plural, one {# भर्खरै परिमार्जित फाइल} other {# भर्खरै परिमार्जित फाइलहरू}} राख्ने र अन्य {exclude, plural, one {# फाइल} other {# फाइलहरू}} हटाउने?",
+    "m365PlanIncludeAll": "फेरि सबै सामेल गर्नुहोस् ({count, plural, one {# फाइल हटाइयो} other {# फाइलहरू हटाइयो}})",
     "m365PlanIncludeFile": "{name} समावेश गर्नुहोस्",
     "m365PlanFileExcluded": "हटाइएको",
     "m365PlanSortLabel": "यसअनुसार क्रमबद्ध गर्नुहोस्",
@@ -4733,7 +4733,11 @@
       "name": "नाम",
       "size": "आकार",
       "modified": "परिमार्जन गरिएको"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# कागजात} other {# कागजातहरू}}, सिमा {max} — अपडेट गर्नु अघि ट्रिम वा सिमा बढाउनुहोस्",
+    "m365AgentLimitBadgePlain": "सिमा {limit}",
+    "m365PlanShowAllRows": "सबै {count, plural, one {# फाइल} other {# फाइलहरू}} देखाउनुहोस्",
+    "m365PlanShowFewerRows": "थोरै देखाउनुहोस्"
   },
   "localModels": {
     "title": "स्थानीय मोडेलहरू",

@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "ขีดจำกัดนี้เกินกว่าที่บทบาทของคุณจะตั้งค่าได้ — โปรดติดต่อ global admin",
     "m365AgentLimitBadge": "จำกัด {limit} (กำหนดโดย {who})",
     "m365PlanTrimHint": "เลือกเอกสารที่ต้องการ: ยกเลิกเลือกโฟลเดอร์ย่อยหรือไฟล์ กรองตามประเภท หรือตั้งให้เก็บเฉพาะไฟล์ใหม่ล่าสุด",
-    "m365PlanKeepNewest": "เก็บเฉพาะใหม่ล่าสุด {count} รายการ",
-    "m365PlanKeepNewestConfirm": "เก็บไฟล์ที่แก้ไขล่าสุด {keep} รายการ และไม่รวมอีก {exclude} รายการ?",
-    "m365PlanIncludeAll": "รวมทั้งหมดอีกครั้ง (ที่ถูกตัดออก {count})",
+    "m365PlanKeepNewest": "เก็บเฉพาะไฟล์ล่าสุด {count, plural, one {# ไฟล์} other {# ไฟล์}}",
+    "m365PlanKeepNewestConfirm": "เก็บ {keep, plural, one {# ไฟล์ที่แก้ไขล่าสุด} other {# ไฟล์ที่แก้ไขล่าสุด}} และไม่รวม {exclude, plural, one {# ไฟล์} other {# ไฟล์}} อื่น ๆ หรือไม่?",
+    "m365PlanIncludeAll": "รวมทั้งหมดอีกครั้ง ({count, plural, one {ยกเว้น # ไฟล์} other {ยกเว้น # ไฟล์}})",
     "m365PlanIncludeFile": "รวม {name}",
     "m365PlanFileExcluded": "ไม่รวม",
     "m365PlanSortLabel": "จัดเรียงตาม",
@@ -4749,7 +4749,11 @@
       "name": "ชื่อ",
       "size": "ขนาด",
       "modified": "วันที่แก้ไข"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# เอกสาร} other {# เอกสาร}}, มีขีดจำกัด {max} — กรุณาตัดลดหรือเพิ่มขีดจำกัดก่อนรีเฟรช",
+    "m365AgentLimitBadgePlain": "ขีดจำกัด {limit}",
+    "m365PlanShowAllRows": "แสดงทั้งหมด {count, plural, one {# ไฟล์} other {# ไฟล์}}",
+    "m365PlanShowFewerRows": "แสดงน้อยลง"
   },
   "localModels": {
     "title": "โมเดลภายในเครื่อง",

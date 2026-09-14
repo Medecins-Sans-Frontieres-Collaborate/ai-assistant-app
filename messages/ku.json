@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "ئەم سنوورە بەرزی سنووری جێگەی تۆیە — پێویستە بەڕێوەبەرێکی گشتی داوا بکەیت.",
     "m365AgentLimitBadge": "سنوور {limit} (دیاریکراو لەلایەن {who})",
     "m365PlanTrimHint": "هەڵبژاردنی وشەکانی بۆ تێخستن: بوخچە یان فایل لەنزیکەوە لابکە، بەپێی جۆر شێوە جیا بکە یان تەنها نوێترین بپارێزە.",
-    "m365PlanKeepNewest": "تەنها نوێترین {count} پارێزە",
-    "m365PlanKeepNewestConfirm": "ئایا {keep} فایلە نوێترین دەستکاریکراو پارێزیت و {exclude} ی تر لابکەیت؟",
-    "m365PlanIncludeAll": "دووبارە هەمووی زیاد بکە ({count} لابراوە)",
+    "m365PlanKeepNewest": "نوێترین {count, plural, one {# پەڕگە} other {# پەڕگەکان}} پارێزە",
+    "m365PlanKeepNewestConfirm": "{keep, plural, one {# پەڕگەی نوێترین دەستکاری کراو} other {# پەڕگەی نوێترین دەستکاری کراو}} پارێزه، بقیەی {exclude, plural, one {# پەڕگە} other {# پەڕگەکان}} لابکە؟",
+    "m365PlanIncludeAll": "هەمووی دووبارە لەژێر بگرە ({count, plural, one {# پەڕگە لەبەرچووە} other {# پەڕگە لەبەرچووە}})",
     "m365PlanIncludeFile": "{name} زیاد بکە",
     "m365PlanFileExcluded": "لابراوە",
     "m365PlanSortLabel": "ڕیزبەندی بکە بە",
@@ -4733,7 +4733,11 @@
       "name": "ناو",
       "size": "قەبارە",
       "modified": "گۆڕدراو"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# بەلگە} other {# بەلگە}}, سنوور {max} — پێویستە سنوورەکە بەڕز بکەیت یان کەم بکەیت پێش نوێکردنەوە",
+    "m365AgentLimitBadgePlain": "سنوور {limit}",
+    "m365PlanShowAllRows": "هەموو {count, plural, one {# پەڕگە} other {# پەڕگەکان}} نیشان بدە",
+    "m365PlanShowFewerRows": "کەمتر نیشان بدە"
   },
   "localModels": {
     "title": "مۆدێلە سەرەکییەکان",

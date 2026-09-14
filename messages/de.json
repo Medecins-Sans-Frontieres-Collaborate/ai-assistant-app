@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Dieses Limit liegt über dem, das Ihre Rolle festlegen darf – wenden Sie sich an einen globalen Administrator.",
     "m365AgentLimitBadge": "Limit {limit} (festgelegt von {who})",
     "m365PlanTrimHint": "Auswahl anpassen: Unterordner oder Dateien abwählen, nach Typ filtern oder nur die neuesten behalten.",
-    "m365PlanKeepNewest": "Die neuesten {count} behalten",
-    "m365PlanKeepNewestConfirm": "Die {keep} zuletzt bearbeiteten Dateien behalten und die anderen {exclude} ausschließen?",
-    "m365PlanIncludeAll": "Alle wieder einschließen ({count} ausgeschlossen)",
+    "m365PlanKeepNewest": "Neueste {count, plural, one {# Datei} other {# Dateien}} behalten",
+    "m365PlanKeepNewestConfirm": "Die {keep, plural, one {# zuletzt geänderte Datei} other {# zuletzt geänderten Dateien}} behalten und die übrigen {exclude, plural, one {# Datei} other {# Dateien}} ausschließen?",
+    "m365PlanIncludeAll": "Alle wieder einschließen ({count, plural, one {# Datei ausgeschlossen} other {# Dateien ausgeschlossen}})",
     "m365PlanIncludeFile": "{name} einschließen",
     "m365PlanFileExcluded": "ausgeschlossen",
     "m365PlanSortLabel": "Sortieren nach",
@@ -4749,7 +4749,11 @@
       "name": "Name",
       "size": "Größe",
       "modified": "Geändert"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# Dokument} other {# Dokumente}}, Limit {max} — bitte kürzen oder Limit erhöhen, bevor Sie aktualisieren",
+    "m365AgentLimitBadgePlain": "Limit {limit}",
+    "m365PlanShowAllRows": "Alle {count, plural, one {# Datei} other {# Dateien}} anzeigen",
+    "m365PlanShowFewerRows": "Weniger anzeigen"
   },
   "localModels": {
     "title": "Lokale Modelle",

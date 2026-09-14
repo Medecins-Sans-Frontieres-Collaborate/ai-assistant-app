@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Ин меъёр аз ваколати нақши шумо зиёд аст — ба маъмури умумӣ муроҷиат кунед.",
     "m365AgentLimitBadge": "Меъёр {limit} (муайяншуда аз ҷониби {who})",
     "m365PlanTrimHint": "Чиро дохил карданро ихтисор кунед: зерпапкаҳо ё файлҳоро ғайрифаъол кунед, аз рӯи намуд филтр кунед ё танҳо файлҳои навтаринро нигоҳ доред.",
-    "m365PlanKeepNewest": "{count} навтаринро нигоҳ доред",
-    "m365PlanKeepNewestConfirm": "Оё {keep} файлҳои охир саҳеҳкардашударо нигоҳ доред ва {exclude}-и дигарро хориҷ кунед?",
-    "m365PlanIncludeAll": "Ҳамаро боз дохил кунед ({count} хориҷшуда)",
+    "m365PlanKeepNewest": "Навтарин {count, plural, one {# файл} other {# файл}-ро нигоҳ доред}",
+    "m365PlanKeepNewestConfirm": "Оё мехоҳед {keep, plural, one {# файл, ки охирин тағйир ёфтааст} other {# файл, ки охирин тағйир ёфтанд}}-ро нигоҳ доред ва {exclude, plural, one {# файли дигар} other {# файлҳои дигар}}-ро берун кунед?",
+    "m365PlanIncludeAll": "Ҳамаро дубора дохил кунед ({count, plural, one {# файл хориҷ шудааст} other {# файл хориҷ шудаанд}})",
     "m365PlanIncludeFile": "{name}-ро дохил кунед",
     "m365PlanFileExcluded": "хориҷ шудааст",
     "m365PlanSortLabel": "Ба тартиб дароред",
@@ -4733,7 +4733,11 @@
       "name": "Ном",
       "size": "Ҳаҷм",
       "modified": "Тағйирёфта"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# ҳуҷҷат} other {# ҳуҷҷат}}, ҳадди {max} — пеш аз навсозӣ маҳдудиятро кам ё зиёд кунед",
+    "m365AgentLimitBadgePlain": "Маҳдудият {limit}",
+    "m365PlanShowAllRows": "Нишон додани ҳамаи {count, plural, one {# файл} other {# файл}}",
+    "m365PlanShowFewerRows": "Камтар нишон диҳед"
   },
   "localModels": {
     "title": "Моделҳои маҳаллӣ",

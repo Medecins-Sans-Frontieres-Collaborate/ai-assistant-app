@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "این سقف بالاتر از حد مجاز نقش شماست — با مدیر کل تماس بگیرید.",
     "m365AgentLimitBadge": "سقف {limit} (تنظیم شده توسط {who})",
     "m365PlanTrimHint": "محدودسازی انتخاب: زیرپوشه یا فایل‌ها را بردارید، بر اساس نوع فیلتر کنید یا فقط جدیدترین‌ها را نگه دارید.",
-    "m365PlanKeepNewest": "نگهداری {count} جدیدترین",
-    "m365PlanKeepNewestConfirm": "{keep} فایل به‌تازگی ویرایش‌شده را نگه‌داریم و {exclude} مورد دیگر را حذف کنیم؟",
-    "m365PlanIncludeAll": "همه را دوباره وارد کن ({count} حذف شده)",
+    "m365PlanKeepNewest": "نگه داشتن جدیدترین {count, plural, one {# فایل} other {# فایل}}",
+    "m365PlanKeepNewestConfirm": "جدیدترین {keep, plural, one {# فایل اصلاح‌شده} other {# فایل اصلاح‌شده}} را نگه دار و سایر {exclude, plural, one {# فایل} other {# فایل}} را حذف کن؟",
+    "m365PlanIncludeAll": "دوباره همه را وارد کن ({count, plural, one {# فایل حذف شده} other {# فایل حذف شده}})",
     "m365PlanIncludeFile": "افزودن {name}",
     "m365PlanFileExcluded": "حذف شده",
     "m365PlanSortLabel": "مرتب‌سازی بر اساس",
@@ -4749,7 +4749,11 @@
       "name": "نام",
       "size": "اندازه",
       "modified": "تاریخ تغییر"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# سند} other {# سند}}, محدودیت {max} — پیش از به‌روزرسانی، کاهش دهید یا مقدار محدودیت را افزایش دهید",
+    "m365AgentLimitBadgePlain": "محدودیت {limit}",
+    "m365PlanShowAllRows": "نمایش همه {count, plural, one {# فایل} other {# فایل}}",
+    "m365PlanShowFewerRows": "نمایش کمتر"
   },
   "localModels": {
     "title": "مدل‌های محلی",

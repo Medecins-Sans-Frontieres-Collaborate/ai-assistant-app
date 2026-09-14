@@ -4770,9 +4770,9 @@
     "m365CapAboveRole": "Giới hạn này vượt quá quyền cho phép của vai trò bạn — hãy liên hệ quản trị viên toàn hệ thống.",
     "m365AgentLimitBadge": "Giới hạn {limit} (được đặt bởi {who})",
     "m365PlanTrimHint": "Chọn nội dung cần lấy: bỏ chọn thư mục con hoặc tệp, lọc theo loại, hoặc chỉ giữ nội dung mới nhất.",
-    "m365PlanKeepNewest": "Chỉ giữ {count} mới nhất",
-    "m365PlanKeepNewestConfirm": "Chỉ giữ {keep} tệp được chỉnh sửa gần nhất và loại trừ {exclude} tệp còn lại?",
-    "m365PlanIncludeAll": "Bao gồm lại tất cả ({count} đã bị loại trừ)",
+    "m365PlanKeepNewest": "Giữ lại {count, plural, one {# tệp mới nhất} other {# tệp mới nhất}}",
+    "m365PlanKeepNewestConfirm": "Giữ lại {keep, plural, one {# tệp được sửa đổi gần nhất} other {# tệp được sửa đổi gần nhất}} và loại trừ {exclude, plural, one {# tệp} other {# tệp}} còn lại?",
+    "m365PlanIncludeAll": "Bao gồm lại tất cả ({count, plural, one {# tệp bị loại trừ} other {# tệp bị loại trừ}})",
     "m365PlanIncludeFile": "Bao gồm {name}",
     "m365PlanFileExcluded": "đã loại trừ",
     "m365PlanSortLabel": "Sắp xếp theo",
@@ -4780,7 +4780,11 @@
       "name": "Tên",
       "size": "Kích thước",
       "modified": "Sửa đổi"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# tài liệu} other {# tài liệu}}, giới hạn {max} — hãy cắt bớt hoặc tăng giới hạn trước khi làm mới",
+    "m365AgentLimitBadgePlain": "Giới hạn {limit}",
+    "m365PlanShowAllRows": "Hiện tất cả {count, plural, one {# tệp} other {# tệp}}",
+    "m365PlanShowFewerRows": "Hiện ít hơn"
   },
   "localModels": {
     "title": "Mô hình cục bộ",

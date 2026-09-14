@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Limit sa a pi wo pase sa wòl ou ka mete — mande yon administratè jeneral.",
     "m365AgentLimitBadge": "Limit {limit} (mete pa {who})",
     "m365PlanTrimHint": "Redwi sa pou enkli: dekoche sous-dosye oswa fichye yo, filtre pa tip, oswa kenbe sèlman sa ki pi resan yo.",
-    "m365PlanKeepNewest": "Kenbe {count} ki pi resan",
-    "m365PlanKeepNewestConfirm": "Kenbe {keep} fichye ki modifye pi resan yo epi ekskli lòt {exclude} yo?",
-    "m365PlanIncludeAll": "Enkli tout ankò ({count} ekskli)",
+    "m365PlanKeepNewest": "Kenbe {count, plural, one {# fichye ki pi resan} other {# fichye ki pi resan}}",
+    "m365PlanKeepNewestConfirm": "Kenbe {keep, plural, one {# fichye ki resamman modifye} other {# fichye ki resamman modifye}} epi eskli {exclude, plural, one {# fichye} other {# fichye}} lòt yo?",
+    "m365PlanIncludeAll": "Ajoute tout ankò ({count, plural, one {# fichye eskli} other {# fichye eskli}})",
     "m365PlanIncludeFile": "Enkli {name}",
     "m365PlanFileExcluded": "ekskli",
     "m365PlanSortLabel": "Klasman pa",
@@ -4733,7 +4733,11 @@
       "name": "Non",
       "size": "Gwosè",
       "modified": "Modifye"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# dokiman} other {# dokiman}}, limit {max} — retire oswa ogmante limit la anvan ou rafrechi",
+    "m365AgentLimitBadgePlain": "Limit {limit}",
+    "m365PlanShowAllRows": "Montre tout {count, plural, one {# fichye} other {# fichye}}",
+    "m365PlanShowFewerRows": "Montre mwens"
   },
   "localModels": {
     "title": "Modèl lokal",

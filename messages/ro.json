@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Această limită este peste ce poate seta rolul dvs. — solicitați ajutorul unui administrator global.",
     "m365AgentLimitBadge": "Limită {limit} (setată de {who})",
     "m365PlanTrimHint": "Alegeți ce să includeți: debifați subfoldere sau fișiere, filtrați după tip sau păstrați doar cele mai noi.",
-    "m365PlanKeepNewest": "Păstrează cele mai noi {count}",
-    "m365PlanKeepNewestConfirm": "Păstrați cele mai recent modificate {keep} fișiere și excludeți celelalte {exclude}?",
-    "m365PlanIncludeAll": "Includeți din nou totul ({count} excluse)",
+    "m365PlanKeepNewest": "Păstrează cele mai noi {count, plural, one {# fișier} other {# fișiere}}",
+    "m365PlanKeepNewestConfirm": "Păstrați {keep, plural, one {# fișier modificat cel mai recent} other {# fișiere modificate cel mai recent}} și excludeți celelalte {exclude, plural, one {# fișier} other {# fișiere}}?",
+    "m365PlanIncludeAll": "Include din nou pe toate ({count, plural, one {# fișier exclus} other {# fișiere excluse}})",
     "m365PlanIncludeFile": "Includeți {name}",
     "m365PlanFileExcluded": "exclus",
     "m365PlanSortLabel": "Sortare după",
@@ -4749,7 +4749,11 @@
       "name": "Nume",
       "size": "Dimensiune",
       "modified": "Modificat"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# document} other {# documente}}, limită {max} — reduceți sau măriți limita înainte de a reîmprospăta",
+    "m365AgentLimitBadgePlain": "Limită {limit}",
+    "m365PlanShowAllRows": "Afișează toate {count, plural, one {# fișier} other {# fișiere}}",
+    "m365PlanShowFewerRows": "Afișează mai puține"
   },
   "localModels": {
     "title": "Modele locale",

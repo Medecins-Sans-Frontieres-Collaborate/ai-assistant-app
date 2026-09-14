@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Xaddigaas wuu ka badan yahay waxa aad xil ahaan dejin karto — weydii maamulaha guud.",
     "m365AgentLimitBadge": "Xaddiga {limit} (wuxuu dejiyay {who})",
     "m365PlanTrimHint": "Go'aanso waxa la galinayo: ka saar laan-hoosaadyada ama faylasha, kala saar nooca, ama kaydi kuwa ugu cusub keliya.",
-    "m365PlanKeepNewest": "Keliya kaydi kuwa ugu cusub {count}",
-    "m365PlanKeepNewestConfirm": "Ma rabtaa inaad kaydiso {keep} faylasha ugu dambeysay ee la beddelay oo aad ka saarto {exclude} kuwa kale?",
-    "m365PlanIncludeAll": "Dhammaan dib ugu dar ({count} la reebay)",
+    "m365PlanKeepNewest": "Hay kuwa ugu cusub {count, plural, one {# fayl} other {# faylal}}",
+    "m365PlanKeepNewestConfirm": "Miyaad rabtaa in la hayo {keep, plural, one {# faylka ugu dambeyay ee la beddelay} other {# faylasha ugu dambeyay ee la beddelay}} oo laga reebo {exclude, plural, one {# fayl} other {# faylal}} kale?",
+    "m365PlanIncludeAll": "Dib ugu dar dhammaan ({count, plural, one {# fayl la reebay} other {# faylal la reebay}})",
     "m365PlanIncludeFile": "Ku dar {name}",
     "m365PlanFileExcluded": "la reebay",
     "m365PlanSortLabel": "Kala saar by",
@@ -4733,7 +4733,11 @@
       "name": "Magaca",
       "size": "Cabbirka",
       "modified": "La beddelay"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# dukumiinti} other {# dukumiinti}}, xadka waa {max} — jar ama kordhi xadka ka hor intaadan cusboonaysiin",
+    "m365AgentLimitBadgePlain": "Xadka {limit}",
+    "m365PlanShowAllRows": "Muuji dhammaan {count, plural, one {# fayl} other {# faylal}}",
+    "m365PlanShowFewerRows": "Muuji ugu yar"
   },
   "localModels": {
     "title": "Moodallo maxalli ah",

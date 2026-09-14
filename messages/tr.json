@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Bu limit rolünüzün ayarlayabileceğinin üzerinde — global admin'e danışın.",
     "m365AgentLimitBadge": "Limit {limit} (ayarlayan: {who})",
     "m365PlanTrimHint": "Dahil edilecekleri azaltın: alt klasör ya da dosyaların işaretini kaldırın, türe göre filtreleyin veya sadece en yenileri bırakın.",
-    "m365PlanKeepNewest": "En yeni {count} öğeyi tut",
-    "m365PlanKeepNewestConfirm": "En son değiştirilen {keep} dosyayı tutup diğer {exclude} dosyayı hariç bırakmak ister misiniz?",
-    "m365PlanIncludeAll": "Hepsini tekrar dahil et ({count} hariç tutuldu)",
+    "m365PlanKeepNewest": "En yeni {count, plural, one {# dosyayı} other {# dosyayı}} sakla",
+    "m365PlanKeepNewestConfirm": "{keep, plural, one {# en son değiştirilen dosyayı} other {# en son değiştirilen dosyayı}} saklayıp diğer {exclude, plural, one {# dosyayı} other {# dosyayı}} hariç tutmak ister misiniz?",
+    "m365PlanIncludeAll": "Tümünü tekrar dahil et ({count, plural, one {# dosya hariç tutuldu} other {# dosya hariç tutuldu}})",
     "m365PlanIncludeFile": "{name} dosyasını dahil et",
     "m365PlanFileExcluded": "hariç tutuldu",
     "m365PlanSortLabel": "Sırala",
@@ -4749,7 +4749,11 @@
       "name": "Ad",
       "size": "Boyut",
       "modified": "Değiştirilme tarihi"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# belge} other {# belge}}, limit {max} — yenilemeden önce sınırı azaltın veya artırın",
+    "m365AgentLimitBadgePlain": "Limit {limit}",
+    "m365PlanShowAllRows": "Tüm {count, plural, one {# dosya} other {# dosya}} göster",
+    "m365PlanShowFewerRows": "Daha az göster"
   },
   "localModels": {
     "title": "Yerel modeller",

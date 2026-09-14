@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Urwo rubibe rurengeye ico ushobora gushiraho – saba umuyobozi mukuru.",
     "m365AgentLimitBadge": "Urubibe {limit} (rwashinzwe na {who})",
     "m365PlanTrimHint": "Hitamwo ico ushaka gushiramwo: kura imifukamwo yo hasi canke amadosiye, canke uhitemwo ukoresheje ubwoko canke usigare n’aya hafi kwezi.",
-    "m365PlanKeepNewest": "Sigaza ayashasha {count}",
-    "m365PlanKeepNewestConfirm": "Ushaka gusigaza amadosiye {keep} aherutse guhindurwa maze ukuramwo ayandi {exclude}?",
-    "m365PlanIncludeAll": "Shiramwo vyose kandi ({count} vyarakuwemwo)",
+    "m365PlanKeepNewest": "Zigama bishasha {count, plural, one {# idosiye} other {# amadosiye}}",
+    "m365PlanKeepNewestConfirm": "Uzigame {keep, plural, one {# idosiye yakozwe vuba} other {# amadosiye yakorewe vuba}} maze ukureho izindi {exclude, plural, one {# idosiye} other {# amadosiye}}?",
+    "m365PlanIncludeAll": "Sangiza vyose n’ukundi ({count, plural, one {# idosiye itarimwo} other {# amadosiye atarimwo}})",
     "m365PlanIncludeFile": "Shiramwo {name}",
     "m365PlanFileExcluded": "cakuweho",
     "m365PlanSortLabel": "Gurutsa hakurikijwe",
@@ -4733,7 +4733,11 @@
       "name": "Izina",
       "size": "Ingano",
       "modified": "Vyahinduwe"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# idosiye} other {# amadosiye}}, umupaka {max} — siba canke wiyongere umupaka imbere yo gusubiramwo.",
+    "m365AgentLimitBadgePlain": "Umupaka {limit}",
+    "m365PlanShowAllRows": "Erekana vyose {count, plural, one {# idosiye} other {# amadosiye}}",
+    "m365PlanShowFewerRows": "Erekana bike"
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",

@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Kikomo hicho kiko juu kuliko unachoruhusiwa kuweka — muulize msimamizi mkuu.",
     "m365AgentLimitBadge": "Kikomo {limit} (kimewekwa na {who})",
     "m365PlanTrimHint": "Chagua nini cha kujumuisha: toa alama kwenye folda ndogo au faili, chuja kwa aina, au baka mpya pekee.",
-    "m365PlanKeepNewest": "Baki mpya {count}",
-    "m365PlanKeepNewestConfirm": "Baki faili {keep} zilizorekebishwa hivi karibuni na utoe {exclude} nyingine?",
-    "m365PlanIncludeAll": "Jumuisha zote tena ({count} zimeondolewa)",
+    "m365PlanKeepNewest": "Hifadhi {count, plural, one {# faili mpya zaidi} other {# faili mpya zaidi}}",
+    "m365PlanKeepNewestConfirm": "Hifadhi {keep, plural, one {# faili iliyohaririwa hivi karibuni} other {# faili zilizohaririwa hivi karibuni}} na toa {exclude, plural, one {# faili nyingine} other {# faili nyingine}}?",
+    "m365PlanIncludeAll": "Jumuisha zote tena ({count, plural, one {# faili imeondolewa} other {# faili zimeondolewa}})",
     "m365PlanIncludeFile": "Jumuisha {name}",
     "m365PlanFileExcluded": "imeondolewa",
     "m365PlanSortLabel": "Panga kwa",
@@ -4749,7 +4749,11 @@
       "name": "Jina",
       "size": "Ukubwa",
       "modified": "Iliyorekebishwa"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# hati} other {# hati}}, kikomo {max} — punguza idadi au ongeza kikomo kabla ya kusasisha upya",
+    "m365AgentLimitBadgePlain": "Kikomo {limit}",
+    "m365PlanShowAllRows": "Onyesha zote {count, plural, one {# faili} other {# faili}}",
+    "m365PlanShowFewerRows": "Onyesha chache"
   },
   "localModels": {
     "title": "Miundo ya ndani",

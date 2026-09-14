@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Αυτό το όριο υπερβαίνει την άδεια του ρόλου σας — ζητήστε από παγκόσμιο διαχειριστή.",
     "m365AgentLimitBadge": "Όριο {limit} (ορίστηκε από {who})",
     "m365PlanTrimHint": "Επιλέξτε τι να συμπεριληφθεί: αποεπιλέξτε υποφακέλους ή αρχεία, φιλτράρετε ανά τύπο ή κρατήστε μόνο τα νεότερα.",
-    "m365PlanKeepNewest": "Κρατήστε τα {count} νεότερα",
-    "m365PlanKeepNewestConfirm": "Να κρατηθούν τα {keep} πιο πρόσφατα τροποποιημένα αρχεία και να αποκλειστούν τα υπόλοιπα {exclude};",
-    "m365PlanIncludeAll": "Συμπερίληψη όλων ξανά ({count} εξαιρέθηκαν)",
+    "m365PlanKeepNewest": "Διατήρηση των νεότερων {count, plural, one {# αρχείου} other {# αρχείων}}",
+    "m365PlanKeepNewestConfirm": "Να διατηρηθούν τα {keep, plural, one {# πιο πρόσφατα τροποποιημένο αρχείο} other {# πιο πρόσφατα τροποποιημένα αρχεία}} και να εξαιρεθούν τα υπόλοιπα {exclude, plural, one {# αρχείο} other {# αρχεία}};",
+    "m365PlanIncludeAll": "Συμπερίληψη όλων ξανά ({count, plural, one {# αρχείου εξαιρέθηκε} other {# αρχεία εξαιρέθηκαν}})",
     "m365PlanIncludeFile": "Συμπερίληψη {name}",
     "m365PlanFileExcluded": "εξαιρέθηκε",
     "m365PlanSortLabel": "Ταξινόμηση κατά",
@@ -4733,7 +4733,11 @@
       "name": "Όνομα",
       "size": "Μέγεθος",
       "modified": "Τροποποιήθηκε"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# έγγραφο} other {# έγγραφα}}, όριο {max} — μειώστε τον αριθμό ή αυξήστε το όριο πριν την ανανέωση",
+    "m365AgentLimitBadgePlain": "Όριο {limit}",
+    "m365PlanShowAllRows": "Εμφάνιση όλων των {count, plural, one {# αρχείου} other {# αρχείων}}",
+    "m365PlanShowFewerRows": "Εμφάνιση λιγότερων"
   },
   "localModels": {
     "title": "Τοπικά μοντέλα",

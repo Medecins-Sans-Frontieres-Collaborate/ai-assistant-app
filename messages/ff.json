@@ -4723,9 +4723,9 @@
     "m365CapAboveRole": "Kesol ngol ina ɗi toppa mo role maa woni—nana mbaɗa admin global.",
     "m365AgentLimitBadge": "Kesol {limit} (sappanɗo ko {who})",
     "m365PlanTrimHint": "Suus to hay gooto: yuɓɓit subfolders walla pay files, suusa to leydi type, walla mbaɗ only gorko wi'i.",
-    "m365PlanKeepNewest": "Hool gorko mum {count}",
-    "m365PlanKeepNewestConfirm": "A hool {keep} files juuliiya ɓe yaajaa e falle {exclude}?",
-    "m365PlanIncludeAll": "Ɓeydu fow tun (ɓeyda {count})",
+    "m365PlanKeepNewest": "Moƴƴu fii ndiyam {count, plural, one {# fiilde} other {# fiildeji}}",
+    "m365PlanKeepNewestConfirm": "A moƴƴu {keep, plural, one {# fiilde moƴƴun baɗɗum} other {# fiildeji moƴƴun baɗɗe}} e jooɗit {exclude, plural, one {# fiilde} other {# fiildeji}} yottude?",
+    "m365PlanIncludeAll": "Cuɓo fotaɗe mara ({count, plural, one {# fiilde yottude} other {# fiildeji yottude}})",
     "m365PlanIncludeFile": "Ɓeydu {name}",
     "m365PlanFileExcluded": "mo waawnaa",
     "m365PlanSortLabel": "Fiya ko",
@@ -4733,7 +4733,11 @@
       "name": "Innde",
       "size": "Sago",
       "modified": "Waynaama"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# dokumɛnta} other {# dokumɛntaji}}, ceertu {max} — njoɓtu walla ndokkita ceertu kala ko waɗi yowtitde",
+    "m365AgentLimitBadgePlain": "Ceertu {limit}",
+    "m365PlanShowAllRows": "Hollu fotaɗe {count, plural, one {# fiilde} other {# fiildeji}}",
+    "m365PlanShowFewerRows": "Hollu fewndo"
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",

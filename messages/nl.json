@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Die limiet ligt boven wat uw rol mag instellen — vraag een global admin.",
     "m365AgentLimitBadge": "Limiet {limit} (ingesteld door {who})",
     "m365PlanTrimHint": "Pas selectie aan: deselecteer submappen of bestanden, filter op type, of bewaar alleen de nieuwste.",
-    "m365PlanKeepNewest": "Bewaar de nieuwste {count}",
-    "m365PlanKeepNewestConfirm": "De {keep} meest recent gewijzigde bestanden bewaren en de overige {exclude} uitsluiten?",
-    "m365PlanIncludeAll": "Alles opnieuw opnemen ({count} uitgesloten)",
+    "m365PlanKeepNewest": "Bewaar nieuwste {count, plural, one {# bestand} other {# bestanden}}",
+    "m365PlanKeepNewestConfirm": "Bewaar de {keep, plural, one {# meest recent aangepaste bestand} other {# meest recent aangepaste bestanden}} en sluit de andere {exclude, plural, one {# bestand} other {# bestanden}} uit?",
+    "m365PlanIncludeAll": "Alles opnieuw opnemen ({count, plural, one {# bestand uitgesloten} other {# bestanden uitgesloten}})",
     "m365PlanIncludeFile": "Neem {name} op",
     "m365PlanFileExcluded": "uitgesloten",
     "m365PlanSortLabel": "Sorteren op",
@@ -4749,7 +4749,11 @@
       "name": "Naam",
       "size": "Grootte",
       "modified": "Gewijzigd"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# document} other {# documenten}}, limiet {max} — pas de limiet aan of verhoog deze voordat u ververst",
+    "m365AgentLimitBadgePlain": "Limiet {limit}",
+    "m365PlanShowAllRows": "Toon alle {count, plural, one {# bestand} other {# bestanden}}",
+    "m365PlanShowFewerRows": "Toon minder"
   },
   "localModels": {
     "title": "Lokale modellen",

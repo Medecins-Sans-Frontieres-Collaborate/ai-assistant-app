@@ -4739,9 +4739,9 @@
     "m365CapAboveRole": "Aquest límit supera el màxim que pots establir amb el teu rol: demana-ho a un administrador global.",
     "m365AgentLimitBadge": "Límit {limit} (establert per {who})",
     "m365PlanTrimHint": "Defineix què s'ha d'incloure: desmarca subcarpetes o fitxers, filtra per tipus o conserva només els més recents.",
-    "m365PlanKeepNewest": "Conserva els {count} més recents",
-    "m365PlanKeepNewestConfirm": "Vols conservar els {keep} fitxers modificats més recentment i excloure els altres {exclude}?",
-    "m365PlanIncludeAll": "Inclou-ho tot de nou ({count} exclosos)",
+    "m365PlanKeepNewest": "Conserva els més recents {count, plural, one {# fitxer} other {# fitxers}}",
+    "m365PlanKeepNewestConfirm": "Conservar els {keep, plural, one {# fitxer modificat més recentment} other {# fitxers modificats més recentment}} i excloure els altres {exclude, plural, one {# fitxer} other {# fitxers}}?",
+    "m365PlanIncludeAll": "Inclou-ho tot de nou ({count, plural, one {# fitxer exclòs} other {# fitxers exclosos}})",
     "m365PlanIncludeFile": "Inclou {name}",
     "m365PlanFileExcluded": "exclòs",
     "m365PlanSortLabel": "Ordena per",
@@ -4749,7 +4749,11 @@
       "name": "Nom",
       "size": "Mida",
       "modified": "Modificat"
-    }
+    },
+    "m365ChangesOverCap": "{count, plural, one {# document} other {# documents}}, límit {max} — retalleu o augmenteu el límit abans d'actualitzar",
+    "m365AgentLimitBadgePlain": "Límit {limit}",
+    "m365PlanShowAllRows": "Mostra tots {count, plural, one {# fitxer} other {# fitxers}}",
+    "m365PlanShowFewerRows": "Mostra menys"
   },
   "localModels": {
     "title": "Models locals",
