@@ -437,11 +437,34 @@ const agentAccessDenied = (
 ): PipelineError =>
   PipelineError.critical(
     ErrorCode.AGENT_UNAVAILABLE,
-    decision === 'unavailable'
-      ? 'Agent access rules are currently unavailable, so this agent cannot be invoked right now. Please try again shortly.'
-      : 'Access to this agent is restricted. Contact your administrator if you believe you should have access.',
+    agentAccessDeniedMessage(decision, reason),
     { accessDecision: decision, accessReason: reason },
   );
+
+/**
+ * User-facing copy per denial reason. The M365 layer-2 reasons name the
+ * action the USER can take (re-sign-in, wait for consent, request file
+ * access) — the generic "rules unavailable / contact your administrator"
+ * sentences are wrong for them and were the tester-visible symptom of
+ * "the feature is not connected to my account".
+ */
+const agentAccessDeniedMessage = (
+  decision: 'deny' | 'unavailable',
+  reason: string,
+): string => {
+  switch (reason) {
+    case 'm365-not_connected':
+      return 'Your Microsoft 365 session is unavailable for this agent. Sign out and back in, then try again.';
+    case 'm365-consent_missing':
+      return 'Your organisation has not yet approved the Microsoft 365 permissions this agent needs.';
+    case 'm365-no-file-access':
+      return "You don't have access to any of this agent's files. Open the agent to see which files and request access from their owners.";
+    default:
+      return decision === 'unavailable'
+        ? 'Agent access rules are currently unavailable, so this agent cannot be invoked right now. Please try again shortly.'
+        : 'Access to this agent is restricted. Contact your administrator if you believe you should have access.';
+  }
+};
 
 /**
  * 409-style conflict for a custom-source (byom) model that cannot be invoked.
@@ -675,6 +698,12 @@ export const createCredentialMiddleware = async (
   // enricher) because middleware can reject the request — the pipeline
   // swallows stage errors — and the model must never be called for a user
   // with zero accessible sources.
+  // The layer-2 verdict is carried onto the returned context below; the
+  // branch must NOT return early — byom resolution and the Foundry
+  // classification further down still apply to an M365 agent attached to
+  // a byom-/Foundry model (an early return left such requests without
+  // any credential resolution).
+  let m365Access: Partial<ChatContext> = {};
   if (
     accessService.isEnabled() &&
     (context.m365Agent || context.botId?.startsWith('m365-'))
@@ -734,7 +763,7 @@ export const createCredentialMiddleware = async (
         if (access.accessibleSourceIds.length === 0) {
           throw agentAccessDenied('deny', 'm365-no-file-access');
         }
-        return {
+        m365Access = {
           m365AccessibleSourceIds: access.accessibleSourceIds,
           m365AccessibleFolderItems: access.accessibleFolderItems,
         };
@@ -750,6 +779,24 @@ export const createCredentialMiddleware = async (
     }
   }
 
+  const credentials = await resolveCredentialContext(
+    context,
+    req,
+    accessService,
+  );
+  return { ...m365Access, ...credentials };
+};
+
+/**
+ * Everything after the prompt/M365 guards: org-agent guard, byom
+ * resolution, Foundry classification + OBO credential binding. Split out so
+ * the M365 layer-2 result can be merged with whatever this resolves.
+ */
+const resolveCredentialContext = async (
+  context: Partial<ChatContext>,
+  req: NextRequest,
+  accessService: AgentAccessService,
+): Promise<Partial<ChatContext>> => {
   // Org RAG agents: the same layer-1 guard as prompt agents. Admin records
   // (server-generated `orgr-` ids or overrides of static config ids) are
   // evaluated against the rule stored under `org-agent::<id>`; a STATIC

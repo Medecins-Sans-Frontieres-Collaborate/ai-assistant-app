@@ -32,7 +32,7 @@ export const STAGE_TIMEOUTS: Record<string, number> = {
   RAGEnricher: 10000,
   // Reformulation LLM + query embedding + hybrid search over the shared
   // m365-agents index.
-  M365AgentEnricher: 20000, // 10s for knowledge base search
+  M365AgentEnricher: 20000, // 20s for knowledge base search
   // Web search (reasoning agent + Bing grounding) and the document-trim
   // pipeline (LLM edit plan + sandbox execution + one bounded corrective
   // pass) both run long; 240s leaves the route's 300s ceiling room for
@@ -150,6 +150,19 @@ export class ChatPipeline {
             const errors = context.errors || [];
             errors.push(error);
             context = { ...context, errors };
+
+            // Stage-specific degradation on the pre-stage context (the
+            // timed-out execution's result is discarded).
+            if (typeof stage.onTimeout === 'function') {
+              try {
+                context = stage.onTimeout(context);
+              } catch (hookError) {
+                console.error(
+                  `[Pipeline] onTimeout hook of ${stage.name} failed:`,
+                  hookError instanceof Error ? hookError.message : hookError,
+                );
+              }
+            }
 
             if (stage.name === 'FileProcessor') {
               context = this.handleFileProcessorFailure(context, 'timed out');
