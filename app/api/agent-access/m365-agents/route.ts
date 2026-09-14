@@ -43,6 +43,7 @@ import {
   purgeSourcesFromIndex,
 } from '@/lib/services/m365/agentIndexService';
 import {
+  ENUMERATION_CEILING,
   M365_AGENT_MAX_DOCUMENTS_CEILING,
   MAX_M365_AGENT_SOURCE_BYTES,
   effectiveMaxDocuments,
@@ -127,7 +128,7 @@ const agentFieldsSchema = z
       .min(1)
       .max(1000)
       .nullable()
-      .default(null),
+      .optional(),
     // Sources are bounded by the highest possible cap; the DOCUMENT count
     // after folder expansion is checked by the planner at save and index
     // time against the agent's effective cap.
@@ -230,19 +231,29 @@ type OverrideFields = Pick<
 >;
 
 /**
- * Resolves the per-agent cap override for a save. `null` clears it. An
- * unchanged value keeps its original setter (a local admin re-saving an
- * agent whose cap a global admin raised must not lose that raise); a
- * changed value is bounded by the caller's role ceiling and stamped.
- * Returns an error message when the caller may not set the value.
+ * Resolves the per-agent cap override for a save. `undefined` (field not
+ * sent — an older client, a partial update) keeps whatever is stored;
+ * `null` clears it. An unchanged value keeps its original setter (a local
+ * admin re-saving an agent whose cap a global admin raised must not lose
+ * that raise); a changed value is bounded by the caller's role ceiling and
+ * stamped. Returns an error message when the caller may not set the value.
  */
 function resolveCapOverride(
-  requested: number | null,
+  requested: number | null | undefined,
   existing: OverrideFields | null,
   isGlobalAdmin: boolean,
   userMail: string,
   now: string,
 ): { fields: OverrideFields } | { error: string } {
+  if (requested === undefined) {
+    return {
+      fields: {
+        maxDocumentsOverride: existing?.maxDocumentsOverride,
+        maxDocumentsOverrideBy: existing?.maxDocumentsOverrideBy,
+        maxDocumentsOverrideAt: existing?.maxDocumentsOverrideAt,
+      },
+    };
+  }
   if (requested === null) {
     return {
       fields: {
@@ -306,6 +317,9 @@ async function overCapMessage(
       })),
       { maxDocuments },
     );
+    if (plan.plans.some((p) => p.truncated)) {
+      return `A source is too large to scan completely (more than ${ENUMERATION_CEILING} matching items) — pick a subfolder or narrow the file-type filter`;
+    }
     if (plan.overDocumentCap) {
       return `Sources expand to ${plan.totalDocuments} documents; at most ${plan.maxDocuments} are allowed`;
     }
