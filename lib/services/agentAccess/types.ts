@@ -522,6 +522,14 @@ export const M365AgentSchema = z.object({
    * `noText` with the Prepare offer.
    */
   autoOcr: z.boolean().default(false),
+  /**
+   * Per-agent document cap (replaces the env default when set). Bounded at
+   * save by the setter's role ceiling and at index time by the global
+   * ceiling; who raised it and when is kept for the row badge and audit.
+   */
+  maxDocumentsOverride: z.number().int().min(1).optional(),
+  maxDocumentsOverrideBy: z.string().optional(),
+  maxDocumentsOverrideAt: z.string().optional(),
   sources: z.array(M365AgentSourceSchema).default([]),
   createdBy: z.string(),
   createdAt: z.string(),
