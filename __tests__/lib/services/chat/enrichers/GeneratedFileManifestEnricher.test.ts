@@ -9,8 +9,6 @@ import { createTestChatContext } from '../testUtils';
 
 import { describe, expect, it } from 'vitest';
 
-const record = (files: Array<Partial<Message['toolCalls']>[number]>) => files;
-
 function generated(
   filename: string,
   extra: Partial<{ is_image: boolean; size_bytes: number; url: string }> = {},
