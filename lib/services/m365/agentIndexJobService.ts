@@ -25,6 +25,10 @@ import {
   writeM365Agent,
   writeM365AgentManifest,
 } from '@/lib/services/agentAccess/accessRulesStore';
+import {
+  OVERWRITE_BLOB,
+  statusCodeOf,
+} from '@/lib/services/agentAccess/blobCas';
 import type {
   M365Agent,
   M365IndexJob,
@@ -58,6 +62,8 @@ import { withGraphTokenCache } from '@/lib/services/m365/graphApi';
 
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+
+import { env } from '@/config/environment';
 
 /**
  * Wall-clock budget per step. Well inside the route's maxDuration and any
@@ -143,9 +149,14 @@ export async function startIndexJob(
     }),
   );
   // Replace whatever was there (terminal or interrupted). A concurrent
-  // start loses the CAS and surfaces as a conflict to its caller.
-  await writeIndexJob(storage, job, current?.etag ?? null);
-  await markAgentSources(storage, agent.id, 'indexing');
+  // start loses the CAS and surfaces as a conflict to its caller. With no
+  // readable record the write is unconditional: a malformed job blob must
+  // be overwritable, and a create-only write would 409 against it.
+  await writeIndexJob(storage, job, current?.etag ?? OVERWRITE_BLOB);
+  // Source statuses are deliberately NOT touched here. Flipping them to
+  // `indexing` (and to `pending` on failure) made a live agent vanish from
+  // discovery the moment a re-run died, although its chunks were still in
+  // the index; the job summary already carries the run's progress.
   return summarizeIndexJob(job);
 }
 
@@ -191,9 +202,11 @@ function recordOutcomes(
   const byKey = new Map(
     outcomes.map((o) => [`${o.sourceId}:${o.item.itemId}`, o.item]),
   );
+  const ocrPages = outcomes.reduce((n, o) => n + (o.item.ocrPages ?? 0), 0);
   return {
     ...job,
     updatedAt: now(),
+    ocrPagesUsed: (job.ocrPagesUsed ?? 0) + ocrPages,
     sources: job.sources.map((source) => ({
       ...source,
       items: source.items.map(
@@ -201,6 +214,47 @@ function recordOutcomes(
       ),
     })),
   };
+}
+
+/**
+ * Auto-OCR budget for one step, shared by every item of a batch (items
+ * reserve pages synchronously before awaiting OCR, so three concurrent
+ * scans cannot overspend the run cap together). Null when the agent has
+ * auto-OCR off, or when the run's per-run page cap is already spent.
+ */
+export function autoOcrBudgetFor(
+  agent: M365Agent | null,
+  job: M365IndexJob,
+): { remainingPages: number; maxPagesPerFile: number } | undefined {
+  if (!agent?.autoOcr) return undefined;
+  const remainingPages = Math.max(
+    0,
+    env.M365_AGENT_AUTO_OCR_MAX_PAGES_PER_RUN - (job.ocrPagesUsed ?? 0),
+  );
+  return {
+    remainingPages,
+    maxPagesPerFile: env.M365_AGENT_AUTO_OCR_MAX_PAGES_PER_FILE,
+  };
+}
+
+/**
+ * Human-readable reason for a step that died. Storage precondition
+ * failures used to reach the admin as Azure's raw "The specified blob
+ * already exists" — say what it means for them instead.
+ */
+export function describeStepFailure(error: unknown): string {
+  const status = statusCodeOf(error);
+  if (
+    error instanceof AgentAccessConflictError ||
+    status === 409 ||
+    status === 412
+  ) {
+    return "Could not save the run's results because another write got there first — retry the run";
+  }
+  if (status !== undefined && status >= 500) {
+    return `Storage or search service unavailable (${status}) — retry the run`;
+  }
+  return error instanceof Error ? error.message.slice(0, 300) : 'Step failed';
 }
 
 const SKIP_REASON_TEXT: Record<string, string> = {
@@ -440,6 +494,10 @@ async function runIndexJobStep(
 
   let job = current.job;
   let batches = 0;
+  // The agent's auto-OCR choice is read once per step; the budget object
+  // below is shared by every item processed in this step.
+  const agentRecord =
+    (await readM365Agent(storage, agentId))?.m365Agent ?? null;
   try {
     // At least one batch per step, then as many as the budget allows.
     do {
@@ -490,6 +548,7 @@ async function runIndexJobStep(
         return summarizeIndexJob(job);
       }
 
+      const autoOcr = autoOcrBudgetFor(agentRecord, job);
       const outcomes = await mapWithConcurrency(
         mine,
         DOCUMENT_INDEX_CONCURRENCY,
@@ -507,6 +566,7 @@ async function runIndexJobStep(
                 ? { eTag: derived.eTag, text: derived.text }
                 : null;
             },
+            autoOcr ? { autoOcr } : undefined,
           ),
         }),
       );
@@ -533,8 +593,7 @@ async function runIndexJobStep(
         status: 'failed',
         updatedAt: now(),
         finishedAt: now(),
-        error:
-          error instanceof Error ? error.message.slice(0, 300) : 'Step failed',
+        error: describeStepFailure(error),
       };
     });
     await markAgentSources(storage, agentId, 'pending', 'indexing');
