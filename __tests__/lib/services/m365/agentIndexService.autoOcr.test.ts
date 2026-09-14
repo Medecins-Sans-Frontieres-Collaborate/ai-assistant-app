@@ -136,6 +136,51 @@ describe('indexJobItem auto-OCR', () => {
     expect(budget.remainingPages).toBe(88);
   });
 
+  it('offers the OCR text to the cache hook on success only, and a failing hook never fails the item', async () => {
+    const persistOcr = vi.fn(async () => undefined);
+    const budget = { remainingPages: 100, maxPagesPerFile: 50 };
+    const out = await indexJobItem(
+      req,
+      'm365-abcdefabcdef',
+      'emb',
+      's1',
+      item,
+      undefined,
+      { autoOcr: budget, persistOcr },
+    );
+    expect(out.status).toBe('indexed');
+    expect(persistOcr).toHaveBeenCalledWith(
+      expect.objectContaining({
+        itemId: item.itemId,
+        eTag: '"e1"',
+        pages: 12,
+        engine: expect.any(String),
+        text: expect.any(String),
+      }),
+    );
+
+    persistOcr.mockClear();
+    persistOcr.mockRejectedValue(new Error('storage down'));
+    const stillIndexed = await indexJobItem(
+      req,
+      'm365-abcdefabcdef',
+      'emb',
+      's1',
+      item,
+      undefined,
+      { autoOcr: { remainingPages: 100, maxPagesPerFile: 50 }, persistOcr },
+    );
+    expect(stillIndexed.status).toBe('indexed');
+
+    persistOcr.mockClear();
+    prep.ocrPdfBuffer.mockRejectedValue(new Error('DI 500'));
+    await indexJobItem(req, 'm365-abcdefabcdef', 'emb', 's1', item, undefined, {
+      autoOcr: { remainingPages: 100, maxPagesPerFile: 50 },
+      persistOcr,
+    });
+    expect(persistOcr).not.toHaveBeenCalled();
+  });
+
   it('skips files over the per-file cap without spending budget', async () => {
     fh.countPdfPages.mockResolvedValue(80);
     const budget = { remainingPages: 200, maxPagesPerFile: 50 };

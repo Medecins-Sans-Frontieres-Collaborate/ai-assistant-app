@@ -407,11 +407,35 @@ describe('stepIndexJob', () => {
     );
     await stepIndexJob(req, storage, agent.id, jobId, 0);
     const options = mockIndex.indexJobItem.mock.calls[0][6];
-    expect(options).toEqual({
+    expect(options).toMatchObject({
       autoOcr: { remainingPages: 200, maxPagesPerFile: 50 },
     });
+    expect(typeof options.persistOcr).toBe('function');
     const stored = (await readIndexJob(storage, agent.id))!.job;
     expect(stored.ocrPagesUsed).toBe(7);
+
+    // The cache hook writes a derived-text record keyed by the item's
+    // eTag, so the next run reads it instead of paying for OCR again.
+    await options.persistOcr({
+      itemId: 'a',
+      name: 'a.pdf',
+      eTag: '"e-a"',
+      text: 'ocr text',
+      pages: 7,
+      engine: 'di',
+    });
+    const { m365AgentDerivedTextBlobPath } =
+      await import('@/lib/services/agentAccess/types');
+    const derived = storage.blobs.get(
+      m365AgentDerivedTextBlobPath(agent.id, 'a'),
+    );
+    expect(derived).toBeDefined();
+    expect(JSON.parse(derived!.body)).toMatchObject({
+      kind: 'pdfOcr',
+      eTag: '"e-a"',
+      model: 'auto-ocr:di',
+      text: 'ocr text',
+    });
 
     // Opted out: no budget object at all.
     mockIndex.indexJobItem.mockClear();
