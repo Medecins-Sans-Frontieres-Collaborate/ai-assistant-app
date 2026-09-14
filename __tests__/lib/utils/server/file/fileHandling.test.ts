@@ -555,11 +555,18 @@ describe('countPdfPages', () => {
     const child = fakeChild('Title: x\nPages:          12\nEncrypted: no\n');
     spawnMock.mockReturnValue(child);
     const bytes = Buffer.from('%PDF-1.4 damaged');
-    await expect(countPdfPages(bytes)).resolves.toBe(12);
+    const controller = new AbortController();
+    await expect(
+      countPdfPages(bytes, { signal: controller.signal }),
+    ).resolves.toBe(12);
+    // The caller's abort reaches the child like every other converter.
     expect(spawnMock).toHaveBeenCalledWith(
       'pdfinfo',
       ['-'],
-      expect.objectContaining({ killSignal: 'SIGKILL' }),
+      expect.objectContaining({
+        killSignal: 'SIGKILL',
+        signal: controller.signal,
+      }),
     );
     expect(child.stdin.written).toBe(bytes);
     expect(writeFileMock).not.toHaveBeenCalled();
