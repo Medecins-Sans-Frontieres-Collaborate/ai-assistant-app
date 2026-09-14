@@ -38,6 +38,7 @@ import {
   DISALLOWED_MIME_TYPES,
 } from '@/lib/constants/disallowedFileTypes';
 import { getFileCategory } from '@/lib/constants/fileLimits';
+import { PREPARABLE_IMAGE_EXTENSIONS as SHARED_PREPARABLE_IMAGE_EXTENSIONS } from '@/lib/constants/m365AgentFileTypes';
 
 const GRAPH_SCOPES = ['Files.ReadWrite.All'];
 
@@ -125,18 +126,11 @@ export function extensionOf(name: string): string {
   return name.slice(dot + 1).toLowerCase();
 }
 
-/** Image formats a vision model can be handed (svg is markup, not pixels). */
-const PREPARABLE_IMAGE_EXTENSIONS = new Set([
-  'png',
-  'jpg',
-  'jpeg',
-  'gif',
-  'webp',
-  'bmp',
-  'tif',
-  'tiff',
-  'heic',
-]);
+/**
+ * Image formats a vision model can be handed — the shared list, so the
+ * picker's accept filter and this classification cannot drift apart.
+ */
+const PREPARABLE_IMAGE_EXTENSIONS = new Set(SHARED_PREPARABLE_IMAGE_EXTENSIONS);
 
 /**
  * Metadata-only tiering (§3). Order matters: Microsoft's malware verdict
