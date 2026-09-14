@@ -83,6 +83,13 @@ export const MAX_M365_SOURCE_FILE_BYTES = 25 * 1024 * 1024;
  * is told to pick a subfolder instead.
  */
 export const ENUMERATION_CEILING = 1000;
+/**
+ * Hard bound on Graph pages walked per source, whatever the filter: the
+ * item ceiling counts only files that pass the source's type filter (so a
+ * `pdf` filter can rescue a 3,000-file library), and this keeps a filter
+ * that matches nothing from paging through the whole tenant.
+ */
+export const ENUMERATION_PAGE_CEILING = 50;
 /** Graph page size for children/delta listings. */
 const PAGE_SIZE = 200;
 /** BFS fallback depth guard (delta has no such limit). */
@@ -350,12 +357,38 @@ interface RawEnumeration {
 interface CacheEntry {
   at: number;
   value: RawEnumeration;
+  /** Type filter the walk counted under — only matters when truncated. */
+  filter: string;
 }
 
 const enumerationCache = new Map<string, CacheEntry>();
 
 function cacheKey(userId: string, input: PlanSourceInput): string {
   return `${userId}:${input.driveId}:${input.itemId}:${input.kind}:${input.recursive ? 1 : 0}`;
+}
+
+function filterKey(input: Pick<PlanSourceInput, 'includeExtensions'>): string {
+  return (input.includeExtensions ?? [])
+    .map((e) => e.toLowerCase())
+    .sort()
+    .join(',');
+}
+
+/**
+ * Whether a listed file counts toward the enumeration ceiling: only files
+ * the source's type filter would keep. Exclusions cannot be applied while
+ * paging (a file's folder chain is only known once the walk completes),
+ * so excluded subtrees still count — the ceiling is a bound on matching
+ * material, not on the final selection.
+ */
+function countsTowardCeiling(
+  input: Pick<PlanSourceInput, 'includeExtensions'>,
+): (item: GraphItem) => boolean {
+  const allowed = input.includeExtensions?.length
+    ? new Set(input.includeExtensions.map((e) => e.toLowerCase()))
+    : null;
+  return (item) =>
+    !!item.folder || !allowed || allowed.has(extensionOf(item.name ?? ''));
 }
 
 /** Test hook. */
@@ -383,18 +416,28 @@ async function collectPages(
   req: NextRequest,
   firstUrl: string,
   rootItemId: string,
-  sink: { files: GraphItem[]; folders: GraphItem[] },
+  sink: {
+    files: GraphItem[];
+    folders: GraphItem[];
+    counted?: number;
+    pages?: number;
+  },
+  counts: (item: GraphItem) => boolean = () => true,
 ): Promise<{ truncated: boolean; deltaLink?: string }> {
   let url: string | undefined = firstUrl;
   let deltaLink: string | undefined;
   while (url) {
+    if ((sink.pages ?? 0) >= ENUMERATION_PAGE_CEILING)
+      return { truncated: true };
     const page: GraphPage = await graphJson<GraphPage>(req, GRAPH_SCOPES, url);
+    sink.pages = (sink.pages ?? 0) + 1;
     for (const item of page.value ?? []) {
       if (!item.id || !item.name || item.deleted) continue;
       if (item.id === rootItemId) continue;
       if (item.folder) sink.folders.push(item);
       else sink.files.push(item);
-      if (sink.files.length + sink.folders.length >= ENUMERATION_CEILING) {
+      if (counts(item)) sink.counted = (sink.counted ?? 0) + 1;
+      if ((sink.counted ?? 0) >= ENUMERATION_CEILING) {
         return { truncated: true };
       }
     }
@@ -412,7 +455,13 @@ async function collectChildrenRecursively(
   req: NextRequest,
   driveId: string,
   rootItemId: string,
-  sink: { files: GraphItem[]; folders: GraphItem[] },
+  sink: {
+    files: GraphItem[];
+    folders: GraphItem[];
+    counted?: number;
+    pages?: number;
+  },
+  counts: (item: GraphItem) => boolean = () => true,
 ): Promise<{ truncated: boolean }> {
   const queue: { itemId: string; depth: number }[] = [
     { itemId: rootItemId, depth: 0 },
@@ -425,6 +474,7 @@ async function collectChildrenRecursively(
       `/drives/${itemPath(driveId)}/items/${itemPath(itemId)}/children?${GRAPH_SELECT}&$top=${PAGE_SIZE}`,
       rootItemId,
       sink,
+      counts,
     );
     if (result.truncated) return { truncated: true };
     if (depth + 1 > MAX_FOLDER_DEPTH) continue;
@@ -506,15 +556,24 @@ async function enumerateSource(
   input: PlanSourceInput,
 ): Promise<RawEnumeration> {
   const key = cacheKey(userId, input);
+  const filter = filterKey(input);
   const cached = enumerationCache.get(key);
-  if (cached && Date.now() - cached.at < ENUMERATION_CACHE_TTL_MS) {
+  // A complete listing is valid under any filter (filters apply after the
+  // walk). A truncated one was cut by what the filter counted, so a new
+  // filter has to walk again — that is how a type filter rescues a large
+  // library.
+  if (
+    cached &&
+    Date.now() - cached.at < ENUMERATION_CACHE_TTL_MS &&
+    (!cached.value.truncated || cached.filter === filter)
+  ) {
     return cached.value;
   }
 
   const value = await enumerateUncached(req, input);
 
   if (enumerationCache.size >= ENUMERATION_CACHE_MAX) enumerationCache.clear();
-  enumerationCache.set(key, { at: Date.now(), value });
+  enumerationCache.set(key, { at: Date.now(), value, filter });
   return value;
 }
 
@@ -553,7 +612,13 @@ async function enumerateUncached(
     return { ...empty, items: [toManifestItem(item, input.driveId, paths)] };
   }
 
-  const sink = { files: [] as GraphItem[], folders: [] as GraphItem[] };
+  const sink = {
+    files: [] as GraphItem[],
+    folders: [] as GraphItem[],
+    counted: 0,
+    pages: 0,
+  };
+  const counts = countsTowardCeiling(input);
   let truncated = false;
   let deltaLink: string | undefined;
   try {
@@ -564,6 +629,7 @@ async function enumerateUncached(
           `${base}/delta?${GRAPH_SELECT}&$top=${PAGE_SIZE}`,
           input.itemId,
           sink,
+          counts,
         );
         truncated = result.truncated;
         deltaLink = result.deltaLink;
@@ -580,12 +646,15 @@ async function enumerateUncached(
           );
           sink.files.length = 0;
           sink.folders.length = 0;
+          sink.counted = 0;
+          sink.pages = 0;
           truncated = (
             await collectChildrenRecursively(
               req,
               input.driveId,
               input.itemId,
               sink,
+              counts,
             )
           ).truncated;
         } else {
@@ -599,6 +668,7 @@ async function enumerateUncached(
           `${base}/children?${GRAPH_SELECT}&$top=${PAGE_SIZE}`,
           input.itemId,
           sink,
+          counts,
         )
       ).truncated;
       // Non-recursive: subfolders are listed for the tree but their
