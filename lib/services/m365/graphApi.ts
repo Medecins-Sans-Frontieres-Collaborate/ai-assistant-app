@@ -162,16 +162,28 @@ export async function mintGraphToken(
 }
 
 /** Retry policy for throttled / briefly unavailable Graph responses. */
-const RETRY_STATUSES = new Set([429, 503]);
 const MAX_ATTEMPTS = 3;
 const MAX_RETRY_WAIT_MS = 10_000;
-const DEFAULT_RETRY_WAIT_MS = 2_000;
+const DEFAULT_RETRY_WAIT_MS = 1_000;
+
+/**
+ * 429 is always a "come back later"; 503 only when Graph says so with a
+ * Retry-After (its throttling shape) — a bare 503 is an outage, and
+ * waiting on it just holds an interactive route open for nothing.
+ */
+function shouldRetry(response: Response): boolean {
+  if (response.status === 429) return true;
+  return response.status === 503 && response.headers.has('retry-after');
+}
 
 function retryDelayMs(response: Response, attempt: number): number {
-  const header = Number(response.headers.get('retry-after'));
+  const raw = response.headers.get('retry-after');
+  const seconds = raw === null ? NaN : Number(raw);
+  // A present, well-formed hint is honoured as-is (0 included); absent or
+  // garbage falls back to a short linear backoff.
   const hinted =
-    Number.isFinite(header) && header > 0
-      ? header * 1000
+    Number.isFinite(seconds) && seconds >= 0
+      ? seconds * 1000
       : DEFAULT_RETRY_WAIT_MS * attempt;
   return Math.min(hinted, MAX_RETRY_WAIT_MS);
 }
@@ -180,8 +192,9 @@ const sleep = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 /**
- * `fetch` that retries 429/503 up to MAX_ATTEMPTS, honouring Retry-After
- * (capped at MAX_RETRY_WAIT_MS so a hostile hint cannot pin a request).
+ * `fetch` that retries throttled responses (see {@link shouldRetry}) up to
+ * MAX_ATTEMPTS, honouring Retry-After (capped at MAX_RETRY_WAIT_MS so a
+ * hostile hint cannot pin a request).
  * Used for Graph calls and for the pre-authenticated download URLs Graph
  * hands out, which throttle the same way. Non-retryable statuses and
  * network errors surface unchanged.
@@ -193,7 +206,7 @@ export async function fetchWithGraphRetry(
   let response = await fetch(url, init);
   for (
     let attempt = 1;
-    attempt < MAX_ATTEMPTS && RETRY_STATUSES.has(response.status);
+    attempt < MAX_ATTEMPTS && shouldRetry(response);
     attempt++
   ) {
     const delay = retryDelayMs(response, attempt);
