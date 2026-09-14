@@ -674,12 +674,39 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
     return selection.excludedItemIds.filter((id) => fileIds.has(id));
   }, [plan, selection.excludedItemIds]);
 
+  /**
+   * A truncated listing (enumeration ceiling) does not know every item, so
+   * id-based tools — file checkboxes, "Keep newest", "Include all again" —
+   * would act on a partial picture the index run then contradicts. They
+   * are withheld; the "pick a subfolder" message is the only path.
+   */
+  const truncated = !!plan?.truncated;
+
+  // Zombie exclusions: ids of files that no longer exist (or fell out of a
+  // moved subtree) would otherwise sit in excludedItemIds forever, unseen
+  // by "Include all again". Prune once a COMPLETE recursive listing has
+  // arrived — a truncated or non-recursive plan does not know all ids.
+  useEffect(() => {
+    if (!plan || plan.truncated || plan.missing || !selection.recursive) return;
+    const known = new Set<string>([
+      ...plan.items.map((i) => i.itemId),
+      ...plan.folders.map((f) => f.itemId),
+    ]);
+    const kept = selection.excludedItemIds.filter((id) => known.has(id));
+    if (kept.length !== selection.excludedItemIds.length) {
+      onChange({ excludedItemIds: kept });
+    }
+    // onChange is a fresh closure per render; the plan object is the signal.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plan]);
+
   const includedIndexable = groups.indexable.filter(
     (i) => i.tier === 'indexable',
   ).length;
   const offerKeepNewest =
+    !truncated &&
     keepNewestLimit !== undefined &&
-    keepNewestLimit >= 0 &&
+    keepNewestLimit > 0 &&
     includedIndexable > keepNewestLimit;
 
   const keepNewest = () => {
@@ -890,6 +917,11 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
               {t('m365PlanTrimHint')}
             </p>
           )}
+          {truncated && (
+            <p className="flex items-center gap-1 text-amber-700 dark:text-amber-400">
+              <IconAlertTriangle size={12} /> {t('m365PlanTruncated')}
+            </p>
+          )}
           {(plan.items.length > 0 || offerKeepNewest) && (
             <div className="flex flex-wrap items-center gap-2">
               <label className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
@@ -914,7 +946,7 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
                   {t('m365PlanKeepNewest', { count: keepNewestLimit })}
                 </button>
               )}
-              {fileExclusions.length > 0 && (
+              {!truncated && fileExclusions.length > 0 && (
                 <button
                   type="button"
                   onClick={includeAllFiles}
@@ -984,11 +1016,15 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
             items={groups.indexable}
             statusByItem={statusByItem}
             sortBy={sortBy}
-            selectable={{
-              isChecked: (item) => item.tier === 'indexable',
-              isDisabled: folderExcluded,
-              onToggle: toggleFile,
-            }}
+            selectable={
+              truncated
+                ? undefined
+                : {
+                    isChecked: (item) => item.tier === 'indexable',
+                    isDisabled: folderExcluded,
+                    onToggle: toggleFile,
+                  }
+            }
             renderNote={(item) => {
               if (item.tier !== 'indexable') {
                 return (
@@ -1111,8 +1147,12 @@ const FileGroup: FC<FileGroupProps> = ({
   renderNote,
 }) => {
   const t = useTranslations('agentAccess');
+  // Collapsed by default; "Show all" reveals every row so any file can be
+  // ticked or unticked (the list box scrolls; 1,000 plain rows are fine).
+  const [showAll, setShowAll] = useState(false);
   if (items.length === 0) return null;
-  const shown = sortPlanItems(items, sortBy).slice(0, MAX_ROWS_PER_GROUP);
+  const sorted = sortPlanItems(items, sortBy);
+  const shown = showAll ? sorted : sorted.slice(0, MAX_ROWS_PER_GROUP);
   return (
     <div>
       <p className="mb-1 font-semibold text-gray-700 dark:text-gray-300">
@@ -1145,9 +1185,17 @@ const FileGroup: FC<FileGroupProps> = ({
             <span className="shrink-0">{renderNote(item)}</span>
           </li>
         ))}
-        {items.length > shown.length && (
+        {items.length > MAX_ROWS_PER_GROUP && (
           <li className="text-gray-500 dark:text-gray-400">
-            {t('m365PlanMoreRows', { count: items.length - shown.length })}
+            <button
+              type="button"
+              onClick={() => setShowAll((v) => !v)}
+              className="underline hover:text-gray-700 dark:hover:text-gray-200"
+            >
+              {showAll
+                ? t('m365PlanShowFewerRows')
+                : t('m365PlanShowAllRows', { count: items.length })}
+            </button>
           </li>
         )}
       </ul>

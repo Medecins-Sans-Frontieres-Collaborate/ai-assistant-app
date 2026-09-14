@@ -428,6 +428,11 @@ export interface ClientRefreshPreview {
     changes: ClientSourceChanges;
   } | null;
   lastIndexedAt: string | null;
+  /**
+   * Present when the agent is over its document cap: the preview could
+   * not be turned into a run, so the banner explains and Refresh is off.
+   */
+  overCap?: { totalDocuments: number; maxDocuments: number };
 }
 
 /* ------------------------------------------------------------------ */
