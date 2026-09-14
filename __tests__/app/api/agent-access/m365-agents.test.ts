@@ -598,6 +598,38 @@ describe('per-agent document cap override', () => {
     expect(written.maxDocumentsOverrideBy).toBeUndefined();
   });
 
+  it('PUT without the field keeps the stored override (an older client cannot wipe a raise)', async () => {
+    const existing = makeAgent({
+      maxDocumentsOverride: 180,
+      maxDocumentsOverrideBy: 'global@example.org',
+      maxDocumentsOverrideAt: '2026-09-14T00:00:00.000Z',
+    });
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: existing,
+      etag: '"etag-1"',
+    });
+    const response = await PUT(
+      putRequest({
+        id: existing.id,
+        name: 'Budget agent',
+        sources: [
+          {
+            driveId: 'drive1',
+            itemId: 'item1',
+            kind: 'file',
+            title: 'Budget.xlsx',
+            webUrl: 'https://contoso.sharepoint.com/budget.xlsx',
+          },
+        ],
+      }),
+    );
+    expect(response.status).toBe(200);
+    expect(mockStore.writeM365Agent.mock.calls[0][1]).toMatchObject({
+      maxDocumentsOverride: 180,
+      maxDocumentsOverrideBy: 'global@example.org',
+    });
+  });
+
   it('GET serves the role ceilings and the caller’s role', async () => {
     mockStore.listAllM365Agents?.mockResolvedValue?.([]);
     const response = await GET();

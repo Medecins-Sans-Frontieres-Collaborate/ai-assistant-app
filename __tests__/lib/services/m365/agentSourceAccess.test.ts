@@ -118,11 +118,41 @@ describe('checkAgentSourceAccess ($batch probes)', () => {
     // Throttled probe fails closed for that source only…
     expect(access.accessibleSourceIds).not.toContain('src-8');
     expect(access.accessibleSourceIds).toHaveLength(24);
-    // …and the verdict is flagged unverifiable and NOT cached: the next
-    // request probes again instead of serving the throttled denial.
+    // …and the verdict is flagged unverifiable and held only briefly: the
+    // next request within the hold serves it (a throttled tenant must not
+    // be re-probed on every message), the one after the hold probes again.
     expect(access.unverifiable).toBe(true);
     await checkAgentSourceAccess(req, 'u1', agent);
-    expect(fetchMock).toHaveBeenCalledTimes(8);
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+    const realNow = Date.now;
+    vi.spyOn(Date, 'now').mockImplementation(() => realNow() + 60_000);
+    try {
+      await checkAgentSourceAccess(req, 'u1', agent);
+      expect(fetchMock).toHaveBeenCalledTimes(8);
+    } finally {
+      vi.mocked(Date.now).mockRestore();
+    }
+  });
+
+  it('runs probe batches concurrently, not one after another', async () => {
+    const resolvers: Array<() => void> = [];
+    fetchMock.mockImplementation(
+      (url: string, init?: RequestInit) =>
+        new Promise<Response>((resolve) => {
+          resolvers.push(() => {
+            void batchResponse(() => 200)(url, init).then(resolve);
+          });
+        }),
+    );
+    const agent = makeAgent(60); // 3 batches of 20
+    const pending = checkAgentSourceAccess(req, 'u1', agent);
+    // Give the event loop a tick: all three batches must be in flight
+    // before any of them has answered.
+    await new Promise((r) => setTimeout(r, 0));
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    resolvers.forEach((resolve) => resolve());
+    const access = await pending;
+    expect(access.accessibleSourceIds).toHaveLength(60);
   });
 
   it('retries a throttled probe once and accepts the retried verdict', async () => {
@@ -145,14 +175,22 @@ describe('checkAgentSourceAccess ($batch probes)', () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
-  it('does not cache a verdict that includes a 5xx probe', async () => {
+  it('holds a verdict that includes a 5xx probe only briefly', async () => {
     fetchMock.mockImplementation(batchResponse((i) => (i === 0 ? 503 : 200)));
     const agent = makeAgent(2);
     const first = await checkAgentSourceAccess(req, 'u1', agent);
     expect(first.accessibleSourceIds).toEqual(['src-1']);
     expect(first.unverifiable).toBe(true);
     await checkAgentSourceAccess(req, 'u1', agent);
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const realNow = Date.now;
+    vi.spyOn(Date, 'now').mockImplementation(() => realNow() + 60_000);
+    try {
+      await checkAgentSourceAccess(req, 'u1', agent);
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.mocked(Date.now).mockRestore();
+    }
   });
 
   it('treats 404 as inaccessible and caches the verdict per user', async () => {
@@ -324,13 +362,19 @@ describe('checkAgentSourceAccess ($batch probes)', () => {
     const access = await checkAgentSourceAccess(req, 'u1', agent);
     // The folder source stays "accessible" (probe passed) but contributes
     // no readable items — retrieval for it yields nothing. A failed
-    // listing is not a permission verdict, so nothing is cached.
+    // listing is not a permission verdict, so it is only held briefly.
     expect(access.accessibleSourceIds).toEqual(['src-0', 'src-1']);
     expect(access.accessibleFolderItems).toEqual([]);
     expect(access.unverifiable).toBe(true);
     const before = fetchMock.mock.calls.length;
-    await checkAgentSourceAccess(req, 'u1', agent);
-    expect(fetchMock.mock.calls.length).toBeGreaterThan(before);
+    const realNow = Date.now;
+    vi.spyOn(Date, 'now').mockImplementation(() => realNow() + 60_000);
+    try {
+      await checkAgentSourceAccess(req, 'u1', agent);
+      expect(fetchMock.mock.calls.length).toBeGreaterThan(before);
+    } finally {
+      vi.mocked(Date.now).mockRestore();
+    }
   });
 
   it('fails closed for sources missing from the batch response', async () => {

@@ -29,8 +29,22 @@ vi.mock('@/auth', () => ({ auth: mockAuth, getGraphAccessToken: vi.fn() }));
 vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
   AgentAccessService: { getInstance: () => mockService },
 }));
-vi.mock('@/lib/services/agentAccess/adminAuth', () => mockAdminAuth);
+vi.mock('@/lib/services/agentAccess/adminAuth', async (importOriginal) => {
+  const actual =
+    await importOriginal<
+      typeof import('@/lib/services/agentAccess/adminAuth')
+    >();
+  return { ...actual, ...mockAdminAuth };
+});
 vi.mock('@/lib/services/m365/agentSourcePlanner', () => mockPlanner);
+const mockStore = vi.hoisted(() => ({
+  createAgentAccessBlobStorage: vi.fn(() => ({})),
+  readM365Agent: vi.fn(),
+}));
+vi.mock('@/lib/services/agentAccess/accessRulesStore', () => mockStore);
+vi.mock('@/lib/services/m365/agentDerivedTextStore', () => ({
+  readDerivedIndex: vi.fn(async () => ({ index: { items: {} }, etag: null })),
+}));
 
 const session = {
   user: { id: 'u1', mail: 'admin@example.org', name: 'Admin' },
@@ -135,6 +149,49 @@ describe('POST /api/agent-access/m365-agents/plan', () => {
       [expect.objectContaining({ recursive: true, excludedItemIds: [] })],
       { maxDocuments: 50 },
     );
+  });
+
+  it('judges a value equal to the stored override against the global ceiling for a key holder', async () => {
+    mockPlanner.planSources.mockResolvedValue({
+      plans: [{ counts: {}, items: [], folders: [] }],
+      totalDocuments: 0,
+      totalBytes: 0,
+      maxDocuments: 180,
+      maxBytes: 1,
+      overDocumentCap: false,
+      overByteCap: false,
+    });
+    mockAdminAuth.resolveAdminStatus.mockReturnValue({
+      isGlobalAdmin: false,
+      isLocalAdmin: true,
+      editableAgentKeys: ['m365-agent::m365-abcdefabcdef'],
+    });
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: { id: 'm365-abcdefabcdef', maxDocumentsOverride: 180 },
+      etag: '"e1"',
+    });
+    // Unchanged (180 == stored): not clamped to the local 100.
+    await POST(
+      request({
+        sources: [folder],
+        agentId: 'm365-abcdefabcdef',
+        maxDocuments: 180,
+      }),
+    );
+    expect(mockPlanner.planSources.mock.calls[0][3]).toEqual({
+      maxDocuments: 180,
+    });
+    // A changed value is still clamped by the caller's role.
+    await POST(
+      request({
+        sources: [folder],
+        agentId: 'm365-abcdefabcdef',
+        maxDocuments: 190,
+      }),
+    );
+    expect(mockPlanner.planSources.mock.calls[1][3]).toEqual({
+      maxDocuments: 100,
+    });
   });
 
   it('clamps a requested cap to the caller’s role ceiling', async () => {
