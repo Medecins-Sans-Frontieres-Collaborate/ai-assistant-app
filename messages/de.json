@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "Agent zum Vorbereiten speichern",
     "m365PrepareHintImage": "Bild — 1 Vision-Aufruf",
     "m365PrepareHintMedia": "~{minutes} Min. Audio zu transkribieren",
-    "m365PrepareHintOcr": "keine Textebene — OCR per Vision, bis zu 30 Seiten",
+    "m365PrepareHintOcr": "keine Textebene — OCR, bis zu {pages} Seiten",
     "m365PreparePreparing": "Wird vorbereitet…",
     "m365PreparePending": "Transkription läuft…",
     "m365PreparedNote": "vorbereitet · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "Wird nicht indexiert — {reason}",
     "m365PlanFileNeedsPreparation": "Wird bis zur Vorbereitung nicht indexiert — {hint}",
     "m365PlanFileLastRun": "Letzter Lauf: {status}",
-    "m365ItemNoTextOcr": "kein Text gefunden — gescannt? Nutzen Sie „Vorbereiten (OCR)“"
+    "m365ItemNoTextOcr": "kein Text gefunden — gescannt? Nutzen Sie „Vorbereiten (OCR)“",
+    "m365CapRaiseButton": "Limit dieses Agents auf {limit} erhöhen",
+    "m365CapRaiseInputLabel": "Dokumentenlimit für diesen Agent",
+    "m365CapRaiseApply": "Limit anwenden",
+    "m365CapNeedsGlobalAdmin": "Über {limit} Dokumenten muss ein globaler Administrator das Limit erhöhen.",
+    "m365CapRaiseConfirm": "Das Dokumentenlimit dieses Agents auf {limit} erhöhen (Standard ist {default})?\n\nJedes zusätzliche Dokument wird beim Indizieren des Agents eingebettet, beim ersten Nutzerkontakt erneut auf Microsoft 365-Zugriff geprüft und größere Agents werden langsamer indiziert und beantworten Anfragen langsamer.\n\nErwägen Sie zunächst, Unterordner oder Dateitypen auszuschließen.",
+    "m365CapResetDefault": "Auf Standard zurücksetzen ({default})",
+    "m365CapOverrideNote": "Limit für diesen Agent auf {limit} erhöht",
+    "m365CapAboveRole": "Dieses Limit liegt über dem, das Ihre Rolle festlegen darf – wenden Sie sich an einen globalen Administrator.",
+    "m365AgentLimitBadge": "Limit {limit} (festgelegt von {who})",
+    "m365PlanTrimHint": "Auswahl anpassen: Unterordner oder Dateien abwählen, nach Typ filtern oder nur die neuesten behalten.",
+    "m365PlanKeepNewest": "Die neuesten {count} behalten",
+    "m365PlanKeepNewestConfirm": "Die {keep} zuletzt bearbeiteten Dateien behalten und die anderen {exclude} ausschließen?",
+    "m365PlanIncludeAll": "Alle wieder einschließen ({count} ausgeschlossen)",
+    "m365PlanIncludeFile": "{name} einschließen",
+    "m365PlanFileExcluded": "ausgeschlossen",
+    "m365PlanSortLabel": "Sortieren nach",
+    "m365PlanSort": {
+      "name": "Name",
+      "size": "Größe",
+      "modified": "Geändert"
+    }
   },
   "localModels": {
     "title": "Lokale Modelle",

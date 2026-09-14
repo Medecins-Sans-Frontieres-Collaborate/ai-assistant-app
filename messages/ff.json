@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "sofa ajanɗo ngam taƴtude",
     "m365PrepareHintImage": "jontaare — 1 laabi vision",
     "m365PrepareHintMedia": "~{minutes} min audio ngam heftinde",
-    "m365PrepareHintOcr": "alantii leñol binndan — OCR e vision, lesdi 30 dewgal",
+    "m365PrepareHintOcr": "sappo e layer wondirgal—OCR, yahugol kala {pages} dokkol",
     "m365PreparePreparing": "Ena taƴti...",
     "m365PreparePending": "Ena heftinde...",
     "m365PreparedNote": "taƴti · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Waawaani garir—{reason}",
     "m365PlanFileNeedsPreparation": "Waawaani garir gam tee dañaani—{hint}",
     "m365PlanFileLastRun": "Run cuɓiiɗo: {status}",
-    "m365ItemNoTextOcr": "Alam text—file mbaɗi scanning? loowgol Prepare (OCR)"
+    "m365ItemNoTextOcr": "Alam text—file mbaɗi scanning? loowgol Prepare (OCR)",
+    "m365CapRaiseButton": "Sappu ndernde agent ngol to {limit}",
+    "m365CapRaiseInputLabel": "Hannde docyumenɗe ngol agent maa",
+    "m365CapRaiseApply": "Waɗ kesol",
+    "m365CapNeedsGlobalAdmin": "Ko ɗi {limit} docyumenɗe, admin global refta ko feƴƴi sappude kesol.",
+    "m365CapRaiseConfirm": "A sappu ndernde docyumenɗe agent ngol to {limit} (handi ɗum ko {default})?\n\nKoodhi docyumen mum ina soodta e indexol agent, e laataa baade tesɗo Microsoft 365 nder jeyngol dannde, e agent ɓe mbaydi e ɓuri docyumen dow ko naatnaa e jabnaa jamu.\n\nNgirta ndaaragol subfolders walla pat files ko yimɓe teewi.",
+    "m365CapResetDefault": "Fullita to feere (default {default})",
+    "m365CapOverrideNote": "kesol sappita to {limit} ngol agent",
+    "m365CapAboveRole": "Kesol ngol ina ɗi toppa mo role maa woni—nana mbaɗa admin global.",
+    "m365AgentLimitBadge": "Kesol {limit} (sappanɗo ko {who})",
+    "m365PlanTrimHint": "Suus to hay gooto: yuɓɓit subfolders walla pay files, suusa to leydi type, walla mbaɗ only gorko wi'i.",
+    "m365PlanKeepNewest": "Hool gorko mum {count}",
+    "m365PlanKeepNewestConfirm": "A hool {keep} files juuliiya ɓe yaajaa e falle {exclude}?",
+    "m365PlanIncludeAll": "Ɓeydu fow tun (ɓeyda {count})",
+    "m365PlanIncludeFile": "Ɓeydu {name}",
+    "m365PlanFileExcluded": "mo waawnaa",
+    "m365PlanSortLabel": "Fiya ko",
+    "m365PlanSort": {
+      "name": "Innde",
+      "size": "Sago",
+      "modified": "Waynaama"
+    }
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",

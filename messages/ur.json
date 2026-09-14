@@ -4686,7 +4686,7 @@
     "m365PrepareSaveFirst": "ایجنٹ کو تیار کرنے کے لیے سیو کریں",
     "m365PrepareHintImage": "امیج — 1 وِژن کال",
     "m365PrepareHintMedia": "~{minutes} منٹ آڈیو تحریر میں تبدیل کرنے کے لیے",
-    "m365PrepareHintOcr": "کوئی ٹیکسٹ لیئر نہیں — وِژن کے ذریعے OCR، زیادہ سے زیادہ 30 صفحات",
+    "m365PrepareHintOcr": "ٹیکسٹ لیئر نہیں — OCR، زیادہ سے زیادہ {pages} صفحات",
     "m365PreparePreparing": "تیار کیا جا رہا ہے…",
     "m365PreparePending": "تحریر میں منتقل ہو رہا ہے…",
     "m365PreparedNote": "تیار شدہ · {kind}",
@@ -4758,7 +4758,28 @@
     "m365PlanFileSkipped": "انڈیکس نہیں ہوگا — {reason}",
     "m365PlanFileNeedsPreparation": "تیاری ہونے تک انڈیکس نہیں ہوگا — {hint}",
     "m365PlanFileLastRun": "آخری رن: {status}",
-    "m365ItemNoTextOcr": "کوئی متن نہیں ملا — اسکینڈ؟ Prepare (OCR) استعمال کریں"
+    "m365ItemNoTextOcr": "کوئی متن نہیں ملا — اسکینڈ؟ Prepare (OCR) استعمال کریں",
+    "m365CapRaiseButton": "اس ایجنٹ کی حد {limit} تک بڑھائیں",
+    "m365CapRaiseInputLabel": "اس ایجنٹ کے لیے دستاویزات کی حد",
+    "m365CapRaiseApply": "حد لاگو کریں",
+    "m365CapNeedsGlobalAdmin": "{limit} سے زیادہ دستاویزات کے لیے، ایک عالمی ایڈمن کو حد بڑھانی ہوگی۔",
+    "m365CapRaiseConfirm": "کیا اس ایجنٹ کی دستاویزات کی حد {limit} تک بڑھائی جائے؟ (ڈیفالٹ {default} ہے)\n\nتمام اضافی دستاویزات ایجنٹ کے انڈیکس ہونے پر شامل ہوتی ہیں، ہر صارف کے پہلے پیغام پر Microsoft 365 تک رسائی کے مطابق دوبارہ چیک ہوتی ہے، اور بڑے ایجنٹس سست رفتاری سے انڈیکس اور جواب دیتے ہیں۔\n\nپہلے ذیلی فولڈرز یا فائل کی اقسام کو خارج کرنے پر غور کریں۔",
+    "m365CapResetDefault": "ڈیفالٹ ({default}) پر ری سیٹ کریں",
+    "m365CapOverrideNote": "اس ایجنٹ کے لیے حد {limit} تک بڑھائی گئی",
+    "m365CapAboveRole": "یہ حد آپ کے کردار سے زیادہ ہے — عالمی ایڈمن سے رابطہ کریں۔",
+    "m365AgentLimitBadge": "حد {limit} (سیٹ کرنے والے: {who})",
+    "m365PlanTrimHint": "شامل کرنے کے لیے چھانٹی کریں: ذیلی فولڈرز یا فائلیں انچیک کریں، قسم کے لحاظ سے فلٹر کریں، یا صرف نئی ترین رکھیں۔",
+    "m365PlanKeepNewest": "تازہ ترین {count} رکھیں",
+    "m365PlanKeepNewestConfirm": "کیا صرف حال ہی میں ترمیم شدہ {keep} فائلیں رکھنی ہیں اور بقیہ {exclude} کو خارج کرنا ہے؟",
+    "m365PlanIncludeAll": "سب کو دوبارہ شامل کریں ({count} خارج شدہ)",
+    "m365PlanIncludeFile": "{name} کو شامل کریں",
+    "m365PlanFileExcluded": "خارج شدہ",
+    "m365PlanSortLabel": "ترتیب دیں بذریعہ",
+    "m365PlanSort": {
+      "name": "نام",
+      "size": "حجم",
+      "modified": "ترمیم شدہ"
+    }
   },
   "localModels": {
     "title": "لوکل ماڈلز",

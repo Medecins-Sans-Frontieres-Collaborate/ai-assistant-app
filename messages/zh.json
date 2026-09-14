@@ -4687,7 +4687,7 @@
     "m365PrepareSaveFirst": "请先保存代理以进行准备",
     "m365PrepareHintImage": "图片 — 1 次视觉调用",
     "m365PrepareHintMedia": "约 {minutes} 分钟音频转录",
-    "m365PrepareHintOcr": "无文本层 — 经视觉 OCR，最多 30 页",
+    "m365PrepareHintOcr": "无文本层 — OCR，可处理最多 {pages} 页",
     "m365PreparePreparing": "正在准备…",
     "m365PreparePending": "正在转录…",
     "m365PreparedNote": "已准备 · {kind}",
@@ -4759,7 +4759,28 @@
     "m365PlanFileSkipped": "不会被索引 — {reason}",
     "m365PlanFileNeedsPreparation": "未完成准备前不会被索引 — {hint}",
     "m365PlanFileLastRun": "上次运行：{status}",
-    "m365ItemNoTextOcr": "未发现文本 — 为扫描版？请使用“准备（OCR）”"
+    "m365ItemNoTextOcr": "未发现文本 — 为扫描版？请使用“准备（OCR）”",
+    "m365CapRaiseButton": "将此代理的限额提升至 {limit}",
+    "m365CapRaiseInputLabel": "此代理的文档限额",
+    "m365CapRaiseApply": "应用限额",
+    "m365CapNeedsGlobalAdmin": "超过 {limit} 个文档时需由全局管理员提升限额。",
+    "m365CapRaiseConfirm": "将此代理的文档限额提升至 {limit}（默认值为 {default}）？\n\n每增加一个文档，代理建立索引时都会嵌入该文档，并在每位用户首次发送消息时重新检查其 Microsoft 365 访问权限，代理规模越大，索引和回答速度越慢。\n\n建议优先排除子文件夹或文件类型。",
+    "m365CapResetDefault": "重置为默认值（{default}）",
+    "m365CapOverrideNote": "此代理的限额已提升至 {limit}",
+    "m365CapAboveRole": "该限额已超出您的权限，请联系全局管理员。",
+    "m365AgentLimitBadge": "限额 {limit}（由 {who} 设置）",
+    "m365PlanTrimHint": "筛选需要包含的内容：取消勾选子文件夹或文件，按类型筛选，或只保留最新文件。",
+    "m365PlanKeepNewest": "只保留最新 {count} 个",
+    "m365PlanKeepNewestConfirm": "只保留最近修改的 {keep} 个文件，排除其余 {exclude} 个，是否继续？",
+    "m365PlanIncludeAll": "重新全部包含（已排除 {count} 个）",
+    "m365PlanIncludeFile": "包含 {name}",
+    "m365PlanFileExcluded": "已排除",
+    "m365PlanSortLabel": "排序方式",
+    "m365PlanSort": {
+      "name": "名称",
+      "size": "大小",
+      "modified": "修改时间"
+    }
   },
   "localModels": {
     "title": "本地模型",

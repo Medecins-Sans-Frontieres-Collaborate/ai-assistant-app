@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "salva l'agente per preparare",
     "m365PrepareHintImage": "immagine — 1 chiamata vision",
     "m365PrepareHintMedia": "~{minutes} min di audio da trascrivere",
-    "m365PrepareHintOcr": "nessun livello testo — OCR tramite vision, fino a 30 pagine",
+    "m365PrepareHintOcr": "nessun livello di testo — OCR, fino a {pages} pagine",
     "m365PreparePreparing": "Preparazione…",
     "m365PreparePending": "Trascrizione…",
     "m365PreparedNote": "preparato · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "Non verrà indicizzato — {reason}",
     "m365PlanFileNeedsPreparation": "Non indicizzato finché non viene preparato — {hint}",
     "m365PlanFileLastRun": "Ultima esecuzione: {status}",
-    "m365ItemNoTextOcr": "nessun testo trovato — scansionato? usa Prepara (OCR)"
+    "m365ItemNoTextOcr": "nessun testo trovato — scansionato? usa Prepara (OCR)",
+    "m365CapRaiseButton": "Aumenta il limite di questo agente a {limit}",
+    "m365CapRaiseInputLabel": "Limite di documenti per questo agente",
+    "m365CapRaiseApply": "Applica limite",
+    "m365CapNeedsGlobalAdmin": "Oltre {limit} documenti, deve essere un amministratore globale ad aumentare il limite.",
+    "m365CapRaiseConfirm": "Alzare il limite dei documenti di questo agente a {limit} (il valore predefinito è {default})?\n\nOgni documento aggiuntivo viene incorporato quando l'agente viene indicizzato, viene ricontrollato rispetto all'accesso Microsoft 365 di ogni utente al primo messaggio, e agenti più grandi si indicizzano e rispondono più lentamente.\n\nConsidera prima di escludere sottocartelle o tipi di file.",
+    "m365CapResetDefault": "Ripristina al valore predefinito ({default})",
+    "m365CapOverrideNote": "limite aumentato a {limit} per questo agente",
+    "m365CapAboveRole": "Quel limite supera quello che puoi impostare con il tuo ruolo — chiedi a un amministratore globale.",
+    "m365AgentLimitBadge": "Limite {limit} (impostato da {who})",
+    "m365PlanTrimHint": "Definisci cosa includere: deseleziona sottocartelle o file, filtra per tipo o mantieni solo i più recenti.",
+    "m365PlanKeepNewest": "Mantieni gli ultimi {count}",
+    "m365PlanKeepNewestConfirm": "Mantenere i {keep} file modificati più di recente ed escludere gli altri {exclude}?",
+    "m365PlanIncludeAll": "Includi di nuovo tutto ({count} esclusi)",
+    "m365PlanIncludeFile": "Includi {name}",
+    "m365PlanFileExcluded": "escluso",
+    "m365PlanSortLabel": "Ordina per",
+    "m365PlanSort": {
+      "name": "Nome",
+      "size": "Dimensione",
+      "modified": "Modificato"
+    }
   },
   "localModels": {
     "title": "Modelli locali",

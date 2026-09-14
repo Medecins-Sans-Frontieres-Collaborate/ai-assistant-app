@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "nejprve uložte agenta pro přípravu",
     "m365PrepareHintImage": "obrázek — 1 volání vision",
     "m365PrepareHintMedia": "~{minutes} min zvuku k přepisu",
-    "m365PrepareHintOcr": "žádná textová vrstva — OCR přes vision, až 30 stran",
+    "m365PrepareHintOcr": "bez textové vrstvy – OCR, až {pages} stránek",
     "m365PreparePreparing": "Probíhá příprava…",
     "m365PreparePending": "Probíhá přepis…",
     "m365PreparedNote": "připraveno · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "Nebude indexováno — {reason}",
     "m365PlanFileNeedsPreparation": "Nebude indexováno, dokud nebude připraveno — {hint}",
     "m365PlanFileLastRun": "Poslední běh: {status}",
-    "m365ItemNoTextOcr": "nebyl nalezen žádný text — skenováno? použijte Připravit (OCR)"
+    "m365ItemNoTextOcr": "nebyl nalezen žádný text — skenováno? použijte Připravit (OCR)",
+    "m365CapRaiseButton": "Zvýšit limit tohoto agenta na {limit}",
+    "m365CapRaiseInputLabel": "Limit dokumentů pro tohoto agenta",
+    "m365CapRaiseApply": "Použít limit",
+    "m365CapNeedsGlobalAdmin": "Nad {limit} dokumentů může limit zvýšit pouze globální administrátor.",
+    "m365CapRaiseConfirm": "Zvýšit limit dokumentů tohoto agenta na {limit} (výchozí je {default})?\n\nKaždý další dokument je vložen při indexaci agenta, při první zprávě uživatele je znovu ověřeno jeho přístupové právo k dokumentu v Microsoft 365 a větší agenti se indexují a odpovídají pomaleji.\n\nZvažte nejprve vyloučení podsložek nebo typů souborů.",
+    "m365CapResetDefault": "Obnovit na výchozí ({default})",
+    "m365CapOverrideNote": "limit pro tohoto agenta zvýšen na {limit}",
+    "m365CapAboveRole": "Tento limit přesahuje možnosti vašeho oprávnění – obraťte se na globálního administrátora.",
+    "m365AgentLimitBadge": "Limit {limit} (nastavil {who})",
+    "m365PlanTrimHint": "Upravte, co zahrnout: odškrtněte podsložky nebo soubory, filtrujte podle typu nebo ponechte pouze nejnovější.",
+    "m365PlanKeepNewest": "Ponechat nejnovějších {count}",
+    "m365PlanKeepNewestConfirm": "Ponechat {keep} nejnověji upravených souborů a vyloučit ostatních {exclude}?",
+    "m365PlanIncludeAll": "Zahrnout vše znovu ({count} vyloučeno)",
+    "m365PlanIncludeFile": "Zahrnout {name}",
+    "m365PlanFileExcluded": "vyloučeno",
+    "m365PlanSortLabel": "Řadit podle",
+    "m365PlanSort": {
+      "name": "Název",
+      "size": "Velikost",
+      "modified": "Upraveno"
+    }
   },
   "localModels": {
     "title": "Lokální modely",

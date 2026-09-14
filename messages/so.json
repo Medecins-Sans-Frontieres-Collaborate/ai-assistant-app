@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "wad wakiilka si aad u diyaariso",
     "m365PrepareHintImage": "sawir — 1 wicitaan aragti",
     "m365PrepareHintMedia": "~{minutes} daqiiqo maqal ah oo la tafsiro",
-    "m365PrepareHintOcr": "ma jiro lakab qoraal ah — OCR iyadoo la adeegsanayo vision, ugu badnaan 30 bog",
+    "m365PrepareHintOcr": "lama hayo lakab qoraal ah — OCR, ugu badnaan {pages} bog",
     "m365PreparePreparing": "Waxaa la diyaarinayaa…",
     "m365PreparePending": "Waxaa la turjumayaa…",
     "m365PreparedNote": "waa la diyaariyay · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Lama index gareynayo — {reason}",
     "m365PlanFileNeedsPreparation": "Lama index gareynayo ilaa la diyaariyo — {hint}",
     "m365PlanFileLastRun": "Orodkii ugu dambeeyey: {status}",
-    "m365ItemNoTextOcr": "wax qoraal ah lama helin — la iska qaaday? adeegso Prepare (OCR)"
+    "m365ItemNoTextOcr": "wax qoraal ah lama helin — la iska qaaday? adeegso Prepare (OCR)",
+    "m365CapRaiseButton": "Kordhi xaddiga wakiilkan ilaa {limit}",
+    "m365CapRaiseInputLabel": "Xaddiga dukumintiyada ee wakiilkan",
+    "m365CapRaiseApply": "Codso xaddiga",
+    "m365CapNeedsGlobalAdmin": "Marka dukumintiyada ay ka badan yihiin {limit} waa in maamulaha guud kordhiyaa xaddiga.",
+    "m365CapRaiseConfirm": "Ma rabtaa inaad kordhiso xaddiga dukumintiyada ee wakiilkan ilaa {limit} (midda caadiga ah waa {default})?\n\nDukuminti kasta oo dheeraad ah waa la dhex geliyaa marka wakiilku la calaamadiyo, waxayna mar walba dib loogu hubiyaa ogolaanshaha isticmaalaha Microsoft 365 markuu farriintiisa koowaad gudbiyo, wakiil balaaranna wuu gaabin karaa celinta iyo kaydinta.\n\nTixgeli inaad marka hore ka saarto laan-hoosaadyo ama noocyada faylka.",
+    "m365CapResetDefault": "Soo celi caadiga ({default})",
+    "m365CapOverrideNote": "xaddiga wakiilkan waxaa loo kordhiyay ilaa {limit}",
+    "m365CapAboveRole": "Xaddigaas wuu ka badan yahay waxa aad xil ahaan dejin karto — weydii maamulaha guud.",
+    "m365AgentLimitBadge": "Xaddiga {limit} (wuxuu dejiyay {who})",
+    "m365PlanTrimHint": "Go'aanso waxa la galinayo: ka saar laan-hoosaadyada ama faylasha, kala saar nooca, ama kaydi kuwa ugu cusub keliya.",
+    "m365PlanKeepNewest": "Keliya kaydi kuwa ugu cusub {count}",
+    "m365PlanKeepNewestConfirm": "Ma rabtaa inaad kaydiso {keep} faylasha ugu dambeysay ee la beddelay oo aad ka saarto {exclude} kuwa kale?",
+    "m365PlanIncludeAll": "Dhammaan dib ugu dar ({count} la reebay)",
+    "m365PlanIncludeFile": "Ku dar {name}",
+    "m365PlanFileExcluded": "la reebay",
+    "m365PlanSortLabel": "Kala saar by",
+    "m365PlanSort": {
+      "name": "Magaca",
+      "size": "Cabbirka",
+      "modified": "La beddelay"
+    }
   },
   "localModels": {
     "title": "Moodallo maxalli ah",

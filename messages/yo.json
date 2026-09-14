@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "fipamọ́ àjánilọ́rùn láti tẹ̀síwájú",
     "m365PrepareHintImage": "àwòrán — ipe ìrántí 1",
     "m365PrepareHintMedia": "~{minutes} ìsẹ́jú ohun lati túmọ̀ sí lẹ́tà",
-    "m365PrepareHintOcr": "kò sí àlẹ́yà ọrọ̀ — OCR pẹ̀lú àwòrán, tó pọ̀ jù 30 ojúewé",
+    "m365PrepareHintOcr": "ko ni fẹlẹfẹlẹ ọrọ — OCR, to {pages} oju-iwe",
     "m365PreparePreparing": "Ṣiṣètò…",
     "m365PreparePending": "N túmọ̀ sí lẹ́tà…",
     "m365PreparedNote": "ti ṣètò · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Kò ní ṣe àtòjọ – {reason}",
     "m365PlanFileNeedsPreparation": "Kì í ṣe àtòjọ títí tí a ó fi pèsè – {hint}",
     "m365PlanFileLastRun": "Ìṣiṣẹ́ tó kẹ́yìn: {status}",
-    "m365ItemNoTextOcr": "kò sí ọrọ̀ kankan – ṣàwárí? lo Prepare (OCR)"
+    "m365ItemNoTextOcr": "kò sí ọrọ̀ kankan – ṣàwárí? lo Prepare (OCR)",
+    "m365CapRaiseButton": "Goke opin aṣoju yii si {limit}",
+    "m365CapRaiseInputLabel": "Opin iwe fun aṣoju yii",
+    "m365CapRaiseApply": "Lo opin",
+    "m365CapNeedsGlobalAdmin": "Lori {limit} awọn iwe, oludari agbaye ni o le goke opin naa.",
+    "m365CapRaiseConfirm": "Goke opin iwe aṣoju yii si {limit} (aṣayan aiyipada ni {default})?\n\nGbogbo iwe afikun yoo wa ni fi sii nigba ti aṣoju ba n wa, yoo tun ṣe atunyẹwo fun wiwọle Microsoft 365 olumulo akọkọ, ati pe awọn aṣoju nla maa n wa ati dahun lọra.\n\nRo yiyan lati fi awọn apò-ọwọ kekere silẹ tabi awọn iru faili kan kọkọ.",
+    "m365CapResetDefault": "Ṣetun si aiyipada ({default})",
+    "m365CapOverrideNote": "opin ti goke si {limit} fun aṣoju yii",
+    "m365CapAboveRole": "Opin yẹn kọja iye ti ipa rẹ le ṣeto — beere lọwọ oludari agbaye.",
+    "m365AgentLimitBadge": "Opin {limit} (ti {who} ṣeto)",
+    "m365PlanTrimHint": "Yan kini lati fi kun: yọ awọn apò-ọwọ kekere tabi faili, ṣe àlẹmọ nipasẹ iru, tabi pa awọn tuntun jùlọ mọ́.",
+    "m365PlanKeepNewest": "Pa awọn tuntun jùlọ mọ́ {count}",
+    "m365PlanKeepNewestConfirm": "Pa awọn faili ti a ṣe àtúnse kẹhin {keep} mọ́ ki o yọ awọn miiran {exclude}?",
+    "m365PlanIncludeAll": "Fikun gbogbo lẹẹkansi ({count} ti yọ)",
+    "m365PlanIncludeFile": "Fikun {name}",
+    "m365PlanFileExcluded": "ti yọ",
+    "m365PlanSortLabel": "Tito nipasẹ",
+    "m365PlanSort": {
+      "name": "Orukọ",
+      "size": "Iwọn",
+      "modified": "Atúnṣe"
+    }
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",

@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "bomba agent mpo na kobosana",
     "m365PrepareHintImage": "image — appel moko ya vision",
     "m365PrepareHintMedia": "~{minutes} min ya son ya kotanga",
-    "m365PrepareHintOcr": "texte ezali te — OCR na vision, tii na 30 pages",
+    "m365PrepareHintOcr": "motelemisi te ya maloba — OCR, tii na {pages} ba page",
     "m365PreparePreparing": "Ekobosana…",
     "m365PreparePending": "Ezali kotanga…",
     "m365PreparedNote": "ebosanami · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileNeedsPreparation": "Eko-indexama te kino ekosila ko préparer — {hint}",
     "m365PlanFileLastRun": "Run ya suka : {status}",
     "m365ItemNoTextOcr": "texte moko te ezwami — eskanami? salela Prepare (OCR)",
-    "m365PrepareAllConfirm": "Okosala OCR na {count, plural, one {# PDF eskané} other {# ba PDF eskané}} sik’oyo, moko libanda ya mosusu? OCR ezali kofongolama na motuya ya lokasa; fichier moko na moko ekoki kokamata kaka {pages} ba lokasa. Tika onganga oyo efungoli."
+    "m365PrepareAllConfirm": "Okosala OCR na {count, plural, one {# PDF eskané} other {# ba PDF eskané}} sik’oyo, moko libanda ya mosusu? OCR ezali kofongolama na motuya ya lokasa; fichier moko na moko ekoki kokamata kaka {pages} ba lokasa. Tika onganga oyo efungoli.",
+    "m365CapRaiseButton": "Kobetisa ndelo ya agent oyo tii na {limit}",
+    "m365CapRaiseInputLabel": "Ndelo ya babuku mpo na agent oyo",
+    "m365CapRaiseApply": "Sala ete ndelo esalama",
+    "m365CapNeedsGlobalAdmin": "Soki babuku bilenge koleka {limit}, admin général nde akoki kobakisa ndelo.",
+    "m365CapRaiseConfirm": "Kobetisa ndelo ya babuku ya agent oyo tii na {limit} (ndelo ya libosó ezali {default})?\n\nDokima moko na moko ya engibisami koleka ekobakisama na bobongiseli ya agent, ekotebana lisusu soki uzali kosalela Microsoft 365 ya moto na nsima ya mokanda ya libosó, mpe ba agent minene ekobongisa mpe ekopesa biyano na kimia.\n\nKanga ntembe koyeba libosó soki olingi kobengana ba subfolder to babukusu ndenge nini.",
+    "m365CapResetDefault": "Zongisa na ndelo ya libosó ({default})",
+    "m365CapOverrideNote": "ndelo ebakisami tii na {limit} mpo na agent oyo",
+    "m365CapAboveRole": "Ndelo wana eleki oyo rôle na yo ekoki kotya — tuná admin général.",
+    "m365AgentLimitBadge": "Ndelo {limit} (motó oyo atíki: {who})",
+    "m365PlanTrimHint": "Pona nini ekotala: bondimela te ba subfolder to ba file, senganisa ndenge ya file, to tika kaka ya sika.",
+    "m365PlanKeepNewest": "Tika kaka ya sika {count}",
+    "m365PlanKeepNewestConfirm": "Tika ba file ya sika {keep} oyo babongisami mingi, mpe katisa mosusu {exclude}?",
+    "m365PlanIncludeAll": "Kangela nyonso lisusu ({count} elongi te)",
+    "m365PlanIncludeFile": "Kangela {name}",
+    "m365PlanFileExcluded": "elongi te",
+    "m365PlanSortLabel": "Tata mbala",
+    "m365PlanSort": {
+      "name": "Nkombo",
+      "size": "Monene",
+      "modified": "Ebongisami"
+    }
   },
   "localModels": {
     "title": "Bamodelo ya esika",

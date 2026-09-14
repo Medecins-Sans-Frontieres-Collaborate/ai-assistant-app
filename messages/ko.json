@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "준비하려면 에이전트를 저장하세요",
     "m365PrepareHintImage": "이미지 — 비전 호출 1회",
     "m365PrepareHintMedia": "~{minutes}분 오디오 전사",
-    "m365PrepareHintOcr": "텍스트 레이어 없음 — 비전 OCR, 최대 30페이지",
+    "m365PrepareHintOcr": "텍스트 레이어 없음 — OCR, 최대 {pages}쪽",
     "m365PreparePreparing": "준비 중…",
     "m365PreparePending": "전사 중…",
     "m365PreparedNote": "준비 완료 · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "인덱싱되지 않습니다 — {reason}",
     "m365PlanFileNeedsPreparation": "준비 전까지 인덱싱되지 않음 — {hint}",
     "m365PlanFileLastRun": "마지막 실행: {status}",
-    "m365ItemNoTextOcr": "텍스트 없음 — 스캔본인가요? 준비(OCR) 사용"
+    "m365ItemNoTextOcr": "텍스트 없음 — 스캔본인가요? 준비(OCR) 사용",
+    "m365CapRaiseButton": "이 에이전트의 한도를 {limit}(으)로 올리기",
+    "m365CapRaiseInputLabel": "이 에이전트의 문서 한도",
+    "m365CapRaiseApply": "한도 적용",
+    "m365CapNeedsGlobalAdmin": "{limit}개 이상의 문서는 전역 관리자가 한도를 올려야 합니다.",
+    "m365CapRaiseConfirm": "이 에이전트의 문서 한도를 {limit}(으)로 올릴까요? (기본값: {default})\n\n추가되는 각 문서는 에이전트가 색인화될 때 포함되며, 사용자가 처음 메시지를 보낼 때 각자의 Microsoft 365 접근 권한이 다시 확인됩니다. 에이전트가 클수록 색인 및 답변 속도가 느려집니다.\n\n먼저 하위 폴더나 파일 유형을 제외하는 것을 고려해보세요.",
+    "m365CapResetDefault": "기본값({default})으로 재설정",
+    "m365CapOverrideNote": "이 에이전트의 한도가 {limit}(으)로 상향 조정됨",
+    "m365CapAboveRole": "설정하려는 한도가 권한 범위보다 높습니다 — 전역 관리자에게 문의하세요.",
+    "m365AgentLimitBadge": "한도 {limit} (설정자: {who})",
+    "m365PlanTrimHint": "포함할 항목 다듬기: 하위 폴더나 파일의 선택을 해제하거나, 유형별로 필터링하거나, 최신 항목만 남겨둘 수 있습니다.",
+    "m365PlanKeepNewest": "최신 {count}개만 유지",
+    "m365PlanKeepNewestConfirm": "가장 최근에 수정된 {keep}개 파일만 남기고 나머지 {exclude}개를 제외할까요?",
+    "m365PlanIncludeAll": "모두 다시 포함하기({count}개 제외됨)",
+    "m365PlanIncludeFile": "{name} 포함",
+    "m365PlanFileExcluded": "제외됨",
+    "m365PlanSortLabel": "정렬 기준",
+    "m365PlanSort": {
+      "name": "이름",
+      "size": "크기",
+      "modified": "수정일"
+    }
   },
   "localModels": {
     "title": "로컬 모델",

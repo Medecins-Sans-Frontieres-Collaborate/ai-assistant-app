@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "desa l'agent per preparar",
     "m365PrepareHintImage": "imatge — 1 trucada vision",
     "m365PrepareHintMedia": "~{minutes} min d'àudio per transcriure",
-    "m365PrepareHintOcr": "sense capa de text — OCR amb vision, fins a 30 pàgines",
+    "m365PrepareHintOcr": "sense capa de text — OCR, fins a {pages} pàgines",
     "m365PreparePreparing": "Preparant…",
     "m365PreparePending": "Transcrivint…",
     "m365PreparedNote": "preparat · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "No s'indexarà — {reason}",
     "m365PlanFileNeedsPreparation": "No s’indexarà fins que estigui preparat — {hint}",
     "m365PlanFileLastRun": "Darrera execució: {status}",
-    "m365ItemNoTextOcr": "no s’ha trobat text — escanejat? utilitzeu Preparar (OCR)"
+    "m365ItemNoTextOcr": "no s’ha trobat text — escanejat? utilitzeu Preparar (OCR)",
+    "m365CapRaiseButton": "Augmenta el límit d’aquest agent a {limit}",
+    "m365CapRaiseInputLabel": "Límit de documents per a aquest agent",
+    "m365CapRaiseApply": "Aplica el límit",
+    "m365CapNeedsGlobalAdmin": "Per sobre de {limit} documents, un administrador global ha d’augmentar el límit.",
+    "m365CapRaiseConfirm": "Vols augmentar el límit de documents d’aquest agent a {limit} (el valor per defecte és {default})?\n\nCada document extra es processa quan s’indexa l’agent, es torna a comprovar amb l'accés de cada usuari a Microsoft 365 en el seu primer missatge, i els agents més grans s'indexen i responen més lentament.\n\nConsidera primer excloure subcarpetes o tipus d’arxius.",
+    "m365CapResetDefault": "Restableix al valor per defecte ({default})",
+    "m365CapOverrideNote": "límite augmentat a {limit} per a aquest agent",
+    "m365CapAboveRole": "Aquest límit supera el màxim que pots establir amb el teu rol: demana-ho a un administrador global.",
+    "m365AgentLimitBadge": "Límit {limit} (establert per {who})",
+    "m365PlanTrimHint": "Defineix què s'ha d'incloure: desmarca subcarpetes o fitxers, filtra per tipus o conserva només els més recents.",
+    "m365PlanKeepNewest": "Conserva els {count} més recents",
+    "m365PlanKeepNewestConfirm": "Vols conservar els {keep} fitxers modificats més recentment i excloure els altres {exclude}?",
+    "m365PlanIncludeAll": "Inclou-ho tot de nou ({count} exclosos)",
+    "m365PlanIncludeFile": "Inclou {name}",
+    "m365PlanFileExcluded": "exclòs",
+    "m365PlanSortLabel": "Ordena per",
+    "m365PlanSort": {
+      "name": "Nom",
+      "size": "Mida",
+      "modified": "Modificat"
+    }
   },
   "localModels": {
     "title": "Models locals",

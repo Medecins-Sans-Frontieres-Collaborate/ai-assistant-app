@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "salve o agente para preparar",
     "m365PrepareHintImage": "imagem — 1 chamada de visão",
     "m365PrepareHintMedia": "~{minutes} min de áudio para transcrever",
-    "m365PrepareHintOcr": "sem camada de texto — OCR via visão, até 30 páginas",
+    "m365PrepareHintOcr": "sem camada de texto — OCR, até {pages} páginas",
     "m365PreparePreparing": "Preparando…",
     "m365PreparePending": "Transcrevendo…",
     "m365PreparedNote": "preparado · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "Não será indexado — {reason}",
     "m365PlanFileNeedsPreparation": "Não indexado até ser preparado — {hint}",
     "m365PlanFileLastRun": "Última execução: {status}",
-    "m365ItemNoTextOcr": "nenhum texto encontrado — é escaneado? use Preparar (OCR)"
+    "m365ItemNoTextOcr": "nenhum texto encontrado — é escaneado? use Preparar (OCR)",
+    "m365CapRaiseButton": "Aumentar o limite deste agente para {limit}",
+    "m365CapRaiseInputLabel": "Limite de documentos para este agente",
+    "m365CapRaiseApply": "Aplicar limite",
+    "m365CapNeedsGlobalAdmin": "Acima de {limit} documentos, um administrador global precisa aumentar o limite.",
+    "m365CapRaiseConfirm": "Aumentar o limite de documentos deste agente para {limit} (o padrão é {default})?\n\nCada documento extra é incorporado ao indexar o agente, verificado novamente com o acesso Microsoft 365 do usuário na primeira mensagem, e agentes maiores indexam e respondem mais devagar.\n\nConsidere primeiro excluir subpastas ou tipos de arquivos.",
+    "m365CapResetDefault": "Redefinir para o padrão ({default})",
+    "m365CapOverrideNote": "limite aumentado para {limit} para este agente",
+    "m365CapAboveRole": "Esse limite está acima do permitido para sua função — solicite a um administrador global.",
+    "m365AgentLimitBadge": "Limite {limit} (definido por {who})",
+    "m365PlanTrimHint": "Selecione o que incluir: desmarque subpastas ou arquivos, filtre por tipo ou mantenha apenas os mais recentes.",
+    "m365PlanKeepNewest": "Manter os {count} mais recentes",
+    "m365PlanKeepNewestConfirm": "Manter os {keep} arquivos mais recentemente modificados e excluir os outros {exclude}?",
+    "m365PlanIncludeAll": "Incluir todos novamente ({count} excluídos)",
+    "m365PlanIncludeFile": "Incluir {name}",
+    "m365PlanFileExcluded": "excluído",
+    "m365PlanSortLabel": "Ordenar por",
+    "m365PlanSort": {
+      "name": "Nome",
+      "size": "Tamanho",
+      "modified": "Modificado"
+    }
   },
   "localModels": {
     "title": "Modelos locais",

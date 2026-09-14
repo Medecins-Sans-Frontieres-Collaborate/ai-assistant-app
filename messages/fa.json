@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "نماینده را برای آماده‌سازی ذخیره کنید",
     "m365PrepareHintImage": "تصویر — ۱ تماس vision",
     "m365PrepareHintMedia": "حدود {minutes} دقیقه صوت برای رونویسی",
-    "m365PrepareHintOcr": "بدون لایه متنی — OCR از طریق vision، تا ۳۰ صفحه",
+    "m365PrepareHintOcr": "لایه متنی ندارد — OCR تا {pages} صفحه",
     "m365PreparePreparing": "در حال آماده‌سازی…",
     "m365PreparePending": "در حال رونویسی…",
     "m365PreparedNote": "آماده شد · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "فهرست‌بندی نمی‌شود — {reason}",
     "m365PlanFileNeedsPreparation": "تا زمان آماده‌سازی فهرست‌بندی نمی‌شود — {hint}",
     "m365PlanFileLastRun": "آخرین اجرا: {status}",
-    "m365ItemNoTextOcr": "متنی یافت نشد — اسکن شده؟ از آماده‌سازی (OCR) استفاده کنید"
+    "m365ItemNoTextOcr": "متنی یافت نشد — اسکن شده؟ از آماده‌سازی (OCR) استفاده کنید",
+    "m365CapRaiseButton": "افزایش سقف این عامل به {limit}",
+    "m365CapRaiseInputLabel": "سقف اسناد برای این عامل",
+    "m365CapRaiseApply": "اعمال سقف",
+    "m365CapNeedsGlobalAdmin": "بالاتر از {limit} سند، مدیر کل باید سقف را افزایش دهد.",
+    "m365CapRaiseConfirm": "سقف اسناد این عامل به {limit} افزایش یابد؟ (پیش‌فرض {default} است)\n\nهر سند اضافی هنگام فهرست‌بندی عامل قرار داده می‌شود، در اولین پیام هر کاربر با دسترسی Microsoft 365 او مطابقت داده می‌شود، و عامل‌های بزرگ‌تر کندتر فهرست‌بندی و پاسخ می‌دهند.\n\nپیشنهاد می‌شود ابتدا زیرپوشه‌ها یا نوع فایل‌ها را حذف کنید.",
+    "m365CapResetDefault": "بازگرداندن به پیش‌فرض ({default})",
+    "m365CapOverrideNote": "سقف تا {limit} برای این عامل افزایش یافت",
+    "m365CapAboveRole": "این سقف بالاتر از حد مجاز نقش شماست — با مدیر کل تماس بگیرید.",
+    "m365AgentLimitBadge": "سقف {limit} (تنظیم شده توسط {who})",
+    "m365PlanTrimHint": "محدودسازی انتخاب: زیرپوشه یا فایل‌ها را بردارید، بر اساس نوع فیلتر کنید یا فقط جدیدترین‌ها را نگه دارید.",
+    "m365PlanKeepNewest": "نگهداری {count} جدیدترین",
+    "m365PlanKeepNewestConfirm": "{keep} فایل به‌تازگی ویرایش‌شده را نگه‌داریم و {exclude} مورد دیگر را حذف کنیم؟",
+    "m365PlanIncludeAll": "همه را دوباره وارد کن ({count} حذف شده)",
+    "m365PlanIncludeFile": "افزودن {name}",
+    "m365PlanFileExcluded": "حذف شده",
+    "m365PlanSortLabel": "مرتب‌سازی بر اساس",
+    "m365PlanSort": {
+      "name": "نام",
+      "size": "اندازه",
+      "modified": "تاریخ تغییر"
+    }
   },
   "localModels": {
     "title": "مدل‌های محلی",

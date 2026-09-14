@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "sove ajan an pou prepare",
     "m365PrepareHintImage": "imaj — 1 apèl vizyon",
     "m365PrepareHintMedia": "~{minutes} min odyo pou transkri",
-    "m365PrepareHintOcr": "pa gen kouch tèks — OCR ak vizyon, jiska 30 paj",
+    "m365PrepareHintOcr": "pa gen kouch tèks — OCR, jiska {pages} paj",
     "m365PreparePreparing": "Ap prepare…",
     "m365PreparePending": "Ap transkri…",
     "m365PreparedNote": "prepare · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Pap endèks — {reason}",
     "m365PlanFileNeedsPreparation": "Pap endèks jiskaske prepare — {hint}",
     "m365PlanFileLastRun": "Dènye kouri: {status}",
-    "m365ItemNoTextOcr": "pa jwenn okenn tèks — eskane? itilize Prepare (OCR)"
+    "m365ItemNoTextOcr": "pa jwenn okenn tèks — eskane? itilize Prepare (OCR)",
+    "m365CapRaiseButton": "Ogmante limit ajan sa a a {limit}",
+    "m365CapRaiseInputLabel": "Limit dokiman pou ajan sa a",
+    "m365CapRaiseApply": "Aplike limit",
+    "m365CapNeedsGlobalAdmin": "Plis pase {limit} dokiman, yon administratè jeneral dwe ogmante limit la.",
+    "m365CapRaiseConfirm": "Ogmante limit dokiman pou ajan sa a a {limit} (pa default li se {default})?\n\nChak dokiman an plis ap entegre lè ajan an ap endèks, ap re-tcheke ak aksè Microsoft 365 chak itilizatè nan premye mesaj yo, epi pi gwo ajan yo ap endèks ak reponn pi dousman.\n\nKonsidere exclure sous-dosye oswa tip fichye anvan.",
+    "m365CapResetDefault": "Reyitilize valè default la ({default})",
+    "m365CapOverrideNote": "limit ogmante a {limit} pou ajan sa a",
+    "m365CapAboveRole": "Limit sa a pi wo pase sa wòl ou ka mete — mande yon administratè jeneral.",
+    "m365AgentLimitBadge": "Limit {limit} (mete pa {who})",
+    "m365PlanTrimHint": "Redwi sa pou enkli: dekoche sous-dosye oswa fichye yo, filtre pa tip, oswa kenbe sèlman sa ki pi resan yo.",
+    "m365PlanKeepNewest": "Kenbe {count} ki pi resan",
+    "m365PlanKeepNewestConfirm": "Kenbe {keep} fichye ki modifye pi resan yo epi ekskli lòt {exclude} yo?",
+    "m365PlanIncludeAll": "Enkli tout ankò ({count} ekskli)",
+    "m365PlanIncludeFile": "Enkli {name}",
+    "m365PlanFileExcluded": "ekskli",
+    "m365PlanSortLabel": "Klasman pa",
+    "m365PlanSort": {
+      "name": "Non",
+      "size": "Gwosè",
+      "modified": "Modifye"
+    }
   },
   "localModels": {
     "title": "Modèl lokal",

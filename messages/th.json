@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "บันทึกเจ้าหน้าที่เพื่อเตรียมใช้งาน",
     "m365PrepareHintImage": "ภาพ — 1 vision call",
     "m365PrepareHintMedia": "~{minutes} นาทีของเสียงสำหรับถอดคำ",
-    "m365PrepareHintOcr": "ไม่มีชั้นข้อความ — OCR ด้วย vision สูงสุด 30 หน้า",
+    "m365PrepareHintOcr": "ไม่มีเลเยอร์ข้อความ — OCR สูงสุด {pages} หน้า",
     "m365PreparePreparing": "กำลังเตรียม…",
     "m365PreparePending": "กำลังถอดเสียง…",
     "m365PreparedNote": "เตรียมแล้ว · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "จะไม่ถูกสร้างดัชนี — {reason}",
     "m365PlanFileNeedsPreparation": "ยังไม่ถูกสร้างดัชนีจนกว่าจะเตรียมเสร็จ — {hint}",
     "m365PlanFileLastRun": "การทำงานครั้งล่าสุด: {status}",
-    "m365ItemNoTextOcr": "ไม่พบข้อความ — สแกนใช่หรือไม่? ใช้เตรียม (OCR)"
+    "m365ItemNoTextOcr": "ไม่พบข้อความ — สแกนใช่หรือไม่? ใช้เตรียม (OCR)",
+    "m365CapRaiseButton": "เพิ่มขีดจำกัดของเอเจนต์นี้เป็น {limit}",
+    "m365CapRaiseInputLabel": "ขีดจำกัดเอกสารสำหรับเอเจนต์นี้",
+    "m365CapRaiseApply": "บันทึกขีดจำกัด",
+    "m365CapNeedsGlobalAdmin": "หากเกิน {limit} เอกสาร ต้องให้ global admin เพิ่มขีดจำกัดนี้",
+    "m365CapRaiseConfirm": "ต้องการเพิ่มขีดจำกัดเอกสารของเอเจนต์นี้เป็น {limit} (ค่าเริ่มต้นคือ {default})?\n\nเอกสารที่เพิ่มแต่ละฉบับจะถูกฝังไว้ขณะสร้างดัชนีเอเจนต์ และจะมีการตรวจสอบสิทธิ์ Microsoft 365 ของผู้ใช้ในข้อความแรก และเอเจนต์ที่มีขนาดใหญ่จะสร้างดัชนีและตอบช้าลง\n\nกรุณาพิจารณาตัดโฟลเดอร์ย่อยหรือประเภทไฟล์ออกก่อน",
+    "m365CapResetDefault": "รีเซ็ตเป็นค่าเริ่มต้น ({default})",
+    "m365CapOverrideNote": "ขีดจำกัดถูกตั้งเป็น {limit} สำหรับเอเจนต์นี้",
+    "m365CapAboveRole": "ขีดจำกัดนี้เกินกว่าที่บทบาทของคุณจะตั้งค่าได้ — โปรดติดต่อ global admin",
+    "m365AgentLimitBadge": "จำกัด {limit} (กำหนดโดย {who})",
+    "m365PlanTrimHint": "เลือกเอกสารที่ต้องการ: ยกเลิกเลือกโฟลเดอร์ย่อยหรือไฟล์ กรองตามประเภท หรือตั้งให้เก็บเฉพาะไฟล์ใหม่ล่าสุด",
+    "m365PlanKeepNewest": "เก็บเฉพาะใหม่ล่าสุด {count} รายการ",
+    "m365PlanKeepNewestConfirm": "เก็บไฟล์ที่แก้ไขล่าสุด {keep} รายการ และไม่รวมอีก {exclude} รายการ?",
+    "m365PlanIncludeAll": "รวมทั้งหมดอีกครั้ง (ที่ถูกตัดออก {count})",
+    "m365PlanIncludeFile": "รวม {name}",
+    "m365PlanFileExcluded": "ไม่รวม",
+    "m365PlanSortLabel": "จัดเรียงตาม",
+    "m365PlanSort": {
+      "name": "ชื่อ",
+      "size": "ขนาด",
+      "modified": "วันที่แก้ไข"
+    }
   },
   "localModels": {
     "title": "โมเดลภายในเครื่อง",

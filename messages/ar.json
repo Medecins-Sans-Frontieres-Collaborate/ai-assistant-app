@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "احفظ الوكيل للتهيئة",
     "m365PrepareHintImage": "صورة — اتصال رؤية واحد",
     "m365PrepareHintMedia": "~{minutes} دقائق من الصوت لتحويله إلى نص",
-    "m365PrepareHintOcr": "لا توجد طبقة نص — OCR عبر الرؤية، حتى 30 صفحة",
+    "m365PrepareHintOcr": "لا توجد طبقة نص — OCR، حتى {pages} صفحة",
     "m365PreparePreparing": "جارٍ التهيئة…",
     "m365PreparePending": "جارٍ النسخ…",
     "m365PreparedNote": "مُهيأ · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "لن يتم فهرسته — {reason}",
     "m365PlanFileNeedsPreparation": "لن يُفهرس حتى يتم تجهيزه — {hint}",
     "m365PlanFileLastRun": "آخر تشغيل: {status}",
-    "m365ItemNoTextOcr": "لم يتم العثور على نص — ممسوح ضوئيًا؟ استخدم إعداد (OCR)"
+    "m365ItemNoTextOcr": "لم يتم العثور على نص — ممسوح ضوئيًا؟ استخدم إعداد (OCR)",
+    "m365CapRaiseButton": "رفع الحد لهذا الوكيل إلى {limit}",
+    "m365CapRaiseInputLabel": "حد المستندات لهذا الوكيل",
+    "m365CapRaiseApply": "تطبيق الحد",
+    "m365CapNeedsGlobalAdmin": "فوق {limit} مستند يجب على المسؤول العام رفع الحد.",
+    "m365CapRaiseConfirm": "هل ترغب في رفع حد المستندات لهذا الوكيل إلى {limit} (القيمة الافتراضية هي {default})؟\n\nكل مستند إضافي يتم تضمينه عند فهرسة الوكيل، ويعاد التحقق من كل مستند مقابل وصول كل مستخدم إلى Microsoft 365 في رسالتهم الأولى، كما أن الفهرسة والإجابة تكون أبطأ للوكلاء الأكبر.\n\nفكر أولاً في استبعاد المجلدات الفرعية أو أنواع الملفات.",
+    "m365CapResetDefault": "إعادة التعيين إلى الافتراضي ({default})",
+    "m365CapOverrideNote": "تم رفع الحد إلى {limit} لهذا الوكيل",
+    "m365CapAboveRole": "هذا الحد أعلى مما يمكنك تعيينه وفقاً لدورك — الرجاء طلب المساعدة من المسؤول العام.",
+    "m365AgentLimitBadge": "الحد {limit} (عيّنه {who})",
+    "m365PlanTrimHint": "حدد ما تريد تضمينه: قم بإلغاء تحديد المجلدات الفرعية أو الملفات، أو فلتر حسب النوع، أو احتفظ بالأحدث فقط.",
+    "m365PlanKeepNewest": "الاحتفاظ بأحدث {count}",
+    "m365PlanKeepNewestConfirm": "هل ترغب في الاحتفاظ بـ {keep} من الملفات المعدلة حديثاً واستبعاد {exclude} الأخرى؟",
+    "m365PlanIncludeAll": "تضمين الكل مجدداً (تم استبعاد {count})",
+    "m365PlanIncludeFile": "تضمين {name}",
+    "m365PlanFileExcluded": "مستبعد",
+    "m365PlanSortLabel": "ترتيب حسب",
+    "m365PlanSort": {
+      "name": "الاسم",
+      "size": "الحجم",
+      "modified": "تاريخ التعديل"
+    }
   },
   "localModels": {
     "title": "النماذج المحلية",

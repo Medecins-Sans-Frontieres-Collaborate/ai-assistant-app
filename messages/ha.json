@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "a adana wakili kafin a shirya",
     "m365PrepareHintImage": "hoto — kiran hangen nesa 1",
     "m365PrepareHintMedia": "~{minutes} minti na sauti don fassara",
-    "m365PrepareHintOcr": "babu layin rubutu — OCR ta hangen nesa, har zuwa shafuka 30",
+    "m365PrepareHintOcr": "babu matakin rubutu — OCR, har zuwa shafuka {pages}",
     "m365PreparePreparing": "Ana shiryawa…",
     "m365PreparePending": "Ana fassara…",
     "m365PreparedNote": "an shirya · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Ba za a tsara ba — {reason}",
     "m365PlanFileNeedsPreparation": "Ba za a tsara ba har sai an shirya — {hint}",
     "m365PlanFileLastRun": "Gudanarwa ta ƙarshe: {status}",
-    "m365ItemNoTextOcr": "ba a sami rubutu ba — an duba? Yi amfani da Shirya (OCR)"
+    "m365ItemNoTextOcr": "ba a sami rubutu ba — an duba? Yi amfani da Shirya (OCR)",
+    "m365CapRaiseButton": "Ɗaga iyakar wannan wakili zuwa {limit}",
+    "m365CapRaiseInputLabel": "Iyakacin takardu ga wannan wakilin",
+    "m365CapRaiseApply": "Aiwatar da iyaka",
+    "m365CapNeedsGlobalAdmin": "Fiye da takardu {limit}, dole babban mai gudanarwa ya ƙara iyaka.",
+    "m365CapRaiseConfirm": "Ɗaga iyakar takardun wannan wakili zuwa {limit} (asalin iyaka shine {default})?\n\nDuk wani ƙarin takarda za a haɗa shi idan an ƙirƙiri wakili, kuma za a sake bincika bisa damar Microsoft 365 na kowanne mai amfani a saƙo na farko, sannan manyan wakilai suna ƙirƙira da amsa a hankali.\n\nYi la’akari da cire manyan fayiloli ko nau’in fayil da farko.",
+    "m365CapResetDefault": "Mayar da asali ({default})",
+    "m365CapOverrideNote": "an ƙara iyaka zuwa {limit} ga wannan wakilin",
+    "m365CapAboveRole": "Wannan iyakar ta fi wanda matsayinka zai iya saita — tuntubi babban mai gudanarwa.",
+    "m365AgentLimitBadge": "Iyaka {limit} (wanda {who} ya saita)",
+    "m365PlanTrimHint": "Zabi abin da za a haɗa: cire manyan fayil ko fayiloli, tace nau’in fayil, ko ajiye sabbi kaɗai.",
+    "m365PlanKeepNewest": "Ajiye sabbi {count}",
+    "m365PlanKeepNewestConfirm": "Ajiye fayil {keep} da aka fi sabuntawa kuma a cire sauran {exclude}?",
+    "m365PlanIncludeAll": "Haɗa dukkan su sake ({count} an cire)",
+    "m365PlanIncludeFile": "Haɗa {name}",
+    "m365PlanFileExcluded": "an cire",
+    "m365PlanSortLabel": "Tsara ta",
+    "m365PlanSort": {
+      "name": "Suna",
+      "size": "Girma",
+      "modified": "An gyara"
+    }
   },
   "localModels": {
     "title": "Samfuran cikin gida",

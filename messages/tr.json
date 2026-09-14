@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "hazırlamak için ajanı kaydedin",
     "m365PrepareHintImage": "görüntü — 1 vision çağrısı",
     "m365PrepareHintMedia": "~{minutes} dk ses deşifre edilecek",
-    "m365PrepareHintOcr": "metin katmanı yok — vision üzerinden OCR, en fazla 30 sayfa",
+    "m365PrepareHintOcr": "metin katmanı yok — OCR, en fazla {pages} sayfa",
     "m365PreparePreparing": "Hazırlanıyor…",
     "m365PreparePending": "Deşifre ediliyor…",
     "m365PreparedNote": "hazırlandı · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "İndekslenmeyecek — {reason}",
     "m365PlanFileNeedsPreparation": "Hazırlanana kadar indekslenmeyecek — {hint}",
     "m365PlanFileLastRun": "Son çalıştırma: {status}",
-    "m365ItemNoTextOcr": "metin bulunamadı — taranmış mı? Hazırla (OCR) kullanın"
+    "m365ItemNoTextOcr": "metin bulunamadı — taranmış mı? Hazırla (OCR) kullanın",
+    "m365CapRaiseButton": "Bu ajanın limitini {limit}'e yükselt",
+    "m365CapRaiseInputLabel": "Bu ajan için doküman limiti",
+    "m365CapRaiseApply": "Limiti uygula",
+    "m365CapNeedsGlobalAdmin": "{limit} doküman üzeri için limiti global admin artırmalıdır.",
+    "m365CapRaiseConfirm": "Bu ajanın doküman limitini {limit}'e yükseltmek istiyor musunuz? (Varsayılan: {default})\n\nHer ek doküman, ajan indekslendiğinde eklenir, ilk mesajda her kullanıcının Microsoft 365 erişimiyle tekrar kontrol edilir ve daha büyük ajanlar daha yavaş indekslenir ve yanıt verir.\n\nÖncelikle alt klasörleri veya dosya türlerini hariç tutmayı düşünün.",
+    "m365CapResetDefault": "Varsayılana sıfırla ({default})",
+    "m365CapOverrideNote": "bu ajan için limit {limit}'e çıkarıldı",
+    "m365CapAboveRole": "Bu limit rolünüzün ayarlayabileceğinin üzerinde — global admin'e danışın.",
+    "m365AgentLimitBadge": "Limit {limit} (ayarlayan: {who})",
+    "m365PlanTrimHint": "Dahil edilecekleri azaltın: alt klasör ya da dosyaların işaretini kaldırın, türe göre filtreleyin veya sadece en yenileri bırakın.",
+    "m365PlanKeepNewest": "En yeni {count} öğeyi tut",
+    "m365PlanKeepNewestConfirm": "En son değiştirilen {keep} dosyayı tutup diğer {exclude} dosyayı hariç bırakmak ister misiniz?",
+    "m365PlanIncludeAll": "Hepsini tekrar dahil et ({count} hariç tutuldu)",
+    "m365PlanIncludeFile": "{name} dosyasını dahil et",
+    "m365PlanFileExcluded": "hariç tutuldu",
+    "m365PlanSortLabel": "Sırala",
+    "m365PlanSort": {
+      "name": "Ad",
+      "size": "Boyut",
+      "modified": "Değiştirilme tarihi"
+    }
   },
   "localModels": {
     "title": "Yerel modeller",

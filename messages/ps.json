@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "د چمتو کولو لپاره استازی ثبت کړئ",
     "m365PrepareHintImage": "انځور — ۱ vision غږ",
     "m365PrepareHintMedia": "شاوخوا {minutes} دقیقې غږ د لیک لپاره",
-    "m365PrepareHintOcr": "د لیک لایه نشته — OCR له vision، تر ۳۰ مخونو پورې",
+    "m365PrepareHintOcr": "د متن طبقه نشته — OCR، تر {pages} مخونو پورې",
     "m365PreparePreparing": "چمتو کېږي…",
     "m365PreparePending": "لیک کېږي…",
     "m365PreparedNote": "چمتو شو · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "اندېکس نه شي کېدای — {reason}",
     "m365PlanFileNeedsPreparation": "چمتو کولو تر وخته اندېکس نه شي کېدای — {hint}",
     "m365PlanFileLastRun": "وروستۍ اجرا: {status}",
-    "m365ItemNoTextOcr": "متن ونه موندل شو — سکین شوی؟ Prepare (OCR) وکاروئ"
+    "m365ItemNoTextOcr": "متن ونه موندل شو — سکین شوی؟ Prepare (OCR) وکاروئ",
+    "m365CapRaiseButton": "د دې اجنټ حد {limit} ته لوړ کړئ",
+    "m365CapRaiseInputLabel": "د دې اجنټ لپاره د اسنادو حد",
+    "m365CapRaiseApply": "حد تطبیق کړئ",
+    "m365CapNeedsGlobalAdmin": "له {limit} اسنادو پورته د حد لوړولو ته نړیوال اډمن اړتیا لري.",
+    "m365CapRaiseConfirm": "ایا غواړئ د دې اجنټ د اسنادو حد {limit} ته لوړ کړئ؟ (اصلي ارزښت {default} دی)\n\nهر اضافي سند به د اجنټ د فهرست کولو پر مهال ځای پر ځای شي، د کارونکي لومړي پیغام کې به د Microsoft 365 لاسرسي پر اساس وارزول شي، او لوی اجنټونه به فهرست کول او ځواب ورکول ورو کړي.\n\nمهرباني وکړئ لومړی فرعي پوښۍ یا د فایل ډولونه لرې کړئ.",
+    "m365CapResetDefault": "اصلي ارزښت ته بېرته ستنول ({default})",
+    "m365CapOverrideNote": "حد د دې اجنټ لپاره {limit} ته لوړ شو",
+    "m365CapAboveRole": "دا حد د ستاسو د نقش له صلاحیت پورته دی — له نړیوال اډمن څخه مرسته وغواړئ.",
+    "m365AgentLimitBadge": "حد {limit} (د {who} لخوا ټاکل شوی)",
+    "m365PlanTrimHint": "څه شامل کړئ غوره کړئ: فرعي پوښۍ یا فایلونه غیر فعال کړئ، د ډول له مخې فلټر کړئ، یا یوازې نوي فایلونه پاتې کړئ.",
+    "m365PlanKeepNewest": "یوازې نوي {count} وساتئ",
+    "m365PlanKeepNewestConfirm": "غواړئ {keep} تر ټولو نوي سمبال شوي فایلونه وساتئ او نور {exclude} لرې کړئ؟",
+    "m365PlanIncludeAll": "ټول بیا شامل کړئ ({count} مستثنی شوي)",
+    "m365PlanIncludeFile": "{name} شامل کړئ",
+    "m365PlanFileExcluded": "مستثنی شوی",
+    "m365PlanSortLabel": "مرتب کړئ پر",
+    "m365PlanSort": {
+      "name": "نوم",
+      "size": "اندازه",
+      "modified": "بدل شوی"
+    }
   },
   "localModels": {
     "title": "محلي ماډلونه",

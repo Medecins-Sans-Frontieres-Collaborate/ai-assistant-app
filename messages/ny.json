@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "sungani othandizira kuti mukonze",
     "m365PrepareHintImage": "chithunzi — kuitana kamodzi kwa vision",
     "m365PrepareHintMedia": "~{minutes} min za mawu oti amasulire",
-    "m365PrepareHintOcr": "palibe gulu la mawu — OCR kudzera pa vision, mpaka masamba 30",
+    "m365PrepareHintOcr": "palibe zigawo za malemba — OCR, mpaka masamba {pages}",
     "m365PreparePreparing": "Kukonzekera...",
     "m365PreparePending": "Kusindikiza mawu...",
     "m365PreparedNote": "zokonzedwa · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Sidzasankhidwa — {reason}",
     "m365PlanFileNeedsPreparation": "Sikuchitika mpaka kukonzedwa — {hint}",
     "m365PlanFileLastRun": "Nthawi yam'tsogolo: {status}",
-    "m365ItemNoTextOcr": "palibe mawu apezeka — scaned? gwiritsani ntchito Prepare (OCR)"
+    "m365ItemNoTextOcr": "palibe mawu apezeka — scaned? gwiritsani ntchito Prepare (OCR)",
+    "m365CapRaiseButton": "Kwezani malire a agent uyu kufika pa {limit}",
+    "m365CapRaiseInputLabel": "Malire a zikalata za agent uyu",
+    "m365CapRaiseApply": "Ikani malire",
+    "m365CapNeedsGlobalAdmin": "Ngati zikalata zili kupitirira {limit}, global admin ayenera kukweza malire.",
+    "m365CapRaiseConfirm": "Mukufuna kukweza malire a zikalata za agent uyu kufika pa {limit} (default ndi {default})?\n\nChikalata chilichonse chowonjezera chimamangirizidwa agent ikamapanga index, ndikuletsedwanso kwa aliyense mogwirizana ndi Microsoft 365 yanu pa uthenga woyamba, ndipo ma agent akulu amagwiritsa ntchito nthawi yaitali kulowa ndi kuyankha.\n\nGanizirani kuchotsa ma subfolder kapena mitundu ya mafayela koyamba.",
+    "m365CapResetDefault": "Bwezeretsani pa default ({default})",
+    "m365CapOverrideNote": "malire akukwezedwa kufika pa {limit} pa agent uyu",
+    "m365CapAboveRole": "Malire amenewo ndi ochuluka kuposa omwe udindo wanu ungakhazikitse — funsani global admin.",
+    "m365AgentLimitBadge": "Malire {limit} (wakhazikitsa {who})",
+    "m365PlanTrimHint": "Sankhani zomwe muyike: chotsani ma subfolder kapena mafayela, sungani mitundu ya mafayela, kapena siyani za tsopano zokha.",
+    "m365PlanKeepNewest": "Siyani zaposachedwa {count}",
+    "m365PlanKeepNewestConfirm": "Siyani mafayela {keep} amene asinthidwa posachedwa ndipo chotsani ena {exclude}?",
+    "m365PlanIncludeAll": "Yikanso zonse ({count} zachotsedwa)",
+    "m365PlanIncludeFile": "Ikani {name}",
+    "m365PlanFileExcluded": "yachotsedwa",
+    "m365PlanSortLabel": "Sanja malinga ndi",
+    "m365PlanSort": {
+      "name": "Dzina",
+      "size": "Kukula",
+      "modified": "Zasinthidwa"
+    }
   },
   "localModels": {
     "title": "Mitundu yapafupi",

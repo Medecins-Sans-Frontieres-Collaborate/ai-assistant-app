@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "bika umukozi kugira utangire gutegura",
     "m365PrepareHintImage": "ifoto — 1 vision call",
     "m365PrepareHintMedia": "~{minutes} min z’amajwi zo gusobanura",
-    "m365PrepareHintOcr": "nta murongo w’inyandiko — OCR binyuze muri vision, kugera ku mapaji 30",
+    "m365PrepareHintOcr": "nta layer y'inyandiko — OCR, kugeza kuri pages {pages}",
     "m365PreparePreparing": "Birimo gutegura…",
     "m365PreparePending": "Birimo kwandika mu nyandiko…",
     "m365PreparedNote": "byateguwe · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Ntizashyirwa muri sisitemu — {reason}",
     "m365PlanFileNeedsPreparation": "Ntizashyirwa muri sisitemu kugeza iteguye — {hint}",
     "m365PlanFileLastRun": "Gukoresha guheruka: {status}",
-    "m365ItemNoTextOcr": "nta magambo abonywe — yigeze isuzumwa? Koresha Tegura (OCR)"
+    "m365ItemNoTextOcr": "nta magambo abonywe — yigeze isuzumwa? Koresha Tegura (OCR)",
+    "m365CapRaiseButton": "Shyiriraho uyu muyobozi urugero ruzamuka kuri {limit}",
+    "m365CapRaiseInputLabel": "Umubare ntarengwa w'inyandiko kuri uyu muyobozi",
+    "m365CapRaiseApply": "Shyiraho umubare ntarengwa",
+    "m365CapNeedsGlobalAdmin": "Hejuru ya {limit} inyandiko, umuyobozi mukuru ni we ushobora kongera urugero.",
+    "m365CapRaiseConfirm": "Wemeza ko wongera umubare ntarengwa w'inyandiko kuri uyu muyobozi ukagera kuri {limit} (isanzwe ni {default})?\n\nBuri nyandiko yongera ikajyamwa mu bubiko igihe uyu muyobozi ashyizwemo, bikanagenzurwa ku gihe cy'ubutumwa bwa mbere bwa buri mukoresha kuri Microsoft 365, kandi abayobozi bunini batinda gukusanya no gusubiza.\n\nGerageza kubanza gukuramo amadosiye acamo cyangwa ubwoko bwa dosiye.",
+    "m365CapResetDefault": "Subiza isanzwe ({default})",
+    "m365CapOverrideNote": "umubare ntarengwa wongejwe kuri {limit} kuri uyu muyobozi",
+    "m365CapAboveRole": "Urwo rugero ruruta ibyo ushobora gushyiraho — saba umuyobozi mukuru.",
+    "m365AgentLimitBadge": "Umubare ntarengwa {limit} (washyizweho na {who})",
+    "m365PlanTrimHint": "Hitamo ibyo uzashyiramo: kuraho imigendekere y’amadosiye acamo cyangwa dosiye, ongera urutonde hakurikijwe ubwoko, cyangwa usigare ushyizemo ibishya gusa.",
+    "m365PlanKeepNewest": "Hugukira ibishya {count}",
+    "m365PlanKeepNewestConfirm": "Hagarika {keep} byahinduwe vuba kurusha ibindi naho ibindi {exclude} ubihagarike?",
+    "m365PlanIncludeAll": "Shyiramo byose nanone (harimo {count} byari byarahagaritswe)",
+    "m365PlanIncludeFile": "Shyiramo {name}",
+    "m365PlanFileExcluded": "byatewe hanze",
+    "m365PlanSortLabel": "Ongeraho hakurikijwe",
+    "m365PlanSort": {
+      "name": "Izina",
+      "size": "Ingano",
+      "modified": "Byahinduwe"
+    }
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",

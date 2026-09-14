@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "tehirizo aloha ny mpiandraikitra vao manomana",
     "m365PrepareHintImage": "sary — antso 1 vision",
     "m365PrepareHintMedia": "~{minutes} min amin’ny feo hovadika soratra",
-    "m365PrepareHintOcr": "tsy misy sosona soratra — OCR amin'ny vision, hatramin'ny pejy 30",
+    "m365PrepareHintOcr": "tsy misy sosona soratra — OCR, hatramin'ny pejy {pages}",
     "m365PreparePreparing": "Manomana…",
     "m365PreparePending": "Manoratra an-tsoratra…",
     "m365PreparedNote": "voaomana · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Tsy hojerena — {reason}",
     "m365PlanFileNeedsPreparation": "Tsy hojerena raha tsy mialoha — {hint}",
     "m365PlanFileLastRun": "Fandefasana farany: {status}",
-    "m365ItemNoTextOcr": "tsy nahitana soratra — voasivana ve? ampiasao ny Prepare (OCR)"
+    "m365ItemNoTextOcr": "tsy nahitana soratra — voasivana ve? ampiasao ny Prepare (OCR)",
+    "m365CapRaiseButton": "Amboary ho {limit} ny fetra ho an'ity agent ity",
+    "m365CapRaiseInputLabel": "Fetra antontan-taratasy ho an'ity agent ity",
+    "m365CapRaiseApply": "Ampiharo ny fetra",
+    "m365CapNeedsGlobalAdmin": "Mihoatra ny {limit} antontan-taratasy dia ilaina ny global admin hanitatra ny fetra.",
+    "m365CapRaiseConfirm": "Hatomboka ho {limit} ve ny fetra antontan-taratasy an'ity agent ity (ny mahazatra dia {default})?\n\nNy antontan-taratasy rehetra mihoatra dia hampidirina rehefa asiana index ilay agent, ary hojerena indray arakaraka ny fahazoan'ny tsirairay amin'ny Microsoft 365 amin'ny hafatra voalohany ataony, ary miharatsy ny hafainganam-pamaly sy ny indexing raha lehibe ilay agent.\n\nEritrereto aloha ny manala subfolders na karazana rakitra sasany.",
+    "m365CapResetDefault": "Avereno amin'ny mahazatra ({default})",
+    "m365CapOverrideNote": "nohamafisina ho {limit} ny fetra ho an'ity agent ity",
+    "m365CapAboveRole": "Io fetra io dia mihoatra izay azonao apetraka amin'ny anjara asanao — angataho amin'ny global admin.",
+    "m365AgentLimitBadge": "Fetra {limit} (napetraky ny {who})",
+    "m365PlanTrimHint": "Safidio izay tiana ampidirina: esory amin'ny safidy ny subfolders na rakitra, sivano amin'ny karazana, na tazony ireo farany vao nohavaozina.",
+    "m365PlanKeepNewest": "Tazomy ireo vaovao indrindra {count}",
+    "m365PlanKeepNewestConfirm": "Tazomina ve ny rakitra {keep} vao nohavaozina indrindra ary esorina ny {exclude} ambiny?",
+    "m365PlanIncludeAll": "Ampidiro daholo indray ( {count} nesorina )",
+    "m365PlanIncludeFile": "Ampidiro {name}",
+    "m365PlanFileExcluded": "nesorina",
+    "m365PlanSortLabel": "Ampifanaraho araka ny",
+    "m365PlanSort": {
+      "name": "Anarana",
+      "size": "Habe",
+      "modified": "Nohavaozina"
+    }
   },
   "localModels": {
     "title": "Model eo an-toerana",

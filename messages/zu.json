@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "londoloza umamela ukuze ulungiselele",
     "m365PrepareHintImage": "isithombe — ucingo olulodwa lwe-vision",
     "m365PrepareHintMedia": "~{minutes} imizuzu yokulalelisisa izwi",
-    "m365PrepareHintOcr": "ayikho ungqimba lombhalo — OCR nge-vision, kufika kumakhasi angu-30",
+    "m365PrepareHintOcr": "akulona ungqimba lombhalo — i-OCR, kufika kwama-{pages} amakhasi",
     "m365PreparePreparing": "Kulungiselelwa…",
     "m365PreparePending": "Kulotshwayo phansi…",
     "m365PreparedNote": "kulungiselelwe · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Ngeke kufakwe kuhlu — {reason}",
     "m365PlanFileNeedsPreparation": "Akufakwanga kuhlu kuze kulungiselelwe — {hint}",
     "m365PlanFileLastRun": "Ukugijima kokugcina: {status}",
-    "m365ItemNoTextOcr": "azikho izichazamazwi ezitholakele — iskeniwe? sebenzisa i-Prepare (OCR)"
+    "m365ItemNoTextOcr": "azikho izichazamazwi ezitholakele — iskeniwe? sebenzisa i-Prepare (OCR)",
+    "m365CapRaiseButton": "Khuphula umkhawulo wale agent ube ngu-{limit}",
+    "m365CapRaiseInputLabel": "Umkhawulo wamadokhumenti wale agent",
+    "m365CapRaiseApply": "Faka umkhawulo",
+    "m365CapNeedsGlobalAdmin": "Ngaphezu kwamadokhumenti angu-{limit}, umphathi omkhulu kumele akhuphule umkhawulo.",
+    "m365CapRaiseConfirm": "Ukukhuphula umkhawulo wamadokhumenti wale agent kube ngu-{limit} (okuzenzakalelayo ngu-{default})?\n\nYonke idokhumenti engeziwe iyafakwa lapho i-agent ikhonjwa, ihlolwa kabusha ngobunye bomsebenzisi be-Microsoft 365 umlayezo wabo wokuqala, futhi ama-agent amakhulu ahlonzwa futhi aphendule kancane.\n\nCabanga ukususa izinqamuleli noma izinhlobo zamafayela kuqala.",
+    "m365CapResetDefault": "Buyisela kokuzenzakalelayo ({default})",
+    "m365CapOverrideNote": "umkhawulo ukhuphulwe waba ngu-{limit} kule agent",
+    "m365CapAboveRole": "Lowo mkhawulo uphakeme kunalokho ongakwazi ukusetha ngendima yakho — cela umphathi omkhulu.",
+    "m365AgentLimitBadge": "Umkhawulo {limit} (usethwe ngu-{who})",
+    "m365PlanTrimHint": "Khetha okuzofakwa: susa ukuthikha ezinqamuleleni noma kumafayela, hlunga ngohlobo, noma gcina awasha kakhulu.",
+    "m365PlanKeepNewest": "Gcina ama-{count} amasha",
+    "m365PlanKeepNewestConfirm": "Ugcine amafayela angu-{keep} ahlelwe ngokusha bese ususa angu-{exclude}?",
+    "m365PlanIncludeAll": "Faka konke futhi ({count} kususiwe)",
+    "m365PlanIncludeFile": "Faka u-{name}",
+    "m365PlanFileExcluded": "kususiwe",
+    "m365PlanSortLabel": "Hlela ngo",
+    "m365PlanSort": {
+      "name": "Igama",
+      "size": "Usayizi",
+      "modified": "Kuguqulwe"
+    }
   },
   "localModels": {
     "title": "Amamodeli endaweni",

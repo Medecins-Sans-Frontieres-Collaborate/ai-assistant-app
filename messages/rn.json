@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "ziga agent kugira utegure",
     "m365PrepareHintImage": "ishusho — 1 vision call",
     "m365PrepareHintMedia": "~{minutes} min y'amajwi yo guhindura ibivugwa",
-    "m365PrepareHintOcr": "nta tekst layer — OCR ukoresheje vision, gushika ku mapaji 30",
+    "m365PrepareHintOcr": "nta rukurikirane rw'inyandiko — OCR, gushika ku mapaje {pages}",
     "m365PreparePreparing": "Biriko birategurwa…",
     "m365PreparePending": "Biriko birahindurwa mu majambo…",
     "m365PreparedNote": "vyateguwe · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Ntizoshirwa mu rutonde — {reason}",
     "m365PlanFileNeedsPreparation": "Ntishizwe mu rutonde gushika itegekanyijwe — {hint}",
     "m365PlanFileLastRun": "Urugendo rwa nyuma: {status}",
-    "m365ItemNoTextOcr": "nta majambo yabonetse — vyasuzumwe? kora Prepare (OCR)"
+    "m365ItemNoTextOcr": "nta majambo yabonetse — vyasuzumwe? kora Prepare (OCR)",
+    "m365CapRaiseButton": "Zamura urubibe rw'uyu mushikirizwajambo gushika kuri {limit}",
+    "m365CapRaiseInputLabel": "Urubibe rw'ivyanditswe kuri uyu mushikirizwajambo",
+    "m365CapRaiseApply": "Shirako urubibe",
+    "m365CapNeedsGlobalAdmin": "Harenganye ivyanditswe {limit}, umuyobozi mukuru ni we ashobora kuzamura urubibe.",
+    "m365CapRaiseConfirm": "Uzemera kuzamura urubibe rw'ivyanditswe kuri uyu mushikirizwajambo gushika kuri {limit} (ku busanzwe ni {default})?\n\nIryo andiko ryose rizongerwa igihe mushikirizwajambo asuzumwa, rize rigenzurwe n’uburenganzira bwa Microsoft 365 ya muntu wese aheruka kuvuga, kandi iyo mushikirizwajambo ari munini gusubira kuzirikana no kwishura biratwara umwanya munini.\n\nBanza ugerageze gukuramwo imifukamwo yo hasi canke uburimbane bw'amadosiye.",
+    "m365CapResetDefault": "Subira ku busanzwe ({default})",
+    "m365CapOverrideNote": "Urubibe rwazamutse gushika kuri {limit} kuri uyu mushikirizwajambo",
+    "m365CapAboveRole": "Urwo rubibe rurengeye ico ushobora gushiraho – saba umuyobozi mukuru.",
+    "m365AgentLimitBadge": "Urubibe {limit} (rwashinzwe na {who})",
+    "m365PlanTrimHint": "Hitamwo ico ushaka gushiramwo: kura imifukamwo yo hasi canke amadosiye, canke uhitemwo ukoresheje ubwoko canke usigare n’aya hafi kwezi.",
+    "m365PlanKeepNewest": "Sigaza ayashasha {count}",
+    "m365PlanKeepNewestConfirm": "Ushaka gusigaza amadosiye {keep} aherutse guhindurwa maze ukuramwo ayandi {exclude}?",
+    "m365PlanIncludeAll": "Shiramwo vyose kandi ({count} vyarakuwemwo)",
+    "m365PlanIncludeFile": "Shiramwo {name}",
+    "m365PlanFileExcluded": "cakuweho",
+    "m365PlanSortLabel": "Gurutsa hakurikijwe",
+    "m365PlanSort": {
+      "name": "Izina",
+      "size": "Ingano",
+      "modified": "Vyahinduwe"
+    }
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",

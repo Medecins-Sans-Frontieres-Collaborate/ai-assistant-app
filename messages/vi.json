@@ -4687,7 +4687,7 @@
     "m365PrepareSaveFirst": "lưu tác nhân để chuẩn bị",
     "m365PrepareHintImage": "hình ảnh — 1 cuộc gọi vision",
     "m365PrepareHintMedia": "~{minutes} phút âm thanh cần chuyển lời",
-    "m365PrepareHintOcr": "không có lớp văn bản — OCR bằng vision, tối đa 30 trang",
+    "m365PrepareHintOcr": "không có lớp văn bản — OCR, tối đa {pages} trang",
     "m365PreparePreparing": "Đang chuẩn bị…",
     "m365PreparePending": "Đang chuyển lời…",
     "m365PreparedNote": "đã chuẩn bị · {kind}",
@@ -4759,7 +4759,28 @@
     "m365PlanFileSkipped": "Sẽ không được lập chỉ mục — {reason}",
     "m365PlanFileNeedsPreparation": "Chưa lập chỉ mục cho đến khi chuẩn bị — {hint}",
     "m365PlanFileLastRun": "Lần chạy cuối: {status}",
-    "m365ItemNoTextOcr": "không tìm thấy văn bản — quét? sử dụng Chuẩn bị (OCR)"
+    "m365ItemNoTextOcr": "không tìm thấy văn bản — quét? sử dụng Chuẩn bị (OCR)",
+    "m365CapRaiseButton": "Tăng giới hạn của tác nhân này lên {limit}",
+    "m365CapRaiseInputLabel": "Giới hạn tài liệu cho tác nhân này",
+    "m365CapRaiseApply": "Áp dụng giới hạn",
+    "m365CapNeedsGlobalAdmin": "Vượt quá {limit} tài liệu, quản trị viên toàn hệ thống cần tăng giới hạn.",
+    "m365CapRaiseConfirm": "Tăng giới hạn tài liệu của tác nhân này lên {limit} (mặc định là {default})?\n\nMỗi tài liệu bổ sung sẽ được nhúng khi lập chỉ mục cho tác nhân, được kiểm tra lại quyền truy cập Microsoft 365 của từng người dùng khi gửi tin nhắn đầu tiên, và các tác nhân lớn sẽ lập chỉ mục và trả lời chậm hơn.\n\nHãy cân nhắc loại trừ các thư mục con hoặc các loại tệp trước tiên.",
+    "m365CapResetDefault": "Đặt lại về mặc định ({default})",
+    "m365CapOverrideNote": "đã tăng giới hạn lên {limit} cho tác nhân này",
+    "m365CapAboveRole": "Giới hạn này vượt quá quyền cho phép của vai trò bạn — hãy liên hệ quản trị viên toàn hệ thống.",
+    "m365AgentLimitBadge": "Giới hạn {limit} (được đặt bởi {who})",
+    "m365PlanTrimHint": "Chọn nội dung cần lấy: bỏ chọn thư mục con hoặc tệp, lọc theo loại, hoặc chỉ giữ nội dung mới nhất.",
+    "m365PlanKeepNewest": "Chỉ giữ {count} mới nhất",
+    "m365PlanKeepNewestConfirm": "Chỉ giữ {keep} tệp được chỉnh sửa gần nhất và loại trừ {exclude} tệp còn lại?",
+    "m365PlanIncludeAll": "Bao gồm lại tất cả ({count} đã bị loại trừ)",
+    "m365PlanIncludeFile": "Bao gồm {name}",
+    "m365PlanFileExcluded": "đã loại trừ",
+    "m365PlanSortLabel": "Sắp xếp theo",
+    "m365PlanSort": {
+      "name": "Tên",
+      "size": "Kích thước",
+      "modified": "Sửa đổi"
+    }
   },
   "localModels": {
     "title": "Mô hình cục bộ",

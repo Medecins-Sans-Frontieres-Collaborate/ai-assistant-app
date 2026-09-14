@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "ပြင်ဆင်ရန်အတွက် အေးဂျင့်ကို သိမ်းပါ",
     "m365PrepareHintImage": "ပုံ — ၁ vision ခေါ်ယူမှု",
     "m365PrepareHintMedia": "အသံ ~{minutes} မိနစ် ရိုက်နှိပ်ဖတ်ရန်",
-    "m365PrepareHintOcr": "စာသားအလွှာမရှိပါ — vision ဖြင့် OCR, စာမျက်နှာ ၃၀ အထိ",
+    "m365PrepareHintOcr": "စာသားအလွှာ မရှိပါ — OCR, {pages} စာမျက်နှာအထိ",
     "m365PreparePreparing": "ပြင်ဆင်နေပါသည်…",
     "m365PreparePending": "လုပ်နေသည်…",
     "m365PreparedNote": "ပြင်ဆင်ပြီး · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "Index မလုပ်ပါ — {reason}",
     "m365PlanFileNeedsPreparation": "ပြင်ဆင်မှသာ index လုပ်ပါမည် — {hint}",
     "m365PlanFileLastRun": "နောက်ဆုံးလုပ်ဆောင်မှု: {status}",
-    "m365ItemNoTextOcr": "စာသားမတွေ့ပါ — scanned လား? Prepare (OCR) ကိုသုံးပါ"
+    "m365ItemNoTextOcr": "စာသားမတွေ့ပါ — scanned လား? Prepare (OCR) ကိုသုံးပါ",
+    "m365CapRaiseButton": "ဤ agent ၏အကန့်အသတ်ကို {limit} သို့ မြှင့်ပါ",
+    "m365CapRaiseInputLabel": "ဤ agent ၏စာရွက်စာတမ်း ကန့်သတ်ချက်",
+    "m365CapRaiseApply": "ကန့်သတ်ချက် ထည့်သွင်းပါ",
+    "m365CapNeedsGlobalAdmin": "{limit} စာရွက်စာတမ်းကျော်ပါက global admin မှသာ ကန့်သတ်ချက် မြှင့်နိုင်ပါသည်။",
+    "m365CapRaiseConfirm": "ဤ agent ၏စာရွက်စာတမ်းကန့်သတ်ချက်ကို {limit} သို့ မြှင့်မည် (မူလကန့်သတ်ချက်မှာ {default}) ဖြစ်ပါသလား?\n\n ထပ်မံထားသည့်စာရွက်စာတမ်းတစ်ခုစီသည် agent ကို index လုပ်သောအခါ   သီးခြားသုံးစွဲသူတိုင်း၏ Microsoft 365 access နှင့် ပထမဆုံးမက်ဆေ့ချ်တွင် စစ်ဆေးမည်ဖြစ်သည်။ Agent ပိုကြီးလေလေ index လုပ်ခြင်းနှင့် ဖြေဆိုမှု ပိုနှေးလာနိုင်သည်။\n\nSubfolder သို့မဟုတ် ဖိုင်အမျိုးအစားများကို ပထမဆုံး သီးခြားထားခြင်းကို စဉ်းစားပါ။",
+    "m365CapResetDefault": "မူလအတိုင်းပြန်ထားပါ ({default})",
+    "m365CapOverrideNote": "ဤ agent အတွက်ကန့်သတ်ချက်ကို {limit} သို့ မြှင့်ထားသည်",
+    "m365CapAboveRole": "ဤကန့်သတ်ချက်သည် သင့်အခန်းကဏ္ဍခွင့်ပြုချက်ထက် မြင့်နေပါသည် — global admin ကို တောင်းဆိုပါ။",
+    "m365AgentLimitBadge": "ကန့်သတ်ချက် {limit} (ထည့်သွင်းသူ — {who})",
+    "m365PlanTrimHint": "ထည့်သွင်းရန်ကို ပြောင်းရွှေ့ပါ: subfolder သို့မဟုတ် ဖိုင်များ ပြန်ရွေးချယ်ခြင်း၊ အမျိုးအစားဖြင့် စစ်ထုတ်ခြင်း သို့မဟုတ် အသစ်ဆုံးများသာ ထားရှိပါ။",
+    "m365PlanKeepNewest": "အသစ်ဆုံး {count} ခုသာ ထားရှိပါ",
+    "m365PlanKeepNewestConfirm": "ကြာရွတ်သုံးခြင်းပြုလုပ်ထားသော {keep} ခုသာ ထားရှိပြီး အခြား {exclude} ခုကို ချန်ထားမည်လား?",
+    "m365PlanIncludeAll": "အားလုံးထည့်ပါ ({count} ခု ချန်ထားသည်)",
+    "m365PlanIncludeFile": "{name} ကိုထည့်ပါ",
+    "m365PlanFileExcluded": "ချန်ထားသည်",
+    "m365PlanSortLabel": "အလိုက်စဉ်ရန်",
+    "m365PlanSort": {
+      "name": "နာမည်",
+      "size": "အရွယ်အစား",
+      "modified": "ပြင်ဆင်ချိန်"
+    }
   },
   "localModels": {
     "title": "ဒေသတွင်း မော်ဒယ်များ",

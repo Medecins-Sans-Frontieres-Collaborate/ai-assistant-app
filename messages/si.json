@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "සූදානම් කිරීමට නියෝජිතයා සුරකින්න",
     "m365PrepareHintImage": "පිංතූරය — 1 vision call",
     "m365PrepareHintMedia": "~{minutes} මිනිත්තු ශ්‍රව්‍ය ලියවීමට",
-    "m365PrepareHintOcr": "පෙළ ස්ථරයක් නැත — vision ඔස්සේ OCR, පිටු 30 දක්වා",
+    "m365PrepareHintOcr": "පෙළ ස්ථරයක් නොමැත — OCR, පිටු {pages} දක්වා",
     "m365PreparePreparing": "සූදානම් කරමින්…",
     "m365PreparePending": "ලිවීමට සූදානම් වෙමින්…",
     "m365PreparedNote": "සූදානම් කලේ · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "දර්ශනය නොවේ — {reason}",
     "m365PlanFileNeedsPreparation": "ටියාරි කර නොමැතිව දර්ශනය නොවේ — {hint}",
     "m365PlanFileLastRun": "අවසන් වාරය: {status}",
-    "m365ItemNoTextOcr": "පෙළක් හමු නොවුණි — scan කළාද? Prepare (OCR) භාවිතා කරන්න"
+    "m365ItemNoTextOcr": "පෙළක් හමු නොවුණි — scan කළාද? Prepare (OCR) භාවිතා කරන්න",
+    "m365CapRaiseButton": "මෙම නියෝජිතයාගේ සීමාව {limit} දක්වා වැඩිකරන්න",
+    "m365CapRaiseInputLabel": "මෙම නියෝජිතයා සඳහා ලියවිලි සීමාව",
+    "m365CapRaiseApply": "සීමාව යොදාගන්න",
+    "m365CapNeedsGlobalAdmin": "{limit} කට වැඩි ලියවිලි සඳහා ගෝලීය පරිපාලකයෙකුට මෙම සීමාව වැඩිකිරීම අවශ්‍යයි.",
+    "m365CapRaiseConfirm": "මෙම නියෝජිතයාගේ ලියවිලි සීමාව {limit} දක්වා වැඩිකිරීමට අවශ්‍යද (පෙරනිමි වූ සීමාව {default})?\n\nඔබ එකතු කරන එක් එක් අමතර ලියවියක් නියෝජිතයා සදහා දත්ත සටහන් කිරීමේදී ප්‍රතිස්ථාපනය වේ, පළමු පණිවිඩයේදී එක් එක් පරිශීලකයාගේ Microsoft 365 ප්‍රවේශය සඳහා ආපසු පරීක්ෂා කරයි, තවත් විශාල නියෝජිතයින් ඉදිරිපත් කිරීම සහ පිළිතුරු සපයන්නා වේගඅඩුවෙන් සිදු වේ.\n\nපළමුව උපෆෝල්ඩර හෝ ගොනු වර්ග බැහැර කිරීම සළකා බලන්න.",
+    "m365CapResetDefault": "පෙරනිමි ({default}) වෙත ප්‍රතිස්ථාපනය කරන්න",
+    "m365CapOverrideNote": "මෙම නියෝජිතයා සඳහා සීමාව {limit} දක්වා වැඩිකර ඇත",
+    "m365CapAboveRole": "ඔබගේ භූමිකාවෙන් සකස් කළ හැකි සීමාවට වඩා මෙය වැඩිය — ගෝලීය පරිපාලකයෙකුගෙන් ඉල්ලා සිටින්න.",
+    "m365AgentLimitBadge": "සීමාව {limit} ({who} විසින් සකසා ඇත)",
+    "m365PlanTrimHint": "එක්කරන දෑ සීමා කරන්න: උපෆෝල්ඩර හෝ ගොනු ඉවත් කරන්න, වර්ග අනුව පෙරහන්න, හෝ නව්‍යම දේ පමණක් තබාගන්න.",
+    "m365PlanKeepNewest": "නව්‍යම {count} තබාගන්න",
+    "m365PlanKeepNewestConfirm": "සමීපව සංශෝධනය කළ ලියවිලි {keep} තබා තවත් {exclude} බැහැර කරන්නද?",
+    "m365PlanIncludeAll": "සියල්ල නැවත එක් කරන්න ({count} බැහැර කර ඇත)",
+    "m365PlanIncludeFile": "{name} එක් කරන්න",
+    "m365PlanFileExcluded": "බැහැර කෙරී ඇත",
+    "m365PlanSortLabel": "පෙළගැස්වීම අනුව",
+    "m365PlanSort": {
+      "name": "නම",
+      "size": "ප්‍රමාණය",
+      "modified": "වෙනස් කළ දිනය"
+    }
   },
   "localModels": {
     "title": "ප්‍රාදේශීය ආදර්ශ",

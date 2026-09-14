@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "enregistrez l’agent pour préparer",
     "m365PrepareHintImage": "image — 1 appel vision",
     "m365PrepareHintMedia": "~{minutes} min d’audio à transcrire",
-    "m365PrepareHintOcr": "pas de calque texte — OCR via vision, jusqu’à 30 pages",
+    "m365PrepareHintOcr": "pas de couche texte — OCR, jusqu’à {pages} pages",
     "m365PreparePreparing": "Préparation…",
     "m365PreparePending": "Transcription…",
     "m365PreparedNote": "préparé · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "Ne sera pas indexé — {reason}",
     "m365PlanFileNeedsPreparation": "Non indexé tant que non préparé — {hint}",
     "m365PlanFileLastRun": "Dernière exécution : {status}",
-    "m365ItemNoTextOcr": "aucun texte trouvé — document scanné ? utilisez Préparer (OCR)"
+    "m365ItemNoTextOcr": "aucun texte trouvé — document scanné ? utilisez Préparer (OCR)",
+    "m365CapRaiseButton": "Augmenter la limite de cet agent à {limit}",
+    "m365CapRaiseInputLabel": "Limite de documents pour cet agent",
+    "m365CapRaiseApply": "Appliquer la limite",
+    "m365CapNeedsGlobalAdmin": "Au-delà de {limit} documents, un administrateur global doit augmenter la limite.",
+    "m365CapRaiseConfirm": "Augmenter la limite de documents de cet agent à {limit} (la valeur par défaut est {default}) ?\n\nChaque document supplémentaire est intégré lors de l’indexation de l’agent, re-vérifié avec l’accès Microsoft 365 de chaque utilisateur au premier message, et les agents plus volumineux s’indexent et répondent plus lentement.\n\nPensez d’abord à exclure des sous-dossiers ou types de fichiers.",
+    "m365CapResetDefault": "Réinitialiser à la valeur par défaut ({default})",
+    "m365CapOverrideNote": "limite augmentée à {limit} pour cet agent",
+    "m365CapAboveRole": "Cette limite dépasse celle que peut fixer votre rôle — contactez un administrateur global.",
+    "m365AgentLimitBadge": "Limite {limit} (définie par {who})",
+    "m365PlanTrimHint": "Sélectionnez quoi inclure : décochez des sous-dossiers ou fichiers, filtrez par type, ou gardez uniquement les plus récents.",
+    "m365PlanKeepNewest": "Garder les {count} plus récents",
+    "m365PlanKeepNewestConfirm": "Garder les {keep} fichiers les plus récemment modifiés et exclure les {exclude} autres ?",
+    "m365PlanIncludeAll": "Tout inclure à nouveau ({count} exclus)",
+    "m365PlanIncludeFile": "Inclure {name}",
+    "m365PlanFileExcluded": "exclu",
+    "m365PlanSortLabel": "Trier par",
+    "m365PlanSort": {
+      "name": "Nom",
+      "size": "Taille",
+      "modified": "Modifié"
+    }
   },
   "localModels": {
     "title": "Modèles locaux",

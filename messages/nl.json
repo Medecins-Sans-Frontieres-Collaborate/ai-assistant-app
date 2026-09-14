@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "sla de agent op om voor te bereiden",
     "m365PrepareHintImage": "afbeelding — 1 vision-call",
     "m365PrepareHintMedia": "~{minutes} min audio te transcriberen",
-    "m365PrepareHintOcr": "geen tekstlaag — OCR via vision, tot 30 pagina's",
+    "m365PrepareHintOcr": "geen tekstlaag — OCR, tot {pages} pagina's",
     "m365PreparePreparing": "Voorbereiden…",
     "m365PreparePending": "Transcriberen…",
     "m365PreparedNote": "voorbereid · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "Wordt niet geïndexeerd — {reason}",
     "m365PlanFileNeedsPreparation": "Niet geïndexeerd totdat deze is voorbereid — {hint}",
     "m365PlanFileLastRun": "Laatste run: {status}",
-    "m365ItemNoTextOcr": "geen tekst gevonden — gescand? gebruik Voorbereiden (OCR)"
+    "m365ItemNoTextOcr": "geen tekst gevonden — gescand? gebruik Voorbereiden (OCR)",
+    "m365CapRaiseButton": "Verhoog de limiet van deze agent naar {limit}",
+    "m365CapRaiseInputLabel": "Documentlimiet voor deze agent",
+    "m365CapRaiseApply": "Limiet toepassen",
+    "m365CapNeedsGlobalAdmin": "Boven {limit} documenten moet een global admin de limiet verhogen.",
+    "m365CapRaiseConfirm": "De documentlimiet voor deze agent verhogen naar {limit} (standaard is {default})?\n\nElk extra document wordt opgenomen wanneer de agent wordt geïndexeerd, opnieuw gecontroleerd op iedere gebruiker’s Microsoft 365-rechten bij hun eerste bericht, en grotere agents indexeren en antwoorden langzamer.\n\nOverweeg eerst submappen of bestandstypen uit te sluiten.",
+    "m365CapResetDefault": "Herstel naar standaardwaarde ({default})",
+    "m365CapOverrideNote": "limiet verhoogd naar {limit} voor deze agent",
+    "m365CapAboveRole": "Die limiet ligt boven wat uw rol mag instellen — vraag een global admin.",
+    "m365AgentLimitBadge": "Limiet {limit} (ingesteld door {who})",
+    "m365PlanTrimHint": "Pas selectie aan: deselecteer submappen of bestanden, filter op type, of bewaar alleen de nieuwste.",
+    "m365PlanKeepNewest": "Bewaar de nieuwste {count}",
+    "m365PlanKeepNewestConfirm": "De {keep} meest recent gewijzigde bestanden bewaren en de overige {exclude} uitsluiten?",
+    "m365PlanIncludeAll": "Alles opnieuw opnemen ({count} uitgesloten)",
+    "m365PlanIncludeFile": "Neem {name} op",
+    "m365PlanFileExcluded": "uitgesloten",
+    "m365PlanSortLabel": "Sorteren op",
+    "m365PlanSort": {
+      "name": "Naam",
+      "size": "Grootte",
+      "modified": "Gewijzigd"
+    }
   },
   "localModels": {
     "title": "Lokale modellen",

@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "ወኪሉን ለማዘጋጀት ያስቀምጡ",
     "m365PrepareHintImage": "ምስል — 1 vision ጥሪ",
     "m365PrepareHintMedia": "~{minutes} ደቂቃ የድምፅ ትርጉም",
-    "m365PrepareHintOcr": "የጽሑፍ ንብረት የለውም — OCR በ vision፣ እስከ 30 ገፆች",
+    "m365PrepareHintOcr": "የጽሑፍ ንብረት የለም — OCR፣ እስከ {pages} ገፆች ድረስ",
     "m365PreparePreparing": "በአዘጋጅት ላይ...",
     "m365PreparePending": "በመተረጎም ላይ...",
     "m365PreparedNote": "ተዘጋጅቷል · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "አይቃኙም — {reason}",
     "m365PlanFileNeedsPreparation": "እስከማዘጋጀቱ ድረስ አይቃኙም — {hint}",
     "m365PlanFileLastRun": "የመጨረሻው ስራ፦ {status}",
-    "m365ItemNoTextOcr": "ጽሑፍ አልተገኘም — ተቆርጧል? Prepare (OCR) ይጠቀሙ"
+    "m365ItemNoTextOcr": "ጽሑፍ አልተገኘም — ተቆርጧል? Prepare (OCR) ይጠቀሙ",
+    "m365CapRaiseButton": "የዚህ ወኪል ገደብ ወደ {limit} ያስልፉ",
+    "m365CapRaiseInputLabel": "የዚህ ወኪል ዶኩመንት ገደብ",
+    "m365CapRaiseApply": "ገደቡን ያስተግቡ",
+    "m365CapNeedsGlobalAdmin": "ከ {limit} ዶኩመንቶች በላይ ገደቡን ለማሳደግ የአጠቃላይ አስተዳዳሪ ያስፈልጋል።",
+    "m365CapRaiseConfirm": "የዚህ ወኪል ዶኩመንት ገደብ ወደ {limit} አንሳ (ነባሪው {default} ነው)?\n\nተጨማሪ በሆኑ ዶኩመንቶች ወኪሉ ሲታወቅ ሲያስገባ ይገናኛሉ፣ እና የተጠቃሚው ማመልከቻ ሲጀምር በ Microsoft 365 መዳረሻው ይመርመራሉ። ታላቁ ወኪል ግን በዝግታ ይሆናል።\n\nአቅሙን ለመጠበቅ የቅፅበታ ፎልደሮች ወይም የፋይል አይነቶችን መስወጥ ይመከራል።",
+    "m365CapResetDefault": "ወደ ነባሪው ያስጀምሩ ({default})",
+    "m365CapOverrideNote": "ገደቡ ወደ {limit} ከፍ ተደርጓል ለዚህ ወኪል",
+    "m365CapAboveRole": "ይህ ገደብ ከእርስዎ ሚና የሚፈቀደው በላይ ነው — ከአጠቃላይ አስተዳዳሪ ይጠይቁ።",
+    "m365AgentLimitBadge": "ገደብ {limit} (በ {who} ተዘግቷል)",
+    "m365PlanTrimHint": "የሚካተቱትን ይጨምሩ ወይም ያጥፉ፤ ፎልደሮች ወይም ፋይሎችን ይሰርዙ፣ በአይነት ይተርጉሙ፣ ወይም በቅርቡ የተቀየሩትን ብቻ ያቁሙ።",
+    "m365PlanKeepNewest": "አዳዲስ {count} ይቆዩ",
+    "m365PlanKeepNewestConfirm": "በቅርቡ የተሻሻሉት {keep} ፋይሎች ይቀሩ፣ የቀሩት {exclude} ይቀሩ ይለቀሱ?",
+    "m365PlanIncludeAll": "ሁሉንም ደግሞ ካተቱ ({count} የተወገዱ)",
+    "m365PlanIncludeFile": "{name} ካትቱ",
+    "m365PlanFileExcluded": "የተወገደ",
+    "m365PlanSortLabel": "ምደባ በ",
+    "m365PlanSort": {
+      "name": "ስም",
+      "size": "መጠን",
+      "modified": "የተሻሻለ"
+    }
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",

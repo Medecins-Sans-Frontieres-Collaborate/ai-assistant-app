@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "ኣጄንቱ ኣእቱ ክትዘጋጅ ቅድሚ ምሕዳስ",
     "m365PrepareHintImage": "ስእሊ — 1 vision ጽሑፍ ጥሪ",
     "m365PrepareHintMedia": "~{minutes} ደቒቕ ድምጺ ንምቅስቓስ",
-    "m365PrepareHintOcr": "ናይ ጽሑፍ ማዕከን የለን — OCR ብ vision፣ ክልተ 30 ገጾች",
+    "m365PrepareHintOcr": "ቑፅሩ ኣይተኾሃኑን — OCR, ክውስን {pages} ገጻት",
     "m365PreparePreparing": "ኣብ ምዘጋጀት…",
     "m365PreparePending": "ኣብ ምቅስቓስ…",
     "m365PreparedNote": "ዝዘጋጀ · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "ኣይተማረከን ፡ {reason}",
     "m365PlanFileNeedsPreparation": "ብትዕዛዝ ድንጂ ኣይተማረከን፡ {hint}",
     "m365PlanFileLastRun": "ዝሓለፈ ምውዳእ፡ {status}",
-    "m365ItemNoTextOcr": "ቑፅሪ ቃላት የለን፡ ዝተኣነብቡ? Prepare (OCR) ተጠቀም"
+    "m365ItemNoTextOcr": "ቑፅሪ ቃላት የለን፡ ዝተኣነብቡ? Prepare (OCR) ተጠቀም",
+    "m365CapRaiseButton": "ዝተወሰነዚ ወኪሉ ገደብ ኣብ {limit} ውሰድ",
+    "m365CapRaiseInputLabel": "ገደብ መደብ ሰነዳት ንዚ ወኪሉ",
+    "m365CapRaiseApply": "ገደብ ተፈጺሙ",
+    "m365CapNeedsGlobalAdmin": "ካብ {limit} ሰነዳት በላዕዋ ናይ ዓለም አብሲል ኣስደምዖ ገደቡ ይውሰድ ግድኡ ኣለዎ።",
+    "m365CapRaiseConfirm": "ዝተወሰነዚ ወኪሉ ገደብ ሰነዳት ኣብ {limit} ክትውሰዱ ትደሊ? (ናብ ቀዳማይ ደገ ውሑዱ {default})\n\nኩሉ ተደሊኦ ሰነድ ኣብ እምባ ተሰቐሚ እዩ፡ ወኪሉ ኣብ መጀመሪ መልእኽቲ ናይ Microsoft 365 መድሓኒት ይረክብ፡ እናተፈላለየ ወኪል ግናይ ክቕየሩ ክኸውን ይግበር።\n\nቦታ መቅንዚ ወይ ቀረጺ ዝርዝር እተቖጽኡ።",
+    "m365CapResetDefault": "ናብ ደገ default ({default}) ድለ",
+    "m365CapOverrideNote": "ገደቡ ናብ {limit} ነዚ ወኪሉ ተውሰደ",
+    "m365CapAboveRole": "ዚ ገደብ ካብ የተወሰነ ክህሎት ብላዕዋ እዩ — ናይ ዓለም አብሲል ሓደ ጠይቡ።",
+    "m365AgentLimitBadge": "ገደብ {limit} (ብ{who} ዝተወሰነ)",
+    "m365PlanTrimHint": "ንምሉእ ዝተወሰኡ ኣይትምሓሩ፡ ንዓናት ቦታታት ወይ ፋይሎታት ኣትኽፈሉ፡ ብዝርዝር ኣትፈልጡ፡ ወይ ሓዳስ ንዓብ ሓዳስ ይቕጽፉ።",
+    "m365PlanKeepNewest": "ሓዳስ {count} ዕቕዶ ውህሉ",
+    "m365PlanKeepNewestConfirm": "እቲ {keep} ናይ መጨረሻ ዝተስዕሞ ፋይሎታት ብናይ ዓለም ኣትምሓሩ ምስመውዷ {exclude}?",
+    "m365PlanIncludeAll": "ኩሉ ኣእቱ ድማ ኣትኽውን ({count} ዝተሰርዑ)",
+    "m365PlanIncludeFile": "{name} ኣእቱ",
+    "m365PlanFileExcluded": "ዝተሰርዐ",
+    "m365PlanSortLabel": "ንምምሕዳር ብ...",
+    "m365PlanSort": {
+      "name": "ሽም",
+      "size": "መጠን",
+      "modified": "ተስዓሞ"
+    }
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",

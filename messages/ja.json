@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "準備するにはエージェントを保存してください",
     "m365PrepareHintImage": "画像 — 1回のVision呼び出し",
     "m365PrepareHintMedia": "~{minutes} 分の音声を文字起こし",
-    "m365PrepareHintOcr": "テキスト層なし — VisionによるOCR、最大30ページ",
+    "m365PrepareHintOcr": "テキストレイヤーなし — OCRで最大{pages}ページ",
     "m365PreparePreparing": "準備中…",
     "m365PreparePending": "文字起こし中…",
     "m365PreparedNote": "準備済み · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "インデックスされません—{reason}",
     "m365PlanFileNeedsPreparation": "準備が完了するまでインデックスされません—{hint}",
     "m365PlanFileLastRun": "前回の実行：{status}",
-    "m365ItemNoTextOcr": "テキストが見つかりません—スキャン済みですか？「準備（OCR）」を利用"
+    "m365ItemNoTextOcr": "テキストが見つかりません—スキャン済みですか？「準備（OCR）」を利用",
+    "m365CapRaiseButton": "このエージェントの上限を{limit}に引き上げる",
+    "m365CapRaiseInputLabel": "このエージェントのドキュメント上限",
+    "m365CapRaiseApply": "上限を適用",
+    "m365CapNeedsGlobalAdmin": "{limit}件を超える場合はグローバル管理者が上限を引き上げる必要があります。",
+    "m365CapRaiseConfirm": "このエージェントのドキュメント上限を{limit}に引き上げますか（デフォルトは{default}）？\n\n追加されたドキュメントはすべてエージェントのインデックス時に埋め込まれ、最初のメッセージ時に各ユーザーのMicrosoft 365アクセスと照合されます。また、エージェントの規模が大きいほどインデックスや応答が遅くなります。\n\nまずサブフォルダーやファイル種類の除外を検討してください。",
+    "m365CapResetDefault": "デフォルト（{default}）にリセット",
+    "m365CapOverrideNote": "このエージェントの上限が{limit}に引き上げられました",
+    "m365CapAboveRole": "その上限はあなたのロールで設定できる範囲を超えています。グローバル管理者に依頼してください。",
+    "m365AgentLimitBadge": "上限 {limit}（{who}が設定）",
+    "m365PlanTrimHint": "含める内容を調整：サブフォルダーやファイルのチェックを外す、種類で絞る、最新のみ残す、など。",
+    "m365PlanKeepNewest": "最新{count}件を残す",
+    "m365PlanKeepNewestConfirm": "直近で変更された{keep}件のファイルを残し、残り{exclude}件を除外しますか？",
+    "m365PlanIncludeAll": "すべて再度含める（{count}件除外中）",
+    "m365PlanIncludeFile": "{name}を含める",
+    "m365PlanFileExcluded": "除外中",
+    "m365PlanSortLabel": "並び替え",
+    "m365PlanSort": {
+      "name": "名前",
+      "size": "サイズ",
+      "modified": "更新日"
+    }
   },
   "localModels": {
     "title": "ローカルモデル",

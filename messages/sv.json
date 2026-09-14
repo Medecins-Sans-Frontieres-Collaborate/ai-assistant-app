@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "spara agenten för att förbereda",
     "m365PrepareHintImage": "bild — 1 vision-anrop",
     "m365PrepareHintMedia": "~{minutes} min ljud att transkribera",
-    "m365PrepareHintOcr": "ingen textlager — OCR via vision, upp till 30 sidor",
+    "m365PrepareHintOcr": "ingen textlager – OCR, upp till {pages} sidor",
     "m365PreparePreparing": "Förbereder…",
     "m365PreparePending": "Transkriberar…",
     "m365PreparedNote": "förberedd · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "Kommer inte att indexeras — {reason}",
     "m365PlanFileNeedsPreparation": "Indexeras ej förrän förberedd — {hint}",
     "m365PlanFileLastRun": "Senaste körning: {status}",
-    "m365ItemNoTextOcr": "ingen text hittades — skannad? använd Förbered (OCR)"
+    "m365ItemNoTextOcr": "ingen text hittades — skannad? använd Förbered (OCR)",
+    "m365CapRaiseButton": "Höj den här agentens gräns till {limit}",
+    "m365CapRaiseInputLabel": "Dokumentgräns för denna agent",
+    "m365CapRaiseApply": "Verkställ gräns",
+    "m365CapNeedsGlobalAdmin": "Över {limit} dokument måste en global administratör höja gränsen.",
+    "m365CapRaiseConfirm": "Höj denna agents dokumentgräns till {limit} (standard är {default})?\n\nVarje extra dokument bäddas in när agenten indexeras, kontrolleras mot varje användares Microsoft 365-behörighet vid deras första meddelande och större agenter indexerar och svarar långsammare.\n\nÖverväg att först exkludera undermappar eller filtyper.",
+    "m365CapResetDefault": "Återställ till standard ({default})",
+    "m365CapOverrideNote": "gränsen höjd till {limit} för denna agent",
+    "m365CapAboveRole": "Den gränsen är högre än vad din roll får sätta – be en global administratör.",
+    "m365AgentLimitBadge": "Gräns {limit} (satt av {who})",
+    "m365PlanTrimHint": "Välj vad som ska ingå: avmarkera undermappar eller filer, filtrera efter typ, eller behåll endast de senaste.",
+    "m365PlanKeepNewest": "Behåll de senaste {count}",
+    "m365PlanKeepNewestConfirm": "Behåll de {keep} senast ändrade filerna och exkludera de {exclude} andra?",
+    "m365PlanIncludeAll": "Inkludera alla igen ({count} exkluderade)",
+    "m365PlanIncludeFile": "Inkludera {name}",
+    "m365PlanFileExcluded": "exkluderad",
+    "m365PlanSortLabel": "Sortera efter",
+    "m365PlanSort": {
+      "name": "Namn",
+      "size": "Storlek",
+      "modified": "Ändrad"
+    }
   },
   "localModels": {
     "title": "Lokala modeller",

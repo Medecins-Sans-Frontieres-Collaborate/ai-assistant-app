@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "salvați agentul pentru a pregăti",
     "m365PrepareHintImage": "imagine — 1 apel vision",
     "m365PrepareHintMedia": "~{minutes} min de audio de transcris",
-    "m365PrepareHintOcr": "fără strat de text — OCR prin vision, până la 30 pagini",
+    "m365PrepareHintOcr": "nu există strat de text — OCR, până la {pages} pagini",
     "m365PreparePreparing": "Se pregătește…",
     "m365PreparePending": "Se transcrie…",
     "m365PreparedNote": "pregătit · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "Nu va fi indexat — {reason}",
     "m365PlanFileNeedsPreparation": "Nu va fi indexat până nu este pregătit — {hint}",
     "m365PlanFileLastRun": "Ultima rulare: {status}",
-    "m365ItemNoTextOcr": "nu s-a găsit text — scanat? folosiți Pregătește (OCR)"
+    "m365ItemNoTextOcr": "nu s-a găsit text — scanat? folosiți Pregătește (OCR)",
+    "m365CapRaiseButton": "Crește limita acestui agent la {limit}",
+    "m365CapRaiseInputLabel": "Limită de documente pentru acest agent",
+    "m365CapRaiseApply": "Aplică limita",
+    "m365CapNeedsGlobalAdmin": "Peste {limit} documente, doar un administrator global poate crește limita.",
+    "m365CapRaiseConfirm": "Crește limita de documente a acestui agent la {limit} (valoarea implicită este {default})?\n\nFiecare document suplimentar este procesat la indexarea agentului, verificat pentru acces Microsoft 365 la primul mesaj al fiecărui utilizator, iar agenții mai mari sunt indexați și răspund mai lent.\n\nRecomandăm să excludeți mai întâi subfoldere sau tipuri de fișiere.",
+    "m365CapResetDefault": "Resetează la implicit ({default})",
+    "m365CapOverrideNote": "limita crescută la {limit} pentru acest agent",
+    "m365CapAboveRole": "Această limită este peste ce poate seta rolul dvs. — solicitați ajutorul unui administrator global.",
+    "m365AgentLimitBadge": "Limită {limit} (setată de {who})",
+    "m365PlanTrimHint": "Alegeți ce să includeți: debifați subfoldere sau fișiere, filtrați după tip sau păstrați doar cele mai noi.",
+    "m365PlanKeepNewest": "Păstrează cele mai noi {count}",
+    "m365PlanKeepNewestConfirm": "Păstrați cele mai recent modificate {keep} fișiere și excludeți celelalte {exclude}?",
+    "m365PlanIncludeAll": "Includeți din nou totul ({count} excluse)",
+    "m365PlanIncludeFile": "Includeți {name}",
+    "m365PlanFileExcluded": "exclus",
+    "m365PlanSortLabel": "Sortare după",
+    "m365PlanSort": {
+      "name": "Nume",
+      "size": "Dimensiune",
+      "modified": "Modificat"
+    }
   },
   "localModels": {
     "title": "Modele locale",

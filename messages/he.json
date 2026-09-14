@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "יש לשמור את הסוכן כדי להכין",
     "m365PrepareHintImage": "תמונה — קריאה אחת ל-Vision",
     "m365PrepareHintMedia": "~{minutes} דקות אודיו לפריטה",
-    "m365PrepareHintOcr": "אין שכבת טקסט — OCR דרך Vision, עד 30 עמודים",
+    "m365PrepareHintOcr": "אין שכבת טקסט — OCR, עד {pages} עמודים",
     "m365PreparePreparing": "מתבצעת הכנה…",
     "m365PreparePending": "בתהליך תמלול…",
     "m365PreparedNote": "מוכן · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "לא יאונדקס — {reason}",
     "m365PlanFileNeedsPreparation": "לא יאונדקס עד שיוכן — {hint}",
     "m365PlanFileLastRun": "ריצה אחרונה: {status}",
-    "m365ItemNoTextOcr": "לא נמצא טקסט — קובץ סרוק? השתמש ב'הכן (OCR)'"
+    "m365ItemNoTextOcr": "לא נמצא טקסט — קובץ סרוק? השתמש ב'הכן (OCR)'",
+    "m365CapRaiseButton": "העלה את המגבלה של סוכן זה ל־{limit}",
+    "m365CapRaiseInputLabel": "מגבלת מסמכים עבור סוכן זה",
+    "m365CapRaiseApply": "החלת מגבלה",
+    "m365CapNeedsGlobalAdmin": "מעל {limit} מסמכים על מנהל מערכת כללי להעלות את המגבלה.",
+    "m365CapRaiseConfirm": "להעלות את מגבלת המסמכים של סוכן זה ל־{limit} (הברירת מחדל היא {default})?\n\nכל מסמך נוסף מבוצע עליו embedding כאשר הסוכן מאונדקס, נבדק שוב מול הרשאות Microsoft 365 של כל משתמש בהודעה הראשונה שלו, וסוכנים גדולים יותר מאונדקסים ועונים לאט יותר.\n\nשקול קודם להוציא תיקיות משנה או סוגי קבצים.",
+    "m365CapResetDefault": "איפוס לברירת המחדל ({default})",
+    "m365CapOverrideNote": "המגבלה הוגדלה ל־{limit} עבור סוכן זה",
+    "m365CapAboveRole": "מגבלה זו גבוהה ממה שהתפקיד שלך מאפשר — פנה למנהל מערכת כללי.",
+    "m365AgentLimitBadge": "מגבלה {limit} (הוגדר על ידי {who})",
+    "m365PlanTrimHint": "בחר מה לכלול: הסר סימון מתיקיות משנה או קבצים, סנן לפי סוג, או השאר רק את החדשים ביותר.",
+    "m365PlanKeepNewest": "השאר את {count} החדשים ביותר",
+    "m365PlanKeepNewestConfirm": "להשאיר את {keep} הקבצים בעריכה האחרונה ולהוציא את {exclude} האחרים?",
+    "m365PlanIncludeAll": "כלול הכל מחדש ({count} הוצאו)",
+    "m365PlanIncludeFile": "כלול את {name}",
+    "m365PlanFileExcluded": "הוצא",
+    "m365PlanSortLabel": "מיין לפי",
+    "m365PlanSort": {
+      "name": "שם",
+      "size": "גודל",
+      "modified": "תאריך שינוי"
+    }
   },
   "localModels": {
     "title": "מודלים מקומיים",

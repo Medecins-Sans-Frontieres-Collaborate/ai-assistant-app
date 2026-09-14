@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "guarde el agente para preparar",
     "m365PrepareHintImage": "imagen — 1 llamada de visión",
     "m365PrepareHintMedia": "~{minutes} min de audio para transcribir",
-    "m365PrepareHintOcr": "sin capa de texto — OCR vía visión, hasta 30 páginas",
+    "m365PrepareHintOcr": "sin capa de texto — OCR, hasta {pages} páginas",
     "m365PreparePreparing": "Preparando…",
     "m365PreparePending": "Transcribiendo…",
     "m365PreparedNote": "preparado · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "No se indexará — {reason}",
     "m365PlanFileNeedsPreparation": "No se indexará hasta estar preparado — {hint}",
     "m365PlanFileLastRun": "Última ejecución: {status}",
-    "m365ItemNoTextOcr": "no se encontró texto — ¿escaneado? utilice Preparar (OCR)"
+    "m365ItemNoTextOcr": "no se encontró texto — ¿escaneado? utilice Preparar (OCR)",
+    "m365CapRaiseButton": "Aumentar el límite de este agente a {limit}",
+    "m365CapRaiseInputLabel": "Límite de documentos para este agente",
+    "m365CapRaiseApply": "Aplicar límite",
+    "m365CapNeedsGlobalAdmin": "Por encima de {limit} documentos, un administrador global debe aumentar el límite.",
+    "m365CapRaiseConfirm": "¿Aumentar el límite de documentos de este agente a {limit} (el valor predeterminado es {default})?\n\nCada documento adicional se incrusta cuando se indexa el agente, se vuelve a comprobar con el acceso de Microsoft 365 de cada usuario en su primer mensaje, y los agentes más grandes se indexan y responden más lento.\n\nConsidere excluir subcarpetas o tipos de archivos primero.",
+    "m365CapResetDefault": "Restablecer al valor predeterminado ({default})",
+    "m365CapOverrideNote": "límite aumentado a {limit} para este agente",
+    "m365CapAboveRole": "Ese límite supera lo que su rol puede establecer — solicite a un administrador global.",
+    "m365AgentLimitBadge": "Límite {limit} (establecido por {who})",
+    "m365PlanTrimHint": "Seleccione qué incluir: desmarque subcarpetas o archivos, filtre por tipo o conserve solo los más recientes.",
+    "m365PlanKeepNewest": "Conservar los {count} más recientes",
+    "m365PlanKeepNewestConfirm": "¿Conservar los {keep} archivos modificados más recientemente y excluir los otros {exclude}?",
+    "m365PlanIncludeAll": "Incluir todos nuevamente ({count} excluidos)",
+    "m365PlanIncludeFile": "Incluir {name}",
+    "m365PlanFileExcluded": "excluido",
+    "m365PlanSortLabel": "Ordenar por",
+    "m365PlanSort": {
+      "name": "Nombre",
+      "size": "Tamaño",
+      "modified": "Modificado"
+    }
   },
   "localModels": {
     "title": "Modelos locales",

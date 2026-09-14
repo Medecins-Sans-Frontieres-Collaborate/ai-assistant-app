@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "sačuvajte agenta za pripremu",
     "m365PrepareHintImage": "slika — 1 vision poziv",
     "m365PrepareHintMedia": "~{minutes} min zvuka za transkripciju",
-    "m365PrepareHintOcr": "nema tekstualnog sloja — OCR putem vision-a, do 30 strana",
+    "m365PrepareHintOcr": "nema tekstualnog sloja — OCR, do {pages} strana",
     "m365PreparePreparing": "Priprema…",
     "m365PreparePending": "Transkribovanje…",
     "m365PreparedNote": "pripremljeno · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Neće biti indeksiran — {reason}",
     "m365PlanFileNeedsPreparation": "Nije indeksiran dok se ne pripremi — {hint}",
     "m365PlanFileLastRun": "Poslednje pokretanje: {status}",
-    "m365ItemNoTextOcr": "nema pronađenog teksta — skeniran? koristite Pripremi (OCR)"
+    "m365ItemNoTextOcr": "nema pronađenog teksta — skeniran? koristite Pripremi (OCR)",
+    "m365CapRaiseButton": "Povećajte ograničenje ovog agenta na {limit}",
+    "m365CapRaiseInputLabel": "Ograničenje dokumenata za ovog agenta",
+    "m365CapRaiseApply": "Primeni ograničenje",
+    "m365CapNeedsGlobalAdmin": "Za više od {limit} dokumenata globalni administrator mora da poveća ograničenje.",
+    "m365CapRaiseConfirm": "Povećati ograničenje dokumenata za ovog agenta na {limit} (podrazumevano je {default})?\n\nSvaki dodatni dokument se ugrađuje prilikom indeksiranja agenta, ponovo proverava u odnosu na Microsoft 365 pristup svakog korisnika prilikom njihove prve poruke, a veći agenti indeksiraju i odgovaraju sporije.\n\nPre razmotrite isključenje podfoldera ili tipova fajlova.",
+    "m365CapResetDefault": "Vrati na podrazumevano ({default})",
+    "m365CapOverrideNote": "ograničenje povećano na {limit} za ovog agenta",
+    "m365CapAboveRole": "To ograničenje je iznad onoga što vaša uloga može da postavi — obratite se globalnom administratoru.",
+    "m365AgentLimitBadge": "Ograničenje {limit} (postavio {who})",
+    "m365PlanTrimHint": "Prilagodite šta da uključite: odčekirajte podfoldere ili fajlove, filtrirajte po tipu ili zadržite samo najnovije.",
+    "m365PlanKeepNewest": "Zadrži najnovijih {count}",
+    "m365PlanKeepNewestConfirm": "Zadržati {keep} najnovije izmenjene fajlove i isključiti preostalih {exclude}?",
+    "m365PlanIncludeAll": "Ponovo uključi sve ({count} isključeno)",
+    "m365PlanIncludeFile": "Uključi {name}",
+    "m365PlanFileExcluded": "isključeno",
+    "m365PlanSortLabel": "Sortiraj po",
+    "m365PlanSort": {
+      "name": "Nazivu",
+      "size": "Veličini",
+      "modified": "Izmenjeno"
+    }
   },
   "localModels": {
     "title": "Lokalni modeli",

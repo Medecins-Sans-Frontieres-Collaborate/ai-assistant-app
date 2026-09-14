@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "तैयारी के लिए एजेंट को सेव करें",
     "m365PrepareHintImage": "इमेज — 1 विज़न कॉल",
     "m365PrepareHintMedia": "~{minutes} मिनट ऑडियो ट्रांसक्राइब करें",
-    "m365PrepareHintOcr": "कोई टेक्स्ट लेयर नहीं — विज़न से OCR, अधिकतम 30 पेज",
+    "m365PrepareHintOcr": "कोई टेक्स्ट लेयर नहीं — OCR, अधिकतम {pages} पृष्ठ",
     "m365PreparePreparing": "तैयार हो रहा…",
     "m365PreparePending": "ट्रांसक्राइब हो रहा…",
     "m365PreparedNote": "तैयार किया गया · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "इंडेक्स नहीं किया जाएगा — {reason}",
     "m365PlanFileNeedsPreparation": "तैयार किए बिना इंडेक्स नहीं होगा — {hint}",
     "m365PlanFileLastRun": "अंतिम रन: {status}",
-    "m365ItemNoTextOcr": "कोई टेक्स्ट नहीं मिला — स्कैन किया गया? Prepare (OCR) का उपयोग करें"
+    "m365ItemNoTextOcr": "कोई टेक्स्ट नहीं मिला — स्कैन किया गया? Prepare (OCR) का उपयोग करें",
+    "m365CapRaiseButton": "इस एजेंट की सीमा {limit} तक बढ़ाएं",
+    "m365CapRaiseInputLabel": "इस एजेंट के लिए दस्तावेज़ सीमा",
+    "m365CapRaiseApply": "सीमा लागू करें",
+    "m365CapNeedsGlobalAdmin": "{limit} से अधिक दस्तावेज़ों के लिए सीमा बढ़ाने के लिए ग्लोबल एडमिन आवश्यक है।",
+    "m365CapRaiseConfirm": "क्या इस एजेंट की दस्तावेज़ सीमा {limit} (डिफ़ॉल्ट {default}) तक बढ़ाई जाए?\n\nहर अतिरिक्त दस्तावेज़ इंडेक्सिंग के समय जोड़ दिया जाता है, और पहले संदेश पर हर उपयोगकर्ता की Microsoft 365 पहुंच के अनुसार फिर से जांचा जाता है। बड़े एजेंट अधिक धीरे-धीरे इंडेक्स और उत्तर देते हैं।\n\nपहले उप-फोल्डर या फ़ाइल प्रकारों को बाहर करने पर विचार करें।",
+    "m365CapResetDefault": "डिफ़ॉल्ट ({default}) पर रीसेट करें",
+    "m365CapOverrideNote": "इस एजेंट के लिए सीमा {limit} तक बढ़ाई गई",
+    "m365CapAboveRole": "यह सीमा आपके रोल से अधिक है — कृपया ग्लोबल एडमिन से सहायता लें।",
+    "m365AgentLimitBadge": "सीमा {limit} (निर्धारित: {who})",
+    "m365PlanTrimHint": "क्या शामिल करना है चुनें: सबफोल्डर या फाइलें अचिह्नित करें, प्रकार के अनुसार फ़िल्टर करें, या केवल नवीनतम रखें।",
+    "m365PlanKeepNewest": "नवीनतम {count} रखें",
+    "m365PlanKeepNewestConfirm": "क्या {keep} सबसे हाल ही में संशोधित फाइलें रखनी हैं और बाकी {exclude} को बाहर करना है?",
+    "m365PlanIncludeAll": "फिर से सभी शामिल करें ({count} बाहर रखे गए)",
+    "m365PlanIncludeFile": "{name} शामिल करें",
+    "m365PlanFileExcluded": "बाहर किया गया",
+    "m365PlanSortLabel": "क्रमबद्ध करें",
+    "m365PlanSort": {
+      "name": "नाम",
+      "size": "आकार",
+      "modified": "संशोधित"
+    }
   },
   "localModels": {
     "title": "स्थानीय मॉडल्स",

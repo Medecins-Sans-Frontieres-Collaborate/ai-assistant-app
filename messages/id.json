@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "simpan agen untuk menyiapkan",
     "m365PrepareHintImage": "gambar — 1 panggilan visi",
     "m365PrepareHintMedia": "~{minutes} menit audio untuk ditranskripsi",
-    "m365PrepareHintOcr": "tidak ada lapisan teks — OCR pakai visi, maksimal 30 halaman",
+    "m365PrepareHintOcr": "tidak ada lapisan teks — OCR, hingga {pages} halaman",
     "m365PreparePreparing": "Menyiapkan…",
     "m365PreparePending": "Menyalin…",
     "m365PreparedNote": "siap · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "Tidak akan diindeks — {reason}",
     "m365PlanFileNeedsPreparation": "Tidak diindeks sampai dipersiapkan — {hint}",
     "m365PlanFileLastRun": "Proses terakhir: {status}",
-    "m365ItemNoTextOcr": "teks tidak ditemukan — hasil scan? gunakan Persiapkan (OCR)"
+    "m365ItemNoTextOcr": "teks tidak ditemukan — hasil scan? gunakan Persiapkan (OCR)",
+    "m365CapRaiseButton": "Naikkan batas agen ini menjadi {limit}",
+    "m365CapRaiseInputLabel": "Batas dokumen untuk agen ini",
+    "m365CapRaiseApply": "Terapkan batas",
+    "m365CapNeedsGlobalAdmin": "Di atas {limit} dokumen, hanya global admin yang dapat menaikkan batas.",
+    "m365CapRaiseConfirm": "Naikkan batas dokumen agen ini menjadi {limit} (default adalah {default})?\n\nSetiap dokumen ekstra akan di-embed saat agen diindeks, diperiksa ulang terhadap akses Microsoft 365 setiap pengguna pada pesan pertama mereka, dan agen yang lebih besar akan mengindeks dan menjawab lebih lambat.\n\nPertimbangkan untuk mengecualikan subfolder atau tipe file terlebih dahulu.",
+    "m365CapResetDefault": "Atur ulang ke default ({default})",
+    "m365CapOverrideNote": "batas dinaikkan menjadi {limit} untuk agen ini",
+    "m365CapAboveRole": "Batas tersebut melebihi yang dapat ditetapkan oleh peran Anda — hubungi global admin.",
+    "m365AgentLimitBadge": "Batas {limit} (ditetapkan oleh {who})",
+    "m365PlanTrimHint": "Pilih apa yang ingin disertakan: hapus centang subfolder atau file, filter berdasarkan tipe, atau simpan hanya yang terbaru.",
+    "m365PlanKeepNewest": "Simpan {count} terbaru",
+    "m365PlanKeepNewestConfirm": "Simpan {keep} file terbaru yang dimodifikasi dan kecualikan {exclude} lainnya?",
+    "m365PlanIncludeAll": "Sertakan semua lagi ({count} dikecualikan)",
+    "m365PlanIncludeFile": "Sertakan {name}",
+    "m365PlanFileExcluded": "dikecualikan",
+    "m365PlanSortLabel": "Urutkan berdasarkan",
+    "m365PlanSort": {
+      "name": "Nama",
+      "size": "Ukuran",
+      "modified": "Diubah"
+    }
   },
   "localModels": {
     "title": "Model lokal",

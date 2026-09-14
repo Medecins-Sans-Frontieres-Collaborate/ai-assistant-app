@@ -4640,7 +4640,7 @@
     "m365PrepareSaveFirst": "sambisa bangî sô bèngô",
     "m365PrepareHintImage": "image — 1 vision call",
     "m365PrepareHintMedia": "~{minutes} min tî audio ti transcribe",
-    "m365PrepareHintOcr": "atènî na text layer — OCR via vision, pâsê 30 pages",
+    "m365PrepareHintOcr": "té text layer — OCR, mbênî ku {pages} page",
     "m365PreparePreparing": "On bèngô...",
     "m365PreparePending": "Transcribing...",
     "m365PreparedNote": "A bèngô · {kind}",
@@ -4712,7 +4712,28 @@
     "m365PlanFileSkipped": "Ape na indexi — {reason}",
     "m365PlanFileNeedsPreparation": "Ape na indexi tî mayi prepare — {hint}",
     "m365PlanFileLastRun": "Last run: {status}",
-    "m365ItemNoTextOcr": "Ala zî ayeke-ndongi — ape na scan? yeke Prepare (OCR)"
+    "m365ItemNoTextOcr": "Ala zî ayeke-ndongi — ape na scan? yeke Prepare (OCR)",
+    "m365CapRaiseButton": "Keté limite ti agent ti so na {limit}",
+    "m365CapRaiseInputLabel": "Limite ti dokumente ti agent ti",
+    "m365CapRaiseApply": "Kobä limite",
+    "m365CapNeedsGlobalAdmin": "Sô lo yeke {limit} dokumente, global admin mo yeke kété limite ti lo.",
+    "m365CapRaiseConfirm": "Kété limite ti dokumente ti agent ti go na {limit} (limite ti gbegere so {default})?\n\nDokumente tî gbata tî köda na système process, ah so agent mo índice, so kodro tî Microsoft 365 tî mousso mo tî ora so mbênî ilo. Agent mo so kubwa, índice mo abe mbi lê limbi.\n\nZa lingbi na ködörö subfolders mô types tî fichiers biani mbênî.",
+    "m365CapResetDefault": "Lenga na na limite gbegere ({default})",
+    "m365CapOverrideNote": "limite ti kété na {limit} ti agent ti",
+    "m365CapAboveRole": "Limite ti ado so lo tî mbênî rôle lo si tî la — za sô global admin.",
+    "m365AgentLimitBadge": "Limite {limit} (mo tî {who})",
+    "m365PlanTrimHint": "Falï sô mo yeke dènè: sô subfolders mô fichiers, filtre na type, tî ye da sô tî na yeke ti mû.",
+    "m365PlanKeepNewest": "Gbadirini tî mû na {count}",
+    "m365PlanKeepNewestConfirm": "Gbadirini fichier {keep} so mû tî sèngëlë, sô yeke kôdrö {exclude}?",
+    "m365PlanIncludeAll": "Dènè na aminî nî ndangö ({count} sô nde tî bi dènè)",
+    "m365PlanIncludeFile": "Dènè {name}",
+    "m365PlanFileExcluded": "bi dènè",
+    "m365PlanSortLabel": "Sô na",
+    "m365PlanSort": {
+      "name": "Ngbênî",
+      "size": "Pôndo",
+      "modified": "Yändi"
+    }
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",

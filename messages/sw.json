@@ -4656,7 +4656,7 @@
     "m365PrepareSaveFirst": "hifadhi wakala kisha uandae",
     "m365PrepareHintImage": "picha — simu 1 ya vision",
     "m365PrepareHintMedia": "~{minutes} dakika za sauti kutafsiri",
-    "m365PrepareHintOcr": "hakuna safu ya maandishi — OCR kupitia vision, hadi kurasa 30",
+    "m365PrepareHintOcr": "hakuna tabaka la maandishi — OCR, hadi kurasa {pages}",
     "m365PreparePreparing": "Inaandaa…",
     "m365PreparePending": "Inatafsiri…",
     "m365PreparedNote": "imeandaliwa · {kind}",
@@ -4728,7 +4728,28 @@
     "m365PlanFileSkipped": "Haitarodheshwa — {reason}",
     "m365PlanFileNeedsPreparation": "Haijarodheshwa hadi iandaliwe — {hint}",
     "m365PlanFileLastRun": "Mchakato wa mwisho: {status}",
-    "m365ItemNoTextOcr": "hakuna maandishi yaliyopatikana — imeskanishwa? tumia Andaa (OCR)"
+    "m365ItemNoTextOcr": "hakuna maandishi yaliyopatikana — imeskanishwa? tumia Andaa (OCR)",
+    "m365CapRaiseButton": "Pandisha kikomo cha wakala huyu hadi {limit}",
+    "m365CapRaiseInputLabel": "Kikomo cha hati kwa wakala huyu",
+    "m365CapRaiseApply": "Weka kikomo",
+    "m365CapNeedsGlobalAdmin": "Zaidi ya hati {limit}, msimamizi mkuu anahitaji kuongeza kikomo.",
+    "m365CapRaiseConfirm": "Pandisha kikomo cha hati za wakala huyu hadi {limit} (kawaida ni {default})?\n\nKila hati ya ziada inawekwa wakati wakala anapowekwa kwenye faharasa, inakaguliwa tena kulingana na upatikanaji wa Microsoft 365 wa mtumiaji kwenye ujumbe wao wa kwanza, na mawakala wakubwa huchukua muda mrefu zaidi kufasiri na kujibu.\n\nFikiria kuondoa folda ndogo au aina za faili kwanza.",
+    "m365CapResetDefault": "Rejesha kwenye kikomo chaguo-msingi ({default})",
+    "m365CapOverrideNote": "kikomo kimepandishwa hadi {limit} kwa wakala huyu",
+    "m365CapAboveRole": "Kikomo hicho kiko juu kuliko unachoruhusiwa kuweka — muulize msimamizi mkuu.",
+    "m365AgentLimitBadge": "Kikomo {limit} (kimewekwa na {who})",
+    "m365PlanTrimHint": "Chagua nini cha kujumuisha: toa alama kwenye folda ndogo au faili, chuja kwa aina, au baka mpya pekee.",
+    "m365PlanKeepNewest": "Baki mpya {count}",
+    "m365PlanKeepNewestConfirm": "Baki faili {keep} zilizorekebishwa hivi karibuni na utoe {exclude} nyingine?",
+    "m365PlanIncludeAll": "Jumuisha zote tena ({count} zimeondolewa)",
+    "m365PlanIncludeFile": "Jumuisha {name}",
+    "m365PlanFileExcluded": "imeondolewa",
+    "m365PlanSortLabel": "Panga kwa",
+    "m365PlanSort": {
+      "name": "Jina",
+      "size": "Ukubwa",
+      "modified": "Iliyorekebishwa"
+    }
   },
   "localModels": {
     "title": "Miundo ya ndani",
