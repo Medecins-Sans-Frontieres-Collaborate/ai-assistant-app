@@ -30,6 +30,18 @@ import OpenAI from 'openai';
 
 const REFORMULATION_MODEL = 'gpt-5-mini';
 
+/**
+ * Injected in place of the sources block when retrieval could not run. The
+ * agent's own prompt is still applied, so the model keeps its persona but
+ * is told the truth about its knowledge base — without this note a plain
+ * model answers "I don't have any documents", which reads as "the agent has
+ * no knowledge" to the user (the exact symptom of a broken index).
+ */
+const RETRIEVAL_FAILED_NOTE =
+  'IMPORTANT: The knowledge-base search for this agent FAILED for this message (a temporary technical error, not a permissions issue and not an empty knowledge base). ' +
+  "Tell the user briefly that you could not search the agent's documents right now and ask them to try again in a moment. " +
+  'Do NOT claim you have no documents and do NOT answer from general knowledge as if it came from the documents.';
+
 export class M365AgentEnricher extends BasePipelineStage {
   readonly name = 'M365AgentEnricher';
 
@@ -39,6 +51,77 @@ export class M365AgentEnricher extends BasePipelineStage {
 
   shouldRun(context: ChatContext): boolean {
     return !!context.m365Agent;
+  }
+
+  /**
+   * Pipeline hook: the stage exceeded its budget and the pipeline is about
+   * to continue with the PRE-stage context. Degrade explicitly instead of
+   * silently handing the user a plain model.
+   */
+  onTimeout(context: ChatContext): ChatContext {
+    const agent = context.m365Agent;
+    if (!agent) return context;
+    console.error(
+      `[M365AgentEnricher] retrieval timed out for ${sanitizeForLog(agent.id)}; degrading with retrieval-failed note`,
+    );
+    return this.degradedContext(context, 'timeout');
+  }
+
+  /** The agent's prompt with the renderer/summary/memory sections re-appended. */
+  private agentSystemPrompt(context: ChatContext): string {
+    const agent = context.m365Agent;
+    if (!agent?.systemPrompt) return context.systemPrompt;
+    // The agent's prompt REPLACES the base prompt, taking the renderer
+    // contract (math/markdown/diagram rules) and the summary/memories
+    // sections with it. Re-append both, agent instructions first so an
+    // agent that overrides formatting still wins on substance
+    // (mirrors RAGEnricher).
+    const agentSections = buildAgentPromptSections(
+      context.conversationSummary,
+      context.memories,
+    );
+    return `${agent.systemPrompt}\n\n${agentSections}`;
+  }
+
+  /**
+   * Context for a request whose retrieval did not happen: persona applied,
+   * an explicit retrieval-failed note ahead of the conversation, and a
+   * `retrievalFailed` flag on the agent metadata so telemetry and any
+   * client badge can tell "no results" from "search broke".
+   */
+  private degradedContext(
+    context: ChatContext,
+    cause: 'error' | 'timeout' | 'no-accessible-sources',
+  ): ChatContext {
+    const agent = context.m365Agent!;
+    const baseMessages = context.enrichedMessages || context.messages;
+    return {
+      ...context,
+      enrichedMessages: [
+        {
+          role: 'system',
+          content: RETRIEVAL_FAILED_NOTE,
+          messageType: MessageType.TEXT,
+        },
+        ...baseMessages,
+      ],
+      systemPrompt: this.agentSystemPrompt(context),
+      processedContent: {
+        ...context.processedContent,
+        metadata: {
+          ...context.processedContent?.metadata,
+          m365AgentConfig: {
+            agentId: agent.id,
+            agentName: agent.name,
+            accessibleSources: context.m365AccessibleSourceIds?.length ?? 0,
+            totalSources: agent.sources.length,
+            resultCount: 0,
+            retrievalFailed: true,
+            retrievalFailureCause: cause,
+          },
+        },
+      },
+    };
   }
 
   /** Last user-message text; empty string when none (e.g. image-only). */
@@ -70,8 +153,9 @@ export class M365AgentEnricher extends BasePipelineStage {
         )
         .join('\n');
       const completion = await this.openAIClient.chat.completions.create({
+        // No temperature: the gpt-5 family rejects non-default values and
+        // the call would silently fall back to the raw query.
         model: REFORMULATION_MODEL,
-        temperature: 0.2,
         messages: [
           {
             role: 'system',
@@ -97,7 +181,7 @@ export class M365AgentEnricher extends BasePipelineStage {
       console.error(
         `[M365AgentEnricher] no accessible sources on context for ${sanitizeForLog(agent.id)}; skipping retrieval`,
       );
-      return context;
+      return this.degradedContext(context, 'no-accessible-sources');
     }
 
     await context.emitActivity?.('chat.activity.searchingKnowledge');
@@ -163,16 +247,6 @@ export class M365AgentEnricher extends BasePipelineStage {
         ...(doc.quote ? { quote: doc.quote } : {}),
       }));
 
-      // The agent's prompt REPLACES the base prompt, taking the renderer
-      // contract (math/markdown/diagram rules) and the summary/memories
-      // sections with it. Re-append both, agent instructions first so an
-      // agent that overrides formatting still wins on substance
-      // (mirrors RAGEnricher).
-      const agentSections = buildAgentPromptSections(
-        context.conversationSummary,
-        context.memories,
-      );
-
       // Verification corpus for the model's claim quotes: chunk text per
       // citation number. StandardChatHandler ships it in a terminal
       // metadata block; the client verifies and DISCARDS it (transient).
@@ -195,9 +269,7 @@ export class M365AgentEnricher extends BasePipelineStage {
       return {
         ...context,
         enrichedMessages,
-        systemPrompt: agent.systemPrompt
-          ? `${agent.systemPrompt}\n\n${agentSections}`
-          : context.systemPrompt,
+        systemPrompt: this.agentSystemPrompt(context),
         processedContent: {
           ...context.processedContent,
           metadata: {
@@ -215,8 +287,10 @@ export class M365AgentEnricher extends BasePipelineStage {
         },
       };
     } catch (error) {
-      // Graceful degrade, exactly like RAGEnricher: the chat continues
-      // without retrieval rather than failing the request.
+      // Graceful degrade like RAGEnricher — the request never fails — but
+      // NOT silently: the persona still applies and the model is told the
+      // search broke (see RETRIEVAL_FAILED_NOTE). A live activity line
+      // gives the user the same hint while the answer streams.
       console.error(
         `[M365AgentEnricher] retrieval failed for ${sanitizeForLog(agent.id)}: ${sanitizeForLog(error)}`,
       );
@@ -228,7 +302,8 @@ export class M365AgentEnricher extends BasePipelineStage {
         botId: context.botId,
         telemetry: context.telemetry,
       });
-      return context;
+      await context.emitActivity?.('chat.activity.knowledgeSearchFailed');
+      return this.degradedContext(context, 'error');
     }
   }
 }
