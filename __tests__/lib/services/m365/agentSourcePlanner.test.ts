@@ -13,8 +13,10 @@ import {
   applySourceFilters,
   classifyItem,
   clearPlannerCacheForTests,
+  effectiveMaxDocuments,
   planSource,
   planSources,
+  roleMaxDocuments,
   summarizeCounts,
   summarizePlans,
 } from '@/lib/services/m365/agentSourcePlanner';
@@ -512,5 +514,36 @@ describe('summarizePlans / planSources', () => {
     await expect(
       planSources(req, 'admin', [{ driveId: 'd', itemId: 'x', kind: 'file' }]),
     ).rejects.toMatchObject({ kind: 'not_connected' });
+  });
+});
+
+describe('per-agent document cap', () => {
+  it('summarizePlans judges the cap it is given, defaulting to the env cap', () => {
+    const plan = {
+      counts: { indexable: 7, bytes: 10, skipped: 0, needsPreparation: 0 },
+    } as never;
+    expect(summarizePlans([plan], 5)).toMatchObject({
+      maxDocuments: 5,
+      overDocumentCap: true,
+    });
+    expect(summarizePlans([plan], 8)).toMatchObject({
+      maxDocuments: 8,
+      overDocumentCap: false,
+    });
+  });
+
+  it('effectiveMaxDocuments uses the override, bounded by the global ceiling', () => {
+    const ceiling = roleMaxDocuments(true);
+    expect(effectiveMaxDocuments(undefined)).toBeLessThanOrEqual(ceiling);
+    expect(effectiveMaxDocuments(null)).toBe(effectiveMaxDocuments(undefined));
+    expect(effectiveMaxDocuments(7)).toBe(7);
+    expect(effectiveMaxDocuments(ceiling + 500)).toBe(ceiling);
+    expect(effectiveMaxDocuments(0)).toBe(1);
+  });
+
+  it('a local admin’s ceiling never exceeds the global one', () => {
+    expect(roleMaxDocuments(false)).toBeLessThanOrEqual(roleMaxDocuments(true));
+    expect(roleMaxDocuments(false)).toBe(100);
+    expect(roleMaxDocuments(true)).toBe(200);
   });
 });
