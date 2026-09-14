@@ -11,7 +11,6 @@ const models = [model('gpt-5.2-chat'), model('gpt-5.4'), model('gpt-5.4-nano')];
 
 describe('planEuDefaultModelSwitch', () => {
   const base = {
-    flagOn: true,
     region: 'EU' as const,
     applied: false,
     defaultModelId: 'gpt-5.2-chat',
@@ -25,10 +24,7 @@ describe('planEuDefaultModelSwitch', () => {
     });
   });
 
-  it('does nothing when the flag is off, already applied, or the user is not EU', () => {
-    expect(planEuDefaultModelSwitch({ ...base, flagOn: false })).toEqual({
-      action: 'none',
-    });
+  it('does nothing when already applied or the user is not EU', () => {
     expect(planEuDefaultModelSwitch({ ...base, applied: true })).toEqual({
       action: 'none',
     });

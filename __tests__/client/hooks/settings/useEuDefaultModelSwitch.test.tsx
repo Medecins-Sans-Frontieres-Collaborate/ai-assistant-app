@@ -10,11 +10,6 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const flags = vi.hoisted(() => ({ current: { euDefaultModelSwitch: true } }));
-vi.mock('launchdarkly-react-client-sdk', () => ({
-  useFlags: () => flags.current,
-}));
-
 const model = (id: string): OpenAIModel =>
   ({ id, name: id, maxLength: 1, tokenLimit: 1 }) as OpenAIModel;
 const models = [model('gpt-5.2-chat'), model('gpt-5.4')];
@@ -33,7 +28,6 @@ function conversation(modelId: string, messages: unknown[] = []): Conversation {
 
 describe('useEuDefaultModelSwitch', () => {
   beforeEach(() => {
-    flags.current = { euDefaultModelSwitch: true };
     useSettingsStore.setState({
       userRegion: 'EU',
       euDefaultModelSwitchApplied: false,
@@ -77,19 +71,16 @@ describe('useEuDefaultModelSwitch', () => {
     expect(useSettingsStore.getState().defaultModelId).toBe('gpt-5.2-chat');
   });
 
-  it('does nothing for US users or with the flag off, and marks a non-old default', () => {
+  it('does nothing for US users, and marks a non-old default', () => {
     useSettingsStore.setState({ userRegion: 'US' });
     renderHook(() => useEuDefaultModelSwitch());
     expect(useSettingsStore.getState().defaultModelId).toBe('gpt-5.2-chat');
     expect(useSettingsStore.getState().euDefaultModelSwitchApplied).toBe(false);
 
-    useSettingsStore.setState({ userRegion: 'EU' });
-    flags.current = { euDefaultModelSwitch: false };
-    renderHook(() => useEuDefaultModelSwitch());
-    expect(useSettingsStore.getState().euDefaultModelSwitchApplied).toBe(false);
-
-    flags.current = { euDefaultModelSwitch: true };
-    useSettingsStore.setState({ defaultModelId: OpenAIModelID.GPT_5_4_NANO });
+    useSettingsStore.setState({
+      userRegion: 'EU',
+      defaultModelId: OpenAIModelID.GPT_5_4_NANO,
+    });
     renderHook(() => useEuDefaultModelSwitch());
     expect(useSettingsStore.getState().defaultModelId).toBe('gpt-5.4-nano');
     expect(useSettingsStore.getState().euDefaultModelSwitchApplied).toBe(true);
