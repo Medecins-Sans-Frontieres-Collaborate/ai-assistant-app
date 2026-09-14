@@ -112,6 +112,8 @@ const agentFieldsSchema = z
     /** null → ride the catalog default at request time. */
     chatModelId: z.string().trim().min(1).max(100).nullable().default(null),
     topK: z.number().int().min(1).max(20).default(10),
+    /** OCR scanned PDFs during index runs within the env page budgets. */
+    autoOcr: z.boolean().default(false),
     // Sources are capped at the document cap; the DOCUMENT count after
     // folder expansion is checked by the planner at save and index time.
     sources: z.array(sourceFieldsSchema).min(1).max(MAX_M365_AGENT_DOCUMENTS),
@@ -422,6 +424,7 @@ export async function POST(request: NextRequest) {
       // per-agent embedding choice is a later phase (requires re-index).
       embeddingModelId: env.OPENAI_EMBEDDING_DEPLOYMENT,
       ragConfig: { topK: parsed.data.topK },
+      autoOcr: parsed.data.autoOcr,
       sources: newSources,
       createdBy: userMail,
       createdAt: now,
@@ -551,6 +554,7 @@ export async function PUT(request: NextRequest) {
       systemPrompt: parsed.data.systemPrompt,
       chatModelId: parsed.data.chatModelId,
       ragConfig: { topK: parsed.data.topK },
+      autoOcr: parsed.data.autoOcr,
       sources,
       updatedBy: userMail,
       updatedAt: now,
