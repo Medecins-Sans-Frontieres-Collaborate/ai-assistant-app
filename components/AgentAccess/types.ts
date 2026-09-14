@@ -116,6 +116,12 @@ export interface AdminM365AgentsResponse {
   maxDocuments?: number;
   /** Server's env-configured per-agent byte budget (M365_AGENT_MAX_SOURCE_MB). */
   maxBytes?: number;
+  /** Auto-OCR page budget per index run (M365_AGENT_AUTO_OCR_MAX_PAGES_PER_RUN). */
+  autoOcrMaxPagesPerRun?: number;
+  /** Auto-OCR page cap per file (M365_AGENT_AUTO_OCR_MAX_PAGES_PER_FILE). */
+  autoOcrMaxPagesPerFile?: number;
+  /** Explicit Prepare (OCR) page cap per PDF (M365_AGENT_OCR_MAX_PAGES). */
+  ocrMaxPages?: number;
   /** Latest index job per agent id (seventh pass, phase 2). */
   jobs?: Record<string, ClientIndexJobSummary>;
 }
