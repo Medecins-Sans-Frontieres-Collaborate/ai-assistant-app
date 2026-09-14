@@ -2,9 +2,6 @@
 
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useEffect } from 'react';
-import toast from 'react-hot-toast';
-
-import { useTranslations } from 'next-intl';
 
 import {
   EU_DEFAULT_MODEL_SWITCH_FROM,
@@ -30,7 +27,6 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
 export function useEuDefaultModelSwitch(): void {
   const { euDefaultModelSwitch } = useFlags();
   const flagOn = euDefaultModelSwitch === true;
-  const t = useTranslations('settings');
   const region = useSettingsStore((s) => s.userRegion);
   const applied = useSettingsStore((s) => s.euDefaultModelSwitchApplied);
   const defaultModelId = useSettingsStore((s) => s.defaultModelId);
@@ -59,8 +55,7 @@ export function useEuDefaultModelSwitch(): void {
       ) {
         conversations.updateConversation(selected.id, { model: plan.model });
       }
-      toast.success(t('euDefaultModelSwitched'), { duration: 8000 });
     }
     settings.markEuDefaultModelSwitchApplied();
-  }, [flagOn, region, applied, defaultModelId, models, t]);
+  }, [flagOn, region, applied, defaultModelId, models]);
 }
