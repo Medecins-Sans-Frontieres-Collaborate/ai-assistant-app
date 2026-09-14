@@ -80,6 +80,57 @@ describe('ChatPipeline', () => {
       );
     });
 
+    it('calls the stage onTimeout hook on the pre-stage context when it times out', async () => {
+      const slowStage: PipelineStage = {
+        name: 'SlowStage',
+        shouldRun: () => true,
+        execute: async (context) => {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+          return { ...context, processedContent: { metadata: { slow: true } } };
+        },
+        onTimeout: (context) => ({
+          ...context,
+          processedContent: { metadata: { degraded: true } },
+        }),
+      };
+
+      const pipeline = new ChatPipeline([slowStage], { SlowStage: 50 });
+      const result = await pipeline.execute(createTestChatContext());
+
+      expect(result.processedContent?.metadata?.slow).toBeUndefined();
+      expect(result.processedContent?.metadata?.degraded).toBe(true);
+      expect(result.errors).toHaveLength(1);
+    });
+
+    it('a throwing onTimeout hook does not break the pipeline', async () => {
+      const slowStage: PipelineStage = {
+        name: 'SlowStage',
+        shouldRun: () => true,
+        execute: async (context) => {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+          return context;
+        },
+        onTimeout: () => {
+          throw new Error('hook boom');
+        },
+      };
+      const fastStage: PipelineStage = {
+        name: 'FastStage',
+        shouldRun: () => true,
+        execute: async (context) => ({
+          ...context,
+          processedContent: { metadata: { fast: true } },
+        }),
+      };
+
+      const pipeline = new ChatPipeline([slowStage, fastStage], {
+        SlowStage: 50,
+      });
+      const result = await pipeline.execute(createTestChatContext());
+
+      expect(result.processedContent?.metadata?.fast).toBe(true);
+    });
+
     it('should use default timeout for stages without explicit timeout', async () => {
       const customStage: PipelineStage = {
         name: 'CustomStage',
