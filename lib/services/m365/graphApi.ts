@@ -27,6 +27,17 @@ export const GRAPH_V1 = 'https://graph.microsoft.com/v1.0';
 
 export const CONSENT_ERROR_CODE = 'AADSTS65001';
 
+/**
+ * AAD refresh-token failures that mean "sign in again", not "Graph is
+ * broken": expired/revoked refresh tokens (70008, 700082, 700084, 50173),
+ * conditional-access / MFA interaction required (50076, 50078, 50079,
+ * 53003), session expiry by policy (70043, 70044), silent-auth failure
+ * (50058). Anything else stays `graph_error` so a real outage is not
+ * misreported as a disconnected account.
+ */
+const RECONNECT_ERROR_CODES =
+  /AADSTS(70008|70043|70044|50058|50076|50078|50079|50173|53003|500133|700082|700084)\b/;
+
 export type M365ErrorKind =
   | 'not_connected'
   | 'consent_missing'
@@ -59,13 +70,63 @@ export function isValidGraphId(id: string | null | undefined): id is string {
   return typeof id === 'string' && GRAPH_ID_REGEX.test(id);
 }
 
+/**
+ * Opt-in per-request token cache. A Graph access token lives ~60–90
+ * minutes, but an index step or a 50-item probe used to redeem the
+ * refresh token once PER CALL — hundreds of AAD round-trips per job, and
+ * AAD throttles the token endpoint long before Graph throttles the data
+ * calls. A fan-out path wraps itself in {@link withGraphTokenCache}; the
+ * cache is keyed weakly by the request object (nothing outlives the
+ * request) and by the sorted scope set (different scopes are different
+ * tokens). Single-call routes stay uncached — one mint per request is
+ * what they did before, and it keeps token state out of every test that
+ * varies the mint result on a shared request object.
+ */
+const TOKEN_CACHE_TTL_MS = 50 * 60_000;
+type TokenBucket = Map<string, { token: string; at: number }>;
+const tokenCache = new WeakMap<object, TokenBucket>();
+
+function scopeKey(scopes: string[]): string {
+  return [...scopes].sort().join(' ');
+}
+
+/**
+ * Runs `fn` with token caching enabled for `req`. Nested wraps share the
+ * outer bucket; the outermost wrap drops it when done.
+ */
+export async function withGraphTokenCache<T>(
+  req: NextRequest,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const outer = tokenCache.get(req);
+  if (outer) return fn();
+  tokenCache.set(req, new Map());
+  try {
+    return await fn();
+  } finally {
+    tokenCache.delete(req);
+  }
+}
+
+/** Drops a cached token after Graph rejects it (401) — the next call re-mints. */
+export function evictGraphToken(req: NextRequest, scopes: string[]): void {
+  tokenCache.get(req)?.delete(scopeKey(scopes));
+}
+
 /** Mints a delegated Graph token or throws a typed M365Error. */
 export async function mintGraphToken(
   req: NextRequest,
   scopes: string[],
 ): Promise<string> {
+  const key = scopeKey(scopes);
+  const bucket = tokenCache.get(req);
+  const cached = bucket?.get(key);
+  if (cached && Date.now() - cached.at < TOKEN_CACHE_TTL_MS) {
+    return cached.token;
+  }
   const result = await getGraphAccessToken(req, scopes);
   if (result.accessToken) {
+    bucket?.set(key, { token: result.accessToken, at: Date.now() });
     return result.accessToken;
   }
   if (result.error?.includes(CONSENT_ERROR_CODE)) {
@@ -82,6 +143,17 @@ export async function mintGraphToken(
       401,
     );
   }
+  if (
+    result.error &&
+    (RECONNECT_ERROR_CODES.test(result.error) ||
+      /\binvalid_grant\b|\binteraction_required\b/i.test(result.error))
+  ) {
+    throw new M365Error(
+      'Your Microsoft 365 session has expired — sign out and back in to reconnect',
+      'not_connected',
+      401,
+    );
+  }
   throw new M365Error(
     result.error || 'Failed to acquire a Microsoft Graph token',
     'graph_error',
@@ -89,8 +161,54 @@ export async function mintGraphToken(
   );
 }
 
+/** Retry policy for throttled / briefly unavailable Graph responses. */
+const RETRY_STATUSES = new Set([429, 503]);
+const MAX_ATTEMPTS = 3;
+const MAX_RETRY_WAIT_MS = 10_000;
+const DEFAULT_RETRY_WAIT_MS = 2_000;
+
+function retryDelayMs(response: Response, attempt: number): number {
+  const header = Number(response.headers.get('retry-after'));
+  const hinted =
+    Number.isFinite(header) && header > 0
+      ? header * 1000
+      : DEFAULT_RETRY_WAIT_MS * attempt;
+  return Math.min(hinted, MAX_RETRY_WAIT_MS);
+}
+
+const sleep = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms));
+
 /**
- * Fetches a Graph endpoint with a freshly minted delegated token.
+ * `fetch` that retries 429/503 up to MAX_ATTEMPTS, honouring Retry-After
+ * (capped at MAX_RETRY_WAIT_MS so a hostile hint cannot pin a request).
+ * Used for Graph calls and for the pre-authenticated download URLs Graph
+ * hands out, which throttle the same way. Non-retryable statuses and
+ * network errors surface unchanged.
+ */
+export async function fetchWithGraphRetry(
+  url: string,
+  init?: RequestInit,
+): Promise<Response> {
+  let response = await fetch(url, init);
+  for (
+    let attempt = 1;
+    attempt < MAX_ATTEMPTS && RETRY_STATUSES.has(response.status);
+    attempt++
+  ) {
+    const delay = retryDelayMs(response, attempt);
+    // Drain so the connection can be reused.
+    await response.arrayBuffer().catch(() => undefined);
+    await sleep(delay);
+    response = await fetch(url, init);
+  }
+  return response;
+}
+
+/**
+ * Fetches a Graph endpoint with a delegated token (minted once per request
+ * and scope set, see the token cache above). 429/503 are retried with
+ * Retry-After before the error mapping runs.
  * `path` is relative to /v1.0 unless it is already absolute (e.g. an
  * @odata.nextLink or a pre-authenticated download URL).
  */
@@ -102,7 +220,7 @@ export async function graphFetch(
 ): Promise<Response> {
   const token = await mintGraphToken(req, scopes);
   const url = path.startsWith('https://') ? path : `${GRAPH_V1}${path}`;
-  const response = await fetch(url, {
+  const response = await fetchWithGraphRetry(url, {
     ...init,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -111,6 +229,8 @@ export async function graphFetch(
   });
 
   if (!response.ok) {
+    // A rejected token must not be served again from the cache.
+    if (response.status === 401) evictGraphToken(req, scopes);
     throw await graphErrorFromResponse(response);
   }
   return response;
