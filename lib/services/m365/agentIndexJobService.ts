@@ -54,6 +54,7 @@ import {
   reconcileAgentChunks,
 } from '@/lib/services/m365/agentIndexService';
 import { summarizeCounts } from '@/lib/services/m365/agentSourcePlanner';
+import { withGraphTokenCache } from '@/lib/services/m365/graphApi';
 
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -61,7 +62,8 @@ import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 /**
  * Wall-clock budget per step. Well inside the route's maxDuration and any
  * ingress idle timeout; a batch that starts before the deadline runs to
- * completion, so a step can overrun by one slow document.
+ * completion, so a step can overrun by one slow document (batches shrink
+ * to one document near the deadline — see SMALL_BATCH_THRESHOLD_MS).
  */
 export const STEP_TIME_BUDGET_MS = 45_000;
 
@@ -131,11 +133,15 @@ export async function startIndexJob(
   const manifest =
     mode === 'refresh' ? await readM365AgentManifest(storage, agent.id) : null;
   const { index: derived } = await readDerivedIndex(storage, agent.id);
-  const job = await prepareIndexJob(req, agent, userId, userMail, {
-    mode: manifest ? 'refresh' : 'full',
-    manifest,
-    prepared: derived.items,
-  });
+  // Planning walks every source with the admin's token: one mint per
+  // request, not one per Graph page.
+  const job = await withGraphTokenCache(req, () =>
+    prepareIndexJob(req, agent, userId, userMail, {
+      mode: manifest ? 'refresh' : 'full',
+      manifest,
+      prepared: derived.items,
+    }),
+  );
   // Replace whatever was there (terminal or interrupted). A concurrent
   // start loses the CAS and surfaces as a conflict to its caller.
   await writeIndexJob(storage, job, current?.etag ?? null);
@@ -197,6 +203,72 @@ function recordOutcomes(
   };
 }
 
+const SKIP_REASON_TEXT: Record<string, string> = {
+  unsupported: 'unsupported file type',
+  tooLarge: 'file too large',
+  disallowedType: 'file type not allowed',
+  malware: 'flagged as malware by Microsoft',
+  zeroBytes: 'empty file',
+  excluded: 'excluded by the subfolder selection',
+  typeFilter: 'excluded by the file-type filter',
+};
+
+const SUPPORTED_ALTERNATIVES: Record<string, string> = {
+  xlsm: '.xlsx',
+  docm: '.docx',
+  pptm: '.pptx',
+  ppsx: '.pptx',
+  odp: '.pptx',
+  ods: '.xlsx',
+  pages: '.docx',
+  numbers: '.xlsx',
+  key: '.pptx',
+  msg: '.pdf',
+  eml: '.pdf',
+  one: '.pdf',
+};
+
+/**
+ * Why a source produced no indexable document — in words an admin can act
+ * on. A single skipped file names its type; a folder gives the counts.
+ * Exported for tests.
+ */
+export function describeEmptySource(
+  source: M365Agent['sources'][number],
+  items: M365ManifestItem[],
+): string {
+  if (source.kind === 'file' && items.length === 1) {
+    const [item] = items;
+    const ext = item.name.includes('.')
+      ? item.name.slice(item.name.lastIndexOf('.') + 1).toLowerCase()
+      : '';
+    if (item.tier === 'needsPreparation') {
+      return `${item.name} needs preparation before it can be indexed — use Prepare in the source details`;
+    }
+    const reason = SKIP_REASON_TEXT[item.reason ?? ''] ?? 'not indexable';
+    if (item.reason === 'unsupported' && ext) {
+      const alternative = SUPPORTED_ALTERNATIVES[ext];
+      return alternative
+        ? `Unsupported file type (.${ext}) — save it as ${alternative} and index again`
+        : `Unsupported file type (.${ext})`;
+    }
+    if (item.reason === 'unsupported') {
+      return 'Unsupported file type (no extension)';
+    }
+    return `${item.name}: ${reason}`;
+  }
+  const counts = summarizeCounts(items);
+  const parts: string[] = [];
+  if (counts.skipped > 0) parts.push(`${counts.skipped} skipped`);
+  if (counts.needsPreparation > 0) {
+    parts.push(`${counts.needsPreparation} need preparation`);
+  }
+  const detail = parts.length > 0 ? ` (${parts.join(', ')})` : '';
+  return items.length === 0
+    ? 'The folder contains no files'
+    : `No supported files in this source${detail}`;
+}
+
 /** Stamps per-source outcomes onto the agent record after a finished job. */
 function applyJobToAgent(
   agent: M365Agent,
@@ -215,16 +287,34 @@ function applyJobToAgent(
       const attempted = counts.indexable;
       const failed = (counts.failed ?? 0) + (counts.missing ?? 0);
       const allFailed = attempted > 0 && failed === attempted;
+      // A source whose plan found nothing indexable (single unsupported
+      // file, folder of skipped types) is an error the admin must act on,
+      // not a successful run with zero chunks — "indexed" here used to
+      // stamp lastIndexedAt and hide the reason behind a grey chip.
+      // (finalize has already mapped a drained `pending` source to
+      // `indexed`, so the check is on "not otherwise failed".)
+      const nothingToIndex =
+        jobSource.status !== 'missing' &&
+        jobSource.status !== 'error' &&
+        attempted === 0;
       const status =
         jobSource.status === 'missing'
           ? 'missing'
-          : jobSource.status === 'error' || allFailed
+          : jobSource.status === 'error' || allFailed || nothingToIndex
             ? 'error'
             : 'indexed';
       const error =
-        jobSource.error ?? jobSource.items.find((i) => i.error)?.error;
+        jobSource.error ??
+        (nothingToIndex
+          ? describeEmptySource(source, jobSource.items)
+          : jobSource.items.find((i) => i.error)?.error);
+      // Drop a stale timestamp on a source that no longer serves this run's
+      // content; `lastIndexedAt` must mean "this source's files are in the
+      // index as of then".
+      const rest = { ...source };
+      delete rest.lastIndexedAt;
       return {
-        ...source,
+        ...rest,
         status,
         indexedChunks: jobSource.items.reduce(
           (n, i) => n + (i.indexedChunks ?? 0),
@@ -308,12 +398,33 @@ async function finalizeIndexJob(
  * progress. Safe to call from several browsers at once: claims and
  * outcomes go through CAS, so two steppers simply share the work.
  */
-export async function stepIndexJob(
+export function stepIndexJob(
   req: NextRequest,
   storage: BlobStorage,
   agentId: string,
   jobId: string,
   budgetMs = STEP_TIME_BUDGET_MS,
+): Promise<IndexJobSummary> {
+  // A step downloads several documents: mint the token once for all of them.
+  return withGraphTokenCache(req, () =>
+    runIndexJobStep(req, storage, agentId, jobId, budgetMs),
+  );
+}
+
+/**
+ * When the remaining step budget is below this, the next batch is a
+ * single document: a full batch of three slow files could otherwise push
+ * the step past the route's maxDuration (the client would see a dead
+ * request while the server keeps working).
+ */
+export const SMALL_BATCH_THRESHOLD_MS = 15_000;
+
+async function runIndexJobStep(
+  req: NextRequest,
+  storage: BlobStorage,
+  agentId: string,
+  jobId: string,
+  budgetMs: number,
 ): Promise<IndexJobSummary> {
   const startedAt = Date.now();
 
@@ -328,15 +439,25 @@ export async function stepIndexJob(
   if (isTerminalIndexJob(current.job)) return summarizeIndexJob(current.job);
 
   let job = current.job;
+  let batches = 0;
   try {
     // At least one batch per step, then as many as the budget allows.
     do {
       // The mutator may run more than once (CAS retry); the claims from
       // the invocation whose write landed are the ones this step owns.
       let mine: ClaimedItem[] = [];
+      // The first batch is always full (a step must make progress even on
+      // a tiny budget); later batches shrink to one document when little
+      // budget is left, so the step cannot overrun by three slow files.
+      const remainingMs = budgetMs - (Date.now() - startedAt);
+      const batchSize =
+        batches === 0 || remainingMs >= SMALL_BATCH_THRESHOLD_MS
+          ? DOCUMENT_INDEX_CONCURRENCY
+          : 1;
+      batches += 1;
       const claim = await mutateIndexJob(storage, agentId, (latest) => {
         if (latest.jobId !== jobId || isTerminalIndexJob(latest)) return null;
-        const result = claimItems(latest, DOCUMENT_INDEX_CONCURRENCY);
+        const result = claimItems(latest, batchSize);
         mine = result.claimed;
         return result.job;
       });
