@@ -1142,7 +1142,9 @@ export async function indexJobItem(
       // Auto-OCR: only within the run's page budget and the per-file cap.
       let pages: number;
       try {
-        pages = await countPdfPages(pdfBytes.buffer);
+        pages = await countPdfPages(pdfBytes.buffer, {
+          signal: options.signal,
+        });
       } catch (countError) {
         console.warn(
           `[m365-agents] could not count pages for ${sanitizeForLog(item.itemId)}; leaving as noText: ${sanitizeForLog(countError)}`,

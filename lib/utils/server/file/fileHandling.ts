@@ -287,7 +287,10 @@ function usableText(text: string): boolean {
  * Number of pages in a PDF held in memory — pdfjs first (no temp file),
  * `pdfinfo` as the fallback when pdfjs refuses the structure.
  */
-export async function countPdfPages(buffer: Buffer): Promise<number> {
+export async function countPdfPages(
+  buffer: Buffer,
+  options?: ExtractionOptions,
+): Promise<number> {
   try {
     const pdfjsLib = await configurePdfJs();
     const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buffer) })
@@ -301,7 +304,7 @@ export async function countPdfPages(buffer: Buffer): Promise<number> {
   }
   // Piped over stdin (`pdfinfo -`): the bytes came off the network and never
   // need to touch the filesystem for a page count.
-  const { stdout } = await execWithStdin('pdfinfo', ['-'], buffer);
+  const { stdout } = await execWithStdin('pdfinfo', ['-'], buffer, options);
   const match = /^Pages:\s+(\d+)/m.exec(stdout);
   if (!match) throw new Error('pdfinfo reported no page count');
   return Number(match[1]);
