@@ -95,35 +95,55 @@ export async function downloadBlob(
 }
 
 /**
- * Conditional JSON write. `ifMatchEtag` null → creation only
- * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}.
- * Returns the new ETag.
+ * Unconditional write marker for {@link uploadJson}: last writer wins. For
+ * DERIVED records that are rebuilt wholesale by one writer (an index run's
+ * manifest, a job record whose stored copy is unreadable) — never for
+ * admin-edited config, which must stay compare-and-swap.
+ */
+export const OVERWRITE_BLOB: unique symbol = Symbol('overwrite-blob');
+
+/**
+ * `string` → update only if the ETag still matches; `null` → create only
+ * (`If-None-Match: *`); {@link OVERWRITE_BLOB} → unconditional.
+ */
+export type UploadCondition = string | null | typeof OVERWRITE_BLOB;
+
+/**
+ * Conditional JSON write (see {@link UploadCondition}). A failed
+ * precondition — 412 on an update, or Azure's 409 `BlobAlreadyExists` on a
+ * create — surfaces as {@link AgentAccessConflictError}. Returns the new
+ * ETag.
  */
 export async function uploadJson(
   storage: BlobStorage,
   blobPath: string,
   payload: unknown,
-  ifMatchEtag: string | null,
+  condition: UploadCondition,
   label: string,
   options: DownloadBlobOptions = {},
 ): Promise<string> {
   const client = storage.getBlockBlobClient(blobPath);
   const content = Buffer.from(JSON.stringify(payload), 'utf8');
+  const conditions =
+    condition === OVERWRITE_BLOB
+      ? undefined
+      : condition
+        ? { ifMatch: condition }
+        : { ifNoneMatch: '*' };
   try {
     const response = await withAzureRetry(
       () =>
         client.upload(content, content.length, {
           blobHTTPHeaders: { blobContentType: 'application/json' },
-          conditions: ifMatchEtag
-            ? { ifMatch: ifMatchEtag }
-            : { ifNoneMatch: '*' },
+          ...(conditions ? { conditions } : {}),
           ...(options.abortSignal ? { abortSignal: options.abortSignal } : {}),
         }),
       { label },
     );
     return response.etag ?? '';
   } catch (error) {
-    if (statusCodeOf(error) === 412) {
+    const status = statusCodeOf(error);
+    if (status === 412 || (status === 409 && condition === null)) {
       throw new AgentAccessConflictError();
     }
     throw error;
