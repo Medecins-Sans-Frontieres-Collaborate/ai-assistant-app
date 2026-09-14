@@ -1079,15 +1079,14 @@ export async function previewRefresh(
   const planned = await planJobSources(req, agent, userId, manifest, prepared, {
     enforceCaps: false,
   });
-  const totalDocuments = planned
-    .flatMap((s) => s.items)
-    .filter((i) => i.tier === 'indexable').length;
-  const maxDocuments = effectiveMaxDocuments(agent.maxDocumentsOverride);
-  const overCap =
-    totalDocuments > maxDocuments
-      ? { totalDocuments, maxDocuments }
-      : undefined;
-  const truncated = planned.some((s) => s.truncated) || undefined;
+  const verdict = assessPlannedSources(planned, agent);
+  const overCap = verdict.overCap
+    ? {
+        totalDocuments: verdict.totalDocuments,
+        maxDocuments: verdict.maxDocuments,
+      }
+    : undefined;
+  const truncated = verdict.truncatedSourceId !== undefined || undefined;
   const sources = planned.map(
     (s): RefreshPreviewSource => ({
       sourceId: s.sourceId,
