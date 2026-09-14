@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
+import { useEuDefaultModelSwitch } from '@/client/hooks/settings/useEuDefaultModelSwitch';
 import { useModelsQuery } from '@/client/hooks/settings/useModelsQuery';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
@@ -105,6 +106,10 @@ export function AppInitializer() {
   // focus and quota denials — see useModelsQuery. Requires the
   // QueryClientProvider AppProviders wraps ChatShell (and so this) in.
   useModelsQuery();
+
+  // Temporary (flag `euDefaultModelSwitch`): one-time move of a persisted
+  // gpt-5.2-chat default to gpt-5.4 for EU users. Remove with the flag.
+  useEuDefaultModelSwitch();
 
   // Publishes the admin's resolved feature.upload.megabytesPerFile onto
   // FileUploadService (docs/LIMITS_USER_FACING_UX.md §7.4/§3e) so every
