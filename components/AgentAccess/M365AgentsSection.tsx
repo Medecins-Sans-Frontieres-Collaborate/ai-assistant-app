@@ -1,7 +1,10 @@
 'use client';
 
 import {
+  IconAlertTriangle,
   IconBrandOnedrive,
+  IconChevronDown,
+  IconChevronRight,
   IconFile,
   IconFolder,
   IconPlayerPause,
@@ -58,8 +61,217 @@ import {
 } from './types';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { useUIStore } from '@/client/stores/uiStore';
+import { M365_AGENT_ACCEPT_EXTENSIONS } from '@/lib/constants/m365AgentFileTypes';
 
 type M365AgentRecord = AdminStoredM365Agent['agent'];
+
+/**
+ * The two Graph failures an admin can only fix outside this page: no
+ * usable session (refresh token gone — sign out and back in) or the tenant
+ * consent gap. Every plan/index/step response can carry them; the section
+ * turns them into one persistent notice instead of a bare toast.
+ */
+type M365SessionProblem = 'not_connected' | 'consent_missing';
+
+function m365SessionProblemFromCode(
+  code: string | undefined,
+): M365SessionProblem | null {
+  if (code === 'M365_NOT_CONNECTED') return 'not_connected';
+  if (code === 'M365_CONSENT_MISSING') return 'consent_missing';
+  return null;
+}
+
+/** Error shape thrown by the fetch helpers below (status + API code). */
+interface ApiCallError extends Error {
+  code?: string;
+  status?: number;
+}
+
+function apiCallError(
+  message: string,
+  status: number,
+  code?: string,
+): ApiCallError {
+  const error = new Error(message) as ApiCallError;
+  error.status = status;
+  error.code = code;
+  return error;
+}
+
+/**
+ * A step/status call worth retrying: the browser lost the network, the
+ * route timed out or the ingress answered 5xx, or Graph throttled (429).
+ * 4xx other than 429 are decisions (not connected, not authorised, job
+ * gone) and must surface immediately.
+ */
+function isRetryableStepError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  const status = (error as ApiCallError).status;
+  if (status === undefined) return true; // fetch threw: network/abort
+  return status === 429 || status >= 500;
+}
+
+/** Retry schedule for a lost step call (design §4: the browser is the runner). */
+const STEP_RETRY_DELAYS_MS = [2000, 4000, 8000];
+
+/**
+ * Amber notice for a session/consent problem with the same "open
+ * Settings › Connections" exit the file picker uses (there is no section
+ * deep link; the label names the section).
+ */
+const M365SessionProblemNotice: FC<{
+  problem: M365SessionProblem | 'disconnected';
+  detail?: string;
+}> = ({ problem, detail }) => {
+  const t = useTranslations('agentAccess');
+  const setIsSettingsOpen = useUIStore((s) => s.setIsSettingsOpen);
+  const message =
+    problem === 'not_connected'
+      ? t('m365SessionNotConnected')
+      : problem === 'consent_missing'
+        ? t('m365SessionConsentMissing')
+        : t('m365SessionDisconnected');
+  return (
+    <div
+      role="status"
+      className="mb-3 flex flex-wrap items-center gap-2 rounded-md border border-amber-300 bg-amber-50 p-2 text-xs text-amber-800 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-300"
+    >
+      <IconAlertTriangle size={14} className="shrink-0" />
+      <span className="min-w-0 flex-1">
+        {message}
+        {detail && (
+          <span className="block text-amber-700/80 dark:text-amber-400/80">
+            {detail}
+          </span>
+        )}
+      </span>
+      <button
+        type="button"
+        onClick={() => setIsSettingsOpen(true)}
+        className="shrink-0 rounded-md border border-amber-300 px-2 py-0.5 font-medium hover:bg-amber-100 dark:border-amber-700 dark:hover:bg-amber-900/40"
+      >
+        {t('m365OpenConnections')}
+      </button>
+    </div>
+  );
+};
+
+/**
+ * "N files need attention" on an agent row: the per-file reasons from the
+ * last run (failed / no text / skipped) without opening the editor. The
+ * manifest is fetched only when expanded — one request per row would not
+ * scale, and most rows never need it.
+ */
+const M365AttentionFiles: FC<{ agentId: string; count: number }> = ({
+  agentId,
+  count,
+}) => {
+  const t = useTranslations('agentAccess');
+  const [expanded, setExpanded] = useState(false);
+  const manifestQuery = useQuery<M365AgentManifest | null>({
+    queryKey: ['agent-access-m365-agent-manifest', agentId],
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/agent-access/m365-agents/manifest?id=${encodeURIComponent(agentId)}`,
+      );
+      if (!response.ok) throw new Error(`manifest ${response.status}`);
+      const data = unwrapApiData<{ manifest: M365AgentManifest | null }>(
+        await response.json(),
+      );
+      return data?.manifest ?? null;
+    },
+    enabled: expanded,
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
+  const rows = useMemo(() => {
+    const out: { key: string; name: string; note: string }[] = [];
+    for (const source of manifestQuery.data?.sources ?? []) {
+      for (const item of source.items) {
+        const name = item.path ? `${item.path}/${item.name}` : item.name;
+        if (item.status === 'failed' || item.status === 'missing') {
+          out.push({
+            key: `${source.sourceId}:${item.itemId}`,
+            name,
+            note: item.error
+              ? `${t(`m365ItemStatus.${item.status}`)} — ${item.error}`
+              : t(`m365ItemStatus.${item.status}`),
+          });
+        } else if (item.status === 'noText') {
+          out.push({
+            key: `${source.sourceId}:${item.itemId}`,
+            name,
+            note: item.name.toLowerCase().endsWith('.pdf')
+              ? t('m365ItemNoTextOcr')
+              : t('m365ItemStatus.noText'),
+          });
+        } else if (item.tier === 'skipped') {
+          out.push({
+            key: `${source.sourceId}:${item.itemId}`,
+            name,
+            note: t(`m365SkipReason.${item.reason ?? 'unsupported'}`),
+          });
+        }
+      }
+    }
+    return out;
+  }, [manifestQuery.data, t]);
+  return (
+    <div className="text-xs">
+      <button
+        type="button"
+        onClick={() => setExpanded((e) => !e)}
+        aria-expanded={expanded}
+        className="flex items-center gap-0.5 text-amber-700 hover:underline dark:text-amber-400"
+      >
+        {expanded ? (
+          <IconChevronDown size={12} />
+        ) : (
+          <IconChevronRight size={12} />
+        )}
+        {t('m365AgentAttentionFiles', { count })}
+      </button>
+      {expanded && (
+        <div className="mt-1 rounded-md border border-gray-200 p-2 dark:border-gray-700">
+          {manifestQuery.isLoading ? (
+            <p className="text-gray-500 dark:text-gray-400">
+              {t('m365AgentAttentionLoading')}
+            </p>
+          ) : manifestQuery.isError ? (
+            <p className="text-red-600 dark:text-red-400">
+              {t('m365AgentAttentionFailed')}
+            </p>
+          ) : (
+            <ul className="max-h-48 space-y-0.5 overflow-y-auto">
+              {rows.map((row) => (
+                <li
+                  key={row.key}
+                  className="flex items-center gap-2 text-gray-800 dark:text-gray-200"
+                >
+                  <span className="min-w-0 flex-1 truncate" title={row.name}>
+                    {row.name}
+                  </span>
+                  <span
+                    className="shrink-0 text-red-600 dark:text-red-400"
+                    title={row.note}
+                  >
+                    {row.note}
+                  </span>
+                </li>
+              ))}
+              {rows.length === 0 && (
+                <li className="text-gray-500 dark:text-gray-400">
+                  {t('m365AgentAttentionNone')}
+                </li>
+              )}
+            </ul>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const AGENT_MODEL_ID_PREFIXES = ['foundry-', 'org-', 'custom-', 'byom-'];
 /**
@@ -86,15 +298,46 @@ async function readJobResponse(
 ): Promise<ClientIndexJobSummary> {
   const body = await response.json().catch(() => null);
   if (!response.ok) {
-    const error = new Error(
+    throw apiCallError(
       body?.error || `Indexing request failed (${response.status})`,
-    ) as Error & { code?: string };
-    error.code = body?.code;
-    throw error;
+      response.status,
+      body?.code,
+    );
   }
   const job = unwrapApiData<{ job: ClientIndexJobSummary | null }>(body)?.job;
   if (!job) throw new Error('No job in response');
   return job;
+}
+
+/**
+ * One step call with the retry schedule above. Gives up on the first
+ * non-retryable error, or after the schedule is exhausted — the caller
+ * then tells the admin the job is still on the server, not "failed".
+ */
+async function stepWithRetry(
+  agentId: string,
+  jobId: string,
+  isCancelled: () => boolean,
+): Promise<ClientIndexJobSummary> {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      const response = await fetch('/api/agent-access/m365-agents/index/step', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: agentId, jobId }),
+      });
+      return await readJobResponse(response);
+    } catch (error) {
+      if (
+        !isRetryableStepError(error) ||
+        attempt >= STEP_RETRY_DELAYS_MS.length ||
+        isCancelled()
+      ) {
+        throw error;
+      }
+      await sleep(STEP_RETRY_DELAYS_MS[attempt]);
+    }
+  }
 }
 
 function isServerKnownModelId(modelId: string): boolean {
@@ -177,6 +420,10 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   const t = useTranslations('agentAccess');
   const models = useSettingsStore((s) => s.models);
   const userRegion = useSettingsStore((s) => s.userRegion);
+  // Client-side off switch (Settings › Connections). Planning and indexing
+  // run with the admin's own Graph token, so a disconnected admin can edit
+  // metadata but cannot add or scan sources.
+  const m365Connected = useSettingsStore((s) => s.m365Connected);
 
   const [name, setName] = useState(existing?.agent.name ?? '');
   const [description, setDescription] = useState(
@@ -196,6 +443,14 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   const [plan, setPlan] = useState<ClientAgentPlan | null>(null);
   const [planLoading, setPlanLoading] = useState(false);
   const [planError, setPlanError] = useState<string | null>(null);
+  /**
+   * A plan failure the admin must fix outside the editor (no M365 session /
+   * consent gap). Blocks Save: the server skips the cap check on a Graph
+   * failure, so saving now would only defer the same error to Index.
+   */
+  const [planProblem, setPlanProblem] = useState<M365SessionProblem | null>(
+    null,
+  );
   const planRequest = useRef(0);
   /** Bumped when a file is prepared so the plan re-runs unchanged sources. */
   const [planVersion, setPlanVersion] = useState(0);
@@ -258,6 +513,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     if (sources.length === 0) {
       setPlan(null);
       setPlanError(null);
+      setPlanProblem(null);
       return;
     }
     const requestId = ++planRequest.current;
@@ -275,15 +531,23 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
         if (requestId !== planRequest.current) return;
         if (!response.ok) {
           const body = await response.json().catch(() => null);
+          // A failed re-plan must not leave the previous selection's cap
+          // numbers on screen next to the error.
+          setPlan(null);
+          setPlanProblem(m365SessionProblemFromCode(body?.code));
           setPlanError(body?.error || t('m365PlanFailed'));
           return;
         }
         const data = unwrapApiData<ClientAgentPlan>(await response.json());
         setPlan(data ?? null);
         setPlanError(null);
+        setPlanProblem(null);
       } catch {
-        if (requestId === planRequest.current)
+        if (requestId === planRequest.current) {
+          setPlan(null);
+          setPlanProblem(null);
           setPlanError(t('m365PlanFailed'));
+        }
       } finally {
         if (requestId === planRequest.current) setPlanLoading(false);
       }
@@ -374,7 +638,20 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     sources.length > 0 &&
     !isSaving &&
     !overCap &&
+    planProblem === null &&
     conflict === null;
+
+  /** Unsaved edits relative to the stored record (new agents: anything typed). */
+  const isDirty = existing
+    ? name.trim() !== existing.agent.name ||
+      description.trim() !== existing.agent.description ||
+      systemPrompt.trim() !== existing.agent.systemPrompt ||
+      (chatModelId || null) !== (existing.agent.chatModelId ?? null) ||
+      JSON.stringify(sources.map(toSourcePayload)) !==
+        JSON.stringify(
+          existing.agent.sources.map(toEditorSource).map(toSourcePayload),
+        )
+    : name.trim().length > 0 || sources.length > 0;
 
   const sourcesSummary = (list: { title: string }[]) =>
     list.map((s) => s.title).join(', ');
@@ -605,7 +882,21 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                 {changeTotal > 0 && onStartIndex && (
                   <button
                     type="button"
+                    disabled={!m365Connected}
+                    title={
+                      !m365Connected
+                        ? t('m365ActionNeedsConnection')
+                        : undefined
+                    }
                     onClick={() => {
+                      // Refresh runs against the STORED record and closes
+                      // the editor — never silently drop a draft.
+                      if (
+                        isDirty &&
+                        !window.confirm(t('m365AgentDiscardEditsConfirm'))
+                      ) {
+                        return;
+                      }
                       onStartIndex('refresh');
                       onCancel();
                     }}
@@ -623,12 +914,21 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
         <div>
           <div className="mb-1 flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-              {t('m365AgentSources')} ({sources.length}/{maxSources})
+              {t('m365AgentSources')} ({sources.length})
             </span>
             <button
               type="button"
               onClick={() => setPickerOpen(true)}
-              disabled={sources.length >= maxSources}
+              // The cap is per DOCUMENT (the meter below); the source count
+              // is only a coarse guard against pathological lists.
+              disabled={sources.length >= maxSources || !m365Connected}
+              title={
+                !m365Connected
+                  ? t('m365ActionNeedsConnection')
+                  : sources.length >= maxSources
+                    ? t('m365AgentTooManySources', { max: maxSources })
+                    : undefined
+              }
               className="flex items-center gap-1 rounded-md border border-neutral-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-100 disabled:opacity-40 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
             >
               <IconPlus size={14} /> {t('m365AgentAddSource')}
@@ -637,6 +937,15 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
             {t('m365AgentSourcesHelp')}
           </p>
+          {!m365Connected && (
+            <M365SessionProblemNotice problem="disconnected" />
+          )}
+          {planProblem && (
+            <M365SessionProblemNotice
+              problem={planProblem}
+              detail={planError ?? undefined}
+            />
+          )}
           {sources.length > 0 && (
             <div
               className={`mb-2 rounded-md px-2 py-1 text-xs ${
@@ -671,9 +980,12 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                   {t('m365CapOverBytes', { max: formatBytes(maxBytes) })}
                 </p>
               )}
-              {planError && (
+              {planError && !planProblem && (
                 <p className="mt-1 text-amber-700 dark:text-amber-400">
                   {planError}
+                  <span className="block text-gray-600 dark:text-gray-400">
+                    {t('m365PlanFailedSaveAnyway')}
+                  </span>
                 </p>
               )}
             </div>
@@ -811,6 +1123,9 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
         isOpen={pickerOpen}
         onClose={() => setPickerOpen(false)}
         onPick={addSource}
+        // Files the index run cannot use stay visible but inert, so an
+        // admin never adds a source that can only end up "skipped".
+        acceptExtensions={M365_AGENT_ACCEPT_EXTENSIONS}
       />
     </div>
   );
@@ -835,6 +1150,22 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   const t = useTranslations('agentAccess');
   const queryClient = useQueryClient();
   const { agentsEnabled } = useM365Enabled();
+  const m365Connected = useSettingsStore((s) => s.m365Connected);
+  /**
+   * Last session/consent failure reported by an index/step/status call —
+   * shown as one persistent notice above the list until a call succeeds.
+   */
+  const [sessionProblem, setSessionProblem] = useState<{
+    problem: M365SessionProblem;
+    detail?: string;
+  } | null>(null);
+  /**
+   * Agents whose job reached a terminal state in THIS tab: the row keeps a
+   * visibility verdict ("now visible" / "still hidden") after the toast is
+   * gone, computed from the refreshed record so it reflects what discovery
+   * will actually serve.
+   */
+  const [finishedIds, setFinishedIds] = useState<Set<string>>(new Set());
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingRuleKey, setEditingRuleKey] = useState<string | null>(null);
@@ -925,6 +1256,26 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
     }
   };
 
+  /**
+   * Turns a failed index/step/status call into the right signal: a
+   * session/consent problem becomes the persistent notice, anything else a
+   * toast. Returns true when the error was a session problem.
+   */
+  const reportCallError = (error: unknown, fallbackKey: string): boolean => {
+    const code =
+      error instanceof Error ? (error as ApiCallError).code : undefined;
+    const problem = m365SessionProblemFromCode(code);
+    if (problem) {
+      setSessionProblem({
+        problem,
+        detail: error instanceof Error ? error.message : undefined,
+      });
+      return true;
+    }
+    toast.error(error instanceof Error ? error.message : t(fallbackKey));
+    return false;
+  };
+
   const stepUntilDone = async (agentId: string, jobId: string) => {
     if (drivingRef.current.has(agentId)) return;
     setDriving(agentId, true);
@@ -932,18 +1283,16 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
       let lastDone = -1;
       for (;;) {
         if (unmountedRef.current) return;
-        const response = await fetch(
-          '/api/agent-access/m365-agents/index/step',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: agentId, jobId }),
-          },
+        const job = await stepWithRetry(
+          agentId,
+          jobId,
+          () => unmountedRef.current,
         );
-        const job = await readJobResponse(response);
+        setSessionProblem(null);
         setJobs((prev) => ({ ...prev, [agentId]: job }));
         if (job.status !== 'running') {
           reportTerminal(job);
+          setFinishedIds((prev) => new Set(prev).add(agentId));
           invalidate();
           return;
         }
@@ -951,9 +1300,14 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
         lastDone = job.done;
       }
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : t('m365AgentIndexFailed'),
-      );
+      if (unmountedRef.current) return;
+      if (isRetryableStepError(error)) {
+        // Retries exhausted: the job record is on the server with its
+        // outcomes so far — say so, and leave Resume as the way back.
+        toast.error(t('m365AgentIndexStepLost'));
+      } else {
+        reportCallError(error, 'm365AgentIndexFailed');
+      }
       invalidate();
     } finally {
       setDriving(agentId, false);
@@ -984,13 +1338,18 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
           ),
         );
       }
+      setSessionProblem(null);
+      setFinishedIds((prev) => {
+        if (!prev.has(agentId)) return prev;
+        const next = new Set(prev);
+        next.delete(agentId);
+        return next;
+      });
       setJobs((prev) => ({ ...prev, [agentId]: job }));
       invalidate();
       if (job.status === 'running') await stepUntilDone(agentId, job.jobId);
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : t('m365AgentIndexFailed'),
-      );
+      reportCallError(error, 'm365AgentIndexFailed');
       invalidate();
     }
   };
@@ -1009,9 +1368,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
       setJobs((prev) => ({ ...prev, [agentId]: job }));
       reportTerminal(job);
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : t('m365AgentIndexFailed'),
-      );
+      reportCallError(error, 'm365AgentIndexFailed');
     }
     invalidate();
   };
@@ -1086,6 +1443,19 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
           {t('m365AgentsUnavailableWarning')}
         </p>
       )}
+      {/* Indexing runs with THIS admin's Graph token: a disconnected account
+          or a dead session blocks every source action, so say it once, up
+          front, with the way out — not as a toast after the click. */}
+      {!m365Connected ? (
+        <M365SessionProblemNotice problem="disconnected" />
+      ) : (
+        sessionProblem && (
+          <M365SessionProblemNotice
+            problem={sessionProblem.problem}
+            detail={sessionProblem.detail}
+          />
+        )
+      )}
 
       <ShowHiddenToggle
         hiddenCount={hiddenCount}
@@ -1116,10 +1486,27 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
             const emptySources = sources.filter(
               (s) => s.status === 'indexed' && (s.indexedChunks ?? 0) === 0,
             ).length;
-            const firstSourceError = sources.find((s) => s.error)?.error;
+            // Every source-level error, with its source, not just the
+            // first one — an admin with 6 files needs to know WHICH 2.
+            const sourceErrors = sources
+              .filter((s) => !!s.error)
+              .map((s) => ({ title: s.title, error: s.error as string }));
             const job = jobs[entry.agent.id];
             const jobActive = job?.status === 'running';
             const driving = drivingIds.has(entry.agent.id);
+            // Verdict after a job this tab finished, once the refreshed
+            // record is in (a stale record would flash the wrong answer).
+            const finishedVerdict =
+              finishedIds.has(entry.agent.id) &&
+              !jobActive &&
+              !agentsQuery.isFetching
+                ? contentSources > 0
+                  ? 'visible'
+                  : 'hidden'
+                : null;
+            const actionDisabledTitle = !m365Connected
+              ? t('m365ActionNeedsConnection')
+              : undefined;
             // Refresh needs a manifest to diff against; a source that was
             // ever indexed under the planner implies one.
             const hasBeenIndexed = sources.some((s) => !!s.counts);
@@ -1245,13 +1632,35 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         })}
                       </p>
                     )}
-                    {firstSourceError && (
+                    {finishedVerdict === 'visible' && (
                       <p
-                        className="truncate text-xs text-red-600 dark:text-red-400"
-                        title={firstSourceError}
+                        role="status"
+                        className="text-xs font-medium text-green-700 dark:text-green-400"
                       >
-                        {firstSourceError}
+                        {t('m365AgentRunVisible')}
                       </p>
+                    )}
+                    {finishedVerdict === 'hidden' && (
+                      <p
+                        role="status"
+                        className="text-xs font-medium text-red-700 dark:text-red-400"
+                      >
+                        {t('m365AgentRunHidden')}
+                      </p>
+                    )}
+                    {sourceErrors.length > 0 && (
+                      <ul className="text-xs text-red-600 dark:text-red-400">
+                        {sourceErrors.map(({ title, error }) => (
+                          <li
+                            key={`${title}:${error}`}
+                            className="truncate"
+                            title={`${title}: ${error}`}
+                          >
+                            <span className="font-medium">{title}</span>:{' '}
+                            {error}
+                          </li>
+                        ))}
+                      </ul>
                     )}
                     {emptySources > 0 && (
                       <p className="text-xs text-amber-700 dark:text-amber-400">
@@ -1260,6 +1669,18 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         })}
                       </p>
                     )}
+                    {docCounts.present &&
+                      docCounts.failed + docCounts.noText + docCounts.skipped >
+                        0 && (
+                        <M365AttentionFiles
+                          agentId={entry.agent.id}
+                          count={
+                            docCounts.failed +
+                            docCounts.noText +
+                            docCounts.skipped
+                          }
+                        />
+                      )}
                   </div>
                   <span
                     className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
@@ -1284,8 +1705,11 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                           onClick={() =>
                             void stepUntilDone(entry.agent.id, job!.jobId)
                           }
-                          className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                          title={t('m365AgentIndexResumeHint')}
+                          disabled={!m365Connected}
+                          className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                          title={
+                            actionDisabledTitle ?? t('m365AgentIndexResumeHint')
+                          }
                         >
                           <IconRefresh size={14} />
                           {t('m365AgentIndexResume')}
@@ -1309,8 +1733,9 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         onClick={() =>
                           void startIndex(entry.agent.id, 'refresh')
                         }
-                        className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                        title={t('m365AgentRefreshHint')}
+                        disabled={!m365Connected}
+                        className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                        title={actionDisabledTitle ?? t('m365AgentRefreshHint')}
                       >
                         <IconRefresh size={14} />
                         {t('m365AgentRefresh')}
@@ -1318,8 +1743,9 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                       <button
                         type="button"
                         onClick={() => void startIndex(entry.agent.id, 'full')}
-                        className="shrink-0 rounded-md px-1.5 py-1 text-xs text-gray-500 hover:bg-gray-100 hover:text-black dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
-                        title={t('m365AgentIndexHint')}
+                        disabled={!m365Connected}
+                        className="shrink-0 rounded-md px-1.5 py-1 text-xs text-gray-500 hover:bg-gray-100 hover:text-black disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                        title={actionDisabledTitle ?? t('m365AgentIndexHint')}
                       >
                         {t('m365AgentReindexAll')}
                       </button>
@@ -1328,8 +1754,9 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                     <button
                       type="button"
                       onClick={() => void startIndex(entry.agent.id, 'full')}
+                      disabled={!m365Connected}
                       className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                      title={t('m365AgentIndexHint')}
+                      title={actionDisabledTitle ?? t('m365AgentIndexHint')}
                     >
                       <IconRefresh size={14} />
                       {t('m365AgentIndex')}
