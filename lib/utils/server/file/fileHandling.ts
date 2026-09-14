@@ -257,7 +257,7 @@ export class PdfExtractionError extends Error {
 }
 
 const GOOD_TEXT_CHARS =
-  /[\p{L}\p{N}\p{M}.,;:!?'"()\[\]{}\-–—/\\%&+*=<>@#$€£§°_|~^`«»‘’“”•·]/u;
+  /[\p{L}\p{N}\p{M}.,;:!?'"()[\]{}\-–—/\\%&+*=<>@#$€£§°_|~^`«»‘’“”•·]/u;
 
 /**
  * Text-quality gate for extractor output. PDFs whose fonts lack a
