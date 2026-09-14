@@ -39,6 +39,7 @@ import {
   MAX_M365_SOURCE_FILE_BYTES,
   RefreshSourcePlan,
   SourcePlan,
+  effectiveMaxDocuments,
   extensionOf,
   planSource,
   refreshSourcePlan,
@@ -928,9 +929,10 @@ async function planJobSources(
     .flatMap((s) => s.items)
     .filter((i) => i.tier === 'indexable');
   const totalDocuments = counts.length;
-  if (totalDocuments > MAX_M365_AGENT_DOCUMENTS) {
+  const maxDocuments = effectiveMaxDocuments(agent.maxDocumentsOverride);
+  if (totalDocuments > maxDocuments) {
     throw new M365Error(
-      `Agent expands to ${totalDocuments} documents, more than the ${MAX_M365_AGENT_DOCUMENTS} allowed — exclude subfolders, filter by type, or remove sources`,
+      `Agent expands to ${totalDocuments} documents, more than the ${maxDocuments} allowed — exclude subfolders, filter by type, or remove sources`,
       'graph_error',
       400,
     );

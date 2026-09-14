@@ -44,6 +44,34 @@ const GRAPH_SCOPES = ['Files.ReadWrite.All'];
 
 /** Documents per agent after expansion (env-tunable, default 50). */
 export const MAX_M365_AGENT_DOCUMENTS = env.M365_AGENT_MAX_DOCUMENTS;
+/** Highest cap a local admin may set on an agent by themselves. */
+export const M365_AGENT_LOCAL_ADMIN_MAX_DOCUMENTS =
+  env.M365_AGENT_LOCAL_ADMIN_MAX_DOCUMENTS;
+/** Highest cap any admin may set; also bounds indexing of stored overrides. */
+export const M365_AGENT_MAX_DOCUMENTS_CEILING =
+  env.M365_AGENT_MAX_DOCUMENTS_CEILING;
+
+/** The cap an admin of the given role may set on an agent. */
+export function roleMaxDocuments(isGlobalAdmin: boolean): number {
+  return isGlobalAdmin
+    ? M365_AGENT_MAX_DOCUMENTS_CEILING
+    : Math.min(
+        M365_AGENT_LOCAL_ADMIN_MAX_DOCUMENTS,
+        M365_AGENT_MAX_DOCUMENTS_CEILING,
+      );
+}
+
+/**
+ * The document cap in force for an agent: its override when set, else the
+ * env default — never above the global ceiling, so a lowered ceiling takes
+ * effect on the next index run without touching stored records.
+ */
+export function effectiveMaxDocuments(
+  override: number | null | undefined,
+): number {
+  const base = override ?? MAX_M365_AGENT_DOCUMENTS;
+  return Math.max(1, Math.min(base, M365_AGENT_MAX_DOCUMENTS_CEILING));
+}
 /** Sum of indexable file sizes per agent (env-tunable, default 512 MB). */
 export const MAX_M365_AGENT_SOURCE_BYTES =
   env.M365_AGENT_MAX_SOURCE_MB * 1024 * 1024;
@@ -619,15 +647,18 @@ export async function planSource(
 }
 
 /** Cap accounting across sources (§2) — the same numbers the editor shows. */
-export function summarizePlans(plans: SourcePlan[]): Omit<AgentPlan, 'plans'> {
+export function summarizePlans(
+  plans: SourcePlan[],
+  maxDocuments: number = MAX_M365_AGENT_DOCUMENTS,
+): Omit<AgentPlan, 'plans'> {
   const totalDocuments = plans.reduce((n, p) => n + p.counts.indexable, 0);
   const totalBytes = plans.reduce((n, p) => n + p.counts.bytes, 0);
   return {
     totalDocuments,
     totalBytes,
-    maxDocuments: MAX_M365_AGENT_DOCUMENTS,
+    maxDocuments,
     maxBytes: MAX_M365_AGENT_SOURCE_BYTES,
-    overDocumentCap: totalDocuments > MAX_M365_AGENT_DOCUMENTS,
+    overDocumentCap: totalDocuments > maxDocuments,
     overByteCap: totalBytes > MAX_M365_AGENT_SOURCE_BYTES,
   };
 }
@@ -640,12 +671,13 @@ export async function planSources(
   req: NextRequest,
   userId: string,
   inputs: PlanSourceInput[],
+  options: { maxDocuments?: number } = {},
 ): Promise<AgentPlan> {
   const plans: SourcePlan[] = [];
   for (const input of inputs) {
     plans.push(await planSource(req, userId, input));
   }
-  return { plans, ...summarizePlans(plans) };
+  return { plans, ...summarizePlans(plans, options.maxDocuments) };
 }
 
 // ---------------------------------------------------------------------------
