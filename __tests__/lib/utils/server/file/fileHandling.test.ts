@@ -130,6 +130,18 @@ describe('legacy Office / HTML routing via loadDocumentFromPath', () => {
     expect(out).toContain('--- START OF SHEET: Data ---');
   });
 
+  it('reads an unknown-type script (generated .vbs, octet-stream) as plain text — issue #126', async () => {
+    readFileMock.mockResolvedValue('MsgBox "hello"\r\nWScript.Quit');
+    const out = await loadDocumentFromPath(
+      '/input/script.vbs',
+      'application/octet-stream',
+      'script.vbs',
+    );
+    expect(out).toContain('MsgBox "hello"');
+    // No converter is involved for plain text.
+    expect(execFileMock).not.toHaveBeenCalled();
+  });
+
   it('converts HTML with pandoc (explicit html reader, no raw passthrough)', async () => {
     execFileMock.mockImplementation((cmd: string, args: readonly string[]) => {
       expect(cmd).toBe('pandoc');
