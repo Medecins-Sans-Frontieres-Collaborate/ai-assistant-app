@@ -2,17 +2,20 @@ import { NextRequest } from 'next/server';
 
 import {
   M365Error,
+  fetchWithGraphRetry,
   graphErrorFromResponse,
+  graphFetch,
   isValidGraphId,
   m365ErrorResponse,
   mintGraphToken,
   normalizeDriveItem,
   normalizeMailEnvelope,
+  withGraphTokenCache,
 } from '@/lib/services/m365/graphApi';
 import { formatMailRecipient } from '@/lib/services/m365/mailMarkdown';
 
 import { getGraphAccessToken } from '@/auth';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/auth', () => ({ getGraphAccessToken: vi.fn() }));
 
@@ -62,6 +65,117 @@ describe('mintGraphToken', () => {
     const rejection = mintGraphToken(req, ['Mail.Read']);
     await expect(rejection).rejects.toBeInstanceOf(M365Error);
     await expect(rejection).rejects.toMatchObject({ kind: 'graph_error' });
+  });
+
+  it('maps an expired/revoked refresh token to not_connected (sign in again)', async () => {
+    for (const description of [
+      'AADSTS70008: The provided authorization code or refresh token has expired due to inactivity.',
+      'AADSTS700082: The refresh token has expired due to inactivity.',
+      'AADSTS50173: The provided grant has expired due to it being revoked.',
+      'invalid_grant: something',
+    ]) {
+      vi.mocked(getGraphAccessToken).mockResolvedValue({
+        accessToken: null,
+        grantedScopes: [],
+        error: description,
+      });
+      await expect(mintGraphToken(req, ['Files.Read'])).rejects.toMatchObject({
+        kind: 'not_connected',
+        status: 401,
+      });
+    }
+    // Consent still wins over the generic invalid_grant shape.
+    vi.mocked(getGraphAccessToken).mockResolvedValue({
+      accessToken: null,
+      grantedScopes: [],
+      error: 'AADSTS65001: consent required',
+    });
+    await expect(mintGraphToken(req, ['Files.Read'])).rejects.toMatchObject({
+      kind: 'consent_missing',
+    });
+  });
+
+  it('mints once per request+scope set inside withGraphTokenCache, never outside', async () => {
+    vi.mocked(getGraphAccessToken).mockResolvedValue({
+      accessToken: 'tok',
+      grantedScopes: [],
+    });
+    const scoped = new NextRequest('http://localhost/api/m365/scoped');
+    await withGraphTokenCache(scoped, async () => {
+      await mintGraphToken(scoped, ['Files.ReadWrite.All']);
+      await mintGraphToken(scoped, ['Files.ReadWrite.All']);
+      await mintGraphToken(scoped, ['Mail.Read']);
+      // Nested wrap shares the bucket.
+      await withGraphTokenCache(scoped, () =>
+        mintGraphToken(scoped, ['Mail.Read']),
+      );
+    });
+    expect(getGraphAccessToken).toHaveBeenCalledTimes(2);
+    // Outside a wrap (and after it ends) every call mints — the old
+    // behaviour, which single-call routes and their tests rely on.
+    await mintGraphToken(scoped, ['Mail.Read']);
+    await mintGraphToken(scoped, ['Mail.Read']);
+    expect(getGraphAccessToken).toHaveBeenCalledTimes(4);
+  });
+});
+
+describe('graphFetch retry + token eviction', () => {
+  const fetchMock = vi.fn();
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.stubGlobal('fetch', fetchMock);
+    vi.mocked(getGraphAccessToken).mockResolvedValue({
+      accessToken: 'tok',
+      grantedScopes: [],
+    });
+  });
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('retries 429/503 honouring a (capped) Retry-After and then succeeds', async () => {
+    fetchMock
+      .mockResolvedValueOnce(
+        new Response(null, { status: 429, headers: { 'retry-after': '0' } }),
+      )
+      .mockResolvedValueOnce(
+        new Response(null, { status: 503, headers: { 'retry-after': '0' } }),
+      )
+      .mockResolvedValueOnce(new Response('{"ok":true}', { status: 200 }));
+    const response = await fetchWithGraphRetry('https://graph.microsoft.com/x');
+    expect(response.status).toBe(200);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
+  it('does not retry a bare 503 (outage, not throttling)', async () => {
+    fetchMock.mockResolvedValue(new Response(null, { status: 503 }));
+    const response = await fetchWithGraphRetry('https://graph.microsoft.com/x');
+    expect(response.status).toBe(503);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('gives up after three attempts and maps the last 429 to rate_limited', async () => {
+    fetchMock.mockResolvedValue(
+      new Response(null, { status: 429, headers: { 'retry-after': '0' } }),
+    );
+    await expect(
+      graphFetch(req, ['Files.Read'], '/me/drive'),
+    ).rejects.toMatchObject({ kind: 'rate_limited' });
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
+  it('does not retry 4xx and evicts a cached token on 401', async () => {
+    fetchMock
+      .mockResolvedValueOnce(new Response(null, { status: 401 }))
+      .mockResolvedValueOnce(new Response('{}', { status: 200 }));
+    const scoped = new NextRequest('http://localhost/api/m365/evict');
+    await withGraphTokenCache(scoped, async () => {
+      await expect(
+        graphFetch(scoped, ['Files.Read'], '/me/drive'),
+      ).rejects.toMatchObject({ kind: 'not_connected' });
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      // The rejected token was evicted: the next call mints a fresh one.
+      await graphFetch(scoped, ['Files.Read'], '/me/drive');
+    });
+    expect(getGraphAccessToken).toHaveBeenCalledTimes(2);
   });
 });
 

@@ -411,15 +411,16 @@ describe('RAGService', () => {
       expect(result).toBe('Original query');
     });
 
-    it('should use low temperature for focused query generation', async () => {
+    it('sends no temperature (the gpt-5 utility model rejects non-default values)', async () => {
       const messages: Message[] = [{ role: 'user', content: 'Test query' }];
 
       await ragService.reformulateQuery(messages);
 
       const call = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
 
-      // Use low temperature for focused, deterministic query generation
-      expect(call.temperature).toBe(0.2);
+      // A rejected call silently fell back to the raw query before; the
+      // parameter must stay off so reformulation actually runs.
+      expect(call.temperature).toBeUndefined();
     });
   });
 

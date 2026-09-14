@@ -51,7 +51,13 @@ function makeAgent(sourceCount: number) {
   };
 }
 
-/** Batch response echoing per-id statuses from the provided map. */
+/**
+ * Batch response echoing per-id statuses. `index` is the position within
+ * the whole probe list, recovered from the sub-request URL's item id
+ * (`item<N>`), so the retry batch (which re-numbers ids from 0) maps to the
+ * same sources as the first pass. Throttled sub-responses carry a zero
+ * Retry-After so the single retry does not slow the suite down.
+ */
 function batchResponse(statusFor: (index: number) => number) {
   return (url: string, init?: RequestInit) => {
     expect(url).toContain('/$batch');
@@ -59,10 +65,15 @@ function batchResponse(statusFor: (index: number) => number) {
     return Promise.resolve(
       new Response(
         JSON.stringify({
-          responses: body.requests.map((r: { id: string }) => ({
-            id: r.id,
-            status: statusFor(Number(r.id)),
-          })),
+          responses: body.requests.map((r: { id: string; url: string }) => {
+            const match = r.url.match(/\/items\/item(\d+)\?/);
+            const status = statusFor(match ? Number(match[1]) : Number(r.id));
+            return {
+              id: r.id,
+              status,
+              ...(status === 429 && { headers: { 'Retry-After': '0' } }),
+            };
+          }),
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } },
       ),
@@ -89,22 +100,59 @@ afterEach(() => {
 describe('checkAgentSourceAccess ($batch probes)', () => {
   it('splits 50 sources into 3 batch calls and maps verdicts', async () => {
     // Even indices accessible; odd denied; index 8 (otherwise accessible)
-    // throttled — must fail closed.
+    // throttled on both passes — must fail closed.
     fetchMock.mockImplementation(
       batchResponse((i) => (i === 8 ? 429 : i % 2 === 0 ? 200 : 403)),
     );
-    const access = await checkAgentSourceAccess(req, 'u1', makeAgent(50));
-    expect(fetchMock).toHaveBeenCalledTimes(3);
+    const agent = makeAgent(50);
+    const access = await checkAgentSourceAccess(req, 'u1', agent);
+    // 3 probe batches + 1 retry batch for the throttled item.
+    expect(fetchMock).toHaveBeenCalledTimes(4);
     const sizes = fetchMock.mock.calls.map(
       (call) => JSON.parse(String(call[1]?.body)).requests.length,
     );
-    expect(sizes).toEqual([20, 20, 10]);
+    expect(sizes).toEqual([20, 20, 10, 1]);
     expect(access.results).toHaveLength(50);
     expect(access.accessibleSourceIds).toContain('src-0');
     expect(access.accessibleSourceIds).not.toContain('src-1');
-    // Throttled probe fails closed for that source only.
+    // Throttled probe fails closed for that source only…
     expect(access.accessibleSourceIds).not.toContain('src-8');
     expect(access.accessibleSourceIds).toHaveLength(24);
+    // …and the verdict is flagged unverifiable and NOT cached: the next
+    // request probes again instead of serving the throttled denial.
+    expect(access.unverifiable).toBe(true);
+    await checkAgentSourceAccess(req, 'u1', agent);
+    expect(fetchMock).toHaveBeenCalledTimes(8);
+  });
+
+  it('retries a throttled probe once and accepts the retried verdict', async () => {
+    let calls = 0;
+    fetchMock.mockImplementation((url: string, init?: RequestInit) => {
+      calls += 1;
+      // First pass: item1 throttled; retry pass: everything 200.
+      return batchResponse((i) => (calls === 1 && i === 1 ? 429 : 200))(
+        url,
+        init,
+      );
+    });
+    const agent = makeAgent(3);
+    const access = await checkAgentSourceAccess(req, 'u1', agent);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(access.accessibleSourceIds).toEqual(['src-0', 'src-1', 'src-2']);
+    expect(access.unverifiable).toBe(false);
+    // Definitive → cached.
+    await checkAgentSourceAccess(req, 'u1', agent);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not cache a verdict that includes a 5xx probe', async () => {
+    fetchMock.mockImplementation(batchResponse((i) => (i === 0 ? 503 : 200)));
+    const agent = makeAgent(2);
+    const first = await checkAgentSourceAccess(req, 'u1', agent);
+    expect(first.accessibleSourceIds).toEqual(['src-1']);
+    expect(first.unverifiable).toBe(true);
+    await checkAgentSourceAccess(req, 'u1', agent);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   it('treats 404 as inaccessible and caches the verdict per user', async () => {
@@ -275,9 +323,14 @@ describe('checkAgentSourceAccess ($batch probes)', () => {
 
     const access = await checkAgentSourceAccess(req, 'u1', agent);
     // The folder source stays "accessible" (probe passed) but contributes
-    // no readable items — retrieval for it yields nothing.
+    // no readable items — retrieval for it yields nothing. A failed
+    // listing is not a permission verdict, so nothing is cached.
     expect(access.accessibleSourceIds).toEqual(['src-0', 'src-1']);
     expect(access.accessibleFolderItems).toEqual([]);
+    expect(access.unverifiable).toBe(true);
+    const before = fetchMock.mock.calls.length;
+    await checkAgentSourceAccess(req, 'u1', agent);
+    expect(fetchMock.mock.calls.length).toBeGreaterThan(before);
   });
 
   it('fails closed for sources missing from the batch response', async () => {
@@ -293,5 +346,6 @@ describe('checkAgentSourceAccess ($batch probes)', () => {
     });
     const access = await checkAgentSourceAccess(req, 'u1', makeAgent(3));
     expect(access.accessibleSourceIds).toEqual(['src-0', 'src-1']);
+    expect(access.unverifiable).toBe(true);
   });
 });
