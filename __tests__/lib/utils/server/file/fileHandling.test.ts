@@ -65,6 +65,128 @@ beforeEach(() => {
   writeFileMock.mockResolvedValue(undefined);
 });
 
+describe('legacy Office / HTML routing via loadDocumentFromPath', () => {
+  it('routes .doc through LibreOffice → docx → pandoc instead of raw UTF-8', async () => {
+    mkdtempMock.mockResolvedValue('/tmp/doc-1');
+    const calls: string[] = [];
+    execFileMock.mockImplementation((cmd: string, args: readonly string[]) => {
+      calls.push(cmd);
+      if (cmd === 'libreoffice') {
+        expect(args).toContain('--convert-to');
+        expect(args).toContain('docx');
+        expect(args.some((a) => a.startsWith('-env:UserInstallation='))).toBe(
+          true,
+        );
+      }
+      if (cmd === 'pandoc') {
+        expect(args[0]).toBe('/tmp/doc-1/memo.docx');
+      }
+      return Promise.resolve({ stdout: '', stderr: '' });
+    });
+    readdirMock.mockResolvedValue(['memo.docx']);
+    readFileMock.mockResolvedValue('# Memo\n\nBody text');
+
+    const out = await loadDocumentFromPath(
+      '/input/memo.doc',
+      'application/msword',
+      'memo.doc',
+    );
+    expect(calls).toEqual(['libreoffice', 'pandoc']);
+    expect(out).toBe('# Memo\n\nBody text');
+    expect(rmMock).toHaveBeenCalledWith(
+      '/tmp/doc-1',
+      expect.objectContaining({ recursive: true }),
+    );
+  });
+
+  it('fails loudly when LibreOffice produces nothing for a .doc', async () => {
+    mkdtempMock.mockResolvedValue('/tmp/doc-2');
+    execFileMock.mockResolvedValue({ stdout: '', stderr: '' });
+    readdirMock.mockResolvedValue([]);
+    await expect(
+      loadDocumentFromPath('/input/x.doc', 'application/msword', 'x.doc'),
+    ).rejects.toThrow(/did not produce x\.docx/);
+  });
+
+  it('routes legacy .xls through ssconvert like .xlsx', async () => {
+    mkdtempMock.mockResolvedValue('/tmp/xlsx-legacy');
+    execFileMock.mockImplementation((cmd: string, args: readonly string[]) => {
+      expect(cmd).toBe('ssconvert');
+      if (args.includes('--list-sheets')) {
+        return Promise.resolve({
+          stdout: 'Sheet names in [old.xls]:\nData\n',
+          stderr: '',
+        });
+      }
+      return Promise.resolve({ stdout: '', stderr: '' });
+    });
+    readdirMock.mockResolvedValue(['old_.csv.0']);
+    readFileMock.mockResolvedValue('a,b\n');
+    const out = await loadDocumentFromPath(
+      '/input/old.xls',
+      'application/vnd.ms-excel',
+      'old.xls',
+    );
+    expect(out).toContain('--- START OF SHEET: Data ---');
+  });
+
+  it('reads an unknown-type script (generated .vbs, octet-stream) as plain text — issue #126', async () => {
+    readFileMock.mockResolvedValue('MsgBox "hello"\r\nWScript.Quit');
+    const out = await loadDocumentFromPath(
+      '/input/script.vbs',
+      'application/octet-stream',
+      'script.vbs',
+    );
+    expect(out).toContain('MsgBox "hello"');
+    // No converter is involved for plain text.
+    expect(execFileMock).not.toHaveBeenCalled();
+  });
+
+  it('converts HTML with pandoc (explicit html reader, no raw passthrough)', async () => {
+    execFileMock.mockImplementation((cmd: string, args: readonly string[]) => {
+      expect(cmd).toBe('pandoc');
+      expect(args).toEqual([
+        '/input/page.html',
+        '-f',
+        'html',
+        '-t',
+        'markdown-raw_html',
+        '-o',
+        '/input/page.html.markdown',
+      ]);
+      return Promise.resolve({ stdout: '', stderr: '' });
+    });
+    readFileMock.mockResolvedValue('Heading\n=======\n\nProse');
+    const out = await loadDocumentFromPath(
+      '/input/page.html',
+      'text/html',
+      'page.html',
+    );
+    expect(out).toBe('Heading\n=======\n\nProse');
+    expect(execFileMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('forwards an AbortSignal to the converter child', async () => {
+    const controller = new AbortController();
+    execFileMock.mockImplementation(
+      (_cmd: string, _args: readonly string[], opts: { signal?: unknown }) => {
+        expect(opts.signal).toBe(controller.signal);
+        return Promise.resolve({ stdout: '', stderr: '' });
+      },
+    );
+    readFileMock.mockResolvedValue('x');
+    await loadDocumentFromPath(
+      '/input/a.docx',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'a.docx',
+      {
+        signal: controller.signal,
+      },
+    );
+    expect(execFileMock).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe('xlsxToText via loadDocumentFromPath', () => {
   it('labels sheets with real names from ssconvert --list-sheets', async () => {
     mkdtempMock.mockResolvedValue('/tmp/xlsx-abc');

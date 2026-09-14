@@ -7,7 +7,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 import { MODELS_QUERY_KEY } from '@/client/hooks/settings/useModelsQuery';
 
+import type {
+  ModelAvailability,
+  ModelAvailabilityReason,
+} from '@/lib/services/limits/modelAvailability';
 import { LimitTier } from '@/lib/services/limits/types';
+import type { MeLimit } from '@/lib/services/limits/wire';
 
 import { OpenAIModels } from '@/types/openai';
 
@@ -19,50 +24,9 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
 // preview (useEffectiveLimitsPreview), so the preview-only fields stay here.
 // ---------------------------------------------------------------------------
 
-/**
- * One resolved limit row. On the caller's OWN branch the server keeps its
- * no-provenance promise (no tier, override id or label); those fields are
- * populated only on admin previews.
- */
-export interface MeLimit {
-  limitKey: string;
-  value: number | boolean | null;
-  unit: string;
-  window: string;
-  source: string;
-  overrideId?: string;
-  modelId?: string;
-  series?: string;
-  /**
-   * Authority tier of the winning record (design §3b). Optional because a
-   * server predating delegations omits it; absent reads as `global`.
-   */
-  tier?: LimitTier;
-  /** A global-tier ceiling clamped the winner down. */
-  ceilingApplied?: boolean;
-  /** The global-tier OVERRIDE whose ceiling pinned the value, if one did. */
-  ceilingOverrideId?: string;
-  /**
-   * Its label, supplied by the server: a scoped admin cannot see other
-   * global records, but must be able to read WHY their 500 became 100.
-   */
-  ceilingLabel?: string;
-  // Only with `usage=1`, only on numeric `kind: 'counter'` rows:
-  /** Current-period consumption (0 when no counter document exists). */
-  used?: number;
-  /** `max(0, value - used)`. */
-  remaining?: number;
-  /** ISO instant of the next period boundary in the policy's timezone. */
-  resetAt?: string;
-  /**
-   * Of `used`, the part spent by conversation workflows rather than chat —
-   * from the shadow counter the debit writes beside the real cell
-   * (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b). Absent when none was. Token
-   * cells only: the shadow is written for `chat.tokens*`, which are not
-   * per-model.
-   */
-  usedByWorkflows?: number;
-}
+// `MeLimit` is the server's row contract (lib/services/limits/wire.ts) —
+// imported, not re-declared.
+export type { MeLimit } from '@/lib/services/limits/wire';
 
 /** Back-compat alias — the admin preview components import this name. */
 export type MyLimit = MeLimit;
@@ -73,26 +37,12 @@ export interface PreviewUsage {
   window: 'day' | 'month' | 'total';
 }
 
-export type ModelAvailabilityReason =
-  | 'blocked'
-  | 'exhausted'
-  | 'familyExhausted';
-
-/**
- * Server verdict for one served model, resolved with the same conjunctive
- * cells (model AND family) enforcement uses, so the picker can never
- * disagree with the send-time check.
- */
-export interface ModelAvailability {
-  /** false ⇢ `model.allowed` resolved false on the model OR family cell. */
-  allowed: boolean;
-  reason?: ModelAvailabilityReason;
-  /** The binding counter cell, when any is numeric. */
-  limit?: number;
-  used?: number;
-  remaining?: number;
-  resetAt?: string;
-}
+// The per-model verdict is the server's type (lib/services/limits/
+// modelAvailability.ts is pure and client-safe) — imported, not re-declared.
+export type {
+  ModelAvailability,
+  ModelAvailabilityReason,
+} from '@/lib/services/limits/modelAvailability';
 
 export interface MyLimitsResponse {
   enabled: boolean;
@@ -228,6 +178,27 @@ export function useMyLimits() {
   const policyUnavailable = data?.policyUnavailable === true;
   const limits = data?.limits ?? [];
 
+  // Coalesced refetch. Every exhausted row and picker badge fires
+  // `onExpired` at the SAME reset boundary, and TanStack's default
+  // `cancelRefetch: true` turns N calls into N requests with N-1 of them
+  // thrown away — each costing the server a full `/me?models=` resolution.
+  // While one refetch is in flight, later callers share its promise.
+  const inFlightRef = useRef<ReturnType<typeof refetch> | null>(null);
+  const coalescedRefetch = useCallback(
+    (refetchOptions?: Parameters<typeof refetch>[0]) => {
+      if (inFlightRef.current) return inFlightRef.current;
+      const pending = refetch({
+        cancelRefetch: false,
+        ...refetchOptions,
+      }).finally(() => {
+        inFlightRef.current = null;
+      });
+      inFlightRef.current = pending;
+      return pending;
+    },
+    [refetch],
+  );
+
   return {
     limits,
     mode,
@@ -244,7 +215,7 @@ export function useMyLimits() {
     policyUnavailable,
     isLoading,
     error,
-    refetch,
+    refetch: coalescedRefetch,
   };
 }
 

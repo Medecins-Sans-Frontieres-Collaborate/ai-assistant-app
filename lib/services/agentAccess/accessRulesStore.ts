@@ -10,6 +10,7 @@ import {
   AGENT_ACCESS_CATALOG_OAUTH_PREFIX,
   AGENT_ACCESS_CONFIG_PATH,
   AGENT_ACCESS_CONNECTORS_PREFIX,
+  AGENT_ACCESS_FORM_TEMPLATES_PREFIX,
   AGENT_ACCESS_GENERATION_PATH,
   AGENT_ACCESS_GUIDES_PREFIX,
   AGENT_ACCESS_M365_AGENTS_PREFIX,
@@ -17,6 +18,10 @@ import {
   AGENT_ACCESS_ORG_AGENTS_PREFIX,
   AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
+  AdminFormTemplate,
+  AdminFormTemplateHistoryEntry,
+  AdminFormTemplateHistoryEntrySchema,
+  AdminFormTemplateSchema,
   AgentAccessConfig,
   AgentAccessConfigSchema,
   AgentAccessHistoryEntry,
@@ -28,6 +33,7 @@ import {
   CatalogOauthAppHistoryEntry,
   CatalogOauthAppHistoryEntrySchema,
   CatalogOauthAppSchema,
+  FORM_TEMPLATE_SOURCE,
   GUIDE_SOURCE,
   Guide,
   GuideHistoryEntry,
@@ -67,6 +73,7 @@ import {
   canonicalAgentKey,
   catalogOauthBlobPath,
   connectorBlobPath,
+  formTemplateBlobPath,
   guideBlobPath,
   historyBlobPath,
   historyListPrefix,
@@ -213,6 +220,19 @@ export interface StoredGuide {
 
 export interface GuideReadResult {
   guide: Guide;
+  etag: string;
+}
+
+export interface StoredFormTemplate {
+  /** `form-template::<id>` — flows through delegation and rules unchanged. */
+  canonicalKey: string;
+  blobPath: string;
+  record: AdminFormTemplate;
+  etag: string;
+}
+
+export interface FormTemplateReadResult {
+  record: AdminFormTemplate;
   etag: string;
 }
 
@@ -588,6 +608,20 @@ const catalogOauthEntity = defineBlobEntity<
   labelBase: 'CatalogOauthApp',
 });
 
+const formTemplateEntity = defineBlobEntity<
+  AdminFormTemplate,
+  AdminFormTemplateHistoryEntry
+>({
+  logNoun: 'form-template',
+  errorNoun: 'form template',
+  source: FORM_TEMPLATE_SOURCE,
+  listPrefix: AGENT_ACCESS_FORM_TEMPLATES_PREFIX,
+  blobPath: formTemplateBlobPath,
+  schema: AdminFormTemplateSchema,
+  historySchema: AdminFormTemplateHistoryEntrySchema,
+  labelBase: 'FormTemplate',
+});
+
 const guideEntity = defineBlobEntity<Guide, GuideHistoryEntry>({
   logNoun: 'guide',
   errorNoun: 'guide',
@@ -942,6 +976,44 @@ export function writeGuideHistoryEntry(
   entry: GuideHistoryEntry,
 ): Promise<void> {
   return guideEntity.writeHistory(storage, entry);
+}
+
+/* --- Form templates ------------------------------------------------- */
+
+export function listAllFormTemplates(
+  storage: BlobStorage,
+): Promise<StoredFormTemplate[]> {
+  return formTemplateEntity.listAll(storage);
+}
+
+export function readFormTemplate(
+  storage: BlobStorage,
+  id: string,
+): Promise<FormTemplateReadResult | null> {
+  return formTemplateEntity.read(storage, id);
+}
+
+export function writeFormTemplate(
+  storage: BlobStorage,
+  record: AdminFormTemplate,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  return formTemplateEntity.write(storage, record, ifMatchEtag);
+}
+
+export function deleteFormTemplate(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  return formTemplateEntity.remove(storage, id, ifMatchEtag);
+}
+
+export function writeFormTemplateHistoryEntry(
+  storage: BlobStorage,
+  entry: AdminFormTemplateHistoryEntry,
+): Promise<void> {
+  return formTemplateEntity.writeHistory(storage, entry);
 }
 
 /* ------------------------------------------------------------------ */

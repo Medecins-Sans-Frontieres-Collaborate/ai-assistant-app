@@ -80,6 +80,11 @@ import { useUIStore } from './uiStore';
 
 import { ApiError, chatService } from '@/client/services';
 import { getFallbackModel, isModelDisabled } from '@/config/models';
+import {
+  GENERATED_FILE_ACTIVATION_MAX_BYTES,
+  generatedFileBlobId,
+  isTextLikeGeneratedFile,
+} from '@/lib/constants/generatedFiles';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import {
   ConsentRequestPayload,
@@ -153,6 +158,48 @@ function setWithout<T>(set: Set<T>, item: T): Set<T> {
  * calls and consent requests only when present. Shared by the send, retry, and
  * approval-resume paths so they stay consistent.
  */
+/**
+ * Auto-activate the text-like files an interpreter run produced this turn
+ * (issue #126). Their bytes are already in the user's upload storage; as
+ * active files the server extracts their text into the next turn's context
+ * instead of the model only ever seeing a download link and asking the user
+ * to "provide" a file it wrote itself. Images are already inlined as
+ * previews; large files stay download-only (the model still learns their
+ * names from the server-side manifest). Bounded by the active-file slot cap
+ * and dedupe in `activateFile`.
+ */
+function activateGeneratedFiles(
+  conversationStore: ReturnType<typeof useConversationStore.getState>,
+  conversationId: string,
+  assistantMessage: Message,
+): void {
+  const now = new Date().toISOString();
+  for (const record of assistantMessage.toolCalls ?? []) {
+    for (const file of record.generated_files ?? []) {
+      if (file.is_image) continue;
+      if (!isTextLikeGeneratedFile(file.filename, file.mime_type)) continue;
+      if (
+        file.size_bytes !== undefined &&
+        file.size_bytes > GENERATED_FILE_ACTIVATION_MAX_BYTES
+      ) {
+        continue;
+      }
+      const blobId = generatedFileBlobId(file.url);
+      if (!blobId) continue;
+      conversationStore.activateFile(conversationId, {
+        id: `generated-${blobId}`,
+        url: file.url,
+        originalFilename: file.filename,
+        addedAt: now,
+        sourceMessageId: assistantMessage.id ?? '',
+        status: 'idle',
+        mimeType: file.mime_type,
+        ...(file.size_bytes !== undefined && { sizeBytes: file.size_bytes }),
+      });
+    }
+  }
+}
+
 function buildAssistantMessage(
   streamParser: StreamParser,
   finalContent: string,
@@ -1144,6 +1191,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             argumentOverrides.get(c.approval_request_id!) ??
             c.tool_arguments ??
             '{}',
+          // Echo the server's continuation proof so the resume is not
+          // metered as a fresh message (lib/services/limits/continuationToken.ts).
+          ...(c.continuation_token
+            ? { continuationToken: c.continuation_token }
+            : {}),
         }))
       : undefined;
     // Plan echo: the turn plan persisted on the same message that carries
@@ -1721,6 +1773,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     if (assistantMessage.error !== true) {
       get().clearErrorStreak(conversation.id);
     }
+
+    activateGeneratedFiles(
+      conversationStore,
+      conversation.id,
+      assistantMessage,
+    );
 
     if (regeneratingIndex !== null) {
       // Adding a new version to an existing message group

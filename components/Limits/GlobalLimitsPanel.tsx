@@ -104,17 +104,16 @@ function draftFrom(data: PolicyResponse): Draft {
  *
  * The whole policy is ONE document, so this saves it as one CAS'd PUT with
  * If-Match. On 409 the draft is KEPT and a banner offers Reload / Keep
- * editing (ADMIN_LIMITS_REVIEW #20): with scoped admins writing
- * per-override, a global admin's If-Match goes stale far more often, and
- * discarding a long edit for that is not acceptable.
+ * editing: with scoped admins writing per-override, a global admin's
+ * If-Match goes stale far more often, and discarding a long edit for that
+ * is not acceptable.
  *
  * "Keep editing" is an INFORMED last-writer-wins: it refetches the policy in
  * the background and adopts the FRESH etag while leaving the draft alone, so
  * the next Save can actually succeed — and overwrites whatever the other
- * admin changed since this draft was loaded. The banner says so. Merely
- * hiding the banner (the old behaviour) left the stale etag in place, and
- * since the server compares If-Match before any other check (design §5),
- * every subsequent Save re-409'd: a dead end dressed up as an exit.
+ * admin changed since this draft was loaded. The banner says so. The etag
+ * must be adopted, not just the banner hidden: the server compares If-Match
+ * before any other check (design §5), so a stale one 409s every later Save.
  *
  * The draft is seeded from each NEW server response during render (the
  * "storing information from previous renders" pattern) and only while not
@@ -244,7 +243,27 @@ export const GlobalLimitsPanel: FC = () => {
         return;
       }
       toast.success(t('saved'));
-      setDirty(false);
+      // Adopt the SAVED document from the PUT response itself — its etag and
+      // the server-minted delegation ids — rather than relying on a follow-up
+      // GET. If that GET failed, the old code kept the stale etag (every
+      // later Save 409'd) and kept the session-created delegations marked
+      // new, so the next Save re-sent them WITHOUT ids and the server minted
+      // a second id for each while dropping the first. A response without a
+      // policy (not what the route sends) falls back to the refetch.
+      const saved = unwrapApiData<Partial<PolicyResponse>>(
+        await response.json(),
+      );
+      if (saved.policy && saved.etag) {
+        const fresh: PolicyResponse = {
+          policy: saved.policy,
+          etag: saved.etag,
+          policyUnavailable: false,
+        };
+        queryClient.setQueryData<PolicyResponse>(['limits-policy'], fresh);
+        applyServer(fresh);
+      } else {
+        setDirty(false);
+      }
       // The effective-limits preview and the scoped view both resolve
       // against the SAVED policy; stale results must not outlive the save.
       await queryClient.invalidateQueries({ queryKey: ['limits-preview'] });
@@ -257,7 +276,7 @@ export const GlobalLimitsPanel: FC = () => {
       // already do this via useLimitsAdmin.ts; the global PUT lives in this
       // file instead and was the one save path that never fired it.
       notifyLimitsChanged();
-      await reload();
+      if (!saved.policy || !saved.etag) await reload();
     } catch {
       toast.error(t('saveFailed'));
     } finally {
@@ -281,6 +300,14 @@ export const GlobalLimitsPanel: FC = () => {
   );
   const delegationById = (id: string) =>
     draft.delegations.find((d) => d.id === id);
+  // Period keys embed the zone, so a zone change starts every day/month
+  // counter from zero org-wide and, for the cache TTL, lets replicas debit
+  // different documents. Worth saying before Save, not after.
+  const savedTimezone = policyQuery.data?.policy?.timezone ?? 'UTC';
+  const timezoneChanged =
+    policyQuery.data?.policy !== undefined &&
+    policyQuery.data?.policy !== null &&
+    draft.timezone.trim() !== savedTimezone;
 
   if (unavailable) {
     return (
@@ -369,6 +396,14 @@ export const GlobalLimitsPanel: FC = () => {
         {draft.mode === 'observe' && (
           <p className={`mt-3 ${ADMIN_BANNER_WARN}`}>{t('observeNotice')}</p>
         )}
+        {timezoneChanged && (
+          <p className={`mt-3 ${ADMIN_BANNER_WARN}`} role="note">
+            {t('timezoneChangeWarning', {
+              from: savedTimezone,
+              to: draft.timezone,
+            })}
+          </p>
+        )}
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
           {t('propagationNotice')}
         </p>
@@ -451,6 +486,14 @@ export const GlobalLimitsPanel: FC = () => {
                         <span className={ADMIN_CHIP_NEUTRAL}>
                           {t('tierScoped')} ·{' '}
                           {delegation.label || t('untitledDelegation')}
+                        </span>
+                      )}
+                      {delegation && !delegation.enabled && (
+                        <span
+                          className={ADMIN_CHIP_NEUTRAL}
+                          title={t('disabledDelegationNote')}
+                        >
+                          {t('delegationDisabledChip')}
                         </span>
                       )}
                       {orphaned && (

@@ -206,6 +206,8 @@ export interface ConsentRequest {
   server_id?: string | null;
   tool_name?: string | null;
   tool_arguments?: string | null;
+  /** Server-signed continuation proof, echoed on resume (see streamMarkers). */
+  continuation_token?: string | null;
 }
 
 export type Role = 'system' | 'assistant' | 'user';

@@ -62,6 +62,14 @@ export interface PipelineStage {
    * }
    */
   execute(context: ChatContext): Promise<ChatContext>;
+
+  /**
+   * Optional: called by the pipeline when this stage exceeded its timeout
+   * and the pipeline is about to continue with the PRE-stage context. Lets
+   * a stage degrade explicitly (e.g. tell the model its retrieval failed)
+   * instead of vanishing silently. Must be synchronous and must not throw.
+   */
+  onTimeout?(context: ChatContext): ChatContext;
 }
 
 /**

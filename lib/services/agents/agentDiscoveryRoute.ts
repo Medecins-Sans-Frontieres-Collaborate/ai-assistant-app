@@ -128,9 +128,15 @@ export function cacheOwnerFor(session: Session): string {
  * never reads storage directly), access-filtered for the user. The wire
  * shape deliberately omits systemPrompt and modelId: those are admin-only
  * fields; the server resolves them from botId at invocation time.
- * 'unavailable' passes through like the Foundry discovery filter (this is a
- * visibility-only surface — in practice an unavailable snapshot carries no
- * prompt agents anyway). Empty when the feature is disabled.
+ *
+ * Only 'allow' is listed. The invocation guard (createCredentialMiddleware)
+ * blocks 'unavailable' for these app-managed kinds, so listing them would
+ * show an agent every send of which fails with a generic error; hiding it
+ * until the rules resolve is the consistent choice (a client-side disabled
+ * state would need every picker surface — AgentsTab, the browser, the
+ * composer chip — to learn a new field for a rare, transient condition).
+ * The Foundry discovery filter keeps its pass-through: its guard has other
+ * inputs. Empty when the feature is disabled.
  */
 async function getVisiblePromptAgentEntries(
   userMail: string | undefined,
@@ -145,7 +151,7 @@ async function getVisiblePromptAgentEntries(
       source: PROMPT_AGENT_SOURCE,
       agentName: promptAgent.id,
     });
-    if (decision !== 'deny') {
+    if (decision === 'allow') {
       entries.push({
         id: promptAgent.id,
         name: promptAgent.name,
@@ -160,10 +166,11 @@ async function getVisiblePromptAgentEntries(
 }
 
 /**
- * M365 file-backed agents, filtered by the same layer-1 rules. Deliberately
- * visibility-only: users who cannot open the base files still SEE the agent
- * (requirement 1 of the design) — the preflight endpoint + chat-time trim
- * handle layer 2.
+ * M365 file-backed agents, filtered by the same layer-1 rules ('allow'
+ * only — see getVisiblePromptAgentEntries for why 'unavailable' is not
+ * listed). Deliberately visibility-only beyond that: users who cannot open
+ * the base files still SEE the agent (requirement 1 of the design) — the
+ * preflight endpoint + chat-time trim handle layer 2.
  *
  * Never-indexed agents are the exception: with no successfully indexed
  * source there is nothing to retrieve for ANY user, so every chat can only
@@ -191,7 +198,7 @@ async function getVisibleM365AgentEntries(
       source: M365_AGENT_SOURCE,
       agentName: m365Agent.id,
     });
-    if (decision !== 'deny') {
+    if (decision === 'allow') {
       entries.push({
         id: m365Agent.id,
         name: m365Agent.name,

@@ -27,6 +27,7 @@ const EXPECTED_CONTAINER: Record<string, DocumentContainer[]> = {
   epub: ['zip'],
   doc: ['ole'],
   ppt: ['ole'],
+  xls: ['ole'],
   rtf: ['rtf', 'text'],
   txt: ['text'],
   md: ['text'],

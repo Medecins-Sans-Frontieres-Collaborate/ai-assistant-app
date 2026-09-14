@@ -30,6 +30,7 @@ import {
   LimitOverride,
   LimitsPolicy,
 } from '@/lib/services/limits/types';
+import { LIMITS_ERROR_CODES } from '@/lib/services/limits/wire';
 
 import {
   badRequestResponse,
@@ -89,7 +90,7 @@ function conflictResponse() {
     'Limits policy was modified by another admin; retry',
     409,
     undefined,
-    'LIMITS_CONFLICT',
+    LIMITS_ERROR_CODES.CONFLICT,
   );
 }
 
@@ -98,7 +99,7 @@ function policyUnavailableResponse() {
     'Limits policy is unavailable; retry',
     503,
     undefined,
-    'LIMITS_POLICY_UNAVAILABLE',
+    LIMITS_ERROR_CODES.POLICY_UNAVAILABLE,
   );
 }
 
@@ -107,7 +108,7 @@ function foreignOverrideResponse() {
     'This override is not under your delegation',
     403,
     undefined,
-    'LIMITS_FOREIGN_OVERRIDE',
+    LIMITS_ERROR_CODES.FOREIGN_OVERRIDE,
   );
 }
 
@@ -116,7 +117,7 @@ function budgetResponse(details: string) {
     'Override budget exceeded',
     400,
     details,
-    'LIMITS_BUDGET_EXCEEDED',
+    LIMITS_ERROR_CODES.BUDGET_EXCEEDED,
   );
 }
 
@@ -126,7 +127,7 @@ function outOfScopeResponse(outOfScope: string[]) {
     'One or more targets are outside your scope',
     400,
     { outOfScope },
-    'LIMITS_OUT_OF_SCOPE',
+    LIMITS_ERROR_CODES.OUT_OF_SCOPE,
   );
 }
 

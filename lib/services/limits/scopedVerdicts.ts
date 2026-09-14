@@ -21,13 +21,16 @@
  * verdicts at authoring time, and the server computes them on GET for the
  * post-narrowing chip — one implementation, never two that drift.
  */
-import { resolveLimit } from '@/lib/services/limits/resolver';
+import {
+  matchingOverrides,
+  resolveLimit,
+  restrictiveness,
+} from '@/lib/services/limits/resolver';
 import {
   JurisdictionPredicate,
   LimitDelegation,
   LimitEntry,
   LimitOverride,
-  LimitValue,
   LimitsPolicy,
   OverrideScope,
 } from '@/lib/services/limits/types';
@@ -274,17 +277,6 @@ export function canPreviewMail(
 // Audit: how many entries RAISE over the global tier
 // ---------------------------------------------------------------------------
 
-/**
- * Same ordering as the resolver's tie-break — false < 0 < … < n < null < true
- * — kept local so this module stays independent of resolver internals.
- */
-function restrictiveness(value: LimitValue): number {
-  if (value === false) return -1;
-  if (value === true) return Number.POSITIVE_INFINITY;
-  if (value === null) return Number.MAX_SAFE_INTEGER;
-  return value;
-}
-
 /** How many targets a raise count inspects — bounds the work per write. */
 const RAISE_SAMPLE_TARGETS = 25;
 
@@ -334,15 +326,26 @@ export function countRaises(
   };
   const principals = syntheticPrincipals(override.scope, override.targets);
   if (principals.length === 0) return 0;
+  // Narrow the policy ONCE per synthetic principal to the overrides that
+  // actually match it: `resolveLimit` re-filters per call, and entries ×
+  // principals calls over the full override array was ~1,250 full passes
+  // per scoped save at the schema bounds (re-run on every CAS round).
+  const perPrincipal = principals.map((principal) => ({
+    principal,
+    policy: {
+      ...globalOnly,
+      overrides: matchingOverrides(globalOnly, principal, NO_DELEGATIONS),
+    },
+  }));
   let raises = 0;
   for (const entry of override.entries as LimitEntry[]) {
     const def = getLimitDefinition(entry.limitKey);
     if (!def) continue;
     const proposed = restrictiveness(entry.value);
-    const raised = principals.some((principal) => {
+    const raised = perPrincipal.some(({ principal, policy: narrowed }) => {
       const base = resolveLimit(
         def,
-        globalOnly,
+        narrowed,
         principal,
         entry.modelId,
         entry.series,

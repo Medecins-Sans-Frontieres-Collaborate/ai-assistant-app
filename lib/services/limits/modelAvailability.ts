@@ -29,6 +29,7 @@
 import { periodKindForWindow, resetAt } from '@/lib/services/limits/periods';
 import {
   ResolvedLimit,
+  activeDelegationIds,
   counterCellName,
   isBlocked,
   resolveLimit,
@@ -78,11 +79,16 @@ function gateCells(
   principal: Principal,
   modelId: string | undefined,
   series: string | undefined,
+  active?: ReadonlySet<string>,
 ): ResolvedLimit[] {
   const cells = def.perModel
-    ? resolveModelCells(def, policy, principal, modelId, series)
-    : [resolveLimit(def, policy, principal)];
-  if (cells.length === 0) cells.push(resolveLimit(def, policy, principal));
+    ? resolveModelCells(def, policy, principal, modelId, series, active)
+    : [resolveLimit(def, policy, principal, undefined, undefined, active)];
+  if (cells.length === 0) {
+    cells.push(
+      resolveLimit(def, policy, principal, undefined, undefined, active),
+    );
+  }
   return cells;
 }
 
@@ -93,12 +99,13 @@ function numericCounterCells(
   principal: Principal,
   modelId?: string,
   series?: string,
+  active?: ReadonlySet<string>,
 ): ResolvedLimit[] {
   const def = getLimitDefinition(limitKey);
   if (!def || def.kind !== 'counter') return [];
   const cells = def.perModel
-    ? resolveModelCells(def, policy, principal, modelId, series)
-    : [resolveLimit(def, policy, principal)];
+    ? resolveModelCells(def, policy, principal, modelId, series, active)
+    : [resolveLimit(def, policy, principal, undefined, undefined, active)];
   return cells.filter((cell) => typeof cell.value === 'number');
 }
 
@@ -116,11 +123,14 @@ export function isModelBlocked(
   principal: Principal,
   modelId?: string,
   series?: string,
+  active?: ReadonlySet<string>,
 ): boolean {
   const def = getLimitDefinition('model.allowed');
   if (!def) return false;
   if (modelId && isByomExempt(policy, modelId)) return false;
-  return gateCells(def, policy, principal, modelId, series).some(isBlocked);
+  return gateCells(def, policy, principal, modelId, series, active).some(
+    isBlocked,
+  );
 }
 
 interface CellReading {
@@ -193,20 +203,42 @@ export function resolveModelAvailability(
   model: { id: string; series?: string },
   usage: UsageWindows | null,
   timezone: string,
+  active: ReadonlySet<string> = activeDelegationIds(policy, principal),
 ): ModelAvailability {
-  if (isModelBlocked(policy, principal, model.id, model.series)) {
+  if (isModelBlocked(policy, principal, model.id, model.series, active)) {
     return { allowed: false, reason: 'blocked' };
   }
 
   const cells = [
-    ...numericCounterCells('chat.messagesPerDay', policy, principal),
+    ...numericCounterCells(
+      'chat.messagesPerDay',
+      policy,
+      principal,
+      undefined,
+      undefined,
+      active,
+    ),
     // Pre-flight token budgets (tokenDebit.ts checkTokenBudget) refuse every
     // send once hit, regardless of model — fold them in so an exhausted
     // token cap grays the picker instead of leaving every model "available"
     // right up until the 403 (docs/LIMITS_USER_FACING_UX.md §8). Not
     // byom-exempt: the pre-flight check applies to every model.
-    ...numericCounterCells('chat.tokensPerDay', policy, principal),
-    ...numericCounterCells('chat.tokensPerMonth', policy, principal),
+    ...numericCounterCells(
+      'chat.tokensPerDay',
+      policy,
+      principal,
+      undefined,
+      undefined,
+      active,
+    ),
+    ...numericCounterCells(
+      'chat.tokensPerMonth',
+      policy,
+      principal,
+      undefined,
+      undefined,
+      active,
+    ),
     ...(isByomExempt(policy, model.id)
       ? []
       : numericCounterCells(
@@ -215,6 +247,7 @@ export function resolveModelAvailability(
           principal,
           model.id,
           model.series,
+          active,
         )),
   ];
   if (cells.length === 0) return { allowed: true };

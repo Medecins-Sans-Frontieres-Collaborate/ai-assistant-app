@@ -14,6 +14,7 @@ import type {
 import {
   IndexJobActiveError,
   cancelIndexJob,
+  describeEmptySource,
   startIndexJob,
   stepIndexJob,
 } from '@/lib/services/m365/agentIndexJobService';
@@ -385,11 +386,170 @@ describe('stepIndexJob', () => {
     );
   });
 
+  it('marks a source with nothing indexable as an error with the reason (not "indexed")', async () => {
+    const skipped: M365ManifestItem = {
+      ...item('legacy'),
+      name: 'Budget.xlsm',
+      tier: 'skipped',
+      reason: 'unsupported',
+      status: undefined,
+    };
+    mockIndex.prepareIndexJob.mockImplementation(async () => {
+      const job = freshJob([]);
+      job.sources[0].items = [skipped];
+      return job;
+    });
+    const fileAgent: M365Agent = {
+      ...agent,
+      sources: [
+        {
+          ...agent.sources[0],
+          kind: 'file',
+          title: 'Budget.xlsm',
+          status: 'indexed',
+          lastIndexedAt: '2026-08-01T00:00:00.000Z',
+        },
+      ],
+    };
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: fileAgent,
+      etag: '"a1"',
+    });
+    const { jobId } = await startIndexJob(
+      req,
+      storage,
+      fileAgent,
+      'u1',
+      'admin@example.org',
+    );
+    const summary = await stepIndexJob(req, storage, fileAgent.id, jobId, 0);
+    expect(summary.status).toBe('succeeded');
+    expect(mockIndex.indexJobItem).not.toHaveBeenCalled();
+    const stamped = mockStore.writeM365Agent.mock.calls.at(-1)![1] as M365Agent;
+    expect(stamped.sources[0]).toMatchObject({
+      status: 'error',
+      indexedChunks: 0,
+      error: 'Unsupported file type (.xlsm) — save it as .xlsx and index again',
+    });
+    // No content in the index for this source → no "last indexed" claim.
+    expect(stamped.sources[0].lastIndexedAt).toBeUndefined();
+  });
+
+  it('drops a stale lastIndexedAt when every item of a source fails', async () => {
+    mockIndex.indexJobItem.mockImplementation(
+      async (_req, _agentId, _dep, _sourceId, it: M365ManifestItem) => ({
+        ...it,
+        status: 'failed',
+        indexedChunks: 0,
+        error: 'boom',
+      }),
+    );
+    const staleAgent: M365Agent = {
+      ...agent,
+      sources: [
+        {
+          ...agent.sources[0],
+          status: 'indexed',
+          lastIndexedAt: '2026-08-01T00:00:00.000Z',
+        },
+      ],
+    };
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: staleAgent,
+      etag: '"a1"',
+    });
+    const { jobId } = await startIndexJob(
+      req,
+      storage,
+      staleAgent,
+      'u1',
+      'admin@example.org',
+    );
+    let summary = await stepIndexJob(req, storage, staleAgent.id, jobId, 0);
+    while (summary.status === 'running') {
+      summary = await stepIndexJob(req, storage, staleAgent.id, jobId, 0);
+    }
+    const stamped = mockStore.writeM365Agent.mock.calls.at(-1)![1] as M365Agent;
+    expect(stamped.sources[0]).toMatchObject({
+      status: 'error',
+      error: 'boom',
+    });
+    expect(stamped.sources[0].lastIndexedAt).toBeUndefined();
+  });
+
   it('rejects a mismatched job id', async () => {
     await startIndexJob(req, storage, agent, 'u1', 'admin@example.org');
     await expect(
       stepIndexJob(req, storage, agent.id, 'job-ffffffffffff', 0),
     ).rejects.toThrow(/does not match/);
+  });
+});
+
+describe('describeEmptySource', () => {
+  const fileSource = { ...agent.sources[0], kind: 'file' as const };
+  const folderSource = agent.sources[0];
+
+  it('names the unsupported type and a supported alternative for a single file', () => {
+    expect(
+      describeEmptySource(fileSource, [
+        {
+          ...item('x'),
+          name: 'Deck.pptm',
+          tier: 'skipped',
+          reason: 'unsupported',
+        },
+      ]),
+    ).toBe('Unsupported file type (.pptm) — save it as .pptx and index again');
+    expect(
+      describeEmptySource(fileSource, [
+        {
+          ...item('x'),
+          name: 'notes.one',
+          tier: 'skipped',
+          reason: 'unsupported',
+        },
+      ]),
+    ).toContain('.one');
+    expect(
+      describeEmptySource(fileSource, [
+        {
+          ...item('x'),
+          name: 'README',
+          tier: 'skipped',
+          reason: 'unsupported',
+        },
+      ]),
+    ).toBe('Unsupported file type (no extension)');
+  });
+
+  it('describes other skip reasons and media needing preparation', () => {
+    expect(
+      describeEmptySource(fileSource, [
+        { ...item('x'), name: 'big.pdf', tier: 'skipped', reason: 'tooLarge' },
+      ]),
+    ).toBe('big.pdf: file too large');
+    expect(
+      describeEmptySource(fileSource, [
+        { ...item('x'), name: 'talk.mp4', tier: 'needsPreparation' },
+      ]),
+    ).toMatch(/needs preparation/);
+  });
+
+  it('summarises folders by count', () => {
+    expect(describeEmptySource(folderSource, [])).toBe(
+      'The folder contains no files',
+    );
+    expect(
+      describeEmptySource(folderSource, [
+        {
+          ...item('a'),
+          name: 'a.zip',
+          tier: 'skipped',
+          reason: 'disallowedType',
+        },
+        { ...item('b'), name: 'b.png', tier: 'needsPreparation' },
+      ]),
+    ).toBe('No supported files in this source (1 skipped, 1 need preparation)');
   });
 });
 

@@ -4,6 +4,7 @@ import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { AgentEnricher } from '@/lib/services/chat/enrichers/AgentEnricher';
 import { ExtractionEnricher } from '@/lib/services/chat/enrichers/ExtractionEnricher';
+import { GeneratedFileManifestEnricher } from '@/lib/services/chat/enrichers/GeneratedFileManifestEnricher';
 import { M365AgentEnricher } from '@/lib/services/chat/enrichers/M365AgentEnricher';
 import { PromptAgentEnricher } from '@/lib/services/chat/enrichers/PromptAgentEnricher';
 import { RAGEnricher } from '@/lib/services/chat/enrichers/RAGEnricher';
@@ -205,6 +206,10 @@ export async function POST(req: NextRequest): Promise<Response> {
         env.SEARCH_INDEX!,
         foundryOpenAIClient,
       ),
+      // Names the files earlier interpreter runs produced (issue #126) —
+      // after the persona/RAG stages that may replace systemPrompt, before
+      // the tool router that may remount those files.
+      new GeneratedFileManifestEnricher(),
       new ToolRouterEnricher(toolRouterService, agentChatService),
       // Structured-data extraction: composes the JSON-schema response
       // format when the request carries an `extraction` payload.

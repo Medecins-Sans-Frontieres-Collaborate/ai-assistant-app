@@ -137,6 +137,7 @@ export async function persistContainerFiles(
         filename: citation.filename,
         mime_type: mimeType,
         is_image: isImage,
+        size_bytes: data.length,
       });
       console.log(
         `[CodeInterpreter] Persisted generated file ${sanitizeForLog(citation.filename)} (${data.length} bytes)`,

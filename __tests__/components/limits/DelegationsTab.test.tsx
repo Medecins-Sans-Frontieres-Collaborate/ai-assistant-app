@@ -5,6 +5,7 @@ import { LimitDelegation, LimitOverride } from '@/lib/services/limits/types';
 
 import { DelegationsTab } from '@/components/Limits/DelegationsTab';
 
+import { LIMIT_DEFINITIONS } from '@/config/limits';
 import '@testing-library/jest-dom';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -196,6 +197,76 @@ describe('DelegationsTab', () => {
       defaults: [
         { limitKey: 'chat.messagesPerDay', value: 100, ceiling: true },
         { limitKey: 'chat.tokensPerDay', value: 5, ceiling: false },
+      ],
+    });
+  });
+
+  it('lifting a built-in default CONFIGURES it at its own value with a ceiling', () => {
+    const d = delegation();
+    const onChange = vi.fn();
+    render(
+      <DelegationsTab
+        delegations={[d]}
+        overrides={[]}
+        defaults={[]}
+        newIds={new Set([d.id])}
+        onChange={onChange}
+        onAdd={vi.fn()}
+      />,
+    );
+    const catalog = LIMIT_DEFINITIONS.find(
+      (def) => def.key === 'feature.m365.toolCallsPerDay',
+    )!;
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: `delegationLiftDefault label.${catalog.labelKey}`,
+      }),
+    );
+    expect(onChange).toHaveBeenCalledWith({
+      defaults: [
+        { limitKey: 'feature.m365.toolCallsPerDay', value: 200, ceiling: true },
+      ],
+    });
+  });
+
+  it('lifting a global-tier override entry ticks ceiling on exactly that entry of that override', () => {
+    const d = delegation();
+    const onChange = vi.fn();
+    const contractors = override({
+      id: 'lim-0000000000c1',
+      label: 'Contractors',
+      scope: 'domain',
+      targets: ['example.org'],
+      delegationId: undefined,
+      entries: [
+        { limitKey: 'chat.messagesPerDay', value: 100, ceiling: false },
+        { limitKey: 'chat.tokensPerDay', value: 5, ceiling: false },
+      ],
+    });
+    render(
+      <DelegationsTab
+        delegations={[d]}
+        overrides={[contractors]}
+        defaults={[]}
+        newIds={new Set([d.id])}
+        onChange={onChange}
+        onAdd={vi.fn()}
+      />,
+    );
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'delegationLiftDefault label.chatMessagesPerDay · Contractors',
+      }),
+    );
+    expect(onChange).toHaveBeenCalledWith({
+      overrides: [
+        {
+          ...contractors,
+          entries: [
+            { limitKey: 'chat.messagesPerDay', value: 100, ceiling: true },
+            { limitKey: 'chat.tokensPerDay', value: 5, ceiling: false },
+          ],
+        },
       ],
     });
   });

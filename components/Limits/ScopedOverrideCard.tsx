@@ -15,6 +15,7 @@ import {
 } from '@/client/hooks/settings/useLimitsAdmin';
 
 import { LimitOverride } from '@/lib/services/limits/types';
+import { LIMITS_ERROR_CODES } from '@/lib/services/limits/wire';
 
 import {
   ADMIN_BANNER_WARN,
@@ -47,8 +48,16 @@ interface ScopedOverrideCardProps {
   /** Created this session, not yet saved — Discard drops it entirely. */
   isNew?: boolean;
   onDiscardNew: () => void;
-  /** A save or delete round-tripped (success or conflict) — parent refetches. */
+  /** A save or delete SUCCEEDED — the parent refetches and, for a new card, retires the draft. */
   onSettled: () => void;
+  /**
+   * The server view moved on under a refused write (409, or an owned record
+   * that vanished) — the parent refetches the surrounding data but the draft
+   * is KEPT. Distinct from `onSettled` on purpose: for a never-saved card the
+   * parent's `onSettled` retires the pending copy, which on a conflict would
+   * silently discard the admin's targets and entries.
+   */
+  onStale: () => void;
   onDirtyChange: (id: string, dirty: boolean) => void;
 }
 
@@ -84,6 +93,7 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
   isNew = false,
   onDiscardNew,
   onSettled,
+  onStale,
   onDirtyChange,
 }) => {
   const t = useTranslations('limits');
@@ -139,21 +149,21 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
   const explain = (error: unknown): string => {
     if (!(error instanceof ScopedLimitsError)) return t('saveFailed');
     switch (error.code) {
-      case 'LIMITS_OUT_OF_SCOPE':
+      case LIMITS_ERROR_CODES.OUT_OF_SCOPE:
         return t('saveRejectedOutOfScope', {
           targets: error.outOfScope.join(', '),
         });
-      case 'LIMITS_BUDGET_EXCEEDED':
+      case LIMITS_ERROR_CODES.BUDGET_EXCEEDED:
         return t('saveRejectedBudget', { max: delegation.maxOverrides });
-      case 'LIMITS_FOREIGN_OVERRIDE':
+      case LIMITS_ERROR_CODES.FOREIGN_OVERRIDE:
         return t('saveRejectedForeign');
       case 'FORBIDDEN':
         return t('saveRejectedForbidden');
       case 'NOT_FOUND':
         return t('saveRejectedNotFound');
-      case 'LIMITS_CONFLICT':
+      case LIMITS_ERROR_CODES.CONFLICT:
         return t('conflict');
-      case 'LIMITS_POLICY_UNAVAILABLE':
+      case LIMITS_ERROR_CODES.POLICY_UNAVAILABLE:
         return t('policyUnavailable');
       default:
         return error.details || error.message || t('saveFailed');
@@ -173,7 +183,7 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
     } catch (error) {
       if (
         error instanceof ScopedLimitsError &&
-        error.code === 'LIMITS_OUT_OF_SCOPE'
+        error.code === LIMITS_ERROR_CODES.OUT_OF_SCOPE
       ) {
         setRejected(error.outOfScope);
       }
@@ -182,9 +192,10 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
       // draft is KEPT (dirty), only the surrounding data refreshes.
       if (
         error instanceof ScopedLimitsError &&
-        (error.code === 'LIMITS_CONFLICT' || error.code === 'NOT_FOUND')
+        (error.code === LIMITS_ERROR_CODES.CONFLICT ||
+          error.code === 'NOT_FOUND')
       ) {
-        onSettled();
+        onStale();
       }
     }
   };
@@ -209,7 +220,7 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
     } catch (error) {
       toast.error(explain(error));
       if (error instanceof ScopedLimitsError && error.code === 'NOT_FOUND') {
-        onSettled();
+        onStale();
       }
     }
   };

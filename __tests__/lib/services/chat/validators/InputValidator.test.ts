@@ -227,6 +227,68 @@ describe('InputValidator', () => {
     });
   });
 
+  describe('validateChatRequest - assistant toolCalls (issue #126)', () => {
+    const baseModel = { id: 'gpt-5', name: 'gpt-5' };
+    const generated = {
+      url: '/api/file/abc123.vbs',
+      filename: 'script.vbs',
+      mime_type: 'application/octet-stream',
+      is_image: false,
+      size_bytes: 2150,
+    };
+
+    it('keeps generated-file refs on prior assistant turns and strips display-only fields', () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest({
+        model: baseModel,
+        messages: [
+          { role: 'user', content: 'write a script' },
+          {
+            role: 'assistant',
+            content: 'Here is script.vbs',
+            toolCalls: [
+              {
+                id: 'ci-1',
+                name: 'code_interpreter',
+                server_label: null,
+                arguments: 'x'.repeat(6000),
+                status: 'completed',
+                output: 'y'.repeat(4000),
+                error: null,
+                generated_files: [generated],
+              },
+            ],
+          },
+          { role: 'user', content: 'it fails on line 4' },
+        ],
+      });
+      const assistant = result.messages[1] as Record<string, unknown>;
+      const calls = assistant.toolCalls as Array<Record<string, unknown>>;
+      expect(calls).toHaveLength(1);
+      expect(calls[0].generated_files).toEqual([generated]);
+      expect(calls[0]).not.toHaveProperty('arguments');
+      expect(calls[0]).not.toHaveProperty('output');
+    });
+
+    it('drops malformed toolCalls without failing the request', () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest({
+        model: baseModel,
+        messages: [
+          {
+            role: 'assistant',
+            content: 'x',
+            toolCalls: [{ generated_files: 'not-an-array' }],
+          },
+          { role: 'user', content: 'hi' },
+        ],
+      });
+      expect(
+        (result.messages[0] as Record<string, unknown>).toolCalls,
+      ).toBeUndefined();
+    });
+  });
+
   describe('validateChatRequest - file_url metadata', () => {
     const baseModel = { id: 'gpt-5', name: 'gpt-5' };
     const requestWith = (fileBlock: unknown) => ({
@@ -794,6 +856,25 @@ describe('validateChatRequest - mcpServers entries', () => {
     expect(result.mcpServers).toEqual([
       { id: 'builtin-m365', name: 'Microsoft 365', builtin: true },
     ]);
+  });
+
+  it('accepts a continuationToken on an echoed pending tool call', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      mcpServers: [{ id: 'github', name: 'GitHub' }],
+      mcpPendingToolCalls: [
+        {
+          id: 'call_1',
+          serverId: 'github',
+          toolName: 'list_prs',
+          argumentsJson: '{}',
+          continuationToken: 'v1.1.abc',
+        },
+      ],
+      mcpLoopRound: 1,
+    });
+    expect(result.mcpPendingToolCalls?.[0].continuationToken).toBe('v1.1.abc');
   });
 
   it('accepts an admin-connector entry carrying connectorId', () => {

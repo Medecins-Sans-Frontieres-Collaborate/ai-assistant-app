@@ -29,6 +29,7 @@ import { SURFACE_CELL_SUFFIX } from '@/lib/services/limits/tokenDebit';
 import { LimitEntry, LimitsPolicy } from '@/lib/services/limits/types';
 import { UsageCell, lookupUsage } from '@/lib/services/limits/usageLookup';
 import { readUsage } from '@/lib/services/limits/usageStore';
+import { LIMITS_ERROR_CODES, MeLimit } from '@/lib/services/limits/wire';
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import { isValidEmail } from '@/lib/services/m365/tools/shared';
 import {
@@ -156,39 +157,8 @@ import {
  * list. The `enabled: true` field is kept for response-shape stability.
  */
 
-interface MeLimit {
-  limitKey: string;
-  value: number | boolean | null;
-  unit: string;
-  window: string;
-  source: string;
-  overrideId?: string;
-  modelId?: string;
-  series?: string;
-  ceilingApplied?: boolean;
-  /** Preview provenance (design §6c) — absent on the own-limits path. */
-  tier?: LimitTier;
-  /** The global-tier OVERRIDE whose ceiling pinned the value, and only its label. */
-  ceilingOverrideId?: string;
-  ceilingLabel?: string;
-  /**
-   * Own-limits path with `usage=1`, numeric `counter` rows only: the
-   * caller's consumption this period (0 when no document), what is left,
-   * and when the window rolls over.
-   */
-  used?: number;
-  remaining?: number;
-  resetAt?: string;
-  /**
-   * Of `used`, how much came from conversation workflows rather than chat —
-   * read from the shadow counter the debit writes alongside the real cell
-   * (docs/WORKFLOW_EMISSIONS_DESIGN.md §7b). Absent when nothing did, so the
-   * UI shows the split only when there IS one. Never gates anything: the cap
-   * applies to `used` as a whole.
-   */
-  usedByWorkflows?: number;
-}
-
+// `MeLimit` is declared once in lib/services/limits/wire.ts and shared with
+// the client hook.
 /** Hard cap on `models=`; a bad client must not make the server resolve thousands of cells. */
 const MAX_MODEL_IDS = 100;
 
@@ -312,10 +282,10 @@ function dropUnreadCatalogCounters(
 
 /**
  * `readOwnUsage` posture: matches the "same 2.5s posture as other user-path
- * reads" (§3a). `readUsage` takes no abort signal (usageStore.ts is outside
- * this file's ownership), so a hung blob GET keeps running in the
- * background, but the ROUTE stops waiting on it and answers
- * `usageUnavailable: true` rather than holding the response open.
+ * reads" (§3a). `readUsage` carries its own per-operation deadline
+ * (usageStore.ts USAGE_IO_DEADLINE_MS) which is longer than this one; the
+ * ROUTE stops waiting first and answers `usageUnavailable: true` rather than
+ * holding the response open.
  */
 const OWN_USAGE_TIMEOUT_MS = 2_500;
 
@@ -604,7 +574,7 @@ export async function GET(request: NextRequest) {
             'Limits policy is unavailable; retry',
             503,
             undefined,
-            'LIMITS_POLICY_UNAVAILABLE',
+            LIMITS_ERROR_CODES.POLICY_UNAVAILABLE,
           );
         }
         const status = resolveLimitsAdminStatus(session.user, policy);
@@ -620,7 +590,7 @@ export async function GET(request: NextRequest) {
               : 'This person is outside your scope',
             403,
             verdict,
-            'LIMITS_PREVIEW_OUT_OF_SCOPE',
+            LIMITS_ERROR_CODES.PREVIEW_OUT_OF_SCOPE,
           );
         }
       }
@@ -677,6 +647,8 @@ export async function GET(request: NextRequest) {
 
     const principal = buildPrincipal(session);
     const timezone = policy?.timezone ?? 'UTC';
+    // One jurisdiction scan for every per-model verdict below.
+    const ownActive = activeDelegationIds(policy, principal);
     // No provenance: tier and the pinning record's id/label are preview-only.
     // No qualified rows either: the picker's per-model answers come from
     // `models` below, computed conjunctively, not from rows.
@@ -727,6 +699,7 @@ export async function GET(request: NextRequest) {
                   model,
                   usage,
                   timezone,
+                  ownActive,
                 ),
               ]),
             ),

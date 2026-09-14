@@ -9,6 +9,8 @@ import {
   hasUndecidable,
   isMailAnchored,
   liftableDefaults,
+  liftableEntries,
+  looksLikeMail,
   mergeRelevantRules,
   narrowedOverrideCount,
   outOfScopeTargets,
@@ -249,6 +251,73 @@ describe('liftableDefaults', () => {
       'chat.messagesPerDay',
       'feature.webSearch.enabled',
     ]);
+  });
+});
+
+describe('liftableEntries', () => {
+  it('adds finite built-in defaults that have no configured base default, and global overrides below the user layer', () => {
+    const entries = liftableEntries(
+      [
+        { limitKey: 'chat.messagesPerDay', value: 100, ceiling: false },
+        // Configured (with a ceiling): the catalog row for this key must not appear.
+        { limitKey: 'feature.m365.mail.readsPerDay', value: 50, ceiling: true },
+        // A QUALIFIED default does not count as configuring the base cell.
+        {
+          limitKey: 'model.requests',
+          series: 'gpt',
+          value: 10,
+          ceiling: false,
+        },
+      ],
+      [
+        override('domain', ['example.org'], {
+          id: 'lim-0000000000c1',
+          entries: [
+            { limitKey: 'chat.tokensPerDay', value: 5, ceiling: false },
+            { limitKey: 'chat.tokensPerMonth', value: 5, ceiling: true },
+          ],
+        }),
+        // User layer: nothing scoped can outrank it, so never listed.
+        override('user', ['alice@example.org'], {
+          id: 'lim-0000000000c2',
+          entries: [
+            { limitKey: 'chat.tokensPerDay', value: 5, ceiling: false },
+          ],
+        }),
+        // Scoped tier: not a global record, so never listed.
+        override('domain', ['example.org'], {
+          id: 'lim-0000000000c3',
+          delegationId: 'del-0000000000aa',
+          entries: [
+            { limitKey: 'chat.tokensPerDay', value: 5, ceiling: false },
+          ],
+        }),
+      ],
+    );
+    const keys = entries.map((e) => `${e.source}:${e.entry.limitKey}`);
+    expect(keys).toContain('default:chat.messagesPerDay');
+    expect(keys).toContain('default:model.requests');
+    expect(keys).toContain('catalog:feature.m365.toolCallsPerDay');
+    expect(keys).not.toContain('catalog:feature.m365.mail.readsPerDay');
+    // `model.requests` compiles to unlimited, so no catalog row even though
+    // only a qualified default configures it.
+    expect(keys).not.toContain('catalog:model.requests');
+    expect(keys.filter((k) => k.startsWith('override:'))).toEqual([
+      'override:chat.tokensPerDay',
+    ]);
+    expect(entries.find((e) => e.source === 'override')?.overrideId).toBe(
+      'lim-0000000000c1',
+    );
+  });
+});
+
+describe('looksLikeMail', () => {
+  it('accepts a plain address and rejects names, bare domains and blanks', () => {
+    expect(looksLikeMail('ocp-admin@ocp.msf.org')).toBe(true);
+    expect(looksLikeMail('  Alice@Example.org ')).toBe(true);
+    expect(looksLikeMail('alice smith')).toBe(false);
+    expect(looksLikeMail('msf.org')).toBe(false);
+    expect(looksLikeMail('')).toBe(false);
   });
 });
 

@@ -1,5 +1,6 @@
 import {
   IconBook,
+  IconForms,
   IconGauge,
   IconMap2,
   IconMasksTheater,
@@ -77,6 +78,14 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     group: 'access',
     labelKey: 'agentAccess.datasetsTab',
     descriptionKey: 'admin.areaDescription.mapDatasets',
+  },
+  'form-templates': {
+    id: 'form-templates',
+    href: '/admin/form-templates',
+    icon: IconForms,
+    group: 'access',
+    labelKey: 'agentAccess.formTemplatesTab',
+    descriptionKey: 'admin.areaDescription.formTemplates',
   },
   limits: {
     id: 'limits',

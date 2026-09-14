@@ -42,6 +42,9 @@ export const WORKFLOW_POLICY_DEFAULTS: Record<
   'data-analysis': true,
   map: true,
   grants: false,
+  // Ships under the same LD flag as the other general workflows; the policy
+  // stays the kill switch (docs/DOCUMENT_FILL_ASSESSMENT.md §11).
+  'form-fill': true,
 };
 
 export const WorkflowSettingSchema = z.object({

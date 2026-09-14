@@ -1,4 +1,8 @@
-import { denialMessage } from '@/lib/services/limits/enforcement';
+import {
+  denialMessage,
+  effectiveCeiling,
+  meteredCells,
+} from '@/lib/services/limits/enforcement';
 
 import { describe, expect, it } from 'vitest';
 
@@ -105,5 +109,131 @@ describe('denialMessage', () => {
     });
     expect(message).toContain('3');
     expect(message).not.toContain('not.a.real.key');
+  });
+});
+
+describe('fail-closed and observe-mode contracts (review 2026-09-12)', () => {
+  it('an `unavailable` denial says the counter was unreachable, never "reached"', () => {
+    const message = denialMessage({
+      limitKey: 'chat.messagesPerDay',
+      limit: 10,
+      used: 0,
+      unavailable: true,
+      source: 'global',
+    });
+    expect(message).toMatch(/temporarily unavailable/);
+    expect(message).not.toMatch(/reached/);
+  });
+
+  it('effectiveCeiling clamps nothing in observe mode and everything in enforce', () => {
+    const principal = { userId: 'oid-1', attributes: [], groupIds: [] };
+    const base = {
+      version: 1 as const,
+      defaults: [
+        { limitKey: 'feature.mcp.roundsPerRequest', value: 2, ceiling: false },
+      ],
+      overrides: [],
+      delegations: [],
+      failMode: 'open' as const,
+      timezone: 'UTC',
+      countByomUsage: false,
+      countAuxiliaryUsage: false,
+      updatedBy: 'x',
+      updatedAt: 'x',
+    };
+    expect(
+      effectiveCeiling(
+        { ...base, mode: 'observe' },
+        principal,
+        'feature.mcp.roundsPerRequest',
+      ),
+    ).toBeUndefined();
+    expect(
+      effectiveCeiling(
+        { ...base, mode: 'enforce' },
+        principal,
+        'feature.mcp.roundsPerRequest',
+      ),
+    ).toBe(2);
+  });
+});
+
+describe('precomputed active delegations are honoured (review 2026-09-12)', () => {
+  const scopedPolicy = {
+    version: 1 as const,
+    defaults: [{ limitKey: 'chat.messagesPerDay', value: 10, ceiling: false }],
+    overrides: [
+      {
+        id: 'lim-0000000000a1',
+        label: '',
+        enabled: true,
+        scope: 'domain' as const,
+        targets: ['ocp.msf.org'],
+        priority: 0,
+        delegationId: 'del-0000000000aa',
+        entries: [
+          { limitKey: 'chat.messagesPerDay', value: 500, ceiling: false },
+        ],
+        createdBy: 'x',
+        createdAt: 'x',
+        updatedBy: 'x',
+        updatedAt: 'x',
+      },
+    ],
+    delegations: [
+      {
+        id: 'del-0000000000aa',
+        label: 'OCP',
+        enabled: true,
+        admins: [],
+        jurisdiction: [{ scope: 'domain' as const, targets: ['ocp.msf.org'] }],
+        maxOverrides: 25,
+        createdBy: 'x',
+        createdAt: 'x',
+        updatedBy: 'x',
+        updatedAt: 'x',
+      },
+    ],
+    mode: 'enforce' as const,
+    failMode: 'open' as const,
+    timezone: 'UTC',
+    countByomUsage: false,
+    countAuxiliaryUsage: false,
+    updatedBy: 'x',
+    updatedAt: 'x',
+  };
+  const principal = {
+    userId: 'oid-1',
+    mail: 'a@ocp.msf.org',
+    domain: 'ocp.msf.org',
+    attributes: [],
+    groupIds: [],
+  };
+
+  it("uses the caller's set rather than rescanning: an empty set keeps the scoped record out", () => {
+    const scanned = meteredCells(
+      scopedPolicy,
+      principal,
+      'chat.messagesPerDay',
+    );
+    expect(scanned[0].value).toBe(500);
+    const withEmpty = meteredCells(
+      scopedPolicy,
+      principal,
+      'chat.messagesPerDay',
+      undefined,
+      undefined,
+      new Set(),
+    );
+    expect(withEmpty[0].value).toBe(10);
+    const withActive = meteredCells(
+      scopedPolicy,
+      principal,
+      'chat.messagesPerDay',
+      undefined,
+      undefined,
+      new Set(['del-0000000000aa']),
+    );
+    expect(withActive[0].value).toBe(500);
   });
 });

@@ -45,7 +45,13 @@ import {
   sumChanges,
 } from '@/lib/services/m365/agentSourcePlanner';
 import { checkDocumentSignature } from '@/lib/services/m365/documentSignature';
-import { M365Error, graphFetch, graphJson } from '@/lib/services/m365/graphApi';
+import {
+  M365Error,
+  fetchWithGraphRetry,
+  graphErrorFromResponse,
+  graphFetch,
+  graphJson,
+} from '@/lib/services/m365/graphApi';
 
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -561,20 +567,26 @@ export function isAllowedDownloadUrl(url: string): boolean {
   return DOWNLOAD_HOST_SUFFIXES.some((suffix) => host.endsWith(suffix));
 }
 
-function withTimeout<T>(
-  promise: Promise<T>,
+/**
+ * Time-boxes `run` and ABORTS it on expiry: the AbortSignal handed to the
+ * task is forwarded to every converter child the extraction spawns, so a
+ * stuck pandoc/LibreOffice/ssconvert is killed instead of lingering on
+ * the replica after the item has already been recorded as failed.
+ */
+export function withTimeout<T>(
+  run: (signal: AbortSignal) => Promise<T>,
   ms: number,
   what: string,
 ): Promise<T> {
+  const controller = new AbortController();
   let timer: ReturnType<typeof setTimeout> | undefined;
   const timeout = new Promise<never>((_, reject) => {
-    timer = setTimeout(
-      () =>
-        reject(new Error(`${what} timed out after ${Math.round(ms / 1000)}s`)),
-      ms,
-    );
+    timer = setTimeout(() => {
+      controller.abort();
+      reject(new Error(`${what} timed out after ${Math.round(ms / 1000)}s`));
+    }, ms);
   });
-  return Promise.race([promise, timeout]).finally(() => {
+  return Promise.race([run(controller.signal), timeout]).finally(() => {
     if (timer) clearTimeout(timer);
   });
 }
@@ -614,14 +626,21 @@ export async function downloadItemBytes(
   const downloadUrl = meta['@microsoft.graph.downloadUrl'];
   const content =
     downloadUrl && isAllowedDownloadUrl(downloadUrl)
-      ? await fetch(downloadUrl)
+      ? await fetchWithGraphRetry(downloadUrl)
       : await graphFetch(
           req,
           GRAPH_SCOPES,
           `/drives/${encodeURIComponent(driveId)}/items/${encodeURIComponent(itemId)}/content`,
         );
   if (!content.ok) {
-    throw new M365Error('Failed to download file content', 'graph_error', 502);
+    // The pre-authenticated URL is not a Graph endpoint, but its failure
+    // modes map the same way: 401/403/404 mean the file is gone or the
+    // caller lost access (→ `missing` on the item), anything else is a
+    // transport problem worth retrying next run.
+    throw await graphErrorFromResponse(
+      content,
+      'Failed to download file content',
+    );
   }
   const buffer = Buffer.from(await content.arrayBuffer());
   if (buffer.byteLength > maxBytes) {
@@ -666,7 +685,7 @@ async function downloadAndExtract(
   const file = new File([new Uint8Array(downloaded.buffer)], downloaded.name);
   return {
     text: await withTimeout(
-      loadDocument(file),
+      (signal) => loadDocument(file, { signal }),
       EXTRACTION_TIMEOUT_MS,
       'Extraction',
     ),
@@ -1064,6 +1083,15 @@ export async function indexJobItem(
       error: undefined,
     };
   } catch (error) {
+    if (
+      error instanceof M365Error &&
+      (error.kind === 'not_connected' || error.kind === 'consent_missing')
+    ) {
+      // Session-level: no item after this one can succeed either. Let the
+      // step end the job loudly instead of failing items one by one with
+      // an AADSTS string each.
+      throw error;
+    }
     const missing =
       error instanceof M365Error &&
       (error.kind === 'not_found' || error.kind === 'forbidden');

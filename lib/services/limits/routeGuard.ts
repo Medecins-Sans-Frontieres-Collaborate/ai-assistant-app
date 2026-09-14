@@ -72,7 +72,7 @@ const ALLOWED: GuardResult = { allowed: true };
 /**
  * Enforces a limit for a signed-in caller.
  *
- * Returns `{ allowed: true }` when the feature is disabled, when the limit is
+ * Returns `{ allowed: true }` when no policy is authored, when the limit is
  * unlimited for this caller, in observe mode, and on any internal failure
  * where the policy says fail open — a quota is a cost control, and a storage
  * blip must never become a feature outage.
@@ -147,6 +147,7 @@ export async function guardLimit(
       limitKey: result.denial.limitKey,
       limit: result.denial.limit,
       used: result.denial.used,
+      ...(result.denial.unavailable ? { unavailable: true } : {}),
       resetAt: result.denial.resetAt,
       source: (result.denial.source ?? 'global') as ResolvedLimit['source'],
     });
@@ -165,6 +166,7 @@ function quotaResponse(denial: {
   limit: number | false;
   used?: number;
   resetAt?: string;
+  unavailable?: boolean;
 }): NextResponse {
   return errorResponse(
     denialMessage({ ...denial, source: 'global' }),
@@ -205,11 +207,12 @@ export async function guardTokenBudget(
       limitKey: overBudget.limitKey,
       limit: overBudget.limit,
       used: overBudget.used,
+      ...(overBudget.unavailable ? { unavailable: true } : {}),
       resetAt: resetAt(
         overBudget.limitKey === 'chat.tokensPerMonth' ? 'month' : 'day',
         policy?.timezone ?? 'UTC',
       ),
-      source: 'global' as const,
+      source: overBudget.source,
     };
     const decision = applyMode(policy, principal, denial);
     if (decision.allowed) return ALLOWED;

@@ -58,13 +58,31 @@ export function domainOfMail(
   return domain ? domain : undefined;
 }
 
+/**
+ * Canonical (trim + lowercase) target set per target ARRAY, cached weakly on
+ * the array itself. A policy snapshot's arrays are stable objects for the
+ * cache TTL, and the resolver walks every override's targets several times
+ * per chat request — lowercasing each string on every pass was the single
+ * largest CPU cost at policy scale. The WeakMap keeps the cache exactly as
+ * long as the array is alive and never leaks across snapshots.
+ */
+const canonicalSets = new WeakMap<readonly string[], ReadonlySet<string>>();
+
+function canonicalSet(targets: readonly string[]): ReadonlySet<string> {
+  const cached = canonicalSets.get(targets);
+  if (cached) return cached;
+  const built = new Set(targets.map((target) => target.trim().toLowerCase()));
+  canonicalSets.set(targets, built);
+  return built;
+}
+
 /** Case-insensitive exact membership. Blank `value` never matches. */
 export function matchesTargets(
   targets: readonly string[],
   value: string | undefined,
 ): boolean {
-  if (!value) return false;
-  return targets.some((target) => target.trim().toLowerCase() === value);
+  if (!value || targets.length === 0) return false;
+  return canonicalSet(targets).has(value);
 }
 
 /** Case-insensitive intersection. Empty `values` never matches. */
@@ -72,9 +90,9 @@ export function intersectsTargets(
   targets: readonly string[],
   values: readonly string[],
 ): boolean {
-  if (values.length === 0) return false;
-  const normalized = new Set(values.map((v) => v.trim().toLowerCase()));
-  return targets.some((target) => normalized.has(target.trim().toLowerCase()));
+  if (values.length === 0 || targets.length === 0) return false;
+  const set = canonicalSet(targets);
+  return values.some((value) => set.has(value.trim().toLowerCase()));
 }
 
 /**

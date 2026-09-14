@@ -41,9 +41,11 @@ import { normalizeDomainEntry } from '@/components/AgentAccess/RuleEditor';
 import { RelevantRulesPopover } from '@/components/Limits/RelevantRulesPopover';
 import {
   DelegationOverlap,
+  LiftableEntry,
   RelevantRule,
   isMailAnchored,
-  liftableDefaults,
+  liftableEntries,
+  looksLikeMail,
   narrowedOverrideCount,
 } from '@/components/Limits/jurisdiction';
 import { LIMITS_CHIP_WARN } from '@/components/Limits/limitsClasses';
@@ -61,8 +63,14 @@ interface DelegationEditorProps {
   relevantRules: RelevantRule[];
   /** Delegation id → label, for the overlap chip title and popover chips. */
   labelFor: (id: string) => string;
-  /** Draft global defaults, for the liftable-defaults list. */
+  /** Draft global defaults, for the liftable list. */
   globalDefaults: LimitEntry[];
+  /**
+   * Draft overrides (all of them; the list keeps only global-tier records
+   * below the user layer), for the liftable list. Optional so a caller that
+   * has no overrides in hand still gets defaults + catalog rows.
+   */
+  globalOverrides?: LimitOverride[];
   onChange: (next: LimitDelegation) => void;
   /** Plain removal — offered only while the delegation owns no overrides. */
   onRemove: () => void;
@@ -70,8 +78,12 @@ interface DelegationEditorProps {
   onDisable: () => void;
   /** Blocked-delete offer 2: remove the delegation AND its overrides in ONE patch. */
   onDeleteWithOverrides: () => void;
-  /** Tick `ceiling` on one global default (one click from the liftable list). */
-  onLiftDefault: (entry: LimitEntry) => void;
+  /**
+   * Pin one liftable row (one click from the list): tick `ceiling` on a
+   * configured default, configure a catalog default WITH a ceiling, or tick
+   * `ceiling` on the entry of a global-tier override.
+   */
+  onLiftDefault: (item: LiftableEntry) => void;
   disabled?: boolean;
   defaultExpanded?: boolean;
   /** Created this session — no server id yet; the header says so. */
@@ -87,7 +99,9 @@ const SCOPES: OverrideScope[] = ['domain', 'user', 'group', 'attribute'];
  * Four things this card must make visible, because a delegation is by
  * default authority to RAISE every non-ceiling limit inside its
  * jurisdiction:
- *  - liftable defaults (global defaults without `ceiling`), one click to pin;
+ *  - the liftable list — configured defaults without `ceiling`, compiled
+ *    catalog defaults nobody configured, and global-tier overrides a more
+ *    specific scoped record would outrank — one click to pin each;
  *  - anchoring — a warning when no domain or user predicate anchors the
  *    jurisdiction (§8: group-only jurisdictions inherit the group cache's
  *    failure posture and cannot be previewed by mail);
@@ -115,6 +129,7 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
   disabled = false,
   defaultExpanded = true,
   isNew = false,
+  globalOverrides = [],
 }) => {
   const t = useTranslations('limits');
   const tPeople = useTranslations('peopleSuggest');
@@ -122,6 +137,17 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
   const groupsEnabled = useAgentAccessGroupsEnabled();
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  // The budget field keeps its own text so an admin can clear it and type a
+  // new number: the old `NaN → 0` mapping saved a blank field as 0 and
+  // silently blocked every addition under the delegation. An invalid value
+  // commits nothing; blur restores the stored number. Re-seeded during
+  // render when the delegation's value changes (a clamp, a reload).
+  const [maxText, setMaxText] = useState(String(delegation.maxOverrides));
+  const [maxSeed, setMaxSeed] = useState(delegation.maxOverrides);
+  if (delegation.maxOverrides !== maxSeed) {
+    setMaxSeed(delegation.maxOverrides);
+    setMaxText(String(delegation.maxOverrides));
+  }
 
   const update = (patch: Partial<LimitDelegation>) =>
     onChange({ ...delegation, ...patch });
@@ -142,9 +168,12 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
     [delegation.jurisdiction, ownedOverrides],
   );
   const liftable = useMemo(
-    () => liftableDefaults(globalDefaults),
-    [globalDefaults],
+    () => liftableEntries(globalDefaults, globalOverrides),
+    [globalDefaults, globalOverrides],
   );
+  const invalidAdmins = delegation.admins.filter(
+    (admin) => !looksLikeMail(admin),
+  ).length;
   const overlapPartners = useMemo(
     () => [
       ...new Set(overlaps.map((o) => (o.a === delegation.id ? o.b : o.a))),
@@ -161,11 +190,27 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
     setConfirmDelete(true);
   };
 
-  const liftableLabel = (entry: LimitEntry): string => {
+  const liftableLabel = (item: LiftableEntry): string => {
+    const { entry } = item;
     const def = getLimitDefinition(entry.limitKey);
     const base = def ? t(`label.${def.labelKey}` as never) : entry.limitKey;
     const qualifier = entry.modelId ?? entry.series;
-    return qualifier ? `${base} — ${qualifier}` : base;
+    const named = qualifier ? `${base} — ${qualifier}` : base;
+    return item.source === 'override'
+      ? `${named} · ${item.overrideLabel || t('untitledOverride')}`
+      : named;
+  };
+  const liftableSource = (item: LiftableEntry): string => {
+    switch (item.source) {
+      case 'default':
+        return t('liftableSourceDefault');
+      case 'catalog':
+        return t('liftableSourceCatalog');
+      case 'override':
+        return t('liftableSourceOverride', {
+          scope: t(`scope.${item.overrideScope ?? 'domain'}` as never),
+        });
+    }
   };
 
   return (
@@ -255,14 +300,17 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
                 min={0}
                 max={100}
                 className={`w-20 ${ADMIN_FIELD}`}
-                value={delegation.maxOverrides}
+                value={maxText}
                 onChange={(e) => {
+                  setMaxText(e.target.value);
                   const parsed = Number.parseInt(e.target.value, 10);
-                  update({
-                    maxOverrides: Number.isNaN(parsed)
-                      ? 0
-                      : Math.max(0, Math.min(100, parsed)),
-                  });
+                  if (Number.isNaN(parsed)) return;
+                  update({ maxOverrides: Math.max(0, Math.min(100, parsed)) });
+                }}
+                onBlur={() => {
+                  if (Number.isNaN(Number.parseInt(maxText, 10))) {
+                    setMaxText(String(delegation.maxOverrides));
+                  }
                 }}
                 disabled={disabled}
                 aria-label={t('delegationMaxOverridesLabel')}
@@ -335,10 +383,19 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
               disabled={disabled}
               suggest={peopleSuggest}
               suggestionsLabel={tPeople('listLabel')}
+              chipTone={(value) => (looksLikeMail(value) ? undefined : 'warn')}
+              chipTitle={(value) =>
+                looksLikeMail(value) ? undefined : t('delegationAdminNotMail')
+              }
             />
             <p className={ADMIN_HINT}>{t('delegationAdminsHint')}</p>
             {delegation.admins.length === 0 && (
               <p className={ADMIN_HINT}>{t('delegationNoAdminsWarning')}</p>
+            )}
+            {invalidAdmins > 0 && (
+              <p className={`mt-2 ${ADMIN_BANNER_WARN}`} role="note">
+                {t('delegationAdminsInvalidWarning', { count: invalidAdmins })}
+              </p>
             )}
           </div>
 
@@ -486,28 +543,34 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
               <p className={ADMIN_MUTED}>{t('delegationLiftableNone')}</p>
             ) : (
               <ul className="space-y-1">
-                {liftable.map((entry) => (
-                  <li
-                    key={`${entry.limitKey}|${entry.modelId ?? ''}|${entry.series ?? ''}`}
-                    className="flex flex-wrap items-center justify-between gap-2 text-sm text-black dark:text-white"
-                  >
-                    <span>
-                      {liftableLabel(entry)}
-                      <span className={`ml-2 ${ADMIN_MUTED}`}>
-                        {String(entry.value)}
-                      </span>
-                    </span>
-                    <button
-                      type="button"
-                      className={ADMIN_BTN_SECONDARY}
-                      onClick={() => onLiftDefault(entry)}
-                      disabled={disabled}
-                      aria-label={`${t('delegationLiftDefault')} ${liftableLabel(entry)}`}
+                {liftable.map((item) => {
+                  const { entry } = item;
+                  return (
+                    <li
+                      key={`${item.source}|${item.overrideId ?? ''}|${entry.limitKey}|${entry.modelId ?? ''}|${entry.series ?? ''}`}
+                      className="flex flex-wrap items-center justify-between gap-2 text-sm text-black dark:text-white"
                     >
-                      {t('delegationLiftDefault')}
-                    </button>
-                  </li>
-                ))}
+                      <span className="flex flex-wrap items-center gap-2">
+                        {liftableLabel(item)}
+                        <span className={ADMIN_MUTED}>
+                          {String(entry.value)}
+                        </span>
+                        <span className={ADMIN_CHIP_NEUTRAL}>
+                          {liftableSource(item)}
+                        </span>
+                      </span>
+                      <button
+                        type="button"
+                        className={ADMIN_BTN_SECONDARY}
+                        onClick={() => onLiftDefault(item)}
+                        disabled={disabled}
+                        aria-label={`${t('delegationLiftDefault')} ${liftableLabel(item)}`}
+                      >
+                        {t('delegationLiftDefault')}
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

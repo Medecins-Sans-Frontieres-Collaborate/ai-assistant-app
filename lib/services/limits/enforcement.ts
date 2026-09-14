@@ -1,10 +1,12 @@
 /**
  * The one place that turns "policy + principal" into an allow/deny decision.
  *
- * Every enforcement point in the app goes through `checkLimits` (ceilings and
- * boolean gates, no storage) or `reserveLimits` (counters, one CAS), so the
+ * Every enforcement point in the app goes through `checkGate` / `checkCeiling`
+ * (no storage) or `meteredCells` + `reserve` (counters, one CAS), so the
  * observe/enforce switch, the audit line, and the fail-open behaviour cannot
- * drift between call sites.
+ * drift between call sites. Every helper takes an optional precomputed
+ * `active` delegation set (resolver `activeDelegationIds`) so a request that
+ * resolves many cells scans the jurisdictions once, not once per cell.
  *
  * See docs/LIMITS.md.
  */
@@ -22,11 +24,7 @@ import { LimitsPolicy } from '@/lib/services/limits/types';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
-import {
-  LIMIT_DEFINITIONS,
-  LimitDefinition,
-  getLimitDefinition,
-} from '@/config/limits';
+import { getLimitDefinition } from '@/config/limits';
 
 export interface LimitDenial {
   limitKey: string;
@@ -36,6 +34,12 @@ export interface LimitDenial {
   used?: number;
   /** ISO instant the window rolls over; omitted for non-windowed limits. */
   resetAt?: string;
+  /**
+   * Fail-CLOSED denial: the counter could not be read or written and the
+   * policy's `failMode` chose to refuse. `used` is not a reading then, and
+   * the user-facing sentence must say "unavailable", not "reached".
+   */
+  unavailable?: boolean;
   /** Which layer produced the winning value — shown to admins, not users. */
   source: ResolvedLimit['source'];
   modelId?: string;
@@ -68,6 +72,7 @@ export function emitLimitAudit(
     `[limits-audit] decision=${decision} key=${sanitizeForLog(denial.limitKey)} ` +
       `limit=${denial.limit} used=${denial.used ?? '<n/a>'} ` +
       `source=${sanitizeForLog(denial.source)} ` +
+      (denial.unavailable ? 'reason=counter-unavailable ' : '') +
       `user=${sanitizeForLog(principal.mail ?? principal.userId ?? '<none>')}` +
       (denial.modelId ? ` model=${sanitizeForLog(denial.modelId)}` : '') +
       (denial.series ? ` family=${sanitizeForLog(denial.series)}` : ''),
@@ -108,6 +113,10 @@ export function applyMode(
  * (e.g. 'Request body too large (max 10MB)').
  */
 export function denialMessage(denial: LimitDenial): string {
+  // Counter unreadable under failMode 'closed': nothing was reached.
+  if (denial.unavailable) {
+    return 'Usage counters are temporarily unavailable, so this request was not allowed. Please try again in a moment.';
+  }
   const def = getLimitDefinition(denial.limitKey);
   const resets = denial.resetAt
     ? ` Resets ${new Date(denial.resetAt).toUTCString()}.`
@@ -153,6 +162,7 @@ export function checkGate(
   limitKey: string,
   modelId?: string,
   series?: string,
+  active?: ReadonlySet<string>,
 ): LimitCheckResult {
   const def = getLimitDefinition(limitKey);
   if (!def) return ALLOWED;
@@ -160,10 +170,14 @@ export function checkGate(
   // A per-model gate is checked on BOTH the model cell and the family cell:
   // either one saying "blocked" blocks. A family gate is an envelope.
   const cells = def.perModel
-    ? resolveModelCells(def, policy, principal, modelId, series)
-    : [resolveLimit(def, policy, principal)];
+    ? resolveModelCells(def, policy, principal, modelId, series, active)
+    : [resolveLimit(def, policy, principal, undefined, undefined, active)];
   // A per-model key with no model context still has a global answer.
-  if (cells.length === 0) cells.push(resolveLimit(def, policy, principal));
+  if (cells.length === 0) {
+    cells.push(
+      resolveLimit(def, policy, principal, undefined, undefined, active),
+    );
+  }
 
   for (const cell of cells) {
     if (isBlocked(cell)) {
@@ -186,10 +200,18 @@ export function checkCeiling(
   principal: Principal,
   limitKey: string,
   amount: number,
+  active?: ReadonlySet<string>,
 ): LimitCheckResult {
   const def = getLimitDefinition(limitKey);
   if (!def) return ALLOWED;
-  const resolved = resolveLimit(def, policy, principal);
+  const resolved = resolveLimit(
+    def,
+    policy,
+    principal,
+    undefined,
+    undefined,
+    active,
+  );
   if (isUnlimited(resolved) || typeof resolved.value !== 'number') {
     return ALLOWED;
   }
@@ -203,16 +225,29 @@ export function checkCeiling(
 /**
  * The effective numeric value of a ceiling for a principal, for call sites
  * that need to CLAMP rather than reject (upload stream caps, tool-loop
- * rounds). Returns undefined when unlimited.
+ * rounds). Returns undefined when unlimited — and in OBSERVE mode, whatever
+ * the policy says: observe must change nothing for users (docs/LIMITS.md),
+ * and a clamp applied silently is a rejection by another name. Call sites
+ * that know the request's size use `checkCeiling` alongside this so observe
+ * mode still gets its would-block audit line.
  */
 export function effectiveCeiling(
   policy: LimitsPolicy | null,
   principal: Principal,
   limitKey: string,
+  active?: ReadonlySet<string>,
 ): number | undefined {
+  if ((policy?.mode ?? 'observe') === 'observe') return undefined;
   const def = getLimitDefinition(limitKey);
   if (!def) return undefined;
-  const resolved = resolveLimit(def, policy, principal);
+  const resolved = resolveLimit(
+    def,
+    policy,
+    principal,
+    undefined,
+    undefined,
+    active,
+  );
   return typeof resolved.value === 'number' ? resolved.value : undefined;
 }
 
@@ -227,12 +262,13 @@ export function meteredCells(
   limitKey: string,
   modelId?: string,
   series?: string,
+  active?: ReadonlySet<string>,
 ): ResolvedLimit[] {
   const def = getLimitDefinition(limitKey);
   if (!def || def.kind !== 'counter') return [];
   const cells = def.perModel
-    ? resolveModelCells(def, policy, principal, modelId, series)
-    : [resolveLimit(def, policy, principal)];
+    ? resolveModelCells(def, policy, principal, modelId, series, active)
+    : [resolveLimit(def, policy, principal, undefined, undefined, active)];
   return cells.filter((cell) => typeof cell.value === 'number');
 }
 
@@ -241,8 +277,4 @@ export async function currentPolicy(): Promise<LimitsPolicy | null> {
   const service = LimitsService.getInstance();
   await service.ensureFresh();
   return service.getSnapshot().policy;
-}
-
-export function allCounterDefinitions(): LimitDefinition[] {
-  return LIMIT_DEFINITIONS.filter((d) => d.kind === 'counter');
 }

@@ -26,6 +26,7 @@ import { Session } from 'next-auth';
 import { currentPolicy, meteredCells } from '@/lib/services/limits/enforcement';
 import { periodKindForWindow } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
+import { ResolvedLimit } from '@/lib/services/limits/resolver';
 import { reserve } from '@/lib/services/limits/usageStore';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -126,33 +127,89 @@ export async function debitTokenUsage(
  * Pre-flight, read-only: is this user already over a token budget? Called
  * from createLimitsMiddleware before any generation starts.
  */
+export interface TokenBudgetExceeded {
+  limitKey: string;
+  limit: number;
+  used: number;
+  /** Which policy layer produced the cap — for the audit line. */
+  source: ResolvedLimit['source'];
+  /** The counter could not be read and the policy's failMode is 'closed'. */
+  unavailable?: boolean;
+}
+
+export interface TokenBudgetOptions {
+  /**
+   * The caller's DAY counters as already read this request (the message
+   * reservation returns the document it wrote). Saves the second GET of the
+   * very same blob; the month ledger is still read when a monthly cap applies.
+   */
+  dayCounters?: Readonly<Record<string, number>>;
+  /** Precomputed active delegations (resolver `activeDelegationIds`). */
+  active?: ReadonlySet<string>;
+}
+
 export async function checkTokenBudget(
   user: Session['user'] | undefined,
-): Promise<{ limitKey: string; limit: number; used: number } | null> {
+  options: TokenBudgetOptions = {},
+): Promise<TokenBudgetExceeded | null> {
   if (!user?.id) return null;
+  let policy: Awaited<ReturnType<typeof currentPolicy>> = null;
+  let metered:
+    | Pick<TokenBudgetExceeded, 'limitKey' | 'limit' | 'source'>
+    | undefined;
   try {
-    const policy = await currentPolicy();
+    policy = await currentPolicy();
     if (!policy) return null;
     const principal = buildPrincipal({ user } as Session);
     const { readUsage } = await import('@/lib/services/limits/usageStore');
 
     for (const limitKey of TOKEN_KEYS) {
-      const cells = meteredCells(policy, principal, limitKey);
+      const cells = meteredCells(
+        policy,
+        principal,
+        limitKey,
+        undefined,
+        undefined,
+        options.active,
+      );
       if (cells.length === 0) continue;
+      metered ??= {
+        limitKey,
+        limit: cells[0].value as number,
+        source: cells[0].source,
+      };
       const periodKind = limitKey === 'chat.tokensPerMonth' ? 'month' : 'day';
-      const counters = await readUsage(principal.userId, periodKind, {
-        timezone: policy.timezone,
-      });
+      const counters =
+        periodKind === 'day' && options.dayCounters
+          ? options.dayCounters
+          : await readUsage(principal.userId, periodKind, {
+              timezone: policy.timezone,
+            });
       for (const cell of cells) {
         const used = counters[cell.limitKey] ?? 0;
         if (used >= (cell.value as number)) {
-          return { limitKey: cell.limitKey, limit: cell.value as number, used };
+          return {
+            limitKey: cell.limitKey,
+            limit: cell.value as number,
+            used,
+            source: cell.source,
+          };
         }
       }
     }
     return null;
   } catch (error) {
-    // FAIL OPEN — a counter read failure must not block chat.
+    // The counter read failed. Honour the policy's failMode exactly as the
+    // reservation path does (docs/LIMITS.md): 'open' lets the request through
+    // uncounted, 'closed' refuses it and says the counter was unavailable.
+    // `metered` is only set once a token limit is known to apply, so an
+    // unmetered caller is never refused for an outage they never touched.
+    if (policy?.failMode === 'closed' && metered) {
+      console.error(
+        `[limits] token budget check FAIL-CLOSED: ${sanitizeForLog(error)}`,
+      );
+      return { ...metered, used: 0, unavailable: true };
+    }
     console.error(
       `[limits] token budget check FAIL-OPEN: ${sanitizeForLog(error)}`,
     );

@@ -52,6 +52,7 @@ vi.mock('@/client/services/m365/m365Client', () => {
     listSiteDrives: vi.fn(),
     listJoinedTeams: vi.fn(),
     getTeamDrive: vi.fn(),
+    getDriveRoot: vi.fn(),
   };
 });
 
@@ -411,6 +412,129 @@ describe('M365FilePickerModal teams tab', () => {
       sort: 'name',
       dir: 'asc',
     });
+  });
+});
+
+describe('M365FilePickerModal source picking (onPick)', () => {
+  it('adds a whole SharePoint library as one folder source via its resolved root', async () => {
+    const { listSiteDrives, getDriveRoot } =
+      await import('@/client/services/m365/m365Client');
+    const onPick = vi.fn();
+    listSitesMock.mockResolvedValue({
+      followed: [],
+      sites: [{ siteId: 's1', name: 'HR Site' }],
+    });
+    vi.mocked(listSiteDrives).mockResolvedValue([
+      { driveId: 'lib-1', name: 'Policies' },
+    ]);
+    vi.mocked(getDriveRoot).mockResolvedValue({
+      itemId: 'root-item-1',
+      name: 'root',
+      webUrl: 'https://contoso.sharepoint.com/sites/hr/Policies',
+      childCount: 12,
+    });
+    render(<M365FilePickerModal isOpen onClose={vi.fn()} onPick={onPick} />);
+    fireEvent.click(screen.getByRole('tab', { name: 'tabs.sharepoint' }));
+    fireEvent.click(await screen.findByText('HR Site'));
+    await screen.findByText('Policies');
+    fireEvent.click(screen.getByRole('button', { name: 'addLibrary' }));
+    await waitFor(() => expect(onPick).toHaveBeenCalledTimes(1));
+    expect(getDriveRoot).toHaveBeenCalledWith('lib-1');
+    expect(onPick).toHaveBeenCalledWith({
+      driveId: 'lib-1',
+      itemId: 'root-item-1',
+      name: 'Policies',
+      isFolder: true,
+      webUrl: 'https://contoso.sharepoint.com/sites/hr/Policies',
+      childCount: 12,
+    });
+  });
+
+  it("adds a team's files from the team list without browsing in", async () => {
+    const { listJoinedTeams, getTeamDrive, getDriveRoot } =
+      await import('@/client/services/m365/m365Client');
+    const onPick = vi.fn();
+    vi.mocked(listJoinedTeams).mockResolvedValue([
+      { groupId: 'g1', name: 'Logistics' },
+    ]);
+    vi.mocked(getTeamDrive).mockResolvedValue({
+      driveId: 'teamdrive-1',
+      name: 'Documents',
+    });
+    vi.mocked(getDriveRoot).mockResolvedValue({
+      itemId: 'team-root',
+      name: 'Documents',
+    });
+    render(<M365FilePickerModal isOpen onClose={vi.fn()} onPick={onPick} />);
+    fireEvent.click(await screen.findByText('tabs.teams'));
+    await screen.findByText('Logistics');
+    fireEvent.click(screen.getByRole('button', { name: 'addTeamFiles' }));
+    await waitFor(() => expect(onPick).toHaveBeenCalledTimes(1));
+    expect(onPick).toHaveBeenCalledWith(
+      expect.objectContaining({
+        driveId: 'teamdrive-1',
+        itemId: 'team-root',
+        name: 'Logistics',
+        isFolder: true,
+      }),
+    );
+    // The team list itself was never left.
+    expect(listDrivePageMock).not.toHaveBeenCalledWith(
+      'children',
+      expect.objectContaining({ driveId: 'teamdrive-1' }),
+    );
+  });
+
+  it('offers the browsed folder itself in the footer and labels row buttons "Add folder"', async () => {
+    const onPick = vi.fn();
+    listDrivePageMock.mockImplementation(async (_view, params) =>
+      params?.itemId === 'f1'
+        ? page([entry('x', 'q1.pdf')])
+        : page([entry('f1', 'Reports', true)]),
+    );
+    render(<M365FilePickerModal isOpen onClose={vi.fn()} onPick={onPick} />);
+    await screen.findByText('Reports');
+    // At the OneDrive root nothing is addable yet: the footer explains.
+    expect(screen.getByText('pickHint')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'addCurrentFolder' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'addFolder' }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Reports'));
+    await screen.findByText('q1.pdf');
+    fireEvent.click(screen.getByRole('button', { name: 'addCurrentFolder' }));
+    expect(onPick).toHaveBeenCalledWith({
+      driveId: 'd1',
+      itemId: 'f1',
+      name: 'Reports',
+      isFolder: true,
+    });
+  });
+
+  it('surfaces a root-resolution failure instead of adding nothing silently', async () => {
+    const { listSiteDrives, getDriveRoot, M365ClientError } =
+      await import('@/client/services/m365/m365Client');
+    const onPick = vi.fn();
+    listSitesMock.mockResolvedValue({
+      followed: [],
+      sites: [{ siteId: 's1', name: 'HR Site' }],
+    });
+    vi.mocked(listSiteDrives).mockResolvedValue([
+      { driveId: 'lib-1', name: 'Policies' },
+    ]);
+    vi.mocked(getDriveRoot).mockRejectedValue(
+      new M365ClientError('forbidden', 'M365_FORBIDDEN'),
+    );
+    render(<M365FilePickerModal isOpen onClose={vi.fn()} onPick={onPick} />);
+    fireEvent.click(screen.getByRole('tab', { name: 'tabs.sharepoint' }));
+    fireEvent.click(await screen.findByText('HR Site'));
+    await screen.findByText('Policies');
+    fireEvent.click(screen.getByRole('button', { name: 'addLibrary' }));
+    await screen.findByText('errors.forbidden');
+    expect(onPick).not.toHaveBeenCalled();
   });
 });
 

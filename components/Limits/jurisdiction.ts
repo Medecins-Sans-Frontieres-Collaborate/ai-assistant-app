@@ -32,9 +32,12 @@ import {
   LimitEntry,
   LimitOverride,
   LimitTier,
+  LimitValue,
   OverrideScope,
 } from '@/lib/services/limits/types';
 import { domainOfMail } from '@/lib/services/shared/principalMatching';
+
+import { LIMIT_DEFINITIONS } from '@/config/limits';
 
 // ---------------------------------------------------------------------------
 // Verdicts — ONE implementation, shared with the server
@@ -130,9 +133,89 @@ export function narrowedOverrideCount(
 export function liftableDefaults(
   defaults: readonly LimitEntry[],
 ): LimitEntry[] {
-  return defaults.filter(
-    (entry) => !entry.ceiling && entry.value !== null && entry.value !== true,
+  return defaults.filter((entry) => raisable(entry.value, entry.ceiling));
+}
+
+function raisable(value: LimitValue, ceiling: boolean): boolean {
+  return !ceiling && value !== null && value !== true;
+}
+
+export type LiftableSource = 'default' | 'catalog' | 'override';
+
+/** One thing a delegation could raise, with where it comes from. */
+export interface LiftableEntry {
+  source: LiftableSource;
+  /** For `catalog`: synthesized from the compiled default, `ceiling: false`. */
+  entry: LimitEntry;
+  /** `override` only. */
+  overrideId?: string;
+  overrideLabel?: string;
+  overrideScope?: OverrideScope;
+}
+
+/**
+ * EVERYTHING a scoped admin may raise, not only the configured defaults —
+ * the delegations editor is where a global admin decides what to pin before
+ * delegating, so an incomplete list here understates the grant:
+ *  - configured global defaults without a ceiling (`liftableDefaults`);
+ *  - compiled catalog defaults for keys with NO configured base default —
+ *    a finite value there (the M365 counters, MCP rounds) has no ceiling
+ *    until a default is configured, so a scoped record may lift it to
+ *    unlimited (or the compiled hard ceiling, where one exists);
+ *  - global-tier overrides at the domain, attribute or group layer: a scoped
+ *    override at a MORE specific layer outranks them (layer beats tier —
+ *    resolver.ts `beats`). A global USER-layer override is never listed:
+ *    nothing scoped can outrank it at the same layer.
+ */
+export function liftableEntries(
+  defaults: readonly LimitEntry[],
+  overrides: readonly LimitOverride[],
+): LiftableEntry[] {
+  const out: LiftableEntry[] = liftableDefaults(defaults).map((entry) => ({
+    source: 'default',
+    entry,
+  }));
+  const configuredBase = new Set(
+    defaults
+      .filter((entry) => !entry.modelId && !entry.series)
+      .map((entry) => entry.limitKey),
   );
+  for (const def of LIMIT_DEFINITIONS) {
+    if (configuredBase.has(def.key)) continue;
+    if (!raisable(def.defaultValue, false)) continue;
+    out.push({
+      source: 'catalog',
+      entry: { limitKey: def.key, value: def.defaultValue, ceiling: false },
+    });
+  }
+  for (const override of overrides) {
+    if (override.delegationId || !override.enabled) continue;
+    if (override.scope === 'user') continue;
+    for (const entry of override.entries) {
+      if (!raisable(entry.value, entry.ceiling)) continue;
+      out.push({
+        source: 'override',
+        entry,
+        overrideId: override.id,
+        overrideLabel: override.label,
+        overrideScope: override.scope,
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * Shape check for a delegation admin entry — the same pattern the server's
+ * `isValidEmail` uses (lib/services/m365/tools/shared.ts, server-only by
+ * module graph). Admins are matched on the session's Graph `mail`, so an
+ * entry that is not a mail address can never match anyone.
+ */
+const MAIL_SHAPE_RE = /^[^\s@'"<>]+@[^\s@'"<>]+\.[^\s@'"<>]+$/;
+
+export function looksLikeMail(value: string): boolean {
+  const trimmed = value.trim();
+  return trimmed.length <= 320 && MAIL_SHAPE_RE.test(trimmed);
 }
 
 // ---------------------------------------------------------------------------
@@ -249,34 +332,59 @@ export interface RulePool {
  * user target inside a domain rule, and a domain target that contains a
  * user rule's mail. Group/attribute are equality-only.
  */
+/**
+ * Per-array caches for the relevant-rules queries. The admin panel asks
+ * "which other rules touch these targets" for EVERY card on EVERY render,
+ * and a keystroke re-renders; rebuilding a canonical Set per (card, rule)
+ * pair was measured at seconds per render at policy scale. Draft edits
+ * replace only the touched record, so every other record's `targets` array
+ * keeps its identity and hits the cache.
+ */
+const canonSets = new WeakMap<readonly string[], ReadonlySet<string>>();
+const domainSets = new WeakMap<readonly string[], ReadonlySet<string>>();
+
+function canonSetOf(targets: readonly string[]): ReadonlySet<string> {
+  const cached = canonSets.get(targets);
+  if (cached) return cached;
+  const built = new Set(uniq(targets));
+  canonSets.set(targets, built);
+  return built;
+}
+
+/** The mail domains of a user-rule's targets. */
+function domainSetOf(mails: readonly string[]): ReadonlySet<string> {
+  const cached = domainSets.get(mails);
+  if (cached) return cached;
+  const built = new Set<string>();
+  for (const mail of mails) {
+    const domain = domainOfMail(mail);
+    if (domain !== undefined) built.add(domain);
+  }
+  domainSets.set(mails, built);
+  return built;
+}
+
 function matchedTargets(
   scope: OverrideScope,
   targets: readonly string[],
   ruleScope: OverrideScope,
   ruleTargets: readonly string[],
 ): string[] {
-  const rule = uniq(ruleTargets);
-  const ruleSet = new Set(rule);
-  const canonTargets = targets.map((t) => ({ raw: t, canon: canon(t) }));
-
+  if (targets.length === 0 || ruleTargets.length === 0) return [];
   if (scope === ruleScope) {
-    return canonTargets.filter((t) => ruleSet.has(t.canon)).map((t) => t.raw);
+    const ruleSet = canonSetOf(ruleTargets);
+    return targets.filter((t) => ruleSet.has(canon(t)));
   }
   if (scope === 'user' && ruleScope === 'domain') {
-    return canonTargets
-      .filter((t) => {
-        const domain = domainOfMail(t.raw);
-        return domain !== undefined && ruleSet.has(domain);
-      })
-      .map((t) => t.raw);
+    const ruleSet = canonSetOf(ruleTargets);
+    return targets.filter((t) => {
+      const domain = domainOfMail(t);
+      return domain !== undefined && ruleSet.has(domain);
+    });
   }
   if (scope === 'domain' && ruleScope === 'user') {
-    const ruleDomains = new Set(
-      rule.map((mail) => domainOfMail(mail)).filter((d) => d !== undefined),
-    );
-    return canonTargets
-      .filter((t) => ruleDomains.has(t.canon))
-      .map((t) => t.raw);
+    const ruleDomains = domainSetOf(ruleTargets);
+    return targets.filter((t) => ruleDomains.has(canon(t)));
   }
   return [];
 }

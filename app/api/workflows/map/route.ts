@@ -1,7 +1,5 @@
-import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import {
   MAP_FEATURES_SCHEMA,
   buildMapSystemPrompt,
@@ -11,6 +9,7 @@ import {
   isWorkflowEnabled,
   workflowDisabledResponse,
 } from '@/lib/services/workflows/policy/guard';
+import { runGroundedSearch } from '@/lib/services/workflows/shared/groundedSearch';
 import { truncateToTokenBudget } from '@/lib/services/workflows/shared/textBudget';
 import {
   callStructured,
@@ -28,7 +27,6 @@ import {
 import { normalizeEventRange } from '@/lib/utils/shared/date/eventRange';
 import { isValidCoordinate } from '@/lib/utils/shared/geo/geojson';
 
-import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 import {
   MapFeatureConfidence,
   MapFeatureGranularity,
@@ -70,28 +68,6 @@ interface LlmMapConnection {
   toName: string;
   kind: string;
   description: string;
-}
-
-/**
- * Runs the app's standard Foundry web search (Bing grounding configured on
- * the agent in Azure) and returns the grounded answer text + citations.
- * Mirrors ToolRouterEnricher.getAgentModelForSearch for the model guard:
- * null when the default search agent has no discovered agentId.
- */
-async function runGroundedSearch(
-  searchQuery: string,
-  user: Session['user'],
-): Promise<{ text: string; citations: SearchCitation[] } | null> {
-  const searchModel = OpenAIModels[OpenAIModelID.GPT_5_2];
-  if (!searchModel?.agentId) {
-    return null;
-  }
-  const service = ServiceContainer.getInstance().getAgentChatService();
-  return service.executeWebSearchTool({
-    searchQuery,
-    model: searchModel,
-    user,
-  });
 }
 
 interface LlmMapFeature {

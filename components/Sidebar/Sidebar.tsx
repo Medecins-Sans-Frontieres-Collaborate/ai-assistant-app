@@ -635,6 +635,7 @@ export const Sidebar = memo(function Sidebar() {
                         dataAnalysis: tWorkflows('sidebar.newDataAnalysis'),
                         map: tWorkflows('sidebar.newMap'),
                         grants: tWorkflows('sidebar.newGrants'),
+                        formFill: tWorkflows('sidebar.newFormFill'),
                       };
                       return (
                         <button

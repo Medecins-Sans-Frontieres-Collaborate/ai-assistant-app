@@ -399,3 +399,41 @@ export interface ClientRefreshPreview {
   } | null;
   lastIndexedAt: string | null;
 }
+
+/* ------------------------------------------------------------------ */
+/* Form templates (form-fill workflow)                                 */
+/* ------------------------------------------------------------------ */
+
+export const CLIENT_FORM_TEMPLATE_SOURCE = 'form-template';
+
+/** The envelope as served by GET /api/agent-access/form-templates. */
+export interface AdminFormTemplateRecord {
+  version: 1;
+  id: string;
+  name: string;
+  description: string;
+  /** A FormTemplate (types/formFill.ts); validated server-side on write. */
+  template: Record<string, unknown>;
+  createdBy: string;
+  createdAt: string;
+  updatedBy: string;
+  updatedAt: string;
+}
+
+export interface AdminStoredFormTemplate {
+  canonicalKey: string;
+  record: AdminFormTemplateRecord;
+  etag: string;
+}
+
+export interface AdminFormTemplatesResponse {
+  templates: AdminStoredFormTemplate[];
+  templatesUnavailable?: boolean;
+  fetchedAt?: number | null;
+}
+
+export interface AdminFormTemplateResponse {
+  record: AdminFormTemplateRecord;
+  etag: string;
+  canonicalKey: string;
+}

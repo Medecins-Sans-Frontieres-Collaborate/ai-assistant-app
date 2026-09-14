@@ -98,6 +98,8 @@ export interface GeneratedFileRef {
   filename: string;
   mime_type: string;
   is_image: boolean;
+  /** Persisted byte size; lets later turns budget/announce the file. */
+  size_bytes?: number;
 }
 
 /**
@@ -128,6 +130,13 @@ export type ConsentRequestPayload =
        * display; the client should NOT use this for dispatch.
        */
       tool_arguments?: string | null;
+      /**
+       * Server-signed proof this card was issued for the caller
+       * (lib/services/limits/continuationToken.ts). Echoed back on resume as
+       * `mcpPendingToolCalls[].continuationToken`; a resume without it is
+       * metered as a new message. Opaque to the client.
+       */
+      continuation_token?: string | null;
     };
 
 /**
@@ -153,7 +162,7 @@ export interface ConsentOutcomePayload {
  * event body, typed by the workflow's own module.
  */
 export interface WorkflowEventPayload {
-  workflow: 'translation' | 'document' | 'data-analysis' | 'map';
+  workflow: 'translation' | 'document' | 'data-analysis' | 'map' | 'form-fill';
   type: string;
   data: unknown;
 }

@@ -176,6 +176,7 @@ export const ScopedOverridesTab: FC<ScopedOverridesTabProps> = ({
             showDelegation={grouped}
             onDiscardNew={() => undefined}
             onSettled={onRefetch}
+            onStale={onRefetch}
             onDirtyChange={onDirtyChange}
           />
         ))}
@@ -196,6 +197,9 @@ export const ScopedOverridesTab: FC<ScopedOverridesTabProps> = ({
               setPendingNew((list) => list.filter((o) => o.id !== override.id));
               onRefetch();
             }}
+            // A refused save (409 after the CAS rounds) must NOT retire the
+            // pending copy — that is the admin's only copy of the draft.
+            onStale={onRefetch}
             onDirtyChange={onDirtyChange}
           />
         ))}

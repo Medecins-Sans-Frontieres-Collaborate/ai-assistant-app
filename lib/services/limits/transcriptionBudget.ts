@@ -14,9 +14,11 @@ import { Session } from 'next-auth';
 import {
   applyMode,
   currentPolicy,
+  denialMessage,
   meteredCells,
 } from '@/lib/services/limits/enforcement';
 import { buildPrincipal } from '@/lib/services/limits/principal';
+import { ResolvedLimit } from '@/lib/services/limits/resolver';
 import { reserve } from '@/lib/services/limits/usageStore';
 
 import { getAudioDuration } from '@/lib/utils/server/audio/audioSplitter';
@@ -72,10 +74,14 @@ export async function guardTranscriptionMinutes(
       limitKey: result.denial.limitKey,
       limit: result.denial.limit,
       used: result.denial.used,
+      ...(result.denial.unavailable ? { unavailable: true } : {}),
       resetAt: result.denial.resetAt,
-      source: 'global',
+      source: (result.denial.source ?? 'global') as ResolvedLimit['source'],
     });
     if (decision.allowed) return ALLOWED;
+    if (result.denial.unavailable) {
+      return { allowed: false, message: denialMessage(decision.denial!) };
+    }
 
     const resets = result.denial.resetAt
       ? ` Resets ${new Date(result.denial.resetAt).toUTCString()}.`

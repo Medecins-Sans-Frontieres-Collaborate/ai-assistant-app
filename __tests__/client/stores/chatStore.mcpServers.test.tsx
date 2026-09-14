@@ -166,6 +166,7 @@ describe('chatStore MCP wiring', () => {
               server_label: 'GitHub',
               tool_name: 'list_prs',
               tool_arguments: '{"repo":"a/b"}',
+              continuation_token: 'v1.1.signed',
             },
           ],
         } as never,
@@ -179,12 +180,15 @@ describe('chatStore MCP wiring', () => {
       ]);
 
     const options = sentOptions();
+    // The server-signed continuation proof rides along, or the resume would
+    // be metered as a fresh message (lib/services/limits/continuationToken.ts).
     expect(options.mcpPendingToolCalls).toEqual([
       {
         id: 'call_1',
         serverId: 'github',
         toolName: 'list_prs',
         argumentsJson: '{"repo":"a/b"}',
+        continuationToken: 'v1.1.signed',
       },
     ]);
     expect(options.mcpLoopRound).toBe(1);

@@ -1,5 +1,6 @@
 import {
   IconFileText,
+  IconForms,
   IconLanguage,
   IconMap,
   IconReportMoney,
@@ -23,7 +24,13 @@ export interface WorkflowMeta {
   type: ConversationWorkflowType;
   icon: TablerIcon;
   /** Key under the `workflows.types.*` namespace in messages/en.json. */
-  i18nKey: 'translation' | 'document' | 'dataAnalysis' | 'map' | 'grants';
+  i18nKey:
+    | 'translation'
+    | 'document'
+    | 'dataAnalysis'
+    | 'map'
+    | 'grants'
+    | 'formFill';
 }
 
 export const WORKFLOW_META: Record<ConversationWorkflowType, WorkflowMeta> = {
@@ -51,6 +58,11 @@ export const WORKFLOW_META: Record<ConversationWorkflowType, WorkflowMeta> = {
     type: 'grants',
     icon: IconReportMoney,
     i18nKey: 'grants',
+  },
+  'form-fill': {
+    type: 'form-fill',
+    icon: IconForms,
+    i18nKey: 'formFill',
   },
 };
 

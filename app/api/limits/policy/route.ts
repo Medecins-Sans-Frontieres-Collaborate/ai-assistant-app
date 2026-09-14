@@ -38,6 +38,7 @@ import { STRONG_ETAG_REGEX } from '@/lib/services/agentAccess/adminRouteHelpers'
 import { LimitsService } from '@/lib/services/limits/LimitsService';
 import {
   LimitsConflictError,
+  PolicyUnreadableError,
   createLimitsBlobStorage,
   readPolicy,
   writeHistoryEntry,
@@ -57,6 +58,7 @@ import {
   LimitOverride,
   LimitsPolicy,
 } from '@/lib/services/limits/types';
+import { LIMITS_ERROR_CODES } from '@/lib/services/limits/wire';
 
 import {
   badRequestResponse,
@@ -76,7 +78,7 @@ function conflictResponse(details?: string) {
     'Limits policy was modified by another admin; reload and retry',
     409,
     details,
-    'LIMITS_CONFLICT',
+    LIMITS_ERROR_CODES.CONFLICT,
   );
 }
 
@@ -184,6 +186,18 @@ export async function PUT(request: NextRequest) {
   if (duplicateId) {
     return badRequestResponse('Duplicate override id', duplicateId);
   }
+  // Two defaults for one cell (key + qualifier) is never what an admin
+  // meant: the resolver would pick one by restrictiveness and the other
+  // would silently do nothing. Refused rather than stored.
+  const duplicateCell = parsed.data.defaults
+    .map((d) => `${d.limitKey}|${d.modelId ?? ''}|${d.series ?? ''}`)
+    .find((cell, index, all) => all.indexOf(cell) !== index);
+  if (duplicateCell) {
+    return badRequestResponse(
+      'Duplicate default for one limit cell',
+      duplicateCell,
+    );
+  }
 
   const bodyDelegations = parsed.data.delegations ?? [];
   const duplicateDelegationId = bodyDelegations
@@ -208,7 +222,7 @@ export async function PUT(request: NextRequest) {
       'Delegation budgets plus global overrides exceed the document cap',
       400,
       `${globalOverrideCount} global override(s) + ${delegatedBudget} delegated > ${MAX_OVERRIDES}`,
-      'LIMITS_BUDGET_EXCEEDED',
+      LIMITS_ERROR_CODES.BUDGET_EXCEEDED,
     );
   }
 
@@ -299,7 +313,7 @@ export async function PUT(request: NextRequest) {
           scoped ? { ...entry, ceiling: false } : entry,
         ),
         // Ownership metadata is preserved from the STORED record, never
-        // taken from the body (ADMIN_LIMITS_REVIEW #18).
+        // taken from the body.
         createdBy: existing?.createdBy ?? userMail,
         createdAt: existing?.createdAt ?? now,
         updatedBy: userMail,
@@ -339,6 +353,20 @@ export async function PUT(request: NextRequest) {
     return successResponse({ policy, etag });
   } catch (error) {
     if (error instanceof LimitsConflictError) return conflictResponse();
+    // A stored document that cannot be parsed is an outage, not a bad edit
+    // (design §8) — the scoped route already answers 503 for it; the global
+    // PUT used to surface a generic 500 that the client blamed on the draft.
+    if (error instanceof PolicyUnreadableError) {
+      console.error(
+        `[limits-admin] policy write: stored document unreadable: ${sanitizeForLog(error)}`,
+      );
+      return errorResponse(
+        'Limits policy is unavailable; retry',
+        503,
+        undefined,
+        LIMITS_ERROR_CODES.POLICY_UNAVAILABLE,
+      );
+    }
     return handleApiError(error, 'Failed to write limits policy');
   }
 }

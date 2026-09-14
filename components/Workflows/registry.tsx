@@ -91,4 +91,16 @@ export const WORKFLOW_REGISTRY: Record<
     ),
     createInitialState: () => createInitialWorkflowState('grants'),
   },
+  'form-fill': {
+    meta: WORKFLOW_META['form-fill'],
+    Workspace: lazy(() =>
+      import('./Form/FormWorkspace').then((m) => ({
+        default: m.FormWorkspace,
+      })),
+    ),
+    createInitialState: () => createInitialWorkflowState('form-fill'),
+    // Form rail chat is grounded in the field ledger; answers to the
+    // assistant's questions become note sources (docs/FORM_FILL_WORKFLOW.md).
+    railSend: () => import('@/client/services/workflows/form/formRailChat'),
+  },
 };

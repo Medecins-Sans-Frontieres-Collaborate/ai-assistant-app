@@ -47,11 +47,78 @@ import {
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 
 /** 412 → jittered retry. Six attempts covers realistic same-user concurrency. */
 const CAS_ATTEMPTS = 6;
 const BASE_BACKOFF_MS = 10;
+/**
+ * Client-side deadline per storage operation. Neither `withAzureRetry` nor
+ * the SDK carries a time budget, so without this a stalled socket held the
+ * chat request open indefinitely and `failMode` never got a say. A timeout
+ * is NOT transient (see `isTransient`): it is reported straight to the
+ * failMode decision rather than retried six more times.
+ */
+export const USAGE_IO_DEADLINE_MS = 4_000;
+
+function ioDeadline(): { abortSignal: AbortSignal } {
+  return { abortSignal: AbortSignal.timeout(USAGE_IO_DEADLINE_MS) };
+}
+
+function isAbort(error: unknown): boolean {
+  const name = (error as { name?: unknown })?.name;
+  return name === 'AbortError' || name === 'TimeoutError';
+}
+
+/**
+ * A download that came back without an ETag cannot anchor a conditional
+ * write: `uploadJson` treats '' as create-only and the blob exists, so every
+ * attempt would 412 — six conflicts and ~0.5 s of backoff before failMode
+ * got a say. Reported as a final failure instead.
+ */
+class MissingEtagError extends Error {
+  constructor() {
+    super('Usage document returned no ETag; refusing to write');
+    this.name = 'MissingEtagError';
+  }
+}
+
+function assertCounters(counters: readonly CounterRequest[]): void {
+  for (const counter of counters) {
+    if (!Number.isFinite(counter.cost) || counter.cost < 0) {
+      // A NaN cost would pass `used + cost > limit` (false), serialize as
+      // null, and poison the document so the next read resets every cell.
+      throw new TypeError(
+        `Invalid usage cost for ${counter.cell}: ${String(counter.cost)}`,
+      );
+    }
+  }
+}
+
+function parseUsageDoc(
+  raw: Buffer,
+  period: string,
+  path: string,
+): UsageDoc | null {
+  let parsed: ReturnType<typeof UsageDocSchema.safeParse>;
+  try {
+    parsed = UsageDocSchema.safeParse(JSON.parse(raw.toString('utf8')));
+  } catch (error) {
+    console.error(
+      `[limits] usage document is not JSON, treating as empty: ${sanitizeForLog(path)}: ${sanitizeForLog(error)}`,
+    );
+    return null;
+  }
+  if (!parsed.success) {
+    // Loud, because the consequence is a silent full-window reset for this
+    // user — the one outcome an operator wants to know about.
+    console.error(
+      `[limits] usage document failed validation, treating as empty: ${sanitizeForLog(path)}: ${sanitizeForLog(parsed.error.message)}`,
+    );
+    return null;
+  }
+  return parsed.data.period === period ? parsed.data : null;
+}
 
 /**
  * Sharded by a hash prefix so no flat listing is unbounded, and so an expired
@@ -88,6 +155,8 @@ export interface ReserveDenial {
   cell: string;
   limit: number;
   used: number;
+  /** Fail-CLOSED denial: storage was unreachable; `used` is not a reading. */
+  unavailable?: boolean;
   resetAt?: string;
   source?: string;
   modelId?: string;
@@ -101,6 +170,12 @@ export interface ReserveResult {
   failedOpen?: boolean;
   /** Cells actually debited — the input for a compensating release(). */
   debited?: CounterRequest[];
+  /**
+   * The window's counters AFTER the write, when one happened. Lets a caller
+   * that needs another reading from the same document (the token pre-flight
+   * reads the day ledger the reservation just wrote) skip a second GET.
+   */
+  counters?: Readonly<Record<string, number>>;
 }
 
 const ALLOWED_NO_OP: ReserveResult = { allowed: true };
@@ -149,32 +224,41 @@ export async function reserve(
   } = {},
 ): Promise<ReserveResult> {
   if (counters.length === 0) return ALLOWED_NO_OP;
+  assertCounters(counters);
 
   const timezone = options.timezone ?? 'UTC';
   const period = currentPeriod(periodKind, timezone, options.now);
   const storage = options.storage ?? createLimitsBlobStorage();
   const path = usageBlobPath(subjectId, periodKind, period);
+  const writeId = randomUUID();
 
   for (let attempt = 1; attempt <= CAS_ATTEMPTS; attempt++) {
     try {
-      const downloaded = await downloadBlob(storage, path, 'limits.readUsage');
+      const downloaded = await downloadBlob(
+        storage,
+        path,
+        'limits.readUsage',
+        ioDeadline(),
+      );
       let doc: UsageDoc;
       let etag: string | null;
       if (downloaded === null) {
         doc = freshDoc(subjectId, periodKind, period);
         etag = null;
       } else {
+        if (downloaded.etag === '') throw new MissingEtagError();
         etag = downloaded.etag;
-        const parsed = UsageDocSchema.safeParse(
-          JSON.parse(downloaded.buffer.toString('utf8')),
-        );
         // Lazy period rollover: a stale document for a previous period is
         // replaced wholesale rather than migrated. Same for an unparseable
-        // one — a corrupt counter must not permanently block a user.
+        // one (logged) — a corrupt counter must not permanently block a user.
         doc =
-          parsed.success && parsed.data.period === period
-            ? parsed.data
-            : freshDoc(subjectId, periodKind, period);
+          parseUsageDoc(downloaded.buffer, period, path) ??
+          freshDoc(subjectId, periodKind, period);
+      }
+      // Our own write already landed (the PUT committed, its response was
+      // lost, the SDK retry hit 412): success, never a second increment.
+      if (doc.lastWriteId === writeId) {
+        return { allowed: true, debited: counters, counters: doc.counters };
       }
 
       // ── The check that makes this exact: inside the loop, against the
@@ -202,14 +286,22 @@ export async function reserve(
         ...doc,
         counters: { ...doc.counters },
         updatedAt: new Date().toISOString(),
+        lastWriteId: writeId,
       };
       for (const counter of counters) {
         next.counters[counter.cell] =
           (next.counters[counter.cell] ?? 0) + counter.cost;
       }
 
-      await uploadJson(storage, path, next, etag, 'limits.writeUsage');
-      return { allowed: true, debited: counters };
+      await uploadJson(
+        storage,
+        path,
+        next,
+        etag,
+        'limits.writeUsage',
+        ioDeadline(),
+      );
+      return { allowed: true, debited: counters, counters: next.counters };
     } catch (error) {
       if (error instanceof AgentAccessConflictError) {
         if (attempt < CAS_ATTEMPTS) {
@@ -233,6 +325,8 @@ export async function reserve(
         console.error('[limits] FAIL-OPEN: usage not counted, request allowed');
         return { allowed: true, failedOpen: true };
       }
+      // Fail CLOSED: the counter is unreadable, not exhausted — say so
+      // (`unavailable`) rather than fabricating a consumption figure.
       return {
         allowed: false,
         failedOpen: false,
@@ -240,7 +334,8 @@ export async function reserve(
           limitKey: counters[0].limitKey,
           cell: counters[0].cell,
           limit: counters[0].limit,
-          used: counters[0].limit,
+          used: 0,
+          unavailable: true,
           resetAt: resetAt(periodKind, timezone, options.now),
         },
       };
@@ -249,7 +344,14 @@ export async function reserve(
   return ALLOWED_NO_OP;
 }
 
+/**
+ * Worth another CAS round: a 5xx or a status-less network error. A client
+ * abort (the per-operation deadline) is deliberately NOT — it already waited
+ * as long as the request can afford.
+ */
 function isTransient(error: unknown): boolean {
+  if (isAbort(error) || error instanceof MissingEtagError) return false;
+  if (error instanceof TypeError) return false;
   const status =
     (error as { statusCode?: number; status?: number })?.statusCode ??
     (error as { status?: number })?.status;
@@ -277,19 +379,28 @@ export async function release(
   const period = currentPeriod(periodKind, timezone, options.now);
   const storage = options.storage ?? createLimitsBlobStorage();
   const path = usageBlobPath(subjectId, periodKind, period);
+  const writeId = randomUUID();
+  assertCounters(counters);
 
   for (let attempt = 1; attempt <= CAS_ATTEMPTS; attempt++) {
     try {
-      const downloaded = await downloadBlob(storage, path, 'limits.readUsage');
-      if (downloaded === null) return;
-      const parsed = UsageDocSchema.safeParse(
-        JSON.parse(downloaded.buffer.toString('utf8')),
+      const downloaded = await downloadBlob(
+        storage,
+        path,
+        'limits.readUsage',
+        ioDeadline(),
       );
-      if (!parsed.success || parsed.data.period !== period) return;
+      if (downloaded === null) return;
+      if (downloaded.etag === '') throw new MissingEtagError();
+      const current = parseUsageDoc(downloaded.buffer, period, path);
+      if (!current) return;
+      // Same lost-response guard as reserve: our refund already landed.
+      if (current.lastWriteId === writeId) return;
       const next: UsageDoc = {
-        ...parsed.data,
-        counters: { ...parsed.data.counters },
+        ...current,
+        counters: { ...current.counters },
         updatedAt: new Date().toISOString(),
+        lastWriteId: writeId,
       };
       for (const counter of counters) {
         next.counters[counter.cell] = Math.max(
@@ -303,6 +414,7 @@ export async function release(
         next,
         downloaded.etag,
         'limits.writeUsage',
+        ioDeadline(),
       );
       return;
     } catch (error) {
@@ -333,11 +445,14 @@ export async function readUsage(
     storage,
     usageBlobPath(subjectId, periodKind, period),
     'limits.readUsage',
+    ioDeadline(),
   );
   if (downloaded === null) return {};
-  const parsed = UsageDocSchema.safeParse(
-    JSON.parse(downloaded.buffer.toString('utf8')),
+  return (
+    parseUsageDoc(
+      downloaded.buffer,
+      period,
+      usageBlobPath(subjectId, periodKind, period),
+    )?.counters ?? {}
   );
-  if (!parsed.success || parsed.data.period !== period) return {};
-  return parsed.data.counters;
 }

@@ -49,7 +49,6 @@ import {
 import {
   LIMIT_DEFINITIONS,
   LimitDefinition,
-  getLimitDefinition,
   isValidDimension,
 } from '@/config/limits';
 
@@ -124,7 +123,7 @@ export interface ResolvedLimit {
  * `null` is +Infinity because unlimited is the least restrictive number, and
  * `true` sits above it because a boolean "allowed" imposes nothing at all.
  */
-function restrictiveness(value: LimitValue): number {
+export function restrictiveness(value: LimitValue): number {
   if (value === false) return -1;
   if (value === true) return Number.POSITIVE_INFINITY;
   if (value === null) return Number.MAX_SAFE_INTEGER;
@@ -204,28 +203,6 @@ function clampNumeric(value: LimitValue, ceiling: LimitValue): LimitValue {
   const current = restrictiveness(value);
   if (current <= limit) return value;
   return ceiling;
-}
-
-function pickGlobalEntry(
-  policy: LimitsPolicy | null,
-  limitKey: string,
-  modelId?: string,
-  series?: string,
-): LimitEntry | undefined {
-  if (!policy) return undefined;
-  let winner: LimitEntry | undefined;
-  for (const entry of policy.defaults) {
-    if (!entryAppliesTo(entry, limitKey, modelId, series)) continue;
-    if (
-      !winner ||
-      qualifierSpecificity(entry) > qualifierSpecificity(winner) ||
-      (qualifierSpecificity(entry) === qualifierSpecificity(winner) &&
-        restrictiveness(entry.value) < restrictiveness(winner.value))
-    ) {
-      winner = entry;
-    }
-  }
-  return winner;
 }
 
 // ---------------------------------------------------------------------------
@@ -377,24 +354,35 @@ export function resolveLimit(
     ceiling: false,
   };
 
-  // 2. Global defaults. The layer's ONE ceiling candidate is pickGlobalEntry's
-  //    winner iff it is flagged — deliberately not "any default with ceiling",
-  //    so a qualified non-ceiling default keeps shadowing an unqualified
-  //    ceiling default exactly as before delegations existed.
-  const globalEntry = pickGlobalEntry(policy, def.key, modelId, series);
-  if (globalEntry) {
-    winner = {
-      value: globalEntry.value,
-      source: 'global',
-      tier: 'global',
-      priority: 0,
-      specificity: qualifierSpecificity(globalEntry),
-      ceiling: globalEntry.ceiling,
-    };
+  // 2. Global defaults — ordinary candidates through the SAME comparator as
+  //    every override (layer 1 beats the catalog seed; among defaults,
+  //    specificity then restrictiveness decide, as before). Every flagged
+  //    default is a ceiling candidate in its own right, so an unqualified
+  //    ceiling default pins a qualified non-ceiling one's cell, and two
+  //    defaults for one cell cannot make the flagged one vanish. Before this
+  //    a separate `pickGlobalEntry` chose ONE default and only that winner
+  //    could pin, which silently un-pinned exactly those two shapes.
+  let ceilingWinner: Candidate | undefined;
+  if (policy) {
+    for (const entry of policy.defaults) {
+      if (!entryAppliesTo(entry, def.key, modelId, series)) continue;
+      const candidate: Candidate = {
+        value: entry.value,
+        source: 'global',
+        tier: 'global',
+        priority: 0,
+        specificity: qualifierSpecificity(entry),
+        ceiling: entry.ceiling,
+      };
+      if (beats(candidate, winner)) winner = candidate;
+      if (
+        candidate.ceiling &&
+        (!ceilingWinner || beats(candidate, ceilingWinner))
+      ) {
+        ceilingWinner = candidate;
+      }
+    }
   }
-  let ceilingWinner: Candidate | undefined = winner.ceiling
-    ? winner
-    : undefined;
 
   // 3-4. Overrides, sparse: only entries that MENTION this key compete. An
   //      absent key is silence and defers to the layer below. A global-tier
@@ -526,8 +514,8 @@ export function resolveModelCells(
   principal: Principal,
   modelId: string | undefined,
   series: string | undefined,
+  active: ReadonlySet<string> = activeDelegationIds(policy, principal),
 ): ResolvedLimit[] {
-  const active = activeDelegationIds(policy, principal);
   const cells: ResolvedLimit[] = [];
   if (modelId && isValidDimension(modelId)) {
     cells.push(
@@ -547,8 +535,4 @@ export function isUnlimited(resolved: ResolvedLimit | undefined): boolean {
 /** Convenience for boolean gates: `false` means blocked. */
 export function isBlocked(resolved: ResolvedLimit | undefined): boolean {
   return resolved?.value === false;
-}
-
-export function limitDefinitionFor(key: string): LimitDefinition | undefined {
-  return getLimitDefinition(key);
 }

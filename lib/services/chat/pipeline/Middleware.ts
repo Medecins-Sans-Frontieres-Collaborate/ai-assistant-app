@@ -16,6 +16,7 @@ import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
 import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
+import { isVerifiedContinuation } from '@/lib/services/limits/continuationToken';
 import {
   LimitCheckResult,
   applyMode,
@@ -28,7 +29,11 @@ import {
 import { isModelBlocked } from '@/lib/services/limits/modelAvailability';
 import { resetAt } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
-import { ResolvedLimit, counterCellName } from '@/lib/services/limits/resolver';
+import {
+  ResolvedLimit,
+  activeDelegationIds,
+  counterCellName,
+} from '@/lib/services/limits/resolver';
 import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
 import { reserve } from '@/lib/services/limits/usageStore';
 import { checkAgentSourceAccess } from '@/lib/services/m365/agentSourceAccess';
@@ -432,11 +437,34 @@ const agentAccessDenied = (
 ): PipelineError =>
   PipelineError.critical(
     ErrorCode.AGENT_UNAVAILABLE,
-    decision === 'unavailable'
-      ? 'Agent access rules are currently unavailable, so this agent cannot be invoked right now. Please try again shortly.'
-      : 'Access to this agent is restricted. Contact your administrator if you believe you should have access.',
+    agentAccessDeniedMessage(decision, reason),
     { accessDecision: decision, accessReason: reason },
   );
+
+/**
+ * User-facing copy per denial reason. The M365 layer-2 reasons name the
+ * action the USER can take (re-sign-in, wait for consent, request file
+ * access) — the generic "rules unavailable / contact your administrator"
+ * sentences are wrong for them and were the tester-visible symptom of
+ * "the feature is not connected to my account".
+ */
+const agentAccessDeniedMessage = (
+  decision: 'deny' | 'unavailable',
+  reason: string,
+): string => {
+  switch (reason) {
+    case 'm365-not_connected':
+      return 'Your Microsoft 365 session is unavailable for this agent. Sign out and back in, then try again.';
+    case 'm365-consent_missing':
+      return 'Your organisation has not yet approved the Microsoft 365 permissions this agent needs.';
+    case 'm365-no-file-access':
+      return "You don't have access to any of this agent's files. Open the agent to see which files and request access from their owners.";
+    default:
+      return decision === 'unavailable'
+        ? 'Agent access rules are currently unavailable, so this agent cannot be invoked right now. Please try again shortly.'
+        : 'Access to this agent is restricted. Contact your administrator if you believe you should have access.';
+  }
+};
 
 /**
  * 409-style conflict for a custom-source (byom) model that cannot be invoked.
@@ -670,6 +698,12 @@ export const createCredentialMiddleware = async (
   // enricher) because middleware can reject the request — the pipeline
   // swallows stage errors — and the model must never be called for a user
   // with zero accessible sources.
+  // The layer-2 verdict is carried onto the returned context below; the
+  // branch must NOT return early — byom resolution and the Foundry
+  // classification further down still apply to an M365 agent attached to
+  // a byom-/Foundry model (an early return left such requests without
+  // any credential resolution).
+  let m365Access: Partial<ChatContext> = {};
   if (
     accessService.isEnabled() &&
     (context.m365Agent || context.botId?.startsWith('m365-'))
@@ -729,7 +763,7 @@ export const createCredentialMiddleware = async (
         if (access.accessibleSourceIds.length === 0) {
           throw agentAccessDenied('deny', 'm365-no-file-access');
         }
-        return {
+        m365Access = {
           m365AccessibleSourceIds: access.accessibleSourceIds,
           m365AccessibleFolderItems: access.accessibleFolderItems,
         };
@@ -745,6 +779,24 @@ export const createCredentialMiddleware = async (
     }
   }
 
+  const credentials = await resolveCredentialContext(
+    context,
+    req,
+    accessService,
+  );
+  return { ...m365Access, ...credentials };
+};
+
+/**
+ * Everything after the prompt/M365 guards: org-agent guard, byom
+ * resolution, Foundry classification + OBO credential binding. Split out so
+ * the M365 layer-2 result can be merged with whatever this resolves.
+ */
+const resolveCredentialContext = async (
+  context: Partial<ChatContext>,
+  req: NextRequest,
+  accessService: AgentAccessService,
+): Promise<Partial<ChatContext>> => {
   // Org RAG agents: the same layer-1 guard as prompt agents. Admin records
   // (server-generated `orgr-` ids or overrides of static config ids) are
   // evaluated against the rule stored under `org-agent::<id>`; a STATIC
@@ -1406,6 +1458,11 @@ export async function createLimitsMiddleware(
     const principal = buildPrincipal({ user: context.user } as Session);
     const modelId = context.modelId;
     const series = context.model?.series;
+    // The delegations this principal is inside — scanned ONCE here and
+    // threaded through every resolution below (and, via ChatContext.limits,
+    // through the tool budgets later in the request). Before this each of
+    // the ~16 cell resolutions per request rescanned every jurisdiction.
+    const active = activeDelegationIds(policy, principal);
 
     // byom models run against the USER'S OWN Foundry account under their own
     // OBO token and cost the org nothing, so per-model caps are skipped
@@ -1432,13 +1489,17 @@ export async function createLimitsMiddleware(
         'model.allowed',
         modelId,
         series,
+        active,
       );
       throwIfDenied(modelGate, context);
     }
 
-    for (const [limitKey, active] of gates) {
-      if (!active) continue;
-      throwIfDenied(checkGate(policy, principal, limitKey), context);
+    for (const [limitKey, inUse] of gates) {
+      if (!inUse) continue;
+      throwIfDenied(
+        checkGate(policy, principal, limitKey, undefined, undefined, active),
+        context,
+      );
     }
 
     // ── Counters. `chat.messagesPerDay`, `model:<id>.requests` and
@@ -1448,14 +1509,41 @@ export async function createLimitsMiddleware(
     //
     //    An MCP tool-loop continuation is the same logical message as the turn
     //    that started it, so only round 0 is counted; otherwise a single
-    //    question costs a user five messages.
-    const isToolLoopContinuation = (context.mcpLoopRound ?? 0) > 0;
-    if (!isToolLoopContinuation) {
+    //    question costs a user five messages. "Continuation" is decided by
+    //    the server-signed token on every pending call, NOT by the client's
+    //    round counter alone — a bare `mcpLoopRound: 1` used to skip every
+    //    counter (lib/services/limits/continuationToken.ts). A round that
+    //    fails verification is metered as a new message, never rejected.
+    let dayCounters: Readonly<Record<string, number>> | undefined;
+    // No subject id → nothing to count under (the same fail-open guardLimit
+    // takes); gates above still applied. Unreachable with Entra in practice.
+    const countable = principal.userId !== '';
+    const isToolLoopContinuation = isVerifiedContinuation(
+      principal.userId,
+      context.mcpLoopRound,
+      context.mcpPendingToolCalls,
+      context.mcpServers?.length ?? 0,
+    );
+    if (!isToolLoopContinuation && countable) {
       const cells = [
-        ...meteredCells(policy, principal, 'chat.messagesPerDay'),
+        ...meteredCells(
+          policy,
+          principal,
+          'chat.messagesPerDay',
+          undefined,
+          undefined,
+          active,
+        ),
         ...(byomExempt
           ? []
-          : meteredCells(policy, principal, 'model.requests', modelId, series)),
+          : meteredCells(
+              policy,
+              principal,
+              'model.requests',
+              modelId,
+              series,
+              active,
+            )),
       ];
       if (cells.length > 0) {
         const reservation = await reserve(
@@ -1475,12 +1563,14 @@ export async function createLimitsMiddleware(
             failMode: policy?.failMode ?? 'open',
           },
         );
+        dayCounters = reservation.counters;
         if (!reservation.allowed && reservation.denial) {
           throwIfDenied(
             applyMode(policy, principal, {
               limitKey: reservation.denial.limitKey,
               limit: reservation.denial.limit,
               used: reservation.denial.used,
+              ...(reservation.denial.unavailable ? { unavailable: true } : {}),
               resetAt: reservation.denial.resetAt,
               source: (reservation.denial.source ??
                 'global') as ResolvedLimit['source'],
@@ -1500,19 +1590,25 @@ export async function createLimitsMiddleware(
     // Pre-flight token budget: read-only, and only reaches storage when a
     // token limit is actually configured for this principal. Soft by nature —
     // see lib/services/limits/tokenDebit.ts.
-    if (!isToolLoopContinuation) {
-      const overBudget = await checkTokenBudget(context.user);
+    if (!isToolLoopContinuation && countable) {
+      // The day ledger was just read (and written) by the reservation above;
+      // the pre-flight reuses it rather than downloading the same blob again.
+      const overBudget = await checkTokenBudget(context.user, {
+        dayCounters,
+        active,
+      });
       if (overBudget) {
         throwIfDenied(
           applyMode(policy, principal, {
             limitKey: overBudget.limitKey,
             limit: overBudget.limit,
             used: overBudget.used,
+            ...(overBudget.unavailable ? { unavailable: true } : {}),
             resetAt: resetAt(
               overBudget.limitKey === 'chat.tokensPerMonth' ? 'month' : 'day',
               policy?.timezone ?? 'UTC',
             ),
-            source: 'global',
+            source: overBudget.source,
           }),
           context,
         );
@@ -1522,7 +1618,7 @@ export async function createLimitsMiddleware(
     // Ceilings downstream code CLAMPS to rather than rejecting on.
     const ceilings: Record<string, number> = {};
     for (const key of ['feature.mcp.roundsPerRequest']) {
-      const value = effectiveCeiling(policy, principal, key);
+      const value = effectiveCeiling(policy, principal, key, active);
       if (value !== undefined) ceilings[key] = value;
     }
 
@@ -1542,6 +1638,7 @@ export async function createLimitsMiddleware(
             principal,
             id,
             OpenAIModels[id as OpenAIModelID]?.series,
+            active,
           ),
         )
       : [];
@@ -1550,6 +1647,7 @@ export async function createLimitsMiddleware(
       limits: {
         policy,
         principal,
+        active,
         ceilings,
         blockedModelIds,
         ...(byomExempt ? { byomExempt } : {}),

@@ -24,49 +24,16 @@ import {
   isRealGlobalAdmin,
 } from '@/lib/services/agentAccess/adminAuth';
 import { resolveLimitsAdminStatus } from '@/lib/services/limits/limitsAdminAuth';
-import {
-  JurisdictionWarning,
-  OverrideFlag,
-  TargetVerdict,
-} from '@/lib/services/limits/scopedVerdicts';
-import {
-  JurisdictionPredicate,
-  LimitDelegation,
-  LimitOverride,
-  LimitsMode,
-  LimitsPolicy,
-} from '@/lib/services/limits/types';
+import { LimitDelegation, LimitsPolicy } from '@/lib/services/limits/types';
 
-// ---------------------------------------------------------------------------
-// Wire shapes of GET /api/limits/scoped (the shared contract the client hook
-// in client/hooks/settings/useLimitsAdmin.ts mirrors). Kept here rather than
-// in the route file so a route module exports only handlers.
-// ---------------------------------------------------------------------------
-
-export interface ScopedDelegationView {
-  id: string;
-  label: string;
-  enabled: boolean;
-  jurisdiction: JurisdictionPredicate[];
-  maxOverrides: number;
-  overrideCount: number;
-  warnings: JurisdictionWarning[];
-}
-
-export type ScopedOverrideView = LimitOverride & {
-  delegationId: string;
-  verdicts: TargetVerdict[];
-  flags: OverrideFlag[];
-};
-
-export interface ScopedLimitsView {
-  isGlobalAdmin: boolean;
-  mode: LimitsMode;
-  timezone: string;
-  policyUnavailable: boolean;
-  delegations: ScopedDelegationView[];
-  overrides: ScopedOverrideView[];
-}
+// The wire shapes of GET /api/limits/scoped live in lib/services/limits/wire.ts
+// (client-safe) and are shared with client/hooks/settings/useLimitsAdmin.ts;
+// re-exported here for the route and existing importers.
+export type {
+  ScopedDelegationView,
+  ScopedLimitsView,
+  ScopedOverrideView,
+} from '@/lib/services/limits/wire';
 
 export interface ScopedCaller {
   /** Canonical (trim + lowercase) mail. */

@@ -42,6 +42,15 @@ describe('resetAt', () => {
     );
   });
 
+  it('lands on the exact minute for a zone whose offset is not a multiple of 15 minutes', () => {
+    // Asia/Kathmandu is UTC+5:45; local midnight is 18:15 UTC. The old
+    // 15-minute walk from the query instant could answer up to 14 minutes late.
+    const at = new Date('2026-07-24T06:07:00.000Z');
+    expect(resetAt('day', 'Asia/Kathmandu', at)).toBe(
+      '2026-07-24T18:15:00.000Z',
+    );
+  });
+
   it('handles a DST spring-forward day without drifting', () => {
     // 2026-03-08 is the US spring-forward date; that local day is only 23h.
     const at = new Date('2026-03-08T12:00:00.000Z');
