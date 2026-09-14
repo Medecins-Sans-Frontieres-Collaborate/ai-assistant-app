@@ -100,6 +100,12 @@ interface Scenario {
   documents: number;
   /** Explicit file rows in the plan; when absent, none are listed. */
   items?: PlanItem[];
+  /** The listing hit the enumeration ceiling. */
+  truncated?: boolean;
+  /** Delay plan responses that carry a requested cap (stale-cap window). */
+  planDelayMs?: number;
+  /** Changes-preview payload (defaults to "never indexed"). */
+  changes?: Record<string, unknown>;
   put?: (body: Record<string, unknown>) => Response;
 }
 
@@ -138,6 +144,9 @@ function installFetch(scenario: Scenario) {
         });
       }
       if (url === '/api/agent-access/m365-agents/plan') {
+        if (scenario.planDelayMs && typeof body?.maxDocuments === 'number') {
+          await new Promise((r) => setTimeout(r, scenario.planDelayMs));
+        }
         // The server clamps a requested cap to the caller's ceiling and
         // answers with the EFFECTIVE cap.
         const ceiling = scenario.isGlobalAdmin ? 200 : 100;
@@ -165,7 +174,7 @@ function installFetch(scenario: Scenario) {
                 driveId: 'b!drive',
                 itemId: '01FOLDER',
                 missing: false,
-                truncated: false,
+                truncated: scenario.truncated ?? false,
                 folders: [],
                 items,
                 counts: {
@@ -191,7 +200,7 @@ function installFetch(scenario: Scenario) {
       if (url.startsWith('/api/agent-access/m365-agents/changes')) {
         return jsonResponse(200, {
           success: true,
-          data: { preview: null, lastIndexedAt: null },
+          data: scenario.changes ?? { preview: null, lastIndexedAt: null },
         });
       }
       return jsonResponse(404, { error: `unmocked ${method} ${url}` });
@@ -534,5 +543,177 @@ describe('plan-view trim tools', () => {
       target: { value: 'size' },
     });
     expect(names()).toEqual(['b.pdf', 'c.pdf', 'a.pdf']);
+  });
+});
+
+describe('adversarial-pass fixes', () => {
+  const files: PlanItem[] = [
+    { itemId: 'A', name: 'a.pdf', lastModified: '2026-01-01T00:00:00Z' },
+    { itemId: 'B', name: 'b.pdf', lastModified: '2026-03-01T00:00:00Z' },
+    { itemId: 'C', name: 'c.pdf', lastModified: '2026-02-01T00:00:00Z' },
+  ];
+
+  it('shows the draft cap right after a raise and offers no second confirm while the plan is stale', async () => {
+    const { planCalls } = installFetch({
+      agents: [agentWith()],
+      documents: 63,
+      planDelayMs: 400,
+    });
+    renderSection();
+    await openEditor();
+    await waitForPlan(planCalls, (b) => b.maxDocuments === undefined);
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'm365CapRaiseButton' }),
+    );
+    expect(window.confirm).toHaveBeenCalledTimes(1);
+    // The raise is applied to the draft at once: the button is gone before
+    // the delayed plan answers, so it cannot be clicked twice.
+    expect(
+      screen.queryByRole('button', { name: 'm365CapRaiseButton' }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('m365CapOverrideNote')).toBeInTheDocument();
+    await waitForPlan(planCalls, (b) => b.maxDocuments === 70);
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('button', { name: 'm365CapRaiseButton' }),
+      ).not.toBeInTheDocument();
+    });
+    expect(window.confirm).toHaveBeenCalledTimes(1);
+  });
+
+  it('"Show all" reveals rows past the 60-row cutoff so they can be unticked', async () => {
+    const many: PlanItem[] = Array.from({ length: 65 }, (_, i) => ({
+      itemId: `F${String(i).padStart(3, '0')}`,
+      name: `file-${String(i).padStart(3, '0')}.pdf`,
+    }));
+    const { planCalls } = installFetch({
+      agents: [agentWith({ maxDocumentsOverride: 100 } as never)],
+      documents: 65,
+      items: many,
+    });
+    renderSection();
+    await openEditor();
+    await waitForPlan(planCalls, (b) => b.maxDocuments === 100);
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'm365PlanShowDetails' }),
+    );
+    expect(
+      await screen.findAllByRole('checkbox', { name: 'm365PlanIncludeFile' }),
+    ).toHaveLength(60);
+    fireEvent.click(
+      screen.getByRole('button', { name: 'm365PlanShowAllRows' }),
+    );
+    const boxes = await screen.findAllByRole('checkbox', {
+      name: 'm365PlanIncludeFile',
+    });
+    expect(boxes).toHaveLength(65);
+    fireEvent.click(boxes[64]);
+    await waitForPlan(planCalls, (b) =>
+      (b.sources?.[0]?.excludedItemIds ?? []).includes('F064'),
+    );
+    expect(
+      screen.getByRole('button', { name: 'm365PlanShowFewerRows' }),
+    ).toBeInTheDocument();
+  });
+
+  it('a truncated listing withholds Keep newest and file checkboxes and blocks Save', async () => {
+    const { planCalls } = installFetch({
+      agents: [agentWith({ maxDocumentsOverride: 2 } as never)],
+      documents: 3,
+      items: files,
+      truncated: true,
+    });
+    renderSection();
+    await openEditor();
+    await waitForPlan(planCalls, (b) => b.maxDocuments === 2);
+    expect(await screen.findAllByText('m365PlanTruncated')).not.toHaveLength(0);
+    expect(
+      screen.queryByRole('button', { name: 'm365PlanKeepNewest' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: 'm365PlanIncludeFile' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /^(save|Save)$/ }),
+    ).toBeDisabled();
+  });
+
+  it('prunes exclusion ids the complete listing does not know, but keeps them on a truncated one', async () => {
+    const source = (extra: Record<string, unknown>) => ({
+      ...folderSource,
+      excludedItemIds: ['ZOMBIE', 'A'],
+      ...extra,
+    });
+    const complete = installFetch({
+      agents: [agentWith({ sources: [source({})] } as never)],
+      documents: 3,
+      items: files,
+    });
+    const first = renderSection();
+    await openEditor();
+    await waitForPlan(complete.planCalls, (b) =>
+      (b.sources?.[0]?.excludedItemIds ?? []).includes('ZOMBIE'),
+    );
+    await waitForPlan(
+      complete.planCalls,
+      (b) =>
+        JSON.stringify(b.sources?.[0]?.excludedItemIds) ===
+        JSON.stringify(['A']),
+    );
+    first.unmount();
+    vi.unstubAllGlobals();
+
+    const truncated = installFetch({
+      agents: [agentWith({ sources: [source({})] } as never)],
+      documents: 3,
+      items: files,
+      truncated: true,
+    });
+    renderSection();
+    await openEditor();
+    await waitForPlan(truncated.planCalls, (b) =>
+      (b.sources?.[0]?.excludedItemIds ?? []).includes('ZOMBIE'),
+    );
+    await new Promise((r) => setTimeout(r, 600));
+    expect(
+      truncated
+        .planCalls()
+        .every((c) =>
+          (c.body?.sources?.[0]?.excludedItemIds ?? []).includes('ZOMBIE'),
+        ),
+    ).toBe(true);
+  });
+
+  it('shows a plain limit badge when the setter is unknown', async () => {
+    installFetch({
+      agents: [agentWith({ maxDocumentsOverride: 80 } as never)],
+      documents: 1,
+    });
+    renderSection();
+    expect(
+      await screen.findByText('m365AgentLimitBadgePlain'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('m365AgentLimitBadge')).not.toBeInTheDocument();
+  });
+
+  it('an over-cap changes preview explains and disables Refresh', async () => {
+    installFetch({
+      agents: [agentWith()],
+      documents: 1,
+      changes: {
+        preview: {
+          sources: [],
+          changes: { added: 2, modified: 0, removed: 0, unchanged: 5 },
+        },
+        lastIndexedAt: '2026-09-14T04:02:46.000Z',
+        overCap: { totalDocuments: 120, maxDocuments: 50 },
+      },
+    });
+    renderSection();
+    await openEditor();
+    expect(await screen.findByText('m365ChangesOverCap')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'm365AgentRefresh' }),
+    ).toBeDisabled();
   });
 });
