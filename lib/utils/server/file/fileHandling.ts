@@ -35,6 +35,23 @@ const CONVERTER_EXEC_OPTS = {
 };
 
 /**
+ * Per-call extraction options. `signal` is forwarded to every external
+ * converter spawned for the document, so a caller that gives up on a
+ * conversion (the M365 index job's time box, for instance) actually kills
+ * the pandoc/LibreOffice/ssconvert child instead of leaving it running
+ * until CONVERTER_EXEC_OPTS.timeout.
+ */
+export interface ExtractionOptions {
+  signal?: AbortSignal;
+}
+
+function execOpts(options?: ExtractionOptions) {
+  return options?.signal
+    ? { ...CONVERTER_EXEC_OPTS, signal: options.signal }
+    : CONVERTER_EXEC_OPTS;
+}
+
+/**
  * Upper bound on extracted text size across every converter path.
  * Decompressed CSV from an XLSX can balloon orders of magnitude past the
  * compressed upload limit; this prevents unbounded string growth.
@@ -135,6 +152,10 @@ function truncateToBudget(text: string): string {
 export async function convertWithPandoc(
   inputPath: string,
   outputFormat: string,
+  options?: ExtractionOptions & {
+    /** Extra pandoc arguments (e.g. an explicit `-f html`). */
+    args?: string[];
+  },
 ): Promise<string> {
   const outputPath = `${inputPath}.${outputFormat}`;
   const perfStart = performance.now();
@@ -142,8 +163,8 @@ export async function convertWithPandoc(
   try {
     await execFileAsync(
       'pandoc',
-      [inputPath, '-o', outputPath],
-      CONVERTER_EXEC_OPTS,
+      [inputPath, ...(options?.args ?? []), '-o', outputPath],
+      execOpts(options),
     );
     const stdout = await fs.promises.readFile(outputPath, 'utf8');
     console.log(
@@ -215,11 +236,14 @@ async function extractTextWithPdfJs(filePath: string): Promise<string> {
  * @param inputPath - Path to the PDF file
  * @returns Extracted text content
  */
-async function extractTextWithPdfToTextCli(inputPath: string): Promise<string> {
+async function extractTextWithPdfToTextCli(
+  inputPath: string,
+  options?: ExtractionOptions,
+): Promise<string> {
   const { stdout } = await execFileAsync(
     'pdftotext',
     [inputPath, '-'],
-    CONVERTER_EXEC_OPTS,
+    execOpts(options),
   );
   return stdout;
 }
@@ -232,7 +256,10 @@ async function extractTextWithPdfToTextCli(inputPath: string): Promise<string> {
  * @returns Extracted text content
  * @throws Error if both extraction methods fail
  */
-async function pdfToText(inputPath: string): Promise<string> {
+async function pdfToText(
+  inputPath: string,
+  options?: ExtractionOptions,
+): Promise<string> {
   const perfStart = performance.now();
   // Try pdfjs-dist first (more robust for malformed PDFs)
   try {
@@ -261,7 +288,7 @@ async function pdfToText(inputPath: string): Promise<string> {
   // Fallback to pdftotext CLI
   try {
     const perfCliStart = performance.now();
-    const stdout = await extractTextWithPdfToTextCli(inputPath);
+    const stdout = await extractTextWithPdfToTextCli(inputPath, options);
     console.log(
       `[Perf] extractTextWithPdfToTextCli: ${(performance.now() - perfCliStart).toFixed(1)}ms`,
     );
@@ -291,12 +318,15 @@ async function pdfToText(inputPath: string): Promise<string> {
  * Sheet order in the output matches workbook order, which is what
  * `--export-file-per-sheet` uses to index its numbered outputs.
  */
-async function listXlsxSheets(inputPath: string): Promise<string[]> {
+async function listXlsxSheets(
+  inputPath: string,
+  options?: ExtractionOptions,
+): Promise<string[]> {
   try {
     const { stdout } = await execFileAsync(
       'ssconvert',
       ['--list-sheets', inputPath],
-      CONVERTER_EXEC_OPTS,
+      execOpts(options),
     );
     return stdout
       .split('\n')
@@ -311,7 +341,15 @@ async function listXlsxSheets(inputPath: string): Promise<string[]> {
   }
 }
 
-async function xlsxToText(inputPath: string): Promise<string> {
+/**
+ * Workbook → one labelled CSV block per sheet. ssconvert (Gnumeric) reads
+ * both OOXML `.xlsx` and legacy binary `.xls`, so the same path serves
+ * `application/vnd.ms-excel`.
+ */
+async function xlsxToText(
+  inputPath: string,
+  options?: ExtractionOptions,
+): Promise<string> {
   const perfStart = performance.now();
   const tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'xlsx-'));
   const baseName = path.basename(inputPath, path.extname(inputPath));
@@ -320,14 +358,14 @@ async function xlsxToText(inputPath: string): Promise<string> {
   try {
     // Read real sheet names first so we can label the numbered ssconvert
     // outputs with actual workbook sheet names instead of ".0", ".1", ...
-    const sheetNames = await listXlsxSheets(inputPath);
+    const sheetNames = await listXlsxSheets(inputPath, options);
 
     // Convert XLSX to one CSV per sheet. Output files are named
     // `<outputPattern>.0`, `.1`, ... in workbook order.
     await execFileAsync(
       'ssconvert',
       ['--export-file-per-sheet', inputPath, outputPattern],
-      CONVERTER_EXEC_OPTS,
+      execOpts(options),
     );
 
     const files = await fs.promises.readdir(tempDir);
@@ -400,45 +438,62 @@ async function xlsxToText(inputPath: string): Promise<string> {
   }
 }
 
-async function pptToText(inputPath: string): Promise<string> {
+/**
+ * Converts one document with LibreOffice headless into `format` inside
+ * `outputDir` and returns the produced file's path. A per-invocation
+ * profile directory keeps concurrent conversions on the same OS user from
+ * colliding on the shared default profile lock.
+ */
+async function libreOfficeConvert(
+  inputPath: string,
+  format: string,
+  outputDir: string,
+  options?: ExtractionOptions,
+): Promise<string> {
+  const profileDir = path.join(outputDir, 'lo-profile');
+  const baseName = path.basename(inputPath, path.extname(inputPath));
+  const expected = `${baseName}.${format}`;
+  const { stdout, stderr } = await execFileAsync(
+    'libreoffice',
+    [
+      `-env:UserInstallation=file://${profileDir}`,
+      '--headless',
+      '--convert-to',
+      format,
+      '--outdir',
+      outputDir,
+      inputPath,
+    ],
+    execOpts(options),
+  );
+  console.log('LibreOffice stdout:', stdout);
+  if (stderr) {
+    console.warn('LibreOffice stderr:', stderr);
+  }
+  const files = await fs.promises.readdir(outputDir);
+  if (!files.includes(expected)) {
+    throw new Error(
+      `LibreOffice did not produce ${expected} (found: ${files.join(', ') || 'nothing'})`,
+    );
+  }
+  return path.join(outputDir, expected);
+}
+
+async function pptToText(
+  inputPath: string,
+  options?: ExtractionOptions,
+): Promise<string> {
   const perfStart = performance.now();
   // TODO: Possibly find a way to do this without converting to PDF first
   const outputDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'ppt-'));
-  // Per-invocation LibreOffice profile so concurrent calls on the same OS
-  // user don't collide on the shared default profile lock.
-  const profileDir = path.join(outputDir, 'lo-profile');
-  const baseName = path.basename(inputPath, path.extname(inputPath));
-  const pdfPath = path.join(outputDir, `${baseName}.pdf`);
-
   try {
-    const { stdout, stderr } = await execFileAsync(
-      'libreoffice',
-      [
-        `-env:UserInstallation=file://${profileDir}`,
-        '--headless',
-        '--convert-to',
-        'pdf',
-        '--outdir',
-        outputDir,
-        inputPath,
-      ],
-      CONVERTER_EXEC_OPTS,
+    const pdfPath = await libreOfficeConvert(
+      inputPath,
+      'pdf',
+      outputDir,
+      options,
     );
-    console.log('LibreOffice stdout:', stdout);
-    if (stderr) {
-      console.warn('LibreOffice stderr:', stderr);
-    }
-
-    // Check if the PDF file exists
-    const files = await fs.promises.readdir(outputDir);
-    console.log('Files in output directory:', files);
-
-    if (!files.includes(`${baseName}.pdf`)) {
-      throw new Error(`PDF file not found in ${outputDir}`);
-    }
-
-    // Extract text from the PDF
-    const text = await pdfToText(pdfPath);
+    const text = await pdfToText(pdfPath, options);
     console.log(
       `[Perf] pptToText: ${(performance.now() - perfStart).toFixed(1)}ms`,
     );
@@ -447,6 +502,39 @@ async function pptToText(inputPath: string): Promise<string> {
     console.error(
       `Error converting PPT/PPTX to PDF and extracting text: ${error}`,
     );
+    throw error;
+  } finally {
+    await removeTempDir(outputDir);
+  }
+}
+
+/**
+ * Legacy binary Word (`.doc`, OLE container). Pandoc cannot read it, so
+ * LibreOffice first rewrites it as `.docx`, which then takes the ordinary
+ * pandoc path (structure and headings preserved). Reading the OLE bytes as
+ * UTF-8 — the old fall-through — produced mojibake that looked like a
+ * successful extraction.
+ */
+async function docToText(
+  inputPath: string,
+  options?: ExtractionOptions,
+): Promise<string> {
+  const perfStart = performance.now();
+  const outputDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'doc-'));
+  try {
+    const docxPath = await libreOfficeConvert(
+      inputPath,
+      'docx',
+      outputDir,
+      options,
+    );
+    const text = await convertWithPandoc(docxPath, 'markdown', options);
+    console.log(
+      `[Perf] docToText: ${(performance.now() - perfStart).toFixed(1)}ms`,
+    );
+    return text;
+  } catch (error) {
+    console.error(`Error converting DOC via LibreOffice: ${error}`);
     throw error;
   } finally {
     await removeTempDir(outputDir);
@@ -467,13 +555,18 @@ export async function loadDocumentFromPath(
   filePath: string,
   mimeType: string,
   originalFilename: string,
+  options?: ExtractionOptions,
 ): Promise<string> {
   const perfStart = performance.now();
+  const lowerName = originalFilename.toLowerCase();
 
   let text: string;
   switch (true) {
     case mimeType.startsWith('application/pdf'):
-      text = await pdfToText(filePath);
+      text = await pdfToText(filePath, options);
+      break;
+    case mimeType === 'application/msword' || lowerName.endsWith('.doc'):
+      text = await docToText(filePath, options);
       break;
     case mimeType.startsWith(
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -481,34 +574,50 @@ export async function loadDocumentFromPath(
       mimeType.startsWith('application/rtf') ||
       mimeType.startsWith('text/rtf') ||
       mimeType.startsWith('application/vnd.oasis.opendocument.text') ||
-      originalFilename.endsWith('.rtf') ||
-      originalFilename.endsWith('.odt'):
+      lowerName.endsWith('.rtf') ||
+      lowerName.endsWith('.odt'):
       // Pandoc infers the input format from the file extension, which
-      // buildTempFilePath preserves. Legacy binary `.doc` is deliberately NOT
-      // routed here — pandoc cannot read it, and falling through to the raw
-      // UTF-8 default would hand back mojibake rather than an honest failure.
-      text = await convertWithPandoc(filePath, 'markdown');
+      // buildTempFilePath preserves. Legacy binary `.doc` is handled above
+      // (LibreOffice → docx → pandoc); it must never reach the raw UTF-8
+      // default, which would hand back mojibake as if it were text.
+      text = await convertWithPandoc(filePath, 'markdown', options);
       break;
     case mimeType.startsWith(
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    ) || originalFilename.endsWith('.xlsx'):
-      text = await xlsxToText(filePath);
+    ) ||
+      mimeType === 'application/vnd.ms-excel' ||
+      lowerName.endsWith('.xlsx') ||
+      lowerName.endsWith('.xls'):
+      text = await xlsxToText(filePath, options);
       break;
     case mimeType.startsWith(
       'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     ) || mimeType.startsWith('application/vnd.ms-powerpoint'):
-      text = await pptToText(filePath);
+      text = await pptToText(filePath, options);
       break;
     case mimeType.startsWith('application/epub+zip'):
-      text = await convertWithPandoc(filePath, 'markdown');
+      text = await convertWithPandoc(filePath, 'markdown', options);
+      break;
+    case mimeType.startsWith('text/html') ||
+      mimeType.startsWith('application/xhtml+xml') ||
+      lowerName.endsWith('.html') ||
+      lowerName.endsWith('.htm') ||
+      lowerName.endsWith('.xhtml'):
+      // Markup → markdown: pandoc's HTML reader drops <script>/<style>
+      // bodies and tags, so the model (and the search index) sees prose
+      // rather than a wall of attributes. `-raw_html` keeps unknown tags
+      // from being passed through verbatim.
+      text = await convertWithPandoc(filePath, 'markdown', {
+        ...options,
+        args: ['-f', 'html', '-t', 'markdown-raw_html'],
+      });
       break;
     case mimeType.startsWith('text/') ||
       mimeType.startsWith('application/csv') ||
-      originalFilename.endsWith('.py') ||
-      originalFilename.endsWith('.sql') ||
+      lowerName.endsWith('.py') ||
+      lowerName.endsWith('.sql') ||
       mimeType.startsWith('application/json') ||
-      mimeType.startsWith('application/xhtml+xml') ||
-      originalFilename.endsWith('.tex'):
+      lowerName.endsWith('.tex'):
     default:
       text = truncateToBudget(await fs.promises.readFile(filePath, 'utf8'));
   }
@@ -521,7 +630,10 @@ export async function loadDocumentFromPath(
   return text;
 }
 
-export async function loadDocument(file: File): Promise<string> {
+export async function loadDocument(
+  file: File,
+  options?: ExtractionOptions,
+): Promise<string> {
   const mimeType = lookup(file.name) || 'application/octet-stream';
   const perfStart = performance.now();
   const tempFilePath = buildTempFilePath(file.name);
@@ -532,7 +644,12 @@ export async function loadDocument(file: File): Promise<string> {
     mode: 0o600,
   });
 
-  const text = await loadDocumentFromPath(tempFilePath, mimeType, file.name);
+  const text = await loadDocumentFromPath(
+    tempFilePath,
+    mimeType,
+    file.name,
+    options,
+  );
 
   perfLog(
     'loadDocument total',
