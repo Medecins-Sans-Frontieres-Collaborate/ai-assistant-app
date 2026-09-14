@@ -13,6 +13,7 @@
  */
 import {
   AgentAccessConflictError,
+  type UploadCondition,
   downloadBlob,
   uploadJson,
 } from '@/lib/services/agentAccess/blobCas';
@@ -78,14 +79,14 @@ export async function readIndexJob(
 export async function writeIndexJob(
   storage: BlobStorage,
   job: M365IndexJob,
-  ifMatchEtag: string | null,
+  condition: UploadCondition,
 ): Promise<string> {
   const parsed = M365IndexJobSchema.parse(job);
   return uploadJson(
     storage,
     m365AgentIndexJobBlobPath(parsed.agentId),
     parsed,
-    ifMatchEtag,
+    condition,
     'agentAccess.writeM365IndexJob',
   );
 }
