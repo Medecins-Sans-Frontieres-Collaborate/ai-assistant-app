@@ -15,8 +15,11 @@ const mkdtempMock = vi.fn();
 const rmMock = vi.fn();
 const unlinkMock = vi.fn();
 const writeFileMock = vi.fn();
+const spawnMock = vi.fn();
 
 vi.mock('child_process', () => ({
+  spawn: (cmd: string, args: readonly string[], opts: unknown) =>
+    spawnMock(cmd, args, opts),
   execFile: (
     cmd: string,
     args: readonly string[],
@@ -89,6 +92,7 @@ const XLSX_MIME =
 beforeEach(() => {
   getDocumentMock.mockReset();
   execFileMock.mockReset();
+  spawnMock.mockReset();
   readdirMock.mockReset();
   readFileMock.mockReset();
   mkdtempMock.mockReset();
@@ -512,22 +516,63 @@ describe('looksLikeGarbledText', () => {
   });
 });
 
+/** Minimal ChildProcess stand-in: emits the given stdout, then closes. */
+function fakeChild(stdout: string, code = 0, stderr = '') {
+  const { EventEmitter } = require('events') as typeof import('events');
+  const child = new EventEmitter() as import('events').EventEmitter & {
+    stdout: import('events').EventEmitter;
+    stderr: import('events').EventEmitter;
+    stdin: { on: () => void; end: (input: Buffer) => void; written?: Buffer };
+    kill: () => void;
+  };
+  child.stdout = new EventEmitter();
+  child.stderr = new EventEmitter();
+  child.kill = vi.fn();
+  child.stdin = {
+    on: () => undefined,
+    end: (input: Buffer) => {
+      child.stdin.written = input;
+      setImmediate(() => {
+        if (stderr) child.stderr.emit('data', Buffer.from(stderr));
+        if (stdout) child.stdout.emit('data', Buffer.from(stdout));
+        child.emit('close', code);
+      });
+    },
+  };
+  return child;
+}
+
 describe('countPdfPages', () => {
   it('uses pdfjs when it can open the file', async () => {
     pdfjsPages(['a', 'b', 'c']);
     await expect(countPdfPages(Buffer.from('%PDF'))).resolves.toBe(3);
     expect(execFileMock).not.toHaveBeenCalled();
+    expect(spawnMock).not.toHaveBeenCalled();
   });
 
-  it('falls back to pdfinfo and cleans up its temp file', async () => {
+  it('falls back to pdfinfo over stdin — the network bytes never touch the filesystem', async () => {
     pdfjsThrows('bad xref');
-    execFileMock.mockResolvedValue({
-      stdout: 'Title: x\nPages:          12\nEncrypted: no\n',
-      stderr: '',
-    });
-    await expect(countPdfPages(Buffer.from('%PDF'))).resolves.toBe(12);
-    expect(execFileMock.mock.calls[0][0]).toBe('pdfinfo');
-    expect(writeFileMock).toHaveBeenCalledTimes(1);
-    expect(unlinkMock).toHaveBeenCalledTimes(1);
+    const child = fakeChild('Title: x\nPages:          12\nEncrypted: no\n');
+    spawnMock.mockReturnValue(child);
+    const bytes = Buffer.from('%PDF-1.4 damaged');
+    await expect(countPdfPages(bytes)).resolves.toBe(12);
+    expect(spawnMock).toHaveBeenCalledWith(
+      'pdfinfo',
+      ['-'],
+      expect.objectContaining({ killSignal: 'SIGKILL' }),
+    );
+    expect(child.stdin.written).toBe(bytes);
+    expect(writeFileMock).not.toHaveBeenCalled();
+    expect(unlinkMock).not.toHaveBeenCalled();
+  });
+
+  it('surfaces a pdfinfo failure with its stderr', async () => {
+    pdfjsThrows('bad xref');
+    spawnMock.mockReturnValue(
+      fakeChild('', 1, "Syntax Error: Couldn't find trailer dictionary"),
+    );
+    await expect(countPdfPages(Buffer.from('%PDF'))).rejects.toThrow(
+      /pdfinfo exited with 1: Syntax Error/,
+    );
   });
 });
