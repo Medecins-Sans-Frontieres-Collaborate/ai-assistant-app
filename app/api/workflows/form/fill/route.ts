@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 
+import { collectCallerFills } from '@/lib/services/workflows/form/fillRequest';
 import {
   RawFillResponse,
   buildFillSchema,
@@ -62,12 +63,6 @@ interface FillRequest {
   conversationId?: string;
 }
 
-function isFill(value: unknown): value is FieldFill {
-  if (!value || typeof value !== 'object') return false;
-  const f = value as Record<string, unknown>;
-  return 'value' in f && Array.isArray(f.provenance);
-}
-
 /**
  * POST /api/workflows/form/fill — proposes values for the target fields from
  * the supplied material. Synchronous JSON (one strict json_schema call);
@@ -106,16 +101,13 @@ export async function POST(req: NextRequest) {
   );
   if (denied) return denied;
 
-  const fills: Record<string, FieldFill> = {};
-  if (body.fields && typeof body.fields === 'object') {
-    for (const [id, fill] of Object.entries(body.fields)) {
-      if (isFill(fill)) fills[id] = fill;
-    }
-  }
+  const byId = new Map(template.fields.map((f) => [f.id, f]));
+  // Caller-keyed writes are allow-listed against the template's field ids
+  // (CodeQL alert 466) — never copy request object keys verbatim.
+  const fills = collectCallerFills(body.fields, new Set(byId.keys()));
   if (!Array.isArray(body.targetFieldIds) || body.targetFieldIds.length === 0) {
     return badRequestResponse('targetFieldIds is required');
   }
-  const byId = new Map(template.fields.map((f) => [f.id, f]));
   const targets = [...new Set(body.targetFieldIds)]
     .map((id) => byId.get(id))
     .filter((f): f is NonNullable<typeof f> => !!f)

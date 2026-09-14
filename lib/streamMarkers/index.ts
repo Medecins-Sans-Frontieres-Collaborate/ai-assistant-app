@@ -98,6 +98,8 @@ export interface GeneratedFileRef {
   filename: string;
   mime_type: string;
   is_image: boolean;
+  /** Persisted byte size; lets later turns budget/announce the file. */
+  size_bytes?: number;
 }
 
 /**

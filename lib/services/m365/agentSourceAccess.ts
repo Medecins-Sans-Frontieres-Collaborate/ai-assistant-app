@@ -19,7 +19,9 @@
  * immediate-children listing, matching their snapshot semantics.
  * Verdicts are cached per user+agent for a short TTL (per-process, like the
  * access-rules snapshot): max staleness after a permission revocation in
- * SharePoint is CACHE_TTL_MS.
+ * SharePoint is CACHE_TTL_MS. Only DEFINITIVE verdicts are cached: a probe
+ * that came back throttled or 5xx fails closed for this request but is
+ * not remembered, so a Graph wobble cannot lock a user out for the TTL.
  */
 import { NextRequest } from 'next/server';
 
@@ -32,7 +34,7 @@ import type {
   M365AgentSource,
 } from '@/lib/services/agentAccess/types';
 import type { AccessibleFolderItem } from '@/lib/services/m365/agentIndexService';
-import { graphJson } from '@/lib/services/m365/graphApi';
+import { graphJson, withGraphTokenCache } from '@/lib/services/m365/graphApi';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
@@ -54,6 +56,13 @@ export interface SourceAccessResult {
 export interface AgentSourceAccess {
   /** Sources the user's own token can currently open. */
   accessibleSourceIds: string[];
+  /**
+   * True when at least one verdict could not be established (Graph
+   * throttled or errored on the probe). Denials in `results` may then be
+   * transient; callers can say "couldn't verify" instead of "no access".
+   * Such a result is never cached.
+   */
+  unverifiable: boolean;
   /**
    * Child FILES the user can see inside accessible folder sources, each
    * addressed within its drive (item ids are only unique per drive).
@@ -78,16 +87,41 @@ function cacheKey(userId: string, agent: M365Agent): string {
 }
 
 interface GraphBatchResponseShape {
-  responses?: { id?: string; status?: number }[];
+  responses?: {
+    id?: string;
+    status?: number;
+    headers?: Record<string, string>;
+  }[];
 }
 
 /**
- * Probes the sources via $batch. A sub-request's 2xx means the user's token
- * can open the item; 403/404 means it can't. Any OTHER sub-status (429
- * throttle, 5xx) fails CLOSED for that source only — a transient Graph
- * wobble must never widen access, and the verdict retries naturally when
- * the cache entry expires. Batch-level failures (no session, consent gap,
- * transport) throw for the caller to map to the connect flow.
+ * Per-item verdict. `unknown` = Graph gave no definitive answer (throttled
+ * even after a retry, 5xx, or the sub-response was missing): treated as
+ * inaccessible for THIS request, never cached.
+ */
+type Verdict = 'ok' | 'denied' | 'unknown';
+
+/** Cap on how long a throttled probe waits before its single retry. */
+const PROBE_RETRY_MAX_MS = 10_000;
+const PROBE_RETRY_DEFAULT_MS = 1_000;
+
+function retryAfterMs(headers: Record<string, string> | undefined): number {
+  const raw = headers
+    ? Object.entries(headers).find(
+        ([name]) => name.toLowerCase() === 'retry-after',
+      )?.[1]
+    : undefined;
+  const seconds = Number(raw);
+  if (!Number.isFinite(seconds) || seconds < 0) return PROBE_RETRY_DEFAULT_MS;
+  return Math.min(seconds * 1000, PROBE_RETRY_MAX_MS);
+}
+
+/**
+ * Probes items via $batch. A sub-request's 2xx means the user's token can
+ * open the item; 403/404 means it can't. A 429 sub-response is retried
+ * ONCE after its Retry-After; anything still not definitive (429 again,
+ * 5xx, missing) is `unknown`. Batch-level failures (no session, consent
+ * gap, transport) throw for the caller to map to the connect flow.
  */
 interface ProbeTarget {
   /** Verdict key (source id, or item id for manifest items). */
@@ -96,40 +130,90 @@ interface ProbeTarget {
   itemId: string;
 }
 
+async function probeBatch(
+  req: NextRequest,
+  slice: ProbeTarget[],
+): Promise<{
+  verdicts: Map<string, Verdict>;
+  throttled: ProbeTarget[];
+  waitMs: number;
+}> {
+  const data = await graphJson<GraphBatchResponseShape>(
+    req,
+    GRAPH_SCOPES,
+    '/$batch',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        requests: slice.map((target, index) => ({
+          id: String(index),
+          method: 'GET',
+          url: `/drives/${encodeURIComponent(target.driveId)}/items/${encodeURIComponent(target.itemId)}?$select=id`,
+        })),
+      }),
+    },
+  );
+  const verdicts = new Map<string, Verdict>();
+  const throttled: ProbeTarget[] = [];
+  let waitMs = 0;
+  for (const response of data.responses ?? []) {
+    const target = slice[Number(response.id)];
+    if (!target) continue;
+    const status = response.status ?? 0;
+    if (status >= 200 && status < 300) {
+      verdicts.set(target.key, 'ok');
+    } else if (status === 403 || status === 404) {
+      verdicts.set(target.key, 'denied');
+    } else if (status === 429) {
+      throttled.push(target);
+      waitMs = Math.max(waitMs, retryAfterMs(response.headers));
+    } else {
+      console.warn(
+        `[m365-agents] unexpected probe status ${status} for ${sanitizeForLog(target.key)}; failing closed for this item (not cached)`,
+      );
+      verdicts.set(target.key, 'unknown');
+    }
+  }
+  return { verdicts, throttled, waitMs };
+}
+
 async function probeItems(
   req: NextRequest,
   targets: ProbeTarget[],
-): Promise<Map<string, boolean>> {
-  const verdicts = new Map<string, boolean>();
+): Promise<Map<string, Verdict>> {
+  const verdicts = new Map<string, Verdict>(
+    targets.map((target) => [target.key, 'unknown' as const]),
+  );
+  const throttled: ProbeTarget[] = [];
+  let waitMs = 0;
   for (let offset = 0; offset < targets.length; offset += GRAPH_BATCH_SIZE) {
-    const slice = targets.slice(offset, offset + GRAPH_BATCH_SIZE);
-    const data = await graphJson<GraphBatchResponseShape>(
+    const batch = await probeBatch(
       req,
-      GRAPH_SCOPES,
-      '/$batch',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          requests: slice.map((target, index) => ({
-            id: String(offset + index),
-            method: 'GET',
-            url: `/drives/${encodeURIComponent(target.driveId)}/items/${encodeURIComponent(target.itemId)}?$select=id`,
-          })),
-        }),
-      },
+      targets.slice(offset, offset + GRAPH_BATCH_SIZE),
     );
-    for (const response of data.responses ?? []) {
-      const index = Number(response.id);
-      const target = targets[index];
-      if (!target) continue;
-      const status = response.status ?? 0;
-      if (status !== 200 && status !== 403 && status !== 404) {
-        console.warn(
-          `[m365-agents] unexpected probe status ${status} for ${sanitizeForLog(target.key)}; failing closed for this item`,
-        );
-      }
-      verdicts.set(target.key, status >= 200 && status < 300);
+    for (const [key, verdict] of batch.verdicts) verdicts.set(key, verdict);
+    throttled.push(...batch.throttled);
+    waitMs = Math.max(waitMs, batch.waitMs);
+  }
+  if (throttled.length > 0) {
+    console.warn(
+      `[m365-agents] ${throttled.length} probe(s) throttled; retrying once after ${waitMs}ms`,
+    );
+    if (waitMs > 0) {
+      await new Promise<void>((resolve) => setTimeout(resolve, waitMs));
+    }
+    for (
+      let offset = 0;
+      offset < throttled.length;
+      offset += GRAPH_BATCH_SIZE
+    ) {
+      const batch = await probeBatch(
+        req,
+        throttled.slice(offset, offset + GRAPH_BATCH_SIZE),
+      );
+      for (const [key, verdict] of batch.verdicts) verdicts.set(key, verdict);
+      // Still throttled after the retry: unknown (already the default).
     }
   }
   return verdicts;
@@ -138,7 +222,7 @@ async function probeItems(
 function probeSources(
   req: NextRequest,
   sources: M365AgentSource[],
-): Promise<Map<string, boolean>> {
+): Promise<Map<string, Verdict>> {
   return probeItems(
     req,
     sources.map((source) => ({
@@ -207,15 +291,17 @@ async function loadIndexedItems(
  * Resolves the child files the USER'S OWN token can see inside each
  * accessible folder source. Graph children listings are security-trimmed,
  * so an item-restricted child simply doesn't appear for a user without
- * access. A failed listing fails CLOSED for that folder only.
+ * access. A failed listing or probe fails CLOSED for that folder only,
+ * and marks the result `unverifiable` so it is not cached.
  */
 async function resolveAccessibleFolderItems(
   req: NextRequest,
   agent: M365Agent,
   folders: M365AgentSource[],
-): Promise<AccessibleFolderItem[]> {
-  if (folders.length === 0) return [];
+): Promise<{ items: AccessibleFolderItem[]; unverifiable: boolean }> {
+  if (folders.length === 0) return { items: [], unverifiable: false };
   const items: AccessibleFolderItem[] = [];
+  let unverifiable = false;
   const indexed = await loadIndexedItems(agent);
   const legacyFolders: M365AgentSource[] = [];
   const targets: ProbeTarget[] = [];
@@ -228,12 +314,17 @@ async function resolveAccessibleFolderItems(
     try {
       const verdicts = await probeItems(req, targets);
       for (const target of targets) {
-        if (verdicts.get(target.key)) {
+        const verdict = verdicts.get(target.key);
+        if (verdict === 'ok') {
           items.push({ driveId: target.driveId, itemId: target.itemId });
+        } else if (verdict !== 'denied') {
+          unverifiable = true;
         }
       }
     } catch (error) {
-      // Fail closed for the manifest-backed folders only.
+      // Fail closed for the manifest-backed folders only — and only for
+      // this request: a transport failure is not a permission verdict.
+      unverifiable = true;
       console.warn(
         `[m365-agents] per-item probe failed for agent ${sanitizeForLog(agent.id)}; failing closed for its folder items: ${sanitizeForLog(error)}`,
       );
@@ -254,12 +345,13 @@ async function resolveAccessibleFolderItems(
         items.push({ driveId: folder.driveId, itemId: child.id });
       }
     } catch (error) {
+      unverifiable = true;
       console.warn(
         `[m365-agents] folder child listing failed for source ${sanitizeForLog(folder.sourceId)}; failing closed for this folder: ${sanitizeForLog(error)}`,
       );
     }
   }
-  return items;
+  return { items, unverifiable };
 }
 
 /**
@@ -278,38 +370,52 @@ export async function checkAgentSourceAccess(
   if (cached && Date.now() - cached.at < CACHE_TTL_MS) {
     return cached.access;
   }
+  // Several $batch calls plus folder listings: one token mint for all.
+  return withGraphTokenCache(req, async () => {
+    const verdicts = await probeSources(req, agent.sources);
+    const results = agent.sources.map(
+      (source): SourceAccessResult => ({
+        sourceId: source.sourceId,
+        accessible: verdicts.get(source.sourceId) === 'ok',
+      }),
+    );
+    let unverifiable = agent.sources.some(
+      (source) => (verdicts.get(source.sourceId) ?? 'unknown') === 'unknown',
+    );
 
-  const verdicts = await probeSources(req, agent.sources);
-  const results = agent.sources.map(
-    (source): SourceAccessResult => ({
-      sourceId: source.sourceId,
-      accessible: verdicts.get(source.sourceId) ?? false,
-    }),
-  );
+    const folderItems = await resolveAccessibleFolderItems(
+      req,
+      agent,
+      agent.sources.filter(
+        (source) =>
+          source.kind === 'folder' && verdicts.get(source.sourceId) === 'ok',
+      ),
+    );
+    unverifiable ||= folderItems.unverifiable;
 
-  const accessibleFolderItems = await resolveAccessibleFolderItems(
-    req,
-    agent,
-    agent.sources.filter(
-      (source) =>
-        source.kind === 'folder' && (verdicts.get(source.sourceId) ?? false),
-    ),
-  );
+    const access: AgentSourceAccess = {
+      accessibleSourceIds: results
+        .filter((r) => r.accessible)
+        .map((r) => r.sourceId),
+      accessibleFolderItems: folderItems.items,
+      results,
+      unverifiable,
+    };
 
-  const access: AgentSourceAccess = {
-    accessibleSourceIds: results
-      .filter((r) => r.accessible)
-      .map((r) => r.sourceId),
-    accessibleFolderItems,
-    results,
-  };
-
-  if (cache.size >= MAX_CACHE_ENTRIES) {
-    // Simple pressure valve; entries are tiny and TTL-bounded anyway.
-    cache.clear();
-  }
-  cache.set(key, { at: Date.now(), access });
-  return access;
+    if (unverifiable) {
+      // Fail closed now, but let the next request ask Graph again.
+      console.warn(
+        `[m365-agents] source access for agent ${sanitizeForLog(agent.id)} could not be fully verified; verdict not cached`,
+      );
+      return access;
+    }
+    if (cache.size >= MAX_CACHE_ENTRIES) {
+      // Simple pressure valve; entries are tiny and TTL-bounded anyway.
+      cache.clear();
+    }
+    cache.set(key, { at: Date.now(), access });
+    return access;
+  });
 }
 
 /** Test hook. */

@@ -76,6 +76,10 @@ export async function GET(
     return successResponse({
       connected: true,
       agentName: agent.name,
+      // True when Graph could not give a definitive answer for at least
+      // one source (throttled / errored): the client should say "couldn't
+      // verify" rather than "no access", and the verdict is not cached.
+      unverifiable: access.unverifiable,
       sources: agent.sources.map((source) => {
         const accessible = accessibleById.get(source.sourceId) ?? false;
         return {

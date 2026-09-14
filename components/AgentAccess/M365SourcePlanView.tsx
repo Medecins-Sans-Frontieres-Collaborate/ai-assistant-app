@@ -335,6 +335,45 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
     }
   };
 
+  /**
+   * Single-file sources: the one item's classification and last-run
+   * outcome belong on the chip row, not behind "Details" — "0 files will
+   * be indexed" in gray told the tester nothing about WHY.
+   */
+  const fileItem = kind === 'file' ? (plan?.items[0] ?? null) : null;
+  const fileStatus = fileItem ? statusByItem.get(fileItem.itemId) : undefined;
+  const fileOutcome =
+    fileStatus?.status === 'failed' ||
+    fileStatus?.status === 'missing' ||
+    fileStatus?.status === 'noText'
+      ? fileStatus
+      : undefined;
+  const fileVerdict = (): { label: string; tone: 'amber' | 'red' } | null => {
+    if (!fileItem) return null;
+    if (fileItem.tier === 'skipped') {
+      const reason = fileItem.reason ?? 'unsupported';
+      const ext = fileItem.name.toLowerCase().split('.').pop() ?? '';
+      return {
+        label:
+          reason === 'unsupported'
+            ? t('m365PlanFileUnsupported', { ext })
+            : t('m365PlanFileSkipped', {
+                reason: t(`m365SkipReason.${reason}`),
+              }),
+        tone: 'red',
+      };
+    }
+    if (fileItem.tier === 'needsPreparation') {
+      return {
+        label: t('m365PlanFileNeedsPreparation', {
+          hint: prepareHint(fileItem),
+        }),
+        tone: 'amber',
+      };
+    }
+    return null;
+  };
+
   const chip = (label: string, tone: 'green' | 'amber' | 'gray' | 'red') => {
     const tones = {
       green:
@@ -362,18 +401,37 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
         {plan?.missing && chip(t('m365PlanMissing'), 'red')}
         {plan && !plan.missing && (
           <>
-            {chip(
-              t('m365PlanIndexable', { count: plan.counts.indexable }),
-              plan.counts.indexable > 0 ? 'green' : 'gray',
-            )}
-            {plan.counts.needsPreparation > 0 &&
+            {(() => {
+              const verdict = fileVerdict();
+              if (verdict) return chip(verdict.label, verdict.tone);
+              return chip(
+                t('m365PlanIndexable', { count: plan.counts.indexable }),
+                plan.counts.indexable > 0 ? 'green' : 'gray',
+              );
+            })()}
+            {fileOutcome &&
+              chip(
+                t('m365PlanFileLastRun', {
+                  status:
+                    fileOutcome.status === 'noText' &&
+                    fileItem?.name.toLowerCase().endsWith('.pdf')
+                      ? t('m365ItemNoTextOcr')
+                      : fileOutcome.error
+                        ? `${t(`m365ItemStatus.${fileOutcome.status}`)} — ${fileOutcome.error}`
+                        : t(`m365ItemStatus.${fileOutcome.status}`),
+                }),
+                'red',
+              )}
+            {fileItem?.tier !== 'needsPreparation' &&
+              plan.counts.needsPreparation > 0 &&
               chip(
                 t('m365PlanNeedsPreparation', {
                   count: plan.counts.needsPreparation,
                 }),
                 'amber',
               )}
-            {plan.counts.skipped > 0 &&
+            {fileItem?.tier !== 'skipped' &&
+              plan.counts.skipped > 0 &&
               chip(
                 t('m365PlanSkipped', { count: plan.counts.skipped }),
                 'gray',
@@ -504,7 +562,9 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
                       }
                       title={status.error}
                     >
-                      {t(`m365ItemStatus.${status.status}`)}
+                      {status.status === 'noText' && isPdf
+                        ? t('m365ItemNoTextOcr')
+                        : t(`m365ItemStatus.${status.status}`)}
                     </span>
                   )}
                   {status?.status === 'noText' &&

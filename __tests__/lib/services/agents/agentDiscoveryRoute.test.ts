@@ -247,6 +247,61 @@ describe('collectAppAgents — suppression never outruns what is served', () => 
   });
 });
 
+describe('collectAppAgents — app-managed kinds list on allow only', () => {
+  const promptAgent = {
+    id: 'prompt-abc123def456',
+    name: 'Persona',
+    description: '',
+    systemPrompt: 'p',
+    modelId: 'gpt-5.2',
+  };
+  const m365Agent = {
+    id: 'm365-abc123def456',
+    name: 'Handbook',
+    description: '',
+    systemPrompt: '',
+    chatModelId: null,
+    embeddingModelId: 'e',
+    ragConfig: { topK: 5 },
+    sources: [{ sourceId: 's1', status: 'indexed', indexedChunks: 3 }],
+  };
+
+  it("hides prompt and M365 agents whose decision is 'unavailable' (the invocation guard blocks them anyway)", async () => {
+    accessService.getPromptAgents.mockReturnValue([promptAgent]);
+    accessService.getM365Agents.mockReturnValue([m365Agent]);
+    accessService.evaluateAccess.mockReturnValue({
+      decision: 'unavailable',
+      reason: 'group-membership-degraded',
+    });
+
+    const { agents } = await collectAppAgents(USER_MAIL);
+
+    expect(agents.map((a) => a.id)).not.toContain(promptAgent.id);
+    expect(agents.map((a) => a.id)).not.toContain(m365Agent.id);
+  });
+
+  it('lists them on allow', async () => {
+    accessService.getPromptAgents.mockReturnValue([promptAgent]);
+    accessService.getM365Agents.mockReturnValue([m365Agent]);
+
+    const { agents } = await collectAppAgents(USER_MAIL);
+
+    expect(agents.map((a) => a.id)).toEqual(
+      expect.arrayContaining([promptAgent.id, m365Agent.id]),
+    );
+  });
+
+  it('hides a never-indexed M365 agent even on allow', async () => {
+    accessService.getM365Agents.mockReturnValue([
+      { ...m365Agent, sources: [{ sourceId: 's1', status: 'pending' }] },
+    ]);
+
+    const { agents } = await collectAppAgents(USER_MAIL);
+
+    expect(agents.map((a) => a.id)).not.toContain(m365Agent.id);
+  });
+});
+
 describe('discoverFoundryAgents — degraded group lookups filter per agent', () => {
   const session = { user: { id: 'u1', mail: USER_MAIL } } as Session;
 

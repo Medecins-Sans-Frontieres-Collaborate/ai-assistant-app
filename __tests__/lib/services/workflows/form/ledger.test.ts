@@ -226,7 +226,7 @@ describe('fill runs and proposals', () => {
   };
 
   it('queues proposals and questions; accept writes the ledger; reject leaves it', () => {
-    let doc = recordFillRun(attached().documents[0], run, clock);
+    const doc = recordFillRun(attached().documents[0], run, clock);
     expect(doc.proposals.map((p) => p.status)).toEqual(['pending', 'pending']);
     expect(doc.questions).toHaveLength(1);
     expect(doc.runs).toHaveLength(1);
@@ -253,7 +253,6 @@ describe('fill runs and proposals', () => {
     );
     expect(rejected.fields.a).toBeUndefined();
     expect(rejected.proposals[0].status).toBe('rejected');
-    doc = accepted;
   });
 
   it('a null-with-gaps proposal records the gap without inventing a value', () => {

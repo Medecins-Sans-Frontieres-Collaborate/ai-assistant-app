@@ -261,8 +261,9 @@ The frontend automatically shows source information. Just cite inline and end yo
 
         Return ONLY the reformulated search query with no additional text.`;
 
-      // Ask the model to generate an improved search query
-      // Use low temperature for focused, deterministic query generation
+      // Ask the model to generate an improved search query. No temperature:
+      // the gpt-5 family rejects non-default values, and a rejected call
+      // silently falls back to the raw query.
       const completion = await this.openAIClient.chat.completions.create({
         model: 'gpt-5-mini',
         messages: [
@@ -272,7 +273,6 @@ The frontend automatically shows source information. Just cite inline and end yo
             content: `Conversation history:\n${conversationHistory}\n\nOriginal query: ${originalQuery}\n\nGenerate an improved Azure AI Search query that captures the key concepts and appropriately handles recency.`,
           },
         ],
-        temperature: 0.2,
       });
 
       const expandedQuery =

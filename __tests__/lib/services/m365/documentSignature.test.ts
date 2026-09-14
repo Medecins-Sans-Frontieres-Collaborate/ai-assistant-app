@@ -53,7 +53,17 @@ describe('checkDocumentSignature', () => {
   });
 
   it('exposes the indexable extension set the planner gates on', () => {
-    for (const ext of ['pdf', 'docx', 'pptx', 'xlsx', 'txt', 'md', 'epub']) {
+    for (const ext of [
+      'pdf',
+      'docx',
+      'pptx',
+      'xlsx',
+      'doc',
+      'xls',
+      'txt',
+      'md',
+      'epub',
+    ]) {
       expect(INDEXABLE_EXTENSIONS.has(ext)).toBe(true);
     }
     for (const ext of ['mp4', 'png', 'zip', 'exe', 'svg']) {

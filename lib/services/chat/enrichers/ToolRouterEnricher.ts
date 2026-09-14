@@ -46,6 +46,7 @@ import {
 import { buildNewsResult } from '../tools/newsSearch';
 
 import { env } from '@/config/environment';
+import { generatedFileBlobId } from '@/lib/constants/generatedFiles';
 import { emitSearchInterim, emitToolCallRecord } from '@/lib/streamMarkers';
 
 /**
@@ -1578,6 +1579,32 @@ export class ToolRouterEnricher extends BasePipelineStage {
           if (url.startsWith('/api/file/')) {
             const id = url.split('/').pop()?.split('?')[0];
             if (id) refs.push({ id, filename: id, location: 'images' });
+          }
+        }
+      }
+    }
+    // Nothing attached this turn: fall back to the files the interpreter
+    // itself produced earlier (issue #126), newest reply first, so "fix the
+    // script you wrote" re-runs against the real file rather than a memory
+    // of it. Generated refs are persisted under the same upload paths.
+    if (refs.length === 0) {
+      for (
+        let messageIndex = context.messages.length - 1;
+        messageIndex >= 0 && refs.length < MAX_FILES;
+        messageIndex--
+      ) {
+        const message = context.messages[messageIndex];
+        if (message?.role !== 'assistant') continue;
+        for (const record of message.toolCalls ?? []) {
+          for (const file of record.generated_files ?? []) {
+            if (refs.length >= MAX_FILES) break;
+            const id = generatedFileBlobId(file.url);
+            if (!id || refs.some((r) => r.id === id)) continue;
+            refs.push({
+              id,
+              filename: file.filename || id,
+              location: file.is_image ? 'images' : 'files',
+            });
           }
         }
       }

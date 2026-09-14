@@ -305,6 +305,24 @@ export async function getTeamDrive(
   return data.drive;
 }
 
+export interface M365DriveRoot {
+  itemId: string;
+  name: string;
+  webUrl?: string;
+  childCount?: number;
+}
+
+/**
+ * A drive's root folder as a real item (id + metadata). Lets the picker add
+ * a whole document library or a team's Files as one folder source — agent
+ * sources are stored by item id, never by the `root` alias.
+ */
+export async function getDriveRoot(driveId: string): Promise<M365DriveRoot> {
+  return requestJson<M365DriveRoot>(
+    `/api/m365/drive/root?driveId=${encodeURIComponent(driveId)}`,
+  );
+}
+
 export interface M365DriveItemMeta {
   name: string;
   eTag?: string;

@@ -118,6 +118,35 @@ const MessageContentSchema = z.union([
 ]);
 
 /**
+ * A file the code interpreter produced on an earlier turn (issue #126).
+ * Only the reference survives the boundary — the bytes live in the user's
+ * blob storage and are read back by the active-file processor or the
+ * interpreter remount, never trusted from the request.
+ */
+const GeneratedFileRefSchema = z.object({
+  url: z.string().max(512),
+  filename: z.string().max(255),
+  mime_type: z.string().max(128),
+  is_image: z.boolean(),
+  size_bytes: z.number().int().nonnegative().optional(),
+});
+
+/**
+ * Persisted tool-call record on an assistant message. Kept to the fields
+ * later turns act on (which files exist); tool arguments/output are display
+ * data and are stripped here.
+ */
+const ToolCallRecordSchema = z.object({
+  id: z.string().max(200),
+  name: z.string().max(200),
+  server_label: z.string().max(200).nullable().optional(),
+  status: z
+    .enum(['completed', 'failed', 'incomplete', 'in_progress'])
+    .optional(),
+  generated_files: z.array(GeneratedFileRefSchema).max(50).optional(),
+});
+
+/**
  * Zod schema for a single message.
  */
 const MessageSchema = z.object({
@@ -145,6 +174,9 @@ const MessageSchema = z.object({
   transcript: z.any().optional(),
   // Error flag
   error: z.boolean().optional(),
+  // Tool-call records of earlier assistant turns: the model must know which
+  // files it generated (issue #126). Unknown records are dropped, not fatal.
+  toolCalls: z.array(ToolCallRecordSchema).max(100).optional().catch(undefined),
 });
 
 /**
