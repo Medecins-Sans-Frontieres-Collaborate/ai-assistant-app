@@ -107,8 +107,8 @@ export function AppInitializer() {
   // QueryClientProvider AppProviders wraps ChatShell (and so this) in.
   useModelsQuery();
 
-  // Temporary (flag `euDefaultModelSwitch`): one-time move of a persisted
-  // gpt-5.2-chat default to gpt-5.4 for EU users. Remove with the flag.
+  // Temporary: one-time move of a persisted gpt-5.2-chat default to
+  // gpt-5.4 for EU users (marker-guarded). Delete one release after shipping.
   useEuDefaultModelSwitch();
 
   // Publishes the admin's resolved feature.upload.megabytesPerFile onto

@@ -1,6 +1,5 @@
 'use client';
 
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useEffect } from 'react';
 
 import {
@@ -14,19 +13,18 @@ import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
 /**
- * Temporary, flag-gated one-time switch of the persisted default model for
- * EU users from gpt-5.2-chat to gpt-5.4 (pricing, 2026-09-14). Fail-closed
- * on the `euDefaultModelSwitch` flag: nothing happens unless it is served
- * `true`. Mounted once in AppInitializer; safe to remove together with the
- * flag once the fleet has been through it.
+ * Temporary one-time switch of the persisted default model for EU users
+ * from gpt-5.2-chat to gpt-5.4 (pricing, 2026-09-14). Once-ness comes from
+ * the persisted `euDefaultModelSwitchApplied` marker, not from a feature
+ * flag: each browser is evaluated exactly once and never touched again.
+ * Mounted once in AppInitializer; delete this hook (keep the store field
+ * and its v64 migration) one release after it ships.
  *
  * Also moves the currently selected conversation when it is still empty
  * and pinned to the old default — that is the one the user is looking at,
  * and an empty conversation has nothing to lose.
  */
 export function useEuDefaultModelSwitch(): void {
-  const { euDefaultModelSwitch } = useFlags();
-  const flagOn = euDefaultModelSwitch === true;
   const region = useSettingsStore((s) => s.userRegion);
   const applied = useSettingsStore((s) => s.euDefaultModelSwitchApplied);
   const defaultModelId = useSettingsStore((s) => s.defaultModelId);
@@ -34,7 +32,6 @@ export function useEuDefaultModelSwitch(): void {
 
   useEffect(() => {
     const plan = planEuDefaultModelSwitch({
-      flagOn,
       region,
       applied,
       defaultModelId,
@@ -57,5 +54,5 @@ export function useEuDefaultModelSwitch(): void {
       }
     }
     settings.markEuDefaultModelSwitchApplied();
-  }, [flagOn, region, applied, defaultModelId, models]);
+  }, [region, applied, defaultModelId, models]);
 }

@@ -10,8 +10,8 @@ import { OpenAIModel, OpenAIModelID } from '@/types/openai';
  * persisted per browser and the models query only re-selects a default
  * when the persisted one is no longer selectable — so everyone who ever
  * had gpt-5.2-chat as their default kept it. This planner decides, once per
- * browser and only while the temporary `euDefaultModelSwitch` flag is on,
- * whether to move that persisted default.
+ * browser (the persisted `applied` marker), whether to move that persisted
+ * default. Temporary: remove with the hook one release after it ships.
  *
  * Deliberately narrow: only the exact old default is touched; a user who
  * picked any other model keeps it (the marker is set so they are never
@@ -22,7 +22,6 @@ export const EU_DEFAULT_MODEL_SWITCH_FROM: string = OpenAIModelID.GPT_5_2_CHAT;
 export const EU_DEFAULT_MODEL_SWITCH_TO: string = OpenAIModelID.GPT_5_4;
 
 export interface EuDefaultModelSwitchInput {
-  flagOn: boolean;
   region: UserRegion | null | undefined;
   applied: boolean;
   defaultModelId: string | undefined;
@@ -38,7 +37,7 @@ export type EuDefaultModelSwitchPlan =
 export function planEuDefaultModelSwitch(
   input: EuDefaultModelSwitchInput,
 ): EuDefaultModelSwitchPlan {
-  if (!input.flagOn || input.applied || input.region !== 'EU') {
+  if (input.applied || input.region !== 'EU') {
     return { action: 'none' };
   }
   if (input.defaultModelId !== EU_DEFAULT_MODEL_SWITCH_FROM) {
