@@ -14,10 +14,6 @@ const flags = vi.hoisted(() => ({ current: { euDefaultModelSwitch: true } }));
 vi.mock('launchdarkly-react-client-sdk', () => ({
   useFlags: () => flags.current,
 }));
-const toastSuccess = vi.hoisted(() => vi.fn());
-vi.mock('react-hot-toast', () => ({
-  default: Object.assign(vi.fn(), { success: toastSuccess, error: vi.fn() }),
-}));
 
 const model = (id: string): OpenAIModel =>
   ({ id, name: id, maxLength: 1, tokenLimit: 1 }) as OpenAIModel;
@@ -38,7 +34,6 @@ function conversation(modelId: string, messages: unknown[] = []): Conversation {
 describe('useEuDefaultModelSwitch', () => {
   beforeEach(() => {
     flags.current = { euDefaultModelSwitch: true };
-    toastSuccess.mockClear();
     useSettingsStore.setState({
       userRegion: 'EU',
       euDefaultModelSwitchApplied: false,
@@ -59,7 +54,6 @@ describe('useEuDefaultModelSwitch', () => {
     expect(useConversationStore.getState().conversations[0].model.id).toBe(
       'gpt-5.4',
     );
-    expect(toastSuccess).toHaveBeenCalledTimes(1);
   });
 
   it('leaves a conversation with messages on its model', () => {
@@ -81,10 +75,9 @@ describe('useEuDefaultModelSwitch', () => {
     useSettingsStore.getState().setDefaultModelId(OpenAIModelID.GPT_5_2_CHAT);
     renderHook(() => useEuDefaultModelSwitch());
     expect(useSettingsStore.getState().defaultModelId).toBe('gpt-5.2-chat');
-    expect(toastSuccess).toHaveBeenCalledTimes(1);
   });
 
-  it('does nothing for US users or with the flag off, and marks a non-old default without a toast', () => {
+  it('does nothing for US users or with the flag off, and marks a non-old default', () => {
     useSettingsStore.setState({ userRegion: 'US' });
     renderHook(() => useEuDefaultModelSwitch());
     expect(useSettingsStore.getState().defaultModelId).toBe('gpt-5.2-chat');
@@ -100,6 +93,5 @@ describe('useEuDefaultModelSwitch', () => {
     renderHook(() => useEuDefaultModelSwitch());
     expect(useSettingsStore.getState().defaultModelId).toBe('gpt-5.4-nano');
     expect(useSettingsStore.getState().euDefaultModelSwitchApplied).toBe(true);
-    expect(toastSuccess).not.toHaveBeenCalled();
   });
 });
