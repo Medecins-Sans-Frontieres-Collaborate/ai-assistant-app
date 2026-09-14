@@ -18,7 +18,12 @@ const mockService = vi.hoisted(() => ({
   getSnapshot: vi.fn(),
 }));
 const mockAdminAuth = vi.hoisted(() => ({ resolveAdminStatus: vi.fn() }));
-const mockPlanner = vi.hoisted(() => ({ planSources: vi.fn() }));
+const mockPlanner = vi.hoisted(() => ({
+  planSources: vi.fn(),
+  roleMaxDocuments: (isGlobalAdmin: boolean) => (isGlobalAdmin ? 200 : 100),
+  effectiveMaxDocuments: (override?: number | null) =>
+    Math.min(override ?? 50, 200),
+}));
 
 vi.mock('@/auth', () => ({ auth: mockAuth, getGraphAccessToken: vi.fn() }));
 vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
@@ -128,7 +133,33 @@ describe('POST /api/agent-access/m365-agents/plan', () => {
       expect.anything(),
       'u1',
       [expect.objectContaining({ recursive: true, excludedItemIds: [] })],
+      { maxDocuments: 50 },
     );
+  });
+
+  it('clamps a requested cap to the caller’s role ceiling', async () => {
+    mockPlanner.planSources.mockResolvedValue({
+      plans: [{ counts: {}, items: [], folders: [] }],
+      totalDocuments: 0,
+      totalBytes: 0,
+      maxDocuments: 100,
+      maxBytes: 1,
+      overDocumentCap: false,
+      overByteCap: false,
+    });
+    await POST(request({ sources: [folder], maxDocuments: 150 }));
+    expect(mockPlanner.planSources.mock.calls[0][3]).toEqual({
+      maxDocuments: 100,
+    });
+    mockAdminAuth.resolveAdminStatus.mockReturnValue({
+      isGlobalAdmin: true,
+      isLocalAdmin: false,
+      editableAgentKeys: '*',
+    });
+    await POST(request({ sources: [folder], maxDocuments: 150 }));
+    expect(mockPlanner.planSources.mock.calls[1][3]).toEqual({
+      maxDocuments: 150,
+    });
   });
 
   it('maps a missing M365 session to the typed connect error', async () => {
