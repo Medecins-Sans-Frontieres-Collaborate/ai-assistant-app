@@ -338,6 +338,12 @@ export const M365ManifestItemSchema = z.object({
   status: M365ManifestItemStatusSchema.optional(),
   indexedChunks: z.number().optional(),
   error: z.string().optional(),
+  /** Pages OCR'd for this item by the auto-OCR path of the last run. */
+  ocrPages: z.number().int().nonnegative().optional(),
+  /** Set when a scanned file was left `noText` because the run's OCR page budget was spent. */
+  ocrSkipped: z
+    .enum(['budget', 'tooManyPages', 'engineUnavailable'])
+    .optional(),
 });
 export type M365ManifestItem = z.infer<typeof M365ManifestItemSchema>;
 
@@ -481,6 +487,8 @@ export const M365IndexJobSchema = z.object({
   changes: M365SourceChangesSchema.optional(),
   sources: z.array(M365IndexJobSourceSchema).default([]),
   error: z.string().optional(),
+  /** Auto-OCR pages spent so far this run (bounded by the per-run env cap). */
+  ocrPagesUsed: z.number().int().nonnegative().default(0),
 });
 export type M365IndexJob = z.infer<typeof M365IndexJobSchema>;
 
@@ -506,6 +514,14 @@ export const M365AgentSchema = z.object({
    */
   embeddingModelId: z.string().default(''),
   ragConfig: z.object({ topK: z.number().default(10) }).default({ topK: 10 }),
+  /**
+   * OCR scanned PDFs automatically during index runs (instead of the
+   * per-file Prepare click). Off by default: OCR is billed per page, so
+   * runs are bounded by `M365_AGENT_AUTO_OCR_MAX_PAGES_PER_RUN` and
+   * `M365_AGENT_AUTO_OCR_MAX_PAGES_PER_FILE`; items past the budget stay
+   * `noText` with the Prepare offer.
+   */
+  autoOcr: z.boolean().default(false),
   sources: z.array(M365AgentSourceSchema).default([]),
   createdBy: z.string(),
   createdAt: z.string(),

@@ -964,6 +964,7 @@ export async function prepareIndexJob(
     status: 'running',
     startedBy,
     startedAt: now,
+    ocrPagesUsed: 0,
     updatedAt: now,
     embeddingDeployment,
     mode: refresh ? 'refresh' : 'full',
