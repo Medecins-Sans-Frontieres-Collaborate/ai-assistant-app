@@ -48,6 +48,11 @@ const mockSourceAccess = vi.hoisted(() => ({
 const mockPlanner = vi.hoisted(() => ({
   planSources: vi.fn(),
   MAX_M365_AGENT_SOURCE_BYTES: 512 * 1024 * 1024,
+  MAX_M365_AGENT_MAX_DOCUMENTS: 10,
+  M365_AGENT_MAX_DOCUMENTS_CEILING: 200,
+  roleMaxDocuments: (isGlobalAdmin: boolean) => (isGlobalAdmin ? 200 : 100),
+  effectiveMaxDocuments: (override?: number | null) =>
+    Math.min(override ?? 10, 200),
 }));
 
 vi.mock('@/auth', () => ({ auth: mockAuth, getGraphAccessToken: vi.fn() }));
@@ -191,8 +196,8 @@ describe('/api/agent-access/m365-agents', () => {
     expect(response.status).toBe(403);
   });
 
-  it('rejects more than 10 sources', async () => {
-    const sources = Array.from({ length: 11 }, (_, i) => ({
+  it('rejects more sources than the global document ceiling', async () => {
+    const sources = Array.from({ length: 201 }, (_, i) => ({
       ...validSource,
       itemId: `item${i}`,
     }));
@@ -449,5 +454,159 @@ describe('GET /api/m365/agents/[id]/access (preflight)', () => {
     const body = await parseJsonResponse(response);
     expect(response.status).toBe(200);
     expect(body.data.connected).toBe(false);
+  });
+});
+
+describe('per-agent document cap override', () => {
+  const putRequest = (body: unknown) =>
+    new NextRequest('http://localhost/api/agent-access/m365-agents', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'If-Match': '"etag-1"' },
+      body: JSON.stringify(body),
+    });
+  const asLocalAdmin = () =>
+    mockAdminAuth.resolveAdminStatus.mockReturnValue({
+      isGlobalAdmin: false,
+      isLocalAdmin: true,
+      editableAgentKeys: ['m365-agent::m365-abcdefabcdef'],
+    });
+
+  it('lets a local admin raise the cap up to their ceiling and stamps who did it', async () => {
+    asLocalAdmin();
+    const existing = makeAgent();
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: existing,
+      etag: '"etag-1"',
+    });
+    const response = await PUT(
+      putRequest({
+        id: existing.id,
+        name: 'Budget agent',
+        sources: [
+          {
+            driveId: 'drive1',
+            itemId: 'item1',
+            kind: 'file',
+            title: 'Budget.xlsx',
+            webUrl: 'https://contoso.sharepoint.com/budget.xlsx',
+          },
+        ],
+        maxDocumentsOverride: 100,
+      }),
+    );
+    expect(response.status).toBe(200);
+    const written = mockStore.writeM365Agent.mock.calls[0][1];
+    expect(written).toMatchObject({
+      maxDocumentsOverride: 100,
+      maxDocumentsOverrideBy: 'admin@example.org',
+    });
+    expect(written.maxDocumentsOverrideAt).toEqual(expect.any(String));
+    // The save-time plan judged against the raised cap.
+    expect(mockPlanner.planSources.mock.calls[0][3]).toEqual({
+      maxDocuments: 100,
+    });
+  });
+
+  it('refuses a local admin above the local ceiling with a typed code', async () => {
+    asLocalAdmin();
+    const response = await POST(
+      postRequest({
+        name: 'X',
+        sources: [validSource],
+        maxDocumentsOverride: 150,
+      }),
+    );
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(400);
+    expect(body.code).toBe('M365_CAP_ABOVE_ROLE');
+    expect(body.error).toContain('100');
+    expect(mockStore.writeM365Agent).not.toHaveBeenCalled();
+  });
+
+  it('lets a global admin go up to the global ceiling, not past it', async () => {
+    const ok = await POST(
+      postRequest({
+        name: 'X',
+        sources: [validSource],
+        maxDocumentsOverride: 200,
+      }),
+    );
+    expect(ok.status).toBe(200);
+    const tooHigh = await POST(
+      postRequest({
+        name: 'X',
+        sources: [validSource],
+        maxDocumentsOverride: 250,
+      }),
+    );
+    expect(tooHigh.status).toBe(400);
+  });
+
+  it('PUT: a local admin re-saving keeps a global admin’s higher raise, but cannot set one', async () => {
+    asLocalAdmin();
+    const existing = makeAgent({
+      maxDocumentsOverride: 180,
+      maxDocumentsOverrideBy: 'global@example.org',
+      maxDocumentsOverrideAt: '2026-09-14T00:00:00.000Z',
+    });
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: existing,
+      etag: '"etag-1"',
+    });
+    const source = {
+      driveId: 'drive1',
+      itemId: 'item1',
+      kind: 'file',
+      title: 'Budget.xlsx',
+      webUrl: 'https://contoso.sharepoint.com/budget.xlsx',
+    };
+    const kept = await PUT(
+      putRequest({
+        id: existing.id,
+        name: 'Budget agent',
+        sources: [source],
+        maxDocumentsOverride: 180,
+      }),
+    );
+    expect(kept.status).toBe(200);
+    expect(mockStore.writeM365Agent.mock.calls[0][1]).toMatchObject({
+      maxDocumentsOverride: 180,
+      maxDocumentsOverrideBy: 'global@example.org',
+    });
+
+    const raised = await PUT(
+      putRequest({
+        id: existing.id,
+        name: 'Budget agent',
+        sources: [source],
+        maxDocumentsOverride: 190,
+      }),
+    );
+    expect(raised.status).toBe(400);
+
+    const cleared = await PUT(
+      putRequest({
+        id: existing.id,
+        name: 'Budget agent',
+        sources: [source],
+        maxDocumentsOverride: null,
+      }),
+    );
+    expect(cleared.status).toBe(200);
+    const written = mockStore.writeM365Agent.mock.calls[1][1];
+    expect(written.maxDocumentsOverride).toBeUndefined();
+    expect(written.maxDocumentsOverrideBy).toBeUndefined();
+  });
+
+  it('GET serves the role ceilings and the caller’s role', async () => {
+    mockStore.listAllM365Agents?.mockResolvedValue?.([]);
+    const response = await GET();
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(200);
+    expect(body.data.maxDocumentsCeilings).toEqual({
+      localAdmin: 100,
+      globalAdmin: 200,
+    });
+    expect(body.data.isGlobalAdmin).toBe(true);
   });
 });
