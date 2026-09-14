@@ -284,7 +284,7 @@ export const M365PrepareAllButton: FC<{
             type="button"
             onClick={() => void run()}
             disabled={disabled}
-            title={t('m365PrepareHintOcr')}
+            title={t('m365PrepareHintOcr', { pages: ocrMaxPages })}
             className="rounded-md border border-blue-300 px-2 py-0.5 font-medium text-blue-700 hover:bg-blue-50 disabled:opacity-50 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900/20"
           >
             {t('m365PrepareAllButton', { count: items.length })}
@@ -510,7 +510,10 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
 
   const prepareHint = (item: M365ManifestItem): string => {
     const ext = item.name.toLowerCase().split('.').pop() ?? '';
-    if (ext === 'pdf') return t('m365PrepareHintOcr');
+    if (ext === 'pdf')
+      return t('m365PrepareHintOcr', {
+        pages: ocrMaxPages ?? DEFAULT_OCR_MAX_PAGES,
+      });
     if (
       [
         'mp3',
