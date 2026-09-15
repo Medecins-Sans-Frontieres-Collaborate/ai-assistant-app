@@ -43,6 +43,7 @@ import {
   messageToVersion,
 } from '@/lib/utils/shared/chat/messageVersioning';
 import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
+import { clampModelTimeoutSeconds } from '@/lib/utils/shared/chat/modelTimeout';
 import {
   StreamInterruptedError,
   StreamParser,
@@ -291,6 +292,18 @@ interface ChatStore {
    * to hide the Regenerate button.
    */
   errorIsRecoverable: boolean;
+  /**
+   * One-shot model-timeout override for the NEXT send, in seconds (issue
+   * #130). Set by retryFailedWithLongerTimeout, consumed (and cleared) by
+   * sendChatRequest so it can never leak into a later, unrelated turn.
+   */
+  pendingTimeoutSeconds: number | null;
+  /**
+   * The model timeout the most recent send actually used, in seconds. The
+   * error card derives its "wait up to N and try again" offer from this —
+   * the failed turn's own timeout, not whatever Settings says now.
+   */
+  lastRequestTimeoutSeconds: number | null;
 
   // Regeneration state for message versioning
   regeneratingIndex: number | null;
@@ -547,6 +560,13 @@ interface ChatStore {
    */
   retryFailedWithFallbackModel: () => Promise<void>;
   /**
+   * User-initiated retry of the failed turn on the SAME model with a longer
+   * model timeout (issue #130) — the answer to "the model did not start in
+   * time" when the user would rather wait than switch. One-shot: the
+   * override applies to this send only; Settings owns the default.
+   */
+  retryFailedWithLongerTimeout: (timeoutSeconds: number) => Promise<void>;
+  /**
    * "Summarize from headlines now": aborts the in-flight combined search
    * (Bing still running) and resends the same user message with the
    * already-received interim headlines echoed back — the server merges
@@ -621,6 +641,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   failedSearchMode: undefined,
   successfulRetryConversationId: null,
   errorIsRecoverable: true,
+  pendingTimeoutSeconds: null,
+  lastRequestTimeoutSeconds: null,
 
   // Regeneration initial state
   regeneratingIndex: null,
@@ -1022,6 +1044,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   ): Promise<ReadableStream<Uint8Array>> => {
     const settings = useSettingsStore.getState();
     const modelSupportsStreaming = conversation.model.stream !== false;
+
+    // Model start timeout (issue #130): a one-shot "wait longer" override
+    // wins over the Settings default, and is consumed here so it can never
+    // apply to a later turn. Recorded so the error card can offer the next
+    // escalation relative to what THIS send actually used.
+    const { pendingTimeoutSeconds } = get();
+    const timeoutSeconds = clampModelTimeoutSeconds(
+      pendingTimeoutSeconds ?? settings.modelTimeoutSeconds,
+    );
+    set({
+      pendingTimeoutSeconds: null,
+      lastRequestTimeoutSeconds: timeoutSeconds,
+    });
 
     // Get latest model config - if model no longer exists, use fallback
     // Organization agents (org-*) and custom agents (custom-*) are dynamically created
@@ -1467,6 +1502,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       reasoningEffort:
         conversation.reasoningEffort || modelToSend.reasoningEffort,
       verbosity: conversation.verbosity || modelToSend.verbosity,
+      timeoutMs: timeoutSeconds * 1000,
       searchMode: searchModeForRequest,
       // Advanced search tuning only travels when search can actually run.
       webSearchOptions:
@@ -2038,11 +2074,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const nextFallbackModel = conversation
       ? getFallbackModel([conversation.model.id], [], dynamicFallbackOpts())
       : null;
+    // "Prefer my selected model" (issue #130): the user opted out of silent
+    // model switching. The failure surfaces with the manual "Try with
+    // <model>" action still on the card.
+    const { preferSelectedModel } = useSettingsStore.getState();
 
     if (
       !isNonRetryableClientError &&
       !isNonFallbackModel &&
       !isRetrying &&
+      !preferSelectedModel &&
       conversation &&
       nextFallbackModel
     ) {
@@ -2538,6 +2579,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       errorIsRecoverable: true,
     });
     await get().retryWithFallbackModel(failedConversation, failedSearchMode);
+  },
+
+  retryFailedWithLongerTimeout: async (timeoutSeconds) => {
+    if (!get().failedConversation) return;
+    // Consumed by the sendChatRequest that retryFailedRequest triggers.
+    set({ pendingTimeoutSeconds: clampModelTimeoutSeconds(timeoutSeconds) });
+    await get().retryFailedRequest();
+    // retryFailedRequest can return without sending (no trailing user
+    // message); the one-shot must not survive to an unrelated turn.
+    if (get().pendingTimeoutSeconds !== null) {
+      set({ pendingTimeoutSeconds: null });
+    }
   },
 
   retryFailedRequest: async () => {
