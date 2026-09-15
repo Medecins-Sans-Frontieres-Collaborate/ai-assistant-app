@@ -138,13 +138,13 @@ describe('chatStore - model timeout (issue #130)', () => {
         .handleSendError(
           new StreamInterruptedError(
             'The model did not start responding within 90 seconds.',
-            'PIPELINE_TIMEOUT',
+            'MODEL_TIMEOUT',
           ),
           makeConversation(),
         );
 
       expect(retrySpy).not.toHaveBeenCalled();
-      expect(useChatStore.getState().errorCode).toBe('PIPELINE_TIMEOUT');
+      expect(useChatStore.getState().errorCode).toBe('MODEL_TIMEOUT');
       expect(useChatStore.getState().failedConversation).not.toBeNull();
       expect(useChatStore.getState().errorIsRecoverable).toBe(true);
     });
