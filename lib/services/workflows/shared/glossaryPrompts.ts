@@ -92,10 +92,13 @@ function renderRow({ entry, kind }: MatchedGlossaryEntry): string {
     }
   }
   if (entry.note?.trim()) notes.push(entry.note.trim());
-  // Pipes are escaped for the markdown table (NOT substituted — the
-  // compliance check looks for the entry's exact target); line breaks
-  // collapse (admin guides are validated, but the shape is defended too).
-  const cell = (s: string) => s.replace(/\|/g, '\\|').replace(/\s+/g, ' ');
+  // Backslashes and pipes are escaped for the markdown table (NOT
+  // substituted — the compliance check looks for the entry's exact target);
+  // backslashes go first so an escaped pipe can't be un-escaped by a
+  // preceding backslash in the value. Line breaks collapse (admin guides are
+  // validated, but the shape is defended too).
+  const cell = (s: string) =>
+    s.replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\s+/g, ' ');
   return `| ${cell(entry.source)} | ${cell(entry.target)} | ${cell(
     notes.join('; '),
   )} |`;
