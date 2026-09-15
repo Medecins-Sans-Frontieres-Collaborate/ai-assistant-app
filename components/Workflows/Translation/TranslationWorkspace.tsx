@@ -62,6 +62,7 @@ import { TRANSLATION_QUALITY_CRITERIA } from '@/lib/utils/shared/translation/qua
 import {
   TranslationAnalysis,
   TranslationEditStatus,
+  TranslationGlossaryCheck,
   TranslationReviewRound,
   TranslationRoundChange,
   TranslationTargetLanguage,
@@ -388,6 +389,7 @@ export function TranslationWorkspace({
     patchState({
       analysis: undefined,
       rounds: [],
+      glossaryCheck: undefined,
       finalText: undefined,
       assessment: undefined,
     });
@@ -435,6 +437,10 @@ export function TranslationWorkspace({
               };
               patchState({ rounds: [...rounds] });
             }
+          } else if (event.type === 'glossary_check') {
+            patchState({
+              glossaryCheck: event.data as TranslationGlossaryCheck,
+            });
           } else if (event.type === 'complete') {
             const data = event.data as { finalText: string };
             finalText = data.finalText;
@@ -1348,7 +1354,11 @@ export function TranslationWorkspace({
 
       {/* Pre-run paper trail (analysis + review rounds) — history only */}
       <div className="max-h-56 shrink-0 overflow-y-auto">
-        <AnalysisPanel analysis={state.analysis} rounds={state.rounds} />
+        <AnalysisPanel
+          analysis={state.analysis}
+          rounds={state.rounds}
+          glossaryCheck={state.glossaryCheck}
+        />
       </div>
 
       {/* Glossary manager */}
