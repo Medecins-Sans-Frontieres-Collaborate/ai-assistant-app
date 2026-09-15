@@ -123,6 +123,7 @@ function buildOpenAIStrategy(
       serversWithTools: ServerWithTools[],
       allowToolUse,
       write,
+      onModelStarted,
     ): Promise<AssembledRound> {
       const params = options.buildParams(withSystemAddendum(messages));
       const openAITools = serversWithTools.flatMap(({ server, tools }) =>
@@ -139,6 +140,8 @@ function buildOpenAIStrategy(
         true,
         options.signal,
       )) as AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>;
+      // Headers are in: the model has started. Signal BEFORE consuming.
+      onModelStarted?.();
 
       const accumulator = createToolCallAccumulator();
       for await (const chunk of completionStream) {
