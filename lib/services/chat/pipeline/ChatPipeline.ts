@@ -70,14 +70,22 @@ export function isModelHandlerStage(stageName: unknown): boolean {
  * Per-request stage timeouts: the compiled defaults with the model handler
  * stages overridden by the user's (already clamped) model timeout. Absent
  * → the defaults, byte-identical to the pre-#130 behavior.
+ *
+ * StandardChatHandler takes the user's value as-is (that IS the model
+ * timeout). AgentChatHandler can only be LENGTHENED: its 120 s default
+ * also covers Foundry thread/run setup, and since every current client
+ * sends a timeout (90 s by default), honouring a lower value there would
+ * have silently cut agent turns from 120 s to 90 s for everyone.
  */
 export function resolveStageTimeouts(
   modelTimeoutMs: number | undefined,
 ): Record<string, number> {
   if (modelTimeoutMs === undefined) return STAGE_TIMEOUTS;
-  const overrides: Record<string, number> = {};
-  for (const stage of MODEL_HANDLER_STAGES) overrides[stage] = modelTimeoutMs;
-  return { ...STAGE_TIMEOUTS, ...overrides };
+  return {
+    ...STAGE_TIMEOUTS,
+    StandardChatHandler: modelTimeoutMs,
+    AgentChatHandler: Math.max(STAGE_TIMEOUTS.AgentChatHandler, modelTimeoutMs),
+  };
 }
 
 /**
