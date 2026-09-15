@@ -106,12 +106,20 @@ export interface ToolLoopProviderStrategy<TMessage> {
   /**
    * Build params (attaching tool declarations per `allowToolUse`), stream
    * the round, write() text deltas, and return what the round produced.
+   *
+   * `onModelStarted` MUST be called as soon as the provider has opened the
+   * response stream (its request promise resolved — headers received),
+   * BEFORE consuming it. `runToolLoopCore` holds back its Response until
+   * then, which is what lets the pipeline's model-start timeout (issue
+   * #130) cover an MCP turn: without it the Response returned instantly
+   * and the stage timer was cancelled before the model was ever called.
    */
   runModelRound(
     messages: TMessage[],
     serversWithTools: ServerWithTools[],
     allowToolUse: boolean,
     write: (text: string) => void,
+    onModelStarted?: () => void,
   ): Promise<AssembledRound>;
   /**
    * Receive the connector-instructions addendum (trusted servers'
@@ -248,6 +256,17 @@ export async function runToolLoopCore<TMessage>(
   options: ToolLoopCoreOptions<TMessage>,
 ): Promise<Response> {
   const encoder = new TextEncoder();
+
+  // Resolved once the provider has opened the model's response stream (or
+  // the loop ended before it could). The Response is only returned after
+  // that, so the caller's timeout — the pipeline stage racing this call —
+  // spans LIST_TOOLS, planning, resumed tool execution AND the model's
+  // time-to-first-byte, exactly as it does for a plain (non-MCP) turn.
+  // Everything written before then just queues in the ReadableStream.
+  let markModelStarted!: () => void;
+  const modelStarted = new Promise<void>((resolve) => {
+    markModelStarted = resolve;
+  });
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -549,6 +568,7 @@ export async function runToolLoopCore<TMessage>(
           serversWithTools,
           options.loopRound < (options.maxRounds ?? MAX_TOOL_ROUNDS),
           write,
+          markModelStarted,
         );
 
         if (round.usage) {
@@ -656,9 +676,15 @@ export async function runToolLoopCore<TMessage>(
           // abort path is all that's left.
           controller.error(error);
         }
+      } finally {
+        // A loop that never reached (or never signalled) a model round
+        // still has to hand its stream back — failures above end it with
+        // an in-band streamError the client must get to read.
+        markModelStarted();
       }
     },
   });
 
+  await modelStarted;
   return new Response(stream, { headers: STREAMING_RESPONSE_HEADERS });
 }
