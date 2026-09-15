@@ -22,6 +22,7 @@ import {
   AgentActivityPayload,
   ConsentOutcomePayload,
   ConsentRequestPayload,
+  HEARTBEAT_ACTIVITY_KEY,
   SearchInterimPayload,
   ToolCallRecordPayload,
   scanStreamEvents,
@@ -190,6 +191,14 @@ export class StreamParser {
     for (const event of scan.events) {
       switch (event.type) {
         case 'agent_activity':
+          // The route's keepalive must not overwrite a more specific
+          // activity ("Searching: …") that a slow stage is still on.
+          if (
+            event.payload.key === HEARTBEAT_ACTIVITY_KEY &&
+            this.latestActivity
+          ) {
+            break;
+          }
           this.latestActivity = event.payload;
           break;
         case 'consent_outcome': {
