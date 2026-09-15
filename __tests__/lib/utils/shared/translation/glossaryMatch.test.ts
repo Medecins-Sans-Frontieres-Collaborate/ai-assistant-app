@@ -56,8 +56,10 @@ describe('glossaryMatch', () => {
       expect(
         termOccursIn("l'hôpital de campagne", 'hôpital de campagne', opts),
       ).toBe(true);
-      // An accented continuation is still inside the word.
-      expect(termOccursIn('hôpitalé', 'hôpital', opts)).toBe(false);
+      // A long continuation is still inside the word (two trailing letters
+      // of inflection are tolerated, three are not).
+      expect(termOccursIn('hôpitalisé', 'hôpital', opts)).toBe(false);
+      expect(termOccursIn('hôpitalé', 'hôpital', opts)).toBe(true);
       expect(
         termOccursIn("l'OMS a publié", 'OMS', { caseSensitive: true }),
       ).toBe(true);
@@ -81,8 +83,8 @@ describe('glossaryMatch', () => {
       expect(termOccursIn('WHOLESALE', 'WHO', opts)).toBe(false);
     });
 
-    it('acronyms: an occurrence inside a shouting heading does not count', () => {
-      const opts = { caseSensitive: true };
+    it('acronyms: an occurrence inside a shouting heading does not count (source side)', () => {
+      const opts = { caseSensitive: true, ignoreShouting: true };
       expect(
         termOccursIn('WHO IS ELIGIBLE FOR CARE\n\nBody text.', 'WHO', opts),
       ).toBe(false);
@@ -96,6 +98,45 @@ describe('glossaryMatch', () => {
       ).toBe(true);
       // Two-word all-caps lines are not headings ("WHO REPORT" is a title).
       expect(termOccursIn('WHO REPORT', 'WHO', opts)).toBe(true);
+    });
+
+    it('tolerates inflection on the tail only', () => {
+      const term = { caseSensitive: false };
+      expect(
+        termOccursIn('two field hospitals opened', 'field hospital', term),
+      ).toBe(true);
+      expect(termOccursIn('des choléras', 'choléra', term)).toBe(true);
+      expect(termOccursIn('the category', 'cat', term)).toBe(false);
+      expect(termOccursIn('unhospitable', 'hospital', term)).toBe(false);
+      const acr = { caseSensitive: true };
+      expect(termOccursIn('several NGOs and the NGO’s staff', 'NGO', acr)).toBe(
+        true,
+      );
+      expect(termOccursIn("the NGO's staff", 'NGO', acr)).toBe(true);
+      expect(termOccursIn('NGOS', 'NGO', acr)).toBe(false);
+      expect(termOccursIn('WHOLESALE', 'WHO', acr)).toBe(false);
+    });
+
+    it('the shouting filter is opt-in and never applied to the output check', () => {
+      expect(
+        termOccursIn('RAPPORT DE L’OMS SUR LE CHOLÉRA', 'OMS', {
+          caseSensitive: true,
+        }),
+      ).toBe(true);
+      expect(
+        termOccursIn('RAPPORT DE L’OMS SUR LE CHOLÉRA', 'OMS', {
+          caseSensitive: true,
+          ignoreShouting: true,
+        }),
+      ).toBe(false);
+      // …and a translation whose only OMS is in a heading still passes.
+      expect(
+        checkGlossaryCompliance(
+          [{ source: 'WHO', target: 'OMS' }],
+          'The WHO report on cholera.',
+          'RAPPORT DE L’OMS SUR LE CHOLÉRA\n\nTexte.',
+        ).violations,
+      ).toEqual([]);
     });
 
     it('escapes regex metacharacters in terms', () => {
@@ -247,7 +288,10 @@ describe('glossaryMatch', () => {
   });
 
   describe('sanitizeGlossaryEntry', () => {
-    it('trims, caps, validates kind and drops junk', () => {
+    it('trims, caps, collapses whitespace, validates kind and drops junk', () => {
+      expect(
+        sanitizeGlossaryEntry({ source: 'field\n  hospital', target: 'x' }),
+      ).toEqual({ source: 'field hospital', target: 'x' });
       expect(
         sanitizeGlossaryEntry({
           source: '  WHO ',
