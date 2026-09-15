@@ -554,4 +554,61 @@ describe('ChatPipeline - model timeout (issue #130)', () => {
     // And the body still streams to completion afterwards, untimed.
     expect(await result.response!.text()).toBe('hello');
   });
+
+  it('a request-level signal aborts the running stage and skips the rest', async () => {
+    const requestAbort = new AbortController();
+    let slowSignal: AbortSignal | undefined;
+    let laterRan = false;
+    const slowStage: PipelineStage = {
+      name: 'FileProcessor',
+      shouldRun: () => true,
+      execute: async (context) => {
+        slowSignal = context.stageSignal;
+        // The route's guard fires while this stage is still working.
+        setTimeout(() => requestAbort.abort(new Error('REQUEST_TIMEOUT')), 20);
+        await new Promise((resolve) => setTimeout(resolve, 60));
+        return context;
+      },
+    };
+    const laterStage: PipelineStage = {
+      name: 'StandardChatHandler',
+      shouldRun: () => true,
+      execute: async (context) => {
+        laterRan = true;
+        return context;
+      },
+    };
+
+    const pipeline = new ChatPipeline([slowStage, laterStage], {
+      FileProcessor: 1000,
+      StandardChatHandler: 1000,
+    });
+    const result = await pipeline.execute(createTestChatContext(), {
+      signal: requestAbort.signal,
+    });
+
+    expect(slowSignal!.aborted).toBe(true);
+    expect((slowSignal!.reason as Error).message).toBe('REQUEST_TIMEOUT');
+    // The model stage never started on a request already reported failed.
+    expect(laterRan).toBe(false);
+    expect(result.response).toBeUndefined();
+  });
+
+  it('a request signal aborted before a stage starts stops the pipeline immediately', async () => {
+    const requestAbort = new AbortController();
+    requestAbort.abort(new Error('client gone'));
+    let ran = false;
+    const stage: PipelineStage = {
+      name: 'StandardChatHandler',
+      shouldRun: () => true,
+      execute: async (context) => {
+        ran = true;
+        return context;
+      },
+    };
+    await new ChatPipeline([stage]).execute(createTestChatContext(), {
+      signal: requestAbort.signal,
+    });
+    expect(ran).toBe(false);
+  });
 });
