@@ -5,7 +5,7 @@ import {
   sortLongestFirst,
 } from '@/lib/utils/shared/translation/glossaryMatch';
 
-import { GlossaryEntry } from '@/types/workflow';
+import { GlossaryEntry, GlossaryEntryKind } from '@/types/workflow';
 
 /**
  * Mandatory-terminology prompt block, shared by the translation workflow
@@ -109,18 +109,27 @@ export function mergeGlossaryEntries(
   guideEntries: GlossaryEntry[],
   localEntries: GlossaryEntry[],
 ): GlossaryEntry[] {
-  const seen = new Set<string>();
+  const seen = new Map<string, GlossaryEntryKind>();
   const merged: GlossaryEntry[] = [];
   for (const entry of [...guideEntries, ...localEntries]) {
     if (!entry.source) continue;
-    // An acronym and an ordinary word that shares its letters ("WHO" vs
-    // "who") are different entries, so acronyms dedupe on exact case.
-    const key =
-      resolveEntryKind(entry) === 'acronym'
-        ? `acronym:${entry.source.trim()}`
-        : entry.source.trim().toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
+    const key = entry.source.trim().toLowerCase();
+    const kind = resolveEntryKind(entry);
+    const earlier = seen.get(key);
+    // A duplicate is dropped even across case ("idp" after "IDP"): the
+    // org entry wins. The one exception is an entry the user EXPLICITLY
+    // typed as an ordinary word next to an acronym ("who" beside "WHO") —
+    // those are two different words, so both stay.
+    if (earlier !== undefined) {
+      const distinctWord =
+        entry.kind === 'term' &&
+        earlier === 'acronym' &&
+        !seen.has(`term:${key}`);
+      if (!distinctWord) continue;
+      seen.set(`term:${key}`, 'term');
+    } else {
+      seen.set(key, kind);
+    }
     merged.push(entry);
   }
   return merged;
