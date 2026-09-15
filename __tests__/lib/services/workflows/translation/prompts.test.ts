@@ -133,12 +133,14 @@ describe('translation glossary prompt injection — issue #131', () => {
     expect(block).not.toContain('a much longer phrase');
   });
 
-  it('escapes pipes so an entry cannot break the table', () => {
+  it('escapes pipes for markdown without changing the required value', () => {
     const block = buildGlossaryBlock(
       [{ source: 'a|b', target: 'c|d' }],
       'see a|b here',
     );
-    expect(block).toContain('| a/b | c/d |');
+    expect(block).toContain('| a\\|b | c\\|d |');
+    // The model still reads the literal target the checker will look for.
+    expect(block).not.toContain('c/d');
   });
 
   it('mergeGlossaryEntries: org entry wins across case, but an explicit word beside an acronym survives', () => {
