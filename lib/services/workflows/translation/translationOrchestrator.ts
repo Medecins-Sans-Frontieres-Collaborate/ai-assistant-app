@@ -178,7 +178,9 @@ export async function runTranslationWorkflow(
       // rounds remain, unless the reviewer also produced no fix — a
       // round that changes nothing would only repeat itself.
       if (review.verdict === 'approve') {
-        const hasFix = !!review.revisedText?.trim();
+        const hasFix =
+          !!review.revisedText?.trim() &&
+          review.revisedText.trim() !== translation.trim();
         if (violationsBefore.length === 0 || !hasFix) break;
       }
 

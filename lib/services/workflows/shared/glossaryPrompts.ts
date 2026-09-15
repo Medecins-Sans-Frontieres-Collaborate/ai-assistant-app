@@ -92,8 +92,9 @@ function renderRow({ entry, kind }: MatchedGlossaryEntry): string {
     }
   }
   if (entry.note?.trim()) notes.push(entry.note.trim());
-  // Pipes inside cells would break the table the model reads.
-  const cell = (s: string) => s.replace(/\|/g, '/');
+  // Pipes and line breaks inside cells would break the table the model
+  // reads (admin guides are validated, but the shape is defended here too).
+  const cell = (s: string) => s.replace(/\|/g, '/').replace(/\s+/g, ' ');
   return `| ${cell(entry.source)} | ${cell(entry.target)} | ${cell(
     notes.join('; '),
   )} |`;
