@@ -783,6 +783,10 @@ export const GuideGlossaryEntrySchema = z.object({
   source: z.string().min(1),
   target: z.string().min(1),
   note: z.string().optional(),
+  /** Issue #131: acronym entries match case-sensitively; absent = auto. */
+  kind: z.enum(['term', 'acronym']).optional(),
+  sourceExpansion: z.string().optional(),
+  targetExpansion: z.string().optional(),
 });
 
 /**
