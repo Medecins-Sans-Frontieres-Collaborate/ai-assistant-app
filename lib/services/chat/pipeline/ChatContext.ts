@@ -119,9 +119,11 @@ export interface ChatContext {
   modelTimeoutMs?: number;
 
   /**
-   * Aborted by the pipeline when the CURRENT stage exceeds its timeout.
-   * Handlers pass it to their upstream model call so a timed-out request
-   * is cancelled instead of running on (and billing) after the user has
+   * Aborted by the pipeline when the CURRENT stage exceeds its timeout, or
+   * when the route's whole-request guard fires while this stage is
+   * running. Handlers (and the MCP tool loops / the Foundry agent run)
+   * pass it to their upstream model calls so a timed-out request is
+   * cancelled instead of running on (and billing) after the user has
    * already been told it failed. Set per stage by ChatPipeline — never by
    * middleware — and never aborted after the stage has returned.
    */

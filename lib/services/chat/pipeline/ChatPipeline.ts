@@ -132,9 +132,17 @@ export class ChatPipeline {
    * - Final context includes all errors
    *
    * @param initialContext - The initial chat context
+   * @param options.signal - Request-level cancellation (the route's
+   *   whole-request guard). When it fires, the running stage's own signal
+   *   is aborted with the same reason and no further stage runs — so a
+   *   caller that has already reported a timeout never has a model call
+   *   start (and bill) behind its back.
    * @returns The final chat context after all stages
    */
-  async execute(initialContext: ChatContext): Promise<ChatContext> {
+  async execute(
+    initialContext: ChatContext,
+    options: { signal?: AbortSignal } = {},
+  ): Promise<ChatContext> {
     const startTime = Date.now();
     let context: ChatContext = {
       ...initialContext,
@@ -151,6 +159,12 @@ export class ChatPipeline {
     });
 
     for (const stage of this.stages) {
+      if (options.signal?.aborted) {
+        console.warn(
+          `[Pipeline] Request aborted before stage ${stage.name}; stopping`,
+        );
+        break;
+      }
       try {
         // Check if stage should run
         const shouldRun = stage.shouldRun(context);
@@ -169,11 +183,16 @@ export class ChatPipeline {
         );
 
         const errorCountBefore = context.errors?.length ?? 0;
-        // Aborted only when THIS stage loses the race below. A stage that
-        // returned in time is never aborted afterwards: the await's
-        // continuation (a microtask) clears the timer before the timer's
-        // macrotask could ever run.
+        // Aborted when THIS stage loses the race below, or when the
+        // request-level signal fires while it runs. A stage that returned
+        // in time is never aborted afterwards: the await's continuation (a
+        // microtask) clears the timer and drops the request listener before
+        // the timer's macrotask could ever run.
         const stageAbort = new AbortController();
+        const onRequestAbort = () => stageAbort.abort(options.signal?.reason);
+        options.signal?.addEventListener('abort', onRequestAbort, {
+          once: true,
+        });
         const { promise: timeoutPromise, cancel: cancelTimeout } =
           this.createTimeoutPromise(timeout, stage.name, stageAbort);
         try {
@@ -221,6 +240,7 @@ export class ChatPipeline {
           throw error;
         } finally {
           cancelTimeout();
+          options.signal?.removeEventListener('abort', onRequestAbort);
         }
 
         if (
