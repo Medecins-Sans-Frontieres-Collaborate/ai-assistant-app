@@ -418,14 +418,29 @@ export class AIFoundryAgentHandler {
                 '[AIFoundryAgentHandler] Auto-denying pending approvals before retry:',
                 pendingIds,
               );
-              await openAIClient.conversations.items.create(conversationId, {
-                items: buildApprovalResponseItems(
-                  pendingIds.map((id) => ({
-                    approval_request_id: id,
-                    approve: false,
-                  })),
-                ) as any,
-              });
+              // Pre-stream cleanup rides the same linked signal as the run
+              // itself: a stage/request timeout must not keep mutating the
+              // Foundry conversation (nor start a retry) after the request
+              // has already been reported as failed.
+              const throwIfAborted = () => {
+                if (upstreamAbort.signal.aborted) {
+                  throw upstreamAbort.signal.reason ?? firstAttempt;
+                }
+              };
+              throwIfAborted();
+              await openAIClient.conversations.items.create(
+                conversationId,
+                {
+                  items: buildApprovalResponseItems(
+                    pendingIds.map((id) => ({
+                      approval_request_id: id,
+                      approve: false,
+                    })),
+                  ) as any,
+                },
+                { signal: upstreamAbort.signal },
+              );
+              throwIfAborted();
               autoDeniedApprovalIds = pendingIds;
               streamEventMessages = await createStream();
             }
