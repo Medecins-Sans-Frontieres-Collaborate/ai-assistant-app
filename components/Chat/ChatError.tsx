@@ -125,7 +125,7 @@ interface ChatErrorProps {
    */
   timeout?: {
     /**
-     * `model`: the model handler stage timed out (PIPELINE_TIMEOUT) — the
+     * `model`: the model handler stage timed out (MODEL_TIMEOUT) — the
      * model itself did not start. `request`: the route's whole-request
      * guard fired (REQUEST_TIMEOUT) — preparation ran long, which a
      * longer model timeout also extends, but the model is not to blame.
