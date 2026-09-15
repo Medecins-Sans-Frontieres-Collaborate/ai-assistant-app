@@ -74,10 +74,9 @@ export abstract class ModelHandler {
   ): Promise<ChatCompletionResponse> {
     const client = this.getClient();
     const perfStart = performance.now();
-    const response = await client.chat.completions.create(
-      requestParams,
-      signal ? { signal } : undefined,
-    );
+    const response = signal
+      ? await client.chat.completions.create(requestParams, { signal })
+      : await client.chat.completions.create(requestParams);
     console.log(
       `[Perf] ModelHandler.executeRequest (client.chat.completions.create): ${(performance.now() - perfStart).toFixed(1)}ms`,
     );
