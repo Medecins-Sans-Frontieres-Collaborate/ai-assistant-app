@@ -11,7 +11,13 @@ import { RAGEnricher } from '@/lib/services/chat/enrichers/RAGEnricher';
 import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnricher';
 import { AgentChatHandler } from '@/lib/services/chat/handlers/AgentChatHandler';
 import { StandardChatHandler } from '@/lib/services/chat/handlers/StandardChatHandler';
-import { ChatPipeline, buildChatContext } from '@/lib/services/chat/pipeline';
+import {
+  ChatPipeline,
+  STAGE_TIMEOUTS,
+  buildChatContext,
+  isModelHandlerStage,
+  resolveStageTimeouts,
+} from '@/lib/services/chat/pipeline';
 import { FileProcessor } from '@/lib/services/chat/processors/FileProcessor';
 import { ImageProcessor } from '@/lib/services/chat/processors/ImageProcessor';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
@@ -57,11 +63,63 @@ import { emitAgentActivity } from '@/lib/streamMarkers';
  * Non-streaming requests keep the classic behavior: single JSON body,
  * errors as HTTP status codes.
  */
-export async function POST(req: NextRequest): Promise<Response> {
-  // Guard for the pipeline execution phase. Large video files (351MB+) can
-  // take 60-90s to download, plus extraction and batch job submission.
-  const timeoutMs = 300000;
+/**
+ * Budget for everything BEFORE the model handler stage (file download +
+ * extraction, RAG, tool router, …). The whole-request guard is this plus
+ * the model timeout, so a user who asks to wait longer for the model never
+ * eats into the pre-stage budget. Was a flat 300 s with a 90 s handler
+ * stage before issue #130 — the sum is unchanged at the default.
+ */
+const PRE_MODEL_BUDGET_MS = 210_000;
 
+/**
+ * Keepalive cadence while the pipeline is silent (no activity marker).
+ * Long model waits (up to MAX_MODEL_TIMEOUT_SECONDS) would otherwise send
+ * no bytes for minutes — intermediaries with idle timeouts cut those, and
+ * the user sees a frozen loader. The heartbeat is a real activity marker
+ * with the elapsed seconds, so the loader also tells the user what is
+ * happening.
+ */
+const HEARTBEAT_INTERVAL_MS = 15_000;
+const HEARTBEAT_QUIET_MS = 20_000;
+
+/**
+ * The error the client should be told about when the pipeline produced no
+ * response. A model-handler timeout wins even when earlier stages logged
+ * warnings first (a RAG timeout warning must not mask "the model did not
+ * start"); otherwise the first error keeps the historical behavior.
+ */
+function pickReportableError(errors: Error[]): Error {
+  const handlerTimeout = errors.find(
+    (e) =>
+      e instanceof PipelineError &&
+      e.code === ErrorCode.PIPELINE_TIMEOUT &&
+      isModelHandlerStage(e.metadata?.stageName),
+  );
+  return handlerTimeout ?? errors[0];
+}
+
+/**
+ * User-facing message for a reportable error. The pipeline's own timeout
+ * text ("Stage StandardChatHandler exceeded timeout of 90000ms") is a log
+ * line, not something to show a person; the client renders localized copy
+ * from the code, and non-streaming callers get a plain sentence.
+ */
+function describeReportableError(error: Error): string {
+  if (
+    error instanceof PipelineError &&
+    error.code === ErrorCode.PIPELINE_TIMEOUT &&
+    isModelHandlerStage(error.metadata?.stageName)
+  ) {
+    const seconds = Math.round(Number(error.metadata?.timeoutMs ?? 0) / 1000);
+    return seconds > 0
+      ? `The model did not start responding within ${seconds} seconds.`
+      : 'The model did not start responding in time.';
+  }
+  return error.message;
+}
+
+export async function POST(req: NextRequest): Promise<Response> {
   // Set up a TransformStream so pipeline stages can emit AGENT_ACTIVITY /
   // TOOL_CALL_RECORD markers in real time (e.g. "Searching: …") rather
   // than the user staring at a generic "Thinking…" through the slow
@@ -73,10 +131,14 @@ export async function POST(req: NextRequest): Promise<Response> {
   const streamWriter = streamWritable.getWriter();
   const activityEncoder = new TextEncoder();
 
+  // When the pipeline last said something — the heartbeat only speaks up
+  // when the stages have been silent for HEARTBEAT_QUIET_MS.
+  let lastMarkerAt = Date.now();
   const emitActivity = async (
     key: string,
     params?: Record<string, string>,
   ): Promise<void> => {
+    lastMarkerAt = Date.now();
     void streamWriter
       .write(activityEncoder.encode(emitAgentActivity(key, params)))
       .catch(() => {
@@ -87,6 +149,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   // interpreter TOOL_CALL_RECORD emitted by an enricher before the model
   // stream starts). Same non-blocking semantics.
   const emitMarker = async (marker: string): Promise<void> => {
+    lastMarkerAt = Date.now();
     void streamWriter.write(activityEncoder.encode(marker)).catch(() => {
       // Writer may have been closed by an error path.
     });
@@ -185,45 +248,56 @@ export async function POST(req: NextRequest): Promise<Response> {
     const blobStorageClient = createBlobStorageClient(context.session);
     // Get Foundry OpenAI client for RAG service (uses gpt-5-mini for query reformulation)
     const foundryOpenAIClient = container.getOpenAIClient();
-    const pipeline = new ChatPipeline([
-      // Content processors
-      new FileProcessor(
-        fileProcessingService,
-        inputValidator,
-        blobStorageClient,
-      ),
-      new ImageProcessor(),
+    const pipeline = new ChatPipeline(
+      [
+        // Content processors
+        new FileProcessor(
+          fileProcessingService,
+          inputValidator,
+          blobStorageClient,
+        ),
+        new ImageProcessor(),
 
-      // Feature enrichers
-      // Prompt-agent persona override runs BEFORE RAGEnricher: both key
-      // off botId, and RAGEnricher.shouldRun skips prompt agents.
-      new PromptAgentEnricher(),
-      // M365 file-backed agent retrieval — mutually exclusive with
-      // RAGEnricher (both key off botId; each skips the other's kind).
-      new M365AgentEnricher(foundryOpenAIClient),
-      new RAGEnricher(
-        env.SEARCH_ENDPOINT!,
-        env.SEARCH_INDEX!,
-        foundryOpenAIClient,
-      ),
-      // Names the files earlier interpreter runs produced (issue #126) —
-      // after the persona/RAG stages that may replace systemPrompt, before
-      // the tool router that may remount those files.
-      new GeneratedFileManifestEnricher(),
-      new ToolRouterEnricher(toolRouterService, agentChatService),
-      // Structured-data extraction: composes the JSON-schema response
-      // format when the request carries an `extraction` payload.
-      new ExtractionEnricher(agentChatService),
-      new AgentEnricher(),
+        // Feature enrichers
+        // Prompt-agent persona override runs BEFORE RAGEnricher: both key
+        // off botId, and RAGEnricher.shouldRun skips prompt agents.
+        new PromptAgentEnricher(),
+        // M365 file-backed agent retrieval — mutually exclusive with
+        // RAGEnricher (both key off botId; each skips the other's kind).
+        new M365AgentEnricher(foundryOpenAIClient),
+        new RAGEnricher(
+          env.SEARCH_ENDPOINT!,
+          env.SEARCH_INDEX!,
+          foundryOpenAIClient,
+        ),
+        // Names the files earlier interpreter runs produced (issue #126) —
+        // after the persona/RAG stages that may replace systemPrompt, before
+        // the tool router that may remount those files.
+        new GeneratedFileManifestEnricher(),
+        new ToolRouterEnricher(toolRouterService, agentChatService),
+        // Structured-data extraction: composes the JSON-schema response
+        // format when the request carries an `extraction` payload.
+        new ExtractionEnricher(agentChatService),
+        new AgentEnricher(),
 
-      // Execution handlers (AgentChatHandler runs first, StandardChatHandler as fallback)
-      new AgentChatHandler(aiFoundryAgentHandler),
-      new StandardChatHandler(standardChatService),
-    ]);
+        // Execution handlers (AgentChatHandler runs first, StandardChatHandler as fallback)
+        new AgentChatHandler(aiFoundryAgentHandler),
+        new StandardChatHandler(standardChatService),
+      ],
+      resolveStageTimeouts(context.modelTimeoutMs),
+    );
+
+    // Guard for the pipeline execution phase (everything up to the model's
+    // first byte). Pre-stage budget + the user's model timeout (issue #130;
+    // clamped by the middleware, default = the compiled handler timeout).
+    const modelTimeoutMs =
+      context.modelTimeoutMs ?? STAGE_TIMEOUTS.StandardChatHandler;
+    const timeoutMs = PRE_MODEL_BUDGET_MS + modelTimeoutMs;
 
     const executePipeline = async () => {
+      let guardTimer: ReturnType<typeof setTimeout> | null = null;
       const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => {
+        guardTimer = setTimeout(() => {
           reject(
             PipelineError.critical(
               ErrorCode.REQUEST_TIMEOUT,
@@ -233,7 +307,25 @@ export async function POST(req: NextRequest): Promise<Response> {
           );
         }, timeoutMs);
       });
-      return await Promise.race([pipeline.execute(context), timeoutPromise]);
+      // Keepalive while the stages are silent (streaming only — the
+      // non-streaming path has nothing to write to). Stops the moment the
+      // pipeline returns, i.e. before any handler bytes are piped, so it
+      // can never interleave with model output.
+      const startedAt = Date.now();
+      const heartbeat = context.stream
+        ? setInterval(() => {
+            if (Date.now() - lastMarkerAt < HEARTBEAT_QUIET_MS) return;
+            void emitActivity('chat.activity.stillWorking', {
+              seconds: String(Math.round((Date.now() - startedAt) / 1000)),
+            });
+          }, HEARTBEAT_INTERVAL_MS)
+        : null;
+      try {
+        return await Promise.race([pipeline.execute(context), timeoutPromise]);
+      } finally {
+        if (heartbeat) clearInterval(heartbeat);
+        if (guardTimer) clearTimeout(guardTimer);
+      }
     };
 
     // ── Non-streaming: classic single-response behavior ────────────────
@@ -255,13 +347,13 @@ export async function POST(req: NextRequest): Promise<Response> {
         const result = await executePipeline();
 
         if (result.errors && result.errors.length > 0 && !result.response) {
-          const firstError = result.errors[0];
+          const firstError = pickReportableError(result.errors);
           console.error(
             '[Unified Chat] Pipeline failed:',
             result.errors.map((e) => sanitizeForLog(e.message)),
           );
           await writeStreamError(
-            firstError.message,
+            describeReportableError(firstError),
             firstError instanceof PipelineError
               ? firstError.code
               : ErrorCode.INTERNAL_ERROR,
@@ -454,7 +546,7 @@ function buildPipelineErrorResponse(result: {
   );
   if (result.response) return null;
 
-  const firstError = result.errors[0];
+  const firstError = pickReportableError(result.errors);
   const errorCode =
     firstError instanceof PipelineError
       ? firstError.code
@@ -464,7 +556,7 @@ function buildPipelineErrorResponse(result: {
     JSON.stringify({
       error: 'Internal Server Error',
       code: errorCode,
-      message: firstError.message,
+      message: describeReportableError(firstError),
       details: result.errors.map((e) =>
         e instanceof PipelineError ? e.toJSON() : { message: e.message },
       ),
