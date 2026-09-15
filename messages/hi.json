@@ -608,7 +608,9 @@
     "beta": "बीटा",
     "copied": "कॉपी हो गया!",
     "clear": "साफ़ करें",
-    "undo": "पूर्ववत करें"
+    "undo": "पूर्ववत करें",
+    "durationSeconds": "{count, plural, one {# सेकंड} other {# सेकंड}}",
+    "durationMinutes": "{count, plural, one {# मिनट} other {# मिनट}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "एक अप्रत्याशित त्रुटि हुई",
@@ -804,7 +806,8 @@
       "webSearchLimitReached": "प्रतिदिन की वेब खोज सीमा पूरी — बिना खोज के उत्तर दे रहे हैं…",
       "codeInterpreterLimitReached": "प्रतिदिन की कोड निष्पादन सीमा पूरी — कोड चलाए बिना उत्तर दे रहे हैं…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "नॉलेज-बेस खोज विफल रही — उत्तर में एजेंट के दस्तावेज़ों का उपयोग नहीं होगा।"
+      "knowledgeSearchFailed": "नॉलेज-बेस खोज विफल रही — उत्तर में एजेंट के दस्तावेज़ों का उपयोग नहीं होगा।",
+      "stillWorking": "अब भी कार्य कर रहा है…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# टूल इस्तेमाल हुआ} other {# टूल्स इस्तेमाल हुए}}",
@@ -899,7 +902,12 @@
     "startNewConversation": "नई बातचीत शुरू करें",
     "downloadDebugInfo": "डिबग जानकारी डाउनलोड करें",
     "includeMessageText": "संदेश का पाठ शामिल करें",
-    "ttsEquationPlaceholder": "समीकरण"
+    "ttsEquationPlaceholder": "समीकरण",
+    "modelTimedOut": "{model} ने {duration} के भीतर जवाब देना शुरू नहीं किया। यह व्यस्त हो सकता है — आप और अधिक प्रतीक्षा कर सकते हैं, या कोई और मॉडल आज़मा सकते हैं।",
+    "modelTimedOutAtMaximum": "{model} ने उपलब्ध अधिकतम प्रतीक्षा समय {duration} में भी जवाब देना शुरू नहीं किया। दोबारा प्रयास करें या कोई और मॉडल चुनें।",
+    "requestTimedOut": "यह अनुरोध तैयार होने में बहुत समय ले रहा था और {model} के उत्तर देने से पहले ही रोक दिया गया। आप अधिक समय दे सकते हैं या कोई और मॉडल आज़मा सकते हैं।",
+    "retryWaitingLonger": "अधिकतम {duration} तक प्रतीक्षा करें और दोबारा प्रयास करें",
+    "alwaysWaitThisLong": "हमेशा अधिकतम {duration} तक प्रतीक्षा करें"
   },
   "sidebar": {
     "collapseSidebar": "साइडबार संक्षिप्त करें",
@@ -1287,7 +1295,20 @@
     "Connections": "कनेक्शन",
     "DataBackup": "डेटा एवं बैकअप",
     "Export & Import": "निर्यात और आयात",
-    "exportImportDescription": "अपनी चैट्स, फ़ोल्डर्स और प्रॉम्प्ट्स को फ़ाइल के रूप में डाउनलोड करें, या उन्हें पिछले निर्यात से पुनः स्थापित करें।"
+    "exportImportDescription": "अपनी चैट्स, फ़ोल्डर्स और प्रॉम्प्ट्स को फ़ाइल के रूप में डाउनलोड करें, या उन्हें पिछले निर्यात से पुनः स्थापित करें।",
+    "modelTimeout": {
+      "title": "मॉडल का प्रतीक्षा समय",
+      "description": "किसी मॉडल से उत्तर पाने के लिए कितनी देर प्रतीक्षा करें, इससे पहले कि कोशिश छोड़ दें। धीमे मॉडल और व्यस्त क्षेत्र में अधिक समय लग सकता है। उत्तर स्ट्रीम होना शुरू होने के बाद यह लागू नहीं होता।",
+      "presetStandard": "मानक",
+      "presetPatient": "धैर्यवान",
+      "presetMaximum": "अधिकतम",
+      "presetCustom": "कस्टम",
+      "customLabel": "प्रतीक्षा अधिकतम",
+      "customUnit": "सेकंड",
+      "customHint": "{min} से {max} सेकंड के बीच।",
+      "preferModelTitle": "मेरे चुने मॉडल को प्राथमिकता दें",
+      "preferModelDescription": "जब अनुरोध असफल हो जाए तो स्वचालित रूप से किसी अन्य मॉडल पर न जाएं। त्रुटि के समय स्विच करने का विकल्प रहेगा।"
+    }
   },
   "notFound": {
     "lostDog": "खोया हुआ कुत्ता"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "सुझाव हटा दिया गया — आपने उसके अंश को संपादित किया।",
       "suggestionDroppedMany": "{count} सुझाव हटा दिए गए — आपने उनके अंशों को संपादित किया।",
       "pendingRunActionTranslate": "फिर से अनुवाद हो रहा है",
-      "pendingRunActionAssess": "पुनः मूल्यांकन"
+      "pendingRunActionAssess": "पुनः मूल्यांकन",
+      "entryKind": "प्रविष्टि प्रकार",
+      "kindTerm": "शब्द",
+      "kindAcronym": "संक्षिप्त रूप",
+      "sourceExpansion": "स्त्रोत में पूरा नाम (वैकल्पिक)",
+      "targetExpansion": "अनुवाद में पूरा नाम (वैकल्पिक)",
+      "acronymHint": "संक्षिप्त रूप बिलकुल वैसे ही मेल खाते हैं जैसे टाइप किए गए: WHO केवल “WHO” के लिए लागू होगा, “who” के लिए नहीं। शब्द किसी भी केस में मेल खाते हैं।",
+      "glossaryCheckTitle": "शब्दावली जांच",
+      "glossaryCheckPass": "{count, plural, one {आवश्यक शब्द का उपयोग हुआ।} other {सभी # आवश्यक शब्दों का उपयोग हुआ।}}",
+      "glossaryCheckMissing": "{count, plural, one {{total} में से # आवश्यक अनुवाद नहीं हुआ:} other {{total} में से # आवश्यक अनुवाद नहीं हुए:}}"
     },
     "document": {
       "emptyTitle": "वांछित दस्तावेज़ का वर्णन करें",

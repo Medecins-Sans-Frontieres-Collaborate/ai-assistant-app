@@ -711,7 +711,9 @@
     "beta": "बिटा",
     "copied": "प्रतिलिपि गरियो!",
     "clear": "खाली गर्नुहोस्",
-    "undo": "पूर्वस्थितिमा फर्काउनुहोस्"
+    "undo": "पूर्वस्थितिमा फर्काउनुहोस्",
+    "durationSeconds": "{count, plural, one {# सेकेन्ड} other {# सेकेन्डहरू}}",
+    "durationMinutes": "{count, plural, one {# मिनेट} other {# मिनेटहरू}}"
   },
   "terms": {
     "officialLanguages": "आधिकारिक संस्करण:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "दैनिक वेब खोज सीमा पुगेको छ — खोजी बिना जवाफ दिँदै…",
       "codeInterpreterLimitReached": "दैनिक कोड चलाउने सीमा पुगेको छ — कोड नगरी जवाफ दिँदै…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "ज्ञान आधारको खोज असफल भयो — जवाफमा एजेन्टका कागजातहरू प्रयोग हुनेछैनन्।"
+      "knowledgeSearchFailed": "ज्ञान आधारको खोज असफल भयो — जवाफमा एजेन्टका कागजातहरू प्रयोग हुनेछैनन्।",
+      "stillWorking": "अझै काम हुँदैछ…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# उपकरण} other {# उपकरणहरू}} प्रयोग गरियो",
@@ -957,7 +960,12 @@
     "startNewConversation": "नयाँ संवाद सुरु गर्नुहोस्",
     "downloadDebugInfo": "डिबग जानकारी डाउनलोड गर्नुहोस्",
     "includeMessageText": "सन्देशको पाठ समावेश गर्नुहोस्",
-    "ttsEquationPlaceholder": "समीकरण"
+    "ttsEquationPlaceholder": "समीकरण",
+    "modelTimedOut": "{model} ले {duration} भित्र प्रतिक्रिया दिन शुरू गरेन। सम्भवतः व्यस्त छ — तपाईं लामो समय कुर्न सक्नुहुन्छ, वा अर्को मोडेल प्रयास गर्न सक्नुहुन्छ।",
+    "modelTimedOutAtMaximum": "{model} ले {duration} (अधिकतम पर्खाइ समय) भित्र प्रतिक्रिया दिन शुरू गरेन। पुन: प्रयास गर्नुहोस्, वा अर्को मोडेल प्रयास गर्नुहोस्।",
+    "requestTimedOut": "यो अनुरोध तयार हुन धेरै समय लाग्यो र {model} ले उत्तर दिने अघि नै रोकियो। अझ बढी समय अनुमति दिनुहोस्, वा अर्को मोडेल प्रयास गर्नुहोस्।",
+    "retryWaitingLonger": "{duration} सम्म पर्खनुहोस् र पुन: प्रयास गर्नुहोस्",
+    "alwaysWaitThisLong": "{duration} सम्म सधैं पर्खनुहोस्"
   },
   "transcript": {
     "originalTranscript": "मूल ट्रान्सक्रिप्ट",
@@ -1446,7 +1454,20 @@
     "Connections": "कनेक्शनहरू",
     "DataBackup": "डेटा र ब्याकअप",
     "Export & Import": "निर्यात र आयात",
-    "exportImportDescription": "आफ्ना च्याट, फोल्डर र प्रॉम्प्टहरू फाइलको रूपमा डाउनलोड गर्नुहोस्, वा अघिल्लो निर्यातबाट पुनःस्थापना गर्नुहोस्।"
+    "exportImportDescription": "आफ्ना च्याट, फोल्डर र प्रॉम्प्टहरू फाइलको रूपमा डाउनलोड गर्नुहोस्, वा अघिल्लो निर्यातबाट पुनःस्थापना गर्नुहोस्।",
+    "modelTimeout": {
+      "title": "मोडेल पर्खाइ समय",
+      "description": "मोडेलले उत्तर दिन शुरू गर्न कति समय पर्खने भन्ने कुरा। बिस्तारै काम गर्ने मोडेल वा व्यस्त क्षेत्रका लागि बढी समय आवश्यक हुन सक्छ। एकपटक उत्तर स्ट्रिम हुन थालेपछि यो लागू हुँदैन।",
+      "presetStandard": "मानक",
+      "presetPatient": "धैर्य",
+      "presetMaximum": "अधिकतम",
+      "presetCustom": "अनुकूल",
+      "customLabel": "सम्म पर्खनुहोस्",
+      "customUnit": "सेकेन्ड",
+      "customHint": "{min} देखि {max} सेकेन्डसम्म।",
+      "preferModelTitle": "मेरो चयन गरिएको मोडेललाई प्राथमिकता दिनुहोस्",
+      "preferModelDescription": "अनुरोध असफल हुँदा स्वतः अर्को मोडेलमा नस्विच गर्नुहोस्। त्रुटिमा स्विच गर्ने विकल्प रहने छ।"
+    }
   },
   "emptyState": {
     "greeting": "म कसरी मद्दत गर्न सक्छु?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "सिफारिस हटाइयो — तपाईंले यसको अंश सम्पादन गर्नुभयो।",
       "suggestionDroppedMany": "{count} सिफारिसहरू हटाइयो — तपाईंले ती अंशहरू सम्पादन गर्नुभयो।",
       "pendingRunActionTranslate": "फेरि अनुवाद गर्दै",
-      "pendingRunActionAssess": "फेरि मूल्याङ्कन गर्दै"
+      "pendingRunActionAssess": "फेरि मूल्याङ्कन गर्दै",
+      "entryKind": "प्रविष्टिको प्रकार",
+      "kindTerm": "शब्द",
+      "kindAcronym": "संक्षिप्त रूप",
+      "sourceExpansion": "स्रोतमा पूर्ण नाम (वैकल्पिक)",
+      "targetExpansion": "अनुवादमा पूर्ण नाम (वैकल्पिक)",
+      "acronymHint": "संक्षिप्त रूप जस्तै टाइप गरिएको छ, त्यस्तै मिल्नुपर्छ: WHO भनेको \"WHO\" सँग मात्र मिल्छ, \"who\" सँग कहिल्यै मिल्दैन। शब्दहरू कुनै पनि क्यापिटलाइजेसनसँग मिल्न सक्छन्।",
+      "glossaryCheckTitle": "शब्दकोश जाँच",
+      "glossaryCheckPass": "{count, plural, one {आवश्यक शब्द प्रयोग गरिएको छ।} other {सबै # आवश्यक शब्दहरू प्रयोग गरिएको छ।}}",
+      "glossaryCheckMissing": "{count, plural, one {{total} मध्ये # आवश्यक अनुवाद हराइरहेका छन्:} other {{total} मध्ये # आवश्यक अनुवादहरू हराइरहेका छन्:}}"
     },
     "document": {
       "emptyTitle": "तपाईं चाहनुभएको कागजात वर्णन गर्नुहोस्",

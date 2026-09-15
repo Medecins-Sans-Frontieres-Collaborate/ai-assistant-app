@@ -583,7 +583,9 @@
     "beta": "בטא",
     "copied": "הועתק!",
     "clear": "נקה",
-    "undo": "בטל"
+    "undo": "בטל",
+    "durationSeconds": "{count, plural, one {# שנייה} other {# שניות}}",
+    "durationMinutes": "{count, plural, one {# דקה} other {# דקות}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "אירעה שגיאה בלתי צפויה",
@@ -779,7 +781,8 @@
       "webSearchLimitReached": "הגעת למכסת החיפושים היומית — עונה ללא חיפוש…",
       "codeInterpreterLimitReached": "הגעת למכסת הרצת הקוד היומית — עונה ללא הרצת קוד…",
       "m365Progress": "Microsoft 365:‏ {detail}",
-      "knowledgeSearchFailed": "החיפוש במאגר הידע נכשל — התשובה לא תשתמש במסמכי הסוכן"
+      "knowledgeSearchFailed": "החיפוש במאגר הידע נכשל — התשובה לא תשתמש במסמכי הסוכן",
+      "stillWorking": "עדיין עובד…"
     },
     "toolSummary": {
       "usedTools": "השתמש ב־{count, plural, one {# כלי} other {# כלים}}",
@@ -874,7 +877,12 @@
     "startNewConversation": "התחל שיחה חדשה",
     "downloadDebugInfo": "הורד מידע לאיתור תקלות",
     "includeMessageText": "כלול את תוכן ההודעה",
-    "ttsEquationPlaceholder": "משוואה"
+    "ttsEquationPlaceholder": "משוואה",
+    "modelTimedOut": "המודל {model} לא החל לענות בתוך {duration}. ייתכן שהוא עסוק — אפשר להמתין עוד, או לנסות מודל אחר.",
+    "modelTimedOutAtMaximum": "המודל {model} לא החל לענות בתוך {duration}, זמן ההמתנה המקסימלי. נסו שוב או נסו מודל אחר.",
+    "requestTimedOut": "הבקשה הזו לקחה יותר מדי זמן ולא הושלמה לפני שהמודל {model} הצליח לענות. ניתן להקצות יותר זמן, או לנסות מודל אחר.",
+    "retryWaitingLonger": "המתן עד {duration} ונסה שוב",
+    "alwaysWaitThisLong": "המתן תמיד עד {duration}"
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -1262,7 +1270,20 @@
     "Connections": "חיבורים",
     "DataBackup": "גיבוי & נתונים",
     "Export & Import": "ייצוא & ייבוא",
-    "exportImportDescription": "הורד את הצ'אטים, התיקיות והפניות כקובץ, או שחזר אותם מייצוא קודם."
+    "exportImportDescription": "הורד את הצ'אטים, התיקיות והפניות כקובץ, או שחזר אותם מייצוא קודם.",
+    "modelTimeout": {
+      "title": "זמן המתנה למודל",
+      "description": "משך זמן ההמתנה למענה ראשוני מהמודל לפני שמתייאשים. ייתכן שיש להמתין יותר עם מודלים איטיים או אזורים עמוסים. אחרי תחילת זרימת התשובה זמן זה כבר לא רלוונטי.",
+      "presetStandard": "רגיל",
+      "presetPatient": "סבלני",
+      "presetMaximum": "מרבי",
+      "presetCustom": "מותאם אישית",
+      "customLabel": "המתנה עד",
+      "customUnit": "שניות",
+      "customHint": "בין {min} ל-{max} שניות.",
+      "preferModelTitle": "העדף את המודל שנבחר",
+      "preferModelDescription": "אל תעבור אוטומטית למודל אחר כאשר הבקשה נכשלת. השגיאה עדיין תציע מעבר."
+    }
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "ההצעה הוסרה — ערכת את הקטע שלה.",
       "suggestionDroppedMany": "{count} הצעות הוסרו — ערכת את הקטעים שלהן.",
       "pendingRunActionTranslate": "תרגום מחדש",
-      "pendingRunActionAssess": "הערכה מחדש"
+      "pendingRunActionAssess": "הערכה מחדש",
+      "entryKind": "סוג ערך",
+      "kindTerm": "מונח",
+      "kindAcronym": "ראשי תיבות",
+      "sourceExpansion": "שם מלא במקור (לא חובה)",
+      "targetExpansion": "שם מלא בתרגום (לא חובה)",
+      "acronymHint": "ראשי תיבות תואמים בדיוק כפי שהוזנו: WHO מתאים ל-“WHO”, אף פעם לא ל-“who”. מונחים תואמים בכל כתיב.",
+      "glossaryCheckTitle": "בדיקת מילון מונחים",
+      "glossaryCheckPass": "{count, plural, one {המונח הנדרש שימש.} other {כל # המונחים הנדרשים שימשו.}}",
+      "glossaryCheckMissing": "{count, plural, one {# מתוך {total} תרגומים נדרשים חסר:} other {# מתוך {total} תרגומים נדרשים חסרים:}}"
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",

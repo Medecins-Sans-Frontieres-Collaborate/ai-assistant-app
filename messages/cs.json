@@ -608,7 +608,9 @@
     "beta": "Beta",
     "copied": "Zkopírováno!",
     "clear": "Vymazat",
-    "undo": "Zpět"
+    "undo": "Zpět",
+    "durationSeconds": "{count, plural, one {# sekunda} few {# sekundy} other {# sekund}}",
+    "durationMinutes": "{count, plural, one {# minuta} few {# minuty} other {# minut}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "Došlo k neočekávané chybě",
@@ -804,7 +806,8 @@
       "webSearchLimitReached": "Denní limit webového vyhledávání byl vyčerpán — odpovídám bez vyhledávání…",
       "codeInterpreterLimitReached": "Denní limit spuštění kódu byl vyčerpán — odpovídám bez spuštění kódu…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Vyhledávání v databázi znalostí selhalo — odpověď nebude využívat dokumenty agenta."
+      "knowledgeSearchFailed": "Vyhledávání v databázi znalostí selhalo — odpověď nebude využívat dokumenty agenta.",
+      "stillWorking": "Stále pracuji…"
     },
     "toolSummary": {
       "usedTools": "Použito {count, plural, one {# nástroj} few {# nástroje} other {# nástrojů}}",
@@ -899,7 +902,12 @@
     "startNewConversation": "Zahájit novou konverzaci",
     "downloadDebugInfo": "Stáhnout ladicí informace",
     "includeMessageText": "Zahrnout text zprávy",
-    "ttsEquationPlaceholder": "rovnice"
+    "ttsEquationPlaceholder": "rovnice",
+    "modelTimedOut": "Model {model} nezačal odpovídat během {duration}. Může být zaneprázdněný – můžete počkat déle, nebo zkusit jiný model.",
+    "modelTimedOutAtMaximum": "Model {model} nezačal odpovídat během {duration}, což je maximální čekací doba. Zkuste to znovu nebo vyberte jiný model.",
+    "requestTimedOut": "Příprava požadavku trvala příliš dlouho a byla zastavena dříve, než mohl {model} odpovědět. Můžete prodloužit čekací dobu nebo zkusit jiný model.",
+    "retryWaitingLonger": "Počkejte až {duration} a zkuste to znovu",
+    "alwaysWaitThisLong": "Vždy čekat až do {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -1287,7 +1295,20 @@
     "Connections": "Připojení",
     "DataBackup": "Data a zálohování",
     "Export & Import": "Export a import",
-    "exportImportDescription": "Stáhněte si své konverzace, složky a výzvy jako soubor nebo je obnovte z předchozího exportu."
+    "exportImportDescription": "Stáhněte si své konverzace, složky a výzvy jako soubor nebo je obnovte z předchozího exportu.",
+    "modelTimeout": {
+      "title": "Doba čekání na model",
+      "description": "Jak dlouho čekat, než model začne odpovídat, než to vzdáte. Pomalé modely a zaneprázdněné oblasti mohou potřebovat více času. Jakmile začne odpověď proudit, toto omezení už neplatí.",
+      "presetStandard": "Standardní",
+      "presetPatient": "Trpělivý",
+      "presetMaximum": "Maximální",
+      "presetCustom": "Vlastní",
+      "customLabel": "Čekat až do",
+      "customUnit": "sekund",
+      "customHint": "Mezi {min} a {max} sekundami.",
+      "preferModelTitle": "Preferovat vybraný model",
+      "preferModelDescription": "Nepřepínat automaticky na jiný model při neúspěšném požadavku. Chybové hlášení stále nabídne možnost přepnout."
+    }
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Návrh byl odstraněn — upravili jste jeho pasáž.",
       "suggestionDroppedMany": "{count} návrhů bylo odstraněno — upravili jste jejich pasáže.",
       "pendingRunActionTranslate": "Opětovný překlad",
-      "pendingRunActionAssess": "Nové hodnocení"
+      "pendingRunActionAssess": "Nové hodnocení",
+      "entryKind": "Typ položky",
+      "kindTerm": "Termín",
+      "kindAcronym": "Zkratka",
+      "sourceExpansion": "Celý název ve zdroji (volitelné)",
+      "targetExpansion": "Celý název v překladu (volitelné)",
+      "acronymHint": "Zkratky se shodují přesně podle zadání: WHO platí pouze pro „WHO“, nikdy pro „who“. Termíny se shodují bez ohledu na velikost písmen.",
+      "glossaryCheckTitle": "Kontrola glosáře",
+      "glossaryCheckPass": "{count, plural, one {Požadovaný termín byl použit.} other {Všechny # požadované termíny byly použity.}}",
+      "glossaryCheckMissing": "{count, plural, one {Chybí # z {total} požadovaného překladu:} other {Chybí # z {total} požadovaných překladů:}}"
     },
     "document": {
       "emptyTitle": "Popište požadovaný dokument",

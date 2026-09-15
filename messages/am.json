@@ -605,7 +605,9 @@
     "beta": "ቅድመ-ልቀት",
     "copied": "ተገልቧል!",
     "clear": "አጽዳ",
-    "undo": "ተድላ"
+    "undo": "ተድላ",
+    "durationSeconds": "{count, plural, one {# ሰከንድ} other {# ሰከንዶች}}",
+    "durationMinutes": "{count, plural, one {# ደቂቃ} other {# ደቂቃዎች}}"
   },
   "chat": {
     "downloadAudio": "ድምጽን አውርድ",
@@ -747,7 +749,8 @@
       "webSearchLimitReached": "የቀኑ የድህረገፅ ፍለጋ ገደብ ተደርሷል — ያለ ፍለጋ መልስ…",
       "codeInterpreterLimitReached": "የቀኑ የኮድ አስኬድ ገደብ ተደርሷል — ያለ ኮድ አስኬድ መልስ…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "የእውቀት ማጣቀሻ ፍለጋ አልተሳካም — መልሱ የወኪሉን ሰነዶች አይጠቀምም"
+      "knowledgeSearchFailed": "የእውቀት ማጣቀሻ ፍለጋ አልተሳካም — መልሱ የወኪሉን ሰነዶች አይጠቀምም",
+      "stillWorking": "በመስራት ላይ…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳሪያ} other {# መሳሪያዎች}} ተጠቅመዋል",
@@ -842,7 +845,12 @@
     "startNewConversation": "አዲስ ውይይት ጀምር",
     "downloadDebugInfo": "የ ዲበግ መረጃ አውርድ",
     "includeMessageText": "የመልእክቱን ጽሑፍ አካትት",
-    "ttsEquationPlaceholder": "ትክክለኛ ትንታኔ"
+    "ttsEquationPlaceholder": "ትክክለኛ ትንታኔ",
+    "modelTimedOut": "{model} ማብራሪያ በ{duration} ውስጥ መጀመሩን አልቻለም። ምናልባት በተጠጋጋ፣ ቆይተው ይጠብቁ ወይም ሌላ ሞዴል ይሞክሩ።",
+    "modelTimedOutAtMaximum": "{model} ማብራሪያ በ{duration}፣ ከፍተኛውን ጊዜ በተጠቀሱት ወቅት አልጀመረም። እንደገና ይሞክሩ ወይም ሌላ ሞዴል ይሞክሩ።",
+    "requestTimedOut": "ይህ ጥያቄ ለመዘጋጀት ብዙ ጊዜ ወሰደ እና {model} ከመሞላቱ በፊት ተቆርጧል። ተጨማሪ ጊዜ ማስቻል ይችላሉ ወይም ሌላ ሞዴል ይሞክሩ።",
+    "retryWaitingLonger": "እስከ {duration} ድረስ ይጠብቁ እና ደግመው ይሞክሩ",
+    "alwaysWaitThisLong": "ሁልጊዜ እስከ {duration} ድረስ ይጠብቁ"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -1230,7 +1238,20 @@
     "Connections": "ግንኙነቶች",
     "DataBackup": "ዳታ እና ተቀማጭ",
     "Export & Import": "ውጭ ላክ & አስመጣ",
-    "exportImportDescription": "ንግግሮችዎን፣ ፎልደሮችና መነሻ ተግባሮችዎን እንደ ፋይል ይውሰዱ፣ ወይም ከቀድመው ውጭ ላክ ይመልሱ።"
+    "exportImportDescription": "ንግግሮችዎን፣ ፎልደሮችና መነሻ ተግባሮችዎን እንደ ፋይል ይውሰዱ፣ ወይም ከቀድመው ውጭ ላክ ይመልሱ።",
+    "modelTimeout": {
+      "title": "የሞዴል መጠባበቅ ጊዜ",
+      "description": "ሞዴሉ መምላት ይጀምር እንዲሆን ማቋረጥ በፊት ምን ያህል ጊዜ እንደሚጠበቅ ይወስናል። የሚያጸግመው ሞዴል እና ዙሪያ ያሉት ቦታዎች ተጨማሪ ጊዜ ሊያስፈልጋቸው ይችላሉ። መምላቱ ከጀመረ በኋላ ይህ አይተግበርም።",
+      "presetStandard": "መደበኛ",
+      "presetPatient": "ትዕግስተኛ",
+      "presetMaximum": "ከፍተኛ",
+      "presetCustom": "ብጁ",
+      "customLabel": "እስከ",
+      "customUnit": "ሰከንዶች",
+      "customHint": "ከ{min} እስከ {max} ሰከንዶች።",
+      "preferModelTitle": "የተመረጠውን ሞዴል መርጠው ይጠቀሙ",
+      "preferModelDescription": "ጥያቄ ሳይሳካ ሞዴል ራሱን ለወጥ አያደርግም። ችግሩ ቢኖር ይቅዱ የሚለው አንድ አማራጭ ይሆናል።"
+    }
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "ጥያቄው ተተውቷል — ክፍሉን ማርከዋትናችው።",
       "suggestionDroppedMany": "{count} ጥያቄዎች ተተውቷል — ክፍላቸውን ማረምካችው።",
       "pendingRunActionTranslate": "እንደገና ትርጉም በማድረግ ላይ",
-      "pendingRunActionAssess": "በድጋሚ ግምገማ በማድረግ ላይ"
+      "pendingRunActionAssess": "በድጋሚ ግምገማ በማድረግ ላይ",
+      "entryKind": "የግቤት አይነት",
+      "kindTerm": "ቃል",
+      "kindAcronym": "አቀማመጥ ቃል",
+      "sourceExpansion": "በምንጭ ሙሉ ስም (አማራጭ)",
+      "targetExpansion": "በትርጉም ሙሉ ስም (አማራጭ)",
+      "acronymHint": "አቀማመጥ ቃላት በተጻፉበት ሁኔታ ብቻ ይዛመዳሉ፡ WHO ለ“WHO” ብቻ ይዛመዳል፣ ለ“who” አይዛመድም። ቃላት ግን ማንኛውንም አጠቃላይ እንዲፈልጉ ይደረጋሉ።",
+      "glossaryCheckTitle": "ቃላት ዝርዝር ምርመራ",
+      "glossaryCheckPass": "{count, plural, one {የተፈለገው ቃል ተጠቅመዋል።} other {ሁሉም # የተፈለጉ ቃላት ተጠቅመዋል።}}",
+      "glossaryCheckMissing": "{count, plural, one {ከ{total} የተፈለግ ትርጉሞች አንዱ ይጎድላል፡} other {ከ{total} የተፈለጉ ትርጉሞች # ይጎዳሉ፡}}"
     },
     "document": {
       "emptyTitle": "የሚፈልጉትን ሰነድ ይግለጹ",

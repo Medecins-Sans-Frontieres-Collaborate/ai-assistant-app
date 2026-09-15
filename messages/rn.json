@@ -711,7 +711,9 @@
     "beta": "Beta",
     "copied": "Birakoporowe!",
     "clear": "Sukura",
-    "undo": "Subira inyuma"
+    "undo": "Subira inyuma",
+    "durationSeconds": "{count, plural, one {# isegonda} other {# amasegonda}}",
+    "durationMinutes": "{count, plural, one {# umunota} other {# iminota}}"
   },
   "terms": {
     "officialLanguages": "Verisiyo yemewe:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "Ingingo yo kurondera kuri web yarenze — turishura tudakoresheje ukurondera…",
       "codeInterpreterLimitReached": "Ingingo yo kurangura code yarenze — turishura tudakoze code…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Ubushakashatsi kuri dosiye y'ubumenyi ntivyagenze neza — inyishu ntizokoresha inyandiko z'umukozi"
+      "knowledgeSearchFailed": "Ubushakashatsi kuri dosiye y'ubumenyi ntivyagenze neza — inyishu ntizokoresha inyandiko z'umukozi",
+      "stillWorking": "Biracari gukorwa…"
     },
     "toolSummary": {
       "usedTools": "Ibikoresho {count, plural, one {# cakoreshejwe} other {# vyakoreshejwe}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "Tangu ikiganiro gishasha",
     "downloadDebugInfo": "Kurondera no gukuraho amakuru yo gutohoza",
     "includeMessageText": "Shiramwo inyandiko y’ubutumwa",
-    "ttsEquationPlaceholder": "ikigereranyo"
+    "ttsEquationPlaceholder": "ikigereranyo",
+    "modelTimedOut": "{model} ntiratangura kwishura mu gihe ca {duration}. Irashobora kuba ifise akazi kenshi — murashobora kurindira kurenza, canke mugerageze iyindi model.",
+    "modelTimedOutAtMaximum": "{model} ntiratangura kwishura mu gihe ca {duration}, ari naco gihe kinini gishoboka. Gerageza gusubira, canke ukoreshe iyindi model.",
+    "requestTimedOut": "Iyi dosiye yateguye igihe kirekire cane maze irahagarikwa {model} itarishura. Mushobora kwongereza igihe co kurindira, canke mugerageze iyindi model.",
+    "retryWaitingLonger": "Rindira gushika kuri {duration} hanyuma usubire ugerageze",
+    "alwaysWaitThisLong": "Burya rindira gushika kuri {duration}"
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",
@@ -1446,7 +1454,20 @@
     "Connections": "Imiyoboro",
     "DataBackup": "Data & Backup",
     "Export & Import": "Export & Import",
-    "exportImportDescription": "Kururuka ibiganiro vyawe, dosiye, n'ivyiyumviro nka file, canke usubizeho uhereye ku vyasohowe mbere."
+    "exportImportDescription": "Kururuka ibiganiro vyawe, dosiye, n'ivyiyumviro nka file, canke usubizeho uhereye ku vyasohowe mbere.",
+    "modelTimeout": {
+      "title": "Igihe co kurindira model",
+      "description": "Igihe co kurindira ko model itangura kwishura imbere yo guheba. Model zifise igikorwa kenshi canke mu bice vyuzuye zishobora gukenera igihe kinini. Iyo itangura kwishura, iri tegeko ntirigikora.",
+      "presetStandard": "Gisanzwe",
+      "presetPatient": "Kunywana",
+      "presetMaximum": "Cirenze",
+      "presetCustom": "Uhitamwo",
+      "customLabel": "Rindira gushika kuri",
+      "customUnit": "amasegonda",
+      "customHint": "Hagati ya {min} na {max} amasegonda.",
+      "preferModelTitle": "Hitamwo model wahisemwo",
+      "preferModelDescription": "Ntihindure model yikora iyo dosiye ihomvye. Ikosa rizogira inama yo guhindura."
+    }
   },
   "emptyState": {
     "greeting": "Ndagufasha nte?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "Iciyumviro kirakuwemo — wahinduye igice caco.",
       "suggestionDroppedMany": "Ivyiyumviro {count} birakuwemo — wahinduye ibice vyavyo.",
       "pendingRunActionTranslate": "Kuri gusubiramwo ubusubirizi",
-      "pendingRunActionAssess": "Kuri gusubiramwo isuzuma"
+      "pendingRunActionAssess": "Kuri gusubiramwo isuzuma",
+      "entryKind": "Ubwoko bwo kwinjiza",
+      "kindTerm": "Ijambo",
+      "kindAcronym": "Inyuguti zagufi",
+      "sourceExpansion": "Izina ryuzuye nk’uko riri (birashoboka)",
+      "targetExpansion": "Izina ryuzuye mu gisomwa (birashoboka)",
+      "acronymHint": "Inyuguti zagufi zihuza neza nk’uko zanditswe: WHO isigura “WHO”, ntisigura “who”. Amagambo yo, arashobora guhinduka izina uko avyanditswe.",
+      "glossaryCheckTitle": "Isuzuma rya glossaire",
+      "glossaryCheckPass": "{count, plural, one {Ijambo risabwa rarakoreshejwe.} other {Amagambo yose # yasabwe yarakoreshejwe.}}",
+      "glossaryCheckMissing": "{count, plural, one {# kuri {total} ryasabwe nta riraboneka:} other {# kuri {total} yasabwe ntaraboneka:}}"
     },
     "document": {
       "emptyTitle": "Sobanura igitabo ushaka",

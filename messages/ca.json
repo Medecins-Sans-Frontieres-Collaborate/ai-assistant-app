@@ -583,7 +583,9 @@
     "beta": "Beta",
     "copied": "Copiat!",
     "clear": "Neteja",
-    "undo": "Desfés"
+    "undo": "Desfés",
+    "durationSeconds": "{count, plural, one {# segon} other {# segons}}",
+    "durationMinutes": "{count, plural, one {# minut} other {# minuts}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "S'ha produït un error inesperat",
@@ -779,7 +781,8 @@
       "webSearchLimitReached": "S'ha assolit el límit diari de cerques web — es respon sense buscar…",
       "codeInterpreterLimitReached": "S'ha assolit el límit diari d'execució de codi — es respon sense executar codi…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Error en la cerca de la base de coneixement — la resposta no utilitzarà els documents de l’agent"
+      "knowledgeSearchFailed": "Error en la cerca de la base de coneixement — la resposta no utilitzarà els documents de l’agent",
+      "stillWorking": "Encara treballant…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# eina utilitzada} other {# eines utilitzades}}",
@@ -874,7 +877,12 @@
     "startNewConversation": "Comença una conversa nova",
     "downloadDebugInfo": "Descarrega la informació de depuració",
     "includeMessageText": "Inclou el text del missatge",
-    "ttsEquationPlaceholder": "equació"
+    "ttsEquationPlaceholder": "equació",
+    "modelTimedOut": "{model} no ha començat a respondre en {duration}. Pot estar ocupat — pots esperar més temps o provar un altre model.",
+    "modelTimedOutAtMaximum": "{model} no ha començat a respondre en {duration}, el temps màxim disponible. Torna-ho a provar o fes servir un altre model.",
+    "requestTimedOut": "Aquesta sol·licitud ha trigat massa i s'ha aturat abans que {model} pogués respondre. Pots permetre més temps o provar amb un altre model.",
+    "retryWaitingLonger": "Espera fins a {duration} i torna-ho a provar",
+    "alwaysWaitThisLong": "Espera sempre fins a {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -1262,7 +1270,20 @@
     "Connections": "Connexions",
     "DataBackup": "Dades i còpia de seguretat",
     "Export & Import": "Exporta i importa",
-    "exportImportDescription": "Descarrega els teus xats, carpetes i indicacions en un fitxer, o restaura'ls d'una exportació prèvia."
+    "exportImportDescription": "Descarrega els teus xats, carpetes i indicacions en un fitxer, o restaura'ls d'una exportació prèvia.",
+    "modelTimeout": {
+      "title": "Temps d'espera del model",
+      "description": "Temps que s'espera perquè un model comenci a respondre abans de cancel·lar. Els models més lents o regions ocupades poden necessitar més temps. Quan una resposta comença a transmetre's, ja no s'aplica.",
+      "presetStandard": "Estàndard",
+      "presetPatient": "Pacient",
+      "presetMaximum": "Màxim",
+      "presetCustom": "Personalitzat",
+      "customLabel": "Espera fins a",
+      "customUnit": "segons",
+      "customHint": "Entre {min} i {max} segons.",
+      "preferModelTitle": "Preferesc el meu model seleccionat",
+      "preferModelDescription": "No canviïs automàticament a un altre model quan una petició falla. L'error igualment oferirà el canvi."
+    }
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "S'ha descartat el suggeriment — has editat el seu fragment.",
       "suggestionDroppedMany": "S'han descartat {count} suggeriments — has editat els seus fragments.",
       "pendingRunActionTranslate": "Traducció de nou",
-      "pendingRunActionAssess": "Reavaluant"
+      "pendingRunActionAssess": "Reavaluant",
+      "entryKind": "Tipus d'element",
+      "kindTerm": "Terme",
+      "kindAcronym": "Acrònim",
+      "sourceExpansion": "Nom complet a l'original (opcional)",
+      "targetExpansion": "Nom complet a la traducció (opcional)",
+      "acronymHint": "Els acrònims coincideixen exactament tal com s'han escrit: WHO només per a \"WHO\" i mai per a \"who\". Els termes coincideixen amb qualsevol capitalització.",
+      "glossaryCheckTitle": "Verificació de glossari",
+      "glossaryCheckPass": "{count, plural, one {S'ha utilitzat el terme requerit.} other {S'han utilitzat tots els # termes requerits.}}",
+      "glossaryCheckMissing": "{count, plural, one {Falta # de {total} traducció requerida:} other {Falten # de {total} traduccions requerides:}}"
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",

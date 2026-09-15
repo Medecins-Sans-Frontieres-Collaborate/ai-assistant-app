@@ -608,7 +608,9 @@
     "beta": "تجريبي",
     "copied": "تم النسخ!",
     "clear": "مسح",
-    "undo": "تراجع"
+    "undo": "تراجع",
+    "durationSeconds": "{count, plural, one {# ثانية} other {# ثوانٍ}}",
+    "durationMinutes": "{count, plural, one {# دقيقة} other {# دقائق}}"
   },
   "chat": {
     "downloadAudio": "تنزيل الصوت",
@@ -750,7 +752,8 @@
       "webSearchLimitReached": "تم الوصول إلى حد البحث اليومي — سيتم الإجابة بدون بحث…",
       "codeInterpreterLimitReached": "تم الوصول إلى حد تشغيل الشيفرة اليومي — سيتم الإجابة بدون تشغيل الشيفرة…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "فشل البحث في قاعدة المعرفة — الإجابة لن تعتمد على مستندات الوكيل"
+      "knowledgeSearchFailed": "فشل البحث في قاعدة المعرفة — الإجابة لن تعتمد على مستندات الوكيل",
+      "stillWorking": "لا يزال يعمل…"
     },
     "toolSummary": {
       "usedTools": "تم استخدام {count, plural, one {أداة واحدة} other {{count} أدوات}}",
@@ -845,7 +848,12 @@
     "startNewConversation": "ابدأ محادثة جديدة",
     "downloadDebugInfo": "تنزيل معلومات التصحيح",
     "includeMessageText": "تضمين نص الرسالة",
-    "ttsEquationPlaceholder": "معادلة"
+    "ttsEquationPlaceholder": "معادلة",
+    "modelTimedOut": "لم يبدأ {model} في الرد خلال {duration}. قد يكون مشغولًا — يمكنك الانتظار أكثر، أو تجربة نموذج آخر.",
+    "modelTimedOutAtMaximum": "لم يبدأ {model} في الرد خلال {duration}، وهي أقصى مدة انتظار متاحة. حاول مرة أخرى أو جرب نموذجًا آخر.",
+    "requestTimedOut": "استغرقت هذه الطلبية وقتًا طويلاً للتحضير وتم إيقافها قبل أن يتمكن {model} من الإجابة. يمكنك السماح بمزيد من الوقت أو تجربة نموذج آخر.",
+    "retryWaitingLonger": "انتظر حتى {duration} وحاول مرة أخرى",
+    "alwaysWaitThisLong": "دائمًا انتظر حتى {duration}"
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",
@@ -1233,7 +1241,20 @@
     "Connections": "الاتصالات",
     "DataBackup": "البيانات والنسخ الاحتياطي",
     "Export & Import": "تصدير واستيراد",
-    "exportImportDescription": "نزّل محادثاتك، والمجلدات، والتنبيهات كملف، أو استعدها من تصدير سابق."
+    "exportImportDescription": "نزّل محادثاتك، والمجلدات، والتنبيهات كملف، أو استعدها من تصدير سابق.",
+    "modelTimeout": {
+      "title": "مدة انتظار النموذج",
+      "description": "مدة الانتظار لبدء إجابة النموذج قبل التوقف. قد يحتاج النماذج الأبطأ والمناطق المزدحمة لمزيد من الوقت. عند بدء الإجابة، لا ينطبق هذا الحد بعد ذلك.",
+      "presetStandard": "افتراضي",
+      "presetPatient": "طويل",
+      "presetMaximum": "أقصى",
+      "presetCustom": "مخصص",
+      "customLabel": "انتظر حتى",
+      "customUnit": "ثوانٍ",
+      "customHint": "بين {min} و {max} ثانية.",
+      "preferModelTitle": "تفضيل النموذج المحدد",
+      "preferModelDescription": "عدم التبديل التلقائي إلى نموذج آخر عند فشل الطلب. سيظل الخطأ يقترح التبديل."
+    }
   },
   "notFound": {
     "lostDog": "كلب ضائع"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "تم حذف الاقتراح — لقد قمت بتحرير المقطع.",
       "suggestionDroppedMany": "تم حذف {count} اقتراحات — لقد قمت بتحرير المقاطع.",
       "pendingRunActionTranslate": "إعادة الترجمة",
-      "pendingRunActionAssess": "إعادة التقييم"
+      "pendingRunActionAssess": "إعادة التقييم",
+      "entryKind": "نوع الإدخال",
+      "kindTerm": "مصطلح",
+      "kindAcronym": "اختصار",
+      "sourceExpansion": "الاسم الكامل في المصدر (اختياري)",
+      "targetExpansion": "الاسم الكامل في الترجمة (اختياري)",
+      "acronymHint": "تطابق الاختصارات يكون مطابقًا لما هو مكتوب: WHO تنطبق على \"WHO\"، ولا تنطبق أبدًا على \"who\". أما المصطلحات فتتطابق مع أي حالة أحرف.",
+      "glossaryCheckTitle": "مراجعة المصطلحات",
+      "glossaryCheckPass": "{count, plural, one {تم استخدام المصطلح المطلوب.} other {تم استخدام جميع المصطلحات المطلوبة وعددها #.}}",
+      "glossaryCheckMissing": "{count, plural, one {يوجد {total} ترجمة مطلوبة مفقودة:} other {يوجد # من {total} ترجمات مطلوبة مفقودة:}}"
     },
     "document": {
       "emptyTitle": "صف المستند الذي تريده",

@@ -711,7 +711,9 @@
     "beta": "Beta",
     "copied": "Koppiiɗo!",
     "clear": "Momtu",
-    "undo": "Firtu"
+    "undo": "Firtu",
+    "durationSeconds": "{count, plural, one {# saɗi} other {# saɗii}}",
+    "durationMinutes": "{count, plural, one {# hoɗɗo} other {# hoɗɗi}}"
   },
   "terms": {
     "officialLanguages": "Yamre laawɗuɗo:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "Limmorgol web search maa e o jooɗii — nana fowde e jamfa search…",
       "codeInterpreterLimitReached": "Limmorgol code execution maa e o jooɗii — nana fowde e jamfa running code…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Naatde-ɗaaɗo goonga so tawii waawaa annditir—joopondirde mbayka agent maa waawaa ummorɗe."
+      "knowledgeSearchFailed": "Naatde-ɗaaɗo goonga so tawii waawaa annditir—joopondirde mbayka agent maa waawaa ummorɗe.",
+      "stillWorking": "Ton e jam..."
     },
     "toolSummary": {
       "usedTools": "Njoɓɗo {count, plural, one {# nguurndam} other {# nguurndeeji}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "Fuɗɗo konngol hesere",
     "downloadDebugInfo": "Aawto caggal jayngol",
     "includeMessageText": "Naatnu tinnda konngol",
-    "ttsEquationPlaceholder": "hawtirde"
+    "ttsEquationPlaceholder": "hawtirde",
+    "modelTimedOut": "{model} waɗaani waawan fuɗɗitde e {duration}. Nde mo ina hokkude tuma — aɗa waawi waawi haɗagol, walla a yiɗi ɗiɗi model golle.",
+    "modelTimedOutAtMaximum": "{model} waɗaani waawan fuɗɗitde e {duration}, tuma makko mawɗo. Faale fii, walla a yiɗi model goɗɗo.",
+    "requestTimedOut": "Ndee jokka tawi tuma leydi e naatanii ɗum e hoore {model} waawataa yamiroore. Aɗa waawi bolle tuma, walla jokkondir e model goɗɗo.",
+    "retryWaitingLonger": "Aɗa waawi waawi e {duration} jokkondir",
+    "alwaysWaitThisLong": "Naat a waawi bolle e {duration} ko feccere"
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1446,7 +1454,20 @@
     "Connections": "Jokkere",
     "DataBackup": "Data & Backup",
     "Export & Import": "Export & Import",
-    "exportImportDescription": "Dowload chat maa, folders, e prompts ɗe umma file, walla jettinde e export fowre mum."
+    "exportImportDescription": "Dowload chat maa, folders, e prompts ɗe umma file, walla jettinde e export fowre mum.",
+    "modelTimeout": {
+      "title": "Tuma nuttoo model",
+      "description": "Tuma yetta e model jokkondir ka kadi yamiroore. Model goɗɗi gasa e lesdi jamɗo maa tawii tuma makko ina waawi makko heɓde. So model mawnude jokkondir, tuma golle maa waawataa.",
+      "presetStandard": "Looɓirde",
+      "presetPatient": "Eɓɓude",
+      "presetMaximum": "Maɗɗo",
+      "presetCustom": "Sabu",
+      "customLabel": "Bolle ko faa",
+      "customUnit": "saɗii",
+      "customHint": "Haala e {min} e {max} saɗii.",
+      "preferModelTitle": "Balloo model ngal mi suɓi",
+      "preferModelDescription": "Aɗa waawi waawan feccitaade model goɗɗo so jokka weelli. Jiraa walla miɗo hokkude e model goɗɗo."
+    }
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "Gollal ngol mbaydi — a deftee ndaɗo makko.",
       "suggestionDroppedMany": "{count} gollal mbaydi — a deftee ndaɗo makko.",
       "pendingRunActionTranslate": "Ina tuɓɓitere e yimɓe",
-      "pendingRunActionAssess": "Ina rewisira"
+      "pendingRunActionAssess": "Ina rewisira",
+      "entryKind": "Kisal nde ina jokka",
+      "kindTerm": "Kelal",
+      "kindAcronym": "Sangirde",
+      "sourceExpansion": "Innde mum fow (volontaire)",
+      "targetExpansion": "Innde mum fow e yi'ugol (volontaire)",
+      "acronymHint": "Sangirde ina faamii ko ɗum wayi: WHO ngolto “WHO”, tee faamataa “who”. Ceggal ina faami ɗum e no feewi kala.",
+      "glossaryCheckTitle": "Ceŋol bokkoy",
+      "glossaryCheckPass": "{count, plural, one {Kelal moɗɗo jokkude.} other {Ekelal # moɓɓi jokkude.}}",
+      "glossaryCheckMissing": "{count, plural, one {Kelal # e {total} jokkude waawataa:} other {# e {total} kelal jokkude waawataa:}}"
     },
     "document": {
       "emptyTitle": "Winndu lan binndi dannde maa",

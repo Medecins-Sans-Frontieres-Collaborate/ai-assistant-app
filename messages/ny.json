@@ -711,7 +711,9 @@
     "beta": "Beta",
     "copied": "Zalembedwa!",
     "clear": "Chotsani",
-    "undo": "Bwezerani"
+    "undo": "Bwezerani",
+    "durationSeconds": "{count, plural, one {# sekondi} other {# masekondi}}",
+    "durationMinutes": "{count, plural, one {# mphindi} other {# mphindi}}"
   },
   "terms": {
     "officialLanguages": "Mtundu waumulungu:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "Mwafika pa malire a kufufuza pa webusaiti tsiku lero — tikuyankha popanda kufufuza…",
       "codeInterpreterLimitReached": "Mwafika pa malire a kuthamanga malamulo tsiku lero — tikuyankha popanda kuthamanga malamulo…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Kusaka kachidziwitso kulephera — yankho siligwiritsa ntchito zolemba za agent"
+      "knowledgeSearchFailed": "Kusaka kachidziwitso kulephera — yankho siligwiritsa ntchito zolemba za agent",
+      "stillWorking": "Ikadali ikugwira ntchito…"
     },
     "toolSummary": {
       "usedTools": "Zida zogwiritsidwa ntchito {count, plural, one {# chida} other {# zida}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "Yambitsa kukambirana kwatsopano",
     "downloadDebugInfo": "Tsitsani zambiri za debug",
     "includeMessageText": "Phatikizani mawu a uthenga",
-    "ttsEquationPlaceholder": "chilinganizo"
+    "ttsEquationPlaceholder": "chilinganizo",
+    "modelTimedOut": "{model} sinayambe kuyankha mkati mwa {duration}. Ikhoza kukhala yadzaza—mutha kudikirira pang’ono, kapena kuyesa model ina.",
+    "modelTimedOutAtMaximum": "{model} sinayambe kuyankha mkati mwa {duration}, nthawi yayitali kwambiri yololeka. Yesani kachiwiri, kapena model ina.",
+    "requestTimedOut": "Pempho ili latenga nthawi yaitali kukonzekera ndipo layimitsidwa asanayankhe {model}. Mutha kulola nthawi yayitali, kapena kuyesa model ina.",
+    "retryWaitingLonger": "Dikirirani mpaka {duration} ndiyeno yesaninso",
+    "alwaysWaitThisLong": "Nthawi zonse dikirani mpaka {duration}"
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -1446,7 +1454,20 @@
     "Connections": "Zolumikizana",
     "DataBackup": "Ma data & Kubwezeretsa",
     "Export & Import": "Tumizani kunja & Landirani",
-    "exportImportDescription": "Tsitsani macheza anu, mafoda, ndi ma prompts monga fayilo, kapena bweretsani kuchokera pa fayilo yosungidwa kale."
+    "exportImportDescription": "Tsitsani macheza anu, mafoda, ndi ma prompts monga fayilo, kapena bweretsani kuchokera pa fayilo yosungidwa kale.",
+    "modelTimeout": {
+      "title": "Nthawi yolimbikira model",
+      "description": "Nthawi yokonzekera kudikirira model asanayambe kuyankha musanasiyire. Ma model okokedwa ndi madera odzaza amafunikira zambiri. Akayamba kuyankha, malamulowa sapitiriranso.",
+      "presetStandard": "Yoyenera",
+      "presetPatient": "Yoleza Mtima",
+      "presetMaximum": "Yapamwamba",
+      "presetCustom": "Makhazikidwe anu",
+      "customLabel": "Dikirirani mpaka",
+      "customUnit": "sekondi",
+      "customHint": "Pakati pa {min} ndi {max} sekondi.",
+      "preferModelTitle": "Sankhani model yanga",
+      "preferModelDescription": "Osamasintha model zokha ngati pempho laalephera. Cholakwika chidzapereka mwayi osintha."
+    }
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "Cholimbikitsa chachotsedwa — mwasintha ndime yake.",
       "suggestionDroppedMany": "Zolimbikitsa {count} zachotsedwa — mwasintha ndime zake.",
       "pendingRunActionTranslate": "Kumasulira kachiwiri",
-      "pendingRunActionAssess": "Kuwunikanso"
+      "pendingRunActionAssess": "Kuwunikanso",
+      "entryKind": "Mtundu wa cholembedwacho",
+      "kindTerm": "Mawu",
+      "kindAcronym": "Chidule",
+      "sourceExpansion": "Dzina lonse gwero (ngati mungafune)",
+      "targetExpansion": "Dzina lonse m’amasuliridwe (ngati mungafune)",
+      "acronymHint": "Zidule zimafanana ndendende monga zalembedwera: WHO zimagwirizana ndi “WHO”, osati “who”. Mawu amagwirizana ndi zilembo zilizonse.",
+      "glossaryCheckTitle": "Kuyendera mawu",
+      "glossaryCheckPass": "{count, plural, one {Mawu ofunikira agwiritsidwa ntchito.} other {Mawu onse # ofunikira agwiritsidwa ntchito.}}",
+      "glossaryCheckMissing": "{count, plural, one {# mwa {total} zomasulira zofunikira zasowa:} other {# mwa {total} zomasulira zofunikira zasowa:}}"
     },
     "document": {
       "emptyTitle": "Fotokozani chikalata chomwe mukufuna",

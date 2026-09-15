@@ -711,7 +711,9 @@
     "beta": "Beta",
     "copied": "Kopi!",
     "clear": "Efase",
-    "undo": "Anile"
+    "undo": "Anile",
+    "durationSeconds": "{count, plural, one {# segonn} other {# segonn}}",
+    "durationMinutes": "{count, plural, one {# minit} other {# minit}}"
   },
   "terms": {
     "officialLanguages": "Vèsyon ofisyèl:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "Limit rechèch entènèt chak jou rive — ap reponn san rechèch…",
       "codeInterpreterLimitReached": "Limit ekzekisyon kòd chak jou rive — ap reponn san kouri kòd…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Rechèch nan baz konesans lan echwe — repons lan pap itilize dokiman ajan an"
+      "knowledgeSearchFailed": "Rechèch nan baz konesans lan echwe — repons lan pap itilize dokiman ajan an",
+      "stillWorking": "Toujou ap travay..."
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# zouti itilize} other {# zouti yo itilize}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "Kòmanse yon nouvo konvèsasyon",
     "downloadDebugInfo": "Telechaje enfòmasyon analiz erè",
     "includeMessageText": "Enkli tèks mesaj la",
-    "ttsEquationPlaceholder": "ekwasyon"
+    "ttsEquationPlaceholder": "ekwasyon",
+    "modelTimedOut": "{model} pa t kòmanse reponn anvan {duration}. Li ka okipe — ou ka tann plis tan, oswa eseye yon lòt modèl.",
+    "modelTimedOutAtMaximum": "{model} pa t kòmanse reponn anvan {duration}, ki se pi long tan ou ka tann. Eseye ankò, oswa eseye yon lòt modèl.",
+    "requestTimedOut": "Demann sa a pran twòp tan pou prepare epi yo te sispann li anvan {model} te ka reponn. Ou ka bay plis tan, oswa eseye yon lòt modèl.",
+    "retryWaitingLonger": "Tann jiska {duration} epi eseye ankò",
+    "alwaysWaitThisLong": "Toujou tann jiska {duration}"
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1446,7 +1454,20 @@
     "Connections": "Koneksyon",
     "DataBackup": "Done & Sovgad",
     "Export & Import": "Ekspòtasyon & Enpòte",
-    "exportImportDescription": "Telechaje chat, dosye, ak fason ou yo kòm yon fichye, oswa retabli soti nan yon ekspòtasyon anvan."
+    "exportImportDescription": "Telechaje chat, dosye, ak fason ou yo kòm yon fichye, oswa retabli soti nan yon ekspòtasyon anvan.",
+    "modelTimeout": {
+      "title": "Tan ou ka tann pou modèl la",
+      "description": "Konbyen tan pou tann pou yon modèl kòmanse reponn anvan ou abandone. Modèl ki pi ralenti oswa zòn ki okipe ka bezwen plis tan. Yon fwa repons lan kòmanse, pa bezwen kontinye konte tan sa a.",
+      "presetStandard": "Estanda",
+      "presetPatient": "Pasyan",
+      "presetMaximum": "Maksimòm",
+      "presetCustom": "Pèsonalize",
+      "customLabel": "Tann jiska",
+      "customUnit": "segonn",
+      "customHint": "Ant {min} ak {max} segonn.",
+      "preferModelTitle": "Bay modèl mwen chwazi a prioritè",
+      "preferModelDescription": "Pa chanje otomatikman pou yon lòt modèl lè yon demann echwe. Erè a ap toujou ofri opsyon pou chanje."
+    }
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "Sijesyon efase — ou modifye pasaj li a.",
       "suggestionDroppedMany": "{count} sijesyon efase — ou modifye pasaj yo.",
       "pendingRunActionTranslate": "Nap tradui ankò",
-      "pendingRunActionAssess": "Nap re-evalye"
+      "pendingRunActionAssess": "Nap re-evalye",
+      "entryKind": "Kalite antre",
+      "kindTerm": "Tèm",
+      "kindAcronym": "Akwonim",
+      "sourceExpansion": "Non konplè nan sous (opsyonèl)",
+      "targetExpansion": "Non konplè nan tradiksyon (opsyonèl)",
+      "acronymHint": "Akwonim yo mache egzakteman jan yo ekri : WHO aplike pou \"WHO\", pa janm pou \"who\". Tèm yo mache ak nenpòt jan majiskil ekri.",
+      "glossaryCheckTitle": "Verifikasyon glosè",
+      "glossaryCheckPass": "{count, plural, one {Tèm obligatwa a te itilize.} other {Tout # tèm obligatwa yo te itilize.}}",
+      "glossaryCheckMissing": "{count, plural, one {# sou {total} tradiksyon obligatwa pa prezan :} other {# sou {total} tradiksyon obligatwa pa prezan :}}"
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",

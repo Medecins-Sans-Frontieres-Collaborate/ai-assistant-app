@@ -608,7 +608,9 @@
     "beta": "Beta",
     "copied": "Kopierat!",
     "clear": "Rensa",
-    "undo": "Ångra"
+    "undo": "Ångra",
+    "durationSeconds": "{count, plural, one {# sekund} other {# sekunder}}",
+    "durationMinutes": "{count, plural, one {# minut} other {# minuter}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "Ett oväntat fel uppstod",
@@ -804,7 +806,8 @@
       "webSearchLimitReached": "Daglig gräns för webbsök har uppnåtts — svarar utan sökning…",
       "codeInterpreterLimitReached": "Daglig gräns för kodkörning har uppnåtts — svarar utan att köra kod…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Sökning i kunskapsbasen misslyckades — svaret kommer inte att använda agentens dokument."
+      "knowledgeSearchFailed": "Sökning i kunskapsbasen misslyckades — svaret kommer inte att använda agentens dokument.",
+      "stillWorking": "Arbetar fortfarande…"
     },
     "toolSummary": {
       "usedTools": "Använt {count, plural, one {# verktyg} other {# verktyg}}",
@@ -899,7 +902,12 @@
     "startNewConversation": "Starta en ny konversation",
     "downloadDebugInfo": "Ladda ner felsökningsinformation",
     "includeMessageText": "Inkludera meddelandetext",
-    "ttsEquationPlaceholder": "ekvation"
+    "ttsEquationPlaceholder": "ekvation",
+    "modelTimedOut": "{model} började inte svara inom {duration}. Det kan vara upptaget — du kan vänta längre eller prova en annan modell.",
+    "modelTimedOutAtMaximum": "{model} började inte svara inom {duration}, vilket är den längsta väntetiden. Försök igen eller prova en annan modell.",
+    "requestTimedOut": "Denna begäran tog för lång tid att förbereda och stoppades innan {model} kunde svara. Du kan ge mer tid eller prova en annan modell.",
+    "retryWaitingLonger": "Vänta upp till {duration} och försök igen",
+    "alwaysWaitThisLong": "Vänta alltid upp till {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -1287,7 +1295,20 @@
     "Connections": "Anslutningar",
     "DataBackup": "Data & Säkerhetskopiering",
     "Export & Import": "Export & Import",
-    "exportImportDescription": "Ladda ner dina chattar, mappar och kommandon som en fil eller återställ från en tidigare export."
+    "exportImportDescription": "Ladda ner dina chattar, mappar och kommandon som en fil eller återställ från en tidigare export.",
+    "modelTimeout": {
+      "title": "Modellens väntetid",
+      "description": "Hur länge man ska vänta på att en modell ska börja svara innan man ger upp. Långsammare modeller och upptagna regioner kan behöva mer tid. När ett svar börjar strömma gäller inte denna inställning längre.",
+      "presetStandard": "Standard",
+      "presetPatient": "Tålmodig",
+      "presetMaximum": "Maximal",
+      "presetCustom": "Anpassad",
+      "customLabel": "Vänta upp till",
+      "customUnit": "sekunder",
+      "customHint": "Mellan {min} och {max} sekunder.",
+      "preferModelTitle": "Föredra min valda modell",
+      "preferModelDescription": "Byt inte automatiskt till en annan modell när en begäran misslyckas. Felet kommer fortfarande att erbjuda byte."
+    }
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Förslag borttaget — du redigerade dess avsnitt.",
       "suggestionDroppedMany": "{count} förslag borttagna — du redigerade deras avsnitt.",
       "pendingRunActionTranslate": "Översätter igen",
-      "pendingRunActionAssess": "Omvärderar"
+      "pendingRunActionAssess": "Omvärderar",
+      "entryKind": "Inmatningstyp",
+      "kindTerm": "Term",
+      "kindAcronym": "Akronym",
+      "sourceExpansion": "Fullständigt namn på originalspråk (valfritt)",
+      "targetExpansion": "Fullständigt namn i översättning (valfritt)",
+      "acronymHint": "Akronymer matchas exakt som inskrivna: WHO gäller för ”WHO”, aldrig för ”who”. Termer matchar oberoende av versaler/gemener.",
+      "glossaryCheckTitle": "Glossariekontroll",
+      "glossaryCheckPass": "{count, plural, one {Den obligatoriska termen användes.} other {Alla # obligatoriska termer användes.}}",
+      "glossaryCheckMissing": "{count, plural, one {# av {total} obligatoriska översättningar saknas:} other {# av {total} obligatoriska översättningar saknas:}}"
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",

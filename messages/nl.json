@@ -573,7 +573,9 @@
     "beta": "Bèta",
     "copied": "Gekopieerd!",
     "clear": "Wissen",
-    "undo": "Ongedaan maken"
+    "undo": "Ongedaan maken",
+    "durationSeconds": "{count, plural, one {# seconde} other {# seconden}}",
+    "durationMinutes": "{count, plural, one {# minuut} other {# minuten}}"
   },
   "errors": {
     "somethingWentWrong": "Er is iets misgegaan",
@@ -769,7 +771,8 @@
       "webSearchLimitReached": "Dagelijks limiet voor webzoeken bereikt — beantwoorden zonder zoekfunctie…",
       "codeInterpreterLimitReached": "Dagelijks limiet voor code-uitvoering bereikt — beantwoorden zonder code uit te voeren…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Zoeken in de kennisbank is mislukt — het antwoord gebruikt geen documenten van de agent."
+      "knowledgeSearchFailed": "Zoeken in de kennisbank is mislukt — het antwoord gebruikt geen documenten van de agent.",
+      "stillWorking": "Nog bezig…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# tool gebruikt} other {# tools gebruikt}}",
@@ -864,7 +867,12 @@
     "startNewConversation": "Nieuw gesprek starten",
     "downloadDebugInfo": "Debug-informatie downloaden",
     "includeMessageText": "Berichttekst toevoegen",
-    "ttsEquationPlaceholder": "vergelijking"
+    "ttsEquationPlaceholder": "vergelijking",
+    "modelTimedOut": "{model} is niet begonnen met antwoorden binnen {duration}. Het model kan bezig zijn — u kunt langer wachten of een ander model proberen.",
+    "modelTimedOutAtMaximum": "{model} is niet begonnen met antwoorden binnen {duration}, de maximale wachttijd. Probeer het opnieuw of gebruik een ander model.",
+    "requestTimedOut": "Het voorbereiden van dit verzoek duurde te lang en werd gestopt voordat {model} kon antwoorden. U kunt meer tijd toestaan of een ander model proberen.",
+    "retryWaitingLonger": "Wacht tot {duration} en probeer opnieuw",
+    "alwaysWaitThisLong": "Altijd wachten tot {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -1252,7 +1260,20 @@
     "Connections": "Verbindingen",
     "DataBackup": "Gegevens & Back-up",
     "Export & Import": "Exporteren & Importeren",
-    "exportImportDescription": "Download uw chats, mappen en prompts als een bestand, of herstel ze uit een eerdere export."
+    "exportImportDescription": "Download uw chats, mappen en prompts als een bestand, of herstel ze uit een eerdere export.",
+    "modelTimeout": {
+      "title": "Wachttijd model",
+      "description": "Hoelang er gewacht wordt op een antwoord van het model voordat wordt gestopt. Langzamere modellen en drukke regio's hebben mogelijk meer tijd nodig. Zodra een antwoord begint te streamen wordt deze instelling niet meer toegepast.",
+      "presetStandard": "Standaard",
+      "presetPatient": "Geduldig",
+      "presetMaximum": "Maximaal",
+      "presetCustom": "Aangepast",
+      "customLabel": "Wacht tot",
+      "customUnit": "seconden",
+      "customHint": "Tussen {min} en {max} seconden.",
+      "preferModelTitle": "Mijn geselecteerd model prefereren",
+      "preferModelDescription": "Niet automatisch naar een ander model overschakelen als een verzoek faalt. De foutmelding biedt nog steeds de mogelijkheid om te wisselen."
+    }
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Suggestie verwijderd — u heeft de passage bewerkt.",
       "suggestionDroppedMany": "{count} suggesties verwijderd — u heeft hun passages bewerkt.",
       "pendingRunActionTranslate": "Opnieuw vertalen",
-      "pendingRunActionAssess": "Opnieuw beoordelen"
+      "pendingRunActionAssess": "Opnieuw beoordelen",
+      "entryKind": "Itemtype",
+      "kindTerm": "Term",
+      "kindAcronym": "Acroniem",
+      "sourceExpansion": "Volledige naam in de brontaal (optioneel)",
+      "targetExpansion": "Volledige naam in de vertaling (optioneel)",
+      "acronymHint": "Acroniemen komen exact overeen zoals ingevoerd: WHO komt overeen met “WHO”, nooit met “who”. Termen matchen op elke hoofdlettergebruik.",
+      "glossaryCheckTitle": "Woordenlijstcontrole",
+      "glossaryCheckPass": "{count, plural, one {De vereiste term is gebruikt.} other {Alle # vereiste termen zijn gebruikt.}}",
+      "glossaryCheckMissing": "{count, plural, one {# van de {total} vereiste vertalingen ontbreekt:} other {# van de {total} vereiste vertalingen ontbreken:}}"
     },
     "document": {
       "emptyTitle": "Beschrijf het gewenste document",

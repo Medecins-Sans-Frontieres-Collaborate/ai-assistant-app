@@ -711,7 +711,9 @@
     "beta": "Bêta",
     "copied": "Akôta!",
     "clear": "Küata",
-    "undo": "Zûa na mbênî"
+    "undo": "Zûa na mbênî",
+    "durationSeconds": "{count, plural, one {# sǝgɔ} other {# sǝgɔ}}",
+    "durationMinutes": "{count, plural, one {# miníti} other {# miníti}}"
   },
   "terms": {
     "officialLanguages": "Version officiel:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "Limite ti mo na fâ web sô rî — mo yeke na bâ fâ…",
       "codeInterpreterLimitReached": "Limite ti sô na sô kôde sô rî — mo yeke na bâ sô kôde…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Sépêse ti mo ana ti bi tî sô ôko — azêlï lo ti agent ape na ko tî ayeke-linga ye."
+      "knowledgeSearchFailed": "Sépêse ti mo ana ti bi tî sô ôko — azêlï lo ti agent ape na ko tî ayeke-linga ye.",
+      "stillWorking": "Kozo ti kîrî…"
     },
     "toolSummary": {
       "usedTools": "Tool {count, plural, one {# ya kötï} other {# ya kötï}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "Kûê kodê mbênî",
     "downloadDebugInfo": "Zu debug info",
     "includeMessageText": "Gbia lângûi na mbi kodê",
-    "ttsEquationPlaceholder": "équation"
+    "ttsEquationPlaceholder": "équation",
+    "modelTimedOut": "{model} ala hû tî yéké sôngo na {duration}. Model ayeke keti—mo yeke kodro mingi, mô yeke gbanga model âgä.",
+    "modelTimedOutAtMaximum": "{model} ala hû tî yéké sôngo na {duration}, sôngo sô a yeke. Kete mo, mô yeke gbanga model âgä.",
+    "requestTimedOut": "Demanda ayeke sôngi lûngö bien na {model} ayeke zwî kwe ara. Mo yeke yembeti sôngo mingi, mô yeke gbanga model âgä.",
+    "retryWaitingLonger": "Yembeti sôngo na {duration} tî kete mo",
+    "alwaysWaitThisLong": "Yembeti sôngo na {duration} ninga"
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1446,7 +1454,20 @@
     "Connections": "Ködörö",
     "DataBackup": "Dönî & Kopi",
     "Export & Import": "Kupa & Kumâla",
-    "exportImportDescription": "Télechargê bâ ngangu, folder, na prompts na file, do billa dê mingbi tî kupa mbali."
+    "exportImportDescription": "Télechargê bâ ngangu, folder, na prompts na file, do billa dê mingbi tî kupa mbali.",
+    "modelTimeout": {
+      "title": "Sôngo tî yembeti model",
+      "description": "Sôngo sô mo yeke yembeti na model tî yéké ndini mä. Model sô ayeke keti, ana place sô ayeke bâga, sôngo mingi ayeke na wa. Model ayeke yéké nzönî, sôngo awô ténî ayeke na.",
+      "presetStandard": "Standard",
+      "presetPatient": "Yembeti",
+      "presetMaximum": "Maximum",
+      "presetCustom": "A yeke",
+      "customLabel": "Yembeti sôngo na",
+      "customUnit": "sǝgɔ",
+      "customHint": "Na {min} tî {max} sǝgɔ.",
+      "preferModelTitle": "Pênda model a mo a tî",
+      "preferModelDescription": "Ala gbanga model bâla tî bî tî demanda ayeke bô. Erö ayeke tî mbi kété model."
+    }
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "Likambeni ti gba na su — mo yângâ na bagian na mo.",
       "suggestionDroppedMany": "{count} likambeni ti gba na su — mo yângâ na bagian na wâne.",
       "pendingRunActionTranslate": "Na zîngîti mbi na translate",
-      "pendingRunActionAssess": "Na zîgü ti analyze"
+      "pendingRunActionAssess": "Na zîgü ti analyze",
+      "entryKind": "Sôrô",
+      "kindTerm": "Märä",
+      "kindAcronym": "Akronîm",
+      "sourceExpansion": "Ngbângö tî mbênî (vo tî pë tî zo)",
+      "targetExpansion": "Ngbângö tî lingbi (vo tî pë tî zo)",
+      "acronymHint": "Akronîm ayeke tî hû la mô tî yéké: WHO ayeke na \"WHO\", kékérê \"who\" ala. Märä ayeke hû ngû nkiri wâ.",
+      "glossaryCheckTitle": "Ködörö tî glossary",
+      "glossaryCheckPass": "{count, plural, one {Märä a yeke hû.} other {# märä a yeke hû.}}",
+      "glossaryCheckMissing": "{count, plural, one {# na {total} lingbi a yeke mbênî apê:} other {# na {total} lingbi a yeke mbênî apê:}}"
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",

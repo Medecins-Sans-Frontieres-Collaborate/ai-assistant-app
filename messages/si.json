@@ -575,7 +575,9 @@
     "beta": "බීටා",
     "copied": "පිටපත් විය!",
     "clear": "පිරිසිඳු කරන්න",
-    "undo": "අහෝසි කරන්න"
+    "undo": "අහෝසි කරන්න",
+    "durationSeconds": "{count, plural, one {තත්පර #} other {තත්පර #}}",
+    "durationMinutes": "{count, plural, one {විනාඩි #} other {විනාඩි #}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "අනපේක්ෂිත දෝෂයක් සිදු විය",
@@ -771,7 +773,8 @@
       "webSearchLimitReached": "දෛනික වෙබ් සෙවුම් සීමාව ළඟා වී ඇත — සෙවුම නොමැතිව පිළිතුරු දෙනවා…",
       "codeInterpreterLimitReached": "දෛනික කේත කළමණාකරණ සීමාව ළඟයි — කේතය ක්‍රියාත්මක නොකෙරේ…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "දැනුම් ගබඩා සෙවීම අසාර්ථකය — පිළිතුරට නියෝජිතයාගේ ලේඛන භාවිතා නොවේ"
+      "knowledgeSearchFailed": "දැනුම් ගබඩා සෙවීම අසාර්ථකය — පිළිතුරට නියෝජිතයාගේ ලේඛන භාවිතා නොවේ",
+      "stillWorking": "වැටහී සිටින්න..."
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {මෙවලමක් භාවිතා විය} other {මෙවලම් # ක් භාවිතා විය}}",
@@ -866,7 +869,12 @@
     "startNewConversation": "නව සංවාදයක් ආරම්භ කරන්න",
     "downloadDebugInfo": "නිවැරදි කිරීම් තොරතුරු බාගන්න",
     "includeMessageText": "පණිවිඩ පෙළ ඇතුළත් කරන්න",
-    "ttsEquationPlaceholder": "සමානතාවය"
+    "ttsEquationPlaceholder": "සමානතාවය",
+    "modelTimedOut": "{model} {duration} ඇතුළත ප්‍රතිචාරයක් ලබාදීමට පටන්ගෙන නොමැත. එය ව්‍යාපෘත වෙන්නක් ඇත — ඔබ තවත් රැඳී සිටිය හැක, හෝ වෙනත් නමක් උත්සාහ කරන්න.",
+    "modelTimedOutAtMaximum": "{model} {duration} ඇතුළත, වැඩිපුරම බලා සිටිය හැකි කාලය තුළ, ප්‍රතිචාරයක් ලබාදීමට ආරම්භ කර නැත. නැවත උත්සාහ කරන්න, හෝ වෙනත් නමක් උත්සාහ කරන්න.",
+    "requestTimedOut": "මෙම ඉල්ලීම සූදානම් කිරීමට වැඩි කාලයක් ගත් නිසා {model} විසින් පිළිතුරක් ලබාදීමට පෙර නවතා ඇත. ඔබට තවත් කාලයක් ලබාදිය හැක, හෝ වෙනත් නමක් උත්සාහ කරන්න.",
+    "retryWaitingLonger": "{duration} දක්වා රැඳී සිට නැවත උත්සාහ කරන්න",
+    "alwaysWaitThisLong": "සෑම විටම {duration} දක්වා රැඳී සිටින්න"
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",
@@ -1254,7 +1262,20 @@
     "Connections": "සම්බන්ධතා",
     "DataBackup": "දත්ත සහ උපස්ථානය",
     "Export & Import": "අපනයන හා ආනයන",
-    "exportImportDescription": "ඔබගේ සංවාද, ෆෝල්ඩර සහ ප්‍රතිඋත්ප්‍රේරක ගොනුවක් ලෙස බාගත කරන්න, හෝ පෙර අපනයනයකින් නැවත ප්‍රතිසාධනය කරන්න."
+    "exportImportDescription": "ඔබගේ සංවාද, ෆෝල්ඩර සහ ප්‍රතිඋත්ප්‍රේරක ගොනුවක් ලෙස බාගත කරන්න, හෝ පෙර අපනයනයකින් නැවත ප්‍රතිසාධනය කරන්න.",
+    "modelTimeout": {
+      "title": "නම බලා සිටින්නා කාලය",
+      "description": "ප්‍රතිචාරයක් සපයන්න ආරම්භ කරන තුරු රැඳී සිටින්න වන කාලය. මන්දගාමී නාම සහ ව්‍යාජ ප්‍රදේශවලින් වැඩි කාලයක් අවශ්‍ය විය හැක. පිළිතුරක් සජීවීව යෑම ආරම්භ වූ විට මෙය enää බලපාන්නේ නැහැ.",
+      "presetStandard": "සම්මත",
+      "presetPatient": "ඉවසීම",
+      "presetMaximum": "උපරිම",
+      "presetCustom": "අභිරුචි",
+      "customLabel": "දක්වා රැඳී සිටින්න",
+      "customUnit": "තත්පර",
+      "customHint": "තත්පර {min} - {max} අතර.",
+      "preferModelTitle": "මගේ තේරූ නිමාව ප්‍රමුඛ කරන්න",
+      "preferModelDescription": "ඉල්ලීම අසාර්ථක වූවිට ස්වයංක්‍රීයව වෙනත් නමකට යන්න එපා. දෝෂය ලැබු විට තවදුරටත් මාරු වීම සඳහා විකල්පයක් ලබාදේ."
+    }
   },
   "notFound": {
     "lostDog": "අහිමි වූ බල්ලා"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "යෝජනාව ඉවත දැමිනි — ඔබ එය සංස්කරණය කළා.",
       "suggestionDroppedMany": "යෝජනා {count}ක් ඉවත දැමුණි — ඔබ ඒවා සංස්කරණය කළා.",
       "pendingRunActionTranslate": "යළි පරිවර්තනය කරමින්",
-      "pendingRunActionAssess": "නව විමසුමක් සිදු කරමින්"
+      "pendingRunActionAssess": "නව විමසුමක් සිදු කරමින්",
+      "entryKind": "ඇතුල් වර්ගය",
+      "kindTerm": "පදය",
+      "kindAcronym": "සංක්ෂේපය",
+      "sourceExpansion": "මූලාශ්‍රයේ සම්පූර්ණ නාමය (විකල්ප)",
+      "targetExpansion": "පරිවර්තනයේ සම්පූර්ණ නාමය (විකල්ප)",
+      "acronymHint": "සංක්ෂේප මෙම වශයෙන්ම අනුකූල වේ: WHO කියන්නේ “WHO” ට පමණි, “who” ට නොවේ. පද ඕනෑම අක්ෂර වින්‍යාසය සඳහා අනුකූල වේ.",
+      "glossaryCheckTitle": "ශබ්දකෝෂ පරීක්ෂාව",
+      "glossaryCheckPass": "{count, plural, one {අවශ්‍ය පදය භාවිතා කරන ලදි.} other {සියලුම අවශ්‍ය පද # භාවිතා කරන ලදි.}}",
+      "glossaryCheckMissing": "{count, plural, one {අවශ්‍ය පරිවර්තන {total} න් #ක් අස්ථානගතයි:} other {අවශ්‍ය පරිවර්තන {total} න් # අස්ථානගතයි:}}"
     },
     "document": {
       "emptyTitle": "ඔබට අවශ්‍ය ලිපිය විස්තර කරන්න",

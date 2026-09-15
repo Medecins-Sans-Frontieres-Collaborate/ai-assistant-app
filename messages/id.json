@@ -575,7 +575,9 @@
     "beta": "Beta",
     "copied": "Disalin!",
     "clear": "Bersihkan",
-    "undo": "Urungkan"
+    "undo": "Urungkan",
+    "durationSeconds": "{count, plural, one {# detik} other {# detik}}",
+    "durationMinutes": "{count, plural, one {# menit} other {# menit}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "Terjadi kesalahan yang tidak terduga",
@@ -771,7 +773,8 @@
       "webSearchLimitReached": "Batas pencarian web harian tercapai — menjawab tanpa pencarian…",
       "codeInterpreterLimitReached": "Batas eksekusi kode harian tercapai — menjawab tanpa menjalankan kode…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Pencarian di basis pengetahuan gagal — jawaban tidak akan menggunakan dokumen agen"
+      "knowledgeSearchFailed": "Pencarian di basis pengetahuan gagal — jawaban tidak akan menggunakan dokumen agen",
+      "stillWorking": "Masih bekerja…"
     },
     "toolSummary": {
       "usedTools": "Digunakan {count, plural, one {# alat} other {# alat}}",
@@ -866,7 +869,12 @@
     "startNewConversation": "Mulai percakapan baru",
     "downloadDebugInfo": "Unduh info debug",
     "includeMessageText": "Sertakan teks pesan",
-    "ttsEquationPlaceholder": "persamaan"
+    "ttsEquationPlaceholder": "persamaan",
+    "modelTimedOut": "{model} tidak mulai merespons dalam waktu {duration}. Model mungkin sedang sibuk — Anda dapat menunggu lebih lama, atau coba model lain.",
+    "modelTimedOutAtMaximum": "{model} tidak mulai merespons dalam waktu {duration}, waktu tunggu terlama yang tersedia. Silakan coba lagi, atau pilih model lain.",
+    "requestTimedOut": "Permintaan ini memerlukan waktu terlalu lama untuk diproses dan dihentikan sebelum {model} dapat menjawab. Anda dapat memberi waktu lebih lama, atau coba model lain.",
+    "retryWaitingLonger": "Tunggu hingga {duration} dan coba lagi",
+    "alwaysWaitThisLong": "Selalu tunggu hingga {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -1254,7 +1262,20 @@
     "Connections": "Koneksi",
     "DataBackup": "Data & Cadangan",
     "Export & Import": "Ekspor & Impor",
-    "exportImportDescription": "Unduh chat, folder, dan prompt Anda sebagai file, atau pulihkan dari hasil ekspor sebelumnya."
+    "exportImportDescription": "Unduh chat, folder, dan prompt Anda sebagai file, atau pulihkan dari hasil ekspor sebelumnya.",
+    "modelTimeout": {
+      "title": "Waktu tunggu model",
+      "description": "Berapa lama menunggu model mulai merespons sebelum dihentikan. Model yang lebih lambat atau wilayah padat dapat memerlukan waktu lebih lama. Setelah respons mulai diterima, pengaturan ini tidak lagi berlaku.",
+      "presetStandard": "Standar",
+      "presetPatient": "Lebih Sabar",
+      "presetMaximum": "Maksimum",
+      "presetCustom": "Kustom",
+      "customLabel": "Tunggu hingga",
+      "customUnit": "detik",
+      "customHint": "Antara {min} dan {max} detik.",
+      "preferModelTitle": "Utamakan model yang saya pilih",
+      "preferModelDescription": "Jangan otomatis beralih ke model lain jika permintaan gagal. Pesan kesalahan masih akan menawarkan opsi ini."
+    }
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Saran dihapus — Anda telah mengedit bagiannya.",
       "suggestionDroppedMany": "{count} saran dihapus — Anda telah mengedit bagiannya.",
       "pendingRunActionTranslate": "Menerjemahkan ulang",
-      "pendingRunActionAssess": "Menilai ulang"
+      "pendingRunActionAssess": "Menilai ulang",
+      "entryKind": "Jenis entri",
+      "kindTerm": "Istilah",
+      "kindAcronym": "Akronim",
+      "sourceExpansion": "Nama lengkap di sumber (opsional)",
+      "targetExpansion": "Nama lengkap di terjemahan (opsional)",
+      "acronymHint": "Akronim harus sama persis seperti yang diketik: WHO hanya berlaku untuk “WHO”, tidak untuk “who”. Istilah dapat dikenali terlepas dari kapitalisasi.",
+      "glossaryCheckTitle": "Pemeriksaan glosarium",
+      "glossaryCheckPass": "{count, plural, one {Istilah wajib telah digunakan.} other {Semua # istilah wajib telah digunakan.}}",
+      "glossaryCheckMissing": "{count, plural, one {# dari {total} terjemahan wajib belum digunakan:} other {# dari {total} terjemahan wajib belum digunakan:}}"
     },
     "document": {
       "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",

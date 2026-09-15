@@ -711,7 +711,9 @@
     "beta": "Beta",
     "copied": "La koobiyeey!",
     "clear": "Nadiifi",
-    "undo": "Dib u noqosh"
+    "undo": "Dib u noqosh",
+    "durationSeconds": "{count, plural, one {# ilbiriqsi} other {# ilbiriqsi}}",
+    "durationMinutes": "{count, plural, one {# daqiiqo} other {# daqiiqo}}"
   },
   "terms": {
     "officialLanguages": "Nooca rasmiga ah:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "Xaddiga raadinta webka ee maalinlaha ah waa la gaaray — jawaab la’aan raadis…",
       "codeInterpreterLimitReached": "Xadka fulinta koodhka maalinlaha ah waa la gaaray — jawaab la’aan socodsiin koodh…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Baadhista ilaha aqoonta way fashilantay — jawaabtu ma adeegsan doonto dukumentiyada wakiilka."
+      "knowledgeSearchFailed": "Baadhista ilaha aqoonta way fashilantay — jawaabtu ma adeegsan doonto dukumentiyada wakiilka.",
+      "stillWorking": "Weli wuu shaqeynayaa…"
     },
     "toolSummary": {
       "usedTools": "Waxaa la isticmaalay {count, plural, one {# qalab} other {# qalabyo}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "Bilow wadahadal cusub",
     "downloadDebugInfo": "Soo degso macluumaadka cilad-baarista",
     "includeMessageText": "Ku dar qoraalka farriinta",
-    "ttsEquationPlaceholder": "isku-darka xisaabta"
+    "ttsEquationPlaceholder": "isku-darka xisaabta",
+    "modelTimedOut": "{model} kama bilaabin inuu ka jawaabo gudaha {duration}. Waxaa laga yaabaa inuu mashquulsan yahay — waxaad sugi kartaa wakhti dheer, ama isku day moodel kale.",
+    "modelTimedOutAtMaximum": "{model} kama bilaabin inuu ka jawaabo gudaha {duration}, taasoo ah waqtiga ugu dheer ee la sugi karo. Isku day mar kale ama dooro moodel kale.",
+    "requestTimedOut": "Codsigan ayaa waqtigiisii badnaa oo la joojiyay ka hor inta aan {model} jawaabin. Waad kordhin kartaa wakhtiga, ama isku day moodel kale.",
+    "retryWaitingLonger": "Sug ilaa {duration} oo dib u isku day",
+    "alwaysWaitThisLong": "Had iyo jeer sug ilaa {duration}"
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -1446,7 +1454,20 @@
     "Connections": "Xiriirro",
     "DataBackup": "Xog & Kaydin",
     "Export & Import": "Dhoofin & Soo Dejis",
-    "exportImportDescription": "Soo dejiso chat-yadaada, galalka, iyo xusuus-qorka feyl ahaan, ama ka soo cel export kii hore."
+    "exportImportDescription": "Soo dejiso chat-yadaada, galalka, iyo xusuus-qorka feyl ahaan, ama ka soo cel export kii hore.",
+    "modelTimeout": {
+      "title": "Waqtiga sugitaanka moodelka",
+      "description": "Mudada la sugo moodel si uu u bilaabo jawaab ka hor inta aan la joojin. Moodelada gaabiska ah ama deegaanada mashquulsan waxay u baahan karaan waqti dheeraad ah. Marka jawaabtu bilaabato in la socodsiiyo, tan laguma dabaqo mar dambe.",
+      "presetStandard": "Caadi",
+      "presetPatient": "Dulqaad",
+      "presetMaximum": "Ugu badnaan",
+      "presetCustom": "Gaarka ah",
+      "customLabel": "Sug ilaa",
+      "customUnit": "ilbiriqsi",
+      "customHint": "U dhexeeya {min} iyo {max} ilbiriqsi.",
+      "preferModelTitle": "Dooro moodelkayga la xushay",
+      "preferModelDescription": "Ha u wareegin moodel kale si toos ah marka codsi fashilmo. Khaladku weli wuxuu bixin doonaa beddelka."
+    }
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "Talo waa la tirtiray — waad beddeshay qoraalkeeda.",
       "suggestionDroppedMany": "{count} talo waa la tirtiray — waad beddeshay qoraaladooda.",
       "pendingRunActionTranslate": "Mar kale turjumaya",
-      "pendingRunActionAssess": "Dib-u-eegis mar kale"
+      "pendingRunActionAssess": "Dib-u-eegis mar kale",
+      "entryKind": "Nooca galitaanka",
+      "kindTerm": "Erey",
+      "kindAcronym": "Qafis",
+      "sourceExpansion": "Magaca buuxa ee ilaha (ikhtiyaari)",
+      "targetExpansion": "Magaca buuxa ee tarjumaada (ikhtiyaari)",
+      "acronymHint": "Qafisyadu waxay la eg yihiin siduu yahay: WHO waxay khusayneysaa \"WHO\", abidna \"who\". Ereyadu waxay la jaanqaadi karaan cabbir kasta oo xaraf ah.",
+      "glossaryCheckTitle": "Hubinta ereyga",
+      "glossaryCheckPass": "{count, plural, one {Ereyga loo baahnaa waa la isticmaalay.} other {Dhamaan # ereyada loo baahnaa waa la isticmaalay.}}",
+      "glossaryCheckMissing": "{count, plural, one {# ee {total} tarjumaadyada loo baahnaa waa ka maqan yahay:} other {# ee {total} tarjumaadyada loo baahnaa way ka maqan yihiin:}}"
     },
     "document": {
       "emptyTitle": "Sharax dukumintiga aad rabto",

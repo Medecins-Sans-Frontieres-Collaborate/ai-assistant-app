@@ -637,7 +637,9 @@
     "beta": "测试版",
     "copied": "已复制！",
     "clear": "清除",
-    "undo": "撤销"
+    "undo": "撤销",
+    "durationSeconds": "{count, plural, one {# 秒} other {# 秒}}",
+    "durationMinutes": "{count, plural, one {# 分钟} other {# 分钟}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "发生了意外错误",
@@ -835,7 +837,8 @@
       "webSearchLimitReached": "已达今日网页搜索上限 —— 正在无搜索作答…",
       "codeInterpreterLimitReached": "已达今日代码执行上限 —— 正在无执行代码作答…",
       "m365Progress": "Microsoft 365：{detail}",
-      "knowledgeSearchFailed": "知识库搜索失败 — 回答将不会使用智能助手的文档"
+      "knowledgeSearchFailed": "知识库搜索失败 — 回答将不会使用智能助手的文档",
+      "stillWorking": "仍在处理…"
     },
     "toolSummary": {
       "usedTools": "已用 {count, plural, one {# 个工具} other {# 个工具}}",
@@ -930,7 +933,12 @@
     "startNewConversation": "开始新对话",
     "downloadDebugInfo": "下载调试信息",
     "includeMessageText": "包含消息内容",
-    "ttsEquationPlaceholder": "公式"
+    "ttsEquationPlaceholder": "公式",
+    "modelTimedOut": "{model} 在 {duration} 内未开始响应。它可能正繁忙 — 您可以等待更久，或尝试其他模型。",
+    "modelTimedOutAtMaximum": "{model} 在最长等待时间 {duration} 内未开始响应。请重试或选择其他模型。",
+    "requestTimedOut": "该请求准备时间过长，在 {model} 回应前已被停止。您可以延长等待时间，或尝试其他模型。",
+    "retryWaitingLonger": "最多等待 {duration} 后重试",
+    "alwaysWaitThisLong": "始终最多等待 {duration}"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1318,7 +1326,20 @@
     "Connections": "连接",
     "DataBackup": "数据与备份",
     "Export & Import": "导出与导入",
-    "exportImportDescription": "将您的聊天、文件夹和提示下载为文件，或从之前的导出恢复。"
+    "exportImportDescription": "将您的聊天、文件夹和提示下载为文件，或从之前的导出恢复。",
+    "modelTimeout": {
+      "title": "模型等待时间",
+      "description": "等待模型开始响应的最长时间，超时即放弃。较慢模型和繁忙区域可能需要更长时间。一旦开始有答复流出，不再受此限制。",
+      "presetStandard": "标准",
+      "presetPatient": "耐心",
+      "presetMaximum": "最大",
+      "presetCustom": "自定义",
+      "customLabel": "最多等待",
+      "customUnit": "秒",
+      "customHint": "介于 {min} 到 {max} 秒之间。",
+      "preferModelTitle": "优先使用我选择的模型",
+      "preferModelDescription": "当请求失败时不自动切换模型。仍可在错误提示中手动切换。"
+    }
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -2878,7 +2899,16 @@
       "suggestionDroppedOne": "已放弃建议——您已编辑该段落。",
       "suggestionDroppedMany": "已放弃 {count} 条建议——您已编辑这些段落。",
       "pendingRunActionTranslate": "再次翻译中",
-      "pendingRunActionAssess": "重新评估中"
+      "pendingRunActionAssess": "重新评估中",
+      "entryKind": "条目类型",
+      "kindTerm": "术语",
+      "kindAcronym": "缩写",
+      "sourceExpansion": "原文全称（可选）",
+      "targetExpansion": "译文全称（可选）",
+      "acronymHint": "缩写需与输入完全一致：“WHO” 仅匹配 “WHO”，不匹配 “who”。术语不区分大小写。",
+      "glossaryCheckTitle": "术语检查",
+      "glossaryCheckPass": "{count, plural, one {已使用所需术语。} other {已使用全部 # 个所需术语。}}",
+      "glossaryCheckMissing": "{count, plural, one {缺少 {total} 个所需译文中的 # 个：} other {缺少 {total} 个所需译文中的 # 个：}}"
     },
     "document": {
       "emptyTitle": "描述您需要的文档",

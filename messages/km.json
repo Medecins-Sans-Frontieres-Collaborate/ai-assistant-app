@@ -711,7 +711,9 @@
     "beta": "បេតា",
     "copied": "បានចម្លង!",
     "clear": "លុបចេញ",
-    "undo": "បោះបង់"
+    "undo": "បោះបង់",
+    "durationSeconds": "{count, plural, one {# វិនាទី} other {# វិនាទី}}",
+    "durationMinutes": "{count, plural, one {# នាទី} other {# នាទី}}"
   },
   "terms": {
     "officialLanguages": "កំណែផ្លូវការ៖",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "គ្រប់លំហាត់ស្វែងរក​តាមអ៊ីនធឺណិតប្រចាំថ្ងៃរួចហើយ — កំពុងឆ្លើយតបដោយគ្មានការស្វែងរក…",
       "codeInterpreterLimitReached": "បានឈានដល់កំណត់ប្រតិបត្តិកូដប្រចាំថ្ងៃ — កំពុងឆ្លើយតបដោយគ្មានការចាប់ផ្ដើមកូដ…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "ការស្វែងរកសំណួរព័ត៌មានបរាជ័យ — ចម្លើយនេះនឹងមិនប្រើឯកសាររបស់ agent ទេ។"
+      "knowledgeSearchFailed": "ការស្វែងរកសំណួរព័ត៌មានបរាជ័យ — ចម្លើយនេះនឹងមិនប្រើឯកសាររបស់ agent ទេ។",
+      "stillWorking": "កំពុងធ្វើការច្រើនទៀត…"
     },
     "toolSummary": {
       "usedTools": "បានប្រើ {count, plural, one {# ឧបករណ៍} other {# ឧបករណ៍}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "ចាប់ផ្តើមសន្ទនាថ្មី",
     "downloadDebugInfo": "ទាញយកព័ត៌មានបដិសេធកំហុស",
     "includeMessageText": "រួមបញ្ចូលអត្ថបទសារជាមួយ",
-    "ttsEquationPlaceholder": "សមីការ"
+    "ttsEquationPlaceholder": "សមីការ",
+    "modelTimedOut": "{model} មិនបានចាប់ផ្តើមឆ្លើយតបក្នុងរយៈពេល {duration} ទេ។ វាអាចកំពុងរវល់ — អ្នកអាចរង់ចាំបន្តទៀតឬសាកល្បងម៉ូដែលផ្សេង។",
+    "modelTimedOutAtMaximum": "{model} មិនបានចាប់ផ្តើមឆ្លើយតបក្នុងរយៈពេល {duration} ដែលជាពេលវេលរង់ចាំវែងបំផុត។ សូមព្យាយាមម្តងទៀត ឬសាកល្បងម៉ូដែលផ្សេង។",
+    "requestTimedOut": "សំណើនេះចំណាយពេលយូរពេកហើយត្រូវបានបញ្ឈប់មុនពេល {model} ឆ្លើយតប។ អ្នកអាចអនុញ្ញាតពេលវេលាបន្ថែម ឬសាកល្បងម៉ូដែលផ្សេង។",
+    "retryWaitingLonger": "រង់ចាំអតិបរមា {duration} ហើយសាកល្បងម្តងទៀត",
+    "alwaysWaitThisLong": "បង្អែករង់ចាំដល់ {duration}"
   },
   "transcript": {
     "originalTranscript": "អត្ថបទសម្រង់ដើម",
@@ -1446,7 +1454,20 @@
     "Connections": "ការតភ្ជាប់",
     "DataBackup": "ទិន្នន័យ និងការបម្រុងទុក",
     "Export & Import": "នាំចេញ និងនាំចូល",
-    "exportImportDescription": "ទាញយកការឆាត ថត បញ្ជា ជា​ឯកសារ ឬស្ដារឡើងវិញពីទីតាំងបម្រុងទុកមុន។"
+    "exportImportDescription": "ទាញយកការឆាត ថត បញ្ជា ជា​ឯកសារ ឬស្ដារឡើងវិញពីទីតាំងបម្រុងទុកមុន។",
+    "modelTimeout": {
+      "title": "ពេលវេលារង់ចាំម៉ូដែល",
+      "description": "រយៈពេលរង់ចាំមុនពេលបោះបង់បន្តិចជាមួយម៉ូដែល។ ម៉ូដែលយឺត និងតំបន់រវល់អាចចាំយូរជាងនេះ។ ពេលដែលចម្លើយចាប់ផ្តើមបង្ហាញ វានឹងមិនមានការរំលងការកំណត់នេះទៀតទេ។",
+      "presetStandard": "ស្តង់ដារ",
+      "presetPatient": "បណ្តោះអាសន្នយូរ",
+      "presetMaximum": "អតិបរមា",
+      "presetCustom": "ផ្ទាល់ខ្លួន",
+      "customLabel": "រង់ចាំអតិបរមា",
+      "customUnit": "វិនាទី",
+      "customHint": "ចន្លោះពី {min} ដល់ {max} វិនាទី។",
+      "preferModelTitle": "ពេញចិត្តម៉ូដែលដែលខ្ញុំជ្រើស",
+      "preferModelDescription": "កុំប្ដូរទៅម៉ូដែលផ្សេងដោយស្វ័យប្រវត្តិពេលសំណើបរាជ័យ។ កំហុសនេះនៅតែមើលឃើញជំរើសប្ដូរ។"
+    }
   },
   "emptyState": {
     "greeting": "តើយើងអាចជួយអ្វីបានខ្លះ?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "បានលុបសំណើ — អ្នកបានកែសម្រួលអត្ថបទនេះ។",
       "suggestionDroppedMany": "បានលុបសំណើ {count} — អ្នកបានកែសម្រួលអត្ថបទទាំងនេះ។",
       "pendingRunActionTranslate": "កំពុងបកប្រែម្ដងទៀត",
-      "pendingRunActionAssess": "កំពុងពិនិត្យឡើងវិញម្ដងទៀត"
+      "pendingRunActionAssess": "កំពុងពិនិត្យឡើងវិញម្ដងទៀត",
+      "entryKind": "ប្រភេទបញ្ចូល",
+      "kindTerm": "ពាក្យ",
+      "kindAcronym": "អក្រិតសម្ព័ន្ធ",
+      "sourceExpansion": "ឈ្មោះពេញក្នុងប្រភព (ជាជម្រើស)",
+      "targetExpansion": "ឈ្មោះពេញក្នុងបកប្រែ (ជាជម្រើស)",
+      "acronymHint": "អក្រិតសម្ព័ន្ធត្រូវគ្នាពីព្រោះវាយ: WHO មានន័យថា “WHO” មិនមែន “who” ទេ។ ពាក្យផ្ទៀងផ្ទាត់ទាំងអក្សរធំអក្សរតូច។",
+      "glossaryCheckTitle": "ពិនិត្យមើលសម្មាធិកថា",
+      "glossaryCheckPass": "{count, plural, one {បានប្រើពាក្យត្រូវការតែមួយ។} other {បានប្រើពាក្យត្រូវការ # ទាំងអស់។}}",
+      "glossaryCheckMissing": "{count, plural, one {ខ្វះការបកប្រែត្រូវការ # ចេញពី {total}:} other {ខ្វះការបកប្រែត្រូវការ # ចេញពី {total}:}}"
     },
     "document": {
       "emptyTitle": "ពណ៌នាអំពីឯកសារដែលអ្នកត្រូវការ",

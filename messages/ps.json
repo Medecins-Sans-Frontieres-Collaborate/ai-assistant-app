@@ -711,7 +711,9 @@
     "beta": "بتا",
     "copied": "کاپي شو!",
     "clear": "پاک کړئ",
-    "undo": "بیرته واخلئ"
+    "undo": "بیرته واخلئ",
+    "durationSeconds": "{count, plural, one {# ثانیه} other {# ثانیې}}",
+    "durationMinutes": "{count, plural, one {# دقیقه} other {# دقیقې}}"
   },
   "terms": {
     "officialLanguages": "رسمي نسخه:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "د ورځني ویب لټون حد ته ورسېدل — بدون له لټون ځواب ورکوو…",
       "codeInterpreterLimitReached": "د ورځني کوډ اجرا حد ته ورسېدل — بدون له کوډ چلولو ځواب ورکوو…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "د پوهې بنسټ لټون پاتې راغی — ځواب به د اجنټ اسنادو نه کاروي"
+      "knowledgeSearchFailed": "د پوهې بنسټ لټون پاتې راغی — ځواب به د اجنټ اسنادو نه کاروي",
+      "stillWorking": "لا هم کار روان دی…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# وسیله کارول شوې} other {# وسایل کارول شوي}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "نوې خبرې پيل کړئ",
     "downloadDebugInfo": "د Debug معلومات ډاونلوډ کړئ",
     "includeMessageText": "د پیغام متن هم شامل کړئ",
-    "ttsEquationPlaceholder": "معادله"
+    "ttsEquationPlaceholder": "معادله",
+    "modelTimedOut": "{model} د {duration} دننه ځواب نه دی پیل کړی. ښایي بوخت وي — تاسو کولی شئ لا پسې انتظار وباسئ یا بل ماډل وازمویئ.",
+    "modelTimedOutAtMaximum": "{model} د {duration}، چې تر ټولو اوږد انتظار دی، دننه ځواب نه دی پیل کړی. بیا هڅه وکړئ یا بل ماډل وازمویئ.",
+    "requestTimedOut": "دا غوښتنه ډېر وخت ونیوه او مخکې له دې چې {model} ځواب ورکړي، بنده شوه. تاسې کولی شئ نور وخت ورکړئ، یا بل ماډل وازمویئ.",
+    "retryWaitingLonger": "تر {duration} پورې انتظار وباسئ او بیا هڅه وکړئ",
+    "alwaysWaitThisLong": "تل تر {duration} پورې انتظار وکړئ"
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -1446,7 +1454,20 @@
     "Connections": "ارتباطات",
     "DataBackup": "ډاټا او بیک اپ",
     "Export & Import": "صادرول او واردول",
-    "exportImportDescription": "خپل چټونه، فولډرونه او لمونځې د فایل په ډول ښکته یا د پخواني صادرونې څخه بیرته راوباسئ."
+    "exportImportDescription": "خپل چټونه، فولډرونه او لمونځې د فایل په ډول ښکته یا د پخواني صادرونې څخه بیرته راوباسئ.",
+    "modelTimeout": {
+      "title": "د ماډل انتظار وخت",
+      "description": "څومره وخت د دې لپاره انتظار وشي چې ماډل ځواب پیل کړي مخکې له دې چې هڅه بنده شي. ورو ماډلونه او بوختې سیمې ډېر وخت ته اړتیا لري. کله چې ځواب استول پیل شي، دا نور نه تطبیقیږي.",
+      "presetStandard": "معیاري",
+      "presetPatient": "زغمناک",
+      "presetMaximum": "اعظمي",
+      "presetCustom": "دودیز",
+      "customLabel": "تر دې پورې انتظار وکړئ",
+      "customUnit": "ثانیې",
+      "customHint": "د {min} او {max} ثانیو ترمنځ.",
+      "preferModelTitle": "زما غوره شوی ماډل ترجیح کړئ",
+      "preferModelDescription": "کله چې یوه غوښتنه ناکامه شي، بل ماډل ته اوتومات ډول مه بدلیږئ. تېروتنه لا هم د بدلولو وړاندیز کوي."
+    }
   },
   "emptyState": {
     "greeting": "څنګه مرسته کولی شم؟",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "وړاندیز پریښودل شو — تاسې یې ټوټه ایډیټ کړه.",
       "suggestionDroppedMany": "{count} وړاندیزونه پریښودل شول — تاسې یې ټوټې ایډیټ کړې.",
       "pendingRunActionTranslate": "بیا ژباړه روانه ده",
-      "pendingRunActionAssess": "بیا ارزونه روانه ده"
+      "pendingRunActionAssess": "بیا ارزونه روانه ده",
+      "entryKind": "د تڼۍ ډول",
+      "kindTerm": "اصطلاح",
+      "kindAcronym": "لنډیز",
+      "sourceExpansion": "پوره نوم په مبدأ کې (اختیاري)",
+      "targetExpansion": "پوره نوم په ژباړه کې (اختیاري)",
+      "acronymHint": "لنډیزونه هماغسې سره سمون خوري لکه څنګه چې لیکل شوي وي: WHO یوازې له \"WHO\" سره تطبیق کوي، هیڅکله له \"who\" سره نه. اصطلاحات له هر ډول توري سره سمون خوري.",
+      "glossaryCheckTitle": "د کلیمو کتنه",
+      "glossaryCheckPass": "{count, plural, one {اړینه اصطلاح وکارول شوه.} other {ټولې # اړینې اصطلاحات وکارول شوې.}}",
+      "glossaryCheckMissing": "{count, plural, one {د {total} اړینو ژباړو څخه # نشته:} other {د {total} اړینو ژباړو څخه # نه دي شته:}}"
     },
     "document": {
       "emptyTitle": "هغه سند تشریح کړئ چې غواړئ",

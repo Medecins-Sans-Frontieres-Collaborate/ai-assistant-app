@@ -525,7 +525,9 @@
     "beta": "เบต้า",
     "copied": "คัดลอกแล้ว!",
     "clear": "ล้าง",
-    "undo": "ย้อนกลับ"
+    "undo": "ย้อนกลับ",
+    "durationSeconds": "{count, plural, one {# วินาที} other {# วินาที}}",
+    "durationMinutes": "{count, plural, one {# นาที} other {# นาที}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "เกิดข้อผิดพลาดที่ไม่คาดคิด",
@@ -721,7 +723,8 @@
       "webSearchLimitReached": "ถึงขีดจำกัดการค้นหาเว็บต่อวัน — กำลังตอบโดยไม่ค้นหา…",
       "codeInterpreterLimitReached": "ถึงขีดจำกัดการรันโค้ดต่อวัน — กำลังตอบโดยไม่รันโค้ด…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "การค้นหาจากคลังความรู้ล้มเหลว — คำตอบนี้จะไม่ใช้เอกสารของเอเจนต์"
+      "knowledgeSearchFailed": "การค้นหาจากคลังความรู้ล้มเหลว — คำตอบนี้จะไม่ใช้เอกสารของเอเจนต์",
+      "stillWorking": "กำลังดำเนินการ…"
     },
     "toolSummary": {
       "usedTools": "ใช้แล้ว {count, plural, one {# เครื่องมือ} other {# เครื่องมือ}}",
@@ -816,7 +819,12 @@
     "startNewConversation": "เริ่มการสนทนาใหม่",
     "downloadDebugInfo": "ดาวน์โหลดข้อมูลการดีบัก",
     "includeMessageText": "รวมข้อความในการสนทนาด้วย",
-    "ttsEquationPlaceholder": "สมการ"
+    "ttsEquationPlaceholder": "สมการ",
+    "modelTimedOut": "{model} ไม่เริ่มตอบสนองภายใน {duration} อาจกำลังยุ่งอยู่ — คุณสามารถรอให้นานขึ้น หรือเลือกโมเดลอื่น",
+    "modelTimedOutAtMaximum": "{model} ไม่เริ่มตอบสนองภายใน {duration} ซึ่งเป็นเวลารอสูงสุด ลองใหม่หรือลองใช้โมเดลอื่น",
+    "requestTimedOut": "คำขอนี้ใช้เวลานานเกินไปและถูกยกเลิกก่อนที่ {model} จะตอบกลับ คุณสามารถเพิ่มเวลารอ หรือเลือกโมเดลอื่น",
+    "retryWaitingLonger": "รอได้นานถึง {duration} แล้วลองใหม่",
+    "alwaysWaitThisLong": "รอได้นานถึง {duration} เสมอ"
   },
   "sidebar": {
     "collapseSidebar": "ยุบแถบด้านข้าง",
@@ -1204,7 +1212,20 @@
     "Connections": "การเชื่อมต่อ",
     "DataBackup": "ข้อมูล & สำรองข้อมูล",
     "Export & Import": "ส่งออก & นำเข้า",
-    "exportImportDescription": "ดาวน์โหลดการสนทนา โฟลเดอร์ และพรอมพ์เป็นไฟล์ หรือกู้คืนจากการส่งออกก่อนหน้า"
+    "exportImportDescription": "ดาวน์โหลดการสนทนา โฟลเดอร์ และพรอมพ์เป็นไฟล์ หรือกู้คืนจากการส่งออกก่อนหน้า",
+    "modelTimeout": {
+      "title": "ระยะเวลารอโมเดล",
+      "description": "ระยะเวลาที่จะรอให้โมเดลเริ่มตอบก่อนจะยกเลิก โมเดลที่ช้าหรือภูมิภาคที่มีผู้ใช้มากอาจต้องใช้เวลานานกว่า เมื่อเริ่มตอบแล้ว ข้อจำกัดนี้จะไม่ถูกนำไปใช้",
+      "presetStandard": "มาตรฐาน",
+      "presetPatient": "รอได้",
+      "presetMaximum": "สูงสุด",
+      "presetCustom": "กำหนดเอง",
+      "customLabel": "รอได้นานถึง",
+      "customUnit": "วินาที",
+      "customHint": "ระหว่าง {min} ถึง {max} วินาที",
+      "preferModelTitle": "ให้เลือกโมเดลที่ฉันตั้งไว้เสมอ",
+      "preferModelDescription": "อย่าสลับไปใช้โมเดลอื่นโดยอัตโนมัติเมื่อคำขอล้มเหลว จะยังมีตัวเลือกเปลี่ยนโมเดลในกรณีเกิดข้อผิดพลาด"
+    }
   },
   "notFound": {
     "lostDog": "สุนัขหาย"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "ยกเลิกข้อเสนอแนะแล้ว — คุณได้แก้ไขข้อความในส่วนดังกล่าว",
       "suggestionDroppedMany": "ยกเลิกข้อเสนอแนะ {count} รายการแล้ว — คุณได้แก้ไขข้อความในส่วนนั้น",
       "pendingRunActionTranslate": "กำลังแปลใหม่",
-      "pendingRunActionAssess": "กำลังประเมินซ้ำ"
+      "pendingRunActionAssess": "กำลังประเมินซ้ำ",
+      "entryKind": "ประเภทคำ",
+      "kindTerm": "คำศัพท์",
+      "kindAcronym": "ตัวย่อ",
+      "sourceExpansion": "ชื่อเต็มในต้นทาง (ตัวเลือก)",
+      "targetExpansion": "ชื่อเต็มในคำแปล (ตัวเลือก)",
+      "acronymHint": "ตัวย่อต้องตรงตามที่พิมพ์: WHO จะตรงกับ “WHO” เท่านั้น ไม่ตรงกับ “who” ส่วนคำศัพท์จะตรงกับทุกตัวพิมพ์ใหญ่-เล็ก",
+      "glossaryCheckTitle": "การตรวจสอบศัพท์เฉพาะ",
+      "glossaryCheckPass": "{count, plural, one {ใช้ศัพท์ที่จำเป็นแล้ว} other {ใช้ศัพท์ที่จำเป็นครบ # คำแล้ว}}",
+      "glossaryCheckMissing": "{count, plural, one {ขาดคำแปลที่จำเป็น # จากทั้งหมด {total} คำ:} other {ขาดคำแปลที่จำเป็น # จากทั้งหมด {total} คำ:}}"
     },
     "document": {
       "emptyTitle": "อธิบายประเภทเอกสารที่ต้องการ",

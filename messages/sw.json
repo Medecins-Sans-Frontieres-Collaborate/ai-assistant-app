@@ -608,7 +608,9 @@
     "beta": "Beta",
     "copied": "Imenakiliwa!",
     "clear": "Futa",
-    "undo": "Rudisha"
+    "undo": "Rudisha",
+    "durationSeconds": "{count, plural, one {# sekunde} other {# sekunde}}",
+    "durationMinutes": "{count, plural, one {# dakika} other {# dakika}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "Hitilafu isiyotarajiwa imetokea",
@@ -804,7 +806,8 @@
       "webSearchLimitReached": "Kikomo cha utafutaji mtandaoni kimefikiwa — inajibu bila kutafuta…",
       "codeInterpreterLimitReached": "Kikomo cha utekelezaji wa msimbo kimefikiwa — inajibu bila kuendesha msimbo…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Utafutaji wa taarifa haukufaulu — jibu halitatumia hati za wakala"
+      "knowledgeSearchFailed": "Utafutaji wa taarifa haukufaulu — jibu halitatumia hati za wakala",
+      "stillWorking": "Bado inaendelea kufanya kazi…"
     },
     "toolSummary": {
       "usedTools": "Imetumika {count, plural, one {# zana} other {# zana}}",
@@ -899,7 +902,12 @@
     "startNewConversation": "Anza mazungumzo mapya",
     "downloadDebugInfo": "Pakua taarifa za utatuzi wa hitilafu",
     "includeMessageText": "Jumlisha maandishi ya ujumbe",
-    "ttsEquationPlaceholder": "mlinganyo"
+    "ttsEquationPlaceholder": "mlinganyo",
+    "modelTimedOut": "{model} haikuanza kujibu ndani ya {duration}. Inaweza kuwa inashughulika — unaweza kusubiri zaidi, au ujaribu mfano mwingine.",
+    "modelTimedOutAtMaximum": "{model} haikuanza kujibu ndani ya {duration}, ambayo ndiyo muda mrefu zaidi unaweza kusubiri. Tafadhali jaribu tena, au tumia mfano mwingine.",
+    "requestTimedOut": "Ombi hili lilichukua muda mrefu kuandaliwa na limesitishwa kabla ya {model} kujibu. Unaweza kuongeza muda wa kusubiri, au ujaribu mfano mwingine.",
+    "retryWaitingLonger": "Subiri hadi {duration} na ujaribu tena",
+    "alwaysWaitThisLong": "Kusubiri daima hadi {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -1287,7 +1295,20 @@
     "Connections": "Muunganisho",
     "DataBackup": "Data na Hifadhi Nakala",
     "Export & Import": "Hamisha Nje & Ingiza",
-    "exportImportDescription": "Pakua gumzo zako, folda na michocheo kama faili, au rejesha kutoka kipengele cha awali."
+    "exportImportDescription": "Pakua gumzo zako, folda na michocheo kama faili, au rejesha kutoka kipengele cha awali.",
+    "modelTimeout": {
+      "title": "Muda wa kusubiri mfano",
+      "description": "Muda wa kusubiri mfano uanze kujibu kabla ya kukata tamaa. Mifano polepole na maeneo yenye msongamano huenda yahitaji muda zaidi. Mara jibu linapoanza kutolewa, huu muda hautatumika tena.",
+      "presetStandard": "Kawaida",
+      "presetPatient": "Subira",
+      "presetMaximum": "Kiwango cha juu",
+      "presetCustom": "Iliyobinafsishwa",
+      "customLabel": "Subiri hadi",
+      "customUnit": "sekunde",
+      "customHint": "Kati ya {min} na {max} sekunde.",
+      "preferModelTitle": "Pendelea mfano niliouchagua",
+      "preferModelDescription": "Usibadilishe mfano kiotomatiki ombi likishindikana. Ujumbe wa kosa bado utapendekeza kubadilisha."
+    }
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Pendekezo limeondolewa — umehariri sehemu yake.",
       "suggestionDroppedMany": "Mapendekezo {count} yameondolewa — umehariri sehemu zake.",
       "pendingRunActionTranslate": "Inatafsiri tena",
-      "pendingRunActionAssess": "Inapitia upya"
+      "pendingRunActionAssess": "Inapitia upya",
+      "entryKind": "Aina ya kipengele",
+      "kindTerm": "Neno",
+      "kindAcronym": "Kifupisho",
+      "sourceExpansion": "Jina kamili katika chanzo (hiari)",
+      "targetExpansion": "Jina kamili katika tafsiri (hiari)",
+      "acronymHint": "Vifupisho vinapaswa kufanana kabisa na ulivyoandika: WHO ni kwa “WHO” pekee, sio “who”. Maneno yanalingana na maandishi yoyote ya herufi kubwa/ndogo.",
+      "glossaryCheckTitle": "Ukaguzi wa kamusi",
+      "glossaryCheckPass": "{count, plural, one {Neno lililohitajika limetumiwa.} other {Maneno yote # yaliyohitajika yametumiwa.}}",
+      "glossaryCheckMissing": "{count, plural, one {# kati ya {total} tafsiri zinazohitajika haipo:} other {# kati ya {total} tafsiri zinazohitajika hazipo:}}"
     },
     "document": {
       "emptyTitle": "Eleza unachohitaji kwenye hati",

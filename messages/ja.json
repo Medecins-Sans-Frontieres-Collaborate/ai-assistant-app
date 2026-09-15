@@ -608,7 +608,9 @@
     "beta": "ベータ",
     "copied": "コピーしました！",
     "clear": "クリア",
-    "undo": "元に戻す"
+    "undo": "元に戻す",
+    "durationSeconds": "{count, plural, one {# 秒} other {# 秒}}",
+    "durationMinutes": "{count, plural, one {# 分} other {# 分}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "予期しないエラーが発生しました",
@@ -804,7 +806,8 @@
       "webSearchLimitReached": "1日のウェブ検索上限に達しました — 検索なしで回答します…",
       "codeInterpreterLimitReached": "1日のコード実行上限に達しました — コード実行なしで回答します…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "ナレッジベース検索に失敗しました—回答にはエージェントのドキュメントが使用されません"
+      "knowledgeSearchFailed": "ナレッジベース検索に失敗しました—回答にはエージェントのドキュメントが使用されません",
+      "stillWorking": "処理中…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# 件のツールを使用} other {# 件のツールを使用}}",
@@ -899,7 +902,12 @@
     "startNewConversation": "新しい会話を始める",
     "downloadDebugInfo": "デバッグ情報をダウンロード",
     "includeMessageText": "メッセージ本文を含める",
-    "ttsEquationPlaceholder": "数式"
+    "ttsEquationPlaceholder": "数式",
+    "modelTimedOut": "{model} が {duration} 以内に応答を開始しませんでした。混雑している可能性があります。もう少し待つか、他のモデルをお試しください。",
+    "modelTimedOutAtMaximum": "{model} が最長待機時間である {duration} 以内に応答を開始しませんでした。再試行するか、他のモデルをお試しください。",
+    "requestTimedOut": "このリクエストの準備に時間がかかりすぎたため、{model} が応答する前に停止しました。さらに長く待つか、他のモデルをお試しください。",
+    "retryWaitingLonger": "最大 {duration} 待って再試行",
+    "alwaysWaitThisLong": "常に最大 {duration} 待機する"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -1287,7 +1295,20 @@
     "Connections": "接続",
     "DataBackup": "データとバックアップ",
     "Export & Import": "エクスポートとインポート",
-    "exportImportDescription": "チャット、フォルダ、プロンプトをファイルとしてダウンロードするか、以前のエクスポートから復元します。"
+    "exportImportDescription": "チャット、フォルダ、プロンプトをファイルとしてダウンロードするか、以前のエクスポートから復元します。",
+    "modelTimeout": {
+      "title": "モデルの待機時間",
+      "description": "モデルが回答を始めるまでの待機時間の設定です。遅いモデルや混雑している地域では、より長い時間が必要な場合があります。一度回答のストリーミングが始まると、この設定は適用されません。",
+      "presetStandard": "標準",
+      "presetPatient": "長め",
+      "presetMaximum": "最大",
+      "presetCustom": "カスタム",
+      "customLabel": "最大待機時間",
+      "customUnit": "秒",
+      "customHint": "{min}〜{max} 秒の範囲で設定できます。",
+      "preferModelTitle": "選択したモデルを優先",
+      "preferModelDescription": "リクエストが失敗しても自動的に他のモデルに切り替えません。エラー時には切り替えの案内が表示されます。"
+    }
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "提案を削除しました — 対象の文章を編集しました。",
       "suggestionDroppedMany": "{count} 件の提案を削除しました — 対象の文章を編集しました。",
       "pendingRunActionTranslate": "再翻訳中",
-      "pendingRunActionAssess": "再評価中"
+      "pendingRunActionAssess": "再評価中",
+      "entryKind": "エントリー種別",
+      "kindTerm": "用語",
+      "kindAcronym": "頭字語",
+      "sourceExpansion": "元のフルネーム（任意）",
+      "targetExpansion": "翻訳のフルネーム（任意）",
+      "acronymHint": "頭字語は入力どおりに正確に一致します：WHO は “WHO” にのみ一致し、“who” には一致しません。用語は大文字・小文字に関係なく一致します。",
+      "glossaryCheckTitle": "用語集チェック",
+      "glossaryCheckPass": "{count, plural, one {必要な用語が使用されました。} other {すべての # 個の必要な用語が使用されました。}}",
+      "glossaryCheckMissing": "{count, plural, one {{total} 個中 # 個の必須翻訳が不足しています:} other {{total} 個中 # 個の必須翻訳が不足しています:}}"
     },
     "document": {
       "emptyTitle": "作成したい文書の説明",

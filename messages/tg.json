@@ -711,7 +711,9 @@
     "beta": "Бета",
     "copied": "Нусхабардорӣ шуд!",
     "clear": "Пок кардан",
-    "undo": "Баргардондан"
+    "undo": "Баргардондан",
+    "durationSeconds": "{count, plural, one {# сония} other {# сония}}",
+    "durationMinutes": "{count, plural, one {# дақиқа} other {# дақиқа}}"
   },
   "terms": {
     "officialLanguages": "Версияи расмӣ:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "Меъёри ҷустуҷӯи веб барои имрӯз тамом шуд — бе ҷустуҷӯ ҷавоб дода мешавад…",
       "codeInterpreterLimitReached": "Меъёри иҷрои рамз барои имрӯз тамом шуд — бе иҷрои рамз ҷавоб дода мешавад…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Ҷустуҷӯи базаи дониш муқаддас нашуд — ҷавоб ҳуҷҷатҳои агентро истифода намекунад."
+      "knowledgeSearchFailed": "Ҷустуҷӯи базаи дониш муқаддас нашуд — ҷавоб ҳуҷҷатҳои агентро истифода намекунад.",
+      "stillWorking": "Ҳанӯз кор мекунад…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# асбоб} other {# асбоб}} истифода шуд",
@@ -957,7 +960,12 @@
     "startNewConversation": "Сӯҳбати наверо оғоз кунед",
     "downloadDebugInfo": "Маълумоти ислоҳотро боргирӣ кунед",
     "includeMessageText": "Матни паёмро дохил кунед",
-    "ttsEquationPlaceholder": "ҳисобот"
+    "ttsEquationPlaceholder": "ҳисобот",
+    "modelTimedOut": "{model} дар давоми {duration} ҷавоб надод. Шояд машғул аст — шумо метавонед бештар интизор шавед ё модели дигарро санҷед.",
+    "modelTimedOutAtMaximum": "{model} дар тӯли {duration}, ки ҳадди аксар интизорӣ аст, ҷавоб надод. Боз кӯшиш кунед ё модели дигарро санҷед.",
+    "requestTimedOut": "Ин дархост хеле тӯлонӣ омода шуд ва қабл аз он ки {model} ҷавоб диҳад, қатъ карда шуд. Метавонед вақти бештар диҳед ё модели дигарро санҷед.",
+    "retryWaitingLonger": "То {duration} интизор шавед ва дубора кӯшиш кунед",
+    "alwaysWaitThisLong": "Ҳамеша то {duration} интизор шавед"
   },
   "transcript": {
     "originalTranscript": "Нусхаи аслӣ",
@@ -1446,7 +1454,20 @@
     "Connections": "Пайвастҳо",
     "DataBackup": "Захира ва Нусха",
     "Export & Import": "Содирот ва Воридот",
-    "exportImportDescription": "Чатҳо, папкаҳо ва вокунишҳои худро ҳамчун файл боргирӣ кунед ё аз содироти пешина барқарор намоед."
+    "exportImportDescription": "Чатҳо, папкаҳо ва вокунишҳои худро ҳамчун файл боргирӣ кунед ё аз содироти пешина барқарор намоед.",
+    "modelTimeout": {
+      "title": "Вақти интизории модел",
+      "description": "Чанд вақт бояд интизор шуд, ки модел ҷавоб медиҳад пеш аз он ки қатъ шавад. Моделҳои суст ва минтақаҳои серкор шояд вақти бештар талаб кунанд. Пас аз оғоз шудани ҷараёни ҷавоб, ин маҳдудият татбиқ намешавад.",
+      "presetStandard": "Стандартӣ",
+      "presetPatient": "Тобовар",
+      "presetMaximum": "Максималӣ",
+      "presetCustom": "Индивидуалӣ",
+      "customLabel": "Интизорӣ то",
+      "customUnit": "сония",
+      "customHint": "Аз {min} то {max} сония.",
+      "preferModelTitle": "Модели интихобкардаам авлотар бошад",
+      "preferModelDescription": "Ба таври худкор ба модели дигар гузариш накунед вақте ки дархост ноком мешавад. Ҳангоми хатогӣ гузариш пешниҳод мешавад."
+    }
   },
   "emptyState": {
     "greeting": "Чӣ гуна кӯмак карда метавонам?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "Пешниҳод нест шуд — порчаи онро таҳрир кардед.",
       "suggestionDroppedMany": "{count} пешниҳод нест шуданд — порчаҳои онҳоро таҳрир кардед.",
       "pendingRunActionTranslate": "Тарҷумаи дубора",
-      "pendingRunActionAssess": "Аз нав баҳогузорӣ"
+      "pendingRunActionAssess": "Аз нав баҳогузорӣ",
+      "entryKind": "Навъи сабт",
+      "kindTerm": "Истилоҳ",
+      "kindAcronym": "Сардафъа",
+      "sourceExpansion": "Номи пурра дар манбаъ (ихтиёрӣ)",
+      "targetExpansion": "Номи пурра дар тарҷума (ихтиёрӣ)",
+      "acronymHint": "Сардафъаҳо маҳз ҳамон тавре, ки навишта шудааст, мувофиқат мекунанд: \"WHO\" ба \"WHO\" дахл дорад, на ба \"who\". Истилоҳҳо бо ҳар навъ ҳарфбандӣ мувофиқат мекунанд.",
+      "glossaryCheckTitle": "Санҷиши луғат",
+      "glossaryCheckPass": "{count, plural, one {Истилоҳи зарурӣ истифода шуд.} other {Ҳамаи # истилоҳҳои зарурӣ истифода шуданд.}}",
+      "glossaryCheckMissing": "{count, plural, one {# аз {total} тарҷумаи зарурӣ намерасад:} other {# аз {total} тарҷумаҳои зарурӣ намерасанд:}}"
     },
     "document": {
       "emptyTitle": "Ҳуҷҷатеро, ки мехоҳед, тавсиф кунед",

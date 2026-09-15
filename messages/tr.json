@@ -608,7 +608,9 @@
     "beta": "Beta",
     "copied": "Kopyalandı!",
     "clear": "Temizle",
-    "undo": "Geri al"
+    "undo": "Geri al",
+    "durationSeconds": "{count, plural, one {# saniye} other {# saniye}}",
+    "durationMinutes": "{count, plural, one {# dakika} other {# dakika}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "Beklenmeyen bir hata oluştu",
@@ -804,7 +806,8 @@
       "webSearchLimitReached": "Günlük web arama sınırına ulaşıldı — aramasız yanıtlanıyor…",
       "codeInterpreterLimitReached": "Günlük kod çalıştırma sınırına ulaşıldı — kod çalıştırmadan yanıtlanıyor…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Bilgi tabanı araması başarısız oldu — yanıt, aracının belgelerini kullanmayacak"
+      "knowledgeSearchFailed": "Bilgi tabanı araması başarısız oldu — yanıt, aracının belgelerini kullanmayacak",
+      "stillWorking": "Hâlâ çalışıyor…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# araç kullanıldı} other {# araç kullanıldı}}",
@@ -899,7 +902,12 @@
     "startNewConversation": "Yeni bir konuşma başlat",
     "downloadDebugInfo": "Hata ayıklama bilgisini indir",
     "includeMessageText": "Mesaj metnini dahil et",
-    "ttsEquationPlaceholder": "denklem"
+    "ttsEquationPlaceholder": "denklem",
+    "modelTimedOut": "{model}, {duration} içinde yanıt vermeye başlamadı. Yoğun olabilir — daha fazla bekleyebilir veya başka bir modeli deneyebilirsiniz.",
+    "modelTimedOutAtMaximum": "{model}, mevcut en uzun bekleme süresi olan {duration} içinde yanıt vermeye başlamadı. Yeniden deneyin veya başka bir model seçin.",
+    "requestTimedOut": "Bu isteğin hazırlanması çok uzun sürdü ve {model} yanıt vermeden önce durduruldu. Daha fazla süre tanıyabilir veya başka bir model deneyebilirsiniz.",
+    "retryWaitingLonger": "{duration} kadar bekleyip tekrar deneyin",
+    "alwaysWaitThisLong": "Her zaman en fazla {duration} kadar bekle"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -1287,7 +1295,20 @@
     "Connections": "Bağlantılar",
     "DataBackup": "Veri & Yedekleme",
     "Export & Import": "Dışa Aktar & İçe Aktar",
-    "exportImportDescription": "Sohbetlerinizi, klasörlerinizi ve istemlerinizi bir dosya olarak indirin ya da önceki bir dışa aktarımdan geri yükleyin."
+    "exportImportDescription": "Sohbetlerinizi, klasörlerinizi ve istemlerinizi bir dosya olarak indirin ya da önceki bir dışa aktarımdan geri yükleyin.",
+    "modelTimeout": {
+      "title": "Model bekleme süresi",
+      "description": "Bir modelin yanıt vermeye başlaması için ne kadar bekleyeceğiniz. Daha yavaş modeller veya yoğun bölgeler daha fazla süre gerektirebilir. Yanıt akışı başladığında bu sınır geçerli değildir.",
+      "presetStandard": "Standart",
+      "presetPatient": "Sabırlı",
+      "presetMaximum": "Maksimum",
+      "presetCustom": "Özel",
+      "customLabel": "En fazla bekleme süresi",
+      "customUnit": "saniye",
+      "customHint": "{min} ile {max} saniye arasında.",
+      "preferModelTitle": "Seçili modelimi tercih et",
+      "preferModelDescription": "Bir istek başarısız olduğunda otomatik olarak başka bir modele geçme. Hata, model değiştirme seçeneğini yine de sunacak."
+    }
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Öneri silindi — ilgili bölümde değişiklik yaptınız.",
       "suggestionDroppedMany": "{count} öneri silindi — ilgili bölümlerde değişiklik yaptınız.",
       "pendingRunActionTranslate": "Tekrar çeviriliyor",
-      "pendingRunActionAssess": "Yeniden değerlendiriliyor"
+      "pendingRunActionAssess": "Yeniden değerlendiriliyor",
+      "entryKind": "Girdi türü",
+      "kindTerm": "Terim",
+      "kindAcronym": "Kısaltma",
+      "sourceExpansion": "Kaynakta tam adı (isteğe bağlı)",
+      "targetExpansion": "Çeviride tam adı (isteğe bağlı)",
+      "acronymHint": "Kısaltmalar, yazıldığı gibi tam eşleşir: WHO yalnızca “WHO” için geçerlidir, “who” için geçerli değildir. Terimler ise herhangi bir büyük-küçük harf kullanımıyla eşleşir.",
+      "glossaryCheckTitle": "Terim kontrolü",
+      "glossaryCheckPass": "{count, plural, one {Gerekli terim kullanıldı.} other {Tüm # gerekli terim kullanıldı.}}",
+      "glossaryCheckMissing": "{count, plural, one {{total} zorunlu çeviriden # eksik:} other {{total} zorunlu çeviriden # eksik:}}"
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",
