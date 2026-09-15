@@ -28,6 +28,14 @@ export const WORKFLOW_EVENT_CLOSE = '<<<END_WORKFLOW_EVENT>>>';
 export const SEARCH_INTERIM_OPEN = '<<<SEARCH_INTERIM>>>';
 export const SEARCH_INTERIM_CLOSE = '<<<END_SEARCH_INTERIM>>>';
 
+/**
+ * Keepalive activity the chat route emits while the pipeline is silent
+ * during a long pre-stream wait (issue #130). The parser only lets it
+ * drive the loader when no more specific activity ("Searching: …") is
+ * already showing — its job is keeping the socket alive, not narrating.
+ */
+export const HEARTBEAT_ACTIVITY_KEY = 'chat.activity.stillWorking';
+
 // ───────────────────────────────────────────────────────────────────
 // Payload shapes
 // ───────────────────────────────────────────────────────────────────
