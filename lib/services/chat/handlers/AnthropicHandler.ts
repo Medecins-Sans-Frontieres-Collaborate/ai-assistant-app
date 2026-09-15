@@ -184,7 +184,6 @@ export class AnthropicHandler extends ModelHandler {
     signal?: AbortSignal,
   ): Promise<ChatCompletionResponse> {
     const params = requestParams as any;
-    const requestOptions = signal ? { signal } : undefined;
 
     // Convert OpenAI message format to Anthropic format
     const anthropicMessages: AnthropicMessage[] = params.messages
@@ -206,31 +205,31 @@ export class AnthropicHandler extends ModelHandler {
 
     if (streamResponse) {
       // Return streaming response
-      const stream = await this.client.messages.stream(
-        {
-          model: params.model,
-          max_tokens: params.max_tokens || 8192,
-          messages: anthropicMessages,
-          system: params.metadata?.systemPrompt || undefined,
-          temperature: params.temperature,
-        },
-        requestOptions,
-      );
+      const streamParams = {
+        model: params.model,
+        max_tokens: params.max_tokens || 8192,
+        messages: anthropicMessages,
+        system: params.metadata?.systemPrompt || undefined,
+        temperature: params.temperature,
+      };
+      const stream = signal
+        ? await this.client.messages.stream(streamParams, { signal })
+        : await this.client.messages.stream(streamParams);
 
       // Convert Anthropic stream to OpenAI-compatible async iterable
       return this.convertStreamToOpenAIFormat(stream);
     } else {
       // Non-streaming request
-      const response = await this.client.messages.create(
-        {
-          model: params.model,
-          max_tokens: params.max_tokens || 8192,
-          messages: anthropicMessages,
-          system: params.metadata?.systemPrompt || undefined,
-          temperature: params.temperature,
-        },
-        requestOptions,
-      );
+      const createParams = {
+        model: params.model,
+        max_tokens: params.max_tokens || 8192,
+        messages: anthropicMessages,
+        system: params.metadata?.systemPrompt || undefined,
+        temperature: params.temperature,
+      };
+      const response = signal
+        ? await this.client.messages.create(createParams, { signal })
+        : await this.client.messages.create(createParams);
 
       // Convert Anthropic response to OpenAI format
       return this.convertResponseToOpenAIFormat(response);
