@@ -143,6 +143,14 @@ describe('translation glossary prompt injection — issue #131', () => {
     expect(block).not.toContain('c/d');
   });
 
+  it('escapes backslashes before pipes so a trailing backslash cannot un-escape a pipe', () => {
+    const block = buildGlossaryBlock(
+      [{ source: 'a\\|b', target: 'c\\d' }],
+      'see a\\|b here',
+    );
+    expect(block).toContain('| a\\\\\\|b | c\\\\d |');
+  });
+
   it('mergeGlossaryEntries: org entry wins across case, but an explicit word beside an acronym survives', () => {
     const merged = mergeGlossaryEntries(
       [{ source: 'IDP', target: 'personne déplacée' }],
