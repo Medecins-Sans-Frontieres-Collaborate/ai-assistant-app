@@ -1,5 +1,9 @@
 import { ChatContext } from '@/lib/services/chat/pipeline/ChatContext';
-import { ChatPipeline } from '@/lib/services/chat/pipeline/ChatPipeline';
+import {
+  ChatPipeline,
+  STAGE_TIMEOUTS,
+  resolveStageTimeouts,
+} from '@/lib/services/chat/pipeline/ChatPipeline';
 import { PipelineStage } from '@/lib/services/chat/pipeline/PipelineStage';
 
 import { ErrorCode, PipelineError } from '@/types/errors';
@@ -431,5 +435,123 @@ describe('ChatPipeline', () => {
       expect(result.processedContent?.metadata?.next).toBeUndefined();
       expect(result.errors).toHaveLength(1);
     });
+  });
+});
+
+describe('ChatPipeline - model timeout (issue #130)', () => {
+  it('resolveStageTimeouts overrides ONLY the model handler stages', () => {
+    const resolved = resolveStageTimeouts(240_000);
+    expect(resolved.StandardChatHandler).toBe(240_000);
+    expect(resolved.AgentChatHandler).toBe(240_000);
+    expect(resolved.FileProcessor).toBe(STAGE_TIMEOUTS.FileProcessor);
+    expect(resolved.ToolRouterEnricher).toBe(STAGE_TIMEOUTS.ToolRouterEnricher);
+    // Absent → the compiled defaults, untouched.
+    expect(resolveStageTimeouts(undefined)).toBe(STAGE_TIMEOUTS);
+    expect(STAGE_TIMEOUTS.StandardChatHandler).toBe(90_000);
+  });
+
+  it('never shortens the agent handler below its default (the client default is 90 s)', () => {
+    const resolved = resolveStageTimeouts(90_000);
+    expect(resolved.StandardChatHandler).toBe(90_000);
+    expect(resolved.AgentChatHandler).toBe(STAGE_TIMEOUTS.AgentChatHandler);
+    expect(resolveStageTimeouts(30_000).AgentChatHandler).toBe(
+      STAGE_TIMEOUTS.AgentChatHandler,
+    );
+    expect(resolveStageTimeouts(30_000).StandardChatHandler).toBe(30_000);
+  });
+
+  it('hands every stage a signal and aborts it when that stage times out', async () => {
+    let slowSignal: AbortSignal | undefined;
+    let fastSignal: AbortSignal | undefined;
+    const slowStage: PipelineStage = {
+      name: 'StandardChatHandler',
+      shouldRun: () => true,
+      execute: async (context) => {
+        slowSignal = context.stageSignal;
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        return context;
+      },
+    };
+    const fastStage: PipelineStage = {
+      name: 'FastStage',
+      shouldRun: () => true,
+      execute: async (context) => {
+        fastSignal = context.stageSignal;
+        return context;
+      },
+    };
+
+    const pipeline = new ChatPipeline([slowStage, fastStage], {
+      StandardChatHandler: 50,
+      FastStage: 1000,
+    });
+    const result = await pipeline.execute(createTestChatContext());
+
+    expect(slowSignal).toBeInstanceOf(AbortSignal);
+    expect(slowSignal!.aborted).toBe(true);
+    // The abort reason carries the same PIPELINE_TIMEOUT error the pipeline
+    // records, so handlers can tell a timeout from a client disconnect.
+    expect(slowSignal!.reason).toBeInstanceOf(PipelineError);
+    expect((slowSignal!.reason as PipelineError).code).toBe(
+      ErrorCode.PIPELINE_TIMEOUT,
+    );
+    expect((slowSignal!.reason as PipelineError).metadata?.stageName).toBe(
+      'StandardChatHandler',
+    );
+    expect((slowSignal!.reason as PipelineError).metadata?.timeoutMs).toBe(50);
+
+    // The stage that finished in time keeps an un-aborted signal.
+    expect(fastSignal).toBeInstanceOf(AbortSignal);
+    expect(fastSignal!.aborted).toBe(false);
+    expect(result.errors).toHaveLength(1);
+  });
+
+  it('never aborts a stage that returned in time, even after its timeout would have elapsed', async () => {
+    let signal: AbortSignal | undefined;
+    const stage: PipelineStage = {
+      name: 'StandardChatHandler',
+      shouldRun: () => true,
+      execute: async (context) => {
+        signal = context.stageSignal;
+        await new Promise((resolve) => setTimeout(resolve, 10));
+        return context;
+      },
+    };
+    const pipeline = new ChatPipeline([stage], { StandardChatHandler: 40 });
+    await pipeline.execute(createTestChatContext());
+    // Wait past the configured timeout: the timer was cleared, so nothing
+    // fires late against the (already consumed) stage.
+    await new Promise((resolve) => setTimeout(resolve, 80));
+    expect(signal!.aborted).toBe(false);
+  });
+
+  it('does not time out a handler whose Response BODY is slow — only the start counts', async () => {
+    // The handler returns immediately with a stream that takes far longer
+    // than the stage timeout to produce bytes. The stage must resolve on
+    // the Response, not on the body.
+    const slowBody = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        controller.enqueue(new TextEncoder().encode('hello'));
+        controller.close();
+      },
+    });
+    const handler: PipelineStage = {
+      name: 'StandardChatHandler',
+      shouldRun: () => true,
+      execute: async (context) => ({
+        ...context,
+        response: new Response(slowBody, {
+          headers: { 'Content-Type': 'text/plain' },
+        }),
+      }),
+    };
+    const pipeline = new ChatPipeline([handler], { StandardChatHandler: 30 });
+    const result = await pipeline.execute(createTestChatContext());
+
+    expect(result.errors).toHaveLength(0);
+    expect(result.response).toBeDefined();
+    // And the body still streams to completion afterwards, untimed.
+    expect(await result.response!.text()).toBe('hello');
   });
 });
