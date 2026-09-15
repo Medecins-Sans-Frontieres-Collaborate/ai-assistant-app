@@ -94,3 +94,106 @@ describe('ChatError', () => {
     ).not.toBeInTheDocument();
   });
 });
+
+describe('ChatError - model timeout (issue #130)', () => {
+  const timeout = {
+    kind: 'model' as const,
+    modelName: 'GPT-5.2',
+    seconds: 90,
+    longerSeconds: 180,
+  };
+
+  it('renders localized copy naming the model and the wait, not the server string', () => {
+    renderChatError({
+      error: 'Stage StandardChatHandler exceeded timeout of 90000ms',
+      errorCode: 'MODEL_TIMEOUT',
+      timeout,
+      onRetryLonger: vi.fn(),
+    });
+
+    expect(
+      screen.getByText(
+        "GPT-5.2 didn't start responding within 90 seconds. It may be busy — you can wait longer, or try another model.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/exceeded timeout/)).not.toBeInTheDocument();
+  });
+
+  it('replaces "Try again" with the longer-wait action and calls it with the escalated seconds', () => {
+    const onRetry = vi.fn();
+    const onRetryLonger = vi.fn();
+    renderChatError({
+      errorCode: 'MODEL_TIMEOUT',
+      timeout,
+      onRetry,
+      onRetryLonger,
+    });
+
+    expect(screen.queryByText('Try again')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByText('Wait up to 3 minutes and try again'));
+    expect(onRetryLonger).toHaveBeenCalledWith(180);
+    expect(onRetry).not.toHaveBeenCalled();
+  });
+
+  it('offers to persist the longer wait as the default', () => {
+    const onAlwaysWaitLonger = vi.fn();
+    renderChatError({
+      errorCode: 'MODEL_TIMEOUT',
+      timeout,
+      onRetryLonger: vi.fn(),
+      onAlwaysWaitLonger,
+    });
+
+    fireEvent.click(screen.getByText('Always wait up to 3 minutes'));
+    expect(onAlwaysWaitLonger).toHaveBeenCalledWith(180);
+  });
+
+  it('falls back to plain "Try again" once the ceiling has been used', () => {
+    const onRetry = vi.fn();
+    renderChatError({
+      errorCode: 'MODEL_TIMEOUT',
+      timeout: { ...timeout, seconds: 600, longerSeconds: null },
+      onRetry,
+      onRetryLonger: vi.fn(),
+      onAlwaysWaitLonger: vi.fn(),
+    });
+
+    expect(screen.getByText(/the longest wait available/)).toBeInTheDocument();
+    expect(screen.queryByText(/Wait up to/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Always wait/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByText('Try again'));
+    expect(onRetry).toHaveBeenCalled();
+  });
+
+  it('keeps the longer-wait action off the regenerate path', () => {
+    renderChatError({
+      errorCode: 'MODEL_TIMEOUT',
+      timeout,
+      canRetry: false,
+      onRetry: undefined,
+      canRegenerate: true,
+      onRegenerate: vi.fn(),
+      onRetryLonger: vi.fn(),
+    });
+
+    expect(screen.queryByText(/Wait up to/)).not.toBeInTheDocument();
+    expect(screen.getByText('Regenerate')).toBeInTheDocument();
+  });
+
+  it('uses request-level copy for a whole-request timeout', () => {
+    renderChatError({
+      errorCode: 'REQUEST_TIMEOUT',
+      timeout: { ...timeout, kind: 'request' },
+      onRetryLonger: vi.fn(),
+    });
+
+    expect(
+      screen.getByText(
+        /took too long to prepare and was stopped before GPT-5.2/,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Wait up to 3 minutes and try again'),
+    ).toBeInTheDocument();
+  });
+});

@@ -607,7 +607,9 @@
     "beta": "Beta",
     "copied": "Đã sao chép!",
     "clear": "Xóa",
-    "undo": "Hoàn tác"
+    "undo": "Hoàn tác",
+    "durationSeconds": "{count, plural, one {# giây} other {# giây}}",
+    "durationMinutes": "{count, plural, one {# phút} other {# phút}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "Đã xảy ra lỗi không mong muốn",
@@ -805,7 +807,8 @@
       "webSearchLimitReached": "Đã đạt giới hạn tìm kiếm web hàng ngày — trả lời mà không tìm kiếm…",
       "codeInterpreterLimitReached": "Đã đạt giới hạn thực thi mã hàng ngày — trả lời mà không chạy mã…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Tìm kiếm cơ sở tri thức thất bại — câu trả lời sẽ không sử dụng tài liệu của tác nhân"
+      "knowledgeSearchFailed": "Tìm kiếm cơ sở tri thức thất bại — câu trả lời sẽ không sử dụng tài liệu của tác nhân",
+      "stillWorking": "Vẫn đang xử lý…"
     },
     "toolSummary": {
       "usedTools": "Đã sử dụng {count, plural, one {# công cụ} other {# công cụ}}",
@@ -900,7 +903,12 @@
     "startNewConversation": "Bắt đầu cuộc trò chuyện mới",
     "downloadDebugInfo": "Tải thông tin gỡ lỗi",
     "includeMessageText": "Bao gồm nội dung tin nhắn",
-    "ttsEquationPlaceholder": "phương trình"
+    "ttsEquationPlaceholder": "phương trình",
+    "modelTimedOut": "{model} không bắt đầu phản hồi trong vòng {duration}. Có thể hệ thống đang bận — bạn có thể chờ lâu hơn hoặc thử mô hình khác.",
+    "modelTimedOutAtMaximum": "{model} không bắt đầu phản hồi trong {duration}, là thời gian chờ tối đa. Vui lòng thử lại hoặc chọn mô hình khác.",
+    "requestTimedOut": "Yêu cầu này mất quá nhiều thời gian để chuẩn bị và đã dừng trước khi {model} có thể trả lời. Bạn có thể cho phép nhiều thời gian hơn hoặc thử mô hình khác.",
+    "retryWaitingLonger": "Chờ tối đa {duration} và thử lại",
+    "alwaysWaitThisLong": "Luôn chờ tối đa {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -1288,7 +1296,20 @@
     "Connections": "Kết nối",
     "DataBackup": "Dữ liệu & Sao lưu",
     "Export & Import": "Xuất & Nhập",
-    "exportImportDescription": "Tải xuống các đoạn chat, thư mục và gợi ý dưới dạng tệp, hoặc khôi phục từ lần xuất trước."
+    "exportImportDescription": "Tải xuống các đoạn chat, thư mục và gợi ý dưới dạng tệp, hoặc khôi phục từ lần xuất trước.",
+    "modelTimeout": {
+      "title": "Thời gian chờ mô hình",
+      "description": "Khoảng thời gian chờ để mô hình bắt đầu trả lời trước khi dừng. Mô hình chậm hoặc khu vực đông có thể cần lâu hơn. Khi câu trả lời bắt đầu truyền, tùy chọn này không còn áp dụng.",
+      "presetStandard": "Tiêu chuẩn",
+      "presetPatient": "Kiên nhẫn",
+      "presetMaximum": "Tối đa",
+      "presetCustom": "Tùy chỉnh",
+      "customLabel": "Chờ tối đa",
+      "customUnit": "giây",
+      "customHint": "Từ {min} đến {max} giây.",
+      "preferModelTitle": "Ưu tiên mô hình đã chọn",
+      "preferModelDescription": "Không tự động chuyển mô hình khác khi yêu cầu thất bại. Lỗi vẫn sẽ cho phép bạn chuyển đổi."
+    }
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -2878,7 +2899,16 @@
       "suggestionDroppedOne": "Đã bỏ đề xuất — bạn đã chỉnh sửa đoạn văn này.",
       "suggestionDroppedMany": "Đã bỏ {count} đề xuất — bạn đã chỉnh sửa các đoạn đó.",
       "pendingRunActionTranslate": "Đang dịch lại",
-      "pendingRunActionAssess": "Đang đánh giá lại"
+      "pendingRunActionAssess": "Đang đánh giá lại",
+      "entryKind": "Loại mục nhập",
+      "kindTerm": "Thuật ngữ",
+      "kindAcronym": "Chữ viết tắt",
+      "sourceExpansion": "Tên đầy đủ trong nguồn (không bắt buộc)",
+      "targetExpansion": "Tên đầy đủ trong bản dịch (không bắt buộc)",
+      "acronymHint": "Chữ viết tắt cần khớp chính xác: WHO sẽ áp dụng cho “WHO”, không phải “who”. Thuật ngữ có thể khớp bất kỳ cách viết hoa nào.",
+      "glossaryCheckTitle": "Kiểm tra bảng thuật ngữ",
+      "glossaryCheckPass": "{count, plural, one {Thuật ngữ bắt buộc đã được sử dụng.} other {Đã sử dụng đủ # thuật ngữ bắt buộc.}}",
+      "glossaryCheckMissing": "{count, plural, one {Còn thiếu #/{total} bản dịch bắt buộc:} other {Thiếu #/{total} bản dịch bắt buộc:}}"
     },
     "document": {
       "emptyTitle": "Mô tả tài liệu bạn muốn",

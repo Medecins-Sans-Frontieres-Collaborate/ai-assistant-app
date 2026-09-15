@@ -711,7 +711,9 @@
     "beta": "Beta",
     "copied": "Ekopi!",
     "clear": "Kolongola",
-    "undo": "Kobongisa lisusu"
+    "undo": "Kobongisa lisusu",
+    "durationSeconds": "{count, plural, one {# sekonde} other {# basekonde}}",
+    "durationMinutes": "{count, plural, one {# minute} other {# baminate}}"
   },
   "terms": {
     "officialLanguages": "Version officielle :",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "Limiti ya motif ya Web esili — kozongisa eyano na recherche te…",
       "codeInterpreterLimitReached": "Motango ya mokolo ya execution ya code esili — eyano ezali na code te…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Recherche na base ya boyebi ekwe, eyano eko salela makomi ya agent te"
+      "knowledgeSearchFailed": "Recherche na base ya boyebi ekwe, eyano eko salela makomi ya agent te",
+      "stillWorking": "Ezali naino kosala…"
     },
     "toolSummary": {
       "usedTools": "Outils esalelamaki: {count, plural, one {# outil} other {# ba outils}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "Kobanda boyokanisi ya sika",
     "downloadDebugInfo": "Kozwa ba informasyo ya debug",
     "includeMessageText": "Tia kati mobeko ya sango",
-    "ttsEquationPlaceholder": "ekwesio"
+    "ttsEquationPlaceholder": "ekwesio",
+    "modelTimedOut": "{model} ebandaki kozongisa te na kati ya {duration}. Ekoki kozala ezali na mosala mingi — okoki kozela lisusu mingi, to kobeta modele mosusu.",
+    "modelTimedOutAtMaximum": "{model} ebandaki kozongisa te na kati ya {duration}, eleki ntango oyo esalelami mingi. Meleka lisusu, to sala na modele mosusu.",
+    "requestTimedOut": "Mposa oyo etikaki ntango molai mingi mpo etinda esilaki liboso ete {model} azozonga. Okoki kotelema po na ntango mingi, to sala na modele mosusu.",
+    "retryWaitingLonger": "Zela tii {duration} mpe meka lisusu",
+    "alwaysWaitThisLong": "Zela tango oyo ntango nyonso tii {duration}"
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -1446,7 +1454,20 @@
     "Connections": "Bisika ya boyokani",
     "DataBackup": "Donnee & Backup",
     "Export & Import": "Kobimisa & Kokoisa",
-    "exportImportDescription": "Téléléchargé ba chats, ba dossiers, mpe ba prompts na fichier, to zongisa yango wuta kobimisa ya kala."
+    "exportImportDescription": "Téléléchargé ba chats, ba dossiers, mpe ba prompts na fichier, to zongisa yango wuta kobimisa ya kala.",
+    "modelTimeout": {
+      "title": "Ntango ya kozela modele",
+      "description": "Ntango nini okoki kozela modele liboso ya kopesa eyano liboso okima. Bamodele bazangi mbangu to bisika oyo ezalaka na mosala mingi ekoki kosenga ntango ebele. Soki eyano ebandi koya, ntango oyo ekosilika.",
+      "presetStandard": "Ya ordinɛr",
+      "presetPatient": "Kozela",
+      "presetMaximum": "Maksimum",
+      "presetCustom": "Na ndenge ya moto moko",
+      "customLabel": "Zela tii",
+      "customUnit": "basɛkɔnde",
+      "customHint": "Kati na {min} na {max} basɛkɔnde.",
+      "preferModelTitle": "Lingaka modele na ngai",
+      "preferModelDescription": "Komboisela modele mosusu automatikal te soki mposa ekokisami te. Mbeba ekopesa kaka likoki ya kobongola."
+    }
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "Sugeransé ekangami—osalaki mbongwana na eteni oyo.",
       "suggestionDroppedMany": "Sugeransé {count} ekangami—osalaki mbongwana na biteni yango.",
       "pendingRunActionTranslate": "Kokota lisusu",
-      "pendingRunActionAssess": "Kosambisa lisusu"
+      "pendingRunActionAssess": "Kosambisa lisusu",
+      "entryKind": "Motype ya entrée",
+      "kindTerm": "Ndakisa",
+      "kindAcronym": "Acronym",
+      "sourceExpansion": "Kombo mobimba na esika ya ebandeli (soki olingi)",
+      "targetExpansion": "Kombo mobimba na lolenge ya kobongola (soki olingi)",
+      "acronymHint": "Bamakasi ekotambola kaka ndenge wabongi: WHO ezali kaka “WHO”, te “who”. Matalatala ekosangana na minzoto nyonso ya mikanda.",
+      "glossaryCheckTitle": "Kokanga maloba",
+      "glossaryCheckPass": "{count, plural, one {Liloba esengeli esalemi.} other {Maloba nyonso # esengeli esalami.}}",
+      "glossaryCheckMissing": "{count, plural, one {# na kati ya {total} bakobongisa esengeli ezali te:} other {# na kati ya {total} bakobongisa esengeli ezali te:}}"
     },
     "document": {
       "emptyTitle": "Sosola mokanda olingi",

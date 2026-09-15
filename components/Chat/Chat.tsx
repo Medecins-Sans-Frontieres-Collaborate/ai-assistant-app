@@ -28,7 +28,12 @@ import { isAgentShapedModelId } from '@/lib/utils/app/agentAttachment';
 import { downloadChatDebugBundle } from '@/lib/utils/app/export/chatDebugExport';
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
 import { entryToDisplayMessage } from '@/lib/utils/shared/chat/messageVersioning';
+import {
+  escalateModelTimeoutSeconds,
+  isModelTimeoutErrorCode,
+} from '@/lib/utils/shared/chat/modelTimeout';
 
+import { ErrorCode } from '@/types/errors';
 import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
 
 import { KeyboardShortcutsModal } from '@/components/KeyboardShortcuts';
@@ -134,6 +139,8 @@ export function Chat({
     requestStop,
     retryFailedRequest,
     retryFailedWithFallbackModel,
+    retryFailedWithLongerTimeout,
+    lastRequestTimeoutSeconds,
   } = useChat();
   const failedConversation = useChatStore((s) => s.failedConversation);
   // Usage-limit denial details for the error card (read directly rather
@@ -589,6 +596,43 @@ export function Chat({
   const canRetryFallback =
     !!error && !isRetrying && errorIsRecoverable && !!fallbackModelForRetry;
 
+  // Model-start timeout (issue #130): the card names the failed turn's own
+  // timeout and offers the next escalation — relative to what that send
+  // used, not to whatever Settings says now. "Always wait" persists the
+  // escalated value as the default before re-sending.
+  const modelTimeoutSeconds = useSettingsStore((s) => s.modelTimeoutSeconds);
+  const setModelTimeoutSeconds = useSettingsStore(
+    (s) => s.setModelTimeoutSeconds,
+  );
+  const timeoutInfo = useMemo(() => {
+    if (!error || !failedConversation || !isModelTimeoutErrorCode(errorCode)) {
+      return null;
+    }
+    const seconds = lastRequestTimeoutSeconds ?? modelTimeoutSeconds;
+    return {
+      kind:
+        errorCode === ErrorCode.REQUEST_TIMEOUT
+          ? ('request' as const)
+          : ('model' as const),
+      modelName: failedConversation.model.name,
+      seconds,
+      longerSeconds: escalateModelTimeoutSeconds(seconds),
+    };
+  }, [
+    error,
+    errorCode,
+    failedConversation,
+    lastRequestTimeoutSeconds,
+    modelTimeoutSeconds,
+  ]);
+  const handleAlwaysWaitLonger = useCallback(
+    (seconds: number) => {
+      setModelTimeoutSeconds(seconds);
+      void retryFailedWithLongerTimeout(seconds);
+    },
+    [setModelTimeoutSeconds, retryFailedWithLongerTimeout],
+  );
+
   // Repeated-failure escalation: the streak only escalates the banner that
   // MATCHES it — a different banner (e.g. a one-off setError from TTS)
   // while a streak exists must not inherit the "corrupted conversation"
@@ -845,6 +889,9 @@ export function Chat({
           onChooseModel={handleOpenModelSelector}
           onResendWithoutFeature={resendWithoutFeature}
           isAgentModelDenial={isAgentModelDenial}
+          timeout={timeoutInfo}
+          onRetryLonger={retryFailedWithLongerTimeout}
+          onAlwaysWaitLonger={handleAlwaysWaitLonger}
         />
 
         {/* Model Switch Prompt (shown after successful retry) */}

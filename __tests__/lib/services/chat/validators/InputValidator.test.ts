@@ -912,3 +912,35 @@ describe('validateChatRequest - mcpServers entries', () => {
     ).toThrow();
   });
 });
+
+describe('validateChatRequest - timeoutMs (issue #130)', () => {
+  const body = (timeoutMs: unknown) => ({
+    model: { id: 'gpt-5', name: 'gpt-5' },
+    messages: [{ role: 'user', content: 'hi' }],
+    timeoutMs,
+  });
+
+  it('passes a positive number through untouched (the middleware clamps)', () => {
+    const validator = new InputValidator();
+    expect(validator.validateChatRequest(body(90_000)).timeoutMs).toBe(90_000);
+    // Out-of-range is NOT a 400: it degrades to the nearest bound later.
+    expect(validator.validateChatRequest(body(5)).timeoutMs).toBe(5);
+    expect(validator.validateChatRequest(body(1e9)).timeoutMs).toBe(1e9);
+  });
+
+  it('is optional', () => {
+    const validator = new InputValidator();
+    expect(validator.validateChatRequest(body(undefined)).timeoutMs).toBe(
+      undefined,
+    );
+  });
+
+  it('rejects non-numeric, non-finite and non-positive values', () => {
+    const validator = new InputValidator();
+    for (const bad of ['90000', 0, -1, Infinity, null]) {
+      expect(() => validator.validateChatRequest(body(bad))).toThrow(
+        PipelineError,
+      );
+    }
+  });
+});

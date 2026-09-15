@@ -711,7 +711,9 @@
     "beta": "ቤታ",
     "copied": "ተቐዲሑ!",
     "clear": "ኣጽዳቕ",
-    "undo": "ኣቐላጥፍ"
+    "undo": "ኣቐላጥፍ",
+    "durationSeconds": "{count, plural, one {# ሰከንድ} other {# ሰከንዳት}}",
+    "durationMinutes": "{count, plural, one {# ደቒቕ} other {# ደቒቓት}}"
   },
   "terms": {
     "officialLanguages": "ወግዓዊ ሕትመት:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "ዕጥም ዳንክ ድሕሪ ቅድሚ ምፈላለይ ዓለም-አቀፍ ሓበሬታ — ከይከብዲ እዩ መልሲ…",
       "codeInterpreterLimitReached": "ዕፈላላይ ድሕሪ ጽዕነት ኮድ ግደፍኩም — ብዘይ ምስራሕ ኮድ መልሲ ፈጺሙ…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "ዝተፈላለየ ፍለጋ ብዝኾነ ውድብ እዩ ዘይስደዱ፡ መልሲ ከኣ Agent ሰነዶታት ኣይጥቀምን።"
+      "knowledgeSearchFailed": "ዝተፈላለየ ፍለጋ ብዝኾነ ውድብ እዩ ዘይስደዱ፡ መልሲ ከኣ Agent ሰነዶታት ኣይጥቀምን።",
+      "stillWorking": "እደጊም ይሰርሕ…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳርሒ} other {# መሳርሒታት} } ተጠቒሙ",
@@ -957,7 +960,12 @@
     "startNewConversation": "ሓድሽ ቃለ-መጠይቕ ጀምር",
     "downloadDebugInfo": "መረጋገጺ መረጃ ውርድ",
     "includeMessageText": "ናይ መልእኽቲ ጽሑፍ ኣካብዪ",
-    "ttsEquationPlaceholder": "ስእሊ ሒሳብ"
+    "ttsEquationPlaceholder": "ስእሊ ሒሳብ",
+    "modelTimedOut": "{model} ኣብ {duration} ኣብዚ ግዜ ኣላ ኣልቦን ኢሉ ኣበለ። ምኻን ምጸናጸን ክኸውን ይኽእል እዩ — ዝኾነ ምርጫ ኤልካ ወይ ካብኦም ሞዴል ፈትኑ።",
+    "modelTimedOutAtMaximum": "{model} ኣብ {duration} እንተዝበለ ናይ እግሪ እንተዘይብሉ ኣምላእ። ደጊም ፈትኑ ወይ ካብኦም ሞዴል ፈትኑ።",
+    "requestTimedOut": "እዚ ጥዒት ፈጺሙ እዩ ኣደሊሉ ብቑጽሪ ምውዳእ ደልዩ {model} እንተሃተወን ምስሓተቱ። ውን ግዜ ይፈትኑ ወይ ካብኦም ሞዴል ይፈትኑ።",
+    "retryWaitingLonger": "ናብ {duration} ድሕሪ ግዜ ደጊም ፈትኑ",
+    "alwaysWaitThisLong": "ኣብዚ ጊዜ {duration} ምጽናት ዘይወጹ።"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -1446,7 +1454,20 @@
     "Connections": "ግንኙታት",
     "DataBackup": "ውሂብን መከላከያን",
     "Export & Import": "ምልካይን ምእታውን",
-    "exportImportDescription": "ቻት ፋይሎትኩም፣ ፎልደራትኩም፣ እንታይም ምስ ናይ ቀደም ስምዒታዊ ምልካይ ደጊም ዕቐጡ።"
+    "exportImportDescription": "ቻት ፋይሎትኩም፣ ፎልደራትኩም፣ እንታይም ምስ ናይ ቀደም ስምዒታዊ ምልካይ ደጊም ዕቐጡ።",
+    "modelTimeout": {
+      "title": "ኲናት ግዜ ምጸናጸን ሞዴል",
+      "description": "ክንደይ ምጸናጸን ብዝኾነ ሞዴል ምስ መልስ ይጀመር እሞኑ ናይ ግምቲ ግዜ። ዝሕሸር ሞዴልን ብበዝሒ ግዜ ምጸናጸን ክፈልጥ ይኽእል። መልስ ምስ ይጀመር ነዚ ደግሞ ኣይተመሃደስን።",
+      "presetStandard": "መደበይቲ",
+      "presetPatient": "ትዕግስታዊ",
+      "presetMaximum": "ኣብ ምሉእ ልዕሊት",
+      "presetCustom": "ብትዕዝብቲ",
+      "customLabel": "ናብዚ ክትጸናጸኑ ድሕሪ ግዜ",
+      "customUnit": "ሰከንዳት",
+      "customHint": "ብዝተዋህዶ ካብ {min} ናብ {max} ሰከንዳት።",
+      "preferModelTitle": "ዝመረፅኩም ሞዴል ኣምርጹ",
+      "preferModelDescription": "ንሓሳብ ኣይትቀይሩ ኣይንኣምርጹም እዩ ሓሳብ መልስ ይኸውን ዝበለ ግን ሓሳብ ይፈትኑ።"
+    }
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "ምምኽር ተውድቆ — ኣብ ጽሑፉ ክብል ክብል ትህሂት።",
       "suggestionDroppedMany": "{count} ምምኽራት ተውድቆ — ኣብ ነታቶም ጽሑፋት ስራሕ ተውቢትዎ።",
       "pendingRunActionTranslate": "እንተዘይቀየረ ምትርጉም",
-      "pendingRunActionAssess": "እንተዘይቀየረ ምዕጽማት"
+      "pendingRunActionAssess": "እንተዘይቀየረ ምዕጽማት",
+      "entryKind": "ዓይነት ኣቀባውነት",
+      "kindTerm": "ቃል",
+      "kindAcronym": "አክሮንይም",
+      "sourceExpansion": "ሙሉእ ስም ኣብ ዝተኸፈነ (ኣማራጺ)",
+      "targetExpansion": "ሙሉእ ስም ኣብ ትርጉም (ኣማራጺ)",
+      "acronymHint": "አክሮንይም ብትኽክል እዩ ክውዳእ፤ WHO ዝተጻፈ እዩ ሓሳብ እሞኑ፡ \"WHO\" ኣይኮነን \"who\" ኣፍ ይዳግሱ። ቃላት ዝተኸፈኑ ምዕባለ ጻፍ ይድልዩ።",
+      "glossaryCheckTitle": "መዝገብ ቃላት መርመራ",
+      "glossaryCheckPass": "{count, plural, one {ተወሳኺ ቃል ተጠቒሙ።} other {ምሉእ # ተወሳኺ ቃላት ተጠቒሙ።}}",
+      "glossaryCheckMissing": "{count, plural, one {ካብ {total} ተወሳኺ ትርጉሞታት # ይጎድኦ፡} other {ካብ {total} ተወሳኺ ትርጉሞታት # ይጎድኦዎም፡}}"
     },
     "document": {
       "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",

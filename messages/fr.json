@@ -608,7 +608,9 @@
     "beta": "Bêta",
     "copied": "Copié !",
     "clear": "Effacer",
-    "undo": "Annuler"
+    "undo": "Annuler",
+    "durationSeconds": "{count, plural, one {# seconde} other {# secondes}}",
+    "durationMinutes": "{count, plural, one {# minute} other {# minutes}}"
   },
   "chat": {
     "downloadAudio": "Télécharger l'audio",
@@ -750,7 +752,8 @@
       "webSearchLimitReached": "Limite quotidienne de recherche web atteinte — réponse sans recherche…",
       "codeInterpreterLimitReached": "Limite quotidienne d’exécution de code atteinte — réponse sans exécution de code…",
       "m365Progress": "Microsoft 365 : {detail}",
-      "knowledgeSearchFailed": "La recherche dans la base de connaissances a échoué — la réponse n'utilisera pas les documents de l'agent."
+      "knowledgeSearchFailed": "La recherche dans la base de connaissances a échoué — la réponse n'utilisera pas les documents de l'agent.",
+      "stillWorking": "Traitement en cours…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# outil utilisé} other {# outils utilisés}}",
@@ -845,7 +848,12 @@
     "startNewConversation": "Démarrer une nouvelle conversation",
     "downloadDebugInfo": "Télécharger les informations de débogage",
     "includeMessageText": "Inclure le texte du message",
-    "ttsEquationPlaceholder": "équation"
+    "ttsEquationPlaceholder": "équation",
+    "modelTimedOut": "{model} n’a pas commencé à répondre dans le délai de {duration}. Il est peut-être occupé — vous pouvez attendre plus longtemps ou essayer un autre modèle.",
+    "modelTimedOutAtMaximum": "{model} n’a pas commencé à répondre dans le délai maximal de {duration}. Veuillez réessayer ou utiliser un autre modèle.",
+    "requestTimedOut": "La préparation de cette demande a pris trop de temps et a été interrompue avant la réponse de {model}. Vous pouvez accorder plus de temps ou essayer un autre modèle.",
+    "retryWaitingLonger": "Attendre jusqu’à {duration} puis réessayer",
+    "alwaysWaitThisLong": "Toujours attendre jusqu’à {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",
@@ -1287,7 +1295,20 @@
     "Connections": "Connexions",
     "DataBackup": "Données & Sauvegarde",
     "Export & Import": "Exporter & Importer",
-    "exportImportDescription": "Téléchargez vos discussions, dossiers et invites au format fichier, ou restaurez-les depuis une exportation précédente."
+    "exportImportDescription": "Téléchargez vos discussions, dossiers et invites au format fichier, ou restaurez-les depuis une exportation précédente.",
+    "modelTimeout": {
+      "title": "Délai d’attente du modèle",
+      "description": "Durée maximale d’attente avant d’abandonner si le modèle ne répond pas. Les modèles plus lents ou régions surchargées peuvent nécessiter plus de temps. Dès qu’une réponse commence à être diffusée, ce délai n’est plus pris en compte.",
+      "presetStandard": "Standard",
+      "presetPatient": "Patient",
+      "presetMaximum": "Maximum",
+      "presetCustom": "Personnalisé",
+      "customLabel": "Attendre jusqu’à",
+      "customUnit": "secondes",
+      "customHint": "Entre {min} et {max} secondes.",
+      "preferModelTitle": "Préférer mon modèle sélectionné",
+      "preferModelDescription": "Ne pas changer de modèle automatiquement en cas d’échec d’une demande. Le message d’erreur proposera toujours le changement."
+    }
   },
   "notFound": {
     "lostDog": "Chien perdu"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Suggestion supprimée — vous avez modifié son passage.",
       "suggestionDroppedMany": "{count} suggestions supprimées — vous avez modifié leurs passages.",
       "pendingRunActionTranslate": "Nouvelle traduction en cours",
-      "pendingRunActionAssess": "Réévaluation en cours"
+      "pendingRunActionAssess": "Réévaluation en cours",
+      "entryKind": "Type d’entrée",
+      "kindTerm": "Terme",
+      "kindAcronym": "Acronyme",
+      "sourceExpansion": "Nom complet dans la source (optionnel)",
+      "targetExpansion": "Nom complet en traduction (optionnel)",
+      "acronymHint": "Les acronymes correspondent exactement à la saisie : « WHO » s’applique uniquement à « WHO », jamais à « who ». Les termes correspondent à toute capitalisation.",
+      "glossaryCheckTitle": "Vérification du glossaire",
+      "glossaryCheckPass": "{count, plural, one {Le terme requis a été utilisé.} other {Tous les # termes requis ont été utilisés.}}",
+      "glossaryCheckMissing": "{count, plural, one {# traduction requise sur {total} est manquante :} other {# traductions requises sur {total} sont manquantes :}}"
     },
     "document": {
       "emptyTitle": "Décrivez le document souhaité",

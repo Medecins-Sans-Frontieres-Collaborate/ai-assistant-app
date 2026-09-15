@@ -181,6 +181,7 @@ export class AnthropicHandler extends ModelHandler {
   async executeRequest(
     requestParams: ChatCompletionParams,
     streamResponse: boolean,
+    signal?: AbortSignal,
   ): Promise<ChatCompletionResponse> {
     const params = requestParams as any;
 
@@ -204,25 +205,31 @@ export class AnthropicHandler extends ModelHandler {
 
     if (streamResponse) {
       // Return streaming response
-      const stream = await this.client.messages.stream({
+      const streamParams = {
         model: params.model,
         max_tokens: params.max_tokens || 8192,
         messages: anthropicMessages,
         system: params.metadata?.systemPrompt || undefined,
         temperature: params.temperature,
-      });
+      };
+      const stream = signal
+        ? await this.client.messages.stream(streamParams, { signal })
+        : await this.client.messages.stream(streamParams);
 
       // Convert Anthropic stream to OpenAI-compatible async iterable
       return this.convertStreamToOpenAIFormat(stream);
     } else {
       // Non-streaming request
-      const response = await this.client.messages.create({
+      const createParams = {
         model: params.model,
         max_tokens: params.max_tokens || 8192,
         messages: anthropicMessages,
         system: params.metadata?.systemPrompt || undefined,
         temperature: params.temperature,
-      });
+      };
+      const response = signal
+        ? await this.client.messages.create(createParams, { signal })
+        : await this.client.messages.create(createParams);
 
       // Convert Anthropic response to OpenAI format
       return this.convertResponseToOpenAIFormat(response);

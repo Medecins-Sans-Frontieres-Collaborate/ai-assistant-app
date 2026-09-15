@@ -299,6 +299,13 @@ export interface ChatBody {
   threadId?: string; // Azure AI Agent thread ID
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
+  /**
+   * How long the server may wait for the model to START responding, in
+   * milliseconds (issue #130). Clamped server-side to the bounds in
+   * lib/utils/shared/chat/modelTimeout.ts; absent = the compiled default.
+   * Never applies once the response stream has started.
+   */
+  timeoutMs?: number;
   forcedAgentType?: string; // Force routing to specific agent type (e.g., 'web_search')
   /**
    * Which region's hosted instance this conversation chats with

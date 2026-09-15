@@ -125,4 +125,107 @@ describe('AIFoundryAgentHandler error mapping', () => {
     expect(caught).toBeInstanceOf(PipelineError);
     expect((caught as PipelineError).code).toBe(ErrorCode.AGENT_UNAVAILABLE);
   });
+
+  it('forwards the pipeline signal to the pre-stream Foundry calls (issue #130)', async () => {
+    responsesCreate.mockRejectedValueOnce(
+      Object.assign(new Error('Not found'), { statusCode: 404 }),
+    );
+    const controller = new AbortController();
+    const model = baseModel({ agentId: 'asst_legacy' });
+
+    await expect(
+      handler.handleAgentChat(
+        model.id,
+        model,
+        messages,
+        0.5,
+        user,
+        undefined,
+        undefined,
+        undefined,
+        ALLOWED_ENDPOINT,
+        undefined,
+        { signal: controller.signal },
+      ),
+    ).rejects.toMatchObject({ code: ErrorCode.AGENT_UNAVAILABLE });
+
+    // The conversation create (before any stream exists) carried the signal…
+    expect(conversationsCreate).toHaveBeenCalledWith(expect.anything(), {
+      signal: controller.signal,
+    });
+    // …and the run stream's own abort controller follows it: the signal the
+    // SDK received for responses.create is the linked upstream one.
+    const runOptions = responsesCreate.mock.calls[0][1] as {
+      signal: AbortSignal;
+    };
+    expect(runOptions.signal.aborted).toBe(false);
+    controller.abort(new Error('stage timeout'));
+    expect(runOptions.signal.aborted).toBe(true);
+  });
+
+  it('runs the pending-approval auto-deny under the linked signal and stops before retrying once aborted', async () => {
+    const controller = new AbortController();
+    responsesCreate.mockRejectedValueOnce(
+      Object.assign(
+        new Error(
+          'Items mcpr_abc123 do not have an approval response; respond before continuing.',
+        ),
+        { statusCode: 400 },
+      ),
+    );
+    // The stage times out WHILE the auto-deny write is in flight.
+    conversationsItemsCreate.mockImplementationOnce(async () => {
+      controller.abort(new Error('stage timeout'));
+      return {};
+    });
+    const model = baseModel({ agentId: 'asst_legacy' });
+
+    await expect(
+      handler.handleAgentChat(
+        model.id,
+        model,
+        messages,
+        0.5,
+        user,
+        undefined,
+        undefined,
+        undefined,
+        ALLOWED_ENDPOINT,
+        undefined,
+        { signal: controller.signal },
+      ),
+    ).rejects.toBeDefined();
+
+    // The cleanup write carried the linked signal…
+    const [, , itemsOptions] = conversationsItemsCreate.mock.calls[0] as [
+      string,
+      unknown,
+      { signal: AbortSignal },
+    ];
+    expect(itemsOptions.signal.aborted).toBe(true);
+    // …and no second run was started after the abort.
+    expect(responsesCreate).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the historical call shape when no signal is given', async () => {
+    responsesCreate.mockRejectedValueOnce(
+      Object.assign(new Error('Not found'), { statusCode: 404 }),
+    );
+    const model = baseModel({ agentId: 'asst_legacy' });
+    await handler
+      .handleAgentChat(
+        model.id,
+        model,
+        messages,
+        0.5,
+        user,
+        undefined,
+        undefined,
+        undefined,
+        ALLOWED_ENDPOINT,
+      )
+      .catch(() => undefined);
+    expect(conversationsCreate).toHaveBeenCalledTimes(1);
+    expect(conversationsCreate.mock.calls[0]).toHaveLength(1);
+  });
 });

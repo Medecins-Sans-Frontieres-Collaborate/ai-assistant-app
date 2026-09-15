@@ -411,6 +411,21 @@ describe('runAnthropicMcpToolLoop', () => {
       .calls[0][0] as Anthropic.MessageCreateParamsStreaming;
     expect(params.tools).toBeUndefined();
   });
+
+  it('passes the pipeline signal into every model round (issue #130)', async () => {
+    const handler = makeHandler([textRoundEvents('Done.')]);
+    const controller = new AbortController();
+    await readAll(
+      await runAnthropicMcpToolLoop({
+        ...baseOptions(handler),
+        signal: controller.signal,
+      }),
+    );
+    expect(handler.executeStreamingRequest).toHaveBeenCalledWith(
+      expect.anything(),
+      controller.signal,
+    );
+  });
 });
 
 /** Fetches the params the handler was called with (first round). */

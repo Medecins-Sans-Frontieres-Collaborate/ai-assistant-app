@@ -608,7 +608,9 @@
     "beta": "Beta",
     "copied": "Copiado!",
     "clear": "Limpar",
-    "undo": "Desfazer"
+    "undo": "Desfazer",
+    "durationSeconds": "{count, plural, one {# segundo} other {# segundos}}",
+    "durationMinutes": "{count, plural, one {# minuto} other {# minutos}}"
   },
   "chat": {
     "downloadAudio": "Baixar áudio",
@@ -750,7 +752,8 @@
       "webSearchLimitReached": "Limite diário de pesquisas na web atingido — respondendo sem buscar…",
       "codeInterpreterLimitReached": "Limite diário de execução de código atingido — respondendo sem executar código…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Falha na busca na base de conhecimento — a resposta não usará os documentos do agente"
+      "knowledgeSearchFailed": "Falha na busca na base de conhecimento — a resposta não usará os documentos do agente",
+      "stillWorking": "Ainda processando…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ferramenta utilizada} other {# ferramentas utilizadas}}",
@@ -845,7 +848,12 @@
     "startNewConversation": "Iniciar uma nova conversa",
     "downloadDebugInfo": "Baixar informações de depuração",
     "includeMessageText": "Incluir texto da mensagem",
-    "ttsEquationPlaceholder": "equação"
+    "ttsEquationPlaceholder": "equação",
+    "modelTimedOut": "{model} não começou a responder em {duration}. Pode estar ocupado — você pode aguardar mais ou tentar outro modelo.",
+    "modelTimedOutAtMaximum": "{model} não começou a responder em {duration}, o tempo máximo de espera. Tente novamente ou tente outro modelo.",
+    "requestTimedOut": "Esta solicitação demorou muito para ser preparada e foi interrompida antes que {model} pudesse responder. Você pode permitir mais tempo ou tentar outro modelo.",
+    "retryWaitingLonger": "Aguarde até {duration} e tente novamente",
+    "alwaysWaitThisLong": "Sempre aguardar até {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -1287,7 +1295,20 @@
     "Connections": "Conexões",
     "DataBackup": "Dados e backup",
     "Export & Import": "Exportar e importar",
-    "exportImportDescription": "Baixe seus chats, pastas e prompts como um arquivo ou restaure-os de uma exportação anterior."
+    "exportImportDescription": "Baixe seus chats, pastas e prompts como um arquivo ou restaure-os de uma exportação anterior.",
+    "modelTimeout": {
+      "title": "Tempo de espera do modelo",
+      "description": "Tempo de espera para o modelo começar a responder antes de desistir. Modelos mais lentos e regiões ocupadas podem exigir mais tempo. Quando a resposta começar a ser transmitida, isto não se aplica mais.",
+      "presetStandard": "Padrão",
+      "presetPatient": "Paciente",
+      "presetMaximum": "Máximo",
+      "presetCustom": "Personalizado",
+      "customLabel": "Aguardar até",
+      "customUnit": "segundos",
+      "customHint": "Entre {min} e {max} segundos.",
+      "preferModelTitle": "Preferir meu modelo selecionado",
+      "preferModelDescription": "Não trocar automaticamente para outro modelo quando uma solicitação falhar. O erro ainda permitirá a troca."
+    }
   },
   "notFound": {
     "lostDog": "Cão perdido"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Sugestão descartada — você editou essa passagem.",
       "suggestionDroppedMany": "{count} sugestões descartadas — você editou essas passagens.",
       "pendingRunActionTranslate": "Traduzindo novamente",
-      "pendingRunActionAssess": "Reavaliando"
+      "pendingRunActionAssess": "Reavaliando",
+      "entryKind": "Tipo de entrada",
+      "kindTerm": "Termo",
+      "kindAcronym": "Acrônimo",
+      "sourceExpansion": "Nome completo na origem (opcional)",
+      "targetExpansion": "Nome completo na tradução (opcional)",
+      "acronymHint": "Siglas correspondem exatamente como digitadas: WHO se aplica a “WHO”, nunca a “who”. Termos correspondem a qualquer capitalização.",
+      "glossaryCheckTitle": "Verificação do glossário",
+      "glossaryCheckPass": "{count, plural, one {O termo obrigatório foi usado.} other {Todos os # termos obrigatórios foram usados.}}",
+      "glossaryCheckMissing": "{count, plural, one {# de {total} traduções obrigatórias está faltando:} other {# de {total} traduções obrigatórias estão faltando:}}"
     },
     "document": {
       "emptyTitle": "Descreva o documento desejado",

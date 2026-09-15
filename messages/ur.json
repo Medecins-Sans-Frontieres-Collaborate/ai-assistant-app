@@ -607,7 +607,9 @@
     "beta": "بیٹا",
     "copied": "کاپی ہو گیا!",
     "clear": "صاف کریں",
-    "undo": "واپس لیں"
+    "undo": "واپس لیں",
+    "durationSeconds": "{count, plural, one {# سیکنڈ} other {# سیکنڈز}}",
+    "durationMinutes": "{count, plural, one {# منٹ} other {# منٹ}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "ایک غیر متوقع خرابی پیش آگئی",
@@ -805,7 +807,8 @@
       "webSearchLimitReached": "روزانہ ویب سرچ کی حد مکمل ہو گئی — بغیر سرچ کے جواب دیا جا رہا ہے…",
       "codeInterpreterLimitReached": "روزانہ کوڈ چلانے کی حد مکمل ہو گئی — بغیر کوڈ چلائے جواب دیا جا رہا ہے…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "نالج بیس تلاش ناکام ہوگئی — جواب میں ایجنٹ کی دستاویزات استعمال نہیں ہوں گی"
+      "knowledgeSearchFailed": "نالج بیس تلاش ناکام ہوگئی — جواب میں ایجنٹ کی دستاویزات استعمال نہیں ہوں گی",
+      "stillWorking": "ابھی بھی کام کر رہا ہے…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ٹول استعمال ہوا} other {# ٹولز استعمال ہوئے}}",
@@ -900,7 +903,12 @@
     "startNewConversation": "نئی گفتگو شروع کریں",
     "downloadDebugInfo": "ڈیبگ معلومات ڈاؤن لوڈ کریں",
     "includeMessageText": "پیغام کا متن شامل کریں",
-    "ttsEquationPlaceholder": "مساوات"
+    "ttsEquationPlaceholder": "مساوات",
+    "modelTimedOut": "{model} نے {duration} کے اندر جواب دینا شروع نہیں کیا۔ یہ مصروف ہو سکتا ہے — آپ مزید انتظار کر سکتے ہیں یا دوسرا ماڈل آزما سکتے ہیں۔",
+    "modelTimedOutAtMaximum": "{model} نے {duration} (زیادہ سے زیادہ انتظار کا وقت) کے اندر جواب دینا شروع نہیں کیا۔ دوبارہ کوشش کریں یا دوسرا ماڈل استعمال کریں۔",
+    "requestTimedOut": "اس درخواست کو تیار ہونے میں زیادہ وقت لگا اور اسے {model} کے جواب دینے سے پہلے روک دیا گیا۔ آپ مزید وقت دے سکتے ہیں یا دوسرا ماڈل آزما سکتے ہیں۔",
+    "retryWaitingLonger": "{duration} تک انتظار کریں اور دوبارہ کوشش کریں",
+    "alwaysWaitThisLong": "ہمیشہ {duration} تک انتظار کریں"
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",
@@ -1288,7 +1296,20 @@
     "Connections": "کنکشنز",
     "DataBackup": "ڈیٹا اور بیک اپ",
     "Export & Import": "ایکسپورٹ اور امپورٹ",
-    "exportImportDescription": "اپنی چیٹس، فولڈرز اور پرامپٹس کو فائل کے طور پر ڈاؤن لوڈ کریں یا پچھلے ایکسپورٹ سے انہیں بحال کریں۔"
+    "exportImportDescription": "اپنی چیٹس، فولڈرز اور پرامپٹس کو فائل کے طور پر ڈاؤن لوڈ کریں یا پچھلے ایکسپورٹ سے انہیں بحال کریں۔",
+    "modelTimeout": {
+      "title": "ماڈل کے انتظار کا وقت",
+      "description": "کسی ماڈل کے جواب دینے کا آغاز کرنے کے لیے زیادہ سے زیادہ انتظار کتنا کرنا چاہیے۔ سست ماڈلز یا مصروف خطوں کے لیے زیادہ وقت درکار ہو سکتا ہے۔ ایک بار جواب آنا شروع ہو جائے تو یہ لاگو نہیں ہوتا۔",
+      "presetStandard": "معیاری",
+      "presetPatient": "صبرو تحمل",
+      "presetMaximum": "زیادہ سے زیادہ",
+      "presetCustom": "ذاتی نوعیت",
+      "customLabel": "انتظار کریں زیادہ سے زیادہ",
+      "customUnit": "سیکنڈز",
+      "customHint": "{min} سے {max} سیکنڈز کے درمیان۔",
+      "preferModelTitle": "میرا منتخب کردہ ماڈل ترجیح دیں",
+      "preferModelDescription": "جب درخواست ناکام ہو تو خودکار طور پر دوسرا ماڈل منتخب نہ کریں۔ غلطی کی صورت میں پھر بھی ماڈل تبدیل کرنے کا آپشن دیا جائے گا۔"
+    }
   },
   "notFound": {
     "lostDog": "گمشدہ کتا"
@@ -2877,7 +2898,16 @@
       "suggestionDroppedOne": "تجویز ہٹا دی گئی — آپ نے اس عبارت میں ترمیم کی۔",
       "suggestionDroppedMany": "{count} تجاویز ہٹا دی گئیں — آپ نے ان کی عبارتوں میں ترمیم کی۔",
       "pendingRunActionTranslate": "دوبارہ ترجمہ کیا جا رہا ہے",
-      "pendingRunActionAssess": "دوبارہ جانچا جا رہا ہے"
+      "pendingRunActionAssess": "دوبارہ جانچا جا رہا ہے",
+      "entryKind": "اندراج کی قسم",
+      "kindTerm": "اصطلاح",
+      "kindAcronym": "مخفف",
+      "sourceExpansion": "ماخذ میں مکمل نام (اختیاری)",
+      "targetExpansion": "ترجمہ میں مکمل نام (اختیاری)",
+      "acronymHint": "مخففات بالکل ویسے ہی ملتے ہیں جیسے لکھے جاتے ہیں: WHO صرف “WHO” کے لیے ہے، کبھی “who” کے لیے نہیں۔ اصطلاحات میں کسی بھی بڑے یا چھوٹے حرف کی صورت قابل قبول ہے۔",
+      "glossaryCheckTitle": "گلوسری چیک",
+      "glossaryCheckPass": "{count, plural, one {ضروری اصطلاح استعمال کی گئی۔} other {تمام # ضروری اصطلاحات استعمال کی گئیں۔}}",
+      "glossaryCheckMissing": "{count, plural, one {{total} میں سے # ضروری ترجمہ موجود نہیں:} other {{total} میں سے # ضروری تراجم موجود نہیں:}}"
     },
     "document": {
       "emptyTitle": "جس دستاویز کی وضاحت چاہتے ہیں بیان کریں",

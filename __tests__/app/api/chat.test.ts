@@ -477,9 +477,93 @@ describe('/api/chat - Integration Tests', () => {
       expect(response.status).toBe(408);
       const data = await parseJsonResponse(response);
       // Pipeline stage timeout fires first when stages hang
-      // (stage timeouts are shorter than the overall request timeout)
-      expect(data.code).toBe(ErrorCode.PIPELINE_TIMEOUT);
-      expect(data.message.toLowerCase()).toContain('exceeded timeout');
+      // (stage timeouts are shorter than the overall request timeout).
+      // The message is the user-facing sentence (issue #130), not the
+      // pipeline's "Stage X exceeded timeout" log line; without a client
+      // timeout the window is the compiled 90 s default.
+      expect(data.code).toBe(ErrorCode.MODEL_TIMEOUT);
+      expect(data.message).toBe(
+        'The model did not start responding within 90 seconds.',
+      );
+    });
+
+    it('honours a client-sent timeoutMs and cancels the hung upstream call (issue #130)', async () => {
+      vi.useFakeTimers();
+
+      let upstreamSignal: AbortSignal | undefined;
+      mockCreateFn.mockImplementationOnce(
+        (_params: unknown, options?: { signal?: AbortSignal }) => {
+          upstreamSignal = options?.signal;
+          return new Promise(() => {
+            // Never resolves - simulates a hung request
+          });
+        },
+      );
+
+      const request = createChatRequest({
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
+        messages: [
+          { role: 'user', content: 'Hello', messageType: MessageType.TEXT },
+        ],
+        stream: false,
+        timeoutMs: 30_000,
+      });
+
+      const responsePromise = POST(request);
+      // Well past the requested 30 s, well short of the old 90 s default.
+      await vi.advanceTimersByTimeAsync(35_000);
+      const response = await responsePromise;
+      vi.useRealTimers();
+
+      expect(response.status).toBe(408);
+      const data = await parseJsonResponse(response);
+      expect(data.code).toBe(ErrorCode.MODEL_TIMEOUT);
+      expect(data.message).toBe(
+        'The model did not start responding within 30 seconds.',
+      );
+      // The stage timeout aborted the model call it will never consume.
+      expect(upstreamSignal).toBeInstanceOf(AbortSignal);
+      expect(upstreamSignal!.aborted).toBe(true);
+    });
+
+    it('clamps an out-of-range client timeoutMs instead of rejecting it', async () => {
+      vi.useFakeTimers();
+      mockCreateFn.mockImplementationOnce(
+        () =>
+          new Promise(() => {
+            // Never resolves
+          }),
+      );
+
+      const request = createChatRequest({
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
+        messages: [
+          { role: 'user', content: 'Hello', messageType: MessageType.TEXT },
+        ],
+        stream: false,
+        // Below the 30 s floor: must clamp UP, not 400 and not honour 1 s.
+        timeoutMs: 1_000,
+      });
+
+      const responsePromise = POST(request);
+      await vi.advanceTimersByTimeAsync(20_000);
+      // Not timed out yet at 20 s — the 1 s value was clamped to 30 s.
+      let settled = false;
+      void responsePromise.then(() => {
+        settled = true;
+      });
+      await vi.advanceTimersByTimeAsync(0);
+      expect(settled).toBe(false);
+
+      await vi.advanceTimersByTimeAsync(15_000);
+      const response = await responsePromise;
+      vi.useRealTimers();
+
+      expect(response.status).toBe(408);
+      const data = await parseJsonResponse(response);
+      expect(data.message).toBe(
+        'The model did not start responding within 30 seconds.',
+      );
     });
   });
 

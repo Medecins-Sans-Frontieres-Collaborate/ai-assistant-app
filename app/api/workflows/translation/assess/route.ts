@@ -29,6 +29,7 @@ import {
   MAX_GUIDES_PER_ASSESSMENT,
   isGuideCriterionId,
 } from '@/lib/utils/shared/review/guideCriteria';
+import { sanitizeGlossaryEntry } from '@/lib/utils/shared/translation/glossaryMatch';
 import { isTranslationBuiltinCriterionId } from '@/lib/utils/shared/translation/qualityCriteria';
 
 import { GlossaryEntry } from '@/types/workflow';
@@ -131,11 +132,12 @@ export async function POST(req: NextRequest) {
     return badRequestResponse(guideResolution.error);
   }
 
+  // Same guard as the translate route (issue #131): trimmed, capped,
+  // `kind` validated — entries become prompt text and regex input.
   const localEntries: GlossaryEntry[] = Array.isArray(body.glossaryEntries)
-    ? body.glossaryEntries.filter(
-        (e): e is GlossaryEntry =>
-          !!e && typeof e.source === 'string' && typeof e.target === 'string',
-      )
+    ? body.glossaryEntries
+        .map((e: unknown) => sanitizeGlossaryEntry(e))
+        .filter((e): e is GlossaryEntry => e !== null)
     : [];
   // Same merge as the translate route: guide entries first, guide wins on
   // duplicate source terms.

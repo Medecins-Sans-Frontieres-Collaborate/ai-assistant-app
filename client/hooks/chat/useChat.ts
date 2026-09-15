@@ -41,6 +41,7 @@ export function useChat() {
       showModelSwitchPrompt: s.showModelSwitchPrompt,
       failedConversation: s.failedConversation,
       errorIsRecoverable: s.errorIsRecoverable,
+      lastRequestTimeoutSeconds: s.lastRequestTimeoutSeconds,
     })),
   );
 
@@ -60,6 +61,7 @@ export function useChat() {
       sendMessage: s.sendMessage,
       retryFailedRequest: s.retryFailedRequest,
       retryFailedWithFallbackModel: s.retryFailedWithFallbackModel,
+      retryFailedWithLongerTimeout: s.retryFailedWithLongerTimeout,
       dismissModelSwitchPrompt: s.dismissModelSwitchPrompt,
       acceptModelSwitch: s.acceptModelSwitch,
     })),

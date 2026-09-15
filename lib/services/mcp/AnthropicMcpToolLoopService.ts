@@ -67,6 +67,8 @@ export interface AnthropicMcpToolLoopOptions {
   userMessageText?: string;
   /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
   builtinExecutor?: ToolLoopCoreOptions<Anthropic.MessageParam>['builtinExecutor'];
+  /** Aborts every model round (see McpToolLoopOptions.signal). */
+  signal?: AbortSignal;
 }
 
 function buildAnthropicStrategy(
@@ -98,6 +100,7 @@ function buildAnthropicStrategy(
       serversWithTools: ServerWithTools[],
       allowToolUse,
       write,
+      onModelStarted,
     ): Promise<AssembledRound> {
       const params = options.buildParams(messages);
       if (systemAddendum) {
@@ -122,7 +125,12 @@ function buildAnthropicStrategy(
         }
       }
 
-      const eventStream = await options.handler.executeStreamingRequest(params);
+      const eventStream = await options.handler.executeStreamingRequest(
+        params,
+        options.signal,
+      );
+      // Headers are in: the model has started. Signal BEFORE consuming.
+      onModelStarted?.();
 
       const accumulator = createAnthropicToolUseAccumulator();
       for await (const event of eventStream) {

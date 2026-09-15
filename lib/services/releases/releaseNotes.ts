@@ -62,6 +62,26 @@ export function getReleasesUrl(): string {
 const DEPLOY_LINE = /^Deployed to .*\[workflow run\]\(.*$/gm;
 /** GitHub's "notes generated using configuration in .github/release.yml" marker. */
 const HTML_COMMENT = /<!--[\s\S]*?-->/g;
+
+/**
+ * Removes HTML comments until none are left, then defuses any opener that
+ * survives. A single deletion pass can reassemble a comment from its own
+ * remnants (`<!<!---->--` → `<!--`), and what remains after the loop is by
+ * construction an UNCLOSED opener, which no complete-comment pattern can
+ * ever match — so it is escaped rather than deleted (an escape cannot be
+ * reassembled: the `<` it consumes is gone). Harmless either way, since the
+ * body is rendered through the sanitizing markdown pipeline, but "strip
+ * comments" should leave no `<!--` behind.
+ */
+function stripHtmlComments(text: string): string {
+  let previous: string;
+  let current = text;
+  do {
+    previous = current;
+    current = current.replace(HTML_COMMENT, '');
+  } while (current !== previous);
+  return current.replace(/<!--/g, '&lt;!--');
+}
 /** Trailing compare link; the per-PR links above it are the useful ones. */
 const FULL_CHANGELOG_LINE = /^\*\*Full Changelog\*\*:.*$/gm;
 /** Bare PR URLs, which GitHub's generated notes emit unlinked and in full. */
@@ -79,9 +99,7 @@ const PR_URL =
 export function cleanReleaseBody(raw: string): string {
   if (!raw) return '';
 
-  const cleaned = raw
-    .replace(/\r\n/g, '\n')
-    .replace(HTML_COMMENT, '')
+  const cleaned = stripHtmlComments(raw.replace(/\r\n/g, '\n'))
     .replace(DEPLOY_LINE, '')
     .replace(FULL_CHANGELOG_LINE, '')
     .replace(PR_URL, (url, number) => `[#${number}](${url})`)

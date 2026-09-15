@@ -711,7 +711,9 @@
     "beta": "Ibheta",
     "copied": "Kukopishiwe!",
     "clear": "Sula",
-    "undo": "Buyisela emuva"
+    "undo": "Buyisela emuva",
+    "durationSeconds": "{count, plural, one {# umzuzwana} other {# imizuzwana}}",
+    "durationMinutes": "{count, plural, one {# umzuzu} other {# imizuzu}}"
   },
   "terms": {
     "officialLanguages": "Inguqulo esemthethweni:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "Unqenqema lokusesha iwebhu lufinyelelwe — kuphendulwa ngaphandle kokusesha…",
       "codeInterpreterLimitReached": "Unqenqema lokusebenza kwekhodi lufinyelelwe — kuphendulwa ngaphandle kokusebenzisa ikhodi…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Ukusesha kwesisekelo solwazi kwehlulekile — impendulo ngeke isebenzise amadokhumenti elungu"
+      "knowledgeSearchFailed": "Ukusesha kwesisekelo solwazi kwehlulekile — impendulo ngeke isebenzise amadokhumenti elungu",
+      "stillWorking": "Sisasebenza…"
     },
     "toolSummary": {
       "usedTools": "Kusetshenzisiwe {count, plural, one {# ithuluzi} other {# amathuluzi}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "Qala ingxoxo entsha",
     "downloadDebugInfo": "Landa ulwazi lokuhlola amaphutha",
     "includeMessageText": "Faka umbhalo womyalezo",
-    "ttsEquationPlaceholder": "isibalo"
+    "ttsEquationPlaceholder": "isibalo",
+    "modelTimedOut": "{model} ayizange iqale ukuphendula phakathi nesikhathi esingu-{duration}. Ingabe imatasa — ungakwazi ukulinda isikhathi eside, noma usebenzise olunye uhlobo.",
+    "modelTimedOutAtMaximum": "{model} ayizange iqale ukuphendula phakathi nesikhathi esingu-{duration}, okuyisikhathi eside kakhulu esitholakalayo. Zama futhi, noma usebenzise olunye uhlobo.",
+    "requestTimedOut": "Lesi sicelo sithathe isikhathi eside kakhulu ukuprepare, samiswa {model} ingakaphenduli. Unganika isikhathi esengeziwe, noma usebenzise olunye uhlobo.",
+    "retryWaitingLonger": "Linda kufika ku-{duration} bese uzama futhi",
+    "alwaysWaitThisLong": "Hlale ulinda kufika ku-{duration}"
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -1446,7 +1454,20 @@
     "Connections": "Izixhumi",
     "DataBackup": "Idatha & Isipele",
     "Export & Import": "Thumela & Ngenisa",
-    "exportImportDescription": "Landa izingxoxo zakho, amafolda, namaphrompthi njengefayela, noma uwasibonise kusuka kuthunyelwe kwangaphambilini."
+    "exportImportDescription": "Landa izingxoxo zakho, amafolda, namaphrompthi njengefayela, noma uwasibonise kusuka kuthunyelwe kwangaphambilini.",
+    "modelTimeout": {
+      "title": "Isikhathi sokulinda imodeli",
+      "description": "Isikhathi esilindelwe ukuthi imodeli iqale ukuphendula ngaphambi kokuthi siyeke. Amaphuzu angasheshisa amamodeli ahamba kancane noma izifunda ezimatasa. Uma impendulo isiqale ukugeleza, lokhu akusasebenzi.",
+      "presetStandard": "Okuvamile",
+      "presetPatient": "Okubekezelayo",
+      "presetMaximum": "Okukhulu",
+      "presetCustom": "Okokwezifiso",
+      "customLabel": "Linda kufika ku",
+      "customUnit": "imizuzwana",
+      "customHint": "Phakathi kuka-{min} no-{max} imizuzwana.",
+      "preferModelTitle": "Khetha imodeli engiyithandayo",
+      "preferModelDescription": "Ungashintshi ngokuzenzakalelayo uma isicelo siphazamiseka. Iphutha lizobe lisavumela ukushintsha imodeli."
+    }
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "Isiphakamiso sikhishiwe — uhlele isigaba saso.",
       "suggestionDroppedMany": "{count} iziphakamiso zikhishiwe — uhlele izigaba zazo.",
       "pendingRunActionTranslate": "Ukuhunyushwa futhi",
-      "pendingRunActionAssess": "Ukuhlola kabusha"
+      "pendingRunActionAssess": "Ukuhlola kabusha",
+      "entryKind": "Uhlobo lokufaka",
+      "kindTerm": "Ithuluzi",
+      "kindAcronym": "Isifinyezo",
+      "sourceExpansion": "Igama eligcwele emthonjeni (okokuzikhethela)",
+      "targetExpansion": "Igama eligcwele ngokuhumusha (okokuzikhethela)",
+      "acronymHint": "Izifinyezo zifana nje ngendlela ezibhaliwe ngayo: WHO isebenza ku-“WHO”, hhayi “who”. Ama-term afaka noma yikuphi ukukhishwa kokuqala.",
+      "glossaryCheckTitle": "Ukuhlola iglosari",
+      "glossaryCheckPass": "{count, plural, one {Ithuluzi elidingekayo lisetshenzisiwe.} other {Zonke izithuluzi ezingu-# ezidingekayo zisetshenzisiwe.}}",
+      "glossaryCheckMissing": "{count, plural, one {# phakathi kuka-{total} wezilimi ezidingekayo azikho:} other {# phakathi kuka-{total} wezilimi ezidingekayo azikho:}}"
     },
     "document": {
       "emptyTitle": "Chaza umbhalo ofunayo",

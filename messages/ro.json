@@ -606,7 +606,9 @@
     "beta": "Beta",
     "copied": "Copiat!",
     "clear": "Șterge",
-    "undo": "Anulare"
+    "undo": "Anulare",
+    "durationSeconds": "{count, plural, one {# secundă} other {# secunde}}",
+    "durationMinutes": "{count, plural, one {# minut} other {# minute}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "A apărut o eroare neașteptată",
@@ -802,7 +804,8 @@
       "webSearchLimitReached": "Limita zilnică de căutare web atinsă — se răspunde fără căutare…",
       "codeInterpreterLimitReached": "Limita zilnică pentru rularea codului atinsă — se răspunde fără a executa cod…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Căutarea în baza de cunoștințe a eșuat — răspunsul nu va folosi documentele agentului"
+      "knowledgeSearchFailed": "Căutarea în baza de cunoștințe a eșuat — răspunsul nu va folosi documentele agentului",
+      "stillWorking": "Se lucrează în continuare…"
     },
     "toolSummary": {
       "usedTools": "Folosit {count, plural, one {# instrument} other {# instrumente}}",
@@ -897,7 +900,12 @@
     "startNewConversation": "Pornește o conversație nouă",
     "downloadDebugInfo": "Descarcă informațiile de depanare",
     "includeMessageText": "Include textul mesajului",
-    "ttsEquationPlaceholder": "ecuație"
+    "ttsEquationPlaceholder": "ecuație",
+    "modelTimedOut": "{model} nu a început să răspundă în {duration}. Poate fi ocupat — puteți aștepta mai mult sau puteți încerca un alt model.",
+    "modelTimedOutAtMaximum": "{model} nu a început să răspundă în {duration}, timpul maxim de așteptare disponibil. Încercați din nou sau încercați un alt model.",
+    "requestTimedOut": "Această solicitare a durat prea mult pentru a fi pregătită și a fost oprită înainte ca {model} să poată răspunde. Puteți permite mai mult timp sau puteți încerca un alt model.",
+    "retryWaitingLonger": "Așteptați până la {duration} și încercați din nou",
+    "alwaysWaitThisLong": "Așteptați mereu până la {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -1285,7 +1293,20 @@
     "Connections": "Conexiuni",
     "DataBackup": "Date & Backup",
     "Export & Import": "Export & Import",
-    "exportImportDescription": "Descarcă conversațiile, folderele și mesajele rapide ca fișier sau restaurează-le dintr-un export anterior."
+    "exportImportDescription": "Descarcă conversațiile, folderele și mesajele rapide ca fișier sau restaurează-le dintr-un export anterior.",
+    "modelTimeout": {
+      "title": "Timp de așteptare model",
+      "description": "Cât timp să așteptați ca un model să înceapă să răspundă înainte de a renunța. Modelele mai lente și regiunile aglomerate pot necesita mai mult. Odată ce răspunsul începe să fie transmis, această setare nu se mai aplică.",
+      "presetStandard": "Standard",
+      "presetPatient": "Răbdător",
+      "presetMaximum": "Maxim",
+      "presetCustom": "Personalizat",
+      "customLabel": "Așteptați până la",
+      "customUnit": "secunde",
+      "customHint": "Între {min} și {max} secunde.",
+      "preferModelTitle": "Prefer modelul selectat",
+      "preferModelDescription": "Nu comuta automat la un alt model când o solicitare eșuează. Eroarea va permite în continuare schimbarea modelului."
+    }
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Sugestie eliminată — ați editat acest pasaj.",
       "suggestionDroppedMany": "{count} sugestii eliminate — ați editat pasajele respective.",
       "pendingRunActionTranslate": "Se retraduce",
-      "pendingRunActionAssess": "Se reevaluează"
+      "pendingRunActionAssess": "Se reevaluează",
+      "entryKind": "Tip de intrare",
+      "kindTerm": "Termen",
+      "kindAcronym": "Acronim",
+      "sourceExpansion": "Denumire completă în sursă (opțional)",
+      "targetExpansion": "Denumire completă în traducere (opțional)",
+      "acronymHint": "Acronimele corespund exact modului tastat: WHO se aplică la „WHO”, niciodată la „who”. Termenii corespund oricărei capitalizări.",
+      "glossaryCheckTitle": "Verificare glosar",
+      "glossaryCheckPass": "{count, plural, one {Termenul cerut a fost folosit.} other {Toți cei # termeni ceruți au fost folosiți.}}",
+      "glossaryCheckMissing": "{count, plural, one {Lipsește # din {total} traduceri cerute:} other {Lipsesc # din {total} traduceri cerute:}}"
     },
     "document": {
       "emptyTitle": "Descrieți documentul dorit",

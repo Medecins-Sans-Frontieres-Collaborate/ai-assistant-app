@@ -711,7 +711,9 @@
     "beta": "Бета",
     "copied": "Kopirano!",
     "clear": "Obriši",
-    "undo": "Poništi"
+    "undo": "Poništi",
+    "durationSeconds": "{count, plural, one {# sekunda} other {# sekundi}}",
+    "durationMinutes": "{count, plural, one {# minut} other {# minuta}}"
   },
   "terms": {
     "officialLanguages": "Званична верзија:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "Dnevni limit za pretragu je dostignut — odgovaranje bez pretrage…",
       "codeInterpreterLimitReached": "Dnevni limit za izvršavanje koda je dostignut — odgovaranje bez pokretanja koda…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Pretraga baze znanja nije uspela — odgovor neće koristiti dokumente agenta"
+      "knowledgeSearchFailed": "Pretraga baze znanja nije uspela — odgovor neće koristiti dokumente agenta",
+      "stillWorking": "Još uvek radim…"
     },
     "toolSummary": {
       "usedTools": "Korišćen{count, plural, one {# alat} other {# alata}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "Započni novi razgovor",
     "downloadDebugInfo": "Preuzmi informacije za otklanjanje grešaka",
     "includeMessageText": "Uključi tekst poruke",
-    "ttsEquationPlaceholder": "jednačina"
+    "ttsEquationPlaceholder": "jednačina",
+    "modelTimedOut": "{model} nije počeo da odgovara u roku od {duration}. Možda je zauzet — možete sačekati duže ili pokušati sa drugim modelom.",
+    "modelTimedOutAtMaximum": "{model} nije počeo da odgovara u roku od {duration}, što je maksimalno vreme čekanja. Pokušajte ponovo ili izaberite drugi model.",
+    "requestTimedOut": "Ovaj zahtev je trajao predugo i zaustavljen je pre nego što je {model} mogao da odgovori. Možete dozvoliti više vremena ili pokušati sa drugim modelom.",
+    "retryWaitingLonger": "Sačekajte do {duration} i pokušajte ponovo",
+    "alwaysWaitThisLong": "Uvek čekaj do {duration}"
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1446,7 +1454,20 @@
     "Connections": "Veze",
     "DataBackup": "Podaci i bekap",
     "Export & Import": "Izvoz i uvoz",
-    "exportImportDescription": "Preuzmite svoje razgovore, foldere i podsetnike kao fajl ili ih vratite iz prethodnog izvoza."
+    "exportImportDescription": "Preuzmite svoje razgovore, foldere i podsetnike kao fajl ili ih vratite iz prethodnog izvoza.",
+    "modelTimeout": {
+      "title": "Vreme čekanja modela",
+      "description": "Koliko dugo čekati da model počne da odgovara pre nego što odustane. Sporiji modeli i zauzetije regije mogu zahtevati više vremena. Ova postavka se ne primenjuje kada odgovor počne da pristiže.",
+      "presetStandard": "Standardno",
+      "presetPatient": "Strpljivo",
+      "presetMaximum": "Maksimalno",
+      "presetCustom": "Prilagođeno",
+      "customLabel": "Čekaj do",
+      "customUnit": "sekundi",
+      "customHint": "Između {min} i {max} sekundi.",
+      "preferModelTitle": "Preferiraj moj izabrani model",
+      "preferModelDescription": "Nemoj automatski prebacivati na drugi model kada zahtev ne uspe. Greška će i dalje ponuditi promenu modela."
+    }
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "Predlog je odbačen — izmenili ste njegov odlomak.",
       "suggestionDroppedMany": "{count} predloga je odbačeno — izmenili ste njihove odlomke.",
       "pendingRunActionTranslate": "Ponovno prevođenje",
-      "pendingRunActionAssess": "Ponovno procenjivanje"
+      "pendingRunActionAssess": "Ponovno procenjivanje",
+      "entryKind": "Vrsta unosa",
+      "kindTerm": "Termin",
+      "kindAcronym": "Akronim",
+      "sourceExpansion": "Puno ime u izvorniku (opciono)",
+      "targetExpansion": "Puno ime u prevodu (opciono)",
+      "acronymHint": "Akronimi se poklapaju tačno kako su napisani: WHO se odnosi samo na „WHO“, nikada na „who“. Termini odgovaraju u bilo kojoj kombinaciji slova.",
+      "glossaryCheckTitle": "Provera pojmovnika",
+      "glossaryCheckPass": "{count, plural, one {Neophodan termin je upotrebljen.} other {Svi # neophodni termini su upotrebljeni.}}",
+      "glossaryCheckMissing": "{count, plural, one {# od {total} neophodnih prevoda nedostaje:} other {# od {total} neophodnih prevoda nedostaje:}}"
     },
     "document": {
       "emptyTitle": "Opišite dokument koji želite",

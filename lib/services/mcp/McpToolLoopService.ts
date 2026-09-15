@@ -65,6 +65,12 @@ export interface McpToolLoopOptions {
   userMessageText?: string;
   /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
   builtinExecutor?: ToolLoopCoreOptions<OpenAIMessage>['builtinExecutor'];
+  /**
+   * Aborts every model round (pipeline stage timeout / request guard,
+   * issue #130) so a turn the client was already told failed does not
+   * keep calling the model.
+   */
+  signal?: AbortSignal;
 }
 
 type OpenAIMessage = OpenAI.Chat.Completions.ChatCompletionMessageParam;
@@ -117,6 +123,7 @@ function buildOpenAIStrategy(
       serversWithTools: ServerWithTools[],
       allowToolUse,
       write,
+      onModelStarted,
     ): Promise<AssembledRound> {
       const params = options.buildParams(withSystemAddendum(messages));
       const openAITools = serversWithTools.flatMap(({ server, tools }) =>
@@ -131,7 +138,10 @@ function buildOpenAIStrategy(
       const completionStream = (await options.handler.executeRequest(
         params,
         true,
+        options.signal,
       )) as AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>;
+      // Headers are in: the model has started. Signal BEFORE consuming.
+      onModelStarted?.();
 
       const accumulator = createToolCallAccumulator();
       for await (const chunk of completionStream) {

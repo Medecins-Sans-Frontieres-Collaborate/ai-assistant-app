@@ -93,6 +93,13 @@ export interface StandardChatRequest {
   stream?: boolean;
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
   verbosity?: 'low' | 'medium' | 'high';
+  /**
+   * Aborted when the pipeline stage times out (issue #130). Passed to the
+   * upstream create call so the model request is cancelled rather than
+   * left running; once aborted, every fallback path below rethrows instead
+   * of starting a fresh upstream call the caller will never consume.
+   */
+  signal?: AbortSignal;
   botId?: string;
   /** Per-request agent + correlation telemetry (see ChatContext.telemetry). */
   telemetry?: RequestTelemetry;
@@ -519,6 +526,7 @@ export class StandardChatService {
         chatRegion,
         request.telemetry,
         request.reasoningEffort,
+        request.signal,
       );
     }
 
@@ -563,6 +571,7 @@ export class StandardChatService {
           ) as OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming,
         servers: request.mcpServers,
         builtinExecutor: request.builtinExecutor,
+        signal: request.signal,
         pendingToolCalls: request.mcpPendingToolCalls,
         approvalResponses: request.approvalResponses,
         loopRound: request.mcpLoopRound ?? 0,
@@ -627,6 +636,10 @@ export class StandardChatService {
             chatRegion,
           );
         } catch (error) {
+          // The stage timed out and cancelled this call: the caller has
+          // already reported the failure, so a fresh chat.completions call
+          // here would only burn tokens on an answer nobody reads.
+          if (request.signal?.aborted) throw error;
           const message =
             error instanceof Error ? error.message : String(error);
           if (isDeploymentNotFoundError(error)) {
@@ -719,13 +732,23 @@ export class StandardChatService {
       // Execute request
       const perfExecStart = performance.now();
       try {
-        response = await handler.executeRequest(requestParams, stream);
+        response = await handler.executeRequest(
+          requestParams,
+          stream,
+          request.signal,
+        );
         perfLog('StandardChatService.executeRequest', perfExecStart);
         break;
       } catch (error) {
         // Custom-source requests never fall back: a missing deployment on the
         // user's own account must surface, not silently reroute to app models.
-        if (customSource || !isDeploymentNotFoundError(error)) throw error;
+        // Neither does a call the stage timeout already cancelled.
+        if (
+          customSource ||
+          request.signal?.aborted ||
+          !isDeploymentNotFoundError(error)
+        )
+          throw error;
 
         const fallback = getFallbackModel(
           attemptedModelIds,
@@ -888,7 +911,7 @@ export class StandardChatService {
     if (stream) {
       let events: Awaited<ReturnType<typeof handler.executeStreaming>>;
       try {
-        events = await handler.executeStreaming(params);
+        events = await handler.executeStreaming(params, request.signal);
       } catch (error) {
         // The uploads outlive a failed create call — clean up before the
         // caller retries on a fallback deployment (which re-uploads).
@@ -947,7 +970,10 @@ export class StandardChatService {
       });
     }
 
-    const completion = await handler.executeNonStreaming(params);
+    const completion = await handler.executeNonStreaming(
+      params,
+      request.signal,
+    );
     const thinking = handler.extractReasoningSummary(completion);
 
     let usage: TokenUsageMetadata | undefined;
@@ -1036,6 +1062,7 @@ export class StandardChatService {
         ),
       servers: request.mcpServers ?? [],
       builtinExecutor: request.builtinExecutor,
+      signal: request.signal,
       pendingToolCalls: request.mcpPendingToolCalls,
       approvalResponses: request.approvalResponses,
       loopRound: request.mcpLoopRound ?? 0,
@@ -1093,6 +1120,7 @@ export class StandardChatService {
     chatRegion: UserRegion | null = null,
     telemetry?: RequestTelemetry,
     reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high',
+    signal?: AbortSignal,
   ): Promise<Response> {
     const client = anthropicClient ?? this.anthropicFoundryClient;
     // Validate Anthropic client is configured
@@ -1130,7 +1158,10 @@ export class StandardChatService {
       );
 
       // Execute streaming request
-      const response = await handler.executeStreamingRequest(requestParams);
+      const response = await handler.executeStreamingRequest(
+        requestParams,
+        signal,
+      );
 
       // Process the stream with Anthropic-specific processor. Claude models
       // don't use the fallback chain, so modelConfig IS the served model.
@@ -1171,7 +1202,7 @@ export class StandardChatService {
       );
 
       // Execute non-streaming request
-      const message = await handler.executeRequest(requestParams);
+      const message = await handler.executeRequest(requestParams, signal);
 
       // Extract text content from response
       const textContent = handler.extractTextContent(message);

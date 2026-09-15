@@ -16,6 +16,7 @@ import {
   badRequestResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
+import { sanitizeGlossaryEntry } from '@/lib/utils/shared/translation/glossaryMatch';
 
 import { GlossaryEntry } from '@/types/workflow';
 
@@ -92,11 +93,12 @@ export async function POST(req: NextRequest) {
     return badRequestResponse('mode must be "quick" or "agentic"');
   }
 
+  // Trimmed, length-capped, `kind` validated (issue #131) — the entries
+  // become prompt text and regex input, so their shape is never trusted.
   const localEntries: GlossaryEntry[] = Array.isArray(body.glossaryEntries)
-    ? body.glossaryEntries.filter(
-        (e): e is GlossaryEntry =>
-          !!e && typeof e.source === 'string' && typeof e.target === 'string',
-      )
+    ? body.glossaryEntries
+        .map((e: unknown) => sanitizeGlossaryEntry(e))
+        .filter((e): e is GlossaryEntry => e !== null)
     : [];
 
   // Admin terminology guide: resolved fail-closed BEFORE the stream opens so

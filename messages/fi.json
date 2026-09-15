@@ -583,7 +583,9 @@
     "beta": "Beta",
     "copied": "Kopioitu!",
     "clear": "Tyhjennä",
-    "undo": "Kumoa"
+    "undo": "Kumoa",
+    "durationSeconds": "{count, plural, one {# sekunti} other {# sekuntia}}",
+    "durationMinutes": "{count, plural, one {# minuutti} other {# minuuttia}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "Odottamaton virhe tapahtui",
@@ -779,7 +781,8 @@
       "webSearchLimitReached": "Päivittäinen verkkohakuraja saavutettu — vastataan ilman hakua…",
       "codeInterpreterLimitReached": "Päivittäinen koodinsuorituksen raja saavutettu — vastataan ilman koodin ajamista…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Tietopohjahaku epäonnistui — vastaus ei käytä agentin asiakirjoja"
+      "knowledgeSearchFailed": "Tietopohjahaku epäonnistui — vastaus ei käytä agentin asiakirjoja",
+      "stillWorking": "Työstetään yhä…"
     },
     "toolSummary": {
       "usedTools": "Käytetty {count, plural, one {# työkalu} other {# työkalua}}",
@@ -874,7 +877,12 @@
     "startNewConversation": "Aloita uusi keskustelu",
     "downloadDebugInfo": "Lataa vianmääritystiedot",
     "includeMessageText": "Sisällytä viestien teksti",
-    "ttsEquationPlaceholder": "kaava"
+    "ttsEquationPlaceholder": "kaava",
+    "modelTimedOut": "{model} ei alkanut vastata {duration} kuluessa. Se saattaa olla varattu — voit odottaa pidempään tai kokeilla toista mallia.",
+    "modelTimedOutAtMaximum": "{model} ei alkanut vastata {duration} kuluessa, mikä on pisin mahdollinen odotusaika. Yritä uudelleen tai käytä toista mallia.",
+    "requestTimedOut": "Tämän pyynnön valmistelu kesti liian kauan, ja se keskeytettiin ennen kuin {model} ehti vastata. Voit sallia pidemmän odotusajan tai kokeilla toista mallia.",
+    "retryWaitingLonger": "Odota enintään {duration} ja yritä uudelleen",
+    "alwaysWaitThisLong": "Odotetaan aina enintään {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -1262,7 +1270,20 @@
     "Connections": "Yhteydet",
     "DataBackup": "Data & Varmuuskopiointi",
     "Export & Import": "Vienti & Tuonti",
-    "exportImportDescription": "Lataa keskustelut, kansiot ja kehotteet tiedostona tai palauta aiemmasta viennistä."
+    "exportImportDescription": "Lataa keskustelut, kansiot ja kehotteet tiedostona tai palauta aiemmasta viennistä.",
+    "modelTimeout": {
+      "title": "Mallin odotusaika",
+      "description": "Kuinka kauan odotetaan mallin vastausta ennen luopumista. Hitaammat mallit ja ruuhkaiset alueet voivat vaatia enemmän aikaa. Odotus ei enää koske, kun vastaus alkaa tulla.",
+      "presetStandard": "Vakio",
+      "presetPatient": "Pitkä odotus",
+      "presetMaximum": "Maksimi",
+      "presetCustom": "Mukautettu",
+      "customLabel": "Odotetaan enintään",
+      "customUnit": "sekuntia",
+      "customHint": "Väliltä {min}–{max} sekuntia.",
+      "preferModelTitle": "Suosi valitsemaani mallia",
+      "preferModelDescription": "Älä vaihda toiseen malliin automaattisesti, jos pyyntö epäonnistuu. Virheilmoitus tarjoaa kuitenkin mallin vaihdon."
+    }
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Ehdotus poistettu — muokkasit kyseistä kohtaa.",
       "suggestionDroppedMany": "{count} ehdotusta poistettu — muokkasit kyseisiä kohtia.",
       "pendingRunActionTranslate": "Käännetään uudelleen",
-      "pendingRunActionAssess": "Arvioidaan uudelleen"
+      "pendingRunActionAssess": "Arvioidaan uudelleen",
+      "entryKind": "Kirjaustyyppi",
+      "kindTerm": "Termi",
+      "kindAcronym": "Lyhenne",
+      "sourceExpansion": "Lähteen koko nimi (valinnainen)",
+      "targetExpansion": "Käännöksen koko nimi (valinnainen)",
+      "acronymHint": "Lyhenteet täsmäävät tarkalleen kirjoitetun mukaan: WHO koskee vain \"WHO\", ei \"who\". Termit täsmäävät kaikilla kirjainkoolla.",
+      "glossaryCheckTitle": "Sanastotarkistus",
+      "glossaryCheckPass": "{count, plural, one {Vaadittu termi on käytetty.} other {Kaikki # vaadittua termiä on käytetty.}}",
+      "glossaryCheckMissing": "{count, plural, one {# / {total} vaaditusta käännöksestä puuttuu:} other {# / {total} vaaditusta käännöksestä puuttuu:}}"
     },
     "document": {
       "emptyTitle": "Kuvaile haluamaasi asiakirjaa",

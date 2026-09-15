@@ -608,7 +608,9 @@
     "beta": "베타",
     "copied": "복사됨!",
     "clear": "지우기",
-    "undo": "실행 취소"
+    "undo": "실행 취소",
+    "durationSeconds": "{count, plural, one {#초} other {#초}}",
+    "durationMinutes": "{count, plural, one {#분} other {#분}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "예기치 않은 오류가 발생했습니다",
@@ -804,7 +806,8 @@
       "webSearchLimitReached": "일일 웹 검색 한도 도달 — 검색 없이 답변합니다…",
       "codeInterpreterLimitReached": "일일 코드 실행 한도 도달 — 코드 실행 없이 답변합니다…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "지식 기반 검색에 실패했습니다 — 답변에 에이전트 문서가 사용되지 않습니다."
+      "knowledgeSearchFailed": "지식 기반 검색에 실패했습니다 — 답변에 에이전트 문서가 사용되지 않습니다.",
+      "stillWorking": "작업 진행 중…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {#개 도구 사용} other {#개 도구 사용}}",
@@ -899,7 +902,12 @@
     "startNewConversation": "새 대화 시작",
     "downloadDebugInfo": "디버그 정보 다운로드",
     "includeMessageText": "메시지 텍스트 포함",
-    "ttsEquationPlaceholder": "수식"
+    "ttsEquationPlaceholder": "수식",
+    "modelTimedOut": "{model}이(가) {duration} 이내에 응답을 시작하지 않았습니다. 현재 바쁠 수 있습니다 — 더 기다리시거나 다른 모델을 시도해 보세요.",
+    "modelTimedOutAtMaximum": "{model}이(가) {duration} 이내(설정된 최대 시간) 응답을 시작하지 않았습니다. 다시 시도하시거나 다른 모델을 사용해 보세요.",
+    "requestTimedOut": "요청 준비에 시간이 너무 오래 걸려 {model}이(가) 답변을 시작하기 전에 중단되었습니다. 더 긴 대기 시간을 허용하거나 다른 모델을 시도할 수 있습니다.",
+    "retryWaitingLonger": "최대 {duration}까지 기다린 후 다시 시도하기",
+    "alwaysWaitThisLong": "항상 최대 {duration}까지 대기"
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -1287,7 +1295,20 @@
     "Connections": "연결",
     "DataBackup": "데이터 및 백업",
     "Export & Import": "내보내기 및 가져오기",
-    "exportImportDescription": "채팅, 폴더, 프롬프트를 파일로 다운로드하거나, 이전 내보내기에서 복원할 수 있습니다."
+    "exportImportDescription": "채팅, 폴더, 프롬프트를 파일로 다운로드하거나, 이전 내보내기에서 복원할 수 있습니다.",
+    "modelTimeout": {
+      "title": "모델 대기 시간",
+      "description": "모델이 답변을 시작할 때까지 기다릴 최대 시간입니다. 느린 모델이나 바쁜 지역에서는 시간이 더 필요할 수 있습니다. 답변이 스트리밍되기 시작하면 이 설정은 더 이상 적용되지 않습니다.",
+      "presetStandard": "표준",
+      "presetPatient": "여유",
+      "presetMaximum": "최대",
+      "presetCustom": "사용자 지정",
+      "customLabel": "최대 대기",
+      "customUnit": "초",
+      "customHint": "{min}초에서 {max}초 사이.",
+      "preferModelTitle": "선택한 모델 우선 사용",
+      "preferModelDescription": "요청이 실패해도 자동으로 다른 모델로 전환하지 않습니다. 오류 시 전환 옵션은 계속 제공됩니다."
+    }
   },
   "notFound": {
     "lostDog": "잃어버린 개"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "제안이 삭제되었습니다 — 해당 부분을 편집했습니다.",
       "suggestionDroppedMany": "{count}개의 제안이 삭제되었습니다 — 해당 부분을 편집했습니다.",
       "pendingRunActionTranslate": "다시 번역 중",
-      "pendingRunActionAssess": "재평가 중"
+      "pendingRunActionAssess": "재평가 중",
+      "entryKind": "항목 유형",
+      "kindTerm": "용어",
+      "kindAcronym": "약어",
+      "sourceExpansion": "원문 전체 이름 (선택 사항)",
+      "targetExpansion": "번역 전체 이름 (선택 사항)",
+      "acronymHint": "약어는 입력한 대로 정확히 일치해야 합니다: WHO는 “WHO”에만 적용되고 “who”에는 적용되지 않습니다. 용어는 대소문자 구분 없이 일치합니다.",
+      "glossaryCheckTitle": "용어집 확인",
+      "glossaryCheckPass": "{count, plural, one {필수 용어가 사용되었습니다.} other {#개의 모든 필수 용어가 사용되었습니다.}}",
+      "glossaryCheckMissing": "{count, plural, one {{total}개 중 #개의 필수 번역이 누락되었습니다:} other {{total}개 중 #개의 필수 번역이 누락되었습니다:}}"
     },
     "document": {
       "emptyTitle": "원하는 문서를 설명하세요",

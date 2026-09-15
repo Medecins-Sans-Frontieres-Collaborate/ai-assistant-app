@@ -608,7 +608,9 @@
     "beta": "Beta",
     "copied": "Kopiert!",
     "clear": "Leeren",
-    "undo": "Rückgängig"
+    "undo": "Rückgängig",
+    "durationSeconds": "{count, plural, one {# Sekunde} other {# Sekunden}}",
+    "durationMinutes": "{count, plural, one {# Minute} other {# Minuten}}"
   },
   "chat": {
     "downloadAudio": "Audio herunterladen",
@@ -750,7 +752,8 @@
       "webSearchLimitReached": "Tägliches Web-Suchlimit erreicht – Antwort ohne Suche…",
       "codeInterpreterLimitReached": "Tägliches Code-Ausführungslimit erreicht – Antwort ohne Code-Ausführung…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Suche in der Wissensdatenbank fehlgeschlagen — die Antwort verwendet keine Dokumente des Agents."
+      "knowledgeSearchFailed": "Suche in der Wissensdatenbank fehlgeschlagen — die Antwort verwendet keine Dokumente des Agents.",
+      "stillWorking": "Noch in Arbeit…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# Tool verwendet} other {# Tools verwendet}}",
@@ -845,7 +848,12 @@
     "startNewConversation": "Neues Gespräch starten",
     "downloadDebugInfo": "Debug-Informationen herunterladen",
     "includeMessageText": "Nachrichtentext einschließen",
-    "ttsEquationPlaceholder": "Gleichung"
+    "ttsEquationPlaceholder": "Gleichung",
+    "modelTimedOut": "{model} hat innerhalb von {duration} nicht zu antworten begonnen. Das Modell ist möglicherweise ausgelastet — Sie können länger warten oder ein anderes Modell ausprobieren.",
+    "modelTimedOutAtMaximum": "{model} hat innerhalb von {duration}, der längsten verfügbaren Wartezeit, nicht zu antworten begonnen. Versuchen Sie es erneut oder wählen Sie ein anderes Modell.",
+    "requestTimedOut": "Für diese Anfrage war die Vorbereitungszeit zu lang und sie wurde gestoppt, bevor {model} antworten konnte. Sie können mehr Zeit erlauben, oder ein anderes Modell ausprobieren.",
+    "retryWaitingLonger": "Bis zu {duration} warten und erneut versuchen",
+    "alwaysWaitThisLong": "Immer bis zu {duration} warten"
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -1287,7 +1295,20 @@
     "Connections": "Verbindungen",
     "DataBackup": "Daten & Backup",
     "Export & Import": "Export & Import",
-    "exportImportDescription": "Laden Sie Ihre Chats, Ordner und Eingabeaufforderungen als Datei herunter oder stellen Sie sie aus einem früheren Export wieder her."
+    "exportImportDescription": "Laden Sie Ihre Chats, Ordner und Eingabeaufforderungen als Datei herunter oder stellen Sie sie aus einem früheren Export wieder her.",
+    "modelTimeout": {
+      "title": "Modell-Wartezeit",
+      "description": "Wie lange gewartet wird, bis ein Modell mit einer Antwort beginnt, bevor aufgegeben wird. Langsamere Modelle und ausgelastete Regionen benötigen möglicherweise mehr Zeit. Sobald eine Antwort gestreamt wird, gilt dies nicht mehr.",
+      "presetStandard": "Standard",
+      "presetPatient": "Geduldig",
+      "presetMaximum": "Maximum",
+      "presetCustom": "Benutzerdefiniert",
+      "customLabel": "Warten bis zu",
+      "customUnit": "Sekunden",
+      "customHint": "Zwischen {min} und {max} Sekunden.",
+      "preferModelTitle": "Bevorzugtes Modell verwenden",
+      "preferModelDescription": "Nicht automatisch zu einem anderen Modell wechseln, wenn eine Anfrage fehlschlägt. Der Fehler bietet weiterhin das Wechseln an."
+    }
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Vorschlag verworfen — Sie haben den Abschnitt bearbeitet.",
       "suggestionDroppedMany": "{count} Vorschläge verworfen — Sie haben die Abschnitte bearbeitet.",
       "pendingRunActionTranslate": "Erneut übersetzen",
-      "pendingRunActionAssess": "Erneut beurteilen"
+      "pendingRunActionAssess": "Erneut beurteilen",
+      "entryKind": "Eintragsart",
+      "kindTerm": "Begriff",
+      "kindAcronym": "Akronym",
+      "sourceExpansion": "Vollständiger Name in Quelle (optional)",
+      "targetExpansion": "Vollständiger Name in Übersetzung (optional)",
+      "acronymHint": "Akronyme stimmen genau mit der Eingabe überein: WHO gilt nur für „WHO“, nicht für „who“. Begriffe stimmen bei jeder Groß- und Kleinschreibung überein.",
+      "glossaryCheckTitle": "Glossar-Prüfung",
+      "glossaryCheckPass": "{count, plural, one {Der erforderliche Begriff wurde verwendet.} other {Alle # erforderlichen Begriffe wurden verwendet.}}",
+      "glossaryCheckMissing": "{count, plural, one {# von {total} erforderlichen Übersetzungen fehlt:} other {# von {total} erforderlichen Übersetzungen fehlen:}}"
     },
     "document": {
       "emptyTitle": "Beschreiben Sie das gewünschte Dokument",

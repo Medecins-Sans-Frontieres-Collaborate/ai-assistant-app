@@ -4,6 +4,8 @@
  * `app/api/chat/translate/route.ts` (which stays untouched — it serves the
  * per-message translate feature).
  */
+import { GlossaryViolation } from '@/types/workflow';
+
 import { buildGlossaryBlock } from '../shared/glossaryPrompts';
 
 // Re-exported for the orchestrator and existing call sites; the
@@ -73,10 +75,22 @@ export function buildReviewUserPrompt(
   translation: string,
   targetLanguage: string,
   priorIssues: string[],
+  /**
+   * Required translations a deterministic scan could not find in the
+   * translation (issue #131). Not the model's opinion — these MUST be
+   * fixed, so the review cannot approve while any remain.
+   */
+  glossaryViolations: GlossaryViolation[] = [],
 ): string {
   const prior =
     priorIssues.length > 0
       ? `\n\nIssues raised in earlier review rounds (verify they are fixed; do not re-raise fixed ones):\n- ${priorIssues.join('\n- ')}`
+      : '';
+  const violations =
+    glossaryViolations.length > 0
+      ? `\n\nGLOSSARY CHECK FAILED — an exact scan of the translation did not find these required translations. The verdict must be "revise" and the revised text must use them (acronyms exactly as written):\n- ${glossaryViolations
+          .map((v) => `"${v.source}" must be rendered as "${v.target}"`)
+          .join('\n- ')}`
       : '';
   return `Source text:
 """
@@ -86,7 +100,7 @@ ${sourceText}
 Translation into ${targetLanguage}:
 """
 ${translation}
-"""${prior}`;
+"""${prior}${violations}`;
 }
 
 /* ------------------------------------------------------------------ */

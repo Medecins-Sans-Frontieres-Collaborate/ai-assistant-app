@@ -20,6 +20,7 @@ import { Settings } from '@/types/settings';
 
 import { AutoFetchLinksToggle } from '../AutoFetchLinksToggle';
 import { ContextWindowSlider } from '../ContextWindowSlider';
+import { ModelTimeoutSetting } from '../ModelTimeoutSetting';
 import { PasteAttachmentSetting } from '../PasteAttachmentSetting';
 import { SuggestRevisionsSetting } from '../SuggestRevisionsSetting';
 import { SystemPrompt } from '../SystemPrompt';
@@ -294,6 +295,12 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
                     'settings.Controls how smoothly text appears during AI responses',
                   )}
                 </p>
+              </div>
+
+              {/* Model start timeout + prefer-my-model (issue #130) —
+                  store-driven, applies immediately. */}
+              <div className="mt-4">
+                <ModelTimeoutSetting />
               </div>
 
               {/* Context Window Setting — store-driven, applies immediately

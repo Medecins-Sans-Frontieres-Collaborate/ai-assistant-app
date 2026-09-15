@@ -711,7 +711,9 @@
     "beta": "Beta",
     "copied": "An kwafa!",
     "clear": "Share",
-    "undo": "Wani lokaci baya"
+    "undo": "Wani lokaci baya",
+    "durationSeconds": "{count, plural, one {# daqiqa} other {# daqiqo}}",
+    "durationMinutes": "{count, plural, one {# minti} other {# mintuna}}"
   },
   "terms": {
     "officialLanguages": "Fassarar hukuma:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "An kai iyakar binciken intanet na yau — amsawa ba tare da bincike…",
       "codeInterpreterLimitReached": "An kai iyakar amfani da lambar yau — amsawa ba tare da gudanar da lamba…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Bincike a cikin tushen ilimi ya gaza — amsar ba za ta yi amfani da takardun wakilin ba"
+      "knowledgeSearchFailed": "Bincike a cikin tushen ilimi ya gaza — amsar ba za ta yi amfani da takardun wakilin ba",
+      "stillWorking": "Har yanzu ana aiki…"
     },
     "toolSummary": {
       "usedTools": "An yi amfani da {count, plural, one {# kayan aiki} other {# kayan aiki}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "Fara sabuwar tattaunawa",
     "downloadDebugInfo": "Sauke bayanan warware matsala",
     "includeMessageText": "Hada da rubutun saƙo",
-    "ttsEquationPlaceholder": "daidaito"
+    "ttsEquationPlaceholder": "daidaito",
+    "modelTimedOut": "{model} bai fara amsawa cikin {duration} ba. Wata kila yana da aiki—za ka iya ƙara jira, ko ka gwada wani model ɗin.",
+    "modelTimedOutAtMaximum": "{model} bai fara amsawa cikin {duration} ba, mafi tsawon lokaci da za a iya jira. Gwada sake tura, ko ka gwada wani model ɗin.",
+    "requestTimedOut": "Wannan buƙatar ta ɗauki lokaci mai tsawo kafin a gama tanadi, aka dakatar kafin {model} ya amsa. Za ka iya ƙara lokaci, ko ka gwada wani model ɗin.",
+    "retryWaitingLonger": "Jira har zuwa {duration} ka sake gwadawa",
+    "alwaysWaitThisLong": "Ko da yaushe a jira har zuwa {duration}"
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1446,7 +1454,20 @@
     "Connections": "Haɗin kai",
     "DataBackup": "Baya & Ajiyar Bayanai",
     "Export & Import": "Fitarwa & Shigo da bayanai",
-    "exportImportDescription": "Zazzage tattaunawarka, manyan fayiloli, da tambayoyi a matsayin fayil, ko dawo da su daga fitarwa ta baya."
+    "exportImportDescription": "Zazzage tattaunawarka, manyan fayiloli, da tambayoyi a matsayin fayil, ko dawo da su daga fitarwa ta baya.",
+    "modelTimeout": {
+      "title": "Lokacin jiran model",
+      "description": "Tsawon lokacin da za a jira model kafin a daina jira. Model masu jinkiri da yankuna masu cunkoson aiki na iya buƙatar ƙarin lokaci. Da zarar an fara amsawa, wannan tsarin ba ya aiki.",
+      "presetStandard": "Na al'ada",
+      "presetPatient": "Mai haƙuri",
+      "presetMaximum": "Mafi yawa",
+      "presetCustom": "Na musamman",
+      "customLabel": "A jira har zuwa",
+      "customUnit": "daqiqa",
+      "customHint": "Tsakanin {min} da {max} daqiqa.",
+      "preferModelTitle": "Fi son samfurin da na zaɓa",
+      "preferModelDescription": "Kar a sauya zuwa wani model kai tsaye lokacin da akayi kuskure. Za a ci gaba da nuna zaɓin sauyawa a kuskuren."
+    }
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "An cire shawara — ka gyara sashe nata.",
       "suggestionDroppedMany": "An cire shawarrwari {count} — ka gyara sassan su.",
       "pendingRunActionTranslate": "Sake fassara",
-      "pendingRunActionAssess": "Sake tantancewa"
+      "pendingRunActionAssess": "Sake tantancewa",
+      "entryKind": "Nau'in shigarwa",
+      "kindTerm": "Kalmomi",
+      "kindAcronym": "Takaitaccen harafi",
+      "sourceExpansion": "Cikakken suna a tushe (na zaɓi)",
+      "targetExpansion": "Cikakken suna a fassara (na zaɓi)",
+      "acronymHint": "Takaitattun haruffa dole su dace da rubutun: WHO yana dacewa da “WHO” kawai, ba “who”. Kalmomi suna dacewa da kowanne harafi.",
+      "glossaryCheckTitle": "Binciken ƙamus",
+      "glossaryCheckPass": "{count, plural, one {An yi amfani da kalmar da ake buƙata.} other {Dukkan # kalmomin da ake buƙata an yi amfani da su.}}",
+      "glossaryCheckMissing": "{count, plural, one {# daga cikin {total} fassarori da ake buƙata ba a samu ba:} other {# daga cikin {total} fassarori da ake buƙata ba a samu ba:}}"
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",

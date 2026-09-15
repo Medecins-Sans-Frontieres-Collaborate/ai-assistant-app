@@ -144,6 +144,18 @@ const guideFieldsSchema = z.discriminatedUnion('kind', [
               source: z.string().trim().min(1).max(MAX_GUIDE_TERM_CHARS),
               target: z.string().trim().min(1).max(MAX_GUIDE_TERM_CHARS),
               note: z.string().max(MAX_GUIDE_TERM_NOTE_CHARS).optional(),
+              // Issue #131: explicit kind + acronym full names.
+              kind: z.enum(['term', 'acronym']).optional(),
+              sourceExpansion: z
+                .string()
+                .trim()
+                .max(MAX_GUIDE_TERM_CHARS)
+                .optional(),
+              targetExpansion: z
+                .string()
+                .trim()
+                .max(MAX_GUIDE_TERM_CHARS)
+                .optional(),
             })
             .strict(),
         )

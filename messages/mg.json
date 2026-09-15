@@ -711,7 +711,9 @@
     "beta": "Beta",
     "copied": "Voakopy!",
     "clear": "Fafao",
-    "undo": "Avereno"
+    "undo": "Avereno",
+    "durationSeconds": "{count, plural, one {# segondra} other {# segondra}}",
+    "durationMinutes": "{count, plural, one {# minitra} other {# minitra}}"
   },
   "terms": {
     "officialLanguages": "Kinova ofisialy:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "Tonga ny fetra fitadiavana amin’ny internet isan’andro — mamaly tsy misy fitadiavana…",
       "codeInterpreterLimitReached": "Tonga ny fetra fanatanterahana kaody isan’andro — mamaly tsy misy kaody tanterahana…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Tsy nahomby ny fikarohana amin'ny tahiry fahalalana — tsy hampiasa antontan-taratasy an'ny agent ny valiny"
+      "knowledgeSearchFailed": "Tsy nahomby ny fikarohana amin'ny tahiry fahalalana — tsy hampiasa antontan-taratasy an'ny agent ny valiny",
+      "stillWorking": "Mbola miasa... "
     },
     "toolSummary": {
       "usedTools": "Fitaovana nampiasaina {count, plural, one {#} other {#}}",
@@ -957,7 +960,12 @@
     "startNewConversation": "Atombohy resaka vaovao",
     "downloadDebugInfo": "Sintomy ny vaovao fanamboarana",
     "includeMessageText": "Ampidiro ny lahatsoratra hafatra",
-    "ttsEquationPlaceholder": "formula"
+    "ttsEquationPlaceholder": "formula",
+    "modelTimedOut": "Tsy afaka namaly tao anatin'ny {duration} i {model}. Mety be asa izy — afaka miandry ela kokoa ianao, na manandrana modely hafa.",
+    "modelTimedOutAtMaximum": "Tsy afaka namaly tao anatin'ny {duration} faran'izay ela indrindra i {model}. Azafady andramo indray na soloina modely hafa.",
+    "requestTimedOut": "Ela loatra ity fangatahana ity ka voatohitra talohan'ny namalian'i {model}. Afaka manome fotoana fanampiny ianao, na manandrana modely hafa.",
+    "retryWaitingLonger": "Miandrasa hatramin'ny {duration} ary andramo indray",
+    "alwaysWaitThisLong": "Miandrasa hatramin'ny {duration} hatrany"
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -1446,7 +1454,20 @@
     "Connections": "Fifandraisana",
     "DataBackup": "Tahiry & Backup",
     "Export & Import": "Export & Import",
-    "exportImportDescription": "Sintomy ho rakitra ny chat, lahatahiry, sy ny toromarikao, na avereno amin'ny export taloha."
+    "exportImportDescription": "Sintomy ho rakitra ny chat, lahatahiry, sy ny toromarikao, na avereno amin'ny export taloha.",
+    "modelTimeout": {
+      "title": "Fotoana fiandrasana modely",
+      "description": "Fotoana hiandrasana ny modely hanomboka mamaly alohan'ny hanilihana. Mety ho lava kokoa amin'ny modely miadana sy amin'ny faritra be olona. Raha vantany vao manomboka tonga ny valiny dia tsy mihatra intsony io.",
+      "presetStandard": "Mahazatra",
+      "presetPatient": "Miahy",
+      "presetMaximum": "Faran'izay betsaka",
+      "presetCustom": "Manokana",
+      "customLabel": "Miandrasa hatramin'ny",
+      "customUnit": "segondra",
+      "customHint": "Manomboka amin'ny {min} ka hatramin'ny {max} segondra.",
+      "preferModelTitle": "Aleoko ilay modely voafidy",
+      "preferModelDescription": "Aza mifanova ho modely hafa ho azy raha tsy mahomby ny fangatahana. Mbola ho hita amin'ny hadisoana ihany ny safidy hanova."
+    }
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "Voasesy ilay soso-kevitra — nanova ny anjara lahatsorany ianao.",
       "suggestionDroppedMany": "Soso-kevitra {count} voasesy — nanova ny anjara lahatsorany ianao.",
       "pendingRunActionTranslate": "Mandika indray",
-      "pendingRunActionAssess": "Mamerenana fanombanana"
+      "pendingRunActionAssess": "Mamerenana fanombanana",
+      "entryKind": "Karazana fidirana",
+      "kindTerm": "Teny",
+      "kindAcronym": "Acronyme",
+      "sourceExpansion": "Anarana feno amin'ny loharano (tsy voatery)",
+      "targetExpansion": "Anarana feno amin'ny fandikan-teny (tsy voatery)",
+      "acronymHint": "Mifanandrify tanteraka amin'ny fampidirana ny acronyme: WHO dia ho an'ny “WHO” ihany, fa tsy ho an'ny “who”. Ny teny dia mety amin'ny endri-tsoratra rehetra.",
+      "glossaryCheckTitle": "Fanamarinana rakibolana",
+      "glossaryCheckPass": "{count, plural, one {Nampiasaina ilay teny ilaina.} other {Nampiasaina avokoa ny teny ilaina #.}}",
+      "glossaryCheckMissing": "{count, plural, one {# amin'ireo {total} fandikan-teny ilaina no tsy voaray:} other {# amin'ireo {total} fandikan-teny ilaina no tsy voaray:}}"
     },
     "document": {
       "emptyTitle": "Lazao ny antontan-taratasy ilainao",

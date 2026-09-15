@@ -711,7 +711,9 @@
     "beta": "Beta",
     "copied": "کۆپی کرا!",
     "clear": "پاککردنەوە",
-    "undo": "گەڕاندنەوە"
+    "undo": "گەڕاندنەوە",
+    "durationSeconds": "{count, plural, one {# چرکە} other {# چرکە}}",
+    "durationMinutes": "{count, plural, one {# خوولەک} other {# خوولەک}}"
   },
   "terms": {
     "officialLanguages": "Guhertoya fermî:",
@@ -862,7 +864,8 @@
       "webSearchLimitReached": "سنووری گه‌ڕانی وێب بەردەست گەیشتووە — وەلام دەدرێت بێ گه‌ڕان…",
       "codeInterpreterLimitReached": "سنووری ڕادەستکردنی کۆد ڕۆژانە گەیشتووە — وەلام دەدرێت بێ جێبەجێکردنی کۆد…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "گەڕانی بنکەی زانیاری سەرکەوتوو نەبوو — وەڵامەکە بە بەڵگەنامەکانی ئەجێنتەکە بەکاردەهێنرێت."
+      "knowledgeSearchFailed": "گەڕانی بنکەی زانیاری سەرکەوتوو نەبوو — وەڵامەکە بە بەڵگەنامەکانی ئەجێنتەکە بەکاردەهێنرێت.",
+      "stillWorking": "هێشتا کار دەکات…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ئامراز} other {# ئامراز}} بەکارهات",
@@ -957,7 +960,12 @@
     "startNewConversation": "دەستپێکردنی گفتوگۆیەکی نوێ",
     "downloadDebugInfo": "داگرتنی زانیاری چاککردنەوە",
     "includeMessageText": "تێکەڵکردنی دەقەکانی نامە",
-    "ttsEquationPlaceholder": "هاوەبەر"
+    "ttsEquationPlaceholder": "هاوەبەر",
+    "modelTimedOut": "{model} لە ماوەی {duration} دا وەڵام نەدا. دەبێت مەشغوڵ بێت — دەتوانیت چاوەڕێی زیاتر بکەیت یان مۆدێلی تر هەوڵبدەیت.",
+    "modelTimedOutAtMaximum": "{model} لە ماوەی {duration} دا وەڵام نەدا، ئەوە درێژترین چاوەڕوانیە. دەتوانیت دووبارە هەوڵبدەیت یان مۆدێلی تر هەوڵبدەیت.",
+    "requestTimedOut": "داواکارییەکە زۆر ماوەی خۆی وتەخراو پێش ئەوەی {model} بتوانێت وەڵام بدات. دەتوانیت چاوەڕێی زیاتر بدەیت یان مۆدێلی تر هەوڵبدەیت.",
+    "retryWaitingLonger": "هەتا {duration} چاوەڕێ بکە و دووبارە هەوڵبدە",
+    "alwaysWaitThisLong": "هەمیشە هەتا {duration} چاوەڕێ بکە"
   },
   "transcript": {
     "originalTranscript": "Transkrîpta Eslî",
@@ -1446,7 +1454,20 @@
     "Connections": "پەیوەندییەکان",
     "DataBackup": "داتا و پاشەکەوت",
     "Export & Import": "هەناردە و هێنان",
-    "exportImportDescription": "گفتوگۆ، بوخچە و داواکاریەکانت وەک فایل دابەزێنە، یان لە داتا هەناردەکراوەکان پێشترەوە بگەرێنەوە."
+    "exportImportDescription": "گفتوگۆ، بوخچە و داواکاریەکانت وەک فایل دابەزێنە، یان لە داتا هەناردەکراوەکان پێشترەوە بگەرێنەوە.",
+    "modelTimeout": {
+      "title": "کاتى چاوەڕوانی مۆدێل",
+      "description": "ماوەی چاوەڕوانی بۆ دەستپێکردنی وەڵامدانی مۆدێل پێش وازهێنان. مۆدێلێکی پەتاختر یان ناوچەیەکی مەشغوڵ دەبێت ماوەی زیاتر پێویست بێت. کاتێک وەڵام دەستپێ دەکات، ئەمە بەکاردێتەوە.",
+      "presetStandard": "ستاندارد",
+      "presetPatient": "بەحووصە",
+      "presetMaximum": "زۆرترین",
+      "presetCustom": "تایبەتی",
+      "customLabel": "هەتا",
+      "customUnit": "چرکە",
+      "customHint": "لە نێوان {min} و {max} چرکە.",
+      "preferModelTitle": "مۆدێلی هەڵبژێردراو پێشتر بێت",
+      "preferModelDescription": "مۆدێل خۆکارانە گۆڕ نەكە کاتێک داواکاری دەسەربێت. هەڵەکە هێشتا هەڵبژاردنی گۆڕیندا پێشنیار دەکات."
+    }
   },
   "emptyState": {
     "greeting": "Ez çawa dikarim alîkariya te bikim?",
@@ -2831,7 +2852,16 @@
       "suggestionDroppedOne": "پێشنیارەکە لابرد — بەشی دەقەکە دەستکاری کردیت.",
       "suggestionDroppedMany": "{count} پێشنیار لابرد — بەشەکانی دەقەکە دەستکاری کردیت.",
       "pendingRunActionTranslate": "دووبارە وەرگێڕان",
-      "pendingRunActionAssess": "دووبارە هەڵسەنگاندن"
+      "pendingRunActionAssess": "دووبارە هەڵسەنگاندن",
+      "entryKind": "جۆری تۆمارکردن",
+      "kindTerm": "وشە",
+      "kindAcronym": "کورتکراو",
+      "sourceExpansion": "ناوی تەواو لە سەرچاوە (هاوشێوە)",
+      "targetExpansion": "ناوی تەواو لە وەرگێڕان (هاوشێوە)",
+      "acronymHint": "کورتکراوەکان وەک خۆیان بە جۆراوجۆر پێکەوە دەبن: WHO تەنها بۆ \"WHO\"، نەک بۆ \"who\". وشەکان هەر شێوازی وشاندنێک بکرێت وەک خۆیان دەشێن.",
+      "glossaryCheckTitle": "پشکنینی فرەنووس",
+      "glossaryCheckPass": "{count, plural, one {وشەی داواکراو بەکار هاتووە.} other {هەموو # وشەی داواکراو بەکار هاتن.}}",
+      "glossaryCheckMissing": "{count, plural, one {# لە {total} وەرگێڕانی داواکراو نەماوە:} other {# لە {total} وەرگێڕانی داواکراو نەماون:}}"
     },
     "document": {
       "emptyTitle": "پێسەندکردنی بەلگەی پێویست",

@@ -158,3 +158,145 @@ describe('runTranslationWorkflow', () => {
     );
   });
 });
+
+describe('runTranslationWorkflow — glossary check (issue #131)', () => {
+  const glossaryEntries = [
+    { source: 'WHO', target: 'OMS' },
+    { source: 'cholera', target: 'choléra' },
+  ];
+
+  beforeEach(() => {
+    callStructured.mockReset();
+    callStreamedText.mockReset();
+  });
+
+  it('quick mode reports missing required terms without a corrective pass', async () => {
+    callStreamedText.mockImplementation(async (opts: any) => {
+      opts.onDelta('Le choléra selon l’oms.');
+      return 'Le choléra selon l’oms.';
+    });
+    const { writer, events } = makeWriter();
+    await runTranslationWorkflow({
+      sourceText: 'Cholera according to the WHO.',
+      targetLanguage: 'French',
+      glossaryEntries,
+      mode: 'quick',
+      writer,
+    });
+
+    expect(callStructured).not.toHaveBeenCalled();
+    expect(events.map((e) => e.type)).toEqual(['glossary_check', 'complete']);
+    expect(events[0].data).toEqual({
+      checkedTerms: 2,
+      violations: [
+        { source: 'WHO', target: 'OMS', kind: 'acronym', matchedBy: 'source' },
+      ],
+    });
+  });
+
+  it('agentic mode feeds violations into the review and does not accept an approve over them', async () => {
+    callStreamedText.mockImplementation(async (opts: any) => {
+      opts.onDelta('Le choléra selon l’oms.');
+      return 'Le choléra selon l’oms.';
+    });
+    callStructured
+      .mockResolvedValueOnce(ANALYSIS)
+      // Round 1: the reviewer "approves" but still hands back a fix.
+      .mockResolvedValueOnce(reviewResult('approve', 'Le choléra selon l’OMS.'))
+      // Round 2: clean scan → a real approve ends the loop.
+      .mockResolvedValueOnce(
+        reviewResult('approve', 'Le choléra selon l’OMS.'),
+      );
+
+    const { writer, events } = makeWriter();
+    await runTranslationWorkflow({
+      sourceText: 'Cholera according to the WHO.',
+      targetLanguage: 'French',
+      glossaryEntries,
+      mode: 'agentic',
+      writer,
+    });
+
+    // The first review prompt carried the deterministic finding.
+    const firstReviewCall = callStructured.mock.calls[1][0];
+    expect(firstReviewCall.user).toContain('GLOSSARY CHECK FAILED');
+    expect(firstReviewCall.user).toContain('"WHO" must be rendered as "OMS"');
+    // The second did not (the revision fixed it).
+    const secondReviewCall = callStructured.mock.calls[2][0];
+    expect(secondReviewCall.user).not.toContain('GLOSSARY CHECK FAILED');
+
+    const types = events.map((e) => e.type);
+    expect(types).toEqual([
+      'analysis',
+      'review_round',
+      'revision',
+      'review_round',
+      'glossary_check',
+      'complete',
+    ]);
+    expect(events[types.indexOf('glossary_check')].data).toEqual({
+      checkedTerms: 2,
+      violations: [],
+    });
+    expect(events[types.indexOf('complete')].data).toMatchObject({
+      finalText: 'Le choléra selon l’OMS.',
+      rounds: 2,
+    });
+  });
+
+  it('an approve over violations whose "fix" is the unchanged text ends the loop', async () => {
+    callStreamedText.mockImplementation(async (opts: any) => {
+      opts.onDelta('Le choléra selon l’oms.');
+      return 'Le choléra selon l’oms.';
+    });
+    callStructured
+      .mockResolvedValueOnce(ANALYSIS)
+      .mockResolvedValueOnce(
+        reviewResult('approve', 'Le choléra selon l’oms.'),
+      );
+
+    const { writer, events } = makeWriter();
+    await runTranslationWorkflow({
+      sourceText: 'Cholera according to the WHO.',
+      targetLanguage: 'French',
+      glossaryEntries,
+      mode: 'agentic',
+      writer,
+    });
+
+    expect(callStructured).toHaveBeenCalledTimes(2);
+    expect(events.map((e) => e.type)).toEqual([
+      'analysis',
+      'review_round',
+      'glossary_check',
+      'complete',
+    ]);
+  });
+
+  it('an approve over violations with no fix ends the loop (nothing to apply)', async () => {
+    callStreamedText.mockImplementation(async (opts: any) => {
+      opts.onDelta('Le choléra selon l’oms.');
+      return 'Le choléra selon l’oms.';
+    });
+    callStructured.mockResolvedValueOnce(ANALYSIS).mockResolvedValueOnce({
+      verdict: 'approve',
+      issues: [],
+      revisedText: '',
+    });
+
+    const { writer, events } = makeWriter();
+    await runTranslationWorkflow({
+      sourceText: 'Cholera according to the WHO.',
+      targetLanguage: 'French',
+      glossaryEntries,
+      mode: 'agentic',
+      writer,
+    });
+
+    expect(callStructured).toHaveBeenCalledTimes(2);
+    const check = events.find((e) => e.type === 'glossary_check');
+    expect((check?.data as { violations: unknown[] }).violations).toHaveLength(
+      1,
+    );
+  });
+});

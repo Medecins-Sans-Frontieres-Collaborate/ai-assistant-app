@@ -533,7 +533,9 @@
     "beta": "بتا",
     "copied": "کپی شد!",
     "clear": "پاک‌سازی",
-    "undo": "برگرداندن"
+    "undo": "برگرداندن",
+    "durationSeconds": "{count, plural, one {# ثانیه} other {# ثانیه}}",
+    "durationMinutes": "{count, plural, one {# دقیقه} other {# دقیقه}}"
   },
   "errors": {
     "unexpectedErrorOccurred": "یک خطای غیرمنتظره رخ داد",
@@ -729,7 +731,8 @@
       "webSearchLimitReached": "سقف جستجوی وب روزانه پر شده است — در حال پاسخ‌دهی بدون جستجو…",
       "codeInterpreterLimitReached": "سقف اجرای کد روزانه پر شده است — در حال پاسخ‌دهی بدون اجرای کد…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "جستجو در پایگاه دانش انجام نشد — پاسخ از اسناد عامل استفاده نخواهد کرد."
+      "knowledgeSearchFailed": "جستجو در پایگاه دانش انجام نشد — پاسخ از اسناد عامل استفاده نخواهد کرد.",
+      "stillWorking": "در حال انجام…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ابزار} other {# ابزار}} استفاده شده",
@@ -824,7 +827,12 @@
     "startNewConversation": "شروع گفتگوی جدید",
     "downloadDebugInfo": "دانلود اطلاعات اشکال‌زدایی",
     "includeMessageText": "شامل کردن متن پیام",
-    "ttsEquationPlaceholder": "معادله"
+    "ttsEquationPlaceholder": "معادله",
+    "modelTimedOut": "مدل {model} طی مدت {duration} پاسخی نداد. ممکن است مشغول باشد — می‌توانید بیشتر منتظر بمانید یا مدل دیگری را امتحان کنید.",
+    "modelTimedOutAtMaximum": "مدل {model} طی مدت {duration} که بیشترین زمان انتظار است، پاسخی نداد. دوباره تلاش کنید یا مدل دیگری را امتحان کنید.",
+    "requestTimedOut": "این درخواست زمان زیادی برد و قبل از اینکه {model} بتواند پاسخ دهد متوقف شد. می‌توانید زمان بیشتری را مجاز کنید یا مدل دیگری را امتحان کنید.",
+    "retryWaitingLonger": "تا {duration} منتظر بمانید و دوباره تلاش کنید",
+    "alwaysWaitThisLong": "همیشه تا {duration} منتظر بمانید"
   },
   "sidebar": {
     "collapseSidebar": "بستن نوار کناری",
@@ -1212,7 +1220,20 @@
     "Connections": "اتصالات",
     "DataBackup": "داده و پشتیبان‌گیری",
     "Export & Import": "صادرات و واردات",
-    "exportImportDescription": "گفتگوها، پوشه‌ها و دستورات خود را به صورت پرونده دانلود کنید، یا آنها را از یک نسخه قبلی بازیابی کنید."
+    "exportImportDescription": "گفتگوها، پوشه‌ها و دستورات خود را به صورت پرونده دانلود کنید، یا آنها را از یک نسخه قبلی بازیابی کنید.",
+    "modelTimeout": {
+      "title": "زمان انتظار مدل",
+      "description": "مدت زمانی که باید قبل از صرف‌نظر کردن برای پاسخ‌دهی مدل منتظر بمانید. مدل‌های کندتر و مناطق پر ترافیک ممکن است به زمان بیشتری نیاز داشته باشند. پس از شروع ارسال پاسخ، این محدودیت دیگر اعمال نمی‌شود.",
+      "presetStandard": "معمولی",
+      "presetPatient": "صبور",
+      "presetMaximum": "حداکثر",
+      "presetCustom": "سفارشی",
+      "customLabel": "انتظار تا",
+      "customUnit": "ثانیه",
+      "customHint": "بین {min} تا {max} ثانیه.",
+      "preferModelTitle": "ترجیح مدل انتخابی من",
+      "preferModelDescription": "در صورت خطا، به طور خودکار به مدل دیگری تغییر نده. اما همچنان پیشنهاد تغییر مدل نمایش داده می‌شود."
+    }
   },
   "notFound": {
     "lostDog": "سگ گمشده"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "پیشنهاد حذف شد — شما بخش آن را ویرایش کردید.",
       "suggestionDroppedMany": "‏{count} پیشنهاد حذف شد — شما بخش‌های آن‌ها را ویرایش کردید.",
       "pendingRunActionTranslate": "در حال ترجمه دوباره",
-      "pendingRunActionAssess": "در حال ارزیابی مجدد"
+      "pendingRunActionAssess": "در حال ارزیابی مجدد",
+      "entryKind": "نوع مدخل",
+      "kindTerm": "اصطلاح",
+      "kindAcronym": "مخفف",
+      "sourceExpansion": "نام کامل در منبع (اختیاری)",
+      "targetExpansion": "نام کامل در ترجمه (اختیاری)",
+      "acronymHint": "مخفف‌ها دقیقاً مطابق تایپ‌شده مطابقت دارند: WHO فقط با «WHO» مطابقت دارد، نه «who». اصطلاحات با هر نوع حروف بزرگ یا کوچک مطابقت دارند.",
+      "glossaryCheckTitle": "بررسی واژه‌نامه",
+      "glossaryCheckPass": "{count, plural, one {اصطلاح موردنیاز استفاده شد.} other {همه # اصطلاح موردنیاز استفاده شدند.}}",
+      "glossaryCheckMissing": "{count, plural, one {# از {total} ترجمه موردنیاز وجود ندارد:} other {# از {total} ترجمه موردنیاز وجود ندارد:}}"
     },
     "document": {
       "emptyTitle": "مشخصات سند موردنظر را توضیح دهید",

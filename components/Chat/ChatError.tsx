@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useTimeoutDurationLabel } from '@/client/hooks/chat/useTimeoutDurationLabel';
 import { useResetCountdown } from '@/client/hooks/settings/useMyLimits';
 
 import { LimitDenialMetadata } from '@/client/services/api/errors';
@@ -116,6 +117,30 @@ interface ChatErrorProps {
    * copy that points at detaching the agent instead.
    */
   isAgentModelDenial?: boolean;
+  /**
+   * The failed turn timed out waiting for the model to START (issue #130).
+   * Renders localized copy naming the model and the wait, and replaces
+   * "Try again" with "Wait up to <longer> and try again" while a longer
+   * wait is still available. Null/undefined for every other failure.
+   */
+  timeout?: {
+    /**
+     * `model`: the model handler stage timed out (MODEL_TIMEOUT) — the
+     * model itself did not start. `request`: the route's whole-request
+     * guard fired (REQUEST_TIMEOUT) — preparation ran long, which a
+     * longer model timeout also extends, but the model is not to blame.
+     */
+    kind: 'model' | 'request';
+    modelName: string;
+    /** The timeout the failed turn actually used, in seconds. */
+    seconds: number;
+    /** Next escalation to offer; null when the ceiling was already used. */
+    longerSeconds: number | null;
+  } | null;
+  /** Re-sends the failed turn on the same model with a longer timeout. */
+  onRetryLonger?: (seconds: number) => void;
+  /** Persists `seconds` as the default timeout, then re-sends. */
+  onAlwaysWaitLonger?: (seconds: number) => void;
 }
 
 /**
@@ -144,8 +169,12 @@ export const ChatError: React.FC<ChatErrorProps> = ({
   onChooseModel,
   onResendWithoutFeature,
   isAgentModelDenial = false,
+  timeout = null,
+  onRetryLonger,
+  onAlwaysWaitLonger,
 }) => {
   const t = useTranslations();
+  const durationLabel = useTimeoutDurationLabel();
   // Privacy default: the debug bundle is metadata-only unless the user
   // explicitly opts message text in.
   const [includeMessageText, setIncludeMessageText] = useState(false);
@@ -228,10 +257,23 @@ export const ChatError: React.FC<ChatErrorProps> = ({
       ? `${sentence} ${t('limitsUx.denial.resets', { resets: resetsIn })}`
       : sentence;
   })();
+  const timeoutCopy = timeout
+    ? timeout.kind === 'request'
+      ? t('chat.requestTimedOut', { model: timeout.modelName })
+      : timeout.longerSeconds
+        ? t('chat.modelTimedOut', {
+            model: timeout.modelName,
+            duration: durationLabel(timeout.seconds),
+          })
+        : t('chat.modelTimedOutAtMaximum', {
+            model: timeout.modelName,
+            duration: durationLabel(timeout.seconds),
+          })
+    : null;
   const effectiveError =
     errorCode === 'FILE_NOT_FOUND'
       ? t('chat.attachedFileExpired')
-      : (denialCopy ?? error);
+      : (timeoutCopy ?? denialCopy ?? error);
 
   // Truncate so the card stays readable; full text stays on the title attr.
   const renderedError = (() => {
@@ -250,16 +292,29 @@ export const ChatError: React.FC<ChatErrorProps> = ({
   const showRetry = !isQuotaDenial && canRetry && onRetry;
   const showRegenerate =
     !isQuotaDenial && !showRetry && canRegenerate && onRegenerate;
-  const actionLabel = showRetry
-    ? t('common.tryAgain')
-    : showRegenerate
-      ? t('chat.regenerate')
+  // A model-start timeout with a longer wait still available: the primary
+  // action becomes "wait longer" on the SAME model (issue #130). It rides
+  // the retry path (re-send of the trailing user message), so it is only
+  // offered where plain "Try again" would be.
+  const longerSeconds =
+    showRetry && timeout?.longerSeconds && onRetryLonger
+      ? timeout.longerSeconds
       : null;
-  const onActionClick = showRetry
-    ? onRetry
-    : showRegenerate
-      ? onRegenerate
-      : null;
+  const actionLabel = longerSeconds
+    ? t('chat.retryWaitingLonger', { duration: durationLabel(longerSeconds) })
+    : showRetry
+      ? t('common.tryAgain')
+      : showRegenerate
+        ? t('chat.regenerate')
+        : null;
+  const onActionClick = longerSeconds
+    ? () => onRetryLonger?.(longerSeconds)
+    : showRetry
+      ? onRetry
+      : showRegenerate
+        ? onRegenerate
+        : null;
+  const showAlwaysWaitLonger = !!longerSeconds && !!onAlwaysWaitLonger;
   const showRetryFallback =
     !isQuotaDenial &&
     canRetryFallback &&
@@ -349,6 +404,19 @@ export const ChatError: React.FC<ChatErrorProps> = ({
             </button>
           </div>
         </div>
+        {showAlwaysWaitLonger && longerSeconds && (
+          <div className="mt-2">
+            <button
+              type="button"
+              onClick={() => onAlwaysWaitLonger?.(longerSeconds)}
+              className="text-sm underline underline-offset-2 hover:text-red-600 dark:hover:text-red-100 transition-colors"
+            >
+              {t('chat.alwaysWaitThisLong', {
+                duration: durationLabel(longerSeconds),
+              })}
+            </button>
+          </div>
+        )}
         {showEscalation && (
           <div className="mt-3 border-t border-red-300 dark:border-red-700 pt-3">
             <p className="text-sm">{t('chat.repeatedFailureNotice')}</p>

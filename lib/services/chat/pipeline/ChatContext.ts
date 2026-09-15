@@ -111,6 +111,24 @@ export interface ChatContext {
   /** Response verbosity */
   verbosity?: 'low' | 'medium' | 'high';
 
+  /**
+   * How long the model handler stages may wait for the model to START
+   * responding, in ms (issue #130). Already clamped by the request
+   * middleware. Absent = the compiled `STAGE_TIMEOUTS` defaults.
+   */
+  modelTimeoutMs?: number;
+
+  /**
+   * Aborted by the pipeline when the CURRENT stage exceeds its timeout, or
+   * when the route's whole-request guard fires while this stage is
+   * running. Handlers (and the MCP tool loops / the Foundry agent run)
+   * pass it to their upstream model calls so a timed-out request is
+   * cancelled instead of running on (and billing) after the user has
+   * already been told it failed. Set per stage by ChatPipeline — never by
+   * middleware — and never aborted after the stage has returned.
+   */
+  stageSignal?: AbortSignal;
+
   /** Raw user prompt from request (before building full system prompt) */
   rawUserPrompt?: string;
 

@@ -373,8 +373,12 @@ export class AnthropicFoundryHandler {
    */
   async executeRequest(
     requestParams: Anthropic.MessageCreateParamsNonStreaming,
+    /** Aborts the upstream call (pipeline stage timeout, issue #130). */
+    signal?: AbortSignal,
   ): Promise<Anthropic.Message> {
-    return await this.client.messages.create(requestParams);
+    return signal
+      ? await this.client.messages.create(requestParams, { signal })
+      : await this.client.messages.create(requestParams);
   }
 
   /**
@@ -385,8 +389,12 @@ export class AnthropicFoundryHandler {
    */
   async executeStreamingRequest(
     requestParams: Anthropic.MessageCreateParamsStreaming,
+    /** Aborts the upstream call (pipeline stage timeout, issue #130). */
+    signal?: AbortSignal,
   ): Promise<AsyncIterable<Anthropic.RawMessageStreamEvent>> {
-    const stream = await this.client.messages.create(requestParams);
+    const stream = signal
+      ? await this.client.messages.create(requestParams, { signal })
+      : await this.client.messages.create(requestParams);
     return stream as AsyncIterable<Anthropic.RawMessageStreamEvent>;
   }
 

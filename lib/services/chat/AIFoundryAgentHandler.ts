@@ -85,9 +85,21 @@ export class AIFoundryAgentHandler {
     credential?: TokenCredential,
     endpoint?: string,
     approvalResponses?: ApprovalResponse[],
-    options?: { ephemeral?: boolean; telemetry?: RequestTelemetry },
+    options?: {
+      ephemeral?: boolean;
+      telemetry?: RequestTelemetry;
+      /**
+       * Pipeline stage timeout / request guard (issue #130): aborts the
+       * pre-stream Foundry calls and the run stream so a turn the client
+       * was already told failed does not keep running (and billing).
+       */
+      signal?: AbortSignal;
+    },
   ): Promise<Response> {
     const startTime = Date.now();
+    const requestOptions = options?.signal
+      ? { signal: options.signal }
+      : undefined;
 
     // Create OpenTelemetry span for tracing
     return await this.tracer.startActiveSpan(
@@ -243,15 +255,21 @@ export class AIFoundryAgentHandler {
               if (threadId) {
                 conversationId = threadId;
               } else {
-                const conversation = await openAIClient.conversations.create({
+                const conversationBody = {
                   items: [
                     {
-                      type: 'message',
-                      role: 'user',
+                      type: 'message' as const,
+                      role: 'user' as const,
                       content: messageContent,
                     },
                   ],
-                });
+                };
+                const conversation = requestOptions
+                  ? await openAIClient.conversations.create(
+                      conversationBody,
+                      requestOptions,
+                    )
+                  : await openAIClient.conversations.create(conversationBody);
                 conversationId = conversation.id;
                 isNewConversation = true;
               }
@@ -339,8 +357,19 @@ export class AIFoundryAgentHandler {
 
           // Aborts the upstream Foundry stream when the client disconnects
           // (the ReadableStream's `cancel()` fires) so we don't keep draining
-          // — and billing — an abandoned agent run to completion.
+          // — and billing — an abandoned agent run to completion. The
+          // pipeline's stage/request signal feeds the same controller.
           const upstreamAbort = new AbortController();
+          if (options?.signal) {
+            if (options.signal.aborted)
+              upstreamAbort.abort(options.signal.reason);
+            else
+              options.signal.addEventListener(
+                'abort',
+                () => upstreamAbort.abort(options.signal?.reason),
+                { once: true },
+              );
+          }
 
           // Foundry's preview runtime requires `agent_reference` (the legacy
           // `agent` key is deprecated). The OpenAI SDK's options.body
@@ -389,14 +418,29 @@ export class AIFoundryAgentHandler {
                 '[AIFoundryAgentHandler] Auto-denying pending approvals before retry:',
                 pendingIds,
               );
-              await openAIClient.conversations.items.create(conversationId, {
-                items: buildApprovalResponseItems(
-                  pendingIds.map((id) => ({
-                    approval_request_id: id,
-                    approve: false,
-                  })),
-                ) as any,
-              });
+              // Pre-stream cleanup rides the same linked signal as the run
+              // itself: a stage/request timeout must not keep mutating the
+              // Foundry conversation (nor start a retry) after the request
+              // has already been reported as failed.
+              const throwIfAborted = () => {
+                if (upstreamAbort.signal.aborted) {
+                  throw upstreamAbort.signal.reason ?? firstAttempt;
+                }
+              };
+              throwIfAborted();
+              await openAIClient.conversations.items.create(
+                conversationId,
+                {
+                  items: buildApprovalResponseItems(
+                    pendingIds.map((id) => ({
+                      approval_request_id: id,
+                      approve: false,
+                    })),
+                  ) as any,
+                },
+                { signal: upstreamAbort.signal },
+              );
+              throwIfAborted();
               autoDeniedApprovalIds = pendingIds;
               streamEventMessages = await createStream();
             }

@@ -1,13 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { revalidateRows } from '@/lib/services/grants/revalidate';
+import {
+  readOwnedRunMetadata,
+  readRunFileIfExists,
+} from '@/lib/services/grants/runFiles';
 import { grantRunDir, isValidRunId } from '@/lib/services/grants/runPaths';
 import { canUseGrants } from '@/lib/services/grants/serverAccess';
 
 import { auth } from '@/auth';
-import { constants } from 'fs';
-import { access, readFile, writeFile } from 'fs/promises';
+import { writeFile } from 'fs/promises';
 import { join } from 'path';
+
+/**
+ * Bounds on an edit payload. The rows are written to local disk as-is, so
+ * without a cap a single authorized caller could fill the temp volume of the
+ * replica. Real extractions are tens to hundreds of rows; both limits are an
+ * order of magnitude above anything the pipeline produces.
+ */
+export const MAX_SAVE_ROWS = 10_000;
+export const MAX_SAVE_BODY_BYTES = 20 * 1024 * 1024;
 
 /**
  * Convert an array of row objects back to CSV format.
@@ -76,21 +88,35 @@ export async function POST(
       return NextResponse.json({ error: 'Invalid runId' }, { status: 400 });
     }
 
-    // 2. Verify run exists
+    // 2. Verify the run exists AND belongs to the caller (foreign → 404)
     const workDir = grantRunDir(runId);
-    const metadataPath = join(workDir, 'metadata.json');
     const outputPath = join(workDir, 'output.csv');
     const validationPath = join(workDir, 'validation.json');
 
-    try {
-      await access(metadataPath, constants.R_OK);
-    } catch {
-      return NextResponse.json({ error: 'Run not found' }, { status: 404 });
+    const owned = await readOwnedRunMetadata(workDir, session.user.id);
+    if (!owned.ok) {
+      return NextResponse.json(
+        { error: owned.error },
+        { status: owned.status },
+      );
     }
+    const metadata = owned.metadata;
 
-    // 3. Parse request body
-    const body: SaveRequestBody = await request.json();
-    const { rows } = body;
+    // 3. Parse request body (bounded — it lands on local disk verbatim)
+    const rawBody = await request.text();
+    if (rawBody.length > MAX_SAVE_BODY_BYTES) {
+      return NextResponse.json(
+        { error: 'Request body too large' },
+        { status: 413 },
+      );
+    }
+    let body: SaveRequestBody;
+    try {
+      body = JSON.parse(rawBody);
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    }
+    const rows = body?.rows;
 
     if (!rows || !Array.isArray(rows) || rows.length === 0) {
       return NextResponse.json(
@@ -98,13 +124,28 @@ export async function POST(
         { status: 400 },
       );
     }
+    if (rows.length > MAX_SAVE_ROWS) {
+      return NextResponse.json(
+        { error: `Too many rows (max ${MAX_SAVE_ROWS})` },
+        { status: 413 },
+      );
+    }
+    if (
+      !rows.every(
+        (row) => row && typeof row === 'object' && !Array.isArray(row),
+      )
+    ) {
+      return NextResponse.json(
+        { error: 'Every row must be an object' },
+        { status: 400 },
+      );
+    }
 
     // 4. Determine columns from existing output or from the rows themselves
     let columns: string[];
 
-    try {
-      await access(outputPath, constants.R_OK);
-      const existingCSV = await readFile(outputPath, 'utf-8');
+    const existingCSV = await readRunFileIfExists(outputPath);
+    if (existingCSV !== null) {
       const firstLine = existingCSV.split('\n')[0];
 
       // Parse header line to extract column names
@@ -133,7 +174,7 @@ export async function POST(
         }
       }
       columns.push(field.trim());
-    } catch {
+    } else {
       // No existing CSV - derive columns from the first row
       columns = Object.keys(rows[0]);
     }
@@ -149,10 +190,10 @@ export async function POST(
     const cacheDir = join(workDir, 'cache');
 
     try {
-      // Read metadata to get OC
-      const metadataText = await readFile(metadataPath, 'utf-8');
-      const metadata = JSON.parse(metadataText);
       const oc = metadata.oc;
+      if (typeof oc !== 'string' || !oc) {
+        throw new Error('Run metadata has no OC');
+      }
 
       console.log(`[${runId}] Re-running validation for OC=${oc}...`);
 
@@ -175,9 +216,8 @@ export async function POST(
       );
       // Fallback: read existing validation.json if available
       try {
-        await access(validationPath, constants.R_OK);
-        const validationText = await readFile(validationPath, 'utf-8');
-        validation = JSON.parse(validationText);
+        const validationText = await readRunFileIfExists(validationPath);
+        if (validationText !== null) validation = JSON.parse(validationText);
       } catch {
         // No validation available
       }

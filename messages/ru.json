@@ -608,7 +608,9 @@
     "beta": "Бета",
     "copied": "Скопировано!",
     "clear": "Очистить",
-    "undo": "Отменить"
+    "undo": "Отменить",
+    "durationSeconds": "{count, plural, one {# секунда} few {# секунды} many {# секунд} other {# секунд}}",
+    "durationMinutes": "{count, plural, one {# минута} few {# минуты} many {# минут} other {# минут}}"
   },
   "errors": {
     "somethingWentWrong": "Что-то пошло не так",
@@ -804,7 +806,8 @@
       "webSearchLimitReached": "Достигнут дневной лимит веб-поиска — ответ без поиска…",
       "codeInterpreterLimitReached": "Достигнут дневной лимит выполнения кода — ответ без выполнения кода…",
       "m365Progress": "Microsoft 365: {detail}",
-      "knowledgeSearchFailed": "Поиск в базе знаний не удался — ответ не будет использовать документы агента."
+      "knowledgeSearchFailed": "Поиск в базе знаний не удался — ответ не будет использовать документы агента.",
+      "stillWorking": "Всё ещё работаю…"
     },
     "toolSummary": {
       "usedTools": "Использовано {count, plural, one {# инструмент} few {# инструмента} many {# инструментов} other {# инструментов}}",
@@ -899,7 +902,12 @@
     "startNewConversation": "Начать новый разговор",
     "downloadDebugInfo": "Скачать отладочную информацию",
     "includeMessageText": "Включить текст сообщений",
-    "ttsEquationPlaceholder": "уравнение"
+    "ttsEquationPlaceholder": "уравнение",
+    "modelTimedOut": "Модель {model} не начала отвечать в течение {duration}. Возможно, она занята — подождите дольше или выберите другую модель.",
+    "modelTimedOutAtMaximum": "Модель {model} не начала отвечать в течение {duration} — это максимальное время ожидания. Попробуйте снова или выберите другую модель.",
+    "requestTimedOut": "Запрос готовился слишком долго и был остановлен до того, как {model} успела ответить. Можете увеличить время ожидания или выбрать другую модель.",
+    "retryWaitingLonger": "Подождать до {duration} и попробовать снова",
+    "alwaysWaitThisLong": "Всегда ждать до {duration}"
   },
   "sidebar": {
     "collapseSidebar": "Свернуть боковую панель",
@@ -1287,7 +1295,20 @@
     "Connections": "Подключения",
     "DataBackup": "Данные и резервное копирование",
     "Export & Import": "Экспорт и импорт",
-    "exportImportDescription": "Скачайте свои чаты, папки и подсказки в виде файла или восстановите их из ранее сохраненного экспорта."
+    "exportImportDescription": "Скачайте свои чаты, папки и подсказки в виде файла или восстановите их из ранее сохраненного экспорта.",
+    "modelTimeout": {
+      "title": "Время ожидания модели",
+      "description": "За сколько времени ожидать ответа от модели перед тем, как прекратить попытку. Для более медленных моделей или загруженных регионов может потребоваться больше времени. Это ограничение действует только до начала ответа.",
+      "presetStandard": "Стандартно",
+      "presetPatient": "Терпеливо",
+      "presetMaximum": "Максимум",
+      "presetCustom": "Другое",
+      "customLabel": "Ждать до",
+      "customUnit": "секунд",
+      "customHint": "От {min} до {max} секунд.",
+      "preferModelTitle": "Предпочитать выбранную мной модель",
+      "preferModelDescription": "Не переключаться автоматически на другую модель при ошибке запроса. Возможность смены модели останется в ошибке."
+    }
   },
   "notFound": {
     "lostDog": "Потерянная собака"
@@ -2847,7 +2868,16 @@
       "suggestionDroppedOne": "Предложение удалено — вы изменили этот фрагмент.",
       "suggestionDroppedMany": "{count} предложений удалено — вы изменили эти фрагменты.",
       "pendingRunActionTranslate": "Повторный перевод",
-      "pendingRunActionAssess": "Повторная оценка"
+      "pendingRunActionAssess": "Повторная оценка",
+      "entryKind": "Тип записи",
+      "kindTerm": "Термин",
+      "kindAcronym": "Аббревиатура",
+      "sourceExpansion": "Полное название на исходном языке (необязательно)",
+      "targetExpansion": "Полное название в переводе (необязательно)",
+      "acronymHint": "Аббревиатуры совпадают строго по написанию: WHO относится только к «WHO», а не к «who». Термины совпадают при любом написании.",
+      "glossaryCheckTitle": "Проверка глоссария",
+      "glossaryCheckPass": "{count, plural, one {Требуемый термин использован.} other {Все # требуемых терминов использованы.}}",
+      "glossaryCheckMissing": "{count, plural, one {Отсутствует # из {total} требуемого перевода:} other {Отсутствуют # из {total} требуемых переводов:}}"
     },
     "document": {
       "emptyTitle": "Опишите нужный вам документ",

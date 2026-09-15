@@ -50,6 +50,10 @@ const mockMessages: Record<string, unknown> = {
     search: 'Search',
     beta: 'Beta',
     tryAgain: 'Try again',
+    // The real keys are ICU plurals; the mock t() only does {param}
+    // interpolation, so keep a simple shape here.
+    durationSeconds: '{count} seconds',
+    durationMinutes: '{count} minutes',
   },
   admin: {
     title: 'Admin',
@@ -57,6 +61,15 @@ const mockMessages: Record<string, unknown> = {
     areaNavLabel: 'Admin areas',
   },
   chat: {
+    modelTimedOut:
+      "{model} didn't start responding within {duration}. It may be busy — you can wait longer, or try another model.",
+    modelTimedOutAtMaximum:
+      "{model} didn't start responding within {duration}, the longest wait available. Try again, or try another model.",
+    requestTimedOut:
+      'This request took too long to prepare and was stopped before {model} could answer. You can allow more time, or try another model.',
+    retryWaitingLonger: 'Wait up to {duration} and try again',
+    regenerate: 'Regenerate',
+    alwaysWaitThisLong: 'Always wait up to {duration}',
     attachedFileExpired:
       'An attached file is no longer available — uploaded files are stored for a limited time. It has been removed from this conversation. Try again without it, or upload the file again.',
     repeatedFailureNotice:
@@ -1166,6 +1179,35 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
   writable: true,
 });
+
+// jsdom implements layout stubs on Element but not on Range. ProseMirror's
+// coordsAtPos (reached through Tiptap's focus() → deferred scrollIntoView on
+// the next animation frame) measures text positions with a Range, so without
+// these any editor test whose frame fires before unmount dies with
+// "target.getClientRects is not a function" — an unhandled error that fails
+// the whole Vitest run and depends on machine timing (CI-only flake).
+const zeroRect = (): DOMRect => ({
+  x: 0,
+  y: 0,
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  width: 0,
+  height: 0,
+  toJSON: () => ({}),
+});
+if (typeof Range !== 'undefined') {
+  if (typeof Range.prototype.getClientRects !== 'function') {
+    Range.prototype.getClientRects = () =>
+      Object.assign([] as DOMRect[], {
+        item: () => null,
+      }) as unknown as DOMRectList;
+  }
+  if (typeof Range.prototype.getBoundingClientRect !== 'function') {
+    Range.prototype.getBoundingClientRect = zeroRect;
+  }
+}
 
 // Example setup code
 beforeAll(() => {

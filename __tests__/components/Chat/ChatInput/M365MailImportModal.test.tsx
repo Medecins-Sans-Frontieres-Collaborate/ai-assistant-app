@@ -64,7 +64,14 @@ class IntersectionObserverStub {
   disconnect() {}
 }
 
-function fireSentinel() {
+// The observer is created in a passive effect React schedules AFTER the
+// commit that renders the first page, while `findBy*` resolves after its
+// own zero-delay timer — two macrotasks with no ordering guarantee. On a
+// loaded runner the sentinel used to fire before the observer existed
+// (`ioCallback` still null), so the next page never loaded and the test
+// hung until its timeout. Wait for the observer first.
+async function fireSentinel() {
+  await waitFor(() => expect(ioCallback).not.toBeNull());
   act(() => {
     ioCallback?.(
       [{ isIntersecting: true }] as IntersectionObserverEntry[],
@@ -91,14 +98,18 @@ async function enterSearch(query: string) {
   );
 }
 
-// Every CI failure of this file has been a findBy/waitFor expiring at
-// exactly the 1s default on a saturated runner (the suite passes locally,
-// alone and under full load). The polling utilities still resolve as soon
-// as the condition holds — this only widens the worst-case allowance.
-configure({ asyncUtilTimeout: 5000 });
+// Generous for a saturated runner, but kept BELOW Vitest's 5 s test timeout
+// so a condition that never holds fails inside the polling utility — with
+// the DOM dump that names the missing element — instead of as a bare
+// "Test timed out" at the `it(` line.
+configure({ asyncUtilTimeout: 4000 });
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  // mockReset, not clearAllMocks: only a reset drops queued `…Once` values,
+  // and a test that fails part-way leaves its unconsumed page in the queue,
+  // where it would shadow the NEXT test's mock and fail that one too.
+  attachMail.mockReset();
+  listMailMock.mockReset();
   ioCallback = null;
   vi.stubGlobal('IntersectionObserver', IntersectionObserverStub);
   listMailMock.mockResolvedValue({ envelopes: [] });
@@ -278,7 +289,7 @@ describe('M365MailImportModal', () => {
       ],
       nextToken: 't2',
     });
-    fireSentinel();
+    await fireSentinel();
     await screen.findByText('Second');
     expect(listMailMock).toHaveBeenLastCalledWith({ pageToken: 't1' });
     expect(screen.getAllByText('First')).toHaveLength(1);
@@ -289,10 +300,10 @@ describe('M365MailImportModal', () => {
       envelopes: [envelope({ id: 'm2', fromName: 'Second' })],
       nextToken: 't3',
     });
-    fireSentinel();
+    await fireSentinel();
     await waitFor(() => expect(listMailMock).toHaveBeenCalledTimes(3));
     const settledCalls = listMailMock.mock.calls.length;
-    fireSentinel();
+    await fireSentinel();
     expect(listMailMock.mock.calls.length).toBe(settledCalls);
   });
 
@@ -305,7 +316,7 @@ describe('M365MailImportModal', () => {
     await screen.findByText('First');
 
     listMailMock.mockRejectedValueOnce(new Error('boom'));
-    fireSentinel();
+    await fireSentinel();
     const retry = await screen.findByRole('button', { name: 'retry' });
     expect(screen.getByText('First')).toBeInTheDocument();
     expect(screen.getByText('loadMoreError')).toBeInTheDocument();
