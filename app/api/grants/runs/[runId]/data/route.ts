@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import {
+  readOwnedRunMetadata,
+  readRunFileIfExists,
+} from '@/lib/services/grants/runFiles';
 import { grantRunDir, isValidRunId } from '@/lib/services/grants/runPaths';
 import { canUseGrants } from '@/lib/services/grants/serverAccess';
 
 import { auth } from '@/auth';
-import { constants } from 'fs';
-import { access, readFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import { join } from 'path';
 
 /**
@@ -203,25 +206,32 @@ export async function GET(
       return NextResponse.json({ error: 'Invalid runId' }, { status: 400 });
     }
 
-    // 2. Verify run exists
+    // 2. Verify the run exists AND belongs to the caller (foreign → 404)
     const workDir = grantRunDir(runId);
-    const metadataPath = join(workDir, 'metadata.json');
     const outputPath = join(workDir, 'output.csv');
     const validationPath = join(workDir, 'validation.json');
 
-    try {
-      await access(metadataPath, constants.R_OK);
-    } catch {
-      return NextResponse.json({ error: 'Run not found' }, { status: 404 });
+    const owned = await readOwnedRunMetadata(workDir, session.user.id);
+    if (!owned.ok) {
+      return NextResponse.json(
+        { error: owned.error },
+        { status: owned.status },
+      );
     }
+    const metadata = owned.metadata;
 
     // 3. Read and parse output CSV
     let columns: string[] = [];
     let rows: Record<string, string>[] = [];
 
+    const csvText = await readRunFileIfExists(outputPath);
+    if (csvText === null) {
+      return NextResponse.json(
+        { error: 'Output CSV not ready yet' },
+        { status: 404 },
+      );
+    }
     try {
-      await access(outputPath, constants.R_OK);
-      const csvText = await readFile(outputPath, 'utf-8');
       const parsed = parseCSV(csvText);
       columns = parsed.columns;
       rows = parsed.rows;
@@ -236,12 +246,12 @@ export async function GET(
     let validation: object = {};
 
     try {
-      await access(validationPath, constants.R_OK);
-      const validationText = await readFile(validationPath, 'utf-8');
-      validation = JSON.parse(validationText);
+      const validationText = await readRunFileIfExists(validationPath);
+      if (validationText !== null) validation = JSON.parse(validationText);
+      else console.log(`[${runId}] Validation file not available`);
     } catch {
-      // Validation file not available - return empty object
-      console.log(`[${runId}] Validation file not available`);
+      // Malformed validation file - return empty object
+      console.log(`[${runId}] Validation file not readable`);
     }
 
     // 5. Read supplemental report (optional)
@@ -253,11 +263,10 @@ export async function GET(
     );
 
     try {
-      await access(supplementalReportPath, constants.R_OK);
-      const reportText = await readFile(supplementalReportPath, 'utf-8');
-      supplementalReport = JSON.parse(reportText);
+      const reportText = await readRunFileIfExists(supplementalReportPath);
+      if (reportText !== null) supplementalReport = JSON.parse(reportText);
     } catch {
-      // Supplemental report not available
+      // Supplemental report not readable
     }
 
     // 6. Build source-file-to-blob-path mapping from metadata
@@ -267,9 +276,9 @@ export async function GET(
     let sourceFileMap: Record<string, string> = {};
 
     try {
-      const metadataText = await readFile(metadataPath, 'utf-8');
-      const metadata = JSON.parse(metadataText);
-      const blobPaths: string[] = metadata.documentBlobPaths || [];
+      const blobPaths: string[] = Array.isArray(metadata.documentBlobPaths)
+        ? metadata.documentBlobPaths
+        : [];
 
       for (const blobPath of blobPaths) {
         const blobFilename = blobPath.split('/').pop() || '';

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { readOwnedRunMetadata } from '@/lib/services/grants/runFiles';
 import { grantRunDir, isValidRunId } from '@/lib/services/grants/runPaths';
 import { canUseGrants } from '@/lib/services/grants/serverAccess';
 
 import { auth } from '@/auth';
-import { constants } from 'fs';
-import { access, readFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import { join } from 'path';
 
 /**
@@ -180,15 +180,14 @@ export async function GET(
       );
     }
 
-    // 3. Resolve file paths
+    // 3. Resolve the run — it must exist AND belong to the caller
     const workDir = grantRunDir(runId);
-    const metadataPath = join(workDir, 'metadata.json');
-
-    // Check if run exists
-    try {
-      await access(metadataPath, constants.R_OK);
-    } catch {
-      return NextResponse.json({ error: 'Run not found' }, { status: 404 });
+    const owned = await readOwnedRunMetadata(workDir, session.user.id);
+    if (!owned.ok) {
+      return NextResponse.json(
+        { error: owned.error },
+        { status: owned.status },
+      );
     }
 
     // 4. Determine target file based on query param
@@ -206,10 +205,12 @@ export async function GET(
       downloadFileName = `Grant_Validation_${runId.slice(0, 8)}.json`;
     }
 
-    // 5. Check if file exists
+    // 5. Read the file; absence means it is not ready yet
+    let fileBuffer: Buffer;
     try {
-      await access(filePath, constants.R_OK);
-    } catch {
+      fileBuffer = await readFile(filePath);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException)?.code !== 'ENOENT') throw error;
       return NextResponse.json(
         {
           error: `${fileType === 'output' ? 'Output CSV' : 'Validation report'} not ready yet`,
@@ -218,8 +219,7 @@ export async function GET(
       );
     }
 
-    // 6. Read and serve the file
-    const fileBuffer = await readFile(filePath);
+    // 6. Serve the file
 
     // 7. Apply column filtering for CSV downloads if columns param is present
     const columnsParam = searchParams.get('columns');

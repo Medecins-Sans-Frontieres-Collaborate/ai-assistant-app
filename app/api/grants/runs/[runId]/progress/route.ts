@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import {
+  readOwnedRunMetadata,
+  runFileExists,
+} from '@/lib/services/grants/runFiles';
 import { grantRunDir, isValidRunId } from '@/lib/services/grants/runPaths';
 import { canUseGrants } from '@/lib/services/grants/serverAccess';
 
 import { auth } from '@/auth';
-import { constants } from 'fs';
-import { access, readFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import { join } from 'path';
 
 /**
@@ -85,16 +88,17 @@ export async function GET(
       return NextResponse.json({ error: 'Invalid runId' }, { status: 400 });
     }
 
-    // 2. Verify run exists
+    // 2. Verify the run exists AND belongs to the caller (foreign → 404)
     const workDir = grantRunDir(runId);
-    const metadataPath = join(workDir, 'metadata.json');
     const progressPath = join(workDir, 'progress.json');
     const outputPath = join(workDir, 'output.csv');
 
-    try {
-      await access(metadataPath, constants.R_OK);
-    } catch {
-      return NextResponse.json({ error: 'Run not found' }, { status: 404 });
+    const owned = await readOwnedRunMetadata(workDir, session.user.id);
+    if (!owned.ok) {
+      return NextResponse.json(
+        { error: owned.error },
+        { status: owned.status },
+      );
     }
 
     // 3. Build default progress response
@@ -171,8 +175,7 @@ export async function GET(
     }
 
     // 5. Check if output file exists (indicates completion)
-    try {
-      await access(outputPath, constants.R_OK);
+    if (await runFileExists(outputPath)) {
       if (progress.status !== 'failed') {
         progress.status = 'succeeded';
         progress.overall_percent = 100;
@@ -184,8 +187,6 @@ export async function GET(
           progress.stages[stage.key].percent = 100;
         }
       }
-    } catch {
-      // Output not ready yet
     }
 
     return NextResponse.json(progress);
