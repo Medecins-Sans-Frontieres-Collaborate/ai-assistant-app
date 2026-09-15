@@ -205,6 +205,8 @@ export class ChatService {
       m365MailScreenOverrides?: string[];
       /** Configured shared mailbox addresses (see ChatBody). */
       m365SharedMailboxes?: string[];
+      /** Model start timeout in ms (see ChatBody.timeoutMs, issue #130). */
+      timeoutMs?: number;
     },
   ): Promise<ReadableStream<Uint8Array>> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
@@ -217,6 +219,7 @@ export class ChatService {
       stream: options?.stream ?? true,
       reasoningEffort: options?.reasoningEffort,
       verbosity: options?.verbosity,
+      timeoutMs: options?.timeoutMs,
       botId: options?.botId,
       agentAttached: options?.agentAttached,
       conversationId: options?.conversationId,
