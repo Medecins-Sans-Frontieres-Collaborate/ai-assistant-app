@@ -143,6 +143,40 @@ export interface GlossaryEntry {
   source: string;
   target: string;
   note?: string;
+  /**
+   * How the entry is matched and enforced (issue #131). `term` matches
+   * case-insensitively on whole words; `acronym` matches the short form
+   * case-sensitively ("WHO" never matches "who") and carries optional full
+   * names. Absent = auto-detected from the source term's shape, so entries
+   * saved before this field existed keep working without a migration.
+   */
+  kind?: GlossaryEntryKind;
+  /** Acronym only: the spelled-out source name, e.g. "World Health Organization". */
+  sourceExpansion?: string;
+  /** Acronym only: the spelled-out target name, e.g. "Organisation mondiale de la Santé". */
+  targetExpansion?: string;
+}
+
+export type GlossaryEntryKind = 'term' | 'acronym';
+
+/** A required translation the deterministic glossary check did not find. */
+export interface GlossaryViolation {
+  source: string;
+  target: string;
+  kind: GlossaryEntryKind;
+  /** Whether the entry was pulled in by its short form or its full name. */
+  matchedBy: 'source' | 'expansion';
+}
+
+/**
+ * Result of the deterministic glossary check on a translation: every
+ * glossary entry that occurs in the source must have its required
+ * translation (or full-name translation) in the output.
+ */
+export interface TranslationGlossaryCheck {
+  /** Entries that occurred in the source text and were therefore checked. */
+  checkedTerms: number;
+  violations: GlossaryViolation[];
 }
 
 /**
@@ -197,6 +231,8 @@ export interface TranslationWorkflowState {
   mode: 'quick' | 'agentic';
   analysis?: TranslationAnalysis;
   rounds: TranslationReviewRound[];
+  /** Deterministic glossary check of the run's final text (issue #131). */
+  glossaryCheck?: TranslationGlossaryCheck;
   /**
    * The WORKING translation: the streamed result, a user-pasted text, or
    * the edit-toggle output — whichever came last. Assessment edits apply
