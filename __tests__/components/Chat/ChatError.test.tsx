@@ -106,7 +106,7 @@ describe('ChatError - model timeout (issue #130)', () => {
   it('renders localized copy naming the model and the wait, not the server string', () => {
     renderChatError({
       error: 'Stage StandardChatHandler exceeded timeout of 90000ms',
-      errorCode: 'PIPELINE_TIMEOUT',
+      errorCode: 'MODEL_TIMEOUT',
       timeout,
       onRetryLonger: vi.fn(),
     });
@@ -123,7 +123,7 @@ describe('ChatError - model timeout (issue #130)', () => {
     const onRetry = vi.fn();
     const onRetryLonger = vi.fn();
     renderChatError({
-      errorCode: 'PIPELINE_TIMEOUT',
+      errorCode: 'MODEL_TIMEOUT',
       timeout,
       onRetry,
       onRetryLonger,
@@ -138,7 +138,7 @@ describe('ChatError - model timeout (issue #130)', () => {
   it('offers to persist the longer wait as the default', () => {
     const onAlwaysWaitLonger = vi.fn();
     renderChatError({
-      errorCode: 'PIPELINE_TIMEOUT',
+      errorCode: 'MODEL_TIMEOUT',
       timeout,
       onRetryLonger: vi.fn(),
       onAlwaysWaitLonger,
@@ -151,7 +151,7 @@ describe('ChatError - model timeout (issue #130)', () => {
   it('falls back to plain "Try again" once the ceiling has been used', () => {
     const onRetry = vi.fn();
     renderChatError({
-      errorCode: 'PIPELINE_TIMEOUT',
+      errorCode: 'MODEL_TIMEOUT',
       timeout: { ...timeout, seconds: 600, longerSeconds: null },
       onRetry,
       onRetryLonger: vi.fn(),
@@ -167,7 +167,7 @@ describe('ChatError - model timeout (issue #130)', () => {
 
   it('keeps the longer-wait action off the regenerate path', () => {
     renderChatError({
-      errorCode: 'PIPELINE_TIMEOUT',
+      errorCode: 'MODEL_TIMEOUT',
       timeout,
       canRetry: false,
       onRetry: undefined,
