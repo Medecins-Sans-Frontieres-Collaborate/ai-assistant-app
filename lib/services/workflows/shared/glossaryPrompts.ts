@@ -92,9 +92,10 @@ function renderRow({ entry, kind }: MatchedGlossaryEntry): string {
     }
   }
   if (entry.note?.trim()) notes.push(entry.note.trim());
-  // Pipes and line breaks inside cells would break the table the model
-  // reads (admin guides are validated, but the shape is defended here too).
-  const cell = (s: string) => s.replace(/\|/g, '/').replace(/\s+/g, ' ');
+  // Pipes are escaped for the markdown table (NOT substituted — the
+  // compliance check looks for the entry's exact target); line breaks
+  // collapse (admin guides are validated, but the shape is defended too).
+  const cell = (s: string) => s.replace(/\|/g, '\\|').replace(/\s+/g, ' ');
   return `| ${cell(entry.source)} | ${cell(entry.target)} | ${cell(
     notes.join('; '),
   )} |`;
