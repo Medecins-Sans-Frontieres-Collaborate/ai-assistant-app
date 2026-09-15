@@ -95,7 +95,7 @@ export function AnalysisPanel({
                 className="text-green-700 dark:text-green-400"
               />
               {t('translation.glossaryCheckPass', {
-                count: String(glossaryCheck.checkedTerms),
+                count: glossaryCheck.checkedTerms,
               })}
             </p>
           ) : (
@@ -107,8 +107,8 @@ export function AnalysisPanel({
                   className="text-amber-600 dark:text-amber-400"
                 />
                 {t('translation.glossaryCheckMissing', {
-                  count: String(glossaryCheck.violations.length),
-                  total: String(glossaryCheck.checkedTerms),
+                  count: glossaryCheck.violations.length,
+                  total: glossaryCheck.checkedTerms,
                 })}
               </p>
               <ul className="ms-5 mt-1 list-disc space-y-0.5 text-sm text-gray-600 dark:text-gray-400">
