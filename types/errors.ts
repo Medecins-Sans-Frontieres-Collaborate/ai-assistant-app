@@ -36,6 +36,12 @@ export enum ErrorCode {
 
   // Model & Execution
   MODEL_UNAVAILABLE = 'MODEL_UNAVAILABLE',
+  /**
+   * The MODEL did not start responding within the model timeout (issue
+   * #130). Distinct from PIPELINE_TIMEOUT, which any stage can raise (file
+   * processing, RAG, tool router…) — only this one means "waiting longer
+   * for the model might help", which is what the client offers.
+   */
   MODEL_TIMEOUT = 'MODEL_TIMEOUT',
   MODEL_RATE_LIMITED = 'MODEL_RATE_LIMITED',
   MODEL_CONTEXT_TOO_LONG = 'MODEL_CONTEXT_TOO_LONG',
