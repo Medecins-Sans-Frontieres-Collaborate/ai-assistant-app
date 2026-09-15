@@ -4,21 +4,34 @@ import { IconAlertTriangle, IconCheck } from '@tabler/icons-react';
 
 import { useTranslations } from 'next-intl';
 
-import { TranslationAnalysis, TranslationReviewRound } from '@/types/workflow';
+import {
+  TranslationAnalysis,
+  TranslationGlossaryCheck,
+  TranslationReviewRound,
+} from '@/types/workflow';
 
 interface AnalysisPanelProps {
   analysis?: TranslationAnalysis;
   rounds: TranslationReviewRound[];
+  /** Deterministic glossary verdict on the final text (issue #131). */
+  glossaryCheck?: TranslationGlossaryCheck;
 }
 
 /**
- * The agentic run's paper trail: pre-translation analysis findings and the
- * verdict of each review round. Collapsible section under the panes.
+ * The run's paper trail: pre-translation analysis findings, the verdict of
+ * each review round, and the glossary check. Collapsible section under the
+ * panes. The glossary section only renders when a glossary term actually
+ * occurred in the source — a run with nothing to check says nothing.
  */
-export function AnalysisPanel({ analysis, rounds }: AnalysisPanelProps) {
+export function AnalysisPanel({
+  analysis,
+  rounds,
+  glossaryCheck,
+}: AnalysisPanelProps) {
   const t = useTranslations('workflows');
 
-  if (!analysis && rounds.length === 0) return null;
+  const showGlossary = !!glossaryCheck && glossaryCheck.checkedTerms > 0;
+  if (!analysis && rounds.length === 0 && !showGlossary) return null;
 
   return (
     <div className="space-y-4 overflow-y-auto border-t border-gray-200 px-4 py-3 dark:border-gray-700">
@@ -65,6 +78,47 @@ export function AnalysisPanel({ analysis, rounds }: AnalysisPanelProps) {
             <p className="mt-1 max-w-[75ch] text-sm text-gray-600 dark:text-gray-400">
               {analysis.notes}
             </p>
+          )}
+        </section>
+      )}
+
+      {showGlossary && glossaryCheck && (
+        <section data-testid="glossary-check">
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            {t('translation.glossaryCheckTitle')}
+          </h3>
+          {glossaryCheck.violations.length === 0 ? (
+            <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300">
+              <IconCheck
+                size={14}
+                aria-hidden
+                className="text-green-700 dark:text-green-400"
+              />
+              {t('translation.glossaryCheckPass', {
+                count: String(glossaryCheck.checkedTerms),
+              })}
+            </p>
+          ) : (
+            <>
+              <p className="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-gray-800 dark:text-gray-200">
+                <IconAlertTriangle
+                  size={14}
+                  aria-hidden
+                  className="text-amber-600 dark:text-amber-400"
+                />
+                {t('translation.glossaryCheckMissing', {
+                  count: String(glossaryCheck.violations.length),
+                  total: String(glossaryCheck.checkedTerms),
+                })}
+              </p>
+              <ul className="ms-5 mt-1 list-disc space-y-0.5 text-sm text-gray-600 dark:text-gray-400">
+                {glossaryCheck.violations.map((v, i) => (
+                  <li key={i}>
+                    <span className="font-medium">{v.source}</span> → {v.target}
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </section>
       )}
