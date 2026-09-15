@@ -25,7 +25,7 @@ import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 import { devTrace } from '@/lib/utils/server/debug/devTrace';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
-import { ErrorCode, PipelineError } from '@/types/errors';
+import { ErrorCode, ErrorSeverity, PipelineError } from '@/types/errors';
 
 import { env } from '@/config/environment';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
@@ -58,14 +58,35 @@ const HEARTBEAT_QUIET_MS = 20_000;
  * warnings first (a RAG timeout warning must not mask "the model did not
  * start"); otherwise the first error keeps the historical behavior.
  */
-function pickReportableError(errors: Error[]): Error {
-  const handlerTimeout = errors.find(
-    (e) =>
-      e instanceof PipelineError &&
-      e.code === ErrorCode.PIPELINE_TIMEOUT &&
-      isModelHandlerStage(e.metadata?.stageName),
+function isModelHandlerTimeout(error: Error): error is PipelineError {
+  return (
+    error instanceof PipelineError &&
+    error.code === ErrorCode.PIPELINE_TIMEOUT &&
+    isModelHandlerStage(error.metadata?.stageName)
   );
-  return handlerTimeout ?? errors[0];
+}
+
+function pickReportableError(errors: Error[]): Error {
+  const handlerTimeout = errors.find(isModelHandlerTimeout);
+  if (handlerTimeout) return handlerTimeout;
+  // A critical error is what actually stopped the pipeline; an earlier
+  // stage's timeout WARNING (RAG, file processing) merely degraded it and
+  // must not be reported as the failure — the client would offer to wait
+  // longer for a model that never had a chance to start.
+  const critical = errors.find(
+    (e) => e instanceof PipelineError && e.severity === ErrorSeverity.CRITICAL,
+  );
+  return critical ?? errors[0];
+}
+
+/**
+ * The code the client is told. A model-handler timeout is reported as
+ * MODEL_TIMEOUT so the client can tell it apart from any other stage's
+ * PIPELINE_TIMEOUT (which a longer model wait cannot fix).
+ */
+function reportableErrorCode(error: Error): ErrorCode {
+  if (isModelHandlerTimeout(error)) return ErrorCode.MODEL_TIMEOUT;
+  return error instanceof PipelineError ? error.code : ErrorCode.INTERNAL_ERROR;
 }
 
 /**
@@ -75,11 +96,7 @@ function pickReportableError(errors: Error[]): Error {
  * from the code, and non-streaming callers get a plain sentence.
  */
 function describeReportableError(error: Error): string {
-  if (
-    error instanceof PipelineError &&
-    error.code === ErrorCode.PIPELINE_TIMEOUT &&
-    isModelHandlerStage(error.metadata?.stageName)
-  ) {
+  if (isModelHandlerTimeout(error)) {
     const seconds = Math.round(Number(error.metadata?.timeoutMs ?? 0) / 1000);
     return seconds > 0
       ? `The model did not start responding within ${seconds} seconds.`
@@ -296,16 +313,21 @@ export async function POST(req: NextRequest): Promise<Response> {
     const timeoutMs = PRE_MODEL_BUDGET_MS + modelTimeoutMs;
 
     const executePipeline = async () => {
+      // Request-level cancellation: when the guard below fires, the
+      // pipeline is told to stop — the running stage's upstream call is
+      // aborted and no later stage (in particular the model) starts on a
+      // request the client has already been told failed.
+      const requestAbort = new AbortController();
       let guardTimer: ReturnType<typeof setTimeout> | null = null;
       const timeoutPromise = new Promise<never>((_, reject) => {
         guardTimer = setTimeout(() => {
-          reject(
-            PipelineError.critical(
-              ErrorCode.REQUEST_TIMEOUT,
-              `Request timed out after ${timeoutMs / 1000} seconds`,
-              { timeoutMs },
-            ),
+          const error = PipelineError.critical(
+            ErrorCode.REQUEST_TIMEOUT,
+            `Request timed out after ${timeoutMs / 1000} seconds`,
+            { timeoutMs },
           );
+          requestAbort.abort(error);
+          reject(error);
         }, timeoutMs);
       });
       // Keepalive while the stages are silent (streaming only — the
@@ -319,7 +341,10 @@ export async function POST(req: NextRequest): Promise<Response> {
           }, HEARTBEAT_INTERVAL_MS)
         : null;
       try {
-        return await Promise.race([pipeline.execute(context), timeoutPromise]);
+        return await Promise.race([
+          pipeline.execute(context, { signal: requestAbort.signal }),
+          timeoutPromise,
+        ]);
       } finally {
         if (heartbeat) clearInterval(heartbeat);
         if (guardTimer) clearTimeout(guardTimer);
@@ -352,9 +377,7 @@ export async function POST(req: NextRequest): Promise<Response> {
           );
           await writeStreamError(
             describeReportableError(firstError),
-            firstError instanceof PipelineError
-              ? firstError.code
-              : ErrorCode.INTERNAL_ERROR,
+            reportableErrorCode(firstError),
             streamErrorExtra(firstError),
           );
           return;
@@ -513,6 +536,7 @@ function getStatusCodeForPipelineError(code: ErrorCode): number {
       return 409;
     case ErrorCode.REQUEST_TIMEOUT:
     case ErrorCode.PIPELINE_TIMEOUT:
+    case ErrorCode.MODEL_TIMEOUT:
       return 408;
     default:
       return 500;
@@ -545,10 +569,7 @@ function buildPipelineErrorResponse(result: {
   if (result.response) return null;
 
   const firstError = pickReportableError(result.errors);
-  const errorCode =
-    firstError instanceof PipelineError
-      ? firstError.code
-      : ErrorCode.INTERNAL_ERROR;
+  const errorCode = reportableErrorCode(firstError);
 
   return new Response(
     JSON.stringify({
