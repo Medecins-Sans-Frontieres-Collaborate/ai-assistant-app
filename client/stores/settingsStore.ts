@@ -2,6 +2,10 @@
 
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
+import {
+  DEFAULT_MODEL_TIMEOUT_SECONDS,
+  clampModelTimeoutSeconds,
+} from '@/lib/utils/shared/chat/modelTimeout';
 import { ToolApprovalRule } from '@/lib/utils/shared/chat/toolApprovalRules';
 import {
   EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
@@ -693,6 +697,26 @@ interface SettingsStore {
   setPasteAsAttachmentChars: (chars: number) => void;
 
   /**
+   * How long the server waits for the model to START responding, in
+   * seconds (issue #130). Sent with every chat request as `timeoutMs`;
+   * clamped to the shared bounds on read and write, so a hand-edited
+   * localStorage value can neither disable the timeout nor exceed the
+   * server ceiling. Never applies once the response stream has started.
+   */
+  modelTimeoutSeconds: number;
+  setModelTimeoutSeconds: (seconds: number) => void;
+
+  /**
+   * "Prefer my selected model": when true the store never silently retries
+   * a failed turn on the fallback chain (5xx, network, model rate limit).
+   * The failure surfaces immediately with the manual "Try with <model>"
+   * action still available — the user chose the model for its quality and
+   * wants to decide the trade-off themselves.
+   */
+  preferSelectedModel: boolean;
+  setPreferSelectedModel: (enabled: boolean) => void;
+
+  /**
    * How persistently the floating emissions chip is shown. Defaults to
    * `always` so the migration is a no-op for existing users; `auto` fades it
    * out between updates, `hidden` removes it entirely.
@@ -954,6 +978,10 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Pasting more than this many characters attaches instead of inlining
       pasteAsAttachmentChars: DEFAULT_PASTE_ATTACHMENT_CHARS,
+
+      // Model start timeout (issue #130) — the historical server default
+      modelTimeoutSeconds: DEFAULT_MODEL_TIMEOUT_SECONDS,
+      preferSelectedModel: false,
 
       // Emissions chip shown persistently by default
       emissionsChipVisibility: EMISSIONS_CHIP_VISIBILITY_DEFAULT,
@@ -1716,6 +1744,13 @@ export const useSettingsStore = create<SettingsStore>()(
       setPasteAsAttachmentChars: (chars) =>
         set({ pasteAsAttachmentChars: clampPasteAttachmentChars(chars) }),
 
+      // Clamped on write: the server clamps too, but the UI must never show
+      // a value the request will silently not honour.
+      setModelTimeoutSeconds: (seconds) =>
+        set({ modelTimeoutSeconds: clampModelTimeoutSeconds(seconds) }),
+      setPreferSelectedModel: (enabled) =>
+        set({ preferSelectedModel: enabled }),
+
       setEmissionsChipVisibility: (visibility) =>
         set({ emissionsChipVisibility: visibility }),
 
@@ -1857,6 +1892,8 @@ export const useSettingsStore = create<SettingsStore>()(
           autoInjectPinnedImages: true,
           autoFetchPastedLinks: true,
           pasteAsAttachmentChars: DEFAULT_PASTE_ATTACHMENT_CHARS,
+          modelTimeoutSeconds: DEFAULT_MODEL_TIMEOUT_SECONDS,
+          preferSelectedModel: false,
           emissionsChipVisibility: EMISSIONS_CHIP_VISIBILITY_DEFAULT,
           emissionsChipAutoHideMs: EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
           mapTimelapse: DEFAULT_MAP_TIMELAPSE,
@@ -1882,7 +1919,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 64, // Increment this when schema changes to trigger migrations
+      version: 65, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1971,6 +2008,8 @@ export const useSettingsStore = create<SettingsStore>()(
         autoInjectPinnedImages: state.autoInjectPinnedImages,
         autoFetchPastedLinks: state.autoFetchPastedLinks,
         pasteAsAttachmentChars: state.pasteAsAttachmentChars,
+        modelTimeoutSeconds: state.modelTimeoutSeconds,
+        preferSelectedModel: state.preferSelectedModel,
         emissionsChipVisibility: state.emissionsChipVisibility,
         emissionsChipAutoHideMs: state.emissionsChipAutoHideMs,
         mapTimelapse: state.mapTimelapse,
@@ -2618,6 +2657,18 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 64) {
           if (typeof state.euDefaultModelSwitchApplied !== 'boolean') {
             state.euDefaultModelSwitchApplied = false;
+          }
+        }
+
+        // Version 64 → 65: user-controlled model timeout + "prefer my
+        // selected model" (issue #130). Clamped rather than trusted, like
+        // pasteAsAttachmentChars.
+        if (version < 65) {
+          state.modelTimeoutSeconds = clampModelTimeoutSeconds(
+            state.modelTimeoutSeconds,
+          );
+          if (typeof state.preferSelectedModel !== 'boolean') {
+            state.preferSelectedModel = false;
           }
         }
 
