@@ -43,8 +43,17 @@ async function mount(gate: (ids: string[]) => boolean) {
     expect(container.querySelector('.edit-suggestion-mark')).toBeTruthy();
   });
   const pm = container.querySelector('.ProseMirror') as HTMLElement;
-  const type = (pos: number, text: string) =>
-    act(() => ref.current!.insertText(pos, pos, text));
+  // Tiptap's focus() defers its scrollIntoView to the next animation frame.
+  // Let that frame fire INSIDE the test so the scroll path (ProseMirror's
+  // coordsAtPos on a jsdom Range) runs deterministically here rather than
+  // racing teardown and surfacing as an unhandled error on a slow runner.
+  const type = async (pos: number, text: string) => {
+    await act(() => ref.current!.insertText(pos, pos, text));
+    await act(
+      () =>
+        new Promise<void>((resolve) => requestAnimationFrame(() => resolve())),
+    );
+  };
   return { pm, onChange, type };
 }
 
