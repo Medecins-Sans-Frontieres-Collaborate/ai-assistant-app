@@ -54,6 +54,7 @@ import {
   isValidFoundryResourcePath,
   stripToAccountPath,
 } from '@/lib/utils/shared/armPath';
+import { clampModelTimeoutMs } from '@/lib/utils/shared/chat/modelTimeout';
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
 import { RequestTelemetry } from '@/lib/types/logging';
@@ -199,6 +200,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       stream = true,
       reasoningEffort,
       verbosity,
+      timeoutMs,
       botId,
       conversationId,
       agentAttached,
@@ -280,6 +282,10 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       stream,
       reasoningEffort,
       verbosity,
+      // Model start timeout (issue #130): the client's preference, clamped
+      // to the shared bounds. The client is never trusted for the ceiling.
+      modelTimeoutMs:
+        timeoutMs === undefined ? undefined : clampModelTimeoutMs(timeoutMs),
       botId,
       conversationId,
       agentAttached,
