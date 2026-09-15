@@ -346,6 +346,14 @@ const ChatBodySchema = z
     stream: z.boolean().optional().default(true),
     reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
     verbosity: z.enum(['low', 'medium', 'high']).optional(),
+    // Model start timeout (issue #130). Deliberately NOT range-checked
+    // here: requestParsingMiddleware clamps it, so an older client or a
+    // hand-edited value degrades to the nearest bound instead of a 400.
+    timeoutMs: z
+      .number()
+      .finite('Timeout must be a finite number')
+      .positive('Timeout must be positive')
+      .optional(),
     botId: z.string().max(100, 'Bot ID too long').optional(),
     // Telemetry-only correlation id (conversation.id); never routes anything.
     conversationId: z.string().max(100, 'Conversation ID too long').optional(),
