@@ -49,6 +49,38 @@ export const STAGE_TIMEOUTS: Record<string, number> = {
 const DEFAULT_STAGE_TIMEOUT = 30000; // 30s
 
 /**
+ * The stages whose timeout is the user-facing "model timeout" (issue #130):
+ * both resolve when the model's response STARTS (the handler returns a
+ * Response whose body is piped afterwards, untimed), so their timer is the
+ * time-to-first-byte bound the user is actually tuning.
+ */
+export const MODEL_HANDLER_STAGES = [
+  'StandardChatHandler',
+  'AgentChatHandler',
+] as const;
+
+export function isModelHandlerStage(stageName: unknown): boolean {
+  return (
+    typeof stageName === 'string' &&
+    (MODEL_HANDLER_STAGES as readonly string[]).includes(stageName)
+  );
+}
+
+/**
+ * Per-request stage timeouts: the compiled defaults with the model handler
+ * stages overridden by the user's (already clamped) model timeout. Absent
+ * → the defaults, byte-identical to the pre-#130 behavior.
+ */
+export function resolveStageTimeouts(
+  modelTimeoutMs: number | undefined,
+): Record<string, number> {
+  if (modelTimeoutMs === undefined) return STAGE_TIMEOUTS;
+  const overrides: Record<string, number> = {};
+  for (const stage of MODEL_HANDLER_STAGES) overrides[stage] = modelTimeoutMs;
+  return { ...STAGE_TIMEOUTS, ...overrides };
+}
+
+/**
  * ChatPipeline orchestrates the execution of pipeline stages.
  *
  * Responsibilities:
@@ -129,11 +161,16 @@ export class ChatPipeline {
         );
 
         const errorCountBefore = context.errors?.length ?? 0;
+        // Aborted only when THIS stage loses the race below. A stage that
+        // returned in time is never aborted afterwards: the await's
+        // continuation (a microtask) clears the timer before the timer's
+        // macrotask could ever run.
+        const stageAbort = new AbortController();
         const { promise: timeoutPromise, cancel: cancelTimeout } =
-          this.createTimeoutPromise(timeout, stage.name);
+          this.createTimeoutPromise(timeout, stage.name, stageAbort);
         try {
           context = await Promise.race([
-            stage.execute(context),
+            stage.execute({ ...context, stageSignal: stageAbort.signal }),
             timeoutPromise,
           ]);
         } catch (error) {
@@ -271,10 +308,20 @@ export class ChatPipeline {
   private createTimeoutPromise(
     timeoutMs: number,
     stageName: string,
+    stageAbort?: AbortController,
   ): { promise: Promise<never>; cancel: () => void } {
     let timer: ReturnType<typeof setTimeout> | null = null;
     const promise = new Promise<never>((_, reject) => {
       timer = setTimeout(() => {
+        // Cancel the stage's upstream work (a model call that will never be
+        // consumed) before the pipeline moves on without it.
+        stageAbort?.abort(
+          PipelineError.warning(
+            ErrorCode.PIPELINE_TIMEOUT,
+            `Stage ${stageName} exceeded timeout of ${timeoutMs}ms`,
+            { stageName, timeoutMs },
+          ),
+        );
         reject(
           PipelineError.warning(
             ErrorCode.PIPELINE_TIMEOUT,
