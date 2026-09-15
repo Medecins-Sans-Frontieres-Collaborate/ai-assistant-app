@@ -100,6 +100,7 @@ function buildAnthropicStrategy(
       serversWithTools: ServerWithTools[],
       allowToolUse,
       write,
+      onModelStarted,
     ): Promise<AssembledRound> {
       const params = options.buildParams(messages);
       if (systemAddendum) {
@@ -128,6 +129,8 @@ function buildAnthropicStrategy(
         params,
         options.signal,
       );
+      // Headers are in: the model has started. Signal BEFORE consuming.
+      onModelStarted?.();
 
       const accumulator = createAnthropicToolUseAccumulator();
       for await (const event of eventStream) {
