@@ -29,7 +29,7 @@ import { ErrorCode, PipelineError } from '@/types/errors';
 
 import { env } from '@/config/environment';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
-import { emitAgentActivity } from '@/lib/streamMarkers';
+import { HEARTBEAT_ACTIVITY_KEY, emitAgentActivity } from '@/lib/streamMarkers';
 
 /**
  * Budget for everything BEFORE the model handler stage (file download +
@@ -45,8 +45,9 @@ const PRE_MODEL_BUDGET_MS = 210_000;
  * Long model waits (up to MAX_MODEL_TIMEOUT_SECONDS) would otherwise send
  * no bytes for minutes — intermediaries with idle timeouts cut those, and
  * the user sees a frozen loader. The heartbeat is a real activity marker
- * with the elapsed seconds, so the loader also tells the user what is
- * happening.
+ * (HEARTBEAT_ACTIVITY_KEY), so a plain "Thinking…" loader also gains the
+ * elapsed counter; the client ignores it while a more specific activity
+ * is showing.
  */
 const HEARTBEAT_INTERVAL_MS = 15_000;
 const HEARTBEAT_QUIET_MS = 20_000;
@@ -311,13 +312,10 @@ export async function POST(req: NextRequest): Promise<Response> {
       // non-streaming path has nothing to write to). Stops the moment the
       // pipeline returns, i.e. before any handler bytes are piped, so it
       // can never interleave with model output.
-      const startedAt = Date.now();
       const heartbeat = context.stream
         ? setInterval(() => {
             if (Date.now() - lastMarkerAt < HEARTBEAT_QUIET_MS) return;
-            void emitActivity('chat.activity.stillWorking', {
-              seconds: String(Math.round((Date.now() - startedAt) / 1000)),
-            });
+            void emitActivity(HEARTBEAT_ACTIVITY_KEY);
           }, HEARTBEAT_INTERVAL_MS)
         : null;
       try {
