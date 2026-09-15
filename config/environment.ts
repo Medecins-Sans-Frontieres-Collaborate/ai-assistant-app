@@ -134,6 +134,24 @@ const serverEnvSchema = z.object({
   // sanity bound — the synchronous index route has a 300s budget.
   M365_AGENT_MAX_DOCUMENTS: z.coerce.number().int().min(1).max(200).default(50),
   /**
+   * Per-agent document-cap overrides (admin editor). A LOCAL admin may raise
+   * an agent's cap up to the first value on their own (the confirm dialog is
+   * there to make them reconsider); anything above needs a GLOBAL admin, who
+   * is bounded by the second. Both bound the effective cap for indexing.
+   */
+  M365_AGENT_LOCAL_ADMIN_MAX_DOCUMENTS: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(1000)
+    .default(100),
+  M365_AGENT_MAX_DOCUMENTS_CEILING: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(1000)
+    .default(200),
+  /**
    * Sum of the sizes of an M365 agent's indexable files (MB). Known from
    * Graph metadata, so the plan view can refuse an oversized tree before a
    * single download.
@@ -149,6 +167,37 @@ const serverEnvSchema = z.object({
    * PDFs when an admin prepares such a file for an M365 agent (phase 4).
    */
   M365_AGENT_VISION_MODEL: z.string().default('gpt-5-mini'),
+  /**
+   * OCR engine for scanned PDFs (Prepare and auto-OCR). `auto` uses Azure
+   * Document Intelligence `prebuilt-read` when AZURE_DOCUMENT_INTELLIGENCE_*
+   * is configured and the vision model otherwise; `vision` forces the
+   * vision path; `di` fails loudly when DI is not configured.
+   */
+  M365_AGENT_OCR_ENGINE: z.enum(['auto', 'di', 'vision']).default('auto'),
+  /**
+   * Budget for OCR that runs WITHOUT a per-file click (agent `autoOcr`).
+   * OCR is billed per page, so both caps are hard: pages per index run and
+   * pages per file. Over-budget items stay `noText` with the Prepare offer.
+   */
+  M365_AGENT_AUTO_OCR_MAX_PAGES_PER_RUN: z.coerce
+    .number()
+    .int()
+    .min(0)
+    .max(5000)
+    .default(200),
+  M365_AGENT_AUTO_OCR_MAX_PAGES_PER_FILE: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(1000)
+    .default(50),
+  /** Explicit Prepare (OCR) page ceiling per PDF; was a hard-coded 30. */
+  M365_AGENT_OCR_MAX_PAGES: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(2000)
+    .default(200),
 
   // Web search backend:
   //  - 'news': GDELT + Google News RSS queried IN PARALLEL and merged —

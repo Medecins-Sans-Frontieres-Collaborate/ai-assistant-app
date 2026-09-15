@@ -7,8 +7,13 @@
  *
  *   image          → a vision model describes it and transcribes visible
  *                    text (one call)
- *   scanned PDF    → pdftoppm renders pages, the vision model reads each
- *                    (page markers kept so citations get "p. N")
+ *   scanned PDF    → OCR: Azure Document Intelligence `prebuilt-read`
+ *                    when configured (regional resource — see
+ *                    documentIntelligence/client.ts), otherwise pdftoppm
+ *                    renders pages and the vision model reads each
+ *                    (page markers kept so citations get "p. N");
+ *                    `ocrPdfBuffer` is also what the indexer's budgeted
+ *                    auto-OCR path calls
  *   audio / video  → Whisper synchronously up to its 25MB limit; larger
  *                    files go through the existing chunked transcription
  *                    job, which the admin's browser polls; `complete`
@@ -28,6 +33,11 @@ import type {
   M365PreparationKind,
 } from '@/lib/services/agentAccess/types';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import {
+  DocumentIntelligenceError,
+  analyzeDocument,
+  isDocumentIntelligenceConfigured,
+} from '@/lib/services/documentIntelligence/client';
 import { guardTranscriptionMinutes } from '@/lib/services/limits/transcriptionBudget';
 import {
   mutateDerivedIndex,
@@ -63,9 +73,9 @@ const GRAPH_SCOPES = ['Files.ReadWrite.All'];
 
 /** Images above this are refused — vision inputs are small by design. */
 const MAX_IMAGE_BYTES = 20 * 1024 * 1024;
-/** Pages OCR'd per scanned PDF; beyond this the admin is told to split. */
-const MAX_OCR_PAGES = 30;
 const OCR_RENDER_DPI = 110;
+/** Derived-text `model` label for DI-produced OCR (vision records the deployment). */
+const DI_OCR_MODEL_LABEL = 'document-intelligence:prebuilt-read';
 /** Derived text cap, matching the extractor's budget order of magnitude. */
 const MAX_DERIVED_CHARS = 2_000_000;
 const OCR_PAGE_CONCURRENCY = 2;
@@ -177,30 +187,38 @@ async function describeWithVision(
   imageBuffer: Buffer,
   mimeType: string,
   prompt: string,
+  signal?: AbortSignal,
 ): Promise<string> {
   const client = ServiceContainer.getInstance().getOpenAIClient();
-  const completion = await client.chat.completions.create({
-    model: env.M365_AGENT_VISION_MODEL,
-    messages: [
-      {
-        role: 'user',
-        content: [
-          { type: 'text', text: prompt },
-          {
-            type: 'image_url',
-            image_url: {
-              url: `data:${mimeType};base64,${imageBuffer.toString('base64')}`,
-              detail: 'high',
+  const completion = await client.chat.completions.create(
+    {
+      model: env.M365_AGENT_VISION_MODEL,
+      messages: [
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: prompt },
+            {
+              type: 'image_url',
+              image_url: {
+                url: `data:${mimeType};base64,${imageBuffer.toString('base64')}`,
+                detail: 'high',
+              },
             },
-          },
-        ],
-      },
-    ],
-  });
+          ],
+        },
+      ],
+    },
+    signal ? { signal } : undefined,
+  );
   return completion.choices[0]?.message?.content?.trim() ?? '';
 }
 
-async function ocrPdf(buffer: Buffer): Promise<string> {
+async function ocrPdfWithVision(
+  buffer: Buffer,
+  maxPages: number,
+  signal?: AbortSignal,
+): Promise<{ text: string; pages: number }> {
   return withTempFile('scan.pdf', buffer, async (pdfPath) => {
     const outDir = await fs.promises.mkdtemp(
       path.join(os.tmpdir(), 'm365-ocr-'),
@@ -213,11 +231,11 @@ async function ocrPdf(buffer: Buffer): Promise<string> {
           String(OCR_RENDER_DPI),
           '-png',
           '-l',
-          String(MAX_OCR_PAGES),
+          String(Math.max(1, maxPages)),
           pdfPath,
           path.join(outDir, 'page'),
         ],
-        { timeout: 120_000 },
+        { timeout: 120_000, ...(signal ? { signal } : {}) },
       );
       const pages = (await fs.promises.readdir(outDir))
         .filter((f) => f.endsWith('.png'))
@@ -243,21 +261,148 @@ async function ocrPdf(buffer: Buffer): Promise<string> {
                 png,
                 'image/png',
                 OCR_PROMPT,
+                signal,
               );
             }
           },
         ),
       );
       // The pdfjs marker dialect, so chunkDocument attributes "p. N".
-      return texts
-        .map((text, i) => `--- Page ${i + 1} ---\n${text}`)
-        .join('\n');
+      return {
+        text: texts
+          .map((text, i) => `--- Page ${i + 1} ---\n${text}`)
+          .join('\n'),
+        pages: texts.length,
+      };
     } finally {
       await fs.promises
         .rm(outDir, { recursive: true, force: true })
         .catch(() => undefined);
     }
   });
+}
+
+// ---------------------------------------------------------------------------
+// OCR engine
+// ---------------------------------------------------------------------------
+
+export interface OcrPdfResult {
+  /** Page-marked text (`--- Page N ---` per page) for the chunker. */
+  text: string;
+  /** Pages actually OCR'd (≤ `maxPages`). */
+  pages: number;
+  engine: 'di' | 'vision';
+}
+
+/** `M365_AGENT_OCR_ENGINE=di` with no Document Intelligence configured. */
+export class OcrEngineUnavailableError extends Error {
+  constructor(message = 'No OCR engine is available on this server') {
+    super(message);
+    this.name = 'OcrEngineUnavailableError';
+  }
+}
+
+/**
+ * Which engine serves OCR right now. `auto` prefers Document Intelligence
+ * because it is cheaper per page and has no rendering step; the vision
+ * model is the fallback for deployments without a DI resource in-region.
+ */
+export function resolveOcrEngine(): 'di' | 'vision' {
+  const configured = isDocumentIntelligenceConfigured();
+  switch (env.M365_AGENT_OCR_ENGINE) {
+    case 'di':
+      if (!configured) {
+        throw new OcrEngineUnavailableError(
+          'M365_AGENT_OCR_ENGINE=di but AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT/KEY are not set',
+        );
+      }
+      return 'di';
+    case 'vision':
+      return 'vision';
+    default:
+      return configured ? 'di' : 'vision';
+  }
+}
+
+/** Does a DI submit error look like an out-of-range `pages` selection? */
+function isPageRangeError(error: unknown): boolean {
+  return (
+    error instanceof DocumentIntelligenceError &&
+    error.kind === 'submit' &&
+    error.status === 400 &&
+    /page/i.test(error.message)
+  );
+}
+
+async function ocrPdfWithDocumentIntelligence(
+  buffer: Buffer,
+  maxPages: number,
+  signal?: AbortSignal,
+): Promise<{ text: string; pages: number }> {
+  const analyze = (pages?: string) =>
+    analyzeDocument(buffer, {
+      model: 'prebuilt-read',
+      contentType: 'application/pdf',
+      ...(pages && { pages }),
+      signal,
+    });
+  let result;
+  try {
+    // Only the selected pages are analysed — and billed.
+    result = await analyze(`1-${Math.max(1, maxPages)}`);
+  } catch (error) {
+    // A document shorter than the cap can make the range invalid on some
+    // service versions; the whole document is then within budget anyway.
+    if (!isPageRangeError(error)) throw error;
+    result = await analyze();
+  }
+  const pages = result.pages.slice(0, Math.max(1, maxPages));
+  return {
+    text: pages
+      .map((page) => `--- Page ${page.pageNumber} ---\n${page.text}`)
+      .join('\n'),
+    pages: pages.length,
+  };
+}
+
+/**
+ * OCR a scanned PDF held in memory, bounded to `maxPages` (a billing cap
+ * as much as a size cap). Used by the explicit Prepare action and by the
+ * indexer's budgeted auto-OCR. Throws OcrEngineUnavailableError when the
+ * configured engine cannot run; other errors are the engine's own.
+ */
+export async function ocrPdfBuffer(
+  buffer: Buffer,
+  name: string,
+  options: { maxPages: number; signal?: AbortSignal },
+): Promise<OcrPdfResult> {
+  const engine = resolveOcrEngine();
+  const maxPages = Math.max(1, Math.floor(options.maxPages));
+  if (engine === 'di') {
+    try {
+      const di = await ocrPdfWithDocumentIntelligence(
+        buffer,
+        maxPages,
+        options.signal,
+      );
+      return { ...di, engine: 'di' };
+    } catch (error) {
+      // `auto` keeps the vision path as a fallback for service outages;
+      // an explicit `di` setting fails loudly instead of paying twice.
+      if (
+        env.M365_AGENT_OCR_ENGINE !== 'auto' ||
+        options.signal?.aborted ||
+        (error instanceof DocumentIntelligenceError && error.kind === 'aborted')
+      ) {
+        throw error;
+      }
+      console.warn(
+        `[m365-agents] Document Intelligence OCR failed for ${sanitizeForLog(name)}, falling back to the vision model: ${sanitizeForLog(error)}`,
+      );
+    }
+  }
+  const vision = await ocrPdfWithVision(buffer, maxPages, options.signal);
+  return { ...vision, engine: 'vision' };
 }
 
 // ---------------------------------------------------------------------------
@@ -370,8 +515,13 @@ export async function prepareAgentItem(
       target.itemId,
       meta.name,
     );
-    const text = await ocrPdf(buffer);
-    return record(text, env.M365_AGENT_VISION_MODEL);
+    const ocr = await ocrPdfBuffer(buffer, meta.name, {
+      maxPages: env.M365_AGENT_OCR_MAX_PAGES,
+    });
+    return record(
+      ocr.text,
+      ocr.engine === 'di' ? DI_OCR_MODEL_LABEL : env.M365_AGENT_VISION_MODEL,
+    );
   }
 
   // Audio / video — the admin's own transcription budget applies.

@@ -13,8 +13,10 @@ import type {
 } from '@/lib/services/agentAccess/types';
 import {
   IndexJobActiveError,
+  autoOcrBudgetFor,
   cancelIndexJob,
   describeEmptySource,
+  describeStepFailure,
   startIndexJob,
   stepIndexJob,
 } from '@/lib/services/m365/agentIndexJobService';
@@ -193,7 +195,7 @@ beforeEach(() => {
 });
 
 describe('startIndexJob', () => {
-  it('writes the job, marks sources indexing, and refuses a second live start', async () => {
+  it('writes the job, leaves source statuses alone, and refuses a second live start', async () => {
     const summary = await startIndexJob(
       req,
       storage,
@@ -202,16 +204,32 @@ describe('startIndexJob', () => {
       'admin@example.org',
     );
     expect(summary).toMatchObject({ status: 'running', total: 3, done: 0 });
-    expect(mockStore.writeM365Agent).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({
-        sources: [expect.objectContaining({ status: 'indexing' })],
-      }),
-      '"a1"',
-    );
+    // A re-run must not hide a live agent: statuses stay whatever the last
+    // finished run stamped (the job summary carries progress instead).
+    expect(mockStore.writeM365Agent).not.toHaveBeenCalled();
     await expect(
       startIndexJob(req, storage, agent, 'u1', 'admin@example.org'),
     ).rejects.toBeInstanceOf(IndexJobActiveError);
+  });
+
+  it('overwrites an unreadable job record instead of 409-ing on it', async () => {
+    const { m365AgentIndexJobBlobPath } =
+      await import('@/lib/services/agentAccess/types');
+    storage.blobs.set(m365AgentIndexJobBlobPath(agent.id), {
+      body: '{"version":1,"garbage":true}',
+      etag: '"old"',
+    });
+    const summary = await startIndexJob(
+      req,
+      storage,
+      agent,
+      'u1',
+      'admin@example.org',
+    );
+    expect(summary.status).toBe('running');
+    expect((await readIndexJob(storage, agent.id))!.job.jobId).toBe(
+      summary.jobId,
+    );
   });
 
   it('replaces a terminal or interrupted job', async () => {
@@ -367,6 +385,114 @@ describe('stepIndexJob', () => {
         (c) => (c[4] as M365ManifestItem).itemId,
       ),
     ).toEqual(['a', 'b']);
+  });
+
+  it('threads the auto-OCR budget to items only when the agent opted in, and accounts pages used', async () => {
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: { ...agent, autoOcr: true },
+      etag: '"a1"',
+    });
+    mockIndex.indexJobItem.mockImplementation(
+      async (_req, _agentId, _dep, _sourceId, it: M365ManifestItem) =>
+        it.itemId === 'a'
+          ? { ...it, status: 'indexed', indexedChunks: 3, ocrPages: 7 }
+          : { ...it, status: 'indexed', indexedChunks: 1 },
+    );
+    const { jobId } = await startIndexJob(
+      req,
+      storage,
+      agent,
+      'u1',
+      'admin@example.org',
+    );
+    await stepIndexJob(req, storage, agent.id, jobId, 0);
+    const options = mockIndex.indexJobItem.mock.calls[0][6];
+    expect(options).toMatchObject({
+      autoOcr: { remainingPages: 200, maxPagesPerFile: 50 },
+    });
+    expect(typeof options.persistOcr).toBe('function');
+    const stored = (await readIndexJob(storage, agent.id))!.job;
+    expect(stored.ocrPagesUsed).toBe(7);
+
+    // The cache hook writes a derived-text record keyed by the item's
+    // eTag, so the next run reads it instead of paying for OCR again.
+    await options.persistOcr({
+      itemId: 'a',
+      name: 'a.pdf',
+      eTag: '"e-a"',
+      text: 'ocr text',
+      pages: 7,
+      engine: 'di',
+    });
+    const { m365AgentDerivedTextBlobPath } =
+      await import('@/lib/services/agentAccess/types');
+    const derived = storage.blobs.get(
+      m365AgentDerivedTextBlobPath(agent.id, 'a'),
+    );
+    expect(derived).toBeDefined();
+    expect(JSON.parse(derived!.body)).toMatchObject({
+      kind: 'pdfOcr',
+      eTag: '"e-a"',
+      model: 'auto-ocr:di',
+      text: 'ocr text',
+    });
+
+    // Opted out: no budget object at all.
+    mockIndex.indexJobItem.mockClear();
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: agent,
+      etag: '"a1"',
+    });
+    storage = fakeStorage();
+    const second = await startIndexJob(
+      req,
+      storage,
+      agent,
+      'u1',
+      'admin@example.org',
+    );
+    await stepIndexJob(req, storage, agent.id, second.jobId, 0);
+    expect(mockIndex.indexJobItem.mock.calls[0][6]).toBeUndefined();
+  });
+
+  it('caps the remaining budget by pages already spent this run', () => {
+    const job = freshJob(['a']);
+    expect(autoOcrBudgetFor({ ...agent, autoOcr: true }, job)).toEqual({
+      remainingPages: 200,
+      maxPagesPerFile: 50,
+    });
+    expect(
+      autoOcrBudgetFor(
+        { ...agent, autoOcr: true },
+        { ...job, ocrPagesUsed: 190 },
+      ),
+    ).toEqual({ remainingPages: 10, maxPagesPerFile: 50 });
+    expect(
+      autoOcrBudgetFor(
+        { ...agent, autoOcr: true },
+        { ...job, ocrPagesUsed: 999 },
+      ),
+    ).toEqual({ remainingPages: 0, maxPagesPerFile: 50 });
+    expect(autoOcrBudgetFor(agent, job)).toBeUndefined();
+    expect(autoOcrBudgetFor(null, job)).toBeUndefined();
+  });
+
+  it('explains storage precondition failures instead of echoing Azure', () => {
+    expect(
+      describeStepFailure(
+        Object.assign(new Error('The specified blob already exists.'), {
+          statusCode: 409,
+        }),
+      ),
+    ).toMatch(/Could not save the run's results/);
+    expect(
+      describeStepFailure(
+        Object.assign(new Error('boom'), { statusCode: 503 }),
+      ),
+    ).toMatch(/unavailable \(503\)/);
+    expect(describeStepFailure(new Error('token expired'))).toBe(
+      'token expired',
+    );
   });
 
   it('fails the job loudly when an item processor throws (session-level failure)', async () => {

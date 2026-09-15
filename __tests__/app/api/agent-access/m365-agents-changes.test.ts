@@ -106,6 +106,30 @@ describe('GET /api/agent-access/m365-agents/changes', () => {
     );
   });
 
+  it('passes an over-cap verdict through as data instead of failing', async () => {
+    mockStore.readM365AgentManifest.mockResolvedValue({
+      version: 1,
+      agentId: AGENT_ID,
+      updatedAt: '2026-08-25T09:00:00.000Z',
+      sources: [],
+    });
+    mockIndex.previewRefresh.mockResolvedValue({
+      sources: [],
+      changes: { added: 0, modified: 0, removed: 0, unchanged: 120 },
+      overCap: { totalDocuments: 120, maxDocuments: 50 },
+      truncated: true,
+    });
+    const response = await GET(request());
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(200);
+    expect(body.data.preview.changes.unchanged).toBe(120);
+    expect(body.data.overCap).toEqual({
+      totalDocuments: 120,
+      maxDocuments: 50,
+    });
+    expect(body.data.truncated).toBe(true);
+  });
+
   it('gates on admin status', async () => {
     mockAdminAuth.resolveAdminStatus.mockReturnValue({
       isGlobalAdmin: false,

@@ -3,6 +3,8 @@
  *
  * Uses Azure Document Intelligence REST API for PDF/DOCX files.
  */
+import { analyzeDocument } from '@/lib/services/documentIntelligence/client';
+
 import { createHash } from 'crypto';
 import {
   copyFileSync,
@@ -53,7 +55,9 @@ function safeStem(filename: string): string {
 }
 
 /**
- * Extract text from a document using Azure Document Intelligence REST API.
+ * Extract text from a document with Azure Document Intelligence via the
+ * shared client (`prebuilt-layout`, as this stage always used). The
+ * GRANT_PIPELINE_DI_* overrides win over the app-wide endpoint/key.
  */
 async function extractWithDocIntelligence(docPath: string): Promise<string> {
   const endpoint = diEndpoint();
@@ -81,65 +85,16 @@ async function extractWithDocIntelligence(docPath: string): Promise<string> {
         ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         : 'application/octet-stream';
 
-  // Submit analysis request
-  const analyzeUrl = `${endpoint.replace(/\/$/, '')}/documentintelligence/documentModels/prebuilt-layout:analyze?api-version=2024-11-30`;
-
-  const submitResp = await fetch(analyzeUrl, {
-    method: 'POST',
-    headers: {
-      'Ocp-Apim-Subscription-Key': key,
-      'Content-Type': contentType,
-    },
-    body: fileBuffer,
+  const { content } = await analyzeDocument(fileBuffer, {
+    model: 'prebuilt-layout',
+    contentType,
+    endpoint,
+    key,
+    // The previous inline poller waited up to 10 minutes at 5 s intervals.
+    pollIntervalMs: 5000,
+    timeoutMs: 10 * 60_000,
   });
-
-  if (!submitResp.ok) {
-    const body = await submitResp.text();
-    throw new Error(
-      `Document Intelligence submit failed: ${submitResp.status} - ${body}`,
-    );
-  }
-
-  const operationLocation = submitResp.headers.get('operation-location');
-  if (!operationLocation) {
-    throw new Error(
-      'No operation-location header in Document Intelligence response',
-    );
-  }
-
-  // Poll for completion
-  let attempts = 0;
-  const maxAttempts = 120; // 10 minutes max
-  while (attempts < maxAttempts) {
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    attempts++;
-
-    const pollResp = await fetch(operationLocation, {
-      headers: { 'Ocp-Apim-Subscription-Key': key },
-    });
-
-    if (!pollResp.ok) {
-      throw new Error(`Document Intelligence poll failed: ${pollResp.status}`);
-    }
-
-    const result = (await pollResp.json()) as {
-      status: string;
-      analyzeResult?: { content?: string };
-      error?: { message?: string };
-    };
-
-    if (result.status === 'succeeded') {
-      return result.analyzeResult?.content || '';
-    }
-    if (result.status === 'failed') {
-      throw new Error(
-        `Document Intelligence analysis failed: ${result.error?.message || 'Unknown error'}`,
-      );
-    }
-    // status is 'running' or 'notStarted' — continue polling
-  }
-
-  throw new Error('Document Intelligence analysis timed out');
+  return content;
 }
 // Azure Document Intelligence does not support .doc files,
 // so the word-extractor package is used to extract text from them.

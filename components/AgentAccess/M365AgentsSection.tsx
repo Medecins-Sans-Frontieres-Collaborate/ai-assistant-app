@@ -43,9 +43,14 @@ import {
   ShowHiddenToggle,
 } from './HiddenAgentsControls';
 import {
+  DEFAULT_AUTO_OCR_MAX_PAGES_PER_FILE,
+  DEFAULT_OCR_MAX_PAGES,
+  M365PrepareAllButton,
   M365SourcePlanView,
   SourceSelection,
   formatBytes,
+  ocrNoteFor,
+  selectUnpreparedScannedPdfs,
 } from './M365SourcePlanView';
 import { RuleEditor } from './RuleEditor';
 import {
@@ -57,6 +62,7 @@ import {
   ClientIndexJobSummary,
   ClientRefreshPreview,
   ClientSourcePlan,
+  M365DocumentCapCeilings,
   clientCanonicalAgentKey,
 } from './types';
 
@@ -163,11 +169,25 @@ const M365SessionProblemNotice: FC<{
  * manifest is fetched only when expanded — one request per row would not
  * scale, and most rows never need it.
  */
-const M365AttentionFiles: FC<{ agentId: string; count: number }> = ({
+const M365AttentionFiles: FC<{
+  agentId: string;
+  count: number;
+  /** Items already reported on a source line — not repeated here. */
+  excludeItemIds?: readonly string[];
+  ocrMaxPages: number;
+  autoOcrMaxPagesPerFile: number;
+  /** Batch preparation finished with at least one prepared file. */
+  onPrepared?: () => void;
+}> = ({
   agentId,
   count,
+  excludeItemIds = [],
+  ocrMaxPages,
+  autoOcrMaxPagesPerFile,
+  onPrepared,
 }) => {
   const t = useTranslations('agentAccess');
+  const queryClient = useQueryClient();
   const [expanded, setExpanded] = useState(false);
   const manifestQuery = useQuery<M365AgentManifest | null>({
     queryKey: ['agent-access-m365-agent-manifest', agentId],
@@ -185,10 +205,14 @@ const M365AttentionFiles: FC<{ agentId: string; count: number }> = ({
     retry: 0,
     refetchOnWindowFocus: false,
   });
+  const excluded = useMemo(() => new Set(excludeItemIds), [excludeItemIds]);
   const rows = useMemo(() => {
     const out: { key: string; name: string; note: string }[] = [];
     for (const source of manifestQuery.data?.sources ?? []) {
       for (const item of source.items) {
+        // A single-file source already shows this item's error on its
+        // own line — listing it twice reads as two problems.
+        if (excluded.has(item.itemId)) continue;
         const name = item.path ? `${item.path}/${item.name}` : item.name;
         if (item.status === 'failed' || item.status === 'missing') {
           out.push({
@@ -199,12 +223,15 @@ const M365AttentionFiles: FC<{ agentId: string; count: number }> = ({
               : t(`m365ItemStatus.${item.status}`),
           });
         } else if (item.status === 'noText') {
+          const ocrNote = ocrNoteFor(item, t, autoOcrMaxPagesPerFile);
           out.push({
             key: `${source.sourceId}:${item.itemId}`,
             name,
-            note: item.name.toLowerCase().endsWith('.pdf')
-              ? t('m365ItemNoTextOcr')
-              : t('m365ItemStatus.noText'),
+            note:
+              ocrNote ??
+              (item.name.toLowerCase().endsWith('.pdf')
+                ? t('m365ItemNoTextOcr')
+                : t('m365ItemStatus.noText')),
           });
         } else if (item.tier === 'skipped') {
           out.push({
@@ -216,7 +243,15 @@ const M365AttentionFiles: FC<{ agentId: string; count: number }> = ({
       }
     }
     return out;
-  }, [manifestQuery.data, t]);
+  }, [manifestQuery.data, excluded, autoOcrMaxPagesPerFile, t]);
+  // Scanned PDFs still awaiting OCR — the batch Prepare action's input.
+  const scannedPdfs = useMemo(
+    () =>
+      selectUnpreparedScannedPdfs(
+        (manifestQuery.data?.sources ?? []).flatMap((source) => source.items),
+      ),
+    [manifestQuery.data],
+  );
   return (
     <div className="text-xs">
       <button
@@ -243,29 +278,56 @@ const M365AttentionFiles: FC<{ agentId: string; count: number }> = ({
               {t('m365AgentAttentionFailed')}
             </p>
           ) : (
-            <ul className="max-h-48 space-y-0.5 overflow-y-auto">
-              {rows.map((row) => (
-                <li
-                  key={row.key}
-                  className="flex items-center gap-2 text-gray-800 dark:text-gray-200"
-                >
-                  <span className="min-w-0 flex-1 truncate" title={row.name}>
-                    {row.name}
-                  </span>
-                  <span
-                    className="shrink-0 text-red-600 dark:text-red-400"
-                    title={row.note}
+            <>
+              <ul className="max-h-48 space-y-1 overflow-y-auto">
+                {rows.map((row) => (
+                  <li
+                    key={row.key}
+                    className="flex flex-col text-gray-800 dark:text-gray-200"
                   >
-                    {row.note}
-                  </span>
-                </li>
-              ))}
-              {rows.length === 0 && (
-                <li className="text-gray-500 dark:text-gray-400">
-                  {t('m365AgentAttentionNone')}
-                </li>
+                    {/* Name and reason on their own lines: side by side, a
+                        long reason squeezed the name to nothing. */}
+                    <span
+                      className="min-w-0 truncate font-medium"
+                      title={row.name}
+                    >
+                      {row.name}
+                    </span>
+                    <span className="break-words text-red-600 dark:text-red-400">
+                      {row.note}
+                    </span>
+                  </li>
+                ))}
+                {rows.length === 0 && (
+                  <li className="text-gray-500 dark:text-gray-400">
+                    {t('m365AgentAttentionNone')}
+                  </li>
+                )}
+              </ul>
+              {scannedPdfs.length > 0 && (
+                <div className="mt-2">
+                  <M365PrepareAllButton
+                    agentId={agentId}
+                    items={scannedPdfs}
+                    ocrMaxPages={ocrMaxPages}
+                    onDone={(result) => {
+                      void queryClient.invalidateQueries({
+                        queryKey: ['agent-access-m365-agent-manifest', agentId],
+                      });
+                      if (result.prepared > 0) {
+                        toast.success(
+                          t('m365PrepareAllDone', {
+                            prepared: result.prepared,
+                            total: result.total,
+                          }),
+                        );
+                        onPrepared?.();
+                      }
+                    }}
+                  />
+                </div>
               )}
-            </ul>
+            </>
           )}
         </div>
       )}
@@ -281,6 +343,13 @@ const AGENT_MODEL_ID_PREFIXES = ['foundry-', 'org-', 'custom-', 'byom-'];
 const DEFAULT_MAX_SOURCES = 50;
 /** Fallback for the byte budget (M365_AGENT_MAX_SOURCE_MB default). */
 const DEFAULT_MAX_BYTES = 512 * 1024 * 1024;
+/** Auto-OCR per-run page budget default (env M365_AGENT_AUTO_OCR_MAX_PAGES_PER_RUN). */
+const DEFAULT_AUTO_OCR_MAX_PAGES_PER_RUN = 200;
+/** Role ceilings for the per-agent cap override until the listing serves them. */
+const DEFAULT_CAP_CEILINGS: M365DocumentCapCeilings = {
+  localAdmin: 100,
+  globalAdmin: 200,
+};
 /** Selection edits re-plan after this pause (metadata calls only). */
 const PLAN_DEBOUNCE_MS = 400;
 /**
@@ -394,6 +463,14 @@ interface M365AgentEditorProps {
   maxSources: number;
   /** Server's env-configured byte budget (from the listing response). */
   maxBytes: number;
+  /** OCR page caps (from the listing response), for copy and Prepare-all. */
+  ocrMaxPages: number;
+  autoOcrMaxPagesPerRun: number;
+  autoOcrMaxPagesPerFile: number;
+  /** Role ceilings for the per-agent document cap override. */
+  capCeilings: M365DocumentCapCeilings;
+  /** Global admins get a numeric limit input; local admins a bounded raise. */
+  isGlobalAdmin: boolean;
   /** Starts an index job for the agent being edited (existing agents). */
   onStartIndex?: (mode: 'full' | 'refresh') => void;
   onSaved: () => void;
@@ -412,6 +489,11 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   existing,
   maxSources,
   maxBytes,
+  ocrMaxPages,
+  autoOcrMaxPagesPerRun,
+  autoOcrMaxPagesPerFile,
+  capCeilings,
+  isGlobalAdmin,
   onStartIndex,
   onSaved,
   onCancel,
@@ -435,6 +517,19 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   const [chatModelId, setChatModelId] = useState(
     existing?.agent.chatModelId ?? '',
   );
+  // Off by default: OCR is billed per page, so it is an explicit opt-in.
+  const [autoOcr, setAutoOcr] = useState(existing?.agent.autoOcr ?? false);
+  /**
+   * Per-agent document cap (null = the env default). Raising it is a
+   * deliberate, confirmed act: the point is to make the admin reconsider
+   * before a bigger agent is embedded, probed per user and answered.
+   */
+  const [maxDocumentsOverride, setMaxDocumentsOverride] = useState<
+    number | null
+  >(existing?.agent.maxDocumentsOverride ?? null);
+  const [capInput, setCapInput] = useState('');
+  /** Server refused the override for this role (M365_CAP_ABOVE_ROLE). */
+  const [capError, setCapError] = useState<string | null>(null);
   const [sources, setSources] = useState<EditorSource[]>(
     (existing?.agent.sources ?? []).map(toEditorSource),
   );
@@ -508,7 +603,10 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   // Re-plan whenever the selection changes (debounced). The plan is what
   // the server enforces at save and index time, so the numbers shown are
   // the numbers that count.
-  const selectionKey = JSON.stringify(sources.map(toSourcePayload));
+  const selectionKey = JSON.stringify({
+    sources: sources.map(toSourcePayload),
+    maxDocuments: maxDocumentsOverride,
+  });
   useEffect(() => {
     if (sources.length === 0) {
       setPlan(null);
@@ -526,6 +624,11 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           body: JSON.stringify({
             sources: sources.map(toSourcePayload),
             ...(existing ? { agentId: existing.agent.id } : {}),
+            // The draft's cap: the server clamps it to the caller's role
+            // ceiling and answers with the EFFECTIVE cap.
+            ...(maxDocumentsOverride !== null
+              ? { maxDocuments: maxDocumentsOverride }
+              : {}),
           }),
         });
         if (requestId !== planRequest.current) return;
@@ -578,6 +681,58 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   };
 
   const overCap = !!plan && (plan.overDocumentCap || plan.overByteCap);
+  /** Any source listing hit the enumeration ceiling: the save is refused. */
+  const anyTruncated = !!plan?.plans.some((p) => p.truncated);
+  const roleCeiling = isGlobalAdmin
+    ? capCeilings.globalAdmin
+    : capCeilings.localAdmin;
+  /** The cap the draft asks for (a stored raise may exceed the caller's role). */
+  const draftCap = maxDocumentsOverride ?? maxSources;
+  /**
+   * Whether the plan on screen was computed for the current draft cap. In
+   * the window between a raise and the debounced re-plan the old plan
+   * would otherwise keep showing the old cap next to a live Raise button.
+   */
+  const planMatchesDraft =
+    !!plan && !planLoading && plan.maxDocuments === draftCap;
+  /** The cap shown: the server's answer when it matches the draft, else the draft. */
+  const effectiveCap = planMatchesDraft ? plan!.maxDocuments : draftCap;
+  const needed = plan?.totalDocuments ?? 0;
+  /** Local-admin raise target: the need rounded up to the next 10, capped. */
+  const localRaiseTarget = Math.min(
+    Math.ceil(needed / 10) * 10,
+    capCeilings.localAdmin,
+  );
+  const needsGlobalAdmin = !isGlobalAdmin && needed > capCeilings.localAdmin;
+  /** Largest source by included documents — where trimming pays off most. */
+  const largestSourceKey = useMemo(() => {
+    if (!plan?.overDocumentCap) return null;
+    let best: { key: string; count: number } | null = null;
+    for (const sourcePlan of plan.plans) {
+      const count = sourcePlan.counts.indexable;
+      if (!best || count > best.count) {
+        best = { key: sourceKey(sourcePlan), count };
+      }
+    }
+    return best?.key ?? null;
+  }, [plan]);
+  /** Documents of one source that still fit under the cap next to the others. */
+  const keepNewestLimitFor = (sourcePlan: ClientSourcePlan | undefined) => {
+    if (!plan?.overDocumentCap || !sourcePlan) return undefined;
+    const others = plan.totalDocuments - sourcePlan.counts.indexable;
+    return Math.max(0, effectiveCap - others);
+  };
+
+  const applyCap = (value: number) => {
+    const limit = Math.max(1, Math.min(Math.floor(value), roleCeiling));
+    const confirmed = window.confirm(
+      t('m365CapRaiseConfirm', { limit, default: maxSources }),
+    );
+    if (!confirmed) return;
+    setCapError(null);
+    setCapInput('');
+    setMaxDocumentsOverride(limit === maxSources ? null : limit);
+  };
   const [isSaving, setIsSaving] = useState(false);
   /**
    * 409 state: the record that won the race (null = deleted meanwhile).
@@ -638,6 +793,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     sources.length > 0 &&
     !isSaving &&
     !overCap &&
+    !anyTruncated &&
     planProblem === null &&
     conflict === null;
 
@@ -647,6 +803,9 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       description.trim() !== existing.agent.description ||
       systemPrompt.trim() !== existing.agent.systemPrompt ||
       (chatModelId || null) !== (existing.agent.chatModelId ?? null) ||
+      autoOcr !== (existing.agent.autoOcr ?? false) ||
+      (maxDocumentsOverride ?? null) !==
+        (existing.agent.maxDocumentsOverride ?? null) ||
       JSON.stringify(sources.map(toSourcePayload)) !==
         JSON.stringify(
           existing.agent.sources.map(toEditorSource).map(toSourcePayload),
@@ -662,6 +821,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       [t('agentDescriptionPlaceholder')]: description.trim(),
       [t('m365AgentSystemPromptPlaceholder')]: systemPrompt.trim(),
       [t('agentModelLabel')]: chatModelId || '',
+      [t('m365CapRaiseInputLabel')]: String(maxDocumentsOverride ?? maxSources),
       [t('m365AgentSources')]: sourcesSummary(sources),
     };
     const theirs: Record<string, string> = {
@@ -669,6 +829,9 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       [t('agentDescriptionPlaceholder')]: latest.description,
       [t('m365AgentSystemPromptPlaceholder')]: latest.systemPrompt,
       [t('agentModelLabel')]: latest.chatModelId ?? '',
+      [t('m365CapRaiseInputLabel')]: String(
+        latest.maxDocumentsOverride ?? maxSources,
+      ),
       [t('m365AgentSources')]: sourcesSummary(latest.sources),
     };
     return Object.keys(yours)
@@ -682,6 +845,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     setDescription(latest.agent.description);
     setSystemPrompt(latest.agent.systemPrompt);
     setChatModelId(latest.agent.chatModelId ?? '');
+    setMaxDocumentsOverride(latest.agent.maxDocumentsOverride ?? null);
     setSources(latest.agent.sources.map(toEditorSource));
   };
 
@@ -727,6 +891,8 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           systemPrompt: systemPrompt.trim(),
           chatModelId: chatModelId || null,
           topK: existing?.agent.ragConfig.topK ?? 10,
+          autoOcr,
+          maxDocumentsOverride,
           sources: sources.map(toSourcePayload),
         }),
       });
@@ -736,6 +902,12 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       }
       if (!response.ok) {
         const body = await response.json().catch(() => null);
+        if (response.status === 400 && body?.code === 'M365_CAP_ABOVE_ROLE') {
+          // Role ceiling: keep the draft, say what the ceiling is, and let
+          // the admin lower the number or ask a global admin.
+          setCapError(body.error || t('m365CapAboveRole'));
+          return;
+        }
         if (response.status === 400 && body?.error) toast.error(body.error);
         setSaveError(true);
         return;
@@ -842,6 +1014,23 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
             {t('m365AgentModelHelp')}
           </p>
         </div>
+        <div>
+          <label className="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300">
+            <input
+              type="checkbox"
+              checked={autoOcr}
+              onChange={(e) => setAutoOcr(e.target.checked)}
+              className="mt-0.5 h-4 w-4 accent-blue-600"
+            />
+            <span className="font-semibold">{t('m365AgentAutoOcrLabel')}</span>
+          </label>
+          <p className="ml-6 mt-1 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentAutoOcrHelp', {
+              perRun: autoOcrMaxPagesPerRun,
+              perFile: autoOcrMaxPagesPerFile,
+            })}
+          </p>
+        </div>
 
         {existing && (
           <div
@@ -863,6 +1052,14 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
               t('m365ChangesNeverIndexed')
             ) : (
               <span className="flex flex-wrap items-center gap-2">
+                {changesQuery.data.overCap && (
+                  <span className="text-red-700 dark:text-red-400">
+                    {t('m365ChangesOverCap', {
+                      count: changesQuery.data.overCap.totalDocuments,
+                      max: changesQuery.data.overCap.maxDocuments,
+                    })}
+                  </span>
+                )}
                 <span>
                   {changeTotal > 0
                     ? t('m365ChangesFound', {
@@ -882,11 +1079,16 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                 {changeTotal > 0 && onStartIndex && (
                   <button
                     type="button"
-                    disabled={!m365Connected}
+                    disabled={!m365Connected || !!changesQuery.data.overCap}
                     title={
                       !m365Connected
                         ? t('m365ActionNeedsConnection')
-                        : undefined
+                        : changesQuery.data.overCap
+                          ? t('m365ChangesOverCap', {
+                              count: changesQuery.data.overCap.totalDocuments,
+                              max: changesQuery.data.overCap.maxDocuments,
+                            })
+                          : undefined
                     }
                     onClick={() => {
                       // Refresh runs against the STORED record and closes
@@ -957,9 +1159,14 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
               <span className="font-semibold">
                 {t('m365CapDocuments', {
                   count: plan?.totalDocuments ?? 0,
-                  max: maxSources,
+                  max: effectiveCap,
                 })}
               </span>
+              {maxDocumentsOverride !== null && (
+                <span className="ml-2 text-gray-600 dark:text-gray-400">
+                  {t('m365CapOverrideNote', { limit: maxDocumentsOverride })}
+                </span>
+              )}
               {' · '}
               {t('m365CapBytes', {
                 bytes: formatBytes(plan?.totalBytes ?? 0),
@@ -970,9 +1177,97 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                   {t('m365PlanScanning')}
                 </span>
               )}
+              {anyTruncated && (
+                <p className="mt-1 text-amber-700 dark:text-amber-400">
+                  {t('m365PlanTruncated')}
+                </p>
+              )}
               {plan?.overDocumentCap && (
+                <div className="mt-1 space-y-1">
+                  <p>{t('m365CapOverDocuments', { max: effectiveCap })}</p>
+                  <p>{t('m365PlanTrimHint')}</p>
+                  {planMatchesDraft && (
+                    <div className="flex flex-wrap items-center gap-2">
+                      {isGlobalAdmin ? (
+                        <>
+                          <label className="flex items-center gap-1">
+                            <span>{t('m365CapRaiseInputLabel')}</span>
+                            <input
+                              type="number"
+                              min={1}
+                              max={capCeilings.globalAdmin}
+                              value={
+                                capInput ||
+                                String(
+                                  Math.min(
+                                    Math.max(localRaiseTarget, needed),
+                                    capCeilings.globalAdmin,
+                                  ),
+                                )
+                              }
+                              onChange={(e) => setCapInput(e.target.value)}
+                              aria-label={t('m365CapRaiseInputLabel')}
+                              className="w-20 rounded border border-gray-300 bg-white px-1.5 py-0.5 text-xs text-gray-900 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100"
+                            />
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              applyCap(
+                                Number(capInput) ||
+                                  Math.min(
+                                    Math.max(localRaiseTarget, needed),
+                                    capCeilings.globalAdmin,
+                                  ),
+                              )
+                            }
+                            className="rounded-md border border-red-300 px-2 py-0.5 font-medium text-red-800 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/40"
+                          >
+                            {t('m365CapRaiseApply')}
+                          </button>
+                        </>
+                      ) : (
+                        localRaiseTarget > effectiveCap && (
+                          <button
+                            type="button"
+                            onClick={() => applyCap(localRaiseTarget)}
+                            className="rounded-md border border-red-300 px-2 py-0.5 font-medium text-red-800 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/40"
+                          >
+                            {t('m365CapRaiseButton', {
+                              limit: localRaiseTarget,
+                            })}
+                          </button>
+                        )
+                      )}
+                    </div>
+                  )}
+                  {needsGlobalAdmin && (
+                    <p className="text-red-700 dark:text-red-400">
+                      {t('m365CapNeedsGlobalAdmin', {
+                        limit: capCeilings.localAdmin,
+                      })}
+                    </p>
+                  )}
+                </div>
+              )}
+              {maxDocumentsOverride !== null && (
                 <p className="mt-1">
-                  {t('m365CapOverDocuments', { max: maxSources })}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCapError(null);
+                      setCapInput('');
+                      setMaxDocumentsOverride(null);
+                    }}
+                    className="underline"
+                  >
+                    {t('m365CapResetDefault', { default: maxSources })}
+                  </button>
+                </p>
+              )}
+              {capError && (
+                <p role="alert" className="mt-1 text-red-700 dark:text-red-400">
+                  {capError}
                 </p>
               )}
               {plan?.overByteCap && (
@@ -1053,6 +1348,12 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                     }
                     agentId={existing?.agent.id}
                     onPrepared={() => setPlanVersion((v) => v + 1)}
+                    ocrMaxPages={ocrMaxPages}
+                    autoOcrMaxPagesPerFile={autoOcrMaxPagesPerFile}
+                    autoExpand={largestSourceKey === sourceKey(source)}
+                    keepNewestLimit={keepNewestLimitFor(
+                      planBySourceKey.get(sourceKey(source)),
+                    )}
                     onChange={(patch) => updateSelection(source, patch)}
                   />
                 </li>
@@ -1396,6 +1697,16 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   );
   const maxDocuments = agentsQuery.data?.maxDocuments ?? DEFAULT_MAX_SOURCES;
   const maxBytes = agentsQuery.data?.maxBytes ?? DEFAULT_MAX_BYTES;
+  const ocrMaxPages = agentsQuery.data?.ocrMaxPages ?? DEFAULT_OCR_MAX_PAGES;
+  const autoOcrMaxPagesPerRun =
+    agentsQuery.data?.autoOcrMaxPagesPerRun ??
+    DEFAULT_AUTO_OCR_MAX_PAGES_PER_RUN;
+  const autoOcrMaxPagesPerFile =
+    agentsQuery.data?.autoOcrMaxPagesPerFile ??
+    DEFAULT_AUTO_OCR_MAX_PAGES_PER_FILE;
+  const capCeilings: M365DocumentCapCeilings =
+    agentsQuery.data?.maxDocumentsCeilings ?? DEFAULT_CAP_CEILINGS;
+  const isGlobalAdmin = agentsQuery.data?.isGlobalAdmin === true;
 
   return (
     <div className="mt-6 border-t border-gray-200 pt-4 dark:border-gray-700">
@@ -1425,6 +1736,11 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
             existing={null}
             maxSources={maxDocuments}
             maxBytes={maxBytes}
+            ocrMaxPages={ocrMaxPages}
+            autoOcrMaxPagesPerRun={autoOcrMaxPagesPerRun}
+            autoOcrMaxPagesPerFile={autoOcrMaxPagesPerFile}
+            capCeilings={capCeilings}
+            isGlobalAdmin={isGlobalAdmin}
             onSaved={() => {
               setIsCreating(false);
               invalidate();
@@ -1472,10 +1788,16 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
             const stored = rulesByKey.get(entry.canonicalKey) ?? null;
             const isRestricted = stored?.rule.access.type === 'restricted';
             const sources = entry.agent.sources;
-            // Content-bearing = indexed with chunks (undefined = legacy
-            // record from before chunk counts, trust the status).
+            // Content-bearing = has chunks and is not broken. A legacy
+            // `indexed` record without chunk counts is trusted; a record
+            // still carrying a transient `indexing`/`pending` status from
+            // an older run keeps counting as long as its chunks exist —
+            // "6 documents indexed" and "Not indexed" must never both show.
             const contentSources = sources.filter(
-              (s) => s.status === 'indexed' && (s.indexedChunks ?? 1) > 0,
+              (s) =>
+                s.status !== 'error' &&
+                s.status !== 'missing' &&
+                (s.indexedChunks ?? (s.status === 'indexed' ? 1 : 0)) > 0,
             ).length;
             const unindexedSources = sources.filter(
               (s) => s.status !== 'indexed',
@@ -1545,7 +1867,10 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                 <div className="flex items-center gap-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="truncate text-sm font-medium text-black dark:text-white">
+                      <span
+                        className="truncate text-sm font-medium text-black dark:text-white"
+                        title={entry.agent.name}
+                      >
                         {entry.agent.name}
                       </span>
                       <span className="shrink-0 rounded-full bg-sky-100 px-2 py-0.5 text-xs text-sky-800 dark:bg-sky-900/30 dark:text-sky-300">
@@ -1553,6 +1878,21 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                       </span>
                     </div>
                     <CanonicalKeyChip canonicalKey={entry.canonicalKey} />
+                    {entry.agent.maxDocumentsOverride !== undefined && (
+                      <span
+                        className="inline-block rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
+                        title={entry.agent.maxDocumentsOverrideAt}
+                      >
+                        {entry.agent.maxDocumentsOverrideBy
+                          ? t('m365AgentLimitBadge', {
+                              limit: entry.agent.maxDocumentsOverride,
+                              who: entry.agent.maxDocumentsOverrideBy,
+                            })
+                          : t('m365AgentLimitBadgePlain', {
+                              limit: entry.agent.maxDocumentsOverride,
+                            })}
+                      </span>
+                    )}
                     {contentSources === 0 ? (
                       <p className="text-xs font-medium text-red-700 dark:text-red-400">
                         {t('m365AgentStatusNotIndexed')}
@@ -1605,14 +1945,27 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                       </p>
                     )}
                     {job?.status === 'failed' && (
-                      <p
-                        className="truncate text-xs text-red-700 dark:text-red-400"
-                        title={job.error}
-                      >
-                        {t('m365AgentIndexJobFailed', {
-                          error: job.error ?? '',
-                        })}
-                      </p>
+                      <div className="flex items-start gap-2 text-xs text-red-700 dark:text-red-400">
+                        <p
+                          className="line-clamp-2 min-w-0 break-words"
+                          title={job.error}
+                        >
+                          {t('m365AgentIndexJobFailed', {
+                            error: job.error ?? '',
+                          })}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            void startIndex(entry.agent.id, 'full')
+                          }
+                          disabled={!m365Connected}
+                          className="shrink-0 rounded-md border border-red-300 px-2 py-0.5 font-medium hover:bg-red-50 disabled:opacity-40 dark:border-red-700 dark:hover:bg-red-900/20"
+                          title={actionDisabledTitle ?? t('m365AgentIndexHint')}
+                        >
+                          {t('m365AgentIndexRetry')}
+                        </button>
+                      </div>
                     )}
                     {docCounts.present && (
                       <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -1653,7 +2006,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         {sourceErrors.map(({ title, error }) => (
                           <li
                             key={`${title}:${error}`}
-                            className="truncate"
+                            className="line-clamp-2 break-words"
                             title={`${title}: ${error}`}
                           >
                             <span className="font-medium">{title}</span>:{' '}
@@ -1679,6 +2032,12 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                             docCounts.noText +
                             docCounts.skipped
                           }
+                          excludeItemIds={sources
+                            .filter((s) => s.kind === 'file' && !!s.error)
+                            .map((s) => s.itemId)}
+                          ocrMaxPages={ocrMaxPages}
+                          autoOcrMaxPagesPerFile={autoOcrMaxPagesPerFile}
+                          onPrepared={invalidate}
                         />
                       )}
                   </div>
@@ -1744,7 +2103,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         type="button"
                         onClick={() => void startIndex(entry.agent.id, 'full')}
                         disabled={!m365Connected}
-                        className="shrink-0 rounded-md px-1.5 py-1 text-xs text-gray-500 hover:bg-gray-100 hover:text-black disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                        className="shrink-0 rounded-md border border-gray-200 px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 hover:text-black disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
                         title={actionDisabledTitle ?? t('m365AgentIndexHint')}
                       >
                         {t('m365AgentReindexAll')}
@@ -1853,6 +2212,11 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                     existing={entry}
                     maxSources={maxDocuments}
                     maxBytes={maxBytes}
+                    ocrMaxPages={ocrMaxPages}
+                    autoOcrMaxPagesPerRun={autoOcrMaxPagesPerRun}
+                    autoOcrMaxPagesPerFile={autoOcrMaxPagesPerFile}
+                    capCeilings={capCeilings}
+                    isGlobalAdmin={isGlobalAdmin}
                     onStartIndex={(mode) =>
                       void startIndex(entry.agent.id, mode)
                     }

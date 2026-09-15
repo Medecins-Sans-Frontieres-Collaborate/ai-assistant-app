@@ -467,6 +467,7 @@ export function TranslationWorkspace({
   }, [
     state,
     isRunning,
+    hasUnresolvedEdits,
     sourceText,
     targetLanguage,
     conversationId,

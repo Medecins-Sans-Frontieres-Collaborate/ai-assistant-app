@@ -8,13 +8,16 @@ import { NextRequest } from 'next/server';
 import type { M365ManifestItem } from '@/lib/services/agentAccess/types';
 import {
   ENUMERATION_CEILING,
+  ENUMERATION_PAGE_CEILING,
   MAX_M365_AGENT_DOCUMENTS,
   MAX_M365_SOURCE_FILE_BYTES,
   applySourceFilters,
   classifyItem,
   clearPlannerCacheForTests,
+  effectiveMaxDocuments,
   planSource,
   planSources,
+  roleMaxDocuments,
   summarizeCounts,
   summarizePlans,
 } from '@/lib/services/m365/agentSourcePlanner';
@@ -512,5 +515,109 @@ describe('summarizePlans / planSources', () => {
     await expect(
       planSources(req, 'admin', [{ driveId: 'd', itemId: 'x', kind: 'file' }]),
     ).rejects.toMatchObject({ kind: 'not_connected' });
+  });
+});
+
+describe('per-agent document cap', () => {
+  it('summarizePlans judges the cap it is given, defaulting to the env cap', () => {
+    const plan = {
+      counts: { indexable: 7, bytes: 10, skipped: 0, needsPreparation: 0 },
+    } as never;
+    expect(summarizePlans([plan], 5)).toMatchObject({
+      maxDocuments: 5,
+      overDocumentCap: true,
+    });
+    expect(summarizePlans([plan], 8)).toMatchObject({
+      maxDocuments: 8,
+      overDocumentCap: false,
+    });
+  });
+
+  it('effectiveMaxDocuments uses the override, bounded by the global ceiling', () => {
+    const ceiling = roleMaxDocuments(true);
+    expect(effectiveMaxDocuments(undefined)).toBeLessThanOrEqual(ceiling);
+    expect(effectiveMaxDocuments(null)).toBe(effectiveMaxDocuments(undefined));
+    expect(effectiveMaxDocuments(7)).toBe(7);
+    expect(effectiveMaxDocuments(ceiling + 500)).toBe(ceiling);
+    expect(effectiveMaxDocuments(0)).toBe(1);
+  });
+
+  it('a local admin’s ceiling never exceeds the global one', () => {
+    expect(roleMaxDocuments(false)).toBeLessThanOrEqual(roleMaxDocuments(true));
+    expect(roleMaxDocuments(false)).toBe(100);
+    expect(roleMaxDocuments(true)).toBe(200);
+  });
+});
+
+describe('enumeration ceiling counts what the type filter keeps', () => {
+  const folderInput = {
+    driveId: 'd',
+    itemId: 'root',
+    kind: 'folder' as const,
+    recursive: true,
+  };
+  const mixedPage = (offset: number, pages: number) => ({
+    value: Array.from({ length: 200 }, (_, i) => ({
+      id: `f${offset + i}`,
+      // one pdf in ten; the rest docx
+      name: `f${offset + i}.${(offset + i) % 10 === 0 ? 'pdf' : 'docx'}`,
+      size: 1,
+      file: {},
+      parentReference: { id: 'root' },
+    })),
+    ...(offset + 200 < pages * 200 && {
+      '@odata.nextLink': `https://graph.microsoft.com/v1.0/delta?skip=${offset + 200}`,
+    }),
+    ...(offset + 200 >= pages * 200 && {
+      '@odata.deltaLink': 'https://graph.microsoft.com/v1.0/delta?token=end',
+    }),
+  });
+  const serve = (pages: number) =>
+    fetchMock.mockImplementation((url: string) => {
+      const match = /skip=(\d+)/.exec(url);
+      return Promise.resolve(
+        json(mixedPage(match ? Number(match[1]) : 0, pages)),
+      );
+    });
+
+  it('a type filter rescues a library that is over the raw ceiling', async () => {
+    serve(8); // 1,600 files, 160 pdf
+    const plan = await planSource(req, 'admin', {
+      ...folderInput,
+      includeExtensions: ['pdf'],
+    });
+    expect(plan.truncated).toBe(false);
+    expect(plan.counts.indexable).toBe(160);
+    expect(fetchMock).toHaveBeenCalledTimes(8);
+  });
+
+  it('still stops at the page ceiling when the filter matches almost nothing', async () => {
+    serve(ENUMERATION_PAGE_CEILING + 5);
+    const plan = await planSource(req, 'admin', {
+      ...folderInput,
+      includeExtensions: ['xlsx'],
+    });
+    expect(plan.truncated).toBe(true);
+    expect(fetchMock).toHaveBeenCalledTimes(ENUMERATION_PAGE_CEILING);
+  });
+
+  it('re-walks a truncated listing under a new filter, but reuses a complete one', async () => {
+    serve(8);
+    const unfiltered = await planSource(req, 'admin', folderInput);
+    expect(unfiltered.truncated).toBe(true);
+    const walksBefore = fetchMock.mock.calls.length;
+    const filtered = await planSource(req, 'admin', {
+      ...folderInput,
+      includeExtensions: ['pdf'],
+    });
+    expect(filtered.truncated).toBe(false);
+    expect(fetchMock.mock.calls.length).toBeGreaterThan(walksBefore);
+    // Complete now: a different filter reuses it without another walk.
+    const after = fetchMock.mock.calls.length;
+    await planSource(req, 'admin', {
+      ...folderInput,
+      includeExtensions: ['docx'],
+    });
+    expect(fetchMock.mock.calls.length).toBe(after);
   });
 });

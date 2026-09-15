@@ -43,8 +43,12 @@ import {
   purgeSourcesFromIndex,
 } from '@/lib/services/m365/agentIndexService';
 import {
+  ENUMERATION_CEILING,
+  M365_AGENT_MAX_DOCUMENTS_CEILING,
   MAX_M365_AGENT_SOURCE_BYTES,
+  effectiveMaxDocuments,
   planSources,
+  roleMaxDocuments,
 } from '@/lib/services/m365/agentSourcePlanner';
 import { GRAPH_ID_REGEX } from '@/lib/services/m365/graphApi';
 
@@ -112,9 +116,26 @@ const agentFieldsSchema = z
     /** null → ride the catalog default at request time. */
     chatModelId: z.string().trim().min(1).max(100).nullable().default(null),
     topK: z.number().int().min(1).max(20).default(10),
-    // Sources are capped at the document cap; the DOCUMENT count after
-    // folder expansion is checked by the planner at save and index time.
-    sources: z.array(sourceFieldsSchema).min(1).max(MAX_M365_AGENT_DOCUMENTS),
+    /** OCR scanned PDFs during index runs within the env page budgets. */
+    autoOcr: z.boolean().default(false),
+    /**
+     * Per-agent document cap; null = the env default. Bounded by the
+     * caller's role ceiling (local vs global admin) below.
+     */
+    maxDocumentsOverride: z
+      .number()
+      .int()
+      .min(1)
+      .max(1000)
+      .nullable()
+      .optional(),
+    // Sources are bounded by the highest possible cap; the DOCUMENT count
+    // after folder expansion is checked by the planner at save and index
+    // time against the agent's effective cap.
+    sources: z
+      .array(sourceFieldsSchema)
+      .min(1)
+      .max(M365_AGENT_MAX_DOCUMENTS_CEILING),
   })
   .strict();
 
@@ -204,6 +225,70 @@ function reconcileSources(
   });
 }
 
+type OverrideFields = Pick<
+  M365Agent,
+  'maxDocumentsOverride' | 'maxDocumentsOverrideBy' | 'maxDocumentsOverrideAt'
+>;
+
+/**
+ * Resolves the per-agent cap override for a save. `undefined` (field not
+ * sent — an older client, a partial update) keeps whatever is stored;
+ * `null` clears it. An unchanged value keeps its original setter (a local
+ * admin re-saving an agent whose cap a global admin raised must not lose
+ * that raise); a changed value is bounded by the caller's role ceiling and
+ * stamped. Returns an error message when the caller may not set the value.
+ */
+function resolveCapOverride(
+  requested: number | null | undefined,
+  existing: OverrideFields | null,
+  isGlobalAdmin: boolean,
+  userMail: string,
+  now: string,
+): { fields: OverrideFields } | { error: string } {
+  if (requested === undefined) {
+    return {
+      fields: {
+        maxDocumentsOverride: existing?.maxDocumentsOverride,
+        maxDocumentsOverrideBy: existing?.maxDocumentsOverrideBy,
+        maxDocumentsOverrideAt: existing?.maxDocumentsOverrideAt,
+      },
+    };
+  }
+  if (requested === null) {
+    return {
+      fields: {
+        maxDocumentsOverride: undefined,
+        maxDocumentsOverrideBy: undefined,
+        maxDocumentsOverrideAt: undefined,
+      },
+    };
+  }
+  if (existing && existing.maxDocumentsOverride === requested) {
+    return {
+      fields: {
+        maxDocumentsOverride: existing.maxDocumentsOverride,
+        maxDocumentsOverrideBy: existing.maxDocumentsOverrideBy,
+        maxDocumentsOverrideAt: existing.maxDocumentsOverrideAt,
+      },
+    };
+  }
+  const ceiling = roleMaxDocuments(isGlobalAdmin);
+  if (requested > ceiling) {
+    return {
+      error: isGlobalAdmin
+        ? `The document limit cannot exceed ${ceiling}`
+        : `A local admin can raise the document limit to ${ceiling} at most; ask a global admin for more`,
+    };
+  }
+  return {
+    fields: {
+      maxDocumentsOverride: requested,
+      maxDocumentsOverrideBy: userMail,
+      maxDocumentsOverrideAt: now,
+    },
+  };
+}
+
 /**
  * Save-time cap check (design §2): re-plans the sources with the caller's
  * token — normally a cache hit from the editor's own plan call — and
@@ -215,6 +300,7 @@ async function overCapMessage(
   request: NextRequest,
   userId: string,
   sources: M365AgentSource[],
+  maxDocuments: number,
 ): Promise<string | null> {
   try {
     const plan = await planSources(
@@ -229,7 +315,11 @@ async function overCapMessage(
         excludedItemIds: source.excludedItemIds,
         includeExtensions: source.includeExtensions,
       })),
+      { maxDocuments },
     );
+    if (plan.plans.some((p) => p.truncated)) {
+      return `A source is too large to scan completely (more than ${ENUMERATION_CEILING} matching items) — pick a subfolder or narrow the file-type filter`;
+    }
     if (plan.overDocumentCap) {
       return `Sources expand to ${plan.totalDocuments} documents; at most ${plan.maxDocuments} are allowed`;
     }
@@ -358,6 +448,18 @@ export async function GET() {
       // matches what POST/PUT will actually accept.
       maxDocuments: MAX_M365_AGENT_DOCUMENTS,
       maxBytes: MAX_M365_AGENT_SOURCE_BYTES,
+      // Role ceilings for the per-agent cap override, and the caller's role
+      // so the editor offers the right control (self-raise vs numeric).
+      maxDocumentsCeilings: {
+        localAdmin: roleMaxDocuments(false),
+        globalAdmin: roleMaxDocuments(true),
+      },
+      isGlobalAdmin: status.isGlobalAdmin,
+      // OCR budgets (env), served so the editor can state them next to
+      // the auto-OCR toggle and the Prepare-all confirm.
+      autoOcrMaxPagesPerRun: env.M365_AGENT_AUTO_OCR_MAX_PAGES_PER_RUN,
+      autoOcrMaxPagesPerFile: env.M365_AGENT_AUTO_OCR_MAX_PAGES_PER_FILE,
+      ocrMaxPages: env.M365_AGENT_OCR_MAX_PAGES,
       jobs: Object.fromEntries(
         Object.entries(jobs).filter(([agentId]) =>
           visible.some((entry) => entry.m365Agent.id === agentId),
@@ -409,7 +511,27 @@ export async function POST(request: NextRequest) {
     const canonicalKey = canonicalAgentKey(M365_AGENT_SOURCE, id);
     const now = new Date().toISOString();
     const newSources = reconcileSources(parsed.data.sources, []);
-    const capError = await overCapMessage(request, session.user.id, newSources);
+    const override = resolveCapOverride(
+      parsed.data.maxDocumentsOverride,
+      null,
+      status.isGlobalAdmin,
+      userMail,
+      now,
+    );
+    if ('error' in override) {
+      return errorResponse(
+        override.error,
+        400,
+        undefined,
+        'M365_CAP_ABOVE_ROLE',
+      );
+    }
+    const capError = await overCapMessage(
+      request,
+      session.user.id,
+      newSources,
+      effectiveMaxDocuments(override.fields.maxDocumentsOverride),
+    );
     if (capError) return badRequestResponse(capError);
     const agent: M365Agent = {
       version: 1,
@@ -422,6 +544,8 @@ export async function POST(request: NextRequest) {
       // per-agent embedding choice is a later phase (requires re-index).
       embeddingModelId: env.OPENAI_EMBEDDING_DEPLOYMENT,
       ragConfig: { topK: parsed.data.topK },
+      autoOcr: parsed.data.autoOcr,
+      ...override.fields,
       sources: newSources,
       createdBy: userMail,
       createdAt: now,
@@ -542,7 +666,27 @@ export async function PUT(request: NextRequest) {
       parsed.data.sources,
       existing.m365Agent.sources,
     );
-    const capError = await overCapMessage(request, session.user.id, sources);
+    const override = resolveCapOverride(
+      parsed.data.maxDocumentsOverride,
+      existing.m365Agent,
+      status.isGlobalAdmin,
+      userMail,
+      now,
+    );
+    if ('error' in override) {
+      return errorResponse(
+        override.error,
+        400,
+        undefined,
+        'M365_CAP_ABOVE_ROLE',
+      );
+    }
+    const capError = await overCapMessage(
+      request,
+      session.user.id,
+      sources,
+      effectiveMaxDocuments(override.fields.maxDocumentsOverride),
+    );
     if (capError) return badRequestResponse(capError);
     const agent: M365Agent = {
       ...existing.m365Agent,
@@ -551,6 +695,8 @@ export async function PUT(request: NextRequest) {
       systemPrompt: parsed.data.systemPrompt,
       chatModelId: parsed.data.chatModelId,
       ragConfig: { topK: parsed.data.topK },
+      autoOcr: parsed.data.autoOcr,
+      ...override.fields,
       sources,
       updatedBy: userMail,
       updatedAt: now,

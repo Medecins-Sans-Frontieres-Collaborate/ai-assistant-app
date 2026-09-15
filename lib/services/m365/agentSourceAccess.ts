@@ -77,6 +77,46 @@ export interface AgentSourceAccess {
 interface CacheEntry {
   at: number;
   access: AgentSourceAccess;
+  /** Per-entry lifetime; the negative (unverifiable) entry is short-lived. */
+  ttlMs: number;
+}
+
+/**
+ * How long an unverifiable verdict is held before Graph is asked again. A
+ * throttled tenant must back off instead of re-running every batch on
+ * every message (which is what keeps it throttled); short enough that a
+ * blip clears itself within a minute.
+ */
+const UNVERIFIABLE_CACHE_TTL_MS = 45_000;
+
+/** `$batch` calls are independent — run a few at once, not one by one. */
+const PROBE_CONCURRENCY = 4;
+
+async function mapBatchesConcurrently<T, R>(
+  batches: T[][],
+  fn: (batch: T[]) => Promise<R>,
+): Promise<R[]> {
+  const results: R[] = new Array(batches.length);
+  let next = 0;
+  const workers = Array.from(
+    { length: Math.min(PROBE_CONCURRENCY, batches.length) },
+    async () => {
+      while (next < batches.length) {
+        const index = next++;
+        results[index] = await fn(batches[index]);
+      }
+    },
+  );
+  await Promise.all(workers);
+  return results;
+}
+
+function chunkTargets(targets: ProbeTarget[]): ProbeTarget[][] {
+  const out: ProbeTarget[][] = [];
+  for (let offset = 0; offset < targets.length; offset += GRAPH_BATCH_SIZE) {
+    out.push(targets.slice(offset, offset + GRAPH_BATCH_SIZE));
+  }
+  return out;
 }
 
 const cache = new Map<string, CacheEntry>();
@@ -187,11 +227,10 @@ async function probeItems(
   );
   const throttled: ProbeTarget[] = [];
   let waitMs = 0;
-  for (let offset = 0; offset < targets.length; offset += GRAPH_BATCH_SIZE) {
-    const batch = await probeBatch(
-      req,
-      targets.slice(offset, offset + GRAPH_BATCH_SIZE),
-    );
+  const first = await mapBatchesConcurrently(chunkTargets(targets), (batch) =>
+    probeBatch(req, batch),
+  );
+  for (const batch of first) {
     for (const [key, verdict] of batch.verdicts) verdicts.set(key, verdict);
     throttled.push(...batch.throttled);
     waitMs = Math.max(waitMs, batch.waitMs);
@@ -203,15 +242,11 @@ async function probeItems(
     if (waitMs > 0) {
       await new Promise<void>((resolve) => setTimeout(resolve, waitMs));
     }
-    for (
-      let offset = 0;
-      offset < throttled.length;
-      offset += GRAPH_BATCH_SIZE
-    ) {
-      const batch = await probeBatch(
-        req,
-        throttled.slice(offset, offset + GRAPH_BATCH_SIZE),
-      );
+    const retried = await mapBatchesConcurrently(
+      chunkTargets(throttled),
+      (batch) => probeBatch(req, batch),
+    );
+    for (const batch of retried) {
       for (const [key, verdict] of batch.verdicts) verdicts.set(key, verdict);
       // Still throttled after the retry: unknown (already the default).
     }
@@ -367,7 +402,7 @@ export async function checkAgentSourceAccess(
 ): Promise<AgentSourceAccess> {
   const key = cacheKey(userId, agent);
   const cached = cache.get(key);
-  if (cached && Date.now() - cached.at < CACHE_TTL_MS) {
+  if (cached && Date.now() - cached.at < cached.ttlMs) {
     return cached.access;
   }
   // Several $batch calls plus folder listings: one token mint for all.
@@ -403,17 +438,23 @@ export async function checkAgentSourceAccess(
     };
 
     if (unverifiable) {
-      // Fail closed now, but let the next request ask Graph again.
+      // Fail closed now; hold the verdict briefly so a throttled tenant is
+      // not re-probed on every message, then ask Graph again.
       console.warn(
-        `[m365-agents] source access for agent ${sanitizeForLog(agent.id)} could not be fully verified; verdict not cached`,
+        `[m365-agents] source access for agent ${sanitizeForLog(agent.id)} could not be fully verified; held for ${UNVERIFIABLE_CACHE_TTL_MS / 1000}s`,
       );
+      cache.set(key, {
+        at: Date.now(),
+        access,
+        ttlMs: UNVERIFIABLE_CACHE_TTL_MS,
+      });
       return access;
     }
     if (cache.size >= MAX_CACHE_ENTRIES) {
       // Simple pressure valve; entries are tiny and TTL-bounded anyway.
       cache.clear();
     }
-    cache.set(key, { at: Date.now(), access });
+    cache.set(key, { at: Date.now(), access, ttlMs: CACHE_TTL_MS });
     return access;
   });
 }

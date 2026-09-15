@@ -34,11 +34,13 @@ import {
   selectStaleChunkIds,
 } from '@/lib/services/m365/agentIndexJobStore';
 import {
+  ENUMERATION_CEILING,
   MAX_M365_AGENT_DOCUMENTS,
   MAX_M365_AGENT_SOURCE_BYTES,
   MAX_M365_SOURCE_FILE_BYTES,
   RefreshSourcePlan,
   SourcePlan,
+  effectiveMaxDocuments,
   extensionOf,
   planSource,
   refreshSourcePlan,
@@ -53,7 +55,11 @@ import {
   graphJson,
 } from '@/lib/services/m365/graphApi';
 
-import { loadDocument } from '@/lib/utils/server/file/fileHandling';
+import {
+  NoExtractableTextError,
+  countPdfPages,
+  loadDocument,
+} from '@/lib/utils/server/file/fileHandling';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { env } from '@/config/environment';
@@ -668,7 +674,13 @@ export async function downloadItemBytes(
 async function downloadAndExtract(
   req: NextRequest,
   item: M365ManifestItem,
-): Promise<{ text: string; lastModified?: string }> {
+): Promise<{
+  text: string;
+  lastModified?: string;
+  /** The downloaded bytes, so an OCR pass needs no second download. */
+  buffer: Buffer;
+  name: string;
+}> {
   const downloaded = await downloadItemBytes(
     req,
     item.driveId,
@@ -683,13 +695,28 @@ async function downloadAndExtract(
     throw new Error(signature.error ?? 'File content does not match its type');
   }
   const file = new File([new Uint8Array(downloaded.buffer)], downloaded.name);
-  return {
-    text: await withTimeout(
+  let text: string;
+  try {
+    text = await withTimeout(
       (signal) => loadDocument(file, { signal }),
       EXTRACTION_TIMEOUT_MS,
       'Extraction',
-    ),
+    );
+  } catch (error) {
+    // A well-formed PDF with no text layer is not a failure of this item;
+    // it is the `noText` outcome (and auto-OCR's input). Real extraction
+    // failures keep propagating with their reasons.
+    if (error instanceof NoExtractableTextError) {
+      text = '';
+    } else {
+      throw error;
+    }
+  }
+  return {
+    text,
     lastModified: downloaded.lastModified,
+    buffer: downloaded.buffer,
+    name: downloaded.name,
   };
 }
 
@@ -809,7 +836,9 @@ async function planJobSources(
   userId: string,
   manifest: M365AgentManifest | null = null,
   prepared: Record<string, M365DerivedIndexEntry> | undefined = undefined,
+  options: { enforceCaps?: boolean } = {},
 ): Promise<M365IndexJobSource[]> {
+  const enforceCaps = options.enforceCaps ?? true;
   const manifestBySourceId = new Map(
     (manifest?.sources ?? []).map((s) => [s.sourceId, s]),
   );
@@ -899,18 +928,25 @@ async function planJobSources(
     }
   }
 
-  const counts = sources
-    .flatMap((s) => s.items)
-    .filter((i) => i.tier === 'indexable');
-  const totalDocuments = counts.length;
-  if (totalDocuments > MAX_M365_AGENT_DOCUMENTS) {
+  if (!enforceCaps) return sources;
+  const verdict = assessPlannedSources(sources, agent);
+  // A truncated listing would index an arbitrary first slice of a library
+  // and present it as the whole thing — refuse, like the save does.
+  if (verdict.truncatedSourceId) {
     throw new M365Error(
-      `Agent expands to ${totalDocuments} documents, more than the ${MAX_M365_AGENT_DOCUMENTS} allowed — exclude subfolders, filter by type, or remove sources`,
+      `Source ${verdict.truncatedSourceId} is too large to scan completely (more than ${ENUMERATION_CEILING} matching items) — pick a subfolder or narrow the file-type filter`,
       'graph_error',
       400,
     );
   }
-  const totalBytes = counts.reduce((n, item) => n + item.size, 0);
+  if (verdict.overCap) {
+    throw new M365Error(
+      `Agent expands to ${verdict.totalDocuments} documents, more than the ${verdict.maxDocuments} allowed — exclude subfolders, filter by type, or remove sources`,
+      'graph_error',
+      400,
+    );
+  }
+  const { totalBytes } = verdict;
   if (totalBytes > MAX_M365_AGENT_SOURCE_BYTES) {
     throw new M365Error(
       `Agent sources total ${Math.round(totalBytes / (1024 * 1024))}MB, more than the ${Math.round(MAX_M365_AGENT_SOURCE_BYTES / (1024 * 1024))}MB allowed — exclude subfolders or large files`,
@@ -964,6 +1000,7 @@ export async function prepareIndexJob(
     status: 'running',
     startedBy,
     startedAt: now,
+    ocrPagesUsed: 0,
     updatedAt: now,
     embeddingDeployment,
     mode: refresh ? 'refresh' : 'full',
@@ -986,10 +1023,46 @@ export interface RefreshPreviewSource {
   error?: string;
 }
 
+/** Reported by the preview instead of thrown: the banner says it, Refresh stays disabled. */
+export interface RefreshOverCap {
+  totalDocuments: number;
+  maxDocuments: number;
+}
+
+/**
+ * Cap verdict over planned sources (pure): what an index run would refuse.
+ * Shared by the enforcing path (throws) and the preview (reports).
+ */
+export function assessPlannedSources(
+  sources: Pick<M365IndexJobSource, 'sourceId' | 'truncated' | 'items'>[],
+  agent: Pick<M365Agent, 'maxDocumentsOverride'>,
+): {
+  totalDocuments: number;
+  maxDocuments: number;
+  overCap: boolean;
+  totalBytes: number;
+  truncatedSourceId?: string;
+} {
+  const indexable = sources
+    .flatMap((s) => s.items)
+    .filter((i) => i.tier === 'indexable');
+  const totalDocuments = indexable.length;
+  const maxDocuments = effectiveMaxDocuments(agent.maxDocumentsOverride);
+  const truncated = sources.find((s) => s.truncated);
+  return {
+    totalDocuments,
+    maxDocuments,
+    overCap: totalDocuments > maxDocuments,
+    totalBytes: indexable.reduce((n, item) => n + item.size, 0),
+    ...(truncated && { truncatedSourceId: truncated.sourceId }),
+  };
+}
+
 /**
  * "What would a refresh do?" — the change detection behind the editor's
- * banner (design §7). Metadata only; no job, no writes. Throws the cap
- * errors a refresh would, so the admin learns early.
+ * banner (design §7). Metadata only; no job, no writes. Cap problems a
+ * refresh would refuse are returned as data (`overCap`, `truncated`), not
+ * thrown: the admin opened the editor to fix exactly that.
  */
 export async function previewRefresh(
   req: NextRequest,
@@ -997,8 +1070,23 @@ export async function previewRefresh(
   userId: string,
   manifest: M365AgentManifest,
   prepared?: Record<string, M365DerivedIndexEntry>,
-): Promise<{ sources: RefreshPreviewSource[]; changes: M365SourceChanges }> {
-  const planned = await planJobSources(req, agent, userId, manifest, prepared);
+): Promise<{
+  sources: RefreshPreviewSource[];
+  changes: M365SourceChanges;
+  overCap?: RefreshOverCap;
+  truncated?: boolean;
+}> {
+  const planned = await planJobSources(req, agent, userId, manifest, prepared, {
+    enforceCaps: false,
+  });
+  const verdict = assessPlannedSources(planned, agent);
+  const overCap = verdict.overCap
+    ? {
+        totalDocuments: verdict.totalDocuments,
+        maxDocuments: verdict.maxDocuments,
+      }
+    : undefined;
+  const truncated = verdict.truncatedSourceId !== undefined || undefined;
   const sources = planned.map(
     (s): RefreshPreviewSource => ({
       sourceId: s.sourceId,
@@ -1008,7 +1096,12 @@ export async function previewRefresh(
       ...(s.error && { error: s.error }),
     }),
   );
-  return { sources, changes: sumChanges(sources.map((s) => s.changes)) };
+  return {
+    sources,
+    changes: sumChanges(sources.map((s) => s.changes)),
+    ...(overCap && { overCap }),
+    ...(truncated && { truncated }),
+  };
 }
 
 /**
@@ -1022,6 +1115,56 @@ export type DerivedTextReader = (
   itemId: string,
 ) => Promise<{ eTag: string; text: string } | null>;
 
+/**
+ * Auto-OCR budget for one index run, SHARED by every item of a batch
+ * (items run concurrently). `remainingPages` is decremented synchronously
+ * — before any await on the OCR call — so the per-run cap stays hard even
+ * with three items in flight; a failed or unavailable OCR refunds its
+ * reservation. OCR is billed per page, hence both caps.
+ */
+export interface AutoOcrBudget {
+  remainingPages: number;
+  maxPagesPerFile: number;
+}
+
+/** OCR text produced by the auto-OCR path, offered to the caller to cache. */
+export interface AutoOcrOutput {
+  itemId: string;
+  name: string;
+  eTag: string;
+  text: string;
+  pages: number;
+  engine: 'di' | 'vision';
+}
+
+export interface IndexJobItemOptions {
+  /** Present when the agent has `autoOcr` on and the run still has budget. */
+  autoOcr?: AutoOcrBudget;
+  /**
+   * Cache hook for auto-OCR text (billed per page): the job service stores
+   * it as a derived-text record keyed by the item's eTag, so a later
+   * Re-index all reads the cache instead of paying for the same pages
+   * again. Failures to cache never fail the item.
+   */
+  persistOcr?: (output: AutoOcrOutput) => Promise<void>;
+  signal?: AbortSignal;
+}
+
+function noTextOutcome(
+  item: M365ManifestItem,
+  extra: Pick<M365ManifestItem, 'ocrPages' | 'ocrSkipped'> = {},
+): M365ManifestItem {
+  return {
+    ...item,
+    status: 'noText',
+    indexedChunks: 0,
+    error: undefined,
+    ocrPages: undefined,
+    ocrSkipped: undefined,
+    ...extra,
+  };
+}
+
 export async function indexJobItem(
   req: NextRequest,
   agentId: string,
@@ -1029,10 +1172,13 @@ export async function indexJobItem(
   sourceId: string,
   item: M365ManifestItem,
   readDerived?: DerivedTextReader,
+  options: IndexJobItemOptions = {},
 ): Promise<M365ManifestItem> {
   try {
     let text: string;
     let lastModified: string | undefined;
+    let pdfBytes: { buffer: Buffer; name: string } | undefined;
+    let ocrPages: number | undefined;
     if (item.prepared) {
       // Prepared file: the derived text stands in for extraction. It must
       // match the item's current eTag — otherwise the file changed after
@@ -1046,14 +1192,91 @@ export async function indexJobItem(
       text = derived.text;
       lastModified = item.lastModified;
     } else {
-      ({ text, lastModified } = await downloadAndExtract(req, item));
+      const extracted = await downloadAndExtract(req, item);
+      ({ text, lastModified } = extracted);
+      if (extensionOf(extracted.name) === 'pdf') {
+        pdfBytes = { buffer: extracted.buffer, name: extracted.name };
+      }
     }
-    const chunks = chunkDocument(text);
+    let chunks = chunkDocument(text);
     if (chunks.length === 0) {
       console.warn(
         `[m365-agents] extraction yielded no text for agent ${sanitizeForLog(agentId)} item ${sanitizeForLog(item.itemId)} (scanned/image-only file?)`,
       );
-      return { ...item, status: 'noText', indexedChunks: 0, error: undefined };
+      const budget = options.autoOcr;
+      if (!budget || !pdfBytes) return noTextOutcome(item);
+
+      // Auto-OCR: only within the run's page budget and the per-file cap.
+      let pages: number;
+      try {
+        pages = await countPdfPages(pdfBytes.buffer, {
+          signal: options.signal,
+        });
+      } catch (countError) {
+        console.warn(
+          `[m365-agents] could not count pages for ${sanitizeForLog(item.itemId)}; leaving as noText: ${sanitizeForLog(countError)}`,
+        );
+        return noTextOutcome(item);
+      }
+      if (pages > budget.maxPagesPerFile) {
+        return noTextOutcome(item, { ocrSkipped: 'tooManyPages' });
+      }
+      if (pages > budget.remainingPages) {
+        return noTextOutcome(item, { ocrSkipped: 'budget' });
+      }
+      // Reserve synchronously (same tick) so concurrent items cannot
+      // oversubscribe the shared budget while this OCR call is in flight.
+      budget.remainingPages -= pages;
+      const { OcrEngineUnavailableError, ocrPdfBuffer } =
+        await import('@/lib/services/m365/agentPreparationService');
+      let ocrText: string;
+      try {
+        const result = await ocrPdfBuffer(pdfBytes.buffer, pdfBytes.name, {
+          maxPages: pages,
+          signal: options.signal,
+        });
+        ocrText = result.text;
+        ocrPages = result.pages;
+        if (options.persistOcr && item.eTag && ocrText.trim()) {
+          try {
+            await options.persistOcr({
+              itemId: item.itemId,
+              name: pdfBytes.name,
+              eTag: item.eTag,
+              text: ocrText,
+              pages: result.pages,
+              engine: result.engine,
+            });
+          } catch (cacheError) {
+            console.warn(
+              `[m365-agents] could not cache auto-OCR text for ${sanitizeForLog(item.itemId)}: ${sanitizeForLog(cacheError)}`,
+            );
+          }
+        }
+      } catch (ocrError) {
+        budget.remainingPages += pages;
+        if (ocrError instanceof OcrEngineUnavailableError) {
+          return noTextOutcome(item, { ocrSkipped: 'engineUnavailable' });
+        }
+        return {
+          ...item,
+          status: 'failed',
+          indexedChunks: 0,
+          ocrPages: undefined,
+          ocrSkipped: undefined,
+          error: `OCR: ${
+            ocrError instanceof Error
+              ? ocrError.message.slice(0, 280)
+              : 'Unknown error'
+          }`,
+        };
+      }
+      chunks = chunkDocument(ocrText);
+      if (chunks.length === 0) {
+        // Paid for the pages, found nothing (blank scan): keep the count so
+        // the run's usage is honest, and leave the Prepare offer in place.
+        return noTextOutcome(item, { ocrPages });
+      }
     }
     const vectors = await embedTexts(
       chunks.map((c) => c.chunk),
@@ -1081,6 +1304,8 @@ export async function indexJobItem(
       status: 'indexed',
       indexedChunks: docs.length,
       error: undefined,
+      ocrPages,
+      ocrSkipped: undefined,
     };
   } catch (error) {
     if (

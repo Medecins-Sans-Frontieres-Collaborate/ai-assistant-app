@@ -390,6 +390,12 @@ interface SettingsStore {
    */
   userRegion: UserRegion | null;
   /**
+   * One-time EU default-model switch (gpt-5.2-chat → gpt-5.4, pricing) has
+   * been evaluated in this browser. Persisted so the switch never repeats
+   * once a user has re-chosen. See lib/utils/shared/euDefaultModelSwitch.ts.
+   */
+  euDefaultModelSwitchApplied: boolean;
+  /**
    * User-defined data structures (Customizations → Structures). Shared: an
    * entry is usable as an extraction recipe and as a data-workflow table
    * schema. Renamed from `extractionRecipes` in v41.
@@ -601,6 +607,7 @@ interface SettingsStore {
   // Model list provenance / region (runtime-only)
   setModelListSource: (source: ModelListSource | null) => void;
   setUserRegion: (region: UserRegion | null) => void;
+  markEuDefaultModelSwitchApplied: () => void;
 
   // Model Ordering Actions
   setModelOrderMode: (mode: ModelOrderMode) => void;
@@ -902,6 +909,7 @@ export const useSettingsStore = create<SettingsStore>()(
       historicalUsageBackfilledAt: null,
       modelListSource: null,
       userRegion: null,
+      euDefaultModelSwitchApplied: false,
       savedStructures: [],
       streamingSpeed: DEFAULT_STREAMING_SPEED,
       includeUserInfoInPrompt: false, // Default off for privacy
@@ -1396,6 +1404,8 @@ export const useSettingsStore = create<SettingsStore>()(
 
       setModelListSource: (source) => set({ modelListSource: source }),
       setUserRegion: (region) => set({ userRegion: region }),
+      markEuDefaultModelSwitchApplied: () =>
+        set({ euDefaultModelSwitchApplied: true }),
 
       recordTokenUsage: (usage) =>
         set((state) => {
@@ -1863,6 +1873,7 @@ export const useSettingsStore = create<SettingsStore>()(
           suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
           m365Connected: true,
           m365ConnectedUserSet: false,
+          euDefaultModelSwitchApplied: false,
           m365SaveDestination: null,
           m365SaveSkipPicker: false,
           m365PickerLocation: null,
@@ -1871,7 +1882,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 63, // Increment this when schema changes to trigger migrations
+      version: 64, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1971,6 +1982,7 @@ export const useSettingsStore = create<SettingsStore>()(
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
         m365ConnectedUserSet: state.m365ConnectedUserSet,
+        euDefaultModelSwitchApplied: state.euDefaultModelSwitchApplied,
         // m365ToolsFlagEnabled is deliberately NOT persisted (LD mirror,
         // same rationale as mcpArbitraryFlagEnabled above).
         m365ToolsUserEnabled: state.m365ToolsUserEnabled,
@@ -2599,6 +2611,14 @@ export const useSettingsStore = create<SettingsStore>()(
         // Version 62 → 63: form-fill templates.
         if (version < 63) {
           if (!Array.isArray(state.formTemplates)) state.formTemplates = [];
+        }
+
+        // Version 63 → 64: one-time EU default-model switch marker. False
+        // means "not evaluated yet" — the hook decides once per browser.
+        if (version < 64) {
+          if (typeof state.euDefaultModelSwitchApplied !== 'boolean') {
+            state.euDefaultModelSwitchApplied = false;
+          }
         }
 
         return state;

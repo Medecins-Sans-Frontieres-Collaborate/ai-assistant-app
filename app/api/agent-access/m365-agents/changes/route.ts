@@ -51,7 +51,13 @@ export async function GET(request: NextRequest) {
         manifest,
         derived.index.items,
       );
-      return successResponse({ preview, lastIndexedAt: manifest.updatedAt });
+      return successResponse({
+        preview,
+        lastIndexedAt: manifest.updatedAt,
+        // Surfaced at the top level for the editor's banner.
+        ...(preview.overCap && { overCap: preview.overCap }),
+        ...(preview.truncated && { truncated: true }),
+      });
     } catch (error) {
       if (error instanceof M365Error) return m365ErrorResponse(error);
       throw error;

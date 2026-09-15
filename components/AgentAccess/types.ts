@@ -101,10 +101,30 @@ export const CLIENT_M365_AGENT_SOURCE = 'm365-agent';
  * One M365 agent as served by GET /api/agent-access/m365-agents (the etag
  * feeds the If-Match CAS on PUT/DELETE).
  */
+/**
+ * Per-agent document-cap override (server contract, 2026-09-14). A local
+ * admin may raise an agent up to the local ceiling; anything above it is a
+ * global admin's call. Optional here so the client compiles against records
+ * written before the fields existed.
+ */
+export interface M365AgentCapOverride {
+  maxDocumentsOverride?: number;
+  maxDocumentsOverrideBy?: string;
+  maxDocumentsOverrideAt?: string;
+}
+
+export type AdminM365AgentRecord = M365Agent & M365AgentCapOverride;
+
 export interface AdminStoredM365Agent {
   canonicalKey: string;
-  agent: M365Agent;
+  agent: AdminM365AgentRecord;
   etag: string;
+}
+
+/** Role ceilings for `maxDocumentsOverride` (served by the agents listing). */
+export interface M365DocumentCapCeilings {
+  localAdmin: number;
+  globalAdmin: number;
 }
 
 export interface AdminM365AgentsResponse {
@@ -116,6 +136,16 @@ export interface AdminM365AgentsResponse {
   maxDocuments?: number;
   /** Server's env-configured per-agent byte budget (M365_AGENT_MAX_SOURCE_MB). */
   maxBytes?: number;
+  /** Auto-OCR page budget per index run (M365_AGENT_AUTO_OCR_MAX_PAGES_PER_RUN). */
+  autoOcrMaxPagesPerRun?: number;
+  /** Auto-OCR page cap per file (M365_AGENT_AUTO_OCR_MAX_PAGES_PER_FILE). */
+  autoOcrMaxPagesPerFile?: number;
+  /** Explicit Prepare (OCR) page cap per PDF (M365_AGENT_OCR_MAX_PAGES). */
+  ocrMaxPages?: number;
+  /** How far each admin role may raise an agent's document cap. */
+  maxDocumentsCeilings?: M365DocumentCapCeilings;
+  /** Whether the caller is a global admin (drives the cap-raise control). */
+  isGlobalAdmin?: boolean;
   /** Latest index job per agent id (seventh pass, phase 2). */
   jobs?: Record<string, ClientIndexJobSummary>;
 }
@@ -398,6 +428,11 @@ export interface ClientRefreshPreview {
     changes: ClientSourceChanges;
   } | null;
   lastIndexedAt: string | null;
+  /**
+   * Present when the agent is over its document cap: the preview could
+   * not be turned into a run, so the banner explains and Refresh is off.
+   */
+  overCap?: { totalDocuments: number; maxDocuments: number };
 }
 
 /* ------------------------------------------------------------------ */

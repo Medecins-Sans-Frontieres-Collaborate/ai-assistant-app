@@ -38,7 +38,299 @@ interface M365SourcePlanViewProps {
   agentId?: string;
   /** A file was prepared: the caller re-plans so it shows as indexable. */
   onPrepared?: () => void;
+  /** Explicit Prepare (OCR) page cap per PDF (served by the agents listing). */
+  ocrMaxPages?: number;
+  /** Auto-OCR per-file page cap, for the "too many pages" note. */
+  autoOcrMaxPagesPerFile?: number;
+  /**
+   * Open the details (subfolder tree + file lists) without a click — the
+   * editor sets this on the largest source when the plan is over the cap,
+   * so the trim controls are in front of the admin, not behind "Details".
+   */
+  autoExpand?: boolean;
+  /**
+   * How many of THIS source's documents still fit under the effective cap
+   * given the other sources. When it is below the source's included count
+   * the "Keep newest N" action is offered; undefined hides it.
+   */
+  keepNewestLimit?: number;
   onChange: (patch: Partial<SourceSelection>) => void;
+}
+
+export type PlanSortKey = 'name' | 'size' | 'modified';
+
+/**
+ * Newest-first selection for "Keep newest N": the included indexable
+ * items sorted by modified date (undated last, then by name), split into
+ * the N to keep and the ids to exclude. Pure — the confirm copy and the
+ * tests read the same numbers the click applies.
+ */
+export function planKeepNewest(
+  items: readonly M365ManifestItem[],
+  keep: number,
+): { keepIds: string[]; excludeIds: string[] } {
+  const included = items
+    .filter((item) => item.tier === 'indexable')
+    .slice()
+    .sort((a, b) => {
+      const da = a.lastModified ?? '';
+      const db = b.lastModified ?? '';
+      if (da !== db)
+        return da === '' ? 1 : db === '' ? -1 : db.localeCompare(da);
+      return a.name.localeCompare(b.name);
+    });
+  const safeKeep = Math.max(0, keep);
+  return {
+    keepIds: included.slice(0, safeKeep).map((i) => i.itemId),
+    excludeIds: included.slice(safeKeep).map((i) => i.itemId),
+  };
+}
+
+export function sortPlanItems(
+  items: readonly M365ManifestItem[],
+  sortBy: PlanSortKey,
+): M365ManifestItem[] {
+  const byName = (a: M365ManifestItem, b: M365ManifestItem) =>
+    `${a.path}/${a.name}`.localeCompare(`${b.path}/${b.name}`);
+  const sorted = items.slice();
+  if (sortBy === 'size') {
+    sorted.sort((a, b) => b.size - a.size || byName(a, b));
+  } else if (sortBy === 'modified') {
+    sorted.sort((a, b) => {
+      const da = a.lastModified ?? '';
+      const db = b.lastModified ?? '';
+      if (da !== db)
+        return da === '' ? 1 : db === '' ? -1 : db.localeCompare(da);
+      return byName(a, b);
+    });
+  } else {
+    sorted.sort(byName);
+  }
+  return sorted;
+}
+
+/** Default caps when the listing has not served them (matches env defaults). */
+export const DEFAULT_OCR_MAX_PAGES = 200;
+export const DEFAULT_AUTO_OCR_MAX_PAGES_PER_FILE = 50;
+
+function isPdfName(name: string): boolean {
+  return name.toLowerCase().endsWith('.pdf');
+}
+
+/**
+ * Scanned PDFs from the last run that still await OCR: `noText` outcome,
+ * not yet prepared. These are what "Prepare all" walks through.
+ */
+export function selectUnpreparedScannedPdfs(
+  items: readonly M365ManifestItem[],
+): M365ManifestItem[] {
+  return items.filter(
+    (item) =>
+      item.status === 'noText' && isPdfName(item.name) && !item.prepared,
+  );
+}
+
+/** Reads the outcome envelope of POST …/m365-agents/prepare. */
+export async function readPrepareOutcome(
+  response: Response,
+  genericError: string,
+): Promise<PrepareOutcome> {
+  const body = await response.json().catch(() => null);
+  if (!response.ok) {
+    throw new Error(body?.error || genericError);
+  }
+  const outcome = unwrapApiData<{ outcome: PrepareOutcome }>(body)?.outcome;
+  if (!outcome) throw new Error(genericError);
+  return outcome;
+}
+
+export interface PrepareAllResult {
+  prepared: number;
+  total: number;
+  failures: Array<{ name: string; error: string }>;
+  cancelled: boolean;
+}
+
+/**
+ * "Prepare all scanned PDFs": the explicit, click-to-pay batch counterpart
+ * of the per-file Prepare button. Files are OCR'd ONE AT A TIME through
+ * the same route (no server fan-out, nothing runs without this tab), with
+ * a confirm that states the file count and the per-file page cap, live
+ * progress, and a cancel that stops after the file in flight. Failures
+ * are collected and listed rather than aborting the batch.
+ */
+export const M365PrepareAllButton: FC<{
+  agentId: string;
+  items: readonly M365ManifestItem[];
+  ocrMaxPages: number;
+  disabled?: boolean;
+  onDone: (result: PrepareAllResult) => void;
+}> = ({ agentId, items, ocrMaxPages, disabled, onDone }) => {
+  const t = useTranslations('agentAccess');
+  const [running, setRunning] = useState(false);
+  const [progress, setProgress] = useState<{
+    current: number;
+    total: number;
+    name: string;
+  } | null>(null);
+  const [cancelRequested, setCancelRequested] = useState(false);
+  const [failures, setFailures] = useState<
+    Array<{ name: string; error: string }>
+  >([]);
+  const cancelRef = useRef(false);
+  const unmountedRef = useRef(false);
+  useEffect(() => {
+    unmountedRef.current = false;
+    return () => {
+      unmountedRef.current = true;
+      cancelRef.current = true;
+    };
+  }, []);
+
+  const run = async () => {
+    if (running || items.length === 0) return;
+    const confirmed = window.confirm(
+      t('m365PrepareAllConfirm', { count: items.length, pages: ocrMaxPages }),
+    );
+    if (!confirmed) return;
+    cancelRef.current = false;
+    setCancelRequested(false);
+    setFailures([]);
+    setRunning(true);
+    const collected: Array<{ name: string; error: string }> = [];
+    let prepared = 0;
+    let index = 0;
+    try {
+      for (const item of items) {
+        if (cancelRef.current) break;
+        index += 1;
+        if (!unmountedRef.current) {
+          setProgress({ current: index, total: items.length, name: item.name });
+        }
+        try {
+          const outcome = await readPrepareOutcome(
+            await fetch('/api/agent-access/m365-agents/prepare', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: agentId,
+                driveId: item.driveId,
+                itemId: item.itemId,
+              }),
+            }),
+            t('m365PrepareFailedGeneric'),
+          );
+          if (outcome.status === 'prepared') prepared += 1;
+          else if (outcome.status === 'failed') {
+            collected.push({ name: item.name, error: outcome.error });
+          } else {
+            // PDFs answer synchronously; anything else is not a scanned
+            // PDF and does not belong in this batch.
+            collected.push({
+              name: item.name,
+              error: t('m365PrepareFailedGeneric'),
+            });
+          }
+        } catch (error) {
+          collected.push({
+            name: item.name,
+            error: error instanceof Error ? error.message : '',
+          });
+        }
+      }
+    } finally {
+      if (!unmountedRef.current) {
+        setRunning(false);
+        setProgress(null);
+        setFailures(collected);
+      }
+      onDone({
+        prepared,
+        total: items.length,
+        failures: collected,
+        cancelled: cancelRef.current && index < items.length,
+      });
+    }
+  };
+
+  if (items.length === 0 && failures.length === 0) return null;
+  return (
+    <div className="text-xs">
+      {running ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <span role="status" className="text-blue-700 dark:text-blue-400">
+            {cancelRequested
+              ? t('m365PrepareAllCancelling')
+              : progress
+                ? t('m365PrepareAllProgress', progress)
+                : null}
+          </span>
+          {!cancelRequested && (
+            <button
+              type="button"
+              onClick={() => {
+                cancelRef.current = true;
+                setCancelRequested(true);
+              }}
+              className="rounded-md border border-neutral-300 px-2 py-0.5 text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+            >
+              {t('m365PrepareAllCancel')}
+            </button>
+          )}
+        </div>
+      ) : (
+        items.length > 0 && (
+          <button
+            type="button"
+            onClick={() => void run()}
+            disabled={disabled}
+            title={t('m365PrepareHintOcr', { pages: ocrMaxPages })}
+            className="rounded-md border border-blue-300 px-2 py-0.5 font-medium text-blue-700 hover:bg-blue-50 disabled:opacity-50 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900/20"
+          >
+            {t('m365PrepareAllButton', { count: items.length })}
+          </button>
+        )
+      )}
+      {failures.length > 0 && (
+        <div className="mt-1 text-red-700 dark:text-red-400">
+          <p>{t('m365PrepareAllFailures', { count: failures.length })}</p>
+          <ul className="space-y-0.5">
+            {failures.map((failure) => (
+              <li
+                key={failure.name}
+                className="line-clamp-2 break-words"
+                title={`${failure.name}: ${failure.error}`}
+              >
+                <span className="font-medium">{failure.name}</span>:{' '}
+                {failure.error}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/**
+ * Per-item OCR note from the last run: pages billed by auto-OCR, or why
+ * auto-OCR left the file alone (budget / size / no engine).
+ */
+export function ocrNoteFor(
+  status: M365ManifestItem | undefined,
+  t: (key: string, values?: Record<string, string | number>) => string,
+  autoOcrMaxPagesPerFile: number,
+): string | null {
+  if (!status) return null;
+  if (status.ocrSkipped) {
+    return t(`m365ItemOcrSkipped.${status.ocrSkipped}`, {
+      perFile: autoOcrMaxPagesPerFile,
+    });
+  }
+  if (status.ocrPages && status.ocrPages > 0) {
+    return t('m365ItemOcrPages', { count: status.ocrPages });
+  }
+  return null;
 }
 
 type PrepareOutcome =
@@ -92,10 +384,18 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
   manifestSource,
   agentId,
   onPrepared,
+  ocrMaxPages = DEFAULT_OCR_MAX_PAGES,
+  autoOcrMaxPagesPerFile = DEFAULT_AUTO_OCR_MAX_PAGES_PER_FILE,
+  autoExpand = false,
+  keepNewestLimit,
   onChange,
 }) => {
   const t = useTranslations('agentAccess');
   const [expanded, setExpanded] = useState(false);
+  const [sortBy, setSortBy] = useState<PlanSortKey>('name');
+  useEffect(() => {
+    if (autoExpand) setExpanded(true);
+  }, [autoExpand]);
   const [preparing, setPreparing] = useState<Set<string>>(new Set());
   const [pendingJobs, setPendingJobs] = useState<Set<string>>(new Set());
   const unmountedRef = useRef(false);
@@ -114,15 +414,8 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
       return next;
     });
 
-  const readOutcome = async (response: Response): Promise<PrepareOutcome> => {
-    const body = await response.json().catch(() => null);
-    if (!response.ok) {
-      throw new Error(body?.error || t('m365PrepareFailedGeneric'));
-    }
-    const outcome = unwrapApiData<{ outcome: PrepareOutcome }>(body)?.outcome;
-    if (!outcome) throw new Error(t('m365PrepareFailedGeneric'));
-    return outcome;
-  };
+  const readOutcome = (response: Response): Promise<PrepareOutcome> =>
+    readPrepareOutcome(response, t('m365PrepareFailedGeneric'));
 
   /** Polls the chunked transcription job, then stores the transcript. */
   const completePending = async (item: M365ManifestItem, jobId: string) => {
@@ -217,7 +510,10 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
 
   const prepareHint = (item: M365ManifestItem): string => {
     const ext = item.name.toLowerCase().split('.').pop() ?? '';
-    if (ext === 'pdf') return t('m365PrepareHintOcr');
+    if (ext === 'pdf')
+      return t('m365PrepareHintOcr', {
+        pages: ocrMaxPages ?? DEFAULT_OCR_MAX_PAGES,
+      });
     if (
       [
         'mp3',
@@ -292,6 +588,19 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
     [selection.excludedItemIds],
   );
 
+  // Scanned PDFs the last run could not read, still unprepared — the
+  // batch "Prepare all" walks exactly these (status from the manifest,
+  // preparation state from the plan so a just-prepared file drops out).
+  const scannedPdfs = useMemo(() => {
+    const planned = new Map((plan?.items ?? []).map((i) => [i.itemId, i]));
+    return selectUnpreparedScannedPdfs(
+      [...statusByItem.values()].map((status) => ({
+        ...status,
+        prepared: planned.get(status.itemId)?.prepared ?? status.prepared,
+      })),
+    );
+  }, [plan, statusByItem]);
+
   /** Folders sorted by path, with the count of indexable files beneath each. */
   const folderRows = useMemo(() => {
     if (!plan) return [];
@@ -308,12 +617,38 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
     }));
   }, [plan, excluded]);
 
+  /** Folder ids that are excluded directly or through an excluded ancestor. */
+  const excludedFolderIds = useMemo(() => {
+    const set = new Set<string>();
+    for (const folder of plan?.folders ?? []) {
+      if (
+        excluded.has(folder.itemId) ||
+        isAncestorExcluded(folder, plan?.folders ?? [], excluded)
+      ) {
+        set.add(folder.itemId);
+      }
+    }
+    return set;
+  }, [plan, excluded]);
+  /** A file whose containing folder (or one above it) is unticked. */
+  const folderExcluded = (item: M365ManifestItem) =>
+    excludedFolderIds.has(item.parentItemId);
+
   const groups = useMemo(() => {
     const items = plan?.items ?? [];
     const byTier = {
-      indexable: items.filter((i) => i.tier === 'indexable'),
+      // Files unticked by id stay in the indexable list (unchecked) so
+      // they can be ticked back in place instead of hunting through
+      // "Skipped"; folder-excluded ones show there disabled.
+      indexable: items.filter(
+        (i) =>
+          i.tier === 'indexable' ||
+          (i.tier === 'skipped' && i.reason === 'excluded'),
+      ),
       needsPreparation: items.filter((i) => i.tier === 'needsPreparation'),
-      skipped: items.filter((i) => i.tier === 'skipped'),
+      skipped: items.filter(
+        (i) => i.tier === 'skipped' && i.reason !== 'excluded',
+      ),
     };
     return byTier;
   }, [plan]);
@@ -323,6 +658,82 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
     if (next.has(itemId)) next.delete(itemId);
     else next.add(itemId);
     onChange({ excludedItemIds: [...next] });
+  };
+
+  const toggleFile = (item: M365ManifestItem) => {
+    if (folderExcluded(item)) return;
+    const next = new Set(selection.excludedItemIds);
+    if (next.has(item.itemId)) next.delete(item.itemId);
+    else next.add(item.itemId);
+    onChange({ excludedItemIds: [...next] });
+  };
+
+  /** Ids of files (not folders) excluded by id in this source. */
+  const fileExclusions = useMemo(() => {
+    const fileIds = new Set((plan?.items ?? []).map((i) => i.itemId));
+    return selection.excludedItemIds.filter((id) => fileIds.has(id));
+  }, [plan, selection.excludedItemIds]);
+
+  /**
+   * A truncated listing (enumeration ceiling) does not know every item, so
+   * id-based tools — file checkboxes, "Keep newest", "Include all again" —
+   * would act on a partial picture the index run then contradicts. They
+   * are withheld; the "pick a subfolder" message is the only path.
+   */
+  const truncated = !!plan?.truncated;
+
+  // Zombie exclusions: ids of files that no longer exist (or fell out of a
+  // moved subtree) would otherwise sit in excludedItemIds forever, unseen
+  // by "Include all again". Prune once a COMPLETE recursive listing has
+  // arrived — a truncated or non-recursive plan does not know all ids.
+  useEffect(() => {
+    if (!plan || plan.truncated || plan.missing || !selection.recursive) return;
+    const known = new Set<string>([
+      ...plan.items.map((i) => i.itemId),
+      ...plan.folders.map((f) => f.itemId),
+    ]);
+    const kept = selection.excludedItemIds.filter((id) => known.has(id));
+    if (kept.length !== selection.excludedItemIds.length) {
+      onChange({ excludedItemIds: kept });
+    }
+    // onChange is a fresh closure per render; the plan object is the signal.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plan]);
+
+  const includedIndexable = groups.indexable.filter(
+    (i) => i.tier === 'indexable',
+  ).length;
+  const offerKeepNewest =
+    !truncated &&
+    keepNewestLimit !== undefined &&
+    keepNewestLimit > 0 &&
+    includedIndexable > keepNewestLimit;
+
+  const keepNewest = () => {
+    if (!plan || keepNewestLimit === undefined) return;
+    const { excludeIds } = planKeepNewest(plan.items, keepNewestLimit);
+    if (excludeIds.length === 0) return;
+    const confirmed = window.confirm(
+      t('m365PlanKeepNewestConfirm', {
+        keep: keepNewestLimit,
+        exclude: excludeIds.length,
+      }),
+    );
+    if (!confirmed) return;
+    onChange({
+      excludedItemIds: [
+        ...new Set([...selection.excludedItemIds, ...excludeIds]),
+      ],
+    });
+  };
+
+  const includeAllFiles = () => {
+    const fileIds = new Set(fileExclusions);
+    onChange({
+      excludedItemIds: selection.excludedItemIds.filter(
+        (id) => !fileIds.has(id),
+      ),
+    });
   };
 
   const commitExtensions = () => {
@@ -501,6 +912,51 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
 
       {expanded && plan && (
         <div className="space-y-2 rounded-md border border-gray-200 p-2 dark:border-gray-700">
+          {autoExpand && (
+            <p className="text-amber-700 dark:text-amber-400">
+              {t('m365PlanTrimHint')}
+            </p>
+          )}
+          {truncated && (
+            <p className="flex items-center gap-1 text-amber-700 dark:text-amber-400">
+              <IconAlertTriangle size={12} /> {t('m365PlanTruncated')}
+            </p>
+          )}
+          {(plan.items.length > 0 || offerKeepNewest) && (
+            <div className="flex flex-wrap items-center gap-2">
+              <label className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+                <span>{t('m365PlanSortLabel')}</span>
+                <select
+                  aria-label={t('m365PlanSortLabel')}
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as PlanSortKey)}
+                  className="rounded border border-gray-300 bg-white px-1 py-0.5 text-xs dark:border-gray-600 dark:bg-surface-dark-elevated"
+                >
+                  <option value="name">{t('m365PlanSort.name')}</option>
+                  <option value="size">{t('m365PlanSort.size')}</option>
+                  <option value="modified">{t('m365PlanSort.modified')}</option>
+                </select>
+              </label>
+              {offerKeepNewest && (
+                <button
+                  type="button"
+                  onClick={keepNewest}
+                  className="rounded-md border border-blue-300 px-2 py-0.5 font-medium text-blue-700 hover:bg-blue-50 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900/20"
+                >
+                  {t('m365PlanKeepNewest', { count: keepNewestLimit })}
+                </button>
+              )}
+              {!truncated && fileExclusions.length > 0 && (
+                <button
+                  type="button"
+                  onClick={includeAllFiles}
+                  className="rounded-md border border-neutral-300 px-2 py-0.5 text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                >
+                  {t('m365PlanIncludeAll', { count: fileExclusions.length })}
+                </button>
+              )}
+            </div>
+          )}
           {folderRows.length > 0 && (
             <div>
               <p className="mb-1 font-semibold text-gray-700 dark:text-gray-300">
@@ -537,15 +993,62 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
             </div>
           )}
 
+          {agentId && scannedPdfs.length > 0 && (
+            <M365PrepareAllButton
+              agentId={agentId}
+              items={scannedPdfs}
+              ocrMaxPages={ocrMaxPages}
+              onDone={(result) => {
+                if (result.prepared > 0) {
+                  toast.success(
+                    t('m365PrepareAllDone', {
+                      prepared: result.prepared,
+                      total: result.total,
+                    }),
+                  );
+                  onPrepared?.();
+                }
+              }}
+            />
+          )}
           <FileGroup
             title={t('m365PlanGroupIndexable')}
             items={groups.indexable}
             statusByItem={statusByItem}
+            sortBy={sortBy}
+            selectable={
+              truncated
+                ? undefined
+                : {
+                    isChecked: (item) => item.tier === 'indexable',
+                    isDisabled: folderExcluded,
+                    onToggle: toggleFile,
+                  }
+            }
             renderNote={(item) => {
+              if (item.tier !== 'indexable') {
+                return (
+                  <span className="text-gray-400">
+                    {t('m365PlanFileExcluded')}
+                  </span>
+                );
+              }
               const status = statusByItem.get(item.itemId);
               const isPdf = item.name.toLowerCase().endsWith('.pdf');
+              const ocrNote = ocrNoteFor(status, t, autoOcrMaxPagesPerFile);
               return (
                 <span className="flex items-center gap-1.5">
+                  {ocrNote && (
+                    <span
+                      className={
+                        status?.ocrSkipped
+                          ? 'text-amber-700 dark:text-amber-400'
+                          : 'text-gray-500 dark:text-gray-400'
+                      }
+                    >
+                      {ocrNote}
+                    </span>
+                  )}
                   {item.prepared && (
                     <span className="text-green-700 dark:text-green-400">
                       {t('m365PreparedNote', {
@@ -579,6 +1082,7 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
             title={t('m365PlanGroupNeedsPreparation')}
             items={groups.needsPreparation}
             statusByItem={statusByItem}
+            sortBy={sortBy}
             renderNote={(item) => (
               <span className="flex items-center gap-1.5">
                 <span className="text-amber-700 dark:text-amber-400">
@@ -592,6 +1096,7 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
             title={t('m365PlanGroupSkipped')}
             items={groups.skipped}
             statusByItem={statusByItem}
+            sortBy={sortBy}
             renderNote={(item) => (
               <span className="text-gray-500 dark:text-gray-400">
                 {t(`m365SkipReason.${item.reason ?? 'unsupported'}`)}
@@ -624,13 +1129,30 @@ interface FileGroupProps {
   title: string;
   items: M365ManifestItem[];
   statusByItem: Map<string, M365ManifestItem>;
+  sortBy?: PlanSortKey;
+  /** File-level include checkboxes (indexable group). */
+  selectable?: {
+    isChecked: (item: M365ManifestItem) => boolean;
+    isDisabled: (item: M365ManifestItem) => boolean;
+    onToggle: (item: M365ManifestItem) => void;
+  };
   renderNote: (item: M365ManifestItem) => React.ReactNode;
 }
 
-const FileGroup: FC<FileGroupProps> = ({ title, items, renderNote }) => {
+const FileGroup: FC<FileGroupProps> = ({
+  title,
+  items,
+  sortBy = 'name',
+  selectable,
+  renderNote,
+}) => {
   const t = useTranslations('agentAccess');
+  // Collapsed by default; "Show all" reveals every row so any file can be
+  // ticked or unticked (the list box scrolls; 1,000 plain rows are fine).
+  const [showAll, setShowAll] = useState(false);
   if (items.length === 0) return null;
-  const shown = items.slice(0, MAX_ROWS_PER_GROUP);
+  const sorted = sortPlanItems(items, sortBy);
+  const shown = showAll ? sorted : sorted.slice(0, MAX_ROWS_PER_GROUP);
   return (
     <div>
       <p className="mb-1 font-semibold text-gray-700 dark:text-gray-300">
@@ -640,8 +1162,19 @@ const FileGroup: FC<FileGroupProps> = ({ title, items, renderNote }) => {
         {shown.map((item) => (
           <li
             key={item.itemId}
-            className="flex items-center gap-2 text-gray-800 dark:text-gray-200"
+            className={`flex items-center gap-2 text-gray-800 dark:text-gray-200 ${
+              selectable && !selectable.isChecked(item) ? 'opacity-60' : ''
+            }`}
           >
+            {selectable && (
+              <input
+                type="checkbox"
+                aria-label={t('m365PlanIncludeFile', { name: item.name })}
+                checked={selectable.isChecked(item)}
+                disabled={selectable.isDisabled(item)}
+                onChange={() => selectable.onToggle(item)}
+              />
+            )}
             <span className="min-w-0 flex-1 truncate" title={item.name}>
               {item.path ? `${item.path}/` : ''}
               {item.name}
@@ -652,9 +1185,17 @@ const FileGroup: FC<FileGroupProps> = ({ title, items, renderNote }) => {
             <span className="shrink-0">{renderNote(item)}</span>
           </li>
         ))}
-        {items.length > shown.length && (
+        {items.length > MAX_ROWS_PER_GROUP && (
           <li className="text-gray-500 dark:text-gray-400">
-            {t('m365PlanMoreRows', { count: items.length - shown.length })}
+            <button
+              type="button"
+              onClick={() => setShowAll((v) => !v)}
+              className="underline hover:text-gray-700 dark:hover:text-gray-200"
+            >
+              {showAll
+                ? t('m365PlanShowFewerRows')
+                : t('m365PlanShowAllRows', { count: items.length })}
+            </button>
           </li>
         )}
       </ul>

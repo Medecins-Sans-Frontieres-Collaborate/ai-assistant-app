@@ -1,6 +1,7 @@
 import { createAdminBlobStorage } from '@/lib/services/adminBlobStorage';
 import {
   AgentAccessConflictError,
+  OVERWRITE_BLOB,
   downloadBlob,
   statusCodeOf,
   uploadJson,
@@ -756,11 +757,15 @@ export async function writeM365AgentManifest(
   manifest: M365AgentManifest,
 ): Promise<void> {
   const parsed = M365AgentManifestSchema.parse(manifest);
+  // Derived from the finished run and rebuilt wholesale: last writer wins.
+  // A create-only write here failed EVERY second run of an agent with
+  // "The specified blob already exists" (409) once the first run had
+  // written the manifest.
   await uploadJson(
     storage,
     m365AgentManifestBlobPath(parsed.agentId),
     parsed,
-    null,
+    OVERWRITE_BLOB,
     'agentAccess.writeM365AgentManifest',
   );
 }

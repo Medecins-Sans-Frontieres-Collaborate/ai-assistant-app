@@ -9,7 +9,7 @@ import {
   requiresContentValidation,
   validateDocumentContent,
 } from '@/lib/constants/fileLimits';
-import { execFile } from 'child_process';
+import { execFile, spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import fs from 'fs';
 import { lookup } from 'mime-types';
@@ -230,6 +230,167 @@ async function extractTextWithPdfJs(filePath: string): Promise<string> {
 }
 
 /**
+ * Every PDF extractor ran and none produced usable text: the document has
+ * no text layer (scanned/image-only) or its fonts carry no Unicode
+ * mapping. The structure is fine, so re-running extractors cannot help —
+ * only OCR can. Indexers map this to `noText`; uploads still surface it
+ * as an error, just a specific one.
+ */
+export class NoExtractableTextError extends Error {
+  constructor(
+    message = 'The PDF contains no extractable text (scanned or image-only?)',
+  ) {
+    super(message);
+    this.name = 'NoExtractableTextError';
+  }
+}
+
+/**
+ * Every PDF extractor THREW. The message names each cause so an
+ * encrypted or corrupt file is distinguishable from a scan.
+ */
+export class PdfExtractionError extends Error {
+  constructor(readonly causes: string[]) {
+    super(`Failed to extract text from PDF (${causes.join('; ')})`);
+    this.name = 'PdfExtractionError';
+  }
+}
+
+const GOOD_TEXT_CHARS =
+  /[\p{L}\p{N}\p{M}.,;:!?'"()[\]{}\-–—/\\%&+*=<>@#$€£§°_|~^`«»‘’“”•·]/u;
+
+/**
+ * Text-quality gate for extractor output. PDFs whose fonts lack a
+ * ToUnicode map "extract" as glyph-id gibberish that would otherwise be
+ * embedded as if it were prose. Conservative on purpose: a mostly numeric
+ * table, page markers and punctuation-heavy text all pass; only a
+ * majority of unclassifiable symbols or many replacement characters fail.
+ */
+export function looksLikeGarbledText(text: string): boolean {
+  const chars = Array.from(text.replace(/\s+/g, ''));
+  if (chars.length < 40) return false;
+  let good = 0;
+  let replacement = 0;
+  for (const ch of chars) {
+    if (ch === '\uFFFD') replacement += 1;
+    else if (GOOD_TEXT_CHARS.test(ch)) good += 1;
+  }
+  if (replacement / chars.length > 0.05) return true;
+  return good / chars.length < 0.6;
+}
+
+function usableText(text: string): boolean {
+  return !!text.trim() && !looksLikeGarbledText(text);
+}
+
+/**
+ * Number of pages in a PDF held in memory — pdfjs first (no temp file),
+ * `pdfinfo` as the fallback when pdfjs refuses the structure.
+ */
+export async function countPdfPages(
+  buffer: Buffer,
+  options?: ExtractionOptions,
+): Promise<number> {
+  try {
+    const pdfjsLib = await configurePdfJs();
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buffer) })
+      .promise;
+    return pdf.numPages;
+  } catch (pdfjsError) {
+    console.warn(
+      '[countPdfPages] pdfjs failed, trying pdfinfo:',
+      pdfjsError instanceof Error ? pdfjsError.message : pdfjsError,
+    );
+  }
+  // Piped over stdin (`pdfinfo -`): the bytes came off the network and never
+  // need to touch the filesystem for a page count.
+  const { stdout } = await execWithStdin('pdfinfo', ['-'], buffer, options);
+  const match = /^Pages:\s+(\d+)/m.exec(stdout);
+  if (!match) throw new Error('pdfinfo reported no page count');
+  return Number(match[1]);
+}
+
+/**
+ * Runs a converter that accepts its input on stdin, with the same timeout,
+ * kill signal and output cap as the file-based converters. Non-zero exit
+ * rejects with the tool's stderr (trimmed).
+ */
+function execWithStdin(
+  cmd: string,
+  args: readonly string[],
+  input: Buffer,
+  options?: ExtractionOptions,
+): Promise<{ stdout: string }> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(cmd, args, {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      timeout: CONVERTER_EXEC_OPTS.timeout,
+      killSignal: CONVERTER_EXEC_OPTS.killSignal,
+      ...(options?.signal ? { signal: options.signal } : {}),
+    });
+    const out: Buffer[] = [];
+    const err: Buffer[] = [];
+    let outBytes = 0;
+    child.stdout.on('data', (chunk: Buffer) => {
+      outBytes += chunk.length;
+      if (outBytes > CONVERTER_EXEC_OPTS.maxBuffer) {
+        child.kill(CONVERTER_EXEC_OPTS.killSignal);
+        reject(new Error(`${cmd} output exceeded the size cap`));
+        return;
+      }
+      out.push(chunk);
+    });
+    child.stderr.on('data', (chunk: Buffer) => err.push(chunk));
+    child.on('error', reject);
+    child.on('close', (code) => {
+      if (code === 0) {
+        resolve({ stdout: Buffer.concat(out).toString('utf8') });
+      } else {
+        reject(
+          new Error(
+            `${cmd} exited with ${code ?? 'signal'}: ${Buffer.concat(err)
+              .toString('utf8')
+              .trim()
+              .slice(0, 300)}`,
+          ),
+        );
+      }
+    });
+    // The tool may exit before consuming all input (EPIPE) — the close
+    // handler already reports the outcome.
+    child.stdin.on('error', () => undefined);
+    child.stdin.end(input);
+  });
+}
+
+/**
+ * Re-distills a structurally damaged PDF (broken xref, odd incremental
+ * updates from signing tools) into a clean one with Ghostscript, so
+ * pdftotext can read it. Returns the repaired file's path; the caller
+ * removes it.
+ */
+async function repairPdfWithGhostscript(
+  inputPath: string,
+  options?: ExtractionOptions,
+): Promise<string> {
+  const outputPath = buildTempFilePath('repaired.pdf');
+  await execFileAsync(
+    'gs',
+    [
+      '-o',
+      outputPath,
+      '-sDEVICE=pdfwrite',
+      '-dNOPAUSE',
+      '-dBATCH',
+      '-dQUIET',
+      inputPath,
+    ],
+    execOpts(options),
+  );
+  return outputPath;
+}
+
+/**
  * Extract text from PDF using pdftotext CLI tool (poppler-utils).
  * Used as fallback when pdfjs-dist fails.
  *
@@ -249,18 +410,29 @@ async function extractTextWithPdfToTextCli(
 }
 
 /**
- * Extract text from PDF using pdfjs-dist (primary) with pdftotext CLI fallback.
- * pdfjs-dist is more forgiving of malformed PDFs than the CLI tool.
+ * Extract text from a PDF: pdfjs-dist (most tolerant of malformed files),
+ * then pdftotext, then — only when an extractor actually THREW, i.e. the
+ * structure is suspect — a Ghostscript re-distill followed by pdftotext
+ * again. Output passes a quality gate so glyph-id gibberish is not
+ * mistaken for text.
  *
- * @param inputPath - Path to the PDF file
- * @returns Extracted text content
- * @throws Error if both extraction methods fail
+ * Outcomes:
+ * - usable text → returned (budget-truncated)
+ * - every extractor ran but found nothing → {@link NoExtractableTextError}
+ *   (a scan; repair is pointless, OCR is the only fix — so Ghostscript is
+ *   deliberately NOT run for the empty-but-well-formed case)
+ * - every extractor threw → {@link PdfExtractionError} naming each cause
  */
 async function pdfToText(
   inputPath: string,
   options?: ExtractionOptions,
 ): Promise<string> {
   const perfStart = performance.now();
+  const causes: string[] = [];
+  let sawNoText = false;
+  const describe = (error: unknown) =>
+    error instanceof Error ? error.message : String(error);
+
   // Try pdfjs-dist first (more robust for malformed PDFs)
   try {
     const perfPdfjsStart = performance.now();
@@ -268,20 +440,22 @@ async function pdfToText(
     console.log(
       `[Perf] extractTextWithPdfJs: ${(performance.now() - perfPdfjsStart).toFixed(1)}ms`,
     );
-    if (text.trim()) {
+    if (usableText(text)) {
       console.log('[pdfToText] Successfully extracted with pdfjs-dist');
       console.log(
         `[Perf] pdfToText (pdfjs-dist): ${(performance.now() - perfStart).toFixed(1)}ms`,
       );
       return truncateToBudget(text);
     }
+    sawNoText = true;
     console.warn(
-      '[pdfToText] pdfjs-dist returned empty text, trying CLI fallback',
+      `[pdfToText] pdfjs-dist returned ${text.trim() ? 'garbled' : 'empty'} text, trying CLI fallback`,
     );
   } catch (pdfjsError) {
+    causes.push(`pdfjs: ${describe(pdfjsError)}`);
     console.warn(
       '[pdfToText] pdfjs-dist failed, trying pdftotext CLI:',
-      pdfjsError instanceof Error ? pdfjsError.message : pdfjsError,
+      describe(pdfjsError),
     );
   }
 
@@ -292,24 +466,63 @@ async function pdfToText(
     console.log(
       `[Perf] extractTextWithPdfToTextCli: ${(performance.now() - perfCliStart).toFixed(1)}ms`,
     );
-    if (stdout.trim()) {
+    if (usableText(stdout)) {
       console.log('[pdfToText] Successfully extracted with pdftotext CLI');
       console.log(
         `[Perf] pdfToText (CLI fallback): ${(performance.now() - perfStart).toFixed(1)}ms`,
       );
       return truncateToBudget(stdout);
     }
-    console.warn('[pdfToText] pdftotext CLI returned empty text');
-  } catch (cliError) {
+    sawNoText = true;
     console.warn(
-      '[pdfToText] pdftotext CLI also failed:',
-      cliError instanceof Error ? cliError.message : cliError,
+      `[pdfToText] pdftotext CLI returned ${stdout.trim() ? 'garbled' : 'empty'} text`,
     );
+  } catch (cliError) {
+    causes.push(`pdftotext: ${describe(cliError)}`);
+    console.warn('[pdfToText] pdftotext CLI also failed:', describe(cliError));
   }
 
-  throw new Error(
-    'Failed to extract text from PDF using both pdfjs-dist and pdftotext CLI',
-  );
+  // Structure suspect (something threw): re-distill and read again. A
+  // well-formed PDF that simply has no text layer skips this — Ghostscript
+  // cannot invent a text layer, and running it on every scan is wasted CPU.
+  if (causes.length > 0) {
+    let repairedPath: string | undefined;
+    try {
+      const perfRepairStart = performance.now();
+      repairedPath = await repairPdfWithGhostscript(inputPath, options);
+      const stdout = await extractTextWithPdfToTextCli(repairedPath, options);
+      console.log(
+        `[Perf] ghostscript repair + pdftotext: ${(performance.now() - perfRepairStart).toFixed(1)}ms`,
+      );
+      if (usableText(stdout)) {
+        console.log(
+          '[pdfToText] Successfully extracted after Ghostscript repair',
+        );
+        return truncateToBudget(stdout);
+      }
+      sawNoText = true;
+      console.warn('[pdfToText] repaired PDF still has no usable text');
+    } catch (repairError) {
+      causes.push(
+        `${repairedPath ? 'pdftotext (after repair)' : 'ghostscript'}: ${describe(repairError)}`,
+      );
+      console.warn(
+        '[pdfToText] Ghostscript repair path failed:',
+        describe(repairError),
+      );
+    } finally {
+      if (repairedPath) await retryRemoveFile(repairedPath, 1);
+    }
+  }
+
+  if (sawNoText) {
+    throw new NoExtractableTextError(
+      causes.length > 0
+        ? `The PDF contains no extractable text (scanned or image-only?); also: ${causes.join('; ')}`
+        : undefined,
+    );
+  }
+  throw new PdfExtractionError(causes);
 }
 
 /**
