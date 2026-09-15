@@ -32,38 +32,6 @@ import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { emitAgentActivity } from '@/lib/streamMarkers';
 
 /**
- * POST /api/chat
- *
- * UNIFIED CHAT ENDPOINT
- *
- * Handles ALL types of chat requests through a composable pipeline:
- * - Text-only conversations
- * - Image conversations (vision models)
- * - File analysis (documents)
- * - Audio/video transcription
- * - Mixed content (files + images)
- * - RAG with knowledge bases
- * - Intelligent search (tool routing)
- * - Code interpreter (native or sub-tool round-trip)
- * - AI Foundry agents
- *
- * ANY COMBINATION of the above is supported through composition.
- *
- * Streaming contract: for streaming requests the byte stream is returned
- * IMMEDIATELY after context construction (auth, rate limit, validation —
- * which still fail with real HTTP status codes). The pipeline then runs in
- * the background writing into the stream, so pre-generation stages (web
- * search, code interpreter, RAG) surface their AGENT_ACTIVITY progress
- * markers live instead of buffering until the model starts. Failures after
- * the stream has started are reported IN-BAND via the terminal
- * `streamError` metadata block (see lib/utils/app/metadata.ts) — the client
- * surfaces them as an error card with Try Again; aborting the socket
- * instead would show as an opaque network error.
- *
- * Non-streaming requests keep the classic behavior: single JSON body,
- * errors as HTTP status codes.
- */
-/**
  * Budget for everything BEFORE the model handler stage (file download +
  * extraction, RAG, tool router, …). The whole-request guard is this plus
  * the model timeout, so a user who asks to wait longer for the model never
@@ -119,6 +87,38 @@ function describeReportableError(error: Error): string {
   return error.message;
 }
 
+/**
+ * POST /api/chat
+ *
+ * UNIFIED CHAT ENDPOINT
+ *
+ * Handles ALL types of chat requests through a composable pipeline:
+ * - Text-only conversations
+ * - Image conversations (vision models)
+ * - File analysis (documents)
+ * - Audio/video transcription
+ * - Mixed content (files + images)
+ * - RAG with knowledge bases
+ * - Intelligent search (tool routing)
+ * - Code interpreter (native or sub-tool round-trip)
+ * - AI Foundry agents
+ *
+ * ANY COMBINATION of the above is supported through composition.
+ *
+ * Streaming contract: for streaming requests the byte stream is returned
+ * IMMEDIATELY after context construction (auth, rate limit, validation —
+ * which still fail with real HTTP status codes). The pipeline then runs in
+ * the background writing into the stream, so pre-generation stages (web
+ * search, code interpreter, RAG) surface their AGENT_ACTIVITY progress
+ * markers live instead of buffering until the model starts. Failures after
+ * the stream has started are reported IN-BAND via the terminal
+ * `streamError` metadata block (see lib/utils/app/metadata.ts) — the client
+ * surfaces them as an error card with Try Again; aborting the socket
+ * instead would show as an opaque network error.
+ *
+ * Non-streaming requests keep the classic behavior: single JSON body,
+ * errors as HTTP status codes.
+ */
 export async function POST(req: NextRequest): Promise<Response> {
   // Set up a TransformStream so pipeline stages can emit AGENT_ACTIVITY /
   // TOOL_CALL_RECORD markers in real time (e.g. "Searching: …") rather
