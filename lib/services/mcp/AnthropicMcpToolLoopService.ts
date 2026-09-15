@@ -67,6 +67,8 @@ export interface AnthropicMcpToolLoopOptions {
   userMessageText?: string;
   /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
   builtinExecutor?: ToolLoopCoreOptions<Anthropic.MessageParam>['builtinExecutor'];
+  /** Aborts every model round (see McpToolLoopOptions.signal). */
+  signal?: AbortSignal;
 }
 
 function buildAnthropicStrategy(
@@ -122,7 +124,10 @@ function buildAnthropicStrategy(
         }
       }
 
-      const eventStream = await options.handler.executeStreamingRequest(params);
+      const eventStream = await options.handler.executeStreamingRequest(
+        params,
+        options.signal,
+      );
 
       const accumulator = createAnthropicToolUseAccumulator();
       for await (const event of eventStream) {
