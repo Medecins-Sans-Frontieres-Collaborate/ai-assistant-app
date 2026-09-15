@@ -246,20 +246,29 @@ export class ResponsesApiHandler {
 
   async executeStreaming(
     params: OpenAI.Responses.ResponseCreateParams,
+    /** Aborts the upstream call (pipeline stage timeout, issue #130). */
+    signal?: AbortSignal,
   ): Promise<AsyncIterable<OpenAI.Responses.ResponseStreamEvent>> {
-    return (await this.client.responses.create({
-      ...params,
-      stream: true,
-    })) as AsyncIterable<OpenAI.Responses.ResponseStreamEvent>;
+    return (await this.client.responses.create(
+      {
+        ...params,
+        stream: true,
+      },
+      signal ? { signal } : undefined,
+    )) as AsyncIterable<OpenAI.Responses.ResponseStreamEvent>;
   }
 
   async executeNonStreaming(
     params: OpenAI.Responses.ResponseCreateParams,
+    signal?: AbortSignal,
   ): Promise<OpenAI.Responses.Response> {
-    return (await this.client.responses.create({
-      ...params,
-      stream: false,
-    })) as OpenAI.Responses.Response;
+    return (await this.client.responses.create(
+      {
+        ...params,
+        stream: false,
+      },
+      signal ? { signal } : undefined,
+    )) as OpenAI.Responses.Response;
   }
 
   /**
