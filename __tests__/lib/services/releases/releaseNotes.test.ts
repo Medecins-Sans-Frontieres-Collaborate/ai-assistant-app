@@ -110,6 +110,14 @@ describe('cleanReleaseBody', () => {
     expect(cleaned).not.toContain('Full Changelog');
   });
 
+  it('leaves no comment opener behind, even one reassembled from remnants', () => {
+    // A single deletion pass turns `<!<!---->--` into `<!--`; the survivor
+    // is an unclosed opener, which is escaped rather than deleted.
+    const cleaned = cleanReleaseBody('before <!<!---->-- after');
+    expect(cleaned).not.toContain('<!--');
+    expect(cleaned).toBe('before &lt;!-- after');
+  });
+
   it("keeps the What's Changed list, which is the part worth reading", () => {
     const cleaned = cleanReleaseBody(ghRelease().body as string);
 
