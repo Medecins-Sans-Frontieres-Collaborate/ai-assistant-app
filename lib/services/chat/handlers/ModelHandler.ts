@@ -69,10 +69,15 @@ export abstract class ModelHandler {
   async executeRequest(
     requestParams: ChatCompletionParams,
     streamResponse: boolean,
+    /** Aborts the upstream call (pipeline stage timeout, issue #130). */
+    signal?: AbortSignal,
   ): Promise<ChatCompletionResponse> {
     const client = this.getClient();
     const perfStart = performance.now();
-    const response = await client.chat.completions.create(requestParams);
+    const response = await client.chat.completions.create(
+      requestParams,
+      signal ? { signal } : undefined,
+    );
     console.log(
       `[Perf] ModelHandler.executeRequest (client.chat.completions.create): ${(performance.now() - perfStart).toFixed(1)}ms`,
     );
