@@ -1,5 +1,6 @@
 import { criterionRubricLine } from '@/lib/utils/shared/review/customCriteria';
 import { computeSegmentChanges } from '@/lib/utils/shared/translation/editApplication';
+import { checkGlossaryCompliance } from '@/lib/utils/shared/translation/glossaryMatch';
 import { builtinRubricLine } from '@/lib/utils/shared/translation/qualityCriteria';
 
 import {
@@ -128,6 +129,12 @@ export async function runTranslationWorkflow(
     usageLabel: 'translate',
   });
 
+  // Deterministic glossary check (issue #131): the model was TOLD the
+  // terminology; this verifies it. Recomputed on every revision, since a
+  // review round can fix one term and break another.
+  const glossaryCheck = () =>
+    checkGlossaryCompliance(glossaryEntries, sourceText, translation);
+
   // Phase 3 — bounded review rounds (agentic only)
   let rounds = 0;
   if (mode === 'agentic') {
@@ -139,6 +146,9 @@ export async function runTranslationWorkflow(
         total: String(maxRounds),
       });
 
+      // Missing required terms go into the review as hard facts, not
+      // opinions: the reviewer must revise until the scan is clean.
+      const violationsBefore = glossaryCheck().violations;
       const review = await callStructured<ReviewResult>({
         client,
         model: modelId,
@@ -148,6 +158,7 @@ export async function runTranslationWorkflow(
           translation,
           targetLanguage,
           priorIssues,
+          violationsBefore,
         ),
         schemaName: 'translation_review',
         schema: REVIEW_SCHEMA as unknown as Record<string, unknown>,
@@ -162,7 +173,14 @@ export async function runTranslationWorkflow(
         data: { round, verdict: review.verdict, issues: review.issues },
       });
 
-      if (review.verdict === 'approve') break;
+      // An "approve" over a failed glossary scan is not an approve: the
+      // scan is exact and the reviewer was shown it. Keep going while
+      // rounds remain, unless the reviewer also produced no fix — a
+      // round that changes nothing would only repeat itself.
+      if (review.verdict === 'approve') {
+        const hasFix = !!review.revisedText?.trim();
+        if (violationsBefore.length === 0 || !hasFix) break;
+      }
 
       priorIssues.push(
         ...review.issues.map((i) => `${i.excerpt}: ${i.problem}`),
@@ -180,6 +198,19 @@ export async function runTranslationWorkflow(
         });
       }
     }
+  }
+
+  // Final glossary verdict on the text the user will actually get. Quick
+  // mode reports without a corrective pass (that is what quick means);
+  // agentic mode has already spent its rounds on the violations above.
+  // No glossary → no event: there is nothing to report and the event
+  // sequence stays what it was.
+  if (glossaryEntries.length > 0) {
+    writer.event({
+      workflow: 'translation',
+      type: 'glossary_check',
+      data: glossaryCheck(),
+    });
   }
 
   // Usage before completion: the client folds it into the conversation's
