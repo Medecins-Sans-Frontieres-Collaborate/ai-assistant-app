@@ -96,8 +96,10 @@ describe('modelTimeout (issue #130)', () => {
 
   describe('isModelTimeoutErrorCode', () => {
     it('recognises both server timeout codes and nothing else', () => {
-      expect(isModelTimeoutErrorCode('PIPELINE_TIMEOUT')).toBe(true);
+      expect(isModelTimeoutErrorCode('MODEL_TIMEOUT')).toBe(true);
       expect(isModelTimeoutErrorCode('REQUEST_TIMEOUT')).toBe(true);
+      // Any stage can raise this one; a longer model wait cannot fix it.
+      expect(isModelTimeoutErrorCode('PIPELINE_TIMEOUT')).toBe(false);
       expect(isModelTimeoutErrorCode('INTERNAL_ERROR')).toBe(false);
       expect(isModelTimeoutErrorCode(null)).toBe(false);
       expect(isModelTimeoutErrorCode(undefined)).toBe(false);
