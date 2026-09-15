@@ -25,6 +25,11 @@ import {
  * - Word boundaries are Unicode-aware: letters and digits on either side
  *   break a match, everything else (space, punctuation, apostrophe, hyphen)
  *   is a boundary, so "l'OMS" matches "OMS" and accented terms work.
+ * - Inflection is tolerated: a term may carry up to two trailing letters
+ *   ("hospital" matches "hospitals", "choléra" matches "choléras"), an
+ *   acronym an optional plural/possessive "s" ("NGO" matches "NGOs" and
+ *   "NGO's"). The tolerance is on the tail only — "WHO" never matches
+ *   "WHOLESALE", and nothing matches inside a longer word at the front.
  */
 
 /** Hard caps so a hostile entry cannot blow up the regex or the prompt. */
@@ -63,7 +68,9 @@ function escapeRegExp(s: string): string {
  * Whole-word pattern for a term. Internal whitespace matches any run of
  * whitespace (a glossary phrase must still match across a line wrap).
  * Lookbehind/lookahead on letters and digits rather than `\b`, which is
- * ASCII-only and would put a boundary inside "hôpital".
+ * ASCII-only and would put a boundary inside "hôpital". Case-sensitive
+ * (acronym) patterns tolerate a plural/possessive "s"; case-insensitive
+ * (term) patterns tolerate up to two trailing letters of inflection.
  */
 export function buildTermPattern(
   term: string,
@@ -72,8 +79,9 @@ export function buildTermPattern(
   const normalized = term.trim().slice(0, MAX_GLOSSARY_TERM_CHARS);
   if (!normalized) return null;
   const body = normalized.split(/\s+/).map(escapeRegExp).join('\\s+');
+  const tail = caseSensitive ? "(?:['’]s|s)?" : '\\p{L}{0,2}';
   return new RegExp(
-    `(?<![\\p{L}\\p{N}])${body}(?![\\p{L}\\p{N}])`,
+    `(?<![\\p{L}\\p{N}])${body}${tail}(?![\\p{L}\\p{N}])`,
     caseSensitive ? 'gu' : 'giu',
   );
 }
@@ -98,17 +106,19 @@ function lineAround(text: string, index: number): string {
 }
 
 /**
- * Does `term` occur in `text` as a whole word? For case-sensitive
- * (acronym) matches, occurrences inside shouting lines do not count.
+ * Does `term` occur in `text` as a whole word? With `ignoreShouting`
+ * (source-side acronym detection), occurrences inside shouting lines do
+ * not count. The output-side compliance check never sets it: an all-caps
+ * heading that uses the required short form is still the required form.
  */
 export function termOccursIn(
   text: string,
   term: string,
-  options: { caseSensitive: boolean },
+  options: { caseSensitive: boolean; ignoreShouting?: boolean },
 ): boolean {
   const pattern = buildTermPattern(term, options.caseSensitive);
   if (!pattern) return false;
-  if (!options.caseSensitive) return pattern.test(text);
+  if (!options.ignoreShouting) return pattern.test(text);
   for (const match of text.matchAll(pattern)) {
     if (match.index === undefined) continue;
     if (!isShoutingLine(lineAround(text, match.index))) return true;
@@ -136,7 +146,12 @@ export function findMatchingEntries(
     if (!entry || !entry.source?.trim() || !entry.target?.trim()) continue;
     const kind = resolveEntryKind(entry);
     if (kind === 'acronym') {
-      if (termOccursIn(sourceText, entry.source, { caseSensitive: true })) {
+      if (
+        termOccursIn(sourceText, entry.source, {
+          caseSensitive: true,
+          ignoreShouting: true,
+        })
+      ) {
         matched.push({ entry, kind, matchedBy: 'source' });
       } else if (
         entry.sourceExpansion?.trim() &&
@@ -213,8 +228,12 @@ export function checkGlossaryCompliance(
 export function sanitizeGlossaryEntry(raw: unknown): GlossaryEntry | null {
   if (!raw || typeof raw !== 'object') return null;
   const r = raw as Record<string, unknown>;
+  // Newlines and runs of whitespace collapse: entries become table rows
+  // and regex bodies, and neither survives a line break.
   const str = (v: unknown, max: number): string | undefined =>
-    typeof v === 'string' && v.trim() ? v.trim().slice(0, max) : undefined;
+    typeof v === 'string' && v.trim()
+      ? v.replace(/\s+/g, ' ').trim().slice(0, max)
+      : undefined;
   const source = str(r.source, MAX_GLOSSARY_TERM_CHARS);
   const target = str(r.target, MAX_GLOSSARY_TERM_CHARS);
   if (!source || !target) return null;
