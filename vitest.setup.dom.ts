@@ -50,6 +50,10 @@ const mockMessages: Record<string, unknown> = {
     search: 'Search',
     beta: 'Beta',
     tryAgain: 'Try again',
+    // The real keys are ICU plurals; the mock t() only does {param}
+    // interpolation, so keep a simple shape here.
+    durationSeconds: '{count} seconds',
+    durationMinutes: '{count} minutes',
   },
   admin: {
     title: 'Admin',
@@ -57,6 +61,15 @@ const mockMessages: Record<string, unknown> = {
     areaNavLabel: 'Admin areas',
   },
   chat: {
+    modelTimedOut:
+      "{model} didn't start responding within {duration}. It may be busy — you can wait longer, or try another model.",
+    modelTimedOutAtMaximum:
+      "{model} didn't start responding within {duration}, the longest wait available. Try again, or try another model.",
+    requestTimedOut:
+      'This request took too long to prepare and was stopped before {model} could answer. You can allow more time, or try another model.',
+    retryWaitingLonger: 'Wait up to {duration} and try again',
+    regenerate: 'Regenerate',
+    alwaysWaitThisLong: 'Always wait up to {duration}',
     attachedFileExpired:
       'An attached file is no longer available — uploaded files are stored for a limited time. It has been removed from this conversation. Try again without it, or upload the file again.',
     repeatedFailureNotice:
