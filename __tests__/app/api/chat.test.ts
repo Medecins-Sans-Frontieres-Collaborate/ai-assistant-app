@@ -481,7 +481,7 @@ describe('/api/chat - Integration Tests', () => {
       // The message is the user-facing sentence (issue #130), not the
       // pipeline's "Stage X exceeded timeout" log line; without a client
       // timeout the window is the compiled 90 s default.
-      expect(data.code).toBe(ErrorCode.PIPELINE_TIMEOUT);
+      expect(data.code).toBe(ErrorCode.MODEL_TIMEOUT);
       expect(data.message).toBe(
         'The model did not start responding within 90 seconds.',
       );
@@ -517,7 +517,7 @@ describe('/api/chat - Integration Tests', () => {
 
       expect(response.status).toBe(408);
       const data = await parseJsonResponse(response);
-      expect(data.code).toBe(ErrorCode.PIPELINE_TIMEOUT);
+      expect(data.code).toBe(ErrorCode.MODEL_TIMEOUT);
       expect(data.message).toBe(
         'The model did not start responding within 30 seconds.',
       );
