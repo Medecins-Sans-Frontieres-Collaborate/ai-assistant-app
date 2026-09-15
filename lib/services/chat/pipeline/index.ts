@@ -21,7 +21,13 @@
 export type { ChatContext, ProcessedContent } from './ChatContext';
 export type { PipelineStage } from './PipelineStage';
 export { BasePipelineStage } from './PipelineStage';
-export { ChatPipeline } from './ChatPipeline';
+export {
+  ChatPipeline,
+  STAGE_TIMEOUTS,
+  MODEL_HANDLER_STAGES,
+  isModelHandlerStage,
+  resolveStageTimeouts,
+} from './ChatPipeline';
 export type { Middleware } from './Middleware';
 export {
   applyMiddleware,
