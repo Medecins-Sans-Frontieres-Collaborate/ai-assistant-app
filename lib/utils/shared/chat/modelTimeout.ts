@@ -90,11 +90,14 @@ export function modelTimeoutPresetFor(
 
 /**
  * Error codes the chat route reports when the model did not start in time
- * (`PIPELINE_TIMEOUT` from a handler stage, `REQUEST_TIMEOUT` from the
- * route's whole-request guard). Both mean "waiting longer might help".
+ * (`MODEL_TIMEOUT` from the model handler stage, `REQUEST_TIMEOUT` from
+ * the route's whole-request guard). Both mean "waiting longer might help".
+ * A plain `PIPELINE_TIMEOUT` is deliberately NOT here: any stage (file
+ * processing, RAG, tool router) can raise it, and a longer model wait
+ * cannot fix those.
  */
 export const MODEL_TIMEOUT_ERROR_CODES = [
-  'PIPELINE_TIMEOUT',
+  'MODEL_TIMEOUT',
   'REQUEST_TIMEOUT',
 ] as const;
 
