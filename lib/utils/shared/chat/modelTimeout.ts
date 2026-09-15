@@ -66,6 +66,20 @@ export function escalateModelTimeoutSeconds(current: number): number | null {
   return Math.min(MAX_MODEL_TIMEOUT_SECONDS, base * 2);
 }
 
+/**
+ * Human-friendly unit for a timeout: whole minutes from two minutes up
+ * (180 → 3 minutes), seconds otherwise (90 → 90 seconds). The caller
+ * localizes the unit; this only decides which one.
+ */
+export function splitTimeoutDuration(seconds: number): {
+  unit: 'seconds' | 'minutes';
+  count: number;
+} {
+  const s = Math.max(0, Math.round(seconds));
+  if (s >= 120 && s % 60 === 0) return { unit: 'minutes', count: s / 60 };
+  return { unit: 'seconds', count: s };
+}
+
 /** Which preset (if any) a stored value corresponds to. */
 export function modelTimeoutPresetFor(
   seconds: number,
