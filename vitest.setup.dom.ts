@@ -1180,6 +1180,35 @@ Object.defineProperty(window, 'localStorage', {
   writable: true,
 });
 
+// jsdom implements layout stubs on Element but not on Range. ProseMirror's
+// coordsAtPos (reached through Tiptap's focus() → deferred scrollIntoView on
+// the next animation frame) measures text positions with a Range, so without
+// these any editor test whose frame fires before unmount dies with
+// "target.getClientRects is not a function" — an unhandled error that fails
+// the whole Vitest run and depends on machine timing (CI-only flake).
+const zeroRect = (): DOMRect => ({
+  x: 0,
+  y: 0,
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  width: 0,
+  height: 0,
+  toJSON: () => ({}),
+});
+if (typeof Range !== 'undefined') {
+  if (typeof Range.prototype.getClientRects !== 'function') {
+    Range.prototype.getClientRects = () =>
+      Object.assign([] as DOMRect[], {
+        item: () => null,
+      }) as unknown as DOMRectList;
+  }
+  if (typeof Range.prototype.getBoundingClientRect !== 'function') {
+    Range.prototype.getBoundingClientRect = zeroRect;
+  }
+}
+
 // Example setup code
 beforeAll(() => {
   console.log('Setting up before JSDom env tests');
