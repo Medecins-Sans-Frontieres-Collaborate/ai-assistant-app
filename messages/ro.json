@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "Supraregulă pentru {scope}",
     "delegationAdminNotMail": "Nu este o adresă de email — această intrare nu va corespunde niciodată cuiva.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# intrare admin nu este} other {# intrări admin nu sunt}} adrese de email. Adminii sunt identificați după emailul de autentificare, deci aceste intrări nu acordă nimic.",
-    "disabledDelegationNote": "Delegarea este dezactivată, astfel încât această suprascriere nu se aplică nimănui până când delegarea va fi reactivată. Nu este niciodată promovată la nivel global."
+    "disabledDelegationNote": "Delegarea este dezactivată, astfel încât această suprascriere nu se aplică nimănui până când delegarea va fi reactivată. Nu este niciodată promovată la nivel global.",
+    "betaPolicyNotice": "Mediu beta: această politică și contoarele ei de utilizare sunt stocate separat față de producție (policy.beta.json). Nimic din ce modificați aici nu afectează mediul de producție."
   },
   "m365": {
     "connections": {

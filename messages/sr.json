@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "Izmena za {scope}",
     "delegationAdminNotMail": "Nije email adresa — ovaj unos nikada neće odgovarati nikome.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# unos administratora nije} other {# unosa administratora nisu}} email adresa. Administratori se prepoznaju po prijavljenom emailu, tako da ovakvi unosi ništa ne omogućavaju.",
-    "disabledDelegationNote": "Njegova delegacija je onemogućena, tako da ova izmena ne važi za nikoga dok se delegacija ponovo ne omogući. Nikada se ne promoviše na globalni nivo."
+    "disabledDelegationNote": "Njegova delegacija je onemogućena, tako da ova izmena ne važi za nikoga dok se delegacija ponovo ne omogući. Nikada se ne promoviše na globalni nivo.",
+    "betaPolicyNotice": "Beta okruženje: ova pravila i njihovi brojači upotrebe čuvaju se odvojeno od produkcije (policy.beta.json). Sve što ovde promenite ne utiče na produkciju."
   },
   "m365": {
     "connections": {

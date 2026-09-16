@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "{scope} yliajo",
     "delegationAdminNotMail": "Ei sähköpostiosoite — tämä merkintä ei täsmää kehenkään.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# ylläpitäjämerkintä ei ole} other {# ylläpitäjämerkintää eivät ole}} sähköpostiosoite. Ylläpitäjät tunnistetaan kirjautumissähköpostilla, joten tällaiset merkinnät eivät anna oikeuksia.",
-    "disabledDelegationNote": "Delegointi on poistettu käytöstä, joten tämä yliajo ei koske ketään ennen kuin delegointi otetaan uudelleen käyttöön. Sitä ei koskaan edistetä yleiselle tasolle."
+    "disabledDelegationNote": "Delegointi on poistettu käytöstä, joten tämä yliajo ei koske ketään ennen kuin delegointi otetaan uudelleen käyttöön. Sitä ei koskaan edistetä yleiselle tasolle.",
+    "betaPolicyNotice": "Beta-ympäristö: tämä ohjeistus ja sen käyttölaskurit tallennetaan erillään tuotannosta (policy.beta.json). Tämän tekemilläsi muutoksilla ei ole vaikutusta tuotantoon."
   },
   "m365": {
     "connections": {

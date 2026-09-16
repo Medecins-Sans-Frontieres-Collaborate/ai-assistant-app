@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "{{scope}} override",
     "delegationAdminNotMail": "အီးမေးလ်လိပ်စာ မဟုတ်ပါ — ဤအချက်အလက်သည် မည်သူ့နှင့်မဆို မကိုက်ညီသည့်အများဆုံးဖြစ်ပါလိမ့်မည်။",
     "delegationAdminsInvalidWarning": "{count, plural, one {# admin entry သည်} other {# admin entries သည်}} အီးမေးလ်လိပ်စာ မဟုတ်ပါ။ Admin များအား sign-in အီးမေးလ်ဖြင့် ကိုက်ညီစစ်ဆေးသည်၊ ထို့ကြောင့် ဤအချက်အလက်များသည် ဘာအခွင့်အရေးမျှ မပေးနိုင်ပါ။",
-    "disabledDelegationNote": "၎င်း၏ delegation ကို ပိတ်ထားသဖြင့် ဤ override သည် delegation ပြန်ဖွင့်မချင်းမည်သည့်သူမှ မသက်ဆိုင်ပါ။ မည်သည့်အချိန်မှမှ Global tier သို့ တင်သွားမည် မဟုတ်ပါ။"
+    "disabledDelegationNote": "၎င်း၏ delegation ကို ပိတ်ထားသဖြင့် ဤ override သည် delegation ပြန်ဖွင့်မချင်းမည်သည့်သူမှ မသက်ဆိုင်ပါ။ မည်သည့်အချိန်မှမှ Global tier သို့ တင်သွားမည် မဟုတ်ပါ။",
+    "betaPolicyNotice": "ဘီတာပတ်ဝန်းကျင် - ဤမူဝါဒနှင့်အသုံးပြုမှု Counter များကို အသီးသီးသိမ်းထားပြီး၊ အသုံးပြုမည့်လုပ်ငန်းပမာဏ (policy.beta.json) နှင့် အသီးသီးထိန်းသိမ်းထားသည်။ ဤနေရာတွင် ပြင်ဆင်သည့်အရာများသည် ထုတ်လုပ်လုပ်ငန်း (production) တွင် သက်ရောက်မှုမရှိပါ။"
   },
   "m365": {
     "connections": {

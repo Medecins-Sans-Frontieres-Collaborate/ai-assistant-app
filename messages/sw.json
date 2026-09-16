@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "Kubadilisha kwa {scope}",
     "delegationAdminNotMail": "Sio anwani ya barua pepe — ingizo hili halitawahi kuendana na yeyote.",
     "delegationAdminsInvalidWarning": "{count, plural, one {Ingizo # la msimamizi si} other {Maingizo # ya wasimamizi si}} anwani ya barua pepe. Wasimamizi wanafananishwa kwa barua pepe wanayotumia kuingia, hivyo maingizo haya hayatoi ruhusa yoyote.",
-    "disabledDelegationNote": "Ugawaji wake umesitishwa, hivyo mabadiliko haya hayamhusu mtu yeyote hadi ugawaji utakapowezeshwa tena. Haiwahi kupandishwa hadi ngazi ya dunia nzima."
+    "disabledDelegationNote": "Ugawaji wake umesitishwa, hivyo mabadiliko haya hayamhusu mtu yeyote hadi ugawaji utakapowezeshwa tena. Haiwahi kupandishwa hadi ngazi ya dunia nzima.",
+    "betaPolicyNotice": "Mazingira ya Beta: sera hii na kaunta zake za matumizi zimehifadhiwa kando na zile za uzalishaji (policy.beta.json). Hakuna unachobadilisha hapa kitakachoathiri uzalishaji."
   },
   "m365": {
     "connections": {

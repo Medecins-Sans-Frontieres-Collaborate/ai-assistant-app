@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "Canjin {scope}",
     "delegationAdminNotMail": "Ba adireshin imel bane — wannan bayanin ba zai taba dacewa da kowa ba.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# bayanin admin ba} other {# bayanin admin ba su} } adireshin imel bane. Admin ana daidaita su ne da imel din shiga, don haka irin wannan bayanin baya ba da izini ko kadan.",
-    "disabledDelegationNote": "An kashe mayar da hankali, don haka wannan canji bazai shafi kowa ba sai an saita mayar da hankalin. Ba a taba mayar da shi zuwa matakin duniya ba."
+    "disabledDelegationNote": "An kashe mayar da hankali, don haka wannan canji bazai shafi kowa ba sai an saita mayar da hankalin. Ba a taba mayar da shi zuwa matakin duniya ba.",
+    "betaPolicyNotice": "Mahallin Beta: Ana adana wannan manufar da ƙididdigar amfani nata daban da na samarwa (policy.beta.json). Duk wani canji da ka yi a nan ba zai shafi samarwa ba."
   },
   "m365": {
     "connections": {

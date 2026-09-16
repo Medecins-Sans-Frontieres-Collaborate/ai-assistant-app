@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "{scope} wax-ka-beddel",
     "delegationAdminNotMail": "Kani email ma aha — gelitaankan waligiis lama jaanqaadi doono qofna.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# gelin ma aha email} other {# gelin ma ahan emails}}. Maamulka waxaa lagu aqoonsadaa email-kooda galitaanka, sidaas darteed gelinta noocan ahi waxba ma qabaneyso.",
-    "disabledDelegationNote": "Wakaa is-wareejinta lama hawlgelin, sidaas darteed is-bedelkan cidna kuma kordhayo ilaa markale la furo. Waligood kuma darso tier-ka guud."
+    "disabledDelegationNote": "Wakaa is-wareejinta lama hawlgelin, sidaas darteed is-bedelkan cidna kuma kordhayo ilaa markale la furo. Waligood kuma darso tier-ka guud.",
+    "betaPolicyNotice": "Deegaanka Beta: siyaasaddan iyo xisaabta isticmaalka waxaa si gooni ah looga kaydiyaa soosaarka (policy.beta.json). Wax kasta oo aad halkan ka beddesho ma saameeyaan soosaarka."
   },
   "m365": {
     "connections": {

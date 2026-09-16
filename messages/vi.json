@@ -5492,7 +5492,8 @@
     "liftableSourceOverride": "Ghi đè {scope}",
     "delegationAdminNotMail": "Không phải địa chỉ email — mục này sẽ không bao giờ khớp với ai cả.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# mục quản trị viên} other {# mục quản trị viên}} không phải địa chỉ email. Quản trị viên được xác định qua email đăng nhập nên các mục này sẽ không cấp quyền gì.",
-    "disabledDelegationNote": "Ủy quyền của nó đang bị tắt, nên ghi đè này sẽ không áp dụng cho ai cho đến khi ủy quyền được bật lại. Nó không bao giờ được nâng lên mức toàn cầu."
+    "disabledDelegationNote": "Ủy quyền của nó đang bị tắt, nên ghi đè này sẽ không áp dụng cho ai cho đến khi ủy quyền được bật lại. Nó không bao giờ được nâng lên mức toàn cầu.",
+    "betaPolicyNotice": "Môi trường beta: chính sách này và bộ đếm sử dụng của nó được lưu trữ riêng biệt với môi trường sản xuất (policy.beta.json). Mọi thay đổi tại đây sẽ không ảnh hưởng đến môi trường sản xuất."
   },
   "m365": {
     "connections": {

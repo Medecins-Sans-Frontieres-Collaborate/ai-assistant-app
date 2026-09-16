@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "{scope} オーバーライド",
     "delegationAdminNotMail": "メールアドレスではありません ― この項目は誰にも一致しません。",
     "delegationAdminsInvalidWarning": "{count, plural, one {# 件の管理者項目は} other {# 件の管理者項目は}}メールアドレスではありません。管理者はサインイン時のメールアドレスで照合されるため、このような項目では権限は付与されません。",
-    "disabledDelegationNote": "この委任は無効になっているため、再度有効にするまでオーバーライドは誰にも適用されません。グローバル階層に昇格することもありません。"
+    "disabledDelegationNote": "この委任は無効になっているため、再度有効にするまでオーバーライドは誰にも適用されません。グローバル階層に昇格することもありません。",
+    "betaPolicyNotice": "ベータ環境：このポリシーとその使用状況カウンターは本番環境とは別に保存されます（policy.beta.json）。ここでの変更は本番環境には影響しません。"
   },
   "m365": {
     "connections": {

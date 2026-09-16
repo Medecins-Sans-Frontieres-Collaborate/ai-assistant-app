@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "Fandavana {scope}",
     "delegationAdminNotMail": "Tsy adiresy mailaka — tsy hitovy amin'iza na iza mihitsy ity fidirana ity.",
     "delegationAdminsInvalidWarning": "{count, plural, one {Fidirana admin # no} other {Fidirana admin # no}} tsy adiresy mailaka. Ny mifanandrify amin'ny admins dia amin'ny mailaka idirana, ka tsy misy akory ny fahazoan-dalana amin'ireto fidirana ireto.",
-    "disabledDelegationNote": "Voahilika ny delegasiona, ka tsy mihatra amin’iza na iza ity fandavana ity raha tsy averina ampiasaina indray ny delegasiona. Tsy havaozina ho amin’ny sehatra maneran-tany izany."
+    "disabledDelegationNote": "Voahilika ny delegasiona, ka tsy mihatra amin’iza na iza ity fandavana ity raha tsy averina ampiasaina indray ny delegasiona. Tsy havaozina ho amin’ny sehatra maneran-tany izany.",
+    "betaPolicyNotice": "Beta environment: voatahiry misaraka amin'ny production (policy.beta.json) ity politika ity sy ny fanisam-pampiasana azy. Tsy misy zavatra ovainao eto hisy fiantraikany amin'ny production."
   },
   "m365": {
     "connections": {

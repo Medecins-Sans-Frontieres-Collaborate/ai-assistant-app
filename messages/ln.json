@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "Modifications ya {scope}",
     "delegationAdminNotMail": "Ezali te adresse email — entrée oyo ekokutana na moto moko te.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# entrée ya admin ezali} other {# ba entrées ya admin ezali}} te adresse email. Basalaki admin balandanaka na email na bango ya kokota, boye ba entrées wana ekopesa ata eloko moko te.",
-    "disabledDelegationNote": "Delegation na yango ezali te, boye modification oyo ekosala mpo na moto moko te kino delegation ezongeli. Ekotombwana te na niveau global."
+    "disabledDelegationNote": "Delegation na yango ezali te, boye modification oyo ekosala mpo na moto moko te kino delegation ezongeli. Ekotombwana te na niveau global.",
+    "betaPolicyNotice": "Ebateli ya beta: politike oyo ná ba komptɛr ya mikakatano na yango ebombami polele na esika ekabwani na production (policy.beta.json). Eloko nyonso okosala awa ekobongola te production."
   },
   "m365": {
     "connections": {

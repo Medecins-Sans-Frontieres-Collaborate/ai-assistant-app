@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "{scope} kodro",
     "delegationAdminNotMail": "Ala email address ândâ — mbênî na apê kodoro lo.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# entry tî admin ayeke} other {# entry tî admin ayeke}} la email address ândâ. Admin mbi kîri na email na sârö, ayeke na dîngö apê fê kodoro.",
-    "disabledDelegationNote": "Delegation tî yâ apê kîri, ebe kodro na sô apê linga ti môkô tî delegation a kîri na yâ tî sôsö. Ködörö na apê bêti gbalo na mbi."
+    "disabledDelegationNote": "Delegation tî yâ apê kîri, ebe kodro na sô apê linga ti môkô tî delegation a kîri na yâ tî sôsö. Ködörö na apê bêti gbalo na mbi.",
+    "betaPolicyNotice": "Beta ti mbi: Bê ti lo kêtê na sô ti mbi ti, ti usage counters na yeke sô ti lo na bê lo sô ti mbi bê ti mbi ti bê (policy.beta.json). Yeke ti oko na kêtê ape na sô ti mbi na production."
   },
   "m365": {
     "connections": {

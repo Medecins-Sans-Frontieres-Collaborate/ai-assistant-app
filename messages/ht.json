@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "Eksepsyon {scope}",
     "delegationAdminNotMail": "Se pa yon adrès imel — antre sa a pap janm koresponn ak okenn moun.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# antre admin se} other {# antre admin yo se}} pa yon adrès imel. Yo idantifye admin yo ak imel ouvèti sesyon an, donk antre sa yo pap bay okenn aksè.",
-    "disabledDelegationNote": "Delegasyon li dezaktive, donk eksepsyon sa a pa aplike pou pèsonn jiskaske delegasyon an aktive ankò. Li pap janm monte nan nivo global la."
+    "disabledDelegationNote": "Delegasyon li dezaktive, donk eksepsyon sa a pa aplike pou pèsonn jiskaske delegasyon an aktive ankò. Li pap janm monte nan nivo global la.",
+    "betaPolicyNotice": "Anviwònman beta : règleman sa a ak konte itilizasyon li yo estoke apa de prensipal la (policy.beta.json). Sa ou chanje isit la pa gen okenn efè sou prensipal la."
   },
   "m365": {
     "connections": {

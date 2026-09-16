@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "Substitució de {scope}",
     "delegationAdminNotMail": "No és una adreça de correu electrònic — aquesta entrada no coincidirà mai amb ningú.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# entrada d'administrador no és} other {# entrades d'administrador no són}} una adreça de correu electrònic. Els administradors es corresponen amb el seu correu d'accés, així que aquestes entrades no atorguen cap permís.",
-    "disabledDelegationNote": "La seva delegació està desactivada, de manera que aquesta substitució no aplica a ningú fins que la delegació es torni a activar. Mai no s’eleva al nivell global."
+    "disabledDelegationNote": "La seva delegació està desactivada, de manera que aquesta substitució no aplica a ningú fins que la delegació es torni a activar. Mai no s’eleva al nivell global.",
+    "betaPolicyNotice": "Entorn beta: aquesta política i els seus comptadors d'ús s'emmagatzemen separadament de producció (policy.beta.json). Els canvis que feu aquí no afecten la producció."
   },
   "m365": {
     "connections": {

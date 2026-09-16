@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "Àyípadà {scope}",
     "delegationAdminNotMail": "Kí í ṣe àdírẹ́sì ìmélì — àkọsílẹ̀ yìí kì yóò ba ẹnikẹ́ni mu.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# àkọsílẹ̀ alákóso ni} other {# àkọsílẹ̀ alákóso ni}} kí í ṣe àdírẹ́sì ìmélì. Àlákóso ń bà a mu lórí imeeli wíwọlé, bẹ́ẹ̀ ni àwọn àkọsílẹ̀ bẹ́ẹ̀ kò le fúnni ní àṣẹ kankan.",
-    "disabledDelegationNote": "Ìpinpin rẹ̀ ti dènà, béèyàn nìyí, àyípadà yìí kì í ní ipa sí ẹnikẹ́ni títí tí a fi tún ṣiṣẹ́ pinpin. Kò ní lọ sí pẹpẹ àgbáyé rí."
+    "disabledDelegationNote": "Ìpinpin rẹ̀ ti dènà, béèyàn nìyí, àyípadà yìí kì í ní ipa sí ẹnikẹ́ni títí tí a fi tún ṣiṣẹ́ pinpin. Kò ní lọ sí pẹpẹ àgbáyé rí.",
+    "betaPolicyNotice": "Ayika beta: ofin yii ati awọn kaunti lilo rẹ wa ni ipamọ yato si ayika iṣelọpọ (policy.beta.json). Ohun tí o ba yi pada nihin ko ni ni ipa lori iṣelọpọ."
   },
   "m365": {
     "connections": {

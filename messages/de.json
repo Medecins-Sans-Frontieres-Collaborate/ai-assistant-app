@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "{scope}-Überschreibung",
     "delegationAdminNotMail": "Keine E-Mail-Adresse – dieser Eintrag entspricht nie jemandem.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# Admin-Eintrag ist} other {# Admin-Einträge sind}} keine E-Mail-Adresse. Admins werden anhand ihrer Anmelde-E-Mail zugeordnet, daher haben solche Einträge keine Wirkung.",
-    "disabledDelegationNote": "Die Delegation ist deaktiviert, daher gilt diese Überschreibung für niemanden, bis die Delegation wieder aktiviert ist. Sie wird nie auf die globale Ebene übertragen."
+    "disabledDelegationNote": "Die Delegation ist deaktiviert, daher gilt diese Überschreibung für niemanden, bis die Delegation wieder aktiviert ist. Sie wird nie auf die globale Ebene übertragen.",
+    "betaPolicyNotice": "Beta-Umgebung: Diese Richtlinie und ihre Nutzungszähler werden getrennt von der Produktion gespeichert (policy.beta.json). Änderungen hier haben keinen Einfluss auf die Produktion."
   },
   "m365": {
     "connections": {

@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "Sostituzione {scope}",
     "delegationAdminNotMail": "Non è un indirizzo email — questa voce non corrisponderà mai a nessuno.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# voce admin non è} other {# voci admin non sono}} un indirizzo email. Gli amministratori sono identificati tramite la loro email di accesso, quindi queste voci non concedono nulla.",
-    "disabledDelegationNote": "La sua delega è disabilitata, quindi questa sostituzione non si applica a nessuno finché la delega non viene riattivata. Non viene mai promossa a livello globale."
+    "disabledDelegationNote": "La sua delega è disabilitata, quindi questa sostituzione non si applica a nessuno finché la delega non viene riattivata. Non viene mai promossa a livello globale.",
+    "betaPolicyNotice": "Ambiente beta: questa policy e i relativi contatori di utilizzo sono memorizzati separatamente dalla produzione (policy.beta.json). Le modifiche apportate qui non influenzano la produzione."
   },
   "m365": {
     "connections": {

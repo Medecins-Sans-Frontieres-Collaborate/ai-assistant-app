@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "Overschrijving voor {scope}",
     "delegationAdminNotMail": "Geen e-mailadres — deze invoer komt nooit met iemand overeen.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# beheerderinvoer is} other {# beheerderinvoeren zijn}} geen e-mailadres. Beheerders worden gekoppeld op hun inlog-e-mailadres, dus zulke invoeren geven nooit rechten.",
-    "disabledDelegationNote": "De delegatie is uitgeschakeld, dus deze overschrijving geldt voor niemand totdat de delegatie weer wordt ingeschakeld. Wordt nooit doorgezet naar het globale niveau."
+    "disabledDelegationNote": "De delegatie is uitgeschakeld, dus deze overschrijving geldt voor niemand totdat de delegatie weer wordt ingeschakeld. Wordt nooit doorgezet naar het globale niveau.",
+    "betaPolicyNotice": "Bèta-omgeving: dit beleid en de teller voor gebruik worden apart opgeslagen van productie (policy.beta.json). Alles wat u hier wijzigt, heeft geen invloed op de productie."
   },
   "m365": {
     "connections": {
