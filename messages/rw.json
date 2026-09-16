@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "Ubwigene {scope}",
     "delegationAdminNotMail": "Si aderesi ya email — iri zina ntirizigera rihura n'umuntu uwo ari we wese.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# izina rya admin} other {# amazina ya admin}} si aderesi ya email. Abayobozi bahuzwa na email bakoresha kwinjira, bityo ayo mazina ntacyo atanga.",
-    "disabledDelegationNote": "Ubu bufatanye burafunzwe, bityo ubu bwigene ntibuzakoreshwa kugeza bufunguwe. Ntabwo buhinduka urwego rusange."
+    "disabledDelegationNote": "Ubu bufatanye burafunzwe, bityo ubu bwigene ntibuzakoreshwa kugeza bufunguwe. Ntabwo buhinduka urwego rusange.",
+    "betaPolicyNotice": "Ahantu h'igerageza: iri tegeko n'ibibarurira imikoreshereze bibikwa ukwabyo bitandukanye n'aho bikorerwa (policy.beta.json). Ibuhindura aha ntibizagira icyo bihindura ku mikorere isanzwe."
   },
   "m365": {
     "connections": {

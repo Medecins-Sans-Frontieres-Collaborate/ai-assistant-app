@@ -13,9 +13,69 @@
 import { z } from 'zod';
 
 export const LIMITS_PREFIX = 'system/limits/';
-export const LIMITS_POLICY_PATH = `${LIMITS_PREFIX}policy.json`;
-export const LIMITS_HISTORY_PREFIX = `${LIMITS_PREFIX}history/`;
-export const LIMITS_USAGE_PREFIX = `${LIMITS_PREFIX}usage/`;
+
+/**
+ * Environment-suffixed blob names for the limits dataset.
+ *
+ * ⚠ BETA CARVE-OUT. Beta and prod are two container apps on ONE shared
+ * infrastructure: the same EU storage account, the same `ai-portal-admin`
+ * container, the same search index, the same Foundry accounts. We cannot
+ * replicate those resources for a second environment, and splitting off a
+ * single container for one store would leave every other admin store as a
+ * phantom competing for the same location. So beta gets the config-file
+ * convention instead — `policy.json` next to `policy.beta.json` — inside the
+ * same container:
+ *
+ *   prod  system/limits/policy.json   history/       usage/
+ *   beta  system/limits/policy.beta.json  history.beta/  usage.beta/
+ *
+ * Why the WHOLE dataset and not just the policy: a stored limits policy is
+ * enforced regardless of any flag (docs/LIMITS.md), so before this a policy
+ * authored while testing in beta was prod's live policy. Counters and audit
+ * history are suffixed too so a beta tester can exhaust and reset a test cap
+ * without that traffic surfacing in prod's per-user history the day prod
+ * enables limits. Runtime state never crosses environments.
+ *
+ * Why only beta: dev and localhost already use the dev storage account and
+ * are isolated from prod by account, so their paths stay unsuffixed. Prod's
+ * paths are unchanged, so nothing migrates. `staging` is an alias for the
+ * beta ring exactly as in config/models.ts.
+ *
+ * `NEXT_PUBLIC_ENV` is read directly (not via config/environment) so this
+ * module stays free of server-only imports for the client components that
+ * value-import the schemas, and so server and client agree on the variant.
+ */
+const BETA_ENVIRONMENTS: ReadonlySet<string> = new Set(['beta', 'staging']);
+
+export function limitsBlobVariant(
+  publicEnv: string | undefined = process.env.NEXT_PUBLIC_ENV,
+): 'beta' | null {
+  return publicEnv !== undefined && BETA_ENVIRONMENTS.has(publicEnv)
+    ? 'beta'
+    : null;
+}
+
+export interface LimitsBlobPaths {
+  policyPath: string;
+  historyPrefix: string;
+  usagePrefix: string;
+}
+
+/** Pure builder so tests can assert both variants without touching env. */
+export function limitsBlobPaths(variant: 'beta' | null): LimitsBlobPaths {
+  const suffix = variant ? `.${variant}` : '';
+  return {
+    policyPath: `${LIMITS_PREFIX}policy${suffix}.json`,
+    historyPrefix: `${LIMITS_PREFIX}history${suffix}/`,
+    usagePrefix: `${LIMITS_PREFIX}usage${suffix}/`,
+  };
+}
+
+const ACTIVE_LIMITS_PATHS = limitsBlobPaths(limitsBlobVariant());
+
+export const LIMITS_POLICY_PATH = ACTIVE_LIMITS_PATHS.policyPath;
+export const LIMITS_HISTORY_PREFIX = ACTIVE_LIMITS_PATHS.historyPrefix;
+export const LIMITS_USAGE_PREFIX = ACTIVE_LIMITS_PATHS.usagePrefix;
 
 /**
  * ⚠ `null` means UNLIMITED — an explicit statement. A key being ABSENT from

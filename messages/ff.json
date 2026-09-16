@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "{scope} override",
     "delegationAdminNotMail": "Haa email address — entri ɗee waawaani ko andi gooto.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# admin entry ko} other {# admin entries ko}} haalemail address. Admin'en anndaani e email mum no they sign-in, entri ɗe waawaani firteede.",
-    "disabledDelegationNote": "Delegation mum tawii yonii, override ɗee waawaani fayde hay so delegation mum daananii. O waawaani yeddu e global tier."
+    "disabledDelegationNote": "Delegation mum tawii yonii, override ɗee waawaani fayde hay so delegation mum daananii. O waawaani yeddu e global tier.",
+    "betaPolicyNotice": "Galle beta: politik rewtinde e junngol ummoraade e mum woni hoore kadi aɗa ɗaɓɓi, tawi ko laawol beta (policy.beta.json). Hol ko a wayli da e heñnde nde ina jamfa e laawol gistugal."
   },
   "m365": {
     "connections": {

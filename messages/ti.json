@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "{scope} ሓዋሪ",
     "delegationAdminNotMail": "ኣይኮነን email ኣድራሻ — እዚ መዝገብ ንሓንቲ ሰብ ኣይተሰርሓን።",
     "delegationAdminsInvalidWarning": "{count, plural, one {# ኣስተዳደር መዝገብ ኣይኮነን email ኣድራሻ} other {# ኣስተዳደር መዝገባት ኣይኮኑን email ኣድራሻት}}። ኣስተዳደራት ብናተ email ናይ መእተው ይገብሩ። እታ መዝገብ ዓይነት ውሑድ ዓይነት ኣይሰረሐን።",
-    "disabledDelegationNote": "ናይኡ delegation ብዝተሰጠ ኣይኮነን፣ ነዚ ሓዋሪ ንሓደ ሰብ ክፈፅም ኣይከኣለን ክብል delegation ክብጸም። ወይንኡ፡ ንኣለም ውሽጣዊ ደረጃ ኣብዚ ኣይስተርዕሕን።"
+    "disabledDelegationNote": "ናይኡ delegation ብዝተሰጠ ኣይኮነን፣ ነዚ ሓዋሪ ንሓደ ሰብ ክፈፅም ኣይከኣለን ክብል delegation ክብጸም። ወይንኡ፡ ንኣለም ውሽጣዊ ደረጃ ኣብዚ ኣይስተርዕሕን።",
+    "betaPolicyNotice": "ቤታ (Beta) አካባቢ፡ እዚ ፖሊሲን ዘምግዓሉ መቆጸሪ ሓሳባት ብሓደ ከተፈላለየ ከም ተምጽኦ ይሑዱ እየ (policy.beta.json)። ኣብዚ ዝተረኽበካ ምኽንያት ምንታይም እዋናዊ (production) ኣይተጽናከለን።"
   },
   "m365": {
     "connections": {

@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "{scope}-överskrivning",
     "delegationAdminNotMail": "Inte en e-postadress — denna post kommer aldrig att matcha någon.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# administratörspost är} other {# administratörsposter är}} inte en e-postadress. Administratörer matchas på sin inloggnings-e-post, så sådana poster ger aldrig någon behörighet.",
-    "disabledDelegationNote": "Dess delegering är inaktiverad, så denna överskrivning gäller ingen förrän delegeringen aktiveras igen. Den uppgraderas aldrig till global nivå."
+    "disabledDelegationNote": "Dess delegering är inaktiverad, så denna överskrivning gäller ingen förrän delegeringen aktiveras igen. Den uppgraderas aldrig till global nivå.",
+    "betaPolicyNotice": "Beta-miljö: denna policy och dess användningsräknare lagras separat från produktionen (policy.beta.json). Ändringar du gör här påverkar inte produktionen."
   },
   "m365": {
     "connections": {

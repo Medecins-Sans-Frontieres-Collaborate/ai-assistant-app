@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "Dérogation {scope}",
     "delegationAdminNotMail": "Pas une adresse e-mail — cette entrée ne correspondra jamais à personne.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# entrée admin n’est} other {# entrées admin ne sont}} pas une adresse e-mail. Les admins sont identifiés via leur e-mail de connexion, donc ces entrées ne donnent jamais de droits.",
-    "disabledDelegationNote": "Sa délégation est désactivée, donc cette dérogation ne s’applique à personne tant que la délégation n’est pas réactivée. Elle n’est jamais promue au niveau global."
+    "disabledDelegationNote": "Sa délégation est désactivée, donc cette dérogation ne s’applique à personne tant que la délégation n’est pas réactivée. Elle n’est jamais promue au niveau global.",
+    "betaPolicyNotice": "Environnement bêta : cette politique et ses compteurs d'utilisation sont stockés séparément de la production (policy.beta.json). Toute modification ici n'affectera pas la production."
   },
   "m365": {
     "connections": {

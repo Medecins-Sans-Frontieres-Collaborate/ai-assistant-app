@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "Penggantian {scope}",
     "delegationAdminNotMail": "Bukan alamat email — entri ini tidak akan pernah cocok dengan siapa pun.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# entri admin bukan} other {# entri admin bukan}} alamat email. Admin dicocokkan berdasarkan email masuk mereka, sehingga entri seperti ini tidak pernah memberikan akses apa pun.",
-    "disabledDelegationNote": "Delegasi ini dinonaktifkan, sehingga penggantian ini tidak berlaku untuk siapa pun sampai delegasi diaktifkan kembali. Tidak pernah dipromosikan ke tingkat global."
+    "disabledDelegationNote": "Delegasi ini dinonaktifkan, sehingga penggantian ini tidak berlaku untuk siapa pun sampai delegasi diaktifkan kembali. Tidak pernah dipromosikan ke tingkat global.",
+    "betaPolicyNotice": "Lingkungan beta: kebijakan ini dan penghitung penggunaannya disimpan terpisah dari produksi (policy.beta.json). Perubahan apa pun di sini tidak akan memengaruhi produksi."
   },
   "m365": {
     "connections": {

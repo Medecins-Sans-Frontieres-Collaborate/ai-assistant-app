@@ -98,3 +98,61 @@ deleted.
   the debit stays off the response path if that ever becomes measurable.
 - An EU-storage outage now affects admin-config freshness for all users
   (softened by stale-serve). The health check above makes that visible.
+
+## Beta separation (2026-09-15, revised 2026-09-16)
+
+**Problem.** Beta and prod run as separate container apps against the same
+EU storage account and both resolve the same `ai-portal-admin` container, so
+an admin edit made while testing in beta is a production edit. The one that
+bites is the **usage-limits policy**: a stored policy is enforced regardless
+of any flag (docs/LIMITS.md), so authoring a test policy in beta limited prod.
+
+**Decision.** No infrastructure split. Beta and prod share ONE
+infrastructure — storage account, admin container, search index, Foundry
+accounts — and we cannot replicate those resources for a second environment.
+A separate admin container for beta (the first version of this section) was
+rejected: it splits off one piece while every other shared resource stays
+shared, leaving the copied stores as phantoms competing for the same
+location, and it needs a seed step to be usable at all.
+
+Instead the limits dataset follows the config-file convention — a
+`policy.json` next to a `policy.beta.json` — **inside the same container**:
+
+| Data           | prod (unchanged)            | beta                             |
+| -------------- | --------------------------- | -------------------------------- |
+| policy         | `system/limits/policy.json` | `system/limits/policy.beta.json` |
+| audit history  | `system/limits/history/`    | `system/limits/history.beta/`    |
+| usage counters | `system/limits/usage/`      | `system/limits/usage.beta/`      |
+
+The variant is derived from `NEXT_PUBLIC_ENV` (`beta`, or its `staging`
+alias) in `lib/services/limits/types.ts`, which is the single place every
+limits blob name is built from. No Terraform, no env var, no new container,
+no seeding. Prod's paths do not move.
+
+Why the whole dataset and not just the policy: counters and history are
+runtime state and must never cross environments. A beta tester needs to
+exhaust and reset a test cap without that traffic appearing in prod's
+per-user history the day prod enables limits.
+
+Why only beta: dev and localhost already use the dev storage account and are
+isolated from prod by account.
+
+What stays shared, on purpose: everything else under `system/` — agent
+access, agents, guides, connectors, map datasets, form templates, workflow
+policy, and the global-admin roster (the same people administer both). Those
+stores carry their own beta-vs-prod differences through env gates and
+per-environment LaunchDarkly flags, which is enough because none of them is
+enforced from a blob the way a limits policy is.
+
+Operational notes:
+
+- The limits admin panel shows a "Beta environment" notice on beta so an
+  admin knows which document they are editing.
+- Starting beta from prod's policy is one blob copy, `policy.json` →
+  `policy.beta.json`, done by hand if ever wanted. There is no automatic
+  copy in either direction.
+- The retention/lifecycle guidance for `system/limits/usage/` in
+  docs/LIMITS.md applies to `usage.beta/` as well; keep any rule
+  prefix-scoped to those two prefixes and never account-wide (invariant 3).
+- `scripts/seed-admin-storage-beta.sh` implemented the rejected
+  separate-container design and is superseded by this section.

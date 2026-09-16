@@ -4762,6 +4762,7 @@
     "timezoneChangeWarning": "Changing the timezone from {from} to {to} starts every daily and monthly counter from zero for everyone, and for up to a minute after saving, different servers may count against different days. Existing usage for the current period is not carried over.",
     "observeNotice": "Observe mode is on: nothing is blocked. Every limit that would have blocked someone is written to the server log instead, so you can check the policy against real usage before enforcing it.",
     "propagationNotice": "Changes take up to 60 seconds to reach every server.",
+    "betaPolicyNotice": "Beta environment: this policy and its usage counters are stored separately from production (policy.beta.json). Nothing you change here affects production.",
     "tab": {
       "defaults": "Global defaults",
       "overrides": "Overrides",

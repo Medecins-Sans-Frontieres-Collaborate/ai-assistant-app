@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "Přepsání pro {scope}",
     "delegationAdminNotMail": "Není e-mailová adresa — tento záznam nikdy nikoho neodpovídá.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# administrátorský záznam není} other {# administrátorských záznamů nejsou}} e-mailová adresa. Administrátoři se ověřují podle svého přihlašovacího e-mailu, takové záznamy proto nikdy nic neudělí.",
-    "disabledDelegationNote": "Žádné delegování není aktivní, takže toto přepsání neplatí pro nikoho, dokud nebude delegování znovu povoleno. Nikdy nebude povýšeno na globální úroveň."
+    "disabledDelegationNote": "Žádné delegování není aktivní, takže toto přepsání neplatí pro nikoho, dokud nebude delegování znovu povoleno. Nikdy nebude povýšeno na globální úroveň.",
+    "betaPolicyNotice": "Testovací prostředí: tato zásada a její čítače použití jsou uloženy odděleně od produkčního prostředí (policy.beta.json). Změny provedené zde neovlivní produkci."
   },
   "m365": {
     "connections": {

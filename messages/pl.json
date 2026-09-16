@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "Nadpisanie: {scope}",
     "delegationAdminNotMail": "To nie jest adres e-mail — ten wpis nigdy nie zostanie dopasowany.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# wpis administratora nie jest} other {# wpisy administratorów nie są}} adresem e-mail. Administratorzy są dopasowywani po adresie logowania, więc takie wpisy nigdy nic nie przyznają.",
-    "disabledDelegationNote": "Delegowanie jest wyłączone, więc to nadpisanie nie dotyczy nikogo, dopóki delegowanie nie zostanie ponownie włączone. Nigdy nie jest promowane do poziomu globalnego."
+    "disabledDelegationNote": "Delegowanie jest wyłączone, więc to nadpisanie nie dotyczy nikogo, dopóki delegowanie nie zostanie ponownie włączone. Nigdy nie jest promowane do poziomu globalnego.",
+    "betaPolicyNotice": "Środowisko beta: ta polityka i liczniki jej użycia są przechowywane oddzielnie od produkcji (policy.beta.json). Zmiany dokonane tutaj nie mają wpływu na środowisko produkcyjne."
   },
   "m365": {
     "connections": {

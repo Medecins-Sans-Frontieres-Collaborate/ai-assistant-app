@@ -7,8 +7,11 @@ import { useTranslations } from 'next-intl';
 
 import { useScopedLimits } from '@/client/hooks/settings/useLimitsAdmin';
 
+import { limitsBlobVariant } from '@/lib/services/limits/types';
+
 import {
   ADMIN_BANNER_ERROR,
+  ADMIN_BANNER_WARN,
   ADMIN_BTN_RETRY,
 } from '@/components/Admin/adminClasses';
 import { GlobalLimitsPanel } from '@/components/Limits/GlobalLimitsPanel';
@@ -38,6 +41,10 @@ export const LimitsPanel: FC = () => {
   const scoped = useScopedLimits();
 
   const scopedMode = scoped.data !== undefined && !scoped.data.isGlobalAdmin;
+  // Beta stores its policy + counters under suffixed blob names in the shared
+  // admin container (carve-out note in lib/services/limits/types.ts); tell
+  // the admin which document they are editing.
+  const betaVariant = limitsBlobVariant() === 'beta';
   const unavailable =
     scoped.isError ||
     (scoped.data !== undefined &&
@@ -56,6 +63,11 @@ export const LimitsPanel: FC = () => {
         <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
           {scopedMode ? t('scopedDescription') : t('description')}
         </p>
+        {betaVariant && (
+          <p role="note" className={`mb-6 ${ADMIN_BANNER_WARN}`}>
+            {t('betaPolicyNotice')}
+          </p>
+        )}
 
         {unavailable ? (
           <div role="alert" className={ADMIN_BANNER_ERROR}>

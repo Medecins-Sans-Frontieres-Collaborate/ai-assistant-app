@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "{scope} 재정의",
     "delegationAdminNotMail": "이메일 주소가 아닙니다 — 이 항목은 누구와도 일치하지 않습니다.",
     "delegationAdminsInvalidWarning": "{count, plural, one {#개 관리자 항목이} other {#개 관리자 항목이}} 이메일 주소가 아닙니다. 관리자는 로그인 이메일로 일치되므로, 이러한 항목은 어떠한 권한도 부여하지 않습니다.",
-    "disabledDelegationNote": "위임이 비활성화되어 있으므로, 위임이 다시 활성화되기 전까지 이 재정의는 아무에게도 적용되지 않습니다. 전역 계층으로 승격되지 않습니다."
+    "disabledDelegationNote": "위임이 비활성화되어 있으므로, 위임이 다시 활성화되기 전까지 이 재정의는 아무에게도 적용되지 않습니다. 전역 계층으로 승격되지 않습니다.",
+    "betaPolicyNotice": "베타 환경: 이 정책과 사용 카운터는 운영 환경과 별도로 저장됩니다(policy.beta.json). 여기서 변경하는 내용은 운영 환경에 영향을 주지 않습니다."
   },
   "m365": {
     "connections": {

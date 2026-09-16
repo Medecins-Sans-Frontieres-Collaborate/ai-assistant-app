@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "{scope} አሻሻይ",
     "delegationAdminNotMail": "ኢሜይል አይደለም — ይህ ግቤት ማንንም አይዛመድም።",
     "delegationAdminsInvalidWarning": "{count, plural, one {# የአስተዳዳሪ ግቤት ኢሜይል አይደለም።} other {# የአስተዳዳሪ ግቤቶች ኢሜይሎች አይደሉም።}} አስተዳዳሪዎች በማስገቢያ ኢሜይላቸው እንደተመዘገቡ እንደዚህ ዓይነት ግቤት ምንም አይሰጥም።",
-    "disabledDelegationNote": "እዚህ የተገለጸው አሻሻይ በማንም ላይ እስካልተጠናቀቀ ድረስ አይሰራም። ወደ አጠቃላይ ደረጃ ፈጽሞ አይገባም።"
+    "disabledDelegationNote": "እዚህ የተገለጸው አሻሻይ በማንም ላይ እስካልተጠናቀቀ ድረስ አይሰራም። ወደ አጠቃላይ ደረጃ ፈጽሞ አይገባም።",
+    "betaPolicyNotice": "ቤታ አካባቢ፡ ይህ ፖሊሲ እና የአጠቃቀም ቁጥሮቹ ከስራ ላይ ያለው በተለየ ሁኔታ policy.beta.json ውስጥ ይቆመዋል። እዚህ የሚያደርጉት ማንኛውም ለውጥ በስራ ላይ ያለውን አይቀይርም።"
   },
   "m365": {
     "connections": {

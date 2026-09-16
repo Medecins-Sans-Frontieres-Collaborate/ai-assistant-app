@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "{scope} override",
     "delegationAdminNotMail": "Si imelo adilesi — cholowera ichi sichidzagwirizana ndi aliyense.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# cholowera cha admin ndi} other {# zolowera za admin ndi}} osati imelo adilesi. Ma admin amapezedwa ndi imelo yawo yolowera, kotero zinthu zotere sizingapereke chilichonse.",
-    "disabledDelegationNote": "Delegation yake yatsekedwa, choncho override imeneyi sichigwira mpaka delegation itayambiranso. Simakwelera pa ntchito yadziko lonse."
+    "disabledDelegationNote": "Delegation yake yatsekedwa, choncho override imeneyi sichigwira mpaka delegation itayambiranso. Simakwelera pa ntchito yadziko lonse.",
+    "betaPolicyNotice": "Malo a Beta: malamulo awa ndi zowerengera zomwe zikugwiritsidwa ntchito zimasungidwa payokha kuchokera ku production (policy.beta.json). Chilichonse chomwe musintha pano sichidzakhudza production."
   },
   "m365": {
     "connections": {

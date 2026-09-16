@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "Sustitución de {scope}",
     "delegationAdminNotMail": "No es una dirección de correo electrónico: esta entrada nunca coincidirá con nadie.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# entrada de administrador no es} other {# entradas de administrador no son}} una dirección de correo electrónico. Los administradores se identifican por su correo de inicio de sesión, así que estas entradas nunca otorgan nada.",
-    "disabledDelegationNote": "Su delegación está deshabilitada, por lo que esta sustitución no se aplica a nadie hasta que se habilite nuevamente. Nunca se promueve al nivel global."
+    "disabledDelegationNote": "Su delegación está deshabilitada, por lo que esta sustitución no se aplica a nadie hasta que se habilite nuevamente. Nunca se promueve al nivel global.",
+    "betaPolicyNotice": "Entorno beta: esta política y sus contadores de uso se almacenan por separado de producción (policy.beta.json). Nada de lo que cambie aquí afecta a producción."
   },
   "m365": {
     "connections": {

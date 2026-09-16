@@ -5492,7 +5492,8 @@
     "liftableSourceOverride": "{scope} 覆盖",
     "delegationAdminNotMail": "不是电子邮件地址，此项永远不会匹配任何人。",
     "delegationAdminsInvalidWarning": "{count, plural, one {# 个管理员记录不是电子邮件地址。} other {# 个管理员记录不是电子邮件地址。}}管理员通过登录邮箱匹配，这些记录不会授予权限。",
-    "disabledDelegationNote": "此委托已禁用，因此该覆盖设置在再次启用委托前对任何人都无效。不会提升为全局级别。"
+    "disabledDelegationNote": "此委托已禁用，因此该覆盖设置在再次启用委托前对任何人都无效。不会提升为全局级别。",
+    "betaPolicyNotice": "测试环境：此策略及其使用计数器与生产环境分开存储（policy.beta.json）。您在此处所做的任何更改都不会影响生产环境。"
   },
   "m365": {
     "connections": {

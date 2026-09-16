@@ -5445,7 +5445,8 @@
     "liftableSourceOverride": "Ukungena kwe-{scope} kuphezulu",
     "delegationAdminNotMail": "Akusona ikheli le-imeyili — lolu fakelo alusoze lufane nomuntu.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# lokungeniswa kwe-admin akusona ikheli le-imeyili} other {# zokungeniswa kwe-admin akusona amakheli e-imeyili}}. Abaphathi bafaniswa nge-imeyili yabo yokungena, ngakho la mafayela awanikezi lutho.",
-    "disabledDelegationNote": "Ukwabelana kwakhona akusebenzi, ngakho lokhu kungena akufanele muntu kuze kube sekuvuliwe futhi. Akukaze kufakwe ezingeni le-global."
+    "disabledDelegationNote": "Ukwabelana kwakhona akusebenzi, ngakho lokhu kungena akufanele muntu kuze kube sekuvuliwe futhi. Akukaze kufakwe ezingeni le-global.",
+    "betaPolicyNotice": "Imvelo ye-Beta: le nqubomgomo kanye nezibali zayo zokusetshenziswa zigcinwa ngokwehlukana kokukhiqiza (policy.beta.json). Lutho olushintsha lapha luzothinta okukhiqiza."
   },
   "m365": {
     "connections": {

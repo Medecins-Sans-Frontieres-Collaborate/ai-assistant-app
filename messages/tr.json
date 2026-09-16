@@ -5461,7 +5461,8 @@
     "liftableSourceOverride": "{scope} geçersiz kılma",
     "delegationAdminNotMail": "Bir e-posta adresi değil — bu girdi kimseyle eşleşmeyecek.",
     "delegationAdminsInvalidWarning": "{count, plural, one {# yönetici girişi} other {# yönetici girişi}} bir e-posta adresi değil. Yöneticiler oturum açma e-postası ile eşleştirilir, bu nedenle bu tür girdiler hiçbir yetki vermez.",
-    "disabledDelegationNote": "Delegasyonu devre dışı bırakıldı, bu yüzden bu geçersiz kılma, delegasyon yeniden etkinleştirilene kadar kimseye uygulanmaz. Asla genel düzeye yükseltilmez."
+    "disabledDelegationNote": "Delegasyonu devre dışı bırakıldı, bu yüzden bu geçersiz kılma, delegasyon yeniden etkinleştirilene kadar kimseye uygulanmaz. Asla genel düzeye yükseltilmez.",
+    "betaPolicyNotice": "Beta ortamı: Bu politika ve kullanım sayaçları, üretimden (policy.beta.json) ayrı olarak saklanır. Burada yaptığınız hiçbir değişiklik üretimi etkilemez."
   },
   "m365": {
     "connections": {
