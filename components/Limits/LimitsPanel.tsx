@@ -11,6 +11,7 @@ import { limitsBlobVariant } from '@/lib/services/limits/types';
 
 import {
   ADMIN_BANNER_ERROR,
+  ADMIN_BANNER_WARN,
   ADMIN_BTN_RETRY,
 } from '@/components/Admin/adminClasses';
 import { GlobalLimitsPanel } from '@/components/Limits/GlobalLimitsPanel';
@@ -63,10 +64,7 @@ export const LimitsPanel: FC = () => {
           {scopedMode ? t('scopedDescription') : t('description')}
         </p>
         {betaVariant && (
-          <p
-            role="note"
-            className="mb-6 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-200"
-          >
+          <p role="note" className={`mb-6 ${ADMIN_BANNER_WARN}`}>
             {t('betaPolicyNotice')}
           </p>
         )}
