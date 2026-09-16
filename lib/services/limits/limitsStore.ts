@@ -1,7 +1,9 @@
 /**
  * Blob persistence for the usage-limits policy and its audit history.
  *
- * ONE document (`system/limits/policy.json`), not per-override blobs. This is
+ * ONE document (`system/limits/policy.json`; `policy.beta.json` on beta — see
+ * the carve-out note in lib/services/limits/types.ts), not per-override
+ * blobs. This is
  * the single most important structural choice here: with per-override blobs a
  * malformed record fails OPEN — that user silently becomes unlimited, and
  * nobody finds out. With one document a parse failure is loud, total, and
