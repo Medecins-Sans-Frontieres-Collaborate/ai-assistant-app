@@ -19,6 +19,12 @@ export const AGENT_ACCESS_GENERATION_PATH = `${AGENT_ACCESS_PREFIX}generation.js
 export const AGENT_ACCESS_PROMPT_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}prompt-agents/`;
 export const AGENT_ACCESS_CONNECTORS_PREFIX = `${AGENT_ACCESS_PREFIX}connectors/`;
 export const AGENT_ACCESS_GUIDES_PREFIX = `${AGENT_ACCESS_PREFIX}guides/`;
+/**
+ * Immutable guide PAYLOAD blobs (`<id>/<ref>.<json|jsonl>.gz`) — a SIBLING of
+ * guides/, never under it: the guides listing feeds the access snapshot and
+ * must stay meta-only (that is the point of the split). See guidePayloadStore.
+ */
+export const AGENT_ACCESS_GUIDE_PAYLOADS_PREFIX = `${AGENT_ACCESS_PREFIX}guide-payloads/`;
 export const AGENT_ACCESS_CATALOG_OAUTH_PREFIX = `${AGENT_ACCESS_PREFIX}catalog-oauth/`;
 export const AGENT_ACCESS_MAP_DATASET_META_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/meta/`;
 export const AGENT_ACCESS_MAP_DATASET_DATA_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/data/`;
@@ -804,6 +810,17 @@ export const GuideGlossaryEntrySchema = z.object({
  * to null and callers fail closed. The admin write route enforces the strict
  * per-kind shape.
  */
+/** Serialization of an external guide payload blob (see guidePayloadStore). */
+export const GuidePayloadFormatSchema = z.enum(['json', 'jsonl']);
+export type GuidePayloadFormat = z.infer<typeof GuidePayloadFormatSchema>;
+
+/**
+ * Opaque, sortable payload reference: `<base36 epoch ms>-<8 hex>`. The epoch
+ * prefix lets pruning keep a grace window for stale-snapshot readers without
+ * a listing-with-properties round trip.
+ */
+export const GUIDE_PAYLOAD_REF_PATTERN = /^[0-9a-z]{6,12}-[0-9a-f]{8}$/;
+
 export const GuideSchema = z.object({
   version: z.literal(1),
   /** Server-generated `guide-<hex>`; immutable — canonical keys hang off it. */
@@ -813,6 +830,24 @@ export const GuideSchema = z.object({
   description: z.string().default(''),
   /** Advisory picker metadata (e.g. ['French']); never evaluated. */
   languages: z.array(z.string()).default([]),
+  /**
+   * Structured language pair for terminology guides (glossaries): catalog
+   * ids from TRANSLATION_LANGUAGES. Discovery metadata only — pickers sort
+   * and warn on it; nothing server-side enforces it. Optional so records
+   * written before the field existed keep working ("any language").
+   */
+  sourceLang: z.string().optional(),
+  targetLang: z.string().optional(),
+  /**
+   * SPLIT STORAGE: when set, this record is META only and the kind's payload
+   * fields live in the immutable blob `guidePayloadBlobPath(id, ref,
+   * format)`. Records without it carry their payload inline (legacy — the
+   * next admin save migrates them). Readers go through hydrateGuide().
+   */
+  payloadRef: z.string().regex(GUIDE_PAYLOAD_REF_PATTERN).optional(),
+  payloadFormat: GuidePayloadFormatSchema.optional(),
+  /** terminology: number of entries in the payload (listing badge). */
+  entryCount: z.number().int().nonnegative().optional(),
   /** style/compliance: markdown rubric, token-budgeted at injection. */
   body: z.string().optional(),
   /** tone: voice rules + optional examples (ToneInput shape). */
@@ -834,6 +869,62 @@ export type Guide = z.infer<typeof GuideSchema>;
 
 export type GuideSpecSection = z.infer<typeof GuideSpecSectionSchema>;
 export type GuideGlossaryEntry = z.infer<typeof GuideGlossaryEntrySchema>;
+
+/** The kind-specific payload fields a guide record may carry inline. */
+export const GUIDE_PAYLOAD_FIELD_KEYS = [
+  'body',
+  'voiceRules',
+  'examples',
+  'sections',
+  'generalGuidance',
+  'entries',
+] as const;
+export type GuidePayloadFieldKey = (typeof GUIDE_PAYLOAD_FIELD_KEYS)[number];
+export type GuidePayloadFields = Pick<Guide, GuidePayloadFieldKey>;
+
+/**
+ * Read schema for a JSON-format payload blob (prose kinds). Permissive like
+ * the record schema: every field optional, and guidePayload() remains the
+ * coherence gate after hydration.
+ */
+export const GuidePayloadFieldsSchema = z.object({
+  body: z.string().optional(),
+  voiceRules: z.string().optional(),
+  examples: z.string().optional(),
+  sections: z.array(GuideSpecSectionSchema).optional(),
+  generalGuidance: z.string().optional(),
+});
+
+/** True when the record's payload lives in an external blob. */
+export function hasExternalPayload(guide: Guide): boolean {
+  return guide.payloadRef !== undefined;
+}
+
+/** The record without any inline payload field — what META blobs store. */
+export function stripInlinePayload(guide: Guide): Guide {
+  const {
+    body: _body,
+    voiceRules: _voiceRules,
+    examples: _examples,
+    sections: _sections,
+    generalGuidance: _generalGuidance,
+    entries: _entries,
+    ...meta
+  } = guide;
+  return meta;
+}
+
+/** Just the inline payload fields of a record (undefined ones omitted). */
+export function inlinePayloadFields(guide: Guide): GuidePayloadFields {
+  const fields: GuidePayloadFields = {};
+  for (const key of GUIDE_PAYLOAD_FIELD_KEYS) {
+    const value = guide[key];
+    if (value !== undefined) {
+      (fields as Record<string, unknown>)[key] = value;
+    }
+  }
+  return fields;
+}
 
 /**
  * The kind-discriminated view of a guide's payload. Prompt builders consume
@@ -1147,6 +1238,24 @@ export function connectorBlobPath(id: string): string {
  */
 export function guideBlobPath(id: string): string {
   return `${AGENT_ACCESS_GUIDES_PREFIX}${id}.json`;
+}
+
+/**
+ * `system/agent-access/guide-payloads/<id>/<ref>.<json|jsonl>.gz` — one
+ * immutable blob per saved payload version. The meta record names the live
+ * one; older refs are pruned after a grace window (guidePayloadStore).
+ */
+export function guidePayloadBlobPath(
+  id: string,
+  ref: string,
+  format: GuidePayloadFormat,
+): string {
+  return `${guidePayloadListPrefix(id)}${ref}.${format}.gz`;
+}
+
+/** Listing prefix for every payload version of one guide. */
+export function guidePayloadListPrefix(id: string): string {
+  return `${AGENT_ACCESS_GUIDE_PAYLOADS_PREFIX}${id}/`;
 }
 
 export function formTemplateBlobPath(id: string): string {
