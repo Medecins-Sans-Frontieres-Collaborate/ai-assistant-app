@@ -2877,7 +2877,39 @@
       "acronymHint": "సంక్షిప్త రూపాలు టైప్ చేసినవిధంగా సరిపోతాయి: WHO అనేది “WHO” కు మాత్రమే వర్తిస్తుంది, “who” కు కాదు. పదాలు ఏయే అక్షర ప్రమాణీకరణకైనా సరిపోతాయి.",
       "glossaryCheckTitle": "పదకోశపు పరిశీలన",
       "glossaryCheckPass": "{count, plural, one {అవసరమైన పదాన్ని ఉపయోగించారు.} other {అన్ని # అవసరమైన పదాలు ఉపయోగించబడ్డాయి.}}",
-      "glossaryCheckMissing": "{count, plural, one {{total} అవసరమైన అనువాదాల్లో # లేదు:} other {{total} అవసరమైన అనువాదాల్లో # లేవు:}}"
+      "glossaryCheckMissing": "{count, plural, one {{total} అవసరమైన అనువాదాల్లో # లేదు:} other {{total} అవసరమైన అనువాదాల్లో # లేవు:}}",
+      "glossariesButton": "{count, plural, =0 {పదకోశాలు} one {# పదకోశం} other {# పదకోశాలు}}",
+      "glossaryPickerTitle": "పదకోశాలు",
+      "glossaryPickerClose": "పదకోశాలను మూసివేయు",
+      "glossaryOrgSection": "సంస్థ",
+      "glossaryMineSection": "నావి",
+      "noOrganizationGlossaries": "మీతో ఏ విధంగా సంస్థ పదకోశాలు పంచుకోలేదు.",
+      "noPersonalGlossaries": "మీ వద్ద ఇప్పటివరకు పదకోశాలు లేవు. ఒకదాన్ని సృష్టించడానికి నిర్వహణను ఉపయోగించండి లేదా సంస్థ పదకోశాన్ని కాపీ చేసుకోండి.",
+      "glossaryAnyLanguage": "ఏదైనా భాష",
+      "glossaryCustomLanguage": "అనుకూల భాష",
+      "glossaryEntryCount": "{count, plural, one {# పదం} other {# పదాలు}}",
+      "glossaryLanguageMismatch": "ఈ పదకోశం వేరే లక్ష్య భాషకు సూచించబడింది.",
+      "glossaryMismatchChip": "భాష అశరదం",
+      "glossaryOrgLimit": "ప్రతి అనువాదానికి {max} సంస్థ పదకోశాలు వరకు.",
+      "copyToMine": "{name} ని నా పదకోశాలకు కాపీ చేయు",
+      "copyToMineTitle": "నా పదకోశాలకు కాపీ చేయు",
+      "copyToMineFailed": "పదకోశాన్ని కాపీ చేయలేకపోయాం. మళ్లీ ప్రయత్నించండి.",
+      "copiedToMine": "మీ పదకోశాల్లో కాపీ చేయబడింది",
+      "copiedGlossaryName": "{name} (కాపీ)",
+      "clearStaleGlossary": "తొలగించు",
+      "glossaryUnavailable": "పదకోశం అందుబాటులో లేదు (తొలగించబడింది లేదా మీతో పంచుకోలేదు)",
+      "showOtherLanguages": "{count, plural, one {మరొక భాషకు # పదకోశాన్ని చూపు} other {ఇతర భాషలకు # పదకోశాలను చూపు}}",
+      "hideOtherLanguages": "ఇతర భాషలను దాచు",
+      "glossarySourceLang": "మూల భాష",
+      "glossaryTargetLang": "లక్ష్య భాష",
+      "glossaryLanguageEncourage": "పదకోశం ముందుగా రావాలంటే లక్ష్య భాషను సూచించండి.",
+      "importEntries": "CSV/TSV దిగుమతి చేయు",
+      "exportEntries": "CSV ఎగుమతి చేయు",
+      "importHint": "కాలమ్స్: source, target, note, kind, sourceExpansion, targetExpansion. రెండు కాలమ్స్ ఉన్న ఫైలు సరిపోతుంది.",
+      "importTooLarge": "ఆ ఫైల్ దిగుమతికి చాలా పెద్దది (గరిష్ఠం 5 MB).",
+      "importNothing": "వాడగలిగిన వరుసలు లభించలేదు ({skipped} దాటవేయబడ్డాయి).",
+      "importSummary": "{added} చేర్చారు, {replaced} మార్చారు, {skipped} దాటవేశారు.",
+      "entriesTooManyToShow": "{count} పదాలు — ఇక్కడ చూపేందుకు చాలా ఉన్నాయి. సమీక్షించేందుకు ఎగుమతి చేయండి లేదా పదాలను భర్తీ చేసేందుకు ఫైల్ దిగుమతి చేయండి."
     },
     "document": {
       "emptyTitle": "మీరు కావాలనుకునే డాక్యుమెంట్‌ను వివరించండి",
@@ -3510,7 +3542,8 @@
         "acceptAll": "బాకీ ఉన్నవి అన్నింటినీ ఆమోదించు",
         "rejectAll": "అన్నిటినీ నిరాకరించు",
         "cancel": "రద్దు చేయండి"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {ఇంకా # పదం చూపించలేదు} other {ఇంకా # పదాలు చూపించలేదు}}"
     },
     "form": {
       "emptyTitle": "పత్రాన్ని పూరించండి",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# డాక్యుమెంట్} other {# డాక్యుమెంట్లు}}, లిమిట్ {max} — రిఫ్రెష్ చేసే ముందు ట్రిమ్ చేయండి లేదా లిమిట్ పెంచండి",
     "m365AgentLimitBadgePlain": "లిమిట్ {limit}",
     "m365PlanShowAllRows": "అన్నీ చూపించు {count, plural, one {# ఫైల్} other {# ఫైళ్లు}}",
-    "m365PlanShowFewerRows": "కొంత తక్కువగా చూపించు"
+    "m365PlanShowFewerRows": "కొంత తక్కువగా చూపించు",
+    "glossariesTab": "పదకోశాలు",
+    "addGlossary": "పదకోశం జోడించు",
+    "noGlossaries": "ఇంకా సంస్థ పదకోశాలు లేవు. అనువాదం చేయేవారందరితో తప్పనిసరి పదజాలాన్ని పంచుకోవడానికి ఒకదాన్ని జోడించండి.",
+    "editGlossaryTitle": "పదకోశాన్ని సవరించండి",
+    "newGlossaryTitle": "కొత్త పదకోశం",
+    "glossarySaveSuccess": "పదకోశం సేవ్ చేయబడింది",
+    "glossaryCreateSuccess": "పదకోశం ఉత్పత్తి చేయబడింది",
+    "glossaryLanguagePairLabel": "భాషలు",
+    "glossarySourceLangLabel": "మూల భాష",
+    "glossaryTargetLangLabel": "లక్ష్య భాష",
+    "glossaryAnyLanguage": "ఏదైనా భాష",
+    "glossaryLanguagePairHint": "ఈ భాషకు అనువాదాలకు ఈ పదకోశం కనిపిస్తుంది.",
+    "glossaryLanguagePairEncourage": "ఐచ్చికం, కానీ లక్ష్య భాష ఇచ్చితే సరైన పదకోశాన్ని వెతుక్కోవడం సులభం అవుతుంది, ఇతరానవసర అనువాదాల్లో చూపబడదు.",
+    "guidePayloadLoading": "విషయాలను లోడ్ చేస్తున్నాం…",
+    "guidePayloadMissing": "ఈ గైడ్ పేర్చిన విషయం కనపడలేదు. సేవ్ చేయడం ద్వారా కొత్త కాపీ రాసే అవకాశం ఉంది.",
+    "deleteGlossary": "పదకోశాన్ని తొలగించు",
+    "deleteGlossaryConfirm": "ఈ పదకోశాన్ని అందరికీ తొలగించాలా? అనువాదకులకు ఇది వెంటనే అందుబాటులో ఉండదు; ఇప్పటికే తీసుకున్న ప్రతులు వారివిగానే ఉంటాయి.",
+    "confirmDeleteGlossary": "గ్లోసరీని తొలగించండి",
+    "glossaryDeleteSuccess": "గ్లోసరీ తొలగించబడింది"
   },
   "localModels": {
     "title": "లోకల్ మోడల్స్",
@@ -5000,7 +5052,8 @@
       "workflows": "ప్రతి ఒక్కరికీ సంభాషణ వర్క్‌ఫ్లోలను ఆన్ లేదా ఆఫ్ చేయండి.",
       "viewAs": "ఒక షరతును మెట్చయ్యేవారు లేదా విఫలమయ్యేవారిలా యాప్‌ను పరీక్షించండి.",
       "globalAdmins": "ప్రతిదినాన్ని నిర్వర్తించే వారు — డిప్లాయ్‌మెంట్ ద్వారా ఏర్పాటైన జాబితిని మించి.",
-      "formTemplates": "డాక్యుమెంట్-ఫిల్ వర్క్‌ఫ్లో వినియోగదారులతో పంచుకునే నిండు చేయదగిన ఫార్మ్ టెంప్లేట్లు."
+      "formTemplates": "డాక్యుమెంట్-ఫిల్ వర్క్‌ఫ్లో వినియోగదారులతో పంచుకునే నిండు చేయదగిన ఫార్మ్ టెంప్లేట్లు.",
+      "glossaries": "సంస్థ గ్లోసరీలు — తప్పనిసరి పదజాలం, అనువాదకులతో పంచుకుంటారు."
     },
     "openSettings": "సెట్టింగ్లు ఓపెన్ చేయండి",
     "area": {

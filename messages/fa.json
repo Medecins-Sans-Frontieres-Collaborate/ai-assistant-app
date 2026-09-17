@@ -2877,7 +2877,39 @@
       "acronymHint": "مخفف‌ها دقیقاً مطابق تایپ‌شده مطابقت دارند: WHO فقط با «WHO» مطابقت دارد، نه «who». اصطلاحات با هر نوع حروف بزرگ یا کوچک مطابقت دارند.",
       "glossaryCheckTitle": "بررسی واژه‌نامه",
       "glossaryCheckPass": "{count, plural, one {اصطلاح موردنیاز استفاده شد.} other {همه # اصطلاح موردنیاز استفاده شدند.}}",
-      "glossaryCheckMissing": "{count, plural, one {# از {total} ترجمه موردنیاز وجود ندارد:} other {# از {total} ترجمه موردنیاز وجود ندارد:}}"
+      "glossaryCheckMissing": "{count, plural, one {# از {total} ترجمه موردنیاز وجود ندارد:} other {# از {total} ترجمه موردنیاز وجود ندارد:}}",
+      "glossariesButton": "{count, plural, =0 {واژه‌نامه‌ها} one {# واژه‌نامه} other {# واژه‌نامه}}",
+      "glossaryPickerTitle": "واژه‌نامه‌ها",
+      "glossaryPickerClose": "بستن واژه‌نامه‌ها",
+      "glossaryOrgSection": "سازمان",
+      "glossaryMineSection": "مال من",
+      "noOrganizationGlossaries": "هیچ واژه‌نامه سازمانی با شما به اشتراک گذاشته نشده است.",
+      "noPersonalGlossaries": "هنوز واژه‌نامه‌ای ندارید. برای ساختن یک واژه‌نامه یا کپی یک واژه‌نامه سازمانی از مدیریت استفاده کنید.",
+      "glossaryAnyLanguage": "هر زبان",
+      "glossaryCustomLanguage": "زبان سفارشی",
+      "glossaryEntryCount": "{count, plural, one {# واژه} other {# واژه}}",
+      "glossaryLanguageMismatch": "این واژه‌نامه برچسب زبان مقصد متفاوتی دارد.",
+      "glossaryMismatchChip": "عدم تطابق زبان",
+      "glossaryOrgLimit": "حداکثر {max} واژه‌نامه سازمانی در هر ترجمه.",
+      "copyToMine": "کپی {name} به واژه‌نامه‌های من",
+      "copyToMineTitle": "کپی به واژه‌نامه‌های من",
+      "copyToMineFailed": "امکان کپی واژه‌نامه وجود ندارد. دوباره تلاش کنید.",
+      "copiedToMine": "به واژه‌نامه‌های شما کپی شد",
+      "copiedGlossaryName": "{name} (کپی)",
+      "clearStaleGlossary": "حذف",
+      "glossaryUnavailable": "واژه‌نامه در دسترس نیست (حذف شده یا دیگر با شما به اشتراک گذاشته نشده)",
+      "showOtherLanguages": "{count, plural, one {نمایش # واژه‌نامه برای زبان دیگر} other {نمایش # واژه‌نامه برای زبان‌های دیگر}}",
+      "hideOtherLanguages": "پنهان کردن زبان‌های دیگر",
+      "glossarySourceLang": "زبان مبدأ",
+      "glossaryTargetLang": "زبان مقصد",
+      "glossaryLanguageEncourage": "برای اینکه این واژه‌نامه ابتدا برای ترجمه‌های همسان نمایش داده شود، یک زبان مقصد اضافه کنید.",
+      "importEntries": "وارد کردن CSV/TSV",
+      "exportEntries": "خروجی CSV",
+      "importHint": "ستون‌ها: مبدأ، مقصد، یادداشت، نوع، توضیح مبدأ، توضیح مقصد. فایل دوستونی نیز قابل استفاده است.",
+      "importTooLarge": "این فایل برای وارد کردن بسیار بزرگ است (حداکثر ۵ مگابایت).",
+      "importNothing": "هیچ سطر قابل استفاده‌ای یافت نشد ({skipped} رد شده).",
+      "importSummary": "{added} اضافه شد، {replaced} جایگزین شد، {skipped} رد شد.",
+      "entriesTooManyToShow": "{count} واژه — نمایش همه ممکن نیست. برای بررسی، خروجی بگیرید یا برای جایگزینی واژه‌ها فایل وارد کنید."
     },
     "document": {
       "emptyTitle": "مشخصات سند موردنظر را توضیح دهید",
@@ -3510,7 +3542,8 @@
         "acceptAll": "پذیرش همه باقی‌مانده‌ها",
         "rejectAll": "رد همه",
         "cancel": "انصراف"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# واژهٔ دیگر نمایش داده نشده} other {# واژه دیگر نمایش داده نشده}}"
     },
     "form": {
       "emptyTitle": "تکمیل یک سند",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# سند} other {# سند}}, محدودیت {max} — پیش از به‌روزرسانی، کاهش دهید یا مقدار محدودیت را افزایش دهید",
     "m365AgentLimitBadgePlain": "محدودیت {limit}",
     "m365PlanShowAllRows": "نمایش همه {count, plural, one {# فایل} other {# فایل}}",
-    "m365PlanShowFewerRows": "نمایش کمتر"
+    "m365PlanShowFewerRows": "نمایش کمتر",
+    "glossariesTab": "واژه‌نامه‌ها",
+    "addGlossary": "افزودن واژه‌نامه",
+    "noGlossaries": "هنوز هیچ واژه‌نامه سازمانی وجود ندارد. یکی اضافه کنید تا واژگان اجباری را با همه مترجمان به اشتراک بگذارید.",
+    "editGlossaryTitle": "ویرایش واژه‌نامه",
+    "newGlossaryTitle": "واژه‌نامه جدید",
+    "glossarySaveSuccess": "واژه‌نامه ذخیره شد",
+    "glossaryCreateSuccess": "واژه‌نامه ایجاد شد",
+    "glossaryLanguagePairLabel": "زبان‌ها",
+    "glossarySourceLangLabel": "زبان مبدأ",
+    "glossaryTargetLangLabel": "زبان مقصد",
+    "glossaryAnyLanguage": "هر زبان",
+    "glossaryLanguagePairHint": "ترجمه‌ها به این زبان ابتدا این واژه‌نامه را خواهند دید.",
+    "glossaryLanguagePairEncourage": "اختیاری است، اما انتخاب زبان مقصد به کاربران کمک می‌کند واژه‌نامه مناسب را پیدا کنند و از بکارگیری نادرست جلوگیری می‌کند.",
+    "guidePayloadLoading": "در حال بارگذاری محتوا…",
+    "guidePayloadMissing": "محتوای ذخیره شده این راهنما پیدا نشد. با ذخیره، نسخه جدید نوشته می‌شود.",
+    "deleteGlossary": "حذف واژه‌نامه",
+    "deleteGlossaryConfirm": "این واژه‌نامه برای همه حذف شود؟ دسترسی مترجمان فوراً قطع خواهد شد؛ نسخه‌های کپی شده نزد افراد می‌ماند.",
+    "confirmDeleteGlossary": "حذف واژه‌نامه",
+    "glossaryDeleteSuccess": "واژه‌نامه حذف شد"
   },
   "localModels": {
     "title": "مدل‌های محلی",
@@ -5000,7 +5052,8 @@
       "workflows": "جریان‌های کاری گفتگو را برای همه روشن یا خاموش کنید.",
       "viewAs": "اپ را به عنوان فردی که یک شرط را دارد یا ندارد آزمایش کنید.",
       "globalAdmins": "افرادی که همه چیز را مدیریت می‌کنند — فراتر از لیست تعیین‌شده توسط پیاده‌سازی.",
-      "formTemplates": "قالب‌های فرم قابل پر کردنی که با کاربران جریان کار تکمیل اسناد به اشتراک گذاشته شده است."
+      "formTemplates": "قالب‌های فرم قابل پر کردنی که با کاربران جریان کار تکمیل اسناد به اشتراک گذاشته شده است.",
+      "glossaries": "واژه‌نامه‌های سازمان — اصطلاحات اجباری، به اشتراک گذاشته شده با مترجمان."
     },
     "openSettings": "باز کردن تنظیمات",
     "area": {

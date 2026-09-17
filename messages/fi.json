@@ -2877,7 +2877,39 @@
       "acronymHint": "Lyhenteet täsmäävät tarkalleen kirjoitetun mukaan: WHO koskee vain \"WHO\", ei \"who\". Termit täsmäävät kaikilla kirjainkoolla.",
       "glossaryCheckTitle": "Sanastotarkistus",
       "glossaryCheckPass": "{count, plural, one {Vaadittu termi on käytetty.} other {Kaikki # vaadittua termiä on käytetty.}}",
-      "glossaryCheckMissing": "{count, plural, one {# / {total} vaaditusta käännöksestä puuttuu:} other {# / {total} vaaditusta käännöksestä puuttuu:}}"
+      "glossaryCheckMissing": "{count, plural, one {# / {total} vaaditusta käännöksestä puuttuu:} other {# / {total} vaaditusta käännöksestä puuttuu:}}",
+      "glossariesButton": "{count, plural, =0 {Sanastot} one {# sanasto} other {# sanastoa}}",
+      "glossaryPickerTitle": "Sanastot",
+      "glossaryPickerClose": "Sulje sanastot",
+      "glossaryOrgSection": "Organisaatio",
+      "glossaryMineSection": "Omat",
+      "noOrganizationGlossaries": "Yksikään organisaation sanasto ei ole jaettu kanssasi.",
+      "noPersonalGlossaries": "Sinulla ei ole vielä sanastoja. Luo uusi hallinnassa tai kopioi organisaation sanasto.",
+      "glossaryAnyLanguage": "Mikä tahansa kieli",
+      "glossaryCustomLanguage": "Mukautettu kieli",
+      "glossaryEntryCount": "{count, plural, one {# termi} other {# termiä}}",
+      "glossaryLanguageMismatch": "Tämä sanasto on merkitty toiselle kohdekielelle.",
+      "glossaryMismatchChip": "Kieliero",
+      "glossaryOrgLimit": "Enintään {max} organisaation sanastoa per käännös.",
+      "copyToMine": "Kopioi {name} omiin sanastoihin",
+      "copyToMineTitle": "Kopioi omiin sanastoihin",
+      "copyToMineFailed": "Sanastoa ei voitu kopioida. Yritä uudelleen.",
+      "copiedToMine": "Kopioitu omiin sanastoihin",
+      "copiedGlossaryName": "{name} (kopio)",
+      "clearStaleGlossary": "Poista",
+      "glossaryUnavailable": "Sanasto ei saatavilla (poistettu tai ei enää jaettu kanssasi)",
+      "showOtherLanguages": "{count, plural, one {Näytä # sanasto toisella kielellä} other {Näytä # sanastoa muilla kielillä}}",
+      "hideOtherLanguages": "Piilota muut kielet",
+      "glossarySourceLang": "Lähdekieli",
+      "glossaryTargetLang": "Kohdekieli",
+      "glossaryLanguageEncourage": "Merkitse kohdekieli, jotta tämä sanasto tarjotaan ensisijaisesti vastaaviin käännöksiin.",
+      "importEntries": "Tuo CSV/TSV",
+      "exportEntries": "Vie CSV",
+      "importHint": "Sarakkeet: source, target, note, kind, sourceExpansion, targetExpansion. Myös kaksipalstainen tiedosto käy.",
+      "importTooLarge": "Tiedosto on liian suuri tuotavaksi (enintään 5 Mt).",
+      "importNothing": "Käytettäviä rivejä ei löytynyt ({skipped} ohitettu).",
+      "importSummary": "{added} lisätty, {replaced} korvattu, {skipped} ohitettu.",
+      "entriesTooManyToShow": "{count} termiä – liian monta näytettäväksi tässä. Vie tarkastellaksesi, tai tuo uusi tiedosto korvataksesi termit."
     },
     "document": {
       "emptyTitle": "Kuvaile haluamaasi asiakirjaa",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Hyväksy kaikki jäljellä olevat",
         "rejectAll": "Hylkää kaikki",
         "cancel": "Peruuta"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# termiä lisää piilossa} other {# termiä lisää piilossa}}"
     },
     "form": {
       "emptyTitle": "Täytä asiakirja",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# asiakirja} other {# asiakirjaa}}, raja {max} — vähennä tai nosta rajaa ennen päivittämistä",
     "m365AgentLimitBadgePlain": "Raja {limit}",
     "m365PlanShowAllRows": "Näytä kaikki {count, plural, one {# tiedosto} other {# tiedostoa}}",
-    "m365PlanShowFewerRows": "Näytä vähemmän"
+    "m365PlanShowFewerRows": "Näytä vähemmän",
+    "glossariesTab": "Sanastot",
+    "addGlossary": "Lisää sanasto",
+    "noGlossaries": "Organisaatiolla ei ole vielä sanastoja. Lisää yksi jakaaksesi pakollista terminologiaa kaikille kääntäjille.",
+    "editGlossaryTitle": "Muokkaa sanastoa",
+    "newGlossaryTitle": "Uusi sanasto",
+    "glossarySaveSuccess": "Sanasto tallennettu",
+    "glossaryCreateSuccess": "Sanasto luotu",
+    "glossaryLanguagePairLabel": "Kielet",
+    "glossarySourceLangLabel": "Lähdekieli",
+    "glossaryTargetLangLabel": "Kohdekieli",
+    "glossaryAnyLanguage": "Mikä tahansa kieli",
+    "glossaryLanguagePairHint": "Tämän kielen käännöksissä tämä sanasto näytetään ensin.",
+    "glossaryLanguagePairEncourage": "Valinnainen, mutta kohdekieli helpottaa sanaston löytymistä ja pitää sen poissa asiaan kuulumattomista käännöksistä.",
+    "guidePayloadLoading": "Ladataan sisältöä…",
+    "guidePayloadMissing": "Tämän ohjeen tallennettua sisältöä ei löytynyt. Tallennus luo uuden kopion.",
+    "deleteGlossary": "Poista sanasto",
+    "deleteGlossaryConfirm": "Poistetaanko tämä sanasto kaikilta? Se katoaa kääntäjiltä heti, mutta omat kopiot pysyvät käyttäjillä.",
+    "confirmDeleteGlossary": "Poista sanasto",
+    "glossaryDeleteSuccess": "Sanasto poistettu"
   },
   "localModels": {
     "title": "Paikalliset mallit",
@@ -5000,7 +5052,8 @@
       "workflows": "Ota keskustelutyönkulut käyttöön tai pois käytöstä kaikille.",
       "viewAs": "Testaa sovellusta henkilönä, joka täyttää — tai ei täytä — jonkin ehdon.",
       "globalAdmins": "Hallinnoi kaikkia asetuksia – yli käyttöönottokohtaisen listan.",
-      "formTemplates": "Täytettävät lomakemallipohjat, jotka jaetaan dokumenttien täyttö -työnkulun käyttäjille."
+      "formTemplates": "Täytettävät lomakemallipohjat, jotka jaetaan dokumenttien täyttö -työnkulun käyttäjille.",
+      "glossaries": "Organisaation sanastot — pakollinen terminologia, jaettu kääntäjille."
     },
     "openSettings": "Avaa asetukset",
     "area": {

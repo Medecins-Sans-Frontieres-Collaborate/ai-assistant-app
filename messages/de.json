@@ -2877,7 +2877,39 @@
       "acronymHint": "Akronyme stimmen genau mit der Eingabe überein: WHO gilt nur für „WHO“, nicht für „who“. Begriffe stimmen bei jeder Groß- und Kleinschreibung überein.",
       "glossaryCheckTitle": "Glossar-Prüfung",
       "glossaryCheckPass": "{count, plural, one {Der erforderliche Begriff wurde verwendet.} other {Alle # erforderlichen Begriffe wurden verwendet.}}",
-      "glossaryCheckMissing": "{count, plural, one {# von {total} erforderlichen Übersetzungen fehlt:} other {# von {total} erforderlichen Übersetzungen fehlen:}}"
+      "glossaryCheckMissing": "{count, plural, one {# von {total} erforderlichen Übersetzungen fehlt:} other {# von {total} erforderlichen Übersetzungen fehlen:}}",
+      "glossariesButton": "{count, plural, =0 {Glossare} one {# Glossar} other {# Glossare}}",
+      "glossaryPickerTitle": "Glossare",
+      "glossaryPickerClose": "Glossare schließen",
+      "glossaryOrgSection": "Organisation",
+      "glossaryMineSection": "Eigene",
+      "noOrganizationGlossaries": "Es werden keine Organisations-Glossare mit Ihnen geteilt.",
+      "noPersonalGlossaries": "Sie haben noch keine Glossare. Mit \"Verwalten\" können Sie eines erstellen oder ein Organisations-Glossar kopieren.",
+      "glossaryAnyLanguage": "Beliebige Sprache",
+      "glossaryCustomLanguage": "Benutzerdefinierte Sprache",
+      "glossaryEntryCount": "{count, plural, one {# Begriff} other {# Begriffe}}",
+      "glossaryLanguageMismatch": "Dieses Glossar ist für eine andere Zielsprache markiert.",
+      "glossaryMismatchChip": "Sprachen stimmen nicht überein",
+      "glossaryOrgLimit": "Bis zu {max} Organisations-Glossare pro Übersetzung.",
+      "copyToMine": "{name} zu meinen Glossaren kopieren",
+      "copyToMineTitle": "Zu meinen Glossaren kopieren",
+      "copyToMineFailed": "Glossar konnte nicht kopiert werden. Bitte versuchen Sie es erneut.",
+      "copiedToMine": "In Ihre Glossare kopiert",
+      "copiedGlossaryName": "{name} (Kopie)",
+      "clearStaleGlossary": "Entfernen",
+      "glossaryUnavailable": "Glossar nicht verfügbar (gelöscht oder nicht mehr geteilt)",
+      "showOtherLanguages": "{count, plural, one {# Glossar für eine andere Sprache anzeigen} other {# Glossare für andere Sprachen anzeigen}}",
+      "hideOtherLanguages": "Andere Sprachen ausblenden",
+      "glossarySourceLang": "Ausgangssprache",
+      "glossaryTargetLang": "Zielsprache",
+      "glossaryLanguageEncourage": "Markieren Sie eine Zielsprache, damit dieses Glossar bei passenden Übersetzungen zuerst angeboten wird.",
+      "importEntries": "CSV/TSV importieren",
+      "exportEntries": "CSV exportieren",
+      "importHint": "Spalten: source, target, note, kind, sourceExpansion, targetExpansion. Eine Datei mit zwei Spalten funktioniert ebenfalls.",
+      "importTooLarge": "Die Datei ist zu groß zum Importieren (max. 5 MB).",
+      "importNothing": "Keine verwendbaren Zeilen gefunden ({skipped} übersprungen).",
+      "importSummary": "{added} hinzugefügt, {replaced} ersetzt, {skipped} übersprungen.",
+      "entriesTooManyToShow": "{count} Begriffe — zu viele für die Anzeige. Exportieren Sie sie zur Überprüfung oder importieren Sie eine Datei, um Begriffe zu ersetzen."
     },
     "document": {
       "emptyTitle": "Beschreiben Sie das gewünschte Dokument",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Alle verbleibenden übernehmen",
         "rejectAll": "Alle ablehnen",
         "cancel": "Abbrechen"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# weiterer Begriff nicht angezeigt} other {# weitere Begriffe nicht angezeigt}}"
     },
     "form": {
       "emptyTitle": "Dokument ausfüllen",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# Dokument} other {# Dokumente}}, Limit {max} — bitte kürzen oder Limit erhöhen, bevor Sie aktualisieren",
     "m365AgentLimitBadgePlain": "Limit {limit}",
     "m365PlanShowAllRows": "Alle {count, plural, one {# Datei} other {# Dateien}} anzeigen",
-    "m365PlanShowFewerRows": "Weniger anzeigen"
+    "m365PlanShowFewerRows": "Weniger anzeigen",
+    "glossariesTab": "Glossare",
+    "addGlossary": "Glossar hinzufügen",
+    "noGlossaries": "Noch keine Organisations-Glossare. Fügen Sie eines hinzu, um verpflichtende Terminologie mit allen Übersetzenden zu teilen.",
+    "editGlossaryTitle": "Glossar bearbeiten",
+    "newGlossaryTitle": "Neues Glossar",
+    "glossarySaveSuccess": "Glossar gespeichert",
+    "glossaryCreateSuccess": "Glossar erstellt",
+    "glossaryLanguagePairLabel": "Sprachen",
+    "glossarySourceLangLabel": "Ausgangssprache",
+    "glossaryTargetLangLabel": "Zielsprache",
+    "glossaryAnyLanguage": "Beliebige Sprache",
+    "glossaryLanguagePairHint": "Übersetzungen in diese Sprache sehen dieses Glossar zuerst.",
+    "glossaryLanguagePairEncourage": "Optional, aber eine Zielsprache hilft, das passende Glossar zu finden und filtert irrelevante Übersetzungen heraus.",
+    "guidePayloadLoading": "Inhalt wird geladen…",
+    "guidePayloadMissing": "Der gespeicherte Inhalt dieses Leitfadens wurde nicht gefunden. Beim Speichern wird eine neue Kopie erstellt.",
+    "deleteGlossary": "Glossar löschen",
+    "deleteGlossaryConfirm": "Dieses Glossar für alle löschen? Übersetzende verlieren sofort Zugriff; Kopien bleiben bei den jeweiligen Personen.",
+    "confirmDeleteGlossary": "Glossar löschen",
+    "glossaryDeleteSuccess": "Glossar gelöscht"
   },
   "localModels": {
     "title": "Lokale Modelle",
@@ -5000,7 +5052,8 @@
       "workflows": "Konversations-Workflows für alle ein- oder ausschalten.",
       "viewAs": "App testen als jemand, der eine Bedingung erfüllt — oder nicht erfüllt.",
       "globalAdmins": "Wer alles verwaltet – über die von der Bereitstellung festgelegte Liste hinaus.",
-      "formTemplates": "Ausfüllbare Formularvorlagen, die mit Nutzern des Dokumenten-Ausfüll-Workflows geteilt werden."
+      "formTemplates": "Ausfüllbare Formularvorlagen, die mit Nutzern des Dokumenten-Ausfüll-Workflows geteilt werden.",
+      "glossaries": "Organisations-Glossare — verbindliche Terminologie, die mit Übersetzern geteilt wird."
     },
     "openSettings": "Einstellungen öffnen",
     "area": {

@@ -2861,7 +2861,39 @@
       "acronymHint": "Inyuguti zagufi zihuza neza nk’uko zanditswe: WHO isigura “WHO”, ntisigura “who”. Amagambo yo, arashobora guhinduka izina uko avyanditswe.",
       "glossaryCheckTitle": "Isuzuma rya glossaire",
       "glossaryCheckPass": "{count, plural, one {Ijambo risabwa rarakoreshejwe.} other {Amagambo yose # yasabwe yarakoreshejwe.}}",
-      "glossaryCheckMissing": "{count, plural, one {# kuri {total} ryasabwe nta riraboneka:} other {# kuri {total} yasabwe ntaraboneka:}}"
+      "glossaryCheckMissing": "{count, plural, one {# kuri {total} ryasabwe nta riraboneka:} other {# kuri {total} yasabwe ntaraboneka:}}",
+      "glossariesButton": "{count, plural, =0 {Amagisomwa} one {# gisomwa} other {# bisomwa}}",
+      "glossaryPickerTitle": "Amagisomwa",
+      "glossaryPickerClose": "Funga amagisomwa",
+      "glossaryOrgSection": "Ishirahamwe",
+      "glossaryMineSection": "Iyanje",
+      "noOrganizationGlossaries": "Nta magisomwa y’ishirahamwe basangiye nawe.",
+      "noPersonalGlossaries": "Nta gisomwa ufise. Koresha Genga kugira ushireko igisomwa canke usubireko igisomwa c’ishirahamwe.",
+      "glossaryAnyLanguage": "Ururimi urwo ari rwo rwose",
+      "glossaryCustomLanguage": "Ururimi wagennye",
+      "glossaryEntryCount": "{count, plural, one {# ijambo} other {# amazina}}",
+      "glossaryLanguageMismatch": "Iki gisomwa categuwe ku rundi rurimi rw'iherezo.",
+      "glossaryMismatchChip": "Hari itandukanye y’indimi",
+      "glossaryOrgLimit": "Imagisomwa y’ishirahamwe gushika kuri {max} kuri translation imwe.",
+      "copyToMine": "Saba {name} mu bisomwa vyanje",
+      "copyToMineTitle": "Saba mu bisomwa vyanje",
+      "copyToMineFailed": "Ntivyashobotse gusaba igisomwa. Gerageza kandi.",
+      "copiedToMine": "Casabwe mu bisomwa vyawe",
+      "copiedGlossaryName": "{name} (ivyafashwe)",
+      "clearStaleGlossary": "Kuramwo",
+      "glossaryUnavailable": "Igisomwa ntikiboneka (carasibwe canke ntigisangiwe nawe)",
+      "showOtherLanguages": "{count, plural, one {Erekana # gisomwa kindi ku rundi rurimi} other {Erekana # bisomwa ku zindi ndimi}}",
+      "hideOtherLanguages": "Hisha izindi ndimi",
+      "glossarySourceLang": "Ururimi rw'itanguriro",
+      "glossaryTargetLang": "Ururimi rw’iherezo",
+      "glossaryLanguageEncourage": "Tora ururimi rw’iherezo kugira iki gisomwa gihabwe abasubiramwo babanza guhitamwo urwo rurimi.",
+      "importEntries": "Injiza CSV/TSV",
+      "exportEntries": "Sohora CSV",
+      "importHint": "Inyandiko: itanguriro, iherezo, icandikano, ubwoko, isobanuroItanguriro, isobanuroIherezo. Dosiyeri ifise imirongo ibiri irakora kandi.",
+      "importTooLarge": "Dosiyeri irarenga urugero (5 MB max).",
+      "importNothing": "Nta migwi iboneka yakoreshejwe ({skipped} vyasizwe).",
+      "importSummary": "{added} vyashizweho, {replaced} vyasubiwemwo, {skipped} vyasizwe.",
+      "entriesTooManyToShow": "{count} amazina — menshi cane kugira yerekanywe hano. Sohoza usuzume canke winjize dosiye kugira usubiremwo amazina."
     },
     "document": {
       "emptyTitle": "Sobanura igitabo ushaka",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Emera vyose bisigaye",
         "rejectAll": "Hakana vyose",
         "cancel": "Sesa"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# ijambo riterekanywe} other {# amazina ntatererekanywe}}"
     },
     "form": {
       "emptyTitle": "Zuza urupapuro",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# idosiye} other {# amadosiye}}, umupaka {max} — siba canke wiyongere umupaka imbere yo gusubiramwo.",
     "m365AgentLimitBadgePlain": "Umupaka {limit}",
     "m365PlanShowAllRows": "Erekana vyose {count, plural, one {# idosiye} other {# amadosiye}}",
-    "m365PlanShowFewerRows": "Erekana bike"
+    "m365PlanShowFewerRows": "Erekana bike",
+    "glossariesTab": "Amagisomwa",
+    "addGlossary": "Shirako igisomwa",
+    "noGlossaries": "Nta magisomwa y’ishirahamwe arahari. Shiraho kugira usangire amajambo akenewe n’abasubiramwo bose.",
+    "editGlossaryTitle": "Hindura igisomwa",
+    "newGlossaryTitle": "Igisomwa gishasha",
+    "glossarySaveSuccess": "Igisomwa cakiwe",
+    "glossaryCreateSuccess": "Igisomwa cashizweho",
+    "glossaryLanguagePairLabel": "Indimi",
+    "glossarySourceLangLabel": "Ururimi rw'itanguriro",
+    "glossaryTargetLangLabel": "Ururimi rw’iherezo",
+    "glossaryAnyLanguage": "Ururimi urwo ari rwo rwose",
+    "glossaryLanguagePairHint": "Abasubiramwo muri uru rurimi babanza kubona iki gisomwa.",
+    "glossaryLanguagePairEncourage": "Bidategetswe, ariko ururimi rw’iherezo rufasha abariko barondera igisomwa kibereye kandi bigakingira ko kidashirwa ahatabereye.",
+    "guidePayloadLoading": "Hariko iratwara ivyo birimwo...",
+    "guidePayloadMissing": "Ibirimwo muri iri somo ntivyabonetse. Kuzisunga birandika kopi nshasha.",
+    "deleteGlossary": "Siba igisomwa",
+    "deleteGlossaryConfirm": "Ushaka gusiba iki gisomwa kuri bose? Abasubiramwo baca batakibona; ivyacafashwe n’abandi biraguma.",
+    "confirmDeleteGlossary": "Siba glossary",
+    "glossaryDeleteSuccess": "Glossary yasibwe"
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",
@@ -4984,7 +5036,8 @@
       "workflows": "Zimya canke shira ku murongo uburyo bw'ibiganiro kuri bose.",
       "viewAs": "Gerageza application nk’uwujuje canke atujuje ibisabwa.",
       "globalAdmins": "Abo bayobora ibintu vyose — n'ibitari mu rutonde rwatewemo deployment.",
-      "formTemplates": "Amepatirizo y'ifishi ashirwako amakuru ashobora gusangirwa n'abakoresha biyumvira kuri document-fill workflow."
+      "formTemplates": "Amepatirizo y'ifishi ashirwako amakuru ashobora gusangirwa n'abakoresha biyumvira kuri document-fill workflow.",
+      "glossaries": "Glossaries y’ishirahamwe — amazina ategerezwa gukoreshwa, asangirwa n’abasubiramwo mu yindi ndimi."
     },
     "openSettings": "Fungura ivyo gushiraho",
     "area": {

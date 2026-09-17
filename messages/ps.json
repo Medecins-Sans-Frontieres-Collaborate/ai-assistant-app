@@ -2861,7 +2861,39 @@
       "acronymHint": "لنډیزونه هماغسې سره سمون خوري لکه څنګه چې لیکل شوي وي: WHO یوازې له \"WHO\" سره تطبیق کوي، هیڅکله له \"who\" سره نه. اصطلاحات له هر ډول توري سره سمون خوري.",
       "glossaryCheckTitle": "د کلیمو کتنه",
       "glossaryCheckPass": "{count, plural, one {اړینه اصطلاح وکارول شوه.} other {ټولې # اړینې اصطلاحات وکارول شوې.}}",
-      "glossaryCheckMissing": "{count, plural, one {د {total} اړینو ژباړو څخه # نشته:} other {د {total} اړینو ژباړو څخه # نه دي شته:}}"
+      "glossaryCheckMissing": "{count, plural, one {د {total} اړینو ژباړو څخه # نشته:} other {د {total} اړینو ژباړو څخه # نه دي شته:}}",
+      "glossariesButton": "{count, plural, =0 {ګلوسريز} one {# ګلوسري} other {# ګلوسريز}}",
+      "glossaryPickerTitle": "ګلوسريز",
+      "glossaryPickerClose": "ګلوسريز وتړئ",
+      "glossaryOrgSection": "سازمان",
+      "glossaryMineSection": "زما",
+      "noOrganizationGlossaries": "هیڅ سازماني ګلوسريز له تاسو سره نه دي شریک شوي.",
+      "noPersonalGlossaries": "تاسو لا تر اوسه ګلوسري نلرئ. د جوړولو یا د سازمان ګلوسري نقلولو لپاره ‘مدیریت’ وکاروئ.",
+      "glossaryAnyLanguage": "هر ژبه",
+      "glossaryCustomLanguage": "ګمرکي ژبه",
+      "glossaryEntryCount": "{count, plural, one {# اصطلاح} other {# اصطلاحات}}",
+      "glossaryLanguageMismatch": "دا ګلوسري د بل هدف ژبې لپاره نښه شوې ده.",
+      "glossaryMismatchChip": "ژبنی توپیر",
+      "glossaryOrgLimit": "د هر ژباړې لپاره تر {max} پورې سازماني ګلوسريز.",
+      "copyToMine": "{name} خپلې ګلوسريز ته نقل کړئ",
+      "copyToMineTitle": "خپلو ګلوسريز ته نقل کړئ",
+      "copyToMineFailed": "ګلوسري نقل نشوای کېدلی. بیا هڅه وکړئ.",
+      "copiedToMine": "ستاسو ګلوسريز ته نقل شو",
+      "copiedGlossaryName": "{name} (نقل)",
+      "clearStaleGlossary": "لیرې کړئ",
+      "glossaryUnavailable": "ګلوسري نشته (حذف شوې یا نور له تاسو سره نه ده شریکه)",
+      "showOtherLanguages": "{count, plural, one {بله ژبه لپاره # ګلوسري ښکاره کړئ} other {نورې ژبې لپاره # ګلوسريز ښکاره کړئ}}",
+      "hideOtherLanguages": "نورې ژبې پټ کړئ",
+      "glossarySourceLang": "سرچينه ژبه",
+      "glossaryTargetLang": "هدف ژبه",
+      "glossaryLanguageEncourage": "هدف ژبه نښه کړئ، څو دا ګلوسري د متناسبو ژباړو لپاره لومړی وړاندې شي.",
+      "importEntries": "CSV/TSV وارد کړئ",
+      "exportEntries": "CSV صادر کړئ",
+      "importHint": "ستونونه: سرچینه، هدف، یادونه، ډول، سرچینه پراخول، هدف پراخول. دوه ستونيز فایل هم کار کوي.",
+      "importTooLarge": "دا فایل د واردولو لپاره ډېره لوی ده (اعظمي ۵ MB).",
+      "importNothing": "هیڅ قابل استفاده کتار ونه موندل شو ({skipped} له پامه وغورځول شول).",
+      "importSummary": "{added} زیات شول، {replaced} تعویض شول، {skipped} له پامه وغورځول شول.",
+      "entriesTooManyToShow": "{count} اصطلاحات — دلته ښودلو ته ډېر زیات دي. د کتلو لپاره صادر کړئ، یا د بدلولو لپاره فایل وارد کړئ."
     },
     "document": {
       "emptyTitle": "هغه سند تشریح کړئ چې غواړئ",
@@ -3494,7 +3526,8 @@
         "acceptAll": "ټول پاتې ومنئ",
         "rejectAll": "ټول رد کړئ",
         "cancel": "لغوه کړئ"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {نور # اصطلاح نه ده ښودل شوې} other {نور # اصطلاحات نه دي ښودل شوي}}"
     },
     "form": {
       "emptyTitle": "سند ډک کړئ",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# سند} other {# اسناد}}، حد {max} — له بیا تازه کولو مخکې اسناد کم یا حد زیات کړئ",
     "m365AgentLimitBadgePlain": "حد {limit}",
     "m365PlanShowAllRows": "ټول ښکاره کړئ {count, plural, one {# فایل} other {# فایلونه}}",
-    "m365PlanShowFewerRows": "لږ ښکاره کړئ"
+    "m365PlanShowFewerRows": "لږ ښکاره کړئ",
+    "glossariesTab": "ګلوسريز",
+    "addGlossary": "ګلوسري زیات کړئ",
+    "noGlossaries": "تر اوسه هیڅ سازماني ګلوسري نشته. د هرچا لپاره لازمي اصطلاحات شریکولو لپاره یو اضافه کړئ.",
+    "editGlossaryTitle": "ګلوسري ایډیټ کړئ",
+    "newGlossaryTitle": "نوې ګلوسري",
+    "glossarySaveSuccess": "ګلوسري خوندي شوه",
+    "glossaryCreateSuccess": "ګلوسري جوړه شوه",
+    "glossaryLanguagePairLabel": "ژبې",
+    "glossarySourceLangLabel": "سرچينه ژبه",
+    "glossaryTargetLangLabel": "هدف ژبه",
+    "glossaryAnyLanguage": "هر ژبه",
+    "glossaryLanguagePairHint": "دا ژبې ته ژباړې دا ګلوسري به لومړی ویني.",
+    "glossaryLanguagePairEncourage": "اختیاري ده، خو هدف ژبه خلک مرسته کوي چې سم ګلوسري ومومي او له نا اړونده ژباړو یې لیرې ساتي.",
+    "guidePayloadLoading": "محتوا روان دي…",
+    "guidePayloadMissing": "د دې لارښود زېرمه شوې محتوا ونه موندل شوه. خوندي کول تازه کاپي ثبتوي.",
+    "deleteGlossary": "ګلوسري حذف کړئ",
+    "deleteGlossaryConfirm": "دا ګلوسري ټولو لپاره حذف کړئ؟ ژباړونکي به يې سمدستي له لاسه ورکړي؛ چې کومې کاپي يې کړې، هماغه به ورسره پاتې وي.",
+    "confirmDeleteGlossary": "استلاحاتو لړ حذف کړئ",
+    "glossaryDeleteSuccess": "استلاحاتو لړ حذف شوه"
   },
   "localModels": {
     "title": "محلي ماډلونه",
@@ -4984,7 +5036,8 @@
       "workflows": "د ټولو لپاره د خبرو اترو کاري جریانونه فعال یا غیر فعال کړئ.",
       "viewAs": "اپلیکیشن د داسې چا په حیث ازموینه وکړئ چې یوه شرط پوره کوي یا یې نه کوي.",
       "globalAdmins": "څوک چې د هر څه اداره کوي — د ډیپلویمنټ له ټاکل شوې لیست څخه بهر.",
-      "formTemplates": "د ډاکومنټ ډکولو د پروسې کاروونکو سره شريکې ډکېدونکې د فورمې نمونې."
+      "formTemplates": "د ډاکومنټ ډکولو د پروسې کاروونکو سره شريکې ډکېدونکې د فورمې نمونې.",
+      "glossaries": "د سازمان استلاحانو لړونه — اړين اصطلاحات چې ژباړونکو سره شريک شوي."
     },
     "openSettings": "تنظیمات پرانېستل",
     "area": {

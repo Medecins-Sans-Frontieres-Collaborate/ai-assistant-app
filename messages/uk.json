@@ -2877,7 +2877,39 @@
       "acronymHint": "Абревіатури співпадають тільки точною формою: WHO співпадає з “WHO”, ніколи з “who”. Терміни співпадають з будь-якою великою чи малою літерою.",
       "glossaryCheckTitle": "Перевірка глосарію",
       "glossaryCheckPass": "{count, plural, one {Використано потрібний термін.} other {Використано всі # потрібні терміни.}}",
-      "glossaryCheckMissing": "{count, plural, one {Відсутній # із {total} потрібних перекладів:} other {Відсутні # із {total} потрібних перекладів:}}"
+      "glossaryCheckMissing": "{count, plural, one {Відсутній # із {total} потрібних перекладів:} other {Відсутні # із {total} потрібних перекладів:}}",
+      "glossariesButton": "{count, plural, =0 {Глосарії} one {# глосарій} other {# глосарії(в)}}",
+      "glossaryPickerTitle": "Глосарії",
+      "glossaryPickerClose": "Закрити глосарії",
+      "glossaryOrgSection": "Організація",
+      "glossaryMineSection": "Мої",
+      "noOrganizationGlossaries": "Жоден організаційний глосарій не надано вам у спільний доступ.",
+      "noPersonalGlossaries": "У вас ще немає глосаріїв. Використовуйте \"Керування\", щоб створити чи скопіювати організаційний глосарій.",
+      "glossaryAnyLanguage": "Будь-яка мова",
+      "glossaryCustomLanguage": "Інша мова",
+      "glossaryEntryCount": "{count, plural, one {# термін} other {# терміни(ів)}}",
+      "glossaryLanguageMismatch": "Цей глосарій позначений для іншої цільової мови.",
+      "glossaryMismatchChip": "Невідповідність мови",
+      "glossaryOrgLimit": "До {max} організаційних глосаріїв на один переклад.",
+      "copyToMine": "Копіювати {name} до моїх глосаріїв",
+      "copyToMineTitle": "Копіювати до моїх глосаріїв",
+      "copyToMineFailed": "Не вдалося скопіювати глосарій. Спробуйте ще раз.",
+      "copiedToMine": "Скопійовано до ваших глосаріїв",
+      "copiedGlossaryName": "{name} (копія)",
+      "clearStaleGlossary": "Видалити",
+      "glossaryUnavailable": "Глосарій недоступний (видалено або більше не надається вам)",
+      "showOtherLanguages": "{count, plural, one {Показати # глосарій для іншої мови} other {Показати # глосарії для інших мов}}",
+      "hideOtherLanguages": "Сховати інші мови",
+      "glossarySourceLang": "Мова оригіналу",
+      "glossaryTargetLang": "Цільова мова",
+      "glossaryLanguageEncourage": "Позначте цільову мову, щоб цей глосарій з'являвся першим при відповідному перекладі.",
+      "importEntries": "Імпортувати CSV/TSV",
+      "exportEntries": "Експортувати CSV",
+      "importHint": "Стовпці: source, target, note, kind, sourceExpansion, targetExpansion. Можна також двостовпцевий файл.",
+      "importTooLarge": "Файл надто великий для імпорту (макс. 5 МБ).",
+      "importNothing": "Не знайдено корисних рядків ({skipped} пропущено).",
+      "importSummary": "{added} додано, {replaced} замінено, {skipped} пропущено.",
+      "entriesTooManyToShow": "{count} термінів — забагато для перегляду тут. Експортуйте для перегляду або імпортуйте файл для заміни термінів."
     },
     "document": {
       "emptyTitle": "Опишіть потрібний документ",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Прийняти всі, що залишилися",
         "rejectAll": "Відхилити всі",
         "cancel": "Скасувати"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {Ще # термін не показано} other {Ще # терміни(ів) не показано}}"
     },
     "form": {
       "emptyTitle": "Заповнити документ",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# документ} other {# документи}}, ліміт {max} — скоротіть або підніміть ліміт перед оновленням",
     "m365AgentLimitBadgePlain": "Ліміт {limit}",
     "m365PlanShowAllRows": "Показати всі {count, plural, one {# файл} other {# файли}}",
-    "m365PlanShowFewerRows": "Показати менше"
+    "m365PlanShowFewerRows": "Показати менше",
+    "glossariesTab": "Глосарії",
+    "addGlossary": "Додати глосарій",
+    "noGlossaries": "Організаційних глосаріїв ще немає. Додайте глосарій, щоб поділитися обовʼязковою термінологією з усіма перекладачами.",
+    "editGlossaryTitle": "Редагувати глосарій",
+    "newGlossaryTitle": "Новий глосарій",
+    "glossarySaveSuccess": "Глосарій збережено",
+    "glossaryCreateSuccess": "Глосарій створено",
+    "glossaryLanguagePairLabel": "Мови",
+    "glossarySourceLangLabel": "Мова оригіналу",
+    "glossaryTargetLangLabel": "Цільова мова",
+    "glossaryAnyLanguage": "Будь-яка мова",
+    "glossaryLanguagePairHint": "Переклади цією мовою побачать цей глосарій першочергово.",
+    "glossaryLanguagePairEncourage": "Необов'язково, але вказати цільову мову допоможе знайти потрібний глосарій і уникнути недоречних виборів.",
+    "guidePayloadLoading": "Завантаження вмісту…",
+    "guidePayloadMissing": "Збережений вміст цього довідника не знайдено. Збереження створить нову копію.",
+    "deleteGlossary": "Видалити глосарій",
+    "deleteGlossaryConfirm": "Видалити цей глосарій для всіх? Перекладачі втратять доступ негайно; копії в користувачів залишаться.",
+    "confirmDeleteGlossary": "Видалити глосарій",
+    "glossaryDeleteSuccess": "Глосарій видалено"
   },
   "localModels": {
     "title": "Локальні моделі",
@@ -5000,7 +5052,8 @@
       "workflows": "Увімкнути або вимкнути робочі процеси для всіх.",
       "viewAs": "Тестуйте застосунок як особа, яка відповідає або не відповідає умові.",
       "globalAdmins": "Хто адмініструє все — незалежно від переліку, встановленого під час розгортання.",
-      "formTemplates": "Шаблони форм для заповнення, спільні з користувачами процесу заповнення документів."
+      "formTemplates": "Шаблони форм для заповнення, спільні з користувачами процесу заповнення документів.",
+      "glossaries": "Глосарії організації — обов'язкова термінологія, що надається перекладачам."
     },
     "openSettings": "Відкрити налаштування",
     "area": {

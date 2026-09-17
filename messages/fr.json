@@ -2877,7 +2877,39 @@
       "acronymHint": "Les acronymes correspondent exactement à la saisie : « WHO » s’applique uniquement à « WHO », jamais à « who ». Les termes correspondent à toute capitalisation.",
       "glossaryCheckTitle": "Vérification du glossaire",
       "glossaryCheckPass": "{count, plural, one {Le terme requis a été utilisé.} other {Tous les # termes requis ont été utilisés.}}",
-      "glossaryCheckMissing": "{count, plural, one {# traduction requise sur {total} est manquante :} other {# traductions requises sur {total} sont manquantes :}}"
+      "glossaryCheckMissing": "{count, plural, one {# traduction requise sur {total} est manquante :} other {# traductions requises sur {total} sont manquantes :}}",
+      "glossariesButton": "{count, plural, =0 {Glossaires} one {# glossaire} other {# glossaires}}",
+      "glossaryPickerTitle": "Glossaires",
+      "glossaryPickerClose": "Fermer les glossaires",
+      "glossaryOrgSection": "Organisation",
+      "glossaryMineSection": "À moi",
+      "noOrganizationGlossaries": "Aucun glossaire d'organisation n'est partagé avec vous.",
+      "noPersonalGlossaries": "Vous n'avez pas encore de glossaire. Utilisez Gérer pour en créer un ou copier un glossaire d'organisation.",
+      "glossaryAnyLanguage": "N'importe quelle langue",
+      "glossaryCustomLanguage": "Langue personnalisée",
+      "glossaryEntryCount": "{count, plural, one {# terme} other {# termes}}",
+      "glossaryLanguageMismatch": "Ce glossaire est étiqueté pour une autre langue cible.",
+      "glossaryMismatchChip": "Incompatibilité de langue",
+      "glossaryOrgLimit": "Jusqu'à {max} glossaires d'organisation par traduction.",
+      "copyToMine": "Copier {name} dans mes glossaires",
+      "copyToMineTitle": "Copier dans mes glossaires",
+      "copyToMineFailed": "Impossible de copier le glossaire. Veuillez réessayer.",
+      "copiedToMine": "Copié dans vos glossaires",
+      "copiedGlossaryName": "{name} (copie)",
+      "clearStaleGlossary": "Supprimer",
+      "glossaryUnavailable": "Glossaire indisponible (supprimé ou non partagé)",
+      "showOtherLanguages": "{count, plural, one {Afficher # glossaire pour une autre langue} other {Afficher # glossaires pour d'autres langues}}",
+      "hideOtherLanguages": "Masquer les autres langues",
+      "glossarySourceLang": "Langue source",
+      "glossaryTargetLang": "Langue cible",
+      "glossaryLanguageEncourage": "Indiquez une langue cible pour que ce glossaire soit proposé en priorité lors des traductions correspondantes.",
+      "importEntries": "Importer CSV/TSV",
+      "exportEntries": "Exporter CSV",
+      "importHint": "Colonnes : source, cible, note, type, sourceExpansion, targetExpansion. Un fichier à deux colonnes fonctionne aussi.",
+      "importTooLarge": "Ce fichier est trop volumineux à importer (5 Mo max).",
+      "importNothing": "Aucune ligne exploitable trouvée ({skipped} ignorées).",
+      "importSummary": "{added} ajoutées, {replaced} remplacées, {skipped} ignorées.",
+      "entriesTooManyToShow": "{count} termes — trop nombreux pour être listés ici. Exportez-les pour les consulter, ou importez un fichier pour remplacer les termes."
     },
     "document": {
       "emptyTitle": "Décrivez le document souhaité",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Tout accepter",
         "rejectAll": "Tout rejeter",
         "cancel": "Annuler"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# terme supplémentaire non affiché} other {# termes supplémentaires non affichés}}"
     },
     "form": {
       "emptyTitle": "Compléter un document",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# document} other {# documents}}, limite {max} — réduisez ou augmentez la limite avant d’actualiser",
     "m365AgentLimitBadgePlain": "Limite {limit}",
     "m365PlanShowAllRows": "Afficher tout {count, plural, one {# fichier} other {# fichiers}}",
-    "m365PlanShowFewerRows": "Afficher moins"
+    "m365PlanShowFewerRows": "Afficher moins",
+    "glossariesTab": "Glossaires",
+    "addGlossary": "Ajouter un glossaire",
+    "noGlossaries": "Aucun glossaire d'organisation pour le moment. Ajoutez-en un pour partager la terminologie obligatoire avec tous les traducteurs.",
+    "editGlossaryTitle": "Modifier le glossaire",
+    "newGlossaryTitle": "Nouveau glossaire",
+    "glossarySaveSuccess": "Glossaire enregistré",
+    "glossaryCreateSuccess": "Glossaire créé",
+    "glossaryLanguagePairLabel": "Langues",
+    "glossarySourceLangLabel": "Langue source",
+    "glossaryTargetLangLabel": "Langue cible",
+    "glossaryAnyLanguage": "N'importe quelle langue",
+    "glossaryLanguagePairHint": "Les traductions vers cette langue verront ce glossaire en premier.",
+    "glossaryLanguagePairEncourage": "Facultatif, mais indiquer une langue cible aide à trouver le bon glossaire et à l'exclure des traductions non concernées.",
+    "guidePayloadLoading": "Chargement du contenu…",
+    "guidePayloadMissing": "Le contenu enregistré de ce guide est introuvable. En sauvegardant, une nouvelle copie sera créée.",
+    "deleteGlossary": "Supprimer le glossaire",
+    "deleteGlossaryConfirm": "Supprimer ce glossaire pour tout le monde ? Les traducteurs y perdront l'accès immédiatement ; les copies personnelles resteront accessibles.",
+    "confirmDeleteGlossary": "Supprimer le glossaire",
+    "glossaryDeleteSuccess": "Glossaire supprimé"
   },
   "localModels": {
     "title": "Modèles locaux",
@@ -5000,7 +5052,8 @@
       "workflows": "Activez ou désactivez les workflows de conversation pour tout le monde.",
       "viewAs": "Testez l’application comme si vous remplissiez — ou non — une condition.",
       "globalAdmins": "Qui administre tout — au-delà de la liste définie lors du déploiement.",
-      "formTemplates": "Modèles de formulaire remplissables partagés avec les utilisateurs du flux de travail de remplissage de documents."
+      "formTemplates": "Modèles de formulaire remplissables partagés avec les utilisateurs du flux de travail de remplissage de documents.",
+      "glossaries": "Glossaires de l’organisation — terminologie obligatoire, partagée avec les traducteurs."
     },
     "openSettings": "Ouvrir les paramètres",
     "area": {

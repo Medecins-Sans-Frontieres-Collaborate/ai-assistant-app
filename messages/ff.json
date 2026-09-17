@@ -2861,7 +2861,39 @@
       "acronymHint": "Sangirde ina faamii ko ɗum wayi: WHO ngolto “WHO”, tee faamataa “who”. Ceggal ina faami ɗum e no feewi kala.",
       "glossaryCheckTitle": "Ceŋol bokkoy",
       "glossaryCheckPass": "{count, plural, one {Kelal moɗɗo jokkude.} other {Ekelal # moɓɓi jokkude.}}",
-      "glossaryCheckMissing": "{count, plural, one {Kelal # e {total} jokkude waawataa:} other {# e {total} kelal jokkude waawataa:}}"
+      "glossaryCheckMissing": "{count, plural, one {Kelal # e {total} jokkude waawataa:} other {# e {total} kelal jokkude waawataa:}}",
+      "glossariesButton": "{count, plural, =0 {Kisalɗe} one {# kisalɗo} other {# kisalɗe}}",
+      "glossaryPickerTitle": "Kisalɗe",
+      "glossaryPickerClose": "Uddu kisalɗe",
+      "glossaryOrgSection": "Suudu",
+      "glossaryMineSection": "Mi",
+      "noOrganizationGlossaries": "Kisalɗe suudu so wonaa ɓurto maa.",
+      "noPersonalGlossaries": "Aɗa alaa kisalɗo tan. Toppi 'Manage' tagi kisalɗo walla kofli kisalɗo suudu.",
+      "glossaryAnyLanguage": "Konngi kala",
+      "glossaryCustomLanguage": "Konngi kala juulnde",
+      "glossaryEntryCount": "{count, plural, one {# ɗemngal} other {# ɗemɗe}}",
+      "glossaryLanguageMismatch": "Kisalɗo on jogii tagi konngi mbido muuyii.",
+      "glossaryMismatchChip": "Toppugol konngi",
+      "glossaryOrgLimit": "Jama {max} kisalɗe suudu kala ngol tooñde.",
+      "copyToMine": "Koflo {name} ha kisalɗe amin",
+      "copyToMineTitle": "Koflo ha kisalɗe amin",
+      "copyToMineFailed": "Kisalɗo on artaani koflugo. Fuɗɗo jokkondir.",
+      "copiedToMine": "Koflo ha kisalɗe maa",
+      "copiedGlossaryName": "{name} (kofnol)",
+      "clearStaleGlossary": "Momtu",
+      "glossaryUnavailable": "Kisalɗo alaa (momtinooma walla kono ɓurto maa) ",
+      "showOtherLanguages": "{count, plural, one {Hollu # kisalɗo konngi gooto faggude} other {Hollu # kisalɗe konngi ɗiɗi walla ɓuri}}",
+      "hideOtherLanguages": "Fof nda konngi ɗi",
+      "glossarySourceLang": "Konngi moƴƴi",
+      "glossaryTargetLang": "Konngi mbido muuyi",
+      "glossaryLanguageEncourage": "Taga konngi mbido muuyi ummin kisalɗo on uddi pilaani tooñde ɲaamde.",
+      "importEntries": "Jiggito CSV/TSV",
+      "exportEntries": "Nattito CSV",
+      "importHint": "Safaraaji: moƴƴi, muuyi, nata, goɗɗo, moƴƴiExpansion, muuyiExpansion. Fayli safaraaji ɗiɗi woni okkude e jam.",
+      "importTooLarge": "Fayli on ɓuri baɗi tuuba jiggito (5MB dollere).",
+      "importNothing": "Safaraaji jokkere njiyataa ({skipped} topi).",
+      "importSummary": "{added} daade, {replaced} sosde, {skipped} topde.",
+      "entriesTooManyToShow": "{count} ɗemɗe — ɓuri piillude fii njiyde. Tuttinoo njiyde walla jiggito fayli ha topde ɗemɗe."
     },
     "document": {
       "emptyTitle": "Winndu lan binndi dannde maa",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Tawi gollal fow mbaydi",
         "rejectAll": "Mbaydi fow",
         "cancel": "Haay"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# ɗemngal topuɗo njiyataa} other {# ɗemɗe topuɗe njiyataa}}"
     },
     "form": {
       "emptyTitle": "Naatu dokment",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# dokumɛnta} other {# dokumɛntaji}}, ceertu {max} — njoɓtu walla ndokkita ceertu kala ko waɗi yowtitde",
     "m365AgentLimitBadgePlain": "Ceertu {limit}",
     "m365PlanShowAllRows": "Hollu fotaɗe {count, plural, one {# fiilde} other {# fiildeji}}",
-    "m365PlanShowFewerRows": "Hollu fewndo"
+    "m365PlanShowFewerRows": "Hollu fewndo",
+    "glossariesTab": "Kisalɗe",
+    "addGlossary": "Ɓeydu kisalɗo",
+    "noGlossaries": "Kisalɗe suudu so wonaa. Ɓeydu gooto hannde golle ndiyam ɓurto kala mo jogiraa tooñde.",
+    "editGlossaryTitle": "Dinam kisalɗo",
+    "newGlossaryTitle": "Kisalɗo mumɗo",
+    "glossarySaveSuccess": "Kisalɗo danndin",
+    "glossaryCreateSuccess": "Kisalɗo sosan",
+    "glossaryLanguagePairLabel": "Konngol",
+    "glossarySourceLangLabel": "Konngi moƴƴi",
+    "glossaryTargetLangLabel": "Konngi mbido muuyi",
+    "glossaryAnyLanguage": "Konngi kala",
+    "glossaryLanguagePairHint": "Yo caɗeele e konngi on mballi kisalɗo on.",
+    "glossaryLanguagePairEncourage": "Dooni, kono konngi mbido muuyi yo hokki moƴƴi kisalɗo e teelta hinnarnde tooñde.",
+    "guidePayloadLoading": "Ina nelda hande…",
+    "guidePayloadMissing": "Laawol kisalɗo on njiyataa. Danndugo rewta kesol mumɗo.",
+    "deleteGlossary": "Momtu kisalɗo",
+    "deleteGlossaryConfirm": "Yo momtu kisalɗo on bayda kala mo jogiraa? Wotaade to moɓɓe, anaama kalɗe kisalɗo moɓɓe.",
+    "confirmDeleteGlossary": "Momtu jaɓɓorgal",
+    "glossaryDeleteSuccess": "Jaɓɓorgal momtini"
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",
@@ -4984,7 +5036,8 @@
       "workflows": "Sagtini walla daaɓi cuɓoraaɗe rimɗinde e kala juulnde.",
       "viewAs": "Huumti app ngal leydi innde juutal ko woni — walla ko nobi — ko e jamfa.",
       "globalAdmins": "Mbeleefeeɓe ɗee ɓe jey-maa kulol—hannde fow mo jogii tare mabbe so tawii ko tee.",
-      "formTemplates": "Templates huuformaaji moƴƴi e njabbu e waɗee ngam document-fill workflow."
+      "formTemplates": "Templates huuformaaji moƴƴi e njabbu e waɗee ngam document-fill workflow.",
+      "glossaries": "Jaɓɓorgal e nder ngorgu — geseede tiingol, ngaññi e jawdiyankeeɓe."
     },
     "openSettings": "Hollu teeltorde",
     "area": {

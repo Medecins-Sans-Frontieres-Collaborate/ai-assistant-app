@@ -2861,7 +2861,39 @@
       "acronymHint": "አክሮንይም ብትኽክል እዩ ክውዳእ፤ WHO ዝተጻፈ እዩ ሓሳብ እሞኑ፡ \"WHO\" ኣይኮነን \"who\" ኣፍ ይዳግሱ። ቃላት ዝተኸፈኑ ምዕባለ ጻፍ ይድልዩ።",
       "glossaryCheckTitle": "መዝገብ ቃላት መርመራ",
       "glossaryCheckPass": "{count, plural, one {ተወሳኺ ቃል ተጠቒሙ።} other {ምሉእ # ተወሳኺ ቃላት ተጠቒሙ።}}",
-      "glossaryCheckMissing": "{count, plural, one {ካብ {total} ተወሳኺ ትርጉሞታት # ይጎድኦ፡} other {ካብ {total} ተወሳኺ ትርጉሞታት # ይጎድኦዎም፡}}"
+      "glossaryCheckMissing": "{count, plural, one {ካብ {total} ተወሳኺ ትርጉሞታት # ይጎድኦ፡} other {ካብ {total} ተወሳኺ ትርጉሞታት # ይጎድኦዎም፡}}",
+      "glossariesButton": "{count, plural, =0 {መዝገብ ቃላት} one {# መዝገብ ቃል} other {# መዝገብ ቃላት}}",
+      "glossaryPickerTitle": "መዝገብ ቃላት",
+      "glossaryPickerClose": "መዝገብ ቃላት ዝግ",
+      "glossaryOrgSection": "ውድብ",
+      "glossaryMineSection": "የዛናይ",
+      "noOrganizationGlossaries": "ዓርከይ መዝገብ ቃላት ከምትትሓተት ዘሎኻ የብሉን።",
+      "noPersonalGlossaries": "መዝገብ ቃላት ገና የሎኻን። ሓደ ለመጽናው ወይ መዝገብ ቃላት ውድብ ንዘርከብ ትኽእለይ።",
+      "glossaryAnyLanguage": "ማእከል ቋንቋ",
+      "glossaryCustomLanguage": "ብትውልድ ቋንቋ",
+      "glossaryEntryCount": "{count, plural, one {# ቃል} other {# ቃላት}}",
+      "glossaryLanguageMismatch": "እዚ መዝገብ ቃላት ንዑድቴታት ቋንቋ ተምሪሑ።",
+      "glossaryMismatchChip": "ምዕራፍ ቋንቋ ዘይሓደሽዎ",
+      "glossaryOrgLimit": "ኣብ እዚ ትርጉም ክፍትቲ {max} ውድብ መዝገብ ቃላት ብብልሕ ትኽእሉ።",
+      "copyToMine": "{name} ናተይ መዝገብ ቃላት ውሰድ",
+      "copyToMineTitle": "ናተይ መዝገብ ቃላት ምትኣንቀሳቓስ",
+      "copyToMineFailed": "መዝገብ ቃላት ምትኣንቀሳቓስ ኣይተሳነን። ደገ ሞክር።",
+      "copiedToMine": "ናተይ መዝገብ ቃላት ተተኣንቀሳቅሎም",
+      "copiedGlossaryName": "{name} (ቅድሚ ኤክስፎርት)",
+      "clearStaleGlossary": "ኣውጽእ",
+      "glossaryUnavailable": "መዝገብ ቃላት ምስርናይ ኣይተገናነበን (ክፋል ወይ ኣይተሳተፈን)",
+      "showOtherLanguages": "{count, plural, one {ንካልእ ቋንቋ # መዝገብ ቃል ርአ} other {ንካልእ ቋንቋታት # መዝገብ ቃላት ርአ}}",
+      "hideOtherLanguages": "ካልኦት ቋንቋታት ሰንሽፍ",
+      "glossarySourceLang": "ቋንቋ መእታው",
+      "glossaryTargetLang": "ቋንቋ ዕለታዊ",
+      "glossaryLanguageEncourage": "ንዕለታዊ ቋንቋ ብተመዝገብ እዚ መዝገብ ቃላት ኣብ መጀመርታ ምርጫ ይኸውን።",
+      "importEntries": "CSV/TSV ኣምጻእ",
+      "exportEntries": "CSV ኣልፈልጥ",
+      "importHint": "ኣውድማታት፡ መእታዊ፣ ዕለታዊ፣ ማስታወሻ፣ ዓይነት፣ መስዋእቲ መእታዊ፣ መስዋእቲ ዕለታዊ። ፋይል ብካብ ውድማ ይሰርሕ ይኽእል።",
+      "importTooLarge": "እዚ ፋይል ብምንታይ ዝበለ ነይሩ (5 MB ድሕሪት ኣይተሳነን።)",
+      "importNothing": "ምዕባለ መስርሒ ብምስካድ {skipped} ኣይተረኽበን።",
+      "importSummary": "{added} ተወስነ፣ {replaced} ተቐይሩ፣ {skipped} ተርፊቱ።",
+      "entriesTooManyToShow": "{count} ቃላት — ሓደሽ ዝርዝር ከምዚ ኣይትቀርብን። ኣልፈልጢ ምርኣይ፣ ወይ CSV/TSV ምትኣንቀሳቓስ ምስክዕ።"
     },
     "document": {
       "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",
@@ -3494,7 +3526,8 @@
         "acceptAll": "ምስሉ ትስዕቲ ንኩሎም ተቐቢሉ",
         "rejectAll": "ኩሎም ኣልቦ",
         "cancel": "ሰርዝ"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# ቃል ደጊም ኣይተቃለሰን} other {# ቃላት ደጊም ኣይተቃለሰን}}"
     },
     "form": {
       "emptyTitle": "ሰነድ ሙሉ",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# ሰነድ} other {# ሰነዳት}}, ውሱስ {max} — ከዝተመደበ ዉሱስ ቅኑዕ ወይ ኣልቦ ካብዚ ንላዕሊ ምልጣ፣ ከምትካ ኣርእዬ ኣደርቡ",
     "m365AgentLimitBadgePlain": "ውሱስ {limit}",
     "m365PlanShowAllRows": "ኩሉ ኣርኣዩ {count, plural, one {# ፋይል} other {# ፋይላት}}",
-    "m365PlanShowFewerRows": "ንእሽቶ ኣርኣዩ"
+    "m365PlanShowFewerRows": "ንእሽቶ ኣርኣዩ",
+    "glossariesTab": "መዝገብ ቃላት",
+    "addGlossary": "መዝገብ ቃላት ኣእመዝ",
+    "noGlossaries": "ዝተጋሩ መዝገብ ቃላት ኣይተረኽበን። ሓደ ኣእመዝ ንኩሎም ተትሓልቋ ቃላት ተመሳሳላት ኣሓበ።",
+    "editGlossaryTitle": "መዝገብ ቃላት ኣርትእ",
+    "newGlossaryTitle": "መዝገብ ቃላት ሓድሽ",
+    "glossarySaveSuccess": "መዝገብ ቃላት ተዓቢቑ",
+    "glossaryCreateSuccess": "መዝገብ ቃላት ተፈጢሩ",
+    "glossaryLanguagePairLabel": "ቋንቋታት",
+    "glossarySourceLangLabel": "ቋንቋ መእታዊ",
+    "glossaryTargetLangLabel": "ቋንቋ ዕለታዊ",
+    "glossaryAnyLanguage": "ማእከል ቋንቋ",
+    "glossaryLanguagePairHint": "ትርጉም ናብዚ ቋንቋ ዝኸውን ዝመረጼ መዝገብ ቃላት ምነታው ይቀይሩ።",
+    "glossaryLanguagePairEncourage": "ከም ኣብዚ ኣይደልን፣ ግን ትርጓም ዝሠርሕ እንተረኻባነ ዝሓለፉ ውጽኢት ኣይትምስላ።",
+    "guidePayloadLoading": "ዝተዛረብ እትትካ።…",
+    "guidePayloadMissing": "ዕብድቲ መፅሓፍ ኣይተረኽበን። ምዝጋብ ሓዱሽ ቅፅ ይሰብር።",
+    "deleteGlossary": "መዝገብ ቃላት ምድምሳስ",
+    "deleteGlossaryConfirm": "ዝኾነ መዝገብ ቃላት ንኩሉ ተሓድሶ? ተተማሃሮም እቲ ወዲ ከይዶም፣ ዝተቐዲሞም እንተተቐዲሙ ዝሓዙ ይበቀሉ።",
+    "confirmDeleteGlossary": "መዝገብ ቃላት ሰርዝ",
+    "glossaryDeleteSuccess": "መዝገብ ቃላት ተሰርዘ"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",
@@ -4984,7 +5036,8 @@
       "workflows": "ሒደታት ውዕል ንኩሉ ሰብ ምክፋት ወይ ምዕጻውን።",
       "viewAs": "እቲ መተግበሪ እንተ ኣብ ዝኽእል ኩነታት ዝገብሩ ወይስ ዝደብሩ ሰባት ምፈታት።",
       "globalAdmins": "ኩሉ ነገር እዚ ኣድሚን ኢሉ ይመሓየሽ ዝብሉ እቲ ምደባ ብዝፈተኑ ዝተወሰነ ሽም ኣይኮነን።",
-      "formTemplates": "ኣተወ ዝተኽልኩሉ ቅደም ተከታታይ ቅፅታታት ንተጠቃሚታት ናይ መዘገብ መምርጡ ስርሒት።"
+      "formTemplates": "ኣተወ ዝተኽልኩሉ ቅደም ተከታታይ ቅፅታታት ንተጠቃሚታት ናይ መዘገብ መምርጡ ስርሒት።",
+      "glossaries": "መዝገብ ቃላት ድሕሪ ስራሕ ባህሪ — ኣስፈላጊ ቃላታት እና ተራኻቢት ትርጉም ኣብ ተተራኸቡ።"
     },
     "openSettings": "ቅንጥታት ክፈት",
     "area": {

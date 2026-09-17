@@ -2877,7 +2877,39 @@
       "acronymHint": "অ্যাক্রোনিম হুবহু যেমন লেখা হয়েছে তেমনই মেলে: WHO শুধুমাত্র “WHO”-তে প্রযোজ্য, “who”-তে নয়। শব্দ যেকোনো বড় বা ছোট অক্ষর মিলবে।",
       "glossaryCheckTitle": "গ্লসারি পরীক্ষা",
       "glossaryCheckPass": "{count, plural, one {প্রয়োজনীয় শব্দটি ব্যবহৃত হয়েছে।} other {সব #টি প্রয়োজনীয় শব্দ ব্যবহৃত হয়েছে।}}",
-      "glossaryCheckMissing": "{count, plural, one {{total}টির মধ্যে #টি প্রয়োজনীয় অনুবাদ নেই:} other {{total}টির মধ্যে #টি প্রয়োজনীয় অনুবাদ নেই:}}"
+      "glossaryCheckMissing": "{count, plural, one {{total}টির মধ্যে #টি প্রয়োজনীয় অনুবাদ নেই:} other {{total}টির মধ্যে #টি প্রয়োজনীয় অনুবাদ নেই:}}",
+      "glossariesButton": "{count, plural, =0 {শব্দকোষসমূহ} one {# শব্দকোষ} other {# শব্দকোষসমূহ}}",
+      "glossaryPickerTitle": "শব্দকোষসমূহ",
+      "glossaryPickerClose": "শব্দকোষসমূহ বন্ধ করুন",
+      "glossaryOrgSection": "সংগঠন",
+      "glossaryMineSection": "আমার",
+      "noOrganizationGlossaries": "কোনো সংগঠনের শব্দকোষ আপনার সাথে ভাগ করা হয়নি।",
+      "noPersonalGlossaries": "আপনার কোনো শব্দকোষ নেই। তৈরি করতে বা কোনো সংগঠনের শব্দকোষ কপি করতে Manage ব্যবহার করুন।",
+      "glossaryAnyLanguage": "যেকোনো ভাষা",
+      "glossaryCustomLanguage": "কাস্টম ভাষা",
+      "glossaryEntryCount": "{count, plural, one {# টার্ম} other {# টার্ম}}",
+      "glossaryLanguageMismatch": "এই শব্দকোষ অন্য লক্ষ্য ভাষার জন্য নির্ধারিত।",
+      "glossaryMismatchChip": "ভাষার অমিল",
+      "glossaryOrgLimit": "প্রতি অনুবাদে সর্বোচ্চ {max}টি সংগঠনের শব্দকোষ।",
+      "copyToMine": "{name} আমার শব্দকোষে কপি করুন",
+      "copyToMineTitle": "আমার শব্দকোষে কপি করুন",
+      "copyToMineFailed": "শব্দকোষ কপি করা যায়নি। আবার চেষ্টা করুন।",
+      "copiedToMine": "আপনার শব্দকোষে কপি হয়েছে",
+      "copiedGlossaryName": "{name} (কপি)",
+      "clearStaleGlossary": "সরান",
+      "glossaryUnavailable": "শব্দকোষ পাওয়া যাচ্ছে না (মুছে ফেলা হয়েছে বা আর ভাগ করা নেই)",
+      "showOtherLanguages": "{count, plural, one {আরও একটি ভাষার জন্য # শব্দকোষ দেখান} other {অন্যান্য ভাষার জন্য # শব্দকোষসমূহ দেখান}}",
+      "hideOtherLanguages": "অন্যান্য ভাষা লুকান",
+      "glossarySourceLang": "উৎস ভাষা",
+      "glossaryTargetLang": "লক্ষ্য ভাষা",
+      "glossaryLanguageEncourage": "একটি লক্ষ্য ভাষা ট্যাগ করুন যাতে সামঞ্জস্যপূর্ণ অনুবাদের জন্য প্রথমে এই শব্দকোষটি প্রস্তাব করা হয়।",
+      "importEntries": "CSV/TSV আমদানি করুন",
+      "exportEntries": "CSV রপ্তানি করুন",
+      "importHint": "কলাম: source, target, note, kind, sourceExpansion, targetExpansion। দুটি কলামের ফাইলও কাজ করবে।",
+      "importTooLarge": "ফাইলটি খুব বড় (সর্বোচ্চ ৫ MB)।",
+      "importNothing": "কোনো ব্যবহারযোগ্য সারি পাওয়া যায়নি ({skipped} টি বাদ)।",
+      "importSummary": "{added}টি যোগ হয়েছে, {replaced}টি প্রতিস্থাপিত, {skipped}টি বাদ।",
+      "entriesTooManyToShow": "{count} টার্ম — এখানে তালিকাভুক্ত করা সম্ভব নয়। পর্যালোচনার জন্য রপ্তানি করুন, অথবা টার্ম পরিবর্তনের জন্য ফাইল আমদানি করুন।"
     },
     "document": {
       "emptyTitle": "আপনি যে নথি চান তা বর্ণনা করুন",
@@ -3510,7 +3542,8 @@
         "acceptAll": "বাকি সব গ্রহণ করুন",
         "rejectAll": "সব প্রত্যাখ্যান করুন",
         "cancel": "বাতিল করুন"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {আরও # টার্ম দেখানো হয়নি} other {আরও # টার্ম দেখানো হয়নি}}"
     },
     "form": {
       "emptyTitle": "একটি ডকুমেন্ট পূরণ করুন",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {#টি নথি} other {#টি নথি}}, সর্বোচ্চ সীমা {max} — রিফ্রেশ করার আগে কমান বা সীমা বাড়ান",
     "m365AgentLimitBadgePlain": "সীমা {limit}",
     "m365PlanShowAllRows": "সব {count, plural, one {#টি ফাইল} other {#টি ফাইল}} দেখান",
-    "m365PlanShowFewerRows": "কম দেখান"
+    "m365PlanShowFewerRows": "কম দেখান",
+    "glossariesTab": "শব্দকোষসমূহ",
+    "addGlossary": "শব্দকোষ যোগ করুন",
+    "noGlossaries": "এখনো কোনো সংগঠনের শব্দকোষ নেই। প্রতিটি অনুবাদকের জন্য বাধ্যতামূলক শব্দভাণ্ডার ভাগাভাগি করতে একটা যোগ করুন।",
+    "editGlossaryTitle": "শব্দকোষ সম্পাদনা করুন",
+    "newGlossaryTitle": "নতুন শব্দকোষ",
+    "glossarySaveSuccess": "শব্দকোষ সংরক্ষিত হয়েছে",
+    "glossaryCreateSuccess": "শব্দকোষ তৈরি হয়েছে",
+    "glossaryLanguagePairLabel": "ভাষাসমূহ",
+    "glossarySourceLangLabel": "উৎস ভাষা",
+    "glossaryTargetLangLabel": "লক্ষ্য ভাষা",
+    "glossaryAnyLanguage": "যেকোনো ভাষা",
+    "glossaryLanguagePairHint": "এই ভাষায় অনুবাদ করলে সর্বপ্রথম এই শব্দকোষ দেখা যাবে।",
+    "glossaryLanguagePairEncourage": "ঐচ্ছিক, তবে লক্ষ্য ভাষা থাকলে সঠিক শব্দকোষ পেতে সুবিধা হয় এবং অপ্রয়োজনীয় অনুবাদের মধ্যে এটি থাকবে না।",
+    "guidePayloadLoading": "বিষয়বস্তু লোড হচ্ছে…",
+    "guidePayloadMissing": "এই গাইডের সংরক্ষিত বিষয়বস্তু পাওয়া যায়নি। সংরক্ষণে নতুন কপি তৈরি হবে।",
+    "deleteGlossary": "শব্দকোষ মুছে ফেলুন",
+    "deleteGlossaryConfirm": "সবার জন্য এই শব্দকোষটি মুছবেন? অনুবাদকরা সঙ্গে সঙ্গে এটি হারাবেন; যারা কপি করেছেন, তাদের থাকবে।",
+    "confirmDeleteGlossary": "গ্লসারি মুছুন",
+    "glossaryDeleteSuccess": "গ্লসারি মুছে ফেলা হয়েছে"
   },
   "localModels": {
     "title": "স্থানীয় মডেলসমূহ",
@@ -5000,7 +5052,8 @@
       "workflows": "সব ব্যবহারকারীর জন্য সংলাপ ওয়ার্কফ্লো চালু বা বন্ধ করুন।",
       "viewAs": "অ্যাপটি এমন কারো মতো টেস্ট করুন, যিনি কোনো শর্ত পূরণ করেন — অথবা করেন না।",
       "globalAdmins": "কারা সবকিছু প্রশাসন করেন — ডিপ্লয়মেন্টে নির্ধারিত তালিকার বাইরেও।",
-      "formTemplates": "ডকুমেন্ট-ফিল ওয়ার্কফ্লোর ব্যবহারকারীদের সাথে ভাগ করা পূরণযোগ্য ফর্ম টেমপ্লেট।"
+      "formTemplates": "ডকুমেন্ট-ফিল ওয়ার্কফ্লোর ব্যবহারকারীদের সাথে ভাগ করা পূরণযোগ্য ফর্ম টেমপ্লেট।",
+      "glossaries": "সংস্থার গ্লসারি — বাধ্যতামূলক পরিভাষা, অনুবাদকদের সাথে ভাগ করা হয়।"
     },
     "openSettings": "সেটিংস খুলুন",
     "area": {

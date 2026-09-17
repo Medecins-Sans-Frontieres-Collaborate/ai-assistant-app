@@ -2861,7 +2861,39 @@
       "acronymHint": "Izifinyezo zifana nje ngendlela ezibhaliwe ngayo: WHO isebenza ku-“WHO”, hhayi “who”. Ama-term afaka noma yikuphi ukukhishwa kokuqala.",
       "glossaryCheckTitle": "Ukuhlola iglosari",
       "glossaryCheckPass": "{count, plural, one {Ithuluzi elidingekayo lisetshenzisiwe.} other {Zonke izithuluzi ezingu-# ezidingekayo zisetshenzisiwe.}}",
-      "glossaryCheckMissing": "{count, plural, one {# phakathi kuka-{total} wezilimi ezidingekayo azikho:} other {# phakathi kuka-{total} wezilimi ezidingekayo azikho:}}"
+      "glossaryCheckMissing": "{count, plural, one {# phakathi kuka-{total} wezilimi ezidingekayo azikho:} other {# phakathi kuka-{total} wezilimi ezidingekayo azikho:}}",
+      "glossariesButton": "{count, plural, =0 {Izichazamazwi} one {# isichazamazwi} other {# izichazamazwi}}",
+      "glossaryPickerTitle": "Izichazamazwi",
+      "glossaryPickerClose": "Vala izichazamazwi",
+      "glossaryOrgSection": "Inhlangano",
+      "glossaryMineSection": "Ezami",
+      "noOrganizationGlossaries": "Azikho izichazamazwi zenhlangano ezabelwana nawe.",
+      "noPersonalGlossaries": "Awukanazo izichazamazwi okwamanje. Sebenzisa u-Manage ukwenza eyodwa noma kopisha isichazamazwi senhlangano.",
+      "glossaryAnyLanguage": "Noma yiluphi ulimi",
+      "glossaryCustomLanguage": "Ulimi lwakho",
+      "glossaryEntryCount": "{count, plural, one {# igama} other {# amagama}}",
+      "glossaryLanguageMismatch": "Leli sichazamazwi limakwe ngolunye ulimi lokuhumusha.",
+      "glossaryMismatchChip": "Ukungahambisani kolimi",
+      "glossaryOrgLimit": "Kuze kufike ku-{max} izichazamazwi zenhlangano per translation.",
+      "copyToMine": "Kopisha u-{name} kwezami izichazamazwi",
+      "copyToMineTitle": "Kopisha kwezami izichazamazwi",
+      "copyToMineFailed": "Akukwazanga ukukopisha isichazamazwi. Zama futhi.",
+      "copiedToMine": "Kukopishwe kwezami izichazamazwi",
+      "copiedGlossaryName": "{name} (ikhophi)",
+      "clearStaleGlossary": "Susa",
+      "glossaryUnavailable": "Isichazamazwi asitholakali (susiwe noma asisabelwanga nawe)",
+      "showOtherLanguages": "{count, plural, one {Bonisa # isichazamazwi kolunye ulimi} other {Bonisa # izichazamazwi kwezinye izilimi}}",
+      "hideOtherLanguages": "Fihla ezinye izilimi",
+      "glossarySourceLang": "Ulimi lwangempela",
+      "glossaryTargetLang": "Ulimi lokuhumusha",
+      "glossaryLanguageEncourage": "Maka ulimi oluhlosiwe ukuze leli sichazamazwi linikezwe kuqala uma kuhunyushwa.",
+      "importEntries": "Faka CSV/TSV",
+      "exportEntries": "Thumela CSV",
+      "importHint": "Amakholomu: source, target, note, kind, sourceExpansion, targetExpansion. Ifayela elinemigqa emibili liyasebenza futhi.",
+      "importTooLarge": "Ifayela likhulu kakhulu ukufakwa (5 MB max).",
+      "importNothing": "Alukho ulayini olungasetshenziswa olwatholakala ({skipped} lushiywe).",
+      "importSummary": "{added} kufakiwe, {replaced} kushintshiwe, {skipped} kushiywe.",
+      "entriesTooManyToShow": "{count} amagama — amaningi kakhulu ukuboniswa lapha. Thumela ngaphandle ukuze uwabuke, noma faka ifayela ukuze ushintshe amagama."
     },
     "document": {
       "emptyTitle": "Chaza umbhalo ofunayo",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Yamukela konke okusele",
         "rejectAll": "Lahla konke",
         "cancel": "Khansela"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# igama elingaboniswanga} other {# amagama angaboniswanga}}"
     },
     "form": {
       "emptyTitle": "Gcwalisa umbhalo",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# umbhalo} other {# imibhalo}}, umkhawulo {max} — sebenzisa noma khuphula umkhawulo ngaphambi kokuvuselela",
     "m365AgentLimitBadgePlain": "Umkhawulo {limit}",
     "m365PlanShowAllRows": "Bonisa konke {count, plural, one {# ifayela} other {# amafayela}}",
-    "m365PlanShowFewerRows": "Bonisa okumbalwa"
+    "m365PlanShowFewerRows": "Bonisa okumbalwa",
+    "glossariesTab": "Izichazamazwi",
+    "addGlossary": "Engeza isichazamazwi",
+    "noGlossaries": "Azikho izichazamazwi zenhlangano okwamanje. Engeza esisodwa ukuze wabelane ngamagama abalulekile nabahumushi bonke.",
+    "editGlossaryTitle": "Hlela isichazamazwi",
+    "newGlossaryTitle": "Isichazamazwi esisha",
+    "glossarySaveSuccess": "Isichazamazwi sigciniwe",
+    "glossaryCreateSuccess": "Isichazamazwi sakhiwe",
+    "glossaryLanguagePairLabel": "Izilimi",
+    "glossarySourceLangLabel": "Ulimi lwangempela",
+    "glossaryTargetLangLabel": "Ulimi lokuhumusha",
+    "glossaryAnyLanguage": "Noma yiluphi ulimi",
+    "glossaryLanguagePairHint": "Ukuhumusha kulo limi kuzobona leli sichazamazwi kuqala.",
+    "glossaryLanguagePairEncourage": "Okuzikhethela, kodwa ulimi oluhlosiwe lusiza abantu bathole isichazamazwi esifanele futhi luhlele amagama angafaneleki.",
+    "guidePayloadLoading": "Kulayishwa okuqukethwe…",
+    "guidePayloadMissing": "Okuqukethwe kwalolu shayela akutholakali. Ukwenza kube okusha kuzogcina ikhophi entsha.",
+    "deleteGlossary": "Susa isichazamazwi",
+    "deleteGlossaryConfirm": "Uqinisekile ukuthi ufuna ukususa lesi sichazamazwi kubo bonke? Abahumushi bazoqedwa ngaso ngokushesha; amakhophi abawenzile azohlala enawo.",
+    "confirmDeleteGlossary": "Susa iglosari",
+    "glossaryDeleteSuccess": "Iglosari isusiwe"
   },
   "localModels": {
     "title": "Amamodeli endaweni",
@@ -4984,7 +5036,8 @@
       "workflows": "Shintsha imisebenzi yengxoxo ivuleke noma ivinjwe kubo bonke.",
       "viewAs": "Hlola uhlelo njengesinye isimo, noma singanelanga isimo esidingekayo.",
       "globalAdmins": "Abalawula konke — ngaphandle kohlu olubekwe ngokufakwa kohlelo.",
-      "formTemplates": "Izitemplate zefomu ezigcwalisekayo ezihlanganyelwa nabasebenzisi be-workflow yokugcwalisa imibhalo."
+      "formTemplates": "Izitemplate zefomu ezigcwalisekayo ezihlanganyelwa nabasebenzisi be-workflow yokugcwalisa imibhalo.",
+      "glossaries": "Ama-glossary enhlangano — amagama okusetshenziswa okudingekayo, abelwe abahumushi."
     },
     "openSettings": "Vula izilungiselelo",
     "area": {

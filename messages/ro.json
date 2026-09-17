@@ -2877,7 +2877,39 @@
       "acronymHint": "Acronimele corespund exact modului tastat: WHO se aplică la „WHO”, niciodată la „who”. Termenii corespund oricărei capitalizări.",
       "glossaryCheckTitle": "Verificare glosar",
       "glossaryCheckPass": "{count, plural, one {Termenul cerut a fost folosit.} other {Toți cei # termeni ceruți au fost folosiți.}}",
-      "glossaryCheckMissing": "{count, plural, one {Lipsește # din {total} traduceri cerute:} other {Lipsesc # din {total} traduceri cerute:}}"
+      "glossaryCheckMissing": "{count, plural, one {Lipsește # din {total} traduceri cerute:} other {Lipsesc # din {total} traduceri cerute:}}",
+      "glossariesButton": "{count, plural, =0 {Glosare} one {# glosar} other {# glosare}}",
+      "glossaryPickerTitle": "Glosare",
+      "glossaryPickerClose": "Închide glosarele",
+      "glossaryOrgSection": "Organizație",
+      "glossaryMineSection": "Ale mele",
+      "noOrganizationGlossaries": "Nu aveți niciun glosar al organizației partajat cu dvs.",
+      "noPersonalGlossaries": "Nu aveți încă niciun glosar. Folosiți opțiunea „Gestionare” pentru a crea unul sau copiați un glosar al organizației.",
+      "glossaryAnyLanguage": "Oricare limbă",
+      "glossaryCustomLanguage": "Limbă personalizată",
+      "glossaryEntryCount": "{count, plural, one {# termen} other {# termeni}}",
+      "glossaryLanguageMismatch": "Acest glosar este etichetat pentru o altă limbă țintă.",
+      "glossaryMismatchChip": "Divergență de limbă",
+      "glossaryOrgLimit": "Până la {max} glosare ale organizației pe traducere.",
+      "copyToMine": "Copiați {name} în glosarele mele",
+      "copyToMineTitle": "Copiați în glosarele mele",
+      "copyToMineFailed": "Nu s-a putut copia glosarul. Încercați din nou.",
+      "copiedToMine": "Copiat în glosarele dvs.",
+      "copiedGlossaryName": "{name} (copie)",
+      "clearStaleGlossary": "Eliminați",
+      "glossaryUnavailable": "Glosar indisponibil (șters sau nu mai este partajat cu dvs.)",
+      "showOtherLanguages": "{count, plural, one {Afișează # glosar pentru altă limbă} other {Afișează # glosare pentru alte limbi}}",
+      "hideOtherLanguages": "Ascunde alte limbi",
+      "glossarySourceLang": "Limba sursă",
+      "glossaryTargetLang": "Limba țintă",
+      "glossaryLanguageEncourage": "Etichetați o limbă țintă pentru ca acest glosar să fie sugerat prima dată pentru traducerile compatibile.",
+      "importEntries": "Importați CSV/TSV",
+      "exportEntries": "Exportați CSV",
+      "importHint": "Coloane: sursă, țintă, notă, tip, extindereSursă, extindereȚintă. Funcționează și un fișier cu două coloane.",
+      "importTooLarge": "Fișierul este prea mare pentru import (maxim 5 MB).",
+      "importNothing": "Nu s-au găsit rânduri utilizabile ({skipped} s-au sărit).",
+      "importSummary": "{added} adăugate, {replaced} înlocuite, {skipped} sărite.",
+      "entriesTooManyToShow": "{count} termeni — prea mulți pentru a fi afișați aici. Exportați pentru a-i verifica sau importați un fișier pentru a înlocui termenii."
     },
     "document": {
       "emptyTitle": "Descrieți documentul dorit",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Acceptă toate rămase",
         "rejectAll": "Respinge toate",
         "cancel": "Anulează"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {încă # termen neafișat} other {încă # termeni neafișați}}"
     },
     "form": {
       "emptyTitle": "Completează un document",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# document} other {# documente}}, limită {max} — reduceți sau măriți limita înainte de a reîmprospăta",
     "m365AgentLimitBadgePlain": "Limită {limit}",
     "m365PlanShowAllRows": "Afișează toate {count, plural, one {# fișier} other {# fișiere}}",
-    "m365PlanShowFewerRows": "Afișează mai puține"
+    "m365PlanShowFewerRows": "Afișează mai puține",
+    "glossariesTab": "Glosare",
+    "addGlossary": "Adaugă glosar",
+    "noGlossaries": "Nu există încă glosare ale organizației. Adăugați unul pentru a partaja terminologia obligatorie cu toți traducătorii.",
+    "editGlossaryTitle": "Editați glosarul",
+    "newGlossaryTitle": "Glosar nou",
+    "glossarySaveSuccess": "Glosar salvat",
+    "glossaryCreateSuccess": "Glosar creat",
+    "glossaryLanguagePairLabel": "Limbi",
+    "glossarySourceLangLabel": "Limba sursă",
+    "glossaryTargetLangLabel": "Limba țintă",
+    "glossaryAnyLanguage": "Oricare limbă",
+    "glossaryLanguagePairHint": "Traducerile către această limbă vor vedea acest glosar prima dată.",
+    "glossaryLanguagePairEncourage": "Opțional, dar specificarea unei limbi țintă ajută utilizatorii să găsească glosarul potrivit și îl exclude din traducerile nerelevante.",
+    "guidePayloadLoading": "Încărcare conținut…",
+    "guidePayloadMissing": "Conținutul salvat al acestui ghid nu a fost găsit. Salvarea va crea o copie nouă.",
+    "deleteGlossary": "Ștergeți glosarul",
+    "deleteGlossaryConfirm": "Ștergeți acest glosar pentru toată lumea? Traducătorii îl vor pierde imediat; copiile făcute de persoane rămân lor.",
+    "confirmDeleteGlossary": "Ștergeți glosarul",
+    "glossaryDeleteSuccess": "Glosar șters"
   },
   "localModels": {
     "title": "Modele locale",
@@ -5000,7 +5052,8 @@
       "workflows": "Activează sau dezactivează fluxurile de conversație pentru toată lumea.",
       "viewAs": "Testează aplicația ca și cum ai îndeplini — sau nu — o condiție.",
       "globalAdmins": "Cine administrează totul — în afara listei stabilite de implementare.",
-      "formTemplates": "Șabloane de formular completabile partajate cu utilizatorii fluxului de lucru pentru completare documente."
+      "formTemplates": "Șabloane de formular completabile partajate cu utilizatorii fluxului de lucru pentru completare documente.",
+      "glossaries": "Glosare organizaționale — terminologie obligatorie, partajată cu traducătorii."
     },
     "openSettings": "Deschide setările",
     "area": {

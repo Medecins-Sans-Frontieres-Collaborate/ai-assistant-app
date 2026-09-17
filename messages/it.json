@@ -2877,7 +2877,39 @@
       "acronymHint": "Gli acronimi corrispondono esattamente come digitati: WHO si applica a “WHO”, mai a “who”. I termini corrispondono a qualsiasi maiuscola/minuscola.",
       "glossaryCheckTitle": "Controllo glossario",
       "glossaryCheckPass": "{count, plural, one {Il termine richiesto è stato utilizzato.} other {Tutti i # termini richiesti sono stati utilizzati.}}",
-      "glossaryCheckMissing": "{count, plural, one {# di {total} traduzione richiesta mancante:} other {# di {total} traduzioni richieste mancanti:}}"
+      "glossaryCheckMissing": "{count, plural, one {# di {total} traduzione richiesta mancante:} other {# di {total} traduzioni richieste mancanti:}}",
+      "glossariesButton": "{count, plural, =0 {Glossari} one {# glossario} other {# glossari}}",
+      "glossaryPickerTitle": "Glossari",
+      "glossaryPickerClose": "Chiudi glossari",
+      "glossaryOrgSection": "Organizzazione",
+      "glossaryMineSection": "Personali",
+      "noOrganizationGlossaries": "Nessun glossario dell'organizzazione è condiviso con te.",
+      "noPersonalGlossaries": "Non hai ancora glossari. Usa Gestisci per crearne uno o copia un glossario dell'organizzazione.",
+      "glossaryAnyLanguage": "Qualsiasi lingua",
+      "glossaryCustomLanguage": "Lingua personalizzata",
+      "glossaryEntryCount": "{count, plural, one {# termine} other {# termini}}",
+      "glossaryLanguageMismatch": "Questo glossario è associato a una lingua di destinazione diversa.",
+      "glossaryMismatchChip": "Incompatibilità lingua",
+      "glossaryOrgLimit": "Fino a {max} glossari dell'organizzazione per traduzione.",
+      "copyToMine": "Copia {name} nei miei glossari",
+      "copyToMineTitle": "Copia nei miei glossari",
+      "copyToMineFailed": "Impossibile copiare il glossario. Riprova.",
+      "copiedToMine": "Copiato nei tuoi glossari",
+      "copiedGlossaryName": "{name} (copia)",
+      "clearStaleGlossary": "Rimuovi",
+      "glossaryUnavailable": "Glossario non disponibile (eliminato o non più condiviso con te)",
+      "showOtherLanguages": "{count, plural, one {Mostra # glossario per un'altra lingua} other {Mostra # glossari per altre lingue}}",
+      "hideOtherLanguages": "Nascondi altre lingue",
+      "glossarySourceLang": "Lingua sorgente",
+      "glossaryTargetLang": "Lingua di destinazione",
+      "glossaryLanguageEncourage": "Associa una lingua di destinazione per proporre questo glossario nelle traduzioni corrispondenti.",
+      "importEntries": "Importa CSV/TSV",
+      "exportEntries": "Esporta CSV",
+      "importHint": "Colonne: source, target, note, kind, sourceExpansion, targetExpansion. Va bene anche un file a due colonne.",
+      "importTooLarge": "Il file è troppo grande da importare (massimo 5 MB).",
+      "importNothing": "Nessuna riga utilizzabile trovata ({skipped} saltate).",
+      "importSummary": "{added} aggiunte, {replaced} sostituite, {skipped} saltate.",
+      "entriesTooManyToShow": "{count} termini — troppi per essere elencati qui. Esporta per consultarli, oppure importa un file per sostituire i termini."
     },
     "document": {
       "emptyTitle": "Descrivi il documento desiderato",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Accetta tutti i rimanenti",
         "rejectAll": "Rifiuta tutti",
         "cancel": "Annulla"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# altro termine non visualizzato} other {# altri termini non visualizzati}}"
     },
     "form": {
       "emptyTitle": "Compila un documento",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# documento} other {# documenti}}, limite {max} — riduce o aumenta il limite prima di aggiornare",
     "m365AgentLimitBadgePlain": "Limite {limit}",
     "m365PlanShowAllRows": "Mostra tutti {count, plural, one {# file} other {# file}}",
-    "m365PlanShowFewerRows": "Mostra meno"
+    "m365PlanShowFewerRows": "Mostra meno",
+    "glossariesTab": "Glossari",
+    "addGlossary": "Aggiungi glossario",
+    "noGlossaries": "Nessun glossario dell'organizzazione al momento. Aggiungine uno per condividere la terminologia obbligatoria con tutti i traduttori.",
+    "editGlossaryTitle": "Modifica glossario",
+    "newGlossaryTitle": "Nuovo glossario",
+    "glossarySaveSuccess": "Glossario salvato",
+    "glossaryCreateSuccess": "Glossario creato",
+    "glossaryLanguagePairLabel": "Lingue",
+    "glossarySourceLangLabel": "Lingua sorgente",
+    "glossaryTargetLangLabel": "Lingua di destinazione",
+    "glossaryAnyLanguage": "Qualsiasi lingua",
+    "glossaryLanguagePairHint": "Le traduzioni verso questa lingua vedranno prima questo glossario.",
+    "glossaryLanguagePairEncourage": "Facoltativo, ma una lingua di destinazione aiuta a trovare il glossario giusto e a evitare traduzioni non correlate.",
+    "guidePayloadLoading": "Caricamento contenuti…",
+    "guidePayloadMissing": "Non è stato possibile trovare i contenuti memorizzati di questa guida. Salvando si scriverà una nuova copia.",
+    "deleteGlossary": "Elimina glossario",
+    "deleteGlossaryConfirm": "Eliminare questo glossario per tutti? I traduttori non lo vedranno più subito; le copie già salvate resteranno disponibili ai proprietari.",
+    "confirmDeleteGlossary": "Elimina glossario",
+    "glossaryDeleteSuccess": "Glossario eliminato"
   },
   "localModels": {
     "title": "Modelli locali",
@@ -5000,7 +5052,8 @@
       "workflows": "Attiva o disattiva i workflow di conversazione per tutti.",
       "viewAs": "Testa l'app come utente che soddisfa — o non soddisfa — una condizione.",
       "globalAdmins": "Chi amministra tutto — oltre l'elenco definito dal deployment.",
-      "formTemplates": "Modelli di form compilabili condivisi con gli utenti del flusso document-fill."
+      "formTemplates": "Modelli di form compilabili condivisi con gli utenti del flusso document-fill.",
+      "glossaries": "Glossari dell’organizzazione — terminologia obbligatoria, condivisa con i traduttori."
     },
     "openSettings": "Apri impostazioni",
     "area": {

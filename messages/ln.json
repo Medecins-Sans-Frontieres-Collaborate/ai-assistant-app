@@ -2861,7 +2861,39 @@
       "acronymHint": "Bamakasi ekotambola kaka ndenge wabongi: WHO ezali kaka “WHO”, te “who”. Matalatala ekosangana na minzoto nyonso ya mikanda.",
       "glossaryCheckTitle": "Kokanga maloba",
       "glossaryCheckPass": "{count, plural, one {Liloba esengeli esalemi.} other {Maloba nyonso # esengeli esalami.}}",
-      "glossaryCheckMissing": "{count, plural, one {# na kati ya {total} bakobongisa esengeli ezali te:} other {# na kati ya {total} bakobongisa esengeli ezali te:}}"
+      "glossaryCheckMissing": "{count, plural, one {# na kati ya {total} bakobongisa esengeli ezali te:} other {# na kati ya {total} bakobongisa esengeli ezali te:}}",
+      "glossariesButton": "{count, plural, =0 {Bilobali} one {# bilobali} other {# bilobali}}",
+      "glossaryPickerTitle": "Bilobali",
+      "glossaryPickerClose": "Kokanga bilobali",
+      "glossaryOrgSection": "Lisanga",
+      "glossaryMineSection": "Nanga",
+      "noOrganizationGlossaries": "Bilobali ya lisanga elandi te na yo.",
+      "noPersonalGlossaries": "Ozali nanu na bilobali te. Salelá \"Manage\" mpo na kokela moko to kopesa kopi ya bilobali ya lisanga.",
+      "glossaryAnyLanguage": "Liyambo nyonso",
+      "glossaryCustomLanguage": "Liyambo ya motuya",
+      "glossaryEntryCount": "{count, plural, one {# liloba} other {# maloba}}",
+      "glossaryLanguageMismatch": "Bilobali oyo ezali mpo na liyambo ya mokili mosusu.",
+      "glossaryMismatchChip": "Liyambo epesami lisusu te",
+      "glossaryOrgLimit": "Tii na {max} bilobali ya lisanga na bobongoli moko.",
+      "copyToMine": "Kokopa {name} na bilobali nanga",
+      "copyToMineTitle": "Kokopa na bilobali nanga",
+      "copyToMineFailed": "Kopikolo bilobali ekokaki te. Salamá lisusu.",
+      "copiedToMine": "Ekopami na bilobali nayo",
+      "copiedGlossaryName": "{name} (kopi)",
+      "clearStaleGlossary": "Kolongola",
+      "glossaryUnavailable": "Bilobali ezali te (ebolami to ezali lisusu te na yo)",
+      "showOtherLanguages": "{count, plural, one {Lakisa # bilobali mpo na liyambo mosusu} other {Lakisa # bilobali mpo na banyambo mosusu}}",
+      "hideOtherLanguages": "Kobomba banyambo mosusu",
+      "glossarySourceLang": "Liyambo ya ebandeli",
+      "glossaryTargetLang": "Liyambo ya suka",
+      "glossaryLanguageEncourage": "Tanda liyambo ya suka mpo ete bilobali oyo ebima liboso na kobongola oyo ekokani.",
+      "importEntries": "Kokota CSV/TSV",
+      "exportEntries": "Kobimisa CSV",
+      "importHint": "Bapili: source, target, note, kind, sourceExpansion, targetExpansion. Dosye ya bapili mibale mpe ekoki.",
+      "importTooLarge": "Dosye yango eleki monene mpo na kokota (5 MB ekoki koleka te).",
+      "importNothing": "Bakangeli ya ntina te emonani ({skipped} epanoli).",
+      "importSummary": "{added} ebakisami, {replaced} ebongolami, {skipped} epanoli.",
+      "entriesTooManyToShow": "{count} maloba — ezali mingi mpo kolakisa awa. Kobimisa mpo kotala yango, to kokota dosye mpo ebongola maloba."
     },
     "document": {
       "emptyTitle": "Sosola mokanda olingi",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Senga nyonso oyo ezali naino",
         "rejectAll": "Kokanga nyonso",
         "cancel": "Kabolaka"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# liloba mosusu ezali komonana te} other {# maloba mosusu ezali komonana te}}"
     },
     "form": {
       "emptyTitle": "Tondisa dokima",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# ndakisa ya mokanda} other {# ndakisa ya mikanda}}, ndelo {max} — longola to sanza ndelo liboso ya kosukisa sika",
     "m365AgentLimitBadgePlain": "Ndelo {limit}",
     "m365PlanShowAllRows": "Lakisa nyonso {count, plural, one {# ndakisa ya fichier} other {# ndakisa ya ba fichier}}",
-    "m365PlanShowFewerRows": "Lakisa mingi te"
+    "m365PlanShowFewerRows": "Lakisa mingi te",
+    "glossariesTab": "Bilobali",
+    "addGlossary": "Kobakisa bilobali",
+    "noGlossaries": "Bilobali ya lisanga ezali nanu te. Bakisá moko mpo na kokabola maloba ya ntina na bato nyonso oyo bazali kobongola.",
+    "editGlossaryTitle": "Kobongisa bilobali",
+    "newGlossaryTitle": "Bilobali ya sika",
+    "glossarySaveSuccess": "Bilobali ebombami",
+    "glossaryCreateSuccess": "Bilobali ekelami",
+    "glossaryLanguagePairLabel": "Banyambo",
+    "glossarySourceLangLabel": "Liyambo ya ebandeli",
+    "glossaryTargetLangLabel": "Liyambo ya suka",
+    "glossaryAnyLanguage": "Liyambo nyonso",
+    "glossaryLanguagePairHint": "Bobongoli na liyambo oyo ekomona bilobali oyo liboso.",
+    "glossaryLanguagePairEncourage": "Ekoki kosalelama te, kasi kobakisa liyambo ya suka ezali na ntina mpo bato bakuta bilobali ya malamu mpe etika na bobongoli ya litambwisi te.",
+    "guidePayloadLoading": "Kopesa ba contenus...",
+    "guidePayloadMissing": "Babombami ya contenu ya guide oyo emonani te. Kobomba ekomema kopesa kopo ya sika.",
+    "deleteGlossary": "Kolongola bilobali",
+    "deleteGlossaryConfirm": "Olingi kolongola bilobali oyo mpo na bato nyonso? Babongoli bakomona yango te kaka sika; kopi oyo bato basalá ekotikala na bango.",
+    "confirmDeleteGlossary": "Kolongola glossary",
+    "glossaryDeleteSuccess": "Glossary elongwe"
   },
   "localModels": {
     "title": "Bamodelo ya esika",
@@ -4984,7 +5036,8 @@
       "workflows": "Fantisa to kotelemisa ba workflow ya masolo mpo na bato nyonso.",
       "viewAs": "Tala application ndenge ndenge moko ya moto akoki kosala to te.",
       "globalAdmins": "Bato oyo batelemi mpo na kozela nyonso — koleka lisanga oyo ebimi na déploiement.",
-      "formTemplates": "Ba modèles ya formulaire oyo ekoki kotondama mpe ekabolami na bato oyo bazali kosalela workflow ya document-fill."
+      "formTemplates": "Ba modèles ya formulaire oyo ekoki kotondama mpe ekabolami na bato oyo bazali kosalela workflow ya document-fill.",
+      "glossaries": "Glossaries ya organisation — maloba na ntina, ekabwani na batoloki."
     },
     "openSettings": "Fungola malamu misala ya malamu",
     "area": {

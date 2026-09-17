@@ -2877,7 +2877,39 @@
       "acronymHint": "Akronim harus sama persis seperti yang diketik: WHO hanya berlaku untuk “WHO”, tidak untuk “who”. Istilah dapat dikenali terlepas dari kapitalisasi.",
       "glossaryCheckTitle": "Pemeriksaan glosarium",
       "glossaryCheckPass": "{count, plural, one {Istilah wajib telah digunakan.} other {Semua # istilah wajib telah digunakan.}}",
-      "glossaryCheckMissing": "{count, plural, one {# dari {total} terjemahan wajib belum digunakan:} other {# dari {total} terjemahan wajib belum digunakan:}}"
+      "glossaryCheckMissing": "{count, plural, one {# dari {total} terjemahan wajib belum digunakan:} other {# dari {total} terjemahan wajib belum digunakan:}}",
+      "glossariesButton": "{count, plural, =0 {Glosarium} one {# glosarium} other {# glosarium}}",
+      "glossaryPickerTitle": "Glosarium",
+      "glossaryPickerClose": "Tutup glosarium",
+      "glossaryOrgSection": "Organisasi",
+      "glossaryMineSection": "Milik Saya",
+      "noOrganizationGlossaries": "Tidak ada glosarium organisasi yang dibagikan dengan Anda.",
+      "noPersonalGlossaries": "Anda belum memiliki glosarium. Gunakan Kelola untuk membuat salah satu atau salin glosarium organisasi.",
+      "glossaryAnyLanguage": "Bahasa apapun",
+      "glossaryCustomLanguage": "Bahasa khusus",
+      "glossaryEntryCount": "{count, plural, one {# istilah} other {# istilah}}",
+      "glossaryLanguageMismatch": "Glosarium ini ditandai untuk bahasa target yang berbeda.",
+      "glossaryMismatchChip": "Bahasa tidak sesuai",
+      "glossaryOrgLimit": "Maksimal {max} glosarium organisasi per terjemahan.",
+      "copyToMine": "Salin {name} ke glosarium saya",
+      "copyToMineTitle": "Salin ke glosarium saya",
+      "copyToMineFailed": "Tidak dapat menyalin glosarium. Coba lagi.",
+      "copiedToMine": "Tersalin ke glosarium Anda",
+      "copiedGlossaryName": "{name} (salinan)",
+      "clearStaleGlossary": "Hapus",
+      "glossaryUnavailable": "Glosarium tidak tersedia (dihapus atau tidak lagi dibagikan)",
+      "showOtherLanguages": "{count, plural, one {Tampilkan # glosarium untuk bahasa lain} other {Tampilkan # glosarium untuk bahasa lain}}",
+      "hideOtherLanguages": "Sembunyikan bahasa lain",
+      "glossarySourceLang": "Bahasa sumber",
+      "glossaryTargetLang": "Bahasa target",
+      "glossaryLanguageEncourage": "Tandai bahasa target agar glosarium ini lebih dulu ditawarkan untuk terjemahan yang cocok.",
+      "importEntries": "Impor CSV/TSV",
+      "exportEntries": "Ekspor CSV",
+      "importHint": "Kolom: source, target, note, kind, sourceExpansion, targetExpansion. File dua kolom juga bisa.",
+      "importTooLarge": "Berkas tersebut terlalu besar untuk diimpor (maksimal 5 MB).",
+      "importNothing": "Tidak ditemukan baris yang dapat digunakan ({skipped} dilewati).",
+      "importSummary": "{added} ditambahkan, {replaced} diganti, {skipped} dilewati.",
+      "entriesTooManyToShow": "{count} istilah — terlalu banyak untuk ditampilkan di sini. Ekspor untuk meninjau, atau impor file untuk mengganti istilah."
     },
     "document": {
       "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Terima semua sisa",
         "rejectAll": "Tolak semua",
         "cancel": "Batal"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# istilah lain tidak ditampilkan} other {# istilah lain tidak ditampilkan}}"
     },
     "form": {
       "emptyTitle": "Isi dokumen",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# dokumen} other {# dokumen}}, batas {max} — kurangi jumlah atau tingkatkan batas sebelum memuat ulang",
     "m365AgentLimitBadgePlain": "Batas {limit}",
     "m365PlanShowAllRows": "Tampilkan semua {count, plural, one {# berkas} other {# berkas}}",
-    "m365PlanShowFewerRows": "Tampilkan lebih sedikit"
+    "m365PlanShowFewerRows": "Tampilkan lebih sedikit",
+    "glossariesTab": "Glosarium",
+    "addGlossary": "Tambah glosarium",
+    "noGlossaries": "Belum ada glosarium organisasi. Tambahkan agar terminologi wajib dapat dibagikan ke semua penerjemah.",
+    "editGlossaryTitle": "Edit glosarium",
+    "newGlossaryTitle": "Glosarium baru",
+    "glossarySaveSuccess": "Glosarium disimpan",
+    "glossaryCreateSuccess": "Glosarium dibuat",
+    "glossaryLanguagePairLabel": "Bahasa",
+    "glossarySourceLangLabel": "Bahasa sumber",
+    "glossaryTargetLangLabel": "Bahasa target",
+    "glossaryAnyLanguage": "Bahasa apapun",
+    "glossaryLanguagePairHint": "Terjemahan ke bahasa ini akan melihat glosarium ini terlebih dahulu.",
+    "glossaryLanguagePairEncourage": "Opsional, tapi bahasa target membantu orang menemukan glosarium yang tepat dan menghindari terjemahan yang tidak relevan.",
+    "guidePayloadLoading": "Memuat konten…",
+    "guidePayloadMissing": "Konten panduan ini tidak ditemukan. Menyimpan akan membuat salinan baru.",
+    "deleteGlossary": "Hapus glosarium",
+    "deleteGlossaryConfirm": "Hapus glosarium ini untuk semua orang? Penerjemah akan langsung kehilangan akses; salinan yang sudah diambil orang tetap ada.",
+    "confirmDeleteGlossary": "Hapus glosarium",
+    "glossaryDeleteSuccess": "Glosarium telah dihapus"
   },
   "localModels": {
     "title": "Model lokal",
@@ -5000,7 +5052,8 @@
       "workflows": "Aktifkan atau nonaktifkan alur kerja percakapan untuk semua orang.",
       "viewAs": "Uji aplikasi sebagai seseorang yang memenuhi — atau tidak memenuhi — suatu kondisi.",
       "globalAdmins": "Siapa yang mengelola semuanya — di luar daftar yang ditetapkan oleh deployment.",
-      "formTemplates": "Templat formulir yang dapat diisi dan dibagikan dengan pengguna alur kerja pengisian dokumen."
+      "formTemplates": "Templat formulir yang dapat diisi dan dibagikan dengan pengguna alur kerja pengisian dokumen.",
+      "glossaries": "Glosarium organisasi — terminologi wajib, dibagikan kepada penerjemah."
     },
     "openSettings": "Buka pengaturan",
     "area": {

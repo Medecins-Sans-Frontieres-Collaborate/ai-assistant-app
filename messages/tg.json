@@ -2861,7 +2861,39 @@
       "acronymHint": "Сардафъаҳо маҳз ҳамон тавре, ки навишта шудааст, мувофиқат мекунанд: \"WHO\" ба \"WHO\" дахл дорад, на ба \"who\". Истилоҳҳо бо ҳар навъ ҳарфбандӣ мувофиқат мекунанд.",
       "glossaryCheckTitle": "Санҷиши луғат",
       "glossaryCheckPass": "{count, plural, one {Истилоҳи зарурӣ истифода шуд.} other {Ҳамаи # истилоҳҳои зарурӣ истифода шуданд.}}",
-      "glossaryCheckMissing": "{count, plural, one {# аз {total} тарҷумаи зарурӣ намерасад:} other {# аз {total} тарҷумаҳои зарурӣ намерасанд:}}"
+      "glossaryCheckMissing": "{count, plural, one {# аз {total} тарҷумаи зарурӣ намерасад:} other {# аз {total} тарҷумаҳои зарурӣ намерасанд:}}",
+      "glossariesButton": "{count, plural, =0 {Глоссарияҳо} one {# глоссария} other {# глоссарияҳо}}",
+      "glossaryPickerTitle": "Глоссарияҳо",
+      "glossaryPickerClose": "Пӯшидани глоссарияҳо",
+      "glossaryOrgSection": "Созмон",
+      "glossaryMineSection": "Ман",
+      "noOrganizationGlossaries": "Ягон глоссарияи созмонӣ бо шумо муштарак нашудааст.",
+      "noPersonalGlossaries": "Шумо ҳоло глоссария надоред. Барои эҷод ё нусхабардории глоссарияи созмонӣ, Идора кардан-ро истифода баред.",
+      "glossaryAnyLanguage": "Ҳар забон",
+      "glossaryCustomLanguage": "Забони фармоишӣ",
+      "glossaryEntryCount": "{count, plural, one {# истилоҳ} other {# истилоҳ}}",
+      "glossaryLanguageMismatch": "Ин глоссария барои забони ҳадафи дигар тамға гузошта шудааст.",
+      "glossaryMismatchChip": "Мувофиқат накардани забон",
+      "glossaryOrgLimit": "То {max} глоссарияи созмонӣ барои як тарҷума.",
+      "copyToMine": "{name}-ро ба глоссарияҳои ман нусхабардорӣ кунед",
+      "copyToMineTitle": "Нусхабардорӣ ба глоссарияҳои ман",
+      "copyToMineFailed": "Нусхабардории глоссария имконпазир нашуд. Бори дигар кӯшиш кунед.",
+      "copiedToMine": "Ба глоссарияҳои шумо нусхабардорӣ шуд",
+      "copiedGlossaryName": "{name} (нусха)",
+      "clearStaleGlossary": "Тоза кардан",
+      "glossaryUnavailable": "Глоссария дастнорас аст (ҳазф ё дигар муштарак нест)",
+      "showOtherLanguages": "{count, plural, one {# глоссария барои забони дигар нишон додан} other {# глоссария барои дигар забонҳо нишон додан}}",
+      "hideOtherLanguages": "Пинҳон кардани дигар забонҳо",
+      "glossarySourceLang": "Забони аслӣ",
+      "glossaryTargetLang": "Забони мақсад",
+      "glossaryLanguageEncourage": "Забони мақсадро ишора кунед, то ин глоссария аввал барои тарҷумаҳои мувофиқ пешниҳод карда шавад.",
+      "importEntries": "Ворид кардани CSV/TSV",
+      "exportEntries": "Содироти CSV",
+      "importHint": "Сутунҳо: manba, ҳадаф, қайд, навъ, тавсеаи манба, тавсеаи ҳадаф. Файли дупарванда низ кор мекунад.",
+      "importTooLarge": "Ин файл барои воридкунӣ хеле калон аст (максимум 5 MB).",
+      "importNothing": "Ягон сатр пайдо нашуд ({skipped} гузаронда шуд).",
+      "importSummary": "{added} илова шуд, {replaced} иваз шуд, {skipped} гузаронда шуд.",
+      "entriesTooManyToShow": "{count} истилоҳ — барои намоиш додан зиёд аст. Барои баррасӣ содир кунед ё файл ворид кунед, то истилоҳҳоро нав кунед."
     },
     "document": {
       "emptyTitle": "Ҳуҷҷатеро, ки мехоҳед, тавсиф кунед",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Қабули ҳамаи боқимонда",
         "rejectAll": "Радкунии ҳама",
         "cancel": "Бекор кардан"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# истилоҳи бештар нишон дода нашудааст} other {# истилоҳи бештар нишон дода нашудааст}}"
     },
     "form": {
       "emptyTitle": "Ҳуҷҷатро пур кунед",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# ҳуҷҷат} other {# ҳуҷҷат}}, ҳадди {max} — пеш аз навсозӣ маҳдудиятро кам ё зиёд кунед",
     "m365AgentLimitBadgePlain": "Маҳдудият {limit}",
     "m365PlanShowAllRows": "Нишон додани ҳамаи {count, plural, one {# файл} other {# файл}}",
-    "m365PlanShowFewerRows": "Камтар нишон диҳед"
+    "m365PlanShowFewerRows": "Камтар нишон диҳед",
+    "glossariesTab": "Глоссарияҳо",
+    "addGlossary": "Иловаи глоссария",
+    "noGlossaries": "Ҳанӯз ягон глоссарияи созмонӣ нест. Якеро илова кунед, то истилоҳоти ҳатмиро ба ҳамаи тарҷумонҳо дастрас намоед.",
+    "editGlossaryTitle": "Таъғири глоссария",
+    "newGlossaryTitle": "Глоссарияи нав",
+    "glossarySaveSuccess": "Глоссария нигоҳ дошта шуд",
+    "glossaryCreateSuccess": "Глоссария эҷод шуд",
+    "glossaryLanguagePairLabel": "Забонҳо",
+    "glossarySourceLangLabel": "Забони аслӣ",
+    "glossaryTargetLangLabel": "Забони мақсад",
+    "glossaryAnyLanguage": "Ҳар забон",
+    "glossaryLanguagePairHint": "Тарҷумаҳо ба ин забон аввал ин глоссарияро мебинанд.",
+    "glossaryLanguagePairEncourage": "Ихтиёрӣ, аммо додани забони мақсад ёрӣ медиҳад, ки глоссарияи мувофиқ ёфта шавад ва берун аз тарҷумаҳои марбут намонад.",
+    "guidePayloadLoading": "Мундариҷа бор мешавад…",
+    "guidePayloadMissing": "Мундариҷаи захирашудаи ин дастур ёфт нашуд. Ҳангоми нигоҳдорӣ нусхаи нав сабт мешавад.",
+    "deleteGlossary": "Глоссарияро ҳазф кунед",
+    "deleteGlossaryConfirm": "Ин глоссарияро барои ҳама ҳазф мекунед? Тарҷумонҳо фавран онро аз даст медиҳанд; нусхаҳои шахсӣ боқӣ мемонанд.",
+    "confirmDeleteGlossary": "Феҳристи истилоҳотро нобуд кунед",
+    "glossaryDeleteSuccess": "Феҳристи истилоҳот нобуд шуд"
   },
   "localModels": {
     "title": "Моделҳои маҳаллӣ",
@@ -4984,7 +5036,8 @@
       "workflows": "Равандҳои сӯҳбатро барои ҳама фаъол ё ғайрифаъол кунед.",
       "viewAs": "Барнома ва шароитҳоро ҳамчун шахсе, ки талаботро иҷро мекунад ё не, санҷед.",
       "globalAdmins": "Ки ҳама чиро идора мекунад — берун аз рӯйхати танзимкардаи ҷойгиркунӣ.",
-      "formTemplates": "Шаблонҳои формаи пуркунанда, ки бо корбарони равандҳои пуркунии ҳуҷҷатҳо мубодила мешаванд."
+      "formTemplates": "Шаблонҳои формаи пуркунанда, ки бо корбарони равандҳои пуркунии ҳуҷҷатҳо мубодила мешаванд.",
+      "glossaries": "Феҳристҳои истилоҳоти созмон — истилоҳоти ҳатмӣ, ки бо тарҷумонҳо мубодила мешаванд."
     },
     "openSettings": "Танзимотро боз кунед",
     "area": {

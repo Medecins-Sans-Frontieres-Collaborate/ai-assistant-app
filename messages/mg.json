@@ -2861,7 +2861,39 @@
       "acronymHint": "Mifanandrify tanteraka amin'ny fampidirana ny acronyme: WHO dia ho an'ny “WHO” ihany, fa tsy ho an'ny “who”. Ny teny dia mety amin'ny endri-tsoratra rehetra.",
       "glossaryCheckTitle": "Fanamarinana rakibolana",
       "glossaryCheckPass": "{count, plural, one {Nampiasaina ilay teny ilaina.} other {Nampiasaina avokoa ny teny ilaina #.}}",
-      "glossaryCheckMissing": "{count, plural, one {# amin'ireo {total} fandikan-teny ilaina no tsy voaray:} other {# amin'ireo {total} fandikan-teny ilaina no tsy voaray:}}"
+      "glossaryCheckMissing": "{count, plural, one {# amin'ireo {total} fandikan-teny ilaina no tsy voaray:} other {# amin'ireo {total} fandikan-teny ilaina no tsy voaray:}}",
+      "glossariesButton": "{count, plural, =0 {Lisitra voambolana} one {# lisitra voambolana} other {# lisitra voambolana}}",
+      "glossaryPickerTitle": "Lisitra voambolana",
+      "glossaryPickerClose": "Akatòny ny lisitra voambolana",
+      "glossaryOrgSection": "Fikambanana",
+      "glossaryMineSection": "Ahy",
+      "noOrganizationGlossaries": "Tsy misy lisitra voambolan'ny fikambanana zaraina aminao.",
+      "noPersonalGlossaries": "Tsy mbola manana lisitra voambolana ianao. Ampiasao ny Manage mba hamoronana iray na haka kopia amin'ny lisitra voambolan'ny fikambanana.",
+      "glossaryAnyLanguage": "Fiteny rehetra",
+      "glossaryCustomLanguage": "Fiteny manokana",
+      "glossaryEntryCount": "{count, plural, one {# voambolana} other {# voambolana}}",
+      "glossaryLanguageMismatch": "Ity lisitra voambolana ity dia natao ho an'ny fiteny kendrena hafa.",
+      "glossaryMismatchChip": "Tsy mifanaraka amin'ny fiteny",
+      "glossaryOrgLimit": "Hatramin'ny {max} lisitra voambolan'ny fikambanana isaky ny fandikana.",
+      "copyToMine": "Kopia {name} ho ao amin'ny lisitro voambolana",
+      "copyToMineTitle": "Kopia ho ao amin'ny lisitro voambolana",
+      "copyToMineFailed": "Tsy vita ny nandika ny lisitra voambolana. Andramo indray.",
+      "copiedToMine": "Voakopia tao amin'ny lisitro voambolana",
+      "copiedGlossaryName": "{name} (kopia)",
+      "clearStaleGlossary": "Esory",
+      "glossaryUnavailable": "Tsy azo ampiasaina ny lisitra voambolana (fafana na tsy zaraina aminao intsony)",
+      "showOtherLanguages": "{count, plural, one {Asehoy # lisitra voambolana amin'ny fiteny hafa} other {Asehoy # lisitra voambolana amin'ny fiteny hafa}}",
+      "hideOtherLanguages": "Afeno ny fiteny hafa",
+      "glossarySourceLang": "Fiteny loharano",
+      "glossaryTargetLang": "Fiteny kendrena",
+      "glossaryLanguageEncourage": "Fenoy fiteny kendrena mba ho tolo-kevitra voalohany amin'ny fandikana mifanaraka amin'izany ity lisitra voambolana ity.",
+      "importEntries": "Ampidiro CSV/TSV",
+      "exportEntries": "Aondrana CSV",
+      "importHint": "Andalana: loharano, kendrena, fanamarihana, karazana, fanitarana_loharano, fanitarana_kendrena. Mety amin'ny rakitra misy andalana roa ihany koa.",
+      "importTooLarge": "Lehibe loatra io rakitra io ka tsy azo hampidirina (5 MB fara-fahabetsany).",
+      "importNothing": "Tsy nahitana andalana azo ampiasaina ({skipped} nesorina).",
+      "importSummary": "{added} nampiana, {replaced} nosoloina, {skipped} nesorina.",
+      "entriesTooManyToShow": "{count} voambolana — be loatra ka tsy azo aseho eto. Aondrana hojerena, na ampidiro rakitra hanoloana voambolana."
     },
     "document": {
       "emptyTitle": "Lazao ny antontan-taratasy ilainao",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Ekeo daholo ny sisa rehetra",
         "rejectAll": "Lavina daholo",
         "cancel": "Nofoanana"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# voambolana hafa tsy aseho} other {# voambolana hafa tsy aseho}}"
     },
     "form": {
       "emptyTitle": "Fenoy taratasy iray",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# antontan-taratasy} other {# antontan-taratasy}}, fetra {max} — esory na ampio ny fetra alohan'ny hanavaozana",
     "m365AgentLimitBadgePlain": "Fetra {limit}",
     "m365PlanShowAllRows": "Asehoy daholo ny {count, plural, one {# rakitra} other {# rakitra}}",
-    "m365PlanShowFewerRows": "Asehoy vitsy kokoa"
+    "m365PlanShowFewerRows": "Asehoy vitsy kokoa",
+    "glossariesTab": "Lisitra voambolana",
+    "addGlossary": "Ampio lisitra voambolana",
+    "noGlossaries": "Tsy misy lisitra voambolan'ny fikambanana mbola voatokana. Ampio iray mba hizara voambolana tsy maintsy ampiasaina amin'izay rehetra mandika.",
+    "editGlossaryTitle": "Hanova lisitra voambolana",
+    "newGlossaryTitle": "Lisitra voambolana vaovao",
+    "glossarySaveSuccess": "Voavonjy ny lisitra voambolana",
+    "glossaryCreateSuccess": "Vita ny famoronana lisitra voambolana",
+    "glossaryLanguagePairLabel": "Fiteny",
+    "glossarySourceLangLabel": "Fiteny loharano",
+    "glossaryTargetLangLabel": "Fiteny kendrena",
+    "glossaryAnyLanguage": "Fiteny rehetra",
+    "glossaryLanguagePairHint": "Ireo fandikana amin'ity fiteny ity dia mahita voalohany ity lisitra voambolana ity.",
+    "glossaryLanguagePairEncourage": "Tsy voatery, saingy manampy amin'ny fitadiavana mora ny lisitra voambolana marina sy amin'ny fanalana azy amin'ny fandikana tsy mifanaraka ilay fanamarihana fiteny kendrena.",
+    "guidePayloadLoading": "Mampiditra votoaty…",
+    "guidePayloadMissing": "Tsy hita ny votoaty voatahiry amin'ity torolàlana ity. Raha manangy ianao dia hanoratra dika vaovao.",
+    "deleteGlossary": "Fafana ny lisitra voambolana",
+    "deleteGlossaryConfirm": "Hafafanina amin'ny rehetra ve ity lisitra voambolana ity? Tsy afaka mampiasa izany avy hatrany ny mpandika teny; izay efa naka kopia dia mbola ho azy.",
+    "confirmDeleteGlossary": "Fafana ny voambolana",
+    "glossaryDeleteSuccess": "Voafafa ny voambolana"
   },
   "localModels": {
     "title": "Model eo an-toerana",
@@ -4984,7 +5036,8 @@
       "workflows": "Ahodina na alefa ho an’ny rehetra ny workflows resaka.",
       "viewAs": "Andramo ny app toy ny olona mahafeno - na tsy mahafeno - fepetra.",
       "globalAdmins": "Iza no mitantana ny zava-drehetra — ivelan'ny lisitra napetraky ny fametrahana.",
-      "formTemplates": "Modely endrika azo fenoina sy zaraina amin'ny mpampiasa amin'ny workflow famenoana antontan-taratasy."
+      "formTemplates": "Modely endrika azo fenoina sy zaraina amin'ny mpampiasa amin'ny workflow famenoana antontan-taratasy.",
+      "glossaries": "Voambolana an'ny fikambanana — voambolana tsy maintsy arahina, zaraina amin'ny mpandika teny."
     },
     "openSettings": "Sokafy ny fikirakirana",
     "area": {

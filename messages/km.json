@@ -2861,7 +2861,39 @@
       "acronymHint": "អក្រិតសម្ព័ន្ធត្រូវគ្នាពីព្រោះវាយ: WHO មានន័យថា “WHO” មិនមែន “who” ទេ។ ពាក្យផ្ទៀងផ្ទាត់ទាំងអក្សរធំអក្សរតូច។",
       "glossaryCheckTitle": "ពិនិត្យមើលសម្មាធិកថា",
       "glossaryCheckPass": "{count, plural, one {បានប្រើពាក្យត្រូវការតែមួយ។} other {បានប្រើពាក្យត្រូវការ # ទាំងអស់។}}",
-      "glossaryCheckMissing": "{count, plural, one {ខ្វះការបកប្រែត្រូវការ # ចេញពី {total}:} other {ខ្វះការបកប្រែត្រូវការ # ចេញពី {total}:}}"
+      "glossaryCheckMissing": "{count, plural, one {ខ្វះការបកប្រែត្រូវការ # ចេញពី {total}:} other {ខ្វះការបកប្រែត្រូវការ # ចេញពី {total}:}}",
+      "glossariesButton": "{count, plural, =0 {វចនានុក្រម} one {# វចនានុក្រម} other {# វចនានុក្រម}}",
+      "glossaryPickerTitle": "វចនានុក្រម",
+      "glossaryPickerClose": "បិទវចនានុក្រម",
+      "glossaryOrgSection": "អង្គការ",
+      "glossaryMineSection": "របស់ខ្ញុំ",
+      "noOrganizationGlossaries": "មិនមានវចនានុក្រមរបស់អង្គការណាមួយបានចែករំលែកជាមួយអ្នកទេ។",
+      "noPersonalGlossaries": "អ្នកមិនទាន់មានវចនានុក្រមទេ។ ប្រើ \"គ្រប់គ្រង\" ដើម្បីបង្កើតថ្មី ឬចម្លងវចនានុក្រមរបស់អង្គការ។",
+      "glossaryAnyLanguage": "ភាសាណាមួយ",
+      "glossaryCustomLanguage": "ភាសាដែលកំណត់ផ្ទាល់ខ្លួន",
+      "glossaryEntryCount": "{count, plural, one {# ពាក្យ} other {# ពាក្យ}}",
+      "glossaryLanguageMismatch": "វចនានុក្រមនេះបានដាក់ស្លាកសម្រាប់ភាសាគោលដៅផ្សេង។",
+      "glossaryMismatchChip": "មិនត្រូវភាសា",
+      "glossaryOrgLimit": "អាចប្រើបានចំនួន {max} វចនានុក្រមរបស់អង្គការប្រចាំមួយការបកប្រែ។",
+      "copyToMine": "ចម្លង {name} ទៅវចនានុក្រមរបស់ខ្ញុំ",
+      "copyToMineTitle": "ចម្លងទៅវចនានុក្រមរបស់ខ្ញុំ",
+      "copyToMineFailed": "មិនអាចចម្លងវចនានុក្រមនេះបានទេ។ សូមព្យាយាមម្តងទៀត។",
+      "copiedToMine": "បានចម្លងទៅវចនានុក្រមរបស់អ្នករួចហើយ",
+      "copiedGlossaryName": "{name} (ច្បាប់ចម្លង)",
+      "clearStaleGlossary": "ដកចេញ",
+      "glossaryUnavailable": "វចនានុក្រមមិនមានទៀតទេ (បានលុប ឬមិនបានចែករំលែកជាមួយអ្នកទៀត)",
+      "showOtherLanguages": "{count, plural, one {បង្ហាញវចនានុក្រម # សម្រាប់ភាសាផ្សេង} other {បង្ហាញវចនានុក្រម # សម្រាប់ភាសាផ្សេង}}",
+      "hideOtherLanguages": "លាក់ភាសាផ្សេង",
+      "glossarySourceLang": "ភាសាប្រភព",
+      "glossaryTargetLang": "ភាសាគោលដៅ",
+      "glossaryLanguageEncourage": "សូមដាក់ស្លាកភាសាគោលដៅ ដើម្បីអនុញ្ញាតឱ្យវចនានុក្រមនេះក្លាយជជ្រើសជានាទីដំបូងសម្រាប់ការបកប្រែដូចគ្នា។",
+      "importEntries": "នាំចូល CSV/TSV",
+      "exportEntries": "នាំចេញ CSV",
+      "importHint": "ជួរឈរ៖ source, target, note, kind, sourceExpansion, targetExpansion។ ឯកសារដែលមានពីរជួរឈរតែប៉ុណ្ណោះក៏ប្រើបាន។",
+      "importTooLarge": "ឯកសារនោះធំពេកសម្រាប់នាំចូល (អតិបរមា ៥MB)។",
+      "importNothing": "រកមិនឃើញជួរដែលអាចប្រើបានទេ ({skipped} ត្រូវបានរំលង)។",
+      "importSummary": "បានបន្ថែម {added}, ជំនួស {replaced}, រំលង {skipped}។",
+      "entriesTooManyToShow": "{count} ពាក្យ — ហ្រើយពេកមិនអាចបង្ហាញនៅទីនេះទេ។ អាចនាំចេញដើម្បីពិនិត្យ ឬនាំចូលឯកសារដើម្បីជំនួសពាក្យ។"
     },
     "document": {
       "emptyTitle": "ពណ៌នាអំពីឯកសារដែលអ្នកត្រូវការ",
@@ -3494,7 +3526,8 @@
         "acceptAll": "ទទួលយកទាំងអស់ដែលនៅសល់",
         "rejectAll": "បដិសេធទាំងអស់",
         "cancel": "បោះបង់"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {មិនបង្ហាញពាក្យមួយទៀត #} other {មិនបង្ហាញពាក្យទៀត #}}"
     },
     "form": {
       "emptyTitle": "បំពេញឯកសារ",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {ឯកសារ #} other {ឯកសារ #}}, ដែនកំណត់ {max} — សូមកាត់ចេញឬបង្កើនដែនកំណត់មុនពេលធ្វើបច្ចុប្បន្នភាពឡើងវិញ",
     "m365AgentLimitBadgePlain": "ដែនកំណត់ {limit}",
     "m365PlanShowAllRows": "បង្ហាញទាំងអស់ {count, plural, one {ឯកសារ #} other {ឯកសារ #}}",
-    "m365PlanShowFewerRows": "បង្ហាញតិចលើស"
+    "m365PlanShowFewerRows": "បង្ហាញតិចលើស",
+    "glossariesTab": "វចនានុក្រម",
+    "addGlossary": "បន្ថែមវចនានុក្រម",
+    "noGlossaries": "មិនទាន់មានវចនានុក្រមរបស់អង្គការទេ។ សូមបន្ថែមមួយ ដើម្បីចែករំលែកសទិ្ធសព្ទទាំងឡាយជាប់បញ្ជាក់ទៅកាន់អ្នកបកប្រែទាំងអស់។",
+    "editGlossaryTitle": "កែវចនានុក្រម",
+    "newGlossaryTitle": "វចនានុក្រមថ្មី",
+    "glossarySaveSuccess": "បានរក្សាទុកវចនានុក្រម",
+    "glossaryCreateSuccess": "បានបង្កើតវចនានុក្រម",
+    "glossaryLanguagePairLabel": "ភាសា",
+    "glossarySourceLangLabel": "ភាសាប្រភព",
+    "glossaryTargetLangLabel": "ភាសាគោលដៅ",
+    "glossaryAnyLanguage": "ភាសាណាមួយ",
+    "glossaryLanguagePairHint": "ការបកប្រែទៅភាសានេះ នឹងឃើញវចនានុក្រមនេះជាចុងក្រោយ។",
+    "glossaryLanguagePairEncourage": "មិនបាច់ប៉ុន្តែបើកំណត់ភាសាគោលដៅ នឹងជួយឱ្យមនុស្សរកវចនានុក្រមបានត្រឹមត្រូវ និងរក្សា​ឲ្យវាចេញពីការបកប្រែដែលមិនពាក់ព័ន្ធ។",
+    "guidePayloadLoading": "កំពុងផ្ទុកមាតិកា...",
+    "guidePayloadMissing": "រកមិនឃើញមាតិការរក្សាទុករបស់មគ្គុទេសក៍នេះទេ។ ការរក្សាទុកថ្មីនឹងសរសេរថ្មី។",
+    "deleteGlossary": "លុបវចនានុក្រម",
+    "deleteGlossaryConfirm": "លុបវចនានុក្រមនេះសម្រាប់អ្នកទាំងអស់រួច? អ្នកបកប្រែភ្លាមៗបាត់វចនានុក្រមនេះ ប៉ុន្តែច្បាប់ចម្លងដែលខ្លួនបានចម្លងនៅតែជាដំណើរការ។",
+    "confirmDeleteGlossary": "លុបវចនានុក្រម",
+    "glossaryDeleteSuccess": "បានលុបវចនានុក្រម"
   },
   "localModels": {
     "title": "ម៉ូឌែលក្នុងតំបន់",
@@ -4984,7 +5036,8 @@
       "workflows": "បិទ ឬបើកលំហូរកិច្ចការសន្ទនាសម្រាប់អ្នកទាំងអស់គ្នា។",
       "viewAs": "សាកល្បងកម្មវិធីជាសមាជិកដែលបំពេញ—ឬមិនបំពេញ—លក្ខខណ្ឌណាមួយ។",
       "globalAdmins": "អ្នកដែលគ្រប់គ្រងអ្វីៗទាំងអស់—អសកម្មលើបញ្ជីដែលបានកំណត់ដោយកព្រោងចរ។",
-      "formTemplates": "ពុម្ពសំណុំបែបបទដែលអាចបំពេញបាន និងចែកគ្នាជាមួយអ្នកប្រើប្រាស់នៃដំណើរការបំពេញឯកសារ។"
+      "formTemplates": "ពុម្ពសំណុំបែបបទដែលអាចបំពេញបាន និងចែកគ្នាជាមួយអ្នកប្រើប្រាស់នៃដំណើរការបំពេញឯកសារ។",
+      "glossaries": "វចនានុក្រមអង្គភាព — សព្វថ្ងៃត្រូវប្រើពាក្យសំរុងដែលត្រូវបញ្ជាក់ ហើយចែករំលែកជាមួយអ្នកបកប្រែ។"
     },
     "openSettings": "បើកការកំណត់",
     "area": {

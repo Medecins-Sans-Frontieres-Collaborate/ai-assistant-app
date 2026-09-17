@@ -2861,7 +2861,39 @@
       "acronymHint": "کورتکراوەکان وەک خۆیان بە جۆراوجۆر پێکەوە دەبن: WHO تەنها بۆ \"WHO\"، نەک بۆ \"who\". وشەکان هەر شێوازی وشاندنێک بکرێت وەک خۆیان دەشێن.",
       "glossaryCheckTitle": "پشکنینی فرەنووس",
       "glossaryCheckPass": "{count, plural, one {وشەی داواکراو بەکار هاتووە.} other {هەموو # وشەی داواکراو بەکار هاتن.}}",
-      "glossaryCheckMissing": "{count, plural, one {# لە {total} وەرگێڕانی داواکراو نەماوە:} other {# لە {total} وەرگێڕانی داواکراو نەماون:}}"
+      "glossaryCheckMissing": "{count, plural, one {# لە {total} وەرگێڕانی داواکراو نەماوە:} other {# لە {total} وەرگێڕانی داواکراو نەماون:}}",
+      "glossariesButton": "{count, plural, =0 {فەرھەنگەکان} one {# فەرھەنگ} other {# فەرھەنگ}}",
+      "glossaryPickerTitle": "فەرھەنگەکان",
+      "glossaryPickerClose": "داخستنی فەرھەنگەکان",
+      "glossaryOrgSection": "رێکخراو",
+      "glossaryMineSection": "من",
+      "noOrganizationGlossaries": "هیچ فەرھەنگێکی رێکخراوی پێوە بە تۆ نەبووە.",
+      "noPersonalGlossaries": "ھێشتا فەرھەنگت نییە. بە بەکارهێنانی بەشی بەڕێوەبردن فەرھەنگ دروست بکە یان فەرھەنگێکی رێکخراو ڕوونووس بکە.",
+      "glossaryAnyLanguage": "ھەر زمانێک",
+      "glossaryCustomLanguage": "زمانێکی تایبەتی",
+      "glossaryEntryCount": "{count, plural, one {# وشە} other {# وشە}}",
+      "glossaryLanguageMismatch": "ئەم فەرھەنگە بۆ زمانێکی ئامانجی جیاواز نیشاندرایە.",
+      "glossaryMismatchChip": "نەگونجاوی زمانی",
+      "glossaryOrgLimit": "زۆرترین {max} فەرھەنگی رێکخراو بۆ ھەر وەرگێڕانێک.",
+      "copyToMine": "کۆپی {name} بۆ فەرھەنگەکانی من",
+      "copyToMineTitle": "کۆپی بۆ فەرھەنگەکانی من",
+      "copyToMineFailed": "نەکرا فەرھەنگەکە بنوسێت. دوبارە ھەوڵبدە.",
+      "copiedToMine": "کۆپی کرا بۆ فەرھەنگەکانت",
+      "copiedGlossaryName": "{name} (کۆپی)",
+      "clearStaleGlossary": "لابردن",
+      "glossaryUnavailable": "فەرھەنگ بەردەست نییە (سڕاوەتەوە یان دواتر پێوە نەبووە)",
+      "showOtherLanguages": "{count, plural, one {# فەرھەنگ بۆ زمانێکی تر پیشان بدە} other {# فەرھەنگ بۆ زمانەکانی تر پیشان بدە}}",
+      "hideOtherLanguages": "شاردنەوەی زمانەکانی تر",
+      "glossarySourceLang": "زمانی سەرچاوە",
+      "glossaryTargetLang": "زمانی ئامانج",
+      "glossaryLanguageEncourage": "زمانێکی ئامانج دانیبە لەگەڵ ئەم فەرھەنگە بۆ ئەوەی یەکەم جار پێشنیار بکرێت لە گۆرانکاریە گونجاوەکان.",
+      "importEntries": "ھێنانەوەی CSV/TSV",
+      "exportEntries": "هەناردەکردنی CSV",
+      "importHint": "ستونەکان: source، target، note، kind، sourceExpansion، targetExpansion. پەڕگەی دوو ستونیش کاری دەکات.",
+      "importTooLarge": "پەڕگەکە زۆر گەورەیە بۆ هێنانەوە (زۆرترین 5 MB).",
+      "importNothing": "ھیچ ڕیزێکی بەسوود نەدۆزرایەوە ({skipped} تێپەڕکرا).",
+      "importSummary": "{added} زیادکرا، {replaced} گۆڕدرا، {skipped} تێپەڕکرا.",
+      "entriesTooManyToShow": "{count} وشە — زۆرن بۆ ئەوەی لێرە لیستی بکرێن. دابەرە پێشاندان بۆ تێپەڕاندنیان، یان پەڕگەیەک هێنەوە بۆ گۆڕینی وشەکان."
     },
     "document": {
       "emptyTitle": "پێسەندکردنی بەلگەی پێویست",
@@ -3494,7 +3526,8 @@
         "acceptAll": "هەمووی باقیمان بپەسەندە",
         "rejectAll": "هەمووی بەڕەت بکه‌وە",
         "cancel": "پاشگەزبوونەوە"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# وشەی تر پیشان نەدرا} other {# وشەی تر پیشان نەدرا}}"
     },
     "form": {
       "emptyTitle": "فۆرمیەک پڕبکەوە",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# بەلگە} other {# بەلگە}}, سنوور {max} — پێویستە سنوورەکە بەڕز بکەیت یان کەم بکەیت پێش نوێکردنەوە",
     "m365AgentLimitBadgePlain": "سنوور {limit}",
     "m365PlanShowAllRows": "هەموو {count, plural, one {# پەڕگە} other {# پەڕگەکان}} نیشان بدە",
-    "m365PlanShowFewerRows": "کەمتر نیشان بدە"
+    "m365PlanShowFewerRows": "کەمتر نیشان بدە",
+    "glossariesTab": "فەرھەنگەکان",
+    "addGlossary": "زیادکردنی فەرھەنگ",
+    "noGlossaries": "ھێشتا هیچ فەرھەنگی رێکخراو دروست نەکراوە. یەک زیاد بکە بۆ بەشکردنی وشەکاری گرنگ بۆ هەموو وەرگێڕ.",
+    "editGlossaryTitle": "سەرەدانی فەرھەنگ",
+    "newGlossaryTitle": "فەرھەنگی نوێ",
+    "glossarySaveSuccess": "فەرھەنگ پاشەکەوت کرا",
+    "glossaryCreateSuccess": "فەرھەنگ دروستکرا",
+    "glossaryLanguagePairLabel": "زمانەکان",
+    "glossarySourceLangLabel": "زمانی سەرچاوە",
+    "glossaryTargetLangLabel": "زمانی ئامانج",
+    "glossaryAnyLanguage": "ھەر زمانێک",
+    "glossaryLanguagePairHint": "یەکەم جار ئەم فەرھەنگە پێشنیار دەکرێت بۆ وەرگێڕانی ئەم زمانە.",
+    "glossaryLanguagePairEncourage": "ھەلبژێرە، بەڵام زیادکردنی زمانی ئامانج یارمەتیدەدە لە دۆزینەوەی فەرھەنگی گونجاو و لەدان بە وەرگێڕانی ناموەبەست.",
+    "guidePayloadLoading": "داگرتنی ناوەڕۆک...",
+    "guidePayloadMissing": "ناوەڕۆکی ئەم ڕێنماییە نەدۆزرایەوە. پاشەکەوتکردن وەشەی نوێ دەنوسێت.",
+    "deleteGlossary": "سڕینەوەی فەرھەنگ",
+    "deleteGlossaryConfirm": "ئەم فەرھەنگە بۆ هەمووان بسڕرێتەوە؟ وەرگێڕان سەری کردنی پاشەکەوتکردن دەدەبنەوە؛ کوپیەکانی تایبەتی هەر کەس دەبەستن بە خۆیان.",
+    "confirmDeleteGlossary": "سڕینەوەی دڵنیابوونەوە",
+    "glossaryDeleteSuccess": "لە فۆڕمەکان سڕایەوە"
   },
   "localModels": {
     "title": "مۆدێلە سەرەکییەکان",
@@ -4984,7 +5036,8 @@
       "workflows": "فڕۆکاره‌کان بۆ هه‌مووان چالاک یان ناچالاک بکە.",
       "viewAs": "ئەپەکە تاقی بکەوە وەک کەسێک کە پێویستیەک زیاتر یان کەمتر پێگەشتووە.",
       "globalAdmins": "کێ هەموو شتێک بەڕێوەدەبات — لە دەرەوەی لیستی دیاریکراو لەلایەن دابەشکردنەوە.",
-      "formTemplates": "تەمپڵەیتە فۆرمە پڕکراوەکان کە بە بەکارهێنەرانى شێوەی پرکردنی بەڵگەنامە پێشکەش دەکرێن."
+      "formTemplates": "تەمپڵەیتە فۆرمە پڕکراوەکان کە بە بەکارهێنەرانى شێوەی پرکردنی بەڵگەنامە پێشکەش دەکرێن.",
+      "glossaries": "فۆڕمەکانی ڕێکخراو — وشەکاری پێویست، پەیوەندیدراو بە وەرگێڕان."
     },
     "openSettings": "دان_Settings بکە",
     "area": {

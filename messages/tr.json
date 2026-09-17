@@ -2877,7 +2877,39 @@
       "acronymHint": "Kısaltmalar, yazıldığı gibi tam eşleşir: WHO yalnızca “WHO” için geçerlidir, “who” için geçerli değildir. Terimler ise herhangi bir büyük-küçük harf kullanımıyla eşleşir.",
       "glossaryCheckTitle": "Terim kontrolü",
       "glossaryCheckPass": "{count, plural, one {Gerekli terim kullanıldı.} other {Tüm # gerekli terim kullanıldı.}}",
-      "glossaryCheckMissing": "{count, plural, one {{total} zorunlu çeviriden # eksik:} other {{total} zorunlu çeviriden # eksik:}}"
+      "glossaryCheckMissing": "{count, plural, one {{total} zorunlu çeviriden # eksik:} other {{total} zorunlu çeviriden # eksik:}}",
+      "glossariesButton": "{count, plural, =0 {Sözlükler} one {# sözlük} other {# sözlük}}",
+      "glossaryPickerTitle": "Sözlükler",
+      "glossaryPickerClose": "Sözlükleri kapat",
+      "glossaryOrgSection": "Kurum",
+      "glossaryMineSection": "Benim",
+      "noOrganizationGlossaries": "Hiçbir kurum sözlüğü sizinle paylaşılmamış.",
+      "noPersonalGlossaries": "Henüz hiç sözlüğünüz yok. Bir tane oluşturmak veya bir kurum sözlüğünü kopyalamak için Yönet'i kullanın.",
+      "glossaryAnyLanguage": "Herhangi bir dil",
+      "glossaryCustomLanguage": "Özel dil",
+      "glossaryEntryCount": "{count, plural, one {# terim} other {# terim}}",
+      "glossaryLanguageMismatch": "Bu sözlük farklı bir hedef dil için etiketlenmiş.",
+      "glossaryMismatchChip": "Dil uyumsuzluğu",
+      "glossaryOrgLimit": "Çeviri başına en fazla {max} kurum sözlüğü.",
+      "copyToMine": "{name} sözlüğünü kendi sözlüklerime kopyala",
+      "copyToMineTitle": "Kendi sözlüklerime kopyala",
+      "copyToMineFailed": "Sözlük kopyalanamadı. Lütfen tekrar deneyin.",
+      "copiedToMine": "Sözlükleriniz arasına kopyalandı",
+      "copiedGlossaryName": "{name} (kopya)",
+      "clearStaleGlossary": "Kaldır",
+      "glossaryUnavailable": "Sözlük kullanılamıyor (silinmiş veya artık sizinle paylaşılmıyor)",
+      "showOtherLanguages": "{count, plural, one {Başka dilde # sözlüğü göster} other {Diğer diller için # sözlüğü göster}}",
+      "hideOtherLanguages": "Diğer dilleri gizle",
+      "glossarySourceLang": "Kaynak dil",
+      "glossaryTargetLang": "Hedef dil",
+      "glossaryLanguageEncourage": "Bu sözlüğün ilk olarak eşleşen çevirilerde sunulması için bir hedef dil etiketleyin.",
+      "importEntries": "CSV/TSV İçe Aktar",
+      "exportEntries": "CSV Dışa Aktar",
+      "importHint": "Sütunlar: source, target, note, kind, sourceExpansion, targetExpansion. İki sütunlu bir dosya da kullanılabilir.",
+      "importTooLarge": "Bu dosya içe aktarmak için çok büyük (en fazla 5 MB).",
+      "importNothing": "Kullanılabilir satır bulunamadı ({skipped} atlandı).",
+      "importSummary": "{added} eklendi, {replaced} değiştirildi, {skipped} atlandı.",
+      "entriesTooManyToShow": "{count} terim — burada listelenemeyecek kadar fazla. Gözden geçirmek için dışa aktarın veya terimleri değiştirmek için bir dosya içe aktarın."
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Tüm kalanları kabul et",
         "rejectAll": "Tümünü reddet",
         "cancel": "İptal et"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# terim daha gösterilmiyor} other {# terim daha gösterilmiyor}}"
     },
     "form": {
       "emptyTitle": "Bir belge doldurun",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# belge} other {# belge}}, limit {max} — yenilemeden önce sınırı azaltın veya artırın",
     "m365AgentLimitBadgePlain": "Limit {limit}",
     "m365PlanShowAllRows": "Tüm {count, plural, one {# dosya} other {# dosya}} göster",
-    "m365PlanShowFewerRows": "Daha az göster"
+    "m365PlanShowFewerRows": "Daha az göster",
+    "glossariesTab": "Sözlükler",
+    "addGlossary": "Sözlük ekle",
+    "noGlossaries": "Henüz kurum sözlüğü yok. Çeviri yapan herkesle zorunlu terminolojiyi paylaşmak için bir tane ekleyin.",
+    "editGlossaryTitle": "Sözlüğü düzenle",
+    "newGlossaryTitle": "Yeni sözlük",
+    "glossarySaveSuccess": "Sözlük kaydedildi",
+    "glossaryCreateSuccess": "Sözlük oluşturuldu",
+    "glossaryLanguagePairLabel": "Diller",
+    "glossarySourceLangLabel": "Kaynak dil",
+    "glossaryTargetLangLabel": "Hedef dil",
+    "glossaryAnyLanguage": "Herhangi bir dil",
+    "glossaryLanguagePairHint": "Bu dile yapılan çevirilerde bu sözlük ilk sırada gösterilecektir.",
+    "glossaryLanguagePairEncourage": "İsteğe bağlıdır ancak bir hedef dil eklemek, insanların doğru sözlüğü bulmasına yardımcı olur ve ilgisiz çevirilerde görünmesini engeller.",
+    "guidePayloadLoading": "İçerik yükleniyor…",
+    "guidePayloadMissing": "Bu rehberin kayıtlı içeriği bulunamadı. Kaydedince yeni bir kopya yazılır.",
+    "deleteGlossary": "Sözlüğü sil",
+    "deleteGlossaryConfirm": "Bu sözlüğü herkes için silmek istiyor musunuz? Çevirmenler hemen erişimi kaybeder, kişisel kopyalar kişilerde kalır.",
+    "confirmDeleteGlossary": "Sözlüğü sil",
+    "glossaryDeleteSuccess": "Sözlük silindi"
   },
   "localModels": {
     "title": "Yerel modeller",
@@ -5000,7 +5052,8 @@
       "workflows": "Konuşma iş akışlarını herkes için açıp kapatın.",
       "viewAs": "Bir koşulu karşılayan veya karşılamayan biri olarak uygulamayı test edin.",
       "globalAdmins": "Her şeyi yönetenler — dağıtım tarafından belirlenen listenin ötesinde.",
-      "formTemplates": "Belge doldurma iş akışı kullanıcılarıyla paylaşılan doldurulabilir form şablonları."
+      "formTemplates": "Belge doldurma iş akışı kullanıcılarıyla paylaşılan doldurulabilir form şablonları.",
+      "glossaries": "Kuruluş sözlükleri — zorunlu terminoloji, çevirmenlerle paylaşılır."
     },
     "openSettings": "Ayarları aç",
     "area": {

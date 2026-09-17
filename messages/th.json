@@ -2877,7 +2877,39 @@
       "acronymHint": "ตัวย่อต้องตรงตามที่พิมพ์: WHO จะตรงกับ “WHO” เท่านั้น ไม่ตรงกับ “who” ส่วนคำศัพท์จะตรงกับทุกตัวพิมพ์ใหญ่-เล็ก",
       "glossaryCheckTitle": "การตรวจสอบศัพท์เฉพาะ",
       "glossaryCheckPass": "{count, plural, one {ใช้ศัพท์ที่จำเป็นแล้ว} other {ใช้ศัพท์ที่จำเป็นครบ # คำแล้ว}}",
-      "glossaryCheckMissing": "{count, plural, one {ขาดคำแปลที่จำเป็น # จากทั้งหมด {total} คำ:} other {ขาดคำแปลที่จำเป็น # จากทั้งหมด {total} คำ:}}"
+      "glossaryCheckMissing": "{count, plural, one {ขาดคำแปลที่จำเป็น # จากทั้งหมด {total} คำ:} other {ขาดคำแปลที่จำเป็น # จากทั้งหมด {total} คำ:}}",
+      "glossariesButton": "{count, plural, =0 {อภิธานศัพท์} one {# อภิธานศัพท์} other {# อภิธานศัพท์}}",
+      "glossaryPickerTitle": "อภิธานศัพท์",
+      "glossaryPickerClose": "ปิดอภิธานศัพท์",
+      "glossaryOrgSection": "องค์กร",
+      "glossaryMineSection": "ของฉัน",
+      "noOrganizationGlossaries": "ไม่มีอภิธานศัพท์ขององค์กรที่ใช้ร่วมกับคุณ",
+      "noPersonalGlossaries": "คุณยังไม่มีอภิธานศัพท์ ใช้ 'จัดการ' เพื่อสร้างหรือคัดลอกอภิธานศัพท์จากองค์กร",
+      "glossaryAnyLanguage": "ทุกภาษา",
+      "glossaryCustomLanguage": "ภาษากำหนดเอง",
+      "glossaryEntryCount": "{count, plural, one {# คำศัพท์} other {# คำศัพท์}}",
+      "glossaryLanguageMismatch": "อภิธานศัพท์นี้ถูกกำหนดสำหรับเป้าหมายภาษาอื่น",
+      "glossaryMismatchChip": "ภาษาต่างกัน",
+      "glossaryOrgLimit": "ใช้อภิธานศัพท์องค์กรสูงสุด {max} รายการต่อการแปลหนึ่งครั้ง",
+      "copyToMine": "คัดลอก {name} ไปยังอภิธานศัพท์ของฉัน",
+      "copyToMineTitle": "คัดลอกไปยังอภิธานศัพท์ของฉัน",
+      "copyToMineFailed": "ไม่สามารถคัดลอกอภิธานศัพท์ ลองอีกครั้ง",
+      "copiedToMine": "คัดลอกไปยังอภิธานศัพท์ของคุณแล้ว",
+      "copiedGlossaryName": "{name} (สำเนา)",
+      "clearStaleGlossary": "ลบออก",
+      "glossaryUnavailable": "อภิธานศัพท์ไม่พร้อมใช้งาน (ถูกลบหรือเลิกแชร์กับคุณแล้ว)",
+      "showOtherLanguages": "{count, plural, one {แสดงอภิธานศัพท์ # สำหรับภาษาอื่น} other {แสดงอภิธานศัพท์ # สำหรับภาษาอื่น ๆ}}",
+      "hideOtherLanguages": "ซ่อนภาษาอื่น",
+      "glossarySourceLang": "ภาษาต้นทาง",
+      "glossaryTargetLang": "ภาษาเป้าหมาย",
+      "glossaryLanguageEncourage": "เลือกภาษาเป้าหมายเพื่อให้แสดงอภิธานศัพท์นี้เป็นอันดับแรกสำหรับการแปลที่ตรงกัน",
+      "importEntries": "นำเข้า CSV/TSV",
+      "exportEntries": "ส่งออก CSV",
+      "importHint": "คอลัมน์: source, target, note, kind, sourceExpansion, targetExpansion ไฟล์สองคอลัมน์ก็ใช้ได้",
+      "importTooLarge": "ไฟล์นั้นมีขนาดใหญ่เกินไป (สูงสุด 5 MB)",
+      "importNothing": "ไม่พบแถวที่ใช้งานได้ ({skipped} แถวถูกข้าม)",
+      "importSummary": "เพิ่ม {added} แทนที่ {replaced} ข้าม {skipped}",
+      "entriesTooManyToShow": "{count} คำศัพท์ — จำนวนมากเกินไปที่จะแสดงที่นี่ กรุณาส่งออกเพื่อตรวจทาน หรือ นำเข้าไฟล์เพื่อแทนที่คำศัพท์"
     },
     "document": {
       "emptyTitle": "อธิบายประเภทเอกสารที่ต้องการ",
@@ -3510,7 +3542,8 @@
         "acceptAll": "ยอมรับทั้งหมดที่เหลืออยู่",
         "rejectAll": "ปฏิเสธทั้งหมด",
         "cancel": "ยกเลิก"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {อีก # คำศัพท์ไม่ได้แสดง} other {อีก # คำศัพท์ไม่ได้แสดง}}"
     },
     "form": {
       "emptyTitle": "กรอกเอกสาร",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# เอกสาร} other {# เอกสาร}}, มีขีดจำกัด {max} — กรุณาตัดลดหรือเพิ่มขีดจำกัดก่อนรีเฟรช",
     "m365AgentLimitBadgePlain": "ขีดจำกัด {limit}",
     "m365PlanShowAllRows": "แสดงทั้งหมด {count, plural, one {# ไฟล์} other {# ไฟล์}}",
-    "m365PlanShowFewerRows": "แสดงน้อยลง"
+    "m365PlanShowFewerRows": "แสดงน้อยลง",
+    "glossariesTab": "อภิธานศัพท์",
+    "addGlossary": "เพิ่มอภิธานศัพท์",
+    "noGlossaries": "ยังไม่มีอภิธานศัพท์ขององค์กร เพิ่มเพื่อแบ่งปันศัพท์จำเป็นกับทุกคนที่แปล",
+    "editGlossaryTitle": "แก้ไขอภิธานศัพท์",
+    "newGlossaryTitle": "อภิธานศัพท์ใหม่",
+    "glossarySaveSuccess": "บันทึกอภิธานศัพท์แล้ว",
+    "glossaryCreateSuccess": "สร้างอภิธานศัพท์แล้ว",
+    "glossaryLanguagePairLabel": "ภาษา",
+    "glossarySourceLangLabel": "ภาษาต้นทาง",
+    "glossaryTargetLangLabel": "ภาษาเป้าหมาย",
+    "glossaryAnyLanguage": "ทุกภาษา",
+    "glossaryLanguagePairHint": "การแปลไปภาษานี้จะเห็นอภิธานศัพท์นี้ก่อน",
+    "glossaryLanguagePairEncourage": "ไม่บังคับ แต่การระบุภาษาเป้าหมายจะช่วยให้ค้นหาอภิธานศัพท์ได้ง่ายและป้องกันการแสดงที่ไม่เกี่ยวข้อง",
+    "guidePayloadLoading": "กำลังโหลดเนื้อหา…",
+    "guidePayloadMissing": "ไม่พบเนื้อหาที่จัดเก็บของคู่มือเล่มนี้ การบันทึกจะสร้างเนื้อหาใหม่",
+    "deleteGlossary": "ลบอภิธานศัพท์",
+    "deleteGlossaryConfirm": "ลบอภิธานศัพท์นี้สำหรับทุกคน? นักแปลจะไม่สามารถเข้าถึงทันที แต่สำเนาที่คนอื่นคัดลอกไว้จะยังมีอยู่",
+    "confirmDeleteGlossary": "ลบศัพท์เฉพาะ",
+    "glossaryDeleteSuccess": "ลบศัพท์เฉพาะเรียบร้อยแล้ว"
   },
   "localModels": {
     "title": "โมเดลภายในเครื่อง",
@@ -5000,7 +5052,8 @@
       "workflows": "เปิดหรือปิดเวิร์กโฟลว์สนทนาสำหรับทุกคน",
       "viewAs": "ทดสอบแอปในฐานะผู้ที่เข้าเงื่อนไขหรือไม่เข้าเงื่อนไข",
       "globalAdmins": "ผู้ที่ดูแลระบบทั้งหมด — นอกเหนือจากรายการที่กำหนดโดยการติดตั้งระบบ",
-      "formTemplates": "แม่แบบฟอร์มที่สามารถกรอกได้ และแชร์ให้กับผู้ใช้ใน workflow เติมเอกสาร"
+      "formTemplates": "แม่แบบฟอร์มที่สามารถกรอกได้ และแชร์ให้กับผู้ใช้ใน workflow เติมเอกสาร",
+      "glossaries": "ศัพท์เฉพาะขององค์กร — คำศัพท์บังคับที่ใช้ร่วมกันกับนักแปล"
     },
     "openSettings": "เปิดการตั้งค่า",
     "area": {

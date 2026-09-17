@@ -2877,7 +2877,39 @@
       "acronymHint": "Zkratky se shodují přesně podle zadání: WHO platí pouze pro „WHO“, nikdy pro „who“. Termíny se shodují bez ohledu na velikost písmen.",
       "glossaryCheckTitle": "Kontrola glosáře",
       "glossaryCheckPass": "{count, plural, one {Požadovaný termín byl použit.} other {Všechny # požadované termíny byly použity.}}",
-      "glossaryCheckMissing": "{count, plural, one {Chybí # z {total} požadovaného překladu:} other {Chybí # z {total} požadovaných překladů:}}"
+      "glossaryCheckMissing": "{count, plural, one {Chybí # z {total} požadovaného překladu:} other {Chybí # z {total} požadovaných překladů:}}",
+      "glossariesButton": "{count, plural, =0 {Slovníky} one {# slovník} other {# slovníky}}",
+      "glossaryPickerTitle": "Slovníky",
+      "glossaryPickerClose": "Zavřít slovníky",
+      "glossaryOrgSection": "Organizace",
+      "glossaryMineSection": "Moje",
+      "noOrganizationGlossaries": "Žádné slovníky organizace s vámi nejsou sdíleny.",
+      "noPersonalGlossaries": "Zatím nemáte žádné slovníky. Použijte Spravovat pro vytvoření nebo zkopírování slovníku organizace.",
+      "glossaryAnyLanguage": "Libovolný jazyk",
+      "glossaryCustomLanguage": "Vlastní jazyk",
+      "glossaryEntryCount": "{count, plural, one {# pojem} other {# pojmů}}",
+      "glossaryLanguageMismatch": "Tento slovník je označen pro jiný cílový jazyk.",
+      "glossaryMismatchChip": "Neshoda jazyka",
+      "glossaryOrgLimit": "Až {max} slovníků organizace na překlad.",
+      "copyToMine": "Zkopírovat {name} do mých slovníků",
+      "copyToMineTitle": "Zkopírovat do mých slovníků",
+      "copyToMineFailed": "Slovník nelze zkopírovat. Zkuste to znovu.",
+      "copiedToMine": "Zkopírováno do vašich slovníků",
+      "copiedGlossaryName": "{name} (kopie)",
+      "clearStaleGlossary": "Odebrat",
+      "glossaryUnavailable": "Slovník nedostupný (smazán nebo již s vámi nesdílen)",
+      "showOtherLanguages": "{count, plural, one {Zobrazit # slovník pro jiný jazyk} other {Zobrazit # slovníků pro jiné jazyky}}",
+      "hideOtherLanguages": "Skrýt další jazyky",
+      "glossarySourceLang": "Zdrojový jazyk",
+      "glossaryTargetLang": "Cílový jazyk",
+      "glossaryLanguageEncourage": "Označte cílový jazyk, aby byl tento slovník nabízen přednostně pro odpovídající překlady.",
+      "importEntries": "Importovat CSV/TSV",
+      "exportEntries": "Exportovat CSV",
+      "importHint": "Sloupce: zdroj, cíl, poznámka, typ, rozšířeníZdroj, rozšířeníCíl. Stačí i soubor se dvěma sloupci.",
+      "importTooLarge": "Tento soubor je příliš velký k importu (max. 5 MB).",
+      "importNothing": "Nebyly nalezeny žádné použitelné řádky ({skipped} přeskočeno).",
+      "importSummary": "{added} přidáno, {replaced} nahrazeno, {skipped} přeskočeno.",
+      "entriesTooManyToShow": "{count} pojmů — příliš mnoho na zobrazení zde. Pro přehled je exportujte, nebo naimportujte soubor pro nahrazení pojmů."
     },
     "document": {
       "emptyTitle": "Popište požadovaný dokument",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Přijmout všechny zbývající",
         "rejectAll": "Zamítnout vše",
         "cancel": "Zrušit"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {další # pojem není zobrazen} other {dalších # pojmů není zobrazeno}}"
     },
     "form": {
       "emptyTitle": "Vyplnit dokument",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# dokument} other {# dokumentů}}, limit {max} — upravte nebo zvýšte limit před aktualizací",
     "m365AgentLimitBadgePlain": "Limit {limit}",
     "m365PlanShowAllRows": "Zobrazit všechny {count, plural, one {# soubor} other {# soubory}}",
-    "m365PlanShowFewerRows": "Zobrazit méně"
+    "m365PlanShowFewerRows": "Zobrazit méně",
+    "glossariesTab": "Slovníky",
+    "addGlossary": "Přidat slovník",
+    "noGlossaries": "Zatím nemáte žádné slovníky organizace. Přidejte jeden pro sdílení povinné terminologie se všemi, kdo překládají.",
+    "editGlossaryTitle": "Upravit slovník",
+    "newGlossaryTitle": "Nový slovník",
+    "glossarySaveSuccess": "Slovník uložen",
+    "glossaryCreateSuccess": "Slovník vytvořen",
+    "glossaryLanguagePairLabel": "Jazyky",
+    "glossarySourceLangLabel": "Zdrojový jazyk",
+    "glossaryTargetLangLabel": "Cílový jazyk",
+    "glossaryAnyLanguage": "Libovolný jazyk",
+    "glossaryLanguagePairHint": "Překlady do tohoto jazyka uvidí tento slovník jako první.",
+    "glossaryLanguagePairEncourage": "Volitelné, ale cílový jazyk pomáhá najít správný slovník a omezuje zobrazení v nesouvisejících překladech.",
+    "guidePayloadLoading": "Načítání obsahu…",
+    "guidePayloadMissing": "Uložený obsah této příručky nebyl nalezen. Při uložení se vytvoří nová kopie.",
+    "deleteGlossary": "Smazat slovník",
+    "deleteGlossaryConfirm": "Smazat tento slovník pro všechny? Překladatelé o něj ihned přijdou; jejich vlastní kopie jim zůstanou.",
+    "confirmDeleteGlossary": "Smazat glosář",
+    "glossaryDeleteSuccess": "Glosář byl smazán"
   },
   "localModels": {
     "title": "Lokální modely",
@@ -5000,7 +5052,8 @@
       "workflows": "Zapněte nebo vypněte workflowy pro všechny uživatele.",
       "viewAs": "Testujte aplikaci jako někdo, kdo splňuje nebo nesplňuje podmínku.",
       "globalAdmins": "Kdo spravuje vše — nad rámec seznamu určeného nasazením.",
-      "formTemplates": "Editovatelné šablony formulářů sdílené s uživateli workflow pro vyplňování dokumentů."
+      "formTemplates": "Editovatelné šablony formulářů sdílené s uživateli workflow pro vyplňování dokumentů.",
+      "glossaries": "Glosáře organizace – povinná terminologie sdílená s překladateli."
     },
     "openSettings": "Otevřít nastavení",
     "area": {

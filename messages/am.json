@@ -2877,7 +2877,39 @@
       "acronymHint": "አቀማመጥ ቃላት በተጻፉበት ሁኔታ ብቻ ይዛመዳሉ፡ WHO ለ“WHO” ብቻ ይዛመዳል፣ ለ“who” አይዛመድም። ቃላት ግን ማንኛውንም አጠቃላይ እንዲፈልጉ ይደረጋሉ።",
       "glossaryCheckTitle": "ቃላት ዝርዝር ምርመራ",
       "glossaryCheckPass": "{count, plural, one {የተፈለገው ቃል ተጠቅመዋል።} other {ሁሉም # የተፈለጉ ቃላት ተጠቅመዋል።}}",
-      "glossaryCheckMissing": "{count, plural, one {ከ{total} የተፈለግ ትርጉሞች አንዱ ይጎድላል፡} other {ከ{total} የተፈለጉ ትርጉሞች # ይጎዳሉ፡}}"
+      "glossaryCheckMissing": "{count, plural, one {ከ{total} የተፈለግ ትርጉሞች አንዱ ይጎድላል፡} other {ከ{total} የተፈለጉ ትርጉሞች # ይጎዳሉ፡}}",
+      "glossariesButton": "{count, plural, =0 {ቃላት ዝርዝርዎች} one {# ቃላት ዝርዝር} other {# ቃላት ዝርዝርዎች}}",
+      "glossaryPickerTitle": "ቃላት ዝርዝርዎች",
+      "glossaryPickerClose": "ቃላት ዝርዝርዎችን ዝጋ",
+      "glossaryOrgSection": "ድርጅት",
+      "glossaryMineSection": "የእኔ",
+      "noOrganizationGlossaries": "የድርጅቱ ቃላት ዝርዝርዎች አይተጋለጡም።",
+      "noPersonalGlossaries": "አሁን ምንም ቃላት ዝርዝር የለዎትም። አንድ ለመፍጠር ወይም የድርጅት ዝርዝር ለመቅዳት 'Manage' ይጠቀሙ።",
+      "glossaryAnyLanguage": "ማንኛውም ቋንቋ",
+      "glossaryCustomLanguage": "ብጁ ቋንቋ",
+      "glossaryEntryCount": "{count, plural, one {# ቃል} other {# ቃላት}}",
+      "glossaryLanguageMismatch": "ይህ ቃላት ዝርዝር ለሌላ መዳረሻ ቋንቋ ተሰይሯል።",
+      "glossaryMismatchChip": "ቋንቋ አልተመሳሰሉም",
+      "glossaryOrgLimit": "ከፍተኛው {max} ድርጅት ቃላት ዝርዝር በአንድ ትርጉም ላይ።",
+      "copyToMine": "{name} ወደ የእኔ ዝርዝሮች ኮፒ አድርግ",
+      "copyToMineTitle": "ወደ የእኔ ቃላት ዝርዝሮች ኮፒ አድርግ",
+      "copyToMineFailed": "ቃላት ዝርዝሩን ማቅዳት አልተቻለም። እንደገና ይሞክሩ።",
+      "copiedToMine": "ወደ የእርስዎ ቃላት ዝርዝሮች ተቀዳች።",
+      "copiedGlossaryName": "{name} (ኮፒ)",
+      "clearStaleGlossary": "አስወግድ",
+      "glossaryUnavailable": "ቃላት ዝርዝሩ አይገኝም (የጠፋ ወይም ከእርስዎ ጋር አይተጋለጠም)",
+      "showOtherLanguages": "{count, plural, one {የሌላ ቋንቋ ቃላት ዝርዝር አሳይ} other {የሌሎች ቋንቋዎች {#} ቃላት ዝርዝሮች አሳይ}}",
+      "hideOtherLanguages": "ሌሎች ቋንቋዎችን ደብቅ",
+      "glossarySourceLang": "የመጣበት ቋንቋ",
+      "glossaryTargetLang": "የመዳረሻ ቋንቋ",
+      "glossaryLanguageEncourage": "ግብረ መዳረሻ ቋንቋ ይምረጡ እንዲሁ በትክክል ትርጉሞች ላይ ይቀይሩበት።",
+      "importEntries": "CSV/TSV አስመጣ",
+      "exportEntries": "CSV ላክ",
+      "importHint": "አምዶች፡ source, target, note, kind, sourceExpansion, targetExpansion። ሁለት አምድ ያለው ፋይልም የሚሰራ ነው።",
+      "importTooLarge": "ያ ፋይል ለመስመጥ በጣም ትልቅ ነው (ከ5 MB በታች).",
+      "importNothing": "ምንም መጠቀም የሚቻል ረድፎች አልተገኙም ({skipped} ተወስኗል።)",
+      "importSummary": "{added} ታክሏል, {replaced} ተቀይሯል, {skipped} ተወስኗል።",
+      "entriesTooManyToShow": "{count} ቃላት — እዚህ ለማሳየት ብዙ ናቸው። ለማየት ያስመጡ ወይም ቃላቶችን ለመቀየር ፋይል ያስመጡ።"
     },
     "document": {
       "emptyTitle": "የሚፈልጉትን ሰነድ ይግለጹ",
@@ -3510,7 +3542,8 @@
         "acceptAll": "ሁሉንም ቀሪዎቹን ይቀበሉ",
         "rejectAll": "ሁሉንም ይተዉ",
         "cancel": "ይቅር"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# ተጨማሪ ቃል አልታዩም} other {# ተጨማሪ ቃላት አልታዩም}}"
     },
     "form": {
       "emptyTitle": "ሰነድ ይሙሉ",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# ዶኩመንት} other {# ዶኩመንቶች}}, ገደብ {max} — ማደስ ከመደገፉ በፊት አንዳንዱን ያስወግዱ ወይም ገደቡን ያሳድጉ",
     "m365AgentLimitBadgePlain": "ገደብ {limit}",
     "m365PlanShowAllRows": "ሁሉንም አሳይ {count, plural, one {# ፋይል} other {# ፋይሎች}}",
-    "m365PlanShowFewerRows": "ጥቂቶቹን አሳይ"
+    "m365PlanShowFewerRows": "ጥቂቶቹን አሳይ",
+    "glossariesTab": "ቃላት ዝርዝርዎች",
+    "addGlossary": "ቃላት ዝርዝር ያክሉ",
+    "noGlossaries": "የድርጅት ቃላት ዝርዝርዎች አልተጨመሩም። ማንኛውንም ቃላት ተመዋዋቂ በሚተረጉሙ ሁሉ ጋር ለመጋራት አንዱን ያክሉ።",
+    "editGlossaryTitle": "ቃላት ዝርዝር አርትዕ",
+    "newGlossaryTitle": "አዲስ ቃላት ዝርዝር",
+    "glossarySaveSuccess": "ቃላት ዝርዝሩ ተቀድሷል",
+    "glossaryCreateSuccess": "ቃላት ዝርዝሩ ተፈጥሯል",
+    "glossaryLanguagePairLabel": "ቋንቋዎች",
+    "glossarySourceLangLabel": "የመጣበት ቋንቋ",
+    "glossaryTargetLangLabel": "የመዳረሻ ቋንቋ",
+    "glossaryAnyLanguage": "ማንኛውም ቋንቋ",
+    "glossaryLanguagePairHint": "ወደዚህ ቋንቋ ተመርጠው የሚተረጉሙ ቀዳሚ በዝርዝሩ ያገኙት ነው።",
+    "glossaryLanguagePairEncourage": "አማራጭ ቢሆንም አንድ መዳረሻ ቋንቋ ማቅረብ ትክክለኛውን ዝርዝር ለማገናኘት እና በትክክል ትርጉሞች ላይ ለማኖር ያግዛል።",
+    "guidePayloadLoading": "ይዘት በመቅደም ላይ...",
+    "guidePayloadMissing": "የዚህ መመሪያ የተቀመጠውን ይዘት ማግኘት አልተቻለም። መዝግብ አዲስ ቅጂ ይፃፋል።",
+    "deleteGlossary": "ቃላት ዝርዝሩን ሰርዝ",
+    "deleteGlossaryConfirm": "ይህንን ቃላት ዝርዝር ለሁሉም ይሰርዙ? ተረጉሚዎች ወዲያውኑ ይውጡታል፤ ያንን የቀደመ ቀጥታ የያዙት ቀሪ ይቆያሉ።",
+    "confirmDeleteGlossary": "የቃላት አክሊል ያጥፉ",
+    "glossaryDeleteSuccess": "የቃላት አክሊል ተሰርዟል"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",
@@ -5000,7 +5052,8 @@
       "workflows": "ለሁሉም የውይይት ስራዎችን ያብቁ ወይም ያኑሩ።",
       "viewAs": "መቼውና መጠኑን የሚያበረታተን — ወይም የማይደለውን — ሁኔታ እንደሚያገኙ ሰው መተግበርያውን ይሞክሩ።",
       "globalAdmins": "እሁድ በሁሉም የአስተዳደር ዝርዝር በተወሰነው ውጪ ፣ ሁሉንም የሚቆጣጠሩ የመንግስት አስተዳዳሪዎች ናቸው።",
-      "formTemplates": "ከተጠቃሚዎች ጋር የሚካፈሉ ይሙሉ የሚችሉ የቅፅ አብነቶች።"
+      "formTemplates": "ከተጠቃሚዎች ጋር የሚካፈሉ ይሙሉ የሚችሉ የቅፅ አብነቶች።",
+      "glossaries": "የድርጅቱ ቃላት አክሊሎች — ግዴታ የሆኑ ቃላት፣ ከተርጉሞች ጋር የተጋሩ።"
     },
     "openSettings": "ማቀናበሪያዎችን ክፈት",
     "area": {

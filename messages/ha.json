@@ -2861,7 +2861,39 @@
       "acronymHint": "Takaitattun haruffa dole su dace da rubutun: WHO yana dacewa da “WHO” kawai, ba “who”. Kalmomi suna dacewa da kowanne harafi.",
       "glossaryCheckTitle": "Binciken ƙamus",
       "glossaryCheckPass": "{count, plural, one {An yi amfani da kalmar da ake buƙata.} other {Dukkan # kalmomin da ake buƙata an yi amfani da su.}}",
-      "glossaryCheckMissing": "{count, plural, one {# daga cikin {total} fassarori da ake buƙata ba a samu ba:} other {# daga cikin {total} fassarori da ake buƙata ba a samu ba:}}"
+      "glossaryCheckMissing": "{count, plural, one {# daga cikin {total} fassarori da ake buƙata ba a samu ba:} other {# daga cikin {total} fassarori da ake buƙata ba a samu ba:}}",
+      "glossariesButton": "{count, plural, =0 {Kamus} one {# kamus} other {# kamus}}",
+      "glossaryPickerTitle": "Kamus",
+      "glossaryPickerClose": "Rufe kamus",
+      "glossaryOrgSection": "Kungiya",
+      "glossaryMineSection": "Na kaina",
+      "noOrganizationGlossaries": "Babu kamus na kungiya da aka raba da kai.",
+      "noPersonalGlossaries": "Ba ka da wani kamus a yanzu. Yi amfani da ‘Manage’ don ƙirƙira ko kwafe kamus na kungiya.",
+      "glossaryAnyLanguage": "Duk wani harshe",
+      "glossaryCustomLanguage": "Harshe na musamman",
+      "glossaryEntryCount": "{count, plural, one {# kalma} other {# kalmomi}}",
+      "glossaryLanguageMismatch": "Wannan kamus an sanya shi da wani harshen manufa dabam.",
+      "glossaryMismatchChip": "Matsalar dacewar harshe",
+      "glossaryOrgLimit": "Har zuwa {max} kamus na kungiya a kowane fassara.",
+      "copyToMine": "Kwafa {name} zuwa kamus dina",
+      "copyToMineTitle": "Kwafa zuwa kamus dina",
+      "copyToMineFailed": "Ba a iya kwafe kamus ɗin ba. Sake gwadawa.",
+      "copiedToMine": "An kwafe zuwa kamus ɗinka",
+      "copiedGlossaryName": "{name} (kwafe)",
+      "clearStaleGlossary": "Cire",
+      "glossaryUnavailable": "Kamus bai samu ba (an share ko ba a raba da kai ba)",
+      "showOtherLanguages": "{count, plural, one {Nuna # kamus na wani harshe} other {Nuna # kamus na wasu harsuna}}",
+      "hideOtherLanguages": "Boye sauran harsuna",
+      "glossarySourceLang": "Asalin harshe",
+      "glossaryTargetLang": "Harshen manufa",
+      "glossaryLanguageEncourage": "Yi wa wannan kamus alamar harshen manufa don a fifita shi a fassarar da ta dace.",
+      "importEntries": "Shigo CSV/TSV",
+      "exportEntries": "Fitar da CSV",
+      "importHint": "Sahuffa: asali, manufa, bayanin kula, iri, bayani asali, bayani manufa. Fayil mai shafi biyu ma yana aiki.",
+      "importTooLarge": "Fayil ɗin yayi girma fiye da izini (max 5 MB).",
+      "importNothing": "Ba a sami layin da ya dace ba ({skipped} an tsallake).",
+      "importSummary": "{added} an ƙara, {replaced} an maye gurbinsu, {skipped} an tsallake.",
+      "entriesTooManyToShow": "{count} kalmomi — sun yi yawa a nan. Fitar da su don duba, ko shigo da fayil don maye gurbinsu."
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Amince da duk saura",
         "rejectAll": "Ki duk",
         "cancel": "Soke"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# karin kalma ba'a nuna ba} other {# karin kalmomi ba'a nuna ba}}"
     },
     "form": {
       "emptyTitle": "Cika takarda",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# takarda} other {# takardu}}, iyaka {max} — a rage ko ƙara iyaka kafin sabuntawa",
     "m365AgentLimitBadgePlain": "Iyaka {limit}",
     "m365PlanShowAllRows": "Nuna duk {count, plural, one {# fayil} other {# fayiloli}}",
-    "m365PlanShowFewerRows": "Nuna kaɗan"
+    "m365PlanShowFewerRows": "Nuna kaɗan",
+    "glossariesTab": "Kamus",
+    "addGlossary": "Ƙara kamus",
+    "noGlossaries": "Babu kamus na kungiya a yanzu. Ƙara ɗaya don rabawa da kowa da ke fassara.",
+    "editGlossaryTitle": "Gyara kamus",
+    "newGlossaryTitle": "Sabon kamus",
+    "glossarySaveSuccess": "An adana kamus",
+    "glossaryCreateSuccess": "An ƙirƙiri kamus",
+    "glossaryLanguagePairLabel": "Harsuna",
+    "glossarySourceLangLabel": "Asalin harshe",
+    "glossaryTargetLangLabel": "Harshen manufa",
+    "glossaryAnyLanguage": "Duk wani harshe",
+    "glossaryLanguagePairHint": "Fassarar zuwa wannan harshe za ta fara ganin wannan kamus.",
+    "glossaryLanguagePairEncourage": "Zaɓi ne, amma shigar da harshen manufa yana taimakawa mutane su gano kamus daidai kuma yana hana shi a cikin fassarar da bai dace ba.",
+    "guidePayloadLoading": "Ana lodin abubuwa…",
+    "guidePayloadMissing": "Ba a samu abubuwan da aka adana na wannan jagora ba. Ajiye zai ƙirƙiri sababbin abubuwa.",
+    "deleteGlossary": "Share kamus",
+    "deleteGlossaryConfirm": "A share wannan kamus ga kowa? Fassara za su daina samunsa nan da nan; kwafe da mutum yayi za su kasance nasa.",
+    "confirmDeleteGlossary": "Goge kundin magana",
+    "glossaryDeleteSuccess": "An goge kundin magana"
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -4984,7 +5036,8 @@
       "workflows": "Kashe ko kunnawa aikin hira ga kowa.",
       "viewAs": "Gwada app kamar wani da ya cika – ko bai cika ba – wani sharadi.",
       "globalAdmins": "Su ne ke kula da komai — ba kawai sunayen da aka saka yayin ɗaukar aiki ba.",
-      "formTemplates": "Samfuran fom na cike da ake rabawa da masu amfani na tsarin cike takardu."
+      "formTemplates": "Samfuran fom na cike da ake rabawa da masu amfani na tsarin cike takardu.",
+      "glossaries": "Kundin magana na ƙungiya — kalmomin tilas, ana raba su da masu fassara."
     },
     "openSettings": "Buɗe saituna",
     "area": {

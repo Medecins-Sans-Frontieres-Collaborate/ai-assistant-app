@@ -2877,7 +2877,39 @@
       "acronymHint": "Akronimy muszą być zgodne z zapisem: WHO dotyczy tylko „WHO”, nigdy „who”. Terminy są dopasowywane bez względu na wielkość liter.",
       "glossaryCheckTitle": "Sprawdzenie słownika",
       "glossaryCheckPass": "{count, plural, one {Użyto wymaganego terminu.} other {Użyto wszystkich # wymaganych terminów.}}",
-      "glossaryCheckMissing": "{count, plural, one {Brakuje # z {total} wymaganych tłumaczeń:} other {Brakuje # z {total} wymaganych tłumaczeń:}}"
+      "glossaryCheckMissing": "{count, plural, one {Brakuje # z {total} wymaganych tłumaczeń:} other {Brakuje # z {total} wymaganych tłumaczeń:}}",
+      "glossariesButton": "{count, plural, =0 {Glosariusze} one {# glosariusz} other {# glosariuszy}}",
+      "glossaryPickerTitle": "Glosariusze",
+      "glossaryPickerClose": "Zamknij glosariusze",
+      "glossaryOrgSection": "Organizacja",
+      "glossaryMineSection": "Moje",
+      "noOrganizationGlossaries": "Nie udostępniono Ci żadnych glosariuszy organizacji.",
+      "noPersonalGlossaries": "Nie masz jeszcze żadnych glosariuszy. Użyj Zarządzaj, aby utworzyć nowy lub skopiować glosariusz organizacji.",
+      "glossaryAnyLanguage": "Dowolny język",
+      "glossaryCustomLanguage": "Niestandardowy język",
+      "glossaryEntryCount": "{count, plural, one {# termin} other {# terminy}}",
+      "glossaryLanguageMismatch": "Ten glosariusz jest oznaczony dla innego języka docelowego.",
+      "glossaryMismatchChip": "Niezgodność języka",
+      "glossaryOrgLimit": "Maksymalnie {max} glosariuszy organizacji na tłumaczenie.",
+      "copyToMine": "Skopiuj {name} do moich glosariuszy",
+      "copyToMineTitle": "Skopiuj do moich glosariuszy",
+      "copyToMineFailed": "Nie udało się skopiować glosariusza. Spróbuj ponownie.",
+      "copiedToMine": "Skopiowano do Twoich glosariuszy",
+      "copiedGlossaryName": "{name} (kopia)",
+      "clearStaleGlossary": "Usuń",
+      "glossaryUnavailable": "Glosariusz niedostępny (usunięty lub nie jest już udostępniany)",
+      "showOtherLanguages": "{count, plural, one {Pokaż # glosariusz dla innego języka} other {Pokaż # glosariuszy dla innych języków}}",
+      "hideOtherLanguages": "Ukryj inne języki",
+      "glossarySourceLang": "Język źródłowy",
+      "glossaryTargetLang": "Język docelowy",
+      "glossaryLanguageEncourage": "Oznacz język docelowy, aby ten glosariusz był proponowany w pierwszej kolejności dla pasujących tłumaczeń.",
+      "importEntries": "Importuj CSV/TSV",
+      "exportEntries": "Eksportuj CSV",
+      "importHint": "Kolumny: source, target, note, kind, sourceExpansion, targetExpansion. Plik dwukolumnowy też jest akceptowany.",
+      "importTooLarge": "Ten plik jest zbyt duży do importu (maks. 5 MB).",
+      "importNothing": "Nie znaleziono użytecznych wierszy ({skipped} pominięto).",
+      "importSummary": "{added} dodano, {replaced} zastąpiono, {skipped} pominięto.",
+      "entriesTooManyToShow": "{count} terminów — zbyt dużo, by wyświetlić tutaj. Wyeksportuj, aby przejrzeć, lub zaimportuj plik, by zastąpić terminy."
     },
     "document": {
       "emptyTitle": "Opisz dokument, który chcesz uzyskać",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Akceptuj wszystkie pozostałe",
         "rejectAll": "Odrzuć wszystkie",
         "cancel": "Anuluj"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# dodatkowy termin niewyświetlony} other {# dodatkowych terminów niewyświetlonych}}"
     },
     "form": {
       "emptyTitle": "Wypełnij dokument",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# dokument} other {# dokumentów}}, limit {max} — przytnij lub zwiększ limit przed odświeżeniem",
     "m365AgentLimitBadgePlain": "Limit {limit}",
     "m365PlanShowAllRows": "Pokaż wszystkie {count, plural, one {# plik} other {# plików}}",
-    "m365PlanShowFewerRows": "Pokaż mniej"
+    "m365PlanShowFewerRows": "Pokaż mniej",
+    "glossariesTab": "Glosariusze",
+    "addGlossary": "Dodaj glosariusz",
+    "noGlossaries": "Nie dodano jeszcze glosariuszy organizacji. Dodaj jeden, by udostępnić obowiązkową terminologię wszystkim tłumaczącym.",
+    "editGlossaryTitle": "Edytuj glosariusz",
+    "newGlossaryTitle": "Nowy glosariusz",
+    "glossarySaveSuccess": "Glosariusz zapisany",
+    "glossaryCreateSuccess": "Glosariusz utworzony",
+    "glossaryLanguagePairLabel": "Języki",
+    "glossarySourceLangLabel": "Język źródłowy",
+    "glossaryTargetLangLabel": "Język docelowy",
+    "glossaryAnyLanguage": "Dowolny język",
+    "glossaryLanguagePairHint": "Tłumaczenia na ten język będą korzystać w pierwszej kolejności z tego glosariusza.",
+    "glossaryLanguagePairEncourage": "Opcjonalne, ale określenie języka docelowego pomaga znaleźć właściwy glosariusz i wyklucza go z niepowiązanych tłumaczeń.",
+    "guidePayloadLoading": "Ładowanie zawartości…",
+    "guidePayloadMissing": "Nie można znaleźć zapisanej zawartości tego przewodnika. Zapisanie utworzy nową kopię.",
+    "deleteGlossary": "Usuń glosariusz",
+    "deleteGlossaryConfirm": "Usunąć ten glosariusz dla wszystkich? Tłumacze stracą do niego dostęp natychmiast; kopie pozostają u osób, które je utworzyły.",
+    "confirmDeleteGlossary": "Usuń słownik",
+    "glossaryDeleteSuccess": "Słownik usunięty"
   },
   "localModels": {
     "title": "Modele lokalne",
@@ -5000,7 +5052,8 @@
       "workflows": "Włączaj lub wyłączaj przepływy rozmów dla wszystkich.",
       "viewAs": "Testuj aplikację jako osoba spełniająca — lub nie — wybrany warunek.",
       "globalAdmins": "Kto zarządza wszystkim — niezależnie od listy ustalonej przez wdrożenie.",
-      "formTemplates": "Udostępnione użytkownikom workflow-u do wypełniania szablony formularzy."
+      "formTemplates": "Udostępnione użytkownikom workflow-u do wypełniania szablony formularzy.",
+      "glossaries": "Słowniki organizacji — obowiązkowa terminologia, udostępniana tłumaczom."
     },
     "openSettings": "Otwórz ustawienia",
     "area": {

@@ -2877,7 +2877,39 @@
       "acronymHint": "Аббревиатуры совпадают строго по написанию: WHO относится только к «WHO», а не к «who». Термины совпадают при любом написании.",
       "glossaryCheckTitle": "Проверка глоссария",
       "glossaryCheckPass": "{count, plural, one {Требуемый термин использован.} other {Все # требуемых терминов использованы.}}",
-      "glossaryCheckMissing": "{count, plural, one {Отсутствует # из {total} требуемого перевода:} other {Отсутствуют # из {total} требуемых переводов:}}"
+      "glossaryCheckMissing": "{count, plural, one {Отсутствует # из {total} требуемого перевода:} other {Отсутствуют # из {total} требуемых переводов:}}",
+      "glossariesButton": "{count, plural, =0 {Глоссарии} one {# глоссарий} other {# глоссариев}}",
+      "glossaryPickerTitle": "Глоссарии",
+      "glossaryPickerClose": "Закрыть глоссарии",
+      "glossaryOrgSection": "Организация",
+      "glossaryMineSection": "Мои",
+      "noOrganizationGlossaries": "С вами не поделились ни одним глоссарием организации.",
+      "noPersonalGlossaries": "У вас еще нет глоссариев. Используйте Управление для создания или скопируйте глоссарий организации.",
+      "glossaryAnyLanguage": "Любой язык",
+      "glossaryCustomLanguage": "Пользовательский язык",
+      "glossaryEntryCount": "{count, plural, one {# термин} other {# терминов}}",
+      "glossaryLanguageMismatch": "Этот глоссарий предназначен для другого целевого языка.",
+      "glossaryMismatchChip": "Несовпадение языка",
+      "glossaryOrgLimit": "До {max} глоссариев организации на перевод.",
+      "copyToMine": "Скопировать {name} в мои глоссарии",
+      "copyToMineTitle": "Скопировать в мои глоссарии",
+      "copyToMineFailed": "Не удалось скопировать глоссарий. Попробуйте еще раз.",
+      "copiedToMine": "Скопировано в ваши глоссарии",
+      "copiedGlossaryName": "{name} (копия)",
+      "clearStaleGlossary": "Удалить",
+      "glossaryUnavailable": "Глоссарий недоступен (удален или больше не общий с вами)",
+      "showOtherLanguages": "{count, plural, one {Показать # глоссарий для другого языка} other {Показать # глоссариев для других языков}}",
+      "hideOtherLanguages": "Скрыть другие языки",
+      "glossarySourceLang": "Язык источника",
+      "glossaryTargetLang": "Целевой язык",
+      "glossaryLanguageEncourage": "Укажите целевой язык, чтобы этот глоссарий предлагался первым при соответствующих переводах.",
+      "importEntries": "Импортировать CSV/TSV",
+      "exportEntries": "Экспортировать CSV",
+      "importHint": "Столбцы: source, target, note, kind, sourceExpansion, targetExpansion. Подойдет и файл с двумя столбцами.",
+      "importTooLarge": "Файл слишком большой для импорта (максимум 5 МБ).",
+      "importNothing": "Не найдено подходящих строк ({skipped} пропущено).",
+      "importSummary": "{added} добавлено, {replaced} заменено, {skipped} пропущено.",
+      "entriesTooManyToShow": "{count} терминов — слишком много для отображения здесь. Экспортируйте для просмотра или импортируйте новый файл для замены терминов."
     },
     "document": {
       "emptyTitle": "Опишите нужный вам документ",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Принять все оставшиеся",
         "rejectAll": "Отклонить все",
         "cancel": "Отмена"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {Еще # термин не показан} other {Еще # терминов не показано}}"
     },
     "form": {
       "emptyTitle": "Заполнить документ",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# документ} other {# документов}}, лимит {max} — уменьшите число или увеличьте лимит перед обновлением",
     "m365AgentLimitBadgePlain": "Лимит {limit}",
     "m365PlanShowAllRows": "Показать все {count, plural, one {# файл} other {# файлов}}",
-    "m365PlanShowFewerRows": "Показать меньше"
+    "m365PlanShowFewerRows": "Показать меньше",
+    "glossariesTab": "Глоссарии",
+    "addGlossary": "Добавить глоссарий",
+    "noGlossaries": "Пока нет глоссариев организации. Добавьте глоссарий, чтобы делиться обязательной терминологией со всеми переводчиками.",
+    "editGlossaryTitle": "Редактировать глоссарий",
+    "newGlossaryTitle": "Новый глоссарий",
+    "glossarySaveSuccess": "Глоссарий сохранен",
+    "glossaryCreateSuccess": "Глоссарий создан",
+    "glossaryLanguagePairLabel": "Языки",
+    "glossarySourceLangLabel": "Язык источника",
+    "glossaryTargetLangLabel": "Целевой язык",
+    "glossaryAnyLanguage": "Любой язык",
+    "glossaryLanguagePairHint": "Переводы на этот язык будут видеть этот глоссарий в первую очередь.",
+    "glossaryLanguagePairEncourage": "Необязательно, но целевой язык поможет найти глоссарий и исключит его из несвязанных переводов.",
+    "guidePayloadLoading": "Загрузка содержимого…",
+    "guidePayloadMissing": "Сохраненное содержимое этого руководства не найдено. Сохранение создаст новую копию.",
+    "deleteGlossary": "Удалить глоссарий",
+    "deleteGlossaryConfirm": "Удалить этот глоссарий для всех? Переводчики сразу его потеряют; уже скопированные копии останутся у владельцев.",
+    "confirmDeleteGlossary": "Удалить глоссарий",
+    "glossaryDeleteSuccess": "Глоссарий удалён"
   },
   "localModels": {
     "title": "Локальные модели",
@@ -5000,7 +5052,8 @@
       "workflows": "Включайте или отключайте рабочие процессы для всех.",
       "viewAs": "Тестируйте приложение как пользователь, соответствующий или не соответствующий условию.",
       "globalAdmins": "Кто управляет всем — помимо списка, установленного при развертывании.",
-      "formTemplates": "Доступные для заполнения шаблоны форм, совместно используемые пользователями сценария заполнения документов."
+      "formTemplates": "Доступные для заполнения шаблоны форм, совместно используемые пользователями сценария заполнения документов.",
+      "glossaries": "Глоссарии организации — обязательная терминология, доступная переводчикам."
     },
     "openSettings": "Открыть настройки",
     "area": {

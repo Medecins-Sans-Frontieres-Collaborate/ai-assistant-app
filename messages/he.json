@@ -2877,7 +2877,39 @@
       "acronymHint": "ראשי תיבות תואמים בדיוק כפי שהוזנו: WHO מתאים ל-“WHO”, אף פעם לא ל-“who”. מונחים תואמים בכל כתיב.",
       "glossaryCheckTitle": "בדיקת מילון מונחים",
       "glossaryCheckPass": "{count, plural, one {המונח הנדרש שימש.} other {כל # המונחים הנדרשים שימשו.}}",
-      "glossaryCheckMissing": "{count, plural, one {# מתוך {total} תרגומים נדרשים חסר:} other {# מתוך {total} תרגומים נדרשים חסרים:}}"
+      "glossaryCheckMissing": "{count, plural, one {# מתוך {total} תרגומים נדרשים חסר:} other {# מתוך {total} תרגומים נדרשים חסרים:}}",
+      "glossariesButton": "{count, plural, =0 {מילונים} one {# מילון} other {# מילונים}}",
+      "glossaryPickerTitle": "מילונים",
+      "glossaryPickerClose": "סגור מילונים",
+      "glossaryOrgSection": "ארגון",
+      "glossaryMineSection": "שלי",
+      "noOrganizationGlossaries": "לא שותפו איתך מילונים ארגוניים.",
+      "noPersonalGlossaries": "אין לך עדיין מילונים. השתמש/י בניהול כדי ליצור מילון חדש או להעתיק מילון ארגוני.",
+      "glossaryAnyLanguage": "כל שפה",
+      "glossaryCustomLanguage": "שפה מותאמת אישית",
+      "glossaryEntryCount": "{count, plural, one {# מונח} other {# מונחים}}",
+      "glossaryLanguageMismatch": "מילון זה מסומן לשפת יעד שונה.",
+      "glossaryMismatchChip": "אי התאמת שפה",
+      "glossaryOrgLimit": "עד {max} מילונים ארגוניים לכל תרגום.",
+      "copyToMine": "העתק/י את {name} למילונים שלי",
+      "copyToMineTitle": "העתקה למילונים שלי",
+      "copyToMineFailed": "לא ניתן להעתיק את המילון. נסה/י שוב.",
+      "copiedToMine": "הועתק למילונים שלך",
+      "copiedGlossaryName": "{name} (עותק)",
+      "clearStaleGlossary": "הסר",
+      "glossaryUnavailable": "המילון אינו זמין (נמחק או כבר לא משותף איתך)",
+      "showOtherLanguages": "{count, plural, one {הצג מילון אחד לשפה אחרת} other {הצג # מילונים לשפות נוספות}}",
+      "hideOtherLanguages": "הסתר שפות נוספות",
+      "glossarySourceLang": "שפת מקור",
+      "glossaryTargetLang": "שפת יעד",
+      "glossaryLanguageEncourage": "סמן/י שפת יעד כדי להציע את מילון זה ראשון בתרגומים תואמים.",
+      "importEntries": "ייבוא CSV/TSV",
+      "exportEntries": "ייצא CSV",
+      "importHint": "עמודות: מקור, יעד, הערה, סוג, הרחבה מקורית, הרחבה מתורגמת. ניתן גם לייבא קובץ עם שתי עמודות.",
+      "importTooLarge": "הקובץ גדול מדי לייבוא (מקסימום 5 מגה-בייט).",
+      "importNothing": "לא נמצאו שורות מתאימות ({skipped} דולגו).",
+      "importSummary": "{added} נוספו, {replaced} הוחלפו, {skipped} דולגו.",
+      "entriesTooManyToShow": "{count} מונחים — יותר מדי להצגה כאן. ייצא/י כדי לעיין בהם, או יבא/י קובץ להחלפת מונחים."
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",
@@ -3510,7 +3542,8 @@
         "acceptAll": "אשר את כל הנותרים",
         "rejectAll": "דחה את כולם",
         "cancel": "ביטול"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# מונח נוסף לא מוצג} other {# מונחים נוספים לא מוצגים}}"
     },
     "form": {
       "emptyTitle": "מלא מסמך",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# מסמך} other {# מסמכים}}, מוגבל ל-{max} — צמצמו או הגדילו את המגבלה לפני רענון",
     "m365AgentLimitBadgePlain": "מגבלה {limit}",
     "m365PlanShowAllRows": "הצג את כל {count, plural, one {# קובץ} other {# קבצים}}",
-    "m365PlanShowFewerRows": "הצג פחות"
+    "m365PlanShowFewerRows": "הצג פחות",
+    "glossariesTab": "מילונים",
+    "addGlossary": "הוסף/י מילון",
+    "noGlossaries": "אין עדיין מילונים ארגוניים. הוסף/י אחד כדי לשתף מונחים חיוניים עם כל מי שמתרגם.",
+    "editGlossaryTitle": "עריכת מילון",
+    "newGlossaryTitle": "מילון חדש",
+    "glossarySaveSuccess": "המילון נשמר",
+    "glossaryCreateSuccess": "המילון נוצר",
+    "glossaryLanguagePairLabel": "שפות",
+    "glossarySourceLangLabel": "שפת מקור",
+    "glossaryTargetLangLabel": "שפת יעד",
+    "glossaryAnyLanguage": "כל שפה",
+    "glossaryLanguagePairHint": "תרגומים לשפה זו יראו תחילה את המילון הזה.",
+    "glossaryLanguagePairEncourage": "רשות בלבד, אך סימון שפת יעד מסייע במציאת המילון הנכון ושומר עליו מתרגומים לא קשורים.",
+    "guidePayloadLoading": "טוען תוכן…",
+    "guidePayloadMissing": "לא ניתן לאתר את תוכן המדריך. השמירה תיצור עותק חדש.",
+    "deleteGlossary": "מחק מילון",
+    "deleteGlossaryConfirm": "למחוק את המילון הזה לכולם? המילון יוסר מיד מהמתרגמים; עותקים שהועתקו לבעלות אישית יישארו.",
+    "confirmDeleteGlossary": "מחיקת מילון מונחים",
+    "glossaryDeleteSuccess": "מילון מונחים נמחק"
   },
   "localModels": {
     "title": "מודלים מקומיים",
@@ -5000,7 +5052,8 @@
       "workflows": "הפעל או השבת תהליכי עבודה בשיחות עבור כולם.",
       "viewAs": "בדוק את האפליקציה כמי שעומד — או לא עומד — בתנאי מסוים.",
       "globalAdmins": "מי שמנהל את הכול — מעבר לרשימה שהוגדרה בפריסה.",
-      "formTemplates": "תבניות טפסים ניתנות למילוי, משותפות עם משתמשי תהליך מילוי המסמכים."
+      "formTemplates": "תבניות טפסים ניתנות למילוי, משותפות עם משתמשי תהליך מילוי המסמכים.",
+      "glossaries": "מילוני מונחים של הארגון — מינוחים מחייבים, משותפים עם מתרגמים."
     },
     "openSettings": "פתח הגדרות",
     "area": {

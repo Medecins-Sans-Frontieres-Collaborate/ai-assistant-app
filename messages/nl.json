@@ -2877,7 +2877,39 @@
       "acronymHint": "Acroniemen komen exact overeen zoals ingevoerd: WHO komt overeen met “WHO”, nooit met “who”. Termen matchen op elke hoofdlettergebruik.",
       "glossaryCheckTitle": "Woordenlijstcontrole",
       "glossaryCheckPass": "{count, plural, one {De vereiste term is gebruikt.} other {Alle # vereiste termen zijn gebruikt.}}",
-      "glossaryCheckMissing": "{count, plural, one {# van de {total} vereiste vertalingen ontbreekt:} other {# van de {total} vereiste vertalingen ontbreken:}}"
+      "glossaryCheckMissing": "{count, plural, one {# van de {total} vereiste vertalingen ontbreekt:} other {# van de {total} vereiste vertalingen ontbreken:}}",
+      "glossariesButton": "{count, plural, =0 {Glossaria} one {# glossarium} other {# glossaria}}",
+      "glossaryPickerTitle": "Glossaria",
+      "glossaryPickerClose": "Glossaria sluiten",
+      "glossaryOrgSection": "Organisatie",
+      "glossaryMineSection": "Mijn glossaria",
+      "noOrganizationGlossaries": "Er zijn geen organisatie-glossaria met u gedeeld.",
+      "noPersonalGlossaries": "U heeft nog geen glossaria. Gebruik Beheren om er één aan te maken of kopieer een organisatie-glossarium.",
+      "glossaryAnyLanguage": "Elke taal",
+      "glossaryCustomLanguage": "Aangepaste taal",
+      "glossaryEntryCount": "{count, plural, one {# term} other {# termen}}",
+      "glossaryLanguageMismatch": "Dit glossarium is gelabeld voor een andere doeltaal.",
+      "glossaryMismatchChip": "Taalverschil",
+      "glossaryOrgLimit": "Maximaal {max} organisatie-glossaria per vertaling.",
+      "copyToMine": "{name} kopiëren naar mijn glossaria",
+      "copyToMineTitle": "Kopiëren naar mijn glossaria",
+      "copyToMineFailed": "Kon het glossarium niet kopiëren. Probeer opnieuw.",
+      "copiedToMine": "Gekopieerd naar uw glossaria",
+      "copiedGlossaryName": "{name} (kopie)",
+      "clearStaleGlossary": "Verwijderen",
+      "glossaryUnavailable": "Glossarium niet beschikbaar (verwijderd of niet langer met u gedeeld)",
+      "showOtherLanguages": "{count, plural, one {# glossarium voor een andere taal weergeven} other {# glossaria voor andere talen weergeven}}",
+      "hideOtherLanguages": "Andere talen verbergen",
+      "glossarySourceLang": "Brontaal",
+      "glossaryTargetLang": "Doeltaal",
+      "glossaryLanguageEncourage": "Label een doeltaal zodat dit glossarium als eerste wordt aangeboden bij passende vertalingen.",
+      "importEntries": "CSV/TSV importeren",
+      "exportEntries": "CSV exporteren",
+      "importHint": "Kolommen: source, target, note, kind, sourceExpansion, targetExpansion. Een bestand met twee kolommen werkt ook.",
+      "importTooLarge": "Dat bestand is te groot om te importeren (max. 5 MB).",
+      "importNothing": "Geen bruikbare rijen gevonden ({skipped} overgeslagen).",
+      "importSummary": "{added} toegevoegd, {replaced} vervangen, {skipped} overgeslagen.",
+      "entriesTooManyToShow": "{count} termen — te veel om hier te tonen. Exporteer om ze te bekijken, of importeer een bestand om termen te vervangen."
     },
     "document": {
       "emptyTitle": "Beschrijf het gewenste document",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Alles accepteren",
         "rejectAll": "Alles weigeren",
         "cancel": "Annuleren"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# extra term niet getoond} other {# extra termen niet getoond}}"
     },
     "form": {
       "emptyTitle": "Vul een document in",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# document} other {# documenten}}, limiet {max} — pas de limiet aan of verhoog deze voordat u ververst",
     "m365AgentLimitBadgePlain": "Limiet {limit}",
     "m365PlanShowAllRows": "Toon alle {count, plural, one {# bestand} other {# bestanden}}",
-    "m365PlanShowFewerRows": "Toon minder"
+    "m365PlanShowFewerRows": "Toon minder",
+    "glossariesTab": "Glossaria",
+    "addGlossary": "Glossarium toevoegen",
+    "noGlossaries": "Nog geen organisatie-glossaria. Voeg er een toe om verplichte terminologie te delen met iedereen die vertaalt.",
+    "editGlossaryTitle": "Glossarium bewerken",
+    "newGlossaryTitle": "Nieuw glossarium",
+    "glossarySaveSuccess": "Glossarium opgeslagen",
+    "glossaryCreateSuccess": "Glossarium aangemaakt",
+    "glossaryLanguagePairLabel": "Talen",
+    "glossarySourceLangLabel": "Brontaal",
+    "glossaryTargetLangLabel": "Doeltaal",
+    "glossaryAnyLanguage": "Elke taal",
+    "glossaryLanguagePairHint": "Vertalingen naar deze taal zien dit glossarium als eerste.",
+    "glossaryLanguagePairEncourage": "Niet verplicht, maar een doeltaal helpt mensen het juiste glossarium te vinden en voorkomt dat het bij ongerelateerde vertalingen verschijnt.",
+    "guidePayloadLoading": "Inhoud laden…",
+    "guidePayloadMissing": "De opgeslagen inhoud van deze gids kon niet worden gevonden. Opslaan schrijft een nieuw exemplaar.",
+    "deleteGlossary": "Glossarium verwijderen",
+    "deleteGlossaryConfirm": "Dit glossarium voor iedereen verwijderen? Vertalers verliezen het direct; gemaakte kopieën blijven bij de eigenaar.",
+    "confirmDeleteGlossary": "Woordenlijst verwijderen",
+    "glossaryDeleteSuccess": "Woordenlijst verwijderd"
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -5000,7 +5052,8 @@
       "workflows": "Schakel gespreksworkflows voor iedereen in of uit.",
       "viewAs": "Test de app als iemand die wel of niet aan een voorwaarde voldoet.",
       "globalAdmins": "Wie alles beheert — buiten de lijst die door de uitrol is ingesteld.",
-      "formTemplates": "Invulbare formuliersjablonen gedeeld met gebruikers van de document-invulworkflow."
+      "formTemplates": "Invulbare formuliersjablonen gedeeld met gebruikers van de document-invulworkflow.",
+      "glossaries": "Organisatiewoordenlijsten — verplichte terminologie, gedeeld met vertalers."
     },
     "openSettings": "Instellingen openen",
     "area": {

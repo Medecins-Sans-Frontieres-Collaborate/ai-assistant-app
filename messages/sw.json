@@ -2877,7 +2877,39 @@
       "acronymHint": "Vifupisho vinapaswa kufanana kabisa na ulivyoandika: WHO ni kwa “WHO” pekee, sio “who”. Maneno yanalingana na maandishi yoyote ya herufi kubwa/ndogo.",
       "glossaryCheckTitle": "Ukaguzi wa kamusi",
       "glossaryCheckPass": "{count, plural, one {Neno lililohitajika limetumiwa.} other {Maneno yote # yaliyohitajika yametumiwa.}}",
-      "glossaryCheckMissing": "{count, plural, one {# kati ya {total} tafsiri zinazohitajika haipo:} other {# kati ya {total} tafsiri zinazohitajika hazipo:}}"
+      "glossaryCheckMissing": "{count, plural, one {# kati ya {total} tafsiri zinazohitajika haipo:} other {# kati ya {total} tafsiri zinazohitajika hazipo:}}",
+      "glossariesButton": "{count, plural, =0 {Kamusi} one {# kamusi} other {# kamusi}}",
+      "glossaryPickerTitle": "Kamusi",
+      "glossaryPickerClose": "Funga kamusi",
+      "glossaryOrgSection": "Shirika",
+      "glossaryMineSection": "Zangu",
+      "noOrganizationGlossaries": "Hakuna kamusi za shirika ambazo zimeshirikiwa na wewe.",
+      "noPersonalGlossaries": "Huna kamusi bado. Tumia Dhibiti kuunda moja au nakili kamusi ya shirika.",
+      "glossaryAnyLanguage": "Lugha yoyote",
+      "glossaryCustomLanguage": "Lugha maalum",
+      "glossaryEntryCount": "{count, plural, one {# neno} other {# maneno}}",
+      "glossaryLanguageMismatch": "Kamusi hii imewekwa alama kwa lugha lengwa tofauti.",
+      "glossaryMismatchChip": "Lugha haiendani",
+      "glossaryOrgLimit": "Hadi kamusi {max} za shirika kwa kila tafsiri.",
+      "copyToMine": "Nakala ya {name} kwenye kamusi zangu",
+      "copyToMineTitle": "Nakala kwenye kamusi zangu",
+      "copyToMineFailed": "Imeshindikana kunakili kamusi. Jaribu tena.",
+      "copiedToMine": "Imenakiliwa kwenye kamusi zako",
+      "copiedGlossaryName": "{name} (nakala)",
+      "clearStaleGlossary": "Ondoa",
+      "glossaryUnavailable": "Kamusi haipatikani (imefutwa au haishirikiwi nawe tena)",
+      "showOtherLanguages": "{count, plural, one {Onesha kamusi # kwa lugha nyingine} other {Onesha kamusi # kwa lugha nyingine}}",
+      "hideOtherLanguages": "Ficha lugha nyingine",
+      "glossarySourceLang": "Lugha chanzo",
+      "glossaryTargetLang": "Lugha lengwa",
+      "glossaryLanguageEncourage": "Weka alama ya lugha lengwa ili kamusi hii itolewe kwanza kwa tafsiri zinazofanana.",
+      "importEntries": "Ingiza CSV/TSV",
+      "exportEntries": "Hamisha CSV",
+      "importHint": "Safu: chanzo, lengwa, maelezo, aina, upanuziChanzo, upanuziLengwa. Faili lenye safu mbili pia linafaa.",
+      "importTooLarge": "Faili hilo ni kubwa mno kulingiza (MB 5 za juu zaidi).",
+      "importNothing": "Hakuna safu zinazoweza kutumika zimepatikana ({skipped} zimeachwa).",
+      "importSummary": "{added} zimeongezwa, {replaced} zilibadilishwa, {skipped} zimeachwa.",
+      "entriesTooManyToShow": "{count} maneno — ni mengi mno kuorodheshwa hapa. Hamisha ili kuyakagua, au ingiza faili kubadilisha maneno."
     },
     "document": {
       "emptyTitle": "Eleza unachohitaji kwenye hati",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Kubali yote yaliyosalia",
         "rejectAll": "Kataa yote",
         "cancel": "Ghairi"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# neno lingine halijaonyeshwa} other {# maneno mengine hayajaonyeshwa}}"
     },
     "form": {
       "emptyTitle": "Jaza hati",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# hati} other {# hati}}, kikomo {max} — punguza idadi au ongeza kikomo kabla ya kusasisha upya",
     "m365AgentLimitBadgePlain": "Kikomo {limit}",
     "m365PlanShowAllRows": "Onyesha zote {count, plural, one {# faili} other {# faili}}",
-    "m365PlanShowFewerRows": "Onyesha chache"
+    "m365PlanShowFewerRows": "Onyesha chache",
+    "glossariesTab": "Kamusi",
+    "addGlossary": "Ongeza kamusi",
+    "noGlossaries": "Hakuna kamusi za shirika bado. Ongeza moja ili kushiriki istilahi za lazima na kila anayefanya tafsiri.",
+    "editGlossaryTitle": "Hariri kamusi",
+    "newGlossaryTitle": "Kamusi mpya",
+    "glossarySaveSuccess": "Kamusi imehifadhiwa",
+    "glossaryCreateSuccess": "Kamusi imeundwa",
+    "glossaryLanguagePairLabel": "Lugha",
+    "glossarySourceLangLabel": "Lugha chanzo",
+    "glossaryTargetLangLabel": "Lugha lengwa",
+    "glossaryAnyLanguage": "Lugha yoyote",
+    "glossaryLanguagePairHint": "Tafsiri zinazoingia kwenye lugha hii zitaona kamusi hii kwanza.",
+    "glossaryLanguagePairEncourage": "Si lazima, lakini lugha lengwa husaidia watu kupata kamusi sahihi na kuzuia kwenda kwenye tafsiri zisizohusiana.",
+    "guidePayloadLoading": "Inapakia yaliyomo…",
+    "guidePayloadMissing": "Yaliyomo ya mwongozo huu hayajapatikana. Kuhifadhi kutaandika upya.",
+    "deleteGlossary": "Futa kamusi",
+    "deleteGlossaryConfirm": "Ufuta kamusi hii kwa kila mtu? Watafsiri wataipoteza mara moja; nakala walizotengeneza zitabaki zao.",
+    "confirmDeleteGlossary": "Futa kamusi",
+    "glossaryDeleteSuccess": "Kamusi imefutwa"
   },
   "localModels": {
     "title": "Miundo ya ndani",
@@ -5000,7 +5052,8 @@
       "workflows": "Washa au zima utaratibu wa mazungumzo kwa kila mtu.",
       "viewAs": "Jaribu programu kama mtu anayekidhi — au asiyekidhi — sharti fulani.",
       "globalAdmins": "Wanaosimamia kila kitu — zaidi ya orodha iliyowekwa na usambazaji.",
-      "formTemplates": "Violezo vya fomu vinavyoweza kujazwa na vinavyoshirikiwa na watumiaji wa mtiririko wa kazi wa kujaza hati."
+      "formTemplates": "Violezo vya fomu vinavyoweza kujazwa na vinavyoshirikiwa na watumiaji wa mtiririko wa kazi wa kujaza hati.",
+      "glossaries": "Kamusi za shirika — istilahi za lazima, zinazoshirikiwa na watafsiri."
     },
     "openSettings": "Fungua mipangilio",
     "area": {

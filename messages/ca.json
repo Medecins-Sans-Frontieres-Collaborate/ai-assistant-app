@@ -2877,7 +2877,39 @@
       "acronymHint": "Els acrònims coincideixen exactament tal com s'han escrit: WHO només per a \"WHO\" i mai per a \"who\". Els termes coincideixen amb qualsevol capitalització.",
       "glossaryCheckTitle": "Verificació de glossari",
       "glossaryCheckPass": "{count, plural, one {S'ha utilitzat el terme requerit.} other {S'han utilitzat tots els # termes requerits.}}",
-      "glossaryCheckMissing": "{count, plural, one {Falta # de {total} traducció requerida:} other {Falten # de {total} traduccions requerides:}}"
+      "glossaryCheckMissing": "{count, plural, one {Falta # de {total} traducció requerida:} other {Falten # de {total} traduccions requerides:}}",
+      "glossariesButton": "{count, plural, =0 {Glossaris} one {# glossari} other {# glossaris}}",
+      "glossaryPickerTitle": "Glossaris",
+      "glossaryPickerClose": "Tanca els glossaris",
+      "glossaryOrgSection": "Organització",
+      "glossaryMineSection": "Meus",
+      "noOrganizationGlossaries": "No tens cap glossari de l'organització compartit amb tu.",
+      "noPersonalGlossaries": "Encara no tens cap glossari. Usa Gestiona per crear-ne un o copia un glossari de l'organització.",
+      "glossaryAnyLanguage": "Qualsevol idioma",
+      "glossaryCustomLanguage": "Idioma personalitzat",
+      "glossaryEntryCount": "{count, plural, one {# terme} other {# termes}}",
+      "glossaryLanguageMismatch": "Aquest glossari està etiquetat per a un idioma de destí diferent.",
+      "glossaryMismatchChip": "Incompatibilitat d'idioma",
+      "glossaryOrgLimit": "Fins a {max} glossaris d'organització per traducció.",
+      "copyToMine": "Copia {name} als meus glossaris",
+      "copyToMineTitle": "Copia als meus glossaris",
+      "copyToMineFailed": "No s'ha pogut copiar el glossari. Torna-ho a provar.",
+      "copiedToMine": "Copiat als teus glossaris",
+      "copiedGlossaryName": "{name} (còpia)",
+      "clearStaleGlossary": "Elimina",
+      "glossaryUnavailable": "Glossari no disponible (eliminat o ja no compartit amb tu)",
+      "showOtherLanguages": "{count, plural, one {Mostra # glossari per a un altre idioma} other {Mostra # glossaris per a altres idiomes}}",
+      "hideOtherLanguages": "Amaga altres idiomes",
+      "glossarySourceLang": "Idioma d'origen",
+      "glossaryTargetLang": "Idioma de destí",
+      "glossaryLanguageEncourage": "Etiqueta un idioma de destí perquè aquest glossari es mostri primer en traduccions coincidents.",
+      "importEntries": "Importa CSV/TSV",
+      "exportEntries": "Exporta CSV",
+      "importHint": "Columnes: source, target, note, kind, sourceExpansion, targetExpansion. També serveix un fitxer amb dues columnes.",
+      "importTooLarge": "El fitxer és massa gran per importar (màxim 5 MB).",
+      "importNothing": "No s'han trobat files útils ({skipped} omeses).",
+      "importSummary": "{added} afegits, {replaced} reemplaçats, {skipped} omesos.",
+      "entriesTooManyToShow": "{count} termes — massa per llistar aquí. Exporta per revisar-los, o importa un fitxer per reemplaçar termes."
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Accepta tots els pendents",
         "rejectAll": "Rebutja'ls tots",
         "cancel": "Cancel·la"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# terme més no mostrat} other {# termes més no mostrats}}"
     },
     "form": {
       "emptyTitle": "Omple un document",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# document} other {# documents}}, límit {max} — retalleu o augmenteu el límit abans d'actualitzar",
     "m365AgentLimitBadgePlain": "Límit {limit}",
     "m365PlanShowAllRows": "Mostra tots {count, plural, one {# fitxer} other {# fitxers}}",
-    "m365PlanShowFewerRows": "Mostra menys"
+    "m365PlanShowFewerRows": "Mostra menys",
+    "glossariesTab": "Glossaris",
+    "addGlossary": "Afegeix glossari",
+    "noGlossaries": "Encara no hi ha glossaris de l'organització. Afegeix-ne un per compartir la terminologia obligatòria amb tothom qui tradueix.",
+    "editGlossaryTitle": "Edita glossari",
+    "newGlossaryTitle": "Nou glossari",
+    "glossarySaveSuccess": "Glossari desat",
+    "glossaryCreateSuccess": "Glossari creat",
+    "glossaryLanguagePairLabel": "Idiomes",
+    "glossarySourceLangLabel": "Idioma d'origen",
+    "glossaryTargetLangLabel": "Idioma de destí",
+    "glossaryAnyLanguage": "Qualsevol idioma",
+    "glossaryLanguagePairHint": "Les traduccions cap a aquest idioma veuran aquest glossari primer.",
+    "glossaryLanguagePairEncourage": "Opcional, però un idioma de destí ajuda a trobar el glossari adequat i a evitar-lo en traduccions no relacionades.",
+    "guidePayloadLoading": "Carregant contingut…",
+    "guidePayloadMissing": "No s'han pogut trobar els continguts emmagatzemats d'aquesta guia. Si deses, s'escriurà una còpia nova.",
+    "deleteGlossary": "Elimina glossari",
+    "deleteGlossaryConfirm": "Eliminar aquest glossari per a tothom? Els traductors el perdran immediatament; les còpies personals continuaran sent seves.",
+    "confirmDeleteGlossary": "Suprimeix el glossari",
+    "glossaryDeleteSuccess": "Glossari suprimit"
   },
   "localModels": {
     "title": "Models locals",
@@ -5000,7 +5052,8 @@
       "workflows": "Activa o desactiva els fluxos de conversa per a tothom.",
       "viewAs": "Prova l'aplicació com una persona que compleix —o no— una condició.",
       "globalAdmins": "Qui administra tot — més enllà de la llista establerta pel desplegament.",
-      "formTemplates": "Plantilles de formulari emplenables compartides amb els usuaris del flux de treball d’emplenament de documents."
+      "formTemplates": "Plantilles de formulari emplenables compartides amb els usuaris del flux de treball d’emplenament de documents.",
+      "glossaries": "Glossaris de l'organització — terminologia obligatòria, compartida amb els traductors."
     },
     "openSettings": "Obre la configuració",
     "area": {

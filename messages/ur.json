@@ -2907,7 +2907,39 @@
       "acronymHint": "مخففات بالکل ویسے ہی ملتے ہیں جیسے لکھے جاتے ہیں: WHO صرف “WHO” کے لیے ہے، کبھی “who” کے لیے نہیں۔ اصطلاحات میں کسی بھی بڑے یا چھوٹے حرف کی صورت قابل قبول ہے۔",
       "glossaryCheckTitle": "گلوسری چیک",
       "glossaryCheckPass": "{count, plural, one {ضروری اصطلاح استعمال کی گئی۔} other {تمام # ضروری اصطلاحات استعمال کی گئیں۔}}",
-      "glossaryCheckMissing": "{count, plural, one {{total} میں سے # ضروری ترجمہ موجود نہیں:} other {{total} میں سے # ضروری تراجم موجود نہیں:}}"
+      "glossaryCheckMissing": "{count, plural, one {{total} میں سے # ضروری ترجمہ موجود نہیں:} other {{total} میں سے # ضروری تراجم موجود نہیں:}}",
+      "glossariesButton": "{count, plural, =0 {اصطلاحات} one {# اصطلاح} other {# اصطلاحات}}",
+      "glossaryPickerTitle": "اصطلاحات",
+      "glossaryPickerClose": "اصطلاحات بند کریں",
+      "glossaryOrgSection": "تنظیم",
+      "glossaryMineSection": "میری",
+      "noOrganizationGlossaries": "آپ کے ساتھ کوئی تنظیمی اصطلاحات شیئر نہیں کی گئی ہیں۔",
+      "noPersonalGlossaries": "آپ کے پاس ابھی تک کوئی اصطلاحات نہیں ہیں۔ مینج استعمال کریں نیا بنانے کے لیے یا کسی تنظیم کی اصطلاح نقل کرنے کے لیے۔",
+      "glossaryAnyLanguage": "کوئی بھی زبان",
+      "glossaryCustomLanguage": "حسبِ منشا زبان",
+      "glossaryEntryCount": "{count, plural, one {# اصطلاح} other {# اصطلاحات}}",
+      "glossaryLanguageMismatch": "یہ اصطلاح مختلف ہدف زبان کے لیے ٹیگ کی گئی ہے۔",
+      "glossaryMismatchChip": "زبان میل نہیں کھاتی",
+      "glossaryOrgLimit": "ہر ترجمے پر زیادہ سے زیادہ {max} تنظیمی اصطلاحات۔",
+      "copyToMine": "{name} کو میری اصطلاحات میں نقل کریں",
+      "copyToMineTitle": "میری اصطلاحات میں نقل کریں",
+      "copyToMineFailed": "اصطلاح نقل نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
+      "copiedToMine": "آپ کی اصطلاحات میں نقل ہو گئی",
+      "copiedGlossaryName": "{name} (نقل)",
+      "clearStaleGlossary": "ہٹا دیں",
+      "glossaryUnavailable": "اصطلاح دستیاب نہیں (حذف یا آپ کے ساتھ مزید شیئر نہیں ہے)",
+      "showOtherLanguages": "{count, plural, one {دوسری زبان کے لیے # اصطلاح دکھائیں} other {دوسری زبانوں کے لیے # اصطلاحات دکھائیں}}",
+      "hideOtherLanguages": "دیگر زبانیں چھپائیں",
+      "glossarySourceLang": "ماخذ زبان",
+      "glossaryTargetLang": "ہدف زبان",
+      "glossaryLanguageEncourage": "اصطلاح کو ترجیحی ترجموں کے لیے پہلے پیش کرنے کے لیے ہدف زبان کا ٹیگ لگائیں۔",
+      "importEntries": "CSV/TSV درآمد کریں",
+      "exportEntries": "CSV برآمد کریں",
+      "importHint": "کالمز: ماخذ، ہدف، نوٹ، قسم، ماخذExpansion، ہدفExpansion۔ دو کالم والی فائل بھی قابل قبول ہے۔",
+      "importTooLarge": "یہ فائل درآمد کرنے کے لیے بہت بڑی ہے (زیادہ سے زیادہ 5MB)۔",
+      "importNothing": "کوئی قابل استعمال قطار نہیں ملی ({skipped} چھوڑ دی گئیں)۔",
+      "importSummary": "{added} شامل ہوئیں، {replaced} تبدیل ہوئیں، {skipped} چھوڑ دی گئیں۔",
+      "entriesTooManyToShow": "{count} اصطلاحات — یہاں فہرست کرنے کے لیے بہت زیادہ ہیں۔ جائزہ لینے کے لیے برآمد کریں یا اصطلاحات تبدیل کرنے کے لیے فائل درآمد کریں۔"
     },
     "document": {
       "emptyTitle": "جس دستاویز کی وضاحت چاہتے ہیں بیان کریں",
@@ -3540,7 +3572,8 @@
         "acceptAll": "تمام باقی ماندہ قبول کریں",
         "rejectAll": "تمام مسترد کریں",
         "cancel": "منسوخ کریں"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# مزید اصطلاح نہیں دکھائی گئی} other {# مزید اصطلاحات نہیں دکھائی گئیں}}"
     },
     "form": {
       "emptyTitle": "دستاویز کو مکمل کریں",
@@ -4813,7 +4846,26 @@
     "m365ChangesOverCap": "{count, plural, one {# دستاویز} other {# دستاویزات}}, حد {max} — ریفریش کرنے سے پہلے تراشیں یا حد بڑھائیں",
     "m365AgentLimitBadgePlain": "حد {limit}",
     "m365PlanShowAllRows": "تمام {count, plural, one {# فائل} other {# فائلیں}} دکھائیں",
-    "m365PlanShowFewerRows": "کم دکھائیں"
+    "m365PlanShowFewerRows": "کم دکھائیں",
+    "glossariesTab": "اصطلاحات",
+    "addGlossary": "نئی اصطلاح شامل کریں",
+    "noGlossaries": "ابھی کوئی تنظیمی اصطلاحات نہیں۔ ایک اضافہ کریں تاکہ سب کو ضروری اصطلاحات شیئر کی جا سکیں۔",
+    "editGlossaryTitle": "اصطلاح میں ترمیم کریں",
+    "newGlossaryTitle": "نئی اصطلاح",
+    "glossarySaveSuccess": "اصطلاح محفوظ ہو گئی",
+    "glossaryCreateSuccess": "اصطلاح بن گئی",
+    "glossaryLanguagePairLabel": "زبانیں",
+    "glossarySourceLangLabel": "ماخذ زبان",
+    "glossaryTargetLangLabel": "ہدف زبان",
+    "glossaryAnyLanguage": "کوئی بھی زبان",
+    "glossaryLanguagePairHint": "اس زبان میں تراجم کے لیے یہ اصطلاح سب سے پہلے نظر آئے گی۔",
+    "glossaryLanguagePairEncourage": "اختیاری، لیکن ہدف زبان تلاش کو آسان اور غیر متعلقہ تراجم میں اصطلاح کی شمولیت روکتی ہے۔",
+    "guidePayloadLoading": "مواد لوڈ ہو رہا ہے…",
+    "guidePayloadMissing": "اس رہنما کا ذخیرہ شدہ مواد نہیں ملا۔ محفوظ کرنے سے نیا مواد لکھا جائے گا۔",
+    "deleteGlossary": "اصطلاح حذف کریں",
+    "deleteGlossaryConfirm": "یہ اصطلاح سب کے لیے حذف کی جائے؟ مترجمین کے لیے فوراً ہٹ جائے گی؛ جو نقول دوسرے لوگوں نے بنائیں وہ ان کی رہیں گی۔",
+    "confirmDeleteGlossary": "گلوسری حذف کریں",
+    "glossaryDeleteSuccess": "گلوسری حذف ہو گئی"
   },
   "localModels": {
     "title": "لوکل ماڈلز",
@@ -5030,7 +5082,8 @@
       "workflows": "تمام کے لیے گفتگو کے ورک فلو آن یا آف کریں۔",
       "viewAs": "کسی شرط پر پورا اترنے یا نہ اترنے والے صارف کی طرح ایپ ٹیسٹ کریں۔",
       "globalAdmins": "جو ہر چیز کے منتظم ہیں — تعیناتی کی فہرست سے آگے۔",
-      "formTemplates": "قابلِ پُر فارم ٹیمپلیٹس جو دستاویز پُر کرنے کے ورک فلو کے صارفین کے ساتھ شیئر کیے گئے ہیں۔"
+      "formTemplates": "قابلِ پُر فارم ٹیمپلیٹس جو دستاویز پُر کرنے کے ورک فلو کے صارفین کے ساتھ شیئر کیے گئے ہیں۔",
+      "glossaries": "ادارے کی گلوسریز — لازمی اصطلاحات، جو مترجمین کے ساتھ شیئر کی جاتی ہیں۔"
     },
     "openSettings": "سیٹنگز کھولیں",
     "area": {

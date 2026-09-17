@@ -2877,7 +2877,39 @@
       "acronymHint": "Siglas correspondem exatamente como digitadas: WHO se aplica a “WHO”, nunca a “who”. Termos correspondem a qualquer capitalização.",
       "glossaryCheckTitle": "Verificação do glossário",
       "glossaryCheckPass": "{count, plural, one {O termo obrigatório foi usado.} other {Todos os # termos obrigatórios foram usados.}}",
-      "glossaryCheckMissing": "{count, plural, one {# de {total} traduções obrigatórias está faltando:} other {# de {total} traduções obrigatórias estão faltando:}}"
+      "glossaryCheckMissing": "{count, plural, one {# de {total} traduções obrigatórias está faltando:} other {# de {total} traduções obrigatórias estão faltando:}}",
+      "glossariesButton": "{count, plural, =0 {Glossários} one {# glossário} other {# glossários}}",
+      "glossaryPickerTitle": "Glossários",
+      "glossaryPickerClose": "Fechar glossários",
+      "glossaryOrgSection": "Organização",
+      "glossaryMineSection": "Meus",
+      "noOrganizationGlossaries": "Nenhum glossário da organização foi compartilhado com você.",
+      "noPersonalGlossaries": "Você ainda não tem glossários. Use Gerenciar para criar um ou copiar um glossário da organização.",
+      "glossaryAnyLanguage": "Qualquer idioma",
+      "glossaryCustomLanguage": "Idioma personalizado",
+      "glossaryEntryCount": "{count, plural, one {# termo} other {# termos}}",
+      "glossaryLanguageMismatch": "Este glossário está marcado para um idioma de destino diferente.",
+      "glossaryMismatchChip": "Incompatibilidade de idioma",
+      "glossaryOrgLimit": "Até {max} glossários da organização por tradução.",
+      "copyToMine": "Copiar {name} para meus glossários",
+      "copyToMineTitle": "Copiar para meus glossários",
+      "copyToMineFailed": "Não foi possível copiar o glossário. Tente novamente.",
+      "copiedToMine": "Copiado para seus glossários",
+      "copiedGlossaryName": "{name} (cópia)",
+      "clearStaleGlossary": "Remover",
+      "glossaryUnavailable": "Glossário indisponível (excluído ou não mais compartilhado com você)",
+      "showOtherLanguages": "{count, plural, one {Mostrar # glossário para outro idioma} other {Mostrar # glossários para outros idiomas}}",
+      "hideOtherLanguages": "Ocultar outros idiomas",
+      "glossarySourceLang": "Idioma de origem",
+      "glossaryTargetLang": "Idioma de destino",
+      "glossaryLanguageEncourage": "Marque um idioma de destino para que este glossário seja oferecido primeiro em traduções correspondentes.",
+      "importEntries": "Importar CSV/TSV",
+      "exportEntries": "Exportar CSV",
+      "importHint": "Colunas: source, target, note, kind, sourceExpansion, targetExpansion. Um arquivo com duas colunas também funciona.",
+      "importTooLarge": "O arquivo é muito grande para importar (máximo de 5 MB).",
+      "importNothing": "Nenhuma linha utilizável encontrada ({skipped} ignoradas).",
+      "importSummary": "{added} adicionadas, {replaced} substituídas, {skipped} ignoradas.",
+      "entriesTooManyToShow": "{count} termos — muitos para listar aqui. Exporte para revisar ou importe um arquivo para substituir termos."
     },
     "document": {
       "emptyTitle": "Descreva o documento desejado",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Aceitar todas as restantes",
         "rejectAll": "Rejeitar todas",
         "cancel": "Cancelar"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# termo a mais não exibido} other {# termos a mais não exibidos}}"
     },
     "form": {
       "emptyTitle": "Preencher um documento",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# documento} other {# documentos}}, limite {max} — reduza ou aumente o limite antes de atualizar",
     "m365AgentLimitBadgePlain": "Limite {limit}",
     "m365PlanShowAllRows": "Mostrar todos os {count, plural, one {# arquivo} other {# arquivos}}",
-    "m365PlanShowFewerRows": "Mostrar menos"
+    "m365PlanShowFewerRows": "Mostrar menos",
+    "glossariesTab": "Glossários",
+    "addGlossary": "Adicionar glossário",
+    "noGlossaries": "Nenhum glossário da organização ainda. Adicione um para compartilhar a terminologia obrigatória com todos os tradutores.",
+    "editGlossaryTitle": "Editar glossário",
+    "newGlossaryTitle": "Novo glossário",
+    "glossarySaveSuccess": "Glossário salvo",
+    "glossaryCreateSuccess": "Glossário criado",
+    "glossaryLanguagePairLabel": "Idiomas",
+    "glossarySourceLangLabel": "Idioma de origem",
+    "glossaryTargetLangLabel": "Idioma de destino",
+    "glossaryAnyLanguage": "Qualquer idioma",
+    "glossaryLanguagePairHint": "Traduções para este idioma verão este glossário primeiro.",
+    "glossaryLanguagePairEncourage": "Opcional, mas indicar o idioma de destino ajuda a encontrar o glossário certo e evita traduções não relacionadas.",
+    "guidePayloadLoading": "Carregando conteúdo…",
+    "guidePayloadMissing": "O conteúdo armazenado deste guia não pôde ser encontrado. Ao salvar, uma nova cópia será criada.",
+    "deleteGlossary": "Excluir glossário",
+    "deleteGlossaryConfirm": "Excluir este glossário para todos? Os tradutores perderão o acesso imediatamente; cópias pessoais permanecem com cada um.",
+    "confirmDeleteGlossary": "Excluir glossário",
+    "glossaryDeleteSuccess": "Glossário excluído"
   },
   "localModels": {
     "title": "Modelos locais",
@@ -5000,7 +5052,8 @@
       "workflows": "Ative ou desative os fluxos de conversa para todos.",
       "viewAs": "Teste o app como alguém que cumpre — ou não cumpre — uma condição.",
       "globalAdmins": "Quem administra tudo — além da lista definida pela implantação.",
-      "formTemplates": "Modelos de formulário preenchíveis compartilhados com os usuários do fluxo de trabalho de preenchimento de documentos."
+      "formTemplates": "Modelos de formulário preenchíveis compartilhados com os usuários do fluxo de trabalho de preenchimento de documentos.",
+      "glossaries": "Glossários da organização — terminologia obrigatória, compartilhada com os tradutores."
     },
     "openSettings": "Abrir configurações",
     "area": {

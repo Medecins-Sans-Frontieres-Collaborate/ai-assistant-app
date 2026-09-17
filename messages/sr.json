@@ -2861,7 +2861,39 @@
       "acronymHint": "Akronimi se poklapaju tačno kako su napisani: WHO se odnosi samo na „WHO“, nikada na „who“. Termini odgovaraju u bilo kojoj kombinaciji slova.",
       "glossaryCheckTitle": "Provera pojmovnika",
       "glossaryCheckPass": "{count, plural, one {Neophodan termin je upotrebljen.} other {Svi # neophodni termini su upotrebljeni.}}",
-      "glossaryCheckMissing": "{count, plural, one {# od {total} neophodnih prevoda nedostaje:} other {# od {total} neophodnih prevoda nedostaje:}}"
+      "glossaryCheckMissing": "{count, plural, one {# od {total} neophodnih prevoda nedostaje:} other {# od {total} neophodnih prevoda nedostaje:}}",
+      "glossariesButton": "{count, plural, =0 {Glosari} one {# glosar} other {# glosara}}",
+      "glossaryPickerTitle": "Glosari",
+      "glossaryPickerClose": "Zatvori glosare",
+      "glossaryOrgSection": "Organizacija",
+      "glossaryMineSection": "Moj",
+      "noOrganizationGlossaries": "Nijedan glosar organizacije nije podeljen sa vama.",
+      "noPersonalGlossaries": "Nemate još nijedan glosar. Koristite Upravljanje za kreiranje ili kopirajte glosar organizacije.",
+      "glossaryAnyLanguage": "Bilo koji jezik",
+      "glossaryCustomLanguage": "Prilagođeni jezik",
+      "glossaryEntryCount": "{count, plural, one {# termin} other {# termina}}",
+      "glossaryLanguageMismatch": "Ovaj glosar je označen za drugi ciljni jezik.",
+      "glossaryMismatchChip": "Neslaganje jezika",
+      "glossaryOrgLimit": "Do {max} glosara organizacije po prevodu.",
+      "copyToMine": "Kopiraj {name} u moje glosare",
+      "copyToMineTitle": "Kopiraj u moje glosare",
+      "copyToMineFailed": "Nije moguće kopirati glosar. Pokušajte ponovo.",
+      "copiedToMine": "Kopirano u vaše glosare",
+      "copiedGlossaryName": "{name} (kopija)",
+      "clearStaleGlossary": "Ukloni",
+      "glossaryUnavailable": "Glosar nedostupan (obrisan ili više nije podeljen sa vama)",
+      "showOtherLanguages": "{count, plural, one {Prikaži # glosar za drugi jezik} other {Prikaži # glosara za druge jezike}}",
+      "hideOtherLanguages": "Sakrij druge jezike",
+      "glossarySourceLang": "Izvorni jezik",
+      "glossaryTargetLang": "Ciljni jezik",
+      "glossaryLanguageEncourage": "Označite ciljni jezik kako bi ovaj glosar bio ponuđen prvi za odgovarajuće prevode.",
+      "importEntries": "Uvezi CSV/TSV",
+      "exportEntries": "Izvezi CSV",
+      "importHint": "Kolone: izvor, cilj, napomena, vrsta, izvornoProširenje, ciljProširenje. Može i fajl sa dve kolone.",
+      "importTooLarge": "Taj fajl je prevelik za uvoz (maksimalno 5 MB).",
+      "importNothing": "Nije pronađen nijedan upotrebljiv red ({skipped} preskočeno).",
+      "importSummary": "{added} dodato, {replaced} zamenjeno, {skipped} preskočeno.",
+      "entriesTooManyToShow": "{count} termina — previše za prikaz. Izvezite da ih proverite ili uvezite fajl da zamenite termine."
     },
     "document": {
       "emptyTitle": "Opišite dokument koji želite",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Prihvati sve preostale",
         "rejectAll": "Odbaci sve",
         "cancel": "Otkaži"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# termin nije prikazan} other {# termina nije prikazano}}"
     },
     "form": {
       "emptyTitle": "Popunite dokument",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# dokument} other {# dokumenata}}, ograničenje {max} — smanjite broj ili povećajte ograničenje pre osvežavanja",
     "m365AgentLimitBadgePlain": "Ograničenje {limit}",
     "m365PlanShowAllRows": "Prikaži svih {count, plural, one {# fajl} other {# fajlova}}",
-    "m365PlanShowFewerRows": "Prikaži manje"
+    "m365PlanShowFewerRows": "Prikaži manje",
+    "glossariesTab": "Glosari",
+    "addGlossary": "Dodaj glosar",
+    "noGlossaries": "Još nema glosara organizacije. Dodajte jedan da biste podelili obaveznu terminologiju sa svima koji prevode.",
+    "editGlossaryTitle": "Izmeni glosar",
+    "newGlossaryTitle": "Novi glosar",
+    "glossarySaveSuccess": "Glosar sačuvan",
+    "glossaryCreateSuccess": "Glosar kreiran",
+    "glossaryLanguagePairLabel": "Jezici",
+    "glossarySourceLangLabel": "Izvorni jezik",
+    "glossaryTargetLangLabel": "Ciljni jezik",
+    "glossaryAnyLanguage": "Bilo koji jezik",
+    "glossaryLanguagePairHint": "Prevodi na ovaj jezik će prvo videti ovaj glosar.",
+    "glossaryLanguagePairEncourage": "Nije obavezno, ali ciljni jezik pomaže korisnicima da pronađu odgovarajući glosar i sprečava prikaz u nevezanim prevodima.",
+    "guidePayloadLoading": "Učitavanje sadržaja…",
+    "guidePayloadMissing": "Skladišteni sadržaj ovog vodiča nije pronađen. Čuvanje upisuje novu kopiju.",
+    "deleteGlossary": "Obriši glosar",
+    "deleteGlossaryConfirm": "Obrisati ovaj glosar za sve? Prevodocima će nestati odmah; kopije koje su ljudi napravili ostaju njihove.",
+    "confirmDeleteGlossary": "Obriši glosar",
+    "glossaryDeleteSuccess": "Glosar je obrisan"
   },
   "localModels": {
     "title": "Lokalni modeli",
@@ -4984,7 +5036,8 @@
       "workflows": "Uključivanje ili isključivanje tokova razgovora za sve.",
       "viewAs": "Testirajte aplikaciju kao neko ko ispunjava — ili ne ispunjava — uslov.",
       "globalAdmins": "Ko upravlja svime — izvan liste definisane pri implementaciji.",
-      "formTemplates": "Šabloni obrazaca za popunjavanje koji se dele sa korisnicima procesa za popunjavanje dokumenata."
+      "formTemplates": "Šabloni obrazaca za popunjavanje koji se dele sa korisnicima procesa za popunjavanje dokumenata.",
+      "glossaries": "Glosari organizacije — obavezna terminologija, podeljena sa prevodiocima."
     },
     "openSettings": "Otvori podešavanja",
     "area": {

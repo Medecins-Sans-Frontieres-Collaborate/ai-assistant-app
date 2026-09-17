@@ -2861,7 +2861,39 @@
       "acronymHint": "Τα ακρωνύμια ταιριάζουν ακριβώς όπως πληκτρολογούνται: το WHO ισχύει μόνο για το “WHO” και ποτέ για το “who”. Οι όροι ταιριάζουν ανεξαρτήτως πεζών-κεφαλαίων.",
       "glossaryCheckTitle": "Έλεγχος γλωσσαρίου",
       "glossaryCheckPass": "{count, plural, one {Ο απαιτούμενος όρος χρησιμοποιήθηκε.} other {Χρησιμοποιήθηκαν και οι # απαιτούμενοι όροι.}}",
-      "glossaryCheckMissing": "{count, plural, one {Λείπει # από τις {total} απαιτούμενες μεταφράσεις:} other {Λείπουν # από τις {total} απαιτούμενες μεταφράσεις:}}"
+      "glossaryCheckMissing": "{count, plural, one {Λείπει # από τις {total} απαιτούμενες μεταφράσεις:} other {Λείπουν # από τις {total} απαιτούμενες μεταφράσεις:}}",
+      "glossariesButton": "{count, plural, =0 {Γλωσσάρια} one {# γλωσσάρι} other {# γλωσσάρια}}",
+      "glossaryPickerTitle": "Γλωσσάρια",
+      "glossaryPickerClose": "Κλείσιμο γλωσσαρίων",
+      "glossaryOrgSection": "Οργανισμός",
+      "glossaryMineSection": "Δικά μου",
+      "noOrganizationGlossaries": "Δεν υπάρχουν κοινοποιημένα γλωσσάρια του οργανισμού σε εσάς.",
+      "noPersonalGlossaries": "Δεν έχετε ακόμη γλωσσάρια. Χρησιμοποιήστε τη Διαχείριση για να δημιουργήσετε ή να αντιγράψετε ένα γλωσσάρι οργανισμού.",
+      "glossaryAnyLanguage": "Οποιαδήποτε γλώσσα",
+      "glossaryCustomLanguage": "Προσαρμοσμένη γλώσσα",
+      "glossaryEntryCount": "{count, plural, one {# όρος} other {# όροι}}",
+      "glossaryLanguageMismatch": "Αυτό το γλωσσάρι αφορά διαφορετική γλώσσα στόχο.",
+      "glossaryMismatchChip": "Ασυμφωνία γλώσσας",
+      "glossaryOrgLimit": "Έως {max} γλωσσάρια οργανισμού ανά μετάφραση.",
+      "copyToMine": "Αντιγραφή του {name} στα δικά μου γλωσσάρια",
+      "copyToMineTitle": "Αντιγραφή στα δικά μου γλωσσάρια",
+      "copyToMineFailed": "Δεν ήταν δυνατή η αντιγραφή του γλωσσαρίου. Δοκιμάστε ξανά.",
+      "copiedToMine": "Αντιγράφηκε στα γλωσσάριά σας",
+      "copiedGlossaryName": "{name} (αντίγραφο)",
+      "clearStaleGlossary": "Αφαίρεση",
+      "glossaryUnavailable": "Το γλωσσάρι δεν είναι διαθέσιμο (διαγράφηκε ή δεν είναι πλέον κοινόχρηστο)",
+      "showOtherLanguages": "{count, plural, one {Εμφάνιση # γλωσσαρίου για άλλη γλώσσα} other {Εμφάνιση # γλωσσαρίων για άλλες γλώσσες}}",
+      "hideOtherLanguages": "Απόκρυψη άλλων γλωσσών",
+      "glossarySourceLang": "Γλώσσα πηγής",
+      "glossaryTargetLang": "Γλώσσα στόχος",
+      "glossaryLanguageEncourage": "Καταχωρίστε γλώσσα στόχο ώστε αυτό το γλωσσάρι να εμφανίζεται πρώτο σε αντίστοιχες μεταφράσεις.",
+      "importEntries": "Εισαγωγή CSV/TSV",
+      "exportEntries": "Εξαγωγή CSV",
+      "importHint": "Στήλες: source, target, note, kind, sourceExpansion, targetExpansion. Λειτουργεί και με αρχείο δύο στηλών.",
+      "importTooLarge": "Το αρχείο είναι πολύ μεγάλο για εισαγωγή (μέγιστο 5 MB).",
+      "importNothing": "Δεν βρέθηκαν χρησιμοποιήσιμες γραμμές ({skipped} παραλείφθηκαν).",
+      "importSummary": "{added} προστέθηκαν, {replaced} αντικαταστάθηκαν, {skipped} παραλείφθηκαν.",
+      "entriesTooManyToShow": "{count} όροι — πάρα πολλοί για να εμφανιστούν εδώ. Κάντε εξαγωγή για να τους δείτε ή εισάγετε αρχείο για να αντικαταστήσετε όρους."
     },
     "document": {
       "emptyTitle": "Περιγράψτε το έγγραφο που θέλετε",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Αποδοχή όλων των υπολοίπων",
         "rejectAll": "Απόρριψη όλων",
         "cancel": "Ακύρωση"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# ακόμα όρος δεν εμφανίζεται} other {# ακόμα όροι δεν εμφανίζονται}}"
     },
     "form": {
       "emptyTitle": "Συμπληρώστε ένα έγγραφο",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# έγγραφο} other {# έγγραφα}}, όριο {max} — μειώστε τον αριθμό ή αυξήστε το όριο πριν την ανανέωση",
     "m365AgentLimitBadgePlain": "Όριο {limit}",
     "m365PlanShowAllRows": "Εμφάνιση όλων των {count, plural, one {# αρχείου} other {# αρχείων}}",
-    "m365PlanShowFewerRows": "Εμφάνιση λιγότερων"
+    "m365PlanShowFewerRows": "Εμφάνιση λιγότερων",
+    "glossariesTab": "Γλωσσάρια",
+    "addGlossary": "Προσθήκη γλωσσαρίου",
+    "noGlossaries": "Δεν υπάρχουν ακόμη γλωσσάρια οργανισμού. Προσθέστε ένα για να κοινοποιείτε υποχρεωτική ορολογία σε όλους όσους μεταφράζουν.",
+    "editGlossaryTitle": "Επεξεργασία γλωσσαρίου",
+    "newGlossaryTitle": "Νέο γλωσσάρι",
+    "glossarySaveSuccess": "Το γλωσσάρι αποθηκεύτηκε",
+    "glossaryCreateSuccess": "Το γλωσσάρι δημιουργήθηκε",
+    "glossaryLanguagePairLabel": "Γλώσσες",
+    "glossarySourceLangLabel": "Γλώσσα πηγής",
+    "glossaryTargetLangLabel": "Γλώσσα στόχος",
+    "glossaryAnyLanguage": "Οποιαδήποτε γλώσσα",
+    "glossaryLanguagePairHint": "Οι μεταφράσεις σε αυτή τη γλώσσα θα βλέπουν πρώτα αυτό το γλωσσάρι.",
+    "glossaryLanguagePairEncourage": "Προαιρετικό, αλλά η γλώσσα στόχος βοηθά στην εύρεση του σωστού γλωσσαρίου και αποτρέπει τη χρήση του σε άσχετες μεταφράσεις.",
+    "guidePayloadLoading": "Φόρτωση περιεχομένων…",
+    "guidePayloadMissing": "Τα αποθηκευμένα περιεχόμενα αυτού του οδηγού δεν βρέθηκαν. Η αποθήκευση δημιουργεί νέο αντίγραφο.",
+    "deleteGlossary": "Διαγραφή γλωσσαρίου",
+    "deleteGlossaryConfirm": "Θέλετε να διαγράψετε αυτό το γλωσσάρι για όλους; Οι μεταφραστές το χάνουν άμεσα· όσα αντίγραφα έγιναν, παραμένουν.",
+    "confirmDeleteGlossary": "Διαγραφή γλωσσαρίου",
+    "glossaryDeleteSuccess": "Το γλωσσάρι διαγράφηκε"
   },
   "localModels": {
     "title": "Τοπικά μοντέλα",
@@ -4984,7 +5036,8 @@
       "workflows": "Ενεργοποιήστε ή απενεργοποιήστε ροές συνομιλίας για όλους.",
       "viewAs": "Δοκιμάστε την εφαρμογή ως κάποιος που πληροί — ή δεν πληροί — μια προϋπόθεση.",
       "globalAdmins": "Ποιοι διαχειρίζονται τα πάντα — πέρα από τη λίστα που ορίζεται από τη διανομή.",
-      "formTemplates": "Συμπληρώσιμα πρότυπα φορμών που μοιράζονται με τους χρήστες της ροής εργασίας συμπλήρωσης εγγράφων."
+      "formTemplates": "Συμπληρώσιμα πρότυπα φορμών που μοιράζονται με τους χρήστες της ροής εργασίας συμπλήρωσης εγγράφων.",
+      "glossaries": "Γλωσσάρια οργανισμού — υποχρεωτική ορολογία, κοινή για τους μεταφραστές."
     },
     "openSettings": "Άνοιγμα ρυθμίσεων",
     "area": {

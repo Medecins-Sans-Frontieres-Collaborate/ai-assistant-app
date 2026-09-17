@@ -2877,7 +2877,39 @@
       "acronymHint": "頭字語は入力どおりに正確に一致します：WHO は “WHO” にのみ一致し、“who” には一致しません。用語は大文字・小文字に関係なく一致します。",
       "glossaryCheckTitle": "用語集チェック",
       "glossaryCheckPass": "{count, plural, one {必要な用語が使用されました。} other {すべての # 個の必要な用語が使用されました。}}",
-      "glossaryCheckMissing": "{count, plural, one {{total} 個中 # 個の必須翻訳が不足しています:} other {{total} 個中 # 個の必須翻訳が不足しています:}}"
+      "glossaryCheckMissing": "{count, plural, one {{total} 個中 # 個の必須翻訳が不足しています:} other {{total} 個中 # 個の必須翻訳が不足しています:}}",
+      "glossariesButton": "{count, plural, =0 {用語集} one {# 用語集} other {# 用語集}}",
+      "glossaryPickerTitle": "用語集",
+      "glossaryPickerClose": "用語集を閉じる",
+      "glossaryOrgSection": "組織",
+      "glossaryMineSection": "自分",
+      "noOrganizationGlossaries": "組織用語集は共有されていません。",
+      "noPersonalGlossaries": "まだ用語集がありません。[管理]から新規作成または組織用語集をコピーできます。",
+      "glossaryAnyLanguage": "任意の言語",
+      "glossaryCustomLanguage": "カスタム言語",
+      "glossaryEntryCount": "{count, plural, one {# 用語} other {# 用語}}",
+      "glossaryLanguageMismatch": "この用語集は異なるターゲット言語用にタグ付けされています。",
+      "glossaryMismatchChip": "言語の不一致",
+      "glossaryOrgLimit": "翻訳ごとに最大{max}件の組織用語集を使用できます。",
+      "copyToMine": "{name}を自分の用語集にコピー",
+      "copyToMineTitle": "自分の用語集にコピー",
+      "copyToMineFailed": "用語集をコピーできませんでした。再試行してください。",
+      "copiedToMine": "自分の用語集にコピーされました",
+      "copiedGlossaryName": "{name}（コピー）",
+      "clearStaleGlossary": "削除",
+      "glossaryUnavailable": "用語集は利用できません（削除済みまたは共有停止）",
+      "showOtherLanguages": "{count, plural, one {他の言語用の用語集 # 件を表示} other {他の言語用の用語集 # 件を表示}}",
+      "hideOtherLanguages": "他の言語を非表示",
+      "glossarySourceLang": "ソース言語",
+      "glossaryTargetLang": "ターゲット言語",
+      "glossaryLanguageEncourage": "ターゲット言語をタグ付けすると、一致する翻訳に優先的に表示されます。",
+      "importEntries": "CSV/TSVをインポート",
+      "exportEntries": "CSVをエクスポート",
+      "importHint": "列：source, target, note, kind, sourceExpansion, targetExpansion。2列のみでも読み込めます。",
+      "importTooLarge": "ファイルサイズが大きすぎます（最大5MB）。",
+      "importNothing": "利用可能な行がありませんでした（{skipped}件スキップ）。",
+      "importSummary": "{added}件追加、{replaced}件置換、{skipped}件スキップ。",
+      "entriesTooManyToShow": "{count}用語 — 多すぎてここには表示できません。すべて確認したい場合はエクスポートしてください。またはファイルをインポートして用語を置き換えることもできます。"
     },
     "document": {
       "emptyTitle": "作成したい文書の説明",
@@ -3510,7 +3542,8 @@
         "acceptAll": "残りをすべて承認",
         "rejectAll": "すべて却下",
         "cancel": "キャンセル"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# 件の用語が非表示} other {# 件の用語が非表示}}"
     },
     "form": {
       "emptyTitle": "書類を作成",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# 件のドキュメント} other {# 件のドキュメント}}、上限 {max} — 更新する前に調整または上限を引き上げてください",
     "m365AgentLimitBadgePlain": "上限 {limit}",
     "m365PlanShowAllRows": "すべて表示（{count, plural, one {# 件のファイル} other {# 件のファイル}}）",
-    "m365PlanShowFewerRows": "表示を減らす"
+    "m365PlanShowFewerRows": "表示を減らす",
+    "glossariesTab": "用語集",
+    "addGlossary": "用語集を追加",
+    "noGlossaries": "組織用語集はまだありません。追加すると翻訳者全員と必須用語を共有できます。",
+    "editGlossaryTitle": "用語集の編集",
+    "newGlossaryTitle": "新しい用語集",
+    "glossarySaveSuccess": "用語集を保存しました",
+    "glossaryCreateSuccess": "用語集を作成しました",
+    "glossaryLanguagePairLabel": "言語",
+    "glossarySourceLangLabel": "ソース言語",
+    "glossaryTargetLangLabel": "ターゲット言語",
+    "glossaryAnyLanguage": "任意の言語",
+    "glossaryLanguagePairHint": "この言語への翻訳時にこの用語集が優先表示されます。",
+    "glossaryLanguagePairEncourage": "任意項目です。ターゲット言語を設定すると適切な用語集を見つけやすくなり、無関係な翻訳から除外されます。",
+    "guidePayloadLoading": "内容を読み込み中…",
+    "guidePayloadMissing": "このガイドの保存内容が見つかりません。保存すると新たに内容が書き込まれます。",
+    "deleteGlossary": "用語集を削除",
+    "deleteGlossaryConfirm": "この用語集を全員から削除しますか？翻訳者はすぐ利用できなくなりますが、個人がコピーしたものはそのまま残ります。",
+    "confirmDeleteGlossary": "用語集を削除",
+    "glossaryDeleteSuccess": "用語集が削除されました"
   },
   "localModels": {
     "title": "ローカルモデル",
@@ -5000,7 +5052,8 @@
       "workflows": "すべてのユーザーに対して会話ワークフローを有効または無効にします。",
       "viewAs": "条件を満たす、または満たさないユーザーとしてアプリをテストします。",
       "globalAdmins": "すべてを管理する人 — 配置で設定されたリストを超えて対応します。",
-      "formTemplates": "ドキュメント入力ワークフローのユーザーと共有される記入可能なフォームテンプレート。"
+      "formTemplates": "ドキュメント入力ワークフローのユーザーと共有される記入可能なフォームテンプレート。",
+      "glossaries": "組織の用語集 — 翻訳者と共有される必須用語です。"
     },
     "openSettings": "設定を開く",
     "area": {

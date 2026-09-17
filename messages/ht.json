@@ -2861,7 +2861,39 @@
       "acronymHint": "Akwonim yo mache egzakteman jan yo ekri : WHO aplike pou \"WHO\", pa janm pou \"who\". Tèm yo mache ak nenpòt jan majiskil ekri.",
       "glossaryCheckTitle": "Verifikasyon glosè",
       "glossaryCheckPass": "{count, plural, one {Tèm obligatwa a te itilize.} other {Tout # tèm obligatwa yo te itilize.}}",
-      "glossaryCheckMissing": "{count, plural, one {# sou {total} tradiksyon obligatwa pa prezan :} other {# sou {total} tradiksyon obligatwa pa prezan :}}"
+      "glossaryCheckMissing": "{count, plural, one {# sou {total} tradiksyon obligatwa pa prezan :} other {# sou {total} tradiksyon obligatwa pa prezan :}}",
+      "glossariesButton": "{count, plural, =0 {Glosè} one {# glosè} other {# glosè yo}}",
+      "glossaryPickerTitle": "Glosè",
+      "glossaryPickerClose": "Fèmen glosè yo",
+      "glossaryOrgSection": "Òganizasyon",
+      "glossaryMineSection": "Pawòl pa mwen",
+      "noOrganizationGlossaries": "Pa gen okenn glosè òganizasyon pataje avè w.",
+      "noPersonalGlossaries": "Ou poko gen okenn glosè. Sèvi ak Jere pou kreye youn oswa kopye yon glosè òganizasyon.",
+      "glossaryAnyLanguage": "Nenpòt lang",
+      "glossaryCustomLanguage": "Lang pèsonalize",
+      "glossaryEntryCount": "{count, plural, one {# tèm} other {# tèm}}",
+      "glossaryLanguageMismatch": "Glosè sa a make pou yon lòt lang sib.",
+      "glossaryMismatchChip": "Lang pa koresponn",
+      "glossaryOrgLimit": "Jiska {max} glosè òganizasyon pou chak tradiksyon.",
+      "copyToMine": "Kopye {name} nan glosè pa mwen",
+      "copyToMineTitle": "Kopye nan glosè pa mwen",
+      "copyToMineFailed": "Pa t kapab kopye glosè a. Eseye ankò.",
+      "copiedToMine": "Kopye nan glosè ou yo",
+      "copiedGlossaryName": "{name} (kopye)",
+      "clearStaleGlossary": "Retire",
+      "glossaryUnavailable": "Glosè pa disponib (efase oswa pa pataje avè w ankò)",
+      "showOtherLanguages": "{count, plural, one {Montre # glosè pou yon lòt lang} other {Montre # glosè pou lòt lang yo}}",
+      "hideOtherLanguages": "Kache lòt lang",
+      "glossarySourceLang": "Lang sous",
+      "glossaryTargetLang": "Lang sib",
+      "glossaryLanguageEncourage": "Mete yon lang sib pou glosè sa a parèt an premye pou tradiksyon ki mache avè l.",
+      "importEntries": "Enpòte CSV/TSV",
+      "exportEntries": "Ekspòt CSV",
+      "importHint": "Kolòn: sous, sib, nòt, tip, extensionSous, extensionSib. Yon fichye de kolòn mache tou.",
+      "importTooLarge": "Fichye sa a two lou pou enpòte (5 MB max).",
+      "importNothing": "Pa jwenn okenn liy ki itilize ({skipped} sote).",
+      "importSummary": "{added} ajoute, {replaced} ranplase, {skipped} sote.",
+      "entriesTooManyToShow": "{count} tèm — two anpil pou montre isit la. Ekspòte pou revize yo, oswa enpòte yon fichye pou ranplase yo."
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Aksepte tout rès yo",
         "rejectAll": "Rejte tout",
         "cancel": "Anile"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# tèm anplis pa montre} other {# tèm anplis pa montre}}"
     },
     "form": {
       "emptyTitle": "Ranpli yon dokiman",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# dokiman} other {# dokiman}}, limit {max} — retire oswa ogmante limit la anvan ou rafrechi",
     "m365AgentLimitBadgePlain": "Limit {limit}",
     "m365PlanShowAllRows": "Montre tout {count, plural, one {# fichye} other {# fichye}}",
-    "m365PlanShowFewerRows": "Montre mwens"
+    "m365PlanShowFewerRows": "Montre mwens",
+    "glossariesTab": "Glosè",
+    "addGlossary": "Ajoute glosè",
+    "noGlossaries": "Pa gen glosè òganizasyon ankò. Ajoute youn pou pataje tèm obligatwa ak tout moun k ap tradui.",
+    "editGlossaryTitle": "Modifye glosè",
+    "newGlossaryTitle": "Nouvo glosè",
+    "glossarySaveSuccess": "Glosè anrejistre",
+    "glossaryCreateSuccess": "Glosè kreye",
+    "glossaryLanguagePairLabel": "Lang",
+    "glossarySourceLangLabel": "Lang sous",
+    "glossaryTargetLangLabel": "Lang sib",
+    "glossaryAnyLanguage": "Nenpòt lang",
+    "glossaryLanguagePairHint": "Tradiksyon nan lang sa a ap wè glosè sa an premye.",
+    "glossaryLanguagePairEncourage": "Opsyonèl, men mete lang sib ede moun jwenn bon glosè epi evite li parèt kote li pa nesesè.",
+    "guidePayloadLoading": "Chaje kontni…",
+    "guidePayloadMissing": "Pa jwenn kontni sove gid sa a. Sove ap ekri yon nouvo kopi.",
+    "deleteGlossary": "Efase glosè",
+    "deleteGlossaryConfirm": "Efase glosè sa pou tout moun? Tradiktè yo ap pèdi l imedyatman; kopi moun yo fè pou tèt yo ap rete pa yo.",
+    "confirmDeleteGlossary": "Efase glosè a",
+    "glossaryDeleteSuccess": "Glosè efase"
   },
   "localModels": {
     "title": "Modèl lokal",
@@ -4984,7 +5036,8 @@
       "workflows": "Aktive oswa dezaktive workflow konvèsasyon pou tout moun.",
       "viewAs": "Teste aplikasyon an tankou yon moun ki ranpli — ou pa ranpli — yon kondisyon.",
       "globalAdmins": "Moun ki administre tout bagay — depase lis ki defini pa deplwaman an.",
-      "formTemplates": "Modèl fòm ranpli ki pataje ak itilizatè workflow dokiman yo."
+      "formTemplates": "Modèl fòm ranpli ki pataje ak itilizatè workflow dokiman yo.",
+      "glossaries": "Glosè òganizasyon an — tèm obligatwa, pataje ak tradiktè yo."
     },
     "openSettings": "Louvri anviwònman yo",
     "area": {

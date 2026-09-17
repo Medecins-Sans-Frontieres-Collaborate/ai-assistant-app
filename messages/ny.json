@@ -2861,7 +2861,39 @@
       "acronymHint": "Zidule zimafanana ndendende monga zalembedwera: WHO zimagwirizana ndi “WHO”, osati “who”. Mawu amagwirizana ndi zilembo zilizonse.",
       "glossaryCheckTitle": "Kuyendera mawu",
       "glossaryCheckPass": "{count, plural, one {Mawu ofunikira agwiritsidwa ntchito.} other {Mawu onse # ofunikira agwiritsidwa ntchito.}}",
-      "glossaryCheckMissing": "{count, plural, one {# mwa {total} zomasulira zofunikira zasowa:} other {# mwa {total} zomasulira zofunikira zasowa:}}"
+      "glossaryCheckMissing": "{count, plural, one {# mwa {total} zomasulira zofunikira zasowa:} other {# mwa {total} zomasulira zofunikira zasowa:}}",
+      "glossariesButton": "{count, plural, =0 {Magalasi} one {# galasi} other {# magalasi}}",
+      "glossaryPickerTitle": "Magalasi",
+      "glossaryPickerClose": "Tsekani magalasi",
+      "glossaryOrgSection": "Bungwe",
+      "glossaryMineSection": "Zanga",
+      "noOrganizationGlossaries": "Palibe magalasi a bungwe omwe agawidwa nanu.",
+      "noPersonalGlossaries": "Simuli ndi galasi lililonse pano. Gwiritsani ntchito Manage kuti mupange lina kapena kukopera galasi la bungwe.",
+      "glossaryAnyLanguage": "Chilankhulo chilichonse",
+      "glossaryCustomLanguage": "Chilankhulo chosankhidwa",
+      "glossaryEntryCount": "{count, plural, one {# mawu} other {# mawu}}",
+      "glossaryLanguageMismatch": "Galasi ili layikidwa chilankhulo cholakwika cha komwe mukufuna.",
+      "glossaryMismatchChip": "Chilankhulo cholakwika",
+      "glossaryOrgLimit": "Mpaka {max} magalasi a bungwe pa tanthauzo limodzi.",
+      "copyToMine": "Kopera {name} muzanga magalasi",
+      "copyToMineTitle": "Kopera muzanga magalasi",
+      "copyToMineFailed": "Galasi silinathe kukoperedwa. Yesani kachiwiri.",
+      "copiedToMine": "Yakoperedwa muzanga magalasi",
+      "copiedGlossaryName": "{name} (kopi)",
+      "clearStaleGlossary": "Chotsani",
+      "glossaryUnavailable": "Galasi silikupezeka (lathetsedwa kapena siligawananso nanu)",
+      "showOtherLanguages": "{count, plural, one {Onetsani # galasi la chilankhulo china} other {Onetsani # magalasi a zilankhulo zina}}",
+      "hideOtherLanguages": "Bisani zilankhulo zina",
+      "glossarySourceLang": "Chilankhulo choyambira",
+      "glossaryTargetLang": "Chilankhulo chokomera",
+      "glossaryLanguageEncourage": "Ikani chizindikiro pa chilankhulo chomwe tikufuna kuti galasi ili lizioneka choyamba pa matanthauzo oyenerera.",
+      "importEntries": "Tengani CSV/TSV",
+      "exportEntries": "Tumizani CSV",
+      "importHint": "Mizere: source, target, note, kind, sourceExpansion, targetExpansion. Fayilo ya mizere iwiri ikhoza kugwiranso ntchito.",
+      "importTooLarge": "Fayilo imeneyo ndi yayikulu kwambiri kuti italetsedwe (pafupifupi 5 MB yokha).",
+      "importNothing": "Palibe mizere yogwiritsidwa ntchito yomwe yapezeka ({skipped} yasiyidwa).",
+      "importSummary": "{added} zawonjezedwa, {replaced} zasinthidwa, {skipped} zasiyidwa.",
+      "entriesTooManyToShow": "{count} mawu — ambiri kwambiri kuti akhalemo. Tumizani kunja kuti muwawerenge, kapena tengani fayilo yatsopano kuti musinthe mawu."
     },
     "document": {
       "emptyTitle": "Fotokozani chikalata chomwe mukufuna",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Landirani zonse zotsalira",
         "rejectAll": "Kana zonse",
         "cancel": "Sinthani"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# mawu ena sakuwonetsedwa} other {# mawu ena sakuwonetsedwa}}"
     },
     "form": {
       "emptyTitle": "Dzaza chikalata",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# chikalata} other {# zikalata}}, malire {max} — chepetsani kapena kukweza malire musanachitenso kusintha",
     "m365AgentLimitBadgePlain": "Malire {limit}",
     "m365PlanShowAllRows": "Onetsani zonse {count, plural, one {# fayilo} other {# mafayilo}}",
-    "m365PlanShowFewerRows": "Onetsani zochepa"
+    "m365PlanShowFewerRows": "Onetsani zochepa",
+    "glossariesTab": "Magalasi",
+    "addGlossary": "Onjezani galasi",
+    "noGlossaries": "Palibe magalasi a bungwe alipo pano. Onjezerani imodzi kuti magawidwe mawu ofunikira kwa aliyense amene akutanthauza.",
+    "editGlossaryTitle": "Sinthani galasi",
+    "newGlossaryTitle": "Galasi latsopano",
+    "glossarySaveSuccess": "Galasi wasungidwa",
+    "glossaryCreateSuccess": "Galasi wapangidwa",
+    "glossaryLanguagePairLabel": "Zilankhulo",
+    "glossarySourceLangLabel": "Chilankhulo choyambira",
+    "glossaryTargetLangLabel": "Chilankhulo chokomera",
+    "glossaryAnyLanguage": "Chilankhulo chilichonse",
+    "glossaryLanguagePairHint": "Matanthauzo a chilankhulochi aziwona galasi ili choyamba.",
+    "glossaryLanguagePairEncourage": "Si lovomerezeka koma kusankha chilankhulo chokomera kumathandiza anthu kupeza galasi loyenera komanso kupewa chiopsezo kutanthauzira zosayenera.",
+    "guidePayloadLoading": "Zikukweza zomwe zili...",
+    "guidePayloadMissing": "Palibe zomwe zili za bukuli zomwe zasungidwa. Kusunga kuchipanga kachilendo.",
+    "deleteGlossary": "Chotsani galasi",
+    "deleteGlossaryConfirm": "Mukufuna kuchotsa galasi ili kwa aliyense? Omatanthauza amaloza nthawi yomweyo; zimene akukopera zimakhala zao.",
+    "confirmDeleteGlossary": "Chotsani glossary",
+    "glossaryDeleteSuccess": "Glossary yachotsedwa"
   },
   "localModels": {
     "title": "Mitundu yapafupi",
@@ -4984,7 +5036,8 @@
       "workflows": "Yatsani kapena yimitsani njira za zokambirana kwa aliyense.",
       "viewAs": "Yesani pulogalamuyi ngati munthu amene amakwaniritsa — kapena alephera — chikhalidwe.",
       "globalAdmins": "Amene amayang'anira zinthu zonse—kupitirira mndandanda womwe unakhazikitsidwa poyambitsa.",
-      "formTemplates": "Matemplenti a mafomu omwe angadzazidwe amagawidwa ndi ogwiritsa ntchito pa document-fill workflow."
+      "formTemplates": "Matemplenti a mafomu omwe angadzazidwe amagawidwa ndi ogwiritsa ntchito pa document-fill workflow.",
+      "glossaries": "Ma glossary a bungwe — mawu ofunikira, amagawidwa ndi otembenuza."
     },
     "openSettings": "Tsegulani makonda",
     "area": {

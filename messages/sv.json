@@ -2877,7 +2877,39 @@
       "acronymHint": "Akronymer matchas exakt som inskrivna: WHO gäller för ”WHO”, aldrig för ”who”. Termer matchar oberoende av versaler/gemener.",
       "glossaryCheckTitle": "Glossariekontroll",
       "glossaryCheckPass": "{count, plural, one {Den obligatoriska termen användes.} other {Alla # obligatoriska termer användes.}}",
-      "glossaryCheckMissing": "{count, plural, one {# av {total} obligatoriska översättningar saknas:} other {# av {total} obligatoriska översättningar saknas:}}"
+      "glossaryCheckMissing": "{count, plural, one {# av {total} obligatoriska översättningar saknas:} other {# av {total} obligatoriska översättningar saknas:}}",
+      "glossariesButton": "{count, plural, =0 {Ordlistor} one {# ordlista} other {# ordlistor}}",
+      "glossaryPickerTitle": "Ordlistor",
+      "glossaryPickerClose": "Stäng ordlistor",
+      "glossaryOrgSection": "Organisation",
+      "glossaryMineSection": "Mina",
+      "noOrganizationGlossaries": "Inga organisationsordlistor delas med dig.",
+      "noPersonalGlossaries": "Du har inga ordlistor än. Använd Hantera för att skapa en eller kopiera en organisationsordlista.",
+      "glossaryAnyLanguage": "Valfritt språk",
+      "glossaryCustomLanguage": "Anpassat språk",
+      "glossaryEntryCount": "{count, plural, one {# term} other {# termer}}",
+      "glossaryLanguageMismatch": "Den här ordlistan är märkt för ett annat målspråk.",
+      "glossaryMismatchChip": "Språkkonflikt",
+      "glossaryOrgLimit": "Upp till {max} organisationsordlistor per översättning.",
+      "copyToMine": "Kopiera {name} till mina ordlistor",
+      "copyToMineTitle": "Kopiera till mina ordlistor",
+      "copyToMineFailed": "Det gick inte att kopiera ordlistan. Försök igen.",
+      "copiedToMine": "Kopierad till dina ordlistor",
+      "copiedGlossaryName": "{name} (kopia)",
+      "clearStaleGlossary": "Ta bort",
+      "glossaryUnavailable": "Ordlistan är inte tillgänglig (borttagen eller inte längre delad med dig)",
+      "showOtherLanguages": "{count, plural, one {Visa # ordlista för ett annat språk} other {Visa # ordlistor för andra språk}}",
+      "hideOtherLanguages": "Dölj andra språk",
+      "glossarySourceLang": "Källspråk",
+      "glossaryTargetLang": "Målspråk",
+      "glossaryLanguageEncourage": "Tagga ett målspråk så erbjuds den här ordlistan först för matchande översättningar.",
+      "importEntries": "Importera CSV/TSV",
+      "exportEntries": "Exportera CSV",
+      "importHint": "Kolumner: källa, mål, anteckning, typ, källaExpansion, målExpansion. En fil med två kolumner fungerar också.",
+      "importTooLarge": "Filen är för stor för import (max 5 MB).",
+      "importNothing": "Inga användbara rader hittades ({skipped} hoppades över).",
+      "importSummary": "{added} tillagda, {replaced} ersatta, {skipped} hoppade över.",
+      "entriesTooManyToShow": "{count} termer — för många för att listas här. Exportera för att granska dem, eller importera en fil för att ersätta termer."
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",
@@ -3510,7 +3542,8 @@
         "acceptAll": "Acceptera alla återstående",
         "rejectAll": "Avslå alla",
         "cancel": "Avbryt"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# ytterligare term visas inte} other {# ytterligare termer visas inte}}"
     },
     "form": {
       "emptyTitle": "Fyll i ett dokument",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# dokument} other {# dokument}}, gräns {max} — minska antalet eller höj gränsen innan du uppdaterar",
     "m365AgentLimitBadgePlain": "Gräns {limit}",
     "m365PlanShowAllRows": "Visa alla {count, plural, one {# fil} other {# filer}}",
-    "m365PlanShowFewerRows": "Visa färre"
+    "m365PlanShowFewerRows": "Visa färre",
+    "glossariesTab": "Ordlistor",
+    "addGlossary": "Lägg till ordlista",
+    "noGlossaries": "Inga organisationsordlistor än. Lägg till en för att dela obligatorisk terminologi med alla som översätter.",
+    "editGlossaryTitle": "Redigera ordlista",
+    "newGlossaryTitle": "Ny ordlista",
+    "glossarySaveSuccess": "Ordlistan sparad",
+    "glossaryCreateSuccess": "Ordlistan skapad",
+    "glossaryLanguagePairLabel": "Språk",
+    "glossarySourceLangLabel": "Källspråk",
+    "glossaryTargetLangLabel": "Målspråk",
+    "glossaryAnyLanguage": "Valfritt språk",
+    "glossaryLanguagePairHint": "Översättningar till det här språket kommer att se den här ordlistan först.",
+    "glossaryLanguagePairEncourage": "Valfritt, men ett målspråk hjälper användare att hitta rätt ordlista och utesluter den från irrelevanta översättningar.",
+    "guidePayloadLoading": "Laddar innehåll…",
+    "guidePayloadMissing": "Den sparade informationen i denna guide kunde inte hittas. Vid sparande skapas en ny kopia.",
+    "deleteGlossary": "Ta bort ordlista",
+    "deleteGlossaryConfirm": "Vill du ta bort den här ordlistan för alla? Översättare tappar tillgången direkt; kopior användare gjort behålls.",
+    "confirmDeleteGlossary": "Ta bort ordlista",
+    "glossaryDeleteSuccess": "Ordlista borttagen"
   },
   "localModels": {
     "title": "Lokala modeller",
@@ -5000,7 +5052,8 @@
       "workflows": "Slå på eller av konversationsarbetsflöden för alla.",
       "viewAs": "Testa appen som någon som uppfyller – eller inte uppfyller – ett villkor.",
       "globalAdmins": "De som administrerar allt — utöver det som är angivet vid driftsättning.",
-      "formTemplates": "Ifyllbara formulärmallar som delas med användare av dokumentifyllnadsflödet."
+      "formTemplates": "Ifyllbara formulärmallar som delas med användare av dokumentifyllnadsflödet.",
+      "glossaries": "Organisationsordlistor — obligatorisk terminologi, delas med översättare."
     },
     "openSettings": "Öppna inställningar",
     "area": {

@@ -2861,7 +2861,39 @@
       "acronymHint": "Akronîm ayeke tî hû la mô tî yéké: WHO ayeke na \"WHO\", kékérê \"who\" ala. Märä ayeke hû ngû nkiri wâ.",
       "glossaryCheckTitle": "Ködörö tî glossary",
       "glossaryCheckPass": "{count, plural, one {Märä a yeke hû.} other {# märä a yeke hû.}}",
-      "glossaryCheckMissing": "{count, plural, one {# na {total} lingbi a yeke mbênî apê:} other {# na {total} lingbi a yeke mbênî apê:}}"
+      "glossaryCheckMissing": "{count, plural, one {# na {total} lingbi a yeke mbênî apê:} other {# na {total} lingbi a yeke mbênî apê:}}",
+      "glossariesButton": "{count, plural, =0 {Lisê ti mbênî} one {# lisê ti mbênî} other {# lisê ti mbênî}}",
+      "glossaryPickerTitle": "Lisê ti mbênî",
+      "glossaryPickerClose": "Zûngbi lisê ti mbênî",
+      "glossaryOrgSection": "Organizasyon",
+      "glossaryMineSection": "Na yângâ mbi",
+      "noOrganizationGlossaries": "Lisê ti mbênî ti organizasyon ape kêtî kodro mbi mo.",
+      "noPersonalGlossaries": "Wê yâ lisê ti mbênî mo ape. Sêka Gbângbê ti sê na wâ hînga na kodro ayeke organizasyon.",
+      "glossaryAnyLanguage": "Gbênî awê",
+      "glossaryCustomLanguage": "Gbênî ti mbi",
+      "glossaryEntryCount": "{count, plural, one {# térè} other {# térè}}",
+      "glossaryLanguageMismatch": "Lisê ti mbênî tî hûnâ na gbênî ti lâ gbênî zo.",
+      "glossaryMismatchChip": "Gbênî ti hûnâ zo",
+      "glossaryOrgLimit": "Mbê {max} lisê ti mbênî ti organizasyon kândê na kêtî gbegbenî.",
+      "copyToMine": "Kêtî {name} na lisê ti mbi",
+      "copyToMineTitle": "Kêtî na lisê ti mbi",
+      "copyToMineFailed": "Lisê ti mbênî ape kêtî mo. Gbéka yângâ.",
+      "copiedToMine": "E kwe kêtî na lisê ti mbi",
+      "copiedGlossaryName": "{name} (kopi)",
+      "clearStaleGlossary": "Kûê",
+      "glossaryUnavailable": "Lisê ti mbênî ape yâ (sûké hîngbi wa ti mo ape kodro mo)",
+      "showOtherLanguages": "{count, plural, one {Sô mbeni # lisê ti gbênî zo} other {Sô mbeni # lisê ti gbênî zo}}",
+      "hideOtherLanguages": "Zûngbi mbeni gbênî zo",
+      "glossarySourceLang": "Gbênî ti yâ sû",
+      "glossaryTargetLang": "Gbênî ti yâ kpê",
+      "glossaryLanguageEncourage": "Sêka gbênî ti yâ kpê wa lisê ti mbênî a nî yâ yângâ wa translations ti hûnâ zo.",
+      "importEntries": "Importé CSV/TSV",
+      "exportEntries": "Exporté CSV",
+      "importHint": "Kolòn: source, target, note, kind, sourceExpansion, targetExpansion. Fichî ti kolòn zô-kɛ̂ a we ti mû.",
+      "importTooLarge": "Fichî â ni abe mingi kêtî (5 MB kêtî dû).",
+      "importNothing": "La yângâ ti mû mo ape ({skipped} kode ayo).",
+      "importSummary": "{added} akêtî, {replaced} asûkê, {skipped} kode.",
+      "entriesTooManyToShow": "{count} térè — mingi kodro ti sô hînga. Exporté wa yângâ pè, wa importé fichî wa sûkê térè."
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Kwê so likambeni ti gba na biani",
         "rejectAll": "Su a na biani",
         "cancel": "Nzo"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# térè kodro mo yâ sô} other {# térè kodro mo yâ sô}}"
     },
     "form": {
       "emptyTitle": "Zïga dokümâ",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# fòndâ} other {# fòndâ-mbi}}, limitî {max} — kokanga sôkô mbi lâ tî aghâ na yeke sôkô mbênî",
     "m365AgentLimitBadgePlain": "Limitî {limit}",
     "m365PlanShowAllRows": "Gbenî sô sâra {count, plural, one {# dòkûmento} other {# dòkûmento-mbi}}",
-    "m365PlanShowFewerRows": "Yeke ndùkù"
+    "m365PlanShowFewerRows": "Yeke ndùkù",
+    "glossariesTab": "Lisê ti mbênî",
+    "addGlossary": "Kê lisê ti mbênî",
+    "noGlossaries": "Lisê ti mbênî ti organizasyon mo ape. Kê yê wa gbêmâ kodro ala ti translation.",
+    "editGlossaryTitle": "Sûkê lisê ti mbênî",
+    "newGlossaryTitle": "Lisê ti mbênî ngangu",
+    "glossarySaveSuccess": "Lisê ti mbênî akêre",
+    "glossaryCreateSuccess": "Lisê ti mbênî a yângâ",
+    "glossaryLanguagePairLabel": "Gbênî",
+    "glossarySourceLangLabel": "Gbênî ti yâ sû",
+    "glossaryTargetLangLabel": "Gbênî ti yâ kpê",
+    "glossaryAnyLanguage": "Gbênî awê",
+    "glossaryLanguagePairHint": "Translations ti gbênî â ni, abâ lisê ti mbênî â ni yângâ.",
+    "glossaryLanguagePairEncourage": "Ko pe yângâ, mbi gbênî na yâ kpê ahû nî, wa pè wa sue lisê ti mbênî ti yê hîngbi wa yângâ zo ti translations mo.",
+    "guidePayloadLoading": "Yângâ mbênî...",
+    "guidePayloadMissing": "Mbeni ti guide â ni ape yâ. Kereke ti sènde wbê mbeni nouvo.",
+    "deleteGlossary": "Kûê lisê ti mbênî",
+    "deleteGlossaryConfirm": "Wa kûê lisê ti mbênî â na kêtî na tîngbi yângâ? Ayeke ti gbegbenî abî kodro mo sô; ayeke ti kêtî na mbi na yê kodro mbi.",
+    "confirmDeleteGlossary": "Kèngä glossary",
+    "glossaryDeleteSuccess": "Glossary a kèngï"
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",
@@ -4984,7 +5036,8 @@
       "workflows": "Wûsa workflow ti nzönî sô vètè ndö ayeke ôko ôko.",
       "viewAs": "Gbenza app tî ngu nzönî sô agbenza na fâa — walï walï — tî zîa sô tîrï ndurü.",
       "globalAdmins": "Nzönî ti lo yeke zia mbi  — ayeke na lisäa fata deployment ti lo.",
-      "formTemplates": "Gbânanî za yeke a kîri na yângâ kodro bèkê na workflow na document-fill."
+      "formTemplates": "Gbânanî za yeke a kîri na yângâ kodro bèkê na workflow na document-fill.",
+      "glossaries": "Glossary ti organisation — Na ködörö ti mbi köröngö tî terêso, mbi lingbi na banga mbï tî fata na mbï na yângâ ti tî-barä."
     },
     "openSettings": "Fungbi tî settings",
     "area": {

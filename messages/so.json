@@ -2861,7 +2861,39 @@
       "acronymHint": "Qafisyadu waxay la eg yihiin siduu yahay: WHO waxay khusayneysaa \"WHO\", abidna \"who\". Ereyadu waxay la jaanqaadi karaan cabbir kasta oo xaraf ah.",
       "glossaryCheckTitle": "Hubinta ereyga",
       "glossaryCheckPass": "{count, plural, one {Ereyga loo baahnaa waa la isticmaalay.} other {Dhamaan # ereyada loo baahnaa waa la isticmaalay.}}",
-      "glossaryCheckMissing": "{count, plural, one {# ee {total} tarjumaadyada loo baahnaa waa ka maqan yahay:} other {# ee {total} tarjumaadyada loo baahnaa way ka maqan yihiin:}}"
+      "glossaryCheckMissing": "{count, plural, one {# ee {total} tarjumaadyada loo baahnaa waa ka maqan yahay:} other {# ee {total} tarjumaadyada loo baahnaa way ka maqan yihiin:}}",
+      "glossariesButton": "{count, plural, =0 {Erey-bixinnada} one {# erey-bixin} other {# erey-bixinno}}",
+      "glossaryPickerTitle": "Erey-bixinnada",
+      "glossaryPickerClose": "Xidh erey-bixinnada",
+      "glossaryOrgSection": "Ururka",
+      "glossaryMineSection": "Kii aniga",
+      "noOrganizationGlossaries": "Wax erey-bixinno urur ah laguma wadaagin adiga.",
+      "noPersonalGlossaries": "Weli ma hayso wax erey-bixin ah. Isticmaal Maamul si aad u abuurto mid ama nuqul uga qaado mid urur ka tirsan.",
+      "glossaryAnyLanguage": "Luqad kasta",
+      "glossaryCustomLanguage": "Luqad la habeeyey",
+      "glossaryEntryCount": "{count, plural, one {# erey} other {# erey} }",
+      "glossaryLanguageMismatch": "Erey-bixintan waxaa lagu calaamadeeyay luqad bartilmaameed kale.",
+      "glossaryMismatchChip": "Luqad is-maandhaaf ah",
+      "glossaryOrgLimit": "Ilaa {max} erey-bixin urur ah tarjumaad walba.",
+      "copyToMine": "Nuqul {name} ugu dar erey-bixinnadeyda",
+      "copyToMineTitle": "Nuqul ugu dar erey-bixinnadeyda",
+      "copyToMineFailed": "Erey-bixinta lama nuqulin. Fadlan isku day mar kale.",
+      "copiedToMine": "Waa lagu daray erey-bixinnadaada",
+      "copiedGlossaryName": "{name} (nuqul)",
+      "clearStaleGlossary": "Ka saar",
+      "glossaryUnavailable": "Erey-bixintu lama heli karo (waa la tirtiray ama laguma wadaago adiga)",
+      "showOtherLanguages": "{count, plural, one {Muuji # erey-bixin oo luqad kale ah} other {Muuji # erey-bixinno oo luqado kale ah}}",
+      "hideOtherLanguages": "Qari luqadaha kale",
+      "glossarySourceLang": "Luqadda asalka",
+      "glossaryTargetLang": "Luqadda bartilmaameedka",
+      "glossaryLanguageEncourage": "Calaamadee luqadda bartilmaameedka si erey-bixintan hore loogu bixiyo tarjumaadaha la midka ah.",
+      "importEntries": "Soo dejiso CSV/TSV",
+      "exportEntries": "U dhoofso CSV",
+      "importHint": "Tiirarka: source, target, note, kind, sourceExpansion, targetExpansion. Fayl labo tiirar ah wuu shaqaynayaa sidoo kale.",
+      "importTooLarge": "Faylkaas aad buu u weyn yahay si loo soo dejiyo (ugu badnaan 5 MB).",
+      "importNothing": "Ma jirin saf la isticmaalayo oo la helay ({skipped} waa la dhaafay).",
+      "importSummary": "{added} waa la daray, {replaced} waa la beddelay, {skipped} waa la dhaafay.",
+      "entriesTooManyToShow": "{count} erey — aad bay u badan yihiin in halkan lagu soo bandhigo. Dhoofso si aad u eegto, ama fayl soo geli si aad ereyada u beddesho."
     },
     "document": {
       "emptyTitle": "Sharax dukumintiga aad rabto",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Dhammaan haray aqbal",
         "rejectAll": "Dhammaan diid",
         "cancel": "Jooji"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# erey kale lama muujin} other {# erey kale lama muujin}}"
     },
     "form": {
       "emptyTitle": "Buuxi dukumeenti",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# dukumiinti} other {# dukumiinti}}, xadka waa {max} — jar ama kordhi xadka ka hor intaadan cusboonaysiin",
     "m365AgentLimitBadgePlain": "Xadka {limit}",
     "m365PlanShowAllRows": "Muuji dhammaan {count, plural, one {# fayl} other {# faylal}}",
-    "m365PlanShowFewerRows": "Muuji ugu yar"
+    "m365PlanShowFewerRows": "Muuji ugu yar",
+    "glossariesTab": "Erey-bixinnada",
+    "addGlossary": "Ku dar erey-bixin",
+    "noGlossaries": "Wali ma jiraan erey-bixinno urur. Ku dar mid si loogu wadaage dhammaan dadka turjuma.",
+    "editGlossaryTitle": "Edit erey-bixin",
+    "newGlossaryTitle": "Erey-bixin cusub",
+    "glossarySaveSuccess": "Erey-bixinta waa la keydiyay",
+    "glossaryCreateSuccess": "Erey-bixin waa la sameeyay",
+    "glossaryLanguagePairLabel": "Luqadaha",
+    "glossarySourceLangLabel": "Luqadda asalka",
+    "glossaryTargetLangLabel": "Luqadda bartilmaameedka",
+    "glossaryAnyLanguage": "Luqad kasta",
+    "glossaryLanguagePairHint": "Tarjumayaashu marka ay ku tarjumayaan luqaddan waxay marka hore arki doonaan erey-bixintan.",
+    "glossaryLanguagePairEncourage": "Ikhtiyaari ah, laakiin luqadda bartilmaameedka waxay ka caawisaa dadka inay helaan erey-bixinta saxda ah waxayna ka ilaalisaa tarjumaado aan la xiriirin.",
+    "guidePayloadLoading": "Waxyaabaha waa la rarayaa…",
+    "guidePayloadMissing": "Waxyaabaha kaydsanaa halkan lama heli karo. Kaydintu waxay abuurtaa nuqul cusub.",
+    "deleteGlossary": "Tirtir erey-bixin",
+    "deleteGlossaryConfirm": "Ma tirtirtaa erey-bixintan qof walba? Tarjumayaasha waxay ku lumin doonaan isla markiiba; nuqullada dadka kale uga tageen waa ahaan doonaan sidoodii.",
+    "confirmDeleteGlossary": "Tir ka saaro qeexitaanka ereyada",
+    "glossaryDeleteSuccess": "Qeexitaanka ereyada waa la tirtiray"
   },
   "localModels": {
     "title": "Moodallo maxalli ah",
@@ -4984,7 +5036,8 @@
       "workflows": "Dami ama shid habraaca wada hadalka qof walba.",
       "viewAs": "Tijaabi app-ka adoo ah qof buuxiya ama waaya shardi.",
       "globalAdmins": "Kuwa maamula wax walba — meel ka baxsan liiska uu dejiyey abuurista.",
-      "formTemplates": "Template-yada foormamka la buuxin karo oo lala wadaagay isticmaaleyaasha hab-socodka buuxinta dukumeentiga."
+      "formTemplates": "Template-yada foormamka la buuxin karo oo lala wadaagay isticmaaleyaasha hab-socodka buuxinta dukumeentiga.",
+      "glossaries": "Qeexitaannada ereyada ee ururka — eraybixinta khasabka ah, lala wadaago turjubaanada."
     },
     "openSettings": "Fur dejinta",
     "area": {

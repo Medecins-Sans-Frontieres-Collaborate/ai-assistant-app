@@ -2908,7 +2908,39 @@
       "acronymHint": "缩写需与输入完全一致：“WHO” 仅匹配 “WHO”，不匹配 “who”。术语不区分大小写。",
       "glossaryCheckTitle": "术语检查",
       "glossaryCheckPass": "{count, plural, one {已使用所需术语。} other {已使用全部 # 个所需术语。}}",
-      "glossaryCheckMissing": "{count, plural, one {缺少 {total} 个所需译文中的 # 个：} other {缺少 {total} 个所需译文中的 # 个：}}"
+      "glossaryCheckMissing": "{count, plural, one {缺少 {total} 个所需译文中的 # 个：} other {缺少 {total} 个所需译文中的 # 个：}}",
+      "glossariesButton": "{count, plural, =0 {词汇表} one {# 个词汇表} other {# 个词汇表}}",
+      "glossaryPickerTitle": "词汇表",
+      "glossaryPickerClose": "关闭词汇表",
+      "glossaryOrgSection": "组织",
+      "glossaryMineSection": "我的",
+      "noOrganizationGlossaries": "你没有被分享任何组织词汇表。",
+      "noPersonalGlossaries": "你还没有词汇表。请使用“管理”来创建一个或复制组织词汇表。",
+      "glossaryAnyLanguage": "任意语言",
+      "glossaryCustomLanguage": "自定义语言",
+      "glossaryEntryCount": "{count, plural, one {# 个术语} other {# 个术语}}",
+      "glossaryLanguageMismatch": "该词汇表标注的是其他目标语言。",
+      "glossaryMismatchChip": "语言不匹配",
+      "glossaryOrgLimit": "每次翻译最多可选 {max} 个组织词汇表。",
+      "copyToMine": "将 {name} 复制到我的词汇表",
+      "copyToMineTitle": "复制到我的词汇表",
+      "copyToMineFailed": "无法复制词汇表，请重试。",
+      "copiedToMine": "已复制到你的词汇表",
+      "copiedGlossaryName": "{name}（副本）",
+      "clearStaleGlossary": "移除",
+      "glossaryUnavailable": "词汇表不可用（已删除或不再共享）",
+      "showOtherLanguages": "{count, plural, one {显示其他语言的 # 个词汇表} other {显示其他语言的 # 个词汇表}}",
+      "hideOtherLanguages": "隐藏其他语言",
+      "glossarySourceLang": "源语言",
+      "glossaryTargetLang": "目标语言",
+      "glossaryLanguageEncourage": "请为该词汇表标注目标语言，以便优先推荐匹配的翻译。",
+      "importEntries": "导入 CSV/TSV",
+      "exportEntries": "导出 CSV",
+      "importHint": "列：source、target、note、kind、sourceExpansion、targetExpansion。只含两列的文件也可导入。",
+      "importTooLarge": "该文件过大，无法导入（最大 5 MB）。",
+      "importNothing": "未找到可用行（已跳过 {skipped} 行）。",
+      "importSummary": "已添加 {added} 条，替换 {replaced} 条，跳过 {skipped} 条。",
+      "entriesTooManyToShow": "共 {count} 个术语—数量过多，无法全部显示。请导出以查看，或导入文件替换术语。"
     },
     "document": {
       "emptyTitle": "描述您需要的文档",
@@ -3541,7 +3573,8 @@
         "acceptAll": "接受全部剩余建议",
         "rejectAll": "全部拒绝",
         "cancel": "取消"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {还有 # 个术语未显示} other {还有 # 个术语未显示}}"
     },
     "form": {
       "emptyTitle": "填充文档",
@@ -4814,7 +4847,26 @@
     "m365ChangesOverCap": "{count, plural, one {# 个文档} other {# 个文档}}，上限为 {max} — 刷新前请精简或提高上限",
     "m365AgentLimitBadgePlain": "限制 {limit}",
     "m365PlanShowAllRows": "显示全部 {count, plural, one {# 个文件} other {# 个文件}}",
-    "m365PlanShowFewerRows": "显示较少"
+    "m365PlanShowFewerRows": "显示较少",
+    "glossariesTab": "词汇表",
+    "addGlossary": "添加词汇表",
+    "noGlossaries": "尚无组织词汇表。请添加以便与所有翻译人员共享必需术语。",
+    "editGlossaryTitle": "编辑词汇表",
+    "newGlossaryTitle": "新建词汇表",
+    "glossarySaveSuccess": "词汇表已保存",
+    "glossaryCreateSuccess": "词汇表已创建",
+    "glossaryLanguagePairLabel": "语言",
+    "glossarySourceLangLabel": "源语言",
+    "glossaryTargetLangLabel": "目标语言",
+    "glossaryAnyLanguage": "任意语言",
+    "glossaryLanguagePairHint": "翻译为该语言时将优先显示本词汇表。",
+    "glossaryLanguagePairEncourage": "此项为可选，但标注目标语言有助于查找合适的词汇表，并避免出现在无关翻译中。",
+    "guidePayloadLoading": "内容加载中……",
+    "guidePayloadMissing": "无法找到该指南保存的内容。保存将写入新版内容。",
+    "deleteGlossary": "删除词汇表",
+    "deleteGlossaryConfirm": "确定要为所有人删除此词汇表吗？译者将立刻失去访问权限，但他人已复制的将不受影响。",
+    "confirmDeleteGlossary": "删除术语表",
+    "glossaryDeleteSuccess": "术语表已删除"
   },
   "localModels": {
     "title": "本地模型",
@@ -5031,7 +5083,8 @@
       "workflows": "为所有人启用或关闭对话工作流。",
       "viewAs": "以符合或不符合某条件的身份测试应用。",
       "globalAdmins": "负责全面管理的人员——超出部署设置的列表。",
-      "formTemplates": "可与文档填写流程用户共享的可填写表单模板。"
+      "formTemplates": "可与文档填写流程用户共享的可填写表单模板。",
+      "glossaries": "组织术语表 — 强制性术语，供译者共享。"
     },
     "openSettings": "打开设置",
     "area": {

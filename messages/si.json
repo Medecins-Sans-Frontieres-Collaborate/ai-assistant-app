@@ -2877,7 +2877,39 @@
       "acronymHint": "සංක්ෂේප මෙම වශයෙන්ම අනුකූල වේ: WHO කියන්නේ “WHO” ට පමණි, “who” ට නොවේ. පද ඕනෑම අක්ෂර වින්‍යාසය සඳහා අනුකූල වේ.",
       "glossaryCheckTitle": "ශබ්දකෝෂ පරීක්ෂාව",
       "glossaryCheckPass": "{count, plural, one {අවශ්‍ය පදය භාවිතා කරන ලදි.} other {සියලුම අවශ්‍ය පද # භාවිතා කරන ලදි.}}",
-      "glossaryCheckMissing": "{count, plural, one {අවශ්‍ය පරිවර්තන {total} න් #ක් අස්ථානගතයි:} other {අවශ්‍ය පරිවර්තන {total} න් # අස්ථානගතයි:}}"
+      "glossaryCheckMissing": "{count, plural, one {අවශ්‍ය පරිවර්තන {total} න් #ක් අස්ථානගතයි:} other {අවශ්‍ය පරිවර්තන {total} න් # අස්ථානගතයි:}}",
+      "glossariesButton": "{count, plural, =0 {ශබ්ද කෝෂ} one {# ශබ්ද කෝෂය} other {# ශබ්ද කෝෂ}}",
+      "glossaryPickerTitle": "ශබ්ද කෝෂ",
+      "glossaryPickerClose": "ශබ්ද කෝෂ වලින් බැහැර වන්න",
+      "glossaryOrgSection": "ආයතනය",
+      "glossaryMineSection": "මගේ",
+      "noOrganizationGlossaries": "ආයතනික ශබ්ද කෝෂ ඔබ සමඟ හවුල් කර නැත.",
+      "noPersonalGlossaries": "ඔබට තවමත් ශබ්ද කෝෂ නොමැත. එකක් නිර්මාණය කිරීමට හෝ ආයතනික ශබ්ද කෝෂයකට පිටපත් කිරීමට Manage භාවිතා කරන්න.",
+      "glossaryAnyLanguage": "ඕනෑම භාෂාවක්",
+      "glossaryCustomLanguage": "රිසි කරන භාෂාව",
+      "glossaryEntryCount": "{count, plural, one {# පදය} other {# පද}}",
+      "glossaryLanguageMismatch": "මෙම ශබ්ද කෝෂය වෙනත් ඉලක්ක භාෂාවකට ටැග් කර ඇත.",
+      "glossaryMismatchChip": "භාෂා එකඟතාව නොමැතිවීම",
+      "glossaryOrgLimit": "එක් පරිවර්තනයකට උපරිම ශබ්ද කෝෂ {max}ක්.",
+      "copyToMine": "{name} මාගේ ශබ්ද කෝෂ වෙත පිටපත් කරන්න",
+      "copyToMineTitle": "මාගේ ශබ්ද කෝෂ වෙත පිටපත් කිරීම",
+      "copyToMineFailed": "ශබ්ද කෝෂය පිටපත් කළ නොහැක. නැවත උත්සාහ කරන්න.",
+      "copiedToMine": "ඔබගේ ශබ්ද කෝෂවලට පිටපත් කළා",
+      "copiedGlossaryName": "{name} (පිටපත)",
+      "clearStaleGlossary": "ඉවත් කරන්න",
+      "glossaryUnavailable": "ශබ්ද කෝෂය නොමැත (මකනු ලැබීය හෝ ඔබ සමඟ හවුල් නොකරයි)",
+      "showOtherLanguages": "{count, plural, one {වෙනත් භාෂාවකට # ශබ්ද කෝෂය පෙන්වන්න} other {වෙනත් භාෂා සඳහා # ශබ්ද කෝෂ පෙන්වන්න}}",
+      "hideOtherLanguages": "වෙනත් භාෂා සඟවන්න",
+      "glossarySourceLang": "මූල භාෂාව",
+      "glossaryTargetLang": "ඉලක්ක භාෂාව",
+      "glossaryLanguageEncourage": "එකඟ පරිවර්තන සඳහා මුලින්ම මෙම ශබ්ද කෝෂය ලබාදීම සඳහා ඉලක්ක භාෂාවක් ටැග් කරන්න.",
+      "importEntries": "CSV/TSV ආයාත කරන්න",
+      "exportEntries": "CSV නිර්යාත කරන්න",
+      "importHint": "තීරු: source, target, note, kind, sourceExpansion, targetExpansion. තීරු දෙකක් ඇත්නම් හැරී.",
+      "importTooLarge": "そのファイルはインポートするには大きすぎます（උපරිම 5 MB).",
+      "importNothing": "ඉල්ලීය යාන්ත්‍රණ පේළි කිසිවක් හමු නොවීය ({skipped} හැර දක්වයි).",
+      "importSummary": "{added} එකතු කළා, {replaced} ප්‍රතිස්ථාපනය කළා, {skipped} හැරි.",
+      "entriesTooManyToShow": "පද {count}ක් — මෙහි පෙන්වීමට ඉතා වැඩියි. ඒවා සමාලෝචනයට නිර්යාත කරන්න හෝ පද ප්‍රතිස්ථාපනයට ගොනුවක් ආයාත කරන්න."
     },
     "document": {
       "emptyTitle": "ඔබට අවශ්‍ය ලිපිය විස්තර කරන්න",
@@ -3510,7 +3542,8 @@
         "acceptAll": "ඉතිරි සියල්ල පිළිගන්න",
         "rejectAll": "සියල්ල ප්‍රතික්ෂේප කරන්න",
         "cancel": "අවලංගු කරන්න"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {තවත් # පදයක් නොපෙන්වනු ලදී} other {තවත් # පද නොපෙන්වනු ලදී}}"
     },
     "form": {
       "emptyTitle": "ලේඛනයක් පුරවන්න",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {ලේඛනය #} other {ලේඛන #}}, සීමාව {max} — නැවත යාවත්කාලීන කිරීම පෙර සීමාව කපා හෝ වැඩි කරන්න",
     "m365AgentLimitBadgePlain": "සීමාව {limit}",
     "m365PlanShowAllRows": "සියළුම {count, plural, one {ගොනුව #} other {ගොනු #} } පෙන්වන්න",
-    "m365PlanShowFewerRows": "අඩු විදිහට පෙන්වන්න"
+    "m365PlanShowFewerRows": "අඩු විදිහට පෙන්වන්න",
+    "glossariesTab": "ශබ්ද කෝෂ",
+    "addGlossary": "ශබ්ද කෝෂ එකතු කරන්න",
+    "noGlossaries": "තවමත් ආයතන ශබ්ද කෝෂ නොමැත. සියල්ලන් සමඟ අනිවාර්ය පද නිර්දේශ හවුල් කිරීමට එකක් එක් කරන්න.",
+    "editGlossaryTitle": "ශබ්ද කෝෂය සංස්කරණය කරන්න",
+    "newGlossaryTitle": "නව ශබ්ද කෝෂය",
+    "glossarySaveSuccess": "ශබ්ද කෝෂය සුරක්ෂිතයි",
+    "glossaryCreateSuccess": "ශබ්ද කෝෂය නිර්මාණය කළා",
+    "glossaryLanguagePairLabel": "භාෂා",
+    "glossarySourceLangLabel": "මූල භාෂාව",
+    "glossaryTargetLangLabel": "ඉලක්ක භාෂාව",
+    "glossaryAnyLanguage": "ඕනෑම භාෂාවක්",
+    "glossaryLanguagePairHint": "මෙම භාෂාවට පරිවර්තන සඳහා මෙම ශබ්ද කෝෂය මුලින් දිස්වේ.",
+    "glossaryLanguagePairEncourage": "අත්යවශ්‍ය නොවූවත්, ඉලක්ක භාෂාවක් ඇත්නම් නිවැරදි ශබ්ද කෝෂය සොයා ගැනීමට සහ අනපේක්ෂිත පරිවර්තන වලට එය බැහැර තබා ගැනීමට උපකාරී වේ.",
+    "guidePayloadLoading": "අන්තර්ගතය පූරණය වෙමින්...",
+    "guidePayloadMissing": "මෙම මාර්ගෝපදේශයේ සුරැකි අන්තර්ගතය හමු නොවීය. සුරක්ෂිත කිරීමෙන් නව පිටපතක් ලියයි.",
+    "deleteGlossary": "ශබ්ද කෝෂය මකන්න",
+    "deleteGlossaryConfirm": "මෙම ශබ්ද කෝෂය සියල්ලන්ටම මකන්නද? පරිවර්තකයන්ට එය හැකිලේය; අයට තිබෙන පිටපත් තවමත් ඔවුන්ගේමයි.",
+    "confirmDeleteGlossary": "මුල් පදසටහන මකන්න",
+    "glossaryDeleteSuccess": "මුල් පදසටහන මකන ලදී"
   },
   "localModels": {
     "title": "ප්‍රාදේශීය ආදර්ශ",
@@ -5000,7 +5052,8 @@
       "workflows": "සියළු දෙනා සඳහා සංවාද වැඩසටහන් සක්‍රිය කරන්න හෝ අක්‍රිය කරන්න.",
       "viewAs": "කවරෙක් තත්ත්වය ගැලපෙන්නේද/නැද්දැයි පරීක්ෂා කරමින් යෙදුම තරනය කරන්න.",
       "globalAdmins": "ඕනෑම දෙයක් පාලනය කරන අයයි — යැව්වීම මගින් නම් කළ ලැයිස්තුවට පමණක් සීමා නොවේ.",
-      "formTemplates": "ලේඛන පුරවීමේ වැඩසටහනේ භාවිතා කරන්නන් සමඟ බෙදාගන්නා පිරවිය හැකි ෆෝම් ටෙම්ප්ලේට්."
+      "formTemplates": "ලේඛන පුරවීමේ වැඩසටහනේ භාවිතා කරන්නන් සමඟ බෙදාගන්නා පිරවිය හැකි ෆෝම් ටෙම්ප්ලේට්.",
+      "glossaries": "සංග්‍රහ පදසටහන් — අත්‍යාවශ්‍ය පදපදවිස්තර, පරිවර්තකයින් සමඟ බෙදා ගනු ලබයි."
     },
     "openSettings": "සැකසුම් විවෘත කරන්න",
     "area": {

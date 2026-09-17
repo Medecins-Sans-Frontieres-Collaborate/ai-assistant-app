@@ -2877,7 +2877,39 @@
       "acronymHint": "تطابق الاختصارات يكون مطابقًا لما هو مكتوب: WHO تنطبق على \"WHO\"، ولا تنطبق أبدًا على \"who\". أما المصطلحات فتتطابق مع أي حالة أحرف.",
       "glossaryCheckTitle": "مراجعة المصطلحات",
       "glossaryCheckPass": "{count, plural, one {تم استخدام المصطلح المطلوب.} other {تم استخدام جميع المصطلحات المطلوبة وعددها #.}}",
-      "glossaryCheckMissing": "{count, plural, one {يوجد {total} ترجمة مطلوبة مفقودة:} other {يوجد # من {total} ترجمات مطلوبة مفقودة:}}"
+      "glossaryCheckMissing": "{count, plural, one {يوجد {total} ترجمة مطلوبة مفقودة:} other {يوجد # من {total} ترجمات مطلوبة مفقودة:}}",
+      "glossariesButton": "{count, plural, =0 {المصطلحات} one {# مُعجم} other {# مُعاجم}}",
+      "glossaryPickerTitle": "المصطلحات",
+      "glossaryPickerClose": "إغلاق المصطلحات",
+      "glossaryOrgSection": "المنظمة",
+      "glossaryMineSection": "خاصتي",
+      "noOrganizationGlossaries": "لا توجد معاجم منظمة تمت مشاركتها معك.",
+      "noPersonalGlossaries": "ليس لديك أي معاجم حتى الآن. استخدم إدارة لإنشاء واحد أو نسخ معجم من المنظمة.",
+      "glossaryAnyLanguage": "أي لغة",
+      "glossaryCustomLanguage": "لغة مخصصة",
+      "glossaryEntryCount": "{count, plural, one {# مُصطلح} other {# مُصطلحات}}",
+      "glossaryLanguageMismatch": "هذا المعجم محدد للغة هدف مختلفة.",
+      "glossaryMismatchChip": "عدم تطابق اللغة",
+      "glossaryOrgLimit": "حتى {max} معاجم منظمة لكل ترجمة.",
+      "copyToMine": "نسخ {name} إلى معاجمي",
+      "copyToMineTitle": "نسخ إلى معاجمي",
+      "copyToMineFailed": "تعذّر نسخ المعجم. حاول مرة أخرى.",
+      "copiedToMine": "تم النسخ إلى معاجمك",
+      "copiedGlossaryName": "{name} (نسخة)",
+      "clearStaleGlossary": "إزالة",
+      "glossaryUnavailable": "المعجم غير متوفر (تم حذفه أو لم يعد مُشارَكًا معك)",
+      "showOtherLanguages": "{count, plural, one {عرض معجم واحد بلغة أخرى} other {عرض # معاجم بلغات أخرى}}",
+      "hideOtherLanguages": "إخفاء اللغات الأخرى",
+      "glossarySourceLang": "اللغة المصدر",
+      "glossaryTargetLang": "اللغة الهدف",
+      "glossaryLanguageEncourage": "حدد لغة هدف ليتم اقتراح هذا المعجم أولاً للترجمات المطابقة.",
+      "importEntries": "استيراد CSV/TSV",
+      "exportEntries": "تصدير CSV",
+      "importHint": "الأعمدة: المصدر، الهدف، الملاحظة، النوع، توسيع المصدر، توسيع الهدف. ملفات العمودين أيضًا مدعومة.",
+      "importTooLarge": "الملف كبير جدًا للاستيراد (الحد الأقصى 5 ميغابايت).",
+      "importNothing": "لم يتم العثور على صفوف صالحة ({skipped} تم تجاوزها).",
+      "importSummary": "{added} أُضيفت، {replaced} استُبدلت، {skipped} تجاوزت.",
+      "entriesTooManyToShow": "{count} مصطلحات — عدد كبير جدًا لعرضها هنا. قم بالتصدير لمراجعتها أو استورد ملفًا لاستبدال المصطلحات."
     },
     "document": {
       "emptyTitle": "صف المستند الذي تريده",
@@ -3510,7 +3542,8 @@
         "acceptAll": "قبول جميع المتبقي",
         "rejectAll": "رفض الكل",
         "cancel": "إلغاء"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# مصطلح إضافي غير ظاهر} other {# مصطلحات إضافية غير ظاهرة}}"
     },
     "form": {
       "emptyTitle": "تعبئة مستند",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {# مستند} other {# مستندات}}، الحد الأقصى {max} — قم بالاقتطاع أو رفع الحد قبل التحديث",
     "m365AgentLimitBadgePlain": "الحد {limit}",
     "m365PlanShowAllRows": "عرض كل {count, plural, one {# ملف} other {# ملفات}}",
-    "m365PlanShowFewerRows": "عرض أقل"
+    "m365PlanShowFewerRows": "عرض أقل",
+    "glossariesTab": "المعاجم",
+    "addGlossary": "إضافة معجم",
+    "noGlossaries": "لا توجد معاجم منظمة حتى الآن. أضف معجمًا لمشاركة المصطلحات الإلزامية مع كل من يترجم.",
+    "editGlossaryTitle": "تعديل المعجم",
+    "newGlossaryTitle": "معجم جديد",
+    "glossarySaveSuccess": "تم حفظ المعجم",
+    "glossaryCreateSuccess": "تم إنشاء المعجم",
+    "glossaryLanguagePairLabel": "اللغات",
+    "glossarySourceLangLabel": "اللغة المصدر",
+    "glossaryTargetLangLabel": "اللغة الهدف",
+    "glossaryAnyLanguage": "أي لغة",
+    "glossaryLanguagePairHint": "الترجمات إلى هذه اللغة سترى هذا المعجم أولاً.",
+    "glossaryLanguagePairEncourage": "اختياري، لكن تحديد لغة هدف يساعد في العثور على المعجم المناسب ويمنعه من الظهور في ترجمات أخرى غير ذات صلة.",
+    "guidePayloadLoading": "جاري تحميل المحتوى…",
+    "guidePayloadMissing": "تعذر العثور على محتوى هذا الدليل المحفوظ. الحفظ ينشئ نسخة جديدة.",
+    "deleteGlossary": "حذف المعجم",
+    "deleteGlossaryConfirm": "حذف هذا المعجم للجميع؟ سيُفقد فورًا لدى المترجمين؛ وتبقى النسخ التي أنشأها الأشخاص.",
+    "confirmDeleteGlossary": "حذف المسرد",
+    "glossaryDeleteSuccess": "تم حذف المسرد"
   },
   "localModels": {
     "title": "النماذج المحلية",
@@ -5000,7 +5052,8 @@
       "workflows": "تفعيل أو تعطيل سير العمل في المحادثة للجميع.",
       "viewAs": "اختبر التطبيق كشخص يستوفي - أو لا يستوفي - شرطاً ما.",
       "globalAdmins": "من يدير كل شيء — خارج القائمة المحددة من قبل النشر.",
-      "formTemplates": "قوالب نماذج قابلة للتعبئة ومشتركة مع مستخدمي سير عمل تعبئة المستندات."
+      "formTemplates": "قوالب نماذج قابلة للتعبئة ومشتركة مع مستخدمي سير عمل تعبئة المستندات.",
+      "glossaries": "مسارد المنظمة — مصطلحات إلزامية، يتم مشاركتها مع المترجمين."
     },
     "openSettings": "افتح الإعدادات",
     "area": {

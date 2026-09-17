@@ -2861,7 +2861,39 @@
       "acronymHint": "संक्षिप्त रूप जस्तै टाइप गरिएको छ, त्यस्तै मिल्नुपर्छ: WHO भनेको \"WHO\" सँग मात्र मिल्छ, \"who\" सँग कहिल्यै मिल्दैन। शब्दहरू कुनै पनि क्यापिटलाइजेसनसँग मिल्न सक्छन्।",
       "glossaryCheckTitle": "शब्दकोश जाँच",
       "glossaryCheckPass": "{count, plural, one {आवश्यक शब्द प्रयोग गरिएको छ।} other {सबै # आवश्यक शब्दहरू प्रयोग गरिएको छ।}}",
-      "glossaryCheckMissing": "{count, plural, one {{total} मध्ये # आवश्यक अनुवाद हराइरहेका छन्:} other {{total} मध्ये # आवश्यक अनुवादहरू हराइरहेका छन्:}}"
+      "glossaryCheckMissing": "{count, plural, one {{total} मध्ये # आवश्यक अनुवाद हराइरहेका छन्:} other {{total} मध्ये # आवश्यक अनुवादहरू हराइरहेका छन्:}}",
+      "glossariesButton": "{count, plural, =0 {शब्दावलीहरू} one {# शब्दावली} other {# शब्दावलीहरू}}",
+      "glossaryPickerTitle": "शब्दावलीहरू",
+      "glossaryPickerClose": "शब्दावलीहरू बन्द गर्नुहोस्",
+      "glossaryOrgSection": "संस्था",
+      "glossaryMineSection": "मेरो",
+      "noOrganizationGlossaries": "तपाईंलाई कुनै संस्थाका शब्दावलीहरू साझेदारी गरिएको छैन।",
+      "noPersonalGlossaries": "तपाईंको कुनै शब्दावली छैन। एउटा सिर्जना गर्न वा संस्थाको शब्दावली प्रतिलिपि गर्न 'व्यवस्थापन' प्रयोग गर्नुहोस्।",
+      "glossaryAnyLanguage": "कुनै पनि भाषा",
+      "glossaryCustomLanguage": "अनुकूल भाषा",
+      "glossaryEntryCount": "{count, plural, one {# शब्द} other {# शब्दहरू}}",
+      "glossaryLanguageMismatch": "यो शब्दावली फरक लक्ष्य भाषाका लागि ट्याग गरिएको छ।",
+      "glossaryMismatchChip": "भाषा मेल खाएन",
+      "glossaryOrgLimit": "प्रति अनुवाद अधिकतम {max} संस्थाका शब्दावलीहरू।",
+      "copyToMine": "{name} लाई मेरो शब्दावलीहरूमा प्रतिलिपि गर्नुहोस्",
+      "copyToMineTitle": "मेरो शब्दावलीहरूमा प्रतिलिपि गर्नुहोस्",
+      "copyToMineFailed": "शब्दावली प्रतिलिपि गर्न सकिएन। पुन: प्रयास गर्नुहोस्।",
+      "copiedToMine": "तपाईंको शब्दावलीहरूमा प्रतिलिपि गरियो",
+      "copiedGlossaryName": "{name} (प्रतिलिपि)",
+      "clearStaleGlossary": "हटाउनुहोस्",
+      "glossaryUnavailable": "शब्दावली उपलब्ध छैन (मेटिएको वा अब तपाईंसँग साझा गरिएको छैन)",
+      "showOtherLanguages": "{count, plural, one {अरू भाषाका लागि # शब्दावली देखाउनुहोस्} other {अरू भाषाका लागि # शब्दावलीहरू देखाउनुहोस्}}",
+      "hideOtherLanguages": "अन्य भाषाहरू लुकाउनुहोस्",
+      "glossarySourceLang": "मूल भाषा",
+      "glossaryTargetLang": "लक्ष्य भाषा",
+      "glossaryLanguageEncourage": "यो शब्दावली मिल्दो अनुवादहरूका लागि पहिला देखाउन लक्ष्य भाषा ट्याग गर्नुहोस्।",
+      "importEntries": "CSV/TSV आयात गर्नुहोस्",
+      "exportEntries": "CSV निर्यात गर्नुहोस्",
+      "importHint": "सङ्कलनहरू: source, target, note, kind, sourceExpansion, targetExpansion। दुई स्तम्भ भएको फाइल पनि उपयुक्त छ।",
+      "importTooLarge": "त्यो फाइल आयात गर्न ठूलो छ (अधिक्तम ५ MB)।",
+      "importNothing": "प्रयोग गर्न मिल्ने कुनै पङ्क्ति भेटिएन ({skipped} छुटाइयो)।",
+      "importSummary": "{added} थपियो, {replaced} प्रतिस्थापन गरियो, {skipped} छुटाइयो।",
+      "entriesTooManyToShow": "{count} शब्दहरू — यहाँ सूची गर्न धेरै छन्। समीक्षा गर्न निर्यात गर्नुहोस्, वा प्रतिस्थापन गर्न फाइल आयात गर्नुहोस्।"
     },
     "document": {
       "emptyTitle": "तपाईं चाहनुभएको कागजात वर्णन गर्नुहोस्",
@@ -3494,7 +3526,8 @@
         "acceptAll": "सबै बाँकी स्वीकृत गर्नुहोस्",
         "rejectAll": "सबै अस्वीकार गर्नुहोस्",
         "cancel": "रद्द गर्नुहोस्"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# थप शब्द देखाइएको छैन} other {# थप शब्दहरू देखाइएको छैन}}"
     },
     "form": {
       "emptyTitle": "डोक्युमेन्ट भर्नुहोस्",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# कागजात} other {# कागजातहरू}}, सिमा {max} — अपडेट गर्नु अघि ट्रिम वा सिमा बढाउनुहोस्",
     "m365AgentLimitBadgePlain": "सिमा {limit}",
     "m365PlanShowAllRows": "सबै {count, plural, one {# फाइल} other {# फाइलहरू}} देखाउनुहोस्",
-    "m365PlanShowFewerRows": "थोरै देखाउनुहोस्"
+    "m365PlanShowFewerRows": "थोरै देखाउनुहोस्",
+    "glossariesTab": "शब्दावलीहरू",
+    "addGlossary": "शब्दावली थप्नुहोस्",
+    "noGlossaries": "अझै कुनै संस्थाका शब्दावलीहरू छैनन्। सबै अनुवादकर्ताहरूसँग आवश्यक पारिभाषिक शब्दहरू साझेदारी गर्न एक थप्नुहोस्।",
+    "editGlossaryTitle": "शब्दावली सम्पादन गर्नुहोस्",
+    "newGlossaryTitle": "नयाँ शब्दावली",
+    "glossarySaveSuccess": "शब्दावली सुरक्षित गरियो",
+    "glossaryCreateSuccess": "शब्दावली बनाइयो",
+    "glossaryLanguagePairLabel": "भाषाहरू",
+    "glossarySourceLangLabel": "मूल भाषा",
+    "glossaryTargetLangLabel": "लक्ष्य भाषा",
+    "glossaryAnyLanguage": "कुनै पनि भाषा",
+    "glossaryLanguagePairHint": "यस भाषामा गरिने अनुवादका लागि यो शब्दावली पहिला देखिन्छ।",
+    "glossaryLanguagePairEncourage": "वैकल्पिक, तर लक्ष्य भाषाले व्यक्तिलाई सही शब्दावली फेला पार्न र असम्बन्धित अनुवादहरूमा देखिनबाट जोगाउँछ।",
+    "guidePayloadLoading": "सामग्रीहरू लोड हुँदैछन्…",
+    "guidePayloadMissing": "यो मार्गदर्शकको सुरक्षित सामग्री फेला परेन। 'सुरक्षित गर्नुहोस्' दबाउँदा नयाँ प्रतिलिपि बनिन्छ।",
+    "deleteGlossary": "शब्दावली मेटाउनुहोस्",
+    "deleteGlossaryConfirm": "यो शब्दावली सबैका लागि मेट्नुहुन्छ? अनुवादकर्ताहरूले यतिभन्दा तुरुन्तै गुमाउँछन्; व्यक्तिले बनाएको प्रतिलिपिहरू उनीहरूको आफ्नै रहन्छ।",
+    "confirmDeleteGlossary": "शब्दसूची मेटाउनुहोस्",
+    "glossaryDeleteSuccess": "शब्दसूची मेटाइयो"
   },
   "localModels": {
     "title": "स्थानीय मोडेलहरू",
@@ -4984,7 +5036,8 @@
       "workflows": "सबैका लागि वार्तालाप कार्यप्रवाहहरू खोल्नु वा बन्द गर्नुहोस्।",
       "viewAs": "कसैले कुनै सर्त पूरा गरे वा नगरेका रूपमा एप परिक्षण गर्नुहोस्।",
       "globalAdmins": "सबै कुरा प्रशासन गर्नेहरू — तैनाथीले तोकेको सूचीभन्दा बाहिरका व्यक्ति।",
-      "formTemplates": "प्रयोगकर्ताहरूले भराउन मिल्ने फर्म टेम्प्लेटहरू document-fill workflow सँग साझा गरिन्छन्।"
+      "formTemplates": "प्रयोगकर्ताहरूले भराउन मिल्ने फर्म टेम्प्लेटहरू document-fill workflow सँग साझा गरिन्छन्।",
+      "glossaries": "संस्थाका शब्दसूचीहरू — अनिवार्य शब्दावली, अनुवादकहरूसँग साझा गरिएको।"
     },
     "openSettings": "सेटिङ खोल्नुहोस्",
     "area": {

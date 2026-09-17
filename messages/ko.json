@@ -2877,7 +2877,39 @@
       "acronymHint": "약어는 입력한 대로 정확히 일치해야 합니다: WHO는 “WHO”에만 적용되고 “who”에는 적용되지 않습니다. 용어는 대소문자 구분 없이 일치합니다.",
       "glossaryCheckTitle": "용어집 확인",
       "glossaryCheckPass": "{count, plural, one {필수 용어가 사용되었습니다.} other {#개의 모든 필수 용어가 사용되었습니다.}}",
-      "glossaryCheckMissing": "{count, plural, one {{total}개 중 #개의 필수 번역이 누락되었습니다:} other {{total}개 중 #개의 필수 번역이 누락되었습니다:}}"
+      "glossaryCheckMissing": "{count, plural, one {{total}개 중 #개의 필수 번역이 누락되었습니다:} other {{total}개 중 #개의 필수 번역이 누락되었습니다:}}",
+      "glossariesButton": "{count, plural, =0 {용어집} one {#개 용어집} other {#개 용어집}}",
+      "glossaryPickerTitle": "용어집",
+      "glossaryPickerClose": "용어집 닫기",
+      "glossaryOrgSection": "조직",
+      "glossaryMineSection": "내 용어집",
+      "noOrganizationGlossaries": "공유된 조직 용어집이 없습니다.",
+      "noPersonalGlossaries": "아직 용어집이 없습니다. 관리에서 새로 만들거나 조직 용어집을 복사하세요.",
+      "glossaryAnyLanguage": "모든 언어",
+      "glossaryCustomLanguage": "사용자 지정 언어",
+      "glossaryEntryCount": "{count, plural, one {#개 용어} other {#개 용어}}",
+      "glossaryLanguageMismatch": "이 용어집은 다른 번역 대상 언어로 지정되어 있습니다.",
+      "glossaryMismatchChip": "언어 불일치",
+      "glossaryOrgLimit": "번역마다 최대 {max}개의 조직 용어집 사용 가능.",
+      "copyToMine": "{name}을(를) 내 용어집에 복사하기",
+      "copyToMineTitle": "내 용어집에 복사",
+      "copyToMineFailed": "용어집을 복사할 수 없습니다. 다시 시도하세요.",
+      "copiedToMine": "내 용어집에 복사되었습니다.",
+      "copiedGlossaryName": "{name} (복사본)",
+      "clearStaleGlossary": "제거",
+      "glossaryUnavailable": "용어집 사용 불가(삭제되었거나 더 이상 공유되지 않음)",
+      "showOtherLanguages": "{count, plural, one {다른 언어의 용어집 #개 표시} other {다른 언어의 용어집 #개 표시}}",
+      "hideOtherLanguages": "다른 언어 숨기기",
+      "glossarySourceLang": "원본 언어",
+      "glossaryTargetLang": "대상 언어",
+      "glossaryLanguageEncourage": "대상 언어를 태그하면 해당 번역에 우선적으로 이 용어집이 제공됩니다.",
+      "importEntries": "CSV/TSV 가져오기",
+      "exportEntries": "CSV 내보내기",
+      "importHint": "열: source, target, note, kind, sourceExpansion, targetExpansion. 두 개 열만 있어도 됩니다.",
+      "importTooLarge": "파일이 너무 커서 가져올 수 없습니다(최대 5MB).",
+      "importNothing": "사용 가능한 행이 없습니다({skipped}개 건너뜀).",
+      "importSummary": "{added}개 추가, {replaced}개 대체, {skipped}개 건너뜀.",
+      "entriesTooManyToShow": "{count}개 용어 — 목록이 너무 많습니다. 검토하려면 내보내기를 사용하거나, 파일을 가져와 용어를 교체하세요."
     },
     "document": {
       "emptyTitle": "원하는 문서를 설명하세요",
@@ -3510,7 +3542,8 @@
         "acceptAll": "남은 모든 항목 수락",
         "rejectAll": "모두 거부",
         "cancel": "취소"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {표시되지 않은 추가 용어 #개} other {표시되지 않은 추가 용어 #개}}"
     },
     "form": {
       "emptyTitle": "문서 작성",
@@ -4783,7 +4816,26 @@
     "m365ChangesOverCap": "{count, plural, one {#개 문서} other {#개 문서}}, 제한 {max} — 새로고침 전에 수정 또는 제한을 늘려주세요.",
     "m365AgentLimitBadgePlain": "제한 {limit}",
     "m365PlanShowAllRows": "모든 {count, plural, one {#개 파일} other {#개 파일}} 보기",
-    "m365PlanShowFewerRows": "간단히 보기"
+    "m365PlanShowFewerRows": "간단히 보기",
+    "glossariesTab": "용어집",
+    "addGlossary": "용어집 추가",
+    "noGlossaries": "아직 조직 용어집이 없습니다. 하나 추가하여 모든 번역자에게 필수 용어를 공유하세요.",
+    "editGlossaryTitle": "용어집 편집",
+    "newGlossaryTitle": "새 용어집",
+    "glossarySaveSuccess": "용어집이 저장되었습니다.",
+    "glossaryCreateSuccess": "용어집이 생성되었습니다.",
+    "glossaryLanguagePairLabel": "언어",
+    "glossarySourceLangLabel": "원본 언어",
+    "glossaryTargetLangLabel": "대상 언어",
+    "glossaryAnyLanguage": "모든 언어",
+    "glossaryLanguagePairHint": "이 언어로 번역 시 해당 용어집이 먼저 표시됩니다.",
+    "glossaryLanguagePairEncourage": "선택 사항이지만, 대상 언어를 입력하면 적합한 용어집을 쉽게 찾을 수 있고 관련 없는 번역에서 제외할 수 있습니다.",
+    "guidePayloadLoading": "내용 불러오는 중…",
+    "guidePayloadMissing": "이 안내 문서의 저장된 내용을 찾을 수 없습니다. 저장하면 새 복사본이 작성됩니다.",
+    "deleteGlossary": "용어집 삭제",
+    "deleteGlossaryConfirm": "이 용어집을 모두에게 삭제하시겠습니까? 번역자는 즉시 접근이 차단되지만, 개인이 복사한 용어집은 유지됩니다.",
+    "confirmDeleteGlossary": "용어집 삭제",
+    "glossaryDeleteSuccess": "용어집이 삭제되었습니다"
   },
   "localModels": {
     "title": "로컬 모델",
@@ -5000,7 +5052,8 @@
       "workflows": "모든 사용자에 대해 대화 워크플로우를 켜거나 끄십시오.",
       "viewAs": "조건을 충족하거나 충족하지 못하는 사용자로 앱을 테스트합니다.",
       "globalAdmins": "배포에서 설정한 목록을 넘어 모든 것을 관리하는 사람입니다.",
-      "formTemplates": "문서 작성 워크플로우 사용자가 공유하는 입력 가능한 폼 템플릿입니다."
+      "formTemplates": "문서 작성 워크플로우 사용자가 공유하는 입력 가능한 폼 템플릿입니다.",
+      "glossaries": "기관 용어집 — 필수 용어로, 번역가와 공유됩니다."
     },
     "openSettings": "설정 열기",
     "area": {

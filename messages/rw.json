@@ -2861,7 +2861,39 @@
       "acronymHint": "Inyuguti ngufi zigomba kwandikwa neza uko zanditse: WHO bivuze “WHO”, ntibivuga “who”. Amagambo arahuza, n’ubwiswe butandukanije inyuguti nini n’intoya.",
       "glossaryCheckTitle": "Isuzuma rya Glossary",
       "glossaryCheckPass": "{count, plural, one {Ijambo risabwa ryakoreshejwe.} other {Amagambo yose # asabwa yakoreshejwe.}}",
-      "glossaryCheckMissing": "{count, plural, one {# muri {total} gisobanuro gisabwa kirabura:} other {# muri {total} bisobanuro bisabwa birabuze:}}"
+      "glossaryCheckMissing": "{count, plural, one {# muri {total} gisobanuro gisabwa kirabura:} other {# muri {total} bisobanuro bisabwa birabuze:}}",
+      "glossariesButton": "{count, plural, =0 {Inkoranyamagambo} one {# nkoranyamagambo} other {# z’inkoranyamagambo}}",
+      "glossaryPickerTitle": "Inkoranyamagambo",
+      "glossaryPickerClose": "Funga inkoranyamagambo",
+      "glossaryOrgSection": "Umuryango",
+      "glossaryMineSection": "Iyanjye",
+      "noOrganizationGlossaries": "Nta nkoranyamagambo z’umuryango mwashyiriweho.",
+      "noPersonalGlossaries": "Nta nkoranyamagambo ufite. Koresha Gucunga kugira ngo ukoreshe cyangwa ushireho indi nkoranyamagambo y’umuryango.",
+      "glossaryAnyLanguage": "Ururimi urwo ari rwo rwose",
+      "glossaryCustomLanguage": "Ururimi wahisemo",
+      "glossaryEntryCount": "{count, plural, one {# ijambo} other {# amagambo}}",
+      "glossaryLanguageMismatch": "Iyi nkoranyamagambo yagenewe urundi rurimi rwa nyurabwenge.",
+      "glossaryMismatchChip": "Ururimi rutandukanye",
+      "glossaryOrgLimit": "Inkoranyamagambo z'umuryango kugeza kuri {max} kuri buri gisobanuro.",
+      "copyToMine": "Koporora {name} mu nkoranyamagambo yanjye",
+      "copyToMineTitle": "Koporora mu nkoranyamagambo yanjye",
+      "copyToMineFailed": "Ntibyakunze gukoporora inkoranyamagambo. Ongera ugerageze.",
+      "copiedToMine": "Byakoporowe mu nkoranyamagambo yawe",
+      "copiedGlossaryName": "{name} (kopi)",
+      "clearStaleGlossary": "Kuraho",
+      "glossaryUnavailable": "Inkoranyamagambo ntibonetse (yasibwe cyangwa ntiyigihari kuri wowe)",
+      "showOtherLanguages": "{count, plural, one {Erekana # nkoranyamagambo y'ikindi rurimi} other {Erekana # z’inkoranyamagambo z'izindi ndimi}}",
+      "hideOtherLanguages": "Hisha izindi ndimi",
+      "glossarySourceLang": "Ururimi rw’inkomoko",
+      "glossaryTargetLang": "Ururimi nyirizina",
+      "glossaryLanguageEncourage": "Shyiraho ururimi nyirizina kugira ngo ino nkoranyamagambo ibe iyambere igaragara mu gusobanura bihura.",
+      "importEntries": "Kwinjiza CSV/TSV",
+      "exportEntries": "Kohereza CSV",
+      "importHint": "Inyandiko: inkomoko, nyirizina, inyongera, ubwoko, isobanuro inkomoko, isobanuro nyirizina. Na dosiye ifite imirongo ibiri irakoreshwa.",
+      "importTooLarge": "Iyo dosiye nini cyane ngo yinjizwe (ntigomba kurenza 5 MB).",
+      "importNothing": "Nta mirongo ikoreshwa yabonetse ({skipped} byasizwe).",
+      "importSummary": "{added} byongewe, {replaced} bisimbuwe, {skipped} byasizwe.",
+      "entriesTooManyToShow": "{count} amagambo — ni menshi cyane ngo agaragazwe hano. Kohereza ibisohoka kugira ngo ubisuzume, cyangwa winjize dosiye isimbuza amagambo."
     },
     "document": {
       "emptyTitle": "Sobanura inyandiko ushaka",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Emerera ibisigaye byose",
         "rejectAll": "Hakana byose",
         "cancel": "Hagarika"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# ijambo riterekanwe} other {# amagambo aterekanwe}}"
     },
     "form": {
       "emptyTitle": "Zuza inyandiko",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# inyandiko} other {# nyandiko}}, ntarengwa ni {max} — gabanya cyangwa wunguke ntarengwa mbere yo kongera gusubizamo",
     "m365AgentLimitBadgePlain": "Ntarengwa {limit}",
     "m365PlanShowAllRows": "Erekana byose {count, plural, one {# dosiye} other {# dosiye}}",
-    "m365PlanShowFewerRows": "Erekana bike"
+    "m365PlanShowFewerRows": "Erekana bike",
+    "glossariesTab": "Inkoranyamagambo",
+    "addGlossary": "Ongeraho inkoranyamagambo",
+    "noGlossaries": "Nta nkoranyamagambo z’umuryango ziraboneka. Shyiraho imwe kugira ngo usangire amagambo ngombwa n’abasobanura bose.",
+    "editGlossaryTitle": "Hindura inkoranyamagambo",
+    "newGlossaryTitle": "Inkoranyamagambo nshya",
+    "glossarySaveSuccess": "Inkoranyamagambo yarokowe",
+    "glossaryCreateSuccess": "Inkoranyamagambo yashyizweho",
+    "glossaryLanguagePairLabel": "Indimi",
+    "glossarySourceLangLabel": "Ururimi rw’inkomoko",
+    "glossaryTargetLangLabel": "Ururimi nyirizina",
+    "glossaryAnyLanguage": "Ururimi urwo ari rwo rwose",
+    "glossaryLanguagePairHint": "Gusobanura muri uru rurimi bizabanza kwerekana iyi nkoranyamagambo.",
+    "glossaryLanguagePairEncourage": "Si ngombwa, ariko gushyiraho ururimi nyirizina bifasha abantu kubona inkoranyamagambo iboneye kandi bikayiheza mu gusobanura bidahuye.",
+    "guidePayloadLoading": "Birimo kubikwa…",
+    "guidePayloadMissing": "Ibirimo by’iyi nyandiko ntibibonetse. Kubika bizandika kopi nshya.",
+    "deleteGlossary": "Siba inkoranyamagambo",
+    "deleteGlossaryConfirm": "Ushaka gusiba iyi nkoranyamagambo kuri buri wese? Abasobanura bazayibura ako kanya; kopi umuntu yakoze zizaguma izabo.",
+    "confirmDeleteGlossary": "Siba umusobanuzi w'amagambo",
+    "glossaryDeleteSuccess": "Umusobanuzi w'amagambo wasibwe"
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",
@@ -4984,7 +5036,8 @@
       "workflows": "Hindura imirongo y'akazi y'ibiganiro kuri bose.",
       "viewAs": "Gerageza app nk'umuntu wujuje cyangwa utujuje ibisabwa.",
       "globalAdmins": "Aba ni bo bashinzwe gukurikirana byose — birenze urutonde rwashyizweho mu ishyirwa mu bikorwa.",
-      "formTemplates": "Ibyitegererezo by'ifishi byujujwe bisangirwa n'abakoresha ba document-fill workflow."
+      "formTemplates": "Ibyitegererezo by'ifishi byujujwe bisangirwa n'abakoresha ba document-fill workflow.",
+      "glossaries": "Imisobanuzi y'amagambo y’umuryango — amagambo agomba gukurikizwa, asangirwa n’abasemuzi."
     },
     "openSettings": "Fungura imyanya",
     "area": {

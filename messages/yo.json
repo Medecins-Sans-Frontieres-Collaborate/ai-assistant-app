@@ -2861,7 +2861,39 @@
       "acronymHint": "Akọtán gbọ́dọ̀ dà bíi ti a kọ: WHO wulo fún \"WHO\" péré, kì í ṣe fún \"who\". Ìtúmọ̀ lè jẹ́ àkóbá pẹ̀lú owó orúkọ.",
       "glossaryCheckTitle": "Ayẹwo àtòkasí",
       "glossaryCheckPass": "{count, plural, one {A lò ọ̀rọ̀ tó bọ́ síwájú.} other {Gbogbo ọ̀rọ̀ # tó bọ́ síwájú ni a lò.}}",
-      "glossaryCheckMissing": "{count, plural, one {# nínú {total} ìtumọ̀ tó yẹ kò sí:} other {# nínú {total} ìtumọ̀ tó yẹ kò sí:}}"
+      "glossaryCheckMissing": "{count, plural, one {# nínú {total} ìtumọ̀ tó yẹ kò sí:} other {# nínú {total} ìtumọ̀ tó yẹ kò sí:}}",
+      "glossariesButton": "{count, plural, =0 {Àkójọ ọ̀rọ̀} one {# àkójọ ọ̀rọ̀} other {# àkójọ ọ̀rọ̀}}",
+      "glossaryPickerTitle": "Àkójọ ọ̀rọ̀",
+      "glossaryPickerClose": "Pa àkójọ ọ̀rọ̀",
+      "glossaryOrgSection": "Àjọ",
+      "glossaryMineSection": "Tẹmi",
+      "noOrganizationGlossaries": "Kò sí àkójọ ọ̀rọ̀ àjọ tí a pín pẹ̀lú rẹ.",
+      "noPersonalGlossaries": "O kòrìí àkójọ ọ̀rọ̀ kankan sibẹ. Lo Ìṣàkóso láti dá tuntun sílẹ̀ tàbí da àkójọ ọ̀rọ̀ àjọ kọ.",
+      "glossaryAnyLanguage": "Èdè kankan",
+      "glossaryCustomLanguage": "Èdè tìkára rẹ",
+      "glossaryEntryCount": "{count, plural, one {# ọ̀rọ̀} other {# ọ̀rọ̀}}",
+      "glossaryLanguageMismatch": "Àkójọ ọ̀rọ̀ yìí jẹ ti èdè àmì-òmíràn.",
+      "glossaryMismatchChip": "Ìfarakanra èdè",
+      "glossaryOrgLimit": "Tító {max} àkójọ ọ̀rọ̀ àjọ pẹ̀lú ìtumọ̀ kọọkan.",
+      "copyToMine": "Da {name} sí àkójọ ọ̀rọ̀ tèmi",
+      "copyToMineTitle": "Da sí àkójọ ọ̀rọ̀ tèmi",
+      "copyToMineFailed": "Kò le da àkójọ ọ̀rọ̀ náà kọ. Gbìyànjú lẹ́ẹ̀kán síi.",
+      "copiedToMine": "Ti da sí àkójọ ọ̀rọ̀ rẹ",
+      "copiedGlossaryName": "{name} (àdàkọ)",
+      "clearStaleGlossary": "Yọ kúrò",
+      "glossaryUnavailable": "Àkójọ ọ̀rọ̀ kò sí (tàbí ti parí tàbí a kò pín mọ́)",
+      "showOtherLanguages": "{count, plural, one {Fi # àkójọ ọ̀rọ̀ han fún èdè mìíràn} other {Fi # àkójọ ọ̀rọ̀ han fún àwọn èdè míì}}",
+      "hideOtherLanguages": "Fipamọ́ àwọn èdè míì",
+      "glossarySourceLang": "Èdè orísun",
+      "glossaryTargetLang": "Èdè amáfihàn",
+      "glossaryLanguageEncourage": "Fi àmì èdè amáfihàn kún àkójọ ọ̀rọ̀ yìí kí ó fẹ́yàtọ̀ fún àwọn ìtumọ̀ tó bá mu.",
+      "importEntries": "Gbé CSV/TSV wọlé",
+      "exportEntries": "Ṣe ọkọ CSV",
+      "importHint": "Àwọn kòlàmù: orísun, amáfihàn, àkọsílẹ̀, irú, ìtòsí orísun, ìtòsí amáfihàn. Fáìlì tó ní kòlàmù méjì pàápàá ni ó ṣiṣẹ́.",
+      "importTooLarge": "Fáìlì yìí tóbi ju lati wọlé (ìyókù tó pọ̀ jù 5 MB).",
+      "importNothing": "Kò sí ìlà tó wúlò rí ({skipped} fo sílẹ̀).",
+      "importSummary": "{added} fi kún, {replaced} rọ̀pò, {skipped} fo sílẹ̀.",
+      "entriesTooManyToShow": "{count} ọ̀rọ̀ — púpọ̀ ju láti ṣàfihàn níbí. Ṣe ọkọ láti ṣàyẹ̀wò, tàbí gbé fáìlì wọlé láti rọ̀pò àwọn ọ̀rọ̀."
     },
     "document": {
       "emptyTitle": "Ṣàpèjúwe iwe ti o fẹ",
@@ -3494,7 +3526,8 @@
         "acceptAll": "Gba gbogbo tí kò fi sílẹ̀",
         "rejectAll": "Kọ gbogbo rẹ",
         "cancel": "Fagilé"
-      }
+      },
+      "guideEntriesMore": "{count, plural, one {# ọ̀rọ̀ mìíràn tí a kò fi han} other {# ọ̀rọ̀ mìíràn tí a kò fi han}}"
     },
     "form": {
       "emptyTitle": "Kún iwe kan",
@@ -4767,7 +4800,26 @@
     "m365ChangesOverCap": "{count, plural, one {# iwe-ipamọ} other {# awon iwe-ipamọ}}, iye to pọ ju ni {max} — ge tabi gbe opin ga ṣaaju ki o to tun ṣe igbesoke",
     "m365AgentLimitBadgePlain": "Iye to pọ ju {limit}",
     "m365PlanShowAllRows": "Fi gbogbo {count, plural, one {# faili} other {# awon faili}} han",
-    "m365PlanShowFewerRows": "Fi diẹ sii"
+    "m365PlanShowFewerRows": "Fi diẹ sii",
+    "glossariesTab": "Àkójọ ọ̀rọ̀",
+    "addGlossary": "Ṣàfikún àkójọ ọ̀rọ̀",
+    "noGlossaries": "Kò sí àkójọ ọ̀rọ̀ àjọ sibẹ. Ṣàfikún kan kí gbogbo ènìyàn tó ń túmọ̀ lè lo àwọn ọ̀rọ̀ pàtàkì.",
+    "editGlossaryTitle": "Ṣàtúnṣe àkójọ ọ̀rọ̀",
+    "newGlossaryTitle": "Àkójọ ọ̀rọ̀ tuntun",
+    "glossarySaveSuccess": "Àkójọ ọ̀rọ̀ ti fipamọ́",
+    "glossaryCreateSuccess": "Àkójọ ọ̀rọ̀ dá sílẹ̀",
+    "glossaryLanguagePairLabel": "Àwọn èdè",
+    "glossarySourceLangLabel": "Èdè orísun",
+    "glossaryTargetLangLabel": "Èdè amáfihàn",
+    "glossaryAnyLanguage": "Èdè kankan",
+    "glossaryLanguagePairHint": "Kòkòrò ìtumọ̀ sí èdè yìí ni yóò rí àkójọ ọ̀rọ̀ yìí kókọ́.",
+    "glossaryLanguagePairEncourage": "Ìbá fẹ́ràn, ṣùgbọ́n fí èdè amáfihàn kún un yóò ràn lówó láti rí àkójọ ọ̀rọ̀ tó bójú mu àti yàtọ̀ sí àwọn ìtumọ̀ tí kò ní í yẹ.",
+    "guidePayloadLoading": "N gbé akoonu wọlé…",
+    "guidePayloadMissing": "A kò rí akoonu tó fipamọ́ fún ìtọnisọna yìí. Títìpamọ́ yóò kọ̀wé tuntun sí.",
+    "deleteGlossary": "Pa àkójọ ọ̀rọ̀ rẹ",
+    "deleteGlossaryConfirm": "Ṣe o fẹ́ pa àkójọ ọ̀rọ̀ yìí fún gbogbo ènìyàn? Àwọn onitumọ̀ yóó padà jẹ́ kó pé; àwòrán tí wọn ko kù ń bẹ lọ́wọ́ wọn.",
+    "confirmDeleteGlossary": "Pa akọtọ kuro",
+    "glossaryDeleteSuccess": "A ti pa akọtọ kuro"
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",
@@ -4984,7 +5036,8 @@
       "workflows": "Ṣí tabi pa àwọn akọ́sẹmọsẹ ìjíròrò fún gbogbo ènìyàn.",
       "viewAs": "Ṣàyẹ̀wò àpẹẹrẹ bí ẹni tó bójú mu tàbí tó kọlùṣọ́n àìpẹ̀.",
       "globalAdmins": "Awon to n dari ohun gbogbo — ju awon ti deployment fi le sile.",
-      "formTemplates": "Àwòrán àpẹẹrẹ fọ́ọ̀mù tó le kún, tí a pín pẹ̀lú àwọn tó ń lò ìṣiṣẹ́ ìkún-fọ́ọ̀mù."
+      "formTemplates": "Àwòrán àpẹẹrẹ fọ́ọ̀mù tó le kún, tí a pín pẹ̀lú àwọn tó ń lò ìṣiṣẹ́ ìkún-fọ́ọ̀mù.",
+      "glossaries": "Àkọtọ agbari — àwọn ọrọ ipa-mímu, a pin pẹ̀lú àwọn onítumọ̀."
     },
     "openSettings": "Ṣí eto",
     "area": {
