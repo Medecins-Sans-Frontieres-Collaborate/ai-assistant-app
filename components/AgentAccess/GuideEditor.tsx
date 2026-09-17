@@ -1,10 +1,13 @@
 'use client';
 
 import { IconSparkles } from '@tabler/icons-react';
-import { FC, useId, useState } from 'react';
+import { FC, useCallback, useEffect, useId, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
+
+// Type-only: lib/services/agentAccess/types.ts pulls in node modules.
+import type { Guide } from '@/lib/services/agentAccess/types';
 
 import {
   MAX_GUIDE_BODY_CHARS,
@@ -13,6 +16,10 @@ import {
   MAX_GUIDE_SECTIONS,
   MAX_GUIDE_VOICE_CHARS,
 } from '@/lib/utils/shared/review/guideCriteria';
+import {
+  TRANSLATION_LANGUAGES,
+  translationLanguageLabel,
+} from '@/lib/utils/shared/translation/languages';
 
 import { DocumentSpecSection, GlossaryEntry } from '@/types/workflow';
 
@@ -28,6 +35,12 @@ interface GuideEditorProps {
   onCancel: () => void;
   /** 409 conflict acknowledged — parent refetches and closes. */
   onConflictReload: () => void;
+  /**
+   * 'glossary' pins the kind to terminology, hides the kind selector, and
+   * uses glossary wording — the Admin → Glossaries area. The stored record
+   * is the same terminology guide either way.
+   */
+  variant?: 'guide' | 'glossary';
 }
 
 type GuideKind = 'style' | 'terminology' | 'compliance' | 'structure' | 'tone';
@@ -95,19 +108,30 @@ export const GuideEditor: FC<GuideEditorProps> = ({
   onSaved,
   onCancel,
   onConflictReload,
+  variant = 'guide',
 }) => {
   const t = useTranslations('agentAccess');
+  const isGlossary = variant === 'glossary';
 
   const [name, setName] = useState(existing?.guide.name ?? '');
   const [description, setDescription] = useState(
     existing?.guide.description ?? '',
   );
-  const [kind, setKind] = useState<GuideKind>(existing?.guide.kind ?? 'style');
+  const [kind, setKind] = useState<GuideKind>(
+    existing?.guide.kind ?? (isGlossary ? 'terminology' : 'style'),
+  );
   const [workflows, setWorkflows] = useState<Array<'document' | 'translation'>>(
-    existing?.guide.workflows ?? ['document'],
+    existing?.guide.workflows ??
+      (isGlossary ? ['translation', 'document'] : ['document']),
   );
   const [languages, setLanguages] = useState<string[]>(
     existing?.guide.languages ?? [],
+  );
+  const [sourceLang, setSourceLang] = useState(
+    existing?.guide.sourceLang ?? '',
+  );
+  const [targetLang, setTargetLang] = useState(
+    existing?.guide.targetLang ?? '',
   );
   const [body, setBody] = useState(existing?.guide.body ?? '');
   const [voiceRules, setVoiceRules] = useState(
@@ -126,6 +150,84 @@ export const GuideEditor: FC<GuideEditorProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [isConflict, setIsConflict] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  /**
+   * SPLIT STORAGE: the admin listing serves META only, so a guide whose
+   * payload lives in an external blob loads it here on open. Saving is
+   * blocked until it lands — an empty form saved over a real payload would
+   * be data loss.
+   */
+  const needsPayloadLoad =
+    existing !== null && existing.guide.payloadRef !== undefined;
+  const [payloadLoading, setPayloadLoading] = useState(needsPayloadLoad);
+  const [payloadError, setPayloadError] = useState<string | null>(null);
+  const [payloadAttempt, setPayloadAttempt] = useState(0);
+
+  useEffect(() => {
+    if (!needsPayloadLoad || !existing) return;
+    let cancelled = false;
+    setPayloadLoading(true);
+    setPayloadError(null);
+    void (async () => {
+      try {
+        const response = await fetch(
+          `/api/agent-access/guides/${encodeURIComponent(existing.guide.id)}`,
+        );
+        if (cancelled) return;
+        if (response.status === 404) {
+          // Deleted since the listing loaded — same dead end as a PUT 404.
+          setIsConflict(true);
+          return;
+        }
+        const json = (await response.json().catch(() => ({}))) as {
+          data?: { guide?: Partial<Guide>; payloadMissing?: boolean };
+          error?: unknown;
+        };
+        if (!response.ok || !json.data?.guide) {
+          setPayloadError(
+            typeof json.error === 'string' ? json.error : t('loadError'),
+          );
+          return;
+        }
+        if (cancelled) return;
+        const loaded = json.data.guide;
+        setBody(loaded.body ?? '');
+        setVoiceRules(loaded.voiceRules ?? '');
+        setExamples(loaded.examples ?? '');
+        setSections(loaded.sections ?? []);
+        setGeneralGuidance(loaded.generalGuidance ?? '');
+        setEntries(loaded.entries ?? []);
+        if (json.data.payloadMissing) {
+          // The meta exists but its blob is gone; the form opens empty and
+          // a save writes a fresh payload. Say so instead of hiding it.
+          toast.error(t('guidePayloadMissing'));
+        }
+        setPayloadLoading(false);
+      } catch {
+        if (!cancelled) setPayloadError(t('loadError'));
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // `existing` is remounted by the parent on etag change; the attempt
+    // counter drives explicit retries.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [needsPayloadLoad, existing?.guide.id, existing?.etag, payloadAttempt]);
+
+  /** Catalog languages, sorted by display label, for the pair selects. */
+  const languageOptions = useMemo(
+    () =>
+      TRANSLATION_LANGUAGES.map((lang) => ({
+        id: lang.id,
+        label: translationLanguageLabel(lang),
+      })).sort((a, b) => a.label.localeCompare(b.label)),
+    [],
+  );
+  const retryPayloadLoad = useCallback(
+    () => setPayloadAttempt((attempt) => attempt + 1),
+    [],
+  );
 
   const [aiPrompt, setAiPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -311,7 +413,9 @@ export const GuideEditor: FC<GuideEditorProps> = ({
     name.trim().length > 0 &&
     name.trim().length <= MAX_GUIDE_NAME_CHARS &&
     payloadValid &&
-    effectiveWorkflows.length > 0;
+    effectiveWorkflows.length > 0 &&
+    !payloadLoading &&
+    payloadError === null;
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -332,6 +436,8 @@ export const GuideEditor: FC<GuideEditorProps> = ({
         if (generalGuidance) payload.generalGuidance = generalGuidance;
       } else if (kind === 'terminology') {
         payload.entries = entries;
+        if (sourceLang) payload.sourceLang = sourceLang;
+        if (targetLang) payload.targetLang = targetLang;
       }
 
       const response = await fetch('/api/agent-access/guides', {
@@ -372,7 +478,17 @@ export const GuideEditor: FC<GuideEditorProps> = ({
         );
         return;
       }
-      toast.success(t(existing ? 'guideSaveSuccess' : 'guideCreateSuccess'));
+      toast.success(
+        t(
+          existing
+            ? isGlossary
+              ? 'glossarySaveSuccess'
+              : 'guideSaveSuccess'
+            : isGlossary
+              ? 'glossaryCreateSuccess'
+              : 'guideCreateSuccess',
+        ),
+      );
       onSaved();
     } catch {
       setSaveError(t('saveError'));
@@ -452,40 +568,73 @@ export const GuideEditor: FC<GuideEditorProps> = ({
     <div className="mt-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-4">
       <div className="mb-3 flex items-center gap-2">
         <p className="text-sm font-semibold text-black dark:text-white">
-          {existing ? t('editGuideTitle') : t('newGuideTitle')}
+          {existing
+            ? t(isGlossary ? 'editGlossaryTitle' : 'editGuideTitle')
+            : t(isGlossary ? 'newGlossaryTitle' : 'newGuideTitle')}
         </p>
-        <span
-          className={`rounded-full px-2 py-0.5 text-xs ${KIND_BADGE_CLASSES[kind]}`}
-        >
-          {t(`guideKind_${kind}`)}
-        </span>
+        {!isGlossary && (
+          <span
+            className={`rounded-full px-2 py-0.5 text-xs ${KIND_BADGE_CLASSES[kind]}`}
+          >
+            {t(`guideKind_${kind}`)}
+          </span>
+        )}
       </div>
+
+      {payloadLoading && (
+        <p
+          className="mb-3 text-xs text-gray-500 dark:text-gray-400"
+          role="status"
+        >
+          {payloadError ? (
+            <>
+              <span className="text-red-600 dark:text-red-400">
+                {payloadError}
+              </span>{' '}
+              <button
+                type="button"
+                className="underline"
+                onClick={retryPayloadLoad}
+              >
+                {t('retry')}
+              </button>
+            </>
+          ) : (
+            t('guidePayloadLoading')
+          )}
+        </p>
+      )}
 
       <div className="space-y-4">
         <div className="flex gap-4">
-          <div className="flex-1">
-            <label className={labelClass} htmlFor={`${baseId}-kind`}>
-              {t('guideKindLabel')}
-            </label>
-            <select
-              id={`${baseId}-kind`}
-              className={inputClass}
-              value={kind}
-              onChange={(e) => changeKind(e.target.value as GuideKind)}
-              // The payload shape, slot eligibility, and access key all hang
-              // off the kind — locked after creation (server enforces too).
-              disabled={existing !== null}
-            >
-              {GUIDE_KINDS.map((k) => (
-                <option key={k} value={k}>
-                  {t(`guideKind_${k}`)}
-                </option>
-              ))}
-            </select>
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-              {existing ? t('guideKindLocked') : t(`guideKindHint_${kind}`)}
-            </p>
-          </div>
+          {!isGlossary && (
+            <div className="flex-1">
+              <label className={labelClass} htmlFor={`${baseId}-kind`}>
+                {t('guideKindLabel')}
+              </label>
+              <select
+                id={`${baseId}-kind`}
+                className={inputClass}
+                value={kind}
+                onChange={(e) => changeKind(e.target.value as GuideKind)}
+                // The payload shape, slot eligibility, and access key all
+                // hang off the kind — locked after creation (server enforces
+                // too).
+                disabled={existing !== null}
+              >
+                {/* Glossaries have their own admin area; offering the kind
+                    here would create a record that vanishes from this list. */}
+                {GUIDE_KINDS.filter((k) => k !== 'terminology').map((k) => (
+                  <option key={k} value={k}>
+                    {t(`guideKind_${k}`)}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                {existing ? t('guideKindLocked') : t(`guideKindHint_${kind}`)}
+              </p>
+            </div>
+          )}
           <div className="flex-1">
             <span className={labelClass}>{t('guideWorkflowsLabel')}</span>
             <div className="flex flex-col gap-1 pt-1">
@@ -541,16 +690,71 @@ export const GuideEditor: FC<GuideEditorProps> = ({
           />
         </div>
 
-        <div>
-          <span className={labelClass}>{t('guideLanguagesLabel')}</span>
-          <ChipListInput
-            values={languages}
-            onChange={setLanguages}
-            placeholder={t('guideLanguagesPlaceholder')}
-            addHint={t('guideLanguagesHint')}
-            removeLabel={t('removeChip')}
-          />
-        </div>
+        {kind === 'terminology' ? (
+          <div>
+            <span className={labelClass}>{t('glossaryLanguagePairLabel')}</span>
+            <div className="flex flex-wrap gap-3">
+              <div className="min-w-[14rem] flex-1">
+                <label
+                  className="mb-1 block text-[11px] text-gray-500 dark:text-gray-400"
+                  htmlFor={`${baseId}-sourceLang`}
+                >
+                  {t('glossarySourceLangLabel')}
+                </label>
+                <select
+                  id={`${baseId}-sourceLang`}
+                  className={inputClass}
+                  value={sourceLang}
+                  onChange={(e) => setSourceLang(e.target.value)}
+                >
+                  <option value="">{t('glossaryAnyLanguage')}</option>
+                  {languageOptions.map((lang) => (
+                    <option key={lang.id} value={lang.id}>
+                      {lang.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="min-w-[14rem] flex-1">
+                <label
+                  className="mb-1 block text-[11px] text-gray-500 dark:text-gray-400"
+                  htmlFor={`${baseId}-targetLang`}
+                >
+                  {t('glossaryTargetLangLabel')}
+                </label>
+                <select
+                  id={`${baseId}-targetLang`}
+                  className={inputClass}
+                  value={targetLang}
+                  onChange={(e) => setTargetLang(e.target.value)}
+                >
+                  <option value="">{t('glossaryAnyLanguage')}</option>
+                  {languageOptions.map((lang) => (
+                    <option key={lang.id} value={lang.id}>
+                      {lang.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              {targetLang
+                ? t('glossaryLanguagePairHint')
+                : t('glossaryLanguagePairEncourage')}
+            </p>
+          </div>
+        ) : (
+          <div>
+            <span className={labelClass}>{t('guideLanguagesLabel')}</span>
+            <ChipListInput
+              values={languages}
+              onChange={setLanguages}
+              placeholder={t('guideLanguagesPlaceholder')}
+              addHint={t('guideLanguagesHint')}
+              removeLabel={t('removeChip')}
+            />
+          </div>
+        )}
 
         {/* ---- Kind-specific payload editor ---- */}
 
@@ -646,7 +850,12 @@ export const GuideEditor: FC<GuideEditorProps> = ({
         {kind === 'terminology' && (
           <div>
             <span className={labelClass}>{t('guideEntriesLabel')}</span>
-            <GlossaryEntriesEditor value={entries} onChange={setEntries} />
+            <GlossaryEntriesEditor
+              value={entries}
+              onChange={setEntries}
+              disabled={payloadLoading}
+              allowImport
+            />
             {entries.length > MAX_GUIDE_ENTRIES && (
               <p className="mt-1 text-xs text-red-600 dark:text-red-400">
                 {t('guideTooManyEntries', { max: String(MAX_GUIDE_ENTRIES) })}
