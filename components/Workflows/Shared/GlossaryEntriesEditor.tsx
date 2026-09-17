@@ -1,10 +1,15 @@
 'use client';
 
-import { IconPlus, IconX } from '@tabler/icons-react';
-import { useState } from 'react';
+import { IconDownload, IconPlus, IconUpload, IconX } from '@tabler/icons-react';
+import { useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import {
+  mergeImportedEntries,
+  parseGlossaryDelimited,
+  serializeGlossaryCsv,
+} from '@/lib/utils/shared/translation/glossaryCsv';
 import {
   isAcronymLike,
   resolveEntryKind,
@@ -16,7 +21,21 @@ interface GlossaryEntriesEditorProps {
   value: GlossaryEntry[];
   onChange: (value: GlossaryEntry[]) => void;
   disabled?: boolean;
+  /** Shows the CSV/TSV import + export toolbar. */
+  allowImport?: boolean;
+  /** Import ceiling (rows past it are reported, not read). */
+  maxEntries?: number;
+  /** Basename for the exported file (".csv" appended). */
+  exportName?: string;
 }
+
+/** Client-side ceiling for an import file — a termbase, not a data dump. */
+const MAX_IMPORT_FILE_BYTES = 5 * 1024 * 1024;
+/**
+ * Rows rendered before the table switches to a count-only summary: a
+ * thousand-row table in a settings pane is unusable and slow.
+ */
+const MAX_RENDERED_ROWS = 500;
 
 /**
  * Controlled editor for glossary entries (table + add-entry row) — extracted
@@ -35,8 +54,13 @@ export function GlossaryEntriesEditor({
   value,
   onChange,
   disabled,
+  allowImport = false,
+  maxEntries = 5_000,
+  exportName = 'glossary',
 }: GlossaryEntriesEditorProps) {
   const t = useTranslations('workflows.translation');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [importStatus, setImportStatus] = useState<string | null>(null);
 
   const [newSource, setNewSource] = useState('');
   const [newTarget, setNewTarget] = useState('');
@@ -77,12 +101,103 @@ export function GlossaryEntriesEditor({
     setKindChoice('auto');
   };
 
+  const handleImportFile = async (file: File) => {
+    setImportStatus(null);
+    if (file.size > MAX_IMPORT_FILE_BYTES) {
+      setImportStatus(t('importTooLarge'));
+      return;
+    }
+    const text = await file.text();
+    const result = parseGlossaryDelimited(text, maxEntries);
+    if (result.entries.length === 0) {
+      setImportStatus(t('importNothing', { skipped: String(result.skipped) }));
+      return;
+    }
+    const merged = mergeImportedEntries(value, result.entries);
+    // Replacements never grow the list; appends past the ceiling are cut
+    // and counted as skipped so the summary stays truthful.
+    const overflow = Math.max(0, merged.entries.length - maxEntries);
+    onChange(merged.entries.slice(0, maxEntries));
+    setImportStatus(
+      t('importSummary', {
+        added: String(merged.added - overflow),
+        replaced: String(merged.replaced),
+        skipped: String(result.skipped + result.truncated + overflow),
+      }),
+    );
+  };
+
+  const handleExport = () => {
+    const blob = new Blob([serializeGlossaryCsv(value)], {
+      type: 'text/csv;charset=utf-8',
+    });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `${exportName.replace(/[^\w.-]+/g, '_') || 'glossary'}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
+
   const inputClass =
     'rounded-lg border border-gray-300 bg-gray-50 px-2 py-1.5 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder-gray-400';
 
+  const renderedRows = value.length > MAX_RENDERED_ROWS ? [] : value;
+
   return (
     <fieldset disabled={disabled}>
-      {value.length > 0 && (
+      {allowImport && (
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values,text/plain"
+            className="hidden"
+            data-testid="glossary-import-input"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) void handleImportFile(file);
+              e.target.value = '';
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+          >
+            <IconUpload size={13} aria-hidden />
+            {t('importEntries')}
+          </button>
+          <button
+            type="button"
+            onClick={handleExport}
+            disabled={value.length === 0}
+            className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-40 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+          >
+            <IconDownload size={13} aria-hidden />
+            {t('exportEntries')}
+          </button>
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {t('importHint')}
+          </span>
+          {importStatus && (
+            <span
+              className="basis-full text-xs text-gray-600 dark:text-gray-300"
+              role="status"
+            >
+              {importStatus}
+            </span>
+          )}
+        </div>
+      )}
+
+      {value.length > MAX_RENDERED_ROWS && (
+        <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
+          {t('entriesTooManyToShow', { count: String(value.length) })}
+        </p>
+      )}
+
+      {renderedRows.length > 0 && (
         <table className="mb-3 w-full text-sm">
           <thead>
             <tr className="text-start text-xs text-gray-500 dark:text-gray-400">
@@ -93,7 +208,7 @@ export function GlossaryEntriesEditor({
             </tr>
           </thead>
           <tbody>
-            {value.map((entry, index) => {
+            {renderedRows.map((entry, index) => {
               const kind = resolveEntryKind(entry);
               return (
                 <tr
