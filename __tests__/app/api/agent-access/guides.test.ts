@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import {
+  AgentAccessConflictError,
   StoredGuide,
   createAgentAccessBlobStorage,
   deleteGuide,
@@ -19,7 +20,10 @@ import {
   guideBlobPath,
 } from '@/lib/services/agentAccess/types';
 
-import { MAX_GUIDE_BODY_CHARS } from '@/lib/utils/shared/review/guideCriteria';
+import {
+  MAX_GUIDE_BODY_CHARS,
+  MAX_GUIDE_ENTRIES,
+} from '@/lib/utils/shared/review/guideCriteria';
 
 import { parseJsonResponse } from '../helpers';
 
@@ -47,6 +51,17 @@ vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
       invalidate: serviceInvalidate,
     }),
   },
+}));
+
+// The payload half of the split store: every write mints a fresh immutable
+// ref; the route then references it from the meta it CAS-writes.
+const mockWriteGuidePayload = vi.hoisted(() => vi.fn());
+const mockDiscardGuidePayload = vi.hoisted(() => vi.fn());
+const mockPruneGuidePayloads = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/services/agentAccess/guidePayloadStore', () => ({
+  writeGuidePayload: mockWriteGuidePayload,
+  discardGuidePayload: mockDiscardGuidePayload,
+  pruneGuidePayloads: mockPruneGuidePayloads,
 }));
 
 // Keep AgentAccessConflictError (instanceof mapping to 409) real; mock only
@@ -151,6 +166,12 @@ describe('/api/agent-access/guides', () => {
       user: { id: 'u1', mail: 'global@example.com' },
     });
     vi.mocked(createAgentAccessBlobStorage).mockReturnValue({} as never);
+    mockWriteGuidePayload.mockResolvedValue({
+      payloadRef: 'abc123-0badf00d',
+      payloadFormat: 'json',
+    });
+    mockDiscardGuidePayload.mockResolvedValue(undefined);
+    mockPruneGuidePayloads.mockResolvedValue(0);
     vi.mocked(listAllGuides).mockResolvedValue([]);
     vi.mocked(readConfig).mockResolvedValue({
       config: emptyConfig,
@@ -287,7 +308,7 @@ describe('/api/agent-access/guides', () => {
         (await POST(postRequest({ ...base, kind: 'terminology', entries: [] })))
           .status,
       ).toBe(400);
-      const tooMany = Array.from({ length: 201 }, (_, i) => ({
+      const tooMany = Array.from({ length: MAX_GUIDE_ENTRIES + 1 }, (_, i) => ({
         source: `term-${i}`,
         target: `translation-${i}`,
       }));
@@ -497,5 +518,118 @@ describe('/api/agent-access/guides', () => {
       expect(body.data.guides).toEqual([]);
       expect(body.data.guidesUnavailable).toBe(true);
     });
+  });
+});
+
+describe('/api/agent-access/guides — split payload storage', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockEnv.AGENT_ACCESS_CONTROL_ENABLED = true;
+    serviceIsEnabled.mockReturnValue(true);
+    serviceGetSnapshot.mockReturnValue({ config: emptyConfig });
+    mockAuth.mockResolvedValue({
+      user: { id: 'u1', mail: 'global@example.com' },
+    });
+    vi.mocked(createAgentAccessBlobStorage).mockReturnValue({} as never);
+    mockWriteGuidePayload.mockResolvedValue({
+      payloadRef: 'abc123-0badf00d',
+      payloadFormat: 'jsonl',
+      entryCount: 1,
+    });
+    mockDiscardGuidePayload.mockResolvedValue(undefined);
+    mockPruneGuidePayloads.mockResolvedValue(0);
+    vi.mocked(writeGuide).mockResolvedValue('"etag-2"');
+    vi.mocked(writeGuideHistoryEntry).mockResolvedValue(undefined);
+  });
+
+  const terminologyBody = {
+    name: 'Org glossary',
+    kind: 'terminology',
+    workflows: ['translation'],
+    sourceLang: 'en',
+    targetLang: 'fr',
+    entries: [{ source: 'IDP', target: 'PDI', kind: 'acronym' }],
+  };
+
+  it('POST writes the payload blob first, then a META record that references it', async () => {
+    const response = await POST(postRequest(terminologyBody));
+    expect(response.status).toBe(200);
+    expect(mockWriteGuidePayload).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.stringMatching(/^guide-[a-f0-9]{12}$/),
+      'terminology',
+      { entries: terminologyBody.entries },
+    );
+    const written = vi.mocked(writeGuide).mock.calls[0][1] as Guide;
+    expect(written.payloadRef).toBe('abc123-0badf00d');
+    expect(written.payloadFormat).toBe('jsonl');
+    expect(written.entryCount).toBe(1);
+    expect(written.entries).toBeUndefined();
+    expect(written.sourceLang).toBe('en');
+    expect(written.targetLang).toBe('fr');
+    // History carries the META only — no payload duplication.
+    const history = vi.mocked(writeGuideHistoryEntry).mock.calls[0][1];
+    expect(history.guide?.entries).toBeUndefined();
+    expect(history.guide?.payloadRef).toBe('abc123-0badf00d');
+  });
+
+  it('POST rejects a language id that is not in the catalog', async () => {
+    const response = await POST(
+      postRequest({ ...terminologyBody, targetLang: 'klingon' }),
+    );
+    expect(response.status).toBe(400);
+    expect(mockWriteGuidePayload).not.toHaveBeenCalled();
+  });
+
+  it('PUT discards the freshly written payload when the meta CAS loses', async () => {
+    vi.mocked(readGuide).mockResolvedValue({
+      guide: makeGuide({ kind: 'terminology', body: undefined }),
+      etag: ETAG,
+    });
+    vi.mocked(writeGuide).mockRejectedValue(new AgentAccessConflictError());
+    const response = await PUT(
+      putRequest({ id: GUIDE_ID, ...terminologyBody }),
+    );
+    expect(response.status).toBe(409);
+    expect(mockDiscardGuidePayload).toHaveBeenCalledWith(
+      expect.anything(),
+      GUIDE_ID,
+      expect.objectContaining({ payloadRef: 'abc123-0badf00d' }),
+    );
+    expect(mockPruneGuidePayloads).not.toHaveBeenCalled();
+  });
+
+  it('PUT migrates a legacy inline record and prunes superseded versions', async () => {
+    vi.mocked(readGuide).mockResolvedValue({
+      guide: makeGuide({
+        kind: 'terminology',
+        body: undefined,
+        entries: [{ source: 'old', target: 'ancien' }],
+      }),
+      etag: ETAG,
+    });
+    const response = await PUT(
+      putRequest({ id: GUIDE_ID, ...terminologyBody }),
+    );
+    expect(response.status).toBe(200);
+    const written = vi.mocked(writeGuide).mock.calls[0][1] as Guide;
+    expect(written.entries).toBeUndefined();
+    expect(written.payloadRef).toBe('abc123-0badf00d');
+    expect(mockPruneGuidePayloads).toHaveBeenCalledWith(
+      expect.anything(),
+      GUIDE_ID,
+      'abc123-0badf00d',
+    );
+  });
+
+  it('DELETE sweeps every payload version after the meta is gone', async () => {
+    vi.mocked(deleteGuide).mockResolvedValue(true);
+    const response = await DELETE(deleteRequest(GUIDE_ID));
+    expect(response.status).toBe(200);
+    expect(mockPruneGuidePayloads).toHaveBeenCalledWith(
+      expect.anything(),
+      GUIDE_ID,
+      null,
+    );
   });
 });
