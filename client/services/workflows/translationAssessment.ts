@@ -22,8 +22,8 @@ export interface AssessTranslationInput {
    */
   customCriteria?: CustomCriterionDefinition[];
   glossaryEntries?: GlossaryEntry[];
-  /** Admin terminology guide; entries resolve server-side and merge in. */
-  glossaryGuideId?: string;
+  /** Organization glossaries; entries resolve server-side and merge in. */
+  glossaryGuideIds?: string[];
   modelId?: string;
   /** Attributes the run's token spend to this conversation's ledger. */
   conversationId?: string;
