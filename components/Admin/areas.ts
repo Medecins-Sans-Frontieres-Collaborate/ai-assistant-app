@@ -9,6 +9,7 @@ import {
   IconRoute,
   IconShieldLock,
   IconUsersGroup,
+  IconVocabulary,
 } from '@tabler/icons-react';
 import { ComponentType } from 'react';
 
@@ -70,6 +71,14 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     group: 'access',
     labelKey: 'agentAccess.guidesTab',
     descriptionKey: 'admin.areaDescription.guides',
+  },
+  glossaries: {
+    id: 'glossaries',
+    href: '/admin/glossaries',
+    icon: IconVocabulary,
+    group: 'access',
+    labelKey: 'agentAccess.glossariesTab',
+    descriptionKey: 'admin.areaDescription.glossaries',
   },
   'map-datasets': {
     id: 'map-datasets',
