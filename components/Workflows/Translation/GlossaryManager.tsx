@@ -1,9 +1,15 @@
 'use client';
 
 import { IconPlus, IconTrash, IconX } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
+
+import { MAX_GUIDE_ENTRIES } from '@/lib/utils/shared/review/guideCriteria';
+import {
+  TRANSLATION_LANGUAGES,
+  translationLanguageLabel,
+} from '@/lib/utils/shared/translation/languages';
 
 import { TranslationGlossary } from '@/types/workflow';
 
@@ -14,6 +20,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 interface GlossaryManagerProps {
   onClose: () => void;
+  /**
+   * Prefills the target language of a NEW glossary from the workspace's
+   * current target (catalog id or `custom:<id>`) — the encouragement half
+   * of "optional but encouraged".
+   */
+  defaultTargetLang?: string;
 }
 
 /**
@@ -21,12 +33,29 @@ interface GlossaryManagerProps {
  * terminology glossaries (persisted in settingsStore, applied to
  * translations by prompt injection).
  */
-export function GlossaryManager({ onClose }: GlossaryManagerProps) {
+export function GlossaryManager({
+  onClose,
+  defaultTargetLang,
+}: GlossaryManagerProps) {
   const t = useTranslations('workflows');
   const glossaries = useSettingsStore((s) => s.glossaries);
+  const customLanguages = useSettingsStore((s) => s.customLanguages);
   const addGlossary = useSettingsStore((s) => s.addGlossary);
   const updateGlossary = useSettingsStore((s) => s.updateGlossary);
   const deleteGlossary = useSettingsStore((s) => s.deleteGlossary);
+
+  /** Catalog + this user's custom languages, for the pair selects. */
+  const languageOptions = useMemo(() => {
+    const catalog = TRANSLATION_LANGUAGES.map((lang) => ({
+      id: lang.id,
+      label: translationLanguageLabel(lang),
+    })).sort((a, b) => a.label.localeCompare(b.label));
+    const custom = customLanguages.map((lang) => ({
+      id: `custom:${lang.id}`,
+      label: lang.name,
+    }));
+    return [...catalog, ...custom];
+  }, [customLanguages]);
 
   const [editingId, setEditingId] = useState<string | null>(
     glossaries[0]?.id ?? null,
@@ -37,6 +66,7 @@ export function GlossaryManager({ onClose }: GlossaryManagerProps) {
     const glossary: TranslationGlossary = {
       id: uuidv4(),
       name: t('translation.newGlossaryName'),
+      ...(defaultTargetLang ? { targetLang: defaultTargetLang } : {}),
       entries: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -117,9 +147,62 @@ export function GlossaryManager({ onClose }: GlossaryManagerProps) {
                 </button>
               </div>
 
+              <div className="mb-3 flex flex-wrap items-end gap-2">
+                <label className="flex flex-col gap-0.5 text-xs text-gray-500 dark:text-gray-400">
+                  {t('translation.glossarySourceLang')}
+                  <select
+                    value={editing.sourceLang ?? ''}
+                    onChange={(e) =>
+                      updateGlossary(editing.id, {
+                        sourceLang: e.target.value || undefined,
+                      })
+                    }
+                    className={`${inputClass} w-44`}
+                  >
+                    <option value="">
+                      {t('translation.glossaryAnyLanguage')}
+                    </option>
+                    {languageOptions.map((lang) => (
+                      <option key={lang.id} value={lang.id}>
+                        {lang.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex flex-col gap-0.5 text-xs text-gray-500 dark:text-gray-400">
+                  {t('translation.glossaryTargetLang')}
+                  <select
+                    value={editing.targetLang ?? ''}
+                    onChange={(e) =>
+                      updateGlossary(editing.id, {
+                        targetLang: e.target.value || undefined,
+                      })
+                    }
+                    className={`${inputClass} w-44`}
+                  >
+                    <option value="">
+                      {t('translation.glossaryAnyLanguage')}
+                    </option>
+                    {languageOptions.map((lang) => (
+                      <option key={lang.id} value={lang.id}>
+                        {lang.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {!editing.targetLang && (
+                  <p className="basis-full text-xs text-gray-500 dark:text-gray-400">
+                    {t('translation.glossaryLanguageEncourage')}
+                  </p>
+                )}
+              </div>
+
               <GlossaryEntriesEditor
                 value={editing.entries}
                 onChange={(entries) => updateGlossary(editing.id, { entries })}
+                allowImport
+                maxEntries={MAX_GUIDE_ENTRIES}
+                exportName={editing.name}
               />
             </>
           ) : (
