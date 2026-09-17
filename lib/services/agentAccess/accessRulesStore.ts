@@ -3,10 +3,12 @@ import {
   AgentAccessConflictError,
   OVERWRITE_BLOB,
   downloadBlob,
+  downloadBlobIfChanged,
   statusCodeOf,
   uploadJson,
 } from '@/lib/services/agentAccess/blobCas';
 import { defineBlobEntity } from '@/lib/services/agentAccess/blobEntityStore';
+import { getPayloadCache } from '@/lib/services/agentAccess/payloadCache';
 import {
   AGENT_ACCESS_CATALOG_OAUTH_PREFIX,
   AGENT_ACCESS_CONFIG_PATH,
@@ -1138,6 +1140,66 @@ export async function readMapDataset(
   return { dataset: parsed.data, etag: result.etag };
 }
 
+function parseMapDatasetBlob(buffer: Buffer, id: string): MapDataset {
+  const parsed = MapDatasetSchema.safeParse(
+    JSON.parse(buffer.toString('utf8')),
+  );
+  if (!parsed.success) {
+    throw new Error(
+      `Malformed map-dataset data blob for id ${id}: ${parsed.error.message}`,
+    );
+  }
+  return parsed.data;
+}
+
+/**
+ * {@link readMapDataset} through the per-replica byte-bounded payload cache.
+ * The data blob is MUTABLE (it is the CAS anchor), so a cache hit is
+ * revalidated with a conditional download keyed on the cached ETag: an
+ * unchanged blob costs one bodiless round trip and no re-parse; a moved one
+ * is re-read. For request paths that serve a dataset repeatedly (the user
+ * load route); admin writes keep using the direct read.
+ */
+export async function readMapDatasetCached(
+  storage: BlobStorage,
+  id: string,
+): Promise<MapDatasetReadResult | null> {
+  const blobPath = mapDatasetDataBlobPath(id);
+  const entry = await getPayloadCache().getOrLoad<MapDataset>(
+    blobPath,
+    async (cached) => {
+      if (cached?.etag) {
+        const result = await downloadBlobIfChanged(
+          storage,
+          blobPath,
+          cached.etag,
+          'agentAccess.readMapDatasetCached',
+        );
+        if (result === 'unchanged') return 'unchanged';
+        if (result === null) return null;
+        return {
+          value: parseMapDatasetBlob(result.buffer, id),
+          bytes: result.buffer.length,
+          etag: result.etag,
+        };
+      }
+      const result = await downloadBlob(
+        storage,
+        blobPath,
+        'agentAccess.readMapDatasetCached',
+      );
+      if (result === null) return null;
+      return {
+        value: parseMapDatasetBlob(result.buffer, id),
+        bytes: result.buffer.length,
+        etag: result.etag,
+      };
+    },
+  );
+  if (entry === null) return null;
+  return { dataset: entry.value, etag: entry.etag ?? '' };
+}
+
 /**
  * Compare-and-swap dataset write: the DATA blob is written under the CAS
  * condition (`ifMatchEtag` set → update; null → creation only; 412 →
@@ -1159,6 +1221,9 @@ export async function writeMapDataset(
     ifMatchEtag,
     'agentAccess.writeMapDatasetData',
   );
+  // This replica's cached copy is stale by definition; other replicas
+  // revalidate by ETag on their next read.
+  getPayloadCache().delete(mapDatasetDataBlobPath(parsed.id));
   try {
     await uploadJsonUnconditional(
       storage,
@@ -1186,6 +1251,7 @@ export async function deleteMapDataset(
   ifMatchEtag: string,
 ): Promise<boolean> {
   let dataDeleted = true;
+  getPayloadCache().delete(mapDatasetDataBlobPath(id));
   const dataClient = storage.getBlockBlobClient(mapDatasetDataBlobPath(id));
   try {
     await withAzureRetry(
