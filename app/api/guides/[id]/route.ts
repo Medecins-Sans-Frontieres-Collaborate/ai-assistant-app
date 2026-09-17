@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
+import { hydrateGuide } from '@/lib/services/agentAccess/guidePayloadStore';
 import { GUIDE_SOURCE, guidePayload } from '@/lib/services/agentAccess/types';
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 
@@ -55,10 +56,16 @@ export async function GET(
     // Fail closed on 'unavailable' too — same contract as the listing.
     if (decision.decision !== 'allow') return notFoundResponse('Guide');
 
+    // The snapshot holds META; the payload blob loads through the cache. A
+    // missing blob answers the same 404 as missing/denied — the resolver
+    // would refuse it identically.
+    const hydrated = await hydrateGuide(guide);
+    if (hydrated === null) return notFoundResponse('Guide');
+
     // An incoherent record (legacy body-only structured guide) answers the
     // same 404 as missing/denied: it cannot be invoked, so exposing it to
     // the viewer would only advertise something assess will reject.
-    const payload = guidePayload(guide);
+    const payload = guidePayload(hydrated);
     if (payload === null) return notFoundResponse('Guide');
     const { kind: _payloadKind, ...payloadFields } = payload;
 
@@ -69,6 +76,8 @@ export async function GET(
         name: guide.name,
         description: guide.description,
         languages: guide.languages,
+        sourceLang: guide.sourceLang,
+        targetLang: guide.targetLang,
         workflows: guide.workflows,
         ...payloadFields,
         updatedAt: guide.updatedAt,
