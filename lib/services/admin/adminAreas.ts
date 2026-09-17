@@ -47,6 +47,7 @@ export const ADMIN_AREA_IDS = [
   'agents',
   'connectors',
   'guides',
+  'glossaries',
   'map-datasets',
   'form-templates',
   'limits',
@@ -111,6 +112,7 @@ export async function resolveAdminAreas(
         'agents',
         'connectors',
         'guides',
+        'glossaries',
         'map-datasets',
         'form-templates',
       );
