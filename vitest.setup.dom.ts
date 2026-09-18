@@ -801,7 +801,11 @@ const mockMessages: Record<string, unknown> = {
       providerLabel: 'Search provider',
       providerAuto: 'Automatic (recommended)',
       providerAutoDescription:
-        'Uses the deployment default — currently the combined news search below.',
+        "Uses this deployment's default — MSF web search where it is available, otherwise the combined news search.",
+      providerSearxng: 'MSF web search',
+      providerSearxngDescription:
+        "MSF's own private metasearch service. Covers the general web, news, scientific literature (including MSF research publications), technical documentation and humanitarian data, and picks the right kind of source for each question. Results arrive in seconds with direct links, and only the search query leaves the app — the search engines never see you.",
+      otherProvidersLabel: 'Other providers',
       providerNews: 'Combined news (GDELT + Google News)',
       providerNewsDescription:
         'Queries both sources in parallel and merges the results, so either one failing never breaks a search. Best balance of speed, source diversity, and working article links.',
