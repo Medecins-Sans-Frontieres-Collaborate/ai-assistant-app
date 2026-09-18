@@ -22,6 +22,8 @@ import { SearchMode } from '@/types/searchMode';
 import {
   MAX_SEARCH_RESULT_COUNT,
   PrecomputedSearchResults,
+  ResolvedWebSearchProvider,
+  WebSearchCategory,
   sanitizeWebSearchOptions,
 } from '@/types/webSearch';
 
@@ -35,7 +37,10 @@ import {
   CodeInterpreterResult,
   CodeInterpreterTool,
 } from '../tools/CodeInterpreterTool';
-import { WebSearchTool } from '../tools/WebSearchTool';
+import {
+  WebSearchTool,
+  resolveDefaultWebSearchProvider,
+} from '../tools/WebSearchTool';
 import { readCitedSources } from '../tools/citedSourceReader';
 import { runDocumentTrim } from '../tools/documentTrim/DocumentTrimPipeline';
 import {
@@ -89,8 +94,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
   // "Executed by" label on the search tool record for feed-based providers
   // (the Bing and combined paths show the agent model id instead).
   private static readonly FEED_PROVIDER_LABELS: Partial<
-    Record<typeof env.WEB_SEARCH_PROVIDER, string>
+    Record<ResolvedWebSearchProvider, string>
   > = {
+    searxng: 'SearXNG',
     news: 'GDELT + Google News',
     gdelt: 'GDELT',
     'google-news': 'Google News',
@@ -485,10 +491,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
     if (toolResponse.tools.includes('web_search') && !followUpSatisfied) {
       const options = sanitizeWebSearchOptions(context.webSearchOptions);
       // User-selected backend wins; 'auto' defers to the deployment
-      // default (WEB_SEARCH_PROVIDER env).
+      // default (SearXNG where configured; WEB_SEARCH_PROVIDER env pins it).
       const provider =
         options.provider === 'auto'
-          ? env.WEB_SEARCH_PROVIDER
+          ? resolveDefaultWebSearchProvider()
           : options.provider;
       const freshness =
         options.freshness === 'auto'
@@ -510,6 +516,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           // Research-style questions justify waiting on every news feed;
           // single-fact lookups answer from the fastest one.
           deep: toolResponse.searchComprehensive === true,
+          category: toolResponse.searchCategory,
         },
       );
     }
@@ -537,14 +544,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
     tuning: {
       resultCount: number;
       freshness: 'day' | 'week' | 'month' | 'any';
-      provider:
-        | 'news'
-        | 'gdelt'
-        | 'google-news'
-        | 'bing-agent'
-        | 'bing-responses'
-        | 'combined';
+      provider: ResolvedWebSearchProvider;
       deep: boolean;
+      category?: WebSearchCategory;
     },
   ): Promise<ChatContext> {
     // Usage limit (docs/LIMITS.md). DEGRADE, DO NOT ABORT: by the time an
@@ -634,6 +636,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
             freshness: tuning.freshness,
             provider: tuning.provider,
             deep: tuning.deep,
+            category: tuning.category,
             // Combined provider: stream the fast leg's headlines to the
             // client while Bing runs — renders the interim list with the
             // "Summarize from headlines" action.
@@ -863,7 +866,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
         // failed says so — the source count alone would overstate coverage.
         const degradedNote = searchResult.metadata?.bingFailed
           ? ' (Bing failed — Google News headlines only)'
-          : '';
+          : searchResult.metadata?.searxngFallback
+            ? ' (MSF web search unavailable — news feeds used instead)'
+            : '';
         await this.emitSearchRecord(
           context,
           queryLabel,
