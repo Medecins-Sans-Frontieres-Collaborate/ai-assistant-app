@@ -188,6 +188,7 @@ export async function searchNewsParallel(
 export function buildNewsResult(
   entries: NewsEntry[],
   queryLabel: string,
+  kind: 'news' | 'web' = 'news',
 ): GoogleNewsSearchResult {
   if (entries.length === 0) {
     return { text: '', citations: [] };
@@ -211,9 +212,11 @@ export function buildNewsResult(
     })
     .join('\n\n');
 
-  const text =
-    `Recent news results for ${queryLabel} (headlines and snippets — synthesize an answer from these and cite by number):\n\n` +
-    digest;
+  const lead =
+    kind === 'web'
+      ? `Web search results for ${queryLabel} (titles and snippets — synthesize an answer from these and cite by number):`
+      : `Recent news results for ${queryLabel} (headlines and snippets — synthesize an answer from these and cite by number):`;
+  const text = `${lead}\n\n${digest}`;
 
   return { text, citations };
 }
