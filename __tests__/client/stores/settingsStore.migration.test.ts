@@ -736,12 +736,12 @@ describe('settingsStore migration (v46 → v47)', () => {
       { webSearchOptions: { resultCount: 12, freshness: 'week' } },
       46,
     ) as Record<string, unknown>;
-    // Absent provider backfills to the store default — 'combined' since
-    // combined (Bing + headlines) became the product default.
+    // Absent provider backfills to the store default — 'auto', so the
+    // deployment picks the backend (SearXNG where configured).
     expect(result.webSearchOptions).toEqual({
       resultCount: 12,
       freshness: 'week',
-      provider: 'combined',
+      provider: 'auto',
     });
 
     const repaired = migrate(
@@ -751,7 +751,7 @@ describe('settingsStore migration (v46 → v47)', () => {
     expect(repaired.webSearchOptions).toEqual({
       resultCount: 15,
       freshness: 'auto',
-      provider: 'combined',
+      provider: 'auto',
     });
   });
 });
@@ -768,7 +768,7 @@ describe('settingsStore migration (v47 → v48)', () => {
     expect(result.webSearchOptions).toEqual({
       resultCount: 10,
       freshness: 'day',
-      provider: 'combined',
+      provider: 'auto',
     });
   });
 
@@ -801,7 +801,7 @@ describe('settingsStore migration (v47 → v48)', () => {
     ) as Record<string, unknown>;
     expect(
       (repaired.webSearchOptions as Record<string, unknown>).provider,
-    ).toBe('combined');
+    ).toBe('auto');
   });
 });
 
@@ -1072,5 +1072,70 @@ describe('settingsStore migration (v57 → v58)', () => {
     const result = migrate({}, 39) as Record<string, unknown>;
 
     expect(result.pasteAsAttachmentChars).toBe(DEFAULT_PASTE_ATTACHMENT_CHARS);
+  });
+});
+
+describe('settingsStore migration (v65 → v66)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it("moves the former 'combined' default to 'auto' once", () => {
+    const result = migrate(
+      {
+        webSearchOptions: {
+          resultCount: 11,
+          freshness: 'week',
+          provider: 'combined',
+        },
+      },
+      65,
+    ) as Record<string, unknown>;
+
+    expect(result.webSearchOptions).toEqual({
+      resultCount: 11,
+      freshness: 'week',
+      provider: 'auto',
+    });
+  });
+
+  it('keeps every other explicit provider pick', () => {
+    for (const kept of [
+      'auto',
+      'searxng',
+      'news',
+      'google-news',
+      'gdelt',
+      'bing-agent',
+      'bing-responses',
+    ]) {
+      const result = migrate(
+        {
+          webSearchOptions: {
+            resultCount: 8,
+            freshness: 'auto',
+            provider: kept,
+          },
+        },
+        65,
+      ) as Record<string, unknown>;
+      expect(
+        (result.webSearchOptions as Record<string, unknown>).provider,
+      ).toBe(kept);
+    }
+  });
+
+  it("leaves a 'combined' pick made after the migration alone", () => {
+    const result = migrate(
+      {
+        webSearchOptions: {
+          resultCount: 8,
+          freshness: 'auto',
+          provider: 'combined',
+        },
+      },
+      66,
+    ) as Record<string, unknown>;
+    expect((result.webSearchOptions as Record<string, unknown>).provider).toBe(
+      'combined',
+    );
   });
 });
