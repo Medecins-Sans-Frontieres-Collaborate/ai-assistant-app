@@ -212,8 +212,16 @@ const serverEnvSchema = z.object({
   //  - 'bing-responses': the native web_search tool on the Azure OpenAI
   //    Responses API — same Bing grounding as 'bing-agent' but a direct
   //    model call instead of a Foundry agent run.
+  //  - 'searxng': MSF's own SearXNG metasearch instance (general web, news,
+  //    science, IT, humanitarian). Seconds-fast, real publisher URLs, no LLM
+  //    round-trip. Needs SEARXNG_URL + SEARXNG_API_KEY; degrades to 'news'
+  //    when the instance is unconfigured or unreachable.
+  // UNSET = automatic: 'searxng' where the instance is configured, 'news'
+  // otherwise (see resolveDefaultWebSearchProvider). Set it only to pin a
+  // deployment to one backend.
   WEB_SEARCH_PROVIDER: z
     .enum([
+      'searxng',
       'news',
       'gdelt',
       'google-news',
@@ -221,7 +229,13 @@ const serverEnvSchema = z.object({
       'bing-responses',
       'combined',
     ])
-    .default('news'),
+    .optional(),
+
+  // SearXNG instance (private endpoint in the tools environment). The key is
+  // the shared secret the proxy in front of it requires in `X-Search-Key`;
+  // Terraform sets both from one random_password.
+  SEARXNG_URL: z.string().url().optional(),
+  SEARXNG_API_KEY: z.string().optional(),
 
   // Web search round-trip budget (ms). Applies to whichever provider runs.
   // Bing grounding via the Foundry search agent is simply slow (observed
