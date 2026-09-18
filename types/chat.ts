@@ -630,6 +630,11 @@ export interface ToolRouterResponse {
    */
   searchComprehensive?: boolean;
   /**
+   * Topic of the search, selecting the SearXNG engine category (general
+   * web, news, science, it, humanitarian). Other providers ignore it.
+   */
+  searchCategory?: import('./webSearch').WebSearchCategory;
+  /**
    * True when the user is asking a follow-up about search results already
    * cited earlier in the conversation — the enricher then re-fetches those
    * cited articles for their full text instead of (or before) running a
