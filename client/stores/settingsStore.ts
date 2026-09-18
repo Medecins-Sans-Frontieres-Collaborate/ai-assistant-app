@@ -1919,7 +1919,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 65, // Increment this when schema changes to trigger migrations
+      version: 66, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2670,6 +2670,19 @@ export const useSettingsStore = create<SettingsStore>()(
           if (typeof state.preferSelectedModel !== 'boolean') {
             state.preferSelectedModel = false;
           }
+        }
+
+        // Version 65 → 66: MSF's SearXNG instance replaces the Bing + Google
+        // News 'combined' search as the default backend. 'combined' WAS the
+        // store default, so a persisted value can't be told apart from a
+        // deliberate pick — everyone on it moves to 'auto' once (the
+        // deployment then selects SearXNG). Other explicit picks are kept.
+        if (version < 66) {
+          const options = sanitizeWebSearchOptions(state.webSearchOptions);
+          state.webSearchOptions =
+            options.provider === 'combined'
+              ? { ...options, provider: 'auto' }
+              : options;
         }
 
         return state;
