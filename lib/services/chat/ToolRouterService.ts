@@ -6,6 +6,7 @@ import {
   ToolRouterResponse,
   ToolType,
 } from '@/types/chat';
+import { WEB_SEARCH_CATEGORIES, isWebSearchCategory } from '@/types/webSearch';
 
 import { TrimTarget, WORDS_PER_PAGE } from './tools/documentTrim/trimDetector';
 
@@ -328,6 +329,7 @@ IMPORTANT: Always provide searchQuery in your response:
 Also tune the search when needsWebSearch is true:
 - searchRecency: "day" for breaking news/live data, "week" or "month" for recent developments, "none" when age doesn't matter
 - searchComprehensive: true for research-style questions wanting breadth (comparisons, overviews, "what are my options"), false for single-fact lookups
+- searchCategory: which kind of source answers best — "news" for current events and recent developments; "science" for medical, clinical, public-health and academic research questions (journals, studies, MSF research publications); "it" for programming, software and technical documentation; "humanitarian" for humanitarian crises, operations and datasets (displacement, outbreaks, country situations); "general" for everything else or when unsure
 - additionalSearchQueries: almost always EMPTY — one query should cover the question whenever possible. Populate ONLY when the message contains multiple clearly SEPARABLE information needs that no single query can cover (e.g. "compare the France strikes with the Germany rail dispute" → one extra query). Max 4 extra queries; each follows the same 3-8 keyword rules. Never split one topic into variations of the same query${followUpPromptSection}${codeExecutionPromptSection}`;
 
             // Include recent conversation history for context-aware decisions
@@ -385,6 +387,12 @@ Also tune the search when needsWebSearch is true:
                 description:
                   'Whether the question wants breadth (many sources) rather than a single fact',
               },
+              searchCategory: {
+                type: 'string',
+                enum: WEB_SEARCH_CATEGORIES,
+                description:
+                  'Kind of source that answers best; "general" when unsure',
+              },
               additionalSearchQueries: {
                 type: 'array',
                 items: { type: 'string' },
@@ -398,6 +406,7 @@ Also tune the search when needsWebSearch is true:
               'searchQuery',
               'searchRecency',
               'searchComprehensive',
+              'searchCategory',
               'additionalSearchQueries',
             ];
             if (hasPriorSearchCitations) {
@@ -429,7 +438,7 @@ Also tune the search when needsWebSearch is true:
               // +60 headroom for the (usually empty) additionalSearchQueries
               // array — a populated fan-out is a few short keyword strings.
               max_completion_tokens:
-                (considerCodeExecution ? 280 : 200) +
+                (considerCodeExecution ? 290 : 210) +
                 (hasPriorSearchCitations ? 20 : 0),
               response_format: {
                 type: 'json_schema',
@@ -512,6 +521,11 @@ Also tune the search when needsWebSearch is true:
                     : undefined,
                 searchComprehensive:
                   result.needsWebSearch && result.searchComprehensive === true,
+                searchCategory:
+                  result.needsWebSearch &&
+                  isWebSearchCategory(result.searchCategory)
+                    ? result.searchCategory
+                    : undefined,
                 searchFollowUp,
                 codeTask:
                   considerCodeExecution && result.needsCodeExecution
