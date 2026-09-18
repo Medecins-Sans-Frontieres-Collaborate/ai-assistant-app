@@ -15,15 +15,20 @@ describe('WebSearchSettingsPanel', () => {
     });
   });
 
-  it('renders all provider choices with the combined default selected', () => {
+  it('renders all provider choices with the automatic default selected', () => {
     render(<WebSearchSettingsPanel />);
 
-    // 'combined' is the product default (DEFAULT_WEB_SEARCH_OPTIONS).
-    expect(
-      screen.getByRole('radio', { name: /Deep search with early headlines/ }),
-    ).toBeChecked();
+    // 'auto' is the product default (DEFAULT_WEB_SEARCH_OPTIONS): the
+    // deployment picks the backend — MSF web search where configured.
     expect(
       screen.getByRole('radio', { name: /Automatic \(recommended\)/ }),
+    ).toBeChecked();
+    expect(
+      screen.getByRole('radio', { name: /^MSF web search/ }),
+    ).not.toBeChecked();
+    expect(screen.getByText('Other providers')).toBeInTheDocument();
+    expect(
+      screen.getByRole('radio', { name: /Deep search with early headlines/ }),
     ).not.toBeChecked();
     expect(
       screen.getByRole('radio', { name: /Combined news/ }),
@@ -38,6 +43,16 @@ describe('WebSearchSettingsPanel', () => {
     expect(
       screen.getByRole('radio', { name: /Bing fast search/ }),
     ).not.toBeChecked();
+  });
+
+  it('writes the MSF web search provider to the settings store', () => {
+    render(<WebSearchSettingsPanel />);
+
+    fireEvent.click(screen.getByRole('radio', { name: /^MSF web search/ }));
+
+    expect(useSettingsStore.getState().webSearchOptions.provider).toBe(
+      'searxng',
+    );
   });
 
   it('writes the combined provider to the settings store', () => {
