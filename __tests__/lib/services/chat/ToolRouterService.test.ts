@@ -179,6 +179,40 @@ describe('ToolRouterService', () => {
         ]);
       });
 
+      it('passes a valid searchCategory through and drops an unknown one', async () => {
+        const respond = (searchCategory: string) =>
+          mockOpenAIClient.chat.completions.create.mockResolvedValue({
+            choices: [
+              {
+                message: {
+                  content: JSON.stringify({
+                    needsWebSearch: true,
+                    searchQuery: 'cholera vaccine efficacy',
+                    searchRecency: 'none',
+                    searchComprehensive: false,
+                    searchCategory,
+                    additionalSearchQueries: [],
+                  }),
+                },
+              },
+            ],
+          });
+
+        respond('science');
+        const science = await service.determineTool({
+          messages: [],
+          currentMessage: 'how effective is the oral cholera vaccine?',
+        });
+        expect(science.searchCategory).toBe('science');
+
+        respond('astrology');
+        const unknown = await service.determineTool({
+          messages: [],
+          currentMessage: 'how effective is the oral cholera vaccine?',
+        });
+        expect(unknown.searchCategory).toBeUndefined();
+      });
+
       it('returns a single-entry query list when no extra aspects exist', async () => {
         mockOpenAIClient.chat.completions.create.mockResolvedValue({
           choices: [
@@ -855,6 +889,12 @@ describe('ToolRouterService', () => {
                   description:
                     'Whether the question wants breadth (many sources) rather than a single fact',
                 },
+                searchCategory: {
+                  type: 'string',
+                  enum: ['general', 'news', 'science', 'it', 'humanitarian'],
+                  description:
+                    'Kind of source that answers best; "general" when unsure',
+                },
                 additionalSearchQueries: {
                   type: 'array',
                   items: { type: 'string' },
@@ -868,6 +908,7 @@ describe('ToolRouterService', () => {
                 'searchQuery',
                 'searchRecency',
                 'searchComprehensive',
+                'searchCategory',
                 'additionalSearchQueries',
               ],
               additionalProperties: false,
@@ -876,7 +917,7 @@ describe('ToolRouterService', () => {
         });
         // Latency-tuning params should be present.
         expect(callArgs[0].reasoning_effort).toBe('minimal');
-        expect(callArgs[0].max_completion_tokens).toBe(200);
+        expect(callArgs[0].max_completion_tokens).toBe(210);
       });
     });
 
