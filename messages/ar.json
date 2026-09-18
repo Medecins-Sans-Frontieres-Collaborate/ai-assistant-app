@@ -1234,7 +1234,10 @@
       "providerCombined": "بحث متعمق مع عناوين مبكرة (Bing + Google News)",
       "providerCombinedDescription": "يعمل على تشغيل Bing Grounding وGoogle News معاً: تظهر العناوين خلال ثوانٍ بينما يستمر البحث المتعمق على Bing، ويمكنك اختيار الإجابة من العناوين مباشرةً بدلاً من الانتظار. عند انتهاء Bing، يتم دمج مجموعتي النتائج.",
       "providerBingResponses": "بحث Bing السريع (Azure OpenAI)",
-      "providerBingResponsesDescription": "تغطية ويب Bing نفسها مثل Bing grounding، لكن يتم التشغيل كطلب مباشر واحد للنموذج بدلاً من وكيل Foundry — عادةً أسرع بكثير. خيار جديد قيد التقييم بالمقارنة مع Bing grounding."
+      "providerBingResponsesDescription": "تغطية ويب Bing نفسها مثل Bing grounding، لكن يتم التشغيل كطلب مباشر واحد للنموذج بدلاً من وكيل Foundry — عادةً أسرع بكثير. خيار جديد قيد التقييم بالمقارنة مع Bing grounding.",
+      "providerSearxng": "بحث الويب من MSF",
+      "providerSearxngDescription": "خدمة ميتا بحث خاصة تابعة لـ MSF. تغطي الويب العام والأخبار والأدبيات العلمية (بما في ذلك منشورات بحوث MSF)، والوثائق التقنية والبيانات الإنسانية، وتختار المصدر الأنسب لكل سؤال. تظهر النتائج خلال ثوانٍ مع روابط مباشرة، ويغادر التطبيق فقط استعلام البحث — محركات البحث لا ترى هويتك أبداً.",
+      "otherProvidersLabel": "مزودون آخرون"
     },
     "Admin": "المسؤول",
     "Usage Limits": "حدود الاستخدام",

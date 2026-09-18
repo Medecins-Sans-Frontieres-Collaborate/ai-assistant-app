@@ -1288,7 +1288,10 @@
       "providerCombined": "Utafutaji wa kina na vichwa vya habari mapema (Bing + Google News)",
       "providerCombinedDescription": "Inaendesha Bing Grounding na Google News pamoja: vichwa vya habari vinaonekana ndani ya sekunde chache huku utafutaji wa kina wa Bing ukiendelea, na unaweza kuchagua kujibu kutoka kwa vichwa vya habari mara moja badala ya kusubiri utafutaji mrefu. Bing ikimaliza, seti zote mbili za matokeo zinaunganishwa.",
       "providerBingResponses": "Utafutaji wa haraka wa Bing (Azure OpenAI)",
-      "providerBingResponsesDescription": "Mlipuko uleule wa Bing kama Bing grounding, inaendeshwa kama mwito mmoja kwa mfano moja kwa moja badala ya wakala wa Foundry — kawaida ni haraka zaidi. Chaguo jipya linafanyiwa tathmini ikilinganishwa na Bing grounding."
+      "providerBingResponsesDescription": "Mlipuko uleule wa Bing kama Bing grounding, inaendeshwa kama mwito mmoja kwa mfano moja kwa moja badala ya wakala wa Foundry — kawaida ni haraka zaidi. Chaguo jipya linafanyiwa tathmini ikilinganishwa na Bing grounding.",
+      "providerSearxng": "Utafutaji wa wavuti wa MSF",
+      "providerSearxngDescription": "Huduma ya MSF ya metatafutaji inayolinda faragha. Inajumuisha wavuti kwa ujumla, habari, machapisho ya kisayansi (ikiwemo machapisho ya utafiti ya MSF), nyaraka za kiufundi na data za kibinadamu, na huchagua chanzo sahihi kwa kila swali. Matokeo yanatokea ndani ya sekunde pamoja na viungo vya moja kwa moja, na ni hoja ya utafutaji tu inayotoka kwenye programu — injini za utafutaji hazikujui.",
+      "otherProvidersLabel": "Watoa huduma wengine"
     },
     "Admin": "Msimamizi",
     "Usage Limits": "Mipaka ya matumizi",

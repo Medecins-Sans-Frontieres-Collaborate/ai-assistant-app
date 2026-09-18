@@ -1447,7 +1447,10 @@
       "providerCombined": "Rechèch apwofondi ak tit prensipal bonè (Bing + Google News)",
       "providerCombinedDescription": "Lanser Bing grounding ak Google News ansanm: tit prensipal yo parèt nan kèk segonn pandan rechèch Bing apwofondi ap kontinye, epi ou ka chwazi reponn ak tit prensipal yo imedyatman olye ou tann rechèch la fini. Lè Bing fini, tou de rezilta yo konbine.",
       "providerBingResponses": "Rechèch rapid Bing (Azure OpenAI)",
-      "providerBingResponsesDescription": "Mennen menm kouvèti entènèt Bing tankou Bing grounding, men fèt kòm yon sèl apèl dirèk olye yon ajan Foundry — anjeneral pi rapid. Nouvo opsyon sa ap evalye kont Bing grounding."
+      "providerBingResponsesDescription": "Mennen menm kouvèti entènèt Bing tankou Bing grounding, men fèt kòm yon sèl apèl dirèk olye yon ajan Foundry — anjeneral pi rapid. Nouvo opsyon sa ap evalye kont Bing grounding.",
+      "providerSearxng": "Rechèch entènèt MSF",
+      "providerSearxngDescription": "Sèvis meta-rechèch prive MSF la. Kouvri entènèt an jeneral, nouvèl, literati syantifik (ki enkli piblikasyon rechèch MSF), dokimantasyon teknik ak done imanitè, epi chwazi bon kalite sous pou chak kesyon. Rezilta yo parèt an kèk segonn ak lyen dirèk, epi se sèlman rechèch la ki soti nan aplikasyon an — motè rechèch yo pa janm konnen kiyès ou ye.",
+      "otherProvidersLabel": "Lòt founisè"
     },
     "Admin": "Admin",
     "Usage Limits": "Limit itilizasyon",

@@ -1447,7 +1447,10 @@
       "providerCombined": "ዝቐረበ ጥርጣር ምስ ቅድመ ሓባራት (Bing + Google News)",
       "providerCombinedDescription": "Bing grounding ንእትትዕ ከምኡውን Google News ኣብ ትሕቲ በሃብ፡ ሓባራት ብግዚኡ ይቀመጡ እዮም ዘለዉ እና Bing ብዝቐጸሉ ጥርጣር እያ ኣተወ። ንሓባራት ካብቲ ቅድመ ዝተረኸቡ ብልጽው ትመልሱ ይኽእሉ ወይ ዝዝለለ መልሲ ትጸበዩ ትኽእሉ። Bing እንተኻፈለ ክሳቡ ሓደ ውጽኢት ይተዋሃቦ።",
       "providerBingResponses": "Bing ፈጣን መፈለጊ (Azure OpenAI)",
-      "providerBingResponsesDescription": "ኩሉ ኣብ Bing grounding ዝተሰማማዐ መርበብ Bing ፍለጋ እዩ፡ ሓደ ብቐንየለይ ኣብ ሞዴል ብባህሪ ዝፈጸመ እንተዘይ Foundry agent — ብምኽንያት ብዙሕ ብፍጡይ እዩ። ሓድሽ መንገዲ ኣብ መርመራ ብ Bing grounding ዝኣሰርሐ።"
+      "providerBingResponsesDescription": "ኩሉ ኣብ Bing grounding ዝተሰማማዐ መርበብ Bing ፍለጋ እዩ፡ ሓደ ብቐንየለይ ኣብ ሞዴል ብባህሪ ዝፈጸመ እንተዘይ Foundry agent — ብምኽንያት ብዙሕ ብፍጡይ እዩ። ሓድሽ መንገዲ ኣብ መርመራ ብ Bing grounding ዝኣሰርሐ።",
+      "providerSearxng": "MSF ድሕረ-መረብ መፈለጊ",
+      "providerSearxngDescription": "ዝስዕብ ዘላ ልዕሊ መረብ መፈለጊ ናይ MSF ኣገልግሎት። ኣካል ዝኣክል መረብ፣ ዜና፣ ሳይንስ ስነ-ጥበብ (ከምኡ'ውን ኣምሓራዊ ስራሕ መዝገቦታት ከም MSF)፣ ቴክኒካዊ ሰነዶምን ኣብ ሓኪምነታት ሰብኣዊ ዳታን የሰርሕ። ካብ እያ ምስፈትን ዝግበር ዓይነት መጠቐምታት ኣብዚ ይምርጽ። ውጹዓት ብብርሃን ማለትኩ ዝመጹን ቀጥታ ሊንክ ይኹኑ፣ ኣብ መተግበሪ ካልእ ነገር ኣይንወጡን፣ መፈለጊ ሓበሬታ ጥራይ ብመሸጋገሪ ይቕፅል፣ መፈለጊ መንገዲ ክንደይ ከይርከቡኩም።",
+      "otherProvidersLabel": "ካልእ ምትእታታይ"
     },
     "Admin": "ኣድሚን",
     "Usage Limits": "ውሳኔ ድንበር ኣጠቃቕያ",

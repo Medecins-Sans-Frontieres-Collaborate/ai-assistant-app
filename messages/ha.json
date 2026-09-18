@@ -1447,7 +1447,10 @@
       "providerCombined": "Bincike mai zurfi da kanun labarai na farko (Bing + Google News)",
       "providerCombinedDescription": "Yana gudanar da Bing grounding da Google News tare: kanun labarai suna bayyana cikin daƙiƙu yayin da bincike mai zurfi na Bing ke ci gaba. Kuna iya zaɓar amsa daga kanun labarai cikin gaggawa maimakon jiran binciken mai jinkiri. Idan Bing ya gama, ana haɗa sakamakon biyu.",
       "providerBingResponses": "Bing bincike mai sauri (Azure OpenAI)",
-      "providerBingResponsesDescription": "Irin wannan rufin yanar gizo na Bing kamar Bing grounding, ana gudanar da shi a matsayin kira guda daya na samfurin kai tsaye maimakon Foundry agent — yawanci yafi sauri. Sabon zaɓi da ake duba dacewarsa da Bing grounding."
+      "providerBingResponsesDescription": "Irin wannan rufin yanar gizo na Bing kamar Bing grounding, ana gudanar da shi a matsayin kira guda daya na samfurin kai tsaye maimakon Foundry agent — yawanci yafi sauri. Sabon zaɓi da ake duba dacewarsa da Bing grounding.",
+      "providerSearxng": "Binciken yanar gizo na MSF",
+      "providerSearxngDescription": "Sabis ɗin bincike na MSF mai zaman kansa. Yana rufe yanar gizo gabaɗaya, labarai, wallafe-wallafen kimiyya (ciki har da na MSF), takardun fasaha da bayanan jin ƙai, kuma yana zaɓar asalin da ya dace da kowace tambaya. Sakamako na isa cikin 'yan daƙiƙa tare da haɗin kai tsaye, kuma kawai tambayar bincike ce ke barin manhaja — injunan bincike ba sa ganin ku.",
+      "otherProvidersLabel": "Sauran masu samarwa"
     },
     "Admin": "Admin",
     "Usage Limits": "Iyakar amfani",

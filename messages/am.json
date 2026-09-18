@@ -1231,7 +1231,10 @@
       "providerCombined": "ጥልቅ ፍለጋ ከቀደም የወጡ ርዕሶች ጋር (Bing + Google News)",
       "providerCombinedDescription": "Bing grounding እና Google News አብራ ያሰራል፡ ርዕሶች በጥቂት ሰከንድ ውስጥ ይታያሉ እና ጥልቅ Bing ፍለጋው ቀጥሎ እየሰራ ነው። ከቀደሙት ርዕሶች መሠረት ላይ አንዲት መልስ ይሰጡ ወይም የረጅም ፍለጋውን ይጠብቁ። Bing የተከናወነ በኋላ የሁለቱ ውጤቶች ተዋሃድ ይቀላቀላሉ።",
       "providerBingResponses": "ፈጣን Bing ፍለጋ (Azure OpenAI)",
-      "providerBingResponsesDescription": "ከBing grounding ጋር ተመሳሳይ የBing ድምር አገናኝነት ፣ እንደFoundry agent በመሆን ሳይሆን እንደአንድ የቀጥታ ሞዴል ጥሪ ይሰራል — ብዙ ጊዜ በጣም ፈጣን ነው። አዲስ አማራጭ ከBing grounding ጋር በተያያዥ በመገምገም ላይ ይገኛል።"
+      "providerBingResponsesDescription": "ከBing grounding ጋር ተመሳሳይ የBing ድምር አገናኝነት ፣ እንደFoundry agent በመሆን ሳይሆን እንደአንድ የቀጥታ ሞዴል ጥሪ ይሰራል — ብዙ ጊዜ በጣም ፈጣን ነው። አዲስ አማራጭ ከBing grounding ጋር በተያያዥ በመገምገም ላይ ይገኛል።",
+      "providerSearxng": "MSF የድህረ ገፅ ፍለጋ",
+      "providerSearxngDescription": "የMSF የግል የሚተሰርች የፍለጋ አገልግሎት ነው። አጠቃላይ ድህረ ገፅ፣ ዜና፣ ሳይንሳዊ ስነ-ልቦና (ከMSF ምርምር ስራዎችን ጨምሮ)፣ ቴክኒካዊ ሰነድና ሰብአዊ ዳታን ይሸፍናል፤ ለእያንዳንዱ ጥያቄ ትክክለኛውን ምንጭ ይምረጣል። ውጤቶቹ በአንደኛው ሰከንድ በቀጥታ አገናኝቶች ጋር ይደርሳሉ፣ ፍለጋው ጥያቄ ብቻ ከአፕ ይወጣል — የፍለጋ ማቀናበሪያዎች እርስዎን በፍጹም አያዩም።",
+      "otherProvidersLabel": "ሌሎች አቅራቢዎች"
     },
     "Admin": "አስተዳዳሪ",
     "Usage Limits": "የአጠቃቀም ገደቦች",

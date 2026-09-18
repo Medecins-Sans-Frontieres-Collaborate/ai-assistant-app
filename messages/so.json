@@ -1447,7 +1447,10 @@
       "providerCombined": "Raadin qoto dheer oo leh cinwaan hore (Bing + Google News)",
       "providerCombinedDescription": "Waxay isku xireysaa Bing iyo Google News: cinwaanada waxay soo muuqanayaan dhowr ilbiriqsi gudaheed iyadoo raadinta qoto dheer ee Bing ay sii socoto, waana aad ka jawaabi kartaa cinwaanada isla markiiba halkii aad sugi lahayd raadinta gaabiska ah. Marka Bing ay dhamaato, natiijooyinka labaduba waa la isku daraa.",
       "providerBingResponses": "Bing raadinta dheereeya (Azure OpenAI)",
-      "providerBingResponsesDescription": "Qaybta isla raadinta Bing sida Bing grounding, waxay si toos ah ugu shaqaysaa hal model halkii laga isticmaali lahaa Foundry agent — caadiyan aad bay u dheereysaa. Xulasho cusub oo hadda lagu tijaabinayo Bing grounding."
+      "providerBingResponsesDescription": "Qaybta isla raadinta Bing sida Bing grounding, waxay si toos ah ugu shaqaysaa hal model halkii laga isticmaali lahaa Foundry agent — caadiyan aad bay u dheereysaa. Xulasho cusub oo hadda lagu tijaabinayo Bing grounding.",
+      "providerSearxng": "Raadinta web-ka ee MSF",
+      "providerSearxngDescription": "Adeeg raadis gaar ah oo gaar u ah MSF. Waxay daboolaysaa web-ka guud, wararka, cilmibaarista cilmiyeed (oo ay ku jiraan daabacaadaha cilmiyeed ee MSF), dukumeentiyada farsamada iyo xogta bini'aadantinimada, waxayna doorataa ilaha ku habboon su’aal kasta. Natiijooyinka waxay kuu yimaadaan ilbiriqsiyo gudahood oo leh xiriir toos ah, raadinta kaliya ayaa app-ka ka baxda — mashiinnada raadinta waligood kuuma arkaan.",
+      "otherProvidersLabel": "Bixiyeyaasha kale"
     },
     "Admin": "Maamul",
     "Usage Limits": "Xadid isticmaalka",

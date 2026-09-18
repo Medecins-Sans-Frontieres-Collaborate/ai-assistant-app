@@ -1288,7 +1288,10 @@
       "providerCombined": "Djupsökning med tidiga rubriker (Bing + Google News)",
       "providerCombinedDescription": "Använder Bing grounding och Google News tillsammans: rubriker visas inom några sekunder medan den djupa Bing-sökningen fortsätter, och du kan välja att svara direkt utifrån rubrikerna istället för att vänta på den långsamma sökningen. När Bing är klar slås båda resultat ihop.",
       "providerBingResponses": "Bing snabbsökning (Azure OpenAI)",
-      "providerBingResponsesDescription": "Samma Bing-webbtäckning som Bing-grounding, men körs som ett enda direkt modellanrop istället för en Foundry-agent — vanligtvis mycket snabbare. Nytt alternativ under utvärdering jämfört med Bing-grounding."
+      "providerBingResponsesDescription": "Samma Bing-webbtäckning som Bing-grounding, men körs som ett enda direkt modellanrop istället för en Foundry-agent — vanligtvis mycket snabbare. Nytt alternativ under utvärdering jämfört med Bing-grounding.",
+      "providerSearxng": "MSF webbsökning",
+      "providerSearxngDescription": "MSF:s egen privata metasöktjänst. Täcker allmänna webben, nyheter, vetenskaplig litteratur (inklusive MSF:s forskningspublikationer), teknisk dokumentation och humanitär data, och väljer rätt typ av källa för varje fråga. Resultat kommer på några sekunder med direkta länkar, och endast sökfrågan lämnar appen — sökmotorerna ser dig aldrig.",
+      "otherProvidersLabel": "Andra leverantörer"
     },
     "Admin": "Admin",
     "Usage Limits": "Användningsgränser",

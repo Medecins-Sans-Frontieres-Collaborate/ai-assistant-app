@@ -1447,7 +1447,10 @@
       "providerCombined": "Usesho olujulile nezihloko zokuqala (Bing + Google News)",
       "providerCombinedDescription": "Isebenzisa i-Bing grounding kanye ne-Google News ngesikhathi esisodwa: izihloko zivele kungakapheli mzuzwana usesho olujulile lwe-Bing luqhubeka, futhi ungakhetha ukuphendula ezihlokweni ngokushesha kunokulinda. Uma i-Bing isiqedile, imiphumela yomibili iyahlanganiswa.",
       "providerBingResponses": "Bing fast search (Azure OpenAI)",
-      "providerBingResponsesDescription": "Ukusetshenziswa kwewebhu kweBing okufanayo ne-Bing grounding, kodwa kusebenzisa imodeli eyodwa ngokushesha — ngokuvamile kushesha kakhulu. Inketho entsha esahlolwayo uma iqhathaniswa ne-Bing grounding."
+      "providerBingResponsesDescription": "Ukusetshenziswa kwewebhu kweBing okufanayo ne-Bing grounding, kodwa kusebenzisa imodeli eyodwa ngokushesha — ngokuvamile kushesha kakhulu. Inketho entsha esahlolwayo uma iqhathaniswa ne-Bing grounding.",
+      "providerSearxng": "Ukusesha kwewebhu kwe-MS​F",
+      "providerSearxngDescription": "Insiza yokusesha ehlanganisa yangasese ye-MS​F. Igubungela iwebhu evamile, izindaba, izincwadi zesayensi (kubandakanya nezinyathelo zocwaningo lwe-MS​F), imibhalo yezobuchwepheshe nedatha yezomphakathi, futhi ikhetha umthombo ofanele wombuzo ngamunye. Imiphumela ifika ngemizuzwana enezixhumanisi eziqondile, futhi kuphuma kuphela umbuzo wokusesha — izinjini zokusesha azisoze zabona umsebenzisi.",
+      "otherProvidersLabel": "Abanye abahlinzeki"
     },
     "Admin": "Ulawulo",
     "Usage Limits": "Imikhawulo yokusetshenziswa",

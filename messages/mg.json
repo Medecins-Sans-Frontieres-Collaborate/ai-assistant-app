@@ -1447,7 +1447,10 @@
       "providerCombined": "Fikarohana lalina miaraka amin’ny lohateny aloha (Bing + Google News)",
       "providerCombinedDescription": "Atao miaraka ny Bing grounding sy Google News: miseho ao anatin’ny segondra vitsy ny lohateny, raha mbola mandeha ny fikarohana lalina Bing. Afaka misafidy hamaly avy amin’ny lohateny ianao fa tsy miandry. Rehefa vita ny Bing dia atambatra ny valiny avy amin’ny roa tonta.",
       "providerBingResponses": "Bing fikarohana haingana (Azure OpenAI)",
-      "providerBingResponsesDescription": "Mampiasa fikarohana tranonkala Bing mitovy amin'ny Bing grounding, fa mitranga amin'ny antso modely tokana fa tsy amin'ny Foundry agent — mazàna haingana kokoa. Safidy vaovao an-dalàna hodinihina amin'ny Bing grounding."
+      "providerBingResponsesDescription": "Mampiasa fikarohana tranonkala Bing mitovy amin'ny Bing grounding, fa mitranga amin'ny antso modely tokana fa tsy amin'ny Foundry agent — mazàna haingana kokoa. Safidy vaovao an-dalàna hodinihina amin'ny Bing grounding.",
+      "providerSearxng": "Fikarohana tranonkala MSF",
+      "providerSearxngDescription": "Serivisy fitadiavana manokana an'ny MSF. Mandrakotra ny tranonkala ankapobeny, vaovao, literatiora ara-tsiansa (anisan'izany ny lahateny fikarohana nataon'ny MSF), antontan-taratasy ara-teknika ary angona maha-olona, ary mifidy loharano mety arakaraka ny fanontaniana tsirairay. Mivoaka ao anatin'ny segondra vitsy ny valiny miaraka amin'ny rohy mivantana, ary ny teny fikarohana ihany no miala ao amin'ny app — tsy ahitana anao mihitsy ny motera fikarohana.",
+      "otherProvidersLabel": "Mpamatsy hafa"
     },
     "Admin": "Admin",
     "Usage Limits": "Fetra fampiasana",

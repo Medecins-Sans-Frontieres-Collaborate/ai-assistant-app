@@ -1255,7 +1255,10 @@
       "providerCombined": "Pencarian mendalam dengan judul awal (Bing + Google News)",
       "providerCombinedDescription": "Menjalankan Bing grounding dan Google News bersamaan: judul akan muncul dalam hitungan detik sementara pencarian mendalam Bing tetap berjalan, dan Anda dapat memilih menjawab dari judul yang sudah ada tanpa harus menunggu pencarian selesai. Setelah Bing selesai, kedua hasil akan digabungkan.",
       "providerBingResponses": "Pencarian cepat Bing (Azure OpenAI)",
-      "providerBingResponsesDescription": "Cakupan web Bing yang sama seperti Bing grounding, dijalankan sebagai satu pemanggilan model langsung, bukan agen Foundry — biasanya jauh lebih cepat. Opsi baru sedang dievaluasi dibandingkan Bing grounding."
+      "providerBingResponsesDescription": "Cakupan web Bing yang sama seperti Bing grounding, dijalankan sebagai satu pemanggilan model langsung, bukan agen Foundry — biasanya jauh lebih cepat. Opsi baru sedang dievaluasi dibandingkan Bing grounding.",
+      "providerSearxng": "Pencarian web MSF",
+      "providerSearxngDescription": "Layanan metasearch pribadi milik MSF. Mencakup web umum, berita, literatur ilmiah (termasuk publikasi riset MSF), dokumentasi teknis, dan data kemanusiaan, serta memilih jenis sumber yang tepat untuk setiap pertanyaan. Hasil muncul dalam beberapa detik dengan tautan langsung, dan hanya kueri pencarian yang keluar dari aplikasi — mesin pencari tidak akan pernah melihat Anda.",
+      "otherProvidersLabel": "Penyedia lain"
     },
     "Admin": "Admin",
     "Usage Limits": "Batas penggunaan",

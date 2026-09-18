@@ -1253,7 +1253,10 @@
       "providerCombined": "Diepe zoekopdracht met vroege koppen (Bing + Google News)",
       "providerCombinedDescription": "Voert Bing-gronding en Google News gelijktijdig uit: koppen verschijnen binnen enkele seconden, terwijl de diepe Bing-zoekopdracht doorloopt, en u kunt direct antwoorden op basis van de koppen zonder te wachten op de langzamere zoekopdracht. Wanneer Bing klaar is, worden beide resultaatsets samengevoegd.",
       "providerBingResponses": "Bing snelle zoekopdracht (Azure OpenAI)",
-      "providerBingResponsesDescription": "Dezelfde Bing-webdekking als Bing-grounding, uitgevoerd als één directe modelaanroep in plaats van via een Foundry-agent — doorgaans veel sneller. Nieuwe optie die momenteel wordt geëvalueerd naast Bing-grounding."
+      "providerBingResponsesDescription": "Dezelfde Bing-webdekking als Bing-grounding, uitgevoerd als één directe modelaanroep in plaats van via een Foundry-agent — doorgaans veel sneller. Nieuwe optie die momenteel wordt geëvalueerd naast Bing-grounding.",
+      "providerSearxng": "MSF-webzoekopdracht",
+      "providerSearxngDescription": "MSF’s eigen private metazoekdienst. Doorzoekt het algemene web, nieuws, wetenschappelijke literatuur (inclusief MSF-publicaties), technische documentatie en humanitaire data, en kiest voor elke vraag het juiste type bron. Resultaten verschijnen binnen enkele seconden met directe links, en alleen uw zoekopdracht verlaat de app — de zoekmachines zien u nooit.",
+      "otherProvidersLabel": "Andere aanbieders"
     },
     "Admin": "Beheer",
     "Usage Limits": "Gebruiksbeperkingen",

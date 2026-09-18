@@ -1286,7 +1286,10 @@
       "providerCombined": "Căutare aprofundată cu titluri rapide (Bing + Google News)",
       "providerCombinedDescription": "Rulează Bing grounding și Google News împreună: titlurile apar în câteva secunde, în timp ce căutarea aprofundată Bing continuă, iar poți alege să răspunzi imediat din titluri în loc să aștepți căutarea lentă. Când Bing finalizează, ambele seturi de rezultate sunt combinate.",
       "providerBingResponses": "Căutare rapidă Bing (Azure OpenAI)",
-      "providerBingResponsesDescription": "Acoperire web Bing identică cu Bing grounding, dar rulat ca un singur apel direct de model în loc de agent Foundry — de obicei mult mai rapid. Opțiune nouă aflată în evaluare față de Bing grounding."
+      "providerBingResponsesDescription": "Acoperire web Bing identică cu Bing grounding, dar rulat ca un singur apel direct de model în loc de agent Foundry — de obicei mult mai rapid. Opțiune nouă aflată în evaluare față de Bing grounding.",
+      "providerSearxng": "Căutare web MSF",
+      "providerSearxngDescription": "Serviciul privat de metacăutare al MSF. Acoperă web-ul general, știri, literatură științifică (inclusiv publicațiile de cercetare MSF), documentație tehnică și date umanitare, alegând tipul potrivit de sursă pentru fiecare întrebare. Rezultatele sosesc în câteva secunde, cu linkuri directe, și doar interogarea de căutare părăsește aplicația — motoarele de căutare nu vă văd niciodată.",
+      "otherProvidersLabel": "Alți furnizori"
     },
     "Admin": "Admin",
     "Usage Limits": "Limite de utilizare",

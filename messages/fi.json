@@ -1263,7 +1263,10 @@
       "providerCombined": "Syväetsintä ja nopeat otsikot (Bing + Google News)",
       "providerCombinedDescription": "Suorittaa Bing-groundingin ja Google Newsin yhdessä: otsikot näkyvät sekunneissa, kun syvä Bing-haku jatkuu taustalla. Voit halutessasi vastata heti otsikoiden perusteella tai odottaa koko tulosta. Kun Bing valmistuu, tulokset yhdistetään.",
       "providerBingResponses": "Bingin nopea haku (Azure OpenAI)",
-      "providerBingResponsesDescription": "Sama Bing-verkkohaku kuin Bing groundingissa, ajetaan yhtenä suoralla mallikutsulla Foundry-agentin sijaan — yleensä paljon nopeampi. Uusi vaihtoehto arvioitavana verrattuna Bing groundingiin."
+      "providerBingResponsesDescription": "Sama Bing-verkkohaku kuin Bing groundingissa, ajetaan yhtenä suoralla mallikutsulla Foundry-agentin sijaan — yleensä paljon nopeampi. Uusi vaihtoehto arvioitavana verrattuna Bing groundingiin.",
+      "providerSearxng": "MSF:n verkkohaku",
+      "providerSearxngDescription": "MSF:n oma yksityinen metahakupalvelu. Kattaa yleisen verkon, uutiset, tieteellisen kirjallisuuden (mukaan lukien MSF:n tutkimusjulkaisut), teknisen dokumentaation ja humanitaarisen datan, ja valitsee kuhunkin kysymykseen sopivimman lähteen. Tulokset saapuvat sekunneissa suorin linkein, ja vain hakukysely välittyy sovelluksesta — hakukoneet eivät koskaan näe sinua.",
+      "otherProvidersLabel": "Muut palveluntarjoajat"
     },
     "Admin": "Ylläpitäjä",
     "Usage Limits": "Käyttörajoitukset",

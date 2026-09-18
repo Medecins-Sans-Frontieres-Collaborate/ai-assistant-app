@@ -1288,7 +1288,10 @@
       "providerCombined": "早期見出し付きディープ検索（Bing + Googleニュース）",
       "providerCombinedDescription": "BingのグラウンディングとGoogleニュースを同時に実行します：数秒で見出しが表示され、その間もBingの詳細検索が継続します。見出しからすぐに回答することも、詳細検索の完了を待つこともできます。Bingの検索が終了した後、両方の結果が統合されます。",
       "providerBingResponses": "Bing 高速検索（Azure OpenAI）",
-      "providerBingResponsesDescription": "Bing グラウンディングと同じウェブカバレッジを、Foundry エージェントではなく単一のモデルコールで実行します。通常はより高速です。現在、Bing グラウンディングと比較評価中の新しいオプションです。"
+      "providerBingResponsesDescription": "Bing グラウンディングと同じウェブカバレッジを、Foundry エージェントではなく単一のモデルコールで実行します。通常はより高速です。現在、Bing グラウンディングと比較評価中の新しいオプションです。",
+      "providerSearxng": "MSFウェブ検索",
+      "providerSearxngDescription": "MSF独自のプライベートメタサーチサービスです。一般的なウェブ、ニュース、科学文献（MSFの研究出版物も含む）、技術ドキュメントや人道データをカバーし、質問ごとに適切な情報源を選択します。結果は数秒で直接リンク付きで表示され、検索クエリのみアプリから送信されます—検索エンジンにあなたの情報は伝わりません。",
+      "otherProvidersLabel": "その他のプロバイダー"
     },
     "Admin": "管理者",
     "Usage Limits": "利用制限",

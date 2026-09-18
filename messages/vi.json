@@ -1289,7 +1289,10 @@
       "providerCombined": "Tìm kiếm sâu với tiêu đề sớm (Bing + Google News)",
       "providerCombinedDescription": "Chạy Bing grounding và Google News cùng lúc: tiêu đề hiển thị sau vài giây trong khi tìm kiếm sâu với Bing vẫn tiếp tục, và bạn có thể chọn trả lời ngay từ các tiêu đề thay vì đợi tìm kiếm lâu. Khi Bing hoàn thành, hai bộ kết quả sẽ được hợp nhất.",
       "providerBingResponses": "Tìm kiếm nhanh Bing (Azure OpenAI)",
-      "providerBingResponsesDescription": "Cùng phạm vi tra cứu web Bing như Bing grounding, thực hiện theo dạng gọi trực tiếp một lần thay vì qua Foundry agent — thường nhanh hơn nhiều. Tùy chọn mới đang được đánh giá so với Bing grounding."
+      "providerBingResponsesDescription": "Cùng phạm vi tra cứu web Bing như Bing grounding, thực hiện theo dạng gọi trực tiếp một lần thay vì qua Foundry agent — thường nhanh hơn nhiều. Tùy chọn mới đang được đánh giá so với Bing grounding.",
+      "providerSearxng": "Tìm kiếm web MSF",
+      "providerSearxngDescription": "Dịch vụ tìm kiếm tổng hợp riêng của MSF. Bao phủ web nói chung, tin tức, tài liệu khoa học (bao gồm các ấn phẩm nghiên cứu của MSF), tài liệu kỹ thuật và dữ liệu nhân đạo, và lựa chọn nguồn phù hợp cho từng câu hỏi. Kết quả hiển thị trong vài giây với liên kết trực tiếp, chỉ có truy vấn tìm kiếm được gửi đi — các công cụ tìm kiếm không biết đến bạn.",
+      "otherProvidersLabel": "Nhà cung cấp khác"
     },
     "Admin": "Quản trị",
     "Usage Limits": "Giới hạn sử dụng",

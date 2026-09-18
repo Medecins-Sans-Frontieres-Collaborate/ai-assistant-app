@@ -1288,7 +1288,10 @@
       "providerCombined": "심층 검색 및 빠른 헤드라인 (Bing + Google 뉴스)",
       "providerCombinedDescription": "Bing 그라운딩과 Google 뉴스를 동시에 실행합니다. 헤드라인은 몇 초 내에 표시되며, 느린 Bing 심층 검색을 기다리지 않고 즉시 답변할 수 있습니다. Bing 검색이 완료되면 두 결과가 통합됩니다.",
       "providerBingResponses": "Bing 빠른 검색 (Azure OpenAI)",
-      "providerBingResponsesDescription": "Bing grounding과 동일한 Bing 웹 커버리지를 제공하지만 Foundry agent 대신 단일 모델 호출로 실행됩니다. 일반적으로 훨씬 더 빠릅니다. Bing grounding과 비교 평가 중인 새로운 옵션입니다."
+      "providerBingResponsesDescription": "Bing grounding과 동일한 Bing 웹 커버리지를 제공하지만 Foundry agent 대신 단일 모델 호출로 실행됩니다. 일반적으로 훨씬 더 빠릅니다. Bing grounding과 비교 평가 중인 새로운 옵션입니다.",
+      "providerSearxng": "MSF 웹 검색",
+      "providerSearxngDescription": "MSF에서 직접 운영하는 프라이빗 메타검색 서비스입니다. 일반 웹, 뉴스, 과학 논문(MSF 연구 출판물 포함), 기술 문서, 인도주의 데이터를 포괄적으로 다루며, 질문에 맞는 적합한 소스를 자동으로 선택합니다. 결과는 몇 초 만에 직접 링크로 제공되며, 검색 쿼리만 앱을 나가고 검색엔진에는 사용자가 노출되지 않습니다.",
+      "otherProvidersLabel": "기타 제공자"
     },
     "Admin": "관리자",
     "Usage Limits": "사용 한도",

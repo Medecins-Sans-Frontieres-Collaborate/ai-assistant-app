@@ -1447,7 +1447,10 @@
       "providerCombined": "Kusaka kozama ndi mitu yoyamba (Bing + Google News)",
       "providerCombinedDescription": "Imagwiritsa ntchito Bing grounding ndi Google News limodzi: mitu imawonekera mkati mwa masekondi pamene kusaka kwa Bing kukupitilira, ndipo mutha kusankha kuyankha kuchokera pa mitu yapezeka nthawi yomweyo osadikira kusaka kutha. Bing akamaliza, zotsatira zonse zimaphatikizidwa.",
       "providerBingResponses": "Bing kufufuza mwachangu (Azure OpenAI)",
-      "providerBingResponsesDescription": "Kufikira pa intaneti kwa Bing mofanana ndi Bing grounding, koma pogwiritsa ntchito model imodzi yokha osagwiritsa ntchito Foundry agent — nthawi zambiri imathamanga kwambiri. Njira yatsopano ikuyesedwa poyerekeza ndi Bing grounding."
+      "providerBingResponsesDescription": "Kufikira pa intaneti kwa Bing mofanana ndi Bing grounding, koma pogwiritsa ntchito model imodzi yokha osagwiritsa ntchito Foundry agent — nthawi zambiri imathamanga kwambiri. Njira yatsopano ikuyesedwa poyerekeza ndi Bing grounding.",
+      "providerSearxng": "MSF kufufuza pa intaneti",
+      "providerSearxngDescription": "Utumiki wa MSF wokha wosakanizika wosaka pa intaneti. Umakhudza ma webusayiti onse, nkhani, mabuku asayansi (kuphatikizapo zofalitsa za kafukufuku wa MSF), zolemba zaukadaulo ndi deta za umunthu, ndikuwonetsetsa kuti chitsime choyenera chisankhidwe pa funso lililonse. Zotsatira zimabwera mkati mwa mphindi ndi maulalo achindunji, ndipo kufunsira kokha ndiko kumachoka mu pulogalamuyi — makina osakira amatheka kupata zambiri za inu.",
+      "otherProvidersLabel": "Othandizira ena"
     },
     "Admin": "Admin",
     "Usage Limits": "Malire ogwiritsa ntchito",

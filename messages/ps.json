@@ -1447,7 +1447,10 @@
       "providerCombined": "ژور لټون د لومړنیو سرلیکونو سره (Bing + Google News)",
       "providerCombinedDescription": "Bing grounding او Google News یو ځای چلوئ: سرلیکونه په څو ثانیو کې ښکاري، پداسې حال کې چې ژور Bing لټون دوام لري، او تاسو کولی شئ سمدلاسه د سرلیکونو څخه ځواب ورکړئ، پرځای یې چې اوږده لټون ته منتظر پاتې شئ. کله چې Bing بشپړ شي، دواړه پایلې یوځای کېږي.",
       "providerBingResponses": "Bing چټک لټون (Azure OpenAI)",
-      "providerBingResponsesDescription": "هماغه Bing ویب پوښښ لکه Bing grounding، چې د Foundry ایجنټ پرځای د یوه مستقیم ماډل زنګ په توګه روانېږي — عموماً ډېر چټک دی. نوې انتخاب چې له Bing grounding سره پرتله کېږي."
+      "providerBingResponsesDescription": "هماغه Bing ویب پوښښ لکه Bing grounding، چې د Foundry ایجنټ پرځای د یوه مستقیم ماډل زنګ په توګه روانېږي — عموماً ډېر چټک دی. نوې انتخاب چې له Bing grounding سره پرتله کېږي.",
+      "providerSearxng": "د MSF ویب لټون",
+      "providerSearxngDescription": "د MSF شخصي میټاسرچ خدمت. عمومي ویب، خبرونه، ساینسي لیکنې (پشمول د MSF تحقیقي خپرونې)، تخنیکي اسناد، او بشري معلومات پوښي، او هرې پوښتنې ته مناسب ماخذ غوره کوي. پایلې څو ثانیو کې راځي له مستقیمو لینکونو سره، او یوازې د لټون پوښتنه له اپ څخه وځي — لټون انجنونه ستاسو معلومات نه ویني.",
+      "otherProvidersLabel": "نور خدمتونه"
     },
     "Admin": "ادمین",
     "Usage Limits": "د کارونې محدودیتونه",

@@ -1288,7 +1288,10 @@
       "providerCombined": "Hloubkové hledání s rychlými titulky (Bing + Google News)",
       "providerCombinedDescription": "Spouští Bing grounding a Google News současně: titulky se objeví během několika sekund, zatímco hloubkové vyhledávání Bing dále pracuje, a můžete se rozhodnout odpovědět rovnou z titulků místo čekání na pomalejší hledání. Když Bing dokončí, oba výsledky se sloučí.",
       "providerBingResponses": "Rychlé vyhledávání Bing (Azure OpenAI)",
-      "providerBingResponsesDescription": "Stejné pokrytí Bing webu jako Bing grounding, ale prováděno jedním přímým voláním modelu místo Foundry agenta — obvykle mnohem rychlejší. Nová možnost, která se porovnává s Bing grounding."
+      "providerBingResponsesDescription": "Stejné pokrytí Bing webu jako Bing grounding, ale prováděno jedním přímým voláním modelu místo Foundry agenta — obvykle mnohem rychlejší. Nová možnost, která se porovnává s Bing grounding.",
+      "providerSearxng": "MSF webové vyhledávání",
+      "providerSearxngDescription": "Soukromá metavyhledávací služba MSF. Pokrývá obecný web, zprávy, vědeckou literaturu (včetně publikací MSF), technickou dokumentaci a humanitární data a vybírá vhodný zdroj pro každou otázku. Výsledky jsou k dispozici během pár vteřin s přímými odkazy; pouze dotaz opustí aplikaci – vyhledávače vás nikdy neuvidí.",
+      "otherProvidersLabel": "Další poskytovatelé"
     },
     "Admin": "Admin",
     "Usage Limits": "Limity používání",

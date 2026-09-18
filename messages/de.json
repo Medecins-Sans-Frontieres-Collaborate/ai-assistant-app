@@ -1288,7 +1288,10 @@
       "providerCombined": "Tiefensuche mit frühen Schlagzeilen (Bing + Google News)",
       "providerCombinedDescription": "Führt Bing Grounding und Google News gemeinsam aus: Schlagzeilen erscheinen innerhalb von Sekunden, während die tiefgehende Bing-Suche weiterläuft. Sie können sofort aus den Schlagzeilen antworten oder auf die vollständigen Ergebnisse warten. Nach Abschluss werden beide Ergebnismengen zusammengeführt.",
       "providerBingResponses": "Bing-Schnellsuche (Azure OpenAI)",
-      "providerBingResponsesDescription": "Gleiche Bing-Webabdeckung wie Bing Grounding, jedoch als einzelner direkter Modellaufruf statt als Foundry-Agent – in der Regel deutlich schneller. Neue Option wird im Vergleich zu Bing Grounding getestet."
+      "providerBingResponsesDescription": "Gleiche Bing-Webabdeckung wie Bing Grounding, jedoch als einzelner direkter Modellaufruf statt als Foundry-Agent – in der Regel deutlich schneller. Neue Option wird im Vergleich zu Bing Grounding getestet.",
+      "providerSearxng": "MSF-Websuche",
+      "providerSearxngDescription": "MSFs eigener privater Meta-Suchdienst. Deckt das allgemeine Web, Nachrichten, wissenschaftliche Literatur (einschließlich MSF-Forschungspublikationen), technische Dokumentation und humanitäre Daten ab und wählt für jede Frage die passende Quelle. Ergebnisse erscheinen in Sekunden mit direkten Links, und nur die Suchanfrage verlässt die App – die Suchmaschinen sehen Sie nie.",
+      "otherProvidersLabel": "Weitere Anbieter"
     },
     "Admin": "Admin",
     "Usage Limits": "Nutzungsbegrenzungen",

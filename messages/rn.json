@@ -1447,7 +1447,10 @@
       "providerCombined": "Gusaka bihambaye hamwe n'ibitangazo vy'imbere (Bing + Google News)",
       "providerCombinedDescription": "Ihurika Bing grounding na Google News: ibitangazo bivamwo mu masegonda make mugihe gusaka bihambaye kwa Bing bigikora, kandi ushobora guhitamwo kwishura ushingiye ku bitangazo aho gutegereza igisubizo kirimwo vyose. Bing irangiye, vyose biratunganirizwa hamwe.",
       "providerBingResponses": "Bing gushakisha vyihuta (Azure OpenAI)",
-      "providerBingResponsesDescription": "Ikorana na Bing web grounding, ariko ikora nk'isabikanya rimwe ry'iciyumviro aho kuba Foundry agent — rimwe na rimwe birihuta cane. Ni amahitamwo mashasha ariko arageragezwa mu kwigereranya na Bing grounding."
+      "providerBingResponsesDescription": "Ikorana na Bing web grounding, ariko ikora nk'isabikanya rimwe ry'iciyumviro aho kuba Foundry agent — rimwe na rimwe birihuta cane. Ni amahitamwo mashasha ariko arageragezwa mu kwigereranya na Bing grounding.",
+      "providerSearxng": "Uruhurikizi rw’ishakiro rya MSF",
+      "providerSearxngDescription": "Serivisi y'ishakiro yihariye ya MSF. Igaragaza ivyegeranyo vy’urubuga rusanzwe, amakuru, ivyigwa vya sayansi (harimwo n’ivyigwa vya MSF), inyandiko z’ubuhinga n’amatangazo yerekeye imfashanyo, kandi ihitamwo isoko ikwiye kuri buri kibazo. Ivy'ishakiro birashika mu masegonda, bifise uturirimbo dutozwa, kandi ikibazo gusa ni co giva muri porogarama — imashini z’ishakiro ntizimenya ico uri we.",
+      "otherProvidersLabel": "Abatanga abandi bakora ishakiro"
     },
     "Admin": "Admin",
     "Usage Limits": "Ingingo ngenderwako z'ikoreshwa",

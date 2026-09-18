@@ -1447,7 +1447,10 @@
       "providerCombined": "Söködro singbï na babûtï sô ayeke pëpé (Bing + Google News)",
       "providerCombinedDescription": "Azara Bing na Google News kéké ndö: babûtï sô ayeke mbi yeke gbalarä le sô, kö söködro tî Bing ko yeke kodro. Awa mo göŋö na mbeti tî babûtï sô ayeke, mo mbi yeke zakara. Sô Bing ape, nzönîsï ködörö asambili.",
       "providerBingResponses": "Bing keresë na gbaba (Azure OpenAI)",
-      "providerBingResponsesDescription": "Bing sara internet gbate nî yeke na Bing grounding, mo ködörö na mô na mô sôko, a yeke pi kûê. Bê ti yeke gbalê na Bing grounding mo tî tîngö."
+      "providerBingResponsesDescription": "Bing sara internet gbate nî yeke na Bing grounding, mo ködörö na mô na mô sôko, a yeke pi kûê. Bê ti yeke gbalê na Bing grounding mo tî tîngö.",
+      "providerSearxng": "MSF ti mbi na Internet",
+      "providerSearxngDescription": "Ti mbi na Internet tî MSF mô tî kodro. A kûê mbi na kòlo, mbi na fânî, mbi na buku tî bûûka (na buku tî mûanî MSF), na buku tî teknikè na don tî sô kûê. A zia mbi na dîa ôko tî kodêro tî sô a dû na mbi. Bini mbi na mbênî, na mbi na nda a gbenî links gbânda, mo tî tâ mbi sô a yeke na app yê — mbi na Internet tî kodro mba mo.",
+      "otherProvidersLabel": "Mbi tî kodro mû"
     },
     "Admin": "Gambalï",
     "Usage Limits": "Limitî tî nîngu",

@@ -1447,7 +1447,10 @@
       "providerCombined": "Dubinsko pretraga sa ranim naslovima (Bing + Google News)",
       "providerCombinedDescription": "Pokreće Bing grounding i Google News zajedno: naslovi se pojavljuju za nekoliko sekundi dok dubinska Bing pretraga i dalje traje, i možete odmah odgovoriti na osnovu naslova umesto da čekate sporiju pretragu. Kada Bing završi, oba skupa rezultata se spajaju.",
       "providerBingResponses": "Brza Bing pretraga (Azure OpenAI)",
-      "providerBingResponsesDescription": "Ista Bing web pokrivenost kao Bing grounding, ali radi kao jedan direktan poziv modela umesto Foundry agenta — obično mnogo brže. Nova opcija na evaluaciji u odnosu na Bing grounding."
+      "providerBingResponsesDescription": "Ista Bing web pokrivenost kao Bing grounding, ali radi kao jedan direktan poziv modela umesto Foundry agenta — obično mnogo brže. Nova opcija na evaluaciji u odnosu na Bing grounding.",
+      "providerSearxng": "MSF pretraga veba",
+      "providerSearxngDescription": "Interna privatna metapretraživačka usluga MSF-a. Obuhvata opšti veb, vesti, naučnu literaturu (uključujući MSF istraživačke publikacije), tehničku dokumentaciju i humanitarne podatke, i bira odgovarajući izvor za svako pitanje. Rezultati stižu za nekoliko sekundi sa direktnim linkovima, a iz aplikacije se šalje samo upit za pretragu — pretraživači vas nikada ne vide.",
+      "otherProvidersLabel": "Drugi provajderi"
     },
     "Admin": "Admin",
     "Usage Limits": "Ograničenja upotrebe",

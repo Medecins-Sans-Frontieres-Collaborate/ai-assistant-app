@@ -1447,7 +1447,10 @@
       "providerCombined": "Ubushakashatsi bwimbitse hamwe n’amakuru y’ingenzi hakiri kare (Bing + Google News)",
       "providerCombinedDescription": "Ikoresha Bing na Google News icyarimwe: amakuru y’ingenzi agaragara mu masegonda make mugihe ubushakashatsi bwa Bing bukomeza, kandi ushobora guhitamo gusubiza uhereye ku makuru yabonetse mbere yo gutegereza ubushakashatsi bwihuta. Bing nikirangira, ibisubizo bibiri birahuzwa.",
       "providerBingResponses": "Bing ishakisha vuba (Azure OpenAI)",
-      "providerBingResponsesDescription": "Ikoresha Bing web nk’uko bimeze kuri Bing grounding, ariko bikorwa nka model imwe aho gukoresha Foundry agent — bisanzwe byihuta cyane. Ushobora kugerageza iyi option nshya ugereranyije na Bing grounding."
+      "providerBingResponsesDescription": "Ikoresha Bing web nk’uko bimeze kuri Bing grounding, ariko bikorwa nka model imwe aho gukoresha Foundry agent — bisanzwe byihuta cyane. Ushobora kugerageza iyi option nshya ugereranyije na Bing grounding.",
+      "providerSearxng": "Ubushakisha kuri interineti bwa MSF",
+      "providerSearxngDescription": "Serivisi y’ubushakisha bwihariye ya MSF. Igenzura interineti rusange, amakuru, inyandiko za siyansi (harimo n’ibyegeranyo bya MSF), inyandiko z'ikoranabuhanga n’amakuru y’ubutabazi, igahitamo isoko iboneye ku kibazo buri gihe. Ibisubizo biboneka mu masegonda bifite imiyoboro igana aho biva, kandi ni inyandicyo bushakisha gusa isohoka muri porogaramu — imashini z’ubushakisha ntizimenya umwirondoro wawe.",
+      "otherProvidersLabel": "Abatanga serivisi bandi"
     },
     "Admin": "Admin",
     "Usage Limits": "Imipaka yo gukoresha",

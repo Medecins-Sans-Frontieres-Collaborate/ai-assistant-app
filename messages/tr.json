@@ -1288,7 +1288,10 @@
       "providerCombined": "Erken başlıklarla derin arama (Bing + Google News)",
       "providerCombinedDescription": "Bing grounding ve Google News'u birlikte çalıştırır: başlıklar birkaç saniye içinde görünürken derin Bing araması devam eder ve yavaş aramayı beklemeden başlıklardan hemen yanıt verebilirsiniz. Bing tamamladığında, iki sonuç kümesi birleştirilir.",
       "providerBingResponses": "Bing hızlı arama (Azure OpenAI)",
-      "providerBingResponsesDescription": "Bing grounding ile aynı Bing web kapsamasına sahiptir, ancak bir Foundry aracısı yerine tek bir doğrudan model çağrısı olarak çalışır — genellikle çok daha hızlıdır. Bing grounding'e karşı değerlendirilen yeni bir seçenektir."
+      "providerBingResponsesDescription": "Bing grounding ile aynı Bing web kapsamasına sahiptir, ancak bir Foundry aracısı yerine tek bir doğrudan model çağrısı olarak çalışır — genellikle çok daha hızlıdır. Bing grounding'e karşı değerlendirilen yeni bir seçenektir.",
+      "providerSearxng": "MSF web arama",
+      "providerSearxngDescription": "MSF'nin kendi özel metaarama servisi. Genel web, haberler, bilimsel literatür (MSF araştırma yayınları dahil), teknik dokümantasyon ve insani yardım verilerini kapsar; her soru için doğru kaynak türünü seçer. Sonuçlar saniyeler içinde doğrudan bağlantılarla gelir ve uygulamadan yalnızca arama sorgusu çıkar — arama motorları sizi asla göremez.",
+      "otherProvidersLabel": "Diğer sağlayıcılar"
     },
     "Admin": "Yönetici",
     "Usage Limits": "Kullanım sınırları",

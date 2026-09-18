@@ -1447,7 +1447,10 @@
       "providerCombined": "Àwárí jinlẹ̀ pẹ̀lú àkọ́lé tẹ́lẹ̀ (Bing + Google News)",
       "providerCombinedDescription": "O n ṣiṣẹ́ Bing grounding àti Google News pọ̀: àwọn àkọ́lé máa hàn lọ́sẹ̀kẹsẹ̀ nígbà tí àwárí Bing jinlẹ̀ ṣi ń ṣiṣẹ́, o sì lè yan láti dáhùn láti inú àwọn àkọ́lé lẹ́sẹ̀kẹsẹ̀ dipo kíkà àwárí pẹ́. Nígbà tí Bing bá parí, wọn máa darapọ̀ abajade méjèèjì pọ̀.",
       "providerBingResponses": "Bing àwárí yára (Azure OpenAI)",
-      "providerBingResponsesDescription": "Ìbójú wẹẹbu Bing gẹ́gẹ́ bí Bing grounding, ṣíṣe gẹ́gẹ́ bí ìpè model taara kan dipo agent Foundry — ó maa yára jù. Àṣàyàn tuntun yìí wà nínú àyẹ̀wò pẹ̀lú Bing grounding."
+      "providerBingResponsesDescription": "Ìbójú wẹẹbu Bing gẹ́gẹ́ bí Bing grounding, ṣíṣe gẹ́gẹ́ bí ìpè model taara kan dipo agent Foundry — ó maa yára jù. Àṣàyàn tuntun yìí wà nínú àyẹ̀wò pẹ̀lú Bing grounding.",
+      "providerSearxng": "MSF wẹẹbu ṣàwárí",
+      "providerSearxngDescription": "Ìṣẹ́ ìṣàwárí àkọ́kọ́ ti MSF. Ó bó gbogbo wẹẹbu, ìròyìn, ìwé àwùjọ sáyẹ́nsì (pẹ̀lú àtẹyìnwá MSF), ìtọnisọna tɛ́kìnálọ́gì àti dásà dátà olùrànlọ́wọ́, ó sì yan orísun tó dáa jù fún ìbéèrè kọọkan. Àbájáde maa ń yà sílẹ̀ lẹ́sẹkẹsẹ pẹ̀lú àtọka taara, bẹ́ẹ̀ ni ìbéèrè ṣàwárí nìkan ló máa fi app náà sílẹ̀ — àwọn èro àwárí ráàrí kì í mọ ẹni tó ń wa rẹ.",
+      "otherProvidersLabel": "Àwọn olùpèsè míì"
     },
     "Admin": "Alakoso",
     "Usage Limits": "Ìdìpọ̀ ìlò",

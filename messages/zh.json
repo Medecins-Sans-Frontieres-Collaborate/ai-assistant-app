@@ -1319,7 +1319,10 @@
       "providerCombined": "深度搜索及早获取头条（Bing + Google 新闻）",
       "providerCombinedDescription": "同时运行 Bing 支持和 Google 新闻：头条几秒内出现，同时深度 Bing 搜索持续进行，您可选择立即根据头条作答，无需等待慢速搜索。Bing 完成后，所有结果将被合并。",
       "providerBingResponses": "Bing 快速搜索（Azure OpenAI）",
-      "providerBingResponsesDescription": "与 Bing grounding 覆盖相同，作为单次直接模型调用运行，而不是 Foundry agent——通常速度更快。新选项，目前正在与 Bing grounding 进行对比评估。"
+      "providerBingResponsesDescription": "与 Bing grounding 覆盖相同，作为单次直接模型调用运行，而不是 Foundry agent——通常速度更快。新选项，目前正在与 Bing grounding 进行对比评估。",
+      "providerSearxng": "MSF 网络搜索",
+      "providerSearxngDescription": "MSF 自有的私密元搜索服务。覆盖通用网络、新闻、科学文献（包括 MSF 研究出版物）、技术文档和人道主义数据，并根据问题选择合适的信息来源。结果秒速到达并附有直接链接，仅有搜索关键词会离开应用——搜索引擎无法获取您的信息。",
+      "otherProvidersLabel": "其他服务提供者"
     },
     "Admin": "管理员",
     "Usage Limits": "使用限制",

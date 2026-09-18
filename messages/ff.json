@@ -1447,7 +1447,10 @@
       "providerCombined": "Golle njiytii e noggalɗi njiyitoh (Bing + Google News)",
       "providerCombinedDescription": "Bing e Google News njiytii ndokkude: noggalɗi ndiytii he tini to golle Bing njiytii fof tun warataa, aɗa waawi jokkondirde e noggalɗi ɗum walla suɓo. To Bing warata, goongɗi ɗiɗi woni ton.",
       "providerBingResponses": "Bing seedhi gese (Azure OpenAI)",
-      "providerBingResponsesDescription": "Bing web cover gese am goonga Bing grounding, tawi ko modeli gooto laawol yamirde haa e Foundry agent — ko ñande majju. Njiɗɗo cuɓoraa e fow Bing grounding."
+      "providerBingResponsesDescription": "Bing web cover gese am goonga Bing grounding, tawi ko modeli gooto laawol yamirde haa e Foundry agent — ko ñande majju. Njiɗɗo cuɓoraa e fow Bing grounding.",
+      "providerSearxng": "MSF web search",
+      "providerSearxngDescription": "Jeyngu moƴƴere MSF tan nde tawii metasearch. Ɓuri web fow, caɗeele, binndi maaɗaaji (so wonaa binndi MSF), binndi takko e bayle humanitarian, e ɓuri ɗum andi hol ko moyyi so neɗɗo wayni ceede. Ndewo waawani ba kammu, ɓurnde e linki non, e laawol search tan e kaddi app – jeyngu search ngal, engineji search ndiyam waawaani maayii.",
+      "otherProvidersLabel": "Jeynguji waɗi ɗi"
     },
     "Admin": "Maɗifaama",
     "Usage Limits": "Doggol hoore nguum",

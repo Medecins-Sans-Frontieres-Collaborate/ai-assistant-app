@@ -1285,7 +1285,10 @@
       "providerCombined": "Głębokie wyszukiwanie z wczesnymi nagłówkami (Bing + Google News)",
       "providerCombinedDescription": "Uruchamia jednocześnie Bing grounding i Google News: nagłówki pojawiają się w ciągu kilku sekund, podczas gdy głębokie wyszukiwanie Bing nadal trwa. Możesz wybrać odpowiedź na podstawie tych nagłówków lub poczekać na całościowy wynik. Po zakończeniu wyszukiwania przez Bing oba zestawy wyników zostaną połączone.",
       "providerBingResponses": "Szybkie wyszukiwanie Bing (Azure OpenAI)",
-      "providerBingResponsesDescription": "Taki sam zasięg przeszukiwania sieci Bing jak w Bing grounding, realizowany jako pojedyncze, bezpośrednie wywołanie modelu zamiast agenta Foundry — zazwyczaj znacznie szybsze. Nowa opcja testowana w porównaniu z Bing grounding."
+      "providerBingResponsesDescription": "Taki sam zasięg przeszukiwania sieci Bing jak w Bing grounding, realizowany jako pojedyncze, bezpośrednie wywołanie modelu zamiast agenta Foundry — zazwyczaj znacznie szybsze. Nowa opcja testowana w porównaniu z Bing grounding.",
+      "providerSearxng": "Wyszukiwarka internetowa MSF",
+      "providerSearxngDescription": "Prywatna usługa metawyszukiwania MSF. Obejmuje ogólne zasoby internetowe, wiadomości, literaturę naukową (w tym publikacje badawcze MSF), dokumentację techniczną oraz dane humanitarne i dobiera najodpowiedniejsze źródła do każdego pytania. Wyniki pojawiają się w kilka sekund i zawierają bezpośrednie linki — jedynie zapytanie opuszcza aplikację, wyszukiwarki nie widzą użytkownika.",
+      "otherProvidersLabel": "Inni dostawcy"
     },
     "Admin": "Administrator",
     "Usage Limits": "Limity wykorzystania",

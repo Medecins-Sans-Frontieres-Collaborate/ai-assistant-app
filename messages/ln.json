@@ -1447,7 +1447,10 @@
       "providerCombined": "Koluka mingi na bantando ya liboso (Bing + Google News)",
       "providerCombinedDescription": "Etindaka koluka ya Bing ná Google News na elongo: bantando ekóti na mwa ntango, na ntango yango koluka ya Bing ezali kaka kosala, pe okoki kopesa eyano uta na bantando ya liboso soki olingi. Soki Bing esili, bamerja bikutani.",
       "providerBingResponses": "Bing mbangu mbangu (Azure OpenAI)",
-      "providerBingResponsesDescription": "Kokakata internet ya Bing ndenge moko na Bing grounding, kasi esalemi lokola libenga moko ya modele esika ya agent ya Foundry — esalaka mbangu mingi koleka. Options ya sika oyo ezali kotestama na Bing grounding."
+      "providerBingResponsesDescription": "Kokakata internet ya Bing ndenge moko na Bing grounding, kasi esalemi lokola libenga moko ya modele esika ya agent ya Foundry — esalaka mbangu mingi koleka. Options ya sika oyo ezali kotestama na Bing grounding.",
+      "providerSearxng": "Mosálá ya koluka na Internet ya MSF",
+      "providerSearxngDescription": "Mosálá ya koluka ya MSF oyo ezali ya longeka mpe ya tika. Ezali kokota na Internet mobimba, sango, bituluku ya mayele (pɛɛ na babukú ya masanga ya MSF), makomi ya tekiniki ná ba-donée humanitaire, mpe epɔni bobele mwa mosólo ya malamu mpo na motuna nyonso. Bazwisi biloko na mwa tango moke na banzela ya kokɔta naino, mpe kaka motuna nde ekende libanda ya app — ba-moteur ya koluka ekoyeba yo te.",
+      "otherProvidersLabel": "Basungi mosusu"
     },
     "Admin": "Admin",
     "Usage Limits": "Mbongwana ya kosalela",

@@ -1263,7 +1263,10 @@
       "providerCombined": "Cerca profunda amb titulars anticipats (Bing + Google News)",
       "providerCombinedDescription": "Executa Bing grounding i Google News conjuntament: els titulars apareixen en pocs segons mentre la cerca profunda de Bing segueix treballant, i pots triar respondre amb els titulars immediatament en lloc d'esperar la cerca lenta. Quan Bing finalitza, els dos conjunts de resultats es fusionen.",
       "providerBingResponses": "Cerca ràpida amb Bing (Azure OpenAI)",
-      "providerBingResponsesDescription": "La mateixa cobertura web de Bing que Bing grounding, executada com una sola crida directa al model en lloc d'un agent Foundry, normalment molt més ràpida. Nova opció en avaluació comparada amb Bing grounding."
+      "providerBingResponsesDescription": "La mateixa cobertura web de Bing que Bing grounding, executada com una sola crida directa al model en lloc d'un agent Foundry, normalment molt més ràpida. Nova opció en avaluació comparada amb Bing grounding.",
+      "providerSearxng": "Cerca web de MSF",
+      "providerSearxngDescription": "Servei de metacerca privat propi de MSF. Cobreix la web general, notícies, literatura científica (incloent publicacions d’investigació de MSF), documentació tècnica i dades humanitàries, i selecciona la font adequada per a cada pregunta. Els resultats arriben en segons amb enllaços directes, i només la consulta de cerca surt de l’aplicació — els motors de cerca mai no veuen qui ets.",
+      "otherProvidersLabel": "Altres proveïdors"
     },
     "Admin": "Administració",
     "Usage Limits": "Límits d'ús",
