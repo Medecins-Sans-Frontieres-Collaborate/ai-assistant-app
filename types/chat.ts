@@ -682,6 +682,21 @@ export interface ToolRouterRequest {
    * unaffected.
    */
   hasUserProvidedContent?: boolean;
+  /**
+   * The search is already decided (Search Mode ALWAYS) but the backend is a
+   * keyword engine that needs PLANNED queries — the raw user prompt makes a
+   * poor query there. The classifier still runs, with needsWebSearch pinned
+   * true, purely to produce queries, recency, category and fan-out.
+   */
+  searchDecided?: boolean;
+  /**
+   * Whether the search backend welcomes multi-query fan-out (our own
+   * SearXNG instance: parallel requests are cheap and unthrottled). The
+   * router may then plan 1-5 queries covering different angles. False keeps
+   * the conservative "almost always one query" wording the rate-limited
+   * public feeds need.
+   */
+  searchFanOut?: boolean;
 }
 
 // Persistent File Context types
