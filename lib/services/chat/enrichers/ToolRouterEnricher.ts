@@ -393,6 +393,13 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // mode; forced decisions are unioned in afterwards.
     const undecidedSearch = searchRequested && !forceWebSearch;
     const undecidedInterpreter = interpreterRequested && !forceInterpreter;
+    // Our own SearXNG instance is a keyword engine with cheap parallel
+    // requests: the router plans 1-5 queries for it, and a FORCED search
+    // still gets planned (the raw user prompt is a poor keyword query —
+    // the Bing agent paths expand it themselves, SearXNG cannot).
+    const plansQueries =
+      searchRequested && this.resolveSearchProvider(context) === 'searxng';
+    const planForcedSearch = forceWebSearch && plansQueries;
     // Citations from the most recent searched turn: follow-up questions
     // about that data are answered by re-fetching THOSE articles rather
     // than searching fresh (same sources, full depth).
@@ -400,7 +407,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
       ? ToolRouterEnricher.latestCitations(baseMessages)
       : [];
     let decided: ToolRouterResponse = { tools: [] };
-    if (undecidedSearch || undecidedInterpreter) {
+    if (undecidedSearch || undecidedInterpreter || planForcedSearch) {
       decided = await this.toolRouterService.determineTool({
         messages: baseMessages,
         currentMessage,
@@ -410,6 +417,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
         hasUserProvidedContent:
           undecidedSearch &&
           this.hasUserProvidedContent(context, rawUserPrompt),
+        searchDecided: planForcedSearch,
+        searchFanOut: plansQueries,
       });
     } else {
       console.log(
@@ -450,14 +459,19 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // Use the raw user prompt (no merged file/transcript context) for
     // forced runs so the tool backend gets a clean query/task. The tool's
     // own model can refine it further if needed.
+    // A forced search uses the planned queries when the router produced
+    // them; a failed/absent plan degrades to the raw prompt as before.
+    const useRawPrompt =
+      forceWebSearch && !(planForcedSearch && decided.searchQuery);
     const toolResponse: ToolRouterResponse = {
       tools: [...tools],
-      searchQuery: forceWebSearch ? rawUserPrompt : decided.searchQuery,
-      searchQueries: forceWebSearch ? undefined : decided.searchQueries,
+      searchQuery: useRawPrompt ? rawUserPrompt : decided.searchQuery,
+      searchQueries: useRawPrompt ? undefined : decided.searchQueries,
       // Dynamic tuning only comes from the classifier; forced searches have
       // no router read and fall back to the user's configured options.
       searchRecency: decided.searchRecency,
       searchComprehensive: decided.searchComprehensive,
+      searchCategory: decided.searchCategory,
       searchFollowUp: decided.searchFollowUp,
       codeTask: forceInterpreter ? rawUserPrompt : decided.codeTask,
     };
@@ -490,12 +504,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // questions widen the source cap beyond the configured default.
     if (toolResponse.tools.includes('web_search') && !followUpSatisfied) {
       const options = sanitizeWebSearchOptions(context.webSearchOptions);
-      // User-selected backend wins; 'auto' defers to the deployment
-      // default (SearXNG where configured; WEB_SEARCH_PROVIDER env pins it).
-      const provider =
-        options.provider === 'auto'
-          ? resolveDefaultWebSearchProvider()
-          : options.provider;
+      const provider = this.resolveSearchProvider(context);
       const freshness =
         options.freshness === 'auto'
           ? (toolResponse.searchRecency ?? 'any')
@@ -531,6 +540,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
     }
 
     return workingContext;
+  }
+
+  /**
+   * User-selected backend wins; 'auto' defers to the deployment default
+   * (SearXNG where configured; WEB_SEARCH_PROVIDER env pins it).
+   */
+  private resolveSearchProvider(
+    context: ChatContext,
+  ): ResolvedWebSearchProvider {
+    const { provider } = sanitizeWebSearchOptions(context.webSearchOptions);
+    return provider === 'auto' ? resolveDefaultWebSearchProvider() : provider;
   }
 
   /**
