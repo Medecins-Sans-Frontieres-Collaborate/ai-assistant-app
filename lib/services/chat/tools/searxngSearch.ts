@@ -14,6 +14,8 @@
  * private addresses, and this endpoint is operator-configured, not
  * user-supplied.
  */
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+
 import { SearchHeadlineEntry, WebSearchCategory } from '@/types/webSearch';
 
 import { mergeNewsEntries } from './newsSearch';
@@ -54,6 +56,24 @@ const MAX_ANSWERS = 2;
 const MAX_QUERIES = 5;
 // Queries × primary category, plus the primary query's breadth categories.
 const MAX_LEGS = 6;
+const TITLE_CHARS = 200;
+// Well under proxy/server request-line limits even with five legs' params.
+const QUERY_CHARS = 300;
+
+/**
+ * Circuit breaker: when EVERY leg of a search fails (instance down, proxy
+ * rejecting the key beyond the rotation retry, no route from this host),
+ * the next searches would each burn the full request budget before falling
+ * back. Skip the instance for a short cooldown instead — searches go
+ * straight to the fallback, and the instance is re-probed afterwards.
+ */
+const FAILURE_COOLDOWN_MS = 60_000;
+let unavailableUntil = 0;
+
+/** Test-only: clears the circuit-breaker state. */
+export function __resetSearxngBreakerForTests(): void {
+  unavailableUntil = 0;
+}
 
 export function isSearxngConfigured(): boolean {
   return Boolean(env.SEARXNG_URL && env.SEARXNG_API_KEY);
@@ -108,7 +128,12 @@ export function buildSearxngUrl(
   category: WebSearchCategory,
   freshness: SearxngSearchOptions['freshness'],
 ): string {
-  const url = new URL('/search', baseUrl);
+  // Relative to the configured base so a path-prefixed deployment
+  // (https://host/searxng/) keeps its prefix.
+  const url = new URL(
+    'search',
+    baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`,
+  );
   url.searchParams.set('q', query);
   url.searchParams.set('format', 'json');
   url.searchParams.set('categories', category);
@@ -134,8 +159,20 @@ function toIsoDate(value: unknown): string {
   return Number.isNaN(time) ? '' : new Date(time).toISOString();
 }
 
+/**
+ * Result text is UNTRUSTED web content headed into a numbered digest the
+ * enricher later renumbers by regex. Collapsing whitespace keeps a title or
+ * snippet on one line (it cannot forge a "[3] Fake source" digest entry);
+ * bracketed numbers — Wikipedia footnotes, injected markers — are removed
+ * so they are never mistaken for, or remapped as, our citation markers;
+ * stream-marker delimiters are defused.
+ */
 function clip(text: string, max: number): string {
-  const collapsed = text.replace(/\s+/g, ' ').trim();
+  const collapsed = text
+    .replace(/\[\s*\d+\s*\]/g, '')
+    .replace(/<{3,}|>{3,}/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
   return collapsed.length > max
     ? `${collapsed.slice(0, max - 1).trimEnd()}…`
     : collapsed;
@@ -143,7 +180,8 @@ function clip(text: string, max: number): string {
 
 function toEntry(raw: Record<string, unknown>): SearchHeadlineEntry | null {
   const url = typeof raw.url === 'string' ? raw.url : '';
-  const title = typeof raw.title === 'string' ? raw.title.trim() : '';
+  const title =
+    typeof raw.title === 'string' ? clip(raw.title, TITLE_CHARS) : '';
   if (!title || !/^https?:\/\//i.test(url)) return null;
   const domain = hostnameOf(url);
   const snippet =
@@ -201,6 +239,19 @@ const HUB_SEGMENTS: ReadonlySet<string> = new Set([
   'authors',
 ]);
 
+const ARTICLE_SEGMENTS: ReadonlySet<string> = new Set([
+  'article',
+  'articles',
+  'story',
+  'stories',
+  'post',
+  'posts',
+  'video',
+  'videos',
+  'press-release',
+  'press-releases',
+]);
+
 /**
  * True for a publication's front door rather than a story: a homepage, a
  * section front (`/news/world/asia/india`, `/india-news`), a tag or topic
@@ -210,24 +261,55 @@ const HUB_SEGMENTS: ReadonlySet<string> = new Set([
  * URLs lack: a multi-word slug or a long numeric id in its last segment.
  */
 export function isLikelyHubPage(url: string): boolean {
-  let pathname: string;
+  let parsed: URL;
   try {
-    pathname = new URL(url).pathname;
+    parsed = new URL(url);
   } catch {
     return false;
   }
-  const segments = pathname
+  const segments = parsed.pathname
     .split('/')
-    .map((segment) => segment.trim().toLowerCase())
+    .map((segment) => {
+      try {
+        return decodeURIComponent(segment).trim().toLowerCase();
+      } catch {
+        return segment.trim().toLowerCase();
+      }
+    })
     .filter(Boolean);
   if (segments.length === 0) return true;
   if (segments.some((segment) => HUB_SEGMENTS.has(segment))) return true;
   const last = segments[segments.length - 1].replace(/\.[a-z0-9]{2,5}$/, '');
   if (/^(index|home|default)[a-z]?$/.test(last)) return true;
-  const words = last.split(/[-_]+/).filter(Boolean);
-  const hasArticleSlug = words.length >= 3;
-  const hasArticleId = segments.some((segment) => /\d{5,}/.test(segment));
-  return !hasArticleSlug && !hasArticleId;
+
+  // Story markers, any one suffices:
+  //  - an article container segment before the leaf (bbc.com/news/articles/<id>)
+  //  - a dated path (/2026/09/17/…, /2026/sep/17/…)
+  //  - a multi-word slug (Unicode-aware: non-Latin slugs hyphenate too)
+  //  - a long numeric id, in the path or the query (?PRID=2034567)
+  //  - an opaque interleaved letter+digit id (cx2k4d9e1lvo)
+  const inArticleContainer = segments
+    .slice(0, -1)
+    .some((segment) => ARTICLE_SEGMENTS.has(segment));
+  const hasDatedPath = /\/(19|20)\d{2}\/(\d{1,2}|[a-z]{3})\/\d{1,2}(\/|$)/.test(
+    parsed.pathname.toLowerCase(),
+  );
+  const hasArticleSlug = last.split(/[-_\s]+/).filter(Boolean).length >= 3;
+  const hasNumericId =
+    segments.some((segment) => /\d{5,}/.test(segment)) ||
+    /=\d{5,}(&|$)/.test(parsed.search);
+  // Opaque ids interleave letters and digits; "elections2026" (a word plus
+  // a year) does not.
+  const transitions = (last.match(/[a-z]\d|\d[a-z]/g) ?? []).length;
+  const hasOpaqueId =
+    last.length >= 8 && transitions >= 3 && !/[-_]/.test(last);
+  return !(
+    inArticleContainer ||
+    hasDatedPath ||
+    hasArticleSlug ||
+    hasNumericId ||
+    hasOpaqueId
+  );
 }
 
 // Below this many real stories, hub pages stay (demoted) rather than
@@ -306,6 +388,10 @@ async function requestOnce(url: string): Promise<unknown> {
         'X-Search-Key': env.SEARXNG_API_KEY ?? '',
         Accept: 'application/json',
       },
+      // fetch forwards custom headers across redirects — a redirect (proxy
+      // misconfiguration, an external-bang query) must never carry the
+      // shared secret to another host. The JSON API never redirects.
+      redirect: 'error',
       signal: controller.signal,
     });
     if (response.status === 401) {
@@ -335,7 +421,7 @@ async function searchLeg(
   query: string,
   category: WebSearchCategory,
   options: Pick<SearxngSearchOptions, 'resultCount' | 'freshness'>,
-): Promise<SearxngSearchOutcome> {
+): Promise<SearxngSearchOutcome & { unresponsive: string[] }> {
   const url = buildSearxngUrl(
     env.SEARXNG_URL ?? '',
     query,
@@ -354,14 +440,22 @@ async function searchLeg(
     body = await requestOnce(url);
   }
 
-  const unresponsive = (body as { unresponsive_engines?: unknown })
+  return {
+    ...parseSearxngResponse(body, options.resultCount),
+    unresponsive: unresponsiveEngines(body),
+  };
+}
+
+/** `unresponsive_engines` is a list of [engine, reason] pairs. */
+function unresponsiveEngines(body: unknown): string[] {
+  const raw = (body as { unresponsive_engines?: unknown } | null)
     ?.unresponsive_engines;
-  if (Array.isArray(unresponsive) && unresponsive.length > 0) {
-    console.warn(
-      `[searxngSearch] Unresponsive engines (${category}): ${JSON.stringify(unresponsive).slice(0, 300)}`,
-    );
-  }
-  return parseSearxngResponse(body, options.resultCount);
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((item) =>
+      Array.isArray(item) ? item.slice(0, 2).join(': ') : String(item),
+    )
+    .slice(0, 20);
 }
 
 interface Leg {
@@ -397,9 +491,11 @@ async function runLegs(
   const lists: SearchHeadlineEntry[][] = [];
   const answers: string[] = [];
   const failures: string[] = [];
+  const unresponsive = new Set<string>();
   settled.forEach((result, idx) => {
     if (result.status === 'fulfilled') {
       if (result.value.entries.length > 0) lists.push(result.value.entries);
+      result.value.unresponsive.forEach((engine) => unresponsive.add(engine));
       for (const answer of result.value.answers) {
         if (!answers.includes(answer)) answers.push(answer);
       }
@@ -410,12 +506,21 @@ async function runLegs(
           : String(result.reason);
       failures.push(`${legs[idx].category}: ${reason}`);
       console.warn(
-        `[searxngSearch] Leg ${legs[idx].category} failed (continuing with others): ${reason}`,
+        `[searxngSearch] Leg ${legs[idx].category} failed (continuing with others): ${sanitizeForLog(reason)}`,
       );
     }
   });
 
+  // One line per search, not per leg — the signal that upstream engines
+  // are throttling or CAPTCHA-ing the instance's egress IP.
+  if (unresponsive.size > 0) {
+    console.warn(
+      `[searxngSearch] Unresponsive engines: ${sanitizeForLog([...unresponsive].join(', ')).slice(0, 400)}`,
+    );
+  }
+
   if (failures.length === legs.length) {
+    unavailableUntil = Date.now() + FAILURE_COOLDOWN_MS;
     throw new Error(`SearXNG search failed — ${failures.join('; ')}`);
   }
   // Round-robin interleave across legs, deduplicated by URL and title.
@@ -449,9 +554,10 @@ export async function searchSearxng(
   if (!isSearxngConfigured()) {
     throw new Error('SearXNG is not configured (SEARXNG_URL/SEARXNG_API_KEY)');
   }
-  const capped = queries
-    .filter((q) => q.trim().length > 0)
-    .slice(0, MAX_QUERIES);
+  if (Date.now() < unavailableUntil) {
+    throw new Error('SearXNG in failure cooldown (skipping)');
+  }
+  const capped = normalizeQueries(queries);
   if (capped.length === 0) return { entries: [], answers: [] };
 
   const categories = planSearxngCategories(options);
@@ -465,7 +571,7 @@ export async function searchSearxng(
 
   const articlesOnly = isCurrentEventsSearch(options);
   console.log(
-    `[searxngSearch] Plan: ${legs.map((leg) => `${leg.category}:"${leg.query}"`).join(', ')} (freshness: ${options.freshness}, articlesOnly: ${articlesOnly})`,
+    `[searxngSearch] Plan: ${sanitizeForLog(legs.map((leg) => `${leg.category}:"${leg.query}"`).join(', '))} (freshness: ${options.freshness}, articlesOnly: ${articlesOnly})`,
   );
 
   const outcome = await runLegs(legs, { ...options, articlesOnly });
@@ -478,5 +584,43 @@ export async function searchSearxng(
     );
     return runLegs(legs, { ...options, freshness: 'any', articlesOnly });
   }
+  // A specialised category (science/it/humanitarian) has few engines; when
+  // they find nothing, the general web usually still can.
+  if (outcome.entries.length === 0 && !categories.includes('general')) {
+    console.log(
+      `[searxngSearch] Nothing in "${categories[0]}" — retrying on the general web`,
+    );
+    return runLegs(
+      capped.map((query) => ({ query, category: 'general' as const })),
+      { ...options, articlesOnly: false },
+    );
+  }
   return outcome;
+}
+
+/**
+ * Queries come from the router model — or, when planning failed, straight
+ * from the user's message. Bounded, de-duplicated, and stripped of SearXNG's
+ * query operators: a leading `!`/`!!` (engine and EXTERNAL bangs — the
+ * latter answer with a redirect), `:` (language) or `<` (timeout) on a token
+ * would let message text steer the instance instead of being searched for.
+ */
+export function normalizeQueries(queries: string[]): string[] {
+  const seen = new Set<string>();
+  const normalized: string[] = [];
+  for (const raw of queries) {
+    const query = raw
+      .split(/\s+/)
+      .map((token) => token.replace(/^[!:<?]+/, ''))
+      .filter(Boolean)
+      .join(' ')
+      .slice(0, QUERY_CHARS)
+      .trim();
+    const key = query.toLowerCase();
+    if (!query || seen.has(key)) continue;
+    seen.add(key);
+    normalized.push(query);
+    if (normalized.length >= MAX_QUERIES) break;
+  }
+  return normalized;
 }
