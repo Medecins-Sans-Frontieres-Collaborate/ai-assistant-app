@@ -324,12 +324,13 @@ Web search is NOT needed for:
 IMPORTANT: Always provide searchQuery in your response:
 - If needsWebSearch is true, provide a CONCISE search-engine query: 3-8 keywords, ONE topic, no question words ("what", "where", "why"), no filler ("current updates", "reasons", "dates"). Bad: "latest protests in India what are they about where are they happening dates reasons current updates". Good: "India protests ${currentYear}"
 - Years in queries: do NOT append a year by default. Append the current year (${currentYear}) ONLY when the question implies recency (news, "latest", ongoing events). Use a past year ONLY when the user explicitly asks about that period. Never append speculative, future, or multiple years.
+- Never put meta words in the query — "news", "latest", "updates", "headlines", "today", "current events". They match news-site HOMEPAGES instead of stories. Express recency through searchRecency instead. An open-ended "what is happening in India" is searchQuery "India", searchRecency "week", searchCategory "news"
 - If needsWebSearch is false, provide an empty string
 
 Also tune the search when needsWebSearch is true:
 - searchRecency: "day" for breaking news/live data, "week" or "month" for recent developments, "none" when age doesn't matter
 - searchComprehensive: true for research-style questions wanting breadth (comparisons, overviews, "what are my options"), false for single-fact lookups
-- searchCategory: which kind of source answers best — "news" for current events and recent developments; "science" for medical, clinical, public-health and academic research questions (journals, studies, MSF research publications); "it" for programming, software and technical documentation; "humanitarian" for humanitarian crises, operations and datasets (displacement, outbreaks, country situations); "general" for everything else or when unsure
+- searchCategory: which kind of source answers best — "news" for current events, recent developments and open-ended "what is happening in/with X" questions; "science" for medical, clinical, public-health and academic research questions (journals, studies, MSF research publications); "it" for programming, software and technical documentation; "humanitarian" for humanitarian crises, operations and datasets (displacement, outbreaks, country situations); "general" for everything else or when unsure
 - additionalSearchQueries: almost always EMPTY — one query should cover the question whenever possible. Populate ONLY when the message contains multiple clearly SEPARABLE information needs that no single query can cover (e.g. "compare the France strikes with the Germany rail dispute" → one extra query). Max 4 extra queries; each follows the same 3-8 keyword rules. Never split one topic into variations of the same query${followUpPromptSection}${codeExecutionPromptSection}`;
 
             // Include recent conversation history for context-aware decisions
