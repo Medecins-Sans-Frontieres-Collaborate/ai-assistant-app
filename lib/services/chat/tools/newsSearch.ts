@@ -214,7 +214,7 @@ export function buildNewsResult(
 
   const lead =
     kind === 'web'
-      ? `Web search results for ${queryLabel} (titles and snippets — synthesize an answer from these and cite by number):`
+      ? `Web search results for ${queryLabel} (titles and snippets — synthesize an answer from these and cite by number; a result that is only a publication's homepage or section index describes the outlet, not an event — never report it as a development):`
       : `Recent news results for ${queryLabel} (headlines and snippets — synthesize an answer from these and cite by number):`;
   const text = `${lead}\n\n${digest}`;
 
