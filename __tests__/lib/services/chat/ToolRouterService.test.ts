@@ -179,6 +179,89 @@ describe('ToolRouterService', () => {
         ]);
       });
 
+      it('switches to liberal fan-out wording and a larger token cap when the backend welcomes it', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: true,
+                  searchQuery: 'Sudan',
+                  searchRecency: 'week',
+                  searchComprehensive: true,
+                  searchCategory: 'news',
+                  additionalSearchQueries: [
+                    'Sudan conflict RSF',
+                    'Sudan humanitarian crisis',
+                  ],
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage: 'what is happening in Sudan',
+          searchFanOut: true,
+        });
+
+        const args = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
+        expect(args.messages[0].content).toContain('0 to 4 EXTRA queries');
+        expect(args.messages[0].content).not.toContain('almost always EMPTY');
+        expect(args.max_completion_tokens).toBe(290);
+        expect(result.searchQueries).toEqual([
+          'Sudan',
+          'Sudan conflict RSF',
+          'Sudan humanitarian crisis',
+        ]);
+      });
+
+      it('keeps the conservative one-query wording by default', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [{ message: { content: '{"needsWebSearch":false}' } }],
+        });
+
+        await service.determineTool({ messages: [], currentMessage: 'hi' });
+
+        const args = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
+        expect(args.messages[0].content).toContain('almost always EMPTY');
+      });
+
+      it('plans an already-decided search even when the model says no search is needed', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: false,
+                  searchQuery: 'recursion programming',
+                  searchRecency: 'none',
+                  searchComprehensive: false,
+                  searchCategory: 'it',
+                  additionalSearchQueries: [],
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage: 'explain recursion',
+          searchDecided: true,
+          searchFanOut: true,
+        });
+
+        const args = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
+        expect(args.messages[0].content).toContain(
+          'needsWebSearch MUST be true',
+        );
+        expect(result.tools).toEqual(['web_search']);
+        expect(result.searchQuery).toBe('recursion programming');
+        expect(result.searchCategory).toBe('it');
+      });
+
       it('passes a valid searchCategory through and drops an unknown one', async () => {
         const respond = (searchCategory: string) =>
           mockOpenAIClient.chat.completions.create.mockResolvedValue({
