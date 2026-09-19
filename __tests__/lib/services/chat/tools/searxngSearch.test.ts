@@ -376,7 +376,7 @@ describe('searchSearxng', () => {
     ]);
   });
 
-  it('runs one leg per query on the primary category for a fan-out, capped at 5', async () => {
+  it('runs one leg per query on the primary category, capped at 5 queries', async () => {
     fetchMock.mockImplementation(async (url: string) => {
       const q = new URL(url).searchParams.get('q');
       return jsonResponse({
@@ -388,7 +388,6 @@ describe('searchSearxng', () => {
       resultCount: 8,
       freshness: 'any',
       category: 'science',
-      deep: true,
     });
 
     expect(fetchMock).toHaveBeenCalledTimes(5);
@@ -396,6 +395,30 @@ describe('searchSearxng', () => {
       expect(new URL(url).searchParams.get('categories')).toBe('science');
     }
     expect(outcome.entries).toHaveLength(5);
+  });
+
+  it('adds the breadth categories on the PRIMARY query only, within 6 requests', async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ results: [result(1)] }));
+
+    await searchSearxng(['a', 'b', 'c', 'd', 'e'], {
+      resultCount: 8,
+      freshness: 'any',
+      category: 'humanitarian',
+      deep: true,
+    });
+
+    const legs = fetchMock.mock.calls.map(([url]) => {
+      const params = new URL(url).searchParams;
+      return `${params.get('categories')}:${params.get('q')}`;
+    });
+    expect(legs).toEqual([
+      'humanitarian:a',
+      'humanitarian:b',
+      'humanitarian:c',
+      'humanitarian:d',
+      'humanitarian:e',
+      'news:a',
+    ]);
   });
 
   it('keeps stories and sheds front pages for a current-events search', async () => {
