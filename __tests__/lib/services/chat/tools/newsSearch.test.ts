@@ -1,6 +1,7 @@
 import { searchGdelt } from '@/lib/services/chat/tools/gdeltSearch';
 import { fetchGoogleNewsItems } from '@/lib/services/chat/tools/googleNewsSearch';
 import {
+  mergeNewsEntries,
   searchNewsFanOut,
   searchNewsParallel,
 } from '@/lib/services/chat/tools/newsSearch';
@@ -40,6 +41,44 @@ const googleItem = (n: number, overrides: Record<string, string> = {}) => ({
 });
 
 const OPTIONS = { resultCount: 8, freshness: 'any' } as const;
+
+describe('mergeNewsEntries', () => {
+  it('does not merge unrelated non-Latin titles that share only digits', () => {
+    const entry = (title: string, n: number) => ({
+      title,
+      url: `https://site.example/${n}`,
+      date: '',
+    });
+    const merged = mergeNewsEntries(
+      [[entry('2026年印度洪水', 1), entry('2026年苏丹和平谈判', 2)]],
+      8,
+    );
+    expect(merged).toHaveLength(2);
+  });
+
+  it('still merges the same story published under two URLs', () => {
+    const merged = mergeNewsEntries(
+      [
+        [
+          {
+            title: 'Floods displace thousands',
+            url: 'https://a.example/1',
+            date: '',
+          },
+        ],
+        [
+          {
+            title: 'Floods Displace Thousands!',
+            url: 'https://b.example/1',
+            date: '',
+          },
+        ],
+      ],
+      8,
+    );
+    expect(merged).toHaveLength(1);
+  });
+});
 
 describe('searchNewsParallel', () => {
   beforeEach(() => {
