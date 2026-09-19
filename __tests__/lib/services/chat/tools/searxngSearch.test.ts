@@ -1,8 +1,10 @@
 import {
   buildSearxngUrl,
+  isLikelyHubPage,
   isSearxngConfigured,
   parseSearxngResponse,
   planSearxngCategories,
+  preferArticles,
   searchSearxng,
 } from '@/lib/services/chat/tools/searxngSearch';
 
@@ -108,6 +110,55 @@ describe('buildSearxngUrl', () => {
         buildSearxngUrl('https://searx.internal', 'q', 'science', 'day'),
       ).searchParams.has('time_range'),
     ).toBe(false);
+  });
+});
+
+describe('isLikelyHubPage', () => {
+  it('flags homepages, section fronts, tag listings and index pages', () => {
+    for (const url of [
+      'https://www.indiatoday.in/',
+      'https://www.bbc.com/news/world/asia/india',
+      'https://economictimes.indiatimes.com/news/politics',
+      'https://www.ndtv.com/latest',
+      'https://www.hindustantimes.com/india-news',
+      'https://telanganatoday.com/tag/semicon-india-2026',
+      'https://pib.gov.in/indexd.aspx?reg=3&lang=1',
+      'https://werindia.com/elections2026',
+    ]) {
+      expect(isLikelyHubPage(url), url).toBe(true);
+    }
+  });
+
+  it('recognises stories by a multi-word slug or a long numeric id', () => {
+    for (const url of [
+      'https://www.bbc.com/news/articles/c4g5k2xq9d1o-india-floods-displace-thousands',
+      'https://www.reuters.com/world/india/india-cuts-fuel-tax-2026-09-17/',
+      'https://www.ndtv.com/india-news/monsoon-floods-assam-death-toll-rises-7654321',
+      'https://www.thehindu.com/news/national/article70012345.ece',
+      'https://example.com/2026/09/17/parliament-passes-data-bill.html',
+    ]) {
+      expect(isLikelyHubPage(url), url).toBe(false);
+    }
+  });
+
+  it('never flags an unparseable URL', () => {
+    expect(isLikelyHubPage('not a url')).toBe(false);
+  });
+});
+
+describe('preferArticles', () => {
+  const entry = (url: string) => ({ title: url, url, date: '' });
+  const hub = entry('https://www.ndtv.com/latest');
+  const stories = [1, 2, 3].map((n) =>
+    entry(`https://site.example/news/floods-displace-thousands-${n}`),
+  );
+
+  it('drops hub pages once enough stories exist', () => {
+    expect(preferArticles([hub, ...stories])).toEqual(stories);
+  });
+
+  it('keeps hub pages, demoted, when stories are scarce', () => {
+    expect(preferArticles([hub, stories[0]])).toEqual([stories[0], hub]);
   });
 });
 
@@ -345,6 +396,60 @@ describe('searchSearxng', () => {
       expect(new URL(url).searchParams.get('categories')).toBe('science');
     }
     expect(outcome.entries).toHaveLength(5);
+  });
+
+  it('keeps stories and sheds front pages for a current-events search', async () => {
+    const story = (n: number) => ({
+      url: `https://paper.example/india/floods-displace-thousands-${n}`,
+      title: `Story ${n}`,
+    });
+    fetchMock.mockImplementation(async (url: string) =>
+      new URL(url).searchParams.get('categories') === 'general'
+        ? jsonResponse({
+            results: [
+              { url: 'https://www.indiatoday.in/', title: 'Latest News' },
+              { url: 'https://www.ndtv.com/latest', title: 'Big headlines' },
+              story(9),
+            ],
+          })
+        : jsonResponse({ results: [story(1), story(2), story(3)] }),
+    );
+
+    const outcome = await searchSearxng(['India'], {
+      resultCount: 8,
+      freshness: 'week',
+      category: 'general',
+    });
+
+    expect(outcome.entries.map((e) => e.title).sort()).toEqual([
+      'Story 1',
+      'Story 2',
+      'Story 3',
+      'Story 9',
+    ]);
+  });
+
+  it('leaves reference pages alone outside current-events searches', async () => {
+    fetchMock.mockResolvedValue(
+      jsonResponse({
+        results: [
+          { url: 'https://en.wikipedia.org/wiki/Cholera', title: 'Cholera' },
+          result(1),
+          result(2),
+          result(3),
+        ],
+      }),
+    );
+
+    const outcome = await searchSearxng(['cholera'], {
+      resultCount: 8,
+      freshness: 'any',
+    });
+
+    expect(outcome.entries[0].url).toBe(
+      'https://en.wikipedia.org/wiki/Cholera',
+    );
+    expect(outcome.entries).toHaveLength(4);
   });
 
   it('retries without the recency window when it comes back empty', async () => {
