@@ -51,7 +51,9 @@ const AUTH_RETRY_DELAY_MS = 1_500;
 // Science abstracts arrive whole; keep enough to answer from, not all of it.
 const SNIPPET_CHARS = 700;
 const MAX_ANSWERS = 2;
-const MAX_LEGS = 5;
+const MAX_QUERIES = 5;
+// Queries × primary category, plus the primary query's breadth categories.
+const MAX_LEGS = 6;
 
 export function isSearxngConfigured(): boolean {
   return Boolean(env.SEARXNG_URL && env.SEARXNG_API_KEY);
@@ -427,9 +429,11 @@ async function runLegs(
 }
 
 /**
- * Runs the search. A single query fans out across the planned categories; a
- * multi-aspect question (router fan-out) runs one leg per query on the
- * primary category instead. At most 5 concurrent requests either way.
+ * Runs the search. Each query (router fan-out, max 5) is one leg on the
+ * primary category; the primary query also covers the plan's breadth
+ * categories. At most 6 concurrent requests — the instance is ours, so the
+ * bound protects the UPSTREAM engines (each leg fans out to ~5 of them, and
+ * they CAPTCHA cloud egress IPs that get noisy), not SearXNG itself.
  *
  * Current-events searches (news category, or a day/week window) keep
  * stories and shed publication front pages — see isLikelyHubPage.
@@ -445,14 +449,19 @@ export async function searchSearxng(
   if (!isSearxngConfigured()) {
     throw new Error('SearXNG is not configured (SEARXNG_URL/SEARXNG_API_KEY)');
   }
-  const capped = queries.filter((q) => q.trim().length > 0).slice(0, MAX_LEGS);
+  const capped = queries
+    .filter((q) => q.trim().length > 0)
+    .slice(0, MAX_QUERIES);
   if (capped.length === 0) return { entries: [], answers: [] };
 
   const categories = planSearxngCategories(options);
-  const legs: Leg[] =
-    capped.length > 1
-      ? capped.map((query) => ({ query, category: categories[0] }))
-      : categories.map((category) => ({ query: capped[0], category }));
+  // Every query runs on the primary category; the breadth categories
+  // (deep / recency / humanitarian pairing) ride on the primary query only,
+  // so a 5-query fan-out costs 6 requests, not 10-15.
+  const legs: Leg[] = [
+    ...capped.map((query) => ({ query, category: categories[0] })),
+    ...categories.slice(1).map((category) => ({ query: capped[0], category })),
+  ].slice(0, MAX_LEGS);
 
   const articlesOnly = isCurrentEventsSearch(options);
   console.log(
