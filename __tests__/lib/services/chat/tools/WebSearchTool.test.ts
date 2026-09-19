@@ -249,6 +249,25 @@ describe('WebSearchTool', () => {
       expect(result.metadata).toEqual({ searxngFallback: true });
     });
 
+    it('does NOT fall back to news headlines for science or IT questions', async () => {
+      vi.mocked(searchSearxng).mockRejectedValue(new Error('down'));
+
+      for (const category of ['science', 'it'] as const) {
+        const result = await webSearchTool.execute({
+          searchQuery: 'q',
+          provider: 'searxng',
+          category,
+          user,
+        });
+        expect(result).toEqual({
+          text: '',
+          citations: [],
+          metadata: { searxngFallback: true },
+        });
+      }
+      expect(searchNewsParallel).not.toHaveBeenCalled();
+    });
+
     it('falls back when the instance finds nothing', async () => {
       vi.mocked(searchSearxng).mockResolvedValue({ entries: [], answers: [] });
 
