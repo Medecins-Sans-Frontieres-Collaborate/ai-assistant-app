@@ -69,6 +69,18 @@ export class WebSearchTool implements Tool {
       if (provider === 'searxng') {
         const result = await this.executeSearxng(params);
         if (result) return result;
+        // The fallback feeds are NEWS feeds: headlines answer a news or
+        // general question, but for a science or programming question they
+        // are noise the model would dutifully cite. There, an honest "found
+        // nothing" (the enricher's knowledge-answer path) is the better
+        // degradation.
+        if (params.category === 'science' || params.category === 'it') {
+          return {
+            text: '',
+            citations: [],
+            metadata: { searxngFallback: true },
+          };
+        }
         const fallback = await this.executeFeeds('news', params);
         return {
           ...fallback,
