@@ -234,8 +234,16 @@ const serverEnvSchema = z.object({
   // SearXNG instance (private endpoint in the tools environment). The key is
   // the shared secret the proxy in front of it requires in `X-Search-Key`;
   // Terraform sets both from one random_password.
-  SEARXNG_URL: z.string().url().optional(),
-  SEARXNG_API_KEY: z.string().optional(),
+  // Blank counts as unset: Terraform renders an empty value in environments
+  // without the instance, and `.url()` on '' would fail the whole boot.
+  SEARXNG_URL: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().url().optional(),
+  ),
+  SEARXNG_API_KEY: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().optional(),
+  ),
 
   // Web search round-trip budget (ms). Applies to whichever provider runs.
   // Bing grounding via the Foundry search agent is simply slow (observed
