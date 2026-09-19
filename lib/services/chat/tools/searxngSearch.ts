@@ -183,6 +183,81 @@ function answerText(raw: unknown): string {
   return '';
 }
 
+const HUB_SEGMENTS: ReadonlySet<string> = new Set([
+  'tag',
+  'tags',
+  'topic',
+  'topics',
+  'category',
+  'categories',
+  'section',
+  'sections',
+  'latest',
+  'live',
+  'search',
+  'author',
+  'authors',
+]);
+
+/**
+ * True for a publication's front door rather than a story: a homepage, a
+ * section front (`/news/world/asia/india`, `/india-news`), a tag or topic
+ * listing, an index page. Their snippets describe the OUTLET ("latest news,
+ * breaking headlines…"), so a current-events answer built on them reports
+ * on news sites instead of events. An article URL is recognised by what hub
+ * URLs lack: a multi-word slug or a long numeric id in its last segment.
+ */
+export function isLikelyHubPage(url: string): boolean {
+  let pathname: string;
+  try {
+    pathname = new URL(url).pathname;
+  } catch {
+    return false;
+  }
+  const segments = pathname
+    .split('/')
+    .map((segment) => segment.trim().toLowerCase())
+    .filter(Boolean);
+  if (segments.length === 0) return true;
+  if (segments.some((segment) => HUB_SEGMENTS.has(segment))) return true;
+  const last = segments[segments.length - 1].replace(/\.[a-z0-9]{2,5}$/, '');
+  if (/^(index|home|default)[a-z]?$/.test(last)) return true;
+  const words = last.split(/[-_]+/).filter(Boolean);
+  const hasArticleSlug = words.length >= 3;
+  const hasArticleId = segments.some((segment) => /\d{5,}/.test(segment));
+  return !hasArticleSlug && !hasArticleId;
+}
+
+// Below this many real stories, hub pages stay (demoted) rather than
+// leaving the model with almost nothing.
+const MIN_ARTICLES_TO_DROP_HUBS = 3;
+
+/**
+ * Current-events searches want stories, not front pages: articles lead, and
+ * hub pages are dropped once enough stories exist.
+ */
+export function preferArticles(
+  entries: SearchHeadlineEntry[],
+): SearchHeadlineEntry[] {
+  const articles = entries.filter((entry) => !isLikelyHubPage(entry.url));
+  if (articles.length >= MIN_ARTICLES_TO_DROP_HUBS) return articles;
+  return [
+    ...articles,
+    ...entries.filter((entry) => isLikelyHubPage(entry.url)),
+  ];
+}
+
+/** News-intent search: the news category, or a day/week recency window. */
+function isCurrentEventsSearch(
+  options: Pick<SearxngSearchOptions, 'category' | 'freshness'>,
+): boolean {
+  return (
+    options.category === 'news' ||
+    ((options.category ?? 'general') === 'general' &&
+      (options.freshness === 'day' || options.freshness === 'week'))
+  );
+}
+
 export function parseSearxngResponse(
   body: unknown,
   resultCount: number,
@@ -294,12 +369,16 @@ interface Leg {
 
 async function runLegs(
   legs: Leg[],
-  options: Pick<SearxngSearchOptions, 'resultCount' | 'freshness'>,
+  options: Pick<SearxngSearchOptions, 'resultCount' | 'freshness'> & {
+    articlesOnly: boolean;
+  },
 ): Promise<SearxngSearchOutcome> {
   // Per-leg share plus buffer so cross-leg dedupe still fills the cap.
+  // Article-only searches over-fetch: hub pages are filtered out AFTER the
+  // merge, and the cap must still fill with stories.
   const perLegCount =
-    legs.length <= 1
-      ? options.resultCount
+    legs.length <= 1 || options.articlesOnly
+      ? options.resultCount * (options.articlesOnly ? 2 : 1)
       : Math.min(
           options.resultCount,
           Math.max(3, Math.ceil(options.resultCount / legs.length) + 2),
@@ -337,17 +416,23 @@ async function runLegs(
   if (failures.length === legs.length) {
     throw new Error(`SearXNG search failed — ${failures.join('; ')}`);
   }
-  return {
-    // Round-robin interleave across legs, deduplicated by URL and title.
-    entries: mergeNewsEntries(lists, options.resultCount),
-    answers: answers.slice(0, MAX_ANSWERS),
-  };
+  // Round-robin interleave across legs, deduplicated by URL and title.
+  const entries = options.articlesOnly
+    ? preferArticles(mergeNewsEntries(lists, perLegCount * legs.length)).slice(
+        0,
+        options.resultCount,
+      )
+    : mergeNewsEntries(lists, options.resultCount);
+  return { entries, answers: answers.slice(0, MAX_ANSWERS) };
 }
 
 /**
  * Runs the search. A single query fans out across the planned categories; a
  * multi-aspect question (router fan-out) runs one leg per query on the
  * primary category instead. At most 5 concurrent requests either way.
+ *
+ * Current-events searches (news category, or a day/week window) keep
+ * stories and shed publication front pages — see isLikelyHubPage.
  *
  * A recency window that comes back EMPTY is retried once without it — a
  * sparse "past day" must not read as "nothing exists". Throws only when
@@ -369,7 +454,12 @@ export async function searchSearxng(
       ? capped.map((query) => ({ query, category: categories[0] }))
       : categories.map((category) => ({ query: capped[0], category }));
 
-  const outcome = await runLegs(legs, options);
+  const articlesOnly = isCurrentEventsSearch(options);
+  console.log(
+    `[searxngSearch] Plan: ${legs.map((leg) => `${leg.category}:"${leg.query}"`).join(', ')} (freshness: ${options.freshness}, articlesOnly: ${articlesOnly})`,
+  );
+
+  const outcome = await runLegs(legs, { ...options, articlesOnly });
   const windowed =
     options.freshness !== 'any' &&
     legs.some((leg) => TIME_RANGE_CATEGORIES.has(leg.category));
@@ -377,7 +467,7 @@ export async function searchSearxng(
     console.log(
       `[searxngSearch] Nothing within the "${options.freshness}" window — retrying without it`,
     );
-    return runLegs(legs, { ...options, freshness: 'any' });
+    return runLegs(legs, { ...options, freshness: 'any', articlesOnly });
   }
   return outcome;
 }
