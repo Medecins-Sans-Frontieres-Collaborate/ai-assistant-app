@@ -183,7 +183,9 @@ export class WebSearchTool implements Tool {
       );
       const digest = buildNewsResult(
         outcome.entries,
-        queries.map((q) => `"${q}"`).join('; '),
+        // A planning failure passes the raw user message as the query —
+        // keep the digest header a label, not a second copy of the prompt.
+        queries.map((q) => `"${q.slice(0, 120)}"`).join('; '),
         'web',
       );
       const answerLead =
