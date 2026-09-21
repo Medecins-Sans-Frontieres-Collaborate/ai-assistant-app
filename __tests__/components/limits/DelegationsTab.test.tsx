@@ -9,6 +9,21 @@ import { LIMIT_DEFINITIONS } from '@/config/limits';
 import '@testing-library/jest-dom';
 import { describe, expect, it, vi } from 'vitest';
 
+vi.mock('@/lib/navigation', () => ({
+  Link: ({
+    href,
+    children,
+    ...rest
+  }: {
+    href: string;
+    children: React.ReactNode;
+  }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}));
+
 vi.mock('next-intl', () => ({
   useTranslations:
     () => (key: string, params?: Record<string, string | number>) =>
