@@ -35,6 +35,7 @@ import {
   isGlobalAdmin,
   resolveAdminStatus,
 } from '@/lib/services/agentAccess/adminAuth';
+import { resolveAnnouncementsAdmin } from '@/lib/services/announcements/adminAccess';
 import { LimitsService } from '@/lib/services/limits/LimitsService';
 import {
   LimitsAdminStatus,
@@ -52,6 +53,8 @@ export const ADMIN_AREA_IDS = [
   'form-templates',
   'limits',
   'workflows',
+  'announcements',
+  'delegations',
   'local-admins',
   'global-admins',
   'view-as',
@@ -149,9 +152,24 @@ export async function resolveAdminAreas(
     areas.push('limits');
   }
 
+  // Announcements: global admins, plus delegated senders — people holding the
+  // `announcements` grant in an enabled shared delegation. Its own gate, fed
+  // by the shared delegations; NOT derived from `limitsStatus` (a limits
+  // delegate was never granted messaging unless their grants say so).
+  const announcementsAdmin = await resolveAnnouncementsAdmin(user);
+  if (announcementsAdmin.delegationsUnavailable) configUnavailable = true;
+  if (
+    announcementsAdmin.status.isGlobalAdmin ||
+    announcementsAdmin.status.isDelegatedAdmin
+  ) {
+    areas.push('announcements');
+  }
+
   if (isGlobalAdmin(user)) {
     // The workflow policy is one org-wide document, like limits: global only.
     areas.push('workflows');
+    // A delegation decides who else may administer: global admins only.
+    areas.push('delegations');
     // Who the global admins are is decided by global admins — EFFECTIVE
     // identity, like every other admin area, so a view-as-demoted admin does
     // not see it (they exit view-as to edit the roster). Deliberately outside
