@@ -8,6 +8,8 @@ import {
   IconRobot,
   IconRoute,
   IconShieldLock,
+  IconSpeakerphone,
+  IconUserShield,
   IconUsersGroup,
   IconVocabulary,
 } from '@tabler/icons-react';
@@ -111,6 +113,22 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     group: 'access',
     labelKey: 'admin.area.workflows',
     descriptionKey: 'admin.areaDescription.workflows',
+  },
+  announcements: {
+    id: 'announcements',
+    href: '/admin/announcements',
+    icon: IconSpeakerphone,
+    group: 'usage',
+    labelKey: 'admin.area.announcements',
+    descriptionKey: 'admin.areaDescription.announcements',
+  },
+  delegations: {
+    id: 'delegations',
+    href: '/admin/delegations',
+    icon: IconUserShield,
+    group: 'administration',
+    labelKey: 'admin.area.delegations',
+    descriptionKey: 'admin.areaDescription.delegations',
   },
   'local-admins': {
     id: 'local-admins',
