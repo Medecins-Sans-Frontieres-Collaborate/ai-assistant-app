@@ -5,15 +5,22 @@ import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { useVersionCheck } from '@/client/hooks/app/useVersionCheck';
 import { useUI } from '@/client/hooks/ui/useUI';
 
 import { ReleaseNotesModal } from '@/components/App/ReleaseNotesModal';
 
-export function UpdateBanner() {
+interface UpdateBannerProps {
+  isUpdateAvailable: boolean;
+  dismiss: () => void;
+}
+
+/** Rendered by BannerHost, which owns the poll that feeds it. */
+export function UpdateBanner({
+  isUpdateAvailable,
+  dismiss,
+}: UpdateBannerProps) {
   const t = useTranslations();
   const { showChatbar } = useUI();
-  const { isUpdateAvailable, dismiss } = useVersionCheck();
   const [showReleaseNotes, setShowReleaseNotes] = useState(false);
 
   if (!isUpdateAvailable) return null;
