@@ -9,7 +9,7 @@ import { LocalStorageService } from '@/client/services/storage/localStorageServi
 import { shouldShowStorageWarning } from '@/lib/utils/app/storage/storageMonitor';
 
 import { ViewAsBanner } from '@/components/Admin/ViewAs/ViewAsBanner';
-import { UpdateBanner } from '@/components/App/UpdateBanner';
+import { BannerHost } from '@/components/App/BannerHost';
 import { BackupModals } from '@/components/Backup/BackupModals';
 import { BackupSyncBanner } from '@/components/Backup/BackupSyncBanner';
 import { MigrationDialog } from '@/components/Migration/MigrationDialog';
@@ -101,7 +101,7 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
       data-sidebar-width-root
       style={{ '--sidebar-width': `${sidebarWidth}px` } as React.CSSProperties}
     >
-      <UpdateBanner />
+      <BannerHost />
       {/* Both banners read the session, so they live inside AppProviders
           (SessionProvider) rather than the locale layout. */}
       <RegionOverrideBanner />
