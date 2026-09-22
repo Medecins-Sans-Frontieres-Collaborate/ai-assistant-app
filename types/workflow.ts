@@ -7,6 +7,7 @@
  * standard chat. The type is fixed at creation time: it is only ever set on
  * an empty conversation and never changed afterward.
  */
+import { ChannelDrafterWorkflowState } from './drafter';
 import { FormFillWorkflowState } from './formFill';
 import { TabularFieldType } from './structure';
 
@@ -17,6 +18,7 @@ export const CONVERSATION_WORKFLOW_TYPES = [
   'map',
   'grants',
   'form-fill',
+  'channel-drafter',
 ] as const;
 
 export type ConversationWorkflowType =
@@ -847,4 +849,5 @@ export type WorkflowState =
   | DataAnalysisWorkflowState
   | MapWorkflowState
   | GrantsWorkflowState
-  | FormFillWorkflowState;
+  | FormFillWorkflowState
+  | ChannelDrafterWorkflowState;
