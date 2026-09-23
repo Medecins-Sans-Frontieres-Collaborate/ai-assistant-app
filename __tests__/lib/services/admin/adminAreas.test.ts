@@ -111,6 +111,18 @@ describe('resolveAdminAreas', () => {
     expect(localAreas).not.toContain('view-as');
   });
 
+  it('gives every admin channel sets but only global admins the platforms', async () => {
+    const globalAreas = (await resolveAdminAreas({ mail: 'admin@example.com' }))
+      .areas;
+    expect(globalAreas).toContain('channel-sets');
+    expect(globalAreas).toContain('channel-profiles');
+
+    const localAreas = (await resolveAdminAreas({ mail: 'local@example.com' }))
+      .areas;
+    expect(localAreas).toContain('channel-sets');
+    expect(localAreas).not.toContain('channel-profiles');
+  });
+
   it('gives announcements to global admins and to holders of the announcements grant ONLY', async () => {
     delegationsSnapshot.document = {
       delegations: [
