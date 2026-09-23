@@ -4,11 +4,16 @@ import {
   IconGauge,
   IconMap2,
   IconMasksTheater,
+  IconMessages,
   IconPlugConnected,
   IconRobot,
   IconRoute,
   IconShieldLock,
+  IconSocial,
+  IconSpeakerphone,
+  IconUserShield,
   IconUsersGroup,
+  IconVocabulary,
 } from '@tabler/icons-react';
 import { ComponentType } from 'react';
 
@@ -71,6 +76,14 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     labelKey: 'agentAccess.guidesTab',
     descriptionKey: 'admin.areaDescription.guides',
   },
+  glossaries: {
+    id: 'glossaries',
+    href: '/admin/glossaries',
+    icon: IconVocabulary,
+    group: 'access',
+    labelKey: 'agentAccess.glossariesTab',
+    descriptionKey: 'admin.areaDescription.glossaries',
+  },
   'map-datasets': {
     id: 'map-datasets',
     href: '/admin/map-datasets',
@@ -87,6 +100,22 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     labelKey: 'agentAccess.formTemplatesTab',
     descriptionKey: 'admin.areaDescription.formTemplates',
   },
+  'channel-sets': {
+    id: 'channel-sets',
+    href: '/admin/channel-sets',
+    icon: IconMessages,
+    group: 'access',
+    labelKey: 'agentAccess.channelSetsTab',
+    descriptionKey: 'admin.areaDescription.channelSets',
+  },
+  'channel-profiles': {
+    id: 'channel-profiles',
+    href: '/admin/channel-profiles',
+    icon: IconSocial,
+    group: 'access',
+    labelKey: 'agentAccess.channelProfilesTab',
+    descriptionKey: 'admin.areaDescription.channelProfiles',
+  },
   limits: {
     id: 'limits',
     href: '/admin/limits',
@@ -102,6 +131,22 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     group: 'access',
     labelKey: 'admin.area.workflows',
     descriptionKey: 'admin.areaDescription.workflows',
+  },
+  announcements: {
+    id: 'announcements',
+    href: '/admin/announcements',
+    icon: IconSpeakerphone,
+    group: 'usage',
+    labelKey: 'admin.area.announcements',
+    descriptionKey: 'admin.areaDescription.announcements',
+  },
+  delegations: {
+    id: 'delegations',
+    href: '/admin/delegations',
+    icon: IconUserShield,
+    group: 'administration',
+    labelKey: 'admin.area.delegations',
+    descriptionKey: 'admin.areaDescription.delegations',
   },
   'local-admins': {
     id: 'local-admins',

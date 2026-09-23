@@ -19,11 +19,19 @@ export const AGENT_ACCESS_GENERATION_PATH = `${AGENT_ACCESS_PREFIX}generation.js
 export const AGENT_ACCESS_PROMPT_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}prompt-agents/`;
 export const AGENT_ACCESS_CONNECTORS_PREFIX = `${AGENT_ACCESS_PREFIX}connectors/`;
 export const AGENT_ACCESS_GUIDES_PREFIX = `${AGENT_ACCESS_PREFIX}guides/`;
+/**
+ * Immutable guide PAYLOAD blobs (`<id>/<ref>.<json|jsonl>.gz`) — a SIBLING of
+ * guides/, never under it: the guides listing feeds the access snapshot and
+ * must stay meta-only (that is the point of the split). See guidePayloadStore.
+ */
+export const AGENT_ACCESS_GUIDE_PAYLOADS_PREFIX = `${AGENT_ACCESS_PREFIX}guide-payloads/`;
 export const AGENT_ACCESS_CATALOG_OAUTH_PREFIX = `${AGENT_ACCESS_PREFIX}catalog-oauth/`;
 export const AGENT_ACCESS_MAP_DATASET_META_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/meta/`;
 export const AGENT_ACCESS_MAP_DATASET_DATA_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/data/`;
 export const AGENT_ACCESS_M365_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agents/`;
 export const AGENT_ACCESS_FORM_TEMPLATES_PREFIX = `${AGENT_ACCESS_PREFIX}form-templates/`;
+export const AGENT_ACCESS_CHANNEL_PROFILES_PREFIX = `${AGENT_ACCESS_PREFIX}channel-profiles/`;
+export const AGENT_ACCESS_CHANNEL_SETS_PREFIX = `${AGENT_ACCESS_PREFIX}channel-sets/`;
 /** Original DOCX/PDF uploads behind admin form templates (binary, not JSON). */
 export const AGENT_ACCESS_FORM_TEMPLATE_ORIGINALS_PREFIX = `${AGENT_ACCESS_PREFIX}form-template-originals/`;
 /**
@@ -83,6 +91,36 @@ export const MAP_DATASET_SOURCE = 'map-dataset';
  * the other entity sources: rules, delegation and history for free.
  */
 export const FORM_TEMPLATE_SOURCE = 'form-template';
+
+/**
+ * Pseudo-source for admin-edited channel profiles in canonical keys
+ * (`channel-profile::<id>`) — docs/CHANNEL_DRAFTER_DESIGN.md §4.1. A record
+ * either OVERRIDES a built-in profile (its id is the built-in's id) or adds
+ * a channel of the organisation's own (`chan-<hex>`). Rules under this key
+ * decide who may draft for the channel.
+ */
+export const CHANNEL_PROFILE_SOURCE = 'channel-profile';
+
+/**
+ * Pseudo-source for channel RULE SETS in canonical keys (`channel-set::<id>`)
+ * — docs/CHANNEL_DRAFTER_DESIGN.md §4.1. A set is one team's house rules
+ * over the global platforms (MSF Norway, MSF USA Fundraising…). Rules under
+ * this key decide who may draft WITH the set; the key is also what a local
+ * admin holds to edit it, so a set's creator owns it through the ordinary
+ * delegation machinery.
+ */
+export const CHANNEL_SET_SOURCE = 'channel-set';
+
+/**
+ * Pseudo-source for PUBLISHING rights in canonical keys: `publish::<channel
+ * id>` for one channel, `publish::*` for every channel. Unlike every other
+ * source this one is DEFAULT DENY: the engine's "no rule = allow" is read as
+ * "nobody" by publishAccess.ts, because sending a post out under the
+ * organisation's name must be granted, never inherited
+ * (docs/CHANNEL_DRAFTER_DESIGN.md §11.1).
+ */
+export const PUBLISH_SOURCE = 'publish';
+export const PUBLISH_ALL_CHANNELS = '*';
 
 /**
  * Pseudo-source for M365 file-backed RAG agents in canonical keys
@@ -804,6 +842,17 @@ export const GuideGlossaryEntrySchema = z.object({
  * to null and callers fail closed. The admin write route enforces the strict
  * per-kind shape.
  */
+/** Serialization of an external guide payload blob (see guidePayloadStore). */
+export const GuidePayloadFormatSchema = z.enum(['json', 'jsonl']);
+export type GuidePayloadFormat = z.infer<typeof GuidePayloadFormatSchema>;
+
+/**
+ * Opaque, sortable payload reference: `<base36 epoch ms>-<8 hex>`. The epoch
+ * prefix lets pruning keep a grace window for stale-snapshot readers without
+ * a listing-with-properties round trip.
+ */
+export const GUIDE_PAYLOAD_REF_PATTERN = /^[0-9a-z]{6,12}-[0-9a-f]{8}$/;
+
 export const GuideSchema = z.object({
   version: z.literal(1),
   /** Server-generated `guide-<hex>`; immutable — canonical keys hang off it. */
@@ -813,6 +862,24 @@ export const GuideSchema = z.object({
   description: z.string().default(''),
   /** Advisory picker metadata (e.g. ['French']); never evaluated. */
   languages: z.array(z.string()).default([]),
+  /**
+   * Structured language pair for terminology guides (glossaries): catalog
+   * ids from TRANSLATION_LANGUAGES. Discovery metadata only — pickers sort
+   * and warn on it; nothing server-side enforces it. Optional so records
+   * written before the field existed keep working ("any language").
+   */
+  sourceLang: z.string().optional(),
+  targetLang: z.string().optional(),
+  /**
+   * SPLIT STORAGE: when set, this record is META only and the kind's payload
+   * fields live in the immutable blob `guidePayloadBlobPath(id, ref,
+   * format)`. Records without it carry their payload inline (legacy — the
+   * next admin save migrates them). Readers go through hydrateGuide().
+   */
+  payloadRef: z.string().regex(GUIDE_PAYLOAD_REF_PATTERN).optional(),
+  payloadFormat: GuidePayloadFormatSchema.optional(),
+  /** terminology: number of entries in the payload (listing badge). */
+  entryCount: z.number().int().nonnegative().optional(),
   /** style/compliance: markdown rubric, token-budgeted at injection. */
   body: z.string().optional(),
   /** tone: voice rules + optional examples (ToneInput shape). */
@@ -834,6 +901,62 @@ export type Guide = z.infer<typeof GuideSchema>;
 
 export type GuideSpecSection = z.infer<typeof GuideSpecSectionSchema>;
 export type GuideGlossaryEntry = z.infer<typeof GuideGlossaryEntrySchema>;
+
+/** The kind-specific payload fields a guide record may carry inline. */
+export const GUIDE_PAYLOAD_FIELD_KEYS = [
+  'body',
+  'voiceRules',
+  'examples',
+  'sections',
+  'generalGuidance',
+  'entries',
+] as const;
+export type GuidePayloadFieldKey = (typeof GUIDE_PAYLOAD_FIELD_KEYS)[number];
+export type GuidePayloadFields = Pick<Guide, GuidePayloadFieldKey>;
+
+/**
+ * Read schema for a JSON-format payload blob (prose kinds). Permissive like
+ * the record schema: every field optional, and guidePayload() remains the
+ * coherence gate after hydration.
+ */
+export const GuidePayloadFieldsSchema = z.object({
+  body: z.string().optional(),
+  voiceRules: z.string().optional(),
+  examples: z.string().optional(),
+  sections: z.array(GuideSpecSectionSchema).optional(),
+  generalGuidance: z.string().optional(),
+});
+
+/** True when the record's payload lives in an external blob. */
+export function hasExternalPayload(guide: Guide): boolean {
+  return guide.payloadRef !== undefined;
+}
+
+/** The record without any inline payload field — what META blobs store. */
+export function stripInlinePayload(guide: Guide): Guide {
+  const {
+    body: _body,
+    voiceRules: _voiceRules,
+    examples: _examples,
+    sections: _sections,
+    generalGuidance: _generalGuidance,
+    entries: _entries,
+    ...meta
+  } = guide;
+  return meta;
+}
+
+/** Just the inline payload fields of a record (undefined ones omitted). */
+export function inlinePayloadFields(guide: Guide): GuidePayloadFields {
+  const fields: GuidePayloadFields = {};
+  for (const key of GUIDE_PAYLOAD_FIELD_KEYS) {
+    const value = guide[key];
+    if (value !== undefined) {
+      (fields as Record<string, unknown>)[key] = value;
+    }
+  }
+  return fields;
+}
 
 /**
  * The kind-discriminated view of a guide's payload. Prompt builders consume
@@ -935,6 +1058,206 @@ export type AdminFormTemplateHistoryEntry = z.infer<
 >;
 
 export const FORM_TEMPLATE_ID_PATTERN = /^formtpl-[a-f0-9]{12}$/;
+
+/* ------------------------------------------------------------------ */
+/* Channel profiles (channel drafter, admin-edited)                    */
+/* ------------------------------------------------------------------ */
+
+/**
+ * What a platform is, as data an admin can correct when the platform
+ * changes. Every bound is deliberate: these numbers drive hard checks and a
+ * prompt, so a typo must be refused here, not discovered in a post.
+ */
+export const ChannelProfileDataSchema = z
+  .object({
+    name: z.string().trim().min(1).max(60),
+    family: z.enum(['social', 'email', 'messaging', 'web']),
+    /** 1 = single post; more = the channel has threads. */
+    maxSegments: z.number().int().min(1).max(50),
+    // Below this a post cannot hold its numbering (6), one link (25) and a
+    // sentence: every generation would spend its repair rounds and fail.
+    segmentLimit: z.number().int().min(60).max(100_000),
+    counting: z.enum(['graphemes', 'utf16', 'url-23', 'x-weighted', 'gsm7']),
+    slots: z
+      .array(
+        z
+          .object({
+            id: z.string().trim().min(1).max(40),
+            labelKey: z.literal('openingLine'),
+            maxChars: z.number().int().min(10).max(1_000),
+            appliesTo: z.literal('first-segment-first-line'),
+            foldLabelKey: z.literal('seeMore').optional(),
+          })
+          .strict(),
+      )
+      .max(1),
+    hashtags: z
+      .object({
+        max: z.number().int().min(0).max(30),
+        placement: z.enum(['inline', 'end', 'none']),
+      })
+      .strict(),
+    links: z
+      .object({
+        allowed: z.boolean(),
+        position: z.enum(['first', 'last']),
+      })
+      .strict(),
+    threadNumbering: z.enum(['none', 'n/N']),
+    /** Prose handed to the model. Capped: it is sent on every call. */
+    guidance: z.string().trim().max(2_000),
+    /** The Hootsuite social profile this channel is sent to, if any. */
+    publishTarget: z.string().trim().max(200).optional(),
+    /** Images per post and the alt text limit, where the channel has them. */
+    media: z
+      .object({
+        maxImages: z.number().int().min(0).max(50),
+        altLimit: z.number().int().min(10).max(10_000).optional(),
+      })
+      .strict()
+      .optional(),
+  })
+  .strict();
+export type ChannelProfileData = z.infer<typeof ChannelProfileDataSchema>;
+
+export const AdminChannelProfileSchema = z.object({
+  version: z.literal(1),
+  /** A built-in profile's id (an override) or a server-minted `chan-<hex>`. */
+  id: z.string().min(1),
+  /** False hides the channel from everyone, including a built-in one. */
+  enabled: z.boolean(),
+  profile: ChannelProfileDataSchema,
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type AdminChannelProfile = z.infer<typeof AdminChannelProfileSchema>;
+
+export const AdminChannelProfileHistoryEntrySchema = z.object({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  record: AdminChannelProfileSchema.nullable(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type AdminChannelProfileHistoryEntry = z.infer<
+  typeof AdminChannelProfileHistoryEntrySchema
+>;
+
+export const CUSTOM_CHANNEL_PROFILE_ID_PATTERN = /^chan-[a-f0-9]{12}$/;
+
+/* ------------------------------------------------------------------ */
+/* Channel rule sets                                                   */
+/* ------------------------------------------------------------------ */
+
+/**
+ * One team's rules for one platform: HOW they write for it. Everything a
+ * platform IS (limits, counting, threads, media) stays on the platform and
+ * is never copied here, so a limit change reaches every set at once. An
+ * absent field means "the platform's own".
+ */
+const channelRuleShape = {
+  enabled: z.boolean(),
+  /** House guidance handed to the model, in the set's language. */
+  guidance: z.string().trim().max(2_000).optional(),
+  hashtags: z
+    .object({
+      max: z.number().int().min(0).max(30),
+      placement: z.enum(['inline', 'end', 'none']),
+    })
+    .strict()
+    .optional(),
+  linkPosition: z.enum(['first', 'last']).optional(),
+  /** An organisation tone guide written for by default on this channel. */
+  defaultVoiceGuideId: z.string().trim().max(80).optional(),
+  /** This team's Hootsuite social profile for the channel. */
+  publishTarget: z.string().trim().max(200).optional(),
+};
+export const ChannelRuleSchema = z.object(channelRuleShape).strict();
+/**
+ * The stored form is read LENIENTLY: a field added later, or one a hand
+ * edit left behind, must not make a whole set vanish for its users.
+ */
+const ChannelRuleStoredSchema = z.object(channelRuleShape);
+export type ChannelRule = z.infer<typeof ChannelRuleSchema>;
+
+export const MAX_CHANNEL_SET_CHANNELS = 60;
+
+export const ChannelSetDefaultsSchema = z
+  .object({
+    /** Channels a new draft starts with, in order. */
+    channelIds: z.array(z.string().trim().min(1).max(60)).max(30),
+    donationUrl: z.string().trim().max(500).optional(),
+    /** Whether a draft from one web page links to it by default. */
+    articleLink: z.boolean(),
+    /** Guides (style, compliance) that Check applies by default. */
+    guideIds: z.array(z.string().trim().min(1).max(80)).max(3),
+  })
+  .strict();
+export type ChannelSetDefaults = z.infer<typeof ChannelSetDefaultsSchema>;
+
+/** The editable part of a set: everything but its identity and stamps. */
+export const ChannelSetDataSchema = z
+  .object({
+    name: z.string().trim().min(1).max(60),
+    /** English language name the guidance is written in ('' = unspecified). */
+    language: z.string().trim().max(40),
+    description: z.string().trim().max(300),
+    /** Keyed by platform id; a platform not listed is not offered. */
+    channels: z
+      .record(z.string().trim().min(1).max(60), ChannelRuleSchema)
+      .refine(
+        (value) => Object.keys(value).length <= MAX_CHANNEL_SET_CHANNELS,
+        {
+          message: `at most ${MAX_CHANNEL_SET_CHANNELS} channels`,
+        },
+      ),
+    defaults: ChannelSetDefaultsSchema,
+    /** Tie-break when a user may use several sets equally. */
+    isDefault: z.boolean(),
+  })
+  .strict();
+export type ChannelSetData = z.infer<typeof ChannelSetDataSchema>;
+
+export const ChannelRuleSetSchema = z.object({
+  version: z.literal(1),
+  /** `default` (the built-in set, once an admin has edited it) or `set-<hex>`. */
+  id: z.string().min(1),
+  name: z.string().trim().min(1).max(60),
+  language: z.string().trim().max(40),
+  description: z.string().trim().max(300),
+  channels: z.record(z.string().min(1).max(60), ChannelRuleStoredSchema),
+  defaults: ChannelSetDefaultsSchema,
+  isDefault: z.boolean(),
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type ChannelRuleSet = z.infer<typeof ChannelRuleSetSchema>;
+
+export const ChannelRuleSetHistoryEntrySchema = z.object({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  record: ChannelRuleSetSchema.nullable(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type ChannelRuleSetHistoryEntry = z.infer<
+  typeof ChannelRuleSetHistoryEntrySchema
+>;
+
+export const DEFAULT_CHANNEL_SET_ID = 'default';
+export const CUSTOM_CHANNEL_SET_ID_PATTERN = /^set-[a-f0-9]{12}$/;
+
+export function isChannelSetId(id: string): boolean {
+  return (
+    id === DEFAULT_CHANNEL_SET_ID || CUSTOM_CHANNEL_SET_ID_PATTERN.test(id)
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Map datasets                                                        */
@@ -1149,8 +1472,34 @@ export function guideBlobPath(id: string): string {
   return `${AGENT_ACCESS_GUIDES_PREFIX}${id}.json`;
 }
 
+/**
+ * `system/agent-access/guide-payloads/<id>/<ref>.<json|jsonl>.gz` — one
+ * immutable blob per saved payload version. The meta record names the live
+ * one; older refs are pruned after a grace window (guidePayloadStore).
+ */
+export function guidePayloadBlobPath(
+  id: string,
+  ref: string,
+  format: GuidePayloadFormat,
+): string {
+  return `${guidePayloadListPrefix(id)}${ref}.${format}.gz`;
+}
+
+/** Listing prefix for every payload version of one guide. */
+export function guidePayloadListPrefix(id: string): string {
+  return `${AGENT_ACCESS_GUIDE_PAYLOADS_PREFIX}${id}/`;
+}
+
 export function formTemplateBlobPath(id: string): string {
   return `${AGENT_ACCESS_FORM_TEMPLATES_PREFIX}${id}.json`;
+}
+
+export function channelProfileBlobPath(id: string): string {
+  return `${AGENT_ACCESS_CHANNEL_PROFILES_PREFIX}${id}.json`;
+}
+
+export function channelSetBlobPath(id: string): string {
+  return `${AGENT_ACCESS_CHANNEL_SETS_PREFIX}${id}.json`;
 }
 
 /** `<id>.<docx|pdf>` under the originals prefix (binary blob). */

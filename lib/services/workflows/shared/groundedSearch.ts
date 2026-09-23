@@ -76,9 +76,10 @@ export const bingResponsesProvider: GroundedSearchProvider = {
 };
 
 /**
- * Provider for the configured engine. Feed-only providers (news, gdelt,
- * google-news, combined) have no grounded-answer form, so they resolve to
- * the Bing agent exactly as the map route always did.
+ * Provider for the configured engine. Digest-only providers (searxng —
+ * also the unset default — news, gdelt, google-news, combined) have no
+ * grounded-answer form yet, so they resolve to the Bing agent exactly as
+ * the map route always did.
  */
 export function resolveGroundedSearchProvider(): GroundedSearchProvider {
   return env.WEB_SEARCH_PROVIDER === 'bing-responses'

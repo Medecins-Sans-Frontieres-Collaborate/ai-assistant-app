@@ -46,6 +46,21 @@ vi.mock('@/lib/services/limits/LimitsService', () => ({
     }),
   },
 }));
+// Shared delegations feed the announcements gate. Default: none stored, so
+// only global admins get the area; the grant test below sets one.
+const delegationsSnapshot = vi.hoisted(() => ({
+  document: null as null | { delegations: unknown[] },
+  etag: null as string | null,
+  unavailable: false,
+}));
+vi.mock('@/lib/services/delegations/DelegationsService', () => ({
+  DelegationsService: {
+    getInstance: () => ({
+      ensureFresh: vi.fn(),
+      getSnapshot: () => delegationsSnapshot,
+    }),
+  },
+}));
 const rosterSnapshot = vi.hoisted(() => ({
   roster: null,
   etag: null,
@@ -74,6 +89,8 @@ describe('resolveAdminAreas', () => {
     mockEnv.AGENT_ACCESS_CONTROL_ENABLED = true;
     limitsSnapshot.policy = null;
     limitsSnapshot.policyUnavailable = false;
+    delegationsSnapshot.document = null;
+    delegationsSnapshot.unavailable = false;
     rosterSnapshot.rosterUnavailable = false;
     limitsEnsureFresh.mockClear();
     rosterEnsureFresh.mockClear();
@@ -92,6 +109,61 @@ describe('resolveAdminAreas', () => {
     expect(localAreas).toContain('agents');
     expect(localAreas).not.toContain('workflows');
     expect(localAreas).not.toContain('view-as');
+  });
+
+  it('gives every admin channel sets but only global admins the platforms', async () => {
+    const globalAreas = (await resolveAdminAreas({ mail: 'admin@example.com' }))
+      .areas;
+    expect(globalAreas).toContain('channel-sets');
+    expect(globalAreas).toContain('channel-profiles');
+
+    const localAreas = (await resolveAdminAreas({ mail: 'local@example.com' }))
+      .areas;
+    expect(localAreas).toContain('channel-sets');
+    expect(localAreas).not.toContain('channel-profiles');
+  });
+
+  it('gives announcements to global admins and to holders of the announcements grant ONLY', async () => {
+    delegationsSnapshot.document = {
+      delegations: [
+        {
+          id: DEL_OCP,
+          label: 'OCP',
+          enabled: true,
+          jurisdiction: [{ scope: 'domain', targets: ['ocp.msf.org'] }],
+          capabilities: ['limits', 'announcements'],
+          admins: [
+            { mail: 'sender@ocp.msf.org', grants: ['announcements'] },
+            { mail: 'limits-only@ocp.msf.org', grants: ['limits'] },
+          ],
+          limits: { maxOverrides: 25 },
+          createdBy: 'x',
+          createdAt: 'x',
+          updatedBy: 'x',
+          updatedAt: 'x',
+        },
+      ],
+    };
+
+    const global = await resolveAdminAreas({ mail: 'admin@example.com' });
+    expect(global.areas).toContain('announcements');
+    expect(global.areas).toContain('delegations');
+
+    const sender = await resolveAdminAreas({ mail: 'sender@ocp.msf.org' });
+    expect(sender.areas).toEqual(['announcements']);
+
+    // A limits-only delegate was never granted messaging.
+    const limitsOnly = await resolveAdminAreas({
+      mail: 'limits-only@ocp.msf.org',
+    });
+    expect(limitsOnly.areas).not.toContain('announcements');
+    expect(limitsOnly.areas).not.toContain('delegations');
+  });
+
+  it('reports a delegations outage as configUnavailable, not as "not an admin"', async () => {
+    delegationsSnapshot.unavailable = true;
+    const resolution = await resolveAdminAreas({ mail: 'user@example.com' });
+    expect(resolution.configUnavailable).toBe(true);
   });
 
   it('keeps ONLY view-as for a global admin viewing as a regular user', async () => {

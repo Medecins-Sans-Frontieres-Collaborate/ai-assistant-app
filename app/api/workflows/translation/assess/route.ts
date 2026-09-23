@@ -6,10 +6,11 @@ import {
   workflowDisabledResponse,
 } from '@/lib/services/workflows/policy/guard';
 import { mergeGlossaryEntries } from '@/lib/services/workflows/shared/glossaryPrompts';
+import { resolveGuideCriteria } from '@/lib/services/workflows/shared/guideResolution';
 import {
-  resolveGuideCriteria,
-  resolveSlotGuide,
-} from '@/lib/services/workflows/shared/guideResolution';
+  requestedGuideIds,
+  resolveOrgGlossaries,
+} from '@/lib/services/workflows/shared/orgGlossaries';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
 import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
 import { runTranslationAssessment } from '@/lib/services/workflows/translation/translationOrchestrator';
@@ -27,6 +28,8 @@ import {
 } from '@/lib/utils/shared/review/customCriteria';
 import {
   MAX_GUIDES_PER_ASSESSMENT,
+  MAX_GUIDE_ENTRIES,
+  MAX_ORG_GLOSSARIES_PER_REQUEST,
   isGuideCriterionId,
 } from '@/lib/utils/shared/review/guideCriteria';
 import { sanitizeGlossaryEntry } from '@/lib/utils/shared/translation/glossaryMatch';
@@ -40,7 +43,9 @@ export const maxDuration = 300;
 
 const MAX_TEXT_CHARS = 60_000;
 const MAX_LANGUAGE_LABEL_CHARS = 80;
-const MAX_GLOSSARY_ENTRIES = 500;
+/** Same ceiling as the translate route (see its comment). */
+const MAX_GLOSSARY_ENTRIES =
+  MAX_ORG_GLOSSARIES_PER_REQUEST * MAX_GUIDE_ENTRIES + MAX_GUIDE_ENTRIES;
 const MAX_CRITERIA = 24;
 
 interface TranslationAssessRequest {
@@ -50,8 +55,9 @@ interface TranslationAssessRequest {
   criteria: string[];
   customCriteria?: CustomCriterionDefinition[];
   glossaryEntries?: GlossaryEntry[];
-  /** Admin terminology guide whose entries merge with (and win over) the
-   * local glossary — same attachment the translate route accepts. */
+  /** Organization glossaries — same attachment the translate route accepts. */
+  glossaryGuideIds?: string[];
+  /** Legacy single-guide form of `glossaryGuideIds`. */
   glossaryGuideId?: string;
   modelId?: string;
   /** Correlates the run's calls in telemetry; not otherwise used. */
@@ -74,7 +80,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Group-membership warm-up MUST precede resolveGuideCriteria /
-  // resolveSlotGuide below — guide access rules with group scope read the
+  // resolveOrgGlossaries below — guide access rules with group scope read the
   // cache synchronously. Never throws.
   await resolveUserGroupIds(req, session);
 
@@ -138,24 +144,27 @@ export async function POST(req: NextRequest) {
     ? body.glossaryEntries
         .map((e: unknown) => sanitizeGlossaryEntry(e))
         .filter((e): e is GlossaryEntry => e !== null)
+        // Personal glossaries share the org per-glossary ceiling; anything
+        // past it is a client bug or an abuse attempt, never a real termbase.
+        .slice(0, MAX_GUIDE_ENTRIES)
     : [];
   // Same merge as the translate route: guide entries first, guide wins on
   // duplicate source terms.
-  let guideEntries: GlossaryEntry[] = [];
-  if (typeof body.glossaryGuideId === 'string' && body.glossaryGuideId) {
-    const resolved = await resolveSlotGuide({
-      userMail: session.user?.mail ?? undefined,
-      guideId: body.glossaryGuideId,
-      expectedKind: 'terminology',
-      workflow: 'translation',
-    });
-    if ('error' in resolved) return badRequestResponse(resolved.error);
-    if (resolved.guide.payload.kind === 'terminology') {
-      guideEntries = resolved.guide.payload.entries;
-    }
+  const guideIds = requestedGuideIds(body);
+  if (guideIds === null) {
+    return badRequestResponse(
+      `At most ${MAX_ORG_GLOSSARIES_PER_REQUEST} organization glossaries per run`,
+    );
+  }
+  const orgResolution = await resolveOrgGlossaries(
+    session.user?.mail ?? undefined,
+    guideIds,
+  );
+  if ('error' in orgResolution) {
+    return badRequestResponse(orgResolution.error);
   }
   const glossaryEntries = mergeGlossaryEntries(
-    guideEntries,
+    orgResolution.entries,
     localEntries,
   ).slice(0, MAX_GLOSSARY_ENTRIES);
 

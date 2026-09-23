@@ -85,6 +85,11 @@ export function artifactOf(state: WorkflowState | undefined): WorkflowArtifact {
         ? { id: `form:${active.id}`, label: active.template.name }
         : WORKSPACE;
     }
+    case 'channel-drafter':
+      // Generation writes every channel in one run, so the run cannot be
+      // attributed to a single channel; the per-channel split is carried by
+      // the usage labels instead.
+      return WORKSPACE;
     default:
       return WORKSPACE;
   }

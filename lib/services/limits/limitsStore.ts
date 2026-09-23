@@ -37,6 +37,17 @@ import {
   uploadJson,
 } from '@/lib/services/agentAccess/blobCas';
 import {
+  DelegationsReadResult,
+  DelegationsUnreadableError,
+  readDelegationsDocument,
+  writeDelegationsDocument,
+} from '@/lib/services/delegations/delegationsStore';
+import {
+  DelegationsDocument,
+  fromLegacyLimitDelegations,
+  toLimitDelegations,
+} from '@/lib/services/delegations/types';
+import {
   LIMITS_HISTORY_PREFIX,
   LIMITS_POLICY_PATH,
   LimitsHistoryEntry,
@@ -91,11 +102,11 @@ export class PolicyUnreadableError extends Error {
 }
 
 /**
- * Reads and parses the policy. Returns null when none has been written yet;
- * throws {@link PolicyUnreadableError} for a document that exists but cannot
- * be parsed, and propagates storage failures unchanged.
+ * Reads and parses the STORED policy document, exactly as persisted — no
+ * delegations composed in. Only this module and the migration below want
+ * that; everything else reads through {@link readPolicy}.
  */
-export async function readPolicy(
+async function readStoredPolicy(
   storage: BlobStorage,
   options: { abortSignal?: AbortSignal } = {},
 ): Promise<PolicyReadResult | null> {
@@ -117,6 +128,133 @@ export async function readPolicy(
   return { policy, etag: result.etag };
 }
 
+const MIGRATION_AUTHOR = 'system:delegations-migration';
+
+/**
+ * The shared delegations document, created on first need.
+ *
+ * Delegations used to live inside the limits policy; they are now a category
+ * of their own (lib/services/delegations/types.ts). When the shared document
+ * does not exist yet it is built ONCE from the policy's legacy
+ * `delegations` and written create-only (`If-None-Match: *`), so two
+ * replicas racing here cannot both win — the loser re-reads the winner's
+ * document. The legacy copy is then stripped from the policy; that strip is
+ * best-effort because {@link writePolicy} never persists delegations again,
+ * so any later policy write finishes the job.
+ *
+ * Shared document FIRST, strip SECOND: a crash in between leaves a stale
+ * copy in the policy that nothing reads.
+ *
+ * `legacy` lets {@link readPolicy} hand over the policy it has already
+ * downloaded instead of paying for a second read.
+ */
+export async function loadDelegationsDocument(
+  storage: BlobStorage,
+  options: {
+    abortSignal?: AbortSignal;
+    legacy?: PolicyReadResult | null;
+  } = {},
+): Promise<DelegationsReadResult & { strippedPolicyEtag?: string }> {
+  const existing = await readDelegationsDocument(storage, {
+    abortSignal: options.abortSignal,
+  });
+  if (existing) return existing;
+
+  const legacy =
+    options.legacy !== undefined
+      ? options.legacy
+      : await readStoredPolicy(storage, { abortSignal: options.abortSignal });
+  const now = new Date().toISOString();
+  const document: DelegationsDocument = fromLegacyLimitDelegations(
+    legacy?.policy.delegations ?? [],
+    MIGRATION_AUTHOR,
+    now,
+  );
+
+  let etag: string;
+  try {
+    etag = await writeDelegationsDocument(storage, document, null);
+  } catch (error) {
+    if (!(error instanceof AgentAccessConflictError)) throw error;
+    // Another replica created it between our read and our write.
+    const winner = await readDelegationsDocument(storage, {
+      abortSignal: options.abortSignal,
+    });
+    if (winner) return winner;
+    throw error;
+  }
+  console.log(
+    `[delegations] migrated ${document.delegations.length} delegation(s) out of the limits policy into the shared document`,
+  );
+
+  // The strip REWRITES the policy blob, so the ETag the caller read is stale
+  // the moment it succeeds; hand the new one back or the admin's next save
+  // would be refused with a spurious 409.
+  let strippedPolicyEtag: string | undefined;
+  if (legacy && legacy.policy.delegations.length > 0) {
+    try {
+      strippedPolicyEtag = await uploadJson(
+        storage,
+        LIMITS_POLICY_PATH,
+        LimitsPolicySchema.parse({ ...legacy.policy, delegations: [] }),
+        legacy.etag,
+        'limits.stripLegacyDelegations',
+      );
+    } catch (error) {
+      // A concurrent policy write (412) strips them itself; anything else is
+      // retried implicitly by the next policy write.
+      console.warn(
+        `[delegations] legacy delegations not stripped from the policy yet (harmless, ignored on read): ${sanitizeForLog(error)}`,
+      );
+    }
+  }
+  return {
+    document,
+    etag,
+    ...(strippedPolicyEtag ? { strippedPolicyEtag } : {}),
+  };
+}
+
+/**
+ * Reads the policy and COMPOSES the shared delegations into it, so the
+ * resolver, the scoped write path, the admin-auth decision and the save-time
+ * verdicts all keep consuming `policy.delegations` unchanged. Returns null
+ * when no policy has been written yet — delegations alone never create one
+ * (a stored policy enforces, and delegating another capability must not
+ * switch limits on).
+ *
+ * Throws {@link PolicyUnreadableError} for a policy OR a delegations document
+ * that exists but cannot be parsed: a policy whose scoped overrides cannot be
+ * evaluated is unavailable as a whole and falls to the explicit `failMode`,
+ * never to "no scoped overrides". Storage failures propagate unchanged.
+ */
+export async function readPolicy(
+  storage: BlobStorage,
+  options: { abortSignal?: AbortSignal } = {},
+): Promise<PolicyReadResult | null> {
+  const stored = await readStoredPolicy(storage, options);
+  if (stored === null) return null;
+  let delegations: DelegationsReadResult & { strippedPolicyEtag?: string };
+  try {
+    delegations = await loadDelegationsDocument(storage, {
+      abortSignal: options.abortSignal,
+      legacy: stored,
+    });
+  } catch (error) {
+    if (error instanceof DelegationsUnreadableError) {
+      throw new PolicyUnreadableError(error);
+    }
+    throw error;
+  }
+  return {
+    policy: {
+      ...stored.policy,
+      delegations: toLimitDelegations(delegations.document),
+    },
+    etag: delegations.strippedPolicyEtag ?? stored.etag,
+  };
+}
+
 /**
  * Compare-and-swap policy write. `ifMatchEtag` null → creation only
  * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}, which the
@@ -127,7 +265,10 @@ export async function writePolicy(
   policy: LimitsPolicy,
   ifMatchEtag: string | null,
 ): Promise<string> {
-  const parsed = LimitsPolicySchema.parse(policy);
+  // Delegations are composed in on read and owned by the shared document
+  // (loadDelegationsDocument): they are never persisted here again, which is
+  // also what retires a legacy copy the migration could not strip.
+  const parsed = LimitsPolicySchema.parse({ ...policy, delegations: [] });
   return uploadJson(
     storage,
     LIMITS_POLICY_PATH,

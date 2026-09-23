@@ -53,13 +53,12 @@ export interface WebSearchToolParams {
    * Resolved search backend for this request (user setting or deployment
    * default). Falls back to the WEB_SEARCH_PROVIDER env when absent.
    */
-  provider?:
-    | 'news'
-    | 'gdelt'
-    | 'google-news'
-    | 'bing-agent'
-    | 'bing-responses'
-    | 'combined';
+  provider?: import('@/types/webSearch').ResolvedWebSearchProvider;
+  /**
+   * SearXNG provider only: the router's read of the topic, selecting which
+   * engine category answers (general web, news, science, it, humanitarian).
+   */
+  category?: import('@/types/webSearch').WebSearchCategory;
   /**
    * Combined provider only: fires once with the fast leg's (Google News)
    * headlines while the Bing agent is still running, so the caller can

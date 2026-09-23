@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 import {
   createAgentAccessBlobStorage,
   listAllMapDatasetMetas,
-  readMapDataset,
+  readMapDatasetCached,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import {
   MAP_DATASET_SOURCE,
@@ -45,7 +45,7 @@ vi.mock(
       ...actual,
       createAgentAccessBlobStorage: vi.fn(),
       listAllMapDatasetMetas: vi.fn(),
-      readMapDataset: vi.fn(),
+      readMapDatasetCached: vi.fn(),
     };
   },
 );
@@ -116,7 +116,7 @@ describe('/api/map-datasets (user routes)', () => {
         meta: mapDatasetMeta(dataset),
       },
     ]);
-    vi.mocked(readMapDataset).mockResolvedValue({ dataset, etag: '"e"' });
+    vi.mocked(readMapDatasetCached).mockResolvedValue({ dataset, etag: '"e"' });
   });
 
   describe('list', () => {
@@ -187,7 +187,7 @@ describe('/api/map-datasets (user routes)', () => {
       });
       let [request, ctx] = idRequest(DATASET_ID);
       expect((await getById(request, ctx)).status).toBe(404);
-      expect(vi.mocked(readMapDataset)).not.toHaveBeenCalled();
+      expect(vi.mocked(readMapDatasetCached)).not.toHaveBeenCalled();
 
       serviceEvaluateAccess.mockReturnValue({
         decision: 'unavailable',
@@ -200,7 +200,7 @@ describe('/api/map-datasets (user routes)', () => {
         decision: 'allow',
         reason: 'public',
       });
-      vi.mocked(readMapDataset).mockResolvedValue(null);
+      vi.mocked(readMapDatasetCached).mockResolvedValue(null);
       [request, ctx] = idRequest(DATASET_ID);
       expect((await getById(request, ctx)).status).toBe(404);
     });

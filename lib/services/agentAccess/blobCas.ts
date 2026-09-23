@@ -95,6 +95,42 @@ export async function downloadBlob(
 }
 
 /**
+ * Conditional download for ETag-revalidated caches: `'unchanged'` when the
+ * stored blob still carries `etag` (HTTP 304), the fresh bytes + ETag when it
+ * moved, null on 404. One round trip with no body on the hot path.
+ */
+export async function downloadBlobIfChanged(
+  storage: BlobStorage,
+  blobPath: string,
+  etag: string,
+  label = 'agentAccess.downloadBlobIfChanged',
+  options: DownloadBlobOptions = {},
+): Promise<{ buffer: Buffer; etag: string } | 'unchanged' | null> {
+  const client = storage.getBlockBlobClient(blobPath);
+  try {
+    return await withAzureRetry(
+      async () => {
+        const response = await client.download(0, undefined, {
+          abortSignal: options.abortSignal,
+          conditions: { ifNoneMatch: etag },
+        });
+        if (!response.readableStreamBody) {
+          throw new Error(`No readable stream for blob ${blobPath}`);
+        }
+        const buffer = await streamToBuffer(response.readableStreamBody);
+        return { buffer, etag: response.etag ?? '' };
+      },
+      { label },
+    );
+  } catch (error) {
+    const status = statusCodeOf(error);
+    if (status === 304) return 'unchanged';
+    if (status === 404) return null;
+    throw error;
+  }
+}
+
+/**
  * Unconditional write marker for {@link uploadJson}: last writer wins. For
  * DERIVED records that are rebuilt wholesale by one writer (an index run's
  * manifest, a job record whose stored copy is unreadable) — never for

@@ -1,8 +1,10 @@
 import { NextRequest } from 'next/server';
 
+import { fromLegacyLimitDelegations } from '@/lib/services/delegations/types';
 import {
   PolicyUnreadableError,
   createLimitsBlobStorage,
+  loadDelegationsDocument,
   readPolicy,
   writeHistoryEntry,
   writePolicy,
@@ -44,6 +46,7 @@ vi.mock('@/lib/services/limits/limitsStore', async (importOriginal) => {
     ...actual,
     createLimitsBlobStorage: vi.fn(),
     readPolicy: vi.fn(),
+    loadDelegationsDocument: vi.fn(),
     writePolicy: vi.fn(),
     writeHistoryEntry: vi.fn(),
   };
@@ -128,6 +131,14 @@ function stored(input: Partial<LimitsPolicy>, etag = '"etag-1"') {
   };
 }
 
+/** What the shared delegations document holds when no policy exists yet. */
+function serverDelegations(delegations: LimitDelegation[]) {
+  vi.mocked(loadDelegationsDocument).mockResolvedValue({
+    document: fromLegacyLimitDelegations(delegations, 'test', STAMP.updatedAt),
+    etag: '"d1"',
+  });
+}
+
 const bodyDelegation = {
   id: DEL_OCP,
   label: 'OCP',
@@ -145,6 +156,9 @@ describe('/api/limits/policy', () => {
     vi.mocked(createLimitsBlobStorage).mockReturnValue({} as never);
     // The PUT pre-reads the stored document; default to "none yet".
     vi.mocked(readPolicy).mockResolvedValue(null);
+    // Delegations are server-held (the shared delegations document). With no
+    // policy yet the route loads them directly; default to "none".
+    serverDelegations([]);
     vi.mocked(writePolicy).mockResolvedValue('"etag-new"');
     vi.mocked(writeHistoryEntry).mockResolvedValue(undefined);
   });
@@ -407,23 +421,21 @@ describe('/api/limits/policy', () => {
     });
   });
 
-  describe('PUT stale-client guard (design §9)', () => {
-    it('409s with details "reload" when the body has NO delegations key but the store has delegations', async () => {
+  describe('PUT never writes delegations (shared delegations document)', () => {
+    it('ignores a body WITHOUT the delegations key: the server-held delegations stand', async () => {
       vi.mocked(readPolicy).mockResolvedValue(
         stored({ delegations: [storedDelegation()] }),
       );
-      // validBody predates delegations: no key at all.
       const response = await PUT(
         putRequest(validBody, { 'if-match': '"etag-1"' }),
       );
-      const body = await parseJsonResponse(response);
-      expect(response.status).toBe(409);
-      expect(body.code).toBe('LIMITS_CONFLICT');
-      expect(body.details).toBe('reload');
-      expect(writePolicy).not.toHaveBeenCalled();
+      expect(response.status).toBe(200);
+      expect(vi.mocked(writePolicy).mock.calls[0][1].delegations).toEqual([
+        storedDelegation(),
+      ]);
     });
 
-    it('treats an explicit `delegations: []` as a real delete when nothing references the delegation', async () => {
+    it('ignores an explicit `delegations: []` — the Limits editor cannot delete a delegation', async () => {
       vi.mocked(readPolicy).mockResolvedValue(
         stored({ delegations: [storedDelegation()] }),
       );
@@ -433,17 +445,31 @@ describe('/api/limits/policy', () => {
           { 'if-match': '"etag-1"' },
         ),
       );
+      const body = await parseJsonResponse(response);
       expect(response.status).toBe(200);
-      expect(vi.mocked(writePolicy).mock.calls[0][1].delegations).toEqual([]);
+      expect(body.data.policy.delegations).toEqual([storedDelegation()]);
     });
 
-    it('accepts a body without the key when the store has no delegations', async () => {
-      vi.mocked(readPolicy).mockResolvedValue(stored({}));
-      const response = await PUT(
-        putRequest(validBody, { 'if-match': '"etag-1"' }),
+    it('ignores edits to a delegation carried in the body', async () => {
+      vi.mocked(readPolicy).mockResolvedValue(
+        stored({ delegations: [storedDelegation()] }),
       );
+      const response = await PUT(
+        putRequest(
+          {
+            ...validBody,
+            delegations: [
+              { ...bodyDelegation, admins: ['attacker@elsewhere.org'] },
+            ],
+          },
+          { 'if-match': '"etag-1"' },
+        ),
+      );
+      const body = await parseJsonResponse(response);
       expect(response.status).toBe(200);
-      expect(vi.mocked(writePolicy).mock.calls[0][1].delegations).toEqual([]);
+      expect(body.data.policy.delegations[0].admins).toEqual([
+        'ocp-admin@ocp.msf.org',
+      ]);
     });
   });
 
@@ -487,55 +513,9 @@ describe('/api/limits/policy', () => {
       expect(written.overrides[1].createdBy).toBe('global@example.com');
       expect(written.overrides[1].createdAt).toBe(written.updatedAt);
     });
-
-    it('preserves createdBy/createdAt for an existing delegation id', async () => {
-      vi.mocked(readPolicy).mockResolvedValue(
-        stored({ delegations: [storedDelegation()] }),
-      );
-      await PUT(
-        putRequest(
-          { ...validBody, delegations: [{ ...bodyDelegation, label: 'new' }] },
-          { 'if-match': '"etag-1"' },
-        ),
-      );
-      const written = vi.mocked(writePolicy).mock.calls[0][1];
-      expect(written.delegations[0]).toMatchObject({
-        id: DEL_OCP,
-        label: 'new',
-        createdBy: 'first-author@example.com',
-        createdAt: '2025-01-01T00:00:00.000Z',
-        updatedBy: 'global@example.com',
-      });
-    });
   });
 
   describe('PUT delegations', () => {
-    it('generates a server del- id and stamps createdBy for a delegation without an id; canonicalizes admins and targets', async () => {
-      await PUT(
-        putRequest({
-          ...validBody,
-          delegations: [
-            {
-              ...bodyDelegation,
-              id: undefined,
-              admins: [' OCP-Admin@ocp.msf.org ', 'ocp-admin@ocp.msf.org'],
-              jurisdiction: [
-                { scope: 'domain', targets: ['OCP.msf.org', ' ocp.msf.org'] },
-              ],
-            },
-          ],
-        }),
-      );
-      const written = vi.mocked(writePolicy).mock.calls[0][1];
-      expect(written.delegations).toHaveLength(1);
-      expect(written.delegations[0].id).toMatch(/^del-[0-9a-f]{12}$/);
-      expect(written.delegations[0].createdBy).toBe('global@example.com');
-      expect(written.delegations[0].admins).toEqual(['ocp-admin@ocp.msf.org']);
-      expect(written.delegations[0].jurisdiction).toEqual([
-        { scope: 'domain', targets: ['ocp.msf.org'] },
-      ]);
-    });
-
     it('rejects an unknown key, an oversized admins list, and an empty predicate (strict write schema)', async () => {
       for (const delegation of [
         { ...bodyDelegation, priority: 1 },
@@ -576,34 +556,6 @@ describe('/api/limits/policy', () => {
       expect(writePolicy).not.toHaveBeenCalled();
     });
 
-    it('never hands writePolicy a delegation the read schema would reject (whitespace admins are dropped, targets canonical)', async () => {
-      vi.mocked(readPolicy).mockResolvedValue(stored({}));
-      const response = await PUT(
-        putRequest(
-          {
-            ...validBody,
-            delegations: [
-              {
-                ...bodyDelegation,
-                admins: ['   ', ' OCP-Admin@ocp.msf.org '],
-                jurisdiction: [
-                  { scope: 'domain', targets: [' OCP.msf.org ', '   '] },
-                ],
-              },
-            ],
-          },
-          { 'if-match': '"etag-1"' },
-        ),
-      );
-      expect(response.status).toBe(200);
-      const written = vi.mocked(writePolicy).mock.calls[0][1];
-      expect(written.delegations[0].admins).toEqual(['ocp-admin@ocp.msf.org']);
-      expect(written.delegations[0].jurisdiction).toEqual([
-        { scope: 'domain', targets: ['ocp.msf.org'] },
-      ]);
-      expect(LimitsPolicySchema.safeParse(written).success).toBe(true);
-    });
-
     it('rejects two defaults for one limit cell (review 2026-09-12)', async () => {
       vi.mocked(readPolicy).mockResolvedValue(null);
       const response = await PUT(
@@ -640,21 +592,12 @@ describe('/api/limits/policy', () => {
       expect(body.code).toBe('LIMITS_POLICY_UNAVAILABLE');
     });
 
-    it('rejects duplicate delegation ids', async () => {
+    it('rejects an override whose delegationId the server does not hold — whatever the body claims', async () => {
       const response = await PUT(
         putRequest({
           ...validBody,
-          delegations: [bodyDelegation, { ...bodyDelegation }],
-        }),
-      );
-      expect(response.status).toBe(400);
-    });
-
-    it('rejects an override whose delegationId is not in the same body', async () => {
-      const response = await PUT(
-        putRequest({
-          ...validBody,
-          delegations: [],
+          // The body vouching for the delegation changes nothing.
+          delegations: [bodyDelegation],
           overrides: [
             {
               id: 'lim-000000000001',
@@ -670,66 +613,8 @@ describe('/api/limits/policy', () => {
       expect(writePolicy).not.toHaveBeenCalled();
     });
 
-    it('refuses to delete a delegation that still owns overrides, with the count', async () => {
-      vi.mocked(readPolicy).mockResolvedValue(
-        stored({
-          delegations: [storedDelegation()],
-          overrides: [
-            storedOverride('lim-000000000001', { delegationId: DEL_OCP }),
-            storedOverride('lim-000000000002', { delegationId: DEL_OCP }),
-          ],
-        }),
-      );
-      const response = await PUT(
-        putRequest(
-          {
-            ...validBody,
-            delegations: [],
-            overrides: [
-              {
-                id: 'lim-000000000001',
-                scope: 'user',
-                targets: ['a@ocp.msf.org'],
-                entries: [],
-                delegationId: DEL_OCP,
-              },
-              {
-                id: 'lim-000000000002',
-                scope: 'user',
-                targets: ['a@ocp.msf.org'],
-                entries: [],
-                delegationId: DEL_OCP,
-              },
-            ],
-          },
-          { 'if-match': '"etag-1"' },
-        ),
-      );
-      const body = await parseJsonResponse(response);
-      expect(response.status).toBe(400);
-      expect(body.details).toContain('2 override(s)');
-      expect(writePolicy).not.toHaveBeenCalled();
-    });
-
-    it('allows deleting a delegation together with its overrides', async () => {
-      vi.mocked(readPolicy).mockResolvedValue(
-        stored({
-          delegations: [storedDelegation()],
-          overrides: [
-            storedOverride('lim-000000000001', { delegationId: DEL_OCP }),
-          ],
-        }),
-      );
-      const response = await PUT(
-        putRequest(
-          { ...validBody, delegations: [], overrides: [] },
-          { 'if-match': '"etag-1"' },
-        ),
-      );
-      expect(response.status).toBe(200);
-    });
-
     it('normalizes priority 0 and ceiling false on a delegationId override (design §3b/§3c)', async () => {
+      serverDelegations([storedDelegation()]);
       await PUT(
         putRequest({
           ...validBody,
@@ -772,12 +657,9 @@ describe('/api/limits/policy', () => {
         targets: [`u${i}@example.org`],
         entries: [],
       }));
+      serverDelegations([storedDelegation({ maxOverrides: 100 })]);
       const response = await PUT(
-        putRequest({
-          ...validBody,
-          overrides: globals,
-          delegations: [{ ...bodyDelegation, maxOverrides: 100 }],
-        }),
+        putRequest({ ...validBody, overrides: globals }),
       );
       const body = await parseJsonResponse(response);
       expect(response.status).toBe(400);
@@ -785,7 +667,8 @@ describe('/api/limits/policy', () => {
       expect(writePolicy).not.toHaveBeenCalled();
     });
 
-    it('writes the delegations and keeps the response shape { policy, etag }', async () => {
+    it('answers with the server-held delegations and keeps the response shape { policy, etag }', async () => {
+      serverDelegations([storedDelegation()]);
       const response = await PUT(
         putRequest({ ...validBody, delegations: [bodyDelegation] }),
       );

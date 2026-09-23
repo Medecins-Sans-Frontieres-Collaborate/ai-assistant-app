@@ -157,6 +157,86 @@ describe('translation assess — organization terminology guide', () => {
     expect(parsed.error).toBe('Guide is not available');
   });
 
+  describe('multiple organization glossaries (glossaryGuideIds)', () => {
+    const GUIDE_B = 'guide-bbbbbbbbbbbb';
+
+    beforeEach(() => {
+      serviceGetGuideById.mockImplementation((id: string) =>
+        id === GUIDE_ID
+          ? makeTerminologyGuide()
+          : id === GUIDE_B
+            ? makeTerminologyGuide({
+                id: GUIDE_B,
+                entries: [
+                  // Duplicate of guide A's IDP — A is listed first and wins.
+                  { source: 'IDP', target: 'from B' },
+                  { source: 'WASH', target: 'EAH' },
+                ],
+              })
+            : null,
+      );
+    });
+
+    it('merges guides in request order, first guide winning, then local', async () => {
+      const response = await post(
+        assessBody({
+          glossaryGuideIds: [GUIDE_ID, GUIDE_B],
+          glossaryEntries: [{ source: 'wash', target: 'local' }],
+        }),
+      );
+      expect(response.status).toBe(200);
+      expect(mockRunAssessment).toHaveBeenCalledWith(
+        expect.objectContaining({
+          glossaryEntries: [
+            { source: 'IDP', target: 'personne déplacée' },
+            { source: 'NFI', target: 'article non alimentaire' },
+            { source: 'WASH', target: 'EAH' },
+          ],
+        }),
+      );
+    });
+
+    it('ignores the legacy single id when the array is present', async () => {
+      const response = await post(
+        assessBody({ glossaryGuideIds: [GUIDE_B], glossaryGuideId: GUIDE_ID }),
+      );
+      expect(response.status).toBe(200);
+      expect(mockRunAssessment).toHaveBeenCalledWith(
+        expect.objectContaining({
+          glossaryEntries: [
+            { source: 'IDP', target: 'from B' },
+            { source: 'WASH', target: 'EAH' },
+          ],
+        }),
+      );
+    });
+
+    it('rejects more than the per-request cap with a 400', async () => {
+      const response = await post(
+        assessBody({
+          glossaryGuideIds: [
+            GUIDE_ID,
+            GUIDE_B,
+            'guide-cccccccccccc',
+            'guide-dddddddddddd',
+          ],
+        }),
+      );
+      expect(response.status).toBe(400);
+      expect(mockRunAssessment).not.toHaveBeenCalled();
+    });
+
+    it('fails closed when any one of the guides is unavailable', async () => {
+      const response = await post(
+        assessBody({ glossaryGuideIds: [GUIDE_ID, 'guide-cccccccccccc'] }),
+      );
+      expect(response.status).toBe(400);
+      expect((await parseJsonResponse(response)).error).toBe(
+        'Guide is not available',
+      );
+    });
+  });
+
   it('runs without any guide exactly as before', async () => {
     const response = await post(
       assessBody({ glossaryEntries: [{ source: 'WASH', target: 'EAH' }] }),

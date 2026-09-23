@@ -19,13 +19,12 @@ import { isGlobalAdmin } from '@/lib/services/agentAccess/adminAuth';
  * `If-Match` before anything else — a mismatch, or no `If-Match` while a
  * document exists, is a 409 up front. Everything that follows is judged
  * against that verified read: `createdBy`/`createdAt` are preserved for
- * override and delegation ids that already exist (ownership metadata never
- * comes from the body); a body with no `delegations` key while the stored
- * policy has some is a stale pre-delegations client and is refused with a
- * 409-shaped "reload" (design §9) — tested on RAW key presence, because zod
- * would erase it; an override may only reference a delegation present in the
- * same body, which is also what blocks deleting a delegation that still owns
- * overrides; `delegationId` overrides are normalized to `priority: 0` and
+ * override ids that already exist (ownership metadata never comes from the
+ * body); DELEGATIONS ARE NOT WRITTEN HERE — they live in the shared
+ * delegations document (/api/admin/delegations) and are only composed into
+ * the policy on read, so the body's `delegations` key is ignored and the
+ * server-held delegations are what an override's `delegationId` must resolve
+ * against; `delegationId` overrides are normalized to `priority: 0` and
  * `ceiling: false` so stored data matches what the resolver runs; and the
  * budget `globalOverrides + Σ maxOverrides ≤ 200` keeps scoped admins from
  * ever hitting a document-full error only a global admin could fix. The
@@ -35,19 +34,19 @@ import { isGlobalAdmin } from '@/lib/services/agentAccess/adminAuth';
 // Only an exact quoted strong ETag may reach a storage CAS condition — see
 // STRONG_ETAG_REGEX in adminRouteHelpers for the full rationale.
 import { STRONG_ETAG_REGEX } from '@/lib/services/agentAccess/adminRouteHelpers';
+import { toLimitDelegations } from '@/lib/services/delegations/types';
 import { LimitsService } from '@/lib/services/limits/LimitsService';
 import {
   LimitsConflictError,
   PolicyUnreadableError,
   createLimitsBlobStorage,
+  loadDelegationsDocument,
   readPolicy,
   writeHistoryEntry,
   writePolicy,
 } from '@/lib/services/limits/limitsStore';
 import {
   MAX_OVERRIDES,
-  WriteDelegation,
-  canonicalList,
   clampToHardCeilings,
   formatIssues,
   isValidTimezone,
@@ -71,7 +70,6 @@ import {
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { auth } from '@/auth';
-import { randomBytes } from 'node:crypto';
 
 function conflictResponse(details?: string) {
   return errorResponse(
@@ -80,44 +78,6 @@ function conflictResponse(details?: string) {
     details,
     LIMITS_ERROR_CODES.CONFLICT,
   );
-}
-
-/** Server-generated, immutable; matches DELEGATION_ID_RE. */
-function newDelegationId(): string {
-  return `del-${randomBytes(6).toString('hex')}`;
-}
-
-/**
- * Assembles the stored record from a body the write schema has ALREADY
- * canonicalized (`admins` and every predicate's `targets` are trimmed,
- * lowercased, deduped and blank-free, and a predicate with no surviving
- * target was refused as a 400 before this runs). `canonicalList` is applied
- * again only because it is idempotent and keeps this function honest on its
- * own: it can never turn a validated predicate into an empty one, so the
- * read-schema parse inside `writePolicy` cannot fail on what it produces.
- */
-function normalizeDelegation(
-  input: WriteDelegation,
-  id: string,
-  stored: LimitDelegation | undefined,
-  userMail: string,
-  now: string,
-): LimitDelegation {
-  return {
-    id,
-    label: input.label,
-    enabled: input.enabled,
-    admins: canonicalList(input.admins),
-    jurisdiction: input.jurisdiction.map((predicate) => ({
-      scope: predicate.scope,
-      targets: canonicalList(predicate.targets),
-    })),
-    maxOverrides: input.maxOverrides,
-    createdBy: stored?.createdBy ?? userMail,
-    createdAt: stored?.createdAt ?? now,
-    updatedBy: userMail,
-    updatedAt: now,
-  };
 }
 
 export async function GET() {
@@ -163,13 +123,6 @@ export async function PUT(request: NextRequest) {
   } catch {
     return badRequestResponse('Invalid JSON body');
   }
-  // Raw presence, not the parsed value: `.optional()` on the schema keeps
-  // "omitted" distinguishable from "[]", but only if we look before zod does.
-  const hasDelegationsKey =
-    typeof body === 'object' &&
-    body !== null &&
-    Object.hasOwn(body, 'delegations');
-
   const parsed = putBodySchema.safeParse(body);
   if (!parsed.success) {
     return badRequestResponse(
@@ -199,33 +152,6 @@ export async function PUT(request: NextRequest) {
     );
   }
 
-  const bodyDelegations = parsed.data.delegations ?? [];
-  const duplicateDelegationId = bodyDelegations
-    .map((d) => d.id)
-    .filter((id): id is string => id !== undefined)
-    .find((id, index, all) => all.indexOf(id) !== index);
-  if (duplicateDelegationId) {
-    return badRequestResponse('Duplicate delegation id', duplicateDelegationId);
-  }
-
-  // Budget (design §5): scoped admins must never be refused with a
-  // document-full error only a global admin can fix.
-  const globalOverrideCount = parsed.data.overrides.filter(
-    (o) => !o.delegationId,
-  ).length;
-  const delegatedBudget = bodyDelegations.reduce(
-    (sum, d) => sum + d.maxOverrides,
-    0,
-  );
-  if (globalOverrideCount + delegatedBudget > MAX_OVERRIDES) {
-    return errorResponse(
-      'Delegation budgets plus global overrides exceed the document cap',
-      400,
-      `${globalOverrideCount} global override(s) + ${delegatedBudget} delegated > ${MAX_OVERRIDES}`,
-      LIMITS_ERROR_CODES.BUDGET_EXCEEDED,
-    );
-  }
-
   const ifMatchEtag = request.headers.get('if-match');
   if (ifMatchEtag !== null && !STRONG_ETAG_REGEX.test(ifMatchEtag)) {
     return badRequestResponse('If-Match must be a quoted strong ETag');
@@ -248,48 +174,40 @@ export async function PUT(request: NextRequest) {
       return conflictResponse();
     }
 
-    // Stale-client guard (design §9): a pre-delegations client would erase
-    // every delegation and orphan every scoped override.
-    if (!hasDelegationsKey && (stored?.policy.delegations.length ?? 0) > 0) {
-      return conflictResponse('reload');
+    // Delegations are owned by the shared delegations document
+    // (/api/admin/delegations) and only COMPOSED into the policy on read, so
+    // the body's `delegations` key — still sent by the editor, which
+    // round-trips the policy it loaded — is ignored: what counts is what the
+    // server holds right now. A policy that does not exist yet has none
+    // composed, so they are loaded directly for the first write.
+    const delegations: LimitDelegation[] = stored
+      ? stored.policy.delegations
+      : toLimitDelegations((await loadDelegationsDocument(storage)).document);
+
+    // Budget (design §5): scoped admins must never be refused with a
+    // document-full error only a global admin can fix.
+    const globalOverrideCount = parsed.data.overrides.filter(
+      (o) => !o.delegationId,
+    ).length;
+    const delegatedBudget = delegations.reduce(
+      (sum, d) => sum + d.maxOverrides,
+      0,
+    );
+    if (globalOverrideCount + delegatedBudget > MAX_OVERRIDES) {
+      return errorResponse(
+        'Delegation budgets plus global overrides exceed the document cap',
+        400,
+        `${globalOverrideCount} global override(s) + ${delegatedBudget} delegated > ${MAX_OVERRIDES}`,
+        LIMITS_ERROR_CODES.BUDGET_EXCEEDED,
+      );
     }
 
     const storedOverrides = new Map(
       (stored?.policy.overrides ?? []).map((o) => [o.id, o]),
     );
-    const storedDelegations = new Map(
-      (stored?.policy.delegations ?? []).map((d) => [d.id, d]),
-    );
     const now = new Date().toISOString();
-
-    const delegations: LimitDelegation[] = bodyDelegations.map((d) => {
-      const id = d.id ?? newDelegationId();
-      return normalizeDelegation(
-        d,
-        id,
-        storedDelegations.get(id),
-        userMail,
-        now,
-      );
-    });
     const delegationIds = new Set(delegations.map((d) => d.id));
 
-    // Every delegationId must resolve inside THIS body. Dropping a
-    // delegation while keeping its overrides is exactly the "delete a
-    // delegation that still owns overrides" case (design §6a): refused with
-    // the count, so the client can offer disable / delete-with-overrides.
-    for (const delegation of storedDelegations.values()) {
-      if (delegationIds.has(delegation.id)) continue;
-      const owned = parsed.data.overrides.filter(
-        (o) => o.delegationId === delegation.id,
-      ).length;
-      if (owned > 0) {
-        return badRequestResponse(
-          'Delegation still owns overrides; disable it or delete them too',
-          `${delegation.id}: ${owned} override(s)`,
-        );
-      }
-    }
     const orphan = parsed.data.overrides.find(
       (o) => o.delegationId && !delegationIds.has(o.delegationId),
     );

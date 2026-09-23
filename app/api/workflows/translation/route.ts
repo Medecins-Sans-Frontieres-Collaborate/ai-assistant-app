@@ -6,7 +6,10 @@ import {
   workflowDisabledResponse,
 } from '@/lib/services/workflows/policy/guard';
 import { mergeGlossaryEntries } from '@/lib/services/workflows/shared/glossaryPrompts';
-import { resolveSlotGuide } from '@/lib/services/workflows/shared/guideResolution';
+import {
+  requestedGuideIds,
+  resolveOrgGlossaries,
+} from '@/lib/services/workflows/shared/orgGlossaries';
 import { createWorkflowStream } from '@/lib/services/workflows/shared/workflowLlm';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
 import { beginWorkflowRun } from '@/lib/services/workflows/shared/workflowUsage';
@@ -16,6 +19,10 @@ import {
   badRequestResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
+import {
+  MAX_GUIDE_ENTRIES,
+  MAX_ORG_GLOSSARIES_PER_REQUEST,
+} from '@/lib/utils/shared/review/guideCriteria';
 import { sanitizeGlossaryEntry } from '@/lib/utils/shared/translation/glossaryMatch';
 
 import { GlossaryEntry } from '@/types/workflow';
@@ -27,7 +34,14 @@ export const maxDuration = 300;
 
 /** Client also pre-checks; server is authoritative. */
 const MAX_SOURCE_CHARS = 60_000;
-const MAX_GLOSSARY_ENTRIES = 500;
+/**
+ * Merged (org + personal) entries considered per run. Org glossaries are
+ * capped at MAX_GUIDE_ENTRIES each on write; the prompt builder then keeps
+ * only entries that occur in the source, so this is a sanity ceiling on
+ * matcher work, not on prompt size.
+ */
+const MAX_GLOSSARY_ENTRIES =
+  MAX_ORG_GLOSSARIES_PER_REQUEST * MAX_GUIDE_ENTRIES + MAX_GUIDE_ENTRIES;
 
 const MAX_LANGUAGE_LABEL_CHARS = 80;
 
@@ -40,8 +54,14 @@ interface TranslationWorkflowRequest {
    */
   targetLanguage: string;
   glossaryEntries?: GlossaryEntry[];
-  /** Admin terminology guide whose entries merge with (and win over) the
-   * local glossary. Resolved server-side by id, fail-closed. */
+  /**
+   * Organization glossaries (admin terminology guides) whose entries merge
+   * with — and win over — the personal entries; among guides the first
+   * listed wins. Resolved server-side by id, fail-closed. At most
+   * MAX_ORG_GLOSSARIES_PER_REQUEST.
+   */
+  glossaryGuideIds?: string[];
+  /** Legacy single-guide form of `glossaryGuideIds`. */
   glossaryGuideId?: string;
   mode: 'quick' | 'agentic';
   maxReviewRounds?: number;
@@ -64,7 +84,7 @@ export async function POST(req: NextRequest) {
     return workflowDisabledResponse('translation');
   }
 
-  // Group-membership warm-up MUST precede resolveSlotGuide below — guide
+  // Group-membership warm-up MUST precede resolveOrgGlossaries below — guide
   // access rules with group scope read the cache synchronously. Never throws.
   await resolveUserGroupIds(req, session);
 
@@ -99,26 +119,27 @@ export async function POST(req: NextRequest) {
     ? body.glossaryEntries
         .map((e: unknown) => sanitizeGlossaryEntry(e))
         .filter((e): e is GlossaryEntry => e !== null)
+        // Personal glossaries share the org per-glossary ceiling; anything
+        // past it is a client bug or an abuse attempt, never a real termbase.
+        .slice(0, MAX_GUIDE_ENTRIES)
     : [];
 
-  // Admin terminology guide: resolved fail-closed BEFORE the stream opens so
-  // a stale/revoked reference is a clean 400. Guide entries come first and
-  // win on duplicate source terms — org terminology is authoritative.
-  let guideEntries: GlossaryEntry[] = [];
-  if (typeof body.glossaryGuideId === 'string' && body.glossaryGuideId) {
-    const resolved = await resolveSlotGuide({
-      userMail: session.user?.mail ?? undefined,
-      guideId: body.glossaryGuideId,
-      expectedKind: 'terminology',
-      workflow: 'translation',
-    });
-    if ('error' in resolved) return badRequestResponse(resolved.error);
-    if (resolved.guide.payload.kind === 'terminology') {
-      guideEntries = resolved.guide.payload.entries;
-    }
+  // Organization glossaries: resolved fail-closed BEFORE the stream opens
+  // so a stale/revoked reference is a clean 400. Guide entries come first
+  // and win on duplicate source terms — org terminology is authoritative.
+  const guideIds = requestedGuideIds(body);
+  if (guideIds === null) {
+    return badRequestResponse(
+      `At most ${MAX_ORG_GLOSSARIES_PER_REQUEST} organization glossaries per run`,
+    );
   }
+  const resolved = await resolveOrgGlossaries(
+    session.user?.mail ?? undefined,
+    guideIds,
+  );
+  if ('error' in resolved) return badRequestResponse(resolved.error);
   const glossaryEntries = mergeGlossaryEntries(
-    guideEntries,
+    resolved.entries,
     localEntries,
   ).slice(0, MAX_GLOSSARY_ENTRIES);
 

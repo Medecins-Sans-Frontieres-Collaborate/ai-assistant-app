@@ -44,10 +44,24 @@ export const MAX_GUIDE_SECTION_HEADING_CHARS = 200;
 export const MAX_GUIDE_SECTION_GUIDANCE_CHARS = 500;
 export const MAX_GUIDE_GENERAL_GUIDANCE_CHARS = 5_000;
 
-/** Terminology-guide caps — MAX_GUIDE_ENTRIES aligns MAX_GLOSSARY_ENTRIES. */
-export const MAX_GUIDE_ENTRIES = 200;
-export const MAX_GUIDE_TERM_CHARS = 120;
-export const MAX_GUIDE_TERM_NOTE_CHARS = 300;
+/**
+ * Terminology-guide (organization glossary) caps. Entries live in an
+ * external payload blob outside the access snapshot (guidePayloadStore), so
+ * the count is sized for a real termbase rather than for snapshot memory;
+ * the prompt builder still injects only the entries that occur in the
+ * source text (MAX_GLOSSARY_ENTRIES caps those). Term length aligns with
+ * MAX_GLOSSARY_TERM_CHARS so an org entry and a personal one share a shape.
+ */
+export const MAX_GUIDE_ENTRIES = 5_000;
+/**
+ * Organization glossaries attachable to one translation run. Mirrors
+ * MAX_GUIDES_PER_ASSESSMENT in spirit: entries are filtered to those that
+ * occur in the source before injection, so this bounds resolution work and
+ * picker sprawl rather than prompt size.
+ */
+export const MAX_ORG_GLOSSARIES_PER_REQUEST = 3;
+export const MAX_GUIDE_TERM_CHARS = 200;
+export const MAX_GUIDE_TERM_NOTE_CHARS = 500;
 
 /**
  * The kinds that behave as assessment criteria. The other two ('structure',

@@ -7,6 +7,7 @@ import {
   clampModelTimeoutSeconds,
 } from '@/lib/utils/shared/chat/modelTimeout';
 import { ToolApprovalRule } from '@/lib/utils/shared/chat/toolApprovalRules';
+import { DEFAULT_CHANNEL_SET_ID } from '@/lib/utils/shared/drafter/channels/channelSets';
 import {
   EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
   EMISSIONS_CHIP_VISIBILITY_DEFAULT,
@@ -26,6 +27,7 @@ import {
 } from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
 
+import { VoiceSet } from '@/types/drafter';
 import { FormTemplate } from '@/types/formFill';
 import { InterpreterMode, isInterpreterMode } from '@/types/interpreterMode';
 import {
@@ -277,6 +279,20 @@ interface SettingsStore {
   documentSpecs: DocumentSpec[];
   /** Fillable form templates (form-fill workflow). */
   formTemplates: FormTemplate[];
+  /**
+   * Channels of the last channel draft (channel-drafter workflow), per rule
+   * set, so a new draft starts with the row the user actually posts to.
+   */
+  lastChannelIdsBySet: Record<string, string[]>;
+  /** The rule set the last channel draft was written in; null = none yet. */
+  lastChannelSetId: string | null;
+  /**
+   * The user's giving page, remembered for the channel drafter's "Ask for
+   * donations" option. Remembering the address never turns the option on.
+   */
+  donationUrl: string;
+  /** Saved spec-to-voice mappings for the drafter workflows. */
+  voiceSets: VoiceSet[];
   /** User-defined document quality criteria (document workflow). */
   documentCriteria: DocumentCustomCriterion[];
   /** User-defined MQM-style criteria for the translation workflow. */
@@ -496,6 +512,11 @@ interface SettingsStore {
     updates: Partial<Omit<FormTemplate, 'id'>>,
   ) => void;
   deleteFormTemplate: (id: string) => void;
+  setLastChannelIds: (setId: string, ids: string[]) => void;
+  setLastChannelSetId: (setId: string | null) => void;
+  setDonationUrl: (url: string) => void;
+  saveVoiceSet: (voiceSet: VoiceSet) => void;
+  deleteVoiceSet: (id: string) => void;
   addDocumentCriterion: (criterion: DocumentCustomCriterion) => void;
   updateDocumentCriterion: (
     id: string,
@@ -886,6 +907,41 @@ const CONTEXT_WINDOW_MAX = VALIDATION_LIMITS.MAX_API_MESSAGES;
 const DEFAULT_SYSTEM_PROMPT = '';
 const DEFAULT_DISPLAY_NAME_PREFERENCE: DisplayNamePreference = 'firstName';
 const DEFAULT_CUSTOM_DISPLAY_NAME = '';
+/** Channel ids remembered per rule set: at most this many per set... */
+const MAX_REMEMBERED_CHANNEL_IDS = 30;
+/** ...and at most this many sets, the least recently written dropped. */
+const MAX_REMEMBERED_CHANNEL_SETS = 20;
+
+/** One channel row as it is stored: strings only, deduped, capped. */
+function coerceChannelIds(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const ids: string[] = [];
+  for (const entry of value) {
+    if (typeof entry !== 'string' || !entry || ids.includes(entry)) continue;
+    ids.push(entry);
+    if (ids.length >= MAX_REMEMBERED_CHANNEL_IDS) break;
+  }
+  return ids;
+}
+
+/**
+ * `lastChannelIdsBySet` as it may be trusted: every value a clean channel
+ * row. Persisted data can carry anything (an old shape, a hand edit), and
+ * the workspace iterates the row, so garbage here would throw on load.
+ */
+export function coerceChannelIdsBySet(
+  value: unknown,
+): Record<string, string[]> {
+  if (value == null || typeof value !== 'object' || Array.isArray(value)) {
+    return {};
+  }
+  const result: Record<string, string[]> = {};
+  for (const [setId, ids] of Object.entries(value as Record<string, unknown>)) {
+    if (!Array.isArray(ids)) continue;
+    result[setId] = coerceChannelIds(ids);
+  }
+  return result;
+}
 
 export const useSettingsStore = create<SettingsStore>()(
   persist(
@@ -913,6 +969,10 @@ export const useSettingsStore = create<SettingsStore>()(
       customLanguages: [],
       documentSpecs: [],
       formTemplates: [],
+      lastChannelIdsBySet: {},
+      lastChannelSetId: null,
+      donationUrl: '',
+      voiceSets: [],
       documentCriteria: [],
       translationCriteria: [],
       mcpServers: [],
@@ -1125,6 +1185,49 @@ export const useSettingsStore = create<SettingsStore>()(
       deleteFormTemplate: (id) =>
         set((state) => ({
           formTemplates: state.formTemplates.filter((t) => t.id !== id),
+        })),
+
+      setLastChannelIds: (setId, ids) =>
+        set((state) => {
+          const next = coerceChannelIds(ids);
+          const current = state.lastChannelIdsBySet[setId] ?? [];
+          if (
+            next.length === current.length &&
+            next.every((id, index) => id === current[index])
+          ) {
+            return state;
+          }
+          // Re-inserted last so key order is write order, then the oldest
+          // sets fall off: the map must not grow with every set ever used.
+          const { [setId]: _previous, ...rest } = state.lastChannelIdsBySet;
+          const entries = [...Object.entries(rest), [setId, next] as const];
+          return {
+            lastChannelIdsBySet: Object.fromEntries(
+              entries.slice(-MAX_REMEMBERED_CHANNEL_SETS),
+            ),
+          };
+        }),
+
+      setLastChannelSetId: (setId) =>
+        set((state) =>
+          state.lastChannelSetId === setId
+            ? state
+            : { lastChannelSetId: setId },
+        ),
+
+      setDonationUrl: (url) => set({ donationUrl: url.trim().slice(0, 500) }),
+
+      saveVoiceSet: (voiceSet) =>
+        set((state) => ({
+          voiceSets: [
+            ...state.voiceSets.filter((entry) => entry.id !== voiceSet.id),
+            voiceSet,
+          ].slice(-30),
+        })),
+
+      deleteVoiceSet: (id) =>
+        set((state) => ({
+          voiceSets: state.voiceSets.filter((entry) => entry.id !== id),
         })),
 
       addDocumentCriterion: (criterion) =>
@@ -1919,7 +2022,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 65, // Increment this when schema changes to trigger migrations
+      version: 68, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1943,6 +2046,10 @@ export const useSettingsStore = create<SettingsStore>()(
         customLanguages: state.customLanguages,
         documentSpecs: state.documentSpecs,
         formTemplates: state.formTemplates,
+        lastChannelIdsBySet: state.lastChannelIdsBySet,
+        lastChannelSetId: state.lastChannelSetId,
+        donationUrl: state.donationUrl,
+        voiceSets: state.voiceSets,
         documentCriteria: state.documentCriteria,
         translationCriteria: state.translationCriteria,
         // NOTE: mcpArbitraryFlagEnabled and memoriesFlagEnabled are
@@ -2672,6 +2779,44 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Version 65 → 66: MSF's SearXNG instance replaces the Bing + Google
+        // News 'combined' search as the default backend. 'combined' WAS the
+        // store default, so a persisted value can't be told apart from a
+        // deliberate pick — everyone on it moves to 'auto' once (the
+        // deployment then selects SearXNG). Other explicit picks are kept.
+        if (version < 66) {
+          const options = sanitizeWebSearchOptions(state.webSearchOptions);
+          state.webSearchOptions =
+            options.provider === 'combined'
+              ? { ...options, provider: 'auto' }
+              : options;
+        }
+
+        // v67: channel drafter memory: the channel row and the donation URL.
+        if (version < 67) {
+          if (!Array.isArray(state.lastChannelIds)) state.lastChannelIds = [];
+          if (typeof state.donationUrl !== 'string') state.donationUrl = '';
+          if (!Array.isArray(state.voiceSets)) state.voiceSets = [];
+        }
+
+        // v68: channel rule sets. The remembered channel row is now kept per
+        // set; the old single row was written under the built-in default set,
+        // so that is where it moves. No set has been used yet.
+        if (version < 68) {
+          const legacy = Array.isArray(state.lastChannelIds)
+            ? (state.lastChannelIds as string[])
+            : [];
+          state.lastChannelIdsBySet =
+            legacy.length > 0 ? { [DEFAULT_CHANNEL_SET_ID]: legacy } : {};
+          delete state.lastChannelIds;
+          state.lastChannelSetId = null;
+        }
+        // Whatever version it came from, the per-set rows are only kept as
+        // clean string arrays (the workspace iterates them on load).
+        state.lastChannelIdsBySet = coerceChannelIdsBySet(
+          state.lastChannelIdsBySet,
+        );
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -2822,6 +2967,20 @@ export const useSettingsStore = create<SettingsStore>()(
           }
           if (!Array.isArray(state.formTemplates)) {
             state.formTemplates = [];
+          }
+          // Defensive, inner values included: a row that is not a clean
+          // string array would throw in the workspace's seed on load.
+          state.lastChannelIdsBySet = coerceChannelIdsBySet(
+            state.lastChannelIdsBySet,
+          );
+          if (typeof state.lastChannelSetId !== 'string') {
+            state.lastChannelSetId = null;
+          }
+          if (typeof state.donationUrl !== 'string') {
+            state.donationUrl = '';
+          }
+          if (!Array.isArray(state.voiceSets)) {
+            state.voiceSets = [];
           }
         }
       },

@@ -1176,6 +1176,132 @@ describe('ToolRouter Enricher', () => {
     });
   });
 
+  describe('searxng provider', () => {
+    const searxngContext = (
+      searchMode: SearchMode,
+      content: string,
+      extra: Record<string, unknown> = {},
+    ) => {
+      const context = createTestChatContext({
+        searchMode,
+        messages: [createTestMessage({ content })],
+        model: { id: 'Mistral-Large-3' },
+        ...extra,
+      });
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'searxng',
+      };
+      return context;
+    };
+
+    beforeEach(() => {
+      (enricher as any).webSearchTool.execute.mockResolvedValue({
+        text: 'Digest.',
+        citations: [{ number: 1, title: 'A', url: 'https://a.example' }],
+      });
+    });
+
+    it('plans a FORCED search through the router: fan-out queries and category reach the tool', async () => {
+      mockToolRouterService.determineTool.mockResolvedValue({
+        tools: ['web_search'],
+        searchQuery: 'India',
+        searchQueries: ['India', 'India economy', 'India politics'],
+        searchRecency: 'week',
+        searchCategory: 'news',
+      });
+
+      await enricher.execute(
+        searxngContext(SearchMode.ALWAYS, 'what is happening in India'),
+      );
+
+      expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+        expect.objectContaining({ searchDecided: true, searchFanOut: true }),
+      );
+      expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
+        expect.objectContaining({
+          searchQuery: 'India',
+          searchQueries: ['India', 'India economy', 'India politics'],
+          category: 'news',
+          freshness: 'week',
+        }),
+      );
+    });
+
+    it('degrades a forced search to the raw prompt when planning fails', async () => {
+      mockToolRouterService.determineTool.mockResolvedValue({
+        tools: [],
+        degraded: true,
+      });
+
+      await enricher.execute(
+        searxngContext(SearchMode.ALWAYS, 'what is happening in India'),
+      );
+
+      expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
+        expect.objectContaining({
+          searchQuery: 'what is happening in India',
+          searchQueries: ['what is happening in India'],
+        }),
+      );
+    });
+
+    it('asks for liberal fan-out on an undecided search, without pinning the decision', async () => {
+      mockToolRouterService.determineTool.mockResolvedValue({ tools: [] });
+
+      await enricher.execute(
+        searxngContext(SearchMode.INTELLIGENT, 'explain recursion'),
+      );
+
+      expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+        expect.objectContaining({ searchDecided: false, searchFanOut: true }),
+      );
+      expect((enricher as any).webSearchTool.execute).not.toHaveBeenCalled();
+    });
+
+    it('runs without an agent model, labels the record, and flags a news fallback', async () => {
+      mockToolRouterService.determineTool.mockResolvedValue({
+        tools: ['web_search'],
+        searchQuery: 'cholera vaccine efficacy',
+        searchQueries: ['cholera vaccine efficacy'],
+      });
+      (enricher as any).webSearchTool.execute.mockResolvedValue({
+        text: 'Digest.',
+        citations: [{ number: 1, title: 'A', url: 'https://a.example' }],
+        metadata: { searxngFallback: true },
+      });
+      const emitMarker = vi.fn().mockResolvedValue(undefined);
+      const context = createTestChatContext({
+        searchMode: SearchMode.ALWAYS,
+        messages: [createTestMessage({ content: 'cholera vaccine efficacy' })],
+        model: { id: 'Mistral-Large-3' },
+        emitMarker,
+      });
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'searxng',
+      };
+
+      const result = await enricher.execute(context);
+
+      expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
+        expect.objectContaining({ provider: 'searxng', model: undefined }),
+      );
+      expect(result.processedContent?.metadata?.citations).toHaveLength(1);
+
+      const marker = emitMarker.mock.calls[0][0] as string;
+      const record = JSON.parse(
+        marker
+          .replace(/[\s\S]*<<<TOOL_CALL_RECORD>>>/, '')
+          .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*/, ''),
+      );
+      expect(record.server_label).toBe('Web Search (SearXNG)');
+      expect(marker).toContain('news feeds used instead');
+    });
+  });
+
   describe('user-selected search provider', () => {
     it('overrides the deployment default and labels the record accordingly', async () => {
       // env default is bing-agent (beforeEach), but the user picked

@@ -133,6 +133,45 @@ export interface MatchedGlossaryEntry {
 }
 
 /**
+ * Simple case folding good enough for a PRE-FILTER: upper-then-lower maps
+ * the odd one-way characters (Kelvin sign, long s) onto the letters the
+ * regex's `iu` folding would also accept. Never used for the match itself.
+ */
+function foldCase(s: string): string {
+  return s.toUpperCase().toLowerCase();
+}
+
+/**
+ * Text prepared once per scan so the per-entry pre-check is a native
+ * substring search instead of a regex compile + Unicode scan. With
+ * organization glossaries at termbase scale (thousands of entries per run)
+ * the regex path alone would dominate request CPU.
+ */
+interface PreparedText {
+  raw: string;
+  folded: string;
+}
+
+/**
+ * Can `term` possibly occur in the text? Its first whitespace-delimited
+ * token must appear verbatim (whole-word and inflection rules only ever
+ * NARROW a match, and internal whitespace only widens between tokens, so
+ * the first token is always a literal substring of any true match). A
+ * false "yes" costs one regex; a false "no" is impossible by construction.
+ */
+function mightContain(
+  prepared: PreparedText,
+  term: string,
+  caseSensitive: boolean,
+): boolean {
+  const first = term.trim().split(/\s+/)[0];
+  if (!first) return false;
+  return caseSensitive
+    ? prepared.raw.includes(first)
+    : prepared.folded.includes(foldCase(first));
+}
+
+/**
  * The entries that occur in `sourceText`, in the ORIGINAL entry order (the
  * caller decides how to rank them — admin guides rank by position when a
  * budget truncates). Incomplete entries are dropped.
@@ -142,11 +181,16 @@ export function findMatchingEntries(
   sourceText: string,
 ): MatchedGlossaryEntry[] {
   const matched: MatchedGlossaryEntry[] = [];
+  const prepared: PreparedText = {
+    raw: sourceText,
+    folded: foldCase(sourceText),
+  };
   for (const entry of entries) {
     if (!entry || !entry.source?.trim() || !entry.target?.trim()) continue;
     const kind = resolveEntryKind(entry);
     if (kind === 'acronym') {
       if (
+        mightContain(prepared, entry.source, true) &&
         termOccursIn(sourceText, entry.source, {
           caseSensitive: true,
           ignoreShouting: true,
@@ -155,6 +199,7 @@ export function findMatchingEntries(
         matched.push({ entry, kind, matchedBy: 'source' });
       } else if (
         entry.sourceExpansion?.trim() &&
+        mightContain(prepared, entry.sourceExpansion, false) &&
         termOccursIn(sourceText, entry.sourceExpansion, {
           caseSensitive: false,
         })
@@ -162,6 +207,7 @@ export function findMatchingEntries(
         matched.push({ entry, kind, matchedBy: 'expansion' });
       }
     } else if (
+      mightContain(prepared, entry.source, false) &&
       termOccursIn(sourceText, entry.source, { caseSensitive: false })
     ) {
       matched.push({ entry, kind, matchedBy: 'source' });
@@ -246,4 +292,40 @@ export function sanitizeGlossaryEntry(raw: unknown): GlossaryEntry | null {
   const targetExpansion = str(r.targetExpansion, MAX_GLOSSARY_TERM_CHARS);
   if (targetExpansion) entry.targetExpansion = targetExpansion;
   return entry;
+}
+
+/**
+ * Merges admin terminology-guide entries with a user's local glossary
+ * entries. Admin entries come FIRST and WIN on a case-insensitive duplicate
+ * source term — organization-mandated terminology is authoritative over
+ * personal glossaries.
+ */
+export function mergeGlossaryEntries(
+  guideEntries: GlossaryEntry[],
+  localEntries: GlossaryEntry[],
+): GlossaryEntry[] {
+  const seen = new Map<string, GlossaryEntryKind>();
+  const merged: GlossaryEntry[] = [];
+  for (const entry of [...guideEntries, ...localEntries]) {
+    if (!entry.source) continue;
+    const key = entry.source.trim().toLowerCase();
+    const kind = resolveEntryKind(entry);
+    const earlier = seen.get(key);
+    // A duplicate is dropped even across case ("idp" after "IDP"): the
+    // org entry wins. The one exception is an entry the user EXPLICITLY
+    // typed as an ordinary word next to an acronym ("who" beside "WHO") —
+    // those are two different words, so both stay.
+    if (earlier !== undefined) {
+      const distinctWord =
+        entry.kind === 'term' &&
+        earlier === 'acronym' &&
+        !seen.has(`term:${key}`);
+      if (!distinctWord) continue;
+      seen.set(`term:${key}`, 'term');
+    } else {
+      seen.set(key, kind);
+    }
+    merged.push(entry);
+  }
+  return merged;
 }

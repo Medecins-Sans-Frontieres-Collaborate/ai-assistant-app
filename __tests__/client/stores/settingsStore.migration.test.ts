@@ -736,12 +736,12 @@ describe('settingsStore migration (v46 → v47)', () => {
       { webSearchOptions: { resultCount: 12, freshness: 'week' } },
       46,
     ) as Record<string, unknown>;
-    // Absent provider backfills to the store default — 'combined' since
-    // combined (Bing + headlines) became the product default.
+    // Absent provider backfills to the store default — 'auto', so the
+    // deployment picks the backend (SearXNG where configured).
     expect(result.webSearchOptions).toEqual({
       resultCount: 12,
       freshness: 'week',
-      provider: 'combined',
+      provider: 'auto',
     });
 
     const repaired = migrate(
@@ -751,7 +751,7 @@ describe('settingsStore migration (v46 → v47)', () => {
     expect(repaired.webSearchOptions).toEqual({
       resultCount: 15,
       freshness: 'auto',
-      provider: 'combined',
+      provider: 'auto',
     });
   });
 });
@@ -768,7 +768,7 @@ describe('settingsStore migration (v47 → v48)', () => {
     expect(result.webSearchOptions).toEqual({
       resultCount: 10,
       freshness: 'day',
-      provider: 'combined',
+      provider: 'auto',
     });
   });
 
@@ -801,7 +801,7 @@ describe('settingsStore migration (v47 → v48)', () => {
     ) as Record<string, unknown>;
     expect(
       (repaired.webSearchOptions as Record<string, unknown>).provider,
-    ).toBe('combined');
+    ).toBe('auto');
   });
 });
 
@@ -1072,5 +1072,185 @@ describe('settingsStore migration (v57 → v58)', () => {
     const result = migrate({}, 39) as Record<string, unknown>;
 
     expect(result.pasteAsAttachmentChars).toBe(DEFAULT_PASTE_ATTACHMENT_CHARS);
+  });
+});
+
+describe('settingsStore migration (v65 → v66)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it("moves the former 'combined' default to 'auto' once", () => {
+    const result = migrate(
+      {
+        webSearchOptions: {
+          resultCount: 11,
+          freshness: 'week',
+          provider: 'combined',
+        },
+      },
+      65,
+    ) as Record<string, unknown>;
+
+    expect(result.webSearchOptions).toEqual({
+      resultCount: 11,
+      freshness: 'week',
+      provider: 'auto',
+    });
+  });
+
+  it('keeps every other explicit provider pick', () => {
+    for (const kept of [
+      'auto',
+      'searxng',
+      'news',
+      'google-news',
+      'gdelt',
+      'bing-agent',
+      'bing-responses',
+    ]) {
+      const result = migrate(
+        {
+          webSearchOptions: {
+            resultCount: 8,
+            freshness: 'auto',
+            provider: kept,
+          },
+        },
+        65,
+      ) as Record<string, unknown>;
+      expect(
+        (result.webSearchOptions as Record<string, unknown>).provider,
+      ).toBe(kept);
+    }
+  });
+
+  it("leaves a 'combined' pick made after the migration alone", () => {
+    const result = migrate(
+      {
+        webSearchOptions: {
+          resultCount: 8,
+          freshness: 'auto',
+          provider: 'combined',
+        },
+      },
+      66,
+    ) as Record<string, unknown>;
+    expect((result.webSearchOptions as Record<string, unknown>).provider).toBe(
+      'combined',
+    );
+  });
+});
+
+describe('settingsStore migration (v67 → v68)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('moves the single remembered channel row under the default set', () => {
+    const result = migrate(
+      {
+        lastChannelIds: ['linkedin', 'x'],
+        donationUrl: 'https://msf.org/give',
+      },
+      67,
+    ) as Record<string, unknown>;
+
+    expect(result.lastChannelIdsBySet).toEqual({
+      default: ['linkedin', 'x'],
+    });
+    expect(result.lastChannelSetId).toBeNull();
+    expect(result.donationUrl).toBe('https://msf.org/give');
+    expect('lastChannelIds' in result).toBe(false);
+  });
+
+  it('starts with no remembered rows when none was kept', () => {
+    const result = migrate({ lastChannelIds: [] }, 67) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.lastChannelIdsBySet).toEqual({});
+    expect(result.lastChannelSetId).toBeNull();
+  });
+
+  it('leaves per-set rows and the remembered set alone on a current store', () => {
+    const result = migrate(
+      {
+        lastChannelIdsBySet: { 'msf-no': ['linkedin'] },
+        lastChannelSetId: 'msf-no',
+      },
+      68,
+    ) as Record<string, unknown>;
+
+    expect(result.lastChannelIdsBySet).toEqual({ 'msf-no': ['linkedin'] });
+    expect(result.lastChannelSetId).toBe('msf-no');
+  });
+
+  /**
+   * Only the container used to be checked, so a row that was not a string
+   * array survived into the store and threw in the workspace's seed.
+   */
+  it('coerces every remembered row to a clean string array', () => {
+    const result = migrate(
+      {
+        lastChannelIdsBySet: {
+          default: 'oops',
+          'msf-no': ['linkedin', 7, null, 'linkedin', '', 'x'],
+          'msf-se': { not: 'a row' },
+          'msf-dk': Array.from({ length: 40 }, (_, i) => `c${i}`),
+        },
+      },
+      68,
+    ) as Record<string, unknown>;
+
+    expect(result.lastChannelIdsBySet).toEqual({
+      'msf-no': ['linkedin', 'x'],
+      'msf-dk': Array.from({ length: 30 }, (_, i) => `c${i}`),
+    });
+  });
+
+  it('coerces the rows on rehydrate as well', () => {
+    const state = {
+      ...useSettingsStore.getState(),
+      lastChannelIdsBySet: {
+        default: 'oops',
+        'msf-no': ['linkedin', 42],
+      } as unknown as Record<string, string[]>,
+    };
+    useSettingsStore.persist.getOptions().onRehydrateStorage!(state)?.(
+      state,
+      undefined,
+    );
+
+    expect(state.lastChannelIdsBySet).toEqual({ 'msf-no': ['linkedin'] });
+  });
+});
+
+describe('settingsStore.setLastChannelIds', () => {
+  it('stores only clean string rows and caps the map at 20 sets', () => {
+    useSettingsStore.setState({ lastChannelIdsBySet: {} });
+    const { setLastChannelIds } = useSettingsStore.getState();
+
+    setLastChannelIds('first', ['x', 'x', '', 'linkedin']);
+    expect(useSettingsStore.getState().lastChannelIdsBySet).toEqual({
+      first: ['x', 'linkedin'],
+    });
+
+    for (let i = 0; i < 20; i += 1) setLastChannelIds(`set-${i}`, ['x']);
+    const rows = useSettingsStore.getState().lastChannelIdsBySet;
+    expect(Object.keys(rows)).toHaveLength(20);
+    // The oldest write ('first') fell off; the latest is still there.
+    expect(rows.first).toBeUndefined();
+    expect(rows['set-19']).toEqual(['x']);
+  });
+
+  it('rewriting a set moves it to the newest position', () => {
+    useSettingsStore.setState({ lastChannelIdsBySet: {} });
+    const { setLastChannelIds } = useSettingsStore.getState();
+    for (let i = 0; i < 20; i += 1) setLastChannelIds(`set-${i}`, ['x']);
+    // Touching the oldest keeps it; the next new set evicts set-1 instead.
+    setLastChannelIds('set-0', ['linkedin']);
+    setLastChannelIds('set-new', ['x']);
+    const rows = useSettingsStore.getState().lastChannelIdsBySet;
+    expect(rows['set-0']).toEqual(['linkedin']);
+    expect(rows['set-1']).toBeUndefined();
+    expect(rows['set-new']).toEqual(['x']);
   });
 });

@@ -1,3 +1,5 @@
+import { isVerbatim } from '@/lib/utils/shared/drafter/core/verify';
+
 import {
   FORM_LIMITS,
   FieldProvenance,
@@ -201,6 +203,12 @@ export function normalizeFillResponse(
   raw: RawFillResponse,
   targets: FormField[],
   knownSourceIds: ReadonlySet<string>,
+  /**
+   * The source texts the model was shown, by source id. When given, every
+   * kept excerpt is looked up in its source and marked `verified`. An
+   * excerpt is "verbatim" by instruction only; this is what checks it.
+   */
+  sourceTexts?: ReadonlyMap<string, string>,
 ): {
   proposals: NormalizedProposal[];
   questions: Array<{ text: string; fieldIds: string[] }>;
@@ -228,10 +236,17 @@ export function normalizeFillResponse(
           p.excerpt.trim() !== '',
       )
       .slice(0, 5)
-      .map((p) => ({
-        sourceId: p.sourceId,
-        excerpt: p.excerpt.trim().slice(0, MAX_EXCERPT_CHARS),
-      }));
+      .map((p) => {
+        const excerpt = p.excerpt.trim().slice(0, MAX_EXCERPT_CHARS);
+        const text = sourceTexts?.get(p.sourceId);
+        return text === undefined
+          ? { sourceId: p.sourceId, excerpt }
+          : {
+              sourceId: p.sourceId,
+              excerpt,
+              verified: isVerbatim(text, excerpt),
+            };
+      });
     const confidence: FillConfidence =
       proposal.confidence === 'high' ||
       proposal.confidence === 'medium' ||

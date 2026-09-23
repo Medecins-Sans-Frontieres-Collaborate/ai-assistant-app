@@ -2,13 +2,16 @@ import {
   AgentAccessService,
   emitAccessAudit,
 } from '@/lib/services/agentAccess/AgentAccessService';
+import { hydrateGuide } from '@/lib/services/agentAccess/guidePayloadStore';
 import {
   GUIDE_SOURCE,
+  Guide,
   GuideKind,
   GuidePayload,
   guidePayload,
 } from '@/lib/services/agentAccess/types';
 
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 import {
   guideCriterionId,
   guideIdFromCriterionId,
@@ -89,7 +92,22 @@ async function resolveOne(options: {
   if (decision.decision !== 'allow') return FAILED;
   if (!guide.workflows.includes(workflow)) return FAILED;
 
-  let payload = guidePayload(guide);
+  // The snapshot holds META; the payload lives in an immutable blob loaded
+  // through the byte-bounded cache. A missing blob (pruned by a racing
+  // save, or a failed write) is indistinguishable from an unknown guide
+  // by contract — same generic failure.
+  let hydrated: Guide | null;
+  try {
+    hydrated = await hydrateGuide(guide);
+  } catch (error) {
+    console.error(
+      `[workflows/guides] payload load failed for guide ${sanitizeForLog(guide.id)}: ${sanitizeForLog(error)}`,
+    );
+    return FAILED;
+  }
+  if (hydrated === null) return FAILED;
+
+  let payload = guidePayload(hydrated);
   if (payload === null) return FAILED;
 
   let truncated = false;

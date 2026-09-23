@@ -13,14 +13,18 @@ const MAX_QUOTE_CHARS = 600;
 
 /** Normalizes typography + whitespace so verbatim quotes compare equal. */
 export function normalizeForQuoteMatch(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[‘’‚′`´]/g, "'")
-    .replace(/[“”„″]/g, '"')
-    .replace(/[–—−]/g, '-')
-    .replace(/­/g, '') // soft hyphen
-    .replace(/\s+/g, ' ')
-    .trim();
+  return (
+    text
+      .toLowerCase()
+      // Markdown escapes are not words (a source kept as Markdown).
+      .replace(/\\(?=[\\*\-+=#`~[\]>_.])/g, '')
+      .replace(/[‘’‚′`´]/g, "'")
+      .replace(/[“”„″]/g, '"')
+      .replace(/[–—−]/g, '-')
+      .replace(/­/g, '') // soft hyphen
+      .replace(/\s+/g, ' ')
+      .trim()
+  );
 }
 
 /**

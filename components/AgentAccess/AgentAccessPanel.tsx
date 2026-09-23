@@ -14,6 +14,11 @@ import {
 } from '@/client/hooks/settings/useAgentAccessAdmin';
 import { useHiddenAdminAgents } from '@/client/hooks/useHiddenAdminAgents';
 
+import {
+  findTranslationLanguage,
+  translationLanguageLabel,
+} from '@/lib/utils/shared/translation/languages';
+
 import { CanonicalKeyChip } from './CanonicalKeyChip';
 import { CatalogOauthSection } from './CatalogOauthSection';
 import { ConnectorEditor } from './ConnectorEditor';
@@ -47,7 +52,28 @@ import {
 
 import { Link } from '@/lib/navigation';
 
-type PanelTab = 'agents' | 'connectors' | 'guides' | 'datasets' | 'localAdmins';
+/** "English → French", "Any → French", or the any-language fallback. */
+function glossaryPairLabel(
+  sourceLang: string | undefined,
+  targetLang: string | undefined,
+  anyLabel: string,
+): string {
+  const name = (id: string | undefined) => {
+    if (!id) return anyLabel;
+    const known = findTranslationLanguage(id);
+    return known ? translationLanguageLabel(known) : id;
+  };
+  if (!sourceLang && !targetLang) return anyLabel;
+  return `${name(sourceLang)} → ${name(targetLang)}`;
+}
+
+type PanelTab =
+  | 'agents'
+  | 'connectors'
+  | 'guides'
+  | 'glossaries'
+  | 'datasets'
+  | 'localAdmins';
 
 /**
  * Per-area headings. Reuses the tab labels, which are already translated into
@@ -57,6 +83,7 @@ const SECTION_HEADING_KEY: Record<PanelTab, string> = {
   agents: 'agentsTab',
   connectors: 'connectorsTab',
   guides: 'guidesTab',
+  glossaries: 'glossariesTab',
   datasets: 'datasetsTab',
   localAdmins: 'localAdminsTab',
 };
@@ -327,7 +354,14 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
     const rulesByKey = new Map(
       (rulesQuery.data?.rules ?? []).map((r) => [r.canonicalKey, r]),
     );
+    // Glossaries (terminology guides) have their own area; the Guides area
+    // lists every other kind. Same store, same rules — different door.
     return (guidesQuery.data?.guides ?? [])
+      .filter((entry: AdminStoredGuide) =>
+        section === 'glossaries'
+          ? entry.guide.kind === 'terminology'
+          : entry.guide.kind !== 'terminology',
+      )
       .map((entry: AdminStoredGuide) => ({
         row: {
           canonicalKey: entry.canonicalKey,
@@ -341,7 +375,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
         entry,
       }))
       .sort((a, b) => a.row.displayName.localeCompare(b.row.displayName));
-  }, [guidesQuery.data, rulesQuery.data]);
+  }, [guidesQuery.data, rulesQuery.data, section]);
 
   /**
    * Dataset rows reuse MergedAgentRow for the same reason the other entities
@@ -493,7 +527,13 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
         toast.error(t('saveError'));
         return;
       }
-      toast.success(t('guideDeleteSuccess'));
+      toast.success(
+        t(
+          section === 'glossaries'
+            ? 'glossaryDeleteSuccess'
+            : 'guideDeleteSuccess',
+        ),
+      );
       setConfirmDeleteGuideId(null);
       await invalidateGuideData();
     } catch {
@@ -904,7 +944,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
               )}
             </>
           )
-        ) : activeTab === 'guides' ? (
+        ) : activeTab === 'guides' || activeTab === 'glossaries' ? (
           guidesQuery.isLoading ? (
             <p className="text-sm text-gray-500 dark:text-gray-400">
               {t('loading')}
@@ -936,13 +976,14 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                 onClick={() => setIsCreatingGuide((creating) => !creating)}
               >
                 <IconPlus size={16} />
-                {t('addGuide')}
+                {t(activeTab === 'glossaries' ? 'addGlossary' : 'addGuide')}
               </button>
 
               {isCreatingGuide && (
                 <div className="mb-4">
                   <GuideEditor
                     existing={null}
+                    variant={activeTab === 'glossaries' ? 'glossary' : 'guide'}
                     onSaved={handleGuideSaved}
                     onCancel={() => setIsCreatingGuide(false)}
                     onConflictReload={handleGuideConflictReload}
@@ -952,7 +993,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
 
               {guideRows.length === 0 ? (
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {t('noGuides')}
+                  {t(activeTab === 'glossaries' ? 'noGlossaries' : 'noGuides')}
                 </p>
               ) : (
                 <ul className="space-y-2">
@@ -975,9 +1016,19 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                               </p>
                             )}
                           </div>
-                          <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                            {t(`guideKind_${entry.guide.kind}`)}
-                          </span>
+                          {activeTab === 'glossaries' ? (
+                            <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                              {glossaryPairLabel(
+                                entry.guide.sourceLang,
+                                entry.guide.targetLang,
+                                t('glossaryAnyLanguage'),
+                              )}
+                            </span>
+                          ) : (
+                            <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                              {t(`guideKind_${entry.guide.kind}`)}
+                            </span>
+                          )}
                           {/* Payload summary — differentiates the structured
                               kinds at a glance. */}
                           {entry.guide.sections !== undefined && (
@@ -987,10 +1038,15 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                               })}
                             </span>
                           )}
-                          {entry.guide.entries !== undefined && (
+                          {(entry.guide.entryCount !== undefined ||
+                            entry.guide.entries !== undefined) && (
                             <span className="shrink-0 text-xs text-gray-500 dark:text-gray-400">
                               {t('guideEntryCount', {
-                                count: String(entry.guide.entries.length),
+                                count: String(
+                                  entry.guide.entryCount ??
+                                    entry.guide.entries?.length ??
+                                    0,
+                                ),
                               })}
                             </span>
                           )}
@@ -1055,7 +1111,11 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                               )
                             }
                           >
-                            {t('deleteGuide')}
+                            {t(
+                              activeTab === 'glossaries'
+                                ? 'deleteGlossary'
+                                : 'deleteGuide',
+                            )}
                           </button>
                         </div>
 
@@ -1086,6 +1146,9 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                           <GuideEditor
                             key={`${entry.guide.id}:${entry.etag}`}
                             existing={entry}
+                            variant={
+                              activeTab === 'glossaries' ? 'glossary' : 'guide'
+                            }
                             onSaved={handleGuideSaved}
                             onCancel={() => setEditingGuideId(null)}
                             onConflictReload={handleGuideConflictReload}
@@ -1094,7 +1157,13 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
 
                         {confirmDeleteGuideId === entry.guide.id && (
                           <div className="mt-2 rounded-md border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-800 dark:text-red-300">
-                            <p>{t('deleteGuideConfirm')}</p>
+                            <p>
+                              {t(
+                                activeTab === 'glossaries'
+                                  ? 'deleteGlossaryConfirm'
+                                  : 'deleteGuideConfirm',
+                              )}
+                            </p>
                             <div className="mt-2 flex gap-2">
                               <button
                                 type="button"
@@ -1102,7 +1171,11 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                                 onClick={() => handleDeleteGuide(entry)}
                                 disabled={isDeletingGuide}
                               >
-                                {t('confirmDeleteGuide')}
+                                {t(
+                                  activeTab === 'glossaries'
+                                    ? 'confirmDeleteGlossary'
+                                    : 'confirmDeleteGuide',
+                                )}
                               </button>
                               <button
                                 type="button"

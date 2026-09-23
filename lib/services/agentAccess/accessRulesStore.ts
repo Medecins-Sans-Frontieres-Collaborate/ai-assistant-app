@@ -3,12 +3,16 @@ import {
   AgentAccessConflictError,
   OVERWRITE_BLOB,
   downloadBlob,
+  downloadBlobIfChanged,
   statusCodeOf,
   uploadJson,
 } from '@/lib/services/agentAccess/blobCas';
 import { defineBlobEntity } from '@/lib/services/agentAccess/blobEntityStore';
+import { getPayloadCache } from '@/lib/services/agentAccess/payloadCache';
 import {
   AGENT_ACCESS_CATALOG_OAUTH_PREFIX,
+  AGENT_ACCESS_CHANNEL_PROFILES_PREFIX,
+  AGENT_ACCESS_CHANNEL_SETS_PREFIX,
   AGENT_ACCESS_CONFIG_PATH,
   AGENT_ACCESS_CONNECTORS_PREFIX,
   AGENT_ACCESS_FORM_TEMPLATES_PREFIX,
@@ -19,6 +23,10 @@ import {
   AGENT_ACCESS_ORG_AGENTS_PREFIX,
   AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
+  AdminChannelProfile,
+  AdminChannelProfileHistoryEntry,
+  AdminChannelProfileHistoryEntrySchema,
+  AdminChannelProfileSchema,
   AdminFormTemplate,
   AdminFormTemplateHistoryEntry,
   AdminFormTemplateHistoryEntrySchema,
@@ -30,10 +38,16 @@ import {
   AgentAccessRule,
   AgentAccessRuleSchema,
   CATALOG_OAUTH_SOURCE,
+  CHANNEL_PROFILE_SOURCE,
+  CHANNEL_SET_SOURCE,
   CatalogOauthApp,
   CatalogOauthAppHistoryEntry,
   CatalogOauthAppHistoryEntrySchema,
   CatalogOauthAppSchema,
+  ChannelRuleSet,
+  ChannelRuleSetHistoryEntry,
+  ChannelRuleSetHistoryEntrySchema,
+  ChannelRuleSetSchema,
   FORM_TEMPLATE_SOURCE,
   GUIDE_SOURCE,
   Guide,
@@ -73,6 +87,8 @@ import {
   PromptAgentSchema,
   canonicalAgentKey,
   catalogOauthBlobPath,
+  channelProfileBlobPath,
+  channelSetBlobPath,
   connectorBlobPath,
   formTemplateBlobPath,
   guideBlobPath,
@@ -623,6 +639,34 @@ const formTemplateEntity = defineBlobEntity<
   labelBase: 'FormTemplate',
 });
 
+const channelProfileEntity = defineBlobEntity<
+  AdminChannelProfile,
+  AdminChannelProfileHistoryEntry
+>({
+  logNoun: 'channel-profile',
+  errorNoun: 'channel profile',
+  source: CHANNEL_PROFILE_SOURCE,
+  listPrefix: AGENT_ACCESS_CHANNEL_PROFILES_PREFIX,
+  blobPath: channelProfileBlobPath,
+  schema: AdminChannelProfileSchema,
+  historySchema: AdminChannelProfileHistoryEntrySchema,
+  labelBase: 'ChannelProfile',
+});
+
+const channelSetEntity = defineBlobEntity<
+  ChannelRuleSet,
+  ChannelRuleSetHistoryEntry
+>({
+  logNoun: 'channel-set',
+  errorNoun: 'channel set',
+  source: CHANNEL_SET_SOURCE,
+  listPrefix: AGENT_ACCESS_CHANNEL_SETS_PREFIX,
+  blobPath: channelSetBlobPath,
+  schema: ChannelRuleSetSchema,
+  historySchema: ChannelRuleSetHistoryEntrySchema,
+  labelBase: 'ChannelSet',
+});
+
 const guideEntity = defineBlobEntity<Guide, GuideHistoryEntry>({
   logNoun: 'guide',
   errorNoun: 'guide',
@@ -985,6 +1029,84 @@ export function writeGuideHistoryEntry(
 
 /* --- Form templates ------------------------------------------------- */
 
+/* Channel profiles (channel drafter) — thin wrappers, like form templates. */
+
+export type StoredChannelProfile = Awaited<
+  ReturnType<typeof channelProfileEntity.listAll>
+>[number];
+
+export function listAllChannelProfiles(
+  storage: BlobStorage,
+): Promise<StoredChannelProfile[]> {
+  return channelProfileEntity.listAll(storage);
+}
+
+export function readChannelProfile(storage: BlobStorage, id: string) {
+  return channelProfileEntity.read(storage, id);
+}
+
+export function writeChannelProfile(
+  storage: BlobStorage,
+  record: AdminChannelProfile,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  return channelProfileEntity.write(storage, record, ifMatchEtag);
+}
+
+export function deleteChannelProfile(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  return channelProfileEntity.remove(storage, id, ifMatchEtag);
+}
+
+export function writeChannelProfileHistoryEntry(
+  storage: BlobStorage,
+  entry: AdminChannelProfileHistoryEntry,
+): Promise<void> {
+  return channelProfileEntity.writeHistory(storage, entry);
+}
+
+/* Channel rule sets — thin wrappers, like channel profiles. */
+
+export type StoredChannelSet = Awaited<
+  ReturnType<typeof channelSetEntity.listAll>
+>[number];
+
+export function listAllChannelSets(
+  storage: BlobStorage,
+): Promise<StoredChannelSet[]> {
+  return channelSetEntity.listAll(storage);
+}
+
+export function readChannelSet(storage: BlobStorage, id: string) {
+  return channelSetEntity.read(storage, id);
+}
+
+export function writeChannelSet(
+  storage: BlobStorage,
+  record: ChannelRuleSet,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  return channelSetEntity.write(storage, record, ifMatchEtag);
+}
+
+export function deleteChannelSet(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  return channelSetEntity.remove(storage, id, ifMatchEtag);
+}
+
+export function writeChannelSetHistoryEntry(
+  storage: BlobStorage,
+  entry: ChannelRuleSetHistoryEntry,
+): Promise<void> {
+  return channelSetEntity.writeHistory(storage, entry);
+}
+
 export function listAllFormTemplates(
   storage: BlobStorage,
 ): Promise<StoredFormTemplate[]> {
@@ -1138,6 +1260,66 @@ export async function readMapDataset(
   return { dataset: parsed.data, etag: result.etag };
 }
 
+function parseMapDatasetBlob(buffer: Buffer, id: string): MapDataset {
+  const parsed = MapDatasetSchema.safeParse(
+    JSON.parse(buffer.toString('utf8')),
+  );
+  if (!parsed.success) {
+    throw new Error(
+      `Malformed map-dataset data blob for id ${id}: ${parsed.error.message}`,
+    );
+  }
+  return parsed.data;
+}
+
+/**
+ * {@link readMapDataset} through the per-replica byte-bounded payload cache.
+ * The data blob is MUTABLE (it is the CAS anchor), so a cache hit is
+ * revalidated with a conditional download keyed on the cached ETag: an
+ * unchanged blob costs one bodiless round trip and no re-parse; a moved one
+ * is re-read. For request paths that serve a dataset repeatedly (the user
+ * load route); admin writes keep using the direct read.
+ */
+export async function readMapDatasetCached(
+  storage: BlobStorage,
+  id: string,
+): Promise<MapDatasetReadResult | null> {
+  const blobPath = mapDatasetDataBlobPath(id);
+  const entry = await getPayloadCache().getOrLoad<MapDataset>(
+    blobPath,
+    async (cached) => {
+      if (cached?.etag) {
+        const result = await downloadBlobIfChanged(
+          storage,
+          blobPath,
+          cached.etag,
+          'agentAccess.readMapDatasetCached',
+        );
+        if (result === 'unchanged') return 'unchanged';
+        if (result === null) return null;
+        return {
+          value: parseMapDatasetBlob(result.buffer, id),
+          bytes: result.buffer.length,
+          etag: result.etag,
+        };
+      }
+      const result = await downloadBlob(
+        storage,
+        blobPath,
+        'agentAccess.readMapDatasetCached',
+      );
+      if (result === null) return null;
+      return {
+        value: parseMapDatasetBlob(result.buffer, id),
+        bytes: result.buffer.length,
+        etag: result.etag,
+      };
+    },
+  );
+  if (entry === null) return null;
+  return { dataset: entry.value, etag: entry.etag ?? '' };
+}
+
 /**
  * Compare-and-swap dataset write: the DATA blob is written under the CAS
  * condition (`ifMatchEtag` set → update; null → creation only; 412 →
@@ -1159,6 +1341,9 @@ export async function writeMapDataset(
     ifMatchEtag,
     'agentAccess.writeMapDatasetData',
   );
+  // This replica's cached copy is stale by definition; other replicas
+  // revalidate by ETag on their next read.
+  getPayloadCache().delete(mapDatasetDataBlobPath(parsed.id));
   try {
     await uploadJsonUnconditional(
       storage,
@@ -1186,6 +1371,7 @@ export async function deleteMapDataset(
   ifMatchEtag: string,
 ): Promise<boolean> {
   let dataDeleted = true;
+  getPayloadCache().delete(mapDatasetDataBlobPath(id));
   const dataClient = storage.getBlockBlobClient(mapDatasetDataBlobPath(id));
   try {
     await withAzureRetry(

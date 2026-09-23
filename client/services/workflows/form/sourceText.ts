@@ -2,6 +2,8 @@
 
 import { fetchUrlContent } from '@/client/services/url/urlFetchClient';
 
+import { markdownToProse } from '@/lib/utils/shared/markdown/markdownToProse';
+
 import { FillNote, FillSourceRecord } from '@/types/formFill';
 
 /**
@@ -16,6 +18,17 @@ const cache = new Map<string, string>();
 
 export function rememberSourceText(sourceId: string, text: string): void {
   cache.set(sourceId, text);
+}
+
+/**
+ * A fetched PAGE arrives as Markdown. What the workflows verify, show and
+ * quote must be the page's prose, so it is converted once, here, and every
+ * reader of the cache sees the same text. Returns the prose.
+ */
+export function rememberPageText(sourceId: string, markdown: string): string {
+  const prose = markdownToProse(markdown);
+  cache.set(sourceId, prose);
+  return prose;
 }
 
 export function forgetSourceText(sourceId: string): void {
@@ -61,7 +74,7 @@ export async function getSourceText(
       text = await refetchFile(source.fileId);
     } else if (source.kind === 'url' && source.url) {
       const result = await fetchUrlContent(source.url);
-      text = result.ok ? result.page.text : '';
+      text = result.ok ? markdownToProse(result.page.text) : '';
     }
   } catch {
     text = '';

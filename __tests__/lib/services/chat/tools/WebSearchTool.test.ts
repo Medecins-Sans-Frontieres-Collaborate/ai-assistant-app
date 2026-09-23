@@ -1,11 +1,18 @@
 import { AgentChatService } from '@/lib/services/chat/AgentChatService';
-import { WebSearchTool } from '@/lib/services/chat/tools/WebSearchTool';
+import {
+  WebSearchTool,
+  resolveDefaultWebSearchProvider,
+} from '@/lib/services/chat/tools/WebSearchTool';
 import {
   fetchGoogleNewsHeadlines,
   searchNewsFanOut,
   searchNewsParallel,
 } from '@/lib/services/chat/tools/newsSearch';
 import { executeResponsesWebSearch } from '@/lib/services/chat/tools/responsesWebSearch';
+import {
+  isSearxngConfigured,
+  searchSearxng,
+} from '@/lib/services/chat/tools/searxngSearch';
 
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
@@ -21,6 +28,11 @@ vi.mock('@/lib/services/chat/tools/newsSearch', async (importOriginal) => ({
   searchNewsFanOut: vi.fn(),
   searchNewsParallel: vi.fn(),
   fetchGoogleNewsHeadlines: vi.fn(),
+}));
+
+vi.mock('@/lib/services/chat/tools/searxngSearch', () => ({
+  isSearxngConfigured: vi.fn(() => false),
+  searchSearxng: vi.fn(),
 }));
 
 vi.mock('@/lib/services/chat/tools/responsesWebSearch', () => ({
@@ -146,6 +158,157 @@ describe('WebSearchTool', () => {
 
       expect(result.citations).toEqual([]);
       expect(result.text).toBe('Some results');
+    });
+  });
+
+  describe('searxng provider', () => {
+    const user = { email: 'test@example.com' } as any;
+    const newsFallback = {
+      text: 'News digest',
+      citations: [
+        { number: 1, title: 'N', url: 'https://n.example', date: '' },
+      ],
+      providersUsed: ['google-news' as const],
+    };
+
+    beforeEach(() => {
+      vi.mocked(searchSearxng).mockReset();
+      vi.mocked(isSearxngConfigured).mockReturnValue(true);
+      vi.mocked(searchNewsParallel).mockReset();
+      vi.mocked(searchNewsParallel).mockResolvedValue(newsFallback);
+      vi.mocked(searchNewsFanOut).mockReset();
+    });
+
+    it("is what 'auto' resolves to when the instance is configured and no provider is pinned", async () => {
+      (env as any).WEB_SEARCH_PROVIDER = undefined;
+      expect(resolveDefaultWebSearchProvider()).toBe('searxng');
+      vi.mocked(isSearxngConfigured).mockReturnValue(false);
+      expect(resolveDefaultWebSearchProvider()).toBe('news');
+      (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
+      vi.mocked(isSearxngConfigured).mockReturnValue(true);
+      expect(resolveDefaultWebSearchProvider()).toBe('bing-agent');
+    });
+
+    it('passes queries, tuning and the router category through and formats a web digest', async () => {
+      vi.mocked(searchSearxng).mockResolvedValue({
+        entries: [
+          {
+            title: 'Cholera vaccine trial',
+            url: 'https://europepmc.org/abstract/MED/1',
+            date: '',
+            sourceName: 'europepmc.org',
+            snippet: 'Abstract text',
+          },
+        ],
+        answers: ['42'],
+      });
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'cholera vaccine efficacy',
+        searchQueries: ['cholera vaccine efficacy'],
+        provider: 'searxng',
+        category: 'science',
+        freshness: 'month',
+        resultCount: 12,
+        deep: true,
+        user,
+      });
+
+      expect(searchSearxng).toHaveBeenCalledWith(['cholera vaccine efficacy'], {
+        resultCount: 12,
+        freshness: 'month',
+        category: 'science',
+        deep: true,
+      });
+      expect(result.text).toContain('Web search results for');
+      expect(result.text).toContain('Instant answer');
+      expect(result.text).toContain('[1] Cholera vaccine trial');
+      expect(result.citations).toEqual([
+        expect.objectContaining({
+          number: 1,
+          url: 'https://europepmc.org/abstract/MED/1',
+        }),
+      ]);
+      expect(result.metadata?.searxngFallback).toBeUndefined();
+      expect(searchNewsParallel).not.toHaveBeenCalled();
+    });
+
+    it('falls back to the news feeds, flagged, when the instance errors', async () => {
+      vi.mocked(searchSearxng).mockRejectedValue(
+        new Error('SearXNG timed out'),
+      );
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        user,
+      });
+
+      expect(searchNewsParallel).toHaveBeenCalled();
+      expect(result.text).toBe('News digest');
+      expect(result.metadata).toEqual({ searxngFallback: true });
+    });
+
+    it('does NOT fall back to news headlines for science or IT questions', async () => {
+      vi.mocked(searchSearxng).mockRejectedValue(new Error('down'));
+
+      for (const category of ['science', 'it'] as const) {
+        const result = await webSearchTool.execute({
+          searchQuery: 'q',
+          provider: 'searxng',
+          category,
+          user,
+        });
+        expect(result).toEqual({
+          text: '',
+          citations: [],
+          metadata: { searxngFallback: true },
+        });
+      }
+      expect(searchNewsParallel).not.toHaveBeenCalled();
+    });
+
+    it('falls back when the instance finds nothing', async () => {
+      vi.mocked(searchSearxng).mockResolvedValue({ entries: [], answers: [] });
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        user,
+      });
+
+      expect(result.metadata?.searxngFallback).toBe(true);
+    });
+
+    it('skips the instance entirely when unconfigured (local dev)', async () => {
+      vi.mocked(isSearxngConfigured).mockReturnValue(false);
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        user,
+      });
+
+      expect(searchSearxng).not.toHaveBeenCalled();
+      expect(result.text).toBe('News digest');
+      expect(result.metadata?.searxngFallback).toBe(true);
+    });
+
+    it('keeps the multi-query shape on fallback (news fan-out)', async () => {
+      vi.mocked(searchSearxng).mockRejectedValue(new Error('down'));
+      vi.mocked(searchNewsFanOut).mockResolvedValue(newsFallback);
+
+      await webSearchTool.execute({
+        searchQuery: 'a',
+        searchQueries: ['a', 'b'],
+        provider: 'searxng',
+        user,
+      });
+
+      expect(searchNewsFanOut).toHaveBeenCalledWith(
+        ['a', 'b'],
+        expect.anything(),
+      );
     });
   });
 

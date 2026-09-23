@@ -80,6 +80,7 @@ const validBody = {
     map: { enabled: false },
     grants: { enabled: true },
     'form-fill': { enabled: true },
+    'channel-drafter': { enabled: true },
   },
 };
 

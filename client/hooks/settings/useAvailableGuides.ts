@@ -8,6 +8,11 @@ export interface AvailableGuide {
   name: string;
   description: string;
   languages: string[];
+  /** terminology: catalog language pair (TRANSLATION_LANGUAGES ids). */
+  sourceLang?: string;
+  targetLang?: string;
+  /** terminology: number of entries (listing badge). */
+  entryCount?: number;
   workflows: Array<'document' | 'translation'>;
   updatedAt: string;
 }

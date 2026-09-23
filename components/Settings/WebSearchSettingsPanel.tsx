@@ -23,8 +23,10 @@ export const WebSearchSettingsPanel: FC = () => {
   const webSearchOptions = useSettingsStore((s) => s.webSearchOptions);
   const setWebSearchOptions = useSettingsStore((s) => s.setWebSearchOptions);
 
-  const providers: WebSearchProviderOption[] = [
-    'auto',
+  // The deployment default and MSF's own search lead; the older backends
+  // stay selectable below them.
+  const primaryProviders: WebSearchProviderOption[] = ['auto', 'searxng'];
+  const otherProviders: WebSearchProviderOption[] = [
     'news',
     'google-news',
     'gdelt',
@@ -34,6 +36,7 @@ export const WebSearchSettingsPanel: FC = () => {
   ];
   const providerKey: Record<WebSearchProviderOption, string> = {
     auto: 'Auto',
+    searxng: 'Searxng',
     news: 'News',
     'google-news': 'GoogleNews',
     gdelt: 'Gdelt',
@@ -41,6 +44,33 @@ export const WebSearchSettingsPanel: FC = () => {
     'bing-responses': 'BingResponses',
     combined: 'Combined',
   };
+
+  const renderProvider = (provider: WebSearchProviderOption) => (
+    <label
+      key={provider}
+      className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${
+        webSearchOptions.provider === provider
+          ? 'border-blue-400 bg-blue-50/60 dark:border-blue-500/60 dark:bg-blue-900/20'
+          : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
+      }`}
+    >
+      <input
+        type="radio"
+        name="webSearchProvider"
+        className="mt-0.5 h-4 w-4 accent-blue-600"
+        checked={webSearchOptions.provider === provider}
+        onChange={() => setWebSearchOptions({ provider })}
+      />
+      <span>
+        <span className="block text-sm font-medium text-black dark:text-gray-200">
+          {t(`provider${providerKey[provider]}`)}
+        </span>
+        <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
+          {t(`provider${providerKey[provider]}Description`)}
+        </span>
+      </span>
+    </label>
+  );
 
   const freshnessValues: WebSearchOptions['freshness'][] = [
     'auto',
@@ -61,34 +91,11 @@ export const WebSearchSettingsPanel: FC = () => {
         <div className="text-sm font-bold mb-2 text-black dark:text-gray-200">
           {t('providerLabel')}
         </div>
-        <div className="space-y-2">
-          {providers.map((provider) => (
-            <label
-              key={provider}
-              className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${
-                webSearchOptions.provider === provider
-                  ? 'border-blue-400 bg-blue-50/60 dark:border-blue-500/60 dark:bg-blue-900/20'
-                  : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
-              }`}
-            >
-              <input
-                type="radio"
-                name="webSearchProvider"
-                className="mt-0.5 h-4 w-4 accent-blue-600"
-                checked={webSearchOptions.provider === provider}
-                onChange={() => setWebSearchOptions({ provider })}
-              />
-              <span>
-                <span className="block text-sm font-medium text-black dark:text-gray-200">
-                  {t(`provider${providerKey[provider]}`)}
-                </span>
-                <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
-                  {t(`provider${providerKey[provider]}Description`)}
-                </span>
-              </span>
-            </label>
-          ))}
+        <div className="space-y-2">{primaryProviders.map(renderProvider)}</div>
+        <div className="mt-4 mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          {t('otherProvidersLabel')}
         </div>
+        <div className="space-y-2">{otherProviders.map(renderProvider)}</div>
       </div>
 
       {/* Sources per search */}

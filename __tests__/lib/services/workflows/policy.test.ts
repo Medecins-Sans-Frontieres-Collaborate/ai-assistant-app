@@ -52,6 +52,7 @@ describe('workflow policy resolution', () => {
     );
     expect(Object.keys(all).sort()).toEqual(
       [
+        'channel-drafter',
         'data-analysis',
         'document',
         'form-fill',
