@@ -51,6 +51,8 @@ export const ADMIN_AREA_IDS = [
   'glossaries',
   'map-datasets',
   'form-templates',
+  'channel-sets',
+  'channel-profiles',
   'limits',
   'workflows',
   'announcements',
@@ -118,12 +120,19 @@ export async function resolveAdminAreas(
         'glossaries',
         'map-datasets',
         'form-templates',
+        // A team's rule set is theirs to edit (delegated on creation), so
+        // every admin gets the area; the route decides per set.
+        'channel-sets',
       );
     }
     // The delegation map decides who else may edit rules, so it stays
     // global-admin only — matching AgentAccessPanel's own tab filter.
     if (status.isGlobalAdmin) {
       areas.push('local-admins');
+      // A platform's limits are organisation-wide data (they drive hard
+      // checks and the prompt for every set): global admins only, matching
+      // the route and the page's own gate.
+      areas.push('channel-profiles');
     }
   }
 
