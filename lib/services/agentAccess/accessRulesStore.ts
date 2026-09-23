@@ -11,6 +11,8 @@ import { defineBlobEntity } from '@/lib/services/agentAccess/blobEntityStore';
 import { getPayloadCache } from '@/lib/services/agentAccess/payloadCache';
 import {
   AGENT_ACCESS_CATALOG_OAUTH_PREFIX,
+  AGENT_ACCESS_CHANNEL_PROFILES_PREFIX,
+  AGENT_ACCESS_CHANNEL_SETS_PREFIX,
   AGENT_ACCESS_CONFIG_PATH,
   AGENT_ACCESS_CONNECTORS_PREFIX,
   AGENT_ACCESS_FORM_TEMPLATES_PREFIX,
@@ -21,6 +23,10 @@ import {
   AGENT_ACCESS_ORG_AGENTS_PREFIX,
   AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
+  AdminChannelProfile,
+  AdminChannelProfileHistoryEntry,
+  AdminChannelProfileHistoryEntrySchema,
+  AdminChannelProfileSchema,
   AdminFormTemplate,
   AdminFormTemplateHistoryEntry,
   AdminFormTemplateHistoryEntrySchema,
@@ -32,10 +38,16 @@ import {
   AgentAccessRule,
   AgentAccessRuleSchema,
   CATALOG_OAUTH_SOURCE,
+  CHANNEL_PROFILE_SOURCE,
+  CHANNEL_SET_SOURCE,
   CatalogOauthApp,
   CatalogOauthAppHistoryEntry,
   CatalogOauthAppHistoryEntrySchema,
   CatalogOauthAppSchema,
+  ChannelRuleSet,
+  ChannelRuleSetHistoryEntry,
+  ChannelRuleSetHistoryEntrySchema,
+  ChannelRuleSetSchema,
   FORM_TEMPLATE_SOURCE,
   GUIDE_SOURCE,
   Guide,
@@ -75,6 +87,8 @@ import {
   PromptAgentSchema,
   canonicalAgentKey,
   catalogOauthBlobPath,
+  channelProfileBlobPath,
+  channelSetBlobPath,
   connectorBlobPath,
   formTemplateBlobPath,
   guideBlobPath,
@@ -625,6 +639,34 @@ const formTemplateEntity = defineBlobEntity<
   labelBase: 'FormTemplate',
 });
 
+const channelProfileEntity = defineBlobEntity<
+  AdminChannelProfile,
+  AdminChannelProfileHistoryEntry
+>({
+  logNoun: 'channel-profile',
+  errorNoun: 'channel profile',
+  source: CHANNEL_PROFILE_SOURCE,
+  listPrefix: AGENT_ACCESS_CHANNEL_PROFILES_PREFIX,
+  blobPath: channelProfileBlobPath,
+  schema: AdminChannelProfileSchema,
+  historySchema: AdminChannelProfileHistoryEntrySchema,
+  labelBase: 'ChannelProfile',
+});
+
+const channelSetEntity = defineBlobEntity<
+  ChannelRuleSet,
+  ChannelRuleSetHistoryEntry
+>({
+  logNoun: 'channel-set',
+  errorNoun: 'channel set',
+  source: CHANNEL_SET_SOURCE,
+  listPrefix: AGENT_ACCESS_CHANNEL_SETS_PREFIX,
+  blobPath: channelSetBlobPath,
+  schema: ChannelRuleSetSchema,
+  historySchema: ChannelRuleSetHistoryEntrySchema,
+  labelBase: 'ChannelSet',
+});
+
 const guideEntity = defineBlobEntity<Guide, GuideHistoryEntry>({
   logNoun: 'guide',
   errorNoun: 'guide',
@@ -986,6 +1028,84 @@ export function writeGuideHistoryEntry(
 }
 
 /* --- Form templates ------------------------------------------------- */
+
+/* Channel profiles (channel drafter) — thin wrappers, like form templates. */
+
+export type StoredChannelProfile = Awaited<
+  ReturnType<typeof channelProfileEntity.listAll>
+>[number];
+
+export function listAllChannelProfiles(
+  storage: BlobStorage,
+): Promise<StoredChannelProfile[]> {
+  return channelProfileEntity.listAll(storage);
+}
+
+export function readChannelProfile(storage: BlobStorage, id: string) {
+  return channelProfileEntity.read(storage, id);
+}
+
+export function writeChannelProfile(
+  storage: BlobStorage,
+  record: AdminChannelProfile,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  return channelProfileEntity.write(storage, record, ifMatchEtag);
+}
+
+export function deleteChannelProfile(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  return channelProfileEntity.remove(storage, id, ifMatchEtag);
+}
+
+export function writeChannelProfileHistoryEntry(
+  storage: BlobStorage,
+  entry: AdminChannelProfileHistoryEntry,
+): Promise<void> {
+  return channelProfileEntity.writeHistory(storage, entry);
+}
+
+/* Channel rule sets — thin wrappers, like channel profiles. */
+
+export type StoredChannelSet = Awaited<
+  ReturnType<typeof channelSetEntity.listAll>
+>[number];
+
+export function listAllChannelSets(
+  storage: BlobStorage,
+): Promise<StoredChannelSet[]> {
+  return channelSetEntity.listAll(storage);
+}
+
+export function readChannelSet(storage: BlobStorage, id: string) {
+  return channelSetEntity.read(storage, id);
+}
+
+export function writeChannelSet(
+  storage: BlobStorage,
+  record: ChannelRuleSet,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  return channelSetEntity.write(storage, record, ifMatchEtag);
+}
+
+export function deleteChannelSet(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  return channelSetEntity.remove(storage, id, ifMatchEtag);
+}
+
+export function writeChannelSetHistoryEntry(
+  storage: BlobStorage,
+  entry: ChannelRuleSetHistoryEntry,
+): Promise<void> {
+  return channelSetEntity.writeHistory(storage, entry);
+}
 
 export function listAllFormTemplates(
   storage: BlobStorage,
