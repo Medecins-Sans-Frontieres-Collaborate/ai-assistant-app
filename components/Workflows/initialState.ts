@@ -1,3 +1,5 @@
+import { emptyBrief } from '@/lib/utils/shared/drafter/core/brief';
+
 import { ConversationWorkflowType, WorkflowState } from '@/types/workflow';
 
 /**
@@ -57,6 +59,21 @@ export function createInitialWorkflowState(
         documents: [],
         sources: [],
         notes: [],
+        updatedAt,
+      };
+    case 'channel-drafter':
+      // `specIds` starts empty: the workspace fills it from the channels
+      // remembered in settings, so a fresh state stays deterministic for the
+      // pristine check in workflowDirty.ts.
+      return {
+        kind: 'channel-drafter',
+        sources: [],
+        brief: emptyBrief(),
+        guideIds: [],
+        specIds: [],
+        layout: { hidden: [], pinned: [] },
+        versions: {},
+        nextId: 1,
         updatedAt,
       };
   }
