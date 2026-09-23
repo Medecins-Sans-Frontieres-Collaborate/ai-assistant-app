@@ -157,3 +157,57 @@ describe('normalizeFillResponse', () => {
     expect(questions[0].fieldIds).toEqual(['title']);
   });
 });
+
+describe('normalizeFillResponse excerpt verification', () => {
+  const known = new Set(['src1']);
+  const raw = {
+    fields: {
+      title: {
+        value: 'Water project',
+        confidence: 'high' as const,
+        gaps: '',
+        generalKnowledge: false,
+        provenance: [
+          { sourceId: 'src1', excerpt: 'Water  project in “Goma”' },
+          { sourceId: 'src1', excerpt: 'Sanitation project in Bukavu' },
+        ],
+      },
+    },
+    questions: [],
+  };
+
+  it('marks each excerpt found or not found in the text the model was shown', () => {
+    const { proposals } = normalizeFillResponse(
+      raw,
+      fields,
+      known,
+      new Map([['src1', 'Report: water project in "Goma", started 2024.']]),
+    );
+    expect(proposals[0].provenance).toEqual([
+      { sourceId: 'src1', excerpt: 'Water  project in “Goma”', verified: true },
+      {
+        sourceId: 'src1',
+        excerpt: 'Sanitation project in Bukavu',
+        verified: false,
+      },
+    ]);
+  });
+
+  it('leaves provenance unmarked when no source texts are given', () => {
+    const { proposals } = normalizeFillResponse(raw, fields, known);
+    expect(proposals[0].provenance[0]).toEqual({
+      sourceId: 'src1',
+      excerpt: 'Water  project in “Goma”',
+    });
+  });
+
+  it('does not mark an excerpt whose source text is unknown', () => {
+    const { proposals } = normalizeFillResponse(
+      raw,
+      fields,
+      known,
+      new Map([['other', 'irrelevant']]),
+    );
+    expect(proposals[0].provenance[0]).not.toHaveProperty('verified');
+  });
+});
