@@ -10,10 +10,17 @@
  */
 import { CheckFinding } from '@/lib/utils/shared/review/deterministicChecks';
 
-import { BriefItem, DraftSetState, DraftSource } from '@/types/drafter';
+import {
+  BriefItem,
+  CitationMark,
+  CitationVerdict,
+  DraftSetState,
+  DraftSource,
+} from '@/types/drafter';
 
 import { includedItems } from './brief';
-import { groundVersion, summarizeProof } from './grounding';
+import { citationMarks } from './citations';
+import { BRIEF_ITSELF, groundVersion, summarizeProof } from './grounding';
 import { sourceLinkFor } from './textFragment';
 import { approvalStatus, hasText, isStale } from './versions';
 
@@ -47,6 +54,12 @@ export interface ReviewPackLabels {
   approvalChanged: string;
   briefChanged: string;
   proof: (traced: number, total: number, vouched: number) => string;
+  /**
+   * The model's citations: one line per sentence with the brief item
+   * numbers it cites and its verdict, and a summary count per version.
+   * Optional; nothing about citations is printed without it.
+   */
+  citations?: ReviewPackCitationLabels;
   checks: string;
   provenance: string;
   provenanceColumns: [string, string, string, string];
@@ -55,6 +68,24 @@ export interface ReviewPackLabels {
   image?: (name: string) => string;
   altMissing?: string;
 }
+
+export interface ReviewPackCitationLabels {
+  heading: string;
+  /** One sentence: its number, an excerpt, the cited entries (already worded) and its verdict (already worded). */
+  line: (n: number, excerpt: string, items: string, verdict: string) => string;
+  /** How many sentences hold each verdict, for the version's summary line. */
+  summary: (counts: Record<CitationVerdict, number>) => string;
+  verdicts: Record<CitationVerdict, string>;
+  /** "items 2, 3" */
+  items: (numbers: string) => string;
+  /** The key message or call to action as a cited entry. */
+  brief: string;
+  /** A sentence citing nothing. */
+  noItems: string;
+}
+
+/** Characters of a sentence quoted back in its citation line. */
+const CITATION_EXCERPT_CHARS = 80;
 
 /** Everything CommonMark (and a text editor) treats as a line ending. */
 const LINE_BREAKS = /\r\n|[\n\r\u2028\u2029\v\f]/u;
@@ -119,6 +150,55 @@ function quoteBlock(text: string): string {
     .split(LINE_BREAKS)
     .map((line) => `> ${mdQuoteLine(line)}`.trimEnd())
     .join('\n');
+}
+
+function countVerdicts(marks: CitationMark[]): Record<CitationVerdict, number> {
+  const counts: Record<CitationVerdict, number> = {
+    supported: 0,
+    partly: 0,
+    unsupported: 0,
+    unclear: 0,
+    pending: 0,
+    stale: 0,
+  };
+  for (const mark of marks) counts[mark.verdict] += 1;
+  return counts;
+}
+
+/**
+ * One line per sentence, in order: the sentence as an excerpt, the cited
+ * entries as their 1-based positions in the brief (the numbers the brief
+ * pane shows) and the verdict in words. Sentence and reasons came from a
+ * model or a user, so they are escaped like the text itself.
+ */
+function citationLines(
+  marks: CitationMark[],
+  segments: DraftSetState['versions'][string]['segments'],
+  brief: DraftSetState['brief'],
+  labels: ReviewPackCitationLabels,
+): string[] {
+  const position = new Map(
+    brief.items.map((item, index) => [item.id, index + 1]),
+  );
+  const textOf = new Map(segments.map((segment) => [segment.id, segment.text]));
+  return marks.map((mark, index) => {
+    const sentence = (textOf.get(mark.segmentId) ?? '').slice(
+      mark.start,
+      mark.end,
+    );
+    const excerpt =
+      sentence.length > CITATION_EXCERPT_CHARS
+        ? `${sentence.slice(0, CITATION_EXCERPT_CHARS).trimEnd()}…`
+        : sentence;
+    const numbers = mark.itemIds
+      .map((id) =>
+        id === BRIEF_ITSELF ? labels.brief : String(position.get(id) ?? ''),
+      )
+      .filter(Boolean);
+    const items =
+      numbers.length > 0 ? labels.items(numbers.join(', ')) : labels.noItems;
+    return `- ${md(labels.line(index + 1, excerpt, items, labels.verdicts[mark.verdict]))}`;
+  });
 }
 
 function itemLine(item: BriefItem, labels: ReviewPackLabels): string {
@@ -202,6 +282,12 @@ export function buildReviewPack(
         summary.vouched,
       ),
     ];
+    const citations = labels.citations
+      ? citationMarks(version.segments, version, brief)
+      : [];
+    if (labels.citations && citations.length > 0) {
+      lines.push(labels.citations.summary(countVerdicts(citations)));
+    }
     if (isStale(version, brief)) lines.push(labels.briefChanged);
     out.push(...lines.map((line) => `- ${line}`), '');
 
@@ -221,6 +307,14 @@ export function buildReviewPack(
       }
       if ((spec.media?.[index] ?? []).length > 0) out.push('');
     });
+
+    if (labels.citations && citations.length > 0) {
+      out.push(`**${labels.citations.heading}:**`, '');
+      out.push(
+        ...citationLines(citations, version.segments, brief, labels.citations),
+        '',
+      );
+    }
 
     if (spec.findingMessages.length > 0) {
       out.push(`**${labels.checks}:**`, '');
