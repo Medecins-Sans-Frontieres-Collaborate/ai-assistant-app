@@ -3,6 +3,8 @@ import {
   normalizeExtractResponse,
 } from '@/lib/services/workflows/shared/drafter/extract';
 import {
+  TOKEN_PATTERN,
+  buildGenerateSystemPrompt,
   buildGenerateUserPrompt,
   buildIntentBlock,
   buildLinksBlock,
@@ -15,6 +17,8 @@ import {
 } from '@/lib/services/workflows/shared/drafter/generate';
 
 import { getSpecAdapter } from '@/lib/utils/shared/drafter/adapters';
+import { emptyBrief } from '@/lib/utils/shared/drafter/core/brief';
+import { groundSegment } from '@/lib/utils/shared/drafter/core/grounding';
 
 import { GenerateRequest } from '@/types/drafter';
 
@@ -143,15 +147,29 @@ describe('quote tokens', () => {
     expect([...tokens.keys()]).toEqual(['{{q1}}']);
     const prompt = buildGenerateUserPrompt(BRIEF, tokens);
     expect(prompt).toContain(
-      'token {{q1}} (costs 40 characters when inserted)',
+      'token {{q1}} (costs 40 characters in full; shorten it with {{q1|first words … last words}})',
     );
     expect(prompt).toContain('id i2 [figure]');
+  });
+
+  it('teaches the shortened form and keeps the hard rules', () => {
+    const prompt = buildGenerateSystemPrompt(
+      'Channel: X.',
+      undefined,
+      'English',
+    );
+    expect(prompt).not.toContain('You may not shorten');
+    expect(prompt).toContain('{{q1|first words … last words}}');
+    expect(prompt).toContain('never write brackets');
+    expect(prompt).toContain('never type a quotation yourself');
+    expect(prompt).toContain('Never put any other text inside quotation marks');
   });
 
   it('puts the exact words back and never double-quotes them', () => {
     expect(substituteQuotes('A nurse said "{{q1}}" today.', tokens)).toEqual({
       text: 'A nurse said “We had no clean water for eleven days.” today.',
       usedItemIds: ['i1'],
+      unverifiedForms: [],
     });
   });
 
@@ -165,6 +183,229 @@ describe('quote tokens', () => {
     expect(substituteQuotes('Before {{q9}} after', tokens).text).toBe(
       'Before after',
     );
+  });
+
+  describe('[tokens] shortened forms', () => {
+    const full = '“We had no clean water for eleven days.”';
+
+    it("renders a verbatim elision from the item's own characters, in its casing", () => {
+      const result = substituteQuotes(
+        'She said {{q1|WE HAD NO CLEAN WATER … eleven days}} to us.',
+        tokens,
+      );
+      expect(result).toEqual({
+        text: 'She said “We had no clean water … eleven days” to us.',
+        usedItemIds: ['i1'],
+        unverifiedForms: [],
+      });
+    });
+
+    it('drops quotation marks the model put around a shortened form', () => {
+      expect(
+        substituteQuotes('"{{q1|We had no clean water … eleven days}}"', tokens)
+          .text,
+      ).toBe('“We had no clean water … eleven days”');
+    });
+
+    it('emits the full quote for a contiguous form that names all the words', () => {
+      const result = substituteQuotes(
+        '{{q1|We had no clean water for eleven days.}}',
+        tokens,
+      );
+      expect(result.text).toBe(full);
+      expect(result.unverifiedForms).toEqual([]);
+    });
+
+    it('inserts the full quote and reports a form that is not a verbatim elision', () => {
+      const result = substituteQuotes('{{q1|we had plenty of water}}', tokens);
+      expect(result.text).toBe(full);
+      expect(result.usedItemIds).toEqual(['i1']);
+      expect(result.unverifiedForms).toEqual(['{{q1|we had plenty of water}}']);
+    });
+
+    it('refuses a shortening that no longer reads as a sentence, and says why', () => {
+      const long: GenerateRequest['brief'] = {
+        ...BRIEF,
+        items: [
+          {
+            id: 'i1',
+            kind: 'quote',
+            text: 'The new deal Gilead announced with PAHO this week comes after the company first blocked people across Latin America and the Caribbean from accessing affordable generic versions of lenacapavir.',
+            verified: 'verbatim',
+          },
+        ],
+      };
+      const tokens = quoteTokens(long.items);
+      const { text, unverifiedForms } = substituteQuotes(
+        '{{q1|The new deal … affordable generic versions of lenacapavir.}}',
+        tokens,
+      );
+      expect(text).toBe(`“${long.items[0].text}”`);
+      expect(unverifiedForms).toHaveLength(1);
+      const prompt = buildRepairPrompt(
+        ['{{q1|The new deal … affordable generic versions of lenacapavir.}}'],
+        [
+          {
+            checkId: 'length',
+            severity: 'block',
+            targetId: 'g0',
+            messageKey: 'overLimit',
+            values: { count: 30, post: 1 },
+          },
+        ],
+        {
+          tokens,
+          cost: (t) => t.length,
+          linkCost: () => 0,
+        },
+      );
+      expect(prompt).toContain('kept less than half of the quotation');
+      // A readable shortening (an aside left out) is accepted.
+      const aside: GenerateRequest['brief'] = {
+        ...BRIEF,
+        items: [
+          {
+            id: 'i1',
+            kind: 'quote',
+            text: 'We had no clean water, with the wells full of mud, for eleven days.',
+            verified: 'verbatim',
+          },
+        ],
+      };
+      const good = substituteQuotes(
+        '{{q1|We had no clean water … for eleven days.}}',
+        quoteTokens(aside.items),
+      );
+      expect(good.unverifiedForms).toHaveLength(0);
+      expect(good.text).toBe('“We had no clean water … for eleven days.”');
+    });
+
+    it('refuses a form that drops a negation', () => {
+      const negated = quoteTokens([
+        {
+          ...BRIEF.items[0],
+          text: 'We did not have enough water for the children.',
+        },
+      ]);
+      const dropped = substituteQuotes(
+        '{{q1|We did … enough water for the children.}}',
+        negated,
+      );
+      expect(dropped.text).toBe(
+        '“We did not have enough water for the children.”',
+      );
+      expect(dropped.unverifiedForms).toEqual([
+        '{{q1|We did … enough water for the children.}}',
+      ]);
+      // A one-word run is not evidence either.
+      const short = substituteQuotes('{{q1|we … enough water}}', negated);
+      expect(short.unverifiedForms).toHaveLength(1);
+    });
+
+    it('refuses brackets from the model', () => {
+      const result = substituteQuotes(
+        '{{q1|We had no clean water [in the camp] for eleven days.}}',
+        tokens,
+      );
+      expect(result.text).toBe(full);
+      expect(result.usedItemIds).toEqual(['i1']);
+      expect(result.unverifiedForms).toHaveLength(1);
+    });
+
+    it('keeps a trailing ellipsis so a shortened end is visible (EQ-5)', () => {
+      const result = substituteQuotes('{{q1|We had no clean water …}}', tokens);
+      expect(result.text).toBe('“We had no clean water …”');
+      expect(result.unverifiedForms).toEqual([]);
+    });
+
+    it('keeps a leading ellipsis so a shortened start is visible (EQ-5)', () => {
+      const clinic = quoteTokens([
+        {
+          ...BRIEF.items[0],
+          text: 'The clinic treated forty children in the first week.',
+        },
+      ]);
+      const result = substituteQuotes(
+        '{{q1|… forty children in the first week.}}',
+        clinic,
+      );
+      expect(result.text).toBe('“… forty children in the first week.”');
+      expect(result.unverifiedForms).toEqual([]);
+      // The words dropped before "for eleven days" carry the negation.
+      const negated = substituteQuotes('{{q1|… for eleven days}}', tokens);
+      expect(negated.text).toBe(full);
+      expect(negated.unverifiedForms).toEqual(['{{q1|… for eleven days}}']);
+    });
+
+    it('adds the ellipsis a plain sub-span left out and holds it to the gap rules (EQ-5)', () => {
+      const clinic = quoteTokens([
+        {
+          ...BRIEF.items[0],
+          text: 'The clinic treated forty children in the first week.',
+        },
+      ]);
+      const inner = substituteQuotes(
+        '{{q1|The clinic treated forty children}}',
+        clinic,
+      );
+      expect(inner.text).toBe('“The clinic treated forty children …”');
+      expect(inner.unverifiedForms).toEqual([]);
+      // Dropping ", but we could not" turns the meaning: refused, goes in whole.
+      const turn = quoteTokens([
+        { ...BRIEF.items[0], text: 'We wanted to leave, but we could not.' },
+      ]);
+      const cut = substituteQuotes('{{q1|We wanted to leave}}', turn);
+      expect(cut.text).toBe('“We wanted to leave, but we could not.”');
+      expect(cut.unverifiedForms).toEqual(['{{q1|We wanted to leave}}']);
+    });
+
+    it('emits edge ellipses the grounding check accepts as an elision (EQ-5)', () => {
+      const item = {
+        ...BRIEF.items[0],
+        text: 'The clinic treated forty children in the first week.',
+      };
+      const rendered = substituteQuotes(
+        'She said {{q1|The clinic treated forty children}} today.',
+        quoteTokens([item]),
+      );
+      const marks = groundSegment(
+        { id: 's1', text: rendered.text, usedItemIds: ['i1'] },
+        {
+          ...emptyBrief(),
+          language: 'English',
+          items: [{ ...item, provenance: [], decision: 'included' }],
+        },
+      );
+      const quote = marks.find((mark) => mark.kind === 'quote');
+      expect(quote).toMatchObject({ itemId: 'i1', elided: true });
+      expect(marks.every((mark) => mark.itemId !== undefined)).toBe(true);
+    });
+
+    it('never publishes an empty or over-long form raw (EQ-7)', () => {
+      const empty = substituteQuotes('Said: {{q1|}} end.', tokens);
+      expect(empty.text).toBe(`Said: ${full} end.`);
+      expect(empty.usedItemIds).toEqual(['i1']);
+      expect(empty.unverifiedForms).toEqual(['{{q1|}}']);
+      const blank = substituteQuotes('{{q1|   }}', tokens);
+      expect(blank.text).toBe(full);
+      expect(blank.unverifiedForms).toEqual(['{{q1|   }}']);
+      const long = `{{q1|${'word '.repeat(130).trim()}}}`;
+      const over = substituteQuotes(long, tokens);
+      expect(over.text).toBe(full);
+      expect(over.unverifiedForms).toEqual([long]);
+    });
+
+    it('removes a shortened token that names no item', () => {
+      expect(substituteQuotes('Before {{q9|a … b}} after', tokens).text).toBe(
+        'Before after',
+      );
+    });
+
+    it('never crosses a line or a brace inside a form', () => {
+      TOKEN_PATTERN.lastIndex = 0;
+      expect('{{q1|a\nb}}'.match(TOKEN_PATTERN)).toBeNull();
+      expect('{{q1|a {b}}'.match(TOKEN_PATTERN)).toBeNull();
+    });
   });
 
   it('merges reported and substituted item ids and drops unknown ones', () => {
@@ -300,6 +541,7 @@ describe('repair round', () => {
       findingsFor(adapter, spec, generated, BRIEF),
     );
     expect(prompt).toContain('You typed a quotation yourself');
+    expect(prompt).toContain('shortened as {{q1|first words … last words}}');
     expect(prompt).toContain('a number that is not in the brief');
     expect(prompt).toContain('characters over the limit');
     expect(prompt).toContain('[1] raw answer');
