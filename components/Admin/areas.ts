@@ -21,13 +21,16 @@ import { AdminAreaId } from '@/lib/services/admin/adminAreas';
 
 type AreaIcon = ComponentType<{ size?: number | string; className?: string }>;
 
-export type AdminAreaGroup = 'access' | 'usage' | 'administration';
+export type AdminAreaGroup =
+  | 'capabilities'
+  | 'libraries'
+  | 'usage'
+  | 'administration';
 
 export interface AdminAreaDescriptor {
   id: AdminAreaId;
   href: string;
   icon: AreaIcon;
-  group: AdminAreaGroup;
   /**
    * ⚠ These reuse keys that ALREADY exist in all 53 locales, so the rail is
    * translated on day one rather than shipping English into every other
@@ -35,16 +38,15 @@ export interface AdminAreaDescriptor {
    * these labels — there is a matching warning in messages/en.json's owners.
    */
   labelKey: string;
+  /** Rendered as the rail item's tooltip, so every entry can say what it is. */
   descriptionKey: string;
 }
 
 /**
- * Presentation registry for the admin area rail. Grouping is by what an admin
- * is trying to DO, not by which service happens to store the data:
+ * Presentation registry for the admin area rail.
  *
- *  - access:         who can use what
- *  - usage:          how much they may use
- *  - administration: who administers the above
+ * Membership and ORDER both live in `ADMIN_GROUPS` below, never here — see the
+ * comment there for why.
  *
  * Prompt agents is deliberately NOT a separate area: AgentAccessPanel merges
  * Foundry discovery, stored rules and prompt agents into one row list so a
@@ -56,7 +58,6 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'agents',
     href: '/admin/agents',
     icon: IconRobot,
-    group: 'access',
     labelKey: 'agentAccess.agentsTab',
     descriptionKey: 'admin.areaDescription.agents',
   },
@@ -64,15 +65,20 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'connectors',
     href: '/admin/connectors',
     icon: IconPlugConnected,
-    group: 'access',
     labelKey: 'agentAccess.connectorsTab',
     descriptionKey: 'admin.areaDescription.connectors',
+  },
+  workflows: {
+    id: 'workflows',
+    href: '/admin/workflows',
+    icon: IconRoute,
+    labelKey: 'admin.area.workflows',
+    descriptionKey: 'admin.areaDescription.workflows',
   },
   guides: {
     id: 'guides',
     href: '/admin/guides',
     icon: IconBook,
-    group: 'access',
     labelKey: 'agentAccess.guidesTab',
     descriptionKey: 'admin.areaDescription.guides',
   },
@@ -80,7 +86,6 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'glossaries',
     href: '/admin/glossaries',
     icon: IconVocabulary,
-    group: 'access',
     labelKey: 'agentAccess.glossariesTab',
     descriptionKey: 'admin.areaDescription.glossaries',
   },
@@ -88,7 +93,6 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'map-datasets',
     href: '/admin/map-datasets',
     icon: IconMap2,
-    group: 'access',
     labelKey: 'agentAccess.datasetsTab',
     descriptionKey: 'admin.areaDescription.mapDatasets',
   },
@@ -96,7 +100,6 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'form-templates',
     href: '/admin/form-templates',
     icon: IconForms,
-    group: 'access',
     labelKey: 'agentAccess.formTemplatesTab',
     descriptionKey: 'admin.areaDescription.formTemplates',
   },
@@ -104,7 +107,6 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'channel-sets',
     href: '/admin/channel-sets',
     icon: IconMessages,
-    group: 'access',
     labelKey: 'agentAccess.channelSetsTab',
     descriptionKey: 'admin.areaDescription.channelSets',
   },
@@ -112,7 +114,6 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'channel-profiles',
     href: '/admin/channel-profiles',
     icon: IconSocial,
-    group: 'access',
     labelKey: 'agentAccess.channelProfilesTab',
     descriptionKey: 'admin.areaDescription.channelProfiles',
   },
@@ -120,23 +121,13 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'limits',
     href: '/admin/limits',
     icon: IconGauge,
-    group: 'usage',
     labelKey: 'limits.title',
     descriptionKey: 'limits.description',
-  },
-  workflows: {
-    id: 'workflows',
-    href: '/admin/workflows',
-    icon: IconRoute,
-    group: 'access',
-    labelKey: 'admin.area.workflows',
-    descriptionKey: 'admin.areaDescription.workflows',
   },
   announcements: {
     id: 'announcements',
     href: '/admin/announcements',
     icon: IconSpeakerphone,
-    group: 'usage',
     labelKey: 'admin.area.announcements',
     descriptionKey: 'admin.areaDescription.announcements',
   },
@@ -144,7 +135,6 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'delegations',
     href: '/admin/delegations',
     icon: IconUserShield,
-    group: 'administration',
     labelKey: 'admin.area.delegations',
     descriptionKey: 'admin.areaDescription.delegations',
   },
@@ -152,7 +142,6 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'local-admins',
     href: '/admin/local-admins',
     icon: IconUsersGroup,
-    group: 'administration',
     labelKey: 'agentAccess.localAdminsTab',
     descriptionKey: 'admin.areaDescription.localAdmins',
   },
@@ -160,7 +149,6 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'global-admins',
     href: '/admin/global-admins',
     icon: IconShieldLock,
-    group: 'administration',
     labelKey: 'admin.area.globalAdmins',
     descriptionKey: 'admin.areaDescription.globalAdmins',
   },
@@ -168,20 +156,82 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     id: 'view-as',
     href: '/admin/view-as',
     icon: IconMasksTheater,
-    group: 'administration',
     labelKey: 'admin.area.viewAs',
     descriptionKey: 'admin.areaDescription.viewAs',
   },
 };
 
-export const ADMIN_GROUP_ORDER: AdminAreaGroup[] = [
-  'access',
-  'usage',
-  'administration',
-];
+export interface AdminAreaGroupDescriptor {
+  id: AdminAreaGroup;
+  labelKey: string;
+  /** Rail order within the group. */
+  areas: AdminAreaId[];
+}
 
-export const ADMIN_GROUP_LABEL_KEY: Record<AdminAreaGroup, string> = {
-  access: 'admin.group.access',
-  usage: 'admin.group.usage',
-  administration: 'admin.group.administration',
-};
+/**
+ * The rail's structure: which groups exist, in which order, holding which
+ * areas, in which order.
+ *
+ * ⚠ ORDER LIVES HERE, NOT IN `resolveAdminAreas`. The nav used to render a
+ * group by filtering the resolver's output, which meant rail order was
+ * whatever order the permission branches happened to push in — so
+ * `channel-profiles` and `workflows`, granted in later branches, sank to the
+ * bottom of their group, and two admins with different rights saw the same
+ * group in different orders. The resolver answers "may this person open it";
+ * this file answers "where does it sit". `areas.test.ts` asserts every
+ * AdminAreaId appears here exactly once, so a new area cannot be added to the
+ * resolver and silently vanish from the rail.
+ *
+ * Grouping is by what an admin is TRYING TO DO, not by which service stores
+ * the data:
+ *
+ *  - capabilities:   what the assistant can do, and who may use it
+ *  - libraries:      reference content the assistant and its workflows draw on
+ *  - usage:          how much people may use
+ *  - administration: who administers the above, and what reaches users
+ *
+ * The libraries group is the reason this split exists. Guides, glossaries,
+ * datasets, templates, channel sets and platforms all carry access rules,
+ * which is how they ended up under a single "Access" heading with agents and
+ * connectors — nine of fifteen areas in one bucket. Having a rule attached is
+ * not what they ARE: an admin opens them to author content, not to grant
+ * something.
+ */
+export const ADMIN_GROUPS: AdminAreaGroupDescriptor[] = [
+  {
+    id: 'capabilities',
+    labelKey: 'admin.group.capabilities',
+    areas: ['agents', 'connectors', 'workflows'],
+  },
+  {
+    id: 'libraries',
+    labelKey: 'admin.group.libraries',
+    areas: [
+      'guides',
+      'glossaries',
+      'map-datasets',
+      'form-templates',
+      'channel-sets',
+      // The organisation-wide platform facts every channel set builds on, so
+      // it reads as a footnote to the sets rather than a peer of them.
+      'channel-profiles',
+    ],
+  },
+  {
+    id: 'usage',
+    labelKey: 'admin.group.usage',
+    areas: ['limits'],
+  },
+  {
+    id: 'administration',
+    labelKey: 'admin.group.administration',
+    areas: [
+      'announcements',
+      'delegations',
+      'local-admins',
+      'global-admins',
+      // A testing tool, not a configuration: last on purpose.
+      'view-as',
+    ],
+  },
+];
