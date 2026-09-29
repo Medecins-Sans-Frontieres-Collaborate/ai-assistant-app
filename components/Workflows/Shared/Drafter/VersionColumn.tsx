@@ -23,13 +23,14 @@ import {
   IconSparkles,
   IconX,
 } from '@tabler/icons-react';
-import { KeyboardEvent, ReactNode, useState } from 'react';
+import { KeyboardEvent, MouseEvent, ReactNode, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { BRIEF_ITSELF } from '@/lib/utils/shared/drafter/core/grounding';
 import { PublishBlocker } from '@/lib/utils/shared/drafter/core/publishing';
 import { pendingEdits } from '@/lib/utils/shared/drafter/core/revisions';
+import { changedRanges } from '@/lib/utils/shared/drafter/core/statements';
+import { TextRange } from '@/lib/utils/shared/drafter/core/verify';
 import {
   approvalStatus,
   changedSinceCopied,
@@ -40,6 +41,8 @@ import { CheckFinding } from '@/lib/utils/shared/review/deterministicChecks';
 
 import {
   Brief,
+  CitationMark,
+  DRAFTER_LIMITS,
   DraftSource,
   GroundingMark,
   Segment,
@@ -52,12 +55,21 @@ import {
 
 import { InlineWordDiff } from '@/components/Workflows/Shared/Review/InlineWordDiff';
 
+import { CitationChip } from './CitationChip';
 import { MediaThumb } from './MediaThumb';
 import { Popover, iconButton, menuItem } from './Popover';
-import { ProofCard } from './ProofCard';
-import { ProofList } from './ProofList';
+import {
+  CitationPanel,
+  ProofList,
+  VerifyClaim,
+  citationClass,
+  citationState,
+  hardProblems,
+  innerMarksOf,
+} from './ProofList';
 import { VersionPreview } from './VersionPreview';
 import { SpecAdapterUi } from './adapterUi';
+import { isBriefRef, refLabel, refNames, refTags } from './itemRefs';
 import { shortSpecName } from './specNames';
 
 /** A voice the user may pick: one of their tones, or an organisation guide. */
@@ -85,7 +97,10 @@ export interface VersionColumnProps {
   layout: 'column' | 'focus';
   statuses: VersionStatus[];
   findings: CheckFinding[];
+  /** The hard checks: every quote and number, grounded or not. */
   marks: GroundingMark[];
+  /** One per sentence: what the cite step says it rests on. */
+  citations: CitationMark[];
   brief: Brief;
   sources: DraftSource[];
   writing: boolean;
@@ -159,10 +174,18 @@ export interface VersionColumnProps {
   onMove: (delta: -1 | 1) => void;
   onFocusMode: () => void;
   onRetry: () => void;
+  /** Runs the cite step on these sentences of one segment (or of the whole version when segmentId is null). */
+  onVerify: (segmentId: string | null, claims: VerifyClaim[]) => void;
+  /** The segment being cited, 'all' for a whole-column run, null when idle. */
+  verifyingId: string | 'all' | null;
+  verifyError?: string;
 }
 
 const ghostButton =
   'inline-flex min-h-[32px] items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-700 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-300 dark:hover:bg-surface-dark-elevated';
+
+/** Resting on a sentence before its item lights up in the brief. */
+const HOVER_TRACE_MS = 200;
 
 const STATUS_TONE: Record<VersionStatus, string> = {
   empty: 'text-gray-600 dark:text-gray-400',
@@ -178,20 +201,45 @@ const STATUS_TONE: Record<VersionStatus, string> = {
 interface Piece {
   start: number;
   end: number;
-  mark?: GroundingMark;
+  /** The sentence this run belongs to, if the cite step has one for it. */
+  cite?: CitationMark;
+  /** The narrowest quote or number mark containing the run. */
+  inner?: GroundingMark;
+  /** Inside the user's last edit, until the strip is dismissed. */
+  fresh: boolean;
   overflow: boolean;
 }
 
-/** Splits a segment into runs by mark and by the overflow boundary. */
+const contains = (range: TextRange, start: number, end: number): boolean =>
+  start >= range.start && end <= range.end;
+
+/**
+ * Splits a segment into runs that render alike: cut at every sentence and
+ * mark edge, at the writer's own parts of a shortened quotation, at the
+ * last edit's edges and at the overflow point.
+ */
 function piecesOf(
   text: string,
   marks: GroundingMark[],
+  citations: CitationMark[],
   overflowAt: number | null,
+  fresh: TextRange[],
 ): Piece[] {
   const cuts = new Set<number>([0, text.length]);
   for (const mark of marks) {
     cuts.add(mark.start);
     cuts.add(mark.end);
+    for (const range of [
+      ...(mark.verbatim ?? []),
+      ...(mark.insertions ?? []),
+    ]) {
+      cuts.add(range.start);
+      cuts.add(range.end);
+    }
+  }
+  for (const range of [...citations, ...fresh]) {
+    cuts.add(range.start);
+    cuts.add(range.end);
   }
   if (overflowAt !== null) cuts.add(overflowAt);
   const points = [...cuts]
@@ -202,14 +250,68 @@ function piecesOf(
     const start = points[i];
     const end = points[i + 1];
     if (start === end) continue;
+    let inner: GroundingMark | undefined;
+    for (const mark of marks) {
+      if (!contains(mark, start, end)) continue;
+      if (!inner || mark.end - mark.start < inner.end - inner.start) {
+        inner = mark;
+      }
+    }
     pieces.push({
       start,
       end,
-      mark: marks.find((mark) => start >= mark.start && end <= mark.end),
+      cite: citations.find((mark) => contains(mark, start, end)),
+      inner,
+      fresh: fresh.some((range) => range.start < end && start < range.end),
       overflow: overflowAt !== null && start >= overflowAt,
     });
   }
   return pieces;
+}
+
+/**
+ * Where in the segment a press on its text landed: the caret the browser
+ * placed, read back through the piece it sits in, or failing that the start
+ * of the pressed piece. The editor then opens at that offset.
+ */
+function caretOffsetIn(
+  container: HTMLElement,
+  target: EventTarget | null,
+): number {
+  const selection =
+    typeof window.getSelection === 'function' ? window.getSelection() : null;
+  const anchor = selection?.anchorNode ?? null;
+  if (selection && anchor && container.contains(anchor)) {
+    const element = anchor instanceof Element ? anchor : anchor.parentElement;
+    const piece = element?.closest<HTMLElement>('[data-start]');
+    if (piece && piece.firstChild === anchor) {
+      return Number(piece.dataset.start) + selection.anchorOffset;
+    }
+  }
+  const pressed =
+    target instanceof Element
+      ? target.closest<HTMLElement>('[data-start]')
+      : null;
+  return pressed ? Number(pressed.dataset.start) : 0;
+}
+
+/** The user's last edit of a segment, kept until the text changes again. */
+interface LastEdit {
+  segmentId: string;
+  /** Offsets into `text`. */
+  ranges: TextRange[];
+  text: string;
+}
+
+/** Whether an edit range touches a mark; a pure deletion is a point. */
+function touches(mark: TextRange, ranges: TextRange[]): boolean {
+  return ranges.some(
+    (range) =>
+      (range.start < mark.end && mark.start < range.end) ||
+      (range.start === range.end &&
+        mark.start <= range.start &&
+        range.start <= mark.end),
+  );
 }
 
 /**
@@ -224,13 +326,44 @@ export function VersionColumn({
   registerHeader,
   ...props
 }: VersionColumnProps) {
-  const { spec, version, ui, layout, statuses, marks, brief, tracedItemId } =
-    props;
+  const {
+    spec,
+    version,
+    ui,
+    layout,
+    statuses,
+    marks,
+    citations,
+    brief,
+    tracedItemId,
+  } = props;
   const t = useTranslations('workflows.drafter');
   const tKind = useTranslations(ui.namespace);
   const [editingId, setEditingId] = useState<string | null>(null);
+  /** The text when the editor opened; null while no editor is open. */
+  const editStartText = useRef<string | null>(null);
+  const [lastEdit, setLastEdit] = useState<LastEdit | null>(null);
+  /** The sentence whose popover is open: `${segmentId}:${start}`. */
   const [proofFor, setProofFor] = useState<string | null>(null);
-  const [proofOpen, setProofOpen] = useState(false);
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** Traces after a short pause: sweeping the mouse over a post must not
+   *  flicker every column; resting on a sentence should light its item. */
+  const hoverTrace = (itemId: string | null) => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    if (itemId === null) {
+      hoverTimer.current = null;
+      props.onTrace(null);
+      return;
+    }
+    hoverTimer.current = setTimeout(() => {
+      hoverTimer.current = null;
+      props.onTrace(itemId);
+    }, HOVER_TRACE_MS);
+  };
+  /** The user's Evidence choice; null = the layout's default (on in Focus). */
+  const [proofChoice, setProofChoice] = useState<boolean | null>(null);
+  /** Focus below lg: whether the checks and evidence are unfolded under the text. */
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -245,14 +378,19 @@ export function VersionColumn({
   // useMemo here only makes it skip the component.
   const segments = version?.segments ?? [];
   const itemsById = new Map(brief.items.map((item) => [item.id, item]));
-  const markNumber = new Map(
-    marks.map((m, index) => [`${m.segmentId}:${m.start}`, index + 1]),
-  );
+  // The last edit applies only while its segment still reads as it did
+  // when the editor closed; any later change drops it.
+  const activeEdit =
+    lastEdit &&
+    segments.find((segment) => segment.id === lastEdit.segmentId)?.text ===
+      lastEdit.text
+      ? lastEdit
+      : null;
   const approval = approvalStatus(version);
   const status = statuses[0] ?? 'empty';
   const blocking = props.findings.filter((f) => f.severity === 'block');
   // Quotes and numbers are already marked in the text and listed in the
-  // proof, so the findings list carries everything else.
+  // evidence, so the findings list carries everything else.
   const listed = props.findings.filter(
     (f) => f.checkId !== 'quote-verbatim' && f.checkId !== 'number-grounded',
   );
@@ -268,8 +406,16 @@ export function VersionColumn({
     ui.fit(spec, segments, brief, () => 'dry-run') !== segments;
   const copyPlan = version ? ui.copyPlan(spec, version) : [];
   const usesTraced =
-    !tracedItemId || marks.some((mark) => mark.itemId === tracedItemId);
-  const showProof = proofOpen || focus;
+    !tracedItemId ||
+    marks.some((mark) => mark.itemId === tracedItemId) ||
+    citations.some((mark) => mark.itemIds.includes(tracedItemId));
+  // Evidence mode: what every sentence, quote and number rests on. On by
+  // default in Focus, and the user may turn it off there too.
+  const showProof = proofChoice ?? focus;
+  const verifyMessage =
+    props.verifyError === 'VERIFY_FAILED'
+      ? t('verifyFailed')
+      : props.verifyError;
   const previewModel =
     props.previewing && ui.preview && hasText(version)
       ? ui.preview(spec, segments, brief.links)
@@ -318,7 +464,7 @@ export function VersionColumn({
       !event.metaKey &&
       !event.altKey
     ) {
-      setProofOpen((open) => !open);
+      setProofChoice((choice) => !(choice ?? focus));
     }
   };
 
@@ -338,87 +484,326 @@ export function VersionColumn({
     }
   };
 
-  const renderText = (segment: Segment, overflowAt: number | null) => {
+  /** Opens the editor on a segment, remembering the text it started from. */
+  const openEditor = (segment: Segment) => {
+    if (lastEdit && lastEdit.segmentId !== segment.id) setLastEdit(null);
+    editStartText.current = segment.text;
+    setEditingId(segment.id);
+  };
+
+  /** Closes the editor; a changed text gets the edit strip. */
+  const commitEdit = (segment: Segment) => {
+    const before = editStartText.current;
+    editStartText.current = null;
+    setEditingId(null);
+    if (before !== null && segment.text !== before) {
+      setLastEdit({
+        segmentId: segment.id,
+        ranges: changedRanges(before, segment.text),
+        text: segment.text,
+      });
+    }
+  };
+
+  const toggleProof = (key: string) =>
+    setProofFor(proofFor === key ? null : key);
+
+  /** The control a sentence's popover or the edit strip ends with. */
+  const checkControl = (segment: Segment, claims: VerifyClaim[]) => ({
+    onCheck: () => props.onVerify(segment.id, claims),
+    checking: props.verifyingId === segment.id,
+    disabled: props.verifyingId !== null,
+    error: verifyMessage,
+  });
+
+  /**
+   * The one interactive element of a sentence: its chip, with the popover
+   * that holds its evidence. Rendered after the sentence's last run, outside
+   * the underlined text.
+   */
+  const chip = (segment: Segment, cite: CitationMark) => {
+    const key = `${segment.id}:${cite.start}`;
+    const inner = innerMarksOf(marks, cite);
+    const problems = hardProblems(t, inner);
+    const state = citationState(t, brief, cite);
+    const label = t('citeChip', {
+      state: problems ? `${state} · ${problems}` : state,
+    });
+    const firstItem = cite.itemIds.find((id) => !isBriefRef(id)) ?? null;
+    return (
+      <CitationChip
+        key={`chip:${key}`}
+        tag={refTags(t, brief, cite.itemIds)}
+        verdict={cite.verdict}
+        label={label}
+        open={proofFor === key}
+        onToggle={() => toggleProof(key)}
+        onClose={() => setProofFor(null)}
+        onTrace={(on) => props.onTrace(on ? firstItem : null)}
+      >
+        <CitationPanel
+          mark={cite}
+          segmentText={segment.text}
+          marks={marks}
+          brief={brief}
+          sources={props.sources}
+          version={version}
+          showSentence
+          check={
+            cite.note === 'ungrounded-inside'
+              ? undefined
+              : checkControl(segment, [
+                  {
+                    segmentId: segment.id,
+                    text: segment.text.slice(cite.start, cite.end),
+                  },
+                ])
+          }
+        />
+      </CitationChip>
+    );
+  };
+
+  /**
+   * The post's text as plain runs: sentence underlines for their verdicts,
+   * quotes and numbers dotted (amber when the brief lacks them), the
+   * writer's own parts of a shortened quotation greyed. Nothing here is a
+   * control, so a press anywhere opens the editor at that spot.
+   */
+  const renderText = (
+    segment: Segment,
+    overflowAt: number | null,
+    fresh: TextRange[],
+  ) => {
     const segmentMarks = marks.filter((m) => m.segmentId === segment.id);
+    const segmentCites = citations.filter((m) => m.segmentId === segment.id);
     const nodes: ReactNode[] = [];
-    for (const piece of piecesOf(segment.text, segmentMarks, overflowAt)) {
+    for (const piece of piecesOf(
+      segment.text,
+      segmentMarks,
+      segmentCites,
+      overflowAt,
+      fresh,
+    )) {
       const content = segment.text.slice(piece.start, piece.end);
       const overflowClass = piece.overflow
         ? 'bg-amber-100 dark:bg-amber-900/40'
         : '';
       const key = `${piece.start}-${piece.end}`;
-      if (!piece.mark) {
+      const { cite, inner } = piece;
+      const freshClass = piece.fresh ? 'bg-blue-50 dark:bg-blue-950/30' : '';
+      const unsupported = cite?.verdict === 'unsupported';
+
+      if (inner) {
+        const grounded = inner.itemId !== undefined;
+        const traced = grounded && inner.itemId === tracedItemId;
+        const item = inner.itemId ? itemsById.get(inner.itemId) : undefined;
+        // In a shortened quotation, the … and [bracketed] parts are the
+        // writer's, not the speaker's, and read as such.
+        const writersWords =
+          !!inner.elided &&
+          ((inner.insertions ?? []).some((range) =>
+            contains(range, piece.start, piece.end),
+          ) ||
+            !(inner.verbatim ?? []).some((range) =>
+              contains(range, piece.start, piece.end),
+            ));
+        const background = !grounded
+          ? 'bg-amber-100 decoration-amber-700 dark:bg-amber-900/40'
+          : traced
+            ? 'bg-blue-100 decoration-gray-500 dark:bg-blue-900/60'
+            : unsupported
+              ? 'bg-amber-50 decoration-gray-500 dark:bg-amber-900/30'
+              : `decoration-gray-500 ${freshClass}`;
         nodes.push(
-          <span key={key} className={overflowClass}>
+          <span
+            key={key}
+            data-start={piece.start}
+            className={`rounded-sm underline decoration-dotted underline-offset-4 ${overflowClass} ${background} ${
+              writersWords ? 'text-gray-700 dark:text-gray-400' : ''
+            }`}
+            title={
+              inner.elided && item
+                ? `${t('quoteFull')}: ${item.text.slice(0, 240)}`
+                : !grounded
+                  ? inner.kind === 'quote'
+                    ? t('quoteNotInBrief')
+                    : t('numberNotInBrief')
+                  : undefined
+            }
+          >
             {content}
           </span>,
         );
-        continue;
+      } else if (cite) {
+        // A supported sentence is plain text until evidence mode, but it
+        // LIGHTS UP whenever its brief item is traced (from the brief pane
+        // or from another sentence), and hovering it traces its item back:
+        // a fact or context item shows what rests on it as readily as a
+        // quote does. An unsupported one always shows.
+        const tracedHere =
+          !!tracedItemId && cite.itemIds.includes(tracedItemId);
+        const background = tracedHere
+          ? 'bg-blue-100 dark:bg-blue-900/60'
+          : unsupported
+            ? ''
+            : freshClass;
+        const firstItem = cite.itemIds.find((id) => !isBriefRef(id)) ?? null;
+        nodes.push(
+          <span
+            key={key}
+            data-start={piece.start}
+            className={`rounded-sm ${citationClass(cite.verdict, showProof)} ${overflowClass} ${background}`}
+            onMouseEnter={firstItem ? () => hoverTrace(firstItem) : undefined}
+            onMouseLeave={firstItem ? () => hoverTrace(null) : undefined}
+          >
+            {content}
+          </span>,
+        );
+      } else {
+        nodes.push(
+          <span
+            key={key}
+            data-start={piece.start}
+            className={`${overflowClass} ${freshClass}`}
+          >
+            {content}
+          </span>,
+        );
       }
-      const grounded = piece.mark.itemId !== undefined;
-      const traced = grounded && piece.mark.itemId === tracedItemId;
-      const markKey = `${segment.id}:${piece.mark.start}`;
-      const closesMark = piece.end === piece.mark.end;
-      nodes.push(
-        <button
-          key={key}
-          type="button"
-          className={`rounded-sm text-start underline decoration-dotted underline-offset-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${overflowClass} ${
-            grounded
-              ? traced
-                ? 'bg-blue-100 dark:bg-blue-900/60'
-                : 'decoration-gray-500'
-              : 'bg-amber-100 decoration-amber-700 dark:bg-amber-900/40'
-          }`}
-          aria-expanded={proofFor === markKey}
-          onMouseEnter={() =>
-            grounded && props.onTrace(piece.mark?.itemId ?? null)
-          }
-          onMouseLeave={() => props.onTrace(null)}
-          onClick={(event) => {
-            event.stopPropagation();
-            setProofFor(proofFor === markKey ? null : markKey);
-          }}
-        >
-          {content}
-          {showProof && closesMark && (
-            <sup className="ms-0.5 font-semibold tabular-nums no-underline">
-              {markNumber.get(markKey)}
-            </sup>
-          )}
-        </button>,
-      );
+
+      if (cite && piece.end === cite.end) {
+        if (showProof) {
+          nodes.push(chip(segment, cite));
+        } else if (unsupported) {
+          // No chip outside evidence mode: the state is still announced,
+          // once per sentence.
+          nodes.push(
+            <span key={`said:${key}`} className="sr-only">
+              {`, ${citationState(t, brief, cite)}`}
+            </span>,
+          );
+        }
+      }
     }
     return nodes;
   };
 
-  const proofPanel = (segment: Segment) => {
-    const mark = marks.find(
-      (m) =>
-        `${m.segmentId}:${m.start}` === proofFor && m.segmentId === segment.id,
+  /**
+   * After an edit: what the changed sentences rest on now, with a way to
+   * ask the model again and a way to dismiss. Never while the editor is
+   * open, and never when the edit touched no sentence and no mark.
+   */
+  const editStrip = (segment: Segment) => {
+    if (
+      !activeEdit ||
+      activeEdit.segmentId !== segment.id ||
+      editingId === segment.id
+    ) {
+      return null;
+    }
+    const sentences = citations.filter(
+      (m) => m.segmentId === segment.id && touches(m, activeEdit.ranges),
     );
-    if (!mark) return null;
-    const item = mark.itemId ? itemsById.get(mark.itemId) : undefined;
+    const inners = marks.filter(
+      (m) => m.segmentId === segment.id && touches(m, activeEdit.ranges),
+    );
+    if (sentences.length === 0 && inners.length === 0) return null;
+    const textOf = (m: TextRange) => segment.text.slice(m.start, m.end);
+    const verdicts = new Set(sentences.map((m) => m.verdict));
+    const hard = inners.some((m) => m.itemId === undefined);
+    const itemIds = [
+      ...new Set([
+        ...sentences.flatMap((m) => m.itemIds),
+        ...inners.flatMap((m) => (m.itemId !== undefined ? [m.itemId] : [])),
+      ]),
+    ];
+    const items = refNames(t, brief, itemIds);
+    const claims: VerifyClaim[] = sentences
+      .filter((m) => m.note !== 'ungrounded-inside')
+      .map((m) => ({ segmentId: segment.id, text: textOf(m) }))
+      .slice(0, DRAFTER_LIMITS.MAX_VERIFY_CLAIMS);
+    const checking = props.verifyingId === segment.id;
+    const amber = 'text-amber-900 dark:text-amber-300';
+    const line = hard ? (
+      <span className={`inline-flex items-center gap-1 ${amber}`}>
+        <IconAlertTriangle size={14} className="shrink-0" aria-hidden />
+        {t('editHardProblem')}
+      </span>
+    ) : verdicts.has('unsupported') ? (
+      <span className={`inline-flex items-center gap-1 ${amber}`}>
+        <IconAlertTriangle size={14} className="shrink-0" aria-hidden />
+        {t('editUnsupported')}
+      </span>
+    ) : verdicts.has('pending') ? (
+      <span className="inline-flex items-center gap-1 text-gray-800 dark:text-gray-200">
+        <IconSparkles size={14} className="shrink-0" aria-hidden />
+        {t('editChecking')}
+      </span>
+    ) : verdicts.has('partly') ? (
+      <span className={`inline-flex items-center gap-1 ${amber}`}>
+        <IconInfoCircle size={14} className="shrink-0" aria-hidden />
+        {t('editPartlyCite')}
+      </span>
+    ) : verdicts.has('unclear') || verdicts.has('stale') ? (
+      <span className="inline-flex items-center gap-1 text-gray-800 dark:text-gray-200">
+        <IconInfoCircle size={14} className="shrink-0" aria-hidden />
+        {t('editUnchecked')}
+      </span>
+    ) : (
+      <span className="inline-flex items-center gap-1 text-gray-800 dark:text-gray-200">
+        <IconCircleCheck size={14} className="shrink-0" aria-hidden />
+        {t('editSupported', { items })}
+      </span>
+    );
     return (
-      <div className="mt-1 rounded-lg bg-gray-50 p-2 text-xs dark:bg-surface-dark-elevated">
-        {item ? (
-          <ProofCard item={item} sources={props.sources} />
-        ) : mark.itemId === BRIEF_ITSELF ? (
-          <p className="text-gray-700 dark:text-gray-300">
-            {t('fromKeyMessage')}
-          </p>
-        ) : (
-          <p className="flex items-start gap-1 text-amber-900 dark:text-amber-300">
-            <IconAlertTriangle
-              size={14}
-              className="mt-0.5 shrink-0"
-              aria-hidden
-            />
-            {mark.kind === 'quote'
-              ? t('quoteNotInBrief')
-              : t('numberNotInBrief')}
-          </p>
-        )}
+      <div className="space-y-1">
+        <p
+          role="status"
+          className="mt-1 flex flex-wrap items-center gap-x-2 text-xs"
+        >
+          {line}
+          {claims.length > 0 && (
+            <button
+              type="button"
+              className={ghostButton}
+              disabled={props.verifyingId !== null}
+              aria-busy={checking || undefined}
+              title={
+                props.verifyingId !== null && !checking
+                  ? t('checkRunning')
+                  : t('citeExplainer')
+              }
+              onClick={() => props.onVerify(segment.id, claims)}
+            >
+              <IconSparkles size={14} aria-hidden />
+              {checking ? t('checkingWithAi') : t('checkWithAi')}
+            </button>
+          )}
+          <button
+            type="button"
+            className={ghostButton}
+            onClick={() => setLastEdit(null)}
+          >
+            {t('dismiss')}
+          </button>
+          {verifyMessage && (
+            <span className="text-amber-900 dark:text-amber-300">
+              {verifyMessage}
+            </span>
+          )}
+        </p>
+        {sentences
+          .filter((m) => m.reason)
+          .map((m) => (
+            <p
+              key={`${m.start}-${m.end}`}
+              className="flex items-start gap-1 text-xs text-gray-800 dark:text-gray-200"
+            >
+              <IconSparkles size={14} className="mt-0.5 shrink-0" aria-hidden />
+              <span dir="auto">{t('aiSays', { reason: m.reason ?? '' })}</span>
+            </p>
+          ))}
       </div>
     );
   };
@@ -440,7 +825,19 @@ export function VersionColumn({
         }
       >
         <div className="mb-1 flex items-center justify-between gap-2 text-xs tabular-nums text-gray-700 dark:text-gray-300">
-          <span>
+          <span className="flex items-center gap-1">
+            {/* The keyboard's way into the editor; the mouse presses the
+                text itself. Visible only while focused. */}
+            <button
+              type="button"
+              className={`${ghostButton} sr-only focus:not-sr-only`}
+              onClick={() => {
+                setCaretAt(0);
+                openEditor(segment);
+              }}
+            >
+              {t('editPost', { n: index + 1 })}
+            </button>
             {index === 0 && slot
               ? `${tKind(`slots.${slot.labelKey}`)} ${slot.count} / ${slot.max}`
               : (meta?.numbering ?? '')}
@@ -486,15 +883,15 @@ export function VersionColumn({
             className="w-full resize-y rounded-lg border border-blue-600 bg-gray-50 px-2 py-1.5 text-sm leading-relaxed text-gray-900 focus:outline-none dark:bg-surface-dark-elevated dark:text-gray-100"
             value={segment.text}
             onChange={(event) => props.onEdit(segment.id, event.target.value)}
-            onBlur={() => setEditingId(null)}
+            onBlur={() => commitEdit(segment)}
             onKeyDown={(event) => {
               const target = event.currentTarget;
               event.stopPropagation();
-              if (event.key === 'Escape') setEditingId(null);
+              if (event.key === 'Escape') commitEdit(segment);
               if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
                 event.preventDefault();
                 props.onSplit(segment.id, target.selectionStart);
-                setEditingId(null);
+                commitEdit(segment);
               }
               if (
                 event.key === 'Backspace' &&
@@ -504,31 +901,30 @@ export function VersionColumn({
               ) {
                 event.preventDefault();
                 props.onMerge(segment.id);
-                setEditingId(null);
+                commitEdit(segment);
               }
             }}
           />
         ) : (
+          // Text, not a control: the chips inside it are the buttons, and a
+          // press on the words opens the editor where they were pressed.
           <div
-            role="button"
-            tabIndex={0}
             lang={brief.language || undefined}
             dir="auto"
-            aria-label={t('editPost', { n: index + 1 })}
-            className="cursor-text whitespace-pre-wrap break-words rounded-lg px-2 py-1.5 text-sm leading-relaxed text-gray-900 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:text-gray-100 dark:hover:bg-surface-dark-elevated"
-            onClick={() => setEditingId(segment.id)}
-            onKeyDown={(event) => {
-              if (event.target !== event.currentTarget) return;
-              if (event.key === 'Enter') {
-                event.preventDefault();
-                event.stopPropagation();
-                setEditingId(segment.id);
-              }
+            className="cursor-text whitespace-pre-wrap break-words rounded-lg px-2 py-1.5 text-sm leading-relaxed text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-surface-dark-elevated"
+            onClick={(event: MouseEvent<HTMLDivElement>) => {
+              setCaretAt(caretOffsetIn(event.currentTarget, event.target));
+              openEditor(segment);
             }}
           >
-            {renderText(segment, meta?.overflowAt ?? null)}
+            {renderText(
+              segment,
+              meta?.overflowAt ?? null,
+              activeEdit?.segmentId === segment.id ? activeEdit.ranges : [],
+            )}
           </div>
         )}
+        {editStrip(segment)}
         {showFold && slot?.foldLabelKey && (
           <p className="mt-1 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
             <span className="h-px flex-1 border-t border-dashed border-gray-400" />
@@ -664,7 +1060,6 @@ export function VersionColumn({
             </label>
           </div>
         )}
-        {proofPanel(segment)}
       </section>
     );
   });
@@ -839,9 +1234,14 @@ export function VersionColumn({
       {showProof && hasText(version) && (
         <ProofList
           marks={marks}
+          citations={citations}
           segments={segments}
           brief={brief}
           sources={props.sources}
+          version={version}
+          verifyingId={props.verifyingId}
+          error={verifyMessage}
+          onVerify={(claims) => props.onVerify(null, claims)}
         />
       )}
 
@@ -1030,16 +1430,20 @@ export function VersionColumn({
                 <IconEyeCheck size={14} aria-hidden />
               </button>
             )}
-            <button
-              type="button"
-              className={iconButton}
-              aria-pressed={proofOpen}
-              aria-label={t('showProof')}
-              title={t('showProof')}
-              onClick={() => setProofOpen((open) => !open)}
-            >
-              <IconListCheck size={14} aria-hidden />
-            </button>
+          </>
+        )}
+        <button
+          type="button"
+          className={iconButton}
+          aria-pressed={showProof}
+          aria-label={t('showProof')}
+          title={t('showProofHint')}
+          onClick={() => setProofChoice(!showProof)}
+        >
+          <IconListCheck size={14} aria-hidden />
+        </button>
+        {!focus && (
+          <>
             <button
               type="button"
               className={iconButton}
@@ -1137,7 +1541,9 @@ export function VersionColumn({
         )}
       </header>
 
-      <div className={`flex min-h-0 flex-1 ${focus ? 'flex-row' : 'flex-col'}`}>
+      <div
+        className={`flex min-h-0 flex-1 ${focus ? 'flex-col lg:flex-row' : 'flex-col'}`}
+      >
         <div
           className={`min-h-0 flex-1 space-y-3 overflow-y-auto p-3 ${
             focus ? 'min-w-0' : ''
@@ -1227,7 +1633,8 @@ export function VersionColumn({
                   // at the word that was pressed.
                   props.onPreviewChange(false);
                   setCaretAt(offset);
-                  setEditingId(segmentId);
+                  const segment = segments.find((s) => s.id === segmentId);
+                  if (segment) openEditor(segment);
                 }}
               />
             ) : (
@@ -1238,16 +1645,65 @@ export function VersionColumn({
         </div>
 
         {focus && (
+          // Beside the text from lg up; below it, folded, on narrower
+          // screens, so evidence mode never shows marks with nowhere to
+          // read them.
           <aside
             aria-label={t('checksAndProof')}
-            className="hidden min-h-0 w-96 shrink-0 space-y-3 overflow-y-auto border-s border-gray-200 p-3 lg:block dark:border-gray-700"
+            className="min-h-0 shrink-0 overflow-y-auto border-t border-gray-200 lg:w-96 lg:border-s lg:border-t-0 dark:border-gray-700"
           >
-            {details}
+            <button
+              type="button"
+              className={`${ghostButton} m-2 lg:hidden`}
+              aria-expanded={detailsOpen}
+              onClick={() => setDetailsOpen((open) => !open)}
+            >
+              {t('checksAndProof')}
+            </button>
+            <div
+              className={`space-y-3 p-3 ${detailsOpen ? '' : 'hidden lg:block'}`}
+            >
+              {details}
+            </div>
           </aside>
         )}
       </div>
 
       <footer className="space-y-1 border-t border-gray-200 px-2 py-1.5 dark:border-gray-700">
+        {hasText(version) && citations.length > 0 && (
+          // What the citation step found, always in view: a press opens
+          // evidence mode. Errors show here too, not only in that mode.
+          <div className="flex items-center gap-2 text-xs">
+            <button
+              type="button"
+              className="min-w-0 truncate text-start text-gray-600 hover:underline dark:text-gray-400"
+              aria-pressed={showProof}
+              onClick={() => setProofChoice(!showProof)}
+            >
+              {props.verifyingId
+                ? t('citing')
+                : t('citeSummary', {
+                    traced: citations.filter(
+                      (m) =>
+                        m.verdict === 'supported' || m.verdict === 'partly',
+                    ).length,
+                    total: citations.length,
+                    unsupported: citations.filter(
+                      (m) => m.verdict === 'unsupported',
+                    ).length,
+                  })}
+            </button>
+            {verifyMessage && !showProof && (
+              <span
+                role="status"
+                className="min-w-0 truncate text-amber-900 dark:text-amber-300"
+                title={verifyMessage}
+              >
+                {verifyMessage}
+              </span>
+            )}
+          </div>
+        )}
         <div className="flex items-center gap-1">
           <span
             className={`flex min-w-0 flex-1 items-center gap-1 text-xs font-medium ${STATUS_TONE[status]}`}
