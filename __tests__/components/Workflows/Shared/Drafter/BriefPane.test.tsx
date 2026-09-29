@@ -177,6 +177,58 @@ describe('BriefPane', () => {
     expect(props.onAddOwn).toHaveBeenCalledWith('My own line');
   });
 
+  it('numbers every row so the superscripts in the columns can be read back [ui-brief]', () => {
+    renderPane();
+    const numbers = [...document.querySelectorAll('li [aria-hidden="true"]')]
+      .map((node) => node.textContent)
+      .filter((text) => /^\d+$/u.test(text ?? ''));
+    expect(numbers).toEqual(['1', '2', '3']);
+    // The number stays on the row once it is expanded.
+    fireEvent.click(
+      screen.getByText('“We had no clean water for eleven days.”'),
+    );
+    expect(
+      [...document.querySelectorAll('li [aria-hidden="true"]')].filter((node) =>
+        /^\d+$/u.test(node.textContent ?? ''),
+      ),
+    ).toHaveLength(3);
+  });
+
+  it('announces a row once: the kind icon carries "#n Kind", the number is decoration [ui-brief]', () => {
+    renderPane();
+    // One accessible name per row for the reference, not "Fact 3 Fact".
+    expect(screen.getAllByRole('img', { name: 'itemRefLabel' })).toHaveLength(
+      3,
+    );
+    expect(
+      screen.queryByRole('img', { name: 'itemRef' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('img', { name: /^kinds\./u }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows the KM and CTA referents beside the key message and call to action', () => {
+    renderPane({ hasVersions: false });
+    const km = screen.getByRole('img', { name: 'refKeyMessageHint' });
+    expect(km.textContent).toBe('refKeyMessage');
+    const cta = screen.getByRole('img', { name: 'refCallToActionHint' });
+    expect(cta.textContent).toBe('refCallToAction');
+  });
+
+  it('counts an item the cite step attributed as used, so it is never "unused" [ui-brief]', () => {
+    // No version names i3 in usedItemIds; the workspace derives its use
+    // from the sentences the model attributed to it (specsUsingItem).
+    renderPane({ usedIn: { i1: ['X'], i3: ['X'] } });
+    expect(screen.queryByText('notUsedShort')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByText('The clinic treated many people.'));
+    expect(screen.getByText('X')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /filterUnused/u }));
+    expect(
+      screen.queryByText('The clinic treated many people.'),
+    ).not.toBeInTheDocument();
+  });
+
   it('labels the links briefly, with the explanation in a tooltip', () => {
     renderPane({ hasVersions: false });
     expect(screen.getByText('pageLink')).toBeInTheDocument();
