@@ -7,18 +7,22 @@
  * merge and "Move overflow" all make an approval lapse without knowing that
  * approval exists.
  */
+import { normalizeForQuoteMatch } from '@/lib/utils/app/citationQuotes';
+
 import {
   ApprovalStatus,
   Brief,
   DRAFTER_LIMITS,
   GeneratedVersion,
   Segment,
+  StatementVerdict,
   Version,
   VersionSnapshot,
   VersionStatus,
 } from '@/types/drafter';
 
 import { carryMedia, mediaSignatures, sameMedia } from './media';
+import { statementKey } from './statements';
 
 /** Whether a stamp (approved, copied, sent) still describes the version. */
 function stampHolds(
@@ -129,6 +133,35 @@ export function briefDigestFor(brief: Brief, usedItemIds: string[]): string {
   const links = brief.links.map((link) => [link.role, link.url]);
   return hashString(
     JSON.stringify([brief.keyMessage, brief.callToAction ?? '', items, links]),
+  );
+}
+
+/**
+ * Digest of the brief a citation verdict was judged against. A supported or
+ * partly verdict depends on the entries it cites; one citing nothing
+ * depends on every included item, since a new one could support it. The
+ * key message and call to action are inputs to both. Links are left out:
+ * they are placed by code and say nothing about what a sentence states.
+ */
+export function verdictDigestFor(
+  brief: Brief,
+  itemIds: string[],
+  verdict: StatementVerdict['verdict'],
+): string {
+  const cited =
+    verdict === 'supported' || verdict === 'partly' ? new Set(itemIds) : null;
+  const items = brief.items
+    .filter(
+      (item) => item.decision === 'included' && (!cited || cited.has(item.id)),
+    )
+    .map((item) => [
+      item.id,
+      item.text,
+      item.attribution?.name ?? '',
+      item.attribution?.role ?? '',
+    ]);
+  return hashString(
+    JSON.stringify([brief.keyMessage, brief.callToAction ?? '', items]),
   );
 }
 
@@ -315,6 +348,85 @@ export function restoreSnapshot(
     edits: undefined,
     proposed: undefined,
   };
+}
+
+/* ------------------------------------------------------------------ */
+/* Verdicts                                                            */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Lands cite-step results on a version. A verdict is keyed by its
+ * sentence, so it applies only while that sentence is still in the text:
+ * one whose sentence is not in its segment is dropped, one on a sentence
+ * already judged replaces the earlier verdict, and only the newest
+ * MAX_VERDICTS are kept. A verdict never changes a grounding mark; whether
+ * it still applies is decided by `citationMarks` (core/citations.ts).
+ */
+export function landVerdicts(
+  version: Version,
+  incoming: Array<Omit<StatementVerdict, 'id' | 'at'>>,
+  ids: string[],
+  now: string,
+): Version {
+  const texts = new Map(
+    version.segments.map((segment) => [
+      segment.id,
+      normalizeForQuoteMatch(segment.text),
+    ]),
+  );
+  const landed: StatementVerdict[] = incoming
+    .filter((verdict) => {
+      const text = texts.get(verdict.segmentId);
+      return (
+        !!verdict.sentenceKey && !!text && text.includes(verdict.sentenceKey)
+      );
+    })
+    .map((verdict, index) => ({
+      ...verdict,
+      id: ids[index] ?? `v${index}`,
+      at: now,
+    }));
+  if (landed.length === 0) return version;
+  const replaced = new Set(
+    landed.map((verdict) => `${verdict.segmentId}\n${verdict.sentenceKey}`),
+  );
+  const combined = [
+    ...(version.verdicts ?? []).filter(
+      (verdict) =>
+        !replaced.has(`${verdict.segmentId}\n${verdict.sentenceKey}`),
+    ),
+    ...landed,
+  ];
+  // Newest by `at`, then by position; the survivors keep their order.
+  const kept = new Set(
+    combined
+      .map((verdict, index) => ({ verdict, index }))
+      .sort(
+        (a, b) => b.verdict.at.localeCompare(a.verdict.at) || b.index - a.index,
+      )
+      .slice(0, DRAFTER_LIMITS.MAX_VERDICTS)
+      .map((entry) => entry.index),
+  );
+  return {
+    ...version,
+    verdicts: combined.filter((_verdict, index) => kept.has(index)),
+  };
+}
+
+/**
+ * The stored verdict on this sentence of this segment, by key alone. It
+ * says nothing about staleness against today's brief: render from
+ * `citationMarks` (core/citations.ts), which does.
+ */
+export function verdictFor(
+  version: Version | undefined,
+  segmentId: string,
+  sentenceText: string,
+): StatementVerdict | undefined {
+  const key = statementKey(sentenceText);
+  return version?.verdicts?.find(
+    (verdict) => verdict.segmentId === segmentId && verdict.sentenceKey === key,
+  );
 }
 
 /* ------------------------------------------------------------------ */
