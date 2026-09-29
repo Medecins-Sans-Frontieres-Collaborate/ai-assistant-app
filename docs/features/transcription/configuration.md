@@ -20,7 +20,11 @@ Speaker separation uses the Azure AI Speech Fast Transcription API for files
 within the Whisper size limit. It uses `AZURE_SPEECH_KEY` when set; otherwise,
 it authenticates with `DefaultAzureCredential`, like the other Azure services.
 It uses `AZURE_SPEECH_REGION` for the resource region. The app identity needs
-the **Cognitive Services Speech User** role on the Speech resource.
+the **Cognitive Services Speech User** role on each Speech resource it uses.
+Regional routing follows the user's resolved region, the same way blob storage
+does. Set `AZURE_SPEECH_KEY_EU` and `AZURE_SPEECH_REGION_EU` for EU users; if
+they are unset, EU requests fall back to `AZURE_SPEECH_KEY` and
+`AZURE_SPEECH_REGION`. Non-EU users use the base variables.
 
 #### 3. Batch Transcription Configuration (Legacy)
 

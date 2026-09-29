@@ -1,3 +1,7 @@
+import type { Session } from 'next-auth';
+
+import { getEnvVariable } from '@/lib/utils/app/env';
+
 import { env } from '@/config/environment';
 import { DefaultAzureCredential } from '@azure/identity';
 import fs from 'fs';
@@ -91,9 +95,21 @@ interface SpeechPhrase {
 /** Transcribes a local audio file and groups adjacent phrases by speaker. */
 export async function transcribeWithSpeakers(
   filePath: string,
+  user: Session['user'],
   language?: string,
 ): Promise<string> {
-  const { AZURE_SPEECH_KEY, AZURE_SPEECH_REGION } = env;
+  const speechKey = getEnvVariable({
+    name: 'AZURE_SPEECH_KEY',
+    throwErrorOnFail: false,
+    defaultValue: '',
+    user,
+  });
+  const speechRegion = getEnvVariable({
+    name: 'AZURE_SPEECH_REGION',
+    throwErrorOnFail: false,
+    defaultValue: env.AZURE_SPEECH_REGION,
+    user,
+  });
 
   const locale = language
     ? AZURE_LOCALES[language.toLowerCase().split('-')[0]]
@@ -119,8 +135,8 @@ export async function transcribeWithSpeakers(
   formData.append('definition', JSON.stringify(definition));
 
   const headers: Record<string, string> = {};
-  if (AZURE_SPEECH_KEY) {
-    headers['Ocp-Apim-Subscription-Key'] = AZURE_SPEECH_KEY;
+  if (speechKey) {
+    headers['Ocp-Apim-Subscription-Key'] = speechKey;
   } else {
     const token = await new DefaultAzureCredential().getToken(
       'https://cognitiveservices.azure.com/.default',
@@ -132,7 +148,7 @@ export async function transcribeWithSpeakers(
   }
 
   const response = await fetch(
-    `https://${AZURE_SPEECH_REGION}.api.cognitive.microsoft.com/speechtotext/transcriptions:transcribe?api-version=2024-11-15`,
+    `https://${speechRegion}.api.cognitive.microsoft.com/speechtotext/transcriptions:transcribe?api-version=2024-11-15`,
     {
       method: 'POST',
       headers,

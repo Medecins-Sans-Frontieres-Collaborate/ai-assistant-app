@@ -461,6 +461,7 @@ export class FileProcessor extends BasePipelineStage {
                       try {
                         transcript = await transcribeWithSpeakers(
                           fileToTranscribe,
+                          context.session.user,
                           file.transcriptionLanguage,
                         );
                       } catch (error) {
