@@ -15,12 +15,15 @@ import {
   defaultVoicesOfSet,
   virtualDefaultSet,
 } from '@/lib/utils/shared/drafter/channels/channelSets';
+import { statementKey } from '@/lib/utils/shared/drafter/core/statements';
+import { verdictDigestFor } from '@/lib/utils/shared/drafter/core/versions';
 
 import { Conversation } from '@/types/chat';
 import {
   ChannelDrafterWorkflowState,
   ChannelSetSummary,
   ToneRef,
+  VerifyRequest,
   Version,
 } from '@/types/drafter';
 
@@ -72,9 +75,17 @@ const api = vi.hoisted(() => ({
   extractBrief: vi.fn(),
   suggestAltText: vi.fn(),
   translateBrief: vi.fn(),
+  verifyClaims: vi.fn(),
   getPublishAccess: vi.fn(async () => ({ configured: false, channels: [] })),
 }));
 vi.mock('@/client/services/workflows/drafter/drafterApi', () => api);
+
+/** The review pack is a download; the blob is captured instead. */
+const downloads = vi.hoisted(() => ({ downloadBlob: vi.fn() }));
+vi.mock('@/client/services/workflows/form/formApi', async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  downloadBlob: downloads.downloadBlob,
+}));
 
 vi.mock('@/client/hooks/useM365Enabled', () => ({
   useM365Enabled: () => ({
@@ -489,5 +500,306 @@ describe('ChannelDrafterWorkspace and its rule set', () => {
         EVERY_SPEC,
       ),
     );
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* Automatic citation                                                  */
+/* ------------------------------------------------------------------ */
+
+const A = 'Twelve clinics reopened in March.';
+const B = 'Soldiers marched through the valley at dawn.';
+const C = 'Nurses treated the wounded overnight.';
+
+function citedVersion(brief: ChannelDrafterWorkflowState['brief']): Version {
+  return {
+    specId: 'linkedin',
+    segments: [{ id: 'linkedin-s1', text: `${A} ${B}`, usedItemIds: [] }],
+    briefRev: 1,
+    briefDigest: '',
+    handEdited: false,
+    history: [],
+    verdicts: [
+      {
+        id: 'v1',
+        segmentId: 'linkedin-s1',
+        sentenceKey: statementKey(A),
+        verdict: 'supported',
+        itemIds: ['i1'],
+        reason: 'The fact states it.',
+        briefDigest: verdictDigestFor(brief, ['i1'], 'supported'),
+        at: '2026-09-21T10:00:00.000Z',
+      },
+      {
+        id: 'v2',
+        segmentId: 'linkedin-s1',
+        sentenceKey: statementKey(B),
+        verdict: 'unsupported',
+        itemIds: [],
+        reason: 'Nothing in the brief mentions soldiers.',
+        briefDigest: verdictDigestFor(brief, [], 'unsupported'),
+        at: '2026-09-21T10:00:00.000Z',
+      },
+    ],
+  };
+}
+
+/** Answers every claim it is sent: A rests on i1, anything else on nothing. */
+function answerClaims() {
+  api.verifyClaims.mockImplementation(async (request: VerifyRequest) => ({
+    results: request.targets.map((target) => ({
+      specId: target.specId,
+      verdicts: target.claims.map((claim) => ({
+        segmentId: claim.segmentId,
+        text: claim.text,
+        verdict: claim.text === A ? 'supported' : 'unsupported',
+        itemIds: claim.text === A ? ['i1'] : [],
+        reason: claim.text === A ? 'The fact states it.' : 'Not in the brief.',
+      })),
+    })),
+  }));
+}
+
+function readBlob(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsText(blob);
+  });
+}
+
+/** Past the edit debounce, so a cite call that was going to happen has. */
+const settle = () => new Promise((resolve) => setTimeout(resolve, 1_800));
+
+describe('ChannelDrafterWorkspace automatic citation [workspace]', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    guidesState.guides = [];
+    guidesState.isLoadingGuides = false;
+    useSettingsStore.setState({
+      lastChannelIdsBySet: {},
+      lastChannelSetId: null,
+      tones: [],
+      voiceSets: [],
+    });
+    useWorkflowRailStore.setState({ scopes: {} });
+    channelSets.current = served([norway], 'msf-no');
+  });
+
+  it('cites every sentence once a version is written, and stores the answer against the brief', async () => {
+    seed({ setId: 'msf-no', specIds: ['linkedin'], brief: briefWithItem() });
+    api.generateVersions.mockResolvedValue({
+      versions: [
+        {
+          specId: 'linkedin',
+          segments: [{ text: `${A} ${B}`, usedItemIds: ['i1'] }],
+        },
+      ],
+    });
+    answerClaims();
+    renderWorkspace();
+    fireEvent.click(
+      await screen.findByRole('button', {
+        name: /writePosts|writeAgain|updateChannels/,
+      }),
+    );
+
+    await waitFor(() => expect(api.verifyClaims).toHaveBeenCalledTimes(1));
+    const segmentId = liveState().versions.linkedin.segments[0].id;
+    const request = api.verifyClaims.mock.calls[0][0] as VerifyRequest;
+    expect(request.specKind).toBe('channel');
+    expect(request.setId).toBe('msf-no');
+    expect(request.modelId).toBe('gpt-4');
+    expect(request.conversationId).toBe('draft-1');
+    expect(request.targets).toEqual([
+      {
+        specId: 'linkedin',
+        segments: [{ id: segmentId, text: `${A} ${B}` }],
+        claims: [
+          { segmentId, text: A },
+          { segmentId, text: B },
+        ],
+      },
+    ]);
+    // The included, verified items only, with their ids; the language named.
+    expect(request.brief).toEqual({
+      keyMessage: 'Clinics reopened.',
+      callToAction: undefined,
+      links: [],
+      language: 'English',
+      items: [
+        {
+          id: 'i1',
+          kind: 'fact',
+          text: 'Twelve clinics reopened in March.',
+          attribution: undefined,
+          verified: 'user-asserted',
+        },
+      ],
+    });
+
+    await waitFor(() =>
+      expect(liveState().versions.linkedin.verdicts).toHaveLength(2),
+    );
+    const [first, second] = liveState().versions.linkedin.verdicts!;
+    expect(first).toMatchObject({
+      segmentId,
+      sentenceKey: statementKey(A),
+      verdict: 'supported',
+      itemIds: ['i1'],
+      modelId: 'gpt-4',
+      briefDigest: verdictDigestFor(liveState().brief, ['i1'], 'supported'),
+    });
+    expect(first.id).toMatch(/^v/u);
+    expect(second).toMatchObject({
+      sentenceKey: statementKey(B),
+      verdict: 'unsupported',
+      itemIds: [],
+      briefDigest: verdictDigestFor(liveState().brief, [], 'unsupported'),
+    });
+    // Nothing is left to cite: a second run sends nothing.
+    await settle();
+    expect(api.verifyClaims).toHaveBeenCalledTimes(1);
+  });
+
+  it('after an edit, waits for typing to stop, then cites only the sentences without a fresh verdict', async () => {
+    const brief = briefWithItem();
+    seed({
+      setId: 'msf-no',
+      specIds: ['linkedin'],
+      versions: { linkedin: citedVersion(brief) },
+      brief,
+    });
+    answerClaims();
+    renderWorkspace();
+    fireEvent.click(screen.getByRole('button', { name: 'editPost' }));
+    const textarea = screen.getByRole('textbox');
+    fireEvent.change(textarea, { target: { value: `${A} ${B} Nurses` } });
+    fireEvent.change(textarea, { target: { value: `${A} ${B} ${C}` } });
+    fireEvent.blur(textarea);
+    // Not on a keystroke, not on blur.
+    expect(api.verifyClaims).not.toHaveBeenCalled();
+    expect(liveState().versions.linkedin.segments[0].text).toBe(
+      `${A} ${B} ${C}`,
+    );
+
+    await waitFor(() => expect(api.verifyClaims).toHaveBeenCalledTimes(1), {
+      timeout: 4_000,
+    });
+    const request = api.verifyClaims.mock.calls[0][0] as VerifyRequest;
+    // A and B keep their verdicts; only the new sentence is sent.
+    expect(request.targets[0].claims).toEqual([
+      { segmentId: 'linkedin-s1', text: C },
+    ]);
+    await waitFor(() =>
+      expect(liveState().versions.linkedin.verdicts).toHaveLength(3),
+    );
+    expect(liveState().versions.linkedin.verdicts!.at(-1)).toMatchObject({
+      sentenceKey: statementKey(C),
+      verdict: 'unsupported',
+    });
+  });
+
+  it('re-cites a sentence whose cited item changed, and leaves the others alone', async () => {
+    const brief = briefWithItem();
+    seed({
+      setId: 'msf-no',
+      specIds: ['linkedin'],
+      versions: { linkedin: citedVersion(brief) },
+      brief,
+    });
+    // The verdict on A was made against an earlier wording of i1: stale.
+    useConversationStore.getState().updateWorkflowState('draft-1', (prev) => ({
+      ...(prev as ChannelDrafterWorkflowState),
+      brief: {
+        ...brief,
+        items: [
+          { ...brief.items[0], text: 'Twelve clinics reopened in April.' },
+        ],
+      },
+    }));
+    answerClaims();
+    renderWorkspace();
+    // Any edit asks for what is uncited; here that is A alone (B's verdict
+    // cites nothing and lapses too, since an item changed).
+    fireEvent.click(screen.getByRole('button', { name: 'editPost' }));
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: `${A} ${B} ` },
+    });
+    await waitFor(() => expect(api.verifyClaims).toHaveBeenCalledTimes(1), {
+      timeout: 4_000,
+    });
+    const request = api.verifyClaims.mock.calls[0][0] as VerifyRequest;
+    expect(request.targets[0].claims.map((claim) => claim.text)).toEqual([
+      A,
+      B,
+    ]);
+  });
+
+  it('keeps the text and lands nothing when the cite call fails, without a workspace-wide alert', async () => {
+    const brief = briefWithItem();
+    seed({
+      setId: 'msf-no',
+      specIds: ['linkedin'],
+      versions: { linkedin: citedVersion(brief) },
+      brief,
+    });
+    api.verifyClaims.mockRejectedValue(new Error('Usage limit reached'));
+    renderWorkspace();
+    fireEvent.click(screen.getByRole('button', { name: 'editPost' }));
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: `${A} ${B} ${C}` },
+    });
+    await waitFor(() => expect(api.verifyClaims).toHaveBeenCalledTimes(1), {
+      timeout: 4_000,
+    });
+    await settle();
+    expect(liveState().versions.linkedin.segments[0].text).toBe(
+      `${A} ${B} ${C}`,
+    );
+    expect(liveState().versions.linkedin.verdicts).toHaveLength(2);
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('cites nothing while the draft is paused', async () => {
+    const brief = briefWithItem();
+    seed({
+      setId: 'gone-set',
+      specIds: ['linkedin'],
+      versions: { linkedin: citedVersion(brief) },
+      brief,
+    });
+    answerClaims();
+    renderWorkspace();
+    await screen.findByText('setLost');
+    fireEvent.click(screen.getByRole('button', { name: 'editPost' }));
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: `${A} ${B} ${C}` },
+    });
+    await settle();
+    expect(api.verifyClaims).not.toHaveBeenCalled();
+  });
+
+  it('prints one citation line per sentence and a summary in the review pack', async () => {
+    const brief = briefWithItem();
+    seed({
+      setId: 'msf-no',
+      specIds: ['linkedin'],
+      versions: { linkedin: citedVersion(brief) },
+      brief,
+    });
+    renderWorkspace();
+    fireEvent.click(screen.getByRole('button', { name: 'moreActions' }));
+    fireEvent.click(screen.getByRole('menuitem', { name: 'reviewPack' }));
+
+    expect(downloads.downloadBlob).toHaveBeenCalledTimes(1);
+    const [blob, name] = downloads.downloadBlob.mock.calls[0] as [Blob, string];
+    expect(name).toBe('review-pack.md');
+    const pack = await readBlob(blob);
+    expect(pack).toContain('- pack.citationSummary');
+    expect(pack).toContain('**pack.citationsHeading:**');
+    expect(pack.match(/^- pack\.citationLine$/gmu)).toHaveLength(2);
+    expect(pack).not.toContain('pack.statements');
   });
 });
