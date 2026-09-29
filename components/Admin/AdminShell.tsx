@@ -90,7 +90,7 @@ export const AdminShell: FC<AdminShellProps> = ({ areas, children }) => {
         </button>
       </header>
 
-      <AdminAreaNav areas={visibleAreas} variant="pills" />
+      <AdminAreaNav areas={visibleAreas} variant="picker" />
 
       <div className="flex min-h-0 flex-1">
         <AdminAreaNav areas={visibleAreas} variant="rail" />
