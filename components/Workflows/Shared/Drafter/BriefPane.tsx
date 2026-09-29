@@ -38,6 +38,7 @@ import { Brief, BriefItem, DraftSource } from '@/types/drafter';
 
 import { Popover, iconButton } from './Popover';
 import { ProofCard } from './ProofCard';
+import { itemRefs } from './itemRefs';
 import { shortSpecName } from './specNames';
 
 export interface BriefPaneProps {
@@ -155,6 +156,23 @@ function VerificationIcon({
   );
 }
 
+/**
+ * The tag a column's superscript shows for a sentence resting on this
+ * field ("KM", "CTA"), so the abbreviation has a referent on the page.
+ */
+function RefTag({ tag, hint }: { tag: string; hint: string }) {
+  return (
+    <span
+      className="ms-1 inline-flex items-center rounded border border-gray-300 px-1 text-[10px] font-semibold uppercase tracking-wide text-gray-600 dark:border-gray-600 dark:text-gray-400"
+      title={hint}
+      aria-label={hint}
+      role="img"
+    >
+      {tag}
+    </span>
+  );
+}
+
 /** A small tooltip-carrying info icon beside a short label. */
 function InfoTip({ text }: { text: string }) {
   return (
@@ -226,6 +244,7 @@ export function BriefPane(props: BriefPaneProps) {
   const goodSources = sources.filter((source) => !source.error);
   // With one source, naming it on every card only repeats the title.
   const showSourceNames = goodSources.length > 1;
+  const refs = itemRefs(brief);
   const unusedIds = new Set(
     brief.items
       .filter(
@@ -388,6 +407,7 @@ export function BriefPane(props: BriefPaneProps) {
           <div className="space-y-2 px-3 pb-3">
             <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
               {t('keyMessage')}
+              <RefTag tag={t('refKeyMessage')} hint={t('refKeyMessageHint')} />
               <textarea
                 className={`${fieldClass} mt-1 resize-none`}
                 rows={Math.min(
@@ -406,6 +426,10 @@ export function BriefPane(props: BriefPaneProps) {
             </label>
             <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
               {t('callToAction')}
+              <RefTag
+                tag={t('refCallToAction')}
+                hint={t('refCallToActionHint')}
+              />
               <input
                 className={`${fieldClass} mt-1`}
                 dir="auto"
@@ -556,6 +580,14 @@ export function BriefPane(props: BriefPaneProps) {
               ? sourceLinkFor(source, provenance.excerpt)
               : null;
           const used = usedIn[item.id] ?? [];
+          // The number the columns' superscripts point back to. It is read
+          // once, folded into the kind icon's label ("#3 Fact"), never as a
+          // second announcement of its own.
+          const ref = refs.get(item.id) ?? 0;
+          const refLabel = t('itemRefLabel', {
+            kind: t(`kinds.${item.kind}`),
+            n: ref,
+          });
           const spoken = item.kind === 'quote' || item.kind === 'testimony';
           const shownText = spoken ? `“${item.text}”` : item.text;
           const position = brief.items.indexOf(item);
@@ -607,10 +639,13 @@ export function BriefPane(props: BriefPaneProps) {
                     onClick={() => setExpandedId(expanded ? null : item.id)}
                   >
                     <span className="mt-0.5 flex shrink-0 items-center gap-1">
-                      <KindMark
-                        kind={item.kind}
-                        label={t(`kinds.${item.kind}`)}
-                      />
+                      <span
+                        className="min-w-[1.25rem] text-center text-[11px] tabular-nums text-gray-600 dark:text-gray-400"
+                        aria-hidden
+                      >
+                        {ref}
+                      </span>
+                      <KindMark kind={item.kind} label={refLabel} />
                       <VerificationIcon
                         verified={item.verified}
                         labels={verificationLabels}
