@@ -59,6 +59,24 @@ const mockMessages: Record<string, unknown> = {
     title: 'Admin',
     openSettings: 'Open settings',
     areaNavLabel: 'Admin areas',
+    group: {
+      capabilities: 'Capabilities',
+      libraries: 'Libraries',
+      usage: 'Usage',
+      administration: 'Administration',
+    },
+    area: {
+      workflows: 'Workflows',
+      viewAs: 'View as',
+      globalAdmins: 'Global admins',
+      announcements: 'Announcements',
+      delegations: 'Delegations',
+    },
+  },
+  limits: {
+    title: 'Usage limits',
+    description:
+      'Cap how much of each model and feature people can use. Everything is unlimited unless you set a limit here.',
   },
   chat: {
     modelTimedOut:
@@ -405,6 +423,12 @@ const mockMessages: Record<string, unknown> = {
     loadError: "Couldn't load access data.",
     agentsTab: 'Agents',
     connectorsTab: 'Connectors',
+    guidesTab: 'Guides',
+    glossariesTab: 'Glossaries',
+    datasetsTab: 'Map datasets',
+    formTemplatesTab: 'Form templates',
+    channelSetsTab: 'Channel sets',
+    channelProfilesTab: 'Platforms',
     addConnector: 'Add connector',
     noConnectors: 'No connectors yet.',
     connectorsUnavailableWarning:
