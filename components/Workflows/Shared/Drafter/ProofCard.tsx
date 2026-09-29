@@ -15,7 +15,9 @@ import { getSourceText } from '@/client/services/workflows/form/sourceText';
 import { sourceLinkFor } from '@/lib/utils/shared/drafter/core/textFragment';
 import {
   Passage,
+  TextRange,
   locateExcerpt,
+  normalizeWithMap,
   passageAround,
 } from '@/lib/utils/shared/drafter/core/verify';
 
@@ -24,6 +26,11 @@ import { BriefItem, DraftSource } from '@/types/drafter';
 interface ProofCardProps {
   item: BriefItem;
   sources: DraftSource[];
+  /**
+   * The post shortened this quotation: the runs it kept, as offsets into
+   * normalizeForQuoteMatch(item.text). The card greys what was left out.
+   */
+  elided?: { pieces: TextRange[] };
 }
 
 /** Icon plus words for how an item was verified; never colour alone. */
@@ -57,13 +64,78 @@ export function VerificationMark({
   );
 }
 
+/** Text runs of a quotation: kept by the post, or left out of it. */
+interface QuoteRun {
+  text: string;
+  kept: boolean;
+}
+
+/**
+ * Splits the item's raw text into kept and omitted runs. The pieces are
+ * offsets into the normalized text; the map takes each back to the raw
+ * text, so the words shown are the item's own characters.
+ */
+function quoteRuns(text: string, pieces: TextRange[]): QuoteRun[] {
+  const { map } = normalizeWithMap(text);
+  const kept = [...pieces]
+    .filter((piece) => piece.end > piece.start && piece.start < map.length)
+    .sort((a, b) => a.start - b.start)
+    .map((piece) => ({
+      start: map[piece.start],
+      end: map[Math.min(piece.end, map.length) - 1] + 1,
+    }));
+  const runs: QuoteRun[] = [];
+  let at = 0;
+  for (const range of kept) {
+    if (range.start > at)
+      runs.push({ text: text.slice(at, range.start), kept: false });
+    if (range.end > Math.max(at, range.start)) {
+      runs.push({
+        text: text.slice(Math.max(at, range.start), range.end),
+        kept: true,
+      });
+    }
+    at = Math.max(at, range.end);
+  }
+  if (at < text.length) runs.push({ text: text.slice(at), kept: false });
+  return runs;
+}
+
+/** The full quotation with the omitted words greyed, headed by why. */
+function AbbreviatedQuote({
+  text,
+  pieces,
+  heading,
+}: {
+  text: string;
+  pieces: TextRange[];
+  heading: string;
+}) {
+  return (
+    <div>
+      <p className="font-medium text-gray-900 dark:text-gray-100">{heading}</p>
+      <p className="text-gray-900 dark:text-gray-100" dir="auto">
+        {quoteRuns(text, pieces).map((run, index) =>
+          run.kept ? (
+            <span key={index}>{run.text}</span>
+          ) : (
+            <span key={index} className="text-gray-500 dark:text-gray-400">
+              {run.text}
+            </span>
+          ),
+        )}
+      </p>
+    </div>
+  );
+}
+
 /**
  * The evidence for one brief item: the excerpt inside its surrounding
  * passage with the match marked, the source's name, and "Open source". The
  * same card serves a brief row and a quote or number inside a version, so
  * proof looks identical wherever it is asked for.
  */
-export function ProofCard({ item, sources }: ProofCardProps) {
+export function ProofCard({ item, sources, elided }: ProofCardProps) {
   const t = useTranslations('workflows.drafter');
   const provenance = item.provenance[0];
   const source = provenance
@@ -98,9 +170,18 @@ export function ProofCard({ item, sources }: ProofCardProps) {
   const passage = loaded?.passage ?? null;
   const missing = !!loaded && !loaded.passage;
 
+  const abbreviated = elided && (
+    <AbbreviatedQuote
+      text={item.text}
+      pieces={elided.pieces}
+      heading={t('quoteAbbreviated')}
+    />
+  );
+
   if (!provenance || !source) {
     return (
       <div className="space-y-1 text-xs text-gray-700 dark:text-gray-300">
+        {abbreviated}
         <VerificationMark verified={item.verified} />
         <p>
           {item.verified === 'user-asserted'
@@ -127,6 +208,7 @@ export function ProofCard({ item, sources }: ProofCardProps) {
           </p>
         </div>
       )}
+      {abbreviated}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         <VerificationMark verified={item.verified} />
         <span className="min-w-0 truncate text-gray-700 dark:text-gray-300">
