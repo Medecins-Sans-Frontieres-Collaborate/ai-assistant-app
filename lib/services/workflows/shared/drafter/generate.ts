@@ -4,7 +4,11 @@
  *
  * Quotations are handed to the model as opaque tokens ({{q1}}) and put back
  * by code afterwards, so a verbatim quote cannot be paraphrased, trimmed or
- * "improved" on the way through. Anything the model still invents inside
+ * "improved" on the way through. The model may shorten one only through
+ * the form {{q1|first words … last words}}: code verifies it with the same
+ * elision matcher the grounding check uses and re-emits the quotation from
+ * the item's OWN characters; a form that fails inserts the full quote and
+ * the repair round says so. Anything the model still invents inside
  * quotation marks is caught by the grounding check.
  *
  * Kind-agnostic: the structural rules come from the spec adapter's
@@ -12,6 +16,11 @@
  */
 import { checkVersion } from '@/lib/utils/shared/drafter/adapters';
 import { SpecAdapter } from '@/lib/utils/shared/drafter/core/adapter';
+import {
+  countWords,
+  matchQuotation,
+  parseQuotation,
+} from '@/lib/utils/shared/drafter/core/elision';
 import { fitByMoving } from '@/lib/utils/shared/drafter/core/fit';
 import {
   DEFAULT_LINK_POLICY,
@@ -25,6 +34,10 @@ import {
   blockingScore,
   protectedRanges,
 } from '@/lib/utils/shared/drafter/core/revisions';
+import {
+  TextRange,
+  normalizeWithMap,
+} from '@/lib/utils/shared/drafter/core/verify';
 import { CheckFinding } from '@/lib/utils/shared/review/deterministicChecks';
 
 import {
@@ -155,7 +168,7 @@ export function buildGenerateSystemPrompt(
 THE BRIEF IS THE ONLY SOURCE OF TRUTH
 - State nothing that is not in the brief: no fact, number, date, place, name or claim of your own.
 - Every number you write must appear in the brief, written the same way.
-- QUOTATIONS: never type a quotation yourself. Each available quotation has a token such as {{q1}}. To use one, write the token exactly where the quotation goes, without quotation marks; the exact words are inserted for you. You may not shorten, merge or reword a quotation. If a quotation does not fit, use a shorter one or none. Never put any other text inside quotation marks.
+- QUOTATIONS: never type a quotation yourself. Each available quotation has a token such as {{q1}}. To use one, write the token exactly where the quotation goes, without quotation marks; the exact words are inserted for you. To shorten one, write {{q1|first words … last words}}: keep consecutive words of the original, in order, and write … where you leave words out; never change or add a word, never write brackets, never merge two quotations. A SHORTENED QUOTATION MUST STILL READ AS A COMPLETE, NATURAL SENTENCE: keep its subject and main verb, leave out only an aside, a list or a clause the sentence does not need, leave no more than about eight words out in one gap, never a negation or a 'but', and keep at least half of the original. Good: “We had no clean water … for eleven days” from “We had no clean water, with the wells full of mud, for eleven days”. Bad: “The new deal … generic versions” (the ends do not connect). If a quotation cannot be shortened so that it still reads well, use the full quotation, a shorter one, or none. Never put any other text inside quotation marks.
 - Name a speaker only as the brief names them.
 
 WHAT WORKS
@@ -193,7 +206,7 @@ export function buildGenerateUserPrompt(
       : '';
     lines.push(
       token
-        ? `- id ${item.id} [${item.kind}] token ${token} (costs ${cost(quoted(item.text))} characters when inserted): ${item.text}${speaker}`
+        ? `- id ${item.id} [${item.kind}] token ${token} (costs ${cost(quoted(item.text))} characters in full; shorten it with ${token.slice(0, -2)}|first words … last words}}): ${item.text}${speaker}`
         : `- id ${item.id} [${item.kind}]: ${item.text}`,
     );
   }
@@ -218,27 +231,154 @@ function quoted(text: string): string {
 }
 
 /**
+ * A quote token, whole (`{{q1}}`) or shortened (`{{q1|first … last}}`),
+ * with any quotation marks the model put around it. The form may be empty
+ * or over-long: such a token still matches, so it is never published raw.
+ */
+export const TOKEN_PATTERN =
+  /(?:["“«„]\s*)?\{\{(q\d+)(?:\|([^{}\n]*))?\}\}(?:\s*["”»“])?/gu;
+
+/** The longest shortened form a token may carry; longer ones go in whole. */
+export const MAX_FORM_CHARS = 600;
+
+const WORD_CHAR = /[\p{L}\p{N}]/u;
+
+/** The token as the model wrote it, quotation marks aside. */
+function tokenText(name: string, form: string | undefined): string {
+  return form === undefined ? `{{${name}}}` : `{{${name}|${form}}}`;
+}
+
+/** Whether words of the item lie before the first run or after the last. */
+function edgeGaps(
+  itemNormalized: string,
+  pieces: TextRange[],
+): { leading: boolean; trailing: boolean } {
+  const first = pieces[0];
+  const last = pieces[pieces.length - 1];
+  return {
+    leading: !!first && WORD_CHAR.test(itemNormalized.slice(0, first.start)),
+    trailing: !!last && WORD_CHAR.test(itemNormalized.slice(last.end)),
+  };
+}
+
+/**
+ * The text a token stands for. A shortened form is accepted only when it
+ * is an ordered verbatim elision of the item (the grounding matcher's own
+ * rule), and the words are then taken from the ITEM's characters, never
+ * from what the model typed. Words left out at either edge are shown as an
+ * ellipsis so the reader (and the grounding check) sees the quotation was
+ * shortened. Brackets are not for the model. A form that fails, is empty
+ * or is over-long inserts the whole quotation and names itself in
+ * `unverifiedForm`.
+ */
+/** Why a shortened form went in whole, in words the model can act on. */
+export type RefusedFormReason =
+  | 'empty-or-long'
+  | 'brackets'
+  | 'keeps-too-little'
+  | 'not-verbatim';
+
+export const REFUSED_FORM_ADVICE: Record<RefusedFormReason, string> = {
+  'empty-or-long': 'the form was empty or far too long',
+  brackets: 'brackets are not allowed in a shortened quotation',
+  'keeps-too-little':
+    'it kept less than half of the quotation, so it no longer reads as a sentence; keep at least half, or use the full quotation or a different one',
+  'not-verbatim':
+    'its words are not consecutive words of the original in order, or a gap of more than eight words or one that hides a negation or a contrast was left out; keep the subject and verb and leave out only an aside',
+};
+
+/** The share of a quotation's words a shortened form must keep. */
+export const MIN_KEPT_SHARE = 0.5;
+
+function renderToken(
+  name: string,
+  form: string | undefined,
+  tokens: Map<string, ItemInput>,
+): {
+  text: string;
+  itemId: string;
+  unverifiedForm?: string;
+  refusedFor?: RefusedFormReason;
+} | null {
+  const item = tokens.get(`{{${name}}}`);
+  if (!item) return null;
+  const whole = { text: quoted(item.text), itemId: item.id };
+  if (form === undefined) return whole;
+  const refuse = (refusedFor: RefusedFormReason) => ({
+    ...whole,
+    unverifiedForm: form,
+    refusedFor,
+  });
+  if (form.trim() === '' || form.length > MAX_FORM_CHARS) {
+    return refuse('empty-or-long');
+  }
+  if (form.includes('[') || form.includes(']')) return refuse('brackets');
+  const norm = normalizeWithMap(item.text);
+  // A readability floor over and above what the matcher verifies: a form
+  // that keeps a third of the sentence is verbatim in letter and unreadable
+  // in fact ("The new deal … generic versions").
+  const parsedForm = parseQuotation(form);
+  const unverified = refuse('not-verbatim');
+  if (!parsedForm) return unverified;
+  const kept = parsedForm.fragments.reduce((sum, f) => sum + f.words, 0);
+  if (kept < countWords(norm.text) * MIN_KEPT_SHARE) {
+    return refuse('keeps-too-little');
+  }
+  // A bracketed insertion cannot occur here, so no word is ever allowed.
+  const match = matchQuotation(norm.text, form, () => false);
+  if (!match) return unverified;
+  let { pieces } = match;
+  let edges = edgeGaps(norm.text, pieces);
+  const parsed = parseQuotation(form);
+  // A plain sub-span ("We wanted to leave" out of "We wanted to leave, but
+  // we could not") leaves words out exactly as "We wanted to leave …" does,
+  // so it is held to the edge-gap rules by adding the ellipsis the model
+  // left out; the rules may then refuse it.
+  if (
+    (edges.leading && !parsed?.leadingGap) ||
+    (edges.trailing && !parsed?.trailingGap)
+  ) {
+    const signalled = `${edges.leading ? '… ' : ''}${form}${edges.trailing ? ' …' : ''}`;
+    const rematch = matchQuotation(norm.text, signalled, () => false);
+    if (!rematch) return unverified;
+    pieces = rematch.pieces;
+    edges = edgeGaps(norm.text, pieces);
+  }
+  const slices = pieces.map((piece) =>
+    item.text.slice(norm.map[piece.start], norm.map[piece.end - 1] + 1),
+  );
+  const text = `${edges.leading ? '… ' : ''}${slices.join(' … ')}${edges.trailing ? ' …' : ''}`;
+  return { text: quoted(text), itemId: item.id };
+}
+
+/**
  * Puts the exact words back. Quotation marks the model added around a token
  * are dropped so the words are never double-quoted; tokens that name no
- * item are removed rather than published.
+ * item are removed rather than published. `unverifiedForms` lists the
+ * tokens whose shortened form was not verbatim and went in whole.
  */
 export function substituteQuotes(
   text: string,
   tokens: Map<string, ItemInput>,
-): { text: string; usedItemIds: string[] } {
+): { text: string; usedItemIds: string[]; unverifiedForms: string[] } {
   const used: string[] = [];
+  const unverifiedForms: string[] = [];
   const replaced = text.replace(
-    /(?:["“«„]\s*)?(\{\{q\d+\}\})(?:\s*["”»“])?/gu,
-    (_match, token: string) => {
-      const item = tokens.get(token);
-      if (!item) return '';
-      used.push(item.id);
-      return quoted(item.text);
+    TOKEN_PATTERN,
+    (_match, name: string, form: string | undefined) => {
+      const rendered = renderToken(name, form, tokens);
+      if (!rendered) return '';
+      used.push(rendered.itemId);
+      if (rendered.unverifiedForm !== undefined) {
+        unverifiedForms.push(tokenText(name, form));
+      }
+      return rendered.text;
     },
   );
   return {
     text: replaced.replace(/[ \t]{2,}/gu, ' ').trim(),
     usedItemIds: used,
+    unverifiedForms,
   };
 }
 
@@ -325,10 +465,19 @@ function lengthProblem(
   const parts: string[] = [];
   if (detail) {
     const raw = rawSegments[post - 1] ?? '';
-    for (const match of raw.matchAll(/\{\{q\d+\}\}/gu)) {
-      const item = detail.tokens.get(match[0]);
-      if (item) {
-        parts.push(`${match[0]} takes ${detail.cost(quoted(item.text))}`);
+    for (const match of raw.matchAll(TOKEN_PATTERN)) {
+      const [, name, form] = match;
+      const rendered = renderToken(name, form, detail.tokens);
+      if (!rendered) continue;
+      const token = tokenText(name, form);
+      parts.push(`${token} takes ${detail.cost(rendered.text)}`);
+      if (rendered.unverifiedForm !== undefined) {
+        const why = rendered.refusedFor
+          ? REFUSED_FORM_ADVICE[rendered.refusedFor]
+          : REFUSED_FORM_ADVICE['not-verbatim'];
+        parts.push(
+          `${token} was inserted in full because ${why}; shorten it differently or use it whole`,
+        );
       }
     }
     const link = detail.linkCost(post - 1, rawSegments.length);
@@ -365,7 +514,7 @@ export function buildRepairPrompt(
       case 'segments':
         return `- There are ${finding.values?.count} posts; the maximum is ${finding.values?.max}.`;
       case 'quote-verbatim':
-        return '- You typed a quotation yourself. Use only the {{q…}} tokens, and put nothing else inside quotation marks.';
+        return '- You typed a quotation yourself. Use only the {{q…}} tokens, whole or shortened as {{q1|first words … last words}}, and put nothing else inside quotation marks.';
       case 'number-grounded':
         return "- You wrote a number that is not in the brief. Remove it or use the brief's number exactly.";
       case 'link-grounded':
