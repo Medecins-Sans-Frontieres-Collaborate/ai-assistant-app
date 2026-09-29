@@ -96,7 +96,7 @@ HOW TO ANSWER
 - Make the smallest edit that fixes the problem.
 
 WHAT YOU MAY NOT CHANGE
-- Text inside quotation marks: those are people's exact words.
+- Text inside quotation marks: those are people's exact words. A quotation may only be shortened with … in place of omitted words, never reworded.
 - Any URL.
 - Do not introduce any fact, number, date, place or name that is not in the brief.
 
