@@ -6,7 +6,10 @@
  *
  * Two things a suggestion may never touch, enforced here and not left to the
  * model: a quotation that matches the brief (the words are someone's), and a
- * link the brief carries (code places those).
+ * link the brief carries (code places those). One exception: a suggestion
+ * may SHORTEN a quotation by an elision ("… ") that still grounds on the same
+ * item, which is checked by grounding the edited text again, never by
+ * trusting the model.
  */
 import { CheckFinding } from '@/lib/utils/shared/review/deterministicChecks';
 import {
@@ -81,6 +84,56 @@ export function protectedRanges(
   return ranges;
 }
 
+/** Grounded quotations with their marks, as `protectedRanges` widens them. */
+function groundedQuoteSpans(
+  segment: Segment,
+  brief: Brief,
+): Array<{ start: number; end: number; itemId: string }> {
+  const spans: Array<{ start: number; end: number; itemId: string }> = [];
+  for (const mark of groundSegment(segment, brief)) {
+    if (mark.kind !== 'quote' || mark.itemId === undefined) continue;
+    const span = { start: mark.start, end: mark.end, itemId: mark.itemId };
+    if (QUOTE_MARK.test(segment.text[span.start - 1] ?? '')) span.start -= 1;
+    if (QUOTE_MARK.test(segment.text[span.end] ?? '')) span.end += 1;
+    spans.push(span);
+  }
+  return spans;
+}
+
+/**
+ * Whether replacing `segment.text[start, end)` by `after` may go ahead: it
+ * touches no protected span, or the one span it touches is a grounded
+ * quotation that the edited text still carries, grounded on the same item,
+ * with the edited region inside it (marks included). A link is never
+ * editable; neither is a rewording that stops the quotation grounding.
+ */
+function admitsProtectedEdit(
+  segment: Segment,
+  brief: Brief,
+  start: number,
+  end: number,
+  after: string,
+): boolean {
+  const range = { start, end };
+  const hits = protectedRanges(segment, brief).filter((p) =>
+    overlaps(range, p),
+  );
+  if (hits.length === 0) return true;
+  if (hits.length > 1) return false;
+  const quote = groundedQuoteSpans(segment, brief).find(
+    (span) => span.start === hits[0].start && span.end === hits[0].end,
+  );
+  if (!quote) return false;
+  const edited = segment.text.slice(0, start) + after + segment.text.slice(end);
+  return groundSegment({ ...segment, text: edited }, brief).some(
+    (mark) =>
+      mark.kind === 'quote' &&
+      mark.itemId === quote.itemId &&
+      mark.start - 1 <= start &&
+      mark.end + 1 >= start + after.length,
+  );
+}
+
 /** The segments as they would read with these proposals applied. */
 export function applyProposals(
   segments: Segment[],
@@ -125,7 +178,9 @@ export function admissibleEdits(
     const start = segment.text.indexOf(proposal.before);
     if (start < 0) continue;
     const range = { start, end: start + proposal.before.length };
-    if (protectedRanges(segment, brief).some((p) => overlaps(range, p))) {
+    if (
+      !admitsProtectedEdit(segment, brief, start, range.end, proposal.after)
+    ) {
       continue;
     }
     // Two suggestions over the same words cannot both be applied.
@@ -235,8 +290,12 @@ export function acceptEdit(
   if (
     brief &&
     at >= 0 &&
-    protectedRanges(segment, brief).some((p) =>
-      overlaps({ start: at, end: at + edit.before.length }, p),
+    !admitsProtectedEdit(
+      segment,
+      brief,
+      at,
+      at + edit.before.length,
+      edit.after,
     )
   ) {
     return { ...version, edits: resolve(version, editId, 'unapplicable', now) };
