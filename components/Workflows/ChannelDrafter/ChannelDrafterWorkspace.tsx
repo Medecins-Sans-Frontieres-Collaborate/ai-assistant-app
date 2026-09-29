@@ -45,6 +45,7 @@ import {
   sendPost,
   suggestAltText,
   translateBrief,
+  verifyClaims,
 } from '@/client/services/workflows/drafter/drafterApi';
 import { setRailContext } from '@/client/services/workflows/drafter/drafterRailChat';
 import { rememberSpecNames } from '@/client/services/workflows/drafter/specNames';
@@ -97,9 +98,12 @@ import {
   vouchForItem,
 } from '@/lib/utils/shared/drafter/core/brief';
 import {
-  groundVersion,
+  CiteClaim,
+  citationMarks,
+  pendingClaims,
   specsUsingItem,
-} from '@/lib/utils/shared/drafter/core/grounding';
+} from '@/lib/utils/shared/drafter/core/citations';
+import { groundVersion } from '@/lib/utils/shared/drafter/core/grounding';
 import {
   addMedia,
   hasMedia,
@@ -120,6 +124,7 @@ import {
   mergeWithPrevious,
   splitSegment,
 } from '@/lib/utils/shared/drafter/core/segments';
+import { statementKey } from '@/lib/utils/shared/drafter/core/statements';
 import {
   appendVoiceRule,
   markTaught,
@@ -138,11 +143,13 @@ import {
   isReadyToApprove,
   isStale,
   keepMine,
+  landVerdicts,
   markCopied,
   markSent,
   restoreSnapshot,
   segmentTexts,
   setSegments,
+  verdictDigestFor,
   versionStatuses,
 } from '@/lib/utils/shared/drafter/core/versions';
 import { blockingCount } from '@/lib/utils/shared/review/deterministicChecks';
@@ -200,6 +207,60 @@ import { HOOTSUITE_PUBLISHING } from '@/config/publishing';
 const SPEC_KIND = 'channel';
 const KIND = 'channel-drafter' as const;
 type State = ChannelDrafterWorkflowState;
+/** How long after the last keystroke the changed sentences are cited. */
+const CITE_DEBOUNCE_MS = 1_500;
+
+/** A queued cite call: the spec, and what to send for it. */
+interface CiteJob {
+  specId: string;
+  /** Every sentence without a fresh verdict. */
+  pending: boolean;
+  /** Sentences asked for by name (a manual re-check), fresh or not. */
+  explicit: CiteClaim[];
+}
+
+function claimKey(claim: CiteClaim): string {
+  return `${claim.segmentId}\n${statementKey(claim.text)}`;
+}
+
+/** The sentences a cite job sends: the pending ones, plus any named ones. */
+function claimsFor(
+  specId: string,
+  pending: boolean,
+  explicit: CiteClaim[],
+  current: State,
+): CiteClaim[] {
+  const version = current.versions[specId];
+  if (!version) return [];
+  const claims = pending
+    ? pendingClaims(version.segments, version, current.brief)
+    : [];
+  const seen = new Set(claims.map(claimKey));
+  for (const claim of explicit) {
+    const key = claimKey(claim);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    claims.push(claim);
+  }
+  return claims;
+}
+
+/** The brief as every drafter request sends it: included items only. */
+function briefPayload(current: State) {
+  return {
+    keyMessage: current.brief.keyMessage,
+    callToAction: current.brief.callToAction,
+    links: current.brief.links,
+    language: current.brief.language || 'English',
+    items: includedItems(current.brief).map((item) => ({
+      id: item.id,
+      kind: item.kind,
+      text: item.text,
+      attribution: item.attribution,
+      verified: item.verified,
+    })),
+  };
+}
 
 const toolbarButton =
   'inline-flex min-h-[36px] items-center gap-1 rounded-lg px-2.5 py-1.5 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-300 dark:hover:bg-surface-dark-elevated';
@@ -290,6 +351,19 @@ export function ChannelDrafterWorkspace({
     specId: string;
     segmentId: string;
   } | null>(null);
+  /** Specs with a cite call queued or in flight: the column's checking state. */
+  const [citing, setCiting] = useState<Record<string, true>>({});
+  /** The last cite failure per spec, cleared when its next call starts. */
+  const [citeErrors, setCiteErrors] = useState<Record<string, string>>({});
+  // The cite queue runs one spec at a time to bound cost; a request for the
+  // spec in flight is folded into one follow-up run after it.
+  const citeQueue = useRef<CiteJob[]>([]);
+  const citeCurrent = useRef<string | null>(null);
+  const citeAgain = useRef<Map<string, CiteJob>>(new Map());
+  const citeTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+  const citeUnmounted = useRef(false);
+  // Read by timers and the queue, which outlive the render they started in.
+  const citeBlocked = useRef<string | null>(null);
   const { state, modelId, setState, mintIds } = useDraftSet<State>(
     conversationId,
     KIND,
@@ -553,6 +627,18 @@ export function ChannelDrafterWorkspace({
       ? t('setLost', { set: state.setId })
       : null;
 
+  useEffect(() => {
+    citeBlocked.current = blockedReason;
+  }, [blockedReason]);
+  useEffect(() => {
+    citeUnmounted.current = false;
+    const timers = citeTimers.current;
+    return () => {
+      citeUnmounted.current = true;
+      for (const timer of Object.values(timers)) clearTimeout(timer);
+    };
+  }, []);
+
   // The "To:" line follows where the user is: every channel in Compare, the
   // one on screen in Focus. It is only a default; the rail lets them change
   // it, and a door (below) sets it explicitly.
@@ -612,6 +698,8 @@ export function ChannelDrafterWorkspace({
       {
         findings: ReturnType<typeof checkVersion>;
         marks: ReturnType<typeof groundVersion>;
+        /** The model's citations per sentence, from the stored verdicts. */
+        citations: ReturnType<typeof citationMarks>;
         statuses: ReturnType<typeof versionStatuses>;
       }
     > = {};
@@ -625,6 +713,7 @@ export function ChannelDrafterWorkspace({
       result[profile.id] = {
         findings,
         marks: groundVersion(segments, state.brief),
+        citations: citationMarks(segments, version, state.brief),
         statuses: versionStatuses(version, {
           brief: state.brief,
           blocking: blockingCount(findings),
@@ -912,6 +1001,207 @@ export function ChannelDrafterWorkspace({
     setBrief((prev) => editItemText(prev, itemId, text, verified));
   };
 
+  /* ---------------- citations ---------------- */
+
+  /**
+   * One cite call per batch of sentences of one column: the model says
+   * which brief entries each rests on, and the verdicts land on the version
+   * stamped with the brief they were judged against. Batches run one after
+   * another against the live text, so a sentence cited by the batch before
+   * is not sent again; a sentence whose verdict did not land is not sent
+   * twice either, so the run always ends. A failure ends this spec's run
+   * and is shown in its column.
+   */
+  const citeSpec = useCallback(
+    async (job: CiteJob) => {
+      const sent = new Set<string>();
+      let explicit = job.explicit;
+      for (;;) {
+        const current = liveState(conversationId);
+        const version = current?.versions[job.specId];
+        if (!current || !version || !hasText(version)) return;
+        const batch = claimsFor(job.specId, job.pending, explicit, current)
+          .filter((claim) => !sent.has(claimKey(claim)))
+          .slice(0, DRAFTER_LIMITS.MAX_VERIFY_CLAIMS);
+        if (batch.length === 0) return;
+        for (const claim of batch) sent.add(claimKey(claim));
+        const sentBrief = current.brief;
+        const response = await verifyClaims({
+          specKind: SPEC_KIND,
+          setId: current.setId ?? effectiveSetId,
+          targets: [
+            {
+              specId: job.specId,
+              segments: version.segments.map((segment) => ({
+                id: segment.id,
+                text: segment.text,
+              })),
+              claims: batch,
+            },
+          ],
+          brief: briefPayload(current),
+          modelId,
+          conversationId,
+        });
+        const result = response.results.find((r) => r.specId === job.specId);
+        if (!result || result.error) throw new Error(t('verifyFailed'));
+        if (citeUnmounted.current) return;
+        setState((prev) => {
+          const target = prev.versions[job.specId];
+          if (!target) return prev;
+          const { ids, next } = mintIds(prev, result.verdicts.length);
+          return {
+            ...next,
+            versions: {
+              ...next.versions,
+              [job.specId]: landVerdicts(
+                target,
+                result.verdicts.map((verdict) => ({
+                  segmentId: verdict.segmentId,
+                  sentenceKey: statementKey(verdict.text),
+                  verdict: verdict.verdict,
+                  itemIds: verdict.itemIds,
+                  reason: verdict.reason,
+                  note: verdict.note,
+                  modelId,
+                  // The brief as SENT: an edit made meanwhile makes the
+                  // verdict stale at once, which is the truth.
+                  briefDigest: verdictDigestFor(
+                    sentBrief,
+                    verdict.itemIds,
+                    verdict.verdict,
+                  ),
+                })),
+                ids.map((id) => `v${id}`),
+                new Date().toISOString(),
+              ),
+            },
+          };
+        });
+        // Named sentences are sent once; what is still pending goes on.
+        explicit = [];
+        if (!job.pending) return;
+      }
+    },
+    [conversationId, effectiveSetId, modelId, setState, mintIds, t],
+  );
+
+  const drainCiteQueue = useCallback(async () => {
+    if (citeCurrent.current !== null) return;
+    for (;;) {
+      const job = citeQueue.current.shift();
+      if (!job) break;
+      citeCurrent.current = job.specId;
+      let next: CiteJob | undefined = job;
+      while (next) {
+        citeAgain.current.delete(job.specId);
+        try {
+          await citeSpec(next);
+        } catch (err) {
+          if (!citeUnmounted.current) {
+            setCiteErrors((prev) => ({
+              ...prev,
+              [job.specId]:
+                err instanceof Error ? err.message : t('verifyFailed'),
+            }));
+          }
+        }
+        // An edit landed while the call ran: one follow-up for what it
+        // left uncited, never a call per keystroke.
+        next = citeAgain.current.get(job.specId);
+      }
+      citeCurrent.current = null;
+      if (!citeUnmounted.current) {
+        setCiting((prev) => {
+          const { [job.specId]: _done, ...rest } = prev;
+          return rest;
+        });
+      }
+    }
+  }, [citeSpec, t]);
+
+  /**
+   * Asks for a column's uncited sentences (and any named ones) to be cited.
+   * Coalesces: a spec already queued gains the named sentences, a spec in
+   * flight gets one follow-up run. Silent while the draft is paused; the
+   * banner already says why nothing runs.
+   */
+  const requestCite = useCallback(
+    (specId: string, explicit: CiteClaim[] = []) => {
+      if (citeUnmounted.current || citeBlocked.current) return;
+      const timer = citeTimers.current[specId];
+      if (timer) {
+        clearTimeout(timer);
+        delete citeTimers.current[specId];
+      }
+      setCiteErrors((prev) => {
+        if (!(specId in prev)) return prev;
+        const { [specId]: _cleared, ...rest } = prev;
+        return rest;
+      });
+      setCiting((prev) => (prev[specId] ? prev : { ...prev, [specId]: true }));
+      const merge = (job: CiteJob | undefined): CiteJob => ({
+        specId,
+        pending: true,
+        explicit: [...(job?.explicit ?? []), ...explicit],
+      });
+      if (citeCurrent.current === specId) {
+        citeAgain.current.set(specId, merge(citeAgain.current.get(specId)));
+        return;
+      }
+      const queued = citeQueue.current.findIndex(
+        (job) => job.specId === specId,
+      );
+      if (queued >= 0) {
+        citeQueue.current[queued] = merge(citeQueue.current[queued]);
+        return;
+      }
+      citeQueue.current.push(merge(undefined));
+      void drainCiteQueue();
+    },
+    [drainCiteQueue],
+  );
+
+  /** After typing: cite the changed sentences once the keys go quiet. */
+  const scheduleCite = useCallback(
+    (specId: string) => {
+      const timer = citeTimers.current[specId];
+      if (timer) clearTimeout(timer);
+      citeTimers.current[specId] = setTimeout(() => {
+        delete citeTimers.current[specId];
+        requestCite(specId);
+      }, CITE_DEBOUNCE_MS);
+    },
+    [requestCite],
+  );
+
+  // A draft written before the citation step existed, or one reopened with
+  // sentences never traced, is cited on opening: once per conversation, once
+  // the real channel list is in, so the request goes to the right set.
+  const citedOnOpen = useRef<string | null>(null);
+  useEffect(() => {
+    if (!state || !isAuthoritative || blockedReason) return;
+    if (citedOnOpen.current === conversationId) return;
+    citedOnOpen.current = conversationId;
+    for (const specId of state.specIds) {
+      const version = state.versions[specId];
+      if (!version || !hasText(version)) continue;
+      if (pendingClaims(version.segments, version, state.brief).length > 0) {
+        scheduleCite(specId);
+      }
+    }
+  }, [state, isAuthoritative, blockedReason, conversationId, scheduleCite]);
+
+  /** A manual re-check of named sentences: refused aloud while paused. */
+  const verify = (specId: string, claims: CiteClaim[]) => {
+    if (blockedReason) {
+      setError(blockedReason);
+      return;
+    }
+    if (claims.length === 0) return;
+    requestCite(specId, claims);
+  };
+
   /* ---------------- writing ---------------- */
 
   const write = useCallback(
@@ -981,6 +1271,15 @@ export function ChannelDrafterWorkspace({
           return { ...next, versions };
         });
         setFailed((prev) => ({ ...prev, ...failures }));
+        // Text that landed is cited at once; a proposal waits for "Use new".
+        const landed = liveState(conversationId);
+        for (const generated of response.versions) {
+          const version = landed?.versions[generated.specId];
+          if (failures[generated.specId] || !version || version.proposed) {
+            continue;
+          }
+          requestCite(generated.specId);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : t('writeFailed'));
       } finally {
@@ -996,6 +1295,7 @@ export function ChannelDrafterWorkspace({
       blockedReason,
       effectiveSetId,
       sendableVoices,
+      requestCite,
     ],
   );
 
@@ -1712,6 +2012,37 @@ export function ChannelDrafterWorkspace({
           vouched > 0
             ? `${t('proofSummary', { traced, total })} · ${t('proofVouched', { count: vouched })}`
             : t('proofSummary', { traced, total }),
+        citations: {
+          heading: t('pack.citationsHeading'),
+          line: (n, excerpt, items, verdict) =>
+            t('pack.citationLine', { n, excerpt, items, verdict }),
+          summary: (counts) =>
+            t('pack.citationSummary', {
+              total:
+                counts.supported +
+                counts.partly +
+                counts.unsupported +
+                counts.unclear +
+                counts.pending +
+                counts.stale,
+              supported: counts.supported,
+              partly: counts.partly,
+              unsupported: counts.unsupported,
+              unclear: counts.unclear,
+              unchecked: counts.pending + counts.stale,
+            }),
+          verdicts: {
+            supported: t('pack.citationVerdict.supported'),
+            partly: t('pack.citationVerdict.partly'),
+            unsupported: t('pack.citationVerdict.unsupported'),
+            unclear: t('pack.citationVerdict.unclear'),
+            pending: t('pack.citationVerdict.pending'),
+            stale: t('pack.citationVerdict.stale'),
+          },
+          items: (numbers) => t('pack.citationItems', { numbers }),
+          brief: t('pack.citationBrief'),
+          noItems: t('pack.citationNoItems'),
+        },
         checks: t('findings'),
         provenance: t('pack.provenance'),
         provenanceColumns: [
@@ -1907,6 +2238,7 @@ export function ChannelDrafterWorkspace({
           statuses={info?.statuses ?? ['empty']}
           findings={info?.findings ?? []}
           marks={info?.marks ?? []}
+          citations={info?.citations ?? []}
           layout={layout}
           brief={brief}
           sources={state.sources}
@@ -1917,7 +2249,7 @@ export function ChannelDrafterWorkspace({
           }}
           onMove={(delta) => moveSpec(profile.id, delta)}
           onFocusMode={() => setFocusId(profile.id)}
-          onAcceptEdit={(editId) =>
+          onAcceptEdit={(editId) => {
             updateVersion(profile.id, (version) =>
               acceptEdit(
                 version,
@@ -1925,22 +2257,24 @@ export function ChannelDrafterWorkspace({
                 new Date().toISOString(),
                 liveState(conversationId)?.brief,
               ),
-            )
-          }
+            );
+            requestCite(profile.id);
+          }}
           onRejectEdit={(editId) =>
             updateVersion(profile.id, (version) =>
               rejectEdit(version, editId, new Date().toISOString()),
             )
           }
-          onAcceptAllEdits={() =>
+          onAcceptAllEdits={() => {
             updateVersion(profile.id, (version) =>
               acceptAllEdits(
                 version,
                 new Date().toISOString(),
                 liveState(conversationId)?.brief,
               ),
-            )
-          }
+            );
+            requestCite(profile.id);
+          }}
           voices={voices}
           teachOffer={teachOfferFor(profile.id)}
           onTeach={(accept) => {
@@ -1989,7 +2323,7 @@ export function ChannelDrafterWorkspace({
             setPreviewing((prev) => ({ ...prev, [profile.id]: on }))
           }
           onRevise={(segmentId) => revise(profile.id, segmentId)}
-          onRestore={(snapshot) =>
+          onRestore={(snapshot) => {
             setState((prev) => {
               const version = prev.versions[profile.id];
               if (!version) return prev;
@@ -2006,19 +2340,21 @@ export function ChannelDrafterWorkspace({
                   ),
                 },
               };
-            })
-          }
+            });
+            requestCite(profile.id);
+          }}
           writing={writing.includes(profile.id)}
           error={failed[profile.id]}
           pinned={pinned}
           tracedItemId={tracedItemId}
           onTrace={setTracedItemId}
-          onEdit={(segmentId, text) =>
+          onEdit={(segmentId, text) => {
             updateVersion(profile.id, (version) =>
               editSegmentText(version, segmentId, text),
-            )
-          }
-          onSplit={(segmentId, caret) =>
+            );
+            scheduleCite(profile.id);
+          }}
+          onSplit={(segmentId, caret) => {
             setState((prev) => {
               const version = prev.versions[profile.id];
               if (!version) return prev;
@@ -2037,17 +2373,19 @@ export function ChannelDrafterWorkspace({
                   [profile.id]: setSegments(version, segments),
                 },
               };
-            })
-          }
-          onMerge={(segmentId) =>
+            });
+            scheduleCite(profile.id);
+          }}
+          onMerge={(segmentId) => {
             updateVersion(profile.id, (version) =>
               setSegments(
                 version,
                 mergeWithPrevious(version.segments, segmentId),
               ),
-            )
-          }
-          onFit={() =>
+            );
+            scheduleCite(profile.id);
+          }}
+          onFit={() => {
             setState((prev) => {
               const version = prev.versions[profile.id];
               if (!version || !channelAdapterUi.fit) return prev;
@@ -2076,9 +2414,10 @@ export function ChannelDrafterWorkspace({
                   [profile.id]: setSegments(version, segments),
                 },
               };
-            })
-          }
-          onDropHashtags={(segmentId) =>
+            });
+            scheduleCite(profile.id);
+          }}
+          onDropHashtags={(segmentId) => {
             updateVersion(profile.id, (version) => {
               const current = liveState(conversationId);
               const segments = channelAdapterUi.dropHashtags?.(
@@ -2090,12 +2429,16 @@ export function ChannelDrafterWorkspace({
               return segments && segments !== version.segments
                 ? setSegments(version, segments)
                 : version;
-            })
-          }
+            });
+            scheduleCite(profile.id);
+          }}
           onTighten={(segmentId) => void tighten(profile.id, segmentId)}
           tighteningId={
             tightening?.specId === profile.id ? tightening.segmentId : null
           }
+          onVerify={(_segmentId, claims) => verify(profile.id, claims)}
+          verifyingId={citing[profile.id] ? 'all' : null}
+          verifyError={citeErrors[profile.id]}
           onApprove={(approved) =>
             updateVersion(profile.id, (version) =>
               approved
@@ -2108,7 +2451,7 @@ export function ChannelDrafterWorkspace({
               markCopied(version, new Date().toISOString()),
             )
           }
-          onUseProposed={() =>
+          onUseProposed={() => {
             setState((prev) => {
               const version = prev.versions[profile.id];
               if (!version) return prev;
@@ -2123,9 +2466,10 @@ export function ChannelDrafterWorkspace({
                   ),
                 },
               };
-            })
-          }
-          onKeepMine={() =>
+            });
+            requestCite(profile.id);
+          }}
+          onKeepMine={() => {
             setState((prev) => {
               const version = prev.versions[profile.id];
               if (!version) return prev;
@@ -2136,8 +2480,9 @@ export function ChannelDrafterWorkspace({
                   [profile.id]: keepMine(version, prev.brief),
                 },
               };
-            })
-          }
+            });
+            requestCite(profile.id);
+          }}
           onHide={() => toggleHidden(profile.id)}
           onTogglePin={() => togglePinned(profile.id)}
           onRetry={() => void write([profile.id])}
