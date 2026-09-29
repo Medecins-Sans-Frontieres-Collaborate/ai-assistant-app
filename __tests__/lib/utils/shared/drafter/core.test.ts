@@ -1,3 +1,5 @@
+import { buildRepairPrompt } from '@/lib/services/workflows/shared/drafter/generate';
+
 import { normalizeForQuoteMatch } from '@/lib/utils/app/citationQuotes';
 import {
   checkVersion,
@@ -14,27 +16,33 @@ import {
   setItemDecision,
   vouchForItem,
 } from '@/lib/utils/shared/drafter/core/brief';
+import { specsUsingItem } from '@/lib/utils/shared/drafter/core/citations';
 import {
   X_URL_WEIGHT,
   countText,
   overflowIndex,
 } from '@/lib/utils/shared/drafter/core/counting';
 import {
+  BRIEF_ITSELF,
+  attributedItemIds,
   canonicalNumber,
   findNames,
   findNumbers,
   findQuotedSpans,
+  groundSegment,
   groundVersion,
   numbersSupported,
   summarizeProof,
   ungroundedNames,
 } from '@/lib/utils/shared/drafter/core/grounding';
+import { blockingScore } from '@/lib/utils/shared/drafter/core/revisions';
 import {
   mergeWithPrevious,
   moveOverflow,
   segmentOverflow,
   splitSegment,
 } from '@/lib/utils/shared/drafter/core/segments';
+import { statementKey } from '@/lib/utils/shared/drafter/core/statements';
 import {
   buildTextFragmentUrl,
   sourceLinkFor,
@@ -53,12 +61,23 @@ import {
   isReadyToApprove,
   isStale,
   keepMine,
+  landVerdicts,
   markCopied,
+  restoreSnapshot,
   useProposed,
+  verdictDigestFor,
+  verdictFor,
   versionStatuses,
 } from '@/lib/utils/shared/drafter/core/versions';
 
-import { Brief, BriefItem, DraftSource, Segment } from '@/types/drafter';
+import {
+  Brief,
+  BriefItem,
+  DRAFTER_LIMITS,
+  DraftSource,
+  Segment,
+  StatementVerdict,
+} from '@/types/drafter';
 
 import { describe, expect, it } from 'vitest';
 
@@ -186,6 +205,7 @@ describe('grounding', () => {
       ],
       brief,
     );
+    // Quotes and numbers only: sentence attribution is the cite step's.
     expect(marks.map((m) => [m.segmentId, m.kind, m.itemId])).toEqual([
       ['s1', 'quote', 'q1'],
       ['s1', 'number', 'f1'],
@@ -205,8 +225,139 @@ describe('grounding', () => {
     const [mark] = groundVersion(
       [seg('s1', '“We had no clean water for eleven days”')],
       brief,
-    );
+    ).filter((m) => m.kind === 'quote');
     expect(mark.itemId).toBeUndefined();
+  });
+
+  it('grounds an elided quotation and remembers which words are the speaker’s', () => {
+    const brief = briefWith([
+      item({ id: 'q1', text: 'We had no clean water for 11 days' }),
+    ]);
+    const text =
+      'She said: “We had no clean water … 11 days” and 12 more left.';
+    const marks = groundSegment(seg('s1', text), brief);
+    const quote = marks.find((m) => m.kind === 'quote');
+    expect(quote).toMatchObject({ itemId: 'q1', elided: true });
+    expect(quote?.pieces).toHaveLength(2);
+    expect(
+      quote?.verbatim?.map((range) => text.slice(range.start, range.end)),
+    ).toEqual(['We had no clean water', '11 days']);
+    // 11 sits in the speaker's words and is proven by them; 12 is not.
+    expect(
+      marks
+        .filter((m) => m.kind === 'number')
+        .map((m) => [text.slice(m.start, m.end), m.itemId]),
+    ).toEqual([['12', undefined]]);
+  });
+
+  it('checks a number in a bracketed insertion, which also breaks the quotation', () => {
+    const brief = briefWith([
+      item({ id: 'q1', text: 'We had no clean water for eleven days' }),
+    ]);
+    const text = '“We had no clean water [for 12 days] … eleven days”';
+    const marks = groundSegment(seg('s1', text), brief);
+    expect(marks.find((m) => m.kind === 'quote')?.itemId).toBeUndefined();
+    expect(
+      marks
+        .filter((m) => m.kind === 'number')
+        .map((m) => [text.slice(m.start, m.end), m.itemId]),
+    ).toEqual([['12', undefined]]);
+  });
+
+  it('memoises marks per segment and brief object', () => {
+    const brief = briefWith([item({ id: 'q1' })]);
+    const version = applyGenerated(
+      undefined,
+      {
+        specId: 'x',
+        segments: [
+          { text: '“We had no clean water for eleven days”', usedItemIds: [] },
+          { text: 'Second post.', usedItemIds: [] },
+        ],
+      },
+      brief,
+      ['s1', 's2'],
+      'first',
+    );
+    const [first, second] = version.segments;
+    const marks = groundSegment(first, brief);
+    expect(groundSegment(first, brief)).toBe(marks);
+    expect(groundSegment(first, { ...brief })).not.toBe(marks);
+    const edited = editSegmentText(version, 's1', 'Changed words here');
+    expect(groundSegment(edited.segments[0], brief)).not.toBe(marks);
+    expect(groundSegment(edited.segments[1], brief)).toBe(
+      groundSegment(second, brief),
+    );
+  });
+
+  it('emits no statement mark: a paraphrase leaves only its number', () => {
+    const brief = briefWith([
+      item({
+        id: 'f1',
+        kind: 'figure',
+        text: 'The clinic treated 1,200 patients in March',
+      }),
+    ]);
+    const marks = groundSegment(
+      seg('s1', '1,200 patients were treated by the clinic in March'),
+      brief,
+    );
+    expect(marks.map((m) => [m.kind, m.start, m.itemId])).toEqual([
+      ['number', 0, 'f1'],
+    ]);
+  });
+
+  it('counts a cited sentence as a use of its item, never a bare paraphrase', () => {
+    const brief = briefWith([
+      item({
+        id: 'f3',
+        kind: 'fact',
+        text: 'Cholera cases doubled since January',
+      }),
+      item({ id: 'q1' }),
+    ]);
+    const sentence = 'Cholera cases doubled since January in the camp';
+    const versions = {
+      x: { segments: [seg('s1', sentence)] },
+      y: { segments: [seg('s2', 'Nothing about cholera here at all.')] },
+    };
+    // Without the model's word, a paraphrase is not a use.
+    expect(specsUsingItem('f3', versions, brief)).toEqual([]);
+    const cited = {
+      ...versions,
+      x: {
+        ...versions.x,
+        verdicts: [
+          {
+            id: 'v1',
+            segmentId: 's1',
+            sentenceKey: statementKey(sentence),
+            verdict: 'supported' as const,
+            itemIds: ['f3'],
+            reason: 'Stated.',
+            briefDigest: verdictDigestFor(brief, ['f3'], 'supported'),
+            at: NOW,
+          },
+        ],
+      },
+    };
+    expect(specsUsingItem('f3', cited, brief)).toEqual(['x']);
+    expect(specsUsingItem('q1', cited, brief)).toEqual([]);
+  });
+
+  it('attributes marks to items, never to the brief itself', () => {
+    const brief = briefWith([item({ id: 'q1' })], {
+      keyMessage: 'Clean water must reach all 12 camps now',
+    });
+    const marks = groundSegment(
+      seg(
+        's1',
+        'Clean water must reach 12 camps. “We had no clean water for eleven days” she said.',
+      ),
+      brief,
+    );
+    expect(marks.some((m) => m.itemId === BRIEF_ITSELF)).toBe(true);
+    expect(attributedItemIds(marks)).toEqual(['q1']);
   });
 });
 
@@ -240,13 +391,14 @@ describe('names', () => {
       [seg('s1', 'We heard from Jean Martin today.')],
       briefWith([item({ id: 'q1' })]),
     );
-    expect(findings).toEqual([
+    expect(findings.filter((f) => f.checkId === 'name-grounded')).toEqual([
       expect.objectContaining({
         checkId: 'name-grounded',
         severity: 'warn',
         values: { name: 'Jean Martin' },
       }),
     ]);
+    expect(findings.every((f) => f.severity === 'warn')).toBe(true);
   });
 });
 
@@ -540,6 +692,120 @@ describe('versions', () => {
     expect(changedSinceCopied(version)).toBe(false);
     expect(changedSinceCopied(editSegmentText(version, 's1', 'x'))).toBe(true);
   });
+
+  describe('verdicts', () => {
+    const SENTENCE = 'We had no clean water for eleven days';
+    const base = applyGenerated(
+      undefined,
+      {
+        specId: 'x',
+        segments: [
+          { text: `“${SENTENCE}” she said. The trucks came.`, usedItemIds: [] },
+          { text: 'Second post here.', usedItemIds: [] },
+        ],
+      },
+      brief,
+      ['s1', 's2'],
+      'first',
+    );
+    const verdict = (
+      text: string,
+      segmentId = 's1',
+      patch: Partial<StatementVerdict> = {},
+    ): Omit<StatementVerdict, 'id' | 'at'> => ({
+      segmentId,
+      sentenceKey: statementKey(text),
+      verdict: 'supported',
+      itemIds: ['q1'],
+      reason: 'Stated by the quotation.',
+      ...patch,
+    });
+
+    it('lands verdicts on sentences still in the text, replacing earlier ones', () => {
+      const landed = landVerdicts(base, [verdict(SENTENCE)], ['v1'], NOW);
+      expect(landed.verdicts).toEqual([
+        expect.objectContaining({ id: 'v1', at: NOW, verdict: 'supported' }),
+      ]);
+      const again = landVerdicts(
+        landed,
+        [verdict(SENTENCE, 's1', { verdict: 'partly', reason: 'Later.' })],
+        ['v2'],
+        '2026-09-21T11:00:00.000Z',
+      );
+      expect(again.verdicts?.map((v) => [v.id, v.verdict])).toEqual([
+        ['v2', 'partly'],
+      ]);
+      // Not in its segment, or in another segment: dropped.
+      expect(
+        landVerdicts(base, [verdict('Nobody said this')], ['v3'], NOW),
+      ).toBe(base);
+      expect(
+        landVerdicts(base, [verdict(SENTENCE, 's2')], ['v3'], NOW).verdicts,
+      ).toBeUndefined();
+    });
+
+    it('keeps the newest verdicts, capped', () => {
+      const many = Array.from({ length: 70 }, (_, index) =>
+        verdict(SENTENCE, 's1', { reason: `r${index}` }),
+      ).map((entry, index) => ({
+        ...entry,
+        sentenceKey: `${entry.sentenceKey}`.slice(0, 5 + (index % 30)),
+      }));
+      let version = base;
+      for (let batch = 0; batch < many.length; batch += 10) {
+        version = landVerdicts(
+          version,
+          many.slice(batch, batch + 10),
+          many.slice(batch, batch + 10).map((_, i) => `v${batch + i}`),
+          `2026-09-21T10:${String(batch).padStart(2, '0')}:00.000Z`,
+        );
+      }
+      expect(version.verdicts?.length).toBeLessThanOrEqual(
+        DRAFTER_LIMITS.MAX_VERDICTS,
+      );
+      expect(version.verdicts?.at(-1)?.reason).toBe('r69');
+    });
+
+    it('finds a verdict by its sentence, through typography-only changes', () => {
+      const landed = landVerdicts(base, [verdict(SENTENCE)], ['v1'], NOW);
+      expect(verdictFor(landed, 's1', `“${SENTENCE}.”`)?.id).toBe('v1');
+      expect(
+        verdictFor(landed, 's1', 'We had  no clean water for eleven days')?.id,
+      ).toBe('v1');
+      expect(
+        verdictFor(landed, 's1', "We had no clean water for eleven days'")?.id,
+      ).toBe('v1');
+      expect(
+        verdictFor(landed, 's1', 'We had no clean water for twelve days'),
+      ).toBeUndefined();
+      expect(verdictFor(landed, 's2', SENTENCE)).toBeUndefined();
+      expect(verdictFor(undefined, 's1', SENTENCE)).toBeUndefined();
+    });
+
+    it('survives a proposal and a restore; the sentence decides whether it applies', () => {
+      const landed = landVerdicts(base, [verdict(SENTENCE)], ['v1'], NOW);
+      const proposed = useProposed(
+        applyGenerated(
+          landed,
+          { specId: 'x', segments: [{ text: 'Rewritten', usedItemIds: [] }] },
+          brief,
+          ['s3'],
+          'update',
+        ),
+        brief,
+        NOW,
+      );
+      expect(proposed.verdicts).toEqual(landed.verdicts);
+      const restored = restoreSnapshot(
+        proposed,
+        proposed.history[0],
+        ['s1'],
+        NOW,
+      );
+      expect(restored.verdicts).toEqual(landed.verdicts);
+      expect(verdictFor(restored, 's1', SENTENCE)?.id).toBe('v1');
+    });
+  });
 });
 
 describe('source links', () => {
@@ -654,9 +920,15 @@ describe('channel adapter', () => {
       [seg('s1', '“Nobody ever said these words” to 9,999 people')],
       brief,
     );
-    expect(findings.map((f) => f.checkId).sort()).toEqual([
-      'number-grounded',
-      'quote-verbatim',
-    ]);
+    expect(
+      findings
+        .filter((f) => f.severity === 'block')
+        .map((f) => f.checkId)
+        .sort(),
+    ).toEqual(['number-grounded', 'quote-verbatim']);
+    // No sentence-level finding: attribution is the cite step's, not a check.
+    expect(findings.some((f) => f.checkId === 'statement-grounded')).toBe(
+      false,
+    );
   });
 });
