@@ -58,8 +58,9 @@ export function publishBlockers(
   if (version.proposed) blockers.push('proposal-pending');
   else if (isStale(version, brief)) blockers.push('brief-changed');
 
-  // What the text actually rests on is decided by the grounding marks, not
-  // by the ids reported at generation: those go stale as the user edits.
+  // What the text rests on is decided by the quote and number marks (code's
+  // finding) and the ids reported at generation, never by the model's
+  // citations: those are an opinion, and this gate is not overruled by one.
   const itemsById = new Map(brief.items.map((item) => [item.id, item]));
   const used = new Set(
     groundVersion(version.segments, brief)
