@@ -109,6 +109,9 @@ describe('assessment', () => {
     for (const id of DRAFTER_CRITERIA) expect(prompt).toContain(`"${id}"`);
     expect(prompt).toContain('"guide:house-style"');
     expect(prompt).toContain('Text inside quotation marks');
+    expect(prompt).toContain(
+      'A quotation may only be shortened with … in place of omitted words, never reworded.',
+    );
     expect(prompt).toContain('A version that is fine returns no edits');
     expect(prompt).toContain('in French');
   });
