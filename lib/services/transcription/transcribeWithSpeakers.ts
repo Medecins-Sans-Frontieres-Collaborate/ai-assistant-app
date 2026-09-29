@@ -1,4 +1,5 @@
 import { env } from '@/config/environment';
+import { DefaultAzureCredential } from '@azure/identity';
 import fs from 'fs';
 import { basename, extname } from 'path';
 
@@ -92,10 +93,7 @@ export async function transcribeWithSpeakers(
   filePath: string,
   language?: string,
 ): Promise<string> {
-  const { SPEECH_KEY, SPEECH_REGION } = env;
-  if (!SPEECH_KEY || !SPEECH_REGION) {
-    throw new Error('Speaker-separated transcription is not configured.');
-  }
+  const { AZURE_SPEECH_KEY, AZURE_SPEECH_REGION } = env;
 
   const locale = language
     ? AZURE_LOCALES[language.toLowerCase().split('-')[0]]
@@ -120,11 +118,24 @@ export async function transcribeWithSpeakers(
   );
   formData.append('definition', JSON.stringify(definition));
 
+  const headers: Record<string, string> = {};
+  if (AZURE_SPEECH_KEY) {
+    headers['Ocp-Apim-Subscription-Key'] = AZURE_SPEECH_KEY;
+  } else {
+    const token = await new DefaultAzureCredential().getToken(
+      'https://cognitiveservices.azure.com/.default',
+    );
+    if (!token) {
+      throw new Error('Could not obtain an Azure Speech access token.');
+    }
+    headers.Authorization = `Bearer ${token.token}`;
+  }
+
   const response = await fetch(
-    `https://${SPEECH_REGION}.api.cognitive.microsoft.com/speechtotext/transcriptions:transcribe?api-version=2024-11-15`,
+    `https://${AZURE_SPEECH_REGION}.api.cognitive.microsoft.com/speechtotext/transcriptions:transcribe?api-version=2024-11-15`,
     {
       method: 'POST',
-      headers: { 'Ocp-Apim-Subscription-Key': SPEECH_KEY },
+      headers,
       body: formData,
     },
   );

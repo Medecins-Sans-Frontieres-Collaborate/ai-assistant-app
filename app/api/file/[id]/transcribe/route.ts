@@ -51,8 +51,10 @@ export async function HEAD() {
     return new NextResponse(null, { status: 401 });
   }
 
+  // Speaker separation can use either a Speech key or the app's default
+  // Azure credential, so the region is the only required configuration here.
   return new NextResponse(null, {
-    status: env.SPEECH_KEY && env.SPEECH_REGION ? 204 : 503,
+    status: env.AZURE_SPEECH_REGION ? 204 : 503,
   });
 }
 

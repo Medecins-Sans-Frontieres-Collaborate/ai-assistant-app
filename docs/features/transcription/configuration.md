@@ -14,7 +14,15 @@ These variables are required for the standard Whisper-based transcription (used 
 
 Note: The system looks for a deployment named `whisper` on your Azure OpenAI resource.
 
-#### 2. Batch Transcription Configuration (Legacy)
+#### 2. Speaker-Separated Transcription
+
+Speaker separation uses the Azure AI Speech Fast Transcription API for files
+within the Whisper size limit. It uses `AZURE_SPEECH_KEY` when set; otherwise,
+it authenticates with `DefaultAzureCredential`, like the other Azure services.
+It uses `AZURE_SPEECH_REGION` for the resource region. The app identity needs
+the **Cognitive Services Speech User** role on the Speech resource.
+
+#### 3. Batch Transcription Configuration (Legacy)
 
 Required only if using the Azure Speech Batch API for large files.
 
@@ -23,14 +31,14 @@ Required only if using the Azure Speech Batch API for large files.
 | `AZURE_SPEECH_KEY`    | API key for Azure Speech Services.    | -        |
 | `AZURE_SPEECH_REGION` | Azure region for the Speech resource. | `eastus` |
 
-#### 3. FFmpeg Configuration
+#### 4. FFmpeg Configuration
 
 FFmpeg is essential for video-to-audio extraction and for splitting large audio files into chunks.
 
 - **Installation**: FFmpeg must be installed on the server hosting the application.
 - **Environment Variable**: The system expects the FFmpeg and FFprobe binaries to be in the system PATH, or you can specify the path using the `FFMPEG_BIN` environment variable (if supported by the underlying library).
 
-#### 4. File Size Limits
+#### 5. File Size Limits
 
 The application defines size limits that determine which transcription path is taken:
 
