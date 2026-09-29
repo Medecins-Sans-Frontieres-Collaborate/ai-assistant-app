@@ -12,6 +12,8 @@ import {
   ReviseResponse,
   TranslateBriefRequest,
   TranslateBriefResponse,
+  VerifyRequest,
+  VerifyResponse,
 } from '@/types/drafter';
 
 /** Thin fetch wrappers for the drafter routes (same shape as formApi). */
@@ -101,6 +103,23 @@ export function assessVersions(
     '/api/workflows/drafter/assess',
     input,
     'Assessment failed',
+    signal,
+  );
+}
+
+/**
+ * The cite step: the model attributes given sentences of a version to the
+ * brief entries they rest on. Run by the workspace after generation and
+ * after edits; a budget denial or failure rejects with the server's message.
+ */
+export function verifyClaims(
+  input: VerifyRequest,
+  signal?: AbortSignal,
+): Promise<VerifyResponse> {
+  return post(
+    '/api/workflows/drafter/verify',
+    input,
+    'Verification failed',
     signal,
   );
 }
