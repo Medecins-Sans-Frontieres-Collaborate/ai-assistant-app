@@ -63,7 +63,7 @@ HOW TO ANSWER
 - If the instruction asks for nothing that applies to this text, return no edits.
 
 WHAT YOU MAY NOT CHANGE
-- Text inside quotation marks. Those are people's exact words. Never edit, shorten or move a quotation, and never add one.
+- Text inside quotation marks. Those are people's exact words. You may shorten a quotation only by leaving words out of its middle or end and writing … in their place; never reword, reorder or extend it, never add one.
 - Any URL.
 - Facts. Add no fact, number, date, place, name or claim that is not in the brief.
 
@@ -99,7 +99,7 @@ export function buildReviseUserPrompt(
   );
   if (brief.callToAction) lines.push(`Call to action: ${brief.callToAction}`);
   for (const item of brief.items) {
-    lines.push(`- [${item.kind}] ${item.text}`);
+    lines.push(`- id ${item.id} [${item.kind}] ${item.text}`);
   }
   return lines.join('\n');
 }
@@ -154,8 +154,9 @@ export function buildTightenInstruction(
     'Cut words, not meaning: remove filler, repetition and the least ' +
       'important detail; prefer deleting a clause to rewording it. Every ' +
       'edit must make its segment SHORTER. Do not touch segments that fit. ' +
-      'You may not shorten a quotation or remove a link; if a quotation is ' +
-      'what makes it too long, cut around it.',
+      'You may shorten a quotation only by leaving out a run of its words ' +
+      'and writing … in their place, never by rewording it; never remove a ' +
+      'link.',
   ];
   if (previous) {
     lines.push(
