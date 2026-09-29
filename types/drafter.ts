@@ -261,6 +261,35 @@ export interface VersionSnapshot {
   briefDigest?: string;
 }
 
+/**
+ * The citation step's answer about one sentence: which brief entries it
+ * rests on, in the model's judgement. Stored on the version, keyed by the
+ * sentence as compared, and stamped with the brief it was judged against;
+ * `core/citations.ts` decides whether it still applies. Never a check: the
+ * deterministic quote/number/name/link findings are the only blockers.
+ */
+export interface StatementVerdict {
+  id: string;
+  segmentId: string;
+  /** statementKey(sentence) as checked; applies while a sentence of the segment still has this key. ≤ 600 chars. */
+  sentenceKey: string;
+  verdict: 'supported' | 'partly' | 'unsupported' | 'unclear';
+  /** Included item ids or BRIEF_ITSELF. */
+  itemIds: string[];
+  reason: string;
+  /** Set by code when the model vouched for a sentence holding a number or quote the brief lacks (verdict forced to 'unsupported'). */
+  note?: 'ungrounded-inside';
+  /**
+   * verdictDigestFor(brief, itemIds, verdict) when it landed: the cited
+   * entries' text and inclusion (or, for a verdict citing nothing, every
+   * included item). A different digest now means the verdict is stale.
+   * Absent on verdicts stored before the digest existed (treated as stale).
+   */
+  briefDigest?: string;
+  at: string;
+  modelId?: string;
+}
+
 /** A named mapping from spec to voice: "one tone can serve many channels". */
 export interface VoiceSet {
   id: string;
@@ -316,6 +345,12 @@ export interface Version {
   /** Set by Copy; a later change shows "Changed since copied". */
   copied?: { at: string; texts: string[]; media?: string[] };
   history: VersionSnapshot[];
+  /**
+   * Citation verdicts, capped at DRAFTER_LIMITS.MAX_VERDICTS. Self-invalidating:
+   * one applies only while its sentence is still in the text and the brief
+   * entries it cites are unchanged (see `citationMarks`).
+   */
+  verdicts?: StatementVerdict[];
 }
 
 /** Compare arrangement, per conversation. */
@@ -354,14 +389,56 @@ export interface ChannelDrafterWorkflowState extends DraftSetState {
 
 export type ApprovalStatus = 'none' | 'approved' | 'changed';
 
-/** A span of a segment that traces to the brief, or fails to. */
+/**
+ * A quotation or a number of a segment that traces to the brief, or fails
+ * to. Deterministic and blocking; the model never overrules one. Sentence
+ * attribution is not a grounding mark: see `CitationMark` below.
+ */
 export interface GroundingMark {
   segmentId: string;
   start: number;
   end: number;
   kind: 'quote' | 'number';
-  /** The brief item it matched; absent = matches nothing (a finding). */
+  /** The item it rests on, BRIEF_ITSELF for the key message / CTA; absent = matches nothing (a finding). */
   itemId?: string;
+  /** Quote only: matched through … / [insertions]. */
+  elided?: true;
+  /** Quote only: matched runs, offsets into normalizeForQuoteMatch(item.text). */
+  pieces?: Array<{ start: number; end: number }>;
+  /** Quote only: raw segment ranges of the speaker's own words (whole span when not elided). Numbers outside these are checked. */
+  verbatim?: Array<{ start: number; end: number }>;
+  /** Quote only: raw segment ranges of [bracketed insertions]. */
+  insertions?: Array<{ start: number; end: number }>;
+}
+
+/** A stored verdict, or why none applies to the sentence yet. */
+export type CitationVerdict =
+  | StatementVerdict['verdict']
+  /** No verdict stored for this sentence yet (a cite call is due). */
+  | 'pending'
+  /** A verdict exists but the brief entries it was judged against changed. */
+  | 'stale';
+
+/**
+ * What the UI renders for one sentence (or clause): the cite step's answer
+ * as it applies today. Derived by `core/citations.ts`, never stored.
+ */
+export interface CitationMark {
+  segmentId: string;
+  /** Raw, trimmed offsets into the segment text. */
+  start: number;
+  end: number;
+  /** statementKey(text): what the verdict is stored under. */
+  key: string;
+  /** Included item ids the model cited, BRIEF_ITSELF for key message / CTA. Empty unless supported/partly. */
+  itemIds: string[];
+  verdict: CitationVerdict;
+  /** Set when a quote or number in the sentence is ungrounded: the verdict is 'unsupported' whatever the model said. */
+  note?: 'ungrounded-inside';
+  /** The model's one-line reason, when a verdict applies. */
+  reason?: string;
+  modelId?: string;
+  at?: string;
 }
 
 /** Worst-first column status; the UI shows the first that applies. */
@@ -390,6 +467,9 @@ export const DRAFTER_LIMITS = {
   MAX_ALT_CHARS: 2_000,
   /** Characters of source shown either side of a matched excerpt. */
   PASSAGE_CONTEXT_CHARS: 300,
+  MAX_VERIFY_CLAIMS: 12,
+  MAX_CLAIM_CHARS: 600,
+  MAX_VERDICTS: 60,
 } as const;
 
 /* ------------------------------------------------------------------ */
@@ -516,6 +596,40 @@ export interface AssessRequest {
   guideIds: string[];
   modelId?: string;
   conversationId?: string;
+}
+
+/**
+ * The citation step (POST /api/workflows/drafter/verify): the model
+ * attributes each claim (a sentence of a version) to the brief entries it
+ * rests on. Targets are unique per spec; claims are capped per target.
+ */
+export interface VerifyRequest {
+  specKind: string;
+  setId?: string;
+  targets: Array<{
+    specId: string;
+    segments: Array<{ id: string; text: string }>;
+    /** Sentences to attribute, each found in its segment; ≤ MAX_VERIFY_CLAIMS. */
+    claims: Array<{ segmentId: string; text: string }>;
+  }>;
+  brief: GenerateRequest['brief'];
+  modelId?: string;
+  conversationId?: string;
+}
+
+export interface VerifyResponse {
+  results: Array<{
+    specId: string;
+    /** One per kept claim, in claim order; `text` is the claim as sent, so statementKey(text) is its key. */
+    verdicts: Array<
+      Pick<
+        StatementVerdict,
+        'segmentId' | 'verdict' | 'itemIds' | 'reason' | 'note'
+      > & { text: string }
+    >;
+    /** 'VERIFY_FAILED' when this spec's call failed; the others still return. */
+    error?: string;
+  }>;
 }
 
 export interface ReviseResponse {
