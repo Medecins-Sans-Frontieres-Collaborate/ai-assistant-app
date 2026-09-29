@@ -4,11 +4,13 @@ import {
   publishBlockers,
 } from '@/lib/utils/shared/drafter/core/publishing';
 import { landEdits } from '@/lib/utils/shared/drafter/core/revisions';
+import { statementKey } from '@/lib/utils/shared/drafter/core/statements';
 import {
   approveVersion,
   briefDigestFor,
   editSegmentText,
   emptyVersion,
+  landVerdicts,
 } from '@/lib/utils/shared/drafter/core/versions';
 import { CheckFinding } from '@/lib/utils/shared/review/deterministicChecks';
 
@@ -142,6 +144,82 @@ describe('publishBlockers', () => {
     expect(
       publishBlockers(ready(brief), brief, [], { allowVouched: true }),
     ).toEqual([]);
+  });
+
+  it('never lets a citation gate publishing: neither an unsupported sentence nor a cited vouched item', () => {
+    const vouched = item({
+      id: 'f1',
+      kind: 'fact',
+      text: 'The clinic reopened its maternity ward in March',
+      verified: 'user-asserted',
+    });
+    const excluded = item({
+      id: 'x1',
+      kind: 'fact',
+      text: 'The hospital closed permanently after the bombing',
+      decision: 'excluded',
+    });
+    const brief = briefWith([item(), vouched, excluded]);
+    const first = 'The clinic reopened the maternity ward in March.';
+    const second = 'The hospital closed permanently after the bombing.';
+    const version: Version = approveVersion(
+      {
+        ...emptyVersion('x'),
+        segments: [{ id: 's1', text: `${first} ${second}`, usedItemIds: [] }],
+        briefDigest: briefDigestFor(brief, []),
+      },
+      NOW,
+    );
+    // Nothing checkable by code rests on any item: publishable as is.
+    expect(publishBlockers(version, brief, [])).toEqual([]);
+    // The model's citations are an opinion: a sentence it attributes to the
+    // vouched item, or calls unsupported, changes nothing at this gate.
+    const cited = landVerdicts(
+      version,
+      [
+        {
+          segmentId: 's1',
+          sentenceKey: statementKey(first),
+          verdict: 'supported',
+          itemIds: ['f1'],
+          reason: 'Stated by the fact.',
+        },
+        {
+          segmentId: 's1',
+          sentenceKey: statementKey(second),
+          verdict: 'unsupported',
+          itemIds: [],
+          reason: 'Not in the brief.',
+        },
+      ],
+      ['v1', 'v2'],
+      NOW,
+    );
+    expect(publishBlockers(cited, brief, [])).toEqual([]);
+    // A quotation of the vouched item is code's finding, and does gate.
+    const quoted: Version = approveVersion(
+      {
+        ...emptyVersion('x'),
+        segments: [
+          {
+            id: 's1',
+            text: 'A fact: 「The clinic reopened its maternity ward in March」.',
+            usedItemIds: [],
+          },
+        ],
+        briefDigest: briefDigestFor(brief, []),
+      },
+      NOW,
+    );
+    expect(publishBlockers(quoted, brief, [])).toEqual([]);
+    const reported: Version = {
+      ...quoted,
+      segments: [{ ...quoted.segments[0], usedItemIds: ['f1'] }],
+      briefDigest: briefDigestFor(brief, ['f1']),
+    };
+    expect(publishBlockers(approveVersion(reported, NOW), brief, [])).toEqual([
+      'uses-vouched-item',
+    ]);
   });
 
   it('asks for approval last, after everything that would change the text', () => {
