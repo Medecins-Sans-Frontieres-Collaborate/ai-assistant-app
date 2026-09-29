@@ -4,15 +4,24 @@
  */
 import { emptyBrief } from '@/lib/utils/shared/drafter/core/brief';
 import {
+  citationMarks,
+  sentencesOf,
+} from '@/lib/utils/shared/drafter/core/citations';
+import {
   BRIEF_ITSELF,
   canonicalNumber,
   findNames,
   findNumbers,
   findQuotedSpans,
+  groundSegment,
   groundVersion,
   numbersSupported,
   ungroundedNames,
 } from '@/lib/utils/shared/drafter/core/grounding';
+import {
+  contentKeys,
+  statementSpans,
+} from '@/lib/utils/shared/drafter/core/statements';
 import { numbersPreserved } from '@/lib/utils/shared/drafter/core/translation';
 import { attributionNearExcerpt } from '@/lib/utils/shared/drafter/core/verify';
 
@@ -136,7 +145,11 @@ describe('2. unbalanced quotation marks', () => {
       ],
       brief,
     );
-    expect(marks.map((m) => [m.segmentId, m.kind, m.itemId])).toEqual([
+    expect(
+      marks
+        .filter((m) => m.kind === 'quote')
+        .map((m) => [m.segmentId, m.kind, m.itemId]),
+    ).toEqual([
       ['s1', 'quote', 'q1'],
       ['s2', 'quote', 'q1'],
     ]);
@@ -586,6 +599,53 @@ describe('hostile input stays fast', () => {
     expect(timed(() => ungroundedNames(segments, brief))).toBeLessThan(
       BUDGET_MS,
     );
+  });
+
+  describe('sentence segmentation and citation marks', () => {
+    const texts: Record<string, string> = {
+      sentenceStarts: fill('. Aa Bb'),
+      runOn: fill('word '),
+      ellipses: fill('…'),
+      openBrackets: fill('[[[['),
+      closeBrackets: fill(']]]]'),
+      dots: fill('.........'),
+      conjunctions: fill(', and '),
+    };
+    const brief = briefWith(
+      Array.from({ length: 40 }, (_, index) =>
+        item({
+          id: `f${index}`,
+          kind: 'fact',
+          text: 'The clinic treated 1,200 cholera patients in March after the water plant closed',
+        }),
+      ),
+    );
+
+    for (const [name, text] of Object.entries(texts)) {
+      it(`statementSpans, contentKeys and citationMarks on ${name}`, () => {
+        expect(text.length).toBe(LIMIT);
+        expect(timed(() => statementSpans(text, []))).toBeLessThan(BUDGET_MS);
+        expect(timed(() => contentKeys(text))).toBeLessThan(BUDGET_MS);
+        expect(
+          timed(() => citationMarks([seg('s1', text)], undefined, brief)),
+        ).toBeLessThan(BUDGET_MS);
+      });
+    }
+
+    it('cuts a full post into sentences once per segment and brief', () => {
+      const post = fill(
+        'The clinic treated 1,200 cholera patients in March after the plant closed. ',
+      );
+      const segment = seg('s1', post);
+      const sentences = sentencesOf(segment, brief);
+      expect(sentences.length).toBeGreaterThan(50);
+      expect(
+        timed(() => {
+          for (let i = 0; i < 100; i += 1) sentencesOf(segment, brief);
+        }),
+      ).toBeLessThan(BUDGET_MS);
+      expect(sentencesOf(segment, brief)).toBe(sentences);
+    });
   });
 
   it('checks an attribution in a hostile source', () => {
