@@ -108,6 +108,7 @@ const MessageContentSchema = z.union([
           .optional()
           .catch(undefined),
         transcriptionPrompt: z.string().max(2000).optional().catch(undefined),
+        separateSpeakers: z.boolean().optional().catch(undefined),
       }),
       z.object({
         type: z.literal('thinking'),

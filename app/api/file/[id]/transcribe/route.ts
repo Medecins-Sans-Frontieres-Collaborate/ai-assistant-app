@@ -27,6 +27,7 @@ import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 import { TranscriptionResponse } from '@/types/transcription';
 
 import { auth } from '@/auth';
+import { env } from '@/config/environment';
 import { isWhisperNativeFormat } from '@/lib/constants/fileTypes';
 import { randomUUID } from 'crypto';
 import fs from 'fs';
@@ -42,6 +43,18 @@ const unlinkAsync = promisify(fs.unlink);
  * as whole IDs) and is bounded to avoid pathological-length inputs.
  */
 const BLOB_ID_REGEX = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/;
+
+/** Reports feature availability without exposing the server-side credentials. */
+export async function HEAD() {
+  const session: Session | null = await auth();
+  if (!session?.user) {
+    return new NextResponse(null, { status: 401 });
+  }
+
+  return new NextResponse(null, {
+    status: env.SPEECH_KEY && env.SPEECH_REGION ? 204 : 503,
+  });
+}
 
 export async function GET(
   request: NextRequest,

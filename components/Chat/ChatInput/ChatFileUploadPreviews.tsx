@@ -14,6 +14,7 @@ import React, {
   FC,
   MouseEvent,
   SetStateAction,
+  useEffect,
   useState,
 } from 'react';
 
@@ -23,6 +24,7 @@ import { ChatInputSubmitTypes, FilePreview } from '@/types/chat';
 
 import { XIcon } from '@/components/Icons/cancel';
 import FileIcon from '@/components/Icons/file';
+import { Tooltip } from '@/components/UI/Tooltip';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { TRANSCRIPTION_LANGUAGES } from '@/lib/constants/transcriptionLanguages';
@@ -134,9 +136,30 @@ const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
   setFilePreviews,
 }) => {
   const t = useTranslations();
+  const [speakerFeatureAvailable, setSpeakerFeatureAvailable] = useState(false);
   const [showPromptInput, setShowPromptInput] = useState(
     !!filePreview.transcriptionPrompt,
   );
+
+  useEffect(() => {
+    let cancelled = false;
+    setSpeakerFeatureAvailable(false);
+
+    if (filePreview.uploadedUrl) {
+      const url = `${filePreview.uploadedUrl.replace(/\/$/, '')}/transcribe`;
+      fetch(url, { method: 'HEAD' })
+        .then((response) => {
+          if (!cancelled) setSpeakerFeatureAvailable(response.ok);
+        })
+        .catch(() => {
+          if (!cancelled) setSpeakerFeatureAvailable(false);
+        });
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [filePreview.uploadedUrl]);
 
   const updateFilePreview = (updates: Partial<FilePreview>) => {
     setFilePreviews((prevPreviews) =>
@@ -196,6 +219,41 @@ const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
           size={12}
           className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
         />
+      </div>
+
+      {/* Optional speaker labels */}
+      <div className="flex items-center gap-1">
+        <label
+          title={
+            speakerFeatureAvailable ? undefined : 'Not available right now.'
+          }
+          className={`flex items-center gap-2 text-xs ${speakerFeatureAvailable ? 'cursor-pointer text-gray-700 dark:text-gray-200' : 'cursor-not-allowed text-gray-400 dark:text-gray-500'}`}
+        >
+          <input
+            type="checkbox"
+            checked={!!filePreview.separateSpeakers}
+            disabled={!speakerFeatureAvailable}
+            onChange={(e) =>
+              updateFilePreview({ separateSpeakers: e.target.checked })
+            }
+            onClick={(e) => e.stopPropagation()}
+            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:cursor-not-allowed"
+          />
+          <span>Separate speakers</span>
+        </label>
+        <Tooltip
+          content="The transcript is split into sections by voice. Each voice gets a label such as Speaker 1 or Speaker 2; names are not identified."
+          position="right"
+          multiline
+        >
+          <span
+            title="The transcript is split into sections by voice. Each voice gets a label such as Speaker 1 or Speaker 2; names are not identified."
+            aria-label="About speaker labels"
+            className="inline-flex cursor-help text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+          >
+            <IconInfoCircle size={14} />
+          </span>
+        </Tooltip>
       </div>
 
       {/* Prompt toggle/input */}

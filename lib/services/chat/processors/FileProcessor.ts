@@ -2,6 +2,7 @@ import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { FileProcessingService } from '@/lib/services/chat';
 import { guardTranscriptionMinutes } from '@/lib/services/limits/transcriptionBudget';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
+import { transcribeWithSpeakers } from '@/lib/services/transcription/transcribeWithSpeakers';
 
 import { FILE_SIZE_LIMITS, WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
 import {
@@ -146,6 +147,7 @@ export class FileProcessor extends BasePipelineStage {
             originalFilename?: string;
             transcriptionLanguage?: string;
             transcriptionPrompt?: string;
+            separateSpeakers?: boolean;
           }> = [];
           const images: Array<{
             url: string;
@@ -168,6 +170,7 @@ export class FileProcessor extends BasePipelineStage {
                 originalFilename: section.originalFilename,
                 transcriptionLanguage: section.transcriptionLanguage,
                 transcriptionPrompt: section.transcriptionPrompt,
+                separateSpeakers: section.separateSpeakers,
               });
             } else if (section.type === 'image_url') {
               // Prior-turn images stay ImageProcessor/last-message territory.
@@ -454,10 +457,30 @@ export class FileProcessor extends BasePipelineStage {
                       prompt: file.transcriptionPrompt,
                     };
 
-                    transcript = await transcriptionService.transcribe(
-                      fileToTranscribe,
-                      transcriptionOptions,
-                    );
+                    if (file.separateSpeakers) {
+                      try {
+                        transcript = await transcribeWithSpeakers(
+                          fileToTranscribe,
+                          file.transcriptionLanguage,
+                        );
+                      } catch (error) {
+                        console.error(
+                          '[FileProcessor] Speaker-separated transcription failed; falling back to Whisper:',
+                          error,
+                        );
+                        const regularTranscript =
+                          await transcriptionService.transcribe(
+                            fileToTranscribe,
+                            transcriptionOptions,
+                          );
+                        transcript = `Couldn't separate speakers this time, so here's the regular transcript.\n\n${regularTranscript}`;
+                      }
+                    } else {
+                      transcript = await transcriptionService.transcribe(
+                        fileToTranscribe,
+                        transcriptionOptions,
+                      );
+                    }
 
                     // Whisper completed synchronously - add transcript immediately
                     transcripts.push({
@@ -471,7 +494,9 @@ export class FileProcessor extends BasePipelineStage {
                       user: context.user,
                       filename,
                       fileSize: audioSize,
-                      transcriptionType: 'whisper',
+                      transcriptionType: file.separateSpeakers
+                        ? 'azure-speech-fast'
+                        : 'whisper',
                       language: file.transcriptionLanguage,
                     });
 
