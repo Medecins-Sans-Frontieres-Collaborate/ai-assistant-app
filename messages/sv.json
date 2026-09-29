@@ -584,6 +584,7 @@
   "enterPromptDescriptionPlaceholder": "Vad är denna prompt till för?",
   "enterPromptContentPlaceholder": "Skriv din prompt här. Använd '{{variable}}' för dynamiskt innehåll.",
   "common": {
+    "clearSearch": "Rensa sökning",
     "contact": "Kontakt",
     "close": "Stäng",
     "remove": "Ta bort",

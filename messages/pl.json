@@ -581,6 +581,7 @@
   "enterPromptDescriptionPlaceholder": "Do czego służy ten prompt?",
   "enterPromptContentPlaceholder": "Napisz swój prompt tutaj. Użyj '{{variable}}' dla treści dynamicznych.",
   "common": {
+    "clearSearch": "Wyczyść wyszukiwanie",
     "contact": "Kontakt",
     "close": "Zamknij",
     "remove": "Usuń",

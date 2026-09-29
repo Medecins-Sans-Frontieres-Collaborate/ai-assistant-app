@@ -584,6 +584,7 @@
   "enterPromptDescriptionPlaceholder": "Wofür ist diese Eingabeaufforderung?",
   "enterPromptContentPlaceholder": "Schreiben Sie hier Ihre Eingabeaufforderung. Verwenden Sie '{{variable}}' für dynamische Inhalte.",
   "common": {
+    "clearSearch": "Suche löschen",
     "close": "Schließen",
     "remove": "Entfernen",
     "tryAgain": "Erneut versuchen",

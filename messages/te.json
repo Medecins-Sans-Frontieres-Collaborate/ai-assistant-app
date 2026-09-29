@@ -582,6 +582,7 @@
   "enterPromptDescriptionPlaceholder": "ఈ ప్రాంప్ట్ దేనికి?",
   "enterPromptContentPlaceholder": "మీ ప్రాంప్ట్‌ను ఇక్కడ వ్రాయండి. డైనమిక్ కంటెంట్ కోసం '{{variable}}' ఉపయోగించండి.",
   "common": {
+    "clearSearch": "శోధనను క్లియర్ చేయండి",
     "contact": "సంప్రదించండి",
     "close": "మూచండి",
     "remove": "తొలగించండి",

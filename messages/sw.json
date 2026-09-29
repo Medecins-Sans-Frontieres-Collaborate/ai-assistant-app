@@ -584,6 +584,7 @@
   "importBackupParseError": "Imeshindwa kuchambua faili ya hifadhi rudufu. Tafadhali hakikisha ni JSON halali.",
   "transcriptionComplete": "Unakilishi umekamilika! Maandishi yameongezwa kwenye ingizo la mazungumzo.",
   "common": {
+    "clearSearch": "Futa utaftaji",
     "contact": "Wasiliana",
     "close": "Funga",
     "remove": "Ondoa",

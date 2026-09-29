@@ -687,6 +687,7 @@
     }
   },
   "common": {
+    "clearSearch": "Nadiifi raadinta",
     "close": "Xir",
     "remove": "Ka saar",
     "tryAgain": "Dib u isku day",
