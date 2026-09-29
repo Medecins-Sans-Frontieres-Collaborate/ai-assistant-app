@@ -3,9 +3,12 @@ import {
   ReviewPackLabels,
   buildReviewPack,
 } from '@/lib/utils/shared/drafter/core/reviewPack';
+import { statementKey } from '@/lib/utils/shared/drafter/core/statements';
 import {
   approveVersion,
   emptyVersion,
+  landVerdicts,
+  verdictDigestFor,
 } from '@/lib/utils/shared/drafter/core/versions';
 
 import { DraftSetState } from '@/types/drafter';
@@ -177,6 +180,103 @@ describe('buildReviewPack', () => {
   it('is deterministic', () => {
     expect(buildReviewPack(state(), [], labels, NOW)).toBe(
       buildReviewPack(state(), [], labels, NOW),
+    );
+  });
+
+  it('prints one citation line per sentence and a summary, only when asked to', () => {
+    const withCitations: ReviewPackLabels = {
+      ...labels,
+      citations: {
+        heading: 'Sentences',
+        line: (n, excerpt, items, verdict) =>
+          `${n}. “${excerpt}” — ${items} — ${verdict}`,
+        summary: (counts) =>
+          `${counts.supported} in the brief, ${counts.unsupported} not, ${counts.pending + counts.stale} unchecked`,
+        verdicts: {
+          supported: 'In the brief',
+          partly: 'Partly in the brief',
+          unsupported: 'Not in the brief',
+          unclear: 'Could not tell',
+          pending: 'Not yet checked',
+          stale: 'Brief changed since checked',
+        },
+        items: (numbers) => `items ${numbers}`,
+        brief: 'key message',
+        noItems: 'no item',
+      },
+    };
+    const specs = [
+      {
+        id: 'x',
+        name: 'X',
+        renderedTexts: [],
+        findings: [],
+        findingMessages: [],
+      },
+    ];
+    const cited = state();
+    const brief = cited.brief;
+    const sentences = [
+      'The hospital closed permanently after the bombing.',
+      'Water is life.',
+      'The clinic treated 1,200 patients in March.',
+    ];
+    const version = {
+      ...cited.versions.x,
+      segments: [
+        ...cited.versions.x.segments,
+        { id: 's3', text: sentences.join(' '), usedItemIds: [] },
+      ],
+    };
+    cited.versions.x = landVerdicts(
+      version,
+      [
+        {
+          segmentId: 's3',
+          sentenceKey: statementKey(sentences[0]),
+          verdict: 'unsupported',
+          itemIds: [],
+          reason: 'No.',
+          briefDigest: verdictDigestFor(brief, [], 'unsupported'),
+        },
+        {
+          segmentId: 's3',
+          sentenceKey: statementKey(sentences[1]),
+          verdict: 'supported',
+          itemIds: ['__brief__', 'q1'],
+          reason: 'The key message.',
+          briefDigest: verdictDigestFor(
+            brief,
+            ['__brief__', 'q1'],
+            'supported',
+          ),
+        },
+      ],
+      ['v1', 'v2'],
+      NOW,
+    );
+    const pack = buildReviewPack(cited, specs, withCitations, NOW);
+    // 1,200 is a number the brief lacks: it joins the proof count.
+    expect(pack).toContain('- 1 of 2 traced');
+    expect(pack).toContain('- 1 in the brief, 2 not, 2 unchecked');
+    expect(pack).toContain('**Sentences:**');
+    expect(pack).toContain(
+      '- 1. ““We had no clean water for eleven days”” — no item — Not yet checked',
+    );
+    expect(pack).toContain('- 2. “Second post.” — no item — Not yet checked');
+    expect(pack).toContain(
+      '- 3. “The hospital closed permanently after the bombing.” — no item — Not in the brief',
+    );
+    expect(pack).toContain(
+      '- 4. “Water is life.” — items key message, 1 — In the brief',
+    );
+    // The ungrounded number decides, whatever the model might have said.
+    expect(pack).toContain(
+      '- 5. “The clinic treated 1,200 patients in March.” — no item — Not in the brief',
+    );
+    // Without the labels nothing about citations is printed.
+    expect(buildReviewPack(cited, specs, labels, NOW)).not.toContain(
+      'Sentences',
     );
   });
 });
