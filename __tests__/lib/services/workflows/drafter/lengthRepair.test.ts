@@ -95,7 +95,7 @@ describe('the budget the model is given', () => {
       (text) => adapter.cost?.(X, text) ?? text.length,
     );
     // Ten CJK characters count double on X, plus the two marks.
-    expect(prompt).toContain('costs 22 characters when inserted');
+    expect(prompt).toContain('costs 22 characters in full');
   });
 });
 
@@ -118,6 +118,35 @@ describe('repair prompt for length', () => {
     expect(prompt).toContain('Cut at least 68');
     expect(prompt).toContain('{{q1}} takes 40');
     expect(prompt).toContain('the link takes 25');
+  });
+
+  it('prices a shortened form as inserted, and says when one went in full', () => {
+    const generated = {
+      specId: 'x',
+      segments: [{ text: `${'a'.repeat(300)}\n\n${LINK}`, usedItemIds: [] }],
+    };
+    const prompt = buildRepairPrompt(
+      [
+        '{{q1|We had no clean water … eleven days}} and {{q1|we had plenty}} aaa',
+      ],
+      findingsFor(adapter, X, generated, BRIEF),
+      {
+        tokens: quoteTokens(BRIEF.items),
+        cost: (text) => adapter.cost?.(X, text) ?? text.length,
+        linkCost: () => 25,
+      },
+    );
+    // Priced the way X counts (the ellipsis weighs two), marks included.
+    expect(prompt).toContain(
+      '{{q1|We had no clean water … eleven days}} takes 38',
+    );
+    expect(prompt).toContain('{{q1|we had plenty}} takes 40');
+    expect(prompt).toContain(
+      '{{q1|we had plenty}} was inserted in full because',
+    );
+    expect(prompt).not.toContain(
+      '{{q1|We had no clean water … eleven days}} was inserted in full',
+    );
   });
 });
 
