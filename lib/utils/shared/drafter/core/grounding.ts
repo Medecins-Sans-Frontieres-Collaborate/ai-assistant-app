@@ -10,10 +10,9 @@ import { normalizeForQuoteMatch } from '@/lib/utils/app/citationQuotes';
 
 import { Brief, BriefItem, GroundingMark, Segment } from '@/types/drafter';
 
-import { TextRange, isWordAligned } from './verify';
-
-/** Below this many words a quoted string is a label, not a quotation. */
-const MIN_QUOTE_WORDS = 3;
+import { MIN_QUOTE_WORDS, matchQuotation } from './elision';
+import { contentKeys, stemLite } from './statements';
+import { TextRange } from './verify';
 
 /** `itemId` of a mark grounded in the key message or the call to action. */
 export const BRIEF_ITSELF = '__brief__';
@@ -265,7 +264,9 @@ export function findQuotedSpans(text: string): QuotedSpan[] {
   return spans;
 }
 
-const URL_OR_TAG_PATTERN = /(?:https?:\/\/|www\.)\S+|[#@][\p{L}\p{N}_]+/giu;
+/** Links, hashtags and handles: never a number, never a content word. */
+export const URL_OR_TAG_PATTERN =
+  /(?:https?:\/\/|www\.)\S+|[#@][\p{L}\p{N}_]+/giu;
 
 /**
  * A written number. A space, comma, period or apostrophe groups thousands
@@ -548,12 +549,14 @@ export function ungroundedNames(
   );
 }
 
-function includedItems(brief: Brief): BriefItem[] {
+export function includedItems(brief: Brief): BriefItem[] {
   return brief.items.filter((item) => item.decision === 'included');
 }
 
 /** Every text of the brief a version may legitimately restate. */
-function briefTexts(brief: Brief): Array<{ itemId?: string; text: string }> {
+export function briefTexts(
+  brief: Brief,
+): Array<{ itemId?: string; text: string }> {
   return [
     ...includedItems(brief).map((item) => ({
       itemId: item.id,
@@ -564,59 +567,6 @@ function briefTexts(brief: Brief): Array<{ itemId?: string; text: string }> {
     { text: brief.keyMessage },
     { text: brief.callToAction ?? '' },
   ];
-}
-
-/**
- * Words that turn the meaning of what follows. A partial quotation that
- * starts right after one ("have enough water" out of "did not have enough
- * water") is verbatim and says the opposite.
- */
-const NEGATORS: ReadonlySet<string> = new Set(
-  (
-    'not no never without nor cannot neither ' +
-    'ne pas jamais sans ni aucun aucune ' +
-    'nunca sin jamás ' +
-    'nicht kein keine keinen keinem keiner keines nie niemals ohne ' +
-    'não sem nem ' +
-    'non mai senza né'
-  ).split(' '),
-);
-
-const NAME_WORD_CHAR = /[\p{L}\p{M}\p{N}']/u;
-
-/** The word just before `at` negates, within the same sentence. */
-function negatedBefore(text: string, at: number): boolean {
-  let end = at;
-  while (end > 0 && !NAME_WORD_CHAR.test(text[end - 1])) {
-    if (SENTENCE_ENDS.includes(text[end - 1]) || text[end - 1] === ';') {
-      return false;
-    }
-    end -= 1;
-  }
-  let start = end;
-  while (start > 0 && NAME_WORD_CHAR.test(text[start - 1])) start -= 1;
-  const word = text.slice(start, end).replace(/^'+|'+$/gu, '');
-  return NEGATORS.has(word) || word.endsWith("n't");
-}
-
-/**
- * `needle` is in `haystack` on word boundaries ("id not have enough wat" is
- * not a quotation) and not as the tail of a negation. Both are normalized.
- */
-function quotedVerbatim(haystack: string, needle: string): boolean {
-  if (!needle) return false;
-  let from = 0;
-  for (;;) {
-    const at = haystack.indexOf(needle, from);
-    if (at < 0) return false;
-    if (
-      isWordAligned(haystack, at, at + needle.length, true) &&
-      !negatedBefore(haystack, at)
-    ) {
-      return true;
-    }
-    from = at + 1;
-  }
 }
 
 /**
@@ -635,48 +585,98 @@ function quotableTexts(item: BriefItem): string[] {
 }
 
 /**
- * Marks for one segment. A mark without `itemId` that is a quote, or a
- * number found nowhere in the brief, is ungrounded.
+ * The folded words a [bracketed insertion] in a quotation of this item may
+ * carry: those of the item's own text and of its speaker's name and role.
+ */
+function insertionWordsOf(item: BriefItem): (word: string) => boolean {
+  const keys = new Set(
+    contentKeys(
+      `${item.text} ${item.attribution?.name ?? ''} ${item.attribution?.role ?? ''}`,
+    ).keys.map((key) => key.key),
+  );
+  return (word) => keys.has(stemLite(word));
+}
+
+/**
+ * Marks are memoised per (segment, brief) object: editing one segment keeps
+ * every other segment's identity, so a keystroke re-grounds one segment and
+ * the checks, the columns and the suggestions share the hit. The cached
+ * array is handed out as is; callers must not mutate it.
+ */
+const MARKS_MEMO = new WeakMap<Segment, WeakMap<Brief, GroundingMark[]>>();
+
+/**
+ * Marks for one segment: its quotations and its numbers. A mark without
+ * `itemId` is ungrounded, and a blocking finding. Sentence attribution is
+ * not decided here (see core/citations.ts).
  */
 export function groundSegment(segment: Segment, brief: Brief): GroundingMark[] {
+  let bySegment = MARKS_MEMO.get(segment);
+  const cached = bySegment?.get(brief);
+  if (cached) return cached;
+  const marks = computeMarks(segment, brief);
+  if (!bySegment) {
+    bySegment = new WeakMap();
+    MARKS_MEMO.set(segment, bySegment);
+  }
+  bySegment.set(brief, marks);
+  return marks;
+}
+
+function computeMarks(segment: Segment, brief: Brief): GroundingMark[] {
   const marks: GroundingMark[] = [];
   const quotable = includedItems(brief).map((item) => ({
     id: item.id,
     texts: quotableTexts(item),
+    insertionAllowed: insertionWordsOf(item),
   }));
 
   const quotes = findQuotedSpans(segment.text);
   for (const quote of quotes) {
-    const needle = normalizeForQuoteMatch(quote.inner);
-    // A post may end a quotation with a full stop the brief item lacks.
-    const bare = needle.replace(/[\s.,;:!?…]+$/u, '');
-    // A partial quotation of a verified quote is still verbatim.
-    const hit = quotable.find((item) =>
-      item.texts.some(
-        (text) => quotedVerbatim(text, needle) || quotedVerbatim(text, bare),
-      ),
-    );
-    marks.push({
+    const mark: GroundingMark = {
       segmentId: segment.id,
       start: quote.start,
       end: quote.end,
       kind: 'quote',
-      itemId: hit?.id,
-    });
+    };
+    // A partial or elided quotation of a verified quote is still verbatim.
+    for (const item of quotable) {
+      let match = null;
+      for (const text of item.texts) {
+        match = matchQuotation(text, quote.inner, item.insertionAllowed);
+        if (match) break;
+      }
+      if (!match) continue;
+      mark.itemId = item.id;
+      if (match.elided) mark.elided = true;
+      mark.pieces = match.pieces;
+      mark.verbatim = match.verbatim.map((range) => ({
+        start: range.start + quote.start,
+        end: range.end + quote.start,
+      }));
+      if (match.insertions.length > 0) {
+        mark.insertions = match.insertions.map((range) => ({
+          start: range.start + quote.start,
+          end: range.end + quote.start,
+        }));
+      }
+      break;
+    }
+    marks.push(mark);
   }
 
   const sources = briefTexts(brief).map((entry) => ({
     itemId: entry.itemId,
     numbers: new Set(findNumbers(entry.text).map((n) => n.canonical)),
   }));
+  // The speaker's own words prove the numbers in them; a number in a
+  // [bracketed insertion] is the writer's and is checked like any other.
+  const verbatim = marks.flatMap((mark) =>
+    mark.itemId !== undefined ? (mark.verbatim ?? []) : [],
+  );
   for (const number of findNumbers(segment.text)) {
-    // A number inside a matched quotation is already proven by the quote.
-    const insideQuote = marks.some(
-      (mark) =>
-        mark.kind === 'quote' &&
-        mark.itemId &&
-        number.start >= mark.start &&
-        number.end <= mark.end,
+    const insideQuote = verbatim.some(
+      (range) => number.start >= range.start && number.end <= range.end,
     );
     if (insideQuote) continue;
     const hit = sources.find((entry) => entry.numbers.has(number.canonical));
@@ -689,7 +689,8 @@ export function groundSegment(segment: Segment, brief: Brief): GroundingMark[] {
       itemId: hit?.itemId ?? (hit ? BRIEF_ITSELF : undefined),
     });
   }
-  return marks.sort((a, b) => a.start - b.start);
+
+  return marks.sort((a, b) => a.start - b.start || b.end - a.end);
 }
 
 export function isGrounded(mark: GroundingMark): boolean {
@@ -717,12 +718,13 @@ export function summarizeProof(
 ): ProofSummary {
   const byId = new Map(brief.items.map((item) => [item.id, item]));
   const summary: ProofSummary = {
-    total: marks.length,
+    total: 0,
     traced: 0,
     vouched: 0,
     ungrounded: 0,
   };
   for (const mark of marks) {
+    summary.total += 1;
     if (!mark.itemId) {
       summary.ungrounded += 1;
       continue;
@@ -734,19 +736,13 @@ export function summarizeProof(
   return summary;
 }
 
-/** Which specs' versions draw on a brief item ("Used in LinkedIn, X"). */
-export function specsUsingItem(
-  itemId: string,
-  versions: Record<string, { segments: Segment[] }>,
-  brief: Brief,
-): string[] {
-  return Object.entries(versions)
-    .filter(([, version]) =>
-      version.segments.some(
-        (segment) =>
-          segment.usedItemIds.includes(itemId) ||
-          groundSegment(segment, brief).some((mark) => mark.itemId === itemId),
-      ),
-    )
-    .map(([specId]) => specId);
+/** The items a set of marks rests on, in order of first use; never the brief itself. */
+export function attributedItemIds(marks: GroundingMark[]): string[] {
+  const ids = new Set<string>();
+  for (const mark of marks) {
+    if (mark.itemId !== undefined && mark.itemId !== BRIEF_ITSELF) {
+      ids.add(mark.itemId);
+    }
+  }
+  return [...ids];
 }
