@@ -443,12 +443,55 @@ export function phraseQueryFor(question: string): string | null {
 
   const phrase = best.join(' ');
   const phraseTerms = new Set(phrase.toLowerCase().split(/\s+/));
-  const years = tokens.filter((token) => /^(19|20)\d{2}$/.test(token));
+  const years = tokens
+    .map((token) => token.replace(/[^\d]/g, ''))
+    .filter((token) => /^(1[5-9]|20)\d{2}$/.test(token));
   const words = focusTerms([question]).filter(
-    (term) => term.length >= 5 && !phraseTerms.has(term) && !/^\d+$/.test(term),
+    (term) =>
+      term.length >= 5 &&
+      !phraseTerms.has(term) &&
+      !/^\d+$/.test(term) &&
+      !PHRASE_FILLER.has(term),
   );
   return [`"${phrase}"`, ...years.slice(0, 1), ...words.slice(0, 3)].join(' ');
 }
+
+// Function words long enough to pass the length filter but useless in a
+// query (English only — the fallback quotes a title, which is usually
+// enough on its own in any language).
+const PHRASE_FILLER: ReadonlySet<string> = new Set([
+  'about',
+  'after',
+  'anyone',
+  'anything',
+  'before',
+  'being',
+  'between',
+  'called',
+  'could',
+  'every',
+  'maybe',
+  'might',
+  'other',
+  'please',
+  'really',
+  'should',
+  'since',
+  'someone',
+  'something',
+  'still',
+  'thanks',
+  'their',
+  'there',
+  'these',
+  'think',
+  'those',
+  'whether',
+  'where',
+  'which',
+  'while',
+  'would',
+]);
 
 interface BatchVerdict {
   degraded: boolean;
@@ -483,7 +526,9 @@ export async function runMultiStepSearch(
 ): Promise<MultiStepResult> {
   const now = deps.now ?? Date.now;
   const { config, prior } = params;
-  const question = clipText(params.question, QUESTION_CHARS);
+  // A continuation is judged against the ORIGINAL question, not against
+  // "keep looking".
+  const question = clipText(prior?.question ?? params.question, QUESTION_CHARS);
 
   // Append-only: a source's position + 1 is its stable number for the
   // assessor across every step.
@@ -670,7 +715,7 @@ export async function runMultiStepSearch(
         recentContext: params.recentContext,
         today: new Date(now()).toISOString().slice(0, 10),
         sources,
-        steps,
+        steps: [...steps],
         stepsRemaining: canAct
           ? Math.max(0, capFor(exploratory) - stepsUsed)
           : 0,
