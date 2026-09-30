@@ -62,6 +62,7 @@ function setup(
     }),
     onActivity: vi.fn(),
     onStep: vi.fn(),
+    onProgress: vi.fn(),
     now: () => clock,
     ...depOverrides,
   };
@@ -137,6 +138,11 @@ describe('runMultiStepSearch', () => {
         outcome: '1 new source found',
       }),
     );
+    // Everything gathered so far, for the interim panel.
+    expect(deps.onProgress).toHaveBeenCalledTimes(1);
+    expect(
+      (deps.onProgress as ReturnType<typeof vi.fn>).mock.calls[0][0],
+    ).toHaveLength(4);
   });
 
   it('reads the pages the assessor picks and carries their text into the digest', async () => {
