@@ -234,9 +234,9 @@ describe('runMultiStepSearch', () => {
   it('ends after two consecutive dead ends', async () => {
     const { deps, params } = setup(
       [
-        verdict({ verdict: 'search', queries: ['q2'] }),
-        verdict({ verdict: 'search', queries: ['q3'] }),
-        verdict({ verdict: 'search', queries: ['q4'] }),
+        verdict({ verdict: 'search', queries: ['q2'], strategy: 'terms' }),
+        verdict({ verdict: 'search', queries: ['q3'], strategy: 'entity' }),
+        verdict({ verdict: 'search', queries: ['q4'], strategy: 'venue' }),
       ],
       {
         config: { ...MULTI_STEP_DEFAULTS, maxSteps: 8, maxStepsExploratory: 8 },
@@ -247,6 +247,25 @@ describe('runMultiStepSearch', () => {
 
     expect(deps.search).toHaveBeenCalledTimes(2);
     expect(result.outcome).toBe('limit');
+    expect(result.stopReason).toBe('dead_ends');
+    expect(result.deadEndStrategies).toEqual(['terms', 'entity']);
+  });
+
+  it('refuses a strategy that already dead-ended, so the assessor must change approach', async () => {
+    const { deps, params } = setup(
+      [
+        verdict({ verdict: 'search', queries: ['q2'], strategy: 'terms' }),
+        verdict({ verdict: 'search', queries: ['q3'], strategy: 'terms' }),
+      ],
+      {
+        config: { ...MULTI_STEP_DEFAULTS, maxSteps: 8, maxStepsExploratory: 8 },
+      },
+      { search: vi.fn(async () => ({ entries: [], answers: [] })) },
+    );
+    const result = await runMultiStepSearch(params, deps);
+
+    expect(deps.search).toHaveBeenCalledTimes(1);
+    expect(result.stopReason).toBe('strategy');
   });
 
   it('does not re-read a page and marks unreadable ones for the assessor', async () => {
@@ -473,7 +492,9 @@ describe('buildMultiStepDigest', () => {
       initial: { entries: [], answers: [] },
     });
     const result = await runMultiStepSearch(params, deps);
-    expect(buildMultiStepDigest(result)).toEqual({ text: '', citations: [] });
+    const digest = buildMultiStepDigest(result);
+    expect(digest.citations).toEqual([]);
+    expect(digest.text).toContain('Search note:');
   });
 
   it('numbers sources from 1 at line starts and lists every query', async () => {
