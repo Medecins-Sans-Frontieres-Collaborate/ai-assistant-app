@@ -88,6 +88,11 @@ const mockMessages: Record<string, unknown> = {
       'This request took too long to prepare and was stopped before {model} could answer. You can allow more time, or try another model.',
     retryWaitingLonger: 'Wait up to {duration} and try again',
     regenerate: 'Regenerate',
+    keepSearching: 'Keep searching',
+    keepSearchingHint:
+      'The search stopped before it found this. Ask the assistant to try different approaches.',
+    keepSearchingMessage:
+      'Keep searching for this, please — try a different approach.',
     alwaysWaitThisLong: 'Always wait up to {duration}',
     attachedFileExpired:
       'An attached file is no longer available — uploaded files are stored for a limited time. It has been removed from this conversation. Try again without it, or upload the file again.',
