@@ -584,6 +584,7 @@
   "enterPromptDescriptionPlaceholder": "ما الغرض من هذا الموجه؟",
   "enterPromptContentPlaceholder": "اكتب موجهك هنا. استخدم '{{variable}}' للمحتوى الديناميكي.",
   "common": {
+    "clearSearch": "مسح البحث",
     "close": "إغلاق",
     "remove": "إزالة",
     "tryAgain": "حاول مرة أخرى",

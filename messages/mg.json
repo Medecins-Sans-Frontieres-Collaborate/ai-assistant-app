@@ -687,6 +687,7 @@
     }
   },
   "common": {
+    "clearSearch": "Fafao ny fikarohana",
     "close": "Hidio",
     "remove": "Esory",
     "tryAgain": "Avereno",

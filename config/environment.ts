@@ -55,7 +55,8 @@ const serverEnvSchema = z.object({
   // Azure Speech Services (for batch transcription)
   AZURE_SPEECH_KEY: z.string().optional(),
   AZURE_SPEECH_REGION: z.string().default('eastus'),
-
+  AZURE_SPEECH_KEY_EU: z.string().optional(),
+  AZURE_SPEECH_REGION_EU: z.string().optional(),
   // Azure AI Foundry
   AZURE_AI_FOUNDRY_ENDPOINT: z.string().url().optional(),
   AZURE_AI_FOUNDRY_OPENAI_ENDPOINT: z.string().url().optional(),

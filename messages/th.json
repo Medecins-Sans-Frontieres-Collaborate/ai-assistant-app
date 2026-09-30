@@ -501,6 +501,7 @@
   "enterPromptDescriptionPlaceholder": "พร้อมท์นี้ใช้ทำอะไร?",
   "enterPromptContentPlaceholder": "เขียนพร้อมท์ของคุณที่นี่ ใช้ '{{variable}}' สำหรับเนื้อหาแบบไดนามิก",
   "common": {
+    "clearSearch": "ล้างการค้นหา",
     "contact": "ติดต่อ",
     "close": "ปิด",
     "remove": "ลบ",

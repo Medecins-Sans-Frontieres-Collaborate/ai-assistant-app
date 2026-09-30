@@ -583,6 +583,7 @@
   "enterPromptDescriptionPlaceholder": "Lời nhắc này dùng để làm gì?",
   "enterPromptContentPlaceholder": "Viết lời nhắc của bạn ở đây. Sử dụng '{{variable}}' cho nội dung động.",
   "common": {
+    "clearSearch": "Xóa tìm kiếm",
     "contact": "Liên hệ",
     "close": "Đóng",
     "remove": "Xóa",
