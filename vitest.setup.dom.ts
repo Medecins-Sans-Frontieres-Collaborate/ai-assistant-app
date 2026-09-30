@@ -67,6 +67,7 @@ const mockMessages: Record<string, unknown> = {
     },
     area: {
       workflows: 'Workflows',
+      webSearch: 'Web search',
       viewAs: 'View as',
       globalAdmins: 'Global admins',
       announcements: 'Announcements',
@@ -112,6 +113,11 @@ const mockMessages: Record<string, unknown> = {
       title: 'Headlines found — deep search still running',
       hint: 'The deep Bing search can take up to 90 seconds. Answer now from the {count} headlines already found, or wait for the merged result.',
       summarizeNow: 'Summarize from headlines now',
+      multiStepTitle:
+        'Results so far — checking whether they answer the question',
+      multiStepHint:
+        'The search may look further — another search or a read of the most promising pages. Answer now from the {count} results already found if you would rather not wait.',
+      answerNow: 'Answer from these results now',
       sourcesCount: '{count} sources',
       showAll: 'Show all {count} sources',
       showFewer: 'Show fewer',
@@ -851,6 +857,9 @@ const mockMessages: Record<string, unknown> = {
       sourcesLabel: 'Sources per search',
       sourcesDescription:
         'How many distinct sources a search keeps as citations. Research-style questions may automatically widen this.',
+      multiStepLabel: 'Multi-step search',
+      multiStepDescription:
+        'With MSF web search, the assistant checks the first results and, only when they fall short, searches again or reads the most promising pages before answering. Most questions still finish in one step. Turn this off to keep every search to a single round.',
       freshnessLabel: 'Preferred recency',
       freshnessDescription:
         'How recent results should be. Automatic lets each question decide (breaking news prefers the last day).',
