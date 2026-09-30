@@ -22,6 +22,8 @@ import { SearchMode } from '@/types/searchMode';
 import {
   MAX_SEARCH_RESULT_COUNT,
   PrecomputedSearchResults,
+  ResolvedWebSearchProvider,
+  WebSearchCategory,
   sanitizeWebSearchOptions,
 } from '@/types/webSearch';
 
@@ -35,7 +37,10 @@ import {
   CodeInterpreterResult,
   CodeInterpreterTool,
 } from '../tools/CodeInterpreterTool';
-import { WebSearchTool } from '../tools/WebSearchTool';
+import {
+  WebSearchTool,
+  resolveDefaultWebSearchProvider,
+} from '../tools/WebSearchTool';
 import { readCitedSources } from '../tools/citedSourceReader';
 import { runDocumentTrim } from '../tools/documentTrim/DocumentTrimPipeline';
 import {
@@ -89,8 +94,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
   // "Executed by" label on the search tool record for feed-based providers
   // (the Bing and combined paths show the agent model id instead).
   private static readonly FEED_PROVIDER_LABELS: Partial<
-    Record<typeof env.WEB_SEARCH_PROVIDER, string>
+    Record<ResolvedWebSearchProvider, string>
   > = {
+    searxng: 'SearXNG',
     news: 'GDELT + Google News',
     gdelt: 'GDELT',
     'google-news': 'Google News',
@@ -387,6 +393,13 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // mode; forced decisions are unioned in afterwards.
     const undecidedSearch = searchRequested && !forceWebSearch;
     const undecidedInterpreter = interpreterRequested && !forceInterpreter;
+    // Our own SearXNG instance is a keyword engine with cheap parallel
+    // requests: the router plans 1-5 queries for it, and a FORCED search
+    // still gets planned (the raw user prompt is a poor keyword query —
+    // the Bing agent paths expand it themselves, SearXNG cannot).
+    const plansQueries =
+      searchRequested && this.resolveSearchProvider(context) === 'searxng';
+    const planForcedSearch = forceWebSearch && plansQueries;
     // Citations from the most recent searched turn: follow-up questions
     // about that data are answered by re-fetching THOSE articles rather
     // than searching fresh (same sources, full depth).
@@ -394,7 +407,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
       ? ToolRouterEnricher.latestCitations(baseMessages)
       : [];
     let decided: ToolRouterResponse = { tools: [] };
-    if (undecidedSearch || undecidedInterpreter) {
+    if (undecidedSearch || undecidedInterpreter || planForcedSearch) {
       decided = await this.toolRouterService.determineTool({
         messages: baseMessages,
         currentMessage,
@@ -404,6 +417,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
         hasUserProvidedContent:
           undecidedSearch &&
           this.hasUserProvidedContent(context, rawUserPrompt),
+        searchDecided: planForcedSearch,
+        searchFanOut: plansQueries,
       });
     } else {
       console.log(
@@ -444,14 +459,19 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // Use the raw user prompt (no merged file/transcript context) for
     // forced runs so the tool backend gets a clean query/task. The tool's
     // own model can refine it further if needed.
+    // A forced search uses the planned queries when the router produced
+    // them; a failed/absent plan degrades to the raw prompt as before.
+    const useRawPrompt =
+      forceWebSearch && !(planForcedSearch && decided.searchQuery);
     const toolResponse: ToolRouterResponse = {
       tools: [...tools],
-      searchQuery: forceWebSearch ? rawUserPrompt : decided.searchQuery,
-      searchQueries: forceWebSearch ? undefined : decided.searchQueries,
+      searchQuery: useRawPrompt ? rawUserPrompt : decided.searchQuery,
+      searchQueries: useRawPrompt ? undefined : decided.searchQueries,
       // Dynamic tuning only comes from the classifier; forced searches have
       // no router read and fall back to the user's configured options.
       searchRecency: decided.searchRecency,
       searchComprehensive: decided.searchComprehensive,
+      searchCategory: decided.searchCategory,
       searchFollowUp: decided.searchFollowUp,
       codeTask: forceInterpreter ? rawUserPrompt : decided.codeTask,
     };
@@ -484,12 +504,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // questions widen the source cap beyond the configured default.
     if (toolResponse.tools.includes('web_search') && !followUpSatisfied) {
       const options = sanitizeWebSearchOptions(context.webSearchOptions);
-      // User-selected backend wins; 'auto' defers to the deployment
-      // default (WEB_SEARCH_PROVIDER env).
-      const provider =
-        options.provider === 'auto'
-          ? env.WEB_SEARCH_PROVIDER
-          : options.provider;
+      const provider = this.resolveSearchProvider(context);
       const freshness =
         options.freshness === 'auto'
           ? (toolResponse.searchRecency ?? 'any')
@@ -510,6 +525,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           // Research-style questions justify waiting on every news feed;
           // single-fact lookups answer from the fastest one.
           deep: toolResponse.searchComprehensive === true,
+          category: toolResponse.searchCategory,
         },
       );
     }
@@ -527,6 +543,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
   }
 
   /**
+   * User-selected backend wins; 'auto' defers to the deployment default
+   * (SearXNG where configured; WEB_SEARCH_PROVIDER env pins it).
+   */
+  private resolveSearchProvider(
+    context: ChatContext,
+  ): ResolvedWebSearchProvider {
+    const { provider } = sanitizeWebSearchOptions(context.webSearchOptions);
+    return provider === 'auto' ? resolveDefaultWebSearchProvider() : provider;
+  }
+
+  /**
    * Runs the web-search tool and merges results into the last user message.
    * Returns the context unchanged when search is unavailable; on failure
    * merges a failure notice instead so the model levels with the user.
@@ -537,14 +564,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
     tuning: {
       resultCount: number;
       freshness: 'day' | 'week' | 'month' | 'any';
-      provider:
-        | 'news'
-        | 'gdelt'
-        | 'google-news'
-        | 'bing-agent'
-        | 'bing-responses'
-        | 'combined';
+      provider: ResolvedWebSearchProvider;
       deep: boolean;
+      category?: WebSearchCategory;
     },
   ): Promise<ChatContext> {
     // Usage limit (docs/LIMITS.md). DEGRADE, DO NOT ABORT: by the time an
@@ -634,6 +656,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
             freshness: tuning.freshness,
             provider: tuning.provider,
             deep: tuning.deep,
+            category: tuning.category,
             // Combined provider: stream the fast leg's headlines to the
             // client while Bing runs — renders the interim list with the
             // "Summarize from headlines" action.
@@ -863,7 +886,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
         // failed says so — the source count alone would overstate coverage.
         const degradedNote = searchResult.metadata?.bingFailed
           ? ' (Bing failed — Google News headlines only)'
-          : '';
+          : searchResult.metadata?.searxngFallback
+            ? ' (MSF web search unavailable — news feeds used instead)'
+            : '';
         await this.emitSearchRecord(
           context,
           queryLabel,

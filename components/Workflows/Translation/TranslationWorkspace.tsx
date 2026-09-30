@@ -52,6 +52,7 @@ import {
   applyEdit,
   applyEditsInOrder,
 } from '@/lib/utils/shared/translation/editApplication';
+import { mergeGlossaryEntries } from '@/lib/utils/shared/translation/glossaryMatch';
 import {
   TRANSLATION_LANGUAGES,
   findTranslationLanguage,
@@ -62,6 +63,7 @@ import { TRANSLATION_QUALITY_CRITERIA } from '@/lib/utils/shared/translation/qua
 import {
   TranslationAnalysis,
   TranslationEditStatus,
+  TranslationGlossary,
   TranslationGlossaryCheck,
   TranslationReviewRound,
   TranslationRoundChange,
@@ -82,6 +84,7 @@ import { PendingEditsDialog } from '../Shared/Review/PendingEditsDialog';
 import { WorkflowWorkspaceProps } from '../registry';
 import { AnalysisPanel } from './AnalysisPanel';
 import { GlossaryManager } from './GlossaryManager';
+import { GlossaryPicker, languageFit } from './GlossaryPicker';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -104,6 +107,7 @@ export function TranslationWorkspace({
     (s) => s.updateWorkflowState,
   );
   const glossaries = useSettingsStore((s) => s.glossaries);
+  const addGlossary = useSettingsStore((s) => s.addGlossary);
   const customLanguages = useSettingsStore((s) => s.customLanguages);
   const addCustomLanguage = useSettingsStore((s) => s.addCustomLanguage);
   const autoClearResolvedEdits = useSettingsStore(
@@ -140,6 +144,7 @@ export function TranslationWorkspace({
 
   const [langPickerOpen, setLangPickerOpen] = useState(false);
   const [glossariesOpen, setGlossariesOpen] = useState(false);
+  const [glossaryPickerOpen, setGlossaryPickerOpen] = useState(false);
   const [criteriaOpen, setCriteriaOpen] = useState(false);
   /** Live target text while streaming; null = show persisted finalText. */
   const [targetDraft, setTargetDraft] = useState<string | null>(null);
@@ -269,7 +274,56 @@ export function TranslationWorkspace({
     append: appendSource,
   });
   const targetText = targetDraft ?? state?.finalText ?? '';
-  const activeGlossary = glossaries.find((g) => g.id === state?.glossaryId);
+
+  // Glossary attachments — arrays, with the pre-picker single-id fields
+  // read as a fallback so older conversations keep their selection.
+  const selectedPersonalIds = useMemo<string[]>(
+    () => state?.glossaryIds ?? (state?.glossaryId ? [state.glossaryId] : []),
+    [state?.glossaryIds, state?.glossaryId],
+  );
+  const selectedOrgIds = useMemo<string[]>(
+    () =>
+      state?.glossaryGuideIds ??
+      (state?.glossaryGuideId ? [state.glossaryGuideId] : []),
+    [state?.glossaryGuideIds, state?.glossaryGuideId],
+  );
+  /**
+   * Entries of every selected personal glossary, deduplicated with the same
+   * first-wins rule the server applies (selection order = precedence).
+   */
+  const activeGlossaryEntries = useMemo(
+    () =>
+      mergeGlossaryEntries(
+        [],
+        selectedPersonalIds.flatMap(
+          (id) => glossaries.find((g) => g.id === id)?.entries ?? [],
+        ),
+      ),
+    [selectedPersonalIds, glossaries],
+  );
+  const stalePersonalIds = useMemo(
+    () =>
+      selectedPersonalIds.filter((id) => !glossaries.some((g) => g.id === id)),
+    [selectedPersonalIds, glossaries],
+  );
+  const togglePersonalGlossary = useCallback(
+    (id: string) => {
+      const next = selectedPersonalIds.includes(id)
+        ? selectedPersonalIds.filter((x) => x !== id)
+        : [...selectedPersonalIds, id];
+      patchState({ glossaryIds: next, glossaryId: undefined });
+    },
+    [selectedPersonalIds, patchState],
+  );
+  const toggleOrgGlossary = useCallback(
+    (id: string) => {
+      const next = selectedOrgIds.includes(id)
+        ? selectedOrgIds.filter((x) => x !== id)
+        : [...selectedOrgIds, id];
+      patchState({ glossaryGuideIds: next, glossaryGuideId: undefined });
+    },
+    [selectedOrgIds, patchState],
+  );
   const assessment = state?.assessment;
   const hasUnresolvedEdits =
     assessment?.edits.some((e) => e.status === 'pending') ?? false;
@@ -316,8 +370,77 @@ export function TranslationWorkspace({
     () => translationGuides.filter((g) => g.kind === 'terminology'),
     [translationGuides],
   );
-  const attachedTerminologyGuide = terminologyGuides.find(
-    (g) => g.id === state?.glossaryGuideId,
+  const staleOrgIds = useMemo(
+    () =>
+      selectedOrgIds.filter(
+        (id) => !terminologyGuides.some((g) => g.id === id),
+      ),
+    [selectedOrgIds, terminologyGuides],
+  );
+  /** Any attached glossary tagged for a different target language. */
+  const glossaryLanguageMismatch = useMemo(() => {
+    const target = targetLanguage?.id;
+    return (
+      selectedOrgIds.some(
+        (id) =>
+          languageFit(
+            terminologyGuides.find((g) => g.id === id)?.targetLang,
+            target,
+          ) === 'other',
+      ) ||
+      selectedPersonalIds.some(
+        (id) =>
+          languageFit(
+            glossaries.find((g) => g.id === id)?.targetLang,
+            target,
+          ) === 'other',
+      )
+    );
+  }, [
+    selectedOrgIds,
+    selectedPersonalIds,
+    terminologyGuides,
+    glossaries,
+    targetLanguage?.id,
+  ]);
+
+  /**
+   * "Copy to my glossaries": snapshots an organization glossary into the
+   * user's own list (entries come from the per-guide detail route, which
+   * re-checks access). Admin edits never propagate to the copy — the same
+   * semantics as loading a map dataset.
+   */
+  const copyOrgGlossaryToMine = useCallback(
+    async (guide: { id: string; name: string }) => {
+      const response = await fetch(
+        `/api/guides/${encodeURIComponent(guide.id)}`,
+      );
+      if (!response.ok) throw new Error(`copy failed (${response.status})`);
+      const json = (await response.json()) as {
+        data?: {
+          guide?: {
+            entries?: TranslationGlossary['entries'];
+            sourceLang?: string;
+            targetLang?: string;
+          };
+        };
+      };
+      const loaded = json.data?.guide;
+      if (!loaded?.entries) throw new Error('copy failed (no entries)');
+      const now = new Date().toISOString();
+      addGlossary({
+        id: uuidv4(),
+        name: t('translation.copiedGlossaryName', { name: guide.name }),
+        sourceLang: loaded.sourceLang,
+        targetLang: loaded.targetLang,
+        entries: loaded.entries,
+        copiedFromGuideId: guide.id,
+        createdAt: now,
+        updatedAt: now,
+      });
+      toast.success(t('translation.copiedToMine'));
+    },
+    [addGlossary, t],
   );
 
   /**
@@ -408,8 +531,8 @@ export function TranslationWorkspace({
           sourceText: text,
           targetLanguage: targetLanguage.label,
           mode: state.mode,
-          glossaryEntries: activeGlossary?.entries ?? [],
-          glossaryGuideId: state.glossaryGuideId,
+          glossaryEntries: activeGlossaryEntries,
+          glossaryGuideIds: selectedOrgIds,
           modelId: conversation?.model?.id,
           conversationId,
         },
@@ -478,7 +601,8 @@ export function TranslationWorkspace({
     targetLanguage,
     conversationId,
     conversation?.model?.id,
-    activeGlossary,
+    activeGlossaryEntries,
+    selectedOrgIds,
     runWorkflowStream,
     patchState,
     clearError,
@@ -529,8 +653,8 @@ export function TranslationWorkspace({
         targetLanguage: targetLanguage.label,
         criteria,
         customCriteria: customDefs,
-        glossaryEntries: activeGlossary?.entries ?? [],
-        glossaryGuideId: state.glossaryGuideId,
+        glossaryEntries: activeGlossaryEntries,
+        glossaryGuideIds: selectedOrgIds,
         modelId: conversation?.model?.id,
         conversationId,
       });
@@ -590,7 +714,8 @@ export function TranslationWorkspace({
     translationCriteria,
     translationGuides,
     hasUnresolvedEdits,
-    activeGlossary,
+    activeGlossaryEntries,
+    selectedOrgIds,
     conversation?.model?.id,
     conversationId,
     patchState,
@@ -941,54 +1066,52 @@ export function TranslationWorkspace({
           disabled={isRunning}
         />
 
-        <select
-          value={state.glossaryId ?? ''}
-          onChange={(e) =>
-            patchState({ glossaryId: e.target.value || undefined })
-          }
-          disabled={isRunning}
-          aria-label={t('translation.glossary')}
-          className="min-h-[36px] rounded-lg border border-gray-300 bg-transparent px-2 py-1.5 text-sm text-gray-700 disabled:opacity-50 dark:border-gray-700 dark:bg-surface-dark dark:text-gray-300"
-        >
-          <option value="">{t('translation.noGlossary')}</option>
-          {glossaries.map((glossary) => (
-            <option key={glossary.id} value={glossary.id}>
-              {glossary.name}
-            </option>
-          ))}
-        </select>
-
-        {/* Organization terminology guide — attachable ALONGSIDE the local
-            glossary (entries merge server-side; the guide's win on duplicate
-            source terms). */}
-        {(terminologyGuides.length > 0 || state.glossaryGuideId) && (
-          <select
-            value={state.glossaryGuideId ?? ''}
-            onChange={(e) =>
-              patchState({ glossaryGuideId: e.target.value || undefined })
-            }
+        {/* One attachment control for organization + personal glossaries;
+            the popover sorts by fit with the current target language. */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setGlossaryPickerOpen((open) => !open)}
+            aria-expanded={glossaryPickerOpen}
+            aria-haspopup="dialog"
             disabled={isRunning}
-            aria-label={t('translation.organizationTerminology')}
-            className="min-h-[36px] rounded-lg border border-gray-300 bg-transparent px-2 py-1.5 text-sm text-gray-700 disabled:opacity-50 dark:border-gray-700 dark:bg-surface-dark dark:text-gray-300"
+            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm text-gray-700 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300"
           >
-            <option value="">
-              {t('translation.noOrganizationTerminology')}
-            </option>
-            {terminologyGuides.map((guide) => (
-              <option key={guide.id} value={guide.id}>
-                {guide.name}
-              </option>
-            ))}
-            {/* A stored guide no longer visible (deleted or access revoked)
-                stays selectable-but-disabled so the user can SEE the stale
-                attachment and clear it — the server would 400 anyway. */}
-            {state.glossaryGuideId && !attachedTerminologyGuide && (
-              <option value={state.glossaryGuideId} disabled>
-                {t('translation.terminologyGuideUnavailable')}
-              </option>
+            <IconBook2 size={15} aria-hidden />
+            {t('translation.glossariesButton', {
+              count: String(selectedOrgIds.length + selectedPersonalIds.length),
+            })}
+            {glossaryLanguageMismatch && (
+              <span
+                className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
+                title={t('translation.glossaryLanguageMismatch')}
+              >
+                {t('translation.glossaryMismatchChip')}
+              </span>
             )}
-          </select>
-        )}
+          </button>
+          {glossaryPickerOpen && (
+            <GlossaryPicker
+              orgGlossaries={terminologyGuides}
+              personalGlossaries={glossaries}
+              selectedOrgIds={selectedOrgIds}
+              selectedPersonalIds={selectedPersonalIds}
+              staleOrgIds={staleOrgIds}
+              stalePersonalIds={stalePersonalIds}
+              targetLangId={targetLanguage?.id}
+              onToggleOrg={toggleOrgGlossary}
+              onTogglePersonal={togglePersonalGlossary}
+              onCopyToMine={copyOrgGlossaryToMine}
+              onManage={() => {
+                setGlossaryPickerOpen(false);
+                setGlossariesOpen(true);
+                setCriteriaOpen(false);
+              }}
+              onClose={() => setGlossaryPickerOpen(false)}
+              disabled={isRunning}
+            />
+          )}
+        </div>
 
         <button
           type="button"
@@ -1377,7 +1500,10 @@ export function TranslationWorkspace({
 
       {glossariesOpen && (
         <div className="h-72 shrink-0">
-          <GlossaryManager onClose={() => setGlossariesOpen(false)} />
+          <GlossaryManager
+            onClose={() => setGlossariesOpen(false)}
+            defaultTargetLang={targetLanguage?.id}
+          />
         </div>
       )}
 

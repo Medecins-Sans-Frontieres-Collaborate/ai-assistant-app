@@ -194,4 +194,34 @@ export default [
       'no-undef': 'off',
     },
   },
+  {
+    // The drafter core knows a version's target only as a `VersionSpec`
+    // (docs/CHANNEL_DRAFTER_DESIGN.md §4.0). It must never learn that
+    // channels exist: adapters are composed in drafter/adapters.ts and
+    // handed to the shared components as props. This rule is the test of
+    // that seam.
+    files: [
+      'lib/utils/shared/drafter/core/**/*.{ts,tsx}',
+      'lib/services/workflows/shared/drafter/**/*.{ts,tsx}',
+      'components/Workflows/Shared/Drafter/**/*.{ts,tsx}',
+      'client/hooks/workflows/useDraftSet.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/drafter/channels/**',
+                '**/Workflows/ChannelDrafter/**',
+              ],
+              message:
+                'The drafter core must not import channel code. Pass it in through a SpecAdapter.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ];

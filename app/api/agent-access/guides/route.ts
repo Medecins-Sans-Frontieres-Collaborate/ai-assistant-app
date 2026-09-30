@@ -23,12 +23,21 @@ import {
   delegateToCreator,
 } from '@/lib/services/agentAccess/adminRouteHelpers';
 import {
+  WrittenGuidePayload,
+  discardGuidePayload,
+  pruneGuidePayloads,
+  writeGuidePayload,
+} from '@/lib/services/agentAccess/guidePayloadStore';
+import { getPayloadCache } from '@/lib/services/agentAccess/payloadCache';
+import {
   AgentAccessConfig,
   GUIDE_SOURCE,
   Guide,
   GuideHistoryEntry,
+  GuidePayloadFields,
   GuideWorkflowSchema,
   canonicalAgentKey,
+  guidePayloadListPrefix,
 } from '@/lib/services/agentAccess/types';
 
 import {
@@ -53,6 +62,7 @@ import {
   MAX_GUIDE_TERM_NOTE_CHARS,
   MAX_GUIDE_VOICE_CHARS,
 } from '@/lib/utils/shared/review/guideCriteria';
+import { findTranslationLanguage } from '@/lib/utils/shared/translation/languages';
 
 import { auth } from '@/auth';
 import { randomUUID } from 'crypto';
@@ -70,6 +80,12 @@ import { z } from 'zod';
  * custom-criterion rubric cap — so the write bound here (MAX_GUIDE_BODY_CHARS)
  * is a storage sanity limit, not a prompt budget; injection applies its own
  * token budget.
+ *
+ * STORAGE SPLIT: the record written to `guides/<id>.json` is META only. The
+ * kind's payload fields go to an immutable blob FIRST (guidePayloadStore),
+ * and the meta — the CAS anchor the client's If-Match targets — is then
+ * swapped to reference it. A lost CAS race therefore never leaves the meta
+ * pointing at another writer's payload; the loser's blob is discarded.
  */
 
 /**
@@ -87,6 +103,20 @@ const guideBaseFields = {
   languages: z.array(z.string().trim().min(1).max(80)).max(20).default([]),
   workflows: z.array(GuideWorkflowSchema).min(1).max(2),
 };
+
+/**
+ * Catalog language id (TRANSLATION_LANGUAGES) for the terminology language
+ * pair. Admin glossaries are catalog-only: a user's custom languages are
+ * per-browser and cannot be referenced by a shared record.
+ */
+const catalogLanguageId = z
+  .string()
+  .trim()
+  .min(1)
+  .max(16)
+  .refine((id) => findTranslationLanguage(id) !== undefined, {
+    message: 'unknown language id',
+  });
 
 const bodyKindFields = {
   ...guideBaseFields,
@@ -137,6 +167,8 @@ const guideFieldsSchema = z.discriminatedUnion('kind', [
     .object({
       kind: z.literal('terminology'),
       ...guideBaseFields,
+      sourceLang: catalogLanguageId.optional(),
+      targetLang: catalogLanguageId.optional(),
       entries: z
         .array(
           z
@@ -201,7 +233,7 @@ function parsePutBody(
  * PUT so a record can never carry another kind's leftovers (the permissive
  * read schema would keep them forever).
  */
-function payloadFieldsOf(fields: GuideFields): Partial<Guide> {
+function payloadFieldsOf(fields: GuideFields): GuidePayloadFields {
   switch (fields.kind) {
     case 'style':
     case 'compliance':
@@ -248,6 +280,45 @@ function normalizeWorkflows(workflows: Guide['workflows']): Guide['workflows'] {
   return [...new Set(workflows)];
 }
 
+/** The structured language pair, present on terminology guides only. */
+function languagePairOf(
+  fields: GuideFields,
+): Pick<Guide, 'sourceLang' | 'targetLang'> {
+  if (fields.kind !== 'terminology') return {};
+  return {
+    ...(fields.sourceLang ? { sourceLang: fields.sourceLang } : {}),
+    ...(fields.targetLang ? { targetLang: fields.targetLang } : {}),
+  };
+}
+
+/** The meta fields that reference an external payload version. */
+function payloadRefFields(
+  written: WrittenGuidePayload,
+): Pick<Guide, 'payloadRef' | 'payloadFormat' | 'entryCount'> {
+  return {
+    payloadRef: written.payloadRef,
+    payloadFormat: written.payloadFormat,
+    ...(written.entryCount !== undefined
+      ? { entryCount: written.entryCount }
+      : {}),
+  };
+}
+
+/**
+ * Superseded payload versions are removed after the save has landed. Best
+ * effort: an orphan is wasted bytes, never a wrong answer, and the next
+ * save prunes again.
+ */
+async function pruneBestEffort(id: string, keepRef: string | null) {
+  try {
+    await pruneGuidePayloads(createAgentAccessBlobStorage(), id, keepRef);
+  } catch (error) {
+    console.error(
+      `[agent-access-admin] guide payload prune failed for id=${sanitizeForLog(id)}: ${sanitizeForLog(error)}`,
+    );
+  }
+}
+
 /**
  * History is the durable audit trail but blob storage has no transactions: by
  * the time the entry is written the guide mutation has already landed, so a
@@ -285,6 +356,7 @@ async function rollbackCreate(
     // is met either way.
     await deleteGuide(createAgentAccessBlobStorage(), id, etag);
     auditAdminWrite('guide-delete', canonicalKey, userMail);
+    await pruneBestEffort(id, null);
     return true;
   } catch (error) {
     console.error(
@@ -417,6 +489,15 @@ export async function POST(request: NextRequest) {
     const id = `guide-${randomUUID().replace(/-/g, '').slice(0, 12)}`;
     const canonicalKey = canonicalAgentKey(GUIDE_SOURCE, id);
     const now = new Date().toISOString();
+    const storage = createAgentAccessBlobStorage();
+
+    // Payload blob first (immutable, fresh ref), then the meta that names it.
+    const written = await writeGuidePayload(
+      storage,
+      id,
+      parsed.data.kind,
+      payloadFieldsOf(parsed.data),
+    );
     const guide: Guide = {
       version: 1,
       id,
@@ -424,7 +505,8 @@ export async function POST(request: NextRequest) {
       name: parsed.data.name,
       description: parsed.data.description,
       languages: parsed.data.languages,
-      ...payloadFieldsOf(parsed.data),
+      ...languagePairOf(parsed.data),
+      ...payloadRefFields(written),
       workflows: normalizeWorkflows(parsed.data.workflows),
       createdBy: userMail,
       createdAt: now,
@@ -434,7 +516,13 @@ export async function POST(request: NextRequest) {
 
     // writeGuide derives the blob path from the record's own id, so the key
     // audited/delegated below is exactly the key being written.
-    const etag = await writeGuide(createAgentAccessBlobStorage(), guide, null);
+    let etag: string;
+    try {
+      etag = await writeGuide(storage, guide, null);
+    } catch (error) {
+      await discardGuidePayload(storage, id, written);
+      throw error;
+    }
     service.invalidate();
     auditAdminWrite('guide-upsert', canonicalKey, userMail);
 
@@ -558,6 +646,15 @@ export async function PUT(request: NextRequest) {
     }
 
     const now = new Date().toISOString();
+    const storage = createAgentAccessBlobStorage();
+    // Payload blob first (new immutable version); the meta swap below is the
+    // CAS. A legacy inline record migrates to the split form on this save.
+    const written = await writeGuidePayload(
+      storage,
+      existing.guide.id,
+      existing.guide.kind,
+      payloadFieldsOf(parsed.fields),
+    );
     // Constructed explicitly — NEVER spread over existing.guide: the
     // permissive read schema would keep any stale cross-kind payload fields
     // forever. Only id/createdBy/createdAt survive from the stored record.
@@ -568,7 +665,8 @@ export async function PUT(request: NextRequest) {
       name: parsed.fields.name,
       description: parsed.fields.description,
       languages: parsed.fields.languages,
-      ...payloadFieldsOf(parsed.fields),
+      ...languagePairOf(parsed.fields),
+      ...payloadRefFields(written),
       workflows: normalizeWorkflows(parsed.fields.workflows),
       createdBy: existing.guide.createdBy,
       createdAt: existing.guide.createdAt,
@@ -576,13 +674,18 @@ export async function PUT(request: NextRequest) {
       updatedAt: now,
     };
 
-    const etag = await writeGuide(
-      createAgentAccessBlobStorage(),
-      guide,
-      ifMatchEtag,
-    );
+    let etag: string;
+    try {
+      etag = await writeGuide(storage, guide, ifMatchEtag);
+    } catch (error) {
+      // CAS lost (or storage failed): the new version is unreferenced —
+      // drop it so it never counts against the grace-window prune.
+      await discardGuidePayload(storage, existing.guide.id, written);
+      throw error;
+    }
     service.invalidate();
     auditAdminWrite('guide-upsert', canonicalKey, userMail);
+    await pruneBestEffort(existing.guide.id, written.payloadRef);
     await appendHistoryBestEffort({
       version: 1,
       canonicalKey,
@@ -648,10 +751,15 @@ export async function DELETE(request: NextRequest) {
       ifMatchEtag,
     );
     if (!deleted) {
+      // Idempotent re-delete: still sweep any payload versions an earlier
+      // attempt left behind (meta gone → nothing references them).
+      await pruneBestEffort(id.trim(), null);
       return notFoundResponse('Guide');
     }
     service.invalidate();
     auditAdminWrite('guide-delete', canonicalKey, userMail);
+    await pruneBestEffort(id.trim(), null);
+    getPayloadCache().deleteByPrefix(guidePayloadListPrefix(id.trim()));
     await appendHistoryBestEffort({
       version: 1,
       canonicalKey,

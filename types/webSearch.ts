@@ -18,9 +18,13 @@
  * 'bing-responses' is the native web_search tool on the Azure OpenAI
  * Responses API — the same Bing grounding as 'bing-agent' but a direct
  * model call instead of a Foundry agent run (A/B latency candidate).
+ * 'searxng' is MSF's own SearXNG metasearch instance — general web plus
+ * news/science/IT/humanitarian engines, seconds-fast, real publisher URLs.
+ * Where the instance is unconfigured or unreachable it degrades to 'news'.
  */
 export type WebSearchProviderOption =
   | 'auto'
+  | 'searxng'
   | 'news'
   | 'google-news'
   | 'gdelt'
@@ -28,8 +32,15 @@ export type WebSearchProviderOption =
   | 'bing-responses'
   | 'combined';
 
+/** A concrete backend — what 'auto' resolves to server-side. */
+export type ResolvedWebSearchProvider = Exclude<
+  WebSearchProviderOption,
+  'auto'
+>;
+
 export const WEB_SEARCH_PROVIDER_OPTIONS: WebSearchProviderOption[] = [
   'auto',
+  'searxng',
   'news',
   'google-news',
   'gdelt',
@@ -37,6 +48,37 @@ export const WEB_SEARCH_PROVIDER_OPTIONS: WebSearchProviderOption[] = [
   'bing-responses',
   'combined',
 ];
+
+/**
+ * Topic categories the SearXNG instance serves (its engine allow-list):
+ * 'general' web, 'news', 'science' (MSF Science Portal, Europe PMC, PubMed,
+ * OpenAlex, …), 'it' (GitHub, Stack Overflow, MDN) and 'humanitarian'
+ * (OCHA HDX datasets). Picked per message by the tool router; providers
+ * other than 'searxng' ignore it.
+ */
+export type WebSearchCategory =
+  | 'general'
+  | 'news'
+  | 'science'
+  | 'it'
+  | 'humanitarian';
+
+export const WEB_SEARCH_CATEGORIES: WebSearchCategory[] = [
+  'general',
+  'news',
+  'science',
+  'it',
+  'humanitarian',
+];
+
+export function isWebSearchCategory(
+  value: unknown,
+): value is WebSearchCategory {
+  return (
+    typeof value === 'string' &&
+    (WEB_SEARCH_CATEGORIES as string[]).includes(value)
+  );
+}
 
 export interface WebSearchOptions {
   /**
@@ -60,7 +102,9 @@ export const MAX_SEARCH_RESULT_COUNT = 15;
 export const DEFAULT_WEB_SEARCH_OPTIONS: WebSearchOptions = {
   resultCount: 8,
   freshness: 'auto',
-  provider: 'combined',
+  // 'auto' lets the deployment pick (SearXNG where configured), so backend
+  // changes reach users without another store migration.
+  provider: 'auto',
 };
 
 /**

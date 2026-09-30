@@ -268,6 +268,20 @@ export function FieldDetail({
                       <span className="text-gray-600 dark:text-gray-400">
                         “{p.excerpt}”
                       </span>
+                      {p.verified !== undefined && (
+                        <span
+                          className={`mt-0.5 block text-[11px] ${
+                            p.verified
+                              ? 'text-green-800 dark:text-green-300'
+                              : 'text-amber-800 dark:text-amber-300'
+                          }`}
+                        >
+                          {p.verified ? '✓ ' : '⚠ '}
+                          {p.verified
+                            ? t('excerptFound')
+                            : t('excerptNotFound')}
+                        </span>
+                      )}
                     </li>
                   );
                 })}

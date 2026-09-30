@@ -19,6 +19,21 @@ import type { PolicyResponse } from '@/components/Limits/types';
 import '@testing-library/jest-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('@/lib/navigation', () => ({
+  Link: ({
+    href,
+    children,
+    ...rest
+  }: {
+    href: string;
+    children: React.ReactNode;
+  }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}));
+
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
   useLocale: () => 'en',
@@ -762,120 +777,21 @@ describe('LimitsPanel — global mode', () => {
     expect((put.body as { timezone: string }).timezone).toBe('Europe/Paris');
   });
 
-  it('adds a delegation from the Delegations tab and PUTs it WITHOUT an id', async () => {
-    globalRouting((call) =>
-      call.method === 'PUT'
-        ? { status: 200, body: envelope({ etag: '"e2"' }) }
-        : undefined,
-    );
+  it('shows delegations READ-ONLY and points at the Delegations area (they are no longer edited here)', async () => {
+    globalRouting(() => undefined);
     renderPanel();
 
     fireEvent.click(
       await screen.findByRole('tab', { name: 'tab.delegations' }),
     );
-    fireEvent.click(screen.getByRole('button', { name: 'addDelegation' }));
-    // New card renders expanded; name it.
-    const labels = screen.getAllByLabelText('delegationLabelLabel');
-    fireEvent.change(labels[labels.length - 1], {
-      target: { value: 'Geneva' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: 'save' }));
 
-    await waitFor(() => expect(putCalls()).toHaveLength(1));
-    const delegations = (
-      putCalls()[0].body as { delegations: Array<Record<string, unknown>> }
-    ).delegations;
-    expect(delegations).toHaveLength(2);
-    expect(delegations[0].id).toBe(DEL_OCP);
-    expect(delegations[1]).not.toHaveProperty('id');
-    expect(delegations[1]).toMatchObject({
-      label: 'Geneva',
-      enabled: true,
-      maxOverrides: 25,
-    });
-  });
-
-  /**
-   * The PUT response carries the SAVED document; the panel must adopt its
-   * etag and server-minted delegation ids from there. Relying on a follow-up
-   * GET meant a failed refetch left the stale etag (every later Save 409'd)
-   * and kept the new delegation marked "new", so the next Save re-sent it
-   * without an id and the server minted a second one while dropping the
-   * first.
-   */
-  it('adopts the PUT response (etag + minted delegation id) even when the follow-up GET fails', async () => {
-    let puts = 0;
-    responder = (call) => {
-      if (call.method === 'GET' && call.url === '/api/limits/scoped') {
-        return {
-          status: 200,
-          body: envelope(
-            scopedView({ isGlobalAdmin: true, delegations: [], overrides: [] }),
-          ),
-        };
-      }
-      if (call.method === 'GET' && call.url === '/api/limits/policy') {
-        // The initial read succeeds; every refetch after a save fails.
-        return puts === 0
-          ? { status: 200, body: envelope(policyResponse()) }
-          : { status: 500, body: { error: 'storage' } };
-      }
-      if (call.method === 'PUT') {
-        puts += 1;
-        const saved = policy({
-          delegations: [
-            ...policy().delegations,
-            {
-              id: 'del-00000000cafe',
-              label: 'Geneva',
-              enabled: true,
-              admins: [],
-              jurisdiction: [],
-              maxOverrides: 25,
-              createdBy: 'global@msf.org',
-              createdAt: '2026-01-01T00:00:00.000Z',
-              updatedBy: 'global@msf.org',
-              updatedAt: '2026-01-01T00:00:00.000Z',
-            },
-          ],
-        });
-        return {
-          status: 200,
-          body: envelope({ policy: saved, etag: `"e${puts + 1}"` }),
-        };
-      }
-      return undefined;
-    };
-    renderPanel();
-
-    fireEvent.click(
-      await screen.findByRole('tab', { name: 'tab.delegations' }),
-    );
-    fireEvent.click(screen.getByRole('button', { name: 'addDelegation' }));
-    const labels = screen.getAllByLabelText('delegationLabelLabel');
-    fireEvent.change(labels[labels.length - 1], {
-      target: { value: 'Geneva' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: 'save' }));
-    await waitFor(() => expect(putCalls()).toHaveLength(1));
     expect(
-      (putCalls()[0].body as { delegations: Array<Record<string, unknown>> })
-        .delegations[1],
-    ).not.toHaveProperty('id');
-    await waitFor(() => expect(toast.success).toHaveBeenCalledWith('saved'));
-
-    // Dirty the draft again and save: the etag and the minted id must come
-    // from the PUT response, since the GET is failing.
-    const timezone = screen.getByLabelText('timezoneLabel');
-    await waitFor(() => expect(timezone).toHaveValue('UTC'));
-    fireEvent.change(timezone, { target: { value: 'Europe/Paris' } });
-    fireEvent.click(screen.getByRole('button', { name: 'save' }));
-    await waitFor(() => expect(putCalls()).toHaveLength(2));
-    expect(putCalls()[1].headers['If-Match']).toBe('"e2"');
+      screen.queryByRole('button', { name: 'addDelegation' }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('delegationsManagedElsewhere')).toBeInTheDocument();
     expect(
-      (putCalls()[1].body as { delegations: Array<Record<string, unknown>> })
-        .delegations[1].id,
-    ).toBe('del-00000000cafe');
+      screen.getByRole('link', { name: 'delegationsManagedElsewhereLink' }),
+    ).toHaveAttribute('href', '/admin/delegations');
   });
 
   /**

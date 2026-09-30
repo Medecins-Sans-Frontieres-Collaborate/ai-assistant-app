@@ -336,6 +336,10 @@ export enum OpenAIModelID {
   // Sol, so simply Foundational version 6 (it shipped alone — no sub-variant
   // split). Deliberately NOT a family default (no defaultRank) — cost policy.
   GPT_6_ASTRA = 'gpt-6-astra',
+  // GPT-6.1 Sol (2026-09-29, version 2026-09-29): the only 6.1 model so far
+  // ("Sol Pro" is the same deployment with reasoning.mode=pro, not a separate
+  // model). Foundational version 6.1; no defaultRank — cost policy.
+  GPT_6_1_SOL = 'gpt-6.1-sol',
   // Rolling alias Azure names as the replacement for retired gpt-*-chat
   // model versions; the deployment is upgraded in place as new chat models ship.
   GPT_CHAT_LATEST = 'gpt-chat-latest',
@@ -416,6 +420,7 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   // version chips in the details panel rather than list rows, so position
   // below only breaks ties (usage mode, equal versionRank) and orders the
   // flattened edit-order list.
+  OpenAIModelID.GPT_6_1_SOL,
   OpenAIModelID.GPT_6_ASTRA,
   OpenAIModelID.GPT_5_6_SOL,
   OpenAIModelID.GPT_5_6_TERRA,

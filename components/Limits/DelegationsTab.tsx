@@ -27,6 +27,8 @@ import {
 } from '@/components/Limits/jurisdiction';
 import { LIMITS_NOTE_CARD } from '@/components/Limits/limitsClasses';
 
+import { Link } from '@/lib/navigation';
+
 /** The document's override budget — the server's own constant, design §5. */
 export const DOCUMENT_OVERRIDE_CAP = MAX_OVERRIDES;
 
@@ -51,6 +53,13 @@ interface DelegationsTabProps {
   onChange: (patch: DelegationsPatch) => void;
   onAdd: () => void;
   disabled?: boolean;
+  /**
+   * Delegations are owned by the shared Delegations admin area (who, whose
+   * users, which grants); the limits policy only COMPOSES them on read. The
+   * tab then shows them read-only — budget, overlaps and owned overrides are
+   * still limits questions — and points at where they are edited.
+   */
+  managedElsewhere?: boolean;
 }
 
 /**
@@ -67,9 +76,11 @@ export const DelegationsTab: FC<DelegationsTabProps> = ({
   newIds,
   onChange,
   onAdd,
-  disabled = false,
+  disabled: disabledProp = false,
+  managedElsewhere = false,
 }) => {
   const t = useTranslations('limits');
+  const disabled = disabledProp || managedElsewhere;
 
   const overlaps = useMemo(
     () => delegationOverlaps(delegations),
@@ -138,6 +149,17 @@ export const DelegationsTab: FC<DelegationsTabProps> = ({
       <p className="text-sm text-gray-600 dark:text-gray-400">
         {t('delegationsDescription')}
       </p>
+      {managedElsewhere && (
+        <p className={LIMITS_NOTE_CARD} role="note">
+          {t('delegationsManagedElsewhere')}{' '}
+          <Link
+            href="/admin/delegations"
+            className="font-medium text-blue-700 underline dark:text-blue-300"
+          >
+            {t('delegationsManagedElsewhereLink')}
+          </Link>
+        </p>
+      )}
       <p
         className={budgetExceeded ? ADMIN_BANNER_WARN : ADMIN_MUTED}
         role={budgetExceeded ? 'alert' : undefined}
@@ -251,15 +273,17 @@ export const DelegationsTab: FC<DelegationsTabProps> = ({
         );
       })}
 
-      <button
-        type="button"
-        className={ADMIN_BTN_SECONDARY}
-        onClick={onAdd}
-        disabled={disabled}
-      >
-        <IconPlus size={16} />
-        {t('addDelegation')}
-      </button>
+      {!managedElsewhere && (
+        <button
+          type="button"
+          className={ADMIN_BTN_SECONDARY}
+          onClick={onAdd}
+          disabled={disabled}
+        >
+          <IconPlus size={16} />
+          {t('addDelegation')}
+        </button>
+      )}
     </div>
   );
 };

@@ -21,6 +21,7 @@ import {
 import {
   ALL_AGENT_KEYS,
   AdminStatus,
+  owningKeyOf,
 } from '@/lib/services/agentAccess/adminAuth';
 import { AgentAccessConfig } from '@/lib/services/agentAccess/types';
 
@@ -42,9 +43,11 @@ const DELEGATION_CAS_ATTEMPTS = 3;
 /** May this admin write the given canonical key? Keys are compared canonicalized. */
 export function canEditKey(status: AdminStatus, canonicalKey: string): boolean {
   if (status.editableAgentKeys === ALL_AGENT_KEYS) return true;
-  return status.editableAgentKeys.some(
-    (key) => key.trim().toLowerCase() === canonicalKey,
-  );
+  const owning = owningKeyOf(canonicalKey);
+  return status.editableAgentKeys.some((key) => {
+    const held = key.trim().toLowerCase();
+    return held === canonicalKey || (owning !== null && held === owning);
+  });
 }
 
 export function auditAdminWrite(

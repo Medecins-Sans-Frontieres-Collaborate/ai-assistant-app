@@ -12,6 +12,8 @@ import type {
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 
+import type { ChannelProfile, ChannelSetData } from '@/types/drafter';
+
 /**
  * Client-side types for the agent-access admin panel. Server schemas are
  * imported type-only: lib/services/agentAccess/types.ts pulls in node
@@ -433,6 +435,110 @@ export interface ClientRefreshPreview {
    * not be turned into a run, so the banner explains and Refresh is off.
    */
   overCap?: { totalDocuments: number; maxDocuments: number };
+}
+
+/* ------------------------------------------------------------------ */
+/* Channel profiles (channel drafter)                                  */
+/* ------------------------------------------------------------------ */
+
+export const CLIENT_CHANNEL_PROFILE_SOURCE = 'channel-profile';
+
+/** The editable part of a channel profile, as the admin route takes it. */
+export interface AdminChannelProfileData {
+  name: string;
+  family: 'social' | 'email' | 'messaging' | 'web';
+  maxSegments: number;
+  segmentLimit: number;
+  counting: 'graphemes' | 'utf16' | 'url-23' | 'x-weighted' | 'gsm7';
+  slots: Array<{
+    id: string;
+    labelKey: 'openingLine';
+    maxChars: number;
+    appliesTo: 'first-segment-first-line';
+    foldLabelKey?: 'seeMore';
+  }>;
+  hashtags: { max: number; placement: 'inline' | 'end' | 'none' };
+  links: { allowed: boolean; position: 'first' | 'last' };
+  threadNumbering: 'none' | 'n/N';
+  guidance: string;
+  publishTarget?: string;
+  media?: { maxImages: number; altLimit?: number };
+}
+
+export interface AdminChannelProfileRecord {
+  version: 1;
+  id: string;
+  enabled: boolean;
+  profile: AdminChannelProfileData;
+  createdBy: string;
+  createdAt: string;
+  updatedBy: string;
+  updatedAt: string;
+}
+
+/** As served by GET /api/agent-access/channel-profiles. */
+export interface AdminChannelProfilesResponse {
+  builtIns: Array<{ id: string; profile: AdminChannelProfileData }>;
+  records: Array<{
+    canonicalKey: string;
+    record: AdminChannelProfileRecord;
+    etag: string;
+  }>;
+}
+
+/* ------------------------------------------------------------------ */
+/* Channel rule sets (channel drafter)                                 */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Client mirror of CHANNEL_SET_SOURCE (value import forbidden here — see
+ * the module comment above). The pseudo-source half of a set's canonical
+ * key: `channel-set::<id>` is both its audience rule and its editor key.
+ */
+export const CLIENT_CHANNEL_SET_SOURCE = 'channel-set';
+
+/** Mirror of DEFAULT_CHANNEL_SET_ID: the built-in set, stored or not. */
+export const CLIENT_DEFAULT_CHANNEL_SET_ID = 'default';
+
+/** A stored set: the editable data plus identity and stamps. */
+export interface AdminChannelSetRecord extends ChannelSetData {
+  version: 1;
+  /** `default` or a server-minted `set-<hex>`. */
+  id: string;
+  createdBy: string;
+  createdAt: string;
+  updatedBy: string;
+  updatedAt: string;
+}
+
+/** As served by GET /api/agent-access/channel-sets. */
+export interface AdminChannelSetsResponse {
+  sets: Array<{
+    canonicalKey: string;
+    record: AdminChannelSetRecord;
+    etag: string;
+    /** Global admin, or delegated `channel-set::<id>`. */
+    canEdit: boolean;
+  }>;
+  /**
+   * The implicit built-in set while no `default` record exists; a PUT of
+   * id `default` without If-Match stores it for the first time.
+   */
+  virtualDefault: {
+    id: string;
+    data: ChannelSetData;
+    canEdit: boolean;
+  } | null;
+  /** The effective platforms (built-ins with admin overrides applied). */
+  platforms: ChannelProfile[];
+  canCreate: boolean;
+}
+
+/** POST/PUT /api/agent-access/channel-sets payload. */
+export interface AdminChannelSetResponse {
+  record: AdminChannelSetRecord;
+  etag: string;
+  canonicalKey: string;
 }
 
 /* ------------------------------------------------------------------ */

@@ -49,6 +49,7 @@ import {
 import {
   collectSourceTexts,
   forgetSourceText,
+  rememberPageText,
   rememberSourceText,
 } from '@/client/services/workflows/form/sourceText';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
@@ -456,7 +457,7 @@ export function FormWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       const result = await fetchUrlContent(url, { modelId });
       const id = uuidv4();
       if (result.ok) {
-        rememberSourceText(id, result.page.text);
+        rememberPageText(id, result.page.text);
         setState((prev) =>
           addSource(prev, {
             id,
@@ -691,6 +692,7 @@ export function FormWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       issueText: (issue) => t(`issue.${issue.code}`, issue.params ?? {}),
       gaps: p('gaps'),
       supportedBy: p('supportedBy'),
+      excerptNotFound: p('excerptNotFound'),
       unsourced: p('unsourced'),
       generalKnowledge: p('generalKnowledge'),
       lockedByAdmin: p('lockedByAdmin'),

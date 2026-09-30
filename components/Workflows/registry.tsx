@@ -34,6 +34,14 @@ export interface WorkflowDefinition {
    * pipeline.
    */
   railSend?: () => Promise<RailSendModule>;
+  /**
+   * Optional strip rendered above the rail's composer, for context the send
+   * needs and the user must see before sending (the drafter's "To:" line).
+   * Lazy for the same reason as the workspace.
+   */
+  RailComposerAddon?: LazyExoticComponent<
+    ComponentType<WorkflowWorkspaceProps>
+  >;
 }
 
 export const WORKFLOW_REGISTRY: Record<
@@ -102,5 +110,25 @@ export const WORKFLOW_REGISTRY: Record<
     // Form rail chat is grounded in the field ledger; answers to the
     // assistant's questions become note sources (docs/FORM_FILL_WORKFLOW.md).
     railSend: () => import('@/client/services/workflows/form/formRailChat'),
+  },
+  'channel-drafter': {
+    meta: WORKFLOW_META['channel-drafter'],
+    // A thin workspace: it mounts the shared drafter core with the channel
+    // adapter (docs/CHANNEL_DRAFTER_DESIGN.md §4.0).
+    Workspace: lazy(() =>
+      import('./ChannelDrafter/ChannelDrafterWorkspace').then((m) => ({
+        default: m.ChannelDrafterWorkspace,
+      })),
+    ),
+    createInitialState: () => createInitialWorkflowState('channel-drafter'),
+    // Instructions in the rail become suggestions on the scoped channels
+    // (docs/CHANNEL_DRAFTER_DESIGN.md §9.6).
+    railSend: () =>
+      import('@/client/services/workflows/drafter/drafterRailChat'),
+    RailComposerAddon: lazy(() =>
+      import('./Shared/Drafter/RevisionScopeLine').then((m) => ({
+        default: m.RevisionScopeLine,
+      })),
+    ),
   },
 };

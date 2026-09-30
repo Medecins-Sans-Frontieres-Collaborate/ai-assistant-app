@@ -630,6 +630,11 @@ export interface ToolRouterResponse {
    */
   searchComprehensive?: boolean;
   /**
+   * Topic of the search, selecting the SearXNG engine category (general
+   * web, news, science, it, humanitarian). Other providers ignore it.
+   */
+  searchCategory?: import('./webSearch').WebSearchCategory;
+  /**
    * True when the user is asking a follow-up about search results already
    * cited earlier in the conversation — the enricher then re-fetches those
    * cited articles for their full text instead of (or before) running a
@@ -677,6 +682,21 @@ export interface ToolRouterRequest {
    * unaffected.
    */
   hasUserProvidedContent?: boolean;
+  /**
+   * The search is already decided (Search Mode ALWAYS) but the backend is a
+   * keyword engine that needs PLANNED queries — the raw user prompt makes a
+   * poor query there. The classifier still runs, with needsWebSearch pinned
+   * true, purely to produce queries, recency, category and fan-out.
+   */
+  searchDecided?: boolean;
+  /**
+   * Whether the search backend welcomes multi-query fan-out (our own
+   * SearXNG instance: parallel requests are cheap and unthrottled). The
+   * router may then plan 1-5 queries covering different angles. False keeps
+   * the conservative "almost always one query" wording the rate-limited
+   * public feeds need.
+   */
+  searchFanOut?: boolean;
 }
 
 // Persistent File Context types

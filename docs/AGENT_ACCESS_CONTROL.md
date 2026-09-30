@@ -46,7 +46,8 @@ system/agent-access/rules/<sha256(canonicalKey)>.json    # one rule file per age
 system/agent-access/history/<sha256(canonicalKey)>/<iso-ts>.json  # immutable audit copies
 system/agent-access/prompt-agents/<id>.json              # app-defined prompt agents (see below)
 system/agent-access/connectors/<id>.json                 # admin-authored MCP connectors (see below)
-system/agent-access/guides/<id>.json                     # admin workflow guides (style/terminology/…)
+system/agent-access/guides/<id>.json                     # admin workflow guides — META only (see below)
+system/agent-access/guide-payloads/<id>/<ref>.<json|jsonl>.gz  # immutable guide payload versions (body / entries)
 system/agent-access/map-datasets/meta/<id>.json          # map dataset listing records (~500B)
 system/agent-access/map-datasets/data/<id>.json          # map dataset payloads (up to ~1MB)
 ```
@@ -54,6 +55,27 @@ system/agent-access/map-datasets/data/<id>.json          # map dataset payloads 
 `connectors/` is a sibling of `rules/` for exactly the same reason as `prompt-agents/`, and shares
 the skip-with-a-loud-error listing posture: one malformed connector blob must never take down the
 ruleset that gates every Foundry invocation. `guides/` follows the same pattern.
+
+### Guide payloads live outside the snapshot
+
+The access snapshot re-downloads every listed record on every refresh, on
+every replica. Guide payloads (a 100k-character style body, a 5,000-entry
+glossary) therefore do NOT live in `guides/<id>.json`: that record is META
+(name, kind, language pair, `payloadRef`, `payloadFormat`, `entryCount`) and
+the payload sits in an immutable blob under `guide-payloads/<id>/`. A save
+writes a NEW payload blob under a fresh ref (`If-None-Match: *`), then swaps
+the meta under the client's `If-Match` — so a lost CAS race can never leave
+the meta pointing at another writer's payload (the loser's blob is discarded).
+Readers go through `hydrateGuide()` (lib/services/agentAccess/guidePayloadStore.ts),
+which loads the blob through a per-replica byte-bounded LRU cache
+(payloadCache.ts) keyed by blob name — immutable, so never revalidated.
+Superseded versions are pruned once the version that replaced them is older
+than a grace window, so a replica on a stale snapshot still finds the ref it
+holds. Prose kinds are gzipped JSON; terminology entries are gzipped JSONL so a
+corrupt line degrades alone. Records written before the split keep their
+payload inline and still serve; the next admin save (or
+`scripts/migrateGuidePayloads.ts`) migrates them. Map dataset data blobs use
+the same cache with ETag revalidation (they are mutable CAS anchors).
 
 **Map datasets deviate from the other entities in three documented ways.** (1) They are SPLIT into a
 meta blob (listings) and a data blob (payload): a dataset can hold 2,000 map features (~1MB), and

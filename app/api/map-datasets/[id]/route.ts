@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
 import {
   createAgentAccessBlobStorage,
-  readMapDataset,
+  readMapDatasetCached,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import { MAP_DATASET_SOURCE } from '@/lib/services/agentAccess/types';
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
@@ -58,7 +58,10 @@ export async function GET(
     // Fail closed on 'unavailable' too — same contract as the listing.
     if (decision.decision !== 'allow') return notFoundResponse('Dataset');
 
-    const existing = await readMapDataset(createAgentAccessBlobStorage(), id);
+    const existing = await readMapDatasetCached(
+      createAgentAccessBlobStorage(),
+      id,
+    );
     if (existing === null) return notFoundResponse('Dataset');
 
     const { dataset } = existing;

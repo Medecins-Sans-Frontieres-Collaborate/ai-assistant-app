@@ -6,6 +6,7 @@ import {
   ToolRouterResponse,
   ToolType,
 } from '@/types/chat';
+import { WEB_SEARCH_CATEGORIES, isWebSearchCategory } from '@/types/webSearch';
 
 import { TrimTarget, WORDS_PER_PAGE } from './tools/documentTrim/trimDetector';
 
@@ -221,6 +222,8 @@ When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit
             forceCodeInterpreter,
             hasPriorSearchCitations,
             hasUserProvidedContent,
+            searchDecided,
+            searchFanOut,
           } = request;
           const considerCodeExecution =
             request.considerCodeExecution || forceCodeInterpreter;
@@ -299,6 +302,16 @@ This conversation already contains web-search results with cited articles. ALSO 
 - Both can be true when the user wants deeper detail AND new information`
               : '';
 
+            const searchDecidedPromptSection = searchDecided
+              ? `
+
+The user has switched web search ON for this message: it WILL run. needsWebSearch MUST be true — your job here is to plan the best possible search (queries, recency, breadth, category), not to decide whether to search.`
+              : '';
+
+            const fanOutInstruction = searchFanOut
+              ? `- additionalSearchQueries: 0 to 4 EXTRA queries that run in parallel with searchQuery and widen coverage. YOU decide how many: none for a single-fact lookup one query answers ("population of Kenya"); 1-2 for a question with a couple of facets; 3-4 for broad, open-ended, comparative or research questions. Each extra query must retrieve DIFFERENT results — a distinct facet, sub-topic, entity, time frame or alternative terminology (e.g. "what is happening in Sudan" → searchQuery "Sudan", extras "Sudan conflict RSF", "Sudan humanitarian crisis", "Sudan peace talks"). When the topic is local to a non-English-speaking region, one extra query in that region's main language often surfaces better local sources. Never add rewordings or synonyms of a query you already have; each follows the same 3-8 keyword rules`
+              : `- additionalSearchQueries: almost always EMPTY — one query should cover the question whenever possible. Populate ONLY when the message contains multiple clearly SEPARABLE information needs that no single query can cover (e.g. "compare the France strikes with the Germany rail dispute" → one extra query). Max 4 extra queries; each follows the same 3-8 keyword rules. Never split one topic into variations of the same query`;
+
             const systemPrompt = `You are a tool router that determines if web search is needed.
 
 Today's date is ${currentDate}. The current year is ${currentYear}.
@@ -318,17 +331,19 @@ Web search is NOT needed for:
 - Mathematical calculations
 - Creative writing, brainstorming
 - Personal advice, opinions
-- Questions about uploaded files or images${providedContentPromptSection}
+- Questions about uploaded files or images${providedContentPromptSection}${searchDecidedPromptSection}
 
 IMPORTANT: Always provide searchQuery in your response:
 - If needsWebSearch is true, provide a CONCISE search-engine query: 3-8 keywords, ONE topic, no question words ("what", "where", "why"), no filler ("current updates", "reasons", "dates"). Bad: "latest protests in India what are they about where are they happening dates reasons current updates". Good: "India protests ${currentYear}"
 - Years in queries: do NOT append a year by default. Append the current year (${currentYear}) ONLY when the question implies recency (news, "latest", ongoing events). Use a past year ONLY when the user explicitly asks about that period. Never append speculative, future, or multiple years.
+- Never put meta words in the query — "news", "latest", "updates", "headlines", "today", "current events". They match news-site HOMEPAGES instead of stories. Express recency through searchRecency instead. An open-ended "what is happening in India" is searchQuery "India", searchRecency "week", searchCategory "news"
 - If needsWebSearch is false, provide an empty string
 
 Also tune the search when needsWebSearch is true:
 - searchRecency: "day" for breaking news/live data, "week" or "month" for recent developments, "none" when age doesn't matter
 - searchComprehensive: true for research-style questions wanting breadth (comparisons, overviews, "what are my options"), false for single-fact lookups
-- additionalSearchQueries: almost always EMPTY — one query should cover the question whenever possible. Populate ONLY when the message contains multiple clearly SEPARABLE information needs that no single query can cover (e.g. "compare the France strikes with the Germany rail dispute" → one extra query). Max 4 extra queries; each follows the same 3-8 keyword rules. Never split one topic into variations of the same query${followUpPromptSection}${codeExecutionPromptSection}`;
+- searchCategory: which kind of source answers best — "news" for current events, recent developments and open-ended "what is happening in/with X" questions; "science" for medical, clinical, public-health and academic research questions (journals, studies, MSF research publications); "it" for programming, software and technical documentation; "humanitarian" for humanitarian crises, operations and datasets (displacement, outbreaks, country situations); "general" for everything else or when unsure
+${fanOutInstruction}${followUpPromptSection}${codeExecutionPromptSection}`;
 
             // Include recent conversation history for context-aware decisions
             // Take last 3 message pairs (6 messages max) to keep it efficient
@@ -385,12 +400,19 @@ Also tune the search when needsWebSearch is true:
                 description:
                   'Whether the question wants breadth (many sources) rather than a single fact',
               },
+              searchCategory: {
+                type: 'string',
+                enum: WEB_SEARCH_CATEGORIES,
+                description:
+                  'Kind of source that answers best; "general" when unsure',
+              },
               additionalSearchQueries: {
                 type: 'array',
                 items: { type: 'string' },
                 maxItems: 4,
-                description:
-                  'Usually empty. Extra queries ONLY for clearly separable aspects one query cannot cover (max 4)',
+                description: searchFanOut
+                  ? 'Extra parallel queries covering DIFFERENT facets of the question (0-4); empty for single-fact lookups'
+                  : 'Usually empty. Extra queries ONLY for clearly separable aspects one query cannot cover (max 4)',
               },
             };
             const requiredFields = [
@@ -398,6 +420,7 @@ Also tune the search when needsWebSearch is true:
               'searchQuery',
               'searchRecency',
               'searchComprehensive',
+              'searchCategory',
               'additionalSearchQueries',
             ];
             if (hasPriorSearchCitations) {
@@ -429,8 +452,10 @@ Also tune the search when needsWebSearch is true:
               // +60 headroom for the (usually empty) additionalSearchQueries
               // array — a populated fan-out is a few short keyword strings.
               max_completion_tokens:
-                (considerCodeExecution ? 280 : 200) +
-                (hasPriorSearchCitations ? 20 : 0),
+                (considerCodeExecution ? 290 : 210) +
+                (hasPriorSearchCitations ? 20 : 0) +
+                // A planned fan-out is up to four more keyword queries.
+                (searchFanOut ? 80 : 0),
               response_format: {
                 type: 'json_schema',
                 json_schema: {
@@ -451,6 +476,8 @@ Also tune the search when needsWebSearch is true:
             );
 
             console.log('[ToolRouterService] AI decision:', result);
+            // The search was decided upstream; the model only planned it.
+            if (searchDecided) result.needsWebSearch = true;
 
             span.setAttribute(
               'tool_router.needs_web_search',
@@ -512,6 +539,11 @@ Also tune the search when needsWebSearch is true:
                     : undefined,
                 searchComprehensive:
                   result.needsWebSearch && result.searchComprehensive === true,
+                searchCategory:
+                  result.needsWebSearch &&
+                  isWebSearchCategory(result.searchCategory)
+                    ? result.searchCategory
+                    : undefined,
                 searchFollowUp,
                 codeTask:
                   considerCodeExecution && result.needsCodeExecution

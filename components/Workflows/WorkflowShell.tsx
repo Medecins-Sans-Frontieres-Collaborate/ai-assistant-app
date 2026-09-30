@@ -21,6 +21,8 @@ import { WorkflowRail } from './WorkflowRail';
 import { WorkflowTabs, useWorkflowTabsEnabled } from './WorkflowTabs';
 import { WORKFLOW_REGISTRY } from './registry';
 
+import { useWorkflowRailStore } from '@/client/stores/workflowRailStore';
+
 /**
  * Layout root for workflow conversations: a header with the workflow badge,
  * the specialized workspace as the primary surface, and the conversation
@@ -49,6 +51,15 @@ export function WorkflowShell() {
   const [mobileTab, setMobileTab] = useState<'workspace' | 'conversation'>(
     'workspace',
   );
+  // A workspace can ask for the rail (the drafter's "Revise…" doors). The
+  // request is a counter, compared during render so no effect is needed.
+  const openRequest = useWorkflowRailStore((state) => state.openRequest);
+  const [seenOpenRequest, setSeenOpenRequest] = useState(openRequest);
+  if (openRequest !== seenOpenRequest) {
+    setSeenOpenRequest(openRequest);
+    setRailOpen(true);
+    setMobileTab('conversation');
+  }
 
   const type = selectedConversation?.conversationType;
   if (!selectedConversation || !type) return null;
@@ -102,7 +113,14 @@ export function WorkflowShell() {
           </div>
         }
       >
-        <Workspace conversationId={selectedConversation.id} />
+        {/* Keyed per conversation: a workspace keeps once-per-mount state
+            (seed refs, focus, transient errors) that must not carry from
+            one draft into the next when the user switches between two of
+            the same kind. */}
+        <Workspace
+          key={selectedConversation.id}
+          conversationId={selectedConversation.id}
+        />
       </Suspense>
     </div>
   );

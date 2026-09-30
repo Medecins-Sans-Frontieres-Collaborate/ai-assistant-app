@@ -32,6 +32,7 @@ import {
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import { markdownToProse } from '@/lib/utils/shared/markdown/markdownToProse';
 
 import {
   FORM_LIMITS,
@@ -152,8 +153,10 @@ export async function POST(req: NextRequest) {
       ) {
         continue;
       }
+      // Prose, whatever the client sent: excerpts are verified against and
+      // shown from this text, and a Markdown escape is not on the page.
       const budgeted = await truncateToTokenBudget(
-        source.text,
+        markdownToProse(source.text),
         SOURCE_TOKEN_BUDGET,
       );
       sources.push({
@@ -215,10 +218,17 @@ export async function POST(req: NextRequest) {
       usage,
       usageLabel: 'fill',
     });
+    // Verified against exactly what the model was shown (the budgeted
+    // text), so an excerpt from beyond the budget can never be "found".
+    const sourceTexts = new Map<string, string>([
+      ...sources.map((s): [string, string] => [s.record.id, s.text]),
+      ...notes.map((n): [string, string] => [n.id, n.text]),
+    ]);
     const { proposals, questions } = normalizeFillResponse(
       raw,
       targets,
       knownSourceIds,
+      sourceTexts,
     );
     return successResponse({
       proposals,

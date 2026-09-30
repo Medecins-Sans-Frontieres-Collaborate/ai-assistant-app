@@ -10,6 +10,13 @@ import { AvailableGuide } from '@/client/hooks/settings/useAvailableGuides';
 
 import { guideCriterionId } from '@/lib/utils/shared/review/guideCriteria';
 
+/**
+ * Glossaries run to thousands of entries; the read-only viewer shows the
+ * first rows and says how many more there are rather than mounting a
+ * multi-thousand-row table inside a review panel.
+ */
+const MAX_VIEWER_ROWS = 300;
+
 interface GuidePickerProps {
   /** Criterion-kind guides for this workflow (caller filters kind+workflow). */
   guides: AvailableGuide[];
@@ -131,20 +138,29 @@ function GuideBody({ guideId }: { guideId: string }) {
             </tr>
           </thead>
           <tbody>
-            {(data.entries ?? []).map((entry, index) => (
-              <tr
-                key={`${entry.source}-${index}`}
-                className="border-t border-gray-100 dark:border-gray-800"
-              >
-                <td className="py-1 pe-2">{entry.source}</td>
-                <td className="py-1 pe-2">{entry.target}</td>
-                <td className="py-1 text-gray-500 dark:text-gray-400">
-                  {entry.note}
-                </td>
-              </tr>
-            ))}
+            {(data.entries ?? [])
+              .slice(0, MAX_VIEWER_ROWS)
+              .map((entry, index) => (
+                <tr
+                  key={`${entry.source}-${index}`}
+                  className="border-t border-gray-100 dark:border-gray-800"
+                >
+                  <td className="py-1 pe-2">{entry.source}</td>
+                  <td className="py-1 pe-2">{entry.target}</td>
+                  <td className="py-1 text-gray-500 dark:text-gray-400">
+                    {entry.note}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
+        {(data.entries?.length ?? 0) > MAX_VIEWER_ROWS && (
+          <p className="pt-1 text-xs text-gray-500 dark:text-gray-400">
+            {t('guideEntriesMore', {
+              count: String((data.entries?.length ?? 0) - MAX_VIEWER_ROWS),
+            })}
+          </p>
+        )}
       </div>
     );
   }

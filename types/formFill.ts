@@ -161,6 +161,14 @@ export interface FieldProvenance {
   sourceId: string;
   /** Verbatim excerpt in the source's own language. */
   excerpt: string;
+  /**
+   * Set by the server when it looked the excerpt up in the source text:
+   * true = found verbatim (typography and whitespace aside), false = not
+   * found, so the excerpt is the model's claim and nothing more. Absent on
+   * provenance recorded before verification existed, and on the drafter's
+   * own items, which carry their verification on the item.
+   */
+  verified?: boolean;
 }
 
 export interface FieldFill {

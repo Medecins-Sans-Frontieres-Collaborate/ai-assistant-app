@@ -11,6 +11,7 @@
  * LIMITS_POLICY_UNAVAILABLE by type, never by guessing at error classes.
  */
 import { AgentAccessConflictError } from '@/lib/services/agentAccess/blobCas';
+import { DELEGATIONS_DOCUMENT_PATH } from '@/lib/services/delegations/types';
 import {
   LimitsConflictError,
   PolicyUnreadableError,
@@ -42,8 +43,21 @@ function createMockClient() {
 type MockClient = ReturnType<typeof createMockClient>;
 
 function createMockStorage(client: MockClient) {
+  // `readPolicy` composes the shared delegations document into the policy, so
+  // every policy read is followed by a delegations read. That blob gets its
+  // own client serving an empty document, leaving `client` — and the download
+  // sequences the tests script on it — about the policy alone.
+  const delegationsClient = createMockClient();
+  delegationsClient.download.mockImplementation(() =>
+    downloadOf(
+      { version: 1, delegations: [], updatedBy: 'test', updatedAt: 'now' },
+      '"d1"',
+    ),
+  );
   return {
-    getBlockBlobClient: vi.fn(() => client),
+    getBlockBlobClient: vi.fn((path: string) =>
+      path === DELEGATIONS_DOCUMENT_PATH ? delegationsClient : client,
+    ),
     listBlobs: vi.fn(),
     upload: vi.fn(),
   } as unknown as BlobStorage & {

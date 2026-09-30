@@ -59,6 +59,9 @@ export async function GET(request: NextRequest) {
         name: guide.name,
         description: guide.description,
         languages: guide.languages,
+        sourceLang: guide.sourceLang,
+        targetLang: guide.targetLang,
+        entryCount: guide.entryCount ?? guide.entries?.length,
         workflows: guide.workflows,
         updatedAt: guide.updatedAt,
       }));

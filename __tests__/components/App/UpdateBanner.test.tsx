@@ -26,12 +26,8 @@ vi.mock('next/dynamic', () => ({
   },
 }));
 
-const dismissMock = vi.hoisted(() => vi.fn());
-const versionCheckMock = vi.hoisted(() => vi.fn());
-
-vi.mock('@/client/hooks/app/useVersionCheck', () => ({
-  useVersionCheck: versionCheckMock,
-}));
+// BannerHost owns the poll and hands the banner its state as props.
+const dismissMock = vi.fn();
 vi.mock('@/client/hooks/ui/useUI', () => ({
   useUI: () => ({ showChatbar: true }),
 }));
@@ -48,10 +44,6 @@ let mockReload: ReturnType<typeof vi.fn>;
 let originalLocation: typeof window.location;
 
 beforeEach(() => {
-  versionCheckMock.mockReturnValue({
-    isUpdateAvailable: true,
-    dismiss: dismissMock,
-  });
   fetchReleaseNotesMock.mockReset();
   fetchReleaseNotesMock.mockResolvedValue({
     releases: [
@@ -79,18 +71,13 @@ afterEach(() => {
 
 describe('UpdateBanner', () => {
   it('renders nothing when no update is available', () => {
-    versionCheckMock.mockReturnValue({
-      isUpdateAvailable: false,
-      dismiss: dismissMock,
-    });
-
-    render(<UpdateBanner />);
+    render(<UpdateBanner isUpdateAvailable={false} dismiss={dismissMock} />);
 
     expect(screen.queryByText('updateBanner.title')).not.toBeInTheDocument();
   });
 
   it('still offers refresh as the primary action', async () => {
-    render(<UpdateBanner />);
+    render(<UpdateBanner isUpdateAvailable dismiss={dismissMock} />);
 
     await userEvent.click(
       screen.getByRole('button', { name: /updateBanner\.refresh/ }),
@@ -100,7 +87,7 @@ describe('UpdateBanner', () => {
   });
 
   it('still dismisses', async () => {
-    render(<UpdateBanner />);
+    render(<UpdateBanner isUpdateAvailable dismiss={dismissMock} />);
 
     await userEvent.click(
       screen.getByRole('button', { name: 'common.dismissBanner' }),
@@ -112,13 +99,13 @@ describe('UpdateBanner', () => {
   it('does not fetch release notes until they are asked for', () => {
     // Every signed-in tab mounts this banner; an eager fetch here would be a
     // request per user rather than a request per curious user.
-    render(<UpdateBanner />);
+    render(<UpdateBanner isUpdateAvailable dismiss={dismissMock} />);
 
     expect(fetchReleaseNotesMock).not.toHaveBeenCalled();
   });
 
   it('opens the notes panel from the banner', async () => {
-    render(<UpdateBanner />);
+    render(<UpdateBanner isUpdateAvailable dismiss={dismissMock} />);
 
     await userEvent.click(
       screen.getByRole('button', { name: 'releaseNotes.whatChanged' }),
@@ -130,7 +117,7 @@ describe('UpdateBanner', () => {
 
   it('leaves the banner in place while the notes are open', async () => {
     // Reading the notes must not cost the user their way to update.
-    render(<UpdateBanner />);
+    render(<UpdateBanner isUpdateAvailable dismiss={dismissMock} />);
 
     await userEvent.click(
       screen.getByRole('button', { name: 'releaseNotes.whatChanged' }),

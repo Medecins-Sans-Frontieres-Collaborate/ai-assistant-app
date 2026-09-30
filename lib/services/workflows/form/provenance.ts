@@ -37,6 +37,8 @@ export interface ProvenanceStrings {
   issueText: (issue: FieldIssue) => string;
   gaps: string;
   supportedBy: string;
+  /** Appended to an excerpt the server could not find in its source. */
+  excerptNotFound?: string;
   unsourced: string;
   generalKnowledge: string;
   lockedByAdmin: string;
@@ -100,7 +102,11 @@ function fieldBlock(
       lines.push(`- **${strings.supportedBy}:**`);
       for (const p of fill.provenance) {
         const label = sourceLabel(p.sourceId, sources, notes, strings);
-        lines.push(`  - ${label}: "${p.excerpt.replace(/\s+/g, ' ')}"`);
+        const flag =
+          p.verified === false && strings.excerptNotFound
+            ? ` (${strings.excerptNotFound})`
+            : '';
+        lines.push(`  - ${label}: "${p.excerpt.replace(/\s+/g, ' ')}"${flag}`);
       }
     } else if (fill.generalKnowledge) {
       lines.push(`- ${strings.generalKnowledge}`);

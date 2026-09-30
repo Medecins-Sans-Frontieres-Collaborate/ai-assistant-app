@@ -7,6 +7,7 @@
  * standard chat. The type is fixed at creation time: it is only ever set on
  * an empty conversation and never changed afterward.
  */
+import { ChannelDrafterWorkflowState } from './drafter';
 import { FormFillWorkflowState } from './formFill';
 import { TabularFieldType } from './structure';
 
@@ -17,6 +18,7 @@ export const CONVERSATION_WORKFLOW_TYPES = [
   'map',
   'grants',
   'form-fill',
+  'channel-drafter',
 ] as const;
 
 export type ConversationWorkflowType =
@@ -187,9 +189,16 @@ export interface TranslationGlossaryCheck {
 export interface TranslationGlossary {
   id: string;
   name: string;
+  /**
+   * Language pair as catalog ids (TRANSLATION_LANGUAGES) or `custom:<id>`
+   * for a user-added language. Optional: an untagged glossary applies to
+   * any language. Discovery metadata for the picker; never enforced.
+   */
   sourceLang?: string;
   targetLang?: string;
   entries: GlossaryEntry[];
+  /** Set when this glossary was copied from an organization glossary. */
+  copiedFromGuideId?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -220,14 +229,26 @@ export interface TranslationWorkflowState {
   /** Legacy locale-code field; superseded by targetLanguage. */
   targetLang?: string;
   targetLanguage?: TranslationTargetLanguage;
-  /** References a glossary in settingsStore; the entries travel per-request. */
+  /**
+   * Legacy single selection — superseded by `glossaryIds`; still read as a
+   * fallback so conversations saved before the picker existed keep their
+   * attachment.
+   */
   glossaryId?: string;
   /**
-   * Admin terminology guide attached for generation + assessment. Entries
-   * resolve server-side by id and merge with (winning over) the local
-   * glossary's.
+   * Legacy single selection — superseded by `glossaryGuideIds` (same
+   * fallback rule as `glossaryId`).
    */
   glossaryGuideId?: string;
+  /** Personal glossaries (settingsStore ids); entries travel per-request. */
+  glossaryIds?: string[];
+  /**
+   * Organization glossaries (admin terminology guides) attached for
+   * generation + assessment, at most MAX_ORG_GLOSSARIES_PER_REQUEST. Entries
+   * resolve server-side by id and merge with (winning over) the personal
+   * glossaries', first guide winning among guides.
+   */
+  glossaryGuideIds?: string[];
   mode: 'quick' | 'agentic';
   analysis?: TranslationAnalysis;
   rounds: TranslationReviewRound[];
@@ -828,4 +849,5 @@ export type WorkflowState =
   | DataAnalysisWorkflowState
   | MapWorkflowState
   | GrantsWorkflowState
-  | FormFillWorkflowState;
+  | FormFillWorkflowState
+  | ChannelDrafterWorkflowState;

@@ -35,6 +35,7 @@ import {
   isGlobalAdmin,
   resolveAdminStatus,
 } from '@/lib/services/agentAccess/adminAuth';
+import { resolveAnnouncementsAdmin } from '@/lib/services/announcements/adminAccess';
 import { LimitsService } from '@/lib/services/limits/LimitsService';
 import {
   LimitsAdminStatus,
@@ -47,10 +48,15 @@ export const ADMIN_AREA_IDS = [
   'agents',
   'connectors',
   'guides',
+  'glossaries',
   'map-datasets',
   'form-templates',
+  'channel-sets',
+  'channel-profiles',
   'limits',
   'workflows',
+  'announcements',
+  'delegations',
   'local-admins',
   'global-admins',
   'view-as',
@@ -111,14 +117,22 @@ export async function resolveAdminAreas(
         'agents',
         'connectors',
         'guides',
+        'glossaries',
         'map-datasets',
         'form-templates',
+        // A team's rule set is theirs to edit (delegated on creation), so
+        // every admin gets the area; the route decides per set.
+        'channel-sets',
       );
     }
     // The delegation map decides who else may edit rules, so it stays
     // global-admin only — matching AgentAccessPanel's own tab filter.
     if (status.isGlobalAdmin) {
       areas.push('local-admins');
+      // A platform's limits are organisation-wide data (they drive hard
+      // checks and the prompt for every set): global admins only, matching
+      // the route and the page's own gate.
+      areas.push('channel-profiles');
     }
   }
 
@@ -147,9 +161,24 @@ export async function resolveAdminAreas(
     areas.push('limits');
   }
 
+  // Announcements: global admins, plus delegated senders — people holding the
+  // `announcements` grant in an enabled shared delegation. Its own gate, fed
+  // by the shared delegations; NOT derived from `limitsStatus` (a limits
+  // delegate was never granted messaging unless their grants say so).
+  const announcementsAdmin = await resolveAnnouncementsAdmin(user);
+  if (announcementsAdmin.delegationsUnavailable) configUnavailable = true;
+  if (
+    announcementsAdmin.status.isGlobalAdmin ||
+    announcementsAdmin.status.isDelegatedAdmin
+  ) {
+    areas.push('announcements');
+  }
+
   if (isGlobalAdmin(user)) {
     // The workflow policy is one org-wide document, like limits: global only.
     areas.push('workflows');
+    // A delegation decides who else may administer: global admins only.
+    areas.push('delegations');
     // Who the global admins are is decided by global admins — EFFECTIVE
     // identity, like every other admin area, so a view-as-demoted admin does
     // not see it (they exit view-as to edit the roster). Deliberately outside

@@ -551,6 +551,7 @@ export const GlobalLimitsPanel: FC = () => {
               patch({ delegations: [...draft.delegations, created] });
             }}
             disabled={saving}
+            managedElsewhere
           />
         )}
         {tab === 'cost' && calculator && (

@@ -17,6 +17,7 @@
  */
 import { NextRequest } from 'next/server';
 
+import { installPolicyBlobFake } from '../../../lib/services/limits/delegationsBlobFake';
 import {
   AgentAccessConflictError,
   downloadBlob,
@@ -56,6 +57,10 @@ vi.mock('@/lib/services/agentAccess/blobCas', async (importOriginal) => {
     await importOriginal<typeof import('@/lib/services/agentAccess/blobCas')>();
   return { ...actual, downloadBlob: vi.fn(), uploadJson: vi.fn() };
 });
+
+// The policy blob the tests script; the shared delegations blob is derived
+// from it (see delegationsBlobFake.ts).
+const policyBlob = vi.fn();
 
 const DEL_OCP = 'del-0000000000aa';
 const DEL_OTHER = 'del-0000000000bb';
@@ -130,10 +135,10 @@ function policyWith(input: Partial<LimitsPolicy> = {}): LimitsPolicy {
 
 function stored(policy: LimitsPolicy | null, etag = '"e1"') {
   if (policy === null) {
-    vi.mocked(downloadBlob).mockResolvedValue(null);
+    policyBlob.mockResolvedValue(null);
     return;
   }
-  vi.mocked(downloadBlob).mockResolvedValue({
+  policyBlob.mockResolvedValue({
     buffer: Buffer.from(JSON.stringify(policy), 'utf8'),
     etag,
   });
@@ -194,6 +199,8 @@ describe('/api/limits/scoped/overrides/[id]', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     mockEnv.AGENT_ACCESS_ADMINS = 'global@example.com';
     mockAuth.mockResolvedValue(ocpSession);
+    policyBlob.mockReset();
+    installPolicyBlobFake(policyBlob);
     stored(policyWith());
     vi.mocked(uploadJson).mockResolvedValue('"e2"');
   });
@@ -233,7 +240,7 @@ describe('/api/limits/scoped/overrides/[id]', () => {
         (await PUT(putRequest(NEW_ID, validBody(OWN_ID)), params(NEW_ID)))
           .status,
       ).toBe(400);
-      expect(downloadBlob).not.toHaveBeenCalled();
+      expect(policyBlob).not.toHaveBeenCalled();
     });
 
     it('refuses the escalation levers by SHAPE: delegationId, priority ≠ 0, ceiling: true, createdBy', async () => {
@@ -537,7 +544,9 @@ describe('/api/limits/scoped/overrides/[id]', () => {
       expect(written.overrides.slice(0, -1)).toEqual(before.overrides);
       // Untouched top-level keys.
       expect(written.defaults).toEqual(before.defaults);
-      expect(written.delegations).toEqual(before.delegations);
+      // Delegations live in the shared delegations document now: they are
+      // composed into the policy on read and never persisted with it.
+      expect(written.delegations).toEqual([]);
       expect(written.mode).toBe(before.mode);
       expect(written.updatedBy).toBe(OCP_ADMIN);
       // CAS anchored on the etag we read.
@@ -612,11 +621,11 @@ describe('/api/limits/scoped/overrides/[id]', () => {
         params(NEW_ID),
       );
       expect(response.status).toBe(200);
-      expect(downloadBlob).toHaveBeenCalledTimes(2);
+      expect(policyBlob).toHaveBeenCalledTimes(2);
     });
 
     it('re-validation catches a delegation narrowed between rounds', async () => {
-      vi.mocked(downloadBlob)
+      policyBlob
         .mockResolvedValueOnce({
           buffer: Buffer.from(JSON.stringify(policyWith()), 'utf8'),
           etag: '"e1"',
@@ -655,7 +664,7 @@ describe('/api/limits/scoped/overrides/[id]', () => {
     it('a replace whose target vanished between rounds answers 404 rather than resurrecting it', async () => {
       const without = policyWith();
       without.overrides = without.overrides.filter((o) => o.id !== OWN_ID);
-      vi.mocked(downloadBlob)
+      policyBlob
         .mockResolvedValueOnce({
           buffer: Buffer.from(JSON.stringify(policyWith()), 'utf8'),
           etag: '"e1"',
@@ -683,7 +692,7 @@ describe('/api/limits/scoped/overrides/[id]', () => {
       );
       expect(response.status).toBe(409);
       expect((await parseJsonResponse(response)).code).toBe('LIMITS_CONFLICT');
-      expect(downloadBlob).toHaveBeenCalledTimes(3);
+      expect(policyBlob).toHaveBeenCalledTimes(3);
       expect(serviceInvalidate).not.toHaveBeenCalled();
     });
 
@@ -698,7 +707,7 @@ describe('/api/limits/scoped/overrides/[id]', () => {
     });
 
     it('answers 503 LIMITS_POLICY_UNAVAILABLE when the policy cannot be read', async () => {
-      vi.mocked(downloadBlob).mockRejectedValue(
+      policyBlob.mockRejectedValue(
         Object.assign(new Error('storage down'), { statusCode: 500 }),
       );
       const response = await PUT(
@@ -765,7 +774,7 @@ describe('/api/limits/scoped/overrides/[id]', () => {
     it('404s ONLY an owned record that vanished between CAS rounds', async () => {
       const without = policyWith();
       without.overrides = without.overrides.filter((o) => o.id !== OWN_ID);
-      vi.mocked(downloadBlob)
+      policyBlob
         .mockResolvedValueOnce({
           buffer: Buffer.from(JSON.stringify(policyWith()), 'utf8'),
           etag: '"e1"',
@@ -831,7 +840,7 @@ describe('/api/limits/scoped/overrides/[id]', () => {
     ])(
       'answers 503 LIMITS_POLICY_UNAVAILABLE from PUT and DELETE when the stored policy is %s',
       async (_label, text) => {
-        vi.mocked(downloadBlob).mockResolvedValue({
+        policyBlob.mockResolvedValue({
           buffer: Buffer.from(text, 'utf8'),
           etag: '"e1"',
         });

@@ -1,3 +1,5 @@
+import { ResolvedWebSearchProvider } from '@/types/webSearch';
+
 import { AgentChatService } from '../AgentChatService';
 import { Tool, ToolResult, WebSearchToolParams } from './Tool';
 import { searchGoogleNews } from './googleNewsSearch';
@@ -9,8 +11,20 @@ import {
   searchNewsParallel,
 } from './newsSearch';
 import { executeResponsesWebSearch } from './responsesWebSearch';
+import { isSearxngConfigured, searchSearxng } from './searxngSearch';
 
 import { env } from '@/config/environment';
+
+/**
+ * Deployment default backend — what the user-facing 'auto' resolves to. An
+ * explicit WEB_SEARCH_PROVIDER pins it; otherwise SearXNG where the
+ * instance is configured, the keyless news feeds everywhere else.
+ */
+export function resolveDefaultWebSearchProvider(): ResolvedWebSearchProvider {
+  return (
+    env.WEB_SEARCH_PROVIDER ?? (isSearxngConfigured() ? 'searxng' : 'news')
+  );
+}
 
 /**
  * WebSearchTool
@@ -42,11 +56,37 @@ export class WebSearchTool implements Tool {
   async execute(params: WebSearchToolParams): Promise<ToolResult> {
     // Caller-resolved provider (user setting) wins; the env default covers
     // callers that don't resolve one.
-    const provider = params.provider ?? env.WEB_SEARCH_PROVIDER;
+    const provider = params.provider ?? resolveDefaultWebSearchProvider();
     try {
       console.log(
         `[WebSearchTool] Executing search via ${provider}: "${params.searchQuery}"`,
       );
+
+      // SearXNG: MSF's own metasearch instance. Unconfigured, unreachable
+      // or empty → the keyless news feeds answer instead, so local dev (no
+      // route to the private endpoint) and a key-rotation gap longer than
+      // the client's single retry still get results.
+      if (provider === 'searxng') {
+        const result = await this.executeSearxng(params);
+        if (result) return result;
+        // The fallback feeds are NEWS feeds: headlines answer a news or
+        // general question, but for a science or programming question they
+        // are noise the model would dutifully cite. There, an honest "found
+        // nothing" (the enricher's knowledge-answer path) is the better
+        // degradation.
+        if (params.category === 'science' || params.category === 'it') {
+          return {
+            text: '',
+            citations: [],
+            metadata: { searxngFallback: true },
+          };
+        }
+        const fallback = await this.executeFeeds('news', params);
+        return {
+          ...fallback,
+          metadata: { ...fallback.metadata, searxngFallback: true },
+        };
+      }
 
       // Combined: Bing agent + Google News feed concurrently — headlines
       // surface via onInterimResults while the agent runs, then merge.
@@ -70,52 +110,10 @@ export class WebSearchTool implements Tool {
         return result;
       }
 
-      // Feed-based providers: no LLM round-trip. 'news' (default) fans out
-      // to GDELT + Google News in parallel so each backs the other up. The
-      // Bing agent path below stays available via WEB_SEARCH_PROVIDER.
+      // Feed-based providers: no LLM round-trip. The Bing agent path below
+      // stays available via WEB_SEARCH_PROVIDER.
       if (provider !== 'bing-agent') {
-        const feedOptions = {
-          resultCount: params.resultCount ?? 8,
-          freshness: params.freshness ?? 'any',
-        } as const;
-        // Multi-aspect fan-out: one Google News leg per query, in
-        // parallel (GDELT excluded — its rate-limit queue would serialize
-        // the legs; see searchNewsFanOut). Only providers that include
-        // Google News fan out — a GDELT-only selection must stay GDELT,
-        // so it takes the single-query path below on its primary query.
-        const fanOutQueries =
-          provider !== 'gdelt' && (params.searchQueries?.length ?? 0) > 1
-            ? params.searchQueries!.slice(0, 5)
-            : null;
-        if (fanOutQueries) {
-          const fanned = await searchNewsFanOut(fanOutQueries, feedOptions);
-          console.log(
-            `[WebSearchTool] Fan-out across ${fanOutQueries.length} queries: ${fanned.citations.length} merged citations`,
-          );
-          return { text: fanned.text, citations: fanned.citations };
-        }
-        if (provider === 'google-news') {
-          const newsResults = await searchGoogleNews(
-            params.searchQuery,
-            feedOptions,
-          );
-          return { text: newsResults.text, citations: newsResults.citations };
-        }
-        const newsResults = await searchNewsParallel(
-          params.searchQuery,
-          feedOptions,
-          {
-            sources:
-              provider === 'gdelt' ? ['gdelt'] : ['gdelt', 'google-news'],
-            deep: params.deep ?? false,
-          },
-        );
-        console.log(
-          `[WebSearchTool] News providers used: ${
-            newsResults.providersUsed.join(', ') || 'none'
-          }`,
-        );
-        return { text: newsResults.text, citations: newsResults.citations };
+        return await this.executeFeeds(provider, params);
       }
 
       if (!params.model) {
@@ -149,6 +147,113 @@ export class WebSearchTool implements Tool {
         citations: [],
       };
     }
+  }
+
+  /**
+   * SearXNG search. Returns null when the caller should fall back to the
+   * news feeds: instance unconfigured, every leg failed, or nothing found.
+   */
+  private async executeSearxng(
+    params: WebSearchToolParams,
+  ): Promise<ToolResult | null> {
+    if (!isSearxngConfigured()) {
+      console.warn(
+        '[WebSearchTool] SearXNG is not configured; using the news feeds',
+      );
+      return null;
+    }
+    const queries = params.searchQueries?.length
+      ? params.searchQueries.slice(0, 5)
+      : [params.searchQuery];
+    try {
+      const outcome = await searchSearxng(queries, {
+        resultCount: params.resultCount ?? 8,
+        freshness: params.freshness ?? 'any',
+        category: params.category,
+        deep: params.deep ?? false,
+      });
+      if (outcome.entries.length === 0) {
+        console.warn(
+          '[WebSearchTool] SearXNG returned no results; using the news feeds',
+        );
+        return null;
+      }
+      console.log(
+        `[WebSearchTool] SearXNG (${params.category ?? 'general'}): ${outcome.entries.length} results across ${queries.length} quer${queries.length === 1 ? 'y' : 'ies'}`,
+      );
+      const digest = buildNewsResult(
+        outcome.entries,
+        // A planning failure passes the raw user message as the query —
+        // keep the digest header a label, not a second copy of the prompt.
+        queries.map((q) => `"${q.slice(0, 120)}"`).join('; '),
+        'web',
+      );
+      const answerLead =
+        outcome.answers.length > 0
+          ? `Instant answer from the search engine (verify against the sources below): ${outcome.answers.join(' | ')}\n\n`
+          : '';
+      return {
+        text: `${answerLead}${digest.text}`,
+        citations: digest.citations,
+      };
+    } catch (error) {
+      console.warn(
+        '[WebSearchTool] SearXNG search failed; using the news feeds:',
+        error instanceof Error ? error.message : error,
+      );
+      return null;
+    }
+  }
+
+  /**
+   * Keyless feed providers. 'news' fans out to GDELT + Google News in
+   * parallel so each backs the other up.
+   */
+  private async executeFeeds(
+    provider: ResolvedWebSearchProvider,
+    params: WebSearchToolParams,
+  ): Promise<ToolResult> {
+    const feedOptions = {
+      resultCount: params.resultCount ?? 8,
+      freshness: params.freshness ?? 'any',
+    } as const;
+    // Multi-aspect fan-out: one Google News leg per query, in
+    // parallel (GDELT excluded — its rate-limit queue would serialize
+    // the legs; see searchNewsFanOut). Only providers that include
+    // Google News fan out — a GDELT-only selection must stay GDELT,
+    // so it takes the single-query path below on its primary query.
+    const fanOutQueries =
+      provider !== 'gdelt' && (params.searchQueries?.length ?? 0) > 1
+        ? params.searchQueries!.slice(0, 5)
+        : null;
+    if (fanOutQueries) {
+      const fanned = await searchNewsFanOut(fanOutQueries, feedOptions);
+      console.log(
+        `[WebSearchTool] Fan-out across ${fanOutQueries.length} queries: ${fanned.citations.length} merged citations`,
+      );
+      return { text: fanned.text, citations: fanned.citations };
+    }
+    if (provider === 'google-news') {
+      const newsResults = await searchGoogleNews(
+        params.searchQuery,
+        feedOptions,
+      );
+      return { text: newsResults.text, citations: newsResults.citations };
+    }
+    const newsResults = await searchNewsParallel(
+      params.searchQuery,
+      feedOptions,
+      {
+        sources: provider === 'gdelt' ? ['gdelt'] : ['gdelt', 'google-news'],
+        deep: params.deep ?? false,
+      },
+    );
+    console.log(
+      `[WebSearchTool] News providers used: ${
+        newsResults.providersUsed.join(', ') || 'none'
+      }`,
+    );
+    return { text: newsResults.text, citations: newsResults.citations };
   }
 
   /**

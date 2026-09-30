@@ -115,6 +115,17 @@ export function globalAdminUnion(
  * snapshot. Env is consulted first so the bootstrap works before the roster
  * has ever loaded.
  */
+/**
+ * A key another key covers: an admin who holds a channel set
+ * (`channel-set::<id>`) also decides who may SEND its posts
+ * (`publish::<id>/<channel>`), so owning a set is enough to manage it end
+ * to end. Returns the owning key, or null when there is none.
+ */
+export function owningKeyOf(canonicalKey: string): string | null {
+  const match = /^publish::([^/]+)\/.+$/u.exec(canonicalKey);
+  return match ? `channel-set::${match[1]}` : null;
+}
+
 export function isRealGlobalAdmin(mail: string | null | undefined): boolean {
   const normalized = mail?.trim().toLowerCase();
   if (!normalized) return false;

@@ -322,3 +322,33 @@ describe('glossaryMatch', () => {
     });
   });
 });
+
+describe('findMatchingEntries pre-filter', () => {
+  it('still matches across a line wrap and under one-way case folding', () => {
+    const entries = [
+      { source: 'internally displaced', target: 'déplacé interne' },
+      { source: 'staff', target: 'personnel' },
+      { source: 'Kelvin', target: 'kelvin' },
+    ];
+    // Line wrap inside the phrase; long s (U+017F) and Kelvin sign
+    // (U+212A) fold onto plain letters under the regex's `iu` flag.
+    const text = 'Many internally\ndisplaced ſtaff measured \u212Aelvin.';
+    const matched = findMatchingEntries(entries, text).map(
+      (m) => m.entry.source,
+    );
+    expect(matched).toEqual(['internally displaced', 'staff', 'Kelvin']);
+  });
+
+  it('stays linear on a large glossary with few hits', () => {
+    const entries = Array.from({ length: 20_000 }, (_, i) => ({
+      source: `term${i}`,
+      target: `x${i}`,
+    }));
+    entries.push({ source: 'needle', target: 'aiguille' });
+    const text = `${'hay '.repeat(15_000)}needle`;
+    const started = performance.now();
+    const matched = findMatchingEntries(entries, text);
+    expect(matched.map((m) => m.entry.source)).toEqual(['needle']);
+    expect(performance.now() - started).toBeLessThan(1_500);
+  });
+});

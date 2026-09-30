@@ -104,38 +104,7 @@ function renderRow({ entry, kind }: MatchedGlossaryEntry): string {
   )} |`;
 }
 
-/**
- * Merges admin terminology-guide entries with a user's local glossary
- * entries. Admin entries come FIRST and WIN on a case-insensitive duplicate
- * source term — organization-mandated terminology is authoritative over
- * personal glossaries.
- */
-export function mergeGlossaryEntries(
-  guideEntries: GlossaryEntry[],
-  localEntries: GlossaryEntry[],
-): GlossaryEntry[] {
-  const seen = new Map<string, GlossaryEntryKind>();
-  const merged: GlossaryEntry[] = [];
-  for (const entry of [...guideEntries, ...localEntries]) {
-    if (!entry.source) continue;
-    const key = entry.source.trim().toLowerCase();
-    const kind = resolveEntryKind(entry);
-    const earlier = seen.get(key);
-    // A duplicate is dropped even across case ("idp" after "IDP"): the
-    // org entry wins. The one exception is an entry the user EXPLICITLY
-    // typed as an ordinary word next to an acronym ("who" beside "WHO") —
-    // those are two different words, so both stay.
-    if (earlier !== undefined) {
-      const distinctWord =
-        entry.kind === 'term' &&
-        earlier === 'acronym' &&
-        !seen.has(`term:${key}`);
-      if (!distinctWord) continue;
-      seen.set(`term:${key}`, 'term');
-    } else {
-      seen.set(key, kind);
-    }
-    merged.push(entry);
-  }
-  return merged;
-}
+// mergeGlossaryEntries lives in the shared (client-safe) module so the
+// picker can merge several personal glossaries with the same precedence
+// rule the server applies; re-exported here for its existing import sites.
+export { mergeGlossaryEntries } from '@/lib/utils/shared/translation/glossaryMatch';

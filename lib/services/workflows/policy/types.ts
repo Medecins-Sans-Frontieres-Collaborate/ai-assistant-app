@@ -45,6 +45,8 @@ export const WORKFLOW_POLICY_DEFAULTS: Record<
   // Ships under the same LD flag as the other general workflows; the policy
   // stays the kill switch (docs/DOCUMENT_FILL_ASSESSMENT.md §11).
   'form-fill': true,
+  // Drafting only; publishing has its own default-off gate (design §11.1).
+  'channel-drafter': true,
 };
 
 export const WorkflowSettingSchema = z.object({

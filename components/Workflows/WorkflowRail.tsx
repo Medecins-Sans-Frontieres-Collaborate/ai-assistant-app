@@ -1,7 +1,13 @@
 'use client';
 
 import { IconArrowUp, IconPlayerStopFilled } from '@tabler/icons-react';
-import { ClipboardEvent, KeyboardEvent, useCallback, useState } from 'react';
+import {
+  ClipboardEvent,
+  KeyboardEvent,
+  Suspense,
+  useCallback,
+  useState,
+} from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -112,6 +118,10 @@ export function WorkflowRail({ conversation }: WorkflowRailProps) {
     conversation,
   ]);
 
+  const ComposerAddon = conversation.conversationType
+    ? WORKFLOW_REGISTRY[conversation.conversationType]?.RailComposerAddon
+    : undefined;
+
   const onKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
@@ -124,6 +134,11 @@ export function WorkflowRail({ conversation }: WorkflowRailProps) {
       <WorkflowRailMessages conversation={conversation} />
 
       <div className="border-t border-gray-200 p-3 dark:border-gray-700">
+        {ComposerAddon && (
+          <Suspense fallback={null}>
+            <ComposerAddon conversationId={conversation.id} />
+          </Suspense>
+        )}
         <PastedTextChips chips={chips} onRemove={removeChip} />
         <div className="flex items-end gap-2">
           <textarea

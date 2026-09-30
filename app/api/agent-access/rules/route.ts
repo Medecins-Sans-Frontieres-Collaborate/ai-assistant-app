@@ -16,6 +16,7 @@ import {
   AdminStatus,
   resolveAdminStatus,
 } from '@/lib/services/agentAccess/adminAuth';
+import { canEditKey } from '@/lib/services/agentAccess/adminRouteHelpers';
 import {
   AgentAccessConfig,
   AgentAccessHistoryEntry,
@@ -74,14 +75,6 @@ const putBodySchema = z.object({
     allowGroups: z.array(z.string().max(320)).max(500).default([]),
   }),
 });
-
-/** May this admin write the given canonical key? Keys are compared canonicalized. */
-function canEditKey(status: AdminStatus, canonicalKey: string): boolean {
-  if (status.editableAgentKeys === ALL_AGENT_KEYS) return true;
-  return status.editableAgentKeys.some(
-    (key) => key.trim().toLowerCase() === canonicalKey,
-  );
-}
 
 function auditAdminWrite(
   action: 'upsert' | 'delete',
