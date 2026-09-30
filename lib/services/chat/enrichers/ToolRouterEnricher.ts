@@ -1121,7 +1121,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
     },
   ): Promise<ToolResult> {
     const resultCount = params.resultCount ?? 8;
-    const userId = getUserIdFromSession(context.user);
+    const userId = getUserIdFromSession(context.session);
     // Continuation: the state says what was searched; this turn's own words
     // ("keep looking") are not a query, so the loop starts at the assessor
     // against the ORIGINAL question.
@@ -1219,7 +1219,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           );
         });
     };
-    showInterim(initial.entries, queries);
+    if (initial) showInterim(initial.entries, queries);
 
     const baseMessages = context.enrichedMessages || context.messages;
     const recentContext = baseMessages
@@ -1259,11 +1259,26 @@ export class ToolRouterEnricher extends BasePipelineStage {
         signal: run.signal,
       },
       {
-        search: (followUpQueries, options) =>
-          this.webSearchTool.searchSearxngEntries(followUpQueries, {
-            ...options,
+        search: (followUpQueries, options) => {
+          ToolRouterEnricher.noteUserSearch(userId, followUpQueries.length);
+          const { narrow, ...rest } = options;
+          return this.webSearchTool.searchSearxngEntries(followUpQueries, {
+            ...rest,
+            // A follow-up on the general web goes to the web engines only.
+            category:
+              narrow &&
+              narrowCategory &&
+              (rest.category === undefined || rest.category === 'general')
+                ? narrowCategory
+                : rest.category,
             deep: false,
-          }),
+            language: run.language,
+          });
+        },
+        // Upstream throttling reported by the instance, or this user
+        // already searching a lot: no follow-ups for now.
+        searchAllowed: () =>
+          !isSearxngThrottled() && ToolRouterEnricher.userMaySearch(userId),
         readPage: async (url) =>
           (await fetchArticleText(url, ToolRouterEnricher.PAGE_READ_TIMEOUT_MS))
             ?.text ?? null,
@@ -1301,21 +1316,34 @@ export class ToolRouterEnricher extends BasePipelineStage {
               step.outcome,
               step.error,
               step.durationMs,
-              { kind: step.kind, why: step.why },
+              { kind: step.kind, why: step.why, strategy: step.strategy },
             ),
           );
         },
       },
     );
+    // The outcome record: one line for the user, and — in its arguments —
+    // the state a later "keep searching" turn continues from.
+    const state = toPriorSearchState(result, question, continuation);
+    records.push(
+      this.emitSearchStateRecord(context, result, encodeSearchState(state)),
+    );
     await Promise.all(records);
     console.log(
-      `[ToolRouterEnricher] Multi-step search ended "${result.outcome}": ${result.stepsUsed} step(s), ${result.searchCount} search(es), ${result.pagesRead} page(s) read, ${result.entries.length} source(s) kept`,
+      `[ToolRouterEnricher] Multi-step search ended "${result.outcome}"${result.stopReason ? ` (${result.stopReason})` : ''}: ${result.stepsUsed} step(s), ${result.searchCount} search(es), ${result.pagesRead} page(s) read, ${result.entries.length} source(s) kept, ${result.usefulCount} useful${result.webCoverageLost ? ', web coverage lost' : ''}`,
+    );
+    ToolRouterEnricher.logMultiStepSearch(
+      context,
+      result,
+      question,
+      Boolean(continuation),
     );
 
     if (result.entries.length === 0) {
-      // Nothing to cite, but the assessor identified what to ask: put the
-      // question to the user instead of answering from thin air.
-      if (result.outcome === 'ask_user') {
+      // Nothing to cite, but the assessor identified what to ask (or the
+      // search ended short on a continuation): put that to the user
+      // instead of answering from thin air or from news headlines.
+      if (result.outcome === 'ask_user' || continuation || result.assessed) {
         return {
           text: '',
           citations: [],
@@ -1329,6 +1357,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
     }
 
     const digest = buildMultiStepDigest(result);
+    // Results found but none about the subject: described, not cited.
+    if (digest.citations.length === 0) {
+      return {
+        text: '',
+        citations: [],
+        metadata: {
+          recordsEmitted: true,
+          emptyNotice: `Note: a live web search ran for this request but found no sources about the subject. ${digest.text}`,
+        },
+      };
+    }
     const pageChars = result.entries.reduce(
       (sum, entry) => sum + (result.pageText.get(entry.url)?.length ?? 0),
       0,
@@ -1345,6 +1384,136 @@ export class ToolRouterEnricher extends BasePipelineStage {
         ),
       },
     };
+  }
+
+  /**
+   * The previous assistant turn's unfinished multi-step search, if any —
+   * carried in its outcome tool record (lib/utils/shared/searchState.ts).
+   * Only the LAST assistant message counts: "keep looking" refers to the
+   * search the user just saw end.
+   */
+  private static latestSearchState(
+    messages: Message[],
+  ): PriorSearchState | null {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const msg = messages[i];
+      if (msg.role !== 'assistant') continue;
+      for (const record of msg.toolCalls ?? []) {
+        const state = decodeSearchState(record);
+        if (state) return isContinuableSearchState(state) ? state : null;
+      }
+      return null;
+    }
+    return null;
+  }
+
+  /** Records a search for the per-user pacing window. */
+  private static noteUserSearch(userId: string, count: number): void {
+    const now = Date.now();
+    const cutoff = now - ToolRouterEnricher.USER_SEARCH_WINDOW_MS;
+    const recent = (
+      ToolRouterEnricher.recentSearchesByUser.get(userId) ?? []
+    ).filter((at) => at > cutoff);
+    for (let i = 0; i < count; i += 1) recent.push(now);
+    ToolRouterEnricher.recentSearchesByUser.set(userId, recent);
+    // Bound the map: idle users drop out.
+    if (ToolRouterEnricher.recentSearchesByUser.size > 1000) {
+      for (const [id, times] of ToolRouterEnricher.recentSearchesByUser) {
+        if (!times.some((at) => at > cutoff)) {
+          ToolRouterEnricher.recentSearchesByUser.delete(id);
+        }
+      }
+    }
+  }
+
+  /** Whether this user may run another follow-up search right now. */
+  private static userMaySearch(userId: string): boolean {
+    const cutoff = Date.now() - ToolRouterEnricher.USER_SEARCH_WINDOW_MS;
+    const recent = ToolRouterEnricher.recentSearchesByUser.get(userId) ?? [];
+    return (
+      recent.filter((at) => at > cutoff).length <
+      ToolRouterEnricher.USER_SEARCHES_PER_WINDOW
+    );
+  }
+
+  /** Test seam only. */
+  static __resetSearchPacingForTests(): void {
+    ToolRouterEnricher.recentSearchesByUser.clear();
+  }
+
+  /**
+   * The search's outcome as one more tool record — what the user sees as
+   * "how did the search end", and (in `arguments`) what a later turn
+   * continues from.
+   */
+  private async emitSearchStateRecord(
+    context: ChatContext,
+    result: MultiStepResult,
+    encodedState: string,
+  ): Promise<void> {
+    if (!context.emitMarker) return;
+    const outcomeLine: Record<MultiStepResult['outcome'], string> = {
+      answered: 'The results answered the question',
+      ask_user: 'Needs a detail from you',
+      gave_up: `Not found${result.reason ? ` — ${result.reason}` : ''}`,
+      degraded: `Web search engines did not answer${result.lastHealth ? ` (${describeSearchHealth(result.lastHealth)})` : ''}`,
+      limit: `Stopped before finding it${result.reason ? ` — still missing: ${result.reason}` : ''}`,
+      unassessed: 'Results returned without assessment',
+    };
+    ToolRouterEnricher.searchRecordSeq += 1;
+    await context.emitMarker(
+      emitToolCallRecord({
+        id: `web-search-${Date.now()}-${ToolRouterEnricher.searchRecordSeq}`,
+        name: SEARCH_STATE_RECORD_NAME,
+        server_label: SEARCH_STATE_RECORD_LABEL,
+        arguments: encodedState,
+        status: 'completed',
+        output: `${outcomeLine[result.outcome]} · ${result.searchCount} search${result.searchCount === 1 ? '' : 'es'}${result.pagesRead > 0 ? `, ${result.pagesRead} page${result.pagesRead === 1 ? '' : 's'} read` : ''}`,
+        error: null,
+      }),
+    );
+  }
+
+  /**
+   * One telemetry row per multi-step search (docs/WEB_SEARCH_DEAD_END_PROPOSAL.md
+   * §F): how it ended, how much it took, and whether the backend answered —
+   * the number this feature is meant to drive down is searches that end
+   * short with nothing useful. Best effort; never awaited.
+   */
+  private static logMultiStepSearch(
+    context: ChatContext,
+    result: MultiStepResult,
+    question: string,
+    continuation: boolean,
+  ): void {
+    try {
+      void getAzureMonitorLogger().logCustomMetric({
+        user: context.user,
+        metricName: 'multi_step_search',
+        metricValue: result.stepsUsed,
+        metricUnit: 'steps',
+        tags: {
+          outcome: result.outcome,
+          stopReason: result.stopReason ?? '',
+          searches: String(result.searchCount),
+          pagesRead: String(result.pagesRead),
+          useful: String(result.usefulCount),
+          kept: String(result.entries.length),
+          strategies: result.strategies.join(','),
+          webCoverage:
+            result.lastHealth?.webCoverage === null ||
+            result.lastHealth === null
+              ? 'unknown'
+              : result.webCoverageLost
+                ? 'lost'
+                : 'ok',
+          continuation: String(continuation),
+          questionChars: String(question.length),
+        },
+      });
+    } catch {
+      // Telemetry must never affect the turn.
+    }
   }
 
   /**
@@ -1568,9 +1737,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
     outcome: string | null,
     error: string | null,
     durationMs: number,
-    // Multi-step follow-up steps: what was opened instead of searched, and
-    // the assessor's stated reason for taking the step.
-    step?: { kind: 'search' | 'read'; why?: string },
+    // Multi-step follow-up steps: what was opened instead of searched, the
+    // assessor's stated reason for taking the step, and the kind of change
+    // a follow-up search made.
+    step?: { kind: 'search' | 'read'; why?: string; strategy?: string },
   ): Promise<void> {
     if (!context.emitMarker) return;
 
@@ -1586,6 +1756,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           : 'Web Search',
         arguments: JSON.stringify({
           ...(step?.kind === 'read' ? { pages: subject } : { query: subject }),
+          ...(step?.strategy ? { strategy: step.strategy } : {}),
           ...(step?.why ? { why: step.why } : {}),
         }),
         status: error ? 'failed' : 'completed',
