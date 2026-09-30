@@ -21,6 +21,30 @@ import {
   vi,
 } from 'vitest';
 
+// Capabilities are discovered from /config on a separate code path (its
+// own test file); here the instance's engine tags are simply unknown, so
+// every fetch below is a search request.
+const capabilities = vi.hoisted(() => ({
+  value: null as null | {
+    categories: Set<string>;
+    engineCategories: Map<string, string[]>;
+    fetchedAt: number;
+  },
+}));
+vi.mock(
+  '@/lib/services/chat/tools/searxngCapabilities',
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import('@/lib/services/chat/tools/searxngCapabilities')
+      >();
+    return {
+      ...actual,
+      getSearxngCapabilities: vi.fn(async () => capabilities.value),
+    };
+  },
+);
+
 const KEY = 'k'.repeat(48);
 
 function jsonResponse(body: unknown, status = 200): Response {
