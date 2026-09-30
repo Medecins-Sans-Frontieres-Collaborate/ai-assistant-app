@@ -132,6 +132,9 @@ export interface SearchHeadlineEntry {
   snippet?: string;
 }
 
+/** Which search an interim panel / echoed result set came from. */
+export type SearchInterimKind = 'combined' | 'multiStep';
+
 /**
  * Client-echoed search results for a "Summarize from headlines" resend:
  * the interim headlines the user already saw, sent back in place of a
@@ -141,6 +144,8 @@ export interface PrecomputedSearchResults {
   /** The queries the interim results answered (display/record only). */
   queries: string[];
   entries: SearchHeadlineEntry[];
+  /** Absent on echoes from older clients: a combined (news) search. */
+  kind?: SearchInterimKind;
 }
 
 export function isWebSearchProviderOption(
