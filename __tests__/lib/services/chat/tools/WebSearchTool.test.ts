@@ -310,6 +310,63 @@ describe('WebSearchTool', () => {
         expect.anything(),
       );
     });
+
+    describe('multi-step seams', () => {
+      const options = {
+        resultCount: 6,
+        freshness: 'any' as const,
+        category: 'general' as const,
+        deep: false,
+      };
+
+      it('searchSearxngEntries returns raw results — an empty one stays empty, no fallback', async () => {
+        vi.mocked(searchSearxng).mockResolvedValue({
+          entries: [],
+          answers: [],
+        });
+
+        const outcome = await webSearchTool.searchSearxngEntries(
+          ['a', 'b', 'c', 'd', 'e', 'f'],
+          options,
+        );
+
+        expect(outcome).toEqual({ entries: [], answers: [] });
+        expect(searchSearxng).toHaveBeenCalledWith(
+          ['a', 'b', 'c', 'd', 'e'],
+          options,
+        );
+        expect(searchNewsParallel).not.toHaveBeenCalled();
+      });
+
+      it('searchSearxngEntries lets an unavailable instance throw', async () => {
+        vi.mocked(searchSearxng).mockRejectedValue(new Error('down'));
+        await expect(
+          webSearchTool.searchSearxngEntries(['a'], options),
+        ).rejects.toThrow('down');
+      });
+
+      it('searxngFallback answers from the news feeds, flagged — but not for science', async () => {
+        const news = await webSearchTool.searxngFallback({
+          searchQuery: 'a',
+          provider: 'searxng',
+          user,
+        });
+        expect(news.text).toBe('News digest');
+        expect(news.metadata?.searxngFallback).toBe(true);
+
+        const science = await webSearchTool.searxngFallback({
+          searchQuery: 'a',
+          provider: 'searxng',
+          category: 'science',
+          user,
+        });
+        expect(science).toEqual({
+          text: '',
+          citations: [],
+          metadata: { searxngFallback: true },
+        });
+      });
+    });
   });
 
   describe('feed provider routing', () => {
