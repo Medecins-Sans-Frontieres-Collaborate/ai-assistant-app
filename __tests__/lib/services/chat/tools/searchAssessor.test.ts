@@ -40,6 +40,9 @@ const input = (overrides: Partial<AssessmentInput> = {}): AssessmentInput => ({
   maxReads: 3,
   maxUseful: 8,
   assessSources: true,
+  searchHealth: '',
+  strategiesTried: [],
+  continuation: false,
   ...overrides,
 });
 
