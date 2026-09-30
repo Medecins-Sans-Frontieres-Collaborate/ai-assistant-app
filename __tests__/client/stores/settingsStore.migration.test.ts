@@ -742,6 +742,7 @@ describe('settingsStore migration (v46 → v47)', () => {
       resultCount: 12,
       freshness: 'week',
       provider: 'auto',
+      multiStep: true,
     });
 
     const repaired = migrate(
@@ -752,6 +753,7 @@ describe('settingsStore migration (v46 → v47)', () => {
       resultCount: 15,
       freshness: 'auto',
       provider: 'auto',
+      multiStep: true,
     });
   });
 });
@@ -769,6 +771,7 @@ describe('settingsStore migration (v47 → v48)', () => {
       resultCount: 10,
       freshness: 'day',
       provider: 'auto',
+      multiStep: true,
     });
   });
 
@@ -1094,6 +1097,7 @@ describe('settingsStore migration (v65 → v66)', () => {
       resultCount: 11,
       freshness: 'week',
       provider: 'auto',
+      multiStep: true,
     });
   });
 
