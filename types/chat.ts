@@ -642,6 +642,18 @@ export interface ToolRouterResponse {
    */
   searchFollowUp?: boolean;
   /**
+   * True when the user asks to keep looking after an earlier turn's
+   * multi-step search ended short — the enricher then continues that
+   * search from its saved state. Only produced when the request offered a
+   * prior search state.
+   */
+  searchContinue?: boolean;
+  /**
+   * ISO 639-1 language of the planned query ("en", "fr"), so the search
+   * backend does not have to guess it from a keyword bag. Absent = auto.
+   */
+  searchLanguage?: string;
+  /**
    * What the interpreter should do, phrased as a self-contained task.
    * Present when tools includes 'code_interpreter'.
    */
@@ -673,6 +685,12 @@ export interface ToolRouterRequest {
    * the prompt/schema stay unchanged for citation-less conversations.
    */
   hasPriorSearchCitations?: boolean;
+  /**
+   * Whether the previous assistant turn's multi-step search ended short
+   * (limit / gave up / degraded), so "keep looking" can be classified as a
+   * continuation of it. Gates the searchContinue classification.
+   */
+  hasPriorSearchState?: boolean;
   /**
    * Whether the user supplied their own source material this turn
    * (uploaded files/images/audio or a large pasted text block). The
