@@ -102,6 +102,29 @@ describe('parseAssessment', () => {
     expect(parseAssessment(null, 2)).toBeNull();
   });
 
+  it('keeps a known strategy and drops an unknown one', () => {
+    expect(
+      parseAssessment(
+        JSON.stringify({
+          verdict: 'search',
+          queries: ['a b c'],
+          strategy: 'venue',
+        }),
+        2,
+      )?.strategy,
+    ).toBe('venue');
+    expect(
+      parseAssessment(
+        JSON.stringify({
+          verdict: 'search',
+          queries: ['a b c'],
+          strategy: 'magic',
+        }),
+        2,
+      )?.strategy,
+    ).toBeUndefined();
+  });
+
   it('drops out-of-range sources, unknown tiers and extra queries', () => {
     const parsed = parseAssessment(
       JSON.stringify({
@@ -168,6 +191,37 @@ describe('assessor prompt', () => {
     expect(prompt).toContain('NAMESAKE');
     expect(prompt).toContain('the details that tell the two apart');
     expect(prompt).toContain('captured by a better-known namesake');
+  });
+
+  it('names the strategies and refuses the ones that dead-ended', () => {
+    const prompt = buildAssessorSystemPrompt(
+      input({
+        strategiesTried: [
+          { strategy: 'terms', deadEnd: true },
+          { strategy: 'phrase', deadEnd: false },
+        ],
+      }),
+    );
+    expect(prompt).toContain('"venue" — a site or catalogue');
+    expect(prompt).toContain(
+      'Strategies already used for this question: terms (dead end — refused), phrase.',
+    );
+  });
+
+  it('forbids searching again while the web engines are not answering', () => {
+    const prompt = buildAssessorSystemPrompt(
+      input({
+        searchHealth: 'The web search engines did not answer the last search.',
+      }),
+    );
+    expect(prompt).toContain('SEARCH SERVICE STATE');
+    expect(prompt).toContain('do not choose "search"');
+  });
+
+  it('tells a continuation not to repeat earlier turns', () => {
+    expect(buildAssessorSystemPrompt(input({ continuation: true }))).toContain(
+      'asked to KEEP LOOKING',
+    );
   });
 
   it('tells the model to name sites, not source numbers', () => {
