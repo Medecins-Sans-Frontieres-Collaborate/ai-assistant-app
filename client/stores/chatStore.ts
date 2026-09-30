@@ -573,6 +573,13 @@ interface ChatStore {
    * them as the search result without searching again.
    */
   summarizeFromHeadlines: () => Promise<void>;
+  /**
+   * "Keep searching" after a multi-step search ended short: sends `text`
+   * as a new user message in the conversation. The server recognises the
+   * request from the previous turn's search-state record and continues
+   * that search rather than starting over.
+   */
+  continueSearch: (conversationId: string, text: string) => Promise<void>;
   dismissModelSwitchPrompt: () => void;
   acceptModelSwitch: (alwaysSwitch?: boolean) => void;
 
@@ -2745,6 +2752,24 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         set({ pendingPrecomputedSearchResults: null });
       }
     }
+  },
+
+  continueSearch: async (conversationId, text) => {
+    if (get().isStreaming) return;
+    const conversationStore = useConversationStore.getState();
+    const conversation = conversationStore.conversations.find(
+      (c) => c.id === conversationId,
+    );
+    if (!conversation) return;
+    const message: Message = { role: 'user', content: text };
+    const updated = {
+      ...conversation,
+      messages: [...conversation.messages, message],
+    };
+    conversationStore.updateConversation(conversationId, {
+      messages: updated.messages,
+    });
+    await get().sendMessage(message, updated, conversation.defaultSearchMode);
   },
 
   dismissModelSwitchPrompt: () => {
