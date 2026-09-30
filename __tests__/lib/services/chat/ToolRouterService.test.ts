@@ -358,6 +358,73 @@ describe('ToolRouterService', () => {
         expect(call.messages[0].content).toContain('searchFollowUp');
       });
 
+      it('classifies "keep looking" as a continuation of an unfinished search — and searches', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: false,
+                  searchQuery: '',
+                  searchRecency: 'none',
+                  searchComprehensive: false,
+                  searchCategory: 'general',
+                  searchLanguage: 'en',
+                  additionalSearchQueries: [],
+                  searchContinue: true,
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage: 'keep searching please',
+          hasPriorSearchState: true,
+        });
+
+        expect(result.searchContinue).toBe(true);
+        expect(result.tools).toEqual(['web_search']);
+        expect(result.searchLanguage).toBe('en');
+
+        const call =
+          mockOpenAIClient.chat.completions.create.mock.calls.at(-1)![0];
+        expect(
+          call.response_format.json_schema.schema.properties.searchContinue,
+        ).toBeDefined();
+        expect(call.messages[0].content).toContain('searchContinue');
+      });
+
+      it('never reports searchContinue without a prior search state offered, and drops a bad language', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: true,
+                  searchQuery: 'india protests',
+                  searchRecency: 'week',
+                  searchComprehensive: false,
+                  searchCategory: 'news',
+                  searchLanguage: 'English',
+                  additionalSearchQueries: [],
+                  searchContinue: true,
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage: 'india protests?',
+        });
+
+        expect(result.searchContinue).toBe(false);
+        expect(result.searchLanguage).toBeUndefined();
+      });
+
       it('never reports searchFollowUp without prior citations offered', async () => {
         mockOpenAIClient.chat.completions.create.mockResolvedValue({
           choices: [
