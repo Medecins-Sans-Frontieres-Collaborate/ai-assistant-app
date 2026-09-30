@@ -26,6 +26,7 @@ import {
   MAX_SEARCH_RESULT_COUNT,
   PrecomputedSearchResults,
   ResolvedWebSearchProvider,
+  SearchHeadlineEntry,
   WebSearchCategory,
   sanitizeWebSearchOptions,
 } from '@/types/webSearch';
@@ -124,6 +125,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
   // Earlier turns the assessor sees, so "this book" / "that policy" resolve.
   private static readonly ASSESSOR_CONTEXT_MESSAGES = 4;
   private static readonly ASSESSOR_CONTEXT_CHARS = 500;
+  // The interim panel shows what the search has so far; the echo-back
+  // schema caps what it may return (MAX_SEARCH_RESULT_COUNT entries, 5
+  // queries), and a "brief description" is enough while waiting.
+  private static readonly INTERIM_SNIPPET_CHARS = 220;
   // Tool-record ids must be unique within a turn; a multi-step search emits
   // several records, possibly within the same millisecond.
   private static searchRecordSeq = 0;
@@ -1099,6 +1104,49 @@ export class ToolRouterEnricher extends BasePipelineStage {
       ),
     ];
 
+    // What the search has so far, shown while the assessor and any further
+    // steps run — with an "answer from these now" escape hatch (the same
+    // echo-back the combined search uses). Re-emitted as steps add to it.
+    const showInterim = (
+      entries: SearchHeadlineEntry[],
+      queriesSoFar: string[],
+    ) => {
+      if (!context.emitMarker || run.signal.aborted || entries.length === 0) {
+        return;
+      }
+      context
+        .emitMarker(
+          emitSearchInterim({
+            kind: 'multiStep',
+            queries: queriesSoFar.slice(0, 5),
+            entries: entries.slice(0, MAX_SEARCH_RESULT_COUNT).map((entry) => ({
+              ...entry,
+              ...(entry.snippet
+                ? {
+                    snippet:
+                      entry.snippet.length >
+                      ToolRouterEnricher.INTERIM_SNIPPET_CHARS
+                        ? `${entry.snippet
+                            .slice(
+                              0,
+                              ToolRouterEnricher.INTERIM_SNIPPET_CHARS - 1,
+                            )
+                            .trimEnd()}…`
+                        : entry.snippet,
+                  }
+                : {}),
+            })),
+          }),
+        )
+        .catch((error) => {
+          console.warn(
+            '[ToolRouterEnricher] Interim results emit failed (ignored):',
+            error instanceof Error ? error.message : error,
+          );
+        });
+    };
+    showInterim(initial.entries, queries);
+
     const baseMessages = context.enrichedMessages || context.messages;
     const recentContext = baseMessages
       .slice(0, -1)
@@ -1167,6 +1215,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           if (run.signal.aborted) return;
           void context.emitActivity?.(key, activityParams);
         },
+        onProgress: showInterim,
         onStep: (step) => {
           if (run.signal.aborted) return;
           records.push(
@@ -1366,9 +1415,12 @@ export class ToolRouterEnricher extends BasePipelineStage {
       `[ToolRouterEnricher] Summarizing from ${entries.length} echoed headlines (no fresh search)`,
     );
 
+    // Echoes from a multi-step search are web results, not news headlines.
+    const fromMultiStep = precomputed.kind === 'multiStep';
     const digest = buildNewsResult(
       entries,
       precomputed.queries.map((q) => `"${q}"`).join('; '),
+      fromMultiStep ? 'web' : 'news',
     );
 
     const existingCitations =
@@ -1407,8 +1459,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
     await this.emitSearchRecord(
       context,
       queryLabel,
-      'Google News',
-      `${digest.citations.length} source${digest.citations.length === 1 ? '' : 's'} from earlier headlines`,
+      fromMultiStep
+        ? ToolRouterEnricher.FEED_PROVIDER_LABELS.searxng!
+        : 'Google News',
+      `${digest.citations.length} source${digest.citations.length === 1 ? '' : 's'} from earlier ${fromMultiStep ? 'results' : 'headlines'}`,
       null,
       Date.now() - startTime,
     );
