@@ -136,25 +136,37 @@ const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
   setFilePreviews,
 }) => {
   const t = useTranslations();
-  const [speakerFeatureAvailable, setSpeakerFeatureAvailable] = useState(false);
+  const [speakerFeatureStatus, setSpeakerFeatureStatus] = useState<{
+    uploadedUrl: string;
+    available: boolean;
+  } | null>(null);
+  const speakerFeatureAvailable = Boolean(
+    filePreview.uploadedUrl &&
+    speakerFeatureStatus &&
+    speakerFeatureStatus.uploadedUrl === filePreview.uploadedUrl &&
+    speakerFeatureStatus.available,
+  );
   const [showPromptInput, setShowPromptInput] = useState(
     !!filePreview.transcriptionPrompt,
   );
 
   useEffect(() => {
-    let cancelled = false;
-    setSpeakerFeatureAvailable(false);
+    const uploadedUrl = filePreview.uploadedUrl;
+    if (!uploadedUrl) return;
 
-    if (filePreview.uploadedUrl) {
-      const url = `${filePreview.uploadedUrl.replace(/\/$/, '')}/transcribe`;
-      fetch(url, { method: 'HEAD' })
-        .then((response) => {
-          if (!cancelled) setSpeakerFeatureAvailable(response.ok);
-        })
-        .catch(() => {
-          if (!cancelled) setSpeakerFeatureAvailable(false);
-        });
-    }
+    let cancelled = false;
+    const url = `${uploadedUrl.replace(/\/$/, '')}/transcribe`;
+    fetch(url, { method: 'HEAD' })
+      .then((response) => {
+        if (!cancelled) {
+          setSpeakerFeatureStatus({ uploadedUrl, available: response.ok });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setSpeakerFeatureStatus({ uploadedUrl, available: false });
+        }
+      });
 
     return () => {
       cancelled = true;
