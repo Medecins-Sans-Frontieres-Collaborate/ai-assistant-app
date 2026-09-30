@@ -57,6 +57,12 @@ export interface MultiStepDeps {
   onActivity?(key: string, params?: Record<string, string>): void;
   /** A follow-up step finished — the caller records it for the user. */
   onStep?(step: CompletedStep): void;
+  /**
+   * A step added sources: everything gathered so far, in arrival order,
+   * and every query run — the caller shows it to the user while the
+   * search goes on.
+   */
+  onProgress?(entries: SearchHeadlineEntry[], queries: string[]): void;
   now?: () => number;
 }
 
@@ -489,6 +495,7 @@ export async function runMultiStepSearch(
         break;
       }
       const added = add(found.entries);
+      if (added > 0) deps.onProgress?.([...all], [...queries]);
       for (const answer of found.answers) {
         if (answers.length < MAX_ANSWERS && !answers.includes(answer)) {
           answers.push(answer);
