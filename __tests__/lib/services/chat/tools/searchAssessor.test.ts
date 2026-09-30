@@ -160,6 +160,13 @@ describe('assessor prompt', () => {
     expect(prompt).toContain('- "give_up":');
   });
 
+  it('treats results about a namesake as a gap, not an answer', () => {
+    const prompt = buildAssessorSystemPrompt(input());
+    expect(prompt).toContain('NAMESAKE');
+    expect(prompt).toContain('the details that tell the two apart');
+    expect(prompt).toContain('captured by a better-known namesake');
+  });
+
   it('tells the model to name sites, not source numbers', () => {
     expect(buildAssessorSystemPrompt(input())).toContain(
       'refer to a source by its SITE NAME, never by its number',
