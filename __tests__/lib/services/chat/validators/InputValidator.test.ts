@@ -794,6 +794,29 @@ describe('validateChatRequest - precomputedSearchResults', () => {
     expect(result.precomputedSearchResults?.queries).toEqual(['q1', 'q2']);
   });
 
+  it('keeps the interim kind, and rejects an unknown one', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      precomputedSearchResults: {
+        queries: ['q1'],
+        entries: [entry],
+        kind: 'multiStep',
+      },
+    });
+    expect(result.precomputedSearchResults?.kind).toBe('multiStep');
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q1'],
+          entries: [entry],
+          kind: 'bing',
+        },
+      }),
+    ).toThrow();
+  });
+
   it('rejects non-http(s) entry URLs (clickable-citation injection)', () => {
     const validator = new InputValidator();
     expect(() =>
