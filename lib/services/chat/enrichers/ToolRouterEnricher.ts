@@ -1,5 +1,6 @@
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { consumeToolBudget } from '@/lib/services/limits/toolBudget';
+import { getAzureMonitorLogger } from '@/lib/services/observability';
 import { recordTokenUsage } from '@/lib/services/observability/tokenUsageRecorder';
 import { peekOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
 import { WebSearchConfigService } from '@/lib/services/webSearch/config/WebSearchConfigService';
@@ -11,6 +12,13 @@ import { devTrace } from '@/lib/utils/server/debug/devTrace';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { getContentType } from '@/lib/utils/server/file/mimeTypes';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import {
+  SEARCH_STATE_RECORD_LABEL,
+  SEARCH_STATE_RECORD_NAME,
+  decodeSearchState,
+  encodeSearchState,
+  isContinuableSearchState,
+} from '@/lib/utils/shared/searchState';
 
 import {
   FileMessageContent,
@@ -54,15 +62,24 @@ import {
   pickTrimmableDocument,
 } from '../tools/documentTrim/trimDetector';
 import {
+  MultiStepResult,
+  PriorSearchState,
   buildMultiStepDigest,
   buildOutcomeNote,
   runMultiStepSearch,
+  toPriorSearchState,
 } from '../tools/multiStepSearch';
 import { buildNewsResult } from '../tools/newsSearch';
 import { SearchAssessor } from '../tools/searchAssessor';
 import {
+  WEB_ENGINE_CATEGORY,
+  getSearxngCapabilities,
+} from '../tools/searxngCapabilities';
+import {
   SearxngSearchOutcome,
+  describeSearchHealth,
   isSearxngConfigured,
+  isSearxngThrottled,
 } from '../tools/searxngSearch';
 
 import { env } from '@/config/environment';
@@ -129,6 +146,16 @@ export class ToolRouterEnricher extends BasePipelineStage {
   // schema caps what it may return (MAX_SEARCH_RESULT_COUNT entries, 5
   // queries), and a "brief description" is enough while waiting.
   private static readonly INTERIM_SNIPPET_CHARS = 220;
+  // With a loop behind it, the first round is narrow: the router may plan
+  // up to five facets, but each query fans out to every general engine of
+  // a shared, easily throttled instance. Two to start; the loop adds
+  // facets one at a time only if the assessor asks.
+  private static readonly MULTI_STEP_FIRST_ROUND_QUERIES = 2;
+  // Per-user pacing across turns (per replica): a "keep searching" loop
+  // must not be able to burn the shared engines.
+  private static readonly USER_SEARCH_WINDOW_MS = 60_000;
+  private static readonly USER_SEARCHES_PER_WINDOW = 8;
+  private static recentSearchesByUser = new Map<string, number[]>();
   // Tool-record ids must be unique within a turn; a multi-step search emits
   // several records, possibly within the same millisecond.
   private static searchRecordSeq = 0;
@@ -441,6 +468,11 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const priorCitations = searchRequested
       ? ToolRouterEnricher.latestCitations(baseMessages)
       : [];
+    // A multi-step search that ended short on the previous turn can be
+    // continued: "keep looking" resumes it rather than starting over.
+    const priorSearch = searchRequested
+      ? ToolRouterEnricher.latestSearchState(baseMessages)
+      : null;
     let decided: ToolRouterResponse = { tools: [] };
     if (undecidedSearch || undecidedInterpreter || planForcedSearch) {
       decided = await this.toolRouterService.determineTool({
@@ -449,6 +481,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
         forceWebSearch: false,
         considerCodeExecution: undecidedInterpreter,
         hasPriorSearchCitations: undecidedSearch && priorCitations.length > 0,
+        hasPriorSearchState: undecidedSearch && priorSearch !== null,
         hasUserProvidedContent:
           undecidedSearch &&
           this.hasUserProvidedContent(context, rawUserPrompt),
@@ -508,6 +541,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
       searchComprehensive: decided.searchComprehensive,
       searchCategory: decided.searchCategory,
       searchFollowUp: decided.searchFollowUp,
+      searchContinue: decided.searchContinue,
+      searchLanguage: decided.searchLanguage,
       codeTask: forceInterpreter ? rawUserPrompt : decided.codeTask,
     };
 
@@ -562,6 +597,11 @@ export class ToolRouterEnricher extends BasePipelineStage {
           deep: toolResponse.searchComprehensive === true,
           category: toolResponse.searchCategory,
           question: rawUserPrompt,
+          language: toolResponse.searchLanguage,
+          continuation:
+            toolResponse.searchContinue && priorSearch
+              ? priorSearch
+              : undefined,
         },
       );
     }
@@ -605,6 +645,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
       category?: WebSearchCategory;
       /** The user's own words — what a multi-step search is assessed against. */
       question: string;
+      /** Router-named language of the query (ISO 639-1). */
+      language?: string;
+      /** An unfinished search from an earlier turn that this one continues. */
+      continuation?: PriorSearchState;
     },
   ): Promise<ChatContext> {
     // Usage limit (docs/LIMITS.md). DEGRADE, DO NOT ABORT: by the time an
@@ -746,6 +790,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
                 queryLabel,
                 executorLabel,
                 question: tuning.question,
+                language: tuning.language,
+                continuation: tuning.continuation,
                 signal: searchAbort.signal,
               })
             : this.webSearchTool.execute(searchParams),
@@ -1068,41 +1114,69 @@ export class ToolRouterEnricher extends BasePipelineStage {
       queryLabel: string;
       executorLabel: string;
       question: string;
+      language?: string;
+      continuation?: PriorSearchState;
       /** Aborted when the caller stops waiting for this search. */
       signal: AbortSignal;
     },
   ): Promise<ToolResult> {
-    const queries = params.searchQueries?.length
-      ? params.searchQueries
-      : [params.searchQuery];
     const resultCount = params.resultCount ?? 8;
+    const userId = getUserIdFromSession(context.user);
+    // Continuation: the state says what was searched; this turn's own words
+    // ("keep looking") are not a query, so the loop starts at the assessor
+    // against the ORIGINAL question.
+    const continuation = run.continuation;
+    const question = continuation?.question ?? run.question;
+    const queries = continuation
+      ? []
+      : (params.searchQueries?.length
+          ? params.searchQueries
+          : [params.searchQuery]
+        ).slice(0, ToolRouterEnricher.MULTI_STEP_FIRST_ROUND_QUERIES);
 
-    let initial: SearxngSearchOutcome;
-    try {
-      initial = await this.webSearchTool.searchSearxngEntries(queries, {
-        resultCount,
-        freshness: params.freshness ?? 'any',
-        category: params.category,
-        deep: params.deep ?? false,
-      });
-    } catch (error) {
-      console.warn(
-        '[ToolRouterEnricher] SearXNG search failed; using the news feeds:',
-        error instanceof Error ? error.message : error,
+    // Follow-ups go to the instance's web engines alone where it tags
+    // them (docs/WEB_SEARCH_DEAD_END_PROPOSAL.md §H); discovery is cached
+    // and tolerant, so this costs nothing per search.
+    const capabilities = await getSearxngCapabilities();
+    const narrowCategory = capabilities?.categories.has(WEB_ENGINE_CATEGORY)
+      ? WEB_ENGINE_CATEGORY
+      : undefined;
+
+    const records: Promise<void>[] = [];
+    let initial: SearxngSearchOutcome | null = null;
+    if (!continuation) {
+      try {
+        initial = await this.webSearchTool.searchSearxngEntries(queries, {
+          resultCount,
+          freshness: params.freshness ?? 'any',
+          category: params.category,
+          deep: params.deep ?? false,
+          language: run.language,
+        });
+      } catch (error) {
+        console.warn(
+          '[ToolRouterEnricher] SearXNG search failed; using the news feeds:',
+          error instanceof Error ? error.message : error,
+        );
+        return this.webSearchTool.searxngFallback(params);
+      }
+      ToolRouterEnricher.noteUserSearch(userId, queries.length);
+      const health = initial.health;
+      records.push(
+        this.emitSearchRecord(
+          context,
+          queries.join(' | '),
+          run.executorLabel,
+          `${initial.entries.length} source${initial.entries.length === 1 ? '' : 's'} found${
+            health?.webCoverage === false
+              ? ` — web engines did not answer (${describeSearchHealth(health)})`
+              : ''
+          }`,
+          null,
+          Date.now() - run.startTime,
+        ),
       );
-      return this.webSearchTool.searxngFallback(params);
     }
-
-    const records: Promise<void>[] = [
-      this.emitSearchRecord(
-        context,
-        run.queryLabel,
-        run.executorLabel,
-        `${initial.entries.length} source${initial.entries.length === 1 ? '' : 's'} found`,
-        null,
-        Date.now() - run.startTime,
-      ),
-    ];
 
     // What the search has so far, shown while the assessor and any further
     // steps run — with an "answer from these now" escape hatch (the same
@@ -1164,13 +1238,14 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const assessor = this.searchAssessor!;
     const result = await runMultiStepSearch(
       {
-        question: run.question,
+        question,
         recentContext,
         initialQueries: queries,
         initial,
         category: params.category,
         resultCount,
         config,
+        prior: continuation,
         deadline:
           run.startTime +
           Math.max(
