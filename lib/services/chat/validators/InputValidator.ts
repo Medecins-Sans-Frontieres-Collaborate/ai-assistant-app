@@ -383,6 +383,9 @@ const ChatBodySchema = z
             ],
           )
           .optional(),
+        // Optional for the same reason; absent means on. Must be listed —
+        // zod strips unknown keys, which would silently re-enable it.
+        multiStep: z.boolean().optional(),
       })
       .optional(),
     // "Summarize from headlines" resend: the interim headlines the client
