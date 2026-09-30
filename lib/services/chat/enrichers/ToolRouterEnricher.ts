@@ -1,6 +1,9 @@
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { consumeToolBudget } from '@/lib/services/limits/toolBudget';
+import { recordTokenUsage } from '@/lib/services/observability/tokenUsageRecorder';
 import { peekOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
+import { WebSearchConfigService } from '@/lib/services/webSearch/config/WebSearchConfigService';
+import { ResolvedMultiStepConfig } from '@/lib/services/webSearch/config/types';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
@@ -37,18 +40,29 @@ import {
   CodeInterpreterResult,
   CodeInterpreterTool,
 } from '../tools/CodeInterpreterTool';
+import { ToolResult, WebSearchToolParams } from '../tools/Tool';
 import {
   WebSearchTool,
   resolveDefaultWebSearchProvider,
 } from '../tools/WebSearchTool';
-import { readCitedSources } from '../tools/citedSourceReader';
+import { fetchArticleText, readCitedSources } from '../tools/citedSourceReader';
 import { runDocumentTrim } from '../tools/documentTrim/DocumentTrimPipeline';
 import {
   TrimTarget,
   TrimmableDocument,
   pickTrimmableDocument,
 } from '../tools/documentTrim/trimDetector';
+import {
+  buildMultiStepDigest,
+  buildOutcomeNote,
+  runMultiStepSearch,
+} from '../tools/multiStepSearch';
 import { buildNewsResult } from '../tools/newsSearch';
+import { SearchAssessor } from '../tools/searchAssessor';
+import {
+  SearxngSearchOutcome,
+  isSearxngConfigured,
+} from '../tools/searxngSearch';
 
 import { env } from '@/config/environment';
 import { generatedFileBlobId } from '@/lib/constants/generatedFiles';
@@ -102,18 +116,34 @@ export class ToolRouterEnricher extends BasePipelineStage {
     'google-news': 'Google News',
   };
 
+  // Multi-step search (docs/WEB_SEARCH_MULTI_STEP.md). The loop ends on its
+  // own deadline and hands back what it gathered; the margin keeps a step
+  // that overruns from losing everything to the outer search timeout.
+  private static readonly MULTI_STEP_TIMEOUT_MARGIN_MS = 15_000;
+  private static readonly PAGE_READ_TIMEOUT_MS = 10_000;
+  // Earlier turns the assessor sees, so "this book" / "that policy" resolve.
+  private static readonly ASSESSOR_CONTEXT_MESSAGES = 4;
+  private static readonly ASSESSOR_CONTEXT_CHARS = 500;
+  // Tool-record ids must be unique within a turn; a multi-step search emits
+  // several records, possibly within the same millisecond.
+  private static searchRecordSeq = 0;
+
   private toolRouterService: ToolRouterService;
   private webSearchTool: WebSearchTool;
   private codeInterpreterTool: CodeInterpreterTool;
+  private searchAssessor?: SearchAssessor;
 
   constructor(
     toolRouterService: ToolRouterService,
     agentChatService: AgentChatService,
+    // Absent → every search is single-step (the pre-multi-step behaviour).
+    searchAssessor?: SearchAssessor,
   ) {
     super();
     this.toolRouterService = toolRouterService;
     this.webSearchTool = new WebSearchTool(agentChatService);
     this.codeInterpreterTool = new CodeInterpreterTool();
+    this.searchAssessor = searchAssessor;
   }
 
   /**
@@ -526,6 +556,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           // single-fact lookups answer from the fastest one.
           deep: toolResponse.searchComprehensive === true,
           category: toolResponse.searchCategory,
+          question: rawUserPrompt,
         },
       );
     }
@@ -567,6 +598,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
       provider: ResolvedWebSearchProvider;
       deep: boolean;
       category?: WebSearchCategory;
+      /** The user's own words — what a multi-step search is assessed against. */
+      question: string;
     },
   ): Promise<ChatContext> {
     // Usage limit (docs/LIMITS.md). DEGRADE, DO NOT ABORT: by the time an
@@ -645,46 +678,72 @@ export class ToolRouterEnricher extends BasePipelineStage {
             : { query: ToolRouterEnricher.truncate(searchQuery, 60) },
         );
 
+        const searchParams: WebSearchToolParams = {
+          searchQuery,
+          searchQueries,
+          model: searchModel ?? undefined,
+          user: context.user,
+          resultCount: tuning.resultCount,
+          freshness: tuning.freshness,
+          provider: tuning.provider,
+          deep: tuning.deep,
+          category: tuning.category,
+          // Combined provider: stream the fast leg's headlines to the
+          // client while Bing runs — renders the interim list with the
+          // "Summarize from headlines" action.
+          onInterimResults:
+            tuning.provider === 'combined' && context.emitMarker
+              ? (entries) => {
+                  // Best-effort side channel: a rejected emit (client
+                  // gone, stream closed) must neither surface as an
+                  // unhandled rejection nor affect the search itself.
+                  context.emitMarker!(
+                    emitSearchInterim({ queries: searchQueries, entries }),
+                  ).catch((error) => {
+                    console.warn(
+                      '[ToolRouterEnricher] Interim headlines emit failed (ignored):',
+                      error instanceof Error ? error.message : error,
+                    );
+                  });
+                }
+              : undefined,
+          // Progress phases from inside the sub-call (searching → reading
+          // sources → …). The generic searchingWeb key is skipped so it
+          // never overwrites the query-specific loader above.
+          onActivity: (key, params) => {
+            if (key !== 'chat.activity.searchingWeb') {
+              void context.emitActivity?.(key, params);
+            }
+          },
+        };
+
+        // SearXNG searches run multi-step unless an admin or the user
+        // switched that off: an assessor may follow the first results with
+        // further searches or page reads, within its own step and time caps.
+        const multiStep = await this.resolveMultiStep(context, tuning.provider);
+
+        // Stops a multi-step search once this race is over (or the stage is
+        // torn down): a loop that lost to the timeout must not keep
+        // searching, nor emit step records into a stream the model is about
+        // to write to.
+        const searchAbort = new AbortController();
+        const onStageAbort = () => searchAbort.abort();
+        if (context.stageSignal?.aborted) searchAbort.abort();
+        context.stageSignal?.addEventListener('abort', onStageAbort, {
+          once: true,
+        });
+
         let searchTimer: ReturnType<typeof setTimeout> | undefined;
         const searchResult = await Promise.race([
-          this.webSearchTool.execute({
-            searchQuery,
-            searchQueries,
-            model: searchModel ?? undefined,
-            user: context.user,
-            resultCount: tuning.resultCount,
-            freshness: tuning.freshness,
-            provider: tuning.provider,
-            deep: tuning.deep,
-            category: tuning.category,
-            // Combined provider: stream the fast leg's headlines to the
-            // client while Bing runs — renders the interim list with the
-            // "Summarize from headlines" action.
-            onInterimResults:
-              tuning.provider === 'combined' && context.emitMarker
-                ? (entries) => {
-                    // Best-effort side channel: a rejected emit (client
-                    // gone, stream closed) must neither surface as an
-                    // unhandled rejection nor affect the search itself.
-                    context.emitMarker!(
-                      emitSearchInterim({ queries: searchQueries, entries }),
-                    ).catch((error) => {
-                      console.warn(
-                        '[ToolRouterEnricher] Interim headlines emit failed (ignored):',
-                        error instanceof Error ? error.message : error,
-                      );
-                    });
-                  }
-                : undefined,
-            // Progress phases from inside the sub-call (searching → reading
-            // sources → …). The generic searchingWeb key is skipped so it
-            // never overwrites the query-specific loader above.
-            onActivity: (key, params) => {
-              if (key !== 'chat.activity.searchingWeb') {
-                void context.emitActivity?.(key, params);
-              }
-            },
-          }),
+          multiStep
+            ? this.executeMultiStepSearch(context, searchParams, multiStep, {
+                startTime,
+                queryLabel,
+                executorLabel,
+                question: tuning.question,
+                signal: searchAbort.signal,
+              })
+            : this.webSearchTool.execute(searchParams),
           new Promise<never>((_, reject) => {
             searchTimer = setTimeout(() => {
               const err = new Error('Web search timed out');
@@ -694,6 +753,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
           }),
         ]).finally(() => {
           if (searchTimer) clearTimeout(searchTimer);
+          searchAbort.abort();
+          context.stageSignal?.removeEventListener('abort', onStageAbort);
         });
 
         console.log(
@@ -714,20 +775,24 @@ export class ToolRouterEnricher extends BasePipelineStage {
           console.warn(
             '[ToolRouterEnricher] Search returned no sources; answering from model knowledge',
           );
-          await this.emitSearchRecord(
-            context,
-            queryLabel,
-            executorLabel,
-            '0 sources found',
-            null,
-            Date.now() - startTime,
-          );
+          // A multi-step search records each of its steps as it goes.
+          if (!searchResult.metadata?.recordsEmitted) {
+            await this.emitSearchRecord(
+              context,
+              queryLabel,
+              executorLabel,
+              '0 sources found',
+              null,
+              Date.now() - startTime,
+            );
+          }
 
-          const emptyNotice =
+          const emptyNotice: string =
+            searchResult.metadata?.emptyNotice ??
             `Note: a live web search ran for this request but found no useful sources. ` +
-            `Mention that ONCE, briefly. Then answer the user's ACTUAL question confidently from your own knowledge, as specifically as you can. ` +
-            `If you do not have specific knowledge of the event or fact being asked about, say so in one sentence and suggest narrowing the question — ` +
-            `do NOT pad the answer with generic background, and do not apologize repeatedly or speculate about why the search failed.`;
+              `Mention that ONCE, briefly. Then answer the user's ACTUAL question confidently from your own knowledge, as specifically as you can. ` +
+              `If you do not have specific knowledge of the event or fact being asked about, say so in one sentence and suggest narrowing the question — ` +
+              `do NOT pad the answer with generic background, and do not apologize repeatedly or speculate about why the search failed.`;
           const lastMsg = baseMessages[baseMessages.length - 1];
           return {
             ...context,
@@ -751,10 +816,11 @@ export class ToolRouterEnricher extends BasePipelineStage {
         // widened for research questions); the text budget scales with it
         // so deeper searches keep proportionally more summary.
         const MAX_SEARCH_CITATIONS = tuning.resultCount;
-        const MAX_SEARCH_TEXT_CHARS = Math.min(
-          16000,
-          4000 + MAX_SEARCH_CITATIONS * 800,
-        );
+        // A multi-step digest also carries text read from result pages and
+        // states its own (bounded) budget.
+        const MAX_SEARCH_TEXT_CHARS: number =
+          searchResult.metadata?.textBudgetChars ??
+          Math.min(16000, 4000 + MAX_SEARCH_CITATIONS * 800);
         const rawSearchText =
           searchResult.text.length > MAX_SEARCH_TEXT_CHARS
             ? searchResult.text.slice(0, MAX_SEARCH_TEXT_CHARS) +
@@ -889,14 +955,16 @@ export class ToolRouterEnricher extends BasePipelineStage {
           : searchResult.metadata?.searxngFallback
             ? ' (MSF web search unavailable — news feeds used instead)'
             : '';
-        await this.emitSearchRecord(
-          context,
-          queryLabel,
-          executorLabel,
-          `${truncatedCitations.length} source${truncatedCitations.length === 1 ? '' : 's'} found${degradedNote}`,
-          null,
-          Date.now() - startTime,
-        );
+        if (!searchResult.metadata?.recordsEmitted) {
+          await this.emitSearchRecord(
+            context,
+            queryLabel,
+            executorLabel,
+            `${truncatedCitations.length} source${truncatedCitations.length === 1 ? '' : 's'} found${degradedNote}`,
+            null,
+            Date.now() - startTime,
+          );
+        }
 
         return {
           ...context,
@@ -947,6 +1015,212 @@ export class ToolRouterEnricher extends BasePipelineStage {
         };
       }
     }
+  }
+
+  /**
+   * Effective multi-step settings for this turn, or null for a single-step
+   * search. Multi-step needs MSF's own SearXNG instance (cheap follow-up
+   * requests, real result URLs to read) and an assessor; an admin can turn
+   * it off for everyone, a user for themselves.
+   */
+  private async resolveMultiStep(
+    context: ChatContext,
+    provider: ResolvedWebSearchProvider,
+  ): Promise<ResolvedMultiStepConfig | null> {
+    if (
+      provider !== 'searxng' ||
+      !this.searchAssessor ||
+      !isSearxngConfigured()
+    ) {
+      return null;
+    }
+    if (!sanitizeWebSearchOptions(context.webSearchOptions).multiStep) {
+      return null;
+    }
+    const service = WebSearchConfigService.getInstance();
+    await service.ensureFresh();
+    const config = service.getMultiStep();
+    return config.enabled ? config : null;
+  }
+
+  /**
+   * Multi-step SearXNG search: the planned first search, then the
+   * assess-and-continue loop (tools/multiStepSearch.ts). Returns the same
+   * ToolResult shape every provider does, so numbering, capping and merging
+   * stay in executeWebSearch. Each step is recorded for the user as it
+   * completes (`recordsEmitted`).
+   *
+   * Degradations are the single-step ones: instance down → news feeds;
+   * nothing found after every step → news feeds (knowledge answer for
+   * science/it); assessor unavailable → the plain first-search result.
+   */
+  private async executeMultiStepSearch(
+    context: ChatContext,
+    params: WebSearchToolParams,
+    config: ResolvedMultiStepConfig,
+    run: {
+      startTime: number;
+      queryLabel: string;
+      executorLabel: string;
+      question: string;
+      /** Aborted when the caller stops waiting for this search. */
+      signal: AbortSignal;
+    },
+  ): Promise<ToolResult> {
+    const queries = params.searchQueries?.length
+      ? params.searchQueries
+      : [params.searchQuery];
+    const resultCount = params.resultCount ?? 8;
+
+    let initial: SearxngSearchOutcome;
+    try {
+      initial = await this.webSearchTool.searchSearxngEntries(queries, {
+        resultCount,
+        freshness: params.freshness ?? 'any',
+        category: params.category,
+        deep: params.deep ?? false,
+      });
+    } catch (error) {
+      console.warn(
+        '[ToolRouterEnricher] SearXNG search failed; using the news feeds:',
+        error instanceof Error ? error.message : error,
+      );
+      return this.webSearchTool.searxngFallback(params);
+    }
+
+    const records: Promise<void>[] = [
+      this.emitSearchRecord(
+        context,
+        run.queryLabel,
+        run.executorLabel,
+        `${initial.entries.length} source${initial.entries.length === 1 ? '' : 's'} found`,
+        null,
+        Date.now() - run.startTime,
+      ),
+    ];
+
+    const baseMessages = context.enrichedMessages || context.messages;
+    const recentContext = baseMessages
+      .slice(0, -1)
+      .filter((msg) => msg.role === 'user' || msg.role === 'assistant')
+      .slice(-ToolRouterEnricher.ASSESSOR_CONTEXT_MESSAGES)
+      .map((msg) => ({
+        role: msg.role as 'user' | 'assistant',
+        text: ToolRouterEnricher.truncate(
+          this.extractTextFromContent(msg.content).replace(/\s+/g, ' '),
+          ToolRouterEnricher.ASSESSOR_CONTEXT_CHARS,
+        ),
+      }))
+      .filter((turn) => turn.text.length > 0);
+
+    const assessor = this.searchAssessor!;
+    const result = await runMultiStepSearch(
+      {
+        question: run.question,
+        recentContext,
+        initialQueries: queries,
+        initial,
+        category: params.category,
+        resultCount,
+        config,
+        deadline:
+          run.startTime +
+          Math.max(
+            0,
+            Math.min(
+              config.timeBudgetSeconds * 1000,
+              ToolRouterEnricher.SEARCH_TIMEOUT_MS -
+                ToolRouterEnricher.MULTI_STEP_TIMEOUT_MARGIN_MS,
+            ),
+          ),
+        signal: run.signal,
+      },
+      {
+        search: (followUpQueries, options) =>
+          this.webSearchTool.searchSearxngEntries(followUpQueries, {
+            ...options,
+            deep: false,
+          }),
+        readPage: async (url) =>
+          (await fetchArticleText(url, ToolRouterEnricher.PAGE_READ_TIMEOUT_MS))
+            ?.text ?? null,
+        assess: (input, timeoutMs) =>
+          assessor.assess(input, {
+            modelId: config.assessorModelId,
+            // The user's own region: an EU user's question is assessed on
+            // the EU account, where the regional deployments also live.
+            region: context.user.region ?? null,
+            signal: run.signal,
+            timeoutMs,
+            // Assessor calls are the user's spend like any other model
+            // call: same telemetry row, same quota debit.
+            onUsage: (usage, model, region) =>
+              recordTokenUsage(
+                { ...usage, modelId: model.id, region },
+                model,
+                context.user,
+                false,
+                context.telemetry,
+              ),
+          }),
+        onActivity: (key, activityParams) => {
+          if (run.signal.aborted) return;
+          void context.emitActivity?.(key, activityParams);
+        },
+        onStep: (step) => {
+          if (run.signal.aborted) return;
+          records.push(
+            this.emitSearchRecord(
+              context,
+              step.label,
+              step.kind === 'read' ? 'page reader' : run.executorLabel,
+              step.outcome,
+              step.error,
+              step.durationMs,
+              { kind: step.kind, why: step.why },
+            ),
+          );
+        },
+      },
+    );
+    await Promise.all(records);
+    console.log(
+      `[ToolRouterEnricher] Multi-step search ended "${result.outcome}": ${result.stepsUsed} step(s), ${result.searchCount} search(es), ${result.pagesRead} page(s) read, ${result.entries.length} source(s) kept`,
+    );
+
+    if (result.entries.length === 0) {
+      // Nothing to cite, but the assessor identified what to ask: put the
+      // question to the user instead of answering from thin air.
+      if (result.outcome === 'ask_user') {
+        return {
+          text: '',
+          citations: [],
+          metadata: {
+            recordsEmitted: true,
+            emptyNotice: `Note: a live web search ran for this request but found no useful sources. ${buildOutcomeNote(result)}`,
+          },
+        };
+      }
+      return this.webSearchTool.searxngFallback(params);
+    }
+
+    const digest = buildMultiStepDigest(result);
+    const pageChars = result.entries.reduce(
+      (sum, entry) => sum + (result.pageText.get(entry.url)?.length ?? 0),
+      0,
+    );
+    return {
+      text: digest.text,
+      citations: digest.citations,
+      metadata: {
+        recordsEmitted: true,
+        multiStepOutcome: result.outcome,
+        textBudgetChars: Math.min(
+          30000,
+          6000 + result.entries.length * 800 + pageChars,
+        ),
+      },
+    };
   }
 
   /**
@@ -1165,19 +1439,25 @@ export class ToolRouterEnricher extends BasePipelineStage {
     outcome: string | null,
     error: string | null,
     durationMs: number,
+    // Multi-step follow-up steps: what was opened instead of searched, and
+    // the assessor's stated reason for taking the step.
+    step?: { kind: 'search' | 'read'; why?: string },
   ): Promise<void> {
     if (!context.emitMarker) return;
 
     const MAX_QUERY_CHARS = 500;
+    const subject = ToolRouterEnricher.truncate(query, MAX_QUERY_CHARS);
+    ToolRouterEnricher.searchRecordSeq += 1;
     await context.emitMarker(
       emitToolCallRecord({
-        id: `web-search-${Date.now()}`,
+        id: `web-search-${Date.now()}-${ToolRouterEnricher.searchRecordSeq}`,
         name: 'web_search',
         server_label: executingModelId
           ? `Web Search (${executingModelId})`
           : 'Web Search',
         arguments: JSON.stringify({
-          query: ToolRouterEnricher.truncate(query, MAX_QUERY_CHARS),
+          ...(step?.kind === 'read' ? { pages: subject } : { query: subject }),
+          ...(step?.why ? { why: step.why } : {}),
         }),
         status: error ? 'failed' : 'completed',
         output: outcome,
