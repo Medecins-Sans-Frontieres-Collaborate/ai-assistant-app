@@ -55,12 +55,14 @@ vi.mock('@/lib/services/webSearch/config/WebSearchConfigService', () => ({
   },
 }));
 
+// Snippets mention the question's terms: results that share no term with
+// the query are treated as "about something else" (isOffQuery).
 const entry = (id: string) => ({
   title: `Title ${id}`,
   url: `https://example.org/${id}`,
   date: '',
   sourceName: 'example.org',
-  snippet: `snippet ${id}`,
+  snippet: `snippet ${id} on US employment equality policy`,
 });
 
 const verdict = (
@@ -203,10 +205,17 @@ describe('ToolRouterEnricher — multi-step search', () => {
     expect(lastUserText(result)).toContain('[1] Title a');
     expect(lastUserText(result)).not.toContain('Search note:');
 
+    // The search step, then the outcome record that carries the state.
     const records = parseRecords(emitMarker);
-    expect(records).toHaveLength(1);
+    expect(records).toHaveLength(2);
     expect(records[0].output).toBe('3 sources found');
     expect(records[0].server_label).toBe('Web Search (SearXNG)');
+    expect(records[1].server_label).toBe('Web Search (outcome)');
+    expect(records[1].output).toContain('answered the question');
+    expect(JSON.parse(records[1].arguments).searchState).toMatchObject({
+      outcome: 'answered',
+      queries: ['US employment equality policy'],
+    });
   });
 
   it('shows the results so far while it works, and again as a step adds to them', async () => {
@@ -252,7 +261,8 @@ describe('ToolRouterEnricher — multi-step search', () => {
       .mockResolvedValueOnce(
         verdict({
           verdict: 'search',
-          queries: ['EEOC enforcement guidance'],
+          queries: ['EEOC guidance'],
+          strategy: 'entity',
           reason: 'primary source missing',
         }),
       )
@@ -278,7 +288,7 @@ describe('ToolRouterEnricher — multi-step search', () => {
     expect(consumeToolBudgetMock).toHaveBeenCalledTimes(1);
     expect(tool.searchSearxngEntries).toHaveBeenCalledTimes(2);
     expect(tool.searchSearxngEntries.mock.calls[1][0]).toEqual([
-      'EEOC enforcement guidance',
+      'EEOC guidance',
     ]);
     expect(fetchArticleText).toHaveBeenCalledWith(
       'https://example.org/eeoc',
@@ -300,16 +310,18 @@ describe('ToolRouterEnricher — multi-step search', () => {
       '3 sources found',
       '1 new source found',
       '1 of 1 page read',
+      'The results answered the question · 2 searches, 1 page read',
     ]);
     expect(JSON.parse(records[1].arguments)).toEqual({
-      query: 'EEOC enforcement guidance',
+      query: 'EEOC guidance',
+      strategy: 'entity',
       why: 'primary source missing',
     });
     expect(JSON.parse(records[2].arguments)).toEqual({
       pages: 'example.org',
       why: 'need the text',
     });
-    expect(new Set(records.map((record) => record.id)).size).toBe(3);
+    expect(new Set(records.map((record) => record.id)).size).toBe(4);
   });
 
   it('passes the conversation and the admin-selected assessor, and meters the call', async () => {
@@ -392,8 +404,9 @@ describe('ToolRouterEnricher — multi-step search', () => {
     expect(tool.searxngFallback).not.toHaveBeenCalled();
     expect(lastUserText(result)).toContain('Which country do you mean?');
     expect(result.processedContent?.metadata?.citations ?? []).toHaveLength(0);
-    // The step record is not doubled by the empty-result path.
-    expect(parseRecords(emitMarker)).toHaveLength(1);
+    // The step record is not doubled by the empty-result path (one step,
+    // one outcome).
+    expect(parseRecords(emitMarker)).toHaveLength(2);
   });
 
   it('reports a give-up honestly instead of answering as if it had found it', async () => {
@@ -429,9 +442,22 @@ describe('ToolRouterEnricher — multi-step search', () => {
     );
   });
 
-  it('falls back to the news feeds when nothing is found after every step', async () => {
+  it('does not pad an assessed dead end with news headlines', async () => {
     tool.searchSearxngEntries.mockResolvedValue({ entries: [], answers: [] });
-    assessor.assess.mockResolvedValue(verdict({ verdict: 'give_up' }));
+    assessor.assess.mockResolvedValue(
+      verdict({ verdict: 'give_up', reason: 'nothing on the subject' }),
+    );
+
+    const result = await enricher.execute(context());
+
+    expect(tool.searxngFallback).not.toHaveBeenCalled();
+    expect(lastUserText(result)).toContain('nothing on the subject');
+    expect(lastUserText(result)).not.toContain('Feed digest.');
+  });
+
+  it('falls back to the news feeds when nothing is found and no assessor answered', async () => {
+    tool.searchSearxngEntries.mockResolvedValue({ entries: [], answers: [] });
+    assessor.assess.mockResolvedValue(null);
 
     const result = await enricher.execute(context());
 
@@ -474,7 +500,9 @@ describe('ToolRouterEnricher — multi-step search', () => {
 
     expect(assessor.assess).toHaveBeenCalledTimes(1);
     expect(tool.searchSearxngEntries).toHaveBeenCalledTimes(1);
-    expect(parseRecords(emitMarker)).toHaveLength(1);
+    // The first step's record and the outcome record; nothing else went
+    // into the stream being torn down.
+    expect(parseRecords(emitMarker)).toHaveLength(2);
   });
 
   describe('runs single-step', () => {
