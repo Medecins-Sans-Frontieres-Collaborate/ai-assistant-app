@@ -68,8 +68,12 @@ vi.mock(
   },
 );
 
+const monitor = vi.hoisted(() => ({
+  logCustomMetric: vi.fn(),
+  logSearchError: vi.fn(),
+}));
 vi.mock('@/lib/services/observability', () => ({
-  getAzureMonitorLogger: () => ({ logCustomMetric: vi.fn() }),
+  getAzureMonitorLogger: () => monitor,
 }));
 
 const multiStepConfig = vi.hoisted(() => ({
@@ -609,33 +613,95 @@ describe('ToolRouterEnricher — multi-step search', () => {
     );
   });
 
-  it('reports lost web coverage on the step record and ends as degraded', async () => {
-    tool.searchSearxngEntries.mockResolvedValue({
-      entries: [entry('ref')],
-      answers: [],
-      health: {
-        answered: { wikipedia: 1 },
-        unresponsive: [{ engine: 'bing', reason: 'suspended' }],
+  describe('when the web engines did not answer', () => {
+    const degradedHealth = {
+      answered: { wikipedia: 1 },
+      unresponsive: [{ engine: 'bing', reason: 'suspended' }],
+      legs: [
+        {
+          category: 'general',
+          query: 'US employment equality policy',
+          ms: 4100,
+          results: 1,
+        },
+      ],
+      elapsedMs: 4100,
+      webCoverage: false,
+      throttled: true,
+    };
+
+    beforeEach(() => {
+      tool.searchSearxngEntries.mockResolvedValue({
+        entries: [entry('ref')],
+        answers: [],
+        health: degradedHealth,
+      });
+      assessor.assess.mockResolvedValue(
+        verdict({
+          verdict: 'search',
+          queries: ['EEOC guidance'],
+          strategy: 'entity',
+        }),
+      );
+    });
+
+    it('records it, logs an incident with the per-leg diagnostic, and answers from the news feeds', async () => {
+      const result = await enricher.execute(context());
+
+      const records = parseRecords(emitMarker);
+      expect(records[0].output).toContain('web engines did not answer');
+      expect(records[0].output).toContain('bing (suspended)');
+      expect(records[1].output).toContain('Web search engines did not answer');
+      expect(records[2].output).toBe(
+        '1 source from the news feeds (web engines did not answer)',
+      );
+      expect(records[2].server_label).toBe('Web Search (GDELT + Google News)');
+      expect(tool.searchSearxngEntries).toHaveBeenCalledTimes(1);
+      expect(tool.searxngFallback).toHaveBeenCalledTimes(1);
+
+      const text = lastUserText(result);
+      expect(text).toContain('web search service was degraded');
+      expect(text).toContain('news feeds');
+      expect(text).toContain('Feed digest.');
+      expect(result.processedContent?.metadata?.citations).toHaveLength(1);
+
+      expect(monitor.logSearchError).toHaveBeenCalledTimes(1);
+      const incident = monitor.logSearchError.mock.calls[0][0];
+      expect(incident.errorCode).toBe('WEB_SEARCH_DEGRADED');
+      expect(incident.indexName).toBe('searxng');
+      const detail = JSON.parse(incident.errorMessage);
+      expect(detail).toMatchObject({
+        outcome: 'degraded',
         webCoverage: false,
         throttled: true,
-      },
+        unresponsive: [{ engine: 'bing', reason: 'suspended' }],
+        legs: [expect.objectContaining({ category: 'general', ms: 4100 })],
+      });
+      expect(monitor.logCustomMetric.mock.calls[0][0].tags).toMatchObject({
+        outcome: 'degraded',
+        fallback: 'feeds',
+      });
     });
-    assessor.assess.mockResolvedValue(
-      verdict({
-        verdict: 'search',
-        queries: ['EEOC guidance'],
-        strategy: 'entity',
-      }),
-    );
 
-    const result = await enricher.execute(context());
+    it('says so without inventing sources when the feeds have nothing either', async () => {
+      tool.searxngFallback.mockResolvedValue({
+        text: '',
+        citations: [],
+        metadata: { searxngFallback: true },
+      });
 
-    const records = parseRecords(emitMarker);
-    expect(records[0].output).toContain('web engines did not answer');
-    expect(records[0].output).toContain('bing (suspended)');
-    expect(records[1].output).toContain('Web search engines did not answer');
-    expect(lastUserText(result)).toContain('web search service was degraded');
-    expect(tool.searchSearxngEntries).toHaveBeenCalledTimes(1);
+      const result = await enricher.execute(context());
+
+      const text = lastUserText(result);
+      expect(text).toContain('web search service was degraded');
+      expect(text).not.toContain('were searched instead');
+      expect(result.processedContent?.metadata?.citations ?? []).toHaveLength(
+        0,
+      );
+      expect(monitor.logCustomMetric.mock.calls[0][0].tags.fallback).toBe(
+        'none',
+      );
+    });
   });
 
   it('continues an unfinished search from the previous turn’s outcome record', async () => {
