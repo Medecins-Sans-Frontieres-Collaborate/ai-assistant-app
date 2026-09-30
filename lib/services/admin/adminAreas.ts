@@ -55,6 +55,7 @@ export const ADMIN_AREA_IDS = [
   'channel-profiles',
   'limits',
   'workflows',
+  'web-search',
   'announcements',
   'delegations',
   'local-admins',
@@ -177,6 +178,8 @@ export async function resolveAdminAreas(
   if (isGlobalAdmin(user)) {
     // The workflow policy is one org-wide document, like limits: global only.
     areas.push('workflows');
+    // Web search tuning is one org-wide document too: global only.
+    areas.push('web-search');
     // A delegation decides who else may administer: global admins only.
     areas.push('delegations');
     // Who the global admins are is decided by global admins — EFFECTIVE
