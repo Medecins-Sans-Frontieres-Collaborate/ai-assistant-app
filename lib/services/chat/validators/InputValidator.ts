@@ -417,6 +417,7 @@ const ChatBodySchema = z
           )
           .min(1)
           .max(MAX_SEARCH_RESULT_COUNT),
+        kind: z.enum(['combined', 'multiStep']).optional(),
       })
       .optional(),
     interpreterMode: z.nativeEnum(InterpreterMode).optional(),
