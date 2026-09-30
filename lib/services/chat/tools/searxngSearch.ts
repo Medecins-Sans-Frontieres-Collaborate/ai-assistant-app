@@ -55,10 +55,24 @@ export interface SearxngSearchOptions {
  * `webCoverage` to tell "the web engines did not answer" from "this is hard
  * to find" — the two look identical in the result list.
  */
+/** One request to the instance, for the diagnostic record. */
+export interface SearchLegReport {
+  category: string;
+  /** Sanitised, truncated. */
+  query: string;
+  ms: number;
+  /** Results the leg returned; null when the request itself failed. */
+  results: number | null;
+  error?: string;
+}
+
 export interface SearchHealth {
   /** engine → number of results it contributed. */
   answered: Record<string, number>;
   unresponsive: Array<{ engine: string; reason: string }>;
+  legs: SearchLegReport[];
+  /** Wall-clock for the whole batch of legs. */
+  elapsedMs: number;
   /**
    * At least one engine the instance tags as a full-text web engine
    * answered. null = the instance's engine tags are unknown (no /config).
@@ -559,6 +573,8 @@ export function assessSearchHealth(
   entries: SearxngEntry[],
   unresponsive: Array<{ engine: string; reason: string }>,
   capabilities: SearxngCapabilities | null,
+  legs: SearchLegReport[] = [],
+  elapsedMs = 0,
 ): SearchHealth {
   const answered: Record<string, number> = {};
   for (const entry of entries) {
@@ -574,10 +590,55 @@ export function assessSearchHealth(
   return {
     answered,
     unresponsive,
+    legs,
+    elapsedMs,
     webCoverage,
     throttled: unresponsive.some((item) =>
       THROTTLE_REASON_RE.test(item.reason),
     ),
+  };
+}
+
+/**
+ * Everything needed to diagnose a degraded or throttled search from the
+ * logs alone: what was asked of the instance, per leg, how long each took,
+ * what came back, which engines answered and which refused and why, and
+ * from which replica. Serialised as one JSON line so Log Analytics can
+ * parse it (`ContainerAppConsoleLogs_CL`, search for `SEARXNG_DEGRADED`).
+ */
+export function searchHealthReport(
+  health: SearchHealth,
+  context: {
+    queries: string[];
+    categories: string[];
+    freshness: string;
+    language?: string;
+    resultCount: number;
+  },
+): Record<string, unknown> {
+  let instance: string | null = null;
+  try {
+    instance = env.SEARXNG_URL ? new URL(env.SEARXNG_URL).host : null;
+  } catch {
+    instance = null;
+  }
+  return {
+    queries: context.queries.map((query) =>
+      sanitizeForLog(query).slice(0, 160),
+    ),
+    categories: context.categories,
+    freshness: context.freshness,
+    language: context.language ?? 'auto',
+    results: context.resultCount,
+    webCoverage: health.webCoverage,
+    throttled: health.throttled,
+    answered: health.answered,
+    unresponsive: health.unresponsive,
+    legs: health.legs,
+    elapsedMs: health.elapsedMs,
+    replica:
+      process.env.CONTAINER_APP_REPLICA_NAME ?? process.env.HOSTNAME ?? null,
+    instance,
   };
 }
 
@@ -622,12 +683,16 @@ async function runLegs(
           options.resultCount,
           Math.max(3, Math.ceil(options.resultCount / legs.length) + 2),
         );
+  const startedAt = Date.now();
+  const legEnds: number[] = legs.map(() => 0);
   const settled = await Promise.allSettled(
-    legs.map((leg) =>
+    legs.map((leg, idx) =>
       searchLeg(leg.query, leg.category, {
         resultCount: perLegCount,
         freshness: options.freshness,
         language: options.language,
+      }).finally(() => {
+        legEnds[idx] = Date.now();
       }),
     ),
   );
@@ -636,7 +701,16 @@ async function runLegs(
   const answers: string[] = [];
   const failures: string[] = [];
   const unresponsive = new Map<string, string>();
+  const reports: SearchLegReport[] = [];
   settled.forEach((result, idx) => {
+    const report: SearchLegReport = {
+      category: legs[idx].category,
+      query: sanitizeForLog(legs[idx].query).slice(0, 160),
+      ms: Math.max(0, legEnds[idx] - startedAt),
+      results:
+        result.status === 'fulfilled' ? result.value.entries.length : null,
+    };
+    reports.push(report);
     if (result.status === 'fulfilled') {
       if (result.value.entries.length > 0) lists.push(result.value.entries);
       result.value.unresponsive.forEach(({ engine, reason }) => {
@@ -652,6 +726,7 @@ async function runLegs(
         result.reason instanceof Error
           ? result.reason.message
           : String(result.reason);
+      report.error = sanitizeForLog(reason).slice(0, 200);
       failures.push(`${legs[idx].category}: ${reason}`);
       console.warn(
         `[searxngSearch] Leg ${legs[idx].category} failed (continuing with others): ${sanitizeForLog(reason)}`,
@@ -675,6 +750,8 @@ async function runLegs(
     entries,
     [...unresponsive].map(([engine, reason]) => ({ engine, reason })),
     options.capabilities,
+    reports,
+    Date.now() - startedAt,
   );
   // One line per search, not per leg — the signal that upstream engines
   // are throttling or CAPTCHA-ing the instance's egress IP.
@@ -682,6 +759,21 @@ async function runLegs(
     `[searxngSearch] ${sanitizeForLog(describeSearchHealth(health)).slice(0, 500)}`,
   );
   if (health.throttled) throttledUntil = Date.now() + THROTTLE_HOLD_MS;
+  // The full diagnostic record, only when something is wrong: the engines
+  // are refusing this egress IP, or no web engine answered at all.
+  if (health.throttled || health.webCoverage === false) {
+    console.warn(
+      `[searxngSearch] ${health.webCoverage === false ? 'SEARXNG_DEGRADED' : 'SEARXNG_THROTTLED'} ${JSON.stringify(
+        searchHealthReport(health, {
+          queries: legs.map((leg) => leg.query),
+          categories: [...new Set(legs.map((leg) => leg.category))],
+          freshness: options.freshness,
+          language: options.language,
+          resultCount: entries.length,
+        }),
+      )}`,
+    );
+  }
 
   return { entries, answers: answers.slice(0, MAX_ANSWERS), health };
 }
@@ -718,6 +810,8 @@ export async function searchSearxng(
       health: {
         answered: {},
         unresponsive: [],
+        legs: [],
+        elapsedMs: 0,
         webCoverage: null,
         throttled: false,
       },
