@@ -316,6 +316,34 @@ describe('ToolRouter Enricher', () => {
         });
       });
 
+      it('digests an echo from a multi-step search as web results, recorded against SearXNG', async () => {
+        const emitMarker = vi.fn().mockResolvedValue(undefined);
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'Latest fusion news?' })],
+          precomputedSearchResults: {
+            queries: ['fusion record'],
+            entries,
+            kind: 'multiStep',
+          },
+          emitMarker,
+        });
+
+        const result = await enricher.execute(context);
+
+        const lastMsg =
+          result.enrichedMessages![result.enrichedMessages!.length - 1];
+        expect(lastMsg.content).toContain('Web search results for');
+        expect(lastMsg.content).not.toContain('Recent news results');
+        const record = JSON.parse(
+          (emitMarker.mock.calls[0][0] as string)
+            .replace(/[\s\S]*<<<TOOL_CALL_RECORD>>>/, '')
+            .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*/, ''),
+        );
+        expect(record.server_label).toBe('Web Search (SearXNG)');
+        expect(record.output).toBe('2 sources from earlier results');
+      });
+
       it('shifts only line-start citation markers when RAG citations occupy the low numbers', async () => {
         const context = createTestChatContext({
           searchMode: SearchMode.INTELLIGENT,
