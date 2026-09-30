@@ -337,6 +337,7 @@ IMPORTANT: Always provide searchQuery in your response:
 - If needsWebSearch is true, provide a CONCISE search-engine query: 3-8 keywords, ONE topic, no question words ("what", "where", "why"), no filler ("current updates", "reasons", "dates"). Bad: "latest protests in India what are they about where are they happening dates reasons current updates". Good: "India protests ${currentYear}"
 - Years in queries: do NOT append a year by default. Append the current year (${currentYear}) ONLY when the question implies recency (news, "latest", ongoing events). Use a past year ONLY when the user explicitly asks about that period. Never append speculative, future, or multiple years.
 - Never put meta words in the query — "news", "latest", "updates", "headlines", "today", "current events". They match news-site HOMEPAGES instead of stories. Express recency through searchRecency instead. An open-ended "what is happening in India" is searchQuery "India", searchRecency "week", searchCategory "news"
+- When the subject shares its name with something better known (a documentary and a blockbuster, a town and a person, a paper and a product), keep the distinguishing details the user gave in the query — the year, the kind of thing, the topic, the place — so the results are about the right one: "Winter Soldier 1972 documentary Vietnam veterans", not "Winter Soldier"
 - If needsWebSearch is false, provide an empty string
 
 Also tune the search when needsWebSearch is true:
