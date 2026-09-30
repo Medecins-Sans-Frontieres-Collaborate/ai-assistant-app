@@ -292,7 +292,11 @@ export async function POST(req: NextRequest): Promise<Response> {
         // after the persona/RAG stages that may replace systemPrompt, before
         // the tool router that may remount those files.
         new GeneratedFileManifestEnricher(),
-        new ToolRouterEnricher(toolRouterService, agentChatService),
+        new ToolRouterEnricher(
+          toolRouterService,
+          agentChatService,
+          container.getSearchAssessor(),
+        ),
         // Structured-data extraction: composes the JSON-schema response
         // format when the request carries an `extraction` payload.
         new ExtractionEnricher(agentChatService),
