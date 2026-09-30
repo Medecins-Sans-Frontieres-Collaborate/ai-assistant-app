@@ -266,8 +266,45 @@ describe('InputValidator', () => {
       const calls = assistant.toolCalls as Array<Record<string, unknown>>;
       expect(calls).toHaveLength(1);
       expect(calls[0].generated_files).toEqual([generated]);
-      expect(calls[0]).not.toHaveProperty('arguments');
+      expect(calls[0].arguments).toBeUndefined();
       expect(calls[0]).not.toHaveProperty('output');
+    });
+
+    it("keeps a web search outcome record's arguments — the state a later turn continues from", () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest({
+        model: baseModel,
+        messages: [
+          { role: 'user', content: 'find it' },
+          {
+            role: 'assistant',
+            content: 'Not found.',
+            toolCalls: [
+              {
+                id: 'ws-1',
+                name: 'web_search',
+                server_label: 'Web Search (outcome)',
+                arguments: '{"searchState":{"outcome":"limit"}}',
+                status: 'completed',
+                output: 'Stopped',
+              },
+              {
+                id: 'ws-2',
+                name: 'web_search',
+                server_label: 'Web Search (SearXNG)',
+                arguments: 'x'.repeat(9000),
+                status: 'completed',
+              },
+            ],
+          },
+          { role: 'user', content: 'keep looking' },
+        ],
+      });
+      const assistant = result.messages[1] as Record<string, unknown>;
+      const calls = assistant.toolCalls as Array<Record<string, unknown>>;
+      expect(calls[0].arguments).toBe('{"searchState":{"outcome":"limit"}}');
+      // Oversize is dropped, not rejected.
+      expect(calls[1].arguments).toBeUndefined();
     });
 
     it('drops malformed toolCalls without failing the request', () => {
