@@ -1056,7 +1056,10 @@ export function buildOutcomeNote(result: MultiStepResult): string {
  * none. The results are still described, uncited, so the answer can say
  * what the search turned up.
  */
-export function buildMultiStepDigest(result: MultiStepResult): {
+export function buildMultiStepDigest(
+  result: MultiStepResult,
+  options: { omitOutcomeNote?: boolean } = {},
+): {
   text: string;
   citations: Array<{
     number: number;
@@ -1068,7 +1071,7 @@ export function buildMultiStepDigest(result: MultiStepResult): {
   }>;
 } {
   const notes: string[] = [];
-  const outcomeNote = buildOutcomeNote(result);
+  const outcomeNote = options.omitOutcomeNote ? '' : buildOutcomeNote(result);
   if (outcomeNote) notes.push(outcomeNote);
 
   const endedShort =
