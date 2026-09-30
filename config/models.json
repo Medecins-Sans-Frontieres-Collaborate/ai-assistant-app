@@ -1,7 +1,7 @@
 {
   "$schema-note": "Baseline model metadata. Source of truth for presentation + routing of KNOWN models. Keyed by model id (matches OpenAIModelID). Azure discovery does NOT return this metadata (context window, sdk, capability flags), so it lives here and can be overlaid by ARM ui-* tags for models added without a code push. See docs/MODEL_DISCOVERY_DESIGN.md.",
   "$retirement-note": "lifecycle / retirementDate / retirementReplacement mirror the Azure Foundry model retirement schedule (learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule) as of its 2026-07-09 revision; refresh manually when that page updates. INFORMATIONAL ONLY, never used for gating: the schedule tracks underlying model VERSIONS, and Azure upgrades deployments in place, so a deployment can outlive its version's retirement (e.g. deployments named gpt-5.2-chat now run a newer underlying model even though the gpt-5.2-chat version is retired). Models absent from the schedule carry no lifecycle fields.",
-  "$pricing-note": "pricing = LIST-PRICE token rates in USD per 1M tokens, pulled 2026-08-20. Azure OpenAI + third-party Foundry models: Azure Retail Prices API (prices.azure.com, serviceName 'Foundry Models'), Global Standard deployment meters — Data Zone runs ~1.1x and regional ~1.21x these rates; batch/provisioned not covered. claude-*: Anthropic first-party list rates (billed via Marketplace at API rates on Foundry); claude-sonnet-5 has intro pricing of 2.00/10.00 through 2026-08-31, standard rate recorded here. mistral-medium-2505, mistral-small-2503, Ministral-3B, Llama-4-Scout, DeepSeek-R1-0528 have no dedicated retail meter (legacy serverless/Marketplace billing); their published serverless list rates are recorded and are lower-confidence. cachedInputPer1M = cached-input READ rate where the provider publishes one (cache-write premiums not modeled). gpt-chat-latest is a rolling alias; its meter (5.00/30.00) tracks whatever chat model Azure currently routes it to. Displayed by the limits admin cost insights (lib/utils/shared/costEstimator.ts) — pricingAsOf / pricingAssumptionsVersion below and the per-model pricing.confidence / billing / alias fields are the machine-readable form of these caveats. Refresh manually alongside price changes (e.g. the 2026-07-30 gpt-5.6 terra/luna cuts are reflected). gpt-6-astra (added 2026-09-07): NO Azure retail meter existed yet (shipped 2026-09-03); rates are the Global Standard list prices from the Azure launch blog (10.00/50.00, cached 1.00; US Data Zone +10%). Prompts over 272K input tokens bill the ENTIRE request at 2x input / 1.5x output — maxLength is capped at 272000 so the app never crosses that boundary; refresh from the retail API once the meter appears.",
+  "$pricing-note": "pricing = LIST-PRICE token rates in USD per 1M tokens, pulled 2026-08-20. Azure OpenAI + third-party Foundry models: Azure Retail Prices API (prices.azure.com, serviceName 'Foundry Models'), Global Standard deployment meters — Data Zone runs ~1.1x and regional ~1.21x these rates; batch/provisioned not covered. claude-*: Anthropic first-party list rates (billed via Marketplace at API rates on Foundry); claude-sonnet-5 has intro pricing of 2.00/10.00 through 2026-08-31, standard rate recorded here. mistral-medium-2505, mistral-small-2503, Ministral-3B, Llama-4-Scout, DeepSeek-R1-0528 have no dedicated retail meter (legacy serverless/Marketplace billing); their published serverless list rates are recorded and are lower-confidence. cachedInputPer1M = cached-input READ rate where the provider publishes one (cache-write premiums not modeled). gpt-chat-latest is a rolling alias; its meter (5.00/30.00) tracks whatever chat model Azure currently routes it to. Displayed by the limits admin cost insights (lib/utils/shared/costEstimator.ts) — pricingAsOf / pricingAssumptionsVersion below and the per-model pricing.confidence / billing / alias fields are the machine-readable form of these caveats. Refresh manually alongside price changes (e.g. the 2026-07-30 gpt-5.6 terra/luna cuts are reflected). gpt-6-astra (added 2026-09-07): NO Azure retail meter existed yet (shipped 2026-09-03); rates are the Global Standard list prices from the Azure launch blog (10.00/50.00, cached 1.00; US Data Zone +10%). Prompts over 272K input tokens bill the ENTIRE request at 2x input / 1.5x output — maxLength is capped at 272000 so the app never crosses that boundary; refresh from the retail API once the meter appears. gpt-6.1-sol (added 2026-09-30): rates 2.00/10.00, cached 0.10 are OpenAI's published list prices (no Azure retail meter found yet; Azure Global Standard may differ); prompts over 272K input tokens bill at a higher rate, so maxLength is capped at 272000.",
   "pricingAsOf": "2026-08-20",
   "pricingAssumptionsVersion": "2026-08.1",
   "models": {
@@ -1792,6 +1792,42 @@
         "inputPer1M": 10,
         "outputPer1M": 50,
         "cachedInputPer1M": 1,
+        "confidence": "list"
+      }
+    },
+    "gpt-6.1-sol": {
+      "id": "gpt-6.1-sol",
+      "name": "GPT-6.1 Sol",
+      "maxLength": 272000,
+      "tokenLimit": 32000,
+      "modelType": "omni",
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "variant": "standard",
+      "variantLabel": "Foundational",
+      "variantRank": 1,
+      "versionLabel": "6.1",
+      "tagline": "Near-Astra capability, far lower cost",
+      "description": "An upgrade to GPT-6 Sol for demanding work across code, documents, and applications. Approaches Astra's capability at a fraction of the token price.",
+      "isDisabled": false,
+      "provider": "openai",
+      "knowledgeCutoffDate": "2026-04",
+      "sdk": "azure-openai",
+      "supportsTemperature": false,
+      "reasoningEffort": "medium",
+      "supportsReasoningEffort": true,
+      "supportsMinimalReasoning": false,
+      "verbosity": "medium",
+      "supportsVerbosity": true,
+      "supportsVision": true,
+      "supportsTools": true,
+      "supportsCodeInterpreter": true,
+      "lifecycle": "ga",
+      "supportsResponsesApi": true,
+      "pricing": {
+        "inputPer1M": 2,
+        "outputPer1M": 10,
+        "cachedInputPer1M": 0.1,
         "confidence": "list"
       }
     },
