@@ -209,7 +209,7 @@ describe('ToolRouterService', () => {
         const args = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
         expect(args.messages[0].content).toContain('0 to 4 EXTRA queries');
         expect(args.messages[0].content).not.toContain('almost always EMPTY');
-        expect(args.max_completion_tokens).toBe(290);
+        expect(args.max_completion_tokens).toBe(302);
         expect(result.searchQueries).toEqual([
           'Sudan',
           'Sudan conflict RSF',
@@ -978,6 +978,11 @@ describe('ToolRouterService', () => {
                   description:
                     'Kind of source that answers best; "general" when unsure',
                 },
+                searchLanguage: {
+                  type: 'string',
+                  description:
+                    'ISO 639-1 code of the language searchQuery is written in, or "auto"',
+                },
                 additionalSearchQueries: {
                   type: 'array',
                   items: { type: 'string' },
@@ -992,6 +997,7 @@ describe('ToolRouterService', () => {
                 'searchRecency',
                 'searchComprehensive',
                 'searchCategory',
+                'searchLanguage',
                 'additionalSearchQueries',
               ],
               additionalProperties: false,
@@ -1000,7 +1006,7 @@ describe('ToolRouterService', () => {
         });
         // Latency-tuning params should be present.
         expect(callArgs[0].reasoning_effort).toBe('minimal');
-        expect(callArgs[0].max_completion_tokens).toBe(210);
+        expect(callArgs[0].max_completion_tokens).toBe(222);
       });
     });
 
