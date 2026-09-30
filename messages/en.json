@@ -3539,6 +3539,11 @@
       "description": "OpenAI's GPT-6 flagship. Built for demanding end-to-end work: deep research, complex analysis, software engineering, and long multi-step tasks. About twice the cost of GPT-5.6 Sol.",
       "tagline": "OpenAI's most capable model"
     },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "An upgrade to GPT-6 Sol for demanding work across code, documents, and applications. Approaches Astra's capability at a fraction of the token price.",
+      "tagline": "Near-Astra capability, far lower cost"
+    },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
       "description": "Mistral's newest mid-size model. A European alternative that balances capability and speed for everyday work.",
