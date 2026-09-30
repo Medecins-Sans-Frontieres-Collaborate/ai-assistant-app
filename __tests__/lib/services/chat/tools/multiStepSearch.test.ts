@@ -5,8 +5,11 @@ import {
   buildOutcomeNote,
   focusExcerpt,
   focusTerms,
+  isOffQuery,
   nameSources,
+  phraseQueryFor,
   runMultiStepSearch,
+  toPriorSearchState,
 } from '@/lib/services/chat/tools/multiStepSearch';
 import {
   AssessmentInput,
@@ -486,7 +489,268 @@ describe('source references in the assessor’s words', () => {
   });
 });
 
+const health = (webCoverage: boolean | null, throttled = false) => ({
+  answered: {},
+  unresponsive: throttled ? [{ engine: 'bing', reason: 'CAPTCHA' }] : [],
+  webCoverage,
+  throttled,
+});
+
+describe('off-query results and the phrase fallback', () => {
+  it('flags results that share at most one term with the query', () => {
+    const junk = [
+      entry('w1', 'Winter is the coldest season of the year.'),
+      {
+        ...entry('w2'),
+        title: 'Winter (singer) - Wikipedia',
+        snippet: 'Kim Min-jeong, known as Winter.',
+      },
+    ];
+    expect(isOffQuery(junk, ['Winter Soldier 1972 documentary'])).toBe(true);
+    const good = [
+      {
+        ...entry('f'),
+        title: 'Winter Soldier (1972) - IMDb',
+        snippet: 'Documentary about Vietnam veterans testimony.',
+      },
+    ];
+    expect(isOffQuery(good, ['Winter Soldier 1972 documentary'])).toBe(false);
+    // Too short a query to judge; an empty batch is empty, not off-query.
+    expect(isOffQuery(junk, ['winter'])).toBe(false);
+    expect(isOffQuery([], ['Winter Soldier 1972 documentary'])).toBe(false);
+  });
+
+  it('builds a quoted-title query from the question, with its disambiguators', () => {
+    expect(
+      phraseQueryFor(
+        "There's a documentary called Winter Soldier about vietnam vets. Is this documentary available to buy or stream online?",
+      ),
+    ).toBe('"Winter Soldier" documentary vietnam available');
+    expect(
+      phraseQueryFor(
+        'Can you find the 1621 first edition of The Anatomy of Melancholy for sale?',
+      ),
+    ).toBe('"The Anatomy of Melancholy" 1621 first edition');
+    // No capitalised multi-word name: nothing to quote.
+    expect(phraseQueryFor('what is happening in India')).toBeNull();
+  });
+
+  it('runs the quoted title itself when the first results are about something else, before asking the assessor', async () => {
+    const junk = {
+      entries: [
+        entry('w1', 'Winter is the coldest season.'),
+        entry('w2', 'KNMI winter outlook.'),
+      ],
+      answers: [],
+    };
+    const { deps, params, inputs } = setup(
+      [verdict({ verdict: 'answer', useful: [3] })],
+      {
+        question:
+          'Is the documentary Winter Soldier about Vietnam vets available to stream?',
+        initialQueries: ['Winter Soldier documentary stream'],
+        initial: junk,
+      },
+      {
+        search: vi.fn(async () => ({
+          entries: [
+            {
+              ...entry('imdb'),
+              title: 'Winter Soldier (1972) - IMDb',
+              snippet: 'Documentary, Vietnam veterans.',
+            },
+          ],
+          answers: [],
+        })),
+      },
+    );
+    const result = await runMultiStepSearch(params, deps);
+
+    expect(deps.search).toHaveBeenCalledTimes(1);
+    expect(deps.search).toHaveBeenCalledWith(
+      ['"Winter Soldier" documentary vietnam available'],
+      expect.objectContaining({ narrow: true }),
+    );
+    expect(deps.onStep).toHaveBeenCalledWith(
+      expect.objectContaining({ strategy: 'phrase' }),
+    );
+    // The assessor saw both batches, the first marked as off-query.
+    expect(inputs[0].steps[0].outcome).toContain('none matched the query');
+    expect(inputs[0].sources).toHaveLength(3);
+    expect(inputs[0].strategiesTried).toEqual([
+      { strategy: 'phrase', deadEnd: false },
+    ]);
+    expect(result.strategies).toEqual(['phrase']);
+    expect(result.entries[0].url).toBe('https://example.org/imdb');
+  });
+});
+
+describe('backend health', () => {
+  it('ends as degraded, without searching again, when the web engines did not answer', async () => {
+    const { deps, params, inputs } = setup(
+      [verdict({ verdict: 'search', queries: ['q2'], strategy: 'entity' })],
+      {
+        initial: {
+          entries: [entry('ref')],
+          answers: [],
+          health: health(false),
+        },
+      },
+    );
+    const result = await runMultiStepSearch(params, deps);
+
+    expect(inputs[0].searchHealth).toContain('did not answer');
+    expect(deps.search).not.toHaveBeenCalled();
+    expect(result.outcome).toBe('degraded');
+    expect(result.stopReason).toBe('no_web_coverage');
+    expect(result.webCoverageLost).toBe(true);
+    expect(buildOutcomeNote(result)).toContain('did not answer');
+  });
+
+  it('a degraded batch is not a dead end of the subject', async () => {
+    const { deps, params } = setup(
+      [
+        verdict({ verdict: 'read', readSources: [1] }),
+        verdict({ verdict: 'answer' }),
+      ],
+      {
+        initial: {
+          entries: [entry('ref')],
+          answers: [],
+          health: health(false),
+        },
+      },
+    );
+    const result = await runMultiStepSearch(params, deps);
+    expect(result.outcome).toBe('answered');
+  });
+
+  it('holds follow-up searches while the instance is throttled', async () => {
+    const { deps, params } = setup(
+      [verdict({ verdict: 'search', queries: ['q2'], strategy: 'entity' })],
+      {},
+      { searchAllowed: () => false },
+    );
+    const result = await runMultiStepSearch(params, deps);
+    expect(deps.search).not.toHaveBeenCalled();
+    expect(result.outcome).toBe('limit');
+    expect(result.stopReason).toBe('throttled');
+  });
+});
+
+describe('continuation', () => {
+  const prior = {
+    question: 'Is the Winter Soldier documentary available to stream?',
+    queries: ['Winter Soldier documentary stream', 'Winter Soldier 1972 DVD'],
+    strategies: ['terms' as const],
+    deadEndStrategies: ['terms' as const],
+    pagesTried: ['https://example.org/old'],
+    outcome: 'limit' as const,
+    reason: 'no listing found',
+    steps: [
+      {
+        kind: 'search' as const,
+        detail: '"Winter Soldier documentary stream"',
+        outcome: '4 results',
+      },
+    ],
+  };
+
+  it('starts at the assessor with the earlier turn’s history and a fresh step budget', async () => {
+    const { deps, params, inputs } = setup(
+      [
+        verdict({
+          verdict: 'search',
+          queries: ['site:justwatch.com Winter Soldier 1972'],
+          strategy: 'venue',
+        }),
+        verdict({ verdict: 'answer', useful: [1] }),
+      ],
+      {
+        question: 'keep looking please',
+        initialQueries: [],
+        initial: null,
+        prior,
+      },
+    );
+    const result = await runMultiStepSearch(params, deps);
+
+    // The original question, not "keep looking"; the old steps as history.
+    expect(inputs[0].question).toBe(prior.question);
+    expect(inputs[0].continuation).toBe(true);
+    expect(inputs[0].steps).toEqual(prior.steps);
+    expect(inputs[0].stepsRemaining).toBe(MULTI_STEP_DEFAULTS.maxSteps);
+    expect(inputs[0].strategiesTried).toEqual([
+      { strategy: 'terms', deadEnd: true },
+    ]);
+    expect(deps.search).toHaveBeenCalledTimes(1);
+    expect(result.outcome).toBe('answered');
+    expect(result.searchCount).toBe(1);
+
+    const state = toPriorSearchState(result, 'keep looking please', prior);
+    expect(state.question).toBe(prior.question);
+    expect(state.queries).toEqual([
+      ...prior.queries,
+      'site:justwatch.com Winter Soldier 1972',
+    ]);
+    // Every strategy tried across turns, so the next continuation knows too.
+    expect(state.strategies).toEqual(['terms', 'venue']);
+    expect(state.deadEndStrategies).toEqual(['terms']);
+    expect(state.outcome).toBe('answered');
+  });
+
+  it('refuses a query or strategy the earlier turn already tried', async () => {
+    const { deps, params } = setup(
+      [
+        verdict({
+          verdict: 'search',
+          queries: ['Winter Soldier 1972 DVD'],
+          strategy: 'venue',
+        }),
+      ],
+      { initialQueries: [], initial: null, prior },
+    );
+    const result = await runMultiStepSearch(params, deps);
+    expect(deps.search).not.toHaveBeenCalled();
+    expect(result.stopReason).toBe('repeat');
+
+    const again = setup(
+      [
+        verdict({
+          verdict: 'search',
+          queries: ['brand new query'],
+          strategy: 'terms',
+        }),
+      ],
+      { initialQueries: [], initial: null, prior },
+    );
+    expect(
+      (await runMultiStepSearch(again.params, again.deps)).stopReason,
+    ).toBe('strategy');
+  });
+});
+
 describe('buildMultiStepDigest', () => {
+  it('cites nothing when the search ended short and nothing was judged useful', async () => {
+    const { deps, params } = setup([
+      verdict({
+        verdict: 'search',
+        queries: ['q2'],
+        strategy: 'entity',
+        reason: 'wrong subject',
+      }),
+      verdict({ verdict: 'give_up', reason: 'only namesakes found' }),
+    ]);
+    const result = await runMultiStepSearch(params, deps);
+    const digest = buildMultiStepDigest(result);
+
+    expect(result.usefulCount).toBe(0);
+    expect(digest.citations).toEqual([]);
+    expect(digest.text).toContain('judged NOT to be about the subject');
+    expect(digest.text).toContain('- Title a (example.org)');
+    expect(digest.text).not.toMatch(/\[\d+\]/);
+  });
+
   it('returns nothing to cite for an empty result', async () => {
     const { deps, params } = setup([verdict({ verdict: 'give_up' })], {
       initial: { entries: [], answers: [] },
