@@ -185,14 +185,22 @@ const REASON_CHARS = 300;
 const QUESTION_CHARS = 300;
 const MAX_QUERIES = 3;
 
-/** The verdicts this assessment may return — enforced where a schema can. */
+/**
+ * The verdicts this assessment may return — enforced where a schema can.
+ * No steps left → only the closing verdicts; page reads off → no "read";
+ * web engines not answering → no "search" (rewording cannot help, and
+ * the live models kept choosing it against the written rule).
+ */
 export function allowedVerdicts(
-  input: Pick<AssessmentInput, 'stepsRemaining' | 'canRead'>,
+  input: Pick<AssessmentInput, 'stepsRemaining' | 'canRead'> &
+    Partial<Pick<AssessmentInput, 'searchHealth'>>,
 ): AssessmentVerdict[] {
   if (input.stepsRemaining <= 0) return ['answer', 'ask_user', 'give_up'];
-  return input.canRead
-    ? [...ASSESSMENT_VERDICTS]
-    : ASSESSMENT_VERDICTS.filter((verdict) => verdict !== 'read');
+  return ASSESSMENT_VERDICTS.filter(
+    (verdict) =>
+      (verdict !== 'read' || input.canRead) &&
+      (verdict !== 'search' || !input.searchHealth),
+  );
 }
 
 const assessmentSchema = (verdicts: AssessmentVerdict[]) => ({
@@ -400,7 +408,7 @@ Rules:
   }
 - reason: one sentence — what is missing (when continuing), or what was tried and why it is a dead end (when giving up). May be empty for "answer" and "ask_user".${
     input.searchHealth
-      ? `\n- SEARCH SERVICE STATE: ${input.searchHealth} Rewording the query cannot help while the web engines are not answering: do not choose "search". Choose "read" if a listed page is genuinely worth opening, otherwise "answer" if the sources happen to suffice, else "give_up" with the reason "the web search engines did not answer".`
+      ? `\n- SEARCH SERVICE STATE: ${input.searchHealth} Rewording the query cannot help while the web engines are not answering, so "search" is not available. Choose "read" if a listed page is genuinely worth opening, otherwise "answer" if the sources happen to suffice, else "give_up" with the reason "the web search engines did not answer".`
       : ''
   }${
     input.strategiesTried.length > 0
