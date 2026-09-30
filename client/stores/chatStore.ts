@@ -2761,7 +2761,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       (c) => c.id === conversationId,
     );
     if (!conversation) return;
-    const message: Message = { role: 'user', content: text };
+    const message: Message = {
+      role: 'user',
+      content: text,
+      messageType: undefined,
+    };
     const updated = {
       ...conversation,
       messages: [...conversation.messages, message],
