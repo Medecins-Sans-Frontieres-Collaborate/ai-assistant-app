@@ -34,14 +34,43 @@ vi.mock('@/lib/services/observability/tokenUsageRecorder', () => ({
   recordTokenUsage: vi.fn(),
 }));
 
-const searxngConfigured = vi.hoisted(() => ({ value: true }));
+const searxngConfigured = vi.hoisted(() => ({ value: true, throttled: false }));
 vi.mock('@/lib/services/chat/tools/searxngSearch', async (importOriginal) => {
   const actual =
     await importOriginal<
       typeof import('@/lib/services/chat/tools/searxngSearch')
     >();
-  return { ...actual, isSearxngConfigured: () => searxngConfigured.value };
+  return {
+    ...actual,
+    isSearxngConfigured: () => searxngConfigured.value,
+    isSearxngThrottled: () => searxngConfigured.throttled,
+  };
 });
+
+const capabilities = vi.hoisted(() => ({
+  value: null as null | {
+    categories: Set<string>;
+    engineCategories: Map<string, string[]>;
+    fetchedAt: number;
+  },
+}));
+vi.mock(
+  '@/lib/services/chat/tools/searxngCapabilities',
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import('@/lib/services/chat/tools/searxngCapabilities')
+      >();
+    return {
+      ...actual,
+      getSearxngCapabilities: vi.fn(async () => capabilities.value),
+    };
+  },
+);
+
+vi.mock('@/lib/services/observability', () => ({
+  getAzureMonitorLogger: () => ({ logCustomMetric: vi.fn() }),
+}));
 
 const multiStepConfig = vi.hoisted(() => ({
   value: null as unknown as ResolvedMultiStepConfig,
@@ -156,6 +185,9 @@ describe('ToolRouterEnricher — multi-step search', () => {
     vi.clearAllMocks();
     consumeToolBudgetMock.mockResolvedValue(true);
     searxngConfigured.value = true;
+    searxngConfigured.throttled = false;
+    capabilities.value = null;
+    ToolRouterEnricher.__resetSearchPacingForTests();
     multiStepConfig.value = { ...MULTI_STEP_DEFAULTS };
 
     router = {
@@ -503,6 +535,194 @@ describe('ToolRouterEnricher — multi-step search', () => {
     // The first step's record and the outcome record; nothing else went
     // into the stream being torn down.
     expect(parseRecords(emitMarker)).toHaveLength(2);
+  });
+
+  it('starts narrow: two of the router’s five queries, the rest left to the loop', async () => {
+    router.determineTool.mockResolvedValue({
+      tools: ['web_search'],
+      searchQuery: 'US employment equality policy',
+      searchQueries: [
+        'US employment equality policy',
+        'EEOC guidance',
+        'OFCCP rules',
+        'Title VII',
+        'EO 11246',
+      ],
+      searchCategory: 'general',
+      searchLanguage: 'en',
+    });
+    assessor.assess.mockResolvedValue(verdict({ verdict: 'answer' }));
+
+    await enricher.execute(context());
+
+    expect(tool.searchSearxngEntries.mock.calls[0][0]).toEqual([
+      'US employment equality policy',
+      'EEOC guidance',
+    ]);
+    expect(tool.searchSearxngEntries.mock.calls[0][1]).toMatchObject({
+      language: 'en',
+    });
+  });
+
+  it('sends follow-ups to the instance’s web engines when it tags them', async () => {
+    capabilities.value = {
+      categories: new Set(['general', 'news', 'web']),
+      engineCategories: new Map([['bing', ['general', 'web']]]),
+      fetchedAt: Date.now(),
+    };
+    assessor.assess
+      .mockResolvedValueOnce(
+        verdict({
+          verdict: 'search',
+          queries: ['EEOC guidance'],
+          strategy: 'entity',
+        }),
+      )
+      .mockResolvedValueOnce(verdict({ verdict: 'answer' }));
+
+    await enricher.execute(context());
+
+    expect(tool.searchSearxngEntries.mock.calls[0][1]).toMatchObject({
+      category: 'general',
+    });
+    expect(tool.searchSearxngEntries.mock.calls[1][1]).toMatchObject({
+      category: 'web',
+      deep: false,
+    });
+  });
+
+  it('holds follow-ups while the instance reports throttling', async () => {
+    searxngConfigured.throttled = true;
+    assessor.assess.mockResolvedValue(
+      verdict({
+        verdict: 'search',
+        queries: ['EEOC guidance'],
+        strategy: 'entity',
+      }),
+    );
+
+    const result = await enricher.execute(context());
+
+    expect(tool.searchSearxngEntries).toHaveBeenCalledTimes(1);
+    expect(lastUserText(result)).toContain(
+      'stopped before the request was fully answered',
+    );
+  });
+
+  it('reports lost web coverage on the step record and ends as degraded', async () => {
+    tool.searchSearxngEntries.mockResolvedValue({
+      entries: [entry('ref')],
+      answers: [],
+      health: {
+        answered: { wikipedia: 1 },
+        unresponsive: [{ engine: 'bing', reason: 'suspended' }],
+        webCoverage: false,
+        throttled: true,
+      },
+    });
+    assessor.assess.mockResolvedValue(
+      verdict({
+        verdict: 'search',
+        queries: ['EEOC guidance'],
+        strategy: 'entity',
+      }),
+    );
+
+    const result = await enricher.execute(context());
+
+    const records = parseRecords(emitMarker);
+    expect(records[0].output).toContain('web engines did not answer');
+    expect(records[0].output).toContain('bing (suspended)');
+    expect(records[1].output).toContain('Web search engines did not answer');
+    expect(lastUserText(result)).toContain('web search service was degraded');
+    expect(tool.searchSearxngEntries).toHaveBeenCalledTimes(1);
+  });
+
+  it('continues an unfinished search from the previous turn’s outcome record', async () => {
+    const prior = {
+      question: 'current US policy on employment equality',
+      queries: ['US employment equality policy'],
+      strategies: ['terms'],
+      deadEndStrategies: ['terms'],
+      pagesTried: [],
+      outcome: 'limit',
+      reason: 'no primary source found',
+      steps: [
+        {
+          kind: 'search',
+          detail: '"US employment equality policy"',
+          outcome: '3 results',
+        },
+      ],
+    };
+    router.determineTool.mockResolvedValue({
+      tools: ['web_search'],
+      searchQuery: 'keep searching',
+      searchQueries: ['keep searching'],
+      searchContinue: true,
+    });
+    assessor.assess
+      .mockResolvedValueOnce(
+        verdict({
+          verdict: 'search',
+          queries: ['site:eeoc.gov employment equality'],
+          strategy: 'venue',
+        }),
+      )
+      .mockResolvedValueOnce(verdict({ verdict: 'answer', useful: [1] }));
+    tool.searchSearxngEntries.mockResolvedValueOnce({
+      entries: [entry('eeoc')],
+      answers: [],
+    });
+
+    const ctx = context({}, [
+      createTestMessage({
+        content: 'current US policy on employment equality',
+      }),
+      createTestMessage({
+        role: 'assistant',
+        content: "I couldn't find it.",
+        toolCalls: [
+          {
+            id: 'ws-1',
+            name: 'web_search',
+            server_label: 'Web Search (outcome)',
+            arguments: JSON.stringify({ searchState: prior }),
+            status: 'completed',
+            output: 'Stopped',
+            error: null,
+          },
+        ],
+      } as never),
+      createTestMessage({ content: 'keep searching please' }),
+    ]);
+    (ctx as any).searchMode = SearchMode.INTELLIGENT;
+    const result = await enricher.execute(ctx);
+
+    expect(router.determineTool).toHaveBeenCalledWith(
+      expect.objectContaining({ hasPriorSearchState: true }),
+    );
+    // No first search from "keep searching": the loop starts at the
+    // assessor, against the original question, knowing what was tried.
+    expect(tool.searchSearxngEntries).toHaveBeenCalledTimes(1);
+    expect(tool.searchSearxngEntries.mock.calls[0][0]).toEqual([
+      'site:eeoc.gov employment equality',
+    ]);
+    const [input] = assessor.assess.mock.calls[0];
+    expect(input.continuation).toBe(true);
+    expect(input.question).toBe(prior.question);
+    expect(input.strategiesTried).toEqual([
+      { strategy: 'terms', deadEnd: true },
+    ]);
+    expect(result.processedContent?.metadata?.citations).toHaveLength(1);
+
+    const records = parseRecords(emitMarker);
+    const state = JSON.parse(records.at(-1).arguments).searchState;
+    expect(state.queries).toEqual([
+      'US employment equality policy',
+      'site:eeoc.gov employment equality',
+    ]);
+    expect(state.outcome).toBe('answered');
   });
 
   describe('runs single-step', () => {
