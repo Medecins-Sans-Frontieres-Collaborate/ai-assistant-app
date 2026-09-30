@@ -2,6 +2,7 @@ import { Session } from 'next-auth';
 
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
+import { SEARCH_STATE_RECORD_NAME } from '@/lib/utils/shared/searchState';
 
 import { ChatBody, Message } from '@/types/chat';
 import { ErrorCode, PipelineError } from '@/types/errors';
@@ -136,20 +137,26 @@ const GeneratedFileRefSchema = z.object({
  * later turns act on (which files exist); tool arguments/output are display
  * data and are stripped here.
  */
-const ToolCallRecordSchema = z.object({
-  id: z.string().max(200),
-  name: z.string().max(200),
-  server_label: z.string().max(200).nullable().optional(),
-  // Display JSON, except for one use: a multi-step search's outcome record
-  // carries the search's state here so the next turn can continue it
-  // (lib/utils/shared/searchState.ts). Bounded; an oversize value is
-  // dropped, never rejected.
-  arguments: z.string().max(8000).nullable().optional().catch(undefined),
-  status: z
-    .enum(['completed', 'failed', 'incomplete', 'in_progress'])
-    .optional(),
-  generated_files: z.array(GeneratedFileRefSchema).max(50).optional(),
-});
+const ToolCallRecordSchema = z
+  .object({
+    id: z.string().max(200),
+    name: z.string().max(200),
+    server_label: z.string().max(200).nullable().optional(),
+    // Display JSON, kept for ONE record only: a multi-step search's outcome
+    // record carries the search's state here so the next turn can continue
+    // it (lib/utils/shared/searchState.ts). Bounded; an oversize value is
+    // dropped, never rejected.
+    arguments: z.string().max(8000).nullable().optional().catch(undefined),
+    status: z
+      .enum(['completed', 'failed', 'incomplete', 'in_progress'])
+      .optional(),
+    generated_files: z.array(GeneratedFileRefSchema).max(50).optional(),
+  })
+  .transform((record) =>
+    record.name === SEARCH_STATE_RECORD_NAME
+      ? record
+      : { ...record, arguments: undefined },
+  );
 
 /**
  * Zod schema for a single message.
