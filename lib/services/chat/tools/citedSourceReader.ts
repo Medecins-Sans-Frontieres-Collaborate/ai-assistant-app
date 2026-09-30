@@ -43,12 +43,18 @@ function isGoogleNewsLink(url: string): boolean {
   }
 }
 
-async function fetchArticleText(
+/**
+ * Readable text of one public page, or null when it cannot be read
+ * (paywall, bot wall, timeout, non-HTML, SSRF block). Also used by the
+ * multi-step search to read result pages the assessor picked.
+ */
+export async function fetchArticleText(
   url: string,
+  timeoutMs: number = PER_ARTICLE_TIMEOUT_MS,
 ): Promise<{ text: string; title: string } | null> {
   try {
     const { response, resolvedUrl } = await fetchPublicUrl(url, {
-      timeoutMs: PER_ARTICLE_TIMEOUT_MS,
+      timeoutMs,
     });
     if (!response.ok) return null;
     const contentType = response.headers.get('content-type') ?? '';
