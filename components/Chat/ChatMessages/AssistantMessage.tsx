@@ -59,6 +59,7 @@ import {
 import { DocumentTranslationContent } from '@/components/Chat/ChatMessages/DocumentTranslationContent';
 import { GeneratedFilesPanel } from '@/components/Chat/ChatMessages/GeneratedFilesPanel';
 import { InterimSearchPanel } from '@/components/Chat/ChatMessages/InterimSearchPanel';
+import { KeepSearchingButton } from '@/components/Chat/ChatMessages/KeepSearchingButton';
 import M365TodoTasksModal, {
   extractTaskCandidates,
 } from '@/components/Chat/ChatMessages/M365TodoTasksModal';
@@ -875,6 +876,20 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                     toolCalls={liveCalls}
                     approvalSources={message?.approvalSources}
                   />
+                  {/* A multi-step search that ended short can be continued
+                      from here — only on the latest message, once the
+                      response is complete. */}
+                  {selectedConversation && (
+                    <KeepSearchingButton
+                      conversationId={selectedConversation.id}
+                      toolCalls={message?.toolCalls}
+                      isLastMessage={
+                        messageIndex ===
+                        selectedConversation.messages.length - 1
+                      }
+                      isStreaming={messageIsStreaming}
+                    />
+                  )}
                 </>
               );
             })()}
