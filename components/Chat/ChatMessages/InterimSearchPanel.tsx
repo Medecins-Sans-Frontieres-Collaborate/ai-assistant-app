@@ -24,6 +24,12 @@ const isSafeHref = (url: string): boolean => /^https?:\/\//i.test(url);
  * half-minute wait costs nothing.
  */
 const HEADLINE_STAGGER_MS = 950;
+/**
+ * A multi-step search adds results within seconds and re-emits the list;
+ * items just cascade in — a slow reveal would still be playing when the
+ * next batch lands.
+ */
+const MULTI_STEP_STAGGER_MS = 120;
 
 /**
  * Interim results of a combined (Bing + Google News) search, rendered on
@@ -34,12 +40,18 @@ const HEADLINE_STAGGER_MS = 950;
  * action aborts the Bing wait and resends the turn with these headlines
  * echoed back (no re-search). Disappears when the full search finishes
  * and answer tokens start streaming.
+ *
+ * A multi-step (SearXNG) search uses the same panel for the results it has
+ * so far — titles with a brief description — re-rendered as further steps
+ * add to them, with the same "answer from these now" escape hatch.
  */
 export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
   interim,
 }) => {
   const t = useTranslations('chat.interimSearch');
   const summarizeFromHeadlines = useChatStore((s) => s.summarizeFromHeadlines);
+  const multiStep = interim.kind === 'multiStep';
+  const staggerMs = multiStep ? MULTI_STEP_STAGGER_MS : HEADLINE_STAGGER_MS;
   // One-shot: the click aborts the current stream and starts the resend;
   // disable immediately so a second click can't race the teardown.
   const [clicked, setClicked] = useState(false);
@@ -53,8 +65,7 @@ export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
   // Footer (count/hint/button) slides in after the last of the INITIAL
   // headlines; expanding later must not re-delay it.
   const footerDelayMs =
-    Math.min(interim.entries.length, MAX_VISIBLE_HEADLINES) *
-    HEADLINE_STAGGER_MS;
+    Math.min(interim.entries.length, MAX_VISIBLE_HEADLINES) * staggerMs;
 
   /**
    * Initial headlines keep their slow streamed-in stagger; ones revealed
@@ -64,7 +75,7 @@ export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
    */
   const entryDelayMs = (idx: number) =>
     idx < MAX_VISIBLE_HEADLINES
-      ? idx * HEADLINE_STAGGER_MS
+      ? idx * staggerMs
       : (idx - MAX_VISIBLE_HEADLINES) * 80;
 
   return (
@@ -87,7 +98,7 @@ export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
             backgroundSize: '200% 100%',
           }}
         >
-          {t('title')}
+          {multiStep ? t('multiStepTitle') : t('title')}
         </span>
         <span className="ml-auto text-gray-500 dark:text-gray-400">
           {t('sourcesCount', { count: interim.entries.length })}
@@ -98,7 +109,7 @@ export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
         {entries.map((entry, idx) => (
           <li
             key={entry.url}
-            className="truncate text-xs text-gray-600 dark:text-gray-400 animate-headline-in motion-reduce:animate-none"
+            className="text-xs text-gray-600 dark:text-gray-400 animate-headline-in motion-reduce:animate-none"
             style={{ animationDelay: `${entryDelayMs(idx)}ms` }}
           >
             {isSafeHref(entry.url) ? (
@@ -106,7 +117,7 @@ export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
                 href={entry.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex max-w-full items-center gap-1 hover:text-gray-900 hover:underline dark:hover:text-gray-200"
+                className="inline-flex max-w-full items-center gap-1 truncate hover:text-gray-900 hover:underline dark:hover:text-gray-200"
               >
                 <span className="truncate">{entry.title}</span>
                 {entry.sourceName && (
@@ -121,7 +132,7 @@ export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
                 />
               </a>
             ) : (
-              <span className="inline-flex max-w-full items-center gap-1">
+              <span className="inline-flex max-w-full items-center gap-1 truncate">
                 <span className="truncate">{entry.title}</span>
                 {entry.sourceName && (
                   <span className="shrink-0 text-gray-400 dark:text-gray-500">
@@ -129,6 +140,11 @@ export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
                   </span>
                 )}
               </span>
+            )}
+            {multiStep && entry.snippet && (
+              <p className="line-clamp-2 text-[11px] leading-snug text-gray-500 dark:text-gray-500">
+                {entry.snippet}
+              </p>
             )}
           </li>
         ))}
@@ -151,7 +167,9 @@ export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
           </button>
         )}
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-          {t('hint', { count: interim.entries.length })}
+          {multiStep
+            ? t('multiStepHint', { count: interim.entries.length })
+            : t('hint', { count: interim.entries.length })}
         </p>
         <button
           type="button"
@@ -163,7 +181,7 @@ export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
           className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-blue-300 bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-700 transition-colors hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-blue-500/50 dark:bg-blue-900/20 dark:text-blue-300 dark:hover:bg-blue-900/40"
         >
           <IconSparkles size={14} aria-hidden="true" />
-          {t('summarizeNow')}
+          {multiStep ? t('answerNow') : t('summarizeNow')}
         </button>
       </div>
     </div>
