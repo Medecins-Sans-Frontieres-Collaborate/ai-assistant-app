@@ -215,7 +215,15 @@ describe('assessor prompt', () => {
       }),
     );
     expect(prompt).toContain('SEARCH SERVICE STATE');
-    expect(prompt).toContain('do not choose "search"');
+    expect(prompt).toContain('"search" is not available');
+    expect(prompt).not.toContain('- "search":');
+    expect(
+      allowedVerdicts({
+        stepsRemaining: 2,
+        canRead: true,
+        searchHealth: 'down',
+      }),
+    ).toEqual(['answer', 'read', 'ask_user', 'give_up']);
   });
 
   it('tells a continuation not to repeat earlier turns', () => {
