@@ -108,6 +108,35 @@ describe('WebSearchSettingsPanel', () => {
     ).toBeChecked();
   });
 
+  it('has multi-step search on by default and lets the user switch it off', () => {
+    render(<WebSearchSettingsPanel />);
+
+    const toggle = screen.getByRole('checkbox', { name: /Multi-step search/ });
+    expect(toggle).toBeChecked();
+
+    fireEvent.click(toggle);
+    expect(useSettingsStore.getState().webSearchOptions.multiStep).toBe(false);
+    expect(toggle).not.toBeChecked();
+
+    fireEvent.click(toggle);
+    expect(useSettingsStore.getState().webSearchOptions.multiStep).toBe(true);
+  });
+
+  it('treats settings persisted before the option existed as on', () => {
+    useSettingsStore.setState({
+      webSearchOptions: {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'auto',
+      } as never,
+    });
+    render(<WebSearchSettingsPanel />);
+
+    expect(
+      screen.getByRole('checkbox', { name: /Multi-step search/ }),
+    ).toBeChecked();
+  });
+
   it('exposes the sources slider and freshness select on the same store', () => {
     render(<WebSearchSettingsPanel />);
 
