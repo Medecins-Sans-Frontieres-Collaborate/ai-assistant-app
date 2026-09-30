@@ -2696,11 +2696,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const payload: PrecomputedSearchResults = {
       queries: streamingInterimSearch.queries,
       entries: streamingInterimSearch.entries,
+      ...(streamingInterimSearch.kind
+        ? { kind: streamingInterimSearch.kind }
+        : {}),
     };
     const searchMode = streamingSearchMode ?? SearchMode.INTELLIGENT;
 
     console.log(
-      '[chatStore] Summarize from headlines: aborting the Bing wait and resending with echoed headlines',
+      '[chatStore] Answer from interim results: aborting the running search and resending with the echoed entries',
     );
     abortController?.abort();
 
