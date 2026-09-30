@@ -759,6 +759,8 @@ describe('searchSearxng with capabilities', () => {
     __resetSearxngBreakerForTests();
     fetchMock.mockReset();
     vi.stubGlobal('fetch', fetchMock);
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.spyOn(console, 'log').mockImplementation(() => {});
     (env as { SEARXNG_URL?: string }).SEARXNG_URL = 'https://searx.internal';
     (env as { SEARXNG_API_KEY?: string }).SEARXNG_API_KEY = KEY;
     capabilities.value = {
@@ -794,6 +796,29 @@ describe('searchSearxng with capabilities', () => {
     expect(outcome.health.webCoverage).toBe(false);
     expect(outcome.health.throttled).toBe(true);
     expect(isSearxngThrottled()).toBe(true);
+    // The diagnostic record: one JSON line a log query can parse.
+    expect(outcome.health.legs).toEqual([
+      expect.objectContaining({
+        category: 'general',
+        query: 'cholera outbreak response',
+        results: 1,
+      }),
+    ]);
+    const line = vi
+      .mocked(console.warn)
+      .mock.calls.map(([message]) => String(message))
+      .find((message) => message.includes('SEARXNG_DEGRADED'));
+    expect(line).toBeDefined();
+    const report = JSON.parse(line!.slice(line!.indexOf('{')));
+    expect(report).toMatchObject({
+      queries: ['cholera outbreak response'],
+      categories: ['general'],
+      webCoverage: false,
+      throttled: true,
+      unresponsive: [{ engine: 'bing', reason: 'too many requests' }],
+      answered: { wikipedia: 1 },
+    });
+    expect(report.legs[0].ms).toBeGreaterThanOrEqual(0);
   });
 
   it('degrades a category the instance does not serve to the general web', async () => {
