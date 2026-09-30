@@ -11,7 +11,12 @@ import {
   searchNewsParallel,
 } from './newsSearch';
 import { executeResponsesWebSearch } from './responsesWebSearch';
-import { isSearxngConfigured, searchSearxng } from './searxngSearch';
+import {
+  SearxngSearchOptions,
+  SearxngSearchOutcome,
+  isSearxngConfigured,
+  searchSearxng,
+} from './searxngSearch';
 
 import { env } from '@/config/environment';
 
@@ -69,23 +74,7 @@ export class WebSearchTool implements Tool {
       if (provider === 'searxng') {
         const result = await this.executeSearxng(params);
         if (result) return result;
-        // The fallback feeds are NEWS feeds: headlines answer a news or
-        // general question, but for a science or programming question they
-        // are noise the model would dutifully cite. There, an honest "found
-        // nothing" (the enricher's knowledge-answer path) is the better
-        // degradation.
-        if (params.category === 'science' || params.category === 'it') {
-          return {
-            text: '',
-            citations: [],
-            metadata: { searxngFallback: true },
-          };
-        }
-        const fallback = await this.executeFeeds('news', params);
-        return {
-          ...fallback,
-          metadata: { ...fallback.metadata, searxngFallback: true },
-        };
+        return await this.searxngFallback(params);
       }
 
       // Combined: Bing agent + Google News feed concurrently — headlines
@@ -147,6 +136,41 @@ export class WebSearchTool implements Tool {
         citations: [],
       };
     }
+  }
+
+  /**
+   * What answers when SearXNG cannot: the keyless news feeds — except for
+   * science and programming questions. The fallback feeds are NEWS feeds:
+   * headlines answer a news or general question, but for a science or
+   * programming question they are noise the model would dutifully cite.
+   * There, an honest "found nothing" (the enricher's knowledge-answer path)
+   * is the better degradation.
+   */
+  async searxngFallback(params: WebSearchToolParams): Promise<ToolResult> {
+    if (params.category === 'science' || params.category === 'it') {
+      return {
+        text: '',
+        citations: [],
+        metadata: { searxngFallback: true },
+      };
+    }
+    const fallback = await this.executeFeeds('news', params);
+    return {
+      ...fallback,
+      metadata: { ...fallback.metadata, searxngFallback: true },
+    };
+  }
+
+  /**
+   * Raw SearXNG results for the multi-step search, which assembles its own
+   * digest across several steps. Throws when the instance is unconfigured
+   * or unavailable; an empty result is returned as such.
+   */
+  async searchSearxngEntries(
+    queries: string[],
+    options: SearxngSearchOptions,
+  ): Promise<SearxngSearchOutcome> {
+    return searchSearxng(queries.slice(0, 5), options);
   }
 
   /**
