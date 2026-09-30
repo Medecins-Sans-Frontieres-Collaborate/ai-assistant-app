@@ -94,6 +94,15 @@ export interface WebSearchOptions {
   freshness: 'auto' | 'day' | 'week' | 'month' | 'any';
   /** Which search backend runs the query ('auto' = deployment default). */
   provider: WebSearchProviderOption;
+  /**
+   * Multi-step search (MSF web search only): after the first results an
+   * assessor may search again or read result pages before the answer is
+   * written. On by default; false keeps every search to its single planned
+   * round. An admin can also switch it off for everyone
+   * (docs/WEB_SEARCH_MULTI_STEP.md). Absent (older persisted settings and
+   * older clients) means on.
+   */
+  multiStep: boolean;
 }
 
 export const MIN_SEARCH_RESULT_COUNT = 3;
@@ -105,6 +114,7 @@ export const DEFAULT_WEB_SEARCH_OPTIONS: WebSearchOptions = {
   // 'auto' lets the deployment pick (SearXNG where configured), so backend
   // changes reach users without another store migration.
   provider: 'auto',
+  multiStep: true,
 };
 
 /**
@@ -170,5 +180,8 @@ export function sanitizeWebSearchOptions(value: unknown): WebSearchOptions {
   const provider = isWebSearchProviderOption(raw.provider)
     ? raw.provider
     : DEFAULT_WEB_SEARCH_OPTIONS.provider;
-  return { resultCount, freshness, provider };
+  // Only an explicit false opts out — settings persisted before the option
+  // existed carry no value and must get the default.
+  const multiStep = raw.multiStep !== false;
+  return { resultCount, freshness, provider, multiStep };
 }
