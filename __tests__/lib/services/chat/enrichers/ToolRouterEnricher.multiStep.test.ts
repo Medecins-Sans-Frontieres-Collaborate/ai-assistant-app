@@ -79,13 +79,29 @@ const verdict = (
 });
 
 function parseRecords(emitMarker: ReturnType<typeof vi.fn>) {
-  return emitMarker.mock.calls.map(([marker]) =>
-    JSON.parse(
-      (marker as string)
-        .replace(/[\s\S]*<<<TOOL_CALL_RECORD>>>/, '')
-        .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*/, ''),
-    ),
-  );
+  return emitMarker.mock.calls
+    .map(([marker]) => marker as string)
+    .filter((marker) => marker.includes('<<<TOOL_CALL_RECORD>>>'))
+    .map((marker) =>
+      JSON.parse(
+        marker
+          .replace(/[\s\S]*<<<TOOL_CALL_RECORD>>>/, '')
+          .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*/, ''),
+      ),
+    );
+}
+
+function parseInterims(emitMarker: ReturnType<typeof vi.fn>) {
+  return emitMarker.mock.calls
+    .map(([marker]) => marker as string)
+    .filter((marker) => marker.includes('<<<SEARCH_INTERIM>>>'))
+    .map((marker) =>
+      JSON.parse(
+        marker
+          .replace(/[\s\S]*<<<SEARCH_INTERIM>>>/, '')
+          .replace(/<<<END_SEARCH_INTERIM>>>[\s\S]*/, ''),
+      ),
+    );
 }
 
 describe('ToolRouterEnricher — multi-step search', () => {
@@ -191,6 +207,44 @@ describe('ToolRouterEnricher — multi-step search', () => {
     expect(records).toHaveLength(1);
     expect(records[0].output).toBe('3 sources found');
     expect(records[0].server_label).toBe('Web Search (SearXNG)');
+  });
+
+  it('shows the results so far while it works, and again as a step adds to them', async () => {
+    assessor.assess
+      .mockResolvedValueOnce(
+        verdict({
+          verdict: 'search',
+          queries: ['EEOC guidance'],
+          reason: 'thin',
+        }),
+      )
+      .mockResolvedValueOnce(verdict({ verdict: 'answer' }));
+    tool.searchSearxngEntries
+      .mockResolvedValueOnce({
+        entries: [{ ...entry('a'), snippet: 'x'.repeat(400) }, entry('b')],
+        answers: [],
+      })
+      .mockResolvedValueOnce({ entries: [entry('eeoc')], answers: [] });
+
+    await enricher.execute(context());
+
+    const interims = parseInterims(emitMarker);
+    expect(interims).toHaveLength(2);
+    expect(interims[0]).toMatchObject({
+      kind: 'multiStep',
+      queries: ['US employment equality policy'],
+    });
+    expect(interims[0].entries.map((e: { url: string }) => e.url)).toEqual([
+      'https://example.org/a',
+      'https://example.org/b',
+    ]);
+    // Brief descriptions only: the echo-back schema bounds the payload.
+    expect(interims[0].entries[0].snippet.length).toBeLessThanOrEqual(220);
+    expect(interims[1].entries).toHaveLength(3);
+    expect(interims[1].queries).toEqual([
+      'US employment equality policy',
+      'EEOC guidance',
+    ]);
   });
 
   it('debits the daily search quota once for a multi-step question', async () => {
