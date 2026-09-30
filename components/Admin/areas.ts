@@ -14,6 +14,7 @@ import {
   IconUserShield,
   IconUsersGroup,
   IconVocabulary,
+  IconWorldSearch,
 } from '@tabler/icons-react';
 import { ComponentType } from 'react';
 
@@ -74,6 +75,13 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     icon: IconRoute,
     labelKey: 'admin.area.workflows',
     descriptionKey: 'admin.areaDescription.workflows',
+  },
+  'web-search': {
+    id: 'web-search',
+    href: '/admin/web-search',
+    icon: IconWorldSearch,
+    labelKey: 'admin.area.webSearch',
+    descriptionKey: 'admin.areaDescription.webSearch',
   },
   guides: {
     id: 'guides',
@@ -201,7 +209,7 @@ export const ADMIN_GROUPS: AdminAreaGroupDescriptor[] = [
   {
     id: 'capabilities',
     labelKey: 'admin.group.capabilities',
-    areas: ['agents', 'connectors', 'workflows'],
+    areas: ['agents', 'connectors', 'workflows', 'web-search'],
   },
   {
     id: 'libraries',
