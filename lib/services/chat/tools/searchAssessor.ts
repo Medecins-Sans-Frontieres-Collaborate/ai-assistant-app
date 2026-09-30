@@ -54,6 +54,20 @@ export const ASSESSMENT_VERDICTS = [
 ] as const;
 export type AssessmentVerdict = (typeof ASSESSMENT_VERDICTS)[number];
 
+/**
+ * The KIND of change a follow-up search makes. The loop refuses a strategy
+ * that already dead-ended, so the assessor has to move on rather than
+ * reword (docs/WEB_SEARCH_DEAD_END_PROPOSAL.md §C).
+ */
+export const SEARCH_STRATEGIES = [
+  'phrase',
+  'entity',
+  'venue',
+  'terms',
+  'language',
+] as const;
+export type SearchStrategy = (typeof SEARCH_STRATEGIES)[number];
+
 export const SOURCE_TIERS = [
   'primary',
   'established',
@@ -103,6 +117,12 @@ export interface AssessmentInput {
   maxUseful: number;
   /** Whether to label source quality and write a caveat. */
   assessSources: boolean;
+  /** One line when the last search lacked web coverage; else empty. */
+  searchHealth: string;
+  /** Strategies already used this question, and whether each dead-ended. */
+  strategiesTried: Array<{ strategy: SearchStrategy; deadEnd: boolean }>;
+  /** The user asked to keep looking after an earlier turn's search. */
+  continuation: boolean;
 }
 
 export interface SearchAssessment {
@@ -110,6 +130,8 @@ export interface SearchAssessment {
   /** What is missing (continue) or why the search ends (stop). */
   reason: string;
   queries: string[];
+  /** The kind of change the new queries make (verdict search). */
+  strategy?: SearchStrategy;
   category?: WebSearchCategory;
   recency: 'day' | 'week' | 'month' | 'any';
   readSources: number[];
@@ -179,6 +201,7 @@ const assessmentSchema = (verdicts: AssessmentVerdict[]) => ({
     verdict: { type: 'string', enum: verdicts },
     reason: { type: 'string' },
     queries: { type: 'array', items: { type: 'string' } },
+    strategy: { type: 'string', enum: [...SEARCH_STRATEGIES, 'none'] },
     category: { type: 'string', enum: WEB_SEARCH_CATEGORIES },
     recency: { type: 'string', enum: ['day', 'week', 'month', 'none'] },
     readSources: { type: 'array', items: { type: 'integer' } },
@@ -203,6 +226,7 @@ const assessmentSchema = (verdicts: AssessmentVerdict[]) => ({
     'verdict',
     'reason',
     'queries',
+    'strategy',
     'category',
     'recency',
     'readSources',
@@ -301,10 +325,15 @@ export function parseAssessment(
     }
   }
 
+  const strategy = parsed.strategy;
   return {
     verdict: verdict as AssessmentVerdict,
     reason: oneLine(parsed.reason, REASON_CHARS),
     queries,
+    ...(typeof strategy === 'string' &&
+    (SEARCH_STRATEGIES as readonly string[]).includes(strategy)
+      ? { strategy: strategy as SearchStrategy }
+      : {}),
     category: isWebSearchCategory(parsed.category)
       ? parsed.category
       : undefined,
@@ -329,7 +358,13 @@ export function buildAssessorSystemPrompt(input: AssessmentInput): string {
   const verdictGuide: Record<AssessmentVerdict, string> = {
     answer: `- "answer": the sources contain what is needed to answer well. THIS IS THE DEFAULT. Choose it whenever a competent, cited answer can be written from what is already here, even if more could be found. Broad or open-ended questions ("what is happening in X", "tell me about Y") are answered from one good batch of results — do not go looking for completeness. It is NOT the right verdict when the results are about a NAMESAKE — a different thing that merely shares the name the user used (the blockbuster instead of the documentary, the company instead of the town): sources about the wrong thing answer nothing.`,
     read: `- "read": a source in the list clearly leads to the answer but its snippet is too thin to answer from — open up to ${input.maxReads} sources (by number, in readSources) so their page text can be read. Prefer this over a new search whenever the right page is already listed: the official policy page, the primary document, the product or listing page.`,
-    search: `- "search": a specific, nameable piece of information is still missing AND a materially different query would plausibly find it. Give 1-2 queries in "queries": 3-8 keywords each, no question words, in the language most likely to find the source. Each must differ in substance from every query already run — the name of the primary source the results pointed to, a narrower facet, different terminology, an alternative title, spelling, edition or seller. When the results were captured by a namesake, the new queries must carry the details that tell the two apart: the year, the kind of thing (documentary, book, village), the topic, the place, the people involved. Never repeat or reword an earlier query.`,
+    search: `- "search": a specific, nameable piece of information is still missing AND a materially different query would plausibly find it. Give ONE query in "queries": 3-8 keywords, no question words, in the language most likely to find the source, and name in "strategy" the KIND of change it makes:
+    "phrase" — the exact title or name in quotes plus the disambiguating details ("Winter Soldier" 1972 documentary);
+    "entity" — anchor on a distinguishing entity from the question or the results (the director, publisher, distributor, organisation, author);
+    "venue" — a site or catalogue that indexes the kind of thing sought (site:justwatch.com, site:imdb.com, a library catalogue, a bookseller aggregator, an official register);
+    "terms" — different terminology or a narrower facet of the same subject;
+    "language" — the subject's own language.
+  A strategy that already dead-ended (listed below) is refused by the system: pick a different one. When the results were captured by a namesake, the new query must carry the details that tell the two apart: the year, the kind of thing (documentary, book, village), the topic, the place, the people involved. Never repeat or reword an earlier query.`,
     ask_user: `- "ask_user": the request is ambiguous, or lacks a detail only the user has (which edition, which country, which period, which of several things with the same name), so that further searching would be guesswork. Put ONE short clarifying question in "question", written in the language of the user's question.`,
     give_up: `- "give_up": there is no promising path left — the steps so far indicate the information cannot be found this way.`,
   };
@@ -363,13 +398,30 @@ Rules:
             : ''
         }`
   }
-- reason: one sentence — what is missing (when continuing), or what was tried and why it is a dead end (when giving up). May be empty for "answer" and "ask_user".
+- reason: one sentence — what is missing (when continuing), or what was tried and why it is a dead end (when giving up). May be empty for "answer" and "ask_user".${
+    input.searchHealth
+      ? `\n- SEARCH SERVICE STATE: ${input.searchHealth} Rewording the query cannot help while the web engines are not answering: do not choose "search". Choose "read" if a listed page is genuinely worth opening, otherwise "answer" if the sources happen to suffice, else "give_up" with the reason "the web search engines did not answer".`
+      : ''
+  }${
+    input.strategiesTried.length > 0
+      ? `\n- Strategies already used for this question: ${input.strategiesTried
+          .map(
+            ({ strategy, deadEnd }) =>
+              `${strategy}${deadEnd ? ' (dead end — refused)' : ''}`,
+          )
+          .join(', ')}.`
+      : ''
+  }${
+    input.continuation
+      ? `\n- The user has asked to KEEP LOOKING after an earlier search ended short: the steps listed were taken on earlier turns. Do not repeat them; take a different approach, or "give_up" if none is left.`
+      : ''
+  }
 - In "reason", "caveat" and "question", refer to a source by its SITE NAME, never by its number: the numbers change before the answer is written.
 - exploratory: true ONLY when the task is inherently a hunt for one specific hard-to-find thing — a copy of a rare book for sale, where an obscure film can be bought or streamed, one particular document, record, listing or person — where dead ends are expected. A first search captured by a better-known namesake is a sign of exactly such a hunt. Questions about topics, events, policies or facts are NOT exploratory.
 - category: the kind of source for a new search — "general", "news", "science", "it" or "humanitarian". recency: "day", "week" or "month" when only recent results are wanted, otherwise "none". Both are ignored unless the verdict is "search".
 - useful: the numbers of the sources worth giving to the answering model, best first, at most ${input.maxUseful}. Leave out off-topic results, near-duplicates, and pages that only describe a website rather than the subject.${sourceRules}
 
-Respond with ONLY a JSON object with exactly these keys: "verdict", "reason", "queries" (array of strings), "category", "recency", "readSources" (array of source numbers), "question", "exploratory" (boolean), "useful" (array of source numbers), "sourceQuality" (array of {"n": number, "tier": string}), "caveat". Use empty strings and empty arrays for the keys that do not apply.`;
+Respond with ONLY a JSON object with exactly these keys: "verdict", "reason", "queries" (array of strings), "strategy" (one of ${SEARCH_STRATEGIES.map((s) => `"${s}"`).join(', ')} or "none"), "category", "recency", "readSources" (array of source numbers), "question", "exploratory" (boolean), "useful" (array of source numbers), "sourceQuality" (array of {"n": number, "tier": string}), "caveat". Use empty strings and empty arrays for the keys that do not apply.`;
 }
 
 export function buildAssessorUserMessage(input: AssessmentInput): string {
