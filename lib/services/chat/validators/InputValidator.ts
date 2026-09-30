@@ -140,6 +140,11 @@ const ToolCallRecordSchema = z.object({
   id: z.string().max(200),
   name: z.string().max(200),
   server_label: z.string().max(200).nullable().optional(),
+  // Display JSON, except for one use: a multi-step search's outcome record
+  // carries the search's state here so the next turn can continue it
+  // (lib/utils/shared/searchState.ts). Bounded; an oversize value is
+  // dropped, never rejected.
+  arguments: z.string().max(8000).nullable().optional().catch(undefined),
   status: z
     .enum(['completed', 'failed', 'incomplete', 'in_progress'])
     .optional(),
