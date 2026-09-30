@@ -6,6 +6,7 @@ import { AgentChatService } from './chat/AgentChatService';
 import { FileProcessingService } from './chat/FileProcessingService';
 import { StandardChatService } from './chat/StandardChatService';
 import { ToolRouterService } from './chat/ToolRouterService';
+import { SearchAssessor } from './chat/tools/searchAssessor';
 import { ModelSelector, StreamingService, ToneService } from './shared';
 
 import { env } from '@/config/environment';
@@ -64,6 +65,7 @@ export class ServiceContainer {
   private streamingService!: StreamingService;
   private fileProcessingService!: FileProcessingService;
   private toolRouterService!: ToolRouterService;
+  private searchAssessor!: SearchAssessor;
   private agentChatService!: AgentChatService;
   private aiFoundryAgentHandler!: AIFoundryAgentHandler;
 
@@ -140,6 +142,12 @@ export class ServiceContainer {
 
     // 3. Initialize services that depend on clients
     this.toolRouterService = new ToolRouterService(this.openAIClient);
+    // Singleton on purpose: it remembers which assessor models failed
+    // recently, so a missing deployment is not retried on every search.
+    this.searchAssessor = new SearchAssessor(
+      this.openAIClient,
+      (region) => this.getChatClientsForRegion(region).openAIClient,
+    );
     this.agentChatService = new AgentChatService();
     // AIFoundryAgentHandler is stateless — credentials are passed per-request
     // from the pipeline context (OBO for Foundry agents, DefaultAzureCredential fallback)
@@ -306,6 +314,10 @@ export class ServiceContainer {
 
   public getToolRouterService(): ToolRouterService {
     return this.toolRouterService;
+  }
+
+  public getSearchAssessor(): SearchAssessor {
+    return this.searchAssessor;
   }
 
   public getAgentChatService(): AgentChatService {
