@@ -19,22 +19,65 @@ import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 import { SearchHeadlineEntry, WebSearchCategory } from '@/types/webSearch';
 
 import { mergeNewsEntries } from './newsSearch';
+import {
+  SearxngCapabilities,
+  WEB_ENGINE_CATEGORY,
+  getSearxngCapabilities,
+  webEnginesOf,
+} from './searxngCapabilities';
 
 import { env } from '@/config/environment';
+
+/**
+ * A category the instance serves. The app's own categories are the
+ * router's vocabulary; `web` is the instance-side tag for full-text web
+ * engines (used for narrow follow-up searches when the instance has it).
+ */
+export type SearxngCategory = WebSearchCategory | typeof WEB_ENGINE_CATEGORY;
 
 export interface SearxngSearchOptions {
   resultCount: number;
   freshness: 'day' | 'week' | 'month' | 'any';
   /** Router's read of the topic; defaults to 'general'. */
-  category?: WebSearchCategory;
+  category?: SearxngCategory;
   /** Research-style question: add a second category leg for breadth. */
   deep?: boolean;
+  /**
+   * ISO 639-1 language of the query ("en", "fr"), sent as `language=`;
+   * absent/invalid → `auto`, where SearXNG guesses from the keyword bag
+   * (unreliably — see docs/WEB_SEARCH_DEAD_END_PROPOSAL.md §I).
+   */
+  language?: string;
+}
+
+/**
+ * Who answered a search, and who did not. The multi-step loop reads
+ * `webCoverage` to tell "the web engines did not answer" from "this is hard
+ * to find" — the two look identical in the result list.
+ */
+export interface SearchHealth {
+  /** engine → number of results it contributed. */
+  answered: Record<string, number>;
+  unresponsive: Array<{ engine: string; reason: string }>;
+  /**
+   * At least one engine the instance tags as a full-text web engine
+   * answered. null = the instance's engine tags are unknown (no /config).
+   */
+  webCoverage: boolean | null;
+  /** An unresponsive reason was a CAPTCHA, a 429 or a suspension. */
+  throttled: boolean;
+}
+
+/** A result with the engines that produced it (internal to the server). */
+export interface SearxngEntry extends SearchHeadlineEntry {
+  engines?: string[];
 }
 
 export interface SearxngSearchOutcome {
-  entries: SearchHeadlineEntry[];
+  entries: SearxngEntry[];
   /** Instant answers (e.g. currency conversion) — uncited lead text. */
   answers: string[];
+  health: SearchHealth;
 }
 
 /** Marks a 401 from the proxy so the caller can retry exactly once. */
@@ -70,9 +113,25 @@ const QUERY_CHARS = 300;
 const FAILURE_COOLDOWN_MS = 60_000;
 let unavailableUntil = 0;
 
-/** Test-only: clears the circuit-breaker state. */
+/**
+ * Upstream throttling: when a response reports engines suspended, CAPTCHA'd
+ * or rate-limited, further follow-up searches from this replica would pile
+ * onto the engines still standing — and a suspension is instance-wide, for
+ * every user of every environment. Follow-ups are held for a short while;
+ * first searches still run (the user asked for them).
+ */
+const THROTTLE_HOLD_MS = 60_000;
+let throttledUntil = 0;
+
+/** Whether follow-up searches should be held (see THROTTLE_HOLD_MS). */
+export function isSearxngThrottled(): boolean {
+  return Date.now() < throttledUntil;
+}
+
+/** Test-only: clears the circuit-breaker and throttle state. */
 export function __resetSearxngBreakerForTests(): void {
   unavailableUntil = 0;
+  throttledUntil = 0;
 }
 
 export function isSearxngConfigured(): boolean {
@@ -85,10 +144,13 @@ export function isSearxngConfigured(): boolean {
  * present, so sending it to the science/it/humanitarian engines would
  * silently empty those searches.
  */
-const TIME_RANGE_CATEGORIES: ReadonlySet<WebSearchCategory> = new Set([
+const TIME_RANGE_CATEGORIES: ReadonlySet<SearxngCategory> = new Set([
   'general',
   'news',
+  WEB_ENGINE_CATEGORY,
 ]);
+
+const LANGUAGE_RE = /^[a-z]{2}(-[A-Z]{2})?$/;
 
 /**
  * Category legs for one question, in interleave-priority order. Each leg is
@@ -98,7 +160,7 @@ const TIME_RANGE_CATEGORIES: ReadonlySet<WebSearchCategory> = new Set([
  */
 export function planSearxngCategories(
   options: Pick<SearxngSearchOptions, 'category' | 'deep' | 'freshness'>,
-): WebSearchCategory[] {
+): SearxngCategory[] {
   const category = options.category ?? 'general';
   const recent = options.freshness === 'day' || options.freshness === 'week';
   switch (category) {
@@ -114,6 +176,9 @@ export function planSearxngCategories(
       return options.deep
         ? ['humanitarian', 'news', 'general']
         : ['humanitarian', 'news'];
+    case WEB_ENGINE_CATEGORY:
+      // Narrow by design (follow-up searches): the web engines alone.
+      return [WEB_ENGINE_CATEGORY];
     default:
       // Recency-driven lookups lead with the news engines.
       if (recent) return ['news', 'general'];
@@ -125,8 +190,9 @@ export function planSearxngCategories(
 export function buildSearxngUrl(
   baseUrl: string,
   query: string,
-  category: WebSearchCategory,
+  category: SearxngCategory,
   freshness: SearxngSearchOptions['freshness'],
+  language?: string,
 ): string {
   // Relative to the configured base so a path-prefixed deployment
   // (https://host/searxng/) keeps its prefix.
@@ -137,8 +203,12 @@ export function buildSearxngUrl(
   url.searchParams.set('q', query);
   url.searchParams.set('format', 'json');
   url.searchParams.set('categories', category);
-  // The instance detects the language from the query text.
-  url.searchParams.set('language', 'auto');
+  // The router names the query's language; only when it cannot does the
+  // instance guess from the query text.
+  url.searchParams.set(
+    'language',
+    language && LANGUAGE_RE.test(language) ? language : 'auto',
+  );
   if (freshness !== 'any' && TIME_RANGE_CATEGORIES.has(category)) {
     url.searchParams.set('time_range', freshness);
   }
@@ -178,7 +248,16 @@ function clip(text: string, max: number): string {
     : collapsed;
 }
 
-function toEntry(raw: Record<string, unknown>): SearchHeadlineEntry | null {
+/** Engine names a result carries (`engines` list, else the single `engine`). */
+function enginesOf(raw: Record<string, unknown>): string[] {
+  const list = Array.isArray(raw.engines)
+    ? raw.engines.filter((e): e is string => typeof e === 'string')
+    : [];
+  if (list.length > 0) return list;
+  return typeof raw.engine === 'string' && raw.engine ? [raw.engine] : [];
+}
+
+function toEntry(raw: Record<string, unknown>): SearxngEntry | null {
   const url = typeof raw.url === 'string' ? raw.url : '';
   const title =
     typeof raw.title === 'string' ? clip(raw.title, TITLE_CHARS) : '';
@@ -186,19 +265,19 @@ function toEntry(raw: Record<string, unknown>): SearchHeadlineEntry | null {
   const domain = hostnameOf(url);
   const snippet =
     typeof raw.content === 'string' ? clip(raw.content, SNIPPET_CHARS) : '';
+  const engines = enginesOf(raw);
   return {
     title,
     url,
     date: toIsoDate(raw.publishedDate),
     ...(domain ? { sourceName: domain, sourceUrl: `https://${domain}` } : {}),
     ...(snippet && snippet !== title ? { snippet } : {}),
+    ...(engines.length > 0 ? { engines } : {}),
   };
 }
 
 /** Infoboxes (Wikipedia/Wikidata) become a leading, citable entry. */
-function infoboxEntry(
-  raw: Record<string, unknown>,
-): SearchHeadlineEntry | null {
+function infoboxEntry(raw: Record<string, unknown>): SearxngEntry | null {
   const urls = Array.isArray(raw.urls) ? raw.urls : [];
   const firstUrl = urls.find(
     (u): u is { url: string } =>
@@ -210,6 +289,7 @@ function infoboxEntry(
     title: raw.infobox,
     url: typeof raw.id === 'string' ? raw.id : firstUrl,
     content: raw.content,
+    engine: raw.engine,
   });
 }
 
@@ -320,9 +400,7 @@ const MIN_ARTICLES_TO_DROP_HUBS = 3;
  * Current-events searches want stories, not front pages: articles lead, and
  * hub pages are dropped once enough stories exist.
  */
-export function preferArticles(
-  entries: SearchHeadlineEntry[],
-): SearchHeadlineEntry[] {
+export function preferArticles(entries: SearxngEntry[]): SearxngEntry[] {
   const articles = entries.filter((entry) => !isLikelyHubPage(entry.url));
   if (articles.length >= MIN_ARTICLES_TO_DROP_HUBS) return articles;
   return [
@@ -335,9 +413,10 @@ export function preferArticles(
 function isCurrentEventsSearch(
   options: Pick<SearxngSearchOptions, 'category' | 'freshness'>,
 ): boolean {
+  const category = options.category ?? 'general';
   return (
-    options.category === 'news' ||
-    ((options.category ?? 'general') === 'general' &&
+    category === 'news' ||
+    ((category === 'general' || category === WEB_ENGINE_CATEGORY) &&
       (options.freshness === 'day' || options.freshness === 'week'))
   );
 }
@@ -345,15 +424,15 @@ function isCurrentEventsSearch(
 export function parseSearxngResponse(
   body: unknown,
   resultCount: number,
-): SearxngSearchOutcome {
+): Pick<SearxngSearchOutcome, 'entries' | 'answers'> {
   const parsed = (body ?? {}) as {
     results?: unknown;
     infoboxes?: unknown;
     answers?: unknown;
   };
-  const entries: SearchHeadlineEntry[] = [];
+  const entries: SearxngEntry[] = [];
   const seenUrls = new Set<string>();
-  const push = (entry: SearchHeadlineEntry | null) => {
+  const push = (entry: SearxngEntry | null) => {
     if (!entry || seenUrls.has(entry.url) || entries.length >= resultCount) {
       return;
     }
@@ -419,14 +498,19 @@ async function requestOnce(url: string): Promise<unknown> {
 /** One category leg: a single request, retried once on a rotation-gap 401. */
 async function searchLeg(
   query: string,
-  category: WebSearchCategory,
-  options: Pick<SearxngSearchOptions, 'resultCount' | 'freshness'>,
-): Promise<SearxngSearchOutcome & { unresponsive: string[] }> {
+  category: SearxngCategory,
+  options: Pick<SearxngSearchOptions, 'resultCount' | 'freshness' | 'language'>,
+): Promise<
+  Pick<SearxngSearchOutcome, 'entries' | 'answers'> & {
+    unresponsive: Array<{ engine: string; reason: string }>;
+  }
+> {
   const url = buildSearxngUrl(
     env.SEARXNG_URL ?? '',
     query,
     category,
     options.freshness,
+    options.language,
   );
   let body: unknown;
   try {
@@ -447,26 +531,85 @@ async function searchLeg(
 }
 
 /** `unresponsive_engines` is a list of [engine, reason] pairs. */
-function unresponsiveEngines(body: unknown): string[] {
+export function unresponsiveEngines(
+  body: unknown,
+): Array<{ engine: string; reason: string }> {
   const raw = (body as { unresponsive_engines?: unknown } | null)
     ?.unresponsive_engines;
   if (!Array.isArray(raw)) return [];
   return raw
     .map((item) =>
-      Array.isArray(item) ? item.slice(0, 2).join(': ') : String(item),
+      Array.isArray(item)
+        ? { engine: String(item[0] ?? ''), reason: String(item[1] ?? '') }
+        : { engine: String(item), reason: '' },
     )
+    .filter((item) => item.engine)
     .slice(0, 20);
+}
+
+/** CAPTCHA, 429 or a suspension: the engine is refusing this egress IP. */
+const THROTTLE_REASON_RE =
+  /captcha|too many|429|access denied|suspend|rate ?limit|blocked/i;
+
+/**
+ * Who answered and who did not, for one search. Coverage needs the
+ * instance's engine tags (searxngCapabilities); without them it is null.
+ */
+export function assessSearchHealth(
+  entries: SearxngEntry[],
+  unresponsive: Array<{ engine: string; reason: string }>,
+  capabilities: SearxngCapabilities | null,
+): SearchHealth {
+  const answered: Record<string, number> = {};
+  for (const entry of entries) {
+    for (const engine of entry.engines ?? []) {
+      answered[engine] = (answered[engine] ?? 0) + 1;
+    }
+  }
+  const webEngines = webEnginesOf(capabilities);
+  const webCoverage =
+    webEngines.size === 0
+      ? null
+      : Object.keys(answered).some((engine) => webEngines.has(engine));
+  return {
+    answered,
+    unresponsive,
+    webCoverage,
+    throttled: unresponsive.some((item) =>
+      THROTTLE_REASON_RE.test(item.reason),
+    ),
+  };
+}
+
+/** One line for the logs and the tool record. */
+export function describeSearchHealth(health: SearchHealth): string {
+  const answered = Object.entries(health.answered)
+    .sort((a, b) => b[1] - a[1])
+    .map(([engine, count]) => `${engine} ×${count}`)
+    .join(', ');
+  const down = health.unresponsive
+    .map((item) =>
+      item.reason ? `${item.engine} (${item.reason})` : item.engine,
+    )
+    .join(', ');
+  return `engines: ${answered || 'none'}${down ? `; unresponsive: ${down}` : ''}${
+    health.webCoverage === false ? '; NO web coverage' : ''
+  }`;
 }
 
 interface Leg {
   query: string;
-  category: WebSearchCategory;
+  category: SearxngCategory;
 }
 
 async function runLegs(
   legs: Leg[],
-  options: Pick<SearxngSearchOptions, 'resultCount' | 'freshness'> & {
+  options: Pick<
+    SearxngSearchOptions,
+    'resultCount' | 'freshness' | 'language'
+  > & {
     articlesOnly: boolean;
+    capabilities: SearxngCapabilities | null;
   },
 ): Promise<SearxngSearchOutcome> {
   // Per-leg share plus buffer so cross-leg dedupe still fills the cap.
@@ -484,18 +627,23 @@ async function runLegs(
       searchLeg(leg.query, leg.category, {
         resultCount: perLegCount,
         freshness: options.freshness,
+        language: options.language,
       }),
     ),
   );
 
-  const lists: SearchHeadlineEntry[][] = [];
+  const lists: SearxngEntry[][] = [];
   const answers: string[] = [];
   const failures: string[] = [];
-  const unresponsive = new Set<string>();
+  const unresponsive = new Map<string, string>();
   settled.forEach((result, idx) => {
     if (result.status === 'fulfilled') {
       if (result.value.entries.length > 0) lists.push(result.value.entries);
-      result.value.unresponsive.forEach((engine) => unresponsive.add(engine));
+      result.value.unresponsive.forEach(({ engine, reason }) => {
+        if (!unresponsive.has(engine) || reason) {
+          unresponsive.set(engine, reason);
+        }
+      });
       for (const answer of result.value.answers) {
         if (!answers.includes(answer)) answers.push(answer);
       }
@@ -511,14 +659,6 @@ async function runLegs(
     }
   });
 
-  // One line per search, not per leg — the signal that upstream engines
-  // are throttling or CAPTCHA-ing the instance's egress IP.
-  if (unresponsive.size > 0) {
-    console.warn(
-      `[searxngSearch] Unresponsive engines: ${sanitizeForLog([...unresponsive].join(', ')).slice(0, 400)}`,
-    );
-  }
-
   if (failures.length === legs.length) {
     unavailableUntil = Date.now() + FAILURE_COOLDOWN_MS;
     throw new Error(`SearXNG search failed — ${failures.join('; ')}`);
@@ -530,7 +670,20 @@ async function runLegs(
         options.resultCount,
       )
     : mergeNewsEntries(lists, options.resultCount);
-  return { entries, answers: answers.slice(0, MAX_ANSWERS) };
+
+  const health = assessSearchHealth(
+    entries,
+    [...unresponsive].map(([engine, reason]) => ({ engine, reason })),
+    options.capabilities,
+  );
+  // One line per search, not per leg — the signal that upstream engines
+  // are throttling or CAPTCHA-ing the instance's egress IP.
+  console.log(
+    `[searxngSearch] ${sanitizeForLog(describeSearchHealth(health)).slice(0, 500)}`,
+  );
+  if (health.throttled) throttledUntil = Date.now() + THROTTLE_HOLD_MS;
+
+  return { entries, answers: answers.slice(0, MAX_ANSWERS), health };
 }
 
 /**
@@ -558,9 +711,30 @@ export async function searchSearxng(
     throw new Error('SearXNG in failure cooldown (skipping)');
   }
   const capped = normalizeQueries(queries);
-  if (capped.length === 0) return { entries: [], answers: [] };
+  if (capped.length === 0) {
+    return {
+      entries: [],
+      answers: [],
+      health: {
+        answered: {},
+        unresponsive: [],
+        webCoverage: null,
+        throttled: false,
+      },
+    };
+  }
 
-  const categories = planSearxngCategories(options);
+  // Never blocks a search for long (short timeout, cached, failure memo):
+  // without it, coverage is simply unknown.
+  const capabilities = await getSearxngCapabilities();
+  // A category the instance does not (yet) serve degrades to the general
+  // web — the app and the instance deploy independently.
+  const requested = options.category ?? 'general';
+  const effective =
+    capabilities && !capabilities.categories.has(requested)
+      ? { ...options, category: 'general' as const }
+      : options;
+  const categories = planSearxngCategories(effective);
   // Every query runs on the primary category; the breadth categories
   // (deep / recency / humanitarian pairing) ride on the primary query only,
   // so a 5-query fan-out costs 6 requests, not 10-15.
@@ -569,12 +743,16 @@ export async function searchSearxng(
     ...categories.slice(1).map((category) => ({ query: capped[0], category })),
   ].slice(0, MAX_LEGS);
 
-  const articlesOnly = isCurrentEventsSearch(options);
+  const articlesOnly = isCurrentEventsSearch(effective);
   console.log(
-    `[searxngSearch] Plan: ${sanitizeForLog(legs.map((leg) => `${leg.category}:"${leg.query}"`).join(', '))} (freshness: ${options.freshness}, articlesOnly: ${articlesOnly})`,
+    `[searxngSearch] Plan: ${sanitizeForLog(legs.map((leg) => `${leg.category}:"${leg.query}"`).join(', '))} (freshness: ${options.freshness}, language: ${options.language ?? 'auto'}, articlesOnly: ${articlesOnly})`,
   );
 
-  const outcome = await runLegs(legs, { ...options, articlesOnly });
+  const outcome = await runLegs(legs, {
+    ...options,
+    articlesOnly,
+    capabilities,
+  });
   const windowed =
     options.freshness !== 'any' &&
     legs.some((leg) => TIME_RANGE_CATEGORIES.has(leg.category));
@@ -582,7 +760,12 @@ export async function searchSearxng(
     console.log(
       `[searxngSearch] Nothing within the "${options.freshness}" window — retrying without it`,
     );
-    return runLegs(legs, { ...options, freshness: 'any', articlesOnly });
+    return runLegs(legs, {
+      ...options,
+      freshness: 'any',
+      articlesOnly,
+      capabilities,
+    });
   }
   // A specialised category (science/it/humanitarian) has few engines; when
   // they find nothing, the general web usually still can.
@@ -592,7 +775,7 @@ export async function searchSearxng(
     );
     return runLegs(
       capped.map((query) => ({ query, category: 'general' as const })),
-      { ...options, articlesOnly: false },
+      { ...options, articlesOnly: false, capabilities },
     );
   }
   return outcome;
