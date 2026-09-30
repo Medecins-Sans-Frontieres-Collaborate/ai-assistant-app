@@ -80,6 +80,7 @@ import {
   describeSearchHealth,
   isSearxngConfigured,
   isSearxngThrottled,
+  searchHealthReport,
 } from '../tools/searxngSearch';
 
 import { env } from '@/config/environment';
@@ -1332,11 +1333,41 @@ export class ToolRouterEnricher extends BasePipelineStage {
     console.log(
       `[ToolRouterEnricher] Multi-step search ended "${result.outcome}"${result.stopReason ? ` (${result.stopReason})` : ''}: ${result.stepsUsed} step(s), ${result.searchCount} search(es), ${result.pagesRead} page(s) read, ${result.entries.length} source(s) kept, ${result.usefulCount} useful${result.webCoverageLost ? ', web coverage lost' : ''}`,
     );
+    // Lost web coverage or a throttling signal at any point: an incident
+    // record with enough to act on (engines, reasons, per-leg timings), in
+    // Azure Monitor next to the other search events. Whatever the outcome.
+    if (result.webCoverageLost || result.lastHealth?.throttled) {
+      ToolRouterEnricher.logDegradedSearch(
+        context,
+        result,
+        params,
+        run.language,
+      );
+    }
+
+    // The web engines did not answer: the keyless news feeds (Google News
+    // + GDELT) are a second opinion, exactly as when the instance is down.
+    // Headlines only, and news only — so they are presented as what they
+    // are, and skipped for science/IT questions (searxngFallback).
+    if (result.outcome === 'degraded') {
+      const feeds = await this.feedFallbackForDegraded(context, result, params);
+      if (feeds) {
+        ToolRouterEnricher.logMultiStepSearch(
+          context,
+          result,
+          question,
+          Boolean(continuation),
+          'feeds',
+        );
+        return feeds;
+      }
+    }
     ToolRouterEnricher.logMultiStepSearch(
       context,
       result,
       question,
       Boolean(continuation),
+      result.outcome === 'degraded' ? 'none' : undefined,
     );
 
     if (result.entries.length === 0) {
@@ -1480,11 +1511,126 @@ export class ToolRouterEnricher extends BasePipelineStage {
    * the number this feature is meant to drive down is searches that end
    * short with nothing useful. Best effort; never awaited.
    */
+  /**
+   * The feeds as a fallback for a degraded search. Returns the merged
+   * result — the note, any SearXNG sources the assessor did judge useful,
+   * then the headlines — or null when the feeds had nothing either.
+   */
+  private async feedFallbackForDegraded(
+    context: ChatContext,
+    result: MultiStepResult,
+    params: WebSearchToolParams,
+  ): Promise<ToolResult | null> {
+    const startTime = Date.now();
+    let feeds: ToolResult;
+    try {
+      feeds = await this.webSearchTool.searxngFallback(params);
+    } catch (error) {
+      console.warn(
+        '[ToolRouterEnricher] Feed fallback for a degraded search failed:',
+        error instanceof Error ? error.message : error,
+      );
+      return null;
+    }
+    const feedCitations = feeds.citations ?? [];
+    await this.emitSearchRecord(
+      context,
+      params.searchQueries?.join(' | ') ?? params.searchQuery,
+      ToolRouterEnricher.FEED_PROVIDER_LABELS.news!,
+      `${feedCitations.length} source${feedCitations.length === 1 ? '' : 's'} from the news feeds (web engines did not answer)`,
+      null,
+      Date.now() - startTime,
+    );
+    if (feedCitations.length === 0) return null;
+
+    // SearXNG sources the assessor did rank (reference engines can still
+    // answer a "what is X" question) come first; the feeds' digest follows
+    // with continued numbering. Numbering is local — the caller offsets.
+    const kept =
+      result.usefulCount > 0
+        ? buildMultiStepDigest(result, { omitOutcomeNote: true })
+        : { text: '', citations: [] };
+    const offset = kept.citations.length;
+    const feedText = feeds.text.replace(
+      /^\[(\d+)\]/gm,
+      (_match, n) => `[${Number(n) + offset}]`,
+    );
+    const note =
+      `Search note: the web search engines behind the search service did not answer for this request` +
+      `${result.lastHealth ? ` (${describeSearchHealth(result.lastHealth)})` : ''}, ` +
+      `so the news feeds (Google News and GDELT) were searched instead. They index NEWS ARTICLES only, as headlines and short snippets — ` +
+      `they cannot show product listings, official documents or reference pages, so their results may be beside the point. ` +
+      `Say plainly that the web search service was degraded for this request and that these results come from news feeds; ` +
+      `answer only what they genuinely support; never present a guess as a finding; and say that searching again in a few minutes usually works.`;
+    return {
+      text: [note, kept.text, feedText].filter(Boolean).join('\n\n'),
+      citations: [
+        ...kept.citations,
+        ...feedCitations.map((citation, idx) => ({
+          ...citation,
+          number: offset + idx + 1,
+        })),
+      ],
+      metadata: {
+        recordsEmitted: true,
+        multiStepOutcome: result.outcome,
+        searxngFallback: true,
+        textBudgetChars: Math.min(
+          30000,
+          6000 + (offset + feedCitations.length) * 800,
+        ),
+      },
+    };
+  }
+
+  /**
+   * An incident record for a search whose web engines did not answer or
+   * refused the egress IP: the per-leg diagnostic (queries, categories,
+   * timings, engines and their reasons, replica) in the SearchError table,
+   * where the other search failures live. Best effort; never awaited.
+   */
+  private static logDegradedSearch(
+    context: ChatContext,
+    result: MultiStepResult,
+    params: WebSearchToolParams,
+    language?: string,
+  ): void {
+    const health = result.lastHealth;
+    if (!health) return;
+    try {
+      const report = searchHealthReport(health, {
+        queries: result.queries,
+        categories: [...new Set(health.legs.map((leg) => leg.category))],
+        freshness: params.freshness ?? 'any',
+        language,
+        resultCount: result.entries.length,
+      });
+      console.warn(
+        `[ToolRouterEnricher] ${health.webCoverage === false ? 'WEB_SEARCH_DEGRADED' : 'WEB_SEARCH_THROTTLED'} outcome=${result.outcome} ${JSON.stringify(report)}`,
+      );
+      void getAzureMonitorLogger().logSearchError({
+        user: context.user,
+        query: result.queries.join(' | '),
+        indexName: 'searxng',
+        errorCode:
+          health.webCoverage === false
+            ? 'WEB_SEARCH_DEGRADED'
+            : 'WEB_SEARCH_THROTTLED',
+        errorMessage: JSON.stringify({ outcome: result.outcome, ...report }),
+        botId: context.botId,
+        telemetry: context.telemetry,
+      });
+    } catch {
+      // Telemetry must never affect the turn.
+    }
+  }
+
   private static logMultiStepSearch(
     context: ChatContext,
     result: MultiStepResult,
     question: string,
     continuation: boolean,
+    fallback?: 'feeds' | 'none',
   ): void {
     try {
       void getAzureMonitorLogger().logCustomMetric({
@@ -1509,6 +1655,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
                 : 'ok',
           continuation: String(continuation),
           questionChars: String(question.length),
+          ...(fallback ? { fallback } : {}),
         },
       });
     } catch {
