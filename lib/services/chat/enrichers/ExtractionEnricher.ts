@@ -4,7 +4,6 @@ import { recipesToResponseFormat } from '@/lib/utils/server/extraction/recipeToJ
 import { Message, TextMessageContent } from '@/types/chat';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
-import { AgentChatService } from '../AgentChatService';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 import { WebSearchTool } from '../tools/WebSearchTool';
@@ -44,9 +43,9 @@ export class ExtractionEnricher extends BasePipelineStage {
 
   private webSearchTool: WebSearchTool;
 
-  constructor(agentChatService: AgentChatService) {
+  constructor() {
     super();
-    this.webSearchTool = new WebSearchTool(agentChatService);
+    this.webSearchTool = new WebSearchTool();
   }
 
   shouldRun(context: ChatContext): boolean {
@@ -76,13 +75,8 @@ export class ExtractionEnricher extends BasePipelineStage {
       );
 
       try {
-        const searchModel = workingContext.model.agentId
-          ? workingContext.model
-          : (OpenAIModels[OpenAIModelID.GPT_4_1] ?? workingContext.model);
-
         const searchResult = await this.webSearchTool.execute({
           searchQuery: url,
-          model: searchModel,
           user: workingContext.user,
         });
 
