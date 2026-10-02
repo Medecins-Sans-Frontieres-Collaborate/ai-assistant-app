@@ -772,8 +772,7 @@ describe('validateChatRequest - webSearchOptions.provider', () => {
       'news',
       'google-news',
       'gdelt',
-      'bing-agent',
-      'bing-responses',
+      'bing',
       'combined',
     ]) {
       const result = validator.validateChatRequest({
@@ -781,6 +780,17 @@ describe('validateChatRequest - webSearchOptions.provider', () => {
         webSearchOptions: { resultCount: 8, freshness: 'any', provider },
       });
       expect(result.webSearchOptions?.provider).toBe(provider);
+    }
+  });
+
+  it('reads the two earlier Bing names from older clients as bing', () => {
+    const validator = new InputValidator();
+    for (const provider of ['bing-agent', 'bing-responses']) {
+      const result = validator.validateChatRequest({
+        ...base,
+        webSearchOptions: { resultCount: 8, freshness: 'any', provider },
+      });
+      expect(result.webSearchOptions?.provider).toBe('bing');
     }
   });
 
