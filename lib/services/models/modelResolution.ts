@@ -159,6 +159,10 @@ export function applyTagOverlay(
       console.warn(`applyTagOverlay: ignoring unknown ui-tier "${tier}"`);
     }
   }
+  // Retirement successor override. Only the id is recorded here; whether it
+  // is usable (served, selectable, not itself retiring) is decided where the
+  // served list is known — lib/utils/shared/modelRetirement.ts.
+  if (tags['ui-successor']?.trim()) m.successorId = tags['ui-successor'].trim();
   // There is deliberately NO ui-hosting overlay: `hosting` is a compliance
   // disclosure ("inference runs outside MSF's Azure environment"), and an ARM
   // tag must not be able to relabel how data is handled. Changing it requires
@@ -190,6 +194,24 @@ export function synthesizeUnknownModel(d: DeployedModel): OpenAIModel {
     supportsVision: false,
   };
   return applyTagOverlay(base, d.tags);
+}
+
+/**
+ * Stamps the discovery facts retirement handling runs on: when Azure stops
+ * serving the deployed model version, and — only when it differs from the
+ * deployment name — which model the deployment actually runs.
+ */
+function withRetirementFacts(
+  model: OpenAIModel,
+  d: DeployedModel,
+): OpenAIModel {
+  return {
+    ...model,
+    ...(d.retiresAt ? { retiresAt: d.retiresAt } : {}),
+    ...(d.modelName !== d.deploymentName
+      ? { deploymentModelName: d.modelName }
+      : {}),
+  };
 }
 
 export interface MergeOptions {
@@ -240,9 +262,9 @@ export function mergeDiscoveryWithMetadata(
     if (!isDeploymentVisibleInRing(d.tags, opts.ring)) continue;
     const meta = metadataById[d.deploymentName];
     if (meta) {
-      out.push(applyTagOverlay({ ...meta }, d.tags));
+      out.push(withRetirementFacts(applyTagOverlay({ ...meta }, d.tags), d));
     } else if (opts.showUnknown) {
-      out.push(synthesizeUnknownModel(d));
+      out.push(withRetirementFacts(synthesizeUnknownModel(d), d));
     }
   }
   return out;
