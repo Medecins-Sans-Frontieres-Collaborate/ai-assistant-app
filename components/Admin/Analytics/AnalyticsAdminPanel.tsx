@@ -5,8 +5,6 @@ import { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { useAnalyticsEnabled } from '@/client/hooks/analytics/useAnalytics';
-
 import { AdminTabs } from '@/components/Admin/AdminTabs';
 import { FieldPolicyTab } from '@/components/Admin/Analytics/FieldPolicyTab';
 import { FoldersTab } from '@/components/Admin/Analytics/FoldersTab';
@@ -14,7 +12,6 @@ import { HealthTab } from '@/components/Admin/Analytics/HealthTab';
 import {
   ADMIN_BANNER_WARN,
   ADMIN_BTN_SECONDARY,
-  ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
 
 import { Link } from '@/lib/navigation';
@@ -36,12 +33,7 @@ const ID_PREFIX = 'analytics-admin';
  */
 export const AnalyticsAdminPanel: FC = () => {
   const t = useTranslations('analyticsAdmin');
-  const enabled = useAnalyticsEnabled();
   const [tab, setTab] = useState<TabId>('health');
-
-  if (!enabled) {
-    return <p className={ADMIN_MUTED}>{t('notEnabled')}</p>;
-  }
 
   return (
     <div className="space-y-6">

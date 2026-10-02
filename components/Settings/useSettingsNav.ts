@@ -102,7 +102,6 @@ export function useSettingsNav(): SettingsNavItem[] {
   const { isAdmin: hasAnyAdminArea } = useAdminAreas();
   // Analytics appears for anyone a folder audience names (and for its
   // admins). Visibility only — the API decides per request what they see.
-  // Fail-closed behind the `analytics` flag, inside the hook.
   const { hasAccess: hasAnalyticsAccess } = useAnalyticsAccess();
 
   const section = (

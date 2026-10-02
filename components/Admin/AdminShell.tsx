@@ -11,7 +11,6 @@ import { FC, ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSelectedLayoutSegments } from 'next/navigation';
 
-import { useAnalyticsEnabled } from '@/client/hooks/analytics/useAnalytics';
 import { useUI } from '@/client/hooks/ui/useUI';
 
 import { AdminAreaId } from '@/lib/services/admin/adminAreas';
@@ -50,14 +49,7 @@ export const AdminShell: FC<AdminShellProps> = ({ areas, children }) => {
   // flag decides here whether the rail shows it. Hiding the entry is not the
   // security control — the limits page and API keep their global-admin gates.
   const { usageLimits } = useFlags();
-  // Same arrangement for analytics: fail-closed `analytics` flag (with the
-  // localhost hatch), applied to the rail only.
-  const analyticsEnabled = useAnalyticsEnabled();
-  const visibleAreas = areas.filter(
-    (area) =>
-      (area !== 'limits' || usageLimits) &&
-      (area !== 'analytics' || analyticsEnabled),
-  );
+  const visibleAreas = areas.filter((area) => area !== 'limits' || usageLimits);
   // Admin renders without the chat sidebar (ChatShell skips it on /admin),
   // so the gear below is the only way to reach Settings from here — the
   // modal host stays mounted in ChatShell and opens over the admin page.

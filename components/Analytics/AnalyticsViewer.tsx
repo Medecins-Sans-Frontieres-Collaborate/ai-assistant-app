@@ -15,7 +15,6 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import {
   analyticsDownloadUrl,
-  useAnalyticsEnabled,
   useAnalyticsFiles,
   useAnalyticsTree,
 } from '@/client/hooks/analytics/useAnalytics';
@@ -60,8 +59,7 @@ import { Link } from '@/lib/navigation';
  */
 export const AnalyticsViewer: FC = () => {
   const t = useTranslations('analytics');
-  const enabled = useAnalyticsEnabled();
-  const tree = useAnalyticsTree(enabled);
+  const tree = useAnalyticsTree();
   const [selected, setSelected] = useState<string | null>(null);
 
   const folders = useMemo(() => tree.data?.folders ?? [], [tree.data]);
@@ -107,9 +105,7 @@ export const AnalyticsViewer: FC = () => {
         )}
       </header>
 
-      {!enabled ? (
-        <CenteredNote title={t('notEnabled')} />
-      ) : tree.isLoading ? (
+      {tree.isLoading ? (
         <CenteredNote title={t('loading')} />
       ) : tree.isError ? (
         <div className="mx-auto mt-10 max-w-md px-4">

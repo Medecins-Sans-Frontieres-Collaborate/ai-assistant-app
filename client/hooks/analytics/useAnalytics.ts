@@ -1,7 +1,6 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 
@@ -15,24 +14,6 @@ import {
   AnalyticsTrendResponse,
 } from '@/lib/services/analytics/dto';
 
-/**
- * The `analytics` rollout flag. Fail-closed with the standard localhost
- * hatch: the surfaces stay hidden until LaunchDarkly explicitly serves true.
- *
- * UI-gating only. LaunchDarkly is client-side in this app, so the control
- * that actually protects the data is the server's deny-by-default folder
- * access — with the flag off the routes still answer, and still answer only
- * what the caller may see.
- */
-export function useAnalyticsEnabled(): boolean {
-  const { analytics } = useFlags();
-  const isLocalhost =
-    typeof window !== 'undefined' &&
-    (window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1');
-  return analytics === true || isLocalhost;
-}
-
 async function getJson<T>(url: string, what: string): Promise<T> {
   const response = await fetch(url);
   if (!response.ok) {
@@ -41,9 +22,14 @@ async function getJson<T>(url: string, what: string): Promise<T> {
   return unwrapApiData<T>(await response.json());
 }
 
-/** Whether the navigation should offer /analytics to this person. */
+/**
+ * Whether the navigation should offer /analytics to this person.
+ *
+ * There is no rollout flag: the server's deny-by-default folder access is
+ * the gate. Until an admin names someone in a folder audience this answers
+ * false for them, so the surfaces stay hidden without a client-side switch.
+ */
 export function useAnalyticsAccess() {
-  const enabled = useAnalyticsEnabled();
   const { data } = useQuery<AnalyticsAccessResponse | null>({
     queryKey: ['analytics-access'],
     queryFn: async () => {
@@ -55,21 +41,19 @@ export function useAnalyticsAccess() {
       }
       return unwrapApiData<AnalyticsAccessResponse>(await response.json());
     },
-    enabled,
     staleTime: 5 * 60 * 1000,
     retry: 1,
     refetchOnWindowFocus: false,
   });
   return {
-    hasAccess: enabled && (data?.hasAccess ?? false),
-    canAdmin: enabled && (data?.canAdmin ?? false),
+    hasAccess: data?.hasAccess ?? false,
+    canAdmin: data?.canAdmin ?? false,
   };
 }
 
-export function useAnalyticsTree(enabled = true) {
+export function useAnalyticsTree() {
   return useQuery<AnalyticsTreeResponse>({
     queryKey: ['analytics-tree'],
-    enabled,
     queryFn: () =>
       getJson<AnalyticsTreeResponse>(
         '/api/analytics/tree',
