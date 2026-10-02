@@ -60,6 +60,11 @@ const MAX_SCOPED_CACHE_ENTRIES = 500;
 // ahead instead of as failing chats. Matches the user-facing notice window
 // (RETIREMENT_NOTICE_DAYS in lib/utils/shared/modelRetirement.ts).
 const RETIREMENT_WARNING_DAYS = 30;
+
+// The catalog read is an enrichment that runs alongside the deployment list
+// (and shares its in-flight promise), so it gets a hard deadline of its own:
+// a slow `/models` endpoint must cost retirement dates, never the model list.
+const CATALOG_TIMEOUT_MS = 8_000;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 // ARM is the only host we will ever send the Bearer token to. nextLink is
@@ -333,6 +338,7 @@ export class ModelDiscoveryService {
         armToken,
         `https://management.azure.com${accountPath}/models?api-version=${ARM_API_VERSION}`,
         'model catalog',
+        AbortSignal.timeout(CATALOG_TIMEOUT_MS),
       );
       for (const entry of catalog) {
         const fields = entry.model ?? entry;
@@ -402,6 +408,7 @@ export class ModelDiscoveryService {
     armToken: string,
     firstUrl: string,
     what: string,
+    signal?: AbortSignal,
   ): Promise<T[]> {
     const all: T[] = [];
     let url: string | undefined = firstUrl;
@@ -412,6 +419,7 @@ export class ModelDiscoveryService {
           Authorization: `Bearer ${armToken}`,
           'Content-Type': 'application/json',
         },
+        ...(signal ? { signal } : {}),
       });
 
       if (!response.ok) {
