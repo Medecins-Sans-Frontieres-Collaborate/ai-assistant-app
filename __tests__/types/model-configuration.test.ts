@@ -64,23 +64,14 @@ describe('Model Configuration', () => {
   });
 
   describe('Agent Configuration', () => {
-    it('GPT-4.1 should have correct agent name with Bing grounding', () => {
-      expect(OpenAIModels[OpenAIModelID.GPT_4_1].agentId).toBe('gpt-41');
-      expect(OpenAIModels[OpenAIModelID.GPT_4_1].isAgent).toBe(true);
-    });
-
-    it('GPT-5 and GPT-5 Chat should have agent capabilities', () => {
-      expect(OpenAIModels[OpenAIModelID.GPT_5_2].agentId).toBe('gpt-52');
-      expect(OpenAIModels[OpenAIModelID.GPT_5_2].isAgent).toBe(true);
-      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].agentId).toBe(
-        'gpt-52-chat',
-      );
-      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].isAgent).toBe(true);
-    });
-
-    it('non-OpenAI models should not have agent capabilities', () => {
-      expect(OpenAIModels[OpenAIModelID.DEEPSEEK_V3_1].agentId).toBeUndefined();
-      expect(OpenAIModels[OpenAIModelID.GROK_3].agentId).toBeUndefined();
+    it('no catalog model is wired to a hand-made Foundry agent any more', () => {
+      // The "Agent" search routing is retired (2026-10): web search runs on
+      // the Responses API web_search tool, and Foundry agents are discovered
+      // live or overlaid per deployment via the ui-agent-id tag.
+      for (const model of Object.values(OpenAIModels)) {
+        expect(model.agentId, model.id).toBeUndefined();
+        expect(model.isAgent, model.id).toBeFalsy();
+      }
     });
   });
 
@@ -139,13 +130,12 @@ describe('Model Configuration', () => {
       });
     });
 
-    it('knowledge cutoffs should be in ISO format or empty for agents', () => {
+    it('knowledge cutoffs should be in ISO format when present', () => {
       Object.values(OpenAIModels).forEach((model) => {
         const cutoff = model.knowledgeCutoffDate || '';
 
         if (cutoff === '') {
-          // Empty string is valid for agent models with real-time search
-          expect(model.isAgent).toBe(true);
+          // No published cutoff (gpt-4.1's entry predates the field).
           return;
         }
 
