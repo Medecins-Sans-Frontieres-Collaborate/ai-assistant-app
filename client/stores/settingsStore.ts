@@ -410,11 +410,12 @@ interface SettingsStore {
    */
   userRegion: UserRegion | null;
   /**
-   * One-time EU default-model switch (gpt-5.2-chat → gpt-5.4, pricing) has
-   * been evaluated in this browser. Persisted so the switch never repeats
-   * once a user has re-chosen. See lib/utils/shared/euDefaultModelSwitch.ts.
+   * Retirement moves already applied in this browser: leaving model id →
+   * the retirement event's trigger (see lib/utils/shared/modelRetirement.ts).
+   * Persisted so a move never repeats once a user has re-chosen the model;
+   * a later event for the same model has a different trigger and applies.
    */
-  euDefaultModelSwitchApplied: boolean;
+  modelRetirementsApplied: Record<string, string>;
   /**
    * User-defined data structures (Customizations → Structures). Shared: an
    * entry is usable as an extraction recipe and as a data-workflow table
@@ -632,7 +633,7 @@ interface SettingsStore {
   // Model list provenance / region (runtime-only)
   setModelListSource: (source: ModelListSource | null) => void;
   setUserRegion: (region: UserRegion | null) => void;
-  markEuDefaultModelSwitchApplied: () => void;
+  markModelRetirementsApplied: (applied: Record<string, string>) => void;
 
   // Model Ordering Actions
   setModelOrderMode: (mode: ModelOrderMode) => void;
@@ -943,6 +944,21 @@ export function coerceChannelIdsBySet(
   return result;
 }
 
+/**
+ * A persisted `Record<string, string>` as it may be trusted: non-string
+ * values dropped, anything that is not a plain object replaced by `{}`.
+ */
+export function coerceStringRecord(value: unknown): Record<string, string> {
+  if (value == null || typeof value !== 'object' || Array.isArray(value)) {
+    return {};
+  }
+  const result: Record<string, string> = {};
+  for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
+    if (typeof entry === 'string') result[key] = entry;
+  }
+  return result;
+}
+
 export const useSettingsStore = create<SettingsStore>()(
   persist(
     (set) => ({
@@ -993,7 +1009,7 @@ export const useSettingsStore = create<SettingsStore>()(
       historicalUsageBackfilledAt: null,
       modelListSource: null,
       userRegion: null,
-      euDefaultModelSwitchApplied: false,
+      modelRetirementsApplied: {},
       savedStructures: [],
       streamingSpeed: DEFAULT_STREAMING_SPEED,
       includeUserInfoInPrompt: false, // Default off for privacy
@@ -1535,8 +1551,13 @@ export const useSettingsStore = create<SettingsStore>()(
 
       setModelListSource: (source) => set({ modelListSource: source }),
       setUserRegion: (region) => set({ userRegion: region }),
-      markEuDefaultModelSwitchApplied: () =>
-        set({ euDefaultModelSwitchApplied: true }),
+      markModelRetirementsApplied: (applied) =>
+        set((state) => ({
+          modelRetirementsApplied: {
+            ...state.modelRetirementsApplied,
+            ...applied,
+          },
+        })),
 
       recordTokenUsage: (usage) =>
         set((state) => {
@@ -2013,7 +2034,7 @@ export const useSettingsStore = create<SettingsStore>()(
           suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
           m365Connected: true,
           m365ConnectedUserSet: false,
-          euDefaultModelSwitchApplied: false,
+          modelRetirementsApplied: {},
           m365SaveDestination: null,
           m365SaveSkipPicker: false,
           m365PickerLocation: null,
@@ -2022,7 +2043,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 68, // Increment this when schema changes to trigger migrations
+      version: 69, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2128,7 +2149,7 @@ export const useSettingsStore = create<SettingsStore>()(
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
         m365ConnectedUserSet: state.m365ConnectedUserSet,
-        euDefaultModelSwitchApplied: state.euDefaultModelSwitchApplied,
+        modelRetirementsApplied: state.modelRetirementsApplied,
         // m365ToolsFlagEnabled is deliberately NOT persisted (LD mirror,
         // same rationale as mcpArbitraryFlagEnabled above).
         m365ToolsUserEnabled: state.m365ToolsUserEnabled,
@@ -2759,13 +2780,10 @@ export const useSettingsStore = create<SettingsStore>()(
           if (!Array.isArray(state.formTemplates)) state.formTemplates = [];
         }
 
-        // Version 63 → 64: one-time EU default-model switch marker. False
-        // means "not evaluated yet" — the hook decides once per browser.
-        if (version < 64) {
-          if (typeof state.euDefaultModelSwitchApplied !== 'boolean') {
-            state.euDefaultModelSwitchApplied = false;
-          }
-        }
+        // Version 63 → 64 added a one-time EU default-model switch marker
+        // (`euDefaultModelSwitchApplied`). It never shipped — the switch was
+        // folded into retirement handling (v69 below) first — so there is
+        // nothing to migrate; v69 drops the key from dev-only stores.
 
         // Version 64 → 65: user-controlled model timeout + "prefer my
         // selected model" (issue #130). Clamped rather than trusted, like
@@ -2811,6 +2829,18 @@ export const useSettingsStore = create<SettingsStore>()(
           delete state.lastChannelIds;
           state.lastChannelSetId = null;
         }
+        // v69: applied model-retirement moves (model id → trigger), replacing
+        // the unshipped v64 marker. Empty means "nothing applied yet" — the
+        // hook then evaluates every leaving model once.
+        if (version < 69) {
+          delete state.euDefaultModelSwitchApplied;
+        }
+        // Whatever version it came from, the record must be a plain
+        // id → string map (the hook indexes it by model id).
+        state.modelRetirementsApplied = coerceStringRecord(
+          state.modelRetirementsApplied,
+        );
+
         // Whatever version it came from, the per-set rows are only kept as
         // clean string arrays (the workspace iterates them on load).
         state.lastChannelIdsBySet = coerceChannelIdsBySet(
@@ -2968,6 +2998,10 @@ export const useSettingsStore = create<SettingsStore>()(
           if (!Array.isArray(state.formTemplates)) {
             state.formTemplates = [];
           }
+          // Defensive (hand-edited storage): see coerceStringRecord.
+          state.modelRetirementsApplied = coerceStringRecord(
+            state.modelRetirementsApplied,
+          );
           // Defensive, inner values included: a row that is not a clean
           // string array would throw in the workspace's seed on load.
           state.lastChannelIdsBySet = coerceChannelIdsBySet(
