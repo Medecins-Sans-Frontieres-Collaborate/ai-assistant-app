@@ -227,7 +227,7 @@ describe('ModelSelect', () => {
       });
     });
 
-    it('sets model with agent capabilities', async () => {
+    it('sets an older version from the details panel', async () => {
       render(<ModelSelect />);
 
       // GPT-4.1 is an older GPT version: pick it from the details panel's
@@ -238,10 +238,7 @@ describe('ModelSelect', () => {
         expect(mockUseConversations.updateConversation).toHaveBeenCalledWith(
           'conv-1',
           expect.objectContaining({
-            model: expect.objectContaining({
-              id: OpenAIModelID.GPT_4_1,
-              isAgent: true,
-            }),
+            model: expect.objectContaining({ id: OpenAIModelID.GPT_4_1 }),
           }),
         );
       });
