@@ -1201,6 +1201,29 @@ describe('settingsStore migration (v67 → v68)', () => {
     expect('euDefaultModelSwitchApplied' in result).toBe(false);
   });
 
+  it('v70 retires the Agent search routing and folds the old Bing names into bing', () => {
+    const result = migrate(
+      {
+        defaultSearchMode: 'agent',
+        webSearchOptions: {
+          resultCount: 8,
+          freshness: 'auto',
+          provider: 'bing-responses',
+          multiStep: false,
+        },
+      },
+      69,
+    ) as Record<string, unknown>;
+
+    expect(result.defaultSearchMode).toBe('intelligent');
+    expect(result.webSearchOptions).toEqual({
+      resultCount: 8,
+      freshness: 'auto',
+      provider: 'bing',
+      multiStep: false,
+    });
+  });
+
   it('keeps well-formed applied retirements on a current store and drops malformed ones', () => {
     const kept = {
       triggers: ['forced', 'alias:gpt-5.4'],
