@@ -87,22 +87,8 @@ describe('ModelRetirementNotice', () => {
     expect(useSettingsStore.getState().defaultModelId).toBe('claude-sonnet-5');
   });
 
-  it('renders nothing for a model that is staying, inside the move window, or before the list arrives', () => {
-    const { container, rerender } = render(
-      <ModelRetirementNotice conversation={conversation('gpt-5.4')} />,
-    );
-    expect(container).toBeEmptyDOMElement();
-
-    useSettingsStore.setState({ modelListSource: 'static' });
-    rerender(
-      <ModelRetirementNotice
-        conversation={conversation('claude-sonnet-4-6')}
-      />,
-    );
-    expect(container).toBeEmptyDOMElement();
-
+  it('keeps warning inside the move window, without promising a move that has already been made', () => {
     useSettingsStore.setState({
-      modelListSource: 'discovery',
       models: [
         served('claude-sonnet-5'),
         served('claude-sonnet-4-6', {
@@ -110,6 +96,25 @@ describe('ModelRetirementNotice', () => {
         }),
       ],
     });
+    render(
+      <ModelRetirementNotice
+        conversation={conversation('claude-sonnet-4-6')}
+      />,
+    );
+    const status = screen.getByRole('status');
+    expect(status).toHaveTextContent('noticeRetiring');
+    expect(status).toHaveTextContent('"retiresOn":"October 5, 2026"');
+    expect(status).not.toHaveTextContent('movesOn');
+    expect(screen.getByRole('button', { name: 'switchNow' })).toBeEnabled();
+  });
+
+  it('renders nothing for a model that is staying, or before the list arrives', () => {
+    const { container, rerender } = render(
+      <ModelRetirementNotice conversation={conversation('gpt-5.4')} />,
+    );
+    expect(container).toBeEmptyDOMElement();
+
+    useSettingsStore.setState({ modelListSource: 'static' });
     rerender(
       <ModelRetirementNotice
         conversation={conversation('claude-sonnet-4-6')}
