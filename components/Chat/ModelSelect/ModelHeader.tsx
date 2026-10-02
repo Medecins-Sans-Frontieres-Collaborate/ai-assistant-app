@@ -1,6 +1,7 @@
 import {
   IconCalendar,
   IconChevronLeft,
+  IconClockHour4,
   IconHash,
   IconLeaf,
   IconStar,
@@ -12,6 +13,8 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import React, { FC, useMemo } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
+
+import { useModelRetirements } from '@/client/hooks/settings/useModelRetirements';
 
 import { modelIdToLocaleKey } from '@/lib/utils/app/locales';
 import { isAgentModel } from '@/lib/utils/shared/chat/usageBackfill';
@@ -44,6 +47,7 @@ import {
   pinnedModelName,
   useModelAvailabilityMap,
 } from './modelLimits';
+import { useRetirementCopy } from './modelRetirementCopy';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { getIconComponent } from '@/lib/organizationAgents';
@@ -90,6 +94,10 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
   const limitView = pinnedModelId
     ? pinnedModelAvailability(pinnedModelId, limitsMap, models)
     : limitsMap.lookup(selectedModel?.id);
+  // Says so when the model this header stands for is being retired — the
+  // place people read before committing to a model.
+  const retirement = useModelRetirements().get(selectedModel?.id ?? '');
+  const retirementCopy = useRetirementCopy();
   const limitCopy = useModelLimitCopy(limitView, {
     onExpired: limitsMap.refetch,
     agentModelName: pinnedModelId ? pinnedModelName(pinnedModelId) : undefined,
@@ -239,6 +247,24 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
           {isStarred ? <IconStarFilled size={20} /> : <IconStar size={20} />}
         </button>
       </div>
+      {retirement && (
+        <p
+          role="note"
+          className={`mb-2 flex items-start gap-1.5 text-sm ${
+            hasBackgroundImage
+              ? 'text-amber-200'
+              : 'text-amber-800 dark:text-amber-300'
+          }`}
+          style={textShadow}
+        >
+          <IconClockHour4
+            size={16}
+            className="mt-0.5 flex-shrink-0"
+            aria-hidden="true"
+          />
+          <span>{retirementCopy(retirement)}</span>
+        </p>
+      )}
       {(() => {
         // Bold the first sentence of the description so users get the
         // headline takeaway at a glance without reading the whole block.
