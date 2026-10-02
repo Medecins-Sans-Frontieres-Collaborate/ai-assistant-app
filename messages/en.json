@@ -1521,6 +1521,7 @@
     "Memories": "Memories",
     "Agent Access": "Access & Connectors",
     "Admin": "Admin",
+    "Analytics": "Analytics",
     "Usage Limits": "Usage limits",
     "LocalModels": "Local models",
     "suggestRevisions": {
@@ -5184,6 +5185,7 @@
       "glossaries": "Organization glossaries — mandatory terminology, shared with translators.",
       "announcements": "Banner messages for users: who sees them, when, and in which languages.",
       "delegations": "Who administers which users, and what each of them is allowed to do.",
+      "analytics": "Delivered reports: what arrived, who may open each folder, and which fields may be shown.",
       "channelSets": "Each team's rules for writing on the platforms: guidance, voices, defaults, who may use the set and who may send."
     },
     "area": {
@@ -5192,7 +5194,8 @@
       "viewAs": "View as",
       "globalAdmins": "Global admins",
       "announcements": "Announcements",
-      "delegations": "Delegations"
+      "delegations": "Delegations",
+      "analytics": "Analytics"
     }
   },
   "limits": {
@@ -6849,7 +6852,8 @@
     "capabilitiesHint": "What this delegation can grant at all. Admins can only hold what is enabled here.",
     "grant": {
       "limits": "Usage limits",
-      "announcements": "Announcements"
+      "announcements": "Announcements",
+      "analytics": "Analytics"
     },
     "grantAll": "All",
     "maxOverrides": "Limit overrides this delegation may hold",
@@ -6952,5 +6956,458 @@
     "isDefaultAfterSave": "You can mark this as the default set after saving.",
     "noChannelsWarning": "This set offers no channels; nobody can draft with it.",
     "audienceEveryoneHint": "Anyone in the organisation can draft with this set."
+  },
+  "analytics": {
+    "title": "Analytics",
+    "backToChat": "Back to chat",
+    "manage": "Manage",
+    "notEnabled": "Analytics is not available yet.",
+    "loading": "Loading…",
+    "loadFailed": "Couldn't load the reports.",
+    "retry": "Retry",
+    "emptyTitle": "Nothing has been shared with you yet",
+    "emptyBody": "Reports appear here once an administrator gives you access to a folder.",
+    "deliveryUnavailable": "The report storage can't be reached right now, so the lists below may be empty. Try again in a few minutes.",
+    "groupsDegraded": "Your group memberships couldn't be checked just now, so folders shared with your groups may be missing. Reload in a minute.",
+    "foldersHeading": "Folders",
+    "rootFolder": "All reports",
+    "pathOnly": "You don't have access to this folder itself, only to folders inside it.",
+    "selectFolder": "Choose a folder to see its reports.",
+    "noFiles": "No reports in this folder.",
+    "viewOnlyNote": "You have view access to this folder: you can open the reports, see their overview and summary tables. Tables with one row per person, exports and downloads need download access.",
+    "col": {
+      "name": "File",
+      "period": "Period",
+      "delivered": "Delivered",
+      "size": "Size",
+      "availableUntil": "Available until",
+      "actions": "Actions"
+    },
+    "download": "Download",
+    "downloadAria": "Download {name}",
+    "block": {
+      "view-only": "View only",
+      "hidden-fields": "Original withheld (hidden fields)",
+      "unclassified-fields": "Original withheld (fields awaiting review)",
+      "not-inspected": "Not checked yet",
+      "policy-unavailable": "Unavailable right now"
+    },
+    "adminBadge": {
+      "error": "Hidden from users",
+      "pending": "Being checked",
+      "warning": "Has warnings",
+      "expired": "Expired, pending deletion",
+      "originalBlocked": "Users can't download: {reason}"
+    },
+    "openAria": "Open {name}",
+    "openForExport": "Open to export",
+    "preview": {
+      "back": "Back to {folder}",
+      "tabsLabel": "Tables in this file",
+      "lockedTab": "{name} (locked)",
+      "unavailable": "This file can't be opened in the app right now.",
+      "tableFailed": "Couldn't load this table.",
+      "withheld": {
+        "row-level": "This table has one row per person. Opening it needs download access to the folder.",
+        "hidden-fields": "This page contains a field that is hidden, so it isn't shown."
+      },
+      "truncated": "Showing the first {shown, number} of {total, number} rows. Export the table to get all of them.",
+      "freeformNote": "This page is laid out for reading and is shown as it was delivered.",
+      "filter": "Filter rows",
+      "filterPlaceholder": "Filter rows…",
+      "rows": "{count, plural, one {# row} other {# rows}}",
+      "matching": "{count, number} of {total, number} rows match",
+      "modeLabel": "Show as",
+      "mode": {
+        "table": "Table",
+        "chart": "Chart"
+      },
+      "noRows": "No rows to show.",
+      "hiddenColumn": "Hidden from users",
+      "exportCsv": "Export this table (CSV)",
+      "exportXlsx": "Export all tables (Excel)",
+      "downloadOriginal": "Download original",
+      "exportNote": "The delivered file contains fields that are hidden, so it can't be downloaded as it is. Exports leave those fields out.",
+      "sectionLabel": "Show",
+      "section": {
+        "overview": "Overview",
+        "tables": "Tables"
+      }
+    },
+    "chart": {
+      "groupBy": "Group by",
+      "measure": "Measure",
+      "rowCount": "Number of rows",
+      "aggregation": "Calculate",
+      "agg": {
+        "sum": "Sum",
+        "mean": "Average",
+        "min": "Smallest",
+        "max": "Largest"
+      },
+      "ariaLabel": "{measure} by {group}",
+      "noColumns": "This table has no text or date column to group by.",
+      "empty": "Nothing to chart for this choice.",
+      "truncatedGroups": "Showing the {count} largest groups.",
+      "basedOn": "Based on the first {shown, number} of {total, number} rows.",
+      "savePng": "Save as image",
+      "saveSvg": "Save as SVG",
+      "saveFailed": "Couldn't save the chart."
+    },
+    "dash": {
+      "loading": "Loading…",
+      "failed": "Couldn't load the overview.",
+      "retry": "Retry",
+      "showTable": "Show as table",
+      "showChart": "Show as chart",
+      "smallGroups": "Groups of fewer than 5 people",
+      "foldedNote": "Groups of fewer than 5 people are combined into one row.",
+      "otherCount": "{count, plural, one {# other} other {# others}}",
+      "hiddenPanel": "Hidden by the field settings.",
+      "missingPanel": "Not available for this file.",
+      "usage": {
+        "users": "Active people",
+        "interactions": "Interactions",
+        "avgPerUser": "Average per person",
+        "medianPerUser": "Median per person",
+        "hq": "At headquarters",
+        "field": "In the field",
+        "shareUsers": "{pct}% of {comparator} users",
+        "shareUsage": "{pct}% of {comparator} usage",
+        "comparator": "{comparator}: {value}",
+        "daily": "Interactions per day",
+        "dailyUsers": "Active people per day",
+        "dailyUsersSub": "By work location",
+        "weekly": "Interactions per week",
+        "activity": "How much people use it",
+        "activitySub": "People, by their number of interactions in the period",
+        "departments": "Interactions by department",
+        "jobTitles": "Interactions by job title",
+        "models": "Events by model",
+        "total": "All locations",
+        "location": {
+          "hq": "Headquarters",
+          "field": "Field",
+          "unknown": "Unknown"
+        },
+        "col": {
+          "date": "Day",
+          "week": "Week starting",
+          "users": "People",
+          "interactions": "Interactions",
+          "events": "Events",
+          "group": "Group",
+          "band": "Interactions"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Total billed",
+        "usageVariable": "Usage-variable cost",
+        "staticInfra": "Static infrastructure",
+        "sections": "Sections billed",
+        "usageEvents": "Usage events",
+        "bySection": "Billed by section",
+        "changes": "Changes from the previous file",
+        "noChanges": "Nothing changed from the previous file.",
+        "byDomain": "Usage events by mail domain",
+        "reconciliation": "Reconciliation to Azure",
+        "col": {
+          "section": "Section",
+          "billed": "Billed",
+          "usageEvents": "Usage events",
+          "usagePct": "Usage %",
+          "line": "Line",
+          "amount": "Amount",
+          "previous": "Previous file",
+          "restated": "Restated",
+          "change": "Change",
+          "domain": "Mail domain",
+          "users": "People"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Calculated with",
+        "delivered": "The report's own assumptions ({version})",
+        "current": "The app's current assumptions ({version})",
+        "whatIf": "What if…",
+        "deliveredUnavailable": "This report's own assumptions couldn't be read from its Assumptions sheet, so the app's current ones are used.",
+        "whatIfIntro": "Change a figure to see its effect on everything below. Nothing is saved.",
+        "resetDelivered": "Reset to the report's own",
+        "resetCurrent": "Reset to the app's current",
+        "co2": "Emissions",
+        "energy": "Energy",
+        "charges": "Smartphone charges",
+        "chargesSub": "With the same footprint",
+        "activeUsers": "Active people",
+        "requests": "Requests",
+        "tokens": "Tokens",
+        "vsDelivered": "{delta} vs the report's own assumptions",
+        "sameAsDelivered": "Same as with the report's own assumptions",
+        "unpriced": "{count, plural, one {# request uses} other {# requests use}} a model size these assumptions have no figure for, and {count, plural, one {is} other {are}} left out.",
+        "byDepartment": "Emissions by department",
+        "byModel": "Emissions by model",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Calculated here vs logged at the time",
+        "reconciliationSub": "The app also estimates each request as it happens. The two agree while the assumptions are the same.",
+        "computed": "Calculated here",
+        "logged": "Logged by the app",
+        "difference": "Difference",
+        "col": {
+          "group": "Group",
+          "requests": "Requests",
+          "tokens": "Tokens",
+          "energyWh": "Energy (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Data-centre overhead (PUE)",
+          "promptTokenWeight": "Prompt token weight",
+          "dedicatedReasoningMultiplier": "Dedicated-reasoner multiplier",
+          "whPer1kTokens": "Wh per 1,000 tokens — {name}",
+          "reasoningEffortMultipliers": "Reasoning effort multiplier — {name}",
+          "gridIntensity": "Grid g CO₂e per kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Events",
+        "users": "People",
+        "tokens": "Tokens",
+        "errors": "Errors",
+        "energy": "Energy",
+        "co2": "Emissions",
+        "hourly": "Events per hour (UTC)",
+        "byType": "Events by type",
+        "byError": "Errors by code",
+        "byModel": "Tokens by model",
+        "byCompany": "Events by organisation",
+        "none": "None.",
+        "col": {
+          "group": "Group",
+          "events": "Events",
+          "tokens": "Tokens",
+          "hour": "Hour"
+        }
+      },
+      "trend": {
+        "title": "Over time",
+        "period": "Period",
+        "users": "Active people per report",
+        "interactions": "Interactions per report",
+        "billed": "Total billed per period",
+        "sections": "Billed by section",
+        "otherSections": "All other sections",
+        "co2": "Emissions per report",
+        "energy": "Energy per report",
+        "recalculated": "Every period is calculated with the app's current assumptions ({version}), so a change of assumptions between reports doesn't show up as a change in emissions.",
+        "severalPerPeriod": "This folder holds several reports for the same period. Open a folder inside it to see how one of them changes over time."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analytics",
+    "description": "Reports are delivered into storage by the data pipeline. Here you check what arrived, decide who may open each folder, and choose which fields the platform may show.",
+    "openViewer": "Open analytics",
+    "sharedNotice": "Beta and production share these folders, audiences and files. A change saved here is live in both.",
+    "notEnabled": "Analytics is not enabled for this deployment.",
+    "tabsLabel": "Analytics sections",
+    "tab": {
+      "health": "Deliveries",
+      "folders": "Folders & access",
+      "fields": "Fields"
+    },
+    "loading": "Loading…",
+    "retry": "Retry",
+    "loadError": "Couldn't load this section.",
+    "unavailable": "Couldn't read the saved settings from storage. This is NOT the same as \"nothing configured\" — editing is disabled so the real settings aren't overwritten. Retry, and check the server logs if it persists.",
+    "save": "Save",
+    "saving": "Saving…",
+    "unsaved": "Unsaved changes",
+    "saveSuccess": "Saved.",
+    "saveError": "Couldn't save.",
+    "conflictError": "Another admin changed these settings while you were editing. Your changes were not saved — the latest version has been reloaded.",
+    "rootFolder": "(top level)",
+    "scope": {
+      "domain": "Email domain",
+      "user": "Person",
+      "attribute": "Attribute",
+      "group": "Entra group"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "Entra group object id"
+    },
+    "level": {
+      "view": "View summaries",
+      "download": "View, export and download"
+    },
+    "reportType": {
+      "usage": "Usage report",
+      "rebilling": "Rebilling",
+      "emissions": "Emissions report",
+      "raw-telemetry": "Raw telemetry"
+    },
+    "field": {
+      "userCode": {
+        "label": "User code",
+        "description": "The pseudonymous u-… code that stands for one person."
+      },
+      "jobTitle": {
+        "label": "Job title",
+        "description": "Job titles, including the most common title on summary sheets. In a small group a title can point to one person."
+      },
+      "department": {
+        "label": "Department",
+        "description": "Departments, including the most active department on summary sheets."
+      },
+      "company": {
+        "label": "Company / organisation",
+        "description": "The organisation name from the directory, and the company names listed on rebilling sheets."
+      },
+      "orgGroup": {
+        "label": "Organisation group",
+        "description": "The operational centre or group a report is sliced by."
+      },
+      "section": {
+        "label": "Section",
+        "description": "The cost-recovery section a rebilling line belongs to."
+      },
+      "mailDomain": {
+        "label": "Mail domain",
+        "description": "The email domain usage is attributed to (never an address)."
+      },
+      "workLocation": {
+        "label": "Work location",
+        "description": "Headquarters or field."
+      },
+      "technical": {
+        "label": "Technical details",
+        "description": "Model, region, event type, currency and similar descriptors that say nothing about a person."
+      },
+      "other": {
+        "label": "Other descriptive fields",
+        "description": "Where you file a column that fits none of the above."
+      }
+    },
+    "folders": {
+      "intro": "Every folder the pipeline has delivered into is listed. A folder with no settings — and no folder above it granting access — is visible to administrators only.",
+      "name": "Display name",
+      "namePlaceholder": "Shown instead of the folder path",
+      "description": "Description",
+      "reportType": "Report type",
+      "reportTypeNone": "Not set",
+      "reportTypeInherited": "Inherited: {type}",
+      "reportTypeHint": "Tells the checker which file names to expect and how often. Applies to the folders inside this one.",
+      "retention": "Keep files for (months)",
+      "retentionHint": "Leave empty to inherit {months} months. Counted from the end of each report's period.",
+      "audience": "Who may open this folder",
+      "audienceHint": "Each line grants access to this folder and the folders inside it. One target per line.",
+      "audienceScope": "Target type",
+      "audienceTargets": "Targets",
+      "audienceLevel": "Access level",
+      "addAudience": "Add people or groups",
+      "removeAudience": "Remove this line",
+      "restricted": "Don't inherit access from the folders above",
+      "restrictedHint": "Only the lines on this folder apply here and below.",
+      "hiddenFields": "Also hide in this folder",
+      "hiddenFieldsHint": "Fields hidden here on top of the platform setting, for this folder and the folders inside it. You can hide more, never show more.",
+      "hiddenPlatformWide": "(hidden everywhere)",
+      "clear": "Remove this folder's settings",
+      "rawChip": "Raw: global admins only",
+      "rawNote": "Raw telemetry contains names, email addresses and file names. Only global administrators can open it, and no audience can be added.",
+      "audienceChip": "{count, plural, one {# access line} other {# access lines}}",
+      "restrictedChip": "Not inheriting",
+      "notConfiguredChip": "No settings",
+      "addPathLabel": "Set up a folder before its first delivery",
+      "addPath": "Add",
+      "addPathHint": "The path exactly as the pipeline will write it, for example usage/ocba. This saves settings only; it does not create anything in storage.",
+      "invalidPath": "That is not a valid folder path.",
+      "rawGlobalOnly": "Only global administrators can configure folders under raw/."
+    },
+    "fields": {
+      "intro": "Choose which fields of the delivered reports the platform may show. Hiding a field removes it from everything shown in the app and from the exports the app generates. The delivered file itself can then be downloaded by administrators only.",
+      "readOnly": "Only global administrators can change this. As an analytics administrator you can hide additional fields per folder, under Folders & access.",
+      "configurableHeading": "Fields",
+      "shown": "Shown",
+      "hidden": "Hidden",
+      "jobTitleNote": "With job title shown, a row in a small group can identify a person even under a user code. Charts hide breakdowns of fewer than five people; downloaded tables do not.",
+      "neverHeading": "Never shown",
+      "neverBody": "Names, email addresses, directory ids, uploaded file names and error text are never shown outside raw telemetry. A report that contains any of them is hidden from users until it is replaced.",
+      "unclassifiedHeading": "Columns the catalog doesn't know",
+      "unclassifiedBody": "A text column that isn't recognised stays hidden — in the app and in exports — and the delivered file can't be downloaded by users, until you file it under a field.",
+      "noneWaiting": "Nothing waiting.",
+      "inFiles": "{count, plural, one {in # file} other {in # files}}",
+      "classifyAs": "Field for column {column}",
+      "keepHidden": "Keep hidden",
+      "removeClassification": "Remove the setting for column {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "The report storage can't be reached",
+      "deliveryUnavailableBody": "The app could not list the container \"{container}\". Check that it exists and that the app's identity has a data role on it. Until then no reports are shown to anyone.",
+      "foldersUnavailable": "The folder settings couldn't be read, so users currently see no folders. Files are not being checked or expired until this recovers.",
+      "policyUnavailable": "The field settings couldn't be read, so users can't download files right now.",
+      "total": {
+        "files": "Files",
+        "ok": "Fine",
+        "warning": "With warnings",
+        "error": "Hidden from users",
+        "pending": "Being checked"
+      },
+      "recheckAll": "Check everything again",
+      "recheckOne": "Check again",
+      "recheckQueued": "{count, plural, one {# file queued for checking.} other {# files queued for checking.}}",
+      "recheckFailed": "Couldn't start the check.",
+      "retention": {
+        "active": "Files past their folder's retention are hidden at once and deleted {days} days later.",
+        "disabled": "Files past their folder's retention are hidden, but deletion is switched off for this deployment.",
+        "waiting-for-config": "Files past the default retention are hidden. Nothing is deleted until folder settings have been saved at least once."
+      },
+      "noFiles": "No files have been delivered yet.",
+      "allGood": "Everything delivered is in order.",
+      "problemsHeading": "Files that need attention",
+      "status": {
+        "error": "Hidden from users",
+        "warning": "Warning",
+        "pending": "Being checked",
+        "ok": "Fine"
+      },
+      "pendingBody": "New or replaced since the last check. It appears to users once it has passed.",
+      "firstSeen": "First noticed {date}",
+      "unclassifiedHeading": "Columns waiting for a decision",
+      "unclassifiedBody": "These columns aren't recognised. They stay hidden, and users can't download the files that contain them, until someone files each one under a field.",
+      "unclassifiedChip": "{column} · {count, plural, one {# file} other {# files}}",
+      "openFields": "Go to Fields",
+      "unconfiguredHeading": "Folders with no settings",
+      "unconfiguredBody": "Files are arriving here, but nobody has set up the folder or one above it. Only administrators can see them.",
+      "staleHeading": "Overdue deliveries",
+      "staleBody": "These folders expect regular reports and the latest one is older than it should be.",
+      "staleDetail": {
+        "daily": "Daily; latest covers {date}",
+        "monthly": "Monthly; latest ends {date}"
+      },
+      "staleNever": "Nothing delivered yet",
+      "expiringHeading": "Expiring",
+      "expiringBody": "Files past retention or reaching it within 30 days.",
+      "expiresOn": "Expires {date}",
+      "expiredOn": "Expired {date}"
+    },
+    "issue": {
+      "name-mismatch": "The file name isn't what this folder expects (for example {expected}).",
+      "unsupported-format": "Files of type \"{extension}\" can't be checked, so this one is hidden from users. Deliver .xlsx or .csv.",
+      "too-large": "At {sizeMb} MB this file is over the {limitMb} MB limit for checking, so it is hidden from users.",
+      "empty-file": "The file is empty.",
+      "unreadable": "The file couldn't be opened. It may be damaged, or not the format its name says.",
+      "identifier-column": "Sheet \"{sheet}\" has a column \"{column}\" that identifies people. The file is hidden from users.",
+      "identifier-values": "\"{sheet}\" contains {count, plural, one {# email address} other {# email addresses}}. The file is hidden from users.",
+      "user-code-format": "Sheet \"{sheet}\", column \"{column}\": {count, plural, one {# value is} other {# values are}} not a u-… user code. The file is hidden from users.",
+      "formulas-without-values": "Sheet \"{sheet}\" has {count, plural, one {# formula} other {# formulas}} with no stored result, so those figures can't be shown in the app.",
+      "missing-sheet": "Sheet \"{sheet}\" is missing, so the views built on it can't be shown.",
+      "missing-column": "Sheet \"{sheet}\" has no \"{column}\" column, so the views that use it can't be shown.",
+      "no-period": "The file name carries no report period, so retention counts from the delivery date.",
+      "unclassified-field": "Column \"{column}\" isn't recognised. It stays hidden, and users can't download the delivered file, until it is filed under a field.",
+      "past-retention": "Older than this folder's {months} months of retention; no longer shown.",
+      "unknown": "Problem reported: {code}."
+    }
   }
 }
