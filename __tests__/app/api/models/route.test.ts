@@ -34,7 +34,10 @@ vi.mock('@azure/identity', () => ({
 const mockGetDiscoveryAccounts = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/services/auth/OfficeResolver', () => ({
   OfficeResolver: {
-    getModelDiscoveryAccountsForUser: mockGetDiscoveryAccounts,
+    // The route resolves the user's region, then discovery resolves the
+    // accounts for that region (lib/services/models/servedModels.ts).
+    getRegionForUser: () => 'US',
+    getModelDiscoveryAccountsForRegion: mockGetDiscoveryAccounts,
   },
 }));
 
