@@ -439,6 +439,8 @@ describe('ToolRouter Enricher', () => {
           deep: false,
           onInterimResults: undefined,
           onActivity: expect.any(Function),
+          onUsage: expect.any(Function),
+          signal: expect.any(AbortSignal),
         });
 
         // Verify enrichedMessages were created
