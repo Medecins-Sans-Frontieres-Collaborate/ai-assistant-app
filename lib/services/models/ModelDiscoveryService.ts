@@ -20,7 +20,13 @@
  *  - The deployment `name` is the join key against OpenAIModelID, NOT the
  *    underlying `properties.model.name` (which can differ, e.g. a `gpt-5.2`
  *    deployment running model `gpt-5.5`).
+ *  - App-identity discovery also reads the account's model catalog
+ *    (`/models`) and stamps each deployment with the date Azure stops serving
+ *    the model VERSION it actually runs (`retiresAt`). That date is what
+ *    drives automatic retirement handling (lib/utils/shared/modelRetirement.ts),
+ *    so nobody has to mirror Microsoft's retirement schedule by hand.
  */
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 import {
   isValidFoundryResourcePath,
   stripToAccountPath,
@@ -49,6 +55,13 @@ const MAX_PAGES = 50;
 // the sweep can't (many distinct un-expired user×account×token combinations).
 const MAX_SCOPED_CACHE_ENTRIES = 500;
 
+// Deployments whose model version retires within this many days are logged on
+// every cache fill, so an approaching retirement shows up in the logs weeks
+// ahead instead of as failing chats. Matches the user-facing notice window
+// (RETIREMENT_NOTICE_DAYS in lib/utils/shared/modelRetirement.ts).
+const RETIREMENT_WARNING_DAYS = 30;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 // ARM is the only host we will ever send the Bearer token to. nextLink is
 // server-supplied, so we re-validate its origin before each follow-up request.
 const ARM_HOST_PREFIX = 'https://management.azure.com/';
@@ -73,6 +86,13 @@ export interface DeployedModel {
   provisioningState?: string;
   /** ARM resource tags — used by the metadata overlay (ui-* keys). */
   tags: Record<string, string>;
+  /**
+   * ISO instant Azure stops serving the deployed model VERSION (the account
+   * model catalog's deprecation date for this deployment's SKU). Absent when
+   * Azure announces none, the catalog could not be read, or the caller is a
+   * user-scoped (byom) discovery, which skips the catalog read.
+   */
+  retiresAt?: string;
 }
 
 /** Raw shape of a deployment as returned by the ARM list endpoint. */
@@ -87,8 +107,24 @@ interface ArmDeployment {
   };
 }
 
-interface ArmDeploymentListPage {
-  value?: ArmDeployment[];
+/**
+ * Raw shape of an account model-catalog entry (`/models`). The fields sit at
+ * the top level on the account-scoped endpoint and under `model` on the
+ * location-scoped one; both are read so either shape works.
+ */
+interface ArmCatalogModelFields {
+  name?: string;
+  version?: string;
+  deprecation?: { inference?: string };
+  skus?: Array<{ name?: string; deprecationDate?: string }>;
+}
+
+interface ArmCatalogModel extends ArmCatalogModelFields {
+  model?: ArmCatalogModelFields;
+}
+
+interface ArmListPage<T> {
+  value?: T[];
   nextLink?: string;
 }
 
@@ -188,6 +224,10 @@ export class ModelDiscoveryService {
       armToken,
       accountPath,
       cacheKey,
+      // Retirement dates are read for app-identity discovery only: the
+      // served model list is what retirement handling acts on. byom sources
+      // are the user's own account and are never migrated by the app.
+      opts?.cacheScope === undefined,
     ).finally(() => {
       this.inFlight.delete(cacheKey);
     });
@@ -200,12 +240,20 @@ export class ModelDiscoveryService {
     armToken: string,
     accountPath: string,
     cacheKey: string,
+    withRetirementDates: boolean,
   ): Promise<DeployedModel[]> {
-    const raw = await this.fetchAllDeployments(armToken, accountPath);
+    const [raw, retirementDates] = await Promise.all([
+      this.fetchAllDeployments(armToken, accountPath),
+      withRetirementDates
+        ? this.fetchRetirementDates(armToken, accountPath)
+        : Promise.resolve(new Map<string, string>()),
+    ]);
     const models = raw
       .map((d) => this.toDeployedModel(d))
       .filter((m): m is DeployedModel => m !== null)
-      .filter((m) => this.isChatCapable(m));
+      .filter((m) => this.isChatCapable(m))
+      .map((m) => this.withRetirementDate(m, retirementDates));
+    this.warnAboutApproachingRetirements(models);
 
     // Don't pin an empty result for the full hour — a transient ARM failure or
     // a freshly-provisioned account can return zero deployments. Re-discover
@@ -255,14 +303,108 @@ export class ModelDiscoveryService {
     }
   }
 
-  /** Walks the ARM `nextLink` pagination, capped at MAX_PAGES pages. */
-  private async fetchAllDeployments(
+  private fetchAllDeployments(
     armToken: string,
     accountPath: string,
   ): Promise<ArmDeployment[]> {
-    const all: ArmDeployment[] = [];
-    let url: string | undefined =
-      `https://management.azure.com${accountPath}/deployments?api-version=${ARM_API_VERSION}`;
+    return this.fetchAllPages<ArmDeployment>(
+      armToken,
+      `https://management.azure.com${accountPath}/deployments?api-version=${ARM_API_VERSION}`,
+      'model deployments',
+    );
+  }
+
+  /**
+   * Retirement date per deployable model version, keyed by
+   * `retirementKey(name, version, sku)` plus a SKU-less fallback key. A
+   * model version can retire on different dates per SKU, hence both.
+   *
+   * NEVER throws: the dates are an enrichment. If the catalog cannot be read
+   * discovery still succeeds, and the deployments simply carry no
+   * `retiresAt` until the next cache fill.
+   */
+  private async fetchRetirementDates(
+    armToken: string,
+    accountPath: string,
+  ): Promise<Map<string, string>> {
+    const dates = new Map<string, string>();
+    try {
+      const catalog = await this.fetchAllPages<ArmCatalogModel>(
+        armToken,
+        `https://management.azure.com${accountPath}/models?api-version=${ARM_API_VERSION}`,
+        'model catalog',
+      );
+      for (const entry of catalog) {
+        const fields = entry.model ?? entry;
+        if (!fields.name || !fields.version) continue;
+        const inference = fields.deprecation?.inference;
+        if (inference) {
+          dates.set(this.retirementKey(fields.name, fields.version), inference);
+        }
+        for (const sku of fields.skus ?? []) {
+          if (!sku.name || !sku.deprecationDate) continue;
+          dates.set(
+            this.retirementKey(fields.name, fields.version, sku.name),
+            sku.deprecationDate,
+          );
+        }
+      }
+    } catch (error) {
+      console.warn(
+        '[ModelDiscoveryService] Could not read model retirement dates; continuing without them:',
+        error instanceof Error ? error.message : error,
+      );
+    }
+    return dates;
+  }
+
+  private retirementKey(name: string, version: string, sku?: string): string {
+    return sku ? `${name}@${version}#${sku}` : `${name}@${version}`;
+  }
+
+  /** Stamps `retiresAt` from the catalog: the SKU's own date, else the version's. */
+  private withRetirementDate(
+    m: DeployedModel,
+    retirementDates: Map<string, string>,
+  ): DeployedModel {
+    if (!m.modelVersion) return m;
+    const retiresAt =
+      (m.sku
+        ? retirementDates.get(
+            this.retirementKey(m.modelName, m.modelVersion, m.sku),
+          )
+        : undefined) ??
+      retirementDates.get(this.retirementKey(m.modelName, m.modelVersion));
+    return retiresAt ? { ...m, retiresAt } : m;
+  }
+
+  /** One log line per deployment that retires soon (once per cache fill). */
+  private warnAboutApproachingRetirements(models: DeployedModel[]): void {
+    const now = Date.now();
+    for (const m of models) {
+      if (!m.retiresAt) continue;
+      const retiresAtMs = Date.parse(m.retiresAt);
+      if (Number.isNaN(retiresAtMs)) continue;
+      const daysLeft = Math.ceil((retiresAtMs - now) / DAY_MS);
+      if (daysLeft > RETIREMENT_WARNING_DAYS) continue;
+      console.warn(
+        `[model-lifecycle] deployment "${sanitizeForLog(m.deploymentName)}" ` +
+          `(${sanitizeForLog(m.modelName)}@${sanitizeForLog(m.modelVersion ?? 'unknown')}) ` +
+          (daysLeft > 0
+            ? `retires in ${daysLeft} day(s), on ${sanitizeForLog(m.retiresAt)}`
+            : `passed its retirement date ${sanitizeForLog(m.retiresAt)}`),
+      );
+    }
+  }
+
+  /** Walks the ARM `nextLink` pagination, capped at MAX_PAGES pages. */
+  private async fetchAllPages<T>(
+    armToken: string,
+    firstUrl: string,
+    what: string,
+  ): Promise<T[]> {
+    const all: T[] = [];
+    let url: string | undefined = firstUrl;
 
     for (let page = 0; url && page < MAX_PAGES; page++) {
       const response = await fetch(url, {
@@ -279,11 +421,11 @@ export class ModelDiscoveryService {
           body,
         );
         throw new Error(
-          `Failed to list model deployments: ${response.status} ${response.statusText}`,
+          `Failed to list ${what}: ${response.status} ${response.statusText}`,
         );
       }
 
-      const data = (await response.json()) as ArmDeploymentListPage;
+      const data = (await response.json()) as ArmListPage<T>;
       if (data.value) all.push(...data.value);
 
       // nextLink is an absolute ARM URL already carrying the api-version. It is
