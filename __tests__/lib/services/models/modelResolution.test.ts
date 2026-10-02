@@ -384,6 +384,11 @@ describe('mergeDiscoveryWithMetadata', () => {
       expect(model.hostedIn).toEqual(['US', 'EU']);
       expect(model.retiresAt).toBe('2027-06-08T00:00:00Z');
       expect(model.deploymentModelName).toBeUndefined();
+      // …and every region's own facts, because they retire separately.
+      expect(model.retirementByRegion).toEqual({
+        US: { retiresAt: '2027-06-08T00:00:00Z' },
+        EU: { deploymentModelName: 'gpt-5.4' },
+      });
     });
   });
 });
