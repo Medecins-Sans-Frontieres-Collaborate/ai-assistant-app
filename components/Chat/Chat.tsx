@@ -35,6 +35,7 @@ import {
 
 import { ErrorCode } from '@/types/errors';
 import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
+import { normalizeSearchMode } from '@/types/searchMode';
 
 import { KeyboardShortcutsModal } from '@/components/KeyboardShortcuts';
 import { PromptModal } from '@/components/Prompts/PromptModal';
@@ -758,7 +759,9 @@ export function Chat({
             onModelClick={() => setIsModelSelectOpen(true)}
             onClearAll={clearConversation}
             hasMessages={hasMessages}
-            searchMode={selectedConversation?.defaultSearchMode}
+            searchMode={normalizeSearchMode(
+              selectedConversation?.defaultSearchMode,
+            )}
             showChatbar={showChatbar}
             autoApproveAll={!!selectedConversation?.alwaysApproveAllTools}
             autoApproveCount={
