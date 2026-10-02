@@ -6965,7 +6965,6 @@
     "title": "Analytics",
     "backToChat": "Back to chat",
     "manage": "Manage",
-    "notEnabled": "Analytics is not available yet.",
     "loading": "Loading…",
     "loadFailed": "Couldn't load the reports.",
     "retry": "Retry",
@@ -7212,7 +7211,6 @@
     "description": "Reports are delivered into storage by the data pipeline. Here you check what arrived, decide who may open each folder, and choose which fields the platform may show.",
     "openViewer": "Open analytics",
     "sharedNotice": "Beta and production share these folders, audiences and files. A change saved here is live in both.",
-    "notEnabled": "Analytics is not enabled for this deployment.",
     "tabsLabel": "Analytics sections",
     "tab": {
       "health": "Deliveries",
