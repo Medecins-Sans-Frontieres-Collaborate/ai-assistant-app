@@ -6,7 +6,7 @@
  * route wires these together with ModelDiscoveryService + the request session.
  * See docs/MODEL_DISCOVERY_DESIGN.md (§3.3, §3.4, §3.5).
  */
-import { OpenAIModel } from '@/types/openai';
+import { ModelRetirementFacts, OpenAIModel } from '@/types/openai';
 
 import { DeployedModel } from './ModelDiscoveryService';
 
@@ -296,7 +296,8 @@ export interface RegionalDeployments {
  * ORDER MATTERS: the caller passes the user's HOME region first. On a name
  * collision the first region's metadata + ARM tag overlay win — the user
  * chats against the home deployment, so its tags are the truthful ones —
- * and later regions only extend `hostedIn`.
+ * and later regions only extend `hostedIn` and add their own
+ * `retirementByRegion` entry.
  */
 export function mergeMultiRegionDiscovery(
   regions: RegionalDeployments[],
@@ -310,13 +311,28 @@ export function mergeMultiRegionDiscovery(
       metadataById,
       opts,
     )) {
+      // Each region's deployment retires on its own schedule: keep its facts
+      // even when another region's metadata wins the model entry.
+      const facts: ModelRetirementFacts = {
+        retiresAt: model.retiresAt,
+        deploymentModelName: model.deploymentModelName,
+        successorId: model.successorId,
+      };
       const existing = byId.get(model.id);
       if (existing) {
         if (existing.hostedIn && !existing.hostedIn.includes(region)) {
           existing.hostedIn.push(region);
         }
+        existing.retirementByRegion = {
+          ...existing.retirementByRegion,
+          [region]: facts,
+        };
       } else {
-        byId.set(model.id, { ...model, hostedIn: [region] });
+        byId.set(model.id, {
+          ...model,
+          hostedIn: [region],
+          retirementByRegion: { [region]: facts },
+        });
       }
     }
   }
