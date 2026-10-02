@@ -605,6 +605,36 @@ describe('ModelDiscoveryService', () => {
       expect(models[0].retiresAt).toBeUndefined();
     });
 
+    it('gives the catalog read its own deadline, and leaves the deployment list without one', async () => {
+      mockArm([chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05')]);
+      await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+
+      const calls = (global.fetch as unknown as ReturnType<typeof vi.fn>).mock
+        .calls as [string, RequestInit | undefined][];
+      const catalogCall = calls.find(([url]) => isCatalogUrl(url));
+      const deploymentCall = calls.find(([url]) => !isCatalogUrl(url));
+      expect(catalogCall?.[1]?.signal).toBeInstanceOf(AbortSignal);
+      expect(deploymentCall?.[1]?.signal).toBeUndefined();
+    });
+
+    it('still discovers when the catalog read is aborted by its deadline', async () => {
+      vi.spyOn(console, 'warn').mockImplementation(() => {});
+      vi.spyOn(global, 'fetch').mockImplementation((async (url: string) => {
+        if (isCatalogUrl(url)) {
+          throw new DOMException('The operation timed out.', 'TimeoutError');
+        }
+        return {
+          ok: true,
+          json: async () => ({
+            value: [chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05')],
+          }),
+        };
+      }) as unknown as typeof fetch);
+
+      const models = await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+      expect(models.map((m) => m.deploymentName)).toEqual(['gpt-5.4']);
+    });
+
     it('skips the catalog for user-scoped (byom) discovery', async () => {
       mockArm([chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05')]);
       await service.listDeployedModels('user-token', ACCOUNT_PATH, {
