@@ -209,6 +209,8 @@ export class WebSearchTool implements Tool {
       freshness: params.freshness,
       deep: params.deep,
       region: params.user?.region,
+      onUsage: params.onUsage,
+      signal: params.signal,
     });
   }
 
@@ -360,7 +362,7 @@ export class WebSearchTool implements Tool {
       ...(entry.sourceUrl ? { sourceUrl: entry.sourceUrl } : {}),
     }));
     if (headlineCitations.length === 0) {
-      return { text: bing.text, citations: bing.citations };
+      return bing;
     }
 
     const headlineDigest = freshEntries
@@ -378,6 +380,9 @@ export class WebSearchTool implements Tool {
         `Additional recent headlines for ${label} (cite by number where relevant):\n\n` +
         headlineDigest,
       citations: [...(bing.citations ?? []), ...headlineCitations],
+      // Keep what the Bing leg reported about itself (the deployment it
+      // ran on): the tool record names it.
+      metadata: { ...bing.metadata, merged: true },
     };
   }
 }
