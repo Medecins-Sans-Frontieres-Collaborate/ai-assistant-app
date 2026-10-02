@@ -125,33 +125,62 @@ export interface EmissionsEstimate {
 }
 
 /**
+ * The part of an assumption set the estimate itself depends on. Narrower than
+ * {@link EmissionsAssumptions} so a set that comes from somewhere other than
+ * config/emissions.json — the assumptions a delivered emissions report was
+ * produced with, or a what-if — can be passed without inventing the display
+ * settings it does not carry.
+ */
+export type EmissionsFactors = Pick<
+  EmissionsAssumptions,
+  | 'assumptionsVersion'
+  | 'pue'
+  | 'gridIntensity'
+  | 'whPer1kTokens'
+  | 'promptTokenWeight'
+  | 'reasoningEffortMultipliers'
+  | 'dedicatedReasoningMultiplier'
+>;
+
+/**
+ * The estimate under an EXPLICIT assumption set. This is the one formula:
+ * {@link estimateCO2Grams} is this with the app's current assumptions, and the
+ * analytics emissions dashboard calls it with whichever set the reader picks,
+ * so a report can be recalculated without a second copy of the arithmetic.
+ */
+export function estimateCO2GramsWith(
+  factors: EmissionsFactors,
+  input: EmissionsInput,
+): EmissionsEstimate {
+  const effectiveTokens =
+    input.promptTokens * factors.promptTokenWeight + input.completionTokens;
+  const effortMultiplier =
+    factors.reasoningEffortMultipliers[input.reasoningEffort ?? 'none'];
+  const dedicatedMultiplier = input.isDedicatedReasoner
+    ? factors.dedicatedReasoningMultiplier
+    : 1;
+  const energyWh =
+    (effectiveTokens / 1000) *
+    factors.whPer1kTokens[input.sizeClass] *
+    effortMultiplier *
+    dedicatedMultiplier *
+    factors.pue;
+  const intensity = factors.gridIntensity[input.region ?? 'default'];
+  return {
+    gCO2e: (energyWh * intensity) / 1000,
+    energyWh,
+    assumptionsVersion: factors.assumptionsVersion,
+  };
+}
+
+/**
  * Estimates the CO2e for one request (or one aggregated bucket of requests
  * sharing model/region/effort — the formula is linear in tokens).
  */
 export function estimateCO2Grams(input: EmissionsInput): EmissionsEstimate {
-  const a = EMISSIONS_ASSUMPTIONS;
-  const effectiveTokens =
-    input.promptTokens * a.promptTokenWeight + input.completionTokens;
-  const effortMultiplier =
-    a.reasoningEffortMultipliers[input.reasoningEffort ?? 'none'];
-  const dedicatedMultiplier = input.isDedicatedReasoner
-    ? a.dedicatedReasoningMultiplier
-    : 1;
-  const energyWh =
-    (effectiveTokens / 1000) *
-    a.whPer1kTokens[input.sizeClass] *
-    effortMultiplier *
-    dedicatedMultiplier *
-    a.pue;
-  const intensity = a.gridIntensity[input.region ?? 'default'];
-  return {
-    gCO2e: (energyWh * intensity) / 1000,
-    energyWh,
-    assumptionsVersion: a.assumptionsVersion,
-  };
+  return estimateCO2GramsWith(EMISSIONS_ASSUMPTIONS, input);
 }
 
-/** Relative per-request impact tier, for at-a-glance model comparison. */
 export type EmissionsTier = 'low' | 'moderate' | 'high';
 
 const SIZE_CLASS_TIER: Record<ModelSizeClass, EmissionsTier> = {
