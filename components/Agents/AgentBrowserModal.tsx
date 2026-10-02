@@ -34,7 +34,7 @@ import {
 } from '@/lib/utils/app/agentAttachment';
 
 import { Conversation } from '@/types/chat';
-import { SearchMode } from '@/types/searchMode';
+import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 
 import { modelLimitCopy } from '@/components/Chat/ModelSelect/ModelLimitBadge';
 import {
@@ -288,11 +288,8 @@ export function AgentBrowserModal() {
     if (!model) return;
     incrementAgentBrowserUsage(agent.id);
 
-    // Same AGENT-mode auto-fix as the sidebar's new-chat path.
-    let searchMode = defaultSearchMode;
-    if (searchMode === SearchMode.AGENT && !model.agentId) {
-      searchMode = SearchMode.INTELLIGENT;
-    }
+    // A persisted AGENT default (retired routing) reads as INTELLIGENT.
+    const searchMode = normalizeSearchMode(defaultSearchMode);
 
     const attachment = attachAgentUpdates(
       { model, bot: undefined, threadId: undefined },
