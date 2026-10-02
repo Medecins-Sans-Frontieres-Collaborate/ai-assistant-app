@@ -1187,6 +1187,25 @@ describe('settingsStore migration (v67 → v68)', () => {
     expect(result.lastChannelSetId).toBe('msf-no');
   });
 
+  it('v69 starts the applied-retirements record empty and drops the unshipped v64 marker', () => {
+    const result = migrate({ euDefaultModelSwitchApplied: true }, 68) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.modelRetirementsApplied).toEqual({});
+    expect('euDefaultModelSwitchApplied' in result).toBe(false);
+  });
+
+  it('keeps applied retirements on a current store, dropping non-string values', () => {
+    const result = migrate(
+      { modelRetirementsApplied: { 'gpt-5.2': 'forced', broken: 7 } },
+      69,
+    ) as Record<string, unknown>;
+
+    expect(result.modelRetirementsApplied).toEqual({ 'gpt-5.2': 'forced' });
+  });
+
   /**
    * Only the container used to be checked, so a row that was not a string
    * array survived into the store and threw in the workspace's seed.

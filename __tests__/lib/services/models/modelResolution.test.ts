@@ -306,6 +306,86 @@ describe('mergeDiscoveryWithMetadata', () => {
     );
     expect(out[0].tagline).toBe('Tagged!');
   });
+
+  describe('retirement facts', () => {
+    it('carries the deployed version retirement date onto the model', () => {
+      const [model] = mergeDiscoveryWithMetadata(
+        [
+          {
+            ...deployed('gpt-5.2', 'OpenAI'),
+            retiresAt: '2027-06-08T00:00:00Z',
+          },
+        ],
+        metadata,
+        { showUnknown: false },
+      );
+      expect(model.retiresAt).toBe('2027-06-08T00:00:00Z');
+    });
+
+    it('records the underlying model only when the deployment runs a different one', () => {
+      const [same, repointed] = mergeDiscoveryWithMetadata(
+        [
+          deployed('claude-opus-4-6', 'Anthropic'),
+          { ...deployed('gpt-5.2', 'OpenAI'), modelName: 'gpt-5.4' },
+        ],
+        metadata,
+        { showUnknown: false },
+      );
+      expect(same.deploymentModelName).toBeUndefined();
+      expect(same.retiresAt).toBeUndefined();
+      expect(repointed.deploymentModelName).toBe('gpt-5.4');
+    });
+
+    it('stamps synthesized unknown models too', () => {
+      const [model] = mergeDiscoveryWithMetadata(
+        [
+          {
+            ...deployed('brand-new-model', 'OpenAI'),
+            retiresAt: '2027-01-01T00:00:00Z',
+          },
+        ],
+        metadata,
+        { showUnknown: true },
+      );
+      expect(model.retiresAt).toBe('2027-01-01T00:00:00Z');
+    });
+
+    it('reads a successor override from the ui-successor tag', () => {
+      const [model] = mergeDiscoveryWithMetadata(
+        [deployed('gpt-5.2', 'OpenAI', { 'ui-successor': ' gpt-5.4 ' })],
+        metadata,
+        { showUnknown: false },
+      );
+      expect(model.successorId).toBe('gpt-5.4');
+    });
+
+    it("keeps the home region's facts when a model is deployed in both", () => {
+      const [model] = mergeMultiRegionDiscovery(
+        [
+          {
+            region: 'US',
+            deployed: [
+              {
+                ...deployed('gpt-5.2', 'OpenAI'),
+                retiresAt: '2027-06-08T00:00:00Z',
+              },
+            ],
+          },
+          {
+            region: 'EU',
+            deployed: [
+              { ...deployed('gpt-5.2', 'OpenAI'), modelName: 'gpt-5.4' },
+            ],
+          },
+        ],
+        metadata,
+        { showUnknown: false },
+      );
+      expect(model.hostedIn).toEqual(['US', 'EU']);
+      expect(model.retiresAt).toBe('2027-06-08T00:00:00Z');
+      expect(model.deploymentModelName).toBeUndefined();
+    });
+  });
 });
 
 describe('applyRingGate', () => {
