@@ -256,7 +256,6 @@ export async function POST(req: NextRequest): Promise<Response> {
     const container = ServiceContainer.getInstance();
     const fileProcessingService = container.getFileProcessingService();
     const toolRouterService = container.getToolRouterService();
-    const agentChatService = container.getAgentChatService();
     const aiFoundryAgentHandler = container.getAIFoundryAgentHandler();
     const standardChatService = container.getStandardChatService();
 
@@ -294,12 +293,11 @@ export async function POST(req: NextRequest): Promise<Response> {
         new GeneratedFileManifestEnricher(),
         new ToolRouterEnricher(
           toolRouterService,
-          agentChatService,
           container.getSearchAssessor(),
         ),
         // Structured-data extraction: composes the JSON-schema response
         // format when the request carries an `extraction` payload.
-        new ExtractionEnricher(agentChatService),
+        new ExtractionEnricher(),
         new AgentEnricher(),
 
         // Execution handlers (AgentChatHandler runs first, StandardChatHandler as fallback)
