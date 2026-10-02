@@ -1,4 +1,3 @@
-import { AgentChatService } from '@/lib/services/chat/AgentChatService';
 import {
   WebSearchTool,
   resolveDefaultWebSearchProvider,
@@ -13,8 +12,6 @@ import {
   isSearxngConfigured,
   searchSearxng,
 } from '@/lib/services/chat/tools/searxngSearch';
-
-import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { env } from '@/config/environment';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -41,7 +38,6 @@ vi.mock('@/lib/services/chat/tools/responsesWebSearch', () => ({
 
 describe('WebSearchTool', () => {
   let webSearchTool: WebSearchTool;
-  let mockAgentChatService: AgentChatService;
 
   const priorProvider = env.WEB_SEARCH_PROVIDER;
   afterAll(() => {
@@ -49,14 +45,10 @@ describe('WebSearchTool', () => {
   });
 
   beforeEach(() => {
-    // These tests exercise the Bing-agent path explicitly.
-    (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
-    // Create mock AgentChatService
-    mockAgentChatService = {
-      executeWebSearchTool: vi.fn(),
-    } as any;
-
-    webSearchTool = new WebSearchTool(mockAgentChatService);
+    // These tests exercise the Bing path explicitly.
+    (env as any).WEB_SEARCH_PROVIDER = 'bing';
+    vi.mocked(executeResponsesWebSearch).mockReset();
+    webSearchTool = new WebSearchTool();
   });
 
   describe('execute', () => {
@@ -79,13 +71,10 @@ describe('WebSearchTool', () => {
         ],
       };
 
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue(
-        mockResults,
-      );
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue(mockResults);
 
       const result = await webSearchTool.execute({
         searchQuery: 'artificial intelligence',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -96,13 +85,10 @@ describe('WebSearchTool', () => {
 
     it('should return error message when search fails', async () => {
       const error = new Error('API quota exceeded');
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockRejectedValue(
-        error,
-      );
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(error);
 
       const result = await webSearchTool.execute({
         searchQuery: 'test query',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -113,13 +99,10 @@ describe('WebSearchTool', () => {
 
     it('should handle network errors gracefully', async () => {
       const error = new Error('Network timeout');
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockRejectedValue(
-        error,
-      );
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(error);
 
       const result = await webSearchTool.execute({
         searchQuery: 'test query',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -129,13 +112,10 @@ describe('WebSearchTool', () => {
     });
 
     it('should handle unknown errors', async () => {
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockRejectedValue(
-        'Unknown error',
-      );
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue('Unknown error');
 
       const result = await webSearchTool.execute({
         searchQuery: 'test query',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -145,14 +125,13 @@ describe('WebSearchTool', () => {
     });
 
     it('should return empty citations array when citations are missing', async () => {
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Some results',
         citations: [],
       });
 
       const result = await webSearchTool.execute({
         searchQuery: 'test',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -184,9 +163,9 @@ describe('WebSearchTool', () => {
       expect(resolveDefaultWebSearchProvider()).toBe('searxng');
       vi.mocked(isSearxngConfigured).mockReturnValue(false);
       expect(resolveDefaultWebSearchProvider()).toBe('news');
-      (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
+      (env as any).WEB_SEARCH_PROVIDER = 'bing';
       vi.mocked(isSearxngConfigured).mockReturnValue(true);
-      expect(resolveDefaultWebSearchProvider()).toBe('bing-agent');
+      expect(resolveDefaultWebSearchProvider()).toBe('bing');
     });
 
     it('passes queries, tuning and the router category through and formats a web digest', async () => {
@@ -439,29 +418,28 @@ describe('WebSearchTool', () => {
       );
     });
 
-    it('ignores fan-out on the bing-agent path (agent expands queries itself)', async () => {
-      (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
-        text: 'Agent results',
+    it('ignores fan-out on the Bing path (the model expands queries itself)', async () => {
+      (env as any).WEB_SEARCH_PROVIDER = 'bing';
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
+        text: 'Bing results',
         citations: [],
       });
 
       await webSearchTool.execute({
         searchQuery: 'primary query',
         searchQueries: ['primary query', 'secondary query'],
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
       expect(searchNewsFanOut).not.toHaveBeenCalled();
-      expect(mockAgentChatService.executeWebSearchTool).toHaveBeenCalledWith(
+      expect(executeResponsesWebSearch).toHaveBeenCalledWith(
         expect.objectContaining({ searchQuery: 'primary query' }),
       );
     });
   });
 
-  describe('bing-responses provider (Responses API web_search)', () => {
-    it('dispatches to the Responses executor with the tuning params, no model needed', async () => {
+  describe('bing provider (Responses API web_search)', () => {
+    it('dispatches to the Responses executor with the tuning params and the user region — no agent, no model', async () => {
       vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Grounded digest.[1]',
         citations: [
@@ -471,12 +449,11 @@ describe('WebSearchTool', () => {
 
       const result = await webSearchTool.execute({
         searchQuery: 'renewable energy trends',
-        provider: 'bing-responses',
+        provider: 'bing',
         resultCount: 10,
         freshness: 'week',
         deep: true,
-        // No `model` — this path must not require an agent-backed model.
-        user: { email: 'test@example.com' } as any,
+        user: { email: 'test@example.com', region: 'EU' } as any,
       });
 
       expect(executeResponsesWebSearch).toHaveBeenCalledWith({
@@ -484,8 +461,8 @@ describe('WebSearchTool', () => {
         resultCount: 10,
         freshness: 'week',
         deep: true,
+        region: 'EU',
       });
-      expect(mockAgentChatService.executeWebSearchTool).not.toHaveBeenCalled();
       expect(searchNewsFanOut).not.toHaveBeenCalled();
       expect(searchNewsParallel).not.toHaveBeenCalled();
       expect(result.text).toBe('Grounded digest.[1]');
@@ -499,7 +476,7 @@ describe('WebSearchTool', () => {
 
       const result = await webSearchTool.execute({
         searchQuery: 'anything',
-        provider: 'bing-responses',
+        provider: 'bing',
         user: { email: 'test@example.com' } as any,
       });
 
@@ -527,7 +504,7 @@ describe('WebSearchTool', () => {
         headline(1),
         headline(2),
       ]);
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Bing summary [1]',
         citations: [
           {
@@ -543,7 +520,6 @@ describe('WebSearchTool', () => {
       const result = await webSearchTool.execute({
         searchQuery: 'fusion energy milestone',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
         onInterimResults,
       });
@@ -564,7 +540,7 @@ describe('WebSearchTool', () => {
         { ...headline(1), url: 'https://deep.example' },
         headline(2),
       ]);
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Bing summary',
         citations: [
           {
@@ -579,7 +555,6 @@ describe('WebSearchTool', () => {
       const result = await webSearchTool.execute({
         searchQuery: 'topic',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
       });
 
@@ -591,14 +566,13 @@ describe('WebSearchTool', () => {
 
     it('returns the headlines alone when the Bing leg fails, flagged and with an honest note', async () => {
       vi.mocked(fetchGoogleNewsHeadlines).mockResolvedValue([headline(1)]);
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockRejectedValue(
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(
         new Error('Foundry agent unavailable'),
       );
 
       const result = await webSearchTool.execute({
         searchQuery: 'topic',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
       });
 
@@ -614,7 +588,7 @@ describe('WebSearchTool', () => {
 
     it('does not flag the result when both legs succeed', async () => {
       vi.mocked(fetchGoogleNewsHeadlines).mockResolvedValue([headline(1)]);
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Bing summary',
         citations: [
           { number: 1, title: 'A', url: 'https://a.example', date: '' },
@@ -624,7 +598,6 @@ describe('WebSearchTool', () => {
       const result = await webSearchTool.execute({
         searchQuery: 'topic',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
       });
 
@@ -635,7 +608,7 @@ describe('WebSearchTool', () => {
       vi.mocked(fetchGoogleNewsHeadlines).mockRejectedValue(
         new Error('RSS unreachable'),
       );
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Bing only',
         citations: [
           { number: 1, title: 'A', url: 'https://a.example', date: '' },
@@ -646,7 +619,6 @@ describe('WebSearchTool', () => {
       const result = await webSearchTool.execute({
         searchQuery: 'topic',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
         onInterimResults,
       });
@@ -660,37 +632,19 @@ describe('WebSearchTool', () => {
       vi.mocked(fetchGoogleNewsHeadlines).mockRejectedValue(
         new Error('RSS unreachable'),
       );
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockRejectedValue(
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(
         new Error('Foundry agent unavailable'),
       );
 
       const result = await webSearchTool.execute({
         searchQuery: 'topic',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
       });
 
       expect(result.citations).toEqual([]);
       expect(result.text).toContain('Web search encountered an issue');
       expect(result.text).toContain('Foundry agent unavailable');
-    });
-
-    it('degrades to the news feed (no interim emission) without an agent model', async () => {
-      vi.mocked(fetchGoogleNewsHeadlines).mockResolvedValue([headline(1)]);
-      const onInterimResults = vi.fn();
-
-      const result = await webSearchTool.execute({
-        searchQuery: 'topic',
-        provider: 'combined',
-        user,
-        onInterimResults,
-      });
-
-      expect(mockAgentChatService.executeWebSearchTool).not.toHaveBeenCalled();
-      expect(onInterimResults).not.toHaveBeenCalled();
-      expect(result.citations).toHaveLength(1);
-      expect(result.text).toContain('Headline 1');
     });
   });
 
