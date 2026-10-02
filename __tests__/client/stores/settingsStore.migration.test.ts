@@ -775,20 +775,25 @@ describe('settingsStore migration (v47 → v48)', () => {
     });
   });
 
-  it('keeps a valid persisted provider and repairs an invalid one', () => {
-    for (const valid of ['google-news', 'bing-agent', 'bing-responses']) {
+  it('keeps a valid persisted provider, folds the old Bing names into bing, and repairs an invalid one', () => {
+    for (const [persisted, expected] of [
+      ['google-news', 'google-news'],
+      ['bing', 'bing'],
+      ['bing-agent', 'bing'],
+      ['bing-responses', 'bing'],
+    ]) {
       const kept = migrate(
         {
           webSearchOptions: {
             resultCount: 8,
             freshness: 'auto',
-            provider: valid,
+            provider: persisted,
           },
         },
         47,
       ) as Record<string, unknown>;
       expect((kept.webSearchOptions as Record<string, unknown>).provider).toBe(
-        valid,
+        expected,
       );
     }
 
@@ -1108,8 +1113,7 @@ describe('settingsStore migration (v65 → v66)', () => {
       'news',
       'google-news',
       'gdelt',
-      'bing-agent',
-      'bing-responses',
+      'bing',
     ]) {
       const result = migrate(
         {
