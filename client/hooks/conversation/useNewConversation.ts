@@ -15,7 +15,7 @@ import { isAgentShapedModelId } from '@/lib/utils/app/agentAttachment';
 
 import { Conversation } from '@/types/chat';
 import { ModelListSource, OpenAIModel, OpenAIModels } from '@/types/openai';
-import { SearchMode } from '@/types/searchMode';
+import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { getOrganizationAgentIdFromModelId } from '@/lib/organizationAgents';
@@ -172,14 +172,8 @@ export function useNewConversation(): (folderId?: string | null) => void {
         ...defaultModel,
       };
 
-      // Determine appropriate search mode based on model capabilities
-      // If the model is an agent (has agentId), use the default search mode from settings
-      // Otherwise, ensure we don't use AGENT mode on non-agent models
-      let searchMode = defaultSearchMode;
-      if (searchMode === SearchMode.AGENT && !defaultModel.agentId) {
-        // Auto-fix: If default is AGENT but model doesn't support it, use INTELLIGENT instead
-        searchMode = SearchMode.INTELLIGENT;
-      }
+      // A persisted AGENT default (retired routing) reads as INTELLIGENT.
+      const searchMode = normalizeSearchMode(defaultSearchMode);
 
       // Get bot ID for organization agents (enables RAG)
       const botId = getOrganizationAgentIdFromModelId(defaultModel.id);
