@@ -35,14 +35,10 @@ export enum SearchMode {
 }
 
 /** A persisted or client-sent mode as it should be acted on today. */
-export function normalizeSearchMode(mode: SearchMode): SearchMode;
-export function normalizeSearchMode(
-  mode: SearchMode | undefined,
-): SearchMode | undefined;
-export function normalizeSearchMode(
-  mode: SearchMode | undefined,
-): SearchMode | undefined {
-  return mode === SearchMode.AGENT ? SearchMode.INTELLIGENT : mode;
+export function normalizeSearchMode<T extends SearchMode | undefined>(
+  mode: T,
+): T {
+  return (mode === SearchMode.AGENT ? SearchMode.INTELLIGENT : mode) as T;
 }
 
 /**
