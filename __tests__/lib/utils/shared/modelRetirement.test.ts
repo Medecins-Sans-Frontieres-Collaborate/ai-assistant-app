@@ -441,6 +441,106 @@ describe('planRetirementMoves', () => {
   });
 });
 
+describe('regions retire separately', () => {
+  // One model id, two deployments: the US one retires in 3 days, the EU one
+  // is fine. A US user's unpinned conversations are served by the US one.
+  const both = { hostedIn: ['US', 'EU'] as ('US' | 'EU')[] };
+  const usRetiring = (id: string) =>
+    served(id, {
+      ...both,
+      retiresAt: inDays(3),
+      retirementByRegion: { US: { retiresAt: inDays(3) }, EU: {} },
+    });
+  const list = [served('gpt-5.4', both), usRetiring('gpt-5.1')];
+  const leaving = (routedRegion?: 'US' | 'EU') =>
+    listRetirements({ models: list, region: 'US', now: NOW, routedRegion })
+      .map((r) => r.model.id)
+      .filter((id) => !FORCED_IDS.includes(id));
+
+  it('judges a conversation by the deployment that serves it', () => {
+    expect(leaving()).toEqual(['gpt-5.1']);
+    // Pinned to the EU instance, which is not retiring.
+    expect(leaving('EU')).toEqual([]);
+  });
+
+  it('applies an EU-only repoint to EU-routed conversations only', () => {
+    const repointedInEu = served('gpt-5.1', {
+      ...both,
+      retirementByRegion: {
+        US: {},
+        EU: { deploymentModelName: 'gpt-5.4' },
+      },
+    });
+    const models = [served('gpt-5.4', both), repointedInEu];
+    const ids = (routedRegion?: 'US' | 'EU') =>
+      listRetirements({ models, region: 'US', now: NOW, routedRegion })
+        .map((r) => r.model.id)
+        .filter((id) => !FORCED_IDS.includes(id));
+    expect(ids()).toEqual([]);
+    expect(ids('EU')).toEqual(['gpt-5.1']);
+  });
+
+  it('serves a US user on an EU-only model from the EU deployment', () => {
+    const euOnly = served('gpt-5.1', {
+      ...EU,
+      retirementByRegion: { EU: { retiresAt: inDays(3) } },
+    });
+    expect(
+      listRetirements({
+        models: [served('gpt-5.4', both), euOnly],
+        region: 'US',
+        now: NOW,
+      }).some((r) => r.model.id === 'gpt-5.1'),
+    ).toBe(true);
+  });
+
+  it('keeps an EU-pinned conversation in the EU when it does have to move', () => {
+    const models = [
+      served('gpt-5.4'), // US only
+      served('gpt-5.5', both),
+      served('gpt-5.1', {
+        ...both,
+        retirementByRegion: { US: {}, EU: { retiresAt: inDays(3) } },
+      }),
+    ];
+    expect(
+      resolveSuccessor(models[2], models, 'US', NOW, 'EU')?.hostedIn,
+    ).toContain('EU');
+  });
+
+  it('moves pinned conversations by their own region’s plan', () => {
+    const context = { models: list, region: 'US' as const, now: NOW };
+    const applied = Object.fromEntries(
+      FORCED_IDS.map((id) => [
+        id,
+        { triggers: ['forced'], appliedAt: inDays(-1) },
+      ]),
+    );
+    const conversation = (id: string, extra: Partial<Conversation> = {}) =>
+      ({
+        id,
+        name: id,
+        messages: [],
+        model: { id: 'gpt-5.1', name: 'gpt-5.1' } as OpenAIModel,
+        prompt: '',
+        temperature: 0.7,
+        folderId: null,
+        updatedAt: '2026-09-01T10:00:00.000Z',
+        ...extra,
+      }) as Conversation;
+    const moved = moveConversationsToSuccessors(
+      [
+        conversation('unpinned'),
+        conversation('pinned', { hostedRegion: 'EU' }),
+      ],
+      planRetirementMoves(context, applied),
+      undefined,
+      { EU: planRetirementMoves({ ...context, routedRegion: 'EU' }, applied) },
+    );
+    expect(moved.map((c) => c.model.id)).toEqual(['gpt-5.4', 'gpt-5.1']);
+  });
+});
+
 describe('getRetirementNotice', () => {
   const context = (retiresAt: string) => ({
     models: [served('gpt-5.4'), served('gpt-5.1', { retiresAt })],
