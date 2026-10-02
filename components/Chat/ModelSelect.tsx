@@ -14,6 +14,7 @@ import { useTranslations } from 'next-intl';
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useFoundryAgents } from '@/client/hooks/settings/useFoundryAgents';
 import { useModelOrder } from '@/client/hooks/settings/useModelOrder';
+import { useModelRetirements } from '@/client/hooks/settings/useModelRetirements';
 import { useModelSelectState } from '@/client/hooks/settings/useModelSelectState';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useCustomSourceModels } from '@/client/hooks/useCustomSourceModels';
@@ -59,6 +60,7 @@ import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
 import { ModelStatusBadge } from './ModelSelect/ModelStatusBadge';
 import { useModelAvailabilityMap } from './ModelSelect/modelLimits';
+import { useRetirementCopy } from './ModelSelect/modelRetirementCopy';
 import { SHOW_RECOMMENDED_TAG } from './ModelSelect/showRecommendedTag';
 import { ModelSourceForm } from './ModelSources/ModelSourceForm';
 
@@ -117,6 +119,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({
     isSelectable: isNotExhausted,
     refetch: refetchLimits,
   } = useModelAvailabilityMap();
+  // Models that are being retired (lib/utils/shared/modelRetirement.ts):
+  // marked in the list, and never what a family row fronts by default.
+  const retirements = useModelRetirements();
+  const retirementCopy = useRetirementCopy();
 
   // Feature flag: Control organization bots visibility via LaunchDarkly
   // Default to true if LaunchDarkly is not configured (for local development)
@@ -1012,8 +1018,12 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                       SHOW_RECOMMENDED_TAG &&
                       getModelTier(metaOf(model)) === 'featured';
                     const infoBadge = badgeFor(model);
+                    const retirement = retirements.get(model.id);
                     const badge =
-                      opts?.versionTag || isFeatured || infoBadge ? (
+                      opts?.versionTag ||
+                      isFeatured ||
+                      infoBadge ||
+                      retirement ? (
                         <>
                           {opts?.versionTag && (
                             <ModelStatusBadge
@@ -1023,6 +1033,13 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                           )}
                           {isFeatured && recommendedPill}
                           {infoBadge}
+                          {retirement && (
+                            <ModelStatusBadge
+                              tone="warning"
+                              label={t('modelSelect.retiring.badge')}
+                              tooltip={retirementCopy(retirement)}
+                            />
+                          )}
                         </>
                       ) : undefined;
                     return (
@@ -1180,20 +1197,27 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                         // panel. A spent default yields to a usable
                         // sibling so the row stays clickable; the row
                         // grays only when the whole family is spent.
+                        // A retiring member never fronts the row either
+                        // (unless it is the current selection): one click
+                        // on the family must not put a conversation — and
+                        // the default — onto a model that is going away.
+                        const isStaying = (m: OpenAIModel) =>
+                          !retirements.has(m.id);
                         const rep = seriesRepresentative(
                           versions,
                           selectedModelId,
-                          isNotExhausted,
+                          (m) => isNotExhausted(m) && isStaying(m),
                         )!;
-                        // Did the gate change which model fronts the row?
-                        // Comparing against the ungated pick (same selection
-                        // bias, no isSelectable) isolates exactly the "cap
-                        // workaround" case: a click here selects `rep` to
-                        // keep the row usable, not because the user chose it
-                        // as their new default.
+                        // Did the usage gate change which model fronts the
+                        // row? Comparing against the pick without it (same
+                        // selection bias, same retirement rule) isolates
+                        // exactly the "cap workaround" case: a click here
+                        // selects `rep` to keep the row usable, not because
+                        // the user chose it as their new default.
                         const naturalRep = seriesRepresentative(
                           versions,
                           selectedModelId,
+                          isStaying,
                         )!;
                         return renderModelCard(rep, {
                           name: rep.seriesLabel ?? rep.name,
