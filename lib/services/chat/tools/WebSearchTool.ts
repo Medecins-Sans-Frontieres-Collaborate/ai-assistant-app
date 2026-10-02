@@ -1,6 +1,5 @@
 import { ResolvedWebSearchProvider } from '@/types/webSearch';
 
-import { AgentChatService } from '../AgentChatService';
 import { Tool, ToolResult, WebSearchToolParams } from './Tool';
 import { searchGoogleNews } from './googleNewsSearch';
 import {
@@ -34,9 +33,10 @@ export function resolveDefaultWebSearchProvider(): ResolvedWebSearchProvider {
 /**
  * WebSearchTool
  *
- * Executes web searches using AI Foundry agents.
- * Only the search query is sent to AI Foundry, not the full conversation,
- * preserving user privacy.
+ * Executes web searches on the configured backend: MSF's own SearXNG
+ * instance, the keyless news feeds, or Bing through the Responses API's
+ * native web_search tool (no Foundry agent involved). Only the search query
+ * leaves the app, never the conversation, preserving user privacy.
  *
  * No result caching: each request runs the full search. An in-memory or
  * cross-request cache would create a window where one user's queries
@@ -49,8 +49,6 @@ export class WebSearchTool implements Tool {
   readonly name = 'Web Search';
   readonly description =
     'Searches the web for current information, news, and real-time data';
-
-  constructor(private agentChatService: AgentChatService) {}
 
   /**
    * Executes a web search.
@@ -77,54 +75,24 @@ export class WebSearchTool implements Tool {
         return await this.searxngFallback(params);
       }
 
-      // Combined: Bing agent + Google News feed concurrently — headlines
-      // surface via onInterimResults while the agent runs, then merge.
+      // Combined: Bing + Google News feed concurrently — headlines surface
+      // via onInterimResults while Bing runs, then the two merge.
       if (provider === 'combined') {
         return await this.executeCombined(params);
       }
 
-      // Responses-API native web_search: a single model call with the
-      // built-in Bing tool — same web coverage as 'bing-agent' without the
-      // Foundry agent round-trip. No agent-backed model required.
-      if (provider === 'bing-responses') {
-        const result = await executeResponsesWebSearch({
-          searchQuery: params.searchQuery,
-          resultCount: params.resultCount,
-          freshness: params.freshness,
-          deep: params.deep,
-        });
+      // Bing: the Responses API's native web_search tool — one model call
+      // on the user's region, no Foundry agent.
+      if (provider === 'bing') {
+        const result = await this.executeBing(params);
         console.log(
-          `[WebSearchTool] Responses web_search completed: ${result.text.length} chars, ${result.citations?.length ?? 0} citations`,
+          `[WebSearchTool] Bing web_search completed: ${result.text.length} chars, ${result.citations?.length ?? 0} citations`,
         );
         return result;
       }
 
-      // Feed-based providers: no LLM round-trip. The Bing agent path below
-      // stays available via WEB_SEARCH_PROVIDER.
-      if (provider !== 'bing-agent') {
-        return await this.executeFeeds(provider, params);
-      }
-
-      if (!params.model) {
-        throw new Error('Bing-agent search requires an agent-backed model');
-      }
-      const searchResults = await this.agentChatService.executeWebSearchTool({
-        searchQuery: params.searchQuery,
-        model: params.model,
-        user: params.user,
-        resultCount: params.resultCount,
-        freshness: params.freshness,
-        onActivity: params.onActivity,
-      });
-
-      console.log(
-        `[WebSearchTool] Search completed, ${searchResults.text.length} characters, ${searchResults.citations.length} citations`,
-      );
-
-      return {
-        text: searchResults.text,
-        citations: searchResults.citations,
-      };
+      // Feed-based providers: no LLM round-trip.
+      return await this.executeFeeds(provider, params);
     } catch (error) {
       console.error('[WebSearchTool] Search failed:', error);
 
@@ -233,6 +201,17 @@ export class WebSearchTool implements Tool {
    * Keyless feed providers. 'news' fans out to GDELT + Google News in
    * parallel so each backs the other up.
    */
+  /** Bing through the Responses API web_search tool, on the user's region. */
+  private executeBing(params: WebSearchToolParams): Promise<ToolResult> {
+    return executeResponsesWebSearch({
+      searchQuery: params.searchQuery,
+      resultCount: params.resultCount,
+      freshness: params.freshness,
+      deep: params.deep,
+      region: params.user?.region,
+    });
+  }
+
   private async executeFeeds(
     provider: ResolvedWebSearchProvider,
     params: WebSearchToolParams,
@@ -302,16 +281,6 @@ export class WebSearchTool implements Tool {
       : [params.searchQuery];
     const label = queries.map((q) => `"${q}"`).join('; ');
 
-    // No agent-backed model in this deployment — the Bing leg cannot run.
-    // Degrade to the feed alone (no interim emission: the result IS final).
-    if (!params.model) {
-      console.warn(
-        '[WebSearchTool] Combined search without an agent-backed model; using news feed only',
-      );
-      const entries = await fetchGoogleNewsHeadlines(queries, feedOptions);
-      return buildNewsResult(entries, label);
-    }
-
     const newsPromise: Promise<NewsEntry[]> = fetchGoogleNewsHeadlines(
       queries,
       feedOptions,
@@ -333,15 +302,7 @@ export class WebSearchTool implements Tool {
         return [] as NewsEntry[];
       });
 
-    const bingSettled = await this.agentChatService
-      .executeWebSearchTool({
-        searchQuery: params.searchQuery,
-        model: params.model,
-        user: params.user,
-        resultCount: params.resultCount,
-        freshness: params.freshness,
-        onActivity: params.onActivity,
-      })
+    const bingSettled = await this.executeBing(params)
       .then((value) => ({ ok: true as const, value }))
       .catch((error) => ({ ok: false as const, error }));
     const entries = await newsPromise;
@@ -374,7 +335,7 @@ export class WebSearchTool implements Tool {
 
     const bing = bingSettled.value;
     if (entries.length === 0) {
-      return { text: bing.text, citations: bing.citations };
+      return bing;
     }
     if ((bing.citations?.length ?? 0) === 0 && bing.text.trim().length === 0) {
       return buildNewsResult(entries, label);
