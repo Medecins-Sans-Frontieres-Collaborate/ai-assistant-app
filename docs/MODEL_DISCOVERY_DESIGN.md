@@ -254,6 +254,35 @@ existing environment-config file) and kept in code for auditability.
   top. This design does **not** move visibility into LaunchDarkly, but flags it as the future seam if
   per-user / instant-toggle gating is ever needed.
 
+### 3.6 Retirement handling — automatic (added 2026-10-02)
+
+Models that are going away are handled from what discovery already knows, so there is no retirement
+schedule to maintain by hand. Rules: `lib/utils/shared/modelRetirement.ts`; the move:
+`client/hooks/settings/useModelRetirementMigration.ts`; the warning:
+`components/Chat/ModelRetirementNotice.tsx`.
+
+- **Facts, from Azure.** App-identity discovery also reads the account's model catalog
+  (`…/accounts/{name}/models`) and stamps each deployment with `retiresAt` — the date Azure stops
+  serving the model **version** that deployment actually runs (the deployment SKU's date when the
+  catalog gives one). `/api/models` serves it, together with `deploymentModelName` when a deployment
+  runs a different model than its name. A deployment within 30 days of its date is logged on every
+  cache fill as `[model-lifecycle] deployment "…" retires in N day(s)` — alert on that line.
+- **A model leaves** when (a) its version's date is within 30 days — notice above the composer with a
+  one-click switch, then an automatic, silent move of the saved default and all conversations 7 days
+  before the date; (b) it is an **alias** — its deployment runs another model that is itself served —
+  moved at once; or (c) it is listed in `FORCED_MODEL_RETIREMENTS` — the one manual input, for
+  decisions Azure's schedule cannot express; moved at once.
+- **Where to:** the deployment's `ui-successor` tag if usable → the region default when it is in the
+  same family → newest model of the same family and variant → the family's own default → the region
+  default. A successor must be served to the user, selectable in their region, and not itself
+  leaving.
+- **Once per event, per browser** (`settingsStore.modelRetirementsApplied`): a user who picks the
+  model again keeps it until a new retirement event applies.
+- **Not covered:** a model that vanishes from the served list with no prior signal is _not_ moved —
+  absence also means "hidden by a usage limit", "other region failed to answer" or "fallback list",
+  so it keeps the existing `ModelUnavailableNotice`. The manual `lifecycle` / `retirementDate` /
+  `retirementReplacement` fields in `config/models.json` stay informational and are not read here.
+
 ---
 
 ## 4. Env toggles
