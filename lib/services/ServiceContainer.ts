@@ -2,7 +2,6 @@ import { OPENAI_API_VERSION } from '@/lib/utils/app/const';
 import { UserRegion } from '@/lib/utils/shared/region';
 
 import { AIFoundryAgentHandler } from './chat/AIFoundryAgentHandler';
-import { AgentChatService } from './chat/AgentChatService';
 import { FileProcessingService } from './chat/FileProcessingService';
 import { StandardChatService } from './chat/StandardChatService';
 import { ToolRouterService } from './chat/ToolRouterService';
@@ -66,7 +65,6 @@ export class ServiceContainer {
   private fileProcessingService!: FileProcessingService;
   private toolRouterService!: ToolRouterService;
   private searchAssessor!: SearchAssessor;
-  private agentChatService!: AgentChatService;
   private aiFoundryAgentHandler!: AIFoundryAgentHandler;
 
   // Chat service (uses all the above)
@@ -148,7 +146,6 @@ export class ServiceContainer {
       this.openAIClient,
       (region) => this.getChatClientsForRegion(region).openAIClient,
     );
-    this.agentChatService = new AgentChatService();
     // AIFoundryAgentHandler is stateless — credentials are passed per-request
     // from the pipeline context (OBO for Foundry agents, DefaultAzureCredential fallback)
     this.aiFoundryAgentHandler = new AIFoundryAgentHandler();
@@ -318,10 +315,6 @@ export class ServiceContainer {
 
   public getSearchAssessor(): SearchAssessor {
     return this.searchAssessor;
-  }
-
-  public getAgentChatService(): AgentChatService {
-    return this.agentChatService;
   }
 
   public getAIFoundryAgentHandler(): AIFoundryAgentHandler {
