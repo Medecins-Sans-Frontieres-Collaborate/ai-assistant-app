@@ -2,6 +2,8 @@ import { Session } from 'next-auth';
 
 import { executeResponsesWebSearch } from '@/lib/services/chat/tools/responsesWebSearch';
 
+import { WorkflowCallUsage } from '@/types/workflowUsage';
+
 import { env } from '@/config/environment';
 
 /**
@@ -25,6 +27,8 @@ export interface GroundedSearchCitation {
 export interface GroundedSearchResult {
   text: string;
   citations: GroundedSearchCitation[];
+  /** The model call behind the answer, for the workflow's usage ledger. */
+  usage?: WorkflowCallUsage;
 }
 
 export interface GroundedSearchProvider {
@@ -54,12 +58,16 @@ export const bingProvider: GroundedSearchProvider = {
       env.AZURE_AI_FOUNDRY_ENDPOINT_EU,
     ),
   async search(query, user, options) {
+    let usage: WorkflowCallUsage | undefined;
     const result = await executeResponsesWebSearch({
       searchQuery: query,
       resultCount: options?.resultCount,
       region: user?.region,
+      onUsage: (spent, modelId) => {
+        usage = { label: 'search', modelId, ...spent };
+      },
     });
-    return { text: result.text, citations: result.citations ?? [] };
+    return { text: result.text, citations: result.citations ?? [], usage };
   },
 };
 
