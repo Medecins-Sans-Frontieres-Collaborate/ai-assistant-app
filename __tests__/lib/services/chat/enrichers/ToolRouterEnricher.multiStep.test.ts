@@ -206,11 +206,7 @@ describe('ToolRouterEnricher — multi-step search', () => {
     assessor = { assess: vi.fn() };
     emitMarker = vi.fn().mockResolvedValue(undefined);
 
-    enricher = new ToolRouterEnricher(
-      router as never,
-      { executeWebSearchTool: vi.fn() } as never,
-      assessor as never,
-    );
+    enricher = new ToolRouterEnricher(router as never, assessor as never);
     tool = {
       execute: vi.fn().mockResolvedValue({
         text: 'Single-step digest.',
@@ -819,10 +815,7 @@ describe('ToolRouterEnricher — multi-step search', () => {
     });
 
     it('when the enricher has no assessor', async () => {
-      enricher = new ToolRouterEnricher(
-        router as never,
-        { executeWebSearchTool: vi.fn() } as never,
-      );
+      enricher = new ToolRouterEnricher(router as never);
       (enricher as any).webSearchTool = tool;
       await expectSingleStep(context());
     });

@@ -7,7 +7,6 @@ import {
   createTestChatContext,
   createTestMessage,
 } from '@/__tests__/lib/services/chat/testUtils';
-import { AgentChatService } from '@/lib/services/chat/AgentChatService';
 import { ToolRouterService } from '@/lib/services/chat/ToolRouterService';
 import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnricher';
 import { readCitedSources } from '@/lib/services/chat/tools/citedSourceReader';
@@ -36,7 +35,6 @@ vi.mock('@/lib/services/limits/toolBudget', () => ({
 describe('ToolRouter Enricher', () => {
   let enricher: ToolRouterEnricher;
   let mockToolRouterService: any;
-  let mockAgentChatService: any;
 
   const priorProvider = env.WEB_SEARCH_PROVIDER;
   afterAll(() => {
@@ -48,7 +46,7 @@ describe('ToolRouter Enricher', () => {
     consumeToolBudgetMock.mockResolvedValue(true);
     // Most search expectations here encode the Bing-agent path (agent model
     // requirement, model-labeled records); google-news has its own describe.
-    (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
+    (env as any).WEB_SEARCH_PROVIDER = 'bing';
 
     // Mock ToolRouterService
     mockToolRouterService = {
@@ -58,16 +56,8 @@ describe('ToolRouter Enricher', () => {
       classifyDocumentTrim: vi.fn().mockResolvedValue(null),
     };
 
-    // Mock AgentChatService
-    mockAgentChatService = {
-      executeWebSearchTool: vi.fn(),
-    };
-
     // Create enricher instance
-    enricher = new ToolRouterEnricher(
-      mockToolRouterService,
-      mockAgentChatService,
-    );
+    enricher = new ToolRouterEnricher(mockToolRouterService);
 
     // Mock the WebSearchTool that gets created internally
     // We'll spy on the execute method after it's created
@@ -428,8 +418,8 @@ describe('ToolRouter Enricher', () => {
           ],
           model: { agentId: 'test-agent-id' },
         });
-        // This test exercises the DEPLOYMENT default (bing-agent env);
-        // the store-level default provider is 'combined', so pin 'auto'.
+        // This test exercises the DEPLOYMENT default (bing env); the
+        // store-level default provider is 'combined', so pin 'auto'.
         (context as any).webSearchOptions = {
           resultCount: 8,
           freshness: 'auto',
@@ -442,11 +432,10 @@ describe('ToolRouter Enricher', () => {
         expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith({
           searchQuery: 'current weather in Seattle',
           searchQueries: ['current weather in Seattle'],
-          model: context.model,
           user: context.user,
           resultCount: 8,
           freshness: 'any',
-          provider: 'bing-agent',
+          provider: 'bing',
           deep: false,
           onInterimResults: undefined,
           onActivity: expect.any(Function),
@@ -1315,7 +1304,7 @@ describe('ToolRouter Enricher', () => {
       const result = await enricher.execute(context);
 
       expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
-        expect.objectContaining({ provider: 'searxng', model: undefined }),
+        expect.objectContaining({ provider: 'searxng' }),
       );
       expect(result.processedContent?.metadata?.citations).toHaveLength(1);
 
@@ -1332,7 +1321,7 @@ describe('ToolRouter Enricher', () => {
 
   describe('user-selected search provider', () => {
     it('overrides the deployment default and labels the record accordingly', async () => {
-      // env default is bing-agent (beforeEach), but the user picked
+      // env default is bing (beforeEach), but the user picked
       // google-news in Settings → the feed path runs, no agent model needed.
       (enricher as any).webSearchTool.execute.mockResolvedValue({
         text: 'Digest.',
@@ -1364,10 +1353,11 @@ describe('ToolRouter Enricher', () => {
       expect(record.server_label).toBe('Web Search (Google News)');
     });
 
-    it('bing-responses runs without an agent model and labels the record with the deployment', async () => {
+    it('bing runs without any agent model and labels the record with the deployment it reports', async () => {
       (enricher as any).webSearchTool.execute.mockResolvedValue({
         text: 'Grounded digest.[1]',
         citations: [{ number: 1, title: 'A', url: 'https://a.example' }],
+        metadata: { executor: 'Bing (gpt-5.4)' },
       });
       const emitMarker = vi.fn().mockResolvedValue(undefined);
       const context = createTestChatContext({
@@ -1380,14 +1370,14 @@ describe('ToolRouter Enricher', () => {
       (context as any).webSearchOptions = {
         resultCount: 8,
         freshness: 'auto',
-        provider: 'bing-responses',
+        provider: 'bing',
       };
 
       const result = await enricher.execute(context);
 
       expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
         expect.objectContaining({
-          provider: 'bing-responses',
+          provider: 'bing',
           searchQuery: 'india protests',
         }),
       );
@@ -1398,12 +1388,10 @@ describe('ToolRouter Enricher', () => {
           .replace(/[\s\S]*<<<TOOL_CALL_RECORD>>>/, '')
           .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*/, ''),
       );
-      expect(record.server_label).toBe(
-        `Web Search (Bing web_search (${env.WEB_SEARCH_RESPONSES_MODEL}))`,
-      );
+      expect(record.server_label).toBe('Web Search (Bing (gpt-5.4))');
     });
 
-    it("'auto' keeps the deployment default (bing-agent path here)", async () => {
+    it("'auto' keeps the deployment default (bing path here)", async () => {
       (enricher as any).webSearchTool.execute.mockResolvedValue({
         text: 'Results.',
         citations: [{ number: 1, title: 'A', url: 'https://a.example' }],
@@ -1422,7 +1410,7 @@ describe('ToolRouter Enricher', () => {
       await enricher.execute(context);
 
       expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
-        expect.objectContaining({ provider: 'bing-agent' }),
+        expect.objectContaining({ provider: 'bing' }),
       );
     });
   });
@@ -1659,8 +1647,9 @@ describe('ToolRouter Enricher', () => {
         model: { agentId: 'agent-1', id: 'gpt-5.2' },
         emitMarker,
       });
-      // Model-labeled record = the bing-agent env path; pin 'auto' so the
-      // store-level 'combined' default doesn't reroute it.
+      // The Bing env path; pin 'auto' so the store-level 'combined'
+      // default doesn't reroute it. The tool reported no deployment here,
+      // so the record falls back to the provider name.
       (context as any).webSearchOptions = {
         resultCount: 8,
         freshness: 'auto',
@@ -1672,7 +1661,7 @@ describe('ToolRouter Enricher', () => {
       expect(emitMarker).toHaveBeenCalledTimes(1);
       const record = extractRecord(emitMarker.mock.calls[0][0] as string);
       expect(record.name).toBe('web_search');
-      expect(record.server_label).toBe('Web Search (gpt-5.2)');
+      expect(record.server_label).toBe('Web Search (Bing)');
       expect(JSON.parse(record.arguments).query).toBe(
         'latest EU AI act status',
       );
