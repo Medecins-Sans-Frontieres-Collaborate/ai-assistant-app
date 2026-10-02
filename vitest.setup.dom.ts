@@ -850,15 +850,12 @@ const mockMessages: Record<string, unknown> = {
       providerGdelt: 'GDELT only',
       providerGdeltDescription:
         'Open research database of world news with direct publisher links, which lets follow-up questions read the full articles. Strictly rate-limited — back-to-back searches may queue for a few seconds.',
-      providerBing: 'Bing grounding (via Microsoft)',
+      providerBing: 'Bing web search',
       providerBingDescription:
-        'Reads full pages for deeper summaries and covers the general web, not just news. However, searches routinely take 30–90 seconds and result quality is often inconsistent from one search to the next.',
-      providerBingResponses: 'Bing fast search (Azure OpenAI)',
-      providerBingResponsesDescription:
-        'The same Bing web coverage as Bing grounding, run as a single direct model call instead of a Foundry agent — typically much faster. New option under evaluation against Bing grounding.',
+        'Covers the general web, not just news, and reads pages for deeper summaries. Runs as a single model call in your region; searches usually take a little longer than the news feeds.',
       providerCombined: 'Deep search with early headlines (Bing + Google News)',
       providerCombinedDescription:
-        'Runs Bing grounding and Google News together: headlines appear within seconds while the deep Bing search keeps working, and you can choose to answer from the headlines right away instead of waiting out the slow search. When Bing finishes, both result sets are merged.',
+        'Runs Bing and Google News together: headlines appear within seconds while the deeper Bing search keeps working, and you can choose to answer from the headlines right away instead of waiting. When Bing finishes, both result sets are merged.',
       sourcesLabel: 'Sources per search',
       sourcesDescription:
         'How many distinct sources a search keeps as citations. Research-style questions may automatically widen this.',
