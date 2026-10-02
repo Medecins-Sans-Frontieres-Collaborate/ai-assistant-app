@@ -1197,13 +1197,28 @@ describe('settingsStore migration (v67 → v68)', () => {
     expect('euDefaultModelSwitchApplied' in result).toBe(false);
   });
 
-  it('keeps applied retirements on a current store, dropping non-string values', () => {
+  it('keeps well-formed applied retirements on a current store and drops malformed ones', () => {
+    const kept = {
+      triggers: ['forced', 'alias:gpt-5.4'],
+      appliedAt: '2026-10-02T12:00:00.000Z',
+    };
     const result = migrate(
-      { modelRetirementsApplied: { 'gpt-5.2': 'forced', broken: 7 } },
+      {
+        modelRetirementsApplied: {
+          'gpt-5.2': kept,
+          legacyShape: 'forced',
+          noDate: { triggers: ['forced'] },
+          badDate: { triggers: ['forced'], appliedAt: 'yesterday' },
+          mixed: { triggers: ['forced', 7], appliedAt: kept.appliedAt },
+        },
+      },
       69,
     ) as Record<string, unknown>;
 
-    expect(result.modelRetirementsApplied).toEqual({ 'gpt-5.2': 'forced' });
+    expect(result.modelRetirementsApplied).toEqual({
+      'gpt-5.2': kept,
+      mixed: { triggers: ['forced'], appliedAt: kept.appliedAt },
+    });
   });
 
   /**
