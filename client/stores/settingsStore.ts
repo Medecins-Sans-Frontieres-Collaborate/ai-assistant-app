@@ -2860,8 +2860,16 @@ export const useSettingsStore = create<SettingsStore>()(
         // v70: the "Agent" search routing is retired — a saved AGENT default
         // becomes the privacy-preserving routing it always fell back to.
         // (Conversations carrying it are read through normalizeSearchMode.)
-        if (version < 70 && state.defaultSearchMode === SearchMode.AGENT) {
-          state.defaultSearchMode = SearchMode.INTELLIGENT;
+        if (version < 70) {
+          if (state.defaultSearchMode === SearchMode.AGENT) {
+            state.defaultSearchMode = SearchMode.INTELLIGENT;
+          }
+          // The two earlier Bing provider names fold into 'bing' (the
+          // sanitizer reads them); without this a v66-v69 store keeps a
+          // value the settings panel has no option for.
+          state.webSearchOptions = sanitizeWebSearchOptions(
+            state.webSearchOptions,
+          );
         }
 
         // Whatever version it came from, the per-set rows are only kept as
