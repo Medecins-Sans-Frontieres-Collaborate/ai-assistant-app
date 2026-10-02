@@ -1,5 +1,7 @@
 import {
+  AppliedRetirement,
   FORCED_MODEL_RETIREMENTS,
+  RetirementMove,
   getRetirementNotice,
   getRetirementSignal,
   listRetirements,
@@ -62,52 +64,77 @@ const EU_LIST: OpenAIModel[] = [
   served('gpt-6-astra', EU),
 ];
 
-const ids = (models: OpenAIModel[]) => new Set(models.map((m) => m.id));
+const FORCED_IDS = Object.keys(FORCED_MODEL_RETIREMENTS);
+const without = (models: OpenAIModel[], id: string) =>
+  models.filter((m) => m.id !== id);
+const retirementOf = (id: string, models: OpenAIModel[], region: 'US' | 'EU') =>
+  listRetirements({ models, region, now: NOW }).find((r) => r.model.id === id);
 const successorOf = (id: string, models: OpenAIModel[], region: 'US' | 'EU') =>
-  listRetirements({ models, region, now: NOW }).find((r) => r.model.id === id)
-    ?.successor.id;
+  retirementOf(id, models, region)?.successor.id;
+const successorsOf = (moves: RetirementMove[]) =>
+  Object.fromEntries(moves.map((m) => [m.model.id, m.successor.id]));
 
 describe('the 2026-10 move off gpt-5.2 / gpt-5.2-chat / gpt-chat-latest', () => {
-  it('lists exactly those three as forced', () => {
-    expect([...FORCED_MODEL_RETIREMENTS].sort()).toEqual([
-      'gpt-5.2',
-      'gpt-5.2-chat',
-      'gpt-chat-latest',
-    ]);
-  });
-
-  it('moves all three to gpt-5.4 for a US user, immediately', () => {
-    const moves = planRetirementMoves(
-      { models: US_LIST, region: 'US', now: NOW },
-      {},
-    );
-    expect(
-      Object.fromEntries(moves.map((m) => [m.model.id, m.successor.id])),
-    ).toEqual({
-      'gpt-5.2': 'gpt-5.4',
-      'gpt-5.2-chat': 'gpt-5.4',
-      'gpt-chat-latest': 'gpt-5.4',
-    });
-    expect(moves.every((m) => m.signal.trigger === 'forced')).toBe(true);
-  });
-
-  it('moves all three to gpt-5.4 for an EU user — gpt-chat-latest though it is not deployed there', () => {
-    const moves = planRetirementMoves(
-      { models: EU_LIST, region: 'EU', now: NOW },
-      {},
-    );
-    expect(
-      Object.fromEntries(moves.map((m) => [m.model.id, m.successor.id])),
-    ).toEqual({
+  it('pins exactly those three to gpt-5.4', () => {
+    expect(FORCED_MODEL_RETIREMENTS).toEqual({
       'gpt-5.2': 'gpt-5.4',
       'gpt-5.2-chat': 'gpt-5.4',
       'gpt-chat-latest': 'gpt-5.4',
     });
   });
+
+  it.each([
+    ['US', US_LIST],
+    ['EU', EU_LIST], // gpt-chat-latest is not even deployed there
+  ] as const)(
+    'moves all three to gpt-5.4 for a %s user, at once',
+    (region, list) => {
+      const moves = planRetirementMoves({ models: list, region, now: NOW }, {});
+      expect(successorsOf(moves)).toEqual({
+        'gpt-5.2': 'gpt-5.4',
+        'gpt-5.2-chat': 'gpt-5.4',
+        'gpt-chat-latest': 'gpt-5.4',
+      });
+      expect(moves.every((m) => m.kind === 'event')).toBe(true);
+    },
+  );
 
   it('still moves a forced model whose deployment has since been deleted', () => {
-    const withoutChat = US_LIST.filter((m) => m.id !== 'gpt-5.2-chat');
-    expect(successorOf('gpt-5.2-chat', withoutChat, 'US')).toBe('gpt-5.4');
+    expect(
+      successorOf('gpt-5.2-chat', without(US_LIST, 'gpt-5.2-chat'), 'US'),
+    ).toBe('gpt-5.4');
+  });
+
+  it('WAITS while gpt-5.4 is unavailable instead of landing somewhere else', () => {
+    // Hidden by a usage limit, ring-gated, or not provisioned at this fill.
+    const eu = planRetirementMoves(
+      { models: without(EU_LIST, 'gpt-5.4'), region: 'EU', now: NOW },
+      {},
+    );
+    expect(eu).toEqual([]);
+
+    const us = planRetirementMoves(
+      { models: without(US_LIST, 'gpt-5.4'), region: 'US', now: NOW },
+      {},
+    );
+    // gpt-5.2 and gpt-chat-latest are forced only: they wait. gpt-5.2-chat is
+    // ALSO dying on its own (alias + 3 days left), so it has to go somewhere.
+    expect(us.map((m) => m.model.id)).toEqual(['gpt-5.2-chat']);
+    expect(us[0].successor.id).not.toBe('gpt-5.4');
+  });
+
+  it('records every reason that holds, so emptying the forced list moves nobody twice', () => {
+    expect(
+      retirementOf('gpt-5.2-chat', US_LIST, 'US')?.signal.triggers,
+    ).toEqual(['forced', 'alias:gpt-chat-latest', '2026-10-05T00:00:00Z']);
+    expect(retirementOf('gpt-5.2', EU_LIST, 'EU')?.signal.triggers).toEqual([
+      'forced',
+      'alias:gpt-5.4',
+    ]);
+    // A plain forced model has no other reason today.
+    expect(retirementOf('gpt-5.2', US_LIST, 'US')?.signal.triggers).toEqual([
+      'forced',
+    ]);
   });
 });
 
@@ -130,7 +157,7 @@ describe('getRetirementSignal', () => {
     expect(getRetirementSignal(model(retiresAt), servedIds, NOW)).toEqual({
       phase: 'notice',
       reason: 'date',
-      trigger: retiresAt,
+      triggers: [],
       retiresAt,
       movesAt: inDays(23),
     });
@@ -140,9 +167,11 @@ describe('getRetirementSignal', () => {
   });
 
   it('moves from 7 days before, and after the date has passed', () => {
-    expect(getRetirementSignal(model(inDays(7)), servedIds, NOW)?.phase).toBe(
-      'move',
-    );
+    const due = inDays(7);
+    expect(getRetirementSignal(model(due), servedIds, NOW)).toMatchObject({
+      phase: 'move',
+      triggers: [due],
+    });
     expect(getRetirementSignal(model(inDays(-3)), servedIds, NOW)?.phase).toBe(
       'move',
     );
@@ -151,7 +180,7 @@ describe('getRetirementSignal', () => {
   it('moves an alias at once — only when the underlying model is itself served', () => {
     expect(
       getRetirementSignal(model(undefined, 'gpt-5.4'), servedIds, NOW),
-    ).toEqual({ phase: 'move', reason: 'alias', trigger: 'alias:gpt-5.4' });
+    ).toEqual({ phase: 'move', reason: 'alias', triggers: ['alias:gpt-5.4'] });
     // A custom deployment name, not an alias of something on offer.
     expect(
       getRetirementSignal(
@@ -161,30 +190,49 @@ describe('getRetirementSignal', () => {
       ),
     ).toBeNull();
   });
+
+  it('keeps the date visible on an alias that is also inside its notice window', () => {
+    const retiresAt = inDays(20);
+    expect(
+      getRetirementSignal(model(retiresAt, 'gpt-5.4'), servedIds, NOW),
+    ).toEqual({
+      phase: 'move',
+      reason: 'alias',
+      // The date is not a MOVE trigger yet — it becomes one 7 days before.
+      triggers: ['alias:gpt-5.4'],
+      retiresAt,
+      movesAt: inDays(13),
+    });
+  });
 });
 
 describe('resolveSuccessor', () => {
   const retiring = (id: string, facts: Partial<OpenAIModel> = {}) =>
     served(id, { retiresAt: inDays(3), ...facts });
+  const successor = (
+    list: OpenAIModel[],
+    id: string,
+    region: 'US' | 'EU' = 'US',
+  ) => resolveSuccessor(list.find((m) => m.id === id)!, list, region, NOW)?.id;
 
-  it('prefers the region default when it is in the same family', () => {
-    // gpt-5.1's own variant line has newer members (5.6, 6); the default wins.
-    const list = [...US_LIST, retiring('gpt-5.1')];
-    expect(resolveSuccessor(list.at(-1)!, list, 'US', NOW)?.id).toBe('gpt-5.4');
-  });
-
-  it('honours a usable ui-successor tag, and ignores an unusable one', () => {
-    const tagged = retiring('gpt-5.1', { successorId: 'gpt-5.6-sol' });
-    expect(resolveSuccessor(tagged, [...US_LIST, tagged], 'US', NOW)?.id).toBe(
-      'gpt-5.6-sol',
+  it('goes to the region default when it shares the family and variant', () => {
+    // gpt-5.1's own line has newer members (5.6, 6); the default wins.
+    expect(successor([...US_LIST, retiring('gpt-5.1')], 'gpt-5.1')).toBe(
+      'gpt-5.4',
     );
-    const dangling = retiring('gpt-5.1', { successorId: 'not-deployed' });
-    expect(
-      resolveSuccessor(dangling, [...US_LIST, dangling], 'US', NOW)?.id,
-    ).toBe('gpt-5.4');
   });
 
-  it('stays in the family and variant when the default is another family', () => {
+  it('keeps the variant: a retiring Mini goes to the next Mini, not the flagship', () => {
+    const list = [
+      served('gpt-5.4'),
+      retiring('gpt-5-mini'),
+      served('gpt-5.4-mini'),
+      served('gpt-6-astra'),
+    ];
+    expect(successor(list, 'gpt-5-mini')).toBe('gpt-5.4-mini');
+  });
+
+  it('picks the NEAREST newer version of the variant, not the newest', () => {
     const list = [
       served('gpt-5.4'),
       retiring('claude-sonnet-4-5'),
@@ -192,27 +240,99 @@ describe('resolveSuccessor', () => {
       served('claude-sonnet-5'),
       served('claude-opus-5'),
     ];
-    expect(resolveSuccessor(list[1], list, 'US', NOW)?.id).toBe(
-      'claude-sonnet-5',
-    );
+    expect(successor(list, 'claude-sonnet-4-5')).toBe('claude-sonnet-4-6');
+    // Nothing newer left in the variant: the nearest older one.
+    expect(
+      successor(
+        [
+          served('gpt-5.4'),
+          served('claude-sonnet-4-6'),
+          retiring('claude-sonnet-5'),
+        ],
+        'claude-sonnet-5',
+      ),
+    ).toBe('claude-sonnet-4-6');
   });
 
-  it("falls back to the family's own default when the variant has nothing left", () => {
+  it('prefers a same-version sibling over another version', () => {
     const list = [
+      served('gpt-5.4'),
+      retiring('gpt-5.6-terra'),
+      served('gpt-5.6-luna'),
+      served('gpt-6-astra'),
+    ];
+    // Closer than the policy default, and closer than the newest model.
+    expect(successor(list, 'gpt-5.6-terra')).toBe('gpt-5.6-luna');
+  });
+
+  it('sends an alias to the model its deployment actually runs', () => {
+    const list = [
+      served('gpt-5.4'),
+      served('gpt-5-mini', { deploymentModelName: 'gpt-5.4-mini' }),
+      served('gpt-5.4-mini'),
+      served('claude-opus-4-6', { deploymentModelName: 'claude-opus-4-8' }),
+      served('claude-opus-4-8'),
+      served('claude-opus-5'),
+    ];
+    expect(successor(list, 'gpt-5-mini')).toBe('gpt-5.4-mini');
+    expect(successor(list, 'claude-opus-4-6')).toBe('claude-opus-4-8');
+  });
+
+  it('honours a usable ui-successor tag, and ignores an unusable one', () => {
+    const tagged = retiring('gpt-5.1', { successorId: 'gpt-5.6-sol' });
+    expect(successor([...US_LIST, tagged], 'gpt-5.1')).toBe('gpt-5.6-sol');
+    const dangling = retiring('gpt-5.1', { successorId: 'not-deployed' });
+    expect(successor([...US_LIST, dangling], 'gpt-5.1')).toBe('gpt-5.4');
+  });
+
+  it('without the policy default, takes the nearest newer version — not the newest', () => {
+    const list = [
+      retiring('gpt-5.1'),
+      served('gpt-5.5'),
+      served('gpt-5.6-sol'),
+      served('gpt-6-astra'),
+    ];
+    expect(successor(list, 'gpt-5.1')).toBe('gpt-5.5');
+  });
+
+  it("falls back to the family's own default, then to the region default", () => {
+    const familyLeft = [
       served('gpt-5.4'),
       retiring('claude-haiku-4-5'),
       served('claude-sonnet-5'),
       served('claude-opus-5'),
     ];
-    const successor = resolveSuccessor(list[1], list, 'US', NOW);
+    const next = successor(familyLeft, 'claude-haiku-4-5');
+    expect(next && OpenAIModels[next as OpenAIModelID].series).toBe('claude');
+
     expect(
-      successor && OpenAIModels[successor.id as OpenAIModelID].series,
-    ).toBe('claude');
+      successor(
+        [served('gpt-5.4'), retiring('claude-haiku-4-5')],
+        'claude-haiku-4-5',
+      ),
+    ).toBe('gpt-5.4');
   });
 
-  it('falls back to the region default when the family has nothing left', () => {
-    const list = [served('gpt-5.4'), retiring('claude-haiku-4-5')];
-    expect(resolveSuccessor(list[1], list, 'US', NOW)?.id).toBe('gpt-5.4');
+  it('never moves from an Azure-hosted model onto an externally hosted one — not even by tag', () => {
+    const tagged = retiring('gpt-5.1', { successorId: 'claude-opus-5' });
+    const list = [served('gpt-5.4'), served('claude-opus-5'), tagged];
+    expect(successor(list, 'gpt-5.1')).toBe('gpt-5.4');
+    // Nothing Azure-hosted left: no successor rather than an external one.
+    expect(
+      successor([served('claude-opus-5'), tagged], 'gpt-5.1'),
+    ).toBeUndefined();
+  });
+
+  it('never moves a US user from a home-hosted model onto an EU-only one', () => {
+    const list = [
+      served('gpt-5.4', EU),
+      served('gpt-5.6-sol'),
+      retiring('gpt-5.1'),
+    ];
+    expect(successor(list, 'gpt-5.1')).toBe('gpt-5.6-sol');
+    // A model that itself only exists in the EU may stay there.
+    const euOnly = [served('gpt-5.4', EU), retiring('gpt-5.1', EU)];
+    expect(successor(euOnly, 'gpt-5.1')).toBe('gpt-5.4');
   });
 
   it('never picks a model that is itself leaving, disabled, or not selectable in the region', () => {
@@ -221,75 +341,154 @@ describe('resolveSuccessor', () => {
       served('gpt-5.6-sol'),
       retiring('gpt-5.1'),
     ];
-    expect(
-      resolveSuccessor(leavingDefault[2], leavingDefault, 'US', NOW)?.id,
-    ).toBe('gpt-5.6-sol');
+    expect(successor(leavingDefault, 'gpt-5.1')).toBe('gpt-5.6-sol');
 
     const usOnlyDefault = [
       served('gpt-5.4', { hostedIn: ['US'] }),
       served('gpt-5.5', EU),
       retiring('gpt-5.1', EU),
     ];
-    expect(
-      resolveSuccessor(usOnlyDefault[2], usOnlyDefault, 'EU', NOW)?.id,
-    ).toBe('gpt-5.5');
+    expect(successor(usOnlyDefault, 'gpt-5.1', 'EU')).toBe('gpt-5.5');
 
-    const nothingLeft = [retiring('gpt-5.1')];
-    expect(resolveSuccessor(nothingLeft[0], nothingLeft, 'US', NOW)).toBeNull();
+    expect(successor([retiring('gpt-5.1')], 'gpt-5.1')).toBeUndefined();
   });
 });
 
-describe('planRetirementMoves / getRetirementNotice', () => {
+describe('planRetirementMoves', () => {
+  const forcedApplied: Record<string, AppliedRetirement> = Object.fromEntries(
+    FORCED_IDS.map((id) => [
+      id,
+      { triggers: ['forced'], appliedAt: inDays(-1) },
+    ]),
+  );
   const list = (retiresAt: string) => [
     served('gpt-5.4'),
     served('gpt-5.1', { retiresAt }),
   ];
+  const plan = (
+    models: OpenAIModel[],
+    applied: Record<string, AppliedRetirement> = {},
+  ) =>
+    planRetirementMoves(
+      { models, region: 'US', now: NOW },
+      { ...forcedApplied, ...applied },
+    ).filter((m) => !FORCED_IDS.includes(m.model.id));
+  const kinds = (moves: RetirementMove[]) =>
+    Object.fromEntries(moves.map((m) => [m.model.id, m.kind]));
+
+  it('plans nothing before the 7-day window', () => {
+    expect(plan(list(inDays(20)))).toEqual([]);
+  });
+
+  it('plans an event once, then only catch-ups for the same event', () => {
+    const date = inDays(5);
+    expect(kinds(plan(list(date)))).toEqual({ 'gpt-5.1': 'event' });
+
+    const done = { 'gpt-5.1': { triggers: [date], appliedAt: inDays(-1) } };
+    const again = plan(list(date), done);
+    expect(kinds(again)).toEqual({ 'gpt-5.1': 'catchUp' });
+    expect(again[0].appliedAt).toBe(inDays(-1));
+  });
+
+  it('treats a trigger it has not applied as a new event', () => {
+    const date = inDays(5);
+    // Azure moved the date.
+    expect(
+      kinds(
+        plan(list(inDays(6)), {
+          'gpt-5.1': { triggers: [date], appliedAt: inDays(-1) },
+        }),
+      ),
+    ).toEqual({ 'gpt-5.1': 'event' });
+    // Forced months ago, now really retiring.
+    expect(
+      kinds(
+        plan(list(date), {
+          'gpt-5.1': { triggers: ['forced'], appliedAt: inDays(-90) },
+        }),
+      ),
+    ).toEqual({ 'gpt-5.1': 'event' });
+  });
+
+  it('does not re-move when an already-applied reason is merely unmasked or alternates', () => {
+    // Alias target present → triggers are [alias, date]; target drops out of
+    // the list (EU discovery failed) → [date] alone. Both were applied.
+    const date = inDays(3);
+    const done = {
+      'gpt-5.1': { triggers: ['alias:gpt-5.5', date], appliedAt: inDays(-1) },
+    };
+    const aliased = served('gpt-5.1', {
+      retiresAt: date,
+      deploymentModelName: 'gpt-5.5',
+    });
+    expect(
+      kinds(plan([served('gpt-5.4'), served('gpt-5.5'), aliased], done)),
+    ).toEqual({ 'gpt-5.1': 'catchUp' });
+    expect(kinds(plan([served('gpt-5.4'), aliased], done))).toEqual({
+      'gpt-5.1': 'catchUp',
+    });
+  });
+
+  it('moves an alias through the plan to the model it runs', () => {
+    const moves = planRetirementMoves(
+      { models: EU_LIST, region: 'EU', now: NOW },
+      {},
+    );
+    expect(moves.find((m) => m.model.id === 'gpt-5.2')).toMatchObject({
+      kind: 'event',
+      successor: { id: 'gpt-5.4' },
+    });
+  });
+});
+
+describe('getRetirementNotice', () => {
   const context = (retiresAt: string) => ({
-    models: list(retiresAt),
+    models: [served('gpt-5.4'), served('gpt-5.1', { retiresAt })],
     region: 'US' as const,
     now: NOW,
   });
-  // The forced entries are not under test here.
-  const forcedApplied = Object.fromEntries(
-    FORCED_MODEL_RETIREMENTS.map((id) => [id, 'forced']),
-  );
-  const pending = (retiresAt: string, applied: Record<string, string>) =>
-    planRetirementMoves(context(retiresAt), {
-      ...forcedApplied,
-      ...applied,
-    }).map((m) => m.model.id);
 
-  it('plans a move only inside the 7-day window; before that it is a notice', () => {
-    expect(pending(inDays(20), {})).toEqual([]);
+  it('announces the move while it is still ahead', () => {
     const notice = getRetirementNotice('gpt-5.1', context(inDays(20)));
+    expect(notice?.signal.phase).toBe('notice');
     expect(notice?.successor.id).toBe('gpt-5.4');
     expect(notice?.signal.movesAt).toBe(inDays(13));
-
-    expect(pending(inDays(5), {})).toEqual(['gpt-5.1']);
-    expect(getRetirementNotice('gpt-5.1', context(inDays(5)))).toBeNull();
   });
 
-  it('applies each retirement event once, and a new event again', () => {
-    const date = inDays(5);
-    expect(pending(date, { 'gpt-5.1': date })).toEqual([]);
-    // Azure moved the date: a different event.
-    expect(pending(inDays(6), { 'gpt-5.1': date })).toEqual(['gpt-5.1']);
-    // Forced earlier, now really retiring.
-    expect(pending(date, { 'gpt-5.1': 'forced' })).toEqual(['gpt-5.1']);
+  it('still warns inside the move window — for a conversation that is on the model again', () => {
+    const notice = getRetirementNotice('gpt-5.1', context(inDays(5)));
+    expect(notice?.signal.phase).toBe('move');
+    expect(notice?.signal.retiresAt).toBe(inDays(5));
   });
 
-  it('has no notice for a model that is staying, or for no model', () => {
+  it('has nothing to say about a staying model, a dateless move, or no model', () => {
     expect(getRetirementNotice('gpt-5.4', context(inDays(20)))).toBeNull();
     expect(getRetirementNotice(undefined, context(inDays(20)))).toBeNull();
+    // Forced, no date in the window.
+    expect(
+      getRetirementNotice('gpt-5.2', {
+        models: US_LIST,
+        region: 'US',
+        now: NOW,
+      }),
+    ).toBeNull();
   });
 });
 
 describe('moveConversationsToSuccessors', () => {
   const target = served('gpt-5.4');
-  const successors = new Map([
-    ['gpt-5.2', target],
-    ['gpt-5.2-chat', target],
-  ]);
+  const APPLIED_AT = '2026-10-01T00:00:00.000Z';
+  const move = (
+    id: string,
+    kind: RetirementMove['kind'] = 'event',
+  ): RetirementMove => ({
+    model: served(id),
+    signal: { phase: 'move', reason: 'forced', triggers: ['forced'] },
+    successor: target,
+    kind,
+    ...(kind === 'catchUp' ? { appliedAt: APPLIED_AT } : {}),
+  });
+  const events = [move('gpt-5.2'), move('gpt-5.2-chat')];
   const conversation = (
     id: string,
     modelId: string,
@@ -306,15 +505,15 @@ describe('moveConversationsToSuccessors', () => {
     ...extra,
   });
 
-  it('moves conversations on a leaving model and leaves the rest untouched', () => {
+  it('an event moves every conversation on a leaving model and leaves the rest untouched', () => {
     const other = conversation('c3', 'claude-sonnet-5');
     const moved = moveConversationsToSuccessors(
       [
         conversation('c1', 'gpt-5.2-chat'),
-        conversation('c2', 'gpt-5.2'),
+        conversation('c2', 'gpt-5.2', { updatedAt: inDays(0) }),
         other,
       ],
-      successors,
+      events,
     );
     expect(moved.map((c) => c.model.id)).toEqual([
       'gpt-5.4',
@@ -326,25 +525,81 @@ describe('moveConversationsToSuccessors', () => {
 
   it('returns the same array when nothing is on a leaving model', () => {
     const conversations = [conversation('c1', 'gpt-5.4')];
-    expect(moveConversationsToSuccessors(conversations, successors)).toBe(
+    expect(moveConversationsToSuccessors(conversations, events)).toBe(
       conversations,
     );
   });
 
-  it('advances updatedAt by the minimum so the move persists without reordering', () => {
-    const [moved] = moveConversationsToSuccessors(
-      [conversation('c1', 'gpt-5.2')],
-      successors,
-    );
-    expect(moved.updatedAt).toBe('2026-09-01T10:00:00.001Z');
+  describe('timestamps', () => {
+    it('advances updatedAt by the minimum so the move persists without reordering', () => {
+      const [moved] = moveConversationsToSuccessors(
+        [conversation('c1', 'gpt-5.2')],
+        events,
+      );
+      expect(moved.updatedAt).toBe('2026-09-01T10:00:00.001Z');
+    });
+
+    it('falls back to createdAt, the same order the backup merge uses', () => {
+      const [moved] = moveConversationsToSuccessors(
+        [
+          conversation('c1', 'gpt-5.2', {
+            updatedAt: undefined,
+            createdAt: '2026-08-01T10:00:00.000Z',
+          }),
+        ],
+        events,
+      );
+      expect(moved.updatedAt).toBe('2026-08-01T10:00:00.001Z');
+    });
+
+    it('NEVER stamps "now" on a conversation that has no timestamp — it would beat a newer copy elsewhere', () => {
+      const [moved] = moveConversationsToSuccessors(
+        [conversation('c1', 'gpt-5.2', { updatedAt: undefined })],
+        events,
+      );
+      expect(moved.model.id).toBe('gpt-5.4');
+      expect(moved.updatedAt).toBeUndefined();
+    });
   });
 
-  it('stamps a conversation that has no updatedAt at all', () => {
-    const [moved] = moveConversationsToSuccessors(
-      [conversation('c1', 'gpt-5.2', { updatedAt: undefined })],
-      successors,
-    );
-    expect(Number.isNaN(Date.parse(moved.updatedAt ?? ''))).toBe(false);
+  describe('catch-up (the event was applied earlier)', () => {
+    const catchUps = [move('gpt-5.2', 'catchUp')];
+
+    it('moves a conversation that predates the applied move — a restore, an import, a sync pull', () => {
+      const [moved] = moveConversationsToSuccessors(
+        [
+          conversation('c1', 'gpt-5.2', {
+            updatedAt: '2026-09-30T00:00:00.000Z',
+          }),
+        ],
+        catchUps,
+      );
+      expect(moved.model.id).toBe('gpt-5.4');
+    });
+
+    it('leaves a conversation touched after the applied move: that is the user choosing the model again', () => {
+      const conversations = [
+        conversation('c1', 'gpt-5.2', {
+          updatedAt: '2026-10-01T08:00:00.000Z',
+        }),
+      ];
+      expect(moveConversationsToSuccessors(conversations, catchUps)).toBe(
+        conversations,
+      );
+    });
+
+    it('moves an untouched conversation, unless the model is the user’s default again', () => {
+      const untouched = [
+        conversation('c1', 'gpt-5.2', { updatedAt: undefined }),
+      ];
+      expect(
+        moveConversationsToSuccessors(untouched, catchUps, 'gpt-5.4')[0].model
+          .id,
+      ).toBe('gpt-5.4');
+      expect(
+        moveConversationsToSuccessors(untouched, catchUps, 'gpt-5.2'),
+      ).toBe(untouched);
+    });
   });
 
   it('drops AGENT search routing the target cannot serve, and keeps other modes', () => {
@@ -353,7 +608,7 @@ describe('moveConversationsToSuccessors', () => {
         conversation('c1', 'gpt-5.2', { defaultSearchMode: SearchMode.AGENT }),
         conversation('c2', 'gpt-5.2', { defaultSearchMode: SearchMode.OFF }),
       ],
-      successors,
+      events,
     );
     expect(moved[0].defaultSearchMode).toBe(SearchMode.INTELLIGENT);
     expect(moved[1].defaultSearchMode).toBe(SearchMode.OFF);
@@ -365,6 +620,18 @@ describe('moveConversationsToSuccessors', () => {
     ).toBeUndefined();
   });
 
+  it('drops a pinned region the target is not hosted in, and keeps one it is', () => {
+    expect(
+      successorUpdates({ hostedRegion: 'EU' }, served('gpt-5.4')),
+    ).toHaveProperty('hostedRegion', undefined);
+    expect(
+      successorUpdates(
+        { hostedRegion: 'EU' },
+        served('gpt-5.4', { hostedIn: ['US', 'EU'] }),
+      ),
+    ).not.toHaveProperty('hostedRegion');
+  });
+
   it('keeps the thread id and moves a remembered pre-agent model', () => {
     const moved = moveConversationsToSuccessors(
       [
@@ -373,7 +640,7 @@ describe('moveConversationsToSuccessors', () => {
           agentPrevModelId: 'gpt-5.2-chat',
         }),
       ],
-      successors,
+      events,
     );
     expect(moved[0].threadId).toBe('thread_1');
     expect(moved[1].model.id).toBe('foundry-abc-agent');
