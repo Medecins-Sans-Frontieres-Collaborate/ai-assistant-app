@@ -1,6 +1,6 @@
 import { Conversation } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
-import { SearchMode } from '@/types/searchMode';
+import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 import { ConversationWorkflowType, WorkflowState } from '@/types/workflow';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -40,14 +40,10 @@ export const createDefaultConversation = (
     throw new Error('No models available');
   }
 
-  // Determine appropriate search mode based on model capabilities
-  // If the model is an agent (has agentId), use the provided search mode
-  // Otherwise, ensure we don't use AGENT mode on non-agent models
-  let searchMode = defaultSearchMode ?? SearchMode.INTELLIGENT;
-  if (searchMode === SearchMode.AGENT && !defaultModel.agentId) {
-    // Auto-fix: If default is AGENT but model doesn't support it, use INTELLIGENT instead
-    searchMode = SearchMode.INTELLIGENT;
-  }
+  // A persisted AGENT default (retired routing) reads as INTELLIGENT.
+  const searchMode = normalizeSearchMode(
+    defaultSearchMode ?? SearchMode.INTELLIGENT,
+  );
 
   return {
     id: uuidv4(),
