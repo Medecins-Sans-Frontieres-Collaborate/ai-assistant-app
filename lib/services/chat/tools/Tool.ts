@@ -76,4 +76,11 @@ export interface WebSearchToolParams {
    * phases), forwarded to the outer response's loader.
    */
   onActivity?: (key: string, params?: Record<string, string>) => void;
+  /**
+   * Bing only: the Responses call's token usage, for the caller to meter
+   * (see responsesWebSearch.ts). Feed providers spend no tokens.
+   */
+  onUsage?: import('./responsesWebSearch').ResponsesWebSearchParams['onUsage'];
+  /** Aborts an in-flight model call when the caller's search timeout fires. */
+  signal?: AbortSignal;
 }
