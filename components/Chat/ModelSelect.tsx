@@ -514,10 +514,6 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       : OpenAIModels[selectedModel.id as OpenAIModelID]
     : null;
   const isCustomAgent = selectedModel?.isCustomAgent === true;
-  const isGpt5 = selectedModel?.id === OpenAIModelID.GPT_5_2;
-  // Check agentId on both modelConfig (for base models) and selectedModel (for org/custom agents)
-  const agentAvailable =
-    modelConfig?.agentId !== undefined || selectedModel?.agentId !== undefined;
 
   // Agents-tab selection: a decoupled attachment (capabilities tray) keeps
   // the REAL model in selectedModelId, so the tab resolves its highlight
@@ -541,42 +537,6 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   const agentsTabIsCustomAgent = agentsTabIsLegacySelection
     ? isCustomAgent
     : false;
-
-  // Get current search mode from conversation (default to INTELLIGENT for privacy)
-  const currentSearchMode =
-    selectedConversation?.defaultSearchMode ?? SearchMode.INTELLIGENT;
-
-  // For non-agent models, if AGENT mode is somehow set, display as INTELLIGENT in UI
-  const displaySearchMode =
-    currentSearchMode === SearchMode.AGENT && !agentAvailable
-      ? SearchMode.INTELLIGENT
-      : currentSearchMode;
-
-  // Automatically fix invalid state when conversation loads with AGENT mode on non-agent model
-  // NOTE: This should ONLY run when conversation or model changes, NOT when search mode changes
-  useEffect(() => {
-    if (!selectedConversation) return;
-
-    const searchMode = selectedConversation.defaultSearchMode;
-
-    // Fix invalid AGENT mode on non-agent models
-    if (!isCustomAgent && searchMode === SearchMode.AGENT && !agentAvailable) {
-      console.log(
-        '[ModelSelect] Auto-fixing invalid AGENT mode for non-agent model',
-      );
-      updateConversation(selectedConversation.id, {
-        defaultSearchMode: SearchMode.INTELLIGENT,
-      });
-    }
-    // Only depend on conversation ID, model type changes, and agent availability
-    // Do NOT depend on currentSearchMode to avoid overriding user changes
-  }, [
-    selectedConversation?.id,
-    selectedConversation,
-    agentAvailable,
-    isCustomAgent,
-    updateConversation,
-  ]);
 
   const handleModelSelect = useCallback(
     (
@@ -696,22 +656,6 @@ export const ModelSelect: FC<ModelSelectProps> = ({
         // restore point — the user just chose their model directly.
         if (selectedConversation.agentPrevModelId) {
           updates.agentPrevModelId = undefined;
-        }
-
-        // Check if the new model supports agents (static config or model object)
-        const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
-        const newModelHasAgent =
-          newModelConfig?.agentId !== undefined || model.agentId !== undefined;
-
-        // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
-        if (
-          !newModelHasAgent &&
-          selectedConversation.defaultSearchMode === SearchMode.AGENT
-        ) {
-          updates.defaultSearchMode = SearchMode.INTELLIGENT;
-          console.log(
-            `[ModelSelect] Resetting AGENT mode to INTELLIGENT for non-agent model`,
-          );
         }
       }
 
@@ -1590,7 +1534,6 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                     )?.name
                   }
                   isCustomAgent={isCustomAgent}
-                  displaySearchMode={displaySearchMode}
                   showModelAdvanced={showModelAdvanced}
                   selectedConversation={selectedConversation}
                   setMobileView={setMobileView}
@@ -1640,7 +1583,6 @@ export const ModelSelect: FC<ModelSelectProps> = ({
           selectedModel={agentsTabSelectedModel}
           modelConfig={agentsTabModelConfig}
           isCustomAgent={agentsTabIsCustomAgent}
-          displaySearchMode={displaySearchMode}
           showModelAdvanced={showModelAdvanced}
           selectedConversation={selectedConversation}
           mobileView={mobileView}
