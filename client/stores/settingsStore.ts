@@ -20,6 +20,7 @@ import {
   MapTimelapseSettings,
   clampTimelapseSettings,
 } from '@/lib/utils/shared/geo/timelapsePacing';
+import type { AppliedRetirement } from '@/lib/utils/shared/modelRetirement';
 import {
   DEFAULT_PASTE_ATTACHMENT_CHARS,
   LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS,
@@ -411,11 +412,12 @@ interface SettingsStore {
   userRegion: UserRegion | null;
   /**
    * Retirement moves already applied in this browser: leaving model id →
-   * the retirement event's trigger (see lib/utils/shared/modelRetirement.ts).
-   * Persisted so a move never repeats once a user has re-chosen the model;
-   * a later event for the same model has a different trigger and applies.
+   * the triggers the user has been moved for and when (see
+   * lib/utils/shared/modelRetirement.ts). Persisted so a move never repeats
+   * once a user has re-chosen the model; a trigger not recorded here is a
+   * new event and applies.
    */
-  modelRetirementsApplied: Record<string, string>;
+  modelRetirementsApplied: Record<string, AppliedRetirement>;
   /**
    * User-defined data structures (Customizations → Structures). Shared: an
    * entry is usable as an extraction recipe and as a data-workflow table
@@ -633,7 +635,9 @@ interface SettingsStore {
   // Model list provenance / region (runtime-only)
   setModelListSource: (source: ModelListSource | null) => void;
   setUserRegion: (region: UserRegion | null) => void;
-  markModelRetirementsApplied: (applied: Record<string, string>) => void;
+  markModelRetirementsApplied: (
+    applied: Record<string, AppliedRetirement>,
+  ) => void;
 
   // Model Ordering Actions
   setModelOrderMode: (mode: ModelOrderMode) => void;
@@ -945,16 +949,28 @@ export function coerceChannelIdsBySet(
 }
 
 /**
- * A persisted `Record<string, string>` as it may be trusted: non-string
- * values dropped, anything that is not a plain object replaced by `{}`.
+ * `modelRetirementsApplied` as it may be trusted: malformed entries dropped
+ * (the model is then simply evaluated again), anything that is not a plain
+ * object replaced by `{}`.
  */
-export function coerceStringRecord(value: unknown): Record<string, string> {
+export function coerceAppliedRetirements(
+  value: unknown,
+): Record<string, AppliedRetirement> {
   if (value == null || typeof value !== 'object' || Array.isArray(value)) {
     return {};
   }
-  const result: Record<string, string> = {};
-  for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
-    if (typeof entry === 'string') result[key] = entry;
+  const result: Record<string, AppliedRetirement> = {};
+  for (const [modelId, entry] of Object.entries(
+    value as Record<string, unknown>,
+  )) {
+    if (entry == null || typeof entry !== 'object') continue;
+    const { triggers, appliedAt } = entry as Partial<AppliedRetirement>;
+    if (!Array.isArray(triggers) || typeof appliedAt !== 'string') continue;
+    if (Number.isNaN(Date.parse(appliedAt))) continue;
+    result[modelId] = {
+      triggers: triggers.filter((t): t is string => typeof t === 'string'),
+      appliedAt,
+    };
   }
   return result;
 }
@@ -2835,9 +2851,9 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 69) {
           delete state.euDefaultModelSwitchApplied;
         }
-        // Whatever version it came from, the record must be a plain
-        // id → string map (the hook indexes it by model id).
-        state.modelRetirementsApplied = coerceStringRecord(
+        // Whatever version it came from, the record must be well-formed
+        // (the hook indexes it by model id and reads both fields).
+        state.modelRetirementsApplied = coerceAppliedRetirements(
           state.modelRetirementsApplied,
         );
 
@@ -2998,8 +3014,8 @@ export const useSettingsStore = create<SettingsStore>()(
           if (!Array.isArray(state.formTemplates)) {
             state.formTemplates = [];
           }
-          // Defensive (hand-edited storage): see coerceStringRecord.
-          state.modelRetirementsApplied = coerceStringRecord(
+          // Defensive (hand-edited storage): see coerceAppliedRetirements.
+          state.modelRetirementsApplied = coerceAppliedRetirements(
             state.modelRetirementsApplied,
           );
           // Defensive, inner values included: a row that is not a clean
