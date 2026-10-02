@@ -702,7 +702,7 @@ describe('moveConversationsToSuccessors', () => {
     });
   });
 
-  it('drops AGENT search routing the target cannot serve, and keeps other modes', () => {
+  it('drops the retired AGENT search routing, and keeps other modes', () => {
     const moved = moveConversationsToSuccessors(
       [
         conversation('c1', 'gpt-5.2', { defaultSearchMode: SearchMode.AGENT }),
@@ -715,9 +715,9 @@ describe('moveConversationsToSuccessors', () => {
     expect(
       successorUpdates(
         { defaultSearchMode: SearchMode.AGENT },
-        served('gpt-4.1'), // has a Foundry agent: AGENT routing survives
+        served('gpt-4.1'),
       ).defaultSearchMode,
-    ).toBeUndefined();
+    ).toBe(SearchMode.INTELLIGENT);
   });
 
   it('drops a pinned region the target is not hosted in, and keeps one it is', () => {
