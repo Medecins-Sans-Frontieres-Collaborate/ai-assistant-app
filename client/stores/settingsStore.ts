@@ -2059,7 +2059,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 69, // Increment this when schema changes to trigger migrations
+      version: 70, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2856,6 +2856,13 @@ export const useSettingsStore = create<SettingsStore>()(
         state.modelRetirementsApplied = coerceAppliedRetirements(
           state.modelRetirementsApplied,
         );
+
+        // v70: the "Agent" search routing is retired — a saved AGENT default
+        // becomes the privacy-preserving routing it always fell back to.
+        // (Conversations carrying it are read through normalizeSearchMode.)
+        if (version < 70 && state.defaultSearchMode === SearchMode.AGENT) {
+          state.defaultSearchMode = SearchMode.INTELLIGENT;
+        }
 
         // Whatever version it came from, the per-set rows are only kept as
         // clean string arrays (the workspace iterates them on load).
