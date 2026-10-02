@@ -198,6 +198,38 @@ export function getModelConfig(): EnvironmentConfig {
   return modelConfigs[env];
 }
 
+function defaultModelPool(
+  availableModels?: OpenAIModel[],
+  region?: UserRegion | null,
+): OpenAIModel[] {
+  return (availableModels ?? getStaticModelList()).filter(
+    (m) =>
+      !m.isDisabled &&
+      !isModelDisabled(m.id) &&
+      isModelSelectableInRegion(m, region),
+  );
+}
+
+/**
+ * The default model as a matter of POLICY: steps 1-2 of getDefaultModel (the
+ * ring override, else the first DEFAULT_MODEL_PREFERENCE entry in the pool),
+ * or undefined when neither applies. For callers that must not fall through
+ * to the "latest standard GPT" heuristic — the latest model is usually the
+ * most expensive, which is the wrong thing to move people onto silently.
+ */
+export function getPolicyDefaultModel(
+  availableModels?: OpenAIModel[],
+  region?: UserRegion | null,
+): string | undefined {
+  const override = getModelConfig().defaultModel;
+  if (override) return override;
+
+  const pool = defaultModelPool(availableModels, region);
+  return DEFAULT_MODEL_PREFERENCE.find((preferredId) =>
+    pool.some((m) => m.id === preferredId),
+  );
+}
+
 /**
  * Gets the default model for the current environment.
  *
@@ -219,20 +251,10 @@ export function getDefaultModel(
   availableModels?: OpenAIModel[],
   region?: UserRegion | null,
 ): string {
-  const override = getModelConfig().defaultModel;
-  if (override) return override;
+  const policyDefault = getPolicyDefaultModel(availableModels, region);
+  if (policyDefault) return policyDefault;
 
-  const pool = (availableModels ?? getStaticModelList()).filter(
-    (m) =>
-      !m.isDisabled &&
-      !isModelDisabled(m.id) &&
-      isModelSelectableInRegion(m, region),
-  );
-
-  for (const preferredId of DEFAULT_MODEL_PREFERENCE) {
-    if (pool.some((m) => m.id === preferredId)) return preferredId;
-  }
-
+  const pool = defaultModelPool(availableModels, region);
   let latest: OpenAIModel | undefined;
   for (const model of pool) {
     if (model.series !== 'gpt' || model.variant !== 'standard') continue;
