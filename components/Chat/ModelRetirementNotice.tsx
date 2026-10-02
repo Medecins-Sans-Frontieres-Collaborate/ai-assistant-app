@@ -6,7 +6,7 @@ import React, { useMemo } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { isServedListRefined } from '@/client/hooks/conversation/useNewConversation';
-import { useRetirementClock } from '@/client/hooks/settings/useModelRetirementMigration';
+import { useRetirementClock } from '@/client/hooks/settings/useModelRetirements';
 
 import {
   getRetirementNotice,
@@ -52,9 +52,16 @@ export function ModelRetirementNotice({
       // Only once /api/models has answered: the static seed carries no
       // retirement dates and is blind to what this user is served.
       isServedListRefined(modelListSource)
-        ? getRetirementNotice(modelId, { models, region, now })
+        ? getRetirementNotice(modelId, {
+            models,
+            region,
+            now,
+            // A conversation pinned to the other region's instance retires
+            // on that deployment's schedule.
+            routedRegion: conversation?.hostedRegion ?? region,
+          })
         : null,
-    [modelListSource, modelId, models, region, now],
+    [modelListSource, modelId, models, region, now, conversation?.hostedRegion],
   );
 
   if (!conversation || !retirement) return null;
