@@ -97,8 +97,40 @@ export interface ModelRetirement {
 
 type RetirementFacts = Pick<
   OpenAIModel,
-  'id' | 'retiresAt' | 'deploymentModelName'
+  'id' | 'retiresAt' | 'deploymentModelName' | 'successorId'
 >;
+
+/**
+ * The retirement facts of the deployment that actually SERVES a
+ * conversation on `model`. US and EU are separate deployments: the same
+ * model id can be a real gpt-5.2 in one and repointed at gpt-5.4 in the
+ * other, or retire months apart.
+ *
+ * `routedRegion` is where the conversation is routed — the user's home
+ * region, or the region a conversation is pinned to (`hostedRegion`). When
+ * the model has no instance there it is served from wherever it is hosted
+ * (a US user on an EU-only model is routed to the EU). Lists without
+ * per-region facts (the static fallback, single-region tests) use the
+ * model's own.
+ */
+export function retirementFacts(
+  model: OpenAIModel,
+  routedRegion: UserRegion | null | undefined,
+): RetirementFacts {
+  const hosted = model.hostedIn;
+  const servingRegion =
+    routedRegion && (!hosted?.length || hosted.includes(routedRegion))
+      ? routedRegion
+      : hosted?.[0];
+  const facts =
+    (servingRegion && model.retirementByRegion?.[servingRegion]) || model;
+  return {
+    id: model.id,
+    retiresAt: facts.retiresAt,
+    deploymentModelName: facts.deploymentModelName,
+    successorId: facts.successorId,
+  };
+}
 
 /** Why (and how urgently) a model is leaving, or null when it is staying. */
 export function getRetirementSignal(
@@ -203,13 +235,18 @@ export function resolveSuccessor(
   served: OpenAIModel[],
   region: UserRegion | null | undefined,
   now: number,
+  /** Where the conversations being moved are routed; defaults to `region`. */
+  routedRegion: UserRegion | null | undefined = region,
 ): OpenAIModel | null {
   const servedIds = new Set(served.map((m) => m.id));
+  const signalOf = (m: OpenAIModel) =>
+    getRetirementSignal(retirementFacts(m, routedRegion), servedIds, now);
+  const own = retirementFacts(model, routedRegion);
   const keepsHosting = (m: OpenAIModel) =>
     getModelHosting(catalogMeta(m)) === 'azure' ||
     getModelHosting(catalogMeta(model)) === 'external';
   const hasHomeInstance = (m: OpenAIModel) =>
-    !region || !m.hostedIn?.length || m.hostedIn.includes(region);
+    !routedRegion || !m.hostedIn?.length || m.hostedIn.includes(routedRegion);
   const keepsRegion = (m: OpenAIModel) =>
     !hasHomeInstance(model) || hasHomeInstance(m);
   const candidates = served.filter(
@@ -219,7 +256,7 @@ export function resolveSuccessor(
       isModelSelectableInRegion(m, region) &&
       keepsHosting(m) &&
       keepsRegion(m) &&
-      getRetirementSignal(m, servedIds, now) === null,
+      signalOf(m) === null,
   );
   const candidate = (id: string | undefined) =>
     id ? candidates.find((m) => m.id === id) : undefined;
@@ -228,16 +265,14 @@ export function resolveSuccessor(
   if (pinned) {
     const pinnedSuccessor = candidate(pinned);
     if (pinnedSuccessor) return pinnedSuccessor;
-    const ownReasons = getRetirementSignal(model, servedIds, now)?.triggers
-      .length;
     // Forced is its only reason to move: wait for the pinned successor.
-    if ((ownReasons ?? 0) <= 1) return null;
+    if ((signalOf(model)?.triggers.length ?? 0) <= 1) return null;
   }
 
-  const tagged = candidate(model.successorId);
+  const tagged = candidate(own.successorId);
   if (tagged) return tagged;
 
-  const underlying = candidate(model.deploymentModelName);
+  const underlying = candidate(own.deploymentModelName);
   if (underlying) return underlying;
 
   const { series, variant } = catalogMeta(model);
@@ -267,6 +302,12 @@ export interface RetirementContext {
   models: OpenAIModel[];
   region: UserRegion | null | undefined;
   now: number;
+  /**
+   * Evaluate for conversations routed to this region instead of the user's
+   * home region — a conversation pinned to the other region's instance
+   * (`hostedRegion`). See retirementFacts.
+   */
+  routedRegion?: UserRegion | null;
 }
 
 /**
@@ -278,6 +319,7 @@ export function listRetirements({
   models,
   region,
   now,
+  routedRegion = region,
 }: RetirementContext): ModelRetirement[] {
   const servedIds = new Set(models.map((m) => m.id));
   const unservedForced = Object.keys(FORCED_MODEL_RETIREMENTS)
@@ -287,9 +329,19 @@ export function listRetirements({
 
   const retirements: ModelRetirement[] = [];
   for (const model of [...models, ...unservedForced]) {
-    const signal = getRetirementSignal(model, servedIds, now);
+    const signal = getRetirementSignal(
+      retirementFacts(model, routedRegion),
+      servedIds,
+      now,
+    );
     if (!signal) continue;
-    const successor = resolveSuccessor(model, models, region, now);
+    const successor = resolveSuccessor(
+      model,
+      models,
+      region,
+      now,
+      routedRegion,
+    );
     if (successor) retirements.push({ model, signal, successor });
   }
   return retirements;
@@ -423,6 +475,9 @@ function shouldMove(
 /**
  * Applies `moves` to conversations: each one on a leaving model goes to
  * that model's successor when the move covers it (see RetirementMove.kind).
+ * A conversation pinned to a region (`hostedRegion`) is judged by
+ * `pinnedMoves` for that region when given — the plan evaluated with that
+ * region's deployments — and by `moves` otherwise.
  * Returns the SAME array when nothing moved, so the caller can skip the
  * store write. A remembered pre-agent model (`agentPrevModelId`) follows the
  * same rule, so detaching a Foundry agent later doesn't restore the retired
@@ -432,10 +487,23 @@ export function moveConversationsToSuccessors(
   conversations: Conversation[],
   moves: readonly RetirementMove[],
   defaultModelId?: string,
+  pinnedMoves?: Partial<Record<UserRegion, readonly RetirementMove[]>>,
 ): Conversation[] {
-  const byModel = new Map(moves.map((move) => [move.model.id, move]));
+  const index = (list: readonly RetirementMove[]) =>
+    new Map(list.map((move) => [move.model.id, move]));
+  const byModel = index(moves);
+  const byPinnedRegion = new Map(
+    Object.entries(pinnedMoves ?? {}).map(([pinned, list]) => [
+      pinned,
+      index(list ?? []),
+    ]),
+  );
   const moveFor = (modelId: string | undefined, conversation: Conversation) => {
-    const move = modelId ? byModel.get(modelId) : undefined;
+    const plan =
+      (conversation.hostedRegion &&
+        byPinnedRegion.get(conversation.hostedRegion)) ||
+      byModel;
+    const move = modelId ? plan.get(modelId) : undefined;
     return move && shouldMove(conversation, move, defaultModelId)
       ? move
       : undefined;
