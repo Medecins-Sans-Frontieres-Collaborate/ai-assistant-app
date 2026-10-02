@@ -168,7 +168,7 @@ describe('ToolModeControls', () => {
     expect(screen.queryByText('Azure AI')).toBeNull();
   });
 
-  it('agent-capable models expose Privacy/Azure-AI routing and the privacy note', () => {
+  it('offers no routing choice: the retired "Azure AI" agent routing is gone', () => {
     selectedConversation = {
       id: 'conv-1',
       model: OpenAIModels[OpenAIModelID.GPT_4_1],
@@ -176,36 +176,25 @@ describe('ToolModeControls', () => {
     };
     render(<ToolModeControls />);
 
-    fireEvent.click(screen.getByText('Azure AI'));
-
-    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
-      defaultSearchMode: SearchMode.AGENT,
-    });
-    expect(setDefaultSearchMode).toHaveBeenCalledWith(SearchMode.AGENT);
-  });
-
-  it('AGENT routing shows the data-retention note', () => {
-    selectedConversation = {
-      id: 'conv-1',
-      model: OpenAIModels[OpenAIModelID.GPT_4_1],
-      defaultSearchMode: SearchMode.AGENT,
-    };
-    render(<ToolModeControls />);
-
-    expect(
-      screen.getByText(/Azure AI Foundry, which may retain them/),
-    ).toBeInTheDocument();
-  });
-
-  it('routing is hidden while search is Off', () => {
-    selectedConversation = {
-      id: 'conv-1',
-      model: OpenAIModels[OpenAIModelID.GPT_4_1],
-      defaultSearchMode: SearchMode.OFF,
-    };
-    render(<ToolModeControls />);
-
+    expect(screen.queryByText('Azure AI')).toBeNull();
     expect(screen.queryByText('Privacy')).toBeNull();
+  });
+
+  it('reads a persisted AGENT default as Auto and saves Auto back', () => {
+    selectedConversation = {
+      id: 'conv-1',
+      model: OpenAIModels[OpenAIModelID.GPT_4_1],
+      defaultSearchMode: SearchMode.AGENT,
+    };
+    render(<ToolModeControls />);
+
+    expect(screen.queryByText(/which may retain them/)).toBeNull();
+    // The web-search row's Auto segment (the interpreter row has one too).
+    fireEvent.click(screen.getAllByText('Auto')[0]);
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      defaultSearchMode: SearchMode.INTELLIGENT,
+    });
+    expect(setDefaultSearchMode).toHaveBeenCalledWith(SearchMode.INTELLIGENT);
   });
 
   it('agent gates hide their row, and hiding both renders nothing', () => {
