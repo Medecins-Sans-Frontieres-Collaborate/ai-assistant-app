@@ -245,6 +245,31 @@ describe('useModelRetirementMigration', () => {
     });
   });
 
+  it('leaves a conversation pinned to the EU instance alone when only the US deployment retires', () => {
+    const due = inDays(3);
+    useSettingsStore.setState({
+      userRegion: 'US',
+      modelRetirementsApplied: forcedDone(inDays(-1)),
+      models: [
+        served('gpt-5.4', { hostedIn: ['US', 'EU'] }),
+        served('claude-sonnet-4-6', { hostedIn: ['US', 'EU'] }),
+        served('claude-sonnet-5', {
+          hostedIn: ['US', 'EU'],
+          retiresAt: due,
+          retirementByRegion: { US: { retiresAt: due }, EU: {} },
+        }),
+      ],
+    });
+    useConversationStore.setState({
+      conversations: [
+        conversation('home', 'claude-sonnet-5'),
+        { ...conversation('pinned', 'claude-sonnet-5'), hostedRegion: 'EU' },
+      ],
+    });
+    renderHook(() => useModelRetirementMigration());
+    expect(modelIds()).toEqual(['claude-sonnet-4-6', 'claude-sonnet-5']);
+  });
+
   describe('a tab left open across the move date', () => {
     afterEach(() => vi.useRealTimers());
 
