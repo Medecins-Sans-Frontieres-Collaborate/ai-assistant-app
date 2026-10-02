@@ -35,6 +35,10 @@ import {
   isGlobalAdmin,
   resolveAdminStatus,
 } from '@/lib/services/agentAccess/adminAuth';
+import {
+  isAnalyticsAdmin,
+  resolveAnalyticsAdmin,
+} from '@/lib/services/analytics/adminAccess';
 import { resolveAnnouncementsAdmin } from '@/lib/services/announcements/adminAccess';
 import { LimitsService } from '@/lib/services/limits/LimitsService';
 import {
@@ -54,6 +58,7 @@ export const ADMIN_AREA_IDS = [
   'channel-sets',
   'channel-profiles',
   'limits',
+  'analytics',
   'workflows',
   'web-search',
   'announcements',
@@ -173,6 +178,16 @@ export async function resolveAdminAreas(
     announcementsAdmin.status.isDelegatedAdmin
   ) {
     areas.push('announcements');
+  }
+
+  // Analytics: global admins, plus holders of the `analytics` grant in an
+  // enabled shared delegation. Its own gate, like announcements. The rollout
+  // gate is the CLIENT-side `analytics` LaunchDarkly flag, which AdminShell
+  // applies to the rail; including the area here grants nothing.
+  const analyticsAdmin = await resolveAnalyticsAdmin(user);
+  if (analyticsAdmin.delegationsUnavailable) configUnavailable = true;
+  if (isAnalyticsAdmin(analyticsAdmin.status)) {
+    areas.push('analytics');
   }
 
   if (isGlobalAdmin(user)) {
