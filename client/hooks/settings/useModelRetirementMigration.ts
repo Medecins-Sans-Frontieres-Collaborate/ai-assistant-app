@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { isServedListRefined } from '@/client/hooks/conversation/useNewConversation';
+import { useRetirementClock } from '@/client/hooks/settings/useModelRetirements';
 
 import {
   AppliedRetirement,
@@ -14,28 +15,6 @@ import { OpenAIModelID } from '@/types/openai';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
-
-const CLOCK_INTERVAL_MS = 60 * 60 * 1000;
-
-/**
- * "Now" for retirement decisions: refreshed hourly and whenever the tab
- * regains focus. The windows are days wide, so this is plenty — what it
- * must not be is frozen at mount, or a tab left open across a boundary
- * would never show the notice or make the move.
- */
-export function useRetirementClock(): number {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    const tick = () => setNow(Date.now());
-    const interval = setInterval(tick, CLOCK_INTERVAL_MS);
-    window.addEventListener('focus', tick);
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('focus', tick);
-    };
-  }, []);
-  return now;
-}
 
 /**
  * Moves the saved default model and existing conversations off models that
@@ -73,12 +52,26 @@ export function useModelRetirementMigration(): void {
     if (!isServedListRefined(modelListSource)) return;
 
     const moves = planRetirementMoves({ models, region, now }, applied);
-    if (moves.length === 0) return;
-    const events = moves.filter((move) => move.kind === 'event');
+    // US users can pin a conversation to the EU instance of a model, which
+    // retires on its own schedule (EU users are always routed to the EU).
+    const pinnedMoves =
+      region === 'US'
+        ? {
+            EU: planRetirementMoves(
+              { models, region, now, routedRegion: 'EU' },
+              applied,
+            ),
+          }
+        : undefined;
+    const allMoves = [...moves, ...(pinnedMoves?.EU ?? [])];
+    if (allMoves.length === 0) return;
+    const events = allMoves.filter((move) => move.kind === 'event');
 
     const settings = useSettingsStore.getState();
-    const defaultMove = events.find(
-      (move) => move.model.id === settings.defaultModelId,
+    // The default follows home routing: new conversations are not pinned.
+    const defaultMove = moves.find(
+      (move) =>
+        move.kind === 'event' && move.model.id === settings.defaultModelId,
     );
     if (defaultMove) {
       settings.setDefaultModelId(defaultMove.successor.id as OpenAIModelID);
@@ -91,6 +84,7 @@ export function useModelRetirementMigration(): void {
       // Read after the default move above: a catch-up must judge untouched
       // conversations against the default as it now stands.
       useSettingsStore.getState().defaultModelId,
+      pinnedMoves,
     );
     if (moved !== store.conversations) {
       // setConversations, not updateConversation: the latter stamps "now"
@@ -102,22 +96,21 @@ export function useModelRetirementMigration(): void {
       // The wall clock, not the (up to an hour old) retirement clock: later
       // catch-ups compare conversation timestamps against this instant.
       const appliedAt = new Date().toISOString();
-      settings.markModelRetirementsApplied(
-        Object.fromEntries(
-          events.map((move): [string, AppliedRetirement] => [
-            move.model.id,
-            {
-              triggers: [
-                ...new Set([
-                  ...(applied[move.model.id]?.triggers ?? []),
-                  ...move.signal.triggers,
-                ]),
-              ],
-              appliedAt,
-            },
-          ]),
-        ),
-      );
+      const record: Record<string, AppliedRetirement> = {};
+      for (const move of events) {
+        // Both routings can report the same model; their triggers add up.
+        record[move.model.id] = {
+          triggers: [
+            ...new Set([
+              ...(applied[move.model.id]?.triggers ?? []),
+              ...(record[move.model.id]?.triggers ?? []),
+              ...move.signal.triggers,
+            ]),
+          ],
+          appliedAt,
+        };
+      }
+      settings.markModelRetirementsApplied(record);
     }
   }, [
     region,
