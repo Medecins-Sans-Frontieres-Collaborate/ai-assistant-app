@@ -140,7 +140,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
   /**
    * The executor to record: what the search result reports about itself
    * (Bing names the deployment it resolved), else the provisional label.
-   * A combined result keeps its feed half in the name.
+   * A combined result keeps its feed half in the name when headlines were
+   * actually merged in.
    */
   private static executorOf(
     result: { metadata?: Record<string, unknown> },
@@ -148,7 +149,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
   ): string {
     const reported = result.metadata?.executor;
     if (typeof reported !== 'string') return provisional;
-    return provisional === 'Bing + Google News'
+    return provisional === 'Bing + Google News' && result.metadata?.merged
       ? `${reported} + Google News`
       : reported;
   }
@@ -749,6 +750,21 @@ export class ToolRouterEnricher extends BasePipelineStage {
               void context.emitActivity?.(key, params);
             }
           },
+          // A Bing search is the user's spend like any other model call:
+          // same telemetry row, same emissions estimate, same quota debit.
+          onUsage: (usage, modelId, region) =>
+            recordTokenUsage(
+              { ...usage, modelId, region },
+              OpenAIModels[modelId as OpenAIModelID] ?? {
+                id: modelId,
+                name: modelId,
+                maxLength: 0,
+                tokenLimit: 0,
+              },
+              context.user,
+              false,
+              context.telemetry,
+            ),
         };
 
         // SearXNG searches run multi-step unless an admin or the user
@@ -766,6 +782,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
         context.stageSignal?.addEventListener('abort', onStageAbort, {
           once: true,
         });
+
+        // The single-step call listens too: a Bing search that lost the
+        // race must not keep running (and spending) in the background.
+        searchParams.signal = searchAbort.signal;
 
         let searchTimer: ReturnType<typeof setTimeout> | undefined;
         const searchResult = await Promise.race([
@@ -816,7 +836,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
             await this.emitSearchRecord(
               context,
               queryLabel,
-              executorLabel,
+              ToolRouterEnricher.executorOf(searchResult, executorLabel),
               '0 sources found',
               null,
               Date.now() - startTime,
