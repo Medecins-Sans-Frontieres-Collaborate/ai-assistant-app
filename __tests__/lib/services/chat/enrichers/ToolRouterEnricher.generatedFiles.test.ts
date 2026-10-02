@@ -53,10 +53,10 @@ describe('ToolRouterEnricher.collectInterpreterInputFiles — generated files', 
 
   beforeEach(() => {
     vi.clearAllMocks();
-    enricher = new ToolRouterEnricher(
-      { determineTool: vi.fn(), classifyDocumentTrim: vi.fn() } as any,
-      { executeWebSearchTool: vi.fn() } as any,
-    );
+    enricher = new ToolRouterEnricher({
+      determineTool: vi.fn(),
+      classifyDocumentTrim: vi.fn(),
+    } as any);
     blobGetMock.mockImplementation(async (path: string) =>
       Buffer.from(`bytes-of:${path}`),
     );

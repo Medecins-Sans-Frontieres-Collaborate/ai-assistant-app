@@ -1028,7 +1028,7 @@ describe('ToolRouter Enricher', () => {
       const emitActivity = vi.fn().mockResolvedValue(undefined);
       (enricher as any).webSearchTool.execute.mockImplementation(
         async (params: any) => {
-          // Inner stream phases forwarded by AgentChatService
+          // Inner phases forwarded by the search sub-call
           params.onActivity?.('chat.activity.searchingWeb'); // generic — skipped
           params.onActivity?.('chat.activity.usingNamedTool', {
             tool: 'bing_grounding',
