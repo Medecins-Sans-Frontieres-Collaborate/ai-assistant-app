@@ -409,9 +409,8 @@ export function planRetirementMoves(
 }
 
 /**
- * The conversation changes that come with moving onto `target`. Mirrors
- * what picking the model in ModelSelect does: an AGENT search mode falls
- * back to INTELLIGENT when the target has no Foundry agent. A pinned
+ * The conversation changes that come with moving onto `target`. A retired
+ * AGENT search mode (see normalizeSearchMode) becomes INTELLIGENT. A pinned
  * `hostedRegion` the target is not hosted in is dropped, or the request
  * would be routed to a region with no such deployment. `threadId` is left
  * alone — it is the handle the conversation's Foundry thread is deleted by.
@@ -422,7 +421,7 @@ export function successorUpdates(
 ): Partial<Conversation> {
   return {
     model: target,
-    ...(conversation.defaultSearchMode === SearchMode.AGENT && !target.agentId
+    ...(conversation.defaultSearchMode === SearchMode.AGENT
       ? { defaultSearchMode: SearchMode.INTELLIGENT }
       : {}),
     ...(conversation.hostedRegion &&
