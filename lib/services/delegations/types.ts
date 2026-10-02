@@ -35,7 +35,22 @@ import {
 
 import { z } from 'zod';
 
-export const DELEGATION_GRANTS = ['limits', 'announcements'] as const;
+export const DELEGATION_GRANTS = [
+  'limits',
+  'announcements',
+  'analytics',
+] as const;
+
+/**
+ * The capabilities that existed when delegations moved out of the limits
+ * policy. FROZEN: the one-time migration grants exactly these, so a grant
+ * type shipped later (analytics) is never conferred by a migration that
+ * happens to run late on some environment.
+ */
+const MIGRATION_GRANTS: readonly DelegationGrant[] = [
+  'limits',
+  'announcements',
+];
 export const DelegationGrantSchema = z.enum(DELEGATION_GRANTS);
 export type DelegationGrant = z.infer<typeof DelegationGrantSchema>;
 
@@ -213,7 +228,8 @@ export function toLimitDelegations(
 /**
  * One-time move out of the limits policy. By decision every existing delegate
  * receives FULL permissions on their delegation: each delegation gets every
- * capability that exists today and each admin `grants: 'all'`. Ids are kept —
+ * capability that existed at the move (`MIGRATION_GRANTS`) and each admin
+ * `grants: 'all'`. Ids are kept —
  * stored overrides reference them.
  */
 export function fromLegacyLimitDelegations(
@@ -228,7 +244,7 @@ export function fromLegacyLimitDelegations(
       label: delegation.label,
       enabled: delegation.enabled,
       jurisdiction: delegation.jurisdiction,
-      capabilities: [...DELEGATION_GRANTS],
+      capabilities: [...MIGRATION_GRANTS],
       admins: [...new Set(delegation.admins.map(canonicalMail))]
         .filter(Boolean)
         .map((mail) => ({ mail, grants: 'all' as const })),
