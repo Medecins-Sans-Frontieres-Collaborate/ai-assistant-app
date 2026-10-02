@@ -39,7 +39,6 @@ import {
   sanitizeWebSearchOptions,
 } from '@/types/webSearch';
 
-import { AgentChatService } from '../AgentChatService';
 import { ToolRouterService } from '../ToolRouterService';
 import { ChatContext, shouldExecuteAsAgent } from '../pipeline/ChatContext';
 import { STAGE_TIMEOUTS } from '../pipeline/ChatPipeline';
@@ -125,15 +124,34 @@ export class ToolRouterEnricher extends BasePipelineStage {
     STAGE_TIMEOUTS.ToolRouterEnricher - 5000;
 
   // "Executed by" label on the search tool record for feed-based providers
-  // (the Bing and combined paths show the agent model id instead).
-  private static readonly FEED_PROVIDER_LABELS: Partial<
-    Record<ResolvedWebSearchProvider, string>
+  // (the Bing executor replaces its own with the deployment it ran on).
+  private static readonly PROVIDER_LABELS: Record<
+    ResolvedWebSearchProvider,
+    string
   > = {
     searxng: 'SearXNG',
     news: 'GDELT + Google News',
     gdelt: 'GDELT',
     'google-news': 'Google News',
+    bing: 'Bing',
+    combined: 'Bing + Google News',
   };
+
+  /**
+   * The executor to record: what the search result reports about itself
+   * (Bing names the deployment it resolved), else the provisional label.
+   * A combined result keeps its feed half in the name.
+   */
+  private static executorOf(
+    result: { metadata?: Record<string, unknown> },
+    provisional: string,
+  ): string {
+    const reported = result.metadata?.executor;
+    if (typeof reported !== 'string') return provisional;
+    return provisional === 'Bing + Google News'
+      ? `${reported} + Google News`
+      : reported;
+  }
 
   // Multi-step search (docs/WEB_SEARCH_MULTI_STEP.md). The loop ends on its
   // own deadline and hands back what it gathered; the margin keeps a step
@@ -168,13 +186,12 @@ export class ToolRouterEnricher extends BasePipelineStage {
 
   constructor(
     toolRouterService: ToolRouterService,
-    agentChatService: AgentChatService,
     // Absent → every search is single-step (the pre-multi-step behaviour).
     searchAssessor?: SearchAssessor,
   ) {
     super();
     this.toolRouterService = toolRouterService;
-    this.webSearchTool = new WebSearchTool(agentChatService);
+    this.webSearchTool = new WebSearchTool();
     this.codeInterpreterTool = new CodeInterpreterTool();
     this.searchAssessor = searchAssessor;
   }
@@ -674,46 +691,14 @@ export class ToolRouterEnricher extends BasePipelineStage {
     );
 
     const startTime = Date.now();
-    // The provider decides what "executed the search" means for the tool
-    // record: the agent model for Bing/combined, the feed(s) themselves
-    // otherwise.
-    const needsAgent =
-      tuning.provider === 'bing-agent' || tuning.provider === 'combined';
-    const feedLabel = ToolRouterEnricher.FEED_PROVIDER_LABELS[tuning.provider];
-    // Bing/combined: find a model with agentId (prefer from context,
-    // fallback to the default search agent). Feed providers need neither.
-    const searchModel = needsAgent
-      ? context.model.agentId
-        ? context.model
-        : this.getAgentModelForSearch()
-      : null;
+    // What "executed the search" means for the tool record: the feed(s)
+    // themselves, or Bing — whose executor reports the deployment it
+    // resolved (the record then reads "Bing (gpt-5.4)"); until then the
+    // provisional label is the provider name.
     const executorLabel =
-      tuning.provider === 'bing-responses'
-        ? // Direct Responses-API call: no Foundry agent, no feed label.
-          `Bing web_search (${env.WEB_SEARCH_RESPONSES_MODEL})`
-        : tuning.provider === 'combined'
-          ? searchModel
-            ? `Bing (${searchModel.id}) + Google News`
-            : 'Google News'
-          : needsAgent
-            ? (searchModel?.id ?? 'unavailable')
-            : feedLabel!;
+      ToolRouterEnricher.PROVIDER_LABELS[tuning.provider] ?? tuning.provider;
     {
       try {
-        if (tuning.provider === 'bing-agent' && !searchModel) {
-          console.warn(
-            '[ToolRouterEnricher] No agent model available for search, skipping',
-          );
-          return context;
-        }
-        if (tuning.provider === 'combined' && !searchModel) {
-          // The combined tool degrades to the news feed alone when no
-          // agent model exists — worth logging, not worth skipping.
-          console.warn(
-            '[ToolRouterEnricher] Combined search without an agent model; news feed only',
-          );
-        }
-
         // Tell the client what we're doing — showing the ACTUAL query makes
         // the multi-second wait feel purposeful instead of stuck.
         await context.emitActivity?.(
@@ -731,7 +716,6 @@ export class ToolRouterEnricher extends BasePipelineStage {
         const searchParams: WebSearchToolParams = {
           searchQuery,
           searchQueries,
-          model: searchModel ?? undefined,
           user: context.user,
           resultCount: tuning.resultCount,
           freshness: tuning.freshness,
@@ -1011,7 +995,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           await this.emitSearchRecord(
             context,
             queryLabel,
-            executorLabel,
+            ToolRouterEnricher.executorOf(searchResult, executorLabel),
             `${truncatedCitations.length} source${truncatedCitations.length === 1 ? '' : 's'} found${degradedNote}`,
             null,
             Date.now() - startTime,
@@ -1536,7 +1520,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
     await this.emitSearchRecord(
       context,
       params.searchQueries?.join(' | ') ?? params.searchQuery,
-      ToolRouterEnricher.FEED_PROVIDER_LABELS.news!,
+      ToolRouterEnricher.PROVIDER_LABELS.news,
       `${feedCitations.length} source${feedCitations.length === 1 ? '' : 's'} from the news feeds (web engines did not answer)`,
       null,
       Date.now() - startTime,
@@ -1851,7 +1835,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
       context,
       queryLabel,
       fromMultiStep
-        ? ToolRouterEnricher.FEED_PROVIDER_LABELS.searxng!
+        ? ToolRouterEnricher.PROVIDER_LABELS.searxng
         : 'Google News',
       `${digest.citations.length} source${digest.citations.length === 1 ? '' : 's'} from earlier ${fromMultiStep ? 'results' : 'headlines'}`,
       null,
@@ -2463,25 +2447,5 @@ export class ToolRouterEnricher extends BasePipelineStage {
     }
 
     return 'text' in content ? content.text : '[non-text content]';
-  }
-
-  /**
-   * Gets a model with agentId for search (fallback if context model doesn't have one).
-   * Uses GPT-5.2 (agent name 'gpt-52') as the default search agent.
-   */
-  private getAgentModelForSearch(): OpenAIModel | null {
-    const defaultSearchModel = OpenAIModels[OpenAIModelID.GPT_5_2];
-
-    if (!defaultSearchModel || !defaultSearchModel.agentId) {
-      console.warn(
-        '[ToolRouterEnricher] Default search agent (GPT-5.2) not available or missing agentId',
-      );
-      return null;
-    }
-
-    console.log(
-      `[ToolRouterEnricher] Using default search agent: ${defaultSearchModel.name} (${defaultSearchModel.agentId})`,
-    );
-    return defaultSearchModel;
   }
 }
