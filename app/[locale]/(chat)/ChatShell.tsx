@@ -49,7 +49,12 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
   // inside this shell (rather than its own route group) so the settings
   // modal host below remains mounted — AdminShell's gear opens it directly.
   const pathname = usePathname();
-  const isAdminRoute = pathname === '/admin' || pathname.startsWith('/admin/');
+  // Analytics is the same kind of full-page surface, for the same reason.
+  const isAdminRoute =
+    pathname === '/admin' ||
+    pathname.startsWith('/admin/') ||
+    pathname === '/analytics' ||
+    pathname.startsWith('/analytics/');
   // Use lazy initialization to check for legacy data on first render
   const [showMigrationDialog, setShowMigrationDialog] = useState(
     shouldShowMigrationDialog,
