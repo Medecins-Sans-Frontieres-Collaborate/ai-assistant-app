@@ -1,11 +1,12 @@
 'use client';
 
 import { IconArrowsExchange, IconClockHour4 } from '@tabler/icons-react';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
 
 import { isServedListRefined } from '@/client/hooks/conversation/useNewConversation';
+import { useRetirementClock } from '@/client/hooks/settings/useModelRetirementMigration';
 
 import {
   getRetirementNotice,
@@ -29,8 +30,10 @@ interface ModelRetirementNoticeProps {
  * and offers the move now.
  *
  * This notice IS the announcement — the move itself
- * (useModelRetirementMigration) is silent. Sibling of
- * ModelUnavailableNotice, which covers models that are already gone.
+ * (useModelRetirementMigration) is silent. It stays up after the move date
+ * for a conversation that is still (or again) on the model, without the
+ * promise of a move: the automatic one has been made and will not repeat.
+ * Sibling of ModelUnavailableNotice, which covers models already gone.
  */
 export function ModelRetirementNotice({
   conversation,
@@ -41,9 +44,7 @@ export function ModelRetirementNotice({
   const region = useSettingsStore((s) => s.userRegion);
   const modelListSource = useSettingsStore((s) => s.modelListSource);
   const updateConversation = useConversationStore((s) => s.updateConversation);
-  // A snapshot, not a live tick: the dates involved are days away (lazy
-  // initializer keeps Date.now() out of render, as in VariantSection).
-  const [now] = useState(() => Date.now());
+  const now = useRetirementClock();
 
   const modelId = conversation?.model?.id;
   const retirement = useMemo(
@@ -59,6 +60,7 @@ export function ModelRetirementNotice({
   if (!conversation || !retirement) return null;
   const { model, signal, successor } = retirement;
   if (!signal.retiresAt || !signal.movesAt) return null;
+  const moveStillAhead = signal.phase === 'notice';
 
   // Azure's dates are UTC midnights; rendering them in UTC keeps the day
   // the same for every viewer.
@@ -91,12 +93,18 @@ export function ModelRetirementNotice({
       >
         <IconClockHour4 size={18} className="flex-shrink-0" />
         <span className="flex-1">
-          {t('notice', {
-            model: conversation.model.name || model.name,
-            retiresOn: formatDate(signal.retiresAt),
-            successor: successor.name,
-            movesOn: formatDate(signal.movesAt),
-          })}
+          {moveStillAhead
+            ? t('notice', {
+                model: conversation.model.name || model.name,
+                retiresOn: formatDate(signal.retiresAt),
+                successor: successor.name,
+                movesOn: formatDate(signal.movesAt),
+              })
+            : t('noticeRetiring', {
+                model: conversation.model.name || model.name,
+                retiresOn: formatDate(signal.retiresAt),
+                successor: successor.name,
+              })}
         </span>
         <button
           type="button"
