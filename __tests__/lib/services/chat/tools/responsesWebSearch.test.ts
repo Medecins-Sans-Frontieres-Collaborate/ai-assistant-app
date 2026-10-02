@@ -8,6 +8,7 @@ import {
 } from '@/lib/services/chat/tools/responsesWebSearch';
 
 import { env } from '@/config/environment';
+import { AIProjectClient } from '@azure/ai-projects';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { mockCreate, mockGetOpenAIClient } = vi.hoisted(() => {
@@ -347,6 +348,26 @@ describe('executeResponsesWebSearch', () => {
     });
   });
 
+  it('reports the token usage and forwards the abort signal', async () => {
+    mockCreate.mockResolvedValue({
+      output: [],
+      usage: { input_tokens: 13002, output_tokens: 476, total_tokens: 13478 },
+    });
+    const onUsage = vi.fn();
+    const controller = new AbortController();
+    await executeResponsesWebSearch({
+      searchQuery: 'anything',
+      onUsage,
+      signal: controller.signal,
+    });
+    expect(onUsage).toHaveBeenCalledWith(
+      { promptTokens: 13002, completionTokens: 476, totalTokens: 13478 },
+      'gpt-5.4',
+      'US',
+    );
+    expect(mockCreate.mock.calls[0][1]).toEqual({ signal: controller.signal });
+  });
+
   it('runs an EU user on the EU project with the deployment resolved for the EU', async () => {
     (env as any).AZURE_AI_FOUNDRY_ENDPOINT_EU =
       'https://unit-test-eu.services.ai.azure.com/api/projects/test';
@@ -356,6 +377,10 @@ describe('executeResponsesWebSearch', () => {
         region: 'EU',
       });
       expect(mockResolveWebSearchModel).toHaveBeenCalledWith('EU');
+      expect(AIProjectClient).toHaveBeenCalledWith(
+        'https://unit-test-eu.services.ai.azure.com/api/projects/test',
+        expect.anything(),
+      );
       expect(mockCreate.mock.calls[0][0].model).toBe('gpt-5.2');
       expect(result.metadata).toEqual({ executor: 'Bing (gpt-5.2)' });
     } finally {

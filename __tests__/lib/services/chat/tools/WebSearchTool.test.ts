@@ -586,6 +586,27 @@ describe('WebSearchTool', () => {
       expect(result.metadata).toEqual({ bingFailed: true });
     });
 
+    it('keeps the Bing executor on the merged result, flagged as merged', async () => {
+      vi.mocked(fetchGoogleNewsHeadlines).mockResolvedValue([headline(1)]);
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
+        text: 'Bing summary [1]',
+        citations: [
+          { number: 1, title: 'Deep', url: 'https://deep.example', date: '' },
+        ],
+        metadata: { executor: 'Bing (gpt-5.4)' },
+      });
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'topic',
+        provider: 'combined',
+        user,
+      });
+      expect(result.metadata).toEqual({
+        executor: 'Bing (gpt-5.4)',
+        merged: true,
+      });
+    });
+
     it('does not flag the result when both legs succeed', async () => {
       vi.mocked(fetchGoogleNewsHeadlines).mockResolvedValue([headline(1)]);
       vi.mocked(executeResponsesWebSearch).mockResolvedValue({
