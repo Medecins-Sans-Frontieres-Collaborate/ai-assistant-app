@@ -6558,6 +6558,7 @@
   },
   "modelRetirement": {
     "notice": "{model} is being retired on {retiresOn}. This conversation will move to {successor} on {movesOn}.",
+    "noticeRetiring": "{model} is being retired on {retiresOn} and will stop working. Switch to {successor} to keep using this conversation.",
     "switchNow": "Switch now"
   },
   "limitsUx": {
