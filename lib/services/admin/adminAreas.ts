@@ -181,9 +181,7 @@ export async function resolveAdminAreas(
   }
 
   // Analytics: global admins, plus holders of the `analytics` grant in an
-  // enabled shared delegation. Its own gate, like announcements. The rollout
-  // gate is the CLIENT-side `analytics` LaunchDarkly flag, which AdminShell
-  // applies to the rail; including the area here grants nothing.
+  // enabled shared delegation. Its own gate, like announcements.
   const analyticsAdmin = await resolveAnalyticsAdmin(user);
   if (analyticsAdmin.delegationsUnavailable) configUnavailable = true;
   if (isAnalyticsAdmin(analyticsAdmin.status)) {
