@@ -1,5 +1,6 @@
 import {
   IconBook,
+  IconChartBar,
   IconForms,
   IconGauge,
   IconMap2,
@@ -132,6 +133,13 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     labelKey: 'limits.title',
     descriptionKey: 'limits.description',
   },
+  analytics: {
+    id: 'analytics',
+    href: '/admin/analytics',
+    icon: IconChartBar,
+    labelKey: 'admin.area.analytics',
+    descriptionKey: 'admin.areaDescription.analytics',
+  },
   announcements: {
     id: 'announcements',
     href: '/admin/announcements',
@@ -228,7 +236,7 @@ export const ADMIN_GROUPS: AdminAreaGroupDescriptor[] = [
   {
     id: 'usage',
     labelKey: 'admin.group.usage',
-    areas: ['limits'],
+    areas: ['limits', 'analytics'],
   },
   {
     id: 'administration',
