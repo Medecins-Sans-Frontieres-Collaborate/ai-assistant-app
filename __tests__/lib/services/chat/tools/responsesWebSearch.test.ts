@@ -31,6 +31,15 @@ vi.mock('@azure/identity', () => ({
   }),
 }));
 
+// The deployment is resolved per region from the served list
+// (lib/services/models/webSearchModel.ts); stubbed here, tested there.
+const mockResolveWebSearchModel = vi.hoisted(() =>
+  vi.fn(async (region: string) => (region === 'EU' ? 'gpt-5.2' : 'gpt-5.4')),
+);
+vi.mock('@/lib/services/models/webSearchModel', () => ({
+  resolveWebSearchModel: mockResolveWebSearchModel,
+}));
+
 describe('buildCitedSearchResult', () => {
   it('inserts a marker at the annotation end index and returns the citation', () => {
     const result = buildCitedSearchResult([
@@ -272,7 +281,10 @@ describe('executeResponsesWebSearch', () => {
 
     expect(mockCreate).toHaveBeenCalledTimes(1);
     const request = mockCreate.mock.calls[0][0];
-    expect(request.model).toBe(env.WEB_SEARCH_RESPONSES_MODEL);
+    // No region given → the US deployment resolved for the US.
+    expect(mockResolveWebSearchModel).toHaveBeenCalledWith('US');
+    expect(request.model).toBe('gpt-5.4');
+    expect(result.metadata).toEqual({ executor: 'Bing (gpt-5.4)' });
     expect(request.tools).toEqual([{ type: 'web_search' }]);
     expect(request.store).toBe(false);
     expect(request.reasoning).toEqual({ effort: 'low' });
@@ -328,7 +340,27 @@ describe('executeResponsesWebSearch', () => {
     const result = await executeResponsesWebSearch({
       searchQuery: 'anything',
     });
-    expect(result).toEqual({ text: '', citations: [] });
+    expect(result).toEqual({
+      text: '',
+      citations: [],
+      metadata: { executor: 'Bing (gpt-5.4)' },
+    });
+  });
+
+  it('runs an EU user on the EU project with the deployment resolved for the EU', async () => {
+    (env as any).AZURE_AI_FOUNDRY_ENDPOINT_EU =
+      'https://unit-test-eu.services.ai.azure.com/api/projects/test';
+    try {
+      const result = await executeResponsesWebSearch({
+        searchQuery: 'anything',
+        region: 'EU',
+      });
+      expect(mockResolveWebSearchModel).toHaveBeenCalledWith('EU');
+      expect(mockCreate.mock.calls[0][0].model).toBe('gpt-5.2');
+      expect(result.metadata).toEqual({ executor: 'Bing (gpt-5.2)' });
+    } finally {
+      delete (env as any).AZURE_AI_FOUNDRY_ENDPOINT_EU;
+    }
   });
 
   it('propagates API failures to the caller', async () => {
