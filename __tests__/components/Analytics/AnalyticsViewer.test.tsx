@@ -24,14 +24,12 @@ vi.mock('@/lib/navigation', () => ({
 }));
 
 const world = vi.hoisted(() => ({
-  enabled: true,
   tree: null as unknown,
   filesByFolder: {} as Record<string, unknown[]>,
   requested: [] as (string | null)[],
 }));
 
 vi.mock('@/client/hooks/analytics/useAnalytics', () => ({
-  useAnalyticsEnabled: () => world.enabled,
   useAnalyticsTree: () => ({
     data: world.tree,
     isLoading: false,
@@ -104,7 +102,6 @@ function setTree(tree: Partial<AnalyticsTreeResponse>) {
 
 describe('AnalyticsViewer', () => {
   beforeEach(() => {
-    world.enabled = true;
     world.filesByFolder = {};
     world.requested = [];
     setTree({});
@@ -216,13 +213,5 @@ describe('AnalyticsViewer', () => {
       'href',
       '/admin/analytics',
     );
-  });
-
-  it('renders nothing but a notice while the flag is off', () => {
-    world.enabled = false;
-    setTree({ folders: [folderView('usage/ocba', { fileCount: 1 })] });
-    render(<AnalyticsViewer />);
-    expect(screen.getByText('notEnabled')).toBeInTheDocument();
-    expect(world.requested.filter((folder) => folder !== null)).toEqual([]);
   });
 });
