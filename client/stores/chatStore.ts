@@ -70,7 +70,7 @@ import {
   fallbackModelID,
 } from '@/types/openai';
 import { Citation } from '@/types/rag';
-import { SearchMode } from '@/types/searchMode';
+import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 import { PrecomputedSearchResults } from '@/types/webSearch';
 
 import { useChatInputStore } from './chatInputStore';
@@ -1332,8 +1332,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
               ?.allowWebSearch === true
         : false;
     const isAgentInvocation = isOrganizationAgent || isCustomAgent;
+    // The retired AGENT routing reads as INTELLIGENT (normalizeSearchMode).
     const effectiveSearchMode =
-      isAgentInvocation && !orgAgentSearchAllowed ? undefined : searchMode;
+      isAgentInvocation && !orgAgentSearchAllowed
+        ? undefined
+        : normalizeSearchMode(searchMode);
 
     // Interpreter mode rides the same org-agent gate as search: static org
     // agents only run code when their config opts in (allowCodeInterpreter,
@@ -2041,9 +2044,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     //
     // Curated/custom agents are NEVER retried — the agent's tools,
     // instructions, and connections are the whole point of choosing it.
-    // Standard models that happen to be invoked via Foundry's agent service
-    // (e.g. GPT-5.2 with `isAgent: true`) DO retry — that flag is just a
-    // deployment-mechanism marker, not "user picked a curated agent".
     //
     // Local-runtime models are never retried either, and for a stronger
     // reason: the fallback is a CLOUD model, so retrying would ship a
