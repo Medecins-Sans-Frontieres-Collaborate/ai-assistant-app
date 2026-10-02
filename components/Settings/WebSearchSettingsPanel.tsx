@@ -30,8 +30,7 @@ export const WebSearchSettingsPanel: FC = () => {
     'news',
     'google-news',
     'gdelt',
-    'bing-agent',
-    'bing-responses',
+    'bing',
     'combined',
   ];
   const providerKey: Record<WebSearchProviderOption, string> = {
@@ -40,8 +39,7 @@ export const WebSearchSettingsPanel: FC = () => {
     news: 'News',
     'google-news': 'GoogleNews',
     gdelt: 'Gdelt',
-    'bing-agent': 'Bing',
-    'bing-responses': 'BingResponses',
+    bing: 'Bing',
     combined: 'Combined',
   };
 
