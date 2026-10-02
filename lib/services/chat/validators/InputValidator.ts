@@ -14,7 +14,7 @@ import {
   MAX_PLAN_STEP_TOOLS,
 } from '@/types/mcp';
 import { OpenAIModel } from '@/types/openai';
-import { SearchMode } from '@/types/searchMode';
+import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
 import {
   MAX_SEARCH_RESULT_COUNT,
@@ -375,7 +375,12 @@ const ChatBodySchema = z
     // `org-<botId>` model ids — old clients never send it, so a stale bot on
     // a pre-tray conversation can't hijack an explicitly selected model.
     agentAttached: z.boolean().optional(),
-    searchMode: z.nativeEnum(SearchMode).optional(),
+    // The retired AGENT value still arrives from older clients and
+    // persisted conversations; it is read as INTELLIGENT.
+    searchMode: z
+      .nativeEnum(SearchMode)
+      .optional()
+      .transform(normalizeSearchMode),
     webSearchOptions: z
       .object({
         resultCount: z
