@@ -192,11 +192,12 @@ metadata layer:
   `ActiveFileInjector.ts:114` to gate image injection. Prefer a `supportsVision` _flag_ in the metadata
   so discovered models can declare it (keep the enum as a thin derived view if other call sites need
   it).
-- **Agent backing:** `isAgent` + `agentId` + `agentVersion` (the `AGENT_NAMES` map in `types/openai.ts`).
-  **Important nuance:** the built-in GPT/Claude "models" are actually invoked as Foundry _agents_
-  (`gpt-52`, `claude-opus-46`) via `AIFoundryAgentHandler` — so their real routing key is `agentId`,
-  which is local metadata, **not** something model-deployment discovery returns. The JSON baseline
-  keeps these mappings; tags can supply `ui-agent-id` for new agent-backed models.
+- **Agent backing:** `isAgent` + `agentId` + `agentVersion`. _Historical note:_ the built-in
+  GPT/Claude models used to carry hand-made Foundry agent ids (`gpt-52`, `claude-opus-46`) for an
+  "Agent" search routing and for Bing web search; both were retired on 2026-10-02 (web search now
+  runs on the Responses API `web_search` tool, on a deployment picked per region by
+  `lib/services/models/webSearchModel.ts`). No catalog model carries an agent id any more; real
+  Foundry agents are discovered live, and tags can still supply `ui-agent-id` per deployment.
 - **Standard-path tools** (`ToolType = 'web_search'` via `ToolRouterService`) and **agent-side tools**
   (code interpreter, file search, MCP — configured server-side in the Foundry agent and surfaced by
   `foundryEventMappers.ts`) are **unchanged**. They are not part of model-deployment metadata and need
@@ -292,12 +293,18 @@ schedule to maintain by hand. Rules: `lib/utils/shared/modelRetirement.ts`; the 
 - **Clock.** Decisions are re-evaluated hourly and on window focus, so a tab left open crosses the
   notice and move dates. After the move date the notice stays up (without promising a move) for a
   conversation that is on the model again.
+- **Per region.** US and EU are separate deployments that retire (and get repointed) independently.
+  `/api/models` serves every region's facts (`retirementByRegion`); a conversation is judged by the
+  deployment that serves it — the home region, the region it is pinned to (`hostedRegion`), or
+  wherever the model is hosted when it has no home instance. A pinned conversation that must move
+  stays in its region.
+- **In the picker.** A retiring model carries a "Retiring" badge on its row, a clock on its version
+  chip and a sentence in the details header, and a family row never fronts one by default (the
+  current selection still wins). It stays selectable — that is the user's call.
 - **Not covered:** a model that vanishes from the served list with no prior signal is _not_ moved —
   absence also means "hidden by a usage limit", "other region failed to answer" or "fallback list",
-  so it keeps the existing `ModelUnavailableNotice`. Retirement facts are the HOME region's; a
-  conversation pinned to the other region's instance is judged by them too. The picker does not mark
-  leaving models. The manual `lifecycle` / `retirementDate` / `retirementReplacement` fields in
-  `config/models.json` stay informational and are not read here.
+  so it keeps the existing `ModelUnavailableNotice`. The manual `lifecycle` / `retirementDate` /
+  `retirementReplacement` fields in `config/models.json` stay informational and are not read here.
 - **Open question — version vs. model.** `retiresAt` is the date of the deployed model _version_.
   Deployments here use `OnceNewDefaultVersionAvailable`, and Azure may upgrade a deployment in place
   to a newer version instead of letting it die; the date rule would then move users off a model that
