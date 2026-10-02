@@ -6556,6 +6556,10 @@
     "loadError": "The global admin list could not be loaded.",
     "retry": "Retry"
   },
+  "modelRetirement": {
+    "notice": "{model} is being retired on {retiresOn}. This conversation will move to {successor} on {movesOn}.",
+    "switchNow": "Switch now"
+  },
   "limitsUx": {
     "picker": {
       "exhausted": "Limit reached ({used}/{limit}). Resets {resets}.",
