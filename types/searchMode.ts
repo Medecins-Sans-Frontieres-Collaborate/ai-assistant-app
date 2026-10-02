@@ -26,12 +26,23 @@ export enum SearchMode {
   ALWAYS = 'always',
 
   /**
-   * Use AI Foundry agent directly (faster, less private)
-   * - Full conversation sent to AI Foundry
-   * - Faster response time
-   * - Less privacy protection
+   * @deprecated Retired 2026-10: the "Agent" routing that sent the whole
+   * conversation to a hand-made Foundry agent. Kept only so persisted
+   * conversations and older clients still parse; read it through
+   * normalizeSearchMode, which maps it to INTELLIGENT.
    */
   AGENT = 'agent',
+}
+
+/** A persisted or client-sent mode as it should be acted on today. */
+export function normalizeSearchMode(mode: SearchMode): SearchMode;
+export function normalizeSearchMode(
+  mode: SearchMode | undefined,
+): SearchMode | undefined;
+export function normalizeSearchMode(
+  mode: SearchMode | undefined,
+): SearchMode | undefined {
+  return mode === SearchMode.AGENT ? SearchMode.INTELLIGENT : mode;
 }
 
 /**
