@@ -103,15 +103,34 @@ export const countMessageTokens = (
   return 0;
 };
 
+export interface MessageWindowOptions {
+  /**
+   * Messages always kept, counting back from the latest, even once the
+   * budget is spent — bounded by `windowTokens`. Keeps the previous
+   * exchange when the latest message alone (file text, search results)
+   * would otherwise fill the budget and leave the model with no history.
+   */
+  minRecentMessages?: number;
+  /** The model's real input room: the hard ceiling the minimum may reach. */
+  windowTokens?: number;
+}
+
+/**
+ * Trims a conversation to what a turn may carry: the latest message always,
+ * then older messages (newest first) while they fit `tokenLimit` — the
+ * history budget, system prompt included (`promptLength`). See
+ * lib/services/contextBudget/types.ts for where the budget comes from.
+ */
 export const getMessagesToSend = async (
   messages: Message[],
   encoding: Tiktoken,
   promptLength: number,
   tokenLimit: number,
   user: Session['user'],
-  // Optional active files (not used here; injection handled earlier in pipeline)
-  _activeFiles?: import('@/types/chat').ActiveFile[],
+  options: MessageWindowOptions = {},
 ): Promise<Message[]> => {
+  const minRecent = Math.max(1, options.minRecentMessages ?? 1);
+  const windowTokens = Math.max(tokenLimit, options.windowTokens ?? tokenLimit);
   const conversationType: ContentType = getPrimaryContentType(
     messages[messages.length - 1].content,
   );
@@ -182,11 +201,16 @@ export const getMessagesToSend = async (
     // Token-based truncation: stop adding older messages once budget is exceeded.
     // Uses break (not continue) to preserve a contiguous suffix of messages.
     // A post-loop check drops any leading orphaned assistant message.
-    // Always include the most recent message (isLastMessage).
+    // Always include the most recent message (isLastMessage), and the
+    // `minRecent` latest ones while the model's window itself has room.
     const messageTokens = countMessageTokens(message, encoding);
+    const withinMinimum =
+      acc.messagesToSend.length < minRecent &&
+      acc.tokenCount + messageTokens <= windowTokens;
     if (
       !isLastMessage &&
       acc.messagesToSend.length > 0 &&
+      !withinMinimum &&
       acc.tokenCount + messageTokens > tokenLimit
     ) {
       break;
