@@ -809,6 +809,35 @@ describe('ToolRouterEnricher — multi-step search', () => {
       await expectSingleStep(context({ provider: 'google-news' }));
     });
 
+    it('meters a Bing search like any other model call, and hands it the abort signal', async () => {
+      tool.execute.mockImplementationOnce(async (params: any) => {
+        expect(params.signal).toBeInstanceOf(AbortSignal);
+        params.onUsage(
+          { promptTokens: 13000, completionTokens: 480, totalTokens: 13480 },
+          'gpt-5.4',
+          'US',
+        );
+        return {
+          text: 'Bing digest.',
+          citations: [{ number: 1, title: 'A', url: 'https://a.example' }],
+          metadata: { executor: 'Bing (gpt-5.4)' },
+        };
+      });
+      await enricher.execute(context({ provider: 'bing' }));
+      expect(recordTokenUsage).toHaveBeenCalledWith(
+        expect.objectContaining({
+          promptTokens: 13000,
+          totalTokens: 13480,
+          modelId: 'gpt-5.4',
+          region: 'US',
+        }),
+        expect.objectContaining({ id: 'gpt-5.4' }),
+        expect.anything(),
+        false,
+        undefined,
+      );
+    });
+
     it('where the SearXNG instance is not configured', async () => {
       searxngConfigured.value = false;
       await expectSingleStep(context());
