@@ -3244,6 +3244,12 @@
       "processedIn": "This conversation is processed in the {region} Azure region.",
       "euOnlyNote": "{name} is hosted in the EU Azure region; conversations with it are processed there."
     },
+    "retiring": {
+      "badge": "Retiring",
+      "datedMoving": "Retires on {date}. Conversations on it move to {successor} on {movesOn}.",
+      "dated": "Retires on {date} and will stop working. Use {successor} instead.",
+      "replaced": "Being replaced by {successor}."
+    },
     "variant": {
       "label": "Variant"
     },
