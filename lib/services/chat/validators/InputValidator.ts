@@ -17,6 +17,7 @@ import { OpenAIModel } from '@/types/openai';
 import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
 import {
+  LEGACY_BING_PROVIDERS,
   MAX_SEARCH_RESULT_COUNT,
   MIN_SEARCH_RESULT_COUNT,
   PrecomputedSearchResults,
@@ -392,14 +393,22 @@ const ChatBodySchema = z
         // Optional for backward compatibility (older clients omit it);
         // sanitizeWebSearchOptions falls back to the store default
         // (DEFAULT_WEB_SEARCH_OPTIONS.provider) server-side.
-        provider: z
-          .enum(
-            WEB_SEARCH_PROVIDER_OPTIONS as [
-              (typeof WEB_SEARCH_PROVIDER_OPTIONS)[number],
-              ...typeof WEB_SEARCH_PROVIDER_OPTIONS,
-            ],
-          )
-          .optional(),
+        // The two earlier Bing names older clients still send read as
+        // 'bing' (normalizeWebSearchProvider); unknown values are rejected.
+        provider: z.preprocess(
+          (value) =>
+            typeof value === 'string' && LEGACY_BING_PROVIDERS.includes(value)
+              ? 'bing'
+              : value,
+          z
+            .enum(
+              WEB_SEARCH_PROVIDER_OPTIONS as [
+                (typeof WEB_SEARCH_PROVIDER_OPTIONS)[number],
+                ...typeof WEB_SEARCH_PROVIDER_OPTIONS,
+              ],
+            )
+            .optional(),
+        ),
         // Optional for the same reason; absent means on. Must be listed —
         // zod strips unknown keys, which would silently re-enable it.
         multiStep: z.boolean().optional(),
