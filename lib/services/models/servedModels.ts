@@ -38,8 +38,15 @@ export interface ServedModels {
 const STATIC_MODELS: OpenAIModel[] = getStaticModelList();
 
 // One DefaultAzureCredential for the process so its token cache survives
-// across requests instead of being thrown away each call.
-const credential = new DefaultAzureCredential();
+// across requests instead of being thrown away each call — built on first
+// use, not at import: this module is reached from the chat route's import
+// graph, and constructing a credential chain at load time is work (and
+// noise in tests) for requests that never discover anything.
+let credential: DefaultAzureCredential | null = null;
+function getCredential(): DefaultAzureCredential {
+  credential ??= new DefaultAzureCredential();
+  return credential;
+}
 
 export async function discoverServedModels(
   region: UserRegion,
@@ -64,7 +71,7 @@ export async function discoverServedModels(
 
     // App identity → ARM token, exactly as the rest of the app's
     // managed-identity Azure calls do. One token covers both accounts.
-    const tokenResponse = await credential.getToken(
+    const tokenResponse = await getCredential().getToken(
       'https://management.azure.com/.default',
     );
     if (!tokenResponse?.token) {
