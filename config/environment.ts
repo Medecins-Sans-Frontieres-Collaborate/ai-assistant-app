@@ -111,6 +111,17 @@ const serverEnvSchema = z.object({
    */
   AZURE_BLOB_STORAGE_ADMIN_NAME: z.string().optional(),
   AZURE_BLOB_STORAGE_ADMIN_CONTAINER: z.string().optional(),
+  /**
+   * Analytics DELIVERY container: where the third-party ETL writes report
+   * files (docs/ANALYTICS_DELIVERY_CONTRACT.md). Same account as the admin
+   * container; defaults to `ai-portal-analytics`. Created by Terraform, never
+   * by the app. See lib/services/analytics/deliveryStore.ts.
+   */
+  AZURE_BLOB_STORAGE_ANALYTICS_CONTAINER: z.string().optional(),
+  // Whether the app DELETES delivered analytics files once they are past
+  // their folder's retention (plus a grace period). "false" keeps expired
+  // files hidden but leaves them in storage.
+  ANALYTICS_RETENTION_DELETE_ENABLED: booleanString(true),
   STORAGE_RESOURCE_ID: z.string().optional(),
   STORAGE_DATA_SOURCE_CONTAINER: z.string().optional(),
 
