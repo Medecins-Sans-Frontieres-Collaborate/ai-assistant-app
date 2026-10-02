@@ -43,6 +43,25 @@ export interface ResponsesWebSearchParams {
    * the deployment it uses. EU users are always served from the EU.
    */
   region?: UserRegion | null;
+  /**
+   * The call's token usage, once known. A search is the user's spend like
+   * any other model call (10-15k input tokens is typical: the model runs
+   * several search rounds), so callers meter it — telemetry row, emissions
+   * and token quota — exactly as they do an assessor call.
+   */
+  onUsage?: (
+    usage: WebSearchUsage,
+    modelId: string,
+    region: UserRegion,
+  ) => void;
+  /** Aborts the Responses call (the enricher's search timeout). */
+  signal?: AbortSignal;
+}
+
+export interface WebSearchUsage {
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
 }
 
 /** One output_text content part with its citation annotations. */
@@ -162,7 +181,7 @@ export function buildCitedSearchResult(parts: CitedTextPart[]): {
 export async function executeResponsesWebSearch(
   params: ResponsesWebSearchParams,
 ): Promise<ToolResult> {
-  const { searchQuery, resultCount, freshness, deep } = params;
+  const { searchQuery, resultCount, freshness, deep, signal } = params;
   const region = searchRegion(params.region);
   const model = await resolveWebSearchModel(region);
 
@@ -186,17 +205,35 @@ export async function executeResponsesWebSearch(
   const client = await getClient(OfficeResolver.getFoundryEndpoint(region));
   const response = await withAzureRetry(
     () =>
-      client.responses.create({
-        model,
-        input,
-        tools: [{ type: 'web_search' } as unknown as OpenAI.Responses.Tool],
-        // 'minimal' is rejected alongside web_search on gpt-5.x; 'medium'
-        // lets deep searches use agentic open_page/find_in_page rounds.
-        reasoning: { effort: deep ? 'medium' : 'low' },
-        store: false,
-      }),
+      client.responses.create(
+        {
+          model,
+          input,
+          tools: [{ type: 'web_search' } as unknown as OpenAI.Responses.Tool],
+          // 'minimal' is rejected alongside web_search on gpt-5.x; 'medium'
+          // lets deep searches use agentic open_page/find_in_page rounds.
+          reasoning: { effort: deep ? 'medium' : 'low' },
+          store: false,
+        },
+        signal ? { signal } : undefined,
+      ),
     { label: 'responses-web-search' },
   );
+
+  const usage = response.usage;
+  if (usage && params.onUsage) {
+    const promptTokens = usage.input_tokens ?? 0;
+    const completionTokens = usage.output_tokens ?? 0;
+    params.onUsage(
+      {
+        promptTokens,
+        completionTokens,
+        totalTokens: usage.total_tokens ?? promptTokens + completionTokens,
+      },
+      model,
+      region,
+    );
+  }
 
   const parts: CitedTextPart[] = [];
   for (const item of response.output ?? []) {
