@@ -3,6 +3,13 @@ import { LocalRuntime } from '@/types/localRuntime';
 import modelMetadata from '@/config/models.json';
 import { z } from 'zod';
 
+/** What discovery knows about one deployment's retirement (see OpenAIModel). */
+export interface ModelRetirementFacts {
+  retiresAt?: string;
+  deploymentModelName?: string;
+  successorId?: string;
+}
+
 export interface OpenAIModel {
   id: string;
   name: string;
@@ -168,6 +175,13 @@ export interface OpenAIModel {
    * lib/utils/shared/modelRetirement.ts).
    */
   successorId?: string;
+  /**
+   * The three facts above PER REGION, for every region the model is deployed
+   * in. US and EU are separate deployments that retire (and get repointed)
+   * independently; the top-level fields are the first (home) region's.
+   * Runtime-only — set by /api/models' multi-region merge.
+   */
+  retirementByRegion?: Partial<Record<'US' | 'EU', ModelRetirementFacts>>;
 
   /**
    * Regions where a deployment with this name was discovered (set by
@@ -546,7 +560,8 @@ const openAIModelSchema = z.object({
   modelSource: z.string().optional(),
   isCustomSourceModel: z.boolean().optional(),
   // hostedIn, sourceLocation, deploymentModelVersion, deploymentModelName,
-  // retiresAt and successorId are intentionally NOT in this schema: they are
+  // retiresAt, successorId and retirementByRegion are intentionally NOT in
+  // this schema: they are
   // derived at runtime (live discovery / the byom sources route), never
   // authored in config/models.json (unknown keys are stripped, so an
   // accidental JSON entry is discarded rather than trusted).
