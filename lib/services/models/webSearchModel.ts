@@ -18,9 +18,10 @@ import { getDefaultModel, getPolicyDefaultModel } from '@/config/models';
  *
  * Nothing is named in code: the model is picked from the list a region is
  * served — the same discovery and retirement rules the picker uses — so a
- * retiring search model moves on its own, 7 days before Azure stops it,
- * exactly like a user's conversation would. `WEB_SEARCH_RESPONSES_MODEL`
- * pins a deployment instead, for a deployment that wants one.
+ * retiring search model is left as soon as it enters its notice window
+ * (earlier than a user's conversation moves: a search has nothing to lose
+ * by switching). `WEB_SEARCH_RESPONSES_MODEL` pins a deployment instead,
+ * for a deployment that wants one.
  */
 
 const catalogMeta = (model: OpenAIModel): OpenAIModel =>
@@ -29,9 +30,11 @@ const catalogMeta = (model: OpenAIModel): OpenAIModel =>
 /**
  * The web-search model among `served`, or null when none qualifies. A
  * candidate is an OpenAI model on the Responses API (the only ones with the
- * `web_search` tool), usable from `region`, hosted there, and not leaving.
- * The policy default wins when it qualifies, then the dynamic default, then
- * the newest remaining candidate.
+ * `web_search` tool) in the standard or mini line — not a dedicated
+ * reasoner, whose hidden thinking makes a search take minutes — usable
+ * from `region`, hosted there, and not leaving. The policy default wins
+ * when it qualifies, then the dynamic default, then the newest remaining
+ * candidate.
  */
 export function pickWebSearchModel(
   served: OpenAIModel[],
@@ -44,6 +47,8 @@ export function pickWebSearchModel(
     return (
       meta.provider === 'openai' &&
       meta.supportsResponsesApi === true &&
+      meta.modelType !== 'reasoning' &&
+      (meta.variant === 'standard' || meta.variant === 'mini') &&
       !m.isDisabled &&
       isModelSelectableInRegion(m, region) &&
       (!m.hostedIn?.length || m.hostedIn.includes(region)) &&
@@ -64,8 +69,11 @@ export function pickWebSearchModel(
 }
 
 // Discovery itself is cached for an hour per account; this only spares the
-// ARM token round-trip and the merge on every search.
+// ARM token round-trip and the merge on every search. A pick made from the
+// static fallback list is region-blind (no hostedIn, no retirement facts),
+// so it is kept only briefly and re-tried once discovery recovers.
 const RESOLVE_TTL_MS = 5 * 60 * 1000;
+const FALLBACK_TTL_MS = 30 * 1000;
 const resolved = new Map<UserRegion, { id: string; expiresAt: number }>();
 
 /** Test seam. */
@@ -75,7 +83,10 @@ export function clearWebSearchModelCache(): void {
 
 /**
  * The deployment to run a web search on for `region`: the env pin when
- * set, else the pick from the served list, else the catalog default.
+ * set, else the pick from the served list. Throws — rather than calling a
+ * chat-only deployment that would reject the tool — when the region serves
+ * nothing that can run a web search; WebSearchTool turns that into its
+ * "search encountered an issue" note.
  */
 export async function resolveWebSearchModel(
   region: UserRegion,
@@ -85,10 +96,14 @@ export async function resolveWebSearchModel(
   const cached = resolved.get(region);
   if (cached && Date.now() < cached.expiresAt) return cached.id;
 
-  const { models } = await discoverServedModels(region);
-  const id =
-    pickWebSearchModel(models, region, Date.now()) ??
-    getDefaultModel(models, region);
-  resolved.set(region, { id, expiresAt: Date.now() + RESOLVE_TTL_MS });
+  const { models, source } = await discoverServedModels(region);
+  const id = pickWebSearchModel(models, region, Date.now());
+  if (!id) {
+    throw new Error(
+      `No web-search-capable deployment is served in the ${region} region (list source: ${source})`,
+    );
+  }
+  const ttl = source.startsWith('discovery') ? RESOLVE_TTL_MS : FALLBACK_TTL_MS;
+  resolved.set(region, { id, expiresAt: Date.now() + ttl });
   return id;
 }
