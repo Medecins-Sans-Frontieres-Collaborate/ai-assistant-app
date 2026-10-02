@@ -271,17 +271,38 @@ schedule to maintain by hand. Rules: `lib/utils/shared/modelRetirement.ts`; the 
   one-click switch, then an automatic, silent move of the saved default and all conversations 7 days
   before the date; (b) it is an **alias** — its deployment runs another model that is itself served —
   moved at once; or (c) it is listed in `FORCED_MODEL_RETIREMENTS` — the one manual input, for
-  decisions Azure's schedule cannot express; moved at once.
-- **Where to:** the deployment's `ui-successor` tag if usable → the region default when it is in the
-  same family → newest model of the same family and variant → the family's own default → the region
-  default. A successor must be served to the user, selectable in their region, and not itself
-  leaving.
-- **Once per event, per browser** (`settingsStore.modelRetirementsApplied`): a user who picks the
-  model again keeps it until a new retirement event applies.
+  decisions Azure's schedule cannot express; moved at once to its **pinned** successor, and waiting
+  while that successor is not available to the user.
+- **Where to** (computed moves): the deployment's `ui-successor` tag → for an alias, the model the
+  deployment actually runs → within the same family and variant: a same-version sibling, else the
+  policy default, else the _nearest_ newer version (never simply the newest, which is usually the most
+  expensive) → the policy default if in the same family → the family's own default → the region
+  default. A successor must be served to the user, selectable in their region, not itself leaving,
+  and must not change how data is handled: never Azure-hosted → externally hosted, never a model with
+  a home-region instance → one hosted only in the other region. The tag is bound by the same guards.
+- **Once per event, per browser** (`settingsStore.modelRetirementsApplied`: model id → triggers
+  applied + when). Every reason that holds is recorded, so a reason that is merely unmasked later
+  (the forced list is emptied) moves nobody twice; a trigger not yet recorded is a new event. A user
+  who picks the model again keeps it.
+- **Late arrivals are caught up.** Conversations that reach the browser after an event was applied (a
+  restored backup, an import, a sync pull) are moved if they predate the applied move; anything
+  touched afterwards is treated as the user's own choice. The move nudges `updatedAt` by 1 ms (from
+  `updatedAt`, else `createdAt`) so it persists without reordering or winning a backup merge; a
+  conversation with no timestamp at all is moved in memory only and re-derived on each load.
+- **Clock.** Decisions are re-evaluated hourly and on window focus, so a tab left open crosses the
+  notice and move dates. After the move date the notice stays up (without promising a move) for a
+  conversation that is on the model again.
 - **Not covered:** a model that vanishes from the served list with no prior signal is _not_ moved —
   absence also means "hidden by a usage limit", "other region failed to answer" or "fallback list",
-  so it keeps the existing `ModelUnavailableNotice`. The manual `lifecycle` / `retirementDate` /
-  `retirementReplacement` fields in `config/models.json` stay informational and are not read here.
+  so it keeps the existing `ModelUnavailableNotice`. Retirement facts are the HOME region's; a
+  conversation pinned to the other region's instance is judged by them too. The picker does not mark
+  leaving models. The manual `lifecycle` / `retirementDate` / `retirementReplacement` fields in
+  `config/models.json` stay informational and are not read here.
+- **Open question — version vs. model.** `retiresAt` is the date of the deployed model _version_.
+  Deployments here use `OnceNewDefaultVersionAvailable`, and Azure may upgrade a deployment in place
+  to a newer version instead of letting it die; the date rule would then move users off a model that
+  would have survived. Unverified either way (the US `gpt-5.2-chat` deployment was NOT upgraded past
+  a non-default version). Until settled, a dated retirement errs on the side of moving.
 
 ---
 
