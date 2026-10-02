@@ -53,6 +53,16 @@ vi.mock('@/client/hooks/settings/useAdminAreas', () => ({
   }),
 }));
 
+// Mutable analytics access; the real hook needs a QueryClientProvider, and
+// its localhost hatch would switch the flag on in jsdom regardless.
+const mockAnalytics = { hasAccess: false };
+vi.mock('@/client/hooks/analytics/useAnalytics', () => ({
+  useAnalyticsAccess: () => ({
+    hasAccess: mockAnalytics.hasAccess,
+    canAdmin: false,
+  }),
+}));
+
 // The setup-level next-intl mock has no `settings` namespace, so labels
 // render as their raw keys ('settings.Backup' etc.) — assert on those.
 function renderSidebar(setActiveSection = vi.fn()) {
@@ -73,8 +83,21 @@ describe('SettingsSidebar — consolidated nav gating', () => {
   beforeEach(() => {
     for (const key of Object.keys(mockFlags)) delete mockFlags[key];
     mockAgentAccess.isAdmin = false;
+    mockAnalytics.hasAccess = false;
     mockM365.filesEnabled = false;
     mockM365.mailEnabled = false;
+  });
+
+  it('shows the Analytics link only to people with something to open there', () => {
+    renderSidebar();
+    expect(screen.queryByText('settings.Analytics')).not.toBeInTheDocument();
+
+    mockAnalytics.hasAccess = true;
+    renderSidebar();
+    const link = screen.getByText('settings.Analytics').closest('a');
+    expect(link).toHaveAttribute('href', '/analytics');
+    // Having reports to read does not make someone an admin.
+    expect(screen.queryByText('settings.Admin')).not.toBeInTheDocument();
   });
 
   it('hides the Admin link for non-admins and shows it for admins', () => {
