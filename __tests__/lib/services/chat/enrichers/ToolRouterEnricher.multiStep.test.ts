@@ -649,7 +649,7 @@ describe('ToolRouterEnricher — multi-step search', () => {
       expect(records[0].output).toContain('bing (suspended)');
       expect(records[1].output).toContain('Web search engines did not answer');
       expect(records[2].output).toBe(
-        '1 source from the news feeds (web engines did not answer)',
+        '1 source from the news feeds (MSF web search engines did not answer)',
       );
       expect(records[2].server_label).toBe('Web Search (GDELT + Google News)');
       expect(tool.searchSearxngEntries).toHaveBeenCalledTimes(1);
@@ -676,6 +676,39 @@ describe('ToolRouterEnricher — multi-step search', () => {
       expect(monitor.logCustomMetric.mock.calls[0][0].tags).toMatchObject({
         outcome: 'degraded',
         fallback: 'feeds',
+      });
+    });
+
+    it('answers from Bing when it can run, under a note, with its own numbering', async () => {
+      tool.searxngFallback.mockResolvedValue({
+        text: 'Bing summary[1] and more[2]',
+        citations: [
+          { number: 1, title: 'EEOC', url: 'https://eeoc.gov/a', date: '' },
+          { number: 2, title: 'DOL', url: 'https://dol.gov/b', date: '' },
+        ],
+        metadata: {
+          executor: 'Bing (gpt-5.4)',
+          searxngFallback: true,
+          fallbackProvider: 'bing',
+        },
+      });
+
+      const result = await enricher.execute(context());
+
+      const records = parseRecords(emitMarker);
+      expect(records[2].output).toBe(
+        '2 sources from Bing (MSF web search engines did not answer)',
+      );
+      expect(records[2].server_label).toBe('Web Search (Bing (gpt-5.4))');
+
+      const text = lastUserText(result);
+      expect(text).toContain('run on Bing instead');
+      expect(text).toContain('Bing summary[1] and more[2]');
+      expect(text).not.toContain('news feeds');
+      expect(result.processedContent?.metadata?.citations).toHaveLength(2);
+      expect(monitor.logCustomMetric.mock.calls[0][0].tags).toMatchObject({
+        outcome: 'degraded',
+        fallback: 'bing',
       });
     });
 
