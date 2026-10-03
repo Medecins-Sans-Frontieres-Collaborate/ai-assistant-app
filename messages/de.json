@@ -753,7 +753,10 @@
       "codeInterpreterLimitReached": "Tägliches Code-Ausführungslimit erreicht – Antwort ohne Code-Ausführung…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Suche in der Wissensdatenbank fehlgeschlagen — die Antwort verwendet keine Dokumente des Agents.",
-      "stillWorking": "Noch in Arbeit…"
+      "stillWorking": "Noch in Arbeit…",
+      "assessingSearchResults": "Prüfe, ob die Ergebnisse die Frage beantworten…",
+      "refiningSearch": "Suche erneut: „{query}“…",
+      "readingSearchPages": "Lese {count} Ergebnisseiten…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# Tool verwendet} other {# Tools verwendet}}",
@@ -839,7 +842,10 @@
       "summarizeNow": "Jetzt aus Schlagzeilen zusammenfassen",
       "sourcesCount": "{count} Quellen",
       "showAll": "Alle {count} Quellen anzeigen",
-      "showFewer": "Weniger anzeigen"
+      "showFewer": "Weniger anzeigen",
+      "multiStepTitle": "Bisherige Ergebnisse – wird geprüft, ob sie die Frage beantworten",
+      "multiStepHint": "Die Suche kann weitergehen – eine neue Suche oder das Lesen der vielversprechendsten Seiten. Antworten Sie jetzt anhand der {count} bereits gefundenen Ergebnisse, wenn Sie nicht warten möchten.",
+      "answerNow": "Jetzt aus diesen Ergebnissen antworten"
     },
     "retryWithModel": "Mit {model} versuchen",
     "createTodoTasks": "To-Do-Aufgaben aus dieser Antwort erstellen",
@@ -853,7 +859,10 @@
     "modelTimedOutAtMaximum": "{model} hat innerhalb von {duration}, der längsten verfügbaren Wartezeit, nicht zu antworten begonnen. Versuchen Sie es erneut oder wählen Sie ein anderes Modell.",
     "requestTimedOut": "Für diese Anfrage war die Vorbereitungszeit zu lang und sie wurde gestoppt, bevor {model} antworten konnte. Sie können mehr Zeit erlauben, oder ein anderes Modell ausprobieren.",
     "retryWaitingLonger": "Bis zu {duration} warten und erneut versuchen",
-    "alwaysWaitThisLong": "Immer bis zu {duration} warten"
+    "alwaysWaitThisLong": "Immer bis zu {duration} warten",
+    "keepSearching": "Weiter suchen",
+    "keepSearchingHint": "Die Suche wurde beendet, bevor dies gefunden wurde. Bitten Sie den Assistenten, andere Ansätze zu versuchen.",
+    "keepSearchingMessage": "Bitte weiter danach suchen – versuchen Sie einen anderen Ansatz."
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -1291,7 +1300,9 @@
       "providerBingResponsesDescription": "Gleiche Bing-Webabdeckung wie Bing Grounding, jedoch als einzelner direkter Modellaufruf statt als Foundry-Agent – in der Regel deutlich schneller. Neue Option wird im Vergleich zu Bing Grounding getestet.",
       "providerSearxng": "MSF-Websuche",
       "providerSearxngDescription": "MSFs eigener privater Meta-Suchdienst. Deckt das allgemeine Web, Nachrichten, wissenschaftliche Literatur (einschließlich MSF-Forschungspublikationen), technische Dokumentation und humanitäre Daten ab und wählt für jede Frage die passende Quelle. Ergebnisse erscheinen in Sekunden mit direkten Links, und nur die Suchanfrage verlässt die App – die Suchmaschinen sehen Sie nie.",
-      "otherProvidersLabel": "Weitere Anbieter"
+      "otherProvidersLabel": "Weitere Anbieter",
+      "multiStepLabel": "Mehrschrittige Suche",
+      "multiStepDescription": "Bei der MSF-Websuche prüft der Assistent die ersten Ergebnisse und sucht nur dann erneut oder liest die vielversprechendsten Seiten, wenn diese nicht ausreichen. Die meisten Fragen werden trotzdem in einem Schritt beantwortet. Schalten Sie dies aus, um jede Suche auf eine Runde zu beschränken."
     },
     "Admin": "Admin",
     "Usage Limits": "Nutzungsbegrenzungen",
@@ -1311,7 +1322,8 @@
       "customHint": "Zwischen {min} und {max} Sekunden.",
       "preferModelTitle": "Bevorzugtes Modell verwenden",
       "preferModelDescription": "Nicht automatisch zu einem anderen Modell wechseln, wenn eine Anfrage fehlschlägt. Der Fehler bietet weiterhin das Wechseln an."
-    }
+    },
+    "Analytics": "Analytics"
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -1519,6 +1531,12 @@
     },
     "subVariant": {
       "label": "Größe"
+    },
+    "retiring": {
+      "badge": "Außer Betrieb",
+      "datedMoving": "Wird am {date} eingestellt. Gespräche werden am {movesOn} zu {successor} verschoben.",
+      "dated": "Wird am {date} eingestellt und funktioniert dann nicht mehr. Nutzen Sie stattdessen {successor}.",
+      "replaced": "Wird durch {successor} ersetzt."
     }
   },
   "models": {
@@ -1817,6 +1835,11 @@
       "name": "GPT-6 Astra",
       "description": "Das Flaggschiff-Modell GPT-6 von OpenAI. Entwickelt für anspruchsvolle End-to-End-Aufgaben: tiefgehende Recherche, komplexe Analysen, Softwareentwicklung und lange, mehrstufige Aufgaben. Etwa doppelt so teuer wie GPT-5.6 Sol.",
       "tagline": "Das leistungsfähigste Modell von OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Ein Upgrade von GPT-6 Sol für anspruchsvolle Aufgaben in Code, Dokumenten und Anwendungen. Erreicht nahezu das Niveau von Astra zu einem Bruchteil des Token-Preises.",
+      "tagline": "Nahezu Astra-Leistung, deutlich geringere Kosten"
     }
   },
   "searchMode": {
@@ -5440,7 +5463,10 @@
       "announcements": "Banner-Nachrichten für Nutzer: wer sie sieht, wann und in welchen Sprachen.",
       "delegations": "Wer verwaltet welche Nutzer und was jeder tun darf.",
       "channelProfiles": "Was jede Plattform ist: Grenzen, Zählweise, Threads. Organisationsweite Fakten, auf denen jedes Kanalset aufbaut.",
-      "channelSets": "Die Regeln jedes Teams für das Veröffentlichen auf Plattformen: Richtlinien, Stimmen, Vorgaben, wer das Set nutzen und wer senden darf."
+      "channelSets": "Die Regeln jedes Teams für das Veröffentlichen auf Plattformen: Richtlinien, Stimmen, Vorgaben, wer das Set nutzen und wer senden darf.",
+      "webSearch": "Wie weit eine Websuche gehen kann: mehrschrittige Suche, Bewertungsmodell und Grenzen.",
+      "contextBudget": "Wie viel einer Konversation pro Zug an jedes Modell gesendet wird.",
+      "analytics": "Gelieferte Berichte: Was eingetroffen ist, wer auf welchen Ordner zugreifen darf und welche Felder angezeigt werden können."
     },
     "openSettings": "Einstellungen öffnen",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "Anzeigen als",
       "globalAdmins": "Globale Admins",
       "announcements": "Ankündigungen",
-      "delegations": "Delegationen"
+      "delegations": "Delegationen",
+      "webSearch": "Websuche",
+      "contextBudget": "Kontextbudget",
+      "analytics": "Analytics"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "Welche Rechte diese Delegation überhaupt vergeben kann. Admins können nur das erhalten, was hier aktiviert ist.",
     "grant": {
       "limits": "Nutzungslimits",
-      "announcements": "Ankündigungen"
+      "announcements": "Ankündigungen",
+      "analytics": "Analytics"
     },
     "grantAll": "Alle",
     "maxOverrides": "Limitüberschreitungen, die diese Delegation halten darf",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "Sie können dieses Set nach dem Speichern als Standard festlegen.",
     "noChannelsWarning": "Dieses Set bietet keine Kanäle an; niemand kann damit Entwürfe erstellen.",
     "audienceEveryoneHint": "Jede Person in der Organisation kann mit diesem Set Entwürfe erstellen."
+  },
+  "contextBudgetAdmin": {
+    "title": "Kontextbudget",
+    "description": "Wie viel Gesprächsverlauf jedes Modell pro Zug erhält. Die neuesten Nachrichten werden immer einbezogen; ältere werden entfernt, sobald das Budget erschöpft ist, und eine Zusammenfassung wird im System-Prompt übermittelt. Ein größeres Budget hält einen längeren Verlauf bei höheren Kosten pro Zug sichtbar.",
+    "scopeNote": "Gilt für alle Chats mit jedem Modell. Das Budget kann nie den unten festgelegten Anteil des eigenen Fensters des Modells überschreiten.",
+    "loading": "Kontextbudget wird geladen…",
+    "loadError": "Das Kontextbudget konnte nicht geladen werden.",
+    "configUnavailable": "Das gespeicherte Kontextbudget konnte derzeit nicht gelesen werden; die unten stehenden Werte sind daher evtl. nicht aktuell. Wiederholen Sie den Vorgang vor der Bearbeitung.",
+    "retry": "Wiederholen",
+    "historyTokensLabel": "Standard-Budget (Tokens)",
+    "historyTokensDescription": "Pro Zug gesendeter Verlauf, einschließlich System-Prompt, für Modelle ohne spezielle Einstellung. Ca. 48.000 Tokens halten die letzten 30–60 Austausche einer typischen Unterhaltung.",
+    "historyFractionLabel": "Obergrenze (Anteil des Eingabefensters des Modells)",
+    "historyFractionDescription": "Das Budget ist auf diesen Anteil des Kontextfensters minus Ausgaberücklage beschränkt, sodass ein Modell mit kleinem Fenster nie mehr erhält, als es fassen kann.",
+    "minRecentMessagesLabel": "Immer behaltene Nachrichten",
+    "minRecentMessagesDescription": "Die neuesten Nachrichten, die immer behalten werden, auch wenn das Budget überschritten ist (innerhalb des Fensters). Drei bewahrt den vorherigen Austausch, wenn sonst z. B. ein eingefügtes Dokument oder Suchergebnis allein das Budget ausfüllen würde.",
+    "familyOverridesLabel": "Pro Familie",
+    "familyOverridesDescription": "Ein Budget für alle Modelle einer Familie, ersetzt das Standardbudget.",
+    "modelOverridesLabel": "Pro Modell",
+    "modelOverridesDescription": "Ein Budget für ein Modell, ersetzt Familien- und Standardbudget.",
+    "overrideFamilyPlaceholder": "Familie",
+    "overrideModelPlaceholder": "Modell-ID",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Hinzufügen",
+    "removeOverride": "Entfernen",
+    "noOverrides": "Keine",
+    "effectiveLabel": "Effektive Budgets mit diesen Einstellungen",
+    "effectiveColumnModel": "Modell",
+    "effectiveColumnWindow": "Zeitraum",
+    "effectiveColumnBudget": "Verlauf-Budget",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Standard: {value}",
+    "defaultsNote": "Nur Werte, die von den Standardwerten abweichen, werden gespeichert; alle anderen folgen weiterhin den Standardwerten des Codes über Versionen hinweg.",
+    "save": "Speichern",
+    "saving": "Speichern…",
+    "resetDefaults": "Auf Standard zurücksetzen",
+    "unsaved": "Nicht gespeicherte Änderungen",
+    "saveSuccess": "Kontextbudget gespeichert. Die Änderung wird innerhalb einer Minute wirksam.",
+    "saveError": "Das Kontextbudget konnte nicht gespeichert werden.",
+    "conflictError": "Ein anderer Admin hat das Kontextbudget inzwischen geändert; die neuesten Werte wurden neu geladen.",
+    "updatedByLine": "Zuletzt gespeichert von {by} am {at}",
+    "neverSaved": "Nie gespeichert — die Code-Standardwerte gelten."
+  },
+  "webSearchAdmin": {
+    "title": "Websuche",
+    "description": "Steuert die mehrstufige Suche in der MSF-Websuche. Nach den ersten Ergebnissen entscheidet ein Bewertungsmodell, ob sie die Frage beantworten; falls nicht, wird möglicherweise erneut mit anderen Suchanfragen gesucht, Ergebnisseiten gelesen, der Benutzer nach fehlenden Details gefragt oder berichtet, dass nichts gefunden wurde.",
+    "scopeNote": "Diese Einstellungen gelten nur für die MSF-Websuche. Andere Suchanbieter führen immer nur eine Runde durch. Jede Person kann die mehrstufige Suche für sich in den Einstellungen deaktivieren.",
+    "loading": "Websuche-Einstellungen werden geladen…",
+    "loadError": "Die Websuche-Einstellungen konnten nicht geladen werden.",
+    "configUnavailable": "Die Websuche-Einstellungen konnten nicht aus dem Speicher gelesen werden. Die Bedienelemente werden ausgeblendet, statt Standardwerte anzuzeigen, die möglicherweise nicht dem tatsächlich verwendeten Stand entsprechen.",
+    "retry": "Erneut versuchen",
+    "enabledLabel": "Mehrstufige Suche",
+    "enabledDescription": "Wenn deaktiviert, besteht jede Suche aus einer geplanten Runde und es wird kein Bewertungsmodell verwendet.",
+    "assessorLabel": "Bewertungsmodell",
+    "assessorDescription": "Wird nach jedem Schritt einmal aufgerufen, um die Ergebnisse zu bewerten. Wählen Sie ein schnelles, günstiges Modell: Es läuft, während der Nutzer wartet. Ist es nicht erreichbar, wird stattdessen {fallback} verwendet.",
+    "maxStepsLabel": "Schritte pro Frage",
+    "maxStepsDescription": "Die maximale Anzahl von Schritten, die eine Frage benötigt, einschließlich der ersten Suche. Jede weitere Suche oder das Lesen eines Seitenbündels zählt als ein Schritt. Diese Begrenzung ist unabhängig vom täglichen Suchlimit, das eine ganze Frage zählt.",
+    "maxStepsExploratoryLabel": "Schritte für explorative Suchen",
+    "maxStepsExploratoryDescription": "Höhere Obergrenze für die Suche nach schwer auffindbaren Inhalten, z. B. einer seltenen Buchkopie, bei der Sackgassen zu erwarten sind. Darf nicht niedriger als die normale Grenze sein.",
+    "pageReadsLabel": "Ergebnisseiten lesen",
+    "pageReadsDescription": "Ermöglicht es einem Schritt, die vielversprechendsten Ergebnisse zu öffnen und die Seite selbst zu lesen, anstatt sich nur auf Suchschnipsel zu verlassen.",
+    "maxPageReadsLabel": "Seiten pro Leseschritt",
+    "sourceAssessmentLabel": "Quellenqualität bewerten",
+    "sourceAssessmentDescription": "Das Bewertungsmodell kennzeichnet jede Quelle (offiziell, etabliert, sekundär, geringe Zuverlässigkeit), damit die Antwort sie gewichten und zuordnen kann.",
+    "timeBudgetLabel": "Zeitbudget (Sekunden)",
+    "timeBudgetDescription": "Maximale Zeit für eine Suche, einschließlich der ersten Runde. Wenn sie abläuft, wird die Antwort aus dem bisher gefundenen verfasst.",
+    "defaultsNote": "Eine Einstellung, die auf dem eingebauten Standardwert bleibt, wird nicht gespeichert und folgt so automatisch späteren Standard-Änderungen.",
+    "defaultHint": "Standard: {value}",
+    "defaultOn": "an",
+    "defaultOff": "aus",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Sie haben nicht gespeicherte Änderungen.",
+    "save": "Speichern",
+    "saving": "Speichern…",
+    "resetDefaults": "Auf Standard zurücksetzen",
+    "saveSuccess": "Websuche-Einstellungen gespeichert.",
+    "saveError": "Die Websuche-Einstellungen konnten nicht gespeichert werden.",
+    "conflictError": "Ein anderer Administrator hat die Einstellungen zuerst geändert. Sie wurden neu geladen – bitte prüfen und erneut speichern.",
+    "updatedByLine": "Zuletzt gespeichert von {by} am {at}.",
+    "neverSaved": "Es wurde noch nichts gespeichert; die eingebauten Standardwerte gelten."
+  },
+  "modelRetirement": {
+    "notice": "{model} wird am {retiresOn} eingestellt. Dieses Gespräch wird am {movesOn} auf {successor} übertragen.",
+    "noticeRetiring": "{model} wird am {retiresOn} eingestellt und funktioniert dann nicht mehr. Wechseln Sie zu {successor}, um dieses Gespräch weiterzuführen.",
+    "switchNow": "Jetzt wechseln"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "backToChat": "Zurück zum Chat",
+    "manage": "Verwalten",
+    "loading": "Lädt…",
+    "loadFailed": "Berichte konnten nicht geladen werden.",
+    "retry": "Erneut versuchen",
+    "emptyTitle": "Es wurde Ihnen noch nichts freigegeben",
+    "emptyBody": "Berichte erscheinen hier, sobald ein Administrator Ihnen Zugriff auf einen Ordner gewährt.",
+    "deliveryUnavailable": "Der Berichtspeicher ist derzeit nicht erreichbar, daher können die folgenden Listen leer sein. Versuchen Sie es in ein paar Minuten erneut.",
+    "groupsDegraded": "Ihre Gruppenzugehörigkeit konnte gerade nicht überprüft werden, daher fehlen möglicherweise Ordner, die mit Ihren Gruppen geteilt sind. Laden Sie die Seite in einer Minute neu.",
+    "foldersHeading": "Ordner",
+    "rootFolder": "Alle Berichte",
+    "pathOnly": "Sie haben keinen Zugriff auf diesen Ordner selbst, sondern nur auf darin enthaltene Ordner.",
+    "selectFolder": "Wählen Sie einen Ordner aus, um dessen Berichte anzuzeigen.",
+    "noFiles": "Keine Berichte in diesem Ordner.",
+    "viewOnlyNote": "Sie haben Leserechte für diesen Ordner: Sie können Berichte öffnen, deren Übersicht und Zusammenfassungstabellen sehen. Für Tabellen mit einer Zeile pro Person, Exporte und Downloads benötigen Sie Download-Zugriff.",
+    "col": {
+      "name": "Datei",
+      "period": "Zeitraum",
+      "delivered": "Bereitgestellt",
+      "size": "Größe",
+      "availableUntil": "Verfügbar bis",
+      "actions": "Aktionen"
+    },
+    "download": "Herunterladen",
+    "downloadAria": "{name} herunterladen",
+    "block": {
+      "view-only": "Nur Leserechte",
+      "hidden-fields": "Original zurückgehalten (versteckte Felder)",
+      "unclassified-fields": "Original zurückgehalten (Felder zur Überprüfung)",
+      "not-inspected": "Noch nicht geprüft",
+      "policy-unavailable": "Derzeit nicht verfügbar"
+    },
+    "adminBadge": {
+      "error": "Vor Benutzern verborgen",
+      "pending": "Wird geprüft",
+      "warning": "Warnhinweise vorhanden",
+      "expired": "Abgelaufen, Löschung ausstehend",
+      "originalBlocked": "Nutzer können nicht herunterladen: {reason}"
+    },
+    "openAria": "{name} öffnen",
+    "openForExport": "Zum Exportieren öffnen",
+    "preview": {
+      "back": "Zurück zu {folder}",
+      "tabsLabel": "Tabellen in dieser Datei",
+      "lockedTab": "{name} (gesperrt)",
+      "unavailable": "Diese Datei kann in der App derzeit nicht geöffnet werden.",
+      "tableFailed": "Diese Tabelle konnte nicht geladen werden.",
+      "withheld": {
+        "row-level": "Diese Tabelle enthält eine Zeile pro Person. Zum Öffnen benötigen Sie Download-Zugriff auf den Ordner.",
+        "hidden-fields": "Diese Seite enthält ein verstecktes Feld, das daher nicht angezeigt wird."
+      },
+      "truncated": "Es werden die ersten {shown, number} von {total, number} Zeilen angezeigt. Exportieren Sie die Tabelle, um alle anzuzeigen.",
+      "freeformNote": "Diese Seite ist zum Lesen formatiert und wird so angezeigt, wie sie bereitgestellt wurde.",
+      "filter": "Zeilen filtern",
+      "filterPlaceholder": "Zeilen filtern…",
+      "rows": "{count, plural, one {# Zeile} other {# Zeilen}}",
+      "matching": "{count, number} von {total, number} Zeilen stimmen überein",
+      "modeLabel": "Anzeigen als",
+      "mode": {
+        "table": "Tabelle",
+        "chart": "Diagramm"
+      },
+      "noRows": "Keine Zeilen zum Anzeigen.",
+      "hiddenColumn": "Vor Nutzern verborgen",
+      "exportCsv": "Diese Tabelle exportieren (CSV)",
+      "exportXlsx": "Alle Tabellen exportieren (Excel)",
+      "downloadOriginal": "Original herunterladen",
+      "exportNote": "Die gelieferte Datei enthält Felder, die verborgen sind, daher kann sie nicht wie sie ist heruntergeladen werden. Beim Export werden diese Felder weggelassen.",
+      "sectionLabel": "Anzeigen",
+      "section": {
+        "overview": "Übersicht",
+        "tables": "Tabellen"
+      }
+    },
+    "chart": {
+      "groupBy": "Gruppieren nach",
+      "measure": "Messwert",
+      "rowCount": "Anzahl der Zeilen",
+      "aggregation": "Berechnen",
+      "agg": {
+        "sum": "Summe",
+        "mean": "Durchschnitt",
+        "min": "Kleinster",
+        "max": "Größter"
+      },
+      "ariaLabel": "{measure} nach {group}",
+      "noColumns": "Diese Tabelle hat keine Text- oder Datums-Spalte zum Gruppieren.",
+      "empty": "Nichts zum Anzeigen für diese Auswahl.",
+      "truncatedGroups": "Die {count} größten Gruppen werden angezeigt.",
+      "basedOn": "Basierend auf den ersten {shown, number} von {total, number} Zeilen.",
+      "savePng": "Als Bild speichern",
+      "saveSvg": "Als SVG speichern",
+      "saveFailed": "Diagramm konnte nicht gespeichert werden."
+    },
+    "dash": {
+      "loading": "Laden…",
+      "failed": "Übersicht konnte nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "showTable": "Als Tabelle anzeigen",
+      "showChart": "Als Diagramm anzeigen",
+      "smallGroups": "Gruppen mit weniger als 5 Personen",
+      "foldedNote": "Gruppen mit weniger als 5 Personen werden in einer Zeile zusammengefasst.",
+      "otherCount": "{count, plural, one {# andere} other {# andere}}",
+      "hiddenPanel": "Durch Feldeinstellungen verborgen.",
+      "missingPanel": "Für diese Datei nicht verfügbar.",
+      "usage": {
+        "users": "Aktive Personen",
+        "interactions": "Interaktionen",
+        "avgPerUser": "Durchschnitt pro Person",
+        "medianPerUser": "Median pro Person",
+        "hq": "In der Zentrale",
+        "field": "Im Einsatzgebiet",
+        "shareUsers": "{pct}% der {comparator} Nutzer",
+        "shareUsage": "{pct}% der {comparator} Nutzung",
+        "comparator": "{comparator}: {value}",
+        "daily": "Interaktionen pro Tag",
+        "dailyUsers": "Aktive Personen pro Tag",
+        "dailyUsersSub": "Nach Arbeitsort",
+        "weekly": "Interaktionen pro Woche",
+        "activity": "Wie oft es genutzt wird",
+        "activitySub": "Personen nach Anzahl der Interaktionen im Zeitraum",
+        "departments": "Interaktionen nach Abteilung",
+        "jobTitles": "Interaktionen nach Berufsbezeichnung",
+        "models": "Ereignisse nach Modell",
+        "total": "Alle Standorte",
+        "location": {
+          "hq": "Hauptsitz",
+          "field": "Feld",
+          "unknown": "Unbekannt"
+        },
+        "col": {
+          "date": "Tag",
+          "week": "Woche ab",
+          "users": "Personen",
+          "interactions": "Interaktionen",
+          "events": "Ereignisse",
+          "group": "Gruppe",
+          "band": "Interaktionen"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Gesamtrechnung",
+        "usageVariable": "Nutzungsabhängige Kosten",
+        "staticInfra": "Statische Infrastruktur",
+        "sections": "Abgerechnete Bereiche",
+        "usageEvents": "Nutzungsereignisse",
+        "bySection": "Abrechnung nach Bereich",
+        "changes": "Änderungen zur vorherigen Datei",
+        "noChanges": "Keine Änderungen zur vorherigen Datei.",
+        "byDomain": "Nutzungsereignisse nach Mail-Domain",
+        "reconciliation": "Abgleich mit Azure",
+        "col": {
+          "section": "Bereich",
+          "billed": "Abgerechnet",
+          "usageEvents": "Nutzungsereignisse",
+          "usagePct": "Nutzung %",
+          "line": "Zeile",
+          "amount": "Betrag",
+          "previous": "Vorherige Datei",
+          "restated": "Angepasst",
+          "change": "Änderung",
+          "domain": "Mail-Domain",
+          "users": "Personen"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Berechnet mit",
+        "delivered": "Eigene Annahmen des Berichts ({version})",
+        "current": "Aktuelle Annahmen der App ({version})",
+        "whatIf": "Was wäre, wenn…",
+        "deliveredUnavailable": "Die eigenen Annahmen dieses Berichts konnten nicht aus dem Annahmen-Blatt gelesen werden, daher werden die aktuellen der App verwendet.",
+        "whatIfIntro": "Ändern Sie einen Wert, um dessen Auswirkung unten zu sehen. Es wird nichts gespeichert.",
+        "resetDelivered": "Zurücksetzen auf eigene des Berichts",
+        "resetCurrent": "Zurücksetzen auf aktuelle der App",
+        "co2": "Emissionen",
+        "energy": "Energie",
+        "charges": "Smartphone-Ladungen",
+        "chargesSub": "Mit demselben Fußabdruck",
+        "activeUsers": "Aktive Personen",
+        "requests": "Anfragen",
+        "tokens": "Tokens",
+        "vsDelivered": "{delta} im Vergleich zu den Annahmen des Berichts",
+        "sameAsDelivered": "Wie bei den Annahmen des Berichts",
+        "unpriced": "{count, plural, one {# Anfrage verwendet} other {# Anfragen verwenden}} eine Modellgröße, für die keine Werte vorliegen, und {count, plural, one {wird} other {werden}} ausgelassen.",
+        "byDepartment": "Emissionen nach Abteilung",
+        "byModel": "Emissionen nach Modell",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Hier berechnet vs. zum Zeitpunkt protokolliert",
+        "reconciliationSub": "Die App schätzt jede Anfrage auch beim Auftreten. Beide stimmen überein, solange die Annahmen identisch sind.",
+        "computed": "Hier berechnet",
+        "logged": "Von der App protokolliert",
+        "difference": "Differenz",
+        "col": {
+          "group": "Gruppe",
+          "requests": "Anfragen",
+          "tokens": "Tokens",
+          "energyWh": "Energie (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Rechenzentrumsaufwand (PUE)",
+          "promptTokenWeight": "Prompt-Token-Gewichtung",
+          "dedicatedReasoningMultiplier": "Multiplikator dedizierter Reasoner",
+          "whPer1kTokens": "Wh pro 1.000 Tokens — {name}",
+          "reasoningEffortMultipliers": "Multiplikator für Reasoning-Aufwand — {name}",
+          "gridIntensity": "Netz g CO₂e pro kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Ereignisse",
+        "users": "Personen",
+        "tokens": "Tokens",
+        "errors": "Fehler",
+        "energy": "Energie",
+        "co2": "Emissionen",
+        "hourly": "Ereignisse pro Stunde (UTC)",
+        "byType": "Ereignisse nach Typ",
+        "byError": "Fehler nach Code",
+        "byModel": "Tokens nach Modell",
+        "byCompany": "Ereignisse nach Organisation",
+        "none": "Keine.",
+        "col": {
+          "group": "Gruppe",
+          "events": "Ereignisse",
+          "tokens": "Tokens",
+          "hour": "Stunde"
+        }
+      },
+      "trend": {
+        "title": "Im Zeitverlauf",
+        "period": "Zeitraum",
+        "users": "Aktive Personen pro Bericht",
+        "interactions": "Interaktionen pro Bericht",
+        "billed": "Gesamt abgerechnet pro Zeitraum",
+        "sections": "Abgerechnet nach Abschnitt",
+        "otherSections": "Alle anderen Bereiche",
+        "co2": "Emissionen pro Bericht",
+        "energy": "Energie pro Bericht",
+        "recalculated": "Jeder Zeitraum wird mit den aktuellen Annahmen der App ({version}) berechnet, sodass eine Änderung der Annahmen zwischen Berichten nicht als Änderung der Emissionen erscheint.",
+        "severalPerPeriod": "Dieser Ordner enthält mehrere Berichte für denselben Zeitraum. Öffnen Sie einen Unterordner, um zu sehen, wie sich einer davon im Laufe der Zeit verändert."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analytics",
+    "description": "Berichte werden durch die Datenpipeline im Speicher abgelegt. Hier prüfen Sie, was angekommen ist, entscheiden, wer auf welchen Ordner zugreifen darf, und wählen aus, welche Felder auf der Plattform angezeigt werden dürfen.",
+    "openViewer": "Analytics öffnen",
+    "sharedNotice": "Beta und Produktion teilen sich diese Ordner, Zielgruppen und Dateien. Änderungen, die hier gespeichert werden, gelten in beiden Umgebungen.",
+    "tabsLabel": "Analytics-Bereiche",
+    "tab": {
+      "health": "Lieferungen",
+      "folders": "Ordner & Zugriff",
+      "fields": "Felder"
+    },
+    "loading": "Wird geladen…",
+    "retry": "Erneut versuchen",
+    "loadError": "Dieser Bereich konnte nicht geladen werden.",
+    "unavailable": "Die gespeicherten Einstellungen konnten nicht aus dem Speicher gelesen werden. Das ist NICHT dasselbe wie \"nichts konfiguriert\" – Bearbeiten ist deaktiviert, damit die echten Einstellungen nicht überschrieben werden. Versuchen Sie es erneut und prüfen Sie die Serverprotokolle, falls das Problem weiterhin besteht.",
+    "save": "Speichern",
+    "saving": "Speichern…",
+    "unsaved": "Nicht gespeicherte Änderungen",
+    "saveSuccess": "Gespeichert.",
+    "saveError": "Konnte nicht gespeichert werden.",
+    "conflictError": "Ein anderer Administrator hat diese Einstellungen während Ihrer Bearbeitung geändert. Ihre Änderungen wurden nicht gespeichert — die letzte Version wurde neu geladen.",
+    "rootFolder": "(oberste Ebene)",
+    "scope": {
+      "domain": "E-Mail-Domain",
+      "user": "Person",
+      "attribute": "Attribut",
+      "group": "Entra-Gruppe"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "Entra-Gruppenobjekt-ID"
+    },
+    "level": {
+      "view": "Zusammenfassungen ansehen",
+      "download": "Ansehen, exportieren und herunterladen"
+    },
+    "reportType": {
+      "usage": "Nutzungsbericht",
+      "rebilling": "Umlage",
+      "emissions": "Emissionsbericht",
+      "raw-telemetry": "Rohdaten-Telemetrie"
+    },
+    "field": {
+      "userCode": {
+        "label": "Benutzercode",
+        "description": "Der pseudonyme u-…-Code, der für eine Person steht."
+      },
+      "jobTitle": {
+        "label": "Berufsbezeichnung",
+        "description": "Berufsbezeichnungen, einschließlich der häufigsten auf den Übersichtsblättern. In kleinen Gruppen kann eine Bezeichnung auf eine einzelne Person hinweisen."
+      },
+      "department": {
+        "label": "Abteilung",
+        "description": "Abteilungen, einschließlich der aktivsten Abteilung auf Übersichtsblättern."
+      },
+      "company": {
+        "label": "Unternehmen / Organisation",
+        "description": "Der Organisationsname aus dem Verzeichnis und die auf Umlageblättern aufgeführten Firmennamen."
+      },
+      "orgGroup": {
+        "label": "Organisationsgruppe",
+        "description": "Das operative Zentrum oder die Gruppe, nach der ein Bericht aufgeteilt wird."
+      },
+      "section": {
+        "label": "Bereich",
+        "description": "Der Kostenstellenbereich, zu dem eine Umlageposition gehört."
+      },
+      "mailDomain": {
+        "label": "E-Mail-Domain",
+        "description": "Die Nutzung der E-Mail-Domain wird zugeordnet (nie eine Adresse)."
+      },
+      "workLocation": {
+        "label": "Arbeitsort",
+        "description": "Zentrale oder Einsatzgebiet."
+      },
+      "technical": {
+        "label": "Technische Details",
+        "description": "Modell, Region, Ereignistyp, Währung und ähnliche Merkmale, die keine Rückschlüsse auf Personen zulassen."
+      },
+      "other": {
+        "label": "Weitere beschreibende Felder",
+        "description": "Für Spalten, die zu keiner der obigen Kategorien passen."
+      }
+    },
+    "folders": {
+      "intro": "Jeder Ordner, in den die Pipeline Daten geliefert hat, wird aufgelistet. Ein Ordner ohne Einstellungen — und ohne übergeordneten Ordner mit Zugriffsrecht — ist nur für Administratoren sichtbar.",
+      "name": "Anzeigename",
+      "namePlaceholder": "Wird anstelle des Ordnerpfads angezeigt",
+      "description": "Beschreibung",
+      "reportType": "Berichtstyp",
+      "reportTypeNone": "Nicht festgelegt",
+      "reportTypeInherited": "Geerbt: {type}",
+      "reportTypeHint": "Legt fest, welche Dateinamen erwartet werden und wie oft. Gilt für die darin enthaltenen Ordner.",
+      "retention": "Dateien aufbewahren für (Monate)",
+      "retentionHint": "Leer lassen, um {months} Monate zu übernehmen. Die Zählung beginnt am Ende des jeweiligen Berichtszeitraums.",
+      "audience": "Wer diesen Ordner öffnen darf",
+      "audienceHint": "Jede Zeile gewährt Zugriff auf diesen Ordner und die darin enthaltenen Ordner. Ein Ziel pro Zeile.",
+      "audienceScope": "Zieltyp",
+      "audienceTargets": "Ziele",
+      "audienceLevel": "Zugriffslevel",
+      "addAudience": "Personen oder Gruppen hinzufügen",
+      "removeAudience": "Diese Zeile entfernen",
+      "restricted": "Keinen Zugriff aus übergeordneten Ordnern übernehmen",
+      "restrictedHint": "Nur die hier aufgelisteten Zeilen gelten für diesen und die darunterliegenden Ordner.",
+      "hiddenFields": "Auch in diesem Ordner ausblenden",
+      "hiddenFieldsHint": "Felder, die zusätzlich zur Plattform-Einstellung hier für diesen und die untergeordneten Ordner ausgeblendet werden. Sie können mehr ausblenden, aber niemals mehr anzeigen.",
+      "hiddenPlatformWide": "(überall ausgeblendet)",
+      "clear": "Einstellungen für diesen Ordner entfernen",
+      "rawChip": "Rohdaten: nur globale Admins",
+      "rawNote": "Roh-Telemetrie enthält Namen, E-Mail-Adressen und Dateinamen. Nur globale Administratoren können darauf zugreifen, und es können keine Zielgruppen hinzugefügt werden.",
+      "audienceChip": "{count, plural, one {# Zugriffszeile} other {# Zugriffszeilen}}",
+      "restrictedChip": "Keine Vererbung",
+      "notConfiguredChip": "Keine Einstellungen",
+      "addPathLabel": "Ordner vor der ersten Lieferung einrichten",
+      "addPath": "Hinzufügen",
+      "addPathHint": "Der genaue Pfad, wie ihn die Pipeline schreibt, z. B. usage/ocba. Dies speichert nur die Einstellungen; es wird nichts im Speicher angelegt.",
+      "invalidPath": "Das ist kein gültiger Ordnerpfad.",
+      "rawGlobalOnly": "Nur globale Administratoren können Ordner unter raw/ konfigurieren."
+    },
+    "fields": {
+      "intro": "Wählen Sie aus, welche Felder der gelieferten Berichte von der Plattform angezeigt werden dürfen. Wird ein Feld ausgeblendet, erscheint es weder in der App noch in den von der App generierten Exporten. Die gelieferte Datei kann dann nur noch von Administratoren heruntergeladen werden.",
+      "readOnly": "Nur globale Administratoren können dies ändern. Als Analytics-Administrator können Sie unter „Ordner & Zugriff“ zusätzliche Felder je Ordner ausblenden.",
+      "configurableHeading": "Felder",
+      "shown": "Angezeigt",
+      "hidden": "Ausgeblendet",
+      "jobTitleNote": "Wenn der Jobtitel angezeigt wird, kann in kleinen Gruppen eine Person auch über einen Nutzer-Code identifiziert werden. Diagramme verbergen Aufschlüsselungen mit weniger als fünf Personen; heruntergeladene Tabellen nicht.",
+      "neverHeading": "Niemals angezeigt",
+      "neverBody": "Namen, E-Mail-Adressen, Verzeichnis-IDs, hochgeladene Dateinamen und Fehlermeldungen werden außerhalb der Roh-Telemetrie nie angezeigt. Ein Bericht mit diesen Daten bleibt für Nutzer verborgen, bis er ersetzt wird.",
+      "unclassifiedHeading": "Spalten, die dem Katalog unbekannt sind",
+      "unclassifiedBody": "Eine nicht erkannte Textspalte bleibt verborgen – in der App und bei Exporten – und die ausgelieferte Datei kann von Nutzern nicht heruntergeladen werden, bis Sie sie einem Feld zuordnen.",
+      "noneWaiting": "Nichts wartet.",
+      "inFiles": "{count, plural, one {in # Datei} other {in # Dateien}}",
+      "classifyAs": "Feld für Spalte {column}",
+      "keepHidden": "Versteckt lassen",
+      "removeClassification": "Einstellung für Spalte {column} entfernen"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Der Berichtsspeicher ist nicht erreichbar",
+      "deliveryUnavailableBody": "Die App konnte den Container \"{container}\" nicht auflisten. Überprüfen Sie, ob er existiert und die App-Identität eine Datenrolle darauf hat. Bis dahin werden keine Berichte angezeigt.",
+      "foldersUnavailable": "Die Ordnereinstellungen konnten nicht gelesen werden, daher sehen Nutzer aktuell keine Ordner. Dateien werden bis zur Wiederherstellung nicht überprüft oder gelöscht.",
+      "policyUnavailable": "Die Feldeinstellungen konnten nicht gelesen werden, daher können Nutzer momentan keine Dateien herunterladen.",
+      "total": {
+        "files": "Dateien",
+        "ok": "In Ordnung",
+        "warning": "Mit Warnungen",
+        "error": "Vor Nutzern verborgen",
+        "pending": "Wird geprüft"
+      },
+      "recheckAll": "Alles erneut überprüfen",
+      "recheckOne": "Erneut überprüfen",
+      "recheckQueued": "{count, plural, one {# Datei zur Überprüfung vorgemerkt.} other {# Dateien zur Überprüfung vorgemerkt.}}",
+      "recheckFailed": "Überprüfung konnte nicht gestartet werden.",
+      "retention": {
+        "active": "Dateien, die die Aufbewahrungsfrist ihres Ordners überschreiten, werden sofort verborgen und nach {days} Tagen gelöscht.",
+        "disabled": "Dateien nach Ablauf der Aufbewahrungsfrist ihres Ordners werden verborgen, das Löschen ist für diese Instanz jedoch deaktiviert.",
+        "waiting-for-config": "Dateien nach der Standardaufbewahrungsfrist werden verborgen. Es wird nichts gelöscht, bis die Ordnereinstellungen mindestens einmal gespeichert wurden."
+      },
+      "noFiles": "Noch keine Dateien wurden geliefert.",
+      "allGood": "Alle gelieferten Dateien sind in Ordnung.",
+      "problemsHeading": "Dateien, die Aufmerksamkeit benötigen",
+      "status": {
+        "error": "Vor Nutzern verborgen",
+        "warning": "Warnung",
+        "pending": "Wird geprüft",
+        "ok": "In Ordnung"
+      },
+      "pendingBody": "Neu oder ersetzt seit der letzten Überprüfung. Für Nutzer sichtbar, sobald sie bestanden wurde.",
+      "firstSeen": "Erstmals erkannt am {date}",
+      "unclassifiedHeading": "Spalten warten auf Entscheidung",
+      "unclassifiedBody": "Diese Spalten sind nicht erkannt. Sie bleiben verborgen und Nutzer können betroffene Dateien nicht herunterladen, bis jede Spalte einem Feld zugeordnet wurde.",
+      "unclassifiedChip": "{column} · {count, plural, one {# Datei} other {# Dateien}}",
+      "openFields": "Zu Feldern wechseln",
+      "unconfiguredHeading": "Ordner ohne Einstellungen",
+      "unconfiguredBody": "Es gehen Dateien ein, aber niemand hat diesen oder darüberliegenden Ordner eingerichtet. Nur Administratoren können diese sehen.",
+      "staleHeading": "Überfällige Lieferungen",
+      "staleBody": "Diese Ordner erwarten regelmäßige Berichte; der neueste ist zu alt.",
+      "staleDetail": {
+        "daily": "Täglich; letzter Bericht umfasst {date}",
+        "monthly": "Monatlich; letzter Bericht endet am {date}"
+      },
+      "staleNever": "Noch nichts geliefert",
+      "expiringHeading": "Ablaufend",
+      "expiringBody": "Dateien nach oder innerhalb von 30 Tagen vor Ablauf der Aufbewahrungsfrist.",
+      "expiresOn": "Läuft ab am {date}",
+      "expiredOn": "Abgelaufen am {date}"
+    },
+    "issue": {
+      "name-mismatch": "Der Dateiname entspricht nicht den Erwartungen dieses Ordners (z. B. {expected}).",
+      "unsupported-format": "Dateien vom Typ \"{extension}\" können nicht überprüft werden, daher ist diese für Nutzer verborgen. Verwenden Sie .xlsx oder .csv.",
+      "too-large": "Mit {sizeMb} MB überschreitet diese Datei das Prüfungs-Limit von {limitMb} MB und ist deshalb für Nutzer verborgen.",
+      "empty-file": "Die Datei ist leer.",
+      "unreadable": "Die Datei konnte nicht geöffnet werden. Sie ist möglicherweise beschädigt oder entspricht nicht dem angegebenen Format.",
+      "identifier-column": "Das Tabellenblatt \"{sheet}\" enthält eine Spalte \"{column}\", die Personen identifiziert. Die Datei ist für Benutzer ausgeblendet.",
+      "identifier-values": "\"{sheet}\" enthält {count, plural, one {# E-Mail-Adresse} other {# E-Mail-Adressen}}. Die Datei ist für Benutzer ausgeblendet.",
+      "user-code-format": "Tabellenblatt \"{sheet}\", Spalte \"{column}\": {count, plural, one {# Wert ist} other {# Werte sind}} kein u-… Benutzer-Code. Die Datei ist für Benutzer ausgeblendet.",
+      "formulas-without-values": "Das Tabellenblatt \"{sheet}\" enthält {count, plural, one {# Formel} other {# Formeln}} ohne gespeichertes Ergebnis, daher können diese Werte in der App nicht angezeigt werden.",
+      "missing-sheet": "Das Tabellenblatt \"{sheet}\" fehlt, daher können die darauf basierenden Ansichten nicht angezeigt werden.",
+      "missing-column": "Das Tabellenblatt \"{sheet}\" enthält keine Spalte \"{column}\", daher können die darauf basierenden Ansichten nicht angezeigt werden.",
+      "no-period": "Der Dateiname enthält keinen Berichtszeitraum, sodass die Aufbewahrung ab Lieferdatum erfolgt.",
+      "unclassified-field": "Die Spalte \"{column}\" wird nicht erkannt. Sie bleibt verborgen und Benutzer können die bereitgestellte Datei erst herunterladen, wenn sie einem Feld zugeordnet wurde.",
+      "past-retention": "Älter als die {months} Monate Aufbewahrungsfrist dieses Ordners; wird nicht mehr angezeigt.",
+      "unknown": "Gemeldetes Problem: {code}."
+    }
   }
 }

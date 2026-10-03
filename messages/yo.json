@@ -865,7 +865,10 @@
       "codeInterpreterLimitReached": "Ìpẹ̀kún ìmú ṣiṣẹ́ kóòdù ti péjọ — ìdáhùn láìṣiṣẹ́ kóòdù…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Ìṣàwárí ibi ipamọ ìmọ̀ ṣìṣe kù – ìdáhùn kì yóò lo àwọn akọsilẹ̀ aṣojú",
-      "stillWorking": "Ṣíṣẹ́ ń bọ…"
+      "stillWorking": "Ṣíṣẹ́ ń bọ…",
+      "assessingSearchResults": "N ṣàyẹ̀wò bóyá àwọn àbájáde dá ìbéèrè lóhùn...",
+      "refiningSearch": "N ṣe àwádìí lẹ́ẹ̀kansi: “{query}”...",
+      "readingSearchPages": "N ka ojúewé àbájáde {count}..."
     },
     "toolSummary": {
       "usedTools": "Lo {count, plural, one {# ohun ìṣàkóso} other {# àwọn ohun ìṣàkóso}}",
@@ -951,7 +954,10 @@
       "summarizeNow": "Ṣàkótán láti inú àwọn àkọ́lé nísinsin yìí",
       "sourcesCount": "Àwòkọ́ṣe {count}",
       "showAll": "Fi gbogbo àwòkọ́ṣe {count} hàn",
-      "showFewer": "Fi díẹ̀ síi hàn"
+      "showFewer": "Fi díẹ̀ síi hàn",
+      "multiStepTitle": "Àbájáde titi di báyìí — n ṣàyẹ̀wò bóyá wọ́n dá ìbéèrè lóhùn",
+      "multiStepHint": "Ìwádìí lè lọ síwájú — ìwádìí míràn tàbí kí a ka àwọn ojúewé to dájú jù lọ. Ṣé o fẹ́ dahùn báyìí nínú àbájáde {count} tó ti jẹ́ wá bí o kò bá fẹ́ dúró?",
+      "answerNow": "Dáhùn báyìí láti inú àwọn àbájáde wọ̀nyí"
     },
     "retryWithModel": "Ṣe ìgbìyànjú pẹ̀lú {model}",
     "createTodoTasks": "Ṣẹda àṣẹṣe ‘To Do’ látinú ìdáhùn yìí",
@@ -965,7 +971,10 @@
     "modelTimedOutAtMaximum": "{model} kò bẹ̀rẹ̀ sí í dáhùn láàárín {duration}, tó jẹ́ pé àsìkò tí a pín jù lọ. Gbìyànjú lẹ́ẹ̀kansi, tàbí gbìyànjú amúyẹ mìíràn.",
     "requestTimedOut": "Ìbéèrè yìí péjú débi pé a dá a dúró kí {model} tó lè dáhùn. O lè fún ní àsìkò síi, tàbí gbìyànjú amúyẹ mìíràn.",
     "retryWaitingLonger": "Dúró tó {duration} kí o gbìyànjú lẹ́ẹ̀kansi",
-    "alwaysWaitThisLong": "Máa dúró tó {duration} ní gbogbo ìgbà"
+    "alwaysWaitThisLong": "Máa dúró tó {duration} ní gbogbo ìgbà",
+    "keepSearching": "Tesiwaju wiwa",
+    "keepSearchingHint": "Ìwádìí dá duro kí ó tó rí èyí. Bẹ̀rẹ̀ fún alábàáṣiṣẹ́ kí ó gbìyànjú ọ̀nà míràn.",
+    "keepSearchingMessage": "Ẹ jọ̀wọ́, tesiwaju wiwa fun eyi — gbìyànjú ọ̀nà míràn."
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -1450,7 +1459,9 @@
       "providerBingResponsesDescription": "Ìbójú wẹẹbu Bing gẹ́gẹ́ bí Bing grounding, ṣíṣe gẹ́gẹ́ bí ìpè model taara kan dipo agent Foundry — ó maa yára jù. Àṣàyàn tuntun yìí wà nínú àyẹ̀wò pẹ̀lú Bing grounding.",
       "providerSearxng": "MSF wẹẹbu ṣàwárí",
       "providerSearxngDescription": "Ìṣẹ́ ìṣàwárí àkọ́kọ́ ti MSF. Ó bó gbogbo wẹẹbu, ìròyìn, ìwé àwùjọ sáyẹ́nsì (pẹ̀lú àtẹyìnwá MSF), ìtọnisọna tɛ́kìnálọ́gì àti dásà dátà olùrànlọ́wọ́, ó sì yan orísun tó dáa jù fún ìbéèrè kọọkan. Àbájáde maa ń yà sílẹ̀ lẹ́sẹkẹsẹ pẹ̀lú àtọka taara, bẹ́ẹ̀ ni ìbéèrè ṣàwárí nìkan ló máa fi app náà sílẹ̀ — àwọn èro àwárí ráàrí kì í mọ ẹni tó ń wa rẹ.",
-      "otherProvidersLabel": "Àwọn olùpèsè míì"
+      "otherProvidersLabel": "Àwọn olùpèsè míì",
+      "multiStepLabel": "Ìwádìí pẹ̀lú ìtọ̀sọ́nà púpọ̀",
+      "multiStepDescription": "Pẹ̀lú MSF web search, alábàáṣiṣẹ́ máa ṣàyẹ̀wò àwọn àbájáde àkọ́kọ́, tí wọn bá ráyè, yóò tún wá tàbí bọ omi péjú àwọn ojúewé tó wọn lèrò jù lọ kí ó tó dahùn. Púpọ̀ nínú àwọn ìbéèrè maa yanju ní ìgbésẹ̀ kan. Pàa àṣẹ yìí dènà kí ìwádìí kọọkan jẹ́ lẹ́ẹ̀kan ṣoṣo."
     },
     "Admin": "Alakoso",
     "Usage Limits": "Ìdìpọ̀ ìlò",
@@ -1470,7 +1481,8 @@
       "customHint": "Láàárín ìṣẹ́jú-aaya {min} sí {max}.",
       "preferModelTitle": "Fẹ́ amúyẹ tí mo yàn",
       "preferModelDescription": "Má ṣe yí padà sí amúyẹ mìíràn láifọwọ́si nígbà tí ìbéèrè bá ṣe aṣìṣe. Àṣìṣe náà yóò tún fi àṣàyàn yí padà hàn."
-    }
+    },
+    "Analytics": "Ìtúpalẹ̀"
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",
@@ -1678,6 +1690,12 @@
     },
     "subVariant": {
       "label": "Iwọn"
+    },
+    "retiring": {
+      "badge": "N kúrò",
+      "datedMoving": "Yóò kúrò ní {date}. Ìjíròrò tó wà yóò lọ sí {successor} ní {movesOn}.",
+      "dated": "Yóò kúrò ní {date} yó sì dá iṣẹ́ dúró. Lo {successor} dípò rẹ.",
+      "replaced": "A rọ́pò rẹ pẹ̀lú {successor}."
     }
   },
   "models": {
@@ -1974,6 +1992,11 @@
       "name": "GPT-6 Astra",
       "description": "Ami alágbára GPT-6 ti OpenAI. Ṣe ifọkansi fun iṣẹ-ṣiṣe gidi-gbóògì: ìwádìí jinlẹ̀, àtúpalẹ̀ to ṣòro, ẹ̀rọ sọfitiwia, ati iṣẹ́ pẹ̀lú awọn igbesẹ lọ́pọ̀. O fìyà tó leralera iye GPT-5.6 Sol.",
       "tagline": "Awoṣe tó lagbara jùlọ lati ọdọ OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Ìmúdójúìwàdà rẹ̀ sí GPT-6 Sol fún iṣẹ́ tó ní eléèmẹta ní kóòdù, àwọn iròyìn àti àwọn ohun elo. Ó sunmó agbára Astra pẹ̀lú owó tó kéré sí.",
+      "tagline": "Agbára nitosi Astra, owó kéré púpọ̀"
     }
   },
   "searchMode": {
@@ -5424,7 +5447,10 @@
       "announcements": "Ifiranṣẹ aworan fun awọn olumulo: tani yoo rii, nigbawo, ati ni iru ede wo.",
       "delegations": "Tani n ṣakoso awọn olumulo wo, ati ohun ti ọkọọkan wọn le ṣe.",
       "channelProfiles": "Kí kọọkan pẹpẹ jẹ́: ààlà, ìṣirò, àwọn àkòrí. Àwọn ohun amáyédẹrùn tó jẹ́ pé gbogbo ìṣùpọ̀ ikanni dá lórí.",
-      "channelSets": "Ofin ẹgbẹ́ kọọkan fún pípa lórí pẹpẹ: ìtọná, ohùn, àyọkà àtìlẹyìn, ẹni tó lè lò àti ẹni tó lè firánṣẹ́."
+      "channelSets": "Ofin ẹgbẹ́ kọọkan fún pípa lórí pẹpẹ: ìtọná, ohùn, àyọkà àtìlẹyìn, ẹni tó lè lò àti ẹni tó lè firánṣẹ́.",
+      "webSearch": "Bí ìwádìí lórí ayélujára ṣe lè lọ jiná: ìwádìí pẹ̀lú ọ̀nà púpọ̀, àmúdájú rẹ̀ àti àìlà rẹ̀.",
+      "contextBudget": "Ìwọn ìtàn àjíròrò tí a rán si gbogbo àlẹ́mọ̀ ní gbogbo yíyí.",
+      "analytics": "Ìjábọ́ tí a fi ránṣẹ́: ohun tó dé, ẹni tí ó lè ṣí apamọ́ kọọkan, àti àwọn pápá wo ni a lè fi hàn."
     },
     "openSettings": "Ṣí eto",
     "area": {
@@ -5432,7 +5458,10 @@
       "viewAs": "Wo gẹ́gẹ́ bí",
       "globalAdmins": "Awon adari agbaye",
       "announcements": "Ifiranṣẹ",
-      "delegations": "Aṣelọpọ"
+      "delegations": "Aṣelọpọ",
+      "webSearch": "Ìwádìí lórí ayélujára",
+      "contextBudget": "Ìpòwó àkọsílẹ̀",
+      "analytics": "Ìtúpalẹ̀"
     }
   },
   "limits": {
@@ -6766,7 +6795,8 @@
     "capabilitiesHint": "Kí ni àṣẹ yìí lè fún ní gbogbo? Admins le ni ohun tó wà nibi péré.",
     "grant": {
       "limits": "Ìdíyeléàpamọ́",
-      "announcements": "Ìkìlọ̀"
+      "announcements": "Ìkìlọ̀",
+      "analytics": "Ìtúpalẹ̀"
     },
     "grantAll": "Gbogbo",
     "maxOverrides": "Ìdíyelé àṣẹ olùmọ́ yìí lè ní",
@@ -6927,5 +6957,540 @@
     "isDefaultAfterSave": "O le yàn èyí gẹ́gẹ́ bí àiyipada lẹ́yìn fipamọ́.",
     "noChannelsWarning": "Ìkòkò yìí kò ní ikanni kankan; kò si leè se àwòrán pẹ̀lú rẹ̀.",
     "audienceEveryoneHint": "Ẹnikẹ́ni nínú agbari le ṣe àwòrán pẹ̀lú ìkòkò yìí."
+  },
+  "contextBudgetAdmin": {
+    "title": "Ìpòwó àkọsílẹ̀",
+    "description": "Ìtàn àjíròrò tó kọọkan mọ́dẹ́lì máa ń gba lẹ́yìn yíyí. Àwọn ìfiránṣẹ́ tuntun maa wa nínú rẹ̀ ní gbogbo igba; títí tí ìpòwó bá yó, ti atijọ́ ni a máa yọ, àkótán àwọn tó yọ sì máa tẹ̀lé yíyí gẹ́gẹ́ bí ìkìlọ̀. Ìpòwó tó tóbi maa jẹ kí àjíròrò pípẹ̀ hàn sílẹ̀, pẹ̀lú owó tó pọ̀ sí kọọkan yíyí.",
+    "scopeNote": "Ó kan gbogbo àjíròrò lori gbogbo mọ́dẹ́lì. Ìpòwó kò lè ju ipin mọ́dẹ́lì lọ tí a sọ lókè.",
+    "loading": "N gbèrò ìpòwó àkọsílẹ̀...",
+    "loadError": "Ìpòwó àkọsílẹ̀ kò le gbèrò.",
+    "configUnavailable": "Ìpòwó àkọsílẹ̀ tí a fipamọ́ kò le ka lọ́wọ́lọ́wọ́, nítorí náà, àwọn iye tó wà ní isalẹ lè yàtọ̀ sí àwọn tó wa n'íṣe. Gbìyànjú lẹ́ẹ̀kansi kí o tó yípadà.",
+    "retry": "Gbìyànjú lẹ́ẹ̀kansi",
+    "historyTokensLabel": "Ìpòwó àìlá (tokens)",
+    "historyTokensDescription": "Ìtàn tí a rán kọọkan yíyí, pẹ̀lú ìkìlọ̀ eto, fún àwọn mọ́dẹ́lì tí kò ní àtúnṣe. To 48,000 dáàbò bo ìparí àjíròrò tó lè jẹ́ ìpàdé 30–60.",
+    "historyFractionLabel": "Àpótí ààyè pọ̀ (ipin àyàfún mọ́dẹ́lì)",
+    "historyFractionDescription": "Ìpòwó a fi sí ipin yìí nínu ààyè àkọsílẹ̀ mọ́dẹ́lì yàtọ̀ sí èyí tí a fi pamọ́ fún agbáyé, nítorí náà, mọ́dẹ́lì kékeré kò ní bójú tó ohun tí kò le gbé.",
+    "minRecentMessagesLabel": "Ìfiránṣẹ́ tí a maa fi pamọ́ nigbagbogbo",
+    "minRecentMessagesDescription": "Ìfiránṣẹ́ tuntun tí a maa duro mọ́ paapaa tí ìpòwó bá pé (nínu ààyè). Mẹ́ta maa pa àpẹẹrẹ sẹ́yìn, nígbà tí ìfiránṣẹ́ tuntun nikan — àtẹ̀jáde ìwé, àbájáde iwádìí — le kun ìpòwó.",
+    "familyOverridesLabel": "Fún ìdílé kọọkan",
+    "familyOverridesDescription": "Ìpòwó fún gbogbo mọ́dẹ́lì inú ìdílé, tó rọ́pò ìpòwó àìlá.",
+    "modelOverridesLabel": "Fún mọ́dẹ́lì kọọkan",
+    "modelOverridesDescription": "Ìpòwó fún mọ́dẹ́lì kan ṣoṣo, tó rọ́pò ìdílé àti àìlá.",
+    "overrideFamilyPlaceholder": "Ìdílé",
+    "overrideModelPlaceholder": "ID mọ́dẹ́lì",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Fikun",
+    "removeOverride": "Yọkúrò",
+    "noOverrides": "Kò sí",
+    "effectiveLabel": "Ìpòwó tó wulo pẹ̀lú àwọn ètò wọ̀nyí",
+    "effectiveColumnModel": "Mọ́dẹ́lì",
+    "effectiveColumnWindow": "Aago àkókò",
+    "effectiveColumnBudget": "Ìṣúná itan",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Àṣàyàn àkọ́kọ́: {value}",
+    "defaultsNote": "Àwọn iye tó yàtọ̀ sí àṣàyàn àkọ́kọ́ ni a tán; gbogbo míràn máa tẹ̀lé àṣàyàn àkọ́kọ́ kóòdù pẹ̀lú gbogbo àsàyẹ̀sọ míràn.",
+    "save": "Fipamọ",
+    "saving": "Nfipamọ…",
+    "resetDefaults": "Tun pada sí àṣàyàn àkọ́kọ́",
+    "unsaved": "Àyípadà tí a kò tíì fipamọ",
+    "saveSuccess": "Ìṣúná àkóónú ti fipamọ. Yóò bẹ̀rẹ̀ sí ní ṣiṣẹ́ láàárín ìsẹ́jú kan.",
+    "saveError": "Ìṣúná àkóónú kò le fipamọ.",
+    "conflictError": "Adámin míràn ti ṣe àtúnṣe ìṣúná àkóónú lásìkò yìí; àwæn iye tuntun ti tun ṣàtúnṣe.",
+    "updatedByLine": "Tí {by} ṣe àyípadà lórí {at} kẹ́hìn.",
+    "neverSaved": "Kò tíì fipamọ — àṣàyàn àkọ́kọ́ kóòdù ló wà lórí."
+  },
+  "webSearchAdmin": {
+    "title": "Ìṣàwárí wẹẹbù",
+    "description": "Ṣe àkóso ìṣàwárí awọn ìgbésẹ púpọ̀ lori ìṣàwárí wẹẹbù MSF. Lẹ́yìn èròjà àkókò, àpẹẹrẹ aṣáyẹri yóó pinnu bóyá wọ́n dáhùn ìbéèrè; bí bẹ́ẹ̀ kò bá rí, ó lè tún ṣàwárí pẹ̀lú ìṣàwárí míì, kà ojúewé abajade, béèrè fún àlàyé tó kù lọ́dọ̀ olùṣàwárí, tàbí sọ pé kò sí ohun tó lè rí.",
+    "scopeNote": "Ìṣètò wọ̀nyí wulo fún ìṣàwárí wẹẹbù MSF nìkan. Awọn onípèsè ìṣàwárí míì máa ń ṣe ìgbìyànjú kan ṣoṣo. Ẹnikẹ́ni lè ṣetún-anṣe ìṣàwárí ìgbésẹ púpọ̀ fún ara wọn nínú Ìṣètò.",
+    "loading": "N gbiyanju láti kó ìṣètò ìṣàwárí wẹẹbù…",
+    "loadError": "A kó le kó ìṣètò ìṣàwárí wẹẹbù wá.",
+    "configUnavailable": "Kò ṣèébí kí a ka ìṣètò ìṣàwárí wẹẹbù láti ipamọ́. Àwọn ìṣiṣẹ́ wa pamọ́ dipo fífi àṣàyàn àkọ́kọ́ tó le yàtọ̀ sí ẹni tó wà lò.",
+    "retry": "Tun gbìyànjú ṣe",
+    "enabledLabel": "Ìṣàwárí ìgbésẹ púpọ̀",
+    "enabledDescription": "Nígbà tó bá wa ní pipa, gbogbo ìṣàwárí jẹ́ ìgbìyànjú kan ṣoṣo tí a ti gbero, kò si pé àpẹẹrẹ aṣáyẹri kankan.",
+    "assessorLabel": "Àpẹẹrẹ aṣáyẹri",
+    "assessorDescription": "A pé lẹ́ẹ̀kan lẹ́yìn gbogbo ìgbésẹ láti ṣe ìdájọ́ abajade. Yàn àpẹẹrẹ tó yarayara, tó ṣòwò: ó máa ṣiṣẹ́ lẹ́kùn-ún-rère tí olùṣàwárí ń dúró. Bí kò bá le dé, {fallback} ni a máa lò lẹ́yìn náà.",
+    "maxStepsLabel": "Ìgbésẹ lórí ìbéèrè kọọkan",
+    "maxStepsDescription": "Ìgbésẹ tó pọ̀ jù tí ìbéèrè kan lè gba, àti ìṣàwárí àkọ́kọ́ náà ni a ka. Gbogbo ìṣàwárí tó kù tàbí akopọ kika ojúewé, jẹ́ ìgbésẹ kan. Ìdìyelé yìí yatọ̀ sí díyèlé ọjọ́ kọọkan, tí ń ka ìbéèrè kọọkan lẹ́ẹ̀kan.",
+    "maxStepsExploratoryLabel": "Ìgbésẹ fún ìṣàwárí àwárí tó jinlẹ̀",
+    "maxStepsExploratoryDescription": "Ìdìyelé tó gà ju fún àwárí onírúurú ohun tó ṣòro láti rí, bíi àpẹẹrẹ ìwé tó ṣòro, níbi tí kò ni abajade tó wù ní lè ṣẹlẹ̀. Kò le kere ju díyèlé àtẹle lọ.",
+    "pageReadsLabel": "Ka ojúewé abajade",
+    "pageReadsDescription": "Yẹ kí ìgbésẹ kan ṣí abajade tó dájú púpọ̀ kí ó ka ojúewé fúnrarẹ̀ dipo láti gbẹ́kẹ̀lé àwòrán ìṣàwárí.",
+    "maxPageReadsLabel": "Ojúewé kọọkan ní ìgbésẹ kika",
+    "sourceAssessmentLabel": "Ṣàyẹri didara orísun",
+    "sourceAssessmentDescription": "Aṣáyẹri máa fi àmi le orísun kọọkan (osise, atọwọ́dọwọ́, alákọ̀ọ́lé kejì, ìdánilójú kékèké) kí idáhùn le ṣe àkójọ àti tọka sí wọn.",
+    "timeBudgetLabel": "Ìṣúná àkókò (ìsẹ́jú-aaya)",
+    "timeBudgetDescription": "Àkókò gbogbo tí ìṣàwárí kan lè gba, tó fi mọ́ ìgbìyànjú àkọ́kọ́. Nígbà tí kókó bá parí, idáhùn máa so lórí ohun tó ti wá.",
+    "defaultsNote": "Ìṣètò tí a fi sí àṣàyàn àkọ́kọ́ rẹ kò ní fipamọ, nítorí náà yóò máa tẹ̀lé àṣàyàn àkọ́kọ́ yẹn tí àtúnṣe bá wá láìpẹ́.",
+    "defaultHint": "Àṣàyàn àkọ́kọ́: {value}",
+    "defaultOn": "sílẹ̀",
+    "defaultOff": "pá",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "O ní àyípadà tí a kò tíì fipamọ.",
+    "save": "Fipamọ",
+    "saving": "Nfipamọ…",
+    "resetDefaults": "Tun pada sí àṣàyàn àkọ́kọ́",
+    "saveSuccess": "Ìṣètò ìṣàwárí wẹẹbù ti fipamọ.",
+    "saveError": "Ìṣètò ìṣàwárí wẹẹbù kò le fipamọ.",
+    "conflictError": "Adámin míràn ti yí ìṣètò pada ṣáájú. Ìṣètò tuntun ti tun gbẹ̀yìn — jọ̀wọ́ ṣàyẹ̀wò kí o si fipamọ lẹ́ẹ̀kansi.",
+    "updatedByLine": "Tí {by} ṣe àyípadà lórí {at} kẹ́hìn.",
+    "neverSaved": "Kò tíì fipamọ ohunkóhun; àṣàyàn àkọ́kọ́ in-built ló wà lórí."
+  },
+  "modelRetirement": {
+    "notice": "{model} yoo kuro lori {retiresOn}. Ibànilòrọ̀ yìí yóò lọ sí {successor} ní {movesOn}.",
+    "noticeRetiring": "{model} yoo kuro lori {retiresOn} ó sì máa dá iṣẹ́ dúró. Yí padà sí {successor} láti tẹ̀síwájú pẹ̀lú ìbànilòrọ̀ yìí.",
+    "switchNow": "Yí padà nísinsin yìí"
+  },
+  "analytics": {
+    "title": "Ìtúpalẹ̀",
+    "backToChat": "Padà sẹ́yàrọ̀",
+    "manage": "Ṣàkóso",
+    "loading": "N gbàmúlò...",
+    "loadFailed": "A kò le gbé ìróyìn wọlé.",
+    "retry": "Tun gbìyànjú",
+    "emptyTitle": "Kò tíì sí ohun tí wọ́n pin pẹ̀lú rẹ",
+    "emptyBody": "Ìróyìn yóò farahàn níbí lẹ́yìn tí adarí bá fún ọ ní ìwọle sí apamọ̀ kan.",
+    "deliveryUnavailable": "A kò le rí ibi ipamọ ìróyìn nísinsin yìí, nítorí náà àtòjọ tó wà lásàlẹ̀ lè ṣàfojú. Gbìyànjú lẹ́yìn ìṣẹ́jú díẹ.",
+    "groupsDegraded": "A kò le ṣàyẹ̀wò ẹgbẹ́ tó wà pẹ̀lú rẹ nísinsin yìí, nítorí náà, àwọn apamọ̀ tí wọ́n pin pẹ̀lú ẹgbẹ́ rẹ le ṣàfojú. Tun gbìyànjú lẹ́yìn ìṣẹ́jú kan.",
+    "foldersHeading": "Àpamọ̀",
+    "rootFolder": "Gbogbo ìróyìn",
+    "pathOnly": "O kò ní ìwọle sí apamọ̀ yìí funra rẹ, àfi àwọn apamọ̀ tó wà nínu rẹ.",
+    "selectFolder": "Yan apamọ̀ kan láti wo àwọn ìróyìn rẹ.",
+    "noFiles": "Kò sí ìróyìn kankan nínú apamọ̀ yìí.",
+    "viewOnlyNote": "O ní ìwọle lílo ìkan ṣe sí apamọ̀ yìí: ó lè ṣí àwọn ìróyìn, wo àkótán wọn àti tábìlì aṣàkóso. Láti wo tábìlì pẹ̀lú ọ̀kan row fún ènìyàn kọọkan, àtàwọn export àti àkóṣílẹ̀, ìwọle ìgbà download ló jẹ́ dandan.",
+    "col": {
+      "name": "Fáìlì",
+      "period": "Àkókò",
+      "delivered": "Ti fi ránṣẹ́",
+      "size": "Ìwọn",
+      "availableUntil": "Wà títí di",
+      "actions": "Ìṣe"
+    },
+    "download": "Gba kalẹ̀",
+    "downloadAria": "Gba {name} kalẹ̀",
+    "block": {
+      "view-only": "Kíkan ṣe nìkan",
+      "hidden-fields": "Tẹ̀síwájú pẹ̀lú oríṣìíríṣìí (àwọn pápá tí wón dá bo)",
+      "unclassified-fields": "Tẹ̀síwájú pẹ̀lú oríṣìíríṣìí (àwọn pápá tí ń dúró de àyẹ̀wò)",
+      "not-inspected": "Kò tíì ṣàyẹ̀wò",
+      "policy-unavailable": "Kò sí nísinsin yìí"
+    },
+    "adminBadge": {
+      "error": "Fipamọ́ bọ́ lọwọ àwọn oníṣe",
+      "pending": "Ní àyẹ̀wò",
+      "warning": "Ní ìkìlọ̀",
+      "expired": "Parí, ń dúró de pípárẹ́",
+      "originalBlocked": "Àwọn oníṣe kò le gba kalẹ̀: {reason}"
+    },
+    "openAria": "Ṣí {name}",
+    "openForExport": "Ṣí fún export",
+    "preview": {
+      "back": "Padà sí {folder}",
+      "tabsLabel": "Àwọn tábìlì nínú fáìlì yìí",
+      "lockedTab": "{name} (tí wón ti dì)",
+      "unavailable": "Fáìlì yìí kò le ṣí nínú app nísinsin yìí.",
+      "tableFailed": "A kò le gbé tábìlì yìí wọlé.",
+      "withheld": {
+        "row-level": "Tábìlì yìí ní row kan fún ènìyàn kọọkan. Lati ṣí i, ìwọle download sí apamọ̀ yìí ló yẹ kó wà.",
+        "hidden-fields": "Ojúewé yìí ní pápá kan tí a ti dá bo, nítorí náà a kò fi hàn."
+      },
+      "truncated": "Àfihàn {shown, number} kẹ́ta àkọ́kọ́ nínú {total, number} row. Ṣàkó tábìlì náà láti gba gbogbo wọn.",
+      "freeformNote": "Ojúewé yìí dáa fún kíkà, ó sì han gégé bí tí wọ́n ṣe fi ránṣẹ́.",
+      "filter": "Fíltà row",
+      "filterPlaceholder": "Fìlà tí wọn lé... ",
+      "rows": "{count, plural, one {# ìkànnì} other {# ìkànnì}}",
+      "matching": "{count, number} nínú {total, number} ìkànnì tó bá mu",
+      "modeLabel": "Fi hàn bí",
+      "mode": {
+        "table": "Tábìlì",
+        "chart": "Àwòrán"
+      },
+      "noRows": "Kò sí ìkànnì láti fi hàn.",
+      "hiddenColumn": "Tí a pa mó lójú àwọn olùlo",
+      "exportCsv": "Èkó tábìlì yìí (CSV)",
+      "exportXlsx": "Èkó gbogbo tábìlì (Excel)",
+      "downloadOriginal": "Gba àṣẹyọrí",
+      "exportNote": "Fáìlì tá a fi ranṣẹ ní àwọn pátákó tí a pa mó, nítorí náà, a kì í le gba a tán bí ó ti rí. Èkó yóò fi àwọn pátákó yẹn sílẹ.",
+      "sectionLabel": "Fi hàn",
+      "section": {
+        "overview": "Àkótán",
+        "tables": "Àwọn tábìlì"
+      }
+    },
+    "chart": {
+      "groupBy": "Pín sí",
+      "measure": "Iwóye",
+      "rowCount": "Iye ìkànnì",
+      "aggregation": "Ṣe àkójọpọ̀",
+      "agg": {
+        "sum": "Àkójọpọ̀",
+        "mean": "Apapọ",
+        "min": "Kekere jùlọ",
+        "max": "Tó pọ̀ jùlọ"
+      },
+      "ariaLabel": "{measure} nípasẹ̀ {group}",
+      "noColumns": "Tábìlì yìí kò ní àtẹ̀jáde tèxt tàbí ọjọ́ fún pín.",
+      "empty": "Kò sí ohun tí a lè ṣe àwòrán fún yíyan yìí.",
+      "truncatedGroups": "Ìfihàn {count} ẹgbẹ́ tó tóbi jùlọ.",
+      "basedOn": "Dá lórí àkọ́kọ́ {shown, number} nínú {total, number} ìkànnì.",
+      "savePng": "Fipamọ́ bí àwòrán",
+      "saveSvg": "Fipamọ́ bí SVG",
+      "saveFailed": "A kó le fipamọ́ àwòrán náà."
+    },
+    "dash": {
+      "loading": "Ngbé lọ...",
+      "failed": "A kó le gbé àkótán wọlé.",
+      "retry": "Ṣàgbéyìpadà",
+      "showTable": "Fi hàn bí tábìlì",
+      "showChart": "Fi hàn bí àwòrán",
+      "smallGroups": "Àwọn ẹgbẹ́ tó kere jù 5 ènìyàn",
+      "foldedNote": "Àwọn ẹgbẹ́ tó kere jù 5 ènìyàn ni a dásílẹ̀ sínú ìkànnì kan.",
+      "otherCount": "{count, plural, one {# míì} other {# àwọn míì}}",
+      "hiddenPanel": "Tí a pa mó nípò àwọn àyẹ̀wò pátákó.",
+      "missingPanel": "Kò sí fún fáìlì yìí.",
+      "usage": {
+        "users": "Àwọn ènìyàn tó nṣiṣe",
+        "interactions": "Ìbáṣepọ",
+        "avgPerUser": "Apapọ fún ènìyàn kọọkan",
+        "medianPerUser": "Ààrin fun ènìyàn kọọkan",
+        "hq": "Ní àgbègbè àgbà",
+        "field": "Ní pápá iṣẹ́",
+        "shareUsers": "{pct}% nínú àwọn olùlo {comparator}",
+        "shareUsage": "{pct}% nínú ìlo {comparator}",
+        "comparator": "{comparator}: {value}",
+        "daily": "Ìbánisọ̀rọ̀ lójú ọjọ́",
+        "dailyUsers": "Àwọn ènìyàn tí ń ṣiṣẹ́ lójú ọjọ́",
+        "dailyUsersSub": "Gẹ́gẹ́ bí ìpò iṣẹ́",
+        "weekly": "Ìbánisọ̀rọ̀ lójú ọ̀sẹ̀",
+        "activity": "Bí wọ́n ṣe máa ń lò ó púpò",
+        "activitySub": "Àwọn ènìyàn, gẹ́gẹ́ bí iye ìbánisọ̀rọ̀ wọn nínú àkókò",
+        "departments": "Ìbánisọ̀rọ̀ pẹ̀lú ẹ̀ka",
+        "jobTitles": "Ìbánisọ̀rọ̀ pẹ̀lú orúkọ ipò iṣẹ́",
+        "models": "Ìṣẹ̀lẹ̀ pẹ̀lú àpẹrẹ",
+        "total": "Gbogbo àwọn ipò",
+        "location": {
+          "hq": "Olú ìlú",
+          "field": "Pàápàá",
+          "unknown": "Àìmọ̀"
+        },
+        "col": {
+          "date": "Ọjọ́",
+          "week": "Ọ̀sẹ̀ tó bẹ̀rẹ̀",
+          "users": "Àwọn ènìyàn",
+          "interactions": "Ìbánisọ̀rọ̀",
+          "events": "Ìṣẹ̀lẹ̀",
+          "group": "Ẹgbẹ́",
+          "band": "Ìbánisọ̀rọ̀"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Apapọ tí a gbà owó rẹ",
+        "usageVariable": "Ìnáwó lílo tó yíyí",
+        "staticInfra": "Ìtòlẹ́sẹẹsẹ amáyédẹrùn",
+        "sections": "Àwọn apá tí a gbà owó wọn",
+        "usageEvents": "Ìṣẹ̀lẹ̀ lílo",
+        "bySection": "Gbà owó pẹ̀lú apá",
+        "changes": "Àtúnṣe láti fáìlì tí kọjá",
+        "noChanges": "Kò sí ohun tí yá padà láti fáìlì tó kọjá.",
+        "byDomain": "Ìṣẹ̀lẹ̀ lílo pẹ̀lú àgbègbè imeeli",
+        "reconciliation": "Ìfaramọ́ sí Azure",
+        "col": {
+          "section": "Apá",
+          "billed": "Owó tí a gbà",
+          "usageEvents": "Ìṣẹ̀lẹ̀ lílo",
+          "usagePct": "Lílo %",
+          "line": "Láìnì",
+          "amount": "Iye",
+          "previous": "Fáìlì tó kọjá",
+          "restated": "Àtàgbà",
+          "change": "Ayípadà",
+          "domain": "Àgbègbè imeeli",
+          "users": "Àwọn ènìyàn"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Ìṣìrọ̀ pẹ̀lú",
+        "delivered": "Àṣà ti ìròyìn fúnra rẹ ({version})",
+        "current": "Àṣà tó wà lórí app ní báyìí ({version})",
+        "whatIf": "Kí ni yó ṣẹlẹ̀ tí...",
+        "deliveredUnavailable": "A kó le ka àṣà ti ìròyìn yìí láti iwe Assumptions rẹ, nítorí náà a fi ti app lọ́wọ́lọwọ̀ lò.",
+        "whatIfIntro": "Yi iye kan padà láti rí bí yó ṣe nípa lórí gbogbo ohun tó wà fún abẹ́. Kò sí ohun tí a fipamọ́.",
+        "resetDelivered": "Ṣètò padà sí ti ìròyìn fúnra rẹ",
+        "resetCurrent": "Ṣètò padà sí ti app lọ́wọ́lọwọ̀",
+        "co2": "Ìtujà",
+        "energy": "Agbara",
+        "charges": "Ibi ti a ti gba alagbeka",
+        "chargesSub": "Pẹlu ami ẹsẹ kanna",
+        "activeUsers": "Awọn eniyan ti n ṣiṣẹ",
+        "requests": "Awọn ìbéèrè",
+        "tokens": "Awọn ami-ẹri",
+        "vsDelivered": "{delta} akawe si awọn ero-iwadii ti iroyin naa funra rẹ",
+        "sameAsDelivered": "Bakan naa pẹlu awọn ero-iwadii ti iroyin naa funra rẹ",
+        "unpriced": "{count, plural, one {# ìbéèrè lo} other {# ìbéèrè lo}} awoṣe ti awọn ero-iwadii ko ni iye fun un, ati {count, plural, one {kù síta} other {wà lọ́tọ} }.",
+        "byDepartment": "Eyi ti ẹsẹ ayika nipasẹ ẹka",
+        "byModel": "Eyi ti ẹsẹ ayika nipasẹ awoṣe",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Ti iṣiro nibi akawe si eyi to ti forukọsilẹ ni akoko yẹn",
+        "reconciliationSub": "Ohun elo naa naa n ṣe iṣiro fun ọkọọkan ìbéèrè gẹgẹ bí ó ti n ṣẹlẹ. Mejeeji ni ibamu nigbati ero-iwadii ba jẹ kanna.",
+        "computed": "Ti iṣiro nibi",
+        "logged": "Ti forukọsilẹ nipase ohun elo",
+        "difference": "Iyato",
+        "col": {
+          "group": "Ẹgbẹ",
+          "requests": "Awọn ìbéèrè",
+          "tokens": "Awọn ami-ẹri",
+          "energyWh": "Agbara (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Iru ọrọ data-centre (PUE)",
+          "promptTokenWeight": "Iwuwo ami-ẹri ìkànsí",
+          "dedicatedReasoningMultiplier": "Onígbàgbọ ọlọgbọn amúlétutù",
+          "whPer1kTokens": "Wh fun 1,000 ami-ẹri — {name}",
+          "reasoningEffortMultipliers": "Atọka ipa-ọrọ ọlọgbọn — {name}",
+          "gridIntensity": "G CO₂e lori kWh agbeko — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Awọn iṣẹlẹ",
+        "users": "Awọn eniyan",
+        "tokens": "Awọn ami-ẹri",
+        "errors": "Awọn aṣiṣe",
+        "energy": "Agbara",
+        "co2": "Ẹsẹ ayika",
+        "hourly": "Awọn iṣẹlẹ lojoojumọ (UTC)",
+        "byType": "Awọn iṣẹlẹ gẹgẹ bi iru wọn",
+        "byError": "Awọn aṣiṣe gẹgẹ bi koodu",
+        "byModel": "Awọn ami-ẹri gẹgẹ bi awoṣe",
+        "byCompany": "Awọn iṣẹlẹ gẹgẹ bi agbari",
+        "none": "Ko si.",
+        "col": {
+          "group": "Ẹgbẹ",
+          "events": "Awọn iṣẹlẹ",
+          "tokens": "Awọn ami-ẹri",
+          "hour": "Wákàtí"
+        }
+      },
+      "trend": {
+        "title": "Láti akoko sí akoko",
+        "period": "Akoko",
+        "users": "Awọn eniyan ti n ṣiṣẹ fun iroyin kọọkan",
+        "interactions": "Ìbáṣepọ kọọkan fun iroyin",
+        "billed": "Lapapọ tí a gba owo lori rẹ fun igba kan",
+        "sections": "Tí a gba owo lori rẹ gẹgẹ bi apakan",
+        "otherSections": "Gbogbo awọn apakan miiran",
+        "co2": "Eefi kọọkan ni iroyin",
+        "energy": "Agbara kọọkan ni iroyin",
+        "recalculated": "Gbogbo akoko ni a ṣe iṣiro pẹlu awọn ero lọwọlọwọ ti app naa ({version}), nítorí náà, iyipada ninu awọn ero laarin awọn iroyin kii fi han bi iyipada ninu eefi.",
+        "severalPerPeriod": "Folda yii ni ọpọlọpọ awọn iroyin fun akoko kanna. Ṣii folda inu rẹ lati wo bi ọkan ninu wọn ṣe yipada lọ lori akoko."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Iṣiro",
+    "description": "Awọn iroyin ni a firanṣẹ sinu ipamọ nipasẹ data pipeline. Nibi ni o ti le ṣayẹwo ohun ti de, pinnu ẹni ti o le ṣii folda kọọkan, ati yan awọn aaye ti pẹpẹ le fi han.",
+    "openViewer": "Ṣii iṣiro",
+    "sharedNotice": "Beta ati iṣelọpọ pin awọn folda, awọn oluwo ati awọn faili wọnyi. Ayipada ti o fipamọ nibi jẹ laaye ni mejeeji.",
+    "tabsLabel": "Awọn apakan iṣiro",
+    "tab": {
+      "health": "Ifijiṣẹ",
+      "folders": "Awọn folda & iraye",
+      "fields": "Awọn aaye"
+    },
+    "loading": "Kókó n ṣiṣẹ…",
+    "retry": "Tun gbiyanju",
+    "loadError": "A ko le gbe apakan yii wọle.",
+    "unavailable": "A ko le ka eto fipamọ lati ipamọ. Eyi kii ṣe \"ko si eto\" — ṣiṣatunkọ ni a ni dènà lati má bà a jẹ awọn eto gidi. Tun gbiyanju, ati ṣayẹwo awọn igbasilẹ olupin ti o ba tesiwaju.",
+    "save": "Fipamọ",
+    "saving": "Nṣiṣẹ fipamọ…",
+    "unsaved": "Awọn ayipada ti a ko fipamọ",
+    "saveSuccess": "Fipamọ.",
+    "saveError": "A ko le fi pamọ.",
+    "conflictError": "Omiran olutọju ayipada awọn eto wọnyi lakoko ti o nṣatunkọ. Awọn ayipada rẹ ko fipamọ — ẹya tuntun ti wa ni titunṣe.",
+    "rootFolder": "(akoko giga julọ)",
+    "scope": {
+      "domain": "Epo imeeli",
+      "user": "Eniyan",
+      "attribute": "Atọka",
+      "group": "Ẹgbẹ Entra"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "oruko@example.org",
+      "attribute": "ẹka:Health",
+      "group": "Entra group object id"
+    },
+    "level": {
+      "view": "Wo akopọ",
+      "download": "Wo, gbe jade ati gba lati ayelujara"
+    },
+    "reportType": {
+      "usage": "Iroyin lilo",
+      "rebilling": "Ìsanwo-tún",
+      "emissions": "Iroyin eefi",
+      "raw-telemetry": "Awon logi telemetri"
+    },
+    "field": {
+      "userCode": {
+        "label": "Koodu olumulo",
+        "description": "Koodu u-… ti ko ni orukọ ẹni, ti o duro fun eniyan kan."
+      },
+      "jobTitle": {
+        "label": "Akọle iṣẹ",
+        "description": "Awọn akọle iṣẹ, pẹlu akọle ti o wọpọ julọ lori iwe akopọ. Ninu ẹgbẹ kekere akọle le tọka si eniyan kan."
+      },
+      "department": {
+        "label": "Ẹka",
+        "description": "Awọn ẹka, pẹlu ẹka to ṣiṣẹ julọ lori iwe akopọ."
+      },
+      "company": {
+        "label": "Ile-iṣẹ / ajo",
+        "description": "Orukọ ajo lati inu directory, ati awọn orukọ ile-iṣẹ ti a mẹnuba lori iwe isanwo-tún."
+      },
+      "orgGroup": {
+        "label": "Ẹgbẹ ajo",
+        "description": "Pápá iṣẹ tabi ẹgbẹ ti iroyin ti pin si."
+      },
+      "section": {
+        "label": "Apakan",
+        "description": "Apakan fífi owó pada ti ila isanwo-tún kan jẹ tii."
+      },
+      "mailDomain": {
+        "label": "Aago imeeli",
+        "description": "Aago imeeli ti a nlo ni a sọtọ si (kii ṣe adirẹsi rara)."
+      },
+      "workLocation": {
+        "label": "Ibi iṣẹ",
+        "description": "Olori ile-iṣẹ tabi pátákó."
+      },
+      "technical": {
+        "label": "Alaye imọ-ẹrọ",
+        "description": "Àwọ̀n àlàyé bíi àpẹrẹ, agbègbè, irú iṣẹlẹ, owó àti bẹ́ẹ̀ bẹ́ẹ̀ tí kò sọ̀rọ̀ nípa ẹni kankan."
+      },
+      "other": {
+        "label": "Àwọn àgbékọ́ lẹ́ya mìíràn",
+        "description": "Ibi tí iwọ ó ti ṣe àgbékọ lẹ́ya tí kò bá àwọn àtòkọ tó wà lókè mu."
+      }
+    },
+    "folders": {
+      "intro": "Gbogbo apamọ́ tí pipeline ti fi ránṣẹ́ sí ni a ṣe akojọpọ rẹ̀. Apamọ́ tí kò ní eto kankan — àti tí apamọ́ mìíràn lókè rẹ̀ kò fun ni ààyè wọlé — awọn alákóso nikan ni wọ́n lè rí i.",
+      "name": "Orukọ ifihan",
+      "namePlaceholder": "A fihan dipo ipa apamọ́",
+      "description": "Apejuwe",
+      "reportType": "Iru iroyin",
+      "reportTypeNone": "Kò dá",
+      "reportTypeInherited": "Ti gba: {type}",
+      "reportTypeHint": "Ó sọ fún oluyẹ̀wò orúkọ fáìlì tí ó yẹ kí ó reti àti igbooro tó yẹ kí ó máa n ṣẹlẹ̀. Ó kan àwọn apamọ́ tí ó wà labe ẹ̀yí.",
+      "retention": "Mú fáìlì mọ́ pẹ́ (osu)",
+      "retentionHint": "Fi silẹ ní ofo láti gba {months} osu tó wà lókè. Akọjọ bẹrẹ láti opin àkókò iroyin kọọkan.",
+      "audience": "Ta ni le ṣí apamọ́ yìí",
+      "audienceHint": "Gbogbo ila kọọkan ń funni ní ààyè wọlé sí apamọ́ yìí àti àwọn apamọ́ tí ó wà labe rẹ̀. Ọkan ni kọọkan.",
+      "audienceScope": "Iru ibi àfojúkò",
+      "audienceTargets": "Àfojúkò",
+      "audienceLevel": "Ipele ààyè wọlé",
+      "addAudience": "Fikun àwọn ènìyàn tàbí ẹgbẹ́",
+      "removeAudience": "Yọ ila yìí",
+      "restricted": "Má gba ààyè wọlé láti apamọ́ lókè",
+      "restrictedHint": "Àwọn ila tó wà lórí apamọ́ yìí nikan ló kan ibi yìí àti apamọ́ tó wà lẹ́yìn rẹ̀.",
+      "hiddenFields": "Dákẹ́ pariwo pèlu apamọ́ yìí",
+      "hiddenFieldsHint": "Àwọn àgbékọ́ tí a tì mọ́ nibi yii lori eto pẹpẹ, àti fún apamọ́ yìí àti gbogbo ẹni tí ó wà lẹ́yìn rẹ̀. O le fi diẹ sí i mọ́, kìí ṣe láti fihan diẹ sii.",
+      "hiddenPlatformWide": "(tì mọ́ gbogbo ibi)",
+      "clear": "Yọ eto apamọ́ yìí kuro",
+      "rawChip": "Raw: àwọn alákóso àgbáyé nikan",
+      "rawNote": "Raw telemetry ni iwọ orúkọ, àwọn imeeli, àti orukọ fáìlì. Awọn alákóso àgbáyé nikan ló le ṣí i, kò sì sí ẹni tó le fi àyèràyé kun.",
+      "audienceChip": "{count, plural, one {# ila ààyè wọlé} other {# awọn ila ààyè wọlé}}",
+      "restrictedChip": "Kò gba ọdà",
+      "notConfiguredChip": "Kò ní eto",
+      "addPathLabel": "Ṣètò apamọ́ kí wọn tó fi ohun ránṣẹ́ sí inu rẹ",
+      "addPath": "Fi kun",
+      "addPathHint": "Ọ̀nà gangan tí pipeline yóò kọ sínú rẹ, fọrûnpé usage/ocba. Eyi n pa eto pamọ nikan; ko dá nkan kankan sí ibi ipamọ́.",
+      "invalidPath": "Iyen kii ṣe ọ̀nà apamọ́ tó bófin mu.",
+      "rawGlobalOnly": "Àwọn alákóso àgbáyé nikan ló le ṣètò apamọ́ labẹ raw/."
+    },
+    "fields": {
+      "intro": "Yan àwọn àgbékọ́ tí àwọ́n iroyin tó fi wọlé le jẹ́ kí pẹpẹ naa fihan. Tí a ba tì àgbékọ́ kan mọ́, ko ni hàn lórí ohun tí app fi hàn tàbí pàdánù kúrò lẹnu àtàwọn export ti app fi dáyàn. Fáìlì tó fi wọlé le jẹ́ kí àwọn alákóso nikan ni kó sílè.",
+      "readOnly": "Àwọn alákóso àgbáyé nikan ló le yí e pada. Gẹ́gẹ́ bí olùṣàkóso analytics, o le dákẹ́ àgbékọ́ kun ní gbogbo apamọ́, labe Àwọn apamọ́ & ààyè wọlé.",
+      "configurableHeading": "Àgbékọ́",
+      "shown": "Ti han",
+      "hidden": "Ti tì mọ́",
+      "jobTitleNote": "Tí a bá nfi ipa iṣẹ́ han, ìlà kan nínú ẹgbẹ́ kékeré le ṣe idanimọ ẹni kan paapaa labẹ kóòdù olùlò. Àwọn àwòrán kì í fi ìtumọ̀ ibi tí kò pé ju arùn-ún lọ han; ṣùgbọ́n tábìlì tó dáyàn nìkan kì í fi pamọ́.",
+      "neverHeading": "Kò sẹ́ni tí yóò fi han",
+      "neverBody": "Orúkọ, adirẹsi imeeli, id directory, orukọ fáìlì tí a fi kó soke àti akọ́tán aṣiṣe kì í hàn lòde raw telemetry. Iroyin tí ó ní eyi yóò bàjé pọ tó gbogbo olùlò títí tí yoo fi jẹ́ pé wọn rọ́pò rẹ̀.",
+      "unclassifiedHeading": "Awọn kòlòmù tí katalogi kò mọ",
+      "unclassifiedBody": "Àwọn kólọ́ọ̀mù tékísì tí a kò mọ̀ yóò bọ́ sínú aṣọ́ ìkọ̀kọ̀ — nínú app àti nínú ẹ̀kó — àti pé àwọn oníṣe kò lè gba fáìlì tí a fi ranṣẹ́, títí tí ìwọ yóò fi ṣètò ọ́ nípò pápá.",
+      "noneWaiting": "Kò sí ohun tó ń dúró.",
+      "inFiles": "{count, plural, one {ní fáìlì #} other {ní fáìlì #}}",
+      "classifyAs": "Pápá fún kólọ́ọ̀mù {column}",
+      "keepHidden": "Pa mó",
+      "removeClassification": "Yọ eto fún kólọ́ọ̀mù {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "A kò lè dé ibi ìfipamọ́ àrọ́pọ̀",
+      "deliveryUnavailableBody": "App kò le ṣàtòjọ apótí \"{container}\". Ṣàyẹ̀wò pé ó wà àti pé app ní ipa data lórí rẹ. Títí di asiko yìí, kò si àrọ́pọ̀ tí a fi han ẹnikẹ́ni.",
+      "foldersUnavailable": "A kò le ka eto àpamọ́, nítorí náà, àwọn oníṣe kò rí àpamọ́ kankan báyìí. A kò ń ṣàyẹ̀wò tàbí pa fáìlì rẹ́ lára títí tí èyí yóò fi dá.",
+      "policyUnavailable": "A kò le ka eto pápá, nítorí náà, àwọn oníṣe kò le gba fáìlì báyìí.",
+      "total": {
+        "files": "Àwọn fáìlì",
+        "ok": "Dára",
+        "warning": "Pẹ̀lú ìkìlọ̀",
+        "error": "Pa mọ lọwọ oníṣe",
+        "pending": "Wọ́n ń ṣàyẹ̀wò"
+      },
+      "recheckAll": "Ṣàyẹ̀wò gbogbo rẹ lẹ́ẹkansi",
+      "recheckOne": "Ṣàyẹ̀wò lẹ́ẹkansi",
+      "recheckQueued": "{count, plural, one {# fáìlì dúró de àyẹ̀wò.} other {# fáìlì dúró de àyẹ̀wò.}}",
+      "recheckFailed": "Kò le bẹ̀rẹ̀ àyẹ̀wò.",
+      "retention": {
+        "active": "Fáìlì tó kọjá àkókò àpamọ́ yóò farapamọ́ lẹ́sẹ̀kẹsẹ̀ tí a ó sì pa rẹ {days} ọjọ́ lẹ́yìn náà.",
+        "disabled": "Fáìlì tó kọjá àkókò àpamọ́ yóò farapamọ́, ṣùgbọ́n pipa rè ti wa nípò ìdákẹ́jẹ fún deployment yìí.",
+        "waiting-for-config": "Fáìlì tó kọjá àkókò àpamọ́ àiyẹsẹ̀ ni a fi pamọ́. Kò sí ohun tí a ó pa títí tí a bá ti fi fipamọ́ eto àpamọ́."
+      },
+      "noFiles": "Kò tí ì sí fáìlì tí a fi ranṣẹ́.",
+      "allGood": "Gbogbo ohun tí a fi ranṣẹ́ wà lódì.",
+      "problemsHeading": "Àwọn fáìlì tó nílò àkíyèsí",
+      "status": {
+        "error": "Pa mọ lọwọ oníṣe",
+        "warning": "Ìkìlọ̀",
+        "pending": "Wọ́n ń ṣàyẹ̀wò",
+        "ok": "Dára"
+      },
+      "pendingBody": "Tuntun tàbí a ti rọ̀pò lati àyẹ̀wò to kọjá. Yóò farahan fún oníṣe léyìn tí ó bá ṣẹ́gun àyẹ̀wò.",
+      "firstSeen": "Akọ́kọ́ rí i {date}",
+      "unclassifiedHeading": "Àwọn kólọ́ọ̀mù tó ń dúró fún ìpinnu",
+      "unclassifiedBody": "Àwọn kólọ́ọ̀mù wọ̀nyí kì í ṣe amọ̀. Wọ́n máa farapamọ́, àwọn oníṣe kò le gba fáìlì tí wọ́n wà nínú rẹ, títí tí ẹnikan yóò fi ṣètò kọọkan sí apá pápá.",
+      "unclassifiedChip": "{column} · {count, plural, one {fáìlì #} other {fáìlì #}}",
+      "openFields": "Lọ sí Pápá",
+      "unconfiguredHeading": "Àpamọ́ tí kò ní eto",
+      "unconfiguredBody": "Àwọn fáìlì ń dé síbí, ṣùgbọ́n kò sí ẹni tó ṣètò àpamọ́ yìí tàbí ti lókè rẹ. Àwọn mọ́dá oníṣe nìkan ni ó le rí i.",
+      "staleHeading": "Àrọ́pọ̀ tó péjọ",
+      "staleBody": "Àpamọ́ wọ̀nyí ń retí àrọ́pọ̀ deede, tí títókẹ́ tí ó kẹ̀yìn dá ju bó yẹ kó jẹ́ lọ.",
+      "staleDetail": {
+        "daily": "Ojoojúmọ́; títókẹ́ kẹ̀yìn ni {date}",
+        "monthly": "Oṣooṣù; títókẹ́ kẹ̀yìn pari {date}"
+      },
+      "staleNever": "Kò sí ohun tí a fi ranṣẹ́",
+      "expiringHeading": "Ìparí àkókò tó súnmọ́",
+      "expiringBody": "Àwọn fáìlì tó ti kọjá àkókò àpamọ́ tàbí tó máa de bẹ́ nínú 30 ọjọ́.",
+      "expiresOn": "Ó máa parí {date}",
+      "expiredOn": "Ó ti parí {date}"
+    },
+    "issue": {
+      "name-mismatch": "Orúkọ fáìlì kì í bá a ṣe folder yìí (àpẹẹrẹ {expected}).",
+      "unsupported-format": "A kò le ṣàyẹ̀wò fáìlì \"{extension}\", nítorí náà, èyí farapamọ́ lọwọ oníṣe. Fi .xlsx tàbí .csv ranṣẹ́.",
+      "too-large": "Ní {sizeMb} MB fáìlì yìí ti ju ààlà {limitMb} MB fún àyẹ̀wò lọ, nítorí náà, o farapamọ́ lọwọ oníṣe.",
+      "empty-file": "Fáìlì náà ṣòfo.",
+      "unreadable": "A kò le ṣí fáìlì náà. Ó lè ti bàjẹ́, tàbí kó bó fẹ́ràn orúkọ tó wa lórí.",
+      "identifier-column": "Ṣíìtì \"{sheet}\" ní ọ̀wọ̀n àkọsílẹ̀ \"{column}\" tó ń dá àwọn ènìyàn mọ́. A ò fi fáìlì náà han àwọn oníṣàkóso.",
+      "identifier-values": "\"{sheet}\" ní {count, plural, one {# àdírẹ́sì imeeli} other {# àdírẹ́sì imeeli}}. A ò fi fáìlì náà han àwọn oníṣàkóso.",
+      "user-code-format": "Ṣíìtì \"{sheet}\", ọ̀wọ̀n àkọsílẹ̀ \"{column}\": {count, plural, one {# iye} other {# iye}} kò jẹ́ kó dá u-… user code. A ò fi fáìlì náà han àwọn oníṣàkóso.",
+      "formulas-without-values": "Ṣíìtì \"{sheet}\" ní {count, plural, one {# fáwọ́ọ́mùulà} other {# fáwọ́ọ́mùulà}} tí kò ní abajade títamọ́, nítorí náà, a ò le fi àwọn àdíà yìí han nínú app.",
+      "missing-sheet": "Ṣíìtì \"{sheet}\" kò sí, nítorí náà, a ò le fi àwọn àwòrán tó da lórí rẹ̀ han.",
+      "missing-column": "Ṣíìtì \"{sheet}\" kò ní ọ̀wọ̀n àkọsílẹ̀ \"{column}\", nítorí náà, a ò le fi àwọn àwòrán tó ń lo rẹ̀ han.",
+      "no-period": "Orúkọ fáìlì náà kò nípè àkókò ìròyìn, nítorí náà, ka àkókò ìtẹ́síwájú bẹ̀rẹ̀ láti ọ̀jọ́ tí a rán án.",
+      "unclassified-field": "Ọ̀wọ̀n àkọsílẹ̀ \"{column}\" kò tí í jẹ́ mọ̀. Ó wà pẹ̀lú ìbòjú mọ́ra, àwọn oníṣàkóso kì yóò rí fáìlì tó bọ̀ wà, títí tí a ó fi yà á sípò kan.",
+      "past-retention": "Wákàtí tó ju {months} osù títẹ̀síwájú folda yìí lọ; a kò fi hàn mọ́.",
+      "unknown": "Ìṣòro tó gbàjọ: {code}."
+    }
   }
 }

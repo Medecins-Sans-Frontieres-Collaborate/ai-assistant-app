@@ -807,7 +807,10 @@
       "codeInterpreterLimitReached": "Günlük kod çalıştırma sınırına ulaşıldı — kod çalıştırmadan yanıtlanıyor…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Bilgi tabanı araması başarısız oldu — yanıt, aracının belgelerini kullanmayacak",
-      "stillWorking": "Hâlâ çalışıyor…"
+      "stillWorking": "Hâlâ çalışıyor…",
+      "assessingSearchResults": "Sonuçların soruya cevap verip vermediğini kontrol ediliyor…",
+      "refiningSearch": "Yeniden aranıyor: “{query}”…",
+      "readingSearchPages": "{count} sonuç sayfası okunuyor…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# araç kullanıldı} other {# araç kullanıldı}}",
@@ -893,7 +896,10 @@
       "summarizeNow": "Başlıklardan şimdi özetle",
       "sourcesCount": "{count} kaynak",
       "showAll": "Tüm {count} kaynağı göster",
-      "showFewer": "Daha az göster"
+      "showFewer": "Daha az göster",
+      "multiStepTitle": "Şu ana kadar bulunanlar — soruya yanıt verip vermediklerini kontrol ediyoruz",
+      "multiStepHint": "Arama daha ileri gidebilir — başka bir arama veya en umut verici sayfaları okuma. Beklemek istemiyorsanız, şimdiye kadar bulunan {count} sonuçtan cevap verin.",
+      "answerNow": "Bu sonuçlardan şimdi cevap ver"
     },
     "retryWithModel": "{model} ile deneyin",
     "createTodoTasks": "Bu yanıtı To Do görevlerine dönüştür",
@@ -907,7 +913,10 @@
     "modelTimedOutAtMaximum": "{model}, mevcut en uzun bekleme süresi olan {duration} içinde yanıt vermeye başlamadı. Yeniden deneyin veya başka bir model seçin.",
     "requestTimedOut": "Bu isteğin hazırlanması çok uzun sürdü ve {model} yanıt vermeden önce durduruldu. Daha fazla süre tanıyabilir veya başka bir model deneyebilirsiniz.",
     "retryWaitingLonger": "{duration} kadar bekleyip tekrar deneyin",
-    "alwaysWaitThisLong": "Her zaman en fazla {duration} kadar bekle"
+    "alwaysWaitThisLong": "Her zaman en fazla {duration} kadar bekle",
+    "keepSearching": "Aramaya devam et",
+    "keepSearchingHint": "Arama bunu bulmadan durdu. Asistanın farklı yollar denemesini isteyin.",
+    "keepSearchingMessage": "Bunu aramaya devam edin lütfen — farklı bir yöntem deneyin."
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -1291,7 +1300,9 @@
       "providerBingResponsesDescription": "Bing grounding ile aynı Bing web kapsamasına sahiptir, ancak bir Foundry aracısı yerine tek bir doğrudan model çağrısı olarak çalışır — genellikle çok daha hızlıdır. Bing grounding'e karşı değerlendirilen yeni bir seçenektir.",
       "providerSearxng": "MSF web arama",
       "providerSearxngDescription": "MSF'nin kendi özel metaarama servisi. Genel web, haberler, bilimsel literatür (MSF araştırma yayınları dahil), teknik dokümantasyon ve insani yardım verilerini kapsar; her soru için doğru kaynak türünü seçer. Sonuçlar saniyeler içinde doğrudan bağlantılarla gelir ve uygulamadan yalnızca arama sorgusu çıkar — arama motorları sizi asla göremez.",
-      "otherProvidersLabel": "Diğer sağlayıcılar"
+      "otherProvidersLabel": "Diğer sağlayıcılar",
+      "multiStepLabel": "Çok aşamalı arama",
+      "multiStepDescription": "MSF web araması ile asistan önce ilk sonuçları kontrol eder; yetersiz kalırsa tekrar arama yapar veya en uygun sayfaları okuyup cevap verir. Çoğu soru yine tek adımda sonuçlanır. Her aramanın tek tur olmasını isterseniz kapatabilirsiniz."
     },
     "Admin": "Yönetici",
     "Usage Limits": "Kullanım sınırları",
@@ -1311,7 +1322,8 @@
       "customHint": "{min} ile {max} saniye arasında.",
       "preferModelTitle": "Seçili modelimi tercih et",
       "preferModelDescription": "Bir istek başarısız olduğunda otomatik olarak başka bir modele geçme. Hata, model değiştirme seçeneğini yine de sunacak."
-    }
+    },
+    "Analytics": "Analitik"
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -1522,6 +1534,12 @@
     },
     "subVariant": {
       "label": "Boyut"
+    },
+    "retiring": {
+      "badge": "Emekli oluyor",
+      "datedMoving": "{date} tarihinde emekli oluyor. Üzerindeki konuşmalar {movesOn} tarihinde {successor} modeline taşınacak.",
+      "dated": "{date} tarihinde emekli oluyor ve çalışmayı durduracak. Bunun yerine {successor} kullanın.",
+      "replaced": "{successor} ile değiştiriliyor."
     }
   },
   "models": {
@@ -1820,6 +1838,11 @@
       "name": "GPT-6 Astra",
       "description": "OpenAI'nin amiral gemisi GPT-6. Zorlu uçtan uca işler için geliştirildi: derin araştırmalar, karmaşık analizler, yazılım mühendisliği ve uzun, çok adımlı görevler. GPT-5.6 Sol'a göre yaklaşık iki kat daha pahalıdır.",
       "tagline": "OpenAI'nin en yetenekli modeli"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Kod, doküman ve uygulamalarda yoğun işler için GPT-6 Sol'un yükseltilmiş hali. Astra ile benzer yeteneğe, çok daha düşük token fiyatı ile ulaşır.",
+      "tagline": "Astra'ya yakın yetenek, çok daha düşük maliyet"
     }
   },
   "searchMode": {
@@ -5440,7 +5463,10 @@
       "announcements": "Kullanıcılar için duyuru mesajları: kimler görecek, ne zaman ve hangi dillerde.",
       "delegations": "Hangi kullanıcıları kimler yönetiyor ve her birinin yetkileri neler.",
       "channelProfiles": "Her platformun ne olduğu: limitler, sayım, diziler. Tüm kanal setlerinin temel aldığı kuruluş genelindeki bilgiler.",
-      "channelSets": "Her ekibin platformlarda yazma kuralları: rehberlik, sesler, varsayılanlar, kimlerin seti ve kimlerin gönderi gönderebileceği."
+      "channelSets": "Her ekibin platformlarda yazma kuralları: rehberlik, sesler, varsayılanlar, kimlerin seti ve kimlerin gönderi gönderebileceği.",
+      "webSearch": "Web aramasının ne kadar ileri gidebileceği: çok aşamalı arama, denetleyici modeli ve sınırları.",
+      "contextBudget": "Her modelin her turda aldığı konuşma miktarı.",
+      "analytics": "Teslim edilen raporlar: neler geldi, her klasörü kim açabilir, hangi alanlar gösterilebilir."
     },
     "openSettings": "Ayarları aç",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "Görüntüle",
       "globalAdmins": "Global yöneticiler",
       "announcements": "Duyurular",
-      "delegations": "Delegasyonlar"
+      "delegations": "Delegasyonlar",
+      "webSearch": "Web arama",
+      "contextBudget": "Kontekst bütçesi",
+      "analytics": "Analitik"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "Bu delegasyonun verebileceği tüm yetenekler. Yöneticiler sadece burada etkinleştirilen yetenekleri alabilir.",
     "grant": {
       "limits": "Kullanım limitleri",
-      "announcements": "Duyurular"
+      "announcements": "Duyurular",
+      "analytics": "Analitik"
     },
     "grantAll": "Tümü",
     "maxOverrides": "Bu delegasyonun kullanabileceği limit aşımları",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "Kaydettikten sonra bunu varsayılan set olarak işaretleyebilirsiniz.",
     "noChannelsWarning": "Bu sette kanal yok; kimse bu setle taslak oluşturamaz.",
     "audienceEveryoneHint": "Kuruluştaki herkes bu setle taslak oluşturabilir."
+  },
+  "contextBudgetAdmin": {
+    "title": "Kontekst bütçesi",
+    "description": "Her modelin bir turda aldığı konuşma geçmişi miktarı. Son mesajlar her zaman dahil edilir; bütçe dolunca eskileri çıkarılır, çıkarılanların özeti sistem komutuna eklenir. Daha büyük bir bütçe, uzun sohbetleri daha fazla kapsar fakat her turda daha yüksek maliyet getirir.",
+    "scopeNote": "Her modeldeki her sohbet için geçerlidir. Bütçe aşağıda belirtilen modelin pencere payını asla aşamaz.",
+    "loading": "Kontekst bütçesi yükleniyor…",
+    "loadError": "Kontekst bütçesi yüklenemedi.",
+    "configUnavailable": "Kayıtlı kontekst bütçesi şu anda okunamadı, bu nedenle aşağıdaki değerler geçerli olmayabilir. Düzenlemeden önce tekrar deneyin.",
+    "retry": "Tekrar dene",
+    "historyTokensLabel": "Standart bütçe (token)",
+    "historyTokensDescription": "Override olmayan modeller için her turda gönderilen geçmiş, sistem komutu hariç dahil. Yaklaşık 48.000, tipik bir konuşmada son 30–60 mesajı saklar.",
+    "historyFractionLabel": "Tavan (modelin giriş alanı payı)",
+    "historyFractionDescription": "Bir bütçe, modelin kontekst penceresinin bu payına ve çıktı rezervasyonu çıkarılmış haline sabitlenir, böylece küçük pencereli bir model asla kapasitesinden fazla istenmez.",
+    "minRecentMessagesLabel": "Her zaman saklanan mesajlar",
+    "minRecentMessagesDescription": "Bütçe aşılmış olsa bile (pencere içinde) son mesajlar saklanır. Üç, son mesaj tek başına — örneğin yapıştırılmış belge veya arama sonucu — bütçeyi doldurursa, bir önceki mesajı da korur.",
+    "familyOverridesLabel": "Aileye göre",
+    "familyOverridesDescription": "Her ailenin modelleri için standart bütçeyi yerine geçen bir bütçe.",
+    "modelOverridesLabel": "Modele göre",
+    "modelOverridesDescription": "Bir model için belirlenen bütçe, aile ve standart bütçelerin yerine geçer.",
+    "overrideFamilyPlaceholder": "Aile",
+    "overrideModelPlaceholder": "Model id",
+    "overrideTokensPlaceholder": "Token",
+    "addOverride": "Ekle",
+    "removeOverride": "Kaldır",
+    "noOverrides": "Yok",
+    "effectiveLabel": "Bu ayarlarla etkin bütçeler",
+    "effectiveColumnModel": "Model",
+    "effectiveColumnWindow": "Pencere",
+    "effectiveColumnBudget": "Geçmiş bütçe",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Varsayılan: {value}",
+    "defaultsNote": "Yalnızca varsayılandan farklı olan değerler saklanır; diğer tüm değerler sürümler arasında kod varsayılanlarını takip etmeye devam eder.",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor…",
+    "resetDefaults": "Varsayılana sıfırla",
+    "unsaved": "Kaydedilmemiş değişiklikler",
+    "saveSuccess": "Kontekst bütçesi kaydedildi. Bir dakika içinde etkili olur.",
+    "saveError": "Kontekst bütçesi kaydedilemedi.",
+    "conflictError": "Başka bir yönetici bu arada kontekst bütçesini değiştirdi; en güncel değerler yeniden yüklendi.",
+    "updatedByLine": "Son olarak {by}, {at} tarihinde kaydetti",
+    "neverSaved": "Hiç kaydedilmedi — kodun varsayılanları uygulanıyor."
+  },
+  "webSearchAdmin": {
+    "title": "Web arama",
+    "description": "MSF web aramasında çok adımlı aramayı yönetir. İlk sonuçlardan sonra bir değerlendirici model, sorunun yanıtlanıp yanıtlanmadığına karar verir; yanıt yoksa, farklı sorgularla yeniden arama yapabilir, sonuç sayfalarını okuyabilir, kullanıcıdan eksik bir detayı isteyebilir veya bir şey bulunamadığını bildirebilir.",
+    "scopeNote": "Bu ayarlar yalnızca MSF web araması için geçerlidir. Diğer arama sağlayıcıları her zaman tek tur çalışır. Her kullanıcı, Ayarlardan çok adımlı aramayı kendisi için kapatabilir.",
+    "loading": "Web arama ayarları yükleniyor…",
+    "loadError": "Web arama ayarları yüklenemedi.",
+    "configUnavailable": "Web arama ayarları depodan okunamadı. Kontroller, kullanımda olan değerlerle eşleşmeyebilecek varsayılanlarla gösterilmek yerine gizlendi.",
+    "retry": "Tekrar Dene",
+    "enabledLabel": "Çok adımlı arama",
+    "enabledDescription": "Kapalıysa, her arama tek planlanmış turdur ve değerlendirici model çağrılmaz.",
+    "assessorLabel": "Değerlendirici model",
+    "assessorDescription": "Her adımda sonuçları değerlendirmek için bir kez çağrılır. Hızlı ve uygun maliyetli bir model seçin: kullanıcı beklerken çalışır. Ulaşılamazsa {fallback} kullanılır.",
+    "maxStepsLabel": "Soru başına adım",
+    "maxStepsDescription": "Bir sorunun alabileceği en fazla adım sayısı, ilk arama dahil. Her ek arama veya sayfa okuma adımı bir adım sayılır. Bu sınır, günlük arama limitinden bağımsızdır; günlük limit bir soruyu tamamlanmış sayar.",
+    "maxStepsExploratoryLabel": "Keşif aramaları için adım",
+    "maxStepsExploratoryDescription": "Zor bulunan bir öğe için (nadir bir kitabın kopyası gibi) yapılan aramalarda daha yüksek bir limit; başarısız yollar beklenir. Normal limittan düşük olamaz.",
+    "pageReadsLabel": "Sonuç sayfalarını oku",
+    "pageReadsDescription": "Bir adım, en umut verici sonuçları açıp sayfanın kendisini okuyabilir, arama snippet’lerine bağlı kalmak yerine.",
+    "maxPageReadsLabel": "Her okuma adımında sayfa sayısı",
+    "sourceAssessmentLabel": "Kaynak kalitesini değerlendir",
+    "sourceAssessmentDescription": "Değerlendirici, her kaynağı (resmi, yerleşik, ikincil, düşük güvenilirlik) etiketler; böylece yanıt bunları ağırlıklandırıp atıf yapabilir.",
+    "timeBudgetLabel": "Zaman bütçesi (saniye)",
+    "timeBudgetDescription": "Bir aramanın alabileceği toplam süre, ilk tur dahil. Süre bittiğinde bulunanlardan yanıt yazılır.",
+    "defaultsNote": "Bir ayar yerleşik varsayılanda bırakılırsa depolanmaz, böylece sonraki sürümde varsayılan değişirse onu takip etmeye devam eder.",
+    "defaultHint": "Varsayılan: {value}",
+    "defaultOn": "açık",
+    "defaultOff": "kapalı",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Kaydedilmemiş değişiklikleriniz var.",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor…",
+    "resetDefaults": "Varsayılana sıfırla",
+    "saveSuccess": "Web arama ayarları kaydedildi.",
+    "saveError": "Web arama ayarları kaydedilemedi.",
+    "conflictError": "Bir başka yönetici ayarları önce değiştirdi. Değerler yeniden yüklendi — lütfen gözden geçirip tekrar kaydedin.",
+    "updatedByLine": "Son olarak {by}, {at} tarihinde kaydetti.",
+    "neverSaved": "Henüz hiçbir şey kaydedilmedi; yerleşik varsayılanlar geçerlidir."
+  },
+  "modelRetirement": {
+    "notice": "{model}, {retiresOn} tarihinde kullanımdan kaldırılıyor. Bu konuşma {movesOn} tarihinde {successor} üzerine taşınacak.",
+    "noticeRetiring": "{model}, {retiresOn} tarihinde kullanımdan kaldırılıyor ve çalışmayı durduracak. Konuşmayı kullanmaya devam etmek için {successor}'a geçiş yapın.",
+    "switchNow": "Şimdi geçiş yap"
+  },
+  "analytics": {
+    "title": "Analitik",
+    "backToChat": "Sohbete geri dön",
+    "manage": "Yönet",
+    "loading": "Yükleniyor…",
+    "loadFailed": "Raporlar yüklenemedi.",
+    "retry": "Yeniden dene",
+    "emptyTitle": "Henüz sizinle hiçbir şey paylaşılmadı",
+    "emptyBody": "Bir yönetici size bir klasöre erişim verdiğinde raporlar burada görünür.",
+    "deliveryUnavailable": "Rapor depolamasına şu anda erişilemiyor, bu nedenle aşağıdaki listeler boş olabilir. Birkaç dakika sonra tekrar deneyin.",
+    "groupsDegraded": "Grup üyelikleriniz şu anda kontrol edilemedi, bu yüzden gruplarınıza paylaşılan klasörler eksik olabilir. Bir dakika içinde tekrar yükleyin.",
+    "foldersHeading": "Klasörler",
+    "rootFolder": "Tüm raporlar",
+    "pathOnly": "Bu klasörün kendisine erişiminiz yok, yalnızca içindeki klasörlere erişebilirsiniz.",
+    "selectFolder": "Raporlarını görmek için bir klasör seçin.",
+    "noFiles": "Bu klasörde rapor yok.",
+    "viewOnlyNote": "Bu klasöre yalnızca görüntüleme erişiminiz var: raporları açıp, genel bakış ve özet tablolarını görebilirsiniz. Kişi başı satır içeren tablolar, dışa aktarma ve indirme işlemleri için indirme erişimi gerekir.",
+    "col": {
+      "name": "Dosya",
+      "period": "Dönem",
+      "delivered": "Teslim edildi",
+      "size": "Boyut",
+      "availableUntil": "Şu tarihe kadar erişilebilir",
+      "actions": "İşlemler"
+    },
+    "download": "İndir",
+    "downloadAria": "{name} dosyasını indir",
+    "block": {
+      "view-only": "Yalnızca görüntüle",
+      "hidden-fields": "Orijinali gizlendi (gizli alanlar)",
+      "unclassified-fields": "Orijinali gizlendi (incelenmeyi bekleyen alanlar)",
+      "not-inspected": "Henüz kontrol edilmedi",
+      "policy-unavailable": "Şu anda erişilebilir değil"
+    },
+    "adminBadge": {
+      "error": "Kullanıcılar için gizlendi",
+      "pending": "Kontrol ediliyor",
+      "warning": "Uyarılar var",
+      "expired": "Süresi doldu, silinmek üzere",
+      "originalBlocked": "Kullanıcılar indiremez: {reason}"
+    },
+    "openAria": "{name} dosyasını aç",
+    "openForExport": "Dışa aktarmak için aç",
+    "preview": {
+      "back": "{folder} klasörüne geri dön",
+      "tabsLabel": "Bu dosyadaki tablolar",
+      "lockedTab": "{name} (kilitli)",
+      "unavailable": "Bu dosya şu anda uygulamada açılamıyor.",
+      "tableFailed": "Bu tablo yüklenemedi.",
+      "withheld": {
+        "row-level": "Bu tabloda kişi başı bir satır var. Açmak için klasöre indirme erişimi gerekir.",
+        "hidden-fields": "Bu sayfada gizli bir alan bulunuyor, bu nedenle gösterilmiyor."
+      },
+      "truncated": "{total, number} satırdan ilk {shown, number} gösteriliyor. Tümünü almak için tabloyu dışa aktarın.",
+      "freeformNote": "Bu sayfa, okuma için düzenlenmiş ve teslim edildiği şekilde gösterilmektedir.",
+      "filter": "Satırları filtrele",
+      "filterPlaceholder": "Satırları filtrele…",
+      "rows": "{count, plural, one {# satır} other {# satır}}",
+      "matching": "{count, number} / {total, number} satır eşleşiyor",
+      "modeLabel": "Şu şekilde göster",
+      "mode": {
+        "table": "Tablo",
+        "chart": "Grafik"
+      },
+      "noRows": "Gösterilecek satır yok.",
+      "hiddenColumn": "Kullanıcılardan gizlendi",
+      "exportCsv": "Bu tabloyu dışa aktar (CSV)",
+      "exportXlsx": "Tüm tabloları dışa aktar (Excel)",
+      "downloadOriginal": "Orijinalini indir",
+      "exportNote": "Teslim edilen dosyada gizli alanlar bulunuyor, bu nedenle olduğu gibi indirilemez. Dışa aktarımlarda bu alanlar hariç tutulur.",
+      "sectionLabel": "Göster",
+      "section": {
+        "overview": "Genel Bakış",
+        "tables": "Tablolar"
+      }
+    },
+    "chart": {
+      "groupBy": "Grupla",
+      "measure": "Ölçüt",
+      "rowCount": "Satır sayısı",
+      "aggregation": "Hesapla",
+      "agg": {
+        "sum": "Toplam",
+        "mean": "Ortalama",
+        "min": "En küçük",
+        "max": "En büyük"
+      },
+      "ariaLabel": "{group} ile {measure}",
+      "noColumns": "Bu tabloda gruplandırmak için metin veya tarih sütunu yok.",
+      "empty": "Bu seçenek için grafiğe aktarılacak veri yok.",
+      "truncatedGroups": "En büyük {count} grup gösteriliyor.",
+      "basedOn": "İlk {shown, number} / {total, number} satıra göre.",
+      "savePng": "Görüntü olarak kaydet",
+      "saveSvg": "SVG olarak kaydet",
+      "saveFailed": "Grafik kaydedilemedi."
+    },
+    "dash": {
+      "loading": "Yükleniyor…",
+      "failed": "Genel bakış yüklenemedi.",
+      "retry": "Tekrar Dene",
+      "showTable": "Tablo olarak göster",
+      "showChart": "Grafik olarak göster",
+      "smallGroups": "5 kişiden az gruplar",
+      "foldedNote": "5 kişiden az gruplar tek satırda birleştirildi.",
+      "otherCount": "{count, plural, one {# diğer} other {# diğerleri}}",
+      "hiddenPanel": "Alan ayarlarıyla gizlendi.",
+      "missingPanel": "Bu dosya için mevcut değil.",
+      "usage": {
+        "users": "Aktif kişiler",
+        "interactions": "Etkileşimler",
+        "avgPerUser": "Kişi başına ortalama",
+        "medianPerUser": "Kişi başına medyan",
+        "hq": "Merkezde",
+        "field": "Sahada",
+        "shareUsers": "{comparator} kullanıcıların %{pct}‘i",
+        "shareUsage": "{comparator} kullanımın %{pct}‘i",
+        "comparator": "{comparator}: {value}",
+        "daily": "Günlük etkileşimler",
+        "dailyUsers": "Günlük aktif kişiler",
+        "dailyUsersSub": "Çalışma konumuna göre",
+        "weekly": "Haftalık etkileşimler",
+        "activity": "Ne kadar kullanılıyor",
+        "activitySub": "Dönemdeki etkileşim sayısına göre kişiler",
+        "departments": "Departmana göre etkileşimler",
+        "jobTitles": "Pozisyona göre etkileşimler",
+        "models": "Model bazında etkinlikler",
+        "total": "Tüm konumlar",
+        "location": {
+          "hq": "Merkez",
+          "field": "Saha",
+          "unknown": "Bilinmeyen"
+        },
+        "col": {
+          "date": "Gün",
+          "week": "Başlangıç haftası",
+          "users": "Kişi",
+          "interactions": "Etkileşimler",
+          "events": "Etkinlikler",
+          "group": "Grup",
+          "band": "Etkileşimler"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Fatura edilen toplam",
+        "usageVariable": "Kullanıma bağlı maliyet",
+        "staticInfra": "Statik altyapı",
+        "sections": "Fatura edilen bölümler",
+        "usageEvents": "Kullanım etkinlikleri",
+        "bySection": "Bölümlere göre fatura edilen",
+        "changes": "Önceki dosyadan değişiklikler",
+        "noChanges": "Önceki dosyadan hiçbir değişiklik yok.",
+        "byDomain": "Mail domainine göre kullanım etkinlikleri",
+        "reconciliation": "Azure ile uzlaştırma",
+        "col": {
+          "section": "Bölüm",
+          "billed": "Faturalanan",
+          "usageEvents": "Kullanım etkinlikleri",
+          "usagePct": "Kullanım %",
+          "line": "Satır",
+          "amount": "Tutar",
+          "previous": "Önceki dosya",
+          "restated": "Yeniden bildirilen",
+          "change": "Değişiklik",
+          "domain": "Mail domaini",
+          "users": "Kişi"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Şunlarla hesaplandı",
+        "delivered": "Raporun kendi varsayımları ({version})",
+        "current": "Uygulamanın mevcut varsayımları ({version})",
+        "whatIf": "Ya şöyle olursa…",
+        "deliveredUnavailable": "Bu raporun kendi varsayımları Varsayımlar sayfasından okunamadı, bu yüzden uygulamanın mevcut varsayımları kullanıldı.",
+        "whatIfIntro": "Bir değeri değiştirdiğinizde aşağıdaki her şeyde etkisini görebilirsiniz. Hiçbir şey kaydedilmez.",
+        "resetDelivered": "Raporun kendi varsayımlarına sıfırla",
+        "resetCurrent": "Uygulamanın mevcut varsayımlarına sıfırla",
+        "co2": "Emisyonlar",
+        "energy": "Enerji",
+        "charges": "Akıllı telefon şarjları",
+        "chargesSub": "Aynı ayak iziyle",
+        "activeUsers": "Aktif kişiler",
+        "requests": "İstekler",
+        "tokens": "Tokenlar",
+        "vsDelivered": "{delta} raporun kendi varsayımlarıyla karşılaştırıldığında",
+        "sameAsDelivered": "Raporun kendi varsayımlarıyla aynı",
+        "unpriced": "{count, plural, one {# istek kullanıyor} other {# istek kullanıyor}} bu varsayımların rakamı olmayan bir model boyutunu ve {count, plural, one {hariç bırakılıyor} other {hariç bırakılıyor}}.",
+        "byDepartment": "Departmana göre emisyonlar",
+        "byModel": "Modele göre emisyonlar",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Burada hesaplanan ile o zamanki kayıtlar karşılaştırması",
+        "reconciliationSub": "Uygulama, her isteği gerçekleştiğinde ayrıca tahmin eder. Varsayımlar aynı olduğunda iki sonuç da uyumludur.",
+        "computed": "Burada hesaplanan",
+        "logged": "Uygulama tarafından kaydedilen",
+        "difference": "Fark",
+        "col": {
+          "group": "Grup",
+          "requests": "İstekler",
+          "tokens": "Tokenlar",
+          "energyWh": "Enerji (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Veri merkezi ek yükü (PUE)",
+          "promptTokenWeight": "Prompt token ağırlığı",
+          "dedicatedReasoningMultiplier": "Özel akıl yürütücü çarpanı",
+          "whPer1kTokens": "1.000 token başına Wh — {name}",
+          "reasoningEffortMultipliers": "Akıl yürütme çabası çarpanı — {name}",
+          "gridIntensity": "Şebeke g CO₂e/kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Olaylar",
+        "users": "Kişiler",
+        "tokens": "Tokenlar",
+        "errors": "Hatalar",
+        "energy": "Enerji",
+        "co2": "Emisyonlar",
+        "hourly": "Saat başı olaylar (UTC)",
+        "byType": "Türe göre olaylar",
+        "byError": "Koda göre hatalar",
+        "byModel": "Modele göre tokenlar",
+        "byCompany": "Kuruluşa göre olaylar",
+        "none": "Yok.",
+        "col": {
+          "group": "Grup",
+          "events": "Olaylar",
+          "tokens": "Tokenlar",
+          "hour": "Saat"
+        }
+      },
+      "trend": {
+        "title": "Zaman içinde",
+        "period": "Dönem",
+        "users": "Rapor başına aktif kişi",
+        "interactions": "Rapor başına etkileşim",
+        "billed": "Dönem başına toplam faturalandırılan",
+        "sections": "Bölüme göre faturalandırılan",
+        "otherSections": "Diğer tüm bölümler",
+        "co2": "Rapor başına emisyon",
+        "energy": "Rapor başına enerji",
+        "recalculated": "Her dönem uygulamanın mevcut varsayımlarıyla ({version}) hesaplanır, dolayısıyla raporlar arasındaki varsayımlardaki değişiklik emisyonlarda bir değişiklik olarak görünmez.",
+        "severalPerPeriod": "Bu klasörde aynı dönem için birden fazla rapor bulunur. Bir alt klasörü açarak bunlardan birinin zaman içindeki değişimini görebilirsiniz."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analitik",
+    "description": "Raporlar veri hattı aracılığıyla depolamaya aktarılır. Burada gelenleri kontrol edebilir, her klasörü kimlerin açabileceğine karar verebilir ve platformda hangi alanların gösterileceğini seçebilirsiniz.",
+    "openViewer": "Analitiği aç",
+    "sharedNotice": "Beta ve üretim bu klasörleri, kitleleri ve dosyaları ortak kullanır. Burada kaydedilen bir değişiklik her ikisinde de geçerli olur.",
+    "tabsLabel": "Analitik bölümler",
+    "tab": {
+      "health": "Teslimatlar",
+      "folders": "Klasörler & erişim",
+      "fields": "Alanlar"
+    },
+    "loading": "Yükleniyor…",
+    "retry": "Yeniden dene",
+    "loadError": "Bu bölüm yüklenemedi.",
+    "unavailable": "Kaydedilmiş ayarlar depodan okunamadı. Bu, \"hiçbir şey yapılandırılmadı\" ile aynı değildir — düzenleme devre dışı bırakıldı böylece gerçek ayarlar üzerine yazılmaz. Tekrar deneyin ve devam ederse sunucu kayıtlarını kontrol edin.",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor…",
+    "unsaved": "Kaydedilmemiş değişiklikler",
+    "saveSuccess": "Kaydedildi.",
+    "saveError": "Kaydedilemedi.",
+    "conflictError": "Bir başka yönetici, siz düzenlerken bu ayarları değiştirdi. Değişiklikleriniz kaydedilmedi — en son sürüm yeniden yüklendi.",
+    "rootFolder": "(üst seviye)",
+    "scope": {
+      "domain": "E-posta alanı",
+      "user": "Kişi",
+      "attribute": "Özellik",
+      "group": "Entra grubu"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "Entra grup nesne kimliği"
+    },
+    "level": {
+      "view": "Özetleri görüntüle",
+      "download": "Görüntüle, dışa aktar ve indir"
+    },
+    "reportType": {
+      "usage": "Kullanım raporu",
+      "rebilling": "Yeniden faturalandırma",
+      "emissions": "Emisyon raporu",
+      "raw-telemetry": "Ham telemetri"
+    },
+    "field": {
+      "userCode": {
+        "label": "Kullanıcı kodu",
+        "description": "Bir kişiyi temsil eden takma isimli u-… kodu."
+      },
+      "jobTitle": {
+        "label": "Unvan",
+        "description": "Unvanlar; özet sayfalardaki en yaygın unvan dahil. Küçük bir grupta bir unvan bir kişiye işaret edebilir."
+      },
+      "department": {
+        "label": "Departman",
+        "description": "Departmanlar; özet sayfalardaki en aktif departman dahil."
+      },
+      "company": {
+        "label": "Şirket / organizasyon",
+        "description": "Dizindeki organizasyon adı ve yeniden faturalandırma sayfalarındaki şirket adları."
+      },
+      "orgGroup": {
+        "label": "Organizasyon grubu",
+        "description": "Bir raporun bölümlendiği operasyon merkezi veya grup."
+      },
+      "section": {
+        "label": "Bölüm",
+        "description": "Yeniden faturalandırma satırının ait olduğu maliyet-gider bölümü."
+      },
+      "mailDomain": {
+        "label": "E-posta alan adı",
+        "description": "E-posta alan adı kullanımı, bir adrese değil, ilişkilendirildiği alana atfedilir."
+      },
+      "workLocation": {
+        "label": "Çalışma yeri",
+        "description": "Merkez veya saha."
+      },
+      "technical": {
+        "label": "Teknik detaylar",
+        "description": "Kişiyle ilgili bilgi vermeyen model, bölge, etkinlik türü, para birimi ve benzeri tanımlayıcılar."
+      },
+      "other": {
+        "label": "Diğer tanımlayıcı alanlar",
+        "description": "Yukarıdakilere uymayan bir sütunu dosyaladığınız yer."
+      }
+    },
+    "folders": {
+      "intro": "Boru hattının teslim ettiği her klasör listelenir. Ayarı olmayan — ve üst klasörlerden erişim izni verilmeyen — klasörler yalnızca yöneticilere görünür.",
+      "name": "Görüntüleme adı",
+      "namePlaceholder": "Klasör yolunun yerine gösterilir",
+      "description": "Açıklama",
+      "reportType": "Rapor türü",
+      "reportTypeNone": "Ayarlanmadı",
+      "reportTypeInherited": "Devralındı: {type}",
+      "reportTypeHint": "Denetleyiciye hangi dosya adlarını beklemesi gerektiğini ve ne kadar sıklıkta olduğunu bildirir. Bu klasörün içindekilere uygulanır.",
+      "retention": "Dosyaları şu kadar süre sakla (ay)",
+      "retentionHint": "{months} ayı devralmak için boş bırakın. Her raporun dönemi bitişinden itibaren hesaplanır.",
+      "audience": "Bu klasörü kimler açabilir",
+      "audienceHint": "Her satır bu klasöre ve içindeki klasörlere erişim sağlar. Satır başına bir hedef.",
+      "audienceScope": "Hedef türü",
+      "audienceTargets": "Hedefler",
+      "audienceLevel": "Erişim seviyesi",
+      "addAudience": "Kişi veya grup ekle",
+      "removeAudience": "Bu satırı kaldır",
+      "restricted": "Üst klasörlerden erişim devralma",
+      "restrictedHint": "Yalnızca bu klasördeki satırlar burada ve alt klasörlerde geçerlidir.",
+      "hiddenFields": "Bu klasörde de gizle",
+      "hiddenFieldsHint": "Bu klasör ve alt klasörleri için platform ayarına ek olarak gizlenen alanlar. Daha fazla alan gizleyebilirsiniz; daha fazlasını gösteremezsiniz.",
+      "hiddenPlatformWide": "(her yerde gizli)",
+      "clear": "Bu klasörün ayarlarını kaldır",
+      "rawChip": "Ham: yalnızca global yöneticiler",
+      "rawNote": "Ham telemetri adları, e-posta adresleri ve dosya adları içerir. Yalnızca global yöneticiler açabilir, ayrıca hiçbir hedef eklenemez.",
+      "audienceChip": "{count, plural, one {# erişim satırı} other {# erişim satırı}}",
+      "restrictedChip": "Devralmıyor",
+      "notConfiguredChip": "Ayarlama yok",
+      "addPathLabel": "İlk teslimattan önce klasör oluşturun",
+      "addPath": "Ekle",
+      "addPathHint": "Boru hattının tam olarak yazacağı yol, örneğin usage/ocba. Bu işlem yalnızca ayarları saklar; depolama alanında bir şey oluşturmaz.",
+      "invalidPath": "Geçerli bir klasör yolu değil.",
+      "rawGlobalOnly": "Ham/ altındaki klasörleri yalnızca global yöneticiler yapılandırabilir."
+    },
+    "fields": {
+      "intro": "Teslim edilen raporların hangi alanlarının platformda gösterileceğini seçin. Bir alanı gizlemek, uygulamada gösterilen her şeyden ve uygulamanın oluşturduğu dışa aktarımlardan kaldırır. Teslim edilen dosya bundan sonra yalnızca yöneticiler tarafından indirilebilir.",
+      "readOnly": "Bunu yalnızca global yöneticiler değiştirebilir. Bir analitik yöneticisi olarak, Klasörler & erişim altında klasör bazında ek alanları gizleyebilirsiniz.",
+      "configurableHeading": "Alanlar",
+      "shown": "Görünen",
+      "hidden": "Gizli",
+      "jobTitleNote": "Görev unvanı görünüyorsa, küçük bir gruptaki bir satır, kullanıcı kodu altında bile bir kişiyi tanımlayabilir. Grafikler beşten az kişiyi gizler; indirilen tablolar gizlemez.",
+      "neverHeading": "Asla gösterilmez",
+      "neverBody": "Adlar, e-posta adresleri, dizin kimlikleri, yüklenen dosya adları ve hata metni ham telemetri dışında asla gösterilmez. Bunlardan herhangi birini içeren bir rapor, yenisiyle değişene kadar kullanıcılar tarafından gizlenir.",
+      "unclassifiedHeading": "Kataloğun bilmediği sütunlar",
+      "unclassifiedBody": "Tanınmayan bir metin sütunu gizli kalır — uygulamada ve dışa aktarımda — ve teslim edilen dosya, bir alana atanana kadar kullanıcılar tarafından indirilemez.",
+      "noneWaiting": "Bekleyen yok.",
+      "inFiles": "{count, plural, one {# dosyada} other {# dosyada}}",
+      "classifyAs": "{column} sütunu için alan",
+      "keepHidden": "Gizli tut",
+      "removeClassification": "{column} sütununun ayarını kaldır"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Rapor depolamasına ulaşılamıyor",
+      "deliveryUnavailableBody": "Uygulama \"{container}\" konteynerini listeleyemedi. Var olduğundan ve uygulamanın kimliğinin üzerinde veri rolü olduğundan emin olun. O zamana kadar kimseye rapor gösterilmeyecek.",
+      "foldersUnavailable": "Klasör ayarları okunamadı, bu nedenle kullanıcılar şu anda hiç klasör görmüyor. Dosyalar kontrol edilip silinmiyor; bu sorun çözülene kadar beklemede kalacak.",
+      "policyUnavailable": "Alan ayarları okunamadı, bu nedenle şu anda kullanıcılar dosya indiremez.",
+      "total": {
+        "files": "Dosyalar",
+        "ok": "Sorun yok",
+        "warning": "Uyarılı",
+        "error": "Kullanıcılardan gizlendi",
+        "pending": "Kontrol ediliyor"
+      },
+      "recheckAll": "Hepsini tekrar kontrol et",
+      "recheckOne": "Tekrar kontrol et",
+      "recheckQueued": "{count, plural, one {# dosya kontrol için sıraya alındı.} other {# dosya kontrol için sıraya alındı.}}",
+      "recheckFailed": "Kontrol başlatılamadı.",
+      "retention": {
+        "active": "Klasörünün saklama süresini geçen dosyalar hemen gizlenir ve {days} gün sonra silinir.",
+        "disabled": "Klasörünün saklama süresini geçen dosyalar gizlenir, ancak bu dağıtımda silme işlemi kapalıdır.",
+        "waiting-for-config": "Varsayılan saklama süresini geçen dosyalar gizlenir. Klasör ayarları en az bir kez kaydedilene kadar hiçbir dosya silinmez."
+      },
+      "noFiles": "Henüz hiç dosya teslim edilmedi.",
+      "allGood": "Teslim edilen her şey düzgün.",
+      "problemsHeading": "Dikkat gerektiren dosyalar",
+      "status": {
+        "error": "Kullanıcılardan gizlendi",
+        "warning": "Uyarı",
+        "pending": "Kontrol ediliyor",
+        "ok": "Sorun yok"
+      },
+      "pendingBody": "Son kontrolden bu yana yeni veya değiştirildi. Kontrolden geçince kullanıcılara gösterilir.",
+      "firstSeen": "İlk olarak {date} tarihinde fark edildi",
+      "unclassifiedHeading": "Karar bekleyen sütunlar",
+      "unclassifiedBody": "Bu sütunlar tanınmıyor. Her biri bir alana atanana kadar gizli kalır ve kullanıcılar bunları içeren dosyaları indiremez.",
+      "unclassifiedChip": "{column} · {count, plural, one {# dosya} other {# dosya}}",
+      "openFields": "Alanlara Git",
+      "unconfiguredHeading": "Ayarı olmayan klasörler",
+      "unconfiguredBody": "Buraya dosyalar geliyor, fakat klasör ya da üst klasörü henüz kimse kurmadı. Yalnızca yöneticiler görebilir.",
+      "staleHeading": "Geciken teslimatlar",
+      "staleBody": "Bu klasörler düzenli raporlar bekliyor ve en son rapor olması gerekenden eski.",
+      "staleDetail": {
+        "daily": "Günlük; en son {date} tarihini kapsıyor",
+        "monthly": "Aylık; en son {date} tarihinde bitiyor"
+      },
+      "staleNever": "Henüz hiç teslimat yapılmadı",
+      "expiringHeading": "Süresi dolmak üzere",
+      "expiringBody": "Saklama süresini geçen ya da 30 gün içinde süresi dolacak dosyalar.",
+      "expiresOn": "Süresi dolacak: {date}",
+      "expiredOn": "Süresi doldu: {date}"
+    },
+    "issue": {
+      "name-mismatch": "Dosya adı bu klasörün beklediğiyle uyuşmuyor (örneğin {expected}).",
+      "unsupported-format": "\"{extension}\" türündeki dosyalar kontrol edilemiyor, bu nedenle bu dosya kullanıcılardan gizlenmiştir. .xlsx veya .csv gönderin.",
+      "too-large": "{sizeMb} MB boyutu ile bu dosya kontrol limiti olan {limitMb} MB'yi aşmaktadır, bu nedenle kullanıcılardan gizlenmiştir.",
+      "empty-file": "Dosya boş.",
+      "unreadable": "Dosya açılamadı. Hasar görmüş olabilir ya da adıyla belirtilen formatta olmayabilir.",
+      "identifier-column": "\"{sheet}\" sayfasında, kişileri tanımlayan \"{column}\" adlı bir sütun var. Dosya kullanıcılar için gizlenmiştir.",
+      "identifier-values": "\"{sheet}\", {count, plural, one {# e-posta adresi} other {# e-posta adresi}} içeriyor. Dosya kullanıcılar için gizlenmiştir.",
+      "user-code-format": "\"{sheet}\" sayfası, \"{column}\" sütunu: {count, plural, one {# değer} other {# değer}} u-... kullanıcı kodu değil. Dosya kullanıcılar için gizlenmiştir.",
+      "formulas-without-values": "\"{sheet}\" sayfasında, sonucu saklanmayan {count, plural, one {# formül} other {# formül}} var, bu nedenle ilgili rakamlar uygulamada gösterilemiyor.",
+      "missing-sheet": "\"{sheet}\" sayfası eksik, bu nedenle üzerine inşa edilen görünümler gösterilemiyor.",
+      "missing-column": "\"{sheet}\" sayfasında \"{column}\" adlı bir sütun yok, bu nedenle bunu kullanan görünümler gösterilemiyor.",
+      "no-period": "Dosya adında raporlama dönemi yok, bu nedenle saklama süresi teslim tarihinden itibaren sayılıyor.",
+      "unclassified-field": "\"{column}\" sütunu tanınmıyor. Bir alana kaydedilene kadar gizli kalacak ve kullanıcılar iletilen dosyayı indiremez.",
+      "past-retention": "Bu klasörün {months} aylık saklama süresinden eski; artık gösterilmiyor.",
+      "unknown": "Bildiren problem: {code}."
+    }
   }
 }

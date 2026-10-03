@@ -772,7 +772,10 @@
       "codeInterpreterLimitReached": "Dagelijks limiet voor code-uitvoering bereikt — beantwoorden zonder code uit te voeren…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Zoeken in de kennisbank is mislukt — het antwoord gebruikt geen documenten van de agent.",
-      "stillWorking": "Nog bezig…"
+      "stillWorking": "Nog bezig…",
+      "assessingSearchResults": "Controleren of de resultaten de vraag beantwoorden…",
+      "refiningSearch": "Opnieuw zoeken: “{query}”…",
+      "readingSearchPages": "Leest {count} resultaatpagina's…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# tool gebruikt} other {# tools gebruikt}}",
@@ -858,7 +861,10 @@
       "summarizeNow": "Nu samenvatten op basis van koppen",
       "sourcesCount": "{count} bronnen",
       "showAll": "Toon alle {count} bronnen",
-      "showFewer": "Toon minder"
+      "showFewer": "Toon minder",
+      "multiStepTitle": "Resultaten tot nu toe — controleren of ze de vraag beantwoorden",
+      "multiStepHint": "De zoekopdracht kan verder gaan — nog een zoekactie of het lezen van de meest veelbelovende pagina’s. Beantwoord nu op basis van de {count} gevonden resultaten als u liever niet wacht.",
+      "answerNow": "Nu antwoorden uit deze resultaten"
     },
     "retryWithModel": "Probeer met {model}",
     "createTodoTasks": "Maak takenlijst-items van deze reactie",
@@ -872,7 +878,10 @@
     "modelTimedOutAtMaximum": "{model} is niet begonnen met antwoorden binnen {duration}, de maximale wachttijd. Probeer het opnieuw of gebruik een ander model.",
     "requestTimedOut": "Het voorbereiden van dit verzoek duurde te lang en werd gestopt voordat {model} kon antwoorden. U kunt meer tijd toestaan of een ander model proberen.",
     "retryWaitingLonger": "Wacht tot {duration} en probeer opnieuw",
-    "alwaysWaitThisLong": "Altijd wachten tot {duration}"
+    "alwaysWaitThisLong": "Altijd wachten tot {duration}",
+    "keepSearching": "Blijf zoeken",
+    "keepSearchingHint": "De zoekopdracht is gestopt voordat dit gevonden was. Vraag de assistent om andere methodes te proberen.",
+    "keepSearchingMessage": "Blijf hiernaar zoeken, alstublieft — probeer een andere aanpak."
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -1256,7 +1265,9 @@
       "providerBingResponsesDescription": "Dezelfde Bing-webdekking als Bing-grounding, uitgevoerd als één directe modelaanroep in plaats van via een Foundry-agent — doorgaans veel sneller. Nieuwe optie die momenteel wordt geëvalueerd naast Bing-grounding.",
       "providerSearxng": "MSF-webzoekopdracht",
       "providerSearxngDescription": "MSF’s eigen private metazoekdienst. Doorzoekt het algemene web, nieuws, wetenschappelijke literatuur (inclusief MSF-publicaties), technische documentatie en humanitaire data, en kiest voor elke vraag het juiste type bron. Resultaten verschijnen binnen enkele seconden met directe links, en alleen uw zoekopdracht verlaat de app — de zoekmachines zien u nooit.",
-      "otherProvidersLabel": "Andere aanbieders"
+      "otherProvidersLabel": "Andere aanbieders",
+      "multiStepLabel": "Meerdere zoekstappen",
+      "multiStepDescription": "Bij MSF webzoek controleert de assistent eerst de resultaten en zoekt of leest alleen opnieuw als die onvoldoende zijn. De meeste vragen worden alsnog in één stap beantwoord. Zet dit uit om elke zoekopdracht tot één ronde te beperken."
     },
     "Admin": "Beheer",
     "Usage Limits": "Gebruiksbeperkingen",
@@ -1276,7 +1287,8 @@
       "customHint": "Tussen {min} en {max} seconden.",
       "preferModelTitle": "Mijn geselecteerd model prefereren",
       "preferModelDescription": "Niet automatisch naar een ander model overschakelen als een verzoek faalt. De foutmelding biedt nog steeds de mogelijkheid om te wisselen."
-    }
+    },
+    "Analytics": "Analytics"
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -1563,6 +1575,12 @@
     },
     "subVariant": {
       "label": "Grootte"
+    },
+    "retiring": {
+      "badge": "Wordt uitgefaseerd",
+      "datedMoving": "Wordt uitgefaseerd op {date}. Gesprekken worden overgezet naar {successor} op {movesOn}.",
+      "dated": "Wordt uitgefaseerd op {date} en stopt daarna. Gebruik in plaats daarvan {successor}.",
+      "replaced": "Vervangen door {successor}."
     }
   },
   "models": {
@@ -1861,6 +1879,11 @@
       "name": "GPT-6 Astra",
       "description": "De toonaangevende GPT-6 van OpenAI. Ontworpen voor veeleisend end-to-end werk: diepgaand onderzoek, complexe analyses, softwareontwikkeling en lange meerstapstaken. Ongeveer twee keer zo duur als GPT-5.6 Sol.",
       "tagline": "Het meest geavanceerde model van OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Een upgrade van GPT-6 Sol voor veeleisend werk met code, documenten en applicaties. Benadert de mogelijkheden van Astra voor een fractie van de tokenprijs.",
+      "tagline": "Bijna Astra-capaciteit, veel lagere kosten"
     }
   },
   "transcription": {
@@ -5440,7 +5463,10 @@
       "announcements": "Bannermeldingen voor gebruikers: wie ze ziet, wanneer en in welke talen.",
       "delegations": "Wie beheert welke gebruikers en wat mag iedere gebruiker doen.",
       "channelProfiles": "Wat elke platform is: limieten, telling, threads. Organisatiebrede feiten waarop elke kanaalset is gebaseerd.",
-      "channelSets": "De spelregels per team voor berichten op platforms: richtlijnen, stemmen, standaarden, wie de set mag gebruiken en wie mag verzenden."
+      "channelSets": "De spelregels per team voor berichten op platforms: richtlijnen, stemmen, standaarden, wie de set mag gebruiken en wie mag verzenden.",
+      "webSearch": "Hoe uitgebreid webzoek kan gaan: meerdere zoekstappen, het beoordelingsmodel en zijn limieten.",
+      "contextBudget": "Hoeveel van een gesprek elk model per beurt ontvangt.",
+      "analytics": "Afgeleverde rapporten: wat is ontvangen, wie mag welke map openen, en welke velden mogen getoond worden."
     },
     "openSettings": "Instellingen openen",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "Bekijken als",
       "globalAdmins": "Globale beheerders",
       "announcements": "Aankondigingen",
-      "delegations": "Delegaties"
+      "delegations": "Delegaties",
+      "webSearch": "Webzoek",
+      "contextBudget": "Contextbudget",
+      "analytics": "Analytics"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "Waarvoor deze delegatie bevoegdheden kan verlenen. Beheerders kunnen alleen wat hier is ingeschakeld.",
     "grant": {
       "limits": "Gebruiksbeperkingen",
-      "announcements": "Aankondigingen"
+      "announcements": "Aankondigingen",
+      "analytics": "Analytics"
     },
     "grantAll": "Alles",
     "maxOverrides": "Limiet op uitzonderingen voor deze delegatie",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "U kunt dit na het opslaan als standaardset instellen.",
     "noChannelsWarning": "Deze set biedt geen kanalen; niemand kan hiermee een concept maken.",
     "audienceEveryoneHint": "Iedereen in de organisatie kan met deze set een concept maken."
+  },
+  "contextBudgetAdmin": {
+    "title": "Contextbudget",
+    "description": "Hoeveel gespreksgeschiedenis elk model per beurt ontvangt. De laatste berichten worden altijd meegenomen; oudere berichten vallen af zodra het budget op is, en een samenvatting daarvan wordt meegegeven in de systeemopdracht. Een groter budget houdt meer van een lang gesprek in beeld, maar kost per beurt meer.",
+    "scopeNote": "Geldt voor ieder gesprek op elk model. Het budget kan nooit de hieronder ingestelde limiet van het venster van het model overschrijden.",
+    "loading": "Contextbudget laden…",
+    "loadError": "Het contextbudget kon niet worden geladen.",
+    "configUnavailable": "Het opgeslagen contextbudget is nu niet leesbaar, dus onderstaande waarden zijn mogelijk niet actief. Probeer opnieuw voordat u wijzigt.",
+    "retry": "Opnieuw proberen",
+    "historyTokensLabel": "Standaardbudget (tokens)",
+    "historyTokensDescription": "Geschiedenis per beurt verzonden, inclusief systeemopdracht, voor modellen zonder override. Circa 48.000 tokens bewaart de laatste 30–60 uitwisselingen van een gesprek.",
+    "historyFractionLabel": "Maximum (deel van het inputvenster van het model)",
+    "historyFractionDescription": "Het budget wordt beperkt tot dit deel van het contextvenster van het model, minus gereserveerde output. Zo wordt een model met klein venster nooit overbelast.",
+    "minRecentMessagesLabel": "Berichten altijd bewaren",
+    "minRecentMessagesDescription": "De laatste berichten die altijd worden bewaard (binnen het venster), ook als het budget overschreden is. Drie bewaart de vorige uitwisseling als het laatste bericht (bijvoorbeeld een geplakt document, zoekresultaten) het budget zou vullen.",
+    "familyOverridesLabel": "Per familie",
+    "familyOverridesDescription": "Een budget voor ieder model uit een familie, ter vervanging van het standaardbudget.",
+    "modelOverridesLabel": "Per model",
+    "modelOverridesDescription": "Een budget voor één specifiek model, ter vervanging van familie- en standaardbudget.",
+    "overrideFamilyPlaceholder": "Familie",
+    "overrideModelPlaceholder": "Model-id",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Toevoegen",
+    "removeOverride": "Verwijderen",
+    "noOverrides": "Geen",
+    "effectiveLabel": "Effectieve budgetten met deze instellingen",
+    "effectiveColumnModel": "Model",
+    "effectiveColumnWindow": "Venster",
+    "effectiveColumnBudget": "Historisch budget",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Standaard: {value}",
+    "defaultsNote": "Alleen waarden die afwijken van de standaard worden opgeslagen; alle andere volgen de standaardwaarden uit de code bij nieuwe releases.",
+    "save": "Opslaan",
+    "saving": "Bezig met opslaan…",
+    "resetDefaults": "Terugzetten naar standaard",
+    "unsaved": "Niet-opgeslagen wijzigingen",
+    "saveSuccess": "Contextbudget opgeslagen. Het wordt binnen een minuut actief.",
+    "saveError": "Het contextbudget kon niet worden opgeslagen.",
+    "conflictError": "Een andere beheerder heeft het contextbudget intussen aangepast; de nieuwste waarden zijn herladen.",
+    "updatedByLine": "Laatst opgeslagen door {by} op {at}",
+    "neverSaved": "Nooit opgeslagen — de standaardwaarden uit de code zijn van kracht."
+  },
+  "webSearchAdmin": {
+    "title": "Webzoekopdracht",
+    "description": "Regelt meerstapszoekopdrachten op MSF-webzoekopdracht. Na de eerste resultaten beoordeelt een assessor-model of deze het antwoord geven; zo niet, dan kan er opnieuw gezocht worden met andere zoektermen, resultatenpagina’s worden gelezen, de gebruiker naar een ontbrekend detail worden gevraagd of wordt gemeld dat er niets is gevonden.",
+    "scopeNote": "Deze instellingen gelden alleen voor MSF webzoekopdracht. Andere zoekaanbieders doen altijd maar één ronde. Iedereen kan meerstapszoeken ook zelf uitzetten bij Instellingen.",
+    "loading": "Webzoekinstellingen laden…",
+    "loadError": "De webzoekinstellingen konden niet worden geladen.",
+    "configUnavailable": "De webzoekinstellingen konden niet uit de opslag worden gelezen. De instellingen zijn verborgen zodat er geen standaardwaarden worden getoond die mogelijk niet overeenkomen met het gebruik.",
+    "retry": "Opnieuw proberen",
+    "enabledLabel": "Meerstapszoekopdracht",
+    "enabledDescription": "Als deze uit staat, bestaat elke zoekopdracht uit slechts één geplande ronde en wordt het assessor-model niet gebruikt.",
+    "assessorLabel": "Assessor-model",
+    "assessorDescription": "Wordt na elke stap één keer aangeroepen om de resultaten te beoordelen. Kies een snel, voordelig model: het verloopt terwijl de gebruiker wacht. Als het niet bereikbaar is, wordt {fallback} gebruikt.",
+    "maxStepsLabel": "Stappen per vraag",
+    "maxStepsDescription": "Het maximaal aantal stappen per vraag, inclusief de eerste zoekopdracht. Elke extra zoekopdracht of groep van paginalezen telt als één stap. Deze limiet staat los van de daglimiet per vraag, waarbij een hele vraag als één keer telt.",
+    "maxStepsExploratoryLabel": "Stappen voor verkennende zoekopdrachten",
+    "maxStepsExploratoryDescription": "Een hogere limiet voor het zoeken naar moeilijk vindbare items, zoals een exemplaar van een zeldzaam boek, waarbij doodlopende sporen te verwachten zijn. Mag niet lager zijn dan de normale limiet.",
+    "pageReadsLabel": "Resultaatpagina’s lezen",
+    "pageReadsDescription": "Laat een stap de meest kansrijke resultaten openen en de pagina zelf lezen, in plaats van alleen op zoekfragmenten te vertrouwen.",
+    "maxPageReadsLabel": "Pagina’s per leessessie",
+    "sourceAssessmentLabel": "Bronkwaliteit beoordelen",
+    "sourceAssessmentDescription": "De assessor labelt elke bron (officieel, gerenommeerd, secundair, lage betrouwbaarheid) zodat het antwoord deze kan wegen en toeschrijven.",
+    "timeBudgetLabel": "Tijdbudget (seconden)",
+    "timeBudgetDescription": "Totale tijd voor één zoekopdracht, inclusief de eerste ronde. Als deze op is, wordt het antwoord samengesteld op basis van wat is gevonden.",
+    "defaultsNote": "Een instelling die op de ingebouwde standaard blijft staan, wordt niet opgeslagen en volgt dus ook toekomstige standaardwijzigingen.",
+    "defaultHint": "Standaard: {value}",
+    "defaultOn": "aan",
+    "defaultOff": "uit",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "U heeft niet-opgeslagen wijzigingen.",
+    "save": "Opslaan",
+    "saving": "Bezig met opslaan…",
+    "resetDefaults": "Terugzetten naar standaard",
+    "saveSuccess": "Webzoekinstellingen opgeslagen.",
+    "saveError": "De webzoekinstellingen konden niet worden opgeslagen.",
+    "conflictError": "Een andere beheerder heeft de instellingen eerder aangepast. Ze zijn opnieuw geladen — controleer en sla opnieuw op.",
+    "updatedByLine": "Laatst opgeslagen door {by} op {at}.",
+    "neverSaved": "Er is nog niets opgeslagen; de ingebouwde standaardwaarden zijn van toepassing."
+  },
+  "modelRetirement": {
+    "notice": "{model} wordt uitgefaseerd op {retiresOn}. Dit gesprek wordt overgezet naar {successor} op {movesOn}.",
+    "noticeRetiring": "{model} wordt uitgefaseerd op {retiresOn} en zal stoppen met werken. Schakel over naar {successor} om dit gesprek te blijven gebruiken.",
+    "switchNow": "Nu overschakelen"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "backToChat": "Terug naar chat",
+    "manage": "Beheren",
+    "loading": "Laden…",
+    "loadFailed": "Kon de rapporten niet laden.",
+    "retry": "Opnieuw proberen",
+    "emptyTitle": "Er is nog niets met u gedeeld",
+    "emptyBody": "Rapporten verschijnen hier zodra een beheerder u toegang tot een map heeft gegeven.",
+    "deliveryUnavailable": "De opslag van rapporten is momenteel niet bereikbaar, hierdoor kunnen onderstaande lijsten leeg zijn. Probeer het over enkele minuten opnieuw.",
+    "groupsDegraded": "Uw groepslidmaatschappen konden zojuist niet worden gecontroleerd, daardoor kunnen gedeelde mappen ontbreken. Ververs over een minuut.",
+    "foldersHeading": "Mappen",
+    "rootFolder": "Alle rapporten",
+    "pathOnly": "U heeft geen toegang tot deze map zelf, alleen tot mappen erin.",
+    "selectFolder": "Kies een map om de rapporten te bekijken.",
+    "noFiles": "Geen rapporten in deze map.",
+    "viewOnlyNote": "U heeft alleen-lezen toegang tot deze map: u kunt rapporten openen en overzichts- en samenvattingstabellen bekijken. Tabellen met één rij per persoon, exports en downloads vereisen downloadtoegang.",
+    "col": {
+      "name": "Bestand",
+      "period": "Periode",
+      "delivered": "Geleverd",
+      "size": "Grootte",
+      "availableUntil": "Beschikbaar tot",
+      "actions": "Acties"
+    },
+    "download": "Downloaden",
+    "downloadAria": "{name} downloaden",
+    "block": {
+      "view-only": "Alleen-lezen",
+      "hidden-fields": "Origineel ingehouden (verborgen velden)",
+      "unclassified-fields": "Origineel ingehouden (velden ter beoordeling)",
+      "not-inspected": "Nog niet gecontroleerd",
+      "policy-unavailable": "Momenteel niet beschikbaar"
+    },
+    "adminBadge": {
+      "error": "Verborgen voor gebruikers",
+      "pending": "Wordt gecontroleerd",
+      "warning": "Bevat waarschuwingen",
+      "expired": "Verlopen, wacht op verwijdering",
+      "originalBlocked": "Gebruikers kunnen niet downloaden: {reason}"
+    },
+    "openAria": "{name} openen",
+    "openForExport": "Openen om te exporteren",
+    "preview": {
+      "back": "Terug naar {folder}",
+      "tabsLabel": "Tabellen in dit bestand",
+      "lockedTab": "{name} (vergrendeld)",
+      "unavailable": "Dit bestand kan nu niet in de app worden geopend.",
+      "tableFailed": "Kon deze tabel niet laden.",
+      "withheld": {
+        "row-level": "Deze tabel bevat één rij per persoon. Openen vereist downloadtoegang tot de map.",
+        "hidden-fields": "Deze pagina bevat een verborgen veld en wordt daarom niet getoond."
+      },
+      "truncated": "Eerste {shown, number} van {total, number} rijen worden getoond. Exporteer de tabel voor alle rijen.",
+      "freeformNote": "Deze pagina is geschikt gemaakt voor lezen en wordt getoond zoals deze is aangeleverd.",
+      "filter": "Rijen filteren",
+      "filterPlaceholder": "Rijen filteren…",
+      "rows": "{count, plural, one {# rij} other {# rijen}}",
+      "matching": "{count, number} van {total, number} rijen komen overeen",
+      "modeLabel": "Weergeven als",
+      "mode": {
+        "table": "Tabel",
+        "chart": "Grafiek"
+      },
+      "noRows": "Geen rijen om te tonen.",
+      "hiddenColumn": "Verborgen voor gebruikers",
+      "exportCsv": "Exporteer deze tabel (CSV)",
+      "exportXlsx": "Exporteer alle tabellen (Excel)",
+      "downloadOriginal": "Origineel downloaden",
+      "exportNote": "Het geleverde bestand bevat velden die verborgen zijn en kan daarom niet zo worden gedownload. Bij export worden deze velden weggelaten.",
+      "sectionLabel": "Tonen",
+      "section": {
+        "overview": "Overzicht",
+        "tables": "Tabellen"
+      }
+    },
+    "chart": {
+      "groupBy": "Groepeer op",
+      "measure": "Meting",
+      "rowCount": "Aantal rijen",
+      "aggregation": "Berekenen",
+      "agg": {
+        "sum": "Som",
+        "mean": "Gemiddelde",
+        "min": "Kleinste",
+        "max": "Grootste"
+      },
+      "ariaLabel": "{measure} per {group}",
+      "noColumns": "Deze tabel heeft geen tekst- of datumkolom om op te groeperen.",
+      "empty": "Niets om te tonen voor deze keuze.",
+      "truncatedGroups": "Toont de {count} grootste groepen.",
+      "basedOn": "Gebaseerd op de eerste {shown, number} van {total, number} rijen.",
+      "savePng": "Opslaan als afbeelding",
+      "saveSvg": "Opslaan als SVG",
+      "saveFailed": "Kan grafiek niet opslaan."
+    },
+    "dash": {
+      "loading": "Laden…",
+      "failed": "Kan het overzicht niet laden.",
+      "retry": "Opnieuw proberen",
+      "showTable": "Weergeven als tabel",
+      "showChart": "Weergeven als grafiek",
+      "smallGroups": "Groepen met minder dan 5 mensen",
+      "foldedNote": "Groepen met minder dan 5 mensen zijn samengevoegd in één rij.",
+      "otherCount": "{count, plural, one {# andere} other {# anderen}}",
+      "hiddenPanel": "Verborgen door de veldinstellingen.",
+      "missingPanel": "Niet beschikbaar voor dit bestand.",
+      "usage": {
+        "users": "Actieve mensen",
+        "interactions": "Interacties",
+        "avgPerUser": "Gemiddeld per persoon",
+        "medianPerUser": "Mediaan per persoon",
+        "hq": "Op hoofdkantoor",
+        "field": "In het veld",
+        "shareUsers": "{pct}% van {comparator} gebruikers",
+        "shareUsage": "{pct}% van {comparator} gebruik",
+        "comparator": "{comparator}: {value}",
+        "daily": "Interacties per dag",
+        "dailyUsers": "Actieve personen per dag",
+        "dailyUsersSub": "Per werklocatie",
+        "weekly": "Interacties per week",
+        "activity": "Hoeveel mensen het gebruiken",
+        "activitySub": "Personen, volgens hun aantal interacties in de periode",
+        "departments": "Interacties per afdeling",
+        "jobTitles": "Interacties per functietitel",
+        "models": "Gebeurtenissen per model",
+        "total": "Alle locaties",
+        "location": {
+          "hq": "Hoofdkantoor",
+          "field": "Veld",
+          "unknown": "Onbekend"
+        },
+        "col": {
+          "date": "Dag",
+          "week": "Week beginnend",
+          "users": "Personen",
+          "interactions": "Interacties",
+          "events": "Gebeurtenissen",
+          "group": "Groep",
+          "band": "Interacties"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Totaal gefactureerd",
+        "usageVariable": "Gebruik-afhankelijke kosten",
+        "staticInfra": "Statische infrastructuur",
+        "sections": "Gefactureerde secties",
+        "usageEvents": "Gebruiksgebeurtenissen",
+        "bySection": "Gefactureerd per sectie",
+        "changes": "Wijzigingen ten opzichte van het vorige bestand",
+        "noChanges": "Geen wijzigingen ten opzichte van het vorige bestand.",
+        "byDomain": "Gebruiksgebeurtenissen per e-maildomein",
+        "reconciliation": "Afstemming op Azure",
+        "col": {
+          "section": "Sectie",
+          "billed": "Gefactureerd",
+          "usageEvents": "Gebruiksgebeurtenissen",
+          "usagePct": "Gebruik %",
+          "line": "Regel",
+          "amount": "Bedrag",
+          "previous": "Vorig bestand",
+          "restated": "Herzien",
+          "change": "Wijziging",
+          "domain": "E-maildomein",
+          "users": "Personen"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Berekend met",
+        "delivered": "De aannames van het rapport zelf ({version})",
+        "current": "De huidige aannames van de app ({version})",
+        "whatIf": "Wat als…",
+        "deliveredUnavailable": "De aannames van dit rapport konden niet worden gelezen uit het Assumptions-blad, daarom worden de huidige van de app gebruikt.",
+        "whatIfIntro": "Wijzig een waarde om het effect hieronder te zien. Er wordt niets opgeslagen.",
+        "resetDelivered": "Terugzetten naar die van het rapport zelf",
+        "resetCurrent": "Terugzetten naar die van de app",
+        "co2": "Emissies",
+        "energy": "Energie",
+        "charges": "Smartphone-opladers",
+        "chargesSub": "Met dezelfde voetafdruk",
+        "activeUsers": "Actieve personen",
+        "requests": "Verzoeken",
+        "tokens": "Tokens",
+        "vsDelivered": "{delta} vs de eigen aannames van het rapport",
+        "sameAsDelivered": "Gelijk aan de eigen aannames van het rapport",
+        "unpriced": "{count, plural, one {# verzoek gebruikt} other {# verzoeken gebruiken}} een modelgrootte waarvoor deze aannames geen waarde hebben, en {count, plural, one {wordt} other {worden}} niet meegenomen.",
+        "byDepartment": "Emissies per afdeling",
+        "byModel": "Emissies per model",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Hier berekend vs geregistreerd op het moment",
+        "reconciliationSub": "De app schat elk verzoek ook in op het moment zelf. De twee komen overeen zolang de aannames gelijk zijn.",
+        "computed": "Hier berekend",
+        "logged": "Geregistreerd door de app",
+        "difference": "Verschil",
+        "col": {
+          "group": "Groep",
+          "requests": "Verzoeken",
+          "tokens": "Tokens",
+          "energyWh": "Energie (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Datacenter-overhead (PUE)",
+          "promptTokenWeight": "Prompt-token gewicht",
+          "dedicatedReasoningMultiplier": "Dedicated-reasoner vermenigvuldiger",
+          "whPer1kTokens": "Wh per 1.000 tokens — {name}",
+          "reasoningEffortMultipliers": "Vermenigvuldiger redeneringsinspanning — {name}",
+          "gridIntensity": "Netwerk g CO₂e per kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Gebeurtenissen",
+        "users": "Personen",
+        "tokens": "Tokens",
+        "errors": "Fouten",
+        "energy": "Energie",
+        "co2": "Emissies",
+        "hourly": "Gebeurtenissen per uur (UTC)",
+        "byType": "Gebeurtenissen per type",
+        "byError": "Fouten per code",
+        "byModel": "Tokens per model",
+        "byCompany": "Gebeurtenissen per organisatie",
+        "none": "Geen.",
+        "col": {
+          "group": "Groep",
+          "events": "Gebeurtenissen",
+          "tokens": "Tokens",
+          "hour": "Uur"
+        }
+      },
+      "trend": {
+        "title": "In de tijd",
+        "period": "Periode",
+        "users": "Actieve personen per rapport",
+        "interactions": "Interactie per rapport",
+        "billed": "Totaal gefactureerd per periode",
+        "sections": "Gefactureerd per sectie",
+        "otherSections": "Alle andere secties",
+        "co2": "Emissies per rapport",
+        "energy": "Energie per rapport",
+        "recalculated": "Elke periode wordt berekend met de huidige aannames van de app ({version}), zodat een wijziging van aannames tussen rapporten niet zichtbaar is als een verandering in emissies.",
+        "severalPerPeriod": "Deze map bevat meerdere rapporten voor dezelfde periode. Open een map hierin om te zien hoe één van hen in de tijd verandert."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analytics",
+    "description": "Rapporten worden via de datapijplijn opgeslagen. Hier controleert u wat er is binnengekomen, bepaalt u wie elke map mag openen en kiest u welke velden het platform mag tonen.",
+    "openViewer": "Analytics openen",
+    "sharedNotice": "Beta en productie delen deze mappen, doelgroepen en bestanden. Een wijziging hier is direct live in beide omgevingen.",
+    "tabsLabel": "Analytics-secties",
+    "tab": {
+      "health": "Leveringen",
+      "folders": "Mappen & toegang",
+      "fields": "Velden"
+    },
+    "loading": "Laden…",
+    "retry": "Opnieuw proberen",
+    "loadError": "Kon deze sectie niet laden.",
+    "unavailable": "De opgeslagen instellingen konden niet uit opslag worden gelezen. Dit betekent NIET \"niets geconfigureerd\" — bewerken is uitgeschakeld zodat de echte instellingen niet worden overschreven. Probeer opnieuw en controleer de serverlogs als het blijft.",
+    "save": "Opslaan",
+    "saving": "Bezig met opslaan…",
+    "unsaved": "Niet-opgeslagen wijzigingen",
+    "saveSuccess": "Opgeslagen.",
+    "saveError": "Kon niet opslaan.",
+    "conflictError": "Een andere beheerder heeft deze instellingen gewijzigd terwijl u aan het bewerken was. Uw wijzigingen zijn niet opgeslagen — de nieuwste versie is geladen.",
+    "rootFolder": "(bovenste niveau)",
+    "scope": {
+      "domain": "E-maildomein",
+      "user": "Persoon",
+      "attribute": "Attribuut",
+      "group": "Entra-groep"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "naam@example.org",
+      "attribute": "afdeling:Health",
+      "group": "Entra-groep object-id"
+    },
+    "level": {
+      "view": "Samenvattingen bekijken",
+      "download": "Bekijken, exporteren en downloaden"
+    },
+    "reportType": {
+      "usage": "Gebruiksrapport",
+      "rebilling": "Herfacturering",
+      "emissions": "Emissierapport",
+      "raw-telemetry": "Ruwe telemetrie"
+    },
+    "field": {
+      "userCode": {
+        "label": "Gebruikerscode",
+        "description": "De pseudonieme u-…-code die voor één persoon staat."
+      },
+      "jobTitle": {
+        "label": "Functietitel",
+        "description": "Functietitels, inclusief de meest voorkomende titel op samenvattingsbladen. In een kleine groep kan een titel naar één persoon verwijzen."
+      },
+      "department": {
+        "label": "Afdeling",
+        "description": "Afdelingen, inclusief de meest actieve afdeling op samenvattingsbladen."
+      },
+      "company": {
+        "label": "Bedrijf / organisatie",
+        "description": "De organisatienaam uit de directory en de bedrijfsnamen vermeld op herfactureringsbladen."
+      },
+      "orgGroup": {
+        "label": "Organisatiegroep",
+        "description": "Het operationeel centrum of de groep waarop een rapport wordt gesplitst."
+      },
+      "section": {
+        "label": "Sectie",
+        "description": "De kostendekkingssectie waartoe een herfactureringsregel behoort."
+      },
+      "mailDomain": {
+        "label": "E-maildomein",
+        "description": "Het e-maildomein waaraan het gebruik wordt toegeschreven (nooit een adres)."
+      },
+      "workLocation": {
+        "label": "Werkplek",
+        "description": "Hoofdkantoor of veld."
+      },
+      "technical": {
+        "label": "Technische details",
+        "description": "Model, regio, gebeurtenistype, valuta en vergelijkbare kenmerken die niets over een persoon zeggen."
+      },
+      "other": {
+        "label": "Andere beschrijvende velden",
+        "description": "Waar u een kolom plaatst die niet in bovenstaande categorieën past."
+      }
+    },
+    "folders": {
+      "intro": "Elke map waarin de pipeline iets heeft afgeleverd wordt weergegeven. Een map zonder instellingen — en zonder bovenliggende map met toegangsrechten — is alleen zichtbaar voor beheerders.",
+      "name": "Weergavenaam",
+      "namePlaceholder": "Wordt getoond in plaats van het mappad",
+      "description": "Beschrijving",
+      "reportType": "Rapporttype",
+      "reportTypeNone": "Niet ingesteld",
+      "reportTypeInherited": "Overgenomen: {type}",
+      "reportTypeHint": "Geeft aan welke bestandsnamen de checker mag verwachten en hoe vaak. Geldt voor de onderliggende mappen.",
+      "retention": "Bestanden bewaren voor (maanden)",
+      "retentionHint": "Laat leeg om {months} maanden over te nemen. Geteld vanaf het einde van de rapportageperiode.",
+      "audience": "Wie deze map mag openen",
+      "audienceHint": "Elke regel geeft toegang tot deze map en onderliggende mappen. Eén doel per regel.",
+      "audienceScope": "Doeltype",
+      "audienceTargets": "Doelen",
+      "audienceLevel": "Toegangsniveau",
+      "addAudience": "Personen of groepen toevoegen",
+      "removeAudience": "Deze regel verwijderen",
+      "restricted": "Geen toegang overnemen van bovenliggende mappen",
+      "restrictedHint": "Alleen de regels in deze map gelden hier en daaronder.",
+      "hiddenFields": "Ook in deze map verbergen",
+      "hiddenFieldsHint": "Velden die hier extra worden verborgen naast de platforminstelling, voor deze map en de onderliggende mappen. U kunt meer verbergen, nooit meer tonen.",
+      "hiddenPlatformWide": "(overal verborgen)",
+      "clear": "Instellingen voor deze map verwijderen",
+      "rawChip": "Raw: alleen globale beheerders",
+      "rawNote": "Raw telemetrie bevat namen, e-mailadressen en bestandsnamen. Alleen globale beheerders kunnen deze openen. Er kunnen geen doelgroepen worden toegevoegd.",
+      "audienceChip": "{count, plural, one {# toegangsregel} other {# toegangsregels}}",
+      "restrictedChip": "Neemt niet over",
+      "notConfiguredChip": "Geen instellingen",
+      "addPathLabel": "Stel een map in vóór eerste aflevering",
+      "addPath": "Toevoegen",
+      "addPathHint": "Het pad precies zoals de pipeline het schrijft, bijvoorbeeld usage/ocba. Dit slaat alleen de instellingen op; er wordt niets in opslag aangemaakt.",
+      "invalidPath": "Dit is geen geldig mappad.",
+      "rawGlobalOnly": "Alleen globale beheerders kunnen mappen onder raw/ instellen."
+    },
+    "fields": {
+      "intro": "Kies welke velden van de afgeleverde rapporten het platform mag tonen. Een verborgen veld wordt uit alle weergaven en uit door de app gegenereerde exporten verwijderd. Alleen beheerders kunnen dan het afgeleverde bestand downloaden.",
+      "readOnly": "Alleen globale beheerders kunnen dit wijzigen. Als analytics-beheerder kunt u per map extra velden verbergen onder Mappen & toegang.",
+      "configurableHeading": "Velden",
+      "shown": "Getoond",
+      "hidden": "Verborgen",
+      "jobTitleNote": "Als de functietitel wordt getoond, kan een rij in een kleine groep alsnog een persoon identificeerbaar maken, zelfs bij gebruik van een gebruikerscode. Grafieken verbergen uitsplitsingen van minder dan vijf mensen; gedownloade tabellen niet.",
+      "neverHeading": "Nooit getoond",
+      "neverBody": "Namen, e-mailadressen, directory-id’s, geüploade bestandsnamen en foutmeldingen worden nooit getoond buiten raw telemetrie. Een rapport dat een van deze bevat, blijft verborgen voor gebruikers totdat het wordt vervangen.",
+      "unclassifiedHeading": "Kolommen die niet in de catalogus staan",
+      "unclassifiedBody": "Een tekstkolom die niet wordt herkend blijft verborgen — in de app en in exports — en het geleverde bestand kan niet worden gedownload door gebruikers tot u deze aan een veld koppelt.",
+      "noneWaiting": "Niets in behandeling.",
+      "inFiles": "{count, plural, one {in # bestand} other {in # bestanden}}",
+      "classifyAs": "Veld voor kolom {column}",
+      "keepHidden": "Verborgen houden",
+      "removeClassification": "Instelling verwijderen voor kolom {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "De rapportopslag is niet bereikbaar",
+      "deliveryUnavailableBody": "De app kon de container \"{container}\" niet weergeven. Controleer of deze bestaat en of de identiteit van de app een datarol heeft. Tot dat is opgelost, worden er geen rapporten getoond aan gebruikers.",
+      "foldersUnavailable": "De mapinstellingen konden niet worden gelezen, dus gebruikers zien momenteel geen mappen. Bestanden worden niet gecontroleerd of verlopen tot dit is hersteld.",
+      "policyUnavailable": "De veldinstellingen konden niet worden gelezen, dus gebruikers kunnen momenteel geen bestanden downloaden.",
+      "total": {
+        "files": "Bestanden",
+        "ok": "In orde",
+        "warning": "Met waarschuwingen",
+        "error": "Verborgen voor gebruikers",
+        "pending": "Wordt gecontroleerd"
+      },
+      "recheckAll": "Alles opnieuw controleren",
+      "recheckOne": "Opnieuw controleren",
+      "recheckQueued": "{count, plural, one {# bestand in wachtrij voor controle.} other {# bestanden in wachtrij voor controle.}}",
+      "recheckFailed": "Controle kon niet worden gestart.",
+      "retention": {
+        "active": "Bestanden die buiten de bewaartermijn van hun map vallen, worden direct verborgen en {days} dagen later verwijderd.",
+        "disabled": "Bestanden voorbij de bewaartermijn van hun map worden verborgen, maar verwijderen is uitgeschakeld voor deze implementatie.",
+        "waiting-for-config": "Bestanden buiten de standaard bewaartermijn worden verborgen. Niets wordt verwijderd tot mapinstellingen minstens één keer zijn opgeslagen."
+      },
+      "noFiles": "Er zijn nog geen bestanden afgeleverd.",
+      "allGood": "Alles wat geleverd is, is in orde.",
+      "problemsHeading": "Bestanden die aandacht nodig hebben",
+      "status": {
+        "error": "Verborgen voor gebruikers",
+        "warning": "Waarschuwing",
+        "pending": "Wordt gecontroleerd",
+        "ok": "In orde"
+      },
+      "pendingBody": "Nieuw of vervangen sinds de laatste controle. Pas na goedkeuring zichtbaar voor gebruikers.",
+      "firstSeen": "Voor het eerst opgemerkt {date}",
+      "unclassifiedHeading": "Kolommen wachten op een besluit",
+      "unclassifiedBody": "Deze kolommen worden niet herkend. Ze blijven verborgen en gebruikers kunnen de bestanden met deze kolommen niet downloaden totdat iemand ze aan een veld koppelt.",
+      "unclassifiedChip": "{column} · {count, plural, one {# bestand} other {# bestanden}}",
+      "openFields": "Ga naar Velden",
+      "unconfiguredHeading": "Mappen zonder instellingen",
+      "unconfiguredBody": "Hier komen bestanden binnen, maar niemand heeft de map ingesteld of die erboven. Alleen beheerders kunnen ze zien.",
+      "staleHeading": "Achterstallige leveringen",
+      "staleBody": "Deze mappen verwachten regelmatige rapporten en het meest recente is ouder dan gewenst.",
+      "staleDetail": {
+        "daily": "Dagelijks; laatste omvat {date}",
+        "monthly": "Maandelijks; laatste eindigt {date}"
+      },
+      "staleNever": "Nog niets afgeleverd",
+      "expiringHeading": "Verloopt binnenkort",
+      "expiringBody": "Bestanden voorbij of bijna op de bewaartermijn (binnen 30 dagen).",
+      "expiresOn": "Verloopt op {date}",
+      "expiredOn": "Verlopen op {date}"
+    },
+    "issue": {
+      "name-mismatch": "De bestandsnaam komt niet overeen met wat deze map verwacht (bijvoorbeeld {expected}).",
+      "unsupported-format": "Bestanden van het type \"{extension}\" kunnen niet worden gecontroleerd, dus dit bestand is verborgen voor gebruikers. Lever een .xlsx of .csv aan.",
+      "too-large": "Met {sizeMb} MB is dit bestand groter dan de limiet van {limitMb} MB voor controle, en daarom verborgen voor gebruikers.",
+      "empty-file": "Het bestand is leeg.",
+      "unreadable": "Het bestand kon niet worden geopend. Het is mogelijk beschadigd, of het formaat komt niet overeen met de bestandsnaam.",
+      "identifier-column": "Blad \"{sheet}\" bevat een kolom \"{column}\" die personen identificeert. Het bestand is verborgen voor gebruikers.",
+      "identifier-values": "\"{sheet}\" bevat {count, plural, one {# e-mailadres} other {# e-mailadressen}}. Het bestand is verborgen voor gebruikers.",
+      "user-code-format": "Blad \"{sheet}\", kolom \"{column}\": {count, plural, one {# waarde is} other {# waarden zijn}} geen u-… gebruikerscode. Het bestand is verborgen voor gebruikers.",
+      "formulas-without-values": "Blad \"{sheet}\" bevat {count, plural, one {# formule} other {# formules}} zonder opgeslagen resultaat, dus deze cijfers kunnen niet worden getoond in de app.",
+      "missing-sheet": "Blad \"{sheet}\" ontbreekt, dus de bijbehorende weergaven kunnen niet worden getoond.",
+      "missing-column": "Blad \"{sheet}\" heeft geen kolom \"{column}\", dus de weergaven die dit gebruiken kunnen niet worden getoond.",
+      "no-period": "De bestandsnaam bevat geen rapportageperiode, dus de retentie wordt geteld vanaf de afleverdatum.",
+      "unclassified-field": "Kolom \"{column}\" wordt niet herkend. Deze blijft verborgen, en gebruikers kunnen het geleverde bestand niet downloaden totdat deze gekoppeld is aan een veld.",
+      "past-retention": "Ouder dan de {months} maanden bewaartermijn van deze map; niet meer weergegeven.",
+      "unknown": "Probleem gemeld: {code}."
+    }
   }
 }

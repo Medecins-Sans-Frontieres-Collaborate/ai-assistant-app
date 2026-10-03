@@ -807,7 +807,10 @@
       "codeInterpreterLimitReached": "Kikomo cha utekelezaji wa msimbo kimefikiwa — inajibu bila kuendesha msimbo…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Utafutaji wa taarifa haukufaulu — jibu halitatumia hati za wakala",
-      "stillWorking": "Bado inaendelea kufanya kazi…"
+      "stillWorking": "Bado inaendelea kufanya kazi…",
+      "assessingSearchResults": "Kukagua kama matokeo yanajibu swali…",
+      "refiningSearch": "Kutafuta tena: “{query}”…",
+      "readingSearchPages": "Kusoma kurasa {count} za matokeo…"
     },
     "toolSummary": {
       "usedTools": "Imetumika {count, plural, one {# zana} other {# zana}}",
@@ -893,7 +896,10 @@
       "summarizeNow": "Fupisha kutoka kwa vichwa vya habari sasa",
       "sourcesCount": "Vyanzo {count}",
       "showAll": "Onyesha vyanzo vyote {count}",
-      "showFewer": "Onyesha vichache"
+      "showFewer": "Onyesha vichache",
+      "multiStepTitle": "Matokeo hadi sasa — kukagua kama yanajibu swali",
+      "multiStepHint": "Utafutaji unaweza kuendelea zaidi — utafutaji mwingine au kusoma kurasa zenye ahadi nyingi. Jibu sasa kutoka kwenye matokeo {count} yaliyopatikana ikiwa hutaki kusubiri.",
+      "answerNow": "Jibu kutoka kwenye matokeo haya sasa"
     },
     "retryWithModel": "Jaribu na {model}",
     "createTodoTasks": "Unda kazi za 'To Do' kutoka kwa jibu hili",
@@ -907,7 +913,10 @@
     "modelTimedOutAtMaximum": "{model} haikuanza kujibu ndani ya {duration}, ambayo ndiyo muda mrefu zaidi unaweza kusubiri. Tafadhali jaribu tena, au tumia mfano mwingine.",
     "requestTimedOut": "Ombi hili lilichukua muda mrefu kuandaliwa na limesitishwa kabla ya {model} kujibu. Unaweza kuongeza muda wa kusubiri, au ujaribu mfano mwingine.",
     "retryWaitingLonger": "Subiri hadi {duration} na ujaribu tena",
-    "alwaysWaitThisLong": "Kusubiri daima hadi {duration}"
+    "alwaysWaitThisLong": "Kusubiri daima hadi {duration}",
+    "keepSearching": "Endelea kutafuta",
+    "keepSearchingHint": "Utafutaji ulisitishwa kabla haujapata hiki. Mwombe msaidizi ajaribu njia tofauti.",
+    "keepSearchingMessage": "Tafadhali endelea kutafuta hili — jaribu njia tofauti."
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -1291,7 +1300,9 @@
       "providerBingResponsesDescription": "Mlipuko uleule wa Bing kama Bing grounding, inaendeshwa kama mwito mmoja kwa mfano moja kwa moja badala ya wakala wa Foundry — kawaida ni haraka zaidi. Chaguo jipya linafanyiwa tathmini ikilinganishwa na Bing grounding.",
       "providerSearxng": "Utafutaji wa wavuti wa MSF",
       "providerSearxngDescription": "Huduma ya MSF ya metatafutaji inayolinda faragha. Inajumuisha wavuti kwa ujumla, habari, machapisho ya kisayansi (ikiwemo machapisho ya utafiti ya MSF), nyaraka za kiufundi na data za kibinadamu, na huchagua chanzo sahihi kwa kila swali. Matokeo yanatokea ndani ya sekunde pamoja na viungo vya moja kwa moja, na ni hoja ya utafutaji tu inayotoka kwenye programu — injini za utafutaji hazikujui.",
-      "otherProvidersLabel": "Watoa huduma wengine"
+      "otherProvidersLabel": "Watoa huduma wengine",
+      "multiStepLabel": "Utafutaji wa hatua nyingi",
+      "multiStepDescription": "Kwa utafutaji wa MSF, msaidizi anakagua matokeo ya kwanza na, ikiwa hayatoshi, hutafuta tena au kusoma kurasa zenye ahadi kabla ya kutoa jibu. Maswali mengi humalizika kwa hatua moja. Zima hili ili kila utafutaji ufanyike mara moja tu."
     },
     "Admin": "Msimamizi",
     "Usage Limits": "Mipaka ya matumizi",
@@ -1311,7 +1322,8 @@
       "customHint": "Kati ya {min} na {max} sekunde.",
       "preferModelTitle": "Pendelea mfano niliouchagua",
       "preferModelDescription": "Usibadilishe mfano kiotomatiki ombi likishindikana. Ujumbe wa kosa bado utapendekeza kubadilisha."
-    }
+    },
+    "Analytics": "Takwimu"
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -1522,6 +1534,12 @@
     },
     "subVariant": {
       "label": "Ukubwa"
+    },
+    "retiring": {
+      "badge": "Inasitishwa",
+      "datedMoving": "Inasitishwa tarehe {date}. Mazungumzo yake yatahamia {successor} tarehe {movesOn}.",
+      "dated": "Inasitishwa tarehe {date} na itakoma kufanya kazi. Tumia {successor} badala yake.",
+      "replaced": "Inabadilishwa na {successor}."
     }
   },
   "models": {
@@ -1820,6 +1838,11 @@
       "name": "GPT-6 Astra",
       "description": "Kivutio kikuu cha OpenAI cha GPT-6. Imetengenezwa kwa kazi nzito za kina kutoka mwanzo hadi mwisho: utafiti wa kina, uchambuzi tata, uhandisi wa programu, na kazi ndefu zenye hatua nyingi. Inagharimu takriban mara mbili ya GPT-5.6 Sol.",
       "tagline": "Mfano wenye uwezo mkubwa zaidi wa OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Uboreshaji wa GPT-6 Sol kwa kazi ngumu kwenye msimbo, nyaraka, na programu. Inakaribia uwezo wa Astra kwa bei ndogo sana ya tokeni.",
+      "tagline": "Uwezo karibu na Astra, gharama ndogo sana"
     }
   },
   "searchMode": {
@@ -5440,7 +5463,10 @@
       "announcements": "Ujumbe wa mabango kwa watumiaji: nani anaona, lini, na kwa lugha zipi.",
       "delegations": "Nani anasimamia watumiaji gani, na kila mmoja anaruhusiwa kufanya nini.",
       "channelProfiles": "Kila jukwaa ni nini: mipaka, uhesabuji, mifululizo. Ukweli wa shirika mzima ambao kila seti ya njia hujengwa juu yake.",
-      "channelSets": "Sheria za kila timu za kuandika kwenye majukwaa: mwongozo, sauti, chaguomsingi, nani anaweza kutumia seti na nani anaweza kutuma."
+      "channelSets": "Sheria za kila timu za kuandika kwenye majukwaa: mwongozo, sauti, chaguomsingi, nani anaweza kutumia seti na nani anaweza kutuma.",
+      "webSearch": "Jinsi utafutaji wa wavuti unaweza kufanyika: utafutaji wa hatua nyingi, modeli ya kukagua na mipaka yake.",
+      "contextBudget": "Sehemu ya mazungumzo inayotumwa kwa kila modeli kila mara.",
+      "analytics": "Ripoti zilizowasilishwa: kilichofika, nani anaweza kufungua kila folda, na ni vipimo gani vinaweza kuonyeshwa."
     },
     "openSettings": "Fungua mipangilio",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "Tazama kama",
       "globalAdmins": "Wasimamizi Wakuu",
       "announcements": "Matangazo",
-      "delegations": "Uwakilishi"
+      "delegations": "Uwakilishi",
+      "webSearch": "Utafutaji wa wavuti",
+      "contextBudget": "Bajeti ya muktadha",
+      "analytics": "Takwimu"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "Hivi ndivyo hiki uwakilishi kinaweza kutoa. Wasimamizi wanaweza tu kushikilia vilivyowezeshwa hapa.",
     "grant": {
       "limits": "Mipaka ya matumizi",
-      "announcements": "Matangazo"
+      "announcements": "Matangazo",
+      "analytics": "Takwimu"
     },
     "grantAll": "Yote",
     "maxOverrides": "Mipaka mikuu ambayo uwakilishi huu unaweza kuwa nayo",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "Unaweza kuchagua hii kama seti ya chaguo baada ya kuhifadhi.",
     "noChannelsWarning": "Seti hii haina vituo; hakuna atakayekuwa na uwezo wa kuandaa rasimu.",
     "audienceEveryoneHint": "Yeyote katika shirika anaweza kuandaa rasimu kwa kutumia seti hii."
+  },
+  "contextBudgetAdmin": {
+    "title": "Bajeti ya muktadha",
+    "description": "Sehemu ya historia ya mazungumzo inayotumwa kwa kila modeli kila mara. Ujumbe wa mwisho huhifadhiwa; ya zamani huondolewa ikishatumika bajeti, na muhtasari wa yaliyodondolewa utawekwa kwenye mfumo. Bajeti kubwa inahifadhi zaidi ya mazungumzo marefu kwa gharama kubwa kwa kila mzunguko.",
+    "scopeNote": "Inatumika kwa kila gumzo kwenye kila modeli. Bajeti haiwezi kuzidi sehemu ya dirisha la modeli iliyoainishwa hapa chini.",
+    "loading": "Inapakia bajeti ya muktadha…",
+    "loadError": "Bajeti ya muktadha imeshindwa kupakia.",
+    "configUnavailable": "Bajeti ya muktadha iliyohifadhiwa haikuweza kusomwa sasa, hivyo maadili hapa chini yanaweza yasiwe yaliyotumika. Jaribu tena kabla ya kufanya mabadiliko.",
+    "retry": "Jaribu tena",
+    "historyTokensLabel": "Bajeti ya kawaida (tokeni)",
+    "historyTokensDescription": "Historia inayotumwa kwa kila mzunguko, prompt ya mfumo ikiwa imejumuishwa, kwa modeli zisizo na ubadilishaji. Takriban 48,000 hutoa mabadilishano 30–60 ya mazungumzo ya kawaida.",
+    "historyFractionLabel": "Kiwango cha juu (sehemu ya chumba cha ingizo cha modeli)",
+    "historyFractionDescription": "Bajeti inasimamiwa hadi sehemu hii ya dirisha la muktadha wa modeli ikiondoa nafasi ya matokeo, hivyo modeli yenye dirisha dogo haiwezi kuombwa zaidi ya inavyoweza kubeba.",
+    "minRecentMessagesLabel": "Ujumbe unaohifadhiwa daima",
+    "minRecentMessagesDescription": "Ujumbe wa hivi punde huhifadhiwa hata kama bajeti imezidi (ndani ya dirisha). Tatu huhifadhi mabadilishano ya nyuma wakati ujumbe wa mwisho tu — hati iliyopakiwa, matokeo ya utafutaji — ungejaza bajeti.",
+    "familyOverridesLabel": "Kwa kila familia",
+    "familyOverridesDescription": "Bajeti kwa kila modeli ya familia, badala ya bajeti ya kawaida.",
+    "modelOverridesLabel": "Kwa kila modeli",
+    "modelOverridesDescription": "Bajeti kwa modeli moja, badala ya bajeti ya familia na bajeti ya kawaida.",
+    "overrideFamilyPlaceholder": "Familia",
+    "overrideModelPlaceholder": "Kitambulisho cha modeli",
+    "overrideTokensPlaceholder": "Tokeni",
+    "addOverride": "Ongeza",
+    "removeOverride": "Ondoa",
+    "noOverrides": "Hakuna",
+    "effectiveLabel": "Bajeti zinazotumika na mipangilio hii",
+    "effectiveColumnModel": "Modeli",
+    "effectiveColumnWindow": "Dirisha",
+    "effectiveColumnBudget": "Bajeti ya historia",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Chaguo msingi: {value}",
+    "defaultsNote": "Ni maadili tu yanayotofautiana na chaguo msingi ndizo zinahifadhiwa; mengine yote yanaendelea kufuata chaguo msingi za code katika matoleo mpya.",
+    "save": "Hifadhi",
+    "saving": "Inahifadhi…",
+    "resetDefaults": "Weka upya chaguo msingi",
+    "unsaved": "Mabadiliko ambayo hayajahifadhiwa",
+    "saveSuccess": "Bajeti ya muktadha imehifadhiwa. Inaanza kutumika ndani ya dakika moja.",
+    "saveError": "Bajeti ya muktadha haikuweza kuhifadhiwa.",
+    "conflictError": "Msimamizi mwingine ameweka bajeti ya muktadha katika kipindi hiki; maadili ya hivi punde yamesasishwa.",
+    "updatedByLine": "Imeshifadhiwa mwisho na {by} tarehe {at}",
+    "neverSaved": "Haijawahi kuhifadhiwa — chaguo msingi za code zinatumika."
+  },
+  "webSearchAdmin": {
+    "title": "Utafutaji wa wavuti",
+    "description": "Hudhibiti utafutaji wa hatua nyingi kwenye utafutaji wa wavuti wa MSF. Baada ya matokeo ya kwanza, mfano wa tathmini utaamua kama wanajibu swali; kama sivyo, inaweza kutafuta tena kwa maswali tofauti, kusoma kurasa za matokeo, kumwuliza mtumiaji maelezo yaliyokosekana, au kuripoti kuwa hakuna kilichopatikana.",
+    "scopeNote": "Mipangilio hii inatumika tu kwa utafutaji wa wavuti wa MSF. Watoa huduma wengine wa utafutaji hufanya raundi moja tu. Kila mtu pia anaweza kuzima utafutaji wa hatua nyingi katika Mipangilio.",
+    "loading": "Inapakia mipangilio ya utafutaji wa wavuti…",
+    "loadError": "Mipangilio ya utafutaji wa wavuti haikuweza kupakiwa.",
+    "configUnavailable": "Mipangilio ya utafutaji wa wavuti haikuweza kusomwa kutoka kwenye hifadhi. Vidhibiti vimefichwa badala ya kuoneshwa na chaguo msingi zinazoweza kutofautiana na zinazotumika.",
+    "retry": "Jaribu tena",
+    "enabledLabel": "Utafutaji wa hatua nyingi",
+    "enabledDescription": "Ikiwa imezimwa, kila utafutaji ni raundi moja iliyopangwa na mfano wa tathmini hautaitwa.",
+    "assessorLabel": "Mfano wa tathmini",
+    "assessorDescription": "Unaitwa mara moja baada ya kila hatua kukagua matokeo. Chagua mfano wa haraka na wa gharama nafuu: unaendesha wakati mtumiaji anasubiri. Ikiwa hauwezi kufikiwa, {fallback} itatumika badala yake.",
+    "maxStepsLabel": "Hatua kwa kila swali",
+    "maxStepsDescription": "Idadi kubwa ya hatua moja ya swali inaweza kuchukua, ikijumuisha utafutaji wa kwanza. Kila utafutaji zaidi au kundi la kusoma kurasa ni hatua moja. Kikomo hiki ni tofauti na kikomo cha utafutaji wa siku, ambacho huhesabu swali zima mara moja.",
+    "maxStepsExploratoryLabel": "Hatua za utafutaji wa uchunguzi",
+    "maxStepsExploratoryDescription": "Kikomo cha juu zaidi kwa utafutaji wa baada ya kipengee kigumu kupatikana, kama nakala ya kitabu adimu, ambapo ni kawaida kukutana na kukosa matokeo. Haiwezi kuwa chini ya kikomo cha kawaida.",
+    "pageReadsLabel": "Soma kurasa za matokeo",
+    "pageReadsDescription": "Inaruhusu hatua kufungua matokeo yenye matumaini na kusoma ukurasa wenyewe badala ya kutegemea vipande vya utafutaji.",
+    "maxPageReadsLabel": "Kurasa kwa kila hatua ya kusoma",
+    "sourceAssessmentLabel": "Pima ubora wa chanzo",
+    "sourceAssessmentDescription": "Mfano wa tathmini huweka lebo kwa kila chanzo (rasmi, kilichoanzishwa, sekondari, kuegemea chini) ili jibu liweze kuzitathmini na kuzitaja.",
+    "timeBudgetLabel": "Bajeti ya muda (sekunde)",
+    "timeBudgetDescription": "Jumla ya muda ambao utafutaji mmoja unaweza kuchukua, ikijumuisha raundi ya kwanza. Muda ukiisha, jibu linaandikwa kutoka kwa kilichopatikana.",
+    "defaultsNote": "Mpangilio ulioachwa kwenye chaguo msingi ya programu haijahifadhiwa, hivyo itaendelea kufuata chaguo msingi ikiwa toleo jipya litabadilisha.",
+    "defaultHint": "Chaguo msingi: {value}",
+    "defaultOn": "imewashwa",
+    "defaultOff": "imezimwa",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Una mabadiliko ambayo hayajahifadhiwa.",
+    "save": "Hifadhi",
+    "saving": "Inahifadhi…",
+    "resetDefaults": "Weka upya chaguo msingi",
+    "saveSuccess": "Mipangilio ya utafutaji wa wavuti imehifadhiwa.",
+    "saveError": "Mipangilio ya utafutaji wa wavuti haikuweza kuhifadhiwa.",
+    "conflictError": "Msimamizi mwingine ameweka mipangilio kwanza. Imesasishwa — tafadhali kagua na hifadhi tena.",
+    "updatedByLine": "Imeshifadhiwa mwisho na {by} tarehe {at}.",
+    "neverSaved": "Hakuna kilichohifadhiwa bado; chaguo msingi zilizojengewa ndizo zinatumika."
+  },
+  "modelRetirement": {
+    "notice": "{model} inastaafishwa tarehe {retiresOn}. Mazungumzo haya yatahamia kwenye {successor} tarehe {movesOn}.",
+    "noticeRetiring": "{model} inastaafishwa tarehe {retiresOn} na itasitisha kazi. Badilisha kwenda {successor} ili uendelee kutumia mazungumzo haya.",
+    "switchNow": "Badilisha sasa"
+  },
+  "analytics": {
+    "title": "Takwimu",
+    "backToChat": "Rudi kwenye mazungumzo",
+    "manage": "Simamia",
+    "loading": "Inapakia...",
+    "loadFailed": "Imeshindwa kupakia ripoti.",
+    "retry": "Jaribu tena",
+    "emptyTitle": "Hakuna kilichoshirikiwa nawe bado",
+    "emptyBody": "Ripoti zitaonekana hapa pindi msimamizi atakapokupa ufikiaji wa folda.",
+    "deliveryUnavailable": "Uhifadhi wa ripoti hauwezi kufikiwa kwa sasa, hivyo orodha hapa chini zinaweza kuwa tupu. Jaribu tena baada ya dakika chache.",
+    "groupsDegraded": "Uanachama wa kikundi chako haukuweza kukaguliwa sasa, hivyo folda zilizoshirikiwa na vikundi vyako zinaweza kukosekana. Pakia upya baada ya dakika.",
+    "foldersHeading": "Folda",
+    "rootFolder": "Ripoti zote",
+    "pathOnly": "Huna ufikiaji kwenye folda hii yenyewe, ila kwenye folda zilizo ndani yake.",
+    "selectFolder": "Chagua folda ili uone ripoti zake.",
+    "noFiles": "Hakuna ripoti kwenye folda hii.",
+    "viewOnlyNote": "Una ruhusa ya kutazama folda hii: unaweza kufungua ripoti, kuona muhtasari na jedwali la muhtasari wake. Jedwali lenye safu moja kwa kila mtu, kuuza nje na kupakua vinahitaji ruhusa ya kupakua.",
+    "col": {
+      "name": "Faili",
+      "period": "Kipindi",
+      "delivered": "Imewasilishwa",
+      "size": "Ukubwa",
+      "availableUntil": "Inapatikana hadi",
+      "actions": "Hatua"
+    },
+    "download": "Pakua",
+    "downloadAria": "Pakua {name}",
+    "block": {
+      "view-only": "Tazama tu",
+      "hidden-fields": "Asili imefichwa (sehemu zilizofichwa)",
+      "unclassified-fields": "Asili imefichwa (sehemu zinazotarajiwa kukaguliwa)",
+      "not-inspected": "Bado haijakaguliwa",
+      "policy-unavailable": "Haipatikani sasa"
+    },
+    "adminBadge": {
+      "error": "Imefichwa kwa watumiaji",
+      "pending": "Inakaguliwa",
+      "warning": "Ina onyo",
+      "expired": "Imekwisha muda, inangoja kufutwa",
+      "originalBlocked": "Watumiaji hawawezi kupakua: {reason}"
+    },
+    "openAria": "Fungua {name}",
+    "openForExport": "Fungua ili kuuza nje",
+    "preview": {
+      "back": "Rudi kwenye {folder}",
+      "tabsLabel": "Jedwali kwenye faili hii",
+      "lockedTab": "{name} (imefungwa)",
+      "unavailable": "Faili hii haiwezi kufunguliwa kwenye app kwa sasa.",
+      "tableFailed": "Imeshindwa kupakia jedwali hili.",
+      "withheld": {
+        "row-level": "Jedwali hili lina safu moja kwa kila mtu. Kulifungua kunahitaji ruhusa ya kupakua folda.",
+        "hidden-fields": "Ukursa huu una sehemu iliyofichwa, hivyo haionyeshwi."
+      },
+      "truncated": "Inaonyesha safu {shown, number} za kwanza kati ya {total, number}. Uza nje jedwali ili kupata zote.",
+      "freeformNote": "Ukurasa huu umeandaliwa kwa ajili ya kusoma na unavyoonekana kama ulivyowasilishwa.",
+      "filter": "Chuja safu",
+      "filterPlaceholder": "Chuja safu...",
+      "rows": "{count, plural, one {# safu} other {# safu}}",
+      "matching": "{count, number} kati ya {total, number} safu zinafanana",
+      "modeLabel": "Onyesha kama",
+      "mode": {
+        "table": "Jedwali",
+        "chart": "Chati"
+      },
+      "noRows": "Hakuna safu za kuonyesha.",
+      "hiddenColumn": "Imefichwa kwa watumiaji",
+      "exportCsv": "Hamisha jedwali hili (CSV)",
+      "exportXlsx": "Hamisha majedwali yote (Excel)",
+      "downloadOriginal": "Pakua asili",
+      "exportNote": "Faili lililowasilishwa lina viwanja vilivyofichwa, hivyo haliwezi kupakuliwa kama lilivyo. Hamisho linaacha viwanja hivyo nje.",
+      "sectionLabel": "Onyesha",
+      "section": {
+        "overview": "Muhtasari",
+        "tables": "Majedwali"
+      }
+    },
+    "chart": {
+      "groupBy": "Panga kwa",
+      "measure": "Pima",
+      "rowCount": "Idadi ya safu",
+      "aggregation": "Hesabu",
+      "agg": {
+        "sum": "Jumla",
+        "mean": "Wastani",
+        "min": "Ndogo zaidi",
+        "max": "Kubwa zaidi"
+      },
+      "ariaLabel": "{measure} kwa {group}",
+      "noColumns": "Jedwali hili halina safu ya maandishi au tarehe ya kupanga kwa.",
+      "empty": "Hakuna kitu cha kuchora kwa chaguo hili.",
+      "truncatedGroups": "Inaonyesha makundi {count} makubwa zaidi.",
+      "basedOn": "Kimetegemea safu {shown, number} za kwanza kati ya {total, number}.",
+      "savePng": "Hifadhi kama picha",
+      "saveSvg": "Hifadhi kama SVG",
+      "saveFailed": "Imeshindwa kuhifadhi chati."
+    },
+    "dash": {
+      "loading": "Inapakia...",
+      "failed": "Imeshindwa kupakia muhtasari.",
+      "retry": "Jaribu tena",
+      "showTable": "Onyesha kama jedwali",
+      "showChart": "Onyesha kama chati",
+      "smallGroups": "Makundi ya watu chini ya 5",
+      "foldedNote": "Makundi ya watu chini ya 5 yameunganishwa kwenye safu moja.",
+      "otherCount": "{count, plural, one {# mwingine} other {# wengine}}",
+      "hiddenPanel": "Imefichwa na mipangilio ya uwanja.",
+      "missingPanel": "Haipatikani kwa faili hili.",
+      "usage": {
+        "users": "Watu hai",
+        "interactions": "Mawasiliano",
+        "avgPerUser": "Wastani kwa mtu",
+        "medianPerUser": "Median kwa mtu",
+        "hq": "Makao makuu",
+        "field": "Uwanjani",
+        "shareUsers": "{pct}% ya watumiaji wa {comparator}",
+        "shareUsage": "{pct}% ya matumizi ya {comparator}",
+        "comparator": "{comparator}: {value}",
+        "daily": "Mwingiliano kwa siku",
+        "dailyUsers": "Watu wanaotumia kwa siku",
+        "dailyUsersSub": "Kwa eneo la kazi",
+        "weekly": "Mwingiliano kwa wiki",
+        "activity": "Ni kwa kiwango gani watu wanaitumia",
+        "activitySub": "Watu, kulingana na idadi ya mwingiliano katika kipindi husika",
+        "departments": "Mwingiliano kwa idara",
+        "jobTitles": "Mwingiliano kwa jina la kazi",
+        "models": "Matukio kwa modeli",
+        "total": "Maeneo yote",
+        "location": {
+          "hq": "Makao makuu",
+          "field": "Shambani",
+          "unknown": "Haijulikani"
+        },
+        "col": {
+          "date": "Siku",
+          "week": "Wiki inaanza",
+          "users": "Watu",
+          "interactions": "Mwingiliano",
+          "events": "Matukio",
+          "group": "Kikundi",
+          "band": "Mwingiliano"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Jumla iliyolipishwa",
+        "usageVariable": "Gharama za matumizi zinazoathirika",
+        "staticInfra": "Miundombinu isiyobadilika",
+        "sections": "Sehemu zilizopewa bili",
+        "usageEvents": "Matukio ya matumizi",
+        "bySection": "Bili kwa sehemu",
+        "changes": "Mabadiliko kutoka faili ya awali",
+        "noChanges": "Hakuna kilichobadilika kutoka faili ya awali.",
+        "byDomain": "Matukio ya matumizi kwa jina la barua pepe",
+        "reconciliation": "Upatanishaji na Azure",
+        "col": {
+          "section": "Sehemu",
+          "billed": "Ilizopishwa",
+          "usageEvents": "Matukio ya matumizi",
+          "usagePct": "Matumizi %",
+          "line": "Nambari ya mstari",
+          "amount": "Kiasi",
+          "previous": "Faili ya awali",
+          "restated": "Imerekebishwa",
+          "change": "Mabadiliko",
+          "domain": "Jina la barua pepe",
+          "users": "Watu"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Imekokotolewa kwa",
+        "delivered": "Dhani za ripoti yenyewe ({version})",
+        "current": "Dhani za sasa za programu ({version})",
+        "whatIf": "Vipi kama...",
+        "deliveredUnavailable": "Dhani za ripoti hii hazikuweza kusomwa kutoka karatasi yake ya Dhani, kwa hiyo za sasa za programu zinatumiwa.",
+        "whatIfIntro": "Badilisha takwimu uone athari yake kwa kila kitu hapa chini. Hakuna kinachohifadhiwa.",
+        "resetDelivered": "Rudisha kwa mali za ripoti",
+        "resetCurrent": "Rudisha kwa mali za programu",
+        "co2": "Uzalishaji",
+        "energy": "Nishati",
+        "charges": "Chaji za simu",
+        "chargesSub": "Kwa kiwango sawa cha utoaji wa hewa",
+        "activeUsers": "Watu hai",
+        "requests": "Maombi",
+        "tokens": "Tokeni",
+        "vsDelivered": "{delta} dhidi ya dhana za ripoti yenyewe",
+        "sameAsDelivered": "Sawa na dhana za ripoti yenyewe",
+        "unpriced": "{count, plural, one {Maombi # yanatumia} other {Maombi # yanatumia}} saizi ya modeli ambayo dhana hizi hazina takwimu, na {count, plural, one {limeachwa nje} other {imeachwa nje}}.",
+        "byDepartment": "Utoaji wa hewa kwa idara",
+        "byModel": "Utoaji wa hewa kwa modeli",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Iliyohesabiwa hapa dhidi ya iliyoandikwa wakati huo",
+        "reconciliationSub": "Programu pia hukadiria kila ombi linapotokea. Kimoja hukubaliana na kingine mradi dhana ni sawa.",
+        "computed": "Iliyohesabiwa hapa",
+        "logged": "Iliyorekodiwa na programu",
+        "difference": "Tofauti",
+        "col": {
+          "group": "Kundi",
+          "requests": "Maombi",
+          "tokens": "Tokeni",
+          "energyWh": "Nishati (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Gharama ya kituo cha data (PUE)",
+          "promptTokenWeight": "Uzito wa tokeni ya prompt",
+          "dedicatedReasoningMultiplier": "Vizidishi vya modeli ya kujitegemea",
+          "whPer1kTokens": "Wh kwa tokeni 1,000 — {name}",
+          "reasoningEffortMultipliers": "Vizidishi vya juhudi ya usimulizi — {name}",
+          "gridIntensity": "Utoaji wa CO₂e kwa kWh ya gridi — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Matukio",
+        "users": "Watu",
+        "tokens": "Tokeni",
+        "errors": "Makosa",
+        "energy": "Nishati",
+        "co2": "Utoaji wa hewa",
+        "hourly": "Matukio kwa saa (UTC)",
+        "byType": "Matukio kwa aina",
+        "byError": "Makosa kwa msimbo",
+        "byModel": "Tokeni kwa modeli",
+        "byCompany": "Matukio kwa shirika",
+        "none": "Hakuna.",
+        "col": {
+          "group": "Kundi",
+          "events": "Matukio",
+          "tokens": "Tokeni",
+          "hour": "Saa"
+        }
+      },
+      "trend": {
+        "title": "Kwa muda",
+        "period": "Kipindi",
+        "users": "Watu hai kwa ripoti",
+        "interactions": "Muingiliano kwa ripoti",
+        "billed": "Jumla iliyotolewa bili kwa kipindi",
+        "sections": "Bili kwa sehemu",
+        "otherSections": "Sehemu nyingine zote",
+        "co2": "Uzalishaji wa gesi per ripoti",
+        "energy": "Nishati per ripoti",
+        "recalculated": "Kila kipindi huhesabiwa kwa kutumia dhana za sasa za programu ({version}), hivyo mabadiliko ya dhana kati ya ripoti hayaonyeshi mabadiliko kwenye uzalishaji wa gesi.",
+        "severalPerPeriod": "Kabrasha hili lina ripoti kadhaa kwa kipindi kilekile. Fungua kabrasha ndani yake ili uone jinsi moja ya ripoti inavyobadilika kadri muda unavyoenda."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analytics",
+    "description": "Ripoti zinawekwa kwenye hifadhi kupitia mfumo wa data. Hapa unaweza kukagua kilichowasili, kuamua nani anayeweza kufungua kila kabrasha, na kuchagua ni sehemu gani jukwaa linaweza kuonyesha.",
+    "openViewer": "Fungua analytics",
+    "sharedNotice": "Beta na production zinashiriki makabrasha, hadhira na faili hizi. Mabadiliko yaliyookolewa hapa ni hai kwa zote.",
+    "tabsLabel": "Sehemu za analytics",
+    "tab": {
+      "health": "Uwasilishaji",
+      "folders": "Makabrasha & ufikivu",
+      "fields": "Sehemu"
+    },
+    "loading": "Inapakia...",
+    "retry": "Jaribu tena",
+    "loadError": "Imeshindwa kupakia sehemu hii.",
+    "unavailable": "Imeshindwa kusoma mipangilio iliyohifadhiwa kutoka kwenye hifadhi. Hili SI sawa na \"hakuna kilichosanidiwa\" — unaweza kuhariri kimezimwa ili mipangilio halisi isifutwe. Jaribu tena, na angalia logi za server kama tatizo linaendelea.",
+    "save": "Hifadhi",
+    "saving": "Inahifadhi...",
+    "unsaved": "Mabadiliko ambayo hayajahifadhiwa",
+    "saveSuccess": "Imehifadhiwa.",
+    "saveError": "Imeshindwa kuhifadhi.",
+    "conflictError": "Admin mwingine amebadilisha mipangilio hii wakati ulikuwa unahariri. Mabadiliko yako hayajahifadhiwa — toleo jipya limepakuliwa upya.",
+    "rootFolder": "(ngazi ya juu)",
+    "scope": {
+      "domain": "Domain ya barua pepe",
+      "user": "Mtu",
+      "attribute": "Sifa",
+      "group": "Kikundi cha Entra"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "Entra group object id"
+    },
+    "level": {
+      "view": "Tazama muhtasari",
+      "download": "Tazama, hamisha na pakua"
+    },
+    "reportType": {
+      "usage": "Ripoti ya Matumizi",
+      "rebilling": "Rebilling",
+      "emissions": "Ripoti ya uzalishaji wa gesi",
+      "raw-telemetry": "Telemetry asilia"
+    },
+    "field": {
+      "userCode": {
+        "label": "Nambari ya mtumiaji",
+        "description": "Nambari ya siri ya u-... inayomwakilisha mtu mmoja."
+      },
+      "jobTitle": {
+        "label": "Cheo cha kazi",
+        "description": "Vyeo vya kazi, vikiwemo cheo kinachotumika zaidi kwenye fomu za muhtasari. Katika kundi dogo, cheo kinaweza kumwonyesha mtu mmoja."
+      },
+      "department": {
+        "label": "Idara",
+        "description": "Idara, ikiwemo idara inayotumika zaidi kwenye fomu za muhtasari."
+      },
+      "company": {
+        "label": "Kampuni / shirika",
+        "description": "Jina la shirika kutoka kwenye daftari, na majina ya kampuni yaliyoorodheshwa kwenye fomu za rebilling."
+      },
+      "orgGroup": {
+        "label": "Kikundi cha shirika",
+        "description": "Kituo cha uendeshaji au kikundi ambacho ripoti imegawanywa nacho."
+      },
+      "section": {
+        "label": "Sehemu",
+        "description": "Sehemu ya urejeshaji gharama ambayo mstari wa rebilling unamhusu."
+      },
+      "mailDomain": {
+        "label": "Kikoa cha barua pepe",
+        "description": "Matumizi ya kikoa cha barua pepe yanahusishwa nayo (si anuani kamwe)."
+      },
+      "workLocation": {
+        "label": "Mahali pa kazi",
+        "description": "Makao makuu au uwanjani."
+      },
+      "technical": {
+        "label": "Maelezo ya kiufundi",
+        "description": "Aina ya muundo, eneo, aina ya tukio, sarafu na masharti mengine yanayoelezea yasiyomuhusu mtu."
+      },
+      "other": {
+        "label": "Sehemu zingine za maelezo",
+        "description": "Mahali unapoweka safu isiyofaa sehemu yoyote kati ya zilizotajwa."
+      }
+    },
+    "folders": {
+      "intro": "Kila folda ambayo mfumo umetumia kutuma majalada imeorodheshwa. Folda isiyo na mipangilio — na isiyo na folda iliyo juu yake inayotoa ruhusa — inaonekana kwa wasimamizi pekee.",
+      "name": "Jina la kuonyesha",
+      "namePlaceholder": "Inaonyeshwa badala ya njia ya folda",
+      "description": "Maelezo",
+      "reportType": "Aina ya ripoti",
+      "reportTypeNone": "Haijawekwa",
+      "reportTypeInherited": "Imepokelewa: {type}",
+      "reportTypeHint": "Inaeleza kwa mkaguzi majina ya mafaili ya kutarajia na mara ngapi. Inatumiwa na folda zilizo ndani ya hii.",
+      "retention": "Hifadhi mafaili kwa (miezi)",
+      "retentionHint": "Acha wazi kurithi miezi {months}. Inahesabiwa kutoka mwisho wa kipindi cha kila ripoti.",
+      "audience": "Nani anaweza kufungua folda hii",
+      "audienceHint": "Kila mstari unatoa ruhusa kwa folda hii na zilizomo ndani yake. Lengo moja kila mstari.",
+      "audienceScope": "Aina ya mlengwa",
+      "audienceTargets": "Walengwa",
+      "audienceLevel": "Kiwango cha upatikanaji",
+      "addAudience": "Ongeza watu au vikundi",
+      "removeAudience": "Ondoa mstari huu",
+      "restricted": "Usirithi upatikanaji kutoka folda za juu",
+      "restrictedHint": "Ni mistari ya kwenye folda hii tu inayotumika hapa na chini yake.",
+      "hiddenFields": "Ficha pia kwenye folda hii",
+      "hiddenFieldsHint": "Sehemu zilizofichwa hapa zaidi ya mipangilio ya jukwaa, kwa folda hii na zilizo ndani yake. Unaweza kuficha zaidi, huwezi kuonyesha ziada.",
+      "hiddenPlatformWide": "(imefichwa kila mahali)",
+      "clear": "Ondoa mipangilio ya folda hii",
+      "rawChip": "Raw: wasimamizi wa kimataifa pekee",
+      "rawNote": "Takwimu ghafi zinajumuisha majina, barua pepe na majina ya mafaili. Ni wasimamizi wa kimataifa pekee wanaoweza kufungua, na hakuna hadhira ya kuongezwa.",
+      "audienceChip": "{count, plural, one {# mstari wa ruhusa} other {# mistari ya ruhusa}}",
+      "restrictedChip": "Hairithi",
+      "notConfiguredChip": "Hakuna mipangilio",
+      "addPathLabel": "Sanidi folda kabla ya usafirishaji wa kwanza",
+      "addPath": "Ongeza",
+      "addPathHint": "Njia kamili jinsi mfumo utakavyoiandika, mfano matumizi/ocba. Hii inaokoa mipangilio tu; haiundi chochote kwenye hifadhi.",
+      "invalidPath": "Hiyo sio njia halali ya folda.",
+      "rawGlobalOnly": "Wasimamizi wa kimataifa pekee wanaweza kusanidi folda chini ya raw/."
+    },
+    "fields": {
+      "intro": "Chagua ni sehemu zipi za ripoti zilizowasilishwa zinaweza kuonyeshwa na jukwaa. Kuficha sehemu huiondoa kila mahali kwenye programu na kwenye uhamishaji wa data unaoundwa na programu. Faili iliyowasilishwa inaweza kupakuliwa na wasimamizi pekee.",
+      "readOnly": "Wasimamizi wa kimataifa pekee wanaweza kubadilisha hii. Kama msimamizi wa takwimu, unaweza kuficha sehemu zaidi kwa kila folda, chini ya Folda & upatikanaji.",
+      "configurableHeading": "Sehemu",
+      "shown": "Inaonyeshwa",
+      "hidden": "Imefichwa",
+      "jobTitleNote": "Ikiwa cheo cha kazi kinaonekana, mstari kwenye kundi dogo unaweza kumtambua mtu hata chini ya msimbo wa mtumiaji. Chati huficha makundi chini ya watu watano; jedwali lililopakuliwa halifichi.",
+      "neverHeading": "Haitawahi kuonyeshwa",
+      "neverBody": "Majina, barua pepe, vitambulisho vya saraka, majina ya mafaili yaliyopakiwa na maandishi ya kosa hayaonyeshwi kamwe nje ya takwimu ghafi. Ripoti inayoambatana na mojawapo yao itafichwa kwa watumiaji hadi itakaporekebishwa.",
+      "unclassifiedHeading": "Safu ambazo haziitambuliki na orodha",
+      "unclassifiedBody": "Safu ya maandishi isiyotambuliwa inabaki imefichwa — kwenye programu na kwenye usafirishaji wa data — na faili iliyowasilishwa haiwezi kupakuliwa na watumiaji hadi uwashe kwenye uwanja maalum.",
+      "noneWaiting": "Hakuna kinachosubiri.",
+      "inFiles": "{count, plural, one {katika faili #} other {katika faili #}}",
+      "classifyAs": "Uwanja wa safu {column}",
+      "keepHidden": "Endelea kuficha",
+      "removeClassification": "Ondoa mpangilio wa safu {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Hifadhi ya ripoti haipatikani",
+      "deliveryUnavailableBody": "Programu haikuweza kupata orodha ya kontena \"{container}\". Hakikisha ipo na kwamba utambulisho wa programu una jukumu la data humo. Mpaka hapo hakutakuwa na ripoti kwa watumiaji wowote.",
+      "foldersUnavailable": "Mipangilio ya folda haikuweza kusomwa, hivyo kwa sasa watumiaji hawaoni folda zozote. Faili haziangaliwi wala hazifutwi mpaka tatizo litakapopata suluhu.",
+      "policyUnavailable": "Mipangilio ya uwanja haikuweza kusomwa, hivyo watumiaji hawawezi kupakua faili kwa sasa.",
+      "total": {
+        "files": "Faili",
+        "ok": "Nzuri",
+        "warning": "Kuna onyo",
+        "error": "Imefichwa kwa watumiaji",
+        "pending": "Inaangaliwa"
+      },
+      "recheckAll": "Angalia tena yote",
+      "recheckOne": "Angalia tena",
+      "recheckQueued": "{count, plural, one {faili # inangojea ukaguzi.} other {faili # zinangojea ukaguzi.}}",
+      "recheckFailed": "Haikuweza kuanza ukaguzi.",
+      "retention": {
+        "active": "Faili zilizopita muda wa kuhifadhiwa wa folda zifichwa mara moja na kufutwa baada ya siku {days}.",
+        "disabled": "Faili zilizopita muda wa kuhifadhiwa zimefichwa, lakini kufutwa hakujawashwa kwa usakinishaji huu.",
+        "waiting-for-config": "Faili zilizopita muda wa msingi wa kuhifadhi zinafichwa. Hakuna kinachofutwa hadi mipangilio ya folda ihifadhiwe angalau mara moja."
+      },
+      "noFiles": "Hakuna faili zilizoletwa bado.",
+      "allGood": "Vyote vilivyowasilishwa viko sawa.",
+      "problemsHeading": "Faili zinazohitaji uangalizi",
+      "status": {
+        "error": "Imefichwa kwa watumiaji",
+        "warning": "Onyo",
+        "pending": "Inaangaliwa",
+        "ok": "Nzuri"
+      },
+      "pendingBody": "Mpya au iliyobadilishwa tangu ukaguzi uliopita. Itaonekana kwa watumiaji ikiwa itapita ukaguzi.",
+      "firstSeen": "Ilionekana kwanza {date}",
+      "unclassifiedHeading": "Safu zinazongoja uamuzi",
+      "unclassifiedBody": "Safu hizi hazijatambuliwa. Zitabaki zimefichwa, na watumiaji hawawezi kupakua faili zinazozibeba, hadi kila moja ipewe uwanja rasmi.",
+      "unclassifiedChip": "{column} · {count, plural, one {faili #} other {faili #}}",
+      "openFields": "Nenda kwenye Uwanja",
+      "unconfiguredHeading": "Folda bila mipangilio",
+      "unconfiguredBody": "Faili zinawasili hapa, lakini hakuna aliyesanidi folda hii au iliyo juu yake. Ni wasimamizi tu wanaoweza kuziona.",
+      "staleHeading": "Matoleo yaliyochelewa",
+      "staleBody": "Folda hizi zinatarajia ripoti mara kwa mara na ya mwisho imepitiliza muda.",
+      "staleDetail": {
+        "daily": "Kila siku; ya mwisho inahusu {date}",
+        "monthly": "Kila mwezi; ya mwisho inaisha {date}"
+      },
+      "staleNever": "Hakuna kilichowasilishwa bado",
+      "expiringHeading": "Inaisha muda",
+      "expiringBody": "Faili zilizopita au zinakaribia muda wa kuhifadhiwa ndani ya siku 30.",
+      "expiresOn": "Inaisha {date}",
+      "expiredOn": "Iliisha {date}"
+    },
+    "issue": {
+      "name-mismatch": "Jina la faili si lile linalotegemewa na folda hii (kwa mfano {expected}).",
+      "unsupported-format": "Faili za aina \"{extension}\" haziwezi kukaguliwa, hivyo hii imefichwa kwa watumiaji. Tuma .xlsx au .csv.",
+      "too-large": "Kwa {sizeMb} MB faili hii imevuka kikomo cha {limitMb} MB cha ukaguzi, hivyo imefichwa kwa watumiaji.",
+      "empty-file": "Faili haina maudhui.",
+      "unreadable": "Faili haikuweza kufunguliwa. Inaweza kuwa imeharibika, au si muundo unaoendana na jina lake.",
+      "identifier-column": "Laha \"{sheet}\" ina safu \"{column}\" inayowatambulisha watu. Faili imeshindwa kuonekana kwa watumiaji.",
+      "identifier-values": "\"{sheet}\" ina {count, plural, one {# anwani ya barua pepe} other {# anwani za barua pepe}}. Faili imeshindwa kuonekana kwa watumiaji.",
+      "user-code-format": "Laha \"{sheet}\", safu \"{column}\": {count, plural, one {# thamani si} other {# thamani haziko}} katika muundo wa u-… user code. Faili imeshindwa kuonekana kwa watumiaji.",
+      "formulas-without-values": "Laha \"{sheet}\" ina {count, plural, one {# fomula} other {# fomula}} bila matokeo yaliyohifadhiwa, hivyo takwimu hizi haziwezi kuonyeshwa kwenye programu.",
+      "missing-sheet": "Laha \"{sheet}\" haipo, hivyo maoni yaliyojengwa juu yake hayawezi kuonyeshwa.",
+      "missing-column": "Laha \"{sheet}\" haina safu \"{column}\", hivyo maoni yanayotumia safu hiyo hayawezi kuonyeshwa.",
+      "no-period": "Jina la faili halijumuishi kipindi cha ripoti, hivyo idadi ya kuweka inahesabiwa kuanzia tarehe ya usambazaji.",
+      "unclassified-field": "Safu \"{column}\" haitambuliki. Inabaki kufichwa, na watumiaji hawawezi kupakua faili iliyotolewa, hadi itakapowekwa chini ya uga fulani.",
+      "past-retention": "Zaidi ya miezi {months} ya kuhifadhi kwenye folda hii; haziwezi kuonyeshwa tena.",
+      "unknown": "Tatizo lililoripotiwa: {code}."
+    }
   }
 }

@@ -865,7 +865,10 @@
       "codeInterpreterLimitReached": "Limit ekzekisyon kòd chak jou rive — ap reponn san kouri kòd…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Rechèch nan baz konesans lan echwe — repons lan pap itilize dokiman ajan an",
-      "stillWorking": "Toujou ap travay..."
+      "stillWorking": "Toujou ap travay...",
+      "assessingSearchResults": "Nap verifye si rezilta yo reponn kesyon an…",
+      "refiningSearch": "Nap rechèche ankò : “{query}”…",
+      "readingSearchPages": "Nap li {count} paj rezilta…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# zouti itilize} other {# zouti yo itilize}}",
@@ -951,7 +954,10 @@
       "summarizeNow": "Rezime soti nan tit prensipal yo kounye a",
       "sourcesCount": "{count} sous",
       "showAll": "Montre tout {count} sous",
-      "showFewer": "Montre mwens"
+      "showFewer": "Montre mwens",
+      "multiStepTitle": "Rezilta yo jiskaprezan — nap verifye si yo reponn kesyon an",
+      "multiStepHint": "Rechèch la ka kontinye — swa yon lòt rechèch oswa li pi bon paj yo. Reponn kounye a ak {count} rezilta ki deja jwenn si ou pa vle tann.",
+      "answerNow": "Reponn ak rezilta sa yo kounye a"
     },
     "retryWithModel": "Ese ak {model}",
     "createTodoTasks": "Kreye travay To Do soti nan repons sa a",
@@ -965,7 +971,10 @@
     "modelTimedOutAtMaximum": "{model} pa t kòmanse reponn anvan {duration}, ki se pi long tan ou ka tann. Eseye ankò, oswa eseye yon lòt modèl.",
     "requestTimedOut": "Demann sa a pran twòp tan pou prepare epi yo te sispann li anvan {model} te ka reponn. Ou ka bay plis tan, oswa eseye yon lòt modèl.",
     "retryWaitingLonger": "Tann jiska {duration} epi eseye ankò",
-    "alwaysWaitThisLong": "Toujou tann jiska {duration}"
+    "alwaysWaitThisLong": "Toujou tann jiska {duration}",
+    "keepSearching": "Kontinye chèche",
+    "keepSearchingHint": "Rechèch la te sispann anvan li jwenn sa. Mande asistan an pou eseye lòt metòd.",
+    "keepSearchingMessage": "Kontinye chèche sa, tanpri — eseye yon lòt apwòch."
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1450,7 +1459,9 @@
       "providerBingResponsesDescription": "Mennen menm kouvèti entènèt Bing tankou Bing grounding, men fèt kòm yon sèl apèl dirèk olye yon ajan Foundry — anjeneral pi rapid. Nouvo opsyon sa ap evalye kont Bing grounding.",
       "providerSearxng": "Rechèch entènèt MSF",
       "providerSearxngDescription": "Sèvis meta-rechèch prive MSF la. Kouvri entènèt an jeneral, nouvèl, literati syantifik (ki enkli piblikasyon rechèch MSF), dokimantasyon teknik ak done imanitè, epi chwazi bon kalite sous pou chak kesyon. Rezilta yo parèt an kèk segonn ak lyen dirèk, epi se sèlman rechèch la ki soti nan aplikasyon an — motè rechèch yo pa janm konnen kiyès ou ye.",
-      "otherProvidersLabel": "Lòt founisè"
+      "otherProvidersLabel": "Lòt founisè",
+      "multiStepLabel": "Rechèch plizyè etap",
+      "multiStepDescription": "Avèk rechèch MSF sou entènèt, asistan an verifye premye rezilta yo epi, si yo pa sifi, li rechèch ankò oubyen li pi bon paj yo anvan li reponn. Pifò kesyon toujou fini nan yon sèl etap. Dekole sa si ou vle chak rechèch fèt nan yon sèl fwa."
     },
     "Admin": "Admin",
     "Usage Limits": "Limit itilizasyon",
@@ -1470,7 +1481,8 @@
       "customHint": "Ant {min} ak {max} segonn.",
       "preferModelTitle": "Bay modèl mwen chwazi a prioritè",
       "preferModelDescription": "Pa chanje otomatikman pou yon lòt modèl lè yon demann echwe. Erè a ap toujou ofri opsyon pou chanje."
-    }
+    },
+    "Analytics": "Analiz"
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -1678,6 +1690,12 @@
     },
     "subVariant": {
       "label": "Gwosè"
+    },
+    "retiring": {
+      "badge": "Pral pran retrèt",
+      "datedMoving": "Pral pran retrèt le {date}. Konvèsasyon yo ap deplase sou {successor} le {movesOn}.",
+      "dated": "Pral pran retrèt le {date} epi ap sispann travay. Sèvi ak {successor} pito.",
+      "replaced": "Ap ranplase pa {successor}."
     }
   },
   "models": {
@@ -1974,6 +1992,11 @@
       "name": "GPT-6 Astra",
       "description": "Dènye modèl GPT-6 OpenAI a. Fèt pou travay ki mande anpil efò soti nan kòmansman rive nan fen : rechèch apwofondi, analiz konplèks, jeni lojisyèl, ak travay long ki gen plizyè etap. Pri li apeprè double GPT-5.6 Sol.",
       "tagline": "Modèl ki pi pisan OpenAI a"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Yon amelyorasyon GPT-6 Sol pou travay ki mande anpil sou kòd, dokiman, ak aplikasyon. Li prèske egal kapasite Astra a ak yon pri siyifikativman pi ba pou chak token.",
+      "tagline": "Prèske menm kapasite ak Astra, pri pi ba anpil"
     }
   },
   "searchMode": {
@@ -5424,7 +5447,10 @@
       "announcements": "Mesaj bann pou itilizatè yo : kiyès ki wè yo, kilè, ak nan ki lang.",
       "delegations": "Kiyès ki jere ki itilizatè, ak sa chak moun ka fè.",
       "channelProfiles": "Kisa chak platfòm ye: limit, konte, fil diskisyon. Sa yo se enfòmasyon sou òganizasyon an tout antye ke chak gwoup chanèl baze sou yo.",
-      "channelSets": "Règ chak ekip pou ekri sou platfòm yo: gid, vwa, sa ki default, kilès ki ka sèvi ak chanèl la epi kilès ki ka voye mesaj."
+      "channelSets": "Règ chak ekip pou ekri sou platfòm yo: gid, vwa, sa ki default, kilès ki ka sèvi ak chanèl la epi kilès ki ka voye mesaj.",
+      "webSearch": "Jiska ki nivo rechèch sou entènèt ka ale: rechèch plizyè etap, modèl ki verifye ak limit li yo.",
+      "contextBudget": "Konbyen nan chak konvèsasyon ki voye bay chak modèl sou chak etap.",
+      "analytics": "Rapò yo delivre: sa ki rive, kiyès ki ka ouvri chak dosye, ak ki jaden ki ka montre."
     },
     "openSettings": "Louvri anviwònman yo",
     "area": {
@@ -5432,7 +5458,10 @@
       "viewAs": "Wè kòm",
       "globalAdmins": "Administratè global",
       "announcements": "Anons",
-      "delegations": "Delegasyon"
+      "delegations": "Delegasyon",
+      "webSearch": "Rechèch sou entènèt",
+      "contextBudget": "Bidjè kontèks",
+      "analytics": "Analiz"
     }
   },
   "limits": {
@@ -6766,7 +6795,8 @@
     "capabilitiesHint": "Sak posib pou delegasyon sa bay. Admin yo ka genyen sèlman sa ki aktive isit la.",
     "grant": {
       "limits": "Limit itilizasyon",
-      "announcements": "Anonse"
+      "announcements": "Anonse",
+      "analytics": "Analitik"
     },
     "grantAll": "Tout",
     "maxOverrides": "Limit depase delegasyon sa ka genyen",
@@ -6927,5 +6957,540 @@
     "isDefaultAfterSave": "Ou kapab mete seri sa a kòm default apre ou fin sove.",
     "noChannelsWarning": "Seri sa a pa gen okenn chèn; pèsonn pa ka ekri bouyon ak li.",
     "audienceEveryoneHint": "Nenpòt moun nan òganizasyon an ka itilize seri sa a pou ekri bouyon."
+  },
+  "contextBudgetAdmin": {
+    "title": "Bidjè kontèks",
+    "description": "Konbyen istwa konvèsasyon chak modèl resevwa sou chak etap. Dènye mesaj yo toujou enkli; ansyen yo retire lè bidjè a fini, epi yon rezime sa yo retire mete nan enfòmasyon sistèm lan. Yon bidjè pi wo pèmèt plis nan yon konvèsasyon long rete vizib, men sa koute plis chak fwa.",
+    "scopeNote": "Aplike pou tout chat sou chak modèl. Bidjè a pa ka janm depase pati nan fenèt modèl lan jan sa make anba a.",
+    "loading": "Nap chaje bidjè kontèks la…",
+    "loadError": "Pa ka chaje bidjè kontèks la.",
+    "configUnavailable": "Pa ka li bidjè kontèks ki anrejistre kounye a, kidonk valè ki anba yo ka pa sa ki sou sistèm lan. Eseye ankò anvan w korije.",
+    "retry": "Eseye ankò",
+    "historyTokensLabel": "Bidjè estanda (tokens)",
+    "historyTokensDescription": "Istwa voye chak fwa, mesaj sistèm enkli, pou modèl ki pa gen konfigirasyon espesyal. Apeprè 48,000 konsève 30–60 dènye echanj nan yon konvèsasyon tipik.",
+    "historyFractionLabel": "Plafon (pati nan espas antre modèl lan)",
+    "historyFractionDescription": "Bidjè a limite ak pati sa a nan fenèt kontèks modèl lan, mwens rezèv pou rezilta; konsa, yon modèl ki gen ti fenèt pa janm mande plis pase sa li ka kenbe.",
+    "minRecentMessagesLabel": "Mesaj yo toujou kenbe",
+    "minRecentMessagesDescription": "Dènye mesaj yo sere menm si bidjè a depase (nan fenèt la). Twa kenbe dènye echanj la lè dènye mesaj la sèlman — tankou yon dokiman kole, rezilta rechèch — ta pran tout bidjè a.",
+    "familyOverridesLabel": "Chak fanmi",
+    "familyOverridesDescription": "Yon bidjè pou chak modèl nan yon fanmi, ki ranplase bidjè estanda a.",
+    "modelOverridesLabel": "Chak modèl",
+    "modelOverridesDescription": "Yon bidjè pou yon sèl modèl, ki ranplase bidjè pou fanmi ak bidjè estanda yo.",
+    "overrideFamilyPlaceholder": "Fanmi",
+    "overrideModelPlaceholder": "ID modèl la",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Ajoute",
+    "removeOverride": "Retire",
+    "noOverrides": "Okenn",
+    "effectiveLabel": "Bidjè aktyèl ak paramèt sa yo",
+    "effectiveColumnModel": "Modèl",
+    "effectiveColumnWindow": "Fenèt",
+    "effectiveColumnBudget": "Bidjè istwa",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Pa default : {value}",
+    "defaultsNote": "Se sèlman valè ki diferan ak sa ki pa default yo ki anrejistre; tout rès la kontinye swiv default kòd la sou chak nouvo vèsyon.",
+    "save": "Sove",
+    "saving": "Ap sove…",
+    "resetDefaults": "Reyajiste a default",
+    "unsaved": "Chanjman pa sove",
+    "saveSuccess": "Bidjè kontèks la sove. L ap pran efè nan kèk minit.",
+    "saveError": "Bidjè kontèks la pa t kapab sove.",
+    "conflictError": "Yon lòt administratè te chanje bidjè kontèks la antan; dènye valè yo retelechaje.",
+    "updatedByLine": "Sove dènye pa {by} sou {at}",
+    "neverSaved": "Pa janm sove — se default kòd la k ap aplike."
+  },
+  "webSearchAdmin": {
+    "title": "Rechèch sou entènèt",
+    "description": "Kontwole rechèch plizyè etap sou rechèch entènèt MSF. Apre premye rezilta yo, yon modèl evalyatè detèmine si yo reponn kesyon an; si se pa sa, li ka fè rechèch ankò ak lòt kesyon, li paj rezilta yo, mande itilizatè a pou detay ki manke, oswa rapòte ke pa gen anyen ki jwenn.",
+    "scopeNote": "Anviwònman sa yo aplike sèlman pou rechèch entènèt MSF. Lòt founisè rechèch toujou itilize yon sèl vag. Chak moun kapab dezaktive rechèch plizyè etap sa a pou tèt yo nan Anviwònman.",
+    "loading": "Ap chaje anviwònman rechèch entènèt…",
+    "loadError": "Te gen yon erè pou chaje anviwònman rechèch entènèt yo.",
+    "configUnavailable": "Anviwònman rechèch entènèt yo pa t kapab li nan depo a. Kontwòl yo kache olye yo montre ak valè default ki petèt pa konpatib ak sa k aktyèlman itilize.",
+    "retry": "Reeseye",
+    "enabledLabel": "Rechèch plizyè etap",
+    "enabledDescription": "Lè l etenn, chak rechèch se yon sèl vag ak pa gen modèl evalyatè.",
+    "assessorLabel": "Modèl evalyatè",
+    "assessorDescription": "Li rele yon fwa apre chak etap pou jije rezilta yo. Chwazi yon modèl rapid ak pri ba : li kouri pandan itilizatè a ap tann. Si li pa disponib, {fallback} ap itilize olye.",
+    "maxStepsLabel": "Etap pa kesyon",
+    "maxStepsDescription": "Kantite etap maksimòm yon kesyon ka genyen, enkli premye rechèch la. Chak rechèch oswa lekti paj siplemantè konte kòm yon etap. Limit sa a separe ak limit rechèch pa jou a, ki konte chak kesyon kòm yon sèl fwa.",
+    "maxStepsExploratoryLabel": "Etap pou rechèch eksplorasyon",
+    "maxStepsExploratoryDescription": "Yon limit pi wo pou chèche yon bagay difisil pou jwenn, tankou yon kopi yon liv ki ra, kote chemen dead ends yo atann. Pa ka pi ba pase limit nòmal la.",
+    "pageReadsLabel": "Li paj rezilta yo",
+    "pageReadsDescription": "Pèmèt yon etap louvri rezilta ki pi pwomèt yo epi li paj la dirèkteman olye pou li konte sou ekstrè rechèch yo.",
+    "maxPageReadsLabel": "Paj pa etap lekti",
+    "sourceAssessmentLabel": "Evalye kalite sous yo",
+    "sourceAssessmentDescription": "Evalyatè a mete etikèt sou chak sous (ofisyèl, etabli, segondè, fyab ba) konsa repons lan ka konsidere ak bay sous yo kredi.",
+    "timeBudgetLabel": "Bidjè tan (segond)",
+    "timeBudgetDescription": "Total tan yon rechèch ka pran, enkli premye vag la. Lè tan fini, repons lan ekri ak sa yo te jwenn.",
+    "defaultsNote": "Si ou kite yon anviwònman sou default orijinal la, li pa anrejistre — donk li toujou swiv default sa a si gen yon nouvo vèsyon pita.",
+    "defaultHint": "Pa default : {value}",
+    "defaultOn": "limen",
+    "defaultOff": "etenn",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Gen chanjman ou pa sove.",
+    "save": "Sove",
+    "saving": "Ap sove…",
+    "resetDefaults": "Reyajiste a default",
+    "saveSuccess": "Anviwònman rechèch entènèt yo sove.",
+    "saveError": "Anviwònman rechèch entènèt yo pa t kapab sove.",
+    "conflictError": "Yon lòt administratè te chanje anviwònman yo avan ou. Yo retelechaje — tcheke epi sove ankò tanpri.",
+    "updatedByLine": "Sove dènye pa {by} sou {at}.",
+    "neverSaved": "Pa gen anyen ki sove ankò; se default sistèm nan k ap aplike."
+  },
+  "modelRetirement": {
+    "notice": "Y ap retire {model} sou {retiresOn}. Konvèsasyon sa ap pase sou {successor} sou {movesOn}.",
+    "noticeRetiring": "Y ap retire {model} sou {retiresOn} epi li pap mache ankò. Chanje pou {successor} pou w kontinye itilize konvèsasyon sa.",
+    "switchNow": "Chanje kounye a"
+  },
+  "analytics": {
+    "title": "Analitik",
+    "backToChat": "Retounen sou chat",
+    "manage": "Jere",
+    "loading": "Y ap chaje…",
+    "loadFailed": "Rapò yo pa ka chaje.",
+    "retry": "Repran",
+    "emptyTitle": "Yo poko pataje anyen avè w",
+    "emptyBody": "Rapò yo ap parèt isit la lè yon administratè ba ou aksè ak yon dosye.",
+    "deliveryUnavailable": "Rapò yo pa disponib kounye a, kidonk lis ki anba yo ka vid. Eseye ankò apre kèk minit.",
+    "groupsDegraded": "Nou pa ka verifye manm gwoup ou yo kounye a; dosye gwoup ou yo pataje yo ka manke. Relanse paj la apre yon minit.",
+    "foldersHeading": "Dosye",
+    "rootFolder": "Tout rapò yo",
+    "pathOnly": "Ou pa gen aksè ak dosye sa menm, sèlman ak dosye ki ladan l.",
+    "selectFolder": "Chwazi yon dosye pou wè rapò li yo.",
+    "noFiles": "Pa gen okenn rapò nan dosye sa.",
+    "viewOnlyNote": "Ou gen aksè sèlman pou w gade dosye sa : ou ka ouvri rapò yo, wè rezime ak tablo yo. Tablo ak yon liy pa moun, ekspòte ak telechaje mande aksè telechajman.",
+    "col": {
+      "name": "Fichye",
+      "period": "Peryòd",
+      "delivered": "Delivre",
+      "size": "Gwosè",
+      "availableUntil": "Disponib jiska",
+      "actions": "Aksyon"
+    },
+    "download": "Telechaje",
+    "downloadAria": "Telechaje {name}",
+    "block": {
+      "view-only": "Gade sèlman",
+      "hidden-fields": "Original pa disponib (chan yo kache)",
+      "unclassified-fields": "Original pa disponib (chan yo ap tann revizyon)",
+      "not-inspected": "Pa ankò verifye",
+      "policy-unavailable": "Pa disponib kounye a"
+    },
+    "adminBadge": {
+      "error": "Kache pou itilizatè yo",
+      "pending": "Y ap verifye",
+      "warning": "Gen avètisman",
+      "expired": "Ekspire, y ap efase byento",
+      "originalBlocked": "Itilizatè yo pa ka telechaje : {reason}"
+    },
+    "openAria": "Ouvri {name}",
+    "openForExport": "Ouvri pou ekspòte",
+    "preview": {
+      "back": "Retounen sou {folder}",
+      "tabsLabel": "Tablo nan fichye sa",
+      "lockedTab": "{name} (bloke)",
+      "unavailable": "Fichye sa pa ka ouvri sou aplikasyon an kounye a.",
+      "tableFailed": "Tablo sa pa ka chaje.",
+      "withheld": {
+        "row-level": "Tablo sa gen yon liy pa moun. Ouvril mande aksè telechajman sou dosye a.",
+        "hidden-fields": "Paj sa gen yon chan ki kache, se poutèt sa li pa afiche."
+      },
+      "truncated": "Y ap montre {shown, number} premye ranje sou {total, number}. Ekspòte tablo a pou w jwenn tout yo.",
+      "freeformNote": "Paj sa fèt pou lekti epi afiche jan li te delivre.",
+      "filter": "Filtre ranje yo",
+      "filterPlaceholder": "Filtre ranje…",
+      "rows": "{count, plural, one {# ranje} other {# ranje yo}}",
+      "matching": "{count, number} sou {total, number} ranje koresponn",
+      "modeLabel": "Montre kòm",
+      "mode": {
+        "table": "Tablo",
+        "chart": "Grafik"
+      },
+      "noRows": "Pa gen okenn ranje pou montre.",
+      "hiddenColumn": "Kache pou itilizatè yo",
+      "exportCsv": "Ekspòte tablo sa a (CSV)",
+      "exportXlsx": "Ekspòte tout tablo yo (Excel)",
+      "downloadOriginal": "Telechaje orijinal la",
+      "exportNote": "Fichye yo delivre gen chan ki kache, kidonk li pa kapab telechaje konsa. Ekspòtasyon yo kite chan sa yo deyò.",
+      "sectionLabel": "Montre",
+      "section": {
+        "overview": "Rezime",
+        "tables": "Tablo yo"
+      }
+    },
+    "chart": {
+      "groupBy": "Gwoupe pa",
+      "measure": "Mezi",
+      "rowCount": "Kantite ranje",
+      "aggregation": "Kalkile",
+      "agg": {
+        "sum": "Sòm",
+        "mean": "Mwayèn",
+        "min": "Pi piti",
+        "max": "Pi gwo"
+      },
+      "ariaLabel": "{measure} pa {group}",
+      "noColumns": "Tablo sa a pa gen kolòn tèks oswa dat pou gwoupe pa li.",
+      "empty": "Pa gen anyen pou grafik ak chwa sa a.",
+      "truncatedGroups": "Ap montre {count} pi gwo gwoup yo.",
+      "basedOn": "Baze sou premye {shown, number} nan {total, number} ranje yo.",
+      "savePng": "Sove kòm imaj",
+      "saveSvg": "Sove kòm SVG",
+      "saveFailed": "Pa t kapab sove grafik la."
+    },
+    "dash": {
+      "loading": "Y ap chaje…",
+      "failed": "Pa t kapab chaje rezime a.",
+      "retry": "Re-eseaye",
+      "showTable": "Montre kòm tablo",
+      "showChart": "Montre kòm grafik",
+      "smallGroups": "Gwoup ki gen mwens pase 5 moun",
+      "foldedNote": "Gwoup ki gen mwens pase 5 moun yo mete ansanm nan yon sèl ranje.",
+      "otherCount": "{count, plural, one {# lòt} other {# lòt yo}}",
+      "hiddenPanel": "Kache pa paramèt chan yo.",
+      "missingPanel": "Pa disponib pou fichye sa a.",
+      "usage": {
+        "users": "Moun aktif",
+        "interactions": "Entèraksyon yo",
+        "avgPerUser": "Mwayèn pa moun",
+        "medianPerUser": "Medyàn pa moun",
+        "hq": "Nan biwo santral",
+        "field": "Nan teren an",
+        "shareUsers": "{pct}% nan itilizatè {comparator}",
+        "shareUsage": "{pct}% nan itilizasyon {comparator}",
+        "comparator": "{comparator}: {value}",
+        "daily": "Entèraksyon pa jou",
+        "dailyUsers": "Moun aktif pa jou",
+        "dailyUsersSub": "Pa kote travay",
+        "weekly": "Entèraksyon pa semèn",
+        "activity": "Kouman moun ap itilize li",
+        "activitySub": "Moun, selon kantite entèraksyon yo nan peryòd la",
+        "departments": "Entèraksyon pa depatman",
+        "jobTitles": "Entèraksyon pa tit travay",
+        "models": "Evènman pa modèl",
+        "total": "Tout kote yo",
+        "location": {
+          "hq": "Sant direktè",
+          "field": "Tèren",
+          "unknown": "Enkoni"
+        },
+        "col": {
+          "date": "Jou",
+          "week": "Semèn kòmanse",
+          "users": "Moun",
+          "interactions": "Entèraksyon",
+          "events": "Evènman",
+          "group": "Gwoup",
+          "band": "Entèraksyon"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Total faktiye",
+        "usageVariable": "Kout varyab selon itilizasyon",
+        "staticInfra": "Enfrastrikti statik",
+        "sections": "Sèksyon faktiye",
+        "usageEvents": "Evènman itilizasyon",
+        "bySection": "Faktiye pa sèksyon",
+        "changes": "Chanjman soti nan dosye anvan an",
+        "noChanges": "Pa gen okenn chanjman soti nan dosye anvan an.",
+        "byDomain": "Evènman itilizasyon pa domèn imèl",
+        "reconciliation": "Rekonsilyasyon ak Azure",
+        "col": {
+          "section": "Sèksyon",
+          "billed": "Faktiye",
+          "usageEvents": "Evènman itilizasyon",
+          "usagePct": "Itilizasyon %",
+          "line": "Liy",
+          "amount": "Kantite",
+          "previous": "Dosye anvan",
+          "restated": "Rekalkile",
+          "change": "Chanjman",
+          "domain": "Domèn imèl",
+          "users": "Moun"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Kalkile ak",
+        "delivered": "Sipozisyon pwòp rapò a ({version})",
+        "current": "Sipozisyon aktyèl aplikasyon an ({version})",
+        "whatIf": "E si…",
+        "deliveredUnavailable": "Sipozisyon pwòp rapò sa a pa t ka li nan fich Sipozisyon an, se sa k fè aplikasyon an itilize sipozisyon aktyèl yo.",
+        "whatIfIntro": "Chanje yon valè pou wè kijan sa afekte tout bagay anba a. Anyen pa sove.",
+        "resetDelivered": "Retounen sou sa rapò a mete",
+        "resetCurrent": "Retounen sou sa aplikasyon an mete",
+        "co2": "Emisyon",
+        "energy": "Enèji",
+        "charges": "Chaj telefòn entelijan",
+        "chargesSub": "Avèk menm anprint la",
+        "activeUsers": "Moun aktif",
+        "requests": "Demann",
+        "tokens": "Tòken",
+        "vsDelivered": "{delta} kont sipozisyon rapò a",
+        "sameAsDelivered": "Menm jan ak sipozisyon rapò a",
+        "unpriced": "{count, plural, one {# demann itilize} other {# demann itilize}} yon gwosè modèl ki pa gen done pou sipozisyon sa yo, epi {count, plural, one {li} other {yo}} pa enkli.",
+        "byDepartment": "Emisyon pa depatman",
+        "byModel": "Emisyon pa modèl",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Kalkile isit la kont sa ki anrejistre nan moman an",
+        "reconciliationSub": "Aplikasyon an estime chak demann tou pandan li fèt. Tou le de dakò si sipozisyon yo menm.",
+        "computed": "Kalkile isit la",
+        "logged": "Anrejistre pa aplikasyon an",
+        "difference": "Diferans",
+        "col": {
+          "group": "Gwoup",
+          "requests": "Demann",
+          "tokens": "Tòken",
+          "energyWh": "Enèji (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Depans sant done (PUE)",
+          "promptTokenWeight": "Pwa tòken prompt",
+          "dedicatedReasoningMultiplier": "Miltiplikatè pou rezonman dedye",
+          "whPer1kTokens": "Wh pou 1,000 tòken — {name}",
+          "reasoningEffortMultipliers": "Miltiplikatè efò rezonman — {name}",
+          "gridIntensity": "CO₂e pa kWh sou rezo a — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Evènman",
+        "users": "Moun",
+        "tokens": "Tòken",
+        "errors": "Erè",
+        "energy": "Enèji",
+        "co2": "Emisyon",
+        "hourly": "Evènman pa lè (UTC)",
+        "byType": "Evènman pa tip",
+        "byError": "Erè pa kòd",
+        "byModel": "Tòken pa modèl",
+        "byCompany": "Evènman pa òganizasyon",
+        "none": "Pa gen.",
+        "col": {
+          "group": "Gwoup",
+          "events": "Evènman",
+          "tokens": "Tòken",
+          "hour": "Lè"
+        }
+      },
+      "trend": {
+        "title": "Evoulisyon sou tan",
+        "period": "Peryòd",
+        "users": "Moun aktif pa rapò",
+        "interactions": "Entèraksyon pa rapò",
+        "billed": "Total faktire pa peryòd",
+        "sections": "Faktirasyon pa seksyon",
+        "otherSections": "Tout lòt seksyon yo",
+        "co2": "Emisyon pa rapò",
+        "energy": "Enèji pa rapò",
+        "recalculated": "Chak peryòd kalkile ak sipozisyon aktyèl app lan ({version}), kidonk yon chanjman nan sipozisyon ant rapò yo pa parèt kòm chanjman nan emisyon yo.",
+        "severalPerPeriod": "Katab sa a gen plizyè rapò pou menm peryòd la. Louvri yon katab andedan li pou w wè kijan yonn nan yo chanje sou tan."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analitik",
+    "description": "Rapò yo depoze nan depo pa done pipeline lan. Isit ou verifye sa ki rive, deside kilès ki ka louvri chak katab, epi chwazi ki chan yo platfòm lan ka montre.",
+    "openViewer": "Louvri analitik yo",
+    "sharedNotice": "Beta ak pwodiksyon pataje katab, odyans, ak fichye sa yo. Nenpòt chanjman ou sove isit la ap afekte toude.",
+    "tabsLabel": "Sksyon analitik yo",
+    "tab": {
+      "health": "Livrezon yo",
+      "folders": "Katab & aksè",
+      "fields": "Champs yo"
+    },
+    "loading": "Y ap chaje…",
+    "retry": "Reeseye",
+    "loadError": "Pa t ka chaje seksyon sa a.",
+    "unavailable": "Pa t ka li paramèt yo sove nan depo a. Sa PA vle di \"pa gen anyen ki konfigire\" — edisyon dezaktive pou pa efase paramèt reyèl yo. Reeseye e tcheke jounal sèvè a si pwoblèm nan kontinye.",
+    "save": "Sove",
+    "saving": "Y ap sove…",
+    "unsaved": "Chanjman ki pa sove",
+    "saveSuccess": "Sove.",
+    "saveError": "Pa t ka sove.",
+    "conflictError": "Yon lòt administratè modifye paramèt sa yo pandan ou t ap edite. Chanjman ou yo pa t sove — dènye vèsyon an chaje ankò.",
+    "rootFolder": "(nivo siperyè)",
+    "scope": {
+      "domain": "Domèn imèl",
+      "user": "Moun",
+      "attribute": "Atribi",
+      "group": "Gwoup Entra"
+    },
+    "scopePlaceholder": {
+      "domain": "egzanp.org",
+      "user": "non@egzanp.org",
+      "attribute": "depatman:Sante",
+      "group": "Id objek gwoup Entra"
+    },
+    "level": {
+      "view": "Gade rezime yo",
+      "download": "Gade, ekspòte ak telechaje"
+    },
+    "reportType": {
+      "usage": "Rapò itilizasyon",
+      "rebilling": "Refakturasyon",
+      "emissions": "Rapò emisyon",
+      "raw-telemetry": "Telemetri brit"
+    },
+    "field": {
+      "userCode": {
+        "label": "Kòd itilizatè",
+        "description": "Kòd pseudonim u-… ki reprezante yon moun."
+      },
+      "jobTitle": {
+        "label": "Tit travay",
+        "description": "Tit travay yo, enkli tit ki pi komen sou fèy rezime yo. Nan yon ti gwoup, tit la ka montre yon moun an patikilye."
+      },
+      "department": {
+        "label": "Depatman",
+        "description": "Depatman yo, enkli depatman ki pi aktif sou fèy rezime yo."
+      },
+      "company": {
+        "label": "Konpayi / òganizasyon",
+        "description": "Non òganizasyon an nan repèrtwa a, ak non konpayi ki parèt sou fèy refakturasyon yo."
+      },
+      "orgGroup": {
+        "label": "Gwoup òganizasyon",
+        "description": "Sant operasyon oswa gwoup yon rapò klase anba li."
+      },
+      "section": {
+        "label": "Sksyon",
+        "description": "Sksyon rekiperasyon depans kote yon liy refakturasyon fè pati."
+      },
+      "mailDomain": {
+        "label": "Domèn imel",
+        "description": "Itilizasyon domèn imel la atribiye a (pa janm yon adrès)."
+      },
+      "workLocation": {
+        "label": "Kote travay",
+        "description": "Sant prensipal oswa sou teren."
+      },
+      "technical": {
+        "label": "Detay teknik",
+        "description": "Modèl, rejyon, tip evènman, lajan ak lòt deskriptè ki pa bay okenn enfòmasyon sou moun."
+      },
+      "other": {
+        "label": "Lòt chan deskriptif",
+        "description": "Lè ou mete nan kolòn ki pa antre nan okenn kategori anwo yo."
+      }
+    },
+    "folders": {
+      "intro": "Chak dosye kote pipeline lan depoze parèt isit la. Yon dosye san okenn konfigirasyon — epi pa gen okenn dosye anlè bay aksè — vizib sèlman pou administratè yo.",
+      "name": "Non pou afiche",
+      "namePlaceholder": "Parèt an plas chemen dosye a",
+      "description": "Deskripsyon",
+      "reportType": "Kalite rapò",
+      "reportTypeNone": "Pa defini",
+      "reportTypeInherited": "Eritaj: {type}",
+      "reportTypeHint": "Di sistèm lan ki non fichye pou atann epi konbyen fwa. Sa aplike pou sous-dosye yo ladan l.",
+      "retention": "Kenbe fichye pou (mwa)",
+      "retentionHint": "Kite vid pou sèvi ak {months} mwa pa eritaj. Konte apati fen peryòd chak rapò.",
+      "audience": "Kilès ki gen dwa ouvè dosye sa a",
+      "audienceHint": "Chak liy bay aksè pou dosye sa ak sous-dosye li yo. Yon moun oswa gwoup pa liy.",
+      "audienceScope": "Kalite sib",
+      "audienceTargets": "Sib yo",
+      "audienceLevel": "Nivo aksè",
+      "addAudience": "Ajoute moun oswa gwoup",
+      "removeAudience": "Retire liy sa",
+      "restricted": "Pa erit aksè nan dosye ki pi wo yo",
+      "restrictedHint": "Sèlman liy yo sou dosye sa aplike isit la ak pi ba.",
+      "hiddenFields": "Kache tou nan dosye sa a",
+      "hiddenFieldsHint": "Chan ki kache isit la anplis sa sou platfòm lan, pou dosye sa ak sous-dosye li yo. Ou ka kache plis, men pa janm montre plis.",
+      "hiddenPlatformWide": "(kache tout kote)",
+      "clear": "Retire konfigirasyon dosye sa a",
+      "rawChip": "Raw: sèlman administratè global",
+      "rawNote": "Telemtri raw gen non, adrès imel ak non fichye. Sèlman administratè global ka ouvè li, epi ou pa ka ajoute okenn lòt moun.",
+      "audienceChip": "{count, plural, one {# liy aksè} other {# liy aksè}}",
+      "restrictedChip": "San eritaj",
+      "notConfiguredChip": "Pa gen konfigirasyon",
+      "addPathLabel": "Konfigire yon dosye anvan premye depo a",
+      "addPath": "Ajoute",
+      "addPathHint": "Chemen egzak la menm jan pipeline lan pral itilize l, egzanp: usage/ocba. Sa ap sèlman sove konfigirasyon an; li pap kreye anyen nan depo a.",
+      "invalidPath": "Chemen dosye sa a pa valab.",
+      "rawGlobalOnly": "Sèlman administratè global ka konfigire dosye ki sou raw/."
+    },
+    "fields": {
+      "intro": "Chwazi ki chan rapò delivre platfòm lan ka montre. Kache yon chan ap retire li toupatou sou aplikasyon an ak nan ekspòtasyon aplikasyon an. Sèlman administratè yo ka telechaje fichye delivre a menm.",
+      "readOnly": "Sèlman administratè global ka modifye sa. Kòm administratè analytics, ou ka kache lòt chan pa dosye, nan \"Dosye & aksè\".",
+      "configurableHeading": "Chan",
+      "shown": "Montre",
+      "hidden": "Kache",
+      "jobTitleNote": "Lè tit travay ap parèt, yon ranje nan yon ti gwoup ka idantifye yon moun menm si se kòd itilizatè. Tablo yo pa montre gwoup ki gen mwens pase senk moun; tab ekspòte yo ap montre tout.",
+      "neverHeading": "Pa janm parèt",
+      "neverBody": "Non, adrès imel, id anyè, non fichye telechaje ak erè pa janm parèt deyò telemetri raw. Yon rapò ki gen nenpòt ladan yo, kache pou itilizatè jiskaske li ranplase.",
+      "unclassifiedHeading": "Kolòn katalòg la pa konnen",
+      "unclassifiedBody": "Yon kolòn tèks ki pa rekonèt ap rete kache — nan aplikasyon an ak nan ekspòtasyon — epi dosye a pa kapab telechaje pa itilizatè yo, jiskaske ou ranje li anba yon jaden.",
+      "noneWaiting": "Pa gen anyen k ap tann.",
+      "inFiles": "{count, plural, one {nan # dosye} other {nan # dosye}}",
+      "classifyAs": "Jaden pou kolòn {column}",
+      "keepHidden": "Kenbe kache",
+      "removeClassification": "Retire anviwònman pou kolòn {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Rapò depo a pa aksesib",
+      "deliveryUnavailableBody": "Aplikasyon an pa ka lis kontenè “{container}”. Tcheke si li egziste epi si idantite aplikasyon an gen yon wòl done sou li. Jiskaske sa rezoud, pa gen okenn rapò ki parèt pou pèsonn.",
+      "foldersUnavailable": "Paramèt katab yo pa t ka li, konsa itilizatè yo pa wè okenn katab kounye a. Pa gen dosye k ap verifye oswa ekspire jiskaske sa korije.",
+      "policyUnavailable": "Paramèt jaden yo pa t ka li, konsa itilizatè yo pa ka telechaje dosye pou kounye a.",
+      "total": {
+        "files": "Dosye",
+        "ok": "Bon",
+        "warning": "Avètisman",
+        "error": "Kache pou itilizatè yo",
+        "pending": "Ap verifye"
+      },
+      "recheckAll": "Revérifye tout bagay",
+      "recheckOne": "Revérifye ankò",
+      "recheckQueued": "{count, plural, one {# dosye ann atant pou vérifikasyon.} other {# dosye ann atant pou vérifikasyon.}}",
+      "recheckFailed": "Pa t ka kòmanse vérifikasyon an.",
+      "retention": {
+        "active": "Dosye ki depase dat retansyon katab yo ap kache touswit epi ap efase {days} jou apre.",
+        "disabled": "Dosye ki depase dat retansyon katab yo ap kache, men efasman an dezaktive pou deplwaman sa a.",
+        "waiting-for-config": "Dosye ki depase retansyon pa default yo ap kache. Pa gen anyen k ap efase jiskaske paramèt katab yo sove omwen yon fwa."
+      },
+      "noFiles": "Pa gen okenn dosye ki delivre ankò.",
+      "allGood": "Tout sa ki delivre an òd.",
+      "problemsHeading": "Dosye ki mande atansyon",
+      "status": {
+        "error": "Kache pou itilizatè yo",
+        "warning": "Avètisman",
+        "pending": "Ap verifye",
+        "ok": "Bon"
+      },
+      "pendingBody": "Nouvo oubyen ranplase depi dènye vérifikasyon an. L ap parèt pou itilizatè apre li pase vérifikasyon an.",
+      "firstSeen": "Premye fwa remake {date}",
+      "unclassifiedHeading": "Kolòn ann atant pou desizyon",
+      "unclassifiedBody": "Kolòn sa yo pa rekonèt. Yo rete kache, epi itilizatè yo pa ka telechaje dosye ki gen yo, jiskaske yon moun ranje chak yonn anba yon jaden.",
+      "unclassifiedChip": "{column} · {count, plural, one {# dosye} other {# dosye}}",
+      "openFields": "Ale nan Jaden yo",
+      "unconfiguredHeading": "Katab san paramèt",
+      "unconfiguredBody": "Dosye ap rive isit, men pèsonn pa konfigire katab la oswa youn anwo li. Se sèlman administratè ki ka wè yo.",
+      "staleHeading": "Livrezon an reta",
+      "staleBody": "Katab sa yo dwe resevwa rapò regilye epi dènye a pi gran pase sa li ta dwe ye.",
+      "staleDetail": {
+        "daily": "Chak jou; dènye kouvri {date}",
+        "monthly": "Chak mwa; dènye fini {date}"
+      },
+      "staleNever": "Pa gen anyen ki delivre ankò",
+      "expiringHeading": "Ap ekspire",
+      "expiringBody": "Dosye ki depase oswa ap rive retansyon nan 30 jou.",
+      "expiresOn": "Ekspire {date}",
+      "expiredOn": "Depi {date} li ekspire"
+    },
+    "issue": {
+      "name-mismatch": "Non dosye a pa sa katab sa a atann (pa egzanp {expected}).",
+      "unsupported-format": "Dosye tip “{extension}” pa ka verifye, konsa li kache pou itilizatè yo. Voye .xlsx oswa .csv.",
+      "too-large": "Avèk {sizeMb} MB, dosye sa depase limit {limitMb} MB pou vérifikasyon, kidonk li kache pou itilizatè yo.",
+      "empty-file": "Dosye a vid.",
+      "unreadable": "Fichye a pa t ka louvri. Li ka domaje, oswa li pa menm fòma non li endike a.",
+      "identifier-column": "Fèy \"{sheet}\" gen yon kolòn \"{column}\" ki idantifye moun yo. Fichye a kache pou itilizatè yo.",
+      "identifier-values": "\"{sheet}\" genyen {count, plural, one {# adrès imel} other {# adrès imel}}. Fichye a kache pou itilizatè yo.",
+      "user-code-format": "Fèy \"{sheet}\", kolòn \"{column}\": {count, plural, one {# valè pa} other {# valè pa}} yon kòd itilizatè u-... Fichye a kache pou itilizatè yo.",
+      "formulas-without-values": "Fèy \"{sheet}\" gen {count, plural, one {# fòmil} other {# fòmil}} ki pa gen rezilta anrejistre, kidonk chif sa yo pa ka parèt nan aplikasyon an.",
+      "missing-sheet": "Fèy \"{sheet}\" manke, kidonk paj ki fèt sou li yo pa ka parèt.",
+      "missing-column": "Fèy \"{sheet}\" pa gen kolòn \"{column}\", kidonk paj ki itilize li yo pa ka parèt.",
+      "no-period": "Non fichye a pa gen okenn peryòd rapò, kidonk retansyon ap konte depi dat livrezon an.",
+      "unclassified-field": "Kolòn \"{column}\" pa rekonèt. Li rete kache, epi itilizatè yo pa ka telechaje fichye a, jiskaske li klase anba yon chan.",
+      "past-retention": "Pi ansyen pase {months} mwa retansyon nan dosye sa a; li pap parèt ankò.",
+      "unknown": "Pwoblèm rapòte : {code}."
+    }
   }
 }

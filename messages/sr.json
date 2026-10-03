@@ -865,7 +865,10 @@
       "codeInterpreterLimitReached": "Dnevni limit za izvršavanje koda je dostignut — odgovaranje bez pokretanja koda…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Pretraga baze znanja nije uspela — odgovor neće koristiti dokumente agenta",
-      "stillWorking": "Još uvek radim…"
+      "stillWorking": "Još uvek radim…",
+      "assessingSearchResults": "Proveravam da li rezultati odgovaraju na pitanje…",
+      "refiningSearch": "Ponovo pretražujem: „{query}“…",
+      "readingSearchPages": "Čitam {count} rezultata stranica…"
     },
     "toolSummary": {
       "usedTools": "Korišćen{count, plural, one {# alat} other {# alata}}",
@@ -951,7 +954,10 @@
       "summarizeNow": "Sažmi iz trenutno pronađenih naslova",
       "sourcesCount": "{count} izvora",
       "showAll": "Prikaži svih {count} izvora",
-      "showFewer": "Prikaži manje"
+      "showFewer": "Prikaži manje",
+      "multiStepTitle": "Dosadašnji rezultati — proveravam da li odgovaraju na pitanje",
+      "multiStepHint": "Pretraga može ići dalje — još jedno pretraživanje ili čitanje najperspektivnijih stranica. Odgovorite sada iz {count} već pronađenih rezultata ako ne želite da čekate.",
+      "answerNow": "Odgovorite odmah iz ovih rezultata"
     },
     "retryWithModel": "Pokušajte sa modelom {model}",
     "createTodoTasks": "Kreiraj To Do zadatke iz ovog odgovora",
@@ -965,7 +971,10 @@
     "modelTimedOutAtMaximum": "{model} nije počeo da odgovara u roku od {duration}, što je maksimalno vreme čekanja. Pokušajte ponovo ili izaberite drugi model.",
     "requestTimedOut": "Ovaj zahtev je trajao predugo i zaustavljen je pre nego što je {model} mogao da odgovori. Možete dozvoliti više vremena ili pokušati sa drugim modelom.",
     "retryWaitingLonger": "Sačekajte do {duration} i pokušajte ponovo",
-    "alwaysWaitThisLong": "Uvek čekaj do {duration}"
+    "alwaysWaitThisLong": "Uvek čekaj do {duration}",
+    "keepSearching": "Nastavite sa pretragom",
+    "keepSearchingHint": "Pretraga je zaustavljena pre nego što je pronašla ovo. Zamolite asistenta da pokuša drugačijim pristupom.",
+    "keepSearchingMessage": "Molim vas, nastavite sa pretragom za ovim — pokušajte drugačiji pristup."
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1450,7 +1459,9 @@
       "providerBingResponsesDescription": "Ista Bing web pokrivenost kao Bing grounding, ali radi kao jedan direktan poziv modela umesto Foundry agenta — obično mnogo brže. Nova opcija na evaluaciji u odnosu na Bing grounding.",
       "providerSearxng": "MSF pretraga veba",
       "providerSearxngDescription": "Interna privatna metapretraživačka usluga MSF-a. Obuhvata opšti veb, vesti, naučnu literaturu (uključujući MSF istraživačke publikacije), tehničku dokumentaciju i humanitarne podatke, i bira odgovarajući izvor za svako pitanje. Rezultati stižu za nekoliko sekundi sa direktnim linkovima, a iz aplikacije se šalje samo upit za pretragu — pretraživači vas nikada ne vide.",
-      "otherProvidersLabel": "Drugi provajderi"
+      "otherProvidersLabel": "Drugi provajderi",
+      "multiStepLabel": "Višekorak pretraga",
+      "multiStepDescription": "Uz MSF pretragu, asistent proverava prve rezultate i, samo ako nisu dovoljni, ponovo pretražuje ili čita najperspektivnije stranice pre odgovora. Većina pitanja se i dalje završava u jednom koraku. Isključite ovo da bi svaka pretraga bila samo jedan krug."
     },
     "Admin": "Admin",
     "Usage Limits": "Ograničenja upotrebe",
@@ -1470,7 +1481,8 @@
       "customHint": "Između {min} i {max} sekundi.",
       "preferModelTitle": "Preferiraj moj izabrani model",
       "preferModelDescription": "Nemoj automatski prebacivati na drugi model kada zahtev ne uspe. Greška će i dalje ponuditi promenu modela."
-    }
+    },
+    "Analytics": "Analitika"
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -1678,6 +1690,12 @@
     },
     "subVariant": {
       "label": "Veličina"
+    },
+    "retiring": {
+      "badge": "U povlačenju",
+      "datedMoving": "Povlači se {date}. Razgovori se prebacuju na {successor} dana {movesOn}.",
+      "dated": "Povlači se {date} i više neće raditi. Koristite umesto toga {successor}.",
+      "replaced": "Zamenjuje ga {successor}."
     }
   },
   "models": {
@@ -1974,6 +1992,11 @@
       "name": "GPT-6 Astra",
       "description": "Vodeći model GPT-6 kompanije OpenAI. Namenjen zahtevnim zadacima od početka do kraja: dubinsko istraživanje, složena analiza, softverski inženjering i dugi višestepeni zadaci. Približno dvostruko skuplji od GPT-5.6 Sol.",
       "tagline": "Najnapredniji model kompanije OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Nadogradnja za GPT-6 Sol za zahtevne zadatke sa kodovima, dokumentima i aplikacijama. Dostiže Astra mogućnosti po znatno nižoj ceni za tokene.",
+      "tagline": "Blizu Astra sposobnosti, znatno niža cena"
     }
   },
   "searchMode": {
@@ -5424,7 +5447,10 @@
       "announcements": "Baner poruke za korisnike: ko ih vidi, kada i na kojim jezicima.",
       "delegations": "Ko upravlja kojim korisnicima i šta je svakome dozvoljeno da radi.",
       "channelProfiles": "Šta je svaka platforma: ograničenja, brojanje, niti. Činjenice na nivou organizacije na kojima počiva svaki set kanala.",
-      "channelSets": "Pravila svakog tima za pisanje na platformama: smernice, glasovi, podrazumevane vrednosti, ko može koristiti set i ko može slati."
+      "channelSets": "Pravila svakog tima za pisanje na platformama: smernice, glasovi, podrazumevane vrednosti, ko može koristiti set i ko može slati.",
+      "webSearch": "Koliko daleko može ići web pretraga: višekorak pretraga, njen model procene i granice.",
+      "contextBudget": "Koliko se istorije razgovora šalje svakom modelu u svakom krugu.",
+      "analytics": "Dostavljeni izveštaji: šta je stiglo, ko može da otvori svaki folder i koja polja mogu biti prikazana."
     },
     "openSettings": "Otvori podešavanja",
     "area": {
@@ -5432,7 +5458,10 @@
       "viewAs": "Prikaži kao",
       "globalAdmins": "Globalni administratori",
       "announcements": "Obaveštenja",
-      "delegations": "Delegacije"
+      "delegations": "Delegacije",
+      "webSearch": "Web pretraga",
+      "contextBudget": "Budžet konteksta",
+      "analytics": "Analitika"
     }
   },
   "limits": {
@@ -6766,7 +6795,8 @@
     "capabilitiesHint": "Šta ova delegacija uopšte može da dodeli. Administratori mogu imati samo ono što je ovde omogućeno.",
     "grant": {
       "limits": "Ograničenja korišćenja",
-      "announcements": "Obaveštenja"
+      "announcements": "Obaveštenja",
+      "analytics": "Analitika"
     },
     "grantAll": "Sve",
     "maxOverrides": "Ograničenje prekoračenja za ovu delegaciju",
@@ -6927,5 +6957,540 @@
     "isDefaultAfterSave": "Možete postaviti ovaj set kao podrazumevani nakon čuvanja.",
     "noChannelsWarning": "Ovaj set ne sadrži nijedan kanal; niko ne može kreirati nacrt sa njim.",
     "audienceEveryoneHint": "Bilo ko u organizaciji može koristiti ovaj set za kreiranje nacrta."
+  },
+  "contextBudgetAdmin": {
+    "title": "Budžet konteksta",
+    "description": "Koliko istorije razgovora se šalje modelu u jednom krugu. Najnovije poruke su uvek uključene; starije se izostavljaju kada se budžet potroši, a sažetak izostavljenih ide u sistemski prompt. Veći budžet zadržava više razgovora uz veći trošak po krugu.",
+    "scopeNote": "Primeni se na svaki razgovor sa svakim modelom. Budžet nikada ne može premašiti procenat modelovog prozora definisanog ispod.",
+    "loading": "Učitavanje budžeta konteksta…",
+    "loadError": "Budžet konteksta nije mogao da se učita.",
+    "configUnavailable": "Sačuvani budžet konteksta trenutno ne može da se pročita, pa vrednosti ispod možda nisu aktuelne. Pokušajte ponovo pre uređivanja.",
+    "retry": "Pokušaj ponovo",
+    "historyTokensLabel": "Standardni budžet (tokeni)",
+    "historyTokensDescription": "Istorija poslata po krugu, uključujući sistemski prompt, za modele bez posebnog podešavanja. Oko 48.000 sačuva poslednjih 30–60 razmena tipičnog razgovora.",
+    "historyFractionLabel": "Gornja granica (procenat unosa modela)",
+    "historyFractionDescription": "Budžet je ograničen na ovaj procenat modelovog prozora konteksta, minus rezervaciju za izlaz, tako da model sa manjim prozorom nikad ne traži više nego što može da primi.",
+    "minRecentMessagesLabel": "Poruke koje se uvek čuvaju",
+    "minRecentMessagesDescription": "Najnovije poruke se čuvaju čak i kada je budžet premašen (u okviru prozora). Tri zadržavaju prethodnu razmenu kada najnovija poruka sama — npr. dokument u paste-u, rezultati pretrage — popuni budžet.",
+    "familyOverridesLabel": "Po porodici modela",
+    "familyOverridesDescription": "Budžet za svaki model porodice, umesto standardnog budžeta.",
+    "modelOverridesLabel": "Po modelu",
+    "modelOverridesDescription": "Budžet za jedan model, umesto porodičnog i standardnog budžeta.",
+    "overrideFamilyPlaceholder": "Porodica",
+    "overrideModelPlaceholder": "Model id",
+    "overrideTokensPlaceholder": "Tokeni",
+    "addOverride": "Dodaj",
+    "removeOverride": "Ukloni",
+    "noOverrides": "Nema",
+    "effectiveLabel": "Efektivni budžeti sa ovim podešavanjima",
+    "effectiveColumnModel": "Model",
+    "effectiveColumnWindow": "Prozor",
+    "effectiveColumnBudget": "Istorija budžeta",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Podrazumevano: {value}",
+    "defaultsNote": "Sačuvane su samo vrednosti koje se razlikuju od podrazumevanih; ostalo ostaje prema podrazumevanim postavkama kroz verzije.",
+    "save": "Sačuvaj",
+    "saving": "Čuvanje…",
+    "resetDefaults": "Vrati na podrazumevane",
+    "unsaved": "Nesačuvane izmene",
+    "saveSuccess": "Budžet konteksta je sačuvan. Stupa na snagu za oko minut.",
+    "saveError": "Budžet konteksta nije mogao da bude sačuvan.",
+    "conflictError": "Drugi administrator je promenio budžet konteksta u međuvremenu; najnovije vrednosti su učitane.",
+    "updatedByLine": "Poslednji put sačuvao/la {by} dana {at}",
+    "neverSaved": "Nikada nije sačuvano — primenjuju se podrazumevane postavke iz koda."
+  },
+  "webSearchAdmin": {
+    "title": "Pretraga na vebu",
+    "description": "Upravlja višekoraknom pretragom na MSF vebu. Nakon prvih rezultata model procene odlučuje da li odgovaraju na pitanje; ako ne, može ponovo pretražiti drugim upitima, čitati strane sa rezultatima, tražiti od korisnika dodatnu informaciju ili prijaviti da ništa nije pronađeno.",
+    "scopeNote": "Ove postavke važe samo za MSF veb pretragu. Ostali pretraživači uvek rade jednu rundu. Svaki korisnik može sam isključiti višekoraknu pretragu u Podešavanjima.",
+    "loading": "Učitavanje postavki veb pretrage…",
+    "loadError": "Postavke veb pretrage nisu mogle biti učitane.",
+    "configUnavailable": "Postavke veb pretrage nisu mogle biti pročitane iz skladišta. Kontrole su sakrivene umesto prikazane sa podrazumevanim vrednostima koje možda ne odgovaraju trenutnim postavkama.",
+    "retry": "Pokušaj ponovo",
+    "enabledLabel": "Višekorakna pretraga",
+    "enabledDescription": "Kada je isključeno, svaka pretraga je jedna planirana runda i model procene se ne pokreće.",
+    "assessorLabel": "Model procene",
+    "assessorDescription": "Pokreće se nakon svakog koraka da proceni rezultate. Izaberite brz, povoljan model: radi dok korisnik čeka. Ako mu nije moguće pristupiti, koristi se {fallback}.",
+    "maxStepsLabel": "Koraci po pitanju",
+    "maxStepsDescription": "Najveći broj koraka po pitanju, uključujući prvu pretragu. Svaka dodatna pretraga ili skup čitanja stranica je jedan korak. Ovo ograničenje je odvojeno od dnevnog limita pretraga, koji računa jedno pitanje kao jednu pretragu.",
+    "maxStepsExploratoryLabel": "Koraci za istraživačke pretrage",
+    "maxStepsExploratoryDescription": "Veći limit za potragu za teško dostupnim stavkama, na primer primerak retke knjige, gde se očekuju ćorsokaci. Ne može biti niži od običnog limita.",
+    "pageReadsLabel": "Čitanje stranica sa rezultatima",
+    "pageReadsDescription": "Dozvoljava koraku da otvori najperspektivnije rezultate i pročita samu stranicu, umesto oslanjanja na isečke iz pretrage.",
+    "maxPageReadsLabel": "Stranica po koraku čitanja",
+    "sourceAssessmentLabel": "Proceni kvalitet izvora",
+    "sourceAssessmentDescription": "Model procene označava svaki izvor (zvaničan, poznat, sekundaran, niska pouzdanost), tako da odgovor može da ih izmeri i pripiše.",
+    "timeBudgetLabel": "Vremenski budžet (sekunde)",
+    "timeBudgetDescription": "Ukupno vreme koje jedna pretraga može trajati, uključujući prvu rundu. Kada se vreme potroši, odgovor se piše na osnovu pronađenih informacija.",
+    "defaultsNote": "Postavka ostavljena na ugrađenom podrazumevanom nije zapamćena, pa ostaje tako ako kasnija verzija promeni tu vrednost.",
+    "defaultHint": "Podrazumevano: {value}",
+    "defaultOn": "uključeno",
+    "defaultOff": "isključeno",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Imate nesačuvane izmene.",
+    "save": "Sačuvaj",
+    "saving": "Čuvanje…",
+    "resetDefaults": "Vrati na podrazumevane",
+    "saveSuccess": "Postavke veb pretrage su sačuvane.",
+    "saveError": "Postavke veb pretrage nisu mogle biti sačuvane.",
+    "conflictError": "Drugi administrator je prvi promenio postavke. Učitane su najnovije vrednosti — pregledajte i sačuvajte ponovo.",
+    "updatedByLine": "Poslednji put sačuvao/la {by} dana {at}.",
+    "neverSaved": "Još ništa nije sačuvano; primenjuju se ugrađene podrazumevane postavke."
+  },
+  "modelRetirement": {
+    "notice": "Model {model} će biti povučen {retiresOn}. Ovaj razgovor će biti prebačen na {successor} {movesOn}.",
+    "noticeRetiring": "Model {model} će biti povučen {retiresOn} i više neće raditi. Pređite na {successor} da biste nastavili sa ovim razgovorom.",
+    "switchNow": "Pređite sada"
+  },
+  "analytics": {
+    "title": "Analitika",
+    "backToChat": "Nazad na chat",
+    "manage": "Upravljaj",
+    "loading": "Učitavanje…",
+    "loadFailed": "Izveštaji nisu mogli da se učitaju.",
+    "retry": "Pokušaj ponovo",
+    "emptyTitle": "Još nije ništa podeljeno sa vama",
+    "emptyBody": "Izveštaji će se pojaviti ovde kada administrator omogući pristup folderu.",
+    "deliveryUnavailable": "Skladište izveštaja trenutno nije dostupno, pa sledeće liste mogu biti prazne. Pokušajte ponovo za nekoliko minuta.",
+    "groupsDegraded": "Vaše članstvo u grupama nije moglo sada da se proveri, pa folderi koji su podeljeni sa vašim grupama možda nedostaju. Osvežite za minut.",
+    "foldersHeading": "Folderi",
+    "rootFolder": "Svi izveštaji",
+    "pathOnly": "Nemate pristup ovom folderu, već samo folderima unutar njega.",
+    "selectFolder": "Izaberite folder da biste videli njegove izveštaje.",
+    "noFiles": "Nema izveštaja u ovom folderu.",
+    "viewOnlyNote": "Imate pristup samo za pregled ovog foldera: možete otvoriti izveštaje, pregledati njihov sažetak i tabele. Tabele sa jednom vrstom po osobi, izvoz i preuzimanja zahtevaju pristup za preuzimanje.",
+    "col": {
+      "name": "Fajl",
+      "period": "Period",
+      "delivered": "Dostavljeno",
+      "size": "Veličina",
+      "availableUntil": "Dostupno do",
+      "actions": "Akcije"
+    },
+    "download": "Preuzmi",
+    "downloadAria": "Preuzmi {name}",
+    "block": {
+      "view-only": "Samo pregled",
+      "hidden-fields": "Original zadržan (skrivena polja)",
+      "unclassified-fields": "Original zadržan (polja na čekanju za pregled)",
+      "not-inspected": "Nije još provereno",
+      "policy-unavailable": "Trenutno nedostupno"
+    },
+    "adminBadge": {
+      "error": "Skriveno od korisnika",
+      "pending": "Na proveri",
+      "warning": "Ima upozorenja",
+      "expired": "Isteklo, čeka brisanje",
+      "originalBlocked": "Korisnici ne mogu preuzeti: {reason}"
+    },
+    "openAria": "Otvori {name}",
+    "openForExport": "Otvori za izvoz",
+    "preview": {
+      "back": "Nazad na {folder}",
+      "tabsLabel": "Tabele u ovom fajlu",
+      "lockedTab": "{name} (zaključano)",
+      "unavailable": "Ovaj fajl trenutno ne može da se otvori u aplikaciji.",
+      "tableFailed": "Nije moguće učitati ovu tabelu.",
+      "withheld": {
+        "row-level": "Ova tabela ima jednu vrstu po osobi. Otvaranje zahteva pristup za preuzimanje foldera.",
+        "hidden-fields": "Ova stranica sadrži skriveno polje, pa nije prikazano."
+      },
+      "truncated": "Prikazano je prvih {shown, number} od ukupno {total, number} vrsta. Izvezite tabelu da biste dobili sve.",
+      "freeformNote": "Ova stranica je razvijena za čitanje i prikazuje se kao što je dostavljena.",
+      "filter": "Filtriraj vrste",
+      "filterPlaceholder": "Filtriraj redove…",
+      "rows": "{count, plural, one {# red} other {# redova}}",
+      "matching": "{count, number} od {total, number} redova odgovara",
+      "modeLabel": "Prikaži kao",
+      "mode": {
+        "table": "Tabela",
+        "chart": "Grafikon"
+      },
+      "noRows": "Nema redova za prikaz.",
+      "hiddenColumn": "Skriveno od korisnika",
+      "exportCsv": "Izvezi ovu tabelu (CSV)",
+      "exportXlsx": "Izvezi sve tabele (Excel)",
+      "downloadOriginal": "Preuzmi original",
+      "exportNote": "Dostavljena datoteka sadrži polja koja su skrivena, pa ne može biti preuzeta u tom obliku. Izvoz ne uključuje ta polja.",
+      "sectionLabel": "Prikaži",
+      "section": {
+        "overview": "Pregled",
+        "tables": "Tabele"
+      }
+    },
+    "chart": {
+      "groupBy": "Grupiši po",
+      "measure": "Mera",
+      "rowCount": "Broj redova",
+      "aggregation": "Izračunaj",
+      "agg": {
+        "sum": "Zbir",
+        "mean": "Prosek",
+        "min": "Najmanji",
+        "max": "Najveći"
+      },
+      "ariaLabel": "{measure} po {group}",
+      "noColumns": "Ova tabela nema tekstualnu ili datum kolonu za grupisanje.",
+      "empty": "Nema podataka za prikazivanje grafikona za ovaj izbor.",
+      "truncatedGroups": "Prikazano je {count} najvećih grupa.",
+      "basedOn": "Na osnovu prvih {shown, number} od {total, number} redova.",
+      "savePng": "Sačuvaj kao sliku",
+      "saveSvg": "Sačuvaj kao SVG",
+      "saveFailed": "Grafikon nije moguće sačuvati."
+    },
+    "dash": {
+      "loading": "Učitavanje…",
+      "failed": "Pregled nije moguće učitati.",
+      "retry": "Pokušaj ponovo",
+      "showTable": "Prikaži kao tabelu",
+      "showChart": "Prikaži kao grafikon",
+      "smallGroups": "Grupe sa manje od 5 osoba",
+      "foldedNote": "Grupe sa manje od 5 osoba su spojene u jedan red.",
+      "otherCount": "{count, plural, one {# drugi} other {# drugih}}",
+      "hiddenPanel": "Skriveno podešavanjima polja.",
+      "missingPanel": "Nije dostupno za ovu datoteku.",
+      "usage": {
+        "users": "Aktivne osobe",
+        "interactions": "Interakcije",
+        "avgPerUser": "Prosek po osobi",
+        "medianPerUser": "Medijana po osobi",
+        "hq": "U sedištu",
+        "field": "Na terenu",
+        "shareUsers": "{pct}% od {comparator} korisnika",
+        "shareUsage": "{pct}% od {comparator} korišćenja",
+        "comparator": "{comparator}: {value}",
+        "daily": "Interakcije po danu",
+        "dailyUsers": "Aktivni korisnici po danu",
+        "dailyUsersSub": "Po radnoj lokaciji",
+        "weekly": "Interakcije po nedelji",
+        "activity": "Koliko se koristi",
+        "activitySub": "Korisnici, prema broju interakcija u periodu",
+        "departments": "Interakcije po odeljenju",
+        "jobTitles": "Interakcije po radnom mestu",
+        "models": "Događaji po modelu",
+        "total": "Sve lokacije",
+        "location": {
+          "hq": "Centrala",
+          "field": "Terenska lokacija",
+          "unknown": "Nepoznato"
+        },
+        "col": {
+          "date": "Dan",
+          "week": "Nedelja počinje",
+          "users": "Korisnici",
+          "interactions": "Interakcije",
+          "events": "Događaji",
+          "group": "Grupa",
+          "band": "Interakcije"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Ukupno fakturisano",
+        "usageVariable": "Varijabilni trošak korišćenja",
+        "staticInfra": "Statička infrastruktura",
+        "sections": "Fakturisane sekcije",
+        "usageEvents": "Događaji korišćenja",
+        "bySection": "Fakturisano po sekciji",
+        "changes": "Izmene u odnosu na prethodni fajl",
+        "noChanges": "Nema promena u odnosu na prethodni fajl.",
+        "byDomain": "Događaji korišćenja po mail domenu",
+        "reconciliation": "Usaglašavanje sa Azure",
+        "col": {
+          "section": "Sekcija",
+          "billed": "Fakturisano",
+          "usageEvents": "Događaji korišćenja",
+          "usagePct": "% korišćenja",
+          "line": "Linija",
+          "amount": "Iznos",
+          "previous": "Prethodni fajl",
+          "restated": "Revidirano",
+          "change": "Promena",
+          "domain": "Mail domen",
+          "users": "Korisnici"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Izračunato sa",
+        "delivered": "Prvobitne pretpostavke iz izveštaja ({version})",
+        "current": "Trenutne pretpostavke aplikacije ({version})",
+        "whatIf": "Šta ako...",
+        "deliveredUnavailable": "Prvobitne pretpostavke iz izveštaja nisu mogle biti učitane iz njegovog Assumptions lista, pa su korišćene trenutne pretpostavke aplikacije.",
+        "whatIfIntro": "Promenite neku vrednost da vidite efekat na sve dole. Ništa se ne čuva.",
+        "resetDelivered": "Vrati na prvobitne izveštaja",
+        "resetCurrent": "Vrati na trenutne aplikacije",
+        "co2": "Emisije",
+        "energy": "Energija",
+        "charges": "Punjenja pametnih telefona",
+        "chargesSub": "Sa istim ekološkim otiskom",
+        "activeUsers": "Aktivne osobe",
+        "requests": "Zahtevi",
+        "tokens": "Tokeni",
+        "vsDelivered": "{delta} u odnosu na pretpostavke samog izveštaja",
+        "sameAsDelivered": "Isto kao sa pretpostavkama izveštaja",
+        "unpriced": "{count, plural, one {# zahtev koristi} other {# zahteva koristi}} veličinu modela za koju nema podatka, i {count, plural, one {ostaje} other {ostaju}} izostavljeni.",
+        "byDepartment": "Emisije po sektoru",
+        "byModel": "Emisije po modelu",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Ovde izračunato u odnosu na evidentirano tokom vremena",
+        "reconciliationSub": "Aplikacija procenjuje svaki zahtev u realnom vremenu. Rezultati se poklapaju dok su pretpostavke iste.",
+        "computed": "Ovde izračunato",
+        "logged": "Evidentirano u aplikaciji",
+        "difference": "Razlika",
+        "col": {
+          "group": "Grupa",
+          "requests": "Zahtevi",
+          "tokens": "Tokeni",
+          "energyWh": "Energija (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Trošak data-centra (PUE)",
+          "promptTokenWeight": "Težina prompt tokena",
+          "dedicatedReasoningMultiplier": "Množitelj za odvojeno rezonovanje",
+          "whPer1kTokens": "Wh po 1.000 tokena — {name}",
+          "reasoningEffortMultipliers": "Množitelj napora za rezonovanje — {name}",
+          "gridIntensity": "Intenzitet mreže g CO₂e po kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Događaji",
+        "users": "Osobe",
+        "tokens": "Tokeni",
+        "errors": "Greške",
+        "energy": "Energija",
+        "co2": "Emisije",
+        "hourly": "Događaja po satu (UTC)",
+        "byType": "Događaji po tipu",
+        "byError": "Greške po šifri",
+        "byModel": "Tokeni po modelu",
+        "byCompany": "Događaji po organizaciji",
+        "none": "Nema.",
+        "col": {
+          "group": "Grupa",
+          "events": "Događaji",
+          "tokens": "Tokeni",
+          "hour": "Sat"
+        }
+      },
+      "trend": {
+        "title": "Tokom vremena",
+        "period": "Period",
+        "users": "Aktivne osobe po izveštaju",
+        "interactions": "Interakcije po izveštaju",
+        "billed": "Ukupno naplaćeno po periodu",
+        "sections": "Naplaćeno po odeljku",
+        "otherSections": "Sve ostale sekcije",
+        "co2": "Emisije po izveštaju",
+        "energy": "Energija po izveštaju",
+        "recalculated": "Svaki period je izračunat sa trenutnim pretpostavkama aplikacije ({version}), tako da promena pretpostavki između izveštaja nije prikazana kao promena emisija.",
+        "severalPerPeriod": "Ovaj folder sadrži nekoliko izveštaja za isti period. Otvorite folder unutar njega da vidite kako se jedan od njih menja tokom vremena."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analitika",
+    "description": "Izveštaji se dostavljaju u skladište kroz podatkovnu liniju. Ovde proveravate šta je stiglo, odlučujete ko može da otvori svaki folder, i birate koja polja platforma može da prikaže.",
+    "openViewer": "Otvorite analitiku",
+    "sharedNotice": "Beta i produkcija dele ove foldere, korisnike i fajlove. Promena sačuvana ovde je aktivna za oba.",
+    "tabsLabel": "Sekcije analitike",
+    "tab": {
+      "health": "Dostave",
+      "folders": "Folderi i pristup",
+      "fields": "Polja"
+    },
+    "loading": "Učitavanje…",
+    "retry": "Pokušaj ponovo",
+    "loadError": "Nije moguće učitati ovu sekciju.",
+    "unavailable": "Nije moguće pročitati sačuvana podešavanja iz skladišta. Ovo NIJE isto kao „ništa nije konfigurirano“ — uređivanje je onemogućeno da prava podešavanja ne bi bila prebrisana. Pokušajte ponovo i proverite server logove ako se problem nastavi.",
+    "save": "Sačuvaj",
+    "saving": "Čuvanje…",
+    "unsaved": "Nesačuvane promene",
+    "saveSuccess": "Sačuvano.",
+    "saveError": "Nije moguće sačuvati.",
+    "conflictError": "Drugi administrator je promenio ova podešavanja dok ste ih uređivali. Vaše promene nisu sačuvane — poslednja verzija je učitana.",
+    "rootFolder": "(najviši nivo)",
+    "scope": {
+      "domain": "Email domen",
+      "user": "Osoba",
+      "attribute": "Atribut",
+      "group": "Entra grupa"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "Entra group object id"
+    },
+    "level": {
+      "view": "Prikaži sažetke",
+      "download": "Prikaži, izvezi i preuzmi"
+    },
+    "reportType": {
+      "usage": "Izveštaj o korišćenju",
+      "rebilling": "Ponovno fakturisanje",
+      "emissions": "Izveštaj o emisijama",
+      "raw-telemetry": "Sirova telemetrija"
+    },
+    "field": {
+      "userCode": {
+        "label": "Korisnički kod",
+        "description": "Pseudonimni u-… kod koji predstavlja jednu osobu."
+      },
+      "jobTitle": {
+        "label": "Naziv posla",
+        "description": "Nazivi poslova, uključujući najčešći naziv na sažetim listama. U maloj grupi naziv može ukazati na jednu osobu."
+      },
+      "department": {
+        "label": "Odeljenje",
+        "description": "Odeljenja, uključujući najaktivnije odeljenje na sažetim listama."
+      },
+      "company": {
+        "label": "Kompanija / organizacija",
+        "description": "Naziv organizacije iz direktorijuma i nazivi kompanija sa listi za ponovno fakturisanje."
+      },
+      "orgGroup": {
+        "label": "Organizaciona grupa",
+        "description": "Operativni centar ili grupa po kojoj je izveštaj razdvojen."
+      },
+      "section": {
+        "label": "Sekcija",
+        "description": "Sekcija za povraćaj troškova kojoj pripada linija ponovnog fakturisanja."
+      },
+      "mailDomain": {
+        "label": "Mail domen",
+        "description": "Upotreba email domena se pripisuje (nikada adresi)."
+      },
+      "workLocation": {
+        "label": "Radna lokacija",
+        "description": "Centrala ili terenski rad."
+      },
+      "technical": {
+        "label": "Tehnički detalji",
+        "description": "Model, region, tip događaja, valuta i slični deskriptori koji ne govore ništa o osobi."
+      },
+      "other": {
+        "label": "Ostali deskriptivni podaci",
+        "description": "Gde unosite kolonu koja ne pripada nijednoj od navedenih."
+      }
+    },
+    "folders": {
+      "intro": "Prikazana je svaka fascikla u koju je pipeline nešto isporučio. Fascikla bez podešavanja — i bez fascikle iznad koja omogućava pristup — vidljiva je samo administratorima.",
+      "name": "Prikazano ime",
+      "namePlaceholder": "Prikazano umesto putanje fascikle",
+      "description": "Opis",
+      "reportType": "Tip izveštaja",
+      "reportTypeNone": "Nije podešeno",
+      "reportTypeInherited": "Nasleđeno: {type}",
+      "reportTypeHint": "Obaveštava proveru koje nazive fajlova da očekuje i koliko često. Važi za fascikle unutar ove.",
+      "retention": "Čuvanje fajlova (meseci)",
+      "retentionHint": "Ostavite prazno da se nasledi {months} meseci. Broji se od kraja perioda svakog izveštaja.",
+      "audience": "Ko može otvoriti ovu fasciklu",
+      "audienceHint": "Svaka linija daje pristup ovoj fascikli i fasciklama unutar nje. Jedan cilj po liniji.",
+      "audienceScope": "Tip cilja",
+      "audienceTargets": "Ciljevi",
+      "audienceLevel": "Nivo pristupa",
+      "addAudience": "Dodajte osobe ili grupe",
+      "removeAudience": "Uklonite ovu liniju",
+      "restricted": "Ne nasleđujte pristup iz fascikli iznad",
+      "restrictedHint": "Samo linije iz ove fascikle važe ovde i ispod.",
+      "hiddenFields": "Takođe sakrijte u ovoj fascikli",
+      "hiddenFieldsHint": "Polja sakrivena ovde, dodatno na podešavanja platforme, važe za ovu fasciklu i za sve unutar nje. Možete sakriti više, nikada pokazati više.",
+      "hiddenPlatformWide": "(sakriveno svuda)",
+      "clear": "Uklonite podešavanja ove fascikle",
+      "rawChip": "Raw: samo globalni administratori",
+      "rawNote": "Raw telemetrija sadrži imena, email adrese i nazive fajlova. Može je otvoriti samo globalni administrator i nije moguće dodati publiku.",
+      "audienceChip": "{count, plural, one {# linija pristupa} other {# linija pristupa}}",
+      "restrictedChip": "Ne nasleđuje",
+      "notConfiguredChip": "Bez podešavanja",
+      "addPathLabel": "Podesite fasciklu pre prve isporuke",
+      "addPath": "Dodaj",
+      "addPathHint": "Putanja tačno onako kako će pipeline zapisivati, na primer usage/ocba. Ovo čuva samo podešavanja; ništa ne kreira u skladištu.",
+      "invalidPath": "To nije validna putanja fascikle.",
+      "rawGlobalOnly": "Samo globalni administratori mogu da konfigurišu fascikle ispod raw/."
+    },
+    "fields": {
+      "intro": "Izaberite koja polja iz isporučenih izveštaja platforma može prikazati. Sakrivanje polja uklanja ga iz svega prikazanog u aplikaciji i iz izveza koje aplikacija generiše. Sam isporučeni fajl tada mogu skinuti samo administratori.",
+      "readOnly": "Samo globalni administratori mogu ovo menjati. Kao administrator analitike možete sakriti dodatna polja po fascikli, u sekciji Fascikle & pristup.",
+      "configurableHeading": "Polja",
+      "shown": "Prikazano",
+      "hidden": "Sakriveno",
+      "jobTitleNote": "Ako je naziv radnog mesta prikazan, red u maloj grupi može identifikovati osobu čak i pod korisničkim kodom. Grafikoni sakrivaju raspodele sa manje od pet osoba; izvezeni tabele ne.",
+      "neverHeading": "Nikada nije prikazano",
+      "neverBody": "Imena, email adrese, ID-ovi iz direktorijuma, nazivi uploadovanih fajlova i tekst greške nikada nisu prikazani van raw telemetrije. Izveštaj koji sadrži bilo šta od navedenog sakriven je od korisnika dok se ne zameni.",
+      "unclassifiedHeading": "Kolone koje katalog ne poznaje",
+      "unclassifiedBody": "Kolona sa tekstom koja nije prepoznata ostaje skrivena — u aplikaciji i u eksportima — i korisnici ne mogu preuzeti dostavljenu datoteku dok je ne povezete sa nekim poljem.",
+      "noneWaiting": "Ništa ne čeka.",
+      "inFiles": "{count, plural, one {u # datoteci} other {u # datoteka}}",
+      "classifyAs": "Polje za kolonu {column}",
+      "keepHidden": "Ostavi skriveno",
+      "removeClassification": "Ukloni podešavanje za kolonu {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Skladište izveštaja nije dostupno",
+      "deliveryUnavailableBody": "Aplikacija nije mogla da prikaže kontejner \"{container}\". Proverite da li postoji i da li identitet aplikacije ima ulogu za podatke na njemu. Do tada, izveštaji neće biti prikazani nikome.",
+      "foldersUnavailable": "Podešavanja foldera nije moguće pročitati, tako da korisnici trenutno ne vide nijedan folder. Datoteke se ne proveravaju niti brišu dok se ovo ne popravi.",
+      "policyUnavailable": "Podešavanja polja nije moguće pročitati, tako da korisnici trenutno ne mogu da preuzmu datoteke.",
+      "total": {
+        "files": "Datoteke",
+        "ok": "U redu",
+        "warning": "Uz upozorenja",
+        "error": "Skriveno od korisnika",
+        "pending": "Na proveri"
+      },
+      "recheckAll": "Proveri sve ponovo",
+      "recheckOne": "Proveri ponovo",
+      "recheckQueued": "{count, plural, one {# datoteka čeka proveru.} other {# datoteka čeka proveru.}}",
+      "recheckFailed": "Nije moguće pokrenuti proveru.",
+      "retention": {
+        "active": "Datoteke koje su po isteku čuvanja foldera odmah se skrivaju i brišu {days} dana kasnije.",
+        "disabled": "Datoteke nakon isteka čuvanja foldera su skrivene, ali brisanje je isključeno za ovu instalaciju.",
+        "waiting-for-config": "Datoteke posle podrazumevanog isteka čuvanja su skrivene. Ništa se ne briše dok podešavanja foldera nisu barem jednom sačuvana."
+      },
+      "noFiles": "Još uvek nije dostavljena nijedna datoteka.",
+      "allGood": "Sve što je dostavljeno je ispravno.",
+      "problemsHeading": "Datoteke koje zahtevaju pažnju",
+      "status": {
+        "error": "Skriveno od korisnika",
+        "warning": "Upozorenje",
+        "pending": "Na proveri",
+        "ok": "U redu"
+      },
+      "pendingBody": "Nova ili zamenjena od poslednje provere. Korisnicima se prikazuje nakon uspešne provere.",
+      "firstSeen": "Prvi put primećeno {date}",
+      "unclassifiedHeading": "Kolone koje čekaju odluku",
+      "unclassifiedBody": "Ove kolone nisu prepoznate. Ostaju skrivene i korisnici ne mogu preuzeti datoteke koje ih sadrže, dok ih neko ne poveže sa poljem.",
+      "unclassifiedChip": "{column} · {count, plural, one {# datoteka} other {# datoteka}}",
+      "openFields": "Idi na Polja",
+      "unconfiguredHeading": "Folderi bez podešavanja",
+      "unconfiguredBody": "Datoteke ovde pristižu, ali niko nije podesio ovaj folder ili neki iznad njega. Samo administratori mogu da ih vide.",
+      "staleHeading": "Kasne isporuke",
+      "staleBody": "Ovi folderi očekuju redovne izveštaje, a poslednji je stariji nego što bi trebalo.",
+      "staleDetail": {
+        "daily": "Dnevno; poslednji pokriva {date}",
+        "monthly": "Mesečno; poslednji završava {date}"
+      },
+      "staleNever": "Još ništa nije dostavljeno",
+      "expiringHeading": "Ističe",
+      "expiringBody": "Datoteke koje su prošle čuvanje ili ga dostižu u narednih 30 dana.",
+      "expiresOn": "Ističe {date}",
+      "expiredOn": "Isteklo {date}"
+    },
+    "issue": {
+      "name-mismatch": "Naziv datoteke nije onaj koji ovaj folder očekuje (na primer {expected}).",
+      "unsupported-format": "Datoteke tipa \"{extension}\" nije moguće proveriti, pa je ova skrivena od korisnika. Dostavite .xlsx ili .csv.",
+      "too-large": "Sa {sizeMb} MB, ova datoteka prelazi ograničenje od {limitMb} MB za proveru, pa je skrivena od korisnika.",
+      "empty-file": "Datoteka je prazna.",
+      "unreadable": "Datoteka ne može da se otvori. Možda je oštećena ili nije u formatu koji njen naziv označava.",
+      "identifier-column": "Radni list \"{sheet}\" ima kolonu \"{column}\" koja identifikuje osobe. Datoteka je sakrivena od korisnika.",
+      "identifier-values": "\"{sheet}\" sadrži {count, plural, one {# email adresu} other {# email adresa}}. Datoteka je sakrivena od korisnika.",
+      "user-code-format": "Radni list \"{sheet}\", kolona \"{column}\": {count, plural, one {# vrednost nije} other {# vrednosti nisu}} u-… korisnički kod. Datoteka je sakrivena od korisnika.",
+      "formulas-without-values": "Radni list \"{sheet}\" ima {count, plural, one {# formulu} other {# formula}} bez sačuvanog rezultata, pa te vrednosti ne mogu biti prikazane u aplikaciji.",
+      "missing-sheet": "Radni list \"{sheet}\" nedostaje, tako da prikazi koji su zasnovani na njemu ne mogu biti prikazani.",
+      "missing-column": "Radni list \"{sheet}\" nema kolonu \"{column}\", pa prikazi koji je koriste ne mogu biti prikazani.",
+      "no-period": "Naziv datoteke ne sadrži period izveštaja, pa se zadržavanje računa od datuma dostave.",
+      "unclassified-field": "Kolona \"{column}\" nije prepoznata. Ostaje skrivena i korisnici ne mogu preuzeti dostavljenu datoteku dok ne bude klasifikovana.",
+      "past-retention": "Starije od {months} meseci zadržavanja za ovaj folder; više nije prikazano.",
+      "unknown": "Prijavljen problem: {code}."
+    }
   }
 }

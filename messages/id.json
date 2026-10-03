@@ -774,7 +774,10 @@
       "codeInterpreterLimitReached": "Batas eksekusi kode harian tercapai — menjawab tanpa menjalankan kode…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Pencarian di basis pengetahuan gagal — jawaban tidak akan menggunakan dokumen agen",
-      "stillWorking": "Masih bekerja…"
+      "stillWorking": "Masih bekerja…",
+      "assessingSearchResults": "Memeriksa apakah hasil sudah menjawab pertanyaan…",
+      "refiningSearch": "Mencari ulang: “{query}”…",
+      "readingSearchPages": "Membaca {count} halaman hasil…"
     },
     "toolSummary": {
       "usedTools": "Digunakan {count, plural, one {# alat} other {# alat}}",
@@ -860,7 +863,10 @@
       "summarizeNow": "Ringkas dari judul sekarang",
       "sourcesCount": "{count} sumber",
       "showAll": "Tampilkan semua {count} sumber",
-      "showFewer": "Tampilkan lebih sedikit"
+      "showFewer": "Tampilkan lebih sedikit",
+      "multiStepTitle": "Hasil sementara — memeriksa apakah sudah menjawab pertanyaan",
+      "multiStepHint": "Pencarian bisa dilanjutkan — pencarian lain atau membaca halaman yang paling menjanjikan. Jawab sekarang dari {count} hasil yang sudah ditemukan jika Anda tidak ingin menunggu.",
+      "answerNow": "Jawab dari hasil ini sekarang"
     },
     "retryWithModel": "Coba dengan {model}",
     "createTodoTasks": "Buat tugas To Do dari respons ini",
@@ -874,7 +880,10 @@
     "modelTimedOutAtMaximum": "{model} tidak mulai merespons dalam waktu {duration}, waktu tunggu terlama yang tersedia. Silakan coba lagi, atau pilih model lain.",
     "requestTimedOut": "Permintaan ini memerlukan waktu terlalu lama untuk diproses dan dihentikan sebelum {model} dapat menjawab. Anda dapat memberi waktu lebih lama, atau coba model lain.",
     "retryWaitingLonger": "Tunggu hingga {duration} dan coba lagi",
-    "alwaysWaitThisLong": "Selalu tunggu hingga {duration}"
+    "alwaysWaitThisLong": "Selalu tunggu hingga {duration}",
+    "keepSearching": "Lanjutkan pencarian",
+    "keepSearchingHint": "Pencarian berhenti sebelum menemukan ini. Minta asisten mencoba pendekatan lain.",
+    "keepSearchingMessage": "Tolong lanjutkan pencarian ini — coba pendekatan berbeda."
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -1258,7 +1267,9 @@
       "providerBingResponsesDescription": "Cakupan web Bing yang sama seperti Bing grounding, dijalankan sebagai satu pemanggilan model langsung, bukan agen Foundry — biasanya jauh lebih cepat. Opsi baru sedang dievaluasi dibandingkan Bing grounding.",
       "providerSearxng": "Pencarian web MSF",
       "providerSearxngDescription": "Layanan metasearch pribadi milik MSF. Mencakup web umum, berita, literatur ilmiah (termasuk publikasi riset MSF), dokumentasi teknis, dan data kemanusiaan, serta memilih jenis sumber yang tepat untuk setiap pertanyaan. Hasil muncul dalam beberapa detik dengan tautan langsung, dan hanya kueri pencarian yang keluar dari aplikasi — mesin pencari tidak akan pernah melihat Anda.",
-      "otherProvidersLabel": "Penyedia lain"
+      "otherProvidersLabel": "Penyedia lain",
+      "multiStepLabel": "Pencarian bertahap",
+      "multiStepDescription": "Dengan pencarian web MSF, asisten memeriksa hasil awal dan, jika masih kurang, melakukan pencarian ulang atau membaca halaman yang paling menjanjikan sebelum menjawab. Sebagian besar pertanyaan selesai dalam satu langkah. Matikan fitur ini untuk memastikan setiap pencarian hanya satu putaran."
     },
     "Admin": "Admin",
     "Usage Limits": "Batas penggunaan",
@@ -1278,7 +1289,8 @@
       "customHint": "Antara {min} dan {max} detik.",
       "preferModelTitle": "Utamakan model yang saya pilih",
       "preferModelDescription": "Jangan otomatis beralih ke model lain jika permintaan gagal. Pesan kesalahan masih akan menawarkan opsi ini."
-    }
+    },
+    "Analytics": "Analitik"
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -1613,6 +1625,12 @@
     },
     "subVariant": {
       "label": "Ukuran"
+    },
+    "retiring": {
+      "badge": "Akan dihentikan",
+      "datedMoving": "Akan dihentikan pada {date}. Percakapan akan berpindah ke {successor} pada {movesOn}.",
+      "dated": "Akan dihentikan pada {date} dan tidak dapat digunakan. Gunakan {successor} sebagai gantinya.",
+      "replaced": "Akan digantikan oleh {successor}."
     }
   },
   "models": {
@@ -1911,6 +1929,11 @@
       "name": "GPT-6 Astra",
       "description": "Model andalan GPT-6 dari OpenAI. Dirancang untuk pekerjaan end-to-end yang menuntut: riset mendalam, analisis kompleks, rekayasa perangkat lunak, dan tugas panjang bertahap. Biaya sekitar dua kali lipat dari GPT-5.6 Sol.",
       "tagline": "Model paling canggih dari OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Peningkatan dari GPT-6 Sol untuk pekerjaan berat di kode, dokumen, dan aplikasi. Mendekati kemampuan Astra dengan harga token yang jauh lebih rendah.",
+      "tagline": "Kemampuan hampir setara Astra, biaya jauh lebih rendah"
     }
   },
   "searchMode": {
@@ -5440,7 +5463,10 @@
       "announcements": "Pesan banner untuk pengguna: siapa yang melihatnya, kapan, dan dalam bahasa apa.",
       "delegations": "Siapa yang mengelola pengguna tertentu, dan apa saja yang dapat dilakukan masing-masing dari mereka.",
       "channelProfiles": "Informasi tiap platform: batasan, penghitungan, thread. Fakta organisasi yang digunakan setiap set kanal.",
-      "channelSets": "Aturan setiap tim saat menulis di platform: panduan, suara, setelan default, siapa yang dapat menggunakan set dan siapa yang dapat mengirim."
+      "channelSets": "Aturan setiap tim saat menulis di platform: panduan, suara, setelan default, siapa yang dapat menggunakan set dan siapa yang dapat mengirim.",
+      "webSearch": "Cakupan pencarian web: pencarian bertahap, model penilai dan batasannya.",
+      "contextBudget": "Jumlah percakapan yang dikirim ke setiap model di setiap giliran.",
+      "analytics": "Laporan yang dikirim: apa saja yang diterima, siapa yang dapat membuka setiap folder, dan bidang mana yang dapat ditampilkan."
     },
     "openSettings": "Buka pengaturan",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "Lihat sebagai",
       "globalAdmins": "Admin global",
       "announcements": "Pengumuman",
-      "delegations": "Delegasi"
+      "delegations": "Delegasi",
+      "webSearch": "Pencarian web",
+      "contextBudget": "Anggaran konteks",
+      "analytics": "Analitik"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "Apa saja yang bisa diberikan oleh delegasi ini. Admin hanya bisa memiliki hak yang diaktifkan di sini.",
     "grant": {
       "limits": "Batas penggunaan",
-      "announcements": "Pengumuman"
+      "announcements": "Pengumuman",
+      "analytics": "Analitik"
     },
     "grantAll": "Semua",
     "maxOverrides": "Batas override yang dapat dimiliki delegasi ini",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "Anda dapat menandai ini sebagai set default setelah menyimpan.",
     "noChannelsWarning": "Set ini tidak menyediakan saluran apa pun; tidak ada yang dapat membuat draft dengan set ini.",
     "audienceEveryoneHint": "Siapa saja di organisasi dapat membuat draft dengan set ini."
+  },
+  "contextBudgetAdmin": {
+    "title": "Anggaran konteks",
+    "description": "Jumlah riwayat percakapan yang dikirim ke setiap model di setiap giliran. Pesan terbaru selalu disertakan; pesan lama akan dikeluarkan jika anggaran sudah terpakai, dan ringkasan pesan yang dikeluarkan akan masuk di sistem prompt. Anggaran lebih besar menjaga riwayat percakapan lebih panjang tetap terlihat, namun biaya per giliran juga lebih tinggi.",
+    "scopeNote": "Berlaku untuk setiap chat pada setiap model. Anggaran tidak pernah melebihi jendela model yang ditetapkan di bawah.",
+    "loading": "Memuat anggaran konteks…",
+    "loadError": "Anggaran konteks tidak dapat dimuat.",
+    "configUnavailable": "Anggaran konteks yang tersimpan tidak bisa dibaca saat ini, sehingga nilai di bawah mungkin bukan yang sedang berlaku. Coba ulang sebelum mengedit.",
+    "retry": "Coba ulang",
+    "historyTokensLabel": "Standar anggaran (token)",
+    "historyTokensDescription": "Riwayat yang dikirim per giliran, termasuk system prompt, untuk model tanpa override. Sekitar 48.000 menjaga 30–60 pertukaran terakhir dalam percakapan.",
+    "historyFractionLabel": "Batas (bagian dari ruang input model)",
+    "historyFractionDescription": "Anggaran dibatasi hingga bagian ini dari jendela konteks model dikurangi output reservasinya, sehingga model dengan jendela kecil tidak pernah diminta lebih dari kapasitasnya.",
+    "minRecentMessagesLabel": "Pesan yang selalu disimpan",
+    "minRecentMessagesDescription": "Pesan terbaru yang disimpan meskipun anggaran terlampaui (dalam jendela). Tiga pesan menjaga pertukaran sebelumnya ketika pesan terbaru — dokumen yang ditempel, hasil pencarian — memenuhi anggaran secara penuh.",
+    "familyOverridesLabel": "Per family",
+    "familyOverridesDescription": "Anggaran khusus untuk setiap model dalam family, menggantikan anggaran standar.",
+    "modelOverridesLabel": "Per model",
+    "modelOverridesDescription": "Anggaran khusus satu model, menggantikan anggaran family dan standar.",
+    "overrideFamilyPlaceholder": "Family",
+    "overrideModelPlaceholder": "Model id",
+    "overrideTokensPlaceholder": "Token",
+    "addOverride": "Tambah",
+    "removeOverride": "Hapus",
+    "noOverrides": "Tidak ada",
+    "effectiveLabel": "Anggaran efektif dengan pengaturan ini",
+    "effectiveColumnModel": "Model",
+    "effectiveColumnWindow": "Jendela",
+    "effectiveColumnBudget": "Riwayat anggaran",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Default: {value}",
+    "defaultsNote": "Hanya nilai yang berbeda dari default yang disimpan; sisanya akan terus mengikuti default kode pada setiap rilis.",
+    "save": "Simpan",
+    "saving": "Menyimpan…",
+    "resetDefaults": "Reset ke default",
+    "unsaved": "Perubahan belum disimpan",
+    "saveSuccess": "Anggaran konteks berhasil disimpan. Akan berlaku dalam waktu satu menit.",
+    "saveError": "Anggaran konteks tidak dapat disimpan.",
+    "conflictError": "Admin lain telah mengubah anggaran konteks; nilai terbaru telah dimuat ulang.",
+    "updatedByLine": "Terakhir disimpan oleh {by} pada {at}",
+    "neverSaved": "Belum pernah disimpan — default kode sedang berlaku."
+  },
+  "webSearchAdmin": {
+    "title": "Pencarian web",
+    "description": "Mengatur pencarian bertahap pada pencarian web MSF. Setelah hasil pertama keluar, model assessor menentukan apakah hasil menjawab pertanyaan; jika belum, dapat mencari lagi dengan kueri berbeda, membaca halaman hasil, meminta detail yang kurang kepada pengguna, atau melaporkan bahwa tidak ada yang ditemukan.",
+    "scopeNote": "Pengaturan ini hanya berlaku pada pencarian web MSF. Penyedia pencarian lain selalu menjalankan satu ronde. Setiap orang juga dapat mematikan pencarian bertahap untuk dirinya sendiri di Pengaturan.",
+    "loading": "Memuat pengaturan pencarian web…",
+    "loadError": "Pengaturan pencarian web tidak dapat dimuat.",
+    "configUnavailable": "Pengaturan pencarian web tidak dapat dibaca dari penyimpanan. Kontrol disembunyikan daripada ditampilkan dengan nilai default yang mungkin tidak cocok dengan yang digunakan.",
+    "retry": "Coba lagi",
+    "enabledLabel": "Pencarian bertahap",
+    "enabledDescription": "Jika dimatikan, setiap pencarian hanya satu ronde dan model assessor tidak digunakan.",
+    "assessorLabel": "Model assessor",
+    "assessorDescription": "Digunakan satu kali setelah setiap langkah untuk menilai hasil. Pilih model cepat dan murah: model dijalankan saat pengguna menunggu. Jika tidak dapat diakses, {fallback} akan digunakan.",
+    "maxStepsLabel": "Langkah per pertanyaan",
+    "maxStepsDescription": "Jumlah langkah maksimal yang boleh diambil satu pertanyaan, termasuk pencarian pertama. Setiap pencarian berikutnya atau pembacaan halaman merupakan satu langkah. Batas ini terpisah dari batas pencarian harian, yang menghitung satu pertanyaan penuh.",
+    "maxStepsExploratoryLabel": "Langkah untuk pencarian eksplorasi",
+    "maxStepsExploratoryDescription": "Batas lebih tinggi untuk pencarian item sulit, seperti salinan buku langka, di mana jalan buntu memang diharapkan. Tidak boleh lebih rendah dari batas normal.",
+    "pageReadsLabel": "Baca halaman hasil",
+    "pageReadsDescription": "Memungkinkan satu langkah membuka hasil paling menjanjikan dan membaca halaman langsung, bukan hanya mengandalkan cuplikan pencarian.",
+    "maxPageReadsLabel": "Halaman per langkah baca",
+    "sourceAssessmentLabel": "Penilaian kualitas sumber",
+    "sourceAssessmentDescription": "Model assessor memberi label setiap sumber (resmi, mapan, sekunder, reliabilitas rendah) agar jawaban dapat mempertimbangkan dan menempatkannya.",
+    "timeBudgetLabel": "Anggaran waktu (detik)",
+    "timeBudgetDescription": "Total waktu satu sesi pencarian boleh berlangsung, termasuk ronde pertama. Jika waktu habis, jawaban ditulis dari hasil yang sudah ditemukan.",
+    "defaultsNote": "Pengaturan yang dibiarkan pada default bawaan tidak disimpan, sehingga tetap mengikuti default tersebut jika rilis berikutnya mengubahnya.",
+    "defaultHint": "Default: {value}",
+    "defaultOn": "aktif",
+    "defaultOff": "tidak aktif",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Anda memiliki perubahan yang belum disimpan.",
+    "save": "Simpan",
+    "saving": "Menyimpan…",
+    "resetDefaults": "Reset ke default",
+    "saveSuccess": "Pengaturan pencarian web berhasil disimpan.",
+    "saveError": "Pengaturan pencarian web tidak dapat disimpan.",
+    "conflictError": "Administrator lain telah mengubah pengaturan terlebih dulu. Nilai telah dimuat ulang — mohon periksa dan simpan kembali.",
+    "updatedByLine": "Terakhir disimpan oleh {by} pada {at}.",
+    "neverSaved": "Belum ada yang disimpan; default bawaan digunakan."
+  },
+  "modelRetirement": {
+    "notice": "{model} akan dihentikan pada {retiresOn}. Percakapan ini akan dipindahkan ke {successor} pada {movesOn}.",
+    "noticeRetiring": "{model} akan dihentikan pada {retiresOn} dan akan berhenti berfungsi. Beralihlah ke {successor} untuk terus menggunakan percakapan ini.",
+    "switchNow": "Beralih sekarang"
+  },
+  "analytics": {
+    "title": "Analitik",
+    "backToChat": "Kembali ke chat",
+    "manage": "Kelola",
+    "loading": "Memuat...",
+    "loadFailed": "Laporan tidak dapat dimuat.",
+    "retry": "Coba lagi",
+    "emptyTitle": "Belum ada yang dibagikan kepada Anda",
+    "emptyBody": "Laporan akan muncul di sini setelah administrator memberi Anda akses ke sebuah folder.",
+    "deliveryUnavailable": "Penyimpanan laporan saat ini tidak dapat diakses, sehingga daftar di bawah mungkin kosong. Coba lagi beberapa menit nanti.",
+    "groupsDegraded": "Keanggotaan grup Anda tidak dapat diperiksa saat ini, sehingga folder yang dibagikan ke grup Anda mungkin tidak ditampilkan. Muat ulang dalam satu menit.",
+    "foldersHeading": "Folder",
+    "rootFolder": "Semua laporan",
+    "pathOnly": "Anda tidak memiliki akses ke folder ini, hanya ke folder di dalamnya.",
+    "selectFolder": "Pilih folder untuk melihat laporannya.",
+    "noFiles": "Tidak ada laporan di folder ini.",
+    "viewOnlyNote": "Anda memiliki akses tampilan ke folder ini: Anda dapat membuka laporan, melihat ringkasan dan tabel rekap. Tabel dengan satu baris per orang, ekspor dan unduhan memerlukan akses unduhan.",
+    "col": {
+      "name": "Berkas",
+      "period": "Periode",
+      "delivered": "Dikirim",
+      "size": "Ukuran",
+      "availableUntil": "Tersedia sampai",
+      "actions": "Tindakan"
+    },
+    "download": "Unduh",
+    "downloadAria": "Unduh {name}",
+    "block": {
+      "view-only": "Hanya dapat dilihat",
+      "hidden-fields": "Asli ditahan (kolom tersembunyi)",
+      "unclassified-fields": "Asli ditahan (kolom menunggu tinjauan)",
+      "not-inspected": "Belum diperiksa",
+      "policy-unavailable": "Tidak tersedia saat ini"
+    },
+    "adminBadge": {
+      "error": "Tersembunyi dari pengguna",
+      "pending": "Sedang diperiksa",
+      "warning": "Ada peringatan",
+      "expired": "Kadaluarsa, menunggu penghapusan",
+      "originalBlocked": "Pengguna tidak dapat mengunduh: {reason}"
+    },
+    "openAria": "Buka {name}",
+    "openForExport": "Buka untuk ekspor",
+    "preview": {
+      "back": "Kembali ke {folder}",
+      "tabsLabel": "Tabel dalam berkas ini",
+      "lockedTab": "{name} (terkunci)",
+      "unavailable": "Berkas ini tidak dapat dibuka di aplikasi saat ini.",
+      "tableFailed": "Tabel ini tidak dapat dimuat.",
+      "withheld": {
+        "row-level": "Tabel ini memiliki satu baris per orang. Membuka tabel ini memerlukan akses unduhan ke folder.",
+        "hidden-fields": "Halaman ini berisi kolom yang tersembunyi, sehingga tidak ditampilkan."
+      },
+      "truncated": "Menampilkan {shown, number} dari {total, number} baris pertama. Ekspor tabel untuk mendapatkan semuanya.",
+      "freeformNote": "Halaman ini disusun untuk dibaca dan ditampilkan seperti saat dikirim.",
+      "filter": "Saring baris",
+      "filterPlaceholder": "Filter baris...",
+      "rows": "{count, plural, one {# baris} other {# baris}}",
+      "matching": "{count, number} dari {total, number} baris cocok",
+      "modeLabel": "Tampilkan sebagai",
+      "mode": {
+        "table": "Tabel",
+        "chart": "Grafik"
+      },
+      "noRows": "Tidak ada baris yang dapat ditampilkan.",
+      "hiddenColumn": "Tersembunyi dari pengguna",
+      "exportCsv": "Ekspor tabel ini (CSV)",
+      "exportXlsx": "Ekspor semua tabel (Excel)",
+      "downloadOriginal": "Unduh asli",
+      "exportNote": "File yang diberikan berisi field yang tersembunyi, sehingga tidak dapat diunduh langsung. Ekspor akan menghilangkan field tersebut.",
+      "sectionLabel": "Tampilkan",
+      "section": {
+        "overview": "Ringkasan",
+        "tables": "Tabel"
+      }
+    },
+    "chart": {
+      "groupBy": "Kelompok berdasarkan",
+      "measure": "Ukuran",
+      "rowCount": "Jumlah baris",
+      "aggregation": "Hitung",
+      "agg": {
+        "sum": "Jumlah",
+        "mean": "Rata-rata",
+        "min": "Terkecil",
+        "max": "Terbesar"
+      },
+      "ariaLabel": "{measure} berdasarkan {group}",
+      "noColumns": "Tabel ini tidak memiliki kolom teks atau tanggal untuk kelompok.",
+      "empty": "Tidak ada data untuk digrafikkan pada pilihan ini.",
+      "truncatedGroups": "Menampilkan {count} kelompok terbesar.",
+      "basedOn": "Berdasarkan {shown, number} pertama dari {total, number} baris.",
+      "savePng": "Simpan sebagai gambar",
+      "saveSvg": "Simpan sebagai SVG",
+      "saveFailed": "Grafik tidak dapat disimpan."
+    },
+    "dash": {
+      "loading": "Memuat...",
+      "failed": "Ringkasan tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "showTable": "Tampilkan sebagai tabel",
+      "showChart": "Tampilkan sebagai grafik",
+      "smallGroups": "Kelompok dengan kurang dari 5 orang",
+      "foldedNote": "Kelompok dengan kurang dari 5 orang digabung menjadi satu baris.",
+      "otherCount": "{count, plural, one {# lainnya} other {# lainnya}}",
+      "hiddenPanel": "Tersembunyi oleh pengaturan field.",
+      "missingPanel": "Tidak tersedia untuk file ini.",
+      "usage": {
+        "users": "Orang aktif",
+        "interactions": "Interaksi",
+        "avgPerUser": "Rata-rata per orang",
+        "medianPerUser": "Median per orang",
+        "hq": "Di kantor pusat",
+        "field": "Di lapangan",
+        "shareUsers": "{pct}% dari pengguna {comparator}",
+        "shareUsage": "{pct}% dari penggunaan {comparator}",
+        "comparator": "{comparator}: {value}",
+        "daily": "Interaksi per hari",
+        "dailyUsers": "Pengguna aktif per hari",
+        "dailyUsersSub": "Berdasarkan lokasi kerja",
+        "weekly": "Interaksi per minggu",
+        "activity": "Seberapa sering digunakan",
+        "activitySub": "Pengguna, berdasarkan jumlah interaksi dalam periode",
+        "departments": "Interaksi berdasarkan departemen",
+        "jobTitles": "Interaksi berdasarkan jabatan",
+        "models": "Peristiwa berdasarkan model",
+        "total": "Semua lokasi",
+        "location": {
+          "hq": "Kantor pusat",
+          "field": "Lapangan",
+          "unknown": "Tidak diketahui"
+        },
+        "col": {
+          "date": "Hari",
+          "week": "Minggu mulai",
+          "users": "Pengguna",
+          "interactions": "Interaksi",
+          "events": "Peristiwa",
+          "group": "Grup",
+          "band": "Interaksi"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Total ditagihkan",
+        "usageVariable": "Biaya penggunaan variabel",
+        "staticInfra": "Infrastruktur statis",
+        "sections": "Bagian ditagihkan",
+        "usageEvents": "Peristiwa penggunaan",
+        "bySection": "Ditagihkan per bagian",
+        "changes": "Perubahan dari file sebelumnya",
+        "noChanges": "Tidak ada perubahan dari file sebelumnya.",
+        "byDomain": "Peristiwa penggunaan berdasarkan domain email",
+        "reconciliation": "Rekonsiliasi ke Azure",
+        "col": {
+          "section": "Bagian",
+          "billed": "Ditagihkan",
+          "usageEvents": "Peristiwa penggunaan",
+          "usagePct": "Penggunaan %",
+          "line": "Baris",
+          "amount": "Jumlah",
+          "previous": "File sebelumnya",
+          "restated": "Dikoreksi",
+          "change": "Perubahan",
+          "domain": "Domain email",
+          "users": "Pengguna"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Dihitung dengan",
+        "delivered": "Asumsi milik laporan ({version})",
+        "current": "Asumsi aplikasi saat ini ({version})",
+        "whatIf": "Bagaimana jika…",
+        "deliveredUnavailable": "Asumsi milik laporan ini tidak dapat dibaca dari lembar Assumptions, sehingga digunakan asumsi aplikasi saat ini.",
+        "whatIfIntro": "Ubah angka untuk melihat dampaknya di bawah ini. Tidak ada yang disimpan.",
+        "resetDelivered": "Kembalikan ke milik laporan",
+        "resetCurrent": "Kembalikan ke aplikasi saat ini",
+        "co2": "Emisi",
+        "energy": "Energi",
+        "charges": "Pengisian smartphone",
+        "chargesSub": "Dengan jejak yang sama",
+        "activeUsers": "Orang aktif",
+        "requests": "Permintaan",
+        "tokens": "Token",
+        "vsDelivered": "{delta} dibanding asumsi laporan sendiri",
+        "sameAsDelivered": "Sama seperti asumsi laporan sendiri",
+        "unpriced": "{count, plural, one {# permintaan menggunakan} other {# permintaan menggunakan}} ukuran model yang tidak memiliki angka dalam asumsi ini, dan {count, plural, one {dikeluarkan} other {dikeluarkan}}.",
+        "byDepartment": "Emisi berdasarkan departemen",
+        "byModel": "Emisi berdasarkan model",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Dihitung di sini vs dicatat pada saat itu",
+        "reconciliationSub": "Aplikasi juga memperkirakan setiap permintaan saat terjadi. Keduanya akan sama jika asumsinya sama.",
+        "computed": "Dihitung di sini",
+        "logged": "Dicatat oleh aplikasi",
+        "difference": "Perbedaan",
+        "col": {
+          "group": "Grup",
+          "requests": "Permintaan",
+          "tokens": "Token",
+          "energyWh": "Energi (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Overhead pusat data (PUE)",
+          "promptTokenWeight": "Bobot token prompt",
+          "dedicatedReasoningMultiplier": "Pengali penalaran khusus",
+          "whPer1kTokens": "Wh per 1.000 token — {name}",
+          "reasoningEffortMultipliers": "Pengali upaya penalaran — {name}",
+          "gridIntensity": "Grid g CO₂e per kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Event",
+        "users": "Orang",
+        "tokens": "Token",
+        "errors": "Kesalahan",
+        "energy": "Energi",
+        "co2": "Emisi",
+        "hourly": "Event per jam (UTC)",
+        "byType": "Event berdasarkan tipe",
+        "byError": "Kesalahan berdasarkan kode",
+        "byModel": "Token berdasarkan model",
+        "byCompany": "Event berdasarkan organisasi",
+        "none": "Tidak ada.",
+        "col": {
+          "group": "Grup",
+          "events": "Event",
+          "tokens": "Token",
+          "hour": "Jam"
+        }
+      },
+      "trend": {
+        "title": "Seiring waktu",
+        "period": "Periode",
+        "users": "Orang aktif per laporan",
+        "interactions": "Interaksi per laporan",
+        "billed": "Total tagihan per periode",
+        "sections": "Tagihan berdasarkan bagian",
+        "otherSections": "Semua bagian lainnya",
+        "co2": "Emisi per laporan",
+        "energy": "Energi per laporan",
+        "recalculated": "Setiap periode dihitung dengan asumsi aplikasi saat ini ({version}), sehingga perubahan asumsi antar laporan tidak tercermin sebagai perubahan emisi.",
+        "severalPerPeriod": "Folder ini berisi beberapa laporan untuk periode yang sama. Buka folder di dalamnya untuk melihat bagaimana salah satu laporan berubah seiring waktu."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analitik",
+    "description": "Laporan dikirim ke penyimpanan oleh data pipeline. Di sini Anda memeriksa apa yang telah tiba, menentukan siapa yang boleh membuka setiap folder, dan memilih bidang apa yang dapat ditampilkan platform.",
+    "openViewer": "Buka analitik",
+    "sharedNotice": "Folder, audiens, dan file di sini digunakan bersama untuk beta dan produksi. Perubahan yang disimpan di sini berlaku di keduanya.",
+    "tabsLabel": "Bagian analitik",
+    "tab": {
+      "health": "Pengiriman",
+      "folders": "Folder & akses",
+      "fields": "Bidang"
+    },
+    "loading": "Memuat…",
+    "retry": "Coba lagi",
+    "loadError": "Bagian ini tidak dapat dimuat.",
+    "unavailable": "Tidak dapat membaca pengaturan yang disimpan dari penyimpanan. Ini BUKAN berarti \"tidak ada yang dikonfigurasi\" — pengeditan dinonaktifkan agar pengaturan sebenarnya tidak tertimpa. Silakan coba lagi dan periksa log server jika masih berlanjut.",
+    "save": "Simpan",
+    "saving": "Menyimpan…",
+    "unsaved": "Perubahan belum disimpan",
+    "saveSuccess": "Tersimpan.",
+    "saveError": "Tidak dapat menyimpan.",
+    "conflictError": "Admin lain mengubah pengaturan ini saat Anda mengedit. Perubahan Anda tidak disimpan — versi terbaru telah dimuat ulang.",
+    "rootFolder": "(tingkat atas)",
+    "scope": {
+      "domain": "Domain email",
+      "user": "Orang",
+      "attribute": "Atribut",
+      "group": "Grup Entra"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "ID objek grup Entra"
+    },
+    "level": {
+      "view": "Lihat ringkasan",
+      "download": "Lihat, ekspor, dan unduh"
+    },
+    "reportType": {
+      "usage": "Laporan penggunaan",
+      "rebilling": "Rebilling",
+      "emissions": "Laporan emisi",
+      "raw-telemetry": "Telemetri mentah"
+    },
+    "field": {
+      "userCode": {
+        "label": "Kode pengguna",
+        "description": "Kode u-… pseudonim yang mewakili satu orang."
+      },
+      "jobTitle": {
+        "label": "Jabatan",
+        "description": "Jabatan, termasuk jabatan yang paling umum pada lembar ringkasan. Di kelompok kecil, jabatan dapat merujuk pada satu orang."
+      },
+      "department": {
+        "label": "Departemen",
+        "description": "Departemen, termasuk departemen yang paling aktif pada lembar ringkasan."
+      },
+      "company": {
+        "label": "Perusahaan / organisasi",
+        "description": "Nama organisasi dari direktori, dan nama perusahaan yang tercantum pada lembar rebilling."
+      },
+      "orgGroup": {
+        "label": "Grup organisasi",
+        "description": "Pusat operasional atau grup yang digunakan untuk memecah laporan."
+      },
+      "section": {
+        "label": "Bagian",
+        "description": "Bagian pemulihan biaya yang menjadi milik baris rebilling."
+      },
+      "mailDomain": {
+        "label": "Domain email",
+        "description": "Penggunaan domain email diterapkan pada (bukan alamat email)."
+      },
+      "workLocation": {
+        "label": "Lokasi kerja",
+        "description": "Kantor pusat atau lapangan."
+      },
+      "technical": {
+        "label": "Detail teknis",
+        "description": "Model, wilayah, jenis event, mata uang, dan deskripsi lain yang tidak berkaitan dengan identitas seseorang."
+      },
+      "other": {
+        "label": "Kolom deskriptif lainnya",
+        "description": "Untuk kolom yang tidak masuk kategori di atas."
+      }
+    },
+    "folders": {
+      "intro": "Setiap folder yang pernah menjadi tujuan pipeline tercantum di sini. Folder tanpa pengaturan — dan tanpa folder di atasnya yang memberi akses — hanya dapat dilihat oleh administrator.",
+      "name": "Nama tampilan",
+      "namePlaceholder": "Ditampilkan sebagai pengganti path folder",
+      "description": "Deskripsi",
+      "reportType": "Jenis laporan",
+      "reportTypeNone": "Belum diatur",
+      "reportTypeInherited": "Diwariskan: {type}",
+      "reportTypeHint": "Memberi tahu pemeriksa nama file yang diharapkan dan seberapa sering. Berlaku untuk folder di dalamnya.",
+      "retention": "Simpan file selama (bulan)",
+      "retentionHint": "Biarkan kosong untuk mewarisi {months} bulan. Dihitung dari akhir periode setiap laporan.",
+      "audience": "Siapa yang dapat membuka folder ini",
+      "audienceHint": "Setiap baris memberikan akses ke folder ini dan folder di dalamnya. Satu target per baris.",
+      "audienceScope": "Jenis target",
+      "audienceTargets": "Target",
+      "audienceLevel": "Tingkat akses",
+      "addAudience": "Tambah orang atau grup",
+      "removeAudience": "Hapus baris ini",
+      "restricted": "Jangan wariskan akses dari folder di atas",
+      "restrictedHint": "Hanya baris pada folder ini yang berlaku di sini dan di bawahnya.",
+      "hiddenFields": "Juga sembunyikan di folder ini",
+      "hiddenFieldsHint": "Field yang disembunyikan di sini di luar pengaturan platform, berlaku untuk folder ini dan di dalamnya. Anda bisa menyembunyikan lebih banyak, tapi tidak menampilkan lebih banyak.",
+      "hiddenPlatformWide": "(disembunyikan di seluruh platform)",
+      "clear": "Hapus pengaturan folder ini",
+      "rawChip": "Raw: hanya admin global",
+      "rawNote": "Telemetri mentah berisi nama, alamat email, dan nama file. Hanya administrator global yang dapat membukanya, dan tidak dapat menambah audiens.",
+      "audienceChip": "{count, plural, one {# baris akses} other {# baris akses}}",
+      "restrictedChip": "Tidak diwariskan",
+      "notConfiguredChip": "Tanpa pengaturan",
+      "addPathLabel": "Atur folder sebelum pengiriman pertama",
+      "addPath": "Tambah",
+      "addPathHint": "Path persis seperti yang digunakan pipeline, misal usage/ocba. Ini hanya menyimpan pengaturan; tidak membuat apapun di penyimpanan.",
+      "invalidPath": "Itu bukan path folder yang valid.",
+      "rawGlobalOnly": "Hanya administrator global yang dapat mengatur folder di bawah raw/."
+    },
+    "fields": {
+      "intro": "Pilih field dari laporan yang dikirim untuk ditampilkan di platform. Menyembunyikan field akan menghapusnya dari seluruh tampilan di aplikasi dan ekspor yang dihasilkan aplikasi. File yang dikirim hanya dapat diunduh oleh administrator.",
+      "readOnly": "Hanya administrator global yang dapat mengubah ini. Sebagai administrator analitik, Anda dapat menyembunyikan field tambahan per folder di bagian Folder & akses.",
+      "configurableHeading": "Field",
+      "shown": "Ditampilkan",
+      "hidden": "Disembunyikan",
+      "jobTitleNote": "Dengan jabatan ditampilkan, baris pada grup kecil bisa mengidentifikasi seseorang meski menggunakan kode pengguna. Grafik tidak menampilkan rincian untuk kurang dari lima orang; tabel hasil unduhan tetap menampilkan semuanya.",
+      "neverHeading": "Tidak pernah ditampilkan",
+      "neverBody": "Nama, alamat email, ID direktori, nama file yang diunggah, dan teks error tidak pernah ditampilkan di luar telemetri mentah. Laporan yang mengandung salah satu di antaranya akan disembunyikan dari pengguna sampai diganti.",
+      "unclassifiedHeading": "Kolom yang tidak dikenal katalog",
+      "unclassifiedBody": "Kolom teks yang tidak dikenali akan tetap tersembunyi — di aplikasi dan ekspor — dan file yang dikirimkan tidak dapat diunduh oleh pengguna, sampai Anda mengkategorikannya ke sebuah field.",
+      "noneWaiting": "Tidak ada yang menunggu.",
+      "inFiles": "{count, plural, one {di # file} other {di # file} }",
+      "classifyAs": "Field untuk kolom {column}",
+      "keepHidden": "Tetap tersembunyi",
+      "removeClassification": "Hapus pengaturan untuk kolom {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Penyimpanan laporan tidak dapat dijangkau",
+      "deliveryUnavailableBody": "Aplikasi tidak dapat menampilkan kontainer \"{container}\". Pastikan kontainer tersebut ada dan identitas aplikasi memiliki peran data di sana. Sampai itu terjadi, laporan tidak akan terlihat oleh siapapun.",
+      "foldersUnavailable": "Pengaturan folder tidak dapat dibaca, sehingga pengguna saat ini tidak melihat folder apa pun. File tidak diperiksa atau dihapus sampai ini pulih.",
+      "policyUnavailable": "Pengaturan field tidak dapat dibaca, sehingga pengguna tidak dapat mengunduh file saat ini.",
+      "total": {
+        "files": "File",
+        "ok": "Baik",
+        "warning": "Dengan peringatan",
+        "error": "Tersembunyi dari pengguna",
+        "pending": "Sedang diperiksa"
+      },
+      "recheckAll": "Periksa semuanya lagi",
+      "recheckOne": "Periksa lagi",
+      "recheckQueued": "{count, plural, one {# file antre untuk diperiksa.} other {# file antre untuk diperiksa.}}",
+      "recheckFailed": "Tidak dapat memulai pemeriksaan.",
+      "retention": {
+        "active": "File yang melewati retensi folder akan langsung tersembunyi dan dihapus {days} hari kemudian.",
+        "disabled": "File yang melewati retensi folder akan tersembunyi, namun penghapusan dinonaktifkan untuk deployment ini.",
+        "waiting-for-config": "File yang melampaui retensi default akan tersembunyi. Tidak ada yang dihapus sampai pengaturan folder tersimpan setidaknya sekali."
+      },
+      "noFiles": "Belum ada file yang dikirimkan.",
+      "allGood": "Semua yang dikirimkan dalam keadaan baik.",
+      "problemsHeading": "File yang membutuhkan perhatian",
+      "status": {
+        "error": "Tersembunyi dari pengguna",
+        "warning": "Peringatan",
+        "pending": "Sedang diperiksa",
+        "ok": "Baik"
+      },
+      "pendingBody": "Baru atau sudah digantikan sejak pemeriksaan terakhir. Akan terlihat oleh pengguna begitu lulus pemeriksaan.",
+      "firstSeen": "Pertama kali terlihat {date}",
+      "unclassifiedHeading": "Kolom yang menunggu keputusan",
+      "unclassifiedBody": "Kolom-kolom ini tidak dikenali. Mereka tetap tersembunyi, dan pengguna tidak dapat mengunduh file yang mengandungnya, sampai setiap kolom dikategorikan ke sebuah field.",
+      "unclassifiedChip": "{column} · {count, plural, one {# file} other {# file}}",
+      "openFields": "Buka Fields",
+      "unconfiguredHeading": "Folder tanpa pengaturan",
+      "unconfiguredBody": "File terus masuk di sini, namun belum ada yang mengatur folder ini atau folder di atasnya. Hanya admin yang dapat melihatnya.",
+      "staleHeading": "Pengiriman yang terlambat",
+      "staleBody": "Folder-folder ini mengharapkan laporan rutin dan yang terbaru sudah lebih tua dari seharusnya.",
+      "staleDetail": {
+        "daily": "Harian; terbaru mencakup {date}",
+        "monthly": "Bulanan; terbaru berakhir {date}"
+      },
+      "staleNever": "Belum ada yang dikirimkan",
+      "expiringHeading": "Segera kedaluwarsa",
+      "expiringBody": "File yang melewati masa retensi atau akan mencapainya dalam 30 hari.",
+      "expiresOn": "Kedaluwarsa {date}",
+      "expiredOn": "Sudah kedaluwarsa {date}"
+    },
+    "issue": {
+      "name-mismatch": "Nama file tidak sesuai dengan yang diharapkan folder ini (misalnya {expected}).",
+      "unsupported-format": "File bertipe \"{extension}\" tidak dapat diperiksa, sehingga file ini tersembunyi dari pengguna. Silakan kirim .xlsx atau .csv.",
+      "too-large": "Dengan ukuran {sizeMb} MB, file ini melebihi batas {limitMb} MB untuk pemeriksaan, sehingga tersembunyi dari pengguna.",
+      "empty-file": "File kosong.",
+      "unreadable": "File tidak dapat dibuka. File mungkin rusak, atau formatnya tidak sesuai dengan namanya.",
+      "identifier-column": "Sheet \"{sheet}\" memiliki kolom \"{column}\" yang mengidentifikasi orang. File ini disembunyikan dari pengguna.",
+      "identifier-values": "\"{sheet}\" berisi {count, plural, one {# alamat email} other {# alamat email}}. File ini disembunyikan dari pengguna.",
+      "user-code-format": "Sheet \"{sheet}\", kolom \"{column}\": {count, plural, one {# nilai} other {# nilai}} bukan kode pengguna u-… . File ini disembunyikan dari pengguna.",
+      "formulas-without-values": "Sheet \"{sheet}\" memiliki {count, plural, one {# rumus} other {# rumus}} tanpa hasil yang tersimpan, sehingga data tersebut tidak dapat ditampilkan di aplikasi.",
+      "missing-sheet": "Sheet \"{sheet}\" tidak ada, sehingga tampilan yang dibangun di atasnya tidak dapat ditampilkan.",
+      "missing-column": "Sheet \"{sheet}\" tidak memiliki kolom \"{column}\", sehingga tampilan yang menggunakannya tidak dapat ditampilkan.",
+      "no-period": "Nama file tidak mencantumkan periode pelaporan, sehingga perhitungan retensi dimulai dari tanggal pengiriman.",
+      "unclassified-field": "Kolom \"{column}\" tidak dikenali. Kolom ini tetap tersembunyi, dan pengguna tidak dapat mengunduh file yang dikirimkan, sampai kolom tersebut diklasifikasikan ke dalam sebuah bidang.",
+      "past-retention": "Lebih lama dari {months} bulan masa retensi folder ini; tidak lagi ditampilkan.",
+      "unknown": "Masalah dilaporkan: {code}."
+    }
   }
 }

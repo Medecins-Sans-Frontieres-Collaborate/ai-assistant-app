@@ -807,7 +807,10 @@
       "codeInterpreterLimitReached": "Daglig gräns för kodkörning har uppnåtts — svarar utan att köra kod…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Sökning i kunskapsbasen misslyckades — svaret kommer inte att använda agentens dokument.",
-      "stillWorking": "Arbetar fortfarande…"
+      "stillWorking": "Arbetar fortfarande…",
+      "assessingSearchResults": "Kontrollerar om resultaten besvarar frågan…",
+      "refiningSearch": "Söker igen: ”{query}”…",
+      "readingSearchPages": "Läser {count} resultatsidor…"
     },
     "toolSummary": {
       "usedTools": "Använt {count, plural, one {# verktyg} other {# verktyg}}",
@@ -893,7 +896,10 @@
       "summarizeNow": "Sammanfatta från rubriker nu",
       "sourcesCount": "{count} källor",
       "showAll": "Visa alla {count} källor",
-      "showFewer": "Visa färre"
+      "showFewer": "Visa färre",
+      "multiStepTitle": "Resultat hittills — kontrollerar om de besvarar frågan",
+      "multiStepHint": "Sökningen kan fortsätta — en ny sökning eller läsning av de mest lovande sidorna. Svara nu från de {count} redan hittade resultaten om du inte vill vänta.",
+      "answerNow": "Svara utifrån dessa resultat nu"
     },
     "retryWithModel": "Försök med {model}",
     "createTodoTasks": "Skapa att göra-uppgifter från svaret",
@@ -907,7 +913,10 @@
     "modelTimedOutAtMaximum": "{model} började inte svara inom {duration}, vilket är den längsta väntetiden. Försök igen eller prova en annan modell.",
     "requestTimedOut": "Denna begäran tog för lång tid att förbereda och stoppades innan {model} kunde svara. Du kan ge mer tid eller prova en annan modell.",
     "retryWaitingLonger": "Vänta upp till {duration} och försök igen",
-    "alwaysWaitThisLong": "Vänta alltid upp till {duration}"
+    "alwaysWaitThisLong": "Vänta alltid upp till {duration}",
+    "keepSearching": "Fortsätt söka",
+    "keepSearchingHint": "Sökningen stoppades innan detta hittades. Be assistenten prova andra tillvägagångssätt.",
+    "keepSearchingMessage": "Fortsätt söka efter detta, tack — testa ett annat tillvägagångssätt."
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -1291,7 +1300,9 @@
       "providerBingResponsesDescription": "Samma Bing-webbtäckning som Bing-grounding, men körs som ett enda direkt modellanrop istället för en Foundry-agent — vanligtvis mycket snabbare. Nytt alternativ under utvärdering jämfört med Bing-grounding.",
       "providerSearxng": "MSF webbsökning",
       "providerSearxngDescription": "MSF:s egen privata metasöktjänst. Täcker allmänna webben, nyheter, vetenskaplig litteratur (inklusive MSF:s forskningspublikationer), teknisk dokumentation och humanitär data, och väljer rätt typ av källa för varje fråga. Resultat kommer på några sekunder med direkta länkar, och endast sökfrågan lämnar appen — sökmotorerna ser dig aldrig.",
-      "otherProvidersLabel": "Andra leverantörer"
+      "otherProvidersLabel": "Andra leverantörer",
+      "multiStepLabel": "Flerstegssökning",
+      "multiStepDescription": "Med MSF webbsökning kontrollerar assistenten de första resultaten och söker/undersöker igen eller läser de mest lovande sidorna om svaren inte räcker. De flesta frågor besvaras ändå i ett steg. Stäng av detta för att alltid hålla sökningen till en enda omgång."
     },
     "Admin": "Admin",
     "Usage Limits": "Användningsgränser",
@@ -1311,7 +1322,8 @@
       "customHint": "Mellan {min} och {max} sekunder.",
       "preferModelTitle": "Föredra min valda modell",
       "preferModelDescription": "Byt inte automatiskt till en annan modell när en begäran misslyckas. Felet kommer fortfarande att erbjuda byte."
-    }
+    },
+    "Analytics": "Analys"
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -1522,6 +1534,12 @@
     },
     "subVariant": {
       "label": "Storlek"
+    },
+    "retiring": {
+      "badge": "Tas ur bruk",
+      "datedMoving": "Tas ur bruk {date}. Konversationer flyttas till {successor} den {movesOn}.",
+      "dated": "Tas ur bruk {date} och slutar fungera. Använd {successor} istället.",
+      "replaced": "Ersätts av {successor}."
     }
   },
   "models": {
@@ -1820,6 +1838,11 @@
       "name": "GPT-6 Astra",
       "description": "OpenAIs flaggskeppsmodell GPT-6. Utformad för krävande arbete från början till slut: avancerad forskning, komplex analys, mjukvaruutveckling samt långa och flerstegsuppgifter. Cirka dubbelt så dyr som GPT-5.6 Sol.",
       "tagline": "OpenAIs mest kraftfulla modell"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "En uppgradering till GPT-6 Sol för krävande arbete inom kod, dokument och applikationer. Närmar sig Astras kapacitet till en bråkdel av tokenpriset.",
+      "tagline": "Nästan Astra-kapacitet, mycket lägre kostnad"
     }
   },
   "searchMode": {
@@ -5440,7 +5463,10 @@
       "announcements": "Bannermeddelanden för användare: vem som ser dem, när och på vilka språk.",
       "delegations": "Vem administrerar vilka användare och vad var och en får göra.",
       "channelProfiles": "Vad varje plattform är: gränser, räkning, trådar. Organisationsövergripande fakta alla kanaluppsättningar bygger på.",
-      "channelSets": "Varje teams regler för att skriva på plattformarna: vägledning, röster, standarder, vem som får använda uppsättningen och vem som får skicka."
+      "channelSets": "Varje teams regler för att skriva på plattformarna: vägledning, röster, standarder, vem som får använda uppsättningen och vem som får skicka.",
+      "webSearch": "Hur långt en webbsökning kan gå: flerstegssökning, bedömningsmodell och dess gränser.",
+      "contextBudget": "Hur mycket av en konversation som skickas till varje modell vid varje tur.",
+      "analytics": "Levererade rapporter: vad anlände, vem kan öppna varje mapp och vilka fält som kan visas."
     },
     "openSettings": "Öppna inställningar",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "Visa som",
       "globalAdmins": "Globala administratörer",
       "announcements": "Meddelanden",
-      "delegations": "Delegationer"
+      "delegations": "Delegationer",
+      "webSearch": "Webbsökning",
+      "contextBudget": "Context budget",
+      "analytics": "Analys"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "Vad denna delegation överhuvudtaget kan ge rätt till. Administratörer kan endast ha det som är aktiverat här.",
     "grant": {
       "limits": "Användningsbegränsningar",
-      "announcements": "Meddelanden"
+      "announcements": "Meddelanden",
+      "analytics": "Analys"
     },
     "grantAll": "Alla",
     "maxOverrides": "Begränsningsundantag denna delegation kan ha",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "Du kan markera detta som standardset efter att ha sparat.",
     "noChannelsWarning": "Detta set erbjuder inga kanaler; ingen kan skapa utkast med det.",
     "audienceEveryoneHint": "Vem som helst i organisationen kan skapa utkast med detta set."
+  },
+  "contextBudgetAdmin": {
+    "title": "Context budget",
+    "description": "Hur mycket samtalshistorik varje modell får vid varje tur. De senaste meddelandena ingår alltid; äldre tas bort när budgeten är förbrukad, och en sammanfattning av dessa inkluderas i systemprompten. En större budget bevarar mer av en lång konversation men ökar kostnaden per tur.",
+    "scopeNote": "Gäller alla chattar på varje modell. Budgeten kan aldrig överskrida andelen av modellens egna fönster som ställs in nedan.",
+    "loading": "Läser in context budget…",
+    "loadError": "Context budget kunde inte laddas.",
+    "configUnavailable": "Den sparade context budgeten kunde inte läsas just nu, så värdena nedan kan avvika från de som gäller. Försök igen innan du redigerar.",
+    "retry": "Försök igen",
+    "historyTokensLabel": "Standardbudget (tokens)",
+    "historyTokensDescription": "Historik per tur, inklusive systemprompt, för modeller utan överskrivning. Ungefär 48 000 räcker till de 30–60 senaste interaktionerna i ett vanligt samtal.",
+    "historyFractionLabel": "Tak (andel av modellens inpututrymme)",
+    "historyFractionDescription": "En budget begränsas till denna andel av modellens context-fönster minus utrymmet för svar, så en modell med mindre fönster aldrig får mer än den klarar.",
+    "minRecentMessagesLabel": "Meddelanden som alltid sparas",
+    "minRecentMessagesDescription": "De senaste meddelandena som sparas även över budgeten (inom fönstret). Tre bevarar föregående växling även när senaste meddelandet ensam — ett inklistrat dokument, sökresultat — annars skulle fylla budgeten.",
+    "familyOverridesLabel": "Per familj",
+    "familyOverridesDescription": "En budget för varje modellfamilj, ersätter standardbudgeten.",
+    "modelOverridesLabel": "Per modell",
+    "modelOverridesDescription": "En budget för en modell, ersätter familje- och standardbudgeten.",
+    "overrideFamilyPlaceholder": "Familj",
+    "overrideModelPlaceholder": "Model id",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Lägg till",
+    "removeOverride": "Ta bort",
+    "noOverrides": "Ingen",
+    "effectiveLabel": "Gällande budgetar med dessa inställningar",
+    "effectiveColumnModel": "Modell",
+    "effectiveColumnWindow": "Fönster",
+    "effectiveColumnBudget": "Historikbudget",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Standard: {value}",
+    "defaultsNote": "Endast värden som skiljer sig från standardlagras; allt annat fortsätter följa kodens standard mellan versioner.",
+    "save": "Spara",
+    "saving": "Sparar…",
+    "resetDefaults": "Återställ till standard",
+    "unsaved": "Osparade ändringar",
+    "saveSuccess": "Kontextbudget sparad. Den träder i kraft inom en minut.",
+    "saveError": "Kontextbudgeten kunde inte sparas.",
+    "conflictError": "En annan administratör ändrade kontextbudgeten under tiden; de senaste värdena har laddats om.",
+    "updatedByLine": "Senast sparad av {by} den {at}",
+    "neverSaved": "Aldrig sparad — kodens standard används."
+  },
+  "webSearchAdmin": {
+    "title": "Webbsökning",
+    "description": "Styr flerstegssökning i MSF webbsökning. Efter de första resultaten avgör en bedömningsmodell om de besvarar frågan; om inte, kan den söka igen med andra sökfraser, läsa resultatsidor, be användaren om en saknad detalj eller rapportera att inget kunde hittas.",
+    "scopeNote": "Dessa inställningar gäller endast MSF webbsökning. Andra sökleverantörer gör alltid en omgång. Varje användare kan också stänga av flerstegssökning själv i Inställningar.",
+    "loading": "Laddar inställningar för webbsökning…",
+    "loadError": "Inställningarna för webbsökning kunde inte laddas.",
+    "configUnavailable": "Inställningarna för webbsökning kunde inte läsas från lagringen. Reglarna göms hellre än att visas med standardvärden som kanske inte stämmer överens med det som används.",
+    "retry": "Försök igen",
+    "enabledLabel": "Flerstegssökning",
+    "enabledDescription": "När avstängd görs varje sökning i en omgång och ingen bedömningsmodell används.",
+    "assessorLabel": "Bedömningsmodell",
+    "assessorDescription": "Anropas en gång efter varje steg för att bedöma resultaten. Välj en snabb, billig modell: den körs medan användaren väntar. Om den inte kan nås används {fallback} istället.",
+    "maxStepsLabel": "Steg per fråga",
+    "maxStepsDescription": "Maximalt antal steg en fråga får ta, inklusive första sökningen. Varje extra sökning eller sidläsning räknas som ett steg. Denna gräns är separat från den dagliga sökgränsen, som räknar en hel fråga som ett tillfälle.",
+    "maxStepsExploratoryLabel": "Steg för utforskande sökningar",
+    "maxStepsExploratoryDescription": "En högre gräns för letande efter något svårfunnet, som ett exemplar av en ovanlig bok, där återvändsgränder förväntas. Kan inte vara lägre än den vanliga gränsen.",
+    "pageReadsLabel": "Läs resultatsidor",
+    "pageReadsDescription": "Gör det möjligt för ett steg att öppna de mest lovande resultaten och läsa själva sidan istället för att bara använda utdrag från sökningen.",
+    "maxPageReadsLabel": "Sidor per lässteg",
+    "sourceAssessmentLabel": "Bedöm källkvalitet",
+    "sourceAssessmentDescription": "Bedömaren märker varje källa (officiell, etablerad, sekundär, låg tillförlitlighet) så att svaret kan väga dem och ange deras ursprung.",
+    "timeBudgetLabel": "Tidsbudget (sekunder)",
+    "timeBudgetDescription": "Total tid en sökning får ta, inklusive första rundan. När tiden tar slut skrivs svaret utifrån det som hittats.",
+    "defaultsNote": "En inställning som lämnas på sin inbyggda standard sparas inte, så den följer alltid standarden om en senare version ändrar den.",
+    "defaultHint": "Standard: {value}",
+    "defaultOn": "på",
+    "defaultOff": "av",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Du har osparade ändringar.",
+    "save": "Spara",
+    "saving": "Sparar…",
+    "resetDefaults": "Återställ till standard",
+    "saveSuccess": "Webbsökningsinställningar sparade.",
+    "saveError": "Inställningarna för webbsökning kunde inte sparas.",
+    "conflictError": "En annan administratör har ändrat inställningarna först. De har laddats om — vänligen granska och spara igen.",
+    "updatedByLine": "Senast sparad av {by} den {at}.",
+    "neverSaved": "Inget har sparats ännu; inbyggda standardvärden gäller."
+  },
+  "modelRetirement": {
+    "notice": "{model} kommer att tas ur bruk den {retiresOn}. Denna konversation flyttas till {successor} den {movesOn}.",
+    "noticeRetiring": "{model} kommer att tas ur bruk den {retiresOn} och slutar att fungera. Byt till {successor} för att fortsätta använda denna konversation.",
+    "switchNow": "Byt nu"
+  },
+  "analytics": {
+    "title": "Analys",
+    "backToChat": "Tillbaka till chatten",
+    "manage": "Hantera",
+    "loading": "Laddar…",
+    "loadFailed": "Rapporterna kunde inte laddas.",
+    "retry": "Försök igen",
+    "emptyTitle": "Inget har delats med dig ännu",
+    "emptyBody": "Rapporter visas här när en administratör ger dig åtkomst till en mapp.",
+    "deliveryUnavailable": "Rapportlagringen kan inte nås just nu, så listorna nedan kan vara tomma. Försök igen om några minuter.",
+    "groupsDegraded": "Dina gruppmedlemskap kunde inte kontrolleras just nu, så mappar delade med dina grupper kan saknas. Ladda om om en minut.",
+    "foldersHeading": "Mappar",
+    "rootFolder": "Alla rapporter",
+    "pathOnly": "Du har inte åtkomst till denna mapp, endast till mappar inuti den.",
+    "selectFolder": "Välj en mapp för att se dess rapporter.",
+    "noFiles": "Inga rapporter i denna mapp.",
+    "viewOnlyNote": "Du har läsbehörighet till denna mapp: du kan öppna rapporterna, se deras översikt och sammandragstabeller. Tabeller med en rad per person, exporter och nedladdningar kräver nedladdningsbehörighet.",
+    "col": {
+      "name": "Fil",
+      "period": "Period",
+      "delivered": "Levererad",
+      "size": "Storlek",
+      "availableUntil": "Tillgänglig till",
+      "actions": "Åtgärder"
+    },
+    "download": "Ladda ner",
+    "downloadAria": "Ladda ner {name}",
+    "block": {
+      "view-only": "Endast visning",
+      "hidden-fields": "Original undanhållet (dolda fält)",
+      "unclassified-fields": "Original undanhållet (fält som väntar på granskning)",
+      "not-inspected": "Inte kontrollerad än",
+      "policy-unavailable": "Inte tillgänglig just nu"
+    },
+    "adminBadge": {
+      "error": "Dold för användare",
+      "pending": "Under granskning",
+      "warning": "Har varningar",
+      "expired": "Utgången, väntar på borttagning",
+      "originalBlocked": "Användare kan inte ladda ner: {reason}"
+    },
+    "openAria": "Öppna {name}",
+    "openForExport": "Öppna för export",
+    "preview": {
+      "back": "Tillbaka till {folder}",
+      "tabsLabel": "Tabeller i denna fil",
+      "lockedTab": "{name} (låst)",
+      "unavailable": "Denna fil kan inte öppnas i appen just nu.",
+      "tableFailed": "Det gick inte att ladda denna tabell.",
+      "withheld": {
+        "row-level": "Denna tabell har en rad per person. För att öppna den krävs nedladdningsbehörighet till mappen.",
+        "hidden-fields": "Denna sida innehåller ett fält som är dolt och visas därför inte."
+      },
+      "truncated": "Visar de första {shown, number} av {total, number} rader. Exportera tabellen för att få alla.",
+      "freeformNote": "Denna sida är utformad för läsning och visas som den levererades.",
+      "filter": "Filtrera rader",
+      "filterPlaceholder": "Filtrera rader…",
+      "rows": "{count, plural, one {# rad} other {# rader}}",
+      "matching": "{count, number} av {total, number} rader matchar",
+      "modeLabel": "Visa som",
+      "mode": {
+        "table": "Tabell",
+        "chart": "Diagram"
+      },
+      "noRows": "Inga rader att visa.",
+      "hiddenColumn": "Dold för användare",
+      "exportCsv": "Exportera denna tabell (CSV)",
+      "exportXlsx": "Exportera alla tabeller (Excel)",
+      "downloadOriginal": "Ladda ner originalet",
+      "exportNote": "Den levererade filen innehåller fält som är dolda, så den kan inte laddas ner som den är. Exporter inkluderar inte dessa fält.",
+      "sectionLabel": "Visa",
+      "section": {
+        "overview": "Översikt",
+        "tables": "Tabeller"
+      }
+    },
+    "chart": {
+      "groupBy": "Gruppera efter",
+      "measure": "Mått",
+      "rowCount": "Antal rader",
+      "aggregation": "Beräkna",
+      "agg": {
+        "sum": "Summa",
+        "mean": "Genomsnitt",
+        "min": "Minsta",
+        "max": "Största"
+      },
+      "ariaLabel": "{measure} efter {group}",
+      "noColumns": "Denna tabell har ingen text- eller datumkolumn att gruppera på.",
+      "empty": "Inget att visa för detta val.",
+      "truncatedGroups": "Visar de {count} största grupperna.",
+      "basedOn": "Baserat på de första {shown, number} av {total, number} raderna.",
+      "savePng": "Spara som bild",
+      "saveSvg": "Spara som SVG",
+      "saveFailed": "Kunde inte spara diagrammet."
+    },
+    "dash": {
+      "loading": "Laddar…",
+      "failed": "Kunde inte ladda översikten.",
+      "retry": "Försök igen",
+      "showTable": "Visa som tabell",
+      "showChart": "Visa som diagram",
+      "smallGroups": "Grupper med färre än 5 personer",
+      "foldedNote": "Grupper med färre än 5 personer har slagits ihop till en rad.",
+      "otherCount": "{count, plural, one {# annan} other {# andra}}",
+      "hiddenPanel": "Dold av fältinställningarna.",
+      "missingPanel": "Inte tillgänglig för denna fil.",
+      "usage": {
+        "users": "Aktiva personer",
+        "interactions": "Interaktioner",
+        "avgPerUser": "Genomsnitt per person",
+        "medianPerUser": "Median per person",
+        "hq": "På huvudkontoret",
+        "field": "I fältet",
+        "shareUsers": "{pct}% av {comparator} användare",
+        "shareUsage": "{pct}% av {comparator} användning",
+        "comparator": "{comparator}: {value}",
+        "daily": "Interaktioner per dag",
+        "dailyUsers": "Aktiva personer per dag",
+        "dailyUsersSub": "Efter arbetsplats",
+        "weekly": "Interaktioner per vecka",
+        "activity": "Hur mycket det används",
+        "activitySub": "Personer, efter antal interaktioner under perioden",
+        "departments": "Interaktioner per avdelning",
+        "jobTitles": "Interaktioner per jobbtitel",
+        "models": "Händelser per modell",
+        "total": "Alla platser",
+        "location": {
+          "hq": "Huvudkontor",
+          "field": "Fältet",
+          "unknown": "Okänd"
+        },
+        "col": {
+          "date": "Dag",
+          "week": "Vecka med start",
+          "users": "Personer",
+          "interactions": "Interaktioner",
+          "events": "Händelser",
+          "group": "Grupp",
+          "band": "Interaktioner"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Totalt debiterat",
+        "usageVariable": "Användningsberoende kostnad",
+        "staticInfra": "Statisk infrastruktur",
+        "sections": "Debiterade sektioner",
+        "usageEvents": "Användningshändelser",
+        "bySection": "Debiterat per sektion",
+        "changes": "Ändringar från föregående fil",
+        "noChanges": "Inget har ändrats från föregående fil.",
+        "byDomain": "Användningshändelser per maildomän",
+        "reconciliation": "Avstämning mot Azure",
+        "col": {
+          "section": "Sektion",
+          "billed": "Debiterat",
+          "usageEvents": "Användningshändelser",
+          "usagePct": "Användning %",
+          "line": "Rad",
+          "amount": "Belopp",
+          "previous": "Föregående fil",
+          "restated": "Omräknat",
+          "change": "Förändring",
+          "domain": "Maildomän",
+          "users": "Personer"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Beräknat med",
+        "delivered": "Rapportens egna antaganden ({version})",
+        "current": "Appens aktuella antaganden ({version})",
+        "whatIf": "Tänk om…",
+        "deliveredUnavailable": "Det gick inte att läsa denna rapports egna antaganden från Assumptions-bladet, så appens aktuella används.",
+        "whatIfIntro": "Ändra en siffra för att se dess effekt på allt nedan. Ingenting sparas.",
+        "resetDelivered": "Återställ till rapportens egna",
+        "resetCurrent": "Återställ till appens aktuella",
+        "co2": "Utsläpp",
+        "energy": "Energi",
+        "charges": "Smarttelefonladdningar",
+        "chargesSub": "Med samma utsläpp",
+        "activeUsers": "Aktiva personer",
+        "requests": "Förfrågningar",
+        "tokens": "Token",
+        "vsDelivered": "{delta} jämfört med rapportens egna antaganden",
+        "sameAsDelivered": "Samma som med rapportens egna antaganden",
+        "unpriced": "{count, plural, one {# förfrågan använder} other {# förfrågningar använder}} en modellstorlek som dessa antaganden saknar siffror för, och {count, plural, one {utesluts} other {utesluts}}.",
+        "byDepartment": "Utsläpp per avdelning",
+        "byModel": "Utsläpp per modell",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Beräknat här vs loggat vid tillfället",
+        "reconciliationSub": "Appen uppskattar också varje förfrågan i realtid. De båda stämmer överens när antagandena är desamma.",
+        "computed": "Beräknat här",
+        "logged": "Loggat av appen",
+        "difference": "Skillnad",
+        "col": {
+          "group": "Grupp",
+          "requests": "Förfrågningar",
+          "tokens": "Token",
+          "energyWh": "Energi (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Datacenterförbrukning (PUE)",
+          "promptTokenWeight": "Vikt för prompttoken",
+          "dedicatedReasoningMultiplier": "Faktor för dedikerad resonering",
+          "whPer1kTokens": "Wh per 1 000 token — {name}",
+          "reasoningEffortMultipliers": "Faktor för resonemangsansträngning — {name}",
+          "gridIntensity": "CO₂e g/kWh för elnät — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Händelser",
+        "users": "Personer",
+        "tokens": "Token",
+        "errors": "Fel",
+        "energy": "Energi",
+        "co2": "Utsläpp",
+        "hourly": "Händelser per timme (UTC)",
+        "byType": "Händelser per typ",
+        "byError": "Fel per kod",
+        "byModel": "Token per modell",
+        "byCompany": "Händelser per organisation",
+        "none": "Inga.",
+        "col": {
+          "group": "Grupp",
+          "events": "Händelser",
+          "tokens": "Token",
+          "hour": "Timme"
+        }
+      },
+      "trend": {
+        "title": "Över tid",
+        "period": "Period",
+        "users": "Aktiva personer per rapport",
+        "interactions": "Interaktioner per rapport",
+        "billed": "Totalt fakturerat per period",
+        "sections": "Fakturerat per avsnitt",
+        "otherSections": "Alla andra sektioner",
+        "co2": "Utsläpp per rapport",
+        "energy": "Energi per rapport",
+        "recalculated": "Varje period beräknas med appens nuvarande antaganden ({version}), så en ändring av antaganden mellan rapporter visas inte som en förändring i utsläpp.",
+        "severalPerPeriod": "Den här mappen innehåller flera rapporter för samma period. Öppna en undermapp för att se hur en av dem förändras över tid."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analys",
+    "description": "Rapporter levereras till lagring via datapipelinen. Här kan du se vad som har kommit in, bestämma vem som får öppna varje mapp och välja vilka fält plattformen får visa.",
+    "openViewer": "Öppna analys",
+    "sharedNotice": "Beta och produktion delar dessa mappar, målgrupper och filer. En ändring som sparas här gäller i båda.",
+    "tabsLabel": "Analyssektioner",
+    "tab": {
+      "health": "Leveranser",
+      "folders": "Mappar & behörighet",
+      "fields": "Fält"
+    },
+    "loading": "Laddar…",
+    "retry": "Försök igen",
+    "loadError": "Kunde inte ladda denna sektion.",
+    "unavailable": "Kunde inte läsa de sparade inställningarna från lagringen. Detta är INTE detsamma som att inget är konfigurerat — redigering är inaktiverad så att de verkliga inställningarna inte skrivs över. Försök igen och kontrollera serverloggarna om problemet kvarstår.",
+    "save": "Spara",
+    "saving": "Sparar…",
+    "unsaved": "Osparade ändringar",
+    "saveSuccess": "Sparat.",
+    "saveError": "Kunde inte spara.",
+    "conflictError": "En annan administratör ändrade dessa inställningar medan du redigerade. Dina ändringar har inte sparats — den senaste versionen har laddats om.",
+    "rootFolder": "(översta nivån)",
+    "scope": {
+      "domain": "E-postdomän",
+      "user": "Person",
+      "attribute": "Attribut",
+      "group": "Entra-grupp"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "namn@example.org",
+      "attribute": "department:Health",
+      "group": "Entra group object id"
+    },
+    "level": {
+      "view": "Visa sammanfattningar",
+      "download": "Visa, exportera och ladda ned"
+    },
+    "reportType": {
+      "usage": "Användningsrapport",
+      "rebilling": "Vidarefakturering",
+      "emissions": "Utsläppsrapport",
+      "raw-telemetry": "Rå telemetri"
+    },
+    "field": {
+      "userCode": {
+        "label": "Användarkod",
+        "description": "Den pseudonyma u-…-koden som står för en person."
+      },
+      "jobTitle": {
+        "label": "Befattning",
+        "description": "Befattningar, inklusive den vanligaste titeln på sammanfattningsblad. I en liten grupp kan en titel peka ut en person."
+      },
+      "department": {
+        "label": "Avdelning",
+        "description": "Avdelningar, inklusive den mest aktiva avdelningen på sammanfattningsblad."
+      },
+      "company": {
+        "label": "Företag / organisation",
+        "description": "Organisationsnamnet från katalogen och företagsnamn listade på vidarefaktureringsblad."
+      },
+      "orgGroup": {
+        "label": "Organisationsgrupp",
+        "description": "Det operativa centrum eller grupp som en rapport delas upp på."
+      },
+      "section": {
+        "label": "Sektion",
+        "description": "Sektionen för kostnadstäckning som en vidarefaktureringsrad tillhör."
+      },
+      "mailDomain": {
+        "label": "E-postdomän",
+        "description": "E-postdomän som användningen tillskrivs (aldrig en adress)."
+      },
+      "workLocation": {
+        "label": "Arbetsplats",
+        "description": "Huvudkontor eller fält."
+      },
+      "technical": {
+        "label": "Tekniska detaljer",
+        "description": "Modell, region, händelsetyp, valuta och liknande beskrivningar som inte avslöjar något om en person."
+      },
+      "other": {
+        "label": "Andra beskrivande fält",
+        "description": "Här anger du kolumner som inte passar ovan."
+      }
+    },
+    "folders": {
+      "intro": "Alla mappar som pipeline levererat till visas här. En mapp utan inställningar — och utan överliggande mapp som ger åtkomst — kan bara ses av administratörer.",
+      "name": "Visningsnamn",
+      "namePlaceholder": "Visas istället för mappsökvägen",
+      "description": "Beskrivning",
+      "reportType": "Rapporttyp",
+      "reportTypeNone": "Ej angivet",
+      "reportTypeInherited": "Ärvt: {type}",
+      "reportTypeHint": "Anger för granskaren vilka filnamn som kan väntas och hur ofta. Gäller mappar inuti denna.",
+      "retention": "Behåll filer i (månader)",
+      "retentionHint": "Lämna tomt för att ärva {months} månader. Räknas från slutet av varje rapports period.",
+      "audience": "Vem får öppna denna mapp",
+      "audienceHint": "Varje rad ger åtkomst till denna mapp och dess undermappar. Ett mål per rad.",
+      "audienceScope": "Måltyp",
+      "audienceTargets": "Mål",
+      "audienceLevel": "Åtkomstnivå",
+      "addAudience": "Lägg till personer eller grupper",
+      "removeAudience": "Ta bort denna rad",
+      "restricted": "Ärv inte åtkomst från ovanstående mappar",
+      "restrictedHint": "Endast rader på denna mapp gäller här och underliggande mappar.",
+      "hiddenFields": "Dölj även i denna mapp",
+      "hiddenFieldsHint": "Fält som döljs här utöver plattformsinställningen för denna mapp och dess undermappar. Du kan dölja fler, aldrig visa fler.",
+      "hiddenPlatformWide": "(döljs överallt)",
+      "clear": "Ta bort mappens inställningar",
+      "rawChip": "Rådata: endast globala administratörer",
+      "rawNote": "Rå telemetri innehåller namn, e-postadresser och filnamn. Endast globala administratörer kan öppna den, och inga målgrupper kan läggas till.",
+      "audienceChip": "{count, plural, one {# åtkomstrad} other {# åtkomstrader}}",
+      "restrictedChip": "Ärver inte",
+      "notConfiguredChip": "Inga inställningar",
+      "addPathLabel": "Ställ in en mapp innan första leveransen",
+      "addPath": "Lägg till",
+      "addPathHint": "Sökvägen exakt så som pipeline kommer att skriva den, till exempel usage/ocba. Detta sparar endast inställningar; det skapar inget i lagringen.",
+      "invalidPath": "Det är inte en giltig mappsökväg.",
+      "rawGlobalOnly": "Endast globala administratörer kan konfigurera mappar under raw/."
+    },
+    "fields": {
+      "intro": "Välj vilka fält från levererade rapporter som plattformen får visa. Om ett fält döljs tas det bort från allt i appen och från exporterna appen genererar. Den levererade filen kan då endast laddas ned av administratörer.",
+      "readOnly": "Endast globala administratörer kan ändra detta. Som analysadministratör kan du dölja fler fält per mapp, under Mappar & åtkomst.",
+      "configurableHeading": "Fält",
+      "shown": "Visas",
+      "hidden": "Dold",
+      "jobTitleNote": "Om befattning visas kan en rad i en liten grupp identifiera en person även med användarkod. Diagram döljer brytningar på färre än fem personer; nedladdade tabeller gör det inte.",
+      "neverHeading": "Visas aldrig",
+      "neverBody": "Namn, e-postadresser, katalog-id:n, uppladdade filnamn och feltexter visas aldrig utanför rå telemetri. En rapport som innehåller något av detta döljs för användare tills den ersätts.",
+      "unclassifiedHeading": "Kolumner som katalogen inte känner till",
+      "unclassifiedBody": "En textkolumn som inte känns igen förblir dold – både i appen och i exporter – och användare kan inte ladda ner den levererade filen förrän du har placerat den under ett fält.",
+      "noneWaiting": "Inget väntar.",
+      "inFiles": "{count, plural, one {i # fil} other {i # filer}}",
+      "classifyAs": "Fält för kolumn {column}",
+      "keepHidden": "Behåll dold",
+      "removeClassification": "Ta bort inställningen för kolumn {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Rapportlagringen kan inte nås",
+      "deliveryUnavailableBody": "Appen kunde inte lista containern \"{container}\". Kontrollera att den finns och att appens identitet har en dataroll på den. Tills dess visas inga rapporter för någon.",
+      "foldersUnavailable": "Mappinställningarna kunde inte läsas, så användare ser för närvarande inga mappar. Filer kontrolleras eller raderas inte förrän detta är återställt.",
+      "policyUnavailable": "Fältinställningarna kunde inte läsas, så användare kan inte ladda ner filer just nu.",
+      "total": {
+        "files": "Filer",
+        "ok": "Ok",
+        "warning": "Med varningar",
+        "error": "Dolda för användare",
+        "pending": "Kontrolleras"
+      },
+      "recheckAll": "Kontrollera allt igen",
+      "recheckOne": "Kontrollera igen",
+      "recheckQueued": "{count, plural, one {# fil i kö för kontroll.} other {# filer i kö för kontroll.}}",
+      "recheckFailed": "Kunde inte starta kontrollen.",
+      "retention": {
+        "active": "Filer som överskrider mappens lagringstid döljs direkt och raderas {days} dagar senare.",
+        "disabled": "Filer som överskrider mappens lagringstid döljs, men radering är avstängt för denna installation.",
+        "waiting-for-config": "Filer som överskrider standard-lagringstiden döljs. Inget raderas innan mappinställningar har sparats minst en gång."
+      },
+      "noFiles": "Inga filer har levererats än.",
+      "allGood": "Allt levererat är i ordning.",
+      "problemsHeading": "Filer som kräver åtgärd",
+      "status": {
+        "error": "Dolda för användare",
+        "warning": "Varning",
+        "pending": "Kontrolleras",
+        "ok": "Ok"
+      },
+      "pendingBody": "Ny eller ersatt sedan förra kontrollen. Syns för användare när filen har godkänts.",
+      "firstSeen": "Första gången upptäckt {date}",
+      "unclassifiedHeading": "Kolumner som väntar på beslut",
+      "unclassifiedBody": "Dessa kolumner känns inte igen. De förblir dolda och användare kan inte ladda ner filer som innehåller dem förrän någon har placerat varje under ett fält.",
+      "unclassifiedChip": "{column} · {count, plural, one {# fil} other {# filer}}",
+      "openFields": "Gå till Fält",
+      "unconfiguredHeading": "Mappar utan inställningar",
+      "unconfiguredBody": "Filer kommer hit, men ingen har konfigurerat mappen eller den ovanför. Endast administratörer kan se dem.",
+      "staleHeading": "Försenade leveranser",
+      "staleBody": "Dessa mappar väntar regelbundna rapporter och den senaste är äldre än den borde.",
+      "staleDetail": {
+        "daily": "Dagligen; senaste avser {date}",
+        "monthly": "Månadsvis; senaste slutar {date}"
+      },
+      "staleNever": "Inget levererat än",
+      "expiringHeading": "Förfaller",
+      "expiringBody": "Filer som har eller når lagringstid inom 30 dagar.",
+      "expiresOn": "Förfaller {date}",
+      "expiredOn": "Förföll {date}"
+    },
+    "issue": {
+      "name-mismatch": "Filnamnet är inte vad denna mapp förväntar sig (t.ex. {expected}).",
+      "unsupported-format": "Filer av typen \"{extension}\" kan inte kontrolleras och är därför dolda för användare. Leverera .xlsx eller .csv.",
+      "too-large": "Med {sizeMb} MB är denna fil över gränsen på {limitMb} MB för kontroll, så den är dold för användare.",
+      "empty-file": "Filen är tom.",
+      "unreadable": "Filen kunde inte öppnas. Den kan vara skadad eller inte av det format som namnet anger.",
+      "identifier-column": "Arket \"{sheet}\" har en kolumn \"{column}\" som identifierar personer. Filen är dold för användare.",
+      "identifier-values": "\"{sheet}\" innehåller {count, plural, one {# e-postadress} other {# e-postadresser}}. Filen är dold för användare.",
+      "user-code-format": "Arket \"{sheet}\", kolumn \"{column}\": {count, plural, one {# värde är} other {# värden är}} inte ett u-… användarkod. Filen är dold för användare.",
+      "formulas-without-values": "Arket \"{sheet}\" har {count, plural, one {# formel} other {# formler}} utan sparat resultat, så dessa siffror kan inte visas i appen.",
+      "missing-sheet": "Arket \"{sheet}\" saknas, så vyer som bygger på det kan inte visas.",
+      "missing-column": "Arket \"{sheet}\" har ingen \"{column}\"-kolumn, så vyer som använder den kan inte visas.",
+      "no-period": "Filnamnet innehåller ingen rapportperiod, så gallring gäller från leveransdatumet.",
+      "unclassified-field": "Kolumnen \"{column}\" känns inte igen. Den förblir dold och användare kan inte ladda ner den levererade filen förrän den har klassificerats under ett fält.",
+      "past-retention": "Äldre än denna mapps {months} månaders lagring; visas inte längre.",
+      "unknown": "Rapporterat problem: {code}."
+    }
   }
 }

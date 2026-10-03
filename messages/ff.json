@@ -865,7 +865,10 @@
       "codeInterpreterLimitReached": "Limmorgol code execution maa e o jooɗii — nana fowde e jamfa running code…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Naatde-ɗaaɗo goonga so tawii waawaa annditir—joopondirde mbayka agent maa waawaa ummorɗe.",
-      "stillWorking": "Ton e jam..."
+      "stillWorking": "Ton e jam...",
+      "assessingSearchResults": "Njiɗɗin so baŋngal njangu jawdi njangu…",
+      "refiningSearch": "Njangde jokkondin: “{query}”…",
+      "readingSearchPages": "Njaɓɓude {count} baŋngal njangu…"
     },
     "toolSummary": {
       "usedTools": "Njoɓɗo {count, plural, one {# nguurndam} other {# nguurndeeji}}",
@@ -951,7 +954,10 @@
       "summarizeNow": "Naatnu e noggalɗi jooni",
       "sourcesCount": "{count} jiitorde",
       "showAll": "Hollu jiitorde {count} fof",
-      "showFewer": "Hollu tuugol"
+      "showFewer": "Hollu tuugol",
+      "multiStepTitle": "Baŋngal nannde — njiɗɗin so tawata e jawdi njangu",
+      "multiStepHint": "Njangde nyawna waawindi e ɗam — njangde jokkondin walla jangu e geɗe ngal mbaɗi baŋngal foti. Njiɗɗin he {count} baŋngal tan tigi so a waawi fina.",
+      "answerNow": "Fina e baŋngal nannde tigi"
     },
     "retryWithModel": "Huutore e {model}",
     "createTodoTasks": "Sari To Do tasks e jaajol ɓeyngu",
@@ -965,7 +971,10 @@
     "modelTimedOutAtMaximum": "{model} waɗaani waawan fuɗɗitde e {duration}, tuma makko mawɗo. Faale fii, walla a yiɗi model goɗɗo.",
     "requestTimedOut": "Ndee jokka tawi tuma leydi e naatanii ɗum e hoore {model} waawataa yamiroore. Aɗa waawi bolle tuma, walla jokkondir e model goɗɗo.",
     "retryWaitingLonger": "Aɗa waawi waawi e {duration} jokkondir",
-    "alwaysWaitThisLong": "Naat a waawi bolle e {duration} ko feccere"
+    "alwaysWaitThisLong": "Naat a waawi bolle e {duration} ko feccere",
+    "keepSearching": "Jokkondin njangde",
+    "keepSearchingHint": "Njangde ndiyam mujannirde tuma mo waawan e nalla. Huumore tampere e baasi assistant jokkondin e wondi danndude.",
+    "keepSearchingMessage": "Jokkondin njangde e jam, miɗo yiɗi — waasi wondi danndude."
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1450,7 +1459,9 @@
       "providerBingResponsesDescription": "Bing web cover gese am goonga Bing grounding, tawi ko modeli gooto laawol yamirde haa e Foundry agent — ko ñande majju. Njiɗɗo cuɓoraa e fow Bing grounding.",
       "providerSearxng": "MSF web search",
       "providerSearxngDescription": "Jeyngu moƴƴere MSF tan nde tawii metasearch. Ɓuri web fow, caɗeele, binndi maaɗaaji (so wonaa binndi MSF), binndi takko e bayle humanitarian, e ɓuri ɗum andi hol ko moyyi so neɗɗo wayni ceede. Ndewo waawani ba kammu, ɓurnde e linki non, e laawol search tan e kaddi app – jeyngu search ngal, engineji search ndiyam waawaani maayii.",
-      "otherProvidersLabel": "Jeynguji waɗi ɗi"
+      "otherProvidersLabel": "Jeynguji waɗi ɗi",
+      "multiStepLabel": "Njangde e yuɲeji",
+      "multiStepDescription": "E njangde web MSF, assistant njiɗɗin baŋngal njangu laata, tee so ɗum waawaani, njangde jokkondin walla naɓɓude geɗe ngal mbaɗi baŋngal foti e fina. Kadi baŋngal jamaa njangu nannde ɗuɗɗo baŋngal. Wayla ngol so a jokkondin njangde e tan baŋngal."
     },
     "Admin": "Maɗifaama",
     "Usage Limits": "Doggol hoore nguum",
@@ -1470,7 +1481,8 @@
       "customHint": "Haala e {min} e {max} saɗii.",
       "preferModelTitle": "Balloo model ngal mi suɓi",
       "preferModelDescription": "Aɗa waawi waawan feccitaade model goɗɗo so jokka weelli. Jiraa walla miɗo hokkude e model goɗɗo."
-    }
+    },
+    "Analytics": "Analytics"
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -1678,6 +1690,12 @@
     },
     "subVariant": {
       "label": "Jummorde"
+    },
+    "retiring": {
+      "badge": "Jokkondin seeda",
+      "datedMoving": "Njaɓɓi seeda on {date}. Njaɗɗi e {successor} on {movesOn}.",
+      "dated": "Njaɓɓi seeda on {date} walla ɗum waawaani ligge. Fannu {successor}.",
+      "replaced": "Njaɓɓi e {successor}."
     }
   },
   "models": {
@@ -1974,6 +1992,11 @@
       "name": "GPT-6 Astra",
       "description": "GPT-6 Astra ngu OpenAI gila no feewi. Wadde gila e hawri goɗɗe: heddore noddoma, naatnude ɗaɗɗi, sosma software, e toɓeeji naatnaari goɗɗe. Kuugal ɗe e hoore GPT-5.6 Sol no waawi no duurnde doble.",
       "tagline": "Moodel gila e OpenAI mo ɓuri feewi"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Ko cilole GPT-6 Sol e ligge wedɗi e code, dokumente, e aplikasyoore. Daanira kapitaal Astra e leydi token ngol.",
+      "tagline": "Fotti Astra, njarma baɗi kaɗo"
     }
   },
   "searchMode": {
@@ -5424,7 +5447,10 @@
       "announcements": "Jeytuji ɗee e modoore: holiɗii kamɓe, hol ko koɗa, e hol tawaare.",
       "delegations": "Hol koondeeji yetti, e hol ko ɗum foti gollu.",
       "channelProfiles": "Ko paltform kadi: ɗiɗal, hokkugo, layki. Factji e jamfaadooji ngol cuɓorgal paltformji gollu.",
-      "channelSets": "Ka teamje kala jogii doole makko e paltformji: hokkugo, ɓogorde, mbayrdi, holi e binndi e holi e siftin."
+      "channelSets": "Ka teamje kala jogii doole makko e paltformji: hokkugo, ɓogorde, mbayrdi, holi e binndi e holi e siftin.",
+      "webSearch": "Njangde web: njangde e yuɲeji, model assessor e luttugol ɗum.",
+      "contextBudget": "Hooɗe konngol mon model njangu e baŋngal.",
+      "analytics": "Rapporte ligge: wondude, kanko waawanaa uɓɓit fodere, e caɗeeji waawi hollita."
     },
     "openSettings": "Hollu teeltorde",
     "area": {
@@ -5432,7 +5458,10 @@
       "viewAs": "Hollu ko gooto",
       "globalAdmins": "Mbeleefeeɓe aduna",
       "announcements": "Jeytuji",
-      "delegations": "Kondeeji"
+      "delegations": "Kondeeji",
+      "webSearch": "Njangde web",
+      "contextBudget": "Konngol njangu",
+      "analytics": "Analytics"
     }
   },
   "limits": {
@@ -6766,7 +6795,8 @@
     "capabilitiesHint": "Ko noon jokkondiral ngol waawi hoore mum fowa. Admin foti hokkude e coolii noon tan gar njeytinooji yarondi.",
     "grant": {
       "limits": "Eboonde hoore mum",
-      "announcements": "Nanaamaaji"
+      "announcements": "Nanaamaaji",
+      "analytics": "Analytics"
     },
     "grantAll": "Fuu",
     "maxOverrides": "Eboonde mo jokkondiral ngol waawi",
@@ -6927,5 +6957,540 @@
     "isDefaultAfterSave": "Ina waawi loowa ɗum kam set default so a arta.",
     "noChannelsWarning": "Set ngal kamɓeeroo kanal so, hay so o waawi jogude draft e ɗum.",
     "audienceEveryoneHint": "So gooto e organisation um waawi jogude draft e set ngal."
+  },
+  "contextBudgetAdmin": {
+    "title": "Konngol njangu",
+    "description": "Hooɗe leydi konngol mon model jangu e baŋngal. Buɓɓe nannde jokkondin; buɓɓe mawɗo wiɗi, yamira e summari buɓɓe mawɗo jokkondin e system prompt. Konngol mawɗo jokkondin baŋngal jokkondin leydi e njarma kaɗo baŋngal.",
+    "scopeNote": "Ko e chat mon e model mon. Konngol waawaani waale leydi window model.",
+    "loading": "Njaɓɓude konngol njangu…",
+    "loadError": "Konngol njangu waawaani njaɓɓude.",
+    "configUnavailable": "Konngol njangu waawaani ñaamugol wondude tigi, e mo leydi sotti; wayla e huunde tigi baɗi.",
+    "retry": "Wayla",
+    "historyTokensLabel": "Konngol standard (tokens)",
+    "historyTokensDescription": "Buɓɓe baŋngal tan jokkondin e system prompt, e model waawaani override. Baŋngal 48,000 jokkondin daande 30–60 baŋngal konngol.",
+    "historyFractionLabel": "Daga (leyɗe model input window)",
+    "historyFractionDescription": "Konngol jottonu leyɗe model context window, baɗi output reservation, jooni model leydi nannde waawaani waale.",
+    "minRecentMessagesLabel": "Buɓɓe nannde jokkondin",
+    "minRecentMessagesDescription": "Buɓɓe nannde jokkondin baawi leydi konngol (e window). Talaati buɓɓe jokkondin maydi so buɓɓe konngol tan — dokumente ebuɗɗo, baŋngal njangu — waawaani waale konngol.",
+    "familyOverridesLabel": "E family",
+    "familyOverridesDescription": "Konngol mon model e family, jokkondin konngol standard.",
+    "modelOverridesLabel": "E model",
+    "modelOverridesDescription": "Konngol mon model, jokkondin family e konngol standard.",
+    "overrideFamilyPlaceholder": "Family",
+    "overrideModelPlaceholder": "Model id",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Jokkondin",
+    "removeOverride": "Yaltin",
+    "noOverrides": "Hay",
+    "effectiveLabel": "Konngol njangu e settings ngol",
+    "effectiveColumnModel": "Model",
+    "effectiveColumnWindow": "Fenɗere",
+    "effectiveColumnBudget": "Budget ngol",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Dafal: {value}",
+    "defaultsNote": "Ndaari moƴƴe ɗiɗi haani dafale fof; moƴƴe goɗɗe tun waawani nyande kode dafale.",
+    "save": "Moƴƴa",
+    "saving": "Moƴƴaa…",
+    "resetDefaults": "Lomal dafale",
+    "unsaved": "Moƴƴe tun moƴƴaani",
+    "saveSuccess": "Budget kontekst moƴƴi. Moƴƴee tun waawi e ɗaɗi.",
+    "saveError": "Budget kontekst moƴƴaani waawaani moƴƴa.",
+    "conflictError": "Administrator goɗɗo moƴƴi budget kontekst haa doggude; moƴƴe sappo moƴƴaani tun.",
+    "updatedByLine": "Moƴƴi tun e {by} e {at}",
+    "neverSaved": "Tun moƴƴaani moƴƴa — dafale kode nyande koy ɗaɗi."
+  },
+  "webSearchAdmin": {
+    "title": "Ñiiɓirde web",
+    "description": "Nattude ñiiɓirde goɗɗe e web MSF. Ko feccere fow ngol, model assessor jogii jawɗe ko wayi naatude laaɓo; so wonaa, mo waawani ndoddirgol e queries goɗɗe, joggol cuɓe, so waawaani, mo waawani laƴgol user e mbaydi goɗɗe, walla mo waawani waawani ndon duudii.",
+    "scopeNote": "Nattude ɗi waɗi e ñiiɓirde MSF web tan. Ñiiɓirde goɗɗe ɗiɓɓe run round goɗɗo tan. Neɗɗo kulle waawi loma ñiiɓirde goɗɗe haani Settings.",
+    "loading": "Stongii nattude ñiiɓirde web…",
+    "loadError": "Nattude ñiiɓirde web waawaani stongii.",
+    "configUnavailable": "Nattude ñiiɓirde web waawaani hokki e storage. Nattude moƴƴe naatanii, ko walla haani dafale moƴƴe ɗi waawaani jogii ko fayde.",
+    "retry": "Temmbu",
+    "enabledLabel": "Ñiiɓirde goɗɗe",
+    "enabledDescription": "So moƴƴaani, ñiiɓirde fow ko round goɗɗo tan, model assessor fow jogaani.",
+    "assessorLabel": "Model assessor",
+    "assessorDescription": "Jogii goɗɗo e step fow jowii jawɗe. Suubi model fayde, ko waawi gollude ka doggol neɗɗo. So mo feccaani jogii, {fallback} jogii.",
+    "maxStepsLabel": "Goɗɗe e laaɓo",
+    "maxStepsDescription": "Goɗɗe woyde laaɓo tun waawani jogii, feccerede laaɓo goɗɗo. Laaɓo feccere goɗɗe, walla batch joggol cuɓe, ko laaɓo goɗɗo. Cap goɗɗo waawaani e cap ñiiɓirde ñande, ko laaɓo tun jogii e laaɓo.",
+    "maxStepsExploratoryLabel": "Goɗɗe e ñiiɓirde exploratory",
+    "maxStepsExploratoryDescription": "Cap tinggi woyde ko hunt e laaɓo huunde, so wondude item ndon waawaani jogii, njoɓdi ko dead ends. Waawaani e cap normal ndon ko feccere.",
+    "pageReadsLabel": "Joggol cuɓe jawɗe",
+    "pageReadsDescription": "Tagi laaɓo goɗɗo ngol joggol cuɓe jawɗe leydi, mo jogii info e cuɓe tan walla snippets.",
+    "maxPageReadsLabel": "Cuɓe e joggol laaɓo",
+    "sourceAssessmentLabel": "Nattude ƴaare source",
+    "sourceAssessmentDescription": "Assessor nattii source fow (official, established, secondary, low reliability), mo waawi joggol e laaɓo.",
+    "timeBudgetLabel": "Budget waaktu (seconde)",
+    "timeBudgetDescription": "Waaktu tun woyde ñiiɓirde waawani jogii, feccere laaɓo goɗɗo tun e. So waaktu muusii, jawɗe jogaani ko fayde jogii.",
+    "defaultsNote": "Nattude goɗɗo haani dafale moƴƴaani stongii, mo waawani jogii dafale so release goɗɗo moƴƴi.",
+    "defaultHint": "Dafal: {value}",
+    "defaultOn": "Ngol",
+    "defaultOff": "Muƴƴaani",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Tun moƴƴaani moƴƴe e laaɓo.",
+    "save": "Moƴƴa",
+    "saving": "Moƴƴaa…",
+    "resetDefaults": "Lomal dafale",
+    "saveSuccess": "Nattude ñiiɓirde web moƴƴi.",
+    "saveError": "Nattude ñiiɓirde web waawaani moƴƴa.",
+    "conflictError": "Administrator goɗɗo moƴƴi nattude goɗɗo. Moƴƴe sappo moƴƴaani — suudu e njoɓdi moƴƴa tun.",
+    "updatedByLine": "Moƴƴi tun e {by} e {at}.",
+    "neverSaved": "Tun moƴƴaani moƴƴa; dafale kode jogii."
+  },
+  "modelRetirement": {
+    "notice": "{model} maa wonaa waawaa sabo maa on {retiresOn}. Nde wondi jokkondirgol maa ndiyam {successor} jooɗii on {movesOn}.",
+    "noticeRetiring": "{model} maa wonaa waawaa sabo maa on {retiresOn} te wondi waawaa jokkondirgol. Nde wondi jokkondirgol e {successor} kono ndiyam jokkondirgol.",
+    "switchNow": "Siifaa ndiyam"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "backToChat": "Yeeso jokkondirgol",
+    "manage": "Danee",
+    "loading": "Ina cokkondiri…",
+    "loadFailed": "Nyaama waawaa jokkondirgol reports ɗe.",
+    "retry": "Faale ndiyam",
+    "emptyTitle": "Dum fof waawaa faaran huɗɗi maa",
+    "emptyBody": "Reports maa woodani fii maa hite admin njaarii access e folder.",
+    "deliveryUnavailable": "Report storage waawaa heɓani jooni, te list ɗe kadi woni faw. Hinndi ndiyam e ciŋkii.",
+    "groupsDegraded": "Ina waawaa heɓani group memberships jooni, folders ɗe shared e group maa kadi waawaa woodaani. Reendu e ciŋkii.",
+    "foldersHeading": "Folders",
+    "rootFolder": "Reports fof",
+    "pathOnly": "Maa waawaa heɓani access e folder ngal boɗɗum, lan e folders ɗe nder.",
+    "selectFolder": "Sari folder fii jokkondirgol reports ngal.",
+    "noFiles": "Folder ngal waawaa report.",
+    "viewOnlyNote": "Maa waawaa access e folder ngal: ndiyam öpponi reports, yita overview e summary tables. Tables nde row baari te person, exports e downloads ina neddi access e download.",
+    "col": {
+      "name": "File",
+      "period": "Jamiroore",
+      "delivered": "Njaarii",
+      "size": "Rew",
+      "availableUntil": "Hita e",
+      "actions": "Fofondi"
+    },
+    "download": "Download",
+    "downloadAria": "Download {name}",
+    "block": {
+      "view-only": "Faatini tuŋŋorde",
+      "hidden-fields": "Original nde waawaa faaran (fields waawaa anndani)",
+      "unclassified-fields": "Original nde waawaa faaran (fields ngalandi review)",
+      "not-inspected": "Waawaa cokkondiri",
+      "policy-unavailable": "Waawaa woodani jooni"
+    },
+    "adminBadge": {
+      "error": "Waawaa yita users",
+      "pending": "Ina cokkondiri",
+      "warning": "Lotti warning",
+      "expired": "Ina wataa jamiroore, ina waawi lekki",
+      "originalBlocked": "Users waawaa download: {reason}"
+    },
+    "openAria": "Opuni {name}",
+    "openForExport": "Opuni fii export",
+    "preview": {
+      "back": "Yeeso e {folder}",
+      "tabsLabel": "Tables e file ngal",
+      "lockedTab": "{name} (tuugii)",
+      "unavailable": "File ngal waawaa öpponi e app ngal jooni.",
+      "tableFailed": "Nyaama waawaa öpponi table ngal.",
+      "withheld": {
+        "row-level": "Table ngal row baari te person. Opuni ngal ina neddi download access e folder.",
+        "hidden-fields": "Page ngal ina field tuugii, te waawaa yita."
+      },
+      "truncated": "Ina yita first {shown, number} jooni e {total, number} rows. Export table nde heɓi ɗe fof.",
+      "freeformNote": "Page ngal ina sedii fii jokkondirgol e yita lan baari dum njaarii.",
+      "filter": "Filtre row ɗe",
+      "filterPlaceholder": "Fayda ɗi…",
+      "rows": "{count, plural, one {# fayda} other {# faydaɗi}}",
+      "matching": "{count, number} e {total, number} faydaɗi ɗi ɗawri",
+      "modeLabel": "Hollu e",
+      "mode": {
+        "table": "Tabal",
+        "chart": "Fiilu"
+      },
+      "noRows": "Faydaɗi alaa kadi e holla.",
+      "hiddenColumn": "Kurfii e jeytinooje",
+      "exportCsv": "Fayda tabal (CSV)",
+      "exportXlsx": "Fayda tabal fofu (Excel)",
+      "downloadOriginal": "Ñaamtu mbaydi",
+      "exportNote": "File fof tawii kurfii e dogon, jooni alaaɗen ne ñaamtu e naatinam. Fayda mo tabit kurfiiɓe ko kurfii e dogon.",
+      "sectionLabel": "Hollu",
+      "section": {
+        "overview": "Hollol",
+        "tables": "Tabalɓe"
+      }
+    },
+    "chart": {
+      "groupBy": "Tukkita e",
+      "measure": "Gantaa",
+      "rowCount": "Gantal faydaɗi",
+      "aggregation": "Hesita",
+      "agg": {
+        "sum": "Jumol",
+        "mean": "Gantaa naat",
+        "min": "Kekki mo ɗi",
+        "max": "Jokkere mum"
+      },
+      "ariaLabel": "{measure} e {group}",
+      "noColumns": "Tabal ngol alaa kurfii kala e text walla date don tukkita e.",
+      "empty": "Alaa fiilu jogii fayde e nanndirgal ngol.",
+      "truncatedGroups": "Hollu {count} tukkita jokkere.",
+      "basedOn": "E hoore {shown, number} e {total, number} faydaɗi.",
+      "savePng": "Faale e suudu",
+      "saveSvg": "Faale e SVG",
+      "saveFailed": "Alaa faale fiilu mum."
+    },
+    "dash": {
+      "loading": "Naandiral…",
+      "failed": "Alaa hollol ngol ngoodi.",
+      "retry": "Fuɗɗita",
+      "showTable": "Hollu e tabal",
+      "showChart": "Hollu e fiilu",
+      "smallGroups": "Tukkita mo ɗi jeyta 5",
+      "foldedNote": "Tukkita mo ɗi jeyta 5, tummii e fayda goɗɗo.",
+      "otherCount": "{count, plural, one {# goɗɗo} other {# goɗɗe}}",
+      "hiddenPanel": "Kurfii e nataande field.",
+      "missingPanel": "Alaa e file ngol.",
+      "usage": {
+        "users": "Jeytinooji",
+        "interactions": "Hokkitaande",
+        "avgPerUser": "Gantaa naat e jeytinooji",
+        "medianPerUser": "Median e jeytinooji",
+        "hq": "E headquarters",
+        "field": "E field",
+        "shareUsers": "{pct}% e jeytinooji {comparator}",
+        "shareUsage": "{pct}% e hokkitaande {comparator}",
+        "comparator": "{comparator}: {value}",
+        "daily": "Jokkondiral e ñalawma",
+        "dailyUsers": "Mbaɗɗo jokkondiral e ñalawma",
+        "dailyUsersSub": "E leydi jaafe",
+        "weekly": "Jokkondiral e dobbu",
+        "activity": "Hol ko mbaɗɗo la tawataa",
+        "activitySub": "Mbaɗɗo, e adadin jokkondiral e gese jamma",
+        "departments": "Jokkondiral e bokkorde",
+        "jobTitles": "Jokkondiral e winndere liggeey",
+        "models": "Gese e moodel",
+        "total": "Leydi fofu",
+        "location": {
+          "hq": "Bii liggeey maɓɓe (Headquarters)",
+          "field": "Leydi njiyataa",
+          "unknown": "Maa anndaa"
+        },
+        "col": {
+          "date": "Ñalawma",
+          "week": "Dobbu ngon ni jangoo",
+          "users": "Mbaɗɗo",
+          "interactions": "Jokkondiral",
+          "events": "Gese",
+          "group": "Golle",
+          "band": "Jokkondiral"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Ñaamre fofu fayaa",
+        "usageVariable": "Ñaamre jokkondiral ndiyam",
+        "staticInfra": "Dondiral static infrastructure",
+        "sections": "Leyye fayaa",
+        "usageEvents": "Gese jokkondiral",
+        "bySection": "Fayaa e leyye",
+        "changes": "Waylude e file jamaa",
+        "noChanges": "Hay waylude e file jamaa.",
+        "byDomain": "Gese jokkondiral e mail domain",
+        "reconciliation": "Soodita e Azure",
+        "col": {
+          "section": "Leyye",
+          "billed": "Fayaa",
+          "usageEvents": "Gese jokkondiral",
+          "usagePct": "Jokkondiral %",
+          "line": "Golmo",
+          "amount": "Ñaamre",
+          "previous": "File jamaa",
+          "restated": "Waylude e jamaa",
+          "change": "Waylude",
+          "domain": "Mail domain",
+          "users": "Mbaɗɗo"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Raawal e",
+        "delivered": "Raawal report mo woni ({version})",
+        "current": "Raawal application mo woni ({version})",
+        "whatIf": "Ko e jamma…",
+        "deliveredUnavailable": "Raawal report mo, maa anndaa e Assumptions sheet makko, e raawal application mo woni e tawataa.",
+        "whatIfIntro": "Waylu adadin, aa waawa jibin e gese fofu kadi. Haydaten jemtataa.",
+        "resetDelivered": "Falti e raawal report mo",
+        "resetCurrent": "Falti e raawal application mo",
+        "co2": "Emissions",
+        "energy": "Nguurndam",
+        "charges": "Naatigi njiyɗam smartphone",
+        "chargesSub": "Ko nda nyamde njiyɗam yahi ko woori",
+        "activeUsers": "Neɗɗo ɓe njiyɗi",
+        "requests": "Jeyngo",
+        "tokens": "Tokenji",
+        "vsDelivered": "{delta} fow ko nyamde njiyɗam ɗee njiyɗi jeyɓe",
+        "sameAsDelivered": "Ko kadi fow ko njiyɗam waɗii jeyɓe njiyɗi",
+        "unpriced": "{count, plural, one {# jeyngal jogii} other {# jeyngo jogi}} moodel makko waɗaa pi kira, {count, plural, one {wanaa koyɗi} other {wanaa koyɗi}}.",
+        "byDepartment": "Njiyɗam nguurndam e dow cellar",
+        "byModel": "Njiyɗam nguurndam e dow moodel",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Nguru woni e ndiyam ko waawoyugo e lokkude",
+        "reconciliationSub": "Application fow sosii jeyngal kala oto. Hitaande ɓe ɓuri ko teŋngude so kira jooni.",
+        "computed": "Nguru woni e ndiyam",
+        "logged": "Sokkel application",
+        "difference": "Laawol",
+        "col": {
+          "group": "Kanggol",
+          "requests": "Jeyngo",
+          "tokens": "Tokenji",
+          "energyWh": "Nguurndam (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "PUE data-centre sokal e dow",
+          "promptTokenWeight": "Buri token fow",
+          "dedicatedReasoningMultiplier": "Rennge moodel moƴƴi",
+          "whPer1kTokens": "Wh e 1,000 tokenji — {name}",
+          "reasoningEffortMultipliers": "Rennge moodel moƴƴi — {name}",
+          "gridIntensity": "Nguurndam grid g CO₂e e kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Coppite",
+        "users": "Neɗɗo",
+        "tokens": "Tokenji",
+        "errors": "Falki",
+        "energy": "Nguurndam",
+        "co2": "Njiyɗam",
+        "hourly": "Coppite e njaati (UTC)",
+        "byType": "Coppite e dow ndiyam",
+        "byError": "Falki e dow koddal",
+        "byModel": "Tokenji e dow moodel",
+        "byCompany": "Coppite e dow organisation",
+        "none": "Aluma.",
+        "col": {
+          "group": "Kanggol",
+          "events": "Coppite",
+          "tokens": "Tokenji",
+          "hour": "Njaati"
+        }
+      },
+      "trend": {
+        "title": "E dow jamma",
+        "period": "Waktu",
+        "users": "Neɗɗo ɓe njiyɗi e jeyngal",
+        "interactions": "Tiiɗanal e jeyngal",
+        "billed": "Jami fow e waktu",
+        "sections": "Jami e koddal",
+        "otherSections": "Ngol mbeyal ɗiɗi",
+        "co2": "Doggol CO2 gooto kala bikku",
+        "energy": "Naatyul gooto kala bikku",
+        "recalculated": "Kala junngo lesdi calculii e teelte app wondude ({version}), kono teelte mumma e bikkuɗe wonaa men ne doggol CO2 wayiiri.",
+        "severalPerPeriod": "Keseede nde ndotti bikkuɗe leydi gooto. Uddit keseede e kon to ɗen yeeyo ko feewi waawani e jamma."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analytics",
+    "description": "Bikkuɗe founi e storage e data pipeline. E ɗen, waawataa heɗugo ko ɓuri, cuɓaa mo waawataa uddu keseede, tee suɓaa ko field platform waawataa ndokkude.",
+    "openViewer": "Uddit analytics",
+    "sharedNotice": "Beta e production ɗiɗi fjoodi keseede, audiences e file. Teelte mbaawi waɗi e ɗen foti ngon ko e ɗiɗi.",
+    "tabsLabel": "Mbeyal Analytics",
+    "tab": {
+      "health": "Yar e bikku",
+      "folders": "Keseede e ndokki",
+      "fields": "Field"
+    },
+    "loading": "Naatude...",
+    "retry": "Tiiɗi",
+    "loadError": "Wonaa waawi naatude mbeyal nde.",
+    "unavailable": "Wonaa waawi jangu teelte mon e storage. Nden NDA ko \"pultataaka\" — waytaade ndotti wayiiri ngam teelte mon fodaaka. Tiiɗi, tee yiɗde server logs so wayiiri.",
+    "save": "Fiɗ",
+    "saving": "Fiɗude...",
+    "unsaved": "Teelte wayiira fiɗaaka",
+    "saveSuccess": "Fiɗi.",
+    "saveError": "Wonaa waawi fiɗude.",
+    "conflictError": "Admin gooto mocha teelte mon e jamma waawani. Teelte mon fiɗaaka — version mumma naatani.",
+    "rootFolder": "(laawol leydi)",
+    "scope": {
+      "domain": "Email domain",
+      "user": "Neɗɗo",
+      "attribute": "Attribute",
+      "group": "Entra group"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "Entra group object id"
+    },
+    "level": {
+      "view": "Yeeyo feewde bikku",
+      "download": "Yeeyo, export e naatude"
+    },
+    "reportType": {
+      "usage": "Bikku ndotti",
+      "rebilling": "Rebilling",
+      "emissions": "Bikku doggol",
+      "raw-telemetry": "Telemetry faggude"
+    },
+    "field": {
+      "userCode": {
+        "label": "Code user",
+        "description": "Code u-... pseudonyme mon, qoyii e neɗɗo gooto."
+      },
+      "jobTitle": {
+        "label": "Titre laawol",
+        "description": "Titre laawol, e jamma laawol fow e bikku feewde. E gese laawol gooto waawi jaani e neɗɗo."
+      },
+      "department": {
+        "label": "Department",
+        "description": "Department, e jamma department fow e bikku feewde."
+      },
+      "company": {
+        "label": "Company / organisation",
+        "description": "Innde organisation e directory, e innde company goowel e bikku rebilling."
+      },
+      "orgGroup": {
+        "label": "Organisation group",
+        "description": "Centre opérationnel walla groupe bikku so faggude e jamma."
+      },
+      "section": {
+        "label": "Section",
+        "description": "Section cost-recovery bikku rebilling line e jamma."
+      },
+      "mailDomain": {
+        "label": "Domen mail",
+        "description": "Domen mo email ɗe nandirta e mum (honto ko adiresi)."
+      },
+      "workLocation": {
+        "label": "Ndaari hoore",
+        "description": "Secrétariat wala champu."
+      },
+      "technical": {
+        "label": "Ciforɗe tekniki",
+        "description": "Model, region, suka, siifa kesum e ɗum ɗi acci ko mo kala."
+      },
+      "other": {
+        "label": "Ndeftere goɗɗe",
+        "description": "So tawii kolom waawani ɗum feewnude kanko."
+      }
+    },
+    "folders": {
+      "intro": "Kolfulɗe kala so pipeline anndita tigi e ɗee. Kolful buy gooto murngo—e o boni kolful buy goɗɗo mo neɗɗo, e o janngini e munirabe tan.",
+      "name": "Innde njoɓdi",
+      "namePlaceholder": "Njoɓdi jokka e laawol kolful",
+      "description": "Ndeftingol",
+      "reportType": "Njoɓdi rapport",
+      "reportTypeNone": "A yetti",
+      "reportTypeInherited": "A jimi: {type}",
+      "reportTypeHint": "A faama checker innde file ɓe ena tawii, e ndinaari. A teelta kolful ɓe ɓuri e ɗum.",
+      "retention": "Jokki file ɓe (lewru)",
+      "retentionHint": "A wuppito nde a waɗi hulnde {months} lewru. Liggundirde so painti waare nde rapoor waawi.",
+      "audience": "Ko on naatata kolful ngar",
+      "audienceHint": "Haadi riga e dow line munirike ini waawi laawol kolful ngar e goɗɗe fow e yetto. Jokkondir e line gooto.",
+      "audienceScope": "Timminirde momtorde",
+      "audienceTargets": "Momtorde",
+      "audienceLevel": "Teelte naatugol",
+      "addAudience": "Jokku neɗɗo walla grupo",
+      "removeAudience": "Mommo ngal riga",
+      "restricted": "A yecci naatugol e kolful ɓe ɗiɗi ɗe wie",
+      "restrictedHint": "Riga ɓe e kolful ngar tan ñi ndaari ndiyam.",
+      "hiddenFields": "Ciforɗe dow hide e kolful ngar",
+      "hiddenFieldsHint": "Ciforɗe hide e kolful ngar e teelte platform, ngam kolful ngar e ɓe e mum. A waawi hide koy, a waawi jokka koy.",
+      "hiddenPlatformWide": "(hide e kala jawdi)",
+      "clear": "Mommo teelte kolful ngar",
+      "rawChip": "Majjuɗo: admins aduniya tan",
+      "rawNote": "Majjuɗo telemetry ngoodi e innde, adiresi mail e innde file. Admins aduniya tan waawi lollude, o walli waawi momtirde momtorde.",
+      "audienceChip": "{count, plural, one {# riga naatugol} other {# riga naatugol}}",
+      "restrictedChip": "A huli naatugol",
+      "notConfiguredChip": "Teelte fuɗɗi",
+      "addPathLabel": "Fayde kolful tun ndiyam ko fayde nder delivery",
+      "addPath": "Jokku",
+      "addPathHint": "Laawol ko tigi so pipeline waawi windude, misal usage/ocba. Ngal ena faysataa teelte tan; o waawi gollita tan e storage.",
+      "invalidPath": "Nde laawol kolful waawan e jam.",
+      "rawGlobalOnly": "Admin aduniya tan waawi teeltude kolful e raw/."
+    },
+    "fields": {
+      "intro": "Labo ciforɗe rapport ɓe platform waawi hollude. Hide ndiyam moftita cifor ngal e kala laawol app e exports kala app makko. Admin tan waawi tambitde file delivered nde.",
+      "readOnly": "Admins aduniya tan waawi waylude. Min admin analytics waawi hide ciforɗe goɗɗe e kolful, e Folders & access.",
+      "configurableHeading": "Ciforɗe",
+      "shown": "Holluɗe",
+      "hidden": "Hide",
+      "jobTitleNote": "So hoore ndiyam holli, mo row e grupo minii waawi anndude neɗɗo, sa bo code jam. Charts hide breakdowns hidden mo ɓuri neɗɗo tati e ndiyan; tables downloaded walli waawan.",
+      "neverHeading": "Honto holluɗe",
+      "neverBody": "Innde, adiresi mail, directory id-ji, innde file upload e jogorde binndi kadi honto holluɗe sew raw telemetry. Rapoor so ɗum nanyi goɗɗe ndiyam ngan, on wuppitaa ko allaandu sa wo adii waylude.",
+      "unclassifiedHeading": "Kolom kekki catalog on anndaa",
+      "unclassifiedBody": "Boowal ɗin ndee moƴƴi waawaa anndude ena naamni — e app e e worɓe — ɗum e file njiyataa baa on dirna ba jaɓnirde field.",
+      "noneWaiting": "Almaara fota mbaɗi.",
+      "inFiles": "{count, plural, one {e file #} other {e files #}}",
+      "classifyAs": "Field boowal {column}",
+      "keepHidden": "Yuɗɓe jogii naamni",
+      "removeClassification": "Momtu teelte boowal {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Laawol fayde report njiyataa tuugude",
+      "deliveryUnavailableBody": "App mo waawi njaɓde container \"{container}\". Ɓeydude so ena woodi e so app jogii data role e ɗum. E ɓurnde goɗngal, report ndiyataa hoppude.",
+      "foldersUnavailable": "Teelte folders looynataa anndude, tee jeyaaɓe waawi hollude folders. Files jalataa anndude walla yuɓɓude amma kadi dawrude.",
+      "policyUnavailable": "Teelte fields looynataa anndude, tee jeyaaɓe waawi wobde files so wona.",
+      "total": {
+        "files": "Files",
+        "ok": "Jaaci",
+        "warning": "E laawol lim",
+        "error": "Naamni e jeyaaɓe",
+        "pending": "E yanfa anndude"
+      },
+      "recheckAll": "Anndu fota kammu",
+      "recheckOne": "Anndu kammu",
+      "recheckQueued": "{count, plural, one {file # e yanfa anndude.} other {files # e yanfa anndude.}}",
+      "recheckFailed": "Yanfa anndude looynataa hoore.",
+      "retention": {
+        "active": "Files waɗi sawru e folder maa naamnii nanndu e fjowdi {days} gila no fuɓɓude.",
+        "disabled": "Files waɗi sawru e folder maa naamnii, amma yuɓɓugol fii nanndu mo wallitaade e ndee deployment.",
+        "waiting-for-config": "Files waɗi sawru e default retention naamnii. Fota fiɗɗidaa wallan e ɓurtal teelte folder so tawi loowa loowde debbo."
+      },
+      "noFiles": "File ndiyataa yowita hoore.",
+      "allGood": "Sa'i yowti hoore oo fota waaw.",
+      "problemsHeading": "Files ndiyam waawi wonde loowa",
+      "status": {
+        "error": "Naamni e jeyaaɓe",
+        "warning": "Laawol lim",
+        "pending": "E yanfa anndude",
+        "ok": "Jaaci"
+      },
+      "pendingBody": "Cilni walla waylude kelol anndude fayde. E hooɓe jeyaaɓe e iwde goɗngal.",
+      "firstSeen": "Anndini sodda {date}",
+      "unclassifiedHeading": "Boowey ngoy filɗa teelte",
+      "unclassifiedBody": "Boowey ndee moƴƴi waawaa anndude. Ena naamni, te jeyaaɓe waawi yantude files nde njogii, kono dum woni teelte.",
+      "unclassifiedChip": "{column} · {count, plural, one {file #} other {files #}}",
+      "openFields": "Yah fields",
+      "unconfiguredHeading": "Folders fuɗɗi teelte",
+      "unconfiguredBody": "Files yantina hoore ndiyam, kono hay fow famɗir teelte folder walla hol ko majji e mo. Koo administrators tan waawii hollude.",
+      "staleHeading": "Files ndiyam waawi sawru",
+      "staleBody": "Folders ndiyam ɗee yantii reports gila: so ɓuri jooɗi ko wonaa ɗum minti.",
+      "staleDetail": {
+        "daily": "Ñalnde; goɗngal soɗɗi {date}",
+        "monthly": "Leentere; goɗngal nanndu {date}"
+      },
+      "staleNever": "File ndiyataa yowita hoore",
+      "expiringHeading": "Ɓeydu",
+      "expiringBody": "Files waɗi sawru retention walla waɗa nannde e 30 ɓeydu.",
+      "expiresOn": "Ɓeyda {date}",
+      "expiredOn": "Ɓeydani {date}"
+    },
+    "issue": {
+      "name-mismatch": "Innde file njoɓataa ko folder ndiyam ngon hokkanii (misal {expected}).",
+      "unsupported-format": "Files e ɗaɓɓere \"{extension}\" mo waawi anndude, ko hono duum naamni e jeyaaɓe. Yantu .xlsx walla .csv.",
+      "too-large": "E {sizeMb} MB file ndiyam ndiyataa sokla {limitMb} MB anndude, tee naamni e jeyaaɓe.",
+      "empty-file": "Files ngal waawaa reedude.",
+      "unreadable": "Fayli ɗum ndon waɗa wañi. Ina laata e kadi hanndude, walla maa tee alaa format mo innde makko.",
+      "identifier-column": "Sheet \"{sheet}\" ina jogii kolom \"{column}\" mo njogii ngam ummoraade moƴƴi. Fayli ɗum ɓuri waalude e jooɗnde moɓɓe.",
+      "identifier-values": "\"{sheet}\" jogii {count, plural, one {# email address} other {# email addresses}}. Fayli ɗum ɓuri waalude e jooɗnde moɓɓe.",
+      "user-code-format": "Sheet \"{sheet}\", kolom \"{column}\": {count, plural, one {# value ɗum} other {# values ɗe}} ngalaa u-… user code. Fayli ɗum ɓuri waalude e jooɗnde moɓɓe.",
+      "formulas-without-values": "Sheet \"{sheet}\" jogii {count, plural, one {# formula} other {# formulas}} ɗe alaa nattooji, kadi ɗum ɓuri waalude e app.",
+      "missing-sheet": "Sheet \"{sheet}\" alaa, kadi views mo waɗi e ɗum ɓuri waalude.",
+      "missing-column": "Sheet \"{sheet}\" alaa kolom \"{column}\", kadi views ɗe jogii e ɗum ɓuri waalude.",
+      "no-period": "Innde fayli ɗum alaa report period, kadi retention mo starti e delivery date.",
+      "unclassified-field": "Kolom \"{column}\" alaa e gesee. Ina waalude, moɓɓe ɓuri haɓude fayli mo yaha, jonnan mo classified e field.",
+      "past-retention": "Hana kadi mo jokkanii waɗa {months} lewru retention e folder ɗum; mo ɓuri waalude.",
+      "unknown": "Problem mo faama: {code}."
+    }
   }
 }

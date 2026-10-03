@@ -807,7 +807,10 @@
       "codeInterpreterLimitReached": "Denní limit spuštění kódu byl vyčerpán — odpovídám bez spuštění kódu…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Vyhledávání v databázi znalostí selhalo — odpověď nebude využívat dokumenty agenta.",
-      "stillWorking": "Stále pracuji…"
+      "stillWorking": "Stále pracuji…",
+      "assessingSearchResults": "Kontroluje se, zda výsledky odpovídají na otázku…",
+      "refiningSearch": "Znovu se hledá: „{query}“…",
+      "readingSearchPages": "Čte se {count} výsledkových stránek…"
     },
     "toolSummary": {
       "usedTools": "Použito {count, plural, one {# nástroj} few {# nástroje} other {# nástrojů}}",
@@ -893,7 +896,10 @@
       "summarizeNow": "Shrnout z titulků nyní",
       "sourcesCount": "{count} zdrojů",
       "showAll": "Zobrazit všech {count} zdrojů",
-      "showFewer": "Zobrazit méně"
+      "showFewer": "Zobrazit méně",
+      "multiStepTitle": "Průběžné výsledky — kontrola, zda odpovídají na otázku",
+      "multiStepHint": "Hledání může pokračovat dalšími koly — dalším hledáním nebo čtením nejperspektivnějších stránek. Pokud nechcete čekat, odpovězte nyní z {count} již nalezených výsledků.",
+      "answerNow": "Odpovědět z těchto výsledků"
     },
     "retryWithModel": "Zkusit s {model}",
     "createTodoTasks": "Vytvořit úkoly To Do z této odpovědi",
@@ -907,7 +913,10 @@
     "modelTimedOutAtMaximum": "Model {model} nezačal odpovídat během {duration}, což je maximální čekací doba. Zkuste to znovu nebo vyberte jiný model.",
     "requestTimedOut": "Příprava požadavku trvala příliš dlouho a byla zastavena dříve, než mohl {model} odpovědět. Můžete prodloužit čekací dobu nebo zkusit jiný model.",
     "retryWaitingLonger": "Počkejte až {duration} a zkuste to znovu",
-    "alwaysWaitThisLong": "Vždy čekat až do {duration}"
+    "alwaysWaitThisLong": "Vždy čekat až do {duration}",
+    "keepSearching": "Pokračovat v hledání",
+    "keepSearchingHint": "Hledání bylo ukončeno dříve, než to bylo nalezeno. Požádejte asistenta, aby zkusil jiné postupy.",
+    "keepSearchingMessage": "Pokračujte prosím v hledání tohoto, zkuste jiný postup."
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -1291,7 +1300,9 @@
       "providerBingResponsesDescription": "Stejné pokrytí Bing webu jako Bing grounding, ale prováděno jedním přímým voláním modelu místo Foundry agenta — obvykle mnohem rychlejší. Nová možnost, která se porovnává s Bing grounding.",
       "providerSearxng": "MSF webové vyhledávání",
       "providerSearxngDescription": "Soukromá metavyhledávací služba MSF. Pokrývá obecný web, zprávy, vědeckou literaturu (včetně publikací MSF), technickou dokumentaci a humanitární data a vybírá vhodný zdroj pro každou otázku. Výsledky jsou k dispozici během pár vteřin s přímými odkazy; pouze dotaz opustí aplikaci – vyhledávače vás nikdy neuvidí.",
-      "otherProvidersLabel": "Další poskytovatelé"
+      "otherProvidersLabel": "Další poskytovatelé",
+      "multiStepLabel": "Vícekrokové hledání",
+      "multiStepDescription": "Při webovém hledání MSF asistent nejdříve zkontroluje první výsledky a pokud nestačí, hledá znovu nebo čte nejperspektivnější stránky před odpovědí. Většina otázek se stále vyřeší v jednom kroku. Vypněte toto, pokud chcete, aby každé hledání proběhlo jen v jednom kroku."
     },
     "Admin": "Admin",
     "Usage Limits": "Limity používání",
@@ -1311,7 +1322,8 @@
       "customHint": "Mezi {min} a {max} sekundami.",
       "preferModelTitle": "Preferovat vybraný model",
       "preferModelDescription": "Nepřepínat automaticky na jiný model při neúspěšném požadavku. Chybové hlášení stále nabídne možnost přepnout."
-    }
+    },
+    "Analytics": "Analytika"
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -1522,6 +1534,12 @@
     },
     "subVariant": {
       "label": "Velikost"
+    },
+    "retiring": {
+      "badge": "Vyřazuje se",
+      "datedMoving": "Vyřazuje se {date}. Konverzace budou přesunuty na {successor} dne {movesOn}.",
+      "dated": "Vyřazuje se {date} a přestane fungovat. Použijte místo něj {successor}.",
+      "replaced": "Nahrazuje se {successor}."
     }
   },
   "models": {
@@ -1820,6 +1838,11 @@
       "name": "GPT-6 Astra",
       "description": "Vlajková loď GPT-6 od OpenAI. Navržen pro náročnou komplexní práci: hloubkový výzkum, složitou analýzu, vývoj softwaru a dlouhé vícekrokové úkoly. Přibližně dvojnásobně dražší než GPT-5.6 Sol.",
       "tagline": "Nejvyspělejší model od OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Vylepšená verze GPT-6 Sol pro náročnou práci s kódem, dokumenty a aplikacemi. Schopnosti téměř jako Astra, ale za zlomek ceny za token.",
+      "tagline": "Schopnosti blízko Astra, výrazně nižší cena"
     }
   },
   "searchMode": {
@@ -5440,7 +5463,10 @@
       "announcements": "Bannerové zprávy pro uživatele: kdo je vidí, kdy a v jakých jazycích.",
       "delegations": "Kdo spravuje které uživatele a co má každý z nich povoleno.",
       "channelProfiles": "Co je která platforma: limity, počítání, vlákna. Údaje platné pro celou organizaci, na kterých jsou postaveny všechny sady kanálů.",
-      "channelSets": "Pravidla každého týmu pro psaní na platformách: pokyny, styly, výchozí nastavení, kdo může soupravu používat a kdo smí odesílat."
+      "channelSets": "Pravidla každého týmu pro psaní na platformách: pokyny, styly, výchozí nastavení, kdo může soupravu používat a kdo smí odesílat.",
+      "webSearch": "Jak daleko může webové hledání jít: vícekrokové hledání, posuzovací model a limity.",
+      "contextBudget": "Kolik konverzace je každý modelu posíláno při každém kroku.",
+      "analytics": "Doručené reporty: co dorazilo, kdo může otevřít kterou složku a která pole lze zobrazit."
     },
     "openSettings": "Otevřít nastavení",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "Zobrazit jako",
       "globalAdmins": "Globální administrátoři",
       "announcements": "Oznámení",
-      "delegations": "Delegace"
+      "delegations": "Delegace",
+      "webSearch": "Webové hledání",
+      "contextBudget": "Rozpočet kontextu",
+      "analytics": "Analytika"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "K čemu může být tato delegace vůbec použita. Správci mohou mít jen to, co je zde povoleno.",
     "grant": {
       "limits": "Limity využití",
-      "announcements": "Oznámení"
+      "announcements": "Oznámení",
+      "analytics": "Analytika"
     },
     "grantAll": "Vše",
     "maxOverrides": "Limity překročení, která může mít tato delegace",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "Po uložení můžete tuto sadu označit jako výchozí.",
     "noChannelsWarning": "Tato sada nenabízí žádné kanály; nikdo s ní nemůže tvořit koncepty.",
     "audienceEveryoneHint": "Kdokoliv v organizaci může tvořit koncepty s touto sadou."
+  },
+  "contextBudgetAdmin": {
+    "title": "Rozpočet kontextu",
+    "description": "Kolik historie konverzace je každému modelu posíláno v jednom kroku. Nejnovější zprávy jsou vždy zahrnuty; starší jsou vynechány po vyčerpání rozpočtu a souhrn toho, co bylo vynecháno, je uveden v systémovém promptu. Vyšší rozpočet umožňuje zobrazit větší část dlouhé konverzace, ale zvyšuje cenu za jeden krok.",
+    "scopeNote": "Platí pro každý chat na každém modelu. Rozpočet nikdy nemůže překročit podíl okna modelu nastavený níže.",
+    "loading": "Načítání rozpočtu kontextu…",
+    "loadError": "Rozpočet kontextu se nepodařilo načíst.",
+    "configUnavailable": "Uložený rozpočet kontextu nelze právě teď načíst, takže níže uvedené hodnoty nemusí být platné. Před úpravou zkuste znovu načíst.",
+    "retry": "Zkusit znovu",
+    "historyTokensLabel": "Standardní rozpočet (tokeny)",
+    "historyTokensDescription": "Historie posílána v jednom kroku, včetně systémového promptu, u modelů bez přepsání. Asi 48 000 pokrývá posledních 30–60 výměn typické konverzace.",
+    "historyFractionLabel": "Strop (podíl vstupního pole modelu)",
+    "historyFractionDescription": "Rozpočet se omezuje na tento podíl v okně kontextu modelu po odečtení rezervy na výstup, takže model s malým oknem nikdy nedostane více, než dokáže pojmout.",
+    "minRecentMessagesLabel": "Vždy ponechané zprávy",
+    "minRecentMessagesDescription": "Nejnovější zprávy, které jsou vždy uchovány i při překročení rozpočtu (v rámci okna). Tři uchovají poslední výměnu, pokud by samotná nejnovější zpráva — vložený dokument, výsledky hledání — rozpočet naplnila.",
+    "familyOverridesLabel": "Podle rodiny",
+    "familyOverridesDescription": "Rozpočet pro každý model jedné rodiny, nahrazuje standardní rozpočet.",
+    "modelOverridesLabel": "Podle modelu",
+    "modelOverridesDescription": "Rozpočet pro jeden model, nahrazuje rozpočet rodiny i standardní.",
+    "overrideFamilyPlaceholder": "Rodina",
+    "overrideModelPlaceholder": "ID modelu",
+    "overrideTokensPlaceholder": "Tokeny",
+    "addOverride": "Přidat",
+    "removeOverride": "Odebrat",
+    "noOverrides": "Žádné",
+    "effectiveLabel": "Efektivní rozpočty s tímto nastavením",
+    "effectiveColumnModel": "Model",
+    "effectiveColumnWindow": "Okno",
+    "effectiveColumnBudget": "Historický rozpočet",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Výchozí: {value}",
+    "defaultsNote": "Jsou ukládány pouze hodnoty odlišné od výchozích; ostatní nadále používají výchozí hodnoty z kódu napříč verzemi.",
+    "save": "Uložit",
+    "saving": "Ukládání…",
+    "resetDefaults": "Obnovit výchozí",
+    "unsaved": "Neuložené změny",
+    "saveSuccess": "Rozpočet pro kontext uložen. Změny se projeví během minuty.",
+    "saveError": "Nelze uložit rozpočet pro kontext.",
+    "conflictError": "Jiný administrátor mezitím změnil rozpočet pro kontext; byly načteny nejnovější hodnoty.",
+    "updatedByLine": "Naposledy uložil {by} dne {at}",
+    "neverSaved": "Nikdy neuloženo — platí výchozí hodnoty z kódu."
+  },
+  "webSearchAdmin": {
+    "title": "Webové vyhledávání",
+    "description": "Řídí vícekrokové hledání v MSF webovém vyhledávání. Po prvních výsledcích model hodnotitele určí, zda odpovídají na dotaz; pokud ne, může hledat znovu s jinými dotazy, přečíst stránky s výsledky, vyžádat si od uživatele chybějící údaj nebo oznámit, že nic nebylo nalezeno.",
+    "scopeNote": "Tato nastavení platí pouze pro MSF webové vyhledávání. Ostatní poskytovatelé hledání provádějí vždy jen jedno kolo. Každý uživatel si také může vícekrokové hledání vypnout v nastavení.",
+    "loading": "Načítání nastavení webového vyhledávání…",
+    "loadError": "Nastavení webového vyhledávání nelze načíst.",
+    "configUnavailable": "Nastavení webového vyhledávání nelze přečíst z úložiště. Ovládací prvky jsou skryté, aby se neukazovaly s výchozími hodnotami, které nemusí odpovídat skutečnému použití.",
+    "retry": "Zkusit znovu",
+    "enabledLabel": "Vícekrokové hledání",
+    "enabledDescription": "Pokud je vypnuto, každé hledání je jediné předem naplánované kolo a model hodnotitele se nespouští.",
+    "assessorLabel": "Model hodnotitele",
+    "assessorDescription": "Po každém kroku vyhodnotí výsledky. Zvolte rychlý, nenáročný model: běží během čekání uživatele. Pokud není dostupný, použije se místo něj {fallback}.",
+    "maxStepsLabel": "Kroky na dotaz",
+    "maxStepsDescription": "Maximální počet kroků pro jeden dotaz, včetně prvního hledání. Každé další hledání nebo dávkové čtení stránek je jeden krok. Tento limit je oddělený od denního limitu hledání, který počítá celý dotaz jako jeden.",
+    "maxStepsExploratoryLabel": "Kroky pro průzkumná hledání",
+    "maxStepsExploratoryDescription": "Vyšší limit pro hledání těžko dostupné položky, např. kopie vzácné knihy, kde jsou slepé cesty očekávány. Nemůže být nižší než běžný limit.",
+    "pageReadsLabel": "Čtení výsledkových stránek",
+    "pageReadsDescription": "Umožňuje kroku otevřít nejperspektivnější výsledky a přečíst přímo stránku místo spoléhání na úryvky z vyhledávání.",
+    "maxPageReadsLabel": "Stránky na čtecí krok",
+    "sourceAssessmentLabel": "Hodnocení kvality zdrojů",
+    "sourceAssessmentDescription": "Hodnotitel označí každý zdroj (oficiální, zavedený, sekundární, nízká spolehlivost), aby odpověď mohla zohlednit a přiřadit jejich úroveň.",
+    "timeBudgetLabel": "Časový limit (sekundy)",
+    "timeBudgetDescription": "Celkový čas pro jedno hledání, včetně prvního kola. Po vyčerpání je odpověď sestavena z dostupných nálezů.",
+    "defaultsNote": "Nastavení ponechané na vestavěné výchozí hodnotě se neukládá, a tedy zůstane výchozí i při změně v pozdější verzi.",
+    "defaultHint": "Výchozí: {value}",
+    "defaultOn": "zapnuto",
+    "defaultOff": "vypnuto",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Máte neuložené změny.",
+    "save": "Uložit",
+    "saving": "Ukládání…",
+    "resetDefaults": "Obnovit výchozí",
+    "saveSuccess": "Nastavení webového vyhledávání bylo uloženo.",
+    "saveError": "Nelze uložit nastavení webového vyhledávání.",
+    "conflictError": "Jiný správce nejprve změnil nastavení. Byla načtena nová nastavení — prosím zkontrolujte a uložte znovu.",
+    "updatedByLine": "Naposledy uložil {by} dne {at}.",
+    "neverSaved": "Ještě nebylo nic uloženo; platí vestavěné výchozí hodnoty."
+  },
+  "modelRetirement": {
+    "notice": "{model} bude ukončen {retiresOn}. Tento rozhovor bude přesunut na {successor} dne {movesOn}.",
+    "noticeRetiring": "{model} bude ukončen {retiresOn} a přestane fungovat. Přepněte na {successor}, abyste mohli v tomto rozhovoru pokračovat.",
+    "switchNow": "Přepnout nyní"
+  },
+  "analytics": {
+    "title": "Analytika",
+    "backToChat": "Zpět do chatu",
+    "manage": "Spravovat",
+    "loading": "Načítání…",
+    "loadFailed": "Nelze načíst reporty.",
+    "retry": "Zkusit znovu",
+    "emptyTitle": "Zatím s vámi nebylo nic sdíleno",
+    "emptyBody": "Reporty se zde objeví, jakmile vám administrátor zpřístupní složku.",
+    "deliveryUnavailable": "Úložiště reportů je nyní nedostupné, takže níže uvedené seznamy mohou být prázdné. Zkuste to za pár minut znovu.",
+    "groupsDegraded": "Vaše členství ve skupinách se nyní nepodařilo ověřit, a proto zde mohou chybět složky sdílené s vašimi skupinami. Obnovte stránku za chvíli.",
+    "foldersHeading": "Složky",
+    "rootFolder": "Všechny reporty",
+    "pathOnly": "K této složce nemáte přístup, pouze k jejím podsložkám.",
+    "selectFolder": "Vyberte složku pro zobrazení jejích reportů.",
+    "noFiles": "V této složce nejsou žádné reporty.",
+    "viewOnlyNote": "Máte přístup jen pro čtení: můžete otvírat reporty a vidět jejich přehledy a souhrnné tabulky. Tabulky s jedním řádkem na osobu, exporty a stahování vyžadují právo ke stažení.",
+    "col": {
+      "name": "Soubor",
+      "period": "Období",
+      "delivered": "Doručeno",
+      "size": "Velikost",
+      "availableUntil": "Dostupné do",
+      "actions": "Akce"
+    },
+    "download": "Stáhnout",
+    "downloadAria": "Stáhnout {name}",
+    "block": {
+      "view-only": "Pouze k prohlížení",
+      "hidden-fields": "Originál zadržen (skrytá pole)",
+      "unclassified-fields": "Originál zadržen (pole čekající na prověření)",
+      "not-inspected": "Zatím nezkontrolováno",
+      "policy-unavailable": "Nyní nedostupné"
+    },
+    "adminBadge": {
+      "error": "Skryto uživatelům",
+      "pending": "Probíhá kontrola",
+      "warning": "Obsahuje varování",
+      "expired": "Platnost vypršela, čeká na smazání",
+      "originalBlocked": "Uživatelé nemohou stahovat: {reason}"
+    },
+    "openAria": "Otevřít {name}",
+    "openForExport": "Otevřít pro export",
+    "preview": {
+      "back": "Zpět do {folder}",
+      "tabsLabel": "Tabulky v tomto souboru",
+      "lockedTab": "{name} (uzamčeno)",
+      "unavailable": "Tento soubor nelze nyní v aplikaci otevřít.",
+      "tableFailed": "Tuto tabulku se nepodařilo načíst.",
+      "withheld": {
+        "row-level": "Tato tabulka má jeden řádek na osobu. Otevření vyžaduje právo ke stažení složky.",
+        "hidden-fields": "Tato stránka obsahuje pole, které je skryté, a proto se nezobrazuje."
+      },
+      "truncated": "Zobrazuje se prvních {shown, number} z {total, number} řádků. Pro export všech řádků vyexportujte tabulku.",
+      "freeformNote": "Tato stránka je upravena pro čtení a je zobrazena tak, jak byla doručena.",
+      "filter": "Filtrovat řádky",
+      "filterPlaceholder": "Filtrovat řádky…",
+      "rows": "{count, plural, one {# řádek} few {# řádky} other {# řádků}}",
+      "matching": "{count, number} z {total, number} řádků odpovídá",
+      "modeLabel": "Zobrazit jako",
+      "mode": {
+        "table": "Tabulka",
+        "chart": "Graf"
+      },
+      "noRows": "Žádné řádky k zobrazení.",
+      "hiddenColumn": "Skryto pro uživatele",
+      "exportCsv": "Exportovat tuto tabulku (CSV)",
+      "exportXlsx": "Exportovat všechny tabulky (Excel)",
+      "downloadOriginal": "Stáhnout originál",
+      "exportNote": "Dodané pole obsahuje skrytá pole, proto jej nelze stáhnout v této podobě. Exporty tato pole vynechávají.",
+      "sectionLabel": "Zobrazit",
+      "section": {
+        "overview": "Přehled",
+        "tables": "Tabulky"
+      }
+    },
+    "chart": {
+      "groupBy": "Seskupit podle",
+      "measure": "Metrika",
+      "rowCount": "Počet řádků",
+      "aggregation": "Výpočet",
+      "agg": {
+        "sum": "Součet",
+        "mean": "Průměr",
+        "min": "Nejmenší",
+        "max": "Největší"
+      },
+      "ariaLabel": "{measure} podle {group}",
+      "noColumns": "Tato tabulka nemá textový nebo datový sloupec pro seskupení.",
+      "empty": "Pro tuto volbu není co zobrazit jako graf.",
+      "truncatedGroups": "Zobrazeno {count} největších skupin.",
+      "basedOn": "Na základě prvních {shown, number} z {total, number} řádků.",
+      "savePng": "Uložit jako obrázek",
+      "saveSvg": "Uložit jako SVG",
+      "saveFailed": "Graf nelze uložit."
+    },
+    "dash": {
+      "loading": "Načítání…",
+      "failed": "Nepodařilo se načíst přehled.",
+      "retry": "Zkusit znovu",
+      "showTable": "Zobrazit jako tabulku",
+      "showChart": "Zobrazit jako graf",
+      "smallGroups": "Skupiny s méně než 5 lidmi",
+      "foldedNote": "Skupiny s méně než 5 lidmi jsou sloučeny do jednoho řádku.",
+      "otherCount": "{count, plural, one {# ostatní} few {# ostatní} other {# ostatních}}",
+      "hiddenPanel": "Skryto v nastavení polí.",
+      "missingPanel": "Není dostupné pro tento soubor.",
+      "usage": {
+        "users": "Aktivní osoby",
+        "interactions": "Interakce",
+        "avgPerUser": "Průměr na osobu",
+        "medianPerUser": "Medián na osobu",
+        "hq": "Na centrále",
+        "field": "V terénu",
+        "shareUsers": "{pct}% z uživatelů ({comparator})",
+        "shareUsage": "{pct}% z použití ({comparator})",
+        "comparator": "{comparator}: {value}",
+        "daily": "Interakce za den",
+        "dailyUsers": "Aktivní uživatelé za den",
+        "dailyUsersSub": "Podle pracoviště",
+        "weekly": "Interakce za týden",
+        "activity": "Jak moc je využíváno",
+        "activitySub": "Lidé podle počtu interakcí v období",
+        "departments": "Interakce podle oddělení",
+        "jobTitles": "Interakce podle pracovní pozice",
+        "models": "Události podle modelu",
+        "total": "Všechna pracoviště",
+        "location": {
+          "hq": "Ústředí",
+          "field": "Terén",
+          "unknown": "Neznámé"
+        },
+        "col": {
+          "date": "Den",
+          "week": "Týden začínající",
+          "users": "Uživatelé",
+          "interactions": "Interakce",
+          "events": "Události",
+          "group": "Skupina",
+          "band": "Interakce"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Celkem účtováno",
+        "usageVariable": "Náklady dle používání",
+        "staticInfra": "Statická infrastruktura",
+        "sections": "Účtované sekce",
+        "usageEvents": "Události použití",
+        "bySection": "Účtování podle sekce",
+        "changes": "Změny oproti předchozímu souboru",
+        "noChanges": "Oproti předchozímu souboru nedošlo ke změnám.",
+        "byDomain": "Události použití podle mailové domény",
+        "reconciliation": "Spárování s Azure",
+        "col": {
+          "section": "Sekce",
+          "billed": "Účtováno",
+          "usageEvents": "Události použití",
+          "usagePct": "Použití %",
+          "line": "Řádek",
+          "amount": "Částka",
+          "previous": "Předchozí soubor",
+          "restated": "Opraveno",
+          "change": "Změna",
+          "domain": "Mailová doména",
+          "users": "Uživatelé"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Vypočítáno s",
+        "delivered": "Vlastní předpoklady reportu ({version})",
+        "current": "Aktuální předpoklady aplikace ({version})",
+        "whatIf": "Co když…",
+        "deliveredUnavailable": "Vlastní předpoklady tohoto reportu nebyly nalezeny v listu Assumptions, proto jsou použity aktuální předpoklady aplikace.",
+        "whatIfIntro": "Změňte hodnotu a podívejte se na dopad níže. Nic se neukládá.",
+        "resetDelivered": "Obnovit na vlastní reportu",
+        "resetCurrent": "Obnovit na aktuální aplikace",
+        "co2": "Emise",
+        "energy": "Energie",
+        "charges": "Nabíjení smartphonu",
+        "chargesSub": "Se stejnou uhlíkovou stopou",
+        "activeUsers": "Aktivní lidé",
+        "requests": "Požadavky",
+        "tokens": "Tokeny",
+        "vsDelivered": "{delta} oproti vlastním předpokladům zprávy",
+        "sameAsDelivered": "Stejně jako s vlastními předpoklady zprávy",
+        "unpriced": "{count, plural, one {# požadavek využívá} other {# požadavky využívají}} velikost modelu, pro kterou tyto předpoklady nemají údaj, a {count, plural, one {je} other {jsou}} vynechán/y.",
+        "byDepartment": "Emise podle oddělení",
+        "byModel": "Emise podle modelu",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Zde vypočteno vs záznam v době události",
+        "reconciliationSub": "Aplikace také odhaduje každý požadavek v reálném čase. Obojí se shoduje, pokud jsou předpoklady stejné.",
+        "computed": "Zde vypočteno",
+        "logged": "Zaznamenáno aplikací",
+        "difference": "Rozdíl",
+        "col": {
+          "group": "Skupina",
+          "requests": "Požadavky",
+          "tokens": "Tokeny",
+          "energyWh": "Energie (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Režie datacentra (PUE)",
+          "promptTokenWeight": "Váha prompt tokenu",
+          "dedicatedReasoningMultiplier": "Násobitel pro samostatné vyhodnocování",
+          "whPer1kTokens": "Wh na 1 000 tokenů — {name}",
+          "reasoningEffortMultipliers": "Násobitel úsilí na vyhodnocování — {name}",
+          "gridIntensity": "Intenzita sítě v g CO₂e na kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Události",
+        "users": "Lidé",
+        "tokens": "Tokeny",
+        "errors": "Chyby",
+        "energy": "Energie",
+        "co2": "Emise",
+        "hourly": "Událostí za hodinu (UTC)",
+        "byType": "Události podle typu",
+        "byError": "Chyby podle kódu",
+        "byModel": "Tokeny podle modelu",
+        "byCompany": "Události podle organizace",
+        "none": "Žádné.",
+        "col": {
+          "group": "Skupina",
+          "events": "Události",
+          "tokens": "Tokeny",
+          "hour": "Hodina"
+        }
+      },
+      "trend": {
+        "title": "V průběhu času",
+        "period": "Období",
+        "users": "Aktivní lidé na zprávu",
+        "interactions": "Interakcí na zprávu",
+        "billed": "Celková fakturace za období",
+        "sections": "Fakturace podle sekce",
+        "otherSections": "Všechny ostatní sekce",
+        "co2": "Emise na report",
+        "energy": "Energie na report",
+        "recalculated": "Každé období je počítáno podle aktuálních předpokladů aplikace ({version}), takže změna předpokladů mezi reporty se neprojeví jako změna emisí.",
+        "severalPerPeriod": "Tato složka obsahuje několik reportů za stejné období. Otevřete složku uvnitř, abyste viděli, jak se některý z nich postupem času mění."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analytika",
+    "description": "Reporty jsou do úložiště doručovány datovým kanálem. Zde zkontrolujete, co dorazilo, určíte, kdo může složku otevřít, a zvolíte, která pole může platforma zobrazovat.",
+    "openViewer": "Otevřít analytiku",
+    "sharedNotice": "Beta a produkční prostředí sdílí tyto složky, publika a soubory. Změna uložená zde se projeví v obou.",
+    "tabsLabel": "Sekce analytiky",
+    "tab": {
+      "health": "Doručení",
+      "folders": "Složky a přístup",
+      "fields": "Pole"
+    },
+    "loading": "Načítání…",
+    "retry": "Zkusit znovu",
+    "loadError": "Tuto sekci se nepodařilo načíst.",
+    "unavailable": "Nelze načíst uložené nastavení z úložiště. To NENÍ totéž jako \"nic nenastaveno\" — úpravy jsou zakázány, aby nedošlo k přepsání skutečných nastavení. Zkuste to znovu a v případě přetrvávání zkontrolujte serverové logy.",
+    "save": "Uložit",
+    "saving": "Ukládání…",
+    "unsaved": "Neuložené změny",
+    "saveSuccess": "Uloženo.",
+    "saveError": "Nelze uložit.",
+    "conflictError": "Jiný administrátor změnil tato nastavení během vaší úpravy. Vaše změny nebyly uloženy – byla načtena nejnovější verze.",
+    "rootFolder": "(nejvyšší úroveň)",
+    "scope": {
+      "domain": "E-mailová doména",
+      "user": "Osoba",
+      "attribute": "Atribut",
+      "group": "Entra skupina"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "Entra group object id"
+    },
+    "level": {
+      "view": "Zobrazit souhrny",
+      "download": "Zobrazit, exportovat a stáhnout"
+    },
+    "reportType": {
+      "usage": "Report o využití",
+      "rebilling": "Přefakturace",
+      "emissions": "Report o emisích",
+      "raw-telemetry": "Surová telemetrie"
+    },
+    "field": {
+      "userCode": {
+        "label": "Kód uživatele",
+        "description": "Pseudonymní kód u-…, který označuje jednu osobu."
+      },
+      "jobTitle": {
+        "label": "Pracovní pozice",
+        "description": "Pracovní pozice, včetně nejčastější pozice na souhrnných listech. Ve malé skupině může pozice určit konkrétní osobu."
+      },
+      "department": {
+        "label": "Oddělení",
+        "description": "Oddělení, včetně nejaktivnějšího oddělení na souhrnných listech."
+      },
+      "company": {
+        "label": "Společnost / organizace",
+        "description": "Název organizace z adresáře a názvy společností uvedené v přefakturačních listech."
+      },
+      "orgGroup": {
+        "label": "Skupina organizace",
+        "description": "Operační centrum nebo skupina, podle které je report rozdělen."
+      },
+      "section": {
+        "label": "Sekce",
+        "description": "Sekce obnovy nákladů, ke které daná položka přefakturace patří."
+      },
+      "mailDomain": {
+        "label": "E-mailová doména",
+        "description": "Použití e-mailové domény, nikoliv adresy."
+      },
+      "workLocation": {
+        "label": "Pracoviště",
+        "description": "Ústředí nebo terén."
+      },
+      "technical": {
+        "label": "Technické podrobnosti",
+        "description": "Model, region, typ události, měna a podobné popisné údaje, které nevypovídají nic o osobě."
+      },
+      "other": {
+        "label": "Ostatní popisná pole",
+        "description": "Umístění sloupce, který nezapadá do žádné z výše uvedených kategorií."
+      }
+    },
+    "folders": {
+      "intro": "Seznam všech složek, do kterých pipeline doručila data. Složka bez nastavení — a bez složky nad ní, která by poskytovala přístup — je viditelná pouze administrátorům.",
+      "name": "Zobrazovaný název",
+      "namePlaceholder": "Zobrazeno místo cesty ke složce",
+      "description": "Popis",
+      "reportType": "Typ reportu",
+      "reportTypeNone": "Nenastaveno",
+      "reportTypeInherited": "Děděno: {type}",
+      "reportTypeHint": "Určuje, které názvy souborů kontrolovat a jak často. Platí pro složky uvnitř této.",
+      "retention": "Uchování souborů (měsíce)",
+      "retentionHint": "Nechte prázdné pro převzetí hodnoty {months} měsíců. Počítáno od konce období každého reportu.",
+      "audience": "Kdo může otevřít tuto složku",
+      "audienceHint": "Každý řádek uděluje přístup k této složce i všem podřízeným složkám. Jeden cíl na řádek.",
+      "audienceScope": "Typ cíle",
+      "audienceTargets": "Cíle",
+      "audienceLevel": "Úroveň přístupu",
+      "addAudience": "Přidat osoby nebo skupiny",
+      "removeAudience": "Odebrat tento řádek",
+      "restricted": "Nepřebírat přístup ze složek výše",
+      "restrictedHint": "Platí pouze řádky k této složce a níže.",
+      "hiddenFields": "Také skrýt v této složce",
+      "hiddenFieldsHint": "Pole skrytá zde navíc k nastavení platformy, platí pro tuto složku i její podřízené složky. Lze skrýt více, zobrazit nikdy.",
+      "hiddenPlatformWide": "(skryto všude)",
+      "clear": "Odstranit nastavení této složky",
+      "rawChip": "Raw: pouze globální administrátoři",
+      "rawNote": "Raw telemetrie obsahuje jména, e-maily a názvy souborů. Otevřít ji mohou pouze globální administrátoři a nelze přidat žádné další příjemce.",
+      "audienceChip": "{count, plural, one {# přístupová položka} few {# přístupové položky} many {# přístupových položek} other {# přístupových položek}}",
+      "restrictedChip": "Bez dědění",
+      "notConfiguredChip": "Žádná nastavení",
+      "addPathLabel": "Nastavte složku před prvním doručením",
+      "addPath": "Přidat",
+      "addPathHint": "Cesta přesně tak, jak ji pipeline zapíše, např. usage/ocba. Toto uloží pouze nastavení; nevytváří žádné objekty ve storage.",
+      "invalidPath": "Toto není platná cesta ke složce.",
+      "rawGlobalOnly": "Složky pod raw/ mohou nastavovat pouze globální administrátoři."
+    },
+    "fields": {
+      "intro": "Vyberte, která pole z doručených reportů může platforma zobrazit. Skrytí pole ho odstraní ze všeho v aplikaci i z exportů. Samotný doručený soubor pak mohou stáhnout pouze administrátoři.",
+      "readOnly": "Změny může provádět pouze globální administrátor. Jako správce analytiky můžete skrývat další pole podle složek v části Složky & přístup.",
+      "configurableHeading": "Pole",
+      "shown": "Zobrazeno",
+      "hidden": "Skryto",
+      "jobTitleNote": "Při zobrazení pracovní pozice lze osobu ve skupině identifikovat i při zobrazení pod uživatelským kódem. Grafy skrývají rozpad podle méně než pěti osob; exportované tabulky ne.",
+      "neverHeading": "Nikdy nezobrazovat",
+      "neverBody": "Jména, e-maily, ID adresáře, názvy nahraných souborů a chybové texty nejsou nikdy zobrazeny mimo raw telemetrii. Report obsahující některý z těchto údajů je pro uživatele skrytý, dokud není nahrazen.",
+      "unclassifiedHeading": "Sloupce, které katalog nezná",
+      "unclassifiedBody": "Textový sloupec, který není rozpoznán, zůstává skrytý – v aplikaci i v exportech – a dodaný soubor nelze stáhnout, dokud jej nezařadíte pod pole.",
+      "noneWaiting": "Nic nečeká.",
+      "inFiles": "{count, plural, one {v # souboru} other {v # souborech}}",
+      "classifyAs": "Pole pro sloupec {column}",
+      "keepHidden": "Ponechat skryté",
+      "removeClassification": "Odebrat nastavení pro sloupec {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Úložiště reportů není dostupné",
+      "deliveryUnavailableBody": "Aplikaci se nepodařilo vypsat kontejner „{container}“. Zkontrolujte, zda existuje a zda má identita aplikace datovou roli. Do té doby nikdo neuvidí žádné reporty.",
+      "foldersUnavailable": "Nelze načíst nastavení složek, proto uživatelé aktuálně nevidí žádné složky. Soubory se nekontrolují ani nemažou, dokud se problém nevyřeší.",
+      "policyUnavailable": "Nastavení polí se nepodařilo načíst, takže uživatelé nyní nemohou stahovat soubory.",
+      "total": {
+        "files": "Soubory",
+        "ok": "V pořádku",
+        "warning": "S varováním",
+        "error": "Skryto uživatelům",
+        "pending": "Probíhá kontrola"
+      },
+      "recheckAll": "Znovu zkontrolovat vše",
+      "recheckOne": "Znovu zkontrolovat",
+      "recheckQueued": "{count, plural, one {# soubor ve frontě ke kontrole.} other {# souborů ve frontě ke kontrole.}}",
+      "recheckFailed": "Nelze spustit kontrolu.",
+      "retention": {
+        "active": "Soubory po uplynutí retenční doby složky jsou ihned skryty a smazány po {days} dnech.",
+        "disabled": "Soubory po uplynutí retenční doby složky jsou skryty, ale mazání je v tomto nasazení vypnuto.",
+        "waiting-for-config": "Soubory po uplynutí výchozí retenční doby jsou skryty. Nic se nemaže, dokud nejsou nastavení složky uložena alespoň jednou."
+      },
+      "noFiles": "Zatím nebyly doručeny žádné soubory.",
+      "allGood": "Vše doručené je v pořádku.",
+      "problemsHeading": "Soubory vyžadující pozornost",
+      "status": {
+        "error": "Skryto uživatelům",
+        "warning": "Varování",
+        "pending": "Probíhá kontrola",
+        "ok": "V pořádku"
+      },
+      "pendingBody": "Nové nebo nahrazené od poslední kontroly. Zobrazí se uživatelům po schválení.",
+      "firstSeen": "Poprvé zaznamenáno {date}",
+      "unclassifiedHeading": "Sloupce čekající na rozhodnutí",
+      "unclassifiedBody": "Tyto sloupce nejsou rozpoznány. Zůstávají skryté a uživatelé nemohou stahovat soubory, které je obsahují, dokud nejsou zařazeny pod pole.",
+      "unclassifiedChip": "{column} · {count, plural, one {# soubor} other {# souborů}}",
+      "openFields": "Přejít na pole",
+      "unconfiguredHeading": "Složky bez nastavení",
+      "unconfiguredBody": "Sem přicházejí soubory, ale nikdo nenastavil tuto složku ani její nadřazenou. Vidí je pouze administrátoři.",
+      "staleHeading": "Zpožděná doručení",
+      "staleBody": "Tyto složky očekávají pravidelné reporty a ten poslední je starší, než by měl být.",
+      "staleDetail": {
+        "daily": "Denně; poslední pokrývá {date}",
+        "monthly": "Měsíčně; poslední končí {date}"
+      },
+      "staleNever": "Zatím nic nebylo doručeno",
+      "expiringHeading": "Brzy vyprší",
+      "expiringBody": "Soubory po nebo blížící se k uplynutí retenční doby během 30 dní.",
+      "expiresOn": "Vyprší {date}",
+      "expiredOn": "Vypršelo {date}"
+    },
+    "issue": {
+      "name-mismatch": "Název souboru neodpovídá očekávání této složky (například {expected}).",
+      "unsupported-format": "Soubory typu „{extension}“ nelze zkontrolovat, proto je tento skryt uživatelům. Doručte .xlsx nebo .csv.",
+      "too-large": "Při velikosti {sizeMb} MB tento soubor přesahuje limit {limitMb} MB pro kontrolu, a proto je skryt uživatelům.",
+      "empty-file": "Soubor je prázdný.",
+      "unreadable": "Soubor nelze otevřít. Může být poškozený nebo nemá formát uvedený v názvu.",
+      "identifier-column": "List „{sheet}“ obsahuje sloupec „{column}“, který identifikuje osoby. Soubor je skrytý před uživateli.",
+      "identifier-values": "„{sheet}“ obsahuje {count, plural, one {# e-mailovou adresu} other {# e-mailových adres}}. Soubor je skrytý před uživateli.",
+      "user-code-format": "List „{sheet}“, sloupec „{column}“: {count, plural, one {# hodnota není} other {# hodnot není}} ve správném formátu u-… uživatelského kódu. Soubor je skrytý před uživateli.",
+      "formulas-without-values": "List „{sheet}“ obsahuje {count, plural, one {# vzorec} other {# vzorců}} bez uloženého výsledku, proto tyto údaje nelze v aplikaci zobrazit.",
+      "missing-sheet": "List „{sheet}“ chybí, takže pohledy vytvořené na jeho základě nelze zobrazit.",
+      "missing-column": "List „{sheet}“ neobsahuje sloupec „{column}“, takže pohledy, které jej používají, nelze zobrazit.",
+      "no-period": "Název souboru neobsahuje období reportu, proto se doba uchování počítá od data doručení.",
+      "unclassified-field": "Sloupec „{column}“ není rozpoznán. Zůstává skrytý a uživatelé si stažený soubor nemohou stáhnout, dokud nebude zařazen do některé kategorie.",
+      "past-retention": "Starší než {months} měsíců uchování této složky; již se nezobrazuje.",
+      "unknown": "Nahlášený problém: {code}."
+    }
   }
 }

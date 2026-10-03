@@ -805,7 +805,10 @@
       "codeInterpreterLimitReached": "Limita zilnică pentru rularea codului atinsă — se răspunde fără a executa cod…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Căutarea în baza de cunoștințe a eșuat — răspunsul nu va folosi documentele agentului",
-      "stillWorking": "Se lucrează în continuare…"
+      "stillWorking": "Se lucrează în continuare…",
+      "assessingSearchResults": "Se verifică dacă rezultatele răspund la întrebare…",
+      "refiningSearch": "Se caută din nou: „{query}”…",
+      "readingSearchPages": "Se citesc {count} pagini de rezultate…"
     },
     "toolSummary": {
       "usedTools": "Folosit {count, plural, one {# instrument} other {# instrumente}}",
@@ -891,7 +894,10 @@
       "summarizeNow": "Rezumă acum din titluri",
       "sourcesCount": "{count} surse",
       "showAll": "Afișează toate cele {count} surse",
-      "showFewer": "Afișează mai puține"
+      "showFewer": "Afișează mai puține",
+      "multiStepTitle": "Rezultate până acum — verific dacă răspund la întrebare",
+      "multiStepHint": "Căutarea poate continua — altă căutare sau citirea celor mai promițătoare pagini. Răspunde acum din cele {count} rezultate găsite deja dacă nu vrei să aștepți.",
+      "answerNow": "Răspunde acum din aceste rezultate"
     },
     "retryWithModel": "Încearcă cu {model}",
     "createTodoTasks": "Creează sarcini To Do din acest răspuns",
@@ -905,7 +911,10 @@
     "modelTimedOutAtMaximum": "{model} nu a început să răspundă în {duration}, timpul maxim de așteptare disponibil. Încercați din nou sau încercați un alt model.",
     "requestTimedOut": "Această solicitare a durat prea mult pentru a fi pregătită și a fost oprită înainte ca {model} să poată răspunde. Puteți permite mai mult timp sau puteți încerca un alt model.",
     "retryWaitingLonger": "Așteptați până la {duration} și încercați din nou",
-    "alwaysWaitThisLong": "Așteptați mereu până la {duration}"
+    "alwaysWaitThisLong": "Așteptați mereu până la {duration}",
+    "keepSearching": "Continuă căutarea",
+    "keepSearchingHint": "Căutarea s-a oprit înainte să găsească acest rezultat. Rugați asistentul să încerce alte variante.",
+    "keepSearchingMessage": "Continuați căutarea pentru acest lucru, vă rog — încercați o altă abordare."
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -1289,7 +1298,9 @@
       "providerBingResponsesDescription": "Acoperire web Bing identică cu Bing grounding, dar rulat ca un singur apel direct de model în loc de agent Foundry — de obicei mult mai rapid. Opțiune nouă aflată în evaluare față de Bing grounding.",
       "providerSearxng": "Căutare web MSF",
       "providerSearxngDescription": "Serviciul privat de metacăutare al MSF. Acoperă web-ul general, știri, literatură științifică (inclusiv publicațiile de cercetare MSF), documentație tehnică și date umanitare, alegând tipul potrivit de sursă pentru fiecare întrebare. Rezultatele sosesc în câteva secunde, cu linkuri directe, și doar interogarea de căutare părăsește aplicația — motoarele de căutare nu vă văd niciodată.",
-      "otherProvidersLabel": "Alți furnizori"
+      "otherProvidersLabel": "Alți furnizori",
+      "multiStepLabel": "Căutare în mai mulți pași",
+      "multiStepDescription": "Cu căutarea web MSF, asistentul verifică primele rezultate și, doar dacă acestea nu sunt suficiente, caută din nou sau citește cele mai promițătoare pagini înainte de a răspunde. Majoritatea întrebărilor se rezolvă însă din primul pas. Dezactivați această opțiune pentru a păstra fiecare căutare la o singură rundă."
     },
     "Admin": "Admin",
     "Usage Limits": "Limite de utilizare",
@@ -1309,7 +1320,8 @@
       "customHint": "Între {min} și {max} secunde.",
       "preferModelTitle": "Prefer modelul selectat",
       "preferModelDescription": "Nu comuta automat la un alt model când o solicitare eșuează. Eroarea va permite în continuare schimbarea modelului."
-    }
+    },
+    "Analytics": "Analitice"
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -1621,6 +1633,12 @@
     },
     "subVariant": {
       "label": "Dimensiune"
+    },
+    "retiring": {
+      "badge": "Retras",
+      "datedMoving": "Se retrage la {date}. Conversațiile vor fi mutate pe {successor} la {movesOn}.",
+      "dated": "Se retrage la {date} și nu va mai funcționa. Folosiți {successor}.",
+      "replaced": "Va fi înlocuit cu {successor}."
     }
   },
   "models": {
@@ -1919,6 +1937,11 @@
       "name": "GPT-6 Astra",
       "description": "Modelul de vârf GPT-6 de la OpenAI. Creat pentru sarcini solicitante de la un capăt la altul: cercetare aprofundată, analiză complexă, inginerie software și sarcini lungi, cu mai multe etape. Aproximativ dublul costului GPT-5.6 Sol.",
       "tagline": "Cel mai performant model al OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Un upgrade la GPT-6 Sol pentru sarcini complexe pe cod, documente și aplicații. Aproape la nivelul Astra, la un preț mult mai mic per token.",
+      "tagline": "Aproape de capabilitatea Astra, cost mult mai mic"
     }
   },
   "searchMode": {
@@ -5440,7 +5463,10 @@
       "announcements": "Mesaje de tip banner pentru utilizatori: cine le vede, când și în ce limbi.",
       "delegations": "Cine administrează care utilizatori și ce are voie să facă fiecare dintre ei.",
       "channelProfiles": "Ce reprezintă fiecare platformă: limite, numărare, threads. Date generale pe care se bazează fiecare set de canale la nivel de organizație.",
-      "channelSets": "Regulile fiecărei echipe privind scrierea pe platforme: ghidaj, tonuri, setări implicite, cine poate folosi setul și cine poate trimite."
+      "channelSets": "Regulile fiecărei echipe privind scrierea pe platforme: ghidaj, tonuri, setări implicite, cine poate folosi setul și cine poate trimite.",
+      "webSearch": "Cât de departe poate merge o căutare pe web: multi-step search, modelul evaluator și limitele sale.",
+      "contextBudget": "Câtă parte din conversație primește fiecare model la fiecare răspuns.",
+      "analytics": "Rapoarte livrate: ce a sosit, cine poate accesa fiecare dosar și ce câmpuri pot fi afişate."
     },
     "openSettings": "Deschide setările",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "Vizualizează ca",
       "globalAdmins": "Administratori globali",
       "announcements": "Anunțuri",
-      "delegations": "Delegații"
+      "delegations": "Delegații",
+      "webSearch": "Căutare web",
+      "contextBudget": "Buget context",
+      "analytics": "Analitice"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "Ce poate oferi această delegație. Adminii pot deține numai ce activați aici.",
     "grant": {
       "limits": "Limite de utilizare",
-      "announcements": "Anunțuri"
+      "announcements": "Anunțuri",
+      "analytics": "Analiză"
     },
     "grantAll": "Toate",
     "maxOverrides": "Limita de suprascrieri permisă acestei delegații",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "Puteți seta acest set ca set implicit după salvare.",
     "noChannelsWarning": "Acest set nu oferă niciun canal; nimeni nu poate crea drafturi cu el.",
     "audienceEveryoneHint": "Oricine din organizație poate crea drafturi cu acest set."
+  },
+  "contextBudgetAdmin": {
+    "title": "Buget context",
+    "description": "Cât din istoricul conversației este trimis modelului la fiecare pas. Cele mai recente mesaje sunt incluse întotdeauna; cele mai vechi se elimină când se atinge bugetul, iar un rezumat al celor eliminate este inclus în promptul de sistem. Un buget mai mare păstrează mai mult din conversațiile lungi, cu un cost mai ridicat per pas.",
+    "scopeNote": "Se aplică tuturor chat-urilor pe orice model. Bugetul nu poate depăși niciodată partea din fereastra modelului setată mai jos.",
+    "loading": "Se încarcă bugetul de context…",
+    "loadError": "Bugetul de context nu a putut fi încărcat.",
+    "configUnavailable": "Bugetul de context salvat nu a putut fi citit acum, astfel încât valorile de mai jos pot să nu fie cele active. Reîncercați înainte de a modifica.",
+    "retry": "Reîncercare",
+    "historyTokensLabel": "Buget standard (tokeni)",
+    "historyTokensDescription": "Istoric trimis per pas, inclusiv promptul de sistem, pentru modelele fără setare personalizată. Aproximativ 48.000 păstrează ultimele 30–60 de schimburi ale unei conversații tipice.",
+    "historyFractionLabel": "Limită (procent din spațiul de intrare al modelului)",
+    "historyFractionDescription": "Bugetul este limitat la acest procent din fereastra de context a modelului, minus rezervarea pentru răspuns, astfel încât un model cu fereastră mică să nu primească niciodată mai mult decât poate gestiona.",
+    "minRecentMessagesLabel": "Mesaje păstrate mereu",
+    "minRecentMessagesDescription": "Cele mai recente mesaje păstrate chiar și atunci când se depășește bugetul (în interiorul ferestrei). Trei păstrează schimbul anterior atunci când doar ultimul mesaj — un document copiat, rezultate de căutare — ar umple altfel bugetul.",
+    "familyOverridesLabel": "Pe familie",
+    "familyOverridesDescription": "Un buget pentru fiecare model dintr-o familie, înlocuind bugetul standard.",
+    "modelOverridesLabel": "Pe model",
+    "modelOverridesDescription": "Un buget pentru un anumit model, care îl înlocuiește pe cel al familiei și pe cel standard.",
+    "overrideFamilyPlaceholder": "Familie",
+    "overrideModelPlaceholder": "ID model",
+    "overrideTokensPlaceholder": "Tokeni",
+    "addOverride": "Adaugă",
+    "removeOverride": "Șterge",
+    "noOverrides": "Niciunul",
+    "effectiveLabel": "Bugete efective cu aceste setări",
+    "effectiveColumnModel": "Model",
+    "effectiveColumnWindow": "Fereastră",
+    "effectiveColumnBudget": "Istoric buget",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Implicit: {value}",
+    "defaultsNote": "Sunt stocate doar valorile care diferă de cele implicite; celelalte urmează valorile implicite din cod la fiecare actualizare.",
+    "save": "Salvează",
+    "saving": "Se salvează…",
+    "resetDefaults": "Resetează la valori implicite",
+    "unsaved": "Modificări nesalvate",
+    "saveSuccess": "Bugetul de context a fost salvat. Va intra în vigoare în decurs de un minut.",
+    "saveError": "Bugetul de context nu a putut fi salvat.",
+    "conflictError": "Un alt administrator a modificat bugetul de context între timp; valorile cele mai recente au fost reîncărcate.",
+    "updatedByLine": "Ultima salvare de {by} la {at}",
+    "neverSaved": "Niciodată salvat — sunt folosite valorile implicite din cod."
+  },
+  "webSearchAdmin": {
+    "title": "Căutare web",
+    "description": "Controlează căutarea multi-pas pe MSF web search. După primele rezultate, un model evaluator decide dacă răspund la întrebare; dacă nu, poate relansa căutarea cu alte interogări, citi pagini de rezultate, solicita utilizatorului un detaliu lipsă sau raporta că nu s-a găsit nimic.",
+    "scopeNote": "Aceste setări se aplică doar căutării web MSF. Alți furnizori de căutare rulează mereu o singură rundă. Fiecare utilizator poate dezactiva căutarea multi-pas din Setări.",
+    "loading": "Se încarcă setările de căutare web…",
+    "loadError": "Setările de căutare web nu au putut fi încărcate.",
+    "configUnavailable": "Setările de căutare web nu au putut fi citite din stocare. Controalele sunt ascunse, nu afișate cu valori implicite care pot să nu corespundă celor utilizate.",
+    "retry": "Reîncearcă",
+    "enabledLabel": "Căutare multi-pas",
+    "enabledDescription": "Când este dezactivat, fiecare căutare are o singură rundă planificată și nu se apelează niciun model evaluator.",
+    "assessorLabel": "Model evaluator",
+    "assessorDescription": "Este apelat după fiecare pas ca să evalueze rezultatele. Alegeți un model rapid și ieftin: rulează cât timp utilizatorul așteaptă. Dacă nu poate fi accesat, se folosește {fallback}.",
+    "maxStepsLabel": "Pași per întrebare",
+    "maxStepsDescription": "Numărul maxim de pași pe care îi poate avea o întrebare, inclusiv prima căutare. Fiecare căutare suplimentară sau set de citiri de pagini contează drept un pas. Această limită este separată de limita zilnică, care contorizează o întrebare întreagă o singură dată.",
+    "maxStepsExploratoryLabel": "Pași pentru căutări exploratorii",
+    "maxStepsExploratoryDescription": "O limită mai mare pentru căutări după un element greu de găsit, cum ar fi o copie a unei cărți rare, unde sunt de așteptat impasuri. Nu poate fi mai mică decât limita normală.",
+    "pageReadsLabel": "Citire pagini de rezultate",
+    "pageReadsDescription": "Permite unui pas să deschidă cele mai promițătoare rezultate și să citească pagina propriu-zisă, nu doar fragmentele din căutare.",
+    "maxPageReadsLabel": "Pagini per pas de citire",
+    "sourceAssessmentLabel": "Evaluează calitatea surselor",
+    "sourceAssessmentDescription": "Evaluatorul etichetează fiecare sursă (oficială, de încredere, secundară, cu fiabilitate redusă), astfel încât răspunsul să le poată cântări și atribui corect.",
+    "timeBudgetLabel": "Buget de timp (secunde)",
+    "timeBudgetDescription": "Timpul total pe care îl poate dura o căutare, inclusiv prima rundă. La expirare, răspunsul este scris din ceea ce s-a găsit.",
+    "defaultsNote": "O setare lăsată la valoarea implicită nu este stocată, astfel încât va urma acea valoare dacă o versiune viitoare o modifică.",
+    "defaultHint": "Implicit: {value}",
+    "defaultOn": "activat",
+    "defaultOff": "dezactivat",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Aveți modificări nesalvate.",
+    "save": "Salvează",
+    "saving": "Se salvează…",
+    "resetDefaults": "Resetează la valori implicite",
+    "saveSuccess": "Setările de căutare web au fost salvate.",
+    "saveError": "Setările de căutare web nu au putut fi salvate.",
+    "conflictError": "Un alt administrator a modificat setările înainte. Acestea au fost reîncărcate — vă rugăm să le revizuiți și să salvați din nou.",
+    "updatedByLine": "Ultima salvare de {by} la {at}.",
+    "neverSaved": "Nu a fost salvat nimic încă; se aplică valorile implicite."
+  },
+  "modelRetirement": {
+    "notice": "{model} va fi retras pe {retiresOn}. Această conversație va fi mutată la {successor} pe {movesOn}.",
+    "noticeRetiring": "{model} va fi retras pe {retiresOn} și nu va mai funcționa. Treceți la {successor} pentru a continua această conversație.",
+    "switchNow": "Comutați acum"
+  },
+  "analytics": {
+    "title": "Analiză",
+    "backToChat": "Înapoi la chat",
+    "manage": "Gestionați",
+    "loading": "Se încarcă…",
+    "loadFailed": "Nu s-au putut încărca rapoartele.",
+    "retry": "Reîncercați",
+    "emptyTitle": "Nu vi s-a partajat încă nimic",
+    "emptyBody": "Rapoartele vor apărea aici după ce un administrator vă oferă acces la un dosar.",
+    "deliveryUnavailable": "Stocarea rapoartelor nu este disponibilă momentan, astfel că listele de mai jos pot fi goale. Încercați din nou peste câteva minute.",
+    "groupsDegraded": "Apartenența la grupuri nu a putut fi verificată acum, astfel că dosarele partajate cu grupurile dvs. ar putea lipsi. Reîncărcați peste un minut.",
+    "foldersHeading": "Dosare",
+    "rootFolder": "Toate rapoartele",
+    "pathOnly": "Nu aveți acces la acest dosar în sine, ci doar la dosarele din interiorul lui.",
+    "selectFolder": "Alegeți un dosar pentru a vedea rapoartele.",
+    "noFiles": "Nu există rapoarte în acest dosar.",
+    "viewOnlyNote": "Aveți acces doar pentru vizualizare la acest dosar: puteți deschide rapoartele, vedea prezentarea generală și tabelele de rezumat. Pentru tabele cu un rând per persoană, export și descărcare este nevoie de acces de descărcare.",
+    "col": {
+      "name": "Fișier",
+      "period": "Perioadă",
+      "delivered": "Livrat",
+      "size": "Dimensiune",
+      "availableUntil": "Disponibil până la",
+      "actions": "Acțiuni"
+    },
+    "download": "Descărcați",
+    "downloadAria": "Descărcați {name}",
+    "block": {
+      "view-only": "Doar vizualizare",
+      "hidden-fields": "Original reținut (câmpuri ascunse)",
+      "unclassified-fields": "Original reținut (câmpuri în așteptarea reviziei)",
+      "not-inspected": "Încă neverificat",
+      "policy-unavailable": "Momentan indisponibil"
+    },
+    "adminBadge": {
+      "error": "Ascuns utilizatorilor",
+      "pending": "În curs de verificare",
+      "warning": "Avertismente",
+      "expired": "Expirat, în așteptarea ștergerii",
+      "originalBlocked": "Utilizatorii nu pot descărca: {reason}"
+    },
+    "openAria": "Deschideți {name}",
+    "openForExport": "Deschideți pentru export",
+    "preview": {
+      "back": "Înapoi la {folder}",
+      "tabsLabel": "Tabele în acest fișier",
+      "lockedTab": "{name} (blocat)",
+      "unavailable": "Acest fișier nu poate fi deschis în aplicație momentan.",
+      "tableFailed": "Nu s-a putut încărca acest tabel.",
+      "withheld": {
+        "row-level": "Acest tabel are câte un rând per persoană. Pentru a-l deschide, este nevoie de acces de descărcare la dosar.",
+        "hidden-fields": "Această pagină conține un câmp ascuns, deci nu este afișat."
+      },
+      "truncated": "Se afișează primele {shown, number} din {total, number} rânduri. Exportați tabelul pentru a le obține pe toate.",
+      "freeformNote": "Această pagină este formatată pentru citire și este afișată așa cum a fost livrată.",
+      "filter": "Filtrați rânduri",
+      "filterPlaceholder": "Filtrați rândurile…",
+      "rows": "{count, plural, one {# rând} other {# rânduri}}",
+      "matching": "{count, number} din {total, number} rânduri corespund",
+      "modeLabel": "Afișați ca",
+      "mode": {
+        "table": "Tabel",
+        "chart": "Grafic"
+      },
+      "noRows": "Nu există rânduri de afișat.",
+      "hiddenColumn": "Ascuns pentru utilizatori",
+      "exportCsv": "Exportați acest tabel (CSV)",
+      "exportXlsx": "Exportați toate tabelele (Excel)",
+      "downloadOriginal": "Descărcați originalul",
+      "exportNote": "Fișierul livrat conține câmpuri ascunse, astfel încât nu poate fi descărcat ca atare. Exporturile nu includ acele câmpuri.",
+      "sectionLabel": "Afișați",
+      "section": {
+        "overview": "Prezentare generală",
+        "tables": "Tabele"
+      }
+    },
+    "chart": {
+      "groupBy": "Grupează după",
+      "measure": "Măsură",
+      "rowCount": "Număr de rânduri",
+      "aggregation": "Calculează",
+      "agg": {
+        "sum": "Sumă",
+        "mean": "Medie",
+        "min": "Minim",
+        "max": "Maxim"
+      },
+      "ariaLabel": "{measure} după {group}",
+      "noColumns": "Acest tabel nu are coloane de tip text sau dată pentru grupare.",
+      "empty": "Nu există nimic de afișat în grafic pentru această alegere.",
+      "truncatedGroups": "Se afișează cele mai mari {count} grupuri.",
+      "basedOn": "Bazat pe primele {shown, number} din {total, number} rânduri.",
+      "savePng": "Salvează ca imagine",
+      "saveSvg": "Salvează ca SVG",
+      "saveFailed": "Nu s-a putut salva graficul."
+    },
+    "dash": {
+      "loading": "Se încarcă…",
+      "failed": "Nu s-a putut încărca prezentarea generală.",
+      "retry": "Reîncercați",
+      "showTable": "Afișați ca tabel",
+      "showChart": "Afișați ca grafic",
+      "smallGroups": "Grupe mai mici de 5 persoane",
+      "foldedNote": "Grupele cu mai puțin de 5 persoane sunt combinate într-un singur rând.",
+      "otherCount": "{count, plural, one {# alt} other {# alții}}",
+      "hiddenPanel": "Ascuns de setările câmpului.",
+      "missingPanel": "Nu este disponibil pentru acest fișier.",
+      "usage": {
+        "users": "Persoane active",
+        "interactions": "Interacțiuni",
+        "avgPerUser": "Medie per persoană",
+        "medianPerUser": "Mediană per persoană",
+        "hq": "La sediu central",
+        "field": "Pe teren",
+        "shareUsers": "{pct}% dintre utilizatorii {comparator}",
+        "shareUsage": "{pct}% din utilizarea {comparator}",
+        "comparator": "{comparator}: {value}",
+        "daily": "Interacțiuni pe zi",
+        "dailyUsers": "Persoane active pe zi",
+        "dailyUsersSub": "Pe locație de lucru",
+        "weekly": "Interacțiuni pe săptămână",
+        "activity": "Cât de mult este utilizată",
+        "activitySub": "Persoane, după numărul de interacțiuni în perioadă",
+        "departments": "Interacțiuni pe departament",
+        "jobTitles": "Interacțiuni pe funcție",
+        "models": "Evenimente pe model",
+        "total": "Toate locațiile",
+        "location": {
+          "hq": "Sediu central",
+          "field": "Teren",
+          "unknown": "Necunoscut"
+        },
+        "col": {
+          "date": "Zi",
+          "week": "Săptămâna începută",
+          "users": "Persoane",
+          "interactions": "Interacțiuni",
+          "events": "Evenimente",
+          "group": "Grup",
+          "band": "Interacțiuni"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Total facturat",
+        "usageVariable": "Cost variabil de utilizare",
+        "staticInfra": "Infrastructură statică",
+        "sections": "Secțiuni facturate",
+        "usageEvents": "Evenimente de utilizare",
+        "bySection": "Facturat pe secțiune",
+        "changes": "Modificări față de fișierul anterior",
+        "noChanges": "Nu s-a modificat nimic față de fișierul anterior.",
+        "byDomain": "Evenimente de utilizare pe domeniu de e-mail",
+        "reconciliation": "Reconciliere cu Azure",
+        "col": {
+          "section": "Secțiune",
+          "billed": "Facturat",
+          "usageEvents": "Evenimente de utilizare",
+          "usagePct": "% utilizare",
+          "line": "Linie",
+          "amount": "Sumă",
+          "previous": "Fișier anterior",
+          "restated": "Reformulat",
+          "change": "Modificare",
+          "domain": "Domeniu e-mail",
+          "users": "Persoane"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Calculat cu",
+        "delivered": "Presupunerile proprii ale raportului ({version})",
+        "current": "Presupunerile actuale ale aplicației ({version})",
+        "whatIf": "Ce-ar fi dacă…",
+        "deliveredUnavailable": "Presupunerile proprii ale acestui raport nu au putut fi citite din foaia Assumptions, astfel că sunt folosite cele actuale ale aplicației.",
+        "whatIfIntro": "Modificați o valoare pentru a vedea efectul ei mai jos. Nimic nu este salvat.",
+        "resetDelivered": "Resetează la cele ale raportului",
+        "resetCurrent": "Resetează la cele actuale ale aplicației",
+        "co2": "Emisii",
+        "energy": "Energie",
+        "charges": "Încărcări smartphone",
+        "chargesSub": "Cu aceeași amprentă",
+        "activeUsers": "Persoane active",
+        "requests": "Solicitări",
+        "tokens": "Tokeni",
+        "vsDelivered": "{delta} față de presupunerile raportului",
+        "sameAsDelivered": "La fel ca presupunerile raportului",
+        "unpriced": "{count, plural, one {# solicitare folosește} other {# solicitări folosesc}} o dimensiune de model fără valoare atribuită acestor presupuneri și {count, plural, one {este} other {sunt}} omise.",
+        "byDepartment": "Emisii pe departament",
+        "byModel": "Emisii pe model",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Calculat aici față de înregistrat la momentul respectiv",
+        "reconciliationSub": "Aplicația estimează fiecare solicitare în timp real. Valorile coincid cât timp presupunerile sunt aceleași.",
+        "computed": "Calculat aici",
+        "logged": "Înregistrat de aplicație",
+        "difference": "Diferență",
+        "col": {
+          "group": "Grup",
+          "requests": "Solicitări",
+          "tokens": "Tokeni",
+          "energyWh": "Energie (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Consum suplimentar centru de date (PUE)",
+          "promptTokenWeight": "Pondere token prompt",
+          "dedicatedReasoningMultiplier": "Multiplicator pentru reasoning dedicat",
+          "whPer1kTokens": "Wh per 1.000 tokeni — {name}",
+          "reasoningEffortMultipliers": "Multiplicator pentru efort de reasoning — {name}",
+          "gridIntensity": "Grilă g CO₂e per kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Evenimente",
+        "users": "Persoane",
+        "tokens": "Tokeni",
+        "errors": "Erori",
+        "energy": "Energie",
+        "co2": "Emisii",
+        "hourly": "Evenimente pe oră (UTC)",
+        "byType": "Evenimente după tip",
+        "byError": "Erori după cod",
+        "byModel": "Tokeni pe model",
+        "byCompany": "Evenimente după organizație",
+        "none": "Nicio valoare.",
+        "col": {
+          "group": "Grup",
+          "events": "Evenimente",
+          "tokens": "Tokeni",
+          "hour": "Oră"
+        }
+      },
+      "trend": {
+        "title": "În timp",
+        "period": "Perioadă",
+        "users": "Persoane active per raport",
+        "interactions": "Interacțiuni per raport",
+        "billed": "Total facturat pe perioadă",
+        "sections": "Facturat pe secțiune",
+        "otherSections": "Toate celelalte secțiuni",
+        "co2": "Emisii pe raport",
+        "energy": "Energie pe raport",
+        "recalculated": "Fiecare perioadă este calculată cu ipotezele actuale ale aplicației ({version}), deci o schimbare de ipoteze între rapoarte nu apare ca o modificare a emisiilor.",
+        "severalPerPeriod": "Acest dosar conține mai multe rapoarte pentru aceeași perioadă. Deschideți un dosar din interior pentru a vedea cum se schimbă unul dintre ele în timp."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analitice",
+    "description": "Rapoartele sunt livrate în spațiul de stocare prin fluxul de date. Aici puteți verifica ce a ajuns, decide cine poate accesa fiecare dosar și alege câmpurile pe care platforma le poate afișa.",
+    "openViewer": "Deschideți analiticele",
+    "sharedNotice": "Beta și producția împart aceste dosare, audiențe și fișiere. O modificare salvată aici este vizibilă în ambele.",
+    "tabsLabel": "Secțiuni analitice",
+    "tab": {
+      "health": "Livrări",
+      "folders": "Dosare & acces",
+      "fields": "Câmpuri"
+    },
+    "loading": "Se încarcă…",
+    "retry": "Reîncercare",
+    "loadError": "Nu s-a putut încărca această secțiune.",
+    "unavailable": "Nu s-au putut citi setările salvate din stocare. Aceasta NU înseamnă \"nimic configurat\" — editarea este dezactivată pentru a nu suprascrie setările reale. Încercați din nou și verificați jurnalele serverului dacă persistă.",
+    "save": "Salvează",
+    "saving": "Se salvează…",
+    "unsaved": "Modificări nesalvate",
+    "saveSuccess": "Salvat.",
+    "saveError": "Nu s-a putut salva.",
+    "conflictError": "Un alt administrator a modificat aceste setări în timp ce editați. Modificările dumneavoastră nu au fost salvate — a fost reîncărcată cea mai recentă versiune.",
+    "rootFolder": "(nivel superior)",
+    "scope": {
+      "domain": "Domeniu e-mail",
+      "user": "Persoană",
+      "attribute": "Atribut",
+      "group": "Grup Entra"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "nume@example.org",
+      "attribute": "departament:Sănătate",
+      "group": "id obiect grup Entra"
+    },
+    "level": {
+      "view": "Vizualizare rezumate",
+      "download": "Vizualizare, export și descărcare"
+    },
+    "reportType": {
+      "usage": "Raport de utilizare",
+      "rebilling": "Refacturare",
+      "emissions": "Raport de emisii",
+      "raw-telemetry": "Telemetrie brută"
+    },
+    "field": {
+      "userCode": {
+        "label": "Cod utilizator",
+        "description": "Codul pseudonim u-… care reprezintă o persoană."
+      },
+      "jobTitle": {
+        "label": "Funcție",
+        "description": "Funcțiile, inclusiv cea mai comună funcție din fișele de rezumat. Într-un grup mic, o funcție poate indica o singură persoană."
+      },
+      "department": {
+        "label": "Departament",
+        "description": "Departamentele, inclusiv cel mai activ departament din fișele de rezumat."
+      },
+      "company": {
+        "label": "Companie / organizație",
+        "description": "Numele organizației din director și numele companiilor listate pe fișele de refacturare."
+      },
+      "orgGroup": {
+        "label": "Grup organizațional",
+        "description": "Centrul operațional sau grupul după care este segmentat un raport."
+      },
+      "section": {
+        "label": "Secțiune",
+        "description": "Secțiunea de recuperare a costurilor de care aparține o linie de refacturare."
+      },
+      "mailDomain": {
+        "label": "Domeniu email",
+        "description": "Utilizarea domeniului de email este atribuită (niciodată unei adrese)."
+      },
+      "workLocation": {
+        "label": "Locație de lucru",
+        "description": "Sediu central sau teren."
+      },
+      "technical": {
+        "label": "Detalii tehnice",
+        "description": "Model, regiune, tip de eveniment, monedă și alți descriptori care nu oferă informații despre persoane."
+      },
+      "other": {
+        "label": "Alte câmpuri descriptive",
+        "description": "Unde se introduce o coloană care nu se potrivește cu cele de mai sus."
+      }
+    },
+    "folders": {
+      "intro": "Fiecare folder în care a fost livrat un fișier de către pipeline este afișat. Un folder fără setări — și fără un folder deasupra care permite accesul — este vizibil doar administratorilor.",
+      "name": "Nume afișat",
+      "namePlaceholder": "Afișat în locul căii folderului",
+      "description": "Descriere",
+      "reportType": "Tip de raport",
+      "reportTypeNone": "Neprecizat",
+      "reportTypeInherited": "Moștenit: {type}",
+      "reportTypeHint": "Informează verificatorul ce nume de fișiere să aștepte și cât de des. Se aplică folderelor din interiorul acestuia.",
+      "retention": "Păstrează fișierele (luni)",
+      "retentionHint": "Lăsați gol pentru a moșteni {months} luni. Calculat de la sfârșitul perioadei fiecărui raport.",
+      "audience": "Cine poate deschide acest folder",
+      "audienceHint": "Fiecare rând acordă acces la acest folder și la folderele din interiorul lui. Un scop pe fiecare rând.",
+      "audienceScope": "Tip de scop",
+      "audienceTargets": "Scopuri",
+      "audienceLevel": "Nivel de acces",
+      "addAudience": "Adaugă persoane sau grupuri",
+      "removeAudience": "Șterge acest rând",
+      "restricted": "Nu moșteni accesul din folderele superioare",
+      "restrictedHint": "Doar liniile de pe acest folder se aplică aici și mai jos.",
+      "hiddenFields": "Ascunde și în acest folder",
+      "hiddenFieldsHint": "Câmpuri ascunse aici peste setarea platformei, pentru acest folder și cele din interiorul lui. Poți ascunde mai multe, niciodată să arăți mai multe.",
+      "hiddenPlatformWide": "(ascuns peste tot)",
+      "clear": "Șterge setările acestui folder",
+      "rawChip": "Raw: doar administratori globali",
+      "rawNote": "Telemetria brută conține nume, adrese email și nume de fișiere. Doar administratorii globali pot deschide, iar nicio audiență nu poate fi adăugată.",
+      "audienceChip": "{count, plural, one {# rând de acces} other {# rânduri de acces}}",
+      "restrictedChip": "Nu moștenește",
+      "notConfiguredChip": "Fără setări",
+      "addPathLabel": "Configurează un folder înainte de prima livrare",
+      "addPath": "Adaugă",
+      "addPathHint": "Calea exactă pe care o va scrie pipeline-ul, de exemplu usage/ocba. Aceasta salvează doar setările; nu creează nimic în stocare.",
+      "invalidPath": "Aceasta nu este o cale de folder validă.",
+      "rawGlobalOnly": "Doar administratorii globali pot configura foldere sub raw/."
+    },
+    "fields": {
+      "intro": "Alege ce câmpuri din rapoartele livrate poate afișa platforma. Ascunderea unui câmp îl elimină din tot ce se afișează în aplicație și din exporturile generate de aplicație. Fișierul livrat poate fi descărcat doar de administratori.",
+      "readOnly": "Doar administratorii globali pot modifica acest lucru. Ca administrator de analytics poți ascunde câmpuri suplimentare pe folder, în secțiunea Foldere & acces.",
+      "configurableHeading": "Câmpuri",
+      "shown": "Afișat",
+      "hidden": "Ascuns",
+      "jobTitleNote": "Cu poziția afișată, un rând dintr-un grup mic poate identifica o persoană chiar și sub un cod de utilizator. Graficele ascund împărțirile cu mai puțin de cinci persoane; tabelele descărcate nu.",
+      "neverHeading": "Niciodată afișat",
+      "neverBody": "Numele, adresele de email, ID-urile din director, numele fișierelor încărcate și textul de eroare nu sunt niciodată afișate în afara telemetriei brute. Un raport care conține oricare dintre acestea este ascuns utilizatorilor până când este înlocuit.",
+      "unclassifiedHeading": "Coloane necunoscute catalogului",
+      "unclassifiedBody": "O coloană de text nerecunoscută rămâne ascunsă — în aplicație și la exporturi — iar fișierul livrat nu poate fi descărcat de utilizatori, până când o încadrezi într-un câmp.",
+      "noneWaiting": "Nimic în așteptare.",
+      "inFiles": "{count, plural, one {în # fișier} other {în # fișiere}}",
+      "classifyAs": "Câmp pentru coloana {column}",
+      "keepHidden": "Păstrează ascuns",
+      "removeClassification": "Elimină setarea pentru coloana {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Stocarea rapoartelor nu poate fi accesată",
+      "deliveryUnavailableBody": "Aplicația nu a putut lista containerul \"{container}\". Verificați dacă există și dacă identitatea aplicației are un rol de date asupra lui. Până atunci, niciun raport nu va fi afișat utilizatorilor.",
+      "foldersUnavailable": "Setările folderului nu au putut fi citite, astfel încât utilizatorii nu văd niciun folder momentan. Fișierele nu sunt verificate sau șterse până la remedierea situației.",
+      "policyUnavailable": "Setările câmpului nu au putut fi citite, astfel încât utilizatorii nu pot descărca fișiere acum.",
+      "total": {
+        "files": "Fișiere",
+        "ok": "În regulă",
+        "warning": "Cu avertizări",
+        "error": "Ascuns de utilizatori",
+        "pending": "Se verifică"
+      },
+      "recheckAll": "Verifică tot din nou",
+      "recheckOne": "Verifică din nou",
+      "recheckQueued": "{count, plural, one {# fișier pus în coadă pentru verificare.} other {# fișiere puse în coadă pentru verificare.}}",
+      "recheckFailed": "Nu s-a putut porni verificarea.",
+      "retention": {
+        "active": "Fișierele care depășesc perioada de păstrare a folderului sunt ascunse imediat și șterse după {days} zile.",
+        "disabled": "Fișierele care depășesc perioada de păstrare a folderului sunt ascunse, dar ștergerea este dezactivată pentru această implementare.",
+        "waiting-for-config": "Fișierele care depășesc perioada implicită de păstrare sunt ascunse. Nimic nu se șterge până când setările folderului sunt salvate cel puțin o dată."
+      },
+      "noFiles": "Nu au fost livrate fișiere încă.",
+      "allGood": "Tot ce a fost livrat este în regulă.",
+      "problemsHeading": "Fișiere ce necesită atenție",
+      "status": {
+        "error": "Ascuns de utilizatori",
+        "warning": "Avertizare",
+        "pending": "Se verifică",
+        "ok": "În regulă"
+      },
+      "pendingBody": "Noi sau înlocuite de la ultima verificare. Apar utilizatorilor doar după trecerea verificării.",
+      "firstSeen": "Observat prima dată la {date}",
+      "unclassifiedHeading": "Coloane ce așteaptă decizie",
+      "unclassifiedBody": "Aceste coloane nu sunt recunoscute. Rămân ascunse și utilizatorii nu pot descărca fișierele care le conțin, până când fiecare este încadrată într-un câmp.",
+      "unclassifiedChip": "{column} · {count, plural, one {# fișier} other {# fișiere}}",
+      "openFields": "Accesează câmpuri",
+      "unconfiguredHeading": "Foldere fără setări",
+      "unconfiguredBody": "Fișierele sosesc aici, dar folderul sau unul de deasupra nu a fost configurat. Doar administratorii le pot vedea.",
+      "staleHeading": "Livrări întârziate",
+      "staleBody": "Aceste foldere așteaptă rapoarte regulate, iar ultimul este mai vechi decât ar trebui.",
+      "staleDetail": {
+        "daily": "Zilnic; ultimul acoperă {date}",
+        "monthly": "Lunar; ultimul se încheie la {date}"
+      },
+      "staleNever": "Nu s-a livrat nimic încă",
+      "expiringHeading": "În curs de expirare",
+      "expiringBody": "Fișierele care au depășit sau vor ajunge la perioada de păstrare în maxim 30 zile.",
+      "expiresOn": "Expiră la {date}",
+      "expiredOn": "Expirat la {date}"
+    },
+    "issue": {
+      "name-mismatch": "Numele fișierului nu este cel așteptat de acest folder (de exemplu {expected}).",
+      "unsupported-format": "Fișierele de tip \"{extension}\" nu pot fi verificate, astfel că acesta este ascuns de utilizatori. Livrați .xlsx sau .csv.",
+      "too-large": "La {sizeMb} MB acest fișier depășește limita de {limitMb} MB pentru verificare, deci este ascuns de utilizatori.",
+      "empty-file": "Fișierul este gol.",
+      "unreadable": "Fișierul nu a putut fi deschis. Poate fi deteriorat sau nu este în formatul indicat de nume.",
+      "identifier-column": "Sheet „{sheet}” are o coloană „{column}” care identifică persoane. Fișierul este ascuns pentru utilizatori.",
+      "identifier-values": "„{sheet}” conține {count, plural, one {# adresă de email} other {# adrese de email}}. Fișierul este ascuns pentru utilizatori.",
+      "user-code-format": "Sheet „{sheet}”, coloana „{column}”: {count, plural, one {# valoare nu este} other {# valori nu sunt}} un cod de utilizator u-… Fișierul este ascuns pentru utilizatori.",
+      "formulas-without-values": "Sheet „{sheet}” are {count, plural, one {# formulă} other {# formule}} fără un rezultat stocat, astfel că aceste cifre nu pot fi afișate în aplicație.",
+      "missing-sheet": "Sheet „{sheet}” lipsește, deci vizualizările bazate pe acesta nu pot fi afișate.",
+      "missing-column": "Sheet „{sheet}” nu are coloana „{column}”, deci vizualizările care o folosesc nu pot fi afișate.",
+      "no-period": "Numele fișierului nu conține o perioadă de raportare, astfel retenția se calculează de la data livrării.",
+      "unclassified-field": "Coloana „{column}” nu este recunoscută. Rămâne ascunsă, iar utilizatorii nu pot descărca fișierul livrat până este clasificată într-un câmp.",
+      "past-retention": "Mai vechi decât {months} luni de retenție ale acestui folder; nu mai este afișat.",
+      "unknown": "A fost raportată o problemă: {code}."
+    }
   }
 }
