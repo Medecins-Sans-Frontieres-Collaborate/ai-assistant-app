@@ -186,6 +186,14 @@ export interface SearchInterimPayload {
   /** Queries the headlines answered (loader/record display + echo-back). */
   queries: string[];
   entries: import('@/types/webSearch').SearchHeadlineEntry[];
+  /**
+   * Which search is still running behind the panel: the combined Bing +
+   * Google News search (default — headlines while Bing runs, 35-90s), or a
+   * multi-step SearXNG search (results so far, re-emitted as further steps
+   * add to them; seconds, not minutes). Decides the panel's copy, and rides
+   * the echo-back so the resend digests the entries as what they are.
+   */
+  kind?: import('@/types/webSearch').SearchInterimKind;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -439,11 +447,13 @@ function isSearchHeadlineEntry(value: unknown): boolean {
 function isSearchInterimPayload(value: unknown): value is SearchInterimPayload {
   if (!value || typeof value !== 'object') return false;
   const p = value as { queries?: unknown; entries?: unknown };
+  const kind = (value as { kind?: unknown }).kind;
   return (
     Array.isArray(p.queries) &&
     p.queries.every((q) => typeof q === 'string') &&
     Array.isArray(p.entries) &&
-    p.entries.every(isSearchHeadlineEntry)
+    p.entries.every(isSearchHeadlineEntry) &&
+    (kind === undefined || kind === 'combined' || kind === 'multiStep')
   );
 }
 

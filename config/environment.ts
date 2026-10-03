@@ -111,6 +111,17 @@ const serverEnvSchema = z.object({
    */
   AZURE_BLOB_STORAGE_ADMIN_NAME: z.string().optional(),
   AZURE_BLOB_STORAGE_ADMIN_CONTAINER: z.string().optional(),
+  /**
+   * Analytics DELIVERY container: where the third-party ETL writes report
+   * files (docs/ANALYTICS_DELIVERY_CONTRACT.md). Same account as the admin
+   * container; defaults to `ai-portal-analytics`. Created by Terraform, never
+   * by the app. See lib/services/analytics/deliveryStore.ts.
+   */
+  AZURE_BLOB_STORAGE_ANALYTICS_CONTAINER: z.string().optional(),
+  // Whether the app DELETES delivered analytics files once they are past
+  // their folder's retention (plus a grace period). "false" keeps expired
+  // files hidden but leaves them in storage.
+  ANALYTICS_RETENTION_DELETE_ENABLED: booleanString(true),
   STORAGE_RESOURCE_ID: z.string().optional(),
   STORAGE_DATA_SOURCE_CONTAINER: z.string().optional(),
 
@@ -205,31 +216,27 @@ const serverEnvSchema = z.object({
   //    sinks the search. Seconds-fast, no LLM round-trip. Default.
   //  - 'gdelt': GDELT DOC API alone — keyless, real publisher URLs.
   //  - 'google-news': Google News RSS alone + link decoding.
-  //  - 'bing-agent': the Foundry agent with Bing grounding — broader web
-  //    coverage but 30-90s round-trips and flaky result quality.
-  //  - 'combined': Bing agent + Google News feed concurrently; headlines
-  //    stream to the client while Bing runs, then the results merge.
-  //  - 'bing-responses': the native web_search tool on the Azure OpenAI
-  //    Responses API — same Bing grounding as 'bing-agent' but a direct
-  //    model call instead of a Foundry agent run.
+  //  - 'bing': Bing grounding through the native web_search tool on the
+  //    Azure OpenAI Responses API — one model call on the user's region, no
+  //    Foundry agent. ('bing-agent' / 'bing-responses' are accepted as
+  //    aliases from older configurations.)
+  //  - 'combined': Bing + Google News feed concurrently; headlines stream
+  //    to the client while Bing runs, then the results merge.
   //  - 'searxng': MSF's own SearXNG metasearch instance (general web, news,
   //    science, IT, humanitarian). Seconds-fast, real publisher URLs, no LLM
-  //    round-trip. Needs SEARXNG_URL + SEARXNG_API_KEY; degrades to 'news'
-  //    when the instance is unconfigured or unreachable.
-  // UNSET = automatic: 'searxng' where the instance is configured, 'news'
-  // otherwise (see resolveDefaultWebSearchProvider). Set it only to pin a
-  // deployment to one backend.
-  WEB_SEARCH_PROVIDER: z
-    .enum([
-      'searxng',
-      'news',
-      'gdelt',
-      'google-news',
-      'bing-agent',
-      'bing-responses',
-      'combined',
-    ])
-    .optional(),
+  //    round-trip. Needs SEARXNG_URL + SEARXNG_API_KEY; degrades to 'bing'
+  //    (then 'news') when the instance is unconfigured or unreachable or
+  //    its web engines do not answer.
+  // UNSET = 'bing' (see resolveDefaultWebSearchProvider); SearXNG stays
+  // opt-in per user until its upstream engines hold up under a full
+  // deployment. Set it only to pin a deployment to one backend.
+  WEB_SEARCH_PROVIDER: z.preprocess(
+    (value) =>
+      value === 'bing-agent' || value === 'bing-responses' ? 'bing' : value,
+    z
+      .enum(['searxng', 'news', 'gdelt', 'google-news', 'bing', 'combined'])
+      .optional(),
+  ),
 
   // SearXNG instance (private endpoint in the tools environment). The key is
   // the shared secret the proxy in front of it requires in `X-Search-Key`;
@@ -261,11 +268,15 @@ const serverEnvSchema = z.object({
   // the Responses-API code_interpreter tool in the project's region).
   CODE_INTERPRETER_MODEL: z.string().default('gpt-5.4'),
 
-  // Deployment used by the 'bing-responses' web-search provider (Responses
-  // API native web_search tool). Must be a Responses-capable deployment in
-  // the default Foundry project, with the web_search tool enabled on the
-  // subscription.
-  WEB_SEARCH_RESPONSES_MODEL: z.string().default('gpt-5.4'),
+  // Pins the deployment the Bing web search runs on (the Responses API
+  // native web_search tool). UNSET = resolved per region from the served
+  // model list — the policy default, skipping anything that is retiring
+  // (lib/services/models/webSearchModel.ts) — so nothing has to be updated
+  // here when a model is retired. Set only to force one deployment.
+  WEB_SEARCH_RESPONSES_MODEL: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().optional(),
+  ),
 
   // MCP (Model Context Protocol) connectors
   // Server-side gate for ARBITRARY (non-catalog) MCP server URLs — defense in

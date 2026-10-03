@@ -1,18 +1,22 @@
+import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
+import { resolveWebSearchModel } from '@/lib/services/models/webSearchModel';
+
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
+import { UserRegion } from '@/lib/utils/shared/region';
 
 import { ToolResult } from './Tool';
 
-import { env } from '@/config/environment';
 import type OpenAI from 'openai';
 
 /**
- * 'bing-responses' web-search executor: the native `web_search` tool on the
- * Azure OpenAI Responses API. Same Bing grounding as the Foundry search
- * agent ('bing-agent'), but a single direct model call instead of an agent
- * run — no agent provisioning, no thread/run loop, and typically a much
- * faster round-trip. Module functions (like the feed providers) so
- * WebSearchTool needs no new constructor dependencies.
+ * The Bing web-search executor: the native `web_search` tool on the Azure
+ * OpenAI Responses API. One direct model call — no Foundry agent to
+ * provision or maintain, no connection, no thread/run loop. Runs on the
+ * user's region's Foundry project (only the query leaves the app) with the
+ * deployment resolveWebSearchModel picks for that region. Module functions
+ * (like the feed providers) so WebSearchTool needs no constructor
+ * dependencies.
  */
 
 /** Subset of the Responses API url_citation annotation we consume. */
@@ -34,6 +38,30 @@ export interface ResponsesWebSearchParams {
    * lookups stay on low effort for speed.
    */
   deep?: boolean;
+  /**
+   * The user's region: picks the Foundry project the search runs on and
+   * the deployment it uses. EU users are always served from the EU.
+   */
+  region?: UserRegion | null;
+  /**
+   * The call's token usage, once known. A search is the user's spend like
+   * any other model call (10-15k input tokens is typical: the model runs
+   * several search rounds), so callers meter it — telemetry row, emissions
+   * and token quota — exactly as they do an assessor call.
+   */
+  onUsage?: (
+    usage: WebSearchUsage,
+    modelId: string,
+    region: UserRegion,
+  ) => void;
+  /** Aborts the Responses call (the enricher's search timeout). */
+  signal?: AbortSignal;
+}
+
+export interface WebSearchUsage {
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
 }
 
 /** One output_text content part with its citation annotations. */
@@ -43,21 +71,16 @@ export interface CitedTextPart {
 }
 
 // The Foundry project's OpenAI client exposes the Responses surface; cached
-// because construction imports SDKs and negotiates credentials.
-let clientPromise: Promise<OpenAI> | null = null;
+// per endpoint because construction imports SDKs and negotiates credentials.
+const clientPromises = new Map<string, Promise<OpenAI>>();
 
-async function getClient(): Promise<OpenAI> {
+async function getClient(endpoint: string): Promise<OpenAI> {
+  let clientPromise = clientPromises.get(endpoint);
   if (!clientPromise) {
     clientPromise = (async () => {
       const aiProjects = await import('@azure/ai-projects');
       const { DefaultAzureCredential } = await import('@azure/identity');
 
-      const endpoint = env.AZURE_AI_FOUNDRY_ENDPOINT;
-      if (!endpoint) {
-        throw new Error(
-          'bing-responses search requires AZURE_AI_FOUNDRY_ENDPOINT to be configured',
-        );
-      }
       if (!isAllowedFoundryHost(endpoint)) {
         throw new Error(
           `Refusing to invoke Foundry against disallowed host: ${endpoint}`,
@@ -70,13 +93,23 @@ async function getClient(): Promise<OpenAI> {
       );
       return (await project.getOpenAIClient()) as unknown as OpenAI;
     })();
+    clientPromises.set(endpoint, clientPromise);
     // Don't cache failures: a transient credential/endpoint error would
     // otherwise make every later search rethrow the stale rejection.
     clientPromise.catch(() => {
-      clientPromise = null;
+      clientPromises.delete(endpoint);
     });
   }
   return clientPromise;
+}
+
+/**
+ * The region a search runs in. EU users are always served from the EU;
+ * everyone else from the US. (Mirrors resolveChatRegion's residency rule
+ * for the one place a search query leaves the app.)
+ */
+function searchRegion(region: UserRegion | null | undefined): UserRegion {
+  return region === 'EU' ? 'EU' : 'US';
 }
 
 /**
@@ -148,7 +181,9 @@ export function buildCitedSearchResult(parts: CitedTextPart[]): {
 export async function executeResponsesWebSearch(
   params: ResponsesWebSearchParams,
 ): Promise<ToolResult> {
-  const { searchQuery, resultCount, freshness, deep } = params;
+  const { searchQuery, resultCount, freshness, deep, signal } = params;
+  const region = searchRegion(params.region);
+  const model = await resolveWebSearchModel(region);
 
   // Tuning rides the instruction text (same approach as the Foundry search
   // agent leg): the web_search tool itself takes no count/freshness params.
@@ -167,20 +202,38 @@ export async function executeResponsesWebSearch(
     `If information is limited or not yet finalized, report the best current information with its source.\n\n` +
     `Information need: ${searchQuery}`;
 
-  const client = await getClient();
+  const client = await getClient(OfficeResolver.getFoundryEndpoint(region));
   const response = await withAzureRetry(
     () =>
-      client.responses.create({
-        model: env.WEB_SEARCH_RESPONSES_MODEL,
-        input,
-        tools: [{ type: 'web_search' } as unknown as OpenAI.Responses.Tool],
-        // 'minimal' is rejected alongside web_search on gpt-5.x; 'medium'
-        // lets deep searches use agentic open_page/find_in_page rounds.
-        reasoning: { effort: deep ? 'medium' : 'low' },
-        store: false,
-      }),
+      client.responses.create(
+        {
+          model,
+          input,
+          tools: [{ type: 'web_search' } as unknown as OpenAI.Responses.Tool],
+          // 'minimal' is rejected alongside web_search on gpt-5.x; 'medium'
+          // lets deep searches use agentic open_page/find_in_page rounds.
+          reasoning: { effort: deep ? 'medium' : 'low' },
+          store: false,
+        },
+        signal ? { signal } : undefined,
+      ),
     { label: 'responses-web-search' },
   );
+
+  const usage = response.usage;
+  if (usage && params.onUsage) {
+    const promptTokens = usage.input_tokens ?? 0;
+    const completionTokens = usage.output_tokens ?? 0;
+    params.onUsage(
+      {
+        promptTokens,
+        completionTokens,
+        totalTokens: usage.total_tokens ?? promptTokens + completionTokens,
+      },
+      model,
+      region,
+    );
+  }
 
   const parts: CitedTextPart[] = [];
   for (const item of response.output ?? []) {
@@ -196,5 +249,10 @@ export async function executeResponsesWebSearch(
     }
   }
 
-  return buildCitedSearchResult(parts);
+  return {
+    ...buildCitedSearchResult(parts),
+    // Which deployment answered — the tool record shows it ("via Bing
+    // (gpt-5.4)"), and it is the only trace of the resolved model.
+    metadata: { executor: `Bing (${model})` },
+  };
 }

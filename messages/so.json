@@ -865,7 +865,10 @@
       "codeInterpreterLimitReached": "Xadka fulinta koodhka maalinlaha ah waa la gaaray — jawaab la’aan socodsiin koodh…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Baadhista ilaha aqoonta way fashilantay — jawaabtu ma adeegsan doonto dukumentiyada wakiilka.",
-      "stillWorking": "Weli wuu shaqeynayaa…"
+      "stillWorking": "Weli wuu shaqeynayaa…",
+      "assessingSearchResults": "Waxaa la hubinayaa in natiijooyinka ay su'aasha ka jawaabaan…",
+      "refiningSearch": "Dib loo raadinayo: “{query}”…",
+      "readingSearchPages": "Waxaa la akhrinayaa {count} bog oo natiijo ah…"
     },
     "toolSummary": {
       "usedTools": "Waxaa la isticmaalay {count, plural, one {# qalab} other {# qalabyo}}",
@@ -951,7 +954,10 @@
       "summarizeNow": "Soo koob cinwaanada hadda",
       "sourcesCount": "{count} ilo",
       "showAll": "Muuji dhammaan {count} ilo",
-      "showFewer": "Muuji wax ka yar"
+      "showFewer": "Muuji wax ka yar",
+      "multiStepTitle": "Natiijooyinka ilaa hadda — waxaa la hubinayaa inay su'aasha ka jawaabaan",
+      "multiStepHint": "Baadhitaanku wuu sii socon karaa — baadhis kale ama akhrinta bogagga ugu rajo badan. Hadda ka jawaab {count} natiijo ee la helay haddii aadan rabin inaad sugtid.",
+      "answerNow": "Ka jawaab natiijooyinkan hadda"
     },
     "retryWithModel": "Isku day {model}",
     "createTodoTasks": "Abuur hawlo To Do oo laga sameeyay jawaabtan",
@@ -965,7 +971,10 @@
     "modelTimedOutAtMaximum": "{model} kama bilaabin inuu ka jawaabo gudaha {duration}, taasoo ah waqtiga ugu dheer ee la sugi karo. Isku day mar kale ama dooro moodel kale.",
     "requestTimedOut": "Codsigan ayaa waqtigiisii badnaa oo la joojiyay ka hor inta aan {model} jawaabin. Waad kordhin kartaa wakhtiga, ama isku day moodel kale.",
     "retryWaitingLonger": "Sug ilaa {duration} oo dib u isku day",
-    "alwaysWaitThisLong": "Had iyo jeer sug ilaa {duration}"
+    "alwaysWaitThisLong": "Had iyo jeer sug ilaa {duration}",
+    "keepSearching": "Sii baaritaan",
+    "keepSearchingHint": "Baaritaanku wuu istaagay intaanan tan helin. U weydii caawiyaha inuu isku dayo habab kale.",
+    "keepSearchingMessage": "Fadlan sii baaritaan tan — isku day hab kale."
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -1450,7 +1459,9 @@
       "providerBingResponsesDescription": "Qaybta isla raadinta Bing sida Bing grounding, waxay si toos ah ugu shaqaysaa hal model halkii laga isticmaali lahaa Foundry agent — caadiyan aad bay u dheereysaa. Xulasho cusub oo hadda lagu tijaabinayo Bing grounding.",
       "providerSearxng": "Raadinta web-ka ee MSF",
       "providerSearxngDescription": "Adeeg raadis gaar ah oo gaar u ah MSF. Waxay daboolaysaa web-ka guud, wararka, cilmibaarista cilmiyeed (oo ay ku jiraan daabacaadaha cilmiyeed ee MSF), dukumeentiyada farsamada iyo xogta bini'aadantinimada, waxayna doorataa ilaha ku habboon su’aal kasta. Natiijooyinka waxay kuu yimaadaan ilbiriqsiyo gudahood oo leh xiriir toos ah, raadinta kaliya ayaa app-ka ka baxda — mashiinnada raadinta waligood kuuma arkaan.",
-      "otherProvidersLabel": "Bixiyeyaasha kale"
+      "otherProvidersLabel": "Bixiyeyaasha kale",
+      "multiStepLabel": "Baaritaan tillaabooyin badan",
+      "multiStepDescription": "Iyadoo la adeegsanayo MSF web search, caawiyuhu wuu hubiyaa natiijooyinka ugu horreeya, kaliya haddii aysan filnayn ayuu dib u baadhaa ama akhriyaa bogagga ugu rajo badan ka hor intuusan ka jawaabin. Su'aalaha badankoodu hal tillaabo ayaa lagu dhammeeyaa. Haddii aad tan demiso, baaritaankasta hal mar ayuu ku ekaan doonaa."
     },
     "Admin": "Maamul",
     "Usage Limits": "Xadid isticmaalka",
@@ -1470,7 +1481,8 @@
       "customHint": "U dhexeeya {min} iyo {max} ilbiriqsi.",
       "preferModelTitle": "Dooro moodelkayga la xushay",
       "preferModelDescription": "Ha u wareegin moodel kale si toos ah marka codsi fashilmo. Khaladku weli wuxuu bixin doonaa beddelka."
-    }
+    },
+    "Analytics": "Falcelin xogeed"
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",
@@ -1678,6 +1690,12 @@
     },
     "subVariant": {
       "label": "Cabbirka"
+    },
+    "retiring": {
+      "badge": "Laga saarayo adeegga",
+      "datedMoving": "Wuu dhamaanayaa {date}. Wada sheekaysiga ku jira waxaa lagu beddelayaa {successor} {movesOn}.",
+      "dated": "Wuu dhamaanayaa {date} wuxuuna joojinayaa shaqadiisa. Isticmaal {successor} halkii uu ka ahaan lahaa.",
+      "replaced": "Waxaa lagu beddelayaa {successor}."
     }
   },
   "models": {
@@ -1974,6 +1992,11 @@
       "name": "GPT-6 Astra",
       "description": "Nooca ugu sarreeya ee GPT-6 ee OpenAI. Waxaa loogu talagalay shaqo dhamaystiran oo adag: cilmi-baaris qoto dheer, falanqayn adag, injineernimada software-ka, iyo hawlo dheer oo tillaabooyin badan leh. Qiimihiisa wuxuu ku dhowaad laba laab yahay GPT-5.6 Sol.",
       "tagline": "Nooca ugu awoodda badan ee OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Cusbooneysiin loo sameeyay GPT-6 Sol si loo qabto shaqo adag oo ku saabsan code, dukumeenti, iyo apps. Waxay la ekaysiinaysaa awoodda Astra iyadoo qiimaha token-ku uu aad u hooseeyo.",
+      "tagline": "Awood la mid ah Astra, qiimo hoose badan"
     }
   },
   "searchMode": {
@@ -5424,7 +5447,10 @@
       "announcements": "Fariimo banner ah oo loogu talagalay isticmaalayaasha: yaa arka, goorta, iyo luqadaha lagu soo bandhigo.",
       "delegations": "Yaa maamula isticmaalayaasha, iyo waxa qof walba loo oggol yahay inuu sameeyo.",
       "channelProfiles": "Waa maxay barnaamij kasta: xadidka, tirinta, silsiladaha. Xaqiiqooyinka guud ee ururka oo xirmo kasta ku salaysan tahay.",
-      "channelSets": "Xeerarka koox walba ee wax-qorka barnaamijyada: tilmaamo, codadka, caadooyinka, cidda isticmaali karta iyo cidda diri karta."
+      "channelSets": "Xeerarka koox walba ee wax-qorka barnaamijyada: tilmaamo, codadka, caadooyinka, cidda isticmaali karta iyo cidda diri karta.",
+      "webSearch": "Baaxadda uu gaarayo baaritaanka webka: baaritaan tillaabo badan, modelka qiimeeyaha iyo xaddidaadiisa.",
+      "contextBudget": "Inta taariikh-wada sheekaysi ah ee model kastaa loo diro marka la isticmaalo.",
+      "analytics": "Warbixino la keenay: waxa yimid, cidda furin karta gal kasta, iyo qaybahaa la tusin karo."
     },
     "openSettings": "Fur dejinta",
     "area": {
@@ -5432,7 +5458,10 @@
       "viewAs": "Eeg sida",
       "globalAdmins": "Maamulayaasha guud",
       "announcements": "Ogeysiisyo",
-      "delegations": "Wakiillo"
+      "delegations": "Wakiillo",
+      "webSearch": "Baaritaanka webka",
+      "contextBudget": "Miisaaniyada macnaha guud",
+      "analytics": "Falcelin xogeed"
     }
   },
   "limits": {
@@ -6766,7 +6795,8 @@
     "capabilitiesHint": "Waxa uu wakiilkani si guud u siin karo. Maamule kaliya wuxuu heli kara waxa halkan la ogolaaday.",
     "grant": {
       "limits": "Xaddidaadda isticmaalka",
-      "announcements": "Ogeysiisyada"
+      "announcements": "Ogeysiisyada",
+      "analytics": "Falanqeyn"
     },
     "grantAll": "Dhammaan",
     "maxOverrides": "Xadka xadgudubyada ee wakiilkan la siin karo",
@@ -6927,5 +6957,540 @@
     "isDefaultAfterSave": "Waxaad calaamadin kartaa tani inay noqoto set-ka caadiga ah kadib kaydinta.",
     "noChannelsWarning": "Set-kan ma laha wax kanaal ah; qofna kuma sameyn karo qoraal.",
     "audienceEveryoneHint": "Qof kasta oo ka tirsan ururka wuxuu qoraal ku sameyn karaa set-kan."
+  },
+  "contextBudgetAdmin": {
+    "title": "Miisaaniyada macnaha guud",
+    "description": "Inta taariikh wada sheekaysi ah ee model kastaa loo diro marka la isticmaalayo. Fariimaha ugu dambeeya mar walba waa lagu daraa; kuwa hore waa la reebaa marka miisaaniyadu dhammaato, warbixin kooban oo waxa la reebay ahna waa lagu daraa system-ka. Miisaaniyad weyn waxay kordhinaysaa inta wada sheekaysiga dheer laga hayo, inkasta oo qiimuhu kordhayo.",
+    "scopeNote": "Waxay khusayso dhammaan sheekaysiyada dhammaan modelada. Miisaaniyadu kama badnaan karto xaddiga modelka ee hoos ku qoran.",
+    "loading": "Miisaaniyada macnaha guud ayaa la rarayaa…",
+    "loadError": "Miisaaniyada macnaha guud lama rari karin.",
+    "configUnavailable": "Miisaaniyada macnaha guud lama akhrin karo xilligan, sidaas darteed qiimayaashu waxay ka duwanaan karaan kuwii saxda ahaa. Dib iskuday ka hor intaadan wax ka beddelin.",
+    "retry": "Dib iskuday",
+    "historyTokensLabel": "Miisaaniyadda caadiga ah (tokens)",
+    "historyTokensDescription": "Taariikhda la diro mar kasta, system prompt goo la raacayo, modelada aan override lahayn. Qiyaastii 48,000 waxay haynaysaa 30–60 is-dhaafsi ee sheekaysi caadi ah.",
+    "historyFractionLabel": "Xadka sare (saamiga booska gelinta modelka)",
+    "historyFractionDescription": "Miisaaniyada waxaa lagu adkeeyaa saamiga la cayimay oo laga jaray booska la qabtay ee natiijada modelka, sidaas darteed model bilado yar leh mar walba kama badna inta uu qaadi karo.",
+    "minRecentMessagesLabel": "Fariimaha mar walba la ilaaliyo",
+    "minRecentMessagesDescription": "Fariimaha ugu dambeeya ayaa la ilaaliyaa xitaa haddii miisaaniyadu dhammaato (inta ku jirta daaqadda). Saddex waxay haynayaan is-dhaafsigii hore haddii farriinta ugu dambeysa — dokument la dhajiyay, natiijooyin raadis — ay kaligeed buuxiso miisaaniyada.",
+    "familyOverridesLabel": "Qoys kasta",
+    "familyOverridesDescription": "Miisaaniyad gaar ah model kastaa ee qoys, taasoo beddeleysa midda caadiga ah.",
+    "modelOverridesLabel": "Model kasta",
+    "modelOverridesDescription": "Miisaaniyad gaar ah hal model, taasoo beddeleysa midda qoyska iyo caadiga ah.",
+    "overrideFamilyPlaceholder": "Qoys",
+    "overrideModelPlaceholder": "Model id",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Kudar",
+    "removeOverride": "Ka saar",
+    "noOverrides": "Midna ma jiro",
+    "effectiveLabel": "Miisaaniyada saxda ah ee dejiyaashan la socda",
+    "effectiveColumnModel": "Model",
+    "effectiveColumnWindow": "Daaqad",
+    "effectiveColumnBudget": "Taariikhda miisaaniyadda",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Deegaanka caadiga ah: {value}",
+    "defaultsNote": "Kaliya qiimaha ka duwan kuwa caadiga ah ayaa la kaydiyaa; inta kale waxay sii raaci doonaan deegaanka koodhka caadiga ah xilliyada la sii daayo.",
+    "save": "Kaydi",
+    "saving": "Waa la kaydinayaa...",
+    "resetDefaults": "Ku celi deegaanka caadiga ah",
+    "unsaved": "Isbeddello aan la kaydin",
+    "saveSuccess": "Miisaaniyadda la xiriirta waa la keydiyay. Waxay saamaynaysaa muddo ka yar hal daqiiqo gudaheed.",
+    "saveError": "Miisaaniyadda la xiriirta lama kaydin karin.",
+    "conflictError": "Maamul kale ayaa beddelay miisaaniyadda la xiriirta intaad adigu wax ka beddeli lahayd; qiimihii ugu dambeeyay waa la soo cusboonaysiiyay.",
+    "updatedByLine": "Waxaa ugu dambayn kaydiyay {by} {at}",
+    "neverSaved": "Waligaa lama kaydin — deegaanka koodhka caadiga ah ayaa shaqaynaya."
+  },
+  "webSearchAdmin": {
+    "title": "Raadinta webka",
+    "description": "Waxay xakameysaa raadinta webka ee MSF oo dhowr-tallaabo ah. Natiijooyinka ugu horreeya kaddib, moodel qiimeeye ayaa go’aamiya haddii ay su’aasha ka jawaabayaan; haddii kale, waxuu dib u raadin karaa su’aalo kala duwan, akhriyi karaa bogagga natiijooyinka, weydiin karaa isticmaalaha faahfaahin ka maqan, ama sheegi karaa in wax la waayay.",
+    "scopeNote": "Dejintan waxay khusayaan oo kaliya raadinta webka ee MSF. Bixiyeyaasha kale ee raadintu mar walba waxay socodsiiyaan hal wareeg. Qof walba wuxuu kaloo ka damin karaa raadinta dhowr-tallaabo ee dejinta.",
+    "loading": "Dejinta raadinta webka ayaa la rarayaa...",
+    "loadError": "Dejinta raadinta webka lama soo rogi karin.",
+    "configUnavailable": "Dejinta raadinta webka lagama akhrin karo kaydka. Xakamaynta waa la qariyay halkii la tusin lahaa qiimaha caadiga ah oo laga yaabo inaanay la jaanqaadin kuwa shaqaynaya.",
+    "retry": "Isku day mar kale",
+    "enabledLabel": "Raadinta dhowr-tallaabo",
+    "enabledDescription": "Markay dansan tahay, raadinta kasta waa hal wareeg qorshaysan, moodel qiimeeyana lama waco.",
+    "assessorLabel": "Moodel qiimeeye",
+    "assessorDescription": "Waxaa la wacaa mar kasta tallaabo kasta ka dib si loo eego natiijooyinka. Dooro moodel degdeg ah oo kharash yar: wuxuu socdaa inta isticmaaluhu sugayo. Haddii aan la heli karin, waxaa badal ahaan la isticmaalaa {fallback}.",
+    "maxStepsLabel": "Tallaabooyin su’aal walba",
+    "maxStepsDescription": "Tirada ugu badan ee tallaabooyin su’aal ku qaadan karto, oo la xisaabiyay raadinta ugu horreysa. Raadinta dambe ama akhrinta bogagga labada midkoodba waa hal tallaabo. Xadkan wuxuu ka madax-bannaan yahay xadka raadinta maalinlaha ah oo hal su’aal kaliya u tirinaya.",
+    "maxStepsExploratoryLabel": "Tallaabooyin raadinta baadhista",
+    "maxStepsExploratoryDescription": "Xad sare oo loogu talagalay raadinta la raadinayo shay adag in la helo, sida nuqul buug naadir ah, halkaasoo dhibaatooyinka la filayo. Ma noqon karo mid hooseeya xadka caadiga ah.",
+    "pageReadsLabel": "Akhri bogagga natiijada",
+    "pageReadsDescription": "Waxay u saamaxdaa tallaabo in laga furo natiijooyinka ugu rajo fiican oo bogga laftiisa la akhriyo halkii laga sugi lahaa cutubyo kooban oo la soo bandhigay.",
+    "maxPageReadsLabel": "Bogagga tallaabo akhrin kasta",
+    "sourceAssessmentLabel": "Qiimee tayada ilaha",
+    "sourceAssessmentDescription": "Qaimeeyaha wuxuu ku calaamadiyaa il kasta (rasmi, la aasaasay, labaad, la isku halayn karo yar) si jawaabtu u cabbirto oo ay u tilmaanto.",
+    "timeBudgetLabel": "Miisaaniyadda waqtiga (ilbiriqsiyo)",
+    "timeBudgetDescription": "Wakhtiga guud ee raadinta hal su’aal qaadan karto, iyadoo la tixgelinayo wareegga ugu horreeya. Markuu waqtigu dhammaado, jawaabta waxaa laga diyaariyaa wixii la helay.",
+    "defaultsNote": "Dejinada laga tago sida caadiga ah lama kaydiyo, markaa waxay sii raacayaan deegaankaas hadii la bedelo marka dambe.",
+    "defaultHint": "Deegaanka caadiga ah: {value}",
+    "defaultOn": "shidan",
+    "defaultOff": "dami",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Waxaad leedahay isbeddello aan la kaydin.",
+    "save": "Kaydi",
+    "saving": "Waa la kaydinayaa...",
+    "resetDefaults": "Ku celi deegaanka caadiga ah",
+    "saveSuccess": "Dejinta raadinta webka waa la kaydiyay.",
+    "saveError": "Dejinta raadinta webka lama kaydin karin.",
+    "conflictError": "Maamule kale ayaa dejinta hore u beddelay. Waa la soo cusboonaysiiyay — fadlan dib u eeg oo kaydi mar kale.",
+    "updatedByLine": "Waxaa ugu dambayn kaydiyay {by} {at}.",
+    "neverSaved": "Wali wax lama keydin; deegaanka caadiga ah ayaa lagu shaqeynayaa."
+  },
+  "modelRetirement": {
+    "notice": "{model} waxaa la hawlgabayaa {retiresOn}. Wadahadalkan wuxuu u wareegi doonaa {successor} {movesOn}.",
+    "noticeRetiring": "{model} waxaa la hawlgabayaa {retiresOn} waxaana uu joojin doonaa shaqada. U wareeg {successor} si aad wadahadalkan u sii wadato.",
+    "switchNow": "U wareeg hadda"
+  },
+  "analytics": {
+    "title": "Falanqeyn",
+    "backToChat": "Ku noqo wadahadalka",
+    "manage": "Maamul",
+    "loading": "Wuu soo dhacayaa…",
+    "loadFailed": "Warbixinada lama soo rogi karin.",
+    "retry": "Mar kale isku day",
+    "emptyTitle": "Wali laguma wadaagin wax",
+    "emptyBody": "Warbixinada halkaan bay ka muuqan doonaan marka maamulka uu ku siiyo oggolaansho gal.",
+    "deliveryUnavailable": "Kaydka warbixinta lama heli karo hadda, liisyada hoos ku qoranna way bannaanan karaan. Mar kale isku day dhowr daqiiqo kadib.",
+    "groupsDegraded": "Xubinnimada kooxahaaga lama xaqiijin karin hadda, sidaas darteed faylasha lala wadaagay kooxahaaga way ka maqan karaan. Mar kale cusbooneysii daqiiqo gudahood.",
+    "foldersHeading": "Galal",
+    "rootFolder": "Dhamaan warbixinada",
+    "pathOnly": "Ma heli kartid galkaan laftiisa, waxaad heli kartaa oo kaliya galalka ku jira dhexdiisa.",
+    "selectFolder": "Dooro gal si aad u aragto warbixinadiisa.",
+    "noFiles": "Galkaan kuma jiro wax warbixin ah.",
+    "viewOnlyNote": "Waxaad leedahay aragis kaliya galkaan: waxaad furi kartaa warbixinada, waxaadna arki kartaa dulmarkooda iyo miisaska kooban. Miisaska hal saf qofkiiba, dhoofinta iyo soo dejinta waxay u baahan yihiin oggolaansho soo dejin.",
+    "col": {
+      "name": "Fayl",
+      "period": "Xilli",
+      "delivered": "La keenay",
+      "size": "Cabbir",
+      "availableUntil": "La heli karo ilaa",
+      "actions": "Falalka"
+    },
+    "download": "Soo dejiso",
+    "downloadAria": "Soo dejiso {name}",
+    "block": {
+      "view-only": "Aragis kaliya",
+      "hidden-fields": "Asal la qariyey (goobo qarsoon)",
+      "unclassified-fields": "Asal la qariyey (goobo sugaya dib-u-eegis)",
+      "not-inspected": "Wali lama hubin",
+      "policy-unavailable": "Lama heli karo hadda"
+    },
+    "adminBadge": {
+      "error": "La qariyey isticmaalayaasha",
+      "pending": "Waa la hubinayaa",
+      "warning": "Waxaa jira digniino",
+      "expired": "Wakhtigu wuu dhacay, sugaya tirtirid",
+      "originalBlocked": "Isticmaalayaashu ma soo dejisan karaan: {reason}"
+    },
+    "openAria": "Fur {name}",
+    "openForExport": "Fur si aad u dhoofiso",
+    "preview": {
+      "back": "Ku noqo {folder}",
+      "tabsLabel": "Miisas ku jira faylkaan",
+      "lockedTab": "{name} (xiran)",
+      "unavailable": "Faylkaan lama furi karo barnaamijka waqtigaan.",
+      "tableFailed": "Miiskaan lama soo rogi karin.",
+      "withheld": {
+        "row-level": "Miiskaan wuxuu leeyahay hal saf qofkiiba. Inaad furto waxaa u baahan oggolaansho soo dejis galka.",
+        "hidden-fields": "Boggaan waxaa ku jira goob la qariyey, sidaas darteed lama muujinayo."
+      },
+      "truncated": "Waxaa la tusayaa {shown, number} saf ee ugu horeeya ee {total, number} saf. Dhoofso miiska si aad u hesho dhammaan safafka.",
+      "freeformNote": "Boggaan waa loo habeeyey akhris waxaana loo soo bandhigay sidii lagu keenay.",
+      "filter": "Sifee safafka",
+      "filterPlaceholder": "Shaandhee safafka…",
+      "rows": "{count, plural, one {# saf} other {# safaf}}",
+      "matching": "{count, number} ka mid ah {total, number} safaf ayaa is waafaqa",
+      "modeLabel": "Muuji sida",
+      "mode": {
+        "table": "Jadwal",
+        "chart": "Jaantus"
+      },
+      "noRows": "Ma jiro saf la muujiyo.",
+      "hiddenColumn": "Laga qariyay isticmaaleyaasha",
+      "exportCsv": "Jadwalkan dhoofso (CSV)",
+      "exportXlsx": "Dhamaan jadwalada dhoofso (Excel)",
+      "downloadOriginal": "Soo dejiso asalka",
+      "exportNote": "Faylka la bixiyay waxa uu leeyahay meelaha la qariyay, sidaa darteed laguma soo dejisan karo siduu yahay. Dhoofinta meelahaas waa laga reebaa.",
+      "sectionLabel": "Muuji",
+      "section": {
+        "overview": "Guudmar",
+        "tables": "Jadwalada"
+      }
+    },
+    "chart": {
+      "groupBy": "Kala saar sida",
+      "measure": "Cabbir",
+      "rowCount": "Tirada safafka",
+      "aggregation": "Xisaabi",
+      "agg": {
+        "sum": "Wadarta",
+        "mean": "Celcelis",
+        "min": "Ugu yar",
+        "max": "Ugu badan"
+      },
+      "ariaLabel": "{measure} ee {group}",
+      "noColumns": "Jadwalkani ma laha tiirar qoraal ah ama taariikhda si loo kala saaro.",
+      "empty": "Wax jaantus ah malaha doorashadan.",
+      "truncatedGroups": "Waxaa la muujinayaa {count} kooxood ee ugu waaweyn.",
+      "basedOn": "Waxay ku salaysan tahay {shown, number} ee ugu horeeya {total, number} safaf.",
+      "savePng": "Kaydi sida sawir",
+      "saveSvg": "Kaydi sida SVG",
+      "saveFailed": "Ma la kaydin jaantuska."
+    },
+    "dash": {
+      "loading": "Soo deynaya…",
+      "failed": "Lama soo rogi karin guudmarka.",
+      "retry": "Isku day mar kale",
+      "showTable": "Muuji sida jadwal",
+      "showChart": "Muuji sida jaantus",
+      "smallGroups": "Kooxo ka yar 5 qof",
+      "foldedNote": "Kooxo ka yar 5 qof waa la isku geeyey hal saf.",
+      "otherCount": "{count, plural, one {# kale} other {# kale}}",
+      "hiddenPanel": "Waxaa la qariyey iyadoo la adeegsanayo dejinta goobta.",
+      "missingPanel": "Faylkani macquul uma aha.",
+      "usage": {
+        "users": "Dad firfircoon",
+        "interactions": "Isdhexgal",
+        "avgPerUser": "Celcelis qofkiiba",
+        "medianPerUser": "Dhexdhexaad qofkiiba",
+        "hq": "Xarunta dhexe",
+        "field": "Goobta shaqada",
+        "shareUsers": "{pct}% ee isticmaaleyaasha {comparator}",
+        "shareUsage": "{pct}% ee isticmaalka {comparator}",
+        "comparator": "{comparator}: {value}",
+        "daily": "Is-dhexgal maalintii",
+        "dailyUsers": "Dad firfircoon maalintii",
+        "dailyUsersSub": "Goobta shaqada",
+        "weekly": "Is-dhexgal toddobaadkii",
+        "activity": "Sida dadka u adeegsadaan",
+        "activitySub": "Dad, iyadoo lagu saleeyay tirada is-dhexgalka muddadaas",
+        "departments": "Is-dhexgalka waax walba",
+        "jobTitles": "Is-dhexgalka xilalka shaqada",
+        "models": "Dhacdooyinka moodalka",
+        "total": "Dhammaan goobaha",
+        "location": {
+          "hq": "Xarunta dhexe",
+          "field": "Goobta shaqada",
+          "unknown": "Aan la garaneyn"
+        },
+        "col": {
+          "date": "Maalin",
+          "week": "Todobaad bilaabanaya",
+          "users": "Dad",
+          "interactions": "Is-dhexgal",
+          "events": "Dhacdooyin",
+          "group": "Koox",
+          "band": "Is-dhexgal"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Wadarta la xisaabiyay",
+        "usageVariable": "Kharashka adeegsiga ee isbedbeddela",
+        "staticInfra": "Kaabayaasha joogtada ah",
+        "sections": "Qaybaha la xisaabiyay",
+        "usageEvents": "Dhacdooyinka adeegsiga",
+        "bySection": "Kharaj lagu xisaabiyay qayb walba",
+        "changes": "Isbedbeddelka laga soo bilaabo faylkii hore",
+        "noChanges": "Wax isbedel ah lagama helin faylkii hore.",
+        "byDomain": "Dhacdooyinka adeegsiga ee domain-ka emailka",
+        "reconciliation": "Is-waafajin Azure",
+        "col": {
+          "section": "Qayb",
+          "billed": "La xisaabiyay",
+          "usageEvents": "Dhacdooyinka adeegsiga",
+          "usagePct": "Adeegsiga %",
+          "line": "Xeer",
+          "amount": "Lacag",
+          "previous": "Faylkii hore",
+          "restated": "Dib loo caddeeyay",
+          "change": "Isbedel",
+          "domain": "Domain-ka emailka",
+          "users": "Dad"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Waxaa lagu xisaabiyay",
+        "delivered": "Filashada warbixinta lafteeda ({version})",
+        "current": "Filashada app-ka ee hadda ({version})",
+        "whatIf": "Haddii…",
+        "deliveredUnavailable": "Filashada warbixintaan lagama akhrin karin xaashideeda Assumptions, sidaas darteed filashada hadda ee app-ka ayaa la isticmaalayaa.",
+        "whatIfIntro": "Beddel tiro si aad u aragto saameynta ay leedahay meelaha hoose. Lama kaydinayo wax isbedel ah.",
+        "resetDelivered": "Ku celi filashada warbixinta lafteeda",
+        "resetCurrent": "Ku celi filashada hadda ee app-ka",
+        "co2": "Qiiqa",
+        "energy": "Tamarta",
+        "charges": "Kharajka telefoonka",
+        "chargesSub": "Iyada oo raad la mid ah",
+        "activeUsers": "Dad firfircoon",
+        "requests": "Codsiyada",
+        "tokens": "Talooyin",
+        "vsDelivered": "{delta} marka la barbar dhigo saadaasha warbixinta",
+        "sameAsDelivered": "La mid ah saadaasha warbixinta",
+        "unpriced": "{count, plural, one {# codsi ayaa isticmaalaya} other {# codsi ayaa isticmaalaya}} cabbir moodeel oo aan xog laga hayn, waxaana {count, plural, one {lagu reebay} other {lagu reebay}}.",
+        "byDepartment": "Dhecaaddu waax kasta",
+        "byModel": "Dhecaaddu moodeel kasta",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Lagu xisaabiyey halkan marka la barbar dhigo kan waqtiga la diiwaan geliyey",
+        "reconciliationSub": "App-ka sidoo kale wuxuu qiyaasayaa codsi kasta markiiba. Labaduba way isku si yihiin haddii saadaashu isku mid tahay.",
+        "computed": "Lagu xisaabiyey halkan",
+        "logged": "App-ka ayaa diiwaan geliyey",
+        "difference": "Farqiga",
+        "col": {
+          "group": "Koox",
+          "requests": "Codsiyada",
+          "tokens": "Talooyin",
+          "energyWh": "Tamarta (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Kharashka xarunta xogta (PUE)",
+          "promptTokenWeight": "Miisaanka taleefka degdegga ah",
+          "dedicatedReasoningMultiplier": "Kordhinta xisaabinta u go'an",
+          "whPer1kTokens": "Wh halkii 1,000 talooyin — {name}",
+          "reasoningEffortMultipliers": "Kordhinta dadaalka xisaabinta — {name}",
+          "gridIntensity": "Grid g CO₂e per kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Dhacdooyin",
+        "users": "Dadka",
+        "tokens": "Talooyin",
+        "errors": "Khaladaad",
+        "energy": "Tamarta",
+        "co2": "Dhecaaddu",
+        "hourly": "Dhacdooyin saacaddii (UTC)",
+        "byType": "Dhacdooyin nooc kasta",
+        "byError": "Khaladaad lambarka la raacayo",
+        "byModel": "Talooyin moodeel kasta",
+        "byCompany": "Dhacdooyin hay'ad kasta",
+        "none": "Midna.",
+        "col": {
+          "group": "Koox",
+          "events": "Dhacdooyin",
+          "tokens": "Talooyin",
+          "hour": "Saacad"
+        }
+      },
+      "trend": {
+        "title": "Waqti ka dib",
+        "period": "Muddo",
+        "users": "Dad firfircoon warbixin kasta",
+        "interactions": "Is-dhexgal warbixin kasta",
+        "billed": "Wadarta la xisaabiyay muddadii",
+        "sections": "La xisaabiyay qayb kasta",
+        "otherSections": "Dhammaan qaybaha kale",
+        "co2": "Qiiqa warbixin kasta",
+        "energy": "Tamarta warbixin kasta",
+        "recalculated": "Muddada kasta waxaa loo xisaabiyaa iyadoo la adeegsanayo mala-awaalka hadda ee app-ka ({version}), sidaa darteed isu beddelka mala-awaalka warbixinaha dhexdooda ma muujiyo isbeddel ku yimaada qiiqa.",
+        "severalPerPeriod": "Galkaan waxa uu xambaarsan yahay warbixino badan oo isla muddada ah. Si aad u aragto sida midkood isugu beddelayo waqti ka waqti, gal mid kamid ah galalka hoose."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Falanqeyn",
+    "description": "Warbixinaha waxaa keydka loogu shubaa iyada oo loo marayo nidaamka xogta. Halkan waxaad kala socotaa waxa yimid, go'aamisaa cidda gal walba furi karta, una doorataa meelaha la oggol yahay in madalku soo bandhigo.",
+    "openViewer": "Fur falanqaynta",
+    "sharedNotice": "Beta iyo waxsoosaarku waxa ay wadaagaan galalkan, dhagaystayaasha iyo faylashaba. Isbeddel kasta oo halkan lagu keydiyo waa mid toos ah labadaba.",
+    "tabsLabel": "Qaybaha falanqaynta",
+    "tab": {
+      "health": "Keenista",
+      "folders": "Galalka & oggolaanshaha",
+      "fields": "Meelaha"
+    },
+    "loading": "Loading…",
+    "retry": "Dib isku day",
+    "loadError": "Qaybtan lama soo load-garin.",
+    "unavailable": "Lama akhrin karin dejimaha kaydsan ee ku jira keydka. Arrintani kama dhigna \"waxba lama dejin\" — wax ka beddelku waa la xannibay si aan loogaga saarin dejimaha dhabta ah. Fadlan dib ugu celi, haddii ay sii socto fiiri diiwaanka server-ka.",
+    "save": "Kaydi",
+    "saving": "Kaydinaya…",
+    "unsaved": "Isbeddelo aan la kaydin",
+    "saveSuccess": "Waa la kaydiyay.",
+    "saveError": "Lama kaydin.",
+    "conflictError": "Maamul kale ayaa isbeddelay dejimahan adigoo wax ka badalaya. Isbeddeladaadu lama kaydin — nuqulkii ugu dambeeyay ayaa la soo cusboonaysiiyay.",
+    "rootFolder": "(heer sare)",
+    "scope": {
+      "domain": "Domain-ka emailka",
+      "user": "Qof",
+      "attribute": "Astaamo",
+      "group": "Kooxda Entra"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "waaxda:Caafimaad",
+      "group": "Entra group object id"
+    },
+    "level": {
+      "view": "Eeg dulmarada",
+      "download": "Eeg, dhoofso oo soo deji"
+    },
+    "reportType": {
+      "usage": "Warbixinta isticmaalka",
+      "rebilling": "Dib-u-lacageynta",
+      "emissions": "Warbixinta qiiqa",
+      "raw-telemetry": "Telemetry-ga asalka ah"
+    },
+    "field": {
+      "userCode": {
+        "label": "Lambarka isticmaale",
+        "description": "Lambarka u-… oo magac la’aan u taagan hal qof."
+      },
+      "jobTitle": {
+        "label": "Jagada shaqada",
+        "description": "Jagada shaqada, oo ay ku jiraan jagada ugu badan warqadaha koobidda. Koox yar gudaheeda, jagadu waxay tilmaami kartaa qof gaar ah."
+      },
+      "department": {
+        "label": "Waaxda",
+        "description": "Waaxyaha, oo ay ku jirto waaxda ugu firfircoon oo lagu muujiyo warqadaha koobidda."
+      },
+      "company": {
+        "label": "Shirkad / hay'ad",
+        "description": "Magaca hay’adda ee laga helay buugga, iyo magacyada shirkadaha lagu qoray bogagga dib-u-lacageynta."
+      },
+      "orgGroup": {
+        "label": "Kooxda hay'adda",
+        "description": "Xarunta howleedka ama kooxda warbixinta laga diyaariyay."
+      },
+      "section": {
+        "label": "Qayb",
+        "description": "Qaybta soo celinta kharashka ee khadka dib-u-lacageynta uu qayb ka yahay."
+      },
+      "mailDomain": {
+        "label": "Domaine-ka iimaylka",
+        "description": "Isticmaalka domaine-ka iimaylka ayaa la xisaabiyaa (marna ma aha cinwaan)."
+      },
+      "workLocation": {
+        "label": "Goobta shaqada",
+        "description": "Xafiiska dhexe ama deegaanka."
+      },
+      "technical": {
+        "label": "Faahfaahinta farsamada",
+        "description": "Moodelka, gobolka, nooca dhacdada, lacagta iyo tilmaamo kale oo aan qof ku saabsanayn."
+      },
+      "other": {
+        "label": "Goobo kale oo faahfaahin ah",
+        "description": "Halka aad buuxinayso tiir aan ku wada haboonayn kuwa kor ku xusan."
+      }
+    },
+    "folders": {
+      "intro": "Dhammaan faylasha faylalka ee pipeline-ku geynayo waa lasoo bandhigay. Fayl aan lahayn dejiin — sidoo kalena aan jirin feyl sare oo ogolaansho siinaya — waxaa arki kara maamulka kaliya.",
+      "name": "Magaca la soo bandhigo",
+      "namePlaceholder": "Waxaa la tusayaa halkii la tusin lahaa dariiqa faylka",
+      "description": "Sharaxaad",
+      "reportType": "Nooca warbixinta",
+      "reportTypeNone": "Lama dhigin",
+      "reportTypeInherited": "La dhaxlay: {type}",
+      "reportTypeHint": "Waxay siinaysaa hubiyaha faylasha la filan karo iyo soo noqnoqda. Waxay quseyneysaa feylasha hoose ee feylkan.",
+      "retention": "Kaydi faylasha (bilood)",
+      "retentionHint": "Ka dhig madhan si aad uga dhaxasho {months} bilood. Waxaa la xisaabiyaa laga bilaabo dhammaadka muddada warbixinta.",
+      "audience": "Yaa furan kara feylkan",
+      "audienceHint": "Khad walba waxa uu siiyaaya ogolaansho faylkan iyo kuwa hoos yimaada. Hal bartilmaameed khadkiiba.",
+      "audienceScope": "Nooca bartilmaameedka",
+      "audienceTargets": "Bartilmaameedyada",
+      "audienceLevel": "Heerka ogolaanshaha",
+      "addAudience": "Kudar dad ama kooxo",
+      "removeAudience": "Ka saar khadkan",
+      "restricted": "Ha ka dhaxlaynin ogolaanshaha faylalka sare",
+      "restrictedHint": "Kaliya khadadka feylkan ayey quseyneysaa halkaan iyo kuwa hoos yimaada.",
+      "hiddenFields": "Sidoo kale ka qari feylkan",
+      "hiddenFieldsHint": "Goobo halkan lagu qariyay oo kasii dheer dejinta barnaamijka, feylkan iyo kuwa hoos yimaadaba. Waxaad qarin kartaa intaad rabto, ma muujin kartid dheeraad.",
+      "hiddenPlatformWide": "(meel walba waa la qariyey)",
+      "clear": "Ka saar dejimaha feylkan",
+      "rawChip": "Raw: maamulka guud oo kaliya",
+      "rawNote": "Raw telemetry waxay ku jirtaa magacyo, ciwaano iimayl iyo magacyada faylasha. Keliya maamulka guud ayaa furi kara, cidna lama dari karo.",
+      "audienceChip": "{count, plural, one {# khad ogolaansho} other {# khadad ogolaansho}}",
+      "restrictedChip": "Lama dhaxlayo",
+      "notConfiguredChip": "Dejin la'aan",
+      "addPathLabel": "Deji feyl ka hor inta uusan keenisii ugu horayn dhicin",
+      "addPath": "Ku dar",
+      "addPathHint": "Dariiqa sida saxda ah ee pipeline-ku u qorayo, tusaale ahaan usage/ocba. Tani waxay kaydisaa dejimaha oo kaliya; wax ma abuureyso xagga kaydinta.",
+      "invalidPath": "Tani maaha dariiq sax ah oo feyl ah.",
+      "rawGlobalOnly": "Kaliya maamulka guud ayaa habayn kara faylasha hoos yimaada raw/."
+    },
+    "fields": {
+      "intro": "Dooro goobaha warbixinnada la keenay oo barnaamijku laga yaabo inuu muujiyo. Goob qarin waxa ay ka saartaa meel walba oo lagu tuso app-ka iyo wixii loo dhoofiyo app-ku. Faylka la keeno waxaa soo dejisan kara maamulka oo keliya.",
+      "readOnly": "Kaliya maamulka guud ayaa beddeli kara. Sida maamulka xogta waxaad qarin kartaa goobo dheeri ah feyl walba, adoo adeegsanaya Faylasha & ogolaanshaha.",
+      "configurableHeading": "Goobo",
+      "shown": "La tusay",
+      "hidden": "La qariyey",
+      "jobTitleNote": "Haddii jagada la muujiyo, saf yar oo kooxyar ah waxay aqoonsan kartaa qof xataa haddii lambar isticmaale la qariyo. Jaantusyada waxa ay qariyaan jab-jab ka yar shan qof; miisaska la soo dejiyo sidaas ma sameeyaan.",
+      "neverHeading": "Waligood la ma muujiyo",
+      "neverBody": "Magacyada, ciwaanada iimaylka, ID-yada buugga, magacyada faylasha ee la geliyo iyo qoraallada khaladaadka waligood meel aan raw telemetry ahayn laguma muujiyo. Warbixin kasta oo mid ka mid ah la helo waa la qariyaa ilaa la beddelo.",
+      "unclassifiedHeading": "Tiirarka kataloggu uusan aqoon",
+      "unclassifiedBody": "Tiirka qoraalka ah ee aan la aqoonsan waxay qarsoontaa — barnaamijka iyo dhoofinta labadaba — mana isticmaali karaan isticmaaleyaashu faylka ilaa aad ku qorto meel shax ah.",
+      "noneWaiting": "Waxbaa sugaya.",
+      "inFiles": "{count, plural, one {fayl # ah} other {faylal # ah}}",
+      "classifyAs": "Shaxda tiirka {column}",
+      "keepHidden": "Qarsoon hay",
+      "removeClassification": "Ka saar dejinta tiirka {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Kaydka warbixinta lama heli karo",
+      "deliveryUnavailableBody": "Barnaamijku ma awoodo inuu muujiyo weelka \"{container}\". Hubi inuu jiro iyo in barnaamijku haysto door xog ku filan. Ilaa intaas laga xallinayo, warbixin lama arko.",
+      "foldersUnavailable": "Sida loogo dhigay faylalka lama akhriyi karo, markaa isticmaaleyaashu imika ma arkaan faylal. Faylasha lama hubinayo lamana waaraayaan ilaa arrintaas la saxo.",
+      "policyUnavailable": "Sida loogo dhigay shaxda lama akhriyi karo, markaa faylal lama soo dejisan karo wakhtigan.",
+      "total": {
+        "files": "Faylal",
+        "ok": "Wanaagsan",
+        "warning": "Digniin leh",
+        "error": "Laga qariyay isticmaaleyaasha",
+        "pending": "La hubinayo"
+      },
+      "recheckAll": "Dhammaan dib u hubi",
+      "recheckOne": "Dib u hubi",
+      "recheckQueued": "{count, plural, one {# fayl sugaya in la hubiyo.} other {# faylal sugaya in la hubiyo.}}",
+      "recheckFailed": "Hubinta lama bilaabi karin.",
+      "retention": {
+        "active": "Faylalka ka gudbay muddada kaydka faylalkooda ayaa isla markiiba la qariyaa waxaana la tirtiraa {days} maalmood kadib.",
+        "disabled": "Faylalka ka gudbay muddada keydka faylka ayaa la qariyaa, balse tirtirka waa la xannibay barnaamijkan.",
+        "waiting-for-config": "Faylalka dhaafay kaydka caadiga ah waa la qarinayaa. Waxba lama tirtirayo ilaa lagu badbaadiyo dejinta folder-ka ugu yaraan mar."
+      },
+      "noFiles": "Faylal weli lama keenin.",
+      "allGood": "Dhammaan la keenay waa sax.",
+      "problemsHeading": "Faylal u baahan fiiro gaar ah",
+      "status": {
+        "error": "Laga qariyay isticmaaleyaasha",
+        "warning": "Digniin",
+        "pending": "La hubinayo",
+        "ok": "Wanaagsan"
+      },
+      "pendingBody": "Waa cusub ama waa la beddelay tan iyo hubintii ugu dambeysay. Waxa la tusayaa isticmaaleyaasha marka uu maro.",
+      "firstSeen": "Markii ugu horreysay la arkay {date}",
+      "unclassifiedHeading": "Tiirar sugaya go'aan",
+      "unclassifiedBody": "Tiirarkan lama aqoonsan weli. Way qarsoon yihiin, isticmaaleyashuna ma soo dejisan karaan faylasha ay ku jiraan ilaa qof walba tiir walba ka dhigo shax.",
+      "unclassifiedChip": "{column} · {count, plural, one {fayl # ah} other {faylal # ah}}",
+      "openFields": "Tag Shaxaha",
+      "unconfiguredHeading": "Faylal aan lahayn dejin",
+      "unconfiguredBody": "Faylal ayaa halkan imanaya, balse lama dejin faylkan ama ka korreeya midna. Keliya maamulayaashaa arki kara.",
+      "staleHeading": "Keenayaal dib dhacay",
+      "staleBody": "Faylalkaani waxay filayaan warbixino joogto ah, kan ugu dambeeyayna wuu ka daahay.",
+      "staleDetail": {
+        "daily": "Maalin kasta; kii ugu dambeeyay waxa uu daboolaa {date}",
+        "monthly": "Bishiiba mar; kii ugu dambeeyay waxa uu dhammaaday {date}"
+      },
+      "staleNever": "Wali wax lama keenin",
+      "expiringHeading": "Dhamaadayaan",
+      "expiringBody": "Faylal dhaafay kaydka ama gaadhaya 30 maalmood gudahood.",
+      "expiresOn": "Wuxuu dhacayaa {date}",
+      "expiredOn": "Waa dhacay {date}"
+    },
+    "issue": {
+      "name-mismatch": "Magaca faylka ma aha midka faylkan la filayo (tusaale ahaan {expected}).",
+      "unsupported-format": "Faylal nooca \"{extension}\" lama hubin karo, sidaas darteed kan waa la qariyay isticmaale kasta. Keeni .xlsx ama .csv.",
+      "too-large": "Faylkan oo ah {sizeMb} MB waa ka badan yahay xadka hubinta ee {limitMb} MB, sidaas darteed isticmaaleyaasha waa laga qariyay.",
+      "empty-file": "Faylku wuu madhan yahay.",
+      "unreadable": "Faylka lama furi karo. Waxaa laga yaabaa inuu dhaawacmay, ama uusan ahayn qaabka uu magacaafiisa sheegayo.",
+      "identifier-column": "Xaanshiyaha \"{sheet}\" waxa uu leeyahay tiir \"{column}\" oo aqoonsada dadka. Faylka waa la qariyey isticmaaleyaashe.",
+      "identifier-values": "\"{sheet}\" waxa ku jira {count, plural, one {# cinwaan email} other {# cinwaano email}}. Faylka isticmaaleyaashe lama tuso.",
+      "user-code-format": "Xaanshiyaha \"{sheet}\", tiirka \"{column}\": {count, plural, one {# qiimo waa} other {# qiimayaal waa}} mid aan ahayn lambar-ka isticmaale 'u-…'. Faylka isticmaaleyaashe lama tuso.",
+      "formulas-without-values": "Xaanshiyaha \"{sheet}\" waxa ku jira {count, plural, one {# formula} other {# formulas}} aan lahayn natiijo lagu kaydiyey, sidaas darteed tiradan lama tusin karo app-ka.",
+      "missing-sheet": "Xaanshiyaha \"{sheet}\" waa maqan yahay, sidaas darteed muuqaallada lagu dhisay lama tusin karo.",
+      "missing-column": "Xaanshiyaha \"{sheet}\" kuma jiro tiirka \"{column}\", sidaas darteed muuqaallada isticmaala lama tusin karo.",
+      "no-period": "Magaca faylka ma wato xilliga warbixinta, sidaas darteed xafidista waxa laga bilaabayaa taariikhda la keenay.",
+      "unclassified-field": "Tiirka \"{column}\" lama aqoonsan. Wuu qarsoonyahay, isticmaaleyashuna ma soo degsan karo faylka la keenay, ilaa lagu kala saaro meel gaar ah.",
+      "past-retention": "Waa ka weyn yahay {months} bilood ee kaydka galkan; dib looma tuso.",
+      "unknown": "Dhibaato la soo sheegay: {code}."
+    }
   }
 }

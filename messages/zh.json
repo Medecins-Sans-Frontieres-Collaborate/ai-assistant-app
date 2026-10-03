@@ -838,7 +838,10 @@
       "codeInterpreterLimitReached": "已达今日代码执行上限 —— 正在无执行代码作答…",
       "m365Progress": "Microsoft 365：{detail}",
       "knowledgeSearchFailed": "知识库搜索失败 — 回答将不会使用智能助手的文档",
-      "stillWorking": "仍在处理…"
+      "stillWorking": "仍在处理…",
+      "assessingSearchResults": "正在检查结果是否能回答问题…",
+      "refiningSearch": "再次搜索：“{query}”…",
+      "readingSearchPages": "正在读取{count}个结果页面…"
     },
     "toolSummary": {
       "usedTools": "已用 {count, plural, one {# 个工具} other {# 个工具}}",
@@ -924,7 +927,10 @@
       "summarizeNow": "立即根据头条新闻总结",
       "sourcesCount": "{count} 个来源",
       "showAll": "显示全部 {count} 个来源",
-      "showFewer": "显示较少"
+      "showFewer": "显示较少",
+      "multiStepTitle": "目前结果 — 正在检查是否回答了问题",
+      "multiStepHint": "搜索可能会继续深入——再次搜索或读取最有希望的页面。如果不想等待，可从已找到的{count}条结果中立即作答。",
+      "answerNow": "立即用这些结果回答"
     },
     "retryWithModel": "尝试使用 {model}",
     "createTodoTasks": "根据本回复创建待办任务",
@@ -938,7 +944,10 @@
     "modelTimedOutAtMaximum": "{model} 在最长等待时间 {duration} 内未开始响应。请重试或选择其他模型。",
     "requestTimedOut": "该请求准备时间过长，在 {model} 回应前已被停止。您可以延长等待时间，或尝试其他模型。",
     "retryWaitingLonger": "最多等待 {duration} 后重试",
-    "alwaysWaitThisLong": "始终最多等待 {duration}"
+    "alwaysWaitThisLong": "始终最多等待 {duration}",
+    "keepSearching": "继续搜索",
+    "keepSearchingHint": "搜索在找到该内容前已停止。请让助手尝试其他方法。",
+    "keepSearchingMessage": "请继续搜索该内容，换个方法试试。"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1322,7 +1331,9 @@
       "providerBingResponsesDescription": "与 Bing grounding 覆盖相同，作为单次直接模型调用运行，而不是 Foundry agent——通常速度更快。新选项，目前正在与 Bing grounding 进行对比评估。",
       "providerSearxng": "MSF 网络搜索",
       "providerSearxngDescription": "MSF 自有的私密元搜索服务。覆盖通用网络、新闻、科学文献（包括 MSF 研究出版物）、技术文档和人道主义数据，并根据问题选择合适的信息来源。结果秒速到达并附有直接链接，仅有搜索关键词会离开应用——搜索引擎无法获取您的信息。",
-      "otherProvidersLabel": "其他服务提供者"
+      "otherProvidersLabel": "其他服务提供者",
+      "multiStepLabel": "多步搜索",
+      "multiStepDescription": "在 MSF 网页搜索中，助手会先检查首批结果，若不充分，会再次搜索或查阅最有希望的页面后作答。大多数问题仍会一步完成。关闭此选项可让每次搜索仅一轮。"
     },
     "Admin": "管理员",
     "Usage Limits": "使用限制",
@@ -1342,7 +1353,8 @@
       "customHint": "介于 {min} 到 {max} 秒之间。",
       "preferModelTitle": "优先使用我选择的模型",
       "preferModelDescription": "当请求失败时不自动切换模型。仍可在错误提示中手动切换。"
-    }
+    },
+    "Analytics": "分析"
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -1553,6 +1565,12 @@
     },
     "subVariant": {
       "label": "大小"
+    },
+    "retiring": {
+      "badge": "即将退役",
+      "datedMoving": "将于{date}退役。届时，该会话将在{movesOn}转移到{successor}。",
+      "dated": "将于{date}退役并停止服务。请改用{successor}。",
+      "replaced": "正在由{successor}替代。"
     }
   },
   "models": {
@@ -1851,6 +1869,11 @@
       "name": "GPT-6 Astra",
       "description": "OpenAI 的旗舰 GPT-6。专为高要求的端到端任务打造：深度研究、复杂分析、软件工程及多步骤长任务。价格约为 GPT-5.6 Sol 的两倍。",
       "tagline": "OpenAI 最强大的模型"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "对GPT-6 Sol的升级，适用于代码、文档及应用的高强度工作。以更少的Token成本接近Astra的能力。",
+      "tagline": "近乎Astra能力，成本大幅降低"
     }
   },
   "searchMode": {
@@ -5471,7 +5494,10 @@
       "announcements": "用户横幅消息：谁能看到、何时显示、显示哪些语言。",
       "delegations": "谁管理哪些用户，以及每个人可执行的操作。",
       "channelProfiles": "每个平台的定义：限制、计数、分帖。每个频道集的组织基础信息。",
-      "channelSets": "各团队在平台发布内容的规则：指导、风格、默认值、可用人员和可发送人员。"
+      "channelSets": "各团队在平台发布内容的规则：指导、风格、默认值、可用人员和可发送人员。",
+      "webSearch": "网页搜索可进行到的深度：多步搜索、评估模型及其限制。",
+      "contextBudget": "每轮发送给模型的对话内容量。",
+      "analytics": "已生成报告：包括内容、可查看每个文件夹的用户及可显示的字段。"
     },
     "openSettings": "打开设置",
     "area": {
@@ -5479,7 +5505,10 @@
       "viewAs": "以其他身份查看",
       "globalAdmins": "全局管理员",
       "announcements": "公告",
-      "delegations": "工作分配"
+      "delegations": "工作分配",
+      "webSearch": "网页搜索",
+      "contextBudget": "上下文预算",
+      "analytics": "分析"
     }
   },
   "limits": {
@@ -6813,7 +6842,8 @@
     "capabilitiesHint": "本委托可授予的所有权限。管理员只能拥有已启用的权限。",
     "grant": {
       "limits": "使用限制",
-      "announcements": "公告管理"
+      "announcements": "公告管理",
+      "analytics": "分析"
     },
     "grantAll": "全部",
     "maxOverrides": "本委托可持有限额",
@@ -6974,5 +7004,540 @@
     "isDefaultAfterSave": "保存后可将该集合设为默认。",
     "noChannelsWarning": "该集合未包含任何频道，无法用于起草。",
     "audienceEveryoneHint": "组织内任何人都可使用此集合起草。"
+  },
+  "contextBudgetAdmin": {
+    "title": "上下文预算",
+    "description": "每轮发送给每个模型的对话历史量。始终包含最新消息，超出预算后较旧消息会被丢弃，被丢弃内容的摘要会加入系统提示。更大的预算可在更高成本下保存更多对话内容。",
+    "scopeNote": "适用于所有模型的每次会话。预算不能超过下方设置的模型窗口占比。",
+    "loading": "正在加载上下文预算…",
+    "loadError": "无法加载上下文预算。",
+    "configUnavailable": "当前无法读取已存上下文预算，以下值可能并非实际有效值。编辑前请重试。",
+    "retry": "重试",
+    "historyTokensLabel": "标准预算（tokens）",
+    "historyTokensDescription": "默认每轮发送的历史内容，包括系统提示，仅适用于未指定覆盖的模型。约48,000个token可保留典型对话中最近30–60轮。",
+    "historyFractionLabel": "上限（占模型输入空间比）",
+    "historyFractionDescription": "预算将限制在模型上下文窗口去除输出保留数后的此占比内，小窗口模型不会超过其承载能力。",
+    "minRecentMessagesLabel": "始终保留的消息",
+    "minRecentMessagesDescription": "即使超预算也要保留的最新消息（在窗口内）。设置为三时，能在单条长消息（如粘贴文档、搜索结果）几乎填满预算时保留上轮对话。",
+    "familyOverridesLabel": "按家族",
+    "familyOverridesDescription": "为每个模型家族单独设定预算，覆盖标准预算。",
+    "modelOverridesLabel": "按模型",
+    "modelOverridesDescription": "为单一模型设定预算，覆盖家族及标准预算。",
+    "overrideFamilyPlaceholder": "家族",
+    "overrideModelPlaceholder": "模型ID",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "添加",
+    "removeOverride": "移除",
+    "noOverrides": "无",
+    "effectiveLabel": "当前设置下的实际预算",
+    "effectiveColumnModel": "模型",
+    "effectiveColumnWindow": "窗口",
+    "effectiveColumnBudget": "历史预算",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "默认：{value}",
+    "defaultsNote": "只有与默认值不同的数值会被保存；其他项将继续遵循每次发布的代码默认值。",
+    "save": "保存",
+    "saving": "正在保存…",
+    "resetDefaults": "重置为默认值",
+    "unsaved": "未保存的更改",
+    "saveSuccess": "上下文预算已保存，1分钟内生效。",
+    "saveError": "无法保存上下文预算。",
+    "conflictError": "期间其他管理员更改了上下文预算；已重新加载最新值。",
+    "updatedByLine": "上次由{by}于{at}保存",
+    "neverSaved": "从未保存——正在使用代码默认值。"
+  },
+  "webSearchAdmin": {
+    "title": "网页搜索",
+    "description": "控制MSF网页搜索中的多步搜索。首轮结果后，一个评估模型将判断其是否回答了问题；如果没有，系统可能会更换查询再次搜索、阅读结果页面、向用户询问缺失细节，或报告未找到内容。",
+    "scopeNote": "这些设置仅适用于MSF网页搜索。其他搜索服务商始终只进行一轮搜索。每个人也可在“设置”中单独关闭多步搜索。",
+    "loading": "正在加载网页搜索设置…",
+    "loadError": "无法加载网页搜索设置。",
+    "configUnavailable": "无法从存储读取网页搜索设置。控件已隐藏，而非显示可能与实际不符的默认值。",
+    "retry": "重试",
+    "enabledLabel": "多步搜索",
+    "enabledDescription": "关闭后，每次搜索仅计划一轮，不调用评估模型。",
+    "assessorLabel": "评估模型",
+    "assessorDescription": "每一步结束后调用一次，用于判断结果。请选择快速且低成本的模型：其在用户等待时运行。如果无法访问，将使用{fallback}。",
+    "maxStepsLabel": "每个问题的步数",
+    "maxStepsDescription": "单个问题可能采取的最大步骤数，包括首次搜索。每次后续搜索或一组页面阅读算作一步。此上限与每日搜索次数限制分开，后者每个问题计为一次。",
+    "maxStepsExploratoryLabel": "探索性搜索步骤上限",
+    "maxStepsExploratoryDescription": "针对难以找到的项目（如稀有书籍副本）可设更高上限，遇到死胡同属于预期。不得低于普通上限。",
+    "pageReadsLabel": "阅读结果页面",
+    "pageReadsDescription": "允许步骤打开最有希望的结果并直接读取页面内容，而不是只依赖搜索摘要。",
+    "maxPageReadsLabel": "每步可阅读页面数",
+    "sourceAssessmentLabel": "评估来源质量",
+    "sourceAssessmentDescription": "评估模型为每个来源加标签（官方、权威、次要、低可靠性），让答案能够衡量并注明它们。",
+    "timeBudgetLabel": "时间预算（秒）",
+    "timeBudgetDescription": "单次搜索可用的总时间，包括第一轮。当时间用尽时，将根据已获信息撰写答案。",
+    "defaultsNote": "保留默认值时不会保存该设置，因此后续版本如果更改默认设置，仍将采用最新默认值。",
+    "defaultHint": "默认：{value}",
+    "defaultOn": "开",
+    "defaultOff": "关",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "您有未保存的更改。",
+    "save": "保存",
+    "saving": "正在保存…",
+    "resetDefaults": "重置为默认值",
+    "saveSuccess": "网页搜索设置已保存。",
+    "saveError": "无法保存网页搜索设置。",
+    "conflictError": "其他管理员已提前更改设置。系统已重新加载，请审核并重新保存。",
+    "updatedByLine": "上次由{by}于{at}保存。",
+    "neverSaved": "尚未保存任何设置；适用内置默认值。"
+  },
+  "modelRetirement": {
+    "notice": "{model} 将于 {retiresOn} 退役。此会话将于 {movesOn} 转移到 {successor}。",
+    "noticeRetiring": "{model} 将于 {retiresOn} 退役并停止工作。要继续使用此会话，请切换到 {successor}。",
+    "switchNow": "立即切换"
+  },
+  "analytics": {
+    "title": "分析",
+    "backToChat": "返回聊天",
+    "manage": "管理",
+    "loading": "正在加载…",
+    "loadFailed": "无法加载报告。",
+    "retry": "重试",
+    "emptyTitle": "您还未收到任何分享",
+    "emptyBody": "当管理员为您分配文件夹后，报告会显示在这里。",
+    "deliveryUnavailable": "当前无法访问报告存储，所以下方列表可能为空。请几分钟后再试。",
+    "groupsDegraded": "刚才无法检查您的群组成员资格，因此由群组共享的文件夹可能未显示。请稍后重新加载。",
+    "foldersHeading": "文件夹",
+    "rootFolder": "所有报告",
+    "pathOnly": "您无法访问此文件夹本身，只能访问其内的子文件夹。",
+    "selectFolder": "请选择一个文件夹以查看其报告。",
+    "noFiles": "此文件夹中无报告。",
+    "viewOnlyNote": "您对此文件夹仅有查看权限：可以打开报告，查看其概览和汇总表。按人员一行的表格、导出和下载需获得下载权限。",
+    "col": {
+      "name": "文件",
+      "period": "周期",
+      "delivered": "交付时间",
+      "size": "大小",
+      "availableUntil": "可用期限",
+      "actions": "操作"
+    },
+    "download": "下载",
+    "downloadAria": "下载 {name}",
+    "block": {
+      "view-only": "仅查看",
+      "hidden-fields": "原始内容保留（隐藏字段）",
+      "unclassified-fields": "原始内容保留（待审核字段）",
+      "not-inspected": "尚未检查",
+      "policy-unavailable": "当前不可用"
+    },
+    "adminBadge": {
+      "error": "已对用户隐藏",
+      "pending": "正在检查",
+      "warning": "有警告",
+      "expired": "已过期，待删除",
+      "originalBlocked": "用户无法下载：{reason}"
+    },
+    "openAria": "打开 {name}",
+    "openForExport": "打开以导出",
+    "preview": {
+      "back": "返回 {folder}",
+      "tabsLabel": "此文件中的表格",
+      "lockedTab": "{name}（已锁定）",
+      "unavailable": "此文件当前无法在应用中打开。",
+      "tableFailed": "无法加载此表格。",
+      "withheld": {
+        "row-level": "此表格按人员一行。需获得文件夹下载权限后才能打开。",
+        "hidden-fields": "此页面包含已隐藏字段，无法显示。"
+      },
+      "truncated": "显示前 {shown, number} 行，共 {total, number} 行。要获取全部请导出表格。",
+      "freeformNote": "此页面为阅读而优化，展示为交付时的样式。",
+      "filter": "筛选行",
+      "filterPlaceholder": "筛选行…",
+      "rows": "{count, plural, one {# 行} other {# 行}}",
+      "matching": "共有 {total, number} 行，匹配 {count, number} 行",
+      "modeLabel": "显示为",
+      "mode": {
+        "table": "表格",
+        "chart": "图表"
+      },
+      "noRows": "无可显示的行。",
+      "hiddenColumn": "对用户隐藏",
+      "exportCsv": "导出此表(CSV)",
+      "exportXlsx": "导出所有表(Excel)",
+      "downloadOriginal": "下载原始文件",
+      "exportNote": "导出文件不包含隐藏字段，无法按当前显示下载。导出时这些字段会被省略。",
+      "sectionLabel": "显示",
+      "section": {
+        "overview": "概览",
+        "tables": "表格"
+      }
+    },
+    "chart": {
+      "groupBy": "分组依据",
+      "measure": "度量",
+      "rowCount": "行数",
+      "aggregation": "计算方式",
+      "agg": {
+        "sum": "求和",
+        "mean": "平均值",
+        "min": "最小值",
+        "max": "最大值"
+      },
+      "ariaLabel": "{group} 的 {measure}",
+      "noColumns": "此表无可用于分组的文本或日期列。",
+      "empty": "此选项没有可显示的图表。",
+      "truncatedGroups": "显示最多 {count} 个分组。",
+      "basedOn": "基于前 {shown, number} 行（共 {total, number} 行）。",
+      "savePng": "保存为图片",
+      "saveSvg": "保存为SVG",
+      "saveFailed": "图表保存失败。"
+    },
+    "dash": {
+      "loading": "加载中…",
+      "failed": "概览加载失败。",
+      "retry": "重试",
+      "showTable": "显示为表格",
+      "showChart": "显示为图表",
+      "smallGroups": "少于5人的分组",
+      "foldedNote": "少于5人的分组合并为一行。",
+      "otherCount": "{count, plural, one {# 其他} other {# 其他}}",
+      "hiddenPanel": "因字段设置隐藏。",
+      "missingPanel": "此文件不适用。",
+      "usage": {
+        "users": "活跃人员",
+        "interactions": "互动次数",
+        "avgPerUser": "人均平均值",
+        "medianPerUser": "人均中位数",
+        "hq": "在总部",
+        "field": "在现场",
+        "shareUsers": "{comparator} 用户的 {pct}%",
+        "shareUsage": "{comparator} 使用量的 {pct}%",
+        "comparator": "{comparator}: {value}",
+        "daily": "每日互动次数",
+        "dailyUsers": "每日活跃人数",
+        "dailyUsersSub": "按工作地点",
+        "weekly": "每周互动次数",
+        "activity": "使用频率",
+        "activitySub": "按期间互动次数分组的人数",
+        "departments": "按部门互动次数",
+        "jobTitles": "按职位互动次数",
+        "models": "按模型事件",
+        "total": "所有地点",
+        "location": {
+          "hq": "总部",
+          "field": "现场",
+          "unknown": "未知"
+        },
+        "col": {
+          "date": "日期",
+          "week": "周起始日",
+          "users": "人数",
+          "interactions": "互动次数",
+          "events": "事件",
+          "group": "分组",
+          "band": "互动次数"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "总计账单",
+        "usageVariable": "按用量变动成本",
+        "staticInfra": "固定基础设施",
+        "sections": "计费部分",
+        "usageEvents": "用量事件",
+        "bySection": "按部分计费",
+        "changes": "与上一个文件的变动",
+        "noChanges": "与上一文件无变化。",
+        "byDomain": "按邮箱域的用量事件",
+        "reconciliation": "与 Azure 对账",
+        "col": {
+          "section": "部分",
+          "billed": "账单",
+          "usageEvents": "用量事件",
+          "usagePct": "用量百分比",
+          "line": "行",
+          "amount": "金额",
+          "previous": "上一个文件",
+          "restated": "重述后",
+          "change": "变动",
+          "domain": "邮箱域",
+          "users": "人数"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "计算依据",
+        "delivered": "报告自身假设（{version}）",
+        "current": "应用当前假设（{version}）",
+        "whatIf": "如果……",
+        "deliveredUnavailable": "无法从假设表中读取本报告的自身假设，已使用应用当前假设。",
+        "whatIfIntro": "修改数值可查看对下方所有内容的影响，不会保存任何更改。",
+        "resetDelivered": "重置为报告自身假设",
+        "resetCurrent": "重置为应用当前假设",
+        "co2": "碳排放",
+        "energy": "能源",
+        "charges": "智能手机充电次数",
+        "chargesSub": "碳足迹相同",
+        "activeUsers": "活跃人数",
+        "requests": "请求数",
+        "tokens": "令牌数",
+        "vsDelivered": "比报告自身假设高出 {delta}",
+        "sameAsDelivered": "与报告自身假设一致",
+        "unpriced": "{count, plural, one {# 个请求使用} other {# 个请求使用}}了这些假设没有数据的模型规模，{count, plural, one {已} other {已}}排除在外。",
+        "byDepartment": "按部门分排放",
+        "byModel": "按模型分排放",
+        "gramsSub": "克 CO₂e",
+        "reconciliation": "当前计算与实时记录对比",
+        "reconciliationSub": "应用也会在每次请求发生时进行估算。当假设一致时，两者结果一致。",
+        "computed": "当前计算",
+        "logged": "应用记录",
+        "difference": "差异",
+        "col": {
+          "group": "分组",
+          "requests": "请求数",
+          "tokens": "令牌数",
+          "energyWh": "能耗 (Wh)",
+          "co2g": "CO₂e (克)"
+        },
+        "factor": {
+          "pue": "数据中心耗损 (PUE)",
+          "promptTokenWeight": "提示令牌权重",
+          "dedicatedReasoningMultiplier": "专用推理系数",
+          "whPer1kTokens": "每 1,000 令牌能耗 (Wh) — {name}",
+          "reasoningEffortMultipliers": "推理工作量系数 — {name}",
+          "gridIntensity": "每千瓦时电网 CO₂e (克) — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "事件数",
+        "users": "人数",
+        "tokens": "令牌数",
+        "errors": "错误",
+        "energy": "能耗",
+        "co2": "排放量",
+        "hourly": "每小时事件数 (UTC)",
+        "byType": "按类型分事件",
+        "byError": "按代码分错误",
+        "byModel": "按模型分令牌",
+        "byCompany": "按机构分事件",
+        "none": "无。",
+        "col": {
+          "group": "分组",
+          "events": "事件数",
+          "tokens": "令牌数",
+          "hour": "小时"
+        }
+      },
+      "trend": {
+        "title": "随时间变化",
+        "period": "周期",
+        "users": "每份报告的活跃人数",
+        "interactions": "每份报告的互动数",
+        "billed": "每周期账单总额",
+        "sections": "按板块计费",
+        "otherSections": "所有其他部分",
+        "co2": "每份报告的排放量",
+        "energy": "每份报告的能耗",
+        "recalculated": "每个周期均按照应用当前的假设（{version}）计算，因此报告间假设变更不会反映在排放量变化上。",
+        "severalPerPeriod": "该文件夹包含同一时期的多份报告。打开其中的子文件夹可查看其中某一份随时间的变化。"
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "分析",
+    "description": "报告由数据管道传送至存储。在此处，您可以检查已到达的报告，决定谁可打开各文件夹，以及选择平台可显示的字段。",
+    "openViewer": "打开分析",
+    "sharedNotice": "Beta 和生产环境共享这些文件夹、受众和文件。在此处保存的更改会同时生效。",
+    "tabsLabel": "分析部分",
+    "tab": {
+      "health": "交付",
+      "folders": "文件夹与访问权限",
+      "fields": "字段"
+    },
+    "loading": "加载中…",
+    "retry": "重试",
+    "loadError": "无法加载该部分。",
+    "unavailable": "无法从存储读取已保存的设置。这与“未配置任何内容”不同——为避免覆盖真实设置，已禁用编辑功能。如持续存在，请重试并检查服务器日志。",
+    "save": "保存",
+    "saving": "正在保存…",
+    "unsaved": "有未保存的更改",
+    "saveSuccess": "已保存。",
+    "saveError": "无法保存。",
+    "conflictError": "在您编辑期间，其他管理员已更改了这些设置。您的更改未被保存——已重新加载最新版。",
+    "rootFolder": "（顶层）",
+    "scope": {
+      "domain": "邮箱域名",
+      "user": "个人",
+      "attribute": "属性",
+      "group": "Entra 组"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "Entra 组对象 ID"
+    },
+    "level": {
+      "view": "查看摘要",
+      "download": "查看、导出与下载"
+    },
+    "reportType": {
+      "usage": "使用报告",
+      "rebilling": "重新计费",
+      "emissions": "排放报告",
+      "raw-telemetry": "原始遥测数据"
+    },
+    "field": {
+      "userCode": {
+        "label": "用户代码",
+        "description": "代表个人的伪匿名 u-… 代码。"
+      },
+      "jobTitle": {
+        "label": "职位",
+        "description": "职位，包括汇总表中最常见的头衔。在小组中，职位可能指向某个人。"
+      },
+      "department": {
+        "label": "部门",
+        "description": "部门，包括汇总表中最活跃的部门。"
+      },
+      "company": {
+        "label": "公司/组织",
+        "description": "来自目录的组织名称，以及重新计费单中的公司名称。"
+      },
+      "orgGroup": {
+        "label": "组织组",
+        "description": "对报告进行分组的运营中心或组织。"
+      },
+      "section": {
+        "label": "部分",
+        "description": "重新计费行所属的成本回收部分。"
+      },
+      "mailDomain": {
+        "label": "邮件域名",
+        "description": "归属于此电子邮件域名的使用情况（从不包括具体地址）。"
+      },
+      "workLocation": {
+        "label": "工作地点",
+        "description": "总部或前线。"
+      },
+      "technical": {
+        "label": "技术详情",
+        "description": "模型、区域、事件类型、货币及类似描述，不涉及个人信息。"
+      },
+      "other": {
+        "label": "其他描述字段",
+        "description": "适用于以上都不符合的列。"
+      }
+    },
+    "folders": {
+      "intro": "已交付的所有文件夹均已列出。未设置权限且上层文件夹也未授权访问的文件夹，仅管理员可见。",
+      "name": "显示名称",
+      "namePlaceholder": "用于替代文件夹路径显示",
+      "description": "描述",
+      "reportType": "报告类型",
+      "reportTypeNone": "未设置",
+      "reportTypeInherited": "继承：{type}",
+      "reportTypeHint": "用于告知检查器应期待哪些文件名及其频率。适用于此文件夹内的所有子文件夹。",
+      "retention": "保留文件（月）",
+      "retentionHint": "留空则继承{months}个月。以每份报告周期结束时间为起点计算。",
+      "audience": "谁可访问此文件夹",
+      "audienceHint": "每行都授权对此文件夹及其下属文件夹的访问权限。每行一个对象。",
+      "audienceScope": "目标类型",
+      "audienceTargets": "目标",
+      "audienceLevel": "访问权限",
+      "addAudience": "添加人员或群组",
+      "removeAudience": "移除此行",
+      "restricted": "不继承上层文件夹的权限",
+      "restrictedHint": "仅此文件夹本身及其下属有效。",
+      "hiddenFields": "在此文件夹也隐藏",
+      "hiddenFieldsHint": "对本文件夹及子文件夹，除了平台设置外，在此隐藏的字段。只能比平台隐藏更多，不能显示更多。",
+      "hiddenPlatformWide": "（全平台隐藏）",
+      "clear": "移除此文件夹的设置",
+      "rawChip": "原始：仅限全局管理员",
+      "rawNote": "原始遥测数据包含姓名、电子邮件地址和文件名。仅全局管理员可打开，无法添加访问对象。",
+      "audienceChip": "{count, plural, one {# 条访问规则} other {# 条访问规则}}",
+      "restrictedChip": "未继承",
+      "notConfiguredChip": "无设置",
+      "addPathLabel": "首次交付前需设置文件夹",
+      "addPath": "添加",
+      "addPathHint": "路径必须与管道写入路径完全一致，例如 usage/ocba。只保存设置，不会在存储中创建实际文件夹。",
+      "invalidPath": "这不是有效的文件夹路径。",
+      "rawGlobalOnly": "仅全局管理员可在 raw/ 下配置文件夹。"
+    },
+    "fields": {
+      "intro": "选择平台可显示的报告字段。隐藏字段后，该字段将从应用内所有显示和导出中移除。已交付的文件仅管理员可下载。",
+      "readOnly": "仅全局管理员可以更改此项。作为分析管理员，您可以在“文件夹与访问”中为每个文件夹额外隐藏字段。",
+      "configurableHeading": "字段",
+      "shown": "显示",
+      "hidden": "隐藏",
+      "jobTitleNote": "显示职位时，小组成员少的情况下即使只有用户编码也可能识别个人。图表会隐藏成员少于5人的细分，下载的表格不会。",
+      "neverHeading": "从不显示",
+      "neverBody": "姓名、电子邮件地址、目录ID、上传文件名和错误信息只在原始遥测数据中显示。包含这些数据的报告将对用户隐藏，直到被替换。",
+      "unclassifiedHeading": "目录未识别的列",
+      "unclassifiedBody": "未识别的文本列将保持隐藏——在应用和导出中都不可见——且用户无法下载已交付的文件，直到您将其归类到某个字段下。",
+      "noneWaiting": "没有待处理项。",
+      "inFiles": "{count, plural, one {在 # 个文件中} other {在 # 个文件中}}",
+      "classifyAs": "为列 {column} 选择字段",
+      "keepHidden": "保持隐藏",
+      "removeClassification": "移除列 {column} 的设置"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "无法访问报告存储",
+      "deliveryUnavailableBody": "应用无法列出容器“{container}”。请检查其是否存在，并确认应用的身份有相应的数据权限。在此之前，任何人都无法查看报告。",
+      "foldersUnavailable": "无法读取文件夹设置，用户当前无法看到任何文件夹。文件不会被检查或自动过期，直至恢复正常。",
+      "policyUnavailable": "无法读取字段设置，用户暂时无法下载文件。",
+      "total": {
+        "files": "文件",
+        "ok": "正常",
+        "warning": "有警告",
+        "error": "对用户隐藏",
+        "pending": "正在检查"
+      },
+      "recheckAll": "全部重新检查",
+      "recheckOne": "重新检查",
+      "recheckQueued": "{count, plural, one {# 个文件排队待检查。} other {# 个文件排队待检查。}}",
+      "recheckFailed": "无法开始检查。",
+      "retention": {
+        "active": "超过文件夹保留期的文件会立即隐藏，并在 {days} 天后删除。",
+        "disabled": "超过文件夹保留期的文件会被隐藏，但本次部署已关闭自动删除。",
+        "waiting-for-config": "超过默认保留期限的文件会被隐藏。在文件夹设置至少保存一次前，不会删除任何文件。"
+      },
+      "noFiles": "尚未交付任何文件。",
+      "allGood": "所有已交付内容均无异常。",
+      "problemsHeading": "需关注的文件",
+      "status": {
+        "error": "对用户隐藏",
+        "warning": "警告",
+        "pending": "正在检查",
+        "ok": "正常"
+      },
+      "pendingBody": "自上次检查后为新文件或替换内容。通过审核后，用户可见。",
+      "firstSeen": "首次发现于 {date}",
+      "unclassifiedHeading": "待决策列",
+      "unclassifiedBody": "这些列尚未识别。它们将保持隐藏，且包含这些列的文件，用户无法下载，直到被归类到某个字段下。",
+      "unclassifiedChip": "{column} · {count, plural, one {# 个文件} other {# 个文件}}",
+      "openFields": "前往字段管理",
+      "unconfiguredHeading": "未配置设置的文件夹",
+      "unconfiguredBody": "有文件送达此处，但尚未有人设置本文件夹或其上级文件夹。仅管理员可见。",
+      "staleHeading": "逾期交付",
+      "staleBody": "这些文件夹需定期接收报告，最新报告时间已超出预期。",
+      "staleDetail": {
+        "daily": "每日：最新覆盖到 {date}",
+        "monthly": "每月：最新结束于 {date}"
+      },
+      "staleNever": "尚未交付任何内容",
+      "expiringHeading": "即将过期",
+      "expiringBody": "已超出或将在 30 天内达保留期的文件。",
+      "expiresOn": "过期时间 {date}",
+      "expiredOn": "已过期 {date}"
+    },
+    "issue": {
+      "name-mismatch": "文件名与本文件夹预期不符（例如 {expected}）。",
+      "unsupported-format": "无法检查类型为“{extension}”的文件，因此该文件对用户隐藏。请交付 .xlsx 或 .csv 格式。",
+      "too-large": "此文件大小为 {sizeMb} MB，超出检查上限 {limitMb} MB，已对用户隐藏。",
+      "empty-file": "文件为空。",
+      "unreadable": "无法打开该文件。文件可能已损坏，或实际格式与文件名不符。",
+      "identifier-column": "表格「{sheet}」包含用于识别人群的「{column}」列。该文件对用户隐藏。",
+      "identifier-values": "「{sheet}」包含{count, plural, one {# 个电子邮件地址} other {# 个电子邮件地址}}。该文件对用户隐藏。",
+      "user-code-format": "表格「{sheet}」，列「{column}」：{count, plural, one {# 个值不是} other {# 个值不是}} u-… 用户代码。该文件对用户隐藏。",
+      "formulas-without-values": "表格「{sheet}」中有{count, plural, one {# 个公式} other {# 个公式}}未保存结果，因此应用内无法显示这些数值。",
+      "missing-sheet": "缺少表格「{sheet}」，因此无法显示基于该表格构建的视图。",
+      "missing-column": "表格「{sheet}」没有「{column}」列，因此无法显示使用了该列的视图。",
+      "no-period": "文件名未包含报告期，因此留存期自交付日期起算。",
+      "unclassified-field": "列「{column}」未被识别。在归类为某个字段前，将保持隐藏，且用户无法下载已交付的文件。",
+      "past-retention": "超出该文件夹{months}个月的留存期，已不再显示。",
+      "unknown": "报告的问题：{code}。"
+    }
   }
 }

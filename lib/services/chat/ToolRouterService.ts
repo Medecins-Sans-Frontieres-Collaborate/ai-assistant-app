@@ -221,6 +221,7 @@ When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit
             forceWebSearch,
             forceCodeInterpreter,
             hasPriorSearchCitations,
+            hasPriorSearchState,
             hasUserProvidedContent,
             searchDecided,
             searchFanOut,
@@ -302,6 +303,14 @@ This conversation already contains web-search results with cited articles. ALSO 
 - Both can be true when the user wants deeper detail AND new information`
               : '';
 
+            const continuePromptSection = hasPriorSearchState
+              ? `
+
+The previous answer came from a web search that stopped before it found what was asked. ALSO decide searchContinue:
+- true when the user asks to keep looking, try again, search more, or otherwise continue that same search ("keep searching", "try harder", "look again", "any luck with other sources?") — needsWebSearch must then be true as well
+- false when the question is a new topic or a different request`
+              : '';
+
             const searchDecidedPromptSection = searchDecided
               ? `
 
@@ -337,13 +346,15 @@ IMPORTANT: Always provide searchQuery in your response:
 - If needsWebSearch is true, provide a CONCISE search-engine query: 3-8 keywords, ONE topic, no question words ("what", "where", "why"), no filler ("current updates", "reasons", "dates"). Bad: "latest protests in India what are they about where are they happening dates reasons current updates". Good: "India protests ${currentYear}"
 - Years in queries: do NOT append a year by default. Append the current year (${currentYear}) ONLY when the question implies recency (news, "latest", ongoing events). Use a past year ONLY when the user explicitly asks about that period. Never append speculative, future, or multiple years.
 - Never put meta words in the query — "news", "latest", "updates", "headlines", "today", "current events". They match news-site HOMEPAGES instead of stories. Express recency through searchRecency instead. An open-ended "what is happening in India" is searchQuery "India", searchRecency "week", searchCategory "news"
+- When the subject shares its name with something better known (a documentary and a blockbuster, a town and a person, a paper and a product), keep the distinguishing details the user gave in the query — the year, the kind of thing, the topic, the place — so the results are about the right one: "Winter Soldier 1972 documentary Vietnam veterans", not "Winter Soldier"
 - If needsWebSearch is false, provide an empty string
+- searchLanguage: the ISO 639-1 code of the language you wrote searchQuery in ("en", "fr", "es"); "auto" only if unsure
 
 Also tune the search when needsWebSearch is true:
 - searchRecency: "day" for breaking news/live data, "week" or "month" for recent developments, "none" when age doesn't matter
 - searchComprehensive: true for research-style questions wanting breadth (comparisons, overviews, "what are my options"), false for single-fact lookups
 - searchCategory: which kind of source answers best — "news" for current events, recent developments and open-ended "what is happening in/with X" questions; "science" for medical, clinical, public-health and academic research questions (journals, studies, MSF research publications); "it" for programming, software and technical documentation; "humanitarian" for humanitarian crises, operations and datasets (displacement, outbreaks, country situations); "general" for everything else or when unsure
-${fanOutInstruction}${followUpPromptSection}${codeExecutionPromptSection}`;
+${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecutionPromptSection}`;
 
             // Include recent conversation history for context-aware decisions
             // Take last 3 message pairs (6 messages max) to keep it efficient
@@ -406,6 +417,11 @@ ${fanOutInstruction}${followUpPromptSection}${codeExecutionPromptSection}`;
                 description:
                   'Kind of source that answers best; "general" when unsure',
               },
+              searchLanguage: {
+                type: 'string',
+                description:
+                  'ISO 639-1 code of the language searchQuery is written in, or "auto"',
+              },
               additionalSearchQueries: {
                 type: 'array',
                 items: { type: 'string' },
@@ -421,6 +437,7 @@ ${fanOutInstruction}${followUpPromptSection}${codeExecutionPromptSection}`;
               'searchRecency',
               'searchComprehensive',
               'searchCategory',
+              'searchLanguage',
               'additionalSearchQueries',
             ];
             if (hasPriorSearchCitations) {
@@ -430,6 +447,14 @@ ${fanOutInstruction}${followUpPromptSection}${codeExecutionPromptSection}`;
                   'Whether the question is a follow-up about the previously cited search results/articles',
               };
               requiredFields.push('searchFollowUp');
+            }
+            if (hasPriorSearchState) {
+              schemaProperties.searchContinue = {
+                type: 'boolean',
+                description:
+                  "Whether the user is asking to continue the previous turn's unfinished web search",
+              };
+              requiredFields.push('searchContinue');
             }
             if (considerCodeExecution) {
               schemaProperties.needsCodeExecution = {
@@ -454,6 +479,9 @@ ${fanOutInstruction}${followUpPromptSection}${codeExecutionPromptSection}`;
               max_completion_tokens:
                 (considerCodeExecution ? 290 : 210) +
                 (hasPriorSearchCitations ? 20 : 0) +
+                (hasPriorSearchState ? 20 : 0) +
+                // searchLanguage is a two-letter code.
+                12 +
                 // A planned fan-out is up to four more keyword queries.
                 (searchFanOut ? 80 : 0),
               response_format: {
@@ -504,6 +532,17 @@ ${fanOutInstruction}${followUpPromptSection}${codeExecutionPromptSection}`;
             const searchFollowUp =
               hasPriorSearchCitations === true &&
               result.searchFollowUp === true;
+            // Continuing an unfinished search implies searching.
+            const searchContinue =
+              hasPriorSearchState === true && result.searchContinue === true;
+            if (searchContinue && !tools.includes('web_search')) {
+              tools.push('web_search');
+            }
+            const searchLanguage =
+              typeof result.searchLanguage === 'string' &&
+              /^[a-z]{2}(-[A-Z]{2})?$/.test(result.searchLanguage)
+                ? result.searchLanguage
+                : undefined;
 
             // Fan-out: primary query first, then any genuinely separable
             // extra aspects. Deduped, blank-filtered, hard-capped at 5.
@@ -545,6 +584,8 @@ ${fanOutInstruction}${followUpPromptSection}${codeExecutionPromptSection}`;
                     ? result.searchCategory
                     : undefined,
                 searchFollowUp,
+                searchContinue,
+                searchLanguage,
                 codeTask:
                   considerCodeExecution && result.needsCodeExecution
                     ? result.codeTask || currentMessage

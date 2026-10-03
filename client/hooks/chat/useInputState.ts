@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 
-import { SearchMode } from '@/types/searchMode';
+import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 
 /**
  * Custom hook to manage all input-related state for ChatInput
@@ -22,9 +22,11 @@ export function useInputState() {
   const [isTranscribing, setIsTranscribing] = useState<boolean>(false);
   const [textareaScrollHeight, setTextareaScrollHeight] = useState(0);
 
-  // Use conversation's defaultSearchMode if set, otherwise OFF
+  // Use conversation's defaultSearchMode if set, otherwise OFF. A persisted
+  // AGENT value (retired routing) reads as INTELLIGENT.
   const [searchMode, setSearchMode] = useState<SearchMode>(
-    selectedConversation?.defaultSearchMode ?? SearchMode.OFF,
+    normalizeSearchMode(selectedConversation?.defaultSearchMode) ??
+      SearchMode.OFF,
   );
 
   // Sync searchMode with conversation's defaultSearchMode when conversation changes
@@ -44,7 +46,8 @@ export function useInputState() {
       // Schedule state update to avoid synchronous setState in effect
       setTimeout(() => {
         setSearchMode(
-          selectedConversation?.defaultSearchMode ?? SearchMode.OFF,
+          normalizeSearchMode(selectedConversation?.defaultSearchMode) ??
+            SearchMode.OFF,
         );
       }, 0);
     }

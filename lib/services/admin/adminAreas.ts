@@ -35,6 +35,10 @@ import {
   isGlobalAdmin,
   resolveAdminStatus,
 } from '@/lib/services/agentAccess/adminAuth';
+import {
+  isAnalyticsAdmin,
+  resolveAnalyticsAdmin,
+} from '@/lib/services/analytics/adminAccess';
 import { resolveAnnouncementsAdmin } from '@/lib/services/announcements/adminAccess';
 import { LimitsService } from '@/lib/services/limits/LimitsService';
 import {
@@ -54,7 +58,10 @@ export const ADMIN_AREA_IDS = [
   'channel-sets',
   'channel-profiles',
   'limits',
+  'analytics',
   'workflows',
+  'web-search',
+  'context-budget',
   'announcements',
   'delegations',
   'local-admins',
@@ -174,9 +181,21 @@ export async function resolveAdminAreas(
     areas.push('announcements');
   }
 
+  // Analytics: global admins, plus holders of the `analytics` grant in an
+  // enabled shared delegation. Its own gate, like announcements.
+  const analyticsAdmin = await resolveAnalyticsAdmin(user);
+  if (analyticsAdmin.delegationsUnavailable) configUnavailable = true;
+  if (isAnalyticsAdmin(analyticsAdmin.status)) {
+    areas.push('analytics');
+  }
+
   if (isGlobalAdmin(user)) {
     // The workflow policy is one org-wide document, like limits: global only.
     areas.push('workflows');
+    // Web search tuning is one org-wide document too: global only.
+    areas.push('web-search');
+    // How much history each model is sent: one org-wide document, global only.
+    areas.push('context-budget');
     // A delegation decides who else may administer: global admins only.
     areas.push('delegations');
     // Who the global admins are is decided by global admins — EFFECTIVE

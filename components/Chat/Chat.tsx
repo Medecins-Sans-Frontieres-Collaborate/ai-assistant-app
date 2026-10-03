@@ -35,6 +35,7 @@ import {
 
 import { ErrorCode } from '@/types/errors';
 import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
+import { normalizeSearchMode } from '@/types/searchMode';
 
 import { KeyboardShortcutsModal } from '@/components/KeyboardShortcuts';
 import { PromptModal } from '@/components/Prompts/PromptModal';
@@ -48,6 +49,7 @@ import { ChatTopbar } from './ChatTopbar';
 import { EmptyState } from './EmptyState/EmptyState';
 import { SuggestedPrompts } from './EmptyState/SuggestedPrompts';
 import { LoadingScreen } from './LoadingScreen';
+import { ModelRetirementNotice } from './ModelRetirementNotice';
 import { ModelSelect } from './ModelSelect';
 import { ModelSwitchPrompt } from './ModelSwitchPrompt';
 import { ModelUnavailableNotice } from './ModelUnavailableNotice';
@@ -757,7 +759,9 @@ export function Chat({
             onModelClick={() => setIsModelSelectOpen(true)}
             onClearAll={clearConversation}
             hasMessages={hasMessages}
-            searchMode={selectedConversation?.defaultSearchMode}
+            searchMode={normalizeSearchMode(
+              selectedConversation?.defaultSearchMode,
+            )}
             showChatbar={showChatbar}
             autoApproveAll={!!selectedConversation?.alwaysApproveAllTools}
             autoApproveCount={
@@ -813,6 +817,7 @@ export function Chat({
                     conversation={selectedConversation}
                     onChooseModel={handleOpenModelSelector}
                   />
+                  <ModelRetirementNotice conversation={selectedConversation} />
                   <ChatInput
                     onSend={handleSend}
                     onRegenerate={handleRegenerate}
@@ -925,6 +930,11 @@ export function Chat({
             conversation={selectedConversation}
             onChooseModel={handleOpenModelSelector}
           />
+        )}
+
+        {/* Selected model retires soon — say when it moves, offer it now. */}
+        {hasMessages && (
+          <ModelRetirementNotice conversation={selectedConversation} />
         )}
 
         {/* Chat Input - Bottom position (hidden in empty state) */}

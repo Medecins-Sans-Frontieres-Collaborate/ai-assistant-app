@@ -15,8 +15,7 @@ import { useResetCountdown } from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
 import { InterpreterMode } from '@/types/interpreterMode';
-import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
-import { SearchMode } from '@/types/searchMode';
+import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 
@@ -74,15 +73,6 @@ export const ToolModeControls: FC = () => {
   if (!selectedConversation) return null;
   if (hideWebSearch && hideCodeInterpreter) return null;
 
-  const model = selectedConversation.model;
-  const modelConfig = OpenAIModels[model?.id as OpenAIModelID] as
-    | OpenAIModel
-    | undefined;
-  // Same rule the model picker used: Azure agent search needs an agentId on
-  // the catalog config or the (possibly synthesized) model object.
-  const agentSearchAvailable =
-    modelConfig?.agentId !== undefined || model?.agentId !== undefined;
-
   const searchLocked = toolLimits.webSearch.blocked;
   const interpreterLocked = toolLimits.codeInterpreter.blocked;
   const searchLockReason = tGates('blocked', {
@@ -92,8 +82,10 @@ export const ToolModeControls: FC = () => {
     feature: tGates('features.codeInterpreter'),
   });
 
-  const defaultSearch =
-    selectedConversation.defaultSearchMode ?? SearchMode.INTELLIGENT;
+  // A persisted AGENT default (retired routing) reads as INTELLIGENT.
+  const defaultSearch = normalizeSearchMode(
+    selectedConversation.defaultSearchMode ?? SearchMode.INTELLIGENT,
+  );
   // Effective state: a policy lock reads as Off regardless of the composer
   // force or the persisted default (both left untouched).
   const searchState: TriState = searchLocked
@@ -103,28 +95,15 @@ export const ToolModeControls: FC = () => {
       : defaultSearch === SearchMode.OFF
         ? 'off'
         : 'auto';
-  // AGENT default without agent support displays (and re-saves) as
-  // INTELLIGENT — mirror of the picker's displaySearchMode fix.
-  const searchRouting =
-    defaultSearch === SearchMode.AGENT && agentSearchAvailable
-      ? SearchMode.AGENT
-      : SearchMode.INTELLIGENT;
-
   const setSearchState = (state: TriState) => {
     if (state === 'always') {
       setSearchMode(SearchMode.ALWAYS);
       return;
     }
-    const mode = state === 'off' ? SearchMode.OFF : searchRouting;
+    const mode = state === 'off' ? SearchMode.OFF : SearchMode.INTELLIGENT;
     updateConversation(selectedConversation.id, { defaultSearchMode: mode });
     setDefaultSearchMode(mode);
     setSearchMode(mode);
-  };
-
-  const setSearchRouting = (mode: SearchMode) => {
-    updateConversation(selectedConversation.id, { defaultSearchMode: mode });
-    setDefaultSearchMode(mode);
-    if (searchState === 'auto') setSearchMode(mode);
   };
 
   const defaultInterpreter =
@@ -250,22 +229,6 @@ export const ToolModeControls: FC = () => {
               {t('webSearch')}
             </span>
             {searchLocked && lockIcon(searchLockReason, 'tool-lock-webSearch')}
-            {agentSearchAvailable && searchState !== 'off' && (
-              <span className="flex flex-shrink-0 items-center gap-0.5">
-                {segment(
-                  searchRouting === SearchMode.INTELLIGENT,
-                  t('routingPrivacy'),
-                  () => setSearchRouting(SearchMode.INTELLIGENT),
-                  'privacy',
-                )}
-                {segment(
-                  searchRouting === SearchMode.AGENT,
-                  t('routingAgent'),
-                  () => setSearchRouting(SearchMode.AGENT),
-                  'agent',
-                )}
-              </span>
-            )}
             {triSegments(
               searchState,
               setSearchState,
@@ -273,19 +236,6 @@ export const ToolModeControls: FC = () => {
             )}
           </div>
           {rowNote(toolLimits.webSearch, searchLockReason, searchResetLabel)}
-          {searchRouting === SearchMode.AGENT && searchState !== 'off' && (
-            <p className="pl-6 text-[11px] text-amber-700 dark:text-amber-400">
-              {t('agentRoutingNote')}{' '}
-              <a
-                href="/info/search-mode"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                {t('learnMore')}
-              </a>
-            </p>
-          )}
         </>
       )}
       {!hideCodeInterpreter && (

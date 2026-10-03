@@ -1,6 +1,5 @@
 import { ResolvedWebSearchProvider } from '@/types/webSearch';
 
-import { AgentChatService } from '../AgentChatService';
 import { Tool, ToolResult, WebSearchToolParams } from './Tool';
 import { searchGoogleNews } from './googleNewsSearch';
 import {
@@ -11,27 +10,38 @@ import {
   searchNewsParallel,
 } from './newsSearch';
 import { executeResponsesWebSearch } from './responsesWebSearch';
-import { isSearxngConfigured, searchSearxng } from './searxngSearch';
+import { WEB_ENGINE_CATEGORY } from './searxngCapabilities';
+import {
+  SearxngSearchOptions,
+  SearxngSearchOutcome,
+  isSearxngConfigured,
+  planSearxngCategories,
+  searchSearxng,
+} from './searxngSearch';
 
 import { env } from '@/config/environment';
 
 /**
  * Deployment default backend — what the user-facing 'auto' resolves to. An
- * explicit WEB_SEARCH_PROVIDER pins it; otherwise SearXNG where the
- * instance is configured, the keyless news feeds everywhere else.
+ * explicit WEB_SEARCH_PROVIDER pins it; otherwise Bing. SearXNG stays
+ * opt-in (Settings → MSF web search) until the instance's upstream engines
+ * hold up under a full deployment; where a user picks it, an unavailable
+ * instance falls back to Bing (see searxngFallback).
  */
 export function resolveDefaultWebSearchProvider(): ResolvedWebSearchProvider {
-  return (
-    env.WEB_SEARCH_PROVIDER ?? (isSearxngConfigured() ? 'searxng' : 'news')
-  );
+  return env.WEB_SEARCH_PROVIDER ?? 'bing';
 }
+
+/** Which backend answered in place of an unavailable SearXNG instance. */
+export type SearxngFallbackProvider = 'bing' | 'news';
 
 /**
  * WebSearchTool
  *
- * Executes web searches using AI Foundry agents.
- * Only the search query is sent to AI Foundry, not the full conversation,
- * preserving user privacy.
+ * Executes web searches on the configured backend: MSF's own SearXNG
+ * instance, the keyless news feeds, or Bing through the Responses API's
+ * native web_search tool (no Foundry agent involved). Only the search query
+ * leaves the app, never the conversation, preserving user privacy.
  *
  * No result caching: each request runs the full search. An in-memory or
  * cross-request cache would create a window where one user's queries
@@ -44,8 +54,6 @@ export class WebSearchTool implements Tool {
   readonly name = 'Web Search';
   readonly description =
     'Searches the web for current information, news, and real-time data';
-
-  constructor(private agentChatService: AgentChatService) {}
 
   /**
    * Executes a web search.
@@ -62,80 +70,35 @@ export class WebSearchTool implements Tool {
         `[WebSearchTool] Executing search via ${provider}: "${params.searchQuery}"`,
       );
 
-      // SearXNG: MSF's own metasearch instance. Unconfigured, unreachable
-      // or empty → the keyless news feeds answer instead, so local dev (no
-      // route to the private endpoint) and a key-rotation gap longer than
-      // the client's single retry still get results.
+      // SearXNG: MSF's own metasearch instance. Unconfigured, unreachable,
+      // empty, or its web engines not answering → Bing answers instead
+      // (then the keyless news feeds), so local dev (no route to the
+      // private endpoint), a key-rotation gap longer than the client's
+      // single retry, and an upstream outage still get results.
       if (provider === 'searxng') {
-        const result = await this.executeSearxng(params);
-        if (result) return result;
-        // The fallback feeds are NEWS feeds: headlines answer a news or
-        // general question, but for a science or programming question they
-        // are noise the model would dutifully cite. There, an honest "found
-        // nothing" (the enricher's knowledge-answer path) is the better
-        // degradation.
-        if (params.category === 'science' || params.category === 'it') {
-          return {
-            text: '',
-            citations: [],
-            metadata: { searxngFallback: true },
-          };
-        }
-        const fallback = await this.executeFeeds('news', params);
-        return {
-          ...fallback,
-          metadata: { ...fallback.metadata, searxngFallback: true },
-        };
+        const searx = await this.executeSearxng(params);
+        if (searx.result && !searx.degraded) return searx.result;
+        return await this.searxngFallback(params, searx.result);
       }
 
-      // Combined: Bing agent + Google News feed concurrently — headlines
-      // surface via onInterimResults while the agent runs, then merge.
+      // Combined: Bing + Google News feed concurrently — headlines surface
+      // via onInterimResults while Bing runs, then the two merge.
       if (provider === 'combined') {
         return await this.executeCombined(params);
       }
 
-      // Responses-API native web_search: a single model call with the
-      // built-in Bing tool — same web coverage as 'bing-agent' without the
-      // Foundry agent round-trip. No agent-backed model required.
-      if (provider === 'bing-responses') {
-        const result = await executeResponsesWebSearch({
-          searchQuery: params.searchQuery,
-          resultCount: params.resultCount,
-          freshness: params.freshness,
-          deep: params.deep,
-        });
+      // Bing: the Responses API's native web_search tool — one model call
+      // on the user's region, no Foundry agent.
+      if (provider === 'bing') {
+        const result = await this.executeBing(params);
         console.log(
-          `[WebSearchTool] Responses web_search completed: ${result.text.length} chars, ${result.citations?.length ?? 0} citations`,
+          `[WebSearchTool] Bing web_search completed: ${result.text.length} chars, ${result.citations?.length ?? 0} citations`,
         );
         return result;
       }
 
-      // Feed-based providers: no LLM round-trip. The Bing agent path below
-      // stays available via WEB_SEARCH_PROVIDER.
-      if (provider !== 'bing-agent') {
-        return await this.executeFeeds(provider, params);
-      }
-
-      if (!params.model) {
-        throw new Error('Bing-agent search requires an agent-backed model');
-      }
-      const searchResults = await this.agentChatService.executeWebSearchTool({
-        searchQuery: params.searchQuery,
-        model: params.model,
-        user: params.user,
-        resultCount: params.resultCount,
-        freshness: params.freshness,
-        onActivity: params.onActivity,
-      });
-
-      console.log(
-        `[WebSearchTool] Search completed, ${searchResults.text.length} characters, ${searchResults.citations.length} citations`,
-      );
-
-      return {
-        text: searchResults.text,
-        citations: searchResults.citations,
-      };
+      // Feed-based providers: no LLM round-trip.
+      return await this.executeFeeds(provider, params);
     } catch (error) {
       console.error('[WebSearchTool] Search failed:', error);
 
@@ -150,33 +113,133 @@ export class WebSearchTool implements Tool {
   }
 
   /**
-   * SearXNG search. Returns null when the caller should fall back to the
-   * news feeds: instance unconfigured, every leg failed, or nothing found.
+   * What answers when SearXNG cannot (instance down, or its upstream web
+   * engines not answering): Bing first — a real web search, so it covers
+   * every category — then the keyless news feeds. The result carries
+   * `searxngFallback` plus `fallbackProvider` so records and the model's
+   * note say which backend answered.
+   *
+   * `degraded` is a SearXNG result whose web engines did not answer (the
+   * reference/news engines may still have found something): kept as the
+   * last resort when Bing cannot run, ahead of the news feeds.
+   *
+   * The news feeds are skipped for science and programming questions:
+   * headlines answer a news or general question, but for a science or
+   * programming question they are noise the model would dutifully cite.
+   * There, an honest "found nothing" (the enricher's knowledge-answer path)
+   * is the better degradation.
+   */
+  async searxngFallback(
+    params: WebSearchToolParams,
+    degraded?: ToolResult | null,
+  ): Promise<ToolResult> {
+    try {
+      const bing = await this.executeBing(params);
+      if ((bing.citations?.length ?? 0) > 0 || bing.text.trim().length > 0) {
+        console.log(
+          `[WebSearchTool] Bing answered in place of SearXNG: ${bing.citations?.length ?? 0} citations`,
+        );
+        return {
+          ...bing,
+          metadata: {
+            ...bing.metadata,
+            searxngFallback: true,
+            fallbackProvider: 'bing' satisfies SearxngFallbackProvider,
+          },
+        };
+      }
+      console.warn(
+        '[WebSearchTool] Bing fallback returned nothing; using the news feeds',
+      );
+    } catch (error) {
+      // A search that lost the race is over — no second backend.
+      if (params.signal?.aborted) throw error;
+      console.warn(
+        '[WebSearchTool] Bing fallback failed; using the news feeds:',
+        error instanceof Error ? error.message : error,
+      );
+    }
+    if (degraded && (degraded.citations?.length ?? 0) > 0) {
+      return {
+        ...degraded,
+        text:
+          `Search note: the web search engines behind the search service did not answer for this request; ` +
+          `these results come from its news and reference engines only, so they may be beside the point. ` +
+          `Say so briefly, and answer only what they genuinely support.\n\n${degraded.text}`,
+        metadata: { ...degraded.metadata, searxngDegraded: true },
+      };
+    }
+    const fallbackProvider: SearxngFallbackProvider = 'news';
+    if (params.category === 'science' || params.category === 'it') {
+      return {
+        text: '',
+        citations: [],
+        metadata: { searxngFallback: true, fallbackProvider },
+      };
+    }
+    const fallback = await this.executeFeeds('news', params);
+    return {
+      ...fallback,
+      metadata: {
+        ...fallback.metadata,
+        searxngFallback: true,
+        fallbackProvider,
+      },
+    };
+  }
+
+  /**
+   * Raw SearXNG results for the multi-step search, which assembles its own
+   * digest across several steps. Throws when the instance is unconfigured
+   * or unavailable; an empty result is returned as such.
+   */
+  async searchSearxngEntries(
+    queries: string[],
+    options: SearxngSearchOptions,
+  ): Promise<SearxngSearchOutcome> {
+    return searchSearxng(queries.slice(0, 5), options);
+  }
+
+  /**
+   * SearXNG search. A null result means the caller should fall back:
+   * instance unconfigured, every leg failed, or nothing found. `degraded`
+   * marks a result whose web engines did not answer (the same signal the
+   * multi-step loop's 'degraded' outcome rests on) — only judged where the
+   * plan asked the web engines at all: a news- or science-only plan never
+   * expects them, so their silence there means nothing.
    */
   private async executeSearxng(
     params: WebSearchToolParams,
-  ): Promise<ToolResult | null> {
+  ): Promise<{ result: ToolResult | null; degraded: boolean }> {
     if (!isSearxngConfigured()) {
-      console.warn(
-        '[WebSearchTool] SearXNG is not configured; using the news feeds',
-      );
-      return null;
+      console.warn('[WebSearchTool] SearXNG is not configured; falling back');
+      return { result: null, degraded: false };
     }
     const queries = params.searchQueries?.length
       ? params.searchQueries.slice(0, 5)
       : [params.searchQuery];
+    const options = {
+      resultCount: params.resultCount ?? 8,
+      freshness: params.freshness ?? 'any',
+      category: params.category,
+      deep: params.deep ?? false,
+    } as const;
     try {
-      const outcome = await searchSearxng(queries, {
-        resultCount: params.resultCount ?? 8,
-        freshness: params.freshness ?? 'any',
-        category: params.category,
-        deep: params.deep ?? false,
-      });
+      const outcome = await searchSearxng(queries, options);
       if (outcome.entries.length === 0) {
         console.warn(
-          '[WebSearchTool] SearXNG returned no results; using the news feeds',
+          '[WebSearchTool] SearXNG returned no results; falling back',
         );
-        return null;
+        return { result: null, degraded: false };
+      }
+      const plan = planSearxngCategories(options);
+      const degraded =
+        outcome.health?.webCoverage === false &&
+        (plan.includes('general') || plan.includes(WEB_ENGINE_CATEGORY));
+      if (degraded) {
+        console.warn(
+          `[WebSearchTool] SearXNG web engines did not answer (${outcome.entries.length} results from other engines); falling back`,
+        );
       }
       console.log(
         `[WebSearchTool] SearXNG (${params.category ?? 'general'}): ${outcome.entries.length} results across ${queries.length} quer${queries.length === 1 ? 'y' : 'ies'}`,
@@ -193,16 +256,32 @@ export class WebSearchTool implements Tool {
           ? `Instant answer from the search engine (verify against the sources below): ${outcome.answers.join(' | ')}\n\n`
           : '';
       return {
-        text: `${answerLead}${digest.text}`,
-        citations: digest.citations,
+        result: {
+          text: `${answerLead}${digest.text}`,
+          citations: digest.citations,
+        },
+        degraded,
       };
     } catch (error) {
       console.warn(
-        '[WebSearchTool] SearXNG search failed; using the news feeds:',
+        '[WebSearchTool] SearXNG search failed; falling back:',
         error instanceof Error ? error.message : error,
       );
-      return null;
+      return { result: null, degraded: false };
     }
+  }
+
+  /** Bing through the Responses API web_search tool, on the user's region. */
+  private executeBing(params: WebSearchToolParams): Promise<ToolResult> {
+    return executeResponsesWebSearch({
+      searchQuery: params.searchQuery,
+      resultCount: params.resultCount,
+      freshness: params.freshness,
+      deep: params.deep,
+      region: params.user?.region,
+      onUsage: params.onUsage,
+      signal: params.signal,
+    });
   }
 
   /**
@@ -278,16 +357,6 @@ export class WebSearchTool implements Tool {
       : [params.searchQuery];
     const label = queries.map((q) => `"${q}"`).join('; ');
 
-    // No agent-backed model in this deployment — the Bing leg cannot run.
-    // Degrade to the feed alone (no interim emission: the result IS final).
-    if (!params.model) {
-      console.warn(
-        '[WebSearchTool] Combined search without an agent-backed model; using news feed only',
-      );
-      const entries = await fetchGoogleNewsHeadlines(queries, feedOptions);
-      return buildNewsResult(entries, label);
-    }
-
     const newsPromise: Promise<NewsEntry[]> = fetchGoogleNewsHeadlines(
       queries,
       feedOptions,
@@ -309,15 +378,7 @@ export class WebSearchTool implements Tool {
         return [] as NewsEntry[];
       });
 
-    const bingSettled = await this.agentChatService
-      .executeWebSearchTool({
-        searchQuery: params.searchQuery,
-        model: params.model,
-        user: params.user,
-        resultCount: params.resultCount,
-        freshness: params.freshness,
-        onActivity: params.onActivity,
-      })
+    const bingSettled = await this.executeBing(params)
       .then((value) => ({ ok: true as const, value }))
       .catch((error) => ({ ok: false as const, error }));
     const entries = await newsPromise;
@@ -350,7 +411,7 @@ export class WebSearchTool implements Tool {
 
     const bing = bingSettled.value;
     if (entries.length === 0) {
-      return { text: bing.text, citations: bing.citations };
+      return bing;
     }
     if ((bing.citations?.length ?? 0) === 0 && bing.text.trim().length === 0) {
       return buildNewsResult(entries, label);
@@ -375,7 +436,7 @@ export class WebSearchTool implements Tool {
       ...(entry.sourceUrl ? { sourceUrl: entry.sourceUrl } : {}),
     }));
     if (headlineCitations.length === 0) {
-      return { text: bing.text, citations: bing.citations };
+      return bing;
     }
 
     const headlineDigest = freshEntries
@@ -393,6 +454,9 @@ export class WebSearchTool implements Tool {
         `Additional recent headlines for ${label} (cite by number where relevant):\n\n` +
         headlineDigest,
       citations: [...(bing.citations ?? []), ...headlineCitations],
+      // Keep what the Bing leg reported about itself (the deployment it
+      // ran on): the tool record names it.
+      metadata: { ...bing.metadata, merged: true },
     };
   }
 }

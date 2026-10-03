@@ -8,6 +8,7 @@ import {
   formatCitationList,
   runGroundedSearch,
 } from '@/lib/services/workflows/shared/groundedSearch';
+import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
   badRequestResponse,
@@ -63,6 +64,11 @@ export async function POST(req: NextRequest) {
         'SEARCH_UNAVAILABLE',
       );
     }
+    // The search is a model call: telemetry row, emissions, token quota.
+    new WorkflowUsageCollector({
+      user: session.user,
+      action: 'form-search',
+    }).record(result.usage);
     const text = `${result.text}${formatCitationList(result.citations)}`.slice(
       0,
       SOURCE_TEXT_STATE_CAP,

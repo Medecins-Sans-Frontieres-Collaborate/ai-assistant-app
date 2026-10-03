@@ -56,6 +56,30 @@ describe('InterimSearchPanel', () => {
     expect(button).toBeDisabled();
   });
 
+  it('presents a multi-step search as results so far, with descriptions', () => {
+    render(
+      <InterimSearchPanel
+        interim={{
+          ...interim,
+          kind: 'multiStep',
+          entries: [
+            { ...interim.entries[0], snippet: 'A brief description of A.' },
+            interim.entries[1],
+          ],
+        }}
+      />,
+    );
+
+    expect(
+      screen.getByText(/Results so far — checking whether they answer/),
+    ).toBeInTheDocument();
+    expect(screen.getByText('A brief description of A.')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Answer from these results now/ }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/deep Bing search/)).not.toBeInTheDocument();
+  });
+
   it('renders nothing when the payload has no entries', () => {
     const { container } = render(
       <InterimSearchPanel interim={{ queries: ['q'], entries: [] }} />,

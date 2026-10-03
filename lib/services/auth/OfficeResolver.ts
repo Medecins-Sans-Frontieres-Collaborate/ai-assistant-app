@@ -186,9 +186,15 @@ export class OfficeResolver {
   static getModelDiscoveryAccountsForUser(
     email: string | undefined | null,
   ): Array<{ region: UserRegion; path: string }> {
-    const office = OfficeResolver.findOfficeByEmail(email);
-    const region = office?.region ?? OfficeResolver.regionFallback(email);
+    return OfficeResolver.getModelDiscoveryAccountsForRegion(
+      OfficeResolver.getRegionForUser(email),
+    );
+  }
 
+  /** The accounts model discovery queries for a HOME region (see above). */
+  static getModelDiscoveryAccountsForRegion(
+    region: UserRegion,
+  ): Array<{ region: UserRegion; path: string }> {
     const us = env.AZURE_AI_FOUNDRY_RESOURCE_ID_US;
     const eu = env.AZURE_AI_FOUNDRY_RESOURCE_ID_EU;
 

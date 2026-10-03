@@ -154,6 +154,8 @@ export async function POST(req: NextRequest) {
           'SEARCH_UNAVAILABLE',
         );
       }
+      // The search is a model call like the extraction that follows it.
+      usage.record(search.usage);
       citations = search.citations;
       // Sources appended so the extraction model can use publication
       // context (dates, outlet names) when judging events.

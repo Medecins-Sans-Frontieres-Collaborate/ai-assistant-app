@@ -63,6 +63,7 @@
     "he": "^1.2.0",
     "html-to-docx": "^1.1.2",
     "html2pdf.js": "^0.14.0",
+    "hyparquet": "^1.31.2",
     "isomorphic-dompurify": "^3.4.0",
     "jsdom": "^27.4.0",
     "katex": "^0.16.25",

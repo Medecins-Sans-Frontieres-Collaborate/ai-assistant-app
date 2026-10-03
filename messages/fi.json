@@ -782,7 +782,10 @@
       "codeInterpreterLimitReached": "Päivittäinen koodinsuorituksen raja saavutettu — vastataan ilman koodin ajamista…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Tietopohjahaku epäonnistui — vastaus ei käytä agentin asiakirjoja",
-      "stillWorking": "Työstetään yhä…"
+      "stillWorking": "Työstetään yhä…",
+      "assessingSearchResults": "Tarkistetaan, vastaavatko tulokset kysymykseen…",
+      "refiningSearch": "Haetaan uudelleen: ”{query}”…",
+      "readingSearchPages": "Luetaan {count} hakutulossivua…"
     },
     "toolSummary": {
       "usedTools": "Käytetty {count, plural, one {# työkalu} other {# työkalua}}",
@@ -868,7 +871,10 @@
       "summarizeNow": "Tiivistä otsikoista nyt",
       "sourcesCount": "{count} lähdettä",
       "showAll": "Näytä kaikki {count} lähdettä",
-      "showFewer": "Näytä vähemmän"
+      "showFewer": "Näytä vähemmän",
+      "multiStepTitle": "Tähän asti saadut tulokset — tarkistetaan vastaavatko ne kysymykseen",
+      "multiStepHint": "Haku voi jatkua — tehdään uusi haku tai luetaan lupaavampia sivuja. Vastaa nyt jo löydetyistä {count} tuloksesta, jos et halua odottaa.",
+      "answerNow": "Vastaa näistä tuloksista nyt"
     },
     "retryWithModel": "Kokeile mallilla {model}",
     "createTodoTasks": "Luo To Do -tehtäviä tästä vastauksesta",
@@ -882,7 +888,10 @@
     "modelTimedOutAtMaximum": "{model} ei alkanut vastata {duration} kuluessa, mikä on pisin mahdollinen odotusaika. Yritä uudelleen tai käytä toista mallia.",
     "requestTimedOut": "Tämän pyynnön valmistelu kesti liian kauan, ja se keskeytettiin ennen kuin {model} ehti vastata. Voit sallia pidemmän odotusajan tai kokeilla toista mallia.",
     "retryWaitingLonger": "Odota enintään {duration} ja yritä uudelleen",
-    "alwaysWaitThisLong": "Odotetaan aina enintään {duration}"
+    "alwaysWaitThisLong": "Odotetaan aina enintään {duration}",
+    "keepSearching": "Jatka hakua",
+    "keepSearchingHint": "Haku pysähtyi ennen kuin tämä löytyi. Pyydä avustajaa kokeilemaan eri lähestymistapoja.",
+    "keepSearchingMessage": "Jatka tämän hakemista, kiitos — kokeile toista lähestymistapaa."
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -1266,7 +1275,9 @@
       "providerBingResponsesDescription": "Sama Bing-verkkohaku kuin Bing groundingissa, ajetaan yhtenä suoralla mallikutsulla Foundry-agentin sijaan — yleensä paljon nopeampi. Uusi vaihtoehto arvioitavana verrattuna Bing groundingiin.",
       "providerSearxng": "MSF:n verkkohaku",
       "providerSearxngDescription": "MSF:n oma yksityinen metahakupalvelu. Kattaa yleisen verkon, uutiset, tieteellisen kirjallisuuden (mukaan lukien MSF:n tutkimusjulkaisut), teknisen dokumentaation ja humanitaarisen datan, ja valitsee kuhunkin kysymykseen sopivimman lähteen. Tulokset saapuvat sekunneissa suorin linkein, ja vain hakukysely välittyy sovelluksesta — hakukoneet eivät koskaan näe sinua.",
-      "otherProvidersLabel": "Muut palveluntarjoajat"
+      "otherProvidersLabel": "Muut palveluntarjoajat",
+      "multiStepLabel": "Monivaiheinen haku",
+      "multiStepDescription": "MSF-verkkohakua käyttäessä avustaja tarkistaa ensin tulokset ja hakee tai lukee lupaavimmat sivut uudelleen vain, jos alkuperäiset eivät riitä. Useimmat kysymykset ratkaistaan yhdellä kierroksella. Poista tämä käytöstä pitääksesi haun yhdessä vaiheessa."
     },
     "Admin": "Ylläpitäjä",
     "Usage Limits": "Käyttörajoitukset",
@@ -1286,7 +1297,8 @@
       "customHint": "Väliltä {min}–{max} sekuntia.",
       "preferModelTitle": "Suosi valitsemaani mallia",
       "preferModelDescription": "Älä vaihda toiseen malliin automaattisesti, jos pyyntö epäonnistuu. Virheilmoitus tarjoaa kuitenkin mallin vaihdon."
-    }
+    },
+    "Analytics": "Analytiikka"
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -1621,6 +1633,12 @@
     },
     "subVariant": {
       "label": "Koko"
+    },
+    "retiring": {
+      "badge": "Käytöstä poistuva",
+      "datedMoving": "Poistuu käytöstä {date}. Keskustelut siirretään malliin {successor} {movesOn}.",
+      "dated": "Poistuu käytöstä {date} ja lakkaa toimimasta. Käytä sen sijaan mallia {successor}.",
+      "replaced": "Korvataan mallilla {successor}."
     }
   },
   "models": {
@@ -1919,6 +1937,11 @@
       "name": "GPT-6 Astra",
       "description": "OpenAIn huippumalli GPT-6. Suunniteltu vaativaan kokonaisvaltaiseen työhön: syvälliseen tutkimukseen, monimutkaiseen analyysiin, ohjelmistokehitykseen ja pitkiin monivaiheisiin tehtäviin. Noin kaksinkertainen hinta verrattuna GPT-5.6 Sol -malliin.",
       "tagline": "OpenAIn edistyksellisin malli"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Päivitys GPT-6 Sol -malliin vaativaan työskentelyyn koodin, dokumenttien ja sovellusten parissa. Lähestyy Astra-mallin kyvykkyyttä murto-osalla token-hinnasta.",
+      "tagline": "Lähes Astra-tason kyvykkyys, huomattavasti edullisemmin"
     }
   },
   "searchMode": {
@@ -5440,7 +5463,10 @@
       "announcements": "Käyttäjille näkyvät banneriviestit: kenelle, milloin ja millä kielillä.",
       "delegations": "Kuka hallinnoi mitäkin käyttäjiä ja mitä kukin heistä saa tehdä.",
       "channelProfiles": "Mitä jokainen alusta on: rajat, merkkimäärä, ketjut. Organisaation laajuisia tietoja, joiden pohjalta kaikki kanavasarjat rakennetaan.",
-      "channelSets": "Jokaisen tiimin säännöt kirjoittamiseen alustoilla: ohjeistus, äänet, oletukset, kuka saa käyttää ja kuka saa lähettää."
+      "channelSets": "Jokaisen tiimin säännöt kirjoittamiseen alustoilla: ohjeistus, äänet, oletukset, kuka saa käyttää ja kuka saa lähettää.",
+      "webSearch": "Kuinka laajalle verkkohaku voi mennä: monivaiheinen haku, arviointimalli ja sen rajat.",
+      "contextBudget": "Kuinka paljon keskustelua kukin malli saa kerralla.",
+      "analytics": "Toimitetut raportit: mitä saapui, kuka saa avata kansion ja mitkä kentät voidaan näyttää."
     },
     "openSettings": "Avaa asetukset",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "Katso roolissa",
       "globalAdmins": "Yleiset ylläpitäjät",
       "announcements": "Tiedotteet",
-      "delegations": "Delegoinnit"
+      "delegations": "Delegoinnit",
+      "webSearch": "Verkkohaku",
+      "contextBudget": "Kontekstibudjetti",
+      "analytics": "Analytiikka"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "Mihin tämä valtuutus voi ylipäätään oikeuttaa. Ylläpitäjät voivat saada käyttöönsä vain ne oikeudet, jotka valitset tässä.",
     "grant": {
       "limits": "Käyttörajoitukset",
-      "announcements": "Tiedotteet"
+      "announcements": "Tiedotteet",
+      "analytics": "Analytiikka"
     },
     "grantAll": "Kaikki",
     "maxOverrides": "Tämän valtuutuksen sallimat rajoituspoikkeukset",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "Voit asettaa tämän oletussarjaksi tallennuksen jälkeen.",
     "noChannelsWarning": "Tässä sarjassa ei ole käytössä kanavia; kukaan ei voi tehdä luonnoksia sillä.",
     "audienceEveryoneHint": "Kuka tahansa organisaatiossa voi tehdä luonnoksia tällä sarjalla."
+  },
+  "contextBudgetAdmin": {
+    "title": "Kontekstibudjetti",
+    "description": "Kuinka paljon keskusteluhistoriaa kustakin mallista välitetään kerralla. Viimeisimmät viestit sisältyvät aina; vanhemmat poistetaan, kun budjetti täyttyy, ja poistettu yhteenveto lisätään järjestelmäkehotteeseen. Suurempi budjetti säilyttää pidempiä keskusteluita näkyvissä, mutta kasvattaa hintaa kierrosta kohden.",
+    "scopeNote": "Pätee kaikkiin keskusteluihin kaikilla malleilla. Budjetti ei voi ylittää alla määriteltyä mallin ikkunan osuutta.",
+    "loading": "Ladataan kontekstibudjettia…",
+    "loadError": "Kontekstibudjettia ei voitu ladata.",
+    "configUnavailable": "Tallennettua kontekstibudjettia ei voitu lukea tällä hetkellä, joten alla olevat arvot eivät välttämättä ole voimassa. Yritä uudelleen ennen muokkaamista.",
+    "retry": "Yritä uudelleen",
+    "historyTokensLabel": "Vakio budjetti (tokenit)",
+    "historyTokensDescription": "Per vuoro välitettävät historiat, järjestelmäkehotus mukaan lukien, malleille, joilla ei ole ohitusta. Noin 48 000 säilyttää tavallisesti 30–60 viimeistä viestinvaihtoa.",
+    "historyFractionLabel": "Yläraja (osuus mallin syötetilasta)",
+    "historyFractionDescription": "Budjetti rajataan tähän osuuteen mallin konteksti-ikkunasta vähennettynä varaus tuotoksille, joten pienikokoiselta mallilta ei koskaan pyydetä liikaa.",
+    "minRecentMessagesLabel": "Aina säilytettävät viestit",
+    "minRecentMessagesDescription": "Viimeisimmät viestit säilytetään, vaikka budjetti ylittyy (ikkunan puitteissa). Kolme säilyttää edellisen viestinvaihdon kun uusin viesti yksin — liitetty dokumentti, hakutulokset — täyttäisi muuten budjetin.",
+    "familyOverridesLabel": "Per perhe",
+    "familyOverridesDescription": "Budjetti jokaiselle perheen mallille, korvaa vakion.",
+    "modelOverridesLabel": "Per malli",
+    "modelOverridesDescription": "Budjetti yksittäiselle mallille, korvaa perhe- ja vakiobudjetit.",
+    "overrideFamilyPlaceholder": "Perhe",
+    "overrideModelPlaceholder": "Mallin id",
+    "overrideTokensPlaceholder": "Tokenit",
+    "addOverride": "Lisää",
+    "removeOverride": "Poista",
+    "noOverrides": "Ei yhtään",
+    "effectiveLabel": "Näillä asetuksilla voimassa olevat budjetit",
+    "effectiveColumnModel": "Malli",
+    "effectiveColumnWindow": "Ikkuna",
+    "effectiveColumnBudget": "Historiabudjetti",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Oletus: {value}",
+    "defaultsNote": "Vain oletusarvoista poikkeavat arvot tallennetaan; kaikki muu noudattaa koodin oletuksia julkaisuissa.",
+    "save": "Tallenna",
+    "saving": "Tallennetaan…",
+    "resetDefaults": "Palauta oletusarvoihin",
+    "unsaved": "Tallentamattomat muutokset",
+    "saveSuccess": "Kontekstibudjetti tallennettu. Muutokset astuvat voimaan minuutin kuluessa.",
+    "saveError": "Kontekstibudjettia ei voitu tallentaa.",
+    "conflictError": "Toinen ylläpitäjä muutti kontekstibudjettia samaan aikaan; viimeisimmät arvot on ladattu uudelleen.",
+    "updatedByLine": "Viimeksi tallennettu käyttäjän {by} toimesta {at}",
+    "neverSaved": "Ei koskaan tallennettu — koodin oletukset ovat voimassa."
+  },
+  "webSearchAdmin": {
+    "title": "Verkkohaku",
+    "description": "Hallinnoi monivaiheista hakua MSF:n verkkohakuun. Ensimmäisten tulosten jälkeen arviointimalli päättää, vastaavatko ne kysymykseen; elleivät, se voi hakea uudelleen eri kyselyillä, lukea tulossivuja, pyytää käyttäjältä puuttuvan tiedon tai ilmoittaa, ettei mitään löytynyt.",
+    "scopeNote": "Nämä asetukset koskevat vain MSF-verkkohakua. Muut hakupalvelut suorittavat aina yhden kierroksen. Kukin henkilö voi myös kytkeä monivaiheisen haun pois päältä asetuksissa.",
+    "loading": "Ladataan verkkohakuasetuksia…",
+    "loadError": "Verkkohakuasetuksia ei voitu ladata.",
+    "configUnavailable": "Verkkohakuasetuksia ei voitu lukea tallennuksesta. Asetukset ovat piilotettu, eikä oletusarvoja näytetä, koska ne eivät välttämättä vastaa käytössä olevia.",
+    "retry": "Yritä uudelleen",
+    "enabledLabel": "Monivaiheinen haku",
+    "enabledDescription": "Kun pois päältä, jokainen haku on yksi suunniteltu kierros eikä arviointimallia kutsuta.",
+    "assessorLabel": "Arviointimalli",
+    "assessorDescription": "Kutsutaan jokaisen vaiheen jälkeen arvioimaan tuloksia. Valitse nopea ja edullinen malli: se toimii käyttäjän odottaessa. Jos mallia ei voi tavoittaa, käytetään {fallback}.",
+    "maxStepsLabel": "Vaiheita per kysymys",
+    "maxStepsDescription": "Kysymykselle sallittujen vaiheiden enimmäismäärä, mukaan lukien ensimmäinen haku. Jokainen jatkohaku tai sivulukujen ryhmä on yksi vaihe. Tämä raja on erillinen päivittäisestä hakurajasta, jossa koko kysymys lasketaan kerran.",
+    "maxStepsExploratoryLabel": "Vaiheita tutkimushauissa",
+    "maxStepsExploratoryDescription": "Korkeampi raja esimerkiksi vaikeasti löydettävän kohteen metsästykseen, kuten harvinaisen kirjan kopion etsimiseen, jossa umpikujiin varautuminen on normaalia. Ei voi olla matalampi kuin normaali raja.",
+    "pageReadsLabel": "Tulossivujen lukeminen",
+    "pageReadsDescription": "Mahdollistaa vaiheen, jossa avataan lupaavimmat tulokset ja luetaan sivut itse pelkkien hakupoimintojen sijaan.",
+    "maxPageReadsLabel": "Sivuja per lukuvaihe",
+    "sourceAssessmentLabel": "Arvioi lähteen laatu",
+    "sourceAssessmentDescription": "Arviointi merkitsee jokaisen lähteen (virallinen, vakiintunut, toissijainen, matala luotettavuus), jotta vastaus voi ottaa ne huomioon ja viitata niihin.",
+    "timeBudgetLabel": "Aikabudjetti (sekuntia)",
+    "timeBudgetDescription": "Hakukokonaisuuden enimmäisaika, mukaan lukien ensimmäinen kierros. Kun aika loppuu, vastaus muodostetaan löydettyjen tietojen perusteella.",
+    "defaultsNote": "Asetusta, joka jätettiin oletusarvoon, ei tallenneta, joten se pysyy siinä, vaikka myöhemmissä julkaisuissa se muuttuisi.",
+    "defaultHint": "Oletus: {value}",
+    "defaultOn": "päällä",
+    "defaultOff": "pois",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Sinulla on tallentamattomia muutoksia.",
+    "save": "Tallenna",
+    "saving": "Tallennetaan…",
+    "resetDefaults": "Palauta oletusarvoihin",
+    "saveSuccess": "Verkkohakuasetukset tallennettu.",
+    "saveError": "Verkkohakuasetuksia ei voitu tallentaa.",
+    "conflictError": "Toinen ylläpitäjä muutti asetukset ensin. Asetukset on ladattu uudelleen — tarkista ja tallenna uudelleen.",
+    "updatedByLine": "Viimeksi tallennettu käyttäjän {by} toimesta {at}.",
+    "neverSaved": "Mitään ei ole vielä tallennettu; oletusarvot ovat voimassa."
+  },
+  "modelRetirement": {
+    "notice": "{model} poistetaan käytöstä {retiresOn}. Tämä keskustelu siirtyy {successor} käyttöön {movesOn}.",
+    "noticeRetiring": "{model} poistetaan käytöstä {retiresOn} eikä enää toimi. Vaihda {successor} käyttöön jatkaaksesi tämän keskustelun käyttöä.",
+    "switchNow": "Vaihda nyt"
+  },
+  "analytics": {
+    "title": "Analytiikka",
+    "backToChat": "Takaisin keskusteluun",
+    "manage": "Hallinnoi",
+    "loading": "Ladataan…",
+    "loadFailed": "Raportteja ei voitu ladata.",
+    "retry": "Yritä uudelleen",
+    "emptyTitle": "Sinulle ei ole vielä jaettu mitään",
+    "emptyBody": "Raportit näkyvät täällä, kun ylläpitäjä antaa sinulle pääsyn kansioon.",
+    "deliveryUnavailable": "Raporttien tallennustilaan ei saada yhteyttä nyt, joten alla olevat luettelot voivat olla tyhjiä. Yritä hetken kuluttua uudelleen.",
+    "groupsDegraded": "Ryhmän jäsenyyksiä ei voitu tarkistaa juuri nyt, joten ryhmillesi jaetut kansiot voivat puuttua. Lataa uudelleen minuutin päästä.",
+    "foldersHeading": "Kansiot",
+    "rootFolder": "Kaikki raportit",
+    "pathOnly": "Sinulla ei ole pääsyä tähän kansioon, vain sen sisällä oleviin kansioihin.",
+    "selectFolder": "Valitse kansio nähdäksesi sen raportit.",
+    "noFiles": "Tässä kansiossa ei ole raportteja.",
+    "viewOnlyNote": "Sinulla on vain katseluoikeudet tähän kansioon: voit avata raportit, nähdä yleiskatsauksen ja yhteenvedot. Taulukot, joissa on yksi rivi per henkilö, vienti ja lataus vaativat latausoikeudet.",
+    "col": {
+      "name": "Tiedosto",
+      "period": "Ajanjakso",
+      "delivered": "Toimitettu",
+      "size": "Koko",
+      "availableUntil": "Saatavilla asti",
+      "actions": "Toiminnot"
+    },
+    "download": "Lataa",
+    "downloadAria": "Lataa {name}",
+    "block": {
+      "view-only": "Vain katselu",
+      "hidden-fields": "Alkuperäinen pidätetty (piilotetut kentät)",
+      "unclassified-fields": "Alkuperäinen pidätetty (arviointia odottavat kentät)",
+      "not-inspected": "Ei vielä tarkistettu",
+      "policy-unavailable": "Ei saatavilla nyt"
+    },
+    "adminBadge": {
+      "error": "Piilotettu käyttäjiltä",
+      "pending": "Tarkistuksessa",
+      "warning": "Varoituksia",
+      "expired": "Vanhentunut, poistamista odottava",
+      "originalBlocked": "Käyttäjät eivät voi ladata: {reason}"
+    },
+    "openAria": "Avaa {name}",
+    "openForExport": "Avaa vientiä varten",
+    "preview": {
+      "back": "Takaisin kansioon {folder}",
+      "tabsLabel": "Tiedostossa olevat taulukot",
+      "lockedTab": "{name} (lukittu)",
+      "unavailable": "Tiedostoa ei voi avata sovelluksessa juuri nyt.",
+      "tableFailed": "Taulukkoa ei voitu ladata.",
+      "withheld": {
+        "row-level": "Tässä taulukossa on yksi rivi per henkilö. Avaaminen vaatii kansioon latausoikeuden.",
+        "hidden-fields": "Tällä sivulla on kenttä, joka on piilotettu, joten sitä ei näytetä."
+      },
+      "truncated": "Näytetään ensimmäiset {shown, number} / {total, number} rivistä. Vie taulukko nähdäksesi kaikki.",
+      "freeformNote": "Tämä sivu on luotu lukemista varten ja näytetään toimitetussa muodossa.",
+      "filter": "Suodata rivejä",
+      "filterPlaceholder": "Suodata rivejä…",
+      "rows": "{count, plural, one {# rivi} other {# riviä}}",
+      "matching": "{count, number} / {total, number} riviä täsmää",
+      "modeLabel": "Näytä muodossa",
+      "mode": {
+        "table": "Taulukko",
+        "chart": "Kaavio"
+      },
+      "noRows": "Ei näytettäviä rivejä.",
+      "hiddenColumn": "Piilotettu käyttäjiltä",
+      "exportCsv": "Vie tämä taulukko (CSV)",
+      "exportXlsx": "Vie kaikki taulukot (Excel)",
+      "downloadOriginal": "Lataa alkuperäinen",
+      "exportNote": "Toimitettu tiedosto sisältää kenttiä, jotka ovat piilotettuja, joten sitä ei voi ladata sellaisenaan. Viennit jättävät nämä kentät pois.",
+      "sectionLabel": "Näytä",
+      "section": {
+        "overview": "Yhteenveto",
+        "tables": "Taulukot"
+      }
+    },
+    "chart": {
+      "groupBy": "Ryhmittele",
+      "measure": "Mitta",
+      "rowCount": "Rivien määrä",
+      "aggregation": "Laske",
+      "agg": {
+        "sum": "Summa",
+        "mean": "Keskiarvo",
+        "min": "Pienin",
+        "max": "Suurin"
+      },
+      "ariaLabel": "{measure} ryhmittäin {group}",
+      "noColumns": "Tässä taulukossa ei ole tekstin- tai päivämääräkenttää ryhmittelyyn.",
+      "empty": "Ei kaaviota tälle valinnalle.",
+      "truncatedGroups": "Näytetään {count} suurinta ryhmää.",
+      "basedOn": "Perustuu ensimmäiseen {shown, number} / {total, number} rivistä.",
+      "savePng": "Tallenna kuvana",
+      "saveSvg": "Tallenna SVG:nä",
+      "saveFailed": "Kaaviota ei voitu tallentaa."
+    },
+    "dash": {
+      "loading": "Ladataan…",
+      "failed": "Yhteenvetoa ei voitu ladata.",
+      "retry": "Yritä uudelleen",
+      "showTable": "Näytä taulukkona",
+      "showChart": "Näytä kaaviona",
+      "smallGroups": "Ryhmiä, joissa alle 5 henkilöä",
+      "foldedNote": "Alle 5 hengen ryhmät yhdistetään yhdeksi riviksi.",
+      "otherCount": "{count, plural, one {# muu} other {# muut}}",
+      "hiddenPanel": "Piilotettu kenttäasetuksilla.",
+      "missingPanel": "Ei saatavilla tälle tiedostolle.",
+      "usage": {
+        "users": "Aktiiviset henkilöt",
+        "interactions": "Vuorovaikutukset",
+        "avgPerUser": "Keskiarvo per henkilö",
+        "medianPerUser": "Mediaani per henkilö",
+        "hq": "Pääkonttorilla",
+        "field": "Kentällä",
+        "shareUsers": "{pct}% / {comparator} käyttäjistä",
+        "shareUsage": "{pct}% / {comparator} käytöstä",
+        "comparator": "{comparator}: {value}",
+        "daily": "Vuorokohtaiset interaktiot",
+        "dailyUsers": "Aktiiviset henkilöt päivittäin",
+        "dailyUsersSub": "Työpaikan mukaan",
+        "weekly": "Viikkokohtaiset interaktiot",
+        "activity": "Kuinka paljon sitä käytetään",
+        "activitySub": "Henkilöt, jakautuu interaktioiden lukumäärän mukaan",
+        "departments": "Osastokohtaiset interaktiot",
+        "jobTitles": "Interaktiot tehtävänimikkeen mukaan",
+        "models": "Tapahtumat mallin mukaan",
+        "total": "Kaikki paikat",
+        "location": {
+          "hq": "Pääkonttori",
+          "field": "Kenttä",
+          "unknown": "Tuntematon"
+        },
+        "col": {
+          "date": "Päivä",
+          "week": "Viikko alkaa",
+          "users": "Henkilöt",
+          "interactions": "Interaktiot",
+          "events": "Tapahtumat",
+          "group": "Ryhmä",
+          "band": "Interaktiot"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Laskutettu yhteensä",
+        "usageVariable": "Käyttöperusteinen kustannus",
+        "staticInfra": "Staattinen infrastruktuuri",
+        "sections": "Laskutetut osiot",
+        "usageEvents": "Käyttötapahtumat",
+        "bySection": "Laskutettu osioittain",
+        "changes": "Muutokset edelliseen tiedostoon",
+        "noChanges": "Ei muutoksia edelliseen tiedostoon.",
+        "byDomain": "Käyttötapahtumat sähköpostidomainin mukaan",
+        "reconciliation": "Tilitarkastus Azureen",
+        "col": {
+          "section": "Osio",
+          "billed": "Laskutettu",
+          "usageEvents": "Käyttötapahtumat",
+          "usagePct": "Käyttö %",
+          "line": "Rivi",
+          "amount": "Summa",
+          "previous": "Edellinen tiedosto",
+          "restated": "Korjattu",
+          "change": "Muutos",
+          "domain": "Sähköpostidomain",
+          "users": "Henkilöt"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Laskettu käyttäen",
+        "delivered": "Raportin omat oletukset ({version})",
+        "current": "Sovelluksen nykyiset oletukset ({version})",
+        "whatIf": "Entä jos…",
+        "deliveredUnavailable": "Raportin omia oletuksia ei voitu lukea sen Assumptions-välilehdeltä, joten käytetään sovelluksen nykyisiä oletuksia.",
+        "whatIfIntro": "Muuta lukua nähdäksesi sen vaikutuksen alla oleviin. Mitään ei tallenneta.",
+        "resetDelivered": "Palauta raportin omiin oletuksiin",
+        "resetCurrent": "Palauta sovelluksen nykyisiin oletuksiin",
+        "co2": "Päästöt",
+        "energy": "Energia",
+        "charges": "Älypuhelimen lataukset",
+        "chargesSub": "Sama hiilijalanjälki",
+        "activeUsers": "Aktiiviset henkilöt",
+        "requests": "Pyynnöt",
+        "tokens": "Tokenit",
+        "vsDelivered": "{delta} verrattuna raportin omiin oletuksiin",
+        "sameAsDelivered": "Sama kuin raportin omilla oletuksilla",
+        "unpriced": "{count, plural, one {# pyyntö käyttää} other {# pyyntöä käyttävät}} mallikokoa, jolle ei ole oletusarvoa, ja {count, plural, one {jää} other {jäävät}} pois laskuista.",
+        "byDepartment": "Päästöt osastoittain",
+        "byModel": "Päästöt mallin mukaan",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Täällä laskettu vs tapahtumahetkellä kirjattu",
+        "reconciliationSub": "Sovellus arvioi myös jokaisen pyynnön samanaikaisesti. Tulokset täsmäävät, kun oletukset ovat samat.",
+        "computed": "Täällä laskettu",
+        "logged": "Sovelluksen kirjaama",
+        "difference": "Erotus",
+        "col": {
+          "group": "Ryhmä",
+          "requests": "Pyynnöt",
+          "tokens": "Tokenit",
+          "energyWh": "Energia (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Konesalin ylijäämä (PUE)",
+          "promptTokenWeight": "Prompt-tokenin paino",
+          "dedicatedReasoningMultiplier": "Dedikoidun päättelyn kerroin",
+          "whPer1kTokens": "Wh per 1 000 tokenia — {name}",
+          "reasoningEffortMultipliers": "Päättelytehon kerroin — {name}",
+          "gridIntensity": "Sähköverkon g CO₂e per kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Tapahtumat",
+        "users": "Henkilöt",
+        "tokens": "Tokenit",
+        "errors": "Virheet",
+        "energy": "Energia",
+        "co2": "Päästöt",
+        "hourly": "Tapahtumia tunnissa (UTC)",
+        "byType": "Tapahtumat tyypeittäin",
+        "byError": "Virheet koodeittain",
+        "byModel": "Tokenit mallin mukaan",
+        "byCompany": "Tapahtumat organisaation mukaan",
+        "none": "Ei mitään.",
+        "col": {
+          "group": "Ryhmä",
+          "events": "Tapahtumat",
+          "tokens": "Tokenit",
+          "hour": "Tunti"
+        }
+      },
+      "trend": {
+        "title": "Ajan myötä",
+        "period": "Ajanjakso",
+        "users": "Aktiiviset henkilöt per raportti",
+        "interactions": "Vuorovaikutuksia per raportti",
+        "billed": "Laskutettu yhteensä per ajanjakso",
+        "sections": "Laskutettu osastoittain",
+        "otherSections": "Kaikki muut osiot",
+        "co2": "Päästöt per raportti",
+        "energy": "Energia per raportti",
+        "recalculated": "Jokainen jakso lasketaan sovelluksen nykyisillä oletuksilla ({version}), joten oletusten muuttuminen raporttien välillä ei näy päästöjen muutoksena.",
+        "severalPerPeriod": "Tämä kansio sisältää useita raportteja samalta ajanjaksolta. Avaa kansio sisällä nähdäksesi, miten jokin niistä muuttuu ajan myötä."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analytiikka",
+    "description": "Data pipeline toimittaa raportit tallennukseen. Täällä voit tarkistaa saapuneet raportit, päättää kenellä on oikeus avata kansioita ja valita, mitä kenttiä alusta saa näyttää.",
+    "openViewer": "Avaa analytiikka",
+    "sharedNotice": "Beta ja tuotanto jakavat nämä kansiot, kohderyhmät ja tiedostot. Täällä tehdyt muutokset ovat voimassa molemmissa.",
+    "tabsLabel": "Analytiikkaosiot",
+    "tab": {
+      "health": "Toimitukset",
+      "folders": "Kansiot & käyttöoikeudet",
+      "fields": "Kentät"
+    },
+    "loading": "Ladataan…",
+    "retry": "Yritä uudelleen",
+    "loadError": "Tätä osiota ei voitu ladata.",
+    "unavailable": "Tallennettuja asetuksia ei voitu lukea tallennuksesta. Tämä EI tarkoita, että 'mitään ei ole määritetty' — muokkaus on estetty, jotta oikeita asetuksia ei ylikirjoiteta. Yritä uudelleen, ja tarkista palvelimen lokit, jos ongelma jatkuu.",
+    "save": "Tallenna",
+    "saving": "Tallennetaan…",
+    "unsaved": "Tallentamattomat muutokset",
+    "saveSuccess": "Tallennettu.",
+    "saveError": "Tallennus epäonnistui.",
+    "conflictError": "Toinen ylläpitäjä muutti näitä asetuksia muokkauksen aikana. Muutoksiasi ei tallennettu — uusin versio ladattiin uudelleen.",
+    "rootFolder": "(ylätaso)",
+    "scope": {
+      "domain": "Sähköpostidomain",
+      "user": "Henkilö",
+      "attribute": "Attribuutti",
+      "group": "Entra-ryhmä"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "nimi@example.org",
+      "attribute": "department:Health",
+      "group": "Entra group object id"
+    },
+    "level": {
+      "view": "Katso yhteenvedot",
+      "download": "Katso, vie ja lataa"
+    },
+    "reportType": {
+      "usage": "Käyttöraportti",
+      "rebilling": "Laskutusuudelleen",
+      "emissions": "Päästöraportti",
+      "raw-telemetry": "Raaka telemetria"
+    },
+    "field": {
+      "userCode": {
+        "label": "Käyttäjätunnus",
+        "description": "Pseudonyymi u-… -tunnus, joka edustaa yhtä henkilöä."
+      },
+      "jobTitle": {
+        "label": "Tehtävänimike",
+        "description": "Tehtävänimikkeet, mukaan lukien yleisin nimike yhteenvetoarkilla. Pienessä ryhmässä nimike voi yksilöidä henkilön."
+      },
+      "department": {
+        "label": "Osasto",
+        "description": "Osastot, mukaan lukien aktiivisin osasto yhteenvetoarkilla."
+      },
+      "company": {
+        "label": "Yritys / organisaatio",
+        "description": "Organisaation nimi hakemistosta sekä yritykset, jotka näkyvät laskutusraporteissa."
+      },
+      "orgGroup": {
+        "label": "Organisaatioryhmä",
+        "description": "Toiminnallinen keskus tai ryhmä, jolla raportti on jaoteltu."
+      },
+      "section": {
+        "label": "Osio",
+        "description": "Kustannusten kohdentamisen osio, johon laskutusrivi kuuluu."
+      },
+      "mailDomain": {
+        "label": "Sähköpostidomain",
+        "description": "Sähköpostidomainin käyttö kuuluu tälle (ei koskaan osoitteelle)."
+      },
+      "workLocation": {
+        "label": "Työpaikka",
+        "description": "Päämaja tai kenttä."
+      },
+      "technical": {
+        "label": "Tekniset tiedot",
+        "description": "Malli, alue, tapahtumatyyppi, valuutta ja vastaavat kuvaajat, jotka eivät kerro mitään henkilöstä."
+      },
+      "other": {
+        "label": "Muut kuvaavat kentät",
+        "description": "Paikka sarakkeelle, joka ei sovi mihinkään yllä olevista."
+      }
+    },
+    "folders": {
+      "intro": "Kaikki kansiot, joihin pipeline on toimittanut, on listattu. Kansiot ilman asetuksia — ja ilman ylemmän kansion käyttöoikeuksia — näkyvät vain ylläpitäjille.",
+      "name": "Näyttönimi",
+      "namePlaceholder": "Näytetään kansiopolun sijasta",
+      "description": "Kuvaus",
+      "reportType": "Raportin tyyppi",
+      "reportTypeNone": "Ei asetettu",
+      "reportTypeInherited": "Peritty: {type}",
+      "reportTypeHint": "Ilmoittaa tarkistajalle, mitä tiedostonimiä odottaa ja kuinka usein. Koskee tämän kansion sisällä olevia kansioita.",
+      "retention": "Säilytä tiedostot (kuukautta)",
+      "retentionHint": "Jätä tyhjäksi periäksesi {months} kuukautta. Lasketaan kunkin raportin jakson lopusta.",
+      "audience": "Kuka voi avata tämän kansion",
+      "audienceHint": "Jokainen rivi antaa käyttöoikeuden tälle kansiolle ja sen sisällä oleville kansioille. Yksi kohde per rivi.",
+      "audienceScope": "Kohteen tyyppi",
+      "audienceTargets": "Kohteet",
+      "audienceLevel": "Käyttöoikeustaso",
+      "addAudience": "Lisää henkilöitä tai ryhmiä",
+      "removeAudience": "Poista tämä rivi",
+      "restricted": "Älä peri käyttöoikeuksia ylemmistä kansioista",
+      "restrictedHint": "Vain tämän kansion rivit koskevat tätä ja alempia kansioita.",
+      "hiddenFields": "Piilota myös tässä kansiossa",
+      "hiddenFieldsHint": "Kentät, jotka on piilotettu täällä platformin asetuksen lisäksi, tälle kansiolle ja sen sisäisille kansioille. Voit piilottaa lisää, et koskaan näyttää lisää.",
+      "hiddenPlatformWide": "(piilotettu kaikkialla)",
+      "clear": "Poista tämän kansion asetukset",
+      "rawChip": "Raaka: vain globaalit ylläpitäjät",
+      "rawNote": "Raaka telemetria sisältää nimiä, sähköpostiosoitteita ja tiedostonimiä. Vain globaalit ylläpitäjät voivat avata sen, eikä kohderyhmiä voi lisätä.",
+      "audienceChip": "{count, plural, one {# käyttöoikeusrivi} other {# käyttöoikeusriviä}}",
+      "restrictedChip": "Ei peritä käyttöoikeuksia",
+      "notConfiguredChip": "Ei asetuksia",
+      "addPathLabel": "Määritä kansio ennen ensimmäistä toimitusta",
+      "addPath": "Lisää",
+      "addPathHint": "Polku täsmälleen kuten pipeline kirjoittaa sen, esimerkiksi usage/ocba. Tämä tallentaa vain asetukset; ei luo mitään tallennukseen.",
+      "invalidPath": "Tämä ei ole kelvollinen kansiopolku.",
+      "rawGlobalOnly": "Vain globaalit ylläpitäjät voivat määrittää kansioita raw/-kansion alle."
+    },
+    "fields": {
+      "intro": "Valitse, mitkä toimitettujen raporttien kentät platform saa näyttää. Kentän piilottaminen poistaa sen kaikesta sovelluksessa näytettävästä ja sovelluksen generoimista viennistä. Itse toimitetun tiedoston voi tällöin ladata vain ylläpitäjät.",
+      "readOnly": "Vain globaalit ylläpitäjät voivat muuttaa tätä. Analytiikan ylläpitäjänä voit piilottaa lisää kenttiä kansiokohtaisesti, Kansiot & käyttöoikeudet -kohdassa.",
+      "configurableHeading": "Kentät",
+      "shown": "Näytetty",
+      "hidden": "Piilotettu",
+      "jobTitleNote": "Kun ammattinimike näytetään, rivi pienessä ryhmässä voi tunnistaa henkilön jopa käyttäjäkoodin avulla. Kaaviot piilottavat vähemmän kuin viiden henkilön jaot; ladatut taulukot eivät.",
+      "neverHeading": "Ei koskaan näytetä",
+      "neverBody": "Nimiä, sähköpostiosoitteita, hakemistotunnisteita, ladattujen tiedostojen nimiä ja virhetekstiä ei koskaan näytetä raaka telemetrian ulkopuolella. Raportti, joka sisältää jotain näistä, piilotetaan käyttäjiltä, kunnes se korvataan.",
+      "unclassifiedHeading": "Sarakkeet, joita katalogi ei tunne",
+      "unclassifiedBody": "Tekstisarakkeet, joita ei tunnisteta, pysyvät piilossa sovelluksessa ja viennissä, eikä toimitettua tiedostoa voi ladata ennen kuin sarake luokitellaan kentän alle.",
+      "noneWaiting": "Ei odottavia.",
+      "inFiles": "{count, plural, one {# tiedostossa} other {# tiedostoissa}}",
+      "classifyAs": "Kenttä sarakkeelle {column}",
+      "keepHidden": "Pidä piilossa",
+      "removeClassification": "Poista asetus sarakkeelta {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Raporttien tallennustilaan ei saada yhteyttä",
+      "deliveryUnavailableBody": "Sovellus ei löytänyt konttia \"{container}\". Tarkista, että se on olemassa ja että sovelluksella on datarooli siihen. Raportteja ei näytetä kenellekään ennen kuin tämä on kunnossa.",
+      "foldersUnavailable": "Kansion asetuksia ei voitu lukea, joten käyttäjät eivät tällä hetkellä näe kansioita. Tiedostoja ei tarkisteta eikä poisteta ennen kuin tilanne palautuu.",
+      "policyUnavailable": "Kenttäasetuksia ei voi lukea, joten käyttäjät eivät voi ladata tiedostoja tällä hetkellä.",
+      "total": {
+        "files": "Tiedostot",
+        "ok": "Kunnossa",
+        "warning": "Varoituksin",
+        "error": "Piilotettu käyttäjiltä",
+        "pending": "Tarkistuksessa"
+      },
+      "recheckAll": "Tarkista kaikki uudelleen",
+      "recheckOne": "Tarkista uudelleen",
+      "recheckQueued": "{count, plural, one {# tiedosto jonossa tarkistukseen.} other {# tiedostoa jonossa tarkistukseen.}}",
+      "recheckFailed": "Tarkistusta ei voitu aloittaa.",
+      "retention": {
+        "active": "Kansioidensa säilytysajan ylittäneet tiedostot piilotetaan heti ja poistetaan {days} päivän kuluttua.",
+        "disabled": "Kansioidensa säilytysajan ylittäneet tiedostot piilotetaan, mutta poisto on pois päältä tässä ympäristössä.",
+        "waiting-for-config": "Oletussäilytysajan ylittäneet tiedostot piilotetaan. Mitään ei poisteta ennen kuin kansion asetukset on tallennettu ainakin kerran."
+      },
+      "noFiles": "Tiedostoja ei ole vielä toimitettu.",
+      "allGood": "Kaikki toimitettu on kunnossa.",
+      "problemsHeading": "Huomiota vaativat tiedostot",
+      "status": {
+        "error": "Piilotettu käyttäjiltä",
+        "warning": "Varoitus",
+        "pending": "Tarkistuksessa",
+        "ok": "Kunnossa"
+      },
+      "pendingBody": "Uusi tai korvattu viime tarkistuksen jälkeen. Näkyy käyttäjille, kun tarkistus on hyväksytty.",
+      "firstSeen": "Ensimmäisen kerran havaittu {date}",
+      "unclassifiedHeading": "Sarakkeet odottavat päätöstä",
+      "unclassifiedBody": "Näitä sarakkeita ei tunnisteta. Ne pysyvät piilossa eikä käyttäjät voi ladata niitä sisältäviä tiedostoja, ennen kuin jokainen on luokiteltu kentän alle.",
+      "unclassifiedChip": "{column} · {count, plural, one {# tiedosto} other {# tiedostoa}}",
+      "openFields": "Siirry kenttiin",
+      "unconfiguredHeading": "Kansiot ilman asetuksia",
+      "unconfiguredBody": "Tiedostoja toimitetaan tänne, mutta kukaan ei ole määrittänyt kansion tai ylemmän kansion asetuksia. Vain ylläpitäjät näkevät tiedostot.",
+      "staleHeading": "Myöhästyneet toimitukset",
+      "staleBody": "Nämä kansiot odottavat säännöllisiä raportteja ja uusin on vanhempi kuin pitäisi.",
+      "staleDetail": {
+        "daily": "Päivittäin; uusin kattaa {date}",
+        "monthly": "Kuukausittain; uusin loppuu {date}"
+      },
+      "staleNever": "Ei toimituksia vielä",
+      "expiringHeading": "Vanhentumassa",
+      "expiringBody": "Säilytysajan ylittäneet tiedostot tai jotka saavuttavat sen 30 päivän sisällä.",
+      "expiresOn": "Vanhenee {date}",
+      "expiredOn": "Vanhentunut {date}"
+    },
+    "issue": {
+      "name-mismatch": "Tiedoston nimi ei ole odotettu (esimerkiksi {expected}).",
+      "unsupported-format": "\"{extension}\"-tyyppisiä tiedostoja ei voi tarkistaa, joten tämä piilotetaan käyttäjiltä. Toimita .xlsx- tai .csv-tiedosto.",
+      "too-large": "Kooltaan {sizeMb} Mt tämä tiedosto ylittää tarkistusrajan {limitMb} Mt, joten se piilotetaan käyttäjiltä.",
+      "empty-file": "Tiedosto on tyhjä.",
+      "unreadable": "Tiedostoa ei voitu avata. Se voi olla vahingoittunut tai ei vasta nimen mukaista muotoa.",
+      "identifier-column": "Taulukossa \"{sheet}\" on sarake \"{column}\", joka tunnistaa henkilöt. Tiedosto on piilotettu käyttäjiltä.",
+      "identifier-values": "\"{sheet}\" sisältää {count, plural, one {# sähköpostiosoitteen} other {# sähköpostiosoitetta}}. Tiedosto on piilotettu käyttäjiltä.",
+      "user-code-format": "Taulukko \"{sheet}\", sarake \"{column}\": {count, plural, one {# arvo ei ole} other {# arvoa eivät ole}} u-... käyttäjätunnus. Tiedosto on piilotettu käyttäjiltä.",
+      "formulas-without-values": "Taulukossa \"{sheet}\" on {count, plural, one {# kaava} other {# kaavaa}}, joilla ei ole tallennettua arvoa, joten näitä lukuja ei voi näyttää sovelluksessa.",
+      "missing-sheet": "Taulukko \"{sheet}\" puuttuu, joten siihen perustuvia näkymiä ei voi näyttää.",
+      "missing-column": "Taulukossa \"{sheet}\" ei ole saraketta \"{column}\", joten sitä käyttävät näkymät eivät ole näkyvissä.",
+      "no-period": "Tiedoston nimessä ei ole raportointijaksoa, joten säilytys lasketaan toimituspäivästä.",
+      "unclassified-field": "Saraketta \"{column}\" ei tunnisteta. Se pysyy piilotettuna eikä käyttäjät voi ladata toimitettua tiedostoa, ennen kuin se liitetään oikeaan kenttään.",
+      "past-retention": "Vanhempi kuin tämän kansion säilytysaika ({months} kuukautta); ei enää näytetä.",
+      "unknown": "Ilmoitettu ongelma: {code}."
+    }
   }
 }

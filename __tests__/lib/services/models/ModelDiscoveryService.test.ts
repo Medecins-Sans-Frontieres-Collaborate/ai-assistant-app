@@ -74,10 +74,28 @@ const EU_DEPLOYMENTS = [
 
 // Spy on global.fetch so vi.restoreAllMocks() cleanly un-installs it after each
 // test (a raw `global.fetch = vi.fn()` would leak the mock across test files).
+//
+// Unscoped discovery also reads the account's model catalog (retirement
+// dates). That request is answered here from `catalogEntries` and never
+// reaches `impl`, so the deployment mocks — and `deploymentFetches()` — stay
+// about deployments only.
+let catalogEntries: unknown[] = [];
+const isCatalogUrl = (url: unknown) =>
+  typeof url === 'string' && url.includes('/models?api-version=');
+
 function spyFetch(impl: (url: string) => Promise<unknown>) {
   return vi
     .spyOn(global, 'fetch')
-    .mockImplementation(impl as unknown as typeof fetch);
+    .mockImplementation((async (url: string) =>
+      isCatalogUrl(url)
+        ? { ok: true, json: async () => ({ value: catalogEntries }) }
+        : impl(url)) as unknown as typeof fetch);
+}
+
+function deploymentFetches(): number {
+  return (
+    global.fetch as unknown as ReturnType<typeof vi.fn>
+  ).mock.calls.filter(([url]) => !isCatalogUrl(url)).length;
 }
 
 function mockArm(deployments: unknown[], pages?: unknown[][]) {
@@ -109,6 +127,7 @@ describe('ModelDiscoveryService', () => {
   beforeEach(() => {
     service = ModelDiscoveryService.getInstance();
     service.clearCache();
+    catalogEntries = [];
   });
 
   afterEach(() => {
@@ -198,7 +217,7 @@ describe('ModelDiscoveryService', () => {
     mockArm(EU_DEPLOYMENTS);
     await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
     await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
-    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(deploymentFetches()).toBe(1);
   });
 
   it('clearCache(path) evicts only that account, leaving other regions cached', async () => {
@@ -209,7 +228,7 @@ describe('ModelDiscoveryService', () => {
     // Warm both regions (2 fetches).
     await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
     await service.listDeployedModels(ARM_TOKEN, OTHER_ACCOUNT);
-    expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect(deploymentFetches()).toBe(2);
 
     // Evict only the EU account (passing the project path; it gets stripped).
     service.clearCache(PROJECT_PATH);
@@ -217,7 +236,7 @@ describe('ModelDiscoveryService', () => {
     // EU re-fetches (3); the other region is still cached (no extra fetch).
     await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
     await service.listDeployedModels(ARM_TOKEN, OTHER_ACCOUNT);
-    expect(global.fetch).toHaveBeenCalledTimes(3);
+    expect(deploymentFetches()).toBe(3);
   });
 
   it('dedups concurrent cold-cache calls into a single fetch (stampede)', async () => {
@@ -227,7 +246,7 @@ describe('ModelDiscoveryService', () => {
       service.listDeployedModels(ARM_TOKEN, PROJECT_PATH),
       service.listDeployedModels(ARM_TOKEN, PROJECT_PATH),
     ]);
-    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(deploymentFetches()).toBe(1);
     // All callers resolve to the same discovered list.
     expect(a).toEqual(b);
     expect(b).toEqual(c);
@@ -239,17 +258,17 @@ describe('ModelDiscoveryService', () => {
       mockArm([]);
       const first = await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
       expect(first).toEqual([]);
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(deploymentFetches()).toBe(1);
 
       // Within the short empty-TTL window: still served from cache.
       vi.advanceTimersByTime(30 * 1000);
       await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(deploymentFetches()).toBe(1);
 
       // Past the 60s empty-TTL: the transient emptiness is re-discovered.
       vi.advanceTimersByTime(40 * 1000);
       await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
-      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(deploymentFetches()).toBe(2);
     } finally {
       vi.useRealTimers();
     }
@@ -263,7 +282,7 @@ describe('ModelDiscoveryService', () => {
       // Well past the 60s empty-TTL but inside the 1h full TTL.
       vi.advanceTimersByTime(5 * 60 * 1000);
       await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(deploymentFetches()).toBe(1);
     } finally {
       vi.useRealTimers();
     }
@@ -301,7 +320,7 @@ describe('ModelDiscoveryService', () => {
       ],
     );
     const models = await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
-    expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect(deploymentFetches()).toBe(2);
     expect(models.map((m) => m.deploymentName).sort()).toEqual([
       'gpt-4.1',
       'gpt-5.2',
@@ -339,15 +358,15 @@ describe('ModelDiscoveryService', () => {
       await service.listDeployedModels('token-a', PROJECT_PATH, {
         cacheScope: 'user-a',
       });
-      expect(global.fetch).toHaveBeenCalledTimes(1); // scoped hit
+      expect(deploymentFetches()).toBe(1); // scoped hit
 
       await service.listDeployedModels('token-b', PROJECT_PATH, {
         cacheScope: 'user-b',
       });
-      expect(global.fetch).toHaveBeenCalledTimes(2); // different scope = miss
+      expect(deploymentFetches()).toBe(2); // different scope = miss
 
       await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
-      expect(global.fetch).toHaveBeenCalledTimes(3); // unscoped = its own entry
+      expect(deploymentFetches()).toBe(3); // unscoped = its own entry
     });
 
     it('scopes the in-flight dedup too (concurrent same-scope calls share one fetch)', async () => {
@@ -365,7 +384,7 @@ describe('ModelDiscoveryService', () => {
       ]);
       // user-a dedups to one fetch; user-b must NOT piggyback on user-a's
       // in-flight discovery (different RBAC).
-      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(deploymentFetches()).toBe(2);
     });
 
     it('clearCache(path, scope) evicts only that scoped entry', async () => {
@@ -377,7 +396,7 @@ describe('ModelDiscoveryService', () => {
         cacheScope: 'user-b',
       });
       await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
-      expect(global.fetch).toHaveBeenCalledTimes(3);
+      expect(deploymentFetches()).toBe(3);
 
       // Evict user-a only (project path is stripped like elsewhere).
       service.clearCache(PROJECT_PATH, 'user-a');
@@ -385,13 +404,13 @@ describe('ModelDiscoveryService', () => {
       await service.listDeployedModels('token-a', PROJECT_PATH, {
         cacheScope: 'user-a',
       });
-      expect(global.fetch).toHaveBeenCalledTimes(4); // re-fetched
+      expect(deploymentFetches()).toBe(4); // re-fetched
 
       await service.listDeployedModels('token-b', PROJECT_PATH, {
         cacheScope: 'user-b',
       });
       await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
-      expect(global.fetch).toHaveBeenCalledTimes(4); // others still cached
+      expect(deploymentFetches()).toBe(4); // others still cached
     });
 
     it('clearCache(path) without a scope evicts the scoped entries too (prefix match)', async () => {
@@ -400,7 +419,7 @@ describe('ModelDiscoveryService', () => {
       await service.listDeployedModels('token-a', PROJECT_PATH, {
         cacheScope: 'user-a',
       });
-      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(deploymentFetches()).toBe(2);
 
       service.clearCache(PROJECT_PATH);
 
@@ -408,7 +427,7 @@ describe('ModelDiscoveryService', () => {
       await service.listDeployedModels('token-a', PROJECT_PATH, {
         cacheScope: 'user-a',
       });
-      expect(global.fetch).toHaveBeenCalledTimes(4); // both re-fetched
+      expect(deploymentFetches()).toBe(4); // both re-fetched
     });
 
     it('sweeps expired entries on the next cache write (no unbounded growth from rotated tokens)', async () => {
@@ -450,22 +469,21 @@ describe('ModelDiscoveryService', () => {
           cacheScope: `scope-${i}`,
         });
       }
-      const fetches = (global.fetch as unknown as ReturnType<typeof vi.fn>).mock
-        .calls.length;
+      const fetches = deploymentFetches();
 
       // Oldest scoped entry was evicted → re-fetches; newest is still cached.
       await service.listDeployedModels('token', PROJECT_PATH, {
         cacheScope: 'scope-0',
       });
-      expect(global.fetch).toHaveBeenCalledTimes(fetches + 1);
+      expect(deploymentFetches()).toBe(fetches + 1);
       await service.listDeployedModels('token', PROJECT_PATH, {
         cacheScope: 'scope-500',
       });
-      expect(global.fetch).toHaveBeenCalledTimes(fetches + 1);
+      expect(deploymentFetches()).toBe(fetches + 1);
 
       // The unscoped entry was never a cap candidate.
       await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
-      expect(global.fetch).toHaveBeenCalledTimes(fetches + 1);
+      expect(deploymentFetches()).toBe(fetches + 1);
     });
 
     it('a path-level clear leaves other accounts (scoped or not) cached', async () => {
@@ -478,14 +496,176 @@ describe('ModelDiscoveryService', () => {
       await service.listDeployedModels('token-a', OTHER_ACCOUNT, {
         cacheScope: 'user-a',
       });
-      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(deploymentFetches()).toBe(2);
 
       service.clearCache(PROJECT_PATH);
 
       await service.listDeployedModels('token-a', OTHER_ACCOUNT, {
         cacheScope: 'user-a',
       });
-      expect(global.fetch).toHaveBeenCalledTimes(2); // other account untouched
+      expect(deploymentFetches()).toBe(2); // other account untouched
+    });
+  });
+
+  describe('retirement dates', () => {
+    // Shape captured from the live US account's `/models` endpoint.
+    const catalogModel = (
+      name: string,
+      version: string,
+      inference: string | undefined,
+      skus: Array<{ name: string; deprecationDate?: string }> = [],
+    ) => ({
+      name,
+      version,
+      format: 'OpenAI',
+      lifecycleStatus: 'Preview',
+      deprecation: inference ? { inference } : {},
+      skus,
+    });
+    const chatDep = (name: string, model: string, version: string) =>
+      dep(name, 'OpenAI', model, version, { chatCompletion: 'true' });
+    const retiresAtByName = (models: { deploymentName: string }[]) =>
+      Object.fromEntries(
+        models.map((m) => [
+          m.deploymentName,
+          (m as { retiresAt?: string }).retiresAt,
+        ]),
+      );
+
+    it('stamps each deployment with the date of the model VERSION it runs', async () => {
+      catalogEntries = [
+        catalogModel('gpt-chat-latest', '2026-05-05', '2026-10-05T00:00:00Z'),
+        catalogModel('gpt-chat-latest', '2026-08-06', '2026-12-02T00:00:00Z'),
+        catalogModel('gpt-5.4', '2026-03-05', '2027-09-02T00:00:00Z'),
+      ];
+      mockArm([
+        // Deployment name is not the model: the date follows the model.
+        chatDep('gpt-5.2-chat', 'gpt-chat-latest', '2026-05-05'),
+        chatDep('gpt-chat-latest', 'gpt-chat-latest', '2026-08-06'),
+        chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05'),
+        chatDep('gpt-4.1', 'gpt-4.1', '2025-04-14'),
+      ]);
+
+      const models = await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+
+      expect(retiresAtByName(models)).toEqual({
+        'gpt-5.2-chat': '2026-10-05T00:00:00Z',
+        'gpt-chat-latest': '2026-12-02T00:00:00Z',
+        'gpt-5.4': '2027-09-02T00:00:00Z',
+        'gpt-4.1': undefined,
+      });
+    });
+
+    it("prefers the deployment SKU's own date over the version-wide one", async () => {
+      catalogEntries = [
+        catalogModel('gpt-5.4', '2026-03-05', '2027-09-02T00:00:00Z', [
+          { name: 'DataZoneStandard', deprecationDate: '2027-03-01T00:00:00Z' },
+          { name: 'GlobalStandard', deprecationDate: '2027-09-02T00:00:00Z' },
+        ]),
+      ];
+      // dep() deploys on the DataZoneStandard SKU.
+      mockArm([chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05')]);
+
+      const [model] = await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+      expect(model.retiresAt).toBe('2027-03-01T00:00:00Z');
+    });
+
+    it('reads the nested `model` shape too', async () => {
+      catalogEntries = [
+        {
+          model: catalogModel('gpt-5.4', '2026-03-05', '2027-09-02T00:00:00Z'),
+        },
+      ];
+      mockArm([chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05')]);
+
+      const [model] = await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+      expect(model.retiresAt).toBe('2027-09-02T00:00:00Z');
+    });
+
+    it('still discovers when the catalog cannot be read', async () => {
+      vi.spyOn(console, 'warn').mockImplementation(() => {});
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+      vi.spyOn(global, 'fetch').mockImplementation((async (url: string) =>
+        isCatalogUrl(url)
+          ? {
+              ok: false,
+              status: 403,
+              statusText: 'Forbidden',
+              text: async () => '',
+            }
+          : {
+              ok: true,
+              json: async () => ({
+                value: [chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05')],
+              }),
+            }) as unknown as typeof fetch);
+
+      const models = await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+      expect(models.map((m) => m.deploymentName)).toEqual(['gpt-5.4']);
+      expect(models[0].retiresAt).toBeUndefined();
+    });
+
+    it('gives the catalog read its own deadline, and leaves the deployment list without one', async () => {
+      mockArm([chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05')]);
+      await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+
+      const calls = (global.fetch as unknown as ReturnType<typeof vi.fn>).mock
+        .calls as [string, RequestInit | undefined][];
+      const catalogCall = calls.find(([url]) => isCatalogUrl(url));
+      const deploymentCall = calls.find(([url]) => !isCatalogUrl(url));
+      expect(catalogCall?.[1]?.signal).toBeInstanceOf(AbortSignal);
+      expect(deploymentCall?.[1]?.signal).toBeUndefined();
+    });
+
+    it('still discovers when the catalog read is aborted by its deadline', async () => {
+      vi.spyOn(console, 'warn').mockImplementation(() => {});
+      vi.spyOn(global, 'fetch').mockImplementation((async (url: string) => {
+        if (isCatalogUrl(url)) {
+          throw new DOMException('The operation timed out.', 'TimeoutError');
+        }
+        return {
+          ok: true,
+          json: async () => ({
+            value: [chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05')],
+          }),
+        };
+      }) as unknown as typeof fetch);
+
+      const models = await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+      expect(models.map((m) => m.deploymentName)).toEqual(['gpt-5.4']);
+    });
+
+    it('skips the catalog for user-scoped (byom) discovery', async () => {
+      mockArm([chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05')]);
+      await service.listDeployedModels('user-token', ACCOUNT_PATH, {
+        cacheScope: 'user-a',
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('logs a deployment whose model version retires within 30 days', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      vi.useFakeTimers({ now: new Date('2026-10-02T12:00:00Z') });
+      try {
+        catalogEntries = [
+          catalogModel('gpt-chat-latest', '2026-05-05', '2026-10-05T00:00:00Z'),
+          catalogModel('gpt-5.4', '2026-03-05', '2027-09-02T00:00:00Z'),
+        ];
+        mockArm([
+          chatDep('gpt-5.2-chat', 'gpt-chat-latest', '2026-05-05'),
+          chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05'),
+        ]);
+        await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+
+        const lines = warn.mock.calls
+          .map(([line]) => String(line))
+          .filter((line) => line.startsWith('[model-lifecycle]'));
+        expect(lines).toEqual([
+          '[model-lifecycle] deployment "gpt-5.2-chat" (gpt-chat-latest@2026-05-05) retires in 3 day(s), on 2026-10-05T00:00:00Z',
+        ]);
+      } finally {
+        vi.useRealTimers();
+      }
     });
   });
 });

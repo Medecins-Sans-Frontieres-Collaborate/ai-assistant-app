@@ -9,8 +9,6 @@ import {
 
 import { useTranslations } from 'next-intl';
 
-import { AzureAIIcon } from '@/components/Icons/providers';
-
 import { CollapsibleDiagram } from './CollapsibleDiagram';
 
 import { Link } from '@/lib/navigation';
@@ -95,49 +93,6 @@ export default function SearchModeInfoPage() {
       style AzureOpenAI fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
   `;
 
-  // Mermaid diagram for Azure AI Foundry Mode
-  const foundryModeDiagram = `
-    flowchart TB
-      Start([👤 You send a message])
-
-      subgraph Browser["💾 YOUR BROWSER"]
-        LocalStorage[Full conversation<br/>stored locally]
-      end
-
-      subgraph OurServer["🔄 AI ASSISTANT SERVER"]
-        Backend[Route to Foundry Agent]
-        ReceiveResponse[Receive streaming response]
-      end
-
-      subgraph AzureFoundry["☁️ AZURE AI FOUNDRY AGENT"]
-        ThreadStorage[(🗄️ Database<br/>⚠️ Full conversation storage<br/>via thread ID)]
-        RecallContext[📚 Recall full conversation<br/>from database]
-        CheckSearch{Need web search?}
-        WebSearch[🌐 Execute web search]
-        Generate[🤖 Generate response<br/>with GPT-4.1]
-        SaveResponse[(💾 Save response<br/>to database)]
-      end
-
-      Start --> LocalStorage
-      LocalStorage --> Backend
-      Backend --> ThreadStorage
-      ThreadStorage --> RecallContext
-      RecallContext --> CheckSearch
-
-      CheckSearch -->|Yes| WebSearch
-      WebSearch --> Generate
-
-      CheckSearch -->|No| Generate
-
-      Generate --> SaveResponse
-      SaveResponse --> ReceiveResponse
-      ReceiveResponse --> LocalStorage
-
-      style Browser fill:#d4edda,stroke:#28a745,stroke-width:3px
-      style OurServer fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
-      style AzureFoundry fill:#f8d7da,stroke:#dc3545,stroke-width:3px
-  `;
-
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 pb-20">
       {/* Back Button */}
@@ -185,12 +140,6 @@ export default function SearchModeInfoPage() {
                     {t('searchMode.privacyFocused')}
                   </div>
                 </th>
-                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
-                  <div className="flex items-center justify-center gap-2">
-                    <AzureAIIcon className="w-4 h-4" />
-                    {t('searchMode.azureAIFoundry')}
-                  </div>
-                </th>
               </tr>
             </thead>
             <tbody>
@@ -204,9 +153,6 @@ export default function SearchModeInfoPage() {
                 <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-sm text-amber-600 dark:text-amber-400">
                   {t('searchMode.slowerMultiStep')}
                 </td>
-                <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-sm text-green-600 dark:text-green-400">
-                  {t('searchMode.fasterDirect')}
-                </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-sm font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700/50">
@@ -217,9 +163,6 @@ export default function SearchModeInfoPage() {
                 </td>
                 <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-sm text-green-600 dark:text-green-400 font-semibold">
                   {t('common.no')}
-                </td>
-                <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-sm text-red-600 dark:text-red-400 font-semibold">
-                  {t('common.yes')}
                 </td>
               </tr>
               <tr>
@@ -232,9 +175,6 @@ export default function SearchModeInfoPage() {
                 <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
                   {t('searchMode.searchQueriesOnly')}
                 </td>
-                <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
-                  {t('searchMode.fullConversationHistory')}
-                </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-sm font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700/50">
@@ -245,9 +185,6 @@ export default function SearchModeInfoPage() {
                 </td>
                 <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-300">
                   {t('searchMode.allModels')}
-                </td>
-                <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-300">
-                  {t('searchMode.gpt41Only')}
                 </td>
               </tr>
             </tbody>
@@ -310,35 +247,6 @@ export default function SearchModeInfoPage() {
           title={t('searchMode.viewTechnicalFlowDiagram')}
           diagram={privacyModeDiagram}
           legend={t('searchMode.legendPrivacy')}
-        />
-      </div>
-
-      {/* Azure AI Foundry Mode */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <AzureAIIcon className="w-7 h-7" />
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
-            {t('searchMode.azureAIFoundryMode')}
-          </h2>
-          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 rounded">
-            {t('searchMode.gpt41Only')}
-          </span>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-4">
-          <p className="text-gray-700 dark:text-gray-300 mb-4">
-            {t('searchMode.foundryDescription')}
-          </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400 italic">
-            {t('searchMode.viewDetailsBelow')}
-          </p>
-        </div>
-
-        {/* Collapsible Diagram */}
-        <CollapsibleDiagram
-          title={t('searchMode.viewTechnicalFlowDiagram')}
-          diagram={foundryModeDiagram}
-          legend={t('searchMode.legendFoundry')}
         />
       </div>
 

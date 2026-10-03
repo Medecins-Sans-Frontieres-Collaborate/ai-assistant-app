@@ -808,7 +808,10 @@
       "codeInterpreterLimitReached": "Đã đạt giới hạn thực thi mã hàng ngày — trả lời mà không chạy mã…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Tìm kiếm cơ sở tri thức thất bại — câu trả lời sẽ không sử dụng tài liệu của tác nhân",
-      "stillWorking": "Vẫn đang xử lý…"
+      "stillWorking": "Vẫn đang xử lý…",
+      "assessingSearchResults": "Đang kiểm tra kết quả xem có trả lời được câu hỏi không…",
+      "refiningSearch": "Đang tìm lại: “{query}”…",
+      "readingSearchPages": "Đang đọc {count} trang kết quả…"
     },
     "toolSummary": {
       "usedTools": "Đã sử dụng {count, plural, one {# công cụ} other {# công cụ}}",
@@ -894,7 +897,10 @@
       "summarizeNow": "Tóm tắt từ các tiêu đề ngay",
       "sourcesCount": "{count} nguồn",
       "showAll": "Hiển thị tất cả {count} nguồn",
-      "showFewer": "Hiển thị ít hơn"
+      "showFewer": "Hiển thị ít hơn",
+      "multiStepTitle": "Kết quả hiện tại — kiểm tra xem các kết quả này có trả lời được câu hỏi không",
+      "multiStepHint": "Tìm kiếm có thể tiếp tục — thực hiện phiên tìm kiếm khác hoặc đọc các trang có tiềm năng nhất. Nếu không muốn chờ, hãy trả lời ngay dựa trên {count} kết quả đã có.",
+      "answerNow": "Trả lời ngay từ các kết quả này"
     },
     "retryWithModel": "Thử với {model}",
     "createTodoTasks": "Tạo nhiệm vụ To Do từ phản hồi này",
@@ -908,7 +914,10 @@
     "modelTimedOutAtMaximum": "{model} không bắt đầu phản hồi trong {duration}, là thời gian chờ tối đa. Vui lòng thử lại hoặc chọn mô hình khác.",
     "requestTimedOut": "Yêu cầu này mất quá nhiều thời gian để chuẩn bị và đã dừng trước khi {model} có thể trả lời. Bạn có thể cho phép nhiều thời gian hơn hoặc thử mô hình khác.",
     "retryWaitingLonger": "Chờ tối đa {duration} và thử lại",
-    "alwaysWaitThisLong": "Luôn chờ tối đa {duration}"
+    "alwaysWaitThisLong": "Luôn chờ tối đa {duration}",
+    "keepSearching": "Tiếp tục tìm kiếm",
+    "keepSearchingHint": "Việc tìm kiếm đã dừng lại trước khi tìm được thông tin này. Hãy yêu cầu trợ lý thử các phương pháp khác.",
+    "keepSearchingMessage": "Vui lòng tiếp tục tìm kiếm nội dung này — hãy thử cách khác."
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -1292,7 +1301,9 @@
       "providerBingResponsesDescription": "Cùng phạm vi tra cứu web Bing như Bing grounding, thực hiện theo dạng gọi trực tiếp một lần thay vì qua Foundry agent — thường nhanh hơn nhiều. Tùy chọn mới đang được đánh giá so với Bing grounding.",
       "providerSearxng": "Tìm kiếm web MSF",
       "providerSearxngDescription": "Dịch vụ tìm kiếm tổng hợp riêng của MSF. Bao phủ web nói chung, tin tức, tài liệu khoa học (bao gồm các ấn phẩm nghiên cứu của MSF), tài liệu kỹ thuật và dữ liệu nhân đạo, và lựa chọn nguồn phù hợp cho từng câu hỏi. Kết quả hiển thị trong vài giây với liên kết trực tiếp, chỉ có truy vấn tìm kiếm được gửi đi — các công cụ tìm kiếm không biết đến bạn.",
-      "otherProvidersLabel": "Nhà cung cấp khác"
+      "otherProvidersLabel": "Nhà cung cấp khác",
+      "multiStepLabel": "Tìm kiếm nhiều bước",
+      "multiStepDescription": "Với tìm kiếm web MSF, trợ lý kiểm tra các kết quả đầu tiên và chỉ tìm lại hoặc đọc trang tiềm năng nhất khi các kết quả đó chưa đủ. Hầu hết câu hỏi vẫn kết thúc trong một bước. Tắt tính năng này để mỗi lần tìm kiếm chỉ diễn ra một vòng."
     },
     "Admin": "Quản trị",
     "Usage Limits": "Giới hạn sử dụng",
@@ -1312,7 +1323,8 @@
       "customHint": "Từ {min} đến {max} giây.",
       "preferModelTitle": "Ưu tiên mô hình đã chọn",
       "preferModelDescription": "Không tự động chuyển mô hình khác khi yêu cầu thất bại. Lỗi vẫn sẽ cho phép bạn chuyển đổi."
-    }
+    },
+    "Analytics": "Phân tích"
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -1652,6 +1664,12 @@
     },
     "subVariant": {
       "label": "Kích thước"
+    },
+    "retiring": {
+      "badge": "Sắp ngừng",
+      "datedMoving": "Sẽ ngừng vào {date}. Các hội thoại trên mô hình này sẽ chuyển sang {successor} vào {movesOn}.",
+      "dated": "Sẽ ngừng vào {date} và sẽ dừng hoạt động. Vui lòng sử dụng {successor} thay thế.",
+      "replaced": "Được thay thế bằng {successor}."
     }
   },
   "models": {
@@ -1950,6 +1968,11 @@
       "name": "GPT-6 Astra",
       "description": "Sản phẩm hàng đầu GPT-6 của OpenAI. Được thiết kế cho các công việc đầu-cuối đòi hỏi cao: nghiên cứu chuyên sâu, phân tích phức tạp, kỹ thuật phần mềm và các nhiệm vụ nhiều bước kéo dài. Chi phí khoảng gấp đôi GPT-5.6 Sol.",
       "tagline": "Mô hình mạnh nhất của OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Phiên bản nâng cấp của GPT-6 Sol cho công việc đòi hỏi cao về mã nguồn, tài liệu và ứng dụng. Gần đạt trình độ Astra nhưng với chi phí token thấp hơn nhiều.",
+      "tagline": "Năng lực gần Astra, chi phí thấp hơn nhiều"
     }
   },
   "searchMode": {
@@ -5471,7 +5494,10 @@
       "announcements": "Thông báo hiển thị cho người dùng: ai được xem, khi nào và bằng ngôn ngữ nào.",
       "delegations": "Ai quản lý người dùng nào và mỗi người được phép làm gì.",
       "channelProfiles": "Thông tin về từng nền tảng: giới hạn, cách đếm, chuỗi bài. Những nguyên tắc cơ bản cho toàn tổ chức mà mỗi bộ kênh dựa vào.",
-      "channelSets": "Quy tắc của từng nhóm khi đăng trên nền tảng: hướng dẫn, giọng điệu, mặc định, ai có thể sử dụng và ai được phép gửi."
+      "channelSets": "Quy tắc của từng nhóm khi đăng trên nền tảng: hướng dẫn, giọng điệu, mặc định, ai có thể sử dụng và ai được phép gửi.",
+      "webSearch": "Giới hạn phạm vi tìm kiếm web: tìm kiếm nhiều bước, mô hình đánh giá và các giới hạn của nó.",
+      "contextBudget": "Lượng thông tin cuộc trò chuyện mỗi mô hình nhận được trong mỗi lượt.",
+      "analytics": "Báo cáo đã chuyển: nội dung đã nhận, ai có thể mở từng thư mục và các trường có thể hiển thị."
     },
     "openSettings": "Mở cài đặt",
     "area": {
@@ -5479,7 +5505,10 @@
       "viewAs": "Xem dạng",
       "globalAdmins": "Quản trị viên toàn cục",
       "announcements": "Thông báo",
-      "delegations": "Phân quyền"
+      "delegations": "Phân quyền",
+      "webSearch": "Tìm kiếm web",
+      "contextBudget": "Ngân sách ngữ cảnh",
+      "analytics": "Phân tích"
     }
   },
   "limits": {
@@ -6813,7 +6842,8 @@
     "capabilitiesHint": "Các quyền hạn mà ủy quyền này có thể cấp. Quản trị viên chỉ có quyền mà bạn bật ở đây.",
     "grant": {
       "limits": "Hạn mức sử dụng",
-      "announcements": "Thông báo"
+      "announcements": "Thông báo",
+      "analytics": "Phân tích"
     },
     "grantAll": "Tất cả",
     "maxOverrides": "Giới hạn quyền ghi đè mà ủy quyền này có thể có",
@@ -6974,5 +7004,540 @@
     "isDefaultAfterSave": "Bạn có thể đánh dấu đây là bộ mặc định sau khi lưu.",
     "noChannelsWarning": "Bộ này không có kênh nào; không ai có thể soạn thảo với nó.",
     "audienceEveryoneHint": "Bất kỳ ai trong tổ chức đều có thể sử dụng bộ này để soạn thảo."
+  },
+  "contextBudgetAdmin": {
+    "title": "Ngân sách ngữ cảnh",
+    "description": "Lượng lịch sử trò chuyện mà mỗi mô hình nhận được tại mỗi lượt. Các tin nhắn mới nhất luôn được giữ lại; các tin cũ hơn sẽ bị loại khi vượt ngân sách và phần tổng kết sẽ được gửi trong prompt hệ thống. Ngân sách lớn giúp giữ được nhiều nội dung hội thoại dài hơn nhưng chi phí mỗi lượt sẽ cao hơn.",
+    "scopeNote": "Áp dụng cho mọi cuộc trò chuyện trên mọi mô hình. Ngân sách không bao giờ vượt quá tỷ lệ cửa sổ mô hình đặt bên dưới.",
+    "loading": "Đang tải ngân sách ngữ cảnh…",
+    "loadError": "Không thể tải ngân sách ngữ cảnh.",
+    "configUnavailable": "Không thể đọc ngân sách ngữ cảnh đã lưu ngay lúc này, nên các giá trị bên dưới có thể không phản ánh đúng thực tế. Vui lòng thử lại trước khi chỉnh sửa.",
+    "retry": "Thử lại",
+    "historyTokensLabel": "Ngân sách chuẩn (tokens)",
+    "historyTokensDescription": "Lịch sử gửi mỗi lượt, bao gồm prompt hệ thống, cho các mô hình không có thiết lập riêng. Khoảng 48.000 token lưu được 30–60 lượt hội thoại gần nhất.",
+    "historyFractionLabel": "Giới hạn (tỷ lệ cửa sổ đầu vào của mô hình)",
+    "historyFractionDescription": "Ngân sách được giới hạn ở tỷ lệ này trên cửa sổ ngữ cảnh của mô hình trừ đi phần dành riêng cho đầu ra, nên mô hình với cửa sổ nhỏ sẽ không bao giờ bị yêu cầu nhiều hơn khả năng.",
+    "minRecentMessagesLabel": "Tin nhắn luôn giữ lại",
+    "minRecentMessagesDescription": "Những tin nhắn mới nhất sẽ giữ lại dù vượt ngân sách (nếu còn trong cửa sổ). Số ba giúp giữ lại lượt hội thoại trước đó khi chỉ một tin nhắn mới nhất — như dán tài liệu, kết quả tìm kiếm — đã chiếm hết ngân sách.",
+    "familyOverridesLabel": "Theo nhóm mô hình",
+    "familyOverridesDescription": "Ngân sách cho từng nhóm mô hình, thay thế ngân sách chuẩn.",
+    "modelOverridesLabel": "Theo từng mô hình",
+    "modelOverridesDescription": "Ngân sách cho một mô hình, thay thế ngân sách nhóm và chuẩn.",
+    "overrideFamilyPlaceholder": "Nhóm mô hình",
+    "overrideModelPlaceholder": "ID mô hình",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Thêm",
+    "removeOverride": "Xóa",
+    "noOverrides": "Không có",
+    "effectiveLabel": "Ngân sách có hiệu lực với các cài đặt này",
+    "effectiveColumnModel": "Mô hình",
+    "effectiveColumnWindow": "Khoảng thời gian",
+    "effectiveColumnBudget": "Ngân sách lịch sử",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Mặc định: {value}",
+    "defaultsNote": "Chỉ các giá trị khác với mặc định mới được lưu; các giá trị còn lại sẽ tiếp tục theo mặc định của mã nguồn qua các phiên bản.",
+    "save": "Lưu",
+    "saving": "Đang lưu…",
+    "resetDefaults": "Khôi phục mặc định",
+    "unsaved": "Thay đổi chưa được lưu",
+    "saveSuccess": "Ngân sách context đã được lưu. Hiệu lực trong vòng một phút.",
+    "saveError": "Không thể lưu ngân sách context.",
+    "conflictError": "Một quản trị viên khác đã thay đổi ngân sách context; các giá trị mới nhất đã được tải lại.",
+    "updatedByLine": "Lần lưu cuối bởi {by} vào {at}",
+    "neverSaved": "Chưa từng lưu — đang áp dụng mặc định của mã nguồn."
+  },
+  "webSearchAdmin": {
+    "title": "Tìm kiếm web",
+    "description": "Điều khiển tìm kiếm nhiều bước trên MSF web search. Sau kết quả đầu tiên, mô hình đánh giá quyết định kết quả có trả lời câu hỏi hay không; nếu không, hệ thống có thể tìm kiếm lại với truy vấn khác, đọc trang kết quả, hỏi người dùng chi tiết thiếu, hoặc báo không tìm thấy dữ liệu.",
+    "scopeNote": "Các cài đặt này chỉ áp dụng cho MSF web search. Các nhà cung cấp tìm kiếm khác luôn chạy một vòng duy nhất. Mỗi người cũng có thể tự tắt tìm kiếm nhiều bước trong Cài đặt.",
+    "loading": "Đang tải cài đặt tìm kiếm web…",
+    "loadError": "Không thể tải cài đặt tìm kiếm web.",
+    "configUnavailable": "Không thể đọc cài đặt tìm kiếm web từ bộ nhớ. Các điều khiển sẽ bị ẩn thay vì hiển thị với giá trị mặc định có thể không đúng với hệ thống đang sử dụng.",
+    "retry": "Thử lại",
+    "enabledLabel": "Tìm kiếm nhiều bước",
+    "enabledDescription": "Khi tắt, mỗi lần tìm kiếm sẽ chỉ là một vòng và không gọi đến mô hình đánh giá.",
+    "assessorLabel": "Mô hình đánh giá",
+    "assessorDescription": "Được gọi sau mỗi bước để đánh giá kết quả. Chọn một mô hình nhanh, tiết kiệm: nó chạy trong lúc người dùng chờ. Nếu không thể truy cập, {fallback} sẽ được sử dụng.",
+    "maxStepsLabel": "Số bước mỗi câu hỏi",
+    "maxStepsDescription": "Số bước tối đa một câu hỏi có thể thực hiện, bao gồm lần tìm kiếm đầu tiên. Mỗi lần tìm kiếm tiếp theo hoặc đọc loạt trang cũng tính là một bước. Giới hạn này tách biệt với hạn mức tìm kiếm hàng ngày, vốn chỉ tính mỗi câu hỏi một lần.",
+    "maxStepsExploratoryLabel": "Số bước cho tìm kiếm khám phá",
+    "maxStepsExploratoryDescription": "Giới hạn cao hơn cho những trường hợp truy tìm một mục khó, ví dụ như bản sao của một cuốn sách hiếm, khi thường sẽ gặp nhiều ngõ cụt. Không thể thấp hơn giới hạn thông thường.",
+    "pageReadsLabel": "Đọc các trang kết quả",
+    "pageReadsDescription": "Cho phép mỗi bước mở các kết quả triển vọng nhất và đọc trực tiếp nội dung trang thay vì chỉ dựa vào trích đoạn tìm kiếm.",
+    "maxPageReadsLabel": "Số trang mỗi bước đọc",
+    "sourceAssessmentLabel": "Đánh giá chất lượng nguồn",
+    "sourceAssessmentDescription": "Mô hình đánh giá sẽ gắn nhãn từng nguồn (chính thức, uy tín, thứ cấp, độ tin cậy thấp) để câu trả lời có thể cân nhắc và ghi nhận nguồn.",
+    "timeBudgetLabel": "Giới hạn thời gian (giây)",
+    "timeBudgetDescription": "Tổng thời gian tối đa cho một lần tìm kiếm, bao gồm vòng đầu tiên. Khi hết thời gian, câu trả lời sẽ được soạn dựa trên những gì đã tìm được.",
+    "defaultsNote": "Cài đặt giữ ở giá trị mặc định sẽ không được lưu, nên nó sẽ luôn theo giá trị mặc định mới nếu các bản cập nhật thay đổi.",
+    "defaultHint": "Mặc định: {value}",
+    "defaultOn": "bật",
+    "defaultOff": "tắt",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Bạn có thay đổi chưa lưu.",
+    "save": "Lưu",
+    "saving": "Đang lưu…",
+    "resetDefaults": "Khôi phục mặc định",
+    "saveSuccess": "Đã lưu cài đặt tìm kiếm web.",
+    "saveError": "Không thể lưu cài đặt tìm kiếm web.",
+    "conflictError": "Một quản trị viên khác đã thay đổi cài đặt trước đó. Đã tải lại — vui lòng kiểm tra và lưu lại.",
+    "updatedByLine": "Lưu lần cuối bởi {by} vào {at}.",
+    "neverSaved": "Chưa có thay đổi nào được lưu; đang áp dụng giá trị mặc định."
+  },
+  "modelRetirement": {
+    "notice": "{model} sẽ ngừng hoạt động vào ngày {retiresOn}. Cuộc trò chuyện này sẽ chuyển sang {successor} vào ngày {movesOn}.",
+    "noticeRetiring": "{model} sẽ ngừng hoạt động vào ngày {retiresOn} và sẽ dừng làm việc. Hãy chuyển sang {successor} để tiếp tục cuộc trò chuyện này.",
+    "switchNow": "Chuyển ngay"
+  },
+  "analytics": {
+    "title": "Phân tích",
+    "backToChat": "Quay lại trò chuyện",
+    "manage": "Quản lý",
+    "loading": "Đang tải…",
+    "loadFailed": "Không thể tải báo cáo.",
+    "retry": "Thử lại",
+    "emptyTitle": "Chưa có gì được chia sẻ với bạn",
+    "emptyBody": "Báo cáo sẽ xuất hiện ở đây khi quản trị viên cấp quyền truy cập cho bạn vào một thư mục.",
+    "deliveryUnavailable": "Hiện không thể kết nối tới kho lưu trữ báo cáo, nên các danh sách dưới đây có thể trống. Vui lòng thử lại sau vài phút.",
+    "groupsDegraded": "Hiện không kiểm tra được quyền thành viên nhóm của bạn, nên có thể thiếu các thư mục được chia sẻ qua nhóm. Vui lòng tải lại sau.",
+    "foldersHeading": "Thư mục",
+    "rootFolder": "Tất cả báo cáo",
+    "pathOnly": "Bạn không có quyền truy cập thư mục này, chỉ có quyền vào các thư mục bên trong.",
+    "selectFolder": "Chọn một thư mục để xem các báo cáo.",
+    "noFiles": "Không có báo cáo nào trong thư mục này.",
+    "viewOnlyNote": "Bạn chỉ có quyền xem thư mục này: bạn có thể mở báo cáo, xem tổng quan và bảng tóm tắt. Các bảng có một dòng cho mỗi người, xuất và tải về cần quyền tải về.",
+    "col": {
+      "name": "Tệp",
+      "period": "Thời gian",
+      "delivered": "Đã gửi",
+      "size": "Kích thước",
+      "availableUntil": "Có sẵn đến",
+      "actions": "Thao tác"
+    },
+    "download": "Tải xuống",
+    "downloadAria": "Tải xuống {name}",
+    "block": {
+      "view-only": "Chỉ xem",
+      "hidden-fields": "Giữ lại bản gốc (trường bị ẩn)",
+      "unclassified-fields": "Giữ lại bản gốc (trường chờ kiểm duyệt)",
+      "not-inspected": "Chưa kiểm tra",
+      "policy-unavailable": "Hiện không khả dụng"
+    },
+    "adminBadge": {
+      "error": "Bị ẩn với người dùng",
+      "pending": "Đang kiểm tra",
+      "warning": "Có cảnh báo",
+      "expired": "Đã hết hạn, chờ xóa",
+      "originalBlocked": "Người dùng không thể tải về: {reason}"
+    },
+    "openAria": "Mở {name}",
+    "openForExport": "Mở để xuất",
+    "preview": {
+      "back": "Quay lại {folder}",
+      "tabsLabel": "Các bảng trong tệp này",
+      "lockedTab": "{name} (bị khóa)",
+      "unavailable": "Hiện không thể mở tệp này trong ứng dụng.",
+      "tableFailed": "Không thể tải bảng này.",
+      "withheld": {
+        "row-level": "Bảng này có một dòng cho mỗi người. Cần quyền tải về thư mục để mở.",
+        "hidden-fields": "Trang này chứa trường bị ẩn nên sẽ không hiển thị."
+      },
+      "truncated": "Hiển thị {shown, number} trên tổng số {total, number} dòng. Hãy xuất bảng để lấy tất cả.",
+      "freeformNote": "Trang này được trình bày để đọc và hiển thị như khi được gửi.",
+      "filter": "Lọc dòng",
+      "filterPlaceholder": "Lọc hàng…",
+      "rows": "{count, plural, one {# hàng} other {# hàng}}",
+      "matching": "{count, number} trong tổng số {total, number} hàng khớp",
+      "modeLabel": "Hiển thị dưới dạng",
+      "mode": {
+        "table": "Bảng",
+        "chart": "Biểu đồ"
+      },
+      "noRows": "Không có hàng nào để hiển thị.",
+      "hiddenColumn": "Ẩn với người dùng",
+      "exportCsv": "Xuất bảng này (CSV)",
+      "exportXlsx": "Xuất tất cả bảng (Excel)",
+      "downloadOriginal": "Tải bản gốc",
+      "exportNote": "Tệp đã giao chứa các trường bị ẩn nên không thể tải nguyên trạng. Khi xuất sẽ bỏ qua các trường này.",
+      "sectionLabel": "Hiển thị",
+      "section": {
+        "overview": "Tổng quan",
+        "tables": "Các bảng"
+      }
+    },
+    "chart": {
+      "groupBy": "Nhóm theo",
+      "measure": "Chỉ số",
+      "rowCount": "Số hàng",
+      "aggregation": "Tính toán",
+      "agg": {
+        "sum": "Tổng",
+        "mean": "Trung bình",
+        "min": "Nhỏ nhất",
+        "max": "Lớn nhất"
+      },
+      "ariaLabel": "{measure} theo {group}",
+      "noColumns": "Bảng này không có cột kiểu văn bản hoặc ngày để nhóm.",
+      "empty": "Không có dữ liệu để vẽ biểu đồ cho lựa chọn này.",
+      "truncatedGroups": "Đang hiển thị {count} nhóm lớn nhất.",
+      "basedOn": "Dựa trên {shown, number} trong tổng số {total, number} hàng đầu tiên.",
+      "savePng": "Lưu dưới dạng hình ảnh",
+      "saveSvg": "Lưu dưới dạng SVG",
+      "saveFailed": "Không thể lưu biểu đồ."
+    },
+    "dash": {
+      "loading": "Đang tải…",
+      "failed": "Không thể tải tổng quan.",
+      "retry": "Thử lại",
+      "showTable": "Hiển thị dạng bảng",
+      "showChart": "Hiển thị dạng biểu đồ",
+      "smallGroups": "Nhóm có ít hơn 5 người",
+      "foldedNote": "Nhóm có ít hơn 5 người sẽ được gộp vào một hàng.",
+      "otherCount": "{count, plural, one {# khác} other {# khác}}",
+      "hiddenPanel": "Được ẩn theo cài đặt trường.",
+      "missingPanel": "Không khả dụng cho tệp này.",
+      "usage": {
+        "users": "Người dùng hoạt động",
+        "interactions": "Tương tác",
+        "avgPerUser": "Trung bình mỗi người",
+        "medianPerUser": "Giá trị trung vị mỗi người",
+        "hq": "Tại trụ sở",
+        "field": "Tại thực địa",
+        "shareUsers": "{pct}% trong số người dùng {comparator}",
+        "shareUsage": "{pct}% trong tổng số sử dụng {comparator}",
+        "comparator": "{comparator}: {value}",
+        "daily": "Tương tác mỗi ngày",
+        "dailyUsers": "Số người sử dụng mỗi ngày",
+        "dailyUsersSub": "Theo địa điểm làm việc",
+        "weekly": "Tương tác mỗi tuần",
+        "activity": "Mức độ sử dụng",
+        "activitySub": "Số người, theo số lượng tương tác trong giai đoạn",
+        "departments": "Tương tác theo bộ phận",
+        "jobTitles": "Tương tác theo chức danh",
+        "models": "Sự kiện theo mô hình",
+        "total": "Tất cả địa điểm",
+        "location": {
+          "hq": "Trụ sở chính",
+          "field": "Hiện trường",
+          "unknown": "Không xác định"
+        },
+        "col": {
+          "date": "Ngày",
+          "week": "Tuần bắt đầu",
+          "users": "Người dùng",
+          "interactions": "Tương tác",
+          "events": "Sự kiện",
+          "group": "Nhóm",
+          "band": "Tương tác"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Tổng đã tính phí",
+        "usageVariable": "Chi phí theo mức sử dụng",
+        "staticInfra": "Cơ sở hạ tầng tĩnh",
+        "sections": "Các mục đã tính phí",
+        "usageEvents": "Sự kiện sử dụng",
+        "bySection": "Tính phí theo mục",
+        "changes": "Thay đổi so với tập tin trước",
+        "noChanges": "Không có thay đổi so với tập tin trước.",
+        "byDomain": "Sự kiện sử dụng theo tên miền email",
+        "reconciliation": "Đối chiếu với Azure",
+        "col": {
+          "section": "Mục",
+          "billed": "Đã tính phí",
+          "usageEvents": "Sự kiện sử dụng",
+          "usagePct": "% Sử dụng",
+          "line": "Dòng",
+          "amount": "Số tiền",
+          "previous": "Tập tin trước",
+          "restated": "Đã điều chỉnh",
+          "change": "Thay đổi",
+          "domain": "Tên miền email",
+          "users": "Người dùng"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Tính toán dựa trên",
+        "delivered": "Giả định riêng của báo cáo ({version})",
+        "current": "Giả định hiện tại của ứng dụng ({version})",
+        "whatIf": "Nếu như…",
+        "deliveredUnavailable": "Không thể đọc giả định riêng của báo cáo từ sheet Assumptions, nên sử dụng giả định hiện tại của ứng dụng.",
+        "whatIfIntro": "Thay đổi một số liệu để xem tác động lên các mục bên dưới. Không có gì được lưu lại.",
+        "resetDelivered": "Đặt lại về giả định của báo cáo",
+        "resetCurrent": "Đặt lại về giả định hiện tại của ứng dụng",
+        "co2": "Phát thải",
+        "energy": "Năng lượng",
+        "charges": "Số lần sạc điện thoại",
+        "chargesSub": "Với lượng phát thải tương đương",
+        "activeUsers": "Người dùng hoạt động",
+        "requests": "Yêu cầu",
+        "tokens": "Tokens",
+        "vsDelivered": "{delta} so với giả định của báo cáo",
+        "sameAsDelivered": "Giống với giả định của báo cáo",
+        "unpriced": "{count, plural, one {# yêu cầu sử dụng} other {# yêu cầu sử dụng}} một kích thước mô hình mà các giả định này không có số liệu, và {count, plural, one {bị} other {bị}} loại ra.",
+        "byDepartment": "Phát thải theo phòng ban",
+        "byModel": "Phát thải theo mô hình",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Tính toán tại đây so với ghi nhận lúc đó",
+        "reconciliationSub": "Ứng dụng cũng ước tính mỗi yêu cầu khi xảy ra. Hai kết quả sẽ giống nhau nếu cùng giả định.",
+        "computed": "Tính toán tại đây",
+        "logged": "Ghi nhận bởi ứng dụng",
+        "difference": "Chênh lệch",
+        "col": {
+          "group": "Nhóm",
+          "requests": "Yêu cầu",
+          "tokens": "Tokens",
+          "energyWh": "Năng lượng (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Chi phí vận hành trung tâm dữ liệu (PUE)",
+          "promptTokenWeight": "Trọng số token prompt",
+          "dedicatedReasoningMultiplier": "Hệ số nhân bộ suy luận chuyên biệt",
+          "whPer1kTokens": "Wh cho mỗi 1.000 tokens — {name}",
+          "reasoningEffortMultipliers": "Hệ số nỗ lực suy luận — {name}",
+          "gridIntensity": "Lưới g CO₂e trên mỗi kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Sự kiện",
+        "users": "Người dùng",
+        "tokens": "Tokens",
+        "errors": "Lỗi",
+        "energy": "Năng lượng",
+        "co2": "Phát thải",
+        "hourly": "Sự kiện mỗi giờ (UTC)",
+        "byType": "Sự kiện theo loại",
+        "byError": "Lỗi theo mã",
+        "byModel": "Tokens theo mô hình",
+        "byCompany": "Sự kiện theo tổ chức",
+        "none": "Không có.",
+        "col": {
+          "group": "Nhóm",
+          "events": "Sự kiện",
+          "tokens": "Tokens",
+          "hour": "Giờ"
+        }
+      },
+      "trend": {
+        "title": "Theo thời gian",
+        "period": "Thời kỳ",
+        "users": "Người dùng hoạt động mỗi báo cáo",
+        "interactions": "Tương tác mỗi báo cáo",
+        "billed": "Tổng thanh toán mỗi thời kỳ",
+        "sections": "Thanh toán theo mục",
+        "otherSections": "Tất cả các mục khác",
+        "co2": "Phát thải trên mỗi báo cáo",
+        "energy": "Năng lượng trên mỗi báo cáo",
+        "recalculated": "Mỗi kỳ đều được tính toán theo giả định hiện tại của ứng dụng ({version}), nên thay đổi giả định giữa các báo cáo sẽ không hiển thị như thay đổi về lượng phát thải.",
+        "severalPerPeriod": "Thư mục này chứa nhiều báo cáo cho cùng một kỳ. Mở một thư mục bên trong để xem một báo cáo thay đổi như thế nào theo thời gian."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Phân tích",
+    "description": "Báo cáo được chuyển vào kho lưu trữ thông qua hệ thống dữ liệu. Tại đây bạn kiểm tra các báo cáo đã đến, quyết định ai có thể mở từng thư mục và chọn trường nào nền tảng được phép hiển thị.",
+    "openViewer": "Mở phân tích",
+    "sharedNotice": "Beta và môi trường vận hành dùng chung các thư mục, nhóm người dùng và tệp này. Thay đổi lưu ở đây sẽ áp dụng cho cả hai.",
+    "tabsLabel": "Các mục phân tích",
+    "tab": {
+      "health": "Giao nhận",
+      "folders": "Thư mục & quyền truy cập",
+      "fields": "Trường dữ liệu"
+    },
+    "loading": "Đang tải…",
+    "retry": "Thử lại",
+    "loadError": "Không thể tải mục này.",
+    "unavailable": "Không thể đọc thiết lập đã lưu từ kho lưu trữ. Đây KHÔNG phải là trạng thái \"chưa cấu hình gì\" — đã tắt chỉnh sửa để tránh ghi đè lên thiết lập thực tế. Vui lòng thử lại và kiểm tra nhật ký máy chủ nếu sự cố vẫn tiếp diễn.",
+    "save": "Lưu",
+    "saving": "Đang lưu…",
+    "unsaved": "Chưa lưu thay đổi",
+    "saveSuccess": "Đã lưu.",
+    "saveError": "Không thể lưu.",
+    "conflictError": "Quản trị viên khác đã thay đổi các thiết lập này khi bạn đang chỉnh sửa. Thay đổi của bạn chưa được lưu — phiên bản mới nhất đã được tải lại.",
+    "rootFolder": "(cấp cao nhất)",
+    "scope": {
+      "domain": "Miền email",
+      "user": "Cá nhân",
+      "attribute": "Thuộc tính",
+      "group": "Nhóm Entra"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "ten@example.org",
+      "attribute": "department:Health",
+      "group": "ID đối tượng nhóm Entra"
+    },
+    "level": {
+      "view": "Xem tổng hợp",
+      "download": "Xem, xuất và tải về"
+    },
+    "reportType": {
+      "usage": "Báo cáo sử dụng",
+      "rebilling": "Tính lại chi phí",
+      "emissions": "Báo cáo phát thải",
+      "raw-telemetry": "Telemet thô"
+    },
+    "field": {
+      "userCode": {
+        "label": "Mã người dùng",
+        "description": "Mã u-… bí danh đại diện cho một người."
+      },
+      "jobTitle": {
+        "label": "Chức danh",
+        "description": "Chức danh, bao gồm chức danh phổ biến nhất trên phiếu tổng hợp. Ở nhóm nhỏ, chức danh có thể xác định một người."
+      },
+      "department": {
+        "label": "Phòng ban",
+        "description": "Các phòng ban, bao gồm phòng ban hoạt động nhiều nhất trên phiếu tổng hợp."
+      },
+      "company": {
+        "label": "Công ty / tổ chức",
+        "description": "Tên tổ chức từ danh bạ, và tên công ty ghi trên phiếu tính lại chi phí."
+      },
+      "orgGroup": {
+        "label": "Nhóm tổ chức",
+        "description": "Trung tâm vận hành hoặc nhóm mà báo cáo được phân chia."
+      },
+      "section": {
+        "label": "Phần",
+        "description": "Phần thu hồi chi phí mà dòng tính lại thuộc về."
+      },
+      "mailDomain": {
+        "label": "Miền email",
+        "description": "Việc sử dụng miền email được quy cho (không bao giờ là địa chỉ email)."
+      },
+      "workLocation": {
+        "label": "Địa điểm làm việc",
+        "description": "Trụ sở chính hoặc hiện trường."
+      },
+      "technical": {
+        "label": "Chi tiết kỹ thuật",
+        "description": "Mô hình, khu vực, loại sự kiện, tiền tệ và các mô tả tương tự không tiết lộ về cá nhân."
+      },
+      "other": {
+        "label": "Trường mô tả khác",
+        "description": "Nơi bạn ghi chú cho cột không phù hợp với bất kỳ mục nào ở trên."
+      }
+    },
+    "folders": {
+      "intro": "Tất cả thư mục pipeline đã chuyển vào đều được liệt kê. Thư mục không có cấu hình — và không có thư mục phía trên cấp quyền truy cập — chỉ hiện với quản trị viên.",
+      "name": "Tên hiển thị",
+      "namePlaceholder": "Hiển thị thay cho đường dẫn thư mục",
+      "description": "Mô tả",
+      "reportType": "Loại báo cáo",
+      "reportTypeNone": "Chưa thiết lập",
+      "reportTypeInherited": "Kế thừa: {type}",
+      "reportTypeHint": "Chỉ dẫn cho hệ thống kiểm tra biết tên tệp nào sẽ có và tần suất như thế nào. Áp dụng cho các thư mục bên trong thư mục này.",
+      "retention": "Lưu giữ tệp trong (tháng)",
+      "retentionHint": "Để trống để kế thừa {months} tháng. Được tính từ khi kết thúc mỗi kỳ báo cáo.",
+      "audience": "Ai có thể mở thư mục này",
+      "audienceHint": "Mỗi dòng cấp quyền truy cập cho thư mục này và các thư mục bên trong. Mỗi dòng chỉ một đối tượng.",
+      "audienceScope": "Loại đối tượng",
+      "audienceTargets": "Đối tượng",
+      "audienceLevel": "Cấp quyền truy cập",
+      "addAudience": "Thêm cá nhân hoặc nhóm",
+      "removeAudience": "Xóa dòng này",
+      "restricted": "Không kế thừa quyền truy cập từ các thư mục phía trên",
+      "restrictedHint": "Chỉ các dòng trên thư mục này được áp dụng tại đây và các thư mục con.",
+      "hiddenFields": "Cũng ẩn các trường này trong thư mục",
+      "hiddenFieldsHint": "Trường bị ẩn tại đây bên trên cài đặt nền tảng, áp dụng cho thư mục này và các thư mục con. Bạn có thể ẩn thêm, không thể hiển thị thêm.",
+      "hiddenPlatformWide": "(ẩn ở mọi nơi)",
+      "clear": "Xóa cấu hình thư mục này",
+      "rawChip": "Thô: chỉ dành cho quản trị viên toàn cục",
+      "rawNote": "Dữ liệu thô chứa tên, địa chỉ email và tên tệp. Chỉ quản trị viên toàn cục mới có thể mở, không thể thêm đối tượng quyền truy cập.",
+      "audienceChip": "{count, plural, one {# dòng quyền truy cập} other {# dòng quyền truy cập}}",
+      "restrictedChip": "Không kế thừa",
+      "notConfiguredChip": "Chưa cấu hình",
+      "addPathLabel": "Thiết lập thư mục trước lần chuyển đầu tiên",
+      "addPath": "Thêm",
+      "addPathHint": "Nhập đường dẫn chính xác như pipeline sẽ ghi, ví dụ: usage/ocba. Chỉ lưu cấu hình; không tạo gì trong lưu trữ.",
+      "invalidPath": "Đây không phải đường dẫn hợp lệ cho thư mục.",
+      "rawGlobalOnly": "Chỉ quản trị viên toàn cục mới được cấu hình thư mục dưới raw/."
+    },
+    "fields": {
+      "intro": "Chọn trường của các báo cáo được chuyển giao mà nền tảng có thể hiển thị. Ẩn một trường sẽ loại bỏ trường đó khỏi tất cả nơi hiển thị trong ứng dụng và khỏi tệp xuất ra từ ứng dụng. Tệp gốc chỉ còn có thể tải về bởi quản trị viên.",
+      "readOnly": "Chỉ quản trị viên toàn cục mới có thể thay đổi. Với tư cách quản trị viên phân tích, bạn có thể ẩn thêm trường cho từng thư mục trong mục Thư mục & quyền truy cập.",
+      "configurableHeading": "Trường",
+      "shown": "Hiển thị",
+      "hidden": "Đã ẩn",
+      "jobTitleNote": "Nếu hiển thị chức danh, một dòng trong nhóm nhỏ vẫn có thể nhận diện cá nhân dù chỉ có mã người dùng. Biểu đồ sẽ ẩn nhóm dưới năm người; bảng tải về thì không.",
+      "neverHeading": "Không bao giờ hiển thị",
+      "neverBody": "Tên, địa chỉ email, mã thư mục, tên tệp tải lên và nội dung lỗi không bao giờ được hiển thị ngoài dữ liệu thô. Báo cáo chứa bất kỳ trường nào trong số đó sẽ bị ẩn khỏi người dùng cho đến khi được thay thế.",
+      "unclassifiedHeading": "Cột không có trong danh mục",
+      "unclassifiedBody": "Cột văn bản không được nhận diện sẽ bị ẩn — cả trong ứng dụng lẫn khi xuất dữ liệu — và người dùng sẽ không thể tải về tập tin, cho đến khi bạn phân loại nó vào một trường.",
+      "noneWaiting": "Không có mục nào đang chờ.",
+      "inFiles": "{count, plural, one {trong # tập tin} other {trong # tập tin}}",
+      "classifyAs": "Trường cho cột {column}",
+      "keepHidden": "Giữ ẩn",
+      "removeClassification": "Xóa thiết lập cho cột {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Không thể truy cập kho lưu trữ báo cáo",
+      "deliveryUnavailableBody": "Ứng dụng không thể liệt kê vùng chứa \"{container}\". Hãy kiểm tra xem vùng chứa này đã tồn tại và định danh của ứng dụng có vai trò dữ liệu trên đó chưa. Trong lúc này sẽ không ai nhìn thấy báo cáo nào.",
+      "foldersUnavailable": "Không thể đọc thiết lập thư mục, nên hiện tại người dùng sẽ không thấy thư mục nào. Các tập tin sẽ không được kiểm tra hoặc xóa cho đến khi hệ thống phục hồi.",
+      "policyUnavailable": "Không thể đọc thiết lập trường, nên người dùng hiện không thể tải về tập tin.",
+      "total": {
+        "files": "Tập tin",
+        "ok": "Bình thường",
+        "warning": "Có cảnh báo",
+        "error": "Ẩn với người dùng",
+        "pending": "Đang kiểm tra"
+      },
+      "recheckAll": "Kiểm tra lại tất cả",
+      "recheckOne": "Kiểm tra lại",
+      "recheckQueued": "{count, plural, one {# tập tin đang chờ kiểm tra.} other {# tập tin đang chờ kiểm tra.}}",
+      "recheckFailed": "Không thể bắt đầu kiểm tra.",
+      "retention": {
+        "active": "Tập tin vượt quá thời hạn lưu trong thư mục sẽ bị ẩn ngay lập tức và sẽ bị xóa sau {days} ngày.",
+        "disabled": "Tập tin vượt quá thời hạn lưu trong thư mục sẽ bị ẩn, nhưng việc xóa đã tắt ở phiên bản này.",
+        "waiting-for-config": "Tập tin vượt quá thời hạn lưu mặc định sẽ bị ẩn. Không có gì bị xóa cho đến khi thiết lập thư mục được lưu ít nhất một lần."
+      },
+      "noFiles": "Chưa có tập tin nào được chuyển giao.",
+      "allGood": "Mọi tập tin đã chuyển đều hợp lệ.",
+      "problemsHeading": "Tập tin cần chú ý",
+      "status": {
+        "error": "Ẩn với người dùng",
+        "warning": "Cảnh báo",
+        "pending": "Đang kiểm tra",
+        "ok": "Bình thường"
+      },
+      "pendingBody": "Mới hoặc thay thế kể từ lần kiểm tra trước. Sẽ hiện với người dùng khi kiểm tra đạt.",
+      "firstSeen": "Phát hiện lần đầu vào {date}",
+      "unclassifiedHeading": "Các cột đang chờ quyết định",
+      "unclassifiedBody": "Những cột này chưa được nhận diện. Chúng sẽ bị ẩn và người dùng không thể tải những tập tin chứa chúng cho đến khi từng cột được phân loại vào trường tương ứng.",
+      "unclassifiedChip": "{column} · {count, plural, one {# tập tin} other {# tập tin}}",
+      "openFields": "Chuyển đến Trường",
+      "unconfiguredHeading": "Thư mục chưa có thiết lập",
+      "unconfiguredBody": "Tập tin đến đây nhưng chưa ai cấu hình thư mục này hoặc thư mục cha của nó. Chỉ quản trị viên mới có thể xem được.",
+      "staleHeading": "Giao báo cáo trễ hạn",
+      "staleBody": "Những thư mục này yêu cầu có báo cáo định kỳ nhưng báo cáo mới nhất đã cũ hơn quy định.",
+      "staleDetail": {
+        "daily": "Hàng ngày; mới nhất đến {date}",
+        "monthly": "Hàng tháng; mới nhất kết thúc {date}"
+      },
+      "staleNever": "Chưa có tập tin nào được chuyển giao",
+      "expiringHeading": "Sắp hết hạn",
+      "expiringBody": "Tập tin đã vượt quá thời hạn lưu trữ hoặc sẽ đến hạn trong vòng 30 ngày.",
+      "expiresOn": "Hết hạn {date}",
+      "expiredOn": "Đã hết hạn {date}"
+    },
+    "issue": {
+      "name-mismatch": "Tên tập tin không đúng theo yêu cầu của thư mục này (ví dụ {expected}).",
+      "unsupported-format": "Tập tin loại \"{extension}\" không thể kiểm tra, nên tập tin này bị ẩn với người dùng. Vui lòng nộp .xlsx hoặc .csv.",
+      "too-large": "Tập tin này có dung lượng {sizeMb} MB, vượt quá giới hạn {limitMb} MB cho kiểm tra, nên sẽ bị ẩn với người dùng.",
+      "empty-file": "Tập tin rỗng.",
+      "unreadable": "Không thể mở tệp. Tệp có thể bị hỏng hoặc không đúng định dạng như tên của nó.",
+      "identifier-column": "Bảng \"{sheet}\" có cột \"{column}\" dùng để nhận diện người dùng. Tệp này bị ẩn với người dùng.",
+      "identifier-values": "\"{sheet}\" chứa {count, plural, one {# địa chỉ email} other {# địa chỉ email}}. Tệp này bị ẩn với người dùng.",
+      "user-code-format": "Bảng \"{sheet}\", cột \"{column}\": {count, plural, one {# giá trị} other {# giá trị}} không phải mã người dùng u-… Tệp này bị ẩn với người dùng.",
+      "formulas-without-values": "Bảng \"{sheet}\" có {count, plural, one {# công thức} other {# công thức}} chưa có kết quả lưu trữ, nên các số liệu đó không thể hiển thị trên ứng dụng.",
+      "missing-sheet": "Bảng \"{sheet}\" bị thiếu, nên các chế độ xem dựa trên đó sẽ không được hiển thị.",
+      "missing-column": "Bảng \"{sheet}\" không có cột \"{column}\", nên các chế độ xem sử dụng cột này sẽ không được hiển thị.",
+      "no-period": "Tên tệp không có thời gian báo cáo, nên thời gian lưu trữ tính từ ngày giao tệp.",
+      "unclassified-field": "Cột \"{column}\" không được nhận diện. Cột này sẽ được ẩn và người dùng không thể tải tệp đã chuyển giao cho đến khi cột này được phân loại vào đúng trường.",
+      "past-retention": "Lâu hơn {months} tháng lưu trữ của thư mục này; không còn hiển thị nữa.",
+      "unknown": "Có sự cố được báo cáo: {code}."
+    }
   }
 }

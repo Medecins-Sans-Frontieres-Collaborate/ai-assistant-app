@@ -20,6 +20,7 @@ import {
   MapTimelapseSettings,
   clampTimelapseSettings,
 } from '@/lib/utils/shared/geo/timelapsePacing';
+import type { AppliedRetirement } from '@/lib/utils/shared/modelRetirement';
 import {
   DEFAULT_PASTE_ATTACHMENT_CHARS,
   LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS,
@@ -410,11 +411,13 @@ interface SettingsStore {
    */
   userRegion: UserRegion | null;
   /**
-   * One-time EU default-model switch (gpt-5.2-chat → gpt-5.4, pricing) has
-   * been evaluated in this browser. Persisted so the switch never repeats
-   * once a user has re-chosen. See lib/utils/shared/euDefaultModelSwitch.ts.
+   * Retirement moves already applied in this browser: leaving model id →
+   * the triggers the user has been moved for and when (see
+   * lib/utils/shared/modelRetirement.ts). Persisted so a move never repeats
+   * once a user has re-chosen the model; a trigger not recorded here is a
+   * new event and applies.
    */
-  euDefaultModelSwitchApplied: boolean;
+  modelRetirementsApplied: Record<string, AppliedRetirement>;
   /**
    * User-defined data structures (Customizations → Structures). Shared: an
    * entry is usable as an extraction recipe and as a data-workflow table
@@ -632,7 +635,9 @@ interface SettingsStore {
   // Model list provenance / region (runtime-only)
   setModelListSource: (source: ModelListSource | null) => void;
   setUserRegion: (region: UserRegion | null) => void;
-  markEuDefaultModelSwitchApplied: () => void;
+  markModelRetirementsApplied: (
+    applied: Record<string, AppliedRetirement>,
+  ) => void;
 
   // Model Ordering Actions
   setModelOrderMode: (mode: ModelOrderMode) => void;
@@ -943,6 +948,33 @@ export function coerceChannelIdsBySet(
   return result;
 }
 
+/**
+ * `modelRetirementsApplied` as it may be trusted: malformed entries dropped
+ * (the model is then simply evaluated again), anything that is not a plain
+ * object replaced by `{}`.
+ */
+export function coerceAppliedRetirements(
+  value: unknown,
+): Record<string, AppliedRetirement> {
+  if (value == null || typeof value !== 'object' || Array.isArray(value)) {
+    return {};
+  }
+  const result: Record<string, AppliedRetirement> = {};
+  for (const [modelId, entry] of Object.entries(
+    value as Record<string, unknown>,
+  )) {
+    if (entry == null || typeof entry !== 'object') continue;
+    const { triggers, appliedAt } = entry as Partial<AppliedRetirement>;
+    if (!Array.isArray(triggers) || typeof appliedAt !== 'string') continue;
+    if (Number.isNaN(Date.parse(appliedAt))) continue;
+    result[modelId] = {
+      triggers: triggers.filter((t): t is string => typeof t === 'string'),
+      appliedAt,
+    };
+  }
+  return result;
+}
+
 export const useSettingsStore = create<SettingsStore>()(
   persist(
     (set) => ({
@@ -993,7 +1025,7 @@ export const useSettingsStore = create<SettingsStore>()(
       historicalUsageBackfilledAt: null,
       modelListSource: null,
       userRegion: null,
-      euDefaultModelSwitchApplied: false,
+      modelRetirementsApplied: {},
       savedStructures: [],
       streamingSpeed: DEFAULT_STREAMING_SPEED,
       includeUserInfoInPrompt: false, // Default off for privacy
@@ -1535,8 +1567,13 @@ export const useSettingsStore = create<SettingsStore>()(
 
       setModelListSource: (source) => set({ modelListSource: source }),
       setUserRegion: (region) => set({ userRegion: region }),
-      markEuDefaultModelSwitchApplied: () =>
-        set({ euDefaultModelSwitchApplied: true }),
+      markModelRetirementsApplied: (applied) =>
+        set((state) => ({
+          modelRetirementsApplied: {
+            ...state.modelRetirementsApplied,
+            ...applied,
+          },
+        })),
 
       recordTokenUsage: (usage) =>
         set((state) => {
@@ -2013,7 +2050,7 @@ export const useSettingsStore = create<SettingsStore>()(
           suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
           m365Connected: true,
           m365ConnectedUserSet: false,
-          euDefaultModelSwitchApplied: false,
+          modelRetirementsApplied: {},
           m365SaveDestination: null,
           m365SaveSkipPicker: false,
           m365PickerLocation: null,
@@ -2022,7 +2059,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 68, // Increment this when schema changes to trigger migrations
+      version: 70, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2128,7 +2165,7 @@ export const useSettingsStore = create<SettingsStore>()(
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
         m365ConnectedUserSet: state.m365ConnectedUserSet,
-        euDefaultModelSwitchApplied: state.euDefaultModelSwitchApplied,
+        modelRetirementsApplied: state.modelRetirementsApplied,
         // m365ToolsFlagEnabled is deliberately NOT persisted (LD mirror,
         // same rationale as mcpArbitraryFlagEnabled above).
         m365ToolsUserEnabled: state.m365ToolsUserEnabled,
@@ -2759,13 +2796,10 @@ export const useSettingsStore = create<SettingsStore>()(
           if (!Array.isArray(state.formTemplates)) state.formTemplates = [];
         }
 
-        // Version 63 → 64: one-time EU default-model switch marker. False
-        // means "not evaluated yet" — the hook decides once per browser.
-        if (version < 64) {
-          if (typeof state.euDefaultModelSwitchApplied !== 'boolean') {
-            state.euDefaultModelSwitchApplied = false;
-          }
-        }
+        // Version 63 → 64 added a one-time EU default-model switch marker
+        // (`euDefaultModelSwitchApplied`). It never shipped — the switch was
+        // folded into retirement handling (v69 below) first — so there is
+        // nothing to migrate; v69 drops the key from dev-only stores.
 
         // Version 64 → 65: user-controlled model timeout + "prefer my
         // selected model" (issue #130). Clamped rather than trusted, like
@@ -2811,6 +2845,33 @@ export const useSettingsStore = create<SettingsStore>()(
           delete state.lastChannelIds;
           state.lastChannelSetId = null;
         }
+        // v69: applied model-retirement moves (model id → trigger), replacing
+        // the unshipped v64 marker. Empty means "nothing applied yet" — the
+        // hook then evaluates every leaving model once.
+        if (version < 69) {
+          delete state.euDefaultModelSwitchApplied;
+        }
+        // Whatever version it came from, the record must be well-formed
+        // (the hook indexes it by model id and reads both fields).
+        state.modelRetirementsApplied = coerceAppliedRetirements(
+          state.modelRetirementsApplied,
+        );
+
+        // v70: the "Agent" search routing is retired — a saved AGENT default
+        // becomes the privacy-preserving routing it always fell back to.
+        // (Conversations carrying it are read through normalizeSearchMode.)
+        if (version < 70) {
+          if (state.defaultSearchMode === SearchMode.AGENT) {
+            state.defaultSearchMode = SearchMode.INTELLIGENT;
+          }
+          // The two earlier Bing provider names fold into 'bing' (the
+          // sanitizer reads them); without this a v66-v69 store keeps a
+          // value the settings panel has no option for.
+          state.webSearchOptions = sanitizeWebSearchOptions(
+            state.webSearchOptions,
+          );
+        }
+
         // Whatever version it came from, the per-set rows are only kept as
         // clean string arrays (the workspace iterates them on load).
         state.lastChannelIdsBySet = coerceChannelIdsBySet(
@@ -2968,6 +3029,10 @@ export const useSettingsStore = create<SettingsStore>()(
           if (!Array.isArray(state.formTemplates)) {
             state.formTemplates = [];
           }
+          // Defensive (hand-edited storage): see coerceAppliedRetirements.
+          state.modelRetirementsApplied = coerceAppliedRetirements(
+            state.modelRetirementsApplied,
+          );
           // Defensive, inner values included: a row that is not a clean
           // string array would throw in the workspace's seed on load.
           state.lastChannelIdsBySet = coerceChannelIdsBySet(

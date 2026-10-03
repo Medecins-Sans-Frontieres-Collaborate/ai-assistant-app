@@ -21,7 +21,6 @@ import { shortSourceHash } from '@/lib/utils/app/agentId';
 
 import { Conversation } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
-import { SearchMode } from '@/types/searchMode';
 
 import { OrganizationAgentList } from '../OrganizationAgents/OrganizationAgentList';
 import { HiddenItemsSection } from './HiddenItemsSection';
@@ -126,7 +125,6 @@ interface AgentsTabProps {
   selectedModel: OpenAIModel | undefined;
   modelConfig: OpenAIModel | null | undefined;
   isCustomAgent: boolean;
-  displaySearchMode: SearchMode;
   showModelAdvanced: boolean;
   selectedConversation: Conversation | null;
   mobileView: 'list' | 'details';
@@ -159,7 +157,6 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   selectedModel,
   modelConfig,
   isCustomAgent,
-  displaySearchMode,
   showModelAdvanced,
   selectedConversation,
   mobileView,
@@ -864,7 +861,6 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                 selectedModel={selectedModel}
                 modelConfig={modelConfig}
                 isCustomAgent={isCustomAgent}
-                displaySearchMode={displaySearchMode}
                 showModelAdvanced={showModelAdvanced}
                 selectedConversation={selectedConversation}
                 setMobileView={setMobileView}

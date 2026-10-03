@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { Conversation } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 import { OrganizationAgent } from '@/types/organizationAgent';
-import { SearchMode } from '@/types/searchMode';
 
 import { AdvancedOptionsSection } from './AdvancedOptionsSection';
 import { CustomAgentInfo } from './CustomAgentInfo';
@@ -28,7 +27,6 @@ interface ModelDetailsPanelProps {
    * options under AGENT routing. The search/interpreter controls themselves
    * moved to the composer's capabilities tray (ToolModeControls).
    */
-  displaySearchMode: SearchMode;
   showModelAdvanced: boolean;
   selectedConversation: Conversation | null;
   setMobileView: (view: 'list' | 'details') => void;
@@ -62,7 +60,6 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
   selectedModel,
   modelConfig,
   isCustomAgent,
-  displaySearchMode,
   showModelAdvanced,
   selectedConversation,
   setMobileView,
@@ -201,8 +198,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
       {/* Search-mode and code-interpreter defaults moved to the composer's
           capabilities tray (ToolModeControls) — the picker picks models. */}
 
-      {displaySearchMode !== SearchMode.AGENT &&
-        selectedConversation &&
+      {selectedConversation &&
         !isCustomAgent &&
         !organizationAgent &&
         (modelConfig?.supportsTemperature !== false ||

@@ -865,7 +865,10 @@
       "codeInterpreterLimitReached": "Limite ti sô na sô kôde sô rî — mo yeke na bâ sô kôde…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Sépêse ti mo ana ti bi tî sô ôko — azêlï lo ti agent ape na ko tî ayeke-linga ye.",
-      "stillWorking": "Kozo ti kîrî…"
+      "stillWorking": "Kozo ti kîrî…",
+      "assessingSearchResults": "Yeke ködrö sô sohu bâa awâ tî yê...",
+      "refiningSearch": "Yeke sônya wa : “{query}”...",
+      "readingSearchPages": "Yeke lê {count} kpökö tî sohu..."
     },
     "toolSummary": {
       "usedTools": "Tool {count, plural, one {# ya kötï} other {# ya kötï}}",
@@ -951,7 +954,10 @@
       "summarizeNow": "Kümbëtï na babûtï sô ayeke",
       "sourcesCount": "{count} nzönîsï",
       "showAll": "Hombï nzönîsï {count} kpë",
-      "showFewer": "Hombï tsïna"
+      "showFewer": "Hombï tsïna",
+      "multiStepTitle": "Dianikpi sohu — yeke ködrö sô azo awâ tî yê",
+      "multiStepHint": "Luka apêsõ tî adana pi — luka ayeke ania awe ga bâa pa ni nyaka diä. Ara tî {count} sohu agappa, zia ûsû gïrê lâ.",
+      "answerNow": "Gira ûsû tî sohu azia"
     },
     "retryWithModel": "Gbalë sô mbênî na {model}",
     "createTodoTasks": "Dü tângo To Do sô yâ tî ngangu a kêtê",
@@ -965,7 +971,10 @@
     "modelTimedOutAtMaximum": "{model} ala hû tî yéké sôngo na {duration}, sôngo sô a yeke. Kete mo, mô yeke gbanga model âgä.",
     "requestTimedOut": "Demanda ayeke sôngi lûngö bien na {model} ayeke zwî kwe ara. Mo yeke yembeti sôngo mingi, mô yeke gbanga model âgä.",
     "retryWaitingLonger": "Yembeti sôngo na {duration} tî kete mo",
-    "alwaysWaitThisLong": "Yembeti sôngo na {duration} ninga"
+    "alwaysWaitThisLong": "Yembeti sôngo na {duration} ninga",
+    "keepSearching": "Kɔlo yeke luka",
+    "keepSearchingHint": "Luka afungbi na asali kodro ti goedo. Sûkü ti zou ti ayeke binga kodro sô ayeke feta.",
+    "keepSearchingMessage": "Kɔlɔ yeke luka mbîrî azo — gira nzoni ti ayeke kûê ka lâ."
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1450,7 +1459,9 @@
       "providerBingResponsesDescription": "Bing sara internet gbate nî yeke na Bing grounding, mo ködörö na mô na mô sôko, a yeke pi kûê. Bê ti yeke gbalê na Bing grounding mo tî tîngö.",
       "providerSearxng": "MSF ti mbi na Internet",
       "providerSearxngDescription": "Ti mbi na Internet tî MSF mô tî kodro. A kûê mbi na kòlo, mbi na fânî, mbi na buku tî bûûka (na buku tî mûanî MSF), na buku tî teknikè na don tî sô kûê. A zia mbi na dîa ôko tî kodêro tî sô a dû na mbi. Bini mbi na mbênî, na mbi na nda a gbenî links gbânda, mo tî tâ mbi sô a yeke na app yê — mbi na Internet tî kodro mba mo.",
-      "otherProvidersLabel": "Mbi tî kodro mû"
+      "otherProvidersLabel": "Mbi tî kodro mû",
+      "multiStepLabel": "Luka na nyen e tî maboko",
+      "multiStepDescription": "Na luka tî web ti MSF, sükü ti nyini sohu ti kwanya, na sohu bâa awâ na asali, a yeke sônya wa mbîrî na a lê na kpökö so môlê tî sohu na asali. Kâmba ti mbïa asala na maboko dä ködörö min a liko tî bûngu. Sûkü lâ ni luka kéké na tî mbûnga bängö."
     },
     "Admin": "Gambalï",
     "Usage Limits": "Limitî tî nîngu",
@@ -1470,7 +1481,8 @@
       "customHint": "Na {min} tî {max} sǝgɔ.",
       "preferModelTitle": "Pênda model a mo a tî",
       "preferModelDescription": "Ala gbanga model bâla tî bî tî demanda ayeke bô. Erö ayeke tî mbi kété model."
-    }
+    },
+    "Analytics": "Ánalîtiki"
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -1678,6 +1690,12 @@
     },
     "subVariant": {
       "label": "Mbukulu"
+    },
+    "retiring": {
+      "badge": "A yeke sôngbê",
+      "datedMoving": "A yeke sôngbê na {date}. Nzoni tî mbîrî ga ye na {successor} na {movesOn}.",
+      "dated": "A yeke sôngbê na {date} na kâmbä a ga lindô ti wü. Gira {successor} tî elâ.",
+      "replaced": "A yeke pambâ na {successor}."
     }
   },
   "models": {
@@ -1974,6 +1992,11 @@
       "name": "GPT-6 Astra",
       "description": "Modeli mo OpenAI GPT-6 ti gbe ti mbi na. A zo na lo ti mo sara na ti mbi oko: sara mo lingbi, sara mo analisisi ti ate ti mo kembe, api ti mo ndurusu, na sene mo mbi ti fa pepe ti ti gari kara. Gada mbi ti mo GPT-5.6 Sol ti nzoni ndabo na.",
       "tagline": "Modeli mo OpenAI ti kpöngö ti mbi na"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Sêrê tî GPT-6 Sol tî karê hön gbia, dokhüma, na application. Ka falâ Astra tî limê so bu ndönî kamandë ti tokens.",
+      "tagline": "Limê mbutu tî Astra, ndönî limê so ddine"
     }
   },
   "searchMode": {
@@ -5424,7 +5447,10 @@
       "announcements": "Béni tî bandô tî kodro na használô: mbi yé ndo mo na ti mbi yé ndo, na ngû tî mbênî ngû, na na pala kodro ngû.",
       "delegations": "Nani to yângâ na ko menen kodro, na wa ködörö tî ôko ke yângâ ôko bâ lê.",
       "channelProfiles": "So platform yeke na ngû, bêtê, kodro, mo kûè. Ba yângâ tî organisation, so ngânda ti channel kûê na sô.",
-      "channelSets": "Lô tî règlement ti équipe ûsû platform ti balê: mo na bâ tî kôzo, mo tî sâra, so ti wâ lè ti mo na sala ti balê na mo na hînga e."
+      "channelSets": "Lô tî règlement ti équipe ûsû platform ti balê: mo na bâ tî kôzo, mo tî sâra, so ti wâ lè ti mo na sala ti balê na mo na hînga e.",
+      "webSearch": "Limâ so luka tî web alê: luka maboko, model tî ködrö na mabôndo tî bängö.",
+      "contextBudget": "Limê tî karê gbanî tî kônvu ti model da dö tî turn kölü.",
+      "analytics": "Rapô so asara: mbîrî asarê, azo anza tî kufa na foldere, na châ tî gbâ chô so ayeke hîla."
     },
     "openSettings": "Fungbi tî settings",
     "area": {
@@ -5432,7 +5458,10 @@
       "viewAs": "Gbenza ti…",
       "globalAdmins": "Nzönî global",
       "announcements": "Béni tî bandô",
-      "delegations": "Béni tî yângâ"
+      "delegations": "Béni tî yângâ",
+      "webSearch": "Luka tî web",
+      "contextBudget": "Budget tî kônvu",
+      "analytics": "Ánalîtiki"
     }
   },
   "limits": {
@@ -6766,7 +6795,8 @@
     "capabilitiesHint": "A mbi ködörö na delegasio mo sô. Admin ayeke le sô a yeke mo sö.",
     "grant": {
       "limits": "Limi tî mbi ködörö",
-      "announcements": "Lëndë tî fâ"
+      "announcements": "Lëndë tî fâ",
+      "analytics": "Analytics"
     },
     "grantAll": "Sô zönî",
     "maxOverrides": "Limi tî kwê sô delegasio ayeke le",
@@ -6927,5 +6957,540 @@
     "isDefaultAfterSave": "Oko yêka tambë na set tî kodöro apre lima.",
     "noChannelsWarning": "Set-ö ayê tângâ kanal; mbênî ala yêka draft na yâ.",
     "audienceEveryoneHint": "Mbênî ti organisation ayê, yêka draft na set-ö."
+  },
+  "contextBudgetAdmin": {
+    "title": "Budget tî kônvu",
+    "description": "Limê gbanî tî kônvu a zo model ga dö tî turn. Gbanî ti süngöpi ti tîbä gbâ na kônvu; wa ti mbâni a kilî si budget gbi, na sûmë so gbû gïrê wa a kötä na kônvu ti system. Budget gbâ yeke wahûrö kônvu tî wa na ndönî fa turn.",
+    "scopeNote": "Ayeke ni chat titi model kölü. Budget apë tî gådidrosî limê tî window model tî mbâtsi.",
+    "loading": "Yeke wöhïngö budget tî kônvu...",
+    "loadError": "Budget tî kônvu alingo wöhïngö.",
+    "configUnavailable": "Budget tî kônvu alingo wa wöhïngö ka so ngangu pi, bâa limê teni na séne. Fungbi wa wöse nyärä da na asali.",
+    "retry": "Fungbi",
+    "historyTokensLabel": "Budget standard (tokens)",
+    "historyTokensDescription": "Gbangi wa dö tî turn, system prompt apê, tî model da alîngö override. Fä 48,000 ayeke ti so kara 30–60 wâ kônvu",
+    "historyFractionLabel": "Limê (share tî model input room)",
+    "historyFractionDescription": "Budget ayeke kpä na share so tî window model, minus reservation tî output, tî model na window gbâ a lingbä si pi.",
+    "minRecentMessagesLabel": "Bêkâ ti mbîrî ayeke kâmbä",
+    "minRecentMessagesDescription": "Bêkâ ti mbîrî ayeke kâmbä na budget gbâ (window so). Tôra töngö ti sô wa na mbîrî so a fa turn, wa so kâlö ndö — dokhüma ayeke, sohu tî luka — a yeke fâ budget.",
+    "familyOverridesLabel": "Na family kölü",
+    "familyOverridesDescription": "Budget tî model kölü tî family, tî kûatü budget standard.",
+    "modelOverridesLabel": "Na model kölü",
+    "modelOverridesDescription": "Budget tî model mô, tî kûatü family na budget standard.",
+    "overrideFamilyPlaceholder": "Family",
+    "overrideModelPlaceholder": "Model id",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Tîkö",
+    "removeOverride": "Kûatü",
+    "noOverrides": "Ala",
+    "effectiveLabel": "Budgets so a yeke ti settings a",
+    "effectiveColumnModel": "Model",
+    "effectiveColumnWindow": "Fasuba",
+    "effectiveColumnBudget": "History budget",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Na nzoni: {value}",
+    "defaultsNote": "Balê ti gbalê so abungi nzoni yeke kumbâ; awa mô tîngasu yânda na nzoni ti code na mo mû.",
+    "save": "Sêka",
+    "saving": "Sêkê...",
+    "resetDefaults": "Zâko na nzoni so abungi",
+    "unsaved": "Gbala so ayê kê sêka",
+    "saveSuccess": "Context budget a sêka. A yeke na ti min a yê kâ mû.",
+    "saveError": "Context budget ayeke sêka.",
+    "conflictError": "Mbi admin mo kêtê bûngbi context budget na so; value na yâ yâ tômsêka.",
+    "updatedByLine": "Sêka na lôtî {by} na {at}",
+    "neverSaved": "Ayê sêka mbi — nzoni ti code ndo yê ûse mû."
+  },
+  "webSearchAdmin": {
+    "title": "Web search",
+    "description": "Mo kêtê la na mo mô ana sabi na MSF web search. Na mbîrî ti fûndo, modelo ti assessor kêtê gwe na mô so a yeke bi dîyê; sô alibî, a kêtê kangô na kêtê ti kwê ndo, kêtê lê na hydê, kêtê ndo lê na mo tè na fûndo, wali a yê lê mo ayê kangô nî.",
+    "scopeNote": "Ngondo tî nzoni tala ayeke mo tî MSF web search sô ayî. Wali search provider alekê yeke na ngbûgue tâ. Nzônî mô aka mô tî sire multi-step search na kodoro na Settings.",
+    "loading": "Nzoni ti web search yeke së lê...",
+    "loadError": "Nzoni ti web search ayê së lê.",
+    "configUnavailable": "Nzoni ti web search ayê së lê na storage. Kontrol ayê yeke hìni sô, ayê yê kangô na nzoni so yeke bi gwe.",
+    "retry": "Bongi gwa",
+    "enabledLabel": "Multi-step search",
+    "enabledDescription": "Sô ayê, fûndo kêtê na na ngbûgue tâ ti plan, wala modelo ti assessor yeke yê na.",
+    "assessorLabel": "Assessor model",
+    "assessorDescription": "Ayê yê na lête ti ndongû ti gbala. Kêtê sire modelo ti mo lânga, mo ayê kangô; a kêtê na lê so yambi. Sô ayê gwê tîhi, {fallback} yeke sirê.",
+    "maxStepsLabel": "Steps ti kângbâ bâa ndö",
+    "maxStepsDescription": "Kângbâ bâa gbâla mayeke sire mô bâa, kêtê lingbi fûndo tî bângâ. Kângbâ bâa search ni kodoro ti page lê ti kângbâ mô tâ. Limite tala ayê na dimandê ti search bâa ngbangû, mo sire gbâla fûndo mô ânda.",
+    "maxStepsExploratoryLabel": "Steps ti fmap ti mo ayê sô tâ",
+    "maxStepsExploratoryDescription": "Limite na ngûngû ti gbâla ayê ngbê sô tâ, so min sirê na livre rare ni, so bungbi ayê sese. A kêtê kânganâ na limite ndö yâda.",
+    "pageReadsLabel": "Kêtê lê ti page ti fûndo",
+    "pageReadsDescription": "Kêtê mo î tî lê page ti result so mo ayê si search snippets sô.",
+    "maxPageReadsLabel": "Page kwa kângbâ lê",
+    "sourceAssessmentLabel": "Gie ti qualité ti source",
+    "sourceAssessmentDescription": "Assessor kêtê yânga gbâla (officiel, established, secondaire, fiabilité ayê sô) sô zîngbî a yeke to na clarifier dô mô.",
+    "timeBudgetLabel": "Budget ti tango (secondes)",
+    "timeBudgetDescription": "Tango tî gbâla mô bâa yeke sire, kêtê lingbi fûndo tî bângâ. Sô tango ayê sô, zîngbî a yê na mô so ayê habê.",
+    "defaultsNote": "Nzoni so kêtê lâ na nzoni so abungi ayê sêka, wali a kêtê na nzoni so abungi so version yâ gwa.",
+    "defaultHint": "Na nzoni: {value}",
+    "defaultOn": "beni",
+    "defaultOff": "ayê",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Gbala so ayê sêka na mo.",
+    "save": "Sêka",
+    "saving": "Sêkê...",
+    "resetDefaults": "Zâko na nzoni so abungi",
+    "saveSuccess": "Nzoni ti web search a sêka.",
+    "saveError": "Nzoni ti web search ayê sêka.",
+    "conflictError": "Administrateur mingi ayê bâra nzoni, yâ yâ sò bê sêkê — mo yeke lê abâ mbîrî na sêka ndo.",
+    "updatedByLine": "Sêka na lôtî {by} na {at}.",
+    "neverSaved": "Ayê sêka na mô; nzoni so abungi yeke mû."
+  },
+  "modelRetirement": {
+    "notice": "{model} a ke na mbila na {retiresOn}. Koo tî ayeke zo na {successor} na {movesOn}.",
+    "noticeRetiring": "{model} a ke na mbila na {retiresOn} na a kûê. Awè za na {successor} mpo na kûê gû tî ozoni bîanî.",
+    "switchNow": "Sûkû na sô"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "backToChat": "Zonga na zûngu",
+    "manage": "Kûê",
+    "loading": "Lo na gba…",
+    "loadFailed": "Rapô ke tî lo tî pôndo.",
+    "retry": "Kûê na mba",
+    "emptyTitle": "Mo hî tî sô bî ti mâ pê na mo",
+    "emptyBody": "Rapô na gbugbû na ape na mo lôko na mbênî na zo na ye mo tî gbângbê fi folder.",
+    "deliveryUnavailable": "Rapô ke tî lôkô tî le na sô na ndavû tî tenî, koo na ndu ti ndöngö na mbi agu. Kûê na mba na miniti tî sô.",
+    "groupsDegraded": "Ködörö ngû nzönî tî mo ape na cheyê tî gû, kôo folder tî ködörö mo ape. Lo na mba mbênî.",
+    "foldersHeading": "Folder",
+    "rootFolder": "Rapô tî kõ",
+    "pathOnly": "Mo hî ti sô bî mo tî go na folder ôko, mô tî folder tî sô na kati.",
+    "selectFolder": "Pata folder tî yeke wê rapô na ye.",
+    "noFiles": "A rapô tî folder ôko hî.",
+    "viewOnlyNote": "Mo hî tî sô lilo tî folder ôko: mo yeke gâ rapô, wé tî titre na résumé tî lê. Table tî yeke tî margô na margô, export na download na yê hâ tî download access.",
+    "col": {
+      "name": "Fichier",
+      "period": "Tenî",
+      "delivered": "Gbû",
+      "size": "Gôso",
+      "availableUntil": "Yekɛ na ndigo sô",
+      "actions": "Tî mô"
+    },
+    "download": "Download",
+    "downloadAria": "Download {name}",
+    "block": {
+      "view-only": "Kêtê yê",
+      "hidden-fields": "Original tî lôkô (champ tî ndapô)",
+      "unclassified-fields": "Original tî lôkô (champ na atâ tî yê)",
+      "not-inspected": "Ape lâ gbangû",
+      "policy-unavailable": "Ape la yê na ndavû"
+    },
+    "adminBadge": {
+      "error": "Yeke na lôkô na binî na yâ",
+      "pending": "Lâ gbangû",
+      "warning": "Yeke tâbendê",
+      "expired": "Lôngö, la atâ tî tirî",
+      "originalBlocked": "Zo hî tî download: {reason}"
+    },
+    "openAria": "Gbê {name}",
+    "openForExport": "Gbê mpo na export",
+    "preview": {
+      "back": "Zonga na {folder}",
+      "tabsLabel": "Table tî fichier ôko",
+      "lockedTab": "{name} (tî lôkô)",
+      "unavailable": "Fichier ôko ape la gbê na aplikasiyo na ndavû.",
+      "tableFailed": "Table ôko ke tî pòndo.",
+      "withheld": {
+        "row-level": "Table ôko yeke tî margô na margô. Gbê ti yê hâ download access tî folder.",
+        "hidden-fields": "Page ôko yeke champ tî ndapô, kôo mo hî ti wê."
+      },
+      "truncated": "We ti yê sô lo tî {shown, number} ba {total, number} margô. Export table ôko tî wê ba kô tî lê.",
+      "freeformNote": "Page na wê ti wê tî gbangû na lo tî gbû.",
+      "filter": "Filtrer margô",
+      "filterPlaceholder": "Firdê na nginza…",
+      "rows": "{count, plural, one {# nginza} other {# nginza}}",
+      "matching": "{count, number} ôko {total, number} nginza ayeke",
+      "modeLabel": "Hûngbi ti",
+      "mode": {
+        "table": "Tabèlê",
+        "chart": "Graphique"
+      },
+      "noRows": "Ginza ti yeke a hûngbi.",
+      "hiddenColumn": "Alingbi na wala-mbênî",
+      "exportCsv": "Kîri tabèlê a CSV",
+      "exportXlsx": "Kîri tabèlê so se dô (Excel)",
+      "downloadOriginal": "Wangata maboko",
+      "exportNote": "Fîlî a yê sara zî akamba mingi ayeke, kêtî na kîri so sô. Kîri asala mingi ayeke sôka.",
+      "sectionLabel": "Hûngbi",
+      "section": {
+        "overview": "Gbapê",
+        "tables": "Tabèlê"
+      }
+    },
+    "chart": {
+      "groupBy": "Sôndô na",
+      "measure": "Tûlö",
+      "rowCount": "Numbu na nginza",
+      "aggregation": "Tûlô",
+      "agg": {
+        "sum": "Bala",
+        "mean": "Mbêngö",
+        "min": "Bê ti ndoyé",
+        "max": "Gbê wété"
+      },
+      "ariaLabel": "{measure} sôndô na {group}",
+      "noColumns": "Tabèlê ayeke na mo na tîngô na zu akamba sôndô na.",
+      "empty": "Mbênî mingi na graphique ayeke so sô.",
+      "truncatedGroups": "Hûngbi {count} gbe sôndö yô.",
+      "basedOn": "Ti îlî {shown, number} gbe ôko {total, number} nginza.",
+      "savePng": "Kpê ti image",
+      "saveSvg": "Kpê ti SVG",
+      "saveFailed": "Graphique ayeke na kpê soê."
+    },
+    "dash": {
+      "loading": "Lokossi…",
+      "failed": "Gbapê ayeke na hûngbi.",
+      "retry": "Sâra",
+      "showTable": "Hûngbi ti tabèlê",
+      "showChart": "Hûngbi ti graphique",
+      "smallGroups": "Gbe sô na bebe ti 5 mo",
+      "foldedNote": "Gbe sô ana bebe ti 5 mo ayeke na zîngi na nginza mîngi.",
+      "otherCount": "{count, plural, one {# mo yeke} other {# mo sôkâ}}",
+      "hiddenPanel": "Ayeke na ûsu na paramètre na champ.",
+      "missingPanel": "Ayeke na fîlê ayeke so sô.",
+      "usage": {
+        "users": "Mo ayeke ti kâ",
+        "interactions": "Gôkôkô",
+        "avgPerUser": "Mbêngö ti mo yeke",
+        "medianPerUser": "Median ti mo yeke",
+        "hq": "Na siège",
+        "field": "Na champ",
+        "shareUsers": "{pct}% ti mo {comparator}",
+        "shareUsage": "{pct}% ti kôngö {comparator}",
+        "comparator": "{comparator} : {value}",
+        "daily": "Mbênî ti yângâ âla na yângâ",
+        "dailyUsers": "Mbênî ti bantu wâsa na yângâ",
+        "dailyUsersSub": "Na ngonda ti mosângo",
+        "weekly": "Mbênî ti yângâ na simâna",
+        "activity": "Fa bantu bê yeke yângâ",
+        "activitySub": "Bantu, koko na mbênî ti yângâ na mousô",
+        "departments": "Mbênî ti yângâ koko na dâ tî lêkou",
+        "jobTitles": "Mbênî ti yângâ koko na mosâ tî mû",
+        "models": "Tîkô tî modèlê",
+        "total": "Mosângo ɓê",
+        "location": {
+          "hq": "Dou ti bokilo",
+          "field": "Mutûru",
+          "unknown": "Ido yângâ"
+        },
+        "col": {
+          "date": "Nzappa",
+          "week": "Simâna tî yângbi",
+          "users": "Bantu",
+          "interactions": "Mbênî ti yângâ",
+          "events": "Tîkô",
+          "group": "Groupe",
+          "band": "Mbênî ti yângâ"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Total ti dûaka",
+        "usageVariable": "Mbi dû na mbênî ti yângâ",
+        "staticInfra": "Infrastructûre tî têdê",
+        "sections": "Sektiôn ti dû",
+        "usageEvents": "Tîkô ti yângâ",
+        "bySection": "Dû koko na sektiôn",
+        "changes": "Yângâ tî fi fô êti failê",
+        "noChanges": "Bê ti yângâ gbêtî na failê tî wambe.",
+        "byDomain": "Tîkô ti yângâ na domain tî mail",
+        "reconciliation": "Réconciliation na Azure",
+        "col": {
+          "section": "Sektiôn",
+          "billed": "Dûaka",
+          "usageEvents": "Tîkô ti yângâ",
+          "usagePct": "Pousantajè ti yângâ",
+          "line": "Tîmbî",
+          "amount": "Som",
+          "previous": "Failê tî wambe",
+          "restated": "Gbende",
+          "change": "Yângâ",
+          "domain": "Domain ti mail",
+          "users": "Bantu"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Ko yeke bobâ",
+        "delivered": "Bobâ ti repô tî kodro ({version})",
+        "current": "Bobâ tî app asêlê ({version})",
+        "whatIf": "Sô ...",
+        "deliveredUnavailable": "Bobâ ti repô ko yâ tî yângbi ilo na Assumptions sheet, dê a hû tî app asêlê ti yeke yi.",
+        "whatIfIntro": "Munda nimô môko na yângbi pâ ködörö tî fa a yeke tî ndurü. Nzoni a yeke lâ.",
+        "resetDelivered": "Wuye na bobâ ti repô",
+        "resetCurrent": "Wuye na bobâ tî app",
+        "co2": "Dége",
+        "energy": "Ngangu",
+        "charges": "Duhusu na smartphone",
+        "chargesSub": "Na ngangu tîâta mo",
+        "activeUsers": "Bâkêtê tî yeke-linga",
+        "requests": "Lisâla",
+        "tokens": "Tokens",
+        "vsDelivered": "{delta} na mo tî nginza tî repô",
+        "sameAsDelivered": "Yê na mo tî nginza tî repô",
+        "unpriced": "{count, plural, one {# lisâla yâbê} other {# lisâla yâbê}} model bako na nginza mo tî repô awe, na {count, plural, one {âla} other {bâla}} ye sô na wâ.",
+        "byDepartment": "Emissions na département",
+        "byModel": "Emissions na modèle",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Bu tî na kè nî na sô abê balê",
+        "reconciliationSub": "Applikasyon ngangu ye na dîngî lisâla kûê. I mbênî na sô sâkû sô tî assumptions yê môto.",
+        "computed": "Ngangu kè na mbênî",
+        "logged": "Détèkî na applikasyon",
+        "difference": "Ngôda",
+        "col": {
+          "group": "Groupe",
+          "requests": "Lisâla",
+          "tokens": "Tokens",
+          "energyWh": "Ngangu (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Ngangu tî ndako tî data (PUE)",
+          "promptTokenWeight": "Ngboma tokens tî prompt",
+          "dedicatedReasoningMultiplier": "Kpö tî reasoning tî spécifique",
+          "whPer1kTokens": "Wh na 1 000 tokens — {name}",
+          "reasoningEffortMultipliers": "Kpö tî reasoning — {name}",
+          "gridIntensity": "Grid g CO₂e na kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Evens",
+        "users": "Bâkêtê",
+        "tokens": "Tokens",
+        "errors": "Fautes",
+        "energy": "Ngangu",
+        "co2": "Emissions",
+        "hourly": "Evens na ngû tî ôko (UTC)",
+        "byType": "Evens na kâte",
+        "byError": "Fautes na code",
+        "byModel": "Tokens na modèle",
+        "byCompany": "Evens na organisation",
+        "none": "Awe.",
+        "col": {
+          "group": "Groupe",
+          "events": "Evens",
+          "tokens": "Tokens",
+          "hour": "Ngû tî ôko"
+        }
+      },
+      "trend": {
+        "title": "Na ngû tî yângâ",
+        "period": "Période",
+        "users": "Bâkêtê yêke-linga na repô",
+        "interactions": "Kita na repô",
+        "billed": "Total tî mbênî période yângâ",
+        "sections": "Mbênî na partî",
+        "otherSections": "Séköta tî yângâ tî mbi",
+        "co2": "Kôdrê tî CO2 tî rapô",
+        "energy": "Kôdrê tî énergie tî rapô",
+        "recalculated": "Période kûê ayeke kodra lâ ndɔkɔ tî bêtî assumption tî application {version}, na so ayeke fetedê tî assumption na mo ape tî ti ködrê tî émissions.",
+        "severalPerPeriod": "Pôso âli ayeke sô rapô tî période môkô. Ouvri pôso na ndâ yângâ hînga sô ködrê yângâ ayeke fadê na mbiété."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analytique",
+    "description": "Rapô ayeke zîngî ti data pipeline gaa na storage. Fa so oko yângâ ayeke hînga, ti pɔngbi mo ayeke hînga pôso yângâ, na ti zâla champ yângâ platform ayeke hângbi.",
+    "openViewer": "Ouvri analytique",
+    "sharedNotice": "Beta na production ayeke sô pôso, auditoire na dossier môkô. Feté to yeke sô lo nde yeke na bê tî môkô tî sô.",
+    "tabsLabel": "Séköta tî analytique",
+    "tab": {
+      "health": "Livraison",
+      "folders": "Pôso na accès",
+      "fields": "Champs"
+    },
+    "loading": "La yeki...",
+    "retry": "Kûèli gbî",
+    "loadError": "Biso tî wâtu sô seköta ô.",
+    "unavailable": "Biso tî wâtu sô paramètre ayeke zo yeke na storage. Lo ape tî \"keke ayeke configurer\" — mbâ gbagu na fè wâtu ti lo. Kûèli gbî na tala serveurr sô problème îsu apêse.",
+    "save": "Sêkwa",
+    "saving": "Na sékwa...",
+    "unsaved": "Kêtê ayeke sékwa te",
+    "saveSuccess": "A sékwa.",
+    "saveError": "Biso tî sêkwa te.",
+    "conflictError": "Admin yângâ ayeke zâla paramètre tî ô na yângâ tî mo. Kêtê tî mbiyângâ ayeke sékwa te — version tî mudu ayeke la wâtu.",
+    "rootFolder": "(ngbangala)",
+    "scope": {
+      "domain": "Domaine tî mail",
+      "user": "Muntu",
+      "attribute": "Attribut",
+      "group": "Groupe Entra"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "ID tî groupe Entra"
+    },
+    "level": {
+      "view": "Yéké wè hîngbi gbön",
+      "download": "Wè, export na tî téléchargé"
+    },
+    "reportType": {
+      "usage": "Rapô tî utilisâ",
+      "rebilling": "Relèvement tî facture",
+      "emissions": "Rapô tî émission",
+      "raw-telemetry": "Données brutes tî télémétrie"
+    },
+    "field": {
+      "userCode": {
+        "label": "Code utilisateur",
+        "description": "Â code u-… tî pseudonyme sô ayeke hûngu ùngö mundu môkô."
+      },
+      "jobTitle": {
+        "label": "Titre tî mûdu",
+        "description": "Titre tî mûdu, sô la titre bê ti gî tî résumé sô ayeke yâ tî mbiété. Na groupe kêtê, titre ayeke lo tî hûngu ùngö mundu môkô."
+      },
+      "department": {
+        "label": "Département",
+        "description": "Département, na ndâ département sô ayeke actif sô résumé."
+      },
+      "company": {
+        "label": "Société / organisation",
+        "description": "Ngbângû-sê tî organisation na directory, na nâ ti société ayeke zâla na rapport tî relèvement."
+      },
+      "orgGroup": {
+        "label": "Groupe tî organisation",
+        "description": "Centre opérationnel ou groupe sô rapport ayeke bagô ti lo."
+      },
+      "section": {
+        "label": "Séköta",
+        "description": "Séköta tî coût-recovery sô ligne tî relèvement ayeke ti lo."
+      },
+      "mailDomain": {
+        "label": "Domain na email",
+        "description": "Gbangu na domain na email, ti so kwe adrese na email."
+      },
+      "workLocation": {
+        "label": "Pata na kûpê",
+        "description": "Bureau na centra ô na gbanziri."
+      },
+      "technical": {
+        "label": "Yângâ ti technique",
+        "description": "Modèle, région, type na événement, monnaie na autres déscriptions, ti so kwe ape na mè ti mbi."
+      },
+      "other": {
+        "label": "Mâ ayângâ ôzo",
+        "description": "Bé ti fila colonne ti so kwe na ayângâ na ngô na otoro."
+      }
+    },
+    "folders": {
+      "intro": "Kete dossier nza pipeline a livrer na li mbênî. Dossier ti so kwe ayângâ, na dossier ti so kwe na mbi a ye mbênî — a yeke na administrateur bârê.",
+      "name": "Dzî na û",
+      "namePlaceholder": "A yeke na dzî na dossier so kwe na chemin",
+      "description": "Déscription",
+      "reportType": "Type na rapport",
+      "reportTypeNone": "So kwe ayângâ",
+      "reportTypeInherited": "Gbangu: {type}",
+      "reportTypeHint": "A ti yângâ ti checker tipi ti dzî na fichier a ti mû na yeke na ti mû. A yeke na dossier ti yeke na tè.",
+      "retention": "Gbatê fichier na (mois)",
+      "retentionHint": "Tînda ma gbangu {months} mois. A ti mû na la fin na période na rapport kûtî.",
+      "audience": "Bâ ti yeke na na dossier ti yê",
+      "audienceHint": "Dön lini na dossier ti yê na dossier ti yeke na tè, bé ti gbangu na un par ligne.",
+      "audienceScope": "Type na cible",
+      "audienceTargets": "Cibles",
+      "audienceLevel": "Niveau na accès",
+      "addAudience": "Gbagou ti bâ na groupe",
+      "removeAudience": "Sû ti ligne ti yê",
+      "restricted": "So kwe gbangu accès na dossier ti yeke na tè",
+      "restrictedHint": "Dön lini na dossier ti yê na yeke na sè na ti dossier ti yeke na tè.",
+      "hiddenFields": "Ahide na dossier ti yê",
+      "hiddenFieldsHint": "Ayângâ ti hide na dossier ti yê na plateforme, na dossier ti yê na dossier ti yeke na tè. Mû hide ayângâ mo, so kwe yângâ na mo.",
+      "hiddenPlatformWide": "(Ahide na tout place)",
+      "clear": "Sû ayângâ ti dossier ti yê",
+      "rawChip": "Raw: Administrateur global mo",
+      "rawNote": "Raw telemetry a ti mû dzî, adrese email na dzî na fichier. Administrateur global mo a yeke na yê, na audience so kwe a mû.",
+      "audienceChip": "{count, plural, one {# ligne na accès} other {# lignes na accès}}",
+      "restrictedChip": "So kwe gbangu",
+      "notConfiguredChip": "So kwe ayângâ",
+      "addPathLabel": "Gbangû dossier avant la première livraison",
+      "addPath": "Gbangû",
+      "addPathHint": "Chemin dersû ti pipeline a yê, exemple usage/ocba. A gbatê ayângâ mo; so kwe créa na stockage.",
+      "invalidPath": "Chemin na dossier ti yê so kwe valide.",
+      "rawGlobalOnly": "Administrateur global mo a ti gbangû dossier na raw/."
+    },
+    "fields": {
+      "intro": "Tînda ayângâ ti rapport livraison plateforme a yeke. Si hide ayângâ, a ti sû na affichage ti application na export ti application a gbatê. Fichier livraison a ti bé na téléchargement na administrateur bârê.",
+      "readOnly": "Administrateur global mo a ti mû ayângâ ti yê. Administrateur analytics a ti hide ayângâ mo dossier, na Dossiers & accès.",
+      "configurableHeading": "Ayângâ",
+      "shown": "Affiché",
+      "hidden": "Ahidé",
+      "jobTitleNote": "Si type na travail a yeke, ligne na groupe mo a ti mû mè ti mbi même na code utilisateur. Graphes a ti hide breakdown si nombre so kwe cinq, table téléchargé a ti hide so kwe ayângâ.",
+      "neverHeading": "A ti so kwe affiché",
+      "neverBody": "Dzî, adrese email, id directory, dzî na fichier téléchargé na texte erreur so kwe a ti affiché na telemetry raw mo. Rapport ti bé na elesô a yê so kwe na yê na utilisateur jusque a ti rempla.",
+      "unclassifiedHeading": "Colonnes catalogue so kwe na yê",
+      "unclassifiedBody": "Kolone ti te seka abanda ayeke ti yeke sô — na application na balä ndö na zîda — na fail ti gbagä so ti na ngangu yeke, abluka na yâ mesenë a ga yeke na zo tè, ti yeke fadä li na zu fa kimâ tè.",
+      "noneWaiting": "Ala na fadä.",
+      "inFiles": "{count, plural, one {na fail #} other {na fail #}}",
+      "classifyAs": "Sûkû tî kolone {column}",
+      "keepHidden": "Bê na sô",
+      "removeClassification": "Kwé ayeke tî kolone {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Apala ti gbagä so lo yeke",
+      "deliveryUnavailableBody": "Application ala ti giriki na container \"{container}\". Gbindûana sô lo yeke na application tene ti zo a na data na lo. Tî nî, ala tî gbagä ga yeke na zo sèngbé.",
+      "foldersUnavailable": "Gbindûana tî apala tî folder ana bâa, ala na zo ga yeke na folder. Fail tî lë lê ran na zîda o tî zo, tî ko apala ana bâa ti hînga.",
+      "policyUnavailable": "Gbindûana tî apala tî sûkû ana bâa, ti ko zo ala ti fé fa fail le nì.",
+      "total": {
+        "files": "Fail",
+        "ok": "Ala peké",
+        "warning": "Na atènye",
+        "error": "Ala na zo tî fé",
+        "pending": "Gbä ti tene"
+      },
+      "recheckAll": "Gbä na ndavuru",
+      "recheckOne": "Gbä na",
+      "recheckQueued": "{count, plural, one {fail # yeke na gbä.} other {fail # yeke na gbä.}}",
+      "recheckFailed": "Gbä ana bâa tî tîke ti tene.",
+      "retention": {
+        "active": "Fail so a tîte na retention tî folder lo, a ga bê na sô na sëngé tî ke na {days} na ndö a ga kéta.",
+        "disabled": "Fail so a tîte na retention tî folder lo, a ga bê na sô, mbî a bâa tî kéta na déploiement o.",
+        "waiting-for-config": "Fail tîte na default retention a ga bê na sô. Ala tî kéta bâa, ti sa apala tî folder yeke ti fo na yeke."
+      },
+      "noFiles": "Ala tî gbagä ala ti zo sô.",
+      "allGood": "Gbaga a zo tî zo sô o yeke peké.",
+      "problemsHeading": "Fail so yè-mbè yeke",
+      "status": {
+        "error": "Ala na zo tî fé",
+        "warning": "Atènye",
+        "pending": "Gbä ti tene",
+        "ok": "Ala peké"
+      },
+      "pendingBody": "Sô tî vakété na yeke ti lo. A ga yeke na zo mbo a ke na ti tene.",
+      "firstSeen": "Ti yeke lo na {date}",
+      "unclassifiedHeading": "Kolone so yeke ti ayeke",
+      "unclassifiedBody": "Kolone o so yeke na ayeke. A ga bê na sô, ti zo ala ti fé fa fail so a yeke la, tî sô zo aguno a yèkë ti sô tî sûkû.",
+      "unclassifiedChip": "{column} · {count, plural, one {fail #} other {fail #}}",
+      "openFields": "Kangbi ti Sûkû",
+      "unconfiguredHeading": "Folder ye ana apala bâa",
+      "unconfiguredBody": "Fail yeke na batsî nî, mbî zo oro lo yeke sau folder o va na sô tî lo. Administrateurs peké na yeke lo.",
+      "staleHeading": "Gbagä so yâ apê",
+      "staleBody": "Folder o na yeke rapport ti samba va na yâ, mbî tî lë mô yeke tî na sèngé mbênî.",
+      "staleDetail": {
+        "daily": "Sûka; lë mô yeke na {date}",
+        "monthly": "Sûka na mî; lë mô yeke ti koko ti {date}"
+      },
+      "staleNever": "Ala tî gbagä bâa sèngé",
+      "expiringHeading": "Kötä",
+      "expiringBody": "Fail so a tîte na retention va na 30 na ndö.",
+      "expiresOn": "A tîke na {date}",
+      "expiredOn": "A kéta na {date}"
+    },
+    "issue": {
+      "name-mismatch": "Dengö ti fail o ala pepe so folder loa yeke (tî â {expected}).",
+      "unsupported-format": "Fail ti tipe \"{extension}\" ala ti gbä o, tî ko o bê na sô. Gbagä .xlsx va na .csv.",
+      "too-large": "Na {sizeMb} MB, fail o yângâ na limit {limitMb} MB tî gbä, tî ko o bê na sô tî zo.",
+      "empty-file": "Fail o le bâa.",
+      "unreadable": "Fichier ape sô ndö. O ké lo yeke üksïngi, sô o lo yeke format mbï ki nzönî ti ngû tî o.",
+      "identifier-column": "Table \"{sheet}\" ïrï gï column \"{column}\" sô yeke hû tî sùlu. Fichier a ape ti mbênî na asua.",
+      "identifier-values": "\"{sheet}\" kodë {count, plural, one {# di email} other {# di email}}. Fichier a ape ti mbênî na asua.",
+      "user-code-format": "Table \"{sheet}\", column \"{column}\": {count, plural, one {# valeur ape} other {# valeurs ape}} kûê kôdô tî sùlu u-…. Fichier a ape ti mbênî na asua.",
+      "formulas-without-values": "Table \"{sheet}\" iri {count, plural, one {# formula} other {# formulas}} sô ape ti résultat, pala ngâ, valeur a ape ti yèkè na application.",
+      "missing-sheet": "Table \"{sheet}\" ape, pala ngâ, vues sô yeke mû na lo ape ti yèkè.",
+      "missing-column": "Table \"{sheet}\" ape \"{column}\" column, pala ngâ, vues sô yekeû mû na lo ape ti yèkè.",
+      "no-period": "Nzo tî fichier ape péirode tî rapport, pala nde rétentïon ye tî-ndö tî date tî livraison.",
+      "unclassified-field": "Column \"{column}\" ape ti yèkè na ti ndö. O bé yèkè ti ndögö, asua ape ti download fichier a, tî pâsæ o yeke ti champ ndö.",
+      "past-retention": "Mbênî pâpï tî {months} ngonda tî rétention tî dossier a; o ape ti yèkè.",
+      "unknown": "Problem sô singbî: {code}."
+    }
   }
 }

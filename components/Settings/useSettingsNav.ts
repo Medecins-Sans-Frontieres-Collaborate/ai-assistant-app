@@ -1,5 +1,6 @@
 import {
   IconBrain,
+  IconChartBar,
   IconDatabase,
   IconDeviceDesktop,
   IconHelp,
@@ -14,6 +15,7 @@ import { ComponentType } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useAnalyticsAccess } from '@/client/hooks/analytics/useAnalytics';
 import { useAdminAreas } from '@/client/hooks/settings/useAdminAreas';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
@@ -98,6 +100,9 @@ export function useSettingsNav(): SettingsNavItem[] {
   // deployment running usage limits WITHOUT agent access used to show a global
   // admin no admin entry at all.
   const { isAdmin: hasAnyAdminArea } = useAdminAreas();
+  // Analytics appears for anyone a folder audience names (and for its
+  // admins). Visibility only — the API decides per request what they see.
+  const { hasAccess: hasAnalyticsAccess } = useAnalyticsAccess();
 
   const section = (
     id: SettingsSection,
@@ -143,6 +148,16 @@ export function useSettingsNav(): SettingsNavItem[] {
             t('settings.LocalModels'),
             IconDeviceDesktop,
           ),
+        ]
+      : []),
+    ...(hasAnalyticsAccess
+      ? [
+          {
+            kind: 'link' as const,
+            href: '/analytics',
+            label: t('settings.Analytics'),
+            icon: IconChartBar,
+          },
         ]
       : []),
     ...(hasAnyAdminArea

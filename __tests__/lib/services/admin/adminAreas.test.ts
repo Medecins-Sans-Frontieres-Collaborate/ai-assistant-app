@@ -101,6 +101,7 @@ describe('resolveAdminAreas', () => {
     const globalAreas = (await resolveAdminAreas({ mail: 'admin@example.com' }))
       .areas;
     expect(globalAreas).toContain('workflows');
+    expect(globalAreas).toContain('web-search');
     expect(globalAreas).toContain('view-as');
     expect(globalAreas).toContain('limits');
 
@@ -108,6 +109,7 @@ describe('resolveAdminAreas', () => {
       .areas;
     expect(localAreas).toContain('agents');
     expect(localAreas).not.toContain('workflows');
+    expect(localAreas).not.toContain('web-search');
     expect(localAreas).not.toContain('view-as');
   });
 

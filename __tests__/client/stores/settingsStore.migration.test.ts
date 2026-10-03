@@ -742,6 +742,7 @@ describe('settingsStore migration (v46 → v47)', () => {
       resultCount: 12,
       freshness: 'week',
       provider: 'auto',
+      multiStep: true,
     });
 
     const repaired = migrate(
@@ -752,6 +753,7 @@ describe('settingsStore migration (v46 → v47)', () => {
       resultCount: 15,
       freshness: 'auto',
       provider: 'auto',
+      multiStep: true,
     });
   });
 });
@@ -769,23 +771,29 @@ describe('settingsStore migration (v47 → v48)', () => {
       resultCount: 10,
       freshness: 'day',
       provider: 'auto',
+      multiStep: true,
     });
   });
 
-  it('keeps a valid persisted provider and repairs an invalid one', () => {
-    for (const valid of ['google-news', 'bing-agent', 'bing-responses']) {
+  it('keeps a valid persisted provider, folds the old Bing names into bing, and repairs an invalid one', () => {
+    for (const [persisted, expected] of [
+      ['google-news', 'google-news'],
+      ['bing', 'bing'],
+      ['bing-agent', 'bing'],
+      ['bing-responses', 'bing'],
+    ]) {
       const kept = migrate(
         {
           webSearchOptions: {
             resultCount: 8,
             freshness: 'auto',
-            provider: valid,
+            provider: persisted,
           },
         },
         47,
       ) as Record<string, unknown>;
       expect((kept.webSearchOptions as Record<string, unknown>).provider).toBe(
-        valid,
+        expected,
       );
     }
 
@@ -1094,6 +1102,7 @@ describe('settingsStore migration (v65 → v66)', () => {
       resultCount: 11,
       freshness: 'week',
       provider: 'auto',
+      multiStep: true,
     });
   });
 
@@ -1104,8 +1113,7 @@ describe('settingsStore migration (v65 → v66)', () => {
       'news',
       'google-news',
       'gdelt',
-      'bing-agent',
-      'bing-responses',
+      'bing',
     ]) {
       const result = migrate(
         {
@@ -1181,6 +1189,63 @@ describe('settingsStore migration (v67 → v68)', () => {
 
     expect(result.lastChannelIdsBySet).toEqual({ 'msf-no': ['linkedin'] });
     expect(result.lastChannelSetId).toBe('msf-no');
+  });
+
+  it('v69 starts the applied-retirements record empty and drops the unshipped v64 marker', () => {
+    const result = migrate({ euDefaultModelSwitchApplied: true }, 68) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.modelRetirementsApplied).toEqual({});
+    expect('euDefaultModelSwitchApplied' in result).toBe(false);
+  });
+
+  it('v70 retires the Agent search routing and folds the old Bing names into bing', () => {
+    const result = migrate(
+      {
+        defaultSearchMode: 'agent',
+        webSearchOptions: {
+          resultCount: 8,
+          freshness: 'auto',
+          provider: 'bing-responses',
+          multiStep: false,
+        },
+      },
+      69,
+    ) as Record<string, unknown>;
+
+    expect(result.defaultSearchMode).toBe('intelligent');
+    expect(result.webSearchOptions).toEqual({
+      resultCount: 8,
+      freshness: 'auto',
+      provider: 'bing',
+      multiStep: false,
+    });
+  });
+
+  it('keeps well-formed applied retirements on a current store and drops malformed ones', () => {
+    const kept = {
+      triggers: ['forced', 'alias:gpt-5.4'],
+      appliedAt: '2026-10-02T12:00:00.000Z',
+    };
+    const result = migrate(
+      {
+        modelRetirementsApplied: {
+          'gpt-5.2': kept,
+          legacyShape: 'forced',
+          noDate: { triggers: ['forced'] },
+          badDate: { triggers: ['forced'], appliedAt: 'yesterday' },
+          mixed: { triggers: ['forced', 7], appliedAt: kept.appliedAt },
+        },
+      },
+      69,
+    ) as Record<string, unknown>;
+
+    expect(result.modelRetirementsApplied).toEqual({
+      'gpt-5.2': kept,
+      mixed: { triggers: ['forced'], appliedAt: kept.appliedAt },
+    });
   });
 
   /**

@@ -2,6 +2,7 @@ import { Session } from 'next-auth';
 
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
+import { SEARCH_STATE_RECORD_NAME } from '@/lib/utils/shared/searchState';
 
 import { ChatBody, Message } from '@/types/chat';
 import { ErrorCode, PipelineError } from '@/types/errors';
@@ -13,9 +14,10 @@ import {
   MAX_PLAN_STEP_TOOLS,
 } from '@/types/mcp';
 import { OpenAIModel } from '@/types/openai';
-import { SearchMode } from '@/types/searchMode';
+import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
 import {
+  LEGACY_BING_PROVIDERS,
   MAX_SEARCH_RESULT_COUNT,
   MIN_SEARCH_RESULT_COUNT,
   PrecomputedSearchResults,
@@ -136,15 +138,26 @@ const GeneratedFileRefSchema = z.object({
  * later turns act on (which files exist); tool arguments/output are display
  * data and are stripped here.
  */
-const ToolCallRecordSchema = z.object({
-  id: z.string().max(200),
-  name: z.string().max(200),
-  server_label: z.string().max(200).nullable().optional(),
-  status: z
-    .enum(['completed', 'failed', 'incomplete', 'in_progress'])
-    .optional(),
-  generated_files: z.array(GeneratedFileRefSchema).max(50).optional(),
-});
+const ToolCallRecordSchema = z
+  .object({
+    id: z.string().max(200),
+    name: z.string().max(200),
+    server_label: z.string().max(200).nullable().optional(),
+    // Display JSON, kept for ONE record only: a multi-step search's outcome
+    // record carries the search's state here so the next turn can continue
+    // it (lib/utils/shared/searchState.ts). Bounded; an oversize value is
+    // dropped, never rejected.
+    arguments: z.string().max(8000).nullable().optional().catch(undefined),
+    status: z
+      .enum(['completed', 'failed', 'incomplete', 'in_progress'])
+      .optional(),
+    generated_files: z.array(GeneratedFileRefSchema).max(50).optional(),
+  })
+  .transform((record) =>
+    record.name === SEARCH_STATE_RECORD_NAME
+      ? record
+      : { ...record, arguments: undefined },
+  );
 
 /**
  * Zod schema for a single message.
@@ -363,7 +376,12 @@ const ChatBodySchema = z
     // `org-<botId>` model ids — old clients never send it, so a stale bot on
     // a pre-tray conversation can't hijack an explicitly selected model.
     agentAttached: z.boolean().optional(),
-    searchMode: z.nativeEnum(SearchMode).optional(),
+    // The retired AGENT value still arrives from older clients and
+    // persisted conversations; it is read as INTELLIGENT.
+    searchMode: z
+      .nativeEnum(SearchMode)
+      .optional()
+      .transform(normalizeSearchMode),
     webSearchOptions: z
       .object({
         resultCount: z
@@ -375,14 +393,25 @@ const ChatBodySchema = z
         // Optional for backward compatibility (older clients omit it);
         // sanitizeWebSearchOptions falls back to the store default
         // (DEFAULT_WEB_SEARCH_OPTIONS.provider) server-side.
-        provider: z
-          .enum(
-            WEB_SEARCH_PROVIDER_OPTIONS as [
-              (typeof WEB_SEARCH_PROVIDER_OPTIONS)[number],
-              ...typeof WEB_SEARCH_PROVIDER_OPTIONS,
-            ],
-          )
-          .optional(),
+        // The two earlier Bing names older clients still send read as
+        // 'bing' (normalizeWebSearchProvider); unknown values are rejected.
+        provider: z.preprocess(
+          (value) =>
+            typeof value === 'string' && LEGACY_BING_PROVIDERS.includes(value)
+              ? 'bing'
+              : value,
+          z
+            .enum(
+              WEB_SEARCH_PROVIDER_OPTIONS as [
+                (typeof WEB_SEARCH_PROVIDER_OPTIONS)[number],
+                ...typeof WEB_SEARCH_PROVIDER_OPTIONS,
+              ],
+            )
+            .optional(),
+        ),
+        // Optional for the same reason; absent means on. Must be listed —
+        // zod strips unknown keys, which would silently re-enable it.
+        multiStep: z.boolean().optional(),
       })
       .optional(),
     // "Summarize from headlines" resend: the interim headlines the client
@@ -414,6 +443,7 @@ const ChatBodySchema = z
           )
           .min(1)
           .max(MAX_SEARCH_RESULT_COUNT),
+        kind: z.enum(['combined', 'multiStep']).optional(),
       })
       .optional(),
     interpreterMode: z.nativeEnum(InterpreterMode).optional(),

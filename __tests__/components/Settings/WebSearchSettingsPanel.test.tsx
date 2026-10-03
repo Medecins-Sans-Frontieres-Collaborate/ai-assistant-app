@@ -38,11 +38,13 @@ describe('WebSearchSettingsPanel', () => {
     ).not.toBeChecked();
     expect(screen.getByRole('radio', { name: /GDELT only/ })).not.toBeChecked();
     expect(
-      screen.getByRole('radio', { name: /Bing grounding \(via Microsoft\)/ }),
+      screen.getByRole('radio', { name: /Bing web search/ }),
     ).not.toBeChecked();
+    // One Bing option: the two earlier routes (agent / direct) are merged.
     expect(
-      screen.getByRole('radio', { name: /Bing fast search/ }),
-    ).not.toBeChecked();
+      screen.queryByRole('radio', { name: /Bing fast search/ }),
+    ).toBeNull();
+    expect(screen.queryByRole('radio', { name: /Bing grounding/ })).toBeNull();
   });
 
   it('writes the MSF web search provider to the settings store', () => {
@@ -67,11 +69,11 @@ describe('WebSearchSettingsPanel', () => {
     );
   });
 
-  it('warns that Bing grounding is slow and inconsistent', () => {
+  it('describes Bing as a single model call in the user’s region', () => {
     render(<WebSearchSettingsPanel />);
 
-    const description = screen.getByText(/30–90 seconds/);
-    expect(description.textContent).toMatch(/often inconsistent/);
+    const description = screen.getByText(/single model call in your region/);
+    expect(description.textContent).toMatch(/general web, not just news/);
   });
 
   it('explains the Google News trade-off (anonymous, fast, headlines-only)', () => {
@@ -95,16 +97,43 @@ describe('WebSearchSettingsPanel', () => {
     ).toBeChecked();
   });
 
-  it('writes the bing-responses provider to the settings store', () => {
+  it('writes the bing provider to the settings store', () => {
     render(<WebSearchSettingsPanel />);
 
-    fireEvent.click(screen.getByRole('radio', { name: /Bing fast search/ }));
+    fireEvent.click(screen.getByRole('radio', { name: /Bing web search/ }));
 
-    expect(useSettingsStore.getState().webSearchOptions.provider).toBe(
-      'bing-responses',
-    );
+    expect(useSettingsStore.getState().webSearchOptions.provider).toBe('bing');
     expect(
-      screen.getByRole('radio', { name: /Bing fast search/ }),
+      screen.getByRole('radio', { name: /Bing web search/ }),
+    ).toBeChecked();
+  });
+
+  it('has multi-step search on by default and lets the user switch it off', () => {
+    render(<WebSearchSettingsPanel />);
+
+    const toggle = screen.getByRole('checkbox', { name: /Multi-step search/ });
+    expect(toggle).toBeChecked();
+
+    fireEvent.click(toggle);
+    expect(useSettingsStore.getState().webSearchOptions.multiStep).toBe(false);
+    expect(toggle).not.toBeChecked();
+
+    fireEvent.click(toggle);
+    expect(useSettingsStore.getState().webSearchOptions.multiStep).toBe(true);
+  });
+
+  it('treats settings persisted before the option existed as on', () => {
+    useSettingsStore.setState({
+      webSearchOptions: {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'auto',
+      } as never,
+    });
+    render(<WebSearchSettingsPanel />);
+
+    expect(
+      screen.getByRole('checkbox', { name: /Multi-step search/ }),
     ).toBeChecked();
   });
 

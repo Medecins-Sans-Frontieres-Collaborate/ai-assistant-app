@@ -807,7 +807,10 @@
       "codeInterpreterLimitReached": "1日のコード実行上限に達しました — コード実行なしで回答します…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "ナレッジベース検索に失敗しました—回答にはエージェントのドキュメントが使用されません",
-      "stillWorking": "処理中…"
+      "stillWorking": "処理中…",
+      "assessingSearchResults": "結果が質問に答えているか確認中…",
+      "refiningSearch": "再検索中: 「{query}」…",
+      "readingSearchPages": "{count}件の結果ページを読んでいます…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# 件のツールを使用} other {# 件のツールを使用}}",
@@ -893,7 +896,10 @@
       "summarizeNow": "今すぐ見出しから要約する",
       "sourcesCount": "{count}件の情報源",
       "showAll": "すべての{count}件の情報源を表示",
-      "showFewer": "表示を減らす"
+      "showFewer": "表示を減らす",
+      "multiStepTitle": "ここまでの結果 — 質問への回答かどうか確認中",
+      "multiStepHint": "検索はさらに進む場合があります——追加の検索や、有望なページを読むこともあります。待たずに既に見つかった{count}件の結果から回答することも可能です。",
+      "answerNow": "これらの結果から今すぐ回答"
     },
     "retryWithModel": "{model} で再試行",
     "createTodoTasks": "この回答からTo Doタスクを作成",
@@ -907,7 +913,10 @@
     "modelTimedOutAtMaximum": "{model} が最長待機時間である {duration} 以内に応答を開始しませんでした。再試行するか、他のモデルをお試しください。",
     "requestTimedOut": "このリクエストの準備に時間がかかりすぎたため、{model} が応答する前に停止しました。さらに長く待つか、他のモデルをお試しください。",
     "retryWaitingLonger": "最大 {duration} 待って再試行",
-    "alwaysWaitThisLong": "常に最大 {duration} 待機する"
+    "alwaysWaitThisLong": "常に最大 {duration} 待機する",
+    "keepSearching": "検索を続ける",
+    "keepSearchingHint": "検索が途中で止まりました。アシスタントに別の方法で検索するよう依頼してください。",
+    "keepSearchingMessage": "これについて検索を続行してください。別の方法を試してください。"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -1291,7 +1300,9 @@
       "providerBingResponsesDescription": "Bing グラウンディングと同じウェブカバレッジを、Foundry エージェントではなく単一のモデルコールで実行します。通常はより高速です。現在、Bing グラウンディングと比較評価中の新しいオプションです。",
       "providerSearxng": "MSFウェブ検索",
       "providerSearxngDescription": "MSF独自のプライベートメタサーチサービスです。一般的なウェブ、ニュース、科学文献（MSFの研究出版物も含む）、技術ドキュメントや人道データをカバーし、質問ごとに適切な情報源を選択します。結果は数秒で直接リンク付きで表示され、検索クエリのみアプリから送信されます—検索エンジンにあなたの情報は伝わりません。",
-      "otherProvidersLabel": "その他のプロバイダー"
+      "otherProvidersLabel": "その他のプロバイダー",
+      "multiStepLabel": "マルチステップ検索",
+      "multiStepDescription": "MSFウェブ検索では、アシスタントが最初の結果を確認し、十分でない場合のみ再度検索や有望なページの閲覧を行ってから回答します。多くの質問は1ステップで完了します。これをオフにすると、全ての検索が1回のみとなります。"
     },
     "Admin": "管理者",
     "Usage Limits": "利用制限",
@@ -1311,7 +1322,8 @@
       "customHint": "{min}〜{max} 秒の範囲で設定できます。",
       "preferModelTitle": "選択したモデルを優先",
       "preferModelDescription": "リクエストが失敗しても自動的に他のモデルに切り替えません。エラー時には切り替えの案内が表示されます。"
-    }
+    },
+    "Analytics": "アナリティクス"
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -1522,6 +1534,12 @@
     },
     "subVariant": {
       "label": "サイズ"
+    },
+    "retiring": {
+      "badge": "提供終了予定",
+      "datedMoving": "{date}に提供終了。以降の会話は{movesOn}から{successor}へ移行します。",
+      "dated": "{date}に提供終了し、利用できなくなります。代わりに{successor}をご利用ください。",
+      "replaced": "{successor}に置き換えられます。"
     }
   },
   "models": {
@@ -1820,6 +1838,11 @@
       "name": "GPT-6 Astra",
       "description": "OpenAIのGPT-6フラッグシップモデル。高度なリサーチ、複雑な分析、ソフトウェア開発、長時間の多段階タスクなど、要求の高いエンドツーエンド業務向けに設計されています。コストはGPT-5.6 Solのおよそ2倍です。",
       "tagline": "OpenAIで最も高性能なモデル"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "GPT-6 Solのアップグレード版で、コード、文書、アプリケーションなど幅広い業務に対応。Astraの能力に近いながら、トークン価格は大幅に低価格です。",
+      "tagline": "Astraに近い性能、圧倒的低コスト"
     }
   },
   "transcription": {
@@ -5440,7 +5463,10 @@
       "announcements": "ユーザー向けバナーメッセージ：誰が、いつ、どの言語で表示されるか。",
       "delegations": "誰がどのユーザーを管理し、それぞれに許可されている操作。",
       "channelProfiles": "各プラットフォームの内容：制限、カウント方法、スレッド。各チャンネルセットの基礎となる、組織全体で共通の情報です。",
-      "channelSets": "各チームによるプラットフォームでの投稿ルール：ガイダンス、声のトーン、デフォルト設定、誰がセットを使用・送信できるか。"
+      "channelSets": "各チームによるプラットフォームでの投稿ルール：ガイダンス、声のトーン、デフォルト設定、誰がセットを使用・送信できるか。",
+      "webSearch": "ウェブ検索がどこまで可能か：マルチステップ検索、その評価用モデルと制限。",
+      "contextBudget": "各モデルが毎回送信する会話の量。",
+      "analytics": "配布されたレポート：到着した内容、各フォルダーを開く可能性のある人物、表示可能な項目。"
     },
     "openSettings": "設定を開く",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "他のユーザーとして表示",
       "globalAdmins": "グローバル管理者",
       "announcements": "お知らせ",
-      "delegations": "デリゲーション"
+      "delegations": "デリゲーション",
+      "webSearch": "ウェブ検索",
+      "contextBudget": "コンテキスト予算",
+      "analytics": "アナリティクス"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "この委任で許可できる内容です。管理者はここで有効化されたものだけ保持できます。",
     "grant": {
       "limits": "利用制限",
-      "announcements": "お知らせ"
+      "announcements": "お知らせ",
+      "analytics": "アナリティクス"
     },
     "grantAll": "すべて",
     "maxOverrides": "この委任で設定できる制限の上書き数",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "保存後にこのセットをデフォルトに設定できます。",
     "noChannelsWarning": "このセットにはチャンネルがありません。誰も下書きを作成できません。",
     "audienceEveryoneHint": "組織の誰でもこのセットで下書きを作成できます。"
+  },
+  "contextBudgetAdmin": {
+    "title": "コンテキスト予算",
+    "description": "各モデルに送信される会話履歴の量。最新メッセージは必ず含まれ、予算を超えた場合は古いものが削除され、削除された履歴の要約がシステムプロンプトに含まれます。予算が大きいほど長い会話をより多く保持できますが、コストも増加します。",
+    "scopeNote": "全モデルの全チャットに適用されます。予算は、下記で設定したモデルのウィンドウの範囲を超えることはありません。",
+    "loading": "コンテキスト予算を読み込み中…",
+    "loadError": "コンテキスト予算を読み込めませんでした。",
+    "configUnavailable": "保存されたコンテキスト予算が現在読み取れないため、下記の値が実際に反映されているとは限りません。編集前に再試行してください。",
+    "retry": "再試行",
+    "historyTokensLabel": "標準予算（トークン数）",
+    "historyTokensDescription": "1ターンごとに送信される履歴（システムプロンプト含む）、上書きのないモデルに適用。約48,000トークンで一般的な会話の30〜60回分のやり取りを保持します。",
+    "historyFractionLabel": "上限（モデル入力領域の割合）",
+    "historyFractionDescription": "予算は、モデルのコンテキストウィンドウから出力予約分を除いた割合までに制限されるため、小さいウィンドウのモデルも容量を超えて要求されることはありません。",
+    "minRecentMessagesLabel": "常時保持されるメッセージ",
+    "minRecentMessagesDescription": "ウィンドウ内で予算を超えても保持される最新メッセージ数。3つの場合、最新メッセージだけで予算を埋める場合にも、直前のやり取り（貼り付けた文書や検索結果など）を保持できます。",
+    "familyOverridesLabel": "ファミリーごと",
+    "familyOverridesDescription": "標準予算の代わりに、ファミリー内の各モデル用の予算を設定します。",
+    "modelOverridesLabel": "モデルごと",
+    "modelOverridesDescription": "ファミリーや標準予算を上書きし、特定モデルごとの予算を設定します。",
+    "overrideFamilyPlaceholder": "ファミリー",
+    "overrideModelPlaceholder": "モデルID",
+    "overrideTokensPlaceholder": "トークン数",
+    "addOverride": "追加",
+    "removeOverride": "削除",
+    "noOverrides": "なし",
+    "effectiveLabel": "これら設定に基づく有効な予算",
+    "effectiveColumnModel": "モデル",
+    "effectiveColumnWindow": "ウィンドウ",
+    "effectiveColumnBudget": "履歴バジェット",
+    "rangeHint": "{min}～{max}",
+    "defaultHint": "デフォルト：{value}",
+    "defaultsNote": "デフォルトと異なる値のみ保存され、他はすべてリリース間でコードのデフォルトが適用されます。",
+    "save": "保存",
+    "saving": "保存中…",
+    "resetDefaults": "デフォルトに戻す",
+    "unsaved": "未保存の変更",
+    "saveSuccess": "コンテキストバジェットが保存されました。1分以内に反映されます。",
+    "saveError": "コンテキストバジェットを保存できませんでした。",
+    "conflictError": "他の管理者がコンテキストバジェットを変更しました。最新の値に更新されています。",
+    "updatedByLine": "最終保存者：{by}、保存日時：{at}",
+    "neverSaved": "一度も保存されていません — コードのデフォルトが適用されています。"
+  },
+  "webSearchAdmin": {
+    "title": "ウェブ検索",
+    "description": "MSFウェブ検索でのマルチステップ検索を制御します。最初の結果後、アセッサーモデルが回答可能か判断し、回答できない場合は別のクエリで再検索したり、結果ページを読んだり、不足情報をユーザーに尋ねたり、該当なしと報告します。",
+    "scopeNote": "これらの設定はMSFウェブ検索のみに適用されます。その他の検索プロバイダーは常に1回のラウンドで実行されます。マルチステップ検索は各自で設定からオフにできます。",
+    "loading": "ウェブ検索設定を読み込み中…",
+    "loadError": "ウェブ検索設定を読み込めませんでした。",
+    "configUnavailable": "ウェブ検索設定をストレージから読み取れませんでした。デフォルト値が実際の設定と異なる場合があるため、コントロールは非表示となります。",
+    "retry": "再試行",
+    "enabledLabel": "マルチステップ検索",
+    "enabledDescription": "オフの場合、すべての検索は1回の計画されたラウンドのみで、アセッサーモデルは実行されません。",
+    "assessorLabel": "アセッサーモデル",
+    "assessorDescription": "各ステップの後に1回呼び出して結果を評価します。高速かつ低コストのモデルを選択してください（ユーザーが待機中に実行されます）。利用できない場合は、{fallback}が使用されます。",
+    "maxStepsLabel": "1問あたりのステップ数",
+    "maxStepsDescription": "1つの質問で実行される最大ステップ数（最初の検索も含む）。追加の検索やページ読込は1ステップとカウントされます。この上限は、1件の質問ごとにカウントする日次検索回数制限とは別です。",
+    "maxStepsExploratoryLabel": "探索的検索のステップ数",
+    "maxStepsExploratoryDescription": "希少本のコピーなど、見つけにくい情報を探索する場合の上限。通常の上限より低くはできません。",
+    "pageReadsLabel": "結果ページの読込",
+    "pageReadsDescription": "ステップごとに有望な検索結果のページを開いて、スニペットだけでなくページ本文を読むことができます。",
+    "maxPageReadsLabel": "1ステップあたりのページ数",
+    "sourceAssessmentLabel": "情報源の品質評価",
+    "sourceAssessmentDescription": "アセッサーが各情報源を（公式、確立、二次、低信頼性）でラベル付けし、回答時に重み付け・出典明記されます。",
+    "timeBudgetLabel": "タイムバジェット（秒）",
+    "timeBudgetDescription": "1回の検索にかけられる合計時間（初回検索含む）。タイムアップした場合は見つかった情報で回答を作成します。",
+    "defaultsNote": "組み込みのデフォルト設定のままの場合は保存されず、後のリリースでデフォルトが変更されてもそれに従います。",
+    "defaultHint": "デフォルト：{value}",
+    "defaultOn": "オン",
+    "defaultOff": "オフ",
+    "rangeHint": "{min}～{max}",
+    "unsaved": "未保存の変更があります。",
+    "save": "保存",
+    "saving": "保存中…",
+    "resetDefaults": "デフォルトに戻す",
+    "saveSuccess": "ウェブ検索設定を保存しました。",
+    "saveError": "ウェブ検索設定を保存できませんでした。",
+    "conflictError": "他の管理者が先に設定を変更しました。再読み込みされていますので、内容を確認し再度保存してください。",
+    "updatedByLine": "最終保存者：{by}、保存日時：{at}。",
+    "neverSaved": "まだ何も保存されていません。組み込みのデフォルトが適用されます。"
+  },
+  "modelRetirement": {
+    "notice": "{model}は{retiresOn}に廃止されます。この会話は{movesOn}に{successor}へ移行されます。",
+    "noticeRetiring": "{model}は{retiresOn}に廃止され、利用できなくなります。会話を継続するには{successor}へ切り替えてください。",
+    "switchNow": "今すぐ切り替え"
+  },
+  "analytics": {
+    "title": "アナリティクス",
+    "backToChat": "チャットに戻る",
+    "manage": "管理",
+    "loading": "読み込み中…",
+    "loadFailed": "レポートを読み込めませんでした。",
+    "retry": "再試行",
+    "emptyTitle": "まだ何も共有されていません",
+    "emptyBody": "管理者がフォルダーへのアクセスを許可すると、レポートがここに表示されます。",
+    "deliveryUnavailable": "現在レポートの保存先にアクセスできないため、下のリストが空の場合があります。数分後に再試行してください。",
+    "groupsDegraded": "グループの所属情報が確認できなかったため、グループで共有されているフォルダーが表示されない場合があります。１分後に再読み込みしてください。",
+    "foldersHeading": "フォルダー",
+    "rootFolder": "すべてのレポート",
+    "pathOnly": "このフォルダー自体へのアクセス権はなく、内部のフォルダーのみアクセスできます。",
+    "selectFolder": "フォルダーを選択してレポートを表示してください。",
+    "noFiles": "このフォルダーにはレポートがありません。",
+    "viewOnlyNote": "このフォルダーは閲覧権限のみです：レポートの開封、概要、集計表の閲覧ができます。個人ごとの行を含む表、エクスポートやダウンロードはダウンロード権限が必要です。",
+    "col": {
+      "name": "ファイル",
+      "period": "期間",
+      "delivered": "配信日",
+      "size": "サイズ",
+      "availableUntil": "利用可能期限",
+      "actions": "操作"
+    },
+    "download": "ダウンロード",
+    "downloadAria": "{name}をダウンロード",
+    "block": {
+      "view-only": "閲覧のみ",
+      "hidden-fields": "原本非表示（隠された項目）",
+      "unclassified-fields": "原本非表示（確認待ち項目）",
+      "not-inspected": "未確認",
+      "policy-unavailable": "現在利用不可"
+    },
+    "adminBadge": {
+      "error": "ユーザーから非表示",
+      "pending": "確認中",
+      "warning": "警告あり",
+      "expired": "期限切れ、削除予定",
+      "originalBlocked": "ユーザーはダウンロードできません：{reason}"
+    },
+    "openAria": "{name}を開く",
+    "openForExport": "エクスポート用に開く",
+    "preview": {
+      "back": "{folder}に戻る",
+      "tabsLabel": "このファイルの表",
+      "lockedTab": "{name}（ロック）",
+      "unavailable": "このファイルは今アプリで開くことができません。",
+      "tableFailed": "この表を読み込めませんでした。",
+      "withheld": {
+        "row-level": "この表は１人につき１行です。フォルダーへのダウンロード権限が必要です。",
+        "hidden-fields": "このページには非表示の項目が含まれているため表示されません。"
+      },
+      "truncated": "最初の{shown, number}行のみ表示しています（全{total, number}行）。すべて取得するには表をエクスポートしてください。",
+      "freeformNote": "このページは読取用にレイアウトされ、配信されたまま表示されています。",
+      "filter": "行を絞り込む",
+      "filterPlaceholder": "行をフィルター…",
+      "rows": "{count, plural, one {# 行} other {# 行}}",
+      "matching": "{count, number} / {total, number} 行が該当",
+      "modeLabel": "表示形式",
+      "mode": {
+        "table": "テーブル",
+        "chart": "チャート"
+      },
+      "noRows": "表示する行がありません。",
+      "hiddenColumn": "ユーザーには非表示",
+      "exportCsv": "このテーブルをエクスポート（CSV）",
+      "exportXlsx": "すべてのテーブルをエクスポート（Excel）",
+      "downloadOriginal": "元ファイルをダウンロード",
+      "exportNote": "提供されたファイルには非表示フィールドが含まれていますので、そのままではダウンロードできません。エクスポート時にそれらのフィールドは除外されます。",
+      "sectionLabel": "表示",
+      "section": {
+        "overview": "概要",
+        "tables": "テーブル"
+      }
+    },
+    "chart": {
+      "groupBy": "グループ化",
+      "measure": "測定値",
+      "rowCount": "行数",
+      "aggregation": "計算",
+      "agg": {
+        "sum": "合計",
+        "mean": "平均",
+        "min": "最小",
+        "max": "最大"
+      },
+      "ariaLabel": "{group}ごとの{measure}",
+      "noColumns": "このテーブルにはグループ化できるテキストまたは日付列がありません。",
+      "empty": "この選択にチャート化できるデータがありません。",
+      "truncatedGroups": "{count}件までの主要グループを表示しています。",
+      "basedOn": "最初の{shown, number}行/{total, number}行に基づく。",
+      "savePng": "画像として保存",
+      "saveSvg": "SVGとして保存",
+      "saveFailed": "チャートを保存できませんでした。"
+    },
+    "dash": {
+      "loading": "読み込み中…",
+      "failed": "概要を読み込めませんでした。",
+      "retry": "再試行",
+      "showTable": "テーブル形式で表示",
+      "showChart": "チャート形式で表示",
+      "smallGroups": "5人未満のグループ",
+      "foldedNote": "5人未満のグループは1行にまとめられています。",
+      "otherCount": "{count, plural, one {# 件その他} other {# 件その他}}",
+      "hiddenPanel": "フィールド設定で非表示。",
+      "missingPanel": "このファイルでは利用できません。",
+      "usage": {
+        "users": "アクティブな人数",
+        "interactions": "インタラクション",
+        "avgPerUser": "1人あたり平均",
+        "medianPerUser": "1人あたり中央値",
+        "hq": "本部で",
+        "field": "現場で",
+        "shareUsers": "{comparator}ユーザーのうち{pct}%",
+        "shareUsage": "{comparator}利用のうち{pct}%",
+        "comparator": "{comparator}：{value}",
+        "daily": "1日あたりのインタラクション数",
+        "dailyUsers": "1日あたりのアクティブ人数",
+        "dailyUsersSub": "勤務地別",
+        "weekly": "1週間あたりのインタラクション数",
+        "activity": "利用状況",
+        "activitySub": "期間内のインタラクション数別の人数",
+        "departments": "部門別インタラクション数",
+        "jobTitles": "職種別インタラクション数",
+        "models": "モデルごとのイベント数",
+        "total": "全拠点",
+        "location": {
+          "hq": "本部",
+          "field": "現地",
+          "unknown": "不明"
+        },
+        "col": {
+          "date": "日",
+          "week": "週開始",
+          "users": "人数",
+          "interactions": "インタラクション",
+          "events": "イベント",
+          "group": "グループ",
+          "band": "インタラクション"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "請求総額",
+        "usageVariable": "使用変動費",
+        "staticInfra": "固定インフラ費",
+        "sections": "請求セクション",
+        "usageEvents": "使用イベント",
+        "bySection": "セクション別請求",
+        "changes": "前回ファイルとの差分",
+        "noChanges": "前回ファイルから変更はありません。",
+        "byDomain": "メールドメイン別使用イベント",
+        "reconciliation": "Azureへの整合",
+        "col": {
+          "section": "セクション",
+          "billed": "請求",
+          "usageEvents": "使用イベント",
+          "usagePct": "使用率",
+          "line": "行",
+          "amount": "金額",
+          "previous": "前回ファイル",
+          "restated": "修正版",
+          "change": "差分",
+          "domain": "メールドメイン",
+          "users": "人数"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "算出方法",
+        "delivered": "レポート固有の前提条件（{version}）",
+        "current": "アプリ現在の前提条件（{version}）",
+        "whatIf": "もし…",
+        "deliveredUnavailable": "このレポートの前提条件をAssumptionsシートから読み取れなかったため、アプリの現在の前提条件が使用されています。",
+        "whatIfIntro": "数値を変更すると下記に影響が表示されます。保存はされません。",
+        "resetDelivered": "レポート固有に戻す",
+        "resetCurrent": "アプリ現在に戻す",
+        "co2": "排出量",
+        "energy": "エネルギー",
+        "charges": "スマートフォン充電回数",
+        "chargesSub": "同じフットプリントの場合",
+        "activeUsers": "アクティブユーザー数",
+        "requests": "リクエスト",
+        "tokens": "トークン",
+        "vsDelivered": "{delta}（報告書独自の仮定との比較）",
+        "sameAsDelivered": "報告書独自の仮定と同じ",
+        "unpriced": "{count, plural, one {# 件のリクエストは} other {# 件のリクエストは}}この仮定で数値のないモデルサイズを利用しており、{count, plural, one {除外されています} other {除外されています}}。",
+        "byDepartment": "部門別排出量",
+        "byModel": "モデル別排出量",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "本計算値と記録時値の比較",
+        "reconciliationSub": "アプリも各リクエスト発生時に推定します。仮定が同じ場合、両者の値は一致します。",
+        "computed": "本計算値",
+        "logged": "アプリ記録値",
+        "difference": "差分",
+        "col": {
+          "group": "グループ",
+          "requests": "リクエスト",
+          "tokens": "トークン",
+          "energyWh": "エネルギー（Wh）",
+          "co2g": "CO₂e（g）"
+        },
+        "factor": {
+          "pue": "データセンターオーバーヘッド（PUE）",
+          "promptTokenWeight": "プロンプトトークン重み",
+          "dedicatedReasoningMultiplier": "専用推論乗数",
+          "whPer1kTokens": "1,000トークンあたりのWh — {name}",
+          "reasoningEffortMultipliers": "推論負荷乗数 — {name}",
+          "gridIntensity": "グリッドg CO₂e/kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "イベント",
+        "users": "ユーザー",
+        "tokens": "トークン",
+        "errors": "エラー",
+        "energy": "エネルギー",
+        "co2": "排出量",
+        "hourly": "1時間ごとのイベント数（UTC）",
+        "byType": "タイプ別イベント数",
+        "byError": "エラーコード別",
+        "byModel": "モデル別トークン",
+        "byCompany": "組織別イベント数",
+        "none": "なし。",
+        "col": {
+          "group": "グループ",
+          "events": "イベント",
+          "tokens": "トークン",
+          "hour": "時"
+        }
+      },
+      "trend": {
+        "title": "経時変化",
+        "period": "期間",
+        "users": "報告書ごとのアクティブユーザー",
+        "interactions": "報告書ごとのインタラクション数",
+        "billed": "期間ごとの合計請求額",
+        "sections": "セクション別請求額",
+        "otherSections": "その他のすべてのセクション",
+        "co2": "レポートごとの排出量",
+        "energy": "レポートごとのエネルギー",
+        "recalculated": "各期間はアプリの現在の前提条件（{version}）で計算されています。したがって、レポート間で前提条件を変更しても排出量の変化としては表示されません。",
+        "severalPerPeriod": "このフォルダーには同じ期間の複数のレポートが保存されています。内部のフォルダーを開くと、それぞれの変化を確認できます。"
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "分析",
+    "description": "レポートはデータパイプラインによってストレージに配信されます。ここでは到着したレポートの確認、各フォルダーのアクセス権の設定、プラットフォームで表示する項目の選択を行います。",
+    "openViewer": "分析を開く",
+    "sharedNotice": "ベータ版と本番環境はこれらのフォルダー、閲覧者、ファイルを共有しています。ここで保存した変更は両方に反映されます。",
+    "tabsLabel": "分析セクション",
+    "tab": {
+      "health": "配信",
+      "folders": "フォルダーとアクセス",
+      "fields": "フィールド"
+    },
+    "loading": "読み込み中…",
+    "retry": "再試行",
+    "loadError": "このセクションを読み込めませんでした。",
+    "unavailable": "保存されている設定をストレージから読み取れませんでした。これは「未設定」とは異なります。編集が無効化されることで、実際の設定が上書きされないようになっています。再試行し、問題が続く場合はサーバーログをご確認ください。",
+    "save": "保存",
+    "saving": "保存中…",
+    "unsaved": "未保存の変更",
+    "saveSuccess": "保存されました。",
+    "saveError": "保存できませんでした。",
+    "conflictError": "別の管理者が編集中に設定を変更しました。あなたの変更は保存されていません—最新バージョンを再読み込みしました。",
+    "rootFolder": "（トップレベル）",
+    "scope": {
+      "domain": "メールドメイン",
+      "user": "人物",
+      "attribute": "属性",
+      "group": "Entraグループ"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "EntraグループオブジェクトID"
+    },
+    "level": {
+      "view": "概要を閲覧",
+      "download": "閲覧・エクスポート・ダウンロード"
+    },
+    "reportType": {
+      "usage": "利用レポート",
+      "rebilling": "再請求",
+      "emissions": "排出レポート",
+      "raw-telemetry": "生テレメトリ"
+    },
+    "field": {
+      "userCode": {
+        "label": "ユーザーコード",
+        "description": "個人を表す仮名のu-…コード。"
+      },
+      "jobTitle": {
+        "label": "職名",
+        "description": "職名（概要シートで最も多く見られる職名を含む）。小規模グループでは職名が特定の人物を示す場合もあります。"
+      },
+      "department": {
+        "label": "部署",
+        "description": "部署（概要シートで最も活動的な部署を含む）。"
+      },
+      "company": {
+        "label": "会社／組織",
+        "description": "ディレクトリ上の組織名や、再請求シートに記載されている会社名。"
+      },
+      "orgGroup": {
+        "label": "組織グループ",
+        "description": "レポートが分類される運営センターやグループ。"
+      },
+      "section": {
+        "label": "セクション",
+        "description": "再請求行が属するコスト回収セクション。"
+      },
+      "mailDomain": {
+        "label": "メールドメイン",
+        "description": "メールドメインの使用はこのドメインに帰属します（アドレスは含みません）。"
+      },
+      "workLocation": {
+        "label": "勤務地",
+        "description": "本部または現地。"
+      },
+      "technical": {
+        "label": "技術的詳細",
+        "description": "モデル、地域、イベント種別、通貨など、人物に関する情報を含まない記述項目です。"
+      },
+      "other": {
+        "label": "その他の記述項目",
+        "description": "上記に該当しない列を入力する場合に使用します。"
+      }
+    },
+    "folders": {
+      "intro": "パイプラインが配信したすべてのフォルダが一覧表示されます。設定のないフォルダと、その上位フォルダからアクセス権が付与されていないフォルダは管理者のみ閲覧できます。",
+      "name": "表示名",
+      "namePlaceholder": "フォルダパスの代わりに表示されます",
+      "description": "説明",
+      "reportType": "レポート種類",
+      "reportTypeNone": "未設定",
+      "reportTypeInherited": "継承：{type}",
+      "reportTypeHint": "チェックするべきファイル名や頻度を指定します。このフォルダ内のフォルダに適用されます。",
+      "retention": "ファイルの保存期間（ヶ月）",
+      "retentionHint": "空欄の場合、{months}ヶ月を継承します。各レポート期間の終了時から算定されます。",
+      "audience": "このフォルダを開ける対象",
+      "audienceHint": "各行はこのフォルダおよび配下のフォルダへのアクセス権を付与します。1行ごとに1つの対象を指定してください。",
+      "audienceScope": "ターゲット種別",
+      "audienceTargets": "ターゲット",
+      "audienceLevel": "アクセスレベル",
+      "addAudience": "人またはグループの追加",
+      "removeAudience": "この行を削除",
+      "restricted": "上位フォルダからアクセスを継承しない",
+      "restrictedHint": "このフォルダの行のみ、ここ以下に適用されます。",
+      "hiddenFields": "このフォルダ内でも非表示にする",
+      "hiddenFieldsHint": "プラットフォーム設定に加え、このフォルダおよび配下のフォルダで非表示にする項目です。非表示にはできますが、表示を増やすことはできません。",
+      "hiddenPlatformWide": "（すべての場所で非表示）",
+      "clear": "このフォルダの設定を削除",
+      "rawChip": "生データ：グローバル管理者のみ",
+      "rawNote": "生データのテレメトリには氏名、メールアドレス、ファイル名が含まれます。グローバル管理者のみ開くことができ、対象追加はできません。",
+      "audienceChip": "{count, plural, one {#アクセス行} other {#アクセス行}}",
+      "restrictedChip": "継承しない",
+      "notConfiguredChip": "未設定",
+      "addPathLabel": "初回配信前にフォルダを設定",
+      "addPath": "追加",
+      "addPathHint": "パイプラインが書き込むパスを正確に指定してください（例：usage/ocba）。設定のみ保存されます。ストレージ内に何かを作成するわけではありません。",
+      "invalidPath": "正しいフォルダパスではありません。",
+      "rawGlobalOnly": "生データ配下のフォルダはグローバル管理者のみ設定できます。"
+    },
+    "fields": {
+      "intro": "配信レポートでプラットフォームが表示可能な項目を選択してください。項目を非表示にすると、アプリの表示やエクスポートされたデータから削除されます。ファイル自体は管理者のみダウンロードできます。",
+      "readOnly": "グローバル管理者のみ変更可能です。分析管理者は「フォルダとアクセス」内でフォルダごとに追加項目の非表示ができます。",
+      "configurableHeading": "項目",
+      "shown": "表示",
+      "hidden": "非表示",
+      "jobTitleNote": "職名を表示すると、少人数グループの行でもユーザーコード下で個人識別が可能になる場合があります。グラフは5人未満の分析結果を非表示にしますが、ダウンロードされる表は非表示になりません。",
+      "neverHeading": "決して表示されない",
+      "neverBody": "氏名、メールアドレス、ディレクトリID、アップロードファイル名、エラーテキストは、生データテレメトリ以外では表示されません。これらを含むレポートは、差し替えられるまでユーザーから非表示になります。",
+      "unclassifiedHeading": "カタログに未登録の列",
+      "unclassifiedBody": "認識されていないテキスト列はアプリとエクスポート両方で非表示のままです。フィールドに分類するまでは、配信されたファイルをユーザーがダウンロードできません。",
+      "noneWaiting": "待機中のものはありません。",
+      "inFiles": "{count, plural, one {# ファイル内} other {# ファイル内}}",
+      "classifyAs": "列 {column} のフィールド",
+      "keepHidden": "非表示のままにする",
+      "removeClassification": "列 {column} の設定を削除"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "レポートストレージにアクセスできません",
+      "deliveryUnavailableBody": "アプリがコンテナ「{container}」をリストできませんでした。存在しているか、アプリの識別情報にデータロールが付与されているか確認してください。復旧するまで、誰にもレポートは表示されません。",
+      "foldersUnavailable": "フォルダ設定の読み取りに失敗したため、現在ユーザーにはフォルダが表示されません。復旧するまで、ファイルの確認も期限切れ判定も行われません。",
+      "policyUnavailable": "フィールド設定の読み取りに失敗したため、現在ファイルをダウンロードできません。",
+      "total": {
+        "files": "ファイル",
+        "ok": "問題なし",
+        "warning": "警告あり",
+        "error": "ユーザーに非表示",
+        "pending": "確認中"
+      },
+      "recheckAll": "すべて再確認",
+      "recheckOne": "再確認",
+      "recheckQueued": "{count, plural, one {# ファイルが確認待ちです。} other {# ファイルが確認待ちです。}}",
+      "recheckFailed": "確認を開始できませんでした。",
+      "retention": {
+        "active": "フォルダの保持期間を過ぎたファイルはすぐに非表示になり、{days} 日後に削除されます。",
+        "disabled": "フォルダの保持期間を過ぎたファイルは非表示になりますが、このデプロイでは削除は無効化されています。",
+        "waiting-for-config": "既定の保持期間を過ぎたファイルは非表示です。フォルダ設定が一度でも保存されるまで、削除されません。"
+      },
+      "noFiles": "まだファイルは配信されていません。",
+      "allGood": "配信されたファイルはすべて正常です。",
+      "problemsHeading": "注意が必要なファイル",
+      "status": {
+        "error": "ユーザーに非表示",
+        "warning": "警告",
+        "pending": "確認中",
+        "ok": "問題なし"
+      },
+      "pendingBody": "前回の確認以降で新規または差し替えられたものです。確認合格後にユーザーに表示されます。",
+      "firstSeen": "最初に確認した日：{date}",
+      "unclassifiedHeading": "判定待ちの列",
+      "unclassifiedBody": "これらの列は認識されていません。すべてフィールドに分類されるまで非表示になり、それらを含むファイルもユーザーはダウンロードできません。",
+      "unclassifiedChip": "{column} · {count, plural, one {# ファイル} other {# ファイル}}",
+      "openFields": "フィールドへ移動",
+      "unconfiguredHeading": "設定されていないフォルダ",
+      "unconfiguredBody": "ファイルが到着していますが、フォルダまたは上位フォルダの設定がされていません。管理者のみが閲覧可能です。",
+      "staleHeading": "期限遅れの配信",
+      "staleBody": "これらのフォルダは定期的なレポートを期待しますが、最新のレポートが想定より古くなっています。",
+      "staleDetail": {
+        "daily": "毎日配信；最新は {date} 分",
+        "monthly": "月次配信；最新終了は {date}"
+      },
+      "staleNever": "未配信",
+      "expiringHeading": "期限切れ間近",
+      "expiringBody": "保持期間を過ぎたか、30日以内に期限切れとなるファイルです。",
+      "expiresOn": "期限：{date}",
+      "expiredOn": "期限切れ：{date}"
+    },
+    "issue": {
+      "name-mismatch": "ファイル名がこのフォルダの指定と違います（例：{expected}）。",
+      "unsupported-format": "拡張子「{extension}」のファイルは確認できないため、ユーザーには非表示です。.xlsx または .csv を配信してください。",
+      "too-large": "{sizeMb} MBのこのファイルは、確認上限の{limitMb} MBを超えているため、ユーザーに非表示です。",
+      "empty-file": "ファイルが空です。",
+      "unreadable": "ファイルを開くことができませんでした。破損しているか、名前通りの形式でない可能性があります。",
+      "identifier-column": "シート「{sheet}」に人物を特定する列「{column}」があります。このファイルはユーザーから非表示です。",
+      "identifier-values": "「{sheet}」に{count, plural, one {# 件のメールアドレス} other {# 件のメールアドレス}}が含まれています。このファイルはユーザーから非表示です。",
+      "user-code-format": "シート「{sheet}」、列「{column}」:{count, plural, one {# 件の値が} other {# 件の値が}}u-…ユーザーコードではありません。このファイルはユーザーから非表示です。",
+      "formulas-without-values": "シート「{sheet}」に計算結果が保存されていない{count, plural, one {# 件の数式} other {# 件の数式}}があります。その数値はアプリで表示できません。",
+      "missing-sheet": "シート「{sheet}」が存在しないため、それに基づくビューは表示できません。",
+      "missing-column": "シート「{sheet}」に「{column}」列がないため、それを利用するビューは表示できません。",
+      "no-period": "ファイル名に報告期間が含まれていないため、保持期間は納品日から計算されます。",
+      "unclassified-field": "列「{column}」が認識されていません。分類されるまで非表示となり、ユーザーは納品ファイルをダウンロードできません。",
+      "past-retention": "このフォルダの保持期間{months}か月を超えたため、表示されません。",
+      "unknown": "報告された問題: {code}。"
+    }
   }
 }

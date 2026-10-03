@@ -49,9 +49,7 @@ export const AdminShell: FC<AdminShellProps> = ({ areas, children }) => {
   // flag decides here whether the rail shows it. Hiding the entry is not the
   // security control — the limits page and API keep their global-admin gates.
   const { usageLimits } = useFlags();
-  const visibleAreas = usageLimits
-    ? areas
-    : areas.filter((area) => area !== 'limits');
+  const visibleAreas = areas.filter((area) => area !== 'limits' || usageLimits);
   // Admin renders without the chat sidebar (ChatShell skips it on /admin),
   // so the gear below is the only way to reach Settings from here — the
   // modal host stays mounted in ChatShell and opens over the admin page.

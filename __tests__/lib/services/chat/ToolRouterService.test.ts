@@ -209,7 +209,7 @@ describe('ToolRouterService', () => {
         const args = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
         expect(args.messages[0].content).toContain('0 to 4 EXTRA queries');
         expect(args.messages[0].content).not.toContain('almost always EMPTY');
-        expect(args.max_completion_tokens).toBe(290);
+        expect(args.max_completion_tokens).toBe(302);
         expect(result.searchQueries).toEqual([
           'Sudan',
           'Sudan conflict RSF',
@@ -356,6 +356,73 @@ describe('ToolRouterService', () => {
           call.response_format.json_schema.schema.properties.searchFollowUp,
         ).toBeDefined();
         expect(call.messages[0].content).toContain('searchFollowUp');
+      });
+
+      it('classifies "keep looking" as a continuation of an unfinished search — and searches', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: false,
+                  searchQuery: '',
+                  searchRecency: 'none',
+                  searchComprehensive: false,
+                  searchCategory: 'general',
+                  searchLanguage: 'en',
+                  additionalSearchQueries: [],
+                  searchContinue: true,
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage: 'keep searching please',
+          hasPriorSearchState: true,
+        });
+
+        expect(result.searchContinue).toBe(true);
+        expect(result.tools).toEqual(['web_search']);
+        expect(result.searchLanguage).toBe('en');
+
+        const call =
+          mockOpenAIClient.chat.completions.create.mock.calls.at(-1)![0];
+        expect(
+          call.response_format.json_schema.schema.properties.searchContinue,
+        ).toBeDefined();
+        expect(call.messages[0].content).toContain('searchContinue');
+      });
+
+      it('never reports searchContinue without a prior search state offered, and drops a bad language', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: true,
+                  searchQuery: 'india protests',
+                  searchRecency: 'week',
+                  searchComprehensive: false,
+                  searchCategory: 'news',
+                  searchLanguage: 'English',
+                  additionalSearchQueries: [],
+                  searchContinue: true,
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage: 'india protests?',
+        });
+
+        expect(result.searchContinue).toBe(false);
+        expect(result.searchLanguage).toBeUndefined();
       });
 
       it('never reports searchFollowUp without prior citations offered', async () => {
@@ -978,6 +1045,11 @@ describe('ToolRouterService', () => {
                   description:
                     'Kind of source that answers best; "general" when unsure',
                 },
+                searchLanguage: {
+                  type: 'string',
+                  description:
+                    'ISO 639-1 code of the language searchQuery is written in, or "auto"',
+                },
                 additionalSearchQueries: {
                   type: 'array',
                   items: { type: 'string' },
@@ -992,6 +1064,7 @@ describe('ToolRouterService', () => {
                 'searchRecency',
                 'searchComprehensive',
                 'searchCategory',
+                'searchLanguage',
                 'additionalSearchQueries',
               ],
               additionalProperties: false,
@@ -1000,7 +1073,7 @@ describe('ToolRouterService', () => {
         });
         // Latency-tuning params should be present.
         expect(callArgs[0].reasoning_effort).toBe('minimal');
-        expect(callArgs[0].max_completion_tokens).toBe(210);
+        expect(callArgs[0].max_completion_tokens).toBe(222);
       });
     });
 

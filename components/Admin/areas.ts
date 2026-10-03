@@ -1,5 +1,6 @@
 import {
   IconBook,
+  IconChartBar,
   IconForms,
   IconGauge,
   IconMap2,
@@ -11,9 +12,11 @@ import {
   IconShieldLock,
   IconSocial,
   IconSpeakerphone,
+  IconTextWrap,
   IconUserShield,
   IconUsersGroup,
   IconVocabulary,
+  IconWorldSearch,
 } from '@tabler/icons-react';
 import { ComponentType } from 'react';
 
@@ -75,6 +78,20 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     labelKey: 'admin.area.workflows',
     descriptionKey: 'admin.areaDescription.workflows',
   },
+  'web-search': {
+    id: 'web-search',
+    href: '/admin/web-search',
+    icon: IconWorldSearch,
+    labelKey: 'admin.area.webSearch',
+    descriptionKey: 'admin.areaDescription.webSearch',
+  },
+  'context-budget': {
+    id: 'context-budget',
+    href: '/admin/context-budget',
+    icon: IconTextWrap,
+    labelKey: 'admin.area.contextBudget',
+    descriptionKey: 'admin.areaDescription.contextBudget',
+  },
   guides: {
     id: 'guides',
     href: '/admin/guides',
@@ -123,6 +140,13 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     icon: IconGauge,
     labelKey: 'limits.title',
     descriptionKey: 'limits.description',
+  },
+  analytics: {
+    id: 'analytics',
+    href: '/admin/analytics',
+    icon: IconChartBar,
+    labelKey: 'admin.area.analytics',
+    descriptionKey: 'admin.areaDescription.analytics',
   },
   announcements: {
     id: 'announcements',
@@ -201,7 +225,13 @@ export const ADMIN_GROUPS: AdminAreaGroupDescriptor[] = [
   {
     id: 'capabilities',
     labelKey: 'admin.group.capabilities',
-    areas: ['agents', 'connectors', 'workflows'],
+    areas: [
+      'agents',
+      'connectors',
+      'workflows',
+      'web-search',
+      'context-budget',
+    ],
   },
   {
     id: 'libraries',
@@ -220,7 +250,7 @@ export const ADMIN_GROUPS: AdminAreaGroupDescriptor[] = [
   {
     id: 'usage',
     labelKey: 'admin.group.usage',
-    areas: ['limits'],
+    areas: ['limits', 'analytics'],
   },
   {
     id: 'administration',

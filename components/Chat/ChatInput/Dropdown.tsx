@@ -63,7 +63,7 @@ import {
   DocumentTranslationReference,
 } from '@/types/documentTranslation';
 import { InterpreterMode } from '@/types/interpreterMode';
-import { SearchMode } from '@/types/searchMode';
+import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
 import { TRANSCRIPT_BLOB_THRESHOLD } from '@/types/transcription';
 
@@ -504,7 +504,10 @@ const Dropdown: React.FC<DropdownProps> = ({
   const toggleSearchMode = useCallback(() => {
     if (searchMode === SearchMode.ALWAYS) {
       // If ALWAYS is active, turn it off (return to conversation's default or OFF)
-      setSearchMode(selectedConversation?.defaultSearchMode ?? SearchMode.OFF);
+      setSearchMode(
+        normalizeSearchMode(selectedConversation?.defaultSearchMode) ??
+          SearchMode.OFF,
+      );
     } else {
       // If OFF or INTELLIGENT, enable ALWAYS mode
       setSearchMode(SearchMode.ALWAYS);

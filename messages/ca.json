@@ -782,7 +782,10 @@
       "codeInterpreterLimitReached": "S'ha assolit el límit diari d'execució de codi — es respon sense executar codi…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Error en la cerca de la base de coneixement — la resposta no utilitzarà els documents de l’agent",
-      "stillWorking": "Encara treballant…"
+      "stillWorking": "Encara treballant…",
+      "assessingSearchResults": "Verificant si els resultats responen a la pregunta…",
+      "refiningSearch": "Cercant de nou: “{query}”…",
+      "readingSearchPages": "Llegint {count} pàgines de resultats…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# eina utilitzada} other {# eines utilitzades}}",
@@ -868,7 +871,10 @@
       "summarizeNow": "Resumir dels titulars ara",
       "sourcesCount": "{count} fonts",
       "showAll": "Mostra totes les {count} fonts",
-      "showFewer": "Mostra menys"
+      "showFewer": "Mostra menys",
+      "multiStepTitle": "Resultats fins ara — comprovant si responen a la pregunta",
+      "multiStepHint": "La cerca pot continuar — una altra cerca o lectura de les pàgines més prometedores. Respon ara amb els {count} resultats ja trobats si prefereixes no esperar.",
+      "answerNow": "Respon ara amb aquests resultats"
     },
     "retryWithModel": "Prova amb {model}",
     "createTodoTasks": "Crea tasques To Do a partir d'aquesta resposta",
@@ -882,7 +888,10 @@
     "modelTimedOutAtMaximum": "{model} no ha començat a respondre en {duration}, el temps màxim disponible. Torna-ho a provar o fes servir un altre model.",
     "requestTimedOut": "Aquesta sol·licitud ha trigat massa i s'ha aturat abans que {model} pogués respondre. Pots permetre més temps o provar amb un altre model.",
     "retryWaitingLonger": "Espera fins a {duration} i torna-ho a provar",
-    "alwaysWaitThisLong": "Espera sempre fins a {duration}"
+    "alwaysWaitThisLong": "Espera sempre fins a {duration}",
+    "keepSearching": "Continua cercant",
+    "keepSearchingHint": "La cerca es va aturar abans de trobar això. Demana a l'assistent que provi diferents enfocaments.",
+    "keepSearchingMessage": "Si us plau, continua cercant això: prova un enfocament diferent."
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -1266,7 +1275,9 @@
       "providerBingResponsesDescription": "La mateixa cobertura web de Bing que Bing grounding, executada com una sola crida directa al model en lloc d'un agent Foundry, normalment molt més ràpida. Nova opció en avaluació comparada amb Bing grounding.",
       "providerSearxng": "Cerca web de MSF",
       "providerSearxngDescription": "Servei de metacerca privat propi de MSF. Cobreix la web general, notícies, literatura científica (incloent publicacions d’investigació de MSF), documentació tècnica i dades humanitàries, i selecciona la font adequada per a cada pregunta. Els resultats arriben en segons amb enllaços directes, i només la consulta de cerca surt de l’aplicació — els motors de cerca mai no veuen qui ets.",
-      "otherProvidersLabel": "Altres proveïdors"
+      "otherProvidersLabel": "Altres proveïdors",
+      "multiStepLabel": "Cerca en diversos passos",
+      "multiStepDescription": "Amb la cerca web d'MSF, l'assistent comprova els primers resultats i, només quan no són suficients, torna a cercar o llegeix les pàgines més prometedores abans de respondre. La majoria de preguntes encara es resolen en un sol pas. Desactiva-ho per mantenir totes les cerques en una sola ronda."
     },
     "Admin": "Administració",
     "Usage Limits": "Límits d'ús",
@@ -1286,7 +1297,8 @@
       "customHint": "Entre {min} i {max} segons.",
       "preferModelTitle": "Preferesc el meu model seleccionat",
       "preferModelDescription": "No canviïs automàticament a un altre model quan una petició falla. L'error igualment oferirà el canvi."
-    }
+    },
+    "Analytics": "Analítica"
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -1621,6 +1633,12 @@
     },
     "subVariant": {
       "label": "Mida"
+    },
+    "retiring": {
+      "badge": "Retirada",
+      "datedMoving": "Es retira el {date}. Les converses es traslladen a {successor} el {movesOn}.",
+      "dated": "Es retira el {date} i deixarà de funcionar. Utilitza {successor}.",
+      "replaced": "Serà substituït per {successor}."
     }
   },
   "models": {
@@ -1919,6 +1937,11 @@
       "name": "GPT-6 Astra",
       "description": "Model insígnia GPT-6 d’OpenAI. Creat per a feines exigents de principi a fi: recerca profunda, anàlisi complexa, enginyeria de programari i tasques llargues i de múltiples passos. Aproximadament el doble de cost que el GPT-5.6 Sol.",
       "tagline": "El model més potent d’OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Una millora de GPT-6 Sol per treballs exigents en codi, documents i aplicacions. S'acosta a la capacitat d'Astra, a una fracció del preu per token.",
+      "tagline": "Quasi la capacitat Astra, molt menor cost"
     }
   },
   "searchMode": {
@@ -5440,7 +5463,10 @@
       "announcements": "Missatges de bàner per a usuaris: qui els veu, quan i en quins idiomes.",
       "delegations": "Qui administra quins usuaris, i què pot fer cadascun d’ells.",
       "channelProfiles": "Què és cada plataforma: límits, recompte, fils. Fets d’abast organitzatiu sobre els quals es construeix cada conjunt de canals.",
-      "channelSets": "Les normes de cada equip per publicar a les plataformes: directrius, registres, predeterminats, qui pot utilitzar el conjunt i qui pot enviar."
+      "channelSets": "Les normes de cada equip per publicar a les plataformes: directrius, registres, predeterminats, qui pot utilitzar el conjunt i qui pot enviar.",
+      "webSearch": "Fins on pot arribar una cerca web: cerca multi-pas, el model d'avaluació i els seus límits.",
+      "contextBudget": "Quant de la conversa s'envia a cada model en cada torn.",
+      "analytics": "Informes lliurats: què ha arribat, qui pot obrir cada carpeta i quins camps es poden mostrar."
     },
     "openSettings": "Obre la configuració",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "Veure com",
       "globalAdmins": "Admins globals",
       "announcements": "Comunicats",
-      "delegations": "Delegacions"
+      "delegations": "Delegacions",
+      "webSearch": "Cerca web",
+      "contextBudget": "Pressupost de context",
+      "analytics": "Analítica"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "Allò que aquesta delegació pot atorgar. Els administradors només poden tenir el que s’habiliti aquí.",
     "grant": {
       "limits": "Límits d’ús",
-      "announcements": "Anuncis"
+      "announcements": "Anuncis",
+      "analytics": "Analítiques"
     },
     "grantAll": "Tot",
     "maxOverrides": "Límit d’excepcions que pot tenir aquesta delegació",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "Pots marcar aquest conjunt com a predeterminat després de desar.",
     "noChannelsWarning": "Aquest conjunt no ofereix canals; ningú pot redactar-hi amb ell.",
     "audienceEveryoneHint": "Qualsevol membre de l'organització pot redactar amb aquest conjunt."
+  },
+  "contextBudgetAdmin": {
+    "title": "Pressupost de context",
+    "description": "Quanta història de conversa s'envia a cada model en cada torn. Els últims missatges sempre s'inclouen; els més antics es descarten quan s'esgota el pressupost, i es resumeixen i s'afegeixen a la instrucció del sistema. Un pressupost més ampli permet mantenir més història visible, tot i que amb un cost superior per torn.",
+    "scopeNote": "S'aplica a tots els xats en tots els models. El pressupost mai pot superar la part de finestra assignada al model aquí sota.",
+    "loading": "Carregant el pressupost de context…",
+    "loadError": "No s'ha pogut carregar el pressupost de context.",
+    "configUnavailable": "En aquest moment no es pot llegir el pressupost de context emmagatzemat, per tant, els valors mostrats podrien no ser els vigents. Torna-ho a provar abans d'editar.",
+    "retry": "Torna-ho a provar",
+    "historyTokensLabel": "Pressupost estàndard (tokens)",
+    "historyTokensDescription": "Història enviada per torn, inclosa la instrucció del sistema, per models sense paràmetre específic. Aproximadament 48.000 manté els darrers 30–60 intercanvis d'una conversa típica.",
+    "historyFractionLabel": "Límit (part de la finestra d'entrada del model)",
+    "historyFractionDescription": "El pressupost es limita a aquesta part de la finestra de context del model, menys la reserva per la sortida, així un model de finestra petita mai rep més del que pot retenir.",
+    "minRecentMessagesLabel": "Missatges que sempre es conserven",
+    "minRecentMessagesDescription": "Els últims missatges es conserven fins i tot si es supera el pressupost (dins la finestra). Tres conserven l'intercanvi anterior quan el darrer missatge —un document enganxat, resultats de cerca— ompliria tot el pressupost.",
+    "familyOverridesLabel": "Per família",
+    "familyOverridesDescription": "Un pressupost per a cada model d'una família, substituint el pressupost estàndard.",
+    "modelOverridesLabel": "Per model",
+    "modelOverridesDescription": "Un pressupost per a un model, substituint el de família i l'estàndard.",
+    "overrideFamilyPlaceholder": "Família",
+    "overrideModelPlaceholder": "ID del model",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Afegeix",
+    "removeOverride": "Elimina",
+    "noOverrides": "Cap",
+    "effectiveLabel": "Pressupostos efectius amb aquesta configuració",
+    "effectiveColumnModel": "Model",
+    "effectiveColumnWindow": "Finestra",
+    "effectiveColumnBudget": "Pressupost d'historial",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Per defecte: {value}",
+    "defaultsNote": "Només es guarden els valors que difereixen dels valors per defecte; la resta segueix els valors per defecte del codi en les noves versions.",
+    "save": "Desa",
+    "saving": "S'està desant…",
+    "resetDefaults": "Restableix als valors per defecte",
+    "unsaved": "Canvis sense desar",
+    "saveSuccess": "Pressupost de context desat. Serà efectiu en menys d’un minut.",
+    "saveError": "No s'ha pogut desar el pressupost de context.",
+    "conflictError": "Un altre administrador ha canviat el pressupost de context mentrestant; s'han recarregat els valors més recents.",
+    "updatedByLine": "Darrer desament per {by} el {at}",
+    "neverSaved": "Mai no s’ha desat — estan actius els valors per defecte del codi."
+  },
+  "webSearchAdmin": {
+    "title": "Cerca web",
+    "description": "Controla la cerca multi-pas a la cerca web d’MSF. Després dels primers resultats, un model avaluador decideix si responen la pregunta; si no, pot cercar de nou amb altres consultes, llegir pàgines de resultats, demanar a l’usuari algun detall que falta o informar que no s’ha trobat res.",
+    "scopeNote": "Aquesta configuració només s’aplica a la cerca web d’MSF. Altres proveïdors fan sempre una sola ronda. Cada persona també pot desactivar la cerca multi-pas per si mateixa a Configuració.",
+    "loading": "S'estan carregant els ajustos de cerca web…",
+    "loadError": "No s'han pogut carregar els ajustos de cerca web.",
+    "configUnavailable": "No s’han pogut llegir els ajustos de cerca web de l’emmagatzematge. Els controls estan ocults, en lloc de mostrar valors per defecte que podrien no coincidir amb els en ús.",
+    "retry": "Reintenta",
+    "enabledLabel": "Cerca multi-pas",
+    "enabledDescription": "Si està desactivat, cada cerca és d’una sola ronda i no es fa servir cap model avaluador.",
+    "assessorLabel": "Model avaluador",
+    "assessorDescription": "S’utilitza un cop a cada pas per valorar els resultats. Escull un model ràpid i econòmic: s’executa mentre l’usuari espera. Si no es pot contactar, s'utilitza {fallback}.",
+    "maxStepsLabel": "Passos per pregunta",
+    "maxStepsDescription": "El nombre màxim de passos que pot fer una pregunta, incloent la primera cerca. Cada nova cerca o grup de lectures de pàgines compta com un pas. Aquest límit és independent del límit diari de cerques, que compta la pregunta sencera com una.",
+    "maxStepsExploratoryLabel": "Passos per cerques exploratòries",
+    "maxStepsExploratoryDescription": "Un límit superior per recerques difícils, com trobar una còpia d’un llibre rar, on són probables resultats fallits. No pot ser inferior al límit normal.",
+    "pageReadsLabel": "Llegir pàgines de resultats",
+    "pageReadsDescription": "Permet que un pas obri els resultats més prometedors i llegeixi la pàgina sencera en lloc de basar-se només en els fragments de cerca.",
+    "maxPageReadsLabel": "Pàgines per pas de lectura",
+    "sourceAssessmentLabel": "Valora la qualitat de la font",
+    "sourceAssessmentDescription": "L’avaluador etiqueta cada font (oficial, reconeguda, secundària, baixa fiabilitat) perquè la resposta les pugui pesar i atribuir.",
+    "timeBudgetLabel": "Límit de temps (segons)",
+    "timeBudgetDescription": "Temps total que pot durar una cerca, incloent la primera ronda. Quan s'esgota, la resposta es redacta amb el que s’ha trobat.",
+    "defaultsNote": "Una opció deixada al valor per defecte no es guarda, així segueix aquesta configuració si una versió posterior la canvia.",
+    "defaultHint": "Per defecte: {value}",
+    "defaultOn": "activat",
+    "defaultOff": "desactivat",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Teniu canvis sense desar.",
+    "save": "Desa",
+    "saving": "S'està desant…",
+    "resetDefaults": "Restableix als valors per defecte",
+    "saveSuccess": "Ajustos de cerca web desats.",
+    "saveError": "No s'han pogut desar els ajustos de cerca web.",
+    "conflictError": "Un altre administrador ha modificat primer la configuració. S'han recarregat — reviseu-la i deseu novament, si us plau.",
+    "updatedByLine": "Darrer desament per {by} el {at}.",
+    "neverSaved": "Encara no s'ha desat res; s'apliquen els valors per defecte del sistema."
+  },
+  "modelRetirement": {
+    "notice": "{model} es retirarà el {retiresOn}. Aquesta conversa es traslladarà a {successor} el {movesOn}.",
+    "noticeRetiring": "{model} es retirarà el {retiresOn} i deixarà de funcionar. Canvieu a {successor} per continuar utilitzant aquesta conversa.",
+    "switchNow": "Canvia ara"
+  },
+  "analytics": {
+    "title": "Analítiques",
+    "backToChat": "Torna al xat",
+    "manage": "Gestiona",
+    "loading": "S'està carregant…",
+    "loadFailed": "No s'han pogut carregar els informes.",
+    "retry": "Torna-ho a provar",
+    "emptyTitle": "Encara no s'ha compartit res amb tu",
+    "emptyBody": "Els informes apareixeran aquí quan un administrador et doni accés a una carpeta.",
+    "deliveryUnavailable": "Ara mateix no es pot accedir a l'emmagatzematge d'informes, per això les llistes poden estar buides. Torna-ho a provar en uns minuts.",
+    "groupsDegraded": "Ara mateix no s'ha pogut comprovar la teva pertinença als grups, així que poden faltar carpetes compartides amb els teus grups. Torna-ho a carregar d'aquí a un minut.",
+    "foldersHeading": "Carpetes",
+    "rootFolder": "Tots els informes",
+    "pathOnly": "No tens accés a aquesta carpeta, només a les carpetes que hi ha dins.",
+    "selectFolder": "Tria una carpeta per veure'n els informes.",
+    "noFiles": "No hi ha informes en aquesta carpeta.",
+    "viewOnlyNote": "Tens accés només de visualització a aquesta carpeta: pots obrir els informes, veure'n la presentació general i els taulers resum. Per veure taules amb una fila per persona, exportar o descarregar, cal accés de descàrrega.",
+    "col": {
+      "name": "Fitxer",
+      "period": "Període",
+      "delivered": "Lliurat",
+      "size": "Mida",
+      "availableUntil": "Disponible fins",
+      "actions": "Accions"
+    },
+    "download": "Descarrega",
+    "downloadAria": "Descarrega {name}",
+    "block": {
+      "view-only": "Només visualització",
+      "hidden-fields": "Original retingut (camps ocults)",
+      "unclassified-fields": "Original retingut (camps pendents de revisió)",
+      "not-inspected": "Encara no revisat",
+      "policy-unavailable": "No disponible ara mateix"
+    },
+    "adminBadge": {
+      "error": "Amagat als usuaris",
+      "pending": "En revisió",
+      "warning": "Amb avisos",
+      "expired": "Caducat, pendent de supressió",
+      "originalBlocked": "Els usuaris no poden descarregar: {reason}"
+    },
+    "openAria": "Obre {name}",
+    "openForExport": "Obre per exportar",
+    "preview": {
+      "back": "Torna a {folder}",
+      "tabsLabel": "Taules en aquest fitxer",
+      "lockedTab": "{name} (blocat)",
+      "unavailable": "Aquest fitxer ara mateix no es pot obrir a l'aplicació.",
+      "tableFailed": "No s'ha pogut carregar aquesta taula.",
+      "withheld": {
+        "row-level": "Aquesta taula té una fila per persona. Per obrir-la cal accés de descàrrega a la carpeta.",
+        "hidden-fields": "Aquesta pàgina conté un camp ocult, per això no es mostra."
+      },
+      "truncated": "S'estan mostrant les primeres {shown, number} de {total, number} files. Exporta la taula per obtenir-les totes.",
+      "freeformNote": "Aquesta pàgina està dissenyada per llegir i es mostra tal com es va lliurar.",
+      "filter": "Filtra files",
+      "filterPlaceholder": "Filtra files…",
+      "rows": "{count, plural, one {# fila} other {# files}}",
+      "matching": "Coincideixen {count, number} de {total, number} files",
+      "modeLabel": "Mostrar com",
+      "mode": {
+        "table": "Taula",
+        "chart": "Gràfic"
+      },
+      "noRows": "No hi ha files per mostrar.",
+      "hiddenColumn": "Ocult als usuaris",
+      "exportCsv": "Exporta aquesta taula (CSV)",
+      "exportXlsx": "Exporta totes les taules (Excel)",
+      "downloadOriginal": "Descarrega l’original",
+      "exportNote": "El fitxer lliurat conté camps ocults, així que no es pot descarregar tal com és. Les exportacions ometen aquests camps.",
+      "sectionLabel": "Mostrar",
+      "section": {
+        "overview": "Resum",
+        "tables": "Taules"
+      }
+    },
+    "chart": {
+      "groupBy": "Agrupa per",
+      "measure": "Mesura",
+      "rowCount": "Nombre de files",
+      "aggregation": "Calcula",
+      "agg": {
+        "sum": "Suma",
+        "mean": "Mitjana",
+        "min": "Mínim",
+        "max": "Màxim"
+      },
+      "ariaLabel": "{measure} per {group}",
+      "noColumns": "Aquesta taula no té cap columna de text o data per agrupar.",
+      "empty": "No hi ha res per mostrar en gràfic per aquesta opció.",
+      "truncatedGroups": "Es mostren els {count} grups més grans.",
+      "basedOn": "Basat en les primeres {shown, number} de {total, number} files.",
+      "savePng": "Desa com a imatge",
+      "saveSvg": "Desa com a SVG",
+      "saveFailed": "No s’ha pogut desar el gràfic."
+    },
+    "dash": {
+      "loading": "Carregant…",
+      "failed": "No s’ha pogut carregar el resum.",
+      "retry": "Reintenta",
+      "showTable": "Mostra com a taula",
+      "showChart": "Mostra com a gràfic",
+      "smallGroups": "Grups de menys de 5 persones",
+      "foldedNote": "Els grups de menys de 5 persones es combinen en una sola fila.",
+      "otherCount": "{count, plural, one {# altre} other {# altres}}",
+      "hiddenPanel": "Ocult per la configuració del camp.",
+      "missingPanel": "No disponible per a aquest fitxer.",
+      "usage": {
+        "users": "Persones actives",
+        "interactions": "Interaccions",
+        "avgPerUser": "Mitjana per persona",
+        "medianPerUser": "Mediana per persona",
+        "hq": "A la seu central",
+        "field": "Al terreny",
+        "shareUsers": "{pct}% dels usuaris de {comparator}",
+        "shareUsage": "{pct}% de l’ús de {comparator}",
+        "comparator": "{comparator}: {value}",
+        "daily": "Interaccions per dia",
+        "dailyUsers": "Persones actives per dia",
+        "dailyUsersSub": "Per lloc de treball",
+        "weekly": "Interaccions per setmana",
+        "activity": "Quant utilitza la gent l'eina",
+        "activitySub": "Persones, segons el nombre d'interaccions en el període",
+        "departments": "Interaccions per departament",
+        "jobTitles": "Interaccions per càrrec",
+        "models": "Esdeveniments per model",
+        "total": "Totes les ubicacions",
+        "location": {
+          "hq": "Seu central",
+          "field": "Camp",
+          "unknown": "Desconegut"
+        },
+        "col": {
+          "date": "Dia",
+          "week": "Setmana iniciada el",
+          "users": "Persones",
+          "interactions": "Interaccions",
+          "events": "Esdeveniments",
+          "group": "Grup",
+          "band": "Interaccions"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Total facturat",
+        "usageVariable": "Cost variable d'ús",
+        "staticInfra": "Infraestructura estàtica",
+        "sections": "Seccions facturades",
+        "usageEvents": "Esdeveniments d'ús",
+        "bySection": "Facturat per secció",
+        "changes": "Canvis respecte a l'arxiu anterior",
+        "noChanges": "No hi ha canvis respecte a l'arxiu anterior.",
+        "byDomain": "Esdeveniments d'ús per domini de correu",
+        "reconciliation": "Reconciliació amb Azure",
+        "col": {
+          "section": "Secció",
+          "billed": "Facturat",
+          "usageEvents": "Esdeveniments d'ús",
+          "usagePct": "Ús %",
+          "line": "Línia",
+          "amount": "Import",
+          "previous": "Arxiu anterior",
+          "restated": "Reformulat",
+          "change": "Canvi",
+          "domain": "Domini de correu",
+          "users": "Persones"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Calculat amb",
+        "delivered": "Supòsits propis de l'informe ({version})",
+        "current": "Supòsits actuals de l'app ({version})",
+        "whatIf": "I si…",
+        "deliveredUnavailable": "No s'han pogut llegir els supòsits propis d'aquest informe de la seva pestanya de Supòsits, així que s'han fet servir els de l'app actuals.",
+        "whatIfIntro": "Canvia una xifra per veure com afecta a tot el que hi ha a sota. Res es desarà.",
+        "resetDelivered": "Reinicia als propis de l'informe",
+        "resetCurrent": "Reinicia als actuals de l'app",
+        "co2": "Emissions",
+        "energy": "Energia",
+        "charges": "Càrregues de telèfon intel·ligent",
+        "chargesSub": "Amb la mateixa petjada",
+        "activeUsers": "Persones actives",
+        "requests": "Sol·licituds",
+        "tokens": "Tokens",
+        "vsDelivered": "{delta} vs els supòsits propis de l'informe",
+        "sameAsDelivered": "El mateix que amb els supòsits propis de l'informe",
+        "unpriced": "{count, plural, one {# sol·licitud utilitza} other {# sol·licituds utilitzen}} una mida de model per a la qual no hi ha xifra, i {count, plural, one {queda} other {queden}} exclosa.",
+        "byDepartment": "Emissions per departament",
+        "byModel": "Emissions per model",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Calculat aquí vs registrat al moment",
+        "reconciliationSub": "L'aplicació també estima cada sol·licitud quan es produeix. Coincideixen mentre els supòsits són els mateixos.",
+        "computed": "Calculat aquí",
+        "logged": "Registrat per l'aplicació",
+        "difference": "Diferència",
+        "col": {
+          "group": "Grup",
+          "requests": "Sol·licituds",
+          "tokens": "Tokens",
+          "energyWh": "Energia (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Despeses del centre de dades (PUE)",
+          "promptTokenWeight": "Pes dels tokens d'entrada",
+          "dedicatedReasoningMultiplier": "Multiplicador de raonament dedicat",
+          "whPer1kTokens": "Wh per 1.000 tokens — {name}",
+          "reasoningEffortMultipliers": "Multiplicador d'esforç de raonament — {name}",
+          "gridIntensity": "g CO₂e per kWh de xarxa — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Esdeveniments",
+        "users": "Persones",
+        "tokens": "Tokens",
+        "errors": "Errors",
+        "energy": "Energia",
+        "co2": "Emissions",
+        "hourly": "Esdeveniments per hora (UTC)",
+        "byType": "Esdeveniments per tipus",
+        "byError": "Errors per codi",
+        "byModel": "Tokens per model",
+        "byCompany": "Esdeveniments per organització",
+        "none": "Cap.",
+        "col": {
+          "group": "Grup",
+          "events": "Esdeveniments",
+          "tokens": "Tokens",
+          "hour": "Hora"
+        }
+      },
+      "trend": {
+        "title": "Al llarg del temps",
+        "period": "Període",
+        "users": "Persones actives per informe",
+        "interactions": "Interaccions per informe",
+        "billed": "Total facturat per període",
+        "sections": "Facturat per secció",
+        "otherSections": "Totes les altres seccions",
+        "co2": "Emissions per informe",
+        "energy": "Energia per informe",
+        "recalculated": "Cada període es calcula segons les actuals hipòtesis de l'aplicació ({version}), així que un canvi d'hipòtesis entre informes no apareix com un canvi en les emissions.",
+        "severalPerPeriod": "Aquesta carpeta conté diversos informes per al mateix període. Obre una carpeta dins per veure com canvia un d'aquests al llarg del temps."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analítica",
+    "description": "Els informes es lliuren a l'emmagatzematge a través del pipeline de dades. Aquí pots consultar què ha arribat, decidir qui pot obrir cada carpeta i triar quins camps pot mostrar la plataforma.",
+    "openViewer": "Obre l'analítica",
+    "sharedNotice": "La beta i la producció comparteixen aquestes carpetes, audiències i fitxers. Qualsevol canvi guardat aquí s'aplica a totes dues.",
+    "tabsLabel": "Seccions d'analítica",
+    "tab": {
+      "health": "Lliuraments",
+      "folders": "Carpetes i accés",
+      "fields": "Camps"
+    },
+    "loading": "S'està carregant…",
+    "retry": "Torna-ho a provar",
+    "loadError": "No s'ha pogut carregar aquesta secció.",
+    "unavailable": "No s'han pogut llegir els ajustos guardats de l'emmagatzematge. Això NO vol dir que \"no hi hagi res configurat\" — l'edició està desactivada per no sobreescriure la configuració real. Torna-ho a provar i consulta els logs del servidor si el problema persisteix.",
+    "save": "Desa",
+    "saving": "S'està desant…",
+    "unsaved": "Canvis no desats",
+    "saveSuccess": "Desat.",
+    "saveError": "No s'ha pogut desar.",
+    "conflictError": "Un altre administrador ha canviat aquests ajustos mentre editaves. Els teus canvis no s'han desat — s'ha recarregat la versió més recent.",
+    "rootFolder": "(nivell superior)",
+    "scope": {
+      "domain": "Domini de correu electrònic",
+      "user": "Persona",
+      "attribute": "Atribut",
+      "group": "Grup Entra"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "nom@example.org",
+      "attribute": "departament:Salut",
+      "group": "Identificador d'objecte del grup Entra"
+    },
+    "level": {
+      "view": "Veure resums",
+      "download": "Veure, exportar i descarregar"
+    },
+    "reportType": {
+      "usage": "Informe d'ús",
+      "rebilling": "Refacturació",
+      "emissions": "Informe d'emissions",
+      "raw-telemetry": "Telemetria en brut"
+    },
+    "field": {
+      "userCode": {
+        "label": "Codi d'usuari",
+        "description": "El codi pseudonimitzat u-… que representa una persona."
+      },
+      "jobTitle": {
+        "label": "Càrrec",
+        "description": "Càrrecs, incloent-hi el més habitual als fulls de resum. En un grup petit, un càrrec pot identificar una persona."
+      },
+      "department": {
+        "label": "Departament",
+        "description": "Departaments, incloent-hi el més actiu als fulls de resum."
+      },
+      "company": {
+        "label": "Empresa / organització",
+        "description": "El nom de l'organització del directori i els noms d'empreses que apareixen a les fulles de refacturació."
+      },
+      "orgGroup": {
+        "label": "Grup de l'organització",
+        "description": "El centre operatiu o grup pel qual es distribueix un informe."
+      },
+      "section": {
+        "label": "Secció",
+        "description": "La secció de recuperació de costos a la qual pertany una línia de refacturació."
+      },
+      "mailDomain": {
+        "label": "Domini de correu",
+        "description": "L’ús del domini de correu electrònic s’atribueix a (mai una adreça)."
+      },
+      "workLocation": {
+        "label": "Ubicació de treball",
+        "description": "Seu central o camp."
+      },
+      "technical": {
+        "label": "Detalls tècnics",
+        "description": "Model, regió, tipus d’esdeveniment, moneda i descriptors similars que no aporten informació personal."
+      },
+      "other": {
+        "label": "Altres camps descriptius",
+        "description": "On s’arxiva una columna que no encaixa en cap de les anteriors."
+      }
+    },
+    "folders": {
+      "intro": "Es mostren totes les carpetes on el pipeline ha fet lliuraments. Una carpeta sense configuració —i sense cap carpeta per sobre que concedeixi accés— només és visible pels administradors.",
+      "name": "Nom de visualització",
+      "namePlaceholder": "Es mostra en lloc del camí de la carpeta",
+      "description": "Descripció",
+      "reportType": "Tipus d’informe",
+      "reportTypeNone": "No assignat",
+      "reportTypeInherited": "Heretat: {type}",
+      "reportTypeHint": "Indica al comprovador quins noms de fitxer esperar i amb quina freqüència. S’aplica a les carpetes dins d’aquesta.",
+      "retention": "Conservar fitxers durant (mesos)",
+      "retentionHint": "Deixeu-ho en blanc per heretar {months} mesos. Es compta des del final del període de cada informe.",
+      "audience": "Qui pot obrir aquesta carpeta",
+      "audienceHint": "Cada línia concedeix accés a aquesta carpeta i a les carpetes que conté. Un objectiu per línia.",
+      "audienceScope": "Tipus d’objectiu",
+      "audienceTargets": "Objectius",
+      "audienceLevel": "Nivell d’accés",
+      "addAudience": "Afegir persones o grups",
+      "removeAudience": "Elimina aquesta línia",
+      "restricted": "No heretar accés de les carpetes superiors",
+      "restrictedHint": "Només compten les línies d’aquesta carpeta i les inferiors.",
+      "hiddenFields": "També ocultar en aquesta carpeta",
+      "hiddenFieldsHint": "Camps ocultats aquí, a més de la configuració de la plataforma, per a aquesta carpeta i les que conté. Podeu ocultar-ne més, mai mostrar-ne més.",
+      "hiddenPlatformWide": "(ocult arreu)",
+      "clear": "Eliminar la configuració d’aquesta carpeta",
+      "rawChip": "Brut: només administradors globals",
+      "rawNote": "La telemetria bruta conté noms, adreces de correu electrònic i noms de fitxer. Només els administradors globals la poden obrir i no es pot afegir cap audiència.",
+      "audienceChip": "{count, plural, one {# línia d'accés} other {# línies d'accés}}",
+      "restrictedChip": "No hereta",
+      "notConfiguredChip": "Sense configuració",
+      "addPathLabel": "Configura una carpeta abans del primer lliurament",
+      "addPath": "Afegeix",
+      "addPathHint": "El camí exacte on el pipeline escriurà, per exemple usage/ocba. Això només desa la configuració; no crea cap element a l’emmagatzematge.",
+      "invalidPath": "Aquest no és un camí de carpeta vàlid.",
+      "rawGlobalOnly": "Només els administradors globals poden configurar carpetes sota raw/."
+    },
+    "fields": {
+      "intro": "Seleccioneu quins camps dels informes lliurats podrà mostrar la plataforma. Si s’amaga un camp, s’elimina de tot el que es mostra a l’aplicació i dels fitxers exportats generats per l’aplicació. El fitxer lliurat només el poden descarregar els administradors.",
+      "readOnly": "Només els administradors globals poden canviar-ho. Com a administrador d’analítica, podeu ocultar camps addicionals per cada carpeta, a Carpetes i accés.",
+      "configurableHeading": "Camps",
+      "shown": "Mostrat",
+      "hidden": "Ocult",
+      "jobTitleNote": "Amb el càrrec mostrat, una fila d’un grup petit pot identificar una persona tot i tenir un codi d’usuari. Els gràfics amaguen desglossaments de menys de cinc persones; les taules descarregades no.",
+      "neverHeading": "Mai es mostra",
+      "neverBody": "Noms, adreces de correu electrònic, id del directori, noms de fitxer pujat i text d’error mai es mostren fora de la telemetria bruta. Un informe que en contingui algun serà amagat als usuaris fins que es reemplaçi.",
+      "unclassifiedHeading": "Columnes desconegudes pel catàleg",
+      "unclassifiedBody": "Una columna de text que no es reconeix roman amagada — a l'aplicació i a les exportacions — i els usuaris no poden descarregar l'arxiu fins que s'assigni a un camp.",
+      "noneWaiting": "No hi ha res pendent.",
+      "inFiles": "{count, plural, one {en # arxiu} other {en # arxius}}",
+      "classifyAs": "Camp per a la columna {column}",
+      "keepHidden": "Mantén amagat",
+      "removeClassification": "Elimina la configuració de la columna {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "No es pot accedir a l'emmagatzematge d'informes",
+      "deliveryUnavailableBody": "L'aplicació no ha pogut llistar el contenidor \"{container}\". Comprova que existeix i que la identitat de l'aplicació té un rol de dades assignat. Fins llavors, no es mostraran informes a ningú.",
+      "foldersUnavailable": "No s'han pogut llegir les configuracions de carpetes, així que actualment els usuaris no veuen cap carpeta. No es comproven ni caduquen arxius fins que es recuperi el servei.",
+      "policyUnavailable": "No s'han pogut llegir les configuracions de camps, així que ara mateix els usuaris no poden descarregar arxius.",
+      "total": {
+        "files": "Arxius",
+        "ok": "Correcte",
+        "warning": "Amb avisos",
+        "error": "Amagat als usuaris",
+        "pending": "S'està comprovant"
+      },
+      "recheckAll": "Comprova-ho tot de nou",
+      "recheckOne": "Torna a comprovar",
+      "recheckQueued": "{count, plural, one {# arxiu en cua per comprovar.} other {# arxius en cua per comprovar.}}",
+      "recheckFailed": "No s'ha pogut iniciar la comprovació.",
+      "retention": {
+        "active": "Els arxius fora del període de retenció de la seva carpeta s'amaguen de seguida i s'eliminen {days} dies després.",
+        "disabled": "Els arxius fora del període de retenció de la seva carpeta s'amaguen, però l'eliminació està desactivada per a aquest desplegament.",
+        "waiting-for-config": "Els arxius fora de la retenció per defecte s'amaguen. No s'elimina res fins que es desin les configuracions de la carpeta almenys una vegada."
+      },
+      "noFiles": "Encara no s'ha entregat cap arxiu.",
+      "allGood": "Tot el que s'ha entregat està en ordre.",
+      "problemsHeading": "Arxius que requereixen atenció",
+      "status": {
+        "error": "Amagat als usuaris",
+        "warning": "Avís",
+        "pending": "S'està comprovant",
+        "ok": "Correcte"
+      },
+      "pendingBody": "Nou o reemplaçat des de la darrera verificació. Es mostra als usuaris un cop ha estat validat.",
+      "firstSeen": "Detectat per primer cop el {date}",
+      "unclassifiedHeading": "Columnes pendents de decisió",
+      "unclassifiedBody": "Aquestes columnes no estan reconegudes. Romanen amagades i els usuaris no poden descarregar els arxius que les contenen fins que algú les assigni a un camp.",
+      "unclassifiedChip": "{column} · {count, plural, one {# arxiu} other {# arxius}}",
+      "openFields": "Vés a Camps",
+      "unconfiguredHeading": "Carpetes sense configuració",
+      "unconfiguredBody": "Hi arriben arxius, però ningú ha configurat la carpeta ni cap de superior. Només els administradors les poden veure.",
+      "staleHeading": "Entregues vençudes",
+      "staleBody": "Aquestes carpetes esperen informes regulars i el més recent és més antic del que tocaria.",
+      "staleDetail": {
+        "daily": "Diari; l'últim abasta el {date}",
+        "monthly": "Mensual; l'últim acaba el {date}"
+      },
+      "staleNever": "Encara no s'ha entregat res",
+      "expiringHeading": "A punt de caducar",
+      "expiringBody": "Arxius caducats o que caduquen en 30 dies.",
+      "expiresOn": "Caduca el {date}",
+      "expiredOn": "Caducat el {date}"
+    },
+    "issue": {
+      "name-mismatch": "El nom de l'arxiu no és el que espera aquesta carpeta (per exemple {expected}).",
+      "unsupported-format": "No es poden comprovar arxius de tipus \"{extension}\", per tant aquest està amagat als usuaris. Entregueu .xlsx o .csv.",
+      "too-large": "Amb {sizeMb} MB, aquest arxiu supera el límit de {limitMb} MB per a la comprovació, així que està amagat als usuaris.",
+      "empty-file": "L'arxiu està buit.",
+      "unreadable": "No s'ha pogut obrir l'arxiu. Pot estar malmès o no ser del format indicat pel seu nom.",
+      "identifier-column": "El full \"{sheet}\" té una columna \"{column}\" que identifica persones. L'arxiu està amagat als usuaris.",
+      "identifier-values": "\"{sheet}\" conté {count, plural, one {# adreça electrònica} other {# adreces electròniques}}. L'arxiu està amagat als usuaris.",
+      "user-code-format": "Full \"{sheet}\", columna \"{column}\": {count, plural, one {# valor no és} other {# valors no són}} un codi d'usuari u-…. L'arxiu està amagat als usuaris.",
+      "formulas-without-values": "El full \"{sheet}\" té {count, plural, one {# fórmula} other {# fórmules}} sense resultat emmagatzemat, per la qual cosa aquestes dades no es poden mostrar a l'aplicació.",
+      "missing-sheet": "Falta el full \"{sheet}\", així que no es poden mostrar les vistes que s'hi basen.",
+      "missing-column": "El full \"{sheet}\" no té la columna \"{column}\", així que no es poden mostrar les vistes que la utilitzen.",
+      "no-period": "El nom de l'arxiu no indica cap període d'informe, així que la retenció es compta des de la data de lliurament.",
+      "unclassified-field": "La columna \"{column}\" no és reconeguda. Roman oculta, i els usuaris no poden descarregar l'arxiu lliurat fins que s'assigni a un camp.",
+      "past-retention": "Més antic que els {months} mesos de retenció d'aquesta carpeta; ja no es mostra.",
+      "unknown": "S'ha reportat un problema: {code}."
+    }
   }
 }

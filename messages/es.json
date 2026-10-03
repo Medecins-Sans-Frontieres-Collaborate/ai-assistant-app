@@ -753,7 +753,10 @@
       "codeInterpreterLimitReached": "Límite diario de ejecución de código alcanzado — respondiendo sin ejecutar código…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "La búsqueda en la base de conocimientos falló — la respuesta no usará los documentos del agente.",
-      "stillWorking": "Aún trabajando…"
+      "stillWorking": "Aún trabajando…",
+      "assessingSearchResults": "Verificando si los resultados responden la pregunta…",
+      "refiningSearch": "Buscando de nuevo: “{query}”…",
+      "readingSearchPages": "Leyendo {count} páginas de resultados…"
     },
     "toolSummary": {
       "usedTools": "Se usó {count, plural, one {# herramienta} other {# herramientas}}",
@@ -839,7 +842,10 @@
       "summarizeNow": "Resumir ahora a partir de los titulares",
       "sourcesCount": "{count} fuentes",
       "showAll": "Mostrar las {count} fuentes",
-      "showFewer": "Mostrar menos"
+      "showFewer": "Mostrar menos",
+      "multiStepTitle": "Resultados hasta ahora — comprobando si responden la pregunta",
+      "multiStepHint": "La búsqueda puede continuar — otra búsqueda o revisar las páginas más prometedoras. Puede responder ahora con los {count} resultados ya encontrados si no desea esperar.",
+      "answerNow": "Responder con estos resultados ahora"
     },
     "retryWithModel": "Intentar con {model}",
     "createTodoTasks": "Crear tareas de To Do desde esta respuesta",
@@ -853,7 +859,10 @@
     "modelTimedOutAtMaximum": "{model} no comenzó a responder en {duration}, el tiempo máximo disponible. Intente de nuevo o pruebe con otro modelo.",
     "requestTimedOut": "Esta solicitud tardó demasiado en prepararse y se detuvo antes de que {model} pudiera responder. Puede dar más tiempo o probar otro modelo.",
     "retryWaitingLonger": "Espere hasta {duration} e intente de nuevo",
-    "alwaysWaitThisLong": "Esperar siempre hasta {duration}"
+    "alwaysWaitThisLong": "Esperar siempre hasta {duration}",
+    "keepSearching": "Seguir buscando",
+    "keepSearchingHint": "La búsqueda se detuvo antes de encontrar esto. Pida al asistente que pruebe diferentes enfoques.",
+    "keepSearchingMessage": "Siga buscando esto, por favor; intente con un enfoque diferente."
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",
@@ -1291,7 +1300,9 @@
       "providerBingResponsesDescription": "La misma cobertura web de Bing que Bing grounding, pero ejecutada como una sola llamada directa al modelo en lugar de un agente Foundry — normalmente mucho más rápido. Nueva opción en evaluación frente a Bing grounding.",
       "providerSearxng": "Búsqueda web de MSF",
       "providerSearxngDescription": "Servicio privado de metabúsqueda de MSF. Cubre la web general, noticias, literatura científica (incluidas publicaciones de investigación de MSF), documentación técnica y datos humanitarios, seleccionando el tipo de fuente adecuada para cada pregunta. Los resultados llegan en segundos con enlaces directos, y solo la consulta de búsqueda sale de la aplicación: los motores de búsqueda nunca ven quién eres.",
-      "otherProvidersLabel": "Otros proveedores"
+      "otherProvidersLabel": "Otros proveedores",
+      "multiStepLabel": "Búsqueda multi-paso",
+      "multiStepDescription": "Con la búsqueda web de MSF, el asistente revisa los primeros resultados y, solo si no son suficientes, busca de nuevo o lee las páginas más prometedoras antes de responder. La mayoría de las preguntas terminan en un solo paso. Apague esta opción para mantener todas las búsquedas en una sola ronda."
     },
     "Admin": "Administrador",
     "Usage Limits": "Límites de uso",
@@ -1311,7 +1322,8 @@
       "customHint": "Entre {min} y {max} segundos.",
       "preferModelTitle": "Preferir mi modelo seleccionado",
       "preferModelDescription": "No cambiar automáticamente a otro modelo cuando una solicitud falle. El error igualmente ofrecerá la opción de cambiar."
-    }
+    },
+    "Analytics": "Analítica"
   },
   "notFound": {
     "lostDog": "Perro perdido"
@@ -1522,6 +1534,12 @@
     },
     "subVariant": {
       "label": "Tamaño"
+    },
+    "retiring": {
+      "badge": "Retiro",
+      "datedMoving": "Se retira el {date}. Las conversaciones se trasladan a {successor} el {movesOn}.",
+      "dated": "Se retira el {date} y dejará de funcionar. Use {successor} en su lugar.",
+      "replaced": "Será reemplazado por {successor}."
     }
   },
   "models": {
@@ -1820,6 +1838,11 @@
       "name": "GPT-6 Astra",
       "description": "El modelo insignia GPT-6 de OpenAI. Diseñado para trabajos complejos de principio a fin: investigación profunda, análisis avanzado, ingeniería de software y tareas largas de múltiples pasos. Aproximadamente el doble de costo que GPT-5.6 Sol.",
       "tagline": "El modelo más avanzado de OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Una mejora de GPT-6 Sol para trabajos exigentes en código, documentos y aplicaciones. Se aproxima a la capacidad de Astra a una fracción del precio por token.",
+      "tagline": "Capacidad casi Astra, costo mucho menor"
     }
   },
   "searchMode": {
@@ -5440,7 +5463,10 @@
       "announcements": "Mensajes de banner para usuarios: quién los ve, cuándo y en qué idiomas.",
       "delegations": "Quién administra a qué usuarios y qué puede hacer cada uno.",
       "channelProfiles": "Qué es cada plataforma: límites, conteo, hilos. Información general sobre la que se construye cada conjunto de canales.",
-      "channelSets": "Las reglas de cada equipo para publicar en las plataformas: orientaciones, voces, valores predeterminados, quién puede usar el conjunto y quién puede enviar."
+      "channelSets": "Las reglas de cada equipo para publicar en las plataformas: orientaciones, voces, valores predeterminados, quién puede usar el conjunto y quién puede enviar.",
+      "webSearch": "Hasta dónde puede llegar una búsqueda web: búsqueda multi-paso, su modelo evaluador y sus límites.",
+      "contextBudget": "Cuánta conversación se envía a cada modelo en cada turno.",
+      "analytics": "Informes entregados: lo que llegó, quién puede abrir cada carpeta y qué campos se pueden mostrar."
     },
     "openSettings": "Abrir ajustes",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "Ver como",
       "globalAdmins": "Administradores globales",
       "announcements": "Anuncios",
-      "delegations": "Delegaciones"
+      "delegations": "Delegaciones",
+      "webSearch": "Búsqueda web",
+      "contextBudget": "Presupuesto de contexto",
+      "analytics": "Analítica"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "Lo que esta delegación puede conceder. Los administradores solo pueden tener lo que esté habilitado aquí.",
     "grant": {
       "limits": "Límites de uso",
-      "announcements": "Anuncios"
+      "announcements": "Anuncios",
+      "analytics": "Analíticas"
     },
     "grantAll": "Todo",
     "maxOverrides": "Cantidad de excepciones que puede tener esta delegación",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "Puede marcar este conjunto como predeterminado después de guardar.",
     "noChannelsWarning": "Este conjunto no ofrece canales; nadie puede redactar con él.",
     "audienceEveryoneHint": "Cualquier persona de la organización puede redactar con este conjunto."
+  },
+  "contextBudgetAdmin": {
+    "title": "Presupuesto de contexto",
+    "description": "Cuánto historial de conversación se envía a cada modelo por turno. Los mensajes más recientes siempre se incluyen; los más antiguos se eliminan una vez que se gasta el presupuesto, y un resumen de lo eliminado se incluye en el mensaje del sistema. Un presupuesto mayor mantiene a la vista más de una conversación larga, pero aumenta el costo por turno.",
+    "scopeNote": "Se aplica a todos los chats y modelos. El presupuesto nunca puede exceder la parte de la ventana del modelo establecida abajo.",
+    "loading": "Cargando presupuesto de contexto…",
+    "loadError": "No se pudo cargar el presupuesto de contexto.",
+    "configUnavailable": "No se pudo leer el presupuesto de contexto guardado en este momento, por lo que los valores de abajo pueden no ser los vigentes. Intente de nuevo antes de editar.",
+    "retry": "Reintentar",
+    "historyTokensLabel": "Presupuesto estándar (tokens)",
+    "historyTokensDescription": "Historial enviado por turno, incluido el sistema prompt, para modelos sin personalización. Aproximadamente 48,000 incluye los últimos 30–60 intercambios de una conversación típica.",
+    "historyFractionLabel": "Límite (parte de la capacidad del modelo)",
+    "historyFractionDescription": "Un presupuesto se ajusta a esta parte de la ventana de contexto del modelo menos su reserva de salida, por lo que un modelo pequeño nunca recibirá más de lo que puede manejar.",
+    "minRecentMessagesLabel": "Mensajes siempre retenidos",
+    "minRecentMessagesDescription": "Los mensajes más recientes que se conservan incluso si se supera el presupuesto (dentro de la ventana). Tres retienen el intercambio anterior si el último mensaje —un documento pegado, resultados de búsqueda— llenaría el presupuesto.",
+    "familyOverridesLabel": "Por familia",
+    "familyOverridesDescription": "Un presupuesto para cada modelo de una familia, en reemplazo del estándar.",
+    "modelOverridesLabel": "Por modelo",
+    "modelOverridesDescription": "Un presupuesto para un modelo, en reemplazo del de la familia y el estándar.",
+    "overrideFamilyPlaceholder": "Familia",
+    "overrideModelPlaceholder": "Id. de modelo",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Agregar",
+    "removeOverride": "Eliminar",
+    "noOverrides": "Ninguno",
+    "effectiveLabel": "Presupuestos efectivos con estas configuraciones",
+    "effectiveColumnModel": "Modelo",
+    "effectiveColumnWindow": "Ventana",
+    "effectiveColumnBudget": "Presupuesto historial",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Predeterminado: {value}",
+    "defaultsNote": "Solo se almacenan valores distintos de los predeterminados; el resto sigue los valores predeterminados del código entre versiones.",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "resetDefaults": "Restablecer a los valores predeterminados",
+    "unsaved": "Cambios no guardados",
+    "saveSuccess": "Presupuesto de contexto guardado. Entrará en vigor en menos de un minuto.",
+    "saveError": "No se pudo guardar el presupuesto de contexto.",
+    "conflictError": "Otro administrador modificó el presupuesto de contexto mientras tanto; los valores más recientes se han recargado.",
+    "updatedByLine": "Última guardado por {by} el {at}",
+    "neverSaved": "Nunca guardado — están en vigor los valores predeterminados del código."
+  },
+  "webSearchAdmin": {
+    "title": "Búsqueda web",
+    "description": "Controla la búsqueda multinivel en la búsqueda web de MSF. Tras los primeros resultados, un modelo evaluador decide si responden a la pregunta; si no, puede volver a buscar con otras consultas, leer páginas de resultados, pedir al usuario información faltante o informar que no se encontró nada.",
+    "scopeNote": "Estos ajustes solo aplican a la búsqueda web de MSF. Otros proveedores siempre realizan una sola ronda. Cada persona puede desactivar la búsqueda multinivel para sí misma en Configuración.",
+    "loading": "Cargando configuración de búsqueda web…",
+    "loadError": "No se pudo cargar la configuración de búsqueda web.",
+    "configUnavailable": "No se pudo leer la configuración de búsqueda web del almacenamiento. Los controles están ocultos en lugar de mostrar valores predeterminados que podrían no coincidir con lo que se está usando.",
+    "retry": "Reintentar",
+    "enabledLabel": "Búsqueda multinivel",
+    "enabledDescription": "Si está desactivado, cada búsqueda es de una sola ronda planificada y no se utiliza el modelo evaluador.",
+    "assessorLabel": "Modelo evaluador",
+    "assessorDescription": "Se llama una vez tras cada paso para evaluar los resultados. Elija un modelo rápido y económico: se ejecuta mientras el usuario espera. Si no está disponible, se utiliza {fallback}.",
+    "maxStepsLabel": "Pasos por pregunta",
+    "maxStepsDescription": "Cantidad máxima de pasos permitidos para una pregunta, contando la primera búsqueda. Cada nueva búsqueda o grupo de lecturas de páginas cuenta como un paso. Este límite es independiente del límite diario de búsquedas, que cuenta toda la pregunta una vez.",
+    "maxStepsExploratoryLabel": "Pasos para búsquedas exploratorias",
+    "maxStepsExploratoryDescription": "Un límite mayor para búsquedas difíciles, como encontrar una copia de un libro raro, donde se esperan caminos sin salida. No puede ser menor que el límite normal.",
+    "pageReadsLabel": "Leer páginas de resultados",
+    "pageReadsDescription": "Permite que un paso abra los resultados más prometedores y lea la página completa en vez de depender solo de los extractos de búsqueda.",
+    "maxPageReadsLabel": "Páginas por paso de lectura",
+    "sourceAssessmentLabel": "Evaluar calidad de la fuente",
+    "sourceAssessmentDescription": "El modelo evaluador etiqueta cada fuente (oficial, reconocida, secundaria, baja fiabilidad) para que la respuesta pueda ponderarlas y atribuirlas.",
+    "timeBudgetLabel": "Presupuesto de tiempo (segundos)",
+    "timeBudgetDescription": "Tiempo total permitido para una búsqueda, incluyendo la primera ronda. Al agotarse, la respuesta se escribe con lo encontrado hasta ese momento.",
+    "defaultsNote": "Un ajuste dejado en su valor predeterminado integrado no se almacena, por lo que seguirá ese valor si una versión futura lo modifica.",
+    "defaultHint": "Predeterminado: {value}",
+    "defaultOn": "activado",
+    "defaultOff": "desactivado",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Tiene cambios no guardados.",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "resetDefaults": "Restablecer a los valores predeterminados",
+    "saveSuccess": "Configuración de búsqueda web guardada.",
+    "saveError": "No se pudo guardar la configuración de búsqueda web.",
+    "conflictError": "Otro administrador modificó la configuración primero. Se han recargado los datos; por favor, revise y guarde nuevamente.",
+    "updatedByLine": "Última guardado por {by} el {at}.",
+    "neverSaved": "Aún no se ha guardado nada; se aplican los valores predeterminados integrados."
+  },
+  "modelRetirement": {
+    "notice": "{model} se retirará el {retiresOn}. Esta conversación se moverá a {successor} el {movesOn}.",
+    "noticeRetiring": "{model} se retirará el {retiresOn} y dejará de funcionar. Cambie a {successor} para seguir usando esta conversación.",
+    "switchNow": "Cambiar ahora"
+  },
+  "analytics": {
+    "title": "Analíticas",
+    "backToChat": "Volver al chat",
+    "manage": "Gestionar",
+    "loading": "Cargando…",
+    "loadFailed": "No se pudieron cargar los informes.",
+    "retry": "Reintentar",
+    "emptyTitle": "Aún no se ha compartido nada con usted",
+    "emptyBody": "Aquí aparecerán los informes cuando un administrador le dé acceso a una carpeta.",
+    "deliveryUnavailable": "No se puede acceder al almacenamiento de informes en este momento, por lo que las listas pueden estar vacías. Intente de nuevo en unos minutos.",
+    "groupsDegraded": "No se pudo comprobar su pertenencia a grupos en este momento, por lo que pueden faltar carpetas compartidas con sus grupos. Recargue en un minuto.",
+    "foldersHeading": "Carpetas",
+    "rootFolder": "Todos los informes",
+    "pathOnly": "No tiene acceso a esta carpeta, solo a las carpetas dentro de ella.",
+    "selectFolder": "Elija una carpeta para ver sus informes.",
+    "noFiles": "No hay informes en esta carpeta.",
+    "viewOnlyNote": "Tiene acceso de solo lectura a esta carpeta: puede abrir los informes, ver su resumen y tablas generales. Para acceder a tablas con una fila por persona, exportaciones y descargas necesita permiso de descarga.",
+    "col": {
+      "name": "Archivo",
+      "period": "Período",
+      "delivered": "Entregado",
+      "size": "Tamaño",
+      "availableUntil": "Disponible hasta",
+      "actions": "Acciones"
+    },
+    "download": "Descargar",
+    "downloadAria": "Descargar {name}",
+    "block": {
+      "view-only": "Solo lectura",
+      "hidden-fields": "Original retenido (campos ocultos)",
+      "unclassified-fields": "Original retenido (campos pendientes de revisión)",
+      "not-inspected": "Aún no verificado",
+      "policy-unavailable": "No disponible en este momento"
+    },
+    "adminBadge": {
+      "error": "Oculto a los usuarios",
+      "pending": "En revisión",
+      "warning": "Con advertencias",
+      "expired": "Caducado, pendiente de eliminación",
+      "originalBlocked": "Los usuarios no pueden descargar: {reason}"
+    },
+    "openAria": "Abrir {name}",
+    "openForExport": "Abrir para exportar",
+    "preview": {
+      "back": "Volver a {folder}",
+      "tabsLabel": "Tablas en este archivo",
+      "lockedTab": "{name} (bloqueada)",
+      "unavailable": "Este archivo no se puede abrir en la aplicación en este momento.",
+      "tableFailed": "No se pudo cargar esta tabla.",
+      "withheld": {
+        "row-level": "Esta tabla tiene una fila por persona. Para abrirla, necesita acceso de descarga a la carpeta.",
+        "hidden-fields": "Esta página contiene un campo oculto, por lo que no se muestra."
+      },
+      "truncated": "Se muestran las primeras {shown, number} de {total, number} filas. Exporte la tabla para obtener todas.",
+      "freeformNote": "Esta página está diseñada para leer y se muestra tal como se entregó.",
+      "filter": "Filtrar filas",
+      "filterPlaceholder": "Filtrar filas…",
+      "rows": "{count, plural, one {# fila} other {# filas}}",
+      "matching": "{count, number} de {total, number} filas coinciden",
+      "modeLabel": "Mostrar como",
+      "mode": {
+        "table": "Tabla",
+        "chart": "Gráfico"
+      },
+      "noRows": "No hay filas para mostrar.",
+      "hiddenColumn": "Oculto para los usuarios",
+      "exportCsv": "Exportar esta tabla (CSV)",
+      "exportXlsx": "Exportar todas las tablas (Excel)",
+      "downloadOriginal": "Descargar original",
+      "exportNote": "El archivo entregado contiene campos ocultos, por lo que no se puede descargar tal cual. Las exportaciones excluyen esos campos.",
+      "sectionLabel": "Mostrar",
+      "section": {
+        "overview": "Resumen",
+        "tables": "Tablas"
+      }
+    },
+    "chart": {
+      "groupBy": "Agrupar por",
+      "measure": "Medida",
+      "rowCount": "Número de filas",
+      "aggregation": "Calcular",
+      "agg": {
+        "sum": "Suma",
+        "mean": "Promedio",
+        "min": "Mínimo",
+        "max": "Máximo"
+      },
+      "ariaLabel": "{measure} por {group}",
+      "noColumns": "Esta tabla no tiene columna de texto ni fecha para agrupar.",
+      "empty": "No hay datos para graficar con esta opción.",
+      "truncatedGroups": "Mostrando los {count} grupos más grandes.",
+      "basedOn": "En función de las primeras {shown, number} de {total, number} filas.",
+      "savePng": "Guardar como imagen",
+      "saveSvg": "Guardar como SVG",
+      "saveFailed": "No se pudo guardar el gráfico."
+    },
+    "dash": {
+      "loading": "Cargando…",
+      "failed": "No se pudo cargar el resumen.",
+      "retry": "Reintentar",
+      "showTable": "Mostrar como tabla",
+      "showChart": "Mostrar como gráfico",
+      "smallGroups": "Grupos de menos de 5 personas",
+      "foldedNote": "Los grupos de menos de 5 personas se combinan en una sola fila.",
+      "otherCount": "{count, plural, one {# otro} other {# otros}}",
+      "hiddenPanel": "Oculto por la configuración del campo.",
+      "missingPanel": "No disponible para este archivo.",
+      "usage": {
+        "users": "Personas activas",
+        "interactions": "Interacciones",
+        "avgPerUser": "Promedio por persona",
+        "medianPerUser": "Mediana por persona",
+        "hq": "En la sede",
+        "field": "En terreno",
+        "shareUsers": "{pct}% de usuarios {comparator}",
+        "shareUsage": "{pct}% del uso {comparator}",
+        "comparator": "{comparator}: {value}",
+        "daily": "Interacciones por día",
+        "dailyUsers": "Personas activas por día",
+        "dailyUsersSub": "Por lugar de trabajo",
+        "weekly": "Interacciones por semana",
+        "activity": "Nivel de uso",
+        "activitySub": "Personas, según su número de interacciones en el periodo",
+        "departments": "Interacciones por departamento",
+        "jobTitles": "Interacciones por cargo",
+        "models": "Eventos por modelo",
+        "total": "Todas las ubicaciones",
+        "location": {
+          "hq": "Sede central",
+          "field": "Terreno",
+          "unknown": "Desconocido"
+        },
+        "col": {
+          "date": "Día",
+          "week": "Semana que comienza",
+          "users": "Personas",
+          "interactions": "Interacciones",
+          "events": "Eventos",
+          "group": "Grupo",
+          "band": "Interacciones"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Total facturado",
+        "usageVariable": "Costo variable de uso",
+        "staticInfra": "Infraestructura estática",
+        "sections": "Secciones facturadas",
+        "usageEvents": "Eventos de uso",
+        "bySection": "Facturado por sección",
+        "changes": "Cambios respecto al archivo anterior",
+        "noChanges": "No hubo cambios respecto al archivo anterior.",
+        "byDomain": "Eventos de uso por dominio de correo",
+        "reconciliation": "Conciliación con Azure",
+        "col": {
+          "section": "Sección",
+          "billed": "Facturado",
+          "usageEvents": "Eventos de uso",
+          "usagePct": "% de uso",
+          "line": "Línea",
+          "amount": "Monto",
+          "previous": "Archivo anterior",
+          "restated": "Reexpresado",
+          "change": "Cambio",
+          "domain": "Dominio de correo",
+          "users": "Personas"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "Calculado con",
+        "delivered": "Supuestos propios del informe ({version})",
+        "current": "Supuestos actuales de la aplicación ({version})",
+        "whatIf": "¿Qué pasaría si…",
+        "deliveredUnavailable": "No se pudieron leer los supuestos propios de este informe de su hoja; se usan los actuales de la aplicación.",
+        "whatIfIntro": "Cambie una cifra para ver su efecto en lo que sigue abajo. No se guarda nada.",
+        "resetDelivered": "Restablecer a los del informe",
+        "resetCurrent": "Restablecer a los actuales de la aplicación",
+        "co2": "Emisiones",
+        "energy": "Energía",
+        "charges": "Cargas de smartphone",
+        "chargesSub": "Con la misma huella",
+        "activeUsers": "Personas activas",
+        "requests": "Solicitudes",
+        "tokens": "Tokens",
+        "vsDelivered": "{delta} vs las propias suposiciones del informe",
+        "sameAsDelivered": "Igual que con las propias suposiciones del informe",
+        "unpriced": "{count, plural, one {# solicitud usa} other {# solicitudes usan}} un tamaño de modelo para el cual no hay cifras en estas suposiciones, y {count, plural, one {queda} other {quedan}} fuera.",
+        "byDepartment": "Emisiones por departamento",
+        "byModel": "Emisiones por modelo",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "Calculado aquí vs registrado en el momento",
+        "reconciliationSub": "La aplicación también estima cada solicitud en tiempo real. Coinciden cuando las suposiciones son las mismas.",
+        "computed": "Calculado aquí",
+        "logged": "Registrado por la app",
+        "difference": "Diferencia",
+        "col": {
+          "group": "Grupo",
+          "requests": "Solicitudes",
+          "tokens": "Tokens",
+          "energyWh": "Energía (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Sobrecarga de centro de datos (PUE)",
+          "promptTokenWeight": "Peso de token prompt",
+          "dedicatedReasoningMultiplier": "Multiplicador de razonador dedicado",
+          "whPer1kTokens": "Wh por 1.000 tokens — {name}",
+          "reasoningEffortMultipliers": "Multiplicador de esfuerzo de razonamiento — {name}",
+          "gridIntensity": "Intensidad de red g CO₂e por kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Eventos",
+        "users": "Personas",
+        "tokens": "Tokens",
+        "errors": "Errores",
+        "energy": "Energía",
+        "co2": "Emisiones",
+        "hourly": "Eventos por hora (UTC)",
+        "byType": "Eventos por tipo",
+        "byError": "Errores por código",
+        "byModel": "Tokens por modelo",
+        "byCompany": "Eventos por organización",
+        "none": "Ninguno.",
+        "col": {
+          "group": "Grupo",
+          "events": "Eventos",
+          "tokens": "Tokens",
+          "hour": "Hora"
+        }
+      },
+      "trend": {
+        "title": "A lo largo del tiempo",
+        "period": "Periodo",
+        "users": "Personas activas por informe",
+        "interactions": "Interacciones por informe",
+        "billed": "Total facturado por periodo",
+        "sections": "Facturado por sección",
+        "otherSections": "Todas las demás secciones",
+        "co2": "Emisiones por informe",
+        "energy": "Energía por informe",
+        "recalculated": "Cada periodo se calcula con las suposiciones actuales de la aplicación ({version}), por lo que un cambio de suposiciones entre informes no se refleja como un cambio en las emisiones.",
+        "severalPerPeriod": "Esta carpeta contiene varios informes para el mismo periodo. Abra una carpeta dentro para ver cómo cambia uno de ellos a lo largo del tiempo."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Analítica",
+    "description": "Los informes se almacenan mediante el flujo de datos. Aquí puede revisar lo recibido, decidir quién puede abrir cada carpeta y elegir qué campos muestra la plataforma.",
+    "openViewer": "Abrir analítica",
+    "sharedNotice": "Beta y producción comparten estas carpetas, audiencias y archivos. Un cambio guardado aquí estará activo en ambas.",
+    "tabsLabel": "Secciones de analítica",
+    "tab": {
+      "health": "Entregas",
+      "folders": "Carpetas y acceso",
+      "fields": "Campos"
+    },
+    "loading": "Cargando…",
+    "retry": "Reintentar",
+    "loadError": "No se pudo cargar esta sección.",
+    "unavailable": "No se pudieron leer los ajustes guardados del almacenamiento. Esto NO es lo mismo que 'nada configurado': la edición está deshabilitada para no sobrescribir los ajustes reales. Reintente y revise los registros del servidor si el problema persiste.",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "unsaved": "Cambios sin guardar",
+    "saveSuccess": "Guardado.",
+    "saveError": "No se pudo guardar.",
+    "conflictError": "Otro administrador cambió estos ajustes mientras editaba. Sus cambios no se guardaron; se ha recargado la última versión.",
+    "rootFolder": "(nivel superior)",
+    "scope": {
+      "domain": "Dominio de correo",
+      "user": "Persona",
+      "attribute": "Atributo",
+      "group": "Grupo Entra"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "nombre@example.org",
+      "attribute": "departamento:Salud",
+      "group": "ID de objeto del grupo Entra"
+    },
+    "level": {
+      "view": "Ver resúmenes",
+      "download": "Ver, exportar y descargar"
+    },
+    "reportType": {
+      "usage": "Informe de uso",
+      "rebilling": "Refacturación",
+      "emissions": "Informe de emisiones",
+      "raw-telemetry": "Telemetría sin procesar"
+    },
+    "field": {
+      "userCode": {
+        "label": "Código de usuario",
+        "description": "El código seudónimo u-… que representa a una persona."
+      },
+      "jobTitle": {
+        "label": "Cargo",
+        "description": "Cargos, incluyendo el más común en las hojas de resumen. En un grupo pequeño, un cargo puede señalar a una persona."
+      },
+      "department": {
+        "label": "Departamento",
+        "description": "Departamentos, incluyendo el más activo en las hojas de resumen."
+      },
+      "company": {
+        "label": "Empresa / organización",
+        "description": "El nombre de la organización del directorio y los nombres de empresas en las hojas de refacturación."
+      },
+      "orgGroup": {
+        "label": "Grupo organizacional",
+        "description": "El centro operativo o grupo por el que se segmenta un informe."
+      },
+      "section": {
+        "label": "Sección",
+        "description": "La sección de recuperación de costos a la que pertenece una línea de refacturación."
+      },
+      "mailDomain": {
+        "label": "Dominio de correo",
+        "description": "El uso se atribuye al dominio del correo electrónico (nunca a una dirección)."
+      },
+      "workLocation": {
+        "label": "Ubicación de trabajo",
+        "description": "Sede central o terreno."
+      },
+      "technical": {
+        "label": "Detalles técnicos",
+        "description": "Modelo, región, tipo de evento, moneda y descriptores similares que no aportan información personal."
+      },
+      "other": {
+        "label": "Otros campos descriptivos",
+        "description": "Donde se clasifica una columna que no encaja en las anteriores."
+      }
+    },
+    "folders": {
+      "intro": "Cada carpeta a la que el pipeline ha entregado información figura en la lista. Una carpeta sin ajustes — y sin una carpeta superior que otorgue acceso — es visible solo para administradores.",
+      "name": "Nombre para mostrar",
+      "namePlaceholder": "Se muestra en lugar de la ruta de la carpeta",
+      "description": "Descripción",
+      "reportType": "Tipo de informe",
+      "reportTypeNone": "No definido",
+      "reportTypeInherited": "Heredado: {type}",
+      "reportTypeHint": "Indica al verificador qué nombres de archivo esperar y con qué frecuencia. Aplica a las carpetas dentro de esta.",
+      "retention": "Conservar archivos durante (meses)",
+      "retentionHint": "Deje vacío para heredar {months} meses. Cuenta desde el final de cada periodo del informe.",
+      "audience": "Quién puede abrir esta carpeta",
+      "audienceHint": "Cada línea otorga acceso a esta carpeta y a las que contiene. Un objetivo por línea.",
+      "audienceScope": "Tipo de objetivo",
+      "audienceTargets": "Objetivos",
+      "audienceLevel": "Nivel de acceso",
+      "addAudience": "Agregar personas o grupos",
+      "removeAudience": "Eliminar esta línea",
+      "restricted": "No heredar acceso de carpetas superiores",
+      "restrictedHint": "Solo aplican aquí y debajo las líneas de esta carpeta.",
+      "hiddenFields": "También ocultar en esta carpeta",
+      "hiddenFieldsHint": "Campos ocultos aquí además de la configuración global, para esta carpeta y las internas. Puede ocultar más, nunca mostrar más.",
+      "hiddenPlatformWide": "(oculto en toda la plataforma)",
+      "clear": "Eliminar configuración de esta carpeta",
+      "rawChip": "Bruto: solo administradores globales",
+      "rawNote": "La telemetría bruta contiene nombres, direcciones de correo y nombres de archivo. Solo pueden abrirla los administradores globales y no se puede agregar audiencia.",
+      "audienceChip": "{count, plural, one {# línea de acceso} other {# líneas de acceso}}",
+      "restrictedChip": "Sin heredar",
+      "notConfiguredChip": "Sin configuración",
+      "addPathLabel": "Configure una carpeta antes de su primera entrega",
+      "addPath": "Agregar",
+      "addPathHint": "La ruta exacta que escribirá el pipeline, por ejemplo usage/ocba. Solo guarda la configuración; no crea nada en el almacenamiento.",
+      "invalidPath": "No es una ruta de carpeta válida.",
+      "rawGlobalOnly": "Solo administradores globales pueden configurar carpetas bajo raw/."
+    },
+    "fields": {
+      "intro": "Elija qué campos de los informes entregados podrá mostrar la plataforma. Ocultar un campo lo elimina de todo lo mostrado en la app y de las exportaciones generadas. El archivo entregado solo lo pueden descargar administradores.",
+      "readOnly": "Solo los administradores globales pueden cambiar este ajuste. Como administrador de analítica puede ocultar campos adicionales por carpeta, en Carpetas y acceso.",
+      "configurableHeading": "Campos",
+      "shown": "Mostrado",
+      "hidden": "Oculto",
+      "jobTitleNote": "Si se muestra el cargo, una fila en un grupo pequeño puede identificar a una persona aunque tenga un código de usuario. Los gráficos ocultan desglose de menos de cinco personas; las tablas descargadas no.",
+      "neverHeading": "Nunca mostrado",
+      "neverBody": "Nombres, correos electrónicos, IDs de directorio, nombres de archivo subidos y texto de error nunca se muestran fuera de la telemetría bruta. Los informes que contengan cualquiera de ellos serán ocultados hasta que se reemplacen.",
+      "unclassifiedHeading": "Columnas que el catálogo no reconoce",
+      "unclassifiedBody": "Una columna de texto no reconocida permanece oculta — tanto en la app como en las exportaciones — y los usuarios no pueden descargar el archivo entregado hasta que la clasifique en un campo.",
+      "noneWaiting": "Nada en espera.",
+      "inFiles": "{count, plural, one {en # archivo} other {en # archivos}}",
+      "classifyAs": "Campo para la columna {column}",
+      "keepHidden": "Mantener oculto",
+      "removeClassification": "Quitar la configuración de la columna {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "No se puede acceder al almacenamiento de informes",
+      "deliveryUnavailableBody": "La app no pudo listar el contenedor \"{container}\". Verifique que exista y que la identidad de la app tenga el rol de datos asignado. Hasta entonces, no se mostrará ningún informe.",
+      "foldersUnavailable": "No se pudieron leer las configuraciones de carpetas; los usuarios actualmente no ven ninguna carpeta. Los archivos no se están revisando ni eliminando hasta que se recupere.",
+      "policyUnavailable": "No se pudieron leer las configuraciones de campo, así que los usuarios no pueden descargar archivos en este momento.",
+      "total": {
+        "files": "Archivos",
+        "ok": "Correcto",
+        "warning": "Con advertencias",
+        "error": "Oculto para los usuarios",
+        "pending": "En revisión"
+      },
+      "recheckAll": "Revisar todo de nuevo",
+      "recheckOne": "Revisar de nuevo",
+      "recheckQueued": "{count, plural, one {# archivo en cola de revisión.} other {# archivos en cola de revisión.}}",
+      "recheckFailed": "No se pudo iniciar la revisión.",
+      "retention": {
+        "active": "Los archivos que excedan la retención de su carpeta se ocultan de inmediato y se eliminan {days} días después.",
+        "disabled": "Los archivos que excedan la retención de su carpeta se ocultan, pero la eliminación está desactivada en este despliegue.",
+        "waiting-for-config": "Los archivos que exceden la retención predeterminada se ocultan. Nada se eliminará hasta que las configuraciones de carpetas se hayan guardado al menos una vez."
+      },
+      "noFiles": "Aún no se ha entregado ningún archivo.",
+      "allGood": "Todo lo entregado está en orden.",
+      "problemsHeading": "Archivos que requieren atención",
+      "status": {
+        "error": "Oculto para los usuarios",
+        "warning": "Advertencia",
+        "pending": "En revisión",
+        "ok": "Correcto"
+      },
+      "pendingBody": "Nuevo o reemplazado desde la última revisión. Se mostrará a los usuarios una vez haya sido aprobado.",
+      "firstSeen": "Primera detección {date}",
+      "unclassifiedHeading": "Columnas esperando decisión",
+      "unclassifiedBody": "Estas columnas no están reconocidas. Permanecen ocultas y los usuarios no pueden descargar los archivos que las contienen hasta que alguien las clasifique en un campo.",
+      "unclassifiedChip": "{column} · {count, plural, one {# archivo} other {# archivos}}",
+      "openFields": "Ir a Campos",
+      "unconfiguredHeading": "Carpetas sin configuración",
+      "unconfiguredBody": "Aquí llegan archivos, pero nadie ha configurado la carpeta o una superior. Solo los administradores pueden verlos.",
+      "staleHeading": "Entregas atrasadas",
+      "staleBody": "Estas carpetas esperan informes regulares y el más reciente es más antiguo de lo permitido.",
+      "staleDetail": {
+        "daily": "Diario; el último cubre {date}",
+        "monthly": "Mensual; el último termina {date}"
+      },
+      "staleNever": "Nada entregado aún",
+      "expiringHeading": "Por expirar",
+      "expiringBody": "Archivos que excedieron la retención o la alcanzarán en 30 días.",
+      "expiresOn": "Expira {date}",
+      "expiredOn": "Expiró {date}"
+    },
+    "issue": {
+      "name-mismatch": "El nombre del archivo no es el esperado para esta carpeta (por ejemplo, {expected}).",
+      "unsupported-format": "No se pueden revisar archivos de tipo \"{extension}\", por lo que este está oculto para los usuarios. Entregue archivos .xlsx o .csv.",
+      "too-large": "Con {sizeMb} MB, este archivo supera el límite de {limitMb} MB para revisión y se oculta para los usuarios.",
+      "empty-file": "El archivo está vacío.",
+      "unreadable": "No se pudo abrir el archivo. Puede estar dañado o no ser del formato indicado por su nombre.",
+      "identifier-column": "La hoja \"{sheet}\" tiene una columna \"{column}\" que identifica personas. El archivo está oculto para los usuarios.",
+      "identifier-values": "\"{sheet}\" contiene {count, plural, one {# dirección de correo electrónico} other {# direcciones de correo electrónico}}. El archivo está oculto para los usuarios.",
+      "user-code-format": "Hoja \"{sheet}\", columna \"{column}\": {count, plural, one {# valor no es} other {# valores no son}} un código de usuario u-… El archivo está oculto para los usuarios.",
+      "formulas-without-values": "La hoja \"{sheet}\" tiene {count, plural, one {# fórmula} other {# fórmulas}} sin resultado almacenado, por lo que esos datos no pueden mostrarse en la aplicación.",
+      "missing-sheet": "Falta la hoja \"{sheet}\", por lo que no pueden mostrarse las vistas basadas en ella.",
+      "missing-column": "La hoja \"{sheet}\" no tiene la columna \"{column}\", por lo que no pueden mostrarse las vistas que la usan.",
+      "no-period": "El nombre del archivo no incluye periodo de informe, por lo que la retención cuenta desde la fecha de entrega.",
+      "unclassified-field": "La columna \"{column}\" no está reconocida. Permanece oculta y los usuarios no pueden descargar el archivo entregado hasta que se clasifique en un campo.",
+      "past-retention": "Más antiguo que los {months} meses de retención de esta carpeta; ya no se muestra.",
+      "unknown": "Problema reportado: {code}."
+    }
   }
 }

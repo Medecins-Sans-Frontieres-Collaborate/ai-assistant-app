@@ -30,8 +30,7 @@ export const WebSearchSettingsPanel: FC = () => {
     'news',
     'google-news',
     'gdelt',
-    'bing-agent',
-    'bing-responses',
+    'bing',
     'combined',
   ];
   const providerKey: Record<WebSearchProviderOption, string> = {
@@ -40,8 +39,7 @@ export const WebSearchSettingsPanel: FC = () => {
     news: 'News',
     'google-news': 'GoogleNews',
     gdelt: 'Gdelt',
-    'bing-agent': 'Bing',
-    'bing-responses': 'BingResponses',
+    bing: 'Bing',
     combined: 'Combined',
   };
 
@@ -96,6 +94,28 @@ export const WebSearchSettingsPanel: FC = () => {
           {t('otherProvidersLabel')}
         </div>
         <div className="space-y-2">{otherProviders.map(renderProvider)}</div>
+      </div>
+
+      {/* Multi-step search (MSF web search only) */}
+      <div>
+        <label className="flex cursor-pointer items-start gap-3">
+          <input
+            type="checkbox"
+            className="mt-0.5 h-4 w-4 accent-blue-600"
+            checked={webSearchOptions.multiStep !== false}
+            onChange={(e) =>
+              setWebSearchOptions({ multiStep: e.target.checked })
+            }
+          />
+          <span>
+            <span className="block text-sm font-bold text-black dark:text-gray-200">
+              {t('multiStepLabel')}
+            </span>
+            <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
+              {t('multiStepDescription')}
+            </span>
+          </span>
+        </label>
       </div>
 
       {/* Sources per search */}

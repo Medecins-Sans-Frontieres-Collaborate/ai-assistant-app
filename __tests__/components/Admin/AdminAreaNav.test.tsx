@@ -47,6 +47,7 @@ const ALL_AREAS: AdminAreaId[] = [
   'announcements',
   'delegations',
   'local-admins',
+  'web-search',
 ];
 
 describe('AdminAreaNav', () => {
@@ -80,6 +81,7 @@ describe('AdminAreaNav', () => {
         '/admin/agents',
         '/admin/connectors',
         '/admin/workflows',
+        '/admin/web-search',
         '/admin/guides',
         '/admin/glossaries',
         '/admin/map-datasets',

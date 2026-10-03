@@ -3,6 +3,13 @@ import { LocalRuntime } from '@/types/localRuntime';
 import modelMetadata from '@/config/models.json';
 import { z } from 'zod';
 
+/** What discovery knows about one deployment's retirement (see OpenAIModel). */
+export interface ModelRetirementFacts {
+  retiresAt?: string;
+  deploymentModelName?: string;
+  successorId?: string;
+}
+
 export interface OpenAIModel {
   id: string;
   name: string;
@@ -147,6 +154,34 @@ export interface OpenAIModel {
    * deliberately NOT in the zod openAIModelSchema (never authored in config).
    */
   deploymentModelVersion?: string;
+  /**
+   * The ARM deployment's underlying model NAME, set only when it differs from
+   * the deployment name this model is keyed by (e.g. a `gpt-5.2` deployment
+   * that actually runs `gpt-5.4`). Runtime-only like hostedIn — set by
+   * /api/models from discovery. Drives the alias rule in
+   * lib/utils/shared/modelRetirement.ts.
+   */
+  deploymentModelName?: string;
+  /**
+   * ISO instant Azure stops serving the model VERSION this deployment runs.
+   * Runtime-only like hostedIn — read from the account's model catalog by
+   * discovery, never authored in config/models.json. This, not the manual
+   * `retirementDate` below, is what automatic retirement handling acts on.
+   */
+  retiresAt?: string;
+  /**
+   * Explicit successor for retirement handling, from the deployment's
+   * `ui-successor` ARM tag. Runtime-only. Absent = computed (see
+   * lib/utils/shared/modelRetirement.ts).
+   */
+  successorId?: string;
+  /**
+   * The three facts above PER REGION, for every region the model is deployed
+   * in. US and EU are separate deployments that retire (and get repointed)
+   * independently; the top-level fields are the first (home) region's.
+   * Runtime-only — set by /api/models' multi-region merge.
+   */
+  retirementByRegion?: Partial<Record<'US' | 'EU', ModelRetirementFacts>>;
 
   /**
    * Regions where a deployment with this name was discovered (set by
@@ -524,10 +559,12 @@ const openAIModelSchema = z.object({
   deploymentName: z.string().optional(),
   modelSource: z.string().optional(),
   isCustomSourceModel: z.boolean().optional(),
-  // hostedIn, sourceLocation, and deploymentModelVersion are intentionally NOT
-  // in this schema: they are derived at runtime (live discovery / the byom
-  // sources route), never authored in config/models.json (unknown keys are
-  // stripped, so an accidental JSON entry is discarded rather than trusted).
+  // hostedIn, sourceLocation, deploymentModelVersion, deploymentModelName,
+  // retiresAt, successorId and retirementByRegion are intentionally NOT in
+  // this schema: they are
+  // derived at runtime (live discovery / the byom sources route), never
+  // authored in config/models.json (unknown keys are stripped, so an
+  // accidental JSON entry is discarded rather than trusted).
   hosting: z.enum(['azure', 'external']).optional(),
   tier: z.enum(['featured', 'standard', 'legacy']).optional(),
   lifecycle: z

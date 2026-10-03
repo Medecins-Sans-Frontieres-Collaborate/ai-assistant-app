@@ -1148,18 +1148,19 @@ export const createModelSelectionMiddleware = async (
     context.messages,
   );
 
-  // Determine if we're in agent mode based on:
-  // 1. User explicitly requested AGENT search mode
-  // 2. Custom agents always use agent mode
-  // 3. Organization/Foundry agents with agentId always use agent mode
+  // Agent mode — execution inside the Foundry Agent Service — is for REAL
+  // agents only:
+  // 1. Custom agents always use agent mode
+  // 2. Organization/Foundry agents with agentId always use agent mode
   //    Check both the model property AND the model ID prefix (the property may
   //    not survive serialization through conversation storage)
+  // (The retired "Agent" search routing, which sent plain-model chats to a
+  // hand-made Foundry agent, is normalized away by the validator.)
   const isOrgAgent =
     modelConfig.isOrganizationAgent === true ||
     modelId.startsWith('foundry-') ||
     modelId.startsWith('org-');
   const agentMode =
-    context.searchMode === SearchMode.AGENT ||
     modelConfig.isCustomAgent === true ||
     modelId.startsWith('custom-') ||
     (isOrgAgent && !!modelConfig.agentId);

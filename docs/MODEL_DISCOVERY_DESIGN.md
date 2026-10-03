@@ -192,11 +192,12 @@ metadata layer:
   `ActiveFileInjector.ts:114` to gate image injection. Prefer a `supportsVision` _flag_ in the metadata
   so discovered models can declare it (keep the enum as a thin derived view if other call sites need
   it).
-- **Agent backing:** `isAgent` + `agentId` + `agentVersion` (the `AGENT_NAMES` map in `types/openai.ts`).
-  **Important nuance:** the built-in GPT/Claude "models" are actually invoked as Foundry _agents_
-  (`gpt-52`, `claude-opus-46`) via `AIFoundryAgentHandler` — so their real routing key is `agentId`,
-  which is local metadata, **not** something model-deployment discovery returns. The JSON baseline
-  keeps these mappings; tags can supply `ui-agent-id` for new agent-backed models.
+- **Agent backing:** `isAgent` + `agentId` + `agentVersion`. _Historical note:_ the built-in
+  GPT/Claude models used to carry hand-made Foundry agent ids (`gpt-52`, `claude-opus-46`) for an
+  "Agent" search routing and for Bing web search; both were retired on 2026-10-02 (web search now
+  runs on the Responses API `web_search` tool, on a deployment picked per region by
+  `lib/services/models/webSearchModel.ts`). No catalog model carries an agent id any more; real
+  Foundry agents are discovered live, and tags can still supply `ui-agent-id` per deployment.
 - **Standard-path tools** (`ToolType = 'web_search'` via `ToolRouterService`) and **agent-side tools**
   (code interpreter, file search, MCP — configured server-side in the Foundry agent and surfaced by
   `foundryEventMappers.ts`) are **unchanged**. They are not part of model-deployment metadata and need
@@ -253,6 +254,62 @@ existing environment-config file) and kept in code for auditability.
   flags (`exploreBots`, `enableClaudeModels` in `ModelSelect.tsx:49`) remain untouched and stack on
   top. This design does **not** move visibility into LaunchDarkly, but flags it as the future seam if
   per-user / instant-toggle gating is ever needed.
+
+### 3.6 Retirement handling — automatic (added 2026-10-02)
+
+Models that are going away are handled from what discovery already knows, so there is no retirement
+schedule to maintain by hand. Rules: `lib/utils/shared/modelRetirement.ts`; the move:
+`client/hooks/settings/useModelRetirementMigration.ts`; the warning:
+`components/Chat/ModelRetirementNotice.tsx`.
+
+- **Facts, from Azure.** App-identity discovery also reads the account's model catalog
+  (`…/accounts/{name}/models`) and stamps each deployment with `retiresAt` — the date Azure stops
+  serving the model **version** that deployment actually runs (the deployment SKU's date when the
+  catalog gives one). `/api/models` serves it, together with `deploymentModelName` when a deployment
+  runs a different model than its name. A deployment within 30 days of its date is logged on every
+  cache fill as `[model-lifecycle] deployment "…" retires in N day(s)` — alert on that line.
+- **A model leaves** when (a) its version's date is within 30 days — notice above the composer with a
+  one-click switch, then an automatic, silent move of the saved default and all conversations 7 days
+  before the date; (b) it is an **alias** — its deployment runs another model that is itself served —
+  moved at once; or (c) it is listed in `FORCED_MODEL_RETIREMENTS` — the one manual input, for
+  decisions Azure's schedule cannot express; moved at once to its **pinned** successor, and waiting
+  while that successor is not available to the user.
+- **Where to** (computed moves): the deployment's `ui-successor` tag → for an alias, the model the
+  deployment actually runs → within the same family and variant: a same-version sibling, else the
+  policy default, else the _nearest_ newer version (never simply the newest, which is usually the most
+  expensive) → the policy default if in the same family → the family's own default → the region
+  default. A successor must be served to the user, selectable in their region, not itself leaving,
+  and must not change how data is handled: never Azure-hosted → externally hosted, never a model with
+  a home-region instance → one hosted only in the other region. The tag is bound by the same guards.
+- **Once per event, per browser** (`settingsStore.modelRetirementsApplied`: model id → triggers
+  applied + when). Every reason that holds is recorded, so a reason that is merely unmasked later
+  (the forced list is emptied) moves nobody twice; a trigger not yet recorded is a new event. A user
+  who picks the model again keeps it.
+- **Late arrivals are caught up.** Conversations that reach the browser after an event was applied (a
+  restored backup, an import, a sync pull) are moved if they predate the applied move; anything
+  touched afterwards is treated as the user's own choice. The move nudges `updatedAt` by 1 ms (from
+  `updatedAt`, else `createdAt`) so it persists without reordering or winning a backup merge; a
+  conversation with no timestamp at all is moved in memory only and re-derived on each load.
+- **Clock.** Decisions are re-evaluated hourly and on window focus, so a tab left open crosses the
+  notice and move dates. After the move date the notice stays up (without promising a move) for a
+  conversation that is on the model again.
+- **Per region.** US and EU are separate deployments that retire (and get repointed) independently.
+  `/api/models` serves every region's facts (`retirementByRegion`); a conversation is judged by the
+  deployment that serves it — the home region, the region it is pinned to (`hostedRegion`), or
+  wherever the model is hosted when it has no home instance. A pinned conversation that must move
+  stays in its region.
+- **In the picker.** A retiring model carries a "Retiring" badge on its row, a clock on its version
+  chip and a sentence in the details header, and a family row never fronts one by default (the
+  current selection still wins). It stays selectable — that is the user's call.
+- **Not covered:** a model that vanishes from the served list with no prior signal is _not_ moved —
+  absence also means "hidden by a usage limit", "other region failed to answer" or "fallback list",
+  so it keeps the existing `ModelUnavailableNotice`. The manual `lifecycle` / `retirementDate` /
+  `retirementReplacement` fields in `config/models.json` stay informational and are not read here.
+- **Open question — version vs. model.** `retiresAt` is the date of the deployed model _version_.
+  Deployments here use `OnceNewDefaultVersionAvailable`, and Azure may upgrade a deployment in place
+  to a newer version instead of letting it die; the date rule would then move users off a model that
+  would have survived. Unverified either way (the US `gpt-5.2-chat` deployment was NOT upgraded past
+  a non-default version). Until settled, a dated retirement errs on the side of moving.
 
 ---
 

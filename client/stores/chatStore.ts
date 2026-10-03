@@ -70,7 +70,7 @@ import {
   fallbackModelID,
 } from '@/types/openai';
 import { Citation } from '@/types/rag';
-import { SearchMode } from '@/types/searchMode';
+import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 import { PrecomputedSearchResults } from '@/types/webSearch';
 
 import { useChatInputStore } from './chatInputStore';
@@ -573,6 +573,13 @@ interface ChatStore {
    * them as the search result without searching again.
    */
   summarizeFromHeadlines: () => Promise<void>;
+  /**
+   * "Keep searching" after a multi-step search ended short: sends `text`
+   * as a new user message in the conversation. The server recognises the
+   * request from the previous turn's search-state record and continues
+   * that search rather than starting over.
+   */
+  continueSearch: (conversationId: string, text: string) => Promise<void>;
   dismissModelSwitchPrompt: () => void;
   acceptModelSwitch: (alwaysSwitch?: boolean) => void;
 
@@ -1325,8 +1332,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
               ?.allowWebSearch === true
         : false;
     const isAgentInvocation = isOrganizationAgent || isCustomAgent;
+    // The retired AGENT routing reads as INTELLIGENT (normalizeSearchMode).
     const effectiveSearchMode =
-      isAgentInvocation && !orgAgentSearchAllowed ? undefined : searchMode;
+      isAgentInvocation && !orgAgentSearchAllowed
+        ? undefined
+        : normalizeSearchMode(searchMode);
 
     // Interpreter mode rides the same org-agent gate as search: static org
     // agents only run code when their config opts in (allowCodeInterpreter,
@@ -2034,9 +2044,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     //
     // Curated/custom agents are NEVER retried — the agent's tools,
     // instructions, and connections are the whole point of choosing it.
-    // Standard models that happen to be invoked via Foundry's agent service
-    // (e.g. GPT-5.2 with `isAgent: true`) DO retry — that flag is just a
-    // deployment-mechanism marker, not "user picked a curated agent".
     //
     // Local-runtime models are never retried either, and for a stronger
     // reason: the fallback is a CLOUD model, so retrying would ship a
@@ -2696,11 +2703,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const payload: PrecomputedSearchResults = {
       queries: streamingInterimSearch.queries,
       entries: streamingInterimSearch.entries,
+      ...(streamingInterimSearch.kind
+        ? { kind: streamingInterimSearch.kind }
+        : {}),
     };
     const searchMode = streamingSearchMode ?? SearchMode.INTELLIGENT;
 
     console.log(
-      '[chatStore] Summarize from headlines: aborting the Bing wait and resending with echoed headlines',
+      '[chatStore] Answer from interim results: aborting the running search and resending with the echoed entries',
     );
     abortController?.abort();
 
@@ -2742,6 +2752,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         set({ pendingPrecomputedSearchResults: null });
       }
     }
+  },
+
+  continueSearch: async (conversationId, text) => {
+    if (get().isStreaming) return;
+    const conversationStore = useConversationStore.getState();
+    const conversation = conversationStore.conversations.find(
+      (c) => c.id === conversationId,
+    );
+    if (!conversation) return;
+    const message: Message = {
+      role: 'user',
+      content: text,
+      messageType: undefined,
+    };
+    const updated = {
+      ...conversation,
+      messages: [...conversation.messages, message],
+    };
+    conversationStore.updateConversation(conversationId, {
+      messages: updated.messages,
+    });
+    await get().sendMessage(message, updated, conversation.defaultSearchMode);
   },
 
   dismissModelSwitchPrompt: () => {

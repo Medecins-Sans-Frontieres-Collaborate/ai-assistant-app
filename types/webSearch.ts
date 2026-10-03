@@ -8,19 +8,21 @@
  */
 /**
  * User-selectable search backend. 'auto' defers to the deployment default
- * (WEB_SEARCH_PROVIDER env). The feed providers work in every deployment;
- * 'bing-agent' needs the Foundry search agent — where that infrastructure
- * is absent, a search on it degrades to a knowledge answer with a notice.
- * 'combined' runs the Bing agent and the Google News feed concurrently:
- * headlines surface as soon as the feed answers, the Bing summary joins
- * when the agent finishes (35-90s), and the two are merged. Where the
- * Foundry agent is absent it degrades to the feed result alone.
- * 'bing-responses' is the native web_search tool on the Azure OpenAI
- * Responses API — the same Bing grounding as 'bing-agent' but a direct
- * model call instead of a Foundry agent run (A/B latency candidate).
+ * (WEB_SEARCH_PROVIDER env). The feed providers work in every deployment.
+ * 'bing' is Bing grounding through the native web_search tool on the Azure
+ * OpenAI Responses API — one direct model call on the user's region, no
+ * Foundry agent (the deployment is picked by lib/services/models/
+ * webSearchModel.ts). 'combined' runs Bing and the Google News feed
+ * concurrently: headlines surface as soon as the feed answers, the Bing
+ * summary joins when it finishes, and the two are merged.
  * 'searxng' is MSF's own SearXNG metasearch instance — general web plus
  * news/science/IT/humanitarian engines, seconds-fast, real publisher URLs.
- * Where the instance is unconfigured or unreachable it degrades to 'news'.
+ * Where the instance is unconfigured, unreachable or its web engines do
+ * not answer, it degrades to 'bing', then to 'news'.
+ *
+ * 'bing-agent' and 'bing-responses' were the two earlier Bing routes (a
+ * hand-made Foundry agent, and this one); persisted settings and older
+ * clients still send them and are read as 'bing'.
  */
 export type WebSearchProviderOption =
   | 'auto'
@@ -28,9 +30,14 @@ export type WebSearchProviderOption =
   | 'news'
   | 'google-news'
   | 'gdelt'
-  | 'bing-agent'
-  | 'bing-responses'
+  | 'bing'
   | 'combined';
+
+/** Earlier names for 'bing', accepted wherever a provider is read. */
+export const LEGACY_BING_PROVIDERS: readonly string[] = [
+  'bing-agent',
+  'bing-responses',
+];
 
 /** A concrete backend — what 'auto' resolves to server-side. */
 export type ResolvedWebSearchProvider = Exclude<
@@ -44,8 +51,7 @@ export const WEB_SEARCH_PROVIDER_OPTIONS: WebSearchProviderOption[] = [
   'news',
   'google-news',
   'gdelt',
-  'bing-agent',
-  'bing-responses',
+  'bing',
   'combined',
 ];
 
@@ -94,6 +100,15 @@ export interface WebSearchOptions {
   freshness: 'auto' | 'day' | 'week' | 'month' | 'any';
   /** Which search backend runs the query ('auto' = deployment default). */
   provider: WebSearchProviderOption;
+  /**
+   * Multi-step search (MSF web search only): after the first results an
+   * assessor may search again or read result pages before the answer is
+   * written. On by default; false keeps every search to its single planned
+   * round. An admin can also switch it off for everyone
+   * (docs/WEB_SEARCH_MULTI_STEP.md). Absent (older persisted settings and
+   * older clients) means on.
+   */
+  multiStep: boolean;
 }
 
 export const MIN_SEARCH_RESULT_COUNT = 3;
@@ -102,9 +117,11 @@ export const MAX_SEARCH_RESULT_COUNT = 15;
 export const DEFAULT_WEB_SEARCH_OPTIONS: WebSearchOptions = {
   resultCount: 8,
   freshness: 'auto',
-  // 'auto' lets the deployment pick (SearXNG where configured), so backend
-  // changes reach users without another store migration.
+  // 'auto' lets the deployment pick (Bing unless WEB_SEARCH_PROVIDER pins
+  // another), so backend changes reach users without another store
+  // migration.
   provider: 'auto',
+  multiStep: true,
 };
 
 /**
@@ -122,6 +139,9 @@ export interface SearchHeadlineEntry {
   snippet?: string;
 }
 
+/** Which search an interim panel / echoed result set came from. */
+export type SearchInterimKind = 'combined' | 'multiStep';
+
 /**
  * Client-echoed search results for a "Summarize from headlines" resend:
  * the interim headlines the user already saw, sent back in place of a
@@ -131,6 +151,8 @@ export interface PrecomputedSearchResults {
   /** The queries the interim results answered (display/record only). */
   queries: string[];
   entries: SearchHeadlineEntry[];
+  /** Absent on echoes from older clients: a combined (news) search. */
+  kind?: SearchInterimKind;
 }
 
 export function isWebSearchProviderOption(
@@ -140,6 +162,16 @@ export function isWebSearchProviderOption(
     typeof value === 'string' &&
     (WEB_SEARCH_PROVIDER_OPTIONS as string[]).includes(value)
   );
+}
+
+/** A provider as persisted or sent, with the legacy Bing names folded in. */
+export function normalizeWebSearchProvider(
+  value: unknown,
+): WebSearchProviderOption | undefined {
+  if (typeof value === 'string' && LEGACY_BING_PROVIDERS.includes(value)) {
+    return 'bing';
+  }
+  return isWebSearchProviderOption(value) ? value : undefined;
 }
 
 export function isWebSearchFreshness(
@@ -167,8 +199,11 @@ export function sanitizeWebSearchOptions(value: unknown): WebSearchOptions {
   const freshness = isWebSearchFreshness(raw.freshness)
     ? raw.freshness
     : DEFAULT_WEB_SEARCH_OPTIONS.freshness;
-  const provider = isWebSearchProviderOption(raw.provider)
-    ? raw.provider
-    : DEFAULT_WEB_SEARCH_OPTIONS.provider;
-  return { resultCount, freshness, provider };
+  const provider =
+    normalizeWebSearchProvider(raw.provider) ??
+    DEFAULT_WEB_SEARCH_OPTIONS.provider;
+  // Only an explicit false opts out — settings persisted before the option
+  // existed carry no value and must get the default.
+  const multiStep = raw.multiStep !== false;
+  return { resultCount, freshness, provider, multiStep };
 }

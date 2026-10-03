@@ -251,3 +251,80 @@ describe('getMessagesToSend – image token budget', () => {
     expect(result).toHaveLength(1);
   });
 });
+
+describe('getMessagesToSend – minimum recent messages', () => {
+  let encoding: InstanceType<typeof Tiktoken>;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    encoding = makeEncoding();
+  });
+
+  // Word count = token count (mock encoding). A 12-word latest message
+  // alone exceeds a 10-token budget.
+  const bigLast = textMessage(
+    'one two three four five six seven eight nine ten eleven twelve',
+    'user',
+  );
+  const conversation: Message[] = [
+    textMessage('oldest question', 'user'),
+    textMessage('oldest answer', 'assistant'),
+    textMessage('previous question', 'user'),
+    textMessage('previous answer', 'assistant'),
+    bigLast,
+  ];
+
+  it('without a minimum, a budget-filling latest message leaves no history', async () => {
+    const result = await getMessagesToSend(
+      conversation,
+      encoding,
+      0,
+      10,
+      testUser,
+    );
+    expect(result).toHaveLength(1);
+  });
+
+  it('keeps the previous exchange past the budget while the window has room', async () => {
+    const result = await getMessagesToSend(
+      conversation,
+      encoding,
+      0,
+      10,
+      testUser,
+      { minRecentMessages: 3, windowTokens: 1000 },
+    );
+    expect(result.map((m) => m.content)).toEqual([
+      'previous question',
+      'previous answer',
+      bigLast.content,
+    ]);
+  });
+
+  it('never reaches past the model window for the minimum', async () => {
+    // 12 (latest) + 2 (previous answer) = 14 fits a 15-token window; the
+    // previous question (2 more) does not. The orphaned assistant reply is
+    // then dropped, so only the latest message remains.
+    const result = await getMessagesToSend(
+      conversation,
+      encoding,
+      0,
+      10,
+      testUser,
+      { minRecentMessages: 3, windowTokens: 15 },
+    );
+    expect(result).toHaveLength(1);
+  });
+
+  it('does not inflate a conversation that already fits', async () => {
+    const result = await getMessagesToSend(
+      conversation,
+      encoding,
+      0,
+      1000,
+      testUser,
+      { minRecentMessages: 3, windowTokens: 2000 },
+    );
+    expect(result).toHaveLength(5);
+  });
+});

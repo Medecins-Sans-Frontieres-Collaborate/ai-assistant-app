@@ -1,4 +1,3 @@
-import { AgentChatService } from '@/lib/services/chat/AgentChatService';
 import {
   WebSearchTool,
   resolveDefaultWebSearchProvider,
@@ -14,8 +13,6 @@ import {
   searchSearxng,
 } from '@/lib/services/chat/tools/searxngSearch';
 
-import { OpenAIModelID, OpenAIModels } from '@/types/openai';
-
 import { env } from '@/config/environment';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -30,7 +27,12 @@ vi.mock('@/lib/services/chat/tools/newsSearch', async (importOriginal) => ({
   fetchGoogleNewsHeadlines: vi.fn(),
 }));
 
-vi.mock('@/lib/services/chat/tools/searxngSearch', () => ({
+vi.mock('@/lib/services/chat/tools/searxngSearch', async (importOriginal) => ({
+  // Keep the real planSearxngCategories — the single-step degraded check
+  // asks it whether the plan expected the web engines at all.
+  ...(await importOriginal<
+    typeof import('@/lib/services/chat/tools/searxngSearch')
+  >()),
   isSearxngConfigured: vi.fn(() => false),
   searchSearxng: vi.fn(),
 }));
@@ -41,7 +43,6 @@ vi.mock('@/lib/services/chat/tools/responsesWebSearch', () => ({
 
 describe('WebSearchTool', () => {
   let webSearchTool: WebSearchTool;
-  let mockAgentChatService: AgentChatService;
 
   const priorProvider = env.WEB_SEARCH_PROVIDER;
   afterAll(() => {
@@ -49,14 +50,10 @@ describe('WebSearchTool', () => {
   });
 
   beforeEach(() => {
-    // These tests exercise the Bing-agent path explicitly.
-    (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
-    // Create mock AgentChatService
-    mockAgentChatService = {
-      executeWebSearchTool: vi.fn(),
-    } as any;
-
-    webSearchTool = new WebSearchTool(mockAgentChatService);
+    // These tests exercise the Bing path explicitly.
+    (env as any).WEB_SEARCH_PROVIDER = 'bing';
+    vi.mocked(executeResponsesWebSearch).mockReset();
+    webSearchTool = new WebSearchTool();
   });
 
   describe('execute', () => {
@@ -79,13 +76,10 @@ describe('WebSearchTool', () => {
         ],
       };
 
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue(
-        mockResults,
-      );
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue(mockResults);
 
       const result = await webSearchTool.execute({
         searchQuery: 'artificial intelligence',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -96,13 +90,10 @@ describe('WebSearchTool', () => {
 
     it('should return error message when search fails', async () => {
       const error = new Error('API quota exceeded');
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockRejectedValue(
-        error,
-      );
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(error);
 
       const result = await webSearchTool.execute({
         searchQuery: 'test query',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -113,13 +104,10 @@ describe('WebSearchTool', () => {
 
     it('should handle network errors gracefully', async () => {
       const error = new Error('Network timeout');
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockRejectedValue(
-        error,
-      );
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(error);
 
       const result = await webSearchTool.execute({
         searchQuery: 'test query',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -129,13 +117,10 @@ describe('WebSearchTool', () => {
     });
 
     it('should handle unknown errors', async () => {
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockRejectedValue(
-        'Unknown error',
-      );
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue('Unknown error');
 
       const result = await webSearchTool.execute({
         searchQuery: 'test query',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -145,14 +130,13 @@ describe('WebSearchTool', () => {
     });
 
     it('should return empty citations array when citations are missing', async () => {
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Some results',
         citations: [],
       });
 
       const result = await webSearchTool.execute({
         searchQuery: 'test',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -171,22 +155,182 @@ describe('WebSearchTool', () => {
       providersUsed: ['google-news' as const],
     };
 
+    const bingFallback = {
+      text: 'Bing summary[1]',
+      citations: [
+        { number: 1, title: 'B', url: 'https://b.example', date: '' },
+      ],
+      metadata: { executor: 'Bing (gpt-5.4)' },
+    };
+
     beforeEach(() => {
       vi.mocked(searchSearxng).mockReset();
       vi.mocked(isSearxngConfigured).mockReturnValue(true);
       vi.mocked(searchNewsParallel).mockReset();
       vi.mocked(searchNewsParallel).mockResolvedValue(newsFallback);
       vi.mocked(searchNewsFanOut).mockReset();
+      // The instance is unavailable in most of these cases and Bing is the
+      // first fallback; it is down too unless a test says otherwise, so
+      // the feed path stays observable.
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(
+        new Error('No web-search-capable deployment'),
+      );
     });
 
-    it("is what 'auto' resolves to when the instance is configured and no provider is pinned", async () => {
+    it("is NOT what 'auto' resolves to: the default is Bing unless a provider is pinned", async () => {
       (env as any).WEB_SEARCH_PROVIDER = undefined;
-      expect(resolveDefaultWebSearchProvider()).toBe('searxng');
+      expect(resolveDefaultWebSearchProvider()).toBe('bing');
       vi.mocked(isSearxngConfigured).mockReturnValue(false);
+      expect(resolveDefaultWebSearchProvider()).toBe('bing');
+      (env as any).WEB_SEARCH_PROVIDER = 'searxng';
+      expect(resolveDefaultWebSearchProvider()).toBe('searxng');
+      (env as any).WEB_SEARCH_PROVIDER = 'news';
       expect(resolveDefaultWebSearchProvider()).toBe('news');
-      (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
-      vi.mocked(isSearxngConfigured).mockReturnValue(true);
-      expect(resolveDefaultWebSearchProvider()).toBe('bing-agent');
+    });
+
+    it('falls back to Bing first, flagged, when the instance errors', async () => {
+      vi.mocked(searchSearxng).mockRejectedValue(
+        new Error('SearXNG timed out'),
+      );
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue(bingFallback);
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'q',
+        searchQueries: ['q', 'q2'],
+        provider: 'searxng',
+        category: 'science',
+        freshness: 'week',
+        resultCount: 5,
+        deep: true,
+        user: { ...user, region: 'EU' },
+      });
+
+      // Bing is a real web search: it answers every category, science
+      // included, on the primary query with the search tuning.
+      expect(executeResponsesWebSearch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          searchQuery: 'q',
+          resultCount: 5,
+          freshness: 'week',
+          deep: true,
+          region: 'EU',
+        }),
+      );
+      expect(result.text).toBe('Bing summary[1]');
+      expect(result.citations).toEqual(bingFallback.citations);
+      expect(result.metadata).toEqual({
+        executor: 'Bing (gpt-5.4)',
+        searxngFallback: true,
+        fallbackProvider: 'bing',
+      });
+      expect(searchNewsParallel).not.toHaveBeenCalled();
+    });
+
+    it('goes on to the news feeds when Bing returns nothing', async () => {
+      vi.mocked(searchSearxng).mockRejectedValue(new Error('down'));
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
+        text: '  ',
+        citations: [],
+      });
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        user,
+      });
+
+      expect(result.text).toBe('News digest');
+      expect(result.metadata).toEqual({
+        searxngFallback: true,
+        fallbackProvider: 'news',
+      });
+    });
+
+    it('does not try a second backend once the search was aborted', async () => {
+      vi.mocked(searchSearxng).mockRejectedValue(new Error('down'));
+      const controller = new AbortController();
+      vi.mocked(executeResponsesWebSearch).mockImplementation(async () => {
+        controller.abort();
+        throw new Error('aborted');
+      });
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        user,
+        signal: controller.signal,
+      });
+
+      expect(searchNewsParallel).not.toHaveBeenCalled();
+      expect(result.citations).toEqual([]);
+      expect(result.text).toContain('aborted');
+    });
+
+    it('treats a result whose web engines did not answer as unavailable, keeping it as the last resort', async () => {
+      const degraded = {
+        entries: [
+          {
+            title: 'Wiki page',
+            url: 'https://en.wikipedia.org/wiki/X',
+            date: '',
+            sourceName: 'wikipedia',
+            snippet: 'Reference only',
+          },
+        ],
+        answers: [],
+        health: { webCoverage: false, throttled: false },
+      } as any;
+      vi.mocked(searchSearxng).mockResolvedValue(degraded);
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue(bingFallback);
+
+      const viaBing = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        user,
+      });
+      expect(viaBing.metadata?.fallbackProvider).toBe('bing');
+      expect(viaBing.text).toBe('Bing summary[1]');
+
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(new Error('down'));
+      const kept = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        user,
+      });
+      expect(kept.metadata).toEqual({ searxngDegraded: true });
+      expect(kept.text).toContain(
+        'web search engines behind the search service did not answer',
+      );
+      expect(kept.text).toContain('[1] Wiki page');
+      expect(kept.citations).toHaveLength(1);
+      expect(searchNewsParallel).not.toHaveBeenCalled();
+    });
+
+    it('does not read missing web coverage as degraded when the plan never asked the web engines', async () => {
+      vi.mocked(searchSearxng).mockResolvedValue({
+        entries: [
+          {
+            title: 'Paper',
+            url: 'https://europepmc.org/abstract/MED/2',
+            date: '',
+            sourceName: 'europepmc.org',
+            snippet: 'Abstract',
+          },
+        ],
+        answers: [],
+        health: { webCoverage: false, throttled: false },
+      } as any);
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        category: 'science',
+        user,
+      });
+
+      expect(executeResponsesWebSearch).not.toHaveBeenCalled();
+      expect(result.metadata).toBeUndefined();
+      expect(result.text).toContain('[1] Paper');
     });
 
     it('passes queries, tuning and the router category through and formats a web digest', async () => {
@@ -233,7 +377,7 @@ describe('WebSearchTool', () => {
       expect(searchNewsParallel).not.toHaveBeenCalled();
     });
 
-    it('falls back to the news feeds, flagged, when the instance errors', async () => {
+    it('falls back to the news feeds, flagged, when the instance errors and Bing cannot run', async () => {
       vi.mocked(searchSearxng).mockRejectedValue(
         new Error('SearXNG timed out'),
       );
@@ -244,9 +388,13 @@ describe('WebSearchTool', () => {
         user,
       });
 
+      expect(executeResponsesWebSearch).toHaveBeenCalledTimes(1);
       expect(searchNewsParallel).toHaveBeenCalled();
       expect(result.text).toBe('News digest');
-      expect(result.metadata).toEqual({ searxngFallback: true });
+      expect(result.metadata).toEqual({
+        searxngFallback: true,
+        fallbackProvider: 'news',
+      });
     });
 
     it('does NOT fall back to news headlines for science or IT questions', async () => {
@@ -262,7 +410,7 @@ describe('WebSearchTool', () => {
         expect(result).toEqual({
           text: '',
           citations: [],
-          metadata: { searxngFallback: true },
+          metadata: { searxngFallback: true, fallbackProvider: 'news' },
         });
       }
       expect(searchNewsParallel).not.toHaveBeenCalled();
@@ -309,6 +457,77 @@ describe('WebSearchTool', () => {
         ['a', 'b'],
         expect.anything(),
       );
+    });
+
+    describe('multi-step seams', () => {
+      const options = {
+        resultCount: 6,
+        freshness: 'any' as const,
+        category: 'general' as const,
+        deep: false,
+      };
+
+      it('searchSearxngEntries returns raw results — an empty one stays empty, no fallback', async () => {
+        vi.mocked(searchSearxng).mockResolvedValue({
+          entries: [],
+          answers: [],
+        });
+
+        const outcome = await webSearchTool.searchSearxngEntries(
+          ['a', 'b', 'c', 'd', 'e', 'f'],
+          options,
+        );
+
+        expect(outcome).toEqual({ entries: [], answers: [] });
+        expect(searchSearxng).toHaveBeenCalledWith(
+          ['a', 'b', 'c', 'd', 'e'],
+          options,
+        );
+        expect(searchNewsParallel).not.toHaveBeenCalled();
+      });
+
+      it('searchSearxngEntries lets an unavailable instance throw', async () => {
+        vi.mocked(searchSearxng).mockRejectedValue(new Error('down'));
+        await expect(
+          webSearchTool.searchSearxngEntries(['a'], options),
+        ).rejects.toThrow('down');
+      });
+
+      it('searxngFallback answers from Bing, else the news feeds, flagged — but never headlines for science', async () => {
+        vi.mocked(executeResponsesWebSearch).mockResolvedValue(bingFallback);
+        const bing = await webSearchTool.searxngFallback({
+          searchQuery: 'a',
+          provider: 'searxng',
+          category: 'science',
+          user,
+        });
+        expect(bing.text).toBe('Bing summary[1]');
+        expect(bing.metadata?.fallbackProvider).toBe('bing');
+
+        vi.mocked(executeResponsesWebSearch).mockRejectedValue(
+          new Error('down'),
+        );
+        const news = await webSearchTool.searxngFallback({
+          searchQuery: 'a',
+          provider: 'searxng',
+          user,
+        });
+        expect(news.text).toBe('News digest');
+        expect(news.metadata?.searxngFallback).toBe(true);
+        expect(news.metadata?.fallbackProvider).toBe('news');
+
+        const science = await webSearchTool.searxngFallback({
+          searchQuery: 'a',
+          provider: 'searxng',
+          category: 'science',
+          user,
+        });
+        expect(science).toEqual({
+          text: '',
+          citations: [],
+          metadata: { searxngFallback: true, fallbackProvider: 'news' },
+        });
+      });
     });
   });
 
@@ -382,29 +601,28 @@ describe('WebSearchTool', () => {
       );
     });
 
-    it('ignores fan-out on the bing-agent path (agent expands queries itself)', async () => {
-      (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
-        text: 'Agent results',
+    it('ignores fan-out on the Bing path (the model expands queries itself)', async () => {
+      (env as any).WEB_SEARCH_PROVIDER = 'bing';
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
+        text: 'Bing results',
         citations: [],
       });
 
       await webSearchTool.execute({
         searchQuery: 'primary query',
         searchQueries: ['primary query', 'secondary query'],
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
       expect(searchNewsFanOut).not.toHaveBeenCalled();
-      expect(mockAgentChatService.executeWebSearchTool).toHaveBeenCalledWith(
+      expect(executeResponsesWebSearch).toHaveBeenCalledWith(
         expect.objectContaining({ searchQuery: 'primary query' }),
       );
     });
   });
 
-  describe('bing-responses provider (Responses API web_search)', () => {
-    it('dispatches to the Responses executor with the tuning params, no model needed', async () => {
+  describe('bing provider (Responses API web_search)', () => {
+    it('dispatches to the Responses executor with the tuning params and the user region — no agent, no model', async () => {
       vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Grounded digest.[1]',
         citations: [
@@ -414,12 +632,11 @@ describe('WebSearchTool', () => {
 
       const result = await webSearchTool.execute({
         searchQuery: 'renewable energy trends',
-        provider: 'bing-responses',
+        provider: 'bing',
         resultCount: 10,
         freshness: 'week',
         deep: true,
-        // No `model` — this path must not require an agent-backed model.
-        user: { email: 'test@example.com' } as any,
+        user: { email: 'test@example.com', region: 'EU' } as any,
       });
 
       expect(executeResponsesWebSearch).toHaveBeenCalledWith({
@@ -427,8 +644,8 @@ describe('WebSearchTool', () => {
         resultCount: 10,
         freshness: 'week',
         deep: true,
+        region: 'EU',
       });
-      expect(mockAgentChatService.executeWebSearchTool).not.toHaveBeenCalled();
       expect(searchNewsFanOut).not.toHaveBeenCalled();
       expect(searchNewsParallel).not.toHaveBeenCalled();
       expect(result.text).toBe('Grounded digest.[1]');
@@ -442,7 +659,7 @@ describe('WebSearchTool', () => {
 
       const result = await webSearchTool.execute({
         searchQuery: 'anything',
-        provider: 'bing-responses',
+        provider: 'bing',
         user: { email: 'test@example.com' } as any,
       });
 
@@ -470,7 +687,7 @@ describe('WebSearchTool', () => {
         headline(1),
         headline(2),
       ]);
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Bing summary [1]',
         citations: [
           {
@@ -486,7 +703,6 @@ describe('WebSearchTool', () => {
       const result = await webSearchTool.execute({
         searchQuery: 'fusion energy milestone',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
         onInterimResults,
       });
@@ -507,7 +723,7 @@ describe('WebSearchTool', () => {
         { ...headline(1), url: 'https://deep.example' },
         headline(2),
       ]);
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Bing summary',
         citations: [
           {
@@ -522,7 +738,6 @@ describe('WebSearchTool', () => {
       const result = await webSearchTool.execute({
         searchQuery: 'topic',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
       });
 
@@ -534,14 +749,13 @@ describe('WebSearchTool', () => {
 
     it('returns the headlines alone when the Bing leg fails, flagged and with an honest note', async () => {
       vi.mocked(fetchGoogleNewsHeadlines).mockResolvedValue([headline(1)]);
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockRejectedValue(
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(
         new Error('Foundry agent unavailable'),
       );
 
       const result = await webSearchTool.execute({
         searchQuery: 'topic',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
       });
 
@@ -555,9 +769,30 @@ describe('WebSearchTool', () => {
       expect(result.metadata).toEqual({ bingFailed: true });
     });
 
+    it('keeps the Bing executor on the merged result, flagged as merged', async () => {
+      vi.mocked(fetchGoogleNewsHeadlines).mockResolvedValue([headline(1)]);
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
+        text: 'Bing summary [1]',
+        citations: [
+          { number: 1, title: 'Deep', url: 'https://deep.example', date: '' },
+        ],
+        metadata: { executor: 'Bing (gpt-5.4)' },
+      });
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'topic',
+        provider: 'combined',
+        user,
+      });
+      expect(result.metadata).toEqual({
+        executor: 'Bing (gpt-5.4)',
+        merged: true,
+      });
+    });
+
     it('does not flag the result when both legs succeed', async () => {
       vi.mocked(fetchGoogleNewsHeadlines).mockResolvedValue([headline(1)]);
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Bing summary',
         citations: [
           { number: 1, title: 'A', url: 'https://a.example', date: '' },
@@ -567,7 +802,6 @@ describe('WebSearchTool', () => {
       const result = await webSearchTool.execute({
         searchQuery: 'topic',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
       });
 
@@ -578,7 +812,7 @@ describe('WebSearchTool', () => {
       vi.mocked(fetchGoogleNewsHeadlines).mockRejectedValue(
         new Error('RSS unreachable'),
       );
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
         text: 'Bing only',
         citations: [
           { number: 1, title: 'A', url: 'https://a.example', date: '' },
@@ -589,7 +823,6 @@ describe('WebSearchTool', () => {
       const result = await webSearchTool.execute({
         searchQuery: 'topic',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
         onInterimResults,
       });
@@ -603,37 +836,19 @@ describe('WebSearchTool', () => {
       vi.mocked(fetchGoogleNewsHeadlines).mockRejectedValue(
         new Error('RSS unreachable'),
       );
-      vi.mocked(mockAgentChatService.executeWebSearchTool).mockRejectedValue(
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(
         new Error('Foundry agent unavailable'),
       );
 
       const result = await webSearchTool.execute({
         searchQuery: 'topic',
         provider: 'combined',
-        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user,
       });
 
       expect(result.citations).toEqual([]);
       expect(result.text).toContain('Web search encountered an issue');
       expect(result.text).toContain('Foundry agent unavailable');
-    });
-
-    it('degrades to the news feed (no interim emission) without an agent model', async () => {
-      vi.mocked(fetchGoogleNewsHeadlines).mockResolvedValue([headline(1)]);
-      const onInterimResults = vi.fn();
-
-      const result = await webSearchTool.execute({
-        searchQuery: 'topic',
-        provider: 'combined',
-        user,
-        onInterimResults,
-      });
-
-      expect(mockAgentChatService.executeWebSearchTool).not.toHaveBeenCalled();
-      expect(onInterimResults).not.toHaveBeenCalled();
-      expect(result.citations).toHaveLength(1);
-      expect(result.text).toContain('Headline 1');
     });
   });
 

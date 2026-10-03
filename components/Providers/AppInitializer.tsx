@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
-import { useEuDefaultModelSwitch } from '@/client/hooks/settings/useEuDefaultModelSwitch';
+import { useModelRetirementMigration } from '@/client/hooks/settings/useModelRetirementMigration';
 import { useModelsQuery } from '@/client/hooks/settings/useModelsQuery';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
@@ -107,9 +107,9 @@ export function AppInitializer() {
   // QueryClientProvider AppProviders wraps ChatShell (and so this) in.
   useModelsQuery();
 
-  // Temporary: one-time move of a persisted gpt-5.2-chat default to
-  // gpt-5.4 for EU users (marker-guarded). Delete one release after shipping.
-  useEuDefaultModelSwitch();
+  // Moves the saved default and existing conversations off models that are
+  // being retired, onto their successor (once per retirement, per browser).
+  useModelRetirementMigration();
 
   // Publishes the admin's resolved feature.upload.megabytesPerFile onto
   // FileUploadService (docs/LIMITS_USER_FACING_UX.md §7.4/§3e) so every

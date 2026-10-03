@@ -194,12 +194,6 @@ export const ChatTopbar = ({
                   title={t('chat.privacyFocusedSearch')}
                 />
               )}
-              {showSearchIndicator && searchMode === SearchMode.AGENT && (
-                <AzureAIIcon
-                  className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
-                  aria-label={t('chat.azureAIAgentMode')}
-                />
-              )}
               {isCustomAgent && (
                 <AzureAIIcon
                   className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"

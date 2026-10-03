@@ -1,8 +1,10 @@
+import { IconClockHour4 } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useModelRetirements } from '@/client/hooks/settings/useModelRetirements';
 import { formatResetIn } from '@/client/hooks/settings/useMyLimits';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
@@ -26,6 +28,7 @@ import {
 import { EmissionsTierIcon } from './EmissionsTierIcon';
 import { ModelLimitBadge, modelLimitCopy } from './ModelLimitBadge';
 import { useModelAvailabilityMap } from './modelLimits';
+import { useRetirementCopy } from './modelRetirementCopy';
 import { SHOW_RECOMMENDED_TAG } from './showRecommendedTag';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -73,6 +76,10 @@ export const VersionSection: FC<VersionSectionProps> = ({
   // it exists and when it comes back) but cannot be picked.
   const { lookup: limitFor, refetch: refetchLimits } =
     useModelAvailabilityMap();
+  // A version that is being retired stays selectable — it is the user's
+  // call — but says so on the chip before they pick it.
+  const retirements = useModelRetirements();
+  const retirementCopy = useRetirementCopy();
 
   const versions = useMemo(() => {
     // byom ids never exist in the static catalog — the model object itself
@@ -170,6 +177,10 @@ export const VersionSection: FC<VersionSectionProps> = ({
                   : null,
               )
             : null;
+          const retirement = retirements.get(version.id);
+          const retirementTitle = retirement
+            ? `${version.name} — ${retirementCopy(retirement)}`
+            : null;
           return (
             <button
               key={group.key}
@@ -177,7 +188,7 @@ export const VersionSection: FC<VersionSectionProps> = ({
               onClick={isLimited ? undefined : () => onSelectVersion(version)}
               aria-pressed={isActive}
               aria-disabled={isLimited || undefined}
-              title={limitTitle ?? version.name}
+              title={limitTitle ?? retirementTitle ?? version.name}
               className={`rounded-lg border px-2.5 py-1.5 min-h-[36px] text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                 isActive
                   ? 'border-blue-600 bg-blue-600 text-white dark:border-blue-500 dark:bg-blue-500'
@@ -193,6 +204,17 @@ export const VersionSection: FC<VersionSectionProps> = ({
                   onExpired={refetchLimits}
                   size={12}
                   className={isActive ? 'ms-1 text-amber-200' : 'ms-1'}
+                />
+              )}
+              {retirement && (
+                <IconClockHour4
+                  size={12}
+                  aria-label={t('retiring.badge')}
+                  className={`ms-1 inline-block align-[-1px] ${
+                    isActive
+                      ? 'text-amber-200'
+                      : 'text-amber-600 dark:text-amber-400'
+                  }`}
                 />
               )}
               {showTiers && (

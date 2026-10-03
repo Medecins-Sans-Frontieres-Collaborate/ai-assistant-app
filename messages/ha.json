@@ -865,7 +865,10 @@
       "codeInterpreterLimitReached": "An kai iyakar amfani da lambar yau — amsawa ba tare da gudanar da lamba…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "Bincike a cikin tushen ilimi ya gaza — amsar ba za ta yi amfani da takardun wakilin ba",
-      "stillWorking": "Har yanzu ana aiki…"
+      "stillWorking": "Har yanzu ana aiki…",
+      "assessingSearchResults": "Ana duba ko sakamakon ya amsa tambayar...",
+      "refiningSearch": "Ana sake bincike: “{query}”...",
+      "readingSearchPages": "Ana karanta shafuka {count} na sakamako..."
     },
     "toolSummary": {
       "usedTools": "An yi amfani da {count, plural, one {# kayan aiki} other {# kayan aiki}}",
@@ -951,7 +954,10 @@
       "summarizeNow": "Takaita daga kanun labarai yanzu",
       "sourcesCount": "Madauki {count}",
       "showAll": "Nuna duk madauki {count}",
-      "showFewer": "Nuna kaɗan"
+      "showFewer": "Nuna kaɗan",
+      "multiStepTitle": "Sakamakon da aka samu zuwa yanzu — ana duba ko sun amsa tambayar",
+      "multiStepHint": "Binciken na iya ci gaba — wani bincike ko karanta shafukan da suka fi yiwuwa. Idan ba kwa son jira, ku bada amsa daga cikin sakamakon {count} da aka riga aka samo.",
+      "answerNow": "Amsa daga cikin wadannan sakamako yanzu"
     },
     "retryWithModel": "Gwada da {model}",
     "createTodoTasks": "Ƙirƙira ayyukan To Do daga wannan amsa",
@@ -965,7 +971,10 @@
     "modelTimedOutAtMaximum": "{model} bai fara amsawa cikin {duration} ba, mafi tsawon lokaci da za a iya jira. Gwada sake tura, ko ka gwada wani model ɗin.",
     "requestTimedOut": "Wannan buƙatar ta ɗauki lokaci mai tsawo kafin a gama tanadi, aka dakatar kafin {model} ya amsa. Za ka iya ƙara lokaci, ko ka gwada wani model ɗin.",
     "retryWaitingLonger": "Jira har zuwa {duration} ka sake gwadawa",
-    "alwaysWaitThisLong": "Ko da yaushe a jira har zuwa {duration}"
+    "alwaysWaitThisLong": "Ko da yaushe a jira har zuwa {duration}",
+    "keepSearching": "Ci gaba da bincike",
+    "keepSearchingHint": "Binciken ya tsaya kafin a samo wannan. Tambayi mataimaki ya gwada wata hanya daban.",
+    "keepSearchingMessage": "Don Allah, ci gaba da bincike — gwada wata hanya daban."
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1450,7 +1459,9 @@
       "providerBingResponsesDescription": "Irin wannan rufin yanar gizo na Bing kamar Bing grounding, ana gudanar da shi a matsayin kira guda daya na samfurin kai tsaye maimakon Foundry agent — yawanci yafi sauri. Sabon zaɓi da ake duba dacewarsa da Bing grounding.",
       "providerSearxng": "Binciken yanar gizo na MSF",
       "providerSearxngDescription": "Sabis ɗin bincike na MSF mai zaman kansa. Yana rufe yanar gizo gabaɗaya, labarai, wallafe-wallafen kimiyya (ciki har da na MSF), takardun fasaha da bayanan jin ƙai, kuma yana zaɓar asalin da ya dace da kowace tambaya. Sakamako na isa cikin 'yan daƙiƙa tare da haɗin kai tsaye, kuma kawai tambayar bincike ce ke barin manhaja — injunan bincike ba sa ganin ku.",
-      "otherProvidersLabel": "Sauran masu samarwa"
+      "otherProvidersLabel": "Sauran masu samarwa",
+      "multiStepLabel": "Bincike mai matakai da dama",
+      "multiStepDescription": "Tare da binciken yanar gizo na MSF, mataimaki zai duba sakamakon farko kuma idan ba su wadatar ba zai sake bincike ko karanta shafukan da suka fi yiwuwa kafin ya bada amsa. Yawancin tambayoyi har yanzu suna karewa mataki guda. Kashe wannan don dukan bincike ya tsaya a zagaye daya."
     },
     "Admin": "Admin",
     "Usage Limits": "Iyakar amfani",
@@ -1470,7 +1481,8 @@
       "customHint": "Tsakanin {min} da {max} daqiqa.",
       "preferModelTitle": "Fi son samfurin da na zaɓa",
       "preferModelDescription": "Kar a sauya zuwa wani model kai tsaye lokacin da akayi kuskure. Za a ci gaba da nuna zaɓin sauyawa a kuskuren."
-    }
+    },
+    "Analytics": "Nazari"
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -1678,6 +1690,12 @@
     },
     "subVariant": {
       "label": "Girma"
+    },
+    "retiring": {
+      "badge": "Ana cirewa",
+      "datedMoving": "Za a cire ranar {date}. Hira a kanta za ta motsa zuwa {successor} ranar {movesOn}.",
+      "dated": "Za a cire ranar {date} kuma zai daina aiki. Yi amfani da {successor} maimakon haka.",
+      "replaced": "Ana sauyawa da {successor}."
     }
   },
   "models": {
@@ -1974,6 +1992,11 @@
       "name": "GPT-6 Astra",
       "description": "Babban samfurin OpenAI GPT-6. An gina shi don aikace-aikace masu wahala: bincike mai zurfi, nazari mai rikitarwa, injiniyan software, da dogayen ayyuka masu matakai da yawa. Kusan sau biyu mafi tsada fiye da GPT-5.6 Sol.",
       "tagline": "Samfurin da ya fi ƙarfin OpenAI"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "Sabuntawa zuwa GPT-6 Sol don ayyuka masu tsauri a lambar kwamfuta, takardu, da aikace-aikace. Kusanci da ƙwarewar Astra amma farashi ƙanƙani sosai bisa adadin token.",
+      "tagline": "Kusan ƙwarewar Astra, farashi ƙasa sosai"
     }
   },
   "searchMode": {
@@ -5424,7 +5447,10 @@
       "announcements": "Saƙonnin banner ga masu amfani: wa zai gani, yaushe, da kuma cikin wane yare.",
       "delegations": "Wa ke kula da waɗanne masu amfani, da abin da kowannensu zai iya yi.",
       "channelProfiles": "Menene kowace manhaja: iyakokinta, yadda ake lissafi, da threads. Muhimman bayanai na ƙungiya gabaɗaya da kowanne saitin tashoshi ke amfani da su.",
-      "channelSets": "Dokokin kowace ƙungiya don rubutu a manhajoji: jagora, salo, tsoffin saituna, wa zai iya amfani da wannan saiti da wa zai iya tura saƙonni."
+      "channelSets": "Dokokin kowace ƙungiya don rubutu a manhajoji: jagora, salo, tsoffin saituna, wa zai iya amfani da wannan saiti da wa zai iya tura saƙonni.",
+      "webSearch": "Inda binciken yanar gizo zai iya kaiwa: bincike mai matakai da dama, tsarin tantancewa, da iyakokinsa.",
+      "contextBudget": "Yawan tarihin hira da kowanne tsarin za a tura a kowane zagaye.",
+      "analytics": "Rahotannin da aka isar: abin da ya iso, wanda zai iya bude kowane fayil, da wadanne filaye za a iya nuna su."
     },
     "openSettings": "Buɗe saituna",
     "area": {
@@ -5432,7 +5458,10 @@
       "viewAs": "Duba a matsayin",
       "globalAdmins": "Manyan masu gudanarwa",
       "announcements": "Sanarwa",
-      "delegations": "Wakilai"
+      "delegations": "Wakilai",
+      "webSearch": "Binciken yanar gizo",
+      "contextBudget": "Kasafin mahallin hirar",
+      "analytics": "Nazari"
     }
   },
   "limits": {
@@ -6766,7 +6795,8 @@
     "capabilitiesHint": "Abin da wannan wakili zai iya bayarwa gaba daya. Masu gudanarwa za su takaita da abin da aka kunna anan kawai.",
     "grant": {
       "limits": "Iyaka amfani",
-      "announcements": "Sanarwa"
+      "announcements": "Sanarwa",
+      "analytics": "Nazari"
     },
     "grantAll": "Duka",
     "maxOverrides": "Adadin sauye-sauye da wannan wakili zai iya samuwa",
@@ -6927,5 +6957,540 @@
     "isDefaultAfterSave": "Za ka iya saita wannan a matsayin tsoho bayan adanawa.",
     "noChannelsWarning": "Wannan saitin baya da wata tasha; ba wanda zai iya yin zane da shi.",
     "audienceEveryoneHint": "Duk wanda ke cikin ƙungiyar zai iya yin zane da wannan saitin."
+  },
+  "contextBudgetAdmin": {
+    "title": "Kasafin mahallin hirar",
+    "description": "Yawan tarihin hira da kowanne tsarin ke samu a zagaye. Saƙonni na ƙarshe koyaushe ana saka su; tsofaffi za a cire idan kasafin ya cika, kuma taƙaitaccen abin da aka cire na bayyana a faɗar tsarin. Kasafi mai girma yana ƙara ɓangaren hira mai tsawo, amma yana da tsada a zagaye.",
+    "scopeNote": "Ya shafi kowace hira a kowanne tsarin. Kasafin ba zai taba wuce rabon taga tsarin da aka sa a ƙasa ba.",
+    "loading": "Ana loda kasafin mahallin hira...",
+    "loadError": "Ba a iya lodawa kasafin mahallin hirar ba.",
+    "configUnavailable": "Ba a iya karanta kasafin mahallin hirar da aka ajiye a yanzu, don haka ƙimar da ke ƙasa bazai zama abin amfani ba. Sake gwadawa kafin gyarawa.",
+    "retry": "Sake gwadawa",
+    "historyTokensLabel": "Kasafi na al'ada (tokens)",
+    "historyTokensDescription": "Tarihi da ake tura a zagaye, har da faɗar tsarin, ga tsarin da ba a ware masa ba. Kusan 48,000 yana riƙe da mu'amalar 30 zuwa 60 ta irin gargajiya.",
+    "historyFractionLabel": "Iyaka (rabo na dakin shigar da tsarin)",
+    "historyFractionDescription": "Kasafi yana ladan da wannan rabo na taga tsarin, bayan an cire na fitowa, don haka ba za a nemi tsarin ƙanana da yawa fiye da abin da zai iya dauka ba.",
+    "minRecentMessagesLabel": "Sako da za a rike koyaushe",
+    "minRecentMessagesDescription": "Saƙonni na ƙarshe da ake rike ko da an wuce kasafi (a cikin taga). Uku suna rike musayar baya idan saƙon ƙarshe kadai — kamar takarda da aka manna, ko sakamakon bincike — zai cika kasafi.",
+    "familyOverridesLabel": "Dangane da iyali",
+    "familyOverridesDescription": "Kasafi ga kowanne tsarin a cikin iyali, wanda zai sauya na al'ada.",
+    "modelOverridesLabel": "Dangane da tsarin guda",
+    "modelOverridesDescription": "Kasafi ga tsarin guda, wanda zai sauya na iyali da na al'ada.",
+    "overrideFamilyPlaceholder": "Iyali",
+    "overrideModelPlaceholder": "Model id",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "Ƙara",
+    "removeOverride": "Cire",
+    "noOverrides": "Babu",
+    "effectiveLabel": "Kasafin aiki da waɗannan saitunan",
+    "effectiveColumnModel": "Tsarin",
+    "effectiveColumnWindow": "Tagar",
+    "effectiveColumnBudget": "Kasafin tarihi",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "Tsoho: {value}",
+    "defaultsNote": "Ana ajiye ƙimar da ta bambanta da tsoffin dabi'u kawai; sauran abubuwa za su ci gaba da amfani da tsofin dabi'u na lambar kowane fitowa.",
+    "save": "Ajiye",
+    "saving": "Ana ajiyewa…",
+    "resetDefaults": "Mayar da tsoffin dabi'u",
+    "unsaved": "Canje-canje ba a ajiye ba",
+    "saveSuccess": "An ajiye kasafin mahalli. Zai fara aiki cikin minti guda.",
+    "saveError": "Ba a samu ajiye kasafin mahalli ba.",
+    "conflictError": "Wani mai gudanarwa ya sauya kasafin mahalli a wannan lokacin; an ɗora sabbin ƙimomi.",
+    "updatedByLine": "Na ƙarshe da {by} ya ajiye a {at}",
+    "neverSaved": "Ba a taɓa ajiye ba — ana amfani da tsofin dabi'un lamba."
+  },
+  "webSearchAdmin": {
+    "title": "Binciken yanar gizo",
+    "description": "Yana sarrafa bincike mai matakai da dama a binciken yanar gizo na MSF. Bayan sakamakon farko, samfurin mai tantancewa zai yanke hukunci ko sun amsa tambayar; idan ba haka ba, zai iya sake bincika da tambayoyi daban, duba shafukan sakamako, tambayar mai amfani don ƙarin bayani ko kuma bayar da rahoto cewa babu abin da aka samu.",
+    "scopeNote": "Wadannan saituna sun shafi binciken yanar gizo na MSF kawai. Sauran masu samar da bincike kullum rundaya ce ɗaya. Kowane mutum zai iya kashe bincike mai matanaki ta Saituna.",
+    "loading": "Ana ɗora saitunan binciken yanar gizo…",
+    "loadError": "Ba a samu ɗora saitunan binciken yanar gizo ba.",
+    "configUnavailable": "Ba za a iya karanta saitunan binciken yanar gizo daga ma'ajiyar bayanai ba. An ɓoye sarrafawa, maimakon a nuna su da tsoffin dabi'u da ba lalle su dace da abin da ake amfani da shi ba.",
+    "retry": "Sake ƙoƙari",
+    "enabledLabel": "Bincike mai matakai da yawa",
+    "enabledDescription": "Idan an kashe, kowanne bincike rundaya ɗaya ce, ba a kira samfurin mai tantancewa.",
+    "assessorLabel": "Samfurin mai tantancewa",
+    "assessorDescription": "Ana kira sau daya bayan duk mataki don tantance sakamakon. Zaɓi samfurin da ke da sauri, mai arha: yana aiki yayin da mai amfani ke jira. Idan ba za a iya kaiwa gare shi ba, ana amfani da {fallback}.",
+    "maxStepsLabel": "Matakai ga kowace tambaya",
+    "maxStepsDescription": "Yawan matakai mafi yawa da tambaya guda zata iya dauka, har da binciki na farko. Kowanne ƙarin bincike ko karanta shafuka lokaci guda mataki ne ɗaya. Wannan iyaka daban take da iyakar binciken yau da kullum, wadda takan ƙididdige tambaya ɗaya kacal.",
+    "maxStepsExploratoryLabel": "Matakai don bincike na ƙari",
+    "maxStepsExploratoryDescription": "Iyaka mafi girma ga neman abu ɗaya mai wahalar samu, irin su kwafin wani littafi da ba kowa da shi, inda ake iya tsammanin a shiga kangi. Ba zai iya zama ƙasa da iyakar al'ada ba.",
+    "pageReadsLabel": "Karanta shafukan sakamako",
+    "pageReadsDescription": "Matsayi zai iya buɗe mafi kyawun sakamako ya karanta shafin da kansa, maimakon dogaro da gajerun bayanan bincike.",
+    "maxPageReadsLabel": "Shafuka kowane karatu",
+    "sourceAssessmentLabel": "Tantance ingancin tushe",
+    "sourceAssessmentDescription": "Mai tantancewa yana sanya alamomi wa kowanne tushe (hukuma, sananne, na biyu, ƙarancin sahihanci) don a iya kimanta su a amsa.",
+    "timeBudgetLabel": "Kasafin lokaci (daƙiƙu)",
+    "timeBudgetDescription": "Jimlar lokaci da bincike guda zai dauka, har da mataki na farko. Idan lokaci ya ƙare, za a rubuta amsa daga abin da aka samu.",
+    "defaultsNote": "Saitin da aka bar a tsohon ƙimarsa ba za a ajiye shi ba, don haka zai rika amfani da tsoffin ƙima idan abin canji ya faru a gaba.",
+    "defaultHint": "Tsoho: {value}",
+    "defaultOn": "a kunne",
+    "defaultOff": "a kashe",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "Kana da sauye-sauyen da ba a ajiye ba.",
+    "save": "Ajiye",
+    "saving": "Ana ajiyewa…",
+    "resetDefaults": "Mayar da tsoffin dabi'u",
+    "saveSuccess": "An ajiye saitunan binciken yanar gizo.",
+    "saveError": "Ba a samu ajiye saitunan binciken yanar gizo ba.",
+    "conflictError": "Wani mai gudanarwa ya canza saitunan tun farko. An sake ɗora su — don Allah duba su kuma ajiye.",
+    "updatedByLine": "Na ƙarshe da {by} ya ajiye a {at}.",
+    "neverSaved": "Babu abin da aka taɓa ajiye; ana amfani da tsoffin dabi'u."
+  },
+  "modelRetirement": {
+    "notice": "{model} zai daina aiki daga {retiresOn}. Wannan tattaunawar za ta koma {successor} a ranar {movesOn}.",
+    "noticeRetiring": "{model} zai daina aiki daga {retiresOn} kuma za a dakatar da shi. Yi amfani da {successor} don ci gaba da wannan tattaunawar.",
+    "switchNow": "Canza yanzu"
+  },
+  "analytics": {
+    "title": "Nazari",
+    "backToChat": "Komawa zuwa hira",
+    "manage": "Sarrafawa",
+    "loading": "Ana loda…",
+    "loadFailed": "Ba a samu loda rahotannin ba.",
+    "retry": "Sake gwadawa",
+    "emptyTitle": "Ba a raba komai da kai zuwa yanzu",
+    "emptyBody": "Rahotanni za su bayyana a nan idan mai gudanarwa ya baka damar zuwa wani fayil.",
+    "deliveryUnavailable": "Ba za a iya samun rahoton yanzu ba, don haka jeri a kasa zai iya fanko. Gwada sake a wasu mintuna.",
+    "groupsDegraded": "Ba a duba membobin rukunanka ba yanzu, don haka wasu fayilolin da aka raba da rukunnanka na iya bacewa. Sabunta bayan minti daya.",
+    "foldersHeading": "Fayiloli",
+    "rootFolder": "Dukkan rahotanni",
+    "pathOnly": "Ba ka da damar shiga wannan fayil din, sai dai kwantena a ciki.",
+    "selectFolder": "Zaɓi fayil don ganin rahotanninsa.",
+    "noFiles": "Babu rahoto a cikin wannan fayil din.",
+    "viewOnlyNote": "Kana da damar duba wannan fayil: zaka iya buɗe rahotanni, ganinsu da teburin taƙaitawa. Tebur da shafi ɗaya kowanne mutum, fitarwa da saukewa su na bukatar damar saukewa.",
+    "col": {
+      "name": "Fayil",
+      "period": "Lokaci",
+      "delivered": "An kawo",
+      "size": "Girma",
+      "availableUntil": "Ana samu har zuwa",
+      "actions": "Ayyuka"
+    },
+    "download": "Sauke",
+    "downloadAria": "Sauke {name}",
+    "block": {
+      "view-only": "Duba kawai",
+      "hidden-fields": "Asalin an adana (sassan da aka boye)",
+      "unclassified-fields": "Asalin an adana (sassan da ke jiran duba)",
+      "not-inspected": "Ba a duba ba tukuna",
+      "policy-unavailable": "Ba a samu yanzu ba"
+    },
+    "adminBadge": {
+      "error": "An boye daga masu amfani",
+      "pending": "Ana duba",
+      "warning": "Yana da gargadi",
+      "expired": "Ya ƙare, yana jiran gogewa",
+      "originalBlocked": "Masu amfani ba za su iya sauke ba: {reason}"
+    },
+    "openAria": "Buɗe {name}",
+    "openForExport": "Buɗe don fitarwa",
+    "preview": {
+      "back": "Komawa zuwa {folder}",
+      "tabsLabel": "Teburai a cikin wannan fayil",
+      "lockedTab": "{name} (an kulle)",
+      "unavailable": "Ba za a iya buɗe wannan fayil a cikin manhaja yanzu ba.",
+      "tableFailed": "Ba a samu lodawa wannan tebur ba.",
+      "withheld": {
+        "row-level": "Wannan tebur yana da shafi ɗaya kowanne mutum. Buɗewa na bukatar damar sauke fayil.",
+        "hidden-fields": "Wannan shafi yana dauke da sashi da aka boye, don haka ba za a nuna shi ba."
+      },
+      "truncated": "Ana nuna shafi {shown, number} na farko daga cikin {total, number}. Sauke teburin don samun duka.",
+      "freeformNote": "Wannan shafi an tanada shi don karantawa kuma ana nuna shi kamar yadda aka kawo.",
+      "filter": "Tace shafuka",
+      "filterPlaceholder": "Tace layuka…",
+      "rows": "{count, plural, one {# layi} other {# layuka}}",
+      "matching": "{count, number} daga cikin {total, number} layuka sun dace",
+      "modeLabel": "Nuna a matsayin",
+      "mode": {
+        "table": "Jadawali",
+        "chart": "Jadawalin zane"
+      },
+      "noRows": "Babu layuka da za a nuna.",
+      "hiddenColumn": "An ɓoye daga masu amfani",
+      "exportCsv": "Fitar da wannan jadawali (CSV)",
+      "exportXlsx": "Fitar da dukan jadawalai (Excel)",
+      "downloadOriginal": "Sauke asali",
+      "exportNote": "Fayil ɗin da aka bayar yana dauke da filayen da aka ɓoye, don haka ba zai iya saukewa yadda yake ba. Fitarwa ba su da waɗannan filayen.",
+      "sectionLabel": "Nuna",
+      "section": {
+        "overview": "Bayanan gaba ɗaya",
+        "tables": "Jadawalai"
+      }
+    },
+    "chart": {
+      "groupBy": "Rarraba bisa",
+      "measure": "Auna",
+      "rowCount": "Adadin layuka",
+      "aggregation": "Lissafa",
+      "agg": {
+        "sum": "Jimilla",
+        "mean": "Matsakaici",
+        "min": "Mafi ƙanƙanta",
+        "max": "Mafi girma"
+      },
+      "ariaLabel": "{measure} bisa {group}",
+      "noColumns": "Wannan jadawali ba shi da rubutu ko kwanan wata da za a iya rarraba.",
+      "empty": "Babu abin da za a fitar da zane don wannan zaɓin.",
+      "truncatedGroups": "Ana nuna manyan rukuni {count}.",
+      "basedOn": "An danganta da farko {shown, number} daga {total, number} layuka.",
+      "savePng": "Ajiye a matsayin hoto",
+      "saveSvg": "Ajiye a matsayin SVG",
+      "saveFailed": "An kasa ajiye jadawalin zane."
+    },
+    "dash": {
+      "loading": "Ana loda…",
+      "failed": "An kasa loda bayanin gaba ɗaya.",
+      "retry": "Sake gwadawa",
+      "showTable": "Nuna a matsayin jadawali",
+      "showChart": "Nuna a matsayin jadawalin zane",
+      "smallGroups": "Rukuni na kasa da mutane 5",
+      "foldedNote": "An haɗa rukuni na kasa da mutane 5 a layi guda.",
+      "otherCount": "{count, plural, one {# wasu} other {# wasu}}",
+      "hiddenPanel": "An ɓoye ta saitunan fili.",
+      "missingPanel": "Ba ya samuwa ga wannan fayil.",
+      "usage": {
+        "users": "Mutane masu amfani",
+        "interactions": "Mu'amala",
+        "avgPerUser": "Matsakaici ga mutum daya",
+        "medianPerUser": "Tsaka-tsaki ga mutum daya",
+        "hq": "A hedikwata",
+        "field": "A filin aiki",
+        "shareUsers": "{pct}% na masu amfani {comparator}",
+        "shareUsage": "{pct}% na amfani {comparator}",
+        "comparator": "{comparator}: {value}",
+        "daily": "Mu'amaloli a kowace rana",
+        "dailyUsers": "Mutanen da ke aiki a kowace rana",
+        "dailyUsersSub": "Dangane da wurin aiki",
+        "weekly": "Mu'amaloli a kowace mako",
+        "activity": "Yawan amfani da mutane",
+        "activitySub": "Mutane, bisa adadin mu'amalolinsu a cikin lokaci",
+        "departments": "Mu'amaloli ta sashen",
+        "jobTitles": "Mu'amaloli ta matsayin aiki",
+        "models": "Abubuwan da suka faru ta samfur",
+        "total": "Dukkan wurare",
+        "location": {
+          "hq": "Hedikwata",
+          "field": "Fili",
+          "unknown": "Ba a sani ba"
+        },
+        "col": {
+          "date": "Rana",
+          "week": "Fara mako",
+          "users": "Mutane",
+          "interactions": "Mu'amaloli",
+          "events": "Abubuwan da suka faru",
+          "group": "Rukuni",
+          "band": "Mu'amaloli"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "Jimillar da aka caje",
+        "usageVariable": "Kudin amfani mai sauyawa",
+        "staticInfra": "Tsayayyen kayan aiki",
+        "sections": "Bangarorin da aka caje",
+        "usageEvents": "Abubuwan amfani",
+        "bySection": "An caje bisa bangare",
+        "changes": "Canje-canje daga fayil na baya",
+        "noChanges": "Babu wani canji daga fayil na baya.",
+        "byDomain": "Abubuwan amfani ta mail domain",
+        "reconciliation": "Daidaitawa zuwa Azure",
+        "col": {
+          "section": "Bangare",
+          "billed": "An caje",
+          "usageEvents": "Abubuwan amfani",
+          "usagePct": "Amfani %",
+          "line": "Lay",
+          "amount": "Adadi",
+          "previous": "Fayil na baya",
+          "restated": "An sake bayyana",
+          "change": "Canji",
+          "domain": "Mail domain",
+          "users": "Mutane"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "An ƙirƙira da",
+        "delivered": "Assumptions na rahoton da kansa ({version})",
+        "current": "Assumptions na yanzu na app ({version})",
+        "whatIf": "Idan...?",
+        "deliveredUnavailable": "Ba a samu assumptions na rahoton daga shafin Assumptions ba, don haka na yanzu na app ake amfani da su.",
+        "whatIfIntro": "Canza wani adadi don ganin yadda zai shafi abubuwa da ke ƙasa. Ba a adana komai.",
+        "resetDelivered": "Mayar da zuwa na rahoton",
+        "resetCurrent": "Mayar da zuwa na yanzu na app",
+        "co2": "Hayaki",
+        "energy": "Makirci",
+        "charges": "Cajin wayar salula",
+        "chargesSub": "Da irin wannan sawun",
+        "activeUsers": "Mutane masu aiki",
+        "requests": "Buƙatu",
+        "tokens": "Takardun",
+        "vsDelivered": "{delta} da ƙididdigar rahoton",
+        "sameAsDelivered": "Daidai da ƙididdigar rahoton",
+        "unpriced": "{count, plural, one {# buƙata tana amfani} other {# buƙatu suna amfani}} da girman samfur da wannan ƙididdiga ba ta da lamba, kuma {count, plural, one {an bar} other {an bar su} } a waje.",
+        "byDepartment": "Fitarwa daga sashen",
+        "byModel": "Fitarwa daga samfur",
+        "gramsSub": "g CO₂e",
+        "reconciliation": "An ƙididdige a nan da na lokacin log",
+        "reconciliationSub": "App ɗin na ƙididdige kowace buƙata lokacin da ta faru. Duka biyun suna daidai idan ƙididdiga ɗaya ce.",
+        "computed": "An ƙididdige a nan",
+        "logged": "An log a cikin app",
+        "difference": "Banbanci",
+        "col": {
+          "group": "Rukunin",
+          "requests": "Buƙatu",
+          "tokens": "Takardun",
+          "energyWh": "Makirci (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "Kudin data-centre (PUE)",
+          "promptTokenWeight": "Nauyin takardun tambaya",
+          "dedicatedReasoningMultiplier": "Multiplier na mai hango",
+          "whPer1kTokens": "Wh kowane 1,000 takardun — {name}",
+          "reasoningEffortMultipliers": "Multiplier na ƙoƙarin nazari — {name}",
+          "gridIntensity": "Grid g CO₂e kowane kWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "Abubuwan da suka faru",
+        "users": "Mutane",
+        "tokens": "Takardun",
+        "errors": "Kuskure",
+        "energy": "Makirci",
+        "co2": "Fitarwa",
+        "hourly": "Abubuwan da suka faru kowane awa (UTC)",
+        "byType": "Abubuwan da suka faru da iri",
+        "byError": "Kuskure da lamba",
+        "byModel": "Takardun da samfur",
+        "byCompany": "Abubuwan da suka faru da ƙungiya",
+        "none": "Babu.",
+        "col": {
+          "group": "Rukunin",
+          "events": "Abubuwan da suka faru",
+          "tokens": "Takardun",
+          "hour": "Awa"
+        }
+      },
+      "trend": {
+        "title": "A tsawon lokaci",
+        "period": "Lokaci",
+        "users": "Mutane masu aiki kowane rahoto",
+        "interactions": "Mu'amala kowane rahoto",
+        "billed": "Jimillar da aka caji kowane lokaci",
+        "sections": "Caji da sashi",
+        "otherSections": "Sauran sassan duka",
+        "co2": "Hayakin CO₂ a kowane rahoto",
+        "energy": "Wutar lantarki a kowane rahoto",
+        "recalculated": "Ana lissafin kowane zangon lokaci da sabbin zato na wannan manhaja ({version}), don haka sauyin zato tsakanin rahotanni ba zai bayyana a matsayin sauyi a hayaki ba.",
+        "severalPerPeriod": "Wannan fayil ɗin na ɗauke da rahotanni da dama na lokaci guda. Buɗe wani keɓaɓɓen fayil cikinta don ganin yadda rahoton ke sauyawa da lokaci."
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "Nazari",
+    "description": "Ana kai rahotanni zuwa ajiya ta hanyar bututun bayanai. Anan zaka duba abin da aka kawo, kayyade wanda zai iya buɗe kowane fayil, kuma ka zaɓi filin da dandalin zai iya nuna.",
+    "openViewer": "Buɗe nazari",
+    "sharedNotice": "Beta da samfur na raba waɗannan fayiloli, masu sauraro da fayilolin su. Duk sauyi da aka ajiye anan zai shafi duka biyun.",
+    "tabsLabel": "Sassan nazari",
+    "tab": {
+      "health": "Isar da kayayyaki",
+      "folders": "Fayiloli & izini",
+      "fields": "Filaye"
+    },
+    "loading": "Ana loda…",
+    "retry": "Sake gwadawa",
+    "loadError": "An kasa loda wannan sashin.",
+    "unavailable": "Ba a iya karanta saitunan da aka adana daga ajiya ba. Wannan BA daidai bane da \"ba a saita komai ba\" — an toshe gyarawa domin kada a maye gurbin saituna na gaskiya. Sake gwadawa, kuma duba bayanan uwar garken idan matsalar ta ci gaba.",
+    "save": "Ajiye",
+    "saving": "Ana ajiye…",
+    "unsaved": "Sauye-sauyen da ba a ajiye ba",
+    "saveSuccess": "An ajiye.",
+    "saveError": "An kasa ajiye.",
+    "conflictError": "Wani mai gudanarwa ya canza waɗannan saituna yayin da kake gyarawa. Ba a adana canje-canjinka ba — an sabunta zuwa sabon sigar.",
+    "rootFolder": "(babban mataki)",
+    "scope": {
+      "domain": "Yankin imel",
+      "user": "Mutum",
+      "attribute": "Siffa",
+      "group": "Rukunin Entra"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "Entra group object id"
+    },
+    "level": {
+      "view": "Duba taƙaice",
+      "download": "Duba, fitarwa da sauke"
+    },
+    "reportType": {
+      "usage": "Rahoton amfani",
+      "rebilling": "Sake lissafin kudi",
+      "emissions": "Rahoton hayaki",
+      "raw-telemetry": "Asalin bayanan nesa"
+    },
+    "field": {
+      "userCode": {
+        "label": "Lambar mai amfani",
+        "description": "Lambar u-… da ke wakiltar mutum guda ba tare da an bayyana sunansa ba."
+      },
+      "jobTitle": {
+        "label": "Matsayin aiki",
+        "description": "Matsayin aiki, ciki har da wanda aka fi amfani da shi a takardun taƙaice. A ƙungiya ƙanana, suna na iya nuna mutum guda."
+      },
+      "department": {
+        "label": "Sashe",
+        "description": "Sassan aiki, ciki har da wanda aka fi amfani da shi a takardun taƙaice."
+      },
+      "company": {
+        "label": "Kamfani / ƙungiya",
+        "description": "Sunan ƙungiyar daga kundin adireshi, da sunayen kamfanoni a takardun sake lissafi."
+      },
+      "orgGroup": {
+        "label": "Rukunin ƙungiya",
+        "description": "Cibiyar aiki ko rukunin da aka rarraba rahoto a kai."
+      },
+      "section": {
+        "label": "Sashe",
+        "description": "Sashen dawo da kudi da layin sake lissafi ya shafa."
+      },
+      "mailDomain": {
+        "label": "Yanki na imel",
+        "description": "An danganta amfani da yankin imel, ba adireshi ba."
+      },
+      "workLocation": {
+        "label": "Wurin aiki",
+        "description": "Hedikwata ko filin aiki."
+      },
+      "technical": {
+        "label": "Cikakkun bayanai na fasaha",
+        "description": "Samfuri, yanki, nau'in taron, kudin kasa da wasu bayanai makamanta haka da ba su bayyana mutum ba."
+      },
+      "other": {
+        "label": "Sauran filayen bayanin",
+        "description": "Inda kake rubuta ginshiki wanda ba ya dace da kowane daga cikin waɗannan."
+      }
+    },
+    "folders": {
+      "intro": "An jera kowanne babban fayil da bututun ya sauke bayanai ciki. Babban fayil da ba shi da saituna — kuma babu babban fayil a sama da ke ba da izini — masu gudanarwa kawai za su gani.",
+      "name": "Sunan nuna",
+      "namePlaceholder": "Ana nuna shi maimakon hanyar babban fayil",
+      "description": "Bayanin",
+      "reportType": "Nau’in rahoto",
+      "reportTypeNone": "Babu tsari",
+      "reportTypeInherited": "Gadaddu: {type}",
+      "reportTypeHint": "Yana bayyana wa mai gwaji irin sunayen fayilolin da ake sa ran gani da yawan kawo su. Ana amfani da wannan ga manyan fayilolin da ke cikin wannan.",
+      "retention": "Ajiye fayiloli na (watanni)",
+      "retentionHint": "Barshi babu komai don gado watanni {months}. Ana kirgawa daga ƙarshen kowanne zangon rahoto.",
+      "audience": "Wa zai iya buɗe wannan babban fayil",
+      "audienceHint": "Kowane layi yana ba da dama ga wannan babban fayil da manyan fayilolin da ke cikinsa. Ɗaya ga kowane layi.",
+      "audienceScope": "Nau'in manufa",
+      "audienceTargets": "Manufofi",
+      "audienceLevel": "Matsayin damar shiga",
+      "addAudience": "Ƙara mutane ko ƙungiyoyi",
+      "removeAudience": "Cire wannan layin",
+      "restricted": "Kada a gaji damar shiga daga manyan fayilolin sama",
+      "restrictedHint": "Sai dai layukan da ke wannan babban fayil ne za su shafi nan da ƙasa.",
+      "hiddenFields": "Kuma a ɓoye a wannan babban fayil",
+      "hiddenFieldsHint": "Filayen da aka ɓoye a nan a kan saiti na dandali, domin wannan babban fayil da na ciki. Za ka iya ƙara ɓoye, ba za a ƙara bayyana ba.",
+      "hiddenPlatformWide": "(an ɓoye ko’ina)",
+      "clear": "Cire saitunan wannan babban fayil",
+      "rawChip": "Raw: manyan masu gudanarwa kawai",
+      "rawNote": "Raw telemetry na ɗauke da sunaye, adireshin imel da sunayen fayiloli. Manyan masu gudanarwa ne kaɗai za su iya buɗe su, kuma ba a iya ƙara manufa.",
+      "audienceChip": "{count, plural, one {layin damar shiga #} other {layukan damar shiga #}}",
+      "restrictedChip": "Ba a gaji ba",
+      "notConfiguredChip": "Babu saituna",
+      "addPathLabel": "Saita babban fayil kafin isarwa ta farko",
+      "addPath": "Ƙara",
+      "addPathHint": "Hanyar daidai kamar yadda pipeline zai rubuta, misali usage/ocba. Wannan zai ajiye saituna ne kawai; ba ya ƙirƙirar komai a ajiya.",
+      "invalidPath": "Wannan ba sahihin hanyar babban fayil ba ne.",
+      "rawGlobalOnly": "Manyan masu gudanarwa kawai za su iya saita manyan fayiloli a ƙarƙashin raw/."
+    },
+    "fields": {
+      "intro": "Zaɓi filayen rahotannin da dandali zai iya nuna. ɓoye fili zai cire shi daga duk abin da aka nuna a cikin manhaja da kuma daga fitarwar da manhaja ke samarwa. Masu gudanarwa ne kawai za su iya sauke fayil ɗin da aka bayar.",
+      "readOnly": "Manyan masu gudanarwa kawai za su iya canza wannan. A matsayinka na mai kula da nazari, za ka iya ƙara ɓoye filayen cikin duk babban fayil, a karkashin Manyan fayiloli & damar shiga.",
+      "configurableHeading": "Filaye",
+      "shown": "Ana nuna",
+      "hidden": "An ɓoye",
+      "jobTitleNote": "Idan an nuna taken aiki, kwafi ɗaya a ƙananan ƙungiya na iya bayyana mutum ko da a ƙarƙashin lambar mai amfani. Zane-zane suna ɓoye iftila'in da ke ƙasa da mutum biyar; teburin da aka sauke ba haka ba.",
+      "neverHeading": "Ba a taɓa nuna ba",
+      "neverBody": "Sunaye, adireshin imel, lambar kundin adireshi, sunayen fayil da aka loda da rubutun kuskure ba a taɓa nuna su ba a wajen raw telemetry. Dukkan rahoton da ya ƙunshi daya daga cikinsu an ɓoye shi daga masu amfani har sai an maye gurbinsa.",
+      "unclassifiedHeading": "Ginshikan da katalog bai sani ba",
+      "unclassifiedBody": "Kolo na rubutu da ba a gane ba zai kasance ɓoye — a cikin app da kuma fitarwa — sannan masu amfani ba za su iya sauke fayil ɗin da aka kawo ba, sai an sakashi a cikin wani filin.",
+      "noneWaiting": "Ba abin da ke jiran.",
+      "inFiles": "{count, plural, one {a cikin fayil ɗaya} other {a cikin fayil #}}",
+      "classifyAs": "Filin don kolo {column}",
+      "keepHidden": "Ci gaba da ɓoye",
+      "removeClassification": "Cire saitin don kolo {column}"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "Ba a iya samowa ajiyar rahoto",
+      "deliveryUnavailableBody": "App ɗin bai iya samun jerin container \"{container}\" ba. Tabbatar da cewa yana akwai kuma app ɗin yana da damar data a kan shi. Har sai an daidaita, ba wani rahoto da ake nunawa ga kowa.",
+      "foldersUnavailable": "Ba a iya karanta saitin manya-manyan fayil, don haka yanzu masu amfani ba sa ganin manya-manyan fayil. Ba a duba ko gogewa fayiloli har sai wannan ya gyaru.",
+      "policyUnavailable": "Ba a iya karanta saitin filayen, don haka masu amfani ba za su iya sauke fayiloli yanzu ba.",
+      "total": {
+        "files": "Fayiloli",
+        "ok": "Lafiya",
+        "warning": "Tare da gargaɗi",
+        "error": "An ɓoye daga masu amfani",
+        "pending": "Ana duba"
+      },
+      "recheckAll": "Duba komai da farko",
+      "recheckOne": "Duba daga farko",
+      "recheckQueued": "{count, plural, one {An jera fayil ɗaya don duba.} other {An jera fayil # don duba.}}",
+      "recheckFailed": "Ba a iya fara duba ba.",
+      "retention": {
+        "active": "Fayiloli da suka wuce lokacin ajiyar manyan fayil ana ɓoye su nan take, daga bisani ana gogewa bayan {days} kwanaki.",
+        "disabled": "Fayiloli da suka wuce lokacin ajiyar manyan fayil ana ɓoye su, amma gogawa an dakatar da shi a wannan deployment.",
+        "waiting-for-config": "Fayiloli da suka wuce lokacin ajiyar da aka sa ana ɓoye su. Ba a gogewa har sai an adana saitin manyan fayil aƙalla sau ɗaya."
+      },
+      "noFiles": "Ba a kawo fayiloli zuwa yanzu.",
+      "allGood": "Duk abin da aka kawo yana lafiya.",
+      "problemsHeading": "Fayiloli da ke bukatar kulawa",
+      "status": {
+        "error": "An ɓoye daga masu amfani",
+        "warning": "Gargaɗi",
+        "pending": "Ana duba",
+        "ok": "Lafiya"
+      },
+      "pendingBody": "Sabon ko wanda aka maye gurbin tun bayan duba na ƙarshe. Zai bayyana ga masu amfani idan ya wuce duba.",
+      "firstSeen": "Na farko aka gani {date}",
+      "unclassifiedHeading": "Kolo da ke jiran shawara",
+      "unclassifiedBody": "Waɗannan kolo ba a gane su ba. Za su kasance ɓoye, kuma masu amfani ba za su iya sauke fayilolin da ke ɗauke da su ba, har sai wani ya sa kowanne a cikin filin.",
+      "unclassifiedChip": "{column} · {count, plural, one {fayil ɗaya} other {fayil #}}",
+      "openFields": "Je zuwa Filaye",
+      "unconfiguredHeading": "Manyan fayil masu babu saitin",
+      "unconfiguredBody": "Fayiloli na zuwa nan, amma babu wanda ya saita wannan babban fayil ko wanda yake sama da shi. Administrators kaɗai ke ganinsu.",
+      "staleHeading": "Jiragen da suka wuce lokaci",
+      "staleBody": "Waɗannan manyan fayil suna bukatar rahoto na kai tsaye kuma na ƙarshe ya fi tsohuwa fiye da yadda ya kamata.",
+      "staleDetail": {
+        "daily": "Kullum; na ƙarshe ya rufe {date}",
+        "monthly": "Kowanne wata; na ƙarshe ya ƙare {date}"
+      },
+      "staleNever": "Ba a kawo komai tukuna",
+      "expiringHeading": "Ana ƙarewa",
+      "expiringBody": "Fayiloli da suka wuce loko mai jiran lokaci ko waɗanda za su kai nan cikin kwanaki 30.",
+      "expiresOn": "Zai ƙare {date}",
+      "expiredOn": "Ya ƙare {date}"
+    },
+    "issue": {
+      "name-mismatch": "Sunan fayil ba yadda wannan babban fayil ke bukata ba (misali {expected}).",
+      "unsupported-format": "Fayiloli irin \"{extension}\" ba a iya duba su, don haka wannan an ɓoye shi daga masu amfani. Ka kawo .xlsx ko .csv.",
+      "too-large": "A {sizeMb} MB wannan fayil ya wuce iyaka na {limitMb} MB don duba, don haka an ɓoye shi daga masu amfani.",
+      "empty-file": "Fayil ɗin babu komai.",
+      "unreadable": "Ba a iya buɗe fayil ɗin ba. Yana iya lalacewa, ko ba shi da daidai dab'i kamar yadda sunansa ke nuna.",
+      "identifier-column": "Takardar \"{sheet}\" tana da ginshiƙi \"{column}\" da ke gano mutane. An ɓoye fayil ɗin daga masu amfani.",
+      "identifier-values": "\"{sheet}\" tana ƙunshe da {count, plural, one {adireshin imel ɗaya} other {adire-shoshin imel #}}. An ɓoye fayil ɗin daga masu amfani.",
+      "user-code-format": "Takardar \"{sheet}\", ginshiƙi \"{column}\": {count, plural, one {kima ɗaya ba} other {kimomi # ba}} su ne u-... user code. An ɓoye fayil daga masu amfani.",
+      "formulas-without-values": "Takardar \"{sheet}\" tana da {count, plural, one {ƙa'ida guda ɗaya} other {ƙa'idoji #}} ba tare da sakamakon ajiye ba, don haka ba za a iya nuna waɗannan bayanan a cikin manhaja ba.",
+      "missing-sheet": "Takardar \"{sheet}\" ba ta nan, don haka ba za a iya nuna ra'ayoyin da aka gina a kanta ba.",
+      "missing-column": "Takardar \"{sheet}\" ba ta da ginshiƙi \"{column}\", don haka ba za a nuna ra'ayoyin da ke amfani da shi ba.",
+      "no-period": "Sunan fayil ɗin bai ƙunshi lokaci na rahoto ba, don haka a ƙididdige riƙe bayanai daga ranar isarwa.",
+      "unclassified-field": "Ginshiƙi \"{column}\" ba a gane shi ba. Zai tsaya a ɓoye, kuma masu amfani ba za su iya sauke fayil ɗin da aka kawo ba, har sai an saka shi ƙarƙashin wani fili.",
+      "past-retention": "Ya wuce watanni {months} na adana bayanai a cikin wannan babban fayil; ba a ƙara nunawa ba.",
+      "unknown": "An bayar da rahoton matsala: {code}."
+    }
   }
 }

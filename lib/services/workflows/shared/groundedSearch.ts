@@ -1,9 +1,8 @@
 import { Session } from 'next-auth';
 
-import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { executeResponsesWebSearch } from '@/lib/services/chat/tools/responsesWebSearch';
 
-import { OpenAIModelID, OpenAIModels } from '@/types/openai';
+import { WorkflowCallUsage } from '@/types/workflowUsage';
 
 import { env } from '@/config/environment';
 
@@ -28,6 +27,8 @@ export interface GroundedSearchCitation {
 export interface GroundedSearchResult {
   text: string;
   citations: GroundedSearchCitation[];
+  /** The model call behind the answer, for the workflow's usage ledger. */
+  usage?: WorkflowCallUsage;
 }
 
 export interface GroundedSearchProvider {
@@ -42,49 +43,42 @@ export interface GroundedSearchProvider {
 }
 
 /**
- * The Foundry agent with Bing grounding (the original map-route path).
- * Mirrors ToolRouterEnricher.getAgentModelForSearch: the default search
- * agent must have a discovered agentId.
+ * Bing through the Responses API's native web_search tool, on the user's
+ * region — the one grounded-answer provider. No Foundry agent: the
+ * deployment is resolved per region by lib/services/models/webSearchModel.ts
+ * (the policy default, skipping anything that is retiring), so nothing here
+ * names a model or needs updating when one is retired.
  */
-export const bingAgentProvider: GroundedSearchProvider = {
-  id: 'bing-agent',
-  isAvailable: () => Boolean(OpenAIModels[OpenAIModelID.GPT_5_2]?.agentId),
+export const bingProvider: GroundedSearchProvider = {
+  id: 'bing',
+  isAvailable: () =>
+    Boolean(
+      env.AZURE_AI_FOUNDRY_ENDPOINT ||
+      env.AZURE_AI_FOUNDRY_ENDPOINT_US ||
+      env.AZURE_AI_FOUNDRY_ENDPOINT_EU,
+    ),
   async search(query, user, options) {
-    const model = OpenAIModels[OpenAIModelID.GPT_5_2];
-    const service = ServiceContainer.getInstance().getAgentChatService();
-    const result = await service.executeWebSearchTool({
-      searchQuery: query,
-      model,
-      user,
-      resultCount: options?.resultCount,
-    });
-    return { text: result.text, citations: result.citations };
-  },
-};
-
-/** The native web_search tool on the Responses API — no agent needed. */
-export const bingResponsesProvider: GroundedSearchProvider = {
-  id: 'bing-responses',
-  isAvailable: () => true,
-  async search(query, _user, options) {
+    let usage: WorkflowCallUsage | undefined;
     const result = await executeResponsesWebSearch({
       searchQuery: query,
       resultCount: options?.resultCount,
+      region: user?.region,
+      onUsage: (spent, modelId) => {
+        usage = { label: 'search', modelId, ...spent };
+      },
     });
-    return { text: result.text, citations: result.citations ?? [] };
+    return { text: result.text, citations: result.citations ?? [], usage };
   },
 };
 
 /**
  * Provider for the configured engine. Digest-only providers (searxng —
  * also the unset default — news, gdelt, google-news, combined) have no
- * grounded-answer form yet, so they resolve to the Bing agent exactly as
- * the map route always did.
+ * grounded-answer form yet, so every configuration resolves to Bing, as the
+ * map route always did.
  */
 export function resolveGroundedSearchProvider(): GroundedSearchProvider {
-  return env.WEB_SEARCH_PROVIDER === 'bing-responses'
-    ? bingResponsesProvider
-    : bingAgentProvider;
+  return bingProvider;
 }
 
 /**

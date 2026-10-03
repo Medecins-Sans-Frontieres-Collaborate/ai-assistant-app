@@ -39,7 +39,12 @@
  * Environment (.env.local is loaded automatically):
  *     AZURE_OPENAI_ENDPOINT or AZURE_AI_FOUNDRY_ENDPOINT: required.
  *     AZURE_TENANT_ID: tenant for the az CLI credential (cli auth mode).
- *     TRANSLATE_AUTH: "cli" (default) or "default".
+ *     TRANSLATE_AUTH: "cli" (default), "default", or "key".
+ *     AZURE_OPENAI_API_KEY: the account key, for TRANSLATE_AUTH=key — the
+ *       path that works when neither `az login` nor the app's service
+ *       principal has a data-plane role on the account. Fetch it with
+ *       `azp ctx run ai-assistant-dev -- cognitiveservices account keys list
+ *       -g rg-ts-aiassist-dev -n ts-aiassist-dev --query key1 -o tsv`.
  *     OPENAI_API_VERSION: Azure OpenAI API version override.
  */
 import {
@@ -542,12 +547,15 @@ function envString(name: string, fallback?: string): string | undefined {
  * → the app's DefaultAzureCredential chain, which also honours
  * AZURE_CLIENT_SECRET from .env.local — note that a stale secret there makes
  * the chain fail hard instead of falling through to the CLI.
+ * TRANSLATE_AUTH=key is handled in buildClient (no token credential).
  */
 function buildCredential(): TokenCredential {
   const mode = envString('TRANSLATE_AUTH', 'cli');
   if (mode === 'default') return new DefaultAzureCredential();
   if (mode !== 'cli') {
-    throw new Error(`TRANSLATE_AUTH must be "cli" or "default", got "${mode}"`);
+    throw new Error(
+      `TRANSLATE_AUTH must be "cli", "default" or "key", got "${mode}"`,
+    );
   }
   // Foundry lives in the app tenant; the CLI's default tenant may differ.
   return new AzureCliCredential({ tenantId: envString('AZURE_TENANT_ID') });
@@ -570,13 +578,23 @@ function buildClient(): AzureOpenAI {
       'Set AZURE_OPENAI_ENDPOINT or AZURE_AI_FOUNDRY_ENDPOINT in .env.local or the environment',
     );
   }
+  const apiVersion = envString('OPENAI_API_VERSION', '2025-04-01-preview');
+  if (envString('TRANSLATE_AUTH') === 'key') {
+    const apiKey = envString('AZURE_OPENAI_API_KEY');
+    if (!apiKey) {
+      throw new Error(
+        'TRANSLATE_AUTH=key needs AZURE_OPENAI_API_KEY in .env.local or the environment',
+      );
+    }
+    return new AzureOpenAI({ endpoint, apiKey, apiVersion });
+  }
   return new AzureOpenAI({
     endpoint,
     azureADTokenProvider: getBearerTokenProvider(
       buildCredential(),
       'https://cognitiveservices.azure.com/.default',
     ),
-    apiVersion: envString('OPENAI_API_VERSION', '2025-04-01-preview'),
+    apiVersion,
   });
 }
 

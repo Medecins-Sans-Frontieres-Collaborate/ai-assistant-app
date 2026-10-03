@@ -750,7 +750,10 @@
       "codeInterpreterLimitReached": "የቀኑ የኮድ አስኬድ ገደብ ተደርሷል — ያለ ኮድ አስኬድ መልስ…",
       "m365Progress": "Microsoft 365: {detail}",
       "knowledgeSearchFailed": "የእውቀት ማጣቀሻ ፍለጋ አልተሳካም — መልሱ የወኪሉን ሰነዶች አይጠቀምም",
-      "stillWorking": "በመስራት ላይ…"
+      "stillWorking": "በመስራት ላይ…",
+      "assessingSearchResults": "ውጤቶቹ ጥያቄውን መልሰው እንደሆነ የመርመራ ላይ...",
+      "refiningSearch": "ዳግመኛ ፍለጋ: “{query}”...",
+      "readingSearchPages": "{count} የውጤት ገፆችን በመንበብ ላይ..."
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳሪያ} other {# መሳሪያዎች}} ተጠቅመዋል",
@@ -836,7 +839,10 @@
       "summarizeNow": "አሁኑኑ ከርዕሶች ያጠቃልሉ",
       "sourcesCount": "{count} ምንጮች",
       "showAll": "ሁሉንም {count} ምንጮች አሳይ",
-      "showFewer": "በቁጥር ቅንጡ"
+      "showFewer": "በቁጥር ቅንጡ",
+      "multiStepTitle": "እስካሁን ውጤቶች — ጥያቄውን ሚመልሱ እንደሆነ እየተመረመሩ ነው",
+      "multiStepHint": "ፍለጉ አላብቆም ይችላል — ዳግመኛ ፍለጋ ወይም በጣም በታመኑ ገጾች ማንበብ። መጠባበቅ ካልተፈለገ ከተገኙ የ{count} ውጤቶች መሠረት አሁን መልስ ይስጡ።",
+      "answerNow": "ከዚህ ውጤቶች መልስ ይስጡ"
     },
     "retryWithModel": "በ{model} ይሞክሩ",
     "createTodoTasks": "ከዚህ መልስ የሚከተሉትን To Do ተግባራት ይፍጠሩ",
@@ -850,7 +856,10 @@
     "modelTimedOutAtMaximum": "{model} ማብራሪያ በ{duration}፣ ከፍተኛውን ጊዜ በተጠቀሱት ወቅት አልጀመረም። እንደገና ይሞክሩ ወይም ሌላ ሞዴል ይሞክሩ።",
     "requestTimedOut": "ይህ ጥያቄ ለመዘጋጀት ብዙ ጊዜ ወሰደ እና {model} ከመሞላቱ በፊት ተቆርጧል። ተጨማሪ ጊዜ ማስቻል ይችላሉ ወይም ሌላ ሞዴል ይሞክሩ።",
     "retryWaitingLonger": "እስከ {duration} ድረስ ይጠብቁ እና ደግመው ይሞክሩ",
-    "alwaysWaitThisLong": "ሁልጊዜ እስከ {duration} ድረስ ይጠብቁ"
+    "alwaysWaitThisLong": "ሁልጊዜ እስከ {duration} ድረስ ይጠብቁ",
+    "keepSearching": "መፈለግ ይቀጥሉ",
+    "keepSearchingHint": "ፍለጉ ወደዚህ ሳይደርስ ቆመ። የሚሻሉ ዘዴዎችን እንዲሞክሩ ለእገዳ ረዳት ይጠይቁ።",
+    "keepSearchingMessage": "እባክዎ ይህን ማግኘት ይቀጥሉ — ሌላ መንገድ ይሞክሩ።"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -1234,7 +1243,9 @@
       "providerBingResponsesDescription": "ከBing grounding ጋር ተመሳሳይ የBing ድምር አገናኝነት ፣ እንደFoundry agent በመሆን ሳይሆን እንደአንድ የቀጥታ ሞዴል ጥሪ ይሰራል — ብዙ ጊዜ በጣም ፈጣን ነው። አዲስ አማራጭ ከBing grounding ጋር በተያያዥ በመገምገም ላይ ይገኛል።",
       "providerSearxng": "MSF የድህረ ገፅ ፍለጋ",
       "providerSearxngDescription": "የMSF የግል የሚተሰርች የፍለጋ አገልግሎት ነው። አጠቃላይ ድህረ ገፅ፣ ዜና፣ ሳይንሳዊ ስነ-ልቦና (ከMSF ምርምር ስራዎችን ጨምሮ)፣ ቴክኒካዊ ሰነድና ሰብአዊ ዳታን ይሸፍናል፤ ለእያንዳንዱ ጥያቄ ትክክለኛውን ምንጭ ይምረጣል። ውጤቶቹ በአንደኛው ሰከንድ በቀጥታ አገናኝቶች ጋር ይደርሳሉ፣ ፍለጋው ጥያቄ ብቻ ከአፕ ይወጣል — የፍለጋ ማቀናበሪያዎች እርስዎን በፍጹም አያዩም።",
-      "otherProvidersLabel": "ሌሎች አቅራቢዎች"
+      "otherProvidersLabel": "ሌሎች አቅራቢዎች",
+      "multiStepLabel": "በብዛት ደረጃ ፍለጋ",
+      "multiStepDescription": "በMSF የድህረገፅ ፍለጋ፣ ረዳቱ የመጀመሪያ ውጤቶቹን ያረጋግጣል፣ ውጤቶቹ አልበቃመውም ከሆነ ግን አዲስ ፍለጋ ወይም በጣም በታመኑ ገጾችን ይነባል ከመልስ በፊት። አብዛኛው ጥያቄዎች በአንድ ደረጃ ላይ ይጨርሳሉ። የፍለጉን ሂደት ወደ አንደኛ ዙር ለማቆየት ይጠፉ።"
     },
     "Admin": "አስተዳዳሪ",
     "Usage Limits": "የአጠቃቀም ገደቦች",
@@ -1254,7 +1265,8 @@
       "customHint": "ከ{min} እስከ {max} ሰከንዶች።",
       "preferModelTitle": "የተመረጠውን ሞዴል መርጠው ይጠቀሙ",
       "preferModelDescription": "ጥያቄ ሳይሳካ ሞዴል ራሱን ለወጥ አያደርግም። ችግሩ ቢኖር ይቅዱ የሚለው አንድ አማራጭ ይሆናል።"
-    }
+    },
+    "Analytics": "ትንተና"
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -1519,6 +1531,12 @@
     },
     "subVariant": {
       "label": "መጠን"
+    },
+    "retiring": {
+      "badge": "በማጠናቀቅ ላይ",
+      "datedMoving": "በ{date} ይወገዳል። በዚህ ላይ ያሉ ውይዮች በ{movesOn} ወደ {successor} ይተካሉ።",
+      "dated": "በ{date} ይወገዳል እና ሥራ ማቆም ይጀምራል። እባኮትን {successor} ይጠቀሙ።",
+      "replaced": "በ{successor} በመተካት ላይ ነው።"
     }
   },
   "models": {
@@ -1817,6 +1835,11 @@
       "name": "GPT-6 Astra",
       "description": "የOpenAI GPT-6 በመሪነት የተጠናቀቀ አምራች ነው። ለጥልቅ ምርምር፣ ውስብስብ ትንታኔ፣ ሶፍትዌር እና ረዥም የተደረጉ ተግባራት በሙሉ ለመዳምጠት ተበጥሯል። ከGPT-5.6 Sol ድግም የሚቆጠር ዋጋ አለው።",
       "tagline": "የOpenAI በጣም ችሎታ ያለው ሞዴል"
+    },
+    "gpt_6_1_sol": {
+      "name": "GPT-6.1 Sol",
+      "description": "ከGPT-6 Sol የተሻሻለ አዳዲስ ስራዎች በcode, ሰነዶችና መተግበሪያዎች ላይ ለጠናካቸው ተግባራት። ስልኩ ከAstra በጣም ይኩራል እና የቶክን ዋግ አንዱን ነፃ ነው።",
+      "tagline": "የAstra ችሎታ ወይዘሮ በዝቅተኛ ዋጋ"
     }
   },
   "searchMode": {
@@ -5440,7 +5463,10 @@
       "announcements": "የተጠቃሚዎች ላይ የሚታዩ ባነር መልዕክቶች፡ ማን እየታየው ነው፣ መቼ ነው፣ በምን ቋንቋዎች ነው።",
       "delegations": "ማን የተጠቃሚዎችን ይከፍላሉ እና የእያንዳንዱ ምን ማድረግ እንደተፈቀደለት።",
       "channelProfiles": "የእያንዳንዱ ᕃዴ የተወሰኑ ገደቦች፣ መቆጣጠሪያዎች፣ ፈንታዎች። የመድረሻ ሰቦች ሁሉ የሚመሰሱበት የድርጅት አጠቃላይ መረጃ።",
-      "channelSets": "እያንዳንዱ ቡድን በᕃዴ ላይ ለማቅረብ ያለው ደንብ፤ መመሪያ፣ ድምፅ፣ ነባሪ ቅንብር፣ መንበሩን ማን ማገልገል እና ማን መላክ እንደሚችል።"
+      "channelSets": "እያንዳንዱ ቡድን በᕃዴ ላይ ለማቅረብ ያለው ደንብ፤ መመሪያ፣ ድምፅ፣ ነባሪ ቅንብር፣ መንበሩን ማን ማገልገል እና ማን መላክ እንደሚችል።",
+      "webSearch": "የድህረገፅ ፍለጋ መሄድ የሚችለው ድንበር፣ በብዛት እሴት የተደረገ ፍለጋ፣ የአስተዳደር ሞዴሉና ውስንነቱ።",
+      "contextBudget": "በእያንዳንዱ ዙር ለየትኛውም ሞዴል ምን ያህል የውይይት ታሪክ ይላካል።",
+      "analytics": "የተደረሱ ሪፖርቶች፡ የደረሱትን፣ ማን ጎራውን ማክፈት የሚችል እና የሚታዩትን መስኮች።"
     },
     "openSettings": "ማቀናበሪያዎችን ክፈት",
     "area": {
@@ -5448,7 +5474,10 @@
       "viewAs": "እንደ ተመለከተ",
       "globalAdmins": "ዋና አስተዳዳሪዎች",
       "announcements": "ማስታወቂያዎች",
-      "delegations": "ዲሌጌሽኖች"
+      "delegations": "ዲሌጌሽኖች",
+      "webSearch": "የድህረገፅ ፍለጋ",
+      "contextBudget": "ኮንቴክስት በጀት",
+      "analytics": "ትንተና"
     }
   },
   "limits": {
@@ -6782,7 +6811,8 @@
     "capabilitiesHint": "ይህ አዋጅ ምን ሰጥቶ ማድረግ እንደሚችል ይግልፃል። አስተዳዳሪዎች እዚህ የታመኑትን ብቻ ማድረግ ይችላሉ።",
     "grant": {
       "limits": "የአጠቃቀም ገደቦች",
-      "announcements": "ማስታወቂያዎች"
+      "announcements": "ማስታወቂያዎች",
+      "analytics": "ትንታኔ"
     },
     "grantAll": "ሁሉም",
     "maxOverrides": "ይህ አዋጅ ማይይይያው የአቋም ገደቦች",
@@ -6943,5 +6973,540 @@
     "isDefaultAfterSave": "ከማስቀመጥ በኋላ ይህን እንደ ነባሪ እንድትሆን ማረጋገጥ ይችላሉ።",
     "noChannelsWarning": "ይህ ቅንብር ቻናል አይሰጥም፤ ማንም ረቂቅ ማዘጋጀት አይችልም።",
     "audienceEveryoneHint": "በድርጅቱ ውስጥ ማንም በዚህ ቅንብር ረቂቅ ማዘጋጀት ይችላል።"
+  },
+  "contextBudgetAdmin": {
+    "title": "ኮንቴክስት በጀት",
+    "description": "በእያንዳንዱ ዙር ሞዴሉ የሚቀበለው የውይይት ታሪክ መጠን። አዲስ መልዕክቶች ሁልጊዜ ይካተታሉ፤ በጀቱ ሞሉ የወጡት የታየ አማካሪያ ያለበት ውይይት መግለጫ በስር አስተዋይ ተግባር ይቀመጣል። ትልቅ በጀት የረዘመውን ውይይት በአንድ ንዑስ ደረጃ ማካተት ይችላል፤ ዋጋው እያንዳንዱ ዙር ይጨምራል።",
+    "scopeNote": "በሁሉም ሞዴሎች ከውይይት ውስጥ ይፈጸማል። በጀቱ ከታች ያለው የሞዴል መስኮት ውስጥ ቅጥ ብቻ ሊበል ይችላል።",
+    "loading": "ኮንቴክስት በጀትን በመጫን ላይ…",
+    "loadError": "ኮንቴክስት በጀቱን መጫን አልተቻለም።",
+    "configUnavailable": "የተያዙ ኮንቴክስት በጀቶችን አሁን ማንበብ አልተቻለም፣ ታች የተያዩ እሴቶች በስራ ላይ እንዳሉ ሊሆን ይችላል። ከማስተካከል በፊት ዳግመኛ ይሞክሩ።",
+    "retry": "እንደገና ይሞክሩ",
+    "historyTokensLabel": "መደበኛ በጀት (ቶክኖች)",
+    "historyTokensDescription": "በእያንዳንዱ ዑደት ሲላኩ ታሪኩ፣ ሲስተም መነሻ ርዕስ ጨምሮ። ማንም ቅድሚያ የሌለውን ሞዴል። ስለ 48,000 የአንደኛ ውይይት 30–60 መጨረሻ ያቆያል።",
+    "historyFractionLabel": "ጣፋጭ (የሞዴል መግቢያ በጀት ክፍል)",
+    "historyFractionDescription": "በጀት ይህን የሞዴል ኮንቴክስት መስኮት ክፍል ተግ቟ የሚያደርገውን፣ የውጭ ግዴታው ያነሳል፣ ትንሽ መስኮት ያለው ሞዴል ከሚችለው በላይ አይጠየቅም።",
+    "minRecentMessagesLabel": "ሁልጊዜ የሚቆዩ መልዕክቶች",
+    "minRecentMessagesDescription": "ማግኘት ጊዜ ቢበቃም ሆኖ የሚቀመጡ የቅርብ ጊዜ መልዕክቶች (በመስኮቱ ውስጥ)። ሶስቱ የቀደሙትን ግናባ ያስቀምጣል፤ የቅርብ መልዕክት ብቻ — ታጣፊ ሰነድ, ውጤቶች — በበጀቱ የመሳበት ጊዜ።",
+    "familyOverridesLabel": "በቤተሰብ",
+    "familyOverridesDescription": "ለቤተሰቡ ውስጥ ሁሉንም ሞዴሎች የሚተካ በጀት።",
+    "modelOverridesLabel": "በሞዴል",
+    "modelOverridesDescription": "በአንድ ሞዴል ላይ የቤተሰቡና መደበኛውን በጀቶች የሚተካ በጀት።",
+    "overrideFamilyPlaceholder": "ቤተሰብ",
+    "overrideModelPlaceholder": "Model id",
+    "overrideTokensPlaceholder": "Tokens",
+    "addOverride": "አክል",
+    "removeOverride": "አስወግድ",
+    "noOverrides": "የለም",
+    "effectiveLabel": "በእነዚህ ቅንብሮች የሚሰሩ በጀቶች",
+    "effectiveColumnModel": "ሞዴል",
+    "effectiveColumnWindow": "መስኮት",
+    "effectiveColumnBudget": "የታሪክ በጀት",
+    "rangeHint": "{min}–{max}",
+    "defaultHint": "ነባሪ፡ {value}",
+    "defaultsNote": "ከነባሪዎች በስተቀር የሚለያዩ እሴቶች ብቻ ይያዙ፤ ቀሪዎቹ የኮድ ነባሪዎችን በማከበር በእያንዳንዱ እትም ይቀጥላሉ።",
+    "save": "አስቀምጥ",
+    "saving": "በመዝጋት…",
+    "resetDefaults": "ወደ ነባሪዎች ያስጀምሩ",
+    "unsaved": "በቤት ያልተቀመጡ ለውጦች",
+    "saveSuccess": "የእቅድ በጀት ተቀመጠ። አካል ውስጥ በአንድ ደቂቃ ውስጥ መተግበሪያ ያገናኛል።",
+    "saveError": "የእቅድ በጀት መቀመጥ አልተቻለም።",
+    "conflictError": "ሌላ አስተዳዳሪ በዚህ ያለውን በጀት በወቅቱ ቀይሯል፤ የቅርብ እሴቶች ተከው ተጫኑ።",
+    "updatedByLine": "መጨረሻ የተቀመጠው {by} በቀኑ {at}",
+    "neverSaved": "ፈፅሞ አልተቀመጠም — የኮድ ነባሪዎች በተግባር ላይ ይውላሉ።"
+  },
+  "webSearchAdmin": {
+    "title": "የድር ፍለጋ",
+    "description": "በMSF የድር ፍለጋ ላይ በርካታ እርምጃዎች የሚወጡ ፍለጋዎችን ይቆጣጠራል። የመጀመሪያው ውጤት ከተገኘ በኋላ መነሻ አንደኛ ሞዴል ጥያቄውን መሟሟቱን ይወስናል፤ ካልተደረገ፣ በተለያዩ ፍለጋዎች ይቀጥላል፣ የውጤት ገጾችን ያነባል፣ ከተጠቃሚው ጎድል ዝርዝር ይጠይቃል ወይም ምንም አልተገኘም ሊያውል ይችላል።",
+    "scopeNote": "እነዚህ ቅንብሮች ለMSF የድር ፍለጋ ብቻ ይመጣሉ። ሌሎች የፍለጋ ሰጪዎች ሁሉ አንድ ዙር ብቻ ይሰራሉ። ሰው ማንኛዉም ሰብራ እርምጃ ፍለጋን በቅንብሮች ማሰናበት ይችላል።",
+    "loading": "የድር ፍለጋ ቅንብሮች በመጫን…",
+    "loadError": "የድር ፍለጋ ቅንብሮች መጫን አልተቻለም።",
+    "configUnavailable": "የድር ፍለጋ ቅንብሮች ከመዝገብ ማንበብ አልተቻለም። መቆጣጠሪያዎቹን ማሳየት የማይገባ ነባሪ ዋጋ አይማስለኝም።",
+    "retry": "ደግመው ይሞክሩ",
+    "enabledLabel": "በርካታ እርምጃ ፍለጋ",
+    "enabledDescription": "ሲዘጋው ፍለጋ ሁሉ አንድ የተዘጋጀ ዙር ብቻ ይሆናል እና ምንም አንደኛ አሳሽ ሞዴል አይጠራም።",
+    "assessorLabel": "የማረጋገጫ ሞዴል",
+    "assessorDescription": "እያንዳንዱ እርምጃ በኋላ የውጤቶቹን ለማየት አንዴ ይጠራል። ፈጣንና ወጪ ዝቅተኛ ሞዴል ይምረጡ፤ እያንዳንዱ የተጠቃሚ ቆይታ ላይ ይሰራል። ማድረስ ካልተቻለ {fallback} ይጠቀማል።",
+    "maxStepsLabel": "እርምጃ ብዛት በአንድ ጥያቄ",
+    "maxStepsDescription": "አንድ ጥያቄ ሊወስደው የሚችለው ከፍተኛ የእርምጃ ቁጥር፤ የመጀመሪያው ፍለጋ ጨምሮ። ተጨማሪ ፍለጋ ወይም የገጽ አንባቢ ጥቅሎች እያንዳንዳቸው አንድ እርምጃ ናቸው። ይህ ግደባ ከዕለታዊ ፍለጋ ገደብ በተለይ ነው፣ ይህ አንድ ጥያቄ ብቻ ቆጣጠራል።",
+    "maxStepsExploratoryLabel": "እርምጃዎች ለማስረጃ ፍለጋዎች",
+    "maxStepsExploratoryDescription": "ለመዟዝ አንድ አስቸጋሪ እቃ የሚፈለግበት ፣ ለምሳሌ የተለመደ መፅሃፍ ቅጂ ድር ጠፍቷ ሊመጣ ይችላል። ከአንደኛው ግደባ ዝቅ አይደለም።",
+    "pageReadsLabel": "የውጤት ገጾችን አንብብ",
+    "pageReadsDescription": "አንድ እርምጃ ተስፋዬ ውጤት በመክፈት በራሱ ገጽ ላይ ማንበብ ይችላል፣ በፍለጋ ክፍል ላይ አይተደግፍም።",
+    "maxPageReadsLabel": "ገጾች በአንድ አንባቢ እርምጃ",
+    "sourceAssessmentLabel": "የምንጭ ጥራት ግምገማ",
+    "sourceAssessmentDescription": "አሳሽ ሞዴሉ የተመዘገቡትን ምንጮች (ታላቅ፣ ታዋቂ፣ ሁለተኛ፣ ዝቅተኛ እምነታዊ) ይሰይራል፣ መልሱም አካባቢዬ ሲሆን ተፈጥሯል።",
+    "timeBudgetLabel": "የጊዜ በጀት (ሰከንዶች)",
+    "timeBudgetDescription": "አንድ ፍለጋ መጠቀም የሚችለው ጠቅላላ ጊዜ፣ የመጀመሪያ ዙር ጨምሮ። ቢቋረጥ ከተገኘው ውስጥ መልስ ይጸሓፋል።",
+    "defaultsNote": "ቅንብሩ ከነባሪው አልተለየምና አይያዝም፣ ቀጣዩ እትም ሲቀየር ከነባሪው ይከተላል።",
+    "defaultHint": "ነባሪ፡ {value}",
+    "defaultOn": "በትክክል",
+    "defaultOff": "ዝግ",
+    "rangeHint": "{min}–{max}",
+    "unsaved": "ያልተቀመጡ ለውጦች አሉዎት።",
+    "save": "አስቀምጥ",
+    "saving": "በመዝጋት…",
+    "resetDefaults": "ወደ ነባሪ ቅንብር ይመለሱ",
+    "saveSuccess": "የድር ፍለጋ ቅንብሮች ተቀመጡ።",
+    "saveError": "የድር ፍለጋ ቅንብሮችን ማስቀመጥ አልተቻለም።",
+    "conflictError": "ሌላ አስተዳዳሪ ቅንብሮችን ከእርስዎ በፊት ለውጦች አስገብቷል። ቅርብ እሴቶቹ ተጫኑ — እባክዎ እንደገና ይገምግሙና ይቀምጡ።",
+    "updatedByLine": "መጨረሻ የተቀመጠው {by} በቀኑ {at}።",
+    "neverSaved": "ምንም አልተቀመጠም፤ የተያዙት በስር ሆነ ነባሪዎች ተፈጥሯል።"
+  },
+  "modelRetirement": {
+    "notice": "{model} በ {retiresOn} ይወገዳል። ይህ ውይይት በ {movesOn} ወደ {successor} ይተላለፋል።",
+    "noticeRetiring": "{model} በ {retiresOn} ይወገዳል እና መስራት ይከለከላል። ውይይቱን ለመቀጠል ወደ {successor} ይቀይሩ።",
+    "switchNow": "አሁኑኑ ይቀይሩ"
+  },
+  "analytics": {
+    "title": "ትንታኔ",
+    "backToChat": "ወደ ውይይት ተመለስ",
+    "manage": "ያቀናብሩ",
+    "loading": "በመጫን ላይ…",
+    "loadFailed": "ሪፖርቶቹን መጫን አልተቻለም።",
+    "retry": "ደግመው ይሞክሩ",
+    "emptyTitle": "ለእርስዎ ምንም አልተጋራበትም",
+    "emptyBody": "አስተዳዳሪ ወደ ፎልደር አካል ሲያደርጉ ሪፖርቶች እዚህ ይታያሉ።",
+    "deliveryUnavailable": "የሪፖርት ማከማቻ አሁን ሊደረስበት አይችልም፣ ስለዚህ ከታች ያሉት ዝርዝሮች ባዶ ሊሆኑ ይችላሉ። ከጥቂት ደቂቃዎች በኋላ ደግመው ይሞክሩ።",
+    "groupsDegraded": "የቡድን አባልነቶችዎን ማረጋገጥ አሁን አልቻለም፤ ስለዚህ ከቡድኖችዎ ጋር የተጋሩ ፎልደሮች ሊጎዱ ይችላሉ። ከደቂቃ በኋላ ይሸጥሩ።",
+    "foldersHeading": "ፎልደሮች",
+    "rootFolder": "ሁሉንም ሪፖርቶች",
+    "pathOnly": "ወደዚህ ፎልደር ማንኛውም መዳረሻ የለዎትም፣ ውስጥ ያሉ ፎልደሮች ብቻ ማግኘት ትችላላችሁ።",
+    "selectFolder": "ፎልደር በመምረጥ ሪፖርቶቹን ይመልከቱ።",
+    "noFiles": "በዚህ ፎልደር ሪፖርት የለም።",
+    "viewOnlyNote": "ወደ ዚህ ፎልደር እይታ መዳረሻ አለዎት፤ ሪፖርቶቹን መክፈት፣ አጠቃላይ እና የማጠቃለያ ሠንጠረዦችን ማየት ትችላላችሁ። ከሰው በኩል አንድ ረድፍ ያላቸው ሠንጠረዦች፣ ማውጣት እና ማውረድ የሚፈልጉ ከሆነ የማውረድ መዳረሻ ያስፈልጋሉ።",
+    "col": {
+      "name": "ፋይል",
+      "period": "የጊዜ ጊዜ",
+      "delivered": "ተሰጥቷል",
+      "size": "መጠን",
+      "availableUntil": "እስከ መጠቀም ይችላሉ",
+      "actions": "እርምጃዎች"
+    },
+    "download": "ያውሩ",
+    "downloadAria": "{name} ያውሩ",
+    "block": {
+      "view-only": "ማየት ብቻ",
+      "hidden-fields": "ዋናው ተደብቆ (የተደበቁ መስኮች)",
+      "unclassified-fields": "ዋናው ተደብቆ (ለክፍል ትክክለኛነት የሚጠብቁ መስኮች)",
+      "not-inspected": "ገና አልተመረመረም",
+      "policy-unavailable": "አሁን አይገኝም"
+    },
+    "adminBadge": {
+      "error": "ከተጠቃሚዎች ተደብቆ ይደርሳል",
+      "pending": "በመመርመር ላይ",
+      "warning": "ማስጠንቀቂያ አለው",
+      "expired": "ጊዜው አልፎ ለማጥፋት በመጠባበቅ ላይ",
+      "originalBlocked": "ተጠቃሚዎች ማውረድ አይችሉም፡ {reason}"
+    },
+    "openAria": "{name} ይክፈቱ",
+    "openForExport": "ለማስመጣት ይክፈቱ",
+    "preview": {
+      "back": "ወደ {folder} ተመለስ",
+      "tabsLabel": "በዚህ ፋይል ውስጥ ያሉ ሰንጠረዦች",
+      "lockedTab": "{name} (ታዝጋለች)",
+      "unavailable": "ይህ ፋይል በመተግበሪያው ላይ አሁን ሊክፈት አይችልም።",
+      "tableFailed": "ይህን ሠንጠረዥ መጫን አልተቻለም።",
+      "withheld": {
+        "row-level": "ይህ ሰንጠረዥ ከሰው በኩል አንድ ረድፍ አለው። ማየቱ የፎልደሩን የማውረድ መዳረሻ ይፈልጋል።",
+        "hidden-fields": "ይህ ገፅ የተደበቀ መስክ ይዟል፣ ስለዚህ አይታይም።"
+      },
+      "truncated": "የመጀመሪያውን {shown, number} ከ {total, number} ረዶች ናቸው በመታየት ላይ ነው። ሁሉንም ለማግኘት ሰንጠረዡን ይልኩ።",
+      "freeformNote": "ይህ ገፅ ለውብ ንባብ ተዘጋጅቶ እንደተቀበሉት እንዲሁ ተቀርቧል።",
+      "filter": "ረዶቹን ያጣሩ",
+      "filterPlaceholder": "ረዳት ሞሎች…",
+      "rows": "{count, plural, one {# ረዳት} other {# ረዳቶች}}",
+      "matching": "{count, number} ከ {total, number} ረዳቶች ይዛመዳሉ",
+      "modeLabel": "እንደ ይታያል",
+      "mode": {
+        "table": "ሰንጠረዥ",
+        "chart": "ገቢ ሰንደቅ"
+      },
+      "noRows": "ለማሳየት ረዳቶች የሉም።",
+      "hiddenColumn": "ከተጠቃሚዎች ተደብቋል",
+      "exportCsv": "ይህን ሰንጠረዥ ወደ CSV ያስወግዱ",
+      "exportXlsx": "ሁሉንም ሰንጠረዦች (Excel) ያስወግዱ",
+      "downloadOriginal": "ዋናውን አውርድ",
+      "exportNote": "ተደርጓል የተላከው ፋይል የተደበቁ ሜዳዎችን ይዟል፣ ስለዚህ እንደሆነ ማውረድ አይችልም። የመውጣት ዕይታ እነዚህን ሜዶች ትቀርባለች።",
+      "sectionLabel": "አሳይ",
+      "section": {
+        "overview": "አጠቃላይ እይታ",
+        "tables": "ሰንጠረዦች"
+      }
+    },
+    "chart": {
+      "groupBy": "በመሐላ ይቡዙ",
+      "measure": "ለመወክል",
+      "rowCount": "የረዳቶች ብዛት",
+      "aggregation": "ቁጥር አስላ",
+      "agg": {
+        "sum": "ድምር",
+        "mean": "አማካይ",
+        "min": "ትንሽ",
+        "max": "ትልቅ"
+      },
+      "ariaLabel": "{measure} በ {group}",
+      "noColumns": "በዚህ ሰንጠረዥ ለመቡዛት ጽሁፍ ወይም ቀን አልቦን የለም።",
+      "empty": "ለዚህ ምርጫ ምንም የለም ለማዳመጥ።",
+      "truncatedGroups": "ትልቁን {count} ቡድኖች ብቻ ታየዋል።",
+      "basedOn": "በመጀመሪያው {shown, number} ከ {total, number} ረዳቶች በተመሰረተ።",
+      "savePng": "እንደ ምስል አስቀምጥ",
+      "saveSvg": "እንደ SVG አስቀምጥ",
+      "saveFailed": "ገቢ ሰንደቁን ማስቀመጥ አልተቻለም።"
+    },
+    "dash": {
+      "loading": "በመጫን ላይ…",
+      "failed": "አጠቃላይ እይታውን ማጫን አልተቻለም።",
+      "retry": "ደግመው ይሞክሩ",
+      "showTable": "እንደ ሰንጠረዥ አሳይ",
+      "showChart": "እንደ ገቢ ሰንደቅ አሳይ",
+      "smallGroups": "ከ 5 በታች የሆኑ ቡድን አባላት",
+      "foldedNote": "ከ 5 በታች የሆኑ ቡድኖች በአንድ ረዳት ውስጥ ተደብቀው ታይተዋል።",
+      "otherCount": "{count, plural, one {# ሌላ} other {# ሌሎች}}",
+      "hiddenPanel": "በሜዳ ቅንብሮች ተደብቋል።",
+      "missingPanel": "ለዚህ ፋይል አልተገኘም።",
+      "usage": {
+        "users": "በተግባር ላይ ያሉ ሰዎች",
+        "interactions": "ግንኙነቶች",
+        "avgPerUser": "በአያያዝ ሰው ላይ አማካይ",
+        "medianPerUser": "በአያያዝ ሰው ላይ መዲያን",
+        "hq": "በዋና ጉባኤ",
+        "field": "በመስክ ላይ",
+        "shareUsers": "{pct}% ከ {comparator} ተጠቃሚዎች",
+        "shareUsage": "{pct}% ከ {comparator} አጠቃቀም",
+        "comparator": "{comparator}: {value}",
+        "daily": "በቀን ውስጥ የተደረጉ መተግበሪያዎች",
+        "dailyUsers": "በቀን ውስጥ የሚሳተፉ ሰዎች",
+        "dailyUsersSub": "በሥራ ቦታ",
+        "weekly": "በሳምንት ውስጥ የተደረጉ መተግበሪያዎች",
+        "activity": "ሰዎች ሚያገለግሉበት መጠን",
+        "activitySub": "ሰዎች በየውስጡ ቆጠራ መተግበሪያ ቁጥር",
+        "departments": "በክፍል የተደረጉ መተግበሪያዎች",
+        "jobTitles": "በስራ መደብ የተደረጉ መተግበሪያዎች",
+        "models": "በሞዴል ያገኙ ክስተቶች",
+        "total": "ሁሉም ቦታዎች",
+        "location": {
+          "hq": "ዋና መሥሪያ ቤት",
+          "field": "መስክ",
+          "unknown": "ያልታወቀ"
+        },
+        "col": {
+          "date": "ቀን",
+          "week": "ሳምንቱ የሚጀምረው",
+          "users": "ሰዎች",
+          "interactions": "መተግበሪያዎች",
+          "events": "ክስተቶች",
+          "group": "ቡድን",
+          "band": "መተግበሪያዎች"
+        }
+      },
+      "rebilling": {
+        "totalBilled": "ጠቅላላ የተጨመረ",
+        "usageVariable": "የአጠቃቀም ተለዋዋጭ ወጪ",
+        "staticInfra": "የቋሚ መዋቅር",
+        "sections": "የተጨመሩ ክፍሎች",
+        "usageEvents": "የአጠቃቀም ክስተቶች",
+        "bySection": "በክፍል የተጨመረ",
+        "changes": "ከቀደም ያለው ፋይል የተቀየሩ",
+        "noChanges": "ከቀደም ያለው ፋይል ምንም አልተለወጠም።",
+        "byDomain": "በኢሜይል ዶሜይን የአጠቃቀም ክስተቶች",
+        "reconciliation": "ከAzure ጋር ጡጋት",
+        "col": {
+          "section": "ክፍል",
+          "billed": "የተጨመረ",
+          "usageEvents": "የአጠቃቀም ክስተቶች",
+          "usagePct": "አጠቃቀም %",
+          "line": "መስመር",
+          "amount": "መጠን",
+          "previous": "ቀደም ያለው ፋይል",
+          "restated": "ዳግመኛ የተቀመጠ",
+          "change": "ለውጥ",
+          "domain": "ኢሜይል ዶሜይን",
+          "users": "ሰዎች"
+        }
+      },
+      "emissions": {
+        "assumptionsLabel": "በዚህ የተቆጠረ",
+        "delivered": "የግምቱ የራሱ ቅሬታዎች ({version})",
+        "current": "የመተግበሪያው አሁን ቅሬታዎች ({version})",
+        "whatIf": "ቢሆን እንዴት…",
+        "deliveredUnavailable": "የዚህ ሪፖርት ግምቶች ከAssumptions ሉህ ማንበብ አልቻለበትም፣ ስለዚህ የመተግበሪያው አሁኑኑ ግምቶች ተጠቀሙ።",
+        "whatIfIntro": "አንድ ቁጥር ቀይር ሁሉም ከታች ላይ ላይ ስለመታየቱ። ምንም አይቀመጥም።",
+        "resetDelivered": "ወደ ሪፖርቱ ራሱ መመለስ",
+        "resetCurrent": "ወደ አሁኑ መተግበሪያ መመለስ",
+        "co2": "አመፅ",
+        "energy": "ኃይል",
+        "charges": "ስማርትፎን እዳ",
+        "chargesSub": "በአንደኛው እጥረት ጋር",
+        "activeUsers": "ንቁ ሰዎች",
+        "requests": "ጥያቄዎች",
+        "tokens": "ቶክኖች",
+        "vsDelivered": "{{delta}} ከሪፖርቱ ራሱ ግምቶች ጋር",
+        "sameAsDelivered": "ከሪፖርቱ ራሱ ግምቶች ጋር ተመሳሳይ",
+        "unpriced": "{count, plural, one {# ጥያቄ ይጠቀማል} other {# ጥያቄዎች ይጠቀማሉ}} ለእነዚህ ግምቶች ቁጥር የሌላቸው የሞዴል መጠን ነው፣ እና {count, plural, one {ተወውበት ተውቷል} other {ተውተዋል}}።",
+        "byDepartment": "በመድረክ የተፈጠሩ ማህበረ-ኃይሎች",
+        "byModel": "በሞዴል የተፈጠሩ ማህበረ-ኃይሎች",
+        "gramsSub": "ግ CO₂e",
+        "reconciliation": "እዚህ የተሞላው ከተመዘገበው ጊዜ ጋር",
+        "reconciliationSub": "መተግበሪያውም እያንዳንዱን ጥያቄ ሲደርስ ይገምታል። ግምቶቹ ከተመሳሰሉ ሁለቱም ይስማማሉ።",
+        "computed": "እዚህ የተሞላ",
+        "logged": "በመተግበሪያው የተመዘገበ",
+        "difference": "ልዩነት",
+        "col": {
+          "group": "ቡድን",
+          "requests": "ጥያቄዎች",
+          "tokens": "ቶክኖች",
+          "energyWh": "ኃይል (Wh)",
+          "co2g": "CO₂e (g)"
+        },
+        "factor": {
+          "pue": "የዳታ ሴንተር ተጨማሪ (PUE)",
+          "promptTokenWeight": "የፕሮምፕት ቶክን ክብደት",
+          "dedicatedReasoningMultiplier": "የተሰጠ ማስተካከያ ድግግሞሽ",
+          "whPer1kTokens": "Wh በ1,000 ቶክኖች — {name}",
+          "reasoningEffortMultipliers": "የአስተያየት ጥናት ድግግሞሽ — {name}",
+          "gridIntensity": "Grd g CO₂e በkWh — {name}"
+        }
+      },
+      "telemetry": {
+        "events": "ክንውን",
+        "users": "ሰዎች",
+        "tokens": "ቶክኖች",
+        "errors": "ስህተቶች",
+        "energy": "ኃይል",
+        "co2": "ማህበረ-ኃይሎች",
+        "hourly": "ክንውን በሰዓት (UTC)",
+        "byType": "ክንውን በዓይነት",
+        "byError": "ስህተቶች በመደብ",
+        "byModel": "ቶክኖች በሞዴል",
+        "byCompany": "ክንውን በድርጅት",
+        "none": "የለም።",
+        "col": {
+          "group": "ቡድን",
+          "events": "ክንውን",
+          "tokens": "ቶክኖች",
+          "hour": "ሰዓት"
+        }
+      },
+      "trend": {
+        "title": "በጊዜ መጠን",
+        "period": "ወቅት",
+        "users": "ንቁ ሰዎች በሪፖርት",
+        "interactions": "ግንኙነቶች በሪፖርት",
+        "billed": "ጠቅላላ የተከፈለበት በወቅት",
+        "sections": "በክፍል የተከፈለ",
+        "otherSections": "ሌሎች ሁሉ ክፍሎች",
+        "co2": "ትራንስፖርት በየ ሪፖርቱ",
+        "energy": "ኃይል በየ ሪፖርቱ",
+        "recalculated": "እያንዳንዱ ጊዜያዊ ውድቀት የመተግበሪያው አሁን ያለው ቅድመ ሀሳብ ({version}) በመጠቀም ይቀመጣል፣ ስለዚህ በሪፖርቶች መካከል የሀሳብ ለውጥ ትራንስፖርቱን እንደ ለውጦ አያሳይም።",
+        "severalPerPeriod": "ይህ ፎልደር በአንድ ጊዜያዊ ውድቀት ርኬቶች አሉት። በውስጡ ያለ ፎልደር ይክፈቱ አንዱ እንዴት በጊዜ መቀየርን ያዩ።"
+      }
+    }
+  },
+  "analyticsAdmin": {
+    "title": "ትንታኔ",
+    "description": "ሪፖርቶች በውሂብ መስመር ወደ አከማቻ ይደርሳሉ። እዚህ የደረሱትን ይመረምራሉ፣ የሚክፈቱትን ያስወራሉ፣ የመድረኩ የሚያሳዩትን ሜዳዎችም ይምረጡ።",
+    "openViewer": "ትንታኔን ክፈት",
+    "sharedNotice": "ቤታና አስፈጻሚ ይህን ፎልደሮች፣ ተመራማሪዎችና ፋይሎች በተቃራኒ ይጋራሉ። እዚህ የተያዙ ለውጦች በሁለቱም የተግበሩ ናቸው።",
+    "tabsLabel": "የትንታኔ ክፍሎች",
+    "tab": {
+      "health": "አድራጎቶች",
+      "folders": "ፎልደሮችና መዳረሻ",
+      "fields": "ሜዳዎች"
+    },
+    "loading": "በመጫን ላይ…",
+    "retry": "እንደገና ይሞክሩ",
+    "loadError": "ይህን ክፍል መጫን አልቻልንም።",
+    "unavailable": "ከአከማቻ የተቀመጡትን ቅንብሮች ማንበብ አልተቻለም። ይህ 'ምንም አልተዘጋጀም' ማለት አይደለም—ትክክለኛው ቅንብር እንዳይጠፋ ማስተካከል ተከልክሏል። እንደገና ይሞክሩ፣ እና ጉዞ ካቀጠለ የአገልጋይ መዝገቦችን ይመልከቱ።",
+    "save": "አስቀምጥ",
+    "saving": "በመከተል ላይ…",
+    "unsaved": "ያልተቀመጡ ለውጦች",
+    "saveSuccess": "ተቀመጠ።",
+    "saveError": "ማስቀመጥ አልተቻለም።",
+    "conflictError": "ሌላ አስተዳዳሪ እየተሻሻለ ነበር። ለውጦትዎ አልተቀመጠም— የቅርብው ቅጂ ተቀይሯል።",
+    "rootFolder": "(ከፍተኛ ደረጃ)",
+    "scope": {
+      "domain": "የኢሜይል ዶሜይን",
+      "user": "ግለሰብ",
+      "attribute": "ባህሪ",
+      "group": "Entra ቡድን"
+    },
+    "scopePlaceholder": {
+      "domain": "example.org",
+      "user": "name@example.org",
+      "attribute": "department:Health",
+      "group": "Entra group object id"
+    },
+    "level": {
+      "view": "ማጠቃለያዎችን ይመልከቱ",
+      "download": "ይመልከቱ፣ ይላኩና ያውርዱ"
+    },
+    "reportType": {
+      "usage": "የአጠቃቀም ሪፖርት",
+      "rebilling": "እንደገና መክፈል",
+      "emissions": "የትራንስፖርት ሪፖርት",
+      "raw-telemetry": "የትክክል ቴሌሜትሪ"
+    },
+    "field": {
+      "userCode": {
+        "label": "የተጠቃሚ ኮድ",
+        "description": "የግለ መስመር አሳዛዥ u-... ኮድ ለአንድ ግለሰብ ይወክላል።"
+      },
+      "jobTitle": {
+        "label": "የስራ መደብ",
+        "description": "የስራ መደቦች፣ በአጠቃላይ የተወሰኑ መደብ ያገኙት በማጠቃለያ ወረቀቦች። በትንሹ ቡድን መደቡ ወደ አንድ ግለሰብ ሊጠቁም ይችላል።"
+      },
+      "department": {
+        "label": "ዲፓርትመንት",
+        "description": "ዲፓርትመንቶች፣ በማጠቃለያ ወረቀቦች ላይ በጣም የሚንቀሳቀሱት ዲፓርትመንቶችን ጨምሮ።"
+      },
+      "company": {
+        "label": "ኩባንያ / ድርጅት",
+        "description": "የድርጅቱ ስም ከዳይሬክቶሪ እና በእንደገና የክፍያ ወረቀቦች ላይ የተዘረዘሩ የኩባንያዎች ስሞች።"
+      },
+      "orgGroup": {
+        "label": "የድርጅት ቡድን",
+        "description": "ሪፖርት በሚደበደቡበት የኦፕሬሽን ማዕከል ወይም ቡድን።"
+      },
+      "section": {
+        "label": "ክፍል",
+        "description": "የክፍያ መከታተያ ክፍል የእንደገና ክፍያ መስመር ወደ የሚቀመጠው።"
+      },
+      "mailDomain": {
+        "label": "የኢሜይል ዶሜይን",
+        "description": "የኢሜይል ዶሜይኑ አጠቃቀም መለያ ይሰጣል (በፅፈት ቦታ አይደለም።)"
+      },
+      "workLocation": {
+        "label": "የመስራች ቦታ",
+        "description": "ጃልማው ቢሮ ወይም መድረክ።"
+      },
+      "technical": {
+        "label": "የቴክኒክ ዝርዝሮች",
+        "description": "ሞዴል፣ ክልል፣ የክስተት አይነት፣ ምንዛሬና ከሌሎች ጋር የተመሳሰሉ የምንም ግለሰብ ውስጥ ሳይገልጹ ምልክቶች።"
+      },
+      "other": {
+        "label": "ሌሎች መግለጫ መስኮች",
+        "description": "ከከፊሎቹ ማንኛውም በውስጡ የማይቀመጥ አስማ ታየበት ቦታ።"
+      }
+    },
+    "folders": {
+      "intro": "ፓይፕላይኑ የሰጠናቸው ሁሉ ፎልደሮች ይዘረዋሉ። ፎልደር ምንም ቅኝት ባይኖረውና ከላይ ባሉ ፎልደሮች ፍቃድ ባይሰጥ የተሟላ ተወካዮች ብቻ ይመለከታል።",
+      "name": "የሚታየው ስም",
+      "namePlaceholder": "የፎልደሩ መንገድ ፋንታ በሚታየው ይታያል",
+      "description": "መግለጫ",
+      "reportType": "የሪፖርት አይነት",
+      "reportTypeNone": "አልተዘጋጅም",
+      "reportTypeInherited": "የተወረሰ፡ {type}",
+      "reportTypeHint": "አዳራሾቹ የሚጠበቁ የፋይል ስሞችን እና በምን ድርግግ መሆናቸውን ይገልጻል። በዚህ ውስጥ ላሉ ፎልደሮች ይተገበራል።",
+      "retention": "ፋይሎችን ያስቀምጡ (በወር)",
+      "retentionHint": "ማንኛውም መስክ ባይሞላ የ {months} ወር ይወረሳል። ከእያንዳንዱ ሪፖርት ጊዜ መጨረሻ ጀምሮ ይቆጠራል።",
+      "audience": "ይህን ፎልደር ማን ማየት ይችላል",
+      "audienceHint": "እያንዳንዱ ረዳት ሊያስገኝ ይችላል። በሁሉም ጫና ውስጥ ቁጥር አንዱ ያህል አድርጉ።",
+      "audienceScope": "የተጠቃሚ አይነት",
+      "audienceTargets": "ተጠቃሚዎች",
+      "audienceLevel": "የፍቃድ ደረጃ",
+      "addAudience": "ግለሰቦች ወይም ቡድኖችን ያክሉ",
+      "removeAudience": "ይህን መስመር ያውጡ",
+      "restricted": "መዳረሻ ከላይ ባሉ ፎልደሮች አይወረስም",
+      "restrictedHint": "በዚህ ፎልደር ላይ ብቻ በሆኑ መስመሮች እና ከታች ቆጥሮ ይደረጋል።",
+      "hiddenFields": "በዚህ ፎልደር ውስጥም ደግመው ይደብቁ",
+      "hiddenFieldsHint": "ከመድረክ ቅኝት በላይ በዚህ ፎልደር ላይ የሚደበቁ መስኮች፤ ያክሉ ይቻላል ነገር ግን ማንኛውንም ይጨምሩ አይቻልም።",
+      "hiddenPlatformWide": "(በሁሉም ቦታ የተደበቁ)",
+      "clear": "የዚህ ፎልደር ቅኝቶችን ያውጡ",
+      "rawChip": "Raw፡ የአጠቃቀም አስተዳዳሪዎች ብቻ",
+      "rawNote": "Raw telemetry ስሞች፣ ኢሜይል አድራሻዎችና የፋይል ስሞችን ይይዛል። የአጠቃቀም አስተዳዳሪዎች ብቻ ማየት ይችላሉ፣ አድራሻ ተጨማሪ ማንኛውም ተጠቃሚ ማከል አይቻልም።",
+      "audienceChip": "{count, plural, one {# የመዳረሻ መስመር} other {# የመዳረሻ መስመሮች}}",
+      "restrictedChip": "አይወረስም",
+      "notConfiguredChip": "ቅኝት የለም",
+      "addPathLabel": "ፎልደርን ከመጀመሪያ ማድረሻ በፊት ይዘጋጁ",
+      "addPath": "አክል",
+      "addPathHint": "ፓይፕላይኑ በትክክል የሚጻፈውን እንደገምግም መንገድ፣ ለምሳሌ usage/ocba። ይህ ቅኝት ብቻ ይይዛል፤ ማንኛውንም በማከል አይፈጥርም።",
+      "invalidPath": "ይህ ትክክለኛ የፎልደር መንገድ አይደለም።",
+      "rawGlobalOnly": "ፎልደሮች raw/ በትክክል ለመቅናሽ የአጠቃቀም አስተዳዳሪዎች ብቻ ይችላሉ።"
+    },
+    "fields": {
+      "intro": "የተሰጡ ሪፖርቶች ውስጥ ምን መስኮች በመድረኩ እንደሚታዩ ይምረጡ። መስኩ በመደበቅ በመታየት ቦታ በመተግበሪያው ከሁሉም ጭምርና በመልት የሚተላለፉበት አይስረዳም። በተሰጠው ፋይል ራሱ ውስጥ በማድረግ አስተዳዳሪዎች ብቻ ማውረድ ይችላሉ።",
+      "readOnly": "ይህን ለመቀየር የአጠቃቀም አስተዳዳሪዎች ብቻ ይችላሉ። እንደ የትክክል አስተዳዳሪ በየፎልደሩ በ \"ፎልደሮች & መዳረሻ\" ተጨማሪ መስኮችን ማደብ ይችላሉ።",
+      "configurableHeading": "መስኮች",
+      "shown": "ታይቷል",
+      "hidden": "የተደበቀ",
+      "jobTitleNote": "የስራ መደብ ስም ቢታይ በትንሽ ቡድን ውስጥ ጊዜ እንኳን በየደምብ ኮድ ሰውን መለየት ይቻላል። ገበታዎች ከአምስት በታች ሕዝቦች ቁጥር የሚለው እና የተወሰኑ ቅጾች ግን ይገልጻሉ።",
+      "neverHeading": "በፊትም የማይታየው",
+      "neverBody": "ስሞች፣ ኢሜይል አድራሻዎች፣ የዝርዝር መለኪያዎች፣ የተጫኑ ፋይሎች ስሞች እና የስህተት ጽሁፎች raw telemetry ውጭ ባይታዩም። የሚይዟቸው ቪውርፖርት መካከል ማንኛውም ሲኖረው እስከይቀየር ድረስ ተጠቃሚዎች አያዩትም።",
+      "unclassifiedHeading": "መዝገቡ የማያውቀው አስማ",
+      "unclassifiedBody": "የታወቀ ያልሆነ የውሂብ አምድ ተይዟ ይቆያል — በመተግበሪያውና በሰጠ ውሂብ ላይ — እና የተሰጠው ፋይል እስካንተ አንድ ሜዳ በታች እስካታደርጉት ድረስ ተጠቃሚዎች ሊያውሩት አይችሉም።",
+      "noneWaiting": "እያጠበቀ የለም።",
+      "inFiles": "{count, plural, one {በ# ፋይል} other {በ# ፋይሎች}}",
+      "classifyAs": "የአምድ {column} ሜዳ",
+      "keepHidden": "ተይዝ ይቆያ",
+      "removeClassification": "የአምድ {column} ቅንጅት አስወግድ"
+    },
+    "health": {
+      "deliveryUnavailableTitle": "የሪፖርት ግምባር ማድረሻ ማድረስ አልተቻለም",
+      "deliveryUnavailableBody": "መተግበሪያው ቆሳው \"{container}\" ሊያሳይ አልተቻለም። እንዴት እንደሚኖረውና መተግበሪያው እንደሚስተኛ የውሂብ ተግባር አለው ያረጋግጡ። እስካዚያው ለማንኛውም ሰው ሪፖርቶች አይታዩም።",
+      "foldersUnavailable": "የፎልደር ቅንጅቶች ማንበብ አልተቻለም፤ አሁን ተጠቃሚዎች ፎልደሮች ሳያዩ ይቆያሉ። ፋይሎች መግለጫ ወይም ማስወገጃ አይደርስበትም እስካስተካከል ድረስ።",
+      "policyUnavailable": "የሜዳ ቅንጅቶች ማንበብ አልተቻለም፤ ተጠቃሚዎች አሁን ፋይሎችን ማውረድ አይችሉም።",
+      "total": {
+        "files": "ፋይሎች",
+        "ok": "ትክክል",
+        "warning": "አደጋ አለበት",
+        "error": "ተይዞ ተጠቃሚዎች ላይ",
+        "pending": "ትክክልነት እየተመረመረ"
+      },
+      "recheckAll": "ሁሉን እንደገና መረምር",
+      "recheckOne": "እንደገና መረምር",
+      "recheckQueued": "{count, plural, one {# ፋይል ለመረምረም ተይዞ ቆይቷል።} other {# ፋይሎች ለመረምረም ተይዞ ቆይቷል።}}",
+      "recheckFailed": "ምረመር የመጀመር አልተቻለም።",
+      "retention": {
+        "active": "ፋይሎች የፎልደር ቆይታን ካልፉ በድንጋ፤ ለ{days} ቀናት በኋላ ይሰረዛሉ።",
+        "disabled": "ፋይሎች የፎልደር ቆይታን ካልፉ ተይዞ ይቆያሉ፤ ነገር ግን ማስወገጃ ለዚህ ምርት ተቆልፏል።",
+        "waiting-for-config": "ፋይሎች የቀድሞው ቆይታን ካልፉ ተይዞ ይቆያሉ። ፎልደር ቅንጅት አንድ ጊዜ እስካስተካከል ድረስ ምንም አይሰረዝም።"
+      },
+      "noFiles": "መርቀቅ የተደረገ ፋይል ስለሌለ።",
+      "allGood": "ሁሉም የደረሰው በደኅና ነው።",
+      "problemsHeading": "አጠቃላይ ዘገባ የሚያስፈልጉ ፋይሎች",
+      "status": {
+        "error": "ተይዞ ተጠቃሚዎች ላይ",
+        "warning": "ማስጠንቀቂያ",
+        "pending": "ትክክልነት እየተመረመረ",
+        "ok": "ትክክል"
+      },
+      "pendingBody": "አዲስ ወይም የተቀየረ ከሚያሳይ ምረመር በኋላ ተጠቃሚዎች ያያዋሉ።",
+      "firstSeen": "የመጀመሪያው ታየ {date}",
+      "unclassifiedHeading": "ወሰን የሚያጠብቁ አምዶች",
+      "unclassifiedBody": "እነዚህ አምዶች የታወቀ አይደሉም። ተይዟ ይቆያሉ፣ ተጠቃሚዎች የሚያይ ፋይሎችን የሚያውሩ አይችሉም፣ ይኸውም እያንዳንዱ በየሜዳው እስካታደርገው ድረስ።",
+      "unclassifiedChip": "{column} · {count, plural, one {# ፋይል} other {# ፋይሎች}}",
+      "openFields": "ወደ ሜዳዎች ውስጥ ግባ",
+      "unconfiguredHeading": "ፎልደሮች ቅንጅት የለውም",
+      "unconfiguredBody": "ፋይሎች ይመጣሉ፣ ነገር ግን ፎልደር ወይም በላዩ ብቻ ቅንጅት የማይኖረው። ማኅበረሰብ ማየት አይችሉም፤ አድሚን ብቻ ያያዋሉ።",
+      "staleHeading": "የተዘገየ መርቀቅ",
+      "staleBody": "እነዚህ ፎልደሮች የወቅታዊ ሪፖርቶች ተጠቃሚዎች ናቸው፣ ቅርብ ሪፖርቱ የሚያስፈልጉት ከደንገዉ የቆሰለ ነው።",
+      "staleDetail": {
+        "daily": "ዕለታዊ፣ ቅርብ የሚያከብር {date}",
+        "monthly": "ወርሃዊ፣ ቅርብ የሚያቁም {date}"
+      },
+      "staleNever": "በአሁኑ ድርሻ አልተሰጠም",
+      "expiringHeading": "በሚያበቃ ሂደት",
+      "expiringBody": "ፋይሎች ቆይታ ካልፉ ወይም በ30 ቀናት ውስጥ በቅርብ የሚያበቃሉ።",
+      "expiresOn": "ይበቃል {date}",
+      "expiredOn": "በቃ፡ {date}"
+    },
+    "issue": {
+      "name-mismatch": "የፋይሉ ስም ከፎልደሩ የሚያስፈልገው አይደለም (ለምሳሌ {expected})።",
+      "unsupported-format": "የፋይሉ አይነት \"{extension}\" ምረመር አይቻለም፤ ስለዚህ ይህ የተይዞ ይቆያል። .xlsx ወይም .csv ያድርጉ።",
+      "too-large": "በ{sizeMb} MB ፋይሉ ከ{limitMb} MB ገደብ በላይ ምረመር አይቻለም፣ ስለዚህ ተጠቃሚዎች ላይ ተይዞ ይቆያል።",
+      "empty-file": "ፋይሉ ባዶ ነው።",
+      "unreadable": "ፋይሉን መክፈት አልተቻለም። ምናልባት ተጎድቷል ወይም ስሙ የሚያመለከተው ፎርማት አይደለም።",
+      "identifier-column": "በ\"{sheet}\" ሺት ውስጥ ሰዎችን የሚለይ የ\"{column}\" አምድ አለ። ፋይሉ ተጠቃሚዎች ለተሰወረ ነው።",
+      "identifier-values": "\"{sheet}\" {count, plural, one {# የኢሜይል አድራሻ} other {# የኢሜይል አድራሻዎች}} ይዟል። ፋይሉ ተጠቃሚዎች ለተሰወረ ነው።",
+      "user-code-format": "በ\"{sheet}\" ሺት፣ በ\"{column}\" አምድ፦ {count, plural, one {# ዋጋ} other {# ዋጋዎች}} u-… የተጠቃሚ ኮድ አይደሉም። ፋይሉ ተጠቃሚዎች ለተሰወረ ነው።",
+      "formulas-without-values": "በ\"{sheet}\" ሺት ውስጥ {count, plural, one {# ፎርሙላ} other {# ፎርሙላዎች}} የተያዙ ውጤት የላቸውም። ስለዚህ እነዚህ ቁጥሮች በመተግበሪያው ላይ ማሳየት አይቻልም።",
+      "missing-sheet": "\"{sheet}\" ሺት የጠፋ፣ ስለዚህ በእሱ ላይ የተመሠሩ እይታዎች ማሳየት አይቻልም።",
+      "missing-column": "በ\"{sheet}\" ሺት ውስጥ \"{column}\" አምድ የለም፣ ስለዚህ ሚጠቀመው እይታ ማሳየት አይቻልም።",
+      "no-period": "በፋይሉ ስም የሪፖርት ጊዜ የለም፣ ስለዚህ ግዝቱ ከተላከበት ቀን ጀምሮ ይቆጠራል።",
+      "unclassified-field": "\"{column}\" አምድ አልታወቀም። እስከ አንድ ማስያ በትክክል እስካልተመደበ ድረስ የተሰጠውን ፋይል ተጠቃሚዎች ማውረድ አይችሉም።",
+      "past-retention": "ከዚህ ፎልደር የ{months} ወር ግዥ ያሻገረ፤ አይታየትም።",
+      "unknown": "ችግር ተዘግቷል፡ {code}።"
+    }
   }
 }

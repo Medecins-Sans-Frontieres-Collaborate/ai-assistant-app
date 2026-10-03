@@ -1,7 +1,5 @@
 import { Session } from 'next-auth';
 
-import { OpenAIModel } from '@/types/openai';
-
 /**
  * Tool interface for all tools that can be executed by the chat system.
  */
@@ -38,16 +36,15 @@ export interface WebSearchToolParams {
   /**
    * Multi-aspect fan-out (first entry === searchQuery, max 5). Feed
    * providers run one Google News leg per query concurrently and merge;
-   * the Bing agent path uses only the primary query (the agent does its
-   * own query expansion).
+   * the Bing path uses only the primary query (the model does its own
+   * query expansion).
    */
   searchQueries?: string[];
-  /** Agent-backed model for the Bing path; unused by google-news. */
-  model?: OpenAIModel;
+  /** The caller; `region` decides where a Bing search runs. */
   user: Session['user'];
-  /** Maximum distinct sources to request from the search agent. */
+  /** Maximum distinct sources to request. */
   resultCount?: number;
-  /** Recency the agent should prefer ('any' = no preference). */
+  /** Recency to prefer ('any' = no preference). */
   freshness?: 'day' | 'week' | 'month' | 'any';
   /**
    * Resolved search backend for this request (user setting or deployment
@@ -61,7 +58,7 @@ export interface WebSearchToolParams {
   category?: import('@/types/webSearch').WebSearchCategory;
   /**
    * Combined provider only: fires once with the fast leg's (Google News)
-   * headlines while the Bing agent is still running, so the caller can
+   * headlines while the Bing search is still running, so the caller can
    * stream them to the client as interim results.
    */
   onInterimResults?: (
@@ -75,8 +72,15 @@ export interface WebSearchToolParams {
    */
   deep?: boolean;
   /**
-   * Live progress from inside the search sub-call (activity keys from the
-   * inner Foundry stream), forwarded to the outer response's loader.
+   * Live progress from inside the search sub-call (the multi-step loop's
+   * phases), forwarded to the outer response's loader.
    */
   onActivity?: (key: string, params?: Record<string, string>) => void;
+  /**
+   * Bing only: the Responses call's token usage, for the caller to meter
+   * (see responsesWebSearch.ts). Feed providers spend no tokens.
+   */
+  onUsage?: import('./responsesWebSearch').ResponsesWebSearchParams['onUsage'];
+  /** Aborts an in-flight model call when the caller's search timeout fires. */
+  signal?: AbortSignal;
 }

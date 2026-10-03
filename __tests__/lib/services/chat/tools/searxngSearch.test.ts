@@ -1,13 +1,17 @@
 import {
   __resetSearxngBreakerForTests,
+  assessSearchHealth,
   buildSearxngUrl,
+  describeSearchHealth,
   isLikelyHubPage,
   isSearxngConfigured,
+  isSearxngThrottled,
   normalizeQueries,
   parseSearxngResponse,
   planSearxngCategories,
   preferArticles,
   searchSearxng,
+  unresponsiveEngines,
 } from '@/lib/services/chat/tools/searxngSearch';
 
 import { env } from '@/config/environment';
@@ -20,6 +24,30 @@ import {
   it,
   vi,
 } from 'vitest';
+
+// Capabilities are discovered from /config on a separate code path (its
+// own test file); here the instance's engine tags are simply unknown, so
+// every fetch below is a search request.
+const capabilities = vi.hoisted(() => ({
+  value: null as null | {
+    categories: Set<string>;
+    engineCategories: Map<string, string[]>;
+    fetchedAt: number;
+  },
+}));
+vi.mock(
+  '@/lib/services/chat/tools/searxngCapabilities',
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import('@/lib/services/chat/tools/searxngCapabilities')
+      >();
+    return {
+      ...actual,
+      getSearxngCapabilities: vi.fn(async () => capabilities.value),
+    };
+  },
+);
 
 const KEY = 'k'.repeat(48);
 
@@ -622,5 +650,190 @@ describe('searchSearxng', () => {
     const assertion = expect(pending).rejects.toThrow(/timed out/);
     await vi.advanceTimersByTimeAsync(11_000);
     await assertion;
+  });
+});
+
+describe('engine health', () => {
+  const caps = {
+    categories: new Set(['general', 'web']),
+    engineCategories: new Map([
+      ['bing', ['general', 'web']],
+      ['qwant', ['general', 'web']],
+      ['wikipedia', ['general']],
+      ['mojeek', ['general', 'web']],
+    ]),
+    fetchedAt: Date.now(),
+  };
+  const withEngines = (id: number, engines: string[]) => ({
+    ...result(id),
+    engines,
+  });
+
+  it('reads engines per result and the unresponsive list with reasons', () => {
+    const parsed = parseSearxngResponse(
+      {
+        results: [
+          withEngines(1, ['bing', 'qwant']),
+          { ...result(2), engine: 'mojeek' },
+        ],
+      },
+      8,
+    );
+    expect(parsed.entries[0].engines).toEqual(['bing', 'qwant']);
+    expect(parsed.entries[1].engines).toEqual(['mojeek']);
+    expect(
+      unresponsiveEngines({
+        unresponsive_engines: [
+          ['bing', 'timeout'],
+          ['qwant', 'CAPTCHA'],
+          'ddg',
+        ],
+      }),
+    ).toEqual([
+      { engine: 'bing', reason: 'timeout' },
+      { engine: 'qwant', reason: 'CAPTCHA' },
+      { engine: 'ddg', reason: '' },
+    ]);
+  });
+
+  it('web coverage needs a tagged web engine among the answers — unknown without tags', () => {
+    const covered = assessSearchHealth(
+      [withEngines(1, ['bing']), withEngines(2, ['wikipedia'])],
+      [],
+      caps,
+    );
+    expect(covered.webCoverage).toBe(true);
+    expect(covered.answered).toEqual({ bing: 1, wikipedia: 1 });
+
+    const lost = assessSearchHealth(
+      [withEngines(1, ['wikipedia']), withEngines(2, ['wikidata'])],
+      [
+        { engine: 'bing', reason: 'suspended' },
+        { engine: 'qwant', reason: 'CAPTCHA' },
+      ],
+      caps,
+    );
+    expect(lost.webCoverage).toBe(false);
+    expect(lost.throttled).toBe(true);
+    expect(describeSearchHealth(lost)).toBe(
+      'engines: wikipedia ×1, wikidata ×1; unresponsive: bing (suspended), qwant (CAPTCHA); NO web coverage',
+    );
+
+    expect(
+      assessSearchHealth([withEngines(1, ['bing'])], [], null).webCoverage,
+    ).toBeNull();
+    expect(
+      assessSearchHealth([], [{ engine: 'bing', reason: 'timeout' }], caps)
+        .throttled,
+    ).toBe(false);
+  });
+
+  it('sends the router’s language, and a web-only leg for the web category', () => {
+    expect(
+      new URL(
+        buildSearxngUrl('https://s.example', 'q', 'general', 'any', 'fr'),
+      ).searchParams.get('language'),
+    ).toBe('fr');
+    expect(
+      new URL(
+        buildSearxngUrl('https://s.example', 'q', 'general', 'any', 'nope'),
+      ).searchParams.get('language'),
+    ).toBe('auto');
+    expect(
+      planSearxngCategories({ category: 'web', freshness: 'day', deep: true }),
+    ).toEqual(['web']);
+    expect(
+      new URL(
+        buildSearxngUrl('https://s.example', 'q', 'web', 'week'),
+      ).searchParams.get('time_range'),
+    ).toBe('week');
+  });
+});
+
+describe('searchSearxng with capabilities', () => {
+  const fetchMock = vi.fn();
+  const priorUrl = env.SEARXNG_URL;
+  const priorKey = env.SEARXNG_API_KEY;
+
+  beforeEach(() => {
+    __resetSearxngBreakerForTests();
+    fetchMock.mockReset();
+    vi.stubGlobal('fetch', fetchMock);
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    (env as { SEARXNG_URL?: string }).SEARXNG_URL = 'https://searx.internal';
+    (env as { SEARXNG_API_KEY?: string }).SEARXNG_API_KEY = KEY;
+    capabilities.value = {
+      categories: new Set(['general', 'news', 'web']),
+      engineCategories: new Map([
+        ['bing', ['general', 'web']],
+        ['wikipedia', ['general']],
+      ]),
+      fetchedAt: Date.now(),
+    };
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    capabilities.value = null;
+  });
+  afterAll(() => {
+    (env as { SEARXNG_URL?: string }).SEARXNG_URL = priorUrl;
+    (env as { SEARXNG_API_KEY?: string }).SEARXNG_API_KEY = priorKey;
+  });
+
+  it('reports health on the outcome and holds follow-ups after a throttling signal', async () => {
+    fetchMock.mockResolvedValue(
+      jsonResponse({
+        results: [{ ...result(1), engine: 'wikipedia' }],
+        unresponsive_engines: [['bing', 'too many requests']],
+      }),
+    );
+    expect(isSearxngThrottled()).toBe(false);
+    const outcome = await searchSearxng(['cholera outbreak response'], {
+      resultCount: 8,
+      freshness: 'any',
+    });
+    expect(outcome.health.webCoverage).toBe(false);
+    expect(outcome.health.throttled).toBe(true);
+    expect(isSearxngThrottled()).toBe(true);
+    // The diagnostic record: one JSON line a log query can parse.
+    expect(outcome.health.legs).toEqual([
+      expect.objectContaining({
+        category: 'general',
+        query: 'cholera outbreak response',
+        results: 1,
+      }),
+    ]);
+    const line = vi
+      .mocked(console.warn)
+      .mock.calls.map(([message]) => String(message))
+      .find((message) => message.includes('SEARXNG_DEGRADED'));
+    expect(line).toBeDefined();
+    const report = JSON.parse(line!.slice(line!.indexOf('{')));
+    expect(report).toMatchObject({
+      queries: ['cholera outbreak response'],
+      categories: ['general'],
+      webCoverage: false,
+      throttled: true,
+      unresponsive: [{ engine: 'bing', reason: 'too many requests' }],
+      answered: { wikipedia: 1 },
+    });
+    expect(report.legs[0].ms).toBeGreaterThanOrEqual(0);
+  });
+
+  it('degrades a category the instance does not serve to the general web', async () => {
+    capabilities.value = {
+      categories: new Set(['general', 'news']),
+      engineCategories: new Map([['bing', ['general']]]),
+      fetchedAt: Date.now(),
+    };
+    fetchMock.mockResolvedValue(jsonResponse({ results: [result(1)] }));
+    await searchSearxng(['q'], {
+      resultCount: 8,
+      freshness: 'any',
+      category: 'web',
+    });
+    const url = new URL(String(fetchMock.mock.calls[0][0]));
+    expect(url.searchParams.get('categories')).toBe('general');
   });
 });

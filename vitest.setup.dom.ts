@@ -67,6 +67,7 @@ const mockMessages: Record<string, unknown> = {
     },
     area: {
       workflows: 'Workflows',
+      webSearch: 'Web search',
       viewAs: 'View as',
       globalAdmins: 'Global admins',
       announcements: 'Announcements',
@@ -87,6 +88,11 @@ const mockMessages: Record<string, unknown> = {
       'This request took too long to prepare and was stopped before {model} could answer. You can allow more time, or try another model.',
     retryWaitingLonger: 'Wait up to {duration} and try again',
     regenerate: 'Regenerate',
+    keepSearching: 'Keep searching',
+    keepSearchingHint:
+      'The search stopped before it found this. Ask the assistant to try different approaches.',
+    keepSearchingMessage:
+      'Keep searching for this, please — try a different approach.',
     alwaysWaitThisLong: 'Always wait up to {duration}',
     attachedFileExpired:
       'An attached file is no longer available — uploaded files are stored for a limited time. It has been removed from this conversation. Try again without it, or upload the file again.',
@@ -112,6 +118,11 @@ const mockMessages: Record<string, unknown> = {
       title: 'Headlines found — deep search still running',
       hint: 'The deep Bing search can take up to 90 seconds. Answer now from the {count} headlines already found, or wait for the merged result.',
       summarizeNow: 'Summarize from headlines now',
+      multiStepTitle:
+        'Results so far — checking whether they answer the question',
+      multiStepHint:
+        'The search may look further — another search or a read of the most promising pages. Answer now from the {count} results already found if you would rather not wait.',
+      answerNow: 'Answer from these results now',
       sourcesCount: '{count} sources',
       showAll: 'Show all {count} sources',
       showFewer: 'Show fewer',
@@ -839,18 +850,18 @@ const mockMessages: Record<string, unknown> = {
       providerGdelt: 'GDELT only',
       providerGdeltDescription:
         'Open research database of world news with direct publisher links, which lets follow-up questions read the full articles. Strictly rate-limited — back-to-back searches may queue for a few seconds.',
-      providerBing: 'Bing grounding (via Microsoft)',
+      providerBing: 'Bing web search',
       providerBingDescription:
-        'Reads full pages for deeper summaries and covers the general web, not just news. However, searches routinely take 30–90 seconds and result quality is often inconsistent from one search to the next.',
-      providerBingResponses: 'Bing fast search (Azure OpenAI)',
-      providerBingResponsesDescription:
-        'The same Bing web coverage as Bing grounding, run as a single direct model call instead of a Foundry agent — typically much faster. New option under evaluation against Bing grounding.',
+        'Covers the general web, not just news, and reads pages for deeper summaries. Runs as a single model call in your region; searches usually take a little longer than the news feeds.',
       providerCombined: 'Deep search with early headlines (Bing + Google News)',
       providerCombinedDescription:
-        'Runs Bing grounding and Google News together: headlines appear within seconds while the deep Bing search keeps working, and you can choose to answer from the headlines right away instead of waiting out the slow search. When Bing finishes, both result sets are merged.',
+        'Runs Bing and Google News together: headlines appear within seconds while the deeper Bing search keeps working, and you can choose to answer from the headlines right away instead of waiting. When Bing finishes, both result sets are merged.',
       sourcesLabel: 'Sources per search',
       sourcesDescription:
         'How many distinct sources a search keeps as citations. Research-style questions may automatically widen this.',
+      multiStepLabel: 'Multi-step search',
+      multiStepDescription:
+        'With MSF web search, the assistant checks the first results and, only when they fall short, searches again or reads the most promising pages before answering. Most questions still finish in one step. Turn this off to keep every search to a single round.',
       freshnessLabel: 'Preferred recency',
       freshnessDescription:
         'How recent results should be. Automatic lets each question decide (breaking news prefers the last day).',
