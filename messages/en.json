@@ -1436,7 +1436,7 @@
       "description": "Controls how live web searches run when Search Mode is active. Changes apply immediately.",
       "providerLabel": "Search provider",
       "providerAuto": "Automatic (recommended)",
-      "providerAutoDescription": "Uses this deployment's default — MSF web search where it is available, otherwise the combined news search.",
+      "providerAutoDescription": "Uses this deployment's default — currently Bing web search. MSF web search is available below as an option.",
       "providerSearxng": "MSF web search",
       "providerSearxngDescription": "MSF's own private metasearch service. Covers the general web, news, scientific literature (including MSF research publications), technical documentation and humanitarian data, and picks the right kind of source for each question. Results arrive in seconds with direct links, and only the search query leaves the app — the search engines never see you.",
       "otherProvidersLabel": "Other providers",
