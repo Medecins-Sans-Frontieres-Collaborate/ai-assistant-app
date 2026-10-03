@@ -154,6 +154,28 @@ export class ToolRouterEnricher extends BasePipelineStage {
       : reported;
   }
 
+  /**
+   * The record's "what went wrong" suffix: a combined search whose Bing
+   * leg failed, or a SearXNG search another backend answered for (Bing
+   * first, the news feeds when Bing cannot run — WebSearchTool's
+   * searxngFallback), or one whose web engines did not answer.
+   */
+  private static degradedNoteOf(result: {
+    metadata?: Record<string, unknown>;
+  }): string {
+    const meta = result.metadata ?? {};
+    if (meta.bingFailed) return ' (Bing failed — Google News headlines only)';
+    if (meta.searxngFallback) {
+      return meta.fallbackProvider === 'bing'
+        ? ' (MSF web search unavailable — Bing used instead)'
+        : ' (MSF web search unavailable — news feeds used instead)';
+    }
+    if (meta.searxngDegraded) {
+      return ' (MSF web search engines did not answer — news and reference engines only)';
+    }
+    return '';
+  }
+
   // Multi-step search (docs/WEB_SEARCH_MULTI_STEP.md). The loop ends on its
   // own deadline and hands back what it gathered; the margin keeps a step
   // that overruns from losing everything to the outer search timeout.
@@ -639,7 +661,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
 
   /**
    * User-selected backend wins; 'auto' defers to the deployment default
-   * (SearXNG where configured; WEB_SEARCH_PROVIDER env pins it).
+   * (Bing; WEB_SEARCH_PROVIDER env pins it).
    */
   private resolveSearchProvider(
     context: ChatContext,
@@ -1005,12 +1027,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
         // Persistent record — parity with the code interpreter: users see
         // WHAT was searched, which model ran it, and how long it took, in
         // the same "Used N tools" strip. A combined search whose Bing leg
-        // failed says so — the source count alone would overstate coverage.
-        const degradedNote = searchResult.metadata?.bingFailed
-          ? ' (Bing failed — Google News headlines only)'
-          : searchResult.metadata?.searxngFallback
-            ? ' (MSF web search unavailable — news feeds used instead)'
-            : '';
+        // failed says so — the source count alone would overstate coverage;
+        // so does a SearXNG search another backend answered for.
+        const degradedNote = ToolRouterEnricher.degradedNoteOf(searchResult);
         if (!searchResult.metadata?.recordsEmitted) {
           await this.emitSearchRecord(
             context,
@@ -1106,9 +1125,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
    * stay in executeWebSearch. Each step is recorded for the user as it
    * completes (`recordsEmitted`).
    *
-   * Degradations are the single-step ones: instance down → news feeds;
-   * nothing found after every step → news feeds (knowledge answer for
-   * science/it); assessor unavailable → the plain first-search result.
+   * Degradations are the single-step ones: instance down → Bing, else the
+   * news feeds; nothing found after every step → the same (knowledge
+   * answer for science/it when only the feeds remain); assessor
+   * unavailable → the plain first-search result.
    */
   private async executeMultiStepSearch(
     context: ChatContext,
@@ -1160,7 +1180,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
         });
       } catch (error) {
         console.warn(
-          '[ToolRouterEnricher] SearXNG search failed; using the news feeds:',
+          '[ToolRouterEnricher] SearXNG search failed; falling back:',
           error instanceof Error ? error.message : error,
         );
         return this.webSearchTool.searxngFallback(params);
@@ -1349,21 +1369,22 @@ export class ToolRouterEnricher extends BasePipelineStage {
       );
     }
 
-    // The web engines did not answer: the keyless news feeds (Google News
-    // + GDELT) are a second opinion, exactly as when the instance is down.
-    // Headlines only, and news only — so they are presented as what they
-    // are, and skipped for science/IT questions (searxngFallback).
+    // The web engines did not answer: another backend is a second opinion,
+    // exactly as when the instance is down — Bing where it can run, else
+    // the keyless news feeds (Google News + GDELT: headlines only, news
+    // only, so presented as what they are and skipped for science/IT
+    // questions; see searxngFallback).
     if (result.outcome === 'degraded') {
-      const feeds = await this.feedFallbackForDegraded(context, result, params);
-      if (feeds) {
+      const fallback = await this.fallbackForDegraded(context, result, params);
+      if (fallback) {
         ToolRouterEnricher.logMultiStepSearch(
           context,
           result,
           question,
           Boolean(continuation),
-          'feeds',
+          fallback.metadata?.fallbackProvider === 'bing' ? 'bing' : 'feeds',
         );
-        return feeds;
+        return fallback;
       }
     }
     ToolRouterEnricher.logMultiStepSearch(
@@ -1516,36 +1537,67 @@ export class ToolRouterEnricher extends BasePipelineStage {
    * short with nothing useful. Best effort; never awaited.
    */
   /**
-   * The feeds as a fallback for a degraded search. Returns the merged
-   * result — the note, any SearXNG sources the assessor did judge useful,
-   * then the headlines — or null when the feeds had nothing either.
+   * Another backend as a fallback for a degraded search (searxngFallback:
+   * Bing, else the news feeds). A Bing answer stands on its own, with a
+   * note. A feeds answer is merged — the note, any SearXNG sources the
+   * assessor did judge useful, then the headlines. Null when the fallback
+   * had nothing either.
    */
-  private async feedFallbackForDegraded(
+  private async fallbackForDegraded(
     context: ChatContext,
     result: MultiStepResult,
     params: WebSearchToolParams,
   ): Promise<ToolResult | null> {
     const startTime = Date.now();
-    let feeds: ToolResult;
+    let fallback: ToolResult;
     try {
-      feeds = await this.webSearchTool.searxngFallback(params);
+      fallback = await this.webSearchTool.searxngFallback(params);
     } catch (error) {
       console.warn(
-        '[ToolRouterEnricher] Feed fallback for a degraded search failed:',
+        '[ToolRouterEnricher] Fallback for a degraded search failed:',
         error instanceof Error ? error.message : error,
       );
       return null;
     }
-    const feedCitations = feeds.citations ?? [];
+    const viaBing = fallback.metadata?.fallbackProvider === 'bing';
+    const citations = fallback.citations ?? [];
+    const healthNote = result.lastHealth
+      ? ` (${describeSearchHealth(result.lastHealth)})`
+      : '';
     await this.emitSearchRecord(
       context,
       params.searchQueries?.join(' | ') ?? params.searchQuery,
-      ToolRouterEnricher.PROVIDER_LABELS.news,
-      `${feedCitations.length} source${feedCitations.length === 1 ? '' : 's'} from the news feeds (web engines did not answer)`,
+      viaBing
+        ? ToolRouterEnricher.executorOf(
+            fallback,
+            ToolRouterEnricher.PROVIDER_LABELS.bing,
+          )
+        : ToolRouterEnricher.PROVIDER_LABELS.news,
+      `${citations.length} source${citations.length === 1 ? '' : 's'} from ${viaBing ? 'Bing' : 'the news feeds'} (MSF web search engines did not answer)`,
       null,
       Date.now() - startTime,
     );
-    if (feedCitations.length === 0) return null;
+    if (citations.length === 0) return null;
+
+    const budget = (count: number) => Math.min(30000, 6000 + count * 800);
+    if (viaBing) {
+      // Bing's summary cites inline; nothing is merged ahead of it, so its
+      // numbering stands as is (the caller offsets).
+      const note =
+        `Search note: the web search engines behind MSF's search service did not answer for this request${healthNote}, ` +
+        `so the search was run on Bing instead. Mention that ONCE, briefly. ` +
+        `Answer only what the results genuinely support; never present a guess as a finding.`;
+      return {
+        text: `${note}\n\n${fallback.text}`,
+        citations,
+        metadata: {
+          ...fallback.metadata,
+          recordsEmitted: true,
+          multiStepOutcome: result.outcome,
+          textBudgetChars: budget(citations.length),
+        },
+      };
+    }
 
     // SearXNG sources the assessor did rank (reference engines can still
     // answer a "what is X" question) come first; the feeds' digest follows
@@ -1555,13 +1607,12 @@ export class ToolRouterEnricher extends BasePipelineStage {
         ? buildMultiStepDigest(result, { omitOutcomeNote: true })
         : { text: '', citations: [] };
     const offset = kept.citations.length;
-    const feedText = feeds.text.replace(
+    const feedText = fallback.text.replace(
       /^\[(\d+)\]/gm,
       (_match, n) => `[${Number(n) + offset}]`,
     );
     const note =
-      `Search note: the web search engines behind the search service did not answer for this request` +
-      `${result.lastHealth ? ` (${describeSearchHealth(result.lastHealth)})` : ''}, ` +
+      `Search note: the web search engines behind the search service did not answer for this request${healthNote}, ` +
       `so the news feeds (Google News and GDELT) were searched instead. They index NEWS ARTICLES only, as headlines and short snippets — ` +
       `they cannot show product listings, official documents or reference pages, so their results may be beside the point. ` +
       `Say plainly that the web search service was degraded for this request and that these results come from news feeds; ` +
@@ -1570,7 +1621,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
       text: [note, kept.text, feedText].filter(Boolean).join('\n\n'),
       citations: [
         ...kept.citations,
-        ...feedCitations.map((citation, idx) => ({
+        ...citations.map((citation, idx) => ({
           ...citation,
           number: offset + idx + 1,
         })),
@@ -1579,10 +1630,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
         recordsEmitted: true,
         multiStepOutcome: result.outcome,
         searxngFallback: true,
-        textBudgetChars: Math.min(
-          30000,
-          6000 + (offset + feedCitations.length) * 800,
-        ),
+        fallbackProvider: 'news',
+        textBudgetChars: budget(offset + citations.length),
       },
     };
   }
@@ -1634,7 +1683,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
     result: MultiStepResult,
     question: string,
     continuation: boolean,
-    fallback?: 'feeds' | 'none',
+    fallback?: 'bing' | 'feeds' | 'none',
   ): void {
     try {
       void getAzureMonitorLogger().logCustomMetric({
