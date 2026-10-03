@@ -10,10 +10,12 @@ import {
   searchNewsParallel,
 } from './newsSearch';
 import { executeResponsesWebSearch } from './responsesWebSearch';
+import { WEB_ENGINE_CATEGORY } from './searxngCapabilities';
 import {
   SearxngSearchOptions,
   SearxngSearchOutcome,
   isSearxngConfigured,
+  planSearxngCategories,
   searchSearxng,
 } from './searxngSearch';
 
@@ -21,14 +23,17 @@ import { env } from '@/config/environment';
 
 /**
  * Deployment default backend — what the user-facing 'auto' resolves to. An
- * explicit WEB_SEARCH_PROVIDER pins it; otherwise SearXNG where the
- * instance is configured, the keyless news feeds everywhere else.
+ * explicit WEB_SEARCH_PROVIDER pins it; otherwise Bing. SearXNG stays
+ * opt-in (Settings → MSF web search) until the instance's upstream engines
+ * hold up under a full deployment; where a user picks it, an unavailable
+ * instance falls back to Bing (see searxngFallback).
  */
 export function resolveDefaultWebSearchProvider(): ResolvedWebSearchProvider {
-  return (
-    env.WEB_SEARCH_PROVIDER ?? (isSearxngConfigured() ? 'searxng' : 'news')
-  );
+  return env.WEB_SEARCH_PROVIDER ?? 'bing';
 }
+
+/** Which backend answered in place of an unavailable SearXNG instance. */
+export type SearxngFallbackProvider = 'bing' | 'news';
 
 /**
  * WebSearchTool
@@ -65,14 +70,15 @@ export class WebSearchTool implements Tool {
         `[WebSearchTool] Executing search via ${provider}: "${params.searchQuery}"`,
       );
 
-      // SearXNG: MSF's own metasearch instance. Unconfigured, unreachable
-      // or empty → the keyless news feeds answer instead, so local dev (no
-      // route to the private endpoint) and a key-rotation gap longer than
-      // the client's single retry still get results.
+      // SearXNG: MSF's own metasearch instance. Unconfigured, unreachable,
+      // empty, or its web engines not answering → Bing answers instead
+      // (then the keyless news feeds), so local dev (no route to the
+      // private endpoint), a key-rotation gap longer than the client's
+      // single retry, and an upstream outage still get results.
       if (provider === 'searxng') {
-        const result = await this.executeSearxng(params);
-        if (result) return result;
-        return await this.searxngFallback(params);
+        const searx = await this.executeSearxng(params);
+        if (searx.result && !searx.degraded) return searx.result;
+        return await this.searxngFallback(params, searx.result);
       }
 
       // Combined: Bing + Google News feed concurrently — headlines surface
@@ -107,25 +113,78 @@ export class WebSearchTool implements Tool {
   }
 
   /**
-   * What answers when SearXNG cannot: the keyless news feeds — except for
-   * science and programming questions. The fallback feeds are NEWS feeds:
+   * What answers when SearXNG cannot (instance down, or its upstream web
+   * engines not answering): Bing first — a real web search, so it covers
+   * every category — then the keyless news feeds. The result carries
+   * `searxngFallback` plus `fallbackProvider` so records and the model's
+   * note say which backend answered.
+   *
+   * `degraded` is a SearXNG result whose web engines did not answer (the
+   * reference/news engines may still have found something): kept as the
+   * last resort when Bing cannot run, ahead of the news feeds.
+   *
+   * The news feeds are skipped for science and programming questions:
    * headlines answer a news or general question, but for a science or
    * programming question they are noise the model would dutifully cite.
    * There, an honest "found nothing" (the enricher's knowledge-answer path)
    * is the better degradation.
    */
-  async searxngFallback(params: WebSearchToolParams): Promise<ToolResult> {
+  async searxngFallback(
+    params: WebSearchToolParams,
+    degraded?: ToolResult | null,
+  ): Promise<ToolResult> {
+    try {
+      const bing = await this.executeBing(params);
+      if ((bing.citations?.length ?? 0) > 0 || bing.text.trim().length > 0) {
+        console.log(
+          `[WebSearchTool] Bing answered in place of SearXNG: ${bing.citations?.length ?? 0} citations`,
+        );
+        return {
+          ...bing,
+          metadata: {
+            ...bing.metadata,
+            searxngFallback: true,
+            fallbackProvider: 'bing' satisfies SearxngFallbackProvider,
+          },
+        };
+      }
+      console.warn(
+        '[WebSearchTool] Bing fallback returned nothing; using the news feeds',
+      );
+    } catch (error) {
+      // A search that lost the race is over — no second backend.
+      if (params.signal?.aborted) throw error;
+      console.warn(
+        '[WebSearchTool] Bing fallback failed; using the news feeds:',
+        error instanceof Error ? error.message : error,
+      );
+    }
+    if (degraded && (degraded.citations?.length ?? 0) > 0) {
+      return {
+        ...degraded,
+        text:
+          `Search note: the web search engines behind the search service did not answer for this request; ` +
+          `these results come from its news and reference engines only, so they may be beside the point. ` +
+          `Say so briefly, and answer only what they genuinely support.\n\n${degraded.text}`,
+        metadata: { ...degraded.metadata, searxngDegraded: true },
+      };
+    }
+    const fallbackProvider: SearxngFallbackProvider = 'news';
     if (params.category === 'science' || params.category === 'it') {
       return {
         text: '',
         citations: [],
-        metadata: { searxngFallback: true },
+        metadata: { searxngFallback: true, fallbackProvider },
       };
     }
     const fallback = await this.executeFeeds('news', params);
     return {
       ...fallback,
-      metadata: { ...fallback.metadata, searxngFallback: true },
+      metadata: {
+        ...fallback.metadata,
+        searxngFallback: true,
+        fallbackProvider,
+      },
     };
   }
 
@@ -142,33 +201,45 @@ export class WebSearchTool implements Tool {
   }
 
   /**
-   * SearXNG search. Returns null when the caller should fall back to the
-   * news feeds: instance unconfigured, every leg failed, or nothing found.
+   * SearXNG search. A null result means the caller should fall back:
+   * instance unconfigured, every leg failed, or nothing found. `degraded`
+   * marks a result whose web engines did not answer (the same signal the
+   * multi-step loop's 'degraded' outcome rests on) — only judged where the
+   * plan asked the web engines at all: a news- or science-only plan never
+   * expects them, so their silence there means nothing.
    */
   private async executeSearxng(
     params: WebSearchToolParams,
-  ): Promise<ToolResult | null> {
+  ): Promise<{ result: ToolResult | null; degraded: boolean }> {
     if (!isSearxngConfigured()) {
-      console.warn(
-        '[WebSearchTool] SearXNG is not configured; using the news feeds',
-      );
-      return null;
+      console.warn('[WebSearchTool] SearXNG is not configured; falling back');
+      return { result: null, degraded: false };
     }
     const queries = params.searchQueries?.length
       ? params.searchQueries.slice(0, 5)
       : [params.searchQuery];
+    const options = {
+      resultCount: params.resultCount ?? 8,
+      freshness: params.freshness ?? 'any',
+      category: params.category,
+      deep: params.deep ?? false,
+    } as const;
     try {
-      const outcome = await searchSearxng(queries, {
-        resultCount: params.resultCount ?? 8,
-        freshness: params.freshness ?? 'any',
-        category: params.category,
-        deep: params.deep ?? false,
-      });
+      const outcome = await searchSearxng(queries, options);
       if (outcome.entries.length === 0) {
         console.warn(
-          '[WebSearchTool] SearXNG returned no results; using the news feeds',
+          '[WebSearchTool] SearXNG returned no results; falling back',
         );
-        return null;
+        return { result: null, degraded: false };
+      }
+      const plan = planSearxngCategories(options);
+      const degraded =
+        outcome.health?.webCoverage === false &&
+        (plan.includes('general') || plan.includes(WEB_ENGINE_CATEGORY));
+      if (degraded) {
+        console.warn(
+          `[WebSearchTool] SearXNG web engines did not answer (${outcome.entries.length} results from other engines); falling back`,
+        );
       }
       console.log(
         `[WebSearchTool] SearXNG (${params.category ?? 'general'}): ${outcome.entries.length} results across ${queries.length} quer${queries.length === 1 ? 'y' : 'ies'}`,
@@ -185,22 +256,21 @@ export class WebSearchTool implements Tool {
           ? `Instant answer from the search engine (verify against the sources below): ${outcome.answers.join(' | ')}\n\n`
           : '';
       return {
-        text: `${answerLead}${digest.text}`,
-        citations: digest.citations,
+        result: {
+          text: `${answerLead}${digest.text}`,
+          citations: digest.citations,
+        },
+        degraded,
       };
     } catch (error) {
       console.warn(
-        '[WebSearchTool] SearXNG search failed; using the news feeds:',
+        '[WebSearchTool] SearXNG search failed; falling back:',
         error instanceof Error ? error.message : error,
       );
-      return null;
+      return { result: null, degraded: false };
     }
   }
 
-  /**
-   * Keyless feed providers. 'news' fans out to GDELT + Google News in
-   * parallel so each backs the other up.
-   */
   /** Bing through the Responses API web_search tool, on the user's region. */
   private executeBing(params: WebSearchToolParams): Promise<ToolResult> {
     return executeResponsesWebSearch({
@@ -214,6 +284,10 @@ export class WebSearchTool implements Tool {
     });
   }
 
+  /**
+   * Keyless feed providers. 'news' fans out to GDELT + Google News in
+   * parallel so each backs the other up.
+   */
   private async executeFeeds(
     provider: ResolvedWebSearchProvider,
     params: WebSearchToolParams,
