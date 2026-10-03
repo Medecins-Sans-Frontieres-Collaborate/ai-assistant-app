@@ -224,11 +224,12 @@ const serverEnvSchema = z.object({
   //    to the client while Bing runs, then the results merge.
   //  - 'searxng': MSF's own SearXNG metasearch instance (general web, news,
   //    science, IT, humanitarian). Seconds-fast, real publisher URLs, no LLM
-  //    round-trip. Needs SEARXNG_URL + SEARXNG_API_KEY; degrades to 'news'
-  //    when the instance is unconfigured or unreachable.
-  // UNSET = automatic: 'searxng' where the instance is configured, 'news'
-  // otherwise (see resolveDefaultWebSearchProvider). Set it only to pin a
-  // deployment to one backend.
+  //    round-trip. Needs SEARXNG_URL + SEARXNG_API_KEY; degrades to 'bing'
+  //    (then 'news') when the instance is unconfigured or unreachable or
+  //    its web engines do not answer.
+  // UNSET = 'bing' (see resolveDefaultWebSearchProvider); SearXNG stays
+  // opt-in per user until its upstream engines hold up under a full
+  // deployment. Set it only to pin a deployment to one backend.
   WEB_SEARCH_PROVIDER: z.preprocess(
     (value) =>
       value === 'bing-agent' || value === 'bing-responses' ? 'bing' : value,
