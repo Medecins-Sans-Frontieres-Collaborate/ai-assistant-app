@@ -12,6 +12,7 @@ import {
   IconShieldLock,
   IconSocial,
   IconSpeakerphone,
+  IconTextWrap,
   IconUserShield,
   IconUsersGroup,
   IconVocabulary,
@@ -83,6 +84,13 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     icon: IconWorldSearch,
     labelKey: 'admin.area.webSearch',
     descriptionKey: 'admin.areaDescription.webSearch',
+  },
+  'context-budget': {
+    id: 'context-budget',
+    href: '/admin/context-budget',
+    icon: IconTextWrap,
+    labelKey: 'admin.area.contextBudget',
+    descriptionKey: 'admin.areaDescription.contextBudget',
   },
   guides: {
     id: 'guides',
@@ -217,7 +225,13 @@ export const ADMIN_GROUPS: AdminAreaGroupDescriptor[] = [
   {
     id: 'capabilities',
     labelKey: 'admin.group.capabilities',
-    areas: ['agents', 'connectors', 'workflows', 'web-search'],
+    areas: [
+      'agents',
+      'connectors',
+      'workflows',
+      'web-search',
+      'context-budget',
+    ],
   },
   {
     id: 'libraries',
