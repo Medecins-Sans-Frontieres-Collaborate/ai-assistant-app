@@ -1,5 +1,7 @@
 import { Session } from 'next-auth';
 
+import { ContextBudgetService } from '@/lib/services/contextBudget/ContextBudgetService';
+
 import {
   appendMetadataToStream,
   createStreamEncoder,
@@ -200,14 +202,21 @@ export class AIFoundryAgentHandler {
             }
           } else {
             const encoding = await getGlobalTiktoken();
+            const budgets = ContextBudgetService.getInstance();
+            await budgets.ensureFresh();
+            const budget = budgets.getBudget(modelConfig);
             const processedMessages = await getMessagesToSend(
               messages,
               encoding,
               // Compaction summary/memories are intentionally NOT injected on
               // this path either — Foundry threads keep full server-side history.
               0, // No system prompt for agents (they have built-in instructions)
-              modelConfig.tokenLimit,
+              budget.tokens,
               user,
+              {
+                minRecentMessages: budget.minRecentMessages,
+                windowTokens: budget.windowTokens,
+              },
             );
 
             console.log('[AIFoundryAgentHandler] Messages processed:', {

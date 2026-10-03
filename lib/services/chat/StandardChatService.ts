@@ -1,5 +1,6 @@
 import { Session } from 'next-auth';
 
+import { ContextBudgetService } from '@/lib/services/contextBudget/ContextBudgetService';
 import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
 import { runAnthropicMcpToolLoop } from '@/lib/services/mcp/AnthropicMcpToolLoopService';
 import { planMcpSteps } from '@/lib/services/mcp/McpPlannerService';
@@ -426,23 +427,39 @@ export class StandardChatService {
       modelConfig,
     );
 
-    // Prepare messages with token limit filtering
-    // Use cached Tiktoken instance for better performance
+    // Trim the history to the model's budget (admin-configurable; see
+    // lib/services/contextBudget/types.ts). Use cached Tiktoken instance
+    // for better performance.
     const perfMsgStart = performance.now();
     const encoding = await getGlobalTiktoken();
     const promptTokens = encoding.encode(enhancedPrompt);
+    const budgets = ContextBudgetService.getInstance();
+    await budgets.ensureFresh();
+    const budget = budgets.getBudget(modelConfig);
     const messagesToSend = await getMessagesToSend(
       request.messages,
       encoding,
       promptTokens.length,
-      modelConfig.tokenLimit,
+      budget.tokens,
       request.user,
+      {
+        minRecentMessages: budget.minRecentMessages,
+        windowTokens: budget.windowTokens,
+      },
     );
     perfLog(
       'StandardChatService.prepareMessages',
       perfMsgStart,
       `(${messagesToSend.length} messages)`,
     );
+    if (messagesToSend.length < request.messages.length) {
+      // The one line that makes a "the model forgot what we said" report
+      // diagnosable: how much of the conversation actually reached it.
+      console.log(
+        `[context] ${sanitizeForLog(modelConfig.id)}: sending ${messagesToSend.length} of ${request.messages.length} messages ` +
+          `(history budget ${budget.tokens} tokens incl. ${promptTokens.length} prompt tokens; window ${budget.windowTokens})`,
+      );
+    }
     // Don't free() - encoding is shared across requests
 
     // Resolve which region's clients to use (cross-region routing). EU users
