@@ -17,7 +17,8 @@
  * summary joins when it finishes, and the two are merged.
  * 'searxng' is MSF's own SearXNG metasearch instance — general web plus
  * news/science/IT/humanitarian engines, seconds-fast, real publisher URLs.
- * Where the instance is unconfigured or unreachable it degrades to 'news'.
+ * Where the instance is unconfigured, unreachable or its web engines do
+ * not answer, it degrades to 'bing', then to 'news'.
  *
  * 'bing-agent' and 'bing-responses' were the two earlier Bing routes (a
  * hand-made Foundry agent, and this one); persisted settings and older
@@ -116,8 +117,9 @@ export const MAX_SEARCH_RESULT_COUNT = 15;
 export const DEFAULT_WEB_SEARCH_OPTIONS: WebSearchOptions = {
   resultCount: 8,
   freshness: 'auto',
-  // 'auto' lets the deployment pick (SearXNG where configured), so backend
-  // changes reach users without another store migration.
+  // 'auto' lets the deployment pick (Bing unless WEB_SEARCH_PROVIDER pins
+  // another), so backend changes reach users without another store
+  // migration.
   provider: 'auto',
   multiStep: true,
 };
