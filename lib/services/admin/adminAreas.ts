@@ -61,6 +61,7 @@ export const ADMIN_AREA_IDS = [
   'analytics',
   'workflows',
   'web-search',
+  'context-budget',
   'announcements',
   'delegations',
   'local-admins',
@@ -193,6 +194,8 @@ export async function resolveAdminAreas(
     areas.push('workflows');
     // Web search tuning is one org-wide document too: global only.
     areas.push('web-search');
+    // How much history each model is sent: one org-wide document, global only.
+    areas.push('context-budget');
     // A delegation decides who else may administer: global admins only.
     areas.push('delegations');
     // Who the global admins are is decided by global admins — EFFECTIVE
