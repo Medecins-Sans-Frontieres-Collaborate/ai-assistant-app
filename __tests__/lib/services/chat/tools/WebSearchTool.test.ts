@@ -27,7 +27,12 @@ vi.mock('@/lib/services/chat/tools/newsSearch', async (importOriginal) => ({
   fetchGoogleNewsHeadlines: vi.fn(),
 }));
 
-vi.mock('@/lib/services/chat/tools/searxngSearch', () => ({
+vi.mock('@/lib/services/chat/tools/searxngSearch', async (importOriginal) => ({
+  // Keep the real planSearxngCategories — the single-step degraded check
+  // asks it whether the plan expected the web engines at all.
+  ...(await importOriginal<
+    typeof import('@/lib/services/chat/tools/searxngSearch')
+  >()),
   isSearxngConfigured: vi.fn(() => false),
   searchSearxng: vi.fn(),
 }));
@@ -150,22 +155,182 @@ describe('WebSearchTool', () => {
       providersUsed: ['google-news' as const],
     };
 
+    const bingFallback = {
+      text: 'Bing summary[1]',
+      citations: [
+        { number: 1, title: 'B', url: 'https://b.example', date: '' },
+      ],
+      metadata: { executor: 'Bing (gpt-5.4)' },
+    };
+
     beforeEach(() => {
       vi.mocked(searchSearxng).mockReset();
       vi.mocked(isSearxngConfigured).mockReturnValue(true);
       vi.mocked(searchNewsParallel).mockReset();
       vi.mocked(searchNewsParallel).mockResolvedValue(newsFallback);
       vi.mocked(searchNewsFanOut).mockReset();
+      // The instance is unavailable in most of these cases and Bing is the
+      // first fallback; it is down too unless a test says otherwise, so
+      // the feed path stays observable.
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(
+        new Error('No web-search-capable deployment'),
+      );
     });
 
-    it("is what 'auto' resolves to when the instance is configured and no provider is pinned", async () => {
+    it("is NOT what 'auto' resolves to: the default is Bing unless a provider is pinned", async () => {
       (env as any).WEB_SEARCH_PROVIDER = undefined;
-      expect(resolveDefaultWebSearchProvider()).toBe('searxng');
-      vi.mocked(isSearxngConfigured).mockReturnValue(false);
-      expect(resolveDefaultWebSearchProvider()).toBe('news');
-      (env as any).WEB_SEARCH_PROVIDER = 'bing';
-      vi.mocked(isSearxngConfigured).mockReturnValue(true);
       expect(resolveDefaultWebSearchProvider()).toBe('bing');
+      vi.mocked(isSearxngConfigured).mockReturnValue(false);
+      expect(resolveDefaultWebSearchProvider()).toBe('bing');
+      (env as any).WEB_SEARCH_PROVIDER = 'searxng';
+      expect(resolveDefaultWebSearchProvider()).toBe('searxng');
+      (env as any).WEB_SEARCH_PROVIDER = 'news';
+      expect(resolveDefaultWebSearchProvider()).toBe('news');
+    });
+
+    it('falls back to Bing first, flagged, when the instance errors', async () => {
+      vi.mocked(searchSearxng).mockRejectedValue(
+        new Error('SearXNG timed out'),
+      );
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue(bingFallback);
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'q',
+        searchQueries: ['q', 'q2'],
+        provider: 'searxng',
+        category: 'science',
+        freshness: 'week',
+        resultCount: 5,
+        deep: true,
+        user: { ...user, region: 'EU' },
+      });
+
+      // Bing is a real web search: it answers every category, science
+      // included, on the primary query with the search tuning.
+      expect(executeResponsesWebSearch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          searchQuery: 'q',
+          resultCount: 5,
+          freshness: 'week',
+          deep: true,
+          region: 'EU',
+        }),
+      );
+      expect(result.text).toBe('Bing summary[1]');
+      expect(result.citations).toEqual(bingFallback.citations);
+      expect(result.metadata).toEqual({
+        executor: 'Bing (gpt-5.4)',
+        searxngFallback: true,
+        fallbackProvider: 'bing',
+      });
+      expect(searchNewsParallel).not.toHaveBeenCalled();
+    });
+
+    it('goes on to the news feeds when Bing returns nothing', async () => {
+      vi.mocked(searchSearxng).mockRejectedValue(new Error('down'));
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
+        text: '  ',
+        citations: [],
+      });
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        user,
+      });
+
+      expect(result.text).toBe('News digest');
+      expect(result.metadata).toEqual({
+        searxngFallback: true,
+        fallbackProvider: 'news',
+      });
+    });
+
+    it('does not try a second backend once the search was aborted', async () => {
+      vi.mocked(searchSearxng).mockRejectedValue(new Error('down'));
+      const controller = new AbortController();
+      vi.mocked(executeResponsesWebSearch).mockImplementation(async () => {
+        controller.abort();
+        throw new Error('aborted');
+      });
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        user,
+        signal: controller.signal,
+      });
+
+      expect(searchNewsParallel).not.toHaveBeenCalled();
+      expect(result.citations).toEqual([]);
+      expect(result.text).toContain('aborted');
+    });
+
+    it('treats a result whose web engines did not answer as unavailable, keeping it as the last resort', async () => {
+      const degraded = {
+        entries: [
+          {
+            title: 'Wiki page',
+            url: 'https://en.wikipedia.org/wiki/X',
+            date: '',
+            sourceName: 'wikipedia',
+            snippet: 'Reference only',
+          },
+        ],
+        answers: [],
+        health: { webCoverage: false, throttled: false },
+      } as any;
+      vi.mocked(searchSearxng).mockResolvedValue(degraded);
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue(bingFallback);
+
+      const viaBing = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        user,
+      });
+      expect(viaBing.metadata?.fallbackProvider).toBe('bing');
+      expect(viaBing.text).toBe('Bing summary[1]');
+
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(new Error('down'));
+      const kept = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        user,
+      });
+      expect(kept.metadata).toEqual({ searxngDegraded: true });
+      expect(kept.text).toContain(
+        'web search engines behind the search service did not answer',
+      );
+      expect(kept.text).toContain('[1] Wiki page');
+      expect(kept.citations).toHaveLength(1);
+      expect(searchNewsParallel).not.toHaveBeenCalled();
+    });
+
+    it('does not read missing web coverage as degraded when the plan never asked the web engines', async () => {
+      vi.mocked(searchSearxng).mockResolvedValue({
+        entries: [
+          {
+            title: 'Paper',
+            url: 'https://europepmc.org/abstract/MED/2',
+            date: '',
+            sourceName: 'europepmc.org',
+            snippet: 'Abstract',
+          },
+        ],
+        answers: [],
+        health: { webCoverage: false, throttled: false },
+      } as any);
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'q',
+        provider: 'searxng',
+        category: 'science',
+        user,
+      });
+
+      expect(executeResponsesWebSearch).not.toHaveBeenCalled();
+      expect(result.metadata).toBeUndefined();
+      expect(result.text).toContain('[1] Paper');
     });
 
     it('passes queries, tuning and the router category through and formats a web digest', async () => {
@@ -212,7 +377,7 @@ describe('WebSearchTool', () => {
       expect(searchNewsParallel).not.toHaveBeenCalled();
     });
 
-    it('falls back to the news feeds, flagged, when the instance errors', async () => {
+    it('falls back to the news feeds, flagged, when the instance errors and Bing cannot run', async () => {
       vi.mocked(searchSearxng).mockRejectedValue(
         new Error('SearXNG timed out'),
       );
@@ -223,9 +388,13 @@ describe('WebSearchTool', () => {
         user,
       });
 
+      expect(executeResponsesWebSearch).toHaveBeenCalledTimes(1);
       expect(searchNewsParallel).toHaveBeenCalled();
       expect(result.text).toBe('News digest');
-      expect(result.metadata).toEqual({ searxngFallback: true });
+      expect(result.metadata).toEqual({
+        searxngFallback: true,
+        fallbackProvider: 'news',
+      });
     });
 
     it('does NOT fall back to news headlines for science or IT questions', async () => {
@@ -241,7 +410,7 @@ describe('WebSearchTool', () => {
         expect(result).toEqual({
           text: '',
           citations: [],
-          metadata: { searxngFallback: true },
+          metadata: { searxngFallback: true, fallbackProvider: 'news' },
         });
       }
       expect(searchNewsParallel).not.toHaveBeenCalled();
@@ -324,7 +493,20 @@ describe('WebSearchTool', () => {
         ).rejects.toThrow('down');
       });
 
-      it('searxngFallback answers from the news feeds, flagged — but not for science', async () => {
+      it('searxngFallback answers from Bing, else the news feeds, flagged — but never headlines for science', async () => {
+        vi.mocked(executeResponsesWebSearch).mockResolvedValue(bingFallback);
+        const bing = await webSearchTool.searxngFallback({
+          searchQuery: 'a',
+          provider: 'searxng',
+          category: 'science',
+          user,
+        });
+        expect(bing.text).toBe('Bing summary[1]');
+        expect(bing.metadata?.fallbackProvider).toBe('bing');
+
+        vi.mocked(executeResponsesWebSearch).mockRejectedValue(
+          new Error('down'),
+        );
         const news = await webSearchTool.searxngFallback({
           searchQuery: 'a',
           provider: 'searxng',
@@ -332,6 +514,7 @@ describe('WebSearchTool', () => {
         });
         expect(news.text).toBe('News digest');
         expect(news.metadata?.searxngFallback).toBe(true);
+        expect(news.metadata?.fallbackProvider).toBe('news');
 
         const science = await webSearchTool.searxngFallback({
           searchQuery: 'a',
@@ -342,7 +525,7 @@ describe('WebSearchTool', () => {
         expect(science).toEqual({
           text: '',
           citations: [],
-          metadata: { searxngFallback: true },
+          metadata: { searxngFallback: true, fallbackProvider: 'news' },
         });
       });
     });
