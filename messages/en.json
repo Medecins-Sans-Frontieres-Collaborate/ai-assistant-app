@@ -708,6 +708,7 @@
     }
   },
   "common": {
+    "clearSearch": "Clear search",
     "close": "Close",
     "remove": "Remove",
     "tryAgain": "Try again",

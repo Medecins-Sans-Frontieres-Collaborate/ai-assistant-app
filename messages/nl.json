@@ -549,6 +549,7 @@
   "enterPromptDescriptionPlaceholder": "Waarvoor is deze prompt?",
   "enterPromptContentPlaceholder": "Schrijf hier uw prompt. Gebruik '{{variable}}' voor dynamische inhoud.",
   "common": {
+    "clearSearch": "Zoekopdracht wissen",
     "close": "Sluiten",
     "remove": "Verwijderen",
     "tryAgain": "Opnieuw proberen",

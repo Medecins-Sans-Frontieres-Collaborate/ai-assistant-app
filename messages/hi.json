@@ -584,6 +584,7 @@
   "enterPromptDescriptionPlaceholder": "यह प्रॉम्प्ट किसके लिए है?",
   "enterPromptContentPlaceholder": "यहां अपना प्रॉम्प्ट लिखें। डायनामिक कंटेंट के लिए '{{variable}}' का उपयोग करें।",
   "common": {
+    "clearSearch": "खोज साफ़ करें",
     "contact": "संपर्क करें",
     "close": "बंद करें",
     "remove": "हटाएं",

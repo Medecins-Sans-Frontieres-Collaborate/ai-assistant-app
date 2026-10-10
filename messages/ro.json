@@ -582,6 +582,7 @@
   "enterPromptDescriptionPlaceholder": "Pentru ce este acest prompt?",
   "enterPromptContentPlaceholder": "Scrie promptul tău aici. Folosește '{{variable}}' pentru conținut dinamic.",
   "common": {
+    "clearSearch": "Șterge căutarea",
     "contact": "Contact",
     "close": "Închide",
     "remove": "Elimină",

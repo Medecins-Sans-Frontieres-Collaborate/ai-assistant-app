@@ -583,6 +583,7 @@
   "enterPromptDescriptionPlaceholder": "یہ پرامپٹ کس لیے ہے؟",
   "enterPromptContentPlaceholder": "اپنا پرامپٹ یہاں لکھیں۔ متحرک مواد کے لیے '{{variable}}' استعمال کریں۔",
   "common": {
+    "clearSearch": "تلاش صاف کریں",
     "contact": "رابطہ",
     "close": "بند کریں",
     "remove": "ہٹائیں",

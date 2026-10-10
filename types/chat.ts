@@ -53,6 +53,8 @@ export interface FileMessageContent {
   transcriptionLanguage?: string;
   /** Optional context/instructions to improve transcription accuracy */
   transcriptionPrompt?: string;
+  /** Whether to label speakers in the transcript */
+  separateSpeakers?: boolean;
 }
 
 export interface TextMessageContent {
@@ -583,6 +585,7 @@ export interface FilePreview {
   // Transcription options (for audio/video files)
   transcriptionLanguage?: string; // ISO-639-1 code (e.g., 'en', 'es', 'fr'). Undefined = auto-detect
   transcriptionPrompt?: string; // Optional context/instructions for Whisper
+  separateSpeakers?: boolean;
   // Original video info (when audio was extracted)
   extractedFromVideo?: {
     originalName: string;

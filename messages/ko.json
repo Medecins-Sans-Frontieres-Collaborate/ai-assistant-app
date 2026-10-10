@@ -584,6 +584,7 @@
   "enterPromptDescriptionPlaceholder": "이 프롬프트는 무엇을 위한 것인가요?",
   "enterPromptContentPlaceholder": "여기에 프롬프트를 작성하세요. 동적 콘텐츠에는 '{{variable}}'을 사용하세요.",
   "common": {
+    "clearSearch": "검색 지우기",
     "contact": "문의",
     "close": "닫기",
     "remove": "제거",

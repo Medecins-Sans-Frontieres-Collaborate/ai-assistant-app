@@ -3,6 +3,8 @@ import { Session } from 'next-auth';
 const EUVariableMap: Record<string, string> = {
   AZURE_BLOB_STORAGE_NAME: 'AZURE_BLOB_STORAGE_NAME_EU',
   AZURE_BLOB_STORAGE_STAGING_NAME: 'AZURE_BLOB_STORAGE_STAGING_NAME_EU',
+  AZURE_SPEECH_KEY: 'AZURE_SPEECH_KEY_EU',
+  AZURE_SPEECH_REGION: 'AZURE_SPEECH_REGION_EU',
 };
 
 interface EnvVariableOptions {
@@ -46,9 +48,9 @@ export function getEnvVariable(
 
   // Region is the single source of truth for data-plane routing. It is resolved
   // once at auth time (office/email lookup, plus any active override) and stored
-  // on `session.user.region`, so blob storage and the Foundry endpoint route
-  // consistently and both honor the override. Fall back to the legacy email
-  // heuristic only for sessions issued before `region` existed.
+  // on `session.user.region`, so blob storage and other regional data-plane
+  // settings route consistently and honor the override. Fall back to the
+  // legacy email heuristic only for sessions issued before `region` existed.
   let euUser: boolean = true;
   if (user?.region) {
     euUser = user.region === 'EU';

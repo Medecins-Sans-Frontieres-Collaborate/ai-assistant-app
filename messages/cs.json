@@ -584,6 +584,7 @@
   "enterPromptDescriptionPlaceholder": "K čemu je tato výzva?",
   "enterPromptContentPlaceholder": "Zde napište svou výzvu. Pro dynamický obsah použijte '{{variable}}'.",
   "common": {
+    "clearSearch": "Vymazat vyhledávání",
     "contact": "Kontakt",
     "close": "Zavřít",
     "remove": "Odebrat",

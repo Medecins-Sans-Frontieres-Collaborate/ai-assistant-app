@@ -501,6 +501,7 @@
   "enterPromptDescriptionPlaceholder": "Для чого цей запит?",
   "enterPromptContentPlaceholder": "Напишіть свій запит тут. Використовуйте '{{variable}}' для динамічного вмісту.",
   "common": {
+    "clearSearch": "Очистити пошук",
     "contact": "Контакт",
     "close": "Закрити",
     "remove": "Видалити",

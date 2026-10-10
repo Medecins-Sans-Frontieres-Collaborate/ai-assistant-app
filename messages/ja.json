@@ -584,6 +584,7 @@
   "enterPromptDescriptionPlaceholder": "このプロンプトは何のためですか？",
   "enterPromptContentPlaceholder": "ここにプロンプトを書いてください。動的コンテンツには'{{variable}}'を使用します。",
   "common": {
+    "clearSearch": "検索をクリア",
     "contact": "お問い合わせ",
     "close": "閉じる",
     "remove": "削除",

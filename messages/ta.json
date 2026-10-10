@@ -687,6 +687,7 @@
     }
   },
   "common": {
+    "clearSearch": "தேடலை அழி",
     "close": "மூடு",
     "remove": "நீக்கு",
     "tryAgain": "மீண்டும் முயற்சி",

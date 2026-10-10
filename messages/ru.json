@@ -584,6 +584,7 @@
   "enterPromptDescriptionPlaceholder": "Для чего эта подсказка?",
   "enterPromptContentPlaceholder": "Напишите свою подсказку здесь. Используйте '{{variable}}' для динамического содержимого.",
   "common": {
+    "clearSearch": "Очистить поиск",
     "close": "Закрыть",
     "remove": "Удалить",
     "tryAgain": "Попробовать снова",

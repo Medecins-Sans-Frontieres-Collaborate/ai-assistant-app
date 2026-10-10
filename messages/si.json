@@ -551,6 +551,7 @@
   "enterPromptDescriptionPlaceholder": "මෙම ප්‍රේරකය කුමක් සඳහාද?",
   "enterPromptContentPlaceholder": "ඔබේ ප්‍රේරකය මෙහි ලියන්න. ගතික අන්තර්ගතය සඳහා '{{variable}}' භාවිතා කරන්න.",
   "common": {
+    "clearSearch": "සෙවීම මකන්න",
     "contact": "සම්බන්ධ වන්න",
     "close": "වසන්න",
     "remove": "ඉවත් කරන්න",

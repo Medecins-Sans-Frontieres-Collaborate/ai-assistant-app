@@ -509,6 +509,7 @@
   "enterPromptDescriptionPlaceholder": "این دستور برای چیست؟",
   "enterPromptContentPlaceholder": "دستور خود را اینجا بنویسید. از '{{variable}}' برای محتوای پویا استفاده کنید.",
   "common": {
+    "clearSearch": "پاک کردن جستجو",
     "contact": "تماس",
     "close": "بستن",
     "remove": "حذف",

@@ -687,6 +687,7 @@
     }
   },
   "common": {
+    "clearSearch": "Kolongola recherche",
     "close": "Kokanga",
     "remove": "Kolongola",
     "tryAgain": "Luka lisusu",

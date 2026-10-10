@@ -581,6 +581,7 @@
   "enterPromptDescriptionPlaceholder": "ይህ ጥያቄ ለምን ነው?",
   "enterPromptContentPlaceholder": "ጥያቄዎን እዚህ ይጻፉ። ለተለዋዋጭ ይዘት '{{variable}}' ይጠቀሙ።",
   "common": {
+    "clearSearch": "ፍለጋን አጽዳ",
     "close": "ዝጋ",
     "remove": "አስወግድ",
     "tryAgain": "እንደገና ይሞክሩ",

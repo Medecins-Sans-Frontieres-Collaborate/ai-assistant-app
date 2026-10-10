@@ -95,6 +95,8 @@ const mergeTranscriptionOptions = (
         preview.transcriptionLanguage || fileMessage.transcriptionLanguage,
       transcriptionPrompt:
         preview.transcriptionPrompt || fileMessage.transcriptionPrompt,
+      separateSpeakers:
+        preview.separateSpeakers ?? fileMessage.separateSpeakers,
     };
   });
 

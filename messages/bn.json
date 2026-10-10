@@ -584,6 +584,7 @@
   "enterPromptDescriptionPlaceholder": "এই প্রম্পট কিসের জন্য?",
   "enterPromptContentPlaceholder": "এখানে আপনার প্রম্পট লিখুন। ডায়নামিক কন্টেন্টের জন্য '{{variable}}' ব্যবহার করুন।",
   "common": {
+    "clearSearch": "অনুসন্ধান মুছুন",
     "close": "বন্ধ করুন",
     "remove": "সরান",
     "tryAgain": "আবার চেষ্টা করুন",

@@ -551,6 +551,7 @@
   "enterPromptDescriptionPlaceholder": "Untuk apa prompt ini?",
   "enterPromptContentPlaceholder": "Tulis prompt Anda di sini. Gunakan '{{variable}}' untuk konten dinamis.",
   "common": {
+    "clearSearch": "Hapus pencarian",
     "contact": "Kontak",
     "close": "Tutup",
     "remove": "Hapus",

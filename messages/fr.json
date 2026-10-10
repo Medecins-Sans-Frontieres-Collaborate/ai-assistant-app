@@ -584,6 +584,7 @@
   "enterPromptDescriptionPlaceholder": "À quoi sert cette instruction?",
   "enterPromptContentPlaceholder": "Écrivez votre instruction ici. Utilisez '{{variable}}' pour le contenu dynamique.",
   "common": {
+    "clearSearch": "Effacer la recherche",
     "close": "Fermer",
     "remove": "Supprimer",
     "tryAgain": "Réessayer",

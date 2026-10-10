@@ -584,6 +584,7 @@
   "enterPromptDescriptionPlaceholder": "Bu istem ne için?",
   "enterPromptContentPlaceholder": "İsteminizi buraya yazın. Dinamik içerik için '{{variable}}' kullanın.",
   "common": {
+    "clearSearch": "Aramayı temizle",
     "contact": "İletişim",
     "close": "Kapat",
     "remove": "Kaldır",
