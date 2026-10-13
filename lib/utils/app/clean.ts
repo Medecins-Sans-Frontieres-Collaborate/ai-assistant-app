@@ -48,7 +48,7 @@ export const cleanConversationHistory = (
         conversation.prompt = DEFAULT_SYSTEM_PROMPT;
       }
 
-      if (!conversation.temperature) {
+      if (typeof conversation.temperature !== 'number') {
         conversation.temperature = DEFAULT_TEMPERATURE;
       }
 
