@@ -161,7 +161,7 @@ function staticAgentIds(): Set<string> {
  * key exactly like admin records) and prefill an override form without
  * the admin re-keying the deployment config.
  */
-export type StaticOrgAgentView = Omit<
+type StaticOrgAgentView = Omit<
   OrgRagAgent,
   | 'version'
   | 'validation'
@@ -171,9 +171,7 @@ export type StaticOrgAgentView = Omit<
   | 'updatedAt'
 >;
 
-export function toStaticOrgAgentView(
-  agent: OrganizationAgent,
-): StaticOrgAgentView {
+function toStaticOrgAgentView(agent: OrganizationAgent): StaticOrgAgentView {
   return {
     id: agent.id,
     name: agent.name,
