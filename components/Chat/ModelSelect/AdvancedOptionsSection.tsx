@@ -67,7 +67,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
                 {t('modelSelect.advancedOptions.temperature')}
               </label>
               <TemperatureSlider
-                temperature={selectedConversation.temperature || 0.5}
+                temperature={selectedConversation.temperature ?? 0.5}
                 onChangeTemperature={(temperature) =>
                   updateConversation(selectedConversation.id, {
                     temperature,
