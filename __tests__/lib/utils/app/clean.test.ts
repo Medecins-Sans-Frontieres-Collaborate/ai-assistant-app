@@ -46,10 +46,17 @@ describe('Conversation tests', () => {
     for (const result of results) {
       expect(result.model).toBe(OpenAIModels[OpenAIModelID.GPT_5_2]);
       expect(result.prompt).toBe(DEFAULT_SYSTEM_PROMPT);
-      expect(result.temperature).toBe(DEFAULT_TEMPERATURE);
+      expect(result.temperature).toBe(0);
       expect(result.folderId).toBe(null);
       expect(result.messages).toStrictEqual([]);
     }
+  });
+
+  it('defaults the temperature only when it is missing', () => {
+    const { temperature: _omitted, ...withoutTemperature } = tempConversation;
+    const [result] = cleanConversationHistory([withoutTemperature]);
+
+    expect(result.temperature).toBe(DEFAULT_TEMPERATURE);
   });
 
   it('returns an empty array when a non-array input is used for cleaning conversation history', () => {
