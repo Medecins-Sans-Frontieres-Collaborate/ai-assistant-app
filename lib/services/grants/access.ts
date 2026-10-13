@@ -8,6 +8,7 @@
  *   MSF-USA AND (
  *     department "Program" with "grants" in the job title      // grants team
  *     OR department "Systems" with "innovation" in the title   // Product & Innovation
+ *     OR department "Systems" with "chief" in the title
  *   )
  *
  * Values come from the user's Entra profile via the sign-in flow (auth.ts),
@@ -27,7 +28,7 @@ export interface GrantsUser {
  *  qualifies a member of that department. */
 export const GRANTS_DEPARTMENT_TITLE_RULES: Record<string, string[]> = {
   program: ['grants'],
-  systems: ['innovation'],
+  systems: ['innovation', 'chief'],
 };
 
 export const GRANTS_ALLOWED_ORGS = new Set<string>(['msf-usa']);
