@@ -23,6 +23,7 @@ import {
   getCachedTextPath,
   shouldCacheText,
 } from '@/lib/utils/server/file/textCacheUtils';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 import {
   MAX_CHUNK_SIZE_BYTES,
   MAX_TOTAL_CHUNKS,
@@ -65,7 +66,9 @@ async function extractAndCacheText(
     const text = await loadDocument(file);
 
     if (!text?.trim()) {
-      console.warn(`[TextCache] Empty text extracted from: ${filename}`);
+      console.warn(
+        `[TextCache] Empty text extracted from: ${sanitizeForLog(filename)}`,
+      );
       return;
     }
 
@@ -75,10 +78,14 @@ async function extractAndCacheText(
     });
 
     console.log(
-      `[TextCache] Cached text for ${filename} (${text.length} chars)`,
+      `[TextCache] Cached text for ${sanitizeForLog(filename)} (${text.length} chars)`,
     );
   } catch (error) {
-    console.error(`[TextCache] Failed to cache text for ${filename}:`, error);
+    console.error(
+      '[TextCache] Failed to cache text for %s: %s',
+      sanitizeForLog(filename),
+      sanitizeForLog(error),
+    );
   }
 }
 
@@ -407,6 +414,15 @@ export async function uploadChunkAction(
   chunkData: FormData,
 ): Promise<ChunkUploadResult> {
   try {
+    // Server Action arguments are untrusted at runtime despite TS annotations.
+    if (!Number.isInteger(chunkIndex)) {
+      return {
+        success: false,
+        chunkIndex: -1,
+        error: 'Chunk index must be an integer',
+      };
+    }
+
     const authSession = await auth();
     if (!authSession) {
       return { success: false, chunkIndex, error: 'Unauthorized' };
@@ -504,8 +520,9 @@ export async function uploadChunkAction(
     return { success: true, chunkIndex, blockId };
   } catch (error) {
     console.error(
-      `[uploadChunkAction] Error uploading chunk ${chunkIndex}:`,
-      error,
+      '[uploadChunkAction] Error uploading chunk %s: %s',
+      sanitizeForLog(chunkIndex),
+      sanitizeForLog(error),
     );
     return {
       success: false,

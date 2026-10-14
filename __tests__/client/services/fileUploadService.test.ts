@@ -1,8 +1,14 @@
+import toast from 'react-hot-toast';
+
 import { FileUploadService } from '@/client/services/fileUploadService';
 
 import type { ChunkedUploadSession } from '@/lib/types/chunkedUpload';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('react-hot-toast', () => ({
+  default: { error: vi.fn() },
+}));
 
 const cacheImageBase64Mock = vi.fn();
 vi.mock('@/lib/services/imageService', () => ({
@@ -59,6 +65,31 @@ function fakeVideoFile(size: number): File {
 }
 
 const FIVE_CHUNKS_50MB = 50 * 1024 * 1024;
+
+describe('FileUploadService batch failure logging', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('escapes log fields while preserving error details and the user message', async () => {
+    const file = new File(['document'], 'report\nFORGED.pdf');
+    const error = new Error('Upload failed\r\nFORGED');
+    vi.spyOn(FileUploadService, 'uploadSingleFile').mockRejectedValue(error);
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    expect(await FileUploadService.uploadMultipleFiles([file])).toEqual([]);
+
+    expect(log).toHaveBeenCalledOnce();
+    const [message, details] = log.mock.calls[0];
+    expect(message).toBe('[FileUploadService] Failed to upload:');
+    expect(details).not.toMatch(/[\r\n]/);
+    expect(JSON.parse(details)).toEqual({
+      filename: file.name,
+      error: { name: error.name, message: error.message, stack: error.stack },
+    });
+    expect(toast.error).toHaveBeenCalledWith(error.message);
+  });
+});
 
 function wait(ms = 5) {
   return new Promise<void>((r) => setTimeout(r, ms));

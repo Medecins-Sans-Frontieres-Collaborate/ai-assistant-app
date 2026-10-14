@@ -773,8 +773,18 @@ export class FileUploadService {
           continue;
         }
         console.error(
-          `[FileUploadService] Failed to upload ${file.name}:`,
-          error,
+          '[FileUploadService] Failed to upload:',
+          JSON.stringify({
+            filename: file.name,
+            error:
+              error instanceof Error
+                ? {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack,
+                  }
+                : String(error),
+          }),
         );
         toast.error(
           error instanceof Error

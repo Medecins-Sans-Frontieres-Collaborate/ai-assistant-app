@@ -7,7 +7,7 @@
  * @kind path-problem
  * @problem.severity error
  * @security-severity 6.1
- * @precision high
+ * @precision medium
  * @id msf/log-injection
  * @tags security
  *       external/cwe/cwe-117

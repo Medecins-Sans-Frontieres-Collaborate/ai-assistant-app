@@ -103,6 +103,63 @@ describe('uploadChunkAction — chunk-0 magic-byte validation', () => {
     vi.restoreAllMocks();
   });
 
+  it.each(['0', '0\nFORGED', 0.5, NaN, Infinity, null, {}, []])(
+    'rejects malformed chunk index %j before processing upload data',
+    async (chunkIndex) => {
+      const data = asFormData(mp4Header());
+      const readChunk = vi.spyOn(data, 'get');
+
+      const result = await uploadChunkAction(
+        videoSession,
+        chunkIndex as number,
+        data,
+      );
+
+      expect(result).toEqual({
+        success: false,
+        chunkIndex: -1,
+        error: 'Chunk index must be an integer',
+      });
+      expect(readChunk).not.toHaveBeenCalled();
+      expect(stageBlockMock).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each([-1, videoSession.totalChunks])(
+    'rejects out-of-range chunk index %i',
+    async (chunkIndex) => {
+      const result = await uploadChunkAction(
+        videoSession,
+        chunkIndex,
+        asFormData(mp4Header()),
+      );
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('out of range');
+      expect(stageBlockMock).not.toHaveBeenCalled();
+    },
+  );
+
+  it('keeps storage errors on one log line without altering the returned error', async () => {
+    const error = new Error('Storage failed\r\nFORGED\u001b[31m');
+    stageBlockMock.mockRejectedValue(error);
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const result = await uploadChunkAction(
+      videoSession,
+      0,
+      asFormData(mp4Header()),
+    );
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBe(error.message);
+    expect(log).toHaveBeenCalledWith(
+      '[uploadChunkAction] Error uploading chunk %s: %s',
+      '0',
+      'Storage failed FORGED[31m',
+    );
+  });
+
   it('accepts chunk 0 of a video session with a valid mp4 header', async () => {
     const result = await uploadChunkAction(
       videoSession,
