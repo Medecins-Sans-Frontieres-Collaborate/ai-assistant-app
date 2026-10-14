@@ -44,12 +44,21 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Initialize CodeQL
+        id: init
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
           # The config selects security-extended AND the custom query.
           # A `queries` input here would override that list without a `+`.
           config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Test custom CodeQL queries
+        if: matrix.language == 'javascript-typescript'
+        env:
+          CODEQL: ${{ steps.init.outputs.codeql-path }}
+        run: |
+          "$CODEQL" pack install .github/codeql/tests --additional-packs=.github/codeql
+          "$CODEQL" test run .github/codeql/tests --additional-packs=.github/codeql --threads=2
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
