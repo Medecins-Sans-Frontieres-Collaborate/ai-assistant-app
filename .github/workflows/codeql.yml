@@ -47,11 +47,9 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
+          # The config selects security-extended AND the custom query.
+          # A `queries` input here would override that list without a `+`.
           config-file: ./.github/codeql/codeql-config.yml
-          # `security-extended` matches the suite default setup ran
-          # ("extended"). Do not weaken this to the default suite without a
-          # deliberate decision — it silently drops query coverage.
-          queries: security-extended
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
