@@ -1,14 +1,13 @@
 import { NextRequest } from 'next/server';
 
+import { MAX_SAVE_ROWS } from '@/lib/services/grants/saveLimits';
+
 import { parseJsonResponse } from './helpers';
 
 import { GET as dataGET } from '@/app/api/grants/runs/[runId]/data/route';
 import { GET as downloadGET } from '@/app/api/grants/runs/[runId]/download/route';
 import { GET as progressGET } from '@/app/api/grants/runs/[runId]/progress/route';
-import {
-  MAX_SAVE_ROWS,
-  POST as savePOST,
-} from '@/app/api/grants/runs/[runId]/save/route';
+import { POST as savePOST } from '@/app/api/grants/runs/[runId]/save/route';
 import { mkdtemp, readFile, rm, writeFile } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';

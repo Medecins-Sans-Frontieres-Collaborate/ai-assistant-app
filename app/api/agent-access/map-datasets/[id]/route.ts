@@ -51,7 +51,7 @@ import { z } from 'zod';
  * full (~1MB) payload and its ETag is the CAS anchor for PUT/DELETE.
  */
 
-export const MAP_DATASET_ID_PATTERN = /^mapds-[a-f0-9]{12}$/;
+const MAP_DATASET_ID_PATTERN = /^mapds-[a-f0-9]{12}$/;
 
 const featureSchema = z
   .object({
