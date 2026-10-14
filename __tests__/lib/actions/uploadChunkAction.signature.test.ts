@@ -154,7 +154,8 @@ describe('uploadChunkAction — chunk-0 magic-byte validation', () => {
     expect(result.success).toBe(false);
     expect(result.error).toBe(error.message);
     expect(log).toHaveBeenCalledWith(
-      '[uploadChunkAction] Error uploading chunk 0:',
+      '[uploadChunkAction] Error uploading chunk %s: %s',
+      '0',
       'Storage failed FORGED[31m',
     );
   });
