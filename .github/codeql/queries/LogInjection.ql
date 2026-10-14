@@ -14,9 +14,8 @@
  */
 
 import javascript
-import semmle.javascript.security.dataflow.LogInjectionQuery
-import semmle.javascript.security.dataflow.LogInjectionCustomizations
-import LogInjectionFlow::PathGraph
+import semmle.javascript.security.dataflow.LogInjectionQuery as LogInjection
+import LogInjection::LogInjectionFlow::PathGraph
 
 /**
  * A call to the repository's own log sanitizers in
@@ -45,7 +44,7 @@ class ProjectLogSanitizer extends LogInjection::Sanitizer {
   }
 }
 
-from LogInjectionFlow::PathNode source, LogInjectionFlow::PathNode sink
-where LogInjectionFlow::flowPath(source, sink)
+from LogInjection::LogInjectionFlow::PathNode source, LogInjection::LogInjectionFlow::PathNode sink
+where LogInjection::LogInjectionFlow::flowPath(source, sink)
 select sink.getNode(), source, sink, "This log entry depends on a $@.", source.getNode(),
   "user-provided value"
