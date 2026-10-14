@@ -1,0 +1,10 @@
+edges
+| logInjection.js:17:45:17:51 | req.url | logInjection.js:17:15:17:53 | `${sani ... q.url}` | provenance |  |
+nodes
+| logInjection.js:14:15:14:21 | req.url | semmle.label | req.url |
+| logInjection.js:17:15:17:53 | `${sani ... q.url}` | semmle.label | `${sani ... q.url}` |
+| logInjection.js:17:45:17:51 | req.url | semmle.label | req.url |
+subpaths
+#select
+| logInjection.js:14:15:14:21 | req.url | logInjection.js:14:15:14:21 | req.url | logInjection.js:14:15:14:21 | req.url | This log entry depends on a $@. | logInjection.js:14:15:14:21 | req.url | user-provided value |
+| logInjection.js:17:15:17:53 | `${sani ... q.url}` | logInjection.js:17:45:17:51 | req.url | logInjection.js:17:15:17:53 | `${sani ... q.url}` | This log entry depends on a $@. | logInjection.js:17:45:17:51 | req.url | user-provided value |
