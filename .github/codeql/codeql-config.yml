@@ -1,0 +1,30 @@
+name: 'AI Assistant CodeQL config'
+
+# The `queries: security-extended` suite comes from the workflow. This block
+# ADDS the project's own query pack on top of it.
+#
+# `msf/log-injection` is a copy of the standard js/log-injection query that
+# additionally honours our `sanitizeForLog()` barrier. The stock query is
+# filtered out below so the two never double-report the same sink.
+queries:
+  - uses: ./.github/codeql/queries
+
+query-filters:
+  # Superseded by `msf/log-injection`, which is the same analysis plus the
+  # project sanitizer. Removing this line brings the stock query back (and
+  # with it the false positives on every sanitizeForLog() call site).
+  - exclude:
+      id: js/log-injection
+
+paths-ignore:
+  # Test sources. CodeQL already tags these `classifications: ["test"]`, but
+  # they still surface as alerts and have repeatedly been dismissed by hand
+  # (e.g. alert 393, a Testing Library text matcher read as a URL regex).
+  # Drop these two entries if you would rather keep scanning test code.
+  - '__tests__'
+  - '**/*.test.ts'
+  - '**/*.test.tsx'
+  # Vendored/generated output that is not ours to fix.
+  - 'node_modules'
+  - '.next'
+  - 'coverage'
