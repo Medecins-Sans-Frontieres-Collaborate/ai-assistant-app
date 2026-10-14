@@ -1,4 +1,5 @@
 import { uploadFileAction } from '@/lib/actions/fileUpload';
+import { format } from 'node:util';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { loadDocument, upload } = vi.hoisted(() => ({
@@ -37,7 +38,7 @@ describe('upload text-cache logging', () => {
   it.each(['empty', 'success', 'failure'] as const)(
     'sanitizes the %s log without changing the filename or document content',
     async (outcome) => {
-      const filename = 'report\r\nFORGED\u001b[31m.pdf';
+      const filename = 'report%s%d%j\r\nFORGED\u001b[31m.pdf';
       const content = 'document\ncontent';
       if (outcome === 'failure') {
         loadDocument.mockRejectedValue(new Error('Parse\nFORGED\u001b[31m'));
@@ -65,7 +66,13 @@ describe('upload text-cache logging', () => {
         // eslint-disable-next-line no-control-regex
         expect(value).not.toMatch(/[\x00-\x1f\x7f-\x9f]/);
       }
-      expect(entry![0]).toContain('FORGED');
+      const rendered = format(...entry!);
+      expect(rendered).toContain('report%s%d%j FORGED[31m.pdf');
+      if (outcome === 'failure') {
+        expect(rendered).toBe(
+          '[TextCache] Failed to cache text for report%s%d%j FORGED[31m.pdf: Parse FORGED[31m',
+        );
+      }
       expect(loadDocument.mock.calls[0][0].name).toBe(filename);
       if (outcome === 'success') {
         expect(upload).toHaveBeenCalledWith(
