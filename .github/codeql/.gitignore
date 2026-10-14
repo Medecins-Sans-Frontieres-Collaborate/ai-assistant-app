@@ -1,0 +1,8 @@
+# Local CodeQL compilation and test outputs.
+.cache/
+*.testproj/
+*.actual
+*.bqrs
+*.qlx
+*.qlo
+*.trap.gz
