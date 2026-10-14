@@ -6,7 +6,7 @@ import { parseJsonResponse } from './helpers';
 
 import { POST } from '@/app/api/transcription/cleanup/route';
 import { auth } from '@/auth';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/auth', () => ({
   auth: vi.fn(),
@@ -16,10 +16,18 @@ vi.mock('@/lib/utils/server/blob/blob', () => ({
   AzureBlobStorage: vi.fn(),
 }));
 
+const mockBatchConfigured = vi.fn();
+const mockDeleteTranscription = vi.fn();
+const mockUserOwnsBatchJob = vi.fn();
+vi.mock('@/lib/services/transcription/batchJobRegistry', () => ({
+  userOwnsBatchJob: (...args: unknown[]) => mockUserOwnsBatchJob(...args),
+  deleteBatchJobRecord: vi.fn(),
+}));
 vi.mock('@/lib/services/transcription/batchTranscriptionService', () => ({
   BatchTranscriptionService: vi.fn().mockImplementation(function (this: any) {
-    this.isConfigured = () => false;
-    this.deleteTranscription = vi.fn();
+    this.isConfigured = () => mockBatchConfigured();
+    this.deleteTranscription = (...args: unknown[]) =>
+      mockDeleteTranscription(...args);
   }),
 }));
 
@@ -80,6 +88,13 @@ describe('/api/transcription/cleanup', () => {
     // cascade set this explicitly.
     mockGetJobForUser.mockReturnValue(undefined);
     mockCleanupChunks.mockResolvedValue(undefined);
+    mockBatchConfigured.mockReturnValue(false);
+    mockUserOwnsBatchJob.mockReturnValue(false);
+    mockDeleteTranscription.mockReset();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   const makeRequest = (body: unknown) =>
@@ -165,6 +180,32 @@ describe('/api/transcription/cleanup', () => {
     expect(mockBlobStorage.getBlockBlobClient).toHaveBeenCalledWith(blobPath);
     expect(mockBlobClient.delete).toHaveBeenCalledTimes(1);
   });
+
+  it.each(['job', 'blob'] as const)(
+    'sanitizes %s deletion errors at the log boundary',
+    async (target) => {
+      const error = new Error('Azure error\r\nFORGED\u001b[31m');
+      const log = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const blobPath = `${userId}/transcripts/${validJobId}.txt`;
+      mockBatchConfigured.mockReturnValue(true);
+      mockUserOwnsBatchJob.mockReturnValue(true);
+      mockDeleteTranscription.mockRejectedValue(error);
+      mockBlobClient.delete.mockRejectedValue(error);
+
+      const response = await POST(
+        makeRequest(target === 'job' ? { jobId: validJobId } : { blobPath }),
+      );
+
+      expect(response.status).toBe(200);
+      expect(log).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to delete'),
+        'Azure error FORGED[31m',
+      );
+      expect(JSON.stringify(await parseJsonResponse(response))).toContain(
+        'Azure error\\r\\nFORGED',
+      );
+    },
+  );
 
   it('returns 400 when neither jobId nor blobPath is provided', async () => {
     const response = await POST(makeRequest({}));
