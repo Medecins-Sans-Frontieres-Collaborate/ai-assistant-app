@@ -1,12 +1,14 @@
 name: 'AI Assistant CodeQL config'
 
-# The `queries: security-extended` suite comes from the workflow. This block
-# ADDS the project's own query pack on top of it.
+# Keep both query sources here. A workflow-level `queries` input overrides
+# this list unless it is prefixed with `+`.
 #
 # `msf/log-injection` is a copy of the standard js/log-injection query that
 # additionally honours our `sanitizeForLog()` barrier. The stock query is
 # filtered out below so the two never double-report the same sink.
 queries:
+  # Matches the `extended` suite used by default setup.
+  - uses: security-extended
   - uses: ./.github/codeql/queries
 
 query-filters:
@@ -24,6 +26,8 @@ paths-ignore:
   - '__tests__'
   - '**/*.test.ts'
   - '**/*.test.tsx'
+  # Deliberately vulnerable fixtures for the custom query's regression tests.
+  - '.github/codeql/tests'
   # Vendored/generated output that is not ours to fix.
   - 'node_modules'
   - '.next'
