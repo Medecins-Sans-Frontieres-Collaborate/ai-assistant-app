@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
         error instanceof Error ? error.message : 'Unknown error';
       console.warn(
         `[TranscriptionCleanup] Failed to delete transcription job ${sanitizeForLog(jobId)}:`,
-        errorMessage,
+        sanitizeForLog(errorMessage),
       );
       results.errors?.push(`Job deletion failed: ${errorMessage}`);
     }
@@ -191,7 +191,7 @@ export async function POST(request: NextRequest) {
         error instanceof Error ? error.message : 'Unknown error';
       console.warn(
         `[TranscriptionCleanup] Failed to delete blob ${sanitizeForLog(blobPath)}:`,
-        errorMessage,
+        sanitizeForLog(errorMessage),
       );
       results.errors?.push(`Blob deletion failed: ${errorMessage}`);
     }
