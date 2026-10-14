@@ -1,0 +1,7 @@
+name: msf/ai-assistant-queries
+version: 0.0.1
+library: false
+# Resolved from the CodeQL bundle shipped with github/codeql-action.
+dependencies:
+  codeql/javascript-all: '*'
+  codeql/javascript-queries: '*'

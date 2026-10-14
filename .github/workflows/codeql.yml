@@ -1,0 +1,66 @@
+# CodeQL — ADVANCED setup.
+#
+# ⚠ Before this workflow can publish results, CodeQL **default setup must be
+# disabled** in repo settings (Settings → Code security → CodeQL analysis →
+# Advanced). While default setup is enabled, GitHub rejects SARIF from an
+# advanced workflow ("analyses from advanced configurations cannot be
+# processed when the default setup is enabled") and this job fails.
+#
+# This replaces the previous default setup exactly — same four languages,
+# same `security-extended` suite, same weekly schedule — and adds one thing
+# default setup cannot do: a project query pack that teaches the
+# log-injection query about our own `sanitizeForLog()` barrier. See
+# .github/codeql/README.md.
+name: CodeQL
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+  schedule:
+    # Weekly, matching the cadence default setup used.
+    - cron: '24 18 * * 0'
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read # required for private repos to read Action run status
+    strategy:
+      fail-fast: false
+      matrix:
+        # Mirrors the languages default setup had configured. `javascript`
+        # and `typescript` are aliases of the same extractor, so the single
+        # `javascript-typescript` entry covers both.
+        language: ['javascript-typescript', 'actions']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        id: init
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          # The config selects security-extended AND the custom query.
+          # A `queries` input here would override that list without a `+`.
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Test custom CodeQL queries
+        if: matrix.language == 'javascript-typescript'
+        env:
+          CODEQL: ${{ steps.init.outputs.codeql-path }}
+        run: |
+          "$CODEQL" pack install .github/codeql/tests --additional-packs=.github/codeql
+          "$CODEQL" test run .github/codeql/tests --additional-packs=.github/codeql --threads=2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:${{ matrix.language }}'

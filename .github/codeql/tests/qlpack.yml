@@ -1,0 +1,6 @@
+name: msf/ai-assistant-query-tests
+version: 0.0.1
+dependencies:
+  msf/ai-assistant-queries: '*'
+extractor: javascript
+tests: .
