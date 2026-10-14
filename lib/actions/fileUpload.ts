@@ -82,7 +82,8 @@ async function extractAndCacheText(
     );
   } catch (error) {
     console.error(
-      `[TextCache] Failed to cache text for ${sanitizeForLog(filename)}:`,
+      '[TextCache] Failed to cache text for %s: %s',
+      sanitizeForLog(filename),
       sanitizeForLog(error),
     );
   }
@@ -519,7 +520,8 @@ export async function uploadChunkAction(
     return { success: true, chunkIndex, blockId };
   } catch (error) {
     console.error(
-      `[uploadChunkAction] Error uploading chunk ${sanitizeForLog(chunkIndex)}:`,
+      '[uploadChunkAction] Error uploading chunk %s: %s',
+      sanitizeForLog(chunkIndex),
       sanitizeForLog(error),
     );
     return {
