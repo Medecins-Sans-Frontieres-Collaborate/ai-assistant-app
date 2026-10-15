@@ -32,6 +32,7 @@ import {
 } from './chunkedJobStore';
 import { WhisperTranscriptionService } from './whisperTranscriptionService';
 
+import { getTranscriptionLanguageMetadata } from '@/lib/constants/transcriptionLanguages';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -168,7 +169,15 @@ export class ChunkedTranscriptionService {
     );
 
     // Create job in store
-    await createJob(storage, jobId, userId, chunkCount, chunkPaths, filename);
+    await createJob(
+      storage,
+      jobId,
+      userId,
+      chunkCount,
+      chunkPaths,
+      filename,
+      getTranscriptionLanguageMetadata(options?.language),
+    );
 
     // Start async processing (don't await - runs in background)
     this.processChunksAsync(

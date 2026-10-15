@@ -27,6 +27,7 @@ import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { TranscriptionErrorClass } from '@/types/transcription';
 
+import type { TranscriptionLanguageMetadata } from '@/lib/constants/transcriptionLanguages';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
@@ -53,6 +54,7 @@ export interface ChunkedJob {
   currentChunk: number;
   /** Combined transcript (only set when succeeded) */
   transcript?: string;
+  languageMetadata?: TranscriptionLanguageMetadata;
   /** Error message (only set when failed) */
   error?: string;
   /**
@@ -265,6 +267,7 @@ export async function createJob(
   totalChunks: number,
   chunkPaths: string[],
   filename: string,
+  languageMetadata?: TranscriptionLanguageMetadata,
 ): Promise<void> {
   const now = Date.now();
 
@@ -277,6 +280,7 @@ export async function createJob(
     currentChunk: 0,
     chunkPaths,
     filename,
+    languageMetadata,
     createdAt: now,
     updatedAt: now,
   };
