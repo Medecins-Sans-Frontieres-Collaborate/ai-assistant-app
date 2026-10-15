@@ -4,21 +4,26 @@
  * Centralized configuration for languages supported by Whisper transcription.
  * Includes official support status, i18n keys, and autonyms (native names).
  *
- * Official Whisper languages are those with <50% word error rate (WER).
- * Source: https://platform.openai.com/docs/guides/speech-to-text#supported-languages
+ * Official status preserves Azure's published Whisper list used by this app.
+ * It is a documentation classification, not an accuracy guarantee.
+ * Azure source: https://learn.microsoft.com/en-us/azure/ai-services/openai/whisper-quickstart
+ * Baseline reviewed: 2026-10-15 (the current quickstart no longer lists languages).
+ * Recognized codes are pinned to the original 99-language Whisper tokenizer:
+ * https://github.com/openai/whisper/blob/v20230314/whisper/tokenizer.py
+ * Tokenizer recognition does not guarantee Azure API acceptance or usable output.
  */
 
 /**
  * Represents a language option for transcription.
  */
 export interface TranscriptionLanguage {
-  /** ISO 639-1 language code (empty string for auto-detect) */
+  /** Whisper language token code, including `haw` and legacy `jw`; empty = auto-detect */
   code: string;
   /** i18n key for the localized language label */
   labelKey: string;
   /** Native name of the language (autonym) */
   autonym: string;
-  /** Whether the language is officially supported by Whisper with <50% WER */
+  /** Whether this language is in the app's Azure-documented support baseline */
   officiallySupported: boolean;
 }
 
@@ -26,8 +31,7 @@ export interface TranscriptionLanguage {
  * List of languages available for Whisper transcription.
  * Sorted alphabetically by English name.
  *
- * Official support is based on OpenAI's published list of languages
- * that exceeded the <50% word error rate threshold.
+ * Experimental options are model-recognized but outside the Azure baseline.
  */
 export const TRANSCRIPTION_LANGUAGES: TranscriptionLanguage[] = [
   // Auto-detect option (always first)
@@ -54,7 +58,7 @@ export const TRANSCRIPTION_LANGUAGES: TranscriptionLanguage[] = [
   {
     code: 'hy',
     labelKey: 'transcription.languages.armenian',
-    autonym: 'Հdelays',
+    autonym: 'Հայերեն',
     officiallySupported: true,
   },
   {
@@ -382,11 +386,257 @@ export const TRANSCRIPTION_LANGUAGES: TranscriptionLanguage[] = [
     officiallySupported: true,
   },
 
-  // Unofficial languages (not in Whisper's official <50% WER list)
+  // Experimental languages, alphabetically sorted by English name.
+  {
+    code: 'sq',
+    labelKey: 'transcription.languages.albanian',
+    autonym: 'Shqip',
+    officiallySupported: false,
+  },
+  {
+    code: 'am',
+    labelKey: 'transcription.languages.amharic',
+    autonym: 'አማርኛ',
+    officiallySupported: false,
+  },
+  {
+    code: 'as',
+    labelKey: 'transcription.languages.assamese',
+    autonym: 'অসমীয়া',
+    officiallySupported: false,
+  },
+  {
+    code: 'ba',
+    labelKey: 'transcription.languages.bashkir',
+    autonym: 'Башҡортса',
+    officiallySupported: false,
+  },
+  {
+    code: 'eu',
+    labelKey: 'transcription.languages.basque',
+    autonym: 'Euskara',
+    officiallySupported: false,
+  },
+  {
+    code: 'bn',
+    labelKey: 'transcription.languages.bengali',
+    autonym: 'বাংলা',
+    officiallySupported: false,
+  },
+  {
+    code: 'br',
+    labelKey: 'transcription.languages.breton',
+    autonym: 'Brezhoneg',
+    officiallySupported: false,
+  },
   {
     code: 'my',
     labelKey: 'transcription.languages.burmese',
     autonym: 'မြန်မာ',
+    officiallySupported: false,
+  },
+  {
+    code: 'fo',
+    labelKey: 'transcription.languages.faroese',
+    autonym: 'Føroyskt',
+    officiallySupported: false,
+  },
+  {
+    code: 'ka',
+    labelKey: 'transcription.languages.georgian',
+    autonym: 'ქართული',
+    officiallySupported: false,
+  },
+  {
+    code: 'gu',
+    labelKey: 'transcription.languages.gujarati',
+    autonym: 'ગુજરાતી',
+    officiallySupported: false,
+  },
+  {
+    code: 'ht',
+    labelKey: 'transcription.languages.haitianCreole',
+    autonym: 'Kreyòl ayisyen',
+    officiallySupported: false,
+  },
+  {
+    code: 'ha',
+    labelKey: 'transcription.languages.hausa',
+    autonym: 'Hausa',
+    officiallySupported: false,
+  },
+  {
+    code: 'haw',
+    labelKey: 'transcription.languages.hawaiian',
+    autonym: 'ʻŌlelo Hawaiʻi',
+    officiallySupported: false,
+  },
+  {
+    code: 'jw',
+    labelKey: 'transcription.languages.javanese',
+    autonym: 'Basa Jawa',
+    officiallySupported: false,
+  },
+  {
+    code: 'km',
+    labelKey: 'transcription.languages.khmer',
+    autonym: 'ខ្មែរ',
+    officiallySupported: false,
+  },
+  {
+    code: 'lo',
+    labelKey: 'transcription.languages.lao',
+    autonym: 'ລາວ',
+    officiallySupported: false,
+  },
+  {
+    code: 'la',
+    labelKey: 'transcription.languages.latin',
+    autonym: 'Latina',
+    officiallySupported: false,
+  },
+  {
+    code: 'ln',
+    labelKey: 'transcription.languages.lingala',
+    autonym: 'Lingála',
+    officiallySupported: false,
+  },
+  {
+    code: 'lb',
+    labelKey: 'transcription.languages.luxembourgish',
+    autonym: 'Lëtzebuergesch',
+    officiallySupported: false,
+  },
+  {
+    code: 'mg',
+    labelKey: 'transcription.languages.malagasy',
+    autonym: 'Malagasy',
+    officiallySupported: false,
+  },
+  {
+    code: 'ml',
+    labelKey: 'transcription.languages.malayalam',
+    autonym: 'മലയാളം',
+    officiallySupported: false,
+  },
+  {
+    code: 'mt',
+    labelKey: 'transcription.languages.maltese',
+    autonym: 'Malti',
+    officiallySupported: false,
+  },
+  {
+    code: 'mn',
+    labelKey: 'transcription.languages.mongolian',
+    autonym: 'Монгол',
+    officiallySupported: false,
+  },
+  {
+    code: 'nn',
+    labelKey: 'transcription.languages.norwegianNynorsk',
+    autonym: 'Nynorsk',
+    officiallySupported: false,
+  },
+  {
+    code: 'oc',
+    labelKey: 'transcription.languages.occitan',
+    autonym: 'Occitan',
+    officiallySupported: false,
+  },
+  {
+    code: 'ps',
+    labelKey: 'transcription.languages.pashto',
+    autonym: 'پښتو',
+    officiallySupported: false,
+  },
+  {
+    code: 'pa',
+    labelKey: 'transcription.languages.punjabi',
+    autonym: 'ਪੰਜਾਬੀ',
+    officiallySupported: false,
+  },
+  {
+    code: 'sa',
+    labelKey: 'transcription.languages.sanskrit',
+    autonym: 'संस्कृतम्',
+    officiallySupported: false,
+  },
+  {
+    code: 'sn',
+    labelKey: 'transcription.languages.shona',
+    autonym: 'ChiShona',
+    officiallySupported: false,
+  },
+  {
+    code: 'sd',
+    labelKey: 'transcription.languages.sindhi',
+    autonym: 'سنڌي',
+    officiallySupported: false,
+  },
+  {
+    code: 'si',
+    labelKey: 'transcription.languages.sinhala',
+    autonym: 'සිංහල',
+    officiallySupported: false,
+  },
+  {
+    code: 'so',
+    labelKey: 'transcription.languages.somali',
+    autonym: 'Soomaali',
+    officiallySupported: false,
+  },
+  {
+    code: 'su',
+    labelKey: 'transcription.languages.sundanese',
+    autonym: 'Basa Sunda',
+    officiallySupported: false,
+  },
+  {
+    code: 'tg',
+    labelKey: 'transcription.languages.tajik',
+    autonym: 'Тоҷикӣ',
+    officiallySupported: false,
+  },
+  {
+    code: 'tt',
+    labelKey: 'transcription.languages.tatar',
+    autonym: 'Татарча',
+    officiallySupported: false,
+  },
+  {
+    code: 'te',
+    labelKey: 'transcription.languages.telugu',
+    autonym: 'తెలుగు',
+    officiallySupported: false,
+  },
+  {
+    code: 'bo',
+    labelKey: 'transcription.languages.tibetan',
+    autonym: 'བོད་སྐད་',
+    officiallySupported: false,
+  },
+  {
+    code: 'tk',
+    labelKey: 'transcription.languages.turkmen',
+    autonym: 'Türkmençe',
+    officiallySupported: false,
+  },
+  {
+    code: 'uz',
+    labelKey: 'transcription.languages.uzbek',
+    autonym: 'Oʻzbekcha',
+    officiallySupported: false,
+  },
+  {
+    code: 'yi',
+    labelKey: 'transcription.languages.yiddish',
+    autonym: 'ייִדיש',
+    officiallySupported: false,
+  },
+  {
+    code: 'yo',
+    labelKey: 'transcription.languages.yoruba',
+    autonym: 'Yorùbá',
     officiallySupported: false,
   },
 ];
@@ -394,7 +644,7 @@ export const TRANSCRIPTION_LANGUAGES: TranscriptionLanguage[] = [
 /**
  * Helper to get a language by its code.
  *
- * @param code - ISO 639-1 language code
+ * @param code - Whisper language token code
  * @returns The language configuration or undefined if not found
  */
 export function getTranscriptionLanguageByCode(
@@ -419,4 +669,21 @@ export function getOfficialTranscriptionLanguages(): TranscriptionLanguage[] {
  */
 export function getUnofficialTranscriptionLanguages(): TranscriptionLanguage[] {
   return TRANSCRIPTION_LANGUAGES.filter((lang) => !lang.officiallySupported);
+}
+
+/** Snapshot of the requested language, kept separately from spoken transcript text. */
+export interface TranscriptionLanguageMetadata {
+  language: string;
+  officiallySupported: boolean;
+}
+
+export function getTranscriptionLanguageMetadata(
+  code?: string,
+): TranscriptionLanguageMetadata | undefined {
+  if (!code) return undefined; // Auto-detect is not a claim of official support.
+  return {
+    language: code,
+    officiallySupported:
+      getTranscriptionLanguageByCode(code)?.officiallySupported ?? false,
+  };
 }
