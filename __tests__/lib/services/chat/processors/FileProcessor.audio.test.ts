@@ -152,7 +152,7 @@ function makeProcessor(fileBuffer: Buffer = Buffer.from('fake-audio')) {
   return { processor, mockFileService };
 }
 
-function audioContext(filename: string, url?: string) {
+function audioContext(filename: string, url?: string, language?: string) {
   return createTestChatContext({
     hasFiles: true,
     messages: [
@@ -164,6 +164,7 @@ function audioContext(filename: string, url?: string) {
             type: 'file_url',
             url: url ?? `https://blob.com/${filename}`,
             originalFilename: filename,
+            transcriptionLanguage: language,
           },
         ],
         messageType: MessageType.FILE,
@@ -190,6 +191,65 @@ describe('FileProcessor A/V branch', () => {
       new Error('loadDocument should not be called for A/V files'),
     );
   });
+
+  it.each(['ht', 'so', 'haw'])(
+    'preserves %s metadata for synchronous transcription',
+    async (language) => {
+      validationMocks.validateBufferSignature.mockReturnValue({
+        isValid: true,
+        detectedType: 'audio',
+        detectedFormat: 'mp3',
+      });
+      whisperMocks.transcribe.mockResolvedValue('spoken content');
+      const { processor } = makeProcessor();
+      const result = await processor.execute(
+        audioContext('audio.mp3', undefined, language),
+      );
+      expect(whisperMocks.transcribe).toHaveBeenCalledWith('/tmp/audio.mp3', {
+        language,
+        prompt: undefined,
+      });
+      expect(result.processedContent?.transcripts?.[0]).toEqual({
+        filename: 'audio.mp3',
+        transcript: 'spoken content',
+        languageMetadata: { language, officiallySupported: false },
+      });
+    },
+  );
+
+  it.each(['ht', 'so', 'haw'])(
+    'preserves %s metadata for chunked transcription',
+    async (language) => {
+      validationMocks.validateBufferSignature.mockReturnValue({
+        isValid: true,
+        detectedType: 'audio',
+        detectedFormat: 'mp3',
+      });
+      fsMocks.stat.mockResolvedValue({ size: 30 * 1024 * 1024 });
+      chunkedMocks.startJob.mockResolvedValue({
+        jobId: 'job-1',
+        totalChunks: 2,
+      });
+      const { processor } = makeProcessor();
+      const result = await processor.execute(
+        audioContext('audio.mp3', undefined, language),
+      );
+      expect(chunkedMocks.startJob).toHaveBeenCalledWith(
+        fakeJobStateStorage,
+        '/tmp/audio.mp3',
+        'audio.mp3',
+        expect.any(String),
+        { language, prompt: undefined },
+      );
+      const metadata = { language, officiallySupported: false };
+      expect(
+        result.processedContent?.transcripts?.[0].languageMetadata,
+      ).toEqual(metadata);
+      expect(
+        result.processedContent?.pendingTranscriptions?.[0].languageMetadata,
+      ).toEqual(metadata);
+    },
+  );
 
   describe('small (≤25MB) video → extract → Whisper', () => {
     it('extracts audio from an .m4v and sends the extracted mp3 to Whisper', async () => {
