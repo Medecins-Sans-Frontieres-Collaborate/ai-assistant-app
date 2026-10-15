@@ -14,6 +14,7 @@ import { useTranslations } from 'next-intl';
 
 import { ActiveFile } from '@/types/chat';
 
+import { TranscriptionLanguageWarning } from '@/components/Chat/TranscriptionLanguageWarning';
 import { Tooltip } from '@/components/UI/Tooltip';
 
 import { useChatStore } from '@/client/stores/chatStore';
@@ -218,10 +219,10 @@ export function ActiveFilesPanel() {
             {files.map((f) => (
               <div
                 key={f.id}
-                className={`flex items-center gap-2 px-2 py-1 rounded border bg-white dark:bg-gray-900 transition-opacity ${
+                className={`flex max-w-full flex-wrap items-center gap-2 px-2 py-1 rounded border bg-white dark:bg-gray-900 transition-opacity ${
                   f.pinned
                     ? 'border-gray-300 dark:border-gray-700'
-                    : 'border-dashed border-gray-300 dark:border-gray-600 opacity-60'
+                    : `border-dashed border-gray-300 dark:border-gray-600 ${f.processedContent?.languageMetadata?.officiallySupported === false ? '' : 'opacity-60'}`
                 }`}
               >
                 <span
@@ -283,6 +284,11 @@ export function ActiveFilesPanel() {
                 )}
 
                 {/* Token Count */}
+                <TranscriptionLanguageWarning
+                  metadata={f.processedContent?.languageMetadata}
+                  result
+                  compact
+                />
                 {f.processedContent?.tokenEstimate ? (
                   <span className="text-[10px] text-gray-500 dark:text-gray-400">
                     {f.processedContent.tokenEstimate.toLocaleString()}{' '}
