@@ -1,6 +1,8 @@
 import { ExtractionResultContent } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
+import type { TranscriptionLanguageMetadata } from '@/lib/constants/transcriptionLanguages';
+
 /**
  * Transcript metadata for audio/video transcriptions
  */
@@ -9,6 +11,7 @@ export interface TranscriptMetadata {
   transcript: string;
   processedContent?: string; // If user provided instructions for processing
   jobId?: string; // For tracking async transcription jobs and reliable message updates
+  languageMetadata?: TranscriptionLanguageMetadata;
 }
 
 /**
@@ -24,6 +27,7 @@ export interface PendingTranscriptionInfo {
   blobPath?: string; // Only required for batch jobs
   totalChunks?: number; // Only for chunked jobs
   jobType?: 'chunked' | 'batch';
+  languageMetadata?: TranscriptionLanguageMetadata;
 }
 
 /**

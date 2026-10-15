@@ -172,8 +172,7 @@ export function createAzureOpenAIStreamProcessor(
             let transcriptMetadata: TranscriptMetadata | undefined;
             if (transcript) {
               transcriptMetadata = {
-                filename: transcript.filename,
-                transcript: transcript.transcript,
+                ...transcript,
                 processedContent: allContent, // The LLM's response about the transcript
               };
             }
