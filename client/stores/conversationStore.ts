@@ -178,6 +178,7 @@ interface ConversationStore {
     transcript: string,
     filename: string,
     jobId?: string,
+    languageMetadata?: import('@/lib/constants/transcriptionLanguages').TranscriptionLanguageMetadata,
   ) => void;
 
   // Active file actions
@@ -574,6 +575,7 @@ export const useConversationStore = create<ConversationStore>()(
         transcript,
         filename,
         jobId,
+        languageMetadata,
       ) =>
         set((state) => ({
           conversations: state.conversations.map((c) => {
@@ -603,6 +605,8 @@ export const useConversationStore = create<ConversationStore>()(
                     transcript: {
                       ...v.transcript,
                       transcript: transcript, // Update the stored transcript
+                      languageMetadata:
+                        languageMetadata ?? v.transcript.languageMetadata,
                     },
                   };
                 }
@@ -619,6 +623,18 @@ export const useConversationStore = create<ConversationStore>()(
                   return {
                     ...v,
                     content: v.content.replace(placeholder, formattedContent),
+                    transcript:
+                      v.transcript || languageMetadata
+                        ? {
+                            ...v.transcript,
+                            filename,
+                            transcript,
+                            jobId,
+                            languageMetadata:
+                              languageMetadata ??
+                              v.transcript?.languageMetadata,
+                          }
+                        : undefined,
                   };
                 }
 
