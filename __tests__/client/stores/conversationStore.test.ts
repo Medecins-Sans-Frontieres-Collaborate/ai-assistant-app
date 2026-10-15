@@ -1,4 +1,4 @@
-import { Conversation } from '@/types/chat';
+import { AssistantMessageGroup, Conversation, MessageType } from '@/types/chat';
 import { FolderInterface } from '@/types/folder';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
@@ -26,6 +26,76 @@ describe('conversationStore', () => {
       expect(state.searchTerm).toBe('');
       expect(state.isLoaded).toBe(false);
     });
+  });
+
+  describe('experimental transcript persistence', () => {
+    it.each(['jobId', 'placeholder'])(
+      'preserves caution on %s-based completion and reload',
+      (matching) => {
+        const languageMetadata = { language: 'so', officiallySupported: false };
+        const entry: AssistantMessageGroup = {
+          type: 'assistant_group',
+          activeIndex: 0,
+          versions: [
+            {
+              content: '[Transcription in progress: audio.wav]',
+              messageType: MessageType.FILE,
+              createdAt: new Date().toISOString(),
+              transcript:
+                matching === 'jobId'
+                  ? {
+                      filename: 'audio.wav',
+                      transcript: '[Transcription in progress: audio.wav]',
+                      jobId: 'job-1',
+                      languageMetadata,
+                    }
+                  : undefined,
+            },
+          ],
+        };
+        useConversationStore.setState({
+          conversations: [
+            {
+              id: 'transcription-conv',
+              name: 'Test',
+              messages: [entry],
+              model: {
+                id: 'gpt-4',
+                name: 'GPT-4',
+                maxLength: 4000,
+                tokenLimit: 4000,
+              },
+              prompt: '',
+              temperature: 0.7,
+              folderId: null,
+            },
+          ],
+        });
+        useConversationStore
+          .getState()
+          .updateMessageWithTranscript(
+            'transcription-conv',
+            0,
+            'spoken content',
+            'audio.wav',
+            'job-1',
+            languageMetadata,
+          );
+        // Persist/reload representation, no metadata embedded in the spoken text.
+        const restored = JSON.parse(
+          JSON.stringify(useConversationStore.getState().conversations[0]),
+        );
+        expect(
+          restored.messages[0].versions[0].transcript.languageMetadata,
+        ).toEqual(languageMetadata);
+        expect(restored.messages[0].versions[0].transcript.transcript).toBe(
+          'spoken content',
+        );
+        expect(restored.messages[0].versions[0].content).not.toContain(
+          'officiallySupported',
+        );
+      },
+    );
   });
 
   describe('Conversation Management', () => {
