@@ -10,6 +10,7 @@ import { TranscriptContent } from '@/components/Chat/ChatMessages/TranscriptCont
 import { TranscriptionLanguageWarning } from '@/components/Chat/TranscriptionLanguageWarning';
 
 import english from '@/messages/en.json';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.unmock('next-intl');
@@ -54,6 +55,69 @@ function OptionsHarness() {
 }
 
 describe('experimental transcription language UX', () => {
+  it('opens the compact caution with the keyboard and dismisses it with Escape', async () => {
+    const user = userEvent.setup();
+    render(
+      <TranscriptionLanguageWarning
+        metadata={{ language: 'so', officiallySupported: false }}
+        compact
+        result
+      />,
+      { wrapper: Wrapper },
+    );
+    const trigger = screen.getByRole('button', {
+      name: 'Experimental language: review carefully',
+    });
+    const description = document.getElementById(
+      trigger.getAttribute('aria-controls')!,
+    )!;
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(description).not.toBeVisible();
+    await user.tab();
+    expect(trigger).toHaveFocus();
+    await user.keyboard('{Enter}');
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(description).toBeVisible();
+    expect(description).toHaveTextContent('Somali is not officially supported');
+    await user.keyboard('{Escape}');
+    expect(description).not.toBeVisible();
+    expect(trigger).toHaveFocus();
+    await user.keyboard(' ');
+    expect(description).toBeVisible();
+  });
+
+  it('toggles the compact caution by touch with wrapping content in the file panel', async () => {
+    const user = userEvent.setup();
+    render(
+      <div style={{ width: 200 }}>
+        <TranscriptionLanguageWarning
+          metadata={{ language: 'ht', officiallySupported: false }}
+          compact
+          result
+        />
+      </div>,
+      { wrapper: Wrapper },
+    );
+    const trigger = screen.getByRole('button', {
+      name: 'Experimental language: review carefully',
+    });
+    const description = document.getElementById(
+      trigger.getAttribute('aria-controls')!,
+    )!;
+    await user.pointer([
+      { keys: '[TouchA>]', target: trigger },
+      { keys: '[/TouchA]' },
+    ]);
+    expect(description).toBeVisible();
+    expect(description).toHaveClass(
+      'max-w-full',
+      'whitespace-normal',
+      'break-words',
+    );
+    expect(description).toHaveTextContent('Haitian Creole');
+    await user.click(trigger);
+    expect(description).not.toBeVisible();
+  });
   it('groups selectable options, warns for only the changed file, and clears on auto-detect', () => {
     render(<OptionsHarness />, { wrapper: Wrapper });
     const selectors = screen.getAllByRole('combobox', {

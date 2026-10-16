@@ -112,4 +112,27 @@ describe('completed transcript language caution', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Somali');
     expect(screen.getByText(/has expired/)).toBeInTheDocument();
   });
+
+  it('shows preserved surrounding prose independently of the collapsed transcript', () => {
+    render(
+      <TranscriptViewer
+        filename="audio.wav"
+        transcript="spoken content"
+        processedContent={
+          'The recording is being processed.\n\nPlease compare the result with your notes.'
+        }
+        languageMetadata={{ language: 'so', officiallySupported: false }}
+      />,
+      { wrapper: Wrapper },
+    );
+    expect(
+      screen.getByText(/The recording is being processed/),
+    ).toHaveTextContent('Please compare the result with your notes.');
+    expect(screen.queryByText('spoken content')).not.toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Expand', exact: true }),
+    );
+    expect(screen.getByText('spoken content')).toBeVisible();
+    expect(screen.getByText(/The recording is being processed/)).toBeVisible();
+  });
 });
