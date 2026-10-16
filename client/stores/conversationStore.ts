@@ -593,6 +593,16 @@ export const useConversationStore = create<ConversationStore>()(
                 const formattedContent = isPreformatted
                   ? transcript
                   : `[Transcript: ${filename}]\n${transcript}`;
+                const placeholder = `[Transcription in progress: ${filename}]`;
+                // Creating transcript metadata switches the message to
+                // TranscriptViewer. Keep surrounding assistant prose in the
+                // field that viewer renders, without duplicating spoken text.
+                const processedContent =
+                  v.transcript?.processedContent ??
+                  (typeof v.content === 'string' &&
+                  v.content.includes(placeholder)
+                    ? v.content.replace(placeholder, '\n\n').trim() || undefined
+                    : undefined);
 
                 // Primary matching: by jobId in transcript metadata (most reliable)
                 if (jobId && v.transcript?.jobId === jobId) {
@@ -605,6 +615,7 @@ export const useConversationStore = create<ConversationStore>()(
                     transcript: {
                       ...v.transcript,
                       transcript: transcript, // Update the stored transcript
+                      processedContent,
                       languageMetadata:
                         languageMetadata ?? v.transcript.languageMetadata,
                     },
@@ -612,7 +623,6 @@ export const useConversationStore = create<ConversationStore>()(
                 }
 
                 // Fallback: Replace placeholder with actual transcript (string matching)
-                const placeholder = `[Transcription in progress: ${filename}]`;
                 if (
                   typeof v.content === 'string' &&
                   v.content.includes(placeholder)
@@ -629,6 +639,7 @@ export const useConversationStore = create<ConversationStore>()(
                             ...v.transcript,
                             filename,
                             transcript,
+                            processedContent,
                             jobId,
                             languageMetadata:
                               languageMetadata ??
