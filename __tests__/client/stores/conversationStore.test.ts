@@ -29,24 +29,56 @@ describe('conversationStore', () => {
   });
 
   describe('experimental transcript persistence', () => {
-    it.each(['jobId', 'placeholder'])(
-      'preserves caution on %s-based completion and reload',
-      (matching) => {
+    it.each(
+      ['jobId', 'placeholder'].flatMap((matching) => [
+        {
+          matching,
+          surrounding: false,
+          existingSummary: undefined,
+          blob: false,
+        },
+        {
+          matching,
+          surrounding: true,
+          existingSummary: undefined,
+          blob: false,
+        },
+        { matching, surrounding: true, existingSummary: undefined, blob: true },
+        {
+          matching,
+          surrounding: true,
+          existingSummary: 'Existing analysis',
+          blob: false,
+        },
+      ]),
+    )(
+      'preserves caution and prose on $matching completion (surrounding=$surrounding, existingSummary=$existingSummary, blob=$blob)',
+      ({ matching, surrounding, existingSummary, blob }) => {
         const languageMetadata = { language: 'so', officiallySupported: false };
+        const placeholder = '[Transcription in progress: audio.wav]';
+        const before = 'The recording is being processed.';
+        const after = 'Please compare the result with your notes.';
+        const content = surrounding
+          ? `${before}\n${placeholder}\n${after}`
+          : placeholder;
+        const completedTranscript = blob
+          ? '[Transcript: audio.wav | blob:job-1 | expires:2030-01-01T00:00:00.000Z]'
+          : 'spoken content';
         const entry: AssistantMessageGroup = {
           type: 'assistant_group',
           activeIndex: 0,
           versions: [
             {
-              content: '[Transcription in progress: audio.wav]',
+              content,
               messageType: MessageType.FILE,
               createdAt: new Date().toISOString(),
               transcript:
-                matching === 'jobId'
+                matching === 'jobId' || existingSummary
                   ? {
                       filename: 'audio.wav',
                       transcript: '[Transcription in progress: audio.wav]',
-                      jobId: 'job-1',
+                      jobId: matching === 'jobId' ? 'job-1' : undefined,
+                      processedContent: existingSummary,
                       languageMetadata,
                     }
                   : undefined,
@@ -76,7 +108,7 @@ describe('conversationStore', () => {
           .updateMessageWithTranscript(
             'transcription-conv',
             0,
-            'spoken content',
+            completedTranscript,
             'audio.wav',
             'job-1',
             languageMetadata,
@@ -89,8 +121,20 @@ describe('conversationStore', () => {
           restored.messages[0].versions[0].transcript.languageMetadata,
         ).toEqual(languageMetadata);
         expect(restored.messages[0].versions[0].transcript.transcript).toBe(
-          'spoken content',
+          completedTranscript,
         );
+        const commentary =
+          restored.messages[0].versions[0].transcript.processedContent;
+        if (existingSummary) {
+          expect(commentary).toBe(existingSummary);
+        } else if (surrounding) {
+          expect(commentary).toContain(before);
+          expect(commentary).toContain(after);
+          expect(commentary).not.toContain(placeholder);
+          expect(commentary).not.toContain(completedTranscript);
+        } else {
+          expect(commentary).toBeUndefined();
+        }
         expect(restored.messages[0].versions[0].content).not.toContain(
           'officiallySupported',
         );
