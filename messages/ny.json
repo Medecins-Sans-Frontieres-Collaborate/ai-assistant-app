@@ -2428,7 +2428,7 @@
     "experimentalLanguages": "Zoyesedwa: sizithandizidwa mwalamulo",
     "experimentalOption": "{language} (zoyesedwa)",
     "unsupportedLanguageTitle": "Sithandizidwa mwalamulo",
-    "unsupportedLanguageWarning": "{language} siyithandizidwa mwalamulo ndi Azure OpenAI Whisper. Zolemba za kujambula zitha kukhala ndi zolakwika zazikulu, kusowa kapena kuyankhula kosanjeza. Chonde mufufuze ndi munthu amene amadziwa bwino chilankhulochi pog comparing zolemba ndi kujambula koyambirira musanadalire, makamaka mayina, manambala, ndi mawu azachipatala.",
+    "unsupportedLanguageWarning": "{language} siyithandizidwa mwalamulo ndi Azure OpenAI Whisper. Zolemba za kujambula zitha kukhala ndi zolakwika zazikulu, kusowa kapena kuyankhula kosanjeza. Chonde mufufuze ndi munthu amene amadziwa bwino chilankhulochi poyerekeza zolemba ndi kujambula koyambirira musanadalire, makamaka mayina, manambala, ndi mawu azachipatala.",
     "experimentalTranscriptTitle": "Chilankhulo choyesedwa: onani mwatsatanetsatane"
   },
   "documentTranslation": {

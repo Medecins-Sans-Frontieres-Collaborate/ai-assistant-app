@@ -2424,7 +2424,7 @@
     "loadingAttempt": "(andramana {count})",
     "transcriptLabel": "[Taratasy: {filename}]",
     "languageLabel": "Fiteny amin'ny firaketana",
-    "officialLanguages": "Tsy tohanana ofisialy",
+    "officialLanguages": "Tohanana ofisialy",
     "experimentalLanguages": "Andrana: tsy tohanana ofisialy",
     "experimentalOption": "{language} (andrana)",
     "unsupportedLanguageTitle": "Tsy tohanana ofisialy",
