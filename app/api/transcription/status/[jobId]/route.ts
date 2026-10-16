@@ -89,6 +89,7 @@ export async function GET(
     return successResponse({
       status,
       transcript: chunkedJob.transcript,
+      languageMetadata: chunkedJob.languageMetadata,
       error: cancelled ? JOB_CANCELLED_MESSAGE : chunkedJob.error,
       // Expose classification so the client can pick appropriate recovery UX
       // (retry vs re-auth vs "try a different file"). Absent for non-failures.

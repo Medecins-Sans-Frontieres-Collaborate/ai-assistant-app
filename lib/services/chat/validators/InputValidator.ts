@@ -100,13 +100,13 @@ const MessageContentSchema = z.union([
           .refine((s) => s !== '.' && s !== '..')
           .optional()
           .catch(undefined),
-        // Whisper accepts ISO-639-1 (2-letter). Accept optional region (en-US,
-        // pt-BR) and normalize case. Anything else is dropped.
+        // Whisper includes 3-letter tokens such as haw. Preserve existing
+        // region compatibility; normalize case without silently dropping haw.
         transcriptionLanguage: z
           .string()
           .trim()
           .transform((s) => s.toLowerCase().replace('_', '-'))
-          .pipe(z.string().regex(/^[a-z]{2}(-[a-z]{2})?$/))
+          .pipe(z.string().regex(/^(?:[a-z]{2}(-[a-z]{2})?|haw)$/))
           .optional()
           .catch(undefined),
         transcriptionPrompt: z.string().max(2000).optional().catch(undefined),

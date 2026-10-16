@@ -14,6 +14,7 @@ import React, {
   FC,
   MouseEvent,
   SetStateAction,
+  useId,
   useState,
 } from 'react';
 
@@ -21,11 +22,16 @@ import { useTranslations } from 'next-intl';
 
 import { ChatInputSubmitTypes, FilePreview } from '@/types/chat';
 
+import { TranscriptionLanguageWarning } from '@/components/Chat/TranscriptionLanguageWarning';
 import { XIcon } from '@/components/Icons/cancel';
 import FileIcon from '@/components/Icons/file';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
-import { TRANSCRIPTION_LANGUAGES } from '@/lib/constants/transcriptionLanguages';
+import {
+  getOfficialTranscriptionLanguages,
+  getTranscriptionLanguageMetadata,
+  getUnofficialTranscriptionLanguages,
+} from '@/lib/constants/transcriptionLanguages';
 
 /**
  * Lightbox modal for full-screen image viewing
@@ -129,11 +135,16 @@ interface TranscriptionOptionsProps {
   setFilePreviews: Dispatch<SetStateAction<FilePreview[]>>;
 }
 
-const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
+export const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
   filePreview,
   setFilePreviews,
 }) => {
   const t = useTranslations();
+  const languageId = useId();
+  const warningId = `${languageId}-warning`;
+  const languageMetadata = getTranscriptionLanguageMetadata(
+    filePreview.transcriptionLanguage,
+  );
   const [showPromptInput, setShowPromptInput] = useState(
     !!filePreview.transcriptionPrompt,
   );
@@ -172,31 +183,51 @@ const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
 
       {/* Language selector */}
       <div className="relative">
+        <label htmlFor={languageId} className="sr-only">
+          {t('transcription.languageLabel')}
+        </label>
         <select
+          id={languageId}
+          aria-describedby={
+            languageMetadata && !languageMetadata.officiallySupported
+              ? warningId
+              : undefined
+          }
           value={filePreview.transcriptionLanguage || ''}
           onChange={handleLanguageChange}
-          className="w-full text-xs px-2 py-1 pr-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full min-h-11 text-xs px-2 py-1 pr-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
           onClick={(e) => e.stopPropagation()}
         >
-          {TRANSCRIPTION_LANGUAGES.map((lang) => (
-            <option
-              key={lang.code}
-              value={lang.code}
-              className={
-                lang.officiallySupported
-                  ? 'text-gray-700 dark:text-gray-200'
-                  : 'text-gray-400 dark:text-gray-500'
-              }
-            >
-              {t(lang.labelKey)}
-            </option>
-          ))}
+          <option value="">{t('transcription.languages.autoDetect')}</option>
+          <optgroup label={t('transcription.officialLanguages')}>
+            {getOfficialTranscriptionLanguages()
+              .filter((lang) => lang.code)
+              .map((lang) => (
+                <option key={lang.code} value={lang.code}>
+                  {t(lang.labelKey)}
+                </option>
+              ))}
+          </optgroup>
+          <optgroup label={t('transcription.experimentalLanguages')}>
+            {getUnofficialTranscriptionLanguages().map((lang) => (
+              <option key={lang.code} value={lang.code}>
+                {t('transcription.experimentalOption', {
+                  language: t(lang.labelKey),
+                })}
+              </option>
+            ))}
+          </optgroup>
         </select>
         <IconChevronDown
           size={12}
           className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
         />
       </div>
+
+      <TranscriptionLanguageWarning
+        metadata={languageMetadata}
+        id={warningId}
+      />
 
       {/* Prompt toggle/input */}
       {!showPromptInput ? (

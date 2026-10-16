@@ -1,4 +1,4 @@
-import { Conversation } from '@/types/chat';
+import { AssistantMessageGroup, Conversation, MessageType } from '@/types/chat';
 import { FolderInterface } from '@/types/folder';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
@@ -26,6 +26,120 @@ describe('conversationStore', () => {
       expect(state.searchTerm).toBe('');
       expect(state.isLoaded).toBe(false);
     });
+  });
+
+  describe('experimental transcript persistence', () => {
+    it.each(
+      ['jobId', 'placeholder'].flatMap((matching) => [
+        {
+          matching,
+          surrounding: false,
+          existingSummary: undefined,
+          blob: false,
+        },
+        {
+          matching,
+          surrounding: true,
+          existingSummary: undefined,
+          blob: false,
+        },
+        { matching, surrounding: true, existingSummary: undefined, blob: true },
+        {
+          matching,
+          surrounding: true,
+          existingSummary: 'Existing analysis',
+          blob: false,
+        },
+      ]),
+    )(
+      'preserves caution and prose on $matching completion (surrounding=$surrounding, existingSummary=$existingSummary, blob=$blob)',
+      ({ matching, surrounding, existingSummary, blob }) => {
+        const languageMetadata = { language: 'so', officiallySupported: false };
+        const placeholder = '[Transcription in progress: audio.wav]';
+        const before = 'The recording is being processed.';
+        const after = 'Please compare the result with your notes.';
+        const content = surrounding
+          ? `${before}\n${placeholder}\n${after}`
+          : placeholder;
+        const completedTranscript = blob
+          ? '[Transcript: audio.wav | blob:job-1 | expires:2030-01-01T00:00:00.000Z]'
+          : 'spoken content';
+        const entry: AssistantMessageGroup = {
+          type: 'assistant_group',
+          activeIndex: 0,
+          versions: [
+            {
+              content,
+              messageType: MessageType.FILE,
+              createdAt: new Date().toISOString(),
+              transcript:
+                matching === 'jobId' || existingSummary
+                  ? {
+                      filename: 'audio.wav',
+                      transcript: '[Transcription in progress: audio.wav]',
+                      jobId: matching === 'jobId' ? 'job-1' : undefined,
+                      processedContent: existingSummary,
+                      languageMetadata,
+                    }
+                  : undefined,
+            },
+          ],
+        };
+        useConversationStore.setState({
+          conversations: [
+            {
+              id: 'transcription-conv',
+              name: 'Test',
+              messages: [entry],
+              model: {
+                id: 'gpt-4',
+                name: 'GPT-4',
+                maxLength: 4000,
+                tokenLimit: 4000,
+              },
+              prompt: '',
+              temperature: 0.7,
+              folderId: null,
+            },
+          ],
+        });
+        useConversationStore
+          .getState()
+          .updateMessageWithTranscript(
+            'transcription-conv',
+            0,
+            completedTranscript,
+            'audio.wav',
+            'job-1',
+            languageMetadata,
+          );
+        // Persist/reload representation, no metadata embedded in the spoken text.
+        const restored = JSON.parse(
+          JSON.stringify(useConversationStore.getState().conversations[0]),
+        );
+        expect(
+          restored.messages[0].versions[0].transcript.languageMetadata,
+        ).toEqual(languageMetadata);
+        expect(restored.messages[0].versions[0].transcript.transcript).toBe(
+          completedTranscript,
+        );
+        const commentary =
+          restored.messages[0].versions[0].transcript.processedContent;
+        if (existingSummary) {
+          expect(commentary).toBe(existingSummary);
+        } else if (surrounding) {
+          expect(commentary).toContain(before);
+          expect(commentary).toContain(after);
+          expect(commentary).not.toContain(placeholder);
+          expect(commentary).not.toContain(completedTranscript);
+        } else {
+          expect(commentary).toBeUndefined();
+        }
+        expect(restored.messages[0].versions[0].content).not.toContain(
+          'officiallySupported',
+        );
+      },
+    );
   });
 
   describe('Conversation Management', () => {

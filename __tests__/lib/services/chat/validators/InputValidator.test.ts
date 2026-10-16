@@ -7,6 +7,7 @@ import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { ErrorCode, PipelineError } from '@/types/errors';
 import { InterpreterMode } from '@/types/interpreterMode';
 
+import { TRANSCRIPTION_LANGUAGES } from '@/lib/constants/transcriptionLanguages';
 import { describe, expect, it } from 'vitest';
 
 describe('InputValidator', () => {
@@ -337,6 +338,24 @@ describe('InputValidator', () => {
         },
       ],
     });
+
+    it.each(TRANSCRIPTION_LANGUAGES.filter((l) => l.code).map((l) => l.code))(
+      'preserves Whisper language code %s',
+      (language) => {
+        const result = new InputValidator().validateChatRequest(
+          requestWith({
+            type: 'file_url',
+            url: 'https://blob.core.windows.net/container/audio.wav',
+            transcriptionLanguage: language.toUpperCase(),
+          }),
+        );
+        const block = (result.messages[0].content as unknown[])[0] as Record<
+          string,
+          unknown
+        >;
+        expect(block.transcriptionLanguage).toBe(language);
+      },
+    );
 
     it('preserves originalFilename, transcriptionLanguage, transcriptionPrompt through validation', () => {
       const validator = new InputValidator();

@@ -68,6 +68,7 @@ describe('/api/transcription/status/[jobId]', () => {
       currentChunk: 1,
       chunkPaths: [],
       filename: 'lecture.mp3',
+      languageMetadata: { language: 'ht', officiallySupported: false },
       createdAt: Date.now(),
       updatedAt: Date.now(),
     } as any);
@@ -87,6 +88,10 @@ describe('/api/transcription/status/[jobId]', () => {
     expect(body.data?.progress ?? body.progress).toEqual({
       completed: 1,
       total: 3,
+    });
+    expect((body.data ?? body).languageMetadata).toEqual({
+      language: 'ht',
+      officiallySupported: false,
     });
   });
 

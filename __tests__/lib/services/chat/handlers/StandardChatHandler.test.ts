@@ -32,6 +32,36 @@ function createHandler(): HandlerInternals {
   return new StandardChatHandler(service) as unknown as HandlerInternals;
 }
 
+describe('StandardChatHandler transcription-only metadata', () => {
+  it.each(['ht', 'so', 'haw'])(
+    'emits the %s caution independently of spoken content',
+    async (language) => {
+      const languageMetadata = { language, officiallySupported: false };
+      const context = createTestChatContext({
+        messages: [
+          { role: 'user', content: '', messageType: MessageType.FILE },
+        ],
+        processedContent: {
+          transcripts: [
+            {
+              filename: 'audio.wav',
+              transcript: 'spoken content',
+              languageMetadata,
+            },
+          ],
+        },
+      });
+      const result = await createHandler().executeStage(context);
+      const body = await result.response!.text();
+      expect(body.split('\n\n<<<METADATA_START>>>')[0]).toBe('spoken content');
+      const metadata = JSON.parse(
+        body.split('<<<METADATA_START>>>')[1].split('<<<METADATA_END>>>')[0],
+      );
+      expect(metadata.transcript.languageMetadata).toEqual(languageMetadata);
+    },
+  );
+});
+
 describe('StandardChatHandler.buildFinalMessages', () => {
   it('injects fileSummaries into the last message when content is a plain string', () => {
     const handler = createHandler();

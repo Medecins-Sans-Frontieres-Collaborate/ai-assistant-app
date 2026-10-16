@@ -4,6 +4,7 @@ import { guardTranscriptionMinutes } from '@/lib/services/limits/transcriptionBu
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 
 import { FILE_SIZE_LIMITS, WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
+import type { TranscriptMetadata } from '@/lib/utils/app/metadata';
 import {
   calculateChunkConfig,
   estimateCharsPerToken,
@@ -35,6 +36,7 @@ import {
   isAudioVideoFile,
   isWhisperNativeFormat,
 } from '@/lib/constants/fileTypes';
+import { getTranscriptionLanguageMetadata } from '@/lib/constants/transcriptionLanguages';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 import fs from 'fs';
 import { performance } from 'perf_hooks';
@@ -135,10 +137,7 @@ export class FileProcessor extends BasePipelineStage {
             content: string;
           }> = [];
 
-          const transcripts: Array<{
-            filename: string;
-            transcript: string;
-          }> = [];
+          const transcripts: TranscriptMetadata[] = [];
 
           // Extract files and images from message
           const files: Array<{
@@ -463,6 +462,9 @@ export class FileProcessor extends BasePipelineStage {
                     transcripts.push({
                       filename,
                       transcript,
+                      languageMetadata: getTranscriptionLanguageMetadata(
+                        file.transcriptionLanguage,
+                      ),
                     });
 
                     // Log successful transcription (fire-and-forget)
@@ -529,12 +531,18 @@ export class FileProcessor extends BasePipelineStage {
                       jobId,
                       totalChunks,
                       jobType: 'chunked',
+                      languageMetadata: getTranscriptionLanguageMetadata(
+                        file.transcriptionLanguage,
+                      ),
                     });
 
                     // Add placeholder transcript for UI display
                     transcripts.push({
                       filename,
                       transcript: `[Transcription in progress: ${filename}]`,
+                      languageMetadata: getTranscriptionLanguageMetadata(
+                        file.transcriptionLanguage,
+                      ),
                     });
 
                     // Log chunked transcription job queued (fire-and-forget)

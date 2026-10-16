@@ -108,6 +108,8 @@ export class StandardChatHandler extends BasePipelineStage {
             ? {
                 filename: context.processedContent.transcripts[0].filename,
                 transcript: context.processedContent.transcripts[0].transcript,
+                languageMetadata:
+                  context.processedContent.transcripts[0].languageMetadata,
                 processedContent: undefined, // Will be filled by LLM response
               }
             : undefined;
@@ -161,6 +163,7 @@ export class StandardChatHandler extends BasePipelineStage {
                       transcript: string;
                       processedContent: undefined;
                       jobId?: string;
+                      languageMetadata?: typeof transcript.languageMetadata;
                     };
                     pendingTranscriptions?: typeof pendingTranscriptions;
                   } = {
@@ -169,6 +172,7 @@ export class StandardChatHandler extends BasePipelineStage {
                       transcript: transcript.transcript,
                       processedContent: undefined, // No LLM processing
                       jobId: pendingJobId, // For reliable message update tracking
+                      languageMetadata: transcript.languageMetadata,
                     },
                   };
                   if (

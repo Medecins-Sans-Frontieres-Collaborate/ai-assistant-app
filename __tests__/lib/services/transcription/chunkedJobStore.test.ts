@@ -132,6 +132,15 @@ describe('chunkedJobStore (blob-backed)', () => {
   }
 
   describe('createJob + getJob', () => {
+    it('persists language caution separately through progress and completion', async () => {
+      const metadata = { language: 'so', officiallySupported: false };
+      await createJob(storage, jobId, ownerId, 1, [], 'somali.wav', metadata);
+      await updateProgress(storage, jobId, ownerId, 1);
+      await completeJob(storage, jobId, ownerId, 'spoken content');
+      const job = await getJob(storage, jobId, ownerId);
+      expect(job?.languageMetadata).toEqual(metadata);
+      expect(job?.transcript).toBe('spoken content');
+    });
     it('stores the record at the user-scoped path', async () => {
       await createOwnedJob();
 

@@ -1,7 +1,7 @@
 /**
  * Options for transcription services.
  *
- * @property language - ISO-639-1 language code (e.g., 'en', 'es', 'fr').
+ * @property language - Whisper language token code (e.g., 'en', 'ht', 'so', 'haw').
  *                      If undefined, Whisper will auto-detect the language.
  * @property prompt - Optional context/instructions to improve transcription accuracy.
  *                    Useful for technical terms, proper nouns, or specific formatting.
@@ -60,6 +60,8 @@ export interface TranscriptionProgress {
  * - Batch jobs: Azure Speech Services (legacy)
  */
 export interface BatchTranscriptionStatusResponse {
+  /** Present only for Whisper chunked jobs; never inferred for legacy Speech Batch. */
+  languageMetadata?: import('@/lib/constants/transcriptionLanguages').TranscriptionLanguageMetadata;
   /** Current status of the job */
   status: 'NotStarted' | 'Running' | 'Succeeded' | 'Failed';
   /** Transcript text (only when status is 'Succeeded') */
