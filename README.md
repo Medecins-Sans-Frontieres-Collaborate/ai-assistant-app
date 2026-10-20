@@ -36,6 +36,61 @@ For a complete feature list, see [docs/FEATURES.md](./docs/FEATURES.md).
 - Azure OpenAI or Azure AI Foundry API access
 - Azure AD application for authentication
 
+### Document extraction dependencies
+
+Local PDF and Office document processing uses native command-line tools in
+addition to npm packages. Install these in the environment running the Node.js
+server and make sure the executables are on its `PATH`.
+
+| File format                | Required tools                                                                                                                                        |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| DOCX, RTF, ODT, EPUB, HTML | `pandoc`                                                                                                                                              |
+| PDF                        | npm's `pdfjs-dist` runs first; `pdftotext` (Poppler) provides fallback extraction, and `gs` (Ghostscript) provides a repair fallback for damaged PDFs |
+| Legacy DOC                 | `libreoffice`, then `pandoc`                                                                                                                          |
+| PPT / PPTX                 | `libreoffice`, then the PDF extraction tools                                                                                                          |
+| XLS / XLSX                 | `ssconvert` (Gnumeric)                                                                                                                                |
+
+For PDF/DOCX translation development:
+
+```bash
+# Ubuntu / Debian (including Ubuntu under WSL)
+sudo apt update
+sudo apt install pandoc poppler-utils ghostscript
+
+# macOS with Homebrew
+brew install pandoc poppler ghostscript
+```
+
+For the other Office formats on Ubuntu / Debian, also install:
+
+```bash
+sudo apt install libreoffice gnumeric
+```
+
+On Windows, use WSL or a Linux container for the server: the file-processing
+service uses Linux-style `/tmp` paths. Install the tools inside that environment,
+not just on the Windows host. The Dockerfile's final production image includes
+all the tools above; its dependency/build stages do not.
+
+Check the tools from the same terminal/container that starts the server, then
+restart the server after installation or `PATH` changes:
+
+```bash
+node --version   # Node 24+, as specified in .nvmrc
+pandoc --version
+pdftotext -v
+gs --version
+```
+
+Scanned/image-only PDFs require OCR before upload; this extraction path does not
+perform OCR. In translation workflows, TXT/Markdown/CSV/JSON/TSV files are read
+directly in the browser, while PDF/DOCX files use Azure Blob Storage and
+server-side extraction. Successful TXT translation therefore does not verify
+storage access. Configure `AZURE_BLOB_STORAGE_NAME` and
+`AZURE_BLOB_STORAGE_CONTAINER` (or `AZURE_BLOB_STORAGE_IMAGE_CONTAINER` as a
+fallback), with either `AZURE_BLOB_STORAGE_CONNECTION_STRING` or an identity
+available to `DefaultAzureCredential` that has access to the storage account.
+
 ### Installation
 
 1. **Clone the repository**
