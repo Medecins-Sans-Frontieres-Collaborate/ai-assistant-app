@@ -243,6 +243,13 @@ export class StandardChatHandler extends BasePipelineStage {
             } else if (fileError?.message.includes('FFmpeg is not available')) {
               errorMessage =
                 "We're currently unable to process video files. You can try uploading an audio file instead.";
+            } else if (
+              fileError?.message.includes('Audio transcription rejected')
+            ) {
+              // The service refused the request (4xx) — the file itself may be
+              // fine, so don't send the user chasing file-format problems.
+              errorMessage =
+                'The transcription service rejected this request. If you selected a recording language, try auto-detect; otherwise try a different file or format.';
             } else {
               // Default generic message for unknown errors
               errorMessage =

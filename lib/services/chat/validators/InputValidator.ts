@@ -110,6 +110,11 @@ const MessageContentSchema = z.union([
           .optional()
           .catch(undefined),
         transcriptionPrompt: z.string().max(2000).optional().catch(undefined),
+        // Engine choice; unknown values fall back to the whisper default.
+        transcriptionEngine: z
+          .enum(['whisper', 'azureSpeech'])
+          .optional()
+          .catch(undefined),
       }),
       z.object({
         type: z.literal('thinking'),
