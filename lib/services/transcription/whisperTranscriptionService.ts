@@ -14,6 +14,7 @@ import {
 } from '@/types/transcription';
 
 import { env } from '@/config/environment';
+import { toAzureWhisperLanguageRequest } from '@/lib/constants/transcriptionLanguages';
 import {
   DefaultAzureCredential,
   getBearerTokenProvider,
@@ -134,15 +135,28 @@ export class WhisperTranscriptionService implements ITranscriptionService {
     segmentPath: string,
     options?: TranscriptionOptions,
   ): Promise<string> {
+    // Azure rejects experimental hints with HTTP 400 unsupported_language,
+    // so they become the disclosed auto-detect fallback (the UI warns the
+    // user whenever an experimental code is selected). The autonym cue only
+    // biases detection when the user supplied no prompt of their own.
+    const { language, autoDetectFallback, autonymCue } =
+      toAzureWhisperLanguageRequest(options?.language);
+    if (autoDetectFallback) {
+      console.log(
+        `[WhisperTranscription] Azure does not accept language hint '${options?.language}'; ` +
+          `using auto-detect with a native-language cue`,
+      );
+    }
+
     try {
       // Use OpenAI SDK which handles file streams properly
       const transcription = await this.client.audio.transcriptions.create({
         file: fs.createReadStream(segmentPath),
         model: this.deployment,
         // Language code (ISO-639-1 format). If undefined, Whisper auto-detects
-        language: options?.language,
+        language,
         // Optional context/prompt to improve accuracy with technical terms
-        prompt: options?.prompt,
+        prompt: options?.prompt ?? autonymCue,
         // Most deterministic transcription
         temperature: 0,
       });
