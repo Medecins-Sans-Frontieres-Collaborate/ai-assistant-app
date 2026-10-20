@@ -67,12 +67,18 @@ export async function uploadAndExtractText(
       errorData.error || `Upload failed (${uploadResponse.status})`,
     );
   }
-  const uploadData = (await uploadResponse.json()) as { uri: string };
+  const uploadData = (await uploadResponse.json()) as {
+    data?: { uri?: unknown };
+  } | null;
+  const url = uploadData?.data?.uri;
+  if (typeof url !== 'string' || !url.trim()) {
+    throw new Error('Upload failed: server response is missing the file URL');
+  }
 
   const processResponse = await fetch('/api/file/process', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url: uploadData.uri }),
+    body: JSON.stringify({ url }),
   });
   if (!processResponse.ok) {
     const errorData = await processResponse.json().catch(() => ({}));
@@ -81,9 +87,14 @@ export async function uploadAndExtractText(
     );
   }
   const processData = (await processResponse.json()) as {
-    results: Array<{ url: string; content: string }>;
-  };
-  const content = processData.results?.[0]?.content ?? '';
+    results?: Array<{ content?: unknown }>;
+  } | null;
+  const content = processData?.results?.[0]?.content;
+  if (typeof content !== 'string') {
+    throw new Error(
+      'Text extraction failed: server response is missing the result',
+    );
+  }
 
-  return { url: uploadData.uri, name: file.name, text: content };
+  return { url, name: file.name, text: content };
 }
