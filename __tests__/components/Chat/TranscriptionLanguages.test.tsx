@@ -157,6 +157,62 @@ describe('experimental transcription language UX', () => {
     expect(selectors[0]).not.toHaveAttribute('aria-describedby');
   });
 
+  it('offers an engine choice only where Azure Speech natively covers the language', () => {
+    render(<OptionsHarness />, { wrapper: Wrapper });
+    const language = screen.getAllByRole('combobox', {
+      name: 'Recording language',
+    })[0];
+
+    // Auto-detect: Whisper only, no engine selector.
+    expect(
+      screen.queryByRole('combobox', { name: 'Transcription service' }),
+    ).not.toBeInTheDocument();
+
+    // Haitian Creole has no Azure Speech locale: still no selector.
+    fireEvent.change(language, { target: { value: 'ht' } });
+    expect(
+      screen.queryByRole('combobox', { name: 'Transcription service' }),
+    ).not.toBeInTheDocument();
+
+    // Somali is natively covered by Azure Speech: selector appears, Whisper
+    // default keeps the experimental caution visible.
+    fireEvent.change(language, { target: { value: 'so' } });
+    const engine = screen.getByRole('combobox', {
+      name: 'Transcription service',
+    });
+    expect(engine).toHaveValue('whisper');
+    const engineOptions = Array.from((engine as HTMLSelectElement).options);
+    expect(engineOptions.map((option) => option.textContent)).toEqual([
+      'OpenAI Whisper (experimental)',
+      'Azure Speech (native support)',
+    ]);
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Somali is not officially supported',
+    );
+
+    // Choosing Azure Speech removes the Whisper experimental caution.
+    fireEvent.change(engine, { target: { value: 'azureSpeech' } });
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+
+    // Switching language resets the engine to the Whisper default.
+    fireEvent.change(language, { target: { value: 'am' } });
+    expect(
+      screen.getByRole('combobox', { name: 'Transcription service' }),
+    ).toHaveValue('whisper');
+    expect(screen.getByRole('status')).toHaveTextContent('Amharic');
+
+    // Official languages offer both engines under their plain names.
+    fireEvent.change(language, { target: { value: 'fr' } });
+    const officialEngine = screen.getByRole('combobox', {
+      name: 'Transcription service',
+    });
+    expect(
+      Array.from((officialEngine as HTMLSelectElement).options).map(
+        (option) => option.textContent,
+      ),
+    ).toEqual(['OpenAI Whisper', 'Azure Speech']);
+  });
+
   it('keeps the caution outside completed inline transcript text', () => {
     render(
       <TranscriptContent
