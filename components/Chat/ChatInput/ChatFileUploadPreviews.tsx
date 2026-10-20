@@ -28,7 +28,9 @@ import FileIcon from '@/components/Icons/file';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import {
+  getAzureSpeechLocales,
   getOfficialTranscriptionLanguages,
+  getTranscriptionLanguageByCode,
   getTranscriptionLanguageMetadata,
   getUnofficialTranscriptionLanguages,
 } from '@/lib/constants/transcriptionLanguages';
@@ -141,10 +143,25 @@ export const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
 }) => {
   const t = useTranslations();
   const languageId = useId();
+  const engineId = `${languageId}-engine`;
   const warningId = `${languageId}-warning`;
+  // Azure Speech is offered only for languages it natively covers; the
+  // engine choice resets when the language changes, so a stale azureSpeech
+  // selection never applies to an unmapped language.
+  const speechAvailable =
+    getAzureSpeechLocales(filePreview.transcriptionLanguage).length > 0;
+  const engine =
+    speechAvailable && filePreview.transcriptionEngine === 'azureSpeech'
+      ? 'azureSpeech'
+      : 'whisper';
   const languageMetadata = getTranscriptionLanguageMetadata(
     filePreview.transcriptionLanguage,
+    engine,
   );
+  const languageIsExperimental =
+    !!filePreview.transcriptionLanguage &&
+    getTranscriptionLanguageByCode(filePreview.transcriptionLanguage)
+      ?.officiallySupported === false;
   const [showPromptInput, setShowPromptInput] = useState(
     !!filePreview.transcriptionPrompt,
   );
@@ -163,6 +180,14 @@ export const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
     const value = e.target.value;
     updateFilePreview({
       transcriptionLanguage: value || undefined,
+      transcriptionEngine: undefined,
+    });
+  };
+
+  const handleEngineChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    updateFilePreview({
+      transcriptionEngine: value === 'azureSpeech' ? 'azureSpeech' : undefined,
     });
   };
 
@@ -223,6 +248,41 @@ export const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
           className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
         />
       </div>
+
+      {/* Engine selector: only when Azure Speech natively covers the language */}
+      {speechAvailable && (
+        <div className="relative">
+          <label htmlFor={engineId} className="sr-only">
+            {t('transcription.engineLabel')}
+          </label>
+          <select
+            id={engineId}
+            value={engine}
+            onChange={handleEngineChange}
+            className="w-full min-h-11 text-xs px-2 py-1 pr-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <option value="whisper">
+              {t(
+                languageIsExperimental
+                  ? 'transcription.engineWhisperExperimental'
+                  : 'transcription.engineWhisper',
+              )}
+            </option>
+            <option value="azureSpeech">
+              {t(
+                languageIsExperimental
+                  ? 'transcription.engineAzureSpeechNative'
+                  : 'transcription.engineAzureSpeech',
+              )}
+            </option>
+          </select>
+          <IconChevronDown
+            size={12}
+            className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
+          />
+        </div>
+      )}
 
       <TranscriptionLanguageWarning
         metadata={languageMetadata}
