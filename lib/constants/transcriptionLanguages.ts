@@ -671,16 +671,168 @@ export function getUnofficialTranscriptionLanguages(): TranscriptionLanguage[] {
   return TRANSCRIPTION_LANGUAGES.filter((lang) => !lang.officiallySupported);
 }
 
+/**
+ * Transcription engines users can choose per upload.
+ * - `whisper`: Azure OpenAI Whisper (official 57 natively; experimental codes
+ *   via the disclosed auto-detect fallback below).
+ * - `azureSpeech`: Azure AI Speech fast transcription, a separate model
+ *   family with native support for some languages Whisper's hosted API
+ *   rejects. Absent engine on stored metadata means whisper (legacy records).
+ */
+export type TranscriptionEngine = 'whisper' | 'azureSpeech';
+
+/**
+ * Whisper token code → candidate BCP-47 locales for Azure AI Speech fast
+ * transcription. Only locales with fast-transcription support are listed
+ * (language-support?tabs=stt, checked 2026-10-16). Multiple candidates let
+ * the service pick the regional variant via language identification.
+ * Codes absent here have no Azure Speech option and stay Whisper-only.
+ * `tl` maps to `fil-PH`: Filipino is the standardized register of Tagalog.
+ */
+export const AZURE_SPEECH_LOCALES: Record<string, string[]> = {
+  // Official Whisper languages (be, mi have no fast-transcription locale)
+  af: ['af-ZA'],
+  ar: ['ar-EG', 'ar-SA', 'ar-IQ', 'ar-MA'],
+  hy: ['hy-AM'],
+  az: ['az-AZ'],
+  bs: ['bs-BA'],
+  bg: ['bg-BG'],
+  ca: ['ca-ES'],
+  zh: ['zh-CN', 'zh-TW', 'zh-HK'],
+  hr: ['hr-HR'],
+  cs: ['cs-CZ'],
+  da: ['da-DK'],
+  nl: ['nl-NL', 'nl-BE'],
+  en: ['en-US', 'en-GB'],
+  et: ['et-EE'],
+  fi: ['fi-FI'],
+  fr: ['fr-FR', 'fr-CA'],
+  gl: ['gl-ES'],
+  de: ['de-DE', 'de-AT', 'de-CH'],
+  el: ['el-GR'],
+  he: ['he-IL'],
+  hi: ['hi-IN'],
+  hu: ['hu-HU'],
+  is: ['is-IS'],
+  id: ['id-ID'],
+  it: ['it-IT', 'it-CH'],
+  ja: ['ja-JP'],
+  kn: ['kn-IN'],
+  kk: ['kk-KZ'],
+  ko: ['ko-KR'],
+  lv: ['lv-LV'],
+  lt: ['lt-LT'],
+  mk: ['mk-MK'],
+  ms: ['ms-MY'],
+  mr: ['mr-IN'],
+  ne: ['ne-NP'],
+  no: ['nb-NO'],
+  fa: ['fa-IR'],
+  pl: ['pl-PL'],
+  pt: ['pt-PT', 'pt-BR'],
+  ro: ['ro-RO'],
+  ru: ['ru-RU'],
+  sr: ['sr-RS'],
+  sk: ['sk-SK'],
+  sl: ['sl-SI'],
+  es: ['es-ES', 'es-MX'],
+  sw: ['sw-KE'],
+  sv: ['sv-SE'],
+  tl: ['fil-PH'],
+  ta: ['ta-IN'],
+  th: ['th-TH'],
+  tr: ['tr-TR'],
+  uk: ['uk-UA'],
+  ur: ['ur-IN'],
+  vi: ['vi-VN'],
+  cy: ['cy-GB'],
+  // Experimental Whisper codes with native Azure Speech support
+  sq: ['sq-AL'],
+  am: ['am-ET'],
+  as: ['as-IN'],
+  eu: ['eu-ES'],
+  bn: ['bn-IN'],
+  my: ['my-MM'],
+  ka: ['ka-GE'],
+  gu: ['gu-IN'],
+  jw: ['jv-ID'],
+  km: ['km-KH'],
+  lo: ['lo-LA'],
+  ml: ['ml-IN'],
+  mt: ['mt-MT'],
+  mn: ['mn-MN'],
+  ps: ['ps-AF'],
+  pa: ['pa-IN'],
+  si: ['si-LK'],
+  so: ['so-SO'],
+  te: ['te-IN'],
+  uz: ['uz-UZ'],
+};
+
+/** Candidate Azure Speech locales for a Whisper code; empty = no Speech option. */
+export function getAzureSpeechLocales(code?: string): string[] {
+  if (!code) return [];
+  return AZURE_SPEECH_LOCALES[code] ?? [];
+}
+
+/**
+ * How a requested language is actually sent to an Azure Whisper deployment.
+ *
+ * Azure rejects every experimental (non-baseline) hint with HTTP 400
+ * `unsupported_language` — verified 2026-10-15 against both dev resources
+ * (see docs/features/transcription/experimental-languages.md). Experimental
+ * codes therefore map to the disclosed auto-detect fallback: no `language`
+ * parameter, with the autonym available as a native-language decoding cue.
+ * The requested code is still recorded in TranscriptionLanguageMetadata so
+ * the UI disclosure survives. Codes outside the registry (e.g. regional
+ * `pt-br`) pass through unchanged to preserve existing behavior.
+ */
+export interface AzureWhisperLanguageRequest {
+  /** Code to send to Azure; undefined = auto-detect. */
+  language?: string;
+  /** True when an experimental hint was converted to auto-detect. */
+  autoDetectFallback: boolean;
+  /** Native-language prompt cue to bias detection when the hint is dropped. */
+  autonymCue?: string;
+}
+
+export function toAzureWhisperLanguageRequest(
+  code?: string,
+): AzureWhisperLanguageRequest {
+  if (!code) return { autoDetectFallback: false };
+  const entry = getTranscriptionLanguageByCode(code);
+  if (entry && !entry.officiallySupported) {
+    return {
+      autoDetectFallback: true,
+      autonymCue: entry.autonym || undefined,
+    };
+  }
+  return { language: code, autoDetectFallback: false };
+}
+
 /** Snapshot of the requested language, kept separately from spoken transcript text. */
 export interface TranscriptionLanguageMetadata {
   language: string;
+  /** Whether the engine that transcribed natively supports this language. */
   officiallySupported: boolean;
+  /** Engine that produced the transcript. Absent = whisper (legacy records). */
+  engine?: TranscriptionEngine;
 }
 
 export function getTranscriptionLanguageMetadata(
   code?: string,
+  engine: TranscriptionEngine = 'whisper',
 ): TranscriptionLanguageMetadata | undefined {
   if (!code) return undefined; // Auto-detect is not a claim of official support.
+  if (engine === 'azureSpeech') {
+    return {
+      language: code,
+      officiallySupported: getAzureSpeechLocales(code).length > 0,
+      engine,
+    };
+  }
+  // Whisper keeps the legacy shape (no engine field) so stored records and
+  // comparisons predating engine choice stay stable.
   return {
     language: code,
     officiallySupported:
