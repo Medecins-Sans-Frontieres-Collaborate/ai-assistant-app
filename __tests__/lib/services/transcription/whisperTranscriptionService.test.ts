@@ -11,7 +11,11 @@ import { WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
 
 import { TranscriptionError } from '@/types/transcription';
 
-import { TRANSCRIPTION_LANGUAGES } from '@/lib/constants/transcriptionLanguages';
+import {
+  getOfficialTranscriptionLanguages,
+  getTranscriptionLanguageByCode,
+  getUnofficialTranscriptionLanguages,
+} from '@/lib/constants/transcriptionLanguages';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -49,9 +53,31 @@ describe('WhisperTranscriptionService size limit', () => {
     await handle.close();
   });
 
-  it.each(TRANSCRIPTION_LANGUAGES.filter((l) => l.code).map((l) => l.code))(
-    'sends %s unchanged to Azure',
+  it.each(
+    getOfficialTranscriptionLanguages()
+      .filter((l) => l.code)
+      .map((l) => l.code),
+  )('sends official hint %s unchanged to Azure', async (language) => {
+    createTranscription.mockImplementation(async ({ file }) => {
+      file.destroy();
+      return { text: 'spoken content' };
+    });
+    const service = new WhisperTranscriptionService();
+    expect(await service.transcribe(smallPath, { language })).toBe(
+      'spoken content',
+    );
+    expect(createTranscription).toHaveBeenLastCalledWith(
+      expect.objectContaining({ language, temperature: 0 }),
+    );
+  });
+
+  // Azure rejects every experimental hint with HTTP 400 unsupported_language
+  // (acceptance probe 2026-10-15), so these become the disclosed auto-detect
+  // fallback: no language parameter, autonym as the decoding cue.
+  it.each(getUnofficialTranscriptionLanguages().map((l) => l.code))(
+    'converts experimental hint %s to auto-detect with a native-language cue',
     async (language) => {
+      createTranscription.mockClear();
       createTranscription.mockImplementation(async ({ file }) => {
         file.destroy();
         return { text: 'spoken content' };
@@ -60,11 +86,49 @@ describe('WhisperTranscriptionService size limit', () => {
       expect(await service.transcribe(smallPath, { language })).toBe(
         'spoken content',
       );
+      // Exactly one request: a proactive fallback, not a rejected-then-retried hint.
+      expect(createTranscription).toHaveBeenCalledTimes(1);
       expect(createTranscription).toHaveBeenLastCalledWith(
-        expect.objectContaining({ language, temperature: 0 }),
+        expect.objectContaining({
+          language: undefined,
+          prompt: getTranscriptionLanguageByCode(language)?.autonym,
+          temperature: 0,
+        }),
       );
     },
   );
+
+  it('keeps the user prompt over the autonym cue on fallback', async () => {
+    createTranscription.mockClear();
+    createTranscription.mockImplementation(async ({ file }) => {
+      file.destroy();
+      return { text: 'spoken content' };
+    });
+    const service = new WhisperTranscriptionService();
+    await service.transcribe(smallPath, {
+      language: 'so',
+      prompt: 'Caafimaadka iyo dawooyinka',
+    });
+    expect(createTranscription).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        language: undefined,
+        prompt: 'Caafimaadka iyo dawooyinka',
+      }),
+    );
+  });
+
+  it('passes unknown codes through unchanged (regional compatibility)', async () => {
+    createTranscription.mockClear();
+    createTranscription.mockImplementation(async ({ file }) => {
+      file.destroy();
+      return { text: 'spoken content' };
+    });
+    const service = new WhisperTranscriptionService();
+    await service.transcribe(smallPath, { language: 'pt-br' });
+    expect(createTranscription).toHaveBeenLastCalledWith(
+      expect.objectContaining({ language: 'pt-br' }),
+    );
+  });
 
   it('does not silently retry with auto-detect after a language rejection', async () => {
     createTranscription.mockClear();
@@ -74,11 +138,11 @@ describe('WhisperTranscriptionService size limit', () => {
     });
     const service = new WhisperTranscriptionService();
     await expect(
-      service.transcribe(smallPath, { language: 'ht' }),
+      service.transcribe(smallPath, { language: 'fr' }),
     ).rejects.toMatchObject({ errorClass: 'permanent' });
     expect(createTranscription).toHaveBeenCalledTimes(1);
     expect(createTranscription).toHaveBeenCalledWith(
-      expect.objectContaining({ language: 'ht' }),
+      expect.objectContaining({ language: 'fr' }),
     );
   });
 

@@ -377,6 +377,37 @@ describe('InputValidator', () => {
       expect(block.transcriptionPrompt).toBe('Medical terminology');
     });
 
+    it('preserves valid transcriptionEngine values and drops unknown ones', () => {
+      const validator = new InputValidator();
+      for (const engine of ['whisper', 'azureSpeech']) {
+        const result = validator.validateChatRequest(
+          requestWith({
+            type: 'file_url',
+            url: 'https://blob.core.windows.net/container/audio.wav',
+            transcriptionLanguage: 'so',
+            transcriptionEngine: engine,
+          }),
+        );
+        const block = (result.messages[0].content as unknown[])[0] as Record<
+          string,
+          unknown
+        >;
+        expect(block.transcriptionEngine).toBe(engine);
+      }
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/audio.wav',
+          transcriptionEngine: 'local-whisper',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.transcriptionEngine).toBeUndefined();
+    });
+
     it('accepts file_url without any optional metadata', () => {
       const validator = new InputValidator();
       expect(() =>
