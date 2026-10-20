@@ -1468,7 +1468,12 @@
     "experimentalOption": "{language} (experimental)",
     "unsupportedLanguageTitle": "No compatible oficialment",
     "unsupportedLanguageWarning": "{language} no és compatible oficialment amb Azure OpenAI Whisper. La transcripció pot contenir errors importants, omissions o parlar inventat. Demaneu a una persona que domini aquest idioma que la revisi acuradament amb la gravació original abans de fer-ne ús, especialment noms, xifres i termes mèdics.",
-    "experimentalTranscriptTitle": "Idioma experimental: reviseu acuradament"
+    "experimentalTranscriptTitle": "Idioma experimental: reviseu acuradament",
+    "engineLabel": "Servei de transcripció",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (experimental)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (compatibilitat nativa)"
   },
   "transcriptionComplete": "Transcripció completa! Text afegit a l'entrada del xat.",
   "No prompts found": "No s'ha trobat cap prompt",

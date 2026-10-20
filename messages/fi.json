@@ -1468,7 +1468,12 @@
     "experimentalOption": "{language} (kokeellinen)",
     "unsupportedLanguageTitle": "Ei virallista tukea",
     "unsupportedLanguageWarning": "Azure OpenAI Whisper ei virallisesti tue kieltä {language}. Puhtaaksikirjoituksessa voi olla huomattavia virheitä, puutteita tai keksittyä puhetta. Tarkistuta se huolellisesti juontokielellä taitavalla henkilöllä alkuperäisen tallenteen kanssa ennen kuin luotat siihen, erityisesti nimien, numeroiden ja lääketieteellisten termien osalta.",
-    "experimentalTranscriptTitle": "Kokeellinen kieli: tarkista huolellisesti"
+    "experimentalTranscriptTitle": "Kokeellinen kieli: tarkista huolellisesti",
+    "engineLabel": "Puheentunnistuspalvelu",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (kokeellinen)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (natiivisti tuettu)"
   },
   "transcriptionComplete": "Puhtaaksikirjoitus valmis! Teksti lisätty keskusteluun.",
   "No prompts found": "Kehotteita ei löytynyt",

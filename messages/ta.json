@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (பரிசோதனை)",
     "unsupportedLanguageTitle": "அதிகாரத்துடன் ஆதரவு இல்லை",
     "unsupportedLanguageWarning": "{language} என்பதிற்கு Azure OpenAI Whisper அதிகாரப்பூர்வமாக ஆதரவு இல்லை. எழுதப்பட்ட உரையில் பெருமளவு பிழைகள், விடுபட்டவை, அல்லது உருவாக்கப்பட்ட பேச்சு இருக்கலாம். மீறல் செய்வதற்கு முன், குறிப்பாக பெயர்கள், எண்ணுகள் மற்றும் மருத்துவ சொற்கள் தொடர்பாக, ஒரிஜினல் பதிவுடன் உள்தாயர் மொழி பேசும் நபர் ஒப்பிட்டு பரிசோதிக்கவும்.",
-    "experimentalTranscriptTitle": "பரிசோதனை மொழி: மணமாக பரிசோதிக்கவும்"
+    "experimentalTranscriptTitle": "பரிசோதனை மொழி: மணமாக பரிசோதிக்கவும்",
+    "engineLabel": "உரை மாற்றும் சேவை",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (சோதனைப் பதிப்பு)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (உள் ஆதரவு)"
   },
   "documentTranslation": {
     "title": "ஆவண மொழிபெயர்ப்பு",

@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (ukuHlola)",
     "unsupportedLanguageTitle": "Akusekelwa ngokusemthethweni",
     "unsupportedLanguageWarning": "{language} ayisekelwa ngokusemthethweni yi-Azure OpenAI Whisper. Ukubhalwa kwezingxoxo kungaba neziphoso ezinkulu, ukushiywa, noma amazwi aqanjiwe. Sicela ukhombise umuntu okhuluma kahle kahle ayibuyekeze ngokucophelela kuqathaniswa nokuqoshwa kwangempela ngaphambi kokuyethembela, ikakhulukazi amagama, izinombolo, nemishwana yezokwelapha.",
-    "experimentalTranscriptTitle": "Ulimi lokuhlola: hlola ngokucophelela"
+    "experimentalTranscriptTitle": "Ulimi lokuhlola: hlola ngokucophelela",
+    "engineLabel": "Isevisi yokuguqulela amazwi abe umbhalo",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (okuzamayo)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (ukuxhasa kwasekuqaleni)"
   },
   "documentTranslation": {
     "title": "Ukuhumusha Idokhumenti",

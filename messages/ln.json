@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (ya komeka)",
     "unsupportedLanguageTitle": "Ezali na nkita ya mobeko te",
     "unsupportedLanguageWarning": "{language} ezali na nkita ya mobeko te epai ya Azure OpenAI Whisper. Mayangani ekoki kozala na mabunga mingi, balongolami, to maloba ya kokelaka. Motángo ya maloba esengeli esalema na moto oyo azali koyeba maloba yango malamu, yambo kolanda yango, mingi mingi na kombo, mibale, mpe maloba ya nzela ya bokolongono.",
-    "experimentalTranscriptTitle": "Lokolá ya komeka: tala na suka"
+    "experimentalTranscriptTitle": "Lokolá ya komeka: tala na suka",
+    "engineLabel": "Mosala ya kokomisa maloba na mokanda",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (ya mai ya sika)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (mosungi ya mboka)"
   },
   "documentTranslation": {
     "title": "Kokufa ya mikanda ya dokumente",

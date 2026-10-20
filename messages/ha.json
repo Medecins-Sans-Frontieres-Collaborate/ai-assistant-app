@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (gwaji)",
     "unsupportedLanguageTitle": "Ba'a goyan bayan hukuma",
     "unsupportedLanguageWarning": "{language} ba'a goyan bayan hukuma daga Azure OpenAI Whisper. Fassarar na iya kunshe da kurakuran da yawa, kuskuren da aka watsar, ko magana da aka kirkira. A tabbatar da ɗan asalin da ke jin yaren ya duba fassarar da kyau da rikodin asali kafin a dogara da ita, musamman sunaye, lambobi, da kalmomin likita.",
-    "experimentalTranscriptTitle": "Yaren gwaji: a duba da ƙyau"
+    "experimentalTranscriptTitle": "Yaren gwaji: a duba da ƙyau",
+    "engineLabel": "Sabis ɗin fassara magana",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (gwaji)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (goiyon baya kai tsaye)"
   },
   "documentTranslation": {
     "title": "Fassarar Takardu",

@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (تجربوي)",
     "unsupportedLanguageTitle": "رسمي ملاتړ نه لري",
     "unsupportedLanguageWarning": "{language} ته د Azure OpenAI Whisper لخوا رسمي ملاتړ نشته. ليکنه کېدای شي جدي تېروتنې، نیمګړتیاوې یا اټکلي خبرې ولري. مهرباني وکړئ، په ځانګړي ډول د نومونو، شمېرو او طبي اصطلاحاتو لپاره، دا د اصلي ثبت سره يو ماهر او روان ويونکو ته په دقت سره وګورئ مخکې له دې چې پرې باور وکړئ.",
-    "experimentalTranscriptTitle": "تجربوي ژبه: په دقت سره وارزوئ"
+    "experimentalTranscriptTitle": "تجربوي ژبه: په دقت سره وارزوئ",
+    "engineLabel": "د ټرانسکرېپشن خدمت",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (ازمایشي)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (اصلي ملاتړ)"
   },
   "documentTranslation": {
     "title": "د سند ژباړه",

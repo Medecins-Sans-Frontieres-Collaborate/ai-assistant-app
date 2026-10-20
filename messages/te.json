@@ -1472,7 +1472,12 @@
     "experimentalOption": "{language} (ప్రయోగాత్మకం)",
     "unsupportedLanguageTitle": "అధికారికంగా మద్దతు లేదు",
     "unsupportedLanguageWarning": "{language} కి Azure OpenAI Whisper అధికారిక మద్దతు లేదు. వాటి ట్రాన్స్క్రిప్షన్లో ముఖ్యమైన తప్పులు, లోపాలు లేదా కల్పితమైన మాటలు ఉండవచ్చు. దీని మీద ఆధారపడే ముందు, ముఖ్యంగా పేర్లు, సంఖ్యలు మరియు వైద్య పదాలను, మాతృ భాషావేత్త యుత్తమంగా మూల రికార్డింగ్తో పరిగణించాలి.",
-    "experimentalTranscriptTitle": "ప్రయోగాత్మక భాష: దయచేసి జాగ్రత్తగా పరిశీలించండి"
+    "experimentalTranscriptTitle": "ప్రయోగాత్మక భాష: దయచేసి జాగ్రత్తగా పరిశీలించండి",
+    "engineLabel": "ట్రాన్స్క్రిప్షన్ సేవ",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (పరీక్షణలో ఉంది)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (స్థానిక మద్దతుతో)"
   },
   "importBackupParseError": "బ్యాకప్ ఫైల్‌ను విశ్లేషించడంలో విఫలమైంది. దయచేసి ఇది సరైన JSON కనుక నిర్ధారించండి.",
   "emptyState": {

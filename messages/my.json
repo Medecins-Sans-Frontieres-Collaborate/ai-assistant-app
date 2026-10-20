@@ -1468,7 +1468,12 @@
     "experimentalOption": "{language} (စမ်းသပ်)",
     "unsupportedLanguageTitle": "တရားဝင်မပံ့ပိုး",
     "unsupportedLanguageWarning": "{language} ကို Azure OpenAI Whisper မှ တရားဝင်မပံ့ပိုးပါ။ တင်သွင်းသံဖြန့်ကြောင်းတွင် ထင်ရှားသော အမှားများ၊ အပျောက်အလဲများ၊ သဘောတူကြောင်း မပါဝင်နိုင်ပါ။ ကိုးကားပြီး အသုံးပြုမတိုင်မီ၊ အစီအစဉ်၊ နာမည်များ၊ ဂဏန်းများနှင့် ဆေးပညာ ဘာသာဆိုင်ရာ အစိတ်အပိုင်းများ အထူးသဖြင့် တင်သွင်းသံစဉ် အစစ်အမှန်နှင့် ဆန္႕ကျင်မြင်သုံးသပ်နိုင်သော ယုံကြည်မှုရှိသူက မေးမြန်းစစ်ဆေးရန် လိုအပ်သည်။",
-    "experimentalTranscriptTitle": "စမ်းသပ်ဘာသာစကား - ဖြေရှင်းစစ်ဆေးပါ"
+    "experimentalTranscriptTitle": "စမ်းသပ်ဘာသာစကား - ဖြေရှင်းစစ်ဆေးပါ",
+    "engineLabel": "စာတမ်းအပြောင်းဝန်ဆောင်မှု",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (စမ်းသပ်မှု)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (ဒေသခံထောက်ခံမှု)"
   },
   "transcriptionComplete": "စာရိုက်ဖြစ်ပြီးပါပြီ! စာသားကို ချတ်ထဲသို့ ထည့်ပြီးပါပြီ။",
   "No prompts found": "Prompt မတွေ့ရပါ",

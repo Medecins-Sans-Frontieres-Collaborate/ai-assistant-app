@@ -1468,7 +1468,12 @@
     "experimentalOption": "{language} (sperimentale)",
     "unsupportedLanguageTitle": "Non supportata ufficialmente",
     "unsupportedLanguageWarning": "{language} non è supportata ufficialmente da Azure OpenAI Whisper. La trascrizione può contenere errori significativi, omissioni o discorsi inventati. Si raccomanda di farla verificare attentamente da un parlante fluente rispetto alla registrazione originale prima di farvi affidamento, specialmente per nomi, numeri e termini medici.",
-    "experimentalTranscriptTitle": "Lingua sperimentale: controllare attentamente"
+    "experimentalTranscriptTitle": "Lingua sperimentale: controllare attentamente",
+    "engineLabel": "Servizio di trascrizione",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (sperimentale)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (supporto nativo)"
   },
   "transcriptionComplete": "Trascrizione completata! Testo aggiunto al campo di input.",
   "No prompts found": "Nessun prompt trovato",

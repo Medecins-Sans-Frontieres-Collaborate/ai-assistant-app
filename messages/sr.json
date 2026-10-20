@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (eksperimentalno)",
     "unsupportedLanguageTitle": "Nije zvanično podržano",
     "unsupportedLanguageWarning": "{language} nije zvanično podržan od strane Azure OpenAI Whisper. Transkripcija može sadržati značajne greške, izostavljanja ili izmišljeni govor. Neka izvorni govornik pažljivo proveri transkripciju u odnosu na originalni snimak pre oslanjanja na nju, naročito imena, brojeve i medicinske termine.",
-    "experimentalTranscriptTitle": "Eksperimentalan jezik: pažljivo proverite"
+    "experimentalTranscriptTitle": "Eksperimentalan jezik: pažljivo proverite",
+    "engineLabel": "Usluga transkripcije",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (eksperimentalno)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (nativna podrška)"
   },
   "documentTranslation": {
     "title": "Превод документа",

@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (koke)",
     "unsupportedLanguageTitle": "Mbênî a ködi na mbênî",
     "unsupportedLanguageWarning": "{language} a ködi na mbênî te Azure OpenAI Whisper. Ködörö ti yângâ a mögä na ngombö, mingi na nzedi, ou na ködörö ti yângâ a mbata. Gbängbä ti yângâ a gbändä na kodörö ti yângâ na mbênî, sìokö ti nzó, ngbäkô, na söngö ti ti tî mbênî.",
-    "experimentalTranscriptTitle": "Yângâ ti koke: gbängbä na yângâ na kodörö."
+    "experimentalTranscriptTitle": "Yângâ ti koke: gbängbä na yângâ na kodörö.",
+    "engineLabel": "Sango ti transcription",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (kati pagbabunga)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (kati tî na mbëtï)"
   },
   "documentTranslation": {
     "title": "Document Translation",

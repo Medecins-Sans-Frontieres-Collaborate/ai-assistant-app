@@ -1502,7 +1502,12 @@
     "experimentalOption": "{language} (thử nghiệm)",
     "unsupportedLanguageTitle": "Chưa được hỗ trợ chính thức",
     "unsupportedLanguageWarning": "{language} chưa được Azure OpenAI Whisper hỗ trợ chính thức. Nội dung chép lại có thể chứa nhiều lỗi lớn, thiếu sót hoặc lời nói do AI tạo ra. Hãy nhờ người thành thạo kiểm tra kỹ so với bản ghi âm gốc trước khi sử dụng, đặc biệt với tên, số và thuật ngữ y tế.",
-    "experimentalTranscriptTitle": "Ngôn ngữ thử nghiệm: kiểm tra cẩn thận"
+    "experimentalTranscriptTitle": "Ngôn ngữ thử nghiệm: kiểm tra cẩn thận",
+    "engineLabel": "Dịch vụ chuyển giọng nói thành văn bản",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (thử nghiệm)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (hỗ trợ gốc)"
   },
   "transcriptionComplete": "Phiên âm hoàn tất! Văn bản đã được thêm vào ô nhập trò chuyện.",
   "importBackupParseError": "Không thể phân tích tệp sao lưu. Vui lòng đảm bảo tệp ở định dạng JSON hợp lệ.",

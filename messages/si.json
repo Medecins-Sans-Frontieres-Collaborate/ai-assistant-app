@@ -1468,7 +1468,12 @@
     "experimentalOption": "{language} (ප්‍රායෝගික)",
     "unsupportedLanguageTitle": "නිල වශයෙන් සහාය නොදක්වයි",
     "unsupportedLanguageWarning": "{language} හි Azure OpenAI Whisper විසින් නිල වශයෙන් සහාය නොදක්වයි. සිණ්ධුවේ විශාල දෝෂ, අතුරුදහන් හෝ නිර්මාණාත්මක කථනය ඇතුළත් විය හැක. විශ්වාසයට පත් කිරීම ප්‍රථම, විශේෂයෙන් නම්, සංඛ්‍යා හා වෛද්‍ය පැදියන් පිළිබඳ විශේෂ අවධානයක් යොමු කරමින්, ප්‍රවීණ කථකයෙකුට එය මුල් සටහන් සමඟ නිසි පරිදි පරීක්ෂා කරන ලෙස ඉල්ලා සිටින්න.",
-    "experimentalTranscriptTitle": "ප්‍රායෝගික භාෂාව: අවධානමෙන් පරීක්ෂා කරන්න"
+    "experimentalTranscriptTitle": "ප්‍රායෝගික භාෂාව: අවධානමෙන් පරීක්ෂා කරන්න",
+    "engineLabel": "අනුලේඛන සේවය",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (ප්‍රයෝගික)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (ස්වාභාවික සහාය)"
   },
   "transcriptionComplete": "ප්‍රතිලේඛනය සම්පූර්ණයි! පෙළ සංවාදයට එක් වී ඇත.",
   "No prompts found": "ප්‍රේරණ කිසිවක් හමු නොවිණි",

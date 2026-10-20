@@ -2031,7 +2031,12 @@
     "experimentalOption": "{language} (experimentellt)",
     "unsupportedLanguageTitle": "Inte officiellt stödd",
     "unsupportedLanguageWarning": "{language} stöds inte officiellt av Azure OpenAI Whisper. Transkriptionen kan innehålla betydande fel, utelämnade delar eller påhittat tal. Låt en flytande talare noggrant kontrollera den mot originalinspelningen innan du litar på den, särskilt namn, siffror och medicinska termer.",
-    "experimentalTranscriptTitle": "Experimentellt språk: granska noggrant"
+    "experimentalTranscriptTitle": "Experimentellt språk: granska noggrant",
+    "engineLabel": "Transkriptionstjänst",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (experimentell)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (inbyggt stöd)"
   },
   "migration": {
     "status": {

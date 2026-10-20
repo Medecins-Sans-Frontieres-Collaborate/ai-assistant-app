@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (эксперименталӣ)",
     "unsupportedLanguageTitle": "Расман дастгирӣ намешавад",
     "unsupportedLanguageWarning": "{language} аз ҷониби Azure OpenAI Whisper расман дастгирӣ намешавад. Транскрипсия метавонад хатогиҳои ҷиддӣ, камбудиҳо ё суханҳои ихтироъшуда дошта бошад. Пеш аз истифода, гузоришро бо сабти аслӣ ба таври дақиқ аз ҷониби фарди соҳибзабон санҷед, алахусус номҳо, рақамҳо ва истилоҳҳои тиббӣ.",
-    "experimentalTranscriptTitle": "Забони эксперименталӣ: бодиққат баррасӣ кунед"
+    "experimentalTranscriptTitle": "Забони эксперименталӣ: бодиққат баррасӣ кунед",
+    "engineLabel": "Хадамоти транскрипсия",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (озмоишӣ)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (дастгирии маҳаллӣ)"
   },
   "documentTranslation": {
     "title": "Тарҷумаи ҳуҷҷат",

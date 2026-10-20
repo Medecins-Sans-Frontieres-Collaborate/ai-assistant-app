@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (tijaabo)",
     "unsupportedLanguageTitle": "Si rasmi ah looguma taageerin",
     "unsupportedLanguageWarning": "{language} si rasmi ah looguma taageerin Azure OpenAI Whisper. Qoraalka laga yaabaa inuu leeyahay qaladaad waaweyn, ka tagid, ama hadal la abuuray. Waxaa muhiim ah in qof si fiican ugu hadla luuqaddaas uu si taxaddar leh u hubiyo duubista asalka ah ka hor intaadan isku hallayn, gaar ahaan magacyada, lambarrada, iyo ereyada caafimaadka.",
-    "experimentalTranscriptTitle": "Luuqad tijaabo ah: si taxaddar leh u eeg"
+    "experimentalTranscriptTitle": "Luuqad tijaabo ah: si taxaddar leh u eeg",
+    "engineLabel": "Adeegga qoraalka codka",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (tijaabo)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (taageero hoose)"
   },
   "documentTranslation": {
     "title": "Turjumaadda Dukumentiga",

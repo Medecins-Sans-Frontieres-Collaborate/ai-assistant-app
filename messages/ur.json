@@ -1474,7 +1474,12 @@
     "experimentalOption": "{language} (تجربی)",
     "unsupportedLanguageTitle": "سرکاری طور پر معاونت نہیں",
     "unsupportedLanguageWarning": "{language} کو Azure OpenAI Whisper سرکاری طور پر معاونت نہیں دیتا۔ متن میں بڑے پیمانے پر غلطیاں، کمی یا فرضی جملے ہو سکتے ہیں۔ اس پر اعتماد کرنے سے پہلے اصل ریکارڈنگ سے فصیح بولنے والے سے بغور چیک کروائیں، خاص طور پر نام، نمبر اور طبی اصطلاحات۔",
-    "experimentalTranscriptTitle": "تجربی زبان: احتیاط سے جائزہ لیں"
+    "experimentalTranscriptTitle": "تجربی زبان: احتیاط سے جائزہ لیں",
+    "engineLabel": "ٹرانسکرپشن سروس",
+    "engineWhisper": "OpenAI وِسپر",
+    "engineWhisperExperimental": "OpenAI وِسپر (تجربی)",
+    "engineAzureSpeech": "Azure اسپیچ",
+    "engineAzureSpeechNative": "Azure اسپیچ (نیٹو سپورٹ)"
   },
   "importBackupParseError": "بیک اپ فائل پارس کرنے میں ناکام۔ براہ کرم یقینی بنائیں کہ یہ درست JSON ہے۔",
   "emptyState": {

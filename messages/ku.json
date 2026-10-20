@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (تاقیکردنەوە)",
     "unsupportedLanguageTitle": "بە پشتیوانی تایبەتی نییە",
     "unsupportedLanguageWarning": "{language} لە لایەن Azure OpenAI Whisper بە پشتیوانی تایبەتی نییە. وەرگرتن دەتوانێت هەڵەی جەنجاو، بەربۆن، یان وتارێکی دروستکراو هەبێت. پێویستە ناوەدەریکی زمانێکی سەرەتا وەربگرێت، بە تایبەتی بۆ ناو، ژمارە و وشەی پزیشکی.",
-    "experimentalTranscriptTitle": "زمانی تاقیکردنەوە: بە بەرچاو بڵاوە"
+    "experimentalTranscriptTitle": "زمانی تاقیکردنەوە: بە بەرچاو بڵاوە",
+    "engineLabel": "خزمەتگوزاری دیكتە",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (تاقیكردنەوە)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (پشتیوانی زەوی)"
   },
   "documentTranslation": {
     "title": "Wergera Belgeyê",

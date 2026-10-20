@@ -2031,7 +2031,12 @@
     "experimentalOption": "{language} (ya majaribio)",
     "unsupportedLanguageTitle": "Haiungiwi mkono rasmi",
     "unsupportedLanguageWarning": "{language} haiungiwi mkono rasmi na Azure OpenAI Whisper. Nakala inaweza kuwa na makosa makubwa, upungufu, au maneno yaliyotungwa. Hakikisha mzungumzaji mwenye ufasaha anakagua kwa makini dhidi ya rekodi asili kabla ya kuitumia, hasa majina, namba, na istilahi za kitabibu.",
-    "experimentalTranscriptTitle": "Lugha ya majaribio: kagua kwa makini"
+    "experimentalTranscriptTitle": "Lugha ya majaribio: kagua kwa makini",
+    "engineLabel": "Huduma ya transcription",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (ya majaribio)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (usaidizi asili)"
   },
   "migration": {
     "status": {

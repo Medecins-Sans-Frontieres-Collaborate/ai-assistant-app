@@ -2028,7 +2028,12 @@
     "experimentalOption": "{language} (experimentell)",
     "unsupportedLanguageTitle": "Nicht offiziell unterstützt",
     "unsupportedLanguageWarning": "{language} wird von Azure OpenAI Whisper nicht offiziell unterstützt. Die Transkription kann erhebliche Fehler, Auslassungen oder erfundene Aussagen enthalten. Lassen Sie die Transkription von einer Person mit fließenden Sprachkenntnissen sorgfältig mit der Originalaufnahme abgleichen, bevor Sie darauf vertrauen, insbesondere bei Namen, Zahlen und medizinischen Begriffen.",
-    "experimentalTranscriptTitle": "Experimentelle Sprache: bitte sorgfältig prüfen"
+    "experimentalTranscriptTitle": "Experimentelle Sprache: bitte sorgfältig prüfen",
+    "engineLabel": "Transkriptionsdienst",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (experimentell)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (native Unterstützung)"
   },
   "notFound": {
     "lostDog": "Verlorener Hund"

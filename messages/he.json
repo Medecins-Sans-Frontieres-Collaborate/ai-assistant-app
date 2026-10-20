@@ -1468,7 +1468,12 @@
     "experimentalOption": "{language} (ניסיוני)",
     "unsupportedLanguageTitle": "לא נתמך רשמית",
     "unsupportedLanguageWarning": "‏{language} אינה נתמכת רשמית על ידי Azure OpenAI Whisper. ייתכן שהתמליל יכיל שגיאות רבות, חוסרים או דיבור שלא נאמר. יש לבדוק בזהירות עם דובר שוטף מול ההקלטה המקורית לפני שמסתמכים עליו, במיוחד בכתיבת שמות, מספרים ומונחים רפואיים.",
-    "experimentalTranscriptTitle": "שפה ניסיונית: יש לבדוק היטב"
+    "experimentalTranscriptTitle": "שפה ניסיונית: יש לבדוק היטב",
+    "engineLabel": "שירות תמלול",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (ניסיוני)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (תמיכה מקורית)"
   },
   "transcriptionComplete": "התעתוק הושלם! הטקסט התווסף לשדה השיחה.",
   "No prompts found": "לא נמצאו הנחיות",

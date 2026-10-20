@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (mu igeragezwa)",
     "unsupportedLanguageTitle": "Ntibyemewe ku mugaragaro",
     "unsupportedLanguageWarning": "{language} ntiryemewe ku mugaragaro kuri Azure OpenAI Whisper. Inyandiko ishobora kuba irimo amakosa menshi, gukura cyangwa kuvugira amarangamutima. Mugere neza hamwe n'umuntu uzi neza uru rurimi mbere yo kuyishingiraho, cyane cyane ku mazina, imibare, n'imvugo z’ubuvuzi.",
-    "experimentalTranscriptTitle": "Ururimi ruri mu igeragezwa: mugere neza"
+    "experimentalTranscriptTitle": "Ururimi ruri mu igeragezwa: mugere neza",
+    "engineLabel": "Serivisi yo Guhererekanya amagambo",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (igeragezwa)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (ifashwa na porogaramu kavukire)"
   },
   "documentTranslation": {
     "title": "Ubuhinduzi bw'Inyandiko",

@@ -1468,7 +1468,12 @@
     "experimentalOption": "{language} (ทดลอง)",
     "unsupportedLanguageTitle": "ยังไม่รองรับอย่างเป็นทางการ",
     "unsupportedLanguageWarning": "{language} ยังไม่ได้รับการรองรับอย่างเป็นทางการโดย Azure OpenAI Whisper การถอดเสียงอาจมีข้อผิดพลาดมาก ข้อมูลตกหล่น หรือเนื้อหาที่ถูกแต่งขึ้น กรุณาให้ผู้พูดที่เชี่ยวชาญตรวจสอบกับการบันทึกต้นฉบับอย่างละเอียดก่อนใช้งาน โดยเฉพาะชื่อ, ตัวเลข และศัพท์ทางการแพทย์",
-    "experimentalTranscriptTitle": "ภาษาแบบทดลอง: กรุณาตรวจสอบอย่างละเอียด"
+    "experimentalTranscriptTitle": "ภาษาแบบทดลอง: กรุณาตรวจสอบอย่างละเอียด",
+    "engineLabel": "บริการถอดเสียง",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (ทดลองใช้)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (รองรับโดยตรง)"
   },
   "transcriptionComplete": "ถอดเสียงเสร็จสิ้น! ข้อความถูกเพิ่มในช่องแชทแล้ว",
   "No prompts found": "ไม่พบพรอมต์",

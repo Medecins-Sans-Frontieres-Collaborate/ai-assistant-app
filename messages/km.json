@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (សាកល្បង)",
     "unsupportedLanguageTitle": "មិនគាំទ្រដោយផ្លូវការ",
     "unsupportedLanguageWarning": "{language} មិនត្រូវបានគាំទ្រដោយផ្លូវការ​ដោយ Azure OpenAI Whisper ទេ។ ការបម្លែងអាចមានកំហុស ឬការខកខានច្រើន និងអាចបង្កើតចំណាំថ្មី។ សូមឱ្យអ្នកដែលប្រើប្រាស់ភាសានេះបានល្អពិនិត្យជ្រាលជ្រៅបន្ថែមតាមកំណត់ត្រាដើមមុនពឹងផ្អែកលើវា ជាពិសេសឈ្មោះ លេខ និងពាក្យវេជ្ជសាស្ត្រ។",
-    "experimentalTranscriptTitle": "ភាសាសាកល្បង៖ សូមពិនិត្យអោយម៉ត់ចត់"
+    "experimentalTranscriptTitle": "ភាសាសាកល្បង៖ សូមពិនិត្យអោយម៉ត់ចត់",
+    "engineLabel": "សេវាកម្មបម្លែងអត្ថបទពីសម្លេង",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (សាកល្បង)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (គាំទ្រ​ដោយផ្ទាល់)"
   },
   "documentTranslation": {
     "title": "បកប្បភាសាឯកសារ",

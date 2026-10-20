@@ -1472,7 +1472,12 @@
     "experimentalOption": "{language} (experimental)",
     "unsupportedLanguageTitle": "Nesusținut oficial",
     "unsupportedLanguageWarning": "{language} nu este susținut oficial de Azure OpenAI Whisper. Transcrierea poate conține erori semnificative, omisiuni sau vorbire inventată. Rugați un vorbitor fluent să verifice cu atenție transcrierea față de înregistrarea originală înainte de a vă baza pe aceasta, mai ales pentru nume, numere și termeni medicali.",
-    "experimentalTranscriptTitle": "Limbă experimentală: verificați cu atenție"
+    "experimentalTranscriptTitle": "Limbă experimentală: verificați cu atenție",
+    "engineLabel": "Serviciu de transcriere",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (experimental)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (suport nativ)"
   },
   "importBackupParseError": "Nu s-a putut analiza fișierul de backup. Asigurați-vă că este un fișier JSON valid.",
   "emptyState": {

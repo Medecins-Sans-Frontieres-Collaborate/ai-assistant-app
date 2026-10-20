@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (biri mu rwego rwo kugerageza)",
     "unsupportedLanguageTitle": "Ntiremewe icese",
     "unsupportedLanguageWarning": "{language} ntiremewe icese na Azure OpenAI Whisper. Ibisohoka vyoshobora kugira amakosa menshi, ivyamizwe, canke ibisohowe bidahuye n'ivyo wavuze. Mugerageze kubisuzumisha neza n'umuntu ashoboye kurivuga neza, bishoboka cane cane ku mazina, imibare, n'ivy'ubuvuzi.",
-    "experimentalTranscriptTitle": "Ururimi ruri mu kugeragezwa: ronsora neza"
+    "experimentalTranscriptTitle": "Ururimi ruri mu kugeragezwa: ronsora neza",
+    "engineLabel": "Serivisi yo kuvyandika",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (igerageza)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (inkingi ya kavukire)"
   },
   "documentTranslation": {
     "title": "Guhindura Inyandiko",

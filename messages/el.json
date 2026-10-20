@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (πειραματικό)",
     "unsupportedLanguageTitle": "Μη επίσημα υποστηριζόμενο",
     "unsupportedLanguageWarning": "Η γλώσσα {language} δεν υποστηρίζεται επίσημα από το Azure OpenAI Whisper. Η μεταγραφή μπορεί να περιέχει σοβαρά σφάλματα, παραλείψεις ή επινοημένη ομιλία. Ένα άτομο με άριστη γνώση της γλώσσας πρέπει να την ελέγξει προσεκτικά σε σύγκριση με την αρχική ηχογράφηση πριν βασιστείτε σε αυτή, κυρίως σε ονόματα, αριθμούς και ιατρικούς όρους.",
-    "experimentalTranscriptTitle": "Πειραματική γλώσσα: ελέγξτε προσεκτικά"
+    "experimentalTranscriptTitle": "Πειραματική γλώσσα: ελέγξτε προσεκτικά",
+    "engineLabel": "Υπηρεσία απομαγνητοφώνησης",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (πειραματικό)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (ενσωματωμένη υποστήριξη)"
   },
   "documentTranslation": {
     "title": "Μετάφραση Εγγράφου",

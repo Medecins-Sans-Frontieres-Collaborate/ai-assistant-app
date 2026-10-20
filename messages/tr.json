@@ -2031,7 +2031,12 @@
     "experimentalOption": "{language} (deneysel)",
     "unsupportedLanguageTitle": "Resmi olarak desteklenmiyor",
     "unsupportedLanguageWarning": "{language}, Azure OpenAI Whisper tarafından resmi olarak desteklenmemektedir. Transkripsiyon önemli hatalar, eksiklikler veya uydurma ifadeler içerebilir. Özellikle isimler, sayılar ve tıbbi terimler için, güvenmeden önce bir akıcı konuşanın orijinal kayıt ile dikkatlice karşılaştırmasını sağlayın.",
-    "experimentalTranscriptTitle": "Deneysel dil: dikkatlice inceleyin"
+    "experimentalTranscriptTitle": "Deneysel dil: dikkatlice inceleyin",
+    "engineLabel": "Transkripsiyon servisi",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (deneysel)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (yerel destek)"
   },
   "migration": {
     "status": {

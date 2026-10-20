@@ -1990,7 +1990,12 @@
     "experimentalOption": "{language}（実験的）",
     "unsupportedLanguageTitle": "公式対応なし",
     "unsupportedLanguageWarning": "{language} は Azure OpenAI Whisper の公式対応言語ではありません。文字起こしには重大な誤り、省略、捏造された内容が含まれる場合があります。特に名前、数字、医療用語については、信頼する前に必ず流暢な話者が原録音と慎重に照合してください。",
-    "experimentalTranscriptTitle": "実験的言語：慎重に確認してください"
+    "experimentalTranscriptTitle": "実験的言語：慎重に確認してください",
+    "engineLabel": "文字起こしサービス",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper（実験的）",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech（ネイティブ対応）"
   },
   "searchMode": {
     "backToChat": "チャットに戻る",

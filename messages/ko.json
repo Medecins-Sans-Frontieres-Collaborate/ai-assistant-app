@@ -2031,7 +2031,12 @@
     "experimentalOption": "{language} (실험적)",
     "unsupportedLanguageTitle": "공식적으로 지원되지 않음",
     "unsupportedLanguageWarning": "{language}는 Azure OpenAI Whisper에서 공식적으로 지원되지 않습니다. 전사 결과에 심각한 오류, 누락 또는 잘못된 내용이 포함될 수 있습니다. 특히 이름, 숫자, 의학 용어는 신뢰하기 전에 반드시 유창한 화자가 원본 녹음과 꼼꼼히 비교해 확인하십시오.",
-    "experimentalTranscriptTitle": "실험적 언어: 신중히 검토하십시오"
+    "experimentalTranscriptTitle": "실험적 언어: 신중히 검토하십시오",
+    "engineLabel": "필기 서비스",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (실험적)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (네이티브 지원)"
   },
   "migration": {
     "status": {

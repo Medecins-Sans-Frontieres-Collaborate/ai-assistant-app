@@ -1472,7 +1472,12 @@
     "experimentalOption": "{language} (eksperymentalny)",
     "unsupportedLanguageTitle": "Nieobsługiwany oficjalnie",
     "unsupportedLanguageWarning": "{language} nie jest oficjalnie obsługiwany przez Azure OpenAI Whisper. Transkrypcja może zawierać poważne błędy, pominięcia lub wymyślone fragmenty. Przed wykorzystaniem należy dokładnie porównać transkrypcję z oryginalnym nagraniem, zwłaszcza w przypadku imion, liczb i terminów medycznych – najlepiej przez osobę biegle władającą tym językiem.",
-    "experimentalTranscriptTitle": "Eksperymentalny język: sprawdź dokładnie"
+    "experimentalTranscriptTitle": "Eksperymentalny język: sprawdź dokładnie",
+    "engineLabel": "Usługa transkrypcji",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (eksperymentalne)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (natywna obsługa)"
   },
   "importBackupParseError": "Nie udało się przetworzyć pliku kopii zapasowej. Upewnij się, że jest to poprawny plik JSON.",
   "emptyState": {

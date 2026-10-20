@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (ìdánwò)",
     "unsupportedLanguageTitle": "Kìí jẹ́ ìdáwọ́lé nípò òfíkíà",
     "unsupportedLanguageWarning": "Azure OpenAI Whisper kò dáàbò bò {language}. Àtẹ̀jáde le ní àṣìṣe púpọ̀, ìkùnsinu, tàbí ọ̀rọ̀ tí a lòpin. Jọwọ kí ẹ̀dá tí mọ̀ọ́kan sọṣọ́ ṣàyẹ̀wò o dáadáa pẹ̀lú ìkọ̀rọ̀ àbẹ́rẹ́ ṣáájú kíkó wà, pàápàá jùlọ orúkọ, nọ́mbà, àti àwọn ọ̀rọ̀ ìṣègùn.",
-    "experimentalTranscriptTitle": "Èdè ìdánwò: ṣàyẹ̀wò dáadáa"
+    "experimentalTranscriptTitle": "Èdè ìdánwò: ṣàyẹ̀wò dáadáa",
+    "engineLabel": "Iṣẹ́ akọ́rọ̀ọ̀rọ̀",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (ìdánwò)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (àmúlọpọ́nà)"
   },
   "documentTranslation": {
     "title": "Ìtúmọ̀ Ìwé",

@@ -1468,7 +1468,12 @@
     "experimentalOption": "{language} (експериментальна)",
     "unsupportedLanguageTitle": "Не офіційно підтримується",
     "unsupportedLanguageWarning": "Мова {language} не офіційно підтримується Azure OpenAI Whisper. Транскрипція може містити значні помилки, пропуски чи вигадані фрази. Перед використанням уважно перевірте її зі звучанням оригіналу носієм мови, особливо імена, числа та медичні терміни.",
-    "experimentalTranscriptTitle": "Експериментальна мова: уважно перевірте"
+    "experimentalTranscriptTitle": "Експериментальна мова: уважно перевірте",
+    "engineLabel": "Сервіс транскрипції",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (експериментальний)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (нативна підтримка)"
   },
   "transcriptionComplete": "Транскрибування завершено! Текст додано до поля введення чату.",
   "No prompts found": "Підказок не знайдено",

@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (andrana)",
     "unsupportedLanguageTitle": "Tsy tohanana ofisialy",
     "unsupportedLanguageWarning": "Tsy tohanana ofisialy amin'ny Azure OpenAI Whisper ny {language}. Mety ahitana hadisoana lehibe, tsy fahavitan-teny, na soratra foronina ny dikanteny. Ataovy avy amin'ny mpiteny tsara ilay izy sy jereo tsara amin'ny rakitsary voalohany alohan'ny hianteheranao aminy, indrindra amin'ny anarana, isa, sy voambolana ara-pitsaboana.",
-    "experimentalTranscriptTitle": "Fiteny andrana: jereo tsara"
+    "experimentalTranscriptTitle": "Fiteny andrana: jereo tsara",
+    "engineLabel": "Serivisy fanoratana",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (andrana)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (fanohanana teratany)"
   },
   "documentTranslation": {
     "title": "Fandikan-tahirin-kevitra",

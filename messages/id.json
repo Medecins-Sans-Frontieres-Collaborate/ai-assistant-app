@@ -1440,7 +1440,12 @@
     "experimentalOption": "{language} (eksperimental)",
     "unsupportedLanguageTitle": "Tidak didukung secara resmi",
     "unsupportedLanguageWarning": "{language} tidak didukung secara resmi oleh Azure OpenAI Whisper. Transkripsi dapat mengandung kesalahan besar, penghilangan, atau ucapan yang dibuat-buat. Pastikan penutur fasih memeriksa hasilnya secara cermat dengan rekaman asli sebelum mengandalkannya, terutama untuk nama, angka, dan istilah medis.",
-    "experimentalTranscriptTitle": "Bahasa eksperimental: tinjau dengan saksama"
+    "experimentalTranscriptTitle": "Bahasa eksperimental: tinjau dengan saksama",
+    "engineLabel": "Layanan transkripsi",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (eksperimental)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (dukungan asli)"
   },
   "transcriptionComplete": "Transkripsi selesai! Teks telah ditambahkan ke input chat.",
   "importBackupParseError": "Gagal mengurai file cadangan. Pastikan itu adalah JSON yang valid.",

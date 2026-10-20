@@ -1468,7 +1468,12 @@
     "experimentalOption": "{language} (آزمایشی)",
     "unsupportedLanguageTitle": "پشتیبانی رسمی ندارد",
     "unsupportedLanguageWarning": "زبان {language} توسط Azure OpenAI Whisper به طور رسمی پشتیبانی نمی‌شود. متن پیاده‌سازی‌شده ممکن است شامل خطاهای قابل توجه، حذف بخش‌ها یا جملات ساختگی باشد. قبل از اطمینان به آن، به‌ویژه اسامی، اعداد و اصطلاحات پزشکی، حتماً یک فرد مسلط آن را با ضبط اصلی به دقت بررسی کند.",
-    "experimentalTranscriptTitle": "زبان آزمایشی: با دقت بررسی شود"
+    "experimentalTranscriptTitle": "زبان آزمایشی: با دقت بررسی شود",
+    "engineLabel": "خدمات رونویسی",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (آزمایشی)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (پشتیبانی بومی)"
   },
   "transcriptionComplete": "تبدیل گفتار کامل شد! متن به ورودی چت اضافه شد.",
   "No prompts found": "هیچ پرامپتی یافت نشد",

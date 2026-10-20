@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (golle arane)",
     "unsupportedLanguageTitle": "So tawii e andi",
     "unsupportedLanguageWarning": "{language} so tawii e andi e Azure OpenAI Whisper. Hollondiral tawi woni e balɗe, toyde, walla ɗum joojoni. Jokkondiral e mum so gollu e mum daande jooɗiwal, foti kosɗe, njoɓdi, ɗum ko ummora, e laawol, e laamu dow waɗɗa mo mardit e mum.",
-    "experimentalTranscriptTitle": "Golle arane: wanndu e mum ko yiɗɗo"
+    "experimentalTranscriptTitle": "Golle arane: wanndu e mum ko yiɗɗo",
+    "engineLabel": "Jom tawaandu ngarka",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (bannduɗe)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (doole goonga)"
   },
   "documentTranslation": {
     "title": "Firgol Ɗerewol",

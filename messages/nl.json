@@ -2031,7 +2031,12 @@
     "experimentalOption": "{language} (experimenteel)",
     "unsupportedLanguageTitle": "Niet officieel ondersteund",
     "unsupportedLanguageWarning": "{language} wordt niet officieel ondersteund door Azure OpenAI Whisper. De transcriptie kan aanzienlijke fouten, weglatingen of verzonnen tekst bevatten. Laat een vloeiende spreker het zorgvuldig controleren aan de hand van de originele opname voordat u erop vertrouwt, vooral bij namen, getallen en medische termen.",
-    "experimentalTranscriptTitle": "Experimentele taal: controleer zorgvuldig"
+    "experimentalTranscriptTitle": "Experimentele taal: controleer zorgvuldig",
+    "engineLabel": "Transcriptiedienst",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (experimenteel)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (native ondersteuning)"
   },
   "migration": {
     "status": {

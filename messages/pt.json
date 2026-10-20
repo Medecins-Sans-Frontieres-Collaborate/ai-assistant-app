@@ -2355,7 +2355,12 @@
     "experimentalOption": "{language} (experimental)",
     "unsupportedLanguageTitle": "Sem suporte oficial",
     "unsupportedLanguageWarning": "{language} não tem suporte oficial pelo Azure OpenAI Whisper. A transcrição pode conter erros significativos, omissões ou falas inventadas. Solicite que um falante fluente confira cuidadosamente com a gravação original antes de confiar nela, especialmente nomes, números e termos médicos.",
-    "experimentalTranscriptTitle": "Idioma experimental: revise com atenção"
+    "experimentalTranscriptTitle": "Idioma experimental: revise com atenção",
+    "engineLabel": "Serviço de transcrição",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (experimental)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (suporte nativo)"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Adicione suas instruções pessoais para personalizar as respostas da IA. Elas são combinadas com diretrizes principais de comportamento que garantem respostas úteis, precisas e seguras.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Dica: digite \"/\" para selecionar entre modelos de prompt salvos.",

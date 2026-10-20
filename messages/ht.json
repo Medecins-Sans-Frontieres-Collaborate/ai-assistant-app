@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (eksperimantal)",
     "unsupportedLanguageTitle": "Pa sipòte ofisyèlman",
     "unsupportedLanguageWarning": "{language} pa sipòte ofisyèlman pa Azure OpenAI Whisper. Transkripsyon ka gen erè grav, omisyon, oswa pawòl envante. Fè yon moun ki pale lang lan byen verifye li ak anrejistreman orijinal la anvan w konte sou li, espesyalman non, nimewo, ak tèm medikal yo.",
-    "experimentalTranscriptTitle": "Lang èksperimantal: revize ak anpil atansyon"
+    "experimentalTranscriptTitle": "Lang èksperimantal: revize ak anpil atansyon",
+    "engineLabel": "Sèvis transkripsyon",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (eksperimantal)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (sipò natif-natal)"
   },
   "documentTranslation": {
     "title": "Tradiksyon Dokiman",

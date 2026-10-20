@@ -2429,7 +2429,12 @@
     "experimentalOption": "{language} (प्रयोगात्मक)",
     "unsupportedLanguageTitle": "औपचारिक रूपमा समर्थन गरिएको छैन",
     "unsupportedLanguageWarning": "{language} Azure OpenAI Whisper द्वारा औपचारिक रूपमा समर्थन गरिएको छैन। ट्रान्सक्रिप्सनमा उल्लेखनीय त्रुटिहरू, छुटेका कुराहरू, वा बनावट भाषण हुन सक्छ। यसमा निर्भर गर्नु अघि, विशेष गरी नाम, सङ्ख्या, र चिकित्सा शब्दहरू, मूल रेकर्डिङसँग ध्यानपूर्वक एक प्रवीण वक्ताबाट जाँच गराउनुहोस्।",
-    "experimentalTranscriptTitle": "प्रयोगात्मक भाषा: ध्यानपूर्वक समीक्षा गर्नुहोस्"
+    "experimentalTranscriptTitle": "प्रयोगात्मक भाषा: ध्यानपूर्वक समीक्षा गर्नुहोस्",
+    "engineLabel": "ट्रान्सक्रिप्सन सेवा",
+    "engineWhisper": "OpenAI Whisper",
+    "engineWhisperExperimental": "OpenAI Whisper (प्रयोगात्मक)",
+    "engineAzureSpeech": "Azure Speech",
+    "engineAzureSpeechNative": "Azure Speech (मूल समर्थन)"
   },
   "documentTranslation": {
     "title": "कागजात अनुवाद",
