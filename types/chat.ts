@@ -53,6 +53,8 @@ export interface FileMessageContent {
   transcriptionLanguage?: string;
   /** Optional context/instructions to improve transcription accuracy */
   transcriptionPrompt?: string;
+  /** Chosen transcription engine. Undefined = whisper. */
+  transcriptionEngine?: import('@/lib/constants/transcriptionLanguages').TranscriptionEngine;
 }
 
 export interface TextMessageContent {
@@ -583,6 +585,7 @@ export interface FilePreview {
   // Transcription options (for audio/video files)
   transcriptionLanguage?: string; // Whisper token code. Undefined = auto-detect
   transcriptionPrompt?: string; // Optional context/instructions for Whisper
+  transcriptionEngine?: import('@/lib/constants/transcriptionLanguages').TranscriptionEngine; // Undefined = whisper
   // Original video info (when audio was extracted)
   extractedFromVideo?: {
     originalName: string;
