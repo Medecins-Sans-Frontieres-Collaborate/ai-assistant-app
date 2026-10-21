@@ -74,16 +74,6 @@ export class FastTranscriptionService implements ITranscriptionService {
     }
 
     try {
-      const stats = await fs.promises.stat(filePath);
-      if (stats.size > FAST_TRANSCRIPTION_MAX_SIZE) {
-        const maxMB = FAST_TRANSCRIPTION_MAX_SIZE / (1024 * 1024);
-        const sizeError = new Error(
-          `Audio file size (${(stats.size / 1024 / 1024).toFixed(2)}MB) exceeds the ${maxMB}MB Azure Speech transcription limit. Please upload a shorter audio file.`,
-        ) as TranscriptionError;
-        sizeError.errorClass = 'permanent';
-        throw sizeError;
-      }
-
       const locales = getAzureSpeechLocales(options?.language);
       if (options?.language && locales.length === 0) {
         const err = new Error(
@@ -93,8 +83,9 @@ export class FastTranscriptionService implements ITranscriptionService {
         throw err;
       }
 
+      const buffer = await this.readAudioWithinLimit(filePath);
+
       const form = new FormData();
-      const buffer = await fs.promises.readFile(filePath);
       form.append(
         'audio',
         new Blob([new Uint8Array(buffer)]),
@@ -141,6 +132,28 @@ export class FastTranscriptionService implements ITranscriptionService {
       if (shouldCleanup) {
         void cleanUpFiles([filePath]);
       }
+    }
+  }
+
+  /**
+   * Size-check and read through one file handle so the file that is measured
+   * is the file that is sent (no stat-then-read window on the path).
+   */
+  private async readAudioWithinLimit(filePath: string): Promise<Buffer> {
+    const handle = await fs.promises.open(filePath, 'r');
+    try {
+      const stats = await handle.stat();
+      if (stats.size > FAST_TRANSCRIPTION_MAX_SIZE) {
+        const maxMB = FAST_TRANSCRIPTION_MAX_SIZE / (1024 * 1024);
+        const sizeError = new Error(
+          `Audio file size (${(stats.size / 1024 / 1024).toFixed(2)}MB) exceeds the ${maxMB}MB Azure Speech transcription limit. Please upload a shorter audio file.`,
+        ) as TranscriptionError;
+        sizeError.errorClass = 'permanent';
+        throw sizeError;
+      }
+      return await handle.readFile();
+    } finally {
+      await handle.close();
     }
   }
 
