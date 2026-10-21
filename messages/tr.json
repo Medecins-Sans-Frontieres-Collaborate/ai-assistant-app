@@ -644,7 +644,7 @@
     "contactSupport": "Destek ekibiyle iletişime geçin",
     "secureSso": "Güvenli SSO",
     "howToGetAccess": "Erişimi nasıl alabilirim?",
-    "accessLimitedText": "Şu anda MSF AI Assistant yalnızca ABD, Amsterdam ve Cenevre personeli için kullanılabilir.",
+    "accessLimitedText": "MSF AI Assistant'a erişim ofis bazında sağlanmaktadır. Erişim talebinde bulunmak için yerel BT ekibinizle ve/veya SITS (Ortak BT Hizmetleri) ile iletişime geçin.",
     "expandAccessSoon": "Yakında erişimi genişletmeyi umuyoruz!",
     "errorConfiguration": "Sunucu yapılandırmasında bir sorun var.",
     "errorAccessDenied": "Oturum açma izniniz yok.",

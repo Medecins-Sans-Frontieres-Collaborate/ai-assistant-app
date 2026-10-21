@@ -673,7 +673,7 @@
     "contactSupport": "联系支持",
     "secureSso": "安全 SSO",
     "howToGetAccess": "如何获得访问权限？",
-    "accessLimitedText": "目前 MSF AI Assistant 仅适用于美国、阿姆斯特丹和日内瓦员工。",
+    "accessLimitedText": "仅限各办事处启用 MSF AI Assistant。若需申请访问权限，请联系您本地的 IT 团队和/或 SITS（共享 IT 服务）。",
     "expandAccessSoon": "我们希望很快扩大访问范围！",
     "errorConfiguration": "服务器配置存在问题。",
     "errorAccessDenied": "您没有登录权限。",

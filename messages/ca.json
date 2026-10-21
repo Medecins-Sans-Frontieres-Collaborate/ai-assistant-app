@@ -619,7 +619,7 @@
     "contactSupport": "Contactar amb el suport",
     "secureSso": "SSO segur",
     "howToGetAccess": "Com puc obtenir accés?",
-    "accessLimitedText": "Actualment, l'Assistent d'IA de MSF només està disponible per al personal dels Estats Units, Amsterdam i Ginebra.",
+    "accessLimitedText": "L'accés a l'MSF AI Assistant està habilitat per oficina. Per sol·licitar l'accés, contacteu amb el vostre equip d'informàtica local i/o amb SITS (Shared IT Services).",
     "expandAccessSoon": "Esperem ampliar l'accés aviat!",
     "errorConfiguration": "Hi ha un problema amb la configuració del servidor.",
     "errorAccessDenied": "No teniu permís per iniciar sessió.",

@@ -643,7 +643,7 @@
     "contactSupport": "Liên hệ hỗ trợ",
     "secureSso": "SSO An toàn",
     "howToGetAccess": "Làm thế nào để có quyền truy cập?",
-    "accessLimitedText": "Hiện tại MSF AI Assistant chỉ khả dụng cho nhân viên Hoa Kỳ, Amsterdam và Geneva.",
+    "accessLimitedText": "Quyền truy cập MSF AI Assistant được cấp theo từng văn phòng. Để yêu cầu truy cập, hãy liên hệ với đội IT địa phương và/hoặc SITS (Shared IT Services).",
     "expandAccessSoon": "Chúng tôi hy vọng sẽ mở rộng quyền truy cập sớm!",
     "errorConfiguration": "Có vấn đề với cấu hình máy chủ.",
     "errorAccessDenied": "Bạn không có quyền đăng nhập.",

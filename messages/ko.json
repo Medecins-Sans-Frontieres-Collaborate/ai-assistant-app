@@ -644,7 +644,7 @@
     "contactSupport": "지원팀에 문의",
     "secureSso": "보안 SSO",
     "howToGetAccess": "액세스 권한을 얻으려면?",
-    "accessLimitedText": "현재 MSF AI Assistant는 미국, 암스테르담 및 제네바 직원만 사용할 수 있습니다.",
+    "accessLimitedText": "MSF AI Assistant은 각 사무소별로 접근이 허용됩니다. 접근 요청은 해당 지역 IT팀 또는 SITS(공유 IT 서비스)에 문의해 주세요.",
     "expandAccessSoon": "곧 액세스를 확대할 수 있기를 바랍니다!",
     "errorConfiguration": "서버 구성에 문제가 있습니다.",
     "errorAccessDenied": "로그인할 권한이 없습니다.",

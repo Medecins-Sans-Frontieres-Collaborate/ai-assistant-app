@@ -644,7 +644,7 @@
     "contactSupport": "Связаться с поддержкой",
     "secureSso": "Безопасный SSO",
     "howToGetAccess": "Как получить доступ?",
-    "accessLimitedText": "В настоящее время MSF AI Assistant доступен только для сотрудников США, Амстердама и Женевы.",
+    "accessLimitedText": "Доступ к MSF AI Assistant предоставляется для каждого офиса отдельно. Для запроса доступа свяжитесь с вашей местной IT-командой и/или SITS (Shared IT Services).",
     "expandAccessSoon": "Мы надеемся расширить доступ в ближайшее время!",
     "errorConfiguration": "Проблема с конфигурацией сервера.",
     "errorAccessDenied": "У вас нет разрешения на вход.",

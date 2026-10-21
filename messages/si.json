@@ -611,7 +611,7 @@
     "contactSupport": "සහාය අමතන්න",
     "secureSso": "ආරක්ෂිත SSO",
     "howToGetAccess": "මට ප්‍රවේශය ලබා ගන්නේ කෙසේද?",
-    "accessLimitedText": "දැනට MSF AI සහායක ලබා ගත හැක්කේ USA, Amsterdam සහ Geneva කාර්ය මණ්ඩලයට පමණි.",
+    "accessLimitedText": "MSF AI Assistant වෙත ප්‍රවේශය කාර්යාලය අනුව සක්‍රිය කර ඇති අතර, ඔබට ප්‍රවේශය ඉල්ලා සිටින්න සිදුවන්නේ ඔබේ දේපල IT කණ්ඩායමට හෝ SITS (Shared IT Services) වෙත සම්බන්ධ වීමෙනි.",
     "expandAccessSoon": "අපි ඉක්මනින් ප්‍රවේශය පුළුල් කිරීමට බලාපොරොත්තු වෙමු!",
     "errorConfiguration": "සේවාදායක වින්‍යාසයේ ගැටලුවක් තිබේ.",
     "errorAccessDenied": "ඔබට පුරන්න වීමට අවසර නැත.",

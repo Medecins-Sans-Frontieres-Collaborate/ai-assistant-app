@@ -644,7 +644,7 @@
     "contactSupport": "सहायता से संपर्क करें",
     "secureSso": "सुरक्षित SSO",
     "howToGetAccess": "मुझे एक्सेस कैसे मिलेगा?",
-    "accessLimitedText": "वर्तमान में MSF AI सहायक केवल USA, Amsterdam और जिनेवा कर्मचारियों के लिए उपलब्ध है।",
+    "accessLimitedText": "MSF AI Assistant तक पहुँच प्रत्येक कार्यालय के अनुसार सक्षम की जाती है। एक्सेस का अनुरोध करने के लिए, अपने स्थानीय आईटी टीम या SITS (Shared IT Services) से संपर्क करें।",
     "expandAccessSoon": "हम जल्द ही एक्सेस का विस्तार करने की उम्मीद करते हैं!",
     "errorConfiguration": "सर्वर कॉन्फ़िगरेशन में समस्या है।",
     "errorAccessDenied": "आपके पास साइन इन करने की अनुमति नहीं है।",

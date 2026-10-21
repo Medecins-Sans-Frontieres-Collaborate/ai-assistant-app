@@ -997,7 +997,7 @@
     "contactSupport": "Contacter le support",
     "secureSso": "SSO sécurisé",
     "howToGetAccess": "Comment obtenir l'accès?",
-    "accessLimitedText": "Actuellement, l'Assistant IA MSF n'est disponible que pour le personnel des États-Unis, d'Amsterdam et de Genève.",
+    "accessLimitedText": "L'accès à l'assistant IA MSF est activé par bureau. Pour demander un accès, contactez votre équipe informatique locale et/ou SITS (Shared IT Services).",
     "expandAccessSoon": "Nous espérons étendre l'accès bientôt!",
     "errorConfiguration": "Il y a un problème avec la configuration du serveur.",
     "errorAccessDenied": "Vous n'avez pas l'autorisation de vous connecter.",

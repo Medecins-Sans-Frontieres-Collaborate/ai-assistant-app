@@ -619,7 +619,7 @@
     "contactSupport": "Ota yhteyttä tukeen",
     "secureSso": "Turvallinen SSO",
     "howToGetAccess": "Miten saan käyttöoikeuden?",
-    "accessLimitedText": "Tällä hetkellä MSF AI Assistant on saatavilla vain USA:n, Amsterdamin ja Geneven henkilöstölle.",
+    "accessLimitedText": "Pääsy MSF AI Assistant -palveluun myönnetään toimistoittain. Pyytääksesi käyttöoikeutta, ota yhteyttä paikalliseen IT-tiimiisi ja/tai SITS:iin (Shared IT Services).",
     "expandAccessSoon": "Toivomme voivamme laajentaa käyttöoikeutta pian!",
     "errorConfiguration": "Palvelimen määrityksessä on ongelma.",
     "errorAccessDenied": "Sinulla ei ole oikeutta kirjautua sisään.",

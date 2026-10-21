@@ -644,7 +644,7 @@
     "contactSupport": "Kontaktovat podporu",
     "secureSso": "Zabezpečené SSO",
     "howToGetAccess": "Jak získám přístup?",
-    "accessLimitedText": "V současné době je MSF AI Assistant k dispozici pouze pro zaměstnance v USA, Amsterdamu a Ženevě.",
+    "accessLimitedText": "Přístup k MSF AI Asistentovi je povolen podle kanceláře. Pro požádání o přístup kontaktujte svůj místní IT tým a/nebo SITS (Shared IT Services).",
     "expandAccessSoon": "Doufáme, že brzy rozšíříme přístup!",
     "errorConfiguration": "Došlo k problému s konfigurací serveru.",
     "errorAccessDenied": "Nemáte oprávnění k přihlášení.",

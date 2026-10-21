@@ -972,7 +972,7 @@
     "contactSupport": "Contatta l'assistenza",
     "secureSso": "SSO sicuro",
     "howToGetAccess": "Come ottengo l'accesso?",
-    "accessLimitedText": "Attualmente MSF AI Assistant è disponibile solo per il personale di USA, Amsterdam e Ginevra.",
+    "accessLimitedText": "L'accesso all'MSF AI Assistant è abilitato per singolo ufficio. Per richiedere l'accesso, contatta il tuo team IT locale e/o SITS (Shared IT Services).",
     "expandAccessSoon": "Speriamo di espandere l'accesso presto!",
     "errorConfiguration": "C'è un problema con la configurazione del server.",
     "errorAccessDenied": "Non hai l'autorizzazione per accedere.",

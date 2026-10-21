@@ -561,7 +561,7 @@
     "contactSupport": "ติดต่อฝ่ายสนับสนุน",
     "secureSso": "SSO ที่ปลอดภัย",
     "howToGetAccess": "ฉันจะเข้าถึงได้อย่างไร?",
-    "accessLimitedText": "ปัจจุบัน MSF AI Assistant พร้อมให้บริการเฉพาะเจ้าหน้าที่ใน USA, Amsterdam และ เจนีวา เท่านั้น",
+    "accessLimitedText": "การเข้าถึง MSF AI Assistant ได้รับการเปิดใช้งานเฉพาะตามสำนักงาน หากต้องการขอสิทธิ์เข้าถึง กรุณาติดต่อทีมไอทีประจำสำนักงานของคุณและ/หรือ SITS (Shared IT Services)",
     "expandAccessSoon": "เราหวังว่าจะขยายการเข้าถึงในเร็วๆ นี้!",
     "errorConfiguration": "มีปัญหากับการกำหนดค่าเซิร์ฟเวอร์",
     "errorAccessDenied": "คุณไม่มีสิทธิ์ในการเข้าสู่ระบบ",

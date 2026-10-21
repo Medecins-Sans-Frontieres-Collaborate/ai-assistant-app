@@ -611,7 +611,7 @@
     "contactSupport": "Hubungi dukungan",
     "secureSso": "SSO Aman",
     "howToGetAccess": "Bagaimana cara mendapatkan akses?",
-    "accessLimitedText": "Saat ini MSF AI Assistant hanya tersedia untuk staf USA, Amsterdam, dan Jenewa.",
+    "accessLimitedText": "Akses ke MSF AI Assistant diaktifkan per kantor. Untuk meminta akses, hubungi tim TI lokal Anda dan/atau SITS (Shared IT Services).",
     "expandAccessSoon": "Kami berharap dapat memperluas akses segera!",
     "errorConfiguration": "Ada masalah dengan konfigurasi server.",
     "errorAccessDenied": "Anda tidak memiliki izin untuk masuk.",

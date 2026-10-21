@@ -644,7 +644,7 @@
     "contactSupport": "サポートに連絡",
     "secureSso": "セキュアSSO",
     "howToGetAccess": "アクセス権を取得するには?",
-    "accessLimitedText": "現在、MSF AIアシスタントは米国、アムステルダム、およびジュネーブのスタッフのみが利用できます。",
+    "accessLimitedText": "MSF AI Assistantへのアクセスは、各オフィスごとに有効化されています。アクセスを希望される場合は、地域のITチームまたはSITS（Shared IT Services）にご連絡ください。",
     "expandAccessSoon": "近いうちにアクセスを拡大したいと考えています!",
     "errorConfiguration": "サーバー構成に問題があります。",
     "errorAccessDenied": "サインインする権限がありません。",
