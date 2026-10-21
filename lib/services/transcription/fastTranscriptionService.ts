@@ -83,14 +83,10 @@ export class FastTranscriptionService implements ITranscriptionService {
         throw err;
       }
 
-      const buffer = await this.readAudioWithinLimit(filePath);
+      const audioParts = await this.readAudioWithinLimit(filePath);
 
       const form = new FormData();
-      form.append(
-        'audio',
-        new Blob([new Uint8Array(buffer)]),
-        path.basename(filePath),
-      );
+      form.append('audio', new Blob(audioParts), path.basename(filePath));
       form.append(
         'definition',
         JSON.stringify({
@@ -136,25 +132,39 @@ export class FastTranscriptionService implements ITranscriptionService {
   }
 
   /**
-   * Size-check and read through one file handle so the file that is measured
-   * is the file that is sent (no stat-then-read window on the path).
+   * Read the audio into memory, enforcing the size cap on the bytes actually
+   * read: no stat-then-read window, and no separate open() on the path. The
+   * stream stops one byte past the cap, so an oversized file is rejected
+   * without consuming the rest of it.
    */
-  private async readAudioWithinLimit(filePath: string): Promise<Buffer> {
-    const handle = await fs.promises.open(filePath, 'r');
+  private async readAudioWithinLimit(
+    filePath: string,
+  ): Promise<Uint8Array<ArrayBuffer>[]> {
+    const parts: Uint8Array<ArrayBuffer>[] = [];
+    let total = 0;
+    // `end` is an inclusive byte offset, so this reads at most cap + 1 bytes.
+    const stream = fs.createReadStream(filePath, {
+      end: FAST_TRANSCRIPTION_MAX_SIZE,
+      highWaterMark: 1024 * 1024,
+    });
     try {
-      const stats = await handle.stat();
-      if (stats.size > FAST_TRANSCRIPTION_MAX_SIZE) {
-        const maxMB = FAST_TRANSCRIPTION_MAX_SIZE / (1024 * 1024);
-        const sizeError = new Error(
-          `Audio file size (${(stats.size / 1024 / 1024).toFixed(2)}MB) exceeds the ${maxMB}MB Azure Speech transcription limit. Please upload a shorter audio file.`,
-        ) as TranscriptionError;
-        sizeError.errorClass = 'permanent';
-        throw sizeError;
+      for await (const chunk of stream) {
+        const part = new Uint8Array(chunk as Buffer);
+        total += part.length;
+        if (total > FAST_TRANSCRIPTION_MAX_SIZE) {
+          const maxMB = FAST_TRANSCRIPTION_MAX_SIZE / (1024 * 1024);
+          const sizeError = new Error(
+            `Audio file exceeds the ${maxMB}MB Azure Speech transcription limit. Please upload a shorter audio file.`,
+          ) as TranscriptionError;
+          sizeError.errorClass = 'permanent';
+          throw sizeError;
+        }
+        parts.push(part);
       }
-      return await handle.readFile();
     } finally {
-      await handle.close();
+      stream.destroy();
     }
+    return parts;
   }
 
   private async toTranscriptionError(
