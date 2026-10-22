@@ -1,11 +1,19 @@
 /**
  * Agent Discovery Service
  *
- * Discovers Foundry Agent Applications via the Azure Resource Manager (ARM) API.
- * Returns only agents the authenticated user has RBAC access to (Azure AI User role).
+ * Discovers Foundry agents the authenticated user has RBAC access to, from
+ * two independent planes that are ALWAYS both attempted:
  *
- * The ARM API naturally filters by RBAC — the user's OBO token ensures they only
- * see Agent Applications they're authorized to use.
+ *  - Control plane (ARM): published "Agent Application" resources under the
+ *    project. Carries ui-* tags and the deployment-pinned version. Requires
+ *    control-plane read on the preview applications resource type.
+ *  - Data plane (Foundry project endpoint): every agent object in the new
+ *    agent model (prompt, hosted, workflow, …), published or not. Requires
+ *    only a data-plane role (Azure AI User / Foundry User).
+ *
+ * A user can hold rights on either plane without the other, so a failure on
+ * one plane must never block the other — each source's result reports the
+ * per-plane outcome so callers can distinguish "empty" from "failed".
  */
 import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
 
@@ -71,6 +79,12 @@ interface DiscoveredAgent {
   agentVersion?: string;
   /** Source type — 'foundry' for ARM-discovered agents, 'prompt' for app-defined prompt agents, 'org' for admin-authored org RAG agents */
   type: 'foundry' | 'prompt' | 'm365' | 'org';
+  /**
+   * New-model agent kind ('prompt' | 'hosted' | 'workflow' | …) from the
+   * data-plane definition. Undefined for ARM-only discoveries and
+   * app-defined agents. Informational — discovery never filters on it.
+   */
+  kind?: string;
   /** ARM resource path this agent was discovered from */
   source?: string;
   /** Foundry project endpoint for invoking this agent */
@@ -96,10 +110,43 @@ interface DiscoveredAgent {
   overridesStatic?: boolean;
 }
 
-interface CachedAgentList {
+/**
+ * Outcome of one discovery plane for one source path.
+ *
+ * 'skipped' means the plane was not attempted by design (feature flag off,
+ * no Foundry token, account-only path) — distinct from 'error', where the
+ * plane was asked and refused. Callers treat a source as FAILED only when
+ * neither plane reports 'ok'.
+ */
+export type DiscoveryPlaneStatus =
+  | { status: 'ok' }
+  | {
+      status: 'skipped';
+      reason: 'flag-disabled' | 'no-foundry-token' | 'no-project-endpoint';
+    }
+  | { status: 'error'; httpStatus?: number; message: string };
+
+/**
+ * Per-source discovery result: the union of both planes' agents plus each
+ * plane's outcome, so callers can tell an empty project (both planes ok,
+ * zero agents) from a failed listing (no plane ok).
+ */
+export interface SourceDiscoveryResult {
+  agents: DiscoveredAgent[];
+  controlPlane: DiscoveryPlaneStatus;
+  dataPlane: DiscoveryPlaneStatus;
+}
+
+/** One plane's listing attempt: its agents plus how the attempt went. */
+interface PlaneListing {
+  agents: DiscoveredAgent[];
+  outcome: DiscoveryPlaneStatus;
+}
+
+interface CachedDiscovery {
   /** Lower-cased user identity the entry belongs to (owner-keyed entries). */
   owner?: string;
-  agents: DiscoveredAgent[];
+  result: SourceDiscoveryResult;
   expiresAt: number;
 }
 
@@ -119,13 +166,13 @@ const ENDPOINT_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h, matches client useFou
 
 export class AgentDiscoveryService {
   private static instance: AgentDiscoveryService | null = null;
-  private cache = new Map<string, CachedAgentList>();
+  private cache = new Map<string, CachedDiscovery>();
   /**
    * Cold discoveries in flight, by cache key: concurrent callers for the
    * same user + path (two tabs, a reload during a slow load) share one
    * ARM/data-plane round-trip instead of stampeding.
    */
-  private inflightRequests = new Map<string, Promise<DiscoveredAgent[]>>();
+  private inflightRequests = new Map<string, Promise<SourceDiscoveryResult>>();
   // Per-user cache mapping (userMail, agentName) → resolved Foundry endpoint.
   // Populated whenever /api/agents discovery succeeds for a user. The chat path
   // reads from this so the host the OBO token gets attached to is never
@@ -140,11 +187,19 @@ export class AgentDiscoveryService {
   }
 
   /**
-   * Lists Agent Applications the user has access to via ARM API.
-   * Results are RBAC-filtered because the user's own ARM token is used.
+   * Lists the agents the user can reach under one source path, as the union
+   * of the ARM control plane (published Agent Applications) and the Foundry
+   * data plane (every new-model agent). Results are RBAC-filtered because
+   * the user's own OBO tokens are used on both planes.
+   *
+   * Never throws for plane-level failures: each plane's outcome is reported
+   * on the result so callers can distinguish an empty project from a failed
+   * listing. Throws only for an invalid resource path.
    *
    * @param armToken - User's ARM-scoped OBO token
-   * @param resourcePath - ARM resource path for the regional Foundry Resource
+   * @param resourcePath - ARM resource path for the Foundry project
+   * @param foundryToken - User's Foundry data-plane OBO token; null skips
+   *   the data plane (outcome 'skipped'/'no-foundry-token')
    */
   async listUserAgents(
     armToken: string,
@@ -157,7 +212,7 @@ export class AgentDiscoveryService {
      * that `armToken` was minted for this user (OBO from their session).
      */
     cacheOwner?: string,
-  ): Promise<DiscoveredAgent[]> {
+  ): Promise<SourceDiscoveryResult> {
     // Defense-in-depth: callers already validate resourcePath, but re-check
     // here so the ARM URL construction has a locally explicit dataflow guard
     // (and so CodeQL doesn't have to trace through every caller).
@@ -184,7 +239,7 @@ export class AgentDiscoveryService {
       : `${this.hashKey(armToken)}:${foundryKeyPart}:${resourcePath}`;
     const cached = this.cache.get(cacheKey);
     if (cached && Date.now() < cached.expiresAt) {
-      return cached.agents;
+      return cached.result;
     }
     const inflight = this.inflightRequests.get(cacheKey);
     if (inflight) return inflight;
@@ -208,28 +263,115 @@ export class AgentDiscoveryService {
     foundryToken: string | null | undefined,
     cacheKey: string,
     owner: string | undefined,
-  ): Promise<DiscoveredAgent[]> {
+  ): Promise<SourceDiscoveryResult> {
+    // Both planes run concurrently and independently: a user can hold
+    // data-plane rights (Azure AI User / Foundry User) without control-plane
+    // read on the preview applications resource type, and vice versa. The
+    // previous ARM-first flow threw before the data plane could run, hiding
+    // every agent from data-plane-only users.
+    const [controlPlane, dataPlane] = await Promise.all([
+      this.listControlPlaneApplications(armToken, resourcePath, foundryToken),
+      this.listDataPlaneAgents(foundryToken, resourcePath),
+    ]);
+
+    // Union with ARM winning on conflicts: the Application resource carries
+    // ui-* tags and the deployment-pinned version.
+    const agents = [...controlPlane.agents];
+    const seen = new Set(agents.map((a) => a.agentName));
+    for (const dp of dataPlane.agents) {
+      if (!seen.has(dp.agentName)) {
+        seen.add(dp.agentName);
+        agents.push(dp);
+      }
+    }
+
+    const result: SourceDiscoveryResult = {
+      agents,
+      controlPlane: controlPlane.outcome,
+      dataPlane: dataPlane.outcome,
+    };
+
+    // Only cache when at least one plane answered. A fully failed discovery
+    // (403 on both, network blip) must retry on the next request rather than
+    // pin an empty list for the full TTL — a role grant should take effect
+    // on the next reload, not an hour later.
+    if (
+      controlPlane.outcome.status === 'ok' ||
+      dataPlane.outcome.status === 'ok'
+    ) {
+      this.cache.set(cacheKey, {
+        result,
+        expiresAt: Date.now() + CACHE_TTL_MS,
+        ...(owner && { owner }),
+      });
+    }
+
+    console.log(
+      `[AgentDiscoveryService] Discovered ${agents.length} agents ` +
+        `(controlPlane=${controlPlane.outcome.status}, dataPlane=${dataPlane.outcome.status})`,
+    );
+
+    return result;
+  }
+
+  /**
+   * Control plane: lists published Agent Application resources via ARM.
+   * Failures are reported on the outcome, never thrown — the caller unions
+   * this with the data-plane listing regardless.
+   */
+  private async listControlPlaneApplications(
+    armToken: string,
+    resourcePath: string,
+    foundryToken: string | null | undefined,
+  ): Promise<PlaneListing> {
     const url = `https://management.azure.com${resourcePath}/applications?api-version=${ARM_API_VERSION}`;
 
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${armToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${armToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(`[AgentDiscoveryService] ARM request failed: ${message}`);
+      return { agents: [], outcome: { status: 'error', message } };
+    }
 
     if (!response.ok) {
-      const body = await response.text();
+      const body = await response.text().catch(() => '');
       console.error(
         `[AgentDiscoveryService] ARM API error (${response.status}):`,
         body,
       );
-      throw new Error(
-        `Failed to list agent applications: ${response.status} ${response.statusText}`,
-      );
+      return {
+        agents: [],
+        outcome: {
+          status: 'error',
+          httpStatus: response.status,
+          message: `Failed to list agent applications: ${response.status} ${response.statusText}`,
+        },
+      };
     }
 
-    const data = (await response.json()) as { value?: ArmAgentApplication[] };
+    // Parse failures must stay inside this plane: a throw here would reject
+    // the Promise.all in discoverUncached and take the healthy data-plane
+    // listing down with it — the exact coupling this split removes.
+    let data: { value?: ArmAgentApplication[] };
+    try {
+      data = (await response.json()) as { value?: ArmAgentApplication[] };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(
+        `[AgentDiscoveryService] Malformed ARM response: ${message}`,
+      );
+      return {
+        agents: [],
+        outcome: { status: 'error', message: `Malformed ARM response` },
+      };
+    }
     const applications: FoundryAgentApp[] = (data.value || []).map((app) => ({
       id: app.name,
       name: app.properties?.displayName || app.name,
@@ -258,41 +400,62 @@ export class AgentDiscoveryService {
       }),
     );
 
-    // New-model agents (and legacy *unpublished* agents) have no ARM "Agent
-    // Application" resource, so the control-plane call above can't see them.
-    // Union in a best-effort data-plane listing under the user's Foundry OBO
-    // token — RBAC is still enforced (project-scoped 403 => empty). ARM wins on
-    // conflicts because it carries ui-* tags and the deployment-pinned version.
-    if (env.FOUNDRY_DATAPLANE_DISCOVERY && foundryToken) {
-      const projectEndpoint = this.deriveProjectEndpoint(resourcePath);
-      if (projectEndpoint) {
-        const dpAgents = await this.listProjectAgentsDataPlane(
-          foundryToken,
-          projectEndpoint,
-        ).catch(() => [] as DiscoveredAgent[]);
+    return { agents, outcome: { status: 'ok' } };
+  }
 
-        const seen = new Set(agents.map((a) => a.agentName));
-        for (const dp of dpAgents) {
-          if (!seen.has(dp.agentName)) {
-            seen.add(dp.agentName);
-            agents.push(dp);
-          }
-        }
-      }
+  /**
+   * Data plane: lists every agent object in the new model (prompt, hosted,
+   * workflow, …) under the user's Foundry OBO token — including agents the
+   * control plane can't see (new-model agents and legacy unpublished ones).
+   * Skips are reported distinctly from errors so callers can tell "not
+   * attempted" from "refused".
+   */
+  private async listDataPlaneAgents(
+    foundryToken: string | null | undefined,
+    resourcePath: string,
+  ): Promise<PlaneListing> {
+    if (!env.FOUNDRY_DATAPLANE_DISCOVERY) {
+      return {
+        agents: [],
+        outcome: { status: 'skipped', reason: 'flag-disabled' },
+      };
+    }
+    if (!foundryToken) {
+      return {
+        agents: [],
+        outcome: { status: 'skipped', reason: 'no-foundry-token' },
+      };
+    }
+    const projectEndpoint = this.deriveProjectEndpoint(resourcePath);
+    if (!projectEndpoint) {
+      // Account-only paths have no project to list; not an error.
+      return {
+        agents: [],
+        outcome: { status: 'skipped', reason: 'no-project-endpoint' },
+      };
     }
 
-    // Cache results
-    this.cache.set(cacheKey, {
-      agents,
-      expiresAt: Date.now() + CACHE_TTL_MS,
-      ...(owner && { owner }),
-    });
-
-    console.log(
-      `[AgentDiscoveryService] Discovered ${agents.length} agents for user`,
-    );
-
-    return agents;
+    try {
+      const agents = await this.listProjectAgentsDataPlane(
+        foundryToken,
+        projectEndpoint,
+      );
+      return { agents, outcome: { status: 'ok' } };
+    } catch (error) {
+      const statusCode = (error as { statusCode?: unknown }).statusCode;
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(
+        `[AgentDiscoveryService] Data-plane listing failed: ${message}`,
+      );
+      return {
+        agents: [],
+        outcome: {
+          status: 'error',
+          ...(typeof statusCode === 'number' && { httpStatus: statusCode }),
+          message,
+        },
+      };
+    }
   }
 
   /**
@@ -363,9 +526,18 @@ export class AgentDiscoveryService {
       version?: string;
     } | null,
   ): DiscoveredAgent {
-    const foundryEndpoint = app.baseUrl
+    // `baseUrl` comes from an ARM response a THIRD-PARTY project admin
+    // controls (users connect arbitrary Foundry projects). An endpoint on a
+    // disallowed host must never be surfaced: it would be anchored into the
+    // per-user endpoint cache and only the chat middleware's allow-list
+    // check would stand between it and the user's bearer token.
+    const rawEndpoint = app.baseUrl
       ? app.baseUrl.split('/applications/')[0]
       : undefined;
+    const foundryEndpoint =
+      rawEndpoint && isAllowedFoundryHost(rawEndpoint)
+        ? rawEndpoint
+        : undefined;
 
     // Foundry has no display-name field separate from the slug, so prettify
     // the slug for the picker. The raw slug is preserved on `id` for the subtitle.
@@ -400,6 +572,10 @@ export class AgentDiscoveryService {
     if (!app.baseUrl || !app.agentName) return null;
     const projectEndpoint = app.baseUrl.split('/applications/')[0];
     if (!projectEndpoint) return null;
+    // The user's Foundry bearer token is attached to this request, and
+    // `baseUrl` is controlled by whoever administers the connected project —
+    // never send the token to a host outside the Foundry allow-list.
+    if (!isAllowedFoundryHost(projectEndpoint)) return null;
     if (!isValidAccountName(app.agentName)) return null;
 
     try {
@@ -488,7 +664,11 @@ export class AgentDiscoveryService {
         a as { agent_card?: { name?: string; description?: string } }
       ).agent_card;
       const latest = a?.versions?.latest as
-        | { version?: string; description?: string }
+        | {
+            version?: string;
+            description?: string;
+            definition?: { kind?: string };
+          }
         | undefined;
 
       agents.push({
@@ -499,6 +679,7 @@ export class AgentDiscoveryService {
         agentName,
         agentVersion: latest?.version,
         type: 'foundry',
+        ...(latest?.definition?.kind && { kind: latest.definition.kind }),
         foundryEndpoint: projectEndpoint,
       });
 
