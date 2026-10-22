@@ -102,10 +102,14 @@ describe('GET /api/agents — access-control discovery filter', () => {
     getAccessTokenForOBO.mockResolvedValue('app-access-token');
     getArmToken.mockResolvedValue('arm-obo-token');
     getFoundryToken.mockResolvedValue('foundry-obo-token');
-    listUserAgents.mockResolvedValue([
-      { agentName: 'agent-a', foundryEndpoint: ENDPOINT_A },
-      { agentName: 'agent-b', foundryEndpoint: ENDPOINT_B },
-    ]);
+    listUserAgents.mockResolvedValue({
+      agents: [
+        { agentName: 'agent-a', foundryEndpoint: ENDPOINT_A },
+        { agentName: 'agent-b', foundryEndpoint: ENDPOINT_B },
+      ],
+      controlPlane: { status: 'ok' },
+      dataPlane: { status: 'ok' },
+    });
     accessIsEnabled.mockReturnValue(false);
     accessEnsureFresh.mockResolvedValue(undefined);
     accessEvaluate.mockReturnValue({ decision: 'allow', reason: 'no-rule' });
