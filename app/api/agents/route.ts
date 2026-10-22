@@ -81,7 +81,12 @@ export async function GET(request: NextRequest) {
             groupsWarmup,
             timing,
           )
-        : Promise.resolve({ agents: [], unavailable: false });
+        : Promise.resolve({
+            agents: [],
+            unavailable: false,
+            failedSources: [],
+            dataPlaneUnavailable: false,
+          });
     await groupsWarmup;
     const [app, discovery] = await Promise.all([
       timing.time('lookups', () => collectAppAgents(session.user.mail)),
