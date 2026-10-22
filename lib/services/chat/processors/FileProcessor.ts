@@ -4,6 +4,7 @@ import { guardTranscriptionMinutes } from '@/lib/services/limits/transcriptionBu
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 
 import { FILE_SIZE_LIMITS, WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
+import type { TranscriptMetadata } from '@/lib/utils/app/metadata';
 import {
   calculateChunkConfig,
   estimateCharsPerToken,
@@ -23,6 +24,10 @@ import { Message, TextMessageContent } from '@/types/chat';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { getChunkedTranscriptionService } from '../../transcription/chunkedTranscriptionService';
+import {
+  FAST_TRANSCRIPTION_MAX_SIZE,
+  getFastTranscriptionService,
+} from '../../transcription/fastTranscriptionService';
 import { TranscriptionServiceFactory } from '../../transcriptionService';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
@@ -35,6 +40,11 @@ import {
   isAudioVideoFile,
   isWhisperNativeFormat,
 } from '@/lib/constants/fileTypes';
+import {
+  TranscriptionEngine,
+  getAzureSpeechLocales,
+  getTranscriptionLanguageMetadata,
+} from '@/lib/constants/transcriptionLanguages';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 import fs from 'fs';
 import { performance } from 'perf_hooks';
@@ -135,10 +145,7 @@ export class FileProcessor extends BasePipelineStage {
             content: string;
           }> = [];
 
-          const transcripts: Array<{
-            filename: string;
-            transcript: string;
-          }> = [];
+          const transcripts: TranscriptMetadata[] = [];
 
           // Extract files and images from message
           const files: Array<{
@@ -146,6 +153,7 @@ export class FileProcessor extends BasePipelineStage {
             originalFilename?: string;
             transcriptionLanguage?: string;
             transcriptionPrompt?: string;
+            transcriptionEngine?: TranscriptionEngine;
           }> = [];
           const images: Array<{
             url: string;
@@ -168,6 +176,7 @@ export class FileProcessor extends BasePipelineStage {
                 originalFilename: section.originalFilename,
                 transcriptionLanguage: section.transcriptionLanguage,
                 transcriptionPrompt: section.transcriptionPrompt,
+                transcriptionEngine: section.transcriptionEngine,
               });
             } else if (section.type === 'image_url') {
               // Prior-turn images stay ImageProcessor/last-message territory.
@@ -436,8 +445,64 @@ export class FileProcessor extends BasePipelineStage {
 
                   let transcript: string;
 
-                  // Route based on file size: ≤25MB → Whisper, >25MB → Batch
-                  if (audioSize <= WHISPER_MAX_SIZE) {
+                  // Azure Speech engine: user-selected per upload; needs a
+                  // language with a mapped locale and a configured Speech
+                  // resource. When unusable, fall back to Whisper so the
+                  // upload still succeeds — metadata records the engine
+                  // actually used, keeping transcript cautions truthful.
+                  const fastService = getFastTranscriptionService();
+                  const wantsAzureSpeech =
+                    file.transcriptionEngine === 'azureSpeech';
+                  const azureSpeechUsable =
+                    wantsAzureSpeech &&
+                    !!file.transcriptionLanguage &&
+                    getAzureSpeechLocales(file.transcriptionLanguage).length >
+                      0 &&
+                    fastService.isAvailable() &&
+                    audioSize <= FAST_TRANSCRIPTION_MAX_SIZE;
+                  if (wantsAzureSpeech && !azureSpeechUsable) {
+                    console.warn(
+                      `[FileProcessor] Azure Speech engine requested but unusable ` +
+                        `(language: ${sanitizeForLog(file.transcriptionLanguage ?? 'auto')}, ` +
+                        `configured: ${fastService.isAvailable()}); falling back to Whisper`,
+                    );
+                  }
+
+                  if (azureSpeechUsable) {
+                    // Synchronous up to the fast-transcription cap; no
+                    // chunking needed. Custom prompts are a Whisper feature
+                    // and are not sent on this path.
+                    console.log(
+                      `[FileProcessor] Using Azure Speech fast transcription`,
+                    );
+
+                    transcript = await fastService.transcribe(
+                      fileToTranscribe,
+                      { language: file.transcriptionLanguage },
+                    );
+
+                    transcripts.push({
+                      filename,
+                      transcript,
+                      languageMetadata: getTranscriptionLanguageMetadata(
+                        file.transcriptionLanguage,
+                        'azureSpeech',
+                      ),
+                    });
+
+                    const logger = getAzureMonitorLogger();
+                    void logger.logTranscriptionSuccess({
+                      user: context.user,
+                      filename,
+                      fileSize: audioSize,
+                      transcriptionType: 'azureSpeech',
+                      language: file.transcriptionLanguage,
+                    });
+
+                    console.log(
+                      `[FileProcessor] Transcription complete: ${transcript.length} chars`,
+                    );
+                  } else if (audioSize <= WHISPER_MAX_SIZE) {
                     // Whisper transcription (synchronous, ≤25MB)
                     console.log(
                       `[FileProcessor] Using Whisper transcription (≤25MB)`,
@@ -463,6 +528,9 @@ export class FileProcessor extends BasePipelineStage {
                     transcripts.push({
                       filename,
                       transcript,
+                      languageMetadata: getTranscriptionLanguageMetadata(
+                        file.transcriptionLanguage,
+                      ),
                     });
 
                     // Log successful transcription (fire-and-forget)
@@ -529,12 +597,18 @@ export class FileProcessor extends BasePipelineStage {
                       jobId,
                       totalChunks,
                       jobType: 'chunked',
+                      languageMetadata: getTranscriptionLanguageMetadata(
+                        file.transcriptionLanguage,
+                      ),
                     });
 
                     // Add placeholder transcript for UI display
                     transcripts.push({
                       filename,
                       transcript: `[Transcription in progress: ${filename}]`,
+                      languageMetadata: getTranscriptionLanguageMetadata(
+                        file.transcriptionLanguage,
+                      ),
                     });
 
                     // Log chunked transcription job queued (fire-and-forget)

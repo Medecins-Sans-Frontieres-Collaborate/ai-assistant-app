@@ -86,6 +86,46 @@ describe('ChunkedTranscriptionService.combineTranscripts', () => {
   });
 });
 
+describe('ChunkedTranscriptionService language propagation', () => {
+  it.each(['ht', 'so', 'haw'])(
+    'stores and forwards %s without changing it',
+    async (language) => {
+      vi.clearAllMocks();
+      splitterMocks.splitAudioFile.mockResolvedValue({
+        chunkPaths: ['/c/audio.mp3'],
+        chunkCount: 1,
+        totalDurationSecs: 1,
+        chunkDurationSecs: 1,
+      });
+      storeMocks.getJob.mockReturnValue({ status: 'processing' });
+      whisperMocks.transcribeChunk.mockResolvedValue('spoken content');
+      const svc = new ChunkedTranscriptionService();
+      const { jobId } = await svc.startJob(
+        fakeStorage as any,
+        '/audio.wav',
+        'audio.wav',
+        userId,
+        { language },
+      );
+      expect(storeMocks.createJob).toHaveBeenCalledWith(
+        fakeStorage,
+        jobId,
+        userId,
+        1,
+        ['/c/audio.mp3'],
+        'audio.wav',
+        { language, officiallySupported: false },
+      );
+      await vi.waitFor(() => expect(storeMocks.completeJob).toHaveBeenCalled());
+      expect(whisperMocks.transcribeChunk).toHaveBeenCalledWith(
+        '/c/audio.mp3',
+        { language },
+      );
+      expect(storeMocks.completeJob.mock.calls[0][3]).toBe('spoken content');
+    },
+  );
+});
+
 describe('ChunkedTranscriptionService.processChunksAsync (worker pool)', () => {
   const jobId = '11111111-2222-3333-4444-555555555555';
   const chunkPaths = ['/c/0.mp3', '/c/1.mp3', '/c/2.mp3', '/c/3.mp3'];

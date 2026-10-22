@@ -85,6 +85,17 @@ vi.mock('@/lib/services/transcription/chunkedTranscriptionService', () => ({
   }),
 }));
 
+// Azure Speech fast transcription (user-selected engine).
+const fastMocks = vi.hoisted(() => ({
+  transcribe: vi.fn(),
+  isAvailable: vi.fn().mockReturnValue(true),
+}));
+
+vi.mock('@/lib/services/transcription/fastTranscriptionService', () => ({
+  FAST_TRANSCRIPTION_MAX_SIZE: 500 * 1024 * 1024,
+  getFastTranscriptionService: vi.fn().mockReturnValue(fastMocks),
+}));
+
 // Observability logger (fire-and-forget; must resolve).
 vi.mock('@/lib/services/observability', () => ({
   getAzureMonitorLogger: vi.fn().mockReturnValue({
@@ -152,7 +163,12 @@ function makeProcessor(fileBuffer: Buffer = Buffer.from('fake-audio')) {
   return { processor, mockFileService };
 }
 
-function audioContext(filename: string, url?: string) {
+function audioContext(
+  filename: string,
+  url?: string,
+  language?: string,
+  engine?: 'whisper' | 'azureSpeech',
+) {
   return createTestChatContext({
     hasFiles: true,
     messages: [
@@ -164,6 +180,8 @@ function audioContext(filename: string, url?: string) {
             type: 'file_url',
             url: url ?? `https://blob.com/${filename}`,
             originalFilename: filename,
+            transcriptionLanguage: language,
+            transcriptionEngine: engine,
           },
         ],
         messageType: MessageType.FILE,
@@ -189,6 +207,142 @@ describe('FileProcessor A/V branch', () => {
     mockLoadDocument.mockRejectedValue(
       new Error('loadDocument should not be called for A/V files'),
     );
+  });
+
+  it.each(['ht', 'so', 'haw'])(
+    'preserves %s metadata for synchronous transcription',
+    async (language) => {
+      validationMocks.validateBufferSignature.mockReturnValue({
+        isValid: true,
+        detectedType: 'audio',
+        detectedFormat: 'mp3',
+      });
+      whisperMocks.transcribe.mockResolvedValue('spoken content');
+      const { processor } = makeProcessor();
+      const result = await processor.execute(
+        audioContext('audio.mp3', undefined, language),
+      );
+      expect(whisperMocks.transcribe).toHaveBeenCalledWith('/tmp/audio.mp3', {
+        language,
+        prompt: undefined,
+      });
+      expect(result.processedContent?.transcripts?.[0]).toEqual({
+        filename: 'audio.mp3',
+        transcript: 'spoken content',
+        languageMetadata: { language, officiallySupported: false },
+      });
+    },
+  );
+
+  it.each(['ht', 'so', 'haw'])(
+    'preserves %s metadata for chunked transcription',
+    async (language) => {
+      validationMocks.validateBufferSignature.mockReturnValue({
+        isValid: true,
+        detectedType: 'audio',
+        detectedFormat: 'mp3',
+      });
+      fsMocks.stat.mockResolvedValue({ size: 30 * 1024 * 1024 });
+      chunkedMocks.startJob.mockResolvedValue({
+        jobId: 'job-1',
+        totalChunks: 2,
+      });
+      const { processor } = makeProcessor();
+      const result = await processor.execute(
+        audioContext('audio.mp3', undefined, language),
+      );
+      expect(chunkedMocks.startJob).toHaveBeenCalledWith(
+        fakeJobStateStorage,
+        '/tmp/audio.mp3',
+        'audio.mp3',
+        expect.any(String),
+        { language, prompt: undefined },
+      );
+      const metadata = { language, officiallySupported: false };
+      expect(
+        result.processedContent?.transcripts?.[0].languageMetadata,
+      ).toEqual(metadata);
+      expect(
+        result.processedContent?.pendingTranscriptions?.[0].languageMetadata,
+      ).toEqual(metadata);
+    },
+  );
+
+  describe('engine selection (azureSpeech)', () => {
+    beforeEach(() => {
+      validationMocks.validateBufferSignature.mockReturnValue({
+        isValid: true,
+        detectedType: 'audio',
+        detectedFormat: 'mp3',
+      });
+      fastMocks.isAvailable.mockReturnValue(true);
+    });
+
+    it('routes a mapped language to Azure Speech with native metadata', async () => {
+      fastMocks.transcribe.mockResolvedValue('qoraal Soomaali ah');
+      const { processor } = makeProcessor();
+      const result = await processor.execute(
+        audioContext('audio.mp3', undefined, 'so', 'azureSpeech'),
+      );
+      expect(fastMocks.transcribe).toHaveBeenCalledWith('/tmp/audio.mp3', {
+        language: 'so',
+      });
+      expect(whisperMocks.transcribe).not.toHaveBeenCalled();
+      expect(result.processedContent?.transcripts?.[0]).toEqual({
+        filename: 'audio.mp3',
+        transcript: 'qoraal Soomaali ah',
+        languageMetadata: {
+          language: 'so',
+          officiallySupported: true,
+          engine: 'azureSpeech',
+        },
+      });
+    });
+
+    it('handles large files without chunking (fast API cap is 500MB)', async () => {
+      fsMocks.stat.mockResolvedValue({ size: 30 * 1024 * 1024 });
+      fastMocks.transcribe.mockResolvedValue('long transcript');
+      const { processor } = makeProcessor();
+      const result = await processor.execute(
+        audioContext('long.mp3', undefined, 'so', 'azureSpeech'),
+      );
+      expect(fastMocks.transcribe).toHaveBeenCalled();
+      expect(chunkedMocks.startJob).not.toHaveBeenCalled();
+      expect(result.processedContent?.transcripts?.[0].transcript).toBe(
+        'long transcript',
+      );
+    });
+
+    it('falls back to Whisper when the language has no Speech locale', async () => {
+      whisperMocks.transcribe.mockResolvedValue('kreyòl transcript');
+      const { processor } = makeProcessor();
+      const result = await processor.execute(
+        audioContext('audio.mp3', undefined, 'ht', 'azureSpeech'),
+      );
+      expect(fastMocks.transcribe).not.toHaveBeenCalled();
+      expect(whisperMocks.transcribe).toHaveBeenCalledWith('/tmp/audio.mp3', {
+        language: 'ht',
+        prompt: undefined,
+      });
+      // Metadata reflects the engine actually used: the Whisper caution stays.
+      expect(
+        result.processedContent?.transcripts?.[0].languageMetadata,
+      ).toEqual({ language: 'ht', officiallySupported: false });
+    });
+
+    it('falls back to Whisper when Azure Speech is not configured', async () => {
+      fastMocks.isAvailable.mockReturnValue(false);
+      whisperMocks.transcribe.mockResolvedValue('fallback transcript');
+      const { processor } = makeProcessor();
+      const result = await processor.execute(
+        audioContext('audio.mp3', undefined, 'so', 'azureSpeech'),
+      );
+      expect(fastMocks.transcribe).not.toHaveBeenCalled();
+      expect(whisperMocks.transcribe).toHaveBeenCalled();
+      expect(
+        result.processedContent?.transcripts?.[0].languageMetadata,
+      ).toEqual({ language: 'so', officiallySupported: false });
+    });
   });
 
   describe('small (≤25MB) video → extract → Whisper', () => {

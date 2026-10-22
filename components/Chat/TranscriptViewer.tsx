@@ -35,11 +35,13 @@ import { MessageTranslationState } from '@/types/translation';
 import AudioPlayer from '@/components/Chat/AudioPlayer';
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 import { TranslationDropdown } from '@/components/Chat/ChatMessages/TranslationDropdown';
+import { TranscriptionLanguageWarning } from '@/components/Chat/TranscriptionLanguageWarning';
 import { CitationStreamdown } from '@/components/Markdown/CitationStreamdown';
 import { StreamdownWithCodeButtons } from '@/components/Markdown/StreamdownWithCodeButtons';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import type { TranscriptionLanguageMetadata } from '@/lib/constants/transcriptionLanguages';
 
 /**
  * Regex to match blob transcript references.
@@ -87,6 +89,7 @@ interface TranscriptViewerProps {
   filename: string;
   transcript: string;
   processedContent?: string;
+  languageMetadata?: TranscriptionLanguageMetadata;
 }
 
 /**
@@ -97,6 +100,7 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
   filename,
   transcript,
   processedContent,
+  languageMetadata,
 }) => {
   const t = useTranslations();
   const { openDocument } = useArtifactStore();
@@ -507,6 +511,7 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
       </div>
 
       {/* Loading message */}
+      <TranscriptionLanguageWarning metadata={languageMetadata} result />
       {loadingMessage && (
         <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 animate-pulse">
           {loadingMessage}

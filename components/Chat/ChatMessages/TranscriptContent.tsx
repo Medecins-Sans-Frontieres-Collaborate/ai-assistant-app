@@ -6,6 +6,10 @@ import { useTranslations } from 'next-intl';
 
 import { TRANSCRIPT_EXPIRY_DAYS } from '@/types/transcription';
 
+import { TranscriptionLanguageWarning } from '@/components/Chat/TranscriptionLanguageWarning';
+
+import type { TranscriptionLanguageMetadata } from '@/lib/constants/transcriptionLanguages';
+
 /**
  * Regex to match blob transcript references.
  * Format: [Transcript: filename | blob:jobId | expires:ISO_TIMESTAMP]
@@ -25,6 +29,7 @@ interface TranscriptContentProps {
   content: string;
   /** Optional className for styling */
   className?: string;
+  languageMetadata?: TranscriptionLanguageMetadata;
 }
 
 interface BlobReference {
@@ -68,6 +73,18 @@ function getDaysUntilExpiry(expiresAt: Date): number {
  * 2. Blob references: Polls API until content loads, with expiration warning
  */
 export function TranscriptContent({
+  languageMetadata,
+  ...props
+}: TranscriptContentProps) {
+  return (
+    <div>
+      <TranscriptionLanguageWarning metadata={languageMetadata} result />
+      <TranscriptContentBody {...props} />
+    </div>
+  );
+}
+
+function TranscriptContentBody({
   content,
   className = '',
 }: TranscriptContentProps) {

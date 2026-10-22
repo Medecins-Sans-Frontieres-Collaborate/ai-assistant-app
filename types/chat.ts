@@ -49,10 +49,12 @@ export interface FileMessageContent {
   type: 'file_url';
   url: string;
   originalFilename?: string;
-  /** ISO-639-1 language code for transcription (e.g., 'en', 'es'). Undefined = auto-detect */
+  /** Whisper language token code (e.g., 'en', 'ht', 'so', 'haw'). Undefined = auto-detect */
   transcriptionLanguage?: string;
   /** Optional context/instructions to improve transcription accuracy */
   transcriptionPrompt?: string;
+  /** Chosen transcription engine. Undefined = whisper. */
+  transcriptionEngine?: import('@/lib/constants/transcriptionLanguages').TranscriptionEngine;
 }
 
 export interface TextMessageContent {
@@ -581,8 +583,9 @@ export interface FilePreview {
   transcriptionJobId?: string;
   transcriptionStatus?: TranscriptionJobStatus;
   // Transcription options (for audio/video files)
-  transcriptionLanguage?: string; // ISO-639-1 code (e.g., 'en', 'es', 'fr'). Undefined = auto-detect
+  transcriptionLanguage?: string; // Whisper token code. Undefined = auto-detect
   transcriptionPrompt?: string; // Optional context/instructions for Whisper
+  transcriptionEngine?: import('@/lib/constants/transcriptionLanguages').TranscriptionEngine; // Undefined = whisper
   // Original video info (when audio was extracted)
   extractedFromVideo?: {
     originalName: string;
@@ -739,6 +742,7 @@ export interface ActiveFile {
     tokenEstimate: number;
     tokenEstimateEncoding?: string;
     processedAt: string; // ISO timestamp
+    languageMetadata?: import('@/lib/constants/transcriptionLanguages').TranscriptionLanguageMetadata;
   };
 
   // Metadata

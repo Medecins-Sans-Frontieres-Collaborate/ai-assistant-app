@@ -52,9 +52,11 @@ const serverEnvSchema = z.object({
   OPENAI_API_VERSION: z.string().default('2025-04-01-preview'),
   OPENAI_EMBEDDING_DEPLOYMENT: z.string().default('text-embedding'),
 
-  // Azure Speech Services (for batch transcription)
+  // Azure Speech Services (for batch and fast transcription)
   AZURE_SPEECH_KEY: z.string().optional(),
   AZURE_SPEECH_REGION: z.string().default('eastus'),
+  // Optional resource endpoint override (defaults to the regional host)
+  AZURE_SPEECH_ENDPOINT: z.string().url().optional(),
 
   // Azure AI Foundry
   AZURE_AI_FOUNDRY_ENDPOINT: z.string().url().optional(),

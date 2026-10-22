@@ -226,9 +226,6 @@ export default function SignInPage() {
                   <p className="text-xs md:text-sm text-gray-300/90 leading-relaxed">
                     {t('auth.accessLimitedText')}
                   </p>
-                  <p className="text-xs md:text-sm text-gray-400/80 mt-3 md:mt-4">
-                    {t('auth.expandAccessSoon')}
-                  </p>
                 </div>
               )}
             </div>

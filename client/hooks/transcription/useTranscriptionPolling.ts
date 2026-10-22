@@ -444,6 +444,11 @@ export function useTranscriptionPolling(): void {
 
       // Handle success case
       if (data.status === 'Succeeded' && data.transcript) {
+        // Persist server metadata even after reconnect, with request metadata
+        // as a fallback for older status endpoints. Never infer Speech Batch support.
+        const languageMetadata =
+          data.languageMetadata ??
+          pendingConversationTranscription.languageMetadata;
         console.log(
           `[useTranscriptionPolling] Conversation transcription completed: ${filename}`,
         );
@@ -490,6 +495,7 @@ export function useTranscriptionPolling(): void {
           messageContent,
           filename,
           jobId, // Pass jobId for reliable message matching
+          languageMetadata,
         );
 
         // Auto-activate transcript as active file
@@ -505,6 +511,7 @@ export function useTranscriptionPolling(): void {
           processedContent: {
             type: 'transcript',
             content: data.transcript,
+            languageMetadata,
             tokenEstimate,
             processedAt: new Date().toISOString(),
           },

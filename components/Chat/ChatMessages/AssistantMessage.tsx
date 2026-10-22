@@ -778,6 +778,7 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                   isBlobTranscriptReference(displayedContent) ? (
                     <TranscriptContent
                       content={displayedContent}
+                      languageMetadata={message?.transcript?.languageMetadata}
                       className="whitespace-pre-wrap"
                     />
                   ) : (

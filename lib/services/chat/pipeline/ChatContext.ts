@@ -3,6 +3,11 @@ import { Session } from 'next-auth';
 import { M365Agent, PromptAgent } from '@/lib/services/agentAccess/types';
 import { ModelSelector } from '@/lib/services/shared';
 
+import type {
+  PendingTranscriptionInfo,
+  TranscriptMetadata,
+} from '@/lib/utils/app/metadata';
+
 import { RequestTelemetry } from '@/lib/types/logging';
 import { ActiveFile, ApprovalResponse, Message } from '@/types/chat';
 import {
@@ -37,19 +42,10 @@ export interface ProcessedContent {
   }[];
 
   /** Transcripts from audio/video files */
-  transcripts?: {
-    filename: string;
-    transcript: string;
-  }[];
+  transcripts?: TranscriptMetadata[];
 
   /** Pending transcription jobs (for files >25MB that use async processing) */
-  pendingTranscriptions?: {
-    filename: string;
-    jobId: string;
-    blobPath?: string; // Only for batch jobs
-    totalChunks?: number; // Only for chunked jobs
-    jobType?: 'chunked' | 'batch';
-  }[];
+  pendingTranscriptions?: PendingTranscriptionInfo[];
 
   /** Validated image URLs (if images present) */
   images?: {

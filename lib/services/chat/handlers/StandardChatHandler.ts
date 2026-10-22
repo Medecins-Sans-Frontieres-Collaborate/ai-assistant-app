@@ -108,6 +108,8 @@ export class StandardChatHandler extends BasePipelineStage {
             ? {
                 filename: context.processedContent.transcripts[0].filename,
                 transcript: context.processedContent.transcripts[0].transcript,
+                languageMetadata:
+                  context.processedContent.transcripts[0].languageMetadata,
                 processedContent: undefined, // Will be filled by LLM response
               }
             : undefined;
@@ -161,6 +163,7 @@ export class StandardChatHandler extends BasePipelineStage {
                       transcript: string;
                       processedContent: undefined;
                       jobId?: string;
+                      languageMetadata?: typeof transcript.languageMetadata;
                     };
                     pendingTranscriptions?: typeof pendingTranscriptions;
                   } = {
@@ -169,6 +172,7 @@ export class StandardChatHandler extends BasePipelineStage {
                       transcript: transcript.transcript,
                       processedContent: undefined, // No LLM processing
                       jobId: pendingJobId, // For reliable message update tracking
+                      languageMetadata: transcript.languageMetadata,
                     },
                   };
                   if (
@@ -239,6 +243,13 @@ export class StandardChatHandler extends BasePipelineStage {
             } else if (fileError?.message.includes('FFmpeg is not available')) {
               errorMessage =
                 "We're currently unable to process video files. You can try uploading an audio file instead.";
+            } else if (
+              fileError?.message.includes('Audio transcription rejected')
+            ) {
+              // The service refused the request (4xx) — the file itself may be
+              // fine, so don't send the user chasing file-format problems.
+              errorMessage =
+                'The transcription service rejected this request. If you selected a recording language, try auto-detect; otherwise try a different file or format.';
             } else {
               // Default generic message for unknown errors
               errorMessage =

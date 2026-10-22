@@ -197,6 +197,7 @@ export const ChatMessage: FC<Props> = ({
             filename={message.transcript.filename}
             transcript={message.transcript.transcript}
             processedContent={message.transcript.processedContent}
+            languageMetadata={message.transcript.languageMetadata}
           />
         </AssistantMessage>
       </div>

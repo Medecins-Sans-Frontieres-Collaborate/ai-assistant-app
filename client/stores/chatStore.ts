@@ -30,7 +30,10 @@ import { isLocalModel } from '@/lib/services/models/localModels';
 
 import { isDecoupledAgentAttachment } from '@/lib/utils/app/agentAttachment';
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
-import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
+import {
+  PendingTranscriptionInfo,
+  TokenUsageMetadata,
+} from '@/lib/utils/app/metadata';
 import { buildConversationContextSections } from '@/lib/utils/app/systemPrompt';
 import { getCompactionBoundary } from '@/lib/utils/shared/chat/conversationCompaction';
 import { findMessageIndexForApprovalId } from '@/lib/utils/shared/chat/findMessageIndexForApprovalId';
@@ -465,13 +468,7 @@ interface ChatStore {
   ) => Promise<{
     finalContent: string;
     threadId?: string;
-    pendingTranscriptions?: {
-      filename: string;
-      jobId: string;
-      blobPath?: string;
-      totalChunks?: number;
-      jobType?: 'chunked' | 'batch';
-    }[];
+    pendingTranscriptions?: PendingTranscriptionInfo[];
     fileCacheUpdates?: Array<{
       fileId: string;
       processedContent: {
@@ -497,13 +494,7 @@ interface ChatStore {
     assistantMessage: Message,
     conversation: Conversation,
     threadId?: string,
-    pendingTranscriptions?: {
-      filename: string;
-      jobId: string;
-      blobPath?: string;
-      totalChunks?: number;
-      jobType?: 'chunked' | 'batch';
-    }[],
+    pendingTranscriptions?: PendingTranscriptionInfo[],
   ) => Promise<void>;
   generateConversationName: (firstUserMessage: Message) => string | null;
   clearStreamingState: () => void;
@@ -593,6 +584,7 @@ interface ChatStore {
     startedAt: number;
     /** Total chunks, if this is a chunked job — used to scale client timeout. */
     totalChunks?: number;
+    languageMetadata?: import('@/lib/constants/transcriptionLanguages').TranscriptionLanguageMetadata;
     progress?: {
       completed: number;
       total: number;
@@ -612,6 +604,7 @@ interface ChatStore {
       filename: string;
       blobPath?: string;
       totalChunks?: number;
+      languageMetadata?: import('@/lib/constants/transcriptionLanguages').TranscriptionLanguageMetadata;
     } | null,
   ) => void;
   updateTranscriptionProgress: (completed: number, total: number) => void;
@@ -917,6 +910,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           messageIndex,
           filename: pending.filename,
           blobPath: pending.blobPath,
+          totalChunks: pending.totalChunks,
+          languageMetadata: pending.languageMetadata,
         });
       }
 
@@ -961,6 +956,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           processedContent: {
             type: 'transcript',
             content: transcript.transcript,
+            languageMetadata: transcript.languageMetadata,
             tokenEstimate,
             processedAt: new Date().toISOString(),
           },
@@ -1572,13 +1568,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   ): Promise<{
     finalContent: string;
     threadId?: string;
-    pendingTranscriptions?: {
-      filename: string;
-      jobId: string;
-      blobPath?: string;
-      totalChunks?: number;
-      jobType?: 'chunked' | 'batch';
-    }[];
+    pendingTranscriptions?: PendingTranscriptionInfo[];
     fileCacheUpdates?: Array<{
       fileId: string;
       processedContent: {
@@ -1800,13 +1790,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     assistantMessage: Message,
     conversation: Conversation,
     threadId?: string,
-    pendingTranscriptions?: {
-      filename: string;
-      jobId: string;
-      blobPath?: string;
-      totalChunks?: number;
-      jobType?: 'chunked' | 'batch';
-    }[],
+    pendingTranscriptions?: PendingTranscriptionInfo[],
   ) => {
     const conversationStore = useConversationStore.getState();
     const { regeneratingIndex } = get();
@@ -2411,6 +2395,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           messageIndex,
           filename: pending.filename,
           blobPath: pending.blobPath,
+          totalChunks: pending.totalChunks,
+          languageMetadata: pending.languageMetadata,
         });
       }
 
@@ -2455,6 +2441,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           processedContent: {
             type: 'transcript',
             content: transcript.transcript,
+            languageMetadata: transcript.languageMetadata,
             tokenEstimate,
             processedAt: new Date().toISOString(),
           },
