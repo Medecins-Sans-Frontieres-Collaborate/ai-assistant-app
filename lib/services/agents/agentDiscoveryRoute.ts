@@ -27,6 +27,7 @@ import {
 import {
   AgentDiscoveryService,
   DiscoveredAgent,
+  DiscoveryPlaneStatus,
 } from '@/lib/services/agents/AgentDiscoveryService';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
@@ -79,6 +80,16 @@ export interface DiscoveryPaths {
 }
 
 /**
+ * Upper bound on user-supplied custom source paths per request. Each path
+ * fans out to an ARM + data-plane listing, and fully failed discoveries are
+ * deliberately never cached — without a cap, a request carrying hundreds of
+ * permanently-403 paths would re-fan out on every call. Matches the browse
+ * tree's MAX_SUBSCRIPTIONS order of magnitude; no legitimate client comes
+ * close (sources are hand-added connections).
+ */
+const MAX_CUSTOM_SOURCE_PATHS = 50;
+
+/**
  * Office-scoped discovery returns three buckets: the regional default, the
  * user's office extras (e.g. MSF USA), and their manually added sources
  * (`?sources=`). Custom entries must match the strict Foundry ARM
@@ -95,12 +106,12 @@ export function resolveDiscoveryPaths(
   const requestedSources = sourcesParam
     ? sourcesParam.split(',').filter(Boolean)
     : [];
-  const customSourcePaths = requestedSources.filter((p) =>
-    isValidFoundryResourcePath(p),
-  );
+  const customSourcePaths = requestedSources
+    .filter((p) => isValidFoundryResourcePath(p))
+    .slice(0, MAX_CUSTOM_SOURCE_PATHS);
   if (customSourcePaths.length !== requestedSources.length) {
     console.warn(
-      `[/api/agents] Dropped ${requestedSources.length - customSourcePaths.length} invalid source path(s)`,
+      `[/api/agents] Dropped ${requestedSources.length - customSourcePaths.length} invalid or over-cap source path(s)`,
     );
   }
   const orderedPaths = [
@@ -371,8 +382,21 @@ interface DiscoveryTokens {
   foundryToken: string | null;
 }
 
+/** One source path's discovery: tagged agents plus per-plane outcomes. */
+interface SourcedDiscovery {
+  path: string;
+  agents: DiscoveredAgent[];
+  controlPlane: DiscoveryPlaneStatus;
+  dataPlane: DiscoveryPlaneStatus;
+}
+
 interface DiscoveryOutcome {
-  results: PromiseSettledResult<DiscoveredAgent[]>[];
+  results: PromiseSettledResult<SourcedDiscovery>[];
+  /**
+   * The Foundry data-plane OBO token could not be acquired: new-model
+   * agents cannot be listed from ANY source this request.
+   */
+  dataPlaneUnavailable: boolean;
 }
 
 /**
@@ -434,17 +458,33 @@ async function startDiscovery(
   const tokens = await acquireDiscoveryTokens(request, cacheOwner);
   if (!tokens) return null;
   const results = await Promise.allSettled(
-    allPaths.map(async (path) => {
-      const agents = await discoveryService.listUserAgents(
+    allPaths.map(async (path): Promise<SourcedDiscovery> => {
+      const discovery = await discoveryService.listUserAgents(
         tokens.armToken,
         path,
         tokens.foundryToken,
         cacheOwner,
       );
-      return agents.map((agent) => ({ ...agent, source: path }));
+      return {
+        path,
+        agents: discovery.agents.map((agent) => ({ ...agent, source: path })),
+        controlPlane: discovery.controlPlane,
+        dataPlane: discovery.dataPlane,
+      };
     }),
   );
-  return { results };
+  return { results, dataPlaneUnavailable: tokens.foundryToken === null };
+}
+
+/**
+ * A source path where NEITHER discovery plane produced a listing — a failed
+ * connection, as opposed to a project that genuinely has no agents. The
+ * connection form must not report these as "connected, 0 agents".
+ */
+export interface FailedSource {
+  path: string;
+  /** HTTP status of the failing plane when known (403, 404, …). */
+  status?: number;
 }
 
 export interface FoundryDiscovery {
@@ -455,6 +495,15 @@ export interface FoundryDiscovery {
    * Distinct from "discovered nothing" so the client can offer a retry.
    */
   unavailable: boolean;
+  /** Sources that failed outright — see {@link FailedSource}. */
+  failedSources: FailedSource[];
+  /**
+   * The Foundry data-plane token could not be acquired (missing consent for
+   * ai.azure.com/user_impersonation, conditional access, …): new-model
+   * agents are missing from every source, so an "empty" result may be a
+   * visibility gap rather than an empty project.
+   */
+  dataPlaneUnavailable: boolean;
 }
 
 /**
@@ -480,32 +529,68 @@ export async function discoverFoundryAgents(
   const run = () =>
     startDiscovery(request, discoveryService, allPaths, cacheOwner);
   const discovery = timing ? await timing.time('discovery', run) : await run();
-  if (!discovery) return { agents: [], unavailable: true };
-  const { results } = discovery;
+  if (!discovery) {
+    return {
+      agents: [],
+      unavailable: true,
+      failedSources: [],
+      dataPlaneUnavailable: true,
+    };
+  }
+  const { results, dataPlaneUnavailable } = discovery;
 
-  // Collect all successful results, skip failures silently
+  // Collect successful results; report failed sources instead of silently
+  // skipping them — a swallowed 403 used to be indistinguishable from an
+  // empty project, so users "successfully" connected sources that had
+  // actually refused them.
   const allAgents: DiscoveredAgent[] = [];
   const seenAgentNames = new Set<string>();
+  const failedSources: FailedSource[] = [];
 
-  for (const result of results) {
-    if (result.status === 'fulfilled') {
-      for (const agent of result.value) {
-        // Guard against rare cases where the same source path is requested twice
-        // through aliasing (e.g. same project added as both office + custom).
-        // Within a single project, ARM already returns each agent once.
-        const key = `${agent.source ?? 'default'}:${agent.agentName}`;
-        if (!seenAgentNames.has(key)) {
-          seenAgentNames.add(key);
-          allAgents.push(agent);
-        }
-      }
-    } else {
+  results.forEach((result, index) => {
+    if (result.status === 'rejected') {
+      // allSettled preserves input order, so the index maps the rejection
+      // back to its path (invalid path, unexpected error).
+      failedSources.push({ path: allPaths[index] });
       console.warn(
         '[/api/agents] Failed to discover from source:',
+        allPaths[index],
         result.reason,
       );
+      return;
     }
-  }
+
+    const { path, agents, controlPlane, dataPlane } = result.value;
+    const anyPlaneOk =
+      controlPlane.status === 'ok' || dataPlane.status === 'ok';
+    if (!anyPlaneOk) {
+      // Neither plane answered: a FAILED source, not an empty one. Surface
+      // the control-plane status first (it is always attempted); fall back
+      // to the data plane's when the control plane carried none.
+      const controlPlaneStatus =
+        controlPlane.status === 'error' ? controlPlane.httpStatus : undefined;
+      const dataPlaneStatus =
+        dataPlane.status === 'error' ? dataPlane.httpStatus : undefined;
+      const status = controlPlaneStatus ?? dataPlaneStatus;
+      failedSources.push({ path, ...(status !== undefined && { status }) });
+      console.warn(
+        `[/api/agents] Source failed on both planes (status=${status ?? 'unknown'}):`,
+        path,
+      );
+      return;
+    }
+
+    for (const agent of agents) {
+      // Guard against rare cases where the same source path is requested twice
+      // through aliasing (e.g. same project added as both office + custom).
+      // Within a single project, ARM already returns each agent once.
+      const key = `${agent.source ?? 'default'}:${agent.agentName}`;
+      if (!seenAgentNames.has(key)) {
+        seenAgentNames.add(key);
+        allAgents.push(agent);
+      }
+    }
+  });
 
   // App-layer access filter (docs/AGENT_ACCESS_CONTROL.md). Drops agents
   // the user fails evaluateAccess for — UX-level only; the invocation
@@ -588,5 +673,10 @@ export async function discoverFoundryAgents(
     }
   }
 
-  return { agents: visibleAgents, unavailable: false };
+  return {
+    agents: visibleAgents,
+    unavailable: false,
+    failedSources,
+    dataPlaneUnavailable,
+  };
 }
