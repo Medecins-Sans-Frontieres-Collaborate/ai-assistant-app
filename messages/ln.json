@@ -452,7 +452,9 @@
     "deselectAll": "Bolongola pona nyonso",
     "agentsSelectedCount": "{selected} na {total} ba agents baponami",
     "autoAddLabel": "Kobetela ba agents sika na ndenge ya automatisé",
-    "autoAddDescription": "Ba agents oyo bakosakana projet oyo nsima bakomema automatik. Ba agents oyo oponi te bakotikala libanda."
+    "autoAddDescription": "Ba agents oyo bakosakana projet oyo nsima bakomema automatik. Ba agents oyo oponi te bakotikala libanda.",
+    "connectionDataPlaneUnavailable": "Ebungi, kasi bokonzi ya agent ekoki te kosolola na compte na yo, yango esalaka ete ba-agent sika ekoki te kolongwa. Kokanga motema ete ozali na Azure AI User role na projet oyo, sima yango bembe lisusu.",
+    "projectRequired": "Tika kombo ya projet"
   },
   "Quick Actions": "Misala ya noki",
   "Type / in chat to access your prompts": "Koma / na chat mpo kozwa prompts na yo",

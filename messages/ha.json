@@ -452,7 +452,9 @@
     "deselectAll": "Cire zaɓi duka",
     "agentsSelectedCount": "An zaɓi {selected} daga cikin {total} wakilai",
     "autoAddLabel": "Ƙara sababbin wakilai ta atomatik",
-    "autoAddDescription": "Wakilai da za a wallafa zuwa wannan aiki daga baya za su bayyana ta atomatik. Wakilan da ba a duba ba za su ci gaba da kasancewa a waje."
+    "autoAddDescription": "Wakilai da za a wallafa zuwa wannan aiki daga baya za su bayyana ta atomatik. Wakilan da ba a duba ba za su ci gaba da kasancewa a waje.",
+    "connectionDataPlaneUnavailable": "An haɗa, amma ba za a iya tambayar sabis ɗin wakili da asusunka ba, saboda haka wasu sabbin wakilai ba su bayyana ba. Tabbatar kana da rawar Azure AI User a cikin wannan aikin, sannan ka sake gwadawa.",
+    "projectRequired": "Shigar da sunan aikin"
   },
   "Quick Actions": "Ayyuka Masu Sauri",
   "Type / in chat to access your prompts": "Rubuta / a cikin tattaunawa don samun damar kwatance naka",

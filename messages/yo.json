@@ -452,7 +452,9 @@
     "deselectAll": "Yọ gbogbo yànkànkan",
     "agentsSelectedCount": "{selected} nínú {total} agent ni a yàn",
     "autoAddLabel": "Ìfi agent tuntun sílẹ̀ laifọwọ́si",
-    "autoAddDescription": "Àwọn agent tuntun tí a gbe sórí iṣẹ́ agbese yìí yóò farahàn laifọwọ́si. Àwọn agent tí a kò yàn ṣì máa kúrò."
+    "autoAddDescription": "Àwọn agent tuntun tí a gbe sórí iṣẹ́ agbese yìí yóò farahàn laifọwọ́si. Àwọn agent tí a kò yàn ṣì máa kúrò.",
+    "connectionDataPlaneUnavailable": "Ti sopọ, ṣugbọn a ko le beere iṣẹ aṣoju pẹlu àkọọlẹ rẹ, nítorí náà awọn aṣoju tuntun le ma hàn. Ṣayẹwo pé o ní ipa Azure AI User lori iṣẹ́ akanṣe yìí, léyìn náà gbìyànjú lẹẹkansi.",
+    "projectRequired": "Tẹ orukọ iṣẹ́ akanṣe"
   },
   "Quick Actions": "Àwọn Ìṣe Kíákíá",
   "Type / in chat to access your prompts": "Tẹ / nínú ìfọ̀rọ̀wérọ̀ láti wọlé sí àwọn ìtọ́sọ́nà rẹ",

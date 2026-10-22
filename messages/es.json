@@ -447,7 +447,9 @@
     "deselectAll": "Deseleccionar todo",
     "agentsSelectedCount": "{selected} de {total} agentes seleccionados",
     "autoAddLabel": "Agregar nuevos agentes automáticamente",
-    "autoAddDescription": "Los agentes publicados a este proyecto posteriormente aparecerán automáticamente. Los agentes no seleccionados permanecerán excluidos."
+    "autoAddDescription": "Los agentes publicados a este proyecto posteriormente aparecerán automáticamente. Los agentes no seleccionados permanecerán excluidos.",
+    "connectionDataPlaneUnavailable": "Conectado, pero no se pudo consultar el servicio del agente con su cuenta, por lo que es posible que no se muestren agentes más recientes. Verifique que tenga el rol Azure AI User en este proyecto y luego intente de nuevo.",
+    "projectRequired": "Ingrese el nombre del proyecto"
   },
   "Quick Actions": "Acciones rápidas",
   "Type / in chat to access your prompts": "Escribe / en el chat para acceder a tus instrucciones",

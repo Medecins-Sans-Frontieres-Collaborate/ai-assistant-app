@@ -447,7 +447,9 @@
     "deselectAll": "Bỏ chọn tất cả",
     "agentsSelectedCount": "Đã chọn {selected} trên tổng {total} agent",
     "autoAddLabel": "Tự động thêm agent mới",
-    "autoAddDescription": "Các agent được xuất bản sau vào dự án này sẽ tự động xuất hiện. Các agent không được chọn sẽ tiếp tục bị loại trừ."
+    "autoAddDescription": "Các agent được xuất bản sau vào dự án này sẽ tự động xuất hiện. Các agent không được chọn sẽ tiếp tục bị loại trừ.",
+    "connectionDataPlaneUnavailable": "Đã kết nối, nhưng không thể truy vấn dịch vụ agent bằng tài khoản của bạn, nên các agent mới có thể không được liệt kê. Hãy kiểm tra rằng bạn có vai trò Azure AI User trên dự án này, sau đó thử lại.",
+    "projectRequired": "Nhập tên dự án"
   },
   "Quick Actions": "Thao tác nhanh",
   "Type / in chat to access your prompts": "Gõ / trong trò chuyện để truy cập lời nhắc của bạn",

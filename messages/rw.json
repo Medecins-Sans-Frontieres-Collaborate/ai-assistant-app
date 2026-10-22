@@ -452,7 +452,9 @@
     "deselectAll": "Kureka byose",
     "agentsSelectedCount": "{selected} muri {total} agents byatoranyijwe",
     "autoAddLabel": "Kongeraho agents nshya mu buryo bwikora",
-    "autoAddDescription": "Agents zizasohorwa muri uyu mushinga nyuma zizahita zigaragara. Agents zitanzwe ntizizongerwa."
+    "autoAddDescription": "Agents zizasohorwa muri uyu mushinga nyuma zizahita zigaragara. Agents zitanzwe ntizizongerwa.",
+    "connectionDataPlaneUnavailable": "Murakabonye, ariko serivisi y'umukozi ntishoboye kubazwa ukoresheje konti yawe, bityo abakozi bashya bashobora kutagaragara. Reba ko ufite uruhushya rwa Azure AI User kuri uyu mushinga, hanyuma ugerageze kongera.",
+    "projectRequired": "Injiza izina ry'umushinga"
   },
   "Quick Actions": "Ibikorwa Byihuse",
   "Type / in chat to access your prompts": "Andika / mu kiganiro kugira ngo ugere ku mabwiriza yawe",

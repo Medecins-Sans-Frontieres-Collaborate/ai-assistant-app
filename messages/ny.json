@@ -452,7 +452,9 @@
     "deselectAll": "Chotsani zosankhidwa zonse",
     "agentsSelectedCount": "{selected} mwa {total} agents wasankhidwa",
     "autoAddLabel": "Ikani ma agents atsopano basi",
-    "autoAddDescription": "Ma agent omwe adzawonjezedwa ku polojekiti iyi mtsogolo adzaonekera basi. Ma agent omwe sanasankhidwe adzakhalabe osaphatikizidwa."
+    "autoAddDescription": "Ma agent omwe adzawonjezedwa ku polojekiti iyi mtsogolo adzaonekera basi. Ma agent omwe sanasankhidwe adzakhalabe osaphatikizidwa.",
+    "connectionDataPlaneUnavailable": "Yalumikizidwa, koma sitinathe kufunsa ntchito ya agent ndi akaunti yanu, choncho ma agent atsopano sangawonetsedwe. Onetsetsani kuti muli ndi udindo wa Azure AI User pa projekiti iyi, kenako yesaninso.",
+    "projectRequired": "Lowetsani dzina la projekiti"
   },
   "Quick Actions": "Zochitika Mwachangu",
   "Type / in chat to access your prompts": "Lembani / mu kucheza kuti mupeze malamulo anu",

@@ -446,7 +446,9 @@
     "deselectAll": "Deselectează tot",
     "agentsSelectedCount": "{selected} din {total} agenți selectați",
     "autoAddLabel": "Adaugă automat agenții noi",
-    "autoAddDescription": "Agenții publicați ulterior în acest proiect vor apărea automat. Agenții debifați rămân excluși."
+    "autoAddDescription": "Agenții publicați ulterior în acest proiect vor apărea automat. Agenții debifați rămân excluși.",
+    "connectionDataPlaneUnavailable": "Conectat, dar serviciul agentului nu a putut fi interogat cu contul dvs., astfel că agenții mai noi s-ar putea să nu fie afișați. Verificați dacă aveți rolul Azure AI User pe acest proiect, apoi încercați din nou.",
+    "projectRequired": "Introduceți numele proiectului"
   },
   "Quick Actions": "Acțiuni rapide",
   "Type / in chat to access your prompts": "Tastați / în chat pentru a accesa solicitările",

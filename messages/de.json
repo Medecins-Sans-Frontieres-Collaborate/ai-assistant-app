@@ -448,7 +448,9 @@
     "deselectAll": "Alle abwählen",
     "agentsSelectedCount": "{selected} von {total} Agenten ausgewählt",
     "autoAddLabel": "Neue Agenten automatisch hinzufügen",
-    "autoAddDescription": "Später veröffentlichte Agenten werden automatisch hinzugefügt. Nicht ausgewählte Agenten bleiben ausgeschlossen."
+    "autoAddDescription": "Später veröffentlichte Agenten werden automatisch hinzugefügt. Nicht ausgewählte Agenten bleiben ausgeschlossen.",
+    "connectionDataPlaneUnavailable": "Verbunden, aber der Agent-Dienst konnte mit Ihrem Konto nicht abgefragt werden, daher werden möglicherweise neuere Agents nicht angezeigt. Stellen Sie sicher, dass Sie die Rolle \"Azure AI User\" für dieses Projekt haben, und versuchen Sie es erneut.",
+    "projectRequired": "Geben Sie den Projektnamen ein"
   },
   "Quick Actions": "Schnellaktionen",
   "Type / in chat to access your prompts": "Geben Sie / im Chat ein, um auf Ihre Eingabeaufforderungen zuzugreifen",

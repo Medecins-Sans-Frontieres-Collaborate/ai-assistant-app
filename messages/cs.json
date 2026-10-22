@@ -448,7 +448,9 @@
     "deselectAll": "Odznačit vše",
     "agentsSelectedCount": "Vybráno {selected} z {total} agentů",
     "autoAddLabel": "Automaticky přidávat nové agenty",
-    "autoAddDescription": "Agentí později publikovaní do tohoto projektu se zobrazí automaticky. Nezaškrtnutí agenti zůstanou vyloučeni."
+    "autoAddDescription": "Agentí později publikovaní do tohoto projektu se zobrazí automaticky. Nezaškrtnutí agenti zůstanou vyloučeni.",
+    "connectionDataPlaneUnavailable": "Připojeno, ale službu agenta nelze s vaším účtem dotazovat, proto nemusí být zobrazeni novější agenti. Zkontrolujte, zda máte v tomto projektu roli Azure AI User, a poté to zkuste znovu.",
+    "projectRequired": "Zadejte název projektu"
   },
   "Quick Actions": "Rychlé akce",
   "Type / in chat to access your prompts": "Napište / v chatu pro přístup k vašim výzvám",

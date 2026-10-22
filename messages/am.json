@@ -444,7 +444,9 @@
     "deselectAll": "ሁሉንም ያትሉ",
     "agentsSelectedCount": "{selected} ከ {total} ወኪሎች ተመርጠዋል",
     "autoAddLabel": "አዲስ ወኪሎችን በራስአደው አክል",
-    "autoAddDescription": "ለዚህ ፕሮጀክት በኋላ የታተመ ወኪል ራሱ ይታያል። ያልተመረጡት ወኪሎች ውጭ ይቆያሉ።"
+    "autoAddDescription": "ለዚህ ፕሮጀክት በኋላ የታተመ ወኪል ራሱ ይታያል። ያልተመረጡት ወኪሎች ውጭ ይቆያሉ።",
+    "connectionDataPlaneUnavailable": "ተገናኝቷል፣ ግን የኤጀንት አገልግሎቱን በመለያዎ ማጥናት አልተቻለም፤ ስለዚህ አዳዲስ ኤጀንቶች ላይ ማየት እንደማይቻል ይችላል። በዚህ ፕሮጀክት ላይ Azure AI User ሚና እንዳለዎት ያረጋግጡ፣ ከዚያም ደግመው ይሞክሩ።",
+    "projectRequired": "የፕሮጀክት ስም ያስገቡ"
   },
   "Quick Actions": "ፈጣን ድርጊቶች",
   "Type / in chat to access your prompts": "ጥያቄዎችዎን ለማግኘት በውይይት ውስጥ / ይተይቡ",

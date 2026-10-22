@@ -452,7 +452,9 @@
     "deselectAll": "Kêmba îtîso",
     "agentsSelectedCount": "{selected} kêtî na {total} kêtî séléksionî",
     "autoAddLabel": "Gbêtî nga kêtî fâ",
-    "autoAddDescription": "Kêtî ké hû na projet o na mûtu ayeke hû fâ-fâ. Kêtî ayeke tena yângâ, ayeke yêmbeni."
+    "autoAddDescription": "Kêtî ké hû na projet o na mûtu ayeke hû fâ-fâ. Kêtî ayeke tena yângâ, ayeke yêmbeni.",
+    "connectionDataPlaneUnavailable": "Héngbû tî na, kodê azenda agent ayeke kûan sô tî, mo azenda bé tîla na ôko sô na akoundji mo na, azenda apese bûzu ayeke bé tî kûan. Vérifî na sô mo yeke rôl Azure AI User na projekti, na mîngâ lê na.",
+    "projectRequired": "Kôdi na projekti"
   },
   "Quick Actions": "Sâra na hïngângö",
   "Type / in chat to access your prompts": "Sü / na polëngö tî gä na âtene tî mo",

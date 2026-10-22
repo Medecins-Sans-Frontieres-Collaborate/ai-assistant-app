@@ -448,7 +448,9 @@
     "deselectAll": "전체 선택 해제",
     "agentsSelectedCount": "{total}개 중 {selected}개 에이전트 선택됨",
     "autoAddLabel": "새 에이전트 자동 추가",
-    "autoAddDescription": "이후 이 프로젝트에 게시된 에이전트가 자동으로 표시됩니다. 선택 해제된 에이전트는 계속 제외됩니다."
+    "autoAddDescription": "이후 이 프로젝트에 게시된 에이전트가 자동으로 표시됩니다. 선택 해제된 에이전트는 계속 제외됩니다.",
+    "connectionDataPlaneUnavailable": "연결되어 있지만 에이전트 서비스를 계정으로 조회할 수 없어 최신 에이전트가 표시되지 않을 수 있습니다. 해당 프로젝트에서 Azure AI User 역할이 있는지 확인한 후 다시 시도하세요.",
+    "projectRequired": "프로젝트 이름을 입력하세요."
   },
   "Quick Actions": "빠른 작업",
   "Type / in chat to access your prompts": "채팅에서 /를 입력하여 프롬프트에 액세스하세요",

@@ -448,7 +448,9 @@
     "deselectAll": "Seçimi kaldır",
     "agentsSelectedCount": "{selected} / {total} ajan seçildi",
     "autoAddLabel": "Yeni ajanları otomatik ekle",
-    "autoAddDescription": "Daha sonra bu projeye eklenen ajanlar otomatik olarak görünecek. İşareti kaldırılmış ajanlar hariç tutulmaya devam eder."
+    "autoAddDescription": "Daha sonra bu projeye eklenen ajanlar otomatik olarak görünecek. İşareti kaldırılmış ajanlar hariç tutulmaya devam eder.",
+    "connectionDataPlaneUnavailable": "Bağlandı, ancak hesap bilgilerinizle agent servisi sorgulanamadı; bu nedenle yeni agent'lar listelenemeyebilir. Bu projede Azure AI Kullanıcısı rolüne sahip olduğunuzdan emin olup tekrar deneyin.",
+    "projectRequired": "Proje adını girin"
   },
   "Quick Actions": "Hızlı İşlemler",
   "Type / in chat to access your prompts": "İstemlerinize erişmek için sohbette / yazın",
