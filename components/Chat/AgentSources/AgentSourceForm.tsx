@@ -37,7 +37,11 @@ function parseResourcePath(path: string) {
     subscriptionId: match[1],
     resourceGroup: match[2],
     accountName: match[3],
-    projectName: match[4] || 'default',
+    // No 'default' fallback: Foundry default projects carry real names
+    // (e.g. "myacct-proj-default"), so guessing "default" built paths to
+    // projects that don't exist. A legacy account-only path leaves the
+    // field empty and the user must pick the project explicitly.
+    projectName: match[4] || '',
   };
 }
 
@@ -64,11 +68,18 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     name?: string;
     subscription?: string;
     account?: string;
+    project?: string;
   }>({});
   const [isValidating, setIsValidating] = useState(false);
   const [validationResult, setValidationResult] = useState<{
     valid: boolean;
     agentCount: number;
+    /**
+     * Discovery could not query the Foundry data plane with the user's
+     * account, so new-model agents may be missing — a zero count is then a
+     * visibility gap, not proof the project is empty.
+     */
+    dataPlaneUnavailable: boolean;
   } | null>(null);
 
   const existing = existingSource
@@ -105,9 +116,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     existing?.resourceGroup || '',
   );
   const [accountName, setAccountName] = useState(existing?.accountName || '');
-  const [projectName, setProjectName] = useState(
-    existing?.projectName || 'default',
-  );
+  const [projectName, setProjectName] = useState(existing?.projectName || '');
 
   useEffect(() => {
     setMounted(true);
@@ -144,13 +153,14 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
       setSubscriptionId(sel.subscriptionId);
       setResourceGroup(sel.resourceGroup);
       setAccountName(sel.accountName);
-      setProjectName(sel.projectName || 'default');
+      setProjectName(sel.projectName);
       setValidationResult(null);
       setError('');
       setFieldErrors((prev) => ({
         ...prev,
         subscription: undefined,
         account: undefined,
+        project: undefined,
       }));
       if (!nameEdited) {
         setName(
@@ -169,7 +179,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
       : null;
 
   const buildPath = () =>
-    `/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.CognitiveServices/accounts/${accountName}/projects/${projectName || 'default'}`;
+    `/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.CognitiveServices/accounts/${accountName}/projects/${projectName}`;
 
   const validateSource = async (
     path: string,
@@ -196,6 +206,16 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
         setError(t('connectionFailed'));
         return null;
       }
+      // A source listed in `failedSources` was refused (403, wrong project
+      // name, preview API not available, …) — a FAILED connection, never to
+      // be confused with a project that genuinely has no agents.
+      const failed = (
+        (data.failedSources ?? []) as { path: string; status?: number }[]
+      ).some((f) => f.path === path);
+      if (failed) {
+        setError(t('connectionFailed'));
+        return null;
+      }
       // The route merges every discovery bucket (regional/office paths too)
       // into one array; only entries tagged with the validated path belong
       // to THIS connection — without this filter they'd inflate agentCount
@@ -203,7 +223,11 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
       const agents: DiscoveredAgent[] = (
         (data.agents ?? []) as DiscoveredAgent[]
       ).filter((a) => a.source === path);
-      setValidationResult({ valid: true, agentCount: agents.length });
+      setValidationResult({
+        valid: true,
+        agentCount: agents.length,
+        dataPlaneUnavailable: data.dataPlaneUnavailable === true,
+      });
       return agents;
     } catch {
       setError(t('connectionFailed'));
@@ -223,6 +247,9 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     if (inputMode === 'manual') {
       if (!subscriptionId) errors.subscription = t('subscriptionRequired');
       if (!accountName) errors.account = t('accountRequired');
+      // Explicitly required: Foundry default projects carry real names, so
+      // a guessed "default" silently targeted a project that doesn't exist.
+      if (!projectName.trim()) errors.project = t('projectRequired');
     }
 
     if (Object.keys(errors).length > 0) {
@@ -233,7 +260,10 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
 
     // In browse mode the tree picker fills all four fields at once, so a
     // missing selection gets one clear banner instead of per-field errors.
-    if (inputMode === 'browse' && (!subscriptionId || !accountName)) {
+    if (
+      inputMode === 'browse' &&
+      (!subscriptionId || !accountName || !projectName)
+    ) {
       setError(t('projectSelectionRequired'));
       return;
     }
@@ -364,18 +394,33 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
           </div>
         )}
 
-        {/* Validation success */}
+        {/* Validation result. The data-plane warning stacks with (rather
+            than replaces) a positive count: new-model agents are invisible
+            either way, so "Connected — 3 agents" alone would overstate what
+            was verified. Only the bare "connected but empty" success is
+            replaced — with no data plane, an empty project is unproven. */}
         {validationResult?.valid && (
-          <div className="mb-4 flex items-start gap-2 rounded-lg bg-green-50 dark:bg-green-900/20 p-3 text-sm text-green-700 dark:text-green-400">
-            <IconCheck size={16} className="shrink-0 mt-0.5" />
-            <span>
-              {validationResult.agentCount > 0
-                ? t('connectionSuccessAgents', {
-                    count: validationResult.agentCount,
-                  })
-                : t('connectionSuccessEmpty')}
-            </span>
-          </div>
+          <>
+            {(validationResult.agentCount > 0 ||
+              !validationResult.dataPlaneUnavailable) && (
+              <div className="mb-4 flex items-start gap-2 rounded-lg bg-green-50 dark:bg-green-900/20 p-3 text-sm text-green-700 dark:text-green-400">
+                <IconCheck size={16} className="shrink-0 mt-0.5" />
+                <span>
+                  {validationResult.agentCount > 0
+                    ? t('connectionSuccessAgents', {
+                        count: validationResult.agentCount,
+                      })
+                    : t('connectionSuccessEmpty')}
+                </span>
+              </div>
+            )}
+            {validationResult.dataPlaneUnavailable && (
+              <div className="mb-4 flex items-start gap-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 p-3 text-sm text-amber-700 dark:text-amber-400">
+                <IconAlertCircle size={16} className="shrink-0 mt-0.5" />
+                <span>{t('connectionDataPlaneUnavailable')}</span>
+              </div>
+            )}
+          </>
         )}
 
         {step === 1 ? (
@@ -488,7 +533,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                   </div>
                   <div>
                     <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
-                      {t('projectNameLabel')}
+                      {t('projectNameLabel')} {requiredMark}
                     </label>
                     <input
                       type="text"
@@ -497,14 +542,19 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                         const proj = e.target.value.trim();
                         setProjectName(proj);
                         setValidationResult(null);
+                        setFieldErrors((prev) => ({
+                          ...prev,
+                          project: undefined,
+                        }));
                         if (!nameEdited && proj && proj !== 'default') {
                           setName(proj);
                         }
                       }}
-                      placeholder="default"
-                      className={selectClass}
+                      placeholder="my-project"
+                      className={`${selectBase} ${fieldBorder(fieldErrors.project)}`}
                       spellCheck={false}
                     />
+                    {fieldErrorText(fieldErrors.project)}
                   </div>
                 </div>
               </div>
