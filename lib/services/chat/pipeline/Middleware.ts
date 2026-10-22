@@ -988,17 +988,24 @@ const resolveCredentialContext = async (
 
     // Cache miss path — likely a server restart, or first chat with an agent
     // discovered on another instance. Discover JUST the one source path the
-    // client supplied (RBAC enforced by ARM via the user's OBO token). On
-    // success we populate cache + retry the lookup; on failure we fall
-    // through to the regional default.
+    // client supplied (RBAC enforced by both OBO tokens). The Foundry token
+    // is required alongside ARM: new-model agents only exist on the data
+    // plane, so an ARM-only re-discovery could never re-anchor their
+    // endpoints after a restart. On success we populate cache + retry the
+    // lookup; on failure we fall through to the regional default.
     if (!resolvedEndpoint && userMail && agentName && sourcePath) {
       try {
         if (appAccessToken) {
-          const armToken =
-            await UserTokenProvider.getInstance().getArmToken(appAccessToken);
-          const agents = await discoveryService.listUserAgents(
+          const tokenProvider = UserTokenProvider.getInstance();
+          const [armToken, discoveryFoundryToken] = await Promise.all([
+            tokenProvider.getArmToken(appAccessToken),
+            tokenProvider.getFoundryToken(appAccessToken).catch(() => null),
+          ]);
+          const { agents } = await discoveryService.listUserAgents(
             armToken,
             sourcePath,
+            discoveryFoundryToken,
+            userMail,
           );
           for (const agent of agents) {
             discoveryService.cacheUserAgentEndpoint(
