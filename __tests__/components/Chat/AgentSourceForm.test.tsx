@@ -26,9 +26,16 @@ interface TreeFixture {
  * Mirrors the real /api/agents/foundry route: agents discovered from the requested
  * `sources` path are tagged with that path via `source` (the form filters on
  * it). Fixtures may carry an explicit `source` to simulate entries from other
- * buckets (regional paths, prompt agents).
+ * buckets (regional paths, prompt agents). `sourceFails` marks the requested
+ * path as failed (both planes refused); `dataPlaneUnavailable` mirrors the
+ * route's missing-Foundry-token flag.
  */
-function stubTreeFetch(routes: { tree?: TreeFixture; agents?: unknown[] }) {
+function stubTreeFetch(routes: {
+  tree?: TreeFixture;
+  agents?: unknown[];
+  sourceFails?: { status?: number };
+  dataPlaneUnavailable?: boolean;
+}) {
   const fn = vi.fn((url: string) => {
     let body: Record<string, unknown> = {};
     if (url.includes('level=tree')) {
@@ -47,6 +54,10 @@ function stubTreeFetch(routes: { tree?: TreeFixture; agents?: unknown[] }) {
             ? { ...a, source: requestedSource }
             : a,
         ),
+        failedSources: routes.sourceFails
+          ? [{ path: requestedSource, ...routes.sourceFails }]
+          : [],
+        dataPlaneUnavailable: routes.dataPlaneUnavailable === true,
       };
     }
     return Promise.resolve({
@@ -373,10 +384,123 @@ describe('AgentSourceForm', () => {
     fireEvent.change(screen.getByPlaceholderText('my-foundry-account'), {
       target: { value: 'acct-9' },
     });
+    fireEvent.change(screen.getByPlaceholderText('my-project'), {
+      target: { value: 'proj-9' },
+    });
     fireEvent.click(screen.getByRole('button', { name: 'next' }));
 
     // The step-2 agent picker is not flag-gated.
     await screen.findByText('autoAddLabel');
     expect(screen.getByRole('checkbox', { name: /Agent A/ })).toBeChecked();
+  });
+
+  it('requires an explicit project name in manual mode (no "default" guess)', async () => {
+    // Foundry default projects carry real names ("acct-proj-default"), so
+    // the old literal-'default' fallback built paths to projects that don't
+    // exist — and the failure then masqueraded as "connected, 0 agents".
+    mockFlags.agentSourceBrowse = false;
+    const fetchFn = stubTreeFetch({ agents: AGENTS });
+    const onSave = vi.fn();
+
+    render(<AgentSourceForm onSave={onSave} onClose={vi.fn()} />);
+
+    fireEvent.change(
+      await screen.findByPlaceholderText(
+        'e49ac66c-c18d-4586-b132-8f201de8f2c2',
+      ),
+      { target: { value: 'sub-9' } },
+    );
+    fireEvent.change(screen.getByPlaceholderText('rg-my-foundry'), {
+      target: { value: 'rg-9' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('my-foundry-account'), {
+      target: { value: 'acct-9' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('namePlaceholder'), {
+      target: { value: 'My Source' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'next' }));
+
+    expect(await screen.findByText('projectRequired')).toBeInTheDocument();
+    expect(fetchFn).not.toHaveBeenCalledWith(
+      expect.stringContaining('/api/agents/foundry'),
+    );
+    expect(onSave).not.toHaveBeenCalled();
+  });
+
+  it('treats a failed source as a connection error, never an empty success', async () => {
+    // A 403/404 on the validated path used to be swallowed server-side and
+    // reported as "connected, 0 agents" — indistinguishable from an empty
+    // project. The route now reports it in `failedSources`.
+    stubTreeFetch({
+      tree: TWO_PROJECT_TREE,
+      agents: [],
+      sourceFails: { status: 403 },
+    });
+    const onSave = vi.fn();
+
+    render(<AgentSourceForm onSave={onSave} onClose={vi.fn()} />);
+
+    fireEvent.change(await screen.findByPlaceholderText('namePlaceholder'), {
+      target: { value: 'My Source' },
+    });
+    const row = await screen.findByRole('radio', { name: /acct-1 \/ proj-1/ });
+    fireEvent.click(row);
+    fireEvent.click(screen.getByRole('button', { name: 'next' }));
+
+    expect(await screen.findByText('connectionFailed')).toBeInTheDocument();
+    // Never advances to step 2 on a failed connection.
+    expect(screen.queryByText('autoAddLabel')).not.toBeInTheDocument();
+    expect(onSave).not.toHaveBeenCalled();
+  });
+
+  it('warns instead of reporting success when zero agents coincide with a missing data plane', async () => {
+    stubTreeFetch({
+      tree: TWO_PROJECT_TREE,
+      agents: [],
+      dataPlaneUnavailable: true,
+    });
+
+    render(<AgentSourceForm onSave={vi.fn()} onClose={vi.fn()} />);
+
+    fireEvent.change(await screen.findByPlaceholderText('namePlaceholder'), {
+      target: { value: 'My Source' },
+    });
+    const row = await screen.findByRole('radio', { name: /acct-1 \/ proj-1/ });
+    fireEvent.click(row);
+    fireEvent.click(screen.getByRole('button', { name: 'next' }));
+
+    expect(
+      await screen.findByText('connectionDataPlaneUnavailable'),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText('connectionSuccessEmpty'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('stacks the data-plane warning with a positive agent count', async () => {
+    // ARM found agents but the data plane was unreachable: the count alone
+    // would overstate what was verified (new-model agents are invisible).
+    stubTreeFetch({
+      tree: TWO_PROJECT_TREE,
+      agents: AGENTS,
+      dataPlaneUnavailable: true,
+    });
+
+    render(<AgentSourceForm onSave={vi.fn()} onClose={vi.fn()} />);
+
+    fireEvent.change(await screen.findByPlaceholderText('namePlaceholder'), {
+      target: { value: 'My Source' },
+    });
+    const row = await screen.findByRole('radio', { name: /acct-1 \/ proj-1/ });
+    fireEvent.click(row);
+    fireEvent.click(screen.getByRole('button', { name: 'next' }));
+
+    expect(
+      await screen.findByText('connectionSuccessAgents', { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('connectionDataPlaneUnavailable'),
+    ).toBeInTheDocument();
   });
 });
