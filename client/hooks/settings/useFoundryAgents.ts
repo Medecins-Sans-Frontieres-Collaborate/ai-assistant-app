@@ -21,6 +21,10 @@ interface FoundryDiscoveryResponse {
   officePaths: string[];
   /** Nothing could be discovered for this user (OBO failed, …) — retryable. */
   unavailable?: boolean;
+  /** Sources where no discovery plane answered — failed, not empty. */
+  failedSources?: { path: string; status?: number }[];
+  /** Foundry data-plane token unavailable: new-model agents not listed. */
+  dataPlaneUnavailable?: boolean;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -214,6 +218,10 @@ export function useFoundryAgents() {
     suppressedOrgAgentIds: appQuery.data?.suppressedOrgAgentIds ?? [],
     regionalPath: foundryQuery.data?.regionalPath ?? null,
     officePaths: foundryQuery.data?.officePaths ?? [],
+    /** Source paths discovery could not list at all (per-source failures). */
+    failedSources: foundryQuery.data?.failedSources ?? [],
+    /** New-model agents could not be listed this session (no data-plane token). */
+    dataPlaneUnavailable: foundryQuery.data?.dataPlaneUnavailable === true,
     /** The FAST half is still loading (nothing to show yet). */
     isLoadingFoundryAgents: appQuery.isLoading || isRefreshing,
     isRefreshingFoundryAgents: isRefreshing,
