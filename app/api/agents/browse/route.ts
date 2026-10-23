@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
+import { AgentDiscoveryService } from '@/lib/services/agents/AgentDiscoveryService';
 import { ResourceTreeService } from '@/lib/services/agents/ResourceTreeService';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 
 import {
   isValidAccountName,
@@ -107,7 +110,41 @@ export async function GET(request: NextRequest) {
       if (request.nextUrl.searchParams.get('refresh') === '1') {
         treeService.clearCache();
       }
-      const tree = await treeService.getTree(armToken);
+      const agentPicker =
+        request.nextUrl.searchParams.get('purpose') === 'agents';
+      const accessService = AgentAccessService.getInstance();
+      let foundryToken: string | null = null;
+      if (agentPicker) {
+        const assertion = await getAccessTokenForOBO(request);
+        if (assertion) {
+          foundryToken = await UserTokenProvider.getInstance()
+            .getFoundryToken(assertion)
+            .catch(() => null);
+        }
+        if (request.nextUrl.searchParams.get('refresh') === '1') {
+          AgentDiscoveryService.getInstance().clearCacheForUser(
+            session.user.mail || session.user.id,
+          );
+        }
+        if (accessService.isEnabled()) {
+          await resolveUserGroupIds(request, session);
+          await accessService.ensureFresh();
+        }
+      }
+      const tree = agentPicker
+        ? await treeService.getAgentTree(
+            armToken,
+            foundryToken,
+            session.user.mail || session.user.id,
+            (agent, sourcePath) =>
+              !accessService.isEnabled() ||
+              accessService.evaluateAccess({
+                userMail: session.user.mail,
+                source: sourcePath,
+                agentName: agent.agentName,
+              }).decision !== 'deny',
+          )
+        : await treeService.getTree(armToken);
       return NextResponse.json(tree);
     }
 
@@ -195,6 +232,7 @@ export async function GET(request: NextRequest) {
         subscriptions: [],
         failedSubscriptions: [],
         truncated: false,
+        unavailable: true,
       });
     }
     return NextResponse.json({ items: [] });
