@@ -485,6 +485,8 @@ export interface FailedSource {
   path: string;
   /** HTTP status of the failing plane when known (403, 404, …). */
   status?: number;
+  /** Degraded results identify which plane failed, for accurate UI warnings. */
+  plane?: 'controlPlane' | 'dataPlane';
 }
 
 export interface FoundryDiscovery {
@@ -497,6 +499,8 @@ export interface FoundryDiscovery {
   unavailable: boolean;
   /** Sources that failed outright — see {@link FailedSource}. */
   failedSources: FailedSource[];
+  /** Sources whose listing is incomplete despite one successful plane. */
+  degradedSources?: FailedSource[];
   /**
    * The Foundry data-plane token could not be acquired (missing consent for
    * ai.azure.com/user_impersonation, conditional access, …): new-model
@@ -546,6 +550,7 @@ export async function discoverFoundryAgents(
   const allAgents: DiscoveredAgent[] = [];
   const seenAgentNames = new Set<string>();
   const failedSources: FailedSource[] = [];
+  const degradedSources: FailedSource[] = [];
 
   results.forEach((result, index) => {
     if (result.status === 'rejected') {
@@ -578,6 +583,19 @@ export async function discoverFoundryAgents(
         path,
       );
       return;
+    }
+    if (controlPlane.status === 'error' || dataPlane.status === 'error') {
+      const status =
+        dataPlane.status === 'error'
+          ? dataPlane.httpStatus
+          : controlPlane.status === 'error'
+            ? controlPlane.httpStatus
+            : undefined;
+      degradedSources.push({
+        path,
+        plane: dataPlane.status === 'error' ? 'dataPlane' : 'controlPlane',
+        ...(status !== undefined && { status }),
+      });
     }
 
     for (const agent of agents) {
@@ -677,6 +695,7 @@ export async function discoverFoundryAgents(
     agents: visibleAgents,
     unavailable: false,
     failedSources,
+    degradedSources,
     dataPlaneUnavailable,
   };
 }
