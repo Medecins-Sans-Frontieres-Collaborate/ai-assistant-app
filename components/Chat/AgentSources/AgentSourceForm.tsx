@@ -122,24 +122,37 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     setMounted(true);
   }, []);
 
-  const loadTree = useCallback(async (refresh = false) => {
-    setLoadingTree(true);
-    try {
-      const response = await fetch(
-        `/api/agents/browse?level=tree${refresh ? '&refresh=1' : ''}`,
-      );
-      const data = await response.json();
-      setTree({
-        subscriptions: data.subscriptions || [],
-        failedSubscriptions: data.failedSubscriptions || [],
-        truncated: !!data.truncated,
-      });
-    } catch {
-      setTree({ subscriptions: [], failedSubscriptions: [], truncated: false });
-    } finally {
-      setLoadingTree(false);
-    }
-  }, []);
+  const loadTree = useCallback(
+    async (refresh = false) => {
+      setLoadingTree(true);
+      setError('');
+      try {
+        const response = await fetch(
+          `/api/agents/browse?level=tree&purpose=agents${refresh ? '&refresh=1' : ''}`,
+        );
+        const data = await response.json();
+        if (!response.ok || data.unavailable === true) {
+          setError(t('connectionFailed'));
+        }
+        setTree({
+          subscriptions: data.subscriptions || [],
+          failedSubscriptions: data.failedSubscriptions || [],
+          truncated: !!data.truncated,
+          failedProjects: data.failedProjects ?? [],
+        });
+      } catch {
+        setError(t('connectionFailed'));
+        setTree({
+          subscriptions: [],
+          failedSubscriptions: [],
+          truncated: false,
+        });
+      } finally {
+        setLoadingTree(false);
+      }
+    },
+    [t],
+  );
 
   // Load the full pruned tree once when browse mode is active.
   useEffect(() => {
@@ -180,6 +193,8 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
 
   const buildPath = () =>
     `/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.CognitiveServices/accounts/${accountName}/projects/${projectName}`;
+  const currentPathRef = useRef('');
+  currentPathRef.current = buildPath();
 
   const validateSource = async (
     path: string,
@@ -191,8 +206,9 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     try {
       // The Foundry half of discovery is the one that honours `sources`
       // (`/api/agents` is the fast app-agent half and ignores it).
-      const params = new URLSearchParams({ sources: path });
+      const params = new URLSearchParams({ sources: path, refresh: '1' });
       const response = await fetch(`/api/agents/foundry?${params.toString()}`);
+      if (currentPathRef.current !== path) return null;
 
       if (!response.ok) {
         setError(t('connectionFailed'));
@@ -200,6 +216,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
       }
 
       const data = await response.json();
+      if (currentPathRef.current !== path) return null;
       // `unavailable` means nothing could be discovered for this user (OBO
       // failed, …): not a verified connection, so don't report "0 agents".
       if (data.unavailable === true) {
@@ -223,10 +240,26 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
       const agents: DiscoveredAgent[] = (
         (data.agents ?? []) as DiscoveredAgent[]
       ).filter((a) => a.source === path);
+      const incomplete =
+        data.dataPlaneUnavailable === true ||
+        (data.degradedSources ?? []).some(
+          (source: { path: string; plane?: string }) =>
+            source.path === path && source.plane !== 'controlPlane',
+        );
+      if (agents.length === 0) {
+        setError(
+          t(
+            incomplete
+              ? 'connectionDataPlaneUnavailable'
+              : 'connectionSuccessEmpty',
+          ),
+        );
+        return null;
+      }
       setValidationResult({
         valid: true,
         agentCount: agents.length,
-        dataPlaneUnavailable: data.dataPlaneUnavailable === true,
+        dataPlaneUnavailable: incomplete,
       });
       return agents;
     } catch {
@@ -307,6 +340,12 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
 
   const handleSave = () => {
     const finalPath = buildPath();
+    if (seededPathRef.current !== finalPath || discoveredAgents.length === 0) {
+      setStep(1);
+      setValidationResult(null);
+      setError(t('connectionFailed'));
+      return;
+    }
     const fetchedNames = new Set(discoveredAgents.map((a) => a.agentName));
     const unchecked = discoveredAgents
       .filter((a) => !checkedNames.has(a.agentName))

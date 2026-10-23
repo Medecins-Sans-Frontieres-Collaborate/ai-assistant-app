@@ -129,6 +129,12 @@ export const ProjectTreePicker: FC<ProjectTreePickerProps> = ({
 
   const warnings = (
     <>
+      {!!tree.failedProjects?.length && (
+        <div className="flex items-start gap-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 p-2.5 text-xs text-amber-700 dark:text-amber-400">
+          <IconAlertTriangle size={14} className="mt-0.5 shrink-0" />
+          <span>{t('connectionFailed')}</span>
+        </div>
+      )}
       {tree.failedSubscriptions.length > 0 && (
         <div className="flex items-start gap-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 p-2.5 text-xs text-amber-700 dark:text-amber-400">
           <IconAlertTriangle size={14} className="mt-0.5 shrink-0" />
