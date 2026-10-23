@@ -1,5 +1,7 @@
 # ---- Base Node ----
-FROM node:24-alpine AS base
+# Pinned to a patched release for CVE-2026-111497 (Brotli decoder RCE) and the
+# October 2026 Node.js security release. Keep base and production stages in sync.
+FROM node:24.22.1-alpine AS base
 WORKDIR /app
 COPY package*.json ./
 
@@ -27,7 +29,7 @@ ENV NEXT_PUBLIC_ENV=$ENV
 RUN npm run build
 
 # ---- Production ----
-FROM node:24-alpine AS production
+FROM node:24.22.1-alpine AS production
 WORKDIR /app
 
 # Set Node.js options to handle larger HTTP headers (for NextAuth cookies)
