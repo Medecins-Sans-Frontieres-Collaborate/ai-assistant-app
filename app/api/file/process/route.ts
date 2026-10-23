@@ -3,7 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { FileProcessingService } from '@/lib/services/chat/FileProcessingService';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
-import { loadDocumentFromPath } from '@/lib/utils/server/file/fileHandling';
+import {
+  NoExtractableTextError,
+  loadDocumentFromPath,
+} from '@/lib/utils/server/file/fileHandling';
 import { getContentType } from '@/lib/utils/server/file/mimeTypes';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
@@ -75,59 +78,67 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   const fps = new FileProcessingService();
   const limit = 3;
-  const queue: Promise<{
-    url: string;
-    content: string;
-    processedAt: string;
-  }>[] = [];
 
   const runOne = async (url: string) => {
     const [, filePath] = fps.getTempFilePath(url);
-    const { usedCache } = await fps.downloadFilePreferCached(
-      url,
-      filePath,
-      session.user,
-    );
-    let content: string;
-    if (usedCache) {
-      const buf = await fps.readFile(filePath);
-      content = buf.toString('utf-8');
-    } else {
-      const mimeType = getContentType(filePath);
-      content = await loadDocumentFromPath(
+    try {
+      const { usedCache } = await fps.downloadFilePreferCached(
+        url,
         filePath,
-        mimeType,
-        filePath.split('/').pop() || 'file',
+        session.user,
       );
+      let content: string;
+      if (usedCache) {
+        const buf = await fps.readFile(filePath);
+        content = buf.toString('utf-8');
+      } else {
+        const mimeType = getContentType(filePath);
+        content = await loadDocumentFromPath(
+          filePath,
+          mimeType,
+          filePath.split('/').pop() || 'file',
+        );
+      }
+      return {
+        url,
+        content,
+        processedAt: new Date().toISOString(),
+      };
+    } finally {
+      await fps.cleanupFile(filePath);
     }
-    await fps.cleanupFile(filePath);
-    return {
-      url,
-      content,
-      processedAt: new Date().toISOString(),
-    };
   };
 
   try {
-    const results: { url: string; content: string; processedAt: string }[] = [];
-    for (const item of items) {
-      if (!item?.url) continue;
-      if (queue.length >= limit) {
-        const r = await Promise.race(queue);
-        results.push(r);
+    const results: Array<Awaited<ReturnType<typeof runOne>>> = [];
+    let nextIndex = 0;
+    const worker = async () => {
+      while (nextIndex < items.length) {
+        const index = nextIndex++;
+        const item = items[index];
+        if (!item?.url) continue;
+        results[index] = await runOne(item.url);
       }
-      const p = runOne(item.url).finally(() => {
-        const i = queue.indexOf(p);
-        if (i >= 0) queue.splice(i, 1);
-      });
-      queue.push(p);
-    }
-    results.push(...(await Promise.all(queue)));
+    };
+    // Await every worker even when one fails, so in-flight files are cleaned
+    // before responding. Store results by index: simultaneous completions
+    // must not be dropped or reorder the requested documents.
+    const outcomes = await Promise.allSettled(
+      Array.from({ length: Math.min(limit, items.length) }, worker),
+    );
+    const failure = outcomes.find((outcome) => outcome.status === 'rejected');
+    if (failure?.status === 'rejected') throw failure.reason;
     return NextResponse.json(
-      { results },
+      { results: results.filter(Boolean) },
       { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   } catch (e) {
+    if (e instanceof NoExtractableTextError) {
+      return NextResponse.json(
+        { error: e.message, code: 'NO_EXTRACTABLE_TEXT' },
+        { status: 422, headers: { 'Content-Type': 'application/json' } },
+      );
+    }
     // Error message can surface user-provided URLs / filenames from blob
     // download failures — sanitize before logging to prevent log forging.
     console.error('[api/file/process] Processing failed:', sanitizeForLog(e));
