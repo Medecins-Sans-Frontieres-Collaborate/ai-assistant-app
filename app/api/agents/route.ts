@@ -98,6 +98,11 @@ export async function GET(request: NextRequest) {
         suppressedOrgAgentIds: app.suppressedOrgAgentIds,
         regionalPath: allPaths.length > 0 ? regionalPath : null,
         officePaths: allPaths.length > 0 ? officePaths : [],
+        unavailable: discovery.unavailable,
+        failedSources: discovery.failedSources,
+        degradedSources:
+          'degradedSources' in discovery ? discovery.degradedSources : [],
+        dataPlaneUnavailable: discovery.dataPlaneUnavailable,
       },
       { headers: { 'Server-Timing': timing.header() } },
     );
