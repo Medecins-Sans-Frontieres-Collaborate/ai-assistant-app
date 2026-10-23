@@ -67,6 +67,7 @@ vi.mock('pdfjs-dist/legacy/build/pdf.mjs', () => ({
 /** pdfjs stub: pages of the given texts (empty array = unreadable/scanned). */
 function pdfjsPages(pageTexts: string[]) {
   getDocumentMock.mockReturnValue({
+    destroy: vi.fn().mockResolvedValue(undefined),
     promise: Promise.resolve({
       numPages: pageTexts.length,
       getPage: async (n: number) => ({
@@ -82,6 +83,7 @@ function pdfjsPages(pageTexts: string[]) {
 
 function pdfjsThrows(message: string) {
   getDocumentMock.mockReturnValue({
+    destroy: vi.fn().mockResolvedValue(undefined),
     promise: Promise.reject(new Error(message)),
   });
 }
@@ -407,6 +409,14 @@ describe('pdfToText chain via loadDocumentFromPath', () => {
     ).rejects.toBeInstanceOf(NoExtractableTextError);
   });
 
+  it('does not let generated page markers disguise control-only PDF content', async () => {
+    pdfjsPages(Array.from({ length: 20 }, () => '\u0001\u0002'));
+    execFileMock.mockResolvedValue({ stdout: '\u0001\u0002', stderr: '' });
+    await expect(
+      loadDocumentFromPath('/input/g.pdf', 'application/pdf', 'g.pdf'),
+    ).rejects.toBeInstanceOf(NoExtractableTextError);
+  });
+
   it('repairs with Ghostscript when both extractors threw, then reads the repaired file', async () => {
     pdfjsThrows('Invalid XRef stream header');
     let repairedPath = '';
@@ -500,13 +510,15 @@ describe('looksLikeGarbledText', () => {
         '--- Page 1 ---\nBudget (EUR) — Q1/Q2; totals: 100%',
       ),
     ).toBe(false);
-    expect(looksLikeGarbledText('\u0001\u0002')).toBe(false);
+    expect(looksLikeGarbledText('OK')).toBe(false);
     expect(
       looksLikeGarbledText('Straße — naïve café, 東京, Москва: fine text!'),
     ).toBe(false);
   });
 
   it('flags control-character glyph dumps and replacement-character soup', () => {
+    expect(looksLikeGarbledText('\u0001\u0002')).toBe(true);
+    expect(looksLikeGarbledText('--- Page 1 ---\n\u0001\u0002')).toBe(true);
     expect(
       looksLikeGarbledText('\u0001\u0002\u0003\u0004\u0005'.repeat(10)),
     ).toBe(true);
