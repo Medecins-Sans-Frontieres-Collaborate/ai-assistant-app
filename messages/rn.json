@@ -452,7 +452,9 @@
     "deselectAll": "Kura vyose",
     "agentsSelectedCount": "{selected} kuri {total} bahitamwo",
     "autoAddLabel": "Ongeramwo abagendaji bashasha kuri automatic",
-    "autoAddDescription": "Abagendaji bazoshirwa muri uno mushinga bazoza bahita baboneka. Abatagiyemwo bazoguma hanze."
+    "autoAddDescription": "Abagendaji bazoshirwa muri uno mushinga bazoza bahita baboneka. Abatagiyemwo bazoguma hanze.",
+    "connectionDataPlaneUnavailable": "Wahuye, ariko ntivyashobotse gusaba serivisi y'umukozi ukoresheje konte yawe, kubw'ivyo abakozi bashasha bashobora kutaboneka. Raba ko ufise uruhusha rwa Azure AI User kuri uyu mugambi, hanyuma ugerageze gusubira.",
+    "projectRequired": "Injiza izina ry'umugambi"
   },
   "Quick Actions": "Ibikorwa vya vuba",
   "Type / in chat to access your prompts": "Andika / mu kiganiro kugira ushikire ibibazo vyawe bisanzwe",

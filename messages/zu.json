@@ -452,7 +452,9 @@
     "deselectAll": "Susa konke okukhethiwe",
     "agentsSelectedCount": "Kukhethiwe onozinti {selected} kwabangu-{total}",
     "autoAddLabel": "Engeza onozinti ngokuzenzakalelayo",
-    "autoAddDescription": "Onozinti abashicilelwe kule phrojekthi kamuva bazovela ngokuzenzakalelayo. Onozinti abangakhethiwe bahlala bengekho."
+    "autoAddDescription": "Onozinti abashicilelwe kule phrojekthi kamuva bazovela ngokuzenzakalelayo. Onozinti abangakhethiwe bahlala bengekho.",
+    "connectionDataPlaneUnavailable": "Uxhunyiwe, kodwa insiza yama-agent ayikwazanga ukubuza nge-akhawunti yakho, ngakho ama-agent amasha angase angabonakali. Qinisekisa ukuthi une-Azure AI User role kulo msebenzi, bese uzama futhi.",
+    "projectRequired": "Faka igama lephrojekthi"
   },
   "Quick Actions": "Izenzo Ezisheshayo",
   "Type / in chat to access your prompts": "Thayipha / engxoxweni ukufinyelela iziqondiso zakho",

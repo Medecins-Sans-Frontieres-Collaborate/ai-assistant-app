@@ -38,7 +38,15 @@ export async function GET(request: NextRequest) {
   if (allPaths.length === 0) {
     await groupsWarmup;
     return NextResponse.json(
-      { agents: [], regionalPath: null, officePaths: [], unavailable: false },
+      {
+        agents: [],
+        regionalPath: null,
+        officePaths: [],
+        unavailable: false,
+        failedSources: [],
+        degradedSources: [],
+        dataPlaneUnavailable: false,
+      },
       { headers: { 'Server-Timing': timing.header() } },
     );
   }
@@ -57,13 +65,24 @@ export async function GET(request: NextRequest) {
         regionalPath,
         officePaths,
         unavailable: discovery.unavailable,
+        failedSources: discovery.failedSources,
+        degradedSources: discovery.degradedSources ?? [],
+        dataPlaneUnavailable: discovery.dataPlaneUnavailable,
       },
       { headers: { 'Server-Timing': timing.header() } },
     );
   } catch (error) {
     console.error('[/api/agents/foundry] Error discovering agents:', error);
     return NextResponse.json(
-      { agents: [], regionalPath, officePaths, unavailable: true },
+      {
+        agents: [],
+        regionalPath,
+        officePaths,
+        unavailable: true,
+        failedSources: [],
+        degradedSources: [],
+        dataPlaneUnavailable: false,
+      },
       { headers: { 'Server-Timing': timing.header() } },
     );
   }

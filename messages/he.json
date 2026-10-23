@@ -423,7 +423,9 @@
     "deselectAll": "נקה סימון",
     "agentsSelectedCount": "נבחרו {selected} מתוך {total} סוכנים",
     "autoAddLabel": "הוסף סוכנים חדשים אוטומטית",
-    "autoAddDescription": "סוכנים שיתווספו לפרויקט בהמשך יופיעו אוטומטית. סוכנים שלא סומנו יישארו מחוץ לרשימה."
+    "autoAddDescription": "סוכנים שיתווספו לפרויקט בהמשך יופיעו אוטומטית. סוכנים שלא סומנו יישארו מחוץ לרשימה.",
+    "connectionDataPlaneUnavailable": "מחובר, אך לא ניתן היה לשלוף את שירות הסוכן עם החשבון שלך, לכן ייתכן שסוכנים חדשים לא יוצגו. ודא שיש לך את תפקיד Azure AI User בפרויקט זה ונסה שוב.",
+    "projectRequired": "הזן את שם הפרויקט"
   },
   "Quick Actions": "פעולות מהירות",
   "Type / in chat to access your prompts": "הקלד / בצ'אט כדי לגשת להנחיות שלך",

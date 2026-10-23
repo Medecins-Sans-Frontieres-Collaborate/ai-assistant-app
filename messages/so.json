@@ -452,7 +452,9 @@
     "deselectAll": "Ka saaro xulashada dhammaan",
     "agentsSelectedCount": "{selected} ka mid ah {total} wakiil la doortay",
     "autoAddLabel": "Si toos ah ugu dar wakiillo cusub",
-    "autoAddDescription": "Wakiillada mustaqbalka lagu soo daabaco mashruucan si toos ah bay uga muuqan doonaan. Wakiillada aan la xulin wey ka reeban doonaan."
+    "autoAddDescription": "Wakiillada mustaqbalka lagu soo daabaco mashruucan si toos ah bay uga muuqan doonaan. Wakiillada aan la xulin wey ka reeban doonaan.",
+    "connectionDataPlaneUnavailable": "Waad ku xiran tahay, laakiin adeegga wakiilka looma baari karo akoonkaaga, sidaas darteed wakiillada cusub laga yaabo inaan la tusin. Hubi inaad leedahay doorka Azure AI User ee mashruucan, kadibna mar kale isku day.",
+    "projectRequired": "Geli magaca mashruuca"
   },
   "Quick Actions": "Ficilada Degdegga ah",
   "Type / in chat to access your prompts": "Ku qor / sheekada si aad u gasho tilmaamahaaga",

@@ -365,7 +365,9 @@
     "deselectAll": "Ondoa chaguo zote",
     "agentsSelectedCount": "{selected} kati ya {total} mawakala wamechaguliwa",
     "autoAddLabel": "Ongeza mawakala wapya kiotomatiki",
-    "autoAddDescription": "Mawakala watakaoongezwa baadaye kwenye mradi huu wataonekana moja kwa moja. Mawakala ambao hawajachaguliwa wataendelea kutengwa."
+    "autoAddDescription": "Mawakala watakaoongezwa baadaye kwenye mradi huu wataonekana moja kwa moja. Mawakala ambao hawajachaguliwa wataendelea kutengwa.",
+    "connectionDataPlaneUnavailable": "Umeunganishwa, lakini huduma ya wakala haiwezi kuulizwa na akaunti yako, hivyo mawakala wapya huenda wasionyeshwe. Hakikisha una jukumu la Azure AI User kwenye mradi huu, kisha jaribu tena.",
+    "projectRequired": "Ingiza jina la mradi"
   },
   "Quick Actions": "Vitendo vya Haraka",
   "Type / in chat to access your prompts": "Andika / katika mazungumzo ili kufikia vidokezo vyako",

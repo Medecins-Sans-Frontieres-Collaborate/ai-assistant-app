@@ -452,7 +452,9 @@
     "deselectAll": "Poništi izbor svega",
     "agentsSelectedCount": "Izabrano {selected} od {total} agenata",
     "autoAddLabel": "Automatski dodaj nove agente",
-    "autoAddDescription": "Agenti koji kasnije budu objavljeni u ovom projektu pojavljuju se automatski. Agenti koji nisu označeni ostaju izostavljeni."
+    "autoAddDescription": "Agenti koji kasnije budu objavljeni u ovom projektu pojavljuju se automatski. Agenti koji nisu označeni ostaju izostavljeni.",
+    "connectionDataPlaneUnavailable": "Povezano, ali nije moguće izvršiti upit za agent servis vašim nalogom, pa noviji agenti možda neće biti prikazani. Proverite da li imate Azure AI User ulogu na ovom projektu, zatim pokušajte ponovo.",
+    "projectRequired": "Unesite naziv projekta"
   },
   "Quick Actions": "Брзе Акције",
   "Type / in chat to access your prompts": "Откуцајте / у ћаскању за приступ упутствима",

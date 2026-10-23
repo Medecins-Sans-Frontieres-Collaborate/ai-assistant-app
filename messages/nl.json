@@ -413,7 +413,9 @@
     "deselectAll": "Alles deselecteren",
     "agentsSelectedCount": "{selected} van {total} agents geselecteerd",
     "autoAddLabel": "Nieuwe agents automatisch toevoegen",
-    "autoAddDescription": "Later gepubliceerde agents in dit project verschijnen automatisch. Niet-aangevinkte agents blijven uitgesloten."
+    "autoAddDescription": "Later gepubliceerde agents in dit project verschijnen automatisch. Niet-aangevinkte agents blijven uitgesloten.",
+    "connectionDataPlaneUnavailable": "Verbonden, maar de agentservice kon niet worden geraadpleegd met uw account, waardoor nieuwere agents mogelijk niet worden weergegeven. Controleer of u de Azure AI-gebruikersrol voor dit project heeft en probeer het opnieuw.",
+    "projectRequired": "Voer de projectnaam in"
   },
   "Quick Actions": "Snelle acties",
   "Type / in chat to access your prompts": "Typ / in chat om toegang te krijgen tot je prompts",

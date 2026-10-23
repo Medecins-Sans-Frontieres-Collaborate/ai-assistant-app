@@ -452,7 +452,9 @@
     "deselectAll": "Dekache tout",
     "agentsSelectedCount": "{selected} sou {total} ajan yo chwazi",
     "autoAddLabel": "Ajoute nouvo ajan otomatikman",
-    "autoAddDescription": "Ajan ki pibliye pita sou pwojè sa a ap ajoute otomatikman. Ajan ou dekache yo ap rete eskli."
+    "autoAddDescription": "Ajan ki pibliye pita sou pwojè sa a ap ajoute otomatikman. Ajan ou dekache yo ap rete eskli.",
+    "connectionDataPlaneUnavailable": "Konekte, men sèvis ajan an pa ka konsilte ak kont ou, kidonk ajan ki pi resan yo ka pa parèt. Verifye si ou gen wòl Azure AI User sou pwojè sa a, epi eseye ankò.",
+    "projectRequired": "Antre non pwojè a"
   },
   "Quick Actions": "Aksyon Rapid",
   "Type / in chat to access your prompts": "Tape / nan chat pou jwenn aksè nan enstriksyon ou yo",

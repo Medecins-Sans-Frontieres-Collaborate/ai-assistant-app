@@ -448,7 +448,9 @@
     "deselectAll": "Tout désélectionner",
     "agentsSelectedCount": "{selected} sur {total} agents sélectionnés",
     "autoAddLabel": "Ajouter automatiquement les nouveaux agents",
-    "autoAddDescription": "Les agents publiés ultérieurement dans ce projet apparaîtront automatiquement. Les agents décochés restent exclus."
+    "autoAddDescription": "Les agents publiés ultérieurement dans ce projet apparaîtront automatiquement. Les agents décochés restent exclus.",
+    "connectionDataPlaneUnavailable": "Connecté, mais le service d’agent n’a pas pu être interrogé avec votre compte, de sorte que les agents les plus récents peuvent ne pas être affichés. Vérifiez que vous avez le rôle Azure AI User sur ce projet, puis réessayez.",
+    "projectRequired": "Saisissez le nom du projet"
   },
   "Quick Actions": "Actions rapides",
   "Type / in chat to access your prompts": "Tapez / dans le chat pour accéder à vos instructions",

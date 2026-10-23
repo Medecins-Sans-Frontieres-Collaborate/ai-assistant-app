@@ -415,7 +415,9 @@
     "deselectAll": "Batalkan semua pilihan",
     "agentsSelectedCount": "{selected} dari {total} agen dipilih",
     "autoAddLabel": "Tambahkan agen baru secara otomatis",
-    "autoAddDescription": "Agen yang diterbitkan ke proyek ini nantinya akan muncul secara otomatis. Agen yang tidak dicentang tetap dikecualikan."
+    "autoAddDescription": "Agen yang diterbitkan ke proyek ini nantinya akan muncul secara otomatis. Agen yang tidak dicentang tetap dikecualikan.",
+    "connectionDataPlaneUnavailable": "Terhubung, tetapi layanan agen tidak dapat diakses dengan akun Anda, sehingga agen terbaru mungkin tidak terdaftar. Pastikan Anda memiliki peran Azure AI User pada proyek ini, lalu coba lagi.",
+    "projectRequired": "Masukkan nama proyek"
   },
   "Quick Actions": "Tindakan Cepat",
   "Type / in chat to access your prompts": "Ketik / dalam obrolan untuk mengakses prompt Anda",

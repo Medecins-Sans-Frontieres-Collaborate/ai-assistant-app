@@ -15,6 +15,7 @@ import { NextRequest } from 'next/server';
 import {
   collectAppAgents,
   discoverFoundryAgents,
+  resolveDiscoveryPaths,
 } from '@/lib/services/agents/agentDiscoveryRoute';
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -80,6 +81,13 @@ const listUserAgents = vi.hoisted(() => vi.fn());
 const cacheUserAgentEndpoint = vi.hoisted(() => vi.fn());
 const clearCacheForUser = vi.hoisted(() => vi.fn());
 
+const getArmToken = vi.hoisted(() =>
+  vi.fn<() => Promise<string>>().mockResolvedValue('arm-token'),
+);
+const getFoundryToken = vi.hoisted(() =>
+  vi.fn<() => Promise<string>>().mockResolvedValue('foundry-token'),
+);
+
 vi.mock('@/auth', () => ({
   auth: vi.fn(),
   getAccessTokenForOBO: vi.fn().mockResolvedValue('app-token'),
@@ -87,8 +95,8 @@ vi.mock('@/auth', () => ({
 vi.mock('@/lib/services/auth/UserTokenProvider', () => ({
   UserTokenProvider: {
     getInstance: () => ({
-      getArmToken: vi.fn().mockResolvedValue('arm-token'),
-      getFoundryToken: vi.fn().mockResolvedValue('foundry-token'),
+      getArmToken,
+      getFoundryToken,
     }),
   },
 }));
@@ -104,6 +112,14 @@ vi.mock('@/lib/services/agents/AgentDiscoveryService', () => ({
 }));
 vi.mock('@/lib/services/auth/appIdentityCredential', () => ({
   createAppIdentityCredential: vi.fn(),
+}));
+vi.mock('@/lib/services/auth/OfficeResolver', () => ({
+  OfficeResolver: {
+    getDiscoveryPathsForUser: vi.fn(() => ({
+      regionalPath: null,
+      officePaths: [],
+    })),
+  },
 }));
 
 /** An admin org RAG record, serveable unless overridden. */
@@ -129,6 +145,8 @@ function orgRecord(overrides: Record<string, unknown> = {}) {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  getArmToken.mockResolvedValue('arm-token');
+  getFoundryToken.mockResolvedValue('foundry-token');
   accessService.isEnabled.mockReturnValue(true);
   accessService.ensureFresh.mockResolvedValue(undefined);
   accessService.evaluateAccess.mockReturnValue({
@@ -321,11 +339,15 @@ describe('discoverFoundryAgents — degraded group lookups filter per agent', ()
   }
 
   beforeEach(() => {
-    listUserAgents.mockResolvedValue([
-      foundryAgent('agent-allowed'),
-      foundryAgent('agent-degraded'),
-      foundryAgent('agent-denied'),
-    ]);
+    listUserAgents.mockResolvedValue({
+      agents: [
+        foundryAgent('agent-allowed'),
+        foundryAgent('agent-degraded'),
+        foundryAgent('agent-denied'),
+      ],
+      controlPlane: { status: 'ok' },
+      dataPlane: { status: 'ok' },
+    });
   });
 
   it('includes only the degraded agent and keeps enforcing the rest', async () => {
@@ -400,5 +422,171 @@ describe('discoverFoundryAgents — degraded group lookups filter per agent', ()
       'agent-degraded',
       'agent-denied',
     ]);
+  });
+});
+
+describe('resolveDiscoveryPaths — custom source fan-out is bounded', () => {
+  function sourcePath(i: number) {
+    return `/subscriptions/sub-${i}/resourceGroups/rg/providers/Microsoft.CognitiveServices/accounts/acct-${i}/projects/proj`;
+  }
+
+  it('caps the number of user-supplied source paths', () => {
+    const paths = Array.from({ length: 80 }, (_, i) => sourcePath(i));
+    const request = new NextRequest(
+      `http://localhost:3000/api/agents/foundry?sources=${paths.join(',')}`,
+    );
+
+    const { allPaths } = resolveDiscoveryPaths(request, USER_MAIL);
+
+    expect(allPaths).toHaveLength(50);
+    expect(allPaths[0]).toBe(sourcePath(0));
+  });
+
+  it('drops invalid paths before applying the cap', () => {
+    const request = new NextRequest(
+      `http://localhost:3000/api/agents/foundry?sources=/etc/passwd,${sourcePath(1)}`,
+    );
+
+    const { allPaths } = resolveDiscoveryPaths(request, USER_MAIL);
+
+    expect(allPaths).toEqual([sourcePath(1)]);
+  });
+});
+
+describe('discoverFoundryAgents — failed sources are reported, not swallowed', () => {
+  const session = { user: { id: 'u1', mail: USER_MAIL } } as Session;
+  const OTHER_PATH =
+    '/subscriptions/abc/resourceGroups/rg/providers/Microsoft.CognitiveServices/accounts/acct2/projects/proj2';
+
+  function request(): NextRequest {
+    return new NextRequest('http://localhost:3000/api/agents/foundry');
+  }
+
+  function okDiscovery(agentName: string) {
+    return {
+      agents: [
+        {
+          id: agentName,
+          name: agentName,
+          description: '',
+          agentName,
+          type: 'foundry' as const,
+          foundryEndpoint: `https://acct.services.ai.azure.com/${agentName}`,
+        },
+      ],
+      controlPlane: { status: 'ok' as const },
+      dataPlane: { status: 'ok' as const },
+    };
+  }
+
+  it('reports a source where no plane answered as failed, with its status', async () => {
+    listUserAgents.mockImplementation(async (_t: string, path: string) =>
+      path === SOURCE_PATH
+        ? okDiscovery('agent-ok')
+        : {
+            agents: [],
+            controlPlane: {
+              status: 'error',
+              httpStatus: 403,
+              message: 'denied',
+            },
+            dataPlane: { status: 'error', httpStatus: 403, message: 'denied' },
+          },
+    );
+
+    const { agents, unavailable, failedSources } = await discoverFoundryAgents(
+      request(),
+      session,
+      [SOURCE_PATH, OTHER_PATH],
+      Promise.resolve(),
+    );
+
+    expect(unavailable).toBe(false);
+    expect(agents.map((a) => a.agentName)).toEqual(['agent-ok']);
+    expect(failedSources).toEqual([{ path: OTHER_PATH, status: 403 }]);
+  });
+
+  it('treats a source with one healthy plane as connected, not failed', async () => {
+    listUserAgents.mockResolvedValue({
+      agents: [],
+      controlPlane: { status: 'error', httpStatus: 403, message: 'denied' },
+      dataPlane: { status: 'ok' },
+    });
+
+    const { failedSources } = await discoverFoundryAgents(
+      request(),
+      session,
+      [SOURCE_PATH],
+      Promise.resolve(),
+    );
+
+    expect(failedSources).toEqual([]);
+  });
+
+  it('reports MIC-style data-plane errors even when ARM successfully lists zero applications', async () => {
+    listUserAgents.mockResolvedValue({
+      agents: [],
+      controlPlane: { status: 'ok' },
+      dataPlane: { status: 'error', message: 'project_connection_id' },
+    });
+    const result = await discoverFoundryAgents(
+      request(),
+      session,
+      [SOURCE_PATH],
+      Promise.resolve(),
+    );
+    expect(result.failedSources).toEqual([]);
+    expect(result.degradedSources).toEqual([
+      { path: SOURCE_PATH, plane: 'dataPlane' },
+    ]);
+    expect(result.dataPlaneUnavailable).toBe(false);
+  });
+
+  it('maps a rejected per-path discovery back to its source path', async () => {
+    listUserAgents.mockImplementation(async (_t: string, path: string) => {
+      if (path === OTHER_PATH) throw new Error('Invalid Foundry resource path');
+      return okDiscovery('agent-ok');
+    });
+
+    const { failedSources } = await discoverFoundryAgents(
+      request(),
+      session,
+      [SOURCE_PATH, OTHER_PATH],
+      Promise.resolve(),
+    );
+
+    expect(failedSources).toEqual([{ path: OTHER_PATH }]);
+  });
+
+  it('flags dataPlaneUnavailable when the Foundry OBO token cannot be acquired', async () => {
+    getFoundryToken.mockRejectedValue(new Error('consent required'));
+    listUserAgents.mockResolvedValue({
+      agents: [],
+      controlPlane: { status: 'ok' },
+      dataPlane: { status: 'skipped', reason: 'no-foundry-token' },
+    });
+
+    const { dataPlaneUnavailable, unavailable } = await discoverFoundryAgents(
+      request(),
+      session,
+      [SOURCE_PATH],
+      Promise.resolve(),
+    );
+
+    expect(unavailable).toBe(false);
+    expect(dataPlaneUnavailable).toBe(true);
+  });
+
+  it('leaves dataPlaneUnavailable false when the token is available', async () => {
+    listUserAgents.mockResolvedValue(okDiscovery('agent-ok'));
+
+    const { dataPlaneUnavailable } = await discoverFoundryAgents(
+      request(),
+      session,
+      [SOURCE_PATH],
+      Promise.resolve(),
+    );
+
+    expect(dataPlaneUnavailable).toBe(false);
   });
 });

@@ -423,7 +423,9 @@
     "deselectAll": "Poista kaikki valinnat",
     "agentsSelectedCount": "{selected}/{total} agenttia valittu",
     "autoAddLabel": "Lisää uudet agentit automaattisesti",
-    "autoAddDescription": "Myöhemmin tähän projektiin julkaistut agentit tulevat automaattisesti näkyviin. Valitsemattomat agentit pysyvät poissuljettuina."
+    "autoAddDescription": "Myöhemmin tähän projektiin julkaistut agentit tulevat automaattisesti näkyviin. Valitsemattomat agentit pysyvät poissuljettuina.",
+    "connectionDataPlaneUnavailable": "Yhteys muodostettu, mutta agenttipalvelua ei voitu kyselyttää tililläsi, joten uudempia agentteja ei ehkä näy. Varmista, että sinulla on Azure AI User -rooli tässä projektissa, ja yritä uudelleen.",
+    "projectRequired": "Anna projektin nimi"
   },
   "Quick Actions": "Pikatoiminnot",
   "Type / in chat to access your prompts": "Kirjoita / keskustelussa päästäksesi kehotteisiisi",

@@ -13,10 +13,6 @@ vi.mock('@/config/environment', () => ({
 }));
 
 const mockAgentsList = vi.hoisted(() => vi.fn());
-const mockAIProjectClient = vi.hoisted(() => vi.fn());
-vi.mock('@azure/ai-projects', () => ({
-  AIProjectClient: mockAIProjectClient,
-}));
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -25,7 +21,7 @@ const RESOURCE_PATH =
 const EXPECTED_ENDPOINT =
   'https://myacct.services.ai.azure.com/api/projects/proj';
 
-/** Async-iterable factory mimicking AIProjectClient.agents.list(). */
+/** Supplies raw wire records to the HTTP response stub. */
 async function* asyncFrom<T>(items: T[]): AsyncGenerator<T> {
   for (const i of items) yield i;
 }
@@ -58,6 +54,7 @@ function dpAgent(name: string) {
 
 function mockArmFetch(apps: unknown[]) {
   global.fetch = vi.fn(async (url: string) => {
+    if (url.includes('/agents?')) return dataPlaneResponse();
     if (url.includes('/applications?')) {
       return { ok: true, json: async () => ({ value: apps }) } as Response;
     }
@@ -77,6 +74,28 @@ function mockArmFetch(apps: unknown[]) {
   }) as unknown as typeof fetch;
 }
 
+/** ARM `/applications` listing that fails with the given HTTP status. */
+function mockArmFetchFailure(status: number) {
+  global.fetch = vi.fn(async (url: string) => {
+    if (url.includes('/agents?')) return dataPlaneResponse();
+    return {
+      ok: false,
+      status,
+      statusText: 'Refused',
+      text: async () => 'denied',
+    } as Response;
+  }) as unknown as typeof fetch;
+}
+
+/** Returns a real Foundry listing envelope, not an SDK-deserialized agent. */
+async function dataPlaneResponse(): Promise<Response> {
+  const data = [];
+  for await (const agent of mockAgentsList()) data.push(agent);
+  return new Response(JSON.stringify({ data, has_more: false }), {
+    status: 200,
+  });
+}
+
 const service = AgentDiscoveryService.getInstance();
 
 beforeEach(() => {
@@ -85,11 +104,6 @@ beforeEach(() => {
   (
     env as { FOUNDRY_DATAPLANE_DISCOVERY: boolean }
   ).FOUNDRY_DATAPLANE_DISCOVERY = true;
-  mockAIProjectClient.mockImplementation(function (this: {
-    agents: { list: typeof mockAgentsList };
-  }) {
-    this.agents = { list: mockAgentsList };
-  });
   mockAgentsList.mockReturnValue(asyncFrom([]));
 });
 
@@ -129,7 +143,7 @@ describe('listUserAgents — ARM + data-plane union', () => {
       asyncFrom([dpAgent('shared-agent'), dpAgent('new-agent')]),
     );
 
-    const agents = await service.listUserAgents(
+    const { agents, controlPlane, dataPlane } = await service.listUserAgents(
       'arm-token',
       RESOURCE_PATH,
       'foundry-token',
@@ -142,6 +156,8 @@ describe('listUserAgents — ARM + data-plane union', () => {
     // Data-plane-only agent surfaces with the derived project endpoint.
     expect(byName['new-agent'].foundryEndpoint).toBe(EXPECTED_ENDPOINT);
     expect(byName['new-agent'].icon).toBeUndefined();
+    expect(controlPlane).toEqual({ status: 'ok' });
+    expect(dataPlane).toEqual({ status: 'ok' });
   });
 
   it('skips the data-plane call when the flag is off', async () => {
@@ -150,7 +166,7 @@ describe('listUserAgents — ARM + data-plane union', () => {
     ).FOUNDRY_DATAPLANE_DISCOVERY = false;
     mockArmFetch([armApp('only-arm')]);
 
-    const agents = await service.listUserAgents(
+    const { agents, dataPlane } = await service.listUserAgents(
       'arm-token',
       RESOURCE_PATH,
       'foundry-token',
@@ -158,6 +174,7 @@ describe('listUserAgents — ARM + data-plane union', () => {
 
     expect(mockAgentsList).not.toHaveBeenCalled();
     expect(agents.map((a) => a.agentName)).toEqual(['only-arm']);
+    expect(dataPlane).toEqual({ status: 'skipped', reason: 'flag-disabled' });
   });
 
   it('falls back to ARM-only results when data-plane listing throws', async () => {
@@ -166,13 +183,449 @@ describe('listUserAgents — ARM + data-plane union', () => {
       throw new Error('403 Forbidden');
     });
 
-    const agents = await service.listUserAgents(
+    const { agents, dataPlane } = await service.listUserAgents(
       'arm-token',
       RESOURCE_PATH,
       'foundry-token',
     );
 
     expect(agents.map((a) => a.agentName)).toEqual(['arm-agent']);
+    expect(dataPlane.status).toBe('error');
+  });
+
+  it('reports a data-plane skip when no Foundry token is available', async () => {
+    mockArmFetch([armApp('arm-agent')]);
+
+    const { agents, dataPlane } = await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      null,
+    );
+
+    expect(mockAgentsList).not.toHaveBeenCalled();
+    expect(agents.map((a) => a.agentName)).toEqual(['arm-agent']);
+    expect(dataPlane).toEqual({
+      status: 'skipped',
+      reason: 'no-foundry-token',
+    });
+  });
+
+  it('surfaces the agent kind from the data-plane definition', async () => {
+    mockArmFetch([]);
+    mockAgentsList.mockReturnValue(
+      asyncFrom([
+        {
+          ...dpAgent('prompt-agent'),
+          versions: {
+            latest: {
+              name: 'prompt-agent',
+              version: '1',
+              definition: { kind: 'prompt' },
+            },
+          },
+        },
+      ]),
+    );
+
+    const { agents } = await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      'foundry-token',
+    );
+
+    expect(agents).toHaveLength(1);
+    expect(agents[0].kind).toBe('prompt');
+  });
+});
+
+// ── plane independence (the Foundry-User-only regression) ───────────────────
+
+describe('listUserAgents — plane independence', () => {
+  it.each([null, {}, { value: {} }, { value: [null] }])(
+    'contains malformed ARM envelope %j without losing data-plane agents',
+    async (body) => {
+      mockArmFetch([]);
+      const original = global.fetch;
+      global.fetch = vi.fn(async (url: string) =>
+        url.includes('/applications?')
+          ? new Response(JSON.stringify(body))
+          : original(url),
+      ) as typeof fetch;
+      mockAgentsList.mockReturnValue(asyncFrom([dpAgent('healthy')]));
+      const result = await service.listUserAgents(
+        'arm',
+        RESOURCE_PATH,
+        'foundry',
+      );
+      expect(result.controlPlane.status).toBe('error');
+      expect(result.agents.map((agent) => agent.agentName)).toEqual([
+        'healthy',
+      ]);
+    },
+  );
+
+  it('ignores malformed optional display metadata rather than losing the agent', async () => {
+    mockArmFetch([]);
+    mockAgentsList.mockReturnValue(
+      asyncFrom([
+        {
+          name: 'valid-agent',
+          agent_card: { name: 12, description: {} },
+          versions: {
+            latest: {
+              description: false,
+              version: 17,
+              definition: { kind: ['prompt'] },
+            },
+          },
+        },
+      ]),
+    );
+    const result = await service.listUserAgents(
+      'arm',
+      RESOURCE_PATH,
+      'foundry',
+    );
+    expect(result.dataPlane.status).toBe('ok');
+    expect(result.agents[0]).toMatchObject({
+      agentName: 'valid-agent',
+      name: 'Valid Agent',
+      description: '',
+    });
+    expect(result.agents[0].kind).toBeUndefined();
+    expect(result.agents[0].agentVersion).toBeUndefined();
+  });
+
+  it('bounds pagination even when every record is rejected and each cursor is fresh', async () => {
+    mockArmFetch([]);
+    const original = global.fetch;
+    let pages = 0;
+    global.fetch = vi.fn(async (url: string) => {
+      if (!url.includes('/agents?')) return original(url);
+      pages += 1;
+      return new Response(
+        JSON.stringify({
+          data: [null, { name: '' }],
+          has_more: true,
+          last_id: `cursor-${pages}`,
+        }),
+      );
+    }) as typeof fetch;
+    const result = await service.listUserAgents(
+      'arm',
+      RESOURCE_PATH,
+      'foundry',
+    );
+    expect(pages).toBe(20);
+    expect(result.dataPlane).toMatchObject({
+      status: 'error',
+      message: expect.stringContaining('safety limit'),
+    });
+  });
+
+  it('stops after the declared 200-agent cap rather than requesting further pages', async () => {
+    mockArmFetch([]);
+    const original = global.fetch;
+    let pages = 0;
+    global.fetch = vi.fn(async (url: string) => {
+      if (!url.includes('/agents?')) return original(url);
+      expect(new URL(url).searchParams.get('limit')).toBe('100');
+      pages += 1;
+      return new Response(
+        JSON.stringify({
+          data: Array.from({ length: 100 }, (_, index) =>
+            dpAgent(`page-${pages}-agent-${index}`),
+          ),
+          has_more: true,
+          last_id: `cursor-${pages}`,
+        }),
+      );
+    }) as typeof fetch;
+    const result = await service.listUserAgents(
+      'arm',
+      RESOURCE_PATH,
+      'foundry',
+    );
+    expect(pages).toBe(2);
+    expect(result.agents).toHaveLength(200);
+  });
+
+  it('rejects a repeated pagination cursor instead of looping', async () => {
+    mockArmFetch([]);
+    const original = global.fetch;
+    global.fetch = vi.fn(async (url: string) =>
+      url.includes('/agents?')
+        ? new Response(
+            JSON.stringify({
+              data: [dpAgent('one')],
+              has_more: true,
+              last_id: 'same-cursor',
+            }),
+          )
+        : original(url),
+    ) as typeof fetch;
+    const result = await service.listUserAgents(
+      'arm',
+      RESOURCE_PATH,
+      'foundry',
+    );
+    expect(result.dataPlane).toMatchObject({
+      status: 'error',
+      message: expect.stringContaining('repeated'),
+    });
+  });
+
+  it('reads metadata without decoding new tool payloads that crash the SDK', async () => {
+    const agent = {
+      ...dpAgent('ai-ocg-mic-agent-hq'),
+      versions: {
+        latest: {
+          name: 'ai-ocg-mic-agent-hq',
+          version: '1',
+          definition: {
+            kind: 'prompt',
+            tools: [
+              {
+                type: 'openapi',
+                openapi: {
+                  name: 'workiq',
+                  spec: {},
+                  auth: {
+                    type: 'project_connection',
+                    project_connection_id: 'connection',
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    };
+    // Exercise the real installed SDK at its HTTP boundary, rather than
+    // mocking agents.list() with already-deserialized objects as before.
+    const { AIProjectClient } = await import('@azure/ai-projects');
+    const { createHttpHeaders } = await import('@azure/core-rest-pipeline');
+    const project = new AIProjectClient(
+      EXPECTED_ENDPOINT,
+      createFoundryTokenCredential('token'),
+      {
+        httpClient: {
+          sendRequest: async (request) => ({
+            request,
+            status: 200,
+            headers: createHttpHeaders(),
+            bodyAsText: JSON.stringify({ data: [agent], has_more: false }),
+          }),
+        },
+      },
+    );
+    await expect(
+      (async () => {
+        for await (const _agent of project.agents.list()) {
+          /* force decoding */
+        }
+      })(),
+    ).rejects.toThrow('project_connection_id');
+
+    mockArmFetch([]);
+    mockAgentsList.mockReturnValue(asyncFrom([agent]));
+    const result = await service.listUserAgents(
+      'arm',
+      RESOURCE_PATH,
+      'foundry',
+    );
+    expect(result.dataPlane.status).toBe('ok');
+    expect(result.agents[0]).toMatchObject({
+      agentName: 'ai-ocg-mic-agent-hq',
+      kind: 'prompt',
+      agentVersion: '1',
+    });
+  });
+
+  it('does not cache a false empty when ARM succeeds but the data plane fails', async () => {
+    mockArmFetch([]);
+    mockAgentsList.mockImplementationOnce(() => {
+      throw new Error('project_connection_id');
+    });
+    expect(
+      (await service.listUserAgents('arm', RESOURCE_PATH, 'foundry', 'user'))
+        .agents,
+    ).toEqual([]);
+    mockAgentsList.mockReturnValue(asyncFrom([dpAgent('recovered')]));
+    expect(
+      (await service.listUserAgents('arm', RESOURCE_PATH, 'foundry', 'user'))
+        .agents[0].agentName,
+    ).toBe('recovered');
+  });
+
+  it('paginates on the same endpoint and accepts unknown agent kinds', async () => {
+    mockArmFetch([]);
+    const original = global.fetch;
+    global.fetch = vi.fn(async (url: string) => {
+      if (!url.includes('/agents?')) return original(url);
+      const second = new URL(url).searchParams.has('after');
+      return new Response(
+        JSON.stringify({
+          data: [
+            {
+              name: second ? 'second' : 'first',
+              versions: { latest: { definition: { kind: 'future-kind' } } },
+            },
+          ],
+          has_more: !second,
+          last_id: 'cursor',
+        }),
+      );
+    }) as typeof fetch;
+    const result = await service.listUserAgents(
+      'arm',
+      RESOURCE_PATH,
+      'foundry',
+    );
+    expect(result.agents.map((agent) => agent.agentName)).toEqual([
+      'first',
+      'second',
+    ]);
+    expect(result.agents.every((agent) => agent.kind === 'future-kind')).toBe(
+      true,
+    );
+  });
+  it('still lists data-plane agents when the ARM control plane returns 403', async () => {
+    // The exact shape of the field report: a user with only the data-plane
+    // "Foundry User" role lists agents fine with the SDK, but the ARM
+    // /applications call 403s. Discovery must NOT let the ARM failure
+    // swallow the data-plane listing.
+    mockArmFetchFailure(403);
+    mockAgentsList.mockReturnValue(asyncFrom([dpAgent('new-agent')]));
+
+    const { agents, controlPlane, dataPlane } = await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      'foundry-token',
+    );
+
+    expect(agents.map((a) => a.agentName)).toEqual(['new-agent']);
+    expect(controlPlane).toEqual({
+      status: 'error',
+      httpStatus: 403,
+      message: expect.stringContaining('403'),
+    });
+    expect(dataPlane).toEqual({ status: 'ok' });
+  });
+
+  it('reports both plane failures without throwing', async () => {
+    mockArmFetchFailure(404);
+    mockAgentsList.mockImplementation(() => {
+      throw new Error('data plane down');
+    });
+
+    const result = await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      'foundry-token',
+    );
+
+    expect(result.agents).toEqual([]);
+    expect(result.controlPlane.status).toBe('error');
+    expect(result.dataPlane.status).toBe('error');
+  });
+
+  it('keeps the data-plane union when the ARM body is malformed', async () => {
+    // A 200 with an unparseable body must stay inside the control plane —
+    // a throw here would reject the Promise.all and take the healthy
+    // data-plane listing down with it (the coupling this split removes).
+    global.fetch = vi.fn(async (url: string) => {
+      if (url.includes('/agents?')) return dataPlaneResponse();
+      if (url.includes('/applications?')) {
+        return {
+          ok: true,
+          json: async () => {
+            throw new Error('unexpected end of JSON input');
+          },
+        } as unknown as Response;
+      }
+      return { ok: false, status: 404, text: async () => '' } as Response;
+    }) as unknown as typeof fetch;
+    mockAgentsList.mockReturnValue(asyncFrom([dpAgent('new-agent')]));
+
+    const { agents, controlPlane, dataPlane } = await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      'foundry-token',
+    );
+
+    expect(agents.map((a) => a.agentName)).toEqual(['new-agent']);
+    expect(controlPlane.status).toBe('error');
+    expect(dataPlane).toEqual({ status: 'ok' });
+  });
+
+  it('does not cache a discovery where no plane succeeded', async () => {
+    mockArmFetchFailure(403);
+    mockAgentsList.mockImplementation(() => {
+      throw new Error('403');
+    });
+    await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      'foundry-token',
+      'ann@example.org',
+    );
+
+    // The role grant lands; the next request must re-discover, not serve
+    // the failed (empty) result for the rest of the TTL.
+    mockArmFetch([armApp('granted-agent')]);
+    mockAgentsList.mockReturnValue(asyncFrom([]));
+    const { agents } = await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      'foundry-token',
+      'ann@example.org',
+    );
+
+    expect(agents.map((a) => a.agentName)).toEqual(['granted-agent']);
+  });
+});
+
+// ── baseUrl host allow-list ──────────────────────────────────────────────────
+
+describe('listUserAgents — ARM-supplied baseUrl is allow-list gated', () => {
+  it('never sends the Foundry token to a baseUrl outside the allow-list, and drops the endpoint', async () => {
+    // `properties.baseUrl` is set by whoever administers the connected
+    // project. A hostile value must neither receive the user's bearer token
+    // (enrichment fetch) nor survive onto the agent (endpoint anchoring).
+    const evil = {
+      ...armApp('evil-agent'),
+      properties: {
+        ...armApp('evil-agent').properties,
+        baseUrl: 'https://evil.example/api/projects/p/applications/evil-agent',
+      },
+    };
+    mockArmFetch([evil]);
+
+    const { agents } = await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      'foundry-token',
+    );
+
+    const fetchCalls = (
+      global.fetch as unknown as { mock: { calls: unknown[][] } }
+    ).mock.calls.map((c) => String(c[0]));
+    expect(fetchCalls.some((u) => u.includes('evil.example'))).toBe(false);
+    expect(agents).toHaveLength(1);
+    expect(agents[0].foundryEndpoint).toBeUndefined();
+  });
+
+  it('keeps enriching and anchoring allow-listed baseUrls', async () => {
+    mockArmFetch([armApp('good-agent')]);
+
+    const { agents } = await service.listUserAgents(
+      'arm-token',
+      RESOURCE_PATH,
+      'foundry-token',
+    );
+
+    expect(agents[0].foundryEndpoint).toBe(EXPECTED_ENDPOINT);
   });
 });
 

@@ -452,7 +452,9 @@
     "deselectAll": "Esory rehetra",
     "agentsSelectedCount": "{selected} amin'ny {total} agents no voafantina",
     "autoAddLabel": "Ampidiro ho azy ireo agents vaovao",
-    "autoAddDescription": "Hiseho ho azy ireo agents navoaka amin'ity tetikasa ity taty aoriana. Hijanona tsy voafantina ireo agent tsy voafantina."
+    "autoAddDescription": "Hiseho ho azy ireo agents navoaka amin'ity tetikasa ity taty aoriana. Hijanona tsy voafantina ireo agent tsy voafantina.",
+    "connectionDataPlaneUnavailable": "Tafakambana, saingy tsy afaka nanontaniana tamin'ny kaontinao ny agent service, ka mety tsy hiseho ireo agent vaovao. Hamarino fa manana ny Azure AI User role amin'ity tetikasa ity ianao, dia andramo indray.",
+    "projectRequired": "Ampidiro ny anaran'ny tetikasa"
   },
   "Quick Actions": "Hetsika haingana",
   "Type / in chat to access your prompts": "Soraty / ao amin'ny resadresaka hidirana amin'ny toro-hevitrao",

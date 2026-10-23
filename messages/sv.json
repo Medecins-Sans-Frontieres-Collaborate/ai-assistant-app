@@ -448,7 +448,9 @@
     "deselectAll": "Avmarkera alla",
     "agentsSelectedCount": "{selected} av {total} agenter valda",
     "autoAddLabel": "Lägg till nya agenter automatiskt",
-    "autoAddDescription": "Agenter som publiceras till detta projekt senare visas automatiskt. Ej markerade agenter förblir exkluderade."
+    "autoAddDescription": "Agenter som publiceras till detta projekt senare visas automatiskt. Ej markerade agenter förblir exkluderade.",
+    "connectionDataPlaneUnavailable": "Ansluten, men agenttjänsten kunde inte frågas med ditt konto, så nyare agenter kan saknas i listan. Kontrollera att du har Azure AI User-rollen på detta projekt och försök igen.",
+    "projectRequired": "Ange projektnamnet"
   },
   "Quick Actions": "Snabbåtgärder",
   "Type / in chat to access your prompts": "Skriv / i chatten för att komma åt dina prompter",

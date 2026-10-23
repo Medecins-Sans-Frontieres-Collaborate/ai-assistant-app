@@ -6,7 +6,7 @@ import {
   QueryClientProvider,
   focusManager,
 } from '@tanstack/react-query';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { ReactNode } from 'react';
 
 import { useFoundryAgents } from '@/client/hooks/settings/useFoundryAgents';
@@ -131,6 +131,49 @@ describe('useFoundryAgents', () => {
       expect(predicate!({ state: { status: 'success' } })).toBe(false);
       expect(predicate!({ state: { status: 'pending' } })).toBe(false);
     }
+  });
+
+  it('recovers a degraded 200 on focus without dropping usable agents', async () => {
+    let degraded = true;
+    fetchMock.mockImplementation((url: string) =>
+      url.startsWith('/api/agents/foundry')
+        ? ok({
+            ...FOUNDRY_RESPONSE,
+            agents: [
+              { id: 'foundry-1', name: 'Foundry One', agentName: 'one' },
+            ],
+            degradedSources: degraded ? [{ path: '/some-project' }] : [],
+          })
+        : ok({ agents: [APP_AGENT] }),
+    );
+    const { result } = renderAgents();
+    await waitFor(() => expect(result.current.isDiscoveryError).toBe(true));
+    expect(result.current.foundryAgents.map((agent) => agent.id)).toContain(
+      'foundry-1',
+    );
+    degraded = false;
+    focusManager.setFocused(false);
+    focusManager.setFocused(true);
+    await waitFor(() => expect(result.current.isDiscoveryError).toBe(false));
+  });
+
+  it('explicit degraded-discovery retries bust the server cache', async () => {
+    fetchMock.mockImplementation((url: string) =>
+      url.startsWith('/api/agents/foundry')
+        ? ok({
+            ...FOUNDRY_RESPONSE,
+            degradedSources: [{ path: '/some-project' }],
+          })
+        : ok({ agents: [APP_AGENT] }),
+    );
+    const { result } = renderAgents();
+    await waitFor(() => expect(result.current.isDiscoveryError).toBe(true));
+    await act(() => result.current.retryFoundryAgents());
+    expect(
+      fetchMock.mock.calls.some(([url]) =>
+        url.includes('/api/agents/foundry?refresh=1'),
+      ),
+    ).toBe(true);
   });
 
   it('fails a hung request on the timeout instead of spinning forever', async () => {

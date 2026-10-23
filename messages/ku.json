@@ -452,7 +452,9 @@
     "deselectAll": "هەموو دیاربکەوە",
     "agentsSelectedCount": "{selected} لە {total} ئەژەنت هەلبژێردراون",
     "autoAddLabel": "ئەژەنتە نوێیەکان خۆکارانە زیاد بکە",
-    "autoAddDescription": "ئەژەنتەکان دواتر بڵاوکراوە بۆ ئەم پڕۆژەیە خۆکارانە دەرئەبن. ئەژەنتە دیاریکراوەکان داخراو دەبن."
+    "autoAddDescription": "ئەژەنتەکان دواتر بڵاوکراوە بۆ ئەم پڕۆژەیە خۆکارانە دەرئەبن. ئەژەنتە دیاریکراوەکان داخراو دەبن.",
+    "connectionDataPlaneUnavailable": "بەسەرکەوتوویی پەیوەندی دا، بەڵام خزمەتگوزاری ئێجنت نشیا بگەڕێتەوە لەگەڵ هەژماری تۆ، بۆیە ئێجنتە نوێکان لە لیستدا نەبینرێنن. دڵنیابە کە دەستەبەری Azure AI User هەبێت لەم پرۆژەدا، پاشان هەوڵ بدەوە.",
+    "projectRequired": "ناوی پرۆژە دابنێ"
   },
   "Quick Actions": "Kiryarên Bilez",
   "Type / in chat to access your prompts": "Di sohbetê de / binivîse ku bigihîjî pirsên xwe",

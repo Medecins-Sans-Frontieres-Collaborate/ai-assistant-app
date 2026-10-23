@@ -423,7 +423,9 @@
     "deselectAll": "Desselecciona-ho tot",
     "agentsSelectedCount": "{selected} de {total} agents seleccionats",
     "autoAddLabel": "Afegeix automàticament nous agents",
-    "autoAddDescription": "Els agents publicats més tard en aquest projecte apareixeran automàticament. Els agents desmarcats es mantindran exclosos."
+    "autoAddDescription": "Els agents publicats més tard en aquest projecte apareixeran automàticament. Els agents desmarcats es mantindran exclosos.",
+    "connectionDataPlaneUnavailable": "Connectat, però no s'ha pogut consultar el servei d'agent amb el vostre compte, així que és possible que els agents més recents no apareguin a la llista. Comproveu que teniu el rol d'usuari d'Azure AI en aquest projecte i torneu-ho a intentar.",
+    "projectRequired": "Introduïu el nom del projecte"
   },
   "Quick Actions": "Accions ràpides",
   "Type / in chat to access your prompts": "Escriu / al xat per accedir als teus avisos",

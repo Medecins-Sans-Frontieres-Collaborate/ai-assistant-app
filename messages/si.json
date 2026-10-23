@@ -415,7 +415,9 @@
     "deselectAll": "සියල්ල අතහැරන්න",
     "agentsSelectedCount": "agent {total}න් {selected}ක් තෝරා ඇත",
     "autoAddLabel": "නව agent ස්වයංක්‍රීයව එක් කරන්න",
-    "autoAddDescription": "පසුව මෙයට ප්‍රකාශිත agent ස්වයංක්‍රීයව දිස්වේ. තෝරා නැති agent ඉවත දමනු ලැබේ."
+    "autoAddDescription": "පසුව මෙයට ප්‍රකාශිත agent ස්වයංක්‍රීයව දිස්වේ. තෝරා නැති agent ඉවත දමනු ලැබේ.",
+    "connectionDataPlaneUnavailable": "සම්බන්ධ වී ඇත, නමුත් ඔබගේ ගිණුම සමඟ agent සේවාව විමසිය නොහැකි වූ නිසා නැවත agent (නව) ලැයිස්තුගත නොවිය හැකිය. මෙම ව්‍යාපෘතිය සඳහා ඔබට Azure AI User භූමිකාව තිබේදැයි පරික්ෂා කර, නැවත උත්සාහ කරන්න.",
+    "projectRequired": "ව්‍යාපෘතියේ නම ඇතුළත් කරන්න"
   },
   "Quick Actions": "ඉක්මන් ක්‍රියා",
   "Type / in chat to access your prompts": "ඔබේ ප්‍රේරක වෙත ප්‍රවේශ වීමට චැට් එකේ / ටයිප් කරන්න",

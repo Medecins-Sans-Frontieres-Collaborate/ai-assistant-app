@@ -124,33 +124,66 @@ describe('createCredentialMiddleware', () => {
   });
 
   describe('cache MISS path with lazy discovery', () => {
-    it('runs ARM discovery, populates cache, retries lookup', async () => {
+    it('runs two-plane discovery, populates cache, retries lookup', async () => {
       // First lookup misses, lazy-discovery populates, second lookup hits.
       lookupUserAgentEndpoint
         .mockReturnValueOnce(null)
         .mockReturnValueOnce(ALLOWED_ENDPOINT);
-      listUserAgents.mockResolvedValue([
-        {
-          agentName: 'my-agent',
-          foundryEndpoint: ALLOWED_ENDPOINT,
-        },
-        {
-          agentName: 'other-agent',
-          foundryEndpoint: ALLOWED_ENDPOINT,
-        },
-      ]);
+      listUserAgents.mockResolvedValue({
+        agents: [
+          {
+            agentName: 'my-agent',
+            foundryEndpoint: ALLOWED_ENDPOINT,
+          },
+          {
+            agentName: 'other-agent',
+            foundryEndpoint: ALLOWED_ENDPOINT,
+          },
+        ],
+        controlPlane: { status: 'ok' },
+        dataPlane: { status: 'ok' },
+      });
 
       const result = await createCredentialMiddleware(makeContext(), mockReq);
 
       expect(getAccessTokenForOBO).toHaveBeenCalled();
       expect(getArmToken).toHaveBeenCalledWith('app-access-token');
-      expect(listUserAgents).toHaveBeenCalledWith('arm-obo-token', VALID_PATH);
+      // The Foundry token rides along so data-plane-only (new-model) agents
+      // can be re-anchored too, and the cache is owner-keyed to the user.
+      expect(listUserAgents).toHaveBeenCalledWith(
+        'arm-obo-token',
+        VALID_PATH,
+        'foundry-obo-token',
+        'u@msf.org',
+      );
       expect(cacheUserAgentEndpoint).toHaveBeenCalledTimes(2);
       expect(cacheUserAgentEndpoint).toHaveBeenCalledWith(
         'u@msf.org',
         'my-agent',
         VALID_PATH,
         ALLOWED_ENDPOINT,
+      );
+      expect(result.foundryEndpoint).toBe(ALLOWED_ENDPOINT);
+    });
+
+    it('still discovers when the Foundry token is unavailable (ARM-only)', async () => {
+      lookupUserAgentEndpoint
+        .mockReturnValueOnce(null)
+        .mockReturnValueOnce(ALLOWED_ENDPOINT);
+      getFoundryToken.mockRejectedValue(new Error('consent required'));
+      listUserAgents.mockResolvedValue({
+        agents: [{ agentName: 'my-agent', foundryEndpoint: ALLOWED_ENDPOINT }],
+        controlPlane: { status: 'ok' },
+        dataPlane: { status: 'skipped', reason: 'no-foundry-token' },
+      });
+
+      const result = await createCredentialMiddleware(makeContext(), mockReq);
+
+      expect(listUserAgents).toHaveBeenCalledWith(
+        'arm-obo-token',
+        VALID_PATH,
+        null,
+        'u@msf.org',
       );
       expect(result.foundryEndpoint).toBe(ALLOWED_ENDPOINT);
     });

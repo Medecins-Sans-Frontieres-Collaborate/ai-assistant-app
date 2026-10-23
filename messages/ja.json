@@ -448,7 +448,9 @@
     "deselectAll": "すべて解除",
     "agentsSelectedCount": "{total} 件中 {selected} 件のエージェントが選択されています",
     "autoAddLabel": "新しいエージェントを自動的に追加",
-    "autoAddDescription": "後からこのプロジェクトに公開されたエージェントは自動的に表示されます。未選択のエージェントは除外されたままになります。"
+    "autoAddDescription": "後からこのプロジェクトに公開されたエージェントは自動的に表示されます。未選択のエージェントは除外されたままになります。",
+    "connectionDataPlaneUnavailable": "接続されていますが、エージェントサービスをお使いのアカウントで照会できませんでした。そのため新しいエージェントが表示されない場合があります。このプロジェクトで Azure AI ユーザー ロールが付与されていることを確認し、再度お試しください。",
+    "projectRequired": "プロジェクト名を入力してください"
   },
   "Quick Actions": "クイックアクション",
   "Type / in chat to access your prompts": "チャットで / を入力してプロンプトにアクセス",

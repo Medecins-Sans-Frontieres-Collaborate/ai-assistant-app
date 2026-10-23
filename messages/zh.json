@@ -477,7 +477,9 @@
     "deselectAll": "取消全选",
     "agentsSelectedCount": "已选择 {selected} / {total} 个 agent",
     "autoAddLabel": "自动添加新 agent",
-    "autoAddDescription": "之后发布到此项目的 agent 会自动显示。未勾选的 agent 会保持排除状态。"
+    "autoAddDescription": "之后发布到此项目的 agent 会自动显示。未勾选的 agent 会保持排除状态。",
+    "connectionDataPlaneUnavailable": "已连接，但无法使用您的账户查询 agent 服务，因此新 agent 可能不会被列出。请确认您拥有该项目的 Azure AI User 角色，然后重试。",
+    "projectRequired": "请输入项目名称"
   },
   "Quick Actions": "快速操作",
   "Type / in chat to access your prompts": "在聊天中输入 / 以访问您的提示",

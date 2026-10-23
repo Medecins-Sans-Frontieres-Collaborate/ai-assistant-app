@@ -452,7 +452,9 @@
     "deselectAll": "ኩሎም ምንባር",
     "agentsSelectedCount": "{selected} ካብ {total} ኤጄንት ተመርጺ እዩ",
     "autoAddLabel": "ሓደሽቲ ኤጄንት ብሓላፊ ወስኺ",
-    "autoAddDescription": "ቅድሚ ዝታሃዙ ኤጄንት ናብዚ ፕሮጀክት ብሓላፊ ይቀመጡ። ዘይተመርጺ ኤጄንት ክልተዉ ይቆፅፉ።"
+    "autoAddDescription": "ቅድሚ ዝታሃዙ ኤጄንት ናብዚ ፕሮጀክት ብሓላፊ ይቀመጡ። ዘይተመርጺ ኤጄንት ክልተዉ ይቆፅፉ።",
+    "connectionDataPlaneUnavailable": "ተገናኢተ፡ ግን ኣገልግሎት እጀንት ብኣካንትኩም ክትረክብ ኣልተኻነ፡ ምስ ሓዚ እጀንት እያ ጽሑፉ ኣይኮነን። ብዚ project Azure AI User role ኣለኹም ብሞያው ተረኪቑ፡ ኣድሓን ግና ተፈትሑ።",
+    "projectRequired": "ስም project ኣእትዉ"
   },
   "Quick Actions": "ቅልጡፍ ተግባራት",
   "Type / in chat to access your prompts": "ፕሮምፕትታትካ ንምርካብ ኣብ ዕላል / ጸሓፍ",

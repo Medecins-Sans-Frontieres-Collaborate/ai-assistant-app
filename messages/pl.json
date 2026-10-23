@@ -445,7 +445,9 @@
     "deselectAll": "Odznacz wszystko",
     "agentsSelectedCount": "Wybrano {selected} z {total} agentów",
     "autoAddLabel": "Automatycznie dodawaj nowych agentów",
-    "autoAddDescription": "Agenci opublikowani później w tym projekcie zostaną dodani automatycznie. Odznaczeni agenci pozostaną wykluczeni."
+    "autoAddDescription": "Agenci opublikowani później w tym projekcie zostaną dodani automatycznie. Odznaczeni agenci pozostaną wykluczeni.",
+    "connectionDataPlaneUnavailable": "Połączono, ale usługa agenta nie mogła zostać zapytana przy użyciu Twojego konta, więc nowsze agenty mogą nie być wyświetlone. Sprawdź, czy masz rolę Azure AI User w tym projekcie, a następnie spróbuj ponownie.",
+    "projectRequired": "Wprowadź nazwę projektu"
   },
   "Quick Actions": "Szybkie akcje",
   "Type / in chat to access your prompts": "Wpisz / w czacie, aby uzyskać dostęp do swoich promptów",

@@ -452,7 +452,9 @@
     "deselectAll": "Momtu fow",
     "agentsSelectedCount": "{selected} e {total} golleekuji suɓi",
     "autoAddLabel": "Jokki golleekuji kesol",
-    "autoAddDescription": "Golleekuji njoɓaani e projekte nde kokkanii jokkitii. Golleekuji mumtani ndiyam jokkanii."
+    "autoAddDescription": "Golleekuji njoɓaani e projekte nde kokkanii jokkitii. Golleekuji mumtani ndiyam jokkanii.",
+    "connectionDataPlaneUnavailable": "Baɗii, am duuɓi agent service ngol hinnooɗaa teŋnde am, kono agent jiɓoore e cuɓaaɗe ndii wawan tokkii. Hewtii ne Azure AI User role lee ne ko duuɓi projektii ngol, jokkondir faale.",
+    "projectRequired": "Siiɗii innde projektii"
   },
   "Quick Actions": "Golle Jaawɗe",
   "Type / in chat to access your prompts": "Tap / e yeewtere ngam heɓde tinndinooje maa",

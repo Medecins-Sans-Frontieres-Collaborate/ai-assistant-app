@@ -9,6 +9,11 @@
  * picker can show only locations that actually lead somewhere, instead of
  * making the user walk a lazy cascade full of dead ends.
  */
+import {
+  AgentDiscoveryService,
+  DiscoveredAgent,
+} from './AgentDiscoveryService';
+
 import { createHash } from 'crypto';
 
 const ARM_BASE = 'https://management.azure.com';
@@ -70,6 +75,8 @@ export interface FoundryResourceTree {
   failedSubscriptions: { id: string; name: string }[];
   /** True when MAX_SUBSCRIPTIONS or MAX_ACCOUNT_FANOUT was exceeded. */
   truncated: boolean;
+  /** Agent-aware scans only: project paths whose agent listing failed. */
+  failedProjects?: string[];
 }
 
 interface CachedTree {
@@ -248,6 +255,82 @@ export class ResourceTreeService {
     );
 
     return tree;
+  }
+
+  /**
+   * Builds an agent-picker tree with only projects containing discoverable
+   * agents under the supplied user's tokens. Model pickers continue using
+   * getTree: model deployments do not require a project to have agents.
+   * @param armToken User's ARM OBO token.
+   * @param foundryToken User's Foundry OBO token, or null if unavailable.
+   * @param cacheOwner Authenticated session identity owning both tokens.
+   * @param isVisible Optional app-layer visibility filter; runs after Azure RBAC.
+   * @returns A new pruned tree; failed listings are reported, never called empty.
+   * @throws When the initial subscription enumeration fails.
+   */
+  async getAgentTree(
+    armToken: string,
+    foundryToken: string | null,
+    cacheOwner: string,
+    isVisible: (agent: DiscoveredAgent, sourcePath: string) => boolean = () =>
+      true,
+  ): Promise<FoundryResourceTree> {
+    const tree = await this.getTree(armToken);
+    const projects = tree.subscriptions.flatMap((sub) =>
+      sub.accounts.flatMap((account) =>
+        account.projects.map((project) => ({
+          path: `/subscriptions/${sub.id}/resourceGroups/${account.resourceGroup}/providers/Microsoft.CognitiveServices/accounts/${account.name}/projects/${project.name}`,
+        })),
+      ),
+    );
+    const discovered = await mapWithConcurrency(
+      projects.slice(0, MAX_ACCOUNT_FANOUT),
+      CONCURRENCY,
+      async ({ path }) => {
+        try {
+          const result =
+            await AgentDiscoveryService.getInstance().listUserAgents(
+              armToken,
+              path,
+              foundryToken,
+              cacheOwner,
+            );
+          return {
+            path,
+            hasAgents: result.agents.some((agent) => isVisible(agent, path)),
+            failed:
+              result.agents.length === 0 &&
+              (result.controlPlane.status === 'error' ||
+                result.dataPlane.status !== 'ok'),
+          };
+        } catch {
+          return { path, hasAgents: false, failed: true };
+        }
+      },
+    );
+    const visiblePaths = new Set(
+      discovered.filter((p) => p.hasAgents).map((p) => p.path),
+    );
+    return {
+      ...tree,
+      truncated: tree.truncated || projects.length > MAX_ACCOUNT_FANOUT,
+      failedProjects: discovered.filter((p) => p.failed).map((p) => p.path),
+      subscriptions: tree.subscriptions
+        .map((sub) => ({
+          ...sub,
+          accounts: sub.accounts
+            .map((account) => ({
+              ...account,
+              projects: account.projects.filter((project) =>
+                visiblePaths.has(
+                  `/subscriptions/${sub.id}/resourceGroups/${account.resourceGroup}/providers/Microsoft.CognitiveServices/accounts/${account.name}/projects/${project.name}`,
+                ),
+              ),
+            }))
+            .filter((account) => account.projects.length > 0),
+        }))
+        .filter((sub) => sub.accounts.length > 0),
+    };
   }
 
   /**
