@@ -6,6 +6,7 @@ import { retryAsync } from '@/lib/utils/app/retry';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 import { getCachedTextPath } from '@/lib/utils/server/file/textCacheUtils';
+import { hasUsablePdfText } from '@/lib/utils/server/file/textQuality';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { randomUUID } from 'crypto';
@@ -136,14 +137,23 @@ export class FileProcessingService {
           cachedPath,
           BlobProperty.BLOB,
         )) as Buffer;
-        await fs.promises.writeFile(filePath, cached, { mode: 0o600 });
-        console.log(
-          `[FileProcessingService] Using cached text: ${sanitizeForLog(id)}`,
+        const text = cached.toString('utf-8');
+        const usable = /\.pdf$/i.test(id)
+          ? hasUsablePdfText(text)
+          : !!text.trim();
+        if (usable) {
+          await fs.promises.writeFile(filePath, cached, { mode: 0o600 });
+          console.log(
+            `[FileProcessingService] Using cached text: ${sanitizeForLog(id)}`,
+          );
+          console.log(
+            `[Perf] FileProcessingService.downloadFilePreferCached (cache hit): ${(performance.now() - perfStart).toFixed(1)}ms`,
+          );
+          return { usedCache: true };
+        }
+        console.warn(
+          `[FileProcessingService] Ignoring unusable cached text: ${sanitizeForLog(id)}`,
         );
-        console.log(
-          `[Perf] FileProcessingService.downloadFilePreferCached (cache hit): ${(performance.now() - perfStart).toFixed(1)}ms`,
-        );
-        return { usedCache: true };
       }
       console.log(
         `[Perf] FileProcessingService.blobExists (cache check): ${(performance.now() - perfExistsStart).toFixed(1)}ms - miss`,
