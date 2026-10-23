@@ -2,6 +2,11 @@ import { ResourceTreeService } from '@/lib/services/agents/ResourceTreeService';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+const listUserAgents = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/services/agents/AgentDiscoveryService', () => ({
+  AgentDiscoveryService: { getInstance: () => ({ listUserAgents }) },
+}));
+
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
 interface FetchRule {
@@ -82,8 +87,100 @@ const projectsRule = (
 let service: ResourceTreeService;
 
 beforeEach(() => {
+  listUserAgents.mockReset();
   ResourceTreeService.reset();
   service = ResourceTreeService.getInstance();
+});
+
+describe('getAgentTree — agent-aware pruning', () => {
+  it('does not offer a project when all its agents are hidden by app-layer rules', async () => {
+    stubArmFetch([
+      subscriptionsRule([sub('s1')]),
+      accountsRule({ s1: [account('s1', 'rg', 'mic')] }),
+      projectsRule({ mic: ['proj'] }),
+    ]);
+    listUserAgents.mockResolvedValue({
+      agents: [{ agentName: 'restricted' }],
+      controlPlane: { status: 'ok' },
+      dataPlane: { status: 'ok' },
+    });
+    const visible = vi.fn(() => false);
+    const tree = await service.getAgentTree('arm', 'foundry', 'user', visible);
+    expect(tree.subscriptions).toEqual([]);
+    expect(tree.failedProjects).toEqual([]);
+    expect(visible).toHaveBeenCalledWith(
+      { agentName: 'restricted' },
+      expect.stringContaining('/projects/proj'),
+    );
+  });
+
+  it('does not label a working data-plane-only connection as failed', async () => {
+    stubArmFetch([
+      subscriptionsRule([sub('s1')]),
+      accountsRule({ s1: [account('s1', 'rg', 'mic')] }),
+      projectsRule({ mic: ['proj'] }),
+    ]);
+    listUserAgents.mockResolvedValue({
+      agents: [{ agentName: 'agent' }],
+      controlPlane: { status: 'error' },
+      dataPlane: { status: 'ok' },
+    });
+    const tree = await service.getAgentTree('arm', 'foundry', 'user');
+    expect(tree.subscriptions).toHaveLength(1);
+    expect(tree.failedProjects).toEqual([]);
+  });
+
+  it('keeps a data-plane-only MIC agent and removes empty projects, without changing model trees', async () => {
+    stubArmFetch([
+      subscriptionsRule([sub('sub-full'), sub('sub-empty')]),
+      accountsRule({
+        'sub-full': [account('sub-full', 'rg', 'mic')],
+        'sub-empty': [account('sub-empty', 'rg', 'empty')],
+      }),
+      projectsRule({
+        mic: ['mic-proj-default', 'empty-project'],
+        empty: ['proj'],
+      }),
+    ]);
+    listUserAgents.mockImplementation(async (_token, path) => ({
+      agents: path.endsWith('/mic-proj-default')
+        ? [{ agentName: 'ai-ocg-mic-agent-hq' }]
+        : [],
+      controlPlane: { status: 'ok' },
+      dataPlane: { status: 'ok' },
+    }));
+    const tree = await service.getAgentTree('arm', 'foundry', 'user');
+    expect(tree.subscriptions).toHaveLength(1);
+    expect(tree.subscriptions[0].accounts[0].projects).toEqual([
+      { name: 'mic-proj-default' },
+    ]);
+    expect(listUserAgents).toHaveBeenCalledWith(
+      'arm',
+      expect.stringContaining('/projects/mic-proj-default'),
+      'foundry',
+      'user',
+    );
+    // Agent pruning never mutates the cached model-source resource tree.
+    expect((await service.getTree('arm')).subscriptions).toHaveLength(2);
+  });
+
+  it('reports a failed agent listing separately from genuine emptiness', async () => {
+    stubArmFetch([
+      subscriptionsRule([sub('s1')]),
+      accountsRule({ s1: [account('s1', 'rg', 'mic')] }),
+      projectsRule({ mic: ['proj'] }),
+    ]);
+    listUserAgents.mockResolvedValue({
+      agents: [],
+      controlPlane: { status: 'ok' },
+      dataPlane: { status: 'error' },
+    });
+    const tree = await service.getAgentTree('arm', 'foundry', 'user');
+    expect(tree.subscriptions).toEqual([]);
+    expect(tree.failedProjects).toEqual([
+      expect.stringContaining('/projects/proj'),
+    ]);
+  });
 });
 
 afterEach(() => {

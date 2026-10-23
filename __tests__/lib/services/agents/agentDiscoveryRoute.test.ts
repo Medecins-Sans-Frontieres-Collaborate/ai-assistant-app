@@ -523,6 +523,25 @@ describe('discoverFoundryAgents — failed sources are reported, not swallowed',
     expect(failedSources).toEqual([]);
   });
 
+  it('reports MIC-style data-plane errors even when ARM successfully lists zero applications', async () => {
+    listUserAgents.mockResolvedValue({
+      agents: [],
+      controlPlane: { status: 'ok' },
+      dataPlane: { status: 'error', message: 'project_connection_id' },
+    });
+    const result = await discoverFoundryAgents(
+      request(),
+      session,
+      [SOURCE_PATH],
+      Promise.resolve(),
+    );
+    expect(result.failedSources).toEqual([]);
+    expect(result.degradedSources).toEqual([
+      { path: SOURCE_PATH, plane: 'dataPlane' },
+    ]);
+    expect(result.dataPlaneUnavailable).toBe(false);
+  });
+
   it('maps a rejected per-path discovery back to its source path', async () => {
     listUserAgents.mockImplementation(async (_t: string, path: string) => {
       if (path === OTHER_PATH) throw new Error('Invalid Foundry resource path');
