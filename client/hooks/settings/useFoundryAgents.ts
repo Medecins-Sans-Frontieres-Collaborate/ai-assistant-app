@@ -23,8 +23,32 @@ interface FoundryDiscoveryResponse {
   unavailable?: boolean;
   /** Sources where no discovery plane answered — failed, not empty. */
   failedSources?: { path: string; status?: number }[];
+  degradedSources?: {
+    path: string;
+    status?: number;
+    plane?: 'controlPlane' | 'dataPlane';
+  }[];
   /** Foundry data-plane token unavailable: new-model agents not listed. */
   dataPlaneUnavailable?: boolean;
+}
+
+/** True when a 200 response still reports incomplete Foundry discovery. */
+function isDiscoveryIncomplete(data?: FoundryDiscoveryResponse): boolean {
+  return !!(
+    data?.unavailable ||
+    data?.dataPlaneUnavailable ||
+    data?.failedSources?.length ||
+    data?.degradedSources?.length
+  );
+}
+
+/** Retries HTTP errors and degraded 200 responses, but not healthy lists. */
+function shouldRetryDiscovery(query: {
+  state: { status: string; data?: FoundryDiscoveryResponse };
+}): boolean {
+  return (
+    query.state.status === 'error' || isDiscoveryIncomplete(query.state.data)
+  );
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -157,9 +181,14 @@ export function useFoundryAgents() {
     // Discovery is slow; a good list stays cached for the day and the user
     // can force a refresh. Recovery from a transient failure comes from
     // `resilience` (errored-only refetch on focus/reconnect).
-    staleTime: DAY_MS,
+    // A degraded 200 must be stale: React Query otherwise rejects a focus
+    // refetch even when our refetchOnWindowFocus predicate returns true.
+    staleTime: (query) =>
+      isDiscoveryIncomplete(query.state.data) ? 0 : DAY_MS,
     gcTime: DAY_MS,
     ...resilience,
+    refetchOnReconnect: shouldRetryDiscovery,
+    refetchOnWindowFocus: shouldRetryDiscovery,
   });
 
   const queryClient = useQueryClient();
@@ -192,11 +221,11 @@ export function useFoundryAgents() {
   const retry = useCallback(async () => {
     const tasks: Promise<unknown>[] = [];
     if (appQuery.isError) tasks.push(appQuery.refetch());
-    if (foundryQuery.isError || foundryQuery.data?.unavailable) {
-      tasks.push(foundryQuery.refetch());
+    if (foundryQuery.isError || isDiscoveryIncomplete(foundryQuery.data)) {
+      tasks.push(refreshAgents());
     }
     await Promise.all(tasks);
-  }, [appQuery, foundryQuery]);
+  }, [appQuery, foundryQuery, refreshAgents]);
 
   // Apply per-source agent selection (auto-add toggle + include/exclude
   // lists) at the single choke point every consumer reads from, so the
@@ -220,6 +249,7 @@ export function useFoundryAgents() {
     officePaths: foundryQuery.data?.officePaths ?? [],
     /** Source paths discovery could not list at all (per-source failures). */
     failedSources: foundryQuery.data?.failedSources ?? [],
+    degradedSources: foundryQuery.data?.degradedSources ?? [],
     /** New-model agents could not be listed this session (no data-plane token). */
     dataPlaneUnavailable: foundryQuery.data?.dataPlaneUnavailable === true,
     /** The FAST half is still loading (nothing to show yet). */
@@ -230,12 +260,12 @@ export function useFoundryAgents() {
     /** Foundry discovery failed with nothing cached, or was unavailable. */
     isDiscoveryError:
       (foundryQuery.isError && foundryQuery.data === undefined) ||
-      foundryQuery.data?.unavailable === true,
+      isDiscoveryIncomplete(foundryQuery.data),
     /** The fast half failed and nothing is cached — see useAgentBrowserAvailability. */
     isFoundryAgentsError: appQuery.isError && appQuery.data === undefined,
     foundryAgentsError: appQuery.error ?? foundryQuery.error,
     refetchFoundryAgents: refreshAgents,
-    /** Plain refetch of whichever half failed (no server-cache bust). */
+    /** Retry failures, busting the Foundry cache for an explicit user retry. */
     retryFoundryAgents: retry,
   };
 }
