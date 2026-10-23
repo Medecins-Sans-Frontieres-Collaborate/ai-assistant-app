@@ -1,4 +1,7 @@
-import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
+import {
+  FileTextExtractionError,
+  uploadAndExtractText,
+} from '@/client/services/workflows/fileTextExtraction';
 
 import { successResponse } from '@/lib/utils/server/api/apiResponse';
 
@@ -120,6 +123,25 @@ describe('uploadAndExtractText', () => {
     );
   });
 
+  it('preserves the no-text error code for localized workspace handling', async () => {
+    fetchMock
+      .mockResolvedValueOnce(successResponse({ uri: url }))
+      .mockResolvedValueOnce(
+        Response.json(
+          {
+            error:
+              'The PDF contains no extractable text (scanned or image-only?)',
+            code: 'NO_EXTRACTABLE_TEXT',
+          },
+          { status: 422 },
+        ),
+      );
+
+    const result = uploadAndExtractText(file);
+    await expect(result).rejects.toBeInstanceOf(FileTextExtractionError);
+    await expect(result).rejects.toMatchObject({ code: 'NO_EXTRACTABLE_TEXT' });
+  });
+
   it('reads plain text locally without requiring upload or extraction', async () => {
     const textFile = new File(['Translate this'], 'notes.txt', {
       type: 'text/plain',
@@ -131,5 +153,20 @@ describe('uploadAndExtractText', () => {
       text: 'Translate this',
     });
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('extracts PDFs on the server even if the browser supplies a plain-text MIME type', async () => {
+    const mislabeledPdf = new File(['%PDF-1.4'], 'source.PDF', {
+      type: 'text/plain',
+    });
+    fetchMock
+      .mockResolvedValueOnce(successResponse({ uri: url }))
+      .mockResolvedValueOnce(
+        Response.json({ results: [{ url, content: 'Parsed PDF text' }] }),
+      );
+    await expect(uploadAndExtractText(mislabeledPdf)).resolves.toMatchObject({
+      text: 'Parsed PDF text',
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 });
