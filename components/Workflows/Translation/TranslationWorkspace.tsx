@@ -22,7 +22,10 @@ import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
 import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
-import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
+import {
+  FileTextExtractionError,
+  uploadAndExtractText,
+} from '@/client/services/workflows/fileTextExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
 import { assessTranslation } from '@/client/services/workflows/translationAssessment';
 import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
@@ -478,8 +481,12 @@ export function TranslationWorkspace({
       const extracted = await uploadAndExtractText(file);
       if (!extracted.text.trim()) {
         setUploadError(t('document.referenceEmpty', { name: file.name }));
+      } else if (extracted.text.length > MAX_SOURCE_CHARS) {
+        setUploadError(
+          t('translation.tooLong', { max: String(MAX_SOURCE_CHARS) }),
+        );
       } else {
-        patchState({ sourceText: extracted.text.slice(0, MAX_SOURCE_CHARS) });
+        patchState({ sourceText: extracted.text });
         nameWorkflowConversation(conversationId, {
           label: file.name,
           sample: extracted.text,
@@ -488,7 +495,12 @@ export function TranslationWorkspace({
       }
     } catch (err) {
       setUploadError(
-        err instanceof Error ? err.message : t('document.uploadFailed'),
+        err instanceof FileTextExtractionError &&
+          err.code === 'NO_EXTRACTABLE_TEXT'
+          ? t('document.referenceEmpty', { name: file.name })
+          : err instanceof Error
+            ? err.message
+            : t('document.uploadFailed'),
       );
     } finally {
       setUploading(false);
@@ -1026,11 +1038,13 @@ export function TranslationWorkspace({
 
   const canTranslate =
     !isRunning &&
+    !uploading &&
     !assessing &&
     sourceText.trim().length > 0 &&
     !!targetLanguage;
   const canAssess =
     !isRunning &&
+    !uploading &&
     !assessing &&
     !!targetLanguage &&
     sourceText.trim().length > 0 &&
@@ -1253,7 +1267,7 @@ export function TranslationWorkspace({
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  disabled={isRunning || uploading}
+                  disabled={isRunning || uploading || assessing}
                   className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
                 >
                   <IconUpload size={13} aria-hidden />
@@ -1273,7 +1287,7 @@ export function TranslationWorkspace({
                 ref={sourceRef}
                 value={sourceText}
                 onChange={(e) => patchState({ sourceText: e.target.value })}
-                disabled={isRunning}
+                disabled={isRunning || uploading}
                 placeholder={t('translation.sourcePlaceholder')}
                 className="min-h-0 flex-1 resize-none bg-transparent p-3 text-sm text-gray-900 placeholder-gray-500 focus:outline-none disabled:opacity-70 dark:text-gray-100 dark:placeholder-gray-400"
               />
