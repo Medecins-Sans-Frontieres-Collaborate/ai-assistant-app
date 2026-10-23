@@ -280,6 +280,10 @@ describe('GET /api/agents — access-control discovery filter', () => {
 
       expect(response.status).toBe(200);
       expect(data).toEqual({
+        unavailable: false,
+        failedSources: [],
+        degradedSources: [],
+        dataPlaneUnavailable: false,
         agents: [
           {
             id: 'prompt-abc123def456',
