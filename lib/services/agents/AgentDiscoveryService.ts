@@ -15,8 +15,6 @@
  * one plane must never block the other — each source's result reports the
  * per-plane outcome so callers can distinguish "empty" from "failed".
  */
-import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
-
 import {
   ARM_NAME_PATTERN,
   isValidAccountName,
@@ -32,6 +30,12 @@ const ARM_API_VERSION = '2025-10-01-preview';
 // Safety cap on data-plane agent listing so a misbehaving/huge project can't
 // stall discovery. Far above any realistic agent count per project.
 const DATAPLANE_AGENT_LIMIT = 200;
+const DATAPLANE_PAGE_LIMIT = 20;
+
+/** Reads optional display metadata without interpreting agent/tool schemas. */
+function metadataString(value: unknown): string | undefined {
+  return typeof value === 'string' ? value.trim() || undefined : undefined;
+}
 
 /** Raw shape of an Agent Application as returned by the ARM list endpoint. */
 interface ArmAgentApplication {
@@ -269,10 +273,23 @@ export class AgentDiscoveryService {
     // read on the preview applications resource type, and vice versa. The
     // previous ARM-first flow threw before the data plane could run, hiding
     // every agent from data-plane-only users.
-    const [controlPlane, dataPlane] = await Promise.all([
+    const attempts = await Promise.allSettled([
       this.listControlPlaneApplications(armToken, resourcePath, foundryToken),
       this.listDataPlaneAgents(foundryToken, resourcePath),
     ]);
+    // Contain unexpected decoding/mapping errors as well as HTTP failures.
+    // A plane's "never throws" contract alone is not an isolation boundary.
+    const [controlPlane, dataPlane] = attempts.map((attempt): PlaneListing => {
+      if (attempt.status === 'fulfilled') return attempt.value;
+      const message =
+        attempt.reason instanceof Error
+          ? attempt.reason.message
+          : String(attempt.reason);
+      console.error(
+        `[AgentDiscoveryService] Discovery plane failed for ${resourcePath}: ${message}`,
+      );
+      return { agents: [], outcome: { status: 'error', message } };
+    });
 
     // Union with ARM winning on conflicts: the Application resource carries
     // ui-* tags and the deployment-pinned version.
@@ -291,13 +308,14 @@ export class AgentDiscoveryService {
       dataPlane: dataPlane.outcome,
     };
 
-    // Only cache when at least one plane answered. A fully failed discovery
-    // (403 on both, network blip) must retry on the next request rather than
-    // pin an empty list for the full TTL — a role grant should take effect
-    // on the next reload, not an hour later.
+    // Never pin an incomplete list for an hour. In particular, ARM can
+    // successfully return [] while the data plane fails to decode an agent.
+    // A later retry must reach Azure instead of repeating that false empty.
     if (
-      controlPlane.outcome.status === 'ok' ||
-      dataPlane.outcome.status === 'ok'
+      controlPlane.outcome.status !== 'error' &&
+      dataPlane.outcome.status !== 'error' &&
+      (controlPlane.outcome.status === 'ok' ||
+        dataPlane.outcome.status === 'ok')
     ) {
       this.cache.set(cacheKey, {
         result,
@@ -308,7 +326,7 @@ export class AgentDiscoveryService {
 
     console.log(
       `[AgentDiscoveryService] Discovered ${agents.length} agents ` +
-        `(controlPlane=${controlPlane.outcome.status}, dataPlane=${dataPlane.outcome.status})`,
+        `(controlPlane=${controlPlane.outcome.status}, dataPlane=${dataPlane.outcome.status}) source=${resourcePath}`,
     );
 
     return result;
@@ -333,6 +351,8 @@ export class AgentDiscoveryService {
           Authorization: `Bearer ${armToken}`,
           'Content-Type': 'application/json',
         },
+        redirect: 'error',
+        signal: AbortSignal.timeout(10_000),
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -362,6 +382,9 @@ export class AgentDiscoveryService {
     let data: { value?: ArmAgentApplication[] };
     try {
       data = (await response.json()) as { value?: ArmAgentApplication[] };
+      if (!data || !Array.isArray(data.value)) {
+        throw new Error('Expected an ARM value array');
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       console.error(
@@ -442,10 +465,10 @@ export class AgentDiscoveryService {
       );
       return { agents, outcome: { status: 'ok' } };
     } catch (error) {
-      const statusCode = (error as { statusCode?: unknown }).statusCode;
+      const statusCode = (error as { statusCode?: unknown } | null)?.statusCode;
       const message = error instanceof Error ? error.message : String(error);
       console.error(
-        `[AgentDiscoveryService] Data-plane listing failed: ${message}`,
+        `[AgentDiscoveryService] Data-plane listing failed for ${resourcePath}: ${message}`,
       );
       return {
         agents: [],
@@ -586,6 +609,8 @@ export class AgentDiscoveryService {
             Authorization: `Bearer ${foundryToken}`,
             'Content-Type': 'application/json',
           },
+          redirect: 'error',
+          signal: AbortSignal.timeout(10_000),
         },
       );
       if (!res.ok) return null;
@@ -639,52 +664,101 @@ export class AgentDiscoveryService {
    * Lists agent objects via the Foundry data plane (new agent object model),
    * surfacing new-model and legacy *unpublished* agents that the ARM control
    * plane can't see. Runs under the user's Foundry OBO token, so results are
-   * RBAC-filtered at project scope — an unauthorized user gets a 403, which
-   * throws and is treated as empty by the caller. Best-effort.
+   * RBAC-filtered at project scope. Reads only discovery metadata from the
+   * REST response, deliberately avoiding the SDK's deep tool deserializers:
+   * a valid new Foundry tool schema can crash those generated deserializers
+   * (observed on MIC: undefined.project_connection_id), hiding every agent.
+   * HTTP, malformed-envelope and pagination failures are reported by caller.
    */
   private async listProjectAgentsDataPlane(
     foundryToken: string,
     projectEndpoint: string,
   ): Promise<DiscoveredAgent[]> {
-    const { AIProjectClient } = await import('@azure/ai-projects');
-    const project = new AIProjectClient(
-      projectEndpoint,
-      createFoundryTokenCredential(foundryToken),
-    );
-
     const agents: DiscoveredAgent[] = [];
-    for await (const a of project.agents.list()) {
-      const agentName = a?.name;
-      if (!agentName || typeof agentName !== 'string') continue;
-
-      // `agent_card` carries consumer-facing name/description in the new model
-      // (there are no ARM tags for UI metadata, so icon/color fall back to the
-      // picker's default).
-      const card = (
-        a as { agent_card?: { name?: string; description?: string } }
-      ).agent_card;
-      const latest = a?.versions?.latest as
-        | {
-            version?: string;
-            description?: string;
-            definition?: { kind?: string };
-          }
-        | undefined;
-
-      agents.push({
-        id: agentName,
-        name: this.prettifyAgentName(card?.name?.trim() || agentName),
-        description:
-          card?.description?.trim() || latest?.description?.trim() || '',
-        agentName,
-        agentVersion: latest?.version,
-        type: 'foundry',
-        ...(latest?.definition?.kind && { kind: latest.definition.kind }),
-        foundryEndpoint: projectEndpoint,
+    const cursors = new Set<string>();
+    const seenNames = new Set<string>();
+    // Bound total work independently of the number of accepted agents.
+    // Fresh cursors plus invalid/duplicate records cannot extend discovery
+    // indefinitely. All pages share a wall-clock budget too.
+    const deadline = AbortSignal.timeout(20_000);
+    let pages = 0;
+    let after: string | undefined;
+    do {
+      if (++pages > DATAPLANE_PAGE_LIMIT) {
+        throw new Error(
+          'Foundry agent listing exceeded the pagination safety limit',
+        );
+      }
+      const url = new URL(`${projectEndpoint}/agents`);
+      url.searchParams.set('api-version', 'v1');
+      url.searchParams.set(
+        'limit',
+        String(Math.min(100, DATAPLANE_AGENT_LIMIT - agents.length)),
+      );
+      if (after) url.searchParams.set('after', after);
+      const response = await fetch(url.toString(), {
+        headers: { Authorization: `Bearer ${foundryToken}` },
+        redirect: 'error',
+        signal: AbortSignal.any([deadline, AbortSignal.timeout(10_000)]),
       });
+      if (!response.ok) {
+        throw Object.assign(
+          new Error(`Foundry agent listing HTTP ${response.status}`),
+          { statusCode: response.status },
+        );
+      }
+      const body = await response.json();
+      if (!body || !Array.isArray(body.data)) {
+        throw new Error('Malformed Foundry agent listing: expected data array');
+      }
+      for (const a of body.data) {
+        const agentName = metadataString(a?.name);
+        if (!agentName || seenNames.has(agentName)) continue;
+        seenNames.add(agentName);
 
-      if (agents.length >= DATAPLANE_AGENT_LIMIT) break;
-    }
+        // `agent_card` carries consumer-facing name/description in the new model
+        // (there are no ARM tags for UI metadata, so icon/color fall back to the
+        // picker's default).
+        const card = (
+          a as { agent_card?: { name?: string; description?: string } }
+        ).agent_card;
+        const latest = a?.versions?.latest as
+          | {
+              version?: string;
+              description?: string;
+              definition?: { kind?: string };
+            }
+          | undefined;
+
+        agents.push({
+          id: agentName,
+          name: this.prettifyAgentName(metadataString(card?.name) || agentName),
+          description:
+            metadataString(card?.description) ||
+            metadataString(latest?.description) ||
+            '',
+          agentName,
+          agentVersion: metadataString(latest?.version),
+          type: 'foundry',
+          kind: metadataString(latest?.definition?.kind),
+          foundryEndpoint: projectEndpoint,
+        });
+
+        if (agents.length >= DATAPLANE_AGENT_LIMIT) break;
+      }
+      if (!body.has_more || agents.length >= DATAPLANE_AGENT_LIMIT) break;
+      if (
+        typeof body.last_id !== 'string' ||
+        !body.last_id ||
+        cursors.has(body.last_id)
+      ) {
+        throw new Error(
+          'Malformed Foundry agent listing: missing or repeated pagination cursor',
+        );
+      }
+      cursors.add(body.last_id);
+      after = body.last_id;
+    } while (after);
     return agents;
   }
 
