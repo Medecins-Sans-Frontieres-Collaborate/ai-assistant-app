@@ -14,7 +14,9 @@ const nextConfig = {
   // jsdom (used by the workflow page-fetcher to run Readability) resolves
   // optional native deps like `canvas` at require time, which the bundler
   // cannot follow. Leave it and Readability as real Node requires.
-  serverExternalPackages: ['jsdom', '@mozilla/readability'],
+  // PDF.js's Node fake worker dynamically imports its sibling worker module.
+  // Preserve that package layout instead of bundling the parser separately.
+  serverExternalPackages: ['jsdom', '@mozilla/readability', 'pdfjs-dist'],
 
   // Experimental settings for large file uploads
   // Supports up to 1.5GB video files + buffer for form data overhead

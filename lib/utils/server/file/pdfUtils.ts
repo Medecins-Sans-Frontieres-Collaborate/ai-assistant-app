@@ -16,11 +16,6 @@ export async function getPdfPageCount(filePath: string): Promise<number> {
   // Use legacy build for better Node.js compatibility
   const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
 
-  // Disable worker for server-side use
-  if (typeof window === 'undefined') {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '';
-  }
-
   // Read file as ArrayBuffer
   const data = await fs.promises.readFile(filePath);
   // Create a new Uint8Array to ensure we get a proper ArrayBuffer (not SharedArrayBuffer)
@@ -28,9 +23,12 @@ export async function getPdfPageCount(filePath: string): Promise<number> {
 
   // Load PDF and get page count
   const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
-  const pdf = await loadingTask.promise;
-
-  return pdf.numPages;
+  try {
+    const pdf = await loadingTask.promise;
+    return pdf.numPages;
+  } finally {
+    await loadingTask.destroy();
+  }
 }
 
 /**
@@ -47,17 +45,15 @@ export async function getPdfPageCountFromBuffer(
   // Use legacy build for better Node.js compatibility
   const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
 
-  // Disable worker for server-side use
-  if (typeof window === 'undefined') {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '';
-  }
-
   // Create a new Uint8Array to ensure we get a proper ArrayBuffer (not SharedArrayBuffer)
   const uint8Array = new Uint8Array(buffer);
 
   // Load PDF and get page count
   const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
-  const pdf = await loadingTask.promise;
-
-  return pdf.numPages;
+  try {
+    const pdf = await loadingTask.promise;
+    return pdf.numPages;
+  } finally {
+    await loadingTask.destroy();
+  }
 }

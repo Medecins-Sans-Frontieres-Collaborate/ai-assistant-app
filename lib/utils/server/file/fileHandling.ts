@@ -4,6 +4,7 @@ import {
 } from '@/lib/utils/server/log/logSanitization';
 
 import { getPdfPageCount } from './pdfUtils';
+import { hasUsablePdfText } from './textQuality';
 
 import {
   requiresContentValidation,
@@ -17,6 +18,8 @@ import os from 'os';
 import path from 'path';
 import { performance } from 'perf_hooks';
 import { promisify } from 'util';
+
+export { looksLikeGarbledText } from './textQuality';
 
 const execFileAsync = promisify(execFile);
 
@@ -70,11 +73,8 @@ async function configurePdfJs(): Promise<typeof import('pdfjs-dist')> {
   // The standard build requires DOMMatrix and other browser APIs
   const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
 
-  // Disable worker for server-side use (runs in main thread)
-  // This avoids issues with web workers in Node.js environment
-  if (typeof window === 'undefined') {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '';
-  }
+  // Keep the legacy build's default worker URL. Node uses a fake worker,
+  // but still needs that module path to load the parser implementation.
 
   return pdfjsLib as unknown as typeof import('pdfjs-dist');
 }
@@ -205,28 +205,31 @@ async function extractTextWithPdfJs(filePath: string): Promise<string> {
 
   // Load PDF document
   const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
-  const pdf = await loadingTask.promise;
+  try {
+    const pdf = await loadingTask.promise;
+    const textContents: string[] = [];
 
-  const textContents: string[] = [];
+    // Extract text from each page
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const textContent = await page.getTextContent();
 
-  // Extract text from each page
-  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-    const page = await pdf.getPage(pageNum);
-    const textContent = await page.getTextContent();
+      // Join text items with spaces, preserving structure
+      // TextItem has 'str', TextMarkedContent does not
+      const pageText = textContent.items
+        .map((item) => ('str' in item ? (item as { str: string }).str : ''))
+        .filter(Boolean)
+        .join(' ');
 
-    // Join text items with spaces, preserving structure
-    // TextItem has 'str', TextMarkedContent does not
-    const pageText = textContent.items
-      .map((item) => ('str' in item ? (item as { str: string }).str : ''))
-      .filter(Boolean)
-      .join(' ');
-
-    if (pageText.trim()) {
-      textContents.push(`--- Page ${pageNum} ---\n${pageText}`);
+      if (pageText.trim()) {
+        textContents.push(`--- Page ${pageNum} ---\n${pageText}`);
+      }
     }
-  }
 
-  return textContents.join('\n\n');
+    return textContents.join('\n\n');
+  } finally {
+    await loadingTask.destroy();
+  }
 }
 
 /**
@@ -256,33 +259,6 @@ export class PdfExtractionError extends Error {
   }
 }
 
-const GOOD_TEXT_CHARS =
-  /[\p{L}\p{N}\p{M}.,;:!?'"()[\]{}\-–—/\\%&+*=<>@#$€£§°_|~^`«»‘’“”•·]/u;
-
-/**
- * Text-quality gate for extractor output. PDFs whose fonts lack a
- * ToUnicode map "extract" as glyph-id gibberish that would otherwise be
- * embedded as if it were prose. Conservative on purpose: a mostly numeric
- * table, page markers and punctuation-heavy text all pass; only a
- * majority of unclassifiable symbols or many replacement characters fail.
- */
-export function looksLikeGarbledText(text: string): boolean {
-  const chars = Array.from(text.replace(/\s+/g, ''));
-  if (chars.length < 40) return false;
-  let good = 0;
-  let replacement = 0;
-  for (const ch of chars) {
-    if (ch === '\uFFFD') replacement += 1;
-    else if (GOOD_TEXT_CHARS.test(ch)) good += 1;
-  }
-  if (replacement / chars.length > 0.05) return true;
-  return good / chars.length < 0.6;
-}
-
-function usableText(text: string): boolean {
-  return !!text.trim() && !looksLikeGarbledText(text);
-}
-
 /**
  * Number of pages in a PDF held in memory — pdfjs first (no temp file),
  * `pdfinfo` as the fallback when pdfjs refuses the structure.
@@ -293,9 +269,13 @@ export async function countPdfPages(
 ): Promise<number> {
   try {
     const pdfjsLib = await configurePdfJs();
-    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buffer) })
-      .promise;
-    return pdf.numPages;
+    const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+    try {
+      const pdf = await loadingTask.promise;
+      return pdf.numPages;
+    } finally {
+      await loadingTask.destroy();
+    }
   } catch (pdfjsError) {
     console.warn(
       '[countPdfPages] pdfjs failed, trying pdfinfo:',
@@ -440,7 +420,7 @@ async function pdfToText(
     console.log(
       `[Perf] extractTextWithPdfJs: ${(performance.now() - perfPdfjsStart).toFixed(1)}ms`,
     );
-    if (usableText(text)) {
+    if (hasUsablePdfText(text)) {
       console.log('[pdfToText] Successfully extracted with pdfjs-dist');
       console.log(
         `[Perf] pdfToText (pdfjs-dist): ${(performance.now() - perfStart).toFixed(1)}ms`,
@@ -466,7 +446,7 @@ async function pdfToText(
     console.log(
       `[Perf] extractTextWithPdfToTextCli: ${(performance.now() - perfCliStart).toFixed(1)}ms`,
     );
-    if (usableText(stdout)) {
+    if (hasUsablePdfText(stdout)) {
       console.log('[pdfToText] Successfully extracted with pdftotext CLI');
       console.log(
         `[Perf] pdfToText (CLI fallback): ${(performance.now() - perfStart).toFixed(1)}ms`,
@@ -494,7 +474,7 @@ async function pdfToText(
       console.log(
         `[Perf] ghostscript repair + pdftotext: ${(performance.now() - perfRepairStart).toFixed(1)}ms`,
       );
-      if (usableText(stdout)) {
+      if (hasUsablePdfText(stdout)) {
         console.log(
           '[pdfToText] Successfully extracted after Ghostscript repair',
         );

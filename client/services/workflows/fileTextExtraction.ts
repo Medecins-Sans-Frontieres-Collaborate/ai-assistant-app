@@ -15,6 +15,21 @@ export interface ExtractedFileText {
   text: string;
 }
 
+/** Processing failure with a stable server code for localized UI handling. */
+export class FileTextExtractionError extends Error {
+  /**
+   * @param message - Human-readable extraction failure.
+   * @param code - Optional machine-readable server error code.
+   */
+  constructor(
+    message: string,
+    readonly code?: string,
+  ) {
+    super(message);
+    this.name = 'FileTextExtractionError';
+  }
+}
+
 function readAsBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -42,8 +57,8 @@ export async function uploadAndExtractText(
 ): Promise<ExtractedFileText> {
   // Cheap path: plain-text files are read in the browser.
   if (
-    LOCAL_TEXT_TYPES.has(file.type) ||
-    LOCAL_TEXT_EXTENSIONS.test(file.name)
+    !/\.pdf$/i.test(file.name) &&
+    (LOCAL_TEXT_TYPES.has(file.type) || LOCAL_TEXT_EXTENSIONS.test(file.name))
   ) {
     const text = await file.text();
     return { url: '', name: file.name, text };
@@ -82,8 +97,9 @@ export async function uploadAndExtractText(
   });
   if (!processResponse.ok) {
     const errorData = await processResponse.json().catch(() => ({}));
-    throw new Error(
+    throw new FileTextExtractionError(
       errorData.error || `Text extraction failed (${processResponse.status})`,
+      typeof errorData.code === 'string' ? errorData.code : undefined,
     );
   }
   const processData = (await processResponse.json()) as {
