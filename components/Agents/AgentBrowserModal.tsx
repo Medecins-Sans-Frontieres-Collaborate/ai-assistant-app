@@ -519,9 +519,11 @@ export function AgentBrowserModal() {
             ? t('attached')
             : t('addToChat')
           : t('newChat')
-        : highlighted.activeInChat
-          ? t('removeFromChat')
-          : t('addToChat');
+        : !canAttach
+          ? null
+          : highlighted.activeInChat
+            ? t('removeFromChat')
+            : t('addToChat');
 
   return (
     <div
