@@ -332,8 +332,8 @@ const mockMessages: Record<string, unknown> = {
     loading: 'Loading agents…',
     loadError:
       "Your agents couldn't be loaded just now. This is usually temporary.",
-    discoveryLoading: 'Looking for Foundry agents…',
-    discoveryError: "Foundry agents couldn't be loaded.",
+    discoveryLoading: 'Looking for more agents…',
+    discoveryError: "Some agents couldn't be loaded.",
     retry: 'Try again',
     noMatches: 'Nothing matches your search.',
     noAgents: 'No agents available.',
@@ -349,9 +349,9 @@ const mockMessages: Record<string, unknown> = {
     kind: {
       rag: 'Knowledge',
       prompt: 'Persona',
-      m365: 'Knowledge (Microsoft 365)',
+      m365: 'Microsoft 365',
       org: 'Knowledge',
-      foundry: 'Foundry agent',
+      foundry: 'Custom agent',
       connector: 'Connector',
     },
     semantics: {
