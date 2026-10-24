@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Aqoonta",
       "prompt": "Qof ahaaneed",
-      "m365": "Aqoonta (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Aqoonta",
-      "foundry": "Wakiilka Foundry",
+      "foundry": "Wakiil la habayn karo",
       "connector": "Isku-xidhaha"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "waxay ku socotaa moodelkeeda gaarka ah"
     },
     "loadError": "Wakiillada lama soo rogi karin waqtigan. Badanaa tani waa arrin ku meel gaar ah.",
-    "discoveryLoading": "Waxaa la raadinayaa wakiillada Foundry…",
-    "discoveryError": "Wakiillada Foundry lama soo rogi karin.",
+    "discoveryLoading": "Waxaan raadinaynaa wakiillo dheeraad ah…",
+    "discoveryError": "Qaar ka mid ah wakiillada lama soo dejin karin.",
     "retry": "Mar kale isku day"
   },
   "peopleSuggest": {

@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "ナレッジ",
       "prompt": "ペルソナ",
-      "m365": "ナレッジ（Microsoft 365）",
+      "m365": "Microsoft 365",
       "org": "ナレッジ",
-      "foundry": "Foundry エージェント",
+      "foundry": "カスタムエージェント",
       "connector": "コネクター"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "独自のモデルで動作"
     },
     "loadError": "エージェントをただいま読み込めませんでした。通常は一時的な問題です。",
-    "discoveryLoading": "Foundryエージェントを検索中…",
-    "discoveryError": "Foundryエージェントを読み込めませんでした。",
+    "discoveryLoading": "追加のエージェントを検索中…",
+    "discoveryError": "一部のエージェントを読み込めませんでした。",
     "retry": "再試行"
   },
   "peopleSuggest": {

@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "জ্ঞান",
       "prompt": "ব্যক্তিত্ব",
-      "m365": "জ্ঞান (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "জ্ঞান",
-      "foundry": "Foundry এজেন্ট",
+      "foundry": "কাস্টম এজেন্ট",
       "connector": "কনেক্টর"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "নিজস্ব মডেলে চলে"
     },
     "loadError": "এখনই আপনার এজেন্ট লোড করা যায়নি। এটি সাধারণত অস্থায়ী।",
-    "discoveryLoading": "Foundry এজেন্ট খোঁজা হচ্ছে…",
-    "discoveryError": "Foundry এজেন্ট লোড করা যায়নি।",
+    "discoveryLoading": "আরও এজেন্ট খোঁজা হচ্ছে…",
+    "discoveryError": "কিছু এজেন্ট লোড করা যায়নি।",
     "retry": "পুনরায় চেষ্টা করুন"
   },
   "peopleSuggest": {

@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Ìmọ̀",
       "prompt": "Ìwà",
-      "m365": "Ìmọ̀ (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Ìmọ̀",
-      "foundry": "Àgbẹ̀rẹ́ Foundry",
+      "foundry": "Aṣàpọ̀ olùrànlọ́wọ́",
       "connector": "Asopọ"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "n ṣiṣẹ́ lórí àmọ̀ràn tirẹ"
     },
     "loadError": "A ko le gbe awọn aṣoju rẹ sẹsẹ yii. Eleyi maa n jẹ iṣoro igba diẹ.",
-    "discoveryLoading": "N wa awọn aṣoju Foundry…",
-    "discoveryError": "A ko le gbe awọn aṣoju Foundry.",
+    "discoveryLoading": "N wa awọn olùrànlọ́wọ́ míì...",
+    "discoveryError": "A kò le kó gbogbo awọn olùrànlọ́wọ́.",
     "retry": "Tun gbiyanju"
   },
   "peopleSuggest": {

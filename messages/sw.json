@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Maarifa",
       "prompt": "Persona",
-      "m365": "Maarifa (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Maarifa",
-      "foundry": "Wakala wa Foundry",
+      "foundry": "Ajemu maalum",
       "connector": "Kiunganishi"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "inaendeshwa na mfano wake binafsi"
     },
     "loadError": "Mawakala wako hawakuweza kupakiwa sasa hivi. Hii mara nyingi ni ya muda mfupi.",
-    "discoveryLoading": "Inatafuta mawakala wa Foundry…",
-    "discoveryError": "Mawakala wa Foundry hawakuweza kupakiwa.",
+    "discoveryLoading": "Inatafuta ajemu zaidi...",
+    "discoveryError": "Baadhi ya ajemu hazikuweza kupakiwa.",
     "retry": "Jaribu tena"
   },
   "peopleSuggest": {

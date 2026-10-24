@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "ज्ञान",
       "prompt": "व्यक्तित्व",
-      "m365": "ज्ञान (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "ज्ञान",
-      "foundry": "Foundry एजेंट",
+      "foundry": "कस्टम एजेंट",
       "connector": "कनेक्टर"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "अपने मॉडल पर चलता है"
     },
     "loadError": "फिलहाल आपके एजेंट्स लोड नहीं हो पाए। यह आमतौर पर अस्थायी होता है।",
-    "discoveryLoading": "Foundry एजेंट्स खोज रहे हैं…",
-    "discoveryError": "Foundry एजेंट्स लोड नहीं हो सके।",
+    "discoveryLoading": "अधिक एजेंट खोजे जा रहे हैं…",
+    "discoveryError": "कुछ एजेंट लोड नहीं हो सके।",
     "retry": "फिर से प्रयास करें"
   },
   "peopleSuggest": {

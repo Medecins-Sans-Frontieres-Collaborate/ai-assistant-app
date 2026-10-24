@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Знания",
       "prompt": "Персона",
-      "m365": "Знания (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Знания",
-      "foundry": "Foundry-агент",
+      "foundry": "Пользовательский агент",
       "connector": "Коннектор"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "работает на собственной модели"
     },
     "loadError": "Не удалось загрузить ваших агентов. Обычно это временно.",
-    "discoveryLoading": "Идет поиск агентов Foundry…",
-    "discoveryError": "Не удалось загрузить агентов Foundry.",
+    "discoveryLoading": "Поиск дополнительных агентов…",
+    "discoveryError": "Не удалось загрузить некоторых агентов.",
     "retry": "Попробовать снова"
   },
   "peopleSuggest": {

@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "ځانګړي معلومات",
       "prompt": "شخصیت",
-      "m365": "ځانګړي معلومات (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "ځانګړي معلومات",
-      "foundry": "Foundry استازی",
+      "foundry": "ډولیز ایجنټ",
       "connector": "وصلوونکی"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "خپل ځانګړی ماډل کاروي"
     },
     "loadError": "ستاسو ایجنټان همدا اوس نه شول پورته کېدل. دا معمولا لنډمهاله وي.",
-    "discoveryLoading": "د Foundry ایجنټانو لټون کوو…",
-    "discoveryError": "Foundry ایجنټان پورته نه شول.",
+    "discoveryLoading": "نور ایجنټونه لټول کېږي...",
+    "discoveryError": "ځینې ایجنټونه لوډ نشول.",
     "retry": "بیا هڅه وکړئ"
   },
   "peopleSuggest": {

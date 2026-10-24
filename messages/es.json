@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Conocimiento",
       "prompt": "Persona",
-      "m365": "Conocimiento (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Conocimiento",
-      "foundry": "Agente Foundry",
+      "foundry": "Agente personalizado",
       "connector": "Conector"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "funciona con su propio modelo"
     },
     "loadError": "No se pudieron cargar sus agentes en este momento. Esto suele ser temporal.",
-    "discoveryLoading": "Buscando agentes de Foundry…",
-    "discoveryError": "No se pudieron cargar los agentes de Foundry.",
+    "discoveryLoading": "Buscando más agentes…",
+    "discoveryError": "Algunos agentes no se pudieron cargar.",
     "retry": "Intentar de nuevo"
   },
   "peopleSuggest": {

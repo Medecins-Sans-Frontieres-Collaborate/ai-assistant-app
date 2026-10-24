@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "معرفة",
       "prompt": "شخصية",
-      "m365": "معرفة (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "معرفة",
-      "foundry": "وكيل Foundry",
+      "foundry": "وكيل مخصص",
       "connector": "موصل"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "يعمل على نموذجه الخاص"
     },
     "loadError": "تعذر تحميل وكلائك الآن. عادةً ما تكون هذه مشكلة مؤقتة.",
-    "discoveryLoading": "جارٍ البحث عن وكلاء Foundry…",
-    "discoveryError": "تعذر تحميل وكلاء Foundry.",
+    "discoveryLoading": "يتم البحث عن المزيد من الوكلاء...",
+    "discoveryError": "تعذر تحميل بعض الوكلاء.",
     "retry": "إعادة المحاولة"
   },
   "peopleSuggest": {

@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Bilgi",
       "prompt": "Profil",
-      "m365": "Bilgi (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Bilgi",
-      "foundry": "Foundry agent",
+      "foundry": "Özel ajan",
       "connector": "Bağlayıcı"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "kendi modeli üzerinde çalışıyor"
     },
     "loadError": "Ajanlarınız şu anda yüklenemedi. Bu genellikle geçici bir durumdur.",
-    "discoveryLoading": "Foundry ajanları aranıyor…",
-    "discoveryError": "Foundry ajanları yüklenemedi.",
+    "discoveryLoading": "Daha fazla ajan aranıyor…",
+    "discoveryError": "Bazı ajanlar yüklenemedi.",
     "retry": "Tekrar deneyin"
   },
   "peopleSuggest": {

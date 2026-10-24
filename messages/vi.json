@@ -6441,9 +6441,9 @@
     "kind": {
       "rag": "Kiến thức",
       "prompt": "Nhân cách",
-      "m365": "Kiến thức (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Kiến thức",
-      "foundry": "Tác nhân Foundry",
+      "foundry": "Agent tùy chỉnh",
       "connector": "Kết nối"
     },
     "semantics": {
@@ -6452,8 +6452,8 @@
       "own-model": "chạy trên chính mô hình của nó"
     },
     "loadError": "Không thể tải các agent của bạn lúc này. Thông thường đây chỉ là tạm thời.",
-    "discoveryLoading": "Đang tìm agent Foundry…",
-    "discoveryError": "Không thể tải agent Foundry.",
+    "discoveryLoading": "Đang tìm thêm agent…",
+    "discoveryError": "Một số agent không thể tải được.",
     "retry": "Thử lại"
   },
   "peopleSuggest": {

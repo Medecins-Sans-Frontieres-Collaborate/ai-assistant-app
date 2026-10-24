@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Tietämys",
       "prompt": "Persoona",
-      "m365": "Tietämys (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Tietämys",
-      "foundry": "Foundry-agentti",
+      "foundry": "Mukautettu agentti",
       "connector": "Liitin"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "käyttää omaa malliaan"
     },
     "loadError": "Agenntiesi lataaminen ei onnistunut juuri nyt. Tämä on yleensä väliaikaista.",
-    "discoveryLoading": "Etsitään Foundry-agentteja…",
-    "discoveryError": "Foundry-agenttien lataaminen epäonnistui.",
+    "discoveryLoading": "Etsitään lisää agentteja…",
+    "discoveryError": "Joidenkin agenttien lataaminen epäonnistui.",
     "retry": "Yritä uudelleen"
   },
   "peopleSuggest": {

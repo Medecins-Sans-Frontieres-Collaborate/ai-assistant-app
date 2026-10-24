@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Znalosti",
       "prompt": "Osobnost",
-      "m365": "Znalosti (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Znalosti",
-      "foundry": "Foundry agent",
+      "foundry": "Vlastní agent",
       "connector": "Konektor"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "běží na vlastním modelu"
     },
     "loadError": "Vaše agenty se nyní nepodařilo načíst. Obvykle jde o dočasný problém.",
-    "discoveryLoading": "Vyhledávají se Foundry agenti…",
-    "discoveryError": "Foundry agenti se nepodařili načíst.",
+    "discoveryLoading": "Vyhledávání dalších agentů…",
+    "discoveryError": "Některé agenty se nepodařilo načíst.",
     "retry": "Zkusit znovu"
   },
   "peopleSuggest": {

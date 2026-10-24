@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Coneixement",
       "prompt": "Persona",
-      "m365": "Coneixement (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Coneixement",
-      "foundry": "Agent Foundry",
+      "foundry": "Agent personalitzat",
       "connector": "Connector"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "fa servir el seu propi model"
     },
     "loadError": "Ara mateix no s'han pogut carregar els teus agents. Normalment és temporal.",
-    "discoveryLoading": "S'estan cercant agents Foundry…",
-    "discoveryError": "No s'han pogut carregar els agents Foundry.",
+    "discoveryLoading": "Cercant més agents…",
+    "discoveryError": "Alguns agents no s'han pogut carregar.",
     "retry": "Torna-ho a provar"
   },
   "peopleSuggest": {

@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Γνώση",
       "prompt": "Προσωπικότητα",
-      "m365": "Γνώση (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Γνώση",
-      "foundry": "Foundry agent",
+      "foundry": "Προσαρμοσμένος agent",
       "connector": "Connector"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "λειτουργεί με το δικό του μοντέλο"
     },
     "loadError": "Αδυναμία φόρτωσης των πρακτόρων σας αυτή τη στιγμή. Συνήθως είναι προσωρινό.",
-    "discoveryLoading": "Αναζήτηση πρακτόρων Foundry…",
-    "discoveryError": "Αδυναμία φόρτωσης των πρακτόρων Foundry.",
+    "discoveryLoading": "Αναζήτηση για περισσότερους agents…",
+    "discoveryError": "Κάποιοι agents δεν φορτώθηκαν.",
     "retry": "Δοκιμάστε ξανά"
   },
   "peopleSuggest": {

@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "እውቀት",
       "prompt": "ግልባጭ ባህሪ",
-      "m365": "እውቀት (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "እውቀት",
-      "foundry": "Foundry ወኪል",
+      "foundry": "ብጁ ወኪል",
       "connector": "ማገናኛ"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "በራሱ ሞዴል ላይ ይሰራል"
     },
     "loadError": "agent ዎት በአሁኑ ጊዜ መጫን አልተቻለም። ይህ ብዙ ጊዜ ጊዜያዊ ነው።",
-    "discoveryLoading": "Foundry agent እየተፈለጉ ነው…",
-    "discoveryError": "Foundry agent መጫን አልተቻለም።",
+    "discoveryLoading": "ተጨማሪ ወኪሎችን በመፈለግ ላይ…",
+    "discoveryError": "አንዳንድ ወኪሎች መጫን አልተቻለም።",
     "retry": "ደግመው ይሞክሩ"
   },
   "peopleSuggest": {

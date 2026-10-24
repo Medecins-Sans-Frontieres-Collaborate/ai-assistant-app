@@ -6440,9 +6440,9 @@
     "kind": {
       "rag": "علم",
       "prompt": "پرسونا",
-      "m365": "علم (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "علم",
-      "foundry": "Foundry ایجنٹ",
+      "foundry": "حسب ضرورت ایجنٹ",
       "connector": "کنیکٹر"
     },
     "semantics": {
@@ -6451,8 +6451,8 @@
       "own-model": "اپنے ماڈل پر چلتا ہے"
     },
     "loadError": "ابھی آپ کے ایجنٹس لوڈ نہیں ہو سکے۔ یہ عموماً عارضی مسئلہ ہوتا ہے۔",
-    "discoveryLoading": "Foundry ایجنٹس تلاش کیے جا رہے ہیں…",
-    "discoveryError": "Foundry ایجنٹس لوڈ نہیں ہو سکے۔",
+    "discoveryLoading": "مزید ایجنٹس تلاش کیے جا رہے ہیں…",
+    "discoveryError": "کچھ ایجنٹس لوڈ نہیں ہو سکے۔",
     "retry": "دوبارہ کوشش کریں"
   },
   "peopleSuggest": {

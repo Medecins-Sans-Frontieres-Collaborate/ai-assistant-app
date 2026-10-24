@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Дониш",
       "prompt": "Шахсият",
-      "m365": "Дониш (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Дониш",
-      "foundry": "Агенти Foundry",
+      "foundry": "Агенти фармоишӣ",
       "connector": "Пайвасткунак"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "бо модели худ кор мекунад"
     },
     "loadError": "Агентҳои шумо ҳоло бор нашуданд. Ин одатан муваққатист.",
-    "discoveryLoading": "Агентҳои Foundry ҷустуҷӯ шуда истодаанд…",
-    "discoveryError": "Агентҳои Foundry бор нашуданд.",
+    "discoveryLoading": "Ҷустуҷӯи агентҳои бештар...",
+    "discoveryError": "Баъзе агентҳоро бор карда натавонистем.",
     "retry": "Бор боз кӯшиш кунед"
   },
   "peopleSuggest": {

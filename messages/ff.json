@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Garsital",
       "prompt": "Wonaa",
-      "m365": "Garsital (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Garsital",
-      "foundry": "Agentu Foundry",
+      "foundry": "Agent makko",
       "connector": "Connector"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "taaƴi e model moƴƴi"
     },
     "loadError": "Mbaɗɓe maa waawi aniima njannde jooni. Ko fii gonga hiɗɗo waa.",
-    "discoveryLoading": "Njalngol mbaɗɓe Foundry...",
-    "discoveryError": "Waawi aniima njannde mbaɗɓe Foundry.",
+    "discoveryLoading": "Ngaynandi agentji ɗiɗi…",
+    "discoveryError": "Agentji fof kadi wonaa buti laatan.",
     "retry": "Hurmit baale"
   },
   "peopleSuggest": {

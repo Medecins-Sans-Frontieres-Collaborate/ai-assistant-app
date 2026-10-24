@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Ubumenyi",
       "prompt": "Umwirondoro",
-      "m365": "Ubumenyi (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Ubumenyi",
-      "foundry": "Umukozi wa Foundry",
+      "foundry": "Umukozi wihariye",
       "connector": "Umuhuza"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "ikoresha imoderele yayo bwite"
     },
     "loadError": "Abakozi bawe ntibashoboye gupakirwa ubu. Akenshi biba ari iby'igihe gito.",
-    "discoveryLoading": "Turashakisha abakozi ba Foundry…",
-    "discoveryError": "Abakozi ba Foundry ntibashoboye gupakirwa.",
+    "discoveryLoading": "Turimo gushaka abakozi abandi...",
+    "discoveryError": "Hari abakozi batashoboye kwishyirwaho.",
     "retry": "Ongera ugerageze"
   },
   "peopleSuggest": {

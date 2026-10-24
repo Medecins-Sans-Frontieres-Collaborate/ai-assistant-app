@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Fahalalana",
       "prompt": "Toetra",
-      "m365": "Fahalalana (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Fahalalana",
-      "foundry": "Mpanampy Foundry",
+      "foundry": "Agent manokana",
       "connector": "Mpampifandray"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "miasa amin'ny modeliny manokana"
     },
     "loadError": "Tsy afaka navahana izao ireo agents-nao. Matetika vetivety monja izany.",
-    "discoveryLoading": "Mitady agents Foundry…",
-    "discoveryError": "Tsy afaka navahana ireo agents Foundry.",
+    "discoveryLoading": "Mitady agent hafa...",
+    "discoveryError": "Misy agent tsy afaka nampidirina.",
     "retry": "Avereno andramana"
   },
   "peopleSuggest": {

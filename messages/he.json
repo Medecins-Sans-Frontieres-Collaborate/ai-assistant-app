@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "ידע",
       "prompt": "פרסונה",
-      "m365": "ידע (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "ידע",
-      "foundry": "סוכן Foundry",
+      "foundry": "סוכן מותאם אישית",
       "connector": "מחבר"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "פועל על המודל הפרטי שלו"
     },
     "loadError": "לא ניתן היה לטעון את הסוכנים שלך כרגע. לרוב מדובר בתקלה זמנית.",
-    "discoveryLoading": "מחפש סוכני Foundry…",
-    "discoveryError": "לא ניתן היה לטעון את סוכני Foundry.",
+    "discoveryLoading": "מחפש סוכנים נוספים…",
+    "discoveryError": "לא ניתן היה לטעון חלק מהסוכנים.",
     "retry": "נסה שוב"
   },
   "peopleSuggest": {

@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Sûngö",
       "prompt": "Ngangu",
-      "m365": "Sûngö (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Sûngö",
-      "foundry": "Bângbi Foundry",
+      "foundry": "Agent ti so ala",
       "connector": "Connector"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "yeke na model iye"
     },
     "loadError": "Agents mo ape yeke koui tî lo nzoni. Doko mbênî ape na ndatabarî.",
-    "discoveryLoading": "Bi na na sô lo agents tî Foundry…",
-    "discoveryError": "Agents tî Foundry ape yeke koui.",
+    "discoveryLoading": "Zo na la tî ti agents sô…",
+    "discoveryError": "Agents mo tî mendé na gu na gbu.",
     "retry": "Koke"
   },
   "peopleSuggest": {

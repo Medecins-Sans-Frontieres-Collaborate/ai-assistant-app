@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Chidziwitso",
       "prompt": "Munthu",
-      "m365": "Chidziwitso (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Chidziwitso",
-      "foundry": "Wothandizira wa Foundry",
+      "foundry": "Wothandizila wopangidwa",
       "connector": "Olumikizira"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "amagwiritsa ntchito mtundu wake"
     },
     "loadError": "Simungathe kutsitsa omwe mungagwiritse ntchito pano pano. Nthawi zambiri izi zimakhala zakanthawi.",
-    "discoveryLoading": "Kufunafuna ma Foundry agents…",
-    "discoveryError": "Simungathe kutsitsa ma Foundry agents.",
+    "discoveryLoading": "Kufufuza othandizila ena...",
+    "discoveryError": "Othandizila ena alephera kutsegulidwa.",
     "retry": "Yesaninso"
   },
   "peopleSuggest": {

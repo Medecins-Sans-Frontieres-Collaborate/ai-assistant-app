@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Kunskap",
       "prompt": "Personlighet",
-      "m365": "Kunskap (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Kunskap",
-      "foundry": "Foundry-agent",
+      "foundry": "Anpassad agent",
       "connector": "Koppling"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "kör på egen modell"
     },
     "loadError": "Dina agenter kunde inte laddas just nu. Detta är vanligtvis tillfälligt.",
-    "discoveryLoading": "Letar efter Foundry-agenter…",
-    "discoveryError": "Det gick inte att ladda Foundry-agenter.",
+    "discoveryLoading": "Letar efter fler agenter…",
+    "discoveryError": "Vissa agenter kunde inte läsas in.",
     "retry": "Försök igen"
   },
   "peopleSuggest": {

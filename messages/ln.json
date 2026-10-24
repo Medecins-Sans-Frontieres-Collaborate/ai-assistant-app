@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Boyebi",
       "prompt": "Moto",
-      "m365": "Boyebi (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Boyebi",
-      "foundry": "Agent ya Foundry",
+      "foundry": "Agent ya moto moko",
       "connector": "Connector"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "esalelaka model na ye moko"
     },
     "loadError": "Ba agents na yo esimbaki te sik’oyo. Makambo boye alongwaka mbala mingi.",
-    "discoveryLoading": "Tosili koluka ba agents ya Foundry…",
-    "discoveryError": "Ba agents ya Foundry esimbaki te.",
+    "discoveryLoading": "Tozali koluka ba agent mosusu…",
+    "discoveryError": "Ba agent mosusu bakokaki te komema.",
     "retry": "Meka lisusu"
   },
   "peopleSuggest": {

@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Kennis",
       "prompt": "Persona",
-      "m365": "Kennis (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Kennis",
-      "foundry": "Foundry-agent",
+      "foundry": "Aangepaste agent",
       "connector": "Connector"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "draait op eigen model"
     },
     "loadError": "Uw agents konden zojuist niet worden geladen. Dit is meestal tijdelijk.",
-    "discoveryLoading": "Zoeken naar Foundry-agents…",
-    "discoveryError": "Foundry-agents konden niet worden geladen.",
+    "discoveryLoading": "Meer agents zoeken…",
+    "discoveryError": "Sommige agents konden niet worden geladen.",
     "retry": "Opnieuw proberen"
   },
   "peopleSuggest": {

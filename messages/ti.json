@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "መረዳእታ",
       "prompt": "ተቋማንቲ",
-      "m365": "መረዳእታ (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "መረዳእታ",
-      "foundry": "Foundry ወኪል",
+      "foundry": "ብሓላፍነት ኤጀንት",
       "connector": "ኮኔክተር"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "ሓደ ሞዴል ይግዚኡ"
     },
     "loadError": "ኣጄንታትኩም ሕጂ ምምጻዕ ኣይተቻአኑን። ዚኣ ሓደ ግዜ ክብል ኢዩ።",
-    "discoveryLoading": "Foundry ኣጄንታት እዚ እተኣክቱ…",
-    "discoveryError": "Foundry ኣጄንታት ምምጻዕ ኣይተቻአኑን።",
+    "discoveryLoading": "ተጨማሪ ኤጀንትታት እዩ ዝምለስ…",
+    "discoveryError": "አንዳንድ ኤጀንትታት ኣይተጽዕነን እዮም።",
     "retry": "ብደገም ፈትኑ"
   },
   "peopleSuggest": {

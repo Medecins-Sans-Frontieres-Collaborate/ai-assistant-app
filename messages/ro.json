@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Cunoaștere",
       "prompt": "Persoană",
-      "m365": "Cunoaștere (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Cunoaștere",
-      "foundry": "Agent Foundry",
+      "foundry": "Agent personalizat",
       "connector": "Conector"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "rulează pe propriul său model"
     },
     "loadError": "Agenții nu au putut fi încărcați momentan. De obicei, aceasta este o situație temporară.",
-    "discoveryLoading": "Se caută agenți Foundry…",
-    "discoveryError": "Agenții Foundry nu au putut fi încărcați.",
+    "discoveryLoading": "Se caută mai mulți agenți…",
+    "discoveryError": "Unii agenți nu au putut fi încărcați.",
     "retry": "Reîncercați"
   },
   "peopleSuggest": {

@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "အသိပညာ",
       "prompt": "ပုဂ္ဂိုလ်ရေး",
-      "m365": "အသိပညာ (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "အသိပညာ",
-      "foundry": "Foundry အေးဂျင့်",
+      "foundry": "စိတ်ကြိုက် agent",
       "connector": "ချိတ်ဆက်ကိရိယာ"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "မိမိ မော်ဒယ်ကို အသုံးပြု၍ လည်ပတ်သည်"
     },
     "loadError": "သင့် agent များကို ယခုဖော်ပြ၍မရပါ။ ယင်းသည် ယာယီဖြစ်ခြင်းဖြစ်သည်။",
-    "discoveryLoading": "Foundry agent များကို ရှာဖွေနေပါသည်...",
-    "discoveryError": "Foundry agent များကို ဖော်ပြ၍မရပါ။",
+    "discoveryLoading": "Agent များအားထပ်မံရှာဖွေနေနှင့်...",
+    "discoveryError": "Agent အချို့အား မထည့်နိုင်ခဲ့ပါ။",
     "retry": "ပြန်လည်ကြိုးစားပါ"
   },
   "peopleSuggest": {

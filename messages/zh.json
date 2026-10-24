@@ -6441,9 +6441,9 @@
     "kind": {
       "rag": "知识",
       "prompt": "人物设定",
-      "m365": "知识（Microsoft 365）",
+      "m365": "Microsoft 365",
       "org": "知识",
-      "foundry": "Foundry 代理",
+      "foundry": "自定义代理",
       "connector": "连接器"
     },
     "semantics": {
@@ -6452,8 +6452,8 @@
       "own-model": "使用自有模型"
     },
     "loadError": "刚才无法加载您的智能体，通常是暂时性问题。",
-    "discoveryLoading": "正在查找Foundry智能体…",
-    "discoveryError": "无法加载Foundry智能体。",
+    "discoveryLoading": "正在查找更多代理…",
+    "discoveryError": "部分代理加载失败。",
     "retry": "重试"
   },
   "peopleSuggest": {

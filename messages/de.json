@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Wissen",
       "prompt": "Persona",
-      "m365": "Wissen (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Wissen",
-      "foundry": "Foundry-Agent",
+      "foundry": "Benutzerdefinierter Agent",
       "connector": "Connector"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "nutzt eigenes Modell"
     },
     "loadError": "Ihre Agents konnten gerade nicht geladen werden. Dies ist in der Regel vorübergehend.",
-    "discoveryLoading": "Es wird nach Foundry Agents gesucht…",
-    "discoveryError": "Foundry Agents konnten nicht geladen werden.",
+    "discoveryLoading": "Suche nach weiteren Agents…",
+    "discoveryError": "Einige Agents konnten nicht geladen werden.",
     "retry": "Erneut versuchen"
   },
   "peopleSuggest": {

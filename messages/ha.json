@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Sanin ilimi",
       "prompt": "Hali",
-      "m365": "Sanin ilimi (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Sanin ilimi",
-      "foundry": "Wakilin Foundry",
+      "foundry": "Wakili na musamman",
       "connector": "Mai haɗawa"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "yana aiki da samfurinsa kansa"
     },
     "loadError": "Ba a iya ɗora wakilanka a yanzu. Wannan yawanci na ɗan lokaci ne.",
-    "discoveryLoading": "Ana neman wakilan Foundry…",
-    "discoveryError": "An kasa ɗora wakilan Foundry.",
+    "discoveryLoading": "Ana neman ƙarin wakilai…",
+    "discoveryError": "Ba a iya loda wasu daga cikin wakilan ba.",
     "retry": "Sake ƙoƙari"
   },
   "peopleSuggest": {

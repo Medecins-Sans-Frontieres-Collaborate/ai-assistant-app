@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "ความรู้",
       "prompt": "บุคคลิก",
-      "m365": "ความรู้ (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "ความรู้",
-      "foundry": "Foundry agent",
+      "foundry": "ตัวแทนแบบกำหนดเอง",
       "connector": "คอนเนคเตอร์"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "ทำงานบนโมเดลของตัวเอง"
     },
     "loadError": "ไม่สามารถโหลดเอเจนต์ของคุณได้ในขณะนี้ โดยปกติปัญหานี้จะเกิดขึ้นชั่วคราว",
-    "discoveryLoading": "กำลังค้นหา Foundry agents…",
-    "discoveryError": "ไม่สามารถโหลด Foundry agents ได้",
+    "discoveryLoading": "กำลังค้นหาตัวแทนเพิ่มเติม…",
+    "discoveryError": "ไม่สามารถโหลดตัวแทนบางรายได้",
     "retry": "ลองอีกครั้ง"
   },
   "peopleSuggest": {

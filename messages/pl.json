@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Wiedza",
       "prompt": "Osobowość",
-      "m365": "Wiedza (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Wiedza",
-      "foundry": "Agent Foundry",
+      "foundry": "Własny agent",
       "connector": "Konektor"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "korzysta z własnego modelu"
     },
     "loadError": "Nie udało się teraz załadować Twoich agentów. Zwykle to chwilowy problem.",
-    "discoveryLoading": "Wyszukiwanie agentów Foundry…",
-    "discoveryError": "Nie udało się załadować agentów Foundry.",
+    "discoveryLoading": "Wyszukiwanie kolejnych agentów…",
+    "discoveryError": "Niektórych agentów nie udało się załadować.",
     "retry": "Spróbuj ponownie"
   },
   "peopleSuggest": {

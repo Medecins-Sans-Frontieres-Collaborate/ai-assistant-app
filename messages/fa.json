@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "دانش",
       "prompt": "شخصیت",
-      "m365": "دانش (Microsoft 365)",
+      "m365": "مایکروسافت ۳۶۵",
       "org": "دانش",
-      "foundry": "نماینده Foundry",
+      "foundry": "عامل سفارشی",
       "connector": "کانکتور"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "روی مدل اختصاصی خود اجرا می‌شود"
     },
     "loadError": "بارگذاری عوامل شما هم‌اکنون انجام نشد. این مشکل معمولاً موقت است.",
-    "discoveryLoading": "در حال جستجوی عوامل Foundry…",
-    "discoveryError": "عوامل Foundry بارگذاری نشدند.",
+    "discoveryLoading": "در حال جستجوی عوامل بیشتر...",
+    "discoveryError": "برخی عوامل بارگذاری نشدند.",
     "retry": "دوباره تلاش کنید"
   },
   "peopleSuggest": {

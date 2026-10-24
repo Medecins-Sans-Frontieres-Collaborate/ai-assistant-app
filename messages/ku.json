@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "زانیاری",
       "prompt": "شخصیەت",
-      "m365": "زانیاری (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "زانیاری",
-      "foundry": "ئەجێنتی Foundry",
+      "foundry": "Agentsەکیی تایبەتی",
       "connector": "پەیوەندیدەر"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "بە مۆدێلی خۆی کاردەکات"
     },
     "loadError": "ئیجێنتەکانت ئەستا نەتوانرا بار بکرێن. ئەمە زۆرجار مۆقایەتە.",
-    "discoveryLoading": "لە گەڕان بۆ ئیجێنتەکانی Foundry...",
-    "discoveryError": "ئیجێنتەکانی Foundry نەتوانرا بار بکرێن.",
+    "discoveryLoading": "لەگەڕان بەدوای agents زیاتر…",
+    "discoveryError": "هەندێک agent نەتوانرا باربکرێن.",
     "retry": "دووبارە هەوڵبدە"
   },
   "peopleSuggest": {

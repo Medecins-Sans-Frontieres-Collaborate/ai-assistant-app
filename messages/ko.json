@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "지식",
       "prompt": "페르소나",
-      "m365": "지식(Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "지식",
-      "foundry": "Foundry 에이전트",
+      "foundry": "사용자 지정 에이전트",
       "connector": "커넥터"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "자체 모델로 실행"
     },
     "loadError": "지금 에이전트를 불러올 수 없습니다. 대부분 일시적인 문제입니다.",
-    "discoveryLoading": "Foundry 에이전트를 찾는 중…",
-    "discoveryError": "Foundry 에이전트를 불러올 수 없습니다.",
+    "discoveryLoading": "추가 에이전트를 찾는 중…",
+    "discoveryError": "일부 에이전트를 불러올 수 없습니다.",
     "retry": "다시 시도하기"
   },
   "peopleSuggest": {

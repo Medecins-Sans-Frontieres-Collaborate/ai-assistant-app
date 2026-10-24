@@ -6410,9 +6410,9 @@
     "kind": {
       "rag": "Pengetahuan",
       "prompt": "Persona",
-      "m365": "Pengetahuan (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Pengetahuan",
-      "foundry": "Agen Foundry",
+      "foundry": "Agen kustom",
       "connector": "Konektor"
     },
     "semantics": {
@@ -6421,8 +6421,8 @@
       "own-model": "berjalan di model sendiri"
     },
     "loadError": "Agen Anda tidak dapat dimuat saat ini. Biasanya ini hanya sementara.",
-    "discoveryLoading": "Mencari agen Foundry…",
-    "discoveryError": "Agen Foundry tidak dapat dimuat.",
+    "discoveryLoading": "Mencari agen lainnya…",
+    "discoveryError": "Beberapa agen tidak dapat dimuat.",
     "retry": "Coba lagi"
   },
   "peopleSuggest": {

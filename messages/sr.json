@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Znanje",
       "prompt": "Persona",
-      "m365": "Znanje (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Znanje",
-      "foundry": "Foundry agent",
+      "foundry": "Prilagođeni agent",
       "connector": "Konektor"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "koristi svoj sopstveni model"
     },
     "loadError": "Vaši agenti trenutno nisu mogli da se učitaju. Ovo je obično privremeno.",
-    "discoveryLoading": "Tražimo Foundry agente…",
-    "discoveryError": "Foundry agenti nisu mogli da se učitaju.",
+    "discoveryLoading": "Tražim dodatne agente…",
+    "discoveryError": "Neki agenti nisu mogli da se učitaju.",
     "retry": "Pokušajte ponovo"
   },
   "peopleSuggest": {

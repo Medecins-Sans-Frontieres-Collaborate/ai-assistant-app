@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Konesans",
       "prompt": "Pèsonalite",
-      "m365": "Konesans (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Konesans",
-      "foundry": "Ajan Foundry",
+      "foundry": "Ajan pèsonalize",
       "connector": "Konektè"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "kouri sou pwòp modèl li"
     },
     "loadError": "Nou pa t ka chaje ajan ou yo kounye a. Sa tipikman se yon pwoblèm tanporè.",
-    "discoveryLoading": "N ap chèche ajan Foundry…",
-    "discoveryError": "Nou pa t ka chaje ajan Foundry yo.",
+    "discoveryLoading": "Nap chèche plis ajan...",
+    "discoveryError": "Gen kèk ajan ki pa t ka chaje.",
     "retry": "Reeseye"
   },
   "peopleSuggest": {

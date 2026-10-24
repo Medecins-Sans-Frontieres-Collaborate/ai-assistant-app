@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "ចំណេះដឹង",
       "prompt": "បុគ្គលិកលក្ខណៈ",
-      "m365": "ចំណេះដឹង (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "ចំណេះដឹង",
-      "foundry": "ភ្នាក់ងារ Foundry",
+      "foundry": "Agent ផ្ទាល់ខ្លួន",
       "connector": "តំណភ្ជាប់"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "ដំណើរការនៅលើម៉ូដែលផ្ទាល់ខ្លួន"
     },
     "loadError": "មិនអាចផ្ទុកភ្នាក់ងាររបស់អ្នកបានទេ។ ស្ថានភាពនេះជាទូទៅជាបណ្តោះអាសន្ន។",
-    "discoveryLoading": "កំពុងស្វែងរក Foundry agents…",
-    "discoveryError": "មិនអាចផ្ទុក Foundry agents បានទេ។",
+    "discoveryLoading": "កំពុងស្វែងរក agent បន្ថែម…",
+    "discoveryError": "Agent មួយចំនួនមិនអាចផ្ទុកបាន។",
     "retry": "សាកល្បងម្តងទៀត"
   },
   "peopleSuggest": {

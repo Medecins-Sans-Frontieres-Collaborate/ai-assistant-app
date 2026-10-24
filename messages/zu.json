@@ -6394,9 +6394,9 @@
     "kind": {
       "rag": "Ulwazi",
       "prompt": "Uhlamvu",
-      "m365": "Ulwazi (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Ulwazi",
-      "foundry": "Umsebenzi we-Foundry",
+      "foundry": "I-ejenti engokwezifiso",
       "connector": "Isixhumi"
     },
     "semantics": {
@@ -6405,8 +6405,8 @@
       "own-model": "isebenzisa imodeli yayo"
     },
     "loadError": "Imisebenzi yakho ayikwazanga ukulayishwa njengamanje. Lokhu kujwayele ukuba isikhashana.",
-    "discoveryLoading": "Sifuna imisebenzi ye-Foundry…",
-    "discoveryError": "Imisebenzi ye-Foundry ayikwazanga ukulayishwa.",
+    "discoveryLoading": "Sifuna ama-ejenti angeziwe...",
+    "discoveryError": "Amanye ama-ejenti awazange akwazi ukulayishwa.",
     "retry": "Zama futhi"
   },
   "peopleSuggest": {
