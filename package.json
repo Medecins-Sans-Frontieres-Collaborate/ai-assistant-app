@@ -24,7 +24,7 @@
     "@anthropic-ai/foundry-sdk": "^0.2.0",
     "@azure/ai-agents": "^1.1.0",
     "@azure/ai-projects": "^2.0.0-beta.4",
-    "@azure/identity": "^4.4.1",
+    "@azure/identity": "^4.14.0",
     "@azure/monitor-ingestion": "^1.1.0",
     "@azure/monitor-opentelemetry-exporter": "^1.0.0-beta.32",
     "@azure/openai": "^2.0.0-beta.2",
@@ -122,7 +122,7 @@
     "@types/react-dom": "19.2.2",
     "@types/turndown": "^5.0.6",
     "@vitejs/plugin-react": "^5.1.0",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.12",
     "autoprefixer": "^10.4.14",
     "dotenv": "^17.2.3",
     "eslint": "^9.22.0",
@@ -140,13 +140,14 @@
     "tailwindcss": "^3.2.7",
     "typescript": "^5.6.3",
     "unified": "^11.0.5",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   },
   "engines": {
     "node": ">=24.0.0",
     "npm": ">=10.0.0"
   },
   "overrides": {
+    "@azure/msal-node": "^7.1.0",
     "dompurify": ">=3.4.0",
     "@opentelemetry/core": "^2.7.2",
     "@hono/node-server": "^2.0.5",
