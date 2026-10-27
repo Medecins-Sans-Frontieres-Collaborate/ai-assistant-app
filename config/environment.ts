@@ -48,6 +48,8 @@ const serverEnvSchema = z.object({
 
   // Azure OpenAI
   AZURE_OPENAI_ENDPOINT: z.string().url().optional(),
+  /** Optional explicit residency declaration for all generic default model endpoints. */
+  AZURE_DEFAULT_REGION: z.enum(['EU', 'US']).optional(),
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_API_VERSION: z.string().default('2025-04-01-preview'),
   OPENAI_EMBEDDING_DEPLOYMENT: z.string().default('text-embedding'),
@@ -322,6 +324,21 @@ const serverEnvSchema = z.object({
   // write can remove it, and the roster PUT refuses to empty itself while
   // this is also empty (GLOBAL_ADMINS_LOCKOUT).
   AGENT_ACCESS_ADMINS: z.string().optional(),
+
+  // Skills (docs/SKILLS_DESIGN.md). Gates the chat-pipeline enricher, the
+  // catalog/admin APIs, and the admin area. Rides the agent-access storage
+  // and admin machinery, so it is only effective when
+  // AGENT_ACCESS_CONTROL_ENABLED is also true. Default off: enabling is the
+  // moment the base prompt's platform knowledge becomes automatically
+  // routed. Core safety stays unconditional. Break-glass: set to "false"
+  // and redeploy to restore the full base prompt.
+  SKILLS_ENABLED: booleanString(false),
+  SKILLS_SEARCH_ENDPOINT: z.string().url().optional(),
+  SKILLS_SEARCH_INDEX: z.string().default('skills'),
+  /** Organization reference corpus residency; queries and embeddings must agree. */
+  SKILLS_DATA_REGION: z.enum(['EU', 'US']).default('EU'),
+  SKILLS_SEARCH_ENDPOINT_EU: z.string().url().optional(),
+  SKILLS_SEARCH_ENDPOINT_US: z.string().url().optional(),
 
   // Usage limits (docs/LIMITS.md) have no env gate: the UI is gated by the
   // client-side `usageLimits` LaunchDarkly flag, and the server side is inert
