@@ -1,5 +1,10 @@
 import { Session } from 'next-auth';
 
+import {
+  SkillReferenceIdSchema,
+  UserSkillsRequestSchema,
+} from '@/lib/services/skills/types';
+
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 import { SEARCH_STATE_RECORD_NAME } from '@/lib/utils/shared/searchState';
@@ -568,7 +573,7 @@ const ChatBodySchema = z
             argumentsJson: z.string().max(20000),
             // Server-signed continuation proof (limits/continuationToken.ts);
             // verified, never trusted, by the limits middleware.
-            continuationToken: z.string().max(256).optional(),
+            continuationToken: z.string().max(4096).optional(),
           })
           .strict(),
       )
@@ -610,8 +615,27 @@ const ChatBodySchema = z
       .array(z.string().max(600, 'Memory too long (max 600 chars)'))
       .max(60, 'Too many memories (max 60)')
       .optional(),
+    // Explicit skill use (docs/SKILLS_DESIGN.md §5.1). Id charset mirrors
+    // the Agent Skills name rules (SkillIdSchema); resolution against the
+    // caller's visible catalog happens in SkillEnricher.
+    forcedSkillIds: z
+      .array(SkillReferenceIdSchema)
+      .max(3, 'Too many forced skills (max 3)')
+      .optional(),
+    pinnedSkillIds: z.array(SkillReferenceIdSchema).max(3).optional(),
+    userSkills: UserSkillsRequestSchema.optional(),
   })
-  .strict(); // Reject unknown properties
+  .strict()
+  .refine(
+    (body) =>
+      (body.pinnedSkillIds ?? []).every((id) =>
+        body.forcedSkillIds?.includes(id),
+      ),
+    {
+      message: 'Pinned skills must also be explicitly selected',
+      path: ['pinnedSkillIds'],
+    },
+  ); // Reject unknown properties and inconsistent attribution
 
 /**
  * InputValidator validates and sanitizes incoming chat requests.
