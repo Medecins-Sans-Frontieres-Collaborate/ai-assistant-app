@@ -22,6 +22,7 @@ import { AutoFetchLinksToggle } from '../AutoFetchLinksToggle';
 import { ContextWindowSlider } from '../ContextWindowSlider';
 import { ModelTimeoutSetting } from '../ModelTimeoutSetting';
 import { PasteAttachmentSetting } from '../PasteAttachmentSetting';
+import { PersonalSkills } from '../PersonalSkills';
 import { SuggestRevisionsSetting } from '../SuggestRevisionsSetting';
 import { SystemPrompt } from '../SystemPrompt';
 import { TTSSettingsPanel } from '../TTS/TTSSettingsPanel';
@@ -83,6 +84,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
       </div>
 
       <div className="space-y-8">
+        <PersonalSkills />
         {/* Model Response Settings Section - Collapsible */}
         <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
           <button
