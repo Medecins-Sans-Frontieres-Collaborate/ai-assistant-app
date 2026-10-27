@@ -23,6 +23,7 @@ import {
   AGENT_ACCESS_ORG_AGENTS_PREFIX,
   AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
+  AGENT_ACCESS_SKILLS_PREFIX,
   AdminChannelProfile,
   AdminChannelProfileHistoryEntry,
   AdminChannelProfileHistoryEntrySchema,
@@ -85,6 +86,7 @@ import {
   PromptAgentHistoryEntry,
   PromptAgentHistoryEntrySchema,
   PromptAgentSchema,
+  SKILL_SOURCE,
   canonicalAgentKey,
   catalogOauthBlobPath,
   channelProfileBlobPath,
@@ -102,7 +104,14 @@ import {
   orgAgentBlobPath,
   promptAgentBlobPath,
   ruleBlobPath,
+  skillBlobPath,
 } from '@/lib/services/agentAccess/types';
+import {
+  Skill,
+  SkillHistoryEntry,
+  SkillHistoryEntrySchema,
+  SkillSchema,
+} from '@/lib/services/skills/types';
 
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
@@ -678,6 +687,17 @@ const guideEntity = defineBlobEntity<Guide, GuideHistoryEntry>({
   labelBase: 'Guide',
 });
 
+const skillEntity = defineBlobEntity<Skill, SkillHistoryEntry>({
+  logNoun: 'skill',
+  errorNoun: 'skill',
+  source: SKILL_SOURCE,
+  listPrefix: AGENT_ACCESS_SKILLS_PREFIX,
+  blobPath: skillBlobPath,
+  schema: SkillSchema,
+  historySchema: SkillHistoryEntrySchema,
+  labelBase: 'Skill',
+});
+
 /* --- Prompt agents ------------------------------------------------- */
 
 export async function listAllPromptAgents(
@@ -1025,6 +1045,58 @@ export function writeGuideHistoryEntry(
   entry: GuideHistoryEntry,
 ): Promise<void> {
   return guideEntity.writeHistory(storage, entry);
+}
+
+/* --- Skills (docs/SKILLS_DESIGN.md) ---------------------------------- */
+
+export type StoredSkill = Awaited<
+  ReturnType<typeof skillEntity.listAll>
+>[number];
+
+export interface SkillReadResult {
+  skill: Skill;
+  etag: string;
+}
+
+export function listAllSkills(storage: BlobStorage): Promise<StoredSkill[]> {
+  return skillEntity.listAll(storage);
+}
+
+/** Reads a single skill record by id. Returns null when none exists. */
+export async function readSkill(
+  storage: BlobStorage,
+  id: string,
+  signal?: AbortSignal,
+): Promise<SkillReadResult | null> {
+  const deadline = AbortSignal.timeout(10_000);
+  const result = await skillEntity.read(storage, id, {
+    abortSignal: signal ? AbortSignal.any([signal, deadline]) : deadline,
+    maxBytes: 1024 * 1024,
+  });
+  return result && { skill: result.record, etag: result.etag };
+}
+
+export function writeSkill(
+  storage: BlobStorage,
+  skill: Skill,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  return skillEntity.write(storage, skill, ifMatchEtag);
+}
+
+export function deleteSkill(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  return skillEntity.remove(storage, id, ifMatchEtag);
+}
+
+export function writeSkillHistoryEntry(
+  storage: BlobStorage,
+  entry: SkillHistoryEntry,
+): Promise<void> {
+  return skillEntity.writeHistory(storage, entry);
 }
 
 /* --- Form templates ------------------------------------------------- */
