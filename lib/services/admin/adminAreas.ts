@@ -53,6 +53,7 @@ export const ADMIN_AREA_IDS = [
   'connectors',
   'guides',
   'glossaries',
+  'skills',
   'map-datasets',
   'form-templates',
   'channel-sets',
@@ -131,6 +132,11 @@ export async function resolveAdminAreas(
         // every admin gets the area; the route decides per set.
         'channel-sets',
       );
+      // Skills follow the guides model (created skills are delegated to
+      // their creator), behind the skills env gate — docs/SKILLS_DESIGN.md.
+      if (env.SKILLS_ENABLED) {
+        areas.push('skills');
+      }
     }
     // The delegation map decides who else may edit rules, so it stays
     // global-admin only — matching AgentAccessPanel's own tab filter.
