@@ -3,11 +3,17 @@ import { NextRequest } from 'next/server';
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { AgentEnricher } from '@/lib/services/chat/enrichers/AgentEnricher';
+import { AgentSkillEnricher } from '@/lib/services/chat/enrichers/AgentSkillEnricher';
 import { ExtractionEnricher } from '@/lib/services/chat/enrichers/ExtractionEnricher';
 import { GeneratedFileManifestEnricher } from '@/lib/services/chat/enrichers/GeneratedFileManifestEnricher';
 import { M365AgentEnricher } from '@/lib/services/chat/enrichers/M365AgentEnricher';
 import { PromptAgentEnricher } from '@/lib/services/chat/enrichers/PromptAgentEnricher';
 import { RAGEnricher } from '@/lib/services/chat/enrichers/RAGEnricher';
+import {
+  SkillCatalogEnricher,
+  SkillEnricher,
+} from '@/lib/services/chat/enrichers/SkillEnricher';
+import { SkillReferenceEnricher } from '@/lib/services/chat/enrichers/SkillReferenceEnricher';
 import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnricher';
 import { AgentChatHandler } from '@/lib/services/chat/handlers/AgentChatHandler';
 import { StandardChatHandler } from '@/lib/services/chat/handlers/StandardChatHandler';
@@ -291,10 +297,16 @@ export async function POST(req: NextRequest): Promise<Response> {
         // after the persona/RAG stages that may replace systemPrompt, before
         // the tool router that may remount those files.
         new GeneratedFileManifestEnricher(),
+        new AgentSkillEnricher(),
+        // Prepare skill metadata for the shared router. SkillEnricher below
+        // delivers selected bodies and handles turns where routing skipped.
+        new SkillCatalogEnricher(),
         new ToolRouterEnricher(
           toolRouterService,
           container.getSearchAssessor(),
         ),
+        new SkillEnricher(toolRouterService),
+        new SkillReferenceEnricher(),
         // Structured-data extraction: composes the JSON-schema response
         // format when the request carries an `extraction` payload.
         new ExtractionEnricher(),
