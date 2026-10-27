@@ -13,6 +13,7 @@ import { McpPendingToolCall, McpPlan, McpPlanStep } from '@/types/mcp';
 import { Citation } from '@/types/rag';
 
 import { connectMcp, isMcpAuthError } from './McpClientService';
+import type { BuiltinExecutor } from './builtinExecutor';
 import {
   deniedCallToOutcomeMarker,
   pendingCallToConsentMarker,
@@ -60,6 +61,7 @@ export interface ServerWithTools {
   tools: McpToolDefinition[];
   /** Server-declared usage guidance from the initialize handshake. */
   instructions?: string;
+  transcriptTools?: McpToolDefinition[];
 }
 
 /** One pending call's outcome, fed back to the model by the strategy. */
@@ -171,25 +173,31 @@ export interface ToolLoopCoreOptions<TMessage> {
    * a builtin server without an executor degrades to zero tools.
    */
   builtinExecutor?: M365BuiltinExecutor;
+  builtinExecutors?: Record<string, BuiltinExecutor>;
+  /** Internal read-only tool rounds are separate from connector approval rounds. */
+  maxImmediateRounds?: number;
 }
 
 export async function listToolsForServers(
   servers: ResolvedMcpServer[],
   userId: string,
   builtinExecutor?: M365BuiltinExecutor,
+  builtinExecutors?: Record<string, BuiltinExecutor>,
 ): Promise<{ serversWithTools: ServerWithTools[]; failedLabels: string[] }> {
   const failedLabels: string[] = [];
   const results = await Promise.all(
     servers.map(async (server): Promise<ServerWithTools> => {
       if (server.provenance === 'builtin') {
+        const executor: BuiltinExecutor | undefined =
+          builtinExecutors?.[server.id] ?? builtinExecutor;
         // Builtin servers list in-process: no connection, and no
         // toolSchemaCache entry — its (userId, url, authToken) key shape
         // never applies to a url-less synthetic server, and the executor
         // does its own consent-probe caching.
-        if (!builtinExecutor) return { server, tools: [] };
+        if (!executor) return { server, tools: [] };
         try {
           const tools = await withBudget(
-            builtinExecutor.listTools(),
+            executor.listTools(),
             LIST_TOOLS_BUDGET_MS,
           );
           return {
@@ -199,7 +207,10 @@ export async function listToolsForServers(
               description: tool.description,
               inputSchema: tool.inputSchema,
             })),
-            instructions: builtinExecutor.instructions,
+            instructions: executor.instructions,
+            ...(executor.transcriptTools
+              ? { transcriptTools: executor.transcriptTools() }
+              : {}),
           };
         } catch {
           // Same degrade-don't-fail posture as network servers below.
@@ -282,6 +293,7 @@ export async function runToolLoopCore<TMessage>(
           options.servers,
           options.userId,
           options.builtinExecutor,
+          options.builtinExecutors,
         );
         for (const label of failedLabels) {
           write(
@@ -371,6 +383,39 @@ export async function runToolLoopCore<TMessage>(
         }
 
         let messages = [...options.preparedMessages];
+        // Explicit preloads are rendered as real tool exchanges without
+        // adding their instruction bodies to the persona system prompt.
+        for (const [serverId, executor] of Object.entries(
+          options.builtinExecutors ?? {},
+        )) {
+          for (const preload of (await executor.preload?.()) ?? []) {
+            const call = {
+              id: `preload-${crypto.randomUUID()}`,
+              serverId,
+              toolName: preload.toolName,
+              argumentsJson: preload.argumentsJson,
+            };
+            messages = options.strategy.reconstructTranscript(messages, [call]);
+            messages = options.strategy.appendToolResults(messages, [
+              {
+                call,
+                text: preload.result.resultText,
+                isError: preload.result.isError,
+              },
+            ]);
+            write(
+              toolResultToRecordMarker(
+                call,
+                serverById.get(serverId)?.label ?? 'Skills',
+                {
+                  text: preload.result.resultText,
+                  isError: preload.result.isError,
+                },
+                0,
+              ),
+            );
+          }
+        }
 
         // ── RESUME: execute the previous round's approved calls, in pending
         // order, producing exactly one result per pending call.
@@ -451,14 +496,17 @@ export async function runToolLoopCore<TMessage>(
               // back as isError results), so the catch below only fires
               // for network servers or executor-contract violations.
               const connection =
-                server.provenance === 'builtin' && options.builtinExecutor
+                server.provenance === 'builtin' &&
+                (options.builtinExecutors?.[server.id] ??
+                  options.builtinExecutor)
                   ? null
                   : await connectMcp(server);
               try {
                 const result = connection
                   ? await connection.callTool(call.toolName, args)
-                  : await options
-                      .builtinExecutor!.callTool(call.toolName, args, {
+                  : await (options.builtinExecutors?.[server.id] ??
+                      options.builtinExecutor)!
+                      .callTool(call.toolName, args, {
                         // Composite tools stream progress ("scanning 214
                         // messages…") through the loop's activity channel.
                         emitActivity: (detail) =>
@@ -563,69 +611,183 @@ export async function runToolLoopCore<TMessage>(
         // ── MODEL_ROUND. Past the round cap the strategy withholds tool use
         // (OpenAI: omit tools; Anthropic: tool_choice 'none' — its transcript
         // still contains tool blocks, so tools must stay declared).
-        const round = await options.strategy.runModelRound(
-          messages,
-          serversWithTools,
-          options.loopRound < (options.maxRounds ?? MAX_TOOL_ROUNDS),
-          write,
-          markModelStarted,
-        );
+        let round: AssembledRound;
+        let immediateRounds = 0;
+        while (true) {
+          for (const entry of serversWithTools) {
+            const executor =
+              entry.server.provenance === 'builtin'
+                ? options.builtinExecutors?.[entry.server.id]
+                : undefined;
+            if (executor?.immediate) {
+              entry.tools =
+                immediateRounds >= (options.maxImmediateRounds ?? 3) ||
+                executor.remainingRounds?.() === 0
+                  ? []
+                  : await executor.listTools();
+            }
+          }
+          round = await options.strategy.runModelRound(
+            messages,
+            serversWithTools.map((entry) => ({
+              ...entry,
+              transcriptTools: entry.transcriptTools ?? entry.tools,
+              tools:
+                options.loopRound >= (options.maxRounds ?? MAX_TOOL_ROUNDS) &&
+                !options.builtinExecutors?.[entry.server.id]?.immediate
+                  ? []
+                  : entry.tools,
+            })),
+            options.loopRound < (options.maxRounds ?? MAX_TOOL_ROUNDS) ||
+              serversWithTools.some(
+                (entry) =>
+                  options.builtinExecutors?.[entry.server.id]?.immediate &&
+                  entry.tools.length > 0,
+              ),
+            write,
+            markModelStarted,
+          );
 
-        if (round.usage) {
-          const roundUsage: TokenUsageMetadata = {
-            promptTokens: round.usage.promptTokens,
-            completionTokens: round.usage.completionTokens,
-            totalTokens: round.usage.totalTokens,
-            modelId: options.usage.modelId,
-            region: options.usage.region,
-            reasoningEffort: options.usage.reasoningEffort,
-          };
-          options.usage.onUsage(roundUsage);
-          aggregate.prompt += roundUsage.promptTokens;
-          aggregate.completion += roundUsage.completionTokens;
-          aggregate.total += roundUsage.totalTokens;
-        }
+          if (round.usage) {
+            const roundUsage: TokenUsageMetadata = {
+              promptTokens: round.usage.promptTokens,
+              completionTokens: round.usage.completionTokens,
+              totalTokens: round.usage.totalTokens,
+              modelId: options.usage.modelId,
+              region: options.usage.region,
+              reasoningEffort: options.usage.reasoningEffort,
+            };
+            options.usage.onUsage(roundUsage);
+            aggregate.prompt += roundUsage.promptTokens;
+            aggregate.completion += roundUsage.completionTokens;
+            aggregate.total += roundUsage.totalTokens;
+          }
 
-        // ── PAUSE or DONE
-        const assembled = round.finishedWithToolUse ? round.calls : [];
-        for (const call of assembled) {
-          const resolved = fromModelToolName(call.name, serversWithTools);
-          if (!resolved) {
-            // The model invented a tool name; surface it as failed rather
-            // than asking the user to approve something undispatchable.
+          // ── PAUSE or DONE
+          const assembled = round.finishedWithToolUse ? round.calls : [];
+          const immediateResults: ExecutedToolResult[] = [];
+          const approvalCalls: typeof assembled = [];
+          for (const call of assembled) {
+            const resolved = fromModelToolName(call.name, serversWithTools);
+            const executor =
+              resolved?.server.provenance === 'builtin'
+                ? options.builtinExecutors?.[resolved.server.id]
+                : undefined;
+            if (!resolved || !executor?.immediate) {
+              approvalCalls.push(call);
+              continue;
+            }
+            const pending = {
+              id: call.id,
+              serverId: resolved.server.id,
+              toolName: resolved.toolName,
+              argumentsJson: call.argumentsJson,
+            };
+            const startedAt = Date.now();
+            const outcome = await executor.callTool(
+              resolved.toolName,
+              parseToolArguments(call.argumentsJson),
+            );
             write(
               toolResultToRecordMarker(
-                {
-                  id: call.id,
-                  serverId: 'unknown',
-                  toolName: call.name,
-                  argumentsJson: call.argumentsJson,
-                },
-                'unknown',
-                { errorMessage: 'Unknown tool' },
-                0,
+                pending,
+                resolved.server.label,
+                { text: outcome.resultText, isError: outcome.isError },
+                Date.now() - startedAt,
               ),
             );
-            continue;
+            immediateResults.push({
+              call: pending,
+              text: outcome.resultText,
+              isError: outcome.isError,
+            });
+            options.onToolCall?.({
+              toolName: resolved.toolName,
+              serverId: resolved.server.id,
+              serverLabel: resolved.server.label,
+              durationMs: Date.now() - startedAt,
+              success: !outcome.isError,
+            });
           }
-          write(
-            pendingCallToConsentMarker(
-              {
-                id: call.id,
-                serverId: resolved.server.id,
-                toolName: resolved.toolName,
-                argumentsJson: call.argumentsJson,
-              },
-              resolved.server.label,
-              // Proof of issuance for the resume's limits check — see
-              // lib/services/limits/continuationToken.ts.
-              mintContinuationToken(options.userId, call.id),
-            ),
+          if (immediateResults.length) {
+            for (const id of new Set(
+              immediateResults.map((result) => result.call.serverId),
+            ))
+              options.builtinExecutors?.[id]?.completeRound?.();
+            immediateRounds += 1;
+            // Keep the preceding user/tool-result message intact. Reconstruction
+            // replaces ONLY the assistant turn just produced by this model round.
+            messages = options.strategy.reconstructTranscript(
+              messages,
+              immediateResults.map((result) => result.call),
+            );
+            messages = options.strategy.appendToolResults(
+              messages,
+              immediateResults,
+            );
+            if (!approvalCalls.length) continue;
+          }
+          const continuationState = Object.fromEntries(
+            Object.entries(options.builtinExecutors ?? {})
+              .filter(([, executor]) => executor.continuationState)
+              .map(([id, executor]) => [id, executor.continuationState!()]),
           );
+          for (const call of approvalCalls) {
+            const resolved = fromModelToolName(call.name, serversWithTools);
+            if (
+              !resolved ||
+              options.loopRound >= (options.maxRounds ?? MAX_TOOL_ROUNDS)
+            ) {
+              // The model invented a tool name; surface it as failed rather
+              // than asking the user to approve something undispatchable.
+              write(
+                toolResultToRecordMarker(
+                  {
+                    id: call.id,
+                    serverId: 'unknown',
+                    toolName: call.name,
+                    argumentsJson: call.argumentsJson,
+                  },
+                  'unknown',
+                  { errorMessage: 'Unknown tool' },
+                  0,
+                ),
+              );
+              continue;
+            }
+            write(
+              pendingCallToConsentMarker(
+                {
+                  id: call.id,
+                  serverId: resolved.server.id,
+                  toolName: resolved.toolName,
+                  argumentsJson: call.argumentsJson,
+                },
+                resolved.server.label,
+                // Proof of issuance for the resume's limits check — see
+                // lib/services/limits/continuationToken.ts.
+                mintContinuationToken(
+                  options.userId,
+                  call.id,
+                  Date.now(),
+                  Object.keys(continuationState).length
+                    ? continuationState
+                    : undefined,
+                ),
+              ),
+            );
+          }
+          break;
         }
 
         const metadata: StreamMetadata = {};
         if (options.citations?.length) metadata.citations = options.citations;
+        for (const executor of Object.values(options.builtinExecutors ?? {})) {
+          const data = executor.metadata?.();
+          if (data?.citations.length) metadata.citations = data.citations;
+          if (data && Object.keys(data.citationQuoteSources).length)
+            metadata.citationQuoteSources = data.citationQuoteSources;
+        }
         if (round.thinking) metadata.thinking = round.thinking;
         // The plan (with progress + retry state) rides the terminal block so
         // the client can echo it back on approval resume — same stateless
