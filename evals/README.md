@@ -56,6 +56,15 @@ candidate for promotion into the app's prompt composition for that model family.
 
 ## Adding things
 
+### Skill selection regression checks
+
+`EVAL_SKILLS=1 npx vitest --run --config ./vitest.config.evals.mts evals/skills.eval.ts`
+runs the real nano router in shared and skills-only modes against positive,
+negative, multilingual, and follow-up fixtures. It also compares platform
+answers with the full base prompt and the skill-loaded prompt. Results are
+written to `evals/results/skills-latest.json`; these checks assert pass/fail
+and remain opt-in, separate from ordinary unit tests and the parity suite.
+
 - **Case**: drop a JSON file in `evals/cases/` (`id`, `tags`, `turns[{user, expect?}]`,
   optional `rubric` and `promptOptions` — the same options `buildSystemPrompt()` takes).
   Write `expect` as what a _good_ answer does, not the answer itself.
