@@ -86,14 +86,16 @@ When visual explanation helps, use Mermaid diagrams in fenced code blocks.
 - \`journey\` - User experience flows`;
 
 /**
- * Default base system prompt content.
- * Can be overridden via BASE_SYSTEM_PROMPT environment variable.
+ * Platform knowledge sections — what the app is and what it can do. Split
+ * out of the base prompt body because the `platform-help` built-in skill
+ * (lib/services/skills/builtinSkills.ts) carries EXACTLY this content when
+ * the skills feature is on: SkillEnricher removes these sections from the
+ * effective base prompt (removePromptSections) and the skill re-delivers
+ * them, standing ('always') in phase 1, routed ('auto') from phase 2.
+ * Importing the same constants in both places keeps the two in lockstep by
+ * construction — docs/SKILLS_DESIGN.md §3.
  */
-const DEFAULT_BASE_SYSTEM_PROMPT = `# Core Behavior
-
-You are the MSF AI Assistant, an AI tool designed to support MSF staff in their work. Your role is to help users accomplish their tasks effectively while maintaining honesty about your capabilities and limitations.
-
-## About the MSF AI Assistant
+export const PLATFORM_ABOUT_PROMPT_SECTION = `## About the MSF AI Assistant
 
 The MSF AI Assistant is an internal AI chat tool for Médecins Sans Frontières (MSF) staff. Key information:
 
@@ -101,15 +103,14 @@ The MSF AI Assistant is an internal AI chat tool for Médecins Sans Frontières 
 
 **Data Privacy**: Conversation history is stored locally in the user's browser, not on any server. Chats do not sync across devices. Clearing browser data will delete conversations.
 
-**Data Guidelines**: Users should NOT enter personal data (names, phone numbers, emails), patient information, or highly sensitive operational details that could identify individuals or compromise safety.
-
 **Output Verification**: AI responses should be verified for accuracy. The AI is an assistant, not a decision-maker. Always review outputs before using them in official work.
 
 **Support**: Users can access the FAQ in Settings > Help & Support. For questions access support from the same location.
 
-If asked about the AI Assistant's features, privacy, or usage guidelines, provide helpful answers based on the above and direct users to the FAQ or Help Center for more detailed information.
+If asked about the AI Assistant's features, privacy, or usage guidelines, provide helpful answers based on the above and direct users to the FAQ or Help Center for more detailed information.`;
 
-## Features
+/** See PLATFORM_ABOUT_PROMPT_SECTION — same lockstep contract. */
+export const PLATFORM_FEATURES_PROMPT_SECTION = `## Features
 
 - The user can access the following features through the plus icon:
   - Document translation (preserving formatting)
@@ -121,7 +122,32 @@ If asked about the AI Assistant's features, privacy, or usage guidelines, provid
 - Microsoft 365 integration may be available if the user has connected it in Settings → Connections: attaching files from OneDrive/SharePoint, importing emails or email threads as attachments (all via the plus icon), and saving exports to OneDrive (via the Download menu). These are user-driven UI actions — you cannot browse or fetch M365 content yourself; suggest the plus-icon options when relevant.
 - Users can use voice inputs rather than typing. Clicking the record icon will start this, but they have to click again to stop when done.
 - Every assistant response has a Download button in its action bar (below the message, next to Copy, Regenerate, and Open as Document). It exports the response as Markdown, HTML, Word (.docx), Plain Text, or PDF.
-- Whether you can GENERATE files yourself depends on the Code Interpreter — follow the "Files & Exports" or "Code Execution & File Generation" section later in this prompt.
+- Whether you can GENERATE files yourself depends on the Code Interpreter — follow the "Files & Exports" or "Code Execution & File Generation" section later in this prompt.`;
+
+/**
+ * Top-level headings SkillEnricher strips when the platform-help skill
+ * carries their content instead. Removal is heading-anchored (like
+ * extractPromptSection) so an operator BASE_SYSTEM_PROMPT override with its
+ * own wording of these sections is stripped-and-replaced consistently too.
+ */
+export const PLATFORM_SECTION_HEADINGS = [
+  '## About the MSF AI Assistant',
+  '## Features',
+] as const;
+
+/**
+ * Default base system prompt content.
+ * Can be overridden via BASE_SYSTEM_PROMPT environment variable.
+ */
+const DEFAULT_BASE_SYSTEM_PROMPT = `# Core Behavior
+
+You are the MSF AI Assistant, an AI tool designed to support MSF staff in their work. Your role is to help users accomplish their tasks effectively while maintaining honesty about your capabilities and limitations.
+
+**Data Guidelines**: Users should NOT enter personal data (names, phone numbers, emails), patient information, or highly sensitive operational details that could identify individuals or compromise safety.
+
+${PLATFORM_ABOUT_PROMPT_SECTION}
+
+${PLATFORM_FEATURES_PROMPT_SECTION}
 
 ## Communication
 
@@ -350,7 +376,7 @@ const FORMATTING_SECTION_HEADINGS = [
  * operator override carries different structure and the caller must fall
  * back to the built-in constants.
  */
-function extractPromptSection(
+export function extractPromptSection(
   prompt: string,
   heading: string,
 ): string | undefined {
@@ -359,8 +385,45 @@ function extractPromptSection(
   if (!match) return undefined;
 
   const body = prompt.slice(match.index + match[0].length);
-  const next = body.search(/\n## /);
+  const next = body.search(/\n#{1,2} /);
   return `${heading}\n${next === -1 ? body : body.slice(0, next)}`.trimEnd();
+}
+
+/**
+ * Removes whole top-level `## ` sections (heading through the next
+ * top-level heading) from a prompt. Same anchoring as extractPromptSection
+ * so a `### ` subheading can never match. A heading the prompt does not
+ * contain is skipped silently — removal is idempotent and safe on operator
+ * overrides with different structure.
+ *
+ * Used by SkillEnricher: when the platform-help skill carries the platform
+ * sections, the base prompt must not duplicate them
+ * (docs/SKILLS_DESIGN.md §3).
+ */
+export function removePromptSections(
+  prompt: string,
+  headings: readonly string[],
+): string {
+  let result = prompt;
+  for (const heading of headings) {
+    const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const match = new RegExp(`(?:^|\\n)${escaped}\\n`).exec(result);
+    if (!match) continue;
+
+    const sectionStart = match.index;
+    const bodyStart = match.index + match[0].length;
+    const next = result.slice(bodyStart).search(/\n#{1,2} /);
+    let sectionEnd = next === -1 ? result.length : bodyStart + next;
+    // Mid-document, match[0]'s leading \n is consumed and the next
+    // heading's own \n survives, preserving the blank-line rhythm. At the
+    // START of the string there is no leading \n to consume — take the next
+    // heading's instead, so the result never opens with a stray newline.
+    if (sectionStart === 0 && result[sectionEnd] === '\n') {
+      sectionEnd += 1;
+    }
+    result = `${result.slice(0, sectionStart)}${result.slice(sectionEnd)}`;
+  }
+  return result;
 }
 
 /**
