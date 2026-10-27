@@ -125,6 +125,34 @@ describe('StandardChatService', () => {
   });
 
   describe('handleChat', () => {
+    it('an EU request cannot fall back to unpinned default inference endpoints', async () => {
+      const model = OpenAIModels[OpenAIModelID.GPT_5_2];
+      const messages: Message[] = [
+        { role: 'user', content: 'Private EU request', messageType: undefined },
+      ];
+      vi.mocked(mockModelSelector.selectModel).mockReturnValue({
+        modelId: model.id,
+        modelConfig: model,
+      });
+      vi.mocked(mockToneService.applyTone).mockReturnValue('Core');
+      vi.mocked(mockStreamingService.getStreamConfig).mockReturnValue({
+        stream: false,
+        temperature: 1,
+      });
+      const { getMessagesToSend } =
+        await import('@/lib/utils/server/chat/chat');
+      vi.mocked(getMessagesToSend).mockResolvedValue(messages);
+      await expect(
+        service.handleChat({
+          model,
+          messages,
+          user: { ...testUser, region: 'EU' },
+          hostedRegion: 'US',
+          systemPrompt: 'Core',
+        }),
+      ).rejects.toThrow(/No EU endpoint/);
+      expect(mockHandler.executeRequest).not.toHaveBeenCalled();
+    });
     it('should handle standard chat request successfully (non-streaming)', async () => {
       const model = OpenAIModels[OpenAIModelID.GPT_5_2];
       const messages: Message[] = [
