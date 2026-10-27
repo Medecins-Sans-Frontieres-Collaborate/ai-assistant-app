@@ -230,6 +230,9 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       extraction,
       conversationSummary,
       memories,
+      forcedSkillIds,
+      pinnedSkillIds,
+      userSkills,
     } = body;
 
     if (mcpServers?.length) {
@@ -303,6 +306,12 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       extraction,
       conversationSummary,
       memories,
+      // Explicit skill use (docs/SKILLS_DESIGN.md §5.1) — resolved against
+      // the user's visible catalog by SkillEnricher; forcing is never an
+      // access bypass.
+      forcedSkillIds,
+      pinnedSkillIds,
+      userSkills,
     };
   } catch (error) {
     if (error instanceof PipelineError) {
