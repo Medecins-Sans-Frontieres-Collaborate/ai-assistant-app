@@ -3,6 +3,8 @@ import { consumeToolBudget } from '@/lib/services/limits/toolBudget';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 import { recordTokenUsage } from '@/lib/services/observability/tokenUsageRecorder';
 import { peekOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
+import { getSkillRoutingCatalog } from '@/lib/services/skills/skillCatalog';
+import { auxiliaryRegion } from '@/lib/services/skills/skillRegion';
 import { WebSearchConfigService } from '@/lib/services/webSearch/config/WebSearchConfigService';
 import { ResolvedMultiStepConfig } from '@/lib/services/webSearch/config/types';
 
@@ -251,6 +253,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
       context.model?.supportsCodeInterpreter === true &&
       context.model?.supportsResponsesApi === true &&
       context.model?.sdk === 'azure-openai' &&
+      // Persona skill loops run on chat.completions. Preserve interpreter
+      // functionality via the existing bounded pre-turn sub-tool path.
+      !context.agentSkillsEnabled &&
       !context.model?.isCustomSourceModel &&
       // Only REAL (network) MCP servers force the chat.completions loop —
       // the builtin M365 toolset must not disable the native interpreter.
@@ -417,6 +422,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
           messages: baseMessages,
           currentMessage,
           documentFilename: trimDocument.filename,
+          region: auxiliaryRegion(context.user.region, context.hostedRegion),
+          signal: context.stageSignal,
         });
         // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
         devTrace('trim-intent', {
@@ -516,9 +523,15 @@ export class ToolRouterEnricher extends BasePipelineStage {
       : null;
     let decided: ToolRouterResponse = { tools: [] };
     if (undecidedSearch || undecidedInterpreter || planForcedSearch) {
+      const skillCatalog = getSkillRoutingCatalog(
+        context.skillCatalog ?? [],
+        context.forcedSkillIds ?? [],
+        currentMessage,
+      );
       decided = await this.toolRouterService.determineTool({
         messages: baseMessages,
         currentMessage,
+        region: auxiliaryRegion(context.user.region, context.hostedRegion),
         forceWebSearch: false,
         considerCodeExecution: undecidedInterpreter,
         hasPriorSearchCitations: undecidedSearch && priorCitations.length > 0,
@@ -528,7 +541,19 @@ export class ToolRouterEnricher extends BasePipelineStage {
           this.hasUserProvidedContent(context, rawUserPrompt),
         searchDecided: planForcedSearch,
         searchFanOut: plansQueries,
+        ...(skillCatalog.length
+          ? { skillCatalog, signal: context.stageSignal }
+          : {}),
       });
+      if (skillCatalog.length) {
+        context = {
+          ...context,
+          skillRouting: {
+            relevantSkills: decided.relevantSkills ?? [],
+            degraded: decided.degraded,
+          },
+        };
+      }
     } else {
       console.log(
         '[ToolRouterEnricher] All requested tools forced; skipping router decision',
