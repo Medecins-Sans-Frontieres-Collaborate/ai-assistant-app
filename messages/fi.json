@@ -893,7 +893,21 @@
     "alwaysWaitThisLong": "Odotetaan aina enintään {duration}",
     "keepSearching": "Jatka hakua",
     "keepSearchingHint": "Haku pysähtyi ennen kuin tämä löytyi. Pyydä avustajaa kokeilemaan eri lähestymistapoja.",
-    "keepSearchingMessage": "Jatka tämän hakemista, kiitos — kokeile toista lähestymistapaa."
+    "keepSearchingMessage": "Jatka tämän hakemista, kiitos — kokeile toista lähestymistapaa.",
+    "addSkill": "Osaamiset",
+    "removeSkill": "Poista osaaminen",
+    "skillsMenuLabel": "Saatavilla olevat osaamiset",
+    "skillsLimit": "Enintään 3 osaamista viestiä kohden.",
+    "skillPin": "Kiinnitä keskusteluun",
+    "skillUseOnce": "Käytä kerran",
+    "skillPinned": "kiinnitetty",
+    "skillOnce": "seuraava viesti",
+    "skillsPaused": "keskeytetty",
+    "skillUnavailable": "ei käytettävissä",
+    "skillsAutomaticHint": "Sopivat taidot valitaan automaattisesti. Käytä kerran seuraavaan viestiin tai kiinnitä taito, jos haluat käyttää sitä koko keskustelun ajan.",
+    "skillsAgentDisabled": "Taidot ovat keskeytettynä agentin ollessa liitettynä. Kiinnityksesi palautuvat käyttöön, kun irrotat agentin.",
+    "skillPersonal": "henkilökohtainen",
+    "skillsAgentToolsHint": "Vain järjestelmänvalvojan agenteille sallimat organisaatiotaidot ovat täällä saatavilla. Agentti voi ladata ne vain luku -työkaluina. Muut pin-tiedostot pysyvät keskeytettyinä, eikä henkilökohtaisia taitoja ole agenteille saatavilla."
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -5521,7 +5535,8 @@
       "channelSets": "Jokaisen tiimin säännöt kirjoittamiseen alustoilla: ohjeistus, äänet, oletukset, kuka saa käyttää ja kuka saa lähettää.",
       "webSearch": "Kuinka laajalle verkkohaku voi mennä: monivaiheinen haku, arviointimalli ja sen rajat.",
       "contextBudget": "Kuinka paljon keskustelua kukin malli saa kerralla.",
-      "analytics": "Toimitetut raportit: mitä saapui, kuka saa avata kansion ja mitkä kentät voidaan näyttää."
+      "analytics": "Toimitetut raportit: mitä saapui, kuka saa avata kansion ja mitkä kentät voidaan näyttää.",
+      "skills": "Toistettavat ohjeet, joita avustaja käyttää tarvittaessa keskusteluissa."
     },
     "openSettings": "Avaa asetukset",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Delegoinnit",
       "webSearch": "Verkkohaku",
       "contextBudget": "Kontekstibudjetti",
-      "analytics": "Analytiikka"
+      "analytics": "Analytiikka",
+      "skills": "Osaamiset"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Vanhempi kuin tämän kansion säilytysaika ({months} kuukautta); ei enää näytetä.",
       "unknown": "Ilmoitettu ongelma: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Osaamiset",
+    "description": "Toistettavat ohjeet, joita avustaja käyttää keskustelussa tarpeen mukaan. Yhteensopiva Agent Skills SKILL.md -formaatin (Claude ja ChatGPT) kanssa.",
+    "loading": "Ladataan osaamisia…",
+    "loadError": "Osaamisia ei voitu ladata.",
+    "retry": "Yritä uudelleen",
+    "unavailableBanner": "Osaamisten tallennustilaan ei juuri nyt saada yhteyttä — näytetään sisäänrakennetut oletukset; tallennetut osaamiset ja muokkaukset eivät ole käytettävissä, kunnes yhteys palautuu.",
+    "conflictError": "Toinen ylläpitäjä on muuttanut tätä osaamista. Lista on päivitetty — tee muokkauksesi uudelleen.",
+    "alwaysWarning": "{count} osaamista on asetettu toimintatilaan \"Aina\". Jokainen niistä lisätään jokaiseen keskusteluun — suosi automaattista valintaa aihekohtaisille osaamisille.",
+    "newSkill": "Uusi osaaminen",
+    "importSkill": "Tuo SKILL.md",
+    "importTitle": "Liitä SKILL.md-tiedosto",
+    "importPlaceholder": "---\nnimi: oma-osaaminen\nkuvaus: Mitä tämä osaaminen tekee ja milloin sitä käytetään.\n---\n\nOhjeet…",
+    "importHint": "Purettu osaaminen avautuu muokkaustilaan tarkistettavaksi — mitään ei tallenneta ennen kuin tallennat sen.",
+    "importParse": "Jäsennä ja tarkista",
+    "invalidId": "Osaamisen id saa sisältää pieniä kirjaimia, numeroita ja yhden väliviivan.",
+    "saveSuccess": "Osaaminen tallennettu.",
+    "saveError": "Osaamista ei voitu tallentaa.",
+    "deleteConfirm": "Poistetaanko tämä osaaminen? Keskustelut lakkaavat saamasta sitä välittömästi.",
+    "restoreConfirm": "Poistetaanko mukautus ja palautetaanko tämän sisäänrakennetun osaamisen oletus?",
+    "deleteSuccess": "Osaaminen poistettu.",
+    "restoreSuccess": "Sisäänrakennettu oletus palautettu.",
+    "deleteError": "Osaamista ei voitu poistaa.",
+    "empty": "Ei osaamisia vielä. Luo uusi tai tuo SKILL.md.",
+    "builtinChip": "Sisäänrakennettu",
+    "customizedChip": "Mukautettu",
+    "exportSkill": "Vie SKILL.md-muotoon",
+    "edit": "Muokkaa",
+    "delete": "Poista",
+    "restoreDefault": "Palauta oletus",
+    "createTitle": "Uusi osaaminen",
+    "editTitle": "Muokkaa: {name}",
+    "idLabel": "Tunniste",
+    "idHint": "Pienet kirjaimet, numerot ja yhdysviivat. Muodostaa osaamisen SKILL.md-nimen, eikä sitä voi muuttaa luomisen jälkeen.",
+    "nameLabel": "Näyttönimi",
+    "descriptionLabel": "Kuvaus",
+    "descriptionHint": "Mitä osaaminen tekee JA milloin sitä käytetään — tämä määrittää osaamisen valinnan, joten lisää selkeät aiheet ja sanamuodot, joihin sen tulee reagoida.",
+    "activationLabel": "Aktivointi",
+    "activation": {
+      "auto": "Automaattinen",
+      "always": "Aina",
+      "off": "Pois päältä"
+    },
+    "activationHint": {
+      "auto": "Valitaan automaattisesti, kun nykyinen tehtävä vastaa kuvausta. Käyttäjät voivat myös pyytää sitä kerran tai kiinnittää sen keskusteluun.",
+      "always": "Lisätään jokaiseen keskusteluun niille, jotka näkevät osaamisen. Käytä harkiten — tämä on pysyvää ohjetilaa.",
+      "off": "Ei aktiivinen: ei käytetä eikä tarjota käyttäjille, mutta on muokattavissa täällä."
+    },
+    "instructionsLabel": "Ohjeet",
+    "instructionsHint": "Markdown, enintään 16 kt. Lisätään sellaisenaan, kun taito on aktiivinen.",
+    "saving": "Tallennetaan…",
+    "save": "Tallenna",
+    "cancel": "Peruuta",
+    "documents": {
+      "title": "Asiakirjat",
+      "hint": "Viitteet tallennetaan tähän taitoon. Pienet asiakirjat latautuvat suoraan; suuremmat asiakirjat indeksoidaan haettua viittausta varten. Enintään 20 resurssia, 10 Mt kukin ja yhteensä 20 Mt. Assetit ovat ladattavissa vain.",
+      "saveFirst": "Tallenna tämän sisäänrakennetun taidon mukautus ennen asiakirjojen lisäämistä.",
+      "upload": "Lisää viiteasiakirjoja",
+      "remove": "Poista",
+      "stop": "Keskeytä indeksointi",
+      "resume": "Indeksoi tai jatka asiakirjoja",
+      "empty": "Ei asiakirjoja liitetty.",
+      "requestFailed": "Asiakirjapyyntö epäonnistui. Lataa sivu uudelleen ja yritä uudelleen.",
+      "importZip": "Tuo taito ZIP-tiedostona",
+      "zipTooLarge": "Taito ZIP-tiedoston on oltava 20 Mt tai pienempi.",
+      "importCount": "Liitettäviä resursseja tallennuksen jälkeen: {count}",
+      "skippedScripts": "Suoritettavat skriptit ohitettiin",
+      "status": {
+        "pending": "Odottaa indeksointia",
+        "processing": "Indeksoidaan",
+        "inline": "Valmis (latautuu suoraan)",
+        "indexed": "Valmis (haettavissa)",
+        "failed": "Indeksointi epäonnistui",
+        "asset": "Ladattava assetti"
+      },
+      "confirmRemove": "Poistetaanko tiedosto {filename} tästä taidosta? Tallennettu alkuperäistiedosto poistetaan, eikä sitä voi enää käyttää lähteenä.",
+      "reindexRequired": "Nämä asiakirjat on indeksoitava uudelleen nykyistä alueellista hakua ja upotuksia varten. Niitä ei voi hakea ennen kuin indeksointi on valmis."
+    },
+    "applyToAgents": "Saatavilla agenteille",
+    "applyToAgentsHint": "Pois päältä oletuksena. Kun tämä on käytössä, agentit voivat ladata tämän taidon vain luku -työkaluina oman persoonakuvauksensa korvaamisen sijaan. Taitokutsujen askelmäärillä on omat rajansa. Foundry-agenttien määrittelyyn tulee olla rekisteröitynä sekä load_skill- että search_skill_documents-toiminnot."
+  },
+  "personalSkills": {
+    "title": "Henkilökohtaiset taidot",
+    "description": "Tallenna uudelleenkäytettäviä ohjeita omiin keskusteluihisi. Taidot säilyvät tässä selaimessa ja lähetetään mallille vain keskustelun aikana. Sopivat taidot voidaan valita automaattisesti, käyttää kerran tai kiinnittää. Niillä ei voi muuttaa organisaation käytäntöjä eikä antaa pääsyä työkaluihin. Taitojen käyttö edellyttää, että taidot on otettu käyttöön tässä käyttöympäristössä; agenttikeskusteluissa henkilökohtaisia taitoja ei käytetä.",
+    "importFile": "Tuo SKILL.md tai ZIP",
+    "review": "Tarkista ohjeet kokonaisuudessaan ennen tallennusta. Tuodut ohjeet ovat käyttäjän asetuksia, eivät luotettavia organisaation käytäntöjä.",
+    "skipped": "Suoritettavat skriptit ohitettiin",
+    "importTooLarge": "Tuotavan tiedoston on oltava enintään 20 Mt.",
+    "invalid": "Taitoa ei voitu tuoda.",
+    "duplicate": "Tämä henkilökohtaisen taidon id on jo olemassa. Muokkaa olemassa olevaa taitoa tai valitse toinen id.",
+    "countLimit": "Voit tallentaa enintään 20 henkilökohtaista taitoa.",
+    "requestLimit": "Käytössä olevat henkilökohtaiset taidot ylittävät 160 KB pyynnön rajan. Poista joitakin taitoja käytöstä tai lyhennä ohjeita.",
+    "saved": "Henkilökohtainen taito tallennettu tähän selaimeen.",
+    "instructionsHint": "Enintään 16 KB ohjeita, mukaan lukien mahdolliset tuodut tekstiviitteet. Binääritiedostot ja pysyvä asiakirjaindeksointi ovat käytettävissä vain organisaatiotaidoissa. Vientitoiminto käyttää oletuksena SKILL.md-nimeä ilman user:-etuliitettä.",
+    "enabled": "Käytössä omissa keskusteluissani",
+    "empty": "Luo taito toistuvaan tehtävään tai tuo SKILL.md tarkistaaksesi ja tallentaaksesi sen tähän."
   }
 }

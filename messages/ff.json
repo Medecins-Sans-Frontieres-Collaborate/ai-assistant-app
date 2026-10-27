@@ -976,7 +976,21 @@
     "alwaysWaitThisLong": "Naat a waawi bolle e {duration} ko feccere",
     "keepSearching": "Jokkondin njangde",
     "keepSearchingHint": "Njangde ndiyam mujannirde tuma mo waawan e nalla. Huumore tampere e baasi assistant jokkondin e wondi danndude.",
-    "keepSearchingMessage": "Jokkondin njangde e jam, miɗo yiɗi — waasi wondi danndude."
+    "keepSearchingMessage": "Jokkondin njangde e jam, miɗo yiɗi — waasi wondi danndude.",
+    "addSkill": "Ndikkaaji",
+    "removeSkill": "Mom ndikkaaji",
+    "skillsMenuLabel": "Ndikkaaji jogii",
+    "skillsLimit": "Ndikkaaji 3 tan saare baatuka",
+    "skillPin": "Pin konngol binndol",
+    "skillUseOnce": "Jogii kadi ɗuum",
+    "skillPinned": "pinndinii",
+    "skillOnce": "binndol fayde",
+    "skillsPaused": "dańndu",
+    "skillUnavailable": "waawaani",
+    "skillsAutomaticHint": "Lafannde jeyɗee jogii mo ɗobo. Jogii kadi ɗuum konngol binndol fayde, walla pin konngol binndol fayde faaynde konngol binndol tawa binndol mum.",
+    "skillsAgentDisabled": "Lafannde jeyɗee dańndu tawi agent jogii. Pin am jooɗii tawa agent waawaani.",
+    "skillPersonal": "keertugol",
+    "skillsAgentToolsHint": "Ko cuɓorgo ɗee baawdi da admin kisal e jawdi agento e ɗun. Agent maa waadi loowdi e kogal waɗɗi jogi-jogorɗe. Pinji bee ngolli, e kisalji personol ɗe waawani loowdi e agentji."
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -5505,7 +5519,8 @@
       "channelSets": "Ka teamje kala jogii doole makko e paltformji: hokkugo, ɓogorde, mbayrdi, holi e binndi e holi e siftin.",
       "webSearch": "Njangde web: njangde e yuɲeji, model assessor e luttugol ɗum.",
       "contextBudget": "Hooɗe konngol mon model njangu e baŋngal.",
-      "analytics": "Rapporte ligge: wondude, kanko waawanaa uɓɓit fodere, e caɗeeji waawi hollita."
+      "analytics": "Rapporte ligge: wondude, kanko waawanaa uɓɓit fodere, e caɗeeji waawi hollita.",
+      "skills": "Bakkaaji tawa ngal jaggi e naatude jooni, jooni ummora mo waawaani."
     },
     "openSettings": "Hollu teeltorde",
     "area": {
@@ -5516,7 +5531,8 @@
       "delegations": "Kondeeji",
       "webSearch": "Njangde web",
       "contextBudget": "Konngol njangu",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "Ndikkaaji"
     }
   },
   "limits": {
@@ -7547,5 +7563,102 @@
       "past-retention": "Hana kadi mo jokkanii waɗa {months} lewru retention e folder ɗum; mo ɓuri waalude.",
       "unknown": "Problem mo faama: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Ndikkaaji",
+    "description": "Bakkaaji tawa ngal jaggi e naatude jooni, jooni ummora mo waawaani. Jogii e Agent Skills SKILL.md Claude e ChatGPT jogii.",
+    "loading": "Majjata e ndikkaaji ...",
+    "loadError": "Majjama e ndikkaaji waawaani.",
+    "retry": "Foɗɗan",
+    "unavailableBanner": "Jokkaaji ndikkaaji waawaani kono — jogii jogorɗe jogii; ndikkaaji jogorɗe e baawal mum waawaani so tawii jokkaaji fayi.",
+    "conflictError": "Admin juɗɗo mo jogii ndikkaaji ngal. List majjata — talli e baawal maa.",
+    "alwaysWarning": "{count} ndikkaaji jogii Always. Teewi e kala baatuka — Tuggii Automatic so nde ndikkaaji juɗɗo konngol.",
+    "newSkill": "Ndikkaaji juɗɗo",
+    "importSkill": "Darti SKILL.md",
+    "importTitle": "Naatu fay SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Hol ndikkaaji ngal joddi e hol jooni waawaani.\n---\n\nBakkaaji ...",
+    "importHint": "Ndikkaaji jokkoto e editor mo ummora — wala baawol so tawa ummora.",
+    "importParse": "Naatnu e ummora",
+    "invalidId": "Id ndikkaaji jogi laawol min hawri, duubii e taru-hyphen e kañum.",
+    "saveSuccess": "Ndikkaaji ummora.",
+    "saveError": "Majjama e ndikkaaji waawaani.",
+    "deleteConfirm": "Momi ndikkaaji ngal? Baatuka majjama e jogi mo waawaani rekk.",
+    "restoreConfirm": "Mom hirnaajo e ummora ndikkaaji jogorɗe e jogii jogorɗe?",
+    "deleteSuccess": "Ndikkaaji momi.",
+    "restoreSuccess": "Jogorɗe jogii jogorɗe ummora.",
+    "deleteError": "Majjama e momi ndikkaaji waawaani.",
+    "empty": "Ndikkaaji walaa. Yiɗi juɗɗo, walla darti SKILL.md.",
+    "builtinChip": "Jogorɗe",
+    "customizedChip": "Hirnaajo",
+    "exportSkill": "Dartu SKILL.md",
+    "edit": "Talli",
+    "delete": "Mom",
+    "restoreDefault": "Ummora jogorɗe",
+    "createTitle": "Ndikkaaji juɗɗo",
+    "editTitle": "Tallii {name}",
+    "idLabel": "Id",
+    "idHint": "Laawol min hawri, duubii e hyphen. Tawa ngol mo ngol SKILL.md e waawaatu talli jamma.",
+    "nameLabel": "Innde jokkoto",
+    "descriptionLabel": "Ndimli",
+    "descriptionHint": "Hol ndikkaaji ngal joddi e hol jooni waawaani — ndikkaaji dogani e konngol mo waawaani, jooni jogii konngi e ndikkaaji mo tawa jogi.",
+    "activationLabel": "Ciyal",
+    "activation": {
+      "auto": "Automatic",
+      "always": "Always",
+      "off": "Off"
+    },
+    "activationHint": {
+      "auto": "Jeyɗee jogii mo ɗobo tawi jango binndol jokkanii faaɗi ko jeye. Ko jogii kadi ɗuum walla pin konngol binndol binndol.",
+      "always": "Teewi e kala baatuka jogii e jogi ndikkaaji. Yiɗi tuggii — mo inndii e prompt mo jogi.",
+      "off": "Inactive: waawaani majjata mo waawaani jogii, kono mo ummora e talli."
+    },
+    "instructionsLabel": "Bakkaaji",
+    "instructionsHint": "Markdown, ko 16 KB woni kammu. Naatani cokka-makko so skill hakkitii.",
+    "saving": "Nana daɓɓit…",
+    "save": "Daɓɓit",
+    "cancel": "Fofna",
+    "documents": {
+      "title": "Doggal",
+      "hint": "Rééfereñcii ɗee doggol juulnii e skill ngol. Doggal njumdi tewtii e tiito, doggal mawdi fuɗii e tuuba e fannu ndokkale. Njuul 20, 10 MB kadi, 20 MB saare. Doggal asset baɗi e dow télécharger tan.",
+      "saveFirst": "Tiitii customisation skill ngol ko juulni, jonde njokkude doggal.",
+      "upload": "Jokk doggal rééfereñcii",
+      "remove": "Mommu",
+      "stop": "Daggii ndokkale",
+      "resume": "Ndokkale walla jokk doggal",
+      "empty": "Doggal nde njokkanii.",
+      "requestFailed": "Doggal njokkataa. Yeeso reload, kono e yejjit.",
+      "importZip": "Jokk skill ZIP",
+      "zipTooLarge": "Skill ZIP foti ko 20 MB walla moƴƴi.",
+      "importCount": "Njuul njokkude e tewtii: {count}",
+      "skippedScripts": "Script executable kadi njokkataa",
+      "status": {
+        "pending": "Ngoodi e tewtii",
+        "processing": "Ndokkale",
+        "inline": "Vuuɗi (doggol tewtii)",
+        "indexed": "Vuuɗi (tiitorde e ndokkale)",
+        "failed": "Ndokkale njokkataa",
+        "asset": "Asset juulnii e télécharger"
+      },
+      "confirmRemove": "Jokkoy {filename} e skill ɗin? Ngal original ngam salmini maa wan'da, tee mbaɗa doon okkitaama e cite.",
+      "reindexRequired": "Aade gooto ɗee soɓɓi reindexing so o waawi jooɗiiɗe e teelteeri Search e embedding ngam moƴƴi. O tawii, aade ɗee waawi jooɗiiɗe e search tan so indexing nde heddii."
+    },
+    "applyToAgents": "Waawi agent ji",
+    "applyToAgentsHint": "Ka kadi feere. So feewi, agentji waawi loowdi kisal ɗee e jogi-jogorɗe, baalini njoɓdi persona. Kisal jogii shaareeri galɗe. Agentji Foundry so jogii load_skill e search_skill_documents e keɓe."
+  },
+  "personalSkills": {
+    "title": "Keertugoji",
+    "description": "Danndu yimɓe keertugol konngol e caatike ma. Keertugoji waɗi e browser jogii e model kala caatike. Keertugoji habaru ɗe gollii, ken goɗɗum ko feewi e hobbe, walla pinngi. Haddi seeta woɗii politique organisation walla jooɗii tool access. Keertugol ina wornii e keertugoji keertugol deployment. Caatike agent haddi ɗaɓɓi keertugoji keertugol.",
+    "importFile": "Import SKILL.md walla ZIP",
+    "review": "Fayyi danndu moƴƴi kala so neɗɗa. Danndu imported moƴƴi ko user preferences, haddi politik organisation moƴƴi.",
+    "skipped": "Danndu executable scripts jaɓtii.",
+    "importTooLarge": "Import ɗe hanna e 20 MB walla boɗɗum.",
+    "invalid": "Keertugo haddi importi.",
+    "duplicate": "Id keertugol keertugol ɗii jannoo. Edit existing skill walla suɓo id goɗɗum.",
+    "countLimit": "Ina waawi danndu keertugoji 20 keertugol.",
+    "requestLimit": "Keertugoji keertugol ɗe enable e tiɗi request limit 160 KB. Disable keertugoji walla moyngol danndu.",
+    "saved": "Keertugol keertugol danndii e browser ɗi.",
+    "instructionsHint": "Danndu 16 KB moƴƴi e danndu imported text references. Binary files e persistent document indexing moƴƴi organisation skills tan. Export ina waawi SKILL.md standard name haddi user: prefix.",
+    "enabled": "Enable caatike am",
+    "empty": "Waɗ keertugol e gollal goɗɗum, walla importi SKILL.md jey e fayyi ko."
   }
 }

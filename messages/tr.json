@@ -918,7 +918,21 @@
     "alwaysWaitThisLong": "Her zaman en fazla {duration} kadar bekle",
     "keepSearching": "Aramaya devam et",
     "keepSearchingHint": "Arama bunu bulmadan durdu. Asistanın farklı yollar denemesini isteyin.",
-    "keepSearchingMessage": "Bunu aramaya devam edin lütfen — farklı bir yöntem deneyin."
+    "keepSearchingMessage": "Bunu aramaya devam edin lütfen — farklı bir yöntem deneyin.",
+    "addSkill": "Yetenekler",
+    "removeSkill": "Yeteneği kaldır",
+    "skillsMenuLabel": "Mevcut yetenekler",
+    "skillsLimit": "Mesaj başına en fazla 3 yetenek.",
+    "skillPin": "Sohbete sabitle",
+    "skillUseOnce": "Bir kez kullan",
+    "skillPinned": "sabitle",
+    "skillOnce": "sonraki mesaj",
+    "skillsPaused": "duraklatıldı",
+    "skillUnavailable": "kullanılamıyor",
+    "skillsAutomaticHint": "İlgili beceriler otomatik olarak seçilir. Sadece sonraki mesaj için bir kez kullanabilir veya bir beceriyi bu sohbet boyunca kullanmak için sabitleyebilirsiniz.",
+    "skillsAgentDisabled": "Bir temsilci eklendiğinde beceriler duraklatılır. Temsilciyi kaldırdığınızda sabitlemeleriniz devam edecek.",
+    "skillPersonal": "kişisel",
+    "skillsAgentToolsHint": "Burada yalnızca bir yönetici tarafından ajanın kullanımı için etkinleştirilen organizasyon becerileri sunulur. Ajan bunları yalnızca okuma modu araçları olarak yükleyebilir. Diğer sabitlenmiş beceriler duraklatılır ve kişisel beceriler ajanlar tarafından kullanılamaz."
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -5521,7 +5535,8 @@
       "channelSets": "Her ekibin platformlarda yazma kuralları: rehberlik, sesler, varsayılanlar, kimlerin seti ve kimlerin gönderi gönderebileceği.",
       "webSearch": "Web aramasının ne kadar ileri gidebileceği: çok aşamalı arama, denetleyici modeli ve sınırları.",
       "contextBudget": "Her modelin her turda aldığı konuşma miktarı.",
-      "analytics": "Teslim edilen raporlar: neler geldi, her klasörü kim açabilir, hangi alanlar gösterilebilir."
+      "analytics": "Teslim edilen raporlar: neler geldi, her klasörü kim açabilir, hangi alanlar gösterilebilir.",
+      "skills": "Asistanın, gerektiğinde bir konuşmaya uyguladığı tekrar kullanılabilir talimat blokları."
     },
     "openSettings": "Ayarları aç",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Delegasyonlar",
       "webSearch": "Web arama",
       "contextBudget": "Kontekst bütçesi",
-      "analytics": "Analitik"
+      "analytics": "Analitik",
+      "skills": "Yetenekler"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Bu klasörün {months} aylık saklama süresinden eski; artık gösterilmiyor.",
       "unknown": "Bildiren problem: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Yetenekler",
+    "description": "Asistanın, gerektiğinde bir konuşmada uyguladığı tekrar kullanılabilir talimat bloklarıdır. Claude ve ChatGPT tarafından kullanılan Agent Skills SKILL.md formatı ile uyumludur.",
+    "loading": "Yetenekler yükleniyor…",
+    "loadError": "Yetenekler yüklenemedi.",
+    "retry": "Yeniden dene",
+    "unavailableBanner": "Yetenek depolama şu anda erişilemiyor — yerleşik varsayılanlar gösteriliyor; depolanan yetenekler ve düzenlemeler geri gelene kadar kullanılamayacak.",
+    "conflictError": "Bu yetenek başka bir yönetici tarafından değiştirildi. Liste yeniden yüklendi — düzenlemenizi tekrar uygulayın.",
+    "alwaysWarning": "{count} yetenek 'Her zaman' olarak ayarlanmış. Hepsi her konuşmaya eklenir — konuya özel yetenekler için 'Otomatik'i tercih edin.",
+    "newSkill": "Yeni yetenek",
+    "importSkill": "SKILL.md İçe Aktar",
+    "importTitle": "Bir SKILL.md dosyası yapıştırın",
+    "importPlaceholder": "---\nname: benim-yetenegim\ndescription: Bu yetenek ne yapar ve ne zaman kullanılır.\n---\n\nTalimatlar…",
+    "importHint": "Ayrıştırılan yetenek, inceleme için editörde açılır — kaydetmeden önce hiçbir şey kaydedilmez.",
+    "importParse": "Ayrıştır ve incele",
+    "invalidId": "Yetenek kimliklerinde küçük harfler, rakamlar ve tek tire kullanılır.",
+    "saveSuccess": "Yetenek kaydedildi.",
+    "saveError": "Yetenek kaydedilemedi.",
+    "deleteConfirm": "Bu yetenek silinsin mi? Konuşmalara hemen uygulanması durur.",
+    "restoreConfirm": "Özelleştirmeyi kaldırıp bu yerleşik yeteneğin varsayılanını geri yükle?",
+    "deleteSuccess": "Yetenek silindi.",
+    "restoreSuccess": "Yerleşik varsayılan geri yüklendi.",
+    "deleteError": "Yetenek silinemedi.",
+    "empty": "Henüz hiç yetenek yok. Bir tane oluşturun veya bir SKILL.md içe aktarın.",
+    "builtinChip": "Yerleşik",
+    "customizedChip": "Özelleştirildi",
+    "exportSkill": "SKILL.md olarak dışa aktar",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "restoreDefault": "Varsayılanı geri yükle",
+    "createTitle": "Yeni yetenek",
+    "editTitle": "{name} düzenle",
+    "idLabel": "Kimlik",
+    "idHint": "Küçük harf, rakam ve tire bulunabilir. Yetenek için SKILL.md adı olur ve oluşturulduktan sonra değiştirilemez.",
+    "nameLabel": "Görünür ad",
+    "descriptionLabel": "Açıklama",
+    "descriptionHint": "Yetenek ne yapar ve ne zaman kullanılır — bu alan yeteneğin seçilmesini sağlar, bu nedenle yanıt vermesi gereken spesifik konu ve ifadeleri ekleyin.",
+    "activationLabel": "Aktivasyon",
+    "activation": {
+      "auto": "Otomatik",
+      "always": "Her zaman",
+      "off": "Kapalı"
+    },
+    "activationHint": {
+      "auto": "Mevcut görev açıklamayla eşleştiğinde otomatik olarak seçilir. Kullanıcılar ayrıca bir kez kullanmayı talep edebilir veya bir sohbet için sabitleyebilir.",
+      "always": "Yetenek gören herkes için her konuşmaya eklenir. Dikkatli kullanın — bu alan kalıcıdır.",
+      "off": "Etkin değil: Asla uygulanmaz ve kullanıcılara sunulmaz, ancak düzenleme için burada tutulur."
+    },
+    "instructionsLabel": "Talimatlar",
+    "instructionsHint": "Markdown, en fazla 16 KB. Yetenek etkin olduğunda olduğu gibi eklenir.",
+    "saving": "Kaydediliyor…",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "documents": {
+      "title": "Belgeler",
+      "hint": "Referanslar bu yetenek ile birlikte saklanır. Küçük belgeler doğrudan yüklenir; büyük belgeler ise atıfla arama için dizine eklenir. En fazla 20 kaynak, her biri 10 MB ve toplamda 20 MB. Varlıklar yalnızca indirme için saklanır.",
+      "saveFirst": "Belgeleri eklemeden önce bu yerleşik yeteneğin bir özelleştirmesini kaydedin.",
+      "upload": "Referans belgeleri ekle",
+      "remove": "Kaldır",
+      "stop": "Dizine eklemeyi durdur",
+      "resume": "Belgeleri dizine ekle veya devam et",
+      "empty": "Henüz ekli belge yok.",
+      "requestFailed": "Belge isteği başarısız oldu. Yeniden yükleyip tekrar deneyin.",
+      "importZip": "Bir yetenek ZIP'i içe aktar",
+      "zipTooLarge": "Yetenek ZIP'i 20 MB veya daha küçük olmalıdır.",
+      "importCount": "Kaydedildikten sonra eklenecek kaynaklar: {count}",
+      "skippedScripts": "Çalıştırılabilir komut dosyaları atlandı",
+      "status": {
+        "pending": "Dizine ekleme bekleniyor",
+        "processing": "Dizine ekleniyor",
+        "inline": "Hazır (doğrudan yüklendi)",
+        "indexed": "Hazır (aranabilir)",
+        "failed": "Dizine ekleme başarısız",
+        "asset": "İndirilebilir varlık"
+      },
+      "confirmRemove": "{filename} dosyasını bu yetenekten kaldırmak istiyor musunuz? Saklanan orijinali silinecek ve artık alıntı kaynağı olarak kullanılamayacaktır.",
+      "reindexRequired": "Bu belgelerin, mevcut bölgesel Arama ve gömme yapılandırması için yeniden indekslenmesi gerekiyor. İndeksleme tamamlanana kadar arama yapılamayacaktır."
+    },
+    "applyToAgents": "Ajanlar için kullanılabilir",
+    "applyToAgentsHint": "Varsayılan olarak kapalıdır. Etkinleştirildiğinde, ajanlar bu beceriyi sadece okuma modunda araçlar üzerinden yükleyebilir ve kendi kimlik talimatlarını değiştirmeden kullanabilir. Beceri çağrılarının adım sınırları birbirinden bağımsızdır. Foundry ajanlarının tanımlarında load_skill ve search_skill_documents fonksiyonlarının zaten kayıtlı olması gerekir."
+  },
+  "personalSkills": {
+    "title": "Kişisel beceriler",
+    "description": "Kendi görüşmelerinizde yeniden kullanılabilir talimatları kaydedin. Beceriler bu tarayıcıda bulunur ve yalnızca sohbet ettiğinizde modele gönderilir. İlgili beceriler otomatik olarak seçilebilir, bir kez kullanılabilir veya sabitlenebilir. Kurum politikasını değiştiremez veya araç erişimi veremezler. Beceri kullanımı, bu dağıtım için becerilerin etkinleştirilmesini gerektirir; ajan görüşmelerinde kişisel beceriler kullanılmaz.",
+    "importFile": "SKILL.md veya ZIP dosyası içe aktar",
+    "review": "Kaydetmeden önce tüm talimatları inceleyin. İçe aktarılan talimatlar kullanıcı tercihidir, güvenilir kurum politikası değildir.",
+    "skipped": "Çalıştırılabilir betikler atlandı",
+    "importTooLarge": "İçe aktarma 20 MB veya daha küçük olmalıdır.",
+    "invalid": "Beceri içe aktarılamadı.",
+    "duplicate": "Bu kişisel beceri kimliği zaten mevcut. Mevcut beceriyi düzenleyin veya farklı bir kimlik seçin.",
+    "countLimit": "En fazla 20 kişisel beceri kaydedebilirsiniz.",
+    "requestLimit": "Etkin kişisel beceriler 160 KB istek sınırını aşıyor. Bazı becerileri devre dışı bırakın veya talimatlarını kısaltın.",
+    "saved": "Kişisel beceri bu tarayıcıya kaydedildi.",
+    "instructionsHint": "Her türlü içe aktarılan metin referansı dâhil en fazla 16 KB talimat. İkili dosyalar ve kalıcı doküman indekslemesi yalnızca kurum becerileri için kullanılabilir. Dışa aktarım, kullanıcı: öneki olmadan standart SKILL.md adını kullanır.",
+    "enabled": "Kendi sohbetlerim için etkin",
+    "empty": "Tekrarlayan bir görev için beceri oluşturun veya gözden geçirmek ve kaydetmek için bir SKILL.md içe aktarın."
   }
 }

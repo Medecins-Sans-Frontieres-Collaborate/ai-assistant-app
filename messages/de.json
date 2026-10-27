@@ -864,7 +864,21 @@
     "alwaysWaitThisLong": "Immer bis zu {duration} warten",
     "keepSearching": "Weiter suchen",
     "keepSearchingHint": "Die Suche wurde beendet, bevor dies gefunden wurde. Bitten Sie den Assistenten, andere Ansätze zu versuchen.",
-    "keepSearchingMessage": "Bitte weiter danach suchen – versuchen Sie einen anderen Ansatz."
+    "keepSearchingMessage": "Bitte weiter danach suchen – versuchen Sie einen anderen Ansatz.",
+    "addSkill": "Fähigkeiten",
+    "removeSkill": "Fähigkeit entfernen",
+    "skillsMenuLabel": "Verfügbare Fähigkeiten",
+    "skillsLimit": "Bis zu 3 Fähigkeiten pro Nachricht.",
+    "skillPin": "An Konversation anheften",
+    "skillUseOnce": "Einmal verwenden",
+    "skillPinned": "angeheftet",
+    "skillOnce": "nächste Nachricht",
+    "skillsPaused": "pausiert",
+    "skillUnavailable": "nicht verfügbar",
+    "skillsAutomaticHint": "Relevante Skills werden automatisch ausgewählt. Verwenden Sie einmal für die nächste Nachricht oder heften Sie einen Skill an, um ihn während der gesamten Konversation zu nutzen.",
+    "skillsAgentDisabled": "Skills sind pausiert, solange ein Agent verbunden ist. Ihre Anheftungen werden fortgesetzt, wenn Sie den Agenten trennen.",
+    "skillPersonal": "persönlich",
+    "skillsAgentToolsHint": "Hier werden nur von einem Administrator für die Nutzung durch Agents freigegebene Organisations-Skills angeboten. Der Agent kann diese als Nur-Lesen-Tools laden. Andere Pins bleiben pausiert, und persönliche Skills stehen Agents nicht zur Verfügung."
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -5521,7 +5535,8 @@
       "channelSets": "Die Regeln jedes Teams für das Veröffentlichen auf Plattformen: Richtlinien, Stimmen, Vorgaben, wer das Set nutzen und wer senden darf.",
       "webSearch": "Wie weit eine Websuche gehen kann: mehrschrittige Suche, Bewertungsmodell und Grenzen.",
       "contextBudget": "Wie viel einer Konversation pro Zug an jedes Modell gesendet wird.",
-      "analytics": "Gelieferte Berichte: Was eingetroffen ist, wer auf welchen Ordner zugreifen darf und welche Felder angezeigt werden können."
+      "analytics": "Gelieferte Berichte: Was eingetroffen ist, wer auf welchen Ordner zugreifen darf und welche Felder angezeigt werden können.",
+      "skills": "Wiederverwendbare Anweisungsblöcke, die der Assistent bei Bedarf in einer Unterhaltung anwendet."
     },
     "openSettings": "Einstellungen öffnen",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Delegationen",
       "webSearch": "Websuche",
       "contextBudget": "Kontextbudget",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "Fähigkeiten"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Älter als die {months} Monate Aufbewahrungsfrist dieses Ordners; wird nicht mehr angezeigt.",
       "unknown": "Gemeldetes Problem: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Fähigkeiten",
+    "description": "Wiederverwendbare Anweisungsblöcke, die der Assistent bei Bedarf in einer Unterhaltung anwendet. Kompatibel mit dem Agent Skills SKILL.md-Format, wie es von Claude und ChatGPT verwendet wird.",
+    "loading": "Fähigkeiten werden geladen…",
+    "loadError": "Fähigkeiten konnten nicht geladen werden.",
+    "retry": "Erneut versuchen",
+    "unavailableBanner": "Der Fähigkeitsspeicher ist derzeit nicht erreichbar – es werden integrierte Standardwerte angezeigt; gespeicherte Fähigkeiten und Bearbeitungen sind erst wieder verfügbar, wenn der Zugriff möglich ist.",
+    "conflictError": "Diese Fähigkeit wurde von einem anderen Admin geändert. Die Liste wurde neu geladen – wenden Sie Ihre Änderung erneut an.",
+    "alwaysWarning": "{count} Fähigkeiten sind auf Immer gesetzt. Jede davon wird jeder Unterhaltung hinzugefügt – nutzen Sie für themenspezifische Fähigkeiten bevorzugt Automatisch.",
+    "newSkill": "Neue Fähigkeit",
+    "importSkill": "SKILL.md importieren",
+    "importTitle": "SKILL.md-Datei einfügen",
+    "importPlaceholder": "---\nname: meine-fähigkeit\nbeschreibung: Was diese Fähigkeit tut und wann sie verwendet wird.\n---\n\nAnweisungen…",
+    "importHint": "Die geparste Fähigkeit wird im Editor zur Überprüfung geöffnet – erst beim Speichern wird sie übernommen.",
+    "importParse": "Parsen und überprüfen",
+    "invalidId": "Fähigkeits-IDs verwenden Kleinbuchstaben, Zahlen und einzelne Bindestriche.",
+    "saveSuccess": "Fähigkeit gespeichert.",
+    "saveError": "Fähigkeit konnte nicht gespeichert werden.",
+    "deleteConfirm": "Diese Fähigkeit löschen? Unterhaltungen erhalten sie ab sofort nicht mehr.",
+    "restoreConfirm": "Anpassung entfernen und die Standardversion dieser integrierten Fähigkeit wiederherstellen?",
+    "deleteSuccess": "Fähigkeit gelöscht.",
+    "restoreSuccess": "Integrierter Standard wiederhergestellt.",
+    "deleteError": "Fähigkeit konnte nicht gelöscht werden.",
+    "empty": "Noch keine Fähigkeiten. Erstellen Sie eine oder importieren Sie eine SKILL.md.",
+    "builtinChip": "Integriert",
+    "customizedChip": "Angepasst",
+    "exportSkill": "Als SKILL.md exportieren",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "restoreDefault": "Standard wiederherstellen",
+    "createTitle": "Neue Fähigkeit",
+    "editTitle": "{name} bearbeiten",
+    "idLabel": "ID",
+    "idHint": "Kleinbuchstaben, Zahlen und Bindestriche. Wird zum SKILL.md-Namen der Fähigkeit und kann nach der Erstellung nicht mehr geändert werden.",
+    "nameLabel": "Anzeigename",
+    "descriptionLabel": "Beschreibung",
+    "descriptionHint": "Was die Fähigkeit tut UND wann sie zu verwenden ist – daran wird die Fähigkeit ausgewählt, also relevante Themen und Formulierungen angeben.",
+    "activationLabel": "Aktivierung",
+    "activation": {
+      "auto": "Automatisch",
+      "always": "Immer",
+      "off": "Aus"
+    },
+    "activationHint": {
+      "auto": "Wird automatisch ausgewählt, wenn die aktuelle Aufgabe zur Beschreibung passt. Nutzer können sie außerdem einmalig anfordern oder an eine Konversation anheften.",
+      "always": "Wird jeder Unterhaltung hinzugefügt und ist für alle sichtbar. Sparsam verwenden – dies ist dauerhafter Prompt-Platz.",
+      "off": "Inaktiv: wird nie angewendet und nicht für Nutzer angeboten, bleibt aber zum Bearbeiten hier gespeichert."
+    },
+    "instructionsLabel": "Anweisungen",
+    "instructionsHint": "Markdown, bis zu 16 KB. Wird beim Aktivieren des Skills wie eingegeben übernommen.",
+    "saving": "Wird gespeichert…",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "documents": {
+      "title": "Dokumente",
+      "hint": "Referenzen werden mit dieser Fähigkeit gespeichert. Kleine Dokumente werden direkt geladen, größere Dokumente werden zum zitierten Suchen indexiert. Bis zu 20 Ressourcen, jeweils 10 MB und insgesamt 20 MB. Assets werden nur zum Herunterladen gespeichert.",
+      "saveFirst": "Speichern Sie eine Anpassung dieser eingebauten Fähigkeit, bevor Sie Dokumente hinzufügen.",
+      "upload": "Referenzdokumente hinzufügen",
+      "remove": "Entfernen",
+      "stop": "Indexierung stoppen",
+      "resume": "Dokumente indexieren oder fortsetzen",
+      "empty": "Noch keine Dokumente angehängt.",
+      "requestFailed": "Die Dokumentenanfrage ist fehlgeschlagen. Bitte neu laden und erneut versuchen.",
+      "importZip": "Skill-ZIP importieren",
+      "zipTooLarge": "Das Skill-ZIP darf maximal 20 MB groß sein.",
+      "importCount": "Ressourcen zum Anhängen nach dem Speichern: {count}",
+      "skippedScripts": "Ausführbare Skripte wurden übersprungen",
+      "status": {
+        "pending": "Indexierung ausstehend",
+        "processing": "Indexierung läuft",
+        "inline": "Bereit (direkt geladen)",
+        "indexed": "Bereit (durchsuchbar)",
+        "failed": "Indexierung fehlgeschlagen",
+        "asset": "Herunterladbares Asset"
+      },
+      "confirmRemove": "{filename} aus dieser Fähigkeit entfernen? Die gespeicherte Originaldatei wird gelöscht und steht nicht mehr als Zitationsquelle zur Verfügung.",
+      "reindexRequired": "Diese Dokumente müssen für die aktuelle regionale Such- und Einbettungskonfiguration neu indiziert werden. Sie sind erst nach Abschluss der Indizierung durchsuchbar."
+    },
+    "applyToAgents": "Für Agents verfügbar",
+    "applyToAgentsHint": "Standardmäßig deaktiviert. Wenn aktiviert, können Agents diesen Skill über Nur-Lesen-Tools laden, anstatt ihre Persona-Anweisungen zu ersetzen. Skill-Aufrufe haben eigene Schrittlimits. Foundry-Agents müssen bereits die Funktionen load_skill und search_skill_documents in ihrer Definition registriert haben."
+  },
+  "personalSkills": {
+    "title": "Persönliche Fähigkeiten",
+    "description": "Speichern Sie wiederverwendbare Anweisungen für Ihre eigenen Gespräche. Fähigkeiten bleiben in diesem Browser und werden nur beim Chatten an das Modell gesendet. Relevante Fähigkeiten können automatisch ausgewählt, einmalig verwendet oder angeheftet werden. Sie können keine Organisationsrichtlinien ändern oder Toolzugriff gewähren. Die Nutzung von Fähigkeiten erfordert, dass diese für diese Bereitstellung aktiviert sind; Agentengespräche verwenden keine persönlichen Fähigkeiten.",
+    "importFile": "SKILL.md oder ZIP importieren",
+    "review": "Überprüfen Sie die gesamten Anweisungen, bevor Sie speichern. Importierte Anweisungen sind Benutzerpräferenzen und keine vertrauenswürdigen Organisationsrichtlinien.",
+    "skipped": "Ausführbare Skripte wurden übersprungen",
+    "importTooLarge": "Der Import muss 20 MB oder kleiner sein.",
+    "invalid": "Die Fähigkeit konnte nicht importiert werden.",
+    "duplicate": "Diese persönliche Skill-ID existiert bereits. Bearbeiten Sie die bestehende Fähigkeit oder wählen Sie eine andere ID.",
+    "countLimit": "Sie können bis zu 20 persönliche Fähigkeiten speichern.",
+    "requestLimit": "Aktivierte persönliche Fähigkeiten überschreiten das 160 KB-Anfragelimit. Deaktivieren Sie einige Fähigkeiten oder kürzen Sie deren Anweisungen.",
+    "saved": "Persönliche Fähigkeit in diesem Browser gespeichert.",
+    "instructionsHint": "Bis zu 16 KB Anweisungen, einschließlich importierter Textreferenzen. Binärdateien und dauerhafte Dokumentenindizierung sind nur für Organisationsfähigkeiten verfügbar. Der Export verwendet den Standardnamen SKILL.md ohne user:-Präfix.",
+    "enabled": "Für meine Gespräche aktiviert",
+    "empty": "Erstellen Sie eine Fähigkeit für wiederkehrende Aufgaben oder importieren Sie eine SKILL.md, um sie hier zu prüfen und zu speichern."
   }
 }

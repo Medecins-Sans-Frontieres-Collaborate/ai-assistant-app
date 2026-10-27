@@ -919,7 +919,21 @@
     "alwaysWaitThisLong": "Luôn chờ tối đa {duration}",
     "keepSearching": "Tiếp tục tìm kiếm",
     "keepSearchingHint": "Việc tìm kiếm đã dừng lại trước khi tìm được thông tin này. Hãy yêu cầu trợ lý thử các phương pháp khác.",
-    "keepSearchingMessage": "Vui lòng tiếp tục tìm kiếm nội dung này — hãy thử cách khác."
+    "keepSearchingMessage": "Vui lòng tiếp tục tìm kiếm nội dung này — hãy thử cách khác.",
+    "addSkill": "Kỹ năng",
+    "removeSkill": "Xóa kỹ năng",
+    "skillsMenuLabel": "Kỹ năng có sẵn",
+    "skillsLimit": "Tối đa 3 kỹ năng cho mỗi tin nhắn.",
+    "skillPin": "Ghim vào cuộc trò chuyện",
+    "skillUseOnce": "Sử dụng một lần",
+    "skillPinned": "đã ghim",
+    "skillOnce": "tin nhắn tiếp theo",
+    "skillsPaused": "đã tạm dừng",
+    "skillUnavailable": "không khả dụng",
+    "skillsAutomaticHint": "Kỹ năng liên quan sẽ được chọn tự động. Sử dụng một lần cho tin nhắn tiếp theo hoặc ghim kỹ năng để dùng xuyên suốt cuộc trò chuyện này.",
+    "skillsAgentDisabled": "Các kỹ năng sẽ tạm dừng trong khi có tác nhân được đính kèm. Ghim của bạn sẽ tiếp tục khi bạn gỡ tác nhân ra.",
+    "skillPersonal": "cá nhân",
+    "skillsAgentToolsHint": "Chỉ các kỹ năng của tổ chức đã được quản trị viên bật cho đại diện sử dụng mới được cung cấp ở đây. Đại diện có thể tải chúng như các công cụ chỉ đọc. Các pin khác sẽ tạm dừng và các kỹ năng cá nhân sẽ không khả dụng cho đại diện."
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -5552,7 +5566,8 @@
       "channelSets": "Quy tắc của từng nhóm khi đăng trên nền tảng: hướng dẫn, giọng điệu, mặc định, ai có thể sử dụng và ai được phép gửi.",
       "webSearch": "Giới hạn phạm vi tìm kiếm web: tìm kiếm nhiều bước, mô hình đánh giá và các giới hạn của nó.",
       "contextBudget": "Lượng thông tin cuộc trò chuyện mỗi mô hình nhận được trong mỗi lượt.",
-      "analytics": "Báo cáo đã chuyển: nội dung đã nhận, ai có thể mở từng thư mục và các trường có thể hiển thị."
+      "analytics": "Báo cáo đã chuyển: nội dung đã nhận, ai có thể mở từng thư mục và các trường có thể hiển thị.",
+      "skills": "Các khối hướng dẫn có thể tái sử dụng mà trợ lý áp dụng khi cuộc trò chuyện cần."
     },
     "openSettings": "Mở cài đặt",
     "area": {
@@ -5563,7 +5578,8 @@
       "delegations": "Phân quyền",
       "webSearch": "Tìm kiếm web",
       "contextBudget": "Ngân sách ngữ cảnh",
-      "analytics": "Phân tích"
+      "analytics": "Phân tích",
+      "skills": "Kỹ năng"
     }
   },
   "limits": {
@@ -7594,5 +7610,102 @@
       "past-retention": "Lâu hơn {months} tháng lưu trữ của thư mục này; không còn hiển thị nữa.",
       "unknown": "Có sự cố được báo cáo: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Kỹ năng",
+    "description": "Các khối hướng dẫn có thể tái sử dụng mà trợ lý áp dụng khi cuộc trò chuyện cần. Tương thích với định dạng Agent Skills SKILL.md do Claude và ChatGPT sử dụng.",
+    "loading": "Đang tải kỹ năng…",
+    "loadError": "Không thể tải kỹ năng.",
+    "retry": "Thử lại",
+    "unavailableBanner": "Kho kỹ năng hiện không truy cập được — các mặc định tích hợp sẵn đang được hiển thị; kỹ năng lưu trữ và chỉnh sửa sẽ không khả dụng cho đến khi phục hồi.",
+    "conflictError": "Kỹ năng này đã bị thay đổi bởi quản trị viên khác. Danh sách đã được tải lại — hãy áp dụng lại chỉnh sửa của bạn.",
+    "alwaysWarning": "{count} kỹ năng được đặt là Luôn. Mỗi kỹ năng này đều được thêm vào mọi cuộc trò chuyện — ưu tiên Tự động cho các kỹ năng theo chủ đề.",
+    "newSkill": "Kỹ năng mới",
+    "importSkill": "Nhập SKILL.md",
+    "importTitle": "Dán file SKILL.md",
+    "importPlaceholder": "---\ntên: my-skill\nmô tả: Kỹ năng này làm gì và khi nào sử dụng.\n---\n\nHướng dẫn…",
+    "importHint": "Kỹ năng đã phân tích sẽ mở trong trình chỉnh sửa để xem xét — chưa lưu lại cho đến khi bạn lưu.",
+    "importParse": "Phân tích và xem xét",
+    "invalidId": "Id kỹ năng sử dụng chữ thường, số và dấu gạch ngang đơn.",
+    "saveSuccess": "Đã lưu kỹ năng.",
+    "saveError": "Không thể lưu kỹ năng.",
+    "deleteConfirm": "Xóa kỹ năng này? Cuộc trò chuyện sẽ dừng nhận kỹ năng ngay lập tức.",
+    "restoreConfirm": "Xóa tùy chỉnh và khôi phục mặc định tích hợp cho kỹ năng này?",
+    "deleteSuccess": "Đã xóa kỹ năng.",
+    "restoreSuccess": "Đã khôi phục mặc định tích hợp.",
+    "deleteError": "Không thể xóa kỹ năng.",
+    "empty": "Chưa có kỹ năng. Tạo mới hoặc nhập SKILL.md.",
+    "builtinChip": "Tích hợp sẵn",
+    "customizedChip": "Tùy chỉnh",
+    "exportSkill": "Xuất dưới dạng SKILL.md",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "restoreDefault": "Khôi phục mặc định",
+    "createTitle": "Kỹ năng mới",
+    "editTitle": "Chỉnh sửa {name}",
+    "idLabel": "Id",
+    "idHint": "Chữ thường, số và dấu gạch ngang. Được dùng làm tên SKILL.md của kỹ năng và không thể thay đổi sau khi tạo.",
+    "nameLabel": "Tên hiển thị",
+    "descriptionLabel": "Mô tả",
+    "descriptionHint": "Kỹ năng làm gì VÀ khi nào nên sử dụng — đây là phần quyết định chọn kỹ năng, nên hãy nêu rõ chủ đề và cụm từ mà kỹ năng cần phản hồi.",
+    "activationLabel": "Kích hoạt",
+    "activation": {
+      "auto": "Tự động",
+      "always": "Luôn",
+      "off": "Tắt"
+    },
+    "activationHint": {
+      "auto": "Được chọn tự động khi nhiệm vụ hiện tại phù hợp với mô tả. Người dùng cũng có thể yêu cầu sử dụng một lần hoặc ghim vào cuộc trò chuyện.",
+      "always": "Thêm vào mọi cuộc trò chuyện cho tất cả người có thể xem kỹ năng này. Sử dụng hạn chế — đây là phần nhắc vĩnh viễn.",
+      "off": "Không hoạt động: không bao giờ áp dụng và không hiển thị cho người dùng, nhưng vẫn lưu để chỉnh sửa."
+    },
+    "instructionsLabel": "Hướng dẫn",
+    "instructionsHint": "Markdown, tối đa 16 KB. Được chèn nguyên văn khi kỹ năng được kích hoạt.",
+    "saving": "Đang lưu…",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "documents": {
+      "title": "Tài liệu",
+      "hint": "Tham khảo được lưu cùng kỹ năng này. Tài liệu nhỏ sẽ được tải trực tiếp; tài liệu lớn hơn sẽ được lập chỉ mục để tìm kiếm có trích dẫn. Tối đa 20 tài nguyên, mỗi tài nguyên 10 MB và tổng cộng 20 MB. Tài sản chỉ lưu để tải xuống.",
+      "saveFirst": "Vui lòng lưu tuỳ chỉnh kỹ năng tích hợp này trước khi thêm tài liệu.",
+      "upload": "Thêm tài liệu tham khảo",
+      "remove": "Xoá",
+      "stop": "Dừng lập chỉ mục",
+      "resume": "Lập chỉ mục hoặc tiếp tục tài liệu",
+      "empty": "Chưa có tài liệu nào được đính kèm.",
+      "requestFailed": "Yêu cầu tài liệu thất bại. Vui lòng tải lại và thử lại.",
+      "importZip": "Nhập tệp ZIP kỹ năng",
+      "zipTooLarge": "Tệp ZIP kỹ năng phải nhỏ hơn hoặc bằng 20 MB.",
+      "importCount": "Tài nguyên sẽ đính kèm sau khi lưu: {count}",
+      "skippedScripts": "Các script có thể thực thi đã bị bỏ qua",
+      "status": {
+        "pending": "Chờ lập chỉ mục",
+        "processing": "Đang lập chỉ mục",
+        "inline": "Sẵn sàng (tải trực tiếp)",
+        "indexed": "Sẵn sàng (có thể tìm kiếm)",
+        "failed": "Lập chỉ mục thất bại",
+        "asset": "Tài nguyên có thể tải xuống"
+      },
+      "confirmRemove": "Xóa {filename} khỏi kỹ năng này? Tệp gốc đã lưu sẽ bị xóa và không còn được sử dụng làm nguồn trích dẫn.",
+      "reindexRequired": "Các tài liệu này cần được đánh chỉ mục lại theo cấu hình Tìm kiếm và nhúng của khu vực hiện tại. Chúng sẽ không được tìm kiếm cho đến khi việc đánh chỉ mục hoàn tất."
+    },
+    "applyToAgents": "Có sẵn cho đại diện",
+    "applyToAgentsHint": "Mặc định là tắt. Khi bật, đại diện có thể tải kỹ năng này qua các công cụ chỉ đọc thay vì thay thế hướng dẫn persona của họ. Các lần gọi kỹ năng có giới hạn bước độc lập. Đại diện Foundry phải đã đăng ký các hàm load_skill và search_skill_documents trong định nghĩa của họ."
+  },
+  "personalSkills": {
+    "title": "Kỹ năng cá nhân",
+    "description": "Lưu các hướng dẫn có thể tái sử dụng cho hội thoại của bạn. Kỹ năng sẽ chỉ ở trình duyệt này và chỉ gửi đến mô hình khi bạn trò chuyện. Kỹ năng liên quan có thể được tự động chọn, sử dụng một lần hoặc ghim lại. Chúng không thể thay đổi chính sách tổ chức hoặc cấp quyền truy cập công cụ. Sử dụng kỹ năng yêu cầu kỹ năng đã được bật cho lần triển khai này; hội thoại với tác tử không sử dụng kỹ năng cá nhân.",
+    "importFile": "Nhập SKILL.md hoặc ZIP",
+    "review": "Xem lại toàn bộ hướng dẫn trước khi lưu. Hướng dẫn nhập vào là tùy chọn cá nhân của người dùng, không phải chính sách tổ chức đáng tin cậy.",
+    "skipped": "Đã bỏ qua các script thực thi",
+    "importTooLarge": "Tệp nhập phải nhỏ hơn hoặc bằng 20 MB.",
+    "invalid": "Không thể nhập kỹ năng này.",
+    "duplicate": "ID kỹ năng cá nhân đó đã tồn tại. Vui lòng chỉnh sửa kỹ năng hiện tại hoặc chọn một ID khác.",
+    "countLimit": "Bạn có thể lưu tối đa 20 kỹ năng cá nhân.",
+    "requestLimit": "Số kỹ năng cá nhân được bật vượt quá giới hạn yêu cầu 160 KB. Vui lòng tắt một số kỹ năng hoặc rút ngắn hướng dẫn.",
+    "saved": "Kỹ năng cá nhân được lưu trong trình duyệt này.",
+    "instructionsHint": "Tối đa 16 KB hướng dẫn, bao gồm mọi tham chiếu văn bản đã nhập. Tệp nhị phân và lập chỉ mục tài liệu liên tục chỉ có ở kỹ năng tổ chức. Xuất ra sẽ dùng tên chuẩn SKILL.md mà không có tiền tố user:.",
+    "enabled": "Đã bật cho hội thoại của tôi",
+    "empty": "Tạo kỹ năng cho một nhiệm vụ lặp lại, hoặc nhập SKILL.md để xem và lưu tại đây."
   }
 }

@@ -976,7 +976,21 @@
     "alwaysWaitThisLong": "Zela tango oyo ntango nyonso tii {duration}",
     "keepSearching": "Koba koluka",
     "keepSearchingHint": "Boluki esilaki liboso ekuta eloko oyo. Senga na assistant asalisa na ndenge mosusu.",
-    "keepSearchingMessage": "Koba koluka oyo, nabondeli yo — meka ndenge mosusu."
+    "keepSearchingMessage": "Koba koluka oyo, nabondeli yo — meka ndenge mosusu.",
+    "addSkill": "Ba compétence",
+    "removeSkill": "Kolongola compétence",
+    "skillsMenuLabel": "Ba compétence oyo ezali",
+    "skillsLimit": "Tii na ba compétence misato mpo na mokanda moko.",
+    "skillPin": "Kangisa na bosololi",
+    "skillUseOnce": "Salela mbala moko",
+    "skillPinned": "ekangi",
+    "skillOnce": "nsango elandi",
+    "skillsPaused": "ekitaki",
+    "skillUnavailable": "epesami te",
+    "skillsAutomaticHint": "Makoki oyo ekoki kosalela esalemi na nzungu. Salela mbala moko mpo na nsango elandi, to kangisa mokoki mpo osalela yango na bosololi mobimba.",
+    "skillsAgentDisabled": "Makoki ekiti ntango agent azali kokangama. Bakangeli na yo ekokoba ntango okobongola agent.",
+    "skillPersonal": "ya moto",
+    "skillsAgentToolsHint": "Kaka ba mayele ya organisation oyo admin apesi nzela mpo na basali ezo bonisama awa. Mosali akoki kokota na yango lokola outil oyo epesami kaka na motuni (read-only). Bansakoli mosusu bakotikala koulala, mpe mayele ya moto moko moko ezali te mpo na basali."
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -5505,7 +5519,8 @@
       "channelSets": "Mibeko ya eteni moko na moko ya kosala na mikanda : litambwisi, mingongo, makambo ya kobanda, nani akoki kosalela sete mpe nani akoki kotinda.",
       "webSearch": "Esika boluki na internet ekoki kokende: boluki ya mikolo mingi, model ya kotalela yango mpe mindule na yango.",
       "contextBudget": "Bokangiseli ya lisolo oyo model nyonso ezwi na tour nyonso.",
-      "analytics": "Rapport epesami: nini ebimi, nani akoki kofungola dosiye, mpe bilanga nini ekoki komonana."
+      "analytics": "Rapport epesami: nini ebimi, nani akoki kofungola dosiye, mpe bilanga nini ekoki komonana.",
+      "skills": "Biteni ya mateya oyo asistani akoki kosalela tango esengeli na lisolo."
     },
     "openSettings": "Fungola malamu misala ya malamu",
     "area": {
@@ -5516,7 +5531,8 @@
       "delegations": "Bato ya ekateli",
       "webSearch": "Boluki na internet",
       "contextBudget": "Bokangiseli ya kontekste",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "Ba compétence"
     }
   },
   "limits": {
@@ -7547,5 +7563,102 @@
       "past-retention": "Eleki {months} ya retention ya dossier oyo; ekomonisama lisusu te.",
       "unknown": "Likambo esalemaki: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Ba compétence",
+    "description": "Biteni ya mateya oyo asistani akoki kosalela tango esengeli na lisolo. Ebongi na Agent Skills SKILL.md format oyo Claude mpe ChatGPT basalelaka.",
+    "loading": "Bazali kokotisa ba compétence…",
+    "loadError": "Ekokaki te kokotisa ba compétence.",
+    "retry": "Salisa",
+    "unavailableBanner": "Espace ya bakisa compétence ezali kozala te sik’oyo — ba valeur par défaut ezali komonana; ba compétence na bino mpe mbongwana na yango ezali te ti ekózwa solution.",
+    "conflictError": "Compétence oyo ebongoli na admin mosusu. Liste elongoli—salisa mbongwana na yo lisusu.",
+    "alwaysWarning": "{count} compétence ezali na \"Toujours\". Nyonso yango ekotaka na lisolo nyonso — kobosana te kosalela \"Automatique\" mpo na compétence ya likambo moko.",
+    "newSkill": "Compétence ya sika",
+    "importSkill": "Kokota SKILL.md",
+    "importTitle": "Kopesa nkayi ya file SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Oyo compétence esalaka mpe tango nini esengeli kosalela yango.\n---\n\nMateya…",
+    "importHint": "Compétence oyo ebimi na kobimisa ekotombama na ndakisa mpo na kotala — ekozala sauvegarder kaka soki osauvegardaki.",
+    "importParse": "Bongola mpe talela",
+    "invalidId": "Id ya compétence esengeli kozala na minuscule, ba nimele, mpe tiret moko.",
+    "saveSuccess": "Compétence esauvegardami.",
+    "saveError": "Ekokaki te kosauvegarder compétence.",
+    "deleteConfirm": "Kolongola compétence oyo ? Lisolo ekosila kozwa yango mbala moko.",
+    "restoreConfirm": "Kolongola mise à jour pe kozongisa valeur par défaut ya compétence oyo ?",
+    "deleteSuccess": "Compétence elongoli.",
+    "restoreSuccess": "Valeur par défaut elongoli.",
+    "deleteError": "Ekokaki te kolongola compétence.",
+    "empty": "Nanu ba compétence te. Salá moko, to kokota SKILL.md.",
+    "builtinChip": "Ya libanda",
+    "customizedChip": "Ya motindo nayo",
+    "exportSkill": "Ekotisa na SKILL.md",
+    "edit": "Bongola",
+    "delete": "Luka",
+    "restoreDefault": "Zongisa valeur par défaut",
+    "createTitle": "Compétence ya sika",
+    "editTitle": "Bongola {name}",
+    "idLabel": "Id",
+    "idHint": "Mikanda ya minuscule, ba nimele, mpe ba tiret. Ekozala nkombo ya SKILL.md ya compétence mpe ekoki te kobongwana soki etali.",
+    "nameLabel": "Nkombo na komonana",
+    "descriptionLabel": "Maloba",
+    "descriptionHint": "Oyo compétence esalaka PE tango nini esengeli kosalela yango — yango ezali koluka compétence, yango wana tanga makambo mpe ndenge esengeli kozongisama.",
+    "activationLabel": "Activation",
+    "activation": {
+      "auto": "Automatique",
+      "always": "Toujours",
+      "off": "Likolo te"
+    },
+    "activationHint": {
+      "auto": "Ezwami na nzungu soki mosala ezali kopesa elilingi. Basaleli bakoki mpe kosenga yango mbala moko to kokangisa yango na bosololi.",
+      "always": "Ezalaka na lisolo nyonso na moto nyonso oyo amonaka compétence. Sala yango na pasito — esika ya prompt ekotikala.",
+      "off": "Ezali te : ekosalama te mpe ekozungwa te na ba utilisateur, kasi ekotikala mpo na kobongisa."
+    },
+    "instructionsLabel": "Mateya",
+    "instructionsHint": "Markdown, kino 16 KB. Ekozala na molimbolimbo bongo soki skill ezali active.",
+    "saving": "Ezali kosalela…",
+    "save": "Salela",
+    "cancel": "Likweyisi",
+    "documents": {
+      "title": "Mikanda",
+      "hint": "Bisika bizalaka na maye o likambo oyo. Mikanda ya mike ezali kofungwama mbala moko; mikanda minene ezali kobalama mpo na koluka na bibimiseli. Kino resources 20, MB 10 mpo na moko moko mpe total MB 20. Assets ebatamaka kaka mpo na kofutisa.",
+      "saveFirst": "Samba mibeko ya likoki oyo liboso ya kobakisa mikanda.",
+      "upload": "Bakisa mikanda ya referansi",
+      "remove": "Longola",
+      "stop": "Tika kobala",
+      "resume": "Bala to yebisa mikanda lisusu",
+      "empty": "Mikanda ezaliko kaka te.",
+      "requestFailed": "Senga ya mokanda ebeleli. Somba lisusu mpe meka lisusu.",
+      "importZip": "Kota ZIP ya likoki",
+      "zipTooLarge": "ZIP ya likoki esengeli kozala MB 20 to moke.",
+      "importCount": "Bisika ya kokakola sima ya kosamba: {count}",
+      "skippedScripts": "Ba scripts ekoki kosalama elongobani.",
+      "status": {
+        "pending": "Kolala na kobala",
+        "processing": "Kobala",
+        "inline": "Eliandi (efungwama mbala moko)",
+        "indexed": "Eliandi (ekoki kolukama)",
+        "failed": "Kobala ezali lisusu te",
+        "asset": "Asset ya kofutisa"
+      },
+      "confirmRemove": "Bolongola {filename} na mayele oyo? Ndakisa ya ebandeli ekobongwana mpe ekokoma lisusu te libosoliboso lokola libimboli ya mbote.",
+      "reindexRequired": "Mikanda oyo esengeli esalema lisusu index mpo na misala ya Search mpe embedding ya region ya sikoyo. Ekozala na posa te ekokanisa te tii index ekosila."
+    },
+    "applyToAgents": "Ezali mpo na basali",
+    "applyToAgentsHint": "Ezali na bitika te na ebandeli. Soki opesi nzela, basali bakoki kokota na mayele oyo na nzela ya ba outils ya motuni kaka, na esika ya kobongola mitindo ya persona na bango. Appel ya mayele ezali na limite na yango moko ya ba étapes. Basali ya Foundry esengeli kozala na ba fonction load_skill mpe search_skill_documents oyo ebongisami na ndakisa na bango."
+  },
+  "personalSkills": {
+    "title": "Mikoki ya moto",
+    "description": "Bomba mitindo oyo okoki kosalela mbala mingi mpo na bisolo na yo. Mikoki ekosala kaka na browser oyo mpe ekotinda na model ntango otali na sango. Mikoki oyo ezali ntina ekoki koponama kaka, kosalelama mbala moko, to kotalama na likolo. Ekozala te na makoki ya kobongola politiki ya organisation to kopesa nzela ya bisaleli. Kosalela mikoki esengi mikoki ezala pɛtɛ na mabongisi oyo; bisolo na agent ekozala te na mikoki ya moto.",
+    "importFile": "Kokota SKILL.md to ZIP",
+    "review": "Tala mobimba ya mitindo liboso okobomba yango. Mitindo oyo ekotamaki ezali bapreference ya mosaleli, ezali te politika ya organisation oyo etyelami motema.",
+    "skipped": "Ba script esalelami basilamaki te",
+    "importTooLarge": "Fichier ya kokota esengeli kozala 20 MB to koleka te.",
+    "invalid": "Mikoki oyo ekokaki kokotama te.",
+    "duplicate": "ID ya mikoki ya moto oyo ezali lisusu. Bɔngisa mikoki oyo ezali deja to sɔkola na ID mosusu.",
+    "countLimit": "Okoki kobomba mikoki ya moto koleka 20 te.",
+    "requestLimit": "Mikoki misalemi ekiti ndelo ya 160 KB mpo na demande. Zongisa mikoki mosusu to yebisa mitindo na yango.",
+    "saved": "Mikoki ya moto ebombami na browser oyo.",
+    "instructionsHint": "Tii na 16 KB ya mitindo, ezali na ba références ya texte oyo ekotamaki. Ba fichiers binaires mpe index ya document oyo ezalaka libela ezali kaka mpo na mikoki ya organisation. Export ekosalela nkombo standard SKILL.md na litomba te na prefix ya user:.",
+    "enabled": "Efungolami mpo na bisolo na ngai",
+    "empty": "Kela mikoki mpo na mosala ya mbala mingi, to kotisa SKILL.md mpo otala mpe obomba yango awa."
   }
 }

@@ -864,7 +864,21 @@
     "alwaysWaitThisLong": "Esperar siempre hasta {duration}",
     "keepSearching": "Seguir buscando",
     "keepSearchingHint": "La búsqueda se detuvo antes de encontrar esto. Pida al asistente que pruebe diferentes enfoques.",
-    "keepSearchingMessage": "Siga buscando esto, por favor; intente con un enfoque diferente."
+    "keepSearchingMessage": "Siga buscando esto, por favor; intente con un enfoque diferente.",
+    "addSkill": "Habilidades",
+    "removeSkill": "Eliminar habilidad",
+    "skillsMenuLabel": "Habilidades disponibles",
+    "skillsLimit": "Hasta 3 habilidades por mensaje.",
+    "skillPin": "Fijar en la conversación",
+    "skillUseOnce": "Usar una vez",
+    "skillPinned": "fijado",
+    "skillOnce": "próximo mensaje",
+    "skillsPaused": "pausado",
+    "skillUnavailable": "no disponible",
+    "skillsAutomaticHint": "Las habilidades relevantes se seleccionan automáticamente. Úsela una vez para el próximo mensaje o fije una habilidad para usarla durante toda la conversación.",
+    "skillsAgentDisabled": "Las habilidades están pausadas mientras hay un agente adjunto. Sus habilidades fijadas se reanudarán al desadjuntar el agente.",
+    "skillPersonal": "personal",
+    "skillsAgentToolsHint": "Solo se ofrecen aquí las habilidades de la organización habilitadas por un administrador para uso de agentes. El agente puede cargarlas como herramientas de solo lectura. Otros pines permanecen en pausa y las habilidades personales no están disponibles para los agentes."
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",
@@ -5521,7 +5535,8 @@
       "channelSets": "Las reglas de cada equipo para publicar en las plataformas: orientaciones, voces, valores predeterminados, quién puede usar el conjunto y quién puede enviar.",
       "webSearch": "Hasta dónde puede llegar una búsqueda web: búsqueda multi-paso, su modelo evaluador y sus límites.",
       "contextBudget": "Cuánta conversación se envía a cada modelo en cada turno.",
-      "analytics": "Informes entregados: lo que llegó, quién puede abrir cada carpeta y qué campos se pueden mostrar."
+      "analytics": "Informes entregados: lo que llegó, quién puede abrir cada carpeta y qué campos se pueden mostrar.",
+      "skills": "Bloques de instrucciones reutilizables que el asistente aplica cuando una conversación los necesita."
     },
     "openSettings": "Abrir ajustes",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Delegaciones",
       "webSearch": "Búsqueda web",
       "contextBudget": "Presupuesto de contexto",
-      "analytics": "Analítica"
+      "analytics": "Analítica",
+      "skills": "Habilidades"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Más antiguo que los {months} meses de retención de esta carpeta; ya no se muestra.",
       "unknown": "Problema reportado: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Habilidades",
+    "description": "Bloques de instrucciones reutilizables que el asistente aplica cuando una conversación los necesita. Compatible con el formato Agent Skills SKILL.md usado por Claude y ChatGPT.",
+    "loading": "Cargando habilidades…",
+    "loadError": "No se pudieron cargar las habilidades.",
+    "retry": "Reintentar",
+    "unavailableBanner": "El almacenamiento de habilidades no se encuentra disponible en este momento. Se muestran las opciones integradas; las habilidades guardadas y las ediciones estarán inaccesibles hasta que se recupere el servicio.",
+    "conflictError": "Esta habilidad fue modificada por otro administrador. La lista se ha recargado; vuelva a aplicar su edición.",
+    "alwaysWarning": "{count} habilidades están configuradas como Siempre. Todas ellas se agregan a cada conversación; prefiera Automático para habilidades específicas por tema.",
+    "newSkill": "Nueva habilidad",
+    "importSkill": "Importar SKILL.md",
+    "importTitle": "Pegue un archivo SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Qué hace esta habilidad y cuándo usarla.\n---\n\nInstrucciones…",
+    "importHint": "La habilidad analizada se abre en el editor para revisión; nada se guarda hasta que lo confirme.",
+    "importParse": "Analizar y revisar",
+    "invalidId": "Los ids de habilidades usan letras minúsculas, números y guiones simples.",
+    "saveSuccess": "Habilidad guardada.",
+    "saveError": "No se pudo guardar la habilidad.",
+    "deleteConfirm": "¿Eliminar esta habilidad? Las conversaciones dejan de recibirla inmediatamente.",
+    "restoreConfirm": "¿Desea eliminar la personalización y restaurar el valor predeterminado de esta habilidad integrada?",
+    "deleteSuccess": "Habilidad eliminada.",
+    "restoreSuccess": "Predeterminado integrado restaurado.",
+    "deleteError": "No se pudo eliminar la habilidad.",
+    "empty": "Todavía no hay habilidades. Cree una nueva o importe un SKILL.md.",
+    "builtinChip": "Integrada",
+    "customizedChip": "Personalizada",
+    "exportSkill": "Exportar como SKILL.md",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "restoreDefault": "Restaurar valor predeterminado",
+    "createTitle": "Nueva habilidad",
+    "editTitle": "Editar {name}",
+    "idLabel": "Id",
+    "idHint": "Letras minúsculas, números y guiones. Será el nombre SKILL.md de la habilidad y no se puede cambiar después de crearla.",
+    "nameLabel": "Nombre visible",
+    "descriptionLabel": "Descripción",
+    "descriptionHint": "Qué hace la habilidad Y cuándo usarla; esto define la selección de la habilidad, así que incluya los temas específicos y formas de redactar a los que debe responder.",
+    "activationLabel": "Activación",
+    "activation": {
+      "auto": "Automático",
+      "always": "Siempre",
+      "off": "Desactivado"
+    },
+    "activationHint": {
+      "auto": "Se selecciona automáticamente cuando la tarea actual coincide con la descripción. Los usuarios también pueden solicitarla una vez o fijarla en una conversación.",
+      "always": "Se agrega a cada conversación de quienes pueden ver la habilidad. Úselo con moderación; este espacio de aviso es permanente.",
+      "off": "Inactiva: no se aplica ni se ofrece a los usuarios, pero se conserva aquí para edición."
+    },
+    "instructionsLabel": "Instrucciones",
+    "instructionsHint": "Markdown, hasta 16 KB. Se inserta tal cual cuando la habilidad está activa.",
+    "saving": "Guardando…",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "documents": {
+      "title": "Documentos",
+      "hint": "Las referencias se almacenan con esta habilidad. Los documentos pequeños se cargan directamente; los documentos grandes se indexan para búsqueda citada. Hasta 20 recursos, 10 MB cada uno y 20 MB en total. Los archivos solo se almacenan para descarga.",
+      "saveFirst": "Guarde una personalización de esta habilidad incorporada antes de agregar documentos.",
+      "upload": "Agregar documentos de referencia",
+      "remove": "Eliminar",
+      "stop": "Detener la indexación",
+      "resume": "Indexar o reanudar documentos",
+      "empty": "No hay documentos adjuntos aún.",
+      "requestFailed": "La solicitud de documento falló. Recargue y vuelva a intentarlo.",
+      "importZip": "Importar un ZIP de habilidad",
+      "zipTooLarge": "El ZIP de la habilidad debe ser de 20 MB o menos.",
+      "importCount": "Recursos para adjuntar después de guardar: {count}",
+      "skippedScripts": "Se omitieron los scripts ejecutables",
+      "status": {
+        "pending": "Esperando para indexar",
+        "processing": "Indexando",
+        "inline": "Listo (cargado directamente)",
+        "indexed": "Listo (buscable)",
+        "failed": "La indexación falló",
+        "asset": "Archivo descargable"
+      },
+      "confirmRemove": "¿Desea eliminar {filename} de esta habilidad? El archivo original almacenado se borrará y ya no estará disponible como fuente de cita.",
+      "reindexRequired": "Estos documentos necesitan ser reindexados para la configuración regional actual de búsqueda y embedding. No se podrán buscar hasta que finalice la indexación."
+    },
+    "applyToAgents": "Disponible para agentes",
+    "applyToAgentsHint": "Desactivado por defecto. Al habilitarlo, los agentes pueden cargar esta habilidad como herramienta de solo lectura en lugar de reemplazar las instrucciones de su persona. Las llamadas de habilidad tienen límites de pasos independientes. Los agentes de Foundry deben tener registradas las funciones load_skill y search_skill_documents en su definición."
+  },
+  "personalSkills": {
+    "title": "Habilidades personales",
+    "description": "Guarde instrucciones reutilizables para sus propias conversaciones. Las habilidades permanecen en este navegador y solo se envían al modelo cuando chatea. Las habilidades relevantes pueden seleccionarse automáticamente, usarse una vez o fijarse. No pueden modificar la política de la organización ni otorgar acceso a herramientas. Usar habilidades requiere tenerlas habilitadas para este despliegue; las conversaciones con agentes no utilizan habilidades personales.",
+    "importFile": "Importar SKILL.md o ZIP",
+    "review": "Revise las instrucciones completas antes de guardar. Las instrucciones importadas son preferencias del usuario, no una política confiable de la organización.",
+    "skipped": "Se omitieron los scripts ejecutables",
+    "importTooLarge": "La importación debe ser de 20 MB o menos.",
+    "invalid": "No se pudo importar la habilidad.",
+    "duplicate": "Ese id de habilidad personal ya existe. Edite la habilidad existente o elija un id diferente.",
+    "countLimit": "Puede guardar hasta 20 habilidades personales.",
+    "requestLimit": "Las habilidades personales habilitadas exceden el límite de solicitud de 160 KB. Desactive algunas habilidades o acorte sus instrucciones.",
+    "saved": "Habilidad personal guardada en este navegador.",
+    "instructionsHint": "Hasta 16 KB de instrucciones, incluyendo referencias de texto importadas. Los archivos binarios y la indexación persistente de documentos solo están disponibles para habilidades de organización. La exportación utiliza el nombre estándar SKILL.md sin el prefijo user:.",
+    "enabled": "Habilitado para mis conversaciones",
+    "empty": "Cree una habilidad para una tarea recurrente, o importe un SKILL.md para revisarlo y guardarlo aquí."
   }
 }

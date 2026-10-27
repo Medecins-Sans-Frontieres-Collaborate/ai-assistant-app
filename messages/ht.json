@@ -976,7 +976,21 @@
     "alwaysWaitThisLong": "Toujou tann jiska {duration}",
     "keepSearching": "Kontinye chèche",
     "keepSearchingHint": "Rechèch la te sispann anvan li jwenn sa. Mande asistan an pou eseye lòt metòd.",
-    "keepSearchingMessage": "Kontinye chèche sa, tanpri — eseye yon lòt apwòch."
+    "keepSearchingMessage": "Kontinye chèche sa, tanpri — eseye yon lòt apwòch.",
+    "addSkill": "Konpetans",
+    "removeSkill": "Retire konpetans",
+    "skillsMenuLabel": "Konpetans ki disponib",
+    "skillsLimit": "Jiska 3 konpetans pa mesaj.",
+    "skillPin": "Fikse nan konvèsasyon an",
+    "skillUseOnce": "Sèvi yon sèl fwa",
+    "skillPinned": "fikse",
+    "skillOnce": "pwochen mesaj la",
+    "skillsPaused": "pòze",
+    "skillUnavailable": "endispo",
+    "skillsAutomaticHint": "Konpetans ki enpòtan yo chwazi otomatikman. Sèvi yon sèl fwa pou pwochen mesaj la, oswa fikse yon konpetans pou sèvi l pandan tout konvèsasyon an.",
+    "skillsAgentDisabled": "Konpetans yo pòze pandan yon ajan konekte. Konpetans ou fikse yo ap reprann lè ou dekonekte ajan an.",
+    "skillPersonal": "pèsonèl",
+    "skillsAgentToolsHint": "Sèlman kapasite òganizasyon an ke yon administratè aktive pou ajan yo ap parèt isit la. Ajan yo ka itilize yo kòm zouti pou li sèlman. Lòt pin yo rete an poz e ajan yo pa gen aksè ak kapasite pèsonèl yo."
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -5505,7 +5519,8 @@
       "channelSets": "Règ chak ekip pou ekri sou platfòm yo: gid, vwa, sa ki default, kilès ki ka sèvi ak chanèl la epi kilès ki ka voye mesaj.",
       "webSearch": "Jiska ki nivo rechèch sou entènèt ka ale: rechèch plizyè etap, modèl ki verifye ak limit li yo.",
       "contextBudget": "Konbyen nan chak konvèsasyon ki voye bay chak modèl sou chak etap.",
-      "analytics": "Rapò yo delivre: sa ki rive, kiyès ki ka ouvri chak dosye, ak ki jaden ki ka montre."
+      "analytics": "Rapò yo delivre: sa ki rive, kiyès ki ka ouvri chak dosye, ak ki jaden ki ka montre.",
+      "skills": "Blòk enstriksyon reutilizab asistan an aplike lè yon konvèsasyon bezwen yo."
     },
     "openSettings": "Louvri anviwònman yo",
     "area": {
@@ -5516,7 +5531,8 @@
       "delegations": "Delegasyon",
       "webSearch": "Rechèch sou entènèt",
       "contextBudget": "Bidjè kontèks",
-      "analytics": "Analiz"
+      "analytics": "Analiz",
+      "skills": "Konpetans"
     }
   },
   "limits": {
@@ -7547,5 +7563,102 @@
       "past-retention": "Pi ansyen pase {months} mwa retansyon nan dosye sa a; li pap parèt ankò.",
       "unknown": "Pwoblèm rapòte : {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Konpetans",
+    "description": "Blòk enstriksyon reutilizab asistan an aplike lè yon konvèsasyon bezwen yo. Konpatib ak fòma Agent Skills SKILL.md ke Claude ak ChatGPT itilize.",
+    "loading": "Y ap chaje konpetans…",
+    "loadError": "Pa kapab chaje konpetans yo.",
+    "retry": "Repran",
+    "unavailableBanner": "Depo konpetans yo pa aksesib kounye a — n ap montre sa ki entegre; konpetans anrejistre ak modifikasyon yo pa disponib jiskaske sa tounen.",
+    "conflictError": "Yon lòt administratè te modifye konpetans sa. Lis la re-chaje — reaplike modifikasyon ou a.",
+    "alwaysWarning": "{count} konpetans mete sou toujou. Chak ladan yo ajoute sou chak konvèsasyon — pito sèvi ak Otomatik pou konpetans espesifik ak sijè.",
+    "newSkill": "Nouvo konpetans",
+    "importSkill": "Enpòte SKILL.md",
+    "importTitle": "Kole yon fichye SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Sa konpetans sa a fè ak lè pou w itilize li.\n---\n\nEnstriksyon…",
+    "importHint": "Konpetans analize a ap louvri nan editè a pou w revize — anyen pa sove jiskaske ou sove li.",
+    "importParse": "Analize epi revize",
+    "invalidId": "Id konpetans la dwe sèvi ak lèt miniskil, chif, ak yon sèl tirè.",
+    "saveSuccess": "Konpetans sove.",
+    "saveError": "Pa kapab sove konpetans la.",
+    "deleteConfirm": "Efase konpetans sa a? Konvèsasyon yo sispann resevwa li imedyatman.",
+    "restoreConfirm": "Retire personnalisation la epi retabli konpetans sa a nan vèsyon defo entegre a?",
+    "deleteSuccess": "Konpetans efase.",
+    "restoreSuccess": "Vèsyon defo entegre retabli.",
+    "deleteError": "Pa kapab efase konpetans la.",
+    "empty": "Pa gen konpetans ankò. Kreye youn, oswa enpòte yon SKILL.md.",
+    "builtinChip": "Entegre",
+    "customizedChip": "Pèsonalize",
+    "exportSkill": "Ekspòte kòm SKILL.md",
+    "edit": "Modifye",
+    "delete": "Efase",
+    "restoreDefault": "Retabli defo",
+    "createTitle": "Nouvo konpetans",
+    "editTitle": "Modifye {name}",
+    "idLabel": "Id",
+    "idHint": "Lèt miniskil, chif, ak tirè. Sa vin non SKILL.md konpetans lan epi li pa ka chanje apre kreasyon.",
+    "nameLabel": "Non ki parèt",
+    "descriptionLabel": "Deskripsyon",
+    "descriptionHint": "Sa konpetans la fè AK kilè pou w itilize li — se sa ki pèmèt konpetans la chwazi, kidonk mete sijè espesifik ak fason pou reponn yo.",
+    "activationLabel": "Aktivasyon",
+    "activation": {
+      "auto": "Otomatik",
+      "always": "Toujou",
+      "off": "Dekonekte"
+    },
+    "activationHint": {
+      "auto": "Chwazi otomatikman lè travay aktyèl la koresponn ak deskripsyon an. Itilizatè yo ka mande l yon sèl fwa oswa fikse l nan yon konvèsasyon.",
+      "always": "Ajoute sou chak konvèsasyon pou tout moun ki ka wè konpetans lan. Sèvi avè l ak modération — espas pou prompt lan pemanman.",
+      "off": "Inaktif : pa janm aplike epi li pa ofri itilizatè yo, men li ret la pou w modifye."
+    },
+    "instructionsLabel": "Enstriksyon",
+    "instructionsHint": "Markdown, jiska 16 KB. Li antre egzakteman jan li ye lè konpetans lan aktif.",
+    "saving": "Ap sove...",
+    "save": "Sove",
+    "cancel": "Anile",
+    "documents": {
+      "title": "Dokiman",
+      "hint": "Referans yo sere ak konpetans sa a. Ti dokiman yo chaje dirèkteman; pi gwo dokiman yo endèks pou rechèch ak sitasyon. Jiska 20 resous, 10 MB chak, epi 20 MB tout ansanm. Dosye yo disponib sèlman pou telechajman.",
+      "saveFirst": "Sove yon personnalizasyon konpetans sa a anvan ou ajoute dokiman.",
+      "upload": "Ajoute dokiman referans",
+      "remove": "Retire",
+      "stop": "Sispann endèksaj",
+      "resume": "Endèkse oswa rekòmanse dokiman",
+      "empty": "Pa gen okenn dokiman atache ankò.",
+      "requestFailed": "Demann dokiman an echwe. Rekarche epi eseye ankò.",
+      "importZip": "Enpòte yon ZIP konpetans",
+      "zipTooLarge": "ZIP konpetans lan dwe 20 MB oswa mwens.",
+      "importCount": "Resous pou atache apre sove: {count}",
+      "skippedScripts": "Skript egzekitab yo te sote",
+      "status": {
+        "pending": "Ap tann pou endèksaj",
+        "processing": "Ap endèkse",
+        "inline": "Pare (chaje dirèkteman)",
+        "indexed": "Pare (ka rechèch)",
+        "failed": "Endèksaj la echwe",
+        "asset": "Resous telechajab"
+      },
+      "confirmRemove": "Retire {filename} nan konpetans sa a? Orijinal ki te anrejistre a pral efase epi li p ap disponib ankò kòm sous sitasyon.",
+      "reindexRequired": "Dokiman sa yo bezwen reindex selon konfigirasyon rechèch ak anbadman rejyonal aktyèl la. Yo pap disponib nan rechèch jiskaske reindexing fini."
+    },
+    "applyToAgents": "Disponib pou ajan yo",
+    "applyToAgentsHint": "Fèmen pa default. Lè li aktive, ajan yo ka chaje kapasite sa a atravè zouti pou li sèlman olye de ranplase enstriksyon pèsonaj yo. Apèl kapasite yo gen limit pa yo chak. Ajan Foundry yo dwe deja gen fonksyon load_skill ak search_skill_documents anrejistre nan definisyon yo."
+  },
+  "personalSkills": {
+    "title": "Konpetans pèsonèl",
+    "description": "Sove enstriksyon ou ka itilize plizyè fwa pou konvèsasyon pèsonèl ou yo. Konpetans sa yo rete nan navigatè sa a epi yo voye bay modèl la sèlman lè ou ap pale. Konpetans ki apwopriye yo ka chwazi otomatikman, itilize yon sèl fwa, oswa fikse. Yo pa ka chanje règleman òganizasyon an ni bay aksè ak zouti. Pou itilize konpetans yo, yo dwe aktive nan depwoyman sa a; ajan pa itilize konpetans pèsonèl.",
+    "importFile": "Enpòte SKILL.md oswa ZIP",
+    "review": "Revize tout enstriksyon yo anvan ou sove yo. Enstriksyon ou enpòte yo se preferans itilizatè, yo pa yon règleman òganizasyon ki fè konfyans.",
+    "skipped": "Script ki ka egzekite yo pa te enpòte",
+    "importTooLarge": "Dosye ou ap enpòte a dwe 20 MB oswa mwens.",
+    "invalid": "Konpetans lan pa t ka enpòte.",
+    "duplicate": "ID konpetans pèsonèl sa a egziste deja. Modifye konpetans ki la deja oswa chwazi yon lòt ID.",
+    "countLimit": "Ou ka sove jiska 20 konpetans pèsonèl.",
+    "requestLimit": "Konpetans pèsonèl aktive yo depase limit demann 160 KB la. Dezaktive kèk konpetans oswa diminye enstriksyon yo.",
+    "saved": "Konpetans pèsonèl sove nan navigatè sa a.",
+    "instructionsHint": "Jiska 16 KB enstriksyon, enkli nenpòt referans tèks ou enpòte. Fichye binè ak endèks fichye pèmanan yo disponib sèlman pou konpetans òganizasyon. Ekspòtasyon ap itilize non estanda SKILL.md san prefiks user: la.",
+    "enabled": "Aktive pou konvèsasyon mwen yo",
+    "empty": "Kreye yon konpetans pou yon travay ki repete, oswa enpòte yon SKILL.md pou revize epi sove li isit la."
   }
 }

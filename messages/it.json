@@ -839,7 +839,21 @@
     "alwaysWaitThisLong": "Attendi sempre fino a {duration}",
     "keepSearching": "Continua la ricerca",
     "keepSearchingHint": "La ricerca si è fermata prima di trovare questo. Chiedi all’assistente di provare altri approcci.",
-    "keepSearchingMessage": "Continua a cercare, per favore — prova un approccio diverso."
+    "keepSearchingMessage": "Continua a cercare, per favore — prova un approccio diverso.",
+    "addSkill": "Competenze",
+    "removeSkill": "Rimuovi competenza",
+    "skillsMenuLabel": "Competenze disponibili",
+    "skillsLimit": "Fino a 3 competenze per messaggio.",
+    "skillPin": "Fissa alla conversazione",
+    "skillUseOnce": "Usa una volta",
+    "skillPinned": "fissato",
+    "skillOnce": "prossimo messaggio",
+    "skillsPaused": "in pausa",
+    "skillUnavailable": "non disponibile",
+    "skillsAutomaticHint": "Le competenze rilevanti vengono selezionate automaticamente. Usa una volta per il prossimo messaggio, oppure fissa una competenza per utilizzarla durante tutta la conversazione.",
+    "skillsAgentDisabled": "Le competenze sono in pausa quando un agente è collegato. I tuoi elementi fissati riprenderanno quando scollegi l'agente.",
+    "skillPersonal": "personale",
+    "skillsAgentToolsHint": "Qui sono offerte solo le skill dell'organizzazione abilitate da un admin per l'uso da parte degli agenti. L'agente può caricarle come strumenti in sola lettura. Gli altri pin restano in pausa e le skill personali non sono disponibili per gli agenti."
   },
   "sidebar": {
     "collapseSidebar": "Comprimi barra laterale",
@@ -5521,7 +5535,8 @@
       "channelSets": "Le regole di ciascun team per scrivere sulle piattaforme: linee guida, voci, predefiniti, chi può usare il set e chi può inviare.",
       "webSearch": "Fino a dove può arrivare una ricerca web: ricerca a più passaggi, il suo modello di valutazione e i suoi limiti.",
       "contextBudget": "Quanta parte di una conversazione viene inviata ad ogni turno da ciascun modello.",
-      "analytics": "Rapporti consegnati: cosa è arrivato, chi può aprire ogni cartella e quali campi possono essere mostrati."
+      "analytics": "Rapporti consegnati: cosa è arrivato, chi può aprire ogni cartella e quali campi possono essere mostrati.",
+      "skills": "Blocchi di istruzioni riutilizzabili applicati dall'assistente quando necessario durante una conversazione."
     },
     "openSettings": "Apri impostazioni",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Deleghe",
       "webSearch": "Ricerca web",
       "contextBudget": "Budget di contesto",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "Competenze"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Più vecchio dei {months} mesi di conservazione previsti per questa cartella; non più visibile.",
       "unknown": "Problema segnalato: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Competenze",
+    "description": "Blocchi di istruzioni riutilizzabili applicati dall'assistente quando necessario durante una conversazione. Compatibile con il formato Agent Skills SKILL.md usato da Claude e ChatGPT.",
+    "loading": "Caricamento competenze…",
+    "loadError": "Impossibile caricare le competenze.",
+    "retry": "Riprova",
+    "unavailableBanner": "L’archivio delle competenze non è attualmente raggiungibile — vengono mostrate le impostazioni predefinite integrate; competenze memorizzate e modifiche non disponibili fino a ripristino.",
+    "conflictError": "Questa competenza è stata modificata da un altro amministratore. L'elenco è stato ricaricato — ripeti la modifica.",
+    "alwaysWarning": "{count} competenze sono impostate su Sempre. Ognuna viene aggiunta a ogni conversazione — preferire Automatica per competenze specifiche all’argomento.",
+    "newSkill": "Nuova competenza",
+    "importSkill": "Importa SKILL.md",
+    "importTitle": "Incolla un file SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Cosa fa questa competenza e quando usarla.\n---\n\nIstruzioni…",
+    "importHint": "La competenza analizzata si apre nell’editor per la revisione — nulla viene salvato finché non la salvi.",
+    "importParse": "Analizza e revisiona",
+    "invalidId": "Gli ID delle competenze usano lettere minuscole, numeri e trattini singoli.",
+    "saveSuccess": "Competenza salvata.",
+    "saveError": "Impossibile salvare la competenza.",
+    "deleteConfirm": "Eliminare questa competenza? Le conversazioni smetteranno subito di riceverla.",
+    "restoreConfirm": "Rimuovere la personalizzazione e ripristinare l'impostazione predefinita di questa competenza integrata?",
+    "deleteSuccess": "Competenza eliminata.",
+    "restoreSuccess": "Impostazione predefinita integrata ripristinata.",
+    "deleteError": "Impossibile eliminare la competenza.",
+    "empty": "Nessuna competenza al momento. Creane una o importa un SKILL.md.",
+    "builtinChip": "Integrata",
+    "customizedChip": "Personalizzata",
+    "exportSkill": "Esporta come SKILL.md",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "restoreDefault": "Ripristina predefinito",
+    "createTitle": "Nuova competenza",
+    "editTitle": "Modifica {name}",
+    "idLabel": "ID",
+    "idHint": "Lettere minuscole, numeri e trattini. Diventa il nome SKILL.md della competenza e non può essere modificato dopo la creazione.",
+    "nameLabel": "Nome visualizzato",
+    "descriptionLabel": "Descrizione",
+    "descriptionHint": "Cosa fa la competenza E quando usarla — questa descrizione determina la selezione, quindi includi argomenti specifici e le frasi a cui deve rispondere.",
+    "activationLabel": "Attivazione",
+    "activation": {
+      "auto": "Automatica",
+      "always": "Sempre",
+      "off": "Disattivata"
+    },
+    "activationHint": {
+      "auto": "Selezionata automaticamente quando il compito attuale corrisponde alla descrizione. Gli utenti possono anche richiederla una volta o fissarla a una conversazione.",
+      "always": "Aggiunta a ogni conversazione per chiunque possa vederla. Usare con cautela — è uno spazio di prompt permanente.",
+      "off": "Inattiva: non viene mai applicata né offerta agli utenti, ma rimane qui per la modifica."
+    },
+    "instructionsLabel": "Istruzioni",
+    "instructionsHint": "Markdown, fino a 16 KB. Inserito come testo diretto quando la competenza è attiva.",
+    "saving": "Salvataggio in corso...",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "documents": {
+      "title": "Documenti",
+      "hint": "I riferimenti sono memorizzati con questa competenza. I documenti di piccole dimensioni vengono caricati direttamente; quelli più grandi vengono indicizzati per la ricerca con citazione. Fino a 20 risorse, 10 MB ciascuna e 20 MB totali. Gli asset sono disponibili solo per il download.",
+      "saveFirst": "Salva una personalizzazione di questa competenza integrata prima di aggiungere documenti.",
+      "upload": "Aggiungi documenti di riferimento",
+      "remove": "Rimuovi",
+      "stop": "Interrompi indicizzazione",
+      "resume": "Indicizza o riprendi documenti",
+      "empty": "Nessun documento allegato.",
+      "requestFailed": "La richiesta del documento non è riuscita. Ricarica e riprova.",
+      "importZip": "Importa uno skill ZIP",
+      "zipTooLarge": "Lo skill ZIP deve essere di 20 MB o meno.",
+      "importCount": "Risorse da allegare dopo il salvataggio: {count}",
+      "skippedScripts": "Script eseguibili sono stati ignorati",
+      "status": {
+        "pending": "In attesa di indicizzazione",
+        "processing": "Indicizzazione in corso",
+        "inline": "Pronto (caricato direttamente)",
+        "indexed": "Pronto (ricercabile)",
+        "failed": "Indicizzazione non riuscita",
+        "asset": "Asset scaricabile"
+      },
+      "confirmRemove": "Rimuovere {filename} da questa competenza? Il file originale archiviato verrà eliminato e non sarà più disponibile come fonte di citazione.",
+      "reindexRequired": "Questi documenti richiedono una reindicizzazione per la configurazione attuale della ricerca regionale e degli embedding. Non saranno ricercabili finché l'indicizzazione non sarà completata."
+    },
+    "applyToAgents": "Disponibile per gli agenti",
+    "applyToAgentsHint": "Disattivato per impostazione predefinita. Se abilitato, gli agenti possono caricare questa skill tramite strumenti in sola lettura invece di sostituire le loro istruzioni persona. Le chiamate della skill hanno limiti di step indipendenti. Gli agenti Foundry devono già avere le funzioni load_skill e search_skill_documents registrate nella loro definizione."
+  },
+  "personalSkills": {
+    "title": "Competenze personali",
+    "description": "Salva istruzioni riutilizzabili per le tue conversazioni. Le competenze restano su questo browser e sono inviate al modello solo durante la chat. Le competenze rilevanti possono essere selezionate automaticamente, usate una volta o fissate. Non possono modificare la policy organizzativa o concedere accesso agli strumenti. L’uso delle competenze personali richiede che siano abilitate per questa implementazione; le conversazioni con agenti non le utilizzano.",
+    "importFile": "Importa SKILL.md o ZIP",
+    "review": "Esamina tutte le istruzioni prima di salvare. Le istruzioni importate sono preferenze utente, non policy organizzativa affidabile.",
+    "skipped": "Script eseguibili sono stati ignorati",
+    "importTooLarge": "L’importazione deve essere di 20 MB o meno.",
+    "invalid": "Impossibile importare la competenza.",
+    "duplicate": "L’id di questa competenza personale esiste già. Modifica quella esistente o scegli un id diverso.",
+    "countLimit": "Puoi salvare fino a 20 competenze personali.",
+    "requestLimit": "Le competenze personali abilitate superano il limite di 160 KB per richiesta. Disattiva alcune competenze o riduci le istruzioni.",
+    "saved": "Competenza personale salvata in questo browser.",
+    "instructionsHint": "Fino a 16 KB di istruzioni, incluse eventuali referenze a testi importati. File binari e indicizzazione persistente dei documenti sono disponibili solo per competenze organizzative. L’esportazione usa il nome standard SKILL.md senza il prefisso user:.",
+    "enabled": "Abilitata per le mie conversazioni",
+    "empty": "Crea una competenza per un’attività ricorrente o importa una SKILL.md per esaminarla e salvarla qui."
   }
 }

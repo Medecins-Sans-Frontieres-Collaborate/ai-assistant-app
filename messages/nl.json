@@ -883,7 +883,21 @@
     "alwaysWaitThisLong": "Altijd wachten tot {duration}",
     "keepSearching": "Blijf zoeken",
     "keepSearchingHint": "De zoekopdracht is gestopt voordat dit gevonden was. Vraag de assistent om andere methodes te proberen.",
-    "keepSearchingMessage": "Blijf hiernaar zoeken, alstublieft — probeer een andere aanpak."
+    "keepSearchingMessage": "Blijf hiernaar zoeken, alstublieft — probeer een andere aanpak.",
+    "addSkill": "Vaardigheden",
+    "removeSkill": "Vaardigheid verwijderen",
+    "skillsMenuLabel": "Beschikbare vaardigheden",
+    "skillsLimit": "Maximaal 3 vaardigheden per bericht.",
+    "skillPin": "Vastmaken aan gesprek",
+    "skillUseOnce": "Eenmalig gebruiken",
+    "skillPinned": "vastgemaakt",
+    "skillOnce": "volgende bericht",
+    "skillsPaused": "gepauzeerd",
+    "skillUnavailable": "niet beschikbaar",
+    "skillsAutomaticHint": "Relevante vaardigheden worden automatisch geselecteerd. Gebruik eenmalig voor het volgende bericht, of maak een vaardigheid vast om deze gedurende het hele gesprek te gebruiken.",
+    "skillsAgentDisabled": "Vaardigheden zijn gepauzeerd terwijl een agent is gekoppeld. Je vastgemaakte vaardigheden worden hervat zodra je de agent loskoppelt.",
+    "skillPersonal": "persoonlijk",
+    "skillsAgentToolsHint": "Alleen organisatieskills die door een beheerder zijn ingeschakeld voor agentgebruik worden hier aangeboden. De agent kan deze als alleen-lezen tools laden. Andere pins blijven gepauzeerd en persoonlijke skills zijn niet beschikbaar voor agents."
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -5521,7 +5535,8 @@
       "channelSets": "De spelregels per team voor berichten op platforms: richtlijnen, stemmen, standaarden, wie de set mag gebruiken en wie mag verzenden.",
       "webSearch": "Hoe uitgebreid webzoek kan gaan: meerdere zoekstappen, het beoordelingsmodel en zijn limieten.",
       "contextBudget": "Hoeveel van een gesprek elk model per beurt ontvangt.",
-      "analytics": "Afgeleverde rapporten: wat is ontvangen, wie mag welke map openen, en welke velden mogen getoond worden."
+      "analytics": "Afgeleverde rapporten: wat is ontvangen, wie mag welke map openen, en welke velden mogen getoond worden.",
+      "skills": "Herbruikbare instructieblokken die de assistent toepast wanneer een gesprek daarom vraagt."
     },
     "openSettings": "Instellingen openen",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Delegaties",
       "webSearch": "Webzoek",
       "contextBudget": "Contextbudget",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "Vaardigheden"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Ouder dan de {months} maanden bewaartermijn van deze map; niet meer weergegeven.",
       "unknown": "Probleem gemeld: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Vaardigheden",
+    "description": "Herbruikbare instructieblokken die de assistent toepast wanneer een gesprek daarom vraagt. Compatibel met het Agent Skills SKILL.md-formaat zoals gebruikt door Claude en ChatGPT.",
+    "loading": "Vaardigheden laden…",
+    "loadError": "Kan vaardigheden niet laden.",
+    "retry": "Opnieuw proberen",
+    "unavailableBanner": "Vaardigheidsopslag is momenteel niet bereikbaar — ingebouwde standaarden worden getoond; opgeslagen vaardigheden en bewerkingen zijn niet beschikbaar tot herstel.",
+    "conflictError": "Deze vaardigheid is door een andere beheerder gewijzigd. De lijst is opnieuw geladen — voer uw wijziging opnieuw uit.",
+    "alwaysWarning": "{count} vaardigheden staan op Altijd. Al deze worden aan elk gesprek toegevoegd — kies liever Automatisch voor onderwerp-specifieke vaardigheden.",
+    "newSkill": "Nieuwe vaardigheid",
+    "importSkill": "Importeer SKILL.md",
+    "importTitle": "Plak een SKILL.md-bestand",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Wat deze vaardigheid doet en wanneer deze te gebruiken.\n---\n\nInstructies…",
+    "importHint": "De geparste vaardigheid opent in de editor ter controle — er wordt pas iets opgeslagen wanneer u het opslaat.",
+    "importParse": "Parsen en beoordelen",
+    "invalidId": "Vaardigheids-ID's gebruiken kleine letters, cijfers en enkele koppeltekens.",
+    "saveSuccess": "Vaardigheid opgeslagen.",
+    "saveError": "Kan de vaardigheid niet opslaan.",
+    "deleteConfirm": "Deze vaardigheid verwijderen? Gesprekken ontvangen deze direct niet meer.",
+    "restoreConfirm": "De aanpassing verwijderen en de standaard van deze ingebouwde vaardigheid herstellen?",
+    "deleteSuccess": "Vaardigheid verwijderd.",
+    "restoreSuccess": "Ingebouwde standaard hersteld.",
+    "deleteError": "Kan de vaardigheid niet verwijderen.",
+    "empty": "Nog geen vaardigheden. Maak er een aan of importeer een SKILL.md.",
+    "builtinChip": "Ingebouwd",
+    "customizedChip": "Aangepast",
+    "exportSkill": "Exporteren als SKILL.md",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "restoreDefault": "Standaard herstellen",
+    "createTitle": "Nieuwe vaardigheid",
+    "editTitle": "{name} bewerken",
+    "idLabel": "Id",
+    "idHint": "Kleine letters, cijfers en koppeltekens. Wordt de SKILL.md-naam van de vaardigheid en kan na het aanmaken niet meer gewijzigd worden.",
+    "nameLabel": "Weergavenaam",
+    "descriptionLabel": "Beschrijving",
+    "descriptionHint": "Wat de vaardigheid doet EN wanneer deze gebruikt wordt — dit bepaalt de keuze, dus geef de specifieke onderwerpen en formuleringen aan waarop gereageerd moet worden.",
+    "activationLabel": "Activering",
+    "activation": {
+      "auto": "Automatisch",
+      "always": "Altijd",
+      "off": "Uit"
+    },
+    "activationHint": {
+      "auto": "Automatisch geselecteerd als de huidige taak overeenkomt met de beschrijving. Gebruikers kunnen het ook eenmalig aanvragen of aan een gesprek vastmaken.",
+      "always": "Toegevoegd aan elk gesprek voor iedereen die de vaardigheid kan zien. Gebruik dit spaarzaam — dit is permanente prompt-ruimte.",
+      "off": "Inactief: wordt nooit toegepast en niet aangeboden aan gebruikers, maar blijft hier voor bewerking."
+    },
+    "instructionsLabel": "Instructies",
+    "instructionsHint": "Markdown, maximaal 16 KB. Wordt letterlijk ingevoegd wanneer de skill actief is.",
+    "saving": "Bezig met opslaan…",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "documents": {
+      "title": "Documenten",
+      "hint": "Referenties worden bij deze vaardigheid opgeslagen. Kleine documenten worden direct geladen; grotere documenten worden geïndexeerd voor geciteerd zoeken. Maximaal 20 bronnen, elk 10 MB en totaal 20 MB. Bestanden worden alleen opgeslagen voor download.",
+      "saveFirst": "Sla een aangepaste versie van deze ingebouwde vaardigheid op voordat u documenten toevoegt.",
+      "upload": "Referentiedocumenten toevoegen",
+      "remove": "Verwijderen",
+      "stop": "Indexeren stoppen",
+      "resume": "Documenten indexeren of hervatten",
+      "empty": "Nog geen documenten toegevoegd.",
+      "requestFailed": "Het aanvragen van het document is mislukt. Herlaad en probeer opnieuw.",
+      "importZip": "Skill-ZIP importeren",
+      "zipTooLarge": "De skill-ZIP mag maximaal 20 MB groot zijn.",
+      "importCount": "Bronnen om toe te voegen na opslaan: {count}",
+      "skippedScripts": "Uitvoerbare scripts zijn overgeslagen",
+      "status": {
+        "pending": "Wachten op indexeren",
+        "processing": "Bezig met indexeren",
+        "inline": "Gereed (direct geladen)",
+        "indexed": "Gereed (doorzoekbaar)",
+        "failed": "Indexeren mislukt",
+        "asset": "Downloadbaar bestand"
+      },
+      "confirmRemove": "{filename} uit deze vaardigheid verwijderen? Het opgeslagen origineel wordt verwijderd en is niet meer beschikbaar als bron voor verwijzingen.",
+      "reindexRequired": "Deze documenten moeten opnieuw worden geïndexeerd voor de huidige regionale zoek- en embeddingconfiguratie. Ze worden pas doorzocht nadat het indexeren is voltooid."
+    },
+    "applyToAgents": "Beschikbaar voor agents",
+    "applyToAgentsHint": "Standaard uitgeschakeld. Wanneer ingeschakeld, kunnen agents deze skill laden via alleen-lezen tools in plaats van hun persoonlijke instructies te vervangen. Skill-oproepen hebben onafhankelijke staplimieten. Foundry agents moeten al functies voor load_skill en search_skill_documents in hun definitie geregistreerd hebben."
+  },
+  "personalSkills": {
+    "title": "Persoonlijke vaardigheden",
+    "description": "Bewaar herbruikbare instructies voor uw eigen gesprekken. Vaardigheden blijven in deze browser en worden alleen naar het model verzonden wanneer u chat. Relevante vaardigheden kunnen automatisch worden geselecteerd, eenmalig gebruikt of vastgezet. Ze kunnen het organisatiebeleid niet wijzigen of toegang tot tools verlenen. Voor het gebruik van vaardigheden moeten vaardigheden voor deze implementatie zijn ingeschakeld; agentgesprekken gebruiken geen persoonlijke vaardigheden.",
+    "importFile": "Importeer SKILL.md of ZIP",
+    "review": "Controleer de volledige instructies voordat u opslaat. Geïmporteerde instructies zijn gebruikersvoorkeuren, geen vertrouwd organisatiebeleid.",
+    "skipped": "Uitvoerbare scripts zijn overgeslagen",
+    "importTooLarge": "De import mag maximaal 20 MB zijn.",
+    "invalid": "De vaardigheid kon niet worden geïmporteerd.",
+    "duplicate": "Dat persoonlijke vaardigheids-id bestaat al. Bewerk de bestaande vaardigheid of kies een ander id.",
+    "countLimit": "U kunt maximaal 20 persoonlijke vaardigheden opslaan.",
+    "requestLimit": "Ingeschakelde persoonlijke vaardigheden overschrijden de limiet van 160 KB per aanvraag. Schakel enkele vaardigheden uit of verkort hun instructies.",
+    "saved": "Persoonlijke vaardigheid opgeslagen in deze browser.",
+    "instructionsHint": "Maximaal 16 KB aan instructies, inclusief geïmporteerde tekstverwijzingen. Binaire bestanden en permanente documentindexering zijn alleen beschikbaar voor organisatievaardigheden. Export gebruikt de standaardnaam SKILL.md zonder het user:-voorvoegsel.",
+    "enabled": "Ingeschakeld voor mijn gesprekken",
+    "empty": "Maak een vaardigheid voor een terugkerende taak, of importeer een SKILL.md om deze hier te bekijken en op te slaan."
   }
 }

@@ -976,7 +976,21 @@
     "alwaysWaitThisLong": "Máa dúró tó {duration} ní gbogbo ìgbà",
     "keepSearching": "Tesiwaju wiwa",
     "keepSearchingHint": "Ìwádìí dá duro kí ó tó rí èyí. Bẹ̀rẹ̀ fún alábàáṣiṣẹ́ kí ó gbìyànjú ọ̀nà míràn.",
-    "keepSearchingMessage": "Ẹ jọ̀wọ́, tesiwaju wiwa fun eyi — gbìyànjú ọ̀nà míràn."
+    "keepSearchingMessage": "Ẹ jọ̀wọ́, tesiwaju wiwa fun eyi — gbìyànjú ọ̀nà míràn.",
+    "addSkill": "Ọgbon",
+    "removeSkill": "Yọ ọgbọn",
+    "skillsMenuLabel": "Ọgbon to wa",
+    "skillsLimit": "Tó pọ̀ sí mẹta ọgbọn fún ifiranṣẹ kọọkan.",
+    "skillPin": "Fi si ibaraẹnisọrọ",
+    "skillUseOnce": "Lo lẹẹkan",
+    "skillPinned": "ti fi mọ́lẹ̀",
+    "skillOnce": "ifiranṣẹ tókàn",
+    "skillsPaused": "ti da duro",
+    "skillUnavailable": "ko si",
+    "skillsAutomaticHint": "A yan awọn ọgbọn to ba yẹ laifọwọyi. Lo lẹẹkan fun ifiranṣẹ tókàn, tàbí fi ọgbọn kan mọ́lẹ̀ lati lo jakejado ibaraẹnisọrọ yii.",
+    "skillsAgentDisabled": "Awọn ọgbọn ti da duro nigba ti aṣoju ba wa. Awọn ti o fi mọ́lẹ̀ yoo tun bọ si ipo rẹ nigba ti o ba yọ aṣoju kuro.",
+    "skillPersonal": "ti ara ẹni",
+    "skillsAgentToolsHint": "Àwọn ogbontarigi ìmọ̀ tí adarí ti fọwọ́sowọ́pọ̀ fún awọn aṣojú ni a nṣàfihàn nínú iṣẹ́ yìí. Aṣojú lè lo wọ́n bíi àwọn irinṣẹ́ kíkọ̀kan nikan. Àwọn àmì míì yóò dúró, kò sì sí àyẹwo ìmọ̀ ti ara ẹni fún aṣojú."
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -5505,7 +5519,8 @@
       "channelSets": "Ofin ẹgbẹ́ kọọkan fún pípa lórí pẹpẹ: ìtọná, ohùn, àyọkà àtìlẹyìn, ẹni tó lè lò àti ẹni tó lè firánṣẹ́.",
       "webSearch": "Bí ìwádìí lórí ayélujára ṣe lè lọ jiná: ìwádìí pẹ̀lú ọ̀nà púpọ̀, àmúdájú rẹ̀ àti àìlà rẹ̀.",
       "contextBudget": "Ìwọn ìtàn àjíròrò tí a rán si gbogbo àlẹ́mọ̀ ní gbogbo yíyí.",
-      "analytics": "Ìjábọ́ tí a fi ránṣẹ́: ohun tó dé, ẹni tí ó lè ṣí apamọ́ kọọkan, àti àwọn pápá wo ni a lè fi hàn."
+      "analytics": "Ìjábọ́ tí a fi ránṣẹ́: ohun tó dé, ẹni tí ó lè ṣí apamọ́ kọọkan, àti àwọn pápá wo ni a lè fi hàn.",
+      "skills": "Àwọn àkọsílẹ̀ ìtọnisọna tí a lè tun lo tí iranwọ́ nlo bí a bá nílò wọn ninu ibaraẹnisọrọ."
     },
     "openSettings": "Ṣí eto",
     "area": {
@@ -5516,7 +5531,8 @@
       "delegations": "Aṣelọpọ",
       "webSearch": "Ìwádìí lórí ayélujára",
       "contextBudget": "Ìpòwó àkọsílẹ̀",
-      "analytics": "Ìtúpalẹ̀"
+      "analytics": "Ìtúpalẹ̀",
+      "skills": "Ọgbon"
     }
   },
   "limits": {
@@ -7547,5 +7563,102 @@
       "past-retention": "Wákàtí tó ju {months} osù títẹ̀síwájú folda yìí lọ; a kò fi hàn mọ́.",
       "unknown": "Ìṣòro tó gbàjọ: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Ọgbon",
+    "description": "Àwọn àkọsílẹ̀ ìtọnisọna tí a lè tún lo tí iranwọ́ nlo bí a bá nílò wọn ninu ibaraẹnisọrọ. Bá a ṣe fẹ́ Agent Skills SKILL.md format tí Claude àti ChatGPT nlo.",
+    "loading": "Nkọkọ ọgbọn…",
+    "loadError": "A kò le kọkọ awọn ọgbọn.",
+    "retry": "Tun gbiyanju",
+    "unavailableBanner": "Àpamọ ọgbọn ò lè wọle báyìí — a fihan àyànfé tí a fi mọ́; àwọn ọgbọn tí a fipamọ ati àtúnṣe kò ṣi dójú tẹ̀sí titi ti yó fi ṣiṣẹ.",
+    "conflictError": "Adámin míràn ti ṣiṣatúnṣe ọgbọn yii. Àtòkasí ti tun kọkọ — tún fi àtúnṣe rẹ sí.",
+    "alwaysWarning": "{count} ọgbọn ni wọ́n ṣètò sí Gbogbo igba. Gbogbo wọn ni a fi kun gbogbo ibaraẹnisọrọ — lo Aifọwọyi fún akọle pàtó.",
+    "newSkill": "Ọgbọn tuntun",
+    "importSkill": "Ra wọlé SKILL.md",
+    "importTitle": "Dàkàpọ̀ fáìlì SKILL.md kan",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Ọ̀rọ̀ tí ọgbọn yii ṣe ati igba tí a fi nlo rẹ.\n---\n\nÀkọsílẹ̀…",
+    "importHint": "Ọgbọn tí a tújáde yó ṣí ni ẹdítọ́ fún atunyẹwo — kò sí nkan tí a fi pamọ́ títí iwọ yó fi fipamọ́.",
+    "importParse": "Tújáde àti atunyẹwo",
+    "invalidId": "Id ọgbọn gbọdọ̀ jẹ́ lẹ́tà kékeré, nọ́mbà, àti àkàrà kan ṣoṣo.",
+    "saveSuccess": "A ti fipamọ ọgbọn.",
+    "saveError": "A kòlè fipamọ ọgbọn náà.",
+    "deleteConfirm": "Ṣe fẹ́ pa ọgbọn yii? Awọn ibaraẹnisọrọ yó da gbigba a lo lẹsẹkẹsẹ.",
+    "restoreConfirm": "Yọ àtúnṣe kúrò kí o sì da àyànfé aiyédẹrun ọgbọn yìí pada?",
+    "deleteSuccess": "A ti pa ọgbọn.",
+    "restoreSuccess": "A ti da àyànfé aiyédẹrun pada.",
+    "deleteError": "A kò le pa ọgbọn náà.",
+    "empty": "Kò sí ọgbọn kankan sibẹ. Ṣẹda tuntun, tàbí rà wọlé SKILL.md.",
+    "builtinChip": "Ti a fi mọ́",
+    "customizedChip": "Tí a ṣe àdámọ̀",
+    "exportSkill": "Gbéjáde sí SKILL.md",
+    "edit": "Ṣatúnṣe",
+    "delete": "Pa",
+    "restoreDefault": "Da aiyédẹrun pada",
+    "createTitle": "Ọgbọn tuntun",
+    "editTitle": "Ṣatúnṣe {name}",
+    "idLabel": "Id",
+    "idHint": "Lẹ́tà kékeré, nọ́mbà, àti àkàrà. Yó jẹ́ orúkọ SKILL.md ọgbọn náà, kò sì le yípadà lẹ́yìn tí a ti dá a ṣẹda.",
+    "nameLabel": "Orúkọ tí yó hàn",
+    "descriptionLabel": "Apejuwe",
+    "descriptionHint": "Ọ̀rọ̀ tí ọgbọn ṣe àti igba tí a yẹ kó lo — eyi ló yan ọgbọn, nítorí náà daríjì akọle ati ọrọ tí kó yẹ kó dahun sí.",
+    "activationLabel": "Ìmọ́lẹ̀ṣiṣẹ́",
+    "activation": {
+      "auto": "Aifọwọyi",
+      "always": "Gbogbo igba",
+      "off": "Pipa"
+    },
+    "activationHint": {
+      "auto": "A yan laifọwọyi nigba ti iṣẹ lọwọlọwọ ba ba apejuwe mu. Awọn olumulo le tun beere lẹẹkan tàbí fi si ibaraẹnisọrọ.",
+      "always": "A fi kun gbogbo ibaraẹnisọrọ fún gbogbo ẹni tí o le rí ọgbọn náà. Lo pẹ̀lú ìtọ́ju — ibi yìí jẹ́ amúlédìípọ̀ tó wà titi.",
+      "off": "Kò ṣiṣẹ́: a kò lo rẹ̀ àti a kò fi hàn sí olùmulo, ṣùgbọ́n ó wà níbí fún àtúnṣe."
+    },
+    "instructionsLabel": "Ìtọnisọna",
+    "instructionsHint": "Markdown, to 16 KB. A fi sii gangan nigba ti agbara naa ba ṣiṣẹ.",
+    "saving": "N fipamọ...",
+    "save": "Fipamọ",
+    "cancel": "Fagilee",
+    "documents": {
+      "title": "Awọn iwe",
+      "hint": "Awọn itọkasi ni a tọju pẹlu ọgbọn yii. Awọn iwe kekere yoo ṣí taara; awọn iwe nla yoo ni aropo fun wiwa itọkasi. Títọjọ pọ ju 20 orisun, 10 MB fun ọkan, ati 20 MB lapapọ. Awọn ohun-ini tọju fun igbasilẹ nikan.",
+      "saveFirst": "Fipamọ ayipada ọgbọn abẹlẹ yi kí o tó fi awọn iwe kun.",
+      "upload": "Fi awọn iwe itọkasi kun",
+      "remove": "Yọ kuro",
+      "stop": "Duro iṣẹ aropo",
+      "resume": "Bẹrẹ tabi tun aropo iwe",
+      "empty": "Ko si iwe ti a so mọ sibẹ.",
+      "requestFailed": "Ìbéèrè iwe naa kuna. Tun ṣàtúnṣe ki o gbìyànjú lẹẹkansi.",
+      "importZip": "Gba wọle ZIP ọgbọn",
+      "zipTooLarge": "ZIP ọgbọn gbọdọ jẹ 20 MB tabi kere si.",
+      "importCount": "Awọn orisun lati so mọ lẹyin fipamọ: {count}",
+      "skippedScripts": "A foju kọ awọn ilana ṣiṣe",
+      "status": {
+        "pending": "N duro de aropo",
+        "processing": "N ṣe aropo",
+        "inline": "Tayọ (taara ṣí)",
+        "indexed": "Tayọ (le wa)",
+        "failed": "Aropo kuna",
+        "asset": "Ohun-ini fun igbasilẹ"
+      },
+      "confirmRemove": "Yọ {filename} kuro lati ọgbọn yii? A maa pa ẹda atilẹba tọju ati pe kii yoo si wa fun lilo gẹgẹbi orisun ẹri mọ.",
+      "reindexRequired": "Awọn iwe aṣẹ wọnyi nilo atunṣe itọkasi fun Eto Wiwa ati isopọ agbegbe lọwọlọwọ. Wọn kii yoo wa titi ti atunṣe itọkasi yoo fi pari."
+    },
+    "applyToAgents": "Wà fún àwọn aṣojú",
+    "applyToAgentsHint": "A ti dá a pa fún ìpilẹ̀ṣẹ̀. Tí a bá mu ṣiṣẹ́, aṣojú le fi ìmọ̀ yii sínú awọn irinṣẹ́ kika nikan lọ́rẹkọsẹ̀ kìí ṣe pé wọ́n yoo rọ́pò ìtọ́sọ́nà ẹni tí wọ́n fẹ́. Kíkọ ọgbọn ní ìdíyelé ìgbésẹ̀ tirẹ̀. Awọn aṣojú Foundry gbọ́dọ̀ ti forúkọ sí awọn iṣẹ́ load_skill àti search_skill_documents nínú ìtúmọ̀ wọn."
+  },
+  "personalSkills": {
+    "title": "Ọgbọn ara ẹni",
+    "description": "Fipamọ awọn ilana ti o le tun lo fun ibaraẹnisọrọ tirẹ. Awọn ọgbọn maa wa ninu ẹrọ aṣawakiri yii ati pe a fi wọn ranṣẹ si awoṣe nikan nigba ti o ba n ba sọrọ. Ọgbọn to yẹ le yan laifọwọyi, lo lẹẹkan, tabi gba mọra. Wọn ko le yi eto ajo pada tabi fun ni iraye si irinṣẹ. Lilo ọgbọn nilo ki a ti muu ṣiṣẹ fun fifi sori yii; ibaraẹnisọrọ pẹlu aṣoju ko lo ọgbọn ara ẹni.",
+    "importFile": "Gba SKILL.md tabi ZIP wọle",
+    "review": "Ṣayẹwo gbogbo ilana ni kikun ki o to fipamọ. Awọn ilana ti a gbe wọle jẹ ayanfẹ olumulo, kii ṣe eto imulo ajo ti a gbẹkẹle.",
+    "skipped": "A foju kọ awọn script to le ṣiṣẹ",
+    "importTooLarge": "Giga ti a gbe wọle gbọdọ jẹ 20 MB tabi kere si.",
+    "invalid": "A ko le gbe ọgbọn wọle.",
+    "duplicate": "ID ọgbọn ara ẹni yẹn ti wa tẹlẹ. Ṣatunkọ ọgbọn to wa tẹlẹ tabi yan ID miiran.",
+    "countLimit": "O le fipamọ to ọgbọn ara ẹni 20.",
+    "requestLimit": "Awọn ọgbọn ara ẹni ti muu ṣiṣẹ ju opin ibeere 160 KB lọ. Pa diẹ ninu awọn ọgbọn tabi dín awọn ilana wọn kúrò.",
+    "saved": "A fipamọ ọgbọn ara ẹni sinu ẹrọ aṣawakiri yii.",
+    "instructionsHint": "To 16 KB ti awọn ilana, pẹlu itọkasi ọrọ ti a gbe wọle. Awọn faili binary ati atokọ iwe aṣẹ alagbero wa fun ọgbọn ajo nikan. Gbigbe jade nlo orukọ SKILL.md deede lai pẹlu user: ni ibẹrẹ.",
+    "enabled": "Ti muu ṣiṣẹ fun awọn ibaraẹnisọrọ mi",
+    "empty": "Ṣẹda ọgbọn fun iṣẹ ti o maa n ṣẹlẹ, tabi gbe SKILL.md wọle lati ṣayẹwo ati fipamọ rẹ nibi."
   }
 }

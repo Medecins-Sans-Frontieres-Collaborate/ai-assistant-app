@@ -893,7 +893,21 @@
     "alwaysWaitThisLong": "Espera sempre fins a {duration}",
     "keepSearching": "Continua cercant",
     "keepSearchingHint": "La cerca es va aturar abans de trobar això. Demana a l'assistent que provi diferents enfocaments.",
-    "keepSearchingMessage": "Si us plau, continua cercant això: prova un enfocament diferent."
+    "keepSearchingMessage": "Si us plau, continua cercant això: prova un enfocament diferent.",
+    "addSkill": "Habilitats",
+    "removeSkill": "Elimina habilitat",
+    "skillsMenuLabel": "Habilitats disponibles",
+    "skillsLimit": "Fins a 3 habilitats per missatge.",
+    "skillPin": "Fixa a la conversa",
+    "skillUseOnce": "Utilitza un cop",
+    "skillPinned": "fixat",
+    "skillOnce": "missatge següent",
+    "skillsPaused": "en pausa",
+    "skillUnavailable": "no disponible",
+    "skillsAutomaticHint": "Les habilitats rellevants se seleccionen automàticament. Utilitza una vegada per al proper missatge o fixa una habilitat per fer-la servir durant tota la conversa.",
+    "skillsAgentDisabled": "Les habilitats estan en pausa mentre hi ha un agent connectat. Les habilitats fixades es reprendran quan desconnectis l’agent.",
+    "skillPersonal": "personal",
+    "skillsAgentToolsHint": "Només s'ofereixen aquí les habilitats de l'organització activades per un administrador per a ús de l'agent. L'agent pot carregar-les com a eines de només lectura. Les altres fixacions queden en pausa i les habilitats personals no estan disponibles per als agents."
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -5521,7 +5535,8 @@
       "channelSets": "Les normes de cada equip per publicar a les plataformes: directrius, registres, predeterminats, qui pot utilitzar el conjunt i qui pot enviar.",
       "webSearch": "Fins on pot arribar una cerca web: cerca multi-pas, el model d'avaluació i els seus límits.",
       "contextBudget": "Quant de la conversa s'envia a cada model en cada torn.",
-      "analytics": "Informes lliurats: què ha arribat, qui pot obrir cada carpeta i quins camps es poden mostrar."
+      "analytics": "Informes lliurats: què ha arribat, qui pot obrir cada carpeta i quins camps es poden mostrar.",
+      "skills": "Blocs d'instruccions reutilitzables que l'assistent aplica quan una conversa els necessita."
     },
     "openSettings": "Obre la configuració",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Delegacions",
       "webSearch": "Cerca web",
       "contextBudget": "Pressupost de context",
-      "analytics": "Analítica"
+      "analytics": "Analítica",
+      "skills": "Habilitats"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Més antic que els {months} mesos de retenció d'aquesta carpeta; ja no es mostra.",
       "unknown": "S'ha reportat un problema: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Habilitats",
+    "description": "Blocs d'instruccions reutilitzables que l'assistent aplica quan una conversa els necessita. Compatible amb el format Agent Skills SKILL.md utilitzat per Claude i ChatGPT.",
+    "loading": "S'estan carregant les habilitats…",
+    "loadError": "No s'han pogut carregar les habilitats.",
+    "retry": "Reintenta",
+    "unavailableBanner": "L'emmagatzematge d'habilitats no és accessible actualment — es mostren els valors predeterminats incorporats; les habilitats desades i les edicions no estaran disponibles fins que es restableixi.",
+    "conflictError": "Aquesta habilitat ha estat modificada per un altre administrador. S'ha recarregat la llista — torna a aplicar la teva edició.",
+    "alwaysWarning": "{count} habilitats estan establertes com a Sempre. Totes s'afegeixen a cada conversa — es recomana utilitzar Automàtic per a habilitats específiques de temes.",
+    "newSkill": "Nova habilitat",
+    "importSkill": "Importa SKILL.md",
+    "importTitle": "Enganxa un fitxer SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Què fa aquesta habilitat i quan utilitzar-la.\n---\n\nInstruccions…",
+    "importHint": "La habilitat analitzada s'obre a l'editor per revisar-la — no es desarà res fins que ho desis.",
+    "importParse": "Analitza i revisa",
+    "invalidId": "Els identificadors d'habilitat utilitzen lletres minúscules, números i guionets simples.",
+    "saveSuccess": "Habilitat desada.",
+    "saveError": "No s'ha pogut desar l'habilitat.",
+    "deleteConfirm": "Vols suprimir aquesta habilitat? Les converses deixaran de rebre-la immediatament.",
+    "restoreConfirm": "Vols eliminar la personalització i restaurar el valor predeterminat d'aquesta habilitat incorporada?",
+    "deleteSuccess": "Habilitat suprimida.",
+    "restoreSuccess": "Valor predeterminat incorporat restaurat.",
+    "deleteError": "No s'ha pogut suprimir l'habilitat.",
+    "empty": "Encara no hi ha habilitats. Crea'n una o importa un fitxer SKILL.md.",
+    "builtinChip": "Incorporada",
+    "customizedChip": "Personalitzada",
+    "exportSkill": "Exporta com a SKILL.md",
+    "edit": "Edita",
+    "delete": "Suprimeix",
+    "restoreDefault": "Restaura el valor predeterminat",
+    "createTitle": "Nova habilitat",
+    "editTitle": "Edita {name}",
+    "idLabel": "Identificador",
+    "idHint": "Lletres minúscules, números i guionets. Esdevé el nom SKILL.md de l'habilitat i no es pot canviar després de crear-la.",
+    "nameLabel": "Nom visible",
+    "descriptionLabel": "Descripció",
+    "descriptionHint": "Què fa l'habilitat I quan utilitzar-la — això és el que selecciona l'habilitat, així que inclou els temes específics i frases a les quals ha de respondre.",
+    "activationLabel": "Activació",
+    "activation": {
+      "auto": "Automàtic",
+      "always": "Sempre",
+      "off": "Desactivat"
+    },
+    "activationHint": {
+      "auto": "Seleccionada automàticament quan la tasca actual coincideix amb la descripció. Els usuaris també la poden demanar una vegada o fixar-la a una conversa.",
+      "always": "S'afegeix a totes les converses per a tothom qui pugui veure l'habilitat. Utilitza-ho amb moderació — aquest espai de prompt és permanent.",
+      "off": "Inactiva: mai no s'aplica ni s'ofereix als usuaris, però es manté aquí per a edició."
+    },
+    "instructionsLabel": "Instruccions",
+    "instructionsHint": "Markdown, fins a 16 KB. S'injecta literalment quan l'habilitat està activa.",
+    "saving": "S'està desant…",
+    "save": "Desa",
+    "cancel": "Cancel·la",
+    "documents": {
+      "title": "Documents",
+      "hint": "Les referències s'emmagatzemen amb aquesta habilitat. Els documents petits es carreguen directament; els més grans s'indexen per a la cerca amb cita. Fins a 20 recursos, 10 MB cadascun i 20 MB en total. Els recursos només es guarden per a descàrrega.",
+      "saveFirst": "Guardeu una personalització d'aquesta habilitat integrada abans d'afegir documents.",
+      "upload": "Afegeix documents de referència",
+      "remove": "Elimina",
+      "stop": "Atura la indexació",
+      "resume": "Indexa o reprèn documents",
+      "empty": "Encara no hi ha documents adjunts.",
+      "requestFailed": "La sol·licitud del document ha fallat. Torneu a carregar i retry.",
+      "importZip": "Importa un ZIP d'habilitat",
+      "zipTooLarge": "El ZIP de l'habilitat ha de tenir 20 MB o menys.",
+      "importCount": "Recursos a adjuntar després de desar: {count}",
+      "skippedScripts": "S'han omès els scripts executables",
+      "status": {
+        "pending": "En espera per indexar",
+        "processing": "S'està indexant",
+        "inline": "Preparat (carregat directament)",
+        "indexed": "Preparat (cercable)",
+        "failed": "Ha fallat la indexació",
+        "asset": "Recurs descarregable"
+      },
+      "confirmRemove": "Voleu eliminar {filename} d'aquesta habilitat? L'original emmagatzemat s'esborrarà i ja no estarà disponible com a font de citacions.",
+      "reindexRequired": "Aquests documents necessiten tornar-se a indexar segons la configuració de Cerca i incrustació regional actual. No es podran cercar fins que s'acabi la indexació."
+    },
+    "applyToAgents": "Disponible per als agents",
+    "applyToAgentsHint": "Desactivat per defecte. Quan s'activa, els agents poden carregar aquesta habilitat mitjançant eines de només lectura en lloc de substituir les seves instruccions de persona. Les crides d'habilitat tenen límits de passos independents. Els agents de Foundry han de tenir ja registrades les funcions load_skill i search_skill_documents a la seva definició."
+  },
+  "personalSkills": {
+    "title": "Habilitats personals",
+    "description": "Desa instruccions reutilitzables per a les teves converses. Les habilitats es guarden en aquest navegador i només s'envien al model quan xateges. Les habilitats rellevants es poden seleccionar automàticament, utilitzar una vegada o fixar. No poden modificar la política de l'organització ni concedir accés a eines. L'ús d'habilitats requereix que estiguin habilitades per a aquest desplegament; les converses amb agents no utilitzen habilitats personals.",
+    "importFile": "Importa SKILL.md o ZIP",
+    "review": "Revisa les instruccions completes abans de desar-les. Les instruccions importades són preferències de l'usuari, no polítiques de confiança de l'organització.",
+    "skipped": "S'han omès els scripts executables",
+    "importTooLarge": "La importació ha de ser de 20 MB o menys.",
+    "invalid": "No s'ha pogut importar l'habilitat.",
+    "duplicate": "Aquest id d'habilitat personal ja existeix. Edita l'habilitat existent o tria un altre id.",
+    "countLimit": "Pots desar fins a 20 habilitats personals.",
+    "requestLimit": "Les habilitats personals habilitades superen el límit de sol·licitud de 160 KB. Deshabilita algunes habilitats o escurça les seves instruccions.",
+    "saved": "Habilitat personal desada en aquest navegador.",
+    "instructionsHint": "Fins a 16 KB d'instruccions, incloent-hi qualsevol referència de text importada. Els fitxers binaris i la indexació persistent de documents només estan disponibles per a habilitats d'organització. L'exportació utilitza el nom estàndard SKILL.md sense el prefix user:.",
+    "enabled": "Habilitada per a les meves converses",
+    "empty": "Crea una habilitat per a una tasca recurrent, o importa un SKILL.md per revisar-lo i desar-lo aquí."
   }
 }

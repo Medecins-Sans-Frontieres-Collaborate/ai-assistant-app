@@ -976,7 +976,21 @@
     "alwaysWaitThisLong": "ኣብዚ ጊዜ {duration} ምጽናት ዘይወጹ።",
     "keepSearching": "ምድላው ቀጽል",
     "keepSearchingHint": "ፍለጣው ንዚ ዝተወከሰ ንትሽፉዕ ኣብ መንእሽቱ ተዕሞዝዎ ኣይተረኽበን። ንመሓሪ በሓደ መንገዲ እንተሎ ደገመይ ከምዝስተው ጠየቕ።",
-    "keepSearchingMessage": "ኣሎ ቀጽል ንዚ ፍለጣ — በሓደ መንገዲ ተፈትን።"
+    "keepSearchingMessage": "ኣሎ ቀጽል ንዚ ፍለጣ — በሓደ መንገዲ ተፈትን።",
+    "addSkill": "ብቕዓዊ ክሕለወ ዝኽእል መሰልታት",
+    "removeSkill": "መሰልታ ወጺኡ",
+    "skillsMenuLabel": "ዝርከቡ መሰልታት",
+    "skillsLimit": "ኣብ መልእኽቲ ናይ ሶስት መሰልታት ድሕሪት ክሕወስ ይኽእል።",
+    "skillPin": "ወደ ዓላማ ይሓተት",
+    "skillUseOnce": "ኣብ ናይ ሓደ ግዜ ተጠቐም",
+    "skillPinned": "ተሓተተ",
+    "skillOnce": "ኣብ ቀጻሊ መልእኽቲ",
+    "skillsPaused": "ትኢኻ ተደኢአ",
+    "skillUnavailable": "ኣይተረኣወን",
+    "skillsAutomaticHint": "ተፈተናሕ ስለ እቲ ግዜ ሕንባብ ብሓላፍነት ይተመርጽ። ኣብ ቀጻሊ መልእኽቲ ሓደ ግዜ ትጠቐም ወይ ሰበይቲ ትሓተት ክትትረኽቲ ኢኻ።",
+    "skillsAgentDisabled": "እታ ትኢኻ ተደኢና ምትክውና ኣገንት ተዓጺቡ። ዘተሓተተካ ሰበይቲ ምትክኻኸ ኣገንት እንተተፅዎም ይዕጽፉ ኢዮም።",
+    "skillPersonal": "ሕብረት ዝነበረ",
+    "skillsAgentToolsHint": "እዚ ክተሓሓዝ ዝኸውኑ ብኣድሚን ኣብ ውድብ ኣተሓሓዛይ ብተሓላለፍቲ ክንበር ዝኽእል እትኾነ ዝዕጋል skills እዩ። ኣተሓሓዛይ እዚን ከም ትኣክት ኣቕፅላ ክተገበር ይከኣል። ኣሎት pins ኣብ ዝተወፀኡ ሁነታ ይኑሩን፣ ናይ ተናይ skills ኣተሓሓዛይ ክትጠቐም ምኽንያት የቕልም።"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -5505,7 +5519,8 @@
       "channelSets": "መድረኻት ዝምልከቱ መደብ ኣባላት ቡድን ፡ መምሪን፣ ድሕሪት፣ ውፉዋት ማዕረፍቲ፣ መንገዲ ምጥቃም ከምኡ።",
       "webSearch": "ምፍለጣ ኣብ web፡ ባይ ምፍለጣ፣ ኣትቃሻ መሓሪ ከኣ ደቂ ጉዳይ ውሽጢ።",
       "contextBudget": "ብቦና ክንታይ conversations ቀረቡዮም model ብእዋኑ ይቅረቡ።",
-      "analytics": "ተሰጥዎ ሪፖርታት፡ ምንባብ መግቢ ፋይል፣ ክንደይ ዝተጠቀሙ ፦ ኣብ ፋይል ዝመዓዙ ኣካል፣ ዝተረኸበ ቦታ"
+      "analytics": "ተሰጥዎ ሪፖርታት፡ ምንባብ መግቢ ፋይል፣ ክንደይ ዝተጠቀሙ ፦ ኣብ ፋይል ዝመዓዙ ኣካል፣ ዝተረኸበ ቦታ",
+      "skills": "ገንዘብ ትእዛዝ ናይ መሰልታት ብዝያዳ ናይ ንድሕረ መደበኛ መጠን ዝምልከት ዘሎ፣ ሓገዝ ሓዳስ ብደረት ክሳዕ ምምሕዳር የተገበረው።"
     },
     "openSettings": "ቅንጥታት ክፈት",
     "area": {
@@ -5516,7 +5531,8 @@
       "delegations": "ደሌጌሽንታት",
       "webSearch": "Web search",
       "contextBudget": "Context budget",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "መሰልታት"
     }
   },
   "limits": {
@@ -7547,5 +7563,102 @@
       "past-retention": "ዝኾነ ኣብ ማእከላይ folder ሓደ {months} ወርሲ retention ተወሲዶ፡ ኣይተበልኩን።",
       "unknown": "ሕጂ በጻሕቲ ሓደ ጸገም ረኺቡ፡ {code}።"
     }
+  },
+  "skillsAdmin": {
+    "title": "መሰልታት",
+    "description": "ገንዘብ ትእዛዝ ብዝያዳ መሰልታት ናይ ናይ ሓገዝ ምዝያዳ ተጠቃሚ  ምስ ዝግባእ። ኣብ Agent Skills SKILL.md ቅድሚ ናይ Claude ንእሽቶ ChatGPT ዝግባእ።",
+    "loading": "ኣብ መመስርዕ መሰልታት...",
+    "loadError": "መሰልታት ክትቕጽል ኣልኾነ።",
+    "retry": "ተደገፈ",
+    "unavailableBanner": "ማእከል መሰልታት ንግዚኦም ኣይተበጽሓን እዩ — መደበኛ ዝተሳተፉ ነገሳት እዚት፡ ዝቐበለ ዘሎን ምንጸባባርን ክሳዕ ዝወዓህ እቶም መሰልታት ኣይተሰርሕን ግን ክትፈልጡ ትኽእሉ።",
+    "conflictError": "ነዚ መሰልታ ብካል ኣስተናጋድ ኣየደለይ። ዝርዝሩ ምዕዳም ኣተወ፡ ኣሓሳትካ ዳግመኛ ኣተው።",
+    "alwaysWarning": "{count} መሰልታት ናይ 'ኤውር' ተዘጊዡ ኣሎ። ንኣብ ንድሕረ መደበኛ መጠን እዩ ዝገበረ — ምሕማም Automatic ንዝርከቦ መሰልታት መደበኛ ኣይተጽበዩን።",
+    "newSkill": "መሰልታ ሓድሽ",
+    "importSkill": "SKILL.md ኣምጣ",
+    "importTitle": "SKILL.md ፋይል ጽሓፍ",
+    "importPlaceholder": "---\nname: my-skill\ndescription: ነዚ መሰልታ መን የክሕለወን ትምህርቲ የማዕረፍርፍ.\n---\n\nትእዛዝ...",
+    "importHint": "ተበጂኡ መሰልታ ኣብ ምዕባለ ፅሑፍ ይቀመጥ — ክትሰርሕ ደሓን ምሉእ ድሕሪት እዩ ዝጸናሕ።",
+    "importParse": "ምምሕዳርን ምፍለጥን",
+    "invalidId": "መሰልታ Id ትንኩሑ ፊደል፡ ቁልፊ፡ ዋጋ ኣሕዋፋይ (hyphens) ይጠቀም።",
+    "saveSuccess": "መሰልታ ተዓቢዩ።",
+    "saveError": "መሰልታ ክትቕጽል ኣልኾነ።",
+    "deleteConfirm": "ነዚ መሰልታ ይሰርዩ? መወዳእት የተተንፋጥ።",
+    "restoreConfirm": "ዝተስተረሰ ምዕባለ ይወጹን ንትሕዝቶ መደበኛ መሰልታ ይኽእል?",
+    "deleteSuccess": "መሰልታ ተሰርሒ።",
+    "restoreSuccess": "መደበኛ ተመልስቲ።",
+    "deleteError": "መሰልታ ክትሰርሕ ኣልኾነ።",
+    "empty": "መሰልታት ገይር ኣሎ። ሓድሽ ኣንፈቱ፣ ወይ SKILL.md ኣምጡ።",
+    "builtinChip": "መደበኛ",
+    "customizedChip": "ተስተረሰ",
+    "exportSkill": "ብ SKILL.md ኣልሉ",
+    "edit": "ምርዳእ",
+    "delete": "ምስርዓ",
+    "restoreDefault": "መደበኛ ኣመሓይሽ",
+    "createTitle": "መሰልታ ሓድሽ",
+    "editTitle": "{name} ምርዳእ",
+    "idLabel": "ID",
+    "idHint": "ትንኩሑ ፊደል፡ ቁልፊ፡ ዋጋ ኣሕዋፋይ። SKILL.md ፋይል ይኸውን ኣይኽእል ዳግመኛ ተስተምህ።",
+    "nameLabel": "ስም ኣብ ቀለል",
+    "descriptionLabel": "መግለጺ",
+    "descriptionHint": "መሰልታ ክደሊኡ እንታይ እዩ ንመን ክትጠቀሙ — ዝፍለጠ ዘሎ ርእይቶታትን ዝዓበየ ግስታትን ኣንፈቱ።",
+    "activationLabel": "ምትእዛዝ",
+    "activation": {
+      "auto": "ሓወይነት",
+      "always": "ኤውር",
+      "off": "ምጽናው"
+    },
+    "activationHint": {
+      "auto": "እቲ ግዜ ሓላፍነት ዘለዎ ዓላማ ምስ መዛገብ ብናብ ብዝሒ ይተመርጽ። ተጠቃሚ ንዓብ ግዜ ይትደርፍዎ ወይ ዓላማ ይሓተት ኢዩ።",
+      "always": "ናይ ሕዝባዊ ኩሉ ምዕባለ ተጠቃሚ ክትቀመጥ ይኽእል። ነገር ምሕማም — እቲ ምስራሕ እዚ በየግዛዝ።",
+      "off": "ዘይሕተት፡ ኣይተሰርሕን ብተጠቃሚ ኣይተቐረበን፣ ንምምሕዳር ደገፍ የትረኽቦ እዩ።"
+    },
+    "instructionsLabel": "ትእዛዝ",
+    "instructionsHint": "Markdown, ክንደይ 16 KB ድሕሪ. ብትፋህ እተረኽበ ከም ትግበሩ ዝገብር ይምልከት።",
+    "saving": "ምዕባድ…",
+    "save": "ኣቐምጥ",
+    "cancel": "ሰርዝ",
+    "documents": {
+      "title": "መዳረበት",
+      "hint": "ምስክር ወይ ተመሳሳሊ ሓበሬታ ከይእተን ኣብዚ ትምህርቲ ይሓሸሽ። ንንኡ መዳረበት ብቀጸምኡ ይናብስ፣ ንሓደ ነበሩት መዳረበት ዕቤ ንተራእዩ ተስማሚ ይተስረይ። ክሳብ 20 ምህዳስ፣ 10 MB ሓደ ናይ ነበሩትን 20 MB ብዙኽሩን። ናይ መዳረበት ግን ንምቕያይ ብሓዋር ይጠቕም።",
+      "saveFirst": "ንተጨማሪ ኣርእስትን መዳረበትን ኣብዚ ኣብ ትምህርታ ይቑም ብልዕሊ መዳረበት ቀዳሞ ምቑላዕ።",
+      "upload": "ምስክር መዳረበት ዋንገል",
+      "remove": "ወጽነ",
+      "stop": " ምስረቱ ኣቋም",
+      "resume": "መዳረበት ምስርዑዎ ወይ ምትእዋን",
+      "empty": "መዳረበት ገና ዘይተስፋፋለይ።",
+      "requestFailed": "ምእታው መዳረበት ናይ ግዛዝ ኣፍላይ። መደበኡ ኣርግጸው ተደጊፉ።",
+      "importZip": "ZIP ናይ ትምህርቲ ተራእዩ",
+      "zipTooLarge": "ZIP ናይ ትምህርቲ ክሳብ 20 MB ድኣ ይኽእል።",
+      "importCount": "ምህዳስ ንምስፋፋ ደቂ ምቑላዕ: {count}",
+      "skippedScripts": "ጽሓፍታት ንምጽዓን ተውደደው።",
+      "status": {
+        "pending": "ንምስረቱ ዝጽብቕ",
+        "processing": "ምስረቱ",
+        "inline": "ዝዝገበረ (ብቀጸምኡ ዝናብስ)",
+        "indexed": "ዝዝገበረ (ዝትሰርርአ)",
+        "failed": "ምስረቱ ኣፍላይ።",
+        "asset": "መዓስታ ንምቕያይ"
+      },
+      "confirmRemove": "ን {filename} ካብ እዚ ክልቢት ይሰርዝ? ናይ ዓናት ዝተሓደሰ ፋይል ይሕደን እንተኾነ እንተማለኸ ከም መንገዲ ምድሓን ስንኳ ኣይፈለጠን።",
+      "reindexRequired": "እዚ ሰነዳት ንኣሁናዊ ልዩ ሃገራዊ ዓበይቲ ዝተዘምኑ ሓበሬታን ዕብደታን ናይ ፍለጥ ምብታ እንተደለኹ፡ ክድፍሉ ይኽእል ኣይኮነን እምበኻ ምእካት ዝተፈጸመ ድኣ።"
+    },
+    "applyToAgents": "ፀጋ ኣተሓሓዛይ ይገናኛላ።",
+    "applyToAgentsHint": "ናይ ቀዳም ብኣይ ተገልግሎ እዩ። ዝተፀይ እንተኾነ ኣተሓሓዛይ እዚን ብትኣክት tools ክዛዕበሉ ይከኣል፣ ዝኾነ persona instructions ከም ዘለዎም ውፅኢ የቕልም። ኣጠራር ናይ skill step ዝበለ limits እዩ ዝሓለፈ። ናይ Foundry agents የምንባር ብ load_skill ከምኡ search_skill_documents functions ተመዝግቡ ኣሎም ትፈትሓ ክንበር ይኽእል።"
+  },
+  "personalSkills": {
+    "title": "ናይ ውሕስታ ኽእለታት",
+    "description": "ናይ ምስትገብር ምዝገባ መርገምቲ ናብ ዝሕነ መገርገራ ምምዝጋብ። ኽእለታት ኣብዚ ብማዕበር ብራውዘር ክህቡ፣ ብጻዕታ ምዝገባ እዋናዊ ኽእለታት ብሓጎስ ክቕውኑ፣ ብዓንዲ ክጥልዉ ወይ ክስቀዱ ይኽእል። ኽእለታት ብዚ ብማዕበር ዘይኽእል ሓደጋ ኣመሓዳሪ ፖሊሲ ወይ ምጥቃም መሳርሒ ምዃን። ዝጠቐሞ ምጥቃም ኽእለታት ጥራይ ብዚ deployment ክሰርሕ፡ ምግባር ብ agent ባይ ኽእለታት ዘይኽልዎ።",
+    "importFile": "SKILL.md ወይ  ZIP ኣእትው",
+    "review": "ምሕብረት ማሕበር ናይ መርጐምቲ ምንባብ በፅሒ። ዝተኣእተወ መርገምቲ ምርጫ ተጠቃሚ ናይ መንግስታዊ ፖሊሲ ዘይዛዝኸ።",
+    "skipped": "ምትገባ ስክሪፕቶት ገፀዱኣ።",
+    "importTooLarge": "ናይ ምኣእታው ፋይል 20 MB ወይ ትንሳኡ ክሆን ኣለዎ።",
+    "invalid": "ኽእለት ዘይተኣእተወ ይኽእል።",
+    "duplicate": "ናይ ውሕስታ ኽእለት id ኣሎ። ዝሕመም ኽእለት ኣቀርብ ወይ ካልኣይ id ምርጫ።",
+    "countLimit": "እቲ ውሕስታ ኽእለታት ክቐደሱ ክንከይ ዝኽእል 20 እዩ።",
+    "requestLimit": "ዝተቐደሱ ውሕስታ ኽእለታት 160 KB ተጠየቕ ዝበጽሕ። ክእለታት ንእሽቶ ወይ ሓበል ኣዋጅ ኣቑርቡ።",
+    "saved": "ናይ ውሕስታ ኽእለት ብዚ ብራውዘር ተዘርእየ።",
+    "instructionsHint": "ውጻዕ instructions 16 KB ድሕሪ ምኣእታው መርገምቲ ግምትታት ይወስዱ። ባይናሪ ፋይልታት እና ዘይዘረጋ ሰነዳት ናይ መንግስታዊ ኽእለታት ብምእታው ይገባ። ናይ export SKILL.md ተወሳኺ ስም ዘይብሃረ user: prefix የጥቀም።",
+    "enabled": "ናይ ውሕስታ ናይ ውሓስ መገርገራ ዝሰሩ።",
+    "empty": "ኽእለት ንሓደ ዝደገፈ ስራሕ ፈጽም፡ ወይ SKILL.md ኣእትው ተምሃራ ኣብዚ ክቐደል ክንከይ።"
   }
 }

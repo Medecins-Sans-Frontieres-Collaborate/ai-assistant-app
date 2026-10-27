@@ -976,7 +976,21 @@
     "alwaysWaitThisLong": "Had iyo jeer sug ilaa {duration}",
     "keepSearching": "Sii baaritaan",
     "keepSearchingHint": "Baaritaanku wuu istaagay intaanan tan helin. U weydii caawiyaha inuu isku dayo habab kale.",
-    "keepSearchingMessage": "Fadlan sii baaritaan tan — isku day hab kale."
+    "keepSearchingMessage": "Fadlan sii baaritaan tan — isku day hab kale.",
+    "addSkill": "Xirfadaha",
+    "removeSkill": "Ka saar xirfadda",
+    "skillsMenuLabel": "Xirfadaha la heli karo",
+    "skillsLimit": "Ilaa 3 xirfadood farriin kasta.",
+    "skillPin": "Ku xiro wada hadalka",
+    "skillUseOnce": "Isticmaal hal mar",
+    "skillPinned": "la xiro",
+    "skillOnce": "farriinta xigta",
+    "skillsPaused": "la hakiyay",
+    "skillUnavailable": "ma jiro",
+    "skillsAutomaticHint": "Aqoonta khuseysa si toos ah ayaa loo dooraa. Isticmaal hal mar farriinta xigta, ama ku xiro xirfad si aad loogu isticmaalo wada hadalkan oo dhan.",
+    "skillsAgentDisabled": "Aqoonta waa la hakiyay inta wakiilku ku xiran yahay. Ku xirnaantaada waxay dib u shaqeyn doontaa marka aad ka bixiso wakiilka.",
+    "skillPersonal": "shaqsiyeed",
+    "skillsAgentToolsHint": "Kaliya xirfadaha ururka ee uu oggolaaday maamule ayaa halkan loogu heli karaa wakiillada. Wakiilku wuxuu u isticmaali karaa xirfadahan qalab akhris oo keliya ah. Xirmooyinka kale way joogsanayaan, xirfadaha shaqsiyeedna uma furna wakiillada."
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -5505,7 +5519,8 @@
       "channelSets": "Xeerarka koox walba ee wax-qorka barnaamijyada: tilmaamo, codadka, caadooyinka, cidda isticmaali karta iyo cidda diri karta.",
       "webSearch": "Baaxadda uu gaarayo baaritaanka webka: baaritaan tillaabo badan, modelka qiimeeyaha iyo xaddidaadiisa.",
       "contextBudget": "Inta taariikh-wada sheekaysi ah ee model kastaa loo diro marka la isticmaalo.",
-      "analytics": "Warbixino la keenay: waxa yimid, cidda furin karta gal kasta, iyo qaybahaa la tusin karo."
+      "analytics": "Warbixino la keenay: waxa yimid, cidda furin karta gal kasta, iyo qaybahaa la tusin karo.",
+      "skills": "Xirmooyin tilmaamo dib loo isticmaali karo oo kaaliyuhu adeegsado marka looga baahdo wadahadalka."
     },
     "openSettings": "Fur dejinta",
     "area": {
@@ -5516,7 +5531,8 @@
       "delegations": "Wakiillo",
       "webSearch": "Baaritaanka webka",
       "contextBudget": "Miisaaniyada macnaha guud",
-      "analytics": "Falcelin xogeed"
+      "analytics": "Falcelin xogeed",
+      "skills": "Xirfadaha"
     }
   },
   "limits": {
@@ -7547,5 +7563,102 @@
       "past-retention": "Waa ka weyn yahay {months} bilood ee kaydka galkan; dib looma tuso.",
       "unknown": "Dhibaato la soo sheegay: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Xirfadaha",
+    "description": "Xirmooyin tilmaamo dib loo isticmaali karo oo kaaliyuhu adeegsado marka looga baahdo wadahadalka. Waa la jaanqaadaysaa qaabka Agent Skills SKILL.md ee ay adeegsadaan Claude iyo ChatGPT.",
+    "loading": "Xirfadaha waa la rarayaa…",
+    "loadError": "Xirfadaha lama soo rogi karin.",
+    "retry": "Dib u day",
+    "unavailableBanner": "Kaydka xirfadaha hadda lama gaadhi karo — kuwa dhisan ee asalka ah ayaa la muujiyey; xirfadaha kaydsan iyo tafatirka ma adeegsan kartid ilaa laga soo celiyo.",
+    "conflictError": "Xirfaddan waxaa beddelay maamule kale. Liiska waa la cusboonaysiiyey — mar kale samee tafatirkaaga.",
+    "alwaysWarning": "{count} xirfadood ayaa loo dejiyey Had iyo Jeer. Mid kasta waxaa lagu darayaa wadahadal kasta — dooro Toos ah (Automatic) kuwa ku xidhan mowduucyada.",
+    "newSkill": "Xirfad cusub",
+    "importSkill": "Soo dejiso SKILL.md",
+    "importTitle": "Ku dheji faylka SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Waxa xirfaddani qabato iyo goorta la isticmaalo.\n---\n\nTilmaamaha…",
+    "importHint": "Xirfadda la fasiro waxay ku furmaysaa tifatiraha si aad u eegto — waxba lama kaydin ilaa aad adigu kaydiso.",
+    "importParse": "Fasiri oo eeg",
+    "invalidId": "Aqoonsiyada xirfadda waxay isticmaalaan xuruuf yar, tirooyin, iyo hal xariiq (hyphen) oo keliya.",
+    "saveSuccess": "Xirfadda waa la kaydiyey.",
+    "saveError": "Xirfadda lama kaydin karin.",
+    "deleteConfirm": "Ma tirtirtaa xirfaddan? Wadahadalada si degdeg ah ayay uga baxaysaa.",
+    "restoreConfirm": "Ma doonaysaa inaad tirtirto habaynta oo dib u soo celiso asalka xirfaddan ee la dhisay?",
+    "deleteSuccess": "Xirfadda waa la tirtiray.",
+    "restoreSuccess": "Asaaska la dhisay ayaa la soo celiyey.",
+    "deleteError": "Xirfadda lama tirtiri karin.",
+    "empty": "Wali lama hayo xirfado. Samee mid, ama soo dejiso SKILL.md.",
+    "builtinChip": "La dhisay",
+    "customizedChip": "La habeeyey",
+    "exportSkill": "Soo saar sida SKILL.md",
+    "edit": "Tafatir",
+    "delete": "Tirtir",
+    "restoreDefault": "Soo celi asalka",
+    "createTitle": "Xirfad cusub",
+    "editTitle": "Tafatir {name}",
+    "idLabel": "Aqoonsi",
+    "idHint": "Xuruufta yaryar, tirooyinka, iyo xariijimaha. Waxay noqonaysaa magaca SKILL.md ee xirfadda mana is beddeli karto marka la abuuray.",
+    "nameLabel": "Magaca la soo bandhigayo",
+    "descriptionLabel": "Sharaxaad",
+    "descriptionHint": "Waxa xirfaddani qabato IYO goorta la isticmaalayo — tan ayaa go’aamisa xulashada xirfadda, sidaa darteed ku dar mowduucyada iyo weedhaha ay la falgeli doonto.",
+    "activationLabel": "Hawlgelin",
+    "activation": {
+      "auto": "Toos ah",
+      "always": "Had iyo Jeer",
+      "off": "Dami"
+    },
+    "activationHint": {
+      "auto": "Si toos ah ayaa loo doortaa marka hawsha hadda jirta la mid tahay sharraxaadda. Isticmaalayaashu waxay sidoo kale codsan karaan hal mar ama si joogto ah ugu xiraan wada hadalka.",
+      "always": "Waa lagu darayaa wadahadal kasta qof walba oo arka xirfadda. Si dheellitiran u isticmaal — tani waa meel joogto ah oo loo qoondeeyo tilmaamaha.",
+      "off": "Aan firfircoonayn: waligeed lama adeegsanayo lagumana soo bandhigayo isticmaalayaasha, balse waa lagu hayaa halkan si loo tafatiro."
+    },
+    "instructionsLabel": "Tilmaamaha",
+    "instructionsHint": "Markdown, ilaa 16 KB. Waxaa si toos ah loogu dari doonaa marka xirfadda firfircoon tahay.",
+    "saving": "Keydinayaa…",
+    "save": "Kaydi",
+    "cancel": "Jooji",
+    "documents": {
+      "title": "Dukumentiyada",
+      "hint": "Tixraacyada waxaa lagu kaydiyaa xirfaddan. Dukumeentiyada yaryar si toos ah ayaa loo furaa; kuwa waaweyn waa la baadhaa si loo raadiyo tixraac. Ilaa 20 ilo, midkiiba 10 MB iyo wadarta 20 MB. Hantida waxaa loo kaydiyaa in la soo dejisto oo keliya.",
+      "saveFirst": "Keydi habeynta xirfaddan la dhisay ka hor intaadan ku darin dukumentiyo.",
+      "upload": "Ku dar dukumentiyo tixraac ah",
+      "remove": "Ka saar",
+      "stop": "Jooji baadhista",
+      "resume": "Baadh ama dib u bilow dukumentiyada",
+      "empty": "Wali dukumentiyo laguma darin.",
+      "requestFailed": "Codsiga dukumeentigu wuu fashilmay. Dib u cusboonaysii oo isku day mar kale.",
+      "importZip": "Soo geli ZIP xirfad ah",
+      "zipTooLarge": "Faylka ZIP xirfadda waa inuu ahaadaa 20 MB ama ka yar.",
+      "importCount": "Ilo lagu dabaqi doono kadib kaydinta: {count}",
+      "skippedScripts": "Qoraallo fulinaya waa la dhaafay",
+      "status": {
+        "pending": "Sugaya baadhis",
+        "processing": "Waa la baadhayaa",
+        "inline": "Diyaar (si toos ah loo furay)",
+        "indexed": "Diyaar (la raadin karo)",
+        "failed": "Baadhistu way fashilantay",
+        "asset": "Hanti la soo dejisan karo"
+      },
+      "confirmRemove": "Ma doonaysaa inaad ka saarto {filename} xirfaddan? Faylka asalka ah ee la kaydiyay waa la tirtiri doonaa mana heli doontid mar dambe inuu noqdo il tixraac.",
+      "reindexRequired": "Dukumentiyadan waa in si dib ah loo tusmeeyaa si ay ugu ekaadaan habeynta Raadinta iyo Embedding ee gobolka hadda. Lama raadin doono ilaa tusmeyntu dhammaato."
+    },
+    "applyToAgents": "Wakiillada waa u diyaar",
+    "applyToAgentsHint": "Waa dansan yahay asalka. Markaad hawlgeliso, wakiilladu waxay xirfaddan ku furi karaan qalab akhris oo keliya ah halkii ay ka beddeli lahaayeen tilmaamahooda shaqsiyeed. Wicitaanada xirfadda waxay leeyihiin xad tallaabo oo madax bannaan. Wakiillada Foundry waa in horay loogu diiwaangeliyey shaqooyinka load_skill iyo search_skill_documents."
+  },
+  "personalSkills": {
+    "title": "Xirfadaha shaqsiyeed",
+    "description": "Kaydi tilmaamo dib loo adeegsankaro oo u gaar ah wada sheekaysiyadaada. Xirfadaha waxa ay ku kaydsan yihiin biraawsarkan oo waxaa loo diraa moodeelka marka aad la sheekaysato kaliya. Xirfadaha la xidhiidha waxa si toos ah loo xulan karaa, hal mar baa loo adeegsan karaa, ama waa la dhejin karaa. Ma beddeli karaan siyaasadda ururka mana furi karaan adeegsiga qalab dheeraad ah. Si loo isticmaalo xirfadaha, waa in fursaddan lagu furo faylkan; wada sheekaysiga agentyadu ma adeegsadaan xirfadaha shaqsiyeed.",
+    "importFile": "Soo geli SKILL.md ama ZIP",
+    "review": "Eeg tilmaamaha oo dhamaystiran ka hor intaadan kaydin. Tilmaamaha la soo dejiyay waa dookha adeegsadaha, ma aha siyaasadda la aamini karo ee ururka.",
+    "skipped": "Skribtyo la fulin karo waa la dhaafay",
+    "importTooLarge": "Faylka la soo gelinayo waa inuu ahaadaa 20 MB ama ka yar.",
+    "invalid": "Xirfadda lama soo geli karin.",
+    "duplicate": "Aqoonsigan xirfadda shaqsiyeed hore ayuu u jiray. Xirfadda jirta wax ka beddel ama aqoonsi kale dooro.",
+    "countLimit": "Waxaad kaydin kartaa ugu badnaan 20 xirfadood oo shaqsiyeed.",
+    "requestLimit": "Xirfadaha shaqsiyeed ee la hawlgeliyay waxay ka badan yihiin xadka codsiga ee 160 KB. Xirfado qaarna danso ama tilmaamahooda gaabi.",
+    "saved": "Xirfad shaqsiyeed ayaa lagu kaydiyay biraawsarkan.",
+    "instructionsHint": "Ilaa 16 KB oo tilmaamo ah, oo ay ku jiraan qoraalka la soo geliyay. Fayooshinka binary-ga iyo diiwaan gelinta joogtada ah ee dukumiintiyada waxa loo heli karaa xirfadaha ururka oo keliya. Dhoofinta waxay isticmaashaa magaca caadiga ah ee SKILL.md la’aanteed astaanta user:.",
+    "enabled": "Waa loo hawlgeliyay wadahadalladayda",
+    "empty": "Abuur xirfad hawl soo noqnoqota ah, ama soo geli SKILL.md si aad u eegto una kaydiso halkan."
   }
 }

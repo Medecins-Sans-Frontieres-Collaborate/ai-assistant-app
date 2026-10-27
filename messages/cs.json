@@ -918,7 +918,21 @@
     "alwaysWaitThisLong": "Vždy čekat až do {duration}",
     "keepSearching": "Pokračovat v hledání",
     "keepSearchingHint": "Hledání bylo ukončeno dříve, než to bylo nalezeno. Požádejte asistenta, aby zkusil jiné postupy.",
-    "keepSearchingMessage": "Pokračujte prosím v hledání tohoto, zkuste jiný postup."
+    "keepSearchingMessage": "Pokračujte prosím v hledání tohoto, zkuste jiný postup.",
+    "addSkill": "Dovednosti",
+    "removeSkill": "Odebrat dovednost",
+    "skillsMenuLabel": "Dostupné dovednosti",
+    "skillsLimit": "Až 3 dovednosti na zprávu.",
+    "skillPin": "Připnout ke konverzaci",
+    "skillUseOnce": "Použít jednou",
+    "skillPinned": "připnuto",
+    "skillOnce": "další zpráva",
+    "skillsPaused": "pozastaveno",
+    "skillUnavailable": "nedostupné",
+    "skillsAutomaticHint": "Relevantní funkce jsou vybírány automaticky. Použijte jednou pro další zprávu nebo připněte funkci pro použití v celé konverzaci.",
+    "skillsAgentDisabled": "Funkce jsou pozastaveny, dokud je připojen agent. Vaše připnuté funkce se obnoví po jeho odpojení.",
+    "skillPersonal": "osobní",
+    "skillsAgentToolsHint": "Jsou zde nabízeny pouze organizační dovednosti povolené správcem pro použití agentem. Agent je může načíst jako nástroje pouze pro čtení. Ostatní připnuté položky zůstávají pozastavené a osobní dovednosti nejsou agentům dostupné."
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -5521,7 +5535,8 @@
       "channelSets": "Pravidla každého týmu pro psaní na platformách: pokyny, styly, výchozí nastavení, kdo může soupravu používat a kdo smí odesílat.",
       "webSearch": "Jak daleko může webové hledání jít: vícekrokové hledání, posuzovací model a limity.",
       "contextBudget": "Kolik konverzace je každý modelu posíláno při každém kroku.",
-      "analytics": "Doručené reporty: co dorazilo, kdo může otevřít kterou složku a která pole lze zobrazit."
+      "analytics": "Doručené reporty: co dorazilo, kdo může otevřít kterou složku a která pole lze zobrazit.",
+      "skills": "Znovupoužitelné bloky instrukcí, které asistent použije, když je to v konverzaci potřeba."
     },
     "openSettings": "Otevřít nastavení",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Delegace",
       "webSearch": "Webové hledání",
       "contextBudget": "Rozpočet kontextu",
-      "analytics": "Analytika"
+      "analytics": "Analytika",
+      "skills": "Dovednosti"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Starší než {months} měsíců uchování této složky; již se nezobrazuje.",
       "unknown": "Nahlášený problém: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Dovednosti",
+    "description": "Znovupoužitelné bloky instrukcí, které asistent použije, když je to v konverzaci potřeba. Kompatibilní s formátem Agent Skills SKILL.md používaným Claude a ChatGPT.",
+    "loading": "Načítání dovedností…",
+    "loadError": "Dovednosti nelze načíst.",
+    "retry": "Opakovat",
+    "unavailableBanner": "Úložiště dovedností je momentálně nedostupné — zobrazují se vestavěné výchozí; uložené dovednosti a úpravy nejsou přístupné, dokud se služba neobnoví.",
+    "conflictError": "Tuto dovednost změnil jiný správce. Seznam byl znovu načten — proveďte úpravu znovu.",
+    "alwaysWarning": "{count} dovedností je nastaveno na Vždy. Každá z nich je přidána do každé konverzace — pro tématické dovednosti preferujte Automatické.",
+    "newSkill": "Nová dovednost",
+    "importSkill": "Importovat SKILL.md",
+    "importTitle": "Vložte soubor SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Co tato dovednost dělá a kdy ji použít.\n---\n\nInstrukce…",
+    "importHint": "Načtená dovednost se otevře v editoru ke kontrole — nic se neukládá, dokud ji neuložíte.",
+    "importParse": "Načíst a zkontrolovat",
+    "invalidId": "ID dovedností používají malá písmena, číslice a jednotlivé pomlčky.",
+    "saveSuccess": "Dovednost byla uložena.",
+    "saveError": "Dovednost nelze uložit.",
+    "deleteConfirm": "Opravdu chcete tuto dovednost smazat? Konverzace ji okamžitě přestanou přijímat.",
+    "restoreConfirm": "Odebrat úpravu a obnovit výchozí nastavení této vestavěné dovednosti?",
+    "deleteSuccess": "Dovednost byla smazána.",
+    "restoreSuccess": "Vestavěné výchozí nastavení obnoveno.",
+    "deleteError": "Dovednost nelze smazat.",
+    "empty": "Zatím žádné dovednosti. Vytvořte dovednost nebo importujte SKILL.md.",
+    "builtinChip": "Vestavěná",
+    "customizedChip": "Upravená",
+    "exportSkill": "Exportovat jako SKILL.md",
+    "edit": "Upravit",
+    "delete": "Smazat",
+    "restoreDefault": "Obnovit výchozí",
+    "createTitle": "Nová dovednost",
+    "editTitle": "Upravit {name}",
+    "idLabel": "ID",
+    "idHint": "Malá písmena, číslice a pomlčky. Použije se jako název SKILL.md a po vytvoření ho nelze změnit.",
+    "nameLabel": "Zobrazovaný název",
+    "descriptionLabel": "Popis",
+    "descriptionHint": "Co dovednost dělá A kdy ji použít — podle toho se dovednost vybírá, proto uveďte konkrétní témata a fráze, na které má reagovat.",
+    "activationLabel": "Aktivace",
+    "activation": {
+      "auto": "Automatická",
+      "always": "Vždy",
+      "off": "Vypnuto"
+    },
+    "activationHint": {
+      "auto": "Vybráno automaticky, pokud aktuální úkol odpovídá popisu. Uživatelé jej mohou také vyžádat jednorázově nebo připnout do konverzace.",
+      "always": "Přidává se do každé konverzace pro každého, kdo dovednost vidí. Používejte opatrně — zabírá trvale místo v promptu.",
+      "off": "Neaktivní: dovednost se nikdy nepoužije ani nenabízí uživatelům, ale zůstává zde pro úpravy."
+    },
+    "instructionsLabel": "Instrukce",
+    "instructionsHint": "Markdown, až 16 KB. Vkládá se přesně, když je dovednost aktivní.",
+    "saving": "Ukládání…",
+    "save": "Uložit",
+    "cancel": "Zrušit",
+    "documents": {
+      "title": "Dokumenty",
+      "hint": "Reference jsou uložené s touto dovedností. Malé dokumenty se načtou přímo, větší jsou indexovány pro citované vyhledávání. Maximálně 20 zdrojů, každý do 10 MB a celkem 20 MB. Soubory jsou uložené pouze ke stažení.",
+      "saveFirst": "Nejprve uložte úpravu této vestavěné dovednosti, než přidáte dokumenty.",
+      "upload": "Přidat referenční dokumenty",
+      "remove": "Odstranit",
+      "stop": "Zastavit indexování",
+      "resume": "Indexovat nebo obnovit dokumenty",
+      "empty": "Zatím nejsou připojeny žádné dokumenty.",
+      "requestFailed": "Požadavek na dokument selhal. Zkuste načíst znovu.",
+      "importZip": "Importovat ZIP dovednosti",
+      "zipTooLarge": "ZIP dovednosti musí mít maximálně 20 MB.",
+      "importCount": "Zdroje k připojení po uložení: {count}",
+      "skippedScripts": "Spustitelné skripty byly přeskočeny",
+      "status": {
+        "pending": "Čeká na indexování",
+        "processing": "Indexování",
+        "inline": "Připraveno (načteno přímo)",
+        "indexed": "Připraveno (vyhledatelné)",
+        "failed": "Indexování selhalo",
+        "asset": "Stáhnutelný soubor"
+      },
+      "confirmRemove": "Odstranit {filename} z této dovednosti? Uložený originál bude smazán a již nebude dostupný jako zdroj citace.",
+      "reindexRequired": "Tyto dokumenty je nutné znovu indexovat podle aktuálního regionálního nastavení vyhledávání a vkládání. Nebudou vyhledávány, dokud nebude indexace dokončena."
+    },
+    "applyToAgents": "Dostupné agentům",
+    "applyToAgentsHint": "Ve výchozím nastavení vypnuto. Pokud je aktivováno, mohou agenti načíst tuto dovednost pomocí nástrojů pouze pro čtení, místo aby nahrazovali své persona instrukce. Volání dovedností mají vlastní limity kroků. Foundry agenti musí mít ve své definici již registrovány funkce load_skill a search_skill_documents."
+  },
+  "personalSkills": {
+    "title": "Osobní dovednosti",
+    "description": "Uložte si znovupoužitelné pokyny pro vlastní konverzace. Dovednosti zůstávají v tomto prohlížeči a modelu jsou odeslány pouze během chatu. Relevantní dovednosti lze vybrat automaticky, použít jednorázově nebo připnout. Nemohou měnit politiku organizace ani udělovat přístup k nástrojům. Použití dovedností vyžaduje jejich povolení pro toto nasazení; konverzace s agentem osobní dovednosti nepoužívají.",
+    "importFile": "Importovat SKILL.md nebo ZIP",
+    "review": "Před uložením si pečlivě zkontrolujte celé pokyny. Importované pokyny jsou uživatelským nastavením, nikoli ověřenou politikou organizace.",
+    "skipped": "Spustitelné skripty byly přeskočeny",
+    "importTooLarge": "Importovaný soubor musí mít maximálně 20 MB.",
+    "invalid": "Tuto dovednost se nepodařilo importovat.",
+    "duplicate": "Toto ID osobní dovednosti již existuje. Upravte stávající dovednost nebo zvolte jiné ID.",
+    "countLimit": "Můžete uložit až 20 osobních dovedností.",
+    "requestLimit": "Povolené osobní dovednosti překračují limit požadavku 160 KB. Některé dovednosti zakažte nebo zkraťte jejich pokyny.",
+    "saved": "Osobní dovednost uložena v tomto prohlížeči.",
+    "instructionsHint": "Až 16 KB pokynů včetně importovaných textových odkazů. Binární soubory a trvalé indexování dokumentů je dostupné jen pro organizační dovednosti. Export používá standardní název SKILL.md bez předpony user:.",
+    "enabled": "Povoleno pro mé konverzace",
+    "empty": "Vytvořte dovednost pro opakovaný úkol či importujte SKILL.md k revizi a uložení zde."
   }
 }

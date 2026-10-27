@@ -949,7 +949,21 @@
     "alwaysWaitThisLong": "始终最多等待 {duration}",
     "keepSearching": "继续搜索",
     "keepSearchingHint": "搜索在找到该内容前已停止。请让助手尝试其他方法。",
-    "keepSearchingMessage": "请继续搜索该内容，换个方法试试。"
+    "keepSearchingMessage": "请继续搜索该内容，换个方法试试。",
+    "addSkill": "技能",
+    "removeSkill": "移除技能",
+    "skillsMenuLabel": "可用技能",
+    "skillsLimit": "每条消息最多可添加 3 个技能。",
+    "skillPin": "固定到对话",
+    "skillUseOnce": "使用一次",
+    "skillPinned": "已固定",
+    "skillOnce": "下一条消息",
+    "skillsPaused": "已暂停",
+    "skillUnavailable": "不可用",
+    "skillsAutomaticHint": "相关技能会自动选择。可在下一条消息中使用一次，或固定技能以在整个对话中使用。",
+    "skillsAgentDisabled": "当有坐席接入时，技能已暂停。解除坐席后，您的固定会恢复。",
+    "skillPersonal": "个人",
+    "skillsAgentToolsHint": "此处仅提供管理员为代理启用的组织技能。代理可以将其作为只读工具加载。其他固定项将保持暂停，个人技能对代理不可用。"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -5552,7 +5566,8 @@
       "channelSets": "各团队在平台发布内容的规则：指导、风格、默认值、可用人员和可发送人员。",
       "webSearch": "网页搜索可进行到的深度：多步搜索、评估模型及其限制。",
       "contextBudget": "每轮发送给模型的对话内容量。",
-      "analytics": "已生成报告：包括内容、可查看每个文件夹的用户及可显示的字段。"
+      "analytics": "已生成报告：包括内容、可查看每个文件夹的用户及可显示的字段。",
+      "skills": "当对话需要时，助手会应用的可复用指令块。"
     },
     "openSettings": "打开设置",
     "area": {
@@ -5563,7 +5578,8 @@
       "delegations": "工作分配",
       "webSearch": "网页搜索",
       "contextBudget": "上下文预算",
-      "analytics": "分析"
+      "analytics": "分析",
+      "skills": "技能"
     }
   },
   "limits": {
@@ -7594,5 +7610,102 @@
       "past-retention": "超出该文件夹{months}个月的留存期，已不再显示。",
       "unknown": "报告的问题：{code}。"
     }
+  },
+  "skillsAdmin": {
+    "title": "技能",
+    "description": "当对话需要时，助手会应用的可复用指令块。兼容 Claude 和 ChatGPT 使用的 Agent Skills SKILL.md 格式。",
+    "loading": "正在加载技能…",
+    "loadError": "无法加载技能。",
+    "retry": "重试",
+    "unavailableBanner": "当前无法访问技能存储 —— 显示内置默认，已保存的技能和编辑功能不可用，直至恢复。",
+    "conflictError": "此技能已被其他管理员更改。列表已重新加载，请重新应用您的编辑。",
+    "alwaysWarning": "{count} 个技能被设为“始终启用”。它们会自动添加到每个会话中 —— 针对特定主题的技能建议选择“自动”。",
+    "newSkill": "新建技能",
+    "importSkill": "导入 SKILL.md",
+    "importTitle": "粘贴 SKILL.md 文件",
+    "importPlaceholder": "---\nname: my-skill\ndescription: 该技能的作用及使用场景。\n---\n\n指令…",
+    "importHint": "解析后的技能将在编辑器中打开进行审核 —— 保存前不会被存储。",
+    "importParse": "解析并审核",
+    "invalidId": "技能 ID 只能包含小写字母、数字和单一连字符。",
+    "saveSuccess": "技能已保存。",
+    "saveError": "无法保存该技能。",
+    "deleteConfirm": "确定要删除此技能？会话将立即停止接收该技能。",
+    "restoreConfirm": "移除自定义设置并恢复此内置技能的默认设置？",
+    "deleteSuccess": "技能已删除。",
+    "restoreSuccess": "已恢复内置默认设置。",
+    "deleteError": "无法删除该技能。",
+    "empty": "尚无技能。请新建或导入 SKILL.md。",
+    "builtinChip": "内置",
+    "customizedChip": "自定义",
+    "exportSkill": "导出为 SKILL.md",
+    "edit": "编辑",
+    "delete": "删除",
+    "restoreDefault": "恢复默认",
+    "createTitle": "新建技能",
+    "editTitle": "编辑 {name}",
+    "idLabel": "ID",
+    "idHint": "小写字母、数字和连字符。将成为该技能的 SKILL.md 名，创建后不可更改。",
+    "nameLabel": "显示名称",
+    "descriptionLabel": "描述",
+    "descriptionHint": "该技能的作用及适用场景——这是技能筛选条件，请写明具体主题和应对的表述方式。",
+    "activationLabel": "激活方式",
+    "activation": {
+      "auto": "自动",
+      "always": "始终",
+      "off": "关闭"
+    },
+    "activationHint": {
+      "auto": "当前任务与描述匹配时自动选择。用户也可以请求使用一次或固定到对话中。",
+      "always": "所有可见该技能的人参与的每个会话中都会加入。请慎用 —— 此为永久提示空间。",
+      "off": "未激活：不会被应用或供用户选择，但保留在此处供编辑。"
+    },
+    "instructionsLabel": "指令",
+    "instructionsHint": "Markdown，最大16KB。技能激活时将原样注入。",
+    "saving": "正在保存…",
+    "save": "保存",
+    "cancel": "取消",
+    "documents": {
+      "title": "文档",
+      "hint": "引用与此技能一同保存。小型文档可直接加载，大型文档将被索引以供引用检索。最多可添加20个资源，每个不超过10 MB，总计不超过20 MB。资产仅供下载保存。",
+      "saveFirst": "请先保存此内置技能的自定义版本再添加文档。",
+      "upload": "添加参考文档",
+      "remove": "移除",
+      "stop": "停止索引",
+      "resume": "索引或恢复文档",
+      "empty": "尚未添加任何文档。",
+      "requestFailed": "文档请求失败。请刷新并重试。",
+      "importZip": "导入技能ZIP文件",
+      "zipTooLarge": "技能ZIP文件必须不超过20 MB。",
+      "importCount": "保存后即将添加的资源数量：{count}",
+      "skippedScripts": "已跳过可执行脚本",
+      "status": {
+        "pending": "等待索引",
+        "processing": "正在索引",
+        "inline": "就绪（直接加载）",
+        "indexed": "就绪（可检索）",
+        "failed": "索引失败",
+        "asset": "可下载资源"
+      },
+      "confirmRemove": "要从此技能中移除 {filename} 吗？存储的原始文件将被删除，并且不再可用作引文来源。",
+      "reindexRequired": "这些文档需要根据当前的区域搜索和嵌入配置重新建立索引。在索引完成之前，这些文档无法被搜索。"
+    },
+    "applyToAgents": "对代理可用",
+    "applyToAgentsHint": "默认关闭。启用后，代理可通过只读工具加载该技能，而不会替换其人物设定说明。技能调用有独立的步骤限制。Foundry 代理需在定义中已注册 load_skill 和 search_skill_documents 函数。"
+  },
+  "personalSkills": {
+    "title": "个人技能",
+    "description": "为您的对话保存可重复使用的指令。技能仅保存在此浏览器中，只有在聊天时才发送给模型。相关技能可自动选择、一次性使用或置顶。它们无法更改组织政策或授予工具访问权限。使用技能需为本部署启用技能；代理对话不使用个人技能。",
+    "importFile": "导入 SKILL.md 或 ZIP",
+    "review": "保存前请审查完整指令。导入的指令为用户偏好，不是受信任的组织政策。",
+    "skipped": "可执行脚本已跳过",
+    "importTooLarge": "导入文件须小于或等于 20 MB。",
+    "invalid": "无法导入该技能。",
+    "duplicate": "该个人技能 ID 已存在。请编辑现有技能或选择其他 ID。",
+    "countLimit": "最多可保存 20 个个人技能。",
+    "requestLimit": "启用的个人技能已超过 160 KB 请求限制。请禁用部分技能或缩短指令内容。",
+    "saved": "个人技能已保存在此浏览器。",
+    "instructionsHint": "说明最多 16 KB，包括任何导入的文本引用。二进制文件及持久化文档索引仅适用于组织技能。导出时采用标准 SKILL.md 名称，无 user: 前缀。",
+    "enabled": "已用于我的对话",
+    "empty": "为经常性任务创建技能，或导入 SKILL.md 以便在此审查和保存。"
   }
 }

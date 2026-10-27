@@ -916,7 +916,21 @@
     "alwaysWaitThisLong": "Așteptați mereu până la {duration}",
     "keepSearching": "Continuă căutarea",
     "keepSearchingHint": "Căutarea s-a oprit înainte să găsească acest rezultat. Rugați asistentul să încerce alte variante.",
-    "keepSearchingMessage": "Continuați căutarea pentru acest lucru, vă rog — încercați o altă abordare."
+    "keepSearchingMessage": "Continuați căutarea pentru acest lucru, vă rog — încercați o altă abordare.",
+    "addSkill": "Abilități",
+    "removeSkill": "Elimină abilitatea",
+    "skillsMenuLabel": "Abilități disponibile",
+    "skillsLimit": "Până la 3 abilități per mesaj.",
+    "skillPin": "Fixează la conversație",
+    "skillUseOnce": "Folosește o dată",
+    "skillPinned": "fixat",
+    "skillOnce": "următorul mesaj",
+    "skillsPaused": "pauzat",
+    "skillUnavailable": "indisponibil",
+    "skillsAutomaticHint": "Abilitățile relevante sunt selectate automat. Folosește o dată pentru următorul mesaj sau fixează o abilitate pentru a o folosi pe tot parcursul conversației.",
+    "skillsAgentDisabled": "Abilitățile sunt pauzate cât timp un agent este atașat. Abilitățile fixate vor fi reluate după ce detașați agentul.",
+    "skillPersonal": "personal",
+    "skillsAgentToolsHint": "Doar abilitățile organizației activate de un administrator pentru utilizarea de către agenți sunt oferite aici. Agenții le pot încărca ca instrumente doar pentru citire. Alte pin-uri rămân întrerupte, iar abilitățile personale nu sunt disponibile agenților."
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -5521,7 +5535,8 @@
       "channelSets": "Regulile fiecărei echipe privind scrierea pe platforme: ghidaj, tonuri, setări implicite, cine poate folosi setul și cine poate trimite.",
       "webSearch": "Cât de departe poate merge o căutare pe web: multi-step search, modelul evaluator și limitele sale.",
       "contextBudget": "Câtă parte din conversație primește fiecare model la fiecare răspuns.",
-      "analytics": "Rapoarte livrate: ce a sosit, cine poate accesa fiecare dosar și ce câmpuri pot fi afişate."
+      "analytics": "Rapoarte livrate: ce a sosit, cine poate accesa fiecare dosar și ce câmpuri pot fi afişate.",
+      "skills": "Blocuri de instrucțiuni reutilizabile pe care asistentul le aplică atunci când conversația necesită acest lucru."
     },
     "openSettings": "Deschide setările",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Delegații",
       "webSearch": "Căutare web",
       "contextBudget": "Buget context",
-      "analytics": "Analitice"
+      "analytics": "Analitice",
+      "skills": "Abilități"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Mai vechi decât {months} luni de retenție ale acestui folder; nu mai este afișat.",
       "unknown": "A fost raportată o problemă: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Abilități",
+    "description": "Blocuri de instrucțiuni reutilizabile pe care asistentul le aplică atunci când conversația necesită acest lucru. Compatibil cu formatul Agent Skills SKILL.md folosit de Claude și ChatGPT.",
+    "loading": "Se încarcă abilitățile…",
+    "loadError": "Nu s-au putut încărca abilitățile.",
+    "retry": "Reîncearcă",
+    "unavailableBanner": "Stocarea abilităților nu este disponibilă momentan — sunt afișate valorile implicite; abilitățile salvate și editările vor fi indisponibile până la remediere.",
+    "conflictError": "Această abilitate a fost modificată de un alt administrator. Lista a fost reîncărcată — reaplicați editarea.",
+    "alwaysWarning": "{count} abilități sunt setate pe Întotdeauna. Fiecare dintre ele este adăugată în orice conversație — folosiți Automată pentru abilități specifice subiectului.",
+    "newSkill": "Abilitate nouă",
+    "importSkill": "Importă SKILL.md",
+    "importTitle": "Lipiți un fișier SKILL.md",
+    "importPlaceholder": "---\nnume: my-skill\ndescriere: Ce face această abilitate și când trebuie folosită.\n---\n\nInstrucțiuni…",
+    "importHint": "Abilitatea analizată se deschide în editor pentru revizuire — nimic nu este salvat până nu salvați.",
+    "importParse": "Analizează și revizuiește",
+    "invalidId": "Id-ul abilității folosește doar litere mici, cifre și un singur cratima.",
+    "saveSuccess": "Abilitate salvată.",
+    "saveError": "Nu s-a putut salva abilitatea.",
+    "deleteConfirm": "Ștergeți această abilitate? Nu va mai fi primită imediat în conversații.",
+    "restoreConfirm": "Eliminați personalizarea și restaurați valoarea implicită pentru această abilitate predefinită?",
+    "deleteSuccess": "Abilitate ștearsă.",
+    "restoreSuccess": "Valoarea implicită a fost restaurată.",
+    "deleteError": "Nu s-a putut șterge abilitatea.",
+    "empty": "Nicio abilitate deocamdată. Creați una sau importați un SKILL.md.",
+    "builtinChip": "Predefinită",
+    "customizedChip": "Personalizată",
+    "exportSkill": "Exportă ca SKILL.md",
+    "edit": "Editează",
+    "delete": "Șterge",
+    "restoreDefault": "Restaurează implicitul",
+    "createTitle": "Abilitate nouă",
+    "editTitle": "Editează {name}",
+    "idLabel": "Id",
+    "idHint": "Litere mici, cifre și cratime. Devine numele SKILL.md și nu poate fi modificat după creare.",
+    "nameLabel": "Nume afișat",
+    "descriptionLabel": "Descriere",
+    "descriptionHint": "Ce face abilitatea ȘI când trebuie folosită — acest text determină selectarea abilității, deci includeți subiecte și formulări specifice la care trebuie să răspundă.",
+    "activationLabel": "Activare",
+    "activation": {
+      "auto": "Automat",
+      "always": "Întotdeauna",
+      "off": "Oprit"
+    },
+    "activationHint": {
+      "auto": "Selectat automat când sarcina curentă se potrivește cu descrierea. Utilizatorii pot solicita și folosirea o dată sau fixarea la conversație.",
+      "always": "Adăugată în orice conversație pentru toți cei care pot vedea abilitatea. Utilizați cu moderație — acest spațiu de prompt este permanent.",
+      "off": "Inactivă: nu este niciodată aplicată și nu este oferită utilizatorilor, dar poate fi editată aici."
+    },
+    "instructionsLabel": "Instrucțiuni",
+    "instructionsHint": "Markdown, până la 16 KB. Este introdus textual când skill-ul este activ.",
+    "saving": "Se salvează…",
+    "save": "Salvează",
+    "cancel": "Anulează",
+    "documents": {
+      "title": "Documente",
+      "hint": "Referințele sunt stocate împreună cu această competență. Documentele mici se încarcă direct; cele mai mari sunt indexate pentru căutare cu citate. Până la 20 de resurse, 10 MB fiecare și 20 MB în total. Resursele sunt stocate doar pentru descărcare.",
+      "saveFirst": "Salvați o personalizare a acestei competențe implicite înainte de a adăuga documente.",
+      "upload": "Adaugă documente de referință",
+      "remove": "Elimină",
+      "stop": "Oprește indexarea",
+      "resume": "Indexează sau reia documentele",
+      "empty": "Nu există documente atașate încă.",
+      "requestFailed": "Solicitarea documentului a eșuat. Reîncărcați și încercați din nou.",
+      "importZip": "Importă un ZIP de competență",
+      "zipTooLarge": "Arhiva ZIP de competență trebuie să aibă 20 MB sau mai puțin.",
+      "importCount": "Resurse de atașat după salvare: {count}",
+      "skippedScripts": "Scripturile executabile au fost omise",
+      "status": {
+        "pending": "Așteptare pentru indexare",
+        "processing": "Se indexează",
+        "inline": "Pregătit (încărcat direct)",
+        "indexed": "Pregătit (se poate căuta)",
+        "failed": "Indexarea a eșuat",
+        "asset": "Resursă descărcabilă"
+      },
+      "confirmRemove": "Eliminați {filename} din această competență? Originalul stocat va fi șters și nu va mai fi disponibil ca sursă de citare.",
+      "reindexRequired": "Aceste documente trebuie reindexate pentru configurația actuală a Căutării și a includerii pe regiune. Nu vor putea fi căutate până la finalizarea indexării."
+    },
+    "applyToAgents": "Disponibil pentru agenți",
+    "applyToAgentsHint": "Dezactivat implicit. Când este activat, agenții pot încărca această abilitate prin instrumente doar pentru citire în loc să înlocuiască instrucțiunile de personalitate. Apelurile de abilitate au limite independente de pași. Agenții Foundry trebuie să aibă deja funcțiile load_skill și search_skill_documents înregistrate în definiția lor."
+  },
+  "personalSkills": {
+    "title": "Abilități personale",
+    "description": "Salvați instrucțiuni reutilizabile pentru propriile conversații. Abilitățile rămân în acest browser și sunt trimise către model doar când conversați. Abilitățile relevante pot fi selectate automat, folosite o dată sau fixate. Ele nu pot schimba politica organizației și nu acordă acces la instrumente. Utilizarea abilităților presupune activarea lor pentru această implementare; conversațiile cu agenți nu folosesc abilități personale.",
+    "importFile": "Importați SKILL.md sau ZIP",
+    "review": "Verificați instrucțiunile complete înainte de salvare. Instrucțiunile importate sunt preferințe ale utilizatorului, nu reguli de încredere ale organizației.",
+    "skipped": "Scripturile executabile au fost omise",
+    "importTooLarge": "Importul trebuie să aibă cel mult 20 MB.",
+    "invalid": "Abilitatea nu a putut fi importată.",
+    "duplicate": "Acest ID de abilitate personală există deja. Editați abilitatea existentă sau alegeți un alt ID.",
+    "countLimit": "Puteți salva până la 20 de abilități personale.",
+    "requestLimit": "Abilitățile personale activate depășesc limita de 160 KB per cerere. Dezactivați unele abilități sau scurtați instrucțiunile acestora.",
+    "saved": "Abilitatea personală a fost salvată în acest browser.",
+    "instructionsHint": "Până la 16 KB de instrucțiuni, inclusiv orice referințe de text importate. Fișierele binare și indexarea persistentă a documentelor sunt disponibile doar pentru abilitățile organizației. Exportarea folosește numele standard SKILL.md fără prefixul user:.",
+    "enabled": "Activată pentru conversațiile mele",
+    "empty": "Creați o abilitate pentru o sarcină recurentă sau importați un SKILL.md pentru a-l verifica și salva aici."
   }
 }

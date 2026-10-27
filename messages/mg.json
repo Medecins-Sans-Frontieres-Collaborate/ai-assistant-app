@@ -976,7 +976,21 @@
     "alwaysWaitThisLong": "Miandrasa hatramin'ny {duration} hatrany",
     "keepSearching": "Tohizo ny fikarohana",
     "keepSearchingHint": "Nijanona ny fikarohana talohan'ny nahitana ity. Angataho ny mpanampy mba hanandrana fomba hafa.",
-    "keepSearchingMessage": "Tohizo azafady ny fikarohana ity — andramo fomba hafa."
+    "keepSearchingMessage": "Tohizo azafady ny fikarohana ity — andramo fomba hafa.",
+    "addSkill": "Fahaiza-manao",
+    "removeSkill": "Esory ny fahaiza-manao",
+    "skillsMenuLabel": "Fahaiza-manao azo ampiasaina",
+    "skillsLimit": "Fahaiza-manao 3 indrindra isaky ny hafatra.",
+    "skillPin": "Apetaho amin'ny resaka",
+    "skillUseOnce": "Ampiasao indray mandeha",
+    "skillPinned": "napetaka",
+    "skillOnce": "hafatra manaraka",
+    "skillsPaused": "naato",
+    "skillUnavailable": "tsy azo ampiasaina",
+    "skillsAutomaticHint": "Misafidy ho azy ireo fahaiza-manao mifanaraka. Ampiasao indray mandeha amin'ny hafatra manaraka, na apetaho amin'ny resaka iray fahaiza-manao iray ho ampiasaina mandritra ity resaka ity.",
+    "skillsAgentDisabled": "Naato ny fahaiza-manao raha mipetraka ny mpiasan'ny serivisy. Hiverina ho ampiasaina ny napetakao rehefa esorina ilay mpiasan'ny serivisy.",
+    "skillPersonal": "manokana",
+    "skillsAgentToolsHint": "Ny fahaizan'ny fikambanana natolotry ny mpitantana ho azon'ny mpiasan'ny fikambanana ihany no hita eto. Azon'ny mpiasan'ny fikambanana ampiasaina amin'ny fomba vakiana ihany ireo fitaovana ireo. Ny fanjairana hafa dia mijanona tsy mandeha, ary tsy azon'ny mpiasan'ny fikambanana ampiasaina ny fahaizana manokana."
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -5505,7 +5519,8 @@
       "channelSets": "Fitsipika ho an'ny ekipa tsirairay rehefa manoratra amin'ny sehatra: torolalana, feo, fomba masontsivana, iza no afaka mampiasa sy mandefa.",
       "webSearch": "Hatramin’ny aiza no atao amin’ny fikarohana web: fikarohana andalana maromaro, modely manasitrana azy, ary fetra.",
       "contextBudget": "Firy ny tantaran’ny resaka alefa isaky ny mandeha amin’ny modely tsirairay.",
-      "analytics": "Tatitra nalefa: inona no tonga, iza afaka manokatra folder tsirairay, ary iza avy amin’ny saha no hita."
+      "analytics": "Tatitra nalefa: inona no tonga, iza afaka manokatra folder tsirairay, ary iza avy amin’ny saha no hita.",
+      "skills": "Boky toromarika azo averina ampiasaina rehefa ilain'ny resaka iray izany."
     },
     "openSettings": "Sokafy ny fikirakirana",
     "area": {
@@ -5516,7 +5531,8 @@
       "delegations": "Fanolorana andraikitra",
       "webSearch": "Fikarohana web",
       "contextBudget": "Teti-bola amin'ny sehatra",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "Fahaiza-manao"
     }
   },
   "limits": {
@@ -7547,5 +7563,102 @@
       "past-retention": "Lasa aloha noho ny fitanana {months} volana amin’ity folder ity; tsy aseho intsony.",
       "unknown": "Olana navoaka: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Fahaiza-manao",
+    "description": "Boky toromarika azo averina ampiasaina rehefa ilain'ny resaka iray izany. Mifanaraka amin'ny endrika Agent Skills SKILL.md ampiasain'i Claude sy ChatGPT.",
+    "loading": "Mampiditra fahaiza-manao...",
+    "loadError": "Tsy tafiditra ny fahaiza-manao.",
+    "retry": "Andramo indray",
+    "unavailableBanner": "Tsy azo idirana amin'izao fotoana izao ny fitahirizana fahaiza-manao — hita ireo fahaiza-manao efa napetraka; tsy azo ampiasaina ny fahaiza-manao voatahiry sy fanovàna raha tsy miverina amin'ny laoniny.",
+    "conflictError": "Nisy admin hafa nanova ity fahaiza-manao ity. Naverina nisy ilay lisitra — avereno ampiharina ny fanovàna nataonao.",
+    "alwaysWarning": "{count} amin'ny fahaiza-manao no napetraka ho Hatrany. Ireo rehetra ireo dia ampiana amin'ny resaka rehetra — aleo atao ho Automatic ny fahaiza-manao manokana amin'ny lohahevitra.",
+    "newSkill": "Fahaiza-manao vaovao",
+    "importSkill": "Ampidiro SKILL.md",
+    "importTitle": "Apetraho eto ny rakitra SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Ny asan'ity fahaiza-manao ity sy ny fotoana ampiasana azy.\n---\n\nToromarika...",
+    "importHint": "Hisokatra ao amin'ny fanovàna ny fahaiza-manao nandalina — tsy misy voatahiry raha tsy voavonjy.",
+    "importParse": "Hadihadiana sy jereo",
+    "invalidId": "Litera kely, isa ary tery tokana ihany no ampiasaina amin'ny id.",
+    "saveSuccess": "Voavonjy ny fahaiza-manao.",
+    "saveError": "Tsy afaka namonjy ny fahaiza-manao.",
+    "deleteConfirm": "Hofafana ity fahaiza-manao ity? Hitsahatra avy hatrany amin'ny resaka izany.",
+    "restoreConfirm": "Esory ny fanamboarana ary avereno amin'ny fahazavana napetraka ity fahaiza-manao fototra ity?",
+    "deleteSuccess": "Voafafa ny fahaiza-manao.",
+    "restoreSuccess": "Voaverina amin'ny napetraka izy.",
+    "deleteError": "Tsy afaka namafa ny fahaiza-manao.",
+    "empty": "Tsy mbola misy fahaiza-manao. Mamoròna iray, na ampidiro SKILL.md.",
+    "builtinChip": "Voarakitra",
+    "customizedChip": "Namboarina manokana",
+    "exportSkill": "Avoahy ho SKILL.md",
+    "edit": "Ovay",
+    "delete": "Fafao",
+    "restoreDefault": "Avereno amin'ny napetraka",
+    "createTitle": "Fahaiza-manao vaovao",
+    "editTitle": "Ovao {name}",
+    "idLabel": "Id",
+    "idHint": "Litera kely, isa ary tery tokana. Izany no lasa SKILL.md an'ilay fahaiza-manao ary tsy azo ovaina aoriana.",
+    "nameLabel": "Anarana haseho",
+    "descriptionLabel": "Famaritana",
+    "descriptionHint": "Ny asan'ny fahaiza-manao sy ny fotoana ampiasana azy — io no isafidianana azy, koa soraty ao ny lohahevitra sy fomba fiteny tokony havaly.",
+    "activationLabel": "Fanaingoana",
+    "activation": {
+      "auto": "Ho azy",
+      "always": "Hatrany",
+      "off": "Miato"
+    },
+    "activationHint": {
+      "auto": "Misafidy ho azy rehefa mifanaraka amin'ny asa ankehitriny ny famaritana. Afaka mangataka indray mandeha na manapetaka izany amin'ny resaka ihany koa ny mpampiasa.",
+      "always": "Ampiana amin'ny resaka rehetra ho an'ny rehetra mahita azy. Ampiasao amin'ny fatra iraisana — toerana mandrakizay eo amin'ny tondro izany.",
+      "off": "Tsy mandeha: tsy ampiharina na aseho amin'ny mpampiasa, fa tahirizina eto ihany ho amin'ny fanovàna."
+    },
+    "instructionsLabel": "Toromarika",
+    "instructionsHint": "Markdown, hatramin'ny 16 KB. Ampidirina mivantana rehefa miasa ny fahaiza-manao.",
+    "saving": "Tehirizina…",
+    "save": "Tehirizo",
+    "cancel": "Hanafoana",
+    "documents": {
+      "title": "Taratasy",
+      "hint": "Tehirizina miaraka amin'ity fahaiza-manao ity ny reference. Mivantana ny fampidirana taratasy kely; ny lehibe kosa voaorina ho hitadiavana loharano. Hatramin'ny loharano 20, 10 MB isanisany, ary 20 MB farafahabetsany. Natokana ho fisintonana ihany ny rakitra (assets).",
+      "saveFirst": "Tehirizo aloha ny namboarinao amin'ity fahaiza-manao iray ity alohan'ny hanampiana taratasy.",
+      "upload": "Ampio taratasy reference",
+      "remove": "Esory",
+      "stop": "Atsaharo ny fanasokajiana",
+      "resume": "Sokajio na tohizo ny fanasokajiana taratasy",
+      "empty": "Tsy mbola misy taratasy mifatotra.",
+      "requestFailed": "Tsy nahomby ny fangatahana taratasy. Avereno ny pejy dia andramo indray.",
+      "importZip": "Ampidiro ZIP misy fahaiza-manao",
+      "zipTooLarge": "Tsy maintsy latsaky ny 20 MB ny ZIP misy fahaiza-manao.",
+      "importCount": "Loharano ho apetraka aorian'ny famonjena: {count}",
+      "skippedScripts": "Nodiana tsy noraisina ny script azo tanterahina",
+      "status": {
+        "pending": "Miandry ho sokajiana",
+        "processing": "Eo am-panasokajiana",
+        "inline": "Vonona (naveran-drakitra mivantana)",
+        "indexed": "Vonona (azo tadiavina)",
+        "failed": "Tsy nahomby ny fanasokajiana",
+        "asset": "Rakitra azo sintonina"
+      },
+      "confirmRemove": "Esorina ve {filename} amin'ity fahaiza-manao ity? Ny rakitra voalohany voatahiry dia ho voafafa ary tsy ho azon'ny olona ampiasaina intsony ho loharano fanovàna.",
+      "reindexRequired": "Ireo antontan-taratasy ireo dia mila havaozina amin'ny fikirakirana Search sy embedding amin'ny faritra ankehitriny. Tsy ho azo itadiavana izy ireny raha tsy vita ny fanavaozana."
+    },
+    "applyToAgents": "Azon'ny mpiasan'ny fikambanana ampiasaina",
+    "applyToAgentsHint": "Tsy mandeha avy hatrany. Raha ampiasaina, dia afaka mampiditra ity fahaiza-manao ity amin'ny alalan'ny fitaovana vakiana ihany ny mpiasan'ny fikambanana, fa tsy manolo ny toromarika momba ny mombamomba azy. Manana fetra tsy miankina amin'ny dingana tsirairay ny antso amin'ny fahaiza-manao. Tsy maintsy efa manana asa load_skill sy search_skill_documents voasoratra ao amin'ny famaritany ny Foundry agents."
+  },
+  "personalSkills": {
+    "title": "Fahaiza-manao manokana",
+    "description": "Tehirizo ato ireo toromarika azo averina ampiasaina amin'ny resakao manokana. Mitahiry ato amin'ity navigateur ity ny fahaiza-manao ary alefa amin'ny modely ihany rehefa miresaka ianao. Azon'ny rafitra fidiana ho azy, ampiasaina indray mandeha, na apetaka ho zatra. Tsy afaka manova politika fikambanana na manome fahazoan-tsampy amin'ny fitaovana izy ireny. Mila asiana fahaiza-manao amin'ity fametrahana ity vao afaka mampiasa. Tsy mampiasa fahaiza-manao manokana ny resaka amin'ny agent.",
+    "importFile": "Ampidiro SKILL.md na ZIP",
+    "review": "Diniho manontolo ny toromarika alohan'ny hitahirizana. Safidin'ny mpampiasa ihany, fa tsy politika ofisialy fikambanana, ireo toromarika nampidirina.",
+    "skipped": "Nafaingana ireo script azo tanterahana",
+    "importTooLarge": "Tokony ho 20 MB na latsaka ny rakitra ampidirina.",
+    "invalid": "Tsy afaka nampidirina ilay fahaiza-manao.",
+    "duplicate": "Efa misy io id fahaiza-manao manokana io. Ahitsy ilay efa misy na mifidiana id hafa.",
+    "countLimit": "Afaka mitahiry fahaiza-manao manokana 20 farafahabetsany ianao.",
+    "requestLimit": "Mihoatra ny fetra fangatahana 160 KB ny fahaiza-manao manokana ampiasaina. Atsaharo na fohazy ny toromarika sasany.",
+    "saved": "Voatahiry ato amin'ity navigateur ity ny fahaiza-manao manokana.",
+    "instructionsHint": "Hatramin’ny 16 KB ny toromarika, anisan’izany ireo refy soratra nampidirina. Ho an’ny fahaiza-manao fikambanana ihany no azo anaovana fichier binerika sy fampidirana lova antontan-taratasy maharitra. Mampiasa anarana SKILL.md tsy misy user: rehefa manondrana.",
+    "enabled": "Azo ampiasaina amin'ny resako",
+    "empty": "Mamoròna fahaiza-manao ho an’ny asa miverimberina, na ampidiro SKILL.md, izay ho azonao jerena sy tehirizina eto."
   }
 }

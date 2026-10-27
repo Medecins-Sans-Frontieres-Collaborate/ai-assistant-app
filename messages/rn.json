@@ -976,7 +976,21 @@
     "alwaysWaitThisLong": "Burya rindira gushika kuri {duration}",
     "keepSearching": "Bandanya urondera",
     "keepSearchingHint": "Irondera yarahagaze itarabona iki. Saba umufasha kwihereza ubundi buryo.",
-    "keepSearchingMessage": "Bandanya kurondera iki, ndakwinginze — gerageza ubundi buryo."
+    "keepSearchingMessage": "Bandanya kurondera iki, ndakwinginze — gerageza ubundi buryo.",
+    "addSkill": "Ubushobozi",
+    "removeSkill": "Kuraho ubushobozi",
+    "skillsMenuLabel": "Ubushobozi buhari",
+    "skillsLimit": "Ushobora gushiramwo ubushobozi 3 ku butumwa.",
+    "skillPin": "Kweza mu kiganiro",
+    "skillUseOnce": "Koresha rimwe",
+    "skillPinned": "vyakwezwa",
+    "skillOnce": "ubutumwa bukurikira",
+    "skillsPaused": "vyahagaritswe",
+    "skillUnavailable": "ntibishoboka",
+    "skillsAutomaticHint": "Ubushobozi bukwiye buhitwa bwikora. Koresha rimwe ku butumwa bukurikira, canke kweza ubushobozi kugira bukoreshe mu kiganiro cose.",
+    "skillsAgentDisabled": "Ubushobozi burahagarikwa igihe umukozi afatanye. Ivyo wakweze bizosubira gukora uzonyora umukozi.",
+    "skillPersonal": "bwite",
+    "skillsAgentToolsHint": "Hano haratangwa ubumenyi bw'ishirahamwe bwemejwe n'umuyobozi kugira bukoreshwe n'umukozi. Umukozi arashobora kubugurura nk'ibikoresho bisomeka gusa. Ibindi bintu bivowe biraguma bihagariye, kandi ubumenyi bw'umuntu ntibuboneka ku bakozi."
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",
@@ -5505,7 +5519,8 @@
       "channelSets": "Amategeko y’umugwi umwe umwe ku kwandika ku mbuga: amategeko, ijwi, ibisanzwe, abemerewe gukoresha canke kohereza.",
       "webSearch": "Urugero irondera kuri web ishobora kwishikana: irondera ry'indaryo nyinshi, modèle ya assessora n'integerezo yayo.",
       "contextBudget": "Uko igice c'ikiganiro ca model gushikirwa kuri buri ndaryo.",
-      "analytics": "Raporo zatanzwe: ivyarungitswe, uwemerewe gufungura buri folder, n'ibibanza bishobora kwerekwa."
+      "analytics": "Raporo zatanzwe: ivyarungitswe, uwemerewe gufungura buri folder, n'ibibanza bishobora kwerekwa.",
+      "skills": "Ibice vy'amabwirizwa vyifashishwa uko bigize bitanga ubufasha igihe bigiye gukenerwa mu kiganiro."
     },
     "openSettings": "Fungura ivyo gushiraho",
     "area": {
@@ -5516,7 +5531,8 @@
       "delegations": "Delegasiyo",
       "webSearch": "Irondera kuri web",
       "contextBudget": "Context budget",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "Ubushobozi"
     }
   },
   "limits": {
@@ -7547,5 +7563,102 @@
       "past-retention": "Birarenze amezi {months} y'ububiko bw'iyi dossier; ntibikigaragara.",
       "unknown": "Ikibazo cagaragaye: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Ubushobozi",
+    "description": "Ibice vy'amabwirizwa vyifashishwa uko bigize bitanga ubufasha igihe bikenewe mu kiganiro. Birahuye na format ya Agent Skills SKILL.md ikoreshwa na Claude na ChatGPT.",
+    "loading": "Turiko turashira ubushobozi...",
+    "loadError": "Ntashoboye gushira ubushobozi.",
+    "retry": "Gerageza gusubira",
+    "unavailableBanner": "Ububiko bw'ubushobozi ntibushikika uyu mwanya — ibisanzwe vyigikozwe biragaragara; ubushobozi bwabitswe n'impinduka ntibavailable gushika vyomera.",
+    "conflictError": "Ubushobozi bwahinduwe n'undi muyobozi. Urutonde rusubiye gushirwa — subira gukora impinduka yawe.",
+    "alwaysWarning": "Ubushobozi {count} vyashizwe kuri Always. Buri kimwe co mu vyo nyene hose gitegurwa kuri buri kiganiro — prefer Automatic ku bushobozi bw'ivyerekeye ingingo runaka.",
+    "newSkill": "Ubushobozi bushasha",
+    "importSkill": "Injiza SKILL.md",
+    "importTitle": "Nshira dosiye ya SKILL.md",
+    "importPlaceholder": "---\nname: ubushobozi-bwanje\ndescription: Ivyo ubushobozi bukora n'igihe gukoreshwa.\n---\n\nAmabwirizwa...",
+    "importHint": "Ubushobozi bwasomewe bufunguruka mu mugenzi wo kuvyihweza — nta kibikwa gushika ubibitse.",
+    "importParse": "Soma no kuvyihweza",
+    "invalidId": "Id y'ubushobozi ikoresha inyuguti zito, ibiharuro, n'agatandukana kamwe.",
+    "saveSuccess": "Ubushobozi bwabitswe.",
+    "saveError": "Ntashoboye kubika ubushobozi.",
+    "deleteConfirm": "Ushaka gukuraho ubu bushobozi? Ibiganiro bihita bibuta guhabwa.",
+    "restoreConfirm": "Kuraho impinduka yihariye ugarure ibisanzwe vy'ubu bushobozi bwo mu mugenzi?",
+    "deleteSuccess": "Ubushobozi bukuweho.",
+    "restoreSuccess": "Ibisanzwe vy'inyuma vyagaruwe.",
+    "deleteError": "Ntashoboye gukura ubushobozi.",
+    "empty": "Nta bushobozi buhari. Shiramu kimwe, canke injiza SKILL.md.",
+    "builtinChip": "Vy'inyuma",
+    "customizedChip": "Vyahinduwe",
+    "exportSkill": "Kura hanze nka SKILL.md",
+    "edit": "Hindura",
+    "delete": "Kuraho",
+    "restoreDefault": "Garura ibisanzwe",
+    "createTitle": "Ubushobozi bushasha",
+    "editTitle": "Hindura {name}",
+    "idLabel": "Id",
+    "idHint": "Inyuguti zito, ibiharuro, n'agatandukana. Biba izina ry'ubushobozi SKILL.md kandi birahinduka kw'ihingurwa.",
+    "nameLabel": "Izina ryo kwerekana",
+    "descriptionLabel": "Ibisobanuro",
+    "descriptionHint": "Ivyo ubushobozi bukora N'igihe bwo gukoreshwa — vyenerwa guhitamo ubushobozi, rero shiramwo ingingo n'amajambo vyihariye vy'ukobwo kugira igisubizo.",
+    "activationLabel": "Kwugururwa",
+    "activation": {
+      "auto": "Automatic",
+      "always": "Always",
+      "off": "Off"
+    },
+    "activationHint": {
+      "auto": "Buhitwako bwikora igihe igikorwa gihuye n'ivyo bisobanuro. Abakoresha bashobora kandi kubusaba rimwe canke bakabusweza mu kiganiro.",
+      "always": "Ishirwa ku kiganiro cose ku wose abibona. Koresha gake — iyi ni espace y'amabwirizwa igihe cose.",
+      "off": "Ntibikora: ntibikora ntibihabwa abakoresha, ariko bisigara ngaha vyogurikurwa."
+    },
+    "instructionsLabel": "Amabwirizwa",
+    "instructionsHint": "Markdown, gushika kuri 16 KB. Irashirwa uko imeze igihe ubushobozi bukora.",
+    "saving": "Biriko birabikwa…",
+    "save": "Bika",
+    "cancel": "Sivya",
+    "documents": {
+      "title": "Idokumente",
+      "hint": "Ivyo vyerekeye birabikwa kuri ubu bushobozi. Idokumente ntoya ziraboneka neza; izinini zirabikwa kugira zishobore gushakwa. Vyemerewe gushira ivyohabwa 20, idokumente imwe 10 MB, hamwe na vyose vyose 20 MB. Ivyo bibikwa gusa kugira ushire hasi.",
+      "saveFirst": "Banze ubuhindurwako kuri ubu bushobozi bwubatswe imbere yo kongerako dokumente.",
+      "upload": "Ongerako dokumente vyerekeye",
+      "remove": "Kura",
+      "stop": "Hagarika kubika",
+      "resume": "Bika canke subira kubika dokumente",
+      "empty": "Nta dokumente yongerwako irabaho.",
+      "requestFailed": "Gusaba dokumente ntivyakunze. Saba wongere.",
+      "importZip": "Injiza skill ZIP",
+      "zipTooLarge": "Skill ZIP igomba kuba 20 MB canke munsi yayo.",
+      "importCount": "Ivyohabwa vyozokurwa inyuma yo kuzigama: {count}",
+      "skippedScripts": "Scripts zishobora kwikora ntizemewe",
+      "status": {
+        "pending": "Nditegereje kubikwa",
+        "processing": "Ndiko ndabika",
+        "inline": "Yiteguye (yarashizwe neza)",
+        "indexed": "Yiteguye (irashobora kurondererwa)",
+        "failed": "Kubika ntivyakunze",
+        "asset": "Inyongerwa yishobora kumanurwa"
+      },
+      "confirmRemove": "Ushaka gukura {filename} kuri ubu bumenyi? Inyandiko y'inyuma izosibwa kandi ntizoboneka nk'isoko ry'icitire.",
+      "reindexRequired": "Ivyandikwa vy'aha birakeneye gusubira kugirwa indexing kugira bihuye n'ikorwa rya Search n'ishirwaho ry'ishema rigezweho ry'akarere. Ntibizoshobora kuronderwa gushika indexing irangiye."
+    },
+    "applyToAgents": "Biboneka ku bakozi",
+    "applyToAgentsHint": "Kigenwa ko atari ngombwa. Iyo wemeje, abakozi bashobora kugurura ubu bumenyi biciye mu bikoresho bisomeka gusa aho gusimbuza amabwirizwa yabo y'ukuntu bakora. Uko ukoresheje ubumenyi ufise umupaka w'intambwe wigenga. Abakozi ba Foundry bagomba kuba bafise functions za load_skill na search_skill_documents ziri muri definition yabo."
+  },
+  "personalSkills": {
+    "title": "Ubushobozi bwite",
+    "description": "Zigama amabwirizwa ushobora gukoresha kenshi mu biganiro vyawe. Ubushobozi buhama muri uwu mushakisho kandi butumwa ku mudeli gusa igihe uri mu kiganiro. Ubushobozi bihabwa akamaro bushobora guhitamwa ku buryo bwikora, gukoresha rimwe canke gukomeza bwanditswe. Ntibishobora guhindura politike y'ishirahamwe canke gutanga uburenganzira bwo gukoresha ibikoresho. Gukoresha ubushobozi bisaba ko ubushobozi bwemewe kuri iyi deployment; ibiganiro vy'abakozi ntibikoresha ubushobozi bwite.",
+    "importFile": "Injiza SKILL.md canke ZIP",
+    "review": "Raba amabwirizwa yose imbere yo kuzigama. Amabwirizwa yinjiye ni ivyipfuzo vy'umukoresha, si politike yizewe y'ishirahamwe.",
+    "skipped": "Udukoryo tuzoshoborwa twarayitswe",
+    "importTooLarge": "Injiza ntigomba kurenza 20 MB.",
+    "invalid": "Ntivyashobotse kwinjiza ubushobozi.",
+    "duplicate": "Id y'ubushobozi bwite iriho ubu. Hindura ubushobozi bumaze kubaho canke hitemwo indi id.",
+    "countLimit": "Urashobora kuzigama ubushobozi bwite 20 gusa.",
+    "requestLimit": "Ubushobozi bwite bwemewe burengeye urugero rwa 160 KB rwo gutanga ibisabwa. Gabanya ubushobozi canke ugabanye amabwirizwa yabwo.",
+    "saved": "Ubushobozi bwite buzigamye muri uwu mushakisho.",
+    "instructionsHint": "Amabwirizwa agera kuri 16 KB, harimwo ivyanditswe vyinjiye. Amadosiye binary n'ugushira mu gatete ababikora burundu biboneka gusa ku bushobozi bw'ishirahamwe. Kumanura bisanzwe bikoresha izina SKILL.md ata user: prefix.",
+    "enabled": "Vyemewe mu biganiro vyanje",
+    "empty": "Kora ubushobozi ku gikorwa gisubira, canke injiza SKILL.md kugira uce urwiga ugahazigama."
   }
 }

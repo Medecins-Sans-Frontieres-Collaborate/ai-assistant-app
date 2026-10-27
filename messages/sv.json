@@ -918,7 +918,21 @@
     "alwaysWaitThisLong": "Vänta alltid upp till {duration}",
     "keepSearching": "Fortsätt söka",
     "keepSearchingHint": "Sökningen stoppades innan detta hittades. Be assistenten prova andra tillvägagångssätt.",
-    "keepSearchingMessage": "Fortsätt söka efter detta, tack — testa ett annat tillvägagångssätt."
+    "keepSearchingMessage": "Fortsätt söka efter detta, tack — testa ett annat tillvägagångssätt.",
+    "addSkill": "Färdigheter",
+    "removeSkill": "Ta bort färdighet",
+    "skillsMenuLabel": "Tillgängliga färdigheter",
+    "skillsLimit": "Upp till 3 färdigheter per meddelande.",
+    "skillPin": "Fäst till konversation",
+    "skillUseOnce": "Använd en gång",
+    "skillPinned": "fäst",
+    "skillOnce": "nästa meddelande",
+    "skillsPaused": "pausad",
+    "skillUnavailable": "otillgänglig",
+    "skillsAutomaticHint": "Relevanta färdigheter väljs automatiskt. Använd en gång för nästa meddelande eller fäst en färdighet för att använda den under hela konversationen.",
+    "skillsAgentDisabled": "Färdigheter är pausade medan en agent är ansluten. Dina fästa kommer att återupptas när du kopplar bort agenten.",
+    "skillPersonal": "personlig",
+    "skillsAgentToolsHint": "Endast organisationsfärdigheter som har aktiverats av en administratör för agentanvändning erbjuds här. Agenten kan ladda dem som verktyg med endast läsrättigheter. Andra fästen förblir pausade och personliga färdigheter är inte tillgängliga för agenter."
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -5521,7 +5535,8 @@
       "channelSets": "Varje teams regler för att skriva på plattformarna: vägledning, röster, standarder, vem som får använda uppsättningen och vem som får skicka.",
       "webSearch": "Hur långt en webbsökning kan gå: flerstegssökning, bedömningsmodell och dess gränser.",
       "contextBudget": "Hur mycket av en konversation som skickas till varje modell vid varje tur.",
-      "analytics": "Levererade rapporter: vad anlände, vem kan öppna varje mapp och vilka fält som kan visas."
+      "analytics": "Levererade rapporter: vad anlände, vem kan öppna varje mapp och vilka fält som kan visas.",
+      "skills": "Återanvändbara instruktioner som assistenten tillämpar vid behov i en konversation."
     },
     "openSettings": "Öppna inställningar",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Delegationer",
       "webSearch": "Webbsökning",
       "contextBudget": "Context budget",
-      "analytics": "Analys"
+      "analytics": "Analys",
+      "skills": "Färdigheter"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Äldre än denna mapps {months} månaders lagring; visas inte längre.",
       "unknown": "Rapporterat problem: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Färdigheter",
+    "description": "Återanvändbara instruktioner som assistenten tillämpar vid behov i en konversation. Kompatibel med Agent Skills SKILL.md-formatet som används av Claude och ChatGPT.",
+    "loading": "Laddar färdigheter…",
+    "loadError": "Kunde inte ladda färdigheter.",
+    "retry": "Försök igen",
+    "unavailableBanner": "Färdighetslagring är för tillfället otillgänglig — inbyggda standardvärden visas; sparade färdigheter och redigeringar är otillgängliga tills anslutningen är återställd.",
+    "conflictError": "Denna färdighet har ändrats av en annan administratör. Listan har laddats om — gör om din ändring.",
+    "alwaysWarning": "{count} färdigheter är satta till Alltid. Alla dessa läggs till i varje konversation — använd hellre Automatisk för ämnesspecifika färdigheter.",
+    "newSkill": "Ny färdighet",
+    "importSkill": "Importera SKILL.md",
+    "importTitle": "Klistra in en SKILL.md-fil",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Vad denna färdighet gör och när den ska användas.\n---\n\nInstruktioner…",
+    "importHint": "Den tolkade färdigheten öppnas i redigeraren för granskning — inget sparas förrän du sparar den.",
+    "importParse": "Tolka och granska",
+    "invalidId": "Färdighets-ID får endast innehålla små bokstäver, siffror och enkla bindestreck.",
+    "saveSuccess": "Färdigheten sparad.",
+    "saveError": "Kunde inte spara färdigheten.",
+    "deleteConfirm": "Ta bort denna färdighet? Konversationer slutar omedelbart att ta emot den.",
+    "restoreConfirm": "Ta bort anpassningen och återställ denna inbyggda färdighets standardvärde?",
+    "deleteSuccess": "Färdigheten borttagen.",
+    "restoreSuccess": "Inbyggd standard återställd.",
+    "deleteError": "Kunde inte ta bort färdigheten.",
+    "empty": "Inga färdigheter ännu. Skapa en, eller importera en SKILL.md.",
+    "builtinChip": "Inbyggd",
+    "customizedChip": "Anpassad",
+    "exportSkill": "Exportera som SKILL.md",
+    "edit": "Redigera",
+    "delete": "Ta bort",
+    "restoreDefault": "Återställ standard",
+    "createTitle": "Ny färdighet",
+    "editTitle": "Redigera {name}",
+    "idLabel": "ID",
+    "idHint": "Små bokstäver, siffror och bindestreck. Blir färdighetens SKILL.md-namn och kan inte ändras efter skapandet.",
+    "nameLabel": "Visningsnamn",
+    "descriptionLabel": "Beskrivning",
+    "descriptionHint": "Vad färdigheten gör OCH när den ska användas — detta styr urvalet, så ange specifika ämnen och formuleringar den ska reagera på.",
+    "activationLabel": "Aktivering",
+    "activation": {
+      "auto": "Automatisk",
+      "always": "Alltid",
+      "off": "Av"
+    },
+    "activationHint": {
+      "auto": "Väljs automatiskt när den aktuella uppgiften matchar beskrivningen. Användare kan också be om att använda den en gång eller fästa den till en konversation.",
+      "always": "Läggs till i varje konversation för alla som kan se färdigheten. Använd sparsamt — detta är permanent promptutrymme.",
+      "off": "Inaktiv: tillämpas aldrig och erbjuds inte användare, men sparas här för redigering."
+    },
+    "instructionsLabel": "Instruktioner",
+    "instructionsHint": "Markdown, upp till 16 KB. Infogas ordagrant när färdigheten är aktiv.",
+    "saving": "Sparar…",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "documents": {
+      "title": "Dokument",
+      "hint": "Referenser lagras med denna färdighet. Små dokument laddas direkt; större dokument indexeras för citerad sökning. Upp till 20 resurser, 10 MB vardera och totalt 20 MB. Tillgångar lagras endast för nedladdning.",
+      "saveFirst": "Spara en anpassning av denna inbyggda färdighet innan du lägger till dokument.",
+      "upload": "Lägg till referensdokument",
+      "remove": "Ta bort",
+      "stop": "Stoppa indexering",
+      "resume": "Indexera eller återuppta dokument",
+      "empty": "Inga dokument bifogade ännu.",
+      "requestFailed": "Dokumentförfrågan misslyckades. Ladda om och försök igen.",
+      "importZip": "Importera en färdighets-ZIP",
+      "zipTooLarge": "Färdighets-ZIP-filen måste vara 20 MB eller mindre.",
+      "importCount": "Resurser att bifoga efter sparning: {count}",
+      "skippedScripts": "Exekverbara skript har hoppats över",
+      "status": {
+        "pending": "Väntar på att indexeras",
+        "processing": "Indexerar",
+        "inline": "Klar (laddas direkt)",
+        "indexed": "Klar (sökbar)",
+        "failed": "Indexeringen misslyckades",
+        "asset": "Nedladdningsbar tillgång"
+      },
+      "confirmRemove": "Ta bort {filename} från denna färdighet? Den sparade originalfilen kommer att raderas och inte längre vara tillgänglig som källhänvisning.",
+      "reindexRequired": "Dessa dokument behöver omindexeras för nuvarande regional sök- och inbäddningskonfiguration. De kommer inte att kunna sökas förrän indexeringen är klar."
+    },
+    "applyToAgents": "Tillgänglig för agenter",
+    "applyToAgentsHint": "Avstängd som standard. När detta är aktiverat kan agenter ladda denna färdighet via verktyg med endast läsrättigheter, istället för att ersätta sina personainstruktioner. Färdighetsanrop har separata stegränser. Foundry-agenter måste redan ha funktionerna load_skill och search_skill_documents registrerade i sin definition."
+  },
+  "personalSkills": {
+    "title": "Personliga färdigheter",
+    "description": "Spara återanvändbara instruktioner för dina egna konversationer. Färdigheter sparas i denna webbläsare och skickas till modellen endast när du chattar. Relevanta färdigheter kan väljas automatiskt, användas en gång eller fästas. De kan inte ändra organisationspolicy eller ge verktygsåtkomst. Användning av färdigheter kräver att funktionen är aktiverad för denna driftsättning; agentkonversationer använder inte personliga färdigheter.",
+    "importFile": "Importera SKILL.md eller ZIP",
+    "review": "Granska hela instruktionen innan du sparar. Importerade instruktioner är användarpreferenser, inte betrodd organisationspolicy.",
+    "skipped": "Körbara skript hoppades över",
+    "importTooLarge": "Importen måste vara 20 MB eller mindre.",
+    "invalid": "Färdigheten kunde inte importeras.",
+    "duplicate": "Den personliga färdighets-id:t finns redan. Redigera befintlig färdighet eller välj ett annat id.",
+    "countLimit": "Du kan spara upp till 20 personliga färdigheter.",
+    "requestLimit": "Aktiverade personliga färdigheter överskrider gränsen på 160 KB för förfrågningar. Inaktivera några färdigheter eller förkorta deras instruktioner.",
+    "saved": "Personlig färdighet sparad i denna webbläsare.",
+    "instructionsHint": "Upp till 16 KB instruktioner, inklusive eventuella importerade textreferenser. Binära filer och kvarvarande dokumentindexering är endast tillgängligt för organisationsfärdigheter. Export använder standardnamnet SKILL.md utan prefixet user:.",
+    "enabled": "Aktiverad för mina konversationer",
+    "empty": "Skapa en färdighet för en återkommande uppgift, eller importera en SKILL.md för att granska och spara den här."
   }
 }

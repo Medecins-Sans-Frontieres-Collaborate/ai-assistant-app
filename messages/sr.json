@@ -976,7 +976,21 @@
     "alwaysWaitThisLong": "Uvek čekaj do {duration}",
     "keepSearching": "Nastavite sa pretragom",
     "keepSearchingHint": "Pretraga je zaustavljena pre nego što je pronašla ovo. Zamolite asistenta da pokuša drugačijim pristupom.",
-    "keepSearchingMessage": "Molim vas, nastavite sa pretragom za ovim — pokušajte drugačiji pristup."
+    "keepSearchingMessage": "Molim vas, nastavite sa pretragom za ovim — pokušajte drugačiji pristup.",
+    "addSkill": "Veštine",
+    "removeSkill": "Ukloni veštinu",
+    "skillsMenuLabel": "Dostupne veštine",
+    "skillsLimit": "Do 3 veštine po poruci.",
+    "skillPin": "Prikači na razgovor",
+    "skillUseOnce": "Upotrebi jednom",
+    "skillPinned": "prikačeno",
+    "skillOnce": "sledeća poruka",
+    "skillsPaused": "pauzirano",
+    "skillUnavailable": "nedostupno",
+    "skillsAutomaticHint": "Relevantne veštine se automatski biraju. Upotrebite jednu za sledeću poruku ili prikačite veštinu da biste je koristili tokom celog razgovora.",
+    "skillsAgentDisabled": "Veštine su pauzirane dok je agent povezan. Vaše prikačene veštine će se nastaviti kada odvojite agenta.",
+    "skillPersonal": "lični",
+    "skillsAgentToolsHint": "Ovde su dostupne samo organizacijske veštine koje je administrator omogućio za upotrebu agentima. Agent ih može učitati kao alate samo za čitanje. Ostali pinovi ostaju pauzirani, a lične veštine nisu dostupne agentima."
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -5505,7 +5519,8 @@
       "channelSets": "Pravila svakog tima za pisanje na platformama: smernice, glasovi, podrazumevane vrednosti, ko može koristiti set i ko može slati.",
       "webSearch": "Koliko daleko može ići web pretraga: višekorak pretraga, njen model procene i granice.",
       "contextBudget": "Koliko se istorije razgovora šalje svakom modelu u svakom krugu.",
-      "analytics": "Dostavljeni izveštaji: šta je stiglo, ko može da otvori svaki folder i koja polja mogu biti prikazana."
+      "analytics": "Dostavljeni izveštaji: šta je stiglo, ko može da otvori svaki folder i koja polja mogu biti prikazana.",
+      "skills": "Ponovo upotrebljivi blokovi instrukcija koje asistent primenjuje kada su potrebni u razgovoru."
     },
     "openSettings": "Otvori podešavanja",
     "area": {
@@ -5516,7 +5531,8 @@
       "delegations": "Delegacije",
       "webSearch": "Web pretraga",
       "contextBudget": "Budžet konteksta",
-      "analytics": "Analitika"
+      "analytics": "Analitika",
+      "skills": "Veštine"
     }
   },
   "limits": {
@@ -7547,5 +7563,102 @@
       "past-retention": "Starije od {months} meseci zadržavanja za ovaj folder; više nije prikazano.",
       "unknown": "Prijavljen problem: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Veštine",
+    "description": "Ponovo upotrebljivi blokovi instrukcija koje asistent primenjuje kada su potrebni u razgovoru. Kompatibilno sa Agent Skills SKILL.md formatom koji koriste Claude i ChatGPT.",
+    "loading": "Učitavanje veština…",
+    "loadError": "Nije moguće učitati veštine.",
+    "retry": "Pokušaj ponovo",
+    "unavailableBanner": "Skladište veština trenutno nije dostupno — prikazane su ugrađene podrazumevane; sačuvane veštine i izmene nisu dostupne dok se ne obnovi.",
+    "conflictError": "Ovu veštinu je promenio drugi administrator. Lista je ažurirana — ponovo primenite svoju izmenu.",
+    "alwaysWarning": "{count} veština je postavljeno na Uvek. Sve se dodaju svakom razgovoru — preferirajte Automatski za veštine koje se odnose na određene teme.",
+    "newSkill": "Nova veština",
+    "importSkill": "Uvezi SKILL.md",
+    "importTitle": "Nalepite SKILL.md datoteku",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Šta ova veština radi i kada se koristi.\n---\n\nInstrukcije…",
+    "importHint": "Parsirana veština se otvara u uređivaču za pregled — ništa nije sačuvano dok ne sačuvate.",
+    "importParse": "Parsiraj i pregledaj",
+    "invalidId": "ID veštine koristi mala slova, brojeve i jednu crticu.",
+    "saveSuccess": "Veština sačuvana.",
+    "saveError": "Nije moguće sačuvati veštinu.",
+    "deleteConfirm": "Obrisati ovu veštinu? Razgovori je odmah više neće primati.",
+    "restoreConfirm": "Ukloniti prilagođavanje i vratiti podrazumevanu vrednost ove ugrađene veštine?",
+    "deleteSuccess": "Veština obrisana.",
+    "restoreSuccess": "Ugrađena podrazumevana vrednost vraćena.",
+    "deleteError": "Nije moguće obrisati veštinu.",
+    "empty": "Još nema veština. Kreirajte jednu ili uvezite SKILL.md.",
+    "builtinChip": "Ugrađeno",
+    "customizedChip": "Prilagođeno",
+    "exportSkill": "Izvezi kao SKILL.md",
+    "edit": "Izmeni",
+    "delete": "Obriši",
+    "restoreDefault": "Vrati podrazumevano",
+    "createTitle": "Nova veština",
+    "editTitle": "Izmeni {name}",
+    "idLabel": "ID",
+    "idHint": "Mala slova, brojevi i crtice. Postaje naziv veštine u SKILL.md datoteci i ne može da se menja nakon kreiranja.",
+    "nameLabel": "Prikazano ime",
+    "descriptionLabel": "Opis",
+    "descriptionHint": "Šta veština radi I kada se koristi — ovo određuje izbor veštine, pa uključite konkretne teme i formulacije na koje treba da reaguje.",
+    "activationLabel": "Aktivacija",
+    "activation": {
+      "auto": "Automatski",
+      "always": "Uvek",
+      "off": "Isključeno"
+    },
+    "activationHint": {
+      "auto": "Bira se automatski kada trenutni zadatak odgovara opisu. Korisnici takođe mogu zatražiti upotrebu jednom ili prikačiti veštinu na razgovor.",
+      "always": "Dodaje se svakom razgovoru za svakoga ko može da vidi veštinu. Koristite štedljivo — ovo je trajni prostor za prompt.",
+      "off": "Neaktivno: ne primenjuje se i nije ponuđeno korisnicima, ali ostaje ovde za izmene."
+    },
+    "instructionsLabel": "Instrukcije",
+    "instructionsHint": "Markdown, do 16 KB. Ubacuje se doslovno kada je veština aktivna.",
+    "saving": "Čuvanje…",
+    "save": "Sačuvaj",
+    "cancel": "Otkaži",
+    "documents": {
+      "title": "Dokumenti",
+      "hint": "Reference se čuvaju uz ovu veštinu. Mali dokumenti se učitavaju direktno, veći se indeksiraju za pretragu sa citatima. Do 20 resursa, po 10 MB svaki i ukupno 20 MB. Sredstva su sačuvana samo za preuzimanje.",
+      "saveFirst": "Sačuvajte prilagođenu verziju ove ugrađene veštine pre dodavanja dokumenata.",
+      "upload": "Dodajte referentne dokumente",
+      "remove": "Ukloni",
+      "stop": "Prekini indeksiranje",
+      "resume": "Indeksiraj ili nastavi dokumente",
+      "empty": "Još nema priloženih dokumenata.",
+      "requestFailed": "Zahtev za dokument nije uspeo. Osvežite i pokušajte ponovo.",
+      "importZip": "Uvezi ZIP veštine",
+      "zipTooLarge": "ZIP veštine mora biti 20 MB ili manji.",
+      "importCount": "Resursi za povezivanje nakon čuvanja: {count}",
+      "skippedScripts": "Izvršni skriptovi su preskočeni",
+      "status": {
+        "pending": "Čeka na indeksiranje",
+        "processing": "Indeksiranje",
+        "inline": "Spremno (učitano direktno)",
+        "indexed": "Spremno (pretraživo)",
+        "failed": "Indeksiranje nije uspelo",
+        "asset": "Resurs za preuzimanje"
+      },
+      "confirmRemove": "Ukloniti {filename} iz ove veštine? Sačuvani original će biti izbrisan i više neće biti dostupan kao izvor za citiranje.",
+      "reindexRequired": "Ovi dokumenti zahtevaju ponovno indeksiranje zbog trenutne regionalne konfiguracije pretrage i ugrađivanja. Neće biti pretraživani dok indeksiranje ne bude završeno."
+    },
+    "applyToAgents": "Dostupno agentima",
+    "applyToAgentsHint": "Podrazumevano isključeno. Kada je omogućeno, agenti mogu učitati ovu veštinu putem alata samo za čitanje, umesto da zamene svoje instrukcije o ličnosti. Pozivi veštine imaju nezavisna ograničenja koraka. Foundry agenti moraju imati registrovane funkcije load_skill i search_skill_documents u svojoj definiciji."
+  },
+  "personalSkills": {
+    "title": "Lične veštine",
+    "description": "Sačuvajte instrukcije koje se mogu ponovo koristiti za vaše sopstvene razgovore. Veštine ostaju u ovom pregledaču i šalju se modelu samo kada razgovarate. Relevantne veštine mogu biti automatski izabrane, korišćene jednom ili zakačene. One ne mogu menjati organizacionu politiku niti omogućiti pristup alatima. Korišćenje veština zahteva da veštine budu omogućene za ovu instalaciju; agentovi razgovori ne koriste lične veštine.",
+    "importFile": "Importujte SKILL.md ili ZIP",
+    "review": "Pregledajte kompletne instrukcije pre čuvanja. Importovane instrukcije su korisničke preferencije, a ne pouzdana politika organizacije.",
+    "skipped": "Izvršni skriptovi su preskočeni",
+    "importTooLarge": "Import mora biti 20 MB ili manji.",
+    "invalid": "Veština nije mogla biti importovana.",
+    "duplicate": "ID te lične veštine već postoji. Izmenite postojeću veštinu ili izaberite drugi ID.",
+    "countLimit": "Možete sačuvati do 20 ličnih veština.",
+    "requestLimit": "Omogućene lične veštine prelaze limit zahteva od 160 KB. Onemogućite neke veštine ili skratite njihove instrukcije.",
+    "saved": "Lična veština je sačuvana u ovom pregledaču.",
+    "instructionsHint": "Do 16 KB instrukcija, uključujući bilo koje importovane tekstualne reference. Binarni fajlovi i trajno indeksiranje dokumenata dostupni su samo za organizacione veštine. Export koristi standardni SKILL.md naziv bez user: prefiksa.",
+    "enabled": "Omogućeno za moje razgovore",
+    "empty": "Kreirajte veštinu za ponavljajući zadatak ili importujte SKILL.md da je pregledate i sačuvate ovde."
   }
 }

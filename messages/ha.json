@@ -976,7 +976,21 @@
     "alwaysWaitThisLong": "Ko da yaushe a jira har zuwa {duration}",
     "keepSearching": "Ci gaba da bincike",
     "keepSearchingHint": "Binciken ya tsaya kafin a samo wannan. Tambayi mataimaki ya gwada wata hanya daban.",
-    "keepSearchingMessage": "Don Allah, ci gaba da bincike — gwada wata hanya daban."
+    "keepSearchingMessage": "Don Allah, ci gaba da bincike — gwada wata hanya daban.",
+    "addSkill": "Kwarewa",
+    "removeSkill": "Cire kwarewa",
+    "skillsMenuLabel": "Kwarewa da ake da su",
+    "skillsLimit": "Har kwarewa 3 za a iya amfani da su a kowace saƙo.",
+    "skillPin": "Manne zuwa tattaunawa",
+    "skillUseOnce": "Yi amfani sau ɗaya",
+    "skillPinned": "an manne",
+    "skillOnce": "saƙon gaba",
+    "skillsPaused": "an dakata",
+    "skillUnavailable": "ba a samuwa",
+    "skillsAutomaticHint": "Ana zaɓar ƙwarewa da suka dace ta atomatik. Yi amfani sau ɗaya don saƙon gaba, ko manne wata ƙwarewa don amfani da ita a duk wannan tattaunawar.",
+    "skillsAgentDisabled": "An dakatar da ƙwarewa yayin da aka haɗa wakili. Mannewan ka za su ci gaba idan ka cire wakilin.",
+    "skillPersonal": "na kaina",
+    "skillsAgentToolsHint": "Kawai ƙwarewar ƙungiya da aka ba damar amfani da su ta hanyar mai gudanarwa ga wakilai ne ake bayarwa anan. Wakilin zai iya ɗorawa su a matsayin kayan aiki na karanta kawai. Wasu da aka saka (pins) za su tsaya a dakatar, kuma wakilai ba su da damar amfani da ƙwarewar kashin kansu."
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -5505,7 +5519,8 @@
       "channelSets": "Dokokin kowace ƙungiya don rubutu a manhajoji: jagora, salo, tsoffin saituna, wa zai iya amfani da wannan saiti da wa zai iya tura saƙonni.",
       "webSearch": "Inda binciken yanar gizo zai iya kaiwa: bincike mai matakai da dama, tsarin tantancewa, da iyakokinsa.",
       "contextBudget": "Yawan tarihin hira da kowanne tsarin za a tura a kowane zagaye.",
-      "analytics": "Rahotannin da aka isar: abin da ya iso, wanda zai iya bude kowane fayil, da wadanne filaye za a iya nuna su."
+      "analytics": "Rahotannin da aka isar: abin da ya iso, wanda zai iya bude kowane fayil, da wadanne filaye za a iya nuna su.",
+      "skills": "Block na umarni da ake iya amfani da su wanda mai taimako ke amfani da su idan tattaunawa ta bukata."
     },
     "openSettings": "Buɗe saituna",
     "area": {
@@ -5516,7 +5531,8 @@
       "delegations": "Wakilai",
       "webSearch": "Binciken yanar gizo",
       "contextBudget": "Kasafin mahallin hirar",
-      "analytics": "Nazari"
+      "analytics": "Nazari",
+      "skills": "Kwarewa"
     }
   },
   "limits": {
@@ -7547,5 +7563,102 @@
       "past-retention": "Ya wuce watanni {months} na adana bayanai a cikin wannan babban fayil; ba a ƙara nunawa ba.",
       "unknown": "An bayar da rahoton matsala: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Kwarewa",
+    "description": "Block na umarni da ake iya amfani da su wanda mai taimako ke amfani da su idan tattaunawa ta bukata. Ya dace da tsarin Agent Skills SKILL.md da Claude da ChatGPT ke amfani da shi.",
+    "loading": "Ana loda kwarewa…",
+    "loadError": "Ba a samu loda kwarewa ba.",
+    "retry": "Sake kokari",
+    "unavailableBanner": "Ba a iya samun wurin ajiyar kwarewa yanzu — na asali kawai ake nuna; kwarewa da aka adana da gyare-gyare ba za a samu ba sai an gyara.",
+    "conflictError": "Wani admin ya canza wannan kwarewar. An sake loda jerin — a sake sa gyare-gare.",
+    "alwaysWarning": "{count} kwarewa an sa su Always. Duk tattaunawa za ta samu kowannensu — zaɓi Automatic don kwarewar da ta shafi sanyi ko wani takamaiman abu.",
+    "newSkill": "Sabuwar kwarewa",
+    "importSkill": "Shigo da SKILL.md",
+    "importTitle": "Manna fayil ɗin SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Abin da wannan kwarewa ke yi da lokacin da za a amfani da ita.\n---\n\nUmarni…",
+    "importHint": "Kwarewar da aka fassara za ta buɗe a editan don duba — ba a adana komai har sai ka adana.",
+    "importParse": "Fassara da duba",
+    "invalidId": "Id na kwarewa yana amfani da ƙananan haruffa, lambobi, da hyphen ɗaya.",
+    "saveSuccess": "An adana kwarewa.",
+    "saveError": "Ba a samu adana kwarewar ba.",
+    "deleteConfirm": "A cire wannan kwarewar? Tattaunawa za su daina karɓar ta nan take.",
+    "restoreConfirm": "A cire gyare-gyare a dawo da kwarewar na asali?",
+    "deleteSuccess": "An cire kwarewa.",
+    "restoreSuccess": "An dawo da na asali.",
+    "deleteError": "Ba a samu cire kwarewar ba.",
+    "empty": "Babu kwarewa tukuna. Ƙirƙiri guda, ko shigo da SKILL.md.",
+    "builtinChip": "Na asali",
+    "customizedChip": "An yi gyare-gyare",
+    "exportSkill": "Fitar da SKILL.md",
+    "edit": "Gyara",
+    "delete": "Cire",
+    "restoreDefault": "Dawo da asali",
+    "createTitle": "Sabuwar kwarewa",
+    "editTitle": "Gyara {name}",
+    "idLabel": "Id",
+    "idHint": "Ƙananan haruffa, lambobi, da hyphen. Za su zama sunan SKILL.md na kwarewar kuma ba za a iya canza bayan an ƙirƙira ba.",
+    "nameLabel": "Sunan da ake nunawa",
+    "descriptionLabel": "Bayanin",
+    "descriptionHint": "Abin da kwarewa ke yi DA lokacin da za a amfani da ita — wannan ne ke zaɓar kwarewa, don haka saka takamaiman batutuwa da kalmomin da ta dace ta amsa su.",
+    "activationLabel": "Kunshin aiki",
+    "activation": {
+      "auto": "Ta atomatik",
+      "always": "Kullum",
+      "off": "A kashe"
+    },
+    "activationHint": {
+      "auto": "Ana zaɓar ta atomatik idan aikin yanzu ya dace da bayanin. Masu amfani kuma za su iya buƙatarta sau ɗaya ko manne ta cikin tattaunawa.",
+      "always": "Za a ƙara ta a kowace tattaunawa ga duk mai ganin kwarewar. A yi amfani da ita da hankali — wannan na dindindin ne.",
+      "off": "Bata aiki: ba za a yi amfani da ita ba kuma ba za a nuna wa masu amfani ba, amma za ta kasance don gyare-gyare."
+    },
+    "instructionsLabel": "Umarni",
+    "instructionsHint": "Markdown, har zuwa 16 KB. Za a saka shi kai tsaye idan an kunna fasalin.",
+    "saving": "Ana adanawa…",
+    "save": "Ajiye",
+    "cancel": "Soke",
+    "documents": {
+      "title": "Takardu",
+      "hint": "Ana adana madogaran tare da wannan fasahar. Ƙananan takardu suna loda kai tsaye; manyan takardu ana yin index don bincike da citata. Har zuwa madogara 20, 10 MB kowanne, da jimillar 20 MB. Kayan sun adana don sauke kawai.",
+      "saveFirst": "Ajiye gyara na wannan fasahar kafin ƙara takardu.",
+      "upload": "Ƙara takardun madogara",
+      "remove": "Cire",
+      "stop": "Dakatar da yin index",
+      "resume": "Yin index ko ci gaba da takardu",
+      "empty": "Ba a haɗa takardu ba tukuna.",
+      "requestFailed": "Buƙatar takardu ta gaza. Sake loda sannan a sake gwadawa.",
+      "importZip": "Shigo da ZIP na fasaha",
+      "zipTooLarge": "ZIP na fasaha bai wuce 20 MB ba.",
+      "importCount": "Madogara da za a haɗa bayan ajiye: {count}",
+      "skippedScripts": "An watsar da script masu aiki",
+      "status": {
+        "pending": "Ana jiran a yi index",
+        "processing": "Ana yin index",
+        "inline": "A shirye (an loda kai tsaye)",
+        "indexed": "A shirye (ana iya bincika)",
+        "failed": "Yin index ya gaza",
+        "asset": "Kayan da za a sauke"
+      },
+      "confirmRemove": "A cire {filename} daga wannan fasaha? Za a goge asalin da aka adana kuma ba za a iya amfani da shi a matsayin tushen shaida ba.",
+      "reindexRequired": "Wadannan takardu suna buƙatar a sake yin index don ƙirar Bincike da embedding na yankin yanzu. Ba za a iya bincika su ba har sai an kammala aikin indexing."
+    },
+    "applyToAgents": "Akwai ga wakilai",
+    "applyToAgentsHint": "A kashe ta tsohuwa. Idan an kunna, wakilai za su iya load wannan ƙwarewa ta hanyar kayan aiki na karanta kawai maimakon maye gurbin umarnin personansu. Kiraye-kiraye na ƙwarewar suna da iyakokin matakai (steps) masu zaman kansu. Dole ne Foundry agents su riga sun yi rajista da fasalulluka load_skill da search_skill_documents a cikin bayaninsu."
+  },
+  "personalSkills": {
+    "title": "Kwarewar kaina",
+    "description": "Ajiye umarni masu amfani don tattaunawarka. Kwarewar kaina suna nan a cikin wannan burauzar, kuma za a aika da su zuwa samfurin ne lokacin da ka fara hira. Za a iya zabar kwarewar da suka dace ta atomatik, amfani da su sau daya, ko manne su. Ba za su iya canza tsarin kungiyar ko su ba damar amfani da kayan aiki ba. Amfani da kwarewar kaina yana bukatar a kunna kwarewa don wannan aikawa; tattaunawar wakilai ba sa amfani da kwarewar kaina.",
+    "importFile": "Shigo da SKILL.md ko ZIP",
+    "review": "Duba cikakken umarni kafin ajiye. Umarnin da aka shigo da su suna matsayin zabin mai amfani, ba su da alaka da tsarin kungiya.",
+    "skipped": "An watsar da rubutattun skrip masu aiwatarwa",
+    "importTooLarge": "Shigo da bayanan bai wuce 20 MB ba.",
+    "invalid": "Ba a samu daman shigo da kwarewar ba.",
+    "duplicate": "Wannan lambar kwarewar kaina ta riga ta wanzu. Gyara kwarewar da take akwai ko zabi wata lamba daban.",
+    "countLimit": "Za ka iya ajiye har kwarewar kaina 20.",
+    "requestLimit": "Kwarewar kaina da aka kunna sun wuce iyakar bukatar 160 KB. Kashe wasu kwarewar ko rage umarninsu.",
+    "saved": "An ajiye kwarewar kaina a wannan burauzar.",
+    "instructionsHint": "Har zuwa 16 KB na umarni, da sun haɗa da duk wani rubutun da aka shigo da shi. Fayilolin binary da dogayen index na takardu sai ga kwarewar kungiya. Fitarwa yana amfani da sunan SKILL.md ba tare da user: a gaba ba.",
+    "enabled": "An kunna don tattaunawata",
+    "empty": "Kirkiri kwarewa don al'amuran da ake maimaitawa, ko shigo da SKILL.md don dubawa da ajiye ta a nan."
   }
 }

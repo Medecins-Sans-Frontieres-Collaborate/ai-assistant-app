@@ -976,7 +976,21 @@
     "alwaysWaitThisLong": "Yembeti sôngo na {duration} ninga",
     "keepSearching": "Kɔlo yeke luka",
     "keepSearchingHint": "Luka afungbi na asali kodro ti goedo. Sûkü ti zou ti ayeke binga kodro sô ayeke feta.",
-    "keepSearchingMessage": "Kɔlɔ yeke luka mbîrî azo — gira nzoni ti ayeke kûê ka lâ."
+    "keepSearchingMessage": "Kɔlɔ yeke luka mbîrî azo — gira nzoni ti ayeke kûê ka lâ.",
+    "addSkill": "Bakara",
+    "removeSkill": "Gu gwa bakara",
+    "skillsMenuLabel": "Bakara ti yeke",
+    "skillsLimit": "Bakara 3 mo soro na kodé na yeke na mesaje",
+    "skillPin": "Saka na mbênî ti sànzi",
+    "skillUseOnce": "Bê na wa",
+    "skillPinned": "gbêndê",
+    "skillOnce": "gonda ti na",
+    "skillsPaused": "gbêda",
+    "skillUnavailable": "bê ti la",
+    "skillsAutomaticHint": "Mbênî ti hinga ti na ti kodro. Bê na wa na gonda ti na, wa saka na mbênî da be ti sànzi mbênî mo seka.",
+    "skillsAgentDisabled": "Mbênî ti gbêda wa agent ayeke ti sànzi. Saka na mbênî mo yeke kodro wa lo agent bûko.",
+    "skillPersonal": "mbeni tî mbi",
+    "skillsAgentToolsHint": "Fini mo yeke na admin ti organisation mo eseni na agent ti lo sangasanga. Agent azo akan mo na tool ti škol ti a yeke na gbegbé. Biyeke pins ti mo yeke ti mo eseni ana na pa ti bangi na agents na ngbangui, na skills ti moti yeke na agents na pa."
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -5505,7 +5519,8 @@
       "channelSets": "Lô tî règlement ti équipe ûsû platform ti balê: mo na bâ tî kôzo, mo tî sâra, so ti wâ lè ti mo na sala ti balê na mo na hînga e.",
       "webSearch": "Limâ so luka tî web alê: luka maboko, model tî ködrö na mabôndo tî bängö.",
       "contextBudget": "Limê tî karê gbanî tî kônvu ti model da dö tî turn kölü.",
-      "analytics": "Rapô so asara: mbîrî asarê, azo anza tî kufa na foldere, na châ tî gbâ chô so ayeke hîla."
+      "analytics": "Rapô so asara: mbîrî asarê, azo anza tî kufa na foldere, na châ tî gbâ chô so ayeke hîla.",
+      "skills": "Ti barara na yeke soro, assistant a yeke gu na mo na di ala na soro."
     },
     "openSettings": "Fungbi tî settings",
     "area": {
@@ -5516,7 +5531,8 @@
       "delegations": "Béni tî yângâ",
       "webSearch": "Luka tî web",
       "contextBudget": "Budget tî kônvu",
-      "analytics": "Ánalîtiki"
+      "analytics": "Ánalîtiki",
+      "skills": "Bakara"
     }
   },
   "limits": {
@@ -7547,5 +7563,102 @@
       "past-retention": "Mbênî pâpï tî {months} ngonda tî rétention tî dossier a; o ape ti yèkè.",
       "unknown": "Problem sô singbî: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Bakara",
+    "description": "Ti barara na yeke soro, assistant a yeke gu na mo na di ala na soro. E yeke galê na Agent Skills SKILL.md ti Claude na ChatGPT.",
+    "loading": "Bakara a yeke gu...",
+    "loadError": "Bakara a yeke gu na nga.",
+    "retry": "Gu ti dibo",
+    "unavailableBanner": "Bakara na gu mo yeke ti tî na nga — ti yeke na mo na kodi na ti yeké; bakara na soro na yeke ayeke kodé na gu na tî na eke.",
+    "conflictError": "Bakara a yeke na gbabâ na admin uko. List a yeke gu na nga — gu la ti a kodé na gu.",
+    "alwaysWarning": "{count} bakara yeke ti Always. Bakara kodé na mo yeke na soro na soro — sôkô ti Automatic na bakara ti soro na topik na soro.",
+    "newSkill": "Bakara na sôkô",
+    "importSkill": "Gu ti SKILL.md",
+    "importTitle": "Gu ti dosié SKILL.md",
+    "importPlaceholder": "---\nnam: my-skill\ngbabâ: Bakara ti a yeke na mo na di na mo na soro.\n---\n\nInstruksi...",
+    "importHint": "Bakara na gu ti editor, mo soro la ti isiba — mo soro la ti kodé na mo ti kodé.",
+    "importParse": "Gu ti sôkô na gbabâ",
+    "invalidId": "Id ti bakara yeke na mo na lettr ti kodé, nombor na tirè na finga.",
+    "saveSuccess": "Bakara a kodé.",
+    "saveError": "Bakara a kodé na nga.",
+    "deleteConfirm": "Gu bakara a? Mesaje na mo na soro na nga la ti yeke.",
+    "restoreConfirm": "Gu la ti gbabâ na mo na mo na sôkô na gu ti bakara na kodé ti yeke?",
+    "deleteSuccess": "Bakara a gu.",
+    "restoreSuccess": "Kodé ti yeke a gu.",
+    "deleteError": "Bakara a gu na nga.",
+    "empty": "Bakara titene na nga. Sôkô na mo, sô gbabâ ti SKILL.md.",
+    "builtinChip": "Kodé ti yeke",
+    "customizedChip": "Kodé ti sôkô",
+    "exportSkill": "Gu ti SKILL.md",
+    "edit": "Kodé",
+    "delete": "Gu",
+    "restoreDefault": "Gu kodé ti yeke",
+    "createTitle": "Bakara na sôkô",
+    "editTitle": "Kodé {name}",
+    "idLabel": "Id",
+    "idHint": "Lettr ti kodé, nombor na tirè. Mo yeke ti SKILL.md na bakara na gu na nga ti kodé.",
+    "nameLabel": "Nam ti mesaje",
+    "descriptionLabel": "Gbabâ",
+    "descriptionHint": "Bakara na mo na di na mo na soro — e sô ti na mo na gu la bakara, sô kêtê ti topik na tambi na mo na soro na mo.",
+    "activationLabel": "Kêtê gbegbe",
+    "activation": {
+      "auto": "Automatic",
+      "always": "Always",
+      "off": "Ayeke"
+    },
+    "activationHint": {
+      "auto": "Na gbêndê kodro wa na da ti sala ayeke kodro ti mô. Ôko yeke bê na wa, wa saka na mbênî da be ti sànzi.",
+      "always": "A yeke na mesaje kodé na mo yeke bakara na. Sô ti na mo ti kodé — e yeke ti gbabâ na kodé.",
+      "off": "Ayeke: a gu na nga na mo na nga na gu ti sôkô, sô la ti gbabâ na kodé."
+    },
+    "instructionsLabel": "Instruksi",
+    "instructionsHint": "Markdown, ti na 16 KB so ape. Lo na a we ti sô ndö kwa na akombere ti fee.",
+    "saving": "Kôzo na…",
+    "save": "Kôzo",
+    "cancel": "Gbé",
+    "documents": {
+      "title": "Ndokume",
+      "hint": "Referense ti yeke na ndokume ya mbeti ti keti ti yeke ti abakara. Ndokume ti lokoloko te yeke ti gbâ; ndokume ti sôngo yenyenye ti sôndô ti yeke ti kangö ti gbîla ti tâh. Kötî 20 ti ndokume, 10 MB ti ndokume mo na 20 MB ti ndokume bângö-gbângö. Ndokume ti assets ti yeke ti kuku na download sô tî tî.",
+      "saveFirst": "Gbâ nze ti ndukume olo so ti yeke tî keti, sö ti yeke ti kambia ndokume.",
+      "upload": "Zâ ndokume ti referense",
+      "remove": "Gbi",
+      "stop": "Sô ti kangö index",
+      "resume": "Kangö index na yeke ndokume",
+      "empty": "Ndokume oko na yeke pâ.",
+      "requestFailed": "Ndokume ti ndingbi mbi te gbâ. Kuli ti kangbi na kôli.",
+      "importZip": "Import skill ZIP",
+      "zipTooLarge": "Skill ZIP ti yeke na 20 MB ou mbâ gbâ.",
+      "importCount": "Ndokume ti yeke na kangbi so gbâ: {count}",
+      "skippedScripts": "Ndokume ti script ti yeke ti baka",
+      "status": {
+        "pending": "Yeke na la index",
+        "processing": "Bayi ti index",
+        "inline": "Gbâ (yeke na la direkt)",
+        "indexed": "Gbâ (yeke ti yî ti tongana)",
+        "failed": "Index ti te gbâ",
+        "asset": "Ndokume ti yeke ti download"
+      },
+      "confirmRemove": "Gbâ {filename} ti skill êzo? Fa na ti so na bala sô ti gbinî ti otara ti te na, ti yeke tî kundû, ti bê tî yeke tî balê ti ndika ti citation.",
+      "reindexRequired": "Dokument ti mbi na reindex mpo na yeke na ndari Search ti region na koko embeding. A kue mbi na mbota biani na lo ti indexing a kete."
+    },
+    "applyToAgents": "Mo yeke na agents",
+    "applyToAgentsHint": "Mo yeke na voko na pa. Soki mo eseni, agents ayeke a akan skill na tool ti škol ti a yeke na gbegbé pa na ngbangui persona instructions ti mo. Skill ti gbegbé ayeke na step limits ti mo ti moti. Foundry agents ayeke a yeke na load_skill na search_skill_documents functions na da na mbeti ti mo."
+  },
+  "personalSkills": {
+    "title": "Mbeni tî mbi",
+    "description": "Küê ti küzô tî lingbi nî na bîrini anï ti mo. Mbeni ti sô ti yê na browser na mo, na yê kodro na model lôko sè oko mo yâ na yângä. Mbeni ti perteni ti yê kpöngö bîanî, yâ ködörö oko, na yâ kpêlê. Alê yê kundü tî politiki tî organization abâ tî bâa na accès tî tool. Tî yê za mbeni, mbi a yê ti fallait yê bi na déploiment nî; dialogue tî agent abâ ti mbi tî yê.",
+    "importFile": "Import-SKILL.md wala ZIP",
+    "review": "Bâ na instructions kâ tî yângâ kîri wa mbi kodro. Instructions tî yê impôrté, zia préférences tî utilisateur, abâ tî confiance politique tî organization.",
+    "skipped": "Scripts tî executé a sô yê bîanî",
+    "importTooLarge": "Fichî tî import so yê 20 MB wala mbi.",
+    "invalid": "Mbeni ayeke importé.",
+    "duplicate": "ID tî mbi nî a bini. Sêgnî mbi sô yê exister wala yê ti fä undö i.",
+    "countLimit": "A yeke ndö 20 mbi sô yê ti kpê.",
+    "requestLimit": "Mbeni ti mbi sô yê bi a dépassé limite tî demande 160 KB. Disable mbi na wüngö ti instructions ti mbi na.",
+    "saved": "Mbeni ti mbi a yê ti kpê na browser nî.",
+    "instructionsHint": "Instructions kokü 16 KB, yimbi wala texte importé. Fichî binêr na document sô yê ti indexation persistante a yê ti mbi tî organization. Export yê ti SKILL.md standard abâ préfixe utilisateur.",
+    "enabled": "Ayeke ti dialogue ti mbi",
+    "empty": "Küê mbi tî tâche sô yê ti végî na sôko, wala import SKILL.md tî bâ na yî tî yê ti kpê na nga nzönî."
   }
 }

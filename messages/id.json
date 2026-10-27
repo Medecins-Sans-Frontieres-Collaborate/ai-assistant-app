@@ -885,7 +885,21 @@
     "alwaysWaitThisLong": "Selalu tunggu hingga {duration}",
     "keepSearching": "Lanjutkan pencarian",
     "keepSearchingHint": "Pencarian berhenti sebelum menemukan ini. Minta asisten mencoba pendekatan lain.",
-    "keepSearchingMessage": "Tolong lanjutkan pencarian ini — coba pendekatan berbeda."
+    "keepSearchingMessage": "Tolong lanjutkan pencarian ini — coba pendekatan berbeda.",
+    "addSkill": "Keterampilan",
+    "removeSkill": "Hapus keterampilan",
+    "skillsMenuLabel": "Keterampilan yang tersedia",
+    "skillsLimit": "Maksimal 3 keterampilan per pesan.",
+    "skillPin": "Sematkan ke percakapan",
+    "skillUseOnce": "Gunakan sekali",
+    "skillPinned": "disematkan",
+    "skillOnce": "pesan berikutnya",
+    "skillsPaused": "ditangguhkan",
+    "skillUnavailable": "tidak tersedia",
+    "skillsAutomaticHint": "Skill yang relevan dipilih secara otomatis. Gunakan sekali untuk pesan berikutnya, atau sematkan skill untuk digunakan sepanjang percakapan ini.",
+    "skillsAgentDisabled": "Skill ditangguhkan ketika agen terpasang. Pin Anda akan aktif kembali saat Anda melepaskan agen.",
+    "skillPersonal": "pribadi",
+    "skillsAgentToolsHint": "Hanya keterampilan organisasi yang diaktifkan oleh admin untuk digunakan agen yang tersedia di sini. Agen dapat memuatnya sebagai alat baca saja. Pin lainnya tetap dijeda, dan keterampilan pribadi tidak tersedia untuk agen."
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -5521,7 +5535,8 @@
       "channelSets": "Aturan setiap tim saat menulis di platform: panduan, suara, setelan default, siapa yang dapat menggunakan set dan siapa yang dapat mengirim.",
       "webSearch": "Cakupan pencarian web: pencarian bertahap, model penilai dan batasannya.",
       "contextBudget": "Jumlah percakapan yang dikirim ke setiap model di setiap giliran.",
-      "analytics": "Laporan yang dikirim: apa saja yang diterima, siapa yang dapat membuka setiap folder, dan bidang mana yang dapat ditampilkan."
+      "analytics": "Laporan yang dikirim: apa saja yang diterima, siapa yang dapat membuka setiap folder, dan bidang mana yang dapat ditampilkan.",
+      "skills": "Blok instruksi yang dapat digunakan kembali, diterapkan oleh asisten saat percakapan membutuhkannya."
     },
     "openSettings": "Buka pengaturan",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Delegasi",
       "webSearch": "Pencarian web",
       "contextBudget": "Anggaran konteks",
-      "analytics": "Analitik"
+      "analytics": "Analitik",
+      "skills": "Keterampilan"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Lebih lama dari {months} bulan masa retensi folder ini; tidak lagi ditampilkan.",
       "unknown": "Masalah dilaporkan: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Keterampilan",
+    "description": "Blok instruksi yang dapat digunakan kembali, diterapkan oleh asisten saat percakapan membutuhkannya. Kompatibel dengan format Agent Skills SKILL.md yang digunakan oleh Claude dan ChatGPT.",
+    "loading": "Memuat keterampilan…",
+    "loadError": "Gagal memuat keterampilan.",
+    "retry": "Coba lagi",
+    "unavailableBanner": "Penyimpanan keterampilan saat ini tidak dapat diakses — bawaan yang ditampilkan; keterampilan tersimpan dan perubahan tidak tersedia sampai pulih.",
+    "conflictError": "Keterampilan ini diubah oleh admin lain. Daftar telah dimuat ulang — lakukan ulang perubahan Anda.",
+    "alwaysWarning": "{count} keterampilan disetel ke Selalu. Semua keterampilan tersebut akan ditambahkan ke setiap percakapan — gunakan Otomatis untuk keterampilan dengan topik spesifik.",
+    "newSkill": "Keterampilan baru",
+    "importSkill": "Impor SKILL.md",
+    "importTitle": "Tempel file SKILL.md",
+    "importPlaceholder": "---\nnama: my-skill\ndeskripsi: Apa yang dilakukan keterampilan ini dan kapan digunakan.\n---\n\nInstruksi…",
+    "importHint": "Keterampilan yang telah diurai akan terbuka di editor untuk ditinjau — tidak akan disimpan sampai Anda menyimpannya.",
+    "importParse": "Parsing dan tinjau",
+    "invalidId": "ID keterampilan menggunakan huruf kecil, angka, dan tanda hubung tunggal.",
+    "saveSuccess": "Keterampilan berhasil disimpan.",
+    "saveError": "Gagal menyimpan keterampilan.",
+    "deleteConfirm": "Hapus keterampilan ini? Percakapan akan segera berhenti menerimanya.",
+    "restoreConfirm": "Hapus kustomisasi dan pulihkan pengaturan default keterampilan bawaan ini?",
+    "deleteSuccess": "Keterampilan berhasil dihapus.",
+    "restoreSuccess": "Pengaturan bawaan dipulihkan.",
+    "deleteError": "Gagal menghapus keterampilan.",
+    "empty": "Belum ada keterampilan. Buat baru, atau impor SKILL.md.",
+    "builtinChip": "Bawaan",
+    "customizedChip": "Kustom",
+    "exportSkill": "Ekspor sebagai SKILL.md",
+    "edit": "Edit",
+    "delete": "Hapus",
+    "restoreDefault": "Pulihkan default",
+    "createTitle": "Keterampilan baru",
+    "editTitle": "Edit {name}",
+    "idLabel": "Id",
+    "idHint": "Huruf kecil, angka, dan tanda hubung. Akan menjadi nama SKILL.md untuk keterampilan dan tidak bisa diubah setelah dibuat.",
+    "nameLabel": "Nama tampilan",
+    "descriptionLabel": "Deskripsi",
+    "descriptionHint": "Apa yang dilakukan keterampilan DAN kapan digunakan — ini yang menentukan pemilihan keterampilan, jadi cantumkan topik dan frasa spesifik yang harus dijawab.",
+    "activationLabel": "Aktivasi",
+    "activation": {
+      "auto": "Otomatis",
+      "always": "Selalu",
+      "off": "Nonaktif"
+    },
+    "activationHint": {
+      "auto": "Dipilih secara otomatis ketika tugas saat ini sesuai dengan deskripsi. Pengguna juga dapat memintanya sekali atau menyematkannya ke dalam percakapan.",
+      "always": "Ditambahkan ke setiap percakapan untuk semua yang dapat melihat keterampilan. Gunakan dengan hati-hati — ini ruang prompt permanen.",
+      "off": "Nonaktif: tidak pernah diterapkan dan tidak ditawarkan ke pengguna, tetapi tetap disimpan di sini untuk pengeditan."
+    },
+    "instructionsLabel": "Instruksi",
+    "instructionsHint": "Markdown, hingga 16 KB. Disisipkan apa adanya saat skill aktif.",
+    "saving": "Menyimpan…",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "documents": {
+      "title": "Dokumen",
+      "hint": "Referensi disimpan dengan skill ini. Dokumen kecil dimuat langsung; dokumen besar diindeks untuk pencarian dengan kutipan. Maksimal 20 sumber daya, 10 MB per dokumen, dan 20 MB total. Aset hanya disimpan untuk diunduh.",
+      "saveFirst": "Simpan penyesuaian skill bawaan ini sebelum menambahkan dokumen.",
+      "upload": "Tambahkan dokumen referensi",
+      "remove": "Hapus",
+      "stop": "Hentikan pengindeksan",
+      "resume": "Indeks atau lanjutkan dokumen",
+      "empty": "Belum ada dokumen yang terlampir.",
+      "requestFailed": "Permintaan dokumen gagal. Muat ulang dan coba lagi.",
+      "importZip": "Impor skill ZIP",
+      "zipTooLarge": "Skill ZIP harus berukuran 20 MB atau kurang.",
+      "importCount": "Sumber daya yang akan dilampirkan setelah menyimpan: {count}",
+      "skippedScripts": "Skrip yang dapat dieksekusi dilewati",
+      "status": {
+        "pending": "Menunggu untuk diindeks",
+        "processing": "Mengindeks",
+        "inline": "Siap (dimuat langsung)",
+        "indexed": "Siap (dapat dicari)",
+        "failed": "Pengindeksan gagal",
+        "asset": "Aset dapat diunduh"
+      },
+      "confirmRemove": "Hapus {filename} dari keterampilan ini? File asli yang tersimpan akan dihapus dan tidak akan tersedia lagi sebagai sumber kutipan.",
+      "reindexRequired": "Dokumen-dokumen ini perlu diindeks ulang sesuai konfigurasi Pencarian dan embedding regional saat ini. Dokumen-dokumen tersebut tidak akan dapat dicari sampai proses pengindeksan selesai."
+    },
+    "applyToAgents": "Tersedia untuk agen",
+    "applyToAgentsHint": "Nonaktif secara default. Jika diaktifkan, agen dapat memuat keterampilan ini melalui alat baca saja, bukan mengganti instruksi persona mereka. Setiap panggilan keterampilan memiliki batas langkah tersendiri. Agen Foundry harus sudah memiliki fungsi load_skill dan search_skill_documents yang terdaftar dalam definisinya."
+  },
+  "personalSkills": {
+    "title": "Keterampilan pribadi",
+    "description": "Simpan instruksi yang dapat digunakan kembali untuk percakapan Anda sendiri. Keterampilan disimpan di browser ini dan hanya dikirim ke model saat Anda mengobrol. Keterampilan yang relevan dapat dipilih secara otomatis, digunakan sekali, atau dipasangkan. Keterampilan ini tidak dapat mengubah kebijakan organisasi atau memberikan akses ke alat. Penggunaan keterampilan memerlukan keterampilan diaktifkan untuk deployment ini; percakapan agen tidak menggunakan keterampilan pribadi.",
+    "importFile": "Impor SKILL.md atau ZIP",
+    "review": "Tinjau instruksi lengkap sebelum menyimpan. Instruksi yang diimpor adalah preferensi pengguna, bukan kebijakan organisasi yang terpercaya.",
+    "skipped": "Skrip yang dapat dijalankan dilewati",
+    "importTooLarge": "Impor harus berukuran 20 MB atau lebih kecil.",
+    "invalid": "Keterampilan tidak dapat diimpor.",
+    "duplicate": "Id keterampilan pribadi tersebut sudah ada. Edit keterampilan yang sudah ada atau pilih id lain.",
+    "countLimit": "Anda dapat menyimpan maksimal 20 keterampilan pribadi.",
+    "requestLimit": "Keterampilan pribadi yang diaktifkan melebihi batas permintaan 160 KB. Nonaktifkan beberapa keterampilan atau ringkas instruksinya.",
+    "saved": "Keterampilan pribadi disimpan di browser ini.",
+    "instructionsHint": "Instruksi hingga 16 KB, termasuk referensi teks yang diimpor. File biner dan pengindeksan dokumen permanen hanya tersedia untuk keterampilan organisasi. Ekspor menggunakan nama standar SKILL.md tanpa awalan user:.",
+    "enabled": "Diaktifkan untuk percakapan saya",
+    "empty": "Buat keterampilan untuk tugas berulang, atau impor SKILL.md untuk ditinjau dan disimpan di sini."
   }
 }

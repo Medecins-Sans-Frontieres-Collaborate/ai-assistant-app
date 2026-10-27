@@ -915,7 +915,21 @@
     "alwaysWaitThisLong": "Zawsze czekaj do {duration}",
     "keepSearching": "Kontynuuj wyszukiwanie",
     "keepSearchingHint": "Wyszukiwanie zostało przerwane, zanim znaleziono ten wynik. Poproś asystenta, aby spróbował innego podejścia.",
-    "keepSearchingMessage": "Proszę kontynuować wyszukiwanie tego — spróbuj innego podejścia."
+    "keepSearchingMessage": "Proszę kontynuować wyszukiwanie tego — spróbuj innego podejścia.",
+    "addSkill": "Umiejętności",
+    "removeSkill": "Usuń umiejętność",
+    "skillsMenuLabel": "Dostępne umiejętności",
+    "skillsLimit": "Do 3 umiejętności na wiadomość.",
+    "skillPin": "Przypnij do rozmowy",
+    "skillUseOnce": "Użyj raz",
+    "skillPinned": "przypięto",
+    "skillOnce": "następna wiadomość",
+    "skillsPaused": "wstrzymano",
+    "skillUnavailable": "niedostępny",
+    "skillsAutomaticHint": "Odpowiednie umiejętności są wybierane automatycznie. Użyj raz dla następnej wiadomości lub przypnij umiejętność, aby używać jej przez całą rozmowę.",
+    "skillsAgentDisabled": "Umiejętności są wstrzymane, gdy agent jest podłączony. Twoje przypięcia zostaną wznowione po odłączeniu agenta.",
+    "skillPersonal": "osobiste",
+    "skillsAgentToolsHint": "Tylko umiejętności organizacyjne włączone przez administratora dla agentów są tutaj dostępne. Agent może je załadować jako narzędzia tylko do odczytu. Pozostałe pinezki pozostają wstrzymane, a umiejętności osobiste nie są dostępne dla agentów."
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -5521,7 +5535,8 @@
       "channelSets": "Zasady każdej grupy dotyczące pisania na platformach: wytyczne, style, domyślne ustawienia, kto może korzystać i kto może wysyłać.",
       "webSearch": "Jak głęboko może sięgać wyszukiwanie w sieci: wielostopniowe wyszukiwanie, model oceniający i jego limity.",
       "contextBudget": "Ile rozmowy każdy model otrzymuje przy każdym użyciu.",
-      "analytics": "Dostarczone raporty: co dotarło, kto może otworzyć każdy folder i które pola mogą być wyświetlane."
+      "analytics": "Dostarczone raporty: co dotarło, kto może otworzyć każdy folder i które pola mogą być wyświetlane.",
+      "skills": "Wielokrotnego użytku bloki instrukcji stosowane przez asystenta w razie potrzeby podczas rozmowy."
     },
     "openSettings": "Otwórz ustawienia",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Delegacje",
       "webSearch": "Wyszukiwanie w sieci",
       "contextBudget": "Budżet kontekstu",
-      "analytics": "Analityka"
+      "analytics": "Analityka",
+      "skills": "Umiejętności"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Starsze niż {months} miesięcy retencji tego folderu; nie jest już wyświetlane.",
       "unknown": "Zgłoszono problem: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Umiejętności",
+    "description": "Wielokrotnego użytku bloki instrukcji stosowane przez asystenta w razie potrzeby podczas rozmowy. Zgodne z formatem Agent Skills SKILL.md używanym przez Claude i ChatGPT.",
+    "loading": "Ładowanie umiejętności…",
+    "loadError": "Nie można załadować umiejętności.",
+    "retry": "Ponów próbę",
+    "unavailableBanner": "Magazyn umiejętności jest obecnie niedostępny — wyświetlane są domyślne wbudowane; zapisane umiejętności i edycje będą niedostępne do czasu przywrócenia łączności.",
+    "conflictError": "Ta umiejętność została zmieniona przez innego administratora. Lista została przeładowana — powtórz edycję.",
+    "alwaysWarning": "{count} umiejętności ustawiono na Zawsze. Każda z nich jest dodawana do każdej rozmowy — do umiejętności tematycznych używaj opcji Automatyczne.",
+    "newSkill": "Nowa umiejętność",
+    "importSkill": "Importuj SKILL.md",
+    "importTitle": "Wklej plik SKILL.md",
+    "importPlaceholder": "---\nnazwa: moja-umiejetnosc\nopis: Czym jest ta umiejętność i kiedy jej użyć.\n---\n\nInstrukcje…",
+    "importHint": "Wczytana umiejętność otworzy się w edytorze do recenzji — nic nie zostanie zapisane, dopóki nie zatwierdzisz.",
+    "importParse": "Przeanalizuj i przejrzyj",
+    "invalidId": "Identyfikatory umiejętności mogą zawierać małe litery, cyfry i pojedyncze myślniki.",
+    "saveSuccess": "Umiejętność zapisana.",
+    "saveError": "Nie można zapisać umiejętności.",
+    "deleteConfirm": "Usunąć tę umiejętność? Rozmowy natychmiast przestaną ją otrzymywać.",
+    "restoreConfirm": "Usunąć niestandardowe zmiany i przywrócić domyślną wbudowaną wersję tej umiejętności?",
+    "deleteSuccess": "Umiejętność usunięta.",
+    "restoreSuccess": "Przywrócono domyślne ustawienie wbudowane.",
+    "deleteError": "Nie można usunąć umiejętności.",
+    "empty": "Brak umiejętności. Utwórz nową lub zaimportuj SKILL.md.",
+    "builtinChip": "Wbudowana",
+    "customizedChip": "Niestandardowa",
+    "exportSkill": "Eksportuj jako SKILL.md",
+    "edit": "Edytuj",
+    "delete": "Usuń",
+    "restoreDefault": "Przywróć domyślne",
+    "createTitle": "Nowa umiejętność",
+    "editTitle": "Edytuj {name}",
+    "idLabel": "Identyfikator",
+    "idHint": "Małe litery, cyfry i myślniki. Staje się nazwą SKILL.md umiejętności i nie można jej zmienić po utworzeniu.",
+    "nameLabel": "Nazwa wyświetlana",
+    "descriptionLabel": "Opis",
+    "descriptionHint": "Na czym polega umiejętność ORAZ kiedy jej używać — to na podstawie tego wybierana jest umiejętność, więc określ szczegółowe tematy i sformułowania, na które ma odpowiadać.",
+    "activationLabel": "Aktywacja",
+    "activation": {
+      "auto": "Automatyczne",
+      "always": "Zawsze",
+      "off": "Wyłączone"
+    },
+    "activationHint": {
+      "auto": "Wybierana automatycznie, gdy bieżące zadanie pasuje do opisu. Użytkownicy mogą też poprosić o użycie jednorazowe lub przypiąć ją do rozmowy.",
+      "always": "Dodawana do każdej rozmowy dla wszystkich użytkowników mających dostęp do umiejętności. Stosuj oszczędnie — to stała przestrzeń podpowiedzi.",
+      "off": "Nieaktywna: nigdy nie stosowana ani nie oferowana użytkownikom, zachowana do edycji."
+    },
+    "instructionsLabel": "Instrukcje",
+    "instructionsHint": "Markdown, do 16 KB. Wstawiany dosłownie, gdy umiejętność jest aktywna.",
+    "saving": "Zapisywanie…",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "documents": {
+      "title": "Dokumenty",
+      "hint": "Referencje są przechowywane razem z tą umiejętnością. Małe dokumenty są ładowane bezpośrednio; większe są indeksowane do wyszukiwania cytowanego. Maksymalnie 20 zasobów, po 10 MB każdy i łącznie 20 MB. Zasoby są przechowywane tylko do pobrania.",
+      "saveFirst": "Zapisz dostosowanie tej wbudowanej umiejętności przed dodaniem dokumentów.",
+      "upload": "Dodaj dokumenty referencyjne",
+      "remove": "Usuń",
+      "stop": "Zatrzymaj indeksowanie",
+      "resume": "Indeksuj lub wznów dokumenty",
+      "empty": "Nie dodano jeszcze żadnych dokumentów.",
+      "requestFailed": "Błąd podczas pobierania dokumentu. Odśwież i spróbuj ponownie.",
+      "importZip": "Importuj paczkę umiejętności ZIP",
+      "zipTooLarge": "Paczka ZIP umiejętności musi mieć maksymalnie 20 MB.",
+      "importCount": "Zasoby do załączenia po zapisaniu: {count}",
+      "skippedScripts": "Pominięto wykonywalne skrypty",
+      "status": {
+        "pending": "Oczekiwanie na indeksowanie",
+        "processing": "Indeksowanie",
+        "inline": "Gotowe (załadowane bezpośrednio)",
+        "indexed": "Gotowe (można wyszukiwać)",
+        "failed": "Niepowodzenie indeksowania",
+        "asset": "Zasób do pobrania"
+      },
+      "confirmRemove": "Usunąć plik {filename} z tej umiejętności? Przechowywany oryginał zostanie usunięty i nie będzie już dostępny jako źródło cytatów.",
+      "reindexRequired": "Te dokumenty wymagają ponownego indeksowania zgodnie z obecną regionalną konfiguracją wyszukiwania i osadzania. Nie będą możliwe do wyszukania, dopóki indeksowanie się nie zakończy."
+    },
+    "applyToAgents": "Dostępne dla agentów",
+    "applyToAgentsHint": "Domyślnie wyłączone. Po włączeniu agenci mogą załadować tę umiejętność przez narzędzia tylko do odczytu, zamiast zastępować swoje instrukcje osobiste. Wywołania umiejętności mają niezależne limity kroków. Agenci Foundry muszą już mieć w swojej definicji zarejestrowane funkcje load_skill i search_skill_documents."
+  },
+  "personalSkills": {
+    "title": "Umiejętności osobiste",
+    "description": "Zapisz instrukcje do ponownego użycia w swoich rozmowach. Umiejętności pozostają w tej przeglądarce i są wysyłane do modelu tylko podczas czatu. Odpowiednie umiejętności mogą być wybierane automatycznie, użyte jednorazowo lub przypięte. Nie mogą zmieniać polityki organizacji ani nadawać dostępu do narzędzi. Korzystanie z umiejętności wymaga ich włączenia w tej instalacji; rozmowy z agentem nie używają umiejętności osobistych.",
+    "importFile": "Importuj SKILL.md lub ZIP",
+    "review": "Przejrzyj pełne instrukcje przed zapisaniem. Importowane instrukcje to preferencje użytkownika, a nie zaufana polityka organizacji.",
+    "skipped": "Pominięto wykonywalne skrypty",
+    "importTooLarge": "Importowany plik musi mieć maksymalnie 20 MB.",
+    "invalid": "Nie udało się zaimportować umiejętności.",
+    "duplicate": "Identyfikator tej umiejętności osobistej już istnieje. Edytuj istniejącą umiejętność lub wybierz inny identyfikator.",
+    "countLimit": "Możesz zapisać do 20 umiejętności osobistych.",
+    "requestLimit": "Włączone umiejętności osobiste przekraczają limit 160 KB na żądanie. Wyłącz niektóre z nich lub skróć ich instrukcje.",
+    "saved": "Umiejętność osobista została zapisana w tej przeglądarce.",
+    "instructionsHint": "Do 16 KB instrukcji, wliczając wszelkie importowane teksty. Pliki binarne i trwałe indeksowanie dokumentów są dostępne tylko dla umiejętności organizacji. Eksport wykorzystuje standardową nazwę SKILL.md bez przedrostka user:.",
+    "enabled": "Włączone dla moich rozmów",
+    "empty": "Utwórz umiejętność do powtarzalnego zadania lub zaimportuj SKILL.md, aby przejrzeć i zapisać ją tutaj."
   }
 }

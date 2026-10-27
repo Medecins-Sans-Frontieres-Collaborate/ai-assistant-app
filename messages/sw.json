@@ -918,7 +918,21 @@
     "alwaysWaitThisLong": "Kusubiri daima hadi {duration}",
     "keepSearching": "Endelea kutafuta",
     "keepSearchingHint": "Utafutaji ulisitishwa kabla haujapata hiki. Mwombe msaidizi ajaribu njia tofauti.",
-    "keepSearchingMessage": "Tafadhali endelea kutafuta hili — jaribu njia tofauti."
+    "keepSearchingMessage": "Tafadhali endelea kutafuta hili — jaribu njia tofauti.",
+    "addSkill": "Ujuzi",
+    "removeSkill": "Ondoa ujuzi",
+    "skillsMenuLabel": "Ujuzi unaopatikana",
+    "skillsLimit": "Ujuzi hadi 3 kwa kila ujumbe.",
+    "skillPin": "Bandika kwenye mazungumzo",
+    "skillUseOnce": "Tumia mara moja",
+    "skillPinned": "imebandikwa",
+    "skillOnce": "ujumbe unaofuata",
+    "skillsPaused": "imesitishwa",
+    "skillUnavailable": "haipatikani",
+    "skillsAutomaticHint": "Ujuzi unaofaa unachaguliwa moja kwa moja. Tumia mara moja kwa ujumbe unaofuata, au bandika ujuzi utumike katika mazungumzo haya yote.",
+    "skillsAgentDisabled": "Ujuzi umesitishwa wakati wakala ameunganishwa. Ujuzi uliobandikwa utaendelea ukiondoa wakala.",
+    "skillPersonal": "binafsi",
+    "skillsAgentToolsHint": "Ni ujuzi wa shirika pekee uliowezeshwa na msimamizi kwa matumizi ya wakala ndio unaopatikana hapa. Wakala anaweza kupakua kama zana za kusoma tu. Pini nyingine zitasalia kusitishwa, na ujuzi binafsi haupatikani kwa mawakala."
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -5521,7 +5535,8 @@
       "channelSets": "Sheria za kila timu za kuandika kwenye majukwaa: mwongozo, sauti, chaguomsingi, nani anaweza kutumia seti na nani anaweza kutuma.",
       "webSearch": "Jinsi utafutaji wa wavuti unaweza kufanyika: utafutaji wa hatua nyingi, modeli ya kukagua na mipaka yake.",
       "contextBudget": "Sehemu ya mazungumzo inayotumwa kwa kila modeli kila mara.",
-      "analytics": "Ripoti zilizowasilishwa: kilichofika, nani anaweza kufungua kila folda, na ni vipimo gani vinaweza kuonyeshwa."
+      "analytics": "Ripoti zilizowasilishwa: kilichofika, nani anaweza kufungua kila folda, na ni vipimo gani vinaweza kuonyeshwa.",
+      "skills": "Vifurushi vya maagizo vinavyoweza kutumiwa tena ambavyo msaidizi anatumia pale inapohitajika kwenye mazungumzo."
     },
     "openSettings": "Fungua mipangilio",
     "area": {
@@ -5532,7 +5547,8 @@
       "delegations": "Uwakilishi",
       "webSearch": "Utafutaji wa wavuti",
       "contextBudget": "Bajeti ya muktadha",
-      "analytics": "Takwimu"
+      "analytics": "Takwimu",
+      "skills": "Ujuzi"
     }
   },
   "limits": {
@@ -7563,5 +7579,102 @@
       "past-retention": "Zaidi ya miezi {months} ya kuhifadhi kwenye folda hii; haziwezi kuonyeshwa tena.",
       "unknown": "Tatizo lililoripotiwa: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Ujuzi",
+    "description": "Vifurushi vya maagizo vinavyoweza kutumiwa tena ambavyo msaidizi anatumia pale inapohitajika kwenye mazungumzo. Inayoendana na muundo wa Agent Skills SKILL.md unaotumika na Claude na ChatGPT.",
+    "loading": "Inapakia ujuzi…",
+    "loadError": "Imeshindikana kupakia ujuzi.",
+    "retry": "Jaribu tena",
+    "unavailableBanner": "Hifadhi ya ujuzi haifikiwi kwa sasa — chaguo za ndani ndizo zinaonyeshwa; ujuzi uliohifadhiwa na mabadiliko havipatikani hadi hali itakaporejea.",
+    "conflictError": "Ujuzi huu umebadilishwa na msimamizi mwingine. Orodha imepakiwa upya — tafadhali rudia mabadiliko yako.",
+    "alwaysWarning": "Ujuzi {count} umewekwa kwenye Daima. Kila mojawapo huongezwa kwenye kila mazungumzo — tumia Kiotomatiki kwa ujuzi wa mada maalum.",
+    "newSkill": "Ujuzi mpya",
+    "importSkill": "Ingiza SKILL.md",
+    "importTitle": "Bandika faili ya SKILL.md",
+    "importPlaceholder": "---\njina: my-skill\nmaelezo: Kile ujuzi huu unafanya na lini uitumie.\n---\n\nMaagizo…",
+    "importHint": "Ujuzi uliotafsiriwa unafunguka kwenye kihariri ili kukaguliwa — hakuna kinachohifadhiwa mpaka ubofye kuhifadhi.",
+    "importParse": "Tafsiri na kagua",
+    "invalidId": "Vitambulisho vya ujuzi hutumia herufi ndogo, nambari, na vizuizi vya katikati pekee.",
+    "saveSuccess": "Ujuzi umehifadhiwa.",
+    "saveError": "Imeshindikana kuhifadhi ujuzi.",
+    "deleteConfirm": "Ungependa kufuta ujuzi huu? Mazungumzo yatasitisha kupokea mara moja.",
+    "restoreConfirm": "Ondoa ubinafsishaji na rejesha ujuzi huu wa ndani kwenye chaguo msingi?",
+    "deleteSuccess": "Ujuzi umefutwa.",
+    "restoreSuccess": "Chaguo msingi la ndani limesharejeshwa.",
+    "deleteError": "Imeshindikana kufuta ujuzi.",
+    "empty": "Bado hakuna ujuzi. Tengeneza mmoja, au ingiza SKILL.md.",
+    "builtinChip": "Chaguo la ndani",
+    "customizedChip": "Umetengenezwa maalum",
+    "exportSkill": "Hamisha kama SKILL.md",
+    "edit": "Hariri",
+    "delete": "Futa",
+    "restoreDefault": "Rejesha chaguo msingi",
+    "createTitle": "Ujuzi mpya",
+    "editTitle": "Hariri {name}",
+    "idLabel": "Kitambulisho",
+    "idHint": "Herufi ndogo, nambari, na vizuizi vya katikati. Hutumika kama jina la SKILL.md la ujuzi na haliwezi kubadilishwa baada ya kutengenezwa.",
+    "nameLabel": "Jina la kuonyesha",
+    "descriptionLabel": "Maelezo",
+    "descriptionHint": "Kile ujuzi huu unafanya NA lini uitumie — hii ndiyo huchagua ujuzi, hivyo weka mada maalum na maneno ambayo inapaswa kujibu.",
+    "activationLabel": "Uanzishaji",
+    "activation": {
+      "auto": "Kiotomatiki",
+      "always": "Daima",
+      "off": "Imezimwa"
+    },
+    "activationHint": {
+      "auto": "Unachaguliwa moja kwa moja kazi ya sasa inapotimiza maelezo. Watumiaji pia wanaweza kuuomba mara moja au kuubandika kwenye mazungumzo.",
+      "always": "Inaongezwa kwenye kila mazungumzo kwa kila anayweza kuona ujuzi huu. Tumia kwa tahadhari — hili ni eneo la kudumu la msaada.",
+      "off": "Haitumiki: haitatumika na haitawasilishwa kwa watumiaji, lakini inabaki hapa kwa ajili ya uhariri."
+    },
+    "instructionsLabel": "Maagizo",
+    "instructionsHint": "Markdown, hadi 16 KB. Inaingizwa kama ilivyo wakati ujuzi unatumika.",
+    "saving": "Inahifadhi…",
+    "save": "Hifadhi",
+    "cancel": "Ghairi",
+    "documents": {
+      "title": "Nyaraka",
+      "hint": "Marejeleo huhifadhiwa na ujuzi huu. Nyaraka ndogo hupakiwa moja kwa moja; nyaraka kubwa huorodheshwa kwa utafutaji wa kunukuu. Hadi rasilimali 20, kila moja MB 10 na jumla ya MB 20. Rasilimali huhifadhiwa kwa kupakua pekee.",
+      "saveFirst": "Hifadhi muundo wa ujuzi huu kabla ya kuongeza nyaraka.",
+      "upload": "Ongeza nyaraka za marejeleo",
+      "remove": "Ondoa",
+      "stop": "Sitisha kuorodhesha",
+      "resume": "Orodhesha au endelea na nyaraka",
+      "empty": "Hakuna nyaraka zilizounganishwa bado.",
+      "requestFailed": "Maombi ya nyaraka yameshindwa. Pakia upya na jaribu tena.",
+      "importZip": "Ingiza ZIP ya ujuzi",
+      "zipTooLarge": "ZIP ya ujuzi inapaswa kuwa MB 20 au chini.",
+      "importCount": "Rasilimali za kuunganisha baada ya kuhifadhi: {count}",
+      "skippedScripts": "Scripti zinazoendeshwa zimeskimiwa",
+      "status": {
+        "pending": "Inasubiri kuorodheshwa",
+        "processing": "Inaorodheshwa",
+        "inline": "Tayari (imepakiwa moja kwa moja)",
+        "indexed": "Tayari (inaweza kutafutwa)",
+        "failed": "Kuorodhesha kumeshindwa",
+        "asset": "Rasilimali ya kupakua"
+      },
+      "confirmRemove": "Ondoa {filename} kutoka kwenye ujuzi huu? Faili asilia iliyohifadhiwa itafutwa na haitapatikana tena kama chanzo cha rejea.",
+      "reindexRequired": "Hati hizi zinahitaji kuorodheshwa upya ili kufuata mpangilio wa sasa wa Utafutaji na ujazaji wa kanda. Hazitatafutwa hadi uorodheshaji ukamilike."
+    },
+    "applyToAgents": "Inapatikana kwa mawakala",
+    "applyToAgentsHint": "Imesitishwa kwa chaguo-msingi. Ukiwezeshwa, mawakala wanaweza kupakua ujuzi huu kupitia zana za kusoma tu badala ya kubadilisha maagizo yao ya utambulisho. Wito wa ujuzi una kikomo cha hatua kinachojitegemea. Mawakala wa Foundry lazima wawe tayari wamejiandikisha na kazi za load_skill na search_skill_documents katika ufafanuzi wao."
+  },
+  "personalSkills": {
+    "title": "Ujuzi binafsi",
+    "description": "Hifadhi maagizo yanayotumika tena kwa mazungumzo yako. Ujuzi hubaki kwenye kivinjari hiki na hutumwa kwa modeli tu unapoongea. Ujuzi husika unaweza kuchaguliwa kiotomatiki, kutumika mara moja, au kunaswa. Haviwezi kubadilisha sera ya shirika au kutoa ufikiaji wa zana. Matumizi ya ujuzi yanahitaji ujuzi kuwezeshwa katika matumizi haya; mazungumzo ya wakala hayatumii ujuzi binafsi.",
+    "importFile": "Ingiza SKILL.md au ZIP",
+    "review": "Kagua maagizo yote kabla ya kuhifadhi. Maagizo yaliyoingizwa ni mapendeleo ya mtumiaji, sio sera rasmi ya shirika.",
+    "skipped": "Skripti zinazoendeshwa zimerukwa",
+    "importTooLarge": "Faili ya kuingiza lazima iwe MB 20 au chini.",
+    "invalid": "Ujuzi haukuweza kuingizwa.",
+    "duplicate": "Kitambulisho hicho cha ujuzi binafsi tayari kipo. Hariri ujuzi uliopo au chagua kitambulisho kingine.",
+    "countLimit": "Unaweza kuhifadhi hadi ujuzi binafsi 20.",
+    "requestLimit": "Ujuzi binafsi walioenezeshwa wamezidi kikomo cha ombi cha KB 160. Zima baadhi ya ujuzi au fupisha maagizo yao.",
+    "saved": "Ujuzi binafsi umehifadhiwa kwenye kivinjari hiki.",
+    "instructionsHint": "Hadi KB 16 za maagizo, ikijumuisha marejeo yoyote ya maandishi yaliyoingizwa. Faili za binary na kuorodhesha nyaraka kwa kudumu vinapatikana tu kwa ujuzi wa shirika. Uzalishaji unatumia jina la SKILL.md bila kiambishi awali cha mtumiaji:.",
+    "enabled": "Imewezeshwa kwa mazungumzo yangu",
+    "empty": "Unda ujuzi kwa kazi inayojirudia, au ingiza SKILL.md ili kukagua na kuhifadhi hapa."
   }
 }
