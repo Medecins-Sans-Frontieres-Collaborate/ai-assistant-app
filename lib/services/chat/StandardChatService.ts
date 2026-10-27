@@ -5,6 +5,7 @@ import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
 import { runAnthropicMcpToolLoop } from '@/lib/services/mcp/AnthropicMcpToolLoopService';
 import { planMcpSteps } from '@/lib/services/mcp/McpPlannerService';
 import { runMcpToolLoop } from '@/lib/services/mcp/McpToolLoopService';
+import type { BuiltinExecutor } from '@/lib/services/mcp/builtinExecutor';
 import { sanitizeMcpPlan } from '@/lib/services/mcp/mcpPlan';
 import { appendMcpSystemContext } from '@/lib/services/mcp/mcpSystemContext';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
@@ -13,6 +14,7 @@ import {
   recordTokenUsage,
   recordToolCall,
 } from '@/lib/services/observability/tokenUsageRecorder';
+import { SKILL_SERVER_ID } from '@/lib/services/skills/skillTools';
 
 import { OPENAI_API_VERSION } from '@/lib/utils/app/const';
 import {
@@ -124,6 +126,7 @@ export interface StandardChatRequest {
    * cached across requests.
    */
   builtinExecutor?: M365BuiltinExecutor;
+  builtinExecutors?: Record<string, BuiltinExecutor>;
   /**
    * Admin-configured cap from `feature.mcp.roundsPerRequest` (docs/LIMITS.md),
    * resolved once in createLimitsMiddleware. Absent → the compiled default.
@@ -252,6 +255,7 @@ export class StandardChatService {
       // The Azure OpenAI SDK targets the Cognitive Services alias of the
       // same account (Foundry accounts expose both hostnames).
       azureOpenAIClient: new AzureOpenAI({
+        baseURL: '',
         endpoint: source.endpoint.replace(
           '.services.ai.azure.com',
           '.cognitiveservices.azure.com',
@@ -478,6 +482,24 @@ export class StandardChatService {
     const clients = customSource
       ? await this.buildCustomSourceClients(customSource)
       : this.resolveClients(chatRegion);
+    const regionalClients =
+      !customSource && chatRegion
+        ? this.getRegionClients?.(chatRegion)
+        : undefined;
+    const requireRegionalClient = (config: OpenAIModel) => {
+      if (customSource || !chatRegion) return;
+      const available =
+        config.sdk === 'anthropic-foundry'
+          ? regionalClients?.anthropicFoundryClient
+          : config.sdk === 'azure-openai'
+            ? regionalClients?.azureOpenAIClient
+            : regionalClients?.openAIClient;
+      if (!available)
+        throw new Error(
+          `No ${chatRegion} endpoint configured for ${config.sdk ?? 'OpenAI-compatible'} inference. Unpinned default endpoints are not a residency fallback.`,
+        );
+    };
+    requireRegionalClient(modelConfig);
     if (customSource) {
       console.log(
         `[StandardChatService] Routing chat to custom-source endpoint: ${customSource.endpoint}`,
@@ -502,7 +524,16 @@ export class StandardChatService {
     const mcpPlanner = (
       userMessage: string,
       serversWithTools: Parameters<typeof planMcpSteps>[2],
-    ) => planMcpSteps(this.openAIClient, userMessage, serversWithTools);
+    ) => {
+      const plannerClient =
+        chatRegion && !customSource
+          ? (regionalClients?.openAIClient ??
+            regionalClients?.azureOpenAIClient)
+          : clients.openAIClient;
+      return plannerClient
+        ? planMcpSteps(plannerClient, userMessage, serversWithTools)
+        : Promise.resolve(null);
+    };
 
     if (
       HandlerFactory.isAnthropicModel(modelConfig) &&
@@ -521,7 +552,11 @@ export class StandardChatService {
         clients.anthropicFoundryClient,
         chatRegion,
         {
-          planner: mcpPlanner,
+          planner: request.mcpServers?.some(
+            (server) => server.id !== SKILL_SERVER_ID,
+          )
+            ? mcpPlanner
+            : undefined,
           existingPlan: mcpExistingPlan,
           userMessageText: mcpUserMessageText,
         },
@@ -588,6 +623,7 @@ export class StandardChatService {
           ) as OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming,
         servers: request.mcpServers,
         builtinExecutor: request.builtinExecutor,
+        builtinExecutors: request.builtinExecutors,
         signal: request.signal,
         pendingToolCalls: request.mcpPendingToolCalls,
         approvalResponses: request.approvalResponses,
@@ -595,7 +631,11 @@ export class StandardChatService {
         maxRounds: request.mcpMaxRounds,
         userId: request.user?.id ?? request.user?.mail ?? 'unknown',
         citations: request.citations,
-        planner: mcpPlanner,
+        planner: request.mcpServers.some(
+          (server) => server.id !== SKILL_SERVER_ID,
+        )
+          ? mcpPlanner
+          : undefined,
         existingPlan: mcpExistingPlan,
         userMessageText: mcpUserMessageText,
         onToolCall: (info) =>
@@ -717,6 +757,7 @@ export class StandardChatService {
       | AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>;
 
     for (;;) {
+      requireRegionalClient(activeConfig);
       attemptedModelIds.push(activeConfig.id);
 
       const handler = HandlerFactory.getHandler(
@@ -1079,6 +1120,7 @@ export class StandardChatService {
         ),
       servers: request.mcpServers ?? [],
       builtinExecutor: request.builtinExecutor,
+      builtinExecutors: request.builtinExecutors,
       signal: request.signal,
       pendingToolCalls: request.mcpPendingToolCalls,
       approvalResponses: request.approvalResponses,
