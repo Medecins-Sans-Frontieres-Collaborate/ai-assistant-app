@@ -63,7 +63,14 @@ export class AgentChatHandler extends BasePipelineStage {
         agentEndpoint,
         context.approvalResponses,
         // Stage timeout / request guard → abort the Foundry run (issue #130).
-        { telemetry: context.telemetry, signal: context.stageSignal },
+        {
+          telemetry: context.telemetry,
+          signal: context.stageSignal,
+          agentSkillsEnabled: context.agentSkillsEnabled,
+          forcedSkillIds: context.forcedSkillIds,
+          hostedRegion: context.hostedRegion,
+          emitMarker: context.emitMarker,
+        },
       );
 
       const duration = Date.now() - startTime;
