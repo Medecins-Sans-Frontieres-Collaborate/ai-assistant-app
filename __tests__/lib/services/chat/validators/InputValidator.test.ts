@@ -683,6 +683,95 @@ describe('validateChatRequest - conversationSummary and memories', () => {
   });
 });
 
+describe('validateChatRequest - forcedSkillIds (docs/SKILLS_DESIGN.md §5.1)', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+  it('accepts namespaced personal references and validates their inline bodies', () => {
+    const validator = new InputValidator();
+    const userSkills = [
+      {
+        id: 'gdpr',
+        name: 'My GDPR',
+        description: 'Personal preferences',
+        instructions: 'Be concise',
+        activation: 'auto',
+        enabled: true,
+      },
+    ];
+    expect(
+      validator.validateChatRequest({
+        ...base,
+        forcedSkillIds: ['user:gdpr'],
+        userSkills,
+      }).forcedSkillIds,
+    ).toEqual(['user:gdpr']);
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        userSkills: [{ ...userSkills[0], applyToAgents: true }],
+      }),
+    ).toThrow(PipelineError);
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        forcedSkillIds: ['user:../gdpr'],
+      }),
+    ).toThrow(PipelineError);
+  });
+  it('allows pin attribution only for explicitly selected skills', () => {
+    const validator = new InputValidator();
+    expect(
+      validator.validateChatRequest({
+        ...base,
+        forcedSkillIds: ['gdpr'],
+        pinnedSkillIds: ['gdpr'],
+      }).pinnedSkillIds,
+    ).toEqual(['gdpr']);
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        forcedSkillIds: [],
+        pinnedSkillIds: ['gdpr'],
+      }),
+    ).toThrow(PipelineError);
+  });
+
+  it('accepts up to 3 well-formed skill ids', () => {
+    const validator = new InputValidator();
+    const forcedSkillIds = ['gdpr', 'platform-help', 'weekly-report-2'];
+    expect(
+      validator.validateChatRequest({ ...base, forcedSkillIds }).forcedSkillIds,
+    ).toEqual(forcedSkillIds);
+  });
+
+  it('rejects a 4th forced skill', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        forcedSkillIds: ['a', 'b', 'c', 'd'],
+      }),
+    ).toThrow(PipelineError);
+  });
+
+  it.each([['UPPER'], ['-edge'], ['two--hyphens'], ['bad/path']])(
+    'rejects malformed id %s (Agent Skills name rules)',
+    (id) => {
+      const validator = new InputValidator();
+      expect(() =>
+        validator.validateChatRequest({ ...base, forcedSkillIds: [id] }),
+      ).toThrow(PipelineError);
+    },
+  );
+
+  it('leaves the field undefined when absent', () => {
+    const validator = new InputValidator();
+    expect(validator.validateChatRequest(base).forcedSkillIds).toBeUndefined();
+  });
+});
+
 describe('validateChatRequest - m365MailScreenOverrides', () => {
   const base = {
     model: { id: 'gpt-5.2', name: 'GPT-5.2' },
