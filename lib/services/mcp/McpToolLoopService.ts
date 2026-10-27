@@ -65,6 +65,8 @@ export interface McpToolLoopOptions {
   userMessageText?: string;
   /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
   builtinExecutor?: ToolLoopCoreOptions<OpenAIMessage>['builtinExecutor'];
+  builtinExecutors?: ToolLoopCoreOptions<OpenAIMessage>['builtinExecutors'];
+  maxImmediateRounds?: number;
   /**
    * Aborts every model round (pipeline stage timeout / request guard,
    * issue #130) so a turn the client was already told failed does not
@@ -182,5 +184,7 @@ export async function runMcpToolLoop(
     existingPlan: options.existingPlan,
     userMessageText: options.userMessageText,
     builtinExecutor: options.builtinExecutor,
+    builtinExecutors: options.builtinExecutors,
+    maxImmediateRounds: options.maxImmediateRounds,
   });
 }
