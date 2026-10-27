@@ -46,6 +46,7 @@
  */
 import {
   AgentAccessConflictError,
+  DownloadBlobOptions,
   downloadBlob,
   statusCodeOf,
   uploadJson,
@@ -104,7 +105,11 @@ export interface BlobEntityStore<
   H extends { canonicalKey: string; updatedAt: string },
 > {
   listAll(storage: BlobStorage): Promise<StoredEntity<T>[]>;
-  read(storage: BlobStorage, id: string): Promise<EntityReadResult<T> | null>;
+  read(
+    storage: BlobStorage,
+    id: string,
+    options?: DownloadBlobOptions,
+  ): Promise<EntityReadResult<T> | null>;
   write(
     storage: BlobStorage,
     record: T,
@@ -168,8 +173,14 @@ export function defineBlobEntity<
   async function read(
     storage: BlobStorage,
     id: string,
+    options?: DownloadBlobOptions,
   ): Promise<EntityReadResult<T> | null> {
-    const result = await downloadBlob(storage, def.blobPath(id));
+    const result = await downloadBlob(
+      storage,
+      def.blobPath(id),
+      'agentAccess.downloadBlob',
+      options,
+    );
     if (result === null) return null;
     const parsed = def.schema.safeParse(
       JSON.parse(result.buffer.toString('utf8')),
@@ -179,6 +190,10 @@ export function defineBlobEntity<
         `Malformed ${def.errorNoun} blob for id ${id}: ${parsed.error.message}`,
       );
     }
+    if (parsed.data.id !== id)
+      throw new Error(
+        `Stored ${def.errorNoun} identity does not match requested id`,
+      );
     return { record: parsed.data, etag: result.etag };
   }
 
