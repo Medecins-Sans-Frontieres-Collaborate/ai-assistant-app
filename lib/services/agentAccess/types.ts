@@ -45,6 +45,13 @@ export const AGENT_ACCESS_M365_JOBS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent-j
 /** Per-file prepared (derived) text — phase 4: `<agentId>/index.json` + `<agentId>/<itemId>.json`. */
 export const AGENT_ACCESS_M365_DERIVED_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent-derived/`;
 export const AGENT_ACCESS_ORG_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}org-agents/`;
+/**
+ * Admin-authored skills (docs/SKILLS_DESIGN.md). Whole records — a skill's
+ * instruction body is capped at 16 KB, the prompt-agent scale, so there is
+ * no guide-style meta/payload split; revisit if documents (phase 3) or the
+ * cap change that.
+ */
+export const AGENT_ACCESS_SKILLS_PREFIX = `${AGENT_ACCESS_PREFIX}skills/`;
 
 /**
  * Pseudo-source for app-defined prompt agents in canonical keys
@@ -137,6 +144,16 @@ export const M365_AGENT_SOURCE = 'm365-agent';
  * local-admin delegation, and history machinery for free.
  */
 export const ORG_AGENT_SOURCE = 'org-agent';
+
+/**
+ * Pseudo-source for admin-authored skills in canonical keys
+ * (`skill::<id>`) — docs/SKILLS_DESIGN.md §4. Same rationale as
+ * PROMPT_AGENT_SOURCE: reusing the canonical-key namespace means skills get
+ * the existing rule matching, local-admin delegation, and history machinery
+ * for free. Like most sources this one is default-allow: a skill with no
+ * rule is org-wide guidance (contrast PUBLISH_SOURCE).
+ */
+export const SKILL_SOURCE = 'skill';
 
 export const AgentAccessTypeSchema = z.enum(['public', 'restricted']);
 export type AgentAccessType = z.infer<typeof AgentAccessTypeSchema>;
@@ -1470,6 +1487,15 @@ export function connectorBlobPath(id: string): string {
  */
 export function guideBlobPath(id: string): string {
   return `${AGENT_ACCESS_GUIDES_PREFIX}${id}.json`;
+}
+
+/**
+ * `system/agent-access/skills/<id>.json` — a SIBLING of rules/ for the same
+ * reason as the other entity prefixes: listAllRules is fail-closed, so an
+ * alien blob under rules/ would brick every Foundry invocation.
+ */
+export function skillBlobPath(id: string): string {
+  return `${AGENT_ACCESS_SKILLS_PREFIX}${id}.json`;
 }
 
 /**
