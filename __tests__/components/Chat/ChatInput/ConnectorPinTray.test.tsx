@@ -31,6 +31,11 @@ vi.mock('@/client/hooks/settings/useSettings', () => ({
   useSettings: () => ({ models: [], defaultModelId: undefined }),
 }));
 
+// Skills are independently covered with the real conversation/input stores.
+vi.mock('@/client/hooks/settings/useUserSkills', () => ({
+  useUserSkills: () => ({ data: [] }),
+}));
+
 // Admin usage-limit gates (§7.4). The real hook needs a QueryClient; the
 // agent gates underneath stay real (they only read the mocked hooks above).
 const openGate = { blocked: false, exhausted: false, low: false };
