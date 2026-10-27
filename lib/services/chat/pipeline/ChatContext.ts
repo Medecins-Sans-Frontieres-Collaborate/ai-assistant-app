@@ -149,6 +149,26 @@ export interface ChatContext {
    */
   memories?: string[];
 
+  /**
+   * Skill ids explicitly invoked for this message (composer skill picker).
+   * Consumed by SkillEnricher, which resolves them against the user's
+   * visible catalog — docs/SKILLS_DESIGN.md §5.1.
+   */
+  forcedSkillIds?: string[];
+  /** Pins are a subset of explicit ids; never a grant of access. */
+  pinnedSkillIds?: string[];
+  userSkills?: import('@/lib/services/skills/types').UserSkill[];
+  /** Server-resolved eligibility; agent skills are delivered only as tools. */
+  agentSkillsEnabled?: boolean;
+  /** Server-only eligible catalog; never accepted from ChatBody. */
+  skillCatalog?: import('@/lib/services/skills/types').CatalogSkill[];
+  /** Resolved server-side instructions; resource retrieval is a separate bounded stage. */
+  activeSkills?: import('@/lib/services/skills/types').Skill[];
+  /** Actual injected instruction tokens, deducted from the shared evidence budget. */
+  skillTokensUsed?: number;
+  /** Present even for empty/failed decisions, preventing a second router call. */
+  skillRouting?: { relevantSkills?: string[]; degraded?: boolean };
+
   /** Display name preference from General Settings (for deriving name fallback) */
   displayNamePreference?: DisplayNamePreference;
 

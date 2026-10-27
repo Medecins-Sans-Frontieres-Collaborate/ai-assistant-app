@@ -33,6 +33,13 @@ export const STAGE_TIMEOUTS: Record<string, number> = {
   // Reformulation LLM + query embedding + hybrid search over the shared
   // m365-agents index.
   M365AgentEnricher: 20000, // 20s for knowledge base search
+  // Catalog read is a ≤60s-cached admin-blob listing; 10s covers a cold
+  // refresh. On timeout the stage skips and the base prompt keeps its
+  // platform sections (status quo), so degradation is content-neutral.
+  SkillEnricher: 10000,
+  SkillReferenceEnricher: 15000,
+  AgentSkillEnricher: 10000,
+  SkillCatalogEnricher: 10000,
   // Web search (reasoning agent + Bing grounding) and the document-trim
   // pipeline (LLM edit plan + sandbox execution + one bounded corrective
   // pass) both run long; 240s leaves the route's 300s ceiling room for
