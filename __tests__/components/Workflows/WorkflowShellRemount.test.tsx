@@ -16,6 +16,9 @@ vi.mock('@/client/hooks/workflows/useWorkflowPolicy', () => ({
     isLoading: false,
   }),
 }));
+vi.mock('@/client/hooks/grants/useGrantsAccess', () => ({
+  useGrantsAccess: () => ({ hasGrantsAccess: false, isLoading: false }),
+}));
 
 vi.mock('@/client/hooks/ui/useUI', () => ({
   useUI: () => ({ toggleChatbar: vi.fn() }),
