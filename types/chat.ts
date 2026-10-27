@@ -127,6 +127,8 @@ export interface Message extends MessageToolArtifacts {
   error?: boolean; // Indicates if the message generation failed
   toneId?: string | null; // Custom tone/voice profile to apply
   promptId?: string | null; // Saved prompt that was used
+  /** Browser-only one-shot skill references, replayed for retry/regeneration. */
+  requestedSkillIds?: string[];
   promptVariables?: { [key: string]: string }; // Variable values used in the prompt
   artifactContext?: {
     // Artifact being edited when message was sent
@@ -403,6 +405,17 @@ export interface ChatBody {
    * (enforced in InputValidator).
    */
   memories?: string[];
+  /**
+   * Skill ids the user explicitly invoked for this message (composer skill
+   * picker — docs/SKILLS_DESIGN.md §5.1). Resolved server-side against the
+   * caller's VISIBLE skill catalog; unknown/hidden ids are dropped with a
+   * visible notice, never an error. Cap: 3 (enforced in InputValidator).
+   */
+  forcedSkillIds?: string[];
+  /** Subset of forcedSkillIds persisted on the conversation, for attribution. */
+  pinnedSkillIds?: string[];
+  /** Enabled browser-local personal skills; validated as untrusted user instructions. */
+  userSkills?: import('@/lib/services/skills/types').UserSkill[];
 }
 
 /**
@@ -459,6 +472,8 @@ export interface Conversation {
    * removed/disabled) is ignored rather than blocking the chat.
    */
   pinnedMcpServerId?: string;
+  /** Skills used on every standard-chat turn until unpinned. Local-only ids. */
+  pinnedSkillIds?: string[];
   /**
    * McpServerConfig.ids switched off FOR THIS CONVERSATION in the connector
    * tray. Purely subtractive on top of the global enabled set — a server
@@ -613,6 +628,8 @@ export type ToolType = 'web_search' | 'code_interpreter';
 
 export interface ToolRouterResponse {
   tools: ToolType[];
+  /** Validated ids from the request's access-filtered skill catalog. */
+  relevantSkills?: string[];
   searchQuery?: string;
   /**
    * Full ordered query list for multi-aspect questions (first entry ===
@@ -674,6 +691,11 @@ export interface ToolRouterResponse {
 export interface ToolRouterRequest {
   messages: Message[];
   currentMessage: string;
+  /** Resolved server-side residency, never an unchecked client override. */
+  region?: 'US' | 'EU';
+  /** Already access-filtered, auto-only metadata; forced skills excluded. */
+  skillCatalog?: import('@/lib/services/skills/skillRouting').SkillRoutingEntry[];
+  signal?: AbortSignal;
   forceWebSearch?: boolean; // When true, always use web search (search mode enabled)
   forceCodeInterpreter?: boolean; // When true, always run the code interpreter (InterpreterMode.ALWAYS)
   /**
