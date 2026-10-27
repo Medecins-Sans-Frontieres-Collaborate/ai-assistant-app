@@ -42,10 +42,23 @@ export function statusCodeOf(error: unknown): number | undefined {
 
 export async function streamToBuffer(
   readableStream: NodeJS.ReadableStream,
+  maxBytes = Infinity,
 ): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
+    let length = 0;
+    let stopped = false;
     readableStream.on('data', (data) => {
+      if (stopped) return;
+      length += Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data);
+      if (length > maxBytes) {
+        stopped = true;
+        (
+          readableStream as NodeJS.ReadableStream & { destroy?: () => void }
+        ).destroy?.();
+        reject(new Error(`Blob exceeds the ${maxBytes}-byte download limit`));
+        return;
+      }
       chunks.push(data instanceof Buffer ? data : Buffer.from(data));
     });
     readableStream.on('end', () => resolve(Buffer.concat(chunks)));
@@ -54,6 +67,8 @@ export async function streamToBuffer(
 }
 
 export interface DownloadBlobOptions {
+  /** Actual streamed-byte ceiling, not a trust in blob Content-Length. */
+  maxBytes?: number;
   /**
    * Client-side deadline for the whole download. The SDK aborts the request
    * AND its body stream when the signal fires, rejecting with an `AbortError`
@@ -83,7 +98,10 @@ export async function downloadBlob(
         if (!response.readableStreamBody) {
           throw new Error(`No readable stream for blob ${blobPath}`);
         }
-        const buffer = await streamToBuffer(response.readableStreamBody);
+        const buffer = await streamToBuffer(
+          response.readableStreamBody,
+          options.maxBytes,
+        );
         return { buffer, etag: response.etag ?? '' };
       },
       { label },
@@ -117,7 +135,10 @@ export async function downloadBlobIfChanged(
         if (!response.readableStreamBody) {
           throw new Error(`No readable stream for blob ${blobPath}`);
         }
-        const buffer = await streamToBuffer(response.readableStreamBody);
+        const buffer = await streamToBuffer(
+          response.readableStreamBody,
+          options.maxBytes,
+        );
         return { buffer, etag: response.etag ?? '' };
       },
       { label },
