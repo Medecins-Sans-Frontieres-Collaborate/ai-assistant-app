@@ -67,6 +67,8 @@ export interface AnthropicMcpToolLoopOptions {
   userMessageText?: string;
   /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
   builtinExecutor?: ToolLoopCoreOptions<Anthropic.MessageParam>['builtinExecutor'];
+  builtinExecutors?: ToolLoopCoreOptions<Anthropic.MessageParam>['builtinExecutors'];
+  maxImmediateRounds?: number;
   /** Aborts every model round (see McpToolLoopOptions.signal). */
   signal?: AbortSignal;
 }
@@ -78,6 +80,7 @@ function buildAnthropicStrategy(
   // the system prompt out of the transcript, so the addendum is folded into
   // params.system on every round rather than into a message.
   let systemAddendum = '';
+  let lastDeclaredTools: Anthropic.Tool[] = [];
 
   return {
     applySystemAddendum(addendum) {
@@ -115,12 +118,27 @@ function buildAnthropicStrategy(
         mcpToolsToAnthropicTools(server.id, tools),
       );
       if (anthropicTools.length > 0) {
+        lastDeclaredTools = anthropicTools;
         // Unlike OpenAI, tools must STAY declared past the round cap: the
         // resume transcript contains tool_use/tool_result blocks, and
         // Anthropic rejects such transcripts when no tools are declared.
         // tool_choice 'none' is how a capped round forbids further calls.
         params.tools = anthropicTools;
         if (!allowToolUse) {
+          params.tool_choice = { type: 'none' };
+        }
+      } else if (lastDeclaredTools.length) {
+        // An internal read-only executor can exhaust its budget mid-request.
+        // Retain legal transcript declarations, but force the final answer.
+        params.tools = lastDeclaredTools;
+        params.tool_choice = { type: 'none' };
+      } else {
+        const historyTools = serversWithTools.flatMap(
+          ({ server, transcriptTools }) =>
+            mcpToolsToAnthropicTools(server.id, transcriptTools ?? []),
+        );
+        if (historyTools.length) {
+          params.tools = historyTools;
           params.tool_choice = { type: 'none' };
         }
       }
@@ -173,5 +191,7 @@ export async function runAnthropicMcpToolLoop(
     existingPlan: options.existingPlan,
     userMessageText: options.userMessageText,
     builtinExecutor: options.builtinExecutor,
+    builtinExecutors: options.builtinExecutors,
+    maxImmediateRounds: options.maxImmediateRounds,
   });
 }
