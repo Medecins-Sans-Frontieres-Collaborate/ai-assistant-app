@@ -34,6 +34,12 @@ export class CitationRegistry {
    * is created URL-less and expects the following annotation to claim it.
    */
   registerMarker(key: string, title: string, url: string): number {
+    // Request-local skill tools may append numbered document evidence to the
+    // shared sink between hosted-tool events. Reserve those numbers too.
+    this.nextNumber = Math.max(
+      this.nextNumber,
+      ...this.entries.map((entry) => entry.number + 1),
+    );
     const existing = this.numbersByKey.get(key);
     if (existing !== undefined) {
       const entry = this.entries.find((c) => c.number === existing);
