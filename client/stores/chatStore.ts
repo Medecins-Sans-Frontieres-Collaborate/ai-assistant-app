@@ -48,6 +48,11 @@ import {
 import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
 import { clampModelTimeoutSeconds } from '@/lib/utils/shared/chat/modelTimeout';
 import {
+  mergeSkillRequestMetadata,
+  requestedSkillsForMessage,
+  skillSelectionForRequest,
+} from '@/lib/utils/shared/chat/skillSelection';
+import {
   StreamInterruptedError,
   StreamParser,
 } from '@/lib/utils/shared/chat/streamParser';
@@ -1045,6 +1050,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     searchMode?: SearchMode,
     approvalResponses?: ApprovalResponse[],
   ): Promise<ReadableStream<Uint8Array>> => {
+    const live = useConversationStore
+      .getState()
+      .conversations.find((item) => item.id === conversation.id);
+    if (live)
+      conversation = {
+        ...conversation,
+        messages: mergeSkillRequestMetadata(
+          conversation.messages,
+          live.messages,
+        ),
+      };
     const settings = useSettingsStore.getState();
     const modelSupportsStreaming = conversation.model.stream !== false;
 
@@ -1455,6 +1471,47 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // recipes. Extraction mode is ephemeral (per-conversation) and recipes
     // travel inline because the server has no recipe store.
     const inputState = useChatInputStore.getState();
+
+    const sourceUserIndex = conversation.messages.findLastIndex(
+      (entry) => 'role' in entry && entry.role === 'user',
+    );
+    const sourceUser =
+      sourceUserIndex >= 0 ? conversation.messages[sourceUserIndex] : undefined;
+    const savedRequests =
+      sourceUser && 'role' in sourceUser
+        ? sourceUser.requestedSkillIds
+        : undefined;
+    const requested = requestedSkillsForMessage(
+      savedRequests,
+      inputState.forcedSkillIds,
+      !!approvalResponses?.length,
+    );
+    const skillSelection = skillSelectionForRequest(
+      conversation.pinnedSkillIds,
+      requested,
+    );
+    if (inputState.forcedSkillIds.length > 0 && !approvalResponses?.length) {
+      // Persist only ids, never instruction bodies. Update the live store,
+      // not the request's possibly truncated regeneration snapshot.
+      const current = useConversationStore
+        .getState()
+        .conversations.find((item) => item.id === conversation.id);
+      if (current && sourceUser && 'role' in sourceUser) {
+        const messages = current.messages.map((entry, index) => {
+          const match = sourceUser.id
+            ? 'role' in entry && entry.id === sourceUser.id
+            : index === sourceUserIndex &&
+              'role' in entry &&
+              entry.role === 'user' &&
+              entry.content === sourceUser.content;
+          return match ? { ...entry, requestedSkillIds: requested } : entry;
+        });
+        useConversationStore
+          .getState()
+          .updateConversation(conversation.id, { messages });
+      }
+      inputState.clearForcedSkillIds();
+    }
     let extraction: ExtractionRequest | undefined;
     if (inputState.extractionMode) {
       const selectedRecipes = settings.savedStructures.filter((r) =>
@@ -1556,6 +1613,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           ? settings.m365SharedMailboxes
           : undefined,
       extraction,
+      ...skillSelection,
+      userSkills:
+        conversation.bot ||
+        modelToSend.agentId ||
+        isOrganizationAgent ||
+        isCustomAgent
+          ? undefined
+          : settings.userSkills?.filter(
+              (skill) => skill.enabled && skill.activation !== 'off',
+            ),
       conversationSummary,
       memories: memoryTexts.length > 0 ? memoryTexts : undefined,
     });
@@ -1824,7 +1891,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       // Creating a new assistant message group
       const newGroup = createMessageGroup(assistantMessage);
       const updates: Partial<Conversation> = {
-        messages: [...conversation.messages, newGroup],
+        messages: [
+          ...mergeSkillRequestMetadata(
+            conversation.messages,
+            useConversationStore
+              .getState()
+              .conversations.find((item) => item.id === conversation.id)
+              ?.messages ?? [],
+          ),
+          newGroup,
+        ],
         ...(threadId ? { threadId } : {}),
       };
 
