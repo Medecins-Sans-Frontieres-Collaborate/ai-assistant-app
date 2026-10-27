@@ -2,12 +2,20 @@ import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { consumeToolBudget } from '@/lib/services/limits/toolBudget';
 import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
 import { createM365ToolExecutor } from '@/lib/services/m365/tools/executor';
+import type { BuiltinExecutor } from '@/lib/services/mcp/builtinExecutor';
 import { createConnectorResolver } from '@/lib/services/mcp/connectorResolution';
 import { isHttpsPublicShapedUrl } from '@/lib/services/mcp/mcpUrlGuard';
 import {
   MetricsService,
   getAzureMonitorLogger,
 } from '@/lib/services/observability';
+import { auxiliaryRegion } from '@/lib/services/skills/skillRegion';
+import {
+  SKILL_SERVER_ID,
+  buildSkillServer,
+  createSkillToolExecutor,
+  restoreAgentSkillState,
+} from '@/lib/services/skills/skillTools';
 
 import { composeExtractionPrompt } from '@/lib/utils/server/extraction/composeExtractionPrompt';
 import { proposeFlatSchema } from '@/lib/utils/server/extraction/proposeFlatSchema';
@@ -363,20 +371,26 @@ export class StandardChatHandler extends BasePipelineStage {
           const { builtinRequested, rest: networkMcpEntries } =
             partitionBuiltinMcpEntries(context.mcpServers);
           const resolvedMcpServers = networkMcpEntries.length
-            ? resolveMcpServers(networkMcpEntries, {
-                allowCustom: env.MCP_CUSTOM_SERVERS_ENABLED,
-                isAllowedCustomUrl: isHttpsPublicShapedUrl,
-                // Admin connectors are access-controlled, so entitlement is
-                // re-checked HERE on every request rather than trusted from
-                // the client's stored settings — which live in localStorage
-                // and long outlive a revoked rule.
-                resolveConnector: await createConnectorResolver(
-                  context.session,
+            ? resolveMcpServers(
+                networkMcpEntries.filter(
+                  (entry) => entry.id !== SKILL_SERVER_ID,
                 ),
-              })
+                {
+                  allowCustom: env.MCP_CUSTOM_SERVERS_ENABLED,
+                  isAllowedCustomUrl: isHttpsPublicShapedUrl,
+                  // Admin connectors are access-controlled, so entitlement is
+                  // re-checked HERE on every request rather than trusted from
+                  // the client's stored settings — which live in localStorage
+                  // and long outlive a revoked rule.
+                  resolveConnector: await createConnectorResolver(
+                    context.session,
+                  ),
+                },
+              )
             : [];
 
           let builtinExecutor: M365BuiltinExecutor | undefined;
+          const builtinExecutors: Record<string, BuiltinExecutor> = {};
           if (builtinRequested && context.session) {
             if (!context.request) {
               // Contexts built without the raw request (tests, non-standard
@@ -404,6 +418,30 @@ export class StandardChatHandler extends BasePipelineStage {
                 },
               );
               resolvedMcpServers.push(buildBuiltinM365Server());
+            }
+          }
+
+          if (context.agentSkillsEnabled) {
+            const executor = await createSkillToolExecutor({
+              userMail: context.user.mail ?? undefined,
+              forcedIds: context.forcedSkillIds,
+              state: await restoreAgentSkillState(
+                context.user.id ?? context.user.mail ?? 'unknown',
+                context.mcpLoopRound ?? 0,
+                context.mcpPendingToolCalls ?? [],
+              ),
+              citations: citations as
+                | import('@/types/rag').Citation[]
+                | undefined,
+              signal: context.stageSignal,
+              region: auxiliaryRegion(
+                context.user.region,
+                context.hostedRegion,
+              ),
+            });
+            if (executor) {
+              resolvedMcpServers.push(buildSkillServer());
+              builtinExecutors[SKILL_SERVER_ID] = executor;
             }
           }
 
@@ -455,6 +493,7 @@ export class StandardChatHandler extends BasePipelineStage {
               ? resolvedMcpServers
               : undefined,
             builtinExecutor,
+            builtinExecutors,
             mcpPendingToolCalls: context.mcpPendingToolCalls,
             mcpLoopRound: context.mcpLoopRound,
             mcpMaxRounds:
