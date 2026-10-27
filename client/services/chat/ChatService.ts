@@ -205,6 +205,10 @@ export class ChatService {
       m365MailScreenOverrides?: string[];
       /** Configured shared mailbox addresses (see ChatBody). */
       m365SharedMailboxes?: string[];
+      /** Explicitly invoked skill ids (see ChatBody.forcedSkillIds). */
+      forcedSkillIds?: string[];
+      pinnedSkillIds?: string[];
+      userSkills?: import('@/lib/services/skills/types').UserSkill[];
       /** Model start timeout in ms (see ChatBody.timeoutMs, issue #130). */
       timeoutMs?: number;
     },
@@ -253,6 +257,9 @@ export class ChatService {
       memories: options?.memories,
       m365MailScreenOverrides: options?.m365MailScreenOverrides,
       m365SharedMailboxes: options?.m365SharedMailboxes,
+      forcedSkillIds: options?.forcedSkillIds,
+      pinnedSkillIds: options?.pinnedSkillIds,
+      userSkills: options?.userSkills,
     };
 
     const { body, report } = trimBodyToByteBudget(rawBody);
@@ -298,6 +305,9 @@ export class ChatService {
       threadId?: string;
       searchMode?: SearchMode;
       forcedAgentType?: string;
+      forcedSkillIds?: string[];
+      pinnedSkillIds?: string[];
+      userSkills?: import('@/lib/services/skills/types').UserSkill[];
       tone?: Tone;
       includeUserInfoInPrompt?: boolean;
       preferredName?: string;
@@ -314,6 +324,9 @@ export class ChatService {
       prompt: options?.prompt,
       temperature: options?.temperature,
       stream: false,
+      forcedSkillIds: options?.forcedSkillIds,
+      pinnedSkillIds: options?.pinnedSkillIds,
+      userSkills: options?.userSkills,
       reasoningEffort: options?.reasoningEffort,
       verbosity: options?.verbosity,
       botId: options?.botId,
