@@ -1,5 +1,9 @@
 import { runAnthropicMcpToolLoop } from '@/lib/services/mcp/AnthropicMcpToolLoopService';
 import { clearToolSchemaCache } from '@/lib/services/mcp/toolSchemaCache';
+import {
+  SKILL_SERVER_ID,
+  buildSkillServer,
+} from '@/lib/services/skills/skillTools';
 
 import { parseMetadataFromContent } from '@/lib/utils/app/metadata';
 
@@ -145,6 +149,54 @@ describe('runAnthropicMcpToolLoop', () => {
     vi.clearAllMocks();
     clearToolSchemaCache();
     mockConnectMcp.mockResolvedValue(mockConnection());
+  });
+
+  it('runs skill tools in-request and retains legal declarations for the final Claude answer', async () => {
+    let loaded = false;
+    const toolEvents = toolUseRoundEvents.map((event) =>
+      event.type === 'content_block_start'
+        ? {
+            ...event,
+            content_block: {
+              ...event.content_block,
+              name: `${SKILL_SERVER_ID}__load_skill`,
+            },
+          }
+        : event.type === 'content_block_delta' && event.index === 1
+          ? {
+              ...event,
+              delta: {
+                type: 'input_json_delta',
+                partial_json: '{"id":"gdpr"}',
+              },
+            }
+          : event,
+    );
+    const handler = makeHandler([toolEvents, textRoundEvents('Final answer')]);
+    const executor = {
+      immediate: true,
+      instructions: '',
+      listTools: async () =>
+        loaded ? [] : [{ name: 'load_skill', inputSchema: { type: 'object' } }],
+      callTool: vi.fn(async () => {
+        loaded = true;
+        return { resultText: 'Guidance', isError: false };
+      }),
+    };
+    const response = await runAnthropicMcpToolLoop(
+      baseOptions(handler, {
+        servers: [buildSkillServer()],
+        builtinExecutors: { [SKILL_SERVER_ID]: executor },
+      }),
+    );
+    const body = await response.text();
+    expect(body).toContain('Final answer');
+    expect(body).not.toContain('<<<CONSENT_REQUEST>>>');
+    const finalParams = vi.mocked(handler.executeStreamingRequest).mock
+      .calls[1][0] as unknown as Anthropic.MessageCreateParamsStreaming;
+    expect(finalParams.tool_choice).toEqual({ type: 'none' });
+    expect(finalParams.tools?.[0].name).toBe(`${SKILL_SERVER_ID}__load_skill`);
+    expect(JSON.stringify(finalParams.messages)).toContain('Guidance');
   });
 
   it('PAUSE: tool_use stop emits a CONSENT_REQUEST with server_id and ends the stream', async () => {
