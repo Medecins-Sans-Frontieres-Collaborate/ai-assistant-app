@@ -2,7 +2,6 @@
 
 import { IconCheck, IconChevronDown, IconMessage } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { useSession } from 'next-auth/react';
 import {
   KeyboardEvent,
   createElement,
@@ -15,9 +14,8 @@ import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useGrantsAccess } from '@/client/hooks/grants/useGrantsAccess';
 import { useWorkflowPolicy } from '@/client/hooks/workflows/useWorkflowPolicy';
-
-import { canAccessGrants } from '@/lib/services/grants/access';
 
 import { CONVERSATION_WORKFLOW_TYPES } from '@/types/workflow';
 
@@ -109,17 +107,14 @@ export function useWorkflowTabsEnabled(): boolean {
  * gates on its own "has messages" notion; the guards below are the floor.
  */
 export function WorkflowTabs() {
-  // Grants is allowlist-restricted: its tab is hidden for everyone else
-  // (the server APIs enforce access regardless).
-  const { data: session } = useSession();
   // Admin workflow policy hides switched-off workflows for everyone; the
   // Chat tab is never a workflow and always stays.
   const { isWorkflowEnabled } = useWorkflowPolicy();
+  const { hasGrantsAccess } = useGrantsAccess();
   const visibleTabIds = TAB_IDS.filter(
     (tab) =>
       tab === CHAT_TAB ||
-      (isWorkflowEnabled(tab) &&
-        (tab !== 'grants' || canAccessGrants(session?.user))),
+      (isWorkflowEnabled(tab) && (tab !== 'grants' || hasGrantsAccess)),
   );
   const t = useTranslations('workflows');
   const enabled = useWorkflowTabsEnabled();
