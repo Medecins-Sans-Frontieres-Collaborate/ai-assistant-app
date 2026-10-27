@@ -1,5 +1,7 @@
 'use client';
 
+import { normalizeUserSkills } from '@/lib/services/skills/userSkills';
+
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import {
@@ -250,6 +252,8 @@ interface SettingsStore {
   customDisplayName: string;
   models: OpenAIModel[];
   prompts: Prompt[];
+  /** Browser-local personal skills; never stored by admin APIs. */
+  userSkills: import('@/lib/services/skills/types').UserSkill[];
   tones: Tone[];
   customAgents: CustomAgent[];
   customAgentSources: AgentSource[];
@@ -487,6 +491,9 @@ interface SettingsStore {
   setUserContext: (context: string) => void;
   setModels: (models: OpenAIModel[]) => void;
   setPrompts: (prompts: Prompt[]) => void;
+  setUserSkills: (
+    skills: import('@/lib/services/skills/types').UserSkill[],
+  ) => void;
   addPrompt: (prompt: Prompt) => void;
   updatePrompt: (id: string, updates: Partial<Prompt>) => void;
   deletePrompt: (id: string) => void;
@@ -990,6 +997,7 @@ export const useSettingsStore = create<SettingsStore>()(
       customDisplayName: DEFAULT_CUSTOM_DISPLAY_NAME,
       models: [],
       prompts: [],
+      userSkills: [],
       tones: [],
       customAgents: [],
       customAgentSources: [],
@@ -1141,6 +1149,8 @@ export const useSettingsStore = create<SettingsStore>()(
       setModels: (models) => set({ models }),
 
       setPrompts: (prompts) => set({ prompts }),
+      setUserSkills: (skills) =>
+        set({ userSkills: normalizeUserSkills(skills) }),
 
       addPrompt: (prompt) =>
         set((state) => ({
@@ -1993,6 +2003,7 @@ export const useSettingsStore = create<SettingsStore>()(
           displayNamePreference: DEFAULT_DISPLAY_NAME_PREFERENCE,
           customDisplayName: DEFAULT_CUSTOM_DISPLAY_NAME,
           prompts: [],
+          userSkills: [],
           tones: [],
           customAgents: [],
           glossaries: [],
@@ -2059,7 +2070,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 70, // Increment this when schema changes to trigger migrations
+      version: 71, // v71: browser-local personal skills
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2072,6 +2083,7 @@ export const useSettingsStore = create<SettingsStore>()(
         displayNamePreference: state.displayNamePreference,
         customDisplayName: state.customDisplayName,
         prompts: state.prompts,
+        userSkills: state.userSkills,
         tones: state.tones,
         customAgents: state.customAgents,
         customAgentSources: state.customAgentSources,
@@ -2180,6 +2192,8 @@ export const useSettingsStore = create<SettingsStore>()(
       }),
       migrate: (persistedState, version) => {
         const state = persistedState as Record<string, unknown>;
+        if (version < 71)
+          state.userSkills = normalizeUserSkills(state.userSkills);
 
         // Version 4 → 5: Convert 'default' mode to 'usage'
         if (version < 5 && state.modelOrderMode === 'default') {
@@ -3029,6 +3043,7 @@ export const useSettingsStore = create<SettingsStore>()(
           if (!Array.isArray(state.formTemplates)) {
             state.formTemplates = [];
           }
+          state.userSkills = normalizeUserSkills(state.userSkills);
           // Defensive (hand-edited storage): see coerceAppliedRetirements.
           state.modelRetirementsApplied = coerceAppliedRetirements(
             state.modelRetirementsApplied,
