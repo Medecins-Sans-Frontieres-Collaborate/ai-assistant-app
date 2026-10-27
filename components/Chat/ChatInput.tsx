@@ -71,6 +71,7 @@ import { InterpreterModeBadge } from '@/components/Chat/ChatInput/InterpreterMod
 import { M365PlaybookChips } from '@/components/Chat/ChatInput/M365PlaybookChips';
 import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
+import { SkillBadges } from '@/components/Chat/ChatInput/SkillBadges';
 import { ToneBadge } from '@/components/Chat/ChatInput/ToneBadge';
 import { M365AgentAccessBanner } from '@/components/Chat/M365AgentAccessBanner';
 
@@ -601,6 +602,7 @@ export const ChatInput = ({
         {(selectedConversation?.pinnedMcpServerId || connectorPinTrayOpen) && (
           <ConnectorPinTray />
         )}
+        <SkillBadges />
 
         {/* M365 agent source-access preflight (renders only when an M365
             file-backed agent is selected AND some sources are denied) */}
