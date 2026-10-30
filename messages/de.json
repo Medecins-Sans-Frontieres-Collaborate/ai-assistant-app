@@ -899,7 +899,8 @@
       "hideDetails": "Skill-Details ausblenden",
       "agentLoad": "vom Agent geladen",
       "agentSearch": "vom Agent durchsuchte Dokumente"
-    }
+    },
+    "skillsManualHint": "Die automatische Auswahl ist in den Einstellungen deaktiviert. Verwenden Sie eine Fähigkeit einmal für die nächste Nachricht oder heften Sie sie an, um sie während des gesamten Gesprächs zu nutzen."
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -1360,7 +1361,11 @@
       "preferModelTitle": "Bevorzugtes Modell verwenden",
       "preferModelDescription": "Nicht automatisch zu einem anderen Modell wechseln, wenn eine Anfrage fehlschlägt. Der Fehler bietet weiterhin das Wechseln an."
     },
-    "Analytics": "Analytics"
+    "Analytics": "Analytics",
+    "skills": {
+      "autoApply": "Den Assistenten Fähigkeiten automatisch anwenden lassen",
+      "autoApplyDescription": "Relevante Fähigkeiten und Ihre persönlichen Fähigkeiten werden für jede Nachricht ausgewählt. Wenn ausgeschaltet, werden nur die von Ihnen angeforderten oder angehefteten Fähigkeiten sowie die von einem Administrator für alle Gespräche festgelegten Fähigkeiten verwendet."
+    }
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",

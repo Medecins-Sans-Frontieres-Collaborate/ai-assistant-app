@@ -1011,7 +1011,8 @@
       "hideDetails": "Sakrij detalje veštine",
       "agentLoad": "učitano od strane agenta",
       "agentSearch": "dokumenta pretražio agent"
-    }
+    },
+    "skillsManualHint": "Automatski izbor je isključen u Podešavanjima. Upotrebite veštinu jednom za sledeću poruku ili je zakačite da bi se koristila tokom celog razgovora."
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Preferiraj moj izabrani model",
       "preferModelDescription": "Nemoj automatski prebacivati na drugi model kada zahtev ne uspe. Greška će i dalje ponuditi promenu modela."
     },
-    "Analytics": "Analitika"
+    "Analytics": "Analitika",
+    "skills": {
+      "autoApply": "Dozvolite asistentu da automatski primenjuje veštine",
+      "autoApplyDescription": "Relevantne veštine, kao i vaše lične veštine, biraju se za svaku poruku. Kada je isključeno, koriste se samo veštine koje vi zahtevate ili zakačite, i veštine koje administrator primenjuje na svaki razgovor."
+    }
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",

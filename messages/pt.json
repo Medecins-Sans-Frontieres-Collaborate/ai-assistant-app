@@ -899,7 +899,8 @@
       "hideDetails": "Ocultar detalhes da habilidade",
       "agentLoad": "carregado pelo agente",
       "agentSearch": "documentos pesquisados pelo agente"
-    }
+    },
+    "skillsManualHint": "A seleção automática está desativada nas Configurações. Use uma vez para a próxima mensagem ou fixe uma habilidade para utilizá-la durante toda esta conversa."
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -1360,7 +1361,11 @@
       "preferModelTitle": "Preferir meu modelo selecionado",
       "preferModelDescription": "Não trocar automaticamente para outro modelo quando uma solicitação falhar. O erro ainda permitirá a troca."
     },
-    "Analytics": "Análises"
+    "Analytics": "Análises",
+    "skills": {
+      "autoApply": "Permitir que o assistente aplique habilidades automaticamente",
+      "autoApplyDescription": "Habilidades relevantes e suas habilidades pessoais são selecionadas para cada mensagem. Quando desativada, apenas habilidades solicitadas ou fixadas por você, e habilidades aplicadas por um administrador para todas as conversas, serão usadas."
+    }
   },
   "notFound": {
     "lostDog": "Cão perdido"

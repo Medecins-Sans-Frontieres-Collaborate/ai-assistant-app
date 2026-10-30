@@ -1011,7 +1011,8 @@
       "hideDetails": "Nyegeza ivyerekeye ubumenyi",
       "agentLoad": "vyashizweko n'uwukora",
       "agentSearch": "inyandiko zarashakwe n'uwukora"
-    }
+    },
+    "skillsManualHint": "Guhitamwo bihanitse vyakuwe muri Ivyashizweho. Koresha rimwe ku butumwa bukurikira, canke ufate ubumenyi kugirango ubukoreshe muri iyi biganiro yose."
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Hitamwo model wahisemwo",
       "preferModelDescription": "Ntihindure model yikora iyo dosiye ihomvye. Ikosa rizogira inama yo guhindura."
     },
-    "Analytics": "Analytics"
+    "Analytics": "Analytics",
+    "skills": {
+      "autoApply": "Reka umufasha ashyire mu bikorwa ubumenyi bwikora",
+      "autoApplyDescription": "Ubumenyi bijanye n'ubutumwa hamwe n'ubumenyi bwawe bwite biratoranwa kuri buri butumwa. Iyo bigeze hasi, hakoreshwa gusa ubumenyi wasavye canke wafashe, hamwe n'ubumenyi umuyobozi yashize ku kiganiro cose."
+    }
   },
   "emptyState": {
     "greeting": "Ndagufasha nte?",

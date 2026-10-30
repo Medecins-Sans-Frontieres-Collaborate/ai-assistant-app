@@ -1011,7 +1011,8 @@
       "hideDetails": "Sosnu skill details",
       "agentLoad": "agent mo jahii",
       "agentSearch": "documents agent mo njahi"
-    }
+    },
+    "skillsManualHint": "Suɓo yimitte e Teelte. Waɗ yontondiral gooto e junngidole, walla fabo so tawii aɗa heɓi tokku e hito e wannan jawdi."
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Balloo model ngal mi suɓi",
       "preferModelDescription": "Aɗa waawi waawan feccitaade model goɗɗo so jokka weelli. Jiraa walla miɗo hokkude e model goɗɗo."
     },
-    "Analytics": "Analytics"
+    "Analytics": "Analytics",
+    "skills": {
+      "autoApply": "Rabai assistant ngam mbaɗa caggal mbayden baare",
+      "autoApplyDescription": "Mbayden laawol, e mbaɗii nde njaatigi maa, ɗi mbaɗi fof e caɗe goo. So suɓi, mbaɗen jooniɗɗo fof ngol a waawi habbugol walla fabbogol, e mbaɗen jooniɗɗo goo admin mbaɗi e jawdi fow, ɗi mbaɗi."
+    }
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",

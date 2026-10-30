@@ -1011,7 +1011,8 @@
       "hideDetails": "Kache detay sou konpetans",
       "agentLoad": "chaje pa ajan",
       "agentSearch": "dokiman chèche pa ajan"
-    }
+    },
+    "skillsManualHint": "Seleksyon otomatik la fèmen nan Anviwònman. Sèvi avè l yon sèl fwa pou pwochen mesaj la, oswa fikse yon konpetans pou itilize li pandan tout konvèsasyon sa a."
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Bay modèl mwen chwazi a prioritè",
       "preferModelDescription": "Pa chanje otomatikman pou yon lòt modèl lè yon demann echwe. Erè a ap toujou ofri opsyon pou chanje."
     },
-    "Analytics": "Analiz"
+    "Analytics": "Analiz",
+    "skills": {
+      "autoApply": "Kite asistan an aplike konpetans yo otomatikman",
+      "autoApplyDescription": "Konpetans ki enpòtan, ak sa w genyen pèsonèlman, yo chwazi pou chak mesaj. Lè fonksyon sa a fèmen, se sèlman konpetans ou mande oswa fikse, ak sa administratè a mete pou tout konvèsasyon, ki itilize."
+    }
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",

@@ -953,7 +953,8 @@
       "hideDetails": "Beceri detaylarını gizle",
       "agentLoad": "ajan tarafından yüklendi",
       "agentSearch": "ajan tarafından belgeler arandı"
-    }
+    },
+    "skillsManualHint": "Otomatik seçim Ayarlar'da kapalı. Bir sonraki mesaj için bir kez kullanabilir veya bir yeteneği sabitleyerek bu görüşme boyunca kullanabilirsiniz."
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -1360,7 +1361,11 @@
       "preferModelTitle": "Seçili modelimi tercih et",
       "preferModelDescription": "Bir istek başarısız olduğunda otomatik olarak başka bir modele geçme. Hata, model değiştirme seçeneğini yine de sunacak."
     },
-    "Analytics": "Analitik"
+    "Analytics": "Analitik",
+    "skills": {
+      "autoApply": "Asistanın yetenekleri otomatik olarak uygulamasına izin ver",
+      "autoApplyDescription": "İlgili yetenekler ve kişisel yetenekleriniz her mesaj için seçilir. Kapalı olduğunda, yalnızca talep ettiğiniz veya sabitlediğiniz yetenekler ve bir yöneticinin tüm görüşmelere uyguladığı yetenekler kullanılır."
+    }
   },
   "notFound": {
     "lostDog": "Kayıp köpek"

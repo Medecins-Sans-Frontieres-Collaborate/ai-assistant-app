@@ -896,7 +896,8 @@
       "hideDetails": "የዘዴ ዝርዝሮችን ደብቅ",
       "agentLoad": "በagent ተጫነ",
       "agentSearch": "በagent የተወደዱ ሰነዶች"
-    }
+    },
+    "skillsManualHint": "በሴቲንግስ ላይ ራስ-ሰር መምረጥ ተዘግቷል። ለቀጣይ መልእክት አንድ ጊዜ ይጠቀሙ፣ ወይም ችሎታን ለዚህ ውይይት ሁሉ ይጠቁሙ።"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -1303,7 +1304,11 @@
       "preferModelTitle": "የተመረጠውን ሞዴል መርጠው ይጠቀሙ",
       "preferModelDescription": "ጥያቄ ሳይሳካ ሞዴል ራሱን ለወጥ አያደርግም። ችግሩ ቢኖር ይቅዱ የሚለው አንድ አማራጭ ይሆናል።"
     },
-    "Analytics": "ትንተና"
+    "Analytics": "ትንተና",
+    "skills": {
+      "autoApply": "አማካሪው ችሎታዎችን ራስ-ሰር እንዲተገበሩ ይፍቀዱ",
+      "autoApplyDescription": "ተዛማጅ ችሎታዎች እና የግል ችሎታዎ ለእያንዳንዱ መልእክት ይመረጣሉ። ይህ ሲዘጋ ከእርስዎ የተጠየቁ ወይም የቆሙና አስተዳዳሪ በሁሉም ውይይት የወሰኑ ችሎታዎች ብቻ ይጠቀማሉ።"
+    }
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"

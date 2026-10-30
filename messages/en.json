@@ -801,6 +801,7 @@
     "skillsPaused": "paused",
     "skillUnavailable": "unavailable",
     "skillsAutomaticHint": "Relevant skills are selected automatically. Use once for the next message, or pin a skill to use it throughout this conversation.",
+    "skillsManualHint": "Automatic selection is off in Settings. Use once for the next message, or pin a skill to use it throughout this conversation.",
     "skillsAgentDisabled": "Skills are paused while an agent is attached. Your pins will resume when you detach the agent.",
     "skillAlwaysOn": "always on",
     "skillAlwaysOnHint": "Added to every message in this conversation by an admin.",
@@ -1509,6 +1510,10 @@
       "additionalContext": "Additional Context",
       "additionalContextPlaceholder": "E.g., I work in field operations, prefer concise responses, often ask about medical protocols...",
       "additionalContextDescription": "Any other information you'd like the AI to know about you"
+    },
+    "skills": {
+      "autoApply": "Let the assistant apply skills automatically",
+      "autoApplyDescription": "Relevant skills, and your personal skills, are selected for each message. When off, only skills you request or pin and skills an admin applies to every conversation are used."
     },
     "tts": {
       "title": "Text-to-Speech",
@@ -5296,7 +5301,7 @@
   },
   "personalSkills": {
     "title": "Personal skills",
-    "description": "Save reusable instructions for your own conversations. Skills stay in this browser and are sent to the model only when you chat. Relevant skills can be selected automatically, used once, or pinned. They cannot change organization policy or grant tool access. Skill use requires skills to be enabled for this deployment; agent conversations do not use personal skills.",
+    "description": "Save reusable instructions for your own conversations. Skills stay in this browser and are sent to the model only when you chat. Relevant skills can be selected automatically, used once, or pinned. They cannot change organization policy or grant tool access. Personal skills are used only while automatic skill selection is on in Settings; agent conversations do not use personal skills.",
     "importFile": "Import SKILL.md or ZIP",
     "review": "Review the complete instructions before saving. Imported instructions are user preferences, not trusted organization policy.",
     "skipped": "Executable scripts were skipped",

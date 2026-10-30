@@ -918,7 +918,8 @@
       "hideDetails": "Verberg skilldetails",
       "agentLoad": "geladen door agent",
       "agentSearch": "documenten gezocht door agent"
-    }
+    },
+    "skillsManualHint": "Automatische selectie staat uit in Instellingen. Gebruik eenmalig voor het volgende bericht, of pin een vaardigheid om deze in het hele gesprek te gebruiken."
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -1325,7 +1326,11 @@
       "preferModelTitle": "Mijn geselecteerd model prefereren",
       "preferModelDescription": "Niet automatisch naar een ander model overschakelen als een verzoek faalt. De foutmelding biedt nog steeds de mogelijkheid om te wisselen."
     },
-    "Analytics": "Analytics"
+    "Analytics": "Analytics",
+    "skills": {
+      "autoApply": "De assistent vaardigheden automatisch laten toepassen",
+      "autoApplyDescription": "Relevante vaardigheden en uw persoonlijke vaardigheden worden per bericht geselecteerd. Als deze optie uit staat, worden alleen de vaardigheden die u aanvraagt of vastzet en de vaardigheden die een beheerder op elk gesprek toepast, gebruikt."
+    }
   },
   "notFound": {
     "lostDog": "Verloren hond"

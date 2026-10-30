@@ -954,7 +954,8 @@
       "hideDetails": "Ẩn chi tiết kỹ năng",
       "agentLoad": "được agent tải lên",
       "agentSearch": "tài liệu được agent tìm kiếm"
-    }
+    },
+    "skillsManualHint": "Tự động chọn đã tắt trong Cài đặt. Sử dụng một lần cho tin nhắn tiếp theo hoặc ghim kỹ năng để dùng xuyên suốt cuộc trò chuyện này."
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -1361,7 +1362,11 @@
       "preferModelTitle": "Ưu tiên mô hình đã chọn",
       "preferModelDescription": "Không tự động chuyển mô hình khác khi yêu cầu thất bại. Lỗi vẫn sẽ cho phép bạn chuyển đổi."
     },
-    "Analytics": "Phân tích"
+    "Analytics": "Phân tích",
+    "skills": {
+      "autoApply": "Cho phép trợ lý tự động áp dụng kỹ năng",
+      "autoApplyDescription": "Các kỹ năng liên quan và kỹ năng cá nhân của bạn sẽ được chọn cho từng tin nhắn. Khi tắt, chỉ những kỹ năng bạn yêu cầu hoặc ghim, và các kỹ năng quản trị viên áp dụng cho tất cả cuộc trò chuyện mới được sử dụng."
+    }
   },
   "notFound": {
     "lostDog": "Chó bị lạc"

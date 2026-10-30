@@ -1011,7 +1011,8 @@
       "hideDetails": "Kokunda makambo mingi ya skill",
       "agentLoad": "ebongisami na agent",
       "agentSearch": "ba ndakisa basalelamaki na agent"
-    }
+    },
+    "skillsManualHint": "Kopona ya automatique ezali te na Paramètres. Salela mbala moko na sango elandi, to pindá mayele moko mpo esalela na nsuka ya lisungi oyo."
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Lingaka modele na ngai",
       "preferModelDescription": "Komboisela modele mosusu automatikal te soki mposa ekokisami te. Mbeba ekopesa kaka likoki ya kobongola."
     },
-    "Analytics": "Analytics"
+    "Analytics": "Analytics",
+    "skills": {
+      "autoApply": "Leka assistant asalela mayele na automatique",
+      "autoApplyDescription": "Mayele ekokani, mpe oyo ya yo moko, epónamaka pona sango mokoté. Soki ezali na yambo te, kaka mayele oyo osengi to opindá mpe oyo admin apesaka na lisungi nyonso esalelamaka."
+    }
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",

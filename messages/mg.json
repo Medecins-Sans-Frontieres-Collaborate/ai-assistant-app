@@ -1011,7 +1011,8 @@
       "hideDetails": "Afeno ny antsipiriany fahaiza-manao",
       "agentLoad": "nataon’ny agent",
       "agentSearch": "antontan-taratasy notadiavin’ny agent"
-    }
+    },
+    "skillsManualHint": "Tsy mandeha ho azy ny fisafidianana ao amin'ny Fikirana. Ampiasao indray mandeha amin'ny hafatra manaraka, na aparitaho mandritra ity resaka ity ny fahaiza-manao iray."
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Aleoko ilay modely voafidy",
       "preferModelDescription": "Aza mifanova ho modely hafa ho azy raha tsy mahomby ny fangatahana. Mbola ho hita amin'ny hadisoana ihany ny safidy hanova."
     },
-    "Analytics": "Analytics"
+    "Analytics": "Analytics",
+    "skills": {
+      "autoApply": "Avelao ny mpanampy hampihatra ho azy ny fahaiza-manao",
+      "autoApplyDescription": "Fahaiza-manao mifandraika, sy ireo fahaiza-manao manokana anananao, no voafantina amin'ny hafatra tsirairay. Raha tsy mandeha, dia ireo fahaiza-manao angatahanao na aparitaka, sy ireo fahaiza-manao ampiharina amin'ny resaka rehetra amin'ny alàlan'ny admin ihany no ampiasaina."
+    }
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",

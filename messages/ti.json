@@ -1011,7 +1011,8 @@
       "hideDetails": "ዝርዝራት ሰርክ ምሕባብ",
       "agentLoad": "ኣብ agent ዝተግበሩ",
       "agentSearch": "ሰነዶታት ብ agent ዝተወሰዱ"
-    }
+    },
+    "skillsManualHint": "ሓሳብ ኣብ ቅድሚ ኣይተሰረዙን። ንብቲ መልእኽቲ ናይ ሓደ ግዜ ጭን ወይ ትክክል ናይ ኣዚ ባይ ትምህርት ሓሳብ ምርጫ ምሕባ የኽንስ።"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "ዝመረፅኩም ሞዴል ኣምርጹ",
       "preferModelDescription": "ንሓሳብ ኣይትቀይሩ ኣይንኣምርጹም እዩ ሓሳብ መልስ ይኸውን ዝበለ ግን ሓሳብ ይፈትኑ።"
     },
-    "Analytics": "Analytics"
+    "Analytics": "Analytics",
+    "skills": {
+      "autoApply": "ነፍሲ መሓላፍ ብፍጻሜ ከም ዝገብሩ ኣድሗ።",
+      "autoApplyDescription": "ናይ መሓላፍ ኣሕዋትን ናይ ተወሳኺ እዋንን ንኣብ ዝነበሩ መልእኽቲ ይምረጹ። እዚ ዝተሰኣቱ ኣይኮነን ኣብ ዝተምረጹን ንዝጠወቕን ወይ ኣስተዳደር ኣብ ቐፅቕፅ ዝምልከት ናብ ዝተገበሩ ባይ መሓላፍ ኣይጥቀምን።"
+    }
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",

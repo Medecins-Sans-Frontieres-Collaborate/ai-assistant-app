@@ -1011,7 +1011,8 @@
       "hideDetails": "Bisani zambiri za luso",
       "agentLoad": "zatsegulidwa ndi agent",
       "agentSearch": "zolemba zasakidwa ndi agent"
-    }
+    },
+    "skillsManualHint": "Kusankhidwa kwa ntchito zokha kwazimitsidwa mu Zikhazikiko. Gwiritsani ntchito kamodzi pa uthenga wotsatira, kapena pangani pin ntchito kuti igwiritsidwe mu zokambirana zonsezi."
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Sankhani model yanga",
       "preferModelDescription": "Osamasintha model zokha ngati pempho laalephera. Cholakwika chidzapereka mwayi osintha."
     },
-    "Analytics": "Kuwunika deta"
+    "Analytics": "Kuwunika deta",
+    "skills": {
+      "autoApply": "Lolani wothandizira kugwiritsa ntchito ntchito zokha",
+      "autoApplyDescription": "Ntchito zofunika, komanso ntchito zanu, zimasankhidwa pa uthenga uliwonse. Akazimitsidwa, ntchito zomwe mumapempha kapena kupanga pin, komanso ntchito zomwe admin amagwiritsa ntchito pa zokambirana zonse, ndizomwe zimagwiritsidwa ntchito."
+    }
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",

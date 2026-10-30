@@ -928,7 +928,8 @@
       "hideDetails": "Amaga els detalls de la habilitat",
       "agentLoad": "carregada per l’agent",
       "agentSearch": "documents cercats per l’agent"
-    }
+    },
+    "skillsManualHint": "La selecció automàtica està desactivada a Configuració. Utilitzeu una habilitat per al proper missatge o fixeuneu-ne una per utilitzar-la durant tota aquesta conversa."
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -1335,7 +1336,11 @@
       "preferModelTitle": "Preferesc el meu model seleccionat",
       "preferModelDescription": "No canviïs automàticament a un altre model quan una petició falla. L'error igualment oferirà el canvi."
     },
-    "Analytics": "Analítica"
+    "Analytics": "Analítica",
+    "skills": {
+      "autoApply": "Permet que l'assistent apliqui habilitats automàticament",
+      "autoApplyDescription": "S'escullen habilitats rellevants i les teves habilitats personals per a cada missatge. Si està desactivat, només s'utilitzen les habilitats que sol·licitis o fixis, i aquelles que un administrador apliqui a totes les converses."
+    }
   },
   "notFound": {
     "lostDog": "Gos perdut"

@@ -1011,7 +1011,8 @@
       "hideDetails": "Yeke na sô skill ti gbogbo",
       "agentLoad": "ngbala na agent",
       "agentSearch": "documents ku agent yeke na mara"
-    }
+    },
+    "skillsManualHint": "Poko so ti yeke na Settings. Mbi kama na yeke mo ti wa na ni, to pin na skill ti yeke na wa na makara ti nzoni so alingo."
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Pênda model a mo a tî",
       "preferModelDescription": "Ala gbanga model bâla tî bî tî demanda ayeke bô. Erö ayeke tî mbi kété model."
     },
-    "Analytics": "Ánalîtiki"
+    "Analytics": "Ánalîtiki",
+    "skills": {
+      "autoApply": "Mbi ti assistant ti yeke skills na mbata",
+      "autoApplyDescription": "Skills ti yeke na singa na skills ti londu na yengi, ti seleka wa na ndoye. To poko so, mo ti yeke na skills ti mo ti sala na pin na skills ti admin ti yeke na yenga ti nzoni so alingo."
+    }
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",

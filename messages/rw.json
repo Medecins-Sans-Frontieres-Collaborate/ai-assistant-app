@@ -1011,7 +1011,8 @@
       "hideDetails": "Hisha ibisobanuro by’ubumenyi",
       "agentLoad": "byapakuruwe n’umukozi",
       "agentSearch": "inyandiko zashakishijwe n’umukozi"
-    }
+    },
+    "skillsManualHint": "Guhitamo byikora birazimye muri Settings. Koresha inshuro imwe ku butumwa bukurikira, cyangwa shyiraho ubuhanga bwihariye kugira ngo bukomeze gukoreshwa muri iki kiganiro."
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Hitamo model nahisemo",
       "preferModelDescription": "Ntihite ihindura model iyo habayeho ikibazo cyo gusubiza. Ubutumwa bw’ikosa buzaba bugifite amahitamo yo guhindura."
     },
-    "Analytics": "Isesengura"
+    "Analytics": "Isesengura",
+    "skills": {
+      "autoApply": "Reka assistant ihitemo ubuhanga byikora",
+      "autoApplyDescription": "Ubumenyi buhuye n'ubutumwa ndetse n'ubumenyi bwawe bwihariye buhitamo kuri buri butumwa. Iyo ibi byazimye, ni ubuhanga wahisemo cyangwa wabifasheho, ndetse n'ubuhanga admin yashyiriyeho buri kiganiro, nibyo bikoreshwa gusa."
+    }
   },
   "emptyState": {
     "greeting": "Nakugufasha nte?",

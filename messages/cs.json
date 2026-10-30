@@ -953,7 +953,8 @@
       "hideDetails": "Skrýt detaily dovednosti",
       "agentLoad": "načteno agentem",
       "agentSearch": "dokumenty vyhledané agentem"
-    }
+    },
+    "skillsManualHint": "Automatický výběr je vypnutý v nastavení. Použijte jednorázově pro další zprávu nebo připněte dovednost, aby byla používána v celém tomto rozhovoru."
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -1360,7 +1361,11 @@
       "preferModelTitle": "Preferovat vybraný model",
       "preferModelDescription": "Nepřepínat automaticky na jiný model při neúspěšném požadavku. Chybové hlášení stále nabídne možnost přepnout."
     },
-    "Analytics": "Analytika"
+    "Analytics": "Analytika",
+    "skills": {
+      "autoApply": "Povolit asistentovi automaticky aplikovat dovednosti",
+      "autoApplyDescription": "Relevantní dovednosti a vaše osobní dovednosti jsou vybírány pro každou zprávu. Pokud je tato volba vypnutá, použijí se pouze dovednosti, které si vyžádáte nebo připnete, a dovednosti, které nastaví administrátor pro každý rozhovor."
+    }
   },
   "notFound": {
     "lostDog": "Ztracený pes"

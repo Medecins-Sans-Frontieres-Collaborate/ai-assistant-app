@@ -984,7 +984,8 @@
       "hideDetails": "隐藏技能详情",
       "agentLoad": "由代理加载",
       "agentSearch": "由代理检索文档"
-    }
+    },
+    "skillsManualHint": "设置中已关闭自动选择。可选择在下条消息中使用一次，或固定某个技能以在本次对话中持续使用。"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1391,7 +1392,11 @@
       "preferModelTitle": "优先使用我选择的模型",
       "preferModelDescription": "当请求失败时不自动切换模型。仍可在错误提示中手动切换。"
     },
-    "Analytics": "分析"
+    "Analytics": "分析",
+    "skills": {
+      "autoApply": "允许助手自动应用技能",
+      "autoApplyDescription": "每条消息会自动选择相关技能和您的个人技能。关闭后，只会使用您主动选择或固定的技能，以及管理员为每次对话设定的技能。"
+    }
   },
   "notFound": {
     "lostDog": "迷路的狗"

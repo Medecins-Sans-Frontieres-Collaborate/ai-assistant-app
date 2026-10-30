@@ -951,7 +951,8 @@
       "hideDetails": "Ascunde detaliile abilității",
       "agentLoad": "încărcat de agent",
       "agentSearch": "documente căutate de agent"
-    }
+    },
+    "skillsManualHint": "Selecția automată este dezactivată în Setări. Utilizați o dată pentru următorul mesaj sau fixați o abilitate pentru a o folosi pe tot parcursul acestei conversații."
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -1358,7 +1359,11 @@
       "preferModelTitle": "Prefer modelul selectat",
       "preferModelDescription": "Nu comuta automat la un alt model când o solicitare eșuează. Eroarea va permite în continuare schimbarea modelului."
     },
-    "Analytics": "Analitice"
+    "Analytics": "Analitice",
+    "skills": {
+      "autoApply": "Permiteți asistentului să aplice abilitățile automat",
+      "autoApplyDescription": "Abilitățile relevante și abilitățile dvs. personale sunt selectate pentru fiecare mesaj. Când este dezactivat, sunt folosite doar abilitățile pe care le solicitați sau le fixați și abilitățile aplicate de un administrator la fiecare conversație."
+    }
   },
   "notFound": {
     "lostDog": "Câine pierdut"

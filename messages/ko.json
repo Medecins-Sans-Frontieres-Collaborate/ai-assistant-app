@@ -953,7 +953,8 @@
       "hideDetails": "스킬 상세 숨기기",
       "agentLoad": "에이전트가 로드함",
       "agentSearch": "에이전트가 검색한 문서"
-    }
+    },
+    "skillsManualHint": "자동 선택 기능이 설정에서 꺼져 있습니다. 다음 메시지에 한 번 사용하거나, 스킬을 고정하여 대화 내내 사용할 수 있습니다."
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -1360,7 +1361,11 @@
       "preferModelTitle": "선택한 모델 우선 사용",
       "preferModelDescription": "요청이 실패해도 자동으로 다른 모델로 전환하지 않습니다. 오류 시 전환 옵션은 계속 제공됩니다."
     },
-    "Analytics": "분석"
+    "Analytics": "분석",
+    "skills": {
+      "autoApply": "어시스턴트가 스킬을 자동으로 적용하도록 허용",
+      "autoApplyDescription": "관련 스킬과 개인 스킬이 각 메시지에 맞게 선택됩니다. 이 기능을 끄면, 요청하거나 고정한 스킬과 관리자가 모든 대화에 적용한 스킬만 사용됩니다."
+    }
   },
   "notFound": {
     "lostDog": "잃어버린 개"

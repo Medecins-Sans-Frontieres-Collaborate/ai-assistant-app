@@ -899,7 +899,8 @@
       "hideDetails": "Masquer les détails de la compétence",
       "agentLoad": "chargée par l'agent",
       "agentSearch": "documents recherchés par l'agent"
-    }
+    },
+    "skillsManualHint": "La sélection automatique est désactivée dans les paramètres. Utilisez une fois pour le prochain message, ou épinglez une compétence pour l'utiliser durant toute cette conversation."
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",
@@ -1360,7 +1361,11 @@
       "preferModelTitle": "Préférer mon modèle sélectionné",
       "preferModelDescription": "Ne pas changer de modèle automatiquement en cas d’échec d’une demande. Le message d’erreur proposera toujours le changement."
     },
-    "Analytics": "Analytique"
+    "Analytics": "Analytique",
+    "skills": {
+      "autoApply": "Permettre à l’assistant d’appliquer les compétences automatiquement",
+      "autoApplyDescription": "Les compétences pertinentes, ainsi que vos compétences personnelles, sont sélectionnées pour chaque message. Lorsqu’elle est désactivée, seules les compétences que vous demandez ou que vous épinglez, et celles appliquées par un administrateur à chaque conversation, sont utilisées."
+    }
   },
   "notFound": {
     "lostDog": "Chien perdu"

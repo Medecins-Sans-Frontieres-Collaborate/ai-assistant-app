@@ -953,7 +953,8 @@
       "hideDetails": "Ficha maelezo ya ujuzi",
       "agentLoad": "imewekwa na wakala",
       "agentSearch": "nyaraka zilizopekuliwa na wakala"
-    }
+    },
+    "skillsManualHint": "Uteuzi wa moja kwa moja umezimwa kwenye Mipangilio. Tumia mara moja kwa ujumbe unaofuata, au weka skill ili itumike kwenye mazungumzo haya yote."
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -1360,7 +1361,11 @@
       "preferModelTitle": "Pendelea mfano niliouchagua",
       "preferModelDescription": "Usibadilishe mfano kiotomatiki ombi likishindikana. Ujumbe wa kosa bado utapendekeza kubadilisha."
     },
-    "Analytics": "Takwimu"
+    "Analytics": "Takwimu",
+    "skills": {
+      "autoApply": "Ruhusu msaidizi kutumia skills moja kwa moja",
+      "autoApplyDescription": "Skills zinazofaa, pamoja na skills zako binafsi, zitachaguliwa kwa kila ujumbe. Iwapo imezimwa, utatumia skills unazoomba au kuweka, pamoja na skills ambazo admin anaweka kwa kila mazungumzo."
+    }
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"

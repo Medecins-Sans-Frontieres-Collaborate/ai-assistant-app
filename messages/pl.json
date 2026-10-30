@@ -950,7 +950,8 @@
       "hideDetails": "Ukryj szczegóły umiejętności",
       "agentLoad": "załadowane przez agenta",
       "agentSearch": "dokumenty przeszukane przez agenta"
-    }
+    },
+    "skillsManualHint": "Automatyczny wybór jest wyłączony w Ustawieniach. Użyj jednorazowo przy następnej wiadomości lub przypnij umiejętność, aby korzystać z niej przez całą rozmowę."
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -1357,7 +1358,11 @@
       "preferModelTitle": "Preferuj mój wybrany model",
       "preferModelDescription": "Nie przełączaj automatycznie na inny model, gdy wystąpi błąd żądania. W przypadku błędu będzie można nadal zmienić model ręcznie."
     },
-    "Analytics": "Analityka"
+    "Analytics": "Analityka",
+    "skills": {
+      "autoApply": "Pozwól asystentowi automatycznie stosować umiejętności",
+      "autoApplyDescription": "Odpowiednie umiejętności i Twoje personalne umiejętności są wybierane dla każdej wiadomości. Gdy wyłączone, używane są tylko umiejętności, o które poprosisz, które przypniesz lub które administrator zastosuje do każdej rozmowy."
+    }
   },
   "notFound": {
     "lostDog": "Zagubiony pies"

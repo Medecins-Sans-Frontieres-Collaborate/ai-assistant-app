@@ -928,7 +928,8 @@
       "hideDetails": "Piilota taidon tiedot",
       "agentLoad": "agentti latasi",
       "agentSearch": "agentti haki dokumentteja"
-    }
+    },
+    "skillsManualHint": "Automaattinen valinta on pois päältä asetuksissa. Käytä kerran seuraavan viestin kohdalla tai kiinnitä taito käyttääksesi sitä koko keskustelun ajan."
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -1335,7 +1336,11 @@
       "preferModelTitle": "Suosi valitsemaani mallia",
       "preferModelDescription": "Älä vaihda toiseen malliin automaattisesti, jos pyyntö epäonnistuu. Virheilmoitus tarjoaa kuitenkin mallin vaihdon."
     },
-    "Analytics": "Analytiikka"
+    "Analytics": "Analytiikka",
+    "skills": {
+      "autoApply": "Anna avustajan soveltaa taitoja automaattisesti",
+      "autoApplyDescription": "Sopivat ja omat taitosi valitaan kullekin viestille. Kun tämä on pois päältä, käytetään vain pyytämiäsi tai kiinnittämiäsi taitoja sekä ylläpitäjän kaikkiin keskusteluihin lisäämiä taitoja."
+    }
   },
   "notFound": {
     "lostDog": "Kadonnut koira"

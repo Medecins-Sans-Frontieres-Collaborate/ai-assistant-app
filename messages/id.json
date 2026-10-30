@@ -920,7 +920,8 @@
       "hideDetails": "Sembunyikan detail keahlian",
       "agentLoad": "dimuat oleh agen",
       "agentSearch": "dokumen dicari oleh agen"
-    }
+    },
+    "skillsManualHint": "Pemilihan otomatis dimatikan di Pengaturan. Gunakan sekali untuk pesan berikutnya, atau sematkan sebuah skill untuk menggunakannya selama percakapan ini."
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -1327,7 +1328,11 @@
       "preferModelTitle": "Utamakan model yang saya pilih",
       "preferModelDescription": "Jangan otomatis beralih ke model lain jika permintaan gagal. Pesan kesalahan masih akan menawarkan opsi ini."
     },
-    "Analytics": "Analitik"
+    "Analytics": "Analitik",
+    "skills": {
+      "autoApply": "Izinkan asisten menerapkan skill secara otomatis",
+      "autoApplyDescription": "Skill yang relevan dan skill pribadi Anda akan dipilih untuk setiap pesan. Jika dimatikan, hanya skill yang Anda minta atau sematkan, serta skill yang diterapkan admin untuk setiap percakapan, yang akan digunakan."
+    }
   },
   "notFound": {
     "lostDog": "Anjing hilang"

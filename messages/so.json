@@ -1011,7 +1011,8 @@
       "hideDetails": "Faahfaahinta aqoonta qari",
       "agentLoad": "waxa uu wakiilku xambaarsaday",
       "agentSearch": "dukumentiyada uu wakiilku raadiyay"
-    }
+    },
+    "skillsManualHint": "Xulashada otomaatiga ah waa deman tahay ee Dejinta. Isticmaal hal mar farriinta xigta, ama ku lifaaq xirfadda si aad ugu isticmaasho wada sheekaysigan oo dhan."
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Dooro moodelkayga la xushay",
       "preferModelDescription": "Ha u wareegin moodel kale si toos ah marka codsi fashilmo. Khaladku weli wuxuu bixin doonaa beddelka."
     },
-    "Analytics": "Falcelin xogeed"
+    "Analytics": "Falcelin xogeed",
+    "skills": {
+      "autoApply": "U oggolow kaaliyaha in si otomaatig ah u adeegsado xirfadaha",
+      "autoApplyDescription": "Xirfadaha la xiriira, iyo xirfadahaaga gaarka ah, ayaa loo xulaa farriin kasta. Markay dansan tahay, kaliya xirfadaha aad codsato ama aad lifaaqdo iyo xirfadaha uu maamulaha ku dabaqo wada sheekaysi kasta ayaa la isticmaalaa."
+    }
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",

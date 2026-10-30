@@ -1011,7 +1011,8 @@
       "hideDetails": "Fihla imininingwane yekhono",
       "agentLoad": "kufakwe umenzeli",
       "agentSearch": "imibhalo ifunwe umenzeli"
-    }
+    },
+    "skillsManualHint": "Ukuzikhethela okuzenzakalelayo kuvaliwe Ezilungisezweni. Sebenzisa kanye umlayezo olandelayo, noma mni izibalo ukuze zisetshenziswe kulo ngxoxo."
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Khetha imodeli engiyithandayo",
       "preferModelDescription": "Ungashintshi ngokuzenzakalelayo uma isicelo siphazamiseka. Iphutha lizobe lisavumela ukushintsha imodeli."
     },
-    "Analytics": "Izibalo"
+    "Analytics": "Izibalo",
+    "skills": {
+      "autoApply": "Vumela umsizi asebenzise amakhono ngokuzenzakalelayo",
+      "autoApplyDescription": "Amakhono afanele, kanye namakhono akho siqu, akhethwa kuwo wonke umlayezo. Lapho kuvaliwe, kusetshenziswa kuphela amakhono owacelayo noma owabophezela kanye namakhono abekwa admin kuzo zonke izingxoxo."
+    }
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",

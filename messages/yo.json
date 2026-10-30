@@ -1011,7 +1011,8 @@
       "hideDetails": "Pa apejuwe ọgbọn",
       "agentLoad": "ageni gbe e",
       "agentSearch": "ageni wa awọn iwe"
-    }
+    },
+    "skillsManualHint": "Àṣàyàn aifọwọyi wa ni pipa ninu Eto. Lo lẹ́kan fún ifiranṣẹ tó ń bọ, tàbí dí amọja kan mọ́lẹ̀ kí o máa lo ní gbogbo ibarẹ̀ yìí."
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Fẹ́ amúyẹ tí mo yàn",
       "preferModelDescription": "Má ṣe yí padà sí amúyẹ mìíràn láifọwọ́si nígbà tí ìbéèrè bá ṣe aṣìṣe. Àṣìṣe náà yóò tún fi àṣàyàn yí padà hàn."
     },
-    "Analytics": "Ìtúpalẹ̀"
+    "Analytics": "Ìtúpalẹ̀",
+    "skills": {
+      "autoApply": "Jẹ́ kí ẹrọ iranlọwọ ló amọja laifọwọyi",
+      "autoApplyDescription": "Amọja tó yẹ, àti ti àra rẹ, ni a yan fún kọọkan ifiranṣẹ. Nígbà tí o bá ti pẹ́, amọja tí o beèrè tàbí dí mọ́lẹ̀ àti amọja tí alákóso yàn fún gbogbo ibarẹ̀ ni a máa lò nikan."
+    }
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",

@@ -953,7 +953,8 @@
       "hideDetails": "Dölj färdighetsdetaljer",
       "agentLoad": "inläst av agent",
       "agentSearch": "dokument sökta av agent"
-    }
+    },
+    "skillsManualHint": "Automatiskt val är avstängt i Inställningar. Använd en gång för nästa meddelande eller fäst en färdighet för att använda den under hela denna konversation."
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -1360,7 +1361,11 @@
       "preferModelTitle": "Föredra min valda modell",
       "preferModelDescription": "Byt inte automatiskt till en annan modell när en begäran misslyckas. Felet kommer fortfarande att erbjuda byte."
     },
-    "Analytics": "Analys"
+    "Analytics": "Analys",
+    "skills": {
+      "autoApply": "Låt assistenten använda färdigheter automatiskt",
+      "autoApplyDescription": "Relevanta färdigheter, samt dina personliga färdigheter, väljs för varje meddelande. När detta är avstängt används endast färdigheter du begär eller fäster samt de som en administratör tilldelar varje konversation."
+    }
   },
   "notFound": {
     "lostDog": "Förlorad hund"

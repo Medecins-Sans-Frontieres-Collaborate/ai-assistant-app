@@ -1011,7 +1011,8 @@
       "hideDetails": "Rufe cikakken bayani na fasaha",
       "agentLoad": "wakili ya loda",
       "agentSearch": "wakili ya bincika takardu"
-    }
+    },
+    "skillsManualHint": "Zaɓin kai tsaye yana kashe a Saituna. Yi amfani da shi sau ɗaya don saƙon na gaba, ko kunshi ƙwarewar da za ka so a duk wannan tattaunawar."
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1519,7 +1520,11 @@
       "preferModelTitle": "Fi son samfurin da na zaɓa",
       "preferModelDescription": "Kar a sauya zuwa wani model kai tsaye lokacin da akayi kuskure. Za a ci gaba da nuna zaɓin sauyawa a kuskuren."
     },
-    "Analytics": "Nazari"
+    "Analytics": "Nazari",
+    "skills": {
+      "autoApply": "Bari mataimaki ya shigar da ƙwarewa kai tsaye",
+      "autoApplyDescription": "Za a zaɓi ƙwarewar da suka dace, har da na kanka, don kowanne saƙo. Idan an kashe, ana amfani da ƙwarewar da ka buƙata ko ka kunshi, da ƙwarewar da admin ya shigar a kowace tattaunawa kaɗai."
+    }
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
