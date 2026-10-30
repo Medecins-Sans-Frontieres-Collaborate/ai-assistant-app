@@ -52,10 +52,12 @@ export function SkillControls() {
                   {skill.description}
                 </p>
               </div>
-              {skill.activation === 'always' ? (
+              {skill.activation === 'always' && !agentAttached ? (
                 // Standing skills are applied on every message by an admin;
                 // there is nothing to request or pin, but users should see
                 // the standing set rather than wonder why guidance appears.
+                // Agents never receive injected skills (only tools), so in
+                // agent mode an 'always' skill is requestable like any other.
                 <span
                   title={t('skillAlwaysOnHint')}
                   className="rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs text-violet-900 dark:border-violet-800 dark:bg-violet-950/40 dark:text-violet-200"
