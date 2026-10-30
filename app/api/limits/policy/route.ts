@@ -46,6 +46,11 @@ import {
   writePolicy,
 } from '@/lib/services/limits/limitsStore';
 import {
+  defaultCellKey,
+  expandModelAccess,
+  modelAccessDimension,
+} from '@/lib/services/limits/modelAccess';
+import {
   MAX_OVERRIDES,
   clampToHardCeilings,
   formatIssues,
@@ -56,6 +61,7 @@ import {
   LimitDelegation,
   LimitOverride,
   LimitsPolicy,
+  ModelAccessRule,
 } from '@/lib/services/limits/types';
 import { LIMITS_ERROR_CODES } from '@/lib/services/limits/wire';
 
@@ -151,6 +157,31 @@ export async function PUT(request: NextRequest) {
       duplicateCell,
     );
   }
+  // Model approval rules: one per model or family, and a node default must
+  // not ALSO be set as a global default for the same cell — the resolver
+  // would pick one by restrictiveness and the other would silently lose.
+  const modelAccessBody = parsed.data.modelAccess;
+  if (modelAccessBody) {
+    const duplicateDimension = modelAccessBody
+      .map(modelAccessDimension)
+      .find((dim, index, all) => all.indexOf(dim) !== index);
+    if (duplicateDimension) {
+      return badRequestResponse(
+        'Two model approval rules for one model or family',
+        duplicateDimension,
+      );
+    }
+    const defaultCells = new Set(parsed.data.defaults.map(defaultCellKey));
+    const collision = expandModelAccess(modelAccessBody).defaults.find(
+      (entry) => defaultCells.has(defaultCellKey(entry)),
+    );
+    if (collision) {
+      return badRequestResponse(
+        'A model approval default is also set in the global defaults; set it in one place',
+        defaultCellKey(collision),
+      );
+    }
+  }
 
   const ifMatchEtag = request.headers.get('if-match');
   if (ifMatchEtag !== null && !STRONG_ETAG_REGEX.test(ifMatchEtag)) {
@@ -239,10 +270,16 @@ export async function PUT(request: NextRequest) {
       };
     });
 
+    // Absent key = a client that predates the approval view: keep what is
+    // stored rather than erasing it (same guard shape as delegations).
+    const modelAccess: ModelAccessRule[] =
+      modelAccessBody ?? stored?.policy.modelAccess ?? [];
+
     const policy: LimitsPolicy = {
       version: 1,
       defaults: clampToHardCeilings(parsed.data.defaults),
       overrides,
+      modelAccess,
       delegations,
       mode: parsed.data.mode,
       failMode: parsed.data.failMode,
@@ -255,7 +292,7 @@ export async function PUT(request: NextRequest) {
 
     const etag = await writePolicy(storage, policy, ifMatchEtag);
     console.log(
-      `[limits-admin] action=upsert mode=${policy.mode} overrides=${policy.overrides.length} delegations=${policy.delegations.length} by=${sanitizeForLog(userMail)}`,
+      `[limits-admin] action=upsert mode=${policy.mode} overrides=${policy.overrides.length} modelAccess=${policy.modelAccess.length} delegations=${policy.delegations.length} by=${sanitizeForLog(userMail)}`,
     );
     // Best-effort audit copy — never fails the write the admin just made.
     await writeHistoryEntry(storage, {
