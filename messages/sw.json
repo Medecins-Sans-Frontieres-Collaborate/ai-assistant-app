@@ -812,7 +812,11 @@
       "stillWorking": "Bado inaendelea kufanya kazi…",
       "assessingSearchResults": "Kukagua kama matokeo yanajibu swali…",
       "refiningSearch": "Kutafuta tena: “{query}”…",
-      "readingSearchPages": "Kusoma kurasa {count} za matokeo…"
+      "readingSearchPages": "Kusoma kurasa {count} za matokeo…",
+      "toolRoutingUnavailableInRegion": "Usambazaji wa zana haupatikani kwenye sehemu ya {region} — kujibu bila zana...",
+      "applyingSkill": "Inatumia ujuzi: {skills}...",
+      "applyingSkills": "Inatumia ujuzi: {skills}...",
+      "readingSkillReferences": "Inasoma nyaraka za marejeo ya ujuzi..."
     },
     "toolSummary": {
       "usedTools": "Imetumika {count, plural, one {# zana} other {# zana}}",
@@ -932,7 +936,23 @@
     "skillsAutomaticHint": "Ujuzi unaofaa unachaguliwa moja kwa moja. Tumia mara moja kwa ujumbe unaofuata, au bandika ujuzi utumike katika mazungumzo haya yote.",
     "skillsAgentDisabled": "Ujuzi umesitishwa wakati wakala ameunganishwa. Ujuzi uliobandikwa utaendelea ukiondoa wakala.",
     "skillPersonal": "binafsi",
-    "skillsAgentToolsHint": "Ni ujuzi wa shirika pekee uliowezeshwa na msimamizi kwa matumizi ya wakala ndio unaopatikana hapa. Wakala anaweza kupakua kama zana za kusoma tu. Pini nyingine zitasalia kusitishwa, na ujuzi binafsi haupatikani kwa mawakala."
+    "skillsAgentToolsHint": "Ni ujuzi wa shirika pekee uliowezeshwa na msimamizi kwa matumizi ya wakala ndio unaopatikana hapa. Wakala anaweza kupakua kama zana za kusoma tu. Pini nyingine zitasalia kusitishwa, na ujuzi binafsi haupatikani kwa mawakala.",
+    "skillAlwaysOn": "daima imewashwa",
+    "skillAlwaysOnHint": "Imeongezwa kwenye kila ujumbe wa mazungumzo haya na msimamizi.",
+    "skillUsage": {
+      "label": "Ujuzi",
+      "requested": "imeombwa",
+      "pinned": "imepachikwa",
+      "auto": "otomatiki",
+      "unavailable": "haipatikani",
+      "incomplete": "Baadhi ya ujuzi haukuweza kutumika",
+      "references": "{count, plural, one {# kifungu cha marejeo} other {# vifungu vya marejeo}}",
+      "referencesUnavailable": "Baadhi ya nyaraka za marejeo hazikupatikana",
+      "showDetails": "Onyesha maelezo ya ujuzi",
+      "hideDetails": "Ficha maelezo ya ujuzi",
+      "agentLoad": "imewekwa na wakala",
+      "agentSearch": "nyaraka zilizopekuliwa na wakala"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",

@@ -777,7 +777,11 @@
       "stillWorking": "Nog bezig…",
       "assessingSearchResults": "Controleren of de resultaten de vraag beantwoorden…",
       "refiningSearch": "Opnieuw zoeken: “{query}”…",
-      "readingSearchPages": "Leest {count} resultaatpagina's…"
+      "readingSearchPages": "Leest {count} resultaatpagina's…",
+      "toolRoutingUnavailableInRegion": "Toolrouting niet beschikbaar op de {region} endpoint — antwoord wordt gegeven zonder tools…",
+      "applyingSkill": "Skill toepassen: {skills}…",
+      "applyingSkills": "Skills toepassen: {skills}…",
+      "readingSkillReferences": "Referentiedocumenten van skills inlezen…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# tool gebruikt} other {# tools gebruikt}}",
@@ -897,7 +901,23 @@
     "skillsAutomaticHint": "Relevante vaardigheden worden automatisch geselecteerd. Gebruik eenmalig voor het volgende bericht, of maak een vaardigheid vast om deze gedurende het hele gesprek te gebruiken.",
     "skillsAgentDisabled": "Vaardigheden zijn gepauzeerd terwijl een agent is gekoppeld. Je vastgemaakte vaardigheden worden hervat zodra je de agent loskoppelt.",
     "skillPersonal": "persoonlijk",
-    "skillsAgentToolsHint": "Alleen organisatieskills die door een beheerder zijn ingeschakeld voor agentgebruik worden hier aangeboden. De agent kan deze als alleen-lezen tools laden. Andere pins blijven gepauzeerd en persoonlijke skills zijn niet beschikbaar voor agents."
+    "skillsAgentToolsHint": "Alleen organisatieskills die door een beheerder zijn ingeschakeld voor agentgebruik worden hier aangeboden. De agent kan deze als alleen-lezen tools laden. Andere pins blijven gepauzeerd en persoonlijke skills zijn niet beschikbaar voor agents.",
+    "skillAlwaysOn": "altijd actief",
+    "skillAlwaysOnHint": "Toegevoegd aan elk bericht in dit gesprek door een beheerder.",
+    "skillUsage": {
+      "label": "Skills",
+      "requested": "aangevraagd",
+      "pinned": "vastgezet",
+      "auto": "auto",
+      "unavailable": "niet beschikbaar",
+      "incomplete": "Sommige skills konden niet worden toegepast",
+      "references": "{count, plural, one {# referentiepassage} other {# referentiepassages}}",
+      "referencesUnavailable": "Sommige referentiedocumenten waren niet beschikbaar",
+      "showDetails": "Toon skilldetails",
+      "hideDetails": "Verberg skilldetails",
+      "agentLoad": "geladen door agent",
+      "agentSearch": "documenten gezocht door agent"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",

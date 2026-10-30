@@ -809,7 +809,11 @@
       "stillWorking": "Wciąż pracuję…",
       "assessingSearchResults": "Sprawdzanie, czy wyniki odpowiadają na pytanie…",
       "refiningSearch": "Ponowne wyszukiwanie: „{query}”…",
-      "readingSearchPages": "Odczyt {count} stron z wynikami…"
+      "readingSearchPages": "Odczyt {count} stron z wynikami…",
+      "toolRoutingUnavailableInRegion": "Kierowanie narzędzi niedostępne w punkcie końcowym {region} — odpowiadam bez narzędzi…",
+      "applyingSkill": "Stosowanie umiejętności: {skills}…",
+      "applyingSkills": "Stosowanie umiejętności: {skills}…",
+      "readingSkillReferences": "Czytanie dokumentów referencyjnych umiejętności…"
     },
     "toolSummary": {
       "usedTools": "Użyto {count, plural, one {# narzędzie} few {# narzędzia} many {# narzędzi} other {# narzędzi}}",
@@ -929,7 +933,23 @@
     "skillsAutomaticHint": "Odpowiednie umiejętności są wybierane automatycznie. Użyj raz dla następnej wiadomości lub przypnij umiejętność, aby używać jej przez całą rozmowę.",
     "skillsAgentDisabled": "Umiejętności są wstrzymane, gdy agent jest podłączony. Twoje przypięcia zostaną wznowione po odłączeniu agenta.",
     "skillPersonal": "osobiste",
-    "skillsAgentToolsHint": "Tylko umiejętności organizacyjne włączone przez administratora dla agentów są tutaj dostępne. Agent może je załadować jako narzędzia tylko do odczytu. Pozostałe pinezki pozostają wstrzymane, a umiejętności osobiste nie są dostępne dla agentów."
+    "skillsAgentToolsHint": "Tylko umiejętności organizacyjne włączone przez administratora dla agentów są tutaj dostępne. Agent może je załadować jako narzędzia tylko do odczytu. Pozostałe pinezki pozostają wstrzymane, a umiejętności osobiste nie są dostępne dla agentów.",
+    "skillAlwaysOn": "zawsze aktywne",
+    "skillAlwaysOnHint": "Dodane do każdej wiadomości w tej rozmowie przez administratora.",
+    "skillUsage": {
+      "label": "Umiejętności",
+      "requested": "zażądano",
+      "pinned": "przypięte",
+      "auto": "automatycznie",
+      "unavailable": "niedostępne",
+      "incomplete": "Niektórych umiejętności nie można było zastosować",
+      "references": "{count, plural, one {# fragment źródłowy} other {# fragmenty źródłowe}}",
+      "referencesUnavailable": "Niektóre dokumenty źródłowe były niedostępne",
+      "showDetails": "Pokaż szczegóły umiejętności",
+      "hideDetails": "Ukryj szczegóły umiejętności",
+      "agentLoad": "załadowane przez agenta",
+      "agentSearch": "dokumenty przeszukane przez agenta"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",

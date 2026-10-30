@@ -733,7 +733,11 @@
       "stillWorking": "Sto ancora lavorando…",
       "assessingSearchResults": "Verifica se i risultati rispondono alla domanda…",
       "refiningSearch": "Ricerca di nuovo: “{query}”…",
-      "readingSearchPages": "Lettura di {count} pagine di risultati…"
+      "readingSearchPages": "Lettura di {count} pagine di risultati…",
+      "toolRoutingUnavailableInRegion": "Instradamento agli strumenti non disponibile sull'endpoint {region} — risposta senza strumenti…",
+      "applyingSkill": "Applicazione della competenza: {skills}…",
+      "applyingSkills": "Applicazione delle competenze: {skills}…",
+      "readingSkillReferences": "Lettura dei documenti di riferimento delle competenze…"
     },
     "toolSummary": {
       "usedTools": "Usati {count, plural, one {# strumento} other {# strumenti}}",
@@ -853,7 +857,23 @@
     "skillsAutomaticHint": "Le competenze rilevanti vengono selezionate automaticamente. Usa una volta per il prossimo messaggio, oppure fissa una competenza per utilizzarla durante tutta la conversazione.",
     "skillsAgentDisabled": "Le competenze sono in pausa quando un agente è collegato. I tuoi elementi fissati riprenderanno quando scollegi l'agente.",
     "skillPersonal": "personale",
-    "skillsAgentToolsHint": "Qui sono offerte solo le skill dell'organizzazione abilitate da un admin per l'uso da parte degli agenti. L'agente può caricarle come strumenti in sola lettura. Gli altri pin restano in pausa e le skill personali non sono disponibili per gli agenti."
+    "skillsAgentToolsHint": "Qui sono offerte solo le skill dell'organizzazione abilitate da un admin per l'uso da parte degli agenti. L'agente può caricarle come strumenti in sola lettura. Gli altri pin restano in pausa e le skill personali non sono disponibili per gli agenti.",
+    "skillAlwaysOn": "sempre attivo",
+    "skillAlwaysOnHint": "Aggiunto a ogni messaggio di questa conversazione da un amministratore.",
+    "skillUsage": {
+      "label": "Competenze",
+      "requested": "richiesto",
+      "pinned": "fissato",
+      "auto": "automatico",
+      "unavailable": "non disponibile",
+      "incomplete": "Alcune competenze non sono state applicate",
+      "references": "{count, plural, one {# passaggio di riferimento} other {# passaggi di riferimento}}",
+      "referencesUnavailable": "Alcuni documenti di riferimento non erano disponibili",
+      "showDetails": "Mostra dettagli sulle competenze",
+      "hideDetails": "Nascondi dettagli sulle competenze",
+      "agentLoad": "caricato dall'agente",
+      "agentSearch": "documenti cercati dall'agente"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Comprimi barra laterale",

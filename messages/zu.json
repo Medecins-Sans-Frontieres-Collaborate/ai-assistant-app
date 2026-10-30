@@ -870,7 +870,11 @@
       "stillWorking": "Sisasebenza…",
       "assessingSearchResults": "Kuyaqinisekiswa ukuthi imiphumela iyaphendula yini umbuzo…",
       "refiningSearch": "Kubuyekezwa usesho: “{query}”…",
-      "readingSearchPages": "Kufundwa amakhasi emiphumela engu-{count}…"
+      "readingSearchPages": "Kufundwa amakhasi emiphumela engu-{count}…",
+      "toolRoutingUnavailableInRegion": "Ukudlulisela amathuluzi akutholakali ku-{region} endpoint — kuyaqhubeka kungasetshenziswa amathuluzi…",
+      "applyingSkill": "Kufaka ikhono: {skills}…",
+      "applyingSkills": "Kufaka amakhono: {skills}…",
+      "readingSkillReferences": "Kufundwa imibhalo yesithenjwa samakhono…"
     },
     "toolSummary": {
       "usedTools": "Kusetshenzisiwe {count, plural, one {# ithuluzi} other {# amathuluzi}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "Amakhono afanele akhethwa ngokuzenzakalayo. Sebenzisa kanye kumyalezo olandelayo, noma bopha ikhono ukuze lihlale lisebenza kulo ngxoxo.",
     "skillsAgentDisabled": "Amakhono amisiwe uma i-agent ixhunywe. Amakhono obophwe azoqhubeka uma usukhulule i-agent.",
     "skillPersonal": "omuntu siqu",
-    "skillsAgentToolsHint": "Amand skills enenhlangano avunyelwe admin ukuze asetshenziswe ngama-agent kuphela ayatholakala lapha. I-agent ingawalayisha njengamathuluzi okufunda kuphela. Amanye ama-pin ahlala emisiwe, futhi amakhono omuntu siqu awatholakali kuma-agent."
+    "skillsAgentToolsHint": "Amand skills enenhlangano avunyelwe admin ukuze asetshenziswe ngama-agent kuphela ayatholakala lapha. I-agent ingawalayisha njengamathuluzi okufunda kuphela. Amanye ama-pin ahlala emisiwe, futhi amakhono omuntu siqu awatholakali kuma-agent.",
+    "skillAlwaysOn": "kuhlala kukuvuliwe",
+    "skillAlwaysOnHint": "Kufakiwe kuyo yonke imilayezo kule ngxoxo ngumlawuli.",
+    "skillUsage": {
+      "label": "Amakhono",
+      "requested": "kuceliwe",
+      "pinned": "kubekwe phezulu",
+      "auto": "okuzenzakalelayo",
+      "unavailable": "akutholakali",
+      "incomplete": "Amanye amakhono awakwazanga ukufakwa",
+      "references": "{count, plural, one {# isiqephu sesithenjwa} other {# iziqephu zesithenjwa}}",
+      "referencesUnavailable": "Ezinye izincwadi zesithenjwa azitholakali",
+      "showDetails": "Bonisa imininingwane yekhono",
+      "hideDetails": "Fihla imininingwane yekhono",
+      "agentLoad": "kufakwe umenzeli",
+      "agentSearch": "imibhalo ifunwe umenzeli"
+    }
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",

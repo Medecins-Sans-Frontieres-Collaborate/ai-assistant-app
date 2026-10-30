@@ -870,7 +870,11 @@
       "stillWorking": "Biracari gukorwa…",
       "assessingSearchResults": "Hariko haragenzurwa ko ivyavuye biriko bisubiza ikibazo…",
       "refiningSearch": "Kurondera rishasha: “{query}”…",
-      "readingSearchPages": "Gusoma impapuro vyavuye {count}…"
+      "readingSearchPages": "Gusoma impapuro vyavuye {count}…",
+      "toolRoutingUnavailableInRegion": "Tool routing ntiboneka kuri {region} endpoint — turishura ata tools...",
+      "applyingSkill": "Gushira mu bikorwa ubumenyi: {skills}...",
+      "applyingSkills": "Gushira mu bikorwa ubumenyi: {skills}...",
+      "readingSkillReferences": "Ndusoma inyandiko zerekeye ubumenyi..."
     },
     "toolSummary": {
       "usedTools": "Ibikoresho {count, plural, one {# cakoreshejwe} other {# vyakoreshejwe}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "Ubushobozi bukwiye buhitwa bwikora. Koresha rimwe ku butumwa bukurikira, canke kweza ubushobozi kugira bukoreshe mu kiganiro cose.",
     "skillsAgentDisabled": "Ubushobozi burahagarikwa igihe umukozi afatanye. Ivyo wakweze bizosubira gukora uzonyora umukozi.",
     "skillPersonal": "bwite",
-    "skillsAgentToolsHint": "Hano haratangwa ubumenyi bw'ishirahamwe bwemejwe n'umuyobozi kugira bukoreshwe n'umukozi. Umukozi arashobora kubugurura nk'ibikoresho bisomeka gusa. Ibindi bintu bivowe biraguma bihagariye, kandi ubumenyi bw'umuntu ntibuboneka ku bakozi."
+    "skillsAgentToolsHint": "Hano haratangwa ubumenyi bw'ishirahamwe bwemejwe n'umuyobozi kugira bukoreshwe n'umukozi. Umukozi arashobora kubugurura nk'ibikoresho bisomeka gusa. Ibindi bintu bivowe biraguma bihagariye, kandi ubumenyi bw'umuntu ntibuboneka ku bakozi.",
+    "skillAlwaysOn": "gucalways on",
+    "skillAlwaysOnHint": "Yongerewe kuri ubutumwa bwose muri iyi kiganiro n'umuyobozi.",
+    "skillUsage": {
+      "label": "Ubumenyi",
+      "requested": "yasabwe",
+      "pinned": "yapitswe",
+      "auto": "yikora",
+      "unavailable": "ntiboneka",
+      "incomplete": "Ubumenyi bumwe ntibwashizwe mu bikorwa",
+      "references": "{count, plural, one {# igipande c'inyandiko yerekeye} other {# ibipande vy'inyandiko zerekeye}}",
+      "referencesUnavailable": "Inyandiko zimwe zerekeye ntiziboneka",
+      "showDetails": "Emeza ivyerekeye ubumenyi",
+      "hideDetails": "Nyegeza ivyerekeye ubumenyi",
+      "agentLoad": "vyashizweko n'uwukora",
+      "agentSearch": "inyandiko zarashakwe n'uwukora"
+    }
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",

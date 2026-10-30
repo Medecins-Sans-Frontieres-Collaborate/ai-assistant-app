@@ -787,7 +787,11 @@
       "stillWorking": "עדיין עובד…",
       "assessingSearchResults": "בודק האם התוצאות עונות על השאלה…",
       "refiningSearch": "מבצע חיפוש נוסף: “{query}”…",
-      "readingSearchPages": "קורא {count} דפי תוצאות…"
+      "readingSearchPages": "קורא {count} דפי תוצאות…",
+      "toolRoutingUnavailableInRegion": "ניתוב כלים אינו זמין בנקודת הקצה של {region} — משיב ללא כלים…",
+      "applyingSkill": "מפעיל מיומנות: {skills}…",
+      "applyingSkills": "מפעיל מיומנויות: {skills}…",
+      "readingSkillReferences": "קורא מסמכי עזר למיומנויות…"
     },
     "toolSummary": {
       "usedTools": "השתמש ב־{count, plural, one {# כלי} other {# כלים}}",
@@ -907,7 +911,23 @@
     "skillsAutomaticHint": "היכולות הרלוונטיות נבחרות אוטומטית. השתמש פעם אחת להודעה הבאה, או הצמד יכולת כדי להשתמש בה לאורך כל השיחה.",
     "skillsAgentDisabled": "היכולות הופסקו כל עוד סוכן מצורף. ההצמדות שלך יתחדשו כאשר תנתק את הסוכן.",
     "skillPersonal": "אישי",
-    "skillsAgentToolsHint": "רק מיומנויות ארגוניות שאושרו על ידי מנהל לשימוש סוכנים זמינות כאן. הסוכן יכול לטעון אותן ככלים לקריאה בלבד. נעצים אחרים נשארים בהשהיה, ומיומנויות אישיות אינן זמינות לסוכנים."
+    "skillsAgentToolsHint": "רק מיומנויות ארגוניות שאושרו על ידי מנהל לשימוש סוכנים זמינות כאן. הסוכן יכול לטעון אותן ככלים לקריאה בלבד. נעצים אחרים נשארים בהשהיה, ומיומנויות אישיות אינן זמינות לסוכנים.",
+    "skillAlwaysOn": "פועל תמיד",
+    "skillAlwaysOnHint": "נוסף לכל הודעה בשיחה זו על ידי מנהל מערכת.",
+    "skillUsage": {
+      "label": "מיומנויות",
+      "requested": "התבקשה",
+      "pinned": "נעוצה",
+      "auto": "אוטומטי",
+      "unavailable": "לא זמינה",
+      "incomplete": "לא ניתן היה להפעיל חלק מהמיומנויות",
+      "references": "{count, plural, one {# קטע עזר} other {# קטעי עזר}}",
+      "referencesUnavailable": "חלק ממסמכי העזר לא היו זמינים",
+      "showDetails": "הצג פרטי מיומנות",
+      "hideDetails": "הסתר פרטי מיומנות",
+      "agentLoad": "נטען על ידי הסוכן",
+      "agentSearch": "מסמכים שחיפוש הסוכן"
+    }
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",

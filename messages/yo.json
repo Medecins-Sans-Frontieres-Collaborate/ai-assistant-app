@@ -870,7 +870,11 @@
       "stillWorking": "Ṣíṣẹ́ ń bọ…",
       "assessingSearchResults": "N ṣàyẹ̀wò bóyá àwọn àbájáde dá ìbéèrè lóhùn...",
       "refiningSearch": "N ṣe àwádìí lẹ́ẹ̀kansi: “{query}”...",
-      "readingSearchPages": "N ka ojúewé àbájáde {count}..."
+      "readingSearchPages": "N ka ojúewé àbájáde {count}...",
+      "toolRoutingUnavailableInRegion": "Fifiranṣẹ irinṣẹ ko si l’akoko {region} endpoint — n dahun lai l’irinṣẹ…",
+      "applyingSkill": "N lo ọgbọn: {skills}…",
+      "applyingSkills": "N lo awọn ọgbọn: {skills}…",
+      "readingSkillReferences": "N ka awọn iwe itọkasi ọgbọn…"
     },
     "toolSummary": {
       "usedTools": "Lo {count, plural, one {# ohun ìṣàkóso} other {# àwọn ohun ìṣàkóso}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "A yan awọn ọgbọn to ba yẹ laifọwọyi. Lo lẹẹkan fun ifiranṣẹ tókàn, tàbí fi ọgbọn kan mọ́lẹ̀ lati lo jakejado ibaraẹnisọrọ yii.",
     "skillsAgentDisabled": "Awọn ọgbọn ti da duro nigba ti aṣoju ba wa. Awọn ti o fi mọ́lẹ̀ yoo tun bọ si ipo rẹ nigba ti o ba yọ aṣoju kuro.",
     "skillPersonal": "ti ara ẹni",
-    "skillsAgentToolsHint": "Àwọn ogbontarigi ìmọ̀ tí adarí ti fọwọ́sowọ́pọ̀ fún awọn aṣojú ni a nṣàfihàn nínú iṣẹ́ yìí. Aṣojú lè lo wọ́n bíi àwọn irinṣẹ́ kíkọ̀kan nikan. Àwọn àmì míì yóò dúró, kò sì sí àyẹwo ìmọ̀ ti ara ẹni fún aṣojú."
+    "skillsAgentToolsHint": "Àwọn ogbontarigi ìmọ̀ tí adarí ti fọwọ́sowọ́pọ̀ fún awọn aṣojú ni a nṣàfihàn nínú iṣẹ́ yìí. Aṣojú lè lo wọ́n bíi àwọn irinṣẹ́ kíkọ̀kan nikan. Àwọn àmì míì yóò dúró, kò sì sí àyẹwo ìmọ̀ ti ara ẹni fún aṣojú.",
+    "skillAlwaysOn": "máa n ṣiṣẹ nigbagbogbo",
+    "skillAlwaysOnHint": "Admin fi kun gbogbo ifiranṣẹ inu ibaraẹnisọrọ yii.",
+    "skillUsage": {
+      "label": "Ọgbọn",
+      "requested": "ti bẹ",
+      "pinned": "t’akọ",
+      "auto": "aifọwọyi",
+      "unavailable": "ko si",
+      "incomplete": "Diẹ ninu awọn ọgbọn ko le ṣee lo",
+      "references": "{count, plural, one {# iwe itọkasi} other {# awọn iwe itọkasi}}",
+      "referencesUnavailable": "Diẹ ninu awọn iwe itọkasi ko si",
+      "showDetails": "Fi apejuwe ọgbọn han",
+      "hideDetails": "Pa apejuwe ọgbọn",
+      "agentLoad": "ageni gbe e",
+      "agentSearch": "ageni wa awọn iwe"
+    }
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",

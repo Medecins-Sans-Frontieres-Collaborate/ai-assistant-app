@@ -758,7 +758,11 @@
       "stillWorking": "Traitement en cours…",
       "assessingSearchResults": "Vérification de la pertinence des résultats…",
       "refiningSearch": "Nouvelle recherche : « {query} »…",
-      "readingSearchPages": "Lecture de {count} pages de résultats…"
+      "readingSearchPages": "Lecture de {count} pages de résultats…",
+      "toolRoutingUnavailableInRegion": "Routage des outils indisponible sur le point de terminaison {region} — réponse sans outils…",
+      "applyingSkill": "Application de la compétence : {skills}…",
+      "applyingSkills": "Application des compétences : {skills}…",
+      "readingSkillReferences": "Lecture des documents de référence sur les compétences…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# outil utilisé} other {# outils utilisés}}",
@@ -878,7 +882,23 @@
     "skillsAutomaticHint": "Les compétences pertinentes sont sélectionnées automatiquement. Utilisez une fois pour le prochain message, ou épinglez une compétence pour l’utiliser tout au long de cette conversation.",
     "skillsAgentDisabled": "Les compétences sont en pause tant qu’un agent est attaché. Vos épingles reprendront dès que vous détacherez l’agent.",
     "skillPersonal": "personnel",
-    "skillsAgentToolsHint": "Seules les compétences organisationnelles activées par un administrateur pour les agents sont proposées ici. L’agent peut les charger comme outils en lecture seule. Les autres épingles restent en pause et les compétences personnelles ne sont pas accessibles aux agents."
+    "skillsAgentToolsHint": "Seules les compétences organisationnelles activées par un administrateur pour les agents sont proposées ici. L’agent peut les charger comme outils en lecture seule. Les autres épingles restent en pause et les compétences personnelles ne sont pas accessibles aux agents.",
+    "skillAlwaysOn": "toujours actif",
+    "skillAlwaysOnHint": "Ajouté à chaque message dans cette conversation par un administrateur.",
+    "skillUsage": {
+      "label": "Compétences",
+      "requested": "demandée",
+      "pinned": "épinglée",
+      "auto": "auto",
+      "unavailable": "indisponible",
+      "incomplete": "Certaines compétences n'ont pas pu être appliquées",
+      "references": "{count, plural, one {# passage de référence} other {# passages de référence}}",
+      "referencesUnavailable": "Certains documents de référence étaient indisponibles",
+      "showDetails": "Afficher les détails de la compétence",
+      "hideDetails": "Masquer les détails de la compétence",
+      "agentLoad": "chargée par l'agent",
+      "agentSearch": "documents recherchés par l'agent"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",

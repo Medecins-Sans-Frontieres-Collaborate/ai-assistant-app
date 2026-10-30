@@ -870,7 +870,11 @@
       "stillWorking": "Još uvek radim…",
       "assessingSearchResults": "Proveravam da li rezultati odgovaraju na pitanje…",
       "refiningSearch": "Ponovo pretražujem: „{query}“…",
-      "readingSearchPages": "Čitam {count} rezultata stranica…"
+      "readingSearchPages": "Čitam {count} rezultata stranica…",
+      "toolRoutingUnavailableInRegion": "Usmeravanje alata nije dostupno na {region} endpointu — odgovaram bez upotrebe alata…",
+      "applyingSkill": "Primena veštine: {skills}…",
+      "applyingSkills": "Primena veština: {skills}…",
+      "readingSkillReferences": "Čitam referentna dokumenta za veštine…"
     },
     "toolSummary": {
       "usedTools": "Korišćen{count, plural, one {# alat} other {# alata}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "Relevantne veštine se automatski biraju. Upotrebite jednu za sledeću poruku ili prikačite veštinu da biste je koristili tokom celog razgovora.",
     "skillsAgentDisabled": "Veštine su pauzirane dok je agent povezan. Vaše prikačene veštine će se nastaviti kada odvojite agenta.",
     "skillPersonal": "lični",
-    "skillsAgentToolsHint": "Ovde su dostupne samo organizacijske veštine koje je administrator omogućio za upotrebu agentima. Agent ih može učitati kao alate samo za čitanje. Ostali pinovi ostaju pauzirani, a lične veštine nisu dostupne agentima."
+    "skillsAgentToolsHint": "Ovde su dostupne samo organizacijske veštine koje je administrator omogućio za upotrebu agentima. Agent ih može učitati kao alate samo za čitanje. Ostali pinovi ostaju pauzirani, a lične veštine nisu dostupne agentima.",
+    "skillAlwaysOn": "uvek aktivno",
+    "skillAlwaysOnHint": "Administrator dodaje svaku poruku u ovom razgovoru.",
+    "skillUsage": {
+      "label": "Veštine",
+      "requested": "zatraženo",
+      "pinned": "prikačeno",
+      "auto": "automatski",
+      "unavailable": "nedostupno",
+      "incomplete": "Neke veštine nije bilo moguće primeniti",
+      "references": "{count, plural, one {# referentni odlomak} other {# referentna odlomka}}",
+      "referencesUnavailable": "Neki referentni dokumenti su nedostupni",
+      "showDetails": "Prikaži detalje veštine",
+      "hideDetails": "Sakrij detalje veštine",
+      "agentLoad": "učitano od strane agenta",
+      "agentSearch": "dokumenta pretražio agent"
+    }
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",

@@ -870,7 +870,11 @@
       "stillWorking": "Biracyakorwa…",
       "assessingSearchResults": "Gusuzuma niba ibisubizo bisubiza ikibazo…",
       "refiningSearch": "Gushakisha bwa kabiri: \"{query}\"…",
-      "readingSearchPages": "Gusoma impapuro z'ibisubizo {count}…"
+      "readingSearchPages": "Gusoma impapuro z'ibisubizo {count}…",
+      "toolRoutingUnavailableInRegion": "Kohereza ibikoresho ntibiboneka kuri {region} endpoint — turasubiza tutifashishije ibikoresho...",
+      "applyingSkill": "Gushyira mu bikorwa ubumenyi: {skills}...",
+      "applyingSkills": "Gushyira mu bikorwa ubumenyi: {skills}...",
+      "readingSkillReferences": "Gusoma inyandiko z’inkomoko ku bumenyi..."
     },
     "toolSummary": {
       "usedTools": "Hakozweho {count, plural, one {igikoresho 1} other {ibikoresho #}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "Ubushobozi bufite akamaro buhitamo bwikoreye. Ushobora gukoresha rimwe ku butumwa bukurikira, cyangwa ugashyira ubushobozi kuri iki kiganiro ngo bukoreshwe igihe cyose.",
     "skillsAgentDisabled": "Ubushobozi burahagarara igihe umukozi yafatanye. Ubushobozi wagiye ushira kuri iki kiganiro buzongera gukura igihe wafashe umukozi.",
     "skillPersonal": "ku giti cye",
-    "skillsAgentToolsHint": "Hano hatangwa gusa ubumenyi bwemewe n'umuyobozi wa sosiyete kugira ngo bukoreshwe n'umukozi. Umukozi ashobora kubukoresha nk'ibikoresho bisomeka gusa. Ibindi pins biraguma byahagaritswe, kandi ubumenyi bwite bw'umuntu ntibuhari ku bakozi."
+    "skillsAgentToolsHint": "Hano hatangwa gusa ubumenyi bwemewe n'umuyobozi wa sosiyete kugira ngo bukoreshwe n'umukozi. Umukozi ashobora kubukoresha nk'ibikoresho bisomeka gusa. Ibindi pins biraguma byahagaritswe, kandi ubumenyi bwite bw'umuntu ntibuhari ku bakozi.",
+    "skillAlwaysOn": "ihora ikora",
+    "skillAlwaysOnHint": "Yongerwa kuri buri butumwa muri iyi biganiro n'umuyobozi.",
+    "skillUsage": {
+      "label": "Ubumenyi",
+      "requested": "yasabwe",
+      "pinned": "yerekanwe",
+      "auto": "ikora ku buryo bwikora",
+      "unavailable": "ntiboneka",
+      "incomplete": "Ubumenyi bumwe ntibwashyizwe mu bikorwa",
+      "references": "{count, plural, one {# igika cy’inkomoko} other {# imigika y’inkomoko}}",
+      "referencesUnavailable": "Inyandiko zimwe z’inkomoko ntizaboneka",
+      "showDetails": "Erekana ibisobanuro by’ubumenyi",
+      "hideDetails": "Hisha ibisobanuro by’ubumenyi",
+      "agentLoad": "byapakuruwe n’umukozi",
+      "agentSearch": "inyandiko zashakishijwe n’umukozi"
+    }
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",

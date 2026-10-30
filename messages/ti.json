@@ -870,7 +870,11 @@
       "stillWorking": "እደጊም ይሰርሕ…",
       "assessingSearchResults": "ምፍሰሳስ ውጻኢ ፍለጣ ብፍሽሽ…",
       "refiningSearch": "ተደገመይ፡ “{query}”…",
-      "readingSearchPages": "{count} ገጽ ውጻኢ ፍለጣ ኣብ ምንባብ…"
+      "readingSearchPages": "{count} ገጽ ውጻኢ ፍለጣ ኣብ ምንባብ…",
+      "toolRoutingUnavailableInRegion": "Tool routing ኣብ ኩሉ {region} endpoint ኣይክእልን — ዝምልከት ዘይ tool...",
+      "applyingSkill": "ምግባር skill: {skills}...",
+      "applyingSkills": "ምግባር skills: {skills}...",
+      "readingSkillReferences": "ምንባብ ሓበሬታ ሰርክ መዳን..."
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳርሒ} other {# መሳርሒታት} } ተጠቒሙ",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "ተፈተናሕ ስለ እቲ ግዜ ሕንባብ ብሓላፍነት ይተመርጽ። ኣብ ቀጻሊ መልእኽቲ ሓደ ግዜ ትጠቐም ወይ ሰበይቲ ትሓተት ክትትረኽቲ ኢኻ።",
     "skillsAgentDisabled": "እታ ትኢኻ ተደኢና ምትክውና ኣገንት ተዓጺቡ። ዘተሓተተካ ሰበይቲ ምትክኻኸ ኣገንት እንተተፅዎም ይዕጽፉ ኢዮም።",
     "skillPersonal": "ሕብረት ዝነበረ",
-    "skillsAgentToolsHint": "እዚ ክተሓሓዝ ዝኸውኑ ብኣድሚን ኣብ ውድብ ኣተሓሓዛይ ብተሓላለፍቲ ክንበር ዝኽእል እትኾነ ዝዕጋል skills እዩ። ኣተሓሓዛይ እዚን ከም ትኣክት ኣቕፅላ ክተገበር ይከኣል። ኣሎት pins ኣብ ዝተወፀኡ ሁነታ ይኑሩን፣ ናይ ተናይ skills ኣተሓሓዛይ ክትጠቐም ምኽንያት የቕልም።"
+    "skillsAgentToolsHint": "እዚ ክተሓሓዝ ዝኸውኑ ብኣድሚን ኣብ ውድብ ኣተሓሓዛይ ብተሓላለፍቲ ክንበር ዝኽእል እትኾነ ዝዕጋል skills እዩ። ኣተሓሓዛይ እዚን ከም ትኣክት ኣቕፅላ ክተገበር ይከኣል። ኣሎት pins ኣብ ዝተወፀኡ ሁነታ ይኑሩን፣ ናይ ተናይ skills ኣተሓሓዛይ ክትጠቐም ምኽንያት የቕልም።",
+    "skillAlwaysOn": "ፈጻሚ ኣብዚ ሰርክ",
+    "skillAlwaysOnHint": "ይኀበቱ ኣብ ምስናው መልእኽት ብ ኣድሚን ክሕበው።",
+    "skillUsage": {
+      "label": "ሰርክቲ",
+      "requested": "ዝተጠየቐ",
+      "pinned": "ዝተቆለለ",
+      "auto": "በቀዳም",
+      "unavailable": "ኣይኣተረን",
+      "incomplete": "ኣንዳንዲ ሰርክቲ ኣይተግበሩን",
+      "references": "{count, plural, one {# ሓበሬታ ናይ ሰርክ} other {# ሓበሬታታት ናይ ሰርክ}}",
+      "referencesUnavailable": "ኣንዳንዲ ሓበሬታ ሰነድታት ኣይኣተረን",
+      "showDetails": "ዝርዝራት ሰርክ ምርኣይ",
+      "hideDetails": "ዝርዝራት ሰርክ ምሕባብ",
+      "agentLoad": "ኣብ agent ዝተግበሩ",
+      "agentSearch": "ሰነዶታት ብ agent ዝተወሰዱ"
+    }
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",

@@ -812,7 +812,11 @@
       "stillWorking": "Stále pracuji…",
       "assessingSearchResults": "Kontroluje se, zda výsledky odpovídají na otázku…",
       "refiningSearch": "Znovu se hledá: „{query}“…",
-      "readingSearchPages": "Čte se {count} výsledkových stránek…"
+      "readingSearchPages": "Čte se {count} výsledkových stránek…",
+      "toolRoutingUnavailableInRegion": "Směrování nástrojů není na koncovém bodu {region} k dispozici — odpovídám bez nástrojů…",
+      "applyingSkill": "Aplikuji dovednost: {skills}…",
+      "applyingSkills": "Aplikuji dovednosti: {skills}…",
+      "readingSkillReferences": "Čtu referenční dokumenty k dovednostem…"
     },
     "toolSummary": {
       "usedTools": "Použito {count, plural, one {# nástroj} few {# nástroje} other {# nástrojů}}",
@@ -932,7 +936,23 @@
     "skillsAutomaticHint": "Relevantní funkce jsou vybírány automaticky. Použijte jednou pro další zprávu nebo připněte funkci pro použití v celé konverzaci.",
     "skillsAgentDisabled": "Funkce jsou pozastaveny, dokud je připojen agent. Vaše připnuté funkce se obnoví po jeho odpojení.",
     "skillPersonal": "osobní",
-    "skillsAgentToolsHint": "Jsou zde nabízeny pouze organizační dovednosti povolené správcem pro použití agentem. Agent je může načíst jako nástroje pouze pro čtení. Ostatní připnuté položky zůstávají pozastavené a osobní dovednosti nejsou agentům dostupné."
+    "skillsAgentToolsHint": "Jsou zde nabízeny pouze organizační dovednosti povolené správcem pro použití agentem. Agent je může načíst jako nástroje pouze pro čtení. Ostatní připnuté položky zůstávají pozastavené a osobní dovednosti nejsou agentům dostupné.",
+    "skillAlwaysOn": "vždy aktivní",
+    "skillAlwaysOnHint": "Přidáno ke každé zprávě v této konverzaci správcem.",
+    "skillUsage": {
+      "label": "Dovednosti",
+      "requested": "vyžádáno",
+      "pinned": "připnuto",
+      "auto": "automaticky",
+      "unavailable": "nedostupné",
+      "incomplete": "Některé dovednosti nebylo možné použít",
+      "references": "{count, plural, one {# referenční úryvek} few {# referenční úryvky} other {# referenčních úryvků}}",
+      "referencesUnavailable": "Některé referenční dokumenty nebyly dostupné",
+      "showDetails": "Zobrazit detaily dovednosti",
+      "hideDetails": "Skrýt detaily dovednosti",
+      "agentLoad": "načteno agentem",
+      "agentSearch": "dokumenty vyhledané agentem"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",

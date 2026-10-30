@@ -870,7 +870,11 @@
       "stillWorking": "Ikadali ikugwira ntchito…",
       "assessingSearchResults": "Kuyang'anira ngati zotsatira zikuyankha funso…",
       "refiningSearch": "Kufufuza kachiwiri: “{query}”…",
-      "readingSearchPages": "Kuwerenga masamba a zotsatira {count}…"
+      "readingSearchPages": "Kuwerenga masamba a zotsatira {count}…",
+      "toolRoutingUnavailableInRegion": "Tool routing sikupezeka pa {region} endpoint — tikuyankha popanda zida…",
+      "applyingSkill": "Ikugwiritsa ntchito luso: {skills}…",
+      "applyingSkills": "Ikugwiritsa ntchito maluso: {skills}…",
+      "readingSkillReferences": "Ikukuwerenga zolemba zothandizira luso…"
     },
     "toolSummary": {
       "usedTools": "Zida zogwiritsidwa ntchito {count, plural, one {# chida} other {# zida}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "Luso lofunikira lisankhidwa lokha. Gwiritsani ntchito kamodzi pa uthenga wotsatira, kapena ikani luso kuti lizigwiritsidwa ntchito nthawi zonse mukukambiranayi.",
     "skillsAgentDisabled": "Maluso ayimitsidwa pamene agent walumikizidwa. Zomwe munaika ziziyambiranso mukachotsa agent.",
     "skillPersonal": "zokhudza munthu",
-    "skillsAgentToolsHint": "Zotheka pano ndi luso la bungwe lomwe layatsidwa ndi admin kuti ogwira ntchito agwiritse ntchito. Ogwira ntchito angathe kutsegula ngati zida zowonera okha. Mapini ena amakhala atayimitsidwa, ndipo luso la payekha silo kupezeka kwa ogwira ntchito."
+    "skillsAgentToolsHint": "Zotheka pano ndi luso la bungwe lomwe layatsidwa ndi admin kuti ogwira ntchito agwiritse ntchito. Ogwira ntchito angathe kutsegula ngati zida zowonera okha. Mapini ena amakhala atayimitsidwa, ndipo luso la payekha silo kupezeka kwa ogwira ntchito.",
+    "skillAlwaysOn": "zimakhala nthawi zonse",
+    "skillAlwaysOnHint": "Zimawonjezedwa pa uthenga uliwonse mu zokambiranazi ndi admin.",
+    "skillUsage": {
+      "label": "Maluso",
+      "requested": "zifunsidwa",
+      "pinned": "zakhazikitsidwa",
+      "auto": "zokha",
+      "unavailable": "sakupikika",
+      "incomplete": "Maluso ena sanaikidwe bwino",
+      "references": "{count, plural, one {# chikalata chothandizira} other {# zikalata zothandizira}}",
+      "referencesUnavailable": "Zina mwa zolemba zothandizira sizikupezeka",
+      "showDetails": "Onetsani zambiri za luso",
+      "hideDetails": "Bisani zambiri za luso",
+      "agentLoad": "zatsegulidwa ndi agent",
+      "agentSearch": "zolemba zasakidwa ndi agent"
+    }
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",

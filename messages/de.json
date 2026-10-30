@@ -758,7 +758,11 @@
       "stillWorking": "Noch in Arbeit…",
       "assessingSearchResults": "Prüfe, ob die Ergebnisse die Frage beantworten…",
       "refiningSearch": "Suche erneut: „{query}“…",
-      "readingSearchPages": "Lese {count} Ergebnisseiten…"
+      "readingSearchPages": "Lese {count} Ergebnisseiten…",
+      "toolRoutingUnavailableInRegion": "Tool-Routing am {region}-Endpunkt nicht verfügbar — Antwort erfolgt ohne Tools…",
+      "applyingSkill": "Skill wird angewendet: {skills}…",
+      "applyingSkills": "Skills werden angewendet: {skills}…",
+      "readingSkillReferences": "Skill-Referenzdokumente werden gelesen…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# Tool verwendet} other {# Tools verwendet}}",
@@ -878,7 +882,23 @@
     "skillsAutomaticHint": "Relevante Skills werden automatisch ausgewählt. Verwenden Sie einmal für die nächste Nachricht oder heften Sie einen Skill an, um ihn während der gesamten Konversation zu nutzen.",
     "skillsAgentDisabled": "Skills sind pausiert, solange ein Agent verbunden ist. Ihre Anheftungen werden fortgesetzt, wenn Sie den Agenten trennen.",
     "skillPersonal": "persönlich",
-    "skillsAgentToolsHint": "Hier werden nur von einem Administrator für die Nutzung durch Agents freigegebene Organisations-Skills angeboten. Der Agent kann diese als Nur-Lesen-Tools laden. Andere Pins bleiben pausiert, und persönliche Skills stehen Agents nicht zur Verfügung."
+    "skillsAgentToolsHint": "Hier werden nur von einem Administrator für die Nutzung durch Agents freigegebene Organisations-Skills angeboten. Der Agent kann diese als Nur-Lesen-Tools laden. Andere Pins bleiben pausiert, und persönliche Skills stehen Agents nicht zur Verfügung.",
+    "skillAlwaysOn": "immer aktiv",
+    "skillAlwaysOnHint": "Von einem Administrator zu jeder Nachricht in diesem Gespräch hinzugefügt.",
+    "skillUsage": {
+      "label": "Skills",
+      "requested": "angefordert",
+      "pinned": "angeheftet",
+      "auto": "auto",
+      "unavailable": "nicht verfügbar",
+      "incomplete": "Einige Skills konnten nicht angewendet werden",
+      "references": "{count, plural, one {# Referenzabschnitt} other {# Referenzabschnitte}}",
+      "referencesUnavailable": "Einige Referenzdokumente waren nicht verfügbar",
+      "showDetails": "Skill-Details anzeigen",
+      "hideDetails": "Skill-Details ausblenden",
+      "agentLoad": "vom Agent geladen",
+      "agentSearch": "vom Agent durchsuchte Dokumente"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",

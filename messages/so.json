@@ -870,7 +870,11 @@
       "stillWorking": "Weli wuu shaqeynayaa…",
       "assessingSearchResults": "Waxaa la hubinayaa in natiijooyinka ay su'aasha ka jawaabaan…",
       "refiningSearch": "Dib loo raadinayo: “{query}”…",
-      "readingSearchPages": "Waxaa la akhrinayaa {count} bog oo natiijo ah…"
+      "readingSearchPages": "Waxaa la akhrinayaa {count} bog oo natiijo ah…",
+      "toolRoutingUnavailableInRegion": "Tool routing lama heli karo barta {region} — jawaab la'aan qalab...",
+      "applyingSkill": "Aqoon gaar ah ayaa la isticmaalayaa: {skills}...",
+      "applyingSkills": "Aqoonta la isticmaalayo: {skills}...",
+      "readingSkillReferences": "Akhriyayaa dukumentiyada tixraaca ee aqoonta..."
     },
     "toolSummary": {
       "usedTools": "Waxaa la isticmaalay {count, plural, one {# qalab} other {# qalabyo}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "Aqoonta khuseysa si toos ah ayaa loo dooraa. Isticmaal hal mar farriinta xigta, ama ku xiro xirfad si aad loogu isticmaalo wada hadalkan oo dhan.",
     "skillsAgentDisabled": "Aqoonta waa la hakiyay inta wakiilku ku xiran yahay. Ku xirnaantaada waxay dib u shaqeyn doontaa marka aad ka bixiso wakiilka.",
     "skillPersonal": "shaqsiyeed",
-    "skillsAgentToolsHint": "Kaliya xirfadaha ururka ee uu oggolaaday maamule ayaa halkan loogu heli karaa wakiillada. Wakiilku wuxuu u isticmaali karaa xirfadahan qalab akhris oo keliya ah. Xirmooyinka kale way joogsanayaan, xirfadaha shaqsiyeedna uma furna wakiillada."
+    "skillsAgentToolsHint": "Kaliya xirfadaha ururka ee uu oggolaaday maamule ayaa halkan loogu heli karaa wakiillada. Wakiilku wuxuu u isticmaali karaa xirfadahan qalab akhris oo keliya ah. Xirmooyinka kale way joogsanayaan, xirfadaha shaqsiyeedna uma furna wakiillada.",
+    "skillAlwaysOn": "mar walba shaqaynaya",
+    "skillAlwaysOnHint": "Wuxuu maamule ku daray fariin kasta oo wada hadal ah.",
+    "skillUsage": {
+      "label": "Aqoonta",
+      "requested": "la dalbaday",
+      "pinned": "la xafiday",
+      "auto": "si toos ah",
+      "unavailable": "lama heli karo",
+      "incomplete": "Qaar ka mid ah aqoonta lama dhaqan gelin",
+      "references": "{count, plural, one {# qoraal tixraac} other {# qoraallo tixraac}}",
+      "referencesUnavailable": "Qaar ka mid ah dukumentiyada tixraaca lama heli karo",
+      "showDetails": "Faahfaahinta aqoonta muuji",
+      "hideDetails": "Faahfaahinta aqoonta qari",
+      "agentLoad": "waxa uu wakiilku xambaarsaday",
+      "agentSearch": "dukumentiyada uu wakiilku raadiyay"
+    }
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",

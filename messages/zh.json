@@ -843,7 +843,11 @@
       "stillWorking": "仍在处理…",
       "assessingSearchResults": "正在检查结果是否能回答问题…",
       "refiningSearch": "再次搜索：“{query}”…",
-      "readingSearchPages": "正在读取{count}个结果页面…"
+      "readingSearchPages": "正在读取{count}个结果页面…",
+      "toolRoutingUnavailableInRegion": "{region} 端点不支持工具路由 — 正在不使用工具作答…",
+      "applyingSkill": "正在应用技能：{skills}…",
+      "applyingSkills": "正在应用技能：{skills}…",
+      "readingSkillReferences": "正在读取技能参考文档…"
     },
     "toolSummary": {
       "usedTools": "已用 {count, plural, one {# 个工具} other {# 个工具}}",
@@ -963,7 +967,23 @@
     "skillsAutomaticHint": "相关技能会自动选择。可在下一条消息中使用一次，或固定技能以在整个对话中使用。",
     "skillsAgentDisabled": "当有坐席接入时，技能已暂停。解除坐席后，您的固定会恢复。",
     "skillPersonal": "个人",
-    "skillsAgentToolsHint": "此处仅提供管理员为代理启用的组织技能。代理可以将其作为只读工具加载。其他固定项将保持暂停，个人技能对代理不可用。"
+    "skillsAgentToolsHint": "此处仅提供管理员为代理启用的组织技能。代理可以将其作为只读工具加载。其他固定项将保持暂停，个人技能对代理不可用。",
+    "skillAlwaysOn": "始终开启",
+    "skillAlwaysOnHint": "由管理员添加到本会话中的每条消息。",
+    "skillUsage": {
+      "label": "技能",
+      "requested": "已请求",
+      "pinned": "已固定",
+      "auto": "自动",
+      "unavailable": "不可用",
+      "incomplete": "部分技能无法应用",
+      "references": "{count, plural, one {# 个参考段落} other {# 个参考段落}}",
+      "referencesUnavailable": "部分参考文档不可用",
+      "showDetails": "显示技能详情",
+      "hideDetails": "隐藏技能详情",
+      "agentLoad": "由代理加载",
+      "agentSearch": "由代理检索文档"
+    }
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",

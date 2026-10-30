@@ -870,7 +870,11 @@
       "stillWorking": "Mbola miasa... ",
       "assessingSearchResults": "Jerenay raha mamaly ilay fanontaniana ny valiny...",
       "refiningSearch": "Averina karohina: “{query}”...",
-      "readingSearchPages": "Mamaky pejy valiny {count}... "
+      "readingSearchPages": "Mamaky pejy valiny {count}... ",
+      "toolRoutingUnavailableInRegion": "Tsy azo ampiasaina amin’ny {region} endpoint ny fanasokajiana fitaovana — hamaly tsy misy fitaovana…",
+      "applyingSkill": "Manatanteraka fahaiza-manao: {skills}…",
+      "applyingSkills": "Manatanteraka fahaiza-manao: {skills}…",
+      "readingSkillReferences": "Mamaky antontan-taratasy fahaiza-manao…"
     },
     "toolSummary": {
       "usedTools": "Fitaovana nampiasaina {count, plural, one {#} other {#}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "Misafidy ho azy ireo fahaiza-manao mifanaraka. Ampiasao indray mandeha amin'ny hafatra manaraka, na apetaho amin'ny resaka iray fahaiza-manao iray ho ampiasaina mandritra ity resaka ity.",
     "skillsAgentDisabled": "Naato ny fahaiza-manao raha mipetraka ny mpiasan'ny serivisy. Hiverina ho ampiasaina ny napetakao rehefa esorina ilay mpiasan'ny serivisy.",
     "skillPersonal": "manokana",
-    "skillsAgentToolsHint": "Ny fahaizan'ny fikambanana natolotry ny mpitantana ho azon'ny mpiasan'ny fikambanana ihany no hita eto. Azon'ny mpiasan'ny fikambanana ampiasaina amin'ny fomba vakiana ihany ireo fitaovana ireo. Ny fanjairana hafa dia mijanona tsy mandeha, ary tsy azon'ny mpiasan'ny fikambanana ampiasaina ny fahaizana manokana."
+    "skillsAgentToolsHint": "Ny fahaizan'ny fikambanana natolotry ny mpitantana ho azon'ny mpiasan'ny fikambanana ihany no hita eto. Azon'ny mpiasan'ny fikambanana ampiasaina amin'ny fomba vakiana ihany ireo fitaovana ireo. Ny fanjairana hafa dia mijanona tsy mandeha, ary tsy azon'ny mpiasan'ny fikambanana ampiasaina ny fahaizana manokana.",
+    "skillAlwaysOn": "miasa mandrakariva",
+    "skillAlwaysOnHint": "Ampiana amin’ny hafatra tsirairay amin’ity resaka ity, nataon’ny mpandrindra.",
+    "skillUsage": {
+      "label": "Fahaiza-manao",
+      "requested": "nofangatahana",
+      "pinned": "nahetsika",
+      "auto": "avy amin’ny rafitra",
+      "unavailable": "tsy misy",
+      "incomplete": "Nisy fahaiza-manao tsy afaka nampiharina",
+      "references": "{count, plural, one {# tapany fanovàna} other {# tapany fanovàna}}",
+      "referencesUnavailable": "Nisy antontan-taratasy fanovàna tsy azo nidirana",
+      "showDetails": "Asehoy ny antsipiriany fahaiza-manao",
+      "hideDetails": "Afeno ny antsipiriany fahaiza-manao",
+      "agentLoad": "nataon’ny agent",
+      "agentSearch": "antontan-taratasy notadiavin’ny agent"
+    }
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",

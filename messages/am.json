@@ -755,7 +755,11 @@
       "stillWorking": "በመስራት ላይ…",
       "assessingSearchResults": "ውጤቶቹ ጥያቄውን መልሰው እንደሆነ የመርመራ ላይ...",
       "refiningSearch": "ዳግመኛ ፍለጋ: “{query}”...",
-      "readingSearchPages": "{count} የውጤት ገፆችን በመንበብ ላይ..."
+      "readingSearchPages": "{count} የውጤት ገፆችን በመንበብ ላይ...",
+      "toolRoutingUnavailableInRegion": "በ{region} እንደመጨረሻ ቀጥታ tool routing አይገኝም — ሳይጠቀም መረጃ ማቅረብ...",
+      "applyingSkill": "ዘዴ እየተሰረዘ፡ {skills}...",
+      "applyingSkills": "ዘዴዎች እየተሰረዙ፡ {skills}...",
+      "readingSkillReferences": "የዘዴ ማጣሪያ ሰነዶችን በመነበብ..."
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳሪያ} other {# መሳሪያዎች}} ተጠቅመዋል",
@@ -875,7 +879,23 @@
     "skillsAutomaticHint": "ተዛማጅ ችሎታዎች በራስ-አውጪ ይመረጣሉ። ለቀጣዩ መልእክት አንድ ጊዜ ይጠቀሙ፣ ወይም ችሎታን ቀይሩ ሁሉም ውይይት ውስጥ ይጠቀሙበት።",
     "skillsAgentDisabled": "ችሎታዎች ባንተ ባለሙያ ሲያያዥ ቆሟል። ባለሙያውን ከማሰናከዝዎ በኋላ የተያዩበት ችሎታዎት ይቀጥላል።",
     "skillPersonal": "የግል",
-    "skillsAgentToolsHint": "የድርጅቱ አስተዳደር ለጀብረ ሰራተኞች የአንባቢ ብቻ ባሉ ችሎታዎች እዚህ የሚገኙት ናቸው። ጀብረ ሰራተኞቹ እነሱን ማንበብ ብቻ የሚችሉ መሣሪያዎች አይቻሉ። ሌሎች ፒንዎች የተዘጋበት ሁኔታ ይቆያሉ፣ የግል ችሎታዎች ለጀብረ ሰራተኞች አያገለግሉም።"
+    "skillsAgentToolsHint": "የድርጅቱ አስተዳደር ለጀብረ ሰራተኞች የአንባቢ ብቻ ባሉ ችሎታዎች እዚህ የሚገኙት ናቸው። ጀብረ ሰራተኞቹ እነሱን ማንበብ ብቻ የሚችሉ መሣሪያዎች አይቻሉ። ሌሎች ፒንዎች የተዘጋበት ሁኔታ ይቆያሉ፣ የግል ችሎታዎች ለጀብረ ሰራተኞች አያገለግሉም።",
+    "skillAlwaysOn": "ዘወትር እየሰራ ያለ",
+    "skillAlwaysOnHint": "በአድሚን በዚህ ውይይት የተጨመረ ወደ እያንዳንዱ መልእክት።",
+    "skillUsage": {
+      "label": "ዘዴዎች",
+      "requested": "ተጠየቀ",
+      "pinned": "ተመሰከረ",
+      "auto": "ራስ",
+      "unavailable": "አይገኝም",
+      "incomplete": "አንዳንድ ዘዴዎች ማድረግ አልተቻለም",
+      "references": "{count, plural, one {# የማጣሪያ አካል} other {# የማጣሪያ አካላት}}",
+      "referencesUnavailable": "አንዳንድ ማጣሪያ ሰነዶች አይገኝም",
+      "showDetails": "የዘዴ ዝርዝሮችን አሳይ",
+      "hideDetails": "የዘዴ ዝርዝሮችን ደብቅ",
+      "agentLoad": "በagent ተጫነ",
+      "agentSearch": "በagent የተወደዱ ሰነዶች"
+    }
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",

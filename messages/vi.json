@@ -813,7 +813,11 @@
       "stillWorking": "Vẫn đang xử lý…",
       "assessingSearchResults": "Đang kiểm tra kết quả xem có trả lời được câu hỏi không…",
       "refiningSearch": "Đang tìm lại: “{query}”…",
-      "readingSearchPages": "Đang đọc {count} trang kết quả…"
+      "readingSearchPages": "Đang đọc {count} trang kết quả…",
+      "toolRoutingUnavailableInRegion": "Định tuyến công cụ không khả dụng tại điểm cuối {region} — trả lời mà không có công cụ…",
+      "applyingSkill": "Đang áp dụng kỹ năng: {skills}…",
+      "applyingSkills": "Đang áp dụng các kỹ năng: {skills}…",
+      "readingSkillReferences": "Đang đọc tài liệu tham khảo kỹ năng…"
     },
     "toolSummary": {
       "usedTools": "Đã sử dụng {count, plural, one {# công cụ} other {# công cụ}}",
@@ -933,7 +937,23 @@
     "skillsAutomaticHint": "Kỹ năng liên quan sẽ được chọn tự động. Sử dụng một lần cho tin nhắn tiếp theo hoặc ghim kỹ năng để dùng xuyên suốt cuộc trò chuyện này.",
     "skillsAgentDisabled": "Các kỹ năng sẽ tạm dừng trong khi có tác nhân được đính kèm. Ghim của bạn sẽ tiếp tục khi bạn gỡ tác nhân ra.",
     "skillPersonal": "cá nhân",
-    "skillsAgentToolsHint": "Chỉ các kỹ năng của tổ chức đã được quản trị viên bật cho đại diện sử dụng mới được cung cấp ở đây. Đại diện có thể tải chúng như các công cụ chỉ đọc. Các pin khác sẽ tạm dừng và các kỹ năng cá nhân sẽ không khả dụng cho đại diện."
+    "skillsAgentToolsHint": "Chỉ các kỹ năng của tổ chức đã được quản trị viên bật cho đại diện sử dụng mới được cung cấp ở đây. Đại diện có thể tải chúng như các công cụ chỉ đọc. Các pin khác sẽ tạm dừng và các kỹ năng cá nhân sẽ không khả dụng cho đại diện.",
+    "skillAlwaysOn": "luôn bật",
+    "skillAlwaysOnHint": "Được quản trị viên thêm vào mọi tin nhắn trong cuộc trò chuyện này.",
+    "skillUsage": {
+      "label": "Kỹ năng",
+      "requested": "đã yêu cầu",
+      "pinned": "ghim",
+      "auto": "tự động",
+      "unavailable": "không khả dụng",
+      "incomplete": "Một số kỹ năng không thể được áp dụng",
+      "references": "{count, plural, one {# đoạn tham khảo} other {# đoạn tham khảo}}",
+      "referencesUnavailable": "Một số tài liệu tham khảo không khả dụng",
+      "showDetails": "Hiện chi tiết kỹ năng",
+      "hideDetails": "Ẩn chi tiết kỹ năng",
+      "agentLoad": "được agent tải lên",
+      "agentSearch": "tài liệu được agent tìm kiếm"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",

@@ -787,7 +787,11 @@
       "stillWorking": "Työstetään yhä…",
       "assessingSearchResults": "Tarkistetaan, vastaavatko tulokset kysymykseen…",
       "refiningSearch": "Haetaan uudelleen: ”{query}”…",
-      "readingSearchPages": "Luetaan {count} hakutulossivua…"
+      "readingSearchPages": "Luetaan {count} hakutulossivua…",
+      "toolRoutingUnavailableInRegion": "Työkalureititys ei ole saatavilla alueen {region} päätepisteessä — vastaan ilman työkaluja…",
+      "applyingSkill": "Otetaan käyttöön taito: {skills}…",
+      "applyingSkills": "Otetaan käyttöön taidot: {skills}…",
+      "readingSkillReferences": "Luetaan taitojen viitedokumentteja…"
     },
     "toolSummary": {
       "usedTools": "Käytetty {count, plural, one {# työkalu} other {# työkalua}}",
@@ -907,7 +911,23 @@
     "skillsAutomaticHint": "Sopivat taidot valitaan automaattisesti. Käytä kerran seuraavaan viestiin tai kiinnitä taito, jos haluat käyttää sitä koko keskustelun ajan.",
     "skillsAgentDisabled": "Taidot ovat keskeytettynä agentin ollessa liitettynä. Kiinnityksesi palautuvat käyttöön, kun irrotat agentin.",
     "skillPersonal": "henkilökohtainen",
-    "skillsAgentToolsHint": "Vain järjestelmänvalvojan agenteille sallimat organisaatiotaidot ovat täällä saatavilla. Agentti voi ladata ne vain luku -työkaluina. Muut pin-tiedostot pysyvät keskeytettyinä, eikä henkilökohtaisia taitoja ole agenteille saatavilla."
+    "skillsAgentToolsHint": "Vain järjestelmänvalvojan agenteille sallimat organisaatiotaidot ovat täällä saatavilla. Agentti voi ladata ne vain luku -työkaluina. Muut pin-tiedostot pysyvät keskeytettyinä, eikä henkilökohtaisia taitoja ole agenteille saatavilla.",
+    "skillAlwaysOn": "aina käytössä",
+    "skillAlwaysOnHint": "Ylläpitäjä on lisännyt tämän jokaiseen viestiin tässä keskustelussa.",
+    "skillUsage": {
+      "label": "Taidot",
+      "requested": "pyydetty",
+      "pinned": "kiinnitetty",
+      "auto": "automaattinen",
+      "unavailable": "ei saatavilla",
+      "incomplete": "Kaikkia taitoja ei voitu käyttää",
+      "references": "{count, plural, one {# viitejakso} other {# viitejaksoa}}",
+      "referencesUnavailable": "Jotkin viitedokumentit eivät olleet saatavilla",
+      "showDetails": "Näytä taidon tiedot",
+      "hideDetails": "Piilota taidon tiedot",
+      "agentLoad": "agentti latasi",
+      "agentSearch": "agentti haki dokumentteja"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",

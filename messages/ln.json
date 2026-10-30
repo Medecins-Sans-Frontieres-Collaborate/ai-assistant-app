@@ -870,7 +870,11 @@
       "stillWorking": "Ezali naino kosala…",
       "assessingSearchResults": "Kotalela soki boyokani ezali na motuna…",
       "refiningSearch": "Kobanda koluka lisusu: “{query}”…",
-      "readingSearchPages": "Kotalela ba page {count} ya boluki…"
+      "readingSearchPages": "Kotalela ba page {count} ya boluki…",
+      "toolRoutingUnavailableInRegion": "Tool routing ezali te na {region} endpoint — azongisaka eyano na kozanga ba tool…",
+      "applyingSkill": "Kosalela skill: {skills}…",
+      "applyingSkills": "Kosalela ba skill: {skills}…",
+      "readingSkillReferences": "Kozua ba ndakisa ya skill…"
     },
     "toolSummary": {
       "usedTools": "Outils esalelamaki: {count, plural, one {# outil} other {# ba outils}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "Makoki oyo ekoki kosalela esalemi na nzungu. Salela mbala moko mpo na nsango elandi, to kangisa mokoki mpo osalela yango na bosololi mobimba.",
     "skillsAgentDisabled": "Makoki ekiti ntango agent azali kokangama. Bakangeli na yo ekokoba ntango okobongola agent.",
     "skillPersonal": "ya moto",
-    "skillsAgentToolsHint": "Kaka ba mayele ya organisation oyo admin apesi nzela mpo na basali ezo bonisama awa. Mosali akoki kokota na yango lokola outil oyo epesami kaka na motuni (read-only). Bansakoli mosusu bakotikala koulala, mpe mayele ya moto moko moko ezali te mpo na basali."
+    "skillsAgentToolsHint": "Kaka ba mayele ya organisation oyo admin apesi nzela mpo na basali ezo bonisama awa. Mosali akoki kokota na yango lokola outil oyo epesami kaka na motuni (read-only). Bansakoli mosusu bakotikala koulala, mpe mayele ya moto moko moko ezali te mpo na basali.",
+    "skillAlwaysOn": "ezalaka ntango nyonso",
+    "skillAlwaysOnHint": "Ekangami na sango nyonso ya boyokani oyo na nzela ya admin.",
+    "skillUsage": {
+      "label": "Ba skill",
+      "requested": "esengeli",
+      "pinned": "ekangami",
+      "auto": "automatique",
+      "unavailable": "ezali te",
+      "incomplete": "Ba skill mosusu ekokaki te kosalelama",
+      "references": "{count, plural, one {# ndakisa ya référence} other {# ba ndakisa ya référence}}",
+      "referencesUnavailable": "Ba ndakisa ya référence mosusu ezalaki te",
+      "showDetails": "Komona makambo mingi ya skill",
+      "hideDetails": "Kokunda makambo mingi ya skill",
+      "agentLoad": "ebongisami na agent",
+      "agentSearch": "ba ndakisa basalelamaki na agent"
+    }
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",

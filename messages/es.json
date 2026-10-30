@@ -758,7 +758,11 @@
       "stillWorking": "Aún trabajando…",
       "assessingSearchResults": "Verificando si los resultados responden la pregunta…",
       "refiningSearch": "Buscando de nuevo: “{query}”…",
-      "readingSearchPages": "Leyendo {count} páginas de resultados…"
+      "readingSearchPages": "Leyendo {count} páginas de resultados…",
+      "toolRoutingUnavailableInRegion": "El enrutamiento de herramientas no está disponible en el endpoint de {region}; respondiendo sin herramientas…",
+      "applyingSkill": "Aplicando habilidad: {skills}…",
+      "applyingSkills": "Aplicando habilidades: {skills}…",
+      "readingSkillReferences": "Leyendo documentos de referencia de habilidades…"
     },
     "toolSummary": {
       "usedTools": "Se usó {count, plural, one {# herramienta} other {# herramientas}}",
@@ -878,7 +882,23 @@
     "skillsAutomaticHint": "Las habilidades relevantes se seleccionan automáticamente. Úsela una vez para el próximo mensaje o fije una habilidad para usarla durante toda la conversación.",
     "skillsAgentDisabled": "Las habilidades están pausadas mientras hay un agente adjunto. Sus habilidades fijadas se reanudarán al desadjuntar el agente.",
     "skillPersonal": "personal",
-    "skillsAgentToolsHint": "Solo se ofrecen aquí las habilidades de la organización habilitadas por un administrador para uso de agentes. El agente puede cargarlas como herramientas de solo lectura. Otros pines permanecen en pausa y las habilidades personales no están disponibles para los agentes."
+    "skillsAgentToolsHint": "Solo se ofrecen aquí las habilidades de la organización habilitadas por un administrador para uso de agentes. El agente puede cargarlas como herramientas de solo lectura. Otros pines permanecen en pausa y las habilidades personales no están disponibles para los agentes.",
+    "skillAlwaysOn": "siempre activo",
+    "skillAlwaysOnHint": "Agregado a cada mensaje en esta conversación por un administrador.",
+    "skillUsage": {
+      "label": "Habilidades",
+      "requested": "solicitada",
+      "pinned": "fijada",
+      "auto": "automática",
+      "unavailable": "no disponible",
+      "incomplete": "No se pudieron aplicar algunas habilidades",
+      "references": "{count, plural, one {# pasaje de referencia} other {# pasajes de referencia}}",
+      "referencesUnavailable": "Algunos documentos de referencia no estaban disponibles",
+      "showDetails": "Mostrar detalles de la habilidad",
+      "hideDetails": "Ocultar detalles de la habilidad",
+      "agentLoad": "cargada por el agente",
+      "agentSearch": "documentos buscados por el agente"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",

@@ -758,7 +758,11 @@
       "stillWorking": "Ainda processando…",
       "assessingSearchResults": "Verificando se os resultados respondem à pergunta…",
       "refiningSearch": "Buscando novamente: “{query}”…",
-      "readingSearchPages": "Lendo {count} páginas de resultados…"
+      "readingSearchPages": "Lendo {count} páginas de resultados…",
+      "toolRoutingUnavailableInRegion": "Roteamento de ferramentas indisponível no endpoint {region} — respondendo sem ferramentas…",
+      "applyingSkill": "Aplicando habilidade: {skills}…",
+      "applyingSkills": "Aplicando habilidades: {skills}…",
+      "readingSkillReferences": "Lendo documentos de referência de habilidades…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ferramenta utilizada} other {# ferramentas utilizadas}}",
@@ -878,7 +882,23 @@
     "skillsAutomaticHint": "As habilidades relevantes são selecionadas automaticamente. Use uma vez para a próxima mensagem ou fixe uma habilidade para utilizá-la durante toda esta conversa.",
     "skillsAgentDisabled": "As habilidades ficam pausadas enquanto um agente está conectado. Suas habilidades fixadas serão retomadas ao desconectar o agente.",
     "skillPersonal": "pessoal",
-    "skillsAgentToolsHint": "Somente habilidades da organização habilitadas por um administrador para uso de agentes são oferecidas aqui. O agente pode carregá-las como ferramentas de leitura. Outros pins permanecem pausados, e habilidades pessoais não estão disponíveis para agentes."
+    "skillsAgentToolsHint": "Somente habilidades da organização habilitadas por um administrador para uso de agentes são oferecidas aqui. O agente pode carregá-las como ferramentas de leitura. Outros pins permanecem pausados, e habilidades pessoais não estão disponíveis para agentes.",
+    "skillAlwaysOn": "sempre ativo",
+    "skillAlwaysOnHint": "Adicionado a cada mensagem nesta conversa por um administrador.",
+    "skillUsage": {
+      "label": "Habilidades",
+      "requested": "solicitado",
+      "pinned": "fixado",
+      "auto": "automático",
+      "unavailable": "indisponível",
+      "incomplete": "Algumas habilidades não puderam ser aplicadas",
+      "references": "{count, plural, one {# trecho de referência} other {# trechos de referência}}",
+      "referencesUnavailable": "Alguns documentos de referência estavam indisponíveis",
+      "showDetails": "Mostrar detalhes da habilidade",
+      "hideDetails": "Ocultar detalhes da habilidade",
+      "agentLoad": "carregado pelo agente",
+      "agentSearch": "documentos pesquisados pelo agente"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",

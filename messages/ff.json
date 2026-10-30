@@ -870,7 +870,11 @@
       "stillWorking": "Ton e jam...",
       "assessingSearchResults": "Njiɗɗin so baŋngal njangu jawdi njangu…",
       "refiningSearch": "Njangde jokkondin: “{query}”…",
-      "readingSearchPages": "Njaɓɓude {count} baŋngal njangu…"
+      "readingSearchPages": "Njaɓɓude {count} baŋngal njangu…",
+      "toolRoutingUnavailableInRegion": "Tool routing tanandi e {region} endpoint — mi andi e tool ɗi...",
+      "applyingSkill": "Mi yahi skill: {skills}...",
+      "applyingSkills": "Mi yahi skills: {skills}...",
+      "readingSkillReferences": "Mi jangu skill reference documents..."
     },
     "toolSummary": {
       "usedTools": "Njoɓɗo {count, plural, one {# nguurndam} other {# nguurndeeji}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "Lafannde jeyɗee jogii mo ɗobo. Jogii kadi ɗuum konngol binndol fayde, walla pin konngol binndol fayde faaynde konngol binndol tawa binndol mum.",
     "skillsAgentDisabled": "Lafannde jeyɗee dańndu tawi agent jogii. Pin am jooɗii tawa agent waawaani.",
     "skillPersonal": "keertugol",
-    "skillsAgentToolsHint": "Ko cuɓorgo ɗee baawdi da admin kisal e jawdi agento e ɗun. Agent maa waadi loowdi e kogal waɗɗi jogi-jogorɗe. Pinji bee ngolli, e kisalji personol ɗe waawani loowdi e agentji."
+    "skillsAgentToolsHint": "Ko cuɓorgo ɗee baawdi da admin kisal e jawdi agento e ɗun. Agent maa waadi loowdi e kogal waɗɗi jogi-jogorɗe. Pinji bee ngolli, e kisalji personol ɗe waawani loowdi e agentji.",
+    "skillAlwaysOn": "o daande",
+    "skillAlwaysOnHint": "Admin mo yahii e kala message e hakkunde nde.",
+    "skillUsage": {
+      "label": "Skills",
+      "requested": "mi wondani",
+      "pinned": "mi ceɗi",
+      "auto": "auto",
+      "unavailable": "tanandi",
+      "incomplete": "Skills ɓe faydaaki ƴetti ko mi yahi",
+      "references": "{count, plural, one {# reference passage} other {# reference passages}}",
+      "referencesUnavailable": "Reference documents ɓe faydaaki tanandi",
+      "showDetails": "Jokku skill details",
+      "hideDetails": "Sosnu skill details",
+      "agentLoad": "agent mo jahii",
+      "agentSearch": "documents agent mo njahi"
+    }
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",

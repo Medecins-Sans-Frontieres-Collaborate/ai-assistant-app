@@ -812,7 +812,11 @@
       "stillWorking": "処理中…",
       "assessingSearchResults": "結果が質問に答えているか確認中…",
       "refiningSearch": "再検索中: 「{query}」…",
-      "readingSearchPages": "{count}件の結果ページを読んでいます…"
+      "readingSearchPages": "{count}件の結果ページを読んでいます…",
+      "toolRoutingUnavailableInRegion": "{region} エンドポイントではツールのルーティングが利用できません。ツールなしで回答します…",
+      "applyingSkill": "スキルを適用中: {skills}…",
+      "applyingSkills": "スキルを適用中: {skills}…",
+      "readingSkillReferences": "スキル参照文書を読んでいます…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# 件のツールを使用} other {# 件のツールを使用}}",
@@ -932,7 +936,23 @@
     "skillsAutomaticHint": "関連するスキルは自動的に選択されます。次のメッセージで1回だけ使用するか、会話全体で使いたい場合はピン留めしてください。",
     "skillsAgentDisabled": "エージェントが接続されている間はスキルが一時停止されます。エージェントを解除するとピン留めしたスキルが再開されます。",
     "skillPersonal": "個人",
-    "skillsAgentToolsHint": "管理者がエージェント用に有効化した組織スキルのみ、ここで利用できます。エージェントはこれらを閲覧専用ツールとして読み込むことができます。他のピンは一時停止され、個人用スキルはエージェントには利用できません。"
+    "skillsAgentToolsHint": "管理者がエージェント用に有効化した組織スキルのみ、ここで利用できます。エージェントはこれらを閲覧専用ツールとして読み込むことができます。他のピンは一時停止され、個人用スキルはエージェントには利用できません。",
+    "skillAlwaysOn": "常時使用",
+    "skillAlwaysOnHint": "管理者によって、この会話のすべてのメッセージに追加されます。",
+    "skillUsage": {
+      "label": "スキル",
+      "requested": "リクエスト済み",
+      "pinned": "ピン留め",
+      "auto": "自動",
+      "unavailable": "利用不可",
+      "incomplete": "一部のスキルが適用できませんでした",
+      "references": "{count, plural, one {# 件の参照パッセージ} other {# 件の参照パッセージ}}",
+      "referencesUnavailable": "一部の参照文書が利用できませんでした",
+      "showDetails": "スキル詳細を表示",
+      "hideDetails": "スキル詳細を非表示",
+      "agentLoad": "エージェントによってロード",
+      "agentSearch": "エージェントによる文書検索"
+    }
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",

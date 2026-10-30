@@ -779,7 +779,11 @@
       "stillWorking": "Masih bekerja…",
       "assessingSearchResults": "Memeriksa apakah hasil sudah menjawab pertanyaan…",
       "refiningSearch": "Mencari ulang: “{query}”…",
-      "readingSearchPages": "Membaca {count} halaman hasil…"
+      "readingSearchPages": "Membaca {count} halaman hasil…",
+      "toolRoutingUnavailableInRegion": "Rute alat tidak tersedia di endpoint {region} — menjawab tanpa alat…",
+      "applyingSkill": "Menerapkan keahlian: {skills}…",
+      "applyingSkills": "Menerapkan keahlian: {skills}…",
+      "readingSkillReferences": "Membaca dokumen referensi keahlian…"
     },
     "toolSummary": {
       "usedTools": "Digunakan {count, plural, one {# alat} other {# alat}}",
@@ -899,7 +903,23 @@
     "skillsAutomaticHint": "Skill yang relevan dipilih secara otomatis. Gunakan sekali untuk pesan berikutnya, atau sematkan skill untuk digunakan sepanjang percakapan ini.",
     "skillsAgentDisabled": "Skill ditangguhkan ketika agen terpasang. Pin Anda akan aktif kembali saat Anda melepaskan agen.",
     "skillPersonal": "pribadi",
-    "skillsAgentToolsHint": "Hanya keterampilan organisasi yang diaktifkan oleh admin untuk digunakan agen yang tersedia di sini. Agen dapat memuatnya sebagai alat baca saja. Pin lainnya tetap dijeda, dan keterampilan pribadi tidak tersedia untuk agen."
+    "skillsAgentToolsHint": "Hanya keterampilan organisasi yang diaktifkan oleh admin untuk digunakan agen yang tersedia di sini. Agen dapat memuatnya sebagai alat baca saja. Pin lainnya tetap dijeda, dan keterampilan pribadi tidak tersedia untuk agen.",
+    "skillAlwaysOn": "selalu aktif",
+    "skillAlwaysOnHint": "Ditambahkan ke setiap pesan dalam percakapan ini oleh admin.",
+    "skillUsage": {
+      "label": "Keahlian",
+      "requested": "diminta",
+      "pinned": "disematkan",
+      "auto": "otomatis",
+      "unavailable": "tidak tersedia",
+      "incomplete": "Beberapa keahlian tidak dapat diterapkan",
+      "references": "{count, plural, one {# bagian referensi} other {# bagian referensi}}",
+      "referencesUnavailable": "Beberapa dokumen referensi tidak tersedia",
+      "showDetails": "Tampilkan detail keahlian",
+      "hideDetails": "Sembunyikan detail keahlian",
+      "agentLoad": "dimuat oleh agen",
+      "agentSearch": "dokumen dicari oleh agen"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",

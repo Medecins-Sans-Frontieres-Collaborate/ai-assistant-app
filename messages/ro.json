@@ -810,7 +810,11 @@
       "stillWorking": "Se lucrează în continuare…",
       "assessingSearchResults": "Se verifică dacă rezultatele răspund la întrebare…",
       "refiningSearch": "Se caută din nou: „{query}”…",
-      "readingSearchPages": "Se citesc {count} pagini de rezultate…"
+      "readingSearchPages": "Se citesc {count} pagini de rezultate…",
+      "toolRoutingUnavailableInRegion": "Routarea instrumentelor nu este disponibilă pe endpoint-ul {region} — răspuns fără instrumente…",
+      "applyingSkill": "Se aplică abilitatea: {skills}…",
+      "applyingSkills": "Se aplică abilitățile: {skills}…",
+      "readingSkillReferences": "Se citesc documentele de referință pentru abilități…"
     },
     "toolSummary": {
       "usedTools": "Folosit {count, plural, one {# instrument} other {# instrumente}}",
@@ -930,7 +934,23 @@
     "skillsAutomaticHint": "Abilitățile relevante sunt selectate automat. Folosește o dată pentru următorul mesaj sau fixează o abilitate pentru a o folosi pe tot parcursul conversației.",
     "skillsAgentDisabled": "Abilitățile sunt pauzate cât timp un agent este atașat. Abilitățile fixate vor fi reluate după ce detașați agentul.",
     "skillPersonal": "personal",
-    "skillsAgentToolsHint": "Doar abilitățile organizației activate de un administrator pentru utilizarea de către agenți sunt oferite aici. Agenții le pot încărca ca instrumente doar pentru citire. Alte pin-uri rămân întrerupte, iar abilitățile personale nu sunt disponibile agenților."
+    "skillsAgentToolsHint": "Doar abilitățile organizației activate de un administrator pentru utilizarea de către agenți sunt oferite aici. Agenții le pot încărca ca instrumente doar pentru citire. Alte pin-uri rămân întrerupte, iar abilitățile personale nu sunt disponibile agenților.",
+    "skillAlwaysOn": "activ permanent",
+    "skillAlwaysOnHint": "Adăugat la fiecare mesaj din această conversație de către un administrator.",
+    "skillUsage": {
+      "label": "Abilități",
+      "requested": "solicitat",
+      "pinned": "fixat",
+      "auto": "automat",
+      "unavailable": "indisponibil",
+      "incomplete": "Unele abilități nu au putut fi aplicate",
+      "references": "{count, plural, one {# pasaj de referință} other {# pasaje de referință}}",
+      "referencesUnavailable": "Unele documente de referință au fost indisponibile",
+      "showDetails": "Afișează detaliile abilității",
+      "hideDetails": "Ascunde detaliile abilității",
+      "agentLoad": "încărcat de agent",
+      "agentSearch": "documente căutate de agent"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",

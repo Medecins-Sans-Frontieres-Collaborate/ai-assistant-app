@@ -812,7 +812,11 @@
       "stillWorking": "Hâlâ çalışıyor…",
       "assessingSearchResults": "Sonuçların soruya cevap verip vermediğini kontrol ediliyor…",
       "refiningSearch": "Yeniden aranıyor: “{query}”…",
-      "readingSearchPages": "{count} sonuç sayfası okunuyor…"
+      "readingSearchPages": "{count} sonuç sayfası okunuyor…",
+      "toolRoutingUnavailableInRegion": "{region} uç noktasında araç yönlendirmesi kullanılamıyor — araçsız yanıtlanıyor…",
+      "applyingSkill": "Beceri uygulanıyor: {skills}…",
+      "applyingSkills": "Beceriler uygulanıyor: {skills}…",
+      "readingSkillReferences": "Beceri referans belgeleri okunuyor…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# araç kullanıldı} other {# araç kullanıldı}}",
@@ -932,7 +936,23 @@
     "skillsAutomaticHint": "İlgili beceriler otomatik olarak seçilir. Sadece sonraki mesaj için bir kez kullanabilir veya bir beceriyi bu sohbet boyunca kullanmak için sabitleyebilirsiniz.",
     "skillsAgentDisabled": "Bir temsilci eklendiğinde beceriler duraklatılır. Temsilciyi kaldırdığınızda sabitlemeleriniz devam edecek.",
     "skillPersonal": "kişisel",
-    "skillsAgentToolsHint": "Burada yalnızca bir yönetici tarafından ajanın kullanımı için etkinleştirilen organizasyon becerileri sunulur. Ajan bunları yalnızca okuma modu araçları olarak yükleyebilir. Diğer sabitlenmiş beceriler duraklatılır ve kişisel beceriler ajanlar tarafından kullanılamaz."
+    "skillsAgentToolsHint": "Burada yalnızca bir yönetici tarafından ajanın kullanımı için etkinleştirilen organizasyon becerileri sunulur. Ajan bunları yalnızca okuma modu araçları olarak yükleyebilir. Diğer sabitlenmiş beceriler duraklatılır ve kişisel beceriler ajanlar tarafından kullanılamaz.",
+    "skillAlwaysOn": "her zaman açık",
+    "skillAlwaysOnHint": "Bir yönetici tarafından bu sohbetteki her mesaja eklendi.",
+    "skillUsage": {
+      "label": "Beceriler",
+      "requested": "talep edildi",
+      "pinned": "sabitledi",
+      "auto": "otomatik",
+      "unavailable": "kullanılamıyor",
+      "incomplete": "Bazı beceriler uygulanamadı",
+      "references": "{count, plural, one {# referans bölümü} other {# referans bölümleri}}",
+      "referencesUnavailable": "Bazı referans belgeleri kullanılamadı",
+      "showDetails": "Beceri detaylarını göster",
+      "hideDetails": "Beceri detaylarını gizle",
+      "agentLoad": "ajan tarafından yüklendi",
+      "agentSearch": "ajan tarafından belgeler arandı"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",

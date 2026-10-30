@@ -870,7 +870,11 @@
       "stillWorking": "Toujou ap travay...",
       "assessingSearchResults": "Nap verifye si rezilta yo reponn kesyon an…",
       "refiningSearch": "Nap rechèche ankò : “{query}”…",
-      "readingSearchPages": "Nap li {count} paj rezilta…"
+      "readingSearchPages": "Nap li {count} paj rezilta…",
+      "toolRoutingUnavailableInRegion": "Wout zouti pa disponib sou {region} endpoint — reponn san zouti...",
+      "applyingSkill": "Ap aplike konpetans: {skills}...",
+      "applyingSkills": "Ap aplike konpetans yo: {skills}...",
+      "readingSkillReferences": "Ap li dokiman referans konpetans yo..."
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# zouti itilize} other {# zouti yo itilize}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "Konpetans ki enpòtan yo chwazi otomatikman. Sèvi yon sèl fwa pou pwochen mesaj la, oswa fikse yon konpetans pou sèvi l pandan tout konvèsasyon an.",
     "skillsAgentDisabled": "Konpetans yo pòze pandan yon ajan konekte. Konpetans ou fikse yo ap reprann lè ou dekonekte ajan an.",
     "skillPersonal": "pèsonèl",
-    "skillsAgentToolsHint": "Sèlman kapasite òganizasyon an ke yon administratè aktive pou ajan yo ap parèt isit la. Ajan yo ka itilize yo kòm zouti pou li sèlman. Lòt pin yo rete an poz e ajan yo pa gen aksè ak kapasite pèsonèl yo."
+    "skillsAgentToolsHint": "Sèlman kapasite òganizasyon an ke yon administratè aktive pou ajan yo ap parèt isit la. Ajan yo ka itilize yo kòm zouti pou li sèlman. Lòt pin yo rete an poz e ajan yo pa gen aksè ak kapasite pèsonèl yo.",
+    "skillAlwaysOn": "toujou aktive",
+    "skillAlwaysOnHint": "Ajoute sou chak mesaj nan konvèsasyon sa pa yon admin.",
+    "skillUsage": {
+      "label": "Konpetans",
+      "requested": "mande",
+      "pinned": "fikse",
+      "auto": "otomatik",
+      "unavailable": "pa disponib",
+      "incomplete": "Gen kèk konpetans ki pa t ka aplike",
+      "references": "{count, plural, one {# pasaj referans} other {# pasaj referans}}",
+      "referencesUnavailable": "Gen kèk dokiman referans ki pa t disponib",
+      "showDetails": "Montre detay sou konpetans",
+      "hideDetails": "Kache detay sou konpetans",
+      "agentLoad": "chaje pa ajan",
+      "agentSearch": "dokiman chèche pa ajan"
+    }
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",

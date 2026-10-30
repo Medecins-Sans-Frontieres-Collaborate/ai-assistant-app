@@ -787,7 +787,11 @@
       "stillWorking": "Encara treballant…",
       "assessingSearchResults": "Verificant si els resultats responen a la pregunta…",
       "refiningSearch": "Cercant de nou: “{query}”…",
-      "readingSearchPages": "Llegint {count} pàgines de resultats…"
+      "readingSearchPages": "Llegint {count} pàgines de resultats…",
+      "toolRoutingUnavailableInRegion": "Enrutament d’eines no disponible a l'endpoint de {region} — responent sense eines…",
+      "applyingSkill": "S'està aplicant la habilitat: {skills}…",
+      "applyingSkills": "S'estan aplicant les habilitats: {skills}…",
+      "readingSkillReferences": "Llegint documents de referència de la habilitat…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# eina utilitzada} other {# eines utilitzades}}",
@@ -907,7 +911,23 @@
     "skillsAutomaticHint": "Les habilitats rellevants se seleccionen automàticament. Utilitza una vegada per al proper missatge o fixa una habilitat per fer-la servir durant tota la conversa.",
     "skillsAgentDisabled": "Les habilitats estan en pausa mentre hi ha un agent connectat. Les habilitats fixades es reprendran quan desconnectis l’agent.",
     "skillPersonal": "personal",
-    "skillsAgentToolsHint": "Només s'ofereixen aquí les habilitats de l'organització activades per un administrador per a ús de l'agent. L'agent pot carregar-les com a eines de només lectura. Les altres fixacions queden en pausa i les habilitats personals no estan disponibles per als agents."
+    "skillsAgentToolsHint": "Només s'ofereixen aquí les habilitats de l'organització activades per un administrador per a ús de l'agent. L'agent pot carregar-les com a eines de només lectura. Les altres fixacions queden en pausa i les habilitats personals no estan disponibles per als agents.",
+    "skillAlwaysOn": "sempre actiu",
+    "skillAlwaysOnHint": "Afegit a cada missatge d'aquesta conversa per un administrador.",
+    "skillUsage": {
+      "label": "Habilitats",
+      "requested": "sol·licitada",
+      "pinned": "fixada",
+      "auto": "automàtica",
+      "unavailable": "no disponible",
+      "incomplete": "Algunes habilitats no s'han pogut aplicar",
+      "references": "{count, plural, one {# fragment de referència} other {# fragments de referència}}",
+      "referencesUnavailable": "Alguns documents de referència no estaven disponibles",
+      "showDetails": "Mostra els detalls de la habilitat",
+      "hideDetails": "Amaga els detalls de la habilitat",
+      "agentLoad": "carregada per l’agent",
+      "agentSearch": "documents cercats per l’agent"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",

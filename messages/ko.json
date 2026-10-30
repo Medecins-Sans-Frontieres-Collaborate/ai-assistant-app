@@ -812,7 +812,11 @@
       "stillWorking": "작업 진행 중…",
       "assessingSearchResults": "결과가 질문에 답하는지 확인 중…",
       "refiningSearch": "다시 검색 중: “{query}”…",
-      "readingSearchPages": "{count}개의 결과 페이지 읽는 중…"
+      "readingSearchPages": "{count}개의 결과 페이지 읽는 중…",
+      "toolRoutingUnavailableInRegion": "{region} 엔드포인트에서는 도구 라우팅이 사용할 수 없습니다 — 도구 없이 답변합니다…",
+      "applyingSkill": "스킬 적용 중: {skills}…",
+      "applyingSkills": "스킬 적용 중: {skills}…",
+      "readingSkillReferences": "스킬 참고 문서 읽는 중…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {#개 도구 사용} other {#개 도구 사용}}",
@@ -932,7 +936,23 @@
     "skillsAutomaticHint": "관련된 기술이 자동으로 선택됩니다. 다음 메시지에 한 번 사용하거나, 대화 전체에 사용할 기술을 고정하세요.",
     "skillsAgentDisabled": "상담원이 연결된 동안에는 기술이 일시 중지됩니다. 상담원이 연결 해제되면 고정된 기술이 다시 활성화됩니다.",
     "skillPersonal": "개인",
-    "skillsAgentToolsHint": "조직 관리자에 의해 에이전트 사용을 위해 활성화된 조직 스킬만 이곳에서 제공합니다. 에이전트는 이를 읽기 전용 도구로 불러올 수 있습니다. 다른 핀들은 일시 중지되며, 개인 스킬은 에이전트에게 제공되지 않습니다."
+    "skillsAgentToolsHint": "조직 관리자에 의해 에이전트 사용을 위해 활성화된 조직 스킬만 이곳에서 제공합니다. 에이전트는 이를 읽기 전용 도구로 불러올 수 있습니다. 다른 핀들은 일시 중지되며, 개인 스킬은 에이전트에게 제공되지 않습니다.",
+    "skillAlwaysOn": "항상 활성화됨",
+    "skillAlwaysOnHint": "관리자가 이 대화의 모든 메시지에 추가했습니다.",
+    "skillUsage": {
+      "label": "스킬",
+      "requested": "요청됨",
+      "pinned": "고정됨",
+      "auto": "자동",
+      "unavailable": "사용 불가",
+      "incomplete": "일부 스킬이 적용되지 않았습니다",
+      "references": "{count, plural, one {# 참고 구절} other {# 참고 구절들}}",
+      "referencesUnavailable": "일부 참고 문서를 사용할 수 없습니다",
+      "showDetails": "스킬 상세보기",
+      "hideDetails": "스킬 상세 숨기기",
+      "agentLoad": "에이전트가 로드함",
+      "agentSearch": "에이전트가 검색한 문서"
+    }
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",

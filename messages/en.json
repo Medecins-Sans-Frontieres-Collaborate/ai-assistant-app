@@ -802,6 +802,8 @@
     "skillUnavailable": "unavailable",
     "skillsAutomaticHint": "Relevant skills are selected automatically. Use once for the next message, or pin a skill to use it throughout this conversation.",
     "skillsAgentDisabled": "Skills are paused while an agent is attached. Your pins will resume when you detach the agent.",
+    "skillAlwaysOn": "always on",
+    "skillAlwaysOnHint": "Added to every message in this conversation by an admin.",
     "disableWebSearch": "Disable web search",
     "interpreterBadge": "Run code",
     "disableCodeInterpreter": "Disable code execution",
@@ -918,6 +920,10 @@
       "searchingKnowledge": "Searching the knowledge base…",
       "cancellingPriorTool": "Cancelling previous tool request…",
       "toolRoutingUnavailable": "Tool routing unavailable — answering without tools…",
+      "toolRoutingUnavailableInRegion": "Tool routing unavailable on the {region} endpoint — answering without tools…",
+      "applyingSkill": "Applying skill: {skills}…",
+      "applyingSkills": "Applying skills: {skills}…",
+      "readingSkillReferences": "Reading skill reference documents…",
       "webSearchLimitReached": "Daily web search limit reached — answering without search…",
       "codeInterpreterLimitReached": "Daily code execution limit reached — answering without running code…",
       "workflow": {
@@ -949,6 +955,20 @@
       "mailFlagShowAnyway": "Show this message anyway",
       "mailFlagOverridden": "Flag overridden — the body will be shown next time it’s read.",
       "mailFlagOverrideToast": "Flag overridden for this message. Ask again to include its content."
+    },
+    "skillUsage": {
+      "label": "Skills",
+      "requested": "requested",
+      "pinned": "pinned",
+      "auto": "auto",
+      "unavailable": "unavailable",
+      "incomplete": "Some skills could not be applied",
+      "references": "{count, plural, one {# reference passage} other {# reference passages}}",
+      "referencesUnavailable": "Some reference documents were unavailable",
+      "showDetails": "Show skill details",
+      "hideDetails": "Hide skill details",
+      "agentLoad": "loaded by agent",
+      "agentSearch": "documents searched by agent"
     },
     "consent": {
       "authorizeRequired": "Authorization required",

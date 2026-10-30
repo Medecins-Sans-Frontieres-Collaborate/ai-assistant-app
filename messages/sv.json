@@ -812,7 +812,11 @@
       "stillWorking": "Arbetar fortfarande…",
       "assessingSearchResults": "Kontrollerar om resultaten besvarar frågan…",
       "refiningSearch": "Söker igen: ”{query}”…",
-      "readingSearchPages": "Läser {count} resultatsidor…"
+      "readingSearchPages": "Läser {count} resultatsidor…",
+      "toolRoutingUnavailableInRegion": "Verktygsdirigering är inte tillgänglig på {region}-endpointen — svarar utan verktyg…",
+      "applyingSkill": "Tillämpa färdighet: {skills}…",
+      "applyingSkills": "Tillämpa färdigheter: {skills}…",
+      "readingSkillReferences": "Läser referensdokument om färdigheter…"
     },
     "toolSummary": {
       "usedTools": "Använt {count, plural, one {# verktyg} other {# verktyg}}",
@@ -932,7 +936,23 @@
     "skillsAutomaticHint": "Relevanta färdigheter väljs automatiskt. Använd en gång för nästa meddelande eller fäst en färdighet för att använda den under hela konversationen.",
     "skillsAgentDisabled": "Färdigheter är pausade medan en agent är ansluten. Dina fästa kommer att återupptas när du kopplar bort agenten.",
     "skillPersonal": "personlig",
-    "skillsAgentToolsHint": "Endast organisationsfärdigheter som har aktiverats av en administratör för agentanvändning erbjuds här. Agenten kan ladda dem som verktyg med endast läsrättigheter. Andra fästen förblir pausade och personliga färdigheter är inte tillgängliga för agenter."
+    "skillsAgentToolsHint": "Endast organisationsfärdigheter som har aktiverats av en administratör för agentanvändning erbjuds här. Agenten kan ladda dem som verktyg med endast läsrättigheter. Andra fästen förblir pausade och personliga färdigheter är inte tillgängliga för agenter.",
+    "skillAlwaysOn": "alltid aktiv",
+    "skillAlwaysOnHint": "Tillagd till varje meddelande i denna konversation av en administratör.",
+    "skillUsage": {
+      "label": "Färdigheter",
+      "requested": "begärd",
+      "pinned": "fastnålad",
+      "auto": "auto",
+      "unavailable": "otillgänglig",
+      "incomplete": "Vissa färdigheter kunde inte tillämpas",
+      "references": "{count, plural, one {# referenstext} other {# referenstexter}}",
+      "referencesUnavailable": "Vissa referensdokument var otillgängliga",
+      "showDetails": "Visa färdighetsdetaljer",
+      "hideDetails": "Dölj färdighetsdetaljer",
+      "agentLoad": "inläst av agent",
+      "agentSearch": "dokument sökta av agent"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",

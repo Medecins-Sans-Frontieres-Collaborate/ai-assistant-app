@@ -870,7 +870,11 @@
       "stillWorking": "Kozo ti kîrî…",
       "assessingSearchResults": "Yeke ködrö sô sohu bâa awâ tî yê...",
       "refiningSearch": "Yeke sônya wa : “{query}”...",
-      "readingSearchPages": "Yeke lê {count} kpökö tî sohu..."
+      "readingSearchPages": "Yeke lê {count} kpökö tî sohu...",
+      "toolRoutingUnavailableInRegion": "Le endpoint {region}, tool routing ti kpala na ku, yeke na zinga na wala tool…",
+      "applyingSkill": "Yeke na bara skill: {skills}…",
+      "applyingSkills": "Yeke na bara skills: {skills}…",
+      "readingSkillReferences": "Yeke na gbanga na skill reference documents…"
     },
     "toolSummary": {
       "usedTools": "Tool {count, plural, one {# ya kötï} other {# ya kötï}}",
@@ -990,7 +994,23 @@
     "skillsAutomaticHint": "Mbênî ti hinga ti na ti kodro. Bê na wa na gonda ti na, wa saka na mbênî da be ti sànzi mbênî mo seka.",
     "skillsAgentDisabled": "Mbênî ti gbêda wa agent ayeke ti sànzi. Saka na mbênî mo yeke kodro wa lo agent bûko.",
     "skillPersonal": "mbeni tî mbi",
-    "skillsAgentToolsHint": "Fini mo yeke na admin ti organisation mo eseni na agent ti lo sangasanga. Agent azo akan mo na tool ti škol ti a yeke na gbegbé. Biyeke pins ti mo yeke ti mo eseni ana na pa ti bangi na agents na ngbangui, na skills ti moti yeke na agents na pa."
+    "skillsAgentToolsHint": "Fini mo yeke na admin ti organisation mo eseni na agent ti lo sangasanga. Agent azo akan mo na tool ti škol ti a yeke na gbegbé. Biyeke pins ti mo yeke ti mo eseni ana na pa ti bangi na agents na ngbangui, na skills ti moti yeke na agents na pa.",
+    "skillAlwaysOn": "ala ti ye sukü",
+    "skillAlwaysOnHint": "Admin ayeke ti bara na yeke na gbata na ni kumanda ku epe.",
+    "skillUsage": {
+      "label": "Skills",
+      "requested": "bengbi",
+      "pinned": "swê ku",
+      "auto": "auto",
+      "unavailable": "ti kpala ku",
+      "incomplete": "Skills mingi ti ngbala gbada na ku",
+      "references": "{count, plural, one {# reference passage} other {# reference passages}}",
+      "referencesUnavailable": "Reference documents mingi ti kpala na ku",
+      "showDetails": "Yeke na vina skill ti gbogbo",
+      "hideDetails": "Yeke na sô skill ti gbogbo",
+      "agentLoad": "ngbala na agent",
+      "agentSearch": "documents ku agent yeke na mara"
+    }
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
