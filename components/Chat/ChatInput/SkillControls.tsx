@@ -52,28 +52,40 @@ export function SkillControls() {
                   {skill.description}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  aria-label={`${t('skillUseOnce')}: ${skill.name}`}
-                  aria-pressed={isRequested}
-                  disabled={disabled || full || isPinned}
-                  onClick={() => toggleOnce(skill.id)}
-                  className={buttonClass}
+              {skill.activation === 'always' ? (
+                // Standing skills are applied on every message by an admin;
+                // there is nothing to request or pin, but users should see
+                // the standing set rather than wonder why guidance appears.
+                <span
+                  title={t('skillAlwaysOnHint')}
+                  className="rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs text-violet-900 dark:border-violet-800 dark:bg-violet-950/40 dark:text-violet-200"
                 >
-                  {t('skillUseOnce')}
-                </button>
-                <button
-                  type="button"
-                  aria-label={`${t('skillPin')}: ${skill.name}`}
-                  aria-pressed={isPinned}
-                  disabled={!isPinned && (disabled || full)}
-                  onClick={() => togglePin(skill.id)}
-                  className={buttonClass}
-                >
-                  {t('skillPin')}
-                </button>
-              </div>
+                  {t('skillAlwaysOn')}
+                </span>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    aria-label={`${t('skillUseOnce')}: ${skill.name}`}
+                    aria-pressed={isRequested}
+                    disabled={disabled || full || isPinned}
+                    onClick={() => toggleOnce(skill.id)}
+                    className={buttonClass}
+                  >
+                    {t('skillUseOnce')}
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={`${t('skillPin')}: ${skill.name}`}
+                    aria-pressed={isPinned}
+                    disabled={!isPinned && (disabled || full)}
+                    onClick={() => togglePin(skill.id)}
+                    className={buttonClass}
+                  >
+                    {t('skillPin')}
+                  </button>
+                </div>
+              )}
             </li>
           );
         })}
