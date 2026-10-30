@@ -7,7 +7,7 @@ vi.mock('@/auth', () => ({
   auth: async () => ({ user: { mail: 'local@msf.org' } }),
 }));
 vi.mock('@/lib/services/skills/skillCatalog', () => ({
-  skillsFeatureEnabled: () => true,
+  orgSkillsAvailable: () => true,
 }));
 vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
   AgentAccessService: {
