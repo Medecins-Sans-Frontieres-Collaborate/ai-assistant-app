@@ -43,6 +43,25 @@ describe('skillToolCalls', () => {
     expect(otherCalls.map((c) => c.id)).toEqual(['c']);
   });
 
+  it('does not capture an MCP connector that happens to be labelled "Skills"', () => {
+    const lookalike = record({
+      id: 'x',
+      name: 'search_tasks',
+      server_label: 'Skills',
+    });
+    const preload = record({
+      id: 'y',
+      name: 'load_skill (requested)',
+      server_label: 'Skills',
+    });
+    const { skillCalls, otherCalls } = partitionSkillToolCalls([
+      lookalike,
+      preload,
+    ]);
+    expect(skillCalls.map((c) => c.id)).toEqual(['y']);
+    expect(otherCalls.map((c) => c.id)).toEqual(['x']);
+  });
+
   it('parses use_skills lines into typed entries', () => {
     const lines = summarizeSkillToolCalls([
       record({
