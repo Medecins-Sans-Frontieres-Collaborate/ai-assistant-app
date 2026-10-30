@@ -83,6 +83,20 @@ describe('SkillEnricher live activity', () => {
     });
   });
 
+  it('announces the skills-only routing wait before calling the router', async () => {
+    mockGetVisibleSkills.mockResolvedValue([entry({ id: 'gdpr' })]);
+    const emitActivity = vi.fn(async () => undefined);
+    const determineSkills = vi.fn().mockResolvedValue({ relevantSkills: [] });
+    await new SkillEnricher({ determineSkills }).execute({
+      ...createTestChatContext({ systemPrompt: 'Base' }),
+      emitActivity,
+      emitMarker: vi.fn(),
+      skillCatalog: [entry({ id: 'gdpr' })],
+    });
+    expect(emitActivity).toHaveBeenCalledWith('chat.activity.selectingSkills');
+    expect(determineSkills).toHaveBeenCalledTimes(1);
+  });
+
   it('stays silent when only standing (always) skills are active', async () => {
     mockGetVisibleSkills.mockResolvedValue([
       entry({ id: 'house-style', activation: 'always' }),
