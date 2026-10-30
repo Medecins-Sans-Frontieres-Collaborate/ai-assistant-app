@@ -626,6 +626,14 @@ export interface FilePreview {
 // Tool Router Types
 export type ToolType = 'web_search' | 'code_interpreter';
 
+/** Why an auxiliary routing call (ToolRouterService) could not produce a decision. */
+export type AuxiliaryFailureReason =
+  | 'endpoint_missing'
+  | 'deployment_missing'
+  | 'unauthorized'
+  | 'timeout'
+  | 'provider';
+
 export interface ToolRouterResponse {
   tools: ToolType[];
   /** Validated ids from the request's access-filtered skill catalog. */
@@ -691,8 +699,15 @@ export interface ToolRouterResponse {
    * enricher names the region in the activity marker so an EU-only outage
    * is distinguishable from a global one.
    */
-  degradedReason?: import('@/lib/services/chat/ToolRouterService').AuxiliaryFailureReason;
+  degradedReason?: AuxiliaryFailureReason;
   degradedRegion?: 'US' | 'EU';
+  /**
+   * The tools decision stands but the skill selection in the same response
+   * was unusable. Kept apart from `degraded` so a skills-only problem never
+   * cancels web search or code execution; SkillEnricher treats it as
+   * degraded routing (keeps the base platform help, reports the outage).
+   */
+  skillSelectionDegraded?: boolean;
   reasoning?: string; // Optional reasoning for debugging
 }
 
