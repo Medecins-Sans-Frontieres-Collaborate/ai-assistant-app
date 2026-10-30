@@ -15,7 +15,7 @@ import { countTokens } from '@/lib/utils/server/tiktoken/tiktokenCache';
 import type { Citation } from '@/types/rag';
 
 import { getBuiltinSkill } from './builtinSkills';
-import { getVisibleSkills, skillsFeatureEnabled } from './skillCatalog';
+import { getVisibleSkills, orgSkillsAvailable } from './skillCatalog';
 import { retrieveSkillReferences } from './skillReferences';
 import { SKILL_LIMITS, Skill, SkillIdSchema } from './types';
 
@@ -134,7 +134,8 @@ export async function createSkillToolExecutor(options: {
   signal?: AbortSignal;
   region?: 'EU' | 'US';
 }): Promise<SkillToolExecutor | null> {
-  if (!skillsFeatureEnabled()) return null;
+  // Agent skills are organization skills by design (applyToAgents).
+  if (!orgSkillsAvailable()) return null;
   const visible = (await getVisibleSkills(options.userMail))
     .filter(({ skill }) => skill.applyToAgents && skill.activation !== 'off')
     .slice(0, SKILL_LIMITS.maxRouterCatalog);

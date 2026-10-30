@@ -18,14 +18,14 @@ import {
 } from '@/lib/utils/server/api/apiResponse';
 
 import { BUILTIN_SKILL_IDS } from './builtinSkills';
-import { skillsFeatureEnabled } from './skillCatalog';
+import { orgSkillsAvailable } from './skillCatalog';
 import { SkillIdSchema } from './types';
 
 import { auth } from '@/auth';
 
 /** Resolves a stored skill for an authorized admin, or an HTTP error response. */
 export async function authorizeSkillDocuments(id: string) {
-  if (!skillsFeatureEnabled() || !SkillIdSchema.safeParse(id).success)
+  if (!orgSkillsAvailable() || !SkillIdSchema.safeParse(id).success)
     return { response: notFoundResponse('Skill') };
   const session = await auth();
   if (!session?.user) return { response: unauthorizedResponse() };
