@@ -3,7 +3,7 @@ import { uploadJson } from '@/lib/services/agentAccess/blobCas';
 import { mintContinuationToken } from '@/lib/services/limits/continuationToken';
 import {
   getVisibleSkills,
-  skillsFeatureEnabled,
+  orgSkillsAvailable,
 } from '@/lib/services/skills/skillCatalog';
 import { retrieveSkillReferences } from '@/lib/services/skills/skillReferences';
 import {
@@ -17,7 +17,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/lib/services/skills/skillCatalog', () => ({
   getVisibleSkills: vi.fn(),
-  skillsFeatureEnabled: vi.fn(() => true),
+  orgSkillsAvailable: vi.fn(() => true),
 }));
 vi.mock('@/lib/services/agentAccess/accessRulesStore', () => ({
   readSkill: vi.fn(),
@@ -42,7 +42,7 @@ const entry = (s: Skill) => ({ skill: s, builtin: false, overridden: false });
 describe('agent skill executor', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(skillsFeatureEnabled).mockReturnValue(true);
+    vi.mocked(orgSkillsAvailable).mockReturnValue(true);
     vi.mocked(getVisibleSkills).mockResolvedValue([
       entry(skill),
       entry({ ...skill, id: 'off-agent', applyToAgents: false }),
