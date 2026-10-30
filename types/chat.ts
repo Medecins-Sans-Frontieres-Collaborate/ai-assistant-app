@@ -416,6 +416,11 @@ export interface ChatBody {
   pinnedSkillIds?: string[];
   /** Enabled browser-local personal skills; validated as untrusted user instructions. */
   userSkills?: import('@/lib/services/skills/types').UserSkill[];
+  /**
+   * The user's Settings toggle for automatic skill selection (default on).
+   * False only reduces what the turn receives — docs/SKILLS_DESIGN.md §5.1a.
+   */
+  skillsAuto?: boolean;
 }
 
 /**
