@@ -45,6 +45,20 @@ export async function register() {
       await import('@/lib/services/limits/startupWarnings')
     ).logLimitsStartupWarnings();
 
+    // Region-pinned tool routing has no fallback: announce a region whose
+    // account cannot serve the router model instead of letting every turn
+    // there silently lose web search and skills.
+    try {
+      void (
+        await import('@/lib/services/chat/auxiliaryRouterStartupCheck')
+      ).logAuxiliaryRouterStartupWarnings();
+    } catch (err) {
+      console.warn(
+        '[Instrumentation] Auxiliary router endpoint check skipped:',
+        err,
+      );
+    }
+
     // Rehearse the static org RAG agents' search index against the retrieval
     // contract (admin-authored agents are validated on save; the file-based
     // ones have no other admission gate). Fire-and-forget: one Search
