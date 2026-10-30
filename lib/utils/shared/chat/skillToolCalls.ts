@@ -16,11 +16,20 @@ export const SKILL_TOOL_SERVER_LABEL = 'Skills';
 /** `SKILL_SERVER_ID` in lib/services/skills/skillTools.ts (duplicated: that module is server-only). */
 export const SKILL_TOOL_SERVER_ID = 'builtin-skills';
 
+/** Record names the skill subsystem emits; an MCP connector labelled "Skills" is not one. */
+const SKILL_RECORD_NAMES = new Set([
+  'use_skills',
+  'skill_references',
+  'load_skill',
+  'search_skill_documents',
+]);
+
 export function isSkillToolCall(call: ToolCallRecord): boolean {
-  return (
-    call.server_label === SKILL_TOOL_SERVER_LABEL ||
-    call.server_id === SKILL_TOOL_SERVER_ID
-  );
+  if (call.server_id === SKILL_TOOL_SERVER_ID) return true;
+  if (call.server_label !== SKILL_TOOL_SERVER_LABEL) return false;
+  // Foundry agent preloads are reported as "load_skill (requested)".
+  const baseName = call.name.split(' ')[0];
+  return SKILL_RECORD_NAMES.has(baseName);
 }
 
 export function partitionSkillToolCalls(calls: readonly ToolCallRecord[]): {
