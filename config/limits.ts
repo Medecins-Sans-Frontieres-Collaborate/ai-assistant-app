@@ -18,6 +18,7 @@
  * the ones that encode behaviour the app ALREADY has today, lifted unchanged
  * so that merging this feature cannot change what any user experiences.
  */
+import modelMetadata from '@/config/models.json';
 
 export type LimitUnit =
   | 'requests'
@@ -345,6 +346,87 @@ export const LIMIT_DEFINITIONS: readonly LimitDefinition[] = [
     labelKey: 'uploadFilesPerDay',
   },
 ] as const;
+
+/**
+ * A compiled, MODEL-QUALIFIED default: the catalog layer's answer for one
+ * model or family cell, beneath every authored policy (resolver.ts step 1b).
+ */
+export interface CatalogModelDefault {
+  limitKey: string;
+  modelId?: string;
+  series?: string;
+  value: boolean;
+}
+
+/**
+ * External models are UNAVAILABLE by default (docs/LIMITS.md "Model
+ * approval"). `hosting: 'external'` (config/models.json) marks inference
+ * that runs on the provider's own infrastructure rather than inside the
+ * Azure environment — today the claude-* family — and such a model must be
+ * granted deliberately: to everyone via the family or model default, or to
+ * groups, domains and people via the model approval view.
+ *
+ * Derived from the catalog rather than listed by hand so a new external
+ * model is covered the day it is added. Each external model gets a model
+ * cell; a family gets a family cell only when EVERY member is external, so a
+ * mixed family never has its Azure-hosted members switched off by proxy. A
+ * discovered model absent from the catalog has no hosting metadata and is
+ * therefore allowed, like every Azure model.
+ *
+ * ⚠ Bites only in `enforce` mode, like every other `model.allowed` answer:
+ * observe mode logs would-blocks and the picker filters nothing.
+ */
+interface ModelMeta {
+  hosting?: string;
+  series?: string;
+}
+
+function externalModelDefaults(): CatalogModelDefault[] {
+  // The file is `{ $notes…, pricingAsOf, models: { <id>: {…} } }`
+  // (types/openai.ts reads `.models` the same way).
+  const models = Object.entries(
+    (modelMetadata as { models: Record<string, ModelMeta> }).models,
+  );
+  const out: CatalogModelDefault[] = [];
+  const bySeries = new Map<string, { total: number; external: number }>();
+  for (const [id, meta] of models) {
+    const external = meta.hosting === 'external';
+    if (external)
+      out.push({ limitKey: 'model.allowed', modelId: id, value: false });
+    if (!meta.series) continue;
+    const count = bySeries.get(meta.series) ?? { total: 0, external: 0 };
+    count.total += 1;
+    if (external) count.external += 1;
+    bySeries.set(meta.series, count);
+  }
+  for (const [series, count] of bySeries) {
+    if (count.total > 0 && count.external === count.total) {
+      out.push({ limitKey: 'model.allowed', series, value: false });
+    }
+  }
+  return out;
+}
+
+export const CATALOG_MODEL_DEFAULTS: readonly CatalogModelDefault[] =
+  externalModelDefaults();
+
+/**
+ * Is this model (or whole family) external by catalog, i.e. unavailable
+ * until an admin grants it? Case-insensitive like every qualifier match.
+ */
+export function isExternalByCatalog(qualifier: {
+  modelId?: string;
+  series?: string;
+}): boolean {
+  const modelId = qualifier.modelId?.toLowerCase();
+  const series = qualifier.series?.toLowerCase();
+  return CATALOG_MODEL_DEFAULTS.some(
+    (entry) =>
+      entry.value === false &&
+      ((!!modelId && entry.modelId?.toLowerCase() === modelId) ||
+        (!modelId && !!series && entry.series?.toLowerCase() === series)),
+  );
+}
 
 export const LIMIT_KEYS: ReadonlySet<string> = new Set(
   LIMIT_DEFINITIONS.map((d) => d.key),
