@@ -209,6 +209,8 @@ export class ChatService {
       forcedSkillIds?: string[];
       pinnedSkillIds?: string[];
       userSkills?: import('@/lib/services/skills/types').UserSkill[];
+      /** User toggle: automatic skill selection (see ChatBody.skillsAuto). */
+      skillsAuto?: boolean;
       /** Model start timeout in ms (see ChatBody.timeoutMs, issue #130). */
       timeoutMs?: number;
     },
@@ -260,6 +262,7 @@ export class ChatService {
       forcedSkillIds: options?.forcedSkillIds,
       pinnedSkillIds: options?.pinnedSkillIds,
       userSkills: options?.userSkills,
+      skillsAuto: options?.skillsAuto,
     };
 
     const { body, report } = trimBodyToByteBudget(rawBody);

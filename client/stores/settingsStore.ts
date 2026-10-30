@@ -254,6 +254,12 @@ interface SettingsStore {
   prompts: Prompt[];
   /** Browser-local personal skills; never stored by admin APIs. */
   userSkills: import('@/lib/services/skills/types').UserSkill[];
+  /**
+   * Let the assistant apply skills automatically (docs/SKILLS_DESIGN.md
+   * §5.1). Off: no automatic selection and no personal skills are sent;
+   * requested/pinned skills and admin `always` skills still apply.
+   */
+  skillsAutoEnabled: boolean;
   tones: Tone[];
   customAgents: CustomAgent[];
   customAgentSources: AgentSource[];
@@ -494,6 +500,7 @@ interface SettingsStore {
   setUserSkills: (
     skills: import('@/lib/services/skills/types').UserSkill[],
   ) => void;
+  setSkillsAutoEnabled: (enabled: boolean) => void;
   addPrompt: (prompt: Prompt) => void;
   updatePrompt: (id: string, updates: Partial<Prompt>) => void;
   deletePrompt: (id: string) => void;
@@ -998,6 +1005,7 @@ export const useSettingsStore = create<SettingsStore>()(
       models: [],
       prompts: [],
       userSkills: [],
+      skillsAutoEnabled: true,
       tones: [],
       customAgents: [],
       customAgentSources: [],
@@ -1151,6 +1159,7 @@ export const useSettingsStore = create<SettingsStore>()(
       setPrompts: (prompts) => set({ prompts }),
       setUserSkills: (skills) =>
         set({ userSkills: normalizeUserSkills(skills) }),
+      setSkillsAutoEnabled: (enabled) => set({ skillsAutoEnabled: enabled }),
 
       addPrompt: (prompt) =>
         set((state) => ({
@@ -2070,7 +2079,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 71, // v71: browser-local personal skills
+      version: 72, // v72: skillsAutoEnabled (automatic skill selection toggle)
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2084,6 +2093,7 @@ export const useSettingsStore = create<SettingsStore>()(
         customDisplayName: state.customDisplayName,
         prompts: state.prompts,
         userSkills: state.userSkills,
+        skillsAutoEnabled: state.skillsAutoEnabled,
         tones: state.tones,
         customAgents: state.customAgents,
         customAgentSources: state.customAgentSources,
@@ -3044,6 +3054,10 @@ export const useSettingsStore = create<SettingsStore>()(
             state.formTemplates = [];
           }
           state.userSkills = normalizeUserSkills(state.userSkills);
+          // v72: default on; anything but a boolean is treated as unset.
+          if (typeof state.skillsAutoEnabled !== 'boolean') {
+            state.skillsAutoEnabled = true;
+          }
           // Defensive (hand-edited storage): see coerceAppliedRetirements.
           state.modelRetirementsApplied = coerceAppliedRetirements(
             state.modelRetirementsApplied,

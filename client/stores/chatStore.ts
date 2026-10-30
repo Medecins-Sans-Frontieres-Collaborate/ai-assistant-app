@@ -1614,11 +1614,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           : undefined,
       extraction,
       ...skillSelection,
+      skillsAuto: settings.skillsAutoEnabled,
       userSkills:
         conversation.bot ||
         modelToSend.agentId ||
         isOrganizationAgent ||
-        isCustomAgent
+        isCustomAgent ||
+        !settings.skillsAutoEnabled
           ? undefined
           : settings.userSkills?.filter(
               (skill) => skill.enabled && skill.activation !== 'off',
