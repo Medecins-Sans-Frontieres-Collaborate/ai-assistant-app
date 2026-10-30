@@ -32,7 +32,6 @@ import {
   getSkillRoutingCatalog,
   getVisibleSkills,
   resolveActiveSkills,
-  skillsFeatureEnabled,
 } from '../../skills/skillCatalog';
 import { ToolRouterService } from '../ToolRouterService';
 import { ChatContext, shouldExecuteAsAgent } from '../pipeline/ChatContext';
@@ -47,7 +46,6 @@ const PLATFORM_HELP_ID = 'platform-help';
 /** One shared eligibility check for preparation and delivery. */
 function supportsSkills(context: ChatContext): boolean {
   return (
-    skillsFeatureEnabled() &&
     !context.botId &&
     !context.model?.agentId &&
     !context.promptAgent &&
@@ -63,6 +61,10 @@ export class SkillCatalogEnricher extends BasePipelineStage {
     return supportsSkills(context);
   }
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
+    // Automatic selection off (user toggle, §5.1): give the router nothing
+    // to choose from. Explicit and `always` skills are resolved later from
+    // the visible catalog, not from this router hint.
+    if (context.skillsAuto === false) return { ...context, skillCatalog: [] };
     return {
       ...context,
       skillCatalog: [
@@ -96,11 +98,14 @@ export class SkillEnricher extends BasePipelineStage {
 
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
     const forcedSkillIds = context.forcedSkillIds ?? [];
+    // The user's Settings toggle (§5.1): off means no automatic selection and
+    // no personal skills; explicit org skills and admin `always` skills stand.
+    const autoEnabled = context.skillsAuto !== false;
     // Preparation is a router hint, not an authorization snapshot for later
     // delivery. Tool runs can outlast the access-cache revocation window.
     const visible = [
       ...(await getVisibleSkills(context.user?.mail ?? undefined)),
-      ...personalSkillCatalog(context.userSkills ?? []),
+      ...(autoEnabled ? personalSkillCatalog(context.userSkills ?? []) : []),
     ];
     const taskText = context.messages
       .slice(-6)
@@ -108,7 +113,9 @@ export class SkillEnricher extends BasePipelineStage {
         typeof message.content === 'string' ? message.content : '',
       )
       .join('\n');
-    const catalog = getSkillRoutingCatalog(visible, forcedSkillIds, taskText);
+    const catalog = autoEnabled
+      ? getSkillRoutingCatalog(visible, forcedSkillIds, taskText)
+      : [];
     let routing = context.skillRouting;
     if (!routing && catalog.length && this.router) {
       // Use the original conversation rather than web results just injected
@@ -161,10 +168,15 @@ export class SkillEnricher extends BasePipelineStage {
 
     // The platform-help swap: deliverable (visible + not 'off') means the
     // base prompt must not duplicate the content the skill now carries.
+    // With automatic selection off the skill can only arrive explicitly, so
+    // the base prompt keeps its sections unless it did.
     let systemPrompt = context.systemPrompt;
+    const platformHelpActive = active.some(
+      ({ skill }) => skill.id === PLATFORM_HELP_ID,
+    );
     if (
-      (!routing?.degraded ||
-        active.some(({ skill }) => skill.id === PLATFORM_HELP_ID)) &&
+      (autoEnabled || platformHelpActive) &&
+      (!routing?.degraded || platformHelpActive) &&
       visible.some((entry) => entry.skill.id === PLATFORM_HELP_ID)
     ) {
       // Only rewrite the base portion. User instructions and memories may

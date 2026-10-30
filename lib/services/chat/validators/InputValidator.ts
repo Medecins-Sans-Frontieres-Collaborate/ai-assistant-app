@@ -618,6 +618,9 @@ const ChatBodySchema = z
     // Explicit skill use (docs/SKILLS_DESIGN.md §5.1). Id charset mirrors
     // the Agent Skills name rules (SkillIdSchema); resolution against the
     // caller's visible catalog happens in SkillEnricher.
+    // User preference (docs/SKILLS_DESIGN.md §5.1): false only REDUCES what
+    // the turn receives, so it is safe to take from the client.
+    skillsAuto: z.boolean().optional(),
     forcedSkillIds: z
       .array(SkillReferenceIdSchema)
       .max(3, 'Too many forced skills (max 3)')

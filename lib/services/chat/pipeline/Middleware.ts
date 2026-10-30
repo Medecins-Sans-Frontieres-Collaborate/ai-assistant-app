@@ -233,6 +233,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       forcedSkillIds,
       pinnedSkillIds,
       userSkills,
+      skillsAuto,
     } = body;
 
     if (mcpServers?.length) {
@@ -312,6 +313,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       forcedSkillIds,
       pinnedSkillIds,
       userSkills,
+      skillsAuto,
     };
   } catch (error) {
     if (error instanceof PipelineError) {

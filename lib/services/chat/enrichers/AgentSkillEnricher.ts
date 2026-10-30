@@ -1,6 +1,6 @@
 import {
   getVisibleSkills,
-  skillsFeatureEnabled,
+  orgSkillsAvailable,
 } from '@/lib/services/skills/skillCatalog';
 
 import { ChatContext } from '../pipeline/ChatContext';
@@ -14,7 +14,7 @@ export class AgentSkillEnricher extends BasePipelineStage {
   readonly name = 'AgentSkillEnricher';
   shouldRun(context: ChatContext): boolean {
     return (
-      skillsFeatureEnabled() &&
+      orgSkillsAvailable() &&
       !!(
         context.botId ||
         context.promptAgent ||

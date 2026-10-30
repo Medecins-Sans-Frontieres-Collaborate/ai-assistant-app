@@ -158,6 +158,12 @@ export interface ChatContext {
   /** Pins are a subset of explicit ids; never a grant of access. */
   pinnedSkillIds?: string[];
   userSkills?: import('@/lib/services/skills/types').UserSkill[];
+  /**
+   * The user's Settings toggle (default on). False = no automatic skill
+   * selection and no personal skills this turn; explicit (forced/pinned)
+   * and admin `always` skills still apply — docs/SKILLS_DESIGN.md §5.1.
+   */
+  skillsAuto?: boolean;
   /** Server-resolved eligibility; agent skills are delivered only as tools. */
   agentSkillsEnabled?: boolean;
   /** Server-only eligible catalog; never accepted from ChatBody. */
