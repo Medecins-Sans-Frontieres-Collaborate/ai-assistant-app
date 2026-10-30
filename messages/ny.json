@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Tool routing sikupezeka pa {region} endpoint — tikuyankha popanda zida…",
       "applyingSkill": "Ikugwiritsa ntchito luso: {skills}…",
       "applyingSkills": "Ikugwiritsa ntchito maluso: {skills}…",
-      "readingSkillReferences": "Ikukuwerenga zolemba zothandizira luso…"
+      "readingSkillReferences": "Ikukuwerenga zolemba zothandizira luso…",
+      "selectingSkills": "Kusankha luso…"
     },
     "toolSummary": {
       "usedTools": "Zida zogwiritsidwa ntchito {count, plural, one {# chida} other {# zida}}",

@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Tool routing lama heli karo barta {region} — jawaab la'aan qalab...",
       "applyingSkill": "Aqoon gaar ah ayaa la isticmaalayaa: {skills}...",
       "applyingSkills": "Aqoonta la isticmaalayo: {skills}...",
-      "readingSkillReferences": "Akhriyayaa dukumentiyada tixraaca ee aqoonta..."
+      "readingSkillReferences": "Akhriyayaa dukumentiyada tixraaca ee aqoonta...",
+      "selectingSkills": "Xulashada xirfadaha…"
     },
     "toolSummary": {
       "usedTools": "Waxaa la isticmaalay {count, plural, one {# qalab} other {# qalabyo}}",

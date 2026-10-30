@@ -813,7 +813,8 @@
       "toolRoutingUnavailableInRegion": "Kierowanie narzędzi niedostępne w punkcie końcowym {region} — odpowiadam bez narzędzi…",
       "applyingSkill": "Stosowanie umiejętności: {skills}…",
       "applyingSkills": "Stosowanie umiejętności: {skills}…",
-      "readingSkillReferences": "Czytanie dokumentów referencyjnych umiejętności…"
+      "readingSkillReferences": "Czytanie dokumentów referencyjnych umiejętności…",
+      "selectingSkills": "Wybieranie umiejętności…"
     },
     "toolSummary": {
       "usedTools": "Użyto {count, plural, one {# narzędzie} few {# narzędzia} many {# narzędzi} other {# narzędzi}}",

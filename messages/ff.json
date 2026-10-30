@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Tool routing tanandi e {region} endpoint — mi andi e tool ɗi...",
       "applyingSkill": "Mi yahi skill: {skills}...",
       "applyingSkills": "Mi yahi skills: {skills}...",
-      "readingSkillReferences": "Mi jangu skill reference documents..."
+      "readingSkillReferences": "Mi jangu skill reference documents...",
+      "selectingSkills": "Nana funani koyɗe…"
     },
     "toolSummary": {
       "usedTools": "Njoɓɗo {count, plural, one {# nguurndam} other {# nguurndeeji}}",

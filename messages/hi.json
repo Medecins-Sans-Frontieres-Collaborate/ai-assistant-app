@@ -816,7 +816,8 @@
       "toolRoutingUnavailableInRegion": "{region} एंडपॉइंट पर टूल राउटिंग उपलब्ध नहीं है — बिना टूल के उत्तर दिया जा रहा है…",
       "applyingSkill": "स्किल लागू की जा रही है: {skills}…",
       "applyingSkills": "स्किल्स लागू की जा रही हैं: {skills}…",
-      "readingSkillReferences": "स्किल संदर्भ दस्तावेज पढ़े जा रहे हैं…"
+      "readingSkillReferences": "स्किल संदर्भ दस्तावेज पढ़े जा रहे हैं…",
+      "selectingSkills": "कौशल चुना जा रहा है…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# टूल इस्तेमाल हुआ} other {# टूल्स इस्तेमाल हुए}}",

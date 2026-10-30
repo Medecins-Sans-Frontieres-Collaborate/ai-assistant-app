@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Le endpoint {region}, tool routing ti kpala na ku, yeke na zinga na wala tool…",
       "applyingSkill": "Yeke na bara skill: {skills}…",
       "applyingSkills": "Yeke na bara skills: {skills}…",
-      "readingSkillReferences": "Yeke na gbanga na skill reference documents…"
+      "readingSkillReferences": "Yeke na gbanga na skill reference documents…",
+      "selectingSkills": "Ti bini ti yeke sala…"
     },
     "toolSummary": {
       "usedTools": "Tool {count, plural, one {# ya kötï} other {# ya kötï}}",

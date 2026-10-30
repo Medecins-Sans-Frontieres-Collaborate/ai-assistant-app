@@ -783,7 +783,8 @@
       "toolRoutingUnavailableInRegion": "{region} අවසන් ස්ථානයේ Tool routing ලබාගත නොහැක — මෙවලම් නොදමා පිළිතුරු දෙමින්...",
       "applyingSkill": "කौशलය යෙදෙමින්: {skills}...",
       "applyingSkills": "කौशलයන් යෙදෙමින්: {skills}...",
-      "readingSkillReferences": "කෞශල්‍ය සහාය ප්‍රමාණලේඛන කියවමින්..."
+      "readingSkillReferences": "කෞශල්‍ය සහාය ප්‍රමාණලේඛන කියවමින්...",
+      "selectingSkills": "දක්ෂතා තෝරමින්…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {මෙවලමක් භාවිතා විය} other {මෙවලම් # ක් භාවිතා විය}}",

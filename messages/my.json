@@ -791,7 +791,8 @@
       "toolRoutingUnavailableInRegion": "{region} endpoint တွင် tool routing မရရှိနိုင်ပါ — tools မသုံးပဲ ဖြေကြားနေသည်...",
       "applyingSkill": "Skill အသုံးပြုနေပါသည် - {skills}...",
       "applyingSkills": "Skills များ အသုံးပြုနေပါသည် - {skills}...",
-      "readingSkillReferences": "Skill ကိုးကားစာအုပ်များ ဖတ်နေသည်..."
+      "readingSkillReferences": "Skill ကိုးကားစာအုပ်များ ဖတ်နေသည်...",
+      "selectingSkills": "ကျွမ်းကျင်မှုများကိုရွေးနေသည်…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ကိရိယာ အသုံးပြုခဲ့သည်} other {# ကိရိယာများ အသုံးပြုခဲ့သည်}}",

@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Kohereza ibikoresho ntibiboneka kuri {region} endpoint — turasubiza tutifashishije ibikoresho...",
       "applyingSkill": "Gushyira mu bikorwa ubumenyi: {skills}...",
       "applyingSkills": "Gushyira mu bikorwa ubumenyi: {skills}...",
-      "readingSkillReferences": "Gusoma inyandiko z’inkomoko ku bumenyi..."
+      "readingSkillReferences": "Gusoma inyandiko z’inkomoko ku bumenyi...",
+      "selectingSkills": "Hahitamo ubumenyi…"
     },
     "toolSummary": {
       "usedTools": "Hakozweho {count, plural, one {igikoresho 1} other {ibikoresho #}}",

@@ -816,7 +816,8 @@
       "toolRoutingUnavailableInRegion": "{region} uç noktasında araç yönlendirmesi kullanılamıyor — araçsız yanıtlanıyor…",
       "applyingSkill": "Beceri uygulanıyor: {skills}…",
       "applyingSkills": "Beceriler uygulanıyor: {skills}…",
-      "readingSkillReferences": "Beceri referans belgeleri okunuyor…"
+      "readingSkillReferences": "Beceri referans belgeleri okunuyor…",
+      "selectingSkills": "Yetenekler seçiliyor…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# araç kullanıldı} other {# araç kullanıldı}}",

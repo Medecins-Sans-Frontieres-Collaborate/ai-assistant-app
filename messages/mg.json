@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Tsy azo ampiasaina amin’ny {region} endpoint ny fanasokajiana fitaovana — hamaly tsy misy fitaovana…",
       "applyingSkill": "Manatanteraka fahaiza-manao: {skills}…",
       "applyingSkills": "Manatanteraka fahaiza-manao: {skills}…",
-      "readingSkillReferences": "Mamaky antontan-taratasy fahaiza-manao…"
+      "readingSkillReferences": "Mamaky antontan-taratasy fahaiza-manao…",
+      "selectingSkills": "Misafidy fahaiza-manao…"
     },
     "toolSummary": {
       "usedTools": "Fitaovana nampiasaina {count, plural, one {#} other {#}}",

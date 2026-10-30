@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Tool routing ezali te na {region} endpoint — azongisaka eyano na kozanga ba tool…",
       "applyingSkill": "Kosalela skill: {skills}…",
       "applyingSkills": "Kosalela ba skill: {skills}…",
-      "readingSkillReferences": "Kozua ba ndakisa ya skill…"
+      "readingSkillReferences": "Kozua ba ndakisa ya skill…",
+      "selectingSkills": "Botali maponi ya mayele…"
     },
     "toolSummary": {
       "usedTools": "Outils esalelamaki: {count, plural, one {# outil} other {# ba outils}}",

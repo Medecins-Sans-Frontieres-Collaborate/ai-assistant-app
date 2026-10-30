@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Fifiranṣẹ irinṣẹ ko si l’akoko {region} endpoint — n dahun lai l’irinṣẹ…",
       "applyingSkill": "N lo ọgbọn: {skills}…",
       "applyingSkills": "N lo awọn ọgbọn: {skills}…",
-      "readingSkillReferences": "N ka awọn iwe itọkasi ọgbọn…"
+      "readingSkillReferences": "N ka awọn iwe itọkasi ọgbọn…",
+      "selectingSkills": "Yan awọn iṣẹ…"
     },
     "toolSummary": {
       "usedTools": "Lo {count, plural, one {# ohun ìṣàkóso} other {# àwọn ohun ìṣàkóso}}",

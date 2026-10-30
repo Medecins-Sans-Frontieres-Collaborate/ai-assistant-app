@@ -817,7 +817,8 @@
       "toolRoutingUnavailableInRegion": "{region} اینڈ پوائنٹ پر ٹول راؤٹنگ دستیاب نہیں — بغیر ٹول کے جواب دیا جا رہا ہے…",
       "applyingSkill": "مہارت لاگو کی جا رہی ہے: {skills}…",
       "applyingSkills": "مہارتیں لاگو کی جا رہی ہیں: {skills}…",
-      "readingSkillReferences": "مہارت کے حوالہ جاتی دستاویزات پڑھے جا رہے ہیں…"
+      "readingSkillReferences": "مہارت کے حوالہ جاتی دستاویزات پڑھے جا رہے ہیں…",
+      "selectingSkills": "مہارتیں منتخب کی جا رہی ہیں…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ٹول استعمال ہوا} other {# ٹولز استعمال ہوئے}}",

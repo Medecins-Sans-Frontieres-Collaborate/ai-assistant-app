@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Ba a samun hanyar amfani da kayan aikin a {region} — za a amsa ba tare da kayan aiki ba...",
       "applyingSkill": "Ana amfani da fasaha: {skills}...",
       "applyingSkills": "Ana amfani da fasahohi: {skills}...",
-      "readingSkillReferences": "Ana karanta takardun bayanin fasaha..."
+      "readingSkillReferences": "Ana karanta takardun bayanin fasaha...",
+      "selectingSkills": "Ana zabar fasaha…"
     },
     "toolSummary": {
       "usedTools": "An yi amfani da {count, plural, one {# kayan aiki} other {# kayan aiki}}",

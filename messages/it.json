@@ -737,7 +737,8 @@
       "toolRoutingUnavailableInRegion": "Instradamento agli strumenti non disponibile sull'endpoint {region} — risposta senza strumenti…",
       "applyingSkill": "Applicazione della competenza: {skills}…",
       "applyingSkills": "Applicazione delle competenze: {skills}…",
-      "readingSkillReferences": "Lettura dei documenti di riferimento delle competenze…"
+      "readingSkillReferences": "Lettura dei documenti di riferimento delle competenze…",
+      "selectingSkills": "Selezione delle competenze…"
     },
     "toolSummary": {
       "usedTools": "Usati {count, plural, one {# strumento} other {# strumenti}}",

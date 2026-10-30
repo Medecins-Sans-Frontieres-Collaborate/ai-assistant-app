@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Wout zouti pa disponib sou {region} endpoint — reponn san zouti...",
       "applyingSkill": "Ap aplike konpetans: {skills}...",
       "applyingSkills": "Ap aplike konpetans yo: {skills}...",
-      "readingSkillReferences": "Ap li dokiman referans konpetans yo..."
+      "readingSkillReferences": "Ap li dokiman referans konpetans yo...",
+      "selectingSkills": "Chwazi konpetans…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# zouti itilize} other {# zouti yo itilize}}",

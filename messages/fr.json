@@ -762,7 +762,8 @@
       "toolRoutingUnavailableInRegion": "Routage des outils indisponible sur le point de terminaison {region} — réponse sans outils…",
       "applyingSkill": "Application de la compétence : {skills}…",
       "applyingSkills": "Application des compétences : {skills}…",
-      "readingSkillReferences": "Lecture des documents de référence sur les compétences…"
+      "readingSkillReferences": "Lecture des documents de référence sur les compétences…",
+      "selectingSkills": "Sélection des compétences…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# outil utilisé} other {# outils utilisés}}",

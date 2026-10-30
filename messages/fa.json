@@ -741,7 +741,8 @@
       "toolRoutingUnavailableInRegion": "مسیر‌یابی ابزار در نقطه انتهایی {region} دردسترس نیست — پاسخ بدون ابزار...",
       "applyingSkill": "در حال اعمال مهارت: {skills}...",
       "applyingSkills": "در حال اعمال مهارت‌ها: {skills}...",
-      "readingSkillReferences": "در حال مطالعه اسناد مرجع مهارت..."
+      "readingSkillReferences": "در حال مطالعه اسناد مرجع مهارت...",
+      "selectingSkills": "در حال انتخاب مهارت‌ها…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ابزار} other {# ابزار}} استفاده شده",

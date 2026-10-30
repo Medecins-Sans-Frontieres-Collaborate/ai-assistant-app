@@ -816,7 +816,8 @@
       "toolRoutingUnavailableInRegion": "Usambazaji wa zana haupatikani kwenye sehemu ya {region} — kujibu bila zana...",
       "applyingSkill": "Inatumia ujuzi: {skills}...",
       "applyingSkills": "Inatumia ujuzi: {skills}...",
-      "readingSkillReferences": "Inasoma nyaraka za marejeo ya ujuzi..."
+      "readingSkillReferences": "Inasoma nyaraka za marejeo ya ujuzi...",
+      "selectingSkills": "Inachagua ujuzi…"
     },
     "toolSummary": {
       "usedTools": "Imetumika {count, plural, one {# zana} other {# zana}}",

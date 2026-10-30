@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Роҳнамоии асбобҳо дар нуқтаи охири {region} дастрас нест — ҷавобдиҳӣ бе асбобҳо…",
       "applyingSkill": "Маҳорати зерин татбиқ мешавад: {skills}…",
       "applyingSkills": "Маҳориатҳои зерин татбиқ мешаванд: {skills}…",
-      "readingSkillReferences": "Ҳуҷҷатҳои истинодии маҳоратиҳо хонда мешавад…"
+      "readingSkillReferences": "Ҳуҷҷатҳои истинодии маҳоратиҳо хонда мешавад…",
+      "selectingSkills": "Интихоби малакаҳо…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# асбоб} other {# асбоб}} истифода шуд",

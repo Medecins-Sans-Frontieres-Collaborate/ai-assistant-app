@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Tool routing ntiboneka kuri {region} endpoint — turishura ata tools...",
       "applyingSkill": "Gushira mu bikorwa ubumenyi: {skills}...",
       "applyingSkills": "Gushira mu bikorwa ubumenyi: {skills}...",
-      "readingSkillReferences": "Ndusoma inyandiko zerekeye ubumenyi..."
+      "readingSkillReferences": "Ndusoma inyandiko zerekeye ubumenyi...",
+      "selectingSkills": "Hariko ndahitamo ubumenyi…"
     },
     "toolSummary": {
       "usedTools": "Ibikoresho {count, plural, one {# cakoreshejwe} other {# vyakoreshejwe}}",

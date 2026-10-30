@@ -924,6 +924,7 @@
       "applyingSkill": "Applying skill: {skills}…",
       "applyingSkills": "Applying skills: {skills}…",
       "readingSkillReferences": "Reading skill reference documents…",
+      "selectingSkills": "Choosing skills…",
       "webSearchLimitReached": "Daily web search limit reached — answering without search…",
       "codeInterpreterLimitReached": "Daily code execution limit reached — answering without running code…",
       "workflow": {

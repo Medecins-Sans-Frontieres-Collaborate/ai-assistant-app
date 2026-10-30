@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Ukudlulisela amathuluzi akutholakali ku-{region} endpoint — kuyaqhubeka kungasetshenziswa amathuluzi…",
       "applyingSkill": "Kufaka ikhono: {skills}…",
       "applyingSkills": "Kufaka amakhono: {skills}…",
-      "readingSkillReferences": "Kufundwa imibhalo yesithenjwa samakhono…"
+      "readingSkillReferences": "Kufundwa imibhalo yesithenjwa samakhono…",
+      "selectingSkills": "Kukhethwa amakhono…"
     },
     "toolSummary": {
       "usedTools": "Kusetshenzisiwe {count, plural, one {# ithuluzi} other {# amathuluzi}}",

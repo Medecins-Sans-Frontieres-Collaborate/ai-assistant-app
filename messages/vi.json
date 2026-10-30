@@ -817,7 +817,8 @@
       "toolRoutingUnavailableInRegion": "Định tuyến công cụ không khả dụng tại điểm cuối {region} — trả lời mà không có công cụ…",
       "applyingSkill": "Đang áp dụng kỹ năng: {skills}…",
       "applyingSkills": "Đang áp dụng các kỹ năng: {skills}…",
-      "readingSkillReferences": "Đang đọc tài liệu tham khảo kỹ năng…"
+      "readingSkillReferences": "Đang đọc tài liệu tham khảo kỹ năng…",
+      "selectingSkills": "Đang chọn kỹ năng…"
     },
     "toolSummary": {
       "usedTools": "Đã sử dụng {count, plural, one {# công cụ} other {# công cụ}}",

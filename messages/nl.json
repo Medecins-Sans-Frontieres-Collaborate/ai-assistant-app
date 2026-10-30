@@ -781,7 +781,8 @@
       "toolRoutingUnavailableInRegion": "Toolrouting niet beschikbaar op de {region} endpoint — antwoord wordt gegeven zonder tools…",
       "applyingSkill": "Skill toepassen: {skills}…",
       "applyingSkills": "Skills toepassen: {skills}…",
-      "readingSkillReferences": "Referentiedocumenten van skills inlezen…"
+      "readingSkillReferences": "Referentiedocumenten van skills inlezen…",
+      "selectingSkills": "Vaardigheden kiezen…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# tool gebruikt} other {# tools gebruikt}}",

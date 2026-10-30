@@ -762,7 +762,8 @@
       "toolRoutingUnavailableInRegion": "Roteamento de ferramentas indisponível no endpoint {region} — respondendo sem ferramentas…",
       "applyingSkill": "Aplicando habilidade: {skills}…",
       "applyingSkills": "Aplicando habilidades: {skills}…",
-      "readingSkillReferences": "Lendo documentos de referência de habilidades…"
+      "readingSkillReferences": "Lendo documentos de referência de habilidades…",
+      "selectingSkills": "Selecionando habilidades…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ferramenta utilizada} other {# ferramentas utilizadas}}",

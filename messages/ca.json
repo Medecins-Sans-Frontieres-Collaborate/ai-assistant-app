@@ -791,7 +791,8 @@
       "toolRoutingUnavailableInRegion": "Enrutament d’eines no disponible a l'endpoint de {region} — responent sense eines…",
       "applyingSkill": "S'està aplicant la habilitat: {skills}…",
       "applyingSkills": "S'estan aplicant les habilitats: {skills}…",
-      "readingSkillReferences": "Llegint documents de referència de la habilitat…"
+      "readingSkillReferences": "Llegint documents de referència de la habilitat…",
+      "selectingSkills": "S'estan seleccionant les habilitats…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# eina utilitzada} other {# eines utilitzades}}",

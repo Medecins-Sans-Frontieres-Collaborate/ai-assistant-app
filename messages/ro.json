@@ -814,7 +814,8 @@
       "toolRoutingUnavailableInRegion": "Routarea instrumentelor nu este disponibilă pe endpoint-ul {region} — răspuns fără instrumente…",
       "applyingSkill": "Se aplică abilitatea: {skills}…",
       "applyingSkills": "Se aplică abilitățile: {skills}…",
-      "readingSkillReferences": "Se citesc documentele de referință pentru abilități…"
+      "readingSkillReferences": "Se citesc documentele de referință pentru abilități…",
+      "selectingSkills": "Se selectează abilități…"
     },
     "toolSummary": {
       "usedTools": "Folosit {count, plural, one {# instrument} other {# instrumente}}",

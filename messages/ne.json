@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "{region} अन्त्यबिन्दुमा उपकरण मार्गनिर्देशन उपलब्ध छैन — उपकरणहरू बिना प्रत्युत्तर दिँदै…",
       "applyingSkill": "दक्षता लागू गर्दै: {skills}…",
       "applyingSkills": "दक्षताहरू लागू गर्दै: {skills}…",
-      "readingSkillReferences": "दक्षता सन्दर्भ कागजातहरू पढ्दै…"
+      "readingSkillReferences": "दक्षता सन्दर्भ कागजातहरू पढ्दै…",
+      "selectingSkills": "सीपहरू छनोट गर्दै…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# उपकरण} other {# उपकरणहरू}} प्रयोग गरियो",

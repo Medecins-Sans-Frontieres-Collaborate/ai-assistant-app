@@ -733,7 +733,8 @@
       "toolRoutingUnavailableInRegion": "Маршрутизація інструментів недоступна на кінцевій точці {region} — відповідь без використання інструментів…",
       "applyingSkill": "Застосування навички: {skills}…",
       "applyingSkills": "Застосування навичок: {skills}…",
-      "readingSkillReferences": "Читання референсних документів навички…"
+      "readingSkillReferences": "Читання референсних документів навички…",
+      "selectingSkills": "Вибір навичок…"
     },
     "toolSummary": {
       "usedTools": "Використано {count, plural, one {# інструмент} few {# інструменти} many {# інструментів} other {# інструментів}}",

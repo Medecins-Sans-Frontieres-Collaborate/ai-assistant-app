@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Tool routing ኣብ ኩሉ {region} endpoint ኣይክእልን — ዝምልከት ዘይ tool...",
       "applyingSkill": "ምግባር skill: {skills}...",
       "applyingSkills": "ምግባር skills: {skills}...",
-      "readingSkillReferences": "ምንባብ ሓበሬታ ሰርክ መዳን..."
+      "readingSkillReferences": "ምንባብ ሓበሬታ ሰርክ መዳን...",
+      "selectingSkills": "ክብሉ ክናበር እዩ…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳርሒ} other {# መሳርሒታት} } ተጠቒሙ",

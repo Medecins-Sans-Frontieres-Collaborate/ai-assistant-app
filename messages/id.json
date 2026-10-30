@@ -783,7 +783,8 @@
       "toolRoutingUnavailableInRegion": "Rute alat tidak tersedia di endpoint {region} — menjawab tanpa alat…",
       "applyingSkill": "Menerapkan keahlian: {skills}…",
       "applyingSkills": "Menerapkan keahlian: {skills}…",
-      "readingSkillReferences": "Membaca dokumen referensi keahlian…"
+      "readingSkillReferences": "Membaca dokumen referensi keahlian…",
+      "selectingSkills": "Memilih keterampilan…"
     },
     "toolSummary": {
       "usedTools": "Digunakan {count, plural, one {# alat} other {# alat}}",

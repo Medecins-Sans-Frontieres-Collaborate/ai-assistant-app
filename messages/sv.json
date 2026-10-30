@@ -816,7 +816,8 @@
       "toolRoutingUnavailableInRegion": "Verktygsdirigering är inte tillgänglig på {region}-endpointen — svarar utan verktyg…",
       "applyingSkill": "Tillämpa färdighet: {skills}…",
       "applyingSkills": "Tillämpa färdigheter: {skills}…",
-      "readingSkillReferences": "Läser referensdokument om färdigheter…"
+      "readingSkillReferences": "Läser referensdokument om färdigheter…",
+      "selectingSkills": "Väljer färdigheter..."
     },
     "toolSummary": {
       "usedTools": "Använt {count, plural, one {# verktyg} other {# verktyg}}",

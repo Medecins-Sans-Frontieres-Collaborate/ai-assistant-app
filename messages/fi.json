@@ -791,7 +791,8 @@
       "toolRoutingUnavailableInRegion": "Työkalureititys ei ole saatavilla alueen {region} päätepisteessä — vastaan ilman työkaluja…",
       "applyingSkill": "Otetaan käyttöön taito: {skills}…",
       "applyingSkills": "Otetaan käyttöön taidot: {skills}…",
-      "readingSkillReferences": "Luetaan taitojen viitedokumentteja…"
+      "readingSkillReferences": "Luetaan taitojen viitedokumentteja…",
+      "selectingSkills": "Valitaan taitoja…"
     },
     "toolSummary": {
       "usedTools": "Käytetty {count, plural, one {# työkalu} other {# työkalua}}",

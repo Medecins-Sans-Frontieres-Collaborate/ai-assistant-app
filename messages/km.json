@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "ការបញ្ជូន​ឧបករណ៍មិនអាចប្រើបាន​នៅលើចំណុចផ្នែក {region} — កំពុងឆ្លើយតប​ដោយគ្មាន​ឧបករណ៍…",
       "applyingSkill": "កំពុងអនុវត្តជំនាញ: {skills}…",
       "applyingSkills": "កំពុងអនុវត្តជំនាញនានា: {skills}…",
-      "readingSkillReferences": "កំពុងអានឯកសារងារជាក់ស្តែងនៃជំនាញ…"
+      "readingSkillReferences": "កំពុងអានឯកសារងារជាក់ស្តែងនៃជំនាញ…",
+      "selectingSkills": "កំពុងជ្រើសជំនាញ…"
     },
     "toolSummary": {
       "usedTools": "បានប្រើ {count, plural, one {# ឧបករណ៍} other {# ឧបករណ៍}}",

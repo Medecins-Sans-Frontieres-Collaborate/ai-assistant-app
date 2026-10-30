@@ -759,7 +759,8 @@
       "toolRoutingUnavailableInRegion": "በ{region} እንደመጨረሻ ቀጥታ tool routing አይገኝም — ሳይጠቀም መረጃ ማቅረብ...",
       "applyingSkill": "ዘዴ እየተሰረዘ፡ {skills}...",
       "applyingSkills": "ዘዴዎች እየተሰረዙ፡ {skills}...",
-      "readingSkillReferences": "የዘዴ ማጣሪያ ሰነዶችን በመነበብ..."
+      "readingSkillReferences": "የዘዴ ማጣሪያ ሰነዶችን በመነበብ...",
+      "selectingSkills": "ክህሎቶችን በማሰራጨት ላይ…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳሪያ} other {# መሳሪያዎች}} ተጠቅመዋል",

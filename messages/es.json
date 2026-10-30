@@ -762,7 +762,8 @@
       "toolRoutingUnavailableInRegion": "El enrutamiento de herramientas no está disponible en el endpoint de {region}; respondiendo sin herramientas…",
       "applyingSkill": "Aplicando habilidad: {skills}…",
       "applyingSkills": "Aplicando habilidades: {skills}…",
-      "readingSkillReferences": "Leyendo documentos de referencia de habilidades…"
+      "readingSkillReferences": "Leyendo documentos de referencia de habilidades…",
+      "selectingSkills": "Seleccionando habilidades…"
     },
     "toolSummary": {
       "usedTools": "Se usó {count, plural, one {# herramienta} other {# herramientas}}",

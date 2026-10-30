@@ -816,7 +816,8 @@
       "toolRoutingUnavailableInRegion": "{region} エンドポイントではツールのルーティングが利用できません。ツールなしで回答します…",
       "applyingSkill": "スキルを適用中: {skills}…",
       "applyingSkills": "スキルを適用中: {skills}…",
-      "readingSkillReferences": "スキル参照文書を読んでいます…"
+      "readingSkillReferences": "スキル参照文書を読んでいます…",
+      "selectingSkills": "スキルを選択中…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# 件のツールを使用} other {# 件のツールを使用}}",

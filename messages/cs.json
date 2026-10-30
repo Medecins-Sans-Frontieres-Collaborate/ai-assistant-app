@@ -816,7 +816,8 @@
       "toolRoutingUnavailableInRegion": "Směrování nástrojů není na koncovém bodu {region} k dispozici — odpovídám bez nástrojů…",
       "applyingSkill": "Aplikuji dovednost: {skills}…",
       "applyingSkills": "Aplikuji dovednosti: {skills}…",
-      "readingSkillReferences": "Čtu referenční dokumenty k dovednostem…"
+      "readingSkillReferences": "Čtu referenční dokumenty k dovednostem…",
+      "selectingSkills": "Výběr dovedností…"
     },
     "toolSummary": {
       "usedTools": "Použito {count, plural, one {# nástroj} few {# nástroje} other {# nástrojů}}",

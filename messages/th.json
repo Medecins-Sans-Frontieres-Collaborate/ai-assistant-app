@@ -733,7 +733,8 @@
       "toolRoutingUnavailableInRegion": "ไม่สามารถเปลี่ยนเส้นทางเครื่องมือได้ที่จุดเชื่อมต่อ {region} — กำลังตอบโดยไม่ใช้เครื่องมือ…",
       "applyingSkill": "กำลังใช้ทักษะ: {skills}…",
       "applyingSkills": "กำลังใช้ทักษะ: {skills}…",
-      "readingSkillReferences": "กำลังอ่านเอกสารอ้างอิงทักษะ…"
+      "readingSkillReferences": "กำลังอ่านเอกสารอ้างอิงทักษะ…",
+      "selectingSkills": "กำลังเลือกทักษะ..."
     },
     "toolSummary": {
       "usedTools": "ใช้แล้ว {count, plural, one {# เครื่องมือ} other {# เครื่องมือ}}",

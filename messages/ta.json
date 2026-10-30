@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "{region} முடிவகத்தில் கருவி வழிமாற்றம் கிடைக்கவில்லை — கருவிகளில்லாமல் பதிலளிக்கப்படுகிறது…",
       "applyingSkill": "திறன் பயன்படுத்தப்படுகிறது: {skills}…",
       "applyingSkills": "திறன்கள் பயன்படுத்தப்படுகின்றன: {skills}…",
-      "readingSkillReferences": "திறன் குறிப்பு ஆவணங்களை வாசிக்கிறது…"
+      "readingSkillReferences": "திறன் குறிப்பு ஆவணங்களை வாசிக்கிறது…",
+      "selectingSkills": "திறன்கள் தேர்வு செய்கிறது…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# கருவி பயன்படுத்தப்பட்டது} other {# கருவிகள் பயன்படுத்தப்பட்டன}}",

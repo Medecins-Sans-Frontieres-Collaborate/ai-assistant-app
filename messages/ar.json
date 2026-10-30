@@ -762,7 +762,8 @@
       "toolRoutingUnavailableInRegion": "توجيه الأدوات غير متوفر على نقطة النهاية {region} — يتم الرد بدون أدوات...",
       "applyingSkill": "تطبيق المهارة: {skills}...",
       "applyingSkills": "تطبيق المهارات: {skills}...",
-      "readingSkillReferences": "قراءة مستندات المراجع الخاصة بالمهارة..."
+      "readingSkillReferences": "قراءة مستندات المراجع الخاصة بالمهارة...",
+      "selectingSkills": "جاري اختيار المهارات..."
     },
     "toolSummary": {
       "usedTools": "تم استخدام {count, plural, one {أداة واحدة} other {{count} أدوات}}",

@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "ڕێگەی بەرەوچوونی ئامراز لە ناو {region} نییە — وەڵام دەدرێت بێ ئامراز…",
       "applyingSkill": "سەروشتە چالاک دەکرێت: {skills}…",
       "applyingSkills": "سەروشتەکان چالاک دەکرێن: {skills}…",
-      "readingSkillReferences": "بخوێندنەوەی بەڵگەنامەکانی سەروشتە…"
+      "readingSkillReferences": "بخوێندنەوەی بەڵگەنامەکانی سەروشتە…",
+      "selectingSkills": "هەڵبژاردنی تواناییەکان…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ئامراز} other {# ئامراز}} بەکارهات",

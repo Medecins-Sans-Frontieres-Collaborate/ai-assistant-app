@@ -791,7 +791,8 @@
       "toolRoutingUnavailableInRegion": "ניתוב כלים אינו זמין בנקודת הקצה של {region} — משיב ללא כלים…",
       "applyingSkill": "מפעיל מיומנות: {skills}…",
       "applyingSkills": "מפעיל מיומנויות: {skills}…",
-      "readingSkillReferences": "קורא מסמכי עזר למיומנויות…"
+      "readingSkillReferences": "קורא מסמכי עזר למיומנויות…",
+      "selectingSkills": "בוחר מיומנויות…"
     },
     "toolSummary": {
       "usedTools": "השתמש ב־{count, plural, one {# כלי} other {# כלים}}",

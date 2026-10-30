@@ -814,7 +814,8 @@
       "toolRoutingUnavailableInRegion": "{region} ఎండ్పాయింట్‌లో టూల్ రౌటింగ్ అందుబాటులో లేదు — టూల్స్ లేకుండా సమాధానం ఇస్తోంది…",
       "applyingSkill": "స్కిల్ ఉపయోగిస్తున్నాను: {skills}…",
       "applyingSkills": "స్కిల్స్ ఉపయోగిస్తున్నాను: {skills}…",
-      "readingSkillReferences": "స్కిల్ రిఫరెన్స్ డాక్యుమెంట్లు చదవుతోంది…"
+      "readingSkillReferences": "స్కిల్ రిఫరెన్స్ డాక్యుమెంట్లు చదవుతోంది…",
+      "selectingSkills": "నైపుణ్యాలను ఎంచుకుంటున్నాం…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# టూల్ వాడింది} other {# టూల్స్ వాడింది}}",

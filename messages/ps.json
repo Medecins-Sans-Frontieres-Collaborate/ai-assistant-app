@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "د وسیلې لاره بندي په {region} پای کې نشته — پرته له وسیلو ځواب ورکول...",
       "applyingSkill": "مهارت تطبیق کیږي: {skills}...",
       "applyingSkills": "مهارتونه تطبیق کیږي: {skills}...",
-      "readingSkillReferences": "د مهارت حواله اسناد لوستل کیږي..."
+      "readingSkillReferences": "د مهارت حواله اسناد لوستل کیږي...",
+      "selectingSkills": "د مهارتونو انتخاب…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# وسیله کارول شوې} other {# وسایل کارول شوي}}",

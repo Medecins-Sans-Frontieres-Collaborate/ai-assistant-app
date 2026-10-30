@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Η δρομολόγηση εργαλείου δεν είναι διαθέσιμη στο τερματικό σημείο {region} — απάντηση χωρίς εργαλεία…",
       "applyingSkill": "Εφαρμογή δεξιότητας: {skills}…",
       "applyingSkills": "Εφαρμογή δεξιοτήτων: {skills}…",
-      "readingSkillReferences": "Ανάγνωση εγγράφων αναφοράς δεξιοτήτων…"
+      "readingSkillReferences": "Ανάγνωση εγγράφων αναφοράς δεξιοτήτων…",
+      "selectingSkills": "Επιλογή δεξιοτήτων…"
     },
     "toolSummary": {
       "usedTools": "Χρησιμοποιήθηκε {count, plural, one {# εργαλείο} other {# εργαλεία}}",

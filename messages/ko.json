@@ -816,7 +816,8 @@
       "toolRoutingUnavailableInRegion": "{region} 엔드포인트에서는 도구 라우팅이 사용할 수 없습니다 — 도구 없이 답변합니다…",
       "applyingSkill": "스킬 적용 중: {skills}…",
       "applyingSkills": "스킬 적용 중: {skills}…",
-      "readingSkillReferences": "스킬 참고 문서 읽는 중…"
+      "readingSkillReferences": "스킬 참고 문서 읽는 중…",
+      "selectingSkills": "기술을 선택하는 중…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {#개 도구 사용} other {#개 도구 사용}}",

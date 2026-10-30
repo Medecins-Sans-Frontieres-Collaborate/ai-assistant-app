@@ -874,7 +874,8 @@
       "toolRoutingUnavailableInRegion": "Usmeravanje alata nije dostupno na {region} endpointu — odgovaram bez upotrebe alata…",
       "applyingSkill": "Primena veštine: {skills}…",
       "applyingSkills": "Primena veština: {skills}…",
-      "readingSkillReferences": "Čitam referentna dokumenta za veštine…"
+      "readingSkillReferences": "Čitam referentna dokumenta za veštine…",
+      "selectingSkills": "Biranje veština…"
     },
     "toolSummary": {
       "usedTools": "Korišćen{count, plural, one {# alat} other {# alata}}",

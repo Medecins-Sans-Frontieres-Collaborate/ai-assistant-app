@@ -762,7 +762,8 @@
       "toolRoutingUnavailableInRegion": "{region} এন্ডপয়েন্টে টুল রাউটিং অনুপলব্ধ — টুল ছাড়াই উত্তর দেওয়া হচ্ছে…",
       "applyingSkill": "স্কিল প্রয়োগ করা হচ্ছে: {skills}…",
       "applyingSkills": "স্কিলগুলো প্রয়োগ করা হচ্ছে: {skills}…",
-      "readingSkillReferences": "স্কিলের রেফারেন্স ডকুমেন্ট পড়া হচ্ছে…"
+      "readingSkillReferences": "স্কিলের রেফারেন্স ডকুমেন্ট পড়া হচ্ছে…",
+      "selectingSkills": "দক্ষতা নির্বাচন করা হচ্ছে…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {#টি টুল ব্যবহৃত} other {#টি টুল ব্যবহৃত}}",
