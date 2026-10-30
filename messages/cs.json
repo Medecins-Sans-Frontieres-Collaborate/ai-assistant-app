@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Globální výchozí hodnoty",
       "overrides": "Přepsání",
-      "delegations": "Delegace"
+      "delegations": "Delegace",
+      "models": "Modely"
     },
     "tabsLabel": "Sekce limitů",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "Žádné delegování není aktivní, takže toto přepsání neplatí pro nikoho, dokud nebude delegování znovu povoleno. Nikdy nebude povýšeno na globální úroveň.",
     "betaPolicyNotice": "Testovací prostředí: tato zásada a její čítače použití jsou uloženy odděleně od produkčního prostředí (policy.beta.json). Změny provedené zde neovlivní produkci.",
     "delegationsManagedElsewhere": "Delegace jsou zde zobrazeny pouze pro čtení. Kdo je v delegaci, na které uživatele se vztahuje a co může každý správce, se spravuje v sekci Delegace.",
-    "delegationsManagedElsewhereLink": "Otevřít delegace"
+    "delegationsManagedElsewhereLink": "Otevřít delegace",
+    "modelAccess": {
+      "intro": "Rozhodněte, kdo může používat každý model. Nastavení rodiny platí pro její modely, pokud si model nenastaví vlastní; osoby na seznamu mají přednost před výchozím nastavením pro ostatní; blokovací seznam přebije každé povolení.",
+      "externalNote": "Modely hostované mimo prostředí Azure ({families}) nejsou dostupné nikomu, dokud je zde nepovolíte – buď pro všechny prostřednictvím výchozího nastavení, nebo pro skupiny, domény a osoby.",
+      "envelopeNote": "Limit požadavků na rodinu je sdílený denní rozpočet mezi jejími modely; limit na modelu je omezení v rámci něj. Neomezený model nezvyšuje rodinný rozpočet.",
+      "observeNote": "Režim sledování je aktivní: nic zde zatím model neskrývá ani neblokuje požadavky. Přepněte výše na Vynutit, až budou pravidla správná.",
+      "familyChip": "Rodina",
+      "modelChip": "Model",
+      "otherModels": "Modely bez rodiny",
+      "modelsInFamily": "{count, plural, one {# model v této rodině} other {# modelů v této rodině}}",
+      "noModels": "V katalogu zatím nejsou žádné modely.",
+      "expand": "Zobrazit modely",
+      "collapse": "Skrýt modely",
+      "edit": "Upravit",
+      "doneEditing": "Hotovo",
+      "editNode": "Upravit přístup pro {label}",
+      "defaultLabel": "Všichni ostatní",
+      "defaultInherit": "Zdědit",
+      "defaultUnlimited": "Neomezeně",
+      "defaultLimited": "Omezeno na",
+      "defaultUnavailable": "Nedostupné",
+      "defaultRequestsLabel": "Požadavky za den pro všechny ostatní",
+      "requestsPerDay": "požadavků / den",
+      "inheritedFrom": "Zdědí {state} od {origin}.",
+      "effectiveLabel": "Všichni, kdo nejsou na seznamu, mají: {state}.",
+      "inheritedChip": "zděděno",
+      "origin": {
+        "model": "toto nastavení",
+        "family": "její rodina",
+        "defaults": "Globální výchozí",
+        "catalogExternal": "pravidlo, že externí modely jsou nedostupné, dokud nejsou povoleny",
+        "catalog": "výchozí katalog"
+      },
+      "state": {
+        "unlimited": "Neomezeně",
+        "limited": "Omezeno na {requests} / den",
+        "unavailable": "Nedostupné"
+      },
+      "list": {
+        "groups": "Skupiny s přístupem",
+        "domains": "Domény s přístupem",
+        "allow": "Povolené osoby",
+        "deny": "Blokované osoby"
+      },
+      "listHint": {
+        "groups": "Členové těchto Entra skupin jej mohou používat za podmínek nastavených pro skupinu.",
+        "domains": "Každý s e-mailovou adresou na těchto doménách jej může používat za podmínek nastavených pro doménu.",
+        "allow": "Pojmenované osoby jej mohou používat bez ohledu na výchozí nebo jejich doménu.",
+        "deny": "Pojmenované osoby jej nesmí nikdy používat. Toto přebíjí každé povolení výše."
+      },
+      "grantUnlimited": "Neomezeně",
+      "grantLimited": "Omezeno na",
+      "termsLabel": "Podmínky pro {target}",
+      "requestsLabel": "Požadavky za den pro {target}",
+      "removeGrant": "Odebrat {target}",
+      "groupsCount": "{count, plural, one {# skupina} other {# skupin}}",
+      "domainsCount": "{count, plural, one {# doména} other {# domén}}",
+      "allowCount": "{count, plural, one {# povolená osoba} other {# povolených osob}}",
+      "denyCount": "{count, plural, one {# blokovaná osoba} other {# blokovaných osob}}",
+      "collisionChip": "Také v globálních výchozích hodnotách",
+      "collisionWarning": "Tento model nebo rodina je také nastavena v globálních výchozích hodnotách. Uložení bude odmítnuto, dokud nebude jeden z těchto dvou vymazán."
+    },
+    "previewSourceModelAccess": "Schválení modelu — {list}"
   },
   "m365": {
     "connections": {

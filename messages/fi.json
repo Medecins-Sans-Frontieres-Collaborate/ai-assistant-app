@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Globaalit oletukset",
       "overrides": "Ohitukset",
-      "delegations": "Delegoinnit"
+      "delegations": "Delegoinnit",
+      "models": "Mallit"
     },
     "tabsLabel": "Rajoitusosioita",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "Delegointi on poistettu käytöstä, joten tämä yliajo ei koske ketään ennen kuin delegointi otetaan uudelleen käyttöön. Sitä ei koskaan edistetä yleiselle tasolle.",
     "betaPolicyNotice": "Beta-ympäristö: tämä ohjeistus ja sen käyttölaskurit tallennetaan erillään tuotannosta (policy.beta.json). Tämän tekemilläsi muutoksilla ei ole vaikutusta tuotantoon.",
     "delegationsManagedElsewhere": "Delegoinnit ovat täällä vain luku -tilassa. Delegoinnin jäsenet, ketkä käyttäjät siihen kuuluvat ja mitä kukin ylläpitäjä voi tehdä, hallitaan Delegoinnit-osiossa.",
-    "delegationsManagedElsewhereLink": "Avaa delegoinnit"
+    "delegationsManagedElsewhereLink": "Avaa delegoinnit",
+    "modelAccess": {
+      "intro": "Määritä, kuka saa käyttää mitäkin mallia. Perheen asetus koskee sen malleja, ellei mallin kohdalla ole poikkeusta; lista ohittaa oletuksen muille; estolista ohittaa kaikki myönnytykset.",
+      "externalNote": "Azure-ympäristön ulkopuolella isännöidyt mallit ({families}) eivät ole kenenkään käytettävissä, ennen kuin myönnät oikeuden täällä – kaikille oletuksen kautta tai ryhmille, domaineille ja henkilöille erikseen.",
+      "envelopeNote": "Perhetason pyyntöraja on yhteinen päivittäinen budjetti sen malleille; mallikohtainen raja on katto kyseisessä mallissa. Rajaton mallissa ei poista perheen budjettia.",
+      "observeNote": "Seurantatila on käytössä: mikään täällä ei vielä piilota mallia tai estä pyyntöjä. Vaihda ylhäältä valvontaan, kun säännöt ovat kunnossa.",
+      "familyChip": "Perhe",
+      "modelChip": "Malli",
+      "otherModels": "Mallit ilman perhettä",
+      "modelsInFamily": "{count, plural, one {# malli tässä perheessä} other {# mallia tässä perheessä}}",
+      "noModels": "Luettelossa ei ole vielä malleja.",
+      "expand": "Näytä mallit",
+      "collapse": "Piilota mallit",
+      "edit": "Muokkaa",
+      "doneEditing": "Valmis",
+      "editNode": "Muokkaa käyttöoikeuksia kohteelle {label}",
+      "defaultLabel": "Kaikki muut",
+      "defaultInherit": "Peritty",
+      "defaultUnlimited": "Rajaton",
+      "defaultLimited": "Rajattu",
+      "defaultUnavailable": "Ei saatavilla",
+      "defaultRequestsLabel": "Pyyntöjä päivässä muille",
+      "requestsPerDay": "pyyntöä / päivä",
+      "inheritedFrom": "Perii tilan {state} kohteesta {origin}.",
+      "effectiveLabel": "Kaikille, jotka eivät ole listalla: {state}.",
+      "inheritedChip": "peritty",
+      "origin": {
+        "model": "tämä asetus",
+        "family": "sen perhe",
+        "defaults": "Globaalit oletukset",
+        "catalogExternal": "sääntö, että ulkoiset mallit ovat käytettävissä vain myöntämisen jälkeen",
+        "catalog": "luettelon oletus"
+      },
+      "state": {
+        "unlimited": "Rajaton",
+        "limited": "Rajattu {requests} / päivä",
+        "unavailable": "Ei saatavilla"
+      },
+      "list": {
+        "groups": "Ryhmät joilla on käyttöoikeus",
+        "domains": "Domainit joilla on käyttöoikeus",
+        "allow": "Sallitut henkilöt",
+        "deny": "Estetyt henkilöt"
+      },
+      "listHint": {
+        "groups": "Nämä Entra-ryhmien jäsenet saavat käyttää sitä ryhmäkohtaisin ehdoin.",
+        "domains": "Kaikki, joilla on sähköpostiosoite näissä domaineissa, domainikohtaisin ehdoin.",
+        "allow": "Nimetyt henkilöt voivat käyttää sitä riippumatta oletuksesta tai domainista.",
+        "deny": "Nimetyt henkilöt eivät saa käyttää. Tämä ohittaa kaikki yllä olevat oikeudet."
+      },
+      "grantUnlimited": "Rajaton",
+      "grantLimited": "Rajattu",
+      "termsLabel": "Ehdot kohteelle {target}",
+      "requestsLabel": "Pyyntöjä päivässä kohteelle {target}",
+      "removeGrant": "Poista kohde {target}",
+      "groupsCount": "{count, plural, one {# ryhmä} other {# ryhmää}}",
+      "domainsCount": "{count, plural, one {# domain} other {# domainia}}",
+      "allowCount": "{count, plural, one {# sallittu henkilö} other {# sallittua henkilöä}}",
+      "denyCount": "{count, plural, one {# estetty henkilö} other {# estettyä henkilöä}}",
+      "collisionChip": "Myös globaaliasetuksissa",
+      "collisionWarning": "Tämä malli tai perhe on myös määritetty globaaliasetuksissa. Tallennusta ei sallita, ennen kuin toinen näistä poistetaan."
+    },
+    "previewSourceModelAccess": "Mallin hyväksyntä — {list}"
   },
   "m365": {
     "connections": {

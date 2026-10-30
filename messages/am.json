@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "አጠቃላይ ነባር",
       "overrides": "ተሻሻሎች",
-      "delegations": "ዲሌጌሽኖች"
+      "delegations": "ዲሌጌሽኖች",
+      "models": "ናይሎች"
     },
     "tabsLabel": "የገደቦች ክፍሎች",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "እዚህ የተገለጸው አሻሻይ በማንም ላይ እስካልተጠናቀቀ ድረስ አይሰራም። ወደ አጠቃላይ ደረጃ ፈጽሞ አይገባም።",
     "betaPolicyNotice": "ቤታ አካባቢ፡ ይህ ፖሊሲ እና የአጠቃቀም ቁጥሮቹ ከስራ ላይ ያለው በተለየ ሁኔታ policy.beta.json ውስጥ ይቆመዋል። እዚህ የሚያደርጉት ማንኛውም ለውጥ በስራ ላይ ያለውን አይቀይርም።",
     "delegationsManagedElsewhere": "ዲሌጌሽኖች እዚህ መብት ሳይኖራቸው ለማየት ብቻ ናቸው። የዲሌጌሽኑ አባላት፣ የሚሸፍኑ ተጠቃሚዎች፣ እና አድሚን ምን ማድረግ እንደሚችሉ በዲሌጌሽኖች ቦታ ይቆጠባል።",
-    "delegationsManagedElsewhereLink": "ዲሌጌሽኖችን ክፈት"
+    "delegationsManagedElsewhereLink": "ዲሌጌሽኖችን ክፈት",
+    "modelAccess": {
+      "intro": "እያንዳንዱ ናይል ለመጠቀም የሚችለው ማን እንደሆነ ይወስኑ። የቤተሰቡ ቅንብር ወደ ናይሎቹ ይተገበራል በሚገኙ፣ ሆኖም ናይሉ የራሱን ቅንብር ከቀየረ፣ የሰንዴ ሰዎች በሁሉም ላይ የተወሰኑትን ይመልከታሉ፣ የተገደበ ሰንዴ ግን ሁሉንም ይሻላል።",
+      "externalNote": "ከAzure አካባቢ ውጭ የተያዘው ናይል ({families}) ለሁሉም ሰዎች እስከታደረው እዚህ ድረስ አይገኝም — ለሁሉም በነባሪው፣ ወይም ለቡድኖች፣ የኢሜል አድራሻዎች እና ሰዎች።",
+      "envelopeNote": "ቤተሰብ ላይ የተወሰነ ሰነድ የበዓሉን በዓል ብዛት በናይሎቹ የሚጋራው ነው፤ በናይል ላይ ያለው ደግሞ የውስጥ ገደብ ነው። በናይል ውስጥ ያለው አልቋም ቤተሰብ ሰነድ አይወጣም።",
+      "observeNote": "እየታየ ሁኔታ ይተገበራል፤ እዚህ ላይ ያለው ምንም ናይልን አይያዝም ወይም ጥያቄን አያቋርጥም። የህዝብ ህጎች ትክክለኛ ሲሆኑ ወደ Enforce ቀይር።",
+      "familyChip": "ቤተሰብ",
+      "modelChip": "ናይል",
+      "otherModels": "የቤተሰብ ካልተካተቱ ናይሎች",
+      "modelsInFamily": "{count, plural, one {ይህበተሰብ ውስጥ ናይል አንዱ} other {ይህበተሰብ ውስጥ ናይሎች #}}",
+      "noModels": "አሁን በካታሎግ ውስጥ ናይሎች የሉም።",
+      "expand": "ናይሎችን አሳይ",
+      "collapse": "ናይሎችን ደብቅ",
+      "edit": "አርትዕ",
+      "doneEditing": "ወደ ተጠናቀቀ",
+      "editNode": "የ{label} መዳረሻ አርትዕ",
+      "defaultLabel": "ደግሞ ሁሉም",
+      "defaultInherit": "ይወርሳል",
+      "defaultUnlimited": "አልቋም",
+      "defaultLimited": "ወደ",
+      "defaultUnavailable": "የማይገኝ",
+      "defaultRequestsLabel": "ለሁሉም ጥያቄዎች በቀን",
+      "requestsPerDay": "ጥያቄዎች / ቀን",
+      "inheritedFrom": "ፈላጊው {origin} ከ{state} ይወርሳል።",
+      "effectiveLabel": "በሰንዴ ያልተገኙ ሁሉ፡ {state} ይሰማዋል።",
+      "inheritedChip": "የተወሰነ",
+      "origin": {
+        "model": "ይህ ቅንብር",
+        "family": "ቤተሰቡ",
+        "defaults": "የአጠቃላይ ነባሪዎች",
+        "catalogExternal": "የውጭ ናይሎች እስከታደሩ ድረስ የማይገኙ ህግ",
+        "catalog": "የካታሎግ ነባሪ"
+      },
+      "state": {
+        "unlimited": "አልቋም",
+        "limited": "ተገደበ ወደ {requests} / ቀን",
+        "unavailable": "የማይገኝ"
+      },
+      "list": {
+        "groups": "በመዳረሻ የተወሰኑ ቡድኖች",
+        "domains": "በመዳረሻ የተወሰኑ ደብዳቤዎች",
+        "allow": "የተፈቀዱ ሰዎች",
+        "deny": "የተገዱ ሰዎች"
+      },
+      "listHint": {
+        "groups": "ይህንን የEntra ቡድን አባላት በዚያ ቡድን የተገለፀው ይተጠቀማሉ።",
+        "domains": "በመመዝገብ የተወሰኑ ደብዳቤዎች ውስጥ ኢሜይል አድራሻ ያላቸው ሁሉ በዚያ ደብዳቤ የተገለፀው ይሰማቸዋል።",
+        "allow": "በስም ተጠቃሚዎች በነባሪው ምንም ብቻ፣ ወይም በደብዳቤው እንዳትገደቡ ልዩ መዳረሻ ይያዛሉ።",
+        "deny": "በስም ተጠቃሚዎች ፈውስ የማያገኙ። ይህ ሁለቱንም ህጎች ይበልጣል።"
+      },
+      "grantUnlimited": "አልቋም",
+      "grantLimited": "ወደ",
+      "termsLabel": "የ{target} ውሎች",
+      "requestsLabel": "በ{target} ቀን ጥያቄዎች",
+      "removeGrant": "{target} አስወግድ",
+      "groupsCount": "{count, plural, one {የተፈቀደ የቡድን ቁጥር #} other {የተፈቀዱ ቡድኖች #}}",
+      "domainsCount": "{count, plural, one {የተፈቀደ የደብዳቤ ቁጥር #} other {የተፈቀዱ ደብዳቤዎች #}}",
+      "allowCount": "{count, plural, one {የተፈቀደ ሰው #} other {የተፈቀዱ ሰዎች #}}",
+      "denyCount": "{count, plural, one {የተገደበ ሰው #} other {የተገዱ ሰዎች #}}",
+      "collisionChip": "በGlobal defaults ውስጥም አለ",
+      "collisionWarning": "ይህ ሞዴል ወይም ቤተሰብ በGlobal defaults ውስጥም ተሸጠ ነው። አንዱን ከሁለቱ ያጽዱ እስከዚያ ድረስ ማስቀመጥ አይቻልም።"
+    },
+    "previewSourceModelAccess": "ሞዴል ማጽደቅ — {list}"
   },
   "m365": {
     "connections": {

@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Setări globale implicite",
       "overrides": "Suprascrieri",
-      "delegations": "Delegații"
+      "delegations": "Delegații",
+      "models": "Modele"
     },
     "tabsLabel": "Secțiuni limite",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "Delegarea este dezactivată, astfel încât această suprascriere nu se aplică nimănui până când delegarea va fi reactivată. Nu este niciodată promovată la nivel global.",
     "betaPolicyNotice": "Mediu beta: această politică și contoarele ei de utilizare sunt stocate separat față de producție (policy.beta.json). Nimic din ce modificați aici nu afectează mediul de producție.",
     "delegationsManagedElsewhere": "Delegațiile sunt afișate aici doar pentru citire. Ce utilizatori fac parte dintr-o delegație, pe cine acoperă aceasta și ce poate face fiecare administrator se gestionează în secțiunea Delegații.",
-    "delegationsManagedElsewhereLink": "Deschide Delegații"
+    "delegationsManagedElsewhereLink": "Deschide Delegații",
+    "modelAccess": {
+      "intro": "Decideți cine poate folosi fiecare model. Setarea unei familii se aplică modelelor din cadrul acesteia, cu excepția cazului în care un model are propria setare; persoanele din listă au prioritate față de implicitul pentru ceilalți; lista de blocare are prioritate față de orice permisiune.",
+      "externalNote": "Modelele găzduite în afara mediului Azure ({families}) nu sunt disponibile pentru nimeni până când le acordați acces aici — tuturor prin setarea implicită sau grupurilor, domeniilor și persoanelor.",
+      "envelopeNote": "Limita de cereri pe o familie este un buget zilnic partajat între modelele ei; o limită pe un model este o restricție în cadrul acestuia. Fără limită pe un model nu ridică bugetul familiei.",
+      "observeNote": "Modul de observare este activat: nimic de aici nu ascunde un model sau nu oprește încă o cerere. Treceți la Enforce mai sus când regulile sunt corecte.",
+      "familyChip": "Familie",
+      "modelChip": "Model",
+      "otherModels": "Modele fără familie",
+      "modelsInFamily": "{count, plural, one {# model din această familie} other {# modele din această familie}}",
+      "noModels": "Nu există încă modele în catalog.",
+      "expand": "Afișați modelele",
+      "collapse": "Ascundeți modelele",
+      "edit": "Editați",
+      "doneEditing": "Finalizat",
+      "editNode": "Editați accesul pentru {label}",
+      "defaultLabel": "Restul utilizatorilor",
+      "defaultInherit": "Moștenește",
+      "defaultUnlimited": "Nelimitat",
+      "defaultLimited": "Limitat la",
+      "defaultUnavailable": "Indisponibil",
+      "defaultRequestsLabel": "Cereri pe zi pentru restul utilizatorilor",
+      "requestsPerDay": "cereri / zi",
+      "inheritedFrom": "Moștenește {state} de la {origin}.",
+      "effectiveLabel": "Oricine nu se află pe o listă primește: {state}.",
+      "inheritedChip": "moștenit",
+      "origin": {
+        "model": "această setare",
+        "family": "familia sa",
+        "defaults": "Implicite globale",
+        "catalogExternal": "regula că modelele externe sunt indisponibile până la acordul de acces",
+        "catalog": "setarea implicită a catalogului"
+      },
+      "state": {
+        "unlimited": "Nelimitat",
+        "limited": "Limitat la {requests} / zi",
+        "unavailable": "Indisponibil"
+      },
+      "list": {
+        "groups": "Grupuri cu acces",
+        "domains": "Domenii cu acces",
+        "allow": "Persoane permise",
+        "deny": "Persoane blocate"
+      },
+      "listHint": {
+        "groups": "Membrii acestor grupuri Entra pot utiliza modelul, conform condițiilor stabilite pentru fiecare grup.",
+        "domains": "Oricine cu adresă de email din aceste domenii, conform condițiilor stabilite pentru domeniu.",
+        "allow": "Persoanele nominalizate pot utiliza modelul indiferent de implicit sau domeniul lor.",
+        "deny": "Persoanele nominalizate nu pot folosi niciodată modelul. Aceasta are prioritate față de orice permisiune de mai sus."
+      },
+      "grantUnlimited": "Nelimitat",
+      "grantLimited": "Limitat la",
+      "termsLabel": "Condiții pentru {target}",
+      "requestsLabel": "Cereri pe zi pentru {target}",
+      "removeGrant": "Eliminați {target}",
+      "groupsCount": "{count, plural, one {# grup} other {# grupuri}}",
+      "domainsCount": "{count, plural, one {# domeniu} other {# domenii}}",
+      "allowCount": "{count, plural, one {# persoană permisă} other {# persoane permise}}",
+      "denyCount": "{count, plural, one {# persoană blocată} other {# persoane blocate}}",
+      "collisionChip": "De asemenea, în valorile implicite globale",
+      "collisionWarning": "Acest model sau familie este configurat(ă) și în valorile implicite globale. Salvarea va fi refuzată până când una dintre cele două va fi eliminată."
+    },
+    "previewSourceModelAccess": "Aprobare model — {list}"
   },
   "m365": {
     "connections": {

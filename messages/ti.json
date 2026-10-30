@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "ዓለምለኸ ነቲኡኹላሊት",
       "overrides": "መድረሻታት",
-      "delegations": "መዋእለኦታት"
+      "delegations": "መዋእለኦታት",
+      "models": "ናይ ሞዴልታት"
     },
     "tabsLabel": "መድረባት ክፋላት",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "ናይኡ delegation ብዝተሰጠ ኣይኮነን፣ ነዚ ሓዋሪ ንሓደ ሰብ ክፈፅም ኣይከኣለን ክብል delegation ክብጸም። ወይንኡ፡ ንኣለም ውሽጣዊ ደረጃ ኣብዚ ኣይስተርዕሕን።",
     "betaPolicyNotice": "ቤታ (Beta) አካባቢ፡ እዚ ፖሊሲን ዘምግዓሉ መቆጸሪ ሓሳባት ብሓደ ከተፈላለየ ከም ተምጽኦ ይሑዱ እየ (policy.beta.json)። ኣብዚ ዝተረኽበካ ምኽንያት ምንታይም እዋናዊ (production) ኣይተጽናከለን።",
     "delegationsManagedElsewhere": "ደሌጌሽንታት ኣብዚ ንምንባዕ ብቑልጡፍ ይተረኽቡ። መን ኣብዚ ደሌጌሽን እዩ፣ ንማን ተጠቃሚታት ይሕበሩን እና ነቲ ኣድሚን ምንታይ ዝኽእሎ ኣብ ደሌጌሽን ፈንታ ይተኣክል።",
-    "delegationsManagedElsewhereLink": "ደሌጌሽንታት ክኽፈቱ"
+    "delegationsManagedElsewhereLink": "ደሌጌሽንታት ክኽፈቱ",
+    "modelAccess": {
+      "intro": "ንሞዴልን ሓደ ትጠቐም ዝኽእል ማን ይፍለጥ። ሓላፍነት ዝተወሰነ ሞዴል ካዚ ሰብኣይ ንዝዘረበ ሞዴል ይሕሉ፣ በይነ ሰናይ ዝተወሰኑ ሰባት ቀዳም ይምለከት፣ ሓበው ሰናይ ዝተወሰኑ ሰባት ካብ ሓላፍነት ምስ ምእዙ።",
+      "externalNote": "ናይ ኣዚር ይኣእቱ ብዝናብኦ ሞዴልታት ({families}) ናይ ሓበሽበል ኣይሰረዩም ክንወሓን ከምኡ ኣይግበሩን — ንሓላፍነት ንኹሉ ወይ ንማዕረፍታት ንናይ ድሕሪ ነጋሪትን ንሰባት ምስ ተፃወት።",
+      "envelopeNote": "ዝተወሰነ ጥዕና ንምትሕዳስ ናይ ሞዴል መዋዕላዊ ዝወደድ ተስፋ የቀስ ይፃኑ። ዝተወሰነ ጥዕና ናይ ሞዴል ባይ ጥዕና ይፃኑ። ሞዴል ዝበለ ሕጋዊ ኣብ ሓላፍነት ሞዴል ክቕርሕ ኣይኮነን።",
+      "observeNote": "Observe ሞዴ ተኣሪፉ፡ ኣብዚ ዚከኣል ሞዴል ዝተኸሰገ ወይ ምውናት ኣይተቀረበን። ኣብ ደሓሎ ደበላ ብEnforce በለ፡ ህጋዊ ውድብ እንተሓገዘ።",
+      "familyChip": "ወላዲ",
+      "modelChip": "ሞዴል",
+      "otherModels": "ሞዴልታት ዘይኣቦ ወላዲ",
+      "modelsInFamily": "{count, plural, one {# ሞዴል ኣብዚ ወላዲ} other {# ሞዴልታት ኣብዚ ወላዲ}}",
+      "noModels": "ኣይኮነን ሞዴልታት ኣብ ካታሎግ እቲ።",
+      "expand": "ሞዴልታት ርኣይ",
+      "collapse": "ሞዴልታት ምልባሉ",
+      "edit": "ምርማላ",
+      "doneEditing": "ተዓሪፉ",
+      "editNode": "ኣብ {label} ምፍታው ተሰናይ",
+      "defaultLabel": "ቀርና፡ ኹሉ ሰብ",
+      "defaultInherit": "ይተሃረሱ",
+      "defaultUnlimited": "ምድላው",
+      "defaultLimited": "ዝተወሰነ ናይ",
+      "defaultUnavailable": "ኣይሰረየን",
+      "defaultRequestsLabel": "ምውናትታት / ዕለት ንኹሉ ሰብ",
+      "requestsPerDay": "ምውናት / ዕለት",
+      "inheritedFrom": "{state} ካብ {origin} ይተሃረሱ።",
+      "effectiveLabel": "ዝኾነ ርኣይ ዘይተወሰነ ሰባት: {state}።",
+      "inheritedChip": "ተሃረሱ",
+      "origin": {
+        "model": "እዚ ምርጫ",
+        "family": "ወላዲ ናይ",
+        "defaults": "ውቂቡ ናይ ሓላፍነት",
+        "catalogExternal": "እቲ ውዕል ናይ ናይ ወጻኢ ሞዴልታት ኣይሰረዩን ምስ ተግበሩ",
+        "catalog": "ውቂቡ ናይ ካታሎግ"
+      },
+      "state": {
+        "unlimited": "ምድላው",
+        "limited": "ዝተወሰነ ናይ {requests} / ዕለት",
+        "unavailable": "ኣይሰረየን"
+      },
+      "list": {
+        "groups": "ማዕረፍት ዘለዎም",
+        "domains": "ዶሜይን ዘለዎም",
+        "allow": "ተፀዓዮ ሰባት",
+        "deny": "ተኣግዩ ሰባት"
+      },
+      "listHint": {
+        "groups": "ኣብዚ ናይ Entra ማዕረፍታት ዘለዎም ኣብ እቲ ምፍታት ዝተወሰኑ ምርጫታት ይሕጋዩ።",
+        "domains": "ኹሉ ዘለዎም ኢማይ ኣብዚ ዶሜይን እቲ ምፍታው ዝተወሰኑ መስርዕታት ይሕጋዩ።",
+        "allow": "ተፃዓዮ ሰባት ኣብ ውቂቡ ይፈትኑ፤ ንዶሜይን ወይ ውቑቡ ኣይኮናን የቀርና።",
+        "deny": "ተኣግዩ ሰባት ኣይፈትኑን። እዚ ናይ ምፍታው ኩሉ ውዕል ይዕደን።"
+      },
+      "grantUnlimited": "ምድላው",
+      "grantLimited": "ዝተወሰነ ናይ",
+      "termsLabel": "መስርዕ ናይ {target}",
+      "requestsLabel": "ምውናት / ዕለት ናይ {target}",
+      "removeGrant": "{target} ምሕዳስ",
+      "groupsCount": "{count, plural, one {# ማዕረፍ} other {# ማዕረፍታት}}",
+      "domainsCount": "{count, plural, one {# ዶሜይን} other {# ዶሜይንታት}}",
+      "allowCount": "{count, plural, one {# ሰብ ተፃዓዮ} other {# ሰባት ተፃዓዮም}}",
+      "denyCount": "{count, plural, one {# ሰብ ተኣግዩ} other {# ሰባት ተኣግዩም}}",
+      "collisionChip": "ኣብ ናይ ዓለም ዋሕዋሐ ምስክር እዶም ምስተተፅናና",
+      "collisionWarning": "እዚ ሞዴል ወይ ቤተሰብ ኣብ ናይ ዓለም ዋሕዋሐ ምስክር ተተፅናና እዩ። ምውህላው ክተሰርፅ ኣይከኣልን እምበር ናይ ሞዴል ወይ ናይ ቤተሰብ ንከንነው ብዙሕዋይ ክወጽእ ይግበሩ።"
+    },
+    "previewSourceModelAccess": "ምሉእ ምዝርግታ ሞዴል — {list}"
   },
   "m365": {
     "connections": {

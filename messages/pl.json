@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Domyślne globalne",
       "overrides": "Nadpisania",
-      "delegations": "Delegacje"
+      "delegations": "Delegacje",
+      "models": "Modele"
     },
     "tabsLabel": "Sekcje limitów",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "Delegowanie jest wyłączone, więc to nadpisanie nie dotyczy nikogo, dopóki delegowanie nie zostanie ponownie włączone. Nigdy nie jest promowane do poziomu globalnego.",
     "betaPolicyNotice": "Środowisko beta: ta polityka i liczniki jej użycia są przechowywane oddzielnie od produkcji (policy.beta.json). Zmiany dokonane tutaj nie mają wpływu na środowisko produkcyjne.",
     "delegationsManagedElsewhere": "Delegacje są widoczne tutaj tylko do odczytu. Skład delegacji, użytkownicy objęci oraz uprawnienia administratorów zarządzane są w sekcji Delegacje.",
-    "delegationsManagedElsewhereLink": "Otwórz delegacje"
+    "delegationsManagedElsewhereLink": "Otwórz delegacje",
+    "modelAccess": {
+      "intro": "Zdecyduj, kto może korzystać z każdego modelu. Ustawienie dla rodziny obowiązuje jej modele, chyba że model ma własne; osoby na liście mają pierwszeństwo przed domyślnym ustawieniem dla wszystkich; lista blokowanych ma pierwszeństwo przed każdą zgodą.",
+      "externalNote": "Modele hostowane poza środowiskiem Azure ({families}) są niedostępne dla wszystkich, dopóki nie przyznasz im tutaj dostępu — wszystkim przez ustawienie domyślne, lub grupom, domenom i osobom.",
+      "envelopeNote": "Limit żądań dla rodziny to wspólny dzienny budżet dla jej modeli; limit dla modelu to ograniczenie wewnętrzne. Brak limitu dla modelu nie znosi budżetu rodziny.",
+      "observeNote": "Tryb obserwacji jest włączony: nic tutaj jeszcze nie ukrywa modelu ani nie blokuje żądań. Przełącz na Wymuszaj powyżej, gdy zasady będą gotowe.",
+      "familyChip": "Rodzina",
+      "modelChip": "Model",
+      "otherModels": "Modele bez rodziny",
+      "modelsInFamily": "{count, plural, one {# model w tej rodzinie} other {# modeli w tej rodzinie}}",
+      "noModels": "Brak modeli w katalogu.",
+      "expand": "Pokaż modele",
+      "collapse": "Ukryj modele",
+      "edit": "Edytuj",
+      "doneEditing": "Gotowe",
+      "editNode": "Edytuj dostęp dla {label}",
+      "defaultLabel": "Wszyscy inni",
+      "defaultInherit": "Dziedziczone",
+      "defaultUnlimited": "Bez limitu",
+      "defaultLimited": "Ograniczone do",
+      "defaultUnavailable": "Niedostępne",
+      "defaultRequestsLabel": "Żądania dziennie dla wszystkich innych",
+      "requestsPerDay": "żądania / dzień",
+      "inheritedFrom": "Dziedziczy {state} od {origin}.",
+      "effectiveLabel": "Każdy spoza listy otrzymuje: {state}.",
+      "inheritedChip": "dziedziczone",
+      "origin": {
+        "model": "to ustawienie",
+        "family": "jego rodzina",
+        "defaults": "Globalne ustawienia domyślne",
+        "catalogExternal": "zasada że modele zewnętrzne są niedostępne, dopóki nie zostaną przyznane",
+        "catalog": "domyślne ustawienie katalogu"
+      },
+      "state": {
+        "unlimited": "Bez limitu",
+        "limited": "Ograniczone do {requests} / dzień",
+        "unavailable": "Niedostępne"
+      },
+      "list": {
+        "groups": "Grupy z dostępem",
+        "domains": "Domeny z dostępem",
+        "allow": "Osoby dozwolone",
+        "deny": "Osoby zablokowane"
+      },
+      "listHint": {
+        "groups": "Członkowie tych grup Entra mogą korzystać, według zasad określonych dla grupy.",
+        "domains": "Każda osoba z adresem e-mail w tych domenach, według zasad określonych dla domeny.",
+        "allow": "Wskazane osoby mogą korzystać niezależnie od ustawień domyślnych lub domeny.",
+        "deny": "Wskazane osoby nigdy nie mogą korzystać. Ma to pierwszeństwo przed każdą powyższą zgodą."
+      },
+      "grantUnlimited": "Bez limitu",
+      "grantLimited": "Ograniczone do",
+      "termsLabel": "Warunki dla {target}",
+      "requestsLabel": "Żądania dziennie dla {target}",
+      "removeGrant": "Usuń {target}",
+      "groupsCount": "{count, plural, one {# grupa} other {# grupy}}",
+      "domainsCount": "{count, plural, one {# domena} other {# domeny}}",
+      "allowCount": "{count, plural, one {# osoba dozwolona} other {# osób dozwolonych}}",
+      "denyCount": "{count, plural, one {# osoba zablokowana} other {# osób zablokowanych}}",
+      "collisionChip": "Także w ustawieniach globalnych",
+      "collisionWarning": "Ten model lub rodzina jest również skonfigurowana w ustawieniach globalnych. Zapisanie będzie niemożliwe, dopóki jedno z tych ustawień nie zostanie usunięte."
+    },
+    "previewSourceModelAccess": "Zatwierdzenie modelu — {list}"
   },
   "m365": {
     "connections": {

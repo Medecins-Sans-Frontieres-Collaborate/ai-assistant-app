@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Padrões globais",
       "overrides": "Substituições",
-      "delegations": "Delegações"
+      "delegations": "Delegações",
+      "models": "Modelos"
     },
     "tabsLabel": "Seções de limites",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "A delegação está desativada, então esta substituição não se aplica a ninguém até que a delegação seja ativada novamente. Nunca é promovida ao nível global.",
     "betaPolicyNotice": "Ambiente Beta: esta política e seus contadores de uso são armazenados separadamente do ambiente de produção (policy.beta.json). Nada do que você alterar aqui afetará a produção.",
     "delegationsManagedElsewhere": "Delegações exibidas aqui apenas para leitura. Quem está na delegação, quais usuários são abrangidos e o que cada administrador pode fazer são gerenciados na área de Delegações.",
-    "delegationsManagedElsewhereLink": "Abrir Delegações"
+    "delegationsManagedElsewhereLink": "Abrir Delegações",
+    "modelAccess": {
+      "intro": "Decida quem pode usar cada modelo. A configuração de uma família vale para seus modelos, exceto se um modelo tiver sua própria; pessoas em uma lista prevalecem sobre o padrão para os demais; a lista de bloqueio supera qualquer permissão.",
+      "externalNote": "Modelos hospedados fora do ambiente Azure ({families}) ficam indisponíveis para todos até que sejam concedidos aqui — para todos via padrão, ou para grupos, domínios e pessoas.",
+      "envelopeNote": "Um limite de solicitações em uma família é um orçamento diário compartilhado entre seus modelos; um limite em um modelo é uma restrição dentro dele. Ilimitado em um modelo não remove o orçamento da família.",
+      "observeNote": "Modo de observação está ativado: nada aqui esconde um modelo nem bloqueia solicitações ainda. Troque para Aplicar acima quando as regras estiverem certas.",
+      "familyChip": "Família",
+      "modelChip": "Modelo",
+      "otherModels": "Modelos sem família",
+      "modelsInFamily": "{count, plural, one {# modelo nesta família} other {# modelos nesta família}}",
+      "noModels": "Ainda não há modelos no catálogo.",
+      "expand": "Mostrar modelos",
+      "collapse": "Ocultar modelos",
+      "edit": "Editar",
+      "doneEditing": "Concluído",
+      "editNode": "Editar acesso para {label}",
+      "defaultLabel": "Demais pessoas",
+      "defaultInherit": "Herdar",
+      "defaultUnlimited": "Ilimitado",
+      "defaultLimited": "Limitado a",
+      "defaultUnavailable": "Indisponível",
+      "defaultRequestsLabel": "Solicitações por dia para demais pessoas",
+      "requestsPerDay": "solicitações / dia",
+      "inheritedFrom": "Herdado {state} de {origin}.",
+      "effectiveLabel": "Todos que não estão em uma lista recebem: {state}.",
+      "inheritedChip": "herdado",
+      "origin": {
+        "model": "esta configuração",
+        "family": "sua família",
+        "defaults": "Padrões globais",
+        "catalogExternal": "a regra de que modelos externos ficam indisponíveis até serem concedidos",
+        "catalog": "o padrão do catálogo"
+      },
+      "state": {
+        "unlimited": "Ilimitado",
+        "limited": "Limitado a {requests} / dia",
+        "unavailable": "Indisponível"
+      },
+      "list": {
+        "groups": "Grupos com acesso",
+        "domains": "Domínios com acesso",
+        "allow": "Pessoas permitidas",
+        "deny": "Pessoas bloqueadas"
+      },
+      "listHint": {
+        "groups": "Membros destes grupos Entra podem usar, conforme os termos definidos por grupo.",
+        "domains": "Todos com endereço de e-mail nestes domínios, conforme os termos definidos por domínio.",
+        "allow": "Pessoas nomeadas podem usar independentemente do padrão ou do domínio.",
+        "deny": "Pessoas nomeadas nunca podem usar. Isto supera qualquer permissão acima."
+      },
+      "grantUnlimited": "Ilimitado",
+      "grantLimited": "Limitado a",
+      "termsLabel": "Termos para {target}",
+      "requestsLabel": "Solicitações por dia para {target}",
+      "removeGrant": "Remover {target}",
+      "groupsCount": "{count, plural, one {# grupo} other {# grupos}}",
+      "domainsCount": "{count, plural, one {# domínio} other {# domínios}}",
+      "allowCount": "{count, plural, one {# pessoa permitida} other {# pessoas permitidas}}",
+      "denyCount": "{count, plural, one {# pessoa bloqueada} other {# pessoas bloqueadas}}",
+      "collisionChip": "Também nas configurações globais",
+      "collisionWarning": "Este modelo ou família também está configurado nas configurações globais. O salvamento será recusado até que uma das duas opções seja removida."
+    },
+    "previewSourceModelAccess": "Aprovação do modelo — {list}"
   },
   "m365": {
     "connections": {

@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Fikirakirana ankapobeny",
       "overrides": "Manova",
-      "delegations": "Delegations"
+      "delegations": "Delegations",
+      "models": "Modely"
     },
     "tabsLabel": "Fizarana fetra",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "Voahilika ny delegasiona, ka tsy mihatra amin’iza na iza ity fandavana ity raha tsy averina ampiasaina indray ny delegasiona. Tsy havaozina ho amin’ny sehatra maneran-tany izany.",
     "betaPolicyNotice": "Beta environment: voatahiry misaraka amin'ny production (policy.beta.json) ity politika ity sy ny fanisam-pampiasana azy. Tsy misy zavatra ovainao eto hisy fiantraikany amin'ny production.",
     "delegationsManagedElsewhere": "Fanolorana andraikitra aseho eto amin'ny fomba famakiana fotsiny. Ny hoe iza no ao anaty delegasiona, iza no rakofiny ary inona no azony ataon'ny mpitantana tsirairay dia fehezina ao amin'ny faritra Delegations.",
-    "delegationsManagedElsewhereLink": "Sokafy ny Fanolorana andraikitra"
+    "delegationsManagedElsewhereLink": "Sokafy ny Fanolorana andraikitra",
+    "modelAccess": {
+      "intro": "Fidio hoe iza no mahazo mampiasa ny modely tsirairay. Raha tsy manokana fanamboarana manokana ny modely iray, dia manara-dalàna amin'ny an'ny fianakaviana. Ireo olona ao anaty lisitra dia mahazo safidy mihoatra noho ny an'ny rehetra; ary ny ao anaty block list dia mandresy an'izay fanomezan-dalana rehetra.",
+      "externalNote": "Ireo modely mitahiry ivelan'ny tontolo Azure ({families}) dia tsy azo idiran'ny olona rehetra raha tsy omena alalana eto — amin'ny alalan'ny default ho an'ny rehetra, na ho an'ny vondrona, domains, ary olona.",
+      "envelopeNote": "Ny fetran'ny fangatahana amin'ny fianakaviana dia teti-bola iombonana isan'andro ho an'ny modely ao aminy; ny fetra amin'ny modely iray dia fitsipika manokana amin'izany modely izany. Raha tsy voafetra ny modely iray dia tsy midika hoe tsy misy fetra ny fianakaviana.",
+      "observeNote": "Mihetsika ny fomba fanaraha-maso: tsy misy zavatra voafina na tsy avela mandefa fangatahana eto aloha. Ampiasao ny Enforce etsy ambony rehefa efa marina ny fitsipika.",
+      "familyChip": "Fianakaviana",
+      "modelChip": "Modely",
+      "otherModels": "Modely tsy an'ny fianakaviana",
+      "modelsInFamily": "{count, plural, one {# modely ao amin'ity fianakaviana ity} other {# modely ao amin'ity fianakaviana ity}}",
+      "noModels": "Tsy mbola misy modely ao amin'ny katalaogy.",
+      "expand": "Asehoy ny modely",
+      "collapse": "Afeno ny modely",
+      "edit": "Hanova",
+      "doneEditing": "Vita",
+      "editNode": "Ovao ny fidirana ho an'i {label}",
+      "defaultLabel": "Sisa rehetra",
+      "defaultInherit": "Manaram-penitra",
+      "defaultUnlimited": "Tsy voafetra",
+      "defaultLimited": "Voafetra ho",
+      "defaultUnavailable": "Tsy azo idirana",
+      "defaultRequestsLabel": "Fangatahana isan'andro ho an'ny sisa rehetra",
+      "requestsPerDay": "fangatahana / andro",
+      "inheritedFrom": "Mandova ny {state} avy amin'ny {origin}.",
+      "effectiveLabel": "Izay tsy ao anaty lisitra dia mahazo: {state}.",
+      "inheritedChip": "navoaka",
+      "origin": {
+        "model": "io fanamboarana io",
+        "family": "ny fianakaviany",
+        "defaults": "Default maneran-tany",
+        "catalogExternal": "ny fitsipika hoe tsy azo idirana ny modely ivelany raha tsy omena alalana",
+        "catalog": "ny default an'ny katalaogy"
+      },
+      "state": {
+        "unlimited": "Tsy voafetra",
+        "limited": "Voafetra ho {requests} / andro",
+        "unavailable": "Tsy azo idirana"
+      },
+      "list": {
+        "groups": "Vondrona mahazo miditra",
+        "domains": "Domaina mahazo miditra",
+        "allow": "Olona mahazo alalana",
+        "deny": "Olona voasakana"
+      },
+      "listHint": {
+        "groups": "Ny mpikambana amin'ireo vondrona Entra ireo dia afaka mampiasa izany, araka ny fepetra isaky ny vondrona.",
+        "domains": "Ny olona manana adiresy mailaka amin'ireo domaina ireo rehetra, araka ny fepetra isaky ny domaina.",
+        "allow": "Olona voatondro anarana dia afaka mampiasa izany na inona na inona voalaza amin'ny default na ny domainany.",
+        "deny": "Olona voatondro anarana tsy mahazo mampiasa izany mihitsy. Mandresy fetra am-baravarana rehetra io."
+      },
+      "grantUnlimited": "Tsy voafetra",
+      "grantLimited": "Voafetra ho",
+      "termsLabel": "Fepetra ho an'i {target}",
+      "requestsLabel": "Fangatahana isan'andro ho an'i {target}",
+      "removeGrant": "Esory i {target}",
+      "groupsCount": "{count, plural, one {# vondrona} other {# vondrona}}",
+      "domainsCount": "{count, plural, one {# domaina} other {# domaina}}",
+      "allowCount": "{count, plural, one {# olona nahazo alalana} other {# olona nahazo alalana}}",
+      "denyCount": "{count, plural, one {# olona voasakana} other {# olona voasakana}}",
+      "collisionChip": "Ao amin'ny safidy Global defaults koa",
+      "collisionWarning": "Ity modely ity na ny sokajiny dia efa voahevitra ao amin'ny Global defaults. Tsy ho voavonjy raha tsy nesorina amin'ny iray amin'ireo."
+    },
+    "previewSourceModelAccess": "Fanekena modely — {list}"
   },
   "m365": {
     "connections": {

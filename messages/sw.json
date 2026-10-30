@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Mipangilio ya kimataifa",
       "overrides": "Vipengele vilivyozidiwa",
-      "delegations": "Wakilishi"
+      "delegations": "Wakilishi",
+      "models": "Mifano"
     },
     "tabsLabel": "Sehemu za mipaka",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "Ugawaji wake umesitishwa, hivyo mabadiliko haya hayamhusu mtu yeyote hadi ugawaji utakapowezeshwa tena. Haiwahi kupandishwa hadi ngazi ya dunia nzima.",
     "betaPolicyNotice": "Mazingira ya Beta: sera hii na kaunta zake za matumizi zimehifadhiwa kando na zile za uzalishaji (policy.beta.json). Hakuna unachobadilisha hapa kitakachoathiri uzalishaji.",
     "delegationsManagedElsewhere": "Uwakilishi unaonyeshwa hapa kwa usomaji pekee. Nani yuko kwenye uwakilishi, watumiaji wanaofikiwa na kila msimamizi anachoweza kufanya inasimamiwa kwenye eneo la Uwakilishi.",
-    "delegationsManagedElsewhereLink": "Fungua Uwakilishi"
+    "delegationsManagedElsewhereLink": "Fungua Uwakilishi",
+    "modelAccess": {
+      "intro": "Amua ni nani anaweza kutumia kila mfano. Mpangilio wa familia unatumika kwa mifano yake isipokuwa mfano umeweka lake; walio kwenye orodha hushinda chaguo-msingi kwa wengine wote; orodha ya waliozuiwa hushinda ruhusa zote.",
+      "externalNote": "Mifano inayohifadhiwa nje ya mazingira ya Azure ({families}) haitapatikana kwa yeyote hadi uruhusu hapa — kwa wote kupitia chaguo-msingi, au kwa makundi, domains na watu.",
+      "envelopeNote": "Kikomo cha maombi kwenye familia ni bajeti ya siku inayoshirikiwa kati ya mifano yake; kikomo kwenye mfano ni kikomo kwake pekee. Hakuna kikomo kwenye mfano hakiondoi bajeti ya familia.",
+      "observeNote": "Hali ya uangalizi imewashwa: hakuna kinachofichwa au kusitisha ombi kwa sasa. Badilisha kuwa Tekeleza juu mara sheria zitakapokamilika.",
+      "familyChip": "Familia",
+      "modelChip": "Mfano",
+      "otherModels": "Mifano bila familia",
+      "modelsInFamily": "{count, plural, one {# mfano katika familia hii} other {# mifano katika familia hii}}",
+      "noModels": "Hakuna mifano kwenye orodha bado.",
+      "expand": "Onyesha mifano",
+      "collapse": "Ficha mifano",
+      "edit": "Hariri",
+      "doneEditing": "Imekamilika",
+      "editNode": "Hariri upatikanaji wa {label}",
+      "defaultLabel": "Wengine wote",
+      "defaultInherit": "Rithi",
+      "defaultUnlimited": "Bila kikomo",
+      "defaultLimited": "Imewekewa kikomo",
+      "defaultUnavailable": "Haipatikani",
+      "defaultRequestsLabel": "Maombi kwa siku kwa wengine wote",
+      "requestsPerDay": "maombi / siku",
+      "inheritedFrom": "Imeturithi {state} kutoka {origin}.",
+      "effectiveLabel": "Wote ambao hawako kwenye orodha wanapata: {state}.",
+      "inheritedChip": "imeturithiwa",
+      "origin": {
+        "model": "mpangilio huu",
+        "family": "familia yake",
+        "defaults": "Chaguo-msingi za kimataifa",
+        "catalogExternal": "kanuni kwamba mifano ya nje haipatikani hadi iruhusiwe",
+        "catalog": "chaguo-msingi ya orodha"
+      },
+      "state": {
+        "unlimited": "Bila kikomo",
+        "limited": "Imewekewa kikomo cha {requests} / siku",
+        "unavailable": "Haipatikani"
+      },
+      "list": {
+        "groups": "Makundi yenye upatikanaji",
+        "domains": "Domains zenye upatikanaji",
+        "allow": "Watu walioruhusiwa",
+        "deny": "Watu waliozuiwa"
+      },
+      "listHint": {
+        "groups": "Wanachama wa makundi haya ya Entra wanaweza kutumia, kwa masharti yaliyowekwa kwa kila kundi.",
+        "domains": "Kila mtu mwenye anwani ya barua pepe kwenye domains hizi, kwa masharti yaliyowekwa kwa domain.",
+        "allow": "Watu waliotajwa wanaweza kutumia bila kujali chaguo-msingi au domain yao.",
+        "deny": "Watu waliotajwa hawawezi kutumia kabisa. Hii hushinda ruhusa zote juu."
+      },
+      "grantUnlimited": "Bila kikomo",
+      "grantLimited": "Imewekewa kikomo",
+      "termsLabel": "Masharti kwa {target}",
+      "requestsLabel": "Maombi kwa siku kwa {target}",
+      "removeGrant": "Ondoa {target}",
+      "groupsCount": "{count, plural, one {# kundi} other {# makundi}}",
+      "domainsCount": "{count, plural, one {# domaini} other {# domaini}}",
+      "allowCount": "{count, plural, one {# mtu ameruhusiwa} other {# watu wameruhusiwa}}",
+      "denyCount": "{count, plural, one {# mtu amezuiwa} other {# watu wamezuiwa}}",
+      "collisionChip": "Pia katika mipangilio ya kimataifa",
+      "collisionWarning": "Muundo huu au familia yake imepangwa pia chini ya mipangilio ya kimataifa. Kuhifadhi hakutaruhusiwa hadi moja kati ya mbili iondolewe."
+    },
+    "previewSourceModelAccess": "Idhini ya muundo — {list}"
   },
   "m365": {
     "connections": {

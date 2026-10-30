@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Definisyon global yo",
       "overrides": "Eksepsyon yo",
-      "delegations": "Delegasyon"
+      "delegations": "Delegasyon",
+      "models": "Modèl yo"
     },
     "tabsLabel": "Seksyon limit yo",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "Delegasyon li dezaktive, donk eksepsyon sa a pa aplike pou pèsonn jiskaske delegasyon an aktive ankò. Li pap janm monte nan nivo global la.",
     "betaPolicyNotice": "Anviwònman beta : règleman sa a ak konte itilizasyon li yo estoke apa de prensipal la (policy.beta.json). Sa ou chanje isit la pa gen okenn efè sou prensipal la.",
     "delegationsManagedElsewhere": "Delegasyon yo ap parèt isit la sèlman pou lekti. Kiyès ki ladan yo, ki itilizatè yo kouvri ak sa chak admin ka fè, sa jere nan espas Delegasyon an.",
-    "delegationsManagedElsewhereLink": "Ouvri Delegasyon yo"
+    "delegationsManagedElsewhereLink": "Ouvri Delegasyon yo",
+    "modelAccess": {
+      "intro": "Deside kilès ki ka itilize chak modèl. Paramèt yon fanmi aplike pou modèl li yo sof si yon modèl gen pwòp paramèt li; moun sou yon lis pase default pou tout lòt moun; lis blokaj la pase tout lòt otorizasyon.",
+      "externalNote": "Modèl ki anime deyò anviwònman Azure la ({families}) pap disponib pou pèsonn jiskaske ou bay aksè isit la – swa pou tout moun atravè default la, oswa pou gwoup, domèn ak moun.",
+      "envelopeNote": "Yon limit demann sou yon fanmi se yon bidjè pataje pa jou atravè modèl fanmi sa yo; yon limit sou yon modèl se yon plafon andedan li. San limit sou yon modèl pa leve bidjè fanmi an.",
+      "observeNote": "Mòd obsèvasyon limen : anyen isit la pa kache yon modèl ni bloke yon demann pou kounye a. Pase sou Mode Egzekite anlè a lè règ yo kòrèk.",
+      "familyChip": "Fanmi",
+      "modelChip": "Modèl",
+      "otherModels": "Modèl san fanmi",
+      "modelsInFamily": "{count, plural, one {# modèl nan fanmi sa} other {# modèl nan fanmi sa}}",
+      "noModels": "Pa gen okenn modèl nan katalòg la pou kounye a.",
+      "expand": "Montre modèl yo",
+      "collapse": "Kache modèl yo",
+      "edit": "Modifye",
+      "doneEditing": "Fini",
+      "editNode": "Modifye aksè pou {label}",
+      "defaultLabel": "Tout rès moun yo",
+      "defaultInherit": "Eritaj",
+      "defaultUnlimited": "San limit",
+      "defaultLimited": "Limite a",
+      "defaultUnavailable": "Endisponib",
+      "defaultRequestsLabel": "Demann pa jou pou tout rès moun yo",
+      "requestsPerDay": "demann / jou",
+      "inheritedFrom": "Eritaj {state} soti nan {origin}.",
+      "effectiveLabel": "Tout moun ki pa sou lis la jwenn : {state}.",
+      "inheritedChip": "erite",
+      "origin": {
+        "model": "paramèt sa",
+        "family": "fanmi li",
+        "defaults": "Default global yo",
+        "catalogExternal": "règ ki fè modèl ekstèn endisponib jiskaske yo otorize",
+        "catalog": "default katalòg la"
+      },
+      "state": {
+        "unlimited": "San limit",
+        "limited": "Limite a {requests} / jou",
+        "unavailable": "Endisponib"
+      },
+      "list": {
+        "groups": "Gwoup ki gen aksè",
+        "domains": "Domèn ki gen aksè",
+        "allow": "Moun otorize",
+        "deny": "Moun bloke"
+      },
+      "listHint": {
+        "groups": "Manm gwoup Entra sa yo ka itilize li, dapre tèm ki tabli pou chak gwoup.",
+        "domains": "Tout moun ki gen yon adrès imèl nan domèn sa yo, dapre tèm ki tabli pou chak domèn.",
+        "allow": "Moun yo nonmen ka itilize li kèlkeswa sa default oswa domèn yo di.",
+        "deny": "Moun yo nonmen p ap janm ka itilize li. Sa pase tout otorizasyon anlè a."
+      },
+      "grantUnlimited": "San limit",
+      "grantLimited": "Limite a",
+      "termsLabel": "Tèm pou {target}",
+      "requestsLabel": "Demann pa jou pou {target}",
+      "removeGrant": "Retire {target}",
+      "groupsCount": "{count, plural, one {# gwoup} other {# gwoup}}",
+      "domainsCount": "{count, plural, one {# domèn} other {# domèn}}",
+      "allowCount": "{count, plural, one {# moun otorize} other {# moun otorize}}",
+      "denyCount": "{count, plural, one {# moun bloke} other {# moun bloke}}",
+      "collisionChip": "Tou prezan nan Definisyon Global yo",
+      "collisionWarning": "Modèl oswa fanmi sa a anrejistre tou anba Definisyon Global yo. Pa ka sove chanjman jiskaske youn nan de yo efase."
+    },
+    "previewSourceModelAccess": "Apwobasyon modèl — {list}"
   },
   "m365": {
     "connections": {

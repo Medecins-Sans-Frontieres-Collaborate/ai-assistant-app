@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Globale standaardwaarden",
       "overrides": "Overschrijvingen",
-      "delegations": "Delegaties"
+      "delegations": "Delegaties",
+      "models": "Modellen"
     },
     "tabsLabel": "Limietsecties",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "De delegatie is uitgeschakeld, dus deze overschrijving geldt voor niemand totdat de delegatie weer wordt ingeschakeld. Wordt nooit doorgezet naar het globale niveau.",
     "betaPolicyNotice": "Bèta-omgeving: dit beleid en de teller voor gebruik worden apart opgeslagen van productie (policy.beta.json). Alles wat u hier wijzigt, heeft geen invloed op de productie.",
     "delegationsManagedElsewhere": "Delegaties worden hier alleen als alleen-lezen weergegeven. Wie in een delegatie zit, welke gebruikers het betreft en wat elke beheerder mag doen, wordt beheerd in het gedeelte Delegaties.",
-    "delegationsManagedElsewhereLink": "Open Delegaties"
+    "delegationsManagedElsewhereLink": "Open Delegaties",
+    "modelAccess": {
+      "intro": "Bepaal wie elk model mag gebruiken. Een instelling op gezinsniveau geldt voor alle modellen in dat gezin, tenzij een model een eigen instelling heeft; mensen op een lijst gaan boven de standaardinstelling; de blokkadelijst gaat boven elke andere toewijzing.",
+      "externalNote": "Modellen die buiten de Azure-omgeving worden gehost ({families}), zijn voor iedereen niet beschikbaar totdat u ze hier toegang geeft — via de standaardinstelling voor iedereen of voor groepen, domeinen en personen.",
+      "envelopeNote": "Een aanvraaglimiet op een gezin is een gedeeld dagbudget voor al zijn modellen; een limiet op een model is een grens daarbinnen. Onbeperkt op modelniveau heft het gezinsbudget niet op.",
+      "observeNote": "Observe-modus is ingeschakeld: niets verbergt een model of stopt een aanvraag. Zet hierboven op Handhaven zodra de regels kloppen.",
+      "familyChip": "Gezin",
+      "modelChip": "Model",
+      "otherModels": "Modellen zonder gezin",
+      "modelsInFamily": "{count, plural, one {# model in dit gezin} other {# modellen in dit gezin}}",
+      "noModels": "Nog geen modellen in de catalogus.",
+      "expand": "Modellen tonen",
+      "collapse": "Modellen verbergen",
+      "edit": "Bewerken",
+      "doneEditing": "Gereed",
+      "editNode": "Toegang bewerken voor {label}",
+      "defaultLabel": "Iedereen anders",
+      "defaultInherit": "Overnemen",
+      "defaultUnlimited": "Onbeperkt",
+      "defaultLimited": "Beperkt tot",
+      "defaultUnavailable": "Niet beschikbaar",
+      "defaultRequestsLabel": "Aanvragen per dag voor iedereen anders",
+      "requestsPerDay": "aanvragen / dag",
+      "inheritedFrom": "Neemt {state} over van {origin}.",
+      "effectiveLabel": "Iedereen niet op een lijst krijgt: {state}.",
+      "inheritedChip": "overgenomen",
+      "origin": {
+        "model": "deze instelling",
+        "family": "zijn gezin",
+        "defaults": "Globale standaardinstellingen",
+        "catalogExternal": "de regel dat externe modellen niet beschikbaar zijn tot ze zijn toegekend",
+        "catalog": "de standaard van de catalogus"
+      },
+      "state": {
+        "unlimited": "Onbeperkt",
+        "limited": "Beperkt tot {requests} / dag",
+        "unavailable": "Niet beschikbaar"
+      },
+      "list": {
+        "groups": "Groepen met toegang",
+        "domains": "Domeinen met toegang",
+        "allow": "Toegestane personen",
+        "deny": "Geblokkeerde personen"
+      },
+      "listHint": {
+        "groups": "Leden van deze Entra-groepen mogen dit gebruiken, onder de voorwaarden per groep.",
+        "domains": "Iedereen met een e-mailadres op deze domeinen, onder de voorwaarden per domein.",
+        "allow": "Genoemde personen mogen dit gebruiken, ongeacht de standaard of wat hun domein toestaat.",
+        "deny": "Genoemde personen mogen dit nooit gebruiken. Dit gaat boven elke andere toewijzing."
+      },
+      "grantUnlimited": "Onbeperkt",
+      "grantLimited": "Beperkt tot",
+      "termsLabel": "Voorwaarden voor {target}",
+      "requestsLabel": "Aanvragen per dag voor {target}",
+      "removeGrant": "{target} verwijderen",
+      "groupsCount": "{count, plural, one {# groep} other {# groepen}}",
+      "domainsCount": "{count, plural, one {# domein} other {# domeinen}}",
+      "allowCount": "{count, plural, one {# persoon toegestaan} other {# personen toegestaan}}",
+      "denyCount": "{count, plural, one {# persoon geblokkeerd} other {# personen geblokkeerd}}",
+      "collisionChip": "Ook in wereldwijde standaardinstellingen",
+      "collisionWarning": "Dit model of deze familie is ook geconfigureerd onder wereldwijde standaardinstellingen. Opslaan wordt geweigerd totdat een van de twee is verwijderd."
+    },
+    "previewSourceModelAccess": "Modelgoedkeuring — {list}"
   },
   "m365": {
     "connections": {

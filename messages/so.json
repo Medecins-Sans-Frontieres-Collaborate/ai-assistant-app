@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Dejimaha guud",
       "overrides": "Laga reebay",
-      "delegations": "Wakiillo"
+      "delegations": "Wakiillo",
+      "models": "Moodallo"
     },
     "tabsLabel": "Qaybaha xaddidaadda",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "Wakaa is-wareejinta lama hawlgelin, sidaas darteed is-bedelkan cidna kuma kordhayo ilaa markale la furo. Waligood kuma darso tier-ka guud.",
     "betaPolicyNotice": "Deegaanka Beta: siyaasaddan iyo xisaabta isticmaalka waxaa si gooni ah looga kaydiyaa soosaarka (policy.beta.json). Wax kasta oo aad halkan ka beddesho ma saameeyaan soosaarka.",
     "delegationsManagedElsewhere": "Wakiillada waxaa halkan lagu tusaa oo keliya aqriso ahaan. Cidda wakiil ka ah, isticmaalayaasha ay daboolayaan, iyo waxa uu madaxda wakiil walba sameyn karo waxaa lagu maamulaa aagga Wakiillo.",
-    "delegationsManagedElsewhereLink": "Fur Wakiillo"
+    "delegationsManagedElsewhereLink": "Fur Wakiillo",
+    "modelAccess": {
+      "intro": "Go'aami qofka isticmaali kara moodal kasta. Dejinta qoysku waxay saameynaysaa moodallada la xiriira ilaa moodal gaar ah uu isagu gooni isu dejiyo; dadka liiska ku jira ayaa ka mudnaan badan kuwa kale; liiska xayiraaddu waxa uu ka sarreeyaa dhammaan rukhsiyada.",
+      "externalNote": "Moodallada ka baxsan deegaanka Azure ({families}) cidna lama heli karo ilaa aad halkan rukhsad siiso — dhammaan adoo adeegsanaya default ama kooxo, domains, iyo dadka.",
+      "envelopeNote": "Xaddiga codsiga ee qoys waxa uu la wadaaganyahay miisaaniyadda maalinlaha ee moodallada ku jira; xaddidaadda moodal keliya waxa ay xad u tahay gudaheeda. Haddii moodal aan xad lahayn laga dhigo, miisaaniyadda qoyska lagama saaro.",
+      "observeNote": "Habka Diiwaangelinta (Observe) waa shaqeeyaa: wax kasta oo halkan ah weli ma qariyo moodal mana joojiyo codsi. U beddel Enforce marka xeerarku sax noqdaan.",
+      "familyChip": "Qoys",
+      "modelChip": "Model",
+      "otherModels": "Moodallo aan qoys lahayn",
+      "modelsInFamily": "{count, plural, one {# moodal ku jira qoyska} other {# moodal ku jira qoyska}}",
+      "noModels": "Weli moodallo kuma jiro buugga.",
+      "expand": "Muuji moodallo",
+      "collapse": "Qari moodallo",
+      "edit": "Wax ka beddel",
+      "doneEditing": "Dhamey",
+      "editNode": "Wax ka beddel helitaanka {label}",
+      "defaultLabel": "Qof kasta oo kale",
+      "defaultInherit": "Raac",
+      "defaultUnlimited": "Aan xad lahayn",
+      "defaultLimited": "Xadidan ilaa",
+      "defaultUnavailable": "Aan la heli karin",
+      "defaultRequestsLabel": "Codsiyo maalintii qof walba oo kale ah",
+      "requestsPerDay": "codsiyo / maalinti",
+      "inheritedFrom": "Waxa uu ka dhaxlay {state} laga bilaabo {origin}.",
+      "effectiveLabel": "Qof kastaa oo aan liis ku jirin waxa uu helayaa: {state}.",
+      "inheritedChip": "la dhaxlay",
+      "origin": {
+        "model": "deejintan",
+        "family": "qoyskiisa",
+        "defaults": "Dejinta guud",
+        "catalogExternal": "xeerka sheegaya in moodallada dibadda aan la heli karin ilaa la siiyo rukhsad",
+        "catalog": "default-ka catalog-ga"
+      },
+      "state": {
+        "unlimited": "Aan xad lahayn",
+        "limited": "Xadidan ilaa {requests} / maalintii",
+        "unavailable": "Aan la heli karin"
+      },
+      "list": {
+        "groups": "Kooxo leh helitaan",
+        "domains": "Domains leh helitaan",
+        "allow": "Dadka la oggolyahay",
+        "deny": "Dadka la xayiray"
+      },
+      "listHint": {
+        "groups": "Xubnaha kooxahan Entra waxay isticmaali karaan, shuruudaha koox kasta ee loo dejiyay.",
+        "domains": "Dadka wata email ku yaal domains-kan, iyagoo ku saleynaya shuruudaha la dejiyay domain kasta.",
+        "allow": "Dadka magacaaban waxay isticmaali karaan inkastoo default ama domain-koodu uu kale yahay.",
+        "deny": "Dadka magacaaban waligood ma isticmaali karaan. Tani waa ka sarreysaa rukhsad kasta oo kor ku xusan."
+      },
+      "grantUnlimited": "Aan xad lahayn",
+      "grantLimited": "Xadidan ilaa",
+      "termsLabel": "Shuruudaha {target}",
+      "requestsLabel": "Codsiyo maalintii ah ee {target}",
+      "removeGrant": "Ka saar {target}",
+      "groupsCount": "{count, plural, one {# koox} other {# kooxood}}",
+      "domainsCount": "{count, plural, one {# domain} other {# domains}}",
+      "allowCount": "{count, plural, one {# qof la oggolyahay} other {# qof la oggolyahay}}",
+      "denyCount": "{count, plural, one {# qof la xayiray} other {# qof la xayiray}}",
+      "collisionChip": "Sidoo kale waxa ku jira Dejinta Guud",
+      "collisionWarning": "Qaabkan ama qoyska waxa kale oo lagu habeeyey Dejinta Guud. Kaydin lama ogola illaa mid ka mid ah labadaasi la tirtiray."
+    },
+    "previewSourceModelAccess": "Oggolaanshaha model-ka — {list}"
   },
   "m365": {
     "connections": {

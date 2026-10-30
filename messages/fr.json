@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Paramètres globaux par défaut",
       "overrides": "Dérogations",
-      "delegations": "Délégations"
+      "delegations": "Délégations",
+      "models": "Modèles"
     },
     "tabsLabel": "Sections des limites",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "Sa délégation est désactivée, donc cette dérogation ne s’applique à personne tant que la délégation n’est pas réactivée. Elle n’est jamais promue au niveau global.",
     "betaPolicyNotice": "Environnement bêta : cette politique et ses compteurs d'utilisation sont stockés séparément de la production (policy.beta.json). Toute modification ici n'affectera pas la production.",
     "delegationsManagedElsewhere": "Les délégations sont affichées ici en lecture seule. La composition des délégations, les utilisateurs couverts et les droits de chaque administrateur sont gérés dans la section Délégations.",
-    "delegationsManagedElsewhereLink": "Ouvrir Délégations"
+    "delegationsManagedElsewhereLink": "Ouvrir Délégations",
+    "modelAccess": {
+      "intro": "Décidez qui peut utiliser chaque modèle. Un paramètre de famille s'applique à ses modèles, sauf si un modèle définit le sien ; les personnes sur une liste prévalent sur le paramètre par défaut ; la liste de blocage prévaut sur toute autorisation.",
+      "externalNote": "Les modèles hébergés en dehors de l'environnement Azure ({families}) sont indisponibles pour tous tant que vous ne les accordez pas ici — soit à tous via le paramètre par défaut, soit à des groupes, domaines et personnes.",
+      "envelopeNote": "Une limite de requêtes sur une famille correspond à un budget quotidien partagé entre ses modèles ; une limite sur un modèle fixe un plafond en son sein. 'Illimité' sur un modèle n'annule pas le budget familial.",
+      "observeNote": "Le mode Observation est activé : rien ici ne masque un modèle ni n'arrête une requête pour l'instant. Passez en mode Application une fois que les règles sont prêtes.",
+      "familyChip": "Famille",
+      "modelChip": "Modèle",
+      "otherModels": "Modèles sans famille",
+      "modelsInFamily": "{count, plural, one {# modèle dans cette famille} other {# modèles dans cette famille}}",
+      "noModels": "Aucun modèle dans le catalogue pour le moment.",
+      "expand": "Afficher les modèles",
+      "collapse": "Masquer les modèles",
+      "edit": "Modifier",
+      "doneEditing": "Terminé",
+      "editNode": "Modifier l’accès pour {label}",
+      "defaultLabel": "Tous les autres",
+      "defaultInherit": "Héritage",
+      "defaultUnlimited": "Illimité",
+      "defaultLimited": "Limité à",
+      "defaultUnavailable": "Indisponible",
+      "defaultRequestsLabel": "Requêtes par jour pour tous les autres",
+      "requestsPerDay": "requêtes / jour",
+      "inheritedFrom": "Hérite {state} de {origin}.",
+      "effectiveLabel": "Tous ceux qui ne sont pas sur une liste obtiennent : {state}.",
+      "inheritedChip": "hérité",
+      "origin": {
+        "model": "ce paramètre",
+        "family": "sa famille",
+        "defaults": "Paramètres globaux par défaut",
+        "catalogExternal": "la règle selon laquelle les modèles externes sont indisponibles tant qu’ils ne sont pas accordés",
+        "catalog": "le paramètre par défaut du catalogue"
+      },
+      "state": {
+        "unlimited": "Illimité",
+        "limited": "Limité à {requests} / jour",
+        "unavailable": "Indisponible"
+      },
+      "list": {
+        "groups": "Groupes avec accès",
+        "domains": "Domaines avec accès",
+        "allow": "Personnes autorisées",
+        "deny": "Personnes bloquées"
+      },
+      "listHint": {
+        "groups": "Les membres de ces groupes Entra peuvent l’utiliser, selon les conditions définies par groupe.",
+        "domains": "Tous ceux ayant une adresse e-mail dans ces domaines, selon les conditions définies par domaine.",
+        "allow": "Les personnes nommées peuvent l’utiliser, quel que soit le paramètre par défaut ou leur domaine.",
+        "deny": "Les personnes nommées ne peuvent jamais l'utiliser. Cela prévaut sur toute autorisation ci-dessus."
+      },
+      "grantUnlimited": "Illimité",
+      "grantLimited": "Limité à",
+      "termsLabel": "Conditions pour {target}",
+      "requestsLabel": "Requêtes par jour pour {target}",
+      "removeGrant": "Retirer {target}",
+      "groupsCount": "{count, plural, one {# groupe} other {# groupes}}",
+      "domainsCount": "{count, plural, one {# domaine} other {# domaines}}",
+      "allowCount": "{count, plural, one {# personne autorisée} other {# personnes autorisées}}",
+      "denyCount": "{count, plural, one {# personne bloquée} other {# personnes bloquées}}",
+      "collisionChip": "Aussi dans les paramètres globaux par défaut",
+      "collisionWarning": "Ce modèle ou cette famille est également configuré(e) dans les paramètres globaux par défaut. L’enregistrement sera refusé jusqu’à ce que l’un des deux soit supprimé."
+    },
+    "previewSourceModelAccess": "Approbation du modèle — {list}"
   },
   "m365": {
     "connections": {

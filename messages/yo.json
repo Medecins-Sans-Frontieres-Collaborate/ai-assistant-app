@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Aiyipada àgbáyé",
       "overrides": "Àtúnṣe",
-      "delegations": "Ipinkọ́"
+      "delegations": "Ipinkọ́",
+      "models": "Àwòrán"
     },
     "tabsLabel": "Ẹ̀ka àìpẹ̀",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "Ìpinpin rẹ̀ ti dènà, béèyàn nìyí, àyípadà yìí kì í ní ipa sí ẹnikẹ́ni títí tí a fi tún ṣiṣẹ́ pinpin. Kò ní lọ sí pẹpẹ àgbáyé rí.",
     "betaPolicyNotice": "Ayika beta: ofin yii ati awọn kaunti lilo rẹ wa ni ipamọ yato si ayika iṣelọpọ (policy.beta.json). Ohun tí o ba yi pada nihin ko ni ni ipa lori iṣelọpọ.",
     "delegationsManagedElsewhere": "Aṣelọpọ ni a fi han nibi fun kika nikan. Tani wa ninu aṣelọpọ kan, awọn olumulo ti o wa rẹ, ati ohun ti oludari kọọkan le ṣe, ni a n ṣakoso ni agbegbe aṣelọpọ.",
-    "delegationsManagedElsewhereLink": "Ṣii aṣelọpọ"
+    "delegationsManagedElsewhereLink": "Ṣii aṣelọpọ",
+    "modelAccess": {
+      "intro": "Yàn ẹni tí ó lè lò àwòrán kọọkan. Eto idile kan máa kan gbogbo àwòrán rẹ bí kò bá ṣe pé àwòrán kan yàtọ̀ síra; àwọn ènìyàn tó wà lórí àkójọ àtakò àwòkọṣe yókù; àkójọ ìdènà ló kọja gbogbo ìfọwọ́sowọ́pò.",
+      "externalNote": "Àwòrán tí a gbalejo lójú òde Azure ({families}) kò sí fún ẹnikẹ́ni ṣáájú kí o fi ìmúlọ sí wọn níbí — fún gbogbo ènìyàn nípasẹ̀ àwòkọṣe, tàbí fún àwọn ẹgbẹ́, agbègbè, àti àwọn ènìyàn.",
+      "envelopeNote": "Ìyè ìbéèrè tó pẹ̀lú idile jẹ́ adápọ̀ àwọ́n tí wọ́n pẹ̀lú àwòrán rẹ; ìdìyekọ̀ ní àwòrán jẹ́ ààlà ṣe ẹ̀dá rẹ. Tí kò bá sí ààlà lórí àwòrán, kò túnbọ̀ nípa ààlà idile.",
+      "observeNote": "Ipo abẹ̀wọ̀ ń ṣiṣẹ́: kò sí ohun tí o ṣe níbí tó máa fi dùnà tàbí dáwọ̀ ìbéèrè dúró. Ṣàǹfàní sí 'Enforce' lókè lẹ́yìn tí àtúnṣe bá pé.",
+      "familyChip": "Ìdílé",
+      "modelChip": "Àwòrán",
+      "otherModels": "Àwòrán tí kò ní idile",
+      "modelsInFamily": "{count, plural, one {# àwòrán nínú idile yìí} other {# àwòrán nínú idile yìí}}",
+      "noModels": "Kò sí àwòrán nínú àkójọ wíwà yìí.",
+      "expand": "Fi àwòrán hàn",
+      "collapse": "Tí àwòrán bo",
+      "edit": "Ṣàtúnṣe",
+      "doneEditing": "Parí",
+      "editNode": "Ṣàtúnṣe ààyè fún {label}",
+      "defaultLabel": "Gbogbo ènìyàn mìíràn",
+      "defaultInherit": "Tè sílẹ̀",
+      "defaultUnlimited": "Láìsí ààlà",
+      "defaultLimited": "Di sí",
+      "defaultUnavailable": "Kò sí níwọ̀n",
+      "defaultRequestsLabel": "Ìbéèrè l’ọjọ́ kọọkan fún gbogbo ènìyàn mìíràn",
+      "requestsPerDay": "ìbéèrè / ọjọ́",
+      "inheritedFrom": "Gba {state} láti {origin}.",
+      "effectiveLabel": "Gbogbo ẹni tí kò wà lórí àkójọ máa rí: {state}.",
+      "inheritedChip": "tè sílẹ̀",
+      "origin": {
+        "model": "ètò yìí",
+        "family": "idile rẹ",
+        "defaults": "Àwòkọṣe gbogbo",
+        "catalogExternal": "ìlànà pé àwòrán òde kò sí bóòrí kó tó funni",
+        "catalog": "àwòkọṣe àkójọ"
+      },
+      "state": {
+        "unlimited": "Láìsí ààlà",
+        "limited": "Di sí {requests} / ọjọ́",
+        "unavailable": "Kò sí níwọ̀n"
+      },
+      "list": {
+        "groups": "Àwọn ẹgbẹ́ tó ní ààyè",
+        "domains": "Àwọn agbègbè tó ní ààyè",
+        "allow": "Àwọn ènìyàn tí wọ́n fọwọ́sowọ́pò",
+        "deny": "Àwọn ènìyàn tí a dè wọlé"
+      },
+      "listHint": {
+        "groups": "Àwọn ọmọ ẹgbẹ́ Entra wọ̀nyí lè lò, lórí àlàyé tó yàn fún ẹgbẹ́.",
+        "domains": "Gbogbo ẹni tó ní àdírẹ́sì imeeli nínú agbègbè wọ̀nyí, lórí àlàyé tó yàn fún agbègbè.",
+        "allow": "Àwọn ènìyàn tó mẹ́ sí orúkọ lè lò, láìka àwòkọṣe tàbí agbègbè wọn.",
+        "deny": "Àwọn ènìyàn tó mẹ́ sí orúkọ kò gbọ́dọ̀ lò rárá. Èyí kọja gbogbo ìmúlọ lókè."
+      },
+      "grantUnlimited": "Láìsí ààlà",
+      "grantLimited": "Di sí",
+      "termsLabel": "Àlàyé fún {target}",
+      "requestsLabel": "Ìbéèrè l’ọjọ́ kọọkan fún {target}",
+      "removeGrant": "Yọ {target} kúrò",
+      "groupsCount": "{count, plural, one {# ẹgbẹ́} other {# ẹgbẹ́}}",
+      "domainsCount": "{count, plural, one {# agbègbè} other {# agbègbè}}",
+      "allowCount": "{count, plural, one {# ènìyàn tí wọ́n fọwọ́sowọ́pò} other {# ènìyàn tí wọ́n fọwọ́sowọ́pò}}",
+      "denyCount": "{count, plural, one {# ènìyàn tí a dè wọlé} other {# ènìyàn tí a dè wọlé}}",
+      "collisionChip": "Tun wà nínú Àwọn àyípasẹ Gbólóhùn",
+      "collisionWarning": "Àwọ̀n àyíkọ́ tàbí ẹbí yìí tún jẹ́ pàtó nínú Àwọn àyípasẹ Gbólóhùn. Títípamọ̀ yóò kọ́ láì gba kókan kúrò nínú wọn."
+    },
+    "previewSourceModelAccess": "Ìfọwọ́si àyíkọ́ — {list}"
   },
   "m365": {
     "connections": {

@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Mabanga y'isi yose",
       "overrides": "Ibihinduwe",
-      "delegations": "Delegation"
+      "delegations": "Delegation",
+      "models": "Amodeli"
     },
     "tabsLabel": "Ibice vy'ibipimo",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "Iyi delegation yazimijwemwo, bityo iri hinduka ntirigira ico rikora ku muntu n'umwe gushika delegation isubire kwemezwa. Ntizigera yashirwa ku rwego rusangi.",
     "betaPolicyNotice": "Ibidukikije vya Beta: iri tegeko hamwe n'ikoreshwa ryaryo birabitswe ukutari kumwe na production (policy.beta.json). Ivyo uhinduye ngaha ntibigira ico bihinduye kuri production.",
     "delegationsManagedElsewhere": "Delegasiyo zigaragara hano gusa zisomwe. Abo delegasiyo irimwo, abo ikorerako, nivyo umuyobozi umwe wese yemerewe gukora, vyose birongerwa muri zone ya Delegasiyo.",
-    "delegationsManagedElsewhereLink": "Fungura Delegasiyo"
+    "delegationsManagedElsewhereLink": "Fungura Delegasiyo",
+    "modelAccess": {
+      "intro": "Hata n’uwemera gukoresha Modeli. Ivyo vyashizwe kuri famille birashirwa no kuri modeli zayo, kiretse iyo modeli ifise ivyo yishinze; abantu bari kuri urutonde bararenza ibindi vyose; uwuri ku rutonde rwo kubuzwa avuga kuri bose.",
+      "externalNote": "Amodeli zibikwa hanze ya Azure ({families}) ntizishobora gukoreshwa na n’umwe gushika aho uzemeje hano — kuri bose ukoresheje defaults, canke ku matsinda, inzego canke abantu bamwe bamwe.",
+      "envelopeNote": "Umupimo wa requests kuri famille ni ingengo y’umunsi isangiye amodeli yayo; umupimo wa request kuri modeli ni limite muri modeli. Uburyo butagira limite kuri modeli ntibukura ingengo ya famille.",
+      "observeNote": "Observe mode irakomeye: ivyo uhashize ntivihisha modeli canke ngo ihagarike requests. Urahindura kuri Enforce inyuma yo gushiraho amategeko neza.",
+      "familyChip": "Famille",
+      "modelChip": "Modeli",
+      "otherModels": "Amodeli ata famille ifise",
+      "modelsInFamily": "{count, plural, one {# model muri iyi famille} other {# amodeli muri iyi famille}}",
+      "noModels": "Nta moderi ziraboneka muri catalogue.",
+      "expand": "Erekana amodeli",
+      "collapse": "Hisha amodeli",
+      "edit": "Hindura",
+      "doneEditing": "Birarangiye",
+      "editNode": "Hindura uburenganzira bwa {label}",
+      "defaultLabel": "Abasigaye bose",
+      "defaultInherit": "Rirakurikirana",
+      "defaultUnlimited": "Ntaho ibarizwa",
+      "defaultLimited": "Rigeze kuri",
+      "defaultUnavailable": "Ntiboneka",
+      "defaultRequestsLabel": "Requests ku munsi ku bandi bose",
+      "requestsPerDay": "requests / munsi",
+      "inheritedFrom": "Vyamukuye kuri {state} ya {origin}.",
+      "effectiveLabel": "Abatari ku rutonde baza: {state}.",
+      "inheritedChip": "vyakurikiranwe",
+      "origin": {
+        "model": "izi nshirahamwe",
+        "family": "famille yayo",
+        "defaults": "Global defaults",
+        "catalogExternal": "itegeko rivuga ko amodeli yo hanze zitaboneka kiretse wemereye",
+        "catalog": "catalog default"
+      },
+      "state": {
+        "unlimited": "Ntaho igarukira",
+        "limited": "Rigeze kuri {requests} / munsi",
+        "unavailable": "Ntiboneka"
+      },
+      "list": {
+        "groups": "Amatsinda yemerewe",
+        "domains": "Inzego zemerewe",
+        "allow": "Abantu bemerewe",
+        "deny": "Abantu babujijwe"
+      },
+      "listHint": {
+        "groups": "Abari muri aya matsinda ya Entra barashobora kuyikoresha, uko vyashizwe kuri buri tsinda.",
+        "domains": "Buri wese afise email kuri izi nzego, uko vyashizwe kuri urwo rwego.",
+        "allow": "Abantu barashobora kuyikoresha naho default canke urwego rwabo rubivuga ukundi.",
+        "deny": "Abantu bagiye ku rutonde ntibemerewe kuyikoresha. Ibi biraruta ibindi vyemezo vyose."
+      },
+      "grantUnlimited": "Ntaho igarukira",
+      "grantLimited": "Rigeze kuri",
+      "termsLabel": "Amategeko ya {target}",
+      "requestsLabel": "Requests ku munsi kuri {target}",
+      "removeGrant": "Kuraho {target}",
+      "groupsCount": "{count, plural, one {# itsinda} other {# amatsinda}}",
+      "domainsCount": "{count, plural, one {# urwego} other {# inzego}}",
+      "allowCount": "{count, plural, one {# muntu yemerewe} other {# bantu bemerewe}}",
+      "denyCount": "{count, plural, one {# muntu yabujijwe} other {# bantu babujijwe}}",
+      "collisionChip": "Biri kandi mu mugenzi wa Global defaults",
+      "collisionWarning": "Uyu modele canke umuryango nawo washizwe muri Global defaults. Kubika ntibizoshoboka gushika umwe muri vyo ukurwa."
+    },
+    "previewSourceModelAccess": "Kwemeza modele — {list}"
   },
   "m365": {
     "connections": {

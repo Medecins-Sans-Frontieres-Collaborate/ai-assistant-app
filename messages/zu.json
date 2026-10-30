@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Izilungiselelo zomhlaba wonke",
       "overrides": "Okuphambili",
-      "delegations": "Izithunywa"
+      "delegations": "Izithunywa",
+      "models": "Amaphutha"
     },
     "tabsLabel": "Izigaba zemingcele",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "Ukwabelana kwakhona akusebenzi, ngakho lokhu kungena akufanele muntu kuze kube sekuvuliwe futhi. Akukaze kufakwe ezingeni le-global.",
     "betaPolicyNotice": "Imvelo ye-Beta: le nqubomgomo kanye nezibali zayo zokusetshenziswa zigcinwa ngokwehlukana kokukhiqiza (policy.beta.json). Lutho olushintsha lapha luzothinta okukhiqiza.",
     "delegationsManagedElsewhere": "Ukuqokwa kuboniswa lapha kuphela ukufunda. Ubani okuqokwe yena, abasebenzisi abayihlanganisayo nokuthi yibaphi amalungelo onompetha bekuphathwa endaweni yokuqokwa.",
-    "delegationsManagedElsewhereLink": "Vula Ukuqokwa"
+    "delegationsManagedElsewhereLink": "Vula Ukuqokwa",
+    "modelAccess": {
+      "intro": "Nquma ukuthi ubani ongasebenzisa imodeli ngayinye. Isilungiselelo somndeni sisebenza kumamodeli awo ngaphandle kokuba imodeli isete esayo; abantu abakuhlu bangathelela okuzenzakalelayo kwabanye bonke; uhlu lokuvimba lunqoba noma yikuphi ukugunyazwa.",
+      "externalNote": "Amaphutha agcinwe ngaphandle kwendawo ye-Azure ({families}) awatholakali kubo bonke kuze kube uwanikeza imvume lapha — kubo bonke ngokuthi kube yinto okuzenzakalelayo, noma kumaqembu, izizinda, nabantu.",
+      "envelopeNote": "Umkhawulo wesicelo kumndeni uyibhajethi yansuku zonke eyabelwana phakathi kwamamodeli awo; umkhawulo kwimodeli usho umkhawulo ngaphakathi kuyo. Okungapheli kwimodeli akusho ukukhulula umkhawulo womndeni.",
+      "observeNote": "Imodi yokubuka ivuliwe: akukho okucashiwa noma okuvimba isicelo okwamanje. Shintshela ku-Enforce ngenhla uma imithetho isilungile.",
+      "familyChip": "Umndeni",
+      "modelChip": "Imodeli",
+      "otherModels": "Amaphutha angenawo umndeni",
+      "modelsInFamily": "{count, plural, one {# imodeli kulomndeni} other {# amamodeli kulomndeni}}",
+      "noModels": "Awekho amamodeli ekhasini okwamanje.",
+      "expand": "Bonisa amamodeli",
+      "collapse": "Fihla amamodeli",
+      "edit": "Hlela",
+      "doneEditing": "Kuqediwe",
+      "editNode": "Hlela ukufinyelela kuka-{label}",
+      "defaultLabel": "Abanye bonke",
+      "defaultInherit": "Landela",
+      "defaultUnlimited": "Akekho umkhawulo",
+      "defaultLimited": "Kunqunyelwe ku",
+      "defaultUnavailable": "Akutholakali",
+      "defaultRequestsLabel": "Izicelo ngosuku kwabanye bonke",
+      "requestsPerDay": "izicelo / usuku",
+      "inheritedFrom": "Kuthatha {state} ku-{origin}.",
+      "effectiveLabel": "Abangekho ohlwini bathola: {state}.",
+      "inheritedChip": "kuthathiwe",
+      "origin": {
+        "model": "lesi silungiselelo",
+        "family": "umndeni wakhe",
+        "defaults": "Okuzenzakalelayo kwendawo",
+        "catalogExternal": "umthetho wokuthi amamodeli angaphandle awatholakali kuze kunikwe imvume",
+        "catalog": "okuzenzakalelayo kwekhasikhali"
+      },
+      "state": {
+        "unlimited": "Akekho umkhawulo",
+        "limited": "Kunqunyelwe ku-{requests} / usuku",
+        "unavailable": "Akutholakali"
+      },
+      "list": {
+        "groups": "Amaqembu anegunya",
+        "domains": "Izizinda ezinokufinyelela",
+        "allow": "Abantu abavunyelwe",
+        "deny": "Abantu abavinjiwe"
+      },
+      "listHint": {
+        "groups": "Amalungu ala maqembu e-Entra angayisebenzisa, ngemigomo elungiselelwe iqembu ngalinye.",
+        "domains": "Wonke umuntu onekheli le-imeyili kulezi zindao, ngemigomo elungiselelwe isizinda.",
+        "allow": "Abantu abaqokiwe bangayisebenzisa noma ngabe yini okuzenzakalelayo noma isizinda sabo sisho ini.",
+        "deny": "Abantu abaqokiwe abakaze bayisebenzise. Lokhu kudlula yonke imvume."
+      },
+      "grantUnlimited": "Akekho umkhawulo",
+      "grantLimited": "Kunqunyelwe ku",
+      "termsLabel": "Imigomo ye-{target}",
+      "requestsLabel": "Izicelo ngosuku zika-{target}",
+      "removeGrant": "Susa u-{target}",
+      "groupsCount": "{count, plural, one {# iqembu} other {# amaqembu}}",
+      "domainsCount": "{count, plural, one {# isizinda} other {# izizinda}}",
+      "allowCount": "{count, plural, one {# umuntu ovunyelwe} other {# abantu abavunyelwe}}",
+      "denyCount": "{count, plural, one {# umuntu ovinjiwe} other {# abantu abavinjiwe}}",
+      "collisionChip": "Iphinde itholakale ku-Global defaults",
+      "collisionWarning": "Le modeli noma umndeni wayo iphinde yamiswa ngaphansi kwe-Global defaults. Ukulondoloza kuzonqatshwa kuze kube omunye wabo ususiwe."
+    },
+    "previewSourceModelAccess": "Ukuvunywa kwemodeli — {list}"
   },
   "m365": {
     "connections": {

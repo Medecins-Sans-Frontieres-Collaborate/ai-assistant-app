@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Nzoni ya mbi",
       "overrides": "Kété ti mbéni",
-      "delegations": "Delegation"
+      "delegations": "Delegation",
+      "models": "Model ti mbi"
     },
     "tabsLabel": "Pöngö na nzoni",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "Delegation tî yâ apê kîri, ebe kodro na sô apê linga ti môkô tî delegation a kîri na yâ tî sôsö. Ködörö na apê bêti gbalo na mbi.",
     "betaPolicyNotice": "Beta ti mbi: Bê ti lo kêtê na sô ti mbi ti, ti usage counters na yeke sô ti lo na bê lo sô ti mbi bê ti mbi ti bê (policy.beta.json). Yeke ti oko na kêtê ape na sô ti mbi na production.",
     "delegationsManagedElsewhere": "Béni tî yângâ yumbu ape na ngû tî lê kodro. Ani nani yângâ, nani kodro sô a zarama na nti yângâ, na wa admin ngû ngû a ke lê tî zarama, mbi yé sô na Béni tî yângâ.",
-    "delegationsManagedElsewhereLink": "Ouvri Béni tî yângâ"
+    "delegationsManagedElsewhereLink": "Ouvri Béni tî yângâ",
+    "modelAccess": {
+      "intro": "Bini na sô na mbi na sâ model mo azoyé. Afamilia na model bako na mo azoyé mo, koto model mo kpe na na zo azoyé. Ba mo na list mo ti azoyé ti mbi, mbi mpo so; ba mo na block list mo ti mbi kangbi na azoyé ti mbi.",
+      "externalNote": "Model ti mbi mo na ko na Azure ({families}) mo mbi kangbi na mbi, ti mbi azoyé mo fa — na mbi lô mo ti mbi, ayeke na group, domain na mo ti mbi.",
+      "envelopeNote": "Limiti na request na familia na model bako na mbi mo ti mbi, limite na model mo ti mbi fa. Unlimited na model mbi mbi kangbi fa limite na familia.",
+      "observeNote": "Mode ti observe ti mbi: ni mbi azoyé model na mbi dampi request. Kwe na Enforce ti mbi so na règle mo zo azoyé.",
+      "familyChip": "Familia",
+      "modelChip": "Model",
+      "otherModels": "Model ti mbi na mbi familia",
+      "modelsInFamily": "{count, plural, one {# model na familia ti mbi} other {# model ti mbi na familia ti mbi}}",
+      "noModels": "Bé model ti mbi na catalog na mbi.",
+      "expand": "Mo model ti mbi",
+      "collapse": "Ka model ti mbi",
+      "edit": "Labo",
+      "doneEditing": "Labo esese",
+      "editNode": "Labo accès ti {label}",
+      "defaultLabel": "Mo ti mbi lô",
+      "defaultInherit": "Kwere",
+      "defaultUnlimited": "Bé limite",
+      "defaultLimited": "Limiti na",
+      "defaultUnavailable": "Mbi kangbi",
+      "defaultRequestsLabel": "Request ti mbi lô na denge",
+      "requestsPerDay": "request / denge",
+      "inheritedFrom": "Akwere {state} fa {origin}.",
+      "effectiveLabel": "Mo ti mbi na list mo ti mbi lô na: {state}.",
+      "inheritedChip": "akwere",
+      "origin": {
+        "model": "setting ti mbi so",
+        "family": "familia ti mbi",
+        "defaults": "Global defaults",
+        "catalogExternal": "règle ti mbi na model ti mbi na ko kangbi na mbi azoyé",
+        "catalog": "catalog default"
+      },
+      "state": {
+        "unlimited": "Bé limite",
+        "limited": "Limiti na {requests} / denge",
+        "unavailable": "Mbi kangbi"
+      },
+      "list": {
+        "groups": "Group ti mbi na accès",
+        "domains": "Domain ti mbi na accès",
+        "allow": "Mo ti mbi na azoyé",
+        "deny": "Mo ti mbi na kangbi"
+      },
+      "listHint": {
+        "groups": "Mo ti Entra group so mo azoyé mo, na règle mo ti group.",
+        "domains": "Mo ti mbi na email na domain so, na règle mo ti domain.",
+        "allow": "Mo ti mbi na azoyé na setting ti domain na default.",
+        "deny": "Mo ti mbi na kangbi. Mo ti mbi na kangbi na azoyé."
+      },
+      "grantUnlimited": "Bé limite",
+      "grantLimited": "Limiti na",
+      "termsLabel": "Règle ti {target}",
+      "requestsLabel": "Request ti denge na {target}",
+      "removeGrant": "Lé {target}",
+      "groupsCount": "{count, plural, one {# group} other {# group ti mbi}}",
+      "domainsCount": "{count, plural, one {# domain} other {# domain ti mbi}}",
+      "allowCount": "{count, plural, one {# mo ti mbi na azoyé} other {# mo ti mbi na azoyé}}",
+      "denyCount": "{count, plural, one {# mo ti mbi na kangbi} other {# mo ti mbi na kangbi}}",
+      "collisionChip": "Duti na Global defaults",
+      "collisionWarning": "Model ti so familia ti yeke na Global defaults. Oko na klé ti model ou familia ti so oko ti la futi mo kui kidô."
+    },
+    "previewSourceModelAccess": "Model ti yame — {list}"
   },
   "m365": {
     "connections": {

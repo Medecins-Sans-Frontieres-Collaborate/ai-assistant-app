@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Mingambo ya mokili mobimba",
       "overrides": "Kobongola",
-      "delegations": "Bokaboli"
+      "delegations": "Bokaboli",
+      "models": "Bamodelo"
     },
     "tabsLabel": "Biteni ya mingambo",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "Delegation na yango ezali te, boye modification oyo ekosala mpo na moto moko te kino delegation ezongeli. Ekotombwana te na niveau global.",
     "betaPolicyNotice": "Ebateli ya beta: politike oyo ná ba komptɛr ya mikakatano na yango ebombami polele na esika ekabwani na production (policy.beta.json). Eloko nyonso okosala awa ekobongola te production.",
     "delegationsManagedElsewhere": "Bato ya ekateli emonisami awa kaka mpo na kotala. Nani azali na ekateli, bato nini bazali kokumbama mpe nini mokambi akoki kosala ezalaka kosalelama na eteni ya Bato ya ekateli.",
-    "delegationsManagedElsewhereLink": "Fungola Bato ya ekateli"
+    "delegationsManagedElsewhereLink": "Fungola Bato ya ekateli",
+    "modelAccess": {
+      "intro": "Kata baye bakoki kosalela modelo mokomoko. Paramɛtɛ ya libota esalelaka bamodelo na yango soki moko moko na bango ezwi paramɛtɛ na ye moko; bato na sololaka batondi koleka paramɛtɛ ya bato nyonso; liste ya koboya eboya nyonso ba granted.",
+      "externalNote": "Bamodelo oyo bazali libanda ya Azure ({families}) bazali te mpo na bato nyonso kino opesi nzela awa — na bato nyonso na nzela ya paramɛtɛ par défaut, to na groupe, domaine, to bato oyo.",
+      "envelopeNote": "Limite ya ba requêtes na libota ezali budget ya mokolo ezali kosakana na bamodelo na yango; limite na modelo ezali mbeto na kati na yango. Soki ezangi limite na modelo ekobongisa te budget ya libota.",
+      "observeNote": "Mode Observe ezali: eloko moko awa ekobomba te modelo to kopekisa requête. Tia Enforce na likolo soki mibeko ezali malamu.",
+      "familyChip": "Libota",
+      "modelChip": "Modelo",
+      "otherModels": "Bamodelo oyo bazangi libota",
+      "modelsInFamily": "{count, plural, one {# modelo na libota oyo} other {# bamodelo na libota oyo}}",
+      "noModels": "Nanu bamodelo ezali te na catalogue.",
+      "expand": "Lakisa bamodelo",
+      "collapse": "Bomba bamodelo",
+      "edit": "Kobongola",
+      "doneEditing": "Sukisi",
+      "editNode": "Bongola accès ya {label}",
+      "defaultLabel": "Bato mosusu nyonso",
+      "defaultInherit": "Zwa na libota",
+      "defaultUnlimited": "Ezangi limite",
+      "defaultLimited": "Ezali kaka tina",
+      "defaultUnavailable": "Ezali te",
+      "defaultRequestsLabel": "Ba requête mokolo na bato mosusu nyonso",
+      "requestsPerDay": "ba requête / mokolo",
+      "inheritedFrom": "Azwi {state} kowuta epai ya {origin}.",
+      "effectiveLabel": "Bato nyonso oyo balingi te na liste bazwi: {state}.",
+      "inheritedChip": "eyaki na libota",
+      "origin": {
+        "model": "paramɛtɛ oyo",
+        "family": "libota na yango",
+        "defaults": "Paramɛtɛ nyonso",
+        "catalogExternal": "mibeko oyo elobi bamodelo libanda bazali te mpo na bato nyonso kino epesi nzela",
+        "catalog": "paramɛtɛ défaut ya catalogue"
+      },
+      "state": {
+        "unlimited": "Ezangi limite",
+        "limited": "Ezali kaka tina {requests} / mokolo",
+        "unavailable": "Ezali te"
+      },
+      "list": {
+        "groups": "Bato na groupe oyo bazwi accès",
+        "domains": "Ba domaine oyo bazwi accès",
+        "allow": "Bato oyo baponami",
+        "deny": "Bato oyo baboyami"
+      },
+      "listHint": {
+        "groups": "Bamembere ya ba groupe Entra oyo bakoki kosalela yango, kaka kolanda makambo na groupe.",
+        "domains": "Bato nyonso na adresse email ya domaine oyo, kolanda mibeko ya domaine.",
+        "allow": "Bato oyo babengami bakoki kosalela yango ata soki default to domaine na bango elobi nini.",
+        "deny": "Bato oyo babengami bakoki soki moke te kosalela yango. Ekoki koleka ba grant nyonso."
+      },
+      "grantUnlimited": "Ezangi limite",
+      "grantLimited": "Ezali kaka tina",
+      "termsLabel": "Mibeko ya {target}",
+      "requestsLabel": "Ba requête mokolo ya {target}",
+      "removeGrant": "Longola {target}",
+      "groupsCount": "{count, plural, one {# groupe} other {# ba groupe}}",
+      "domainsCount": "{count, plural, one {# domaine} other {# ba domaine}}",
+      "allowCount": "{count, plural, one {# moto abongi} other {# bato babongi}}",
+      "denyCount": "{count, plural, one {# moto aboyami} other {# bato baboyami}}",
+      "collisionChip": "Pe ezali na Basaleli ya Global",
+      "collisionWarning": "Modɛle oyo to libota na yango ezali mpe kosalelama na Basaleli ya Global. Kobomba ekokóma mbeba soki moko na moko elongoli te."
+    },
+    "previewSourceModelAccess": "Ndongolá modelɛ — {list}"
   },
   "m365": {
     "connections": {

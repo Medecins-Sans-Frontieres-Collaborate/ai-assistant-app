@@ -5635,7 +5635,8 @@
     "tab": {
       "defaults": "Mặc định toàn cầu",
       "overrides": "Ghi đè",
-      "delegations": "Ủy quyền"
+      "delegations": "Ủy quyền",
+      "models": "Mô hình"
     },
     "tabsLabel": "Các mục giới hạn",
     "category": {
@@ -6063,7 +6064,69 @@
     "disabledDelegationNote": "Ủy quyền của nó đang bị tắt, nên ghi đè này sẽ không áp dụng cho ai cho đến khi ủy quyền được bật lại. Nó không bao giờ được nâng lên mức toàn cầu.",
     "betaPolicyNotice": "Môi trường beta: chính sách này và bộ đếm sử dụng của nó được lưu trữ riêng biệt với môi trường sản xuất (policy.beta.json). Mọi thay đổi tại đây sẽ không ảnh hưởng đến môi trường sản xuất.",
     "delegationsManagedElsewhere": "Phân quyền được hiển thị ở đây chỉ để xem. Ai thuộc phân quyền nào, người dùng nào được bao phủ và mỗi quản trị viên được phép làm gì sẽ được quản lý trong mục Phân quyền.",
-    "delegationsManagedElsewhereLink": "Mở Phân quyền"
+    "delegationsManagedElsewhereLink": "Mở Phân quyền",
+    "modelAccess": {
+      "intro": "Quyết định ai có thể sử dụng từng mô hình. Thiết lập của một nhóm áp dụng cho các mô hình của nó trừ khi mô hình có thiết lập riêng; những người có trong danh sách sẽ được ưu tiên hơn mặc định cho những người khác; danh sách chặn có quyền ưu tiên cao nhất.",
+      "externalNote": "Các mô hình được lưu trữ bên ngoài môi trường Azure ({families}) sẽ không khả dụng cho bất kỳ ai cho đến khi bạn cấp quyền tại đây — cho tất cả mọi người thông qua mặc định, hoặc cho nhóm, tên miền và cá nhân.",
+      "envelopeNote": "Giới hạn yêu cầu trên một nhóm là ngân sách chia sẻ hàng ngày cho các mô hình của nó; giới hạn trên một mô hình là giới hạn trong chính mô hình đó. Không giới hạn trên một mô hình không nâng ngân sách chung của nhóm.",
+      "observeNote": "Chế độ quan sát đang bật: các thiết lập ở đây chưa ẩn mô hình hoặc từ chối yêu cầu nào. Hãy chuyển sang Chế độ áp dụng ở trên khi đã cấu hình đúng quy tắc.",
+      "familyChip": "Nhóm",
+      "modelChip": "Mô hình",
+      "otherModels": "Mô hình không thuộc nhóm nào",
+      "modelsInFamily": "{count, plural, one {# mô hình trong nhóm này} other {# mô hình trong nhóm này}}",
+      "noModels": "Chưa có mô hình nào trong danh mục.",
+      "expand": "Hiển thị mô hình",
+      "collapse": "Ẩn mô hình",
+      "edit": "Chỉnh sửa",
+      "doneEditing": "Hoàn thành",
+      "editNode": "Chỉnh sửa quyền truy cập cho {label}",
+      "defaultLabel": "Những người khác",
+      "defaultInherit": "Kế thừa",
+      "defaultUnlimited": "Không giới hạn",
+      "defaultLimited": "Giới hạn đến",
+      "defaultUnavailable": "Không khả dụng",
+      "defaultRequestsLabel": "Số yêu cầu mỗi ngày cho những người khác",
+      "requestsPerDay": "yêu cầu / ngày",
+      "inheritedFrom": "Kế thừa {state} từ {origin}.",
+      "effectiveLabel": "Ai không có trên danh sách sẽ nhận: {state}.",
+      "inheritedChip": "kế thừa",
+      "origin": {
+        "model": "thiết lập này",
+        "family": "nhóm của nó",
+        "defaults": "Mặc định toàn hệ thống",
+        "catalogExternal": "quy tắc rằng mô hình bên ngoài không khả dụng cho đến khi được cấp quyền",
+        "catalog": "mặc định của danh mục"
+      },
+      "state": {
+        "unlimited": "Không giới hạn",
+        "limited": "Giới hạn {requests} / ngày",
+        "unavailable": "Không khả dụng"
+      },
+      "list": {
+        "groups": "Nhóm có quyền truy cập",
+        "domains": "Tên miền có quyền truy cập",
+        "allow": "Người được phép",
+        "deny": "Người bị chặn"
+      },
+      "listHint": {
+        "groups": "Thành viên của các nhóm Entra này có thể sử dụng, theo điều kiện của từng nhóm.",
+        "domains": "Tất cả người có địa chỉ email tại các tên miền này, theo điều kiện ứng với từng tên miền.",
+        "allow": "Những người được chỉ định này có thể sử dụng dù mặc định hoặc tên miền của họ quy định thế nào.",
+        "deny": "Những người được chỉ định này sẽ không bao giờ được sử dụng. Luôn ưu tiên quyền chặn này."
+      },
+      "grantUnlimited": "Không giới hạn",
+      "grantLimited": "Giới hạn đến",
+      "termsLabel": "Điều kiện cho {target}",
+      "requestsLabel": "Số yêu cầu mỗi ngày cho {target}",
+      "removeGrant": "Xóa {target}",
+      "groupsCount": "{count, plural, one {# nhóm} other {# nhóm}}",
+      "domainsCount": "{count, plural, one {# tên miền} other {# tên miền}}",
+      "allowCount": "{count, plural, one {# người được phép} other {# người được phép}}",
+      "denyCount": "{count, plural, one {# người bị chặn} other {# người bị chặn}}",
+      "collisionChip": "Cũng có trong Thiết lập mặc định toàn cầu",
+      "collisionWarning": "Mô hình hoặc nhóm này cũng được cấu hình trong Thiết lập mặc định toàn cầu. Việc lưu sẽ bị từ chối cho đến khi một trong hai được xóa."
+    },
+    "previewSourceModelAccess": "Phê duyệt mô hình — {list}"
   },
   "m365": {
     "connections": {

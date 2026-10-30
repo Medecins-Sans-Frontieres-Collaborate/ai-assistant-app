@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Globala standardvärden",
       "overrides": "Åsidosättningar",
-      "delegations": "Delegationer"
+      "delegations": "Delegationer",
+      "models": "Modeller"
     },
     "tabsLabel": "Begränsningssektioner",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "Dess delegering är inaktiverad, så denna överskrivning gäller ingen förrän delegeringen aktiveras igen. Den uppgraderas aldrig till global nivå.",
     "betaPolicyNotice": "Beta-miljö: denna policy och dess användningsräknare lagras separat från produktionen (policy.beta.json). Ändringar du gör här påverkar inte produktionen.",
     "delegationsManagedElsewhere": "Delegationer visas här som endast läsbara. Vilka som ingår i en delegation, vilka användare som omfattas och vad varje administratör får göra hanteras i Delegations-området.",
-    "delegationsManagedElsewhereLink": "Öppna Delegationer"
+    "delegationsManagedElsewhereLink": "Öppna Delegationer",
+    "modelAccess": {
+      "intro": "Bestäm vem som får använda varje modell. En familjs inställning gäller för dess modeller om inte en modell har en egen; personer på en lista gäller över standardinställningen för andra; blocklistan prioriteras över alla tilldelningar.",
+      "externalNote": "Modeller som ligger utanför Azure-miljön ({families}) är inte tillgängliga för någon förrän du beviljar åtkomst här — för alla via standardinställningen, eller för grupper, domäner och personer.",
+      "envelopeNote": "En begäransgräns på en familj är en gemensam dagsbudget för dess modeller; en gräns på en modell är ett tak inom den. Obegränsat på en modell höjer inte familjens budget.",
+      "observeNote": "Observera-läge är på: ingenting här döljer en modell eller stoppar en begäran ännu. Byt till Verkställ ovan när reglerna är korrekta.",
+      "familyChip": "Familj",
+      "modelChip": "Modell",
+      "otherModels": "Modeller utan familj",
+      "modelsInFamily": "{count, plural, one {# modell i denna familj} other {# modeller i denna familj}}",
+      "noModels": "Inga modeller i katalogen ännu.",
+      "expand": "Visa modeller",
+      "collapse": "Dölj modeller",
+      "edit": "Redigera",
+      "doneEditing": "Klar",
+      "editNode": "Redigera åtkomst för {label}",
+      "defaultLabel": "Alla andra",
+      "defaultInherit": "Ärv",
+      "defaultUnlimited": "Obegränsad",
+      "defaultLimited": "Begränsad till",
+      "defaultUnavailable": "Otillgänglig",
+      "defaultRequestsLabel": "Förfrågningar per dag för alla andra",
+      "requestsPerDay": "förfrågningar / dag",
+      "inheritedFrom": "Ärver {state} från {origin}.",
+      "effectiveLabel": "Alla som inte är på en lista får: {state}.",
+      "inheritedChip": "ärvd",
+      "origin": {
+        "model": "denna inställning",
+        "family": "dess familj",
+        "defaults": "Globala standardvärden",
+        "catalogExternal": "regeln att externa modeller är otillgängliga tills de beviljats åtkomst",
+        "catalog": "katalogens standardvärde"
+      },
+      "state": {
+        "unlimited": "Obegränsad",
+        "limited": "Begränsad till {requests} / dag",
+        "unavailable": "Otillgänglig"
+      },
+      "list": {
+        "groups": "Grupper med åtkomst",
+        "domains": "Domäner med åtkomst",
+        "allow": "Personer med tillåtelse",
+        "deny": "Blockerade personer"
+      },
+      "listHint": {
+        "groups": "Medlemmar i dessa Entra-grupper får använda den, enligt villkoren som är satta per grupp.",
+        "domains": "Alla med en e-postadress i dessa domäner, enligt villkoren per domän.",
+        "allow": "Namngivna personer får använda den oavsett standard eller deras domäninställning.",
+        "deny": "Namngivna personer får aldrig använda den. Detta prioriteras över alla tilldelningar ovan."
+      },
+      "grantUnlimited": "Obegränsad",
+      "grantLimited": "Begränsad till",
+      "termsLabel": "Villkor för {target}",
+      "requestsLabel": "Förfrågningar per dag för {target}",
+      "removeGrant": "Ta bort {target}",
+      "groupsCount": "{count, plural, one {# grupp} other {# grupper}}",
+      "domainsCount": "{count, plural, one {# domän} other {# domäner}}",
+      "allowCount": "{count, plural, one {# person tillåten} other {# personer tillåtna}}",
+      "denyCount": "{count, plural, one {# person blockerad} other {# personer blockerade}}",
+      "collisionChip": "Finns även i globala standardinställningar",
+      "collisionWarning": "Den här modellen eller familjen är också konfigurerad under globala standardinställningar. Spara kommer att nekas tills en av de två tas bort."
+    },
+    "previewSourceModelAccess": "Modelgodkännande — {list}"
   },
   "m365": {
     "connections": {

@@ -5425,8 +5425,70 @@
     "betaPolicyNotice": "Beta environment: this policy and its usage counters are stored separately from production (policy.beta.json). Nothing you change here affects production.",
     "tab": {
       "defaults": "Global defaults",
+      "models": "Models",
       "overrides": "Overrides",
       "delegations": "Delegations"
+    },
+    "modelAccess": {
+      "intro": "Decide who may use each model. A family's setting applies to its models unless a model sets its own; people on a list beat the default for everyone else; the block list beats every grant.",
+      "externalNote": "Models hosted outside the Azure environment ({families}) are unavailable to everyone until you grant them here — to everyone via the default, or to groups, domains and people.",
+      "envelopeNote": "A request limit on a family is a shared daily budget across its models; a limit on a model is a cap within it. Unlimited on a model does not lift a family budget.",
+      "observeNote": "Observe mode is on: nothing here hides a model or stops a request yet. Switch to Enforce above once the rules are right.",
+      "familyChip": "Family",
+      "modelChip": "Model",
+      "otherModels": "Models without a family",
+      "modelsInFamily": "{count, plural, one {# model in this family} other {# models in this family}}",
+      "noModels": "No models in the catalog yet.",
+      "expand": "Show models",
+      "collapse": "Hide models",
+      "edit": "Edit",
+      "doneEditing": "Done",
+      "editNode": "Edit access for {label}",
+      "defaultLabel": "Everyone else",
+      "defaultInherit": "Inherit",
+      "defaultUnlimited": "Unlimited",
+      "defaultLimited": "Limited to",
+      "defaultUnavailable": "Unavailable",
+      "defaultRequestsLabel": "Requests per day for everyone else",
+      "requestsPerDay": "requests / day",
+      "inheritedFrom": "Inherits {state} from {origin}.",
+      "effectiveLabel": "Everyone not on a list gets: {state}.",
+      "inheritedChip": "inherited",
+      "origin": {
+        "model": "this setting",
+        "family": "its family",
+        "defaults": "Global defaults",
+        "catalogExternal": "the rule that external models are unavailable until granted",
+        "catalog": "the catalog default"
+      },
+      "state": {
+        "unlimited": "Unlimited",
+        "limited": "Limited to {requests} / day",
+        "unavailable": "Unavailable"
+      },
+      "list": {
+        "groups": "Groups with access",
+        "domains": "Domains with access",
+        "allow": "Allowed people",
+        "deny": "Blocked people"
+      },
+      "listHint": {
+        "groups": "Members of these Entra groups may use it, on the terms set per group.",
+        "domains": "Everyone with an email address at these domains, on the terms set per domain.",
+        "allow": "Named people may use it whatever the default or their domain says.",
+        "deny": "Named people may never use it. This beats every grant above."
+      },
+      "grantUnlimited": "Unlimited",
+      "grantLimited": "Limited to",
+      "termsLabel": "Terms for {target}",
+      "requestsLabel": "Requests per day for {target}",
+      "removeGrant": "Remove {target}",
+      "groupsCount": "{count, plural, one {# group} other {# groups}}",
+      "domainsCount": "{count, plural, one {# domain} other {# domains}}",
+      "allowCount": "{count, plural, one {# person allowed} other {# people allowed}}",
+      "denyCount": "{count, plural, one {# person blocked} other {# people blocked}}",
+      "collisionChip": "Also in Global defaults",
+      "collisionWarning": "This model or family is also configured under Global defaults. Saving will be refused until one of the two is cleared."
     },
     "tabsLabel": "Limits sections",
     "group": {
@@ -5554,6 +5616,7 @@
     "previewSourceCatalog": "Built-in default",
     "previewSourceGlobal": "Global default",
     "previewSourceOverride": "Override: {label}",
+    "previewSourceModelAccess": "Model approval — {list}",
     "previewNotEvaluated": "Department/company/office and group overrides can't be evaluated here — they depend on the person's own sign-in.",
     "previewUnsaved": "Showing the last saved policy. Save your changes to preview them.",
     "previewColumnLimit": "Limit",

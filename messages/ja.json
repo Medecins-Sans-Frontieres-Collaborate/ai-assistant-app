@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "グローバルのデフォルト",
       "overrides": "上書き設定",
-      "delegations": "デリゲーション"
+      "delegations": "デリゲーション",
+      "models": "モデル"
     },
     "tabsLabel": "制限セクション",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "この委任は無効になっているため、再度有効にするまでオーバーライドは誰にも適用されません。グローバル階層に昇格することもありません。",
     "betaPolicyNotice": "ベータ環境：このポリシーとその使用状況カウンターは本番環境とは別に保存されます（policy.beta.json）。ここでの変更は本番環境には影響しません。",
     "delegationsManagedElsewhere": "デリゲーションは読み取り専用で表示されています。メンバーやその範囲、各管理者の権限は「デリゲーション」エリアで管理します。",
-    "delegationsManagedElsewhereLink": "デリゲーションを開く"
+    "delegationsManagedElsewhereLink": "デリゲーションを開く",
+    "modelAccess": {
+      "intro": "各モデルの利用者を決定します。ファミリの設定は、モデルが独自に設定しない限り、ファミリ内のモデルに適用されます。リストに載っている人は全員向けのデフォルトより優先され、ブロックリストはすべての許可より優先されます。",
+      "externalNote": "Azure環境外にホストされたモデル（{families}）は、ここで全員またはグループ・ドメイン・個人へ許可を付与するまで、利用できません。",
+      "envelopeNote": "ファミリへのリクエスト制限は、該当するモデル間で共有される1日あたりの予算です。モデルへの制限はそのモデル内での上限です。モデル単位で無制限にしても、ファミリ全体の予算は超えられません。",
+      "observeNote": "観察モードが有効です：ここでの設定はモデルを非表示にしたり、リクエストを拒否したりしません。ルールが正しければ上部の「適用」に切り替えてください。",
+      "familyChip": "ファミリ",
+      "modelChip": "モデル",
+      "otherModels": "ファミリがないモデル",
+      "modelsInFamily": "{count, plural, one {このファミリのモデル # 件} other {このファミリのモデル # 件}}",
+      "noModels": "カタログにモデルがまだありません。",
+      "expand": "モデルを表示",
+      "collapse": "モデルを非表示",
+      "edit": "編集",
+      "doneEditing": "完了",
+      "editNode": "{label} のアクセスを編集",
+      "defaultLabel": "その他全員",
+      "defaultInherit": "継承",
+      "defaultUnlimited": "無制限",
+      "defaultLimited": "上限",
+      "defaultUnavailable": "利用不可",
+      "defaultRequestsLabel": "その他全員の1日あたりリクエスト数",
+      "requestsPerDay": "リクエスト / 日",
+      "inheritedFrom": "{origin} から {state} を継承しています。",
+      "effectiveLabel": "リストに載っていないすべての方: {state}",
+      "inheritedChip": "継承",
+      "origin": {
+        "model": "この設定",
+        "family": "ファミリ",
+        "defaults": "グローバルデフォルト",
+        "catalogExternal": "外部モデルは許可がない限り利用不可というルール",
+        "catalog": "カタログデフォルト"
+      },
+      "state": {
+        "unlimited": "無制限",
+        "limited": "{requests} / 日まで",
+        "unavailable": "利用不可"
+      },
+      "list": {
+        "groups": "アクセス可能なグループ",
+        "domains": "アクセス可能なドメイン",
+        "allow": "許可された人物",
+        "deny": "ブロックされた人物"
+      },
+      "listHint": {
+        "groups": "これらのEntraグループのメンバーは、グループごとに設定された利用条件で利用できます。",
+        "domains": "これらのドメインのメールアドレスを持つ方は、ドメインごとに設定された条件で利用できます。",
+        "allow": "指名された人物は、デフォルトやドメインの設定に関わらず利用できます。",
+        "deny": "指名された人物は利用できません。これはすべての許可より優先されます。"
+      },
+      "grantUnlimited": "無制限",
+      "grantLimited": "上限",
+      "termsLabel": "{target} の条件",
+      "requestsLabel": "{target} の1日あたりリクエスト数",
+      "removeGrant": "{target} を削除",
+      "groupsCount": "{count, plural, one {グループ # 件} other {グループ # 件}}",
+      "domainsCount": "{count, plural, one {ドメイン # 件} other {ドメイン # 件}}",
+      "allowCount": "{count, plural, one {許可された人物 # 名} other {許可された人物 # 名}}",
+      "denyCount": "{count, plural, one {ブロックされた人物 # 名} other {ブロックされた人物 # 名}}",
+      "collisionChip": "グローバルデフォルトにも設定されています",
+      "collisionWarning": "このモデルまたはファミリーはグローバルデフォルトにも設定されています。どちらか一方を解除しない限り、保存できません。"
+    },
+    "previewSourceModelAccess": "モデル承認 — {list}"
   },
   "m365": {
     "connections": {

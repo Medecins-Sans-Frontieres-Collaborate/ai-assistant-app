@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Zokhazikika pa dziko lonse",
       "overrides": "Zosintha",
-      "delegations": "Ma delegations"
+      "delegations": "Ma delegations",
+      "models": "Mitundu"
     },
     "tabsLabel": "Magawo a malire",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "Delegation yake yatsekedwa, choncho override imeneyi sichigwira mpaka delegation itayambiranso. Simakwelera pa ntchito yadziko lonse.",
     "betaPolicyNotice": "Malo a Beta: malamulo awa ndi zowerengera zomwe zikugwiritsidwa ntchito zimasungidwa payokha kuchokera ku production (policy.beta.json). Chilichonse chomwe musintha pano sichidzakhudza production.",
     "delegationsManagedElsewhere": "Ma delegation akusonyezedwa pano monga owerengeka okha. Amene ali m'gulu la delegation, amene likuphimba, ndi zomwe admin aliyense angachite zimawongoleredwa m'dera la Delegations.",
-    "delegationsManagedElsewhereLink": "Tsegulani Delegations"
+    "delegationsManagedElsewhereLink": "Tsegulani Delegations",
+    "modelAccess": {
+      "intro": "Sankhani amene angagwiritse ntchito mtundu uliwonse. Zokhazikitsa za banja zimagwira mitundu yake mpaka mtundu waikha zake; anthu omwe ali m'ndandanda amapeza ufulu kuposa ena; ndandanda yoletsa imaposa ufulu uliwonse.",
+      "externalNote": "Mitundu yomwe ili kunja kwa malo a Azure ({families}) siikupezeka kwa aliyense mpaka mutapereka chilolezo apa — kwa aliyense mwa kusakhazikika, kapena kwa magulu, domains ndi anthu.",
+      "envelopeNote": "Malire a pempho pa banja ndi bajeti yogawana tsiku ndi tsiku pa mitundu yake; malire pa mtundu ndi chophimba mkati mwake. Kuchotsa malire pa mtundu sikutsegula bajeti ya banja.",
+      "observeNote": "Njira ya Observe ili pa: palibe chobisala mtundu kapena choletsa pempho pano. Sinthani ku Enforce pamwamba mukakhazikitsa malamulo molondola.",
+      "familyChip": "Banja",
+      "modelChip": "Mtundu",
+      "otherModels": "Mitundu yopanda banja",
+      "modelsInFamily": "{count, plural, one {# mtundu m'banja lino} other {# mitundu m'banja lino}}",
+      "noModels": "Palibe mitundu m'catalog pakadali pano.",
+      "expand": "Onetsani mitundu",
+      "collapse": "Bisani mitundu",
+      "edit": "Sinthani",
+      "doneEditing": "Maliza",
+      "editNode": "Sinthani ufulu wa {label}",
+      "defaultLabel": "Ena onse",
+      "defaultInherit": "Landira",
+      "defaultUnlimited": "Opanda malire",
+      "defaultLimited": "Zochepa pa",
+      "defaultUnavailable": "Sikupezeka",
+      "defaultRequestsLabel": "Mapempho patsiku kwa ena onse",
+      "requestsPerDay": "mapempho / tsiku",
+      "inheritedFrom": "Akulandira {state} kuchokera ku {origin}.",
+      "effectiveLabel": "Aliyense amene ali m'ndandanda safika: {state}.",
+      "inheritedChip": "zolandira",
+      "origin": {
+        "model": "kukhazikitsa uku",
+        "family": "banja lake",
+        "defaults": "Zokhazikika za dziko",
+        "catalogExternal": "lamulo lakuti mitundu ya kunja sikupezeka mpaka mwa chilolezo",
+        "catalog": "kukhazikika kwa catalog"
+      },
+      "state": {
+        "unlimited": "Opanda malire",
+        "limited": "Zochepa pa {requests} / tsiku",
+        "unavailable": "Sikupezeka"
+      },
+      "list": {
+        "groups": "Magulu omwe ali ndi ufulu",
+        "domains": "Ma domain omwe ali ndi ufulu",
+        "allow": "Anthu ovololeka",
+        "deny": "Anthu olephera"
+      },
+      "listHint": {
+        "groups": "Mamembala a magulu a Entra awa angagwiritse ntchito, malinga ndi malamulo a gulu.",
+        "domains": "Aliyense amene ali ndi imelo m'domain awa, malinga ndi malamulo a domain.",
+        "allow": "Anthu omwe atchulidwa angagwiritse ntchito ngakhale kusakhazikika kapena domain yawo yatheka.",
+        "deny": "Anthu omwe atchulidwa sangathe kugwiritsa ntchito. Ichi chimaposa ufulu uliwonse pamwamba."
+      },
+      "grantUnlimited": "Opanda malire",
+      "grantLimited": "Zochepa pa",
+      "termsLabel": "Malamulo a {target}",
+      "requestsLabel": "Mapempho patsiku a {target}",
+      "removeGrant": "Chotsani {target}",
+      "groupsCount": "{count, plural, one {# gulu} other {# magulu}}",
+      "domainsCount": "{count, plural, one {# domain} other {# ma domain}}",
+      "allowCount": "{count, plural, one {# munthu wololeka} other {# anthu ololeka}}",
+      "denyCount": "{count, plural, one {# munthu olephera} other {# anthu olephera}}",
+      "collisionChip": "Ili komanso mu Global defaults",
+      "collisionWarning": "Chitsanzo ichi kapena banja lili ndi makonzedwe mu Global defaults. Kusunga sikuzaloledwa mpaka chimodzi mwaziwiri zichotsedwa."
+    },
+    "previewSourceModelAccess": "Kuvomereza chitsanzo — {list}"
   },
   "m365": {
     "connections": {

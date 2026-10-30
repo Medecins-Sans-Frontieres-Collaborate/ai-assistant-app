@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Pular mbayɗe hoore mum",
       "overrides": "Nguuyde ley",
-      "delegations": "Aadugol humpitorde"
+      "delegations": "Aadugol humpitorde",
+      "models": "Modeli"
     },
     "tabsLabel": "Cuɗɗe gannugol",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "Delegation mum tawii yonii, override ɗee waawaani fayde hay so delegation mum daananii. O waawaani yeddu e global tier.",
     "betaPolicyNotice": "Galle beta: politik rewtinde e junngol ummoraade e mum woni hoore kadi aɗa ɗaɓɓi, tawi ko laawol beta (policy.beta.json). Hol ko a wayli da e heñnde nde ina jamfa e laawol gistugal.",
     "delegationsManagedElsewhere": "Kondeeji ɗee fii rewteede e jogol. Hol ko wayiitii e konde, hol koondeeji jeytii, e hol ko admin foti gollu, ko e karallaaji Kondeeji.",
-    "delegationsManagedElsewhereLink": "Uddit Kondeeji"
+    "delegationsManagedElsewhereLink": "Uddit Kondeeji",
+    "modelAccess": {
+      "intro": "Teeŋtin men ɓe waɗa model kala. Tiɗɗol rewɓe ɓeen ngal jogi ɗum e modelji ɗe, so wonaa model jiɗi ɗum; ɓeen e lenyol ɗe waɗi ko tiiɗe fii mo kala; ɓeen e lenyol walli ɗiɗɗo dow kala grant.",
+      "externalNote": "Modeli ɓe waɗi e ɗe Azure environment ({families}) leɓiima e hoore mum on kadi so a jooɗi grant ɗe ngon – e hoore mum on tawa fow via default, walla ngal ɓernde, domains e rewɓe.",
+      "envelopeNote": "Limita request ngam tiɗɗol rewɓe ko hoore budget e jammaji e model mum; limit e model ko hoore mum. Unlimited e model ngal waawani limiti budget tiɗɗol rewɓe.",
+      "observeNote": "Observe mode ena on: Hay gooto e nder ɗoo ngarde model walla ndiyam request. Baylo e Enforce e paykun sabu kaɗi ko naatani laawol.",
+      "familyChip": "Tiɗɗol rewɓe",
+      "modelChip": "Model",
+      "otherModels": "Modeli wonaani e tiɗɗol rewɓe",
+      "modelsInFamily": "{count, plural, one {# model e tiɗɗol rewɓe ɗen} other {# modeli e tiɗɗol rewɓe ɗen}}",
+      "noModels": "Modeli alaa e katalog ngam jooni.",
+      "expand": "Hollu modeli",
+      "collapse": "Sokliti modeli",
+      "edit": "Taƴ",
+      "doneEditing": "Songa",
+      "editNode": "Taƴ keftingol e {label}",
+      "defaultLabel": "So tawii ndun",
+      "defaultInherit": "Winndito",
+      "defaultUnlimited": "Haynaani limit",
+      "defaultLimited": "Limiti e",
+      "defaultUnavailable": "Leɓaani",
+      "defaultRequestsLabel": "Requests e ñalngu tawa so tawii ndun",
+      "requestsPerDay": "requests / ñalngu",
+      "inheritedFrom": "Winnditi {state} e {origin}.",
+      "effectiveLabel": "Mbaylaa nde fow e lenyol renndani: {state}.",
+      "inheritedChip": "winnditi",
+      "origin": {
+        "model": "ngal setting",
+        "family": "tiɗɗol rewɓe mum",
+        "defaults": "Defaults ngol fow",
+        "catalogExternal": "laawol e catalog jiɗi haa modeli sappoore e ɗoo leɓaani so wonaa grant",
+        "catalog": "default katalog"
+      },
+      "state": {
+        "unlimited": "Haynaani limit",
+        "limited": "Limiti e {requests} / ñalngu",
+        "unavailable": "Leɓaani"
+      },
+      "list": {
+        "groups": "Laaɓirɗe e keftingol",
+        "domains": "Domains e keftingol",
+        "allow": "Rewɓe juɗɗo",
+        "deny": "Rewɓe juɗɗiayi"
+      },
+      "listHint": {
+        "groups": "Janngirɗi e laaɓirɗe Entra ɗee waawani jogii, ngal keftingol peewi laaɓirɗe kala.",
+        "domains": "Koyɗe fow e email address ngal domain ɓeen, peewi keftingol e domain kala.",
+        "allow": "Rewɓe juɗɗo waawani jogii ko fiɗɗo default walla domain mum.",
+        "deny": "Rewɓe juɗɗiayi waawani jogii so wonaa. Ngol waawi dow kala grant ngal paykun."
+      },
+      "grantUnlimited": "Haynaani limit",
+      "grantLimited": "Limiti e",
+      "termsLabel": "Keftingol e {target}",
+      "requestsLabel": "Requests e ñalngu e {target}",
+      "removeGrant": "Momta {target}",
+      "groupsCount": "{count, plural, one {# laaɓirɗo} other {# laaɓirɗe}}",
+      "domainsCount": "{count, plural, one {# domain} other {# domains}}",
+      "allowCount": "{count, plural, one {# juɗɗo} other {# juɗɗe}}",
+      "denyCount": "{count, plural, one {# juɗɗiayi} other {# juɗɗiayiɓe}}",
+      "collisionChip": "E jamɗe Global defaults fow",
+      "collisionWarning": "Model gila walla leydi-ɗe ɗee woni ko e jamɗe Global defaults. Ndaade mbaydi, waawani goɗɗum maa ɗiɗo epa juutde."
+    },
+    "previewSourceModelAccess": "Cuɓoraa model — {list}"
   },
   "m365": {
     "connections": {

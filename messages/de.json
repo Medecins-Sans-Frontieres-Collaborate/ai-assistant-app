@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Globale Standardwerte",
       "overrides": "Überschreibungen",
-      "delegations": "Delegationen"
+      "delegations": "Delegationen",
+      "models": "Modelle"
     },
     "tabsLabel": "Limitabschnitte",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "Die Delegation ist deaktiviert, daher gilt diese Überschreibung für niemanden, bis die Delegation wieder aktiviert ist. Sie wird nie auf die globale Ebene übertragen.",
     "betaPolicyNotice": "Beta-Umgebung: Diese Richtlinie und ihre Nutzungszähler werden getrennt von der Produktion gespeichert (policy.beta.json). Änderungen hier haben keinen Einfluss auf die Produktion.",
     "delegationsManagedElsewhere": "Delegationen werden hier nur gelesen angezeigt. Wer zu einer Delegation gehört, welche Nutzer sie umfasst und was jeder Admin darf, wird im Bereich \"Delegationen\" verwaltet.",
-    "delegationsManagedElsewhereLink": "Delegationen öffnen"
+    "delegationsManagedElsewhereLink": "Delegationen öffnen",
+    "modelAccess": {
+      "intro": "Legen Sie fest, wer welches Modell nutzen darf. Die Einstellung einer Familie gilt für deren Modelle, es sei denn, ein Modell hat eine eigene Einstellung; Personen auf einer Liste haben Vorrang vor dem Standard für alle anderen; die Blockliste schlägt jede Berechtigung.",
+      "externalNote": "Modelle, die außerhalb der Azure-Umgebung ({families}) gehostet werden, sind für alle gesperrt, bis Sie hier Zugriff gewähren – entweder für alle über den Standard oder für Gruppen, Domains und einzelne Personen.",
+      "envelopeNote": "Ein Anforderungs-Limit für eine Familie ist ein gemeinsames Tagesbudget für alle ihre Modelle; ein Limit für ein Modell ist eine Begrenzung darin. Unbegrenzt für ein Modell hebt das Familienbudget nicht auf.",
+      "observeNote": "Beobachtungsmodus ist aktiv: Hier verbirgt nichts ein Modell oder verhindert eine Anfrage. Wechseln Sie oben auf Durchsetzen, wenn die Regeln korrekt sind.",
+      "familyChip": "Familie",
+      "modelChip": "Modell",
+      "otherModels": "Modelle ohne Familie",
+      "modelsInFamily": "{count, plural, one {# Modell in dieser Familie} other {# Modelle in dieser Familie}}",
+      "noModels": "Noch keine Modelle im Katalog.",
+      "expand": "Modelle anzeigen",
+      "collapse": "Modelle ausblenden",
+      "edit": "Bearbeiten",
+      "doneEditing": "Fertig",
+      "editNode": "Zugriff für {label} bearbeiten",
+      "defaultLabel": "Alle anderen",
+      "defaultInherit": "Vererben",
+      "defaultUnlimited": "Unbegrenzt",
+      "defaultLimited": "Begrenzt auf",
+      "defaultUnavailable": "Nicht verfügbar",
+      "defaultRequestsLabel": "Anfragen pro Tag für alle anderen",
+      "requestsPerDay": "Anfragen / Tag",
+      "inheritedFrom": "Erbt {state} von {origin}.",
+      "effectiveLabel": "Alle, die nicht auf einer Liste stehen, erhalten: {state}.",
+      "inheritedChip": "vererbt",
+      "origin": {
+        "model": "diese Einstellung",
+        "family": "seine Familie",
+        "defaults": "Globale Vorgaben",
+        "catalogExternal": "die Regel, dass externe Modelle bis zur Freigabe nicht verfügbar sind",
+        "catalog": "der Standard des Katalogs"
+      },
+      "state": {
+        "unlimited": "Unbegrenzt",
+        "limited": "Begrenzt auf {requests} / Tag",
+        "unavailable": "Nicht verfügbar"
+      },
+      "list": {
+        "groups": "Gruppen mit Zugriff",
+        "domains": "Domains mit Zugriff",
+        "allow": "Erlaubte Personen",
+        "deny": "Blockierte Personen"
+      },
+      "listHint": {
+        "groups": "Mitglieder dieser Entra-Gruppen können es gemäß den jeweiligen Bedingungen nutzen.",
+        "domains": "Alle mit einer E-Mail-Adresse in diesen Domains, gemäß den jeweiligen Bedingungen pro Domain.",
+        "allow": "Genannte Personen können es nutzen, unabhängig vom Standard oder ihrer Domain.",
+        "deny": "Genannte Personen dürfen es nie nutzen. Dies schlägt jede Berechtigung oben."
+      },
+      "grantUnlimited": "Unbegrenzt",
+      "grantLimited": "Begrenzt auf",
+      "termsLabel": "Bedingungen für {target}",
+      "requestsLabel": "Anfragen pro Tag für {target}",
+      "removeGrant": "{target} entfernen",
+      "groupsCount": "{count, plural, one {# Gruppe} other {# Gruppen}}",
+      "domainsCount": "{count, plural, one {# Domain} other {# Domains}}",
+      "allowCount": "{count, plural, one {# Person erlaubt} other {# Personen erlaubt}}",
+      "denyCount": "{count, plural, one {# Person blockiert} other {# Personen blockiert}}",
+      "collisionChip": "Auch in den globalen Standardwerten",
+      "collisionWarning": "Dieses Modell oder diese Familie ist auch unter den globalen Standardwerten konfiguriert. Das Speichern wird verweigert, bis eine der beiden Konfigurationen entfernt wurde."
+    },
+    "previewSourceModelAccess": "Modellfreigabe — {list}"
   },
   "m365": {
     "connections": {

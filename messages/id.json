@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Default global",
       "overrides": "Penyesuaian",
-      "delegations": "Delegasi"
+      "delegations": "Delegasi",
+      "models": "Model"
     },
     "tabsLabel": "Bagian batas",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "Delegasi ini dinonaktifkan, sehingga penggantian ini tidak berlaku untuk siapa pun sampai delegasi diaktifkan kembali. Tidak pernah dipromosikan ke tingkat global.",
     "betaPolicyNotice": "Lingkungan beta: kebijakan ini dan penghitung penggunaannya disimpan terpisah dari produksi (policy.beta.json). Perubahan apa pun di sini tidak akan memengaruhi produksi.",
     "delegationsManagedElsewhere": "Delegasi hanya dapat dilihat di sini (read-only). Siapa saja anggota delegasi, cakupan penggunanya, dan hak setiap admin dikelola di area Delegasi.",
-    "delegationsManagedElsewhereLink": "Buka Delegasi"
+    "delegationsManagedElsewhereLink": "Buka Delegasi",
+    "modelAccess": {
+      "intro": "Tentukan siapa saja yang dapat menggunakan setiap model. Pengaturan untuk sebuah keluarga berlaku pada model-model di dalamnya, kecuali jika model memiliki pengaturan sendiri; orang pada daftar tertentu mengesampingkan pengaturan default untuk yang lain; daftar blokir mengesampingkan semua pemberian akses.",
+      "externalNote": "Model yang di-host di luar lingkungan Azure ({families}) tidak tersedia untuk siapa pun sampai Anda memberikan akses di sini — untuk semua melalui default, atau untuk grup, domain, dan individu.",
+      "envelopeNote": "Batas permintaan pada sebuah keluarga adalah anggaran harian bersama untuk seluruh modelnya; batas pada model adalah batas khusus pada model itu. Jika model tidak memiliki batas, itu tidak menghapus batas anggaran keluarga.",
+      "observeNote": "Mode Observasi aktif: tidak ada yang tersembunyi atau menghentikan permintaan untuk model. Aktifkan Penegakan di atas setelah aturan sudah benar.",
+      "familyChip": "Keluarga",
+      "modelChip": "Model",
+      "otherModels": "Model tanpa keluarga",
+      "modelsInFamily": "{count, plural, one {# model dalam keluarga ini} other {# model dalam keluarga ini}}",
+      "noModels": "Belum ada model di katalog.",
+      "expand": "Tampilkan model",
+      "collapse": "Sembunyikan model",
+      "edit": "Edit",
+      "doneEditing": "Selesai",
+      "editNode": "Edit akses untuk {label}",
+      "defaultLabel": "Semua yang lain",
+      "defaultInherit": "Turun-temurun",
+      "defaultUnlimited": "Tanpa batas",
+      "defaultLimited": "Dibatasi hingga",
+      "defaultUnavailable": "Tidak tersedia",
+      "defaultRequestsLabel": "Permintaan per hari untuk semua yang lain",
+      "requestsPerDay": "permintaan / hari",
+      "inheritedFrom": "Mewarisi {state} dari {origin}.",
+      "effectiveLabel": "Semua yang tidak masuk daftar mendapatkan: {state}.",
+      "inheritedChip": "turunan",
+      "origin": {
+        "model": "pengaturan ini",
+        "family": "keluarganya",
+        "defaults": "Default global",
+        "catalogExternal": "aturan bahwa model eksternal tidak tersedia sampai diberikan akses",
+        "catalog": "default katalog"
+      },
+      "state": {
+        "unlimited": "Tanpa batas",
+        "limited": "Dibatasi hingga {requests} / hari",
+        "unavailable": "Tidak tersedia"
+      },
+      "list": {
+        "groups": "Grup dengan akses",
+        "domains": "Domain dengan akses",
+        "allow": "Orang yang diizinkan",
+        "deny": "Orang yang diblokir"
+      },
+      "listHint": {
+        "groups": "Anggota grup Entra ini dapat menggunakan, sesuai dengan ketentuan tiap grup.",
+        "domains": "Setiap orang dengan email di domain ini, sesuai ketentuan tiap domain.",
+        "allow": "Orang yang disebutkan dapat menggunakan tanpa memperhatikan default atau aturan domain mereka.",
+        "deny": "Orang yang disebutkan tidak dapat menggunakan kapan pun. Ini mengesampingkan semua pemberian akses di atasnya."
+      },
+      "grantUnlimited": "Tanpa batas",
+      "grantLimited": "Dibatasi hingga",
+      "termsLabel": "Ketentuan untuk {target}",
+      "requestsLabel": "Permintaan per hari untuk {target}",
+      "removeGrant": "Hapus {target}",
+      "groupsCount": "{count, plural, one {# grup} other {# grup}}",
+      "domainsCount": "{count, plural, one {# domain} other {# domain}}",
+      "allowCount": "{count, plural, one {# orang diizinkan} other {# orang diizinkan}}",
+      "denyCount": "{count, plural, one {# orang diblokir} other {# orang diblokir}}",
+      "collisionChip": "Juga terdapat pada pengaturan Global",
+      "collisionWarning": "Model atau keluarga ini juga dikonfigurasi dalam pengaturan Global. Penyimpanan akan ditolak sampai salah satu dari dua pengaturan dihapus."
+    },
+    "previewSourceModelAccess": "Persetujuan model — {list}"
   },
   "m365": {
     "connections": {

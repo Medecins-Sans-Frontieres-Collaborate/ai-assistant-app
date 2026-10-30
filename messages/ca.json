@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Valors globals per defecte",
       "overrides": "Excepcions",
-      "delegations": "Delegacions"
+      "delegations": "Delegacions",
+      "models": "Models"
     },
     "tabsLabel": "Seccions de límits",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "La seva delegació està desactivada, de manera que aquesta substitució no aplica a ningú fins que la delegació es torni a activar. Mai no s’eleva al nivell global.",
     "betaPolicyNotice": "Entorn beta: aquesta política i els seus comptadors d'ús s'emmagatzemen separadament de producció (policy.beta.json). Els canvis que feu aquí no afecten la producció.",
     "delegationsManagedElsewhere": "Les delegacions es mostren aquí només per a consulta. Qui forma part d’una delegació, quins usuaris cobreix i què pot fer cada administrador es gestiona a l’àrea de Delegacions.",
-    "delegationsManagedElsewhereLink": "Obrir Delegacions"
+    "delegationsManagedElsewhereLink": "Obrir Delegacions",
+    "modelAccess": {
+      "intro": "Decidiu qui pot utilitzar cada model. La configuració d’una família s’aplica als seus models, tret que un model tingui la seva pròpia; les persones d’una llista tenen prioritat sobre el valor per defecte dels altres; la llista de bloqueig preval sobre qualsevol permís.",
+      "externalNote": "Els models allotjats fora de l'entorn Azure ({families}) estan indisponibles per a tothom fins que els concedeixis accés aquí — tant a tothom amb el valor per defecte com a grups, dominis i persones.",
+      "envelopeNote": "Un límit de peticions a una família és un pressupost diari compartit entre els seus models; un límit a un model és un màxim dins d’ell. Il·limitat en un model no elimina el pressupost de la família.",
+      "observeNote": "El mode d'observació està activat: res d'aquí amaga un model ni atura una petició ara mateix. Canvia a Aplica a dalt quan les normes siguin correctes.",
+      "familyChip": "Família",
+      "modelChip": "Model",
+      "otherModels": "Models sense família",
+      "modelsInFamily": "{count, plural, one {# model en aquesta família} other {# models en aquesta família}}",
+      "noModels": "Encara no hi ha models al catàleg.",
+      "expand": "Mostra models",
+      "collapse": "Oculta models",
+      "edit": "Edita",
+      "doneEditing": "Fet",
+      "editNode": "Edita l'accés per a {label}",
+      "defaultLabel": "La resta",
+      "defaultInherit": "Hereta",
+      "defaultUnlimited": "Il·limitat",
+      "defaultLimited": "Limitat a",
+      "defaultUnavailable": "Indisponible",
+      "defaultRequestsLabel": "Peticions al dia per a la resta",
+      "requestsPerDay": "peticions / dia",
+      "inheritedFrom": "Hereta {state} de {origin}.",
+      "effectiveLabel": "Qui no és a cap llista rep: {state}.",
+      "inheritedChip": "heretat",
+      "origin": {
+        "model": "aquesta configuració",
+        "family": "la seva família",
+        "defaults": "Valors globals per defecte",
+        "catalogExternal": "la norma que indica que els models externs són indisponibles fins que es concedeixi accés",
+        "catalog": "el valor per defecte del catàleg"
+      },
+      "state": {
+        "unlimited": "Il·limitat",
+        "limited": "Limitat a {requests} / dia",
+        "unavailable": "Indisponible"
+      },
+      "list": {
+        "groups": "Grups amb accés",
+        "domains": "Dominis amb accés",
+        "allow": "Persones autoritzades",
+        "deny": "Persones bloquejades"
+      },
+      "listHint": {
+        "groups": "Els membres d’aquests grups Entra poden utilitzar-lo, segons les condicions fixades per grup.",
+        "domains": "Tothom amb una adreça de correu d’aquests dominis, segons les condicions fixades per domini.",
+        "allow": "Les persones designades podran utilitzar-lo, independentment del valor per defecte o del seu domini.",
+        "deny": "Les persones designades no el podran utilitzar mai. Això preval sobre qualsevol permís anterior."
+      },
+      "grantUnlimited": "Il·limitat",
+      "grantLimited": "Limitat a",
+      "termsLabel": "Condicions per a {target}",
+      "requestsLabel": "Peticions al dia per a {target}",
+      "removeGrant": "Elimina {target}",
+      "groupsCount": "{count, plural, one {# grup} other {# grups}}",
+      "domainsCount": "{count, plural, one {# domini} other {# dominis}}",
+      "allowCount": "{count, plural, one {# persona autoritzada} other {# persones autoritzades}}",
+      "denyCount": "{count, plural, one {# persona bloquejada} other {# persones bloquejades}}",
+      "collisionChip": "També als valors predeterminats globals",
+      "collisionWarning": "Aquest model o família també està configurat als valors predeterminats globals. No es podrà desar fins que s'esborri una de les dues opcions."
+    },
+    "previewSourceModelAccess": "Aprovació del model — {list}"
   },
   "m365": {
     "connections": {

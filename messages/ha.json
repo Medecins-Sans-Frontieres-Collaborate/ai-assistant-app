@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Daidaitattun ƙa'idodi na gaba ɗaya",
       "overrides": "Canje-canje",
-      "delegations": "Rarrabawa"
+      "delegations": "Rarrabawa",
+      "models": "Misalai"
     },
     "tabsLabel": "Sassan iyaka",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "An kashe mayar da hankali, don haka wannan canji bazai shafi kowa ba sai an saita mayar da hankalin. Ba a taba mayar da shi zuwa matakin duniya ba.",
     "betaPolicyNotice": "Mahallin Beta: Ana adana wannan manufar da ƙididdigar amfani nata daban da na samarwa (policy.beta.json). Duk wani canji da ka yi a nan ba zai shafi samarwa ba.",
     "delegationsManagedElsewhere": "Wakilai an nuna su a nan don karantawa kawai. Wanene ke cikin wakilai, wa suke wakilta, da abin da kowanne admin zai iya yi ana sarrafa su a sashen Wakilai.",
-    "delegationsManagedElsewhereLink": "Buɗe Wakilai"
+    "delegationsManagedElsewhereLink": "Buɗe Wakilai",
+    "modelAccess": {
+      "intro": "Kayyade wa zai iya amfani da kowanne misali. Saitin dangin zai shafi misalansa sai dai idan an kafa na musamman; mutanen da ke jerin suna kan gaba akan sauran; jerin toshewa ya fi kowanne izini.",
+      "externalNote": "Misalan da ke waje da Azure ({families}) ba su samuwa ga kowa har sai an ba da izini a nan — ga kowa ta hanyar tsohuwar hanya, ko ga rukuni, yanki da mutane.",
+      "envelopeNote": "Iyakar buƙata a kan dangi, kasafin kudi ne na kullum da ya shafi dukkan misalansa; iyaka a kan misali na nashi ne kadai. Ba iyaka a kan misali ba yana cire iyakar dangi ba.",
+      "observeNote": "Yanayin lura yana kunne: babu wani abu a nan da zai ɓoye misali ko dakatar da buƙata a yanzu. Sauya zuwa Aiwatar sama idan an daidaita dokokin.",
+      "familyChip": "Dangi",
+      "modelChip": "Misali",
+      "otherModels": "Misalan da ba su da dangi",
+      "modelsInFamily": "{count, plural, one {# misali a wannan dangi} other {# misalai a wannan dangi}}",
+      "noModels": "Ba a saka misalai cikin kundin ba tukuna.",
+      "expand": "Nuna misalai",
+      "collapse": "Ɓoye misalai",
+      "edit": "Gyara",
+      "doneEditing": "An gama",
+      "editNode": "Gyara damar shiga na {label}",
+      "defaultLabel": "Sauran kowa",
+      "defaultInherit": "Gada",
+      "defaultUnlimited": "Ba iyaka",
+      "defaultLimited": "An takaita zuwa",
+      "defaultUnavailable": "Ba samuwa",
+      "defaultRequestsLabel": "Buƙatu a rana ga sauran kowa",
+      "requestsPerDay": "buƙatu / rana",
+      "inheritedFrom": "Ya gada {state} daga {origin}.",
+      "effectiveLabel": "Duk wanda ba a jeri ba zai samu: {state}.",
+      "inheritedChip": "gada",
+      "origin": {
+        "model": "wannan saitin",
+        "family": "danginsa",
+        "defaults": "Tsoffin duniya",
+        "catalogExternal": "doka cewa misalan waje ba su samuwa sai an ba da izini",
+        "catalog": "tsohuwar hanyar kundin"
+      },
+      "state": {
+        "unlimited": "Ba iyaka",
+        "limited": "An takaita zuwa {requests} / rana",
+        "unavailable": "Ba samuwa"
+      },
+      "list": {
+        "groups": "Rukunin da ke da damar shiga",
+        "domains": "Yankuna da ke da damar shiga",
+        "allow": "Mutanen da aka yarda",
+        "deny": "Mutanen da aka toshe"
+      },
+      "listHint": {
+        "groups": "Mambobi cikin waɗannan rukunin Entra na iya amfani da shi, bisa sharuddan kowane rukunin.",
+        "domains": "Duk mai adireshin imel a waɗannan yankuna, bisa sharuddan kowanne yanki.",
+        "allow": "Mutanen da aka ambata za su iya amfani da shi duk yadda tsoho ko yanki ya ce.",
+        "deny": "Mutanen da aka ambata ba za su taɓa amfani da shi ba. Wannan yana da fifiko akan duk wani izini da ke sama."
+      },
+      "grantUnlimited": "Ba iyaka",
+      "grantLimited": "An takaita zuwa",
+      "termsLabel": "Sharudda ga {target}",
+      "requestsLabel": "Buƙatu a rana ga {target}",
+      "removeGrant": "Cire {target}",
+      "groupsCount": "{count, plural, one {# rukuni} other {# rukunoni}}",
+      "domainsCount": "{count, plural, one {# yanki} other {# yankuna}}",
+      "allowCount": "{count, plural, one {# mutum an yarda} other {# mutane an yarda}}",
+      "denyCount": "{count, plural, one {# mutum an toshe} other {# mutane an toshe}}",
+      "collisionChip": "Hakanan yana cikin Tsarin Duniya",
+      "collisionWarning": "Wannan samfur ko iyali an saita shi a cikin Tsarin Duniya. Za a hana adanawa sai daya daga cikin biyun aka cire."
+    },
+    "previewSourceModelAccess": "Amincewa da samfur — {list}"
   },
   "m365": {
     "connections": {

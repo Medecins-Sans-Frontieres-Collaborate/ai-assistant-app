@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Valores globales predeterminados",
       "overrides": "Anulaciones",
-      "delegations": "Delegaciones"
+      "delegations": "Delegaciones",
+      "models": "Modelos"
     },
     "tabsLabel": "Secciones de límites",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "Su delegación está deshabilitada, por lo que esta sustitución no se aplica a nadie hasta que se habilite nuevamente. Nunca se promueve al nivel global.",
     "betaPolicyNotice": "Entorno beta: esta política y sus contadores de uso se almacenan por separado de producción (policy.beta.json). Nada de lo que cambie aquí afecta a producción.",
     "delegationsManagedElsewhere": "Las delegaciones se muestran aquí solo como lectura. Quién está en una delegación, a qué usuarios cubre y lo que cada administrador puede hacer se gestiona en el área de Delegaciones.",
-    "delegationsManagedElsewhereLink": "Abrir delegaciones"
+    "delegationsManagedElsewhereLink": "Abrir delegaciones",
+    "modelAccess": {
+      "intro": "Decida quién puede usar cada modelo. La configuración de una familia se aplica a sus modelos, a menos que un modelo tenga su propia configuración; las personas en una lista tienen prioridad sobre el valor predeterminado para los demás; la lista de bloqueo prevalece sobre cualquier concesión.",
+      "externalNote": "Los modelos alojados fuera del entorno de Azure ({families}) están indisponibles para todos hasta que los conceda aquí, ya sea para todos mediante el valor predeterminado, o para grupos, dominios y personas.",
+      "envelopeNote": "Un límite de solicitudes en una familia es un presupuesto diario compartido entre sus modelos; un límite en un modelo es un tope dentro de él. Ilimitado en un modelo no elimina el presupuesto de la familia.",
+      "observeNote": "Modo de observación activado: nada aquí oculta un modelo ni detiene una solicitud aún. Cambie a Aplicar arriba cuando las reglas sean correctas.",
+      "familyChip": "Familia",
+      "modelChip": "Modelo",
+      "otherModels": "Modelos sin familia",
+      "modelsInFamily": "{count, plural, one {# modelo en esta familia} other {# modelos en esta familia}}",
+      "noModels": "No hay modelos en el catálogo todavía.",
+      "expand": "Mostrar modelos",
+      "collapse": "Ocultar modelos",
+      "edit": "Editar",
+      "doneEditing": "Listo",
+      "editNode": "Editar acceso para {label}",
+      "defaultLabel": "Todos los demás",
+      "defaultInherit": "Heredar",
+      "defaultUnlimited": "Ilimitado",
+      "defaultLimited": "Limitado a",
+      "defaultUnavailable": "No disponible",
+      "defaultRequestsLabel": "Solicitudes por día para todos los demás",
+      "requestsPerDay": "solicitudes / día",
+      "inheritedFrom": "Hereda {state} de {origin}.",
+      "effectiveLabel": "Quienes no estén en una lista reciben: {state}.",
+      "inheritedChip": "heredado",
+      "origin": {
+        "model": "esta configuración",
+        "family": "su familia",
+        "defaults": "Valores globales por defecto",
+        "catalogExternal": "la regla de que los modelos externos no están disponibles hasta ser concedidos",
+        "catalog": "valor predeterminado del catálogo"
+      },
+      "state": {
+        "unlimited": "Ilimitado",
+        "limited": "Limitado a {requests} / día",
+        "unavailable": "No disponible"
+      },
+      "list": {
+        "groups": "Grupos con acceso",
+        "domains": "Dominios con acceso",
+        "allow": "Personas permitidas",
+        "deny": "Personas bloqueadas"
+      },
+      "listHint": {
+        "groups": "Los miembros de estos grupos Entra pueden usarlo, según los términos definidos para cada grupo.",
+        "domains": "Todos con una dirección de correo electrónico en estos dominios, según los términos definidos para cada dominio.",
+        "allow": "Personas nombradas pueden usarlo independientemente del valor predeterminado o de su dominio.",
+        "deny": "Las personas nombradas no pueden usarlo nunca. Esto prevalece sobre cualquier concesión anterior."
+      },
+      "grantUnlimited": "Ilimitado",
+      "grantLimited": "Limitado a",
+      "termsLabel": "Términos para {target}",
+      "requestsLabel": "Solicitudes por día para {target}",
+      "removeGrant": "Eliminar {target}",
+      "groupsCount": "{count, plural, one {# grupo} other {# grupos}}",
+      "domainsCount": "{count, plural, one {# dominio} other {# dominios}}",
+      "allowCount": "{count, plural, one {# persona permitida} other {# personas permitidas}}",
+      "denyCount": "{count, plural, one {# persona bloqueada} other {# personas bloqueadas}}",
+      "collisionChip": "También en los valores predeterminados globales",
+      "collisionWarning": "Este modelo o familia también está configurado en los valores predeterminados globales. No se podrá guardar hasta que se elimine una de las dos configuraciones."
+    },
+    "previewSourceModelAccess": "Aprobación del modelo — {list}"
   },
   "m365": {
     "connections": {

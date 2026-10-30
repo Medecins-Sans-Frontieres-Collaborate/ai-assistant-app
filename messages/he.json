@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "ברירות מחדל גלובליות",
       "overrides": "עקיפות",
-      "delegations": "הקצאות"
+      "delegations": "הקצאות",
+      "models": "מודלים"
     },
     "tabsLabel": "סעיפי הגבלות",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "ההאצלה שלה מושבתת, לכן העקיפה לא חלה על אף אחד עד להפעלה מחדש. היא לא מועלה לרמת גלובלית.",
     "betaPolicyNotice": "סביבת בטא: מדיניות זו ומונה השימוש בה נשמרים בנפרד מהייצור (policy.beta.json). שינויים כאן אינם משפיעים על הייצור.",
     "delegationsManagedElsewhere": "הקצאות מוצגות כאן לקריאה בלבד. מי נמצא בהקצאה, אילו משתמשים היא כוללת ומה כל מנהל רשאי לעשות מנוהל באזור ההקצאות.",
-    "delegationsManagedElsewhereLink": "פתח הקצאות"
+    "delegationsManagedElsewhereLink": "פתח הקצאות",
+    "modelAccess": {
+      "intro": "החליטו מי יכול להשתמש בכל מודל. הגדרה של משפחה חלה על כל המודלים שלה, אלא אם כן למודל יש הגדרה משלו; אנשים שמופיעים ברשימה גוברים על ברירת המחדל עבור כל השאר; רשימת החסימה גוברת על כל הרשאה.",
+      "externalNote": "מודלים המתארחים מחוץ לסביבת Azure ({families}) אינם זמינים לאף אחד עד שתאשרו כאן — לכולם דרך ברירת המחדל, או לקבוצות, דומיינים ואנשים.",
+      "envelopeNote": "הגבלת בקשות על משפחה היא תקציב יומי משותף לכל המודלים שלה; הגבלה על מודל היא תקרה עבורו בלבד. ללא הגבלה במודל לא מבטל את תקציב המשפחה.",
+      "observeNote": "מצב צפייה מופעל: שום דבר כאן לא מסתיר מודל או עוצר בקשות כרגע. העבירו ל'הפעל אכיפה' למעלה כשהכללים נכונים.",
+      "familyChip": "משפחה",
+      "modelChip": "מודל",
+      "otherModels": "מודלים ללא משפחה",
+      "modelsInFamily": "{count, plural, one {מודל אחד במשפחה זו} other {# מודלים במשפחה זו}}",
+      "noModels": "עדיין אין מודלים בקטלוג.",
+      "expand": "הצג מודלים",
+      "collapse": "הסתר מודלים",
+      "edit": "ערוך",
+      "doneEditing": "סיום",
+      "editNode": "עריכת הגישה עבור {label}",
+      "defaultLabel": "כל השאר",
+      "defaultInherit": "הורש",
+      "defaultUnlimited": "ללא הגבלה",
+      "defaultLimited": "מוגבל ל",
+      "defaultUnavailable": "לא זמין",
+      "defaultRequestsLabel": "בקשות ליום עבור כל השאר",
+      "requestsPerDay": "בקשות / יום",
+      "inheritedFrom": "הגדרה זו נורשת מ-{state} של {origin}.",
+      "effectiveLabel": "כל מי שלא מופיע ברשימה יקבל: {state}.",
+      "inheritedChip": "מורש",
+      "origin": {
+        "model": "הגדרה זו",
+        "family": "המשפחה שלה",
+        "defaults": "ברירות מחדל גלובליות",
+        "catalogExternal": "הכלל שמודלים חיצוניים אינם זמינים עד שניתנת הרשאה",
+        "catalog": "ברירת המחדל של הקטלוג"
+      },
+      "state": {
+        "unlimited": "ללא הגבלה",
+        "limited": "מוגבל ל-{requests} / יום",
+        "unavailable": "לא זמין"
+      },
+      "list": {
+        "groups": "קבוצות עם גישה",
+        "domains": "דומיינים עם גישה",
+        "allow": "אנשים מורשים",
+        "deny": "אנשים חסומים"
+      },
+      "listHint": {
+        "groups": "חברי קבוצות Entra אלו יכולים להשתמש, בהתאם לתנאים שהוגדרו לכל קבוצה.",
+        "domains": "כל מי שכתובת המייל שלו שייכת לדומיינים אלו, בהתאם לתנאים שהוגדרו לכל דומיין.",
+        "allow": "אנשים בשם יכולים להשתמש ללא תלות בברירת המחדל או בדומיין שלהם.",
+        "deny": "אנשים בשם לעולם לא יוכלו להשתמש. זה גובר על כל הרשאה שמופיעה למעלה."
+      },
+      "grantUnlimited": "ללא הגבלה",
+      "grantLimited": "מוגבל ל",
+      "termsLabel": "תנאים עבור {target}",
+      "requestsLabel": "בקשות ליום עבור {target}",
+      "removeGrant": "הסר את {target}",
+      "groupsCount": "{count, plural, one {קבוצה אחת} other {# קבוצות}}",
+      "domainsCount": "{count, plural, one {דומיין אחד} other {# דומיינים}}",
+      "allowCount": "{count, plural, one {אדם אחד מורשה} other {# אנשים מורשים}}",
+      "denyCount": "{count, plural, one {אדם אחד חסום} other {# אנשים חסומים}}",
+      "collisionChip": "נמצא גם בברירות המחדל הגלובליות",
+      "collisionWarning": "מודל זה או משפחה זו מוגדרים גם תחת ברירות המחדל הגלובליות. לא ניתן לשמור עד שאחד מהשניים ימחק."
+    },
+    "previewSourceModelAccess": "אישור מודל — {list}"
   },
   "m365": {
     "connections": {

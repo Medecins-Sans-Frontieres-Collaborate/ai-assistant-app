@@ -5604,7 +5604,8 @@
     "tab": {
       "defaults": "Genel varsayılanlar",
       "overrides": "Geçersiz kılmalar",
-      "delegations": "Delegasyonlar"
+      "delegations": "Delegasyonlar",
+      "models": "Modeller"
     },
     "tabsLabel": "Sınır bölümleri",
     "category": {
@@ -6032,7 +6033,69 @@
     "disabledDelegationNote": "Delegasyonu devre dışı bırakıldı, bu yüzden bu geçersiz kılma, delegasyon yeniden etkinleştirilene kadar kimseye uygulanmaz. Asla genel düzeye yükseltilmez.",
     "betaPolicyNotice": "Beta ortamı: Bu politika ve kullanım sayaçları, üretimden (policy.beta.json) ayrı olarak saklanır. Burada yaptığınız hiçbir değişiklik üretimi etkilemez.",
     "delegationsManagedElsewhere": "Delegasyonlar burada yalnızca okunabilir olarak görüntülenir. Bir delegasyondaki kişiler, kapsadığı kullanıcılar ve her yöneticinin yetkileri Delegasyonlar alanında yönetilir.",
-    "delegationsManagedElsewhereLink": "Delegasyonları Aç"
+    "delegationsManagedElsewhereLink": "Delegasyonları Aç",
+    "modelAccess": {
+      "intro": "Her bir modeli kimin kullanabileceğine karar verin. Bir ailenin ayarı, model kendi ayarını belirlemediği sürece o ailenin modelleri için geçerlidir; bir listedeki kişiler, diğer herkes için varsayılanı geçersiz kılar; engelleme listesi ise tüm izinlerin üzerindedir.",
+      "externalNote": "Azure ortamı dışında barındırılan modeller ({families}), burada izin vermediğiniz sürece herkes için kullanılamaz — isteğe bağlı olarak tüm kullanıcılar (varsayılan), ya da gruplar, alan adları ve kişiler için.",
+      "envelopeNote": "Bir ailedeki istek limiti, o ailenin modelleri arasında paylaşılan günlük bir bütçedir; bir modeldeki limit ise model için bir üst sınırdır. Bir modelde 'Sınırsız' seçmek, aile bütçesini aşmaz.",
+      "observeNote": "Gözlem modu açık: Buradaki hiçbir ayar şu anda bir modeli gizlemez veya isteği engellemez. Kurallar doğru olduğunda yukarıdan Zorla seçeneğine geçin.",
+      "familyChip": "Aile",
+      "modelChip": "Model",
+      "otherModels": "Ailesi olmayan modeller",
+      "modelsInFamily": "{count, plural, one {Bu ailede # model var} other {Bu ailede # model var}}",
+      "noModels": "Katalogda henüz model yok.",
+      "expand": "Modelleri göster",
+      "collapse": "Modelleri gizle",
+      "edit": "Düzenle",
+      "doneEditing": "Bitti",
+      "editNode": "{label} için erişimi düzenle",
+      "defaultLabel": "Diğer herkes",
+      "defaultInherit": "Devral",
+      "defaultUnlimited": "Sınırsız",
+      "defaultLimited": "Şu kadar ile sınırla",
+      "defaultUnavailable": "Kullanılamaz",
+      "defaultRequestsLabel": "Diğer herkes için günlük istek",
+      "requestsPerDay": "istek / gün",
+      "inheritedFrom": "{origin} kaynağından {state} devralıyor.",
+      "effectiveLabel": "Listede olmayan herkes: {state}.",
+      "inheritedChip": "devralınan",
+      "origin": {
+        "model": "bu ayar",
+        "family": "aile ayarı",
+        "defaults": "Global varsayılanlar",
+        "catalogExternal": "dış modellerin izin verilene kadar kullanılamaz olma kuralı",
+        "catalog": "katalog varsayılanı"
+      },
+      "state": {
+        "unlimited": "Sınırsız",
+        "limited": "Günde {requests} ile sınırlı",
+        "unavailable": "Kullanılamaz"
+      },
+      "list": {
+        "groups": "Erişimi olan gruplar",
+        "domains": "Erişimi olan alan adları",
+        "allow": "İzin verilen kişiler",
+        "deny": "Engellenen kişiler"
+      },
+      "listHint": {
+        "groups": "Bu Entra gruplarının üyeleri, grup için belirlenen koşullarda kullanabilir.",
+        "domains": "Bu alan adlarında e-posta adresi olan herkes, alan için belirlenen şartlarda kullanabilir.",
+        "allow": "İsmi belirtilen kişiler, varsayılandan veya alan ayarlarından bağımsız olarak kullanabilir.",
+        "deny": "İsmi belirtilen kişiler asla kullanamaz. Bu, yukarıdaki tüm izinleri geçersiz kılar."
+      },
+      "grantUnlimited": "Sınırsız",
+      "grantLimited": "Şu kadar ile sınırla",
+      "termsLabel": "{target} için koşullar",
+      "requestsLabel": "{target} için günlük istek",
+      "removeGrant": "{target}'ı kaldır",
+      "groupsCount": "{count, plural, one {# grup} other {# grup}}",
+      "domainsCount": "{count, plural, one {# alan adı} other {# alan adı}}",
+      "allowCount": "{count, plural, one {# kişi izinli} other {# kişi izinli}}",
+      "denyCount": "{count, plural, one {# kişi engellendi} other {# kişi engellendi}}",
+      "collisionChip": "Global varsayılanlarda da mevcut",
+      "collisionWarning": "Bu model veya ailesi ayrıca Global varsayılanlarda yapılandırılmıştır. Kaydetme işlemi, ikisinden biri temizlenene kadar reddedilecektir."
+    },
+    "previewSourceModelAccess": "Model onayı — {list}"
   },
   "m365": {
     "connections": {

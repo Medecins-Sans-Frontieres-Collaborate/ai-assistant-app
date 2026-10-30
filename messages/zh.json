@@ -5635,7 +5635,8 @@
     "tab": {
       "defaults": "全局默认",
       "overrides": "覆盖设置",
-      "delegations": "授权组"
+      "delegations": "授权组",
+      "models": "模型"
     },
     "tabsLabel": "限额部分",
     "category": {
@@ -6063,7 +6064,69 @@
     "disabledDelegationNote": "此委托已禁用，因此该覆盖设置在再次启用委托前对任何人都无效。不会提升为全局级别。",
     "betaPolicyNotice": "测试环境：此策略及其使用计数器与生产环境分开存储（policy.beta.json）。您在此处所做的任何更改都不会影响生产环境。",
     "delegationsManagedElsewhere": "工作分配仅可在此查看，无法编辑。分配成员、覆盖用户和管理员权限等内容请在“工作分配”区域管理。",
-    "delegationsManagedElsewhereLink": "打开工作分配"
+    "delegationsManagedElsewhereLink": "打开工作分配",
+    "modelAccess": {
+      "intro": "决定谁可以使用每个模型。家族的设置适用于其下的模型，除非模型另有指定；名单上的人覆盖所有默认设置；封锁名单优先于所有授权。",
+      "externalNote": "托管在 Azure 环境之外的模型（{families}）只有在您在此授予权限后，才对所有人可用 —— 可以通过默认对所有人开放，或指定给群组、域名和个人。",
+      "envelopeNote": "为家族设置的请求限制是其下所有模型每日共享配额；为单个模型设置的限制仅适用于该模型内。某模型设置为无限不会影响家族总预算。",
+      "observeNote": "当前为观察模式：此处的设置不会隐藏模型或阻止请求。待规则设置正确后，在上方切换为强制执行。",
+      "familyChip": "家族",
+      "modelChip": "模型",
+      "otherModels": "未归类家族的模型",
+      "modelsInFamily": "{count, plural, one {该家族有 # 个模型} other {该家族有 # 个模型}}",
+      "noModels": "目录中暂无模型。",
+      "expand": "显示模型",
+      "collapse": "隐藏模型",
+      "edit": "编辑",
+      "doneEditing": "完成",
+      "editNode": "编辑 {label} 的访问权限",
+      "defaultLabel": "其他所有人",
+      "defaultInherit": "继承",
+      "defaultUnlimited": "无限制",
+      "defaultLimited": "限制为",
+      "defaultUnavailable": "不可用",
+      "defaultRequestsLabel": "其他所有人的每日请求数",
+      "requestsPerDay": "请求/天",
+      "inheritedFrom": "继承自 {origin} 的 {state}。",
+      "effectiveLabel": "未列入名单的所有人将获得：{state}。",
+      "inheritedChip": "已继承",
+      "origin": {
+        "model": "本设置",
+        "family": "其家族",
+        "defaults": "全局默认设置",
+        "catalogExternal": "外部模型须授权才可用的规则",
+        "catalog": "目录默认设置"
+      },
+      "state": {
+        "unlimited": "无限制",
+        "limited": "限制为 {requests} / 天",
+        "unavailable": "不可用"
+      },
+      "list": {
+        "groups": "有访问权的群组",
+        "domains": "有访问权的域名",
+        "allow": "允许的个人",
+        "deny": "封锁的个人"
+      },
+      "listHint": {
+        "groups": "这些 Entra 群组的成员可根据群组设定使用该模型。",
+        "domains": "拥有这些域名邮箱的所有人可按该域名设置使用。",
+        "allow": "被指定的个人可使用该模型，无论其默认或域名设置如何。",
+        "deny": "被指定的个人永远无法使用。此规则优先于上方所有授权。"
+      },
+      "grantUnlimited": "无限制",
+      "grantLimited": "限制为",
+      "termsLabel": "{target} 的使用条件",
+      "requestsLabel": "{target} 的每日请求数",
+      "removeGrant": "移除 {target}",
+      "groupsCount": "{count, plural, one {# 个群组} other {# 个群组}}",
+      "domainsCount": "{count, plural, one {# 个域名} other {# 个域名}}",
+      "allowCount": "{count, plural, one {允许 # 人} other {允许 # 人}}",
+      "denyCount": "{count, plural, one {封锁 # 人} other {封锁 # 人}}",
+      "collisionChip": "也在全局默认设置中",
+      "collisionWarning": "该模型或系列也已在全局默认设置中配置。请在两个设置中清除其一后再保存。"
+    },
+    "previewSourceModelAccess": "模型审批 — {list}"
   },
   "m365": {
     "connections": {

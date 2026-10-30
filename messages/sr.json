@@ -5588,7 +5588,8 @@
     "tab": {
       "defaults": "Globalna podešavanja",
       "overrides": "Prečice",
-      "delegations": "Delegacije"
+      "delegations": "Delegacije",
+      "models": "Modeli"
     },
     "tabsLabel": "Odeljci ograničenja",
     "category": {
@@ -6016,7 +6017,69 @@
     "disabledDelegationNote": "Njegova delegacija je onemogućena, tako da ova izmena ne važi za nikoga dok se delegacija ponovo ne omogući. Nikada se ne promoviše na globalni nivo.",
     "betaPolicyNotice": "Beta okruženje: ova pravila i njihovi brojači upotrebe čuvaju se odvojeno od produkcije (policy.beta.json). Sve što ovde promenite ne utiče na produkciju.",
     "delegationsManagedElsewhere": "Delegacije su ovde prikazane samo za čitanje. Ko je u delegaciji, koje korisnike obuhvata i šta svaki administrator može, uređuje se u oblasti Delegacije.",
-    "delegationsManagedElsewhereLink": "Otvori Delegacije"
+    "delegationsManagedElsewhereLink": "Otvori Delegacije",
+    "modelAccess": {
+      "intro": "Odlučite ko može koristiti svaki model. Podešavanje porodice važi za njene modele, osim ako model nema svoje podešavanje; ljudi na listi imaju prednost nad podrazumevanim za sve ostale; blok lista ima prednost nad svim odobrenjima.",
+      "externalNote": "Modeli koji su hostovani izvan Azure okruženja ({families}) nisu dostupni nikome dok ih ovde ne odobrite — svima preko podrazumevanog ili određenim grupama, domenima i osobama.",
+      "envelopeNote": "Ograničenje zahteva na porodicu predstavlja zajednički dnevni budžet za njene modele; ograničenje na model predstavlja limit unutar njega. Neograničeno na modelu ne ukida budžet porodice.",
+      "observeNote": "Režim posmatranja je uključen: ništa ovde još ne skriva model ili ne zaustavlja zahtev. Prebacite na režim sprovođenja iznad kad pravila budu ispravna.",
+      "familyChip": "Porodica",
+      "modelChip": "Model",
+      "otherModels": "Modeli bez porodice",
+      "modelsInFamily": "{count, plural, one {# model u ovoj porodici} other {# modela u ovoj porodici}}",
+      "noModels": "Još nema modela u katalogu.",
+      "expand": "Prikaži modele",
+      "collapse": "Sakrij modele",
+      "edit": "Izmeni",
+      "doneEditing": "Završeno",
+      "editNode": "Izmeni pristup za {label}",
+      "defaultLabel": "Svi ostali",
+      "defaultInherit": "Nasleđuje",
+      "defaultUnlimited": "Neograničeno",
+      "defaultLimited": "Ograničeno na",
+      "defaultUnavailable": "Nedostupno",
+      "defaultRequestsLabel": "Zahtevi po danu za sve ostale",
+      "requestsPerDay": "zahteva / dan",
+      "inheritedFrom": "Nasleđuje {state} od {origin}.",
+      "effectiveLabel": "Svi koji nisu na listi dobijaju: {state}.",
+      "inheritedChip": "nasleđeno",
+      "origin": {
+        "model": "ovo podešavanje",
+        "family": "njena porodica",
+        "defaults": "Globalna podrazumevana",
+        "catalogExternal": "pravilo da su eksterni modeli nedostupni dok nisu odobreni",
+        "catalog": "podrazumevano iz kataloga"
+      },
+      "state": {
+        "unlimited": "Neograničeno",
+        "limited": "Ograničeno na {requests} / dan",
+        "unavailable": "Nedostupno"
+      },
+      "list": {
+        "groups": "Grupe sa pristupom",
+        "domains": "Domeni sa pristupom",
+        "allow": "Odobrene osobe",
+        "deny": "Blokirane osobe"
+      },
+      "listHint": {
+        "groups": "Članovi ovih Entra grupa mogu ga koristiti, prema pravilima za svaku grupu.",
+        "domains": "Svi sa email adresom na ovim domenima, prema pravilima za svaki domen.",
+        "allow": "Imenovane osobe mogu ga koristiti bez obzira na podrazumevano ili njihov domen.",
+        "deny": "Imenovane osobe ga nikada ne mogu koristiti. Ovo ima prednost nad svim odobrenjima iznad."
+      },
+      "grantUnlimited": "Neograničeno",
+      "grantLimited": "Ograničeno na",
+      "termsLabel": "Uslovi za {target}",
+      "requestsLabel": "Zahteva po danu za {target}",
+      "removeGrant": "Ukloni {target}",
+      "groupsCount": "{count, plural, one {# grupa} other {# grupa}}",
+      "domainsCount": "{count, plural, one {# domen} other {# domena}}",
+      "allowCount": "{count, plural, one {# odobrena osoba} other {# odobrenih osoba}}",
+      "denyCount": "{count, plural, one {# blokirana osoba} other {# blokiranih osoba}}",
+      "collisionChip": "Takođe u globalnim podrazumevanim vrednostima",
+      "collisionWarning": "Ovaj model ili porodica je takođe podešena pod globalnim podrazumevanim vrednostima. Čuvanje neće biti dozvoljeno dok se jedno od dva ne ukloni."
+    },
+    "previewSourceModelAccess": "Odobrenje modela — {list}"
   },
   "m365": {
     "connections": {
