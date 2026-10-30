@@ -4,9 +4,12 @@ import { useSkillSelection } from '@/client/hooks/settings/useSkillSelection';
 
 import { SKILL_LIMITS } from '@/lib/services/skills/types';
 
+import { useSettingsStore } from '@/client/stores/settingsStore';
+
 /** Capabilities-tray controls: use once or pin to this conversation. */
 export function SkillControls() {
   const t = useTranslations('chat');
+  const autoEnabled = useSettingsStore((state) => state.skillsAutoEnabled);
   const {
     query,
     pinned,
@@ -29,7 +32,11 @@ export function SkillControls() {
         {t('addSkill')}
       </h3>
       <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">
-        {agentAttached ? t('skillsAgentToolsHint') : t('skillsAutomaticHint')}
+        {agentAttached
+          ? t('skillsAgentToolsHint')
+          : autoEnabled
+            ? t('skillsAutomaticHint')
+            : t('skillsManualHint')}
       </p>
       <ul className="mt-2 divide-y divide-gray-200 dark:divide-gray-700">
         {(query.data ?? []).map((skill) => {

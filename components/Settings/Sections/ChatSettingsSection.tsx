@@ -29,6 +29,8 @@ import { TTSSettingsPanel } from '../TTS/TTSSettingsPanel';
 import { TemperatureSlider } from '../Temperature';
 import { WebSearchSettingsPanel } from '../WebSearchSettingsPanel';
 
+import { useSettingsStore } from '@/client/stores/settingsStore';
+
 interface ChatSettingsSectionProps {
   state: Settings;
   dispatch: React.Dispatch<{
@@ -50,6 +52,12 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
   onClose,
 }) => {
   const t = useTranslations();
+  const skillsAutoEnabled = useSettingsStore(
+    (state) => state.skillsAutoEnabled,
+  );
+  const setSkillsAutoEnabled = useSettingsStore(
+    (state) => state.setSkillsAutoEnabled,
+  );
   const [isModelResponseExpanded, setIsModelResponseExpanded] = useState(true);
   const [isAdvancedExpanded, setIsAdvancedExpanded] = useState(false);
   const [isAboutYouExpanded, setIsAboutYouExpanded] = useState(false);
@@ -84,6 +92,24 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
       </div>
 
       <div className="space-y-8">
+        {/* Skills are always available; this is the user's own switch for
+            automatic selection (docs/SKILLS_DESIGN.md §5.1). */}
+        <div>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              className="w-4 h-4 accent-gray-600 dark:accent-gray-400"
+              checked={skillsAutoEnabled}
+              onChange={(e) => setSkillsAutoEnabled(e.target.checked)}
+            />
+            <span className="text-sm text-black dark:text-gray-200">
+              {t('settings.skills.autoApply')}
+            </span>
+          </label>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-7">
+            {t('settings.skills.autoApplyDescription')}
+          </p>
+        </div>
         <PersonalSkills />
         {/* Model Response Settings Section - Collapsible */}
         <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
