@@ -685,6 +685,14 @@ export interface ToolRouterResponse {
    * indistinguishable from "no tools needed".
    */
   degraded?: boolean;
+  /**
+   * Why the classifier degraded (ToolRouterService.describeAuxiliaryFailure)
+   * and which region-pinned endpoint failed, when the call was pinned. The
+   * enricher names the region in the activity marker so an EU-only outage
+   * is distinguishable from a global one.
+   */
+  degradedReason?: import('@/lib/services/chat/ToolRouterService').AuxiliaryFailureReason;
+  degradedRegion?: 'US' | 'EU';
   reasoning?: string; // Optional reasoning for debugging
 }
 
