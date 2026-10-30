@@ -1,7 +1,7 @@
 /**
  * SkillEnricher (docs/SKILLS_DESIGN.md §9): 'always' + forced delivery into
  * the system prompt, the platform-help section swap, the explicit-use
- * visibility marker, and the agent-path / feature gates.
+ * visibility marker, the user's automatic-selection toggle, and the agent-path gate.
  *
  * The catalog module is mocked at its seam (feature gate + visible-catalog
  * read); resolveActiveSkills stays REAL so these tests exercise the actual
@@ -12,10 +12,7 @@ import {
   SkillCatalogEnricher,
   SkillEnricher,
 } from '@/lib/services/chat/enrichers/SkillEnricher';
-import {
-  getVisibleSkills,
-  skillsFeatureEnabled,
-} from '@/lib/services/skills/skillCatalog';
+import { getVisibleSkills } from '@/lib/services/skills/skillCatalog';
 import { CatalogSkill, Skill } from '@/lib/services/skills/types';
 
 import {
@@ -30,12 +27,10 @@ vi.mock('@/lib/services/skills/skillCatalog', async (importOriginal) => {
     await importOriginal<typeof import('@/lib/services/skills/skillCatalog')>();
   return {
     ...actual,
-    skillsFeatureEnabled: vi.fn(() => true),
     getVisibleSkills: vi.fn(async () => []),
   };
 });
 
-const mockFeatureEnabled = skillsFeatureEnabled as Mock;
 const mockGetVisibleSkills = getVisibleSkills as Mock;
 
 function makeSkill(overrides: Partial<Skill> & { id: string }): Skill {
@@ -75,18 +70,12 @@ describe('SkillEnricher', () => {
   const enricher = new SkillEnricher();
 
   beforeEach(() => {
-    mockFeatureEnabled.mockReturnValue(true);
     mockGetVisibleSkills.mockResolvedValue([]);
   });
 
   describe('shouldRun', () => {
     it('runs on a standard turn when the feature is enabled', () => {
       expect(enricher.shouldRun(createTestChatContext({}))).toBe(true);
-    });
-
-    it('does not run when the feature is disabled', () => {
-      mockFeatureEnabled.mockReturnValue(false);
-      expect(enricher.shouldRun(createTestChatContext({}))).toBe(false);
     });
 
     it('does not run on agent turns (botId)', () => {
@@ -367,6 +356,64 @@ describe('SkillEnricher', () => {
       );
       expect(result.systemPrompt).toBe(BASE_PROMPT);
       expect(result.errors).toHaveLength(1);
+    });
+  });
+
+  describe('user toggle (skillsAuto: false)', () => {
+    it('skips automatic selection and personal skills but keeps requested and always skills', async () => {
+      mockGetVisibleSkills.mockResolvedValue([
+        entry({ id: 'gdpr' }),
+        entry({ id: 'house-style', activation: 'always' }),
+        entry({ id: 'platform-help' }),
+      ]);
+      const determineSkills = vi.fn();
+      const result = await new SkillEnricher({ determineSkills }).execute({
+        ...createTestChatContext({ systemPrompt: BASE_PROMPT }),
+        emitMarker: vi.fn(),
+        skillsAuto: false,
+        forcedSkillIds: ['gdpr', 'user:report'],
+        userSkills: [
+          {
+            id: 'report',
+            name: 'Report',
+            description: 'd',
+            instructions: 'Personal instructions',
+            activation: 'auto',
+            enabled: true,
+          },
+        ],
+      });
+      expect(determineSkills).not.toHaveBeenCalled();
+      expect(result.systemPrompt).toContain('Instructions for gdpr');
+      expect(result.systemPrompt).toContain('Instructions for house-style');
+      expect(result.systemPrompt).not.toContain('Personal instructions');
+      // The platform sections stay: platform-help can no longer be routed in.
+      expect(result.systemPrompt).toContain(PLATFORM_ABOUT_PROMPT_SECTION);
+      expect(result.activeSkills?.map((skill) => skill.id)).toEqual([
+        'gdpr',
+        'house-style',
+      ]);
+    });
+
+    it('still swaps the platform sections when platform-help is requested explicitly', async () => {
+      mockGetVisibleSkills.mockResolvedValue([entry({ id: 'platform-help' })]);
+      const result = await new SkillEnricher().execute({
+        ...createTestChatContext({ systemPrompt: BASE_PROMPT }),
+        emitMarker: vi.fn(),
+        skillsAuto: false,
+        forcedSkillIds: ['platform-help'],
+      });
+      expect(result.systemPrompt).not.toContain(PLATFORM_ABOUT_PROMPT_SECTION);
+      expect(result.systemPrompt).toContain('Instructions for platform-help');
+    });
+
+    it('gives the router an empty catalog when automatic selection is off', async () => {
+      mockGetVisibleSkills.mockResolvedValue([entry({ id: 'gdpr' })]);
+      const result = await new SkillCatalogEnricher().execute({
+        ...createTestChatContext({}),
+        skillsAuto: false,
+      });
+      expect(result.skillCatalog).toEqual([]);
     });
   });
 });

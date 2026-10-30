@@ -5,10 +5,7 @@
  */
 import { createTestChatContext } from '@/__tests__/lib/services/chat/testUtils';
 import { SkillEnricher } from '@/lib/services/chat/enrichers/SkillEnricher';
-import {
-  getVisibleSkills,
-  skillsFeatureEnabled,
-} from '@/lib/services/skills/skillCatalog';
+import { getVisibleSkills } from '@/lib/services/skills/skillCatalog';
 import { CatalogSkill, Skill } from '@/lib/services/skills/types';
 
 import { Mock, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -18,12 +15,10 @@ vi.mock('@/lib/services/skills/skillCatalog', async (importOriginal) => {
     await importOriginal<typeof import('@/lib/services/skills/skillCatalog')>();
   return {
     ...actual,
-    skillsFeatureEnabled: vi.fn(() => true),
     getVisibleSkills: vi.fn(async () => []),
   };
 });
 
-const mockFeatureEnabled = skillsFeatureEnabled as Mock;
 const mockGetVisibleSkills = getVisibleSkills as Mock;
 
 function entry(overrides: Partial<Skill> & { id: string }): CatalogSkill {
@@ -46,7 +41,7 @@ function entry(overrides: Partial<Skill> & { id: string }): CatalogSkill {
 
 describe('SkillEnricher live activity', () => {
   beforeEach(() => {
-    mockFeatureEnabled.mockReturnValue(true);
+    mockGetVisibleSkills.mockResolvedValue([]);
   });
 
   it('announces a single applied skill by name', async () => {

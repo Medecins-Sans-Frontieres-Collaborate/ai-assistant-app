@@ -2,18 +2,18 @@ import { createTestChatContext } from '@/__tests__/lib/services/chat/testUtils';
 import { AgentSkillEnricher } from '@/lib/services/chat/enrichers/AgentSkillEnricher';
 import {
   getVisibleSkills,
-  skillsFeatureEnabled,
+  orgSkillsAvailable,
 } from '@/lib/services/skills/skillCatalog';
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/lib/services/skills/skillCatalog', () => ({
   getVisibleSkills: vi.fn(),
-  skillsFeatureEnabled: vi.fn(() => true),
+  orgSkillsAvailable: vi.fn(() => true),
 }));
 describe('agent skill eligibility', () => {
   beforeEach(() => {
-    vi.mocked(skillsFeatureEnabled).mockReturnValue(true);
+    vi.mocked(orgSkillsAvailable).mockReturnValue(true);
     vi.mocked(getVisibleSkills).mockResolvedValue([]);
   });
   it('keeps default agent prompts unchanged and offers no unconfigured skills', async () => {
@@ -57,10 +57,10 @@ describe('agent skill eligibility', () => {
     expect(result.forcedSkillIds).toEqual(['gdpr']);
     expect(result.systemPrompt).toBe('Persona');
   });
-  it('does not run on standard conversations or with the feature disabled', () => {
+  it('does not run on standard conversations or without agent-access storage (org skills)', () => {
     const enricher = new AgentSkillEnricher();
     expect(enricher.shouldRun(createTestChatContext({}))).toBe(false);
-    vi.mocked(skillsFeatureEnabled).mockReturnValue(false);
+    vi.mocked(orgSkillsAvailable).mockReturnValue(false);
     expect(enricher.shouldRun(createTestChatContext({ botId: 'agent' }))).toBe(
       false,
     );
