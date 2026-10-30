@@ -25,6 +25,7 @@ export class SkillReferenceEnricher extends BasePipelineStage {
   }
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
     try {
+      void context.emitActivity?.('chat.activity.readingSkillReferences');
       const query = context.messages
         .slice(-6)
         .map((message) =>
