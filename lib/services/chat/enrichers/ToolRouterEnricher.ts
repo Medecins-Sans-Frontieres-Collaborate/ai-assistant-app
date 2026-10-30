@@ -550,7 +550,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           ...context,
           skillRouting: {
             relevantSkills: decided.relevantSkills ?? [],
-            degraded: decided.degraded,
+            degraded: decided.degraded || decided.skillSelectionDegraded,
           },
         };
       }

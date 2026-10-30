@@ -125,6 +125,9 @@ export class SkillEnricher extends BasePipelineStage {
             : last && 'text' in last
               ? last.text
               : '';
+      // The skills-only router call is the one wait this stage adds to a
+      // turn; say so while it runs rather than leaving the generic text up.
+      void context.emitActivity?.('chat.activity.selectingSkills');
       routing = await this.router.determineSkills({
         messages: context.messages,
         currentMessage,
