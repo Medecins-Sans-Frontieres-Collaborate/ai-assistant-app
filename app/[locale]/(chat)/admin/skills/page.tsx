@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
 import { resolveAdminStatus } from '@/lib/services/agentAccess/adminAuth';
-import { skillsFeatureEnabled } from '@/lib/services/skills/skillCatalog';
+import { orgSkillsAvailable } from '@/lib/services/skills/skillCatalog';
 
 import { SkillsPanel } from '@/components/Admin/Skills/SkillsPanel';
 
@@ -14,11 +14,11 @@ import { auth } from '@/auth';
  * Its OWN gate (the adminAreas.ts contract: the rail resolver is not
  * per-area authorization), the glossaries/guides model: local-or-global
  * admins may open it — created skills are delegated to their creator, and
- * the API re-checks per canonical key on every write. Feature-gated like
- * the API routes: both the agent-access master switch and SKILLS_ENABLED.
+ * the API re-checks per canonical key on every write. Gated like the API
+ * routes on the agent-access master switch, whose storage org skills ride.
  */
 export default async function SkillsAdminPage() {
-  if (!skillsFeatureEnabled()) redirect('/');
+  if (!orgSkillsAvailable()) redirect('/');
   const session = await auth();
   if (!session) redirect('/signin');
 
