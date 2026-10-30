@@ -325,14 +325,11 @@ const serverEnvSchema = z.object({
   // this is also empty (GLOBAL_ADMINS_LOCKOUT).
   AGENT_ACCESS_ADMINS: z.string().optional(),
 
-  // Skills (docs/SKILLS_DESIGN.md). Gates the chat-pipeline enricher, the
-  // catalog/admin APIs, and the admin area. Rides the agent-access storage
-  // and admin machinery, so it is only effective when
-  // AGENT_ACCESS_CONTROL_ENABLED is also true. Default off: enabling is the
-  // moment the base prompt's platform knowledge becomes automatically
-  // routed. Core safety stays unconditional. Break-glass: set to "false"
-  // and redeploy to restore the full base prompt.
-  SKILLS_ENABLED: booleanString(false),
+  // Skills (docs/SKILLS_DESIGN.md) are always on; users turn automatic
+  // selection off per browser in Settings → Chat. Organization skills and
+  // the admin area ride the agent-access storage, so they also need
+  // AGENT_ACCESS_CONTROL_ENABLED. The variables below configure the optional
+  // reference-document index.
   SKILLS_SEARCH_ENDPOINT: z.string().url().optional(),
   SKILLS_SEARCH_INDEX: z.string().default('skills'),
   /** Organization reference corpus residency; queries and embeddings must agree. */
