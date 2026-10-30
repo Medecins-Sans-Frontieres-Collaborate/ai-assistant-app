@@ -38,6 +38,9 @@ export async function defaultProbe(client: AuxiliaryClient): Promise<void> {
     {
       model: AUXILIARY_ROUTER_MODEL,
       messages: [{ role: 'user', content: 'ping' }],
+      // Same shape as the router's real call, so a deployment that rejects
+      // the parameter fails here instead of on the first user turn.
+      reasoning_effort: 'minimal',
       max_completion_tokens: 16,
     },
     { timeout: 15_000, maxRetries: 0 },
@@ -47,9 +50,13 @@ export async function defaultProbe(client: AuxiliaryClient): Promise<void> {
 export function defaultGetClient(
   region: UserRegion,
 ): AuxiliaryClient | undefined {
-  const regional =
-    ServiceContainer.getInstance().getChatClientsForRegion(region);
-  return regional.openAIClient ?? regional.azureOpenAIClient;
+  const container = ServiceContainer.getInstance();
+  const regional = container.getChatClientsForRegion(region);
+  const client = regional.openAIClient ?? regional.azureOpenAIClient;
+  // Mirrors ToolRouterService.clientFor: a US pin without a US client uses
+  // the default set; EU never falls back.
+  if (!client && region === 'US') return container.getOpenAIClient();
+  return client;
 }
 
 /** Returns per-region outcomes (for tests); logs each as it resolves. */
@@ -68,7 +75,7 @@ export async function checkAuxiliaryRouterEndpoints(
       if (!client) {
         outcomes[region] = 'missing';
         log.warn(
-          `[tool-router] No ${region} auxiliary endpoint configured — tool routing, skill selection and document-trim classification for ${region}-pinned users will degrade to "no tools" on every turn. Set AZURE_AI_FOUNDRY_ENDPOINT_${region} (or AZURE_OPENAI_ENDPOINT_${region}), or AZURE_DEFAULT_REGION=${region} when the default endpoints live there.`,
+          `[tool-router] No ${region} auxiliary endpoint configured — tool routing, skill selection and document-trim classification for ${region}-pinned users will degrade to "no tools" on every turn (EU never falls back to the default endpoints). Set AZURE_AI_FOUNDRY_ENDPOINT_${region} (or AZURE_OPENAI_ENDPOINT_${region}), or AZURE_DEFAULT_REGION=${region} when the default endpoints live there.`,
         );
         return;
       }
