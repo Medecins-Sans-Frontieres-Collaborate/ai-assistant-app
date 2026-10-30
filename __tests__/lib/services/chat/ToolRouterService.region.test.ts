@@ -125,6 +125,45 @@ describe('ToolRouterService region pinning', () => {
     expect(result.degradedReason).toBe('unauthorized');
   });
 
+  it('falls back to the default client for a US pin without a US client (US is not residency-constrained)', async () => {
+    const service = new ToolRouterService(defaultClient, () => undefined);
+    const result = await service.determineTool({ ...request, region: 'US' });
+    expect(result.tools).toEqual(['web_search']);
+    expect(result.degraded).toBeUndefined();
+    expect(defaultClient.chat.completions.create).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the tools decision when the skill selection is missing, flagging only the skill side', async () => {
+    const eu = client(async () => ({
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              needsWebSearch: true,
+              searchQuery: 'sudan news',
+              additionalSearchQueries: [],
+              searchRecency: 'day',
+              searchComprehensive: false,
+              searchCategory: 'news',
+              searchLanguage: 'en',
+              // relevantSkills omitted although a catalog was sent
+            }),
+          },
+        },
+      ],
+    }));
+    const service = new ToolRouterService(defaultClient, () => eu);
+    const result = await service.determineTool({
+      ...request,
+      region: 'EU',
+      skillCatalog: [{ id: 'gdpr', name: 'GDPR', description: 'privacy' }],
+    });
+    expect(result.tools).toEqual(['web_search']);
+    expect(result.degraded).toBeUndefined();
+    expect(result.skillSelectionDegraded).toBe(true);
+    expect(result.relevantSkills).toEqual([]);
+  });
+
   it('skills-only selection carries the same degradation shape', async () => {
     const service = new ToolRouterService(defaultClient, () => undefined);
     const result = await service.determineSkills({
@@ -167,6 +206,9 @@ describe('describeAuxiliaryFailure', () => {
     expect(
       describeAuxiliaryFailure(new Error('Request timed out')).reason,
     ).toBe('timeout');
+    const aborted = new Error('aborted');
+    aborted.name = 'APIUserAbortError';
+    expect(describeAuxiliaryFailure(aborted).reason).toBe('timeout');
     expect(describeAuxiliaryFailure(new Error('boom')).reason).toBe('provider');
   });
 });
