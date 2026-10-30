@@ -177,6 +177,24 @@ export class SkillEnricher extends BasePipelineStage {
     if (active.length > 0) {
       systemPrompt = `${systemPrompt}\n\n${buildSkillsPromptSection(active)}`;
     }
+    // Live indicator (§10): the per-turn selections are named while the
+    // model is still working, so skill use is visible before the answer
+    // and not only in the retrospective record. Standing 'always' skills
+    // stay silent here for the same reason they emit no record.
+    const announced = active.filter((entry) => entry.via !== 'always');
+    if (announced.length > 0) {
+      void context.emitActivity?.(
+        announced.length === 1
+          ? 'chat.activity.applyingSkill'
+          : 'chat.activity.applyingSkills',
+        {
+          skills: announced
+            .map(({ skill }) => skill.name.replace(/\s+/g, ' '))
+            .join(', ')
+            .slice(0, 120),
+        },
+      );
+    }
     if (budgetSkipped.length)
       systemPrompt +=
         "\n\nSome selected skills exceeded this turn's skill context budget and were not loaded. Do not claim to have followed their instructions.";
