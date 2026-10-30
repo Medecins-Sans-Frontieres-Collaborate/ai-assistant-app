@@ -8,6 +8,7 @@ import { SKILL_LIMITS } from '@/lib/services/skills/types';
 
 import { devTrace } from '@/lib/utils/server/debug/devTrace';
 
+import type { AuxiliaryFailureReason } from '@/types/chat';
 import {
   Message,
   ToolRouterRequest,
@@ -76,14 +77,6 @@ const TRIM_CLASSIFY_SCHEMA = {
  */
 export const AUXILIARY_ROUTER_MODEL = 'gpt-5.4-nano';
 
-/** Why an auxiliary routing call could not produce a decision. */
-export type AuxiliaryFailureReason =
-  | 'endpoint_missing'
-  | 'deployment_missing'
-  | 'unauthorized'
-  | 'timeout'
-  | 'provider';
-
 /** Thrown when a region-pinned call has no regional client to run on. */
 export class AuxiliaryEndpointMissingError extends Error {
   constructor(public readonly region: 'US' | 'EU') {
@@ -129,7 +122,7 @@ export function describeAuxiliaryFailure(
     };
   }
   if (
-    (error instanceof Error && error.name === 'AbortError') ||
+    (error instanceof Error && /abort/i.test(error.name)) ||
     /timed? ?out|APIConnectionTimeoutError/i.test(text)
   ) {
     return { reason: 'timeout', message: `${where} timed out: ${text}` };
@@ -145,12 +138,29 @@ export class ToolRouterService {
     private regionalClient?: (region: 'US' | 'EU') => OpenAI | undefined,
   ) {}
 
-  /** Explicit regional requests never fall back to the unpinned default client. */
+  private warnedUsFallback = false;
+
+  /**
+   * EU-pinned requests never fall back to the unpinned default client — EU
+   * is the residency-constrained direction. A US pin without a US client
+   * uses the default set, exactly as chat does for US users
+   * (resolveChatRegion → null → default clients); US data may flow to the
+   * default endpoints wherever they live.
+   */
   private clientFor(region?: 'US' | 'EU'): OpenAI {
     if (!region) return this.openAIClient;
     const client = this.regionalClient?.(region);
-    if (!client) throw new AuxiliaryEndpointMissingError(region);
-    return client;
+    if (client) return client;
+    if (region === 'US') {
+      if (!this.warnedUsFallback) {
+        this.warnedUsFallback = true;
+        console.warn(
+          '[ToolRouterService] No US auxiliary endpoint configured; US-pinned routing uses the default endpoint.',
+        );
+      }
+      return this.openAIClient;
+    }
+    throw new AuxiliaryEndpointMissingError(region);
   }
 
   /**
@@ -719,10 +729,16 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               result.relevantSkills,
               catalog,
             );
-            if (catalog.length && !Array.isArray(result.relevantSkills)) {
-              throw new Error(
-                'Missing skill selection in tool router response',
+            // A missing/unusable skill selection must not cancel the tools
+            // decision in the same response: search and code execution
+            // stand, and only the skill side is reported as degraded.
+            const skillSelectionDegraded =
+              catalog.length > 0 && !Array.isArray(result.relevantSkills);
+            if (skillSelectionDegraded) {
+              console.warn(
+                '[ToolRouterService] Skill selection missing from the tool router response; tools decision kept, skills treated as degraded',
               );
+              span.setAttribute('tool_router.skills_degraded', true);
             }
             if (catalog.length)
               span.setAttribute('tool_router.skills', relevantSkills);
@@ -792,6 +808,7 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               return {
                 tools,
                 relevantSkills,
+                ...(skillSelectionDegraded ? { skillSelectionDegraded } : {}),
                 searchQuery: primaryQuery,
                 searchQueries,
                 searchRecency:
@@ -822,6 +839,7 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
             return {
               tools: [] as ToolType[],
               relevantSkills,
+              ...(skillSelectionDegraded ? { skillSelectionDegraded } : {}),
               reasoning: 'No tools needed',
             };
           } catch (error) {
