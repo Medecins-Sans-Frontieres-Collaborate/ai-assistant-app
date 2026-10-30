@@ -7,7 +7,7 @@ import {
 } from '@/lib/services/agentAccess/accessRulesStore';
 import { SKILL_SOURCE } from '@/lib/services/agentAccess/types';
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
-import { skillsFeatureEnabled } from '@/lib/services/skills/skillCatalog';
+import { orgSkillsAvailable } from '@/lib/services/skills/skillCatalog';
 import { readSkillOriginal } from '@/lib/services/skills/skillDocumentStore';
 import { SkillIdSchema } from '@/lib/services/skills/types';
 
@@ -25,7 +25,7 @@ export async function GET(
   context: { params: Promise<{ id: string; fileId: string }> },
 ) {
   try {
-    if (!skillsFeatureEnabled()) return notFoundResponse('Resource');
+    if (!orgSkillsAvailable()) return notFoundResponse('Resource');
     const session = await auth();
     if (!session?.user) return unauthorizedResponse();
     const { id, fileId } = await context.params;

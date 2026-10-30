@@ -1,10 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
-import {
-  getVisibleSkills,
-  skillsFeatureEnabled,
-} from '@/lib/services/skills/skillCatalog';
+import { getVisibleSkills } from '@/lib/services/skills/skillCatalog';
 
 import {
   handleApiError,
@@ -22,16 +19,13 @@ import { auth } from '@/auth';
  * activation — never the instruction body, which is injected server-side by
  * SkillEnricher and has no business in the browser.
  *
- * Returns an empty list rather than a 403 when the feature is off or the
- * user is entitled to nothing: "no skills" is a normal state, not an error.
+ * Returns an empty list rather than a 403 when the user is entitled to
+ * nothing: "no skills" is a normal state, not an error. Whether skills are
+ * applied automatically is the user's own Settings toggle (client-side).
  */
 export async function GET(request: NextRequest) {
   const session = await auth();
   if (!session?.user) return unauthorizedResponse();
-
-  if (!skillsFeatureEnabled()) {
-    return successResponse({ skills: [], enabled: false });
-  }
 
   // Group-membership warm-up MUST precede the evaluateAccess filter inside
   // getVisibleSkills — group-scoped rules read the cache synchronously.
@@ -42,7 +36,6 @@ export async function GET(request: NextRequest) {
     const visible = await getVisibleSkills(session.user.mail ?? undefined);
 
     return successResponse({
-      enabled: true,
       skills: visible.map((entry) => ({
         id: entry.skill.id,
         name: entry.skill.name,
