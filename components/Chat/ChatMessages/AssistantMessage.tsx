@@ -37,6 +37,7 @@ import { appendCitationsToMarkdown } from '@/lib/utils/app/export/citationExport
 import { getAutonym } from '@/lib/utils/app/locales';
 import { parseThinkingContent } from '@/lib/utils/app/stream/thinking';
 import { rewriteSandboxLinks } from '@/lib/utils/shared/chat/sandboxLinks';
+import { partitionSkillToolCalls } from '@/lib/utils/shared/chat/skillToolCalls';
 import { toSpeakableText } from '@/lib/utils/shared/markdown/speakableText';
 import { generateAudioFilename } from '@/lib/utils/shared/string/slugify';
 
@@ -64,6 +65,7 @@ import M365TodoTasksModal, {
   extractTaskCandidates,
 } from '@/components/Chat/ChatMessages/M365TodoTasksModal';
 import { MessageDownloadMenu } from '@/components/Chat/ChatMessages/MessageDownloadMenu';
+import { SkillUsageChip } from '@/components/Chat/ChatMessages/SkillUsageChip';
 import { ThinkingBlock } from '@/components/Chat/ChatMessages/ThinkingBlock';
 import { ToolCallSummary } from '@/components/Chat/ChatMessages/ToolCallSummary';
 import { TranscriptContent } from '@/components/Chat/ChatMessages/TranscriptContent';
@@ -867,14 +869,21 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                     ? streamingToolCalls
                     : message?.toolCalls;
               if (!liveCalls || liveCalls.length === 0) return null;
+              // Skill-use records get their own chip: guidance applied to
+              // the answer is not an external tool call, and burying it in
+              // "Used N tools" hid skill use entirely (docs/SKILLS_DESIGN.md
+              // §10).
+              const { skillCalls, otherCalls } =
+                partitionSkillToolCalls(liveCalls);
               return (
                 <>
                   {/* Code-interpreter deliverables (charts, exports) render
                       prominently on the message — never only inside the
                       collapsed tool strip. */}
                   <GeneratedFilesPanel toolCalls={liveCalls} />
+                  <SkillUsageChip toolCalls={skillCalls} />
                   <ToolCallSummary
-                    toolCalls={liveCalls}
+                    toolCalls={otherCalls}
                     approvalSources={message?.approvalSources}
                   />
                   {/* A multi-step search that ended short can be continued
