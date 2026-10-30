@@ -18,6 +18,7 @@ vi.mock('@/client/hooks/settings/useUserSkills', () => ({
         name: 'house-style',
         description: 'standing',
         activation: 'always',
+        applyToAgents: true,
       },
     ],
     isPending: false,
@@ -52,6 +53,28 @@ describe('SkillControls — standing skills', () => {
     ).toBeNull();
     expect(
       screen.getByRole('button', { name: /skillPin.*gdpr/ }),
+    ).toBeInTheDocument();
+  });
+
+  it('offers always-on skills like any other when an agent is attached (agents only get skills as tools)', () => {
+    useConversationStore.setState({
+      conversations: [
+        {
+          ...conversation,
+          model: {
+            id: 'gpt-5.2',
+            name: 'GPT',
+            agentId: 'asst_1',
+            supportsTools: true,
+          },
+        } as Conversation,
+      ],
+      selectedConversationId: 'one',
+    });
+    render(<SkillControls />);
+    expect(screen.queryByText('skillAlwaysOn')).toBeNull();
+    expect(
+      screen.getByRole('button', { name: /skillPin.*house-style/ }),
     ).toBeInTheDocument();
   });
 });
