@@ -565,7 +565,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // "router decided no tools" produce byte-identical streams, and users
     // debug the wrong thing. The turn still proceeds without tools.
     if (decided.degraded) {
-      await context.emitActivity?.('chat.activity.toolRoutingUnavailable');
+      // Name the pinned region when there is one: "EU routing is down" and
+      // "routing is down" call for different fixes (a missing regional
+      // deployment or role vs. a global outage).
+      if (decided.degradedRegion) {
+        await context.emitActivity?.(
+          'chat.activity.toolRoutingUnavailableInRegion',
+          { region: decided.degradedRegion },
+        );
+      } else {
+        await context.emitActivity?.('chat.activity.toolRoutingUnavailable');
+      }
     }
 
     // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
