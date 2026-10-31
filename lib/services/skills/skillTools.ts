@@ -237,7 +237,7 @@ export async function createSkillToolExecutor(options: {
   const personalById = new Map(
     personal.map((entry) => [entry.skill.id, entry.skill]),
   );
-  const visible = [...(await getVisibleSkills(options.userMail)), ...personal]
+  const eligible = [...(await getVisibleSkills(options.userMail)), ...personal]
     .filter((entry) => entry.skill.activation !== 'off' && inScope(entry))
     .filter(
       ({ skill }) =>
@@ -245,8 +245,13 @@ export async function createSkillToolExecutor(options: {
         skill.activation === 'always' ||
         forcedSet.has(skill.id),
     )
-    .filter(({ skill }) => !excluded.has(skill.id))
-    .slice(0, SKILL_LIMITS.maxRouterCatalog * 2);
+    .filter(({ skill }) => !excluded.has(skill.id));
+  // Bound the working set, but never at the expense of an explicit request:
+  // forced ids are kept ahead of the cut (the catalog budget bounds the rest).
+  const visible = [
+    ...eligible.filter(({ skill }) => forcedSet.has(skill.id)),
+    ...eligible.filter(({ skill }) => !forcedSet.has(skill.id)),
+  ].slice(0, SKILL_LIMITS.maxRouterCatalog * 2);
   // Advertised = what the model may discover on its own. 'manual' skills
   // and (where approval cannot pause the run) consent-gated skills reach
   // the model only when the user asked for them.
@@ -280,8 +285,11 @@ export async function createSkillToolExecutor(options: {
   const searchSchema = z
     .object({ id: idSchema, query: z.string().min(1).max(6000) })
     .strict();
-  // Re-read admin configuration at execution time. A stale catalog can offer
-  // a now-revoked skill, but it can never reveal that skill's body.
+  // Re-check admin configuration at execution time against the current
+  // access snapshot (≤60 s stale, fails closed when expired — see
+  // getVisibleSkills). A stale catalog can offer a now-revoked skill, but
+  // it can never reveal that skill's body. The snapshot carries the full
+  // record, so no blob read happens per load.
   const resolve = async (id: string): Promise<Skill | null> => {
     if (!allowed.has(id)) return null;
     const personalSkill = personalById.get(id);
@@ -289,13 +297,8 @@ export async function createSkillToolExecutor(options: {
     const currentVisible = await getVisibleSkills(options.userMail);
     const current = currentVisible.find(({ skill }) => skill.id === id);
     if (!current || !inScope(current)) return null;
-    const stored = await readSkill(
-      createAgentAccessBlobStorage(),
-      id,
-      options.signal,
-    );
-    const skill = stored?.skill ?? getBuiltinSkill(id);
-    if (!skill || skill.activation === 'off') return null;
+    const skill = current.skill;
+    if (skill.activation === 'off') return null;
     if (scope.mode === 'agent' && !skill.applyToAgents) return null;
     return skill;
   };
@@ -462,15 +465,19 @@ export async function createSkillToolExecutor(options: {
           });
         }
       // Standard turns inject forced and 'always' skills into the prompt
-      // (SkillEnricher) and exclude them here, so nothing is preloaded.
-      const forced = [
-        ...new Set([
-          ...(options.forcedIds ?? []),
-          ...visible
-            .filter(({ skill }) => skill.activation === 'always')
-            .map(({ skill }) => skill.id),
-        ]),
-      ].filter((id) => allowed.has(id));
+      // (SkillEnricher) under its own budget; anything it could not fit is
+      // merely advertised here, never preloaded, so the injected budget is
+      // not bypassed and the load allowance stays with the model.
+      const forced = standard
+        ? []
+        : [
+            ...new Set([
+              ...(options.forcedIds ?? []),
+              ...visible
+                .filter(({ skill }) => skill.activation === 'always')
+                .map(({ skill }) => skill.id),
+            ]),
+          ].filter((id) => allowed.has(id));
       for (const id of forced.slice(0, SKILL_LIMITS.maxAgentLoads)) {
         if (restoring.includes(id)) continue;
         results.push({
