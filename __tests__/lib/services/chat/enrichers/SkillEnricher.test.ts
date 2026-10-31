@@ -456,15 +456,54 @@ describe('tools delivery (§5.6): the model loads skills itself', () => {
       'alpha',
       'standing',
     ]);
-    // Platform sections leave the base prompt: the model can load the skill.
+    // Platform sections STAY in the base prompt: nothing proves the model
+    // will load the skill, so the status quo is kept.
     mockGetVisibleSkills.mockResolvedValue([entry({ id: 'platform-help' })]);
-    const swapped = await new SkillEnricher(router).execute(
+    const kept = await new SkillEnricher(router).execute(
       createTestChatContext({
         systemPrompt: BASE_PROMPT,
         model: { supportsTools: true },
       }),
     );
-    expect(swapped.systemPrompt).not.toContain(PLATFORM_ABOUT_PROMPT_SECTION);
+    expect(kept.systemPrompt).toContain(PLATFORM_ABOUT_PROMPT_SECTION);
+    // …unless it was injected explicitly.
+    const injected = await new SkillEnricher(router).execute({
+      ...createTestChatContext({
+        systemPrompt: BASE_PROMPT,
+        model: { supportsTools: true },
+      }),
+      forcedSkillIds: ['platform-help'],
+    });
+    expect(injected.systemPrompt).not.toContain(PLATFORM_ABOUT_PROMPT_SECTION);
+  });
+  it('keeps Responses-API Azure models on prompt delivery unless MCP already runs the loop', async () => {
+    const router = {
+      determineSkills: vi.fn(async () => ({ relevantSkills: ['beta'] })),
+    };
+    const responses = createTestChatContext({
+      systemPrompt: BASE_PROMPT,
+      model: {
+        supportsTools: true,
+        supportsResponsesApi: true,
+        sdk: 'azure-openai',
+      },
+    } as never);
+    const prompt = await new SkillEnricher(router).execute(
+      await new SkillCatalogEnricher().execute(responses),
+    );
+    expect(router.determineSkills).toHaveBeenCalledTimes(1);
+    expect(prompt.standardSkillTools).toBeUndefined();
+
+    router.determineSkills.mockClear();
+    const withMcp = {
+      ...responses,
+      mcpServers: [{ id: 'srv', label: 'Connector', url: 'https://x.test' }],
+    } as never as typeof responses;
+    const tools = await new SkillEnricher(router).execute(
+      await new SkillCatalogEnricher().execute(withMcp),
+    );
+    expect(router.determineSkills).not.toHaveBeenCalled();
+    expect(tools.standardSkillTools).toBeDefined();
   });
   it('falls back to prompt delivery for non-tool models, non-streaming turns, and custom sources', async () => {
     const router = {
