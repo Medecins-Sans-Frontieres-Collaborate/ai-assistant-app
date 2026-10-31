@@ -13,16 +13,19 @@ import {
   M365_BUILTIN_SERVER_LABEL,
 } from '@/lib/services/m365/tools/toolCatalog';
 
+import { CapabilityBubble } from '@/components/Chat/ChatInput/CapabilityBubble';
+
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
 /**
- * Compact badge in the composer showing that MCP connectors are ACTIVE for
- * outgoing messages — active tools have real performance and token cost,
- * so their presence must be visible, not something to remember from
- * Settings. Shows the focused connector's name when a pin is set,
- * otherwise the active count. Clicking toggles the connector tray, where
- * individual connectors can be switched off or focused.
+ * Bubble in the composer's capability row showing that MCP connectors are
+ * ACTIVE for outgoing messages (icon-first, name or count on hover/focus).
+ * Active tools have real performance and token cost, so their presence
+ * must be visible, not something to remember from Settings. Shows the
+ * focused connector's name when a pin is set, otherwise the active count.
+ * Clicking toggles the connector tray, where individual connectors can be
+ * switched off or focused.
  *
  * Renders nothing when no connector is active FOR THIS CHAT (nothing is
  * being sent) — globally enabled servers this conversation opted out of
@@ -73,19 +76,12 @@ export const ConnectorActivityBadge: React.FC = () => {
       : t('badgeCount', { count: String(active.length) });
 
   return (
-    <button
-      type="button"
-      onClick={() => setTrayOpen(!trayOpen)}
-      aria-expanded={trayOpen}
+    <CapabilityBubble
+      icon={<IconPlugConnected size={14} className="text-blue-500" />}
+      label={label}
       title={t('badgeTooltip')}
-      className="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-    >
-      <IconPlugConnected
-        size={14}
-        className="text-blue-500"
-        aria-hidden="true"
-      />
-      <span className="max-w-[7rem] truncate">{label}</span>
-    </button>
+      ariaExpanded={trayOpen}
+      onClick={() => setTrayOpen(!trayOpen)}
+    />
   );
 };
