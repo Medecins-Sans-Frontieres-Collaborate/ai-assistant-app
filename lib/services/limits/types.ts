@@ -326,6 +326,21 @@ export const LimitsPolicySchema = z
     countByomUsage: z.boolean().default(false),
     /** Background LLM calls (title, summarize, memories, tone, revise). */
     countAuxiliaryUsage: z.boolean().default(false),
+    /**
+     * Display names for the Entra group ids referenced anywhere in this
+     * document, refreshed on every write from the writer's delegated Graph
+     * token and pruned to referenced ids (lib/services/limits/groupLabels.ts).
+     * DISPLAY ONLY — the matchers never read it. It exists so the policy
+     * history can still say which group a grant pointed at after a rename
+     * or deletion, and so list views can show names without a directory
+     * call. Bounded on read like every other collection here.
+     */
+    groupLabels: z
+      .record(z.string(), z.string().max(256))
+      .refine((labels) => Object.keys(labels).length <= 2000, {
+        message: 'Too many group labels',
+      })
+      .optional(),
     updatedBy: z.string(),
     updatedAt: z.string(),
   })
