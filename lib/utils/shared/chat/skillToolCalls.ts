@@ -141,12 +141,22 @@ export function summarizeSkillToolCalls(
     if (call.name.startsWith('load_skill')) {
       const args = parseArguments(call);
       const id = args.skillId ?? args.id ?? args.skill;
+      const name =
+        typeof id === 'string' && id
+          ? id
+          : (call.output ?? call.error ?? call.name).split('\n')[0].trim();
+      // Foundry preloads of user-requested skills are reported as
+      // "load_skill (requested)": the user chose them, not the model.
+      if (
+        call.name === 'load_skill (requested)' &&
+        call.status === 'completed'
+      ) {
+        lines.push({ kind: 'skill', name, via: 'requested' });
+        continue;
+      }
       lines.push({
         kind: 'agentLoad',
-        name:
-          typeof id === 'string' && id
-            ? id
-            : (call.output ?? call.error ?? call.name).split('\n')[0].trim(),
+        name,
         failed: failed || call.status === 'incomplete',
       });
       continue;
