@@ -455,6 +455,13 @@ export function appendMetadataToStream(
   if (metadata.usage) cleanMetadata.usage = metadata.usage;
   if (metadata.streamError) cleanMetadata.streamError = metadata.streamError;
   if (metadata.mcpPlan) cleanMetadata.mcpPlan = metadata.mcpPlan;
+  // Claim-quote verification corpus (skill evidence on MCP and agent
+  // turns). Dropping it here silently disabled verification on those paths.
+  if (
+    metadata.citationQuoteSources &&
+    Object.keys(metadata.citationQuoteSources).length > 0
+  )
+    cleanMetadata.citationQuoteSources = metadata.citationQuoteSources;
 
   // Only append if we have actual metadata
   if (Object.keys(cleanMetadata).length > 0) {
