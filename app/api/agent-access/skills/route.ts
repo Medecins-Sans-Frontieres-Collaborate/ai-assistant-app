@@ -439,6 +439,9 @@ export async function PUT(request: NextRequest) {
       version: 1,
       ...parsed.data,
       documents: existing.skill.documents,
+      // A sourced skill stays attached to its source when an admin adjusts
+      // its flags (§12: admin-governed flags survive refreshes).
+      ...(existing.skill.source ? { source: existing.skill.source } : {}),
       createdBy: existing.skill.createdBy,
       createdAt: existing.skill.createdAt,
       updatedBy: userMail,
