@@ -39,7 +39,7 @@ export class M365ToolInputError extends Error {
 const CHANNEL_ID_REGEX = /^[A-Za-z0-9:@._-]{1,256}$/;
 
 export function isValidChannelId(id: string): boolean {
-  return CHANNEL_ID_REGEX.test(id);
+  return CHANNEL_ID_REGEX.test(id) && id !== '.' && id !== '..';
 }
 
 const EMAIL_REGEX = /^[^\s@'"<>]+@[^\s@'"<>]+\.[^\s@'"<>]+$/;
