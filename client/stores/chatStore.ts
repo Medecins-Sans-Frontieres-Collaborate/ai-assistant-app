@@ -48,9 +48,12 @@ import {
 import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
 import { clampModelTimeoutSeconds } from '@/lib/utils/shared/chat/modelTimeout';
 import {
+  appliedSkillVersionsFromToolCalls,
+  attachAppliedSkillVersions,
   mergeSkillRequestMetadata,
   requestedSkillsForMessage,
   skillSelectionForRequest,
+  skillVersionsForRequest,
 } from '@/lib/utils/shared/chat/skillSelection';
 import {
   StreamInterruptedError,
@@ -1616,6 +1619,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       conversation.pinnedSkillIds,
       requested,
     );
+    // Regeneration replays the skill versions that ran the first time
+    // (docs/SKILLS_DESIGN.md §5.7); a fresh picker choice runs current ones.
+    const skillVersions = skillVersionsForRequest(
+      sourceUser && 'role' in sourceUser
+        ? sourceUser.appliedSkillVersions
+        : undefined,
+      skillSelection.forcedSkillIds,
+      inputState.forcedSkillIds.length === 0,
+    );
     if (inputState.forcedSkillIds.length > 0 && !approvalResponses?.length) {
       // Persist only ids, never instruction bodies. Update the live store,
       // not the request's possibly truncated regeneration snapshot.
@@ -1740,6 +1752,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           : undefined,
       extraction,
       ...skillSelection,
+      ...(skillVersions ? { skillVersions } : {}),
       skillsAuto: settings.skillsAutoEnabled,
       userSkills:
         conversation.bot ||
@@ -2091,6 +2104,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       assistantMessage,
     );
 
+    const appliedSkillVersions = appliedSkillVersionsFromToolCalls(
+      assistantMessage.toolCalls,
+    );
     if (regeneratingIndex !== null) {
       // Adding a new version to an existing message group
       const version = messageToVersion(assistantMessage);
@@ -2099,6 +2115,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         regeneratingIndex,
         version,
       );
+      if (appliedSkillVersions) {
+        const live = useConversationStore
+          .getState()
+          .conversations.find((item) => item.id === conversation.id);
+        if (live)
+          conversationStore.updateConversation(conversation.id, {
+            messages: attachAppliedSkillVersions(
+              live.messages,
+              appliedSkillVersions,
+              regeneratingIndex,
+            ),
+          });
+      }
       // Clear regenerating index
       set({ regeneratingIndex: null });
     } else {
@@ -2106,12 +2135,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       const newGroup = createMessageGroup(assistantMessage);
       const updates: Partial<Conversation> = {
         messages: [
-          ...mergeSkillRequestMetadata(
-            conversation.messages,
-            useConversationStore
-              .getState()
-              .conversations.find((item) => item.id === conversation.id)
-              ?.messages ?? [],
+          ...attachAppliedSkillVersions(
+            mergeSkillRequestMetadata(
+              conversation.messages,
+              useConversationStore
+                .getState()
+                .conversations.find((item) => item.id === conversation.id)
+                ?.messages ?? [],
+            ),
+            appliedSkillVersions,
           ),
           newGroup,
         ],
