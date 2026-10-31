@@ -16,6 +16,9 @@ import { z } from 'zod';
 
 const JOB_PREFIX = 'system/agent-access/skill-cleanup/';
 const CLAIM_PREFIX = 'system/agent-access/skill-continuations/';
+/** Per-thread skill catalog memory (skillThreadState.ts); expires by `expiresAt`. */
+const THREAD_PREFIX = 'system/agent-access/skill-threads/';
+const EXPIRING_PREFIXES = [CLAIM_PREFIX, THREAD_PREFIX];
 const CLAIM_CLOCK_SKEW_GRACE_MS = 60 * 60 * 1000;
 const JobSchema = z.object({
   skillId: SkillIdSchema,
@@ -75,7 +78,7 @@ export async function sweepSkillMaintenance(
   limit = 10,
 ): Promise<void> {
   const signal = AbortSignal.timeout(5000);
-  for (const prefix of [CLAIM_PREFIX, JOB_PREFIX]) {
+  for (const prefix of [...EXPIRING_PREFIXES, JOB_PREFIX]) {
     let selected: string[];
     if (storage.listBlobsPage) {
       const page = await storage.listBlobsPage(
@@ -101,11 +104,11 @@ export async function sweepSkillMaintenance(
       try {
         const record = await downloadBlob(storage, name, 'skills.maintenance', {
           abortSignal: signal,
-          maxBytes: 4096,
+          maxBytes: prefix === THREAD_PREFIX ? 256 * 1024 : 4096,
         });
         if (!record) continue;
         const json = JSON.parse(record.buffer.toString('utf8'));
-        if (prefix === CLAIM_PREFIX) {
+        if (EXPIRING_PREFIXES.includes(prefix)) {
           if (
             typeof json.expiresAt === 'number' &&
             Number.isFinite(json.expiresAt) &&
