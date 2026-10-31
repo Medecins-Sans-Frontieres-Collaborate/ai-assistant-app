@@ -370,8 +370,10 @@ export interface CatalogModelDefault {
  * model is covered the day it is added. Each external model gets a model
  * cell; a family gets a family cell only when EVERY member is external, so a
  * mixed family never has its Azure-hosted members switched off by proxy. A
- * discovered model absent from the catalog has no hosting metadata and is
- * therefore allowed, like every Azure model.
+ * discovered model absent from the catalog has no hosting metadata and gets
+ * no model cell of its own — it is allowed like every Azure model, unless it
+ * declares a series whose family cell is external (then the family cell
+ * applies, the safe direction).
  *
  * ⚠ Bites only in `enforce` mode, like every other `model.allowed` answer:
  * observe mode logs would-blocks and the picker filters nothing.
