@@ -12,9 +12,12 @@ import { ToolApprovalRule } from '@/lib/utils/shared/chat/toolApprovalRules';
 import { DEFAULT_CHANNEL_SET_ID } from '@/lib/utils/shared/drafter/channels/channelSets';
 import {
   EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+  EMISSIONS_CHIP_LABEL_MODE_DEFAULT,
   EMISSIONS_CHIP_VISIBILITY_DEFAULT,
+  EmissionsChipLabelMode,
   EmissionsChipVisibility,
   clampEmissionsChipAutoHideMs,
+  isEmissionsChipLabelMode,
   isEmissionsChipVisibility,
 } from '@/lib/utils/shared/emissions';
 import {
@@ -776,6 +779,13 @@ interface SettingsStore {
   setEmissionsChipAutoHideMs: (ms: number) => void;
 
   /**
+   * What the collapsed chip reads: emissions (default), cost, or both. The
+   * popover always carries both figures (docs/CHAT_COST_CHIP.md).
+   */
+  emissionsChipLabelMode: EmissionsChipLabelMode;
+  setEmissionsChipLabelMode: (mode: EmissionsChipLabelMode) => void;
+
+  /**
    * Pacing of the map workflow's time-lapse. Persisted rather than kept as
    * workspace view state: how fast is comfortable to read is a property of
    * the person watching, not of the map they happen to have open.
@@ -1094,6 +1104,7 @@ export const useSettingsStore = create<SettingsStore>()(
       // Emissions chip shown persistently by default
       emissionsChipVisibility: EMISSIONS_CHIP_VISIBILITY_DEFAULT,
       emissionsChipAutoHideMs: EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+      emissionsChipLabelMode: EMISSIONS_CHIP_LABEL_MODE_DEFAULT,
 
       mapTimelapse: DEFAULT_MAP_TIMELAPSE,
 
@@ -1917,6 +1928,13 @@ export const useSettingsStore = create<SettingsStore>()(
       setEmissionsChipAutoHideMs: (ms) =>
         set({ emissionsChipAutoHideMs: clampEmissionsChipAutoHideMs(ms) }),
 
+      setEmissionsChipLabelMode: (mode) =>
+        set({
+          emissionsChipLabelMode: isEmissionsChipLabelMode(mode)
+            ? mode
+            : EMISSIONS_CHIP_LABEL_MODE_DEFAULT,
+        }),
+
       // Clamped on write as well as on read: the sliders are bounded, but a
       // hand-edited localStorage value must not produce a frozen sweep.
       setMapTimelapse: (settings) =>
@@ -2056,6 +2074,7 @@ export const useSettingsStore = create<SettingsStore>()(
           preferSelectedModel: false,
           emissionsChipVisibility: EMISSIONS_CHIP_VISIBILITY_DEFAULT,
           emissionsChipAutoHideMs: EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+          emissionsChipLabelMode: EMISSIONS_CHIP_LABEL_MODE_DEFAULT,
           mapTimelapse: DEFAULT_MAP_TIMELAPSE,
           confirmStopFromButton: true,
           confirmStopFromKeyboard: true,
@@ -2079,7 +2098,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 72, // v72: skillsAutoEnabled (automatic skill selection toggle)
+      version: 73, // v73: emissionsChipLabelMode (what the collapsed impact chip reads)
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2178,6 +2197,7 @@ export const useSettingsStore = create<SettingsStore>()(
         preferSelectedModel: state.preferSelectedModel,
         emissionsChipVisibility: state.emissionsChipVisibility,
         emissionsChipAutoHideMs: state.emissionsChipAutoHideMs,
+        emissionsChipLabelMode: state.emissionsChipLabelMode,
         mapTimelapse: state.mapTimelapse,
         confirmStopFromButton: state.confirmStopFromButton,
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
@@ -2894,6 +2914,14 @@ export const useSettingsStore = create<SettingsStore>()(
           state.webSearchOptions = sanitizeWebSearchOptions(
             state.webSearchOptions,
           );
+        }
+
+        // Version 72 → 73: what the collapsed impact chip reads. Defaults to
+        // emissions — the behavior these users already have; cost is opt-in.
+        if (version < 73) {
+          if (!isEmissionsChipLabelMode(state.emissionsChipLabelMode)) {
+            state.emissionsChipLabelMode = EMISSIONS_CHIP_LABEL_MODE_DEFAULT;
+          }
         }
 
         // Whatever version it came from, the per-set rows are only kept as
