@@ -25,6 +25,50 @@ export interface PolicyResponse {
   etag: string | null;
   /** Storage read failed — render an error + Retry, NEVER an empty form. */
   policyUnavailable: boolean;
+  /**
+   * Replica-local health of the Entra group-membership cache (the server's
+   * `getGroupMembershipStats()`), for the "group rules are not being
+   * evaluated" banner. Optional: older servers do not send it.
+   */
+  groupMembership?: GroupMembershipHealth;
+}
+
+/** Mirrors `GroupMembershipStats` in lib/services/m365/groupMembership.ts. */
+export interface GroupMembershipHealth {
+  hits: number;
+  misses: number;
+  failuresRetryable: number;
+  failuresStructural: number;
+  oversizeFallbacks: number;
+  degradedUsers: number;
+  cachedUsers: number;
+  lastFailure: {
+    at: string;
+    kind: 'retryable' | 'structural';
+    reason: string;
+  } | null;
+}
+
+/** A failure older than this is history, not a live condition. */
+export const GROUP_MEMBERSHIP_FAILURE_WINDOW_MS = 15 * 60 * 1000;
+
+/**
+ * Which banner, if any, the membership health deserves. A structural
+ * failure (consent, forbidden) inside the window is the loud one; a recent
+ * retryable failure or anyone currently degraded is the soft one.
+ */
+export function groupMembershipWarning(
+  health: GroupMembershipHealth | undefined,
+  now: number = Date.now(),
+): 'structural' | 'retryable' | null {
+  if (!health) return null;
+  const last = health.lastFailure;
+  const recent =
+    last !== null &&
+    now - Date.parse(last.at) < GROUP_MEMBERSHIP_FAILURE_WINDOW_MS;
+  if (recent && last.kind === 'structural') return 'structural';
+  if (recent || health.degradedUsers > 0) return 'retryable';
+  return null;
 }
 
 /** A draft entry keyed for the form: `<limitKey>` or `<limitKey>@model:<id>`. */
