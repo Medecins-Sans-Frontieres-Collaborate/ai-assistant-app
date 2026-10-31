@@ -1,8 +1,5 @@
 /** Request-bound, read-only agent skill tools. Not an MCP network endpoint. */
-import {
-  createAgentAccessBlobStorage,
-  readSkill,
-} from '@/lib/services/agentAccess/accessRulesStore';
+import { createAgentAccessBlobStorage } from '@/lib/services/agentAccess/accessRulesStore';
 import { uploadJson } from '@/lib/services/agentAccess/blobCas';
 import { readContinuationState } from '@/lib/services/limits/continuationToken';
 import type {
@@ -14,7 +11,6 @@ import { countTokens } from '@/lib/utils/server/tiktoken/tiktokenCache';
 
 import type { Citation } from '@/types/rag';
 
-import { getBuiltinSkill } from './builtinSkills';
 import { getVisibleSkills, orgSkillsAvailable } from './skillCatalog';
 import {
   AdvertisedCatalog,
