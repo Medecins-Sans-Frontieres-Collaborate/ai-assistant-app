@@ -112,6 +112,12 @@ export interface ExtractionResultContent {
 export interface Message extends MessageToolArtifacts {
   /** Stable id for referencing messages (optional until migration runs) */
   id?: string;
+  /**
+   * Microsoft 365 daily digest carried by this assistant message
+   * (docs/M365_DAILY_DIGEST.md): the job while it runs, the result once
+   * done. `content` holds the markdown twin for follow-up turns.
+   */
+  digest?: import('./m365Digest').DigestMessageState;
   role: Role;
   content:
     | string
@@ -230,6 +236,8 @@ export type ChatInputSubmitTypes = 'TEXT' | 'IMAGE' | 'FILE' | 'MULTI_FILE';
  * Used when the user regenerates responses - each regeneration creates a new version.
  */
 export interface AssistantMessageVersion extends MessageToolArtifacts {
+  /** See Message.digest. */
+  digest?: import('./m365Digest').DigestMessageState;
   content:
     | string
     | Array<TextMessageContent | FileMessageContent>
