@@ -161,6 +161,12 @@ export interface ActiveSkillsResolution {
    * (docs/SKILLS_DESIGN.md §10).
    */
   droppedForcedIds: string[];
+  /**
+   * Routed selections withheld because the skill requires the user's
+   * consent (§5.5): suggested in the record, applied only when the user
+   * requests or pins the skill.
+   */
+  consentRequired: Skill[];
 }
 
 /**
@@ -186,6 +192,7 @@ export function resolveActiveSkills(
   const active: ActiveSkill[] = [];
   const activeIds = new Set<string>();
   const droppedForcedIds: string[] = [];
+  const consentRequired: Skill[] = [];
 
   for (const id of forcedSkillIds.slice(0, SKILL_LIMITS.maxForcedPerTurn)) {
     if (activeIds.has(id)) continue;
@@ -206,6 +213,11 @@ export function resolveActiveSkills(
     const skill = visibleById.get(id);
     if (!skill || skill.activation !== 'auto' || activeIds.has(id)) continue;
     if (routedCount >= SKILL_LIMITS.maxAutoPerTurn) break;
+    if (skill.requireConsent) {
+      // The router may propose it; only the user can apply it.
+      consentRequired.push(skill);
+      continue;
+    }
     active.push({ skill, via: 'routed' });
     activeIds.add(id);
     routedCount += 1;
@@ -221,5 +233,5 @@ export function resolveActiveSkills(
     activeIds.add(entry.skill.id);
   }
 
-  return { active, droppedForcedIds };
+  return { active, droppedForcedIds, consentRequired };
 }
