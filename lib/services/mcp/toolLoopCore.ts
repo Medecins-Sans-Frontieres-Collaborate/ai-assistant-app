@@ -1,5 +1,23 @@
+import { MAX_OVERFLOW_SHRINKS } from '@/lib/services/chat/contextOverflowRecovery';
+import {
+  MODEL_RETRY_ACTIVITY_KEY,
+  createRetryPolicy,
+  retryActivityParams,
+  sleepWithSignal,
+} from '@/lib/services/chat/modelRetry';
+import { classifyProviderError } from '@/lib/services/chat/providerErrors';
+import {
+  CONTENT_FILTER_STREAM_ERROR,
+  ContinuationBudget,
+  ContinuationReason,
+  OUTPUT_LIMIT_STREAM_ERROR,
+  RoundFinish,
+  TRIM_CONTEXT_ACTIVITY_KEY,
+  continuationActivityKey,
+} from '@/lib/services/chat/streamContinuation';
 import { mintContinuationToken } from '@/lib/services/limits/continuationToken';
 import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
+import { MetricsService } from '@/lib/services/observability/MetricsService';
 import { ToolCallTelemetry } from '@/lib/services/observability/tokenUsageRecorder';
 
 import {
@@ -62,6 +80,26 @@ export const MAX_TOOL_ROUNDS = 5;
  */
 export const TOOL_CALL_BUDGET_MS = 120_000;
 const LIST_TOOLS_BUDGET_MS = 10_000;
+/**
+ * Approved calls of one resume batch run concurrently up to this many at a
+ * time. Connector calls are independent (each opens its own connection);
+ * builtin executors are request-bound and already handle concurrent Graph
+ * calls. Results are still fed back in pending order.
+ */
+export const TOOL_CALL_CONCURRENCY = 4;
+/**
+ * Model-facing cap on one tool result (~15k tokens). The UI record has its
+ * own cap (mcpEventMappers.truncateToolOutput); THIS one protects the
+ * context window — a 2 MB connector payload must not blow the next round.
+ */
+export const MAX_MODEL_TOOL_RESULT_CHARS = 60_000;
+
+/** Cap a tool result for the model, with an explicit, actionable trailer. */
+export function capToolResultForModel(text: string): string {
+  if (text.length <= MAX_MODEL_TOOL_RESULT_CHARS) return text;
+  const dropped = text.length - MAX_MODEL_TOOL_RESULT_CHARS;
+  return `${text.slice(0, MAX_MODEL_TOOL_RESULT_CHARS)}\n\n[Tool result truncated: ${dropped} more characters were omitted. Ask for a narrower query, a page, or a specific field if you need the rest.]`;
+}
 
 export interface ServerWithTools {
   server: ResolvedMcpServer;
@@ -84,6 +122,12 @@ export interface ExecutedToolResult {
 export interface AssembledRound {
   /** finish_reason 'tool_calls' (OpenAI) / stop_reason 'tool_use' (Anthropic). */
   finishedWithToolUse: boolean;
+  /**
+   * Normalised terminal finish (lib/services/chat/streamContinuation.ts).
+   * `length` triggers an output-limit continuation, `content_filter` ends
+   * the turn with an in-band error. Absent = treated as a normal stop.
+   */
+  finish?: RoundFinish;
   calls: AssembledToolCall[];
   usage: {
     promptTokens: number;
@@ -136,6 +180,23 @@ export interface ToolLoopProviderStrategy<TMessage> {
    * system prompt. Called once, after LIST_TOOLS, before any round.
    */
   applySystemAddendum?(addendum: string): void;
+  /**
+   * Mid-answer recovery: append the partial assistant text already shown
+   * to the user plus a "continue" nudge (continuationNudge(reason)) so the
+   * next round picks up where the interrupted / length-capped one stopped.
+   * Absent = interruptions end the turn, `length` finishes stand as-is.
+   */
+  appendContinuation?(
+    messages: TMessage[],
+    partialText: string,
+    reason: ContinuationReason,
+  ): TMessage[];
+  /**
+   * Context-overflow recovery: drop old history (never the current turn's
+   * tool exchange) and return the shorter transcript, or null when nothing
+   * more can be dropped. Absent = an overflow surfaces as a failure.
+   */
+  shrinkForOverflow?(messages: TMessage[]): TMessage[] | null;
 }
 
 export interface ToolLoopCoreOptions<TMessage> {
@@ -421,7 +482,7 @@ export async function runToolLoopCore<TMessage>(
             messages = options.strategy.appendToolResults(messages, [
               {
                 call,
-                text: preload.result.resultText,
+                text: capToolResultForModel(preload.result.resultText),
                 isError: preload.result.isError,
               },
             ]);
@@ -455,15 +516,22 @@ export async function runToolLoopCore<TMessage>(
             write(deniedCallToOutcomeMarker(call.id));
           }
 
-          const results: ExecutedToolResult[] = [];
-          for (const call of pending) {
+          // Approved calls run CONCURRENTLY (TOOL_CALL_CONCURRENCY at a
+          // time); results land at their pending index so the transcript
+          // order is unchanged. Three 30 s connector calls now cost 30 s,
+          // not 90.
+          const results: ExecutedToolResult[] = new Array(pending.length);
+          const executeOne = async (
+            call: McpPendingToolCall,
+            index: number,
+          ): Promise<void> => {
             if (decisionById.get(call.id) !== 'approved') {
-              results.push({
+              results[index] = {
                 call,
                 text: DENIED_TOOL_RESULT,
                 isError: false,
-              });
-              continue;
+              };
+              return;
             }
 
             const server = serverById.get(call.serverId);
@@ -481,12 +549,12 @@ export async function runToolLoopCore<TMessage>(
                   0,
                 ),
               );
-              results.push({
+              results[index] = {
                 call,
                 text: `Tool failed: ${errorMessage}`,
                 isError: true,
-              });
-              continue;
+              };
+              return;
             }
 
             // Plan-aware loader: map this call onto the plan and show the
@@ -563,7 +631,7 @@ export async function runToolLoopCore<TMessage>(
                 });
                 let resultText = result.isError
                   ? `Tool failed: ${result.text}`
-                  : result.text || '(empty result)';
+                  : capToolResultForModel(result.text) || '(empty result)';
                 // One retry per plan step: an empty/failed result earns the
                 // model a single adjusted-arguments retry nudge; the step is
                 // marked so a second emptiness moves on quietly.
@@ -576,11 +644,11 @@ export async function runToolLoopCore<TMessage>(
                   turnPlan.steps[matchedStepIndex].retried = true;
                   resultText += RETRY_NUDGE;
                 }
-                results.push({
+                results[index] = {
                   call,
                   text: resultText,
                   isError: result.isError,
-                });
+                };
               } finally {
                 await connection?.close();
               }
@@ -622,21 +690,200 @@ export async function runToolLoopCore<TMessage>(
                 turnPlan.steps[matchedStepIndex].retried = true;
                 failureText += RETRY_NUDGE;
               }
-              results.push({
+              results[index] = {
                 call,
                 text: failureText,
                 isError: true,
-              });
+              };
             }
-          }
+          };
+
+          // Bounded worker pool over the pending list.
+          let nextIndex = 0;
+          const workers = Array.from(
+            { length: Math.min(TOOL_CALL_CONCURRENCY, pending.length) },
+            async () => {
+              for (;;) {
+                const index = nextIndex++;
+                if (index >= pending.length) return;
+                await executeOne(pending[index], index);
+              }
+            },
+          );
+          await Promise.all(workers);
 
           messages = options.strategy.appendToolResults(messages, results);
         }
+
+        /**
+         * One model round with in-turn recovery (see
+         * lib/services/chat/modelRetry.ts and streamContinuation.ts):
+         *  - a failure BEFORE any text reached the client is retried with
+         *    backoff (rate limit, 5xx, connection) — the loader says so;
+         *  - a failure AFTER text streamed is continued on the same model
+         *    with the partial + a "continue" nudge (the client keeps what
+         *    it has; no tool re-runs on a fallback model);
+         *  - a `length` finish with text is continued the same way, capped;
+         *  - a context overflow shrinks old history and re-runs;
+         *  - a content-filter stop ends the turn with an in-band error.
+         * Returns the round plus the transcript it was produced from (a
+         * continuation appends to it), so later steps build on the right
+         * messages.
+         */
+        const runRoundWithRecovery = async (
+          roundInput: TMessage[],
+          roundServers: ServerWithTools[],
+          allowToolUse: boolean,
+        ): Promise<{
+          round: AssembledRound;
+          messages: TMessage[];
+          terminal?: 'content_filter' | 'output_limit';
+        }> => {
+          let roundMessages = roundInput;
+          let roundText = '';
+          const trackedWrite = (text: string) => {
+            roundText += text;
+            write(text);
+          };
+          const policy = createRetryPolicy();
+          const budget = new ContinuationBudget();
+          let overflowShrinks = 0;
+          const usageAcc = { prompt: 0, completion: 0, total: 0, seen: false };
+          const mergeUsage = (round: AssembledRound): AssembledRound => {
+            if (round.usage) {
+              usageAcc.prompt += round.usage.promptTokens;
+              usageAcc.completion += round.usage.completionTokens;
+              usageAcc.total += round.usage.totalTokens;
+              usageAcc.seen = true;
+            }
+            return usageAcc.seen
+              ? {
+                  ...round,
+                  usage: {
+                    promptTokens: usageAcc.prompt,
+                    completionTokens: usageAcc.completion,
+                    totalTokens: usageAcc.total,
+                  },
+                }
+              : round;
+          };
+          const continueWith = (reason: ContinuationReason): boolean => {
+            if (!options.strategy.appendContinuation || !budget.take(reason))
+              return false;
+            write(emitAgentActivity(continuationActivityKey(reason)));
+            MetricsService.recordModelRecovery(
+              reason === 'length' ? 'continue' : 'resume',
+              reason === 'length' ? 'output_limit' : 'incomplete_stream',
+            );
+            roundMessages = options.strategy.appendContinuation(
+              roundMessages,
+              roundText,
+              reason,
+            );
+            return true;
+          };
+          for (;;) {
+            checkAborted();
+            try {
+              const round = mergeUsage(
+                await options.strategy.runModelRound(
+                  roundMessages,
+                  roundServers,
+                  allowToolUse,
+                  trackedWrite,
+                  markModelStarted,
+                ),
+              );
+              if (round.finish === 'content_filter')
+                return {
+                  round,
+                  messages: roundMessages,
+                  terminal: 'content_filter',
+                };
+              if (round.finish === 'length' && !round.finishedWithToolUse) {
+                if (!roundText.trim())
+                  return {
+                    round,
+                    messages: roundMessages,
+                    terminal: 'output_limit',
+                  };
+                if (continueWith('length')) continue;
+              }
+              return { round, messages: roundMessages };
+            } catch (error) {
+              if (options.signal?.aborted) throw error;
+              const classified = classifyProviderError(error);
+              if (
+                classified.kind === 'context_overflow' &&
+                options.strategy.shrinkForOverflow &&
+                overflowShrinks < MAX_OVERFLOW_SHRINKS
+              ) {
+                const shrunk =
+                  options.strategy.shrinkForOverflow(roundMessages);
+                if (shrunk) {
+                  overflowShrinks += 1;
+                  console.warn(
+                    `[toolLoopCore] prompt too long for the model; retrying with ${shrunk.length} of ${roundMessages.length} messages`,
+                  );
+                  MetricsService.recordModelRecovery(
+                    'trim',
+                    'context_overflow',
+                  );
+                  write(emitAgentActivity(TRIM_CONTEXT_ACTIVITY_KEY));
+                  roundMessages = shrunk;
+                  continue;
+                }
+              }
+              if (classified.kind === 'content_filter')
+                return {
+                  round: { finishedWithToolUse: false, calls: [], usage: null },
+                  messages: roundMessages,
+                  terminal: 'content_filter',
+                };
+              if (!classified.retryable) throw error;
+              if (!roundText.trim()) {
+                // Nothing reached the client yet: a plain retry is safe.
+                const decision = policy.decide(error);
+                if (!decision.retry) {
+                  if (decision.reason !== 'not_retryable')
+                    MetricsService.recordModelRecovery(
+                      'give_up',
+                      classified.kind,
+                    );
+                  throw error;
+                }
+                console.warn(
+                  `[toolLoopCore] model round failed (${classified.kind}${classified.status ? ` ${classified.status}` : ''}); retrying in ${decision.delayMs} ms (attempt ${decision.attempt})`,
+                );
+                MetricsService.recordModelRecovery('retry', classified.kind);
+                write(
+                  emitAgentActivity(
+                    MODEL_RETRY_ACTIVITY_KEY,
+                    retryActivityParams({
+                      attempt: decision.attempt,
+                      delayMs: decision.delayMs,
+                      error: classified,
+                    }),
+                  ),
+                );
+                await sleepWithSignal(decision.delayMs, options.signal);
+                continue;
+              }
+              // Text already streamed: continue from it on the same model.
+              console.warn(
+                `[toolLoopCore] model stream interrupted (${classified.kind}) after ${roundText.length} chars; attempting continuation`,
+              );
+              if (continueWith('interrupted')) continue;
+              throw error;
+            }
+          }
+        };
 
         // ── MODEL_ROUND. Past the round cap the strategy withholds tool use
         // (OpenAI: omit tools; Anthropic: tool_choice 'none' — its transcript
         // still contains tool blocks, so tools must stay declared).
         let round: AssembledRound;
+        let terminalFailure: 'content_filter' | 'output_limit' | undefined;
         let immediateRounds = 0;
         while (true) {
           for (const entry of serversWithTools) {
@@ -653,7 +900,7 @@ export async function runToolLoopCore<TMessage>(
             }
           }
           checkAborted();
-          round = await options.strategy.runModelRound(
+          const outcome = await runRoundWithRecovery(
             messages,
             serversWithTools.map((entry) => ({
               ...entry,
@@ -670,9 +917,12 @@ export async function runToolLoopCore<TMessage>(
                   options.builtinExecutors?.[entry.server.id]?.immediate &&
                   entry.tools.length > 0,
               ),
-            write,
-            markModelStarted,
           );
+          round = outcome.round;
+          messages = outcome.messages;
+          if (outcome.terminal) {
+            terminalFailure = outcome.terminal;
+          }
 
           if (round.usage) {
             const roundUsage: TokenUsageMetadata = {
@@ -688,6 +938,11 @@ export async function runToolLoopCore<TMessage>(
             aggregate.completion += roundUsage.completionTokens;
             aggregate.total += roundUsage.totalTokens;
           }
+
+          // A content-filter stop / empty output-limit finish ends the turn
+          // here: no tool dispatch, no consent cards — the terminal metadata
+          // block below carries the in-band error.
+          if (terminalFailure) break;
 
           // ── PAUSE or DONE
           const assembled = round.finishedWithToolUse ? round.calls : [];
@@ -731,7 +986,7 @@ export async function runToolLoopCore<TMessage>(
             );
             immediateResults.push({
               call: pending,
-              text: outcome.resultText,
+              text: capToolResultForModel(outcome.resultText),
               isError: outcome.isError,
             });
             options.onToolCall?.({
@@ -842,11 +1097,17 @@ export async function runToolLoopCore<TMessage>(
             reasoningEffort: options.usage.reasoningEffort,
           };
         }
+        if (terminalFailure === 'content_filter') {
+          metadata.streamError = { ...CONTENT_FILTER_STREAM_ERROR };
+        } else if (terminalFailure === 'output_limit') {
+          metadata.streamError = { ...OUTPUT_LIMIT_STREAM_ERROR };
+        }
         if (
           metadata.citations ||
           metadata.usage ||
           metadata.thinking ||
-          metadata.mcpPlan
+          metadata.mcpPlan ||
+          metadata.streamError
         ) {
           appendMetadataToStream(controller, metadata);
         }
@@ -874,11 +1135,17 @@ export async function runToolLoopCore<TMessage>(
         // which reaches the browser as an opaque network failure (Firefox:
         // NS_ERROR_NET_PARTIAL_TRANSFER) carrying no information at all.
         try {
+          const classified = classifyProviderError(error);
           appendMetadataToStream(controller, {
             streamError: {
               code: 'TOOL_LOOP_FAILED',
+              kind: classified.kind,
               message:
-                'The assistant hit a problem while using connector tools and the response was interrupted.',
+                classified.kind === 'context_overflow'
+                  ? 'This conversation is too long for the selected model, even after trimming older history. Start a new conversation, or remove some attachments.'
+                  : classified.kind === 'rate_limit'
+                    ? 'The model is receiving too many requests right now and the response was interrupted. Please try again in a moment.'
+                    : 'The assistant hit a problem while using connector tools and the response was interrupted.',
             },
           });
           controller.close();
