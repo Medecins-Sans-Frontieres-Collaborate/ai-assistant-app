@@ -232,6 +232,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       memories,
       forcedSkillIds,
       pinnedSkillIds,
+      skillVersions,
       userSkills,
       skillsAuto,
     } = body;
@@ -312,6 +313,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       // access bypass.
       forcedSkillIds,
       pinnedSkillIds,
+      skillVersions,
       userSkills,
       skillsAuto,
     };
