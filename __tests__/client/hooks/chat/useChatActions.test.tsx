@@ -13,22 +13,35 @@ const mockState = {
   selectedConversationId: null as string | null,
 };
 
-vi.mock('@/client/stores/conversationStore', () => ({
-  useConversationStore: {
-    getState: vi.fn(() => mockState),
-  },
-}));
+vi.mock('@/client/stores/conversationStore', () => {
+  // The hook uses the store both as a hook (selector) and via getState().
+  const useConversationStore = Object.assign(
+    (selector: (state: typeof mockState) => unknown) => selector(mockState),
+    { getState: vi.fn(() => mockState) },
+  );
+  return { useConversationStore };
+});
 
 // Mock the chat store
 const mockChatState = {
   setRegeneratingIndex: vi.fn(),
+  isStreaming: false,
+  streamingConversationId: null as string | null,
+  error: null as string | null,
+  queuedSends: [] as unknown[],
+  queueSend: vi.fn(),
+  shiftQueuedSend: vi.fn(() => null),
+  removeQueuedSend: vi.fn(() => null),
 };
 
-vi.mock('@/client/stores/chatStore', () => ({
-  useChatStore: {
-    getState: vi.fn(() => mockChatState),
-  },
-}));
+vi.mock('@/client/stores/chatStore', () => {
+  const useChatStore = Object.assign(
+    (selector: (state: typeof mockChatState) => unknown) =>
+      selector(mockChatState),
+    { getState: vi.fn(() => mockChatState) },
+  );
+  return { useChatStore };
+});
 
 describe('useChatActions', () => {
   const mockUpdateConversation = vi.fn();
