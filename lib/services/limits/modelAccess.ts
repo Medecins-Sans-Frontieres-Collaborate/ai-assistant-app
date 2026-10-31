@@ -100,6 +100,8 @@ function defaultEntries(rule: ModelAccessRule): LimitEntry[] {
 }
 
 const SYNTHETIC_STAMP = '1970-01-01T00:00:00.000Z';
+/** Block-list overrides rank above grant overrides (0) at the same layer. */
+export const DENY_PRIORITY = 1;
 const SYNTHETIC_AUTHOR = 'model-access';
 
 function syntheticOverride(
@@ -107,6 +109,7 @@ function syntheticOverride(
   scope: OverrideScope,
   targets: string[],
   entries: LimitEntry[],
+  priority = 0,
 ): LimitOverride {
   return {
     id,
@@ -114,7 +117,7 @@ function syntheticOverride(
     enabled: true,
     scope,
     targets,
-    priority: 0,
+    priority,
     entries,
     createdBy: SYNTHETIC_AUTHOR,
     createdAt: SYNTHETIC_STAMP,
@@ -161,12 +164,18 @@ function denyOverride(rule: ModelAccessRule): LimitOverride[] {
     ),
   ];
   if (targets.length === 0) return [];
+  // The block list outranks every grant for that person, whichever node
+  // either sits on: same user layer as an allow-list grant, but a higher
+  // priority — and priority ranks before qualifier specificity in the
+  // comparator — so "blocked on the family" is not undone by a model's own
+  // allow list. (A model-level block vs a family grant wins anyway.)
   return [
     syntheticOverride(
       `${MODEL_ACCESS_OVERRIDE_PREFIX}${modelAccessDimension(rule)}|deny|all`,
       'user',
       targets,
       [entry(rule, 'model.allowed', false)],
+      DENY_PRIORITY,
     ),
   ];
 }
