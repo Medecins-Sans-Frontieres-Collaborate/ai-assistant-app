@@ -129,6 +129,13 @@ export interface Message extends MessageToolArtifacts {
   promptId?: string | null; // Saved prompt that was used
   /** Browser-only one-shot skill references, replayed for retry/regeneration. */
   requestedSkillIds?: string[];
+  /**
+   * Skill id → `updatedAt` of the organization skill version that ran for
+   * this message, read back from the turn's `use_skills` record. Regeneration
+   * sends them as `skillVersions` so the same body is replayed
+   * (docs/SKILLS_DESIGN.md §5.7).
+   */
+  appliedSkillVersions?: Record<string, string>;
   promptVariables?: { [key: string]: string }; // Variable values used in the prompt
   artifactContext?: {
     // Artifact being edited when message was sent
@@ -414,6 +421,12 @@ export interface ChatBody {
   forcedSkillIds?: string[];
   /** Subset of forcedSkillIds persisted on the conversation, for attribution. */
   pinnedSkillIds?: string[];
+  /**
+   * Version pins for requested skills on regeneration (§5.7): the server
+   * replays the pinned stored version when it still exists, else the
+   * current one with a visible note. Never widens access.
+   */
+  skillVersions?: Record<string, string>;
   /** Enabled browser-local personal skills; validated as untrusted user instructions. */
   userSkills?: import('@/lib/services/skills/types').UserSkill[];
   /**
