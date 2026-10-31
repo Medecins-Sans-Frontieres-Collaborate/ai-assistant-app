@@ -95,6 +95,22 @@ export const TOOL_CALL_CONCURRENCY = 4;
 export const MAX_MODEL_TOOL_RESULT_CHARS = 60_000;
 
 /** Cap a tool result for the model, with an explicit, actionable trailer. */
+/**
+ * What the browser's TOOL_CALL_RECORD shows for a builtin result: the
+ * executor's summary when it provides one, else the full text. The model
+ * transcript always gets the full text.
+ */
+function recordText(
+  executor: BuiltinExecutor | undefined,
+  toolName: string,
+  args: unknown,
+  result: { resultText: string; isError: boolean },
+): string {
+  return executor?.recordOutput
+    ? executor.recordOutput(toolName, args, result)
+    : result.resultText;
+}
+
 export function capToolResultForModel(text: string): string {
   if (text.length <= MAX_MODEL_TOOL_RESULT_CHARS) return text;
   const dropped = text.length - MAX_MODEL_TOOL_RESULT_CHARS;
@@ -491,7 +507,12 @@ export async function runToolLoopCore<TMessage>(
                 call,
                 serverById.get(serverId)?.label ?? 'Skills',
                 {
-                  text: preload.result.resultText,
+                  text: recordText(
+                    executor,
+                    preload.toolName,
+                    parseToolArguments(preload.argumentsJson),
+                    preload.result,
+                  ),
                   isError: preload.result.isError,
                 },
                 0,
@@ -613,11 +634,28 @@ export async function runToolLoopCore<TMessage>(
                           isError: r.isError,
                         })),
                     );
+                const resumedExecutor = connection
+                  ? undefined
+                  : (options.builtinExecutors?.[server.id] ??
+                    options.builtinExecutor);
                 write(
                   toolResultToRecordMarker(
                     call,
                     server.label,
-                    result,
+                    resumedExecutor
+                      ? {
+                          text: recordText(
+                            resumedExecutor,
+                            call.toolName,
+                            args,
+                            {
+                              resultText: result.text,
+                              isError: result.isError,
+                            },
+                          ),
+                          isError: result.isError,
+                        }
+                      : result,
                     Date.now() - startedAt,
                   ),
                 );
@@ -954,7 +992,16 @@ export async function runToolLoopCore<TMessage>(
               resolved?.server.provenance === 'builtin'
                 ? options.builtinExecutors?.[resolved.server.id]
                 : undefined;
-            if (!resolved || !executor?.immediate) {
+            const immediateArgs = resolved
+              ? parseToolArguments(call.argumentsJson)
+              : null;
+            // A builtin may hold back one call for approval (a consent-gated
+            // skill) while its other tools stay immediate.
+            if (
+              !resolved ||
+              !executor?.immediate ||
+              executor.requiresApproval?.(resolved.toolName, immediateArgs)
+            ) {
               approvalCalls.push(call);
               continue;
             }
@@ -967,10 +1014,7 @@ export async function runToolLoopCore<TMessage>(
             const startedAt = Date.now();
             checkAborted();
             const outcome = await budgeted(
-              executor.callTool(
-                resolved.toolName,
-                parseToolArguments(call.argumentsJson),
-              ),
+              executor.callTool(resolved.toolName, immediateArgs),
             ).catch((error: unknown) => ({
               resultText:
                 error instanceof Error ? error.message : 'Tool call failed',
@@ -980,7 +1024,15 @@ export async function runToolLoopCore<TMessage>(
               toolResultToRecordMarker(
                 pending,
                 resolved.server.label,
-                { text: outcome.resultText, isError: outcome.isError },
+                {
+                  text: recordText(
+                    executor,
+                    resolved.toolName,
+                    immediateArgs,
+                    outcome,
+                  ),
+                  isError: outcome.isError,
+                },
                 Date.now() - startedAt,
               ),
             );
