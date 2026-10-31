@@ -74,6 +74,7 @@ import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
 import { SkillBadges } from '@/components/Chat/ChatInput/SkillBadges';
 import { ToneBadge } from '@/components/Chat/ChatInput/ToneBadge';
 import { M365AgentAccessBanner } from '@/components/Chat/M365AgentAccessBanner';
+import { QueuedMessagesTray } from '@/components/Chat/QueuedMessagesTray';
 
 import { PromptList } from './ChatInput/PromptList';
 import { VariableModal } from './ChatInput/VariableModal';
@@ -306,13 +307,8 @@ export const ChatInput = ({
   };
 
   const handleSend = () => {
-    if (isStreaming) {
-      if (filePreviews.length > 0) {
-        setFilePreviews([]);
-      }
-      return;
-    }
-
+    // While streaming the message is QUEUED (useChatActions.handleSend) and
+    // sent when the response finishes — no more waiting on the composer.
     handleMessageSend();
 
     if (
@@ -563,6 +559,9 @@ export const ChatInput = ({
       )}
 
       <div className="sticky bottom-0 bg-white dark:bg-surface-dark">
+        {selectedConversation && (
+          <QueuedMessagesTray conversationId={selectedConversation.id} />
+        )}
         {filePreviews.length > 0 && (
           <div className="max-h-52 overflow-y-auto">
             <ChatFileUploadPreviews

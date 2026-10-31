@@ -293,6 +293,19 @@ export function Chat({
     [isResizing],
   );
 
+  // Leaving the page mid-stream loses the partial answer (the server
+  // cannot be re-joined — see docs/DURABLE_TURNS_PROPOSAL.md). Ask first.
+  useEffect(() => {
+    if (!isStreaming || typeof window === 'undefined') return;
+    const guard = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      // Legacy browsers need a returnValue for the prompt to show.
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', guard);
+    return () => window.removeEventListener('beforeunload', guard);
+  }, [isStreaming]);
+
   // Mouse event listeners for resizing
   useEffect(() => {
     if (typeof window !== 'undefined') {
