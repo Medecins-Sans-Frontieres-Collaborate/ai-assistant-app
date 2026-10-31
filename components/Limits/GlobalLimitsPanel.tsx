@@ -20,6 +20,7 @@ import {
   LimitOverride,
   LimitsFailMode,
   LimitsMode,
+  ModelAccessRule,
 } from '@/lib/services/limits/types';
 
 import { AdminTabs } from '@/components/Admin/AdminTabs';
@@ -39,6 +40,7 @@ import { DelegationsTab } from '@/components/Limits/DelegationsTab';
 import { EffectiveLimitsPreview } from '@/components/Limits/EffectiveLimitsPreview';
 import { GlobalDefaultsSection } from '@/components/Limits/GlobalDefaultsSection';
 import { useLimitsCost } from '@/components/Limits/LimitsCostContext';
+import { ModelAccessTab } from '@/components/Limits/ModelAccessTab';
 import { OverrideEditor } from '@/components/Limits/OverrideEditor';
 import { RelevantRulesPopover } from '@/components/Limits/RelevantRulesPopover';
 import {
@@ -54,10 +56,12 @@ import {
 } from '@/components/Limits/types';
 
 /** `cost` exists only while `useLimitsCost().calculator` is on. */
-type PanelTab = 'defaults' | 'overrides' | 'delegations' | 'cost';
+type PanelTab = 'defaults' | 'models' | 'overrides' | 'delegations' | 'cost';
 
 interface Draft {
   defaults: LimitEntry[];
+  /** Model approval rules (docs/LIMITS.md "Model approval"); always sent. */
+  modelAccess: ModelAccessRule[];
   overrides: LimitOverride[];
   /**
    * ⚠ Must be present on every PUT. The server refuses a body lacking the
@@ -75,6 +79,7 @@ interface Draft {
 
 const EMPTY_DRAFT: Draft = {
   defaults: [],
+  modelAccess: [],
   overrides: [],
   delegations: [],
   mode: 'observe',
@@ -88,6 +93,7 @@ function draftFrom(data: PolicyResponse): Draft {
   return data.policy
     ? {
         defaults: data.policy.defaults,
+        modelAccess: data.policy.modelAccess ?? [],
         overrides: data.policy.overrides,
         delegations: data.policy.delegations ?? [],
         mode: data.policy.mode,
@@ -412,6 +418,7 @@ export const GlobalLimitsPanel: FC = () => {
       <AdminTabs
         tabs={[
           { id: 'defaults', label: t('tab.defaults') },
+          { id: 'models', label: t('tab.models') },
           { id: 'overrides', label: t('tab.overrides') },
           { id: 'delegations', label: t('tab.delegations') },
           ...(calculator
@@ -433,6 +440,15 @@ export const GlobalLimitsPanel: FC = () => {
           <GlobalDefaultsSection
             entries={draft.defaults}
             onChange={(defaults) => patch({ defaults })}
+            disabled={saving}
+          />
+        )}
+        {tab === 'models' && (
+          <ModelAccessTab
+            rules={draft.modelAccess}
+            defaults={draft.defaults}
+            onChange={(modelAccess) => patch({ modelAccess })}
+            mode={draft.mode}
             disabled={saving}
           />
         )}
@@ -555,7 +571,11 @@ export const GlobalLimitsPanel: FC = () => {
           />
         )}
         {tab === 'cost' && calculator && (
-          <CostCalculatorLazy caps={draft.defaults} mode="global" />
+          <CostCalculatorLazy
+            caps={draft.defaults}
+            modelAccess={draft.modelAccess}
+            mode="global"
+          />
         )}
       </div>
 
