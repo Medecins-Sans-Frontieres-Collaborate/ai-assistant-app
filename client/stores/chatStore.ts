@@ -229,12 +229,27 @@ function buildAssistantMessage(
   return assistantMessage;
 }
 
+/**
+ * A message typed while a response was still streaming in the same
+ * conversation. Held here (not persisted) until the stream settles, then
+ * sent by useChatActions in order. Cancelling returns the text to the
+ * composer.
+ */
+export interface QueuedSend {
+  message: Message;
+  conversationId: string;
+  searchMode?: SearchMode;
+  initialActiveFiles?: ActiveFile[];
+}
+
 interface ChatStore {
   // State
   currentMessage: Message | undefined;
   isStreaming: boolean;
   streamingContent: string;
   streamingConversationId: string | null;
+  /** Messages waiting for the current stream to finish (FIFO). */
+  queuedSends: QueuedSend[];
   citations: Citation[];
   error: string | null;
   /**
@@ -409,6 +424,12 @@ interface ChatStore {
     errorCode: string | undefined,
     conversationId: string | undefined,
   ) => { isQuotaDenial: boolean; denial: LimitDenialMetadata | null };
+  /** Queue a message to send once the current stream in its conversation settles. */
+  queueSend: (entry: QueuedSend) => void;
+  /** Drop one queued message (by message id) and return it, or null. */
+  removeQueuedSend: (messageId: string) => QueuedSend | null;
+  /** Take the oldest queued message for a conversation, or null. */
+  shiftQueuedSend: (conversationId: string) => QueuedSend | null;
   setCurrentMessage: (message: Message | undefined) => void;
   setIsStreaming: (isStreaming: boolean) => void;
   setStreamingContent: (content: string) => void;
@@ -680,6 +701,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   isStreaming: false,
   streamingContent: '',
   streamingConversationId: null,
+  queuedSends: [],
   citations: [],
   error: null,
   errorCode: null,
@@ -799,6 +821,35 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       else next[conversationId] = fileIds;
       return { lastTurnDroppedActiveFileIds: next };
     }),
+
+  queueSend: (entry) =>
+    set((state) => ({ queuedSends: [...state.queuedSends, entry] })),
+
+  removeQueuedSend: (messageId) => {
+    const entry =
+      get().queuedSends.find((item) => item.message.id === messageId) ?? null;
+    if (entry) {
+      set((state) => ({
+        queuedSends: state.queuedSends.filter(
+          (item) => item.message.id !== messageId,
+        ),
+      }));
+    }
+    return entry;
+  },
+
+  shiftQueuedSend: (conversationId) => {
+    const entry =
+      get().queuedSends.find(
+        (item) => item.conversationId === conversationId,
+      ) ?? null;
+    if (entry) {
+      set((state) => ({
+        queuedSends: state.queuedSends.filter((item) => item !== entry),
+      }));
+    }
+    return entry;
+  },
 
   setCurrentMessage: (message) => set({ currentMessage: message }),
 
@@ -2004,6 +2055,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         streamError.code,
         streamError.retry === true,
         streamError.fileUrl,
+        streamError.kind,
       );
     }
 
