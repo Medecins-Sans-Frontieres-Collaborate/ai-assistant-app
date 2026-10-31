@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "මුල් පදසටහන මකන්න",
     "glossaryDeleteSuccess": "මුල් පදසටහන මකන ලදී",
     "channelProfilesTab": "ප්ලැට්ෆෝම්ස්",
-    "channelSetsTab": "චැනල් කට්ටල්"
+    "channelSetsTab": "චැනල් කට්ටල්",
+    "addPromptAgent": "ප්‍රම්ප්ට් නියෝජිතයෙකු එක් කරන්න",
+    "m365AgentIndexStop": "අනුක්‍රමනය නවත්න්න",
+    "foundryAgentsHeading": "Foundry හා ප්‍රම්ප්ට් නියෝජිතයන්",
+    "foundryAgentsDescription": "ඔබගේම පිවිසුමෙන් Azure AI Foundry හරහා සොයාගත් නියෝජිතයන් සහ ඉඳහිට මෙහි นิර්වචනය කළ ප්‍රම්ප්ට් නියෝජිතයන්. දැනුම් නියෝජිතයන් සහ Microsoft 365 නියෝජිතයන් පහතින් තමන්ගේම කොටස්වල කළමනාකරණය වේ."
   },
   "localModels": {
     "title": "ප්‍රාදේශීය ආදර්ශ",

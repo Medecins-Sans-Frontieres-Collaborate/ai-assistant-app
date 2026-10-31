@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Феҳристи истилоҳотро нобуд кунед",
     "glossaryDeleteSuccess": "Феҳристи истилоҳот нобуд шуд",
     "channelProfilesTab": "Платформаҳо",
-    "channelSetsTab": "Маҷмӯаҳои каналҳо"
+    "channelSetsTab": "Маҷмӯаҳои каналҳо",
+    "addPromptAgent": "Агенти фавриро илова кунед",
+    "m365AgentIndexStop": "Индекссозиро қатъ кунед",
+    "foundryAgentsHeading": "Агентҳои Foundry ва фаври",
+    "foundryAgentsDescription": "Агентҳоеро, ки аз Azure AI Foundry тавассути дастрасии шахсии шумо ёфт шудаанд, ва инчунин агентҳои фаврии дар ин ҷо муайяншуда. Агентҳои дониш ва агентҳои Microsoft 365 дар қисматҳои алоҳидаи поён идора карда мешаванд."
   },
   "localModels": {
     "title": "Моделҳои маҳаллӣ",

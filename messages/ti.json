@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "መዝገብ ቃላት ሰርዝ",
     "glossaryDeleteSuccess": "መዝገብ ቃላት ተሰርዘ",
     "channelProfilesTab": "መድረኻት",
-    "channelSetsTab": "ብዛዕባ መድረኻት ማዕረፍቲ"
+    "channelSetsTab": "ብዛዕባ መድረኻት ማዕረፍቲ",
+    "addPromptAgent": "ፕሮምፕት ኤጅንት ወስኽ",
+    "m365AgentIndexStop": "መርእዝን ምቁራብ ዘርከስ",
+    "foundryAgentsHeading": "ፋውንድሪን ፕሮምፕት ኤጅንታት",
+    "foundryAgentsDescription": "ኤጅንታት ካብ Azure AI Foundry ብኣንተ ግዝኣት ተስማምዐኩ፣ ከምኡን ናይ ኣብዚ ዝተገምገመ ፕሮምፕት ኤጅንታት። ናይ እውንታት ኤጅንታትን Microsoft 365 ኤጅንታትን ናይ ምድርኡ ክፍሊታት ተምሓላሉ።"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",

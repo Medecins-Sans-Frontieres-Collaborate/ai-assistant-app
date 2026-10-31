@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "பண்பாட்டு அகராதியை நீக்கவும்",
     "glossaryDeleteSuccess": "அகராதி நீக்கப்பட்டது",
     "channelProfilesTab": "பிளாட்ஃபார்ம்கள்",
-    "channelSetsTab": "சேனல் தொகுப்புகள்"
+    "channelSetsTab": "சேனல் தொகுப்புகள்",
+    "addPromptAgent": "ப்ராம்ப்ட் ஏஜெண்டை சேர்க்கவும்",
+    "m365AgentIndexStop": "இண்டெக்சிங் நிறுத்தவும்",
+    "foundryAgentsHeading": "Foundry மற்றும் ப்ராம்ப்ட் ஏஜெண்ட்கள்",
+    "foundryAgentsDescription": "Azure AI Foundry-இல் இருந்து உங்கள் சொந்த அணுகல் மூலம் கண்டறியப்பட்ட ஏஜெண்ட்கள் மற்றும் இங்கு வரையறுத்த ப்ராம்ப்ட் ஏஜெண்ட்கள். அறிவு ஏஜெண்ட்கள் மற்றும் Microsoft 365 ஏஜெண்ட்கள் கீழே உள்ள தங்களுக்கான பிரிவில் நிர்வகிக்கப்படுகின்றன."
   },
   "localModels": {
     "title": "உள்ளூர் மாதிரிகள்",

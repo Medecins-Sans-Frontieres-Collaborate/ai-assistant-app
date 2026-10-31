@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "Woordenlijst verwijderen",
     "glossaryDeleteSuccess": "Woordenlijst verwijderd",
     "channelProfilesTab": "Platforms",
-    "channelSetsTab": "Kanaalsets"
+    "channelSetsTab": "Kanaalsets",
+    "addPromptAgent": "Promptagent toevoegen",
+    "m365AgentIndexStop": "Indexeren stoppen",
+    "foundryAgentsHeading": "Foundry- en promptagents",
+    "foundryAgentsDescription": "Agents ontdekt via Azure AI Foundry met uw eigen toegang, plus de promptagents die hier zijn gedefinieerd. Kennisagents en Microsoft 365-agents worden in hun eigen secties hieronder beheerd."
   },
   "localModels": {
     "title": "Lokale modellen",

@@ -578,7 +578,11 @@ const mockMessages: Record<string, unknown> = {
     conflictError:
       'Someone else changed this while you were editing. Reload to load the latest version, then make your change again.',
     reload: 'Reload',
-    addAgent: 'Add agent',
+    addPromptAgent: 'Add prompt agent',
+    foundryAgentsHeading: 'Foundry and prompt agents',
+    foundryAgentsDescription:
+      'Agents discovered from Azure AI Foundry through your own access, plus prompt agents defined here.',
+    m365AgentIndexStop: 'Stop indexing',
     newPromptAgentTitle: 'New prompt agent',
     editPromptAgentTitle: 'Edit prompt agent',
     agentNameLabel: 'Name',

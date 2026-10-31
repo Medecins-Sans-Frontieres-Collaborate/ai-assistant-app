@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "حذف واژه‌نامه",
     "glossaryDeleteSuccess": "واژه‌نامه حذف شد",
     "channelProfilesTab": "بسترها",
-    "channelSetsTab": "مجموعه کانال‌ها"
+    "channelSetsTab": "مجموعه کانال‌ها",
+    "addPromptAgent": "افزودن عامل دستور",
+    "m365AgentIndexStop": "توقف فهرست‌بندی",
+    "foundryAgentsHeading": "عامل‌های Foundry و دستور",
+    "foundryAgentsDescription": "عامل‌هایی که از Azure AI Foundry با دسترسی شخصی شما کشف شده‌اند، به‌علاوه عامل‌های دستور که اینجا تعریف شده‌اند. عامل‌های دانش و عامل‌های Microsoft 365 در بخش‌های اختصاصی زیر مدیریت می‌شوند."
   },
   "localModels": {
     "title": "مدل‌های محلی",

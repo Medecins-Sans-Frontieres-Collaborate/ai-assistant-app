@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "Glossar löschen",
     "glossaryDeleteSuccess": "Glossar gelöscht",
     "channelProfilesTab": "Plattformen",
-    "channelSetsTab": "Kanalsets"
+    "channelSetsTab": "Kanalsets",
+    "addPromptAgent": "Prompt-Agent hinzufügen",
+    "m365AgentIndexStop": "Indexierung beenden",
+    "foundryAgentsHeading": "Foundry- und Prompt-Agents",
+    "foundryAgentsDescription": "Agents, die über Ihren eigenen Zugriff aus Azure AI Foundry erkannt wurden, sowie hier definierte Prompt-Agents. Wissens-Agents und Microsoft 365-Agents werden in den jeweiligen Abschnitten unten verwaltet."
   },
   "localModels": {
     "title": "Lokale Modelle",

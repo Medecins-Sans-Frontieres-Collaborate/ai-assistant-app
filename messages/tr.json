@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "Sözlüğü sil",
     "glossaryDeleteSuccess": "Sözlük silindi",
     "channelProfilesTab": "Platformlar",
-    "channelSetsTab": "Kanal setleri"
+    "channelSetsTab": "Kanal setleri",
+    "addPromptAgent": "Prompt ajanı ekle",
+    "m365AgentIndexStop": "Dizini durdur",
+    "foundryAgentsHeading": "Foundry ve prompt ajanları",
+    "foundryAgentsDescription": "Azure AI Foundry'den kendi erişiminizle keşfedilen ajanlar ve burada tanımlanan prompt ajanları. Bilgi ajanları ve Microsoft 365 ajanları aşağıda kendi bölümlerinde yönetilmektedir."
   },
   "localModels": {
     "title": "Yerel modeller",

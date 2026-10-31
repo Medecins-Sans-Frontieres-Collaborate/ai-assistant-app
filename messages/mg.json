@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Fafana ny voambolana",
     "glossaryDeleteSuccess": "Voafafa ny voambolana",
     "channelProfilesTab": "Sehatra",
-    "channelSetsTab": "Andiana fantsona"
+    "channelSetsTab": "Andiana fantsona",
+    "addPromptAgent": "Ampio agent prompt",
+    "m365AgentIndexStop": "Atsaharo ny fanasokajiana",
+    "foundryAgentsHeading": "Agent Foundry sy agent prompt",
+    "foundryAgentsDescription": "Ny agent hita avy amin'ny Azure AI Foundry amin'ny alalan'ny fidiranao manokana, ankoatra ireo agent prompt voafaritra eto. Ny agent fahalalana sy agent Microsoft 365 dia tantanina amin'ny fizarana natokana ho azy etsy ambany."
   },
   "localModels": {
     "title": "Model eo an-toerana",

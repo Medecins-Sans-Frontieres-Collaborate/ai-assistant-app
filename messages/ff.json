@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Momtu jaɓɓorgal",
     "glossaryDeleteSuccess": "Jaɓɓorgal momtini",
     "channelProfilesTab": "Paltformji",
-    "channelSetsTab": "Cuɓorgal paltformji"
+    "channelSetsTab": "Cuɓorgal paltformji",
+    "addPromptAgent": "Ɓeydu jeytinoore prompt",
+    "m365AgentIndexStop": "Toppu coggil index",
+    "foundryAgentsHeading": "Foundry e jeytinooji prompt",
+    "foundryAgentsDescription": "Jeytinooji eɓɓi e Azure AI Foundry ɗo waawanii e boowol maa, jammaa jeytinooji prompt ɓe ɗe woni fii. Jeytinooji knowledge e Microsoft 365 jeytinooji ɓe heddii e bingel makko doole ɗii dow laawol."
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",

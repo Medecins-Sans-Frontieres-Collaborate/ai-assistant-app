@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Siba umusobanuzi w'amagambo",
     "glossaryDeleteSuccess": "Umusobanuzi w'amagambo wasibwe",
     "channelProfilesTab": "Imbuga",
-    "channelSetsTab": "Sets za shene"
+    "channelSetsTab": "Sets za shene",
+    "addPromptAgent": "Ongeraho umukozi w'amabwiriza",
+    "m365AgentIndexStop": "Hagarika kubika ibigize",
+    "foundryAgentsHeading": "Abakozi ba Foundry n'ab'amabwiriza",
+    "foundryAgentsDescription": "Abakozi babonetse muri Azure AI Foundry ukoresheje uburenganzira bwawe, hamwe n'abakozi b'amabwiriza washyize hano. Abakozi b'ubumenyi n'abakozi ba Microsoft 365 bashyirwa ahabugenewe hepfo."
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",

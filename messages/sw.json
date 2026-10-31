@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "Futa kamusi",
     "glossaryDeleteSuccess": "Kamusi imefutwa",
     "channelProfilesTab": "Majukwaa",
-    "channelSetsTab": "Seti za njia"
+    "channelSetsTab": "Seti za njia",
+    "addPromptAgent": "Ongeza wakala wa prompt",
+    "m365AgentIndexStop": "Acha kuorodhesha",
+    "foundryAgentsHeading": "Maajenti wa Foundry na prompt",
+    "foundryAgentsDescription": "Maajenti waliogunduliwa kutoka Azure AI Foundry kupitia ufikiaji wako, pamoja na maajenti wa prompt walioainishwa hapa. Maajenti wa maarifa na maajenti wa Microsoft 365 husimamiwa katika sehemu zao hapa chini."
   },
   "localModels": {
     "title": "Miundo ya ndani",

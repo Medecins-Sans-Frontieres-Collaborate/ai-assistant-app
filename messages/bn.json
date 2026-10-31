@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "গ্লসারি মুছুন",
     "glossaryDeleteSuccess": "গ্লসারি মুছে ফেলা হয়েছে",
     "channelProfilesTab": "প্ল্যাটফর্মসমূহ",
-    "channelSetsTab": "চ্যানেল সেটসমূহ"
+    "channelSetsTab": "চ্যানেল সেটসমূহ",
+    "addPromptAgent": "প্রম্পট এজেন্ট যোগ করুন",
+    "m365AgentIndexStop": "ইনডেক্সিং বন্ধ করুন",
+    "foundryAgentsHeading": "ফাউন্ড্রি এবং প্রম্পট এজেন্টসমূহ",
+    "foundryAgentsDescription": "আপনার নিজস্ব অ্যাক্সেসের মাধ্যমে Azure AI Foundry থেকে আবিষ্কৃত এজেন্ট, এছাড়াও এখানে সংজ্ঞায়িত প্রম্পট এজেন্ট। নলেজ এজেন্ট এবং Microsoft 365 এজেন্ট তাদের নিজস্ব বিভাগে নিচে ব্যবস্থাপিত হয়।"
   },
   "localModels": {
     "title": "স্থানীয় মডেলসমূহ",

@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "سڕینەوەی دڵنیابوونەوە",
     "glossaryDeleteSuccess": "لە فۆڕمەکان سڕایەوە",
     "channelProfilesTab": "پلاتفۆرمەکان",
-    "channelSetsTab": "کۆمەڵە کەنال"
+    "channelSetsTab": "کۆمەڵە کەنال",
+    "addPromptAgent": "زیادکردنی ئایجەنتی پرۆمت",
+    "m365AgentIndexStop": "وەستاندنی فهرستکردن",
+    "foundryAgentsHeading": "ئایجەنتەکانی Foundry و پرۆمت",
+    "foundryAgentsDescription": "ئایجەنتە دۆزراوەکان لە Azure AI Foundry بەرەوپێش بە بەکارهێنانی دەستگەیشتنی خۆت، بە هاوبەشی ئایجەنتەکانی پرۆمت لێرە دیاری کراون. ئایجەنتە زانستیەکان و ئایجەنتەکانی Microsoft 365 لە بەشە تایبەتی خوارەوە بەڕێوبردن."
   },
   "localModels": {
     "title": "مۆدێلە سەرەکییەکان",

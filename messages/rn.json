@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Siba glossary",
     "glossaryDeleteSuccess": "Glossary yasibwe",
     "channelProfilesTab": "Imbuga",
-    "channelSetsTab": "Amaboko y’imbuga"
+    "channelSetsTab": "Amaboko y’imbuga",
+    "addPromptAgent": "Ongerako agent wa prompt",
+    "m365AgentIndexStop": "Hagarika indexing",
+    "foundryAgentsHeading": "Agents ba Foundry n'aba prompt",
+    "foundryAgentsDescription": "Agents basanzwe barabonetse avyavuye kuri Azure AI Foundry uko wavyemerewe, hamwe n'aba prompt agents wanditse hano. Agents b'ubumenyi hamwe n'aba Microsoft 365 agents biragengwa mu mashira yabo hasi."
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",

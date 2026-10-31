@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "Видалити глосарій",
     "glossaryDeleteSuccess": "Глосарій видалено",
     "channelProfilesTab": "Платформи",
-    "channelSetsTab": "Набори каналів"
+    "channelSetsTab": "Набори каналів",
+    "addPromptAgent": "Додати агента підказок",
+    "m365AgentIndexStop": "Зупинити індексацію",
+    "foundryAgentsHeading": "Агенти Foundry та агенти підказок",
+    "foundryAgentsDescription": "Агенти, виявлені через Azure AI Foundry на основі вашого доступу, а також агенти підказок, визначені тут. Агенти знань і агенти Microsoft 365 керуються у своїх розділах нижче."
   },
   "localModels": {
     "title": "Локальні моделі",

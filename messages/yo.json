@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Pa akọtọ kuro",
     "glossaryDeleteSuccess": "A ti pa akọtọ kuro",
     "channelProfilesTab": "Àwọn pẹpẹ",
-    "channelSetsTab": "Ìṣùpọ̀ ikanni"
+    "channelSetsTab": "Ìṣùpọ̀ ikanni",
+    "addPromptAgent": "Fi aṣoju itọsọna kun",
+    "m365AgentIndexStop": "Duro kika",
+    "foundryAgentsHeading": "Aṣoju Foundry ati aṣoju itọsọna",
+    "foundryAgentsDescription": "Àwọn aṣoju tí a ṣàwárí láti Azure AI Foundry nípasẹ̀ ìwọ̀ntúnwọ̀nsì tirẹ, pọ̀ mọ́ aṣoju itọsọna tí a ṣe àtọkànwá nibi. Àwọn aṣoju ìmọ̀ àti aṣoju Microsoft 365 ni a ń ṣàbójútó ní apá wọn ní isalẹ."
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",

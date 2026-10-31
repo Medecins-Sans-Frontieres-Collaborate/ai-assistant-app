@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Obriši glosar",
     "glossaryDeleteSuccess": "Glosar je obrisan",
     "channelProfilesTab": "Platforme",
-    "channelSetsTab": "Setovi kanala"
+    "channelSetsTab": "Setovi kanala",
+    "addPromptAgent": "Dodaj prompt agenta",
+    "m365AgentIndexStop": "Zaustavi indeksiranje",
+    "foundryAgentsHeading": "Foundry i prompt agenti",
+    "foundryAgentsDescription": "Agenti otkriveni putem Azure AI Foundry preko vašeg pristupa, kao i prompt agenti definisani ovde. Agenti za znanje i Microsoft 365 agenti se upravljaju u svojim zasebnim odeljcima ispod."
   },
   "localModels": {
     "title": "Lokalni modeli",

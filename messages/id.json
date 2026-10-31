@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "Hapus glosarium",
     "glossaryDeleteSuccess": "Glosarium telah dihapus",
     "channelProfilesTab": "Platform",
-    "channelSetsTab": "Set kanal"
+    "channelSetsTab": "Set kanal",
+    "addPromptAgent": "Tambah agen prompt",
+    "m365AgentIndexStop": "Hentikan pengindeksan",
+    "foundryAgentsHeading": "Agen Foundry dan prompt",
+    "foundryAgentsDescription": "Agen yang ditemukan dari Azure AI Foundry melalui akses Anda sendiri, ditambah agen prompt yang didefinisikan di sini. Agen pengetahuan dan agen Microsoft 365 dikelola di bagian masing-masing di bawah ini."
   },
   "localModels": {
     "title": "Model lokal",

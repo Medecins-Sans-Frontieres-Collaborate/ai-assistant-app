@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Goge kundin magana",
     "glossaryDeleteSuccess": "An goge kundin magana",
     "channelProfilesTab": "Manhajoji",
-    "channelSetsTab": "Saitunan tashoshi"
+    "channelSetsTab": "Saitunan tashoshi",
+    "addPromptAgent": "Ƙara wakilin umarni",
+    "m365AgentIndexStop": "Dakatar da yin fahimta",
+    "foundryAgentsHeading": "Wakilan Foundry da umarni",
+    "foundryAgentsDescription": "Wakilan da aka gano daga Azure AI Foundry ta hanyar damar ku, da kuma wakilan umarni da aka saita a nan. Wakilan ilimi da wakilan Microsoft 365 ana tafiyar da su a rarrabensu daban a ƙasa."
   },
   "localModels": {
     "title": "Samfuran cikin gida",

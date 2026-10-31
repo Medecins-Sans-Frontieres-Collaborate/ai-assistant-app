@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Tir ka saaro qeexitaanka ereyada",
     "glossaryDeleteSuccess": "Qeexitaanka ereyada waa la tirtiray",
     "channelProfilesTab": "Barnaamijyada",
-    "channelSetsTab": "Xirmooyinka kanaalada"
+    "channelSetsTab": "Xirmooyinka kanaalada",
+    "addPromptAgent": "Ku dar wakiil prompt ah",
+    "m365AgentIndexStop": "Jooji tusmada",
+    "foundryAgentsHeading": "Wakiillada Foundry iyo prompt-ka",
+    "foundryAgentsDescription": "Wakiillo laga helay Azure AI Foundry oo la marayo gelitaankaaga, iyo sidoo kale wakiillada prompt-ka ee halkan lagu qeexay. Wakiillada aqoonta iyo Microsoft 365 waa lagu xakameeyaa qaybaha hoose ee gaarka ah."
   },
   "localModels": {
     "title": "Moodallo maxalli ah",

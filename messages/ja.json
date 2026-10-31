@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "用語集を削除",
     "glossaryDeleteSuccess": "用語集が削除されました",
     "channelProfilesTab": "プラットフォーム",
-    "channelSetsTab": "チャンネルセット"
+    "channelSetsTab": "チャンネルセット",
+    "addPromptAgent": "プロンプトエージェントを追加",
+    "m365AgentIndexStop": "インデックス作成を停止",
+    "foundryAgentsHeading": "Foundry エージェントとプロンプトエージェント",
+    "foundryAgentsDescription": "Azure AI Foundry からご自身のアクセスで検出されたエージェントと、ここで定義されたプロンプトエージェントが含まれます。ナレッジエージェントと Microsoft 365 エージェントは下記の各セクションで管理されます。"
   },
   "localModels": {
     "title": "ローカルモデル",

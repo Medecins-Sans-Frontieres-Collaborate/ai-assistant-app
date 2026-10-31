@@ -5365,7 +5365,11 @@
     "confirmDeleteGlossary": "Xóa bảng thuật ngữ",
     "glossaryDeleteSuccess": "Đã xóa bảng thuật ngữ",
     "channelProfilesTab": "Nền tảng",
-    "channelSetsTab": "Bộ kênh"
+    "channelSetsTab": "Bộ kênh",
+    "addPromptAgent": "Thêm tác nhân prompt",
+    "m365AgentIndexStop": "Dừng lập chỉ mục",
+    "foundryAgentsHeading": "Các tác nhân Foundry và prompt",
+    "foundryAgentsDescription": "Các tác nhân được phát hiện từ Azure AI Foundry qua quyền truy cập của bạn, cùng với các tác nhân prompt được xác định tại đây. Các tác nhân tri thức và tác nhân Microsoft 365 được quản lý ở các phần riêng phía dưới."
   },
   "localModels": {
     "title": "Mô hình cục bộ",

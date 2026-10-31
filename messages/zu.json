@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Susa iglosari",
     "glossaryDeleteSuccess": "Iglosari isusiwe",
     "channelProfilesTab": "Amapulatifomu",
-    "channelSetsTab": "Amasethi wesiteshi"
+    "channelSetsTab": "Amasethi wesiteshi",
+    "addPromptAgent": "Engeza i-agent ye-prompt",
+    "m365AgentIndexStop": "Yeka uku-indexa",
+    "foundryAgentsHeading": "Ama-agent e-Foundry kanye nama-agent e-prompt",
+    "foundryAgentsDescription": "Ama-agent atholakele ku-Azure AI Foundry ngokusebenzisa ukufinyelela kwakho, kanye nama-agent e-prompt achazwe lapha. Ama-agent olwazi nama-agent e-Microsoft 365 aphathwa ezigabeni zawo ezingezansi."
   },
   "localModels": {
     "title": "Amamodeli endaweni",

@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "Smazat glosář",
     "glossaryDeleteSuccess": "Glosář byl smazán",
     "channelProfilesTab": "Platformy",
-    "channelSetsTab": "Sady kanálů"
+    "channelSetsTab": "Sady kanálů",
+    "addPromptAgent": "Přidat prompt agenta",
+    "m365AgentIndexStop": "Zastavit indexování",
+    "foundryAgentsHeading": "Foundry a prompt agenti",
+    "foundryAgentsDescription": "Agenti nalezení v Azure AI Foundry prostřednictvím vašeho přístupu, plus prompt agenti definovaní zde. Agenti znalostí a Microsoft 365 agenti jsou spravováni v samostatných sekcích níže."
   },
   "localModels": {
     "title": "Lokální modely",

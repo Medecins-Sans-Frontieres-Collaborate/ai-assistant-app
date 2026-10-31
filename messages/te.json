@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "గ్లోసరీని తొలగించండి",
     "glossaryDeleteSuccess": "గ్లోసరీ తొలగించబడింది",
     "channelProfilesTab": "ప్లాట్‌ఫారమ్‌లు",
-    "channelSetsTab": "ఛానల్ సెట్లు"
+    "channelSetsTab": "ఛానల్ సెట్లు",
+    "addPromptAgent": "ప్రాంప్ట్ ఏజెంట్‌ను జోడించండి",
+    "m365AgentIndexStop": "ఇండెక్సింగ్ ఆపండి",
+    "foundryAgentsHeading": "ఫౌండ్రీ మరియు ప్రాంప్ట్ ఏజెంట్లు",
+    "foundryAgentsDescription": "మీ స్వంత యాక్సెస్ ద్వారా Azure AI Foundry నుంచి కనుగొన్న ఏజెంట్లు, అలాగే ఇక్కడ నిర్వచించిన ప్రాంప్ట్ ఏజెంట్లు. నాలెడ్జ్ ఏజెంట్లు మరియు Microsoft 365 ఏజెంట్లు వాటి ప్రత్యేక విభాగాల్లో నిర్వహించబడతాయి."
   },
   "localModels": {
     "title": "లోకల్ మోడల్స్",

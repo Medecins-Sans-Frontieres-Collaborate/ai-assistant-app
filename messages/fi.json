@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "Poista sanasto",
     "glossaryDeleteSuccess": "Sanasto poistettu",
     "channelProfilesTab": "Alustat",
-    "channelSetsTab": "Kanavasarjat"
+    "channelSetsTab": "Kanavasarjat",
+    "addPromptAgent": "Lisää prompt-agentti",
+    "m365AgentIndexStop": "Lopeta indeksointi",
+    "foundryAgentsHeading": "Foundry- ja prompt-agentit",
+    "foundryAgentsDescription": "Azure AI Foundrysta oman käyttöoikeutesi kautta löydetyt agentit sekä täällä määritellyt prompt-agentit. Knowledge-agentit ja Microsoft 365 -agentit hallitaan omissa osioissaan alla."
   },
   "localModels": {
     "title": "Paikalliset mallit",

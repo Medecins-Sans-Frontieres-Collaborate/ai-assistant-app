@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "Ștergeți glosarul",
     "glossaryDeleteSuccess": "Glosar șters",
     "channelProfilesTab": "Platforme",
-    "channelSetsTab": "Seturi de canale"
+    "channelSetsTab": "Seturi de canale",
+    "addPromptAgent": "Adăugați agent de prompt",
+    "m365AgentIndexStop": "Opriți indexarea",
+    "foundryAgentsHeading": "Agenți Foundry și agenți de prompt",
+    "foundryAgentsDescription": "Agenți descoperiți din Azure AI Foundry prin accesul dumneavoastră, plus agenți de prompt definiți aici. Agenții de cunoștințe și agenții Microsoft 365 sunt gestionați în secțiunile lor proprii mai jos."
   },
   "localModels": {
     "title": "Modele locale",

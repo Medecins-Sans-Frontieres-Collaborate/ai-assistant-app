@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "Ta bort ordlista",
     "glossaryDeleteSuccess": "Ordlista borttagen",
     "channelProfilesTab": "Plattformar",
-    "channelSetsTab": "Kanaluppsättningar"
+    "channelSetsTab": "Kanaluppsättningar",
+    "addPromptAgent": "Lägg till promptagent",
+    "m365AgentIndexStop": "Stoppa indexering",
+    "foundryAgentsHeading": "Foundry- och promptagenter",
+    "foundryAgentsDescription": "Agenter upptäckta från Azure AI Foundry via din egen åtkomst, samt promptagenter som definieras här. Kunskapsagenter och Microsoft 365-agenter hanteras i sina egna avsnitt nedan."
   },
   "localModels": {
     "title": "Lokala modeller",

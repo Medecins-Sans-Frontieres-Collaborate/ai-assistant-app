@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "Usuń słownik",
     "glossaryDeleteSuccess": "Słownik usunięty",
     "channelProfilesTab": "Platformy",
-    "channelSetsTab": "Zestawy kanałów"
+    "channelSetsTab": "Zestawy kanałów",
+    "addPromptAgent": "Dodaj agenta promptu",
+    "m365AgentIndexStop": "Zatrzymaj indeksowanie",
+    "foundryAgentsHeading": "Agenci Foundry i promptu",
+    "foundryAgentsDescription": "Agenci odnalezieni w Azure AI Foundry na podstawie Twojego dostępu oraz agenci promptu zdefiniowani tutaj. Agenci wiedzy i Microsoft 365 są zarządzani w oddzielnych sekcjach poniżej."
   },
   "localModels": {
     "title": "Modele lokalne",

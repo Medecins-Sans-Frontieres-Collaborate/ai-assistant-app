@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "የቃላት አክሊል ያጥፉ",
     "glossaryDeleteSuccess": "የቃላት አክሊል ተሰርዟል",
     "channelProfilesTab": "ᕃዴሎች",
-    "channelSetsTab": "የሚያደርጉት ሰቦች"
+    "channelSetsTab": "የሚያደርጉት ሰቦች",
+    "addPromptAgent": "ፕሮምፕት ወኪል ያክሉ",
+    "m365AgentIndexStop": "መዝገበ-ሁኔታን ቁም",
+    "foundryAgentsHeading": "Foundry እና ፕሮምፕት ወኪሎች",
+    "foundryAgentsDescription": "ከAzure AI Foundry በራስዎ መዳረሻ የተገኙ ወኪሎች፣ እና በእዚህ የተገለጹ ፕሮምፕት ወኪሎች። የእውቀት ወኪሎች እና Microsoft 365 ወኪሎች ከታች በዚህ ክፍል የተለያዩ ይታገዳሉ።"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",

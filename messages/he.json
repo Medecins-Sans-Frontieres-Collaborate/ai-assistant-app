@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "מחיקת מילון מונחים",
     "glossaryDeleteSuccess": "מילון מונחים נמחק",
     "channelProfilesTab": "פלטפורמות",
-    "channelSetsTab": "מערכי ערוצים"
+    "channelSetsTab": "מערכי ערוצים",
+    "addPromptAgent": "הוסף סוכן הנחיה",
+    "m365AgentIndexStop": "הפסק אינדוקס",
+    "foundryAgentsHeading": "סוכני Foundry וסוכני הנחיה",
+    "foundryAgentsDescription": "סוכנים שהתגלו מ-Azure AI Foundry דרך הגישה האישית שלך, בנוסף לסוכני הנחיה שהוגדרו כאן. סוכני ידע וסוכני Microsoft 365 מנוהלים במקטעים נפרדים למטה."
   },
   "localModels": {
     "title": "מודלים מקומיים",

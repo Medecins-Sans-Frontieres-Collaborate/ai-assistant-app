@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Διαγραφή γλωσσαρίου",
     "glossaryDeleteSuccess": "Το γλωσσάρι διαγράφηκε",
     "channelProfilesTab": "Πλατφόρμες",
-    "channelSetsTab": "Ομάδες καναλιών"
+    "channelSetsTab": "Ομάδες καναλιών",
+    "addPromptAgent": "Προσθήκη prompt agent",
+    "m365AgentIndexStop": "Διακοπή ευρετηρίασης",
+    "foundryAgentsHeading": "Foundry και prompt agents",
+    "foundryAgentsDescription": "Agents που εντοπίστηκαν από το Azure AI Foundry μέσω της δικής σας πρόσβασης, καθώς και prompt agents που ορίζονται εδώ. Οι knowledge agents και οι Microsoft 365 agents διαχειρίζονται στις δικές τους ενότητες παρακάτω."
   },
   "localModels": {
     "title": "Τοπικά μοντέλα",

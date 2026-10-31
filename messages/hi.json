@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "शब्दकोश हटाएं",
     "glossaryDeleteSuccess": "शब्दकोश हटा दिया गया",
     "channelProfilesTab": "प्लेटफ़ॉर्म",
-    "channelSetsTab": "चैनल सेट"
+    "channelSetsTab": "चैनल सेट",
+    "addPromptAgent": "प्रॉम्प्ट एजेंट जोड़ें",
+    "m365AgentIndexStop": "इंडेक्सिंग रोकें",
+    "foundryAgentsHeading": "फाउंड्री और प्रॉम्प्ट एजेंट्स",
+    "foundryAgentsDescription": "Azure AI Foundry से आपके स्वयं के एक्सेस द्वारा पाए गए एजेंट्स, साथ ही यहाँ परिभाषित प्रॉम्प्ट एजेंट्स। ज्ञान एजेंट्स और Microsoft 365 एजेंट्स को नीचे उनके अलग अनुभागों में प्रबंधित किया जाता है।"
   },
   "localModels": {
     "title": "स्थानीय मॉडल्स",

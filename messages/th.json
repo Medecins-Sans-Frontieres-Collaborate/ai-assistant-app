@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "ลบศัพท์เฉพาะ",
     "glossaryDeleteSuccess": "ลบศัพท์เฉพาะเรียบร้อยแล้ว",
     "channelProfilesTab": "แพลตฟอร์ม",
-    "channelSetsTab": "ชุดช่องทาง"
+    "channelSetsTab": "ชุดช่องทาง",
+    "addPromptAgent": "เพิ่มพรอมต์เอเจนต์",
+    "m365AgentIndexStop": "หยุดการทำดัชนี",
+    "foundryAgentsHeading": "Foundry และพรอมต์เอเจนต์",
+    "foundryAgentsDescription": "เอเจนต์ที่ค้นพบจาก Azure AI Foundry ผ่านการเข้าถึงของคุณ รวมถึงพรอมต์เอเจนต์ที่กำหนดไว้ที่นี่ เอเจนต์ความรู้และเอเจนต์ Microsoft 365 จะถูกจัดการในส่วนของตนด้านล่าง"
   },
   "localModels": {
     "title": "โมเดลภายในเครื่อง",

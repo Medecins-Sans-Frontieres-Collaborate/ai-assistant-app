@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "حذف المسرد",
     "glossaryDeleteSuccess": "تم حذف المسرد",
     "channelProfilesTab": "المنصات",
-    "channelSetsTab": "مجموعات القنوات"
+    "channelSetsTab": "مجموعات القنوات",
+    "addPromptAgent": "إضافة وكيل موجه",
+    "m365AgentIndexStop": "إيقاف الفهرسة",
+    "foundryAgentsHeading": "وكلاء Foundry والوكلاء الموجهون",
+    "foundryAgentsDescription": "الوكلاء المكتشفون من Azure AI Foundry عبر وصولك الخاص، بالإضافة إلى الوكلاء الموجهين المُعرَّفين هنا. يتم إدارة وكلاء المعرفة ووكلاء Microsoft 365 في الأقسام الخاصة بهم أدناه."
   },
   "localModels": {
     "title": "النماذج المحلية",

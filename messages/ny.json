@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Chotsani glossary",
     "glossaryDeleteSuccess": "Glossary yachotsedwa",
     "channelProfilesTab": "Mapulatifomu",
-    "channelSetsTab": "Ma Channel Sets"
+    "channelSetsTab": "Ma Channel Sets",
+    "addPromptAgent": "Onjezani prompt agent",
+    "m365AgentIndexStop": "Lekani ku index",
+    "foundryAgentsHeading": "Foundry ndi prompt agents",
+    "foundryAgentsDescription": "Ma agents omwe awoneka kuchokera ku Azure AI Foundry pogwiritsa ntchito mwayi wanu, komanso prompt agents omwe akufotokozedwa pano. Knowledge agents ndi Microsoft 365 agents amasamalidwa m'gawo lawo pansipa."
   },
   "localModels": {
     "title": "Mitundu yapafupi",

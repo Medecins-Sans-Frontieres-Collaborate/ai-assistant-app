@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "លុបវចនានុក្រម",
     "glossaryDeleteSuccess": "បានលុបវចនានុក្រម",
     "channelProfilesTab": "វេទិកា",
-    "channelSetsTab": "សំណុំបណ្តាញ"
+    "channelSetsTab": "សំណុំបណ្តាញ",
+    "addPromptAgent": "បន្ថែមជំនួយការជាចម្លើយរហ័ស",
+    "m365AgentIndexStop": "បញ្ឈប់ការចូលបញ្ជី",
+    "foundryAgentsHeading": "ជំនួយការចេញពី Foundry និងជំនួយការជាចម្លើយរហ័ស",
+    "foundryAgentsDescription": "ជំនួយការដែលបានរកឃើញពី Azure AI Foundry តាមរយៈសិទ្ធិចូលផ្ទាល់របស់អ្នក រួមទាំងជំនួយការជាចម្លើយរហ័សដែលបានកំណត់នៅទីនេះ។ ជំនួយការទម្រង់ដឹង និងជំនួយការ Microsoft 365 ត្រូវបានគ្រប់គ្រងនៅផ្នែកខាងក្រោម។"
   },
   "localModels": {
     "title": "ម៉ូឌែលក្នុងតំបន់",

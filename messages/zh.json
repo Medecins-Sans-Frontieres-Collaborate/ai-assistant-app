@@ -5365,7 +5365,11 @@
     "confirmDeleteGlossary": "删除术语表",
     "glossaryDeleteSuccess": "术语表已删除",
     "channelProfilesTab": "平台",
-    "channelSetsTab": "频道集"
+    "channelSetsTab": "频道集",
+    "addPromptAgent": "添加提示代理",
+    "m365AgentIndexStop": "停止索引",
+    "foundryAgentsHeading": "Foundry 代理和提示代理",
+    "foundryAgentsDescription": "通过您的访问权限，从 Azure AI Foundry 发现的代理，以及此处定义的提示代理。知识代理和 Microsoft 365 代理请在下方各自的部分进行管理。"
   },
   "localModels": {
     "title": "本地模型",

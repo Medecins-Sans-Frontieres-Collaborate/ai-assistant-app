@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "استلاحاتو لړ حذف کړئ",
     "glossaryDeleteSuccess": "استلاحاتو لړ حذف شوه",
     "channelProfilesTab": "پلیټ فارمونه",
-    "channelSetsTab": "چینل سیټونه"
+    "channelSetsTab": "چینل سیټونه",
+    "addPromptAgent": "د پرامپټ اجنټ اضافه کړئ",
+    "m365AgentIndexStop": "اندیکس کول ودروئ",
+    "foundryAgentsHeading": "Foundry او پرامپټ اجنټونه",
+    "foundryAgentsDescription": "هغه اجنټونه چې له Azure AI Foundry څخه ستاسو له لاسرسي سره کشف شوي، له دې سره پرامپټ اجنټونه چې دلته تعریف شوي. د پوهې اجنټونه او Microsoft 365 اجنټونه په خپلو لاندې برخو کې مدیریت کېږي."
   },
   "localModels": {
     "title": "محلي ماډلونه",

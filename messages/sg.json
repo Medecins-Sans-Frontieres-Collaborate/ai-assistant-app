@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Kèngä glossary",
     "glossaryDeleteSuccess": "Glossary a kèngï",
     "channelProfilesTab": "Platform ti wâ",
-    "channelSetsTab": "Ngânda ti balê ti channel"
+    "channelSetsTab": "Ngânda ti balê ti channel",
+    "addPromptAgent": "Kubä prompt agent",
+    "m365AgentIndexStop": "Gbalé kobanga",
+    "foundryAgentsHeading": "Foundry na prompt agents",
+    "foundryAgentsDescription": "Agents a zu ti Azure AI Foundry na ndokodi mo, na prompt agents a defî ti mobio. Knowledge agents na Microsoft 365 agents na sa mo na gbanga ti bara ti bangi."
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",

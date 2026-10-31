@@ -5334,7 +5334,11 @@
     "confirmDeleteGlossary": "ကျမ်းစာစာရင်းကို ဖျက်မည်",
     "glossaryDeleteSuccess": "ကျမ်းစာစာရင်းကို ဖျက်ပြီးပါပြီ",
     "channelProfilesTab": "ပလက်ဖောင်းများ",
-    "channelSetsTab": "ချန်နယ်အစုများ"
+    "channelSetsTab": "ချန်နယ်အစုများ",
+    "addPromptAgent": "Prompt agent ကိုထည့်ပါ",
+    "m365AgentIndexStop": "Index ဖွဲ့ခြင်းကိုရပ်ဆိုင်ပါ",
+    "foundryAgentsHeading": "Foundry နှင့် Prompt agents များ",
+    "foundryAgentsDescription": "သင့်ကိုယ်တိုင်ရယူနိုင်သော Azure AI Foundry မှ ရှာဖွေတွေ့ရှိထားသော agents များနှင့် ဤနေရာတွင် သတ်မှတ်ထားသော prompt agents များ ပါဝင်သည်။ Knowledge agents နှင့် Microsoft 365 agents များကို အောက်ပါအပိုင်းများတွင် ထိန်းချုပ်ထားသည်။"
   },
   "localModels": {
     "title": "ဒေသတွင်း မော်ဒယ်များ",

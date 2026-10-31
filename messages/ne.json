@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "शब्दसूची मेटाउनुहोस्",
     "glossaryDeleteSuccess": "शब्दसूची मेटाइयो",
     "channelProfilesTab": "प्ल्याटफर्महरू",
-    "channelSetsTab": "च्यानल सेटहरू"
+    "channelSetsTab": "च्यानल सेटहरू",
+    "addPromptAgent": "प्रोम्प्ट एजेन्ट थप्नुहोस्",
+    "m365AgentIndexStop": "इन्डेक्सिङ रोक्नुहोस्",
+    "foundryAgentsHeading": "फाउन्ड्री र प्रोम्प्ट एजेन्टहरू",
+    "foundryAgentsDescription": "तपाईंको आफ्नै पहुँचमार्फत Azure AI Foundry बाट फेला परेका एजेन्टहरू, साथै यहाँ परिभाषित प्रोम्प्ट एजेन्टहरू। नॉलेज एजेन्टहरू र Microsoft 365 एजेन्टहरू तलका आ-आफ्नै खण्डहरूमा व्यवस्थापन गरिन्छन्।"
   },
   "localModels": {
     "title": "स्थानीय मोडेलहरू",

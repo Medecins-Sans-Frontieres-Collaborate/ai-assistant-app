@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Kolongola glossary",
     "glossaryDeleteSuccess": "Glossary elongwe",
     "channelProfilesTab": "Mabongisi",
-    "channelSetsTab": "Biseti ya mikanda"
+    "channelSetsTab": "Biseti ya mikanda",
+    "addPromptAgent": "Bakisa agent ya prompt",
+    "m365AgentIndexStop": "Tika kosala indexing",
+    "foundryAgentsHeading": "Bafoundry ná ba agent ya prompt",
+    "foundryAgentsDescription": "Ba agent oyo ezwámí na Azure AI Foundry na nzela ya accès na yo, elongo na ba agent ya prompt oyo basalemi awa. Ba agent ya mayebisi ná ba agent ya Microsoft 365 bazali kozwa bososoli na biteni na bango moko na se."
   },
   "localModels": {
     "title": "Bamodelo ya esika",

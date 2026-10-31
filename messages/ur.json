@@ -5364,7 +5364,11 @@
     "confirmDeleteGlossary": "گلوسری حذف کریں",
     "glossaryDeleteSuccess": "گلوسری حذف ہو گئی",
     "channelProfilesTab": "پلیٹ فارمز",
-    "channelSetsTab": "چینل سیٹس"
+    "channelSetsTab": "چینل سیٹس",
+    "addPromptAgent": "پرامپٹ ایجنٹ شامل کریں",
+    "m365AgentIndexStop": "انڈیکسنگ روکیں",
+    "foundryAgentsHeading": "فاؤنڈری اور پرامپٹ ایجنٹس",
+    "foundryAgentsDescription": "وہ ایجنٹس جو آپ کی رسائی سے Azure AI Foundry میں دریافت ہوئے ہیں، اور وہ پرامپٹ ایجنٹس جو یہاں تعریف کیے گئے ہیں۔ علم کے ایجنٹس اور Microsoft 365 ایجنٹس نیچے اپنے حصوں میں منظم کیے گئے ہیں۔"
   },
   "localModels": {
     "title": "لوکل ماڈلز",

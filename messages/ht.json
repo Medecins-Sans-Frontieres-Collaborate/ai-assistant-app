@@ -5318,7 +5318,11 @@
     "confirmDeleteGlossary": "Efase glosè a",
     "glossaryDeleteSuccess": "Glosè efase",
     "channelProfilesTab": "Platfòm yo",
-    "channelSetsTab": "Gwoup chanèl yo"
+    "channelSetsTab": "Gwoup chanèl yo",
+    "addPromptAgent": "Ajoute ajan pou sijesyon",
+    "m365AgentIndexStop": "Sispann endèksaj",
+    "foundryAgentsHeading": "Ajan Foundry ak ajan pou sijesyon",
+    "foundryAgentsDescription": "Ajan ki dekouvri soti nan Azure AI Foundry atravè aksè pa w, plis ajan pou sijesyon ou defini isit la. Ajan konesans ak ajan Microsoft 365 jere nan seksyon pa yo anba a."
   },
   "localModels": {
     "title": "Modèl lokal",
