@@ -17,6 +17,10 @@
  * Content-filter stops are never continued — re-asking would re-trigger
  * the filter and the user needs to know why the answer stopped.
  */
+import {
+  ProviderErrorKind,
+  describeProviderError,
+} from '@/lib/services/chat/providerErrors';
 
 export type ContinuationReason = 'interrupted' | 'length';
 
@@ -192,3 +196,29 @@ export const OUTPUT_LIMIT_STREAM_ERROR = {
   message:
     'The model used its whole output budget without producing an answer (for a reasoning model, the reasoning alone filled it). Try a lower reasoning effort or a shorter request.',
 };
+
+/**
+ * Whether a mid-stream failure kind is GENERIC (no specific cause the user
+ * can act on): the processors keep their historical "stopped responding"
+ * wording and codes for these, and use the cause-specific sentence/code
+ * (describeProviderError / providerErrorCode) for everything else.
+ */
+export function isGenericStreamFailureKind(kind: ProviderErrorKind): boolean {
+  return (
+    kind === 'unknown' || kind === 'transport' || kind === 'incomplete_stream'
+  );
+}
+
+/**
+ * Client-facing message for a stream that died mid-read. With partial text
+ * already shown, the sentence always says the answer is unfinished; with
+ * nothing shown, a specific cause gets its own explanation.
+ */
+export function midStreamFailureMessage(
+  kind: ProviderErrorKind,
+  hasPartialText: boolean,
+): string {
+  if (hasPartialText || isGenericStreamFailureKind(kind))
+    return 'The model stopped responding before the answer was finished.';
+  return describeProviderError(kind);
+}
