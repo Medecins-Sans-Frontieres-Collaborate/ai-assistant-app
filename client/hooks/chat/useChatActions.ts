@@ -255,8 +255,8 @@ export function useChatActions({
   ]);
 
   /** Cancel one queued message and put its text back in the composer. */
-  const cancelQueuedSend = useCallback((messageId: string) => {
-    const entry = useChatStore.getState().removeQueuedSend(messageId);
+  const cancelQueuedSend = useCallback((queued: QueuedSend) => {
+    const entry = useChatStore.getState().removeQueuedSend(queued);
     if (entry) restoreQueuedToComposer(entry);
   }, []);
 
