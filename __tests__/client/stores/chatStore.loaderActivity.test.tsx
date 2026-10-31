@@ -136,24 +136,31 @@ describe('ChatStore - full send flow shows the search activity', () => {
     const unsubscribe = useChatStore.subscribe((s, p) => {
       if (s.loadingMessage !== p.loadingMessage) seen.push(s.loadingMessage);
     });
-    const done = useChatStore
-      .getState()
-      .sendMessage(
-        {
-          role: 'user',
-          content: 'What is happening in India',
-          messageType: MessageType.TEXT,
-        },
-        conversation,
-      );
+    const done = useChatStore.getState().sendMessage(
+      {
+        role: 'user',
+        content: 'What is happening in India',
+        messageType: MessageType.TEXT,
+      },
+      conversation,
+    );
     await wait(400);
+    // Mid-search: the label names the query, with no text streamed yet.
     const mid = {
       label: useChatStore.getState().loadingMessage,
       params: useChatStore.getState().loadingMessageParams,
-      seen: [...seen],
+      content: useChatStore.getState().streamingContent.trim(),
     };
     await done;
     unsubscribe();
-    expect(mid).toEqual({ probe: true });
+    expect(mid).toEqual({
+      label: 'chat.activity.searchingWebFor',
+      params: { query: 'India' },
+      content: '',
+    });
+    expect(seen).toContain('chat.activity.searchingWebFor');
+    // Finished: the label is gone and the answer was kept.
+    expect(useChatStore.getState().loadingMessage).toBeNull();
+    expect(useChatStore.getState().isStreaming).toBe(false);
   }, 10000);
 });
