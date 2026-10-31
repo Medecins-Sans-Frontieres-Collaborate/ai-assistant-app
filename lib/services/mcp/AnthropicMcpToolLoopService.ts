@@ -193,5 +193,6 @@ export async function runAnthropicMcpToolLoop(
     builtinExecutor: options.builtinExecutor,
     builtinExecutors: options.builtinExecutors,
     maxImmediateRounds: options.maxImmediateRounds,
+    signal: options.signal,
   });
 }
