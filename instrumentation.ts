@@ -30,6 +30,24 @@ export async function register() {
       );
     }
 
+    // Skill maintenance (expired claims/thread state, resource cleanup,
+    // skill-source refresh — docs/SKILLS_DESIGN.md §12) must not depend on
+    // an admin opening the skills page on this replica.
+    try {
+      const { orgSkillsAvailable } =
+        await import('@/lib/services/skills/skillCatalog');
+      if (orgSkillsAvailable()) {
+        const [{ startSkillMaintenance }, { createAgentAccessBlobStorage }] =
+          await Promise.all([
+            import('@/lib/services/skills/skillMaintenance'),
+            import('@/lib/services/agentAccess/accessRulesStore'),
+          ]);
+        startSkillMaintenance(createAgentAccessBlobStorage());
+      }
+    } catch (err) {
+      console.warn('[Instrumentation] Could not start skill maintenance:', err);
+    }
+
     // Surface access-control misconfigurations at boot. The enable flag and
     // the admin roster are independent by design (see startupWarnings.ts),
     // which makes "I set the admins and nothing happened" an easy trap —
