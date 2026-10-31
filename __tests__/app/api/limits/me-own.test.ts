@@ -395,20 +395,32 @@ describe('GET /api/limits/me (own limits)', () => {
       expect(data.models).toEqual({});
     });
 
-    it('a family block hides the member: allowed false, reason blocked, and a model-level allow does not rescue it', async () => {
+    it('a family block hides the members: allowed false, reason blocked — except a model with its own allow', async () => {
       // o3/o4-mini (o-series) and gpt-5.2 (Foundational) are all variants of
-      // the one `gpt` family, so the block reaches all three; the control has
-      // to come from another family entirely.
+      // the one `gpt` family, so the block reaches all three; o3's own rule
+      // overrides the family's (inheritance). The control comes from another
+      // family, granted here because external models are unavailable by
+      // catalog default.
       snapshot.policy = policyWith([
         { limitKey: 'model.allowed', series: 'gpt', value: false },
         { limitKey: 'model.allowed', modelId: 'o3', value: true },
+        { limitKey: 'model.allowed', series: 'claude', value: true },
       ]);
       const data = await get('models=o3,o4-mini,gpt-5.2,claude-sonnet-5');
       expect(data.models).toEqual({
-        o3: { allowed: false, reason: 'blocked' },
+        o3: { allowed: true },
         'o4-mini': { allowed: false, reason: 'blocked' },
         'gpt-5.2': { allowed: false, reason: 'blocked' },
         'claude-sonnet-5': { allowed: true },
+      });
+    });
+
+    it('an external model is blocked by catalog default with no policy authored for it', async () => {
+      snapshot.policy = policyWith([]);
+      const data = await get('models=claude-sonnet-5,gpt-5.2');
+      expect(data.models).toEqual({
+        'claude-sonnet-5': { allowed: false, reason: 'blocked' },
+        'gpt-5.2': { allowed: true },
       });
     });
 

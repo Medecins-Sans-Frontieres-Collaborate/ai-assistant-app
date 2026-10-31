@@ -462,8 +462,15 @@ describe('GET /api/limits/me?as=', () => {
       [k: string]: unknown;
     };
     const rowsOf = (body: { data: { limits: Row[] } }) => body.data.limits;
+    // Rows the POLICY mentions: the catalog's own external-family rows
+    // (config/limits.ts CATALOG_MODEL_DEFAULTS) appear for everyone and are
+    // asserted separately.
     const qualified = (rows: Row[]) =>
-      rows.filter((r) => r.modelId !== undefined || r.series !== undefined);
+      rows.filter(
+        (r) =>
+          (r.modelId !== undefined || r.series !== undefined) &&
+          r.source !== 'catalog',
+      );
     const find = (rows: Row[], key: string, q: Partial<Row>) =>
       rows.find(
         (r) =>
@@ -475,6 +482,26 @@ describe('GET /api/limits/me?as=', () => {
     beforeEach(() => {
       snapshot.policy = qualifiedPolicy;
       stored.policy = qualifiedPolicy;
+    });
+
+    it('surfaces the catalog block for external models even when no rule mentions them', async () => {
+      const bare = { ...qualifiedPolicy, defaults: [], overrides: [] };
+      snapshot.policy = bare;
+      stored.policy = bare;
+      const rows = rowsOf(
+        await parseJsonResponse(await GET(request('as=alice@ocp.msf.org'))),
+      );
+      // One family row says it; the catalog qualifier adds no other rows.
+      expect(find(rows, 'model.allowed', { series: 'claude' })).toMatchObject({
+        value: false,
+        source: 'catalog',
+      });
+      expect(
+        find(rows, 'model.allowed', { modelId: 'claude-sonnet-4-6' }),
+      ).toBeUndefined();
+      expect(
+        find(rows, 'model.requests', { series: 'claude' }),
+      ).toBeUndefined();
     });
 
     it('appends one row per perModel key × mentioned qualifier, with the same provenance as unqualified rows', async () => {
@@ -510,9 +537,11 @@ describe('GET /api/limits/me?as=', () => {
       expect(find(rows, 'model.allowed', { modelId: 'gpt-5.2' })).toMatchObject(
         { value: true },
       );
+      // External by catalog (config/limits.ts): unavailable until granted,
+      // and the preview says so with catalog provenance.
       expect(
         find(rows, 'model.allowed', { modelId: 'claude-sonnet-4-6' }),
-      ).toMatchObject({ value: true, source: 'catalog' });
+      ).toMatchObject({ value: false, source: 'catalog' });
       expect(find(rows, 'model.allowed', { series: 'gpt' })).toMatchObject({
         value: true,
       });
