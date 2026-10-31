@@ -106,6 +106,13 @@ export interface StreamMetadata {
     code?: string;
     retry?: boolean;
     fileUrl?: string;
+    /**
+     * Provider failure class (lib/services/chat/providerErrors.ts) so the
+     * client can branch on the CAUSE — a content-filter stop is never
+     * worth a fallback-model resend, a rate limit the server already
+     * retried may be.
+     */
+    kind?: import('@/lib/services/chat/providerErrors').ProviderErrorKind;
   };
   /**
    * Retrieved chunk text per citation number, shipped by the server so the
@@ -136,6 +143,7 @@ export interface ParsedMetadata {
     code?: string;
     retry?: boolean;
     fileUrl?: string;
+    kind?: import('@/lib/services/chat/providerErrors').ProviderErrorKind;
   };
   mcpPlan?: import('@/types/mcp').McpPlan;
   /**
@@ -355,6 +363,9 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
             ...(parsedData.streamError.retry === true ? { retry: true } : {}),
             ...(typeof parsedData.streamError.fileUrl === 'string'
               ? { fileUrl: parsedData.streamError.fileUrl }
+              : {}),
+            ...(typeof parsedData.streamError.kind === 'string'
+              ? { kind: parsedData.streamError.kind }
               : {}),
           };
         }
