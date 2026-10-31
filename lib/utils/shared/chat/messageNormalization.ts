@@ -145,10 +145,13 @@ export function normalizeMessagesForAPI(
 
     // `NormalizedContent` is a strict subset of `Message['content']`, so
     // TypeScript accepts this assignment without a widening cast.
-    out.push({
+    const forApi: Message = {
       ...(message as Message),
       content: normalizedContent,
-    });
+    };
+    // Card-only state (the digest result is already summarised in content).
+    delete forApi.digest;
+    out.push(forApi);
   }
 
   return {
