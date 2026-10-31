@@ -237,7 +237,24 @@ export function createAzureOpenAIStreamProcessor(
           } else {
             if (!controllerClosed) {
               controllerClosed = true;
-              controller.error(error);
+              // Upstream died after bytes already reached the client (Azure
+              // content-filter cut, mid-stream 5xx, connection reset). End
+              // CLEANLY with an in-band streamError: controller.error()
+              // aborts the socket, which the browser reports as an opaque
+              // network failure and the client store silently re-sends on a
+              // fallback model — partial text discarded, tool calls re-run.
+              try {
+                appendMetadataToStream(controller, {
+                  streamError: {
+                    code: 'UPSTREAM_STREAM_FAILED',
+                    message:
+                      'The model stopped responding before the answer was finished.',
+                  },
+                });
+                controller.close();
+              } catch {
+                controller.error(error);
+              }
             }
           }
         }
