@@ -108,7 +108,7 @@ describe('skillToolCalls', () => {
     expect(lines).toEqual([
       { kind: 'references', count: 3, unavailable: false },
       { kind: 'references', count: 0, unavailable: true },
-      { kind: 'agentLoad', name: 'gdpr', failed: false },
+      { kind: 'skill', name: 'gdpr', via: 'requested' },
       { kind: 'agentSearch', failed: true },
     ]);
   });
