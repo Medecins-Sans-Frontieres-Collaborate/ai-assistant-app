@@ -1,4 +1,9 @@
+import { shrinkTranscriptForOverflow } from '@/lib/services/chat/contextOverflowRecovery';
 import { AnthropicFoundryHandler } from '@/lib/services/chat/handlers/AnthropicFoundryHandler';
+import {
+  continuationNudge,
+  normalizeAnthropicStop,
+} from '@/lib/services/chat/streamContinuation';
 
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 
@@ -98,6 +103,28 @@ function buildAnthropicStrategy(
       return [...messages, executedResultsToUserMessage(results)];
     },
 
+    appendContinuation(messages, partialText, reason) {
+      // Strict alternation holds: the transcript ends with a user message
+      // (prompt or tool results), then assistant partial, then user nudge.
+      return [
+        ...messages,
+        { role: 'assistant', content: partialText },
+        { role: 'user', content: continuationNudge(reason) },
+      ];
+    },
+
+    shrinkForOverflow(messages) {
+      // A real user message is role:'user' whose content is text — a
+      // tool_result carrier has an array containing tool_result blocks.
+      return shrinkTranscriptForOverflow(
+        messages,
+        (message) =>
+          message.role === 'user' &&
+          (typeof message.content === 'string' ||
+            !message.content.some((block) => block.type === 'tool_result')),
+      );
+    },
+
     async runModelRound(
       messages,
       serversWithTools: ServerWithTools[],
@@ -157,6 +184,7 @@ function buildAnthropicStrategy(
 
       return {
         finishedWithToolUse: accumulator.stopReason === 'tool_use',
+        finish: normalizeAnthropicStop(accumulator.stopReason),
         calls: accumulator.toolUses(),
         usage: accumulator.usage
           ? {
