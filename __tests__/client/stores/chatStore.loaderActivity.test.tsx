@@ -1,6 +1,10 @@
 import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
 
+import { Conversation, MessageType } from '@/types/chat';
+
+import { chatService } from '@/client/services';
 import { useChatStore } from '@/client/stores/chatStore';
+import { useConversationStore } from '@/client/stores/conversationStore';
 import { emitAgentActivity } from '@/lib/streamMarkers';
 import '@testing-library/jest-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -70,4 +74,86 @@ describe('ChatStore - loader shows pre-model activity', () => {
       null,
     ]);
   });
+});
+
+describe('ChatStore - full send flow shows the search activity', () => {
+  const initialState = useChatStore.getState();
+  const conversation = {
+    id: 'conv-1',
+    name: '',
+    messages: [
+      {
+        id: 'm1',
+        role: 'user',
+        content: 'What is happening in India',
+        messageType: MessageType.TEXT,
+      },
+    ],
+    model: {
+      id: 'gpt-5.2-chat',
+      name: 'GPT-5.2 Chat',
+      maxLength: 4000,
+      tokenLimit: 4000,
+    },
+    prompt: '',
+    temperature: 0.7,
+    folderId: null,
+  } as unknown as Conversation;
+
+  beforeEach(() => {
+    useChatStore.setState(initialState, true);
+    useConversationStore.setState({
+      conversations: [conversation],
+      selectedConversationId: 'conv-1',
+      folders: [],
+      isLoaded: true,
+    });
+    vi.restoreAllMocks();
+  });
+
+  it('labels the wait with the search query before any text streams', async () => {
+    const encoder = new TextEncoder();
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    vi.spyOn(chatService, 'chat').mockImplementation(
+      async () =>
+        new ReadableStream<Uint8Array>({
+          async start(controller) {
+            await wait(100);
+            controller.enqueue(
+              encoder.encode(
+                emitAgentActivity('chat.activity.searchingWebFor', {
+                  query: 'India',
+                }),
+              ),
+            );
+            await wait(500);
+            controller.enqueue(encoder.encode('India is holding elections.'));
+            controller.close();
+          },
+        }),
+    );
+    const seen: Array<string | null> = [];
+    const unsubscribe = useChatStore.subscribe((s, p) => {
+      if (s.loadingMessage !== p.loadingMessage) seen.push(s.loadingMessage);
+    });
+    const done = useChatStore
+      .getState()
+      .sendMessage(
+        {
+          role: 'user',
+          content: 'What is happening in India',
+          messageType: MessageType.TEXT,
+        },
+        conversation,
+      );
+    await wait(400);
+    const mid = {
+      label: useChatStore.getState().loadingMessage,
+      params: useChatStore.getState().loadingMessageParams,
+      seen: [...seen],
+    };
+    await done;
+    unsubscribe();
+    expect(mid).toEqual({ probe: true });
+  }, 10000);
 });
