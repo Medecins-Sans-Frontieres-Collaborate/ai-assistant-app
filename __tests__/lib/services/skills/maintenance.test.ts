@@ -58,9 +58,9 @@ describe('skill maintenance', () => {
     storage.listBlobsPage = listBlobsPage;
     try {
       startSkillMaintenance(storage);
-      await vi.waitFor(() => expect(listBlobsPage).toHaveBeenCalledTimes(2));
+      await vi.waitFor(() => expect(listBlobsPage).toHaveBeenCalledTimes(3));
       await vi.advanceTimersByTimeAsync(60_000);
-      await vi.waitFor(() => expect(listBlobsPage).toHaveBeenCalledTimes(4));
+      await vi.waitFor(() => expect(listBlobsPage).toHaveBeenCalledTimes(6));
     } finally {
       stopSkillMaintenance();
       vi.useRealTimers();
