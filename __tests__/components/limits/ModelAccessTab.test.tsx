@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import React from 'react';
 
@@ -18,6 +19,9 @@ vi.mock('launchdarkly-react-client-sdk', () => ({ useFlags: () => ({}) }));
 vi.mock('@/client/hooks/useM365PeopleSuggest', () => ({
   useM365PeopleSuggest: () => undefined,
 }));
+vi.mock('@/client/services/m365/m365Client', () => ({
+  lookupEntraGroups: vi.fn().mockResolvedValue([]),
+}));
 vi.mock('@/components/AgentAccess/GroupSearchPicker', () => ({
   GroupSearchPicker: ({
     onChange,
@@ -29,6 +33,14 @@ vi.mock('@/components/AgentAccess/GroupSearchPicker', () => ({
     </button>
   ),
 }));
+
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <QueryClientProvider
+    client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}
+  >
+    {children}
+  </QueryClientProvider>
+);
 
 function renderTab(
   rules: ModelAccessRule[] = [],
@@ -42,6 +54,7 @@ function renderTab(
       onChange={onChange}
       mode={mode}
     />,
+    { wrapper },
   );
   return onChange;
 }
@@ -178,6 +191,7 @@ describe('ModelAccessTab', () => {
         onChange={onChange}
         mode="enforce"
       />,
+      { wrapper },
     );
     const header = screen.getByText('Claude').parentElement as HTMLElement;
     expect(header).toHaveTextContent('modelAccess.groupsCount:{"count":1}');

@@ -692,7 +692,7 @@ describe('LimitsPanel — global mode', () => {
     renderPanel();
 
     expect(await screen.findByRole('tablist')).toBeInTheDocument();
-    expect(screen.getAllByRole('tab')).toHaveLength(3);
+    expect(screen.getAllByRole('tab')).toHaveLength(4);
     expect(
       screen.queryByRole('tab', { name: 'cost.calculator.tab' }),
     ).not.toBeInTheDocument();
@@ -720,7 +720,7 @@ describe('LimitsPanel — global mode', () => {
     renderPanel();
 
     const tab = await screen.findByRole('tab', { name: 'cost.calculator.tab' });
-    expect(screen.getAllByRole('tab')).toHaveLength(4);
+    expect(screen.getAllByRole('tab')).toHaveLength(5);
     fireEvent.click(tab);
 
     const panel = screen.getByRole('tabpanel');
