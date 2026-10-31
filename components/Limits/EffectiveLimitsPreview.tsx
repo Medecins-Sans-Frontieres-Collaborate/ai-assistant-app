@@ -12,6 +12,7 @@ import {
 } from '@/client/hooks/settings/useLimitsAdmin';
 import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
+import { describeModelAccessOverrideId } from '@/lib/services/limits/modelAccess';
 import { counterCellName } from '@/lib/services/limits/resolver';
 import { LimitOverride } from '@/lib/services/limits/types';
 import { LIMITS_ERROR_CODES } from '@/lib/services/limits/wire';
@@ -132,6 +133,13 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
 
   const sourceLabel = (limit: MyLimit): string => {
     if (limit.overrideId) {
+      // A model approval list won (synthetic id, never a stored override).
+      const access = describeModelAccessOverrideId(limit.overrideId);
+      if (access) {
+        return t('previewSourceModelAccess', {
+          list: t(`modelAccess.list.${access.list}` as never),
+        });
+      }
       const match = overrides.find((o) => o.id === limit.overrideId);
       return t('previewSourceOverride', {
         label: match?.label || limit.overrideId,
