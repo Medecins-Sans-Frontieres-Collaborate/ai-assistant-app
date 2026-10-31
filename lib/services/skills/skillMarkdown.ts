@@ -234,6 +234,10 @@ export function parseSkillMarkdown(content: string): ParseSkillResult {
     if (!MAPPED_KEYS.has(key)) foreignFrontmatter[key] = value;
   }
   for (const [key, value] of Object.entries(metadata)) {
+    // The OpenCode flag is interpreted (manual activation), not preserved:
+    // its slash would be an unsafe foreign key, and the serialized form
+    // carries the standard `disable-model-invocation` instead.
+    if (key === OPENCODE_AUTOINVOKE_KEY) continue;
     if (
       !Object.values(MSF_METADATA_KEYS).includes(
         key as (typeof MSF_METADATA_KEYS)[keyof typeof MSF_METADATA_KEYS],
