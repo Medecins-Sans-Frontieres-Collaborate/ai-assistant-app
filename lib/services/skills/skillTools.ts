@@ -133,11 +133,25 @@ export async function createSkillToolExecutor(options: {
   citations?: Citation[];
   signal?: AbortSignal;
   region?: 'EU' | 'US';
+  /**
+   * The user's Settings toggle (docs/SKILLS_DESIGN.md §5.1a). `false` means
+   * no automatic selection: the model is offered only the skills the user
+   * asked for (forcedIds) and admin `always` skills — the same contract the
+   * standard path's SkillEnricher applies.
+   */
+  autoEnabled?: boolean;
 }): Promise<SkillToolExecutor | null> {
   // Agent skills are organization skills by design (applyToAgents).
   if (!orgSkillsAvailable()) return null;
+  const forcedSet = new Set(options.forcedIds ?? []);
   const visible = (await getVisibleSkills(options.userMail))
     .filter(({ skill }) => skill.applyToAgents && skill.activation !== 'off')
+    .filter(
+      ({ skill }) =>
+        options.autoEnabled !== false ||
+        skill.activation === 'always' ||
+        forcedSet.has(skill.id),
+    )
     .slice(0, SKILL_LIMITS.maxRouterCatalog);
   if (!visible.length) return null;
   const allowed = new Set(visible.map(({ skill }) => skill.id));
