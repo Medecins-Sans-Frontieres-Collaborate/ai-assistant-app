@@ -297,3 +297,135 @@ describe('agent skill executor — user auto toggle', () => {
     expect(await createSkillToolExecutor({ autoEnabled: false })).toBeNull();
   });
 });
+
+describe('skill executor — scopes, consent, and record output (§5.5/§5.6)', () => {
+  const org = (id: string, overrides: Partial<Skill> = {}) => ({
+    builtin: false,
+    overridden: false,
+    skill: {
+      ...skill,
+      id,
+      name: id,
+      instructions: `BODY OF ${id}`,
+      ...overrides,
+    } as Skill,
+  });
+  beforeEach(() => {
+    vi.mocked(orgSkillsAvailable).mockReturnValue(true);
+    vi.mocked(getVisibleSkills).mockResolvedValue([
+      org('open'),
+      org('careful', { requireConsent: true }),
+      org('by-request', { activation: 'manual' }),
+      org('no-agents', { applyToAgents: false }),
+    ]);
+    vi.mocked(readSkill).mockImplementation(async (_storage, id) => ({
+      skill: {
+        ...skill,
+        id,
+        name: id,
+        instructions: `BODY OF ${id}`,
+        applyToAgents: id !== 'no-agents',
+        activation: id === 'by-request' ? 'manual' : 'auto',
+        requireConsent: id === 'careful',
+      } as Skill,
+      etag: 'v1',
+    }));
+  });
+  const enumOf = async (
+    executor: NonNullable<Awaited<ReturnType<typeof createSkillToolExecutor>>>,
+  ) => {
+    const [load] = await executor.listTools();
+    return (
+      load.inputSchema as { properties: { id: { enum: string[] } } }
+    ).properties.id.enum.sort();
+  };
+
+  it('standard scope advertises every visible non-manual skill plus personal skills, and loads a personal body', async () => {
+    const executor = (await createSkillToolExecutor({
+      scope: { mode: 'standard' },
+      personalSkills: [
+        {
+          id: 'mine',
+          name: 'Mine',
+          description: 'd',
+          activation: 'auto',
+          instructions: 'PERSONAL BODY',
+          enabled: true,
+        },
+      ],
+    }))!;
+    expect(await enumOf(executor)).toEqual([
+      'careful',
+      'no-agents',
+      'open',
+      'user:mine',
+    ]);
+    const result = await executor.callTool('load_skill', { id: 'user:mine' });
+    expect(result.isError).toBe(false);
+    expect(result.resultText).toContain('PERSONAL BODY');
+    // Manual skills are never advertised, but an explicit request admits one.
+    const forced = (await createSkillToolExecutor({
+      scope: { mode: 'standard' },
+      forcedIds: ['by-request'],
+      excludeIds: ['open'],
+    }))!;
+    expect(await enumOf(forced)).toEqual([
+      'by-request',
+      'careful',
+      'no-agents',
+    ]);
+  });
+
+  it('selected scope offers exactly the persona list and refuses the rest at load time', async () => {
+    const executor = (await createSkillToolExecutor({
+      scope: { mode: 'selected', ids: ['no-agents'] },
+    }))!;
+    expect(await enumOf(executor)).toEqual(['no-agents']);
+    expect(
+      (await executor.callTool('load_skill', { id: 'no-agents' })).isError,
+    ).toBe(false);
+    expect(
+      (await executor.callTool('load_skill', { id: 'open' })).isError,
+    ).toBe(true);
+    expect(
+      await createSkillToolExecutor({ scope: { mode: 'none' } }),
+    ).toBeNull();
+  });
+
+  it('consent-gated skills need approval unless requested, and are hidden where no approval is possible', async () => {
+    const executor = (await createSkillToolExecutor({}))!;
+    expect(executor.requiresApproval?.('load_skill', { id: 'careful' })).toBe(
+      true,
+    );
+    expect(executor.requiresApproval?.('load_skill', { id: 'open' })).toBe(
+      false,
+    );
+    expect(
+      executor.requiresApproval?.('search_skill_documents', { query: 'x' }),
+    ).toBe(false);
+    const requested = (await createSkillToolExecutor({
+      forcedIds: ['careful'],
+    }))!;
+    expect(requested.requiresApproval?.('load_skill', { id: 'careful' })).toBe(
+      false,
+    );
+    const foundry = (await createSkillToolExecutor({
+      consentSupported: false,
+    }))!;
+    expect(await enumOf(foundry)).toEqual(['open']);
+    const foundryForced = (await createSkillToolExecutor({
+      consentSupported: false,
+      forcedIds: ['careful'],
+    }))!;
+    expect(await enumOf(foundryForced)).toEqual(['careful', 'open']);
+  });
+
+  it('record output summarizes a load without the instruction body', async () => {
+    const executor = (await createSkillToolExecutor({}))!;
+    const result = await executor.callTool('load_skill', { id: 'open' });
+    const shown = executor.recordOutput!('load_skill', { id: 'open' }, result);
+    expect(result.resultText).toContain('BODY OF open');
+    expect(shown).not.toContain('BODY OF');
+    expect(shown).toMatch(/open/);
+  });
+});
