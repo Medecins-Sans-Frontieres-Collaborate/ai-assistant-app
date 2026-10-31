@@ -1014,7 +1014,10 @@
       "showDetails": "Montre detay sou konpetans",
       "hideDetails": "Kache detay sou konpetans",
       "agentLoad": "chaje pa ajan",
-      "agentSearch": "dokiman chèche pa ajan"
+      "agentSearch": "dokiman chèche pa ajan",
+      "needsApproval": "bezwen apwobasyon ou",
+      "original": "jan li te egzekite okòmansman",
+      "updated": "mete ajou depi"
     },
     "skillsManualHint": "Seleksyon otomatik la fèmen nan Anviwònman. Sèvi avè l yon sèl fwa pou pwochen mesaj la, oswa fikse yon konpetans pou itilize li pandan tout konvèsasyon sa a.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Ajoute ajan pou sijesyon",
     "m365AgentIndexStop": "Sispann endèksaj",
     "foundryAgentsHeading": "Ajan Foundry ak ajan pou sijesyon",
-    "foundryAgentsDescription": "Ajan ki dekouvri soti nan Azure AI Foundry atravè aksè pa w, plis ajan pou sijesyon ou defini isit la. Ajan konesans ak ajan Microsoft 365 jere nan seksyon pa yo anba a."
+    "foundryAgentsDescription": "Ajan ki dekouvri soti nan Azure AI Foundry atravè aksè pa w, plis ajan pou sijesyon ou defini isit la. Ajan konesans ak ajan Microsoft 365 jere nan seksyon pa yo anba a.",
+    "agentSkillsLabel": "Konpetans",
+    "agentSkillsHelp": "Ki konpetans òganizasyon ajan sa ka chaje pandan li reponn. Itilizatè yo ap kontinye wè sèlman konpetans règ aksè yo pèmèt.",
+    "agentSkills": {
+      "inherit": "Konpetans make “disponib pou ajan yo”",
+      "selected": "Sèlman konpetans ou chwazi anba a",
+      "none": "Pa gen okenn konpetans"
+    },
+    "agentSkillsNone": "Pa gen okenn konpetans disponib pou chwazi."
   },
   "localModels": {
     "title": "Modèl lokal",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Otomatik",
       "always": "Toujou",
-      "off": "Dekonekte"
+      "off": "Dekonekte",
+      "manual": "Sou demann"
     },
     "activationHint": {
       "auto": "Chwazi otomatikman lè travay aktyèl la koresponn ak deskripsyon an. Itilizatè yo ka mande l yon sèl fwa oswa fikse l nan yon konvèsasyon.",
       "always": "Ajoute sou chak konvèsasyon pou tout moun ki ka wè konpetans lan. Sèvi avè l ak modération — espas pou prompt lan pemanman.",
-      "off": "Inaktif : pa janm aplike epi li pa ofri itilizatè yo, men li ret la pou w modifye."
+      "off": "Inaktif : pa janm aplike epi li pa ofri itilizatè yo, men li ret la pou w modifye.",
+      "manual": "Aplike sèlman lè yon itilizatè mande oswa fikse li. Pa janm chwazi otomatikman epi li pa ofri modèl la kòm yon konpetans ki ka chaje."
     },
     "instructionsLabel": "Enstriksyon",
     "instructionsHint": "Markdown, jiska 16 KB. Li antre egzakteman jan li ye lè konpetans lan aktif.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Dokiman sa yo bezwen reindex selon konfigirasyon rechèch ak anbadman rejyonal aktyèl la. Yo pap disponib nan rechèch jiskaske reindexing fini."
     },
     "applyToAgents": "Disponib pou ajan yo",
-    "applyToAgentsHint": "Fèmen pa default. Lè li aktive, ajan yo ka chaje kapasite sa a atravè zouti pou li sèlman olye de ranplase enstriksyon pèsonaj yo. Apèl kapasite yo gen limit pa yo chak. Ajan Foundry yo dwe deja gen fonksyon load_skill ak search_skill_documents anrejistre nan definisyon yo."
+    "applyToAgentsHint": "Fèmen pa default. Lè li aktive, ajan yo ka chaje kapasite sa a atravè zouti pou li sèlman olye de ranplase enstriksyon pèsonaj yo. Apèl kapasite yo gen limit pa yo chak. Ajan Foundry yo dwe deja gen fonksyon load_skill ak search_skill_documents anrejistre nan definisyon yo.",
+    "requireConsent": "Mande avan aplike",
+    "requireConsentHint": "Lè modèl la vle itilize konpetans sa pou kont li, yo mande itilizatè a anvan. Lè mande oswa fikse, pa bezwen konfimasyon.",
+    "consentChip": "Mande anvan",
+    "sourceChip": "Soti nan sous",
+    "sourceChipHint": "Delivre pa yon sous konpetans ou abòne; enstriksyon yo mete ajou pandan senkronizasyon. Paramèt reyalizasyon, ajan, ak konsantman se pa ou.",
+    "sources": {
+      "title": "Sous konpetans",
+      "description": "Abòne sou yon katalòg konpetans ekstèn (yon index.json ki gen lis SKILL.md). Konpetans sa yo vin tounen konpetans òganizasyon epi yo mete ajou anviwon chak sis èdtan. Se sèlman SKILL.md ki enpòte; dokiman referans pa enkli.",
+      "urlLabel": "URL katalòg la",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Dwe https sou yon sèvè piblik. Yo li fichye konpetans yo nan menm kote sa sèlman.",
+      "labelLabel": "Label (opsyonèl)",
+      "add": "Abòne",
+      "adding": "Ap abòne…",
+      "added": "{count, plural, =0 {Sous ajoute; pa gen okenn konpetans enpòte poko} one {Sous ajoute; # konpetans enpòte} other {Sous ajoute; # konpetans enpòte}}",
+      "addedWithError": "Sous la te ajoute, men premye senkronizasyon an pa reyisi. Tcheke erè sou sous la.",
+      "addError": "Pa t kapab ajoute sous konpetans la",
+      "sync": "Senkronize kounye a",
+      "syncing": "Ap senkronize…",
+      "synced": "Sous senkronize.",
+      "syncError": "Pa t kapab senkronize sous konpetans la",
+      "remove": "Retire sous la",
+      "removeConfirm": "Retire sous sa a? Konpetans li te pote yo ap rete kòm konpetans òganizasyon nòmal epi yo sispann mete ajou.",
+      "removed": "Sous retire.",
+      "removeError": "Pa t kapab retire sous konpetans la",
+      "loading": "Ap chaje sous yo…",
+      "loadError": "Pa t kapab chaje sous konpetans yo.",
+      "empty": "Pa gen okenn sous konpetans pou kounye a.",
+      "never": "Pa janm senkronize",
+      "statusOk": "Senkronize",
+      "statusError": "Senkronizasyon echwe",
+      "statusPartial": "{count, plural, one {# antre sote} other {# antre sote}}",
+      "lastSync": "Dènye senkronizasyon {time}",
+      "entryCount": "{count, plural, one {# antre} other {# antre}}",
+      "entryStatus": {
+        "synced": "senkronize",
+        "skipped": "sote",
+        "conflict": "konfli — pa ranplase",
+        "invalid": "envalib"
+      }
+    }
   },
   "personalSkills": {
     "title": "Konpetans pèsonèl",

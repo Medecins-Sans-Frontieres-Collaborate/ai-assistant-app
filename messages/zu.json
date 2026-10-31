@@ -1014,7 +1014,10 @@
       "showDetails": "Bonisa imininingwane yekhono",
       "hideDetails": "Fihla imininingwane yekhono",
       "agentLoad": "kufakwe umenzeli",
-      "agentSearch": "imibhalo ifunwe umenzeli"
+      "agentSearch": "imibhalo ifunwe umenzeli",
+      "needsApproval": "kudinga ukuvunywa kwakho",
+      "original": "njengoba kusetshenziswe ekuqaleni",
+      "updated": "kubuyekeziwe kusukela lapho"
     },
     "skillsManualHint": "Ukuzikhethela okuzenzakalelayo kuvaliwe Ezilungisezweni. Sebenzisa kanye umlayezo olandelayo, noma mni izibalo ukuze zisetshenziswe kulo ngxoxo.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Engeza i-agent ye-prompt",
     "m365AgentIndexStop": "Yeka uku-indexa",
     "foundryAgentsHeading": "Ama-agent e-Foundry kanye nama-agent e-prompt",
-    "foundryAgentsDescription": "Ama-agent atholakele ku-Azure AI Foundry ngokusebenzisa ukufinyelela kwakho, kanye nama-agent e-prompt achazwe lapha. Ama-agent olwazi nama-agent e-Microsoft 365 aphathwa ezigabeni zawo ezingezansi."
+    "foundryAgentsDescription": "Ama-agent atholakele ku-Azure AI Foundry ngokusebenzisa ukufinyelela kwakho, kanye nama-agent e-prompt achazwe lapha. Ama-agent olwazi nama-agent e-Microsoft 365 aphathwa ezigabeni zawo ezingezansi.",
+    "agentSkillsLabel": "Amakhono",
+    "agentSkillsHelp": "Yimiphi imikhono yenhlangano engalayishwa yileli gentshi lapho liphendula. Abasebenzisi babona kuphela amakhono okuvunyelwe imithetho yabo yokufinyelela.",
+    "agentSkills": {
+      "inherit": "Amakhono abhalwe \"atholakala kubagentshi\"",
+      "selected": "Amakhono akhethiwe ngezansi kuphela",
+      "none": "Awekho amakhono"
+    },
+    "agentSkillsNone": "Awekho amakhono akhona ongawakhetha."
   },
   "localModels": {
     "title": "Amamodeli endaweni",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Okuzenzakalelayo",
       "always": "Njalo",
-      "off": "Cishiwe"
+      "off": "Cishiwe",
+      "manual": "Ngokucela"
     },
     "activationHint": {
       "auto": "Akhethwa ngokuzenzakalayo uma umsebenzi wamanje ufana nencazelo. Umsebenzisi angawacela kanye noma awabophe engxoxweni.",
       "always": "Engezwa kuyo yonke ingxoxo wabo bonke ababona ikhono. Sebenzisa kancane — lokhu kuyindawo yokuthi imiyalelo igxile khona.",
-      "off": "Ayisebenzi: ayisekho futhi ayikhonjiswa kubasebenzisi, kodwa igcinwe lapha ukuze ihlelwe."
+      "off": "Ayisebenzi: ayisekho futhi ayikhonjiswa kubasebenzisi, kodwa igcinwe lapha ukuze ihlelwe.",
+      "manual": "Isebenza kuphela uma umsebenzisi ecela noma ebeka ephambili. Ayikhethiwa ngokuzenzakalelayo futhi ayinikezwa imodeli njengamakhono angalayishwa."
     },
     "instructionsLabel": "Imiyalelo",
     "instructionsHint": "Markdown, kuze kufike ku-16 KB. Ifakwa ngqo lapho ikhono lisebenza.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Le mibhalo idinga ukuvuselelwa ukuze ilingane namalungiselelo esifunda samanje sokusesha nokufakwa kwemininingwane. Ngeke ifunwe kuze kube ukuqedwa kokuvuselela."
     },
     "applyToAgents": "Ayatholakala kuma-agent",
-    "applyToAgentsHint": "Ivaliwe ngokuzenzakalelayo. Uma ivuliwe, ama-agent angalayisha le skill nge amathuluzi okufunda kuphela kunokushintsha imiyalelo yomuntu siqu. Ukusetshenziswa kwe-skill kunemikhawulo yesinyathelo ezimele. Ama-Foundry agents kumele abe sevele ebhalise imisebenzi ye-load_skill ne-search_skill_documents kudefinition yawo."
+    "applyToAgentsHint": "Ivaliwe ngokuzenzakalelayo. Uma ivuliwe, ama-agent angalayisha le skill nge amathuluzi okufunda kuphela kunokushintsha imiyalelo yomuntu siqu. Ukusetshenziswa kwe-skill kunemikhawulo yesinyathelo ezimele. Ama-Foundry agents kumele abe sevele ebhalise imisebenzi ye-load_skill ne-search_skill_documents kudefinition yawo.",
+    "requireConsent": "Cela imvume kuqala",
+    "requireConsentHint": "Uma imodeli ifuna ukusebenzisa leli khono yodwa, umsebenzisi uyacelwa kuqala. Uma iliceliwe noma ebekwe ephambili, imvume ayidingeki.",
+    "consentChip": "Cela kuqala",
+    "sourceChip": "Isuka kumthombo",
+    "sourceChipHint": "Ilethwe kumthombo wamakhono obhalisile; imiyalelo ivuselelwa ngesikhathi sokuhlanganisa. Izilungiselelo zokuvula, igentshi nemvume zingenzakalela.",
+    "sources": {
+      "title": "Imithombo yamakhono",
+      "description": "Bhalisela ikhatala elingaphandle lamakhono (uhlu lwe-index.json olunamafayela e-SKILL.md). Amakhono alo aba amakhono enhlangano bese evuselelwa njalo ngemva kwamahora ayisithupha. Kungeniswa kuphela i-SKILL.md; imibhalo ebhekisiwe ayingeniswa.",
+      "urlLabel": "Ikheli le-Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Kufanele kube yi-https kumphathi womphakathi. Amakhono afundwa endaweni efanayo kuphela.",
+      "labelLabel": "Ilebula (okuzikhethela)",
+      "add": "Bhalisa",
+      "adding": "Kubhaliswa...",
+      "added": "{count, plural, =0 {Umthombo wengeziwe; awekho amakhono angenisiwe okwamanje} one {Umthombo wengeziwe; # khono langeniswa} other {Umthombo wengeziwe; # amakhono angenisiwe}}",
+      "addedWithError": "Umthombo wengeziwe, kodwa ukuhlanganisa kokuqala kwehlulekile. Hlola iphutha kumthombo.",
+      "addError": "Awukwazanga ukwengeza umthombo wamakhono",
+      "sync": "Hlanganisa manje",
+      "syncing": "Kuhlanganiswa...",
+      "synced": "Umthombo uhlanganisiwe.",
+      "syncError": "Awukwazanga ukuhlanganisa umthombo wamakhono",
+      "remove": "Susa umthombo",
+      "removeConfirm": "Susa lo mthombo? Amakhono elethwe kuwo ahlala njengamakhono enhlangano ajwayelekile bese eyeka ukuvuseleleka.",
+      "removed": "Umthombo ususiwe.",
+      "removeError": "Awukwazanga ukususa umthombo wamakhono",
+      "loading": "Kulayishwa imithombo...",
+      "loadError": "Imithombo yamakhono ayikwazanga ukulayishwa.",
+      "empty": "Akukabi nemithombo yamakhono.",
+      "never": "Akwaze kwahlanganiswa",
+      "statusOk": "Kuhlanganisiwe",
+      "statusError": "Ukuhlanganisa kwehlulekile",
+      "statusPartial": "{count, plural, one {# okweqa} other {# okuqawe}}",
+      "lastSync": "Ukuhlanganiswa kokugcina {time}",
+      "entryCount": "{count, plural, one {# okuwukuphela} other {# okungenile}}",
+      "entryStatus": {
+        "synced": "kuhlanganisiwe",
+        "skipped": "kweqawe",
+        "conflict": "ungqubuzano — akushintshiwe",
+        "invalid": "akuvumelekile"
+      }
+    }
   },
   "personalSkills": {
     "title": "Amakhono omuntu siqu",

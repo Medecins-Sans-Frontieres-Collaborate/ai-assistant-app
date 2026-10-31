@@ -956,7 +956,10 @@
       "showDetails": "Visa färdighetsdetaljer",
       "hideDetails": "Dölj färdighetsdetaljer",
       "agentLoad": "inläst av agent",
-      "agentSearch": "dokument sökta av agent"
+      "agentSearch": "dokument sökta av agent",
+      "needsApproval": "kräver ditt godkännande",
+      "original": "som ursprungligen kördes",
+      "updated": "uppdaterad sedan dess"
     },
     "skillsManualHint": "Automatiskt val är avstängt i Inställningar. Använd en gång för nästa meddelande eller fäst en färdighet för att använda den under hela denna konversation.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Lägg till promptagent",
     "m365AgentIndexStop": "Stoppa indexering",
     "foundryAgentsHeading": "Foundry- och promptagenter",
-    "foundryAgentsDescription": "Agenter upptäckta från Azure AI Foundry via din egen åtkomst, samt promptagenter som definieras här. Kunskapsagenter och Microsoft 365-agenter hanteras i sina egna avsnitt nedan."
+    "foundryAgentsDescription": "Agenter upptäckta från Azure AI Foundry via din egen åtkomst, samt promptagenter som definieras här. Kunskapsagenter och Microsoft 365-agenter hanteras i sina egna avsnitt nedan.",
+    "agentSkillsLabel": "Färdigheter",
+    "agentSkillsHelp": "Vilka organisationens färdigheter denna agent får ladda vid svar. Användare ser fortfarande bara färdigheter som deras åtkomstregler tillåter.",
+    "agentSkills": {
+      "inherit": "Färdigheter markerade ”tillgängliga för agenter”",
+      "selected": "Endast valda färdigheter nedan",
+      "none": "Inga färdigheter"
+    },
+    "agentSkillsNone": "Inga färdigheter tillgängliga att välja."
   },
   "localModels": {
     "title": "Lokala modeller",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Automatisk",
       "always": "Alltid",
-      "off": "Av"
+      "off": "Av",
+      "manual": "Vid förfrågan"
     },
     "activationHint": {
       "auto": "Väljs automatiskt när den aktuella uppgiften matchar beskrivningen. Användare kan också be om att använda den en gång eller fästa den till en konversation.",
       "always": "Läggs till i varje konversation för alla som kan se färdigheten. Använd sparsamt — detta är permanent promptutrymme.",
-      "off": "Inaktiv: tillämpas aldrig och erbjuds inte användare, men sparas här för redigering."
+      "off": "Inaktiv: tillämpas aldrig och erbjuds inte användare, men sparas här för redigering.",
+      "manual": "Används endast när en användare begär eller fäster den. Väljs aldrig automatiskt och erbjuds inte till modellen som laddningsbar färdighet."
     },
     "instructionsLabel": "Instruktioner",
     "instructionsHint": "Markdown, upp till 16 KB. Infogas ordagrant när färdigheten är aktiv.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Dessa dokument behöver omindexeras för nuvarande regional sök- och inbäddningskonfiguration. De kommer inte att kunna sökas förrän indexeringen är klar."
     },
     "applyToAgents": "Tillgänglig för agenter",
-    "applyToAgentsHint": "Avstängd som standard. När detta är aktiverat kan agenter ladda denna färdighet via verktyg med endast läsrättigheter, istället för att ersätta sina personainstruktioner. Färdighetsanrop har separata stegränser. Foundry-agenter måste redan ha funktionerna load_skill och search_skill_documents registrerade i sin definition."
+    "applyToAgentsHint": "Avstängd som standard. När detta är aktiverat kan agenter ladda denna färdighet via verktyg med endast läsrättigheter, istället för att ersätta sina personainstruktioner. Färdighetsanrop har separata stegränser. Foundry-agenter måste redan ha funktionerna load_skill och search_skill_documents registrerade i sin definition.",
+    "requireConsent": "Fråga innan tillämpning",
+    "requireConsentHint": "När modellen själv vill använda denna färdighet måste användaren först godkänna. Begärda och fästa användningar behöver inget godkännande.",
+    "consentChip": "Frågar först",
+    "sourceChip": "Från källa",
+    "sourceChipHint": "Tillhandahålls av en prenumererad färdighetskälla; instruktionerna uppdateras vid synkronisering. Aktivering, agent- och samtyckesinställningar är dina.",
+    "sources": {
+      "title": "Färdighetskällor",
+      "description": "Prenumerera på en extern färdighetskatalog (en index.json med SKILL.md-filer). Dess färdigheter blir organisationens färdigheter och uppdateras cirka var sjätte timme. Endast SKILL.md importeras; referensdokument importeras inte.",
+      "urlLabel": "Katalog-URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Måste vara https på en publik värd. Färdighetsfiler läses endast från samma plats.",
+      "labelLabel": "Etikett (valfritt)",
+      "add": "Prenumerera",
+      "adding": "Prenumererar…",
+      "added": "{count, plural, =0 {Källa tillagd; inga färdigheter importerade än} one {Källa tillagd; # färdighet importerad} other {Källa tillagd; # färdigheter importerade}}",
+      "addedWithError": "Källa tillagd, men första synken misslyckades. Kontrollera felet på källan.",
+      "addError": "Det gick inte att lägga till färdighetskällan",
+      "sync": "Synka nu",
+      "syncing": "Synkroniserar…",
+      "synced": "Källa synkroniserad.",
+      "syncError": "Det gick inte att synkronisera färdighetskällan",
+      "remove": "Ta bort källa",
+      "removeConfirm": "Ta bort denna källa? Färdigheterna som tillhandahållits blir kvar som vanliga organisationsfärdigheter och slutar att uppdateras.",
+      "removed": "Källa borttagen.",
+      "removeError": "Det gick inte att ta bort färdighetskällan",
+      "loading": "Laddar källor…",
+      "loadError": "Färdighetskällorna kunde inte laddas.",
+      "empty": "Inga färdighetskällor ännu.",
+      "never": "Aldrig synkroniserad",
+      "statusOk": "Synkroniserad",
+      "statusError": "Synkroniseringen misslyckades",
+      "statusPartial": "{count, plural, one {# post hoppad över} other {# poster hoppade över}}",
+      "lastSync": "Senaste synk {time}",
+      "entryCount": "{count, plural, one {# post} other {# poster}}",
+      "entryStatus": {
+        "synced": "synkroniserad",
+        "skipped": "hoppad över",
+        "conflict": "konflikt — inte överskriven",
+        "invalid": "ogiltig"
+      }
+    }
   },
   "personalSkills": {
     "title": "Personliga färdigheter",

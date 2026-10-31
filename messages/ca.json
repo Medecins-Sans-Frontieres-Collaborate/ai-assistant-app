@@ -931,7 +931,10 @@
       "showDetails": "Mostra els detalls de la habilitat",
       "hideDetails": "Amaga els detalls de la habilitat",
       "agentLoad": "carregada per l’agent",
-      "agentSearch": "documents cercats per l’agent"
+      "agentSearch": "documents cercats per l’agent",
+      "needsApproval": "requereix la vostra aprovació",
+      "original": "tal com es va executar originalment",
+      "updated": "actualitzat des de llavors"
     },
     "skillsManualHint": "La selecció automàtica està desactivada a Configuració. Utilitzeu una habilitat per al proper missatge o fixeuneu-ne una per utilitzar-la durant tota aquesta conversa.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Afegeix un agent de prompt",
     "m365AgentIndexStop": "Atura la indexació",
     "foundryAgentsHeading": "Agents de Foundry i de prompt",
-    "foundryAgentsDescription": "Agents descoberts d’Azure AI Foundry amb el teu propi accés, més els agents de prompt definits aquí. Els agents de coneixement i els agents de Microsoft 365 es gestionen en les seves pròpies seccions a continuació."
+    "foundryAgentsDescription": "Agents descoberts d’Azure AI Foundry amb el teu propi accés, més els agents de prompt definits aquí. Els agents de coneixement i els agents de Microsoft 365 es gestionen en les seves pròpies seccions a continuació.",
+    "agentSkillsLabel": "Habilitats",
+    "agentSkillsHelp": "Quines habilitats de l'organització pot carregar aquest agent mentre respon. Els usuaris només veuen les habilitats que permeten les seves regles d'accés.",
+    "agentSkills": {
+      "inherit": "Habilitats marcades com a “disponibles per als agents”",
+      "selected": "Només les habilitats seleccionades a continuació",
+      "none": "Sense habilitats"
+    },
+    "agentSkillsNone": "No hi ha habilitats disponibles per seleccionar."
   },
   "localModels": {
     "title": "Models locals",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Automàtic",
       "always": "Sempre",
-      "off": "Desactivat"
+      "off": "Desactivat",
+      "manual": "A petició"
     },
     "activationHint": {
       "auto": "Seleccionada automàticament quan la tasca actual coincideix amb la descripció. Els usuaris també la poden demanar una vegada o fixar-la a una conversa.",
       "always": "S'afegeix a totes les converses per a tothom qui pugui veure l'habilitat. Utilitza-ho amb moderació — aquest espai de prompt és permanent.",
-      "off": "Inactiva: mai no s'aplica ni s'ofereix als usuaris, però es manté aquí per a edició."
+      "off": "Inactiva: mai no s'aplica ni s'ofereix als usuaris, però es manté aquí per a edició.",
+      "manual": "S’aplica només quan un usuari la sol·licita o la fixa. No es selecciona automàticament i no s’ofereix al model com a habilitat disponible."
     },
     "instructionsLabel": "Instruccions",
     "instructionsHint": "Markdown, fins a 16 KB. S'injecta literalment quan l'habilitat està activa.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Aquests documents necessiten tornar-se a indexar segons la configuració de Cerca i incrustació regional actual. No es podran cercar fins que s'acabi la indexació."
     },
     "applyToAgents": "Disponible per als agents",
-    "applyToAgentsHint": "Desactivat per defecte. Quan s'activa, els agents poden carregar aquesta habilitat mitjançant eines de només lectura en lloc de substituir les seves instruccions de persona. Les crides d'habilitat tenen límits de passos independents. Els agents de Foundry han de tenir ja registrades les funcions load_skill i search_skill_documents a la seva definició."
+    "applyToAgentsHint": "Desactivat per defecte. Quan s'activa, els agents poden carregar aquesta habilitat mitjançant eines de només lectura en lloc de substituir les seves instruccions de persona. Les crides d'habilitat tenen límits de passos independents. Els agents de Foundry han de tenir ja registrades les funcions load_skill i search_skill_documents a la seva definició.",
+    "requireConsent": "Demana abans d'aplicar",
+    "requireConsentHint": "Quan el model vol aplicar aquesta habilitat pel seu compte, abans demana a l’usuari. L'ús sol·licitat o fixat no necessita confirmació.",
+    "consentChip": "Demana primer",
+    "sourceChip": "Des de la font",
+    "sourceChipHint": "Proporcionat per una font d’habilitats subscrita; les instruccions es refresquen en cada sincronització. L’activació, agent i consentiment són configurables per vosaltres.",
+    "sources": {
+      "title": "Fonts d’habilitats",
+      "description": "Subscriviu-vos a un catàleg extern d’habilitats (un index.json que enumera arxius SKILL.md). Aquestes habilitats passen a ser de l’organització i s’actualitzen aproximadament cada sis hores. Només s’importa SKILL.md; els documents de referència no.",
+      "urlLabel": "URL del catàleg",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Ha de ser https en un host públic. Els arxius d’habilitat només es llegeixen des de la mateixa ubicació.",
+      "labelLabel": "Etiqueta (opcional)",
+      "add": "Subscriu",
+      "adding": "Subscripció…",
+      "added": "{count, plural, =0 {Font afegida; encara no s’han importat habilitats} one {Font afegida; # habilitat importada} other {Font afegida; # habilitats importades}}",
+      "addedWithError": "Font afegida, però la primera sincronització ha fallat. Comproveu l’error a la font.",
+      "addError": "No s'ha pogut afegir la font d’habilitats",
+      "sync": "Sincronitza ara",
+      "syncing": "Sincronitzant…",
+      "synced": "Font sincronitzada.",
+      "syncError": "No s’ha pogut sincronitzar la font d’habilitats",
+      "remove": "Elimina la font",
+      "removeConfirm": "Voleu eliminar aquesta font? Les habilitats proporcionades quedaran com a habilitats ordinàries de l’organització i deixaran d’actualitzar-se.",
+      "removed": "Font eliminada.",
+      "removeError": "No s'ha pogut eliminar la font d’habilitats",
+      "loading": "S’estan carregant les fonts…",
+      "loadError": "No s’han pogut carregar les fonts d’habilitats.",
+      "empty": "Encara no hi ha cap font d’habilitats.",
+      "never": "Mai sincronitzada",
+      "statusOk": "Sincronitzada",
+      "statusError": "La sincronització ha fallat",
+      "statusPartial": "{count, plural, one {# entrada omesa} other {# entrades omeses}}",
+      "lastSync": "Darrera sincronització {time}",
+      "entryCount": "{count, plural, one {# entrada} other {# entrades}}",
+      "entryStatus": {
+        "synced": "sincronitzada",
+        "skipped": "omesa",
+        "conflict": "conflicte — no sobreescrita",
+        "invalid": "invàlida"
+      }
+    }
   },
   "personalSkills": {
     "title": "Habilitats personals",

@@ -1014,7 +1014,10 @@
       "showDetails": "Fi apejuwe ọgbọn han",
       "hideDetails": "Pa apejuwe ọgbọn",
       "agentLoad": "ageni gbe e",
-      "agentSearch": "ageni wa awọn iwe"
+      "agentSearch": "ageni wa awọn iwe",
+      "needsApproval": "nilo ìfọwọ́sí rẹ",
+      "original": "bí a ṣe ṣe ní akọkọ",
+      "updated": "ti ṣe imudojuiwọn lati igba naa"
     },
     "skillsManualHint": "Àṣàyàn aifọwọyi wa ni pipa ninu Eto. Lo lẹ́kan fún ifiranṣẹ tó ń bọ, tàbí dí amọja kan mọ́lẹ̀ kí o máa lo ní gbogbo ibarẹ̀ yìí.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Fi aṣoju itọsọna kun",
     "m365AgentIndexStop": "Duro kika",
     "foundryAgentsHeading": "Aṣoju Foundry ati aṣoju itọsọna",
-    "foundryAgentsDescription": "Àwọn aṣoju tí a ṣàwárí láti Azure AI Foundry nípasẹ̀ ìwọ̀ntúnwọ̀nsì tirẹ, pọ̀ mọ́ aṣoju itọsọna tí a ṣe àtọkànwá nibi. Àwọn aṣoju ìmọ̀ àti aṣoju Microsoft 365 ni a ń ṣàbójútó ní apá wọn ní isalẹ."
+    "foundryAgentsDescription": "Àwọn aṣoju tí a ṣàwárí láti Azure AI Foundry nípasẹ̀ ìwọ̀ntúnwọ̀nsì tirẹ, pọ̀ mọ́ aṣoju itọsọna tí a ṣe àtọkànwá nibi. Àwọn aṣoju ìmọ̀ àti aṣoju Microsoft 365 ni a ń ṣàbójútó ní apá wọn ní isalẹ.",
+    "agentSkillsLabel": "Ọgbọn",
+    "agentSkillsHelp": "Àwọn ọgbọn ẹgbẹ́ wo ni agéntì yìí le lo nígbà tó ń dáhùn. àwọn oníṣe ṣi rí àwọn ọgbọn tó bọwọ́ fún àṣẹ wọn nikan.",
+    "agentSkills": {
+      "inherit": "Ọgbọn tí a samisi “wa fún agéntì”",
+      "selected": "Ọgbọn tí a yàn nílẹ̀ nikan",
+      "none": "Kò sí ọgbọn"
+    },
+    "agentSkillsNone": "Kò sí ọgbọn tó wà fún yíyàn."
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Aifọwọyi",
       "always": "Gbogbo igba",
-      "off": "Pipa"
+      "off": "Pipa",
+      "manual": "Láti ọwọ́ oníṣe"
     },
     "activationHint": {
       "auto": "A yan laifọwọyi nigba ti iṣẹ lọwọlọwọ ba ba apejuwe mu. Awọn olumulo le tun beere lẹẹkan tàbí fi si ibaraẹnisọrọ.",
       "always": "A fi kun gbogbo ibaraẹnisọrọ fún gbogbo ẹni tí o le rí ọgbọn náà. Lo pẹ̀lú ìtọ́ju — ibi yìí jẹ́ amúlédìípọ̀ tó wà titi.",
-      "off": "Kò ṣiṣẹ́: a kò lo rẹ̀ àti a kò fi hàn sí olùmulo, ṣùgbọ́n ó wà níbí fún àtúnṣe."
+      "off": "Kò ṣiṣẹ́: a kò lo rẹ̀ àti a kò fi hàn sí olùmulo, ṣùgbọ́n ó wà níbí fún àtúnṣe.",
+      "manual": "A máa lo nikan nígbà tí oníṣe bá béèrè tàbí fi mọ́lẹ̀. Kò ní yàn laifọwọyi, a kì í fi hàn sí àpẹẹrẹ gẹ́gẹ́ bí ọgbọn tó le wúlò."
     },
     "instructionsLabel": "Ìtọnisọna",
     "instructionsHint": "Markdown, to 16 KB. A fi sii gangan nigba ti agbara naa ba ṣiṣẹ.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Awọn iwe aṣẹ wọnyi nilo atunṣe itọkasi fun Eto Wiwa ati isopọ agbegbe lọwọlọwọ. Wọn kii yoo wa titi ti atunṣe itọkasi yoo fi pari."
     },
     "applyToAgents": "Wà fún àwọn aṣojú",
-    "applyToAgentsHint": "A ti dá a pa fún ìpilẹ̀ṣẹ̀. Tí a bá mu ṣiṣẹ́, aṣojú le fi ìmọ̀ yii sínú awọn irinṣẹ́ kika nikan lọ́rẹkọsẹ̀ kìí ṣe pé wọ́n yoo rọ́pò ìtọ́sọ́nà ẹni tí wọ́n fẹ́. Kíkọ ọgbọn ní ìdíyelé ìgbésẹ̀ tirẹ̀. Awọn aṣojú Foundry gbọ́dọ̀ ti forúkọ sí awọn iṣẹ́ load_skill àti search_skill_documents nínú ìtúmọ̀ wọn."
+    "applyToAgentsHint": "A ti dá a pa fún ìpilẹ̀ṣẹ̀. Tí a bá mu ṣiṣẹ́, aṣojú le fi ìmọ̀ yii sínú awọn irinṣẹ́ kika nikan lọ́rẹkọsẹ̀ kìí ṣe pé wọ́n yoo rọ́pò ìtọ́sọ́nà ẹni tí wọ́n fẹ́. Kíkọ ọgbọn ní ìdíyelé ìgbésẹ̀ tirẹ̀. Awọn aṣojú Foundry gbọ́dọ̀ ti forúkọ sí awọn iṣẹ́ load_skill àti search_skill_documents nínú ìtúmọ̀ wọn.",
+    "requireConsent": "Bèrè kí o tó lo",
+    "requireConsentHint": "Nígbà tí àpẹẹrẹ bá fẹ́ lo ọgbọn yìí lára rẹ̀, a máa bèrè lọ́wọ́ oníṣe kíkọ. Bí oníṣe bá béèrè tàbí fi mọ́lẹ̀, ìtẹ́wọgba kì í ṣe dandan.",
+    "consentChip": "Máa bèrè kíkọ",
+    "sourceChip": "Láti orísun",
+    "sourceChipHint": "A ti fi ranṣẹ́ pẹ̀lú orísun ọgbọn tó forúkọ sílẹ̀; ìtókasí máa ni imudojuiwọn nígbà gbogbo tà a bá wa pọ̀. Gbogbo ètò ìṣiṣẹ, agéntì àti ìfẹ́wọ́sí jẹ́ ti tirẹ.",
+    "sources": {
+      "title": "Orísun ọgbọn",
+      "description": "Forúkọ sí katalọ́ọ̀gì ọgbọn tí òde (index.json tó darukọ SKILL.md). Àwọn ọgbọn rẹ̀ máa di ọgbọn ẹgbẹ́, ati pe yóò ni imudojuiwọn lẹ́ẹ̀mefa lójú ọjọ́. SKILL.md nikan ni a máa dìwọ̀le; a kò gbe iwe àmìtọkasi wọle.",
+      "urlLabel": "URL katalọ́ọ̀gì",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Gbọ́dọ̀ jẹ https lórí alejo àkọsílẹ̀. Àwọn faili ọgbọn níbẹ́ nikan ni a le ka.",
+      "labelLabel": "Akọlé (àṣàyàn)",
+      "add": "Forúkọ sílẹ̀",
+      "adding": "N ṣiṣẹ́ forúkọ…",
+      "added": "{count, plural, =0 {Orísun ti kún; kò tí ì ṣàwọn ọgbọn wọlé} one {Orísun ti kún; ọgbọn # ti wọlé} other {Orísun ti kún; awọn ọgbọn # ti wọlé}}",
+      "addedWithError": "Orísun kún, ṣùgbọ́n ìṣàgbéyèṣiṣẹ́ àkọ́kọ́ kuna. Ṣàyẹwo aṣiṣe lórí orísun.",
+      "addError": "A kò le kun orísun ọgbọn",
+      "sync": "Ṣàgbéyèṣiṣẹ́ nísinsin yìí",
+      "syncing": "N ṣiṣẹ́ àgbéyèṣiṣẹ́…",
+      "synced": "Orísun ti ṣàgbéyèṣiṣẹ́.",
+      "syncError": "A kò le ṣàgbéyèṣiṣẹ́ orísun ọgbọn",
+      "remove": "Yọ orísun kúrò",
+      "removeConfirm": "Yọ orísun yìí kúrò? Àwọn ọgbọn tó wá níbẹ̀ máa ṣi di ọgbọn ẹgbẹ́ lasán àti pé ìmúdọ́júìwọ̀n yóò dá.",
+      "removed": "Orísun ti yọ.",
+      "removeError": "A kò le yọ orísun ọgbọn",
+      "loading": "N ṣiṣẹ́ ikó orísun…",
+      "loadError": "A kò le ko àwọn orísun ọgbọn wọlé.",
+      "empty": "Kò sí orísun ọgbọn títí di ìsinsin yìí.",
+      "never": "Kò tí ì ságbéyèṣiṣẹ́ rárá",
+      "statusOk": "Ti ṣàgbéyèṣiṣẹ́",
+      "statusError": "Àgbéyèṣiṣẹ́ kuna",
+      "statusPartial": "{count, plural, one {# àkọsílẹ̀ fó} other {# àwọn àkọsílẹ̀ fó}}",
+      "lastSync": "Àgbéyèṣiṣẹ́ tó kọ́kọ́ ṣẹlẹ̀ {time}",
+      "entryCount": "{count, plural, one {àkọsílẹ̀ #} other {àwọn àkọsílẹ̀ #}}",
+      "entryStatus": {
+        "synced": "ti ṣàgbéyèṣiṣẹ́",
+        "skipped": "fi sílẹ̀",
+        "conflict": "ìyapa — a kò kọ́wọ́ lórí",
+        "invalid": "àìtọ"
+      }
+    }
   },
   "personalSkills": {
     "title": "Ọgbọn ara ẹni",

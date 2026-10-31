@@ -921,7 +921,10 @@
       "showDetails": "Toon skilldetails",
       "hideDetails": "Verberg skilldetails",
       "agentLoad": "geladen door agent",
-      "agentSearch": "documenten gezocht door agent"
+      "agentSearch": "documenten gezocht door agent",
+      "needsApproval": "heeft uw goedkeuring nodig",
+      "original": "zoals oorspronkelijk uitgevoerd",
+      "updated": "bijgewerkt sinds"
     },
     "skillsManualHint": "Automatische selectie staat uit in Instellingen. Gebruik eenmalig voor het volgende bericht, of pin een vaardigheid om deze in het hele gesprek te gebruiken.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Promptagent toevoegen",
     "m365AgentIndexStop": "Indexeren stoppen",
     "foundryAgentsHeading": "Foundry- en promptagents",
-    "foundryAgentsDescription": "Agents ontdekt via Azure AI Foundry met uw eigen toegang, plus de promptagents die hier zijn gedefinieerd. Kennisagents en Microsoft 365-agents worden in hun eigen secties hieronder beheerd."
+    "foundryAgentsDescription": "Agents ontdekt via Azure AI Foundry met uw eigen toegang, plus de promptagents die hier zijn gedefinieerd. Kennisagents en Microsoft 365-agents worden in hun eigen secties hieronder beheerd.",
+    "agentSkillsLabel": "Vaardigheden",
+    "agentSkillsHelp": "Welke organisatievaardigheden deze agent mag laden tijdens het antwoorden. Gebruikers zien nog steeds alleen de vaardigheden waarvoor hun toegangsregels gelden.",
+    "agentSkills": {
+      "inherit": "Vaardigheden gemarkeerd als 'beschikbaar voor agenten'",
+      "selected": "Alleen de hieronder geselecteerde vaardigheden",
+      "none": "Geen vaardigheden"
+    },
+    "agentSkillsNone": "Geen vaardigheden beschikbaar om te selecteren."
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Automatisch",
       "always": "Altijd",
-      "off": "Uit"
+      "off": "Uit",
+      "manual": "Op aanvraag"
     },
     "activationHint": {
       "auto": "Automatisch geselecteerd als de huidige taak overeenkomt met de beschrijving. Gebruikers kunnen het ook eenmalig aanvragen of aan een gesprek vastmaken.",
       "always": "Toegevoegd aan elk gesprek voor iedereen die de vaardigheid kan zien. Gebruik dit spaarzaam — dit is permanente prompt-ruimte.",
-      "off": "Inactief: wordt nooit toegepast en niet aangeboden aan gebruikers, maar blijft hier voor bewerking."
+      "off": "Inactief: wordt nooit toegepast en niet aangeboden aan gebruikers, maar blijft hier voor bewerking.",
+      "manual": "Wordt alleen toegepast wanneer een gebruiker hierom vraagt of het vastzet. Wordt nooit automatisch geselecteerd en niet aangeboden aan het model als laadbare vaardigheid."
     },
     "instructionsLabel": "Instructies",
     "instructionsHint": "Markdown, maximaal 16 KB. Wordt letterlijk ingevoegd wanneer de skill actief is.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Deze documenten moeten opnieuw worden geïndexeerd voor de huidige regionale zoek- en embeddingconfiguratie. Ze worden pas doorzocht nadat het indexeren is voltooid."
     },
     "applyToAgents": "Beschikbaar voor agents",
-    "applyToAgentsHint": "Standaard uitgeschakeld. Wanneer ingeschakeld, kunnen agents deze skill laden via alleen-lezen tools in plaats van hun persoonlijke instructies te vervangen. Skill-oproepen hebben onafhankelijke staplimieten. Foundry agents moeten al functies voor load_skill en search_skill_documents in hun definitie geregistreerd hebben."
+    "applyToAgentsHint": "Standaard uitgeschakeld. Wanneer ingeschakeld, kunnen agents deze skill laden via alleen-lezen tools in plaats van hun persoonlijke instructies te vervangen. Skill-oproepen hebben onafhankelijke staplimieten. Foundry agents moeten al functies voor load_skill en search_skill_documents in hun definitie geregistreerd hebben.",
+    "requireConsent": "Eerst toestemming vragen",
+    "requireConsentHint": "Als het model deze vaardigheid zelf wil toepassen, wordt eerst aan de gebruiker gevraagd. Voor aangevraagde en vastgezette gebruiken is geen bevestiging nodig.",
+    "consentChip": "Vraagt eerst",
+    "sourceChip": "Van bron",
+    "sourceChipHint": "Geleverd door een geabonneerde bron; de instructies worden bij synchronisatie bijgewerkt. Activatie-, agent- en toestemmingsinstellingen zijn van u.",
+    "sources": {
+      "title": "Vaardighedenbronnen",
+      "description": "Abonneer op een externe vaardighedencatalogus (een index.json met SKILL.md-bestanden). Deze vaardigheden worden organisatievaardigheden en worden ongeveer elke zes uur bijgewerkt. Alleen SKILL.md wordt geïmporteerd; referentiedocumenten niet.",
+      "urlLabel": "Catalogus-URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Moet https zijn op een publieke host. Vaardigheidsbestanden worden alleen van deze locatie gelezen.",
+      "labelLabel": "Label (optioneel)",
+      "add": "Abonneren",
+      "adding": "Bezig met abonneren…",
+      "added": "{count, plural, =0 {Bron toegevoegd; nog geen vaardigheden geïmporteerd} one {Bron toegevoegd; # vaardigheid geïmporteerd} other {Bron toegevoegd; # vaardigheden geïmporteerd}}",
+      "addedWithError": "Bron toegevoegd, maar de eerste synchronisatie is mislukt. Controleer de foutmelding bij de bron.",
+      "addError": "Kon de bron van vaardigheden niet toevoegen",
+      "sync": "Nu synchroniseren",
+      "syncing": "Synchroniseren…",
+      "synced": "Bron gesynchroniseerd.",
+      "syncError": "Kon de bron van vaardigheden niet synchroniseren",
+      "remove": "Bron verwijderen",
+      "removeConfirm": "Deze bron verwijderen? De geleverde vaardigheden blijven als gewone organisatievaardigheden en worden niet meer bijgewerkt.",
+      "removed": "Bron verwijderd.",
+      "removeError": "Kon de bron van vaardigheden niet verwijderen",
+      "loading": "Bronnen laden…",
+      "loadError": "Vaardighedenbronnen konden niet worden geladen.",
+      "empty": "Nog geen vaardighedenbronnen.",
+      "never": "Nooit gesynchroniseerd",
+      "statusOk": "Gesynchroniseerd",
+      "statusError": "Synchronisatie mislukt",
+      "statusPartial": "{count, plural, one {# item overgeslagen} other {# items overgeslagen}}",
+      "lastSync": "Laatste synchronisatie {time}",
+      "entryCount": "{count, plural, one {# item} other {# items}}",
+      "entryStatus": {
+        "synced": "gesynchroniseerd",
+        "skipped": "overgeslagen",
+        "conflict": "conflict — niet overschreven",
+        "invalid": "ongeldig"
+      }
+    }
   },
   "personalSkills": {
     "title": "Persoonlijke vaardigheden",

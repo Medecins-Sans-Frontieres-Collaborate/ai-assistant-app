@@ -877,7 +877,10 @@
       "showDetails": "Mostra dettagli sulle competenze",
       "hideDetails": "Nascondi dettagli sulle competenze",
       "agentLoad": "caricato dall'agente",
-      "agentSearch": "documenti cercati dall'agente"
+      "agentSearch": "documenti cercati dall'agente",
+      "needsApproval": "richiede la tua approvazione",
+      "original": "come eseguito originalmente",
+      "updated": "aggiornato da allora"
     },
     "skillsManualHint": "La selezione automatica è disattivata nelle Impostazioni. Usa una volta per il prossimo messaggio, oppure fissa una competenza per utilizzarla durante tutta la conversazione.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Aggiungi prompt agent",
     "m365AgentIndexStop": "Interrompi indicizzazione",
     "foundryAgentsHeading": "Foundry e prompt agent",
-    "foundryAgentsDescription": "Agenti scoperti da Azure AI Foundry tramite il tuo accesso, oltre ai prompt agent definiti qui. Gli agenti di conoscenza e gli agenti Microsoft 365 sono gestiti nelle loro rispettive sezioni sotto."
+    "foundryAgentsDescription": "Agenti scoperti da Azure AI Foundry tramite il tuo accesso, oltre ai prompt agent definiti qui. Gli agenti di conoscenza e gli agenti Microsoft 365 sono gestiti nelle loro rispettive sezioni sotto.",
+    "agentSkillsLabel": "Competenze",
+    "agentSkillsHelp": "Quali competenze dell'organizzazione questo agente può caricare durante la risposta. Gli utenti vedono comunque solo le competenze consentite dalle loro regole di accesso.",
+    "agentSkills": {
+      "inherit": "Competenze contrassegnate come \"disponibili per gli agenti\"",
+      "selected": "Solo le competenze selezionate qui sotto",
+      "none": "Nessuna competenza"
+    },
+    "agentSkillsNone": "Nessuna competenza disponibile da selezionare."
   },
   "localModels": {
     "title": "Modelli locali",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Automatica",
       "always": "Sempre",
-      "off": "Disattivata"
+      "off": "Disattivata",
+      "manual": "Su richiesta"
     },
     "activationHint": {
       "auto": "Selezionata automaticamente quando il compito attuale corrisponde alla descrizione. Gli utenti possono anche richiederla una volta o fissarla a una conversazione.",
       "always": "Aggiunta a ogni conversazione per chiunque possa vederla. Usare con cautela — è uno spazio di prompt permanente.",
-      "off": "Inattiva: non viene mai applicata né offerta agli utenti, ma rimane qui per la modifica."
+      "off": "Inattiva: non viene mai applicata né offerta agli utenti, ma rimane qui per la modifica.",
+      "manual": "Applicata solo quando un utente la richiede o la fissa. Mai selezionata automaticamente e non offerta al modello come competenza caricabile."
     },
     "instructionsLabel": "Istruzioni",
     "instructionsHint": "Markdown, fino a 16 KB. Inserito come testo diretto quando la competenza è attiva.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Questi documenti richiedono una reindicizzazione per la configurazione attuale della ricerca regionale e degli embedding. Non saranno ricercabili finché l'indicizzazione non sarà completata."
     },
     "applyToAgents": "Disponibile per gli agenti",
-    "applyToAgentsHint": "Disattivato per impostazione predefinita. Se abilitato, gli agenti possono caricare questa skill tramite strumenti in sola lettura invece di sostituire le loro istruzioni persona. Le chiamate della skill hanno limiti di step indipendenti. Gli agenti Foundry devono già avere le funzioni load_skill e search_skill_documents registrate nella loro definizione."
+    "applyToAgentsHint": "Disattivato per impostazione predefinita. Se abilitato, gli agenti possono caricare questa skill tramite strumenti in sola lettura invece di sostituire le loro istruzioni persona. Le chiamate della skill hanno limiti di step indipendenti. Gli agenti Foundry devono già avere le funzioni load_skill e search_skill_documents registrate nella loro definizione.",
+    "requireConsent": "Chiedi prima di applicare",
+    "requireConsentHint": "Quando il modello vuole applicare questa competenza autonomamente, viene chiesto prima all'utente. Le applicazioni richieste o fissate non necessitano conferma.",
+    "consentChip": "Chiede prima",
+    "sourceChip": "Da fonte",
+    "sourceChipHint": "Fornita da una fonte di competenze sottoscritta; le istruzioni vengono aggiornate alla sincronizzazione. Impostazioni di attivazione, agente e consenso sono tue.",
+    "sources": {
+      "title": "Fonti di competenze",
+      "description": "Abbonati a un catalogo esterno di competenze (un index.json che elenca file SKILL.md). Le sue competenze diventano competenze dell'organizzazione e si aggiornano circa ogni sei ore. Viene importato solo SKILL.md; i documenti di riferimento no.",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Deve essere https su un host pubblico. I file delle competenze vengono letti solo da questa posizione.",
+      "labelLabel": "Etichetta (opzionale)",
+      "add": "Abbonati",
+      "adding": "Abbonamento in corso…",
+      "added": "{count, plural, =0 {Fonte aggiunta; nessuna competenza importata} one {Fonte aggiunta; # competenza importata} other {Fonte aggiunta; # competenze importate}}",
+      "addedWithError": "Fonte aggiunta, ma la prima sincronizzazione non è riuscita. Controlla l'errore sulla fonte.",
+      "addError": "Impossibile aggiungere la fonte di competenze",
+      "sync": "Sincronizza ora",
+      "syncing": "Sincronizzazione…",
+      "synced": "Fonte sincronizzata.",
+      "syncError": "Impossibile sincronizzare la fonte di competenze",
+      "remove": "Rimuovi fonte",
+      "removeConfirm": "Rimuovere questa fonte? Le competenze fornite rimarranno come competenze ordinarie dell'organizzazione e smetteranno di aggiornarsi.",
+      "removed": "Fonte rimossa.",
+      "removeError": "Impossibile rimuovere la fonte di competenze",
+      "loading": "Caricamento fonti…",
+      "loadError": "Impossibile caricare le fonti di competenze.",
+      "empty": "Nessuna fonte di competenze al momento.",
+      "never": "Mai sincronizzata",
+      "statusOk": "Sincronizzata",
+      "statusError": "Sincronizzazione fallita",
+      "statusPartial": "{count, plural, one {# voce saltata} other {# voci saltate}}",
+      "lastSync": "Ultima sincronizzazione {time}",
+      "entryCount": "{count, plural, one {# voce} other {# voci}}",
+      "entryStatus": {
+        "synced": "sincronizzata",
+        "skipped": "saltata",
+        "conflict": "conflitto — non sovrascritta",
+        "invalid": "non valida"
+      }
+    }
   },
   "personalSkills": {
     "title": "Competenze personali",

@@ -956,7 +956,10 @@
       "showDetails": "Zobrazit detaily dovednosti",
       "hideDetails": "Skrýt detaily dovednosti",
       "agentLoad": "načteno agentem",
-      "agentSearch": "dokumenty vyhledané agentem"
+      "agentSearch": "dokumenty vyhledané agentem",
+      "needsApproval": "vyžaduje vaše schválení",
+      "original": "původní provedení",
+      "updated": "aktualizováno od té doby"
     },
     "skillsManualHint": "Automatický výběr je vypnutý v nastavení. Použijte jednorázově pro další zprávu nebo připněte dovednost, aby byla používána v celém tomto rozhovoru.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Přidat prompt agenta",
     "m365AgentIndexStop": "Zastavit indexování",
     "foundryAgentsHeading": "Foundry a prompt agenti",
-    "foundryAgentsDescription": "Agenti nalezení v Azure AI Foundry prostřednictvím vašeho přístupu, plus prompt agenti definovaní zde. Agenti znalostí a Microsoft 365 agenti jsou spravováni v samostatných sekcích níže."
+    "foundryAgentsDescription": "Agenti nalezení v Azure AI Foundry prostřednictvím vašeho přístupu, plus prompt agenti definovaní zde. Agenti znalostí a Microsoft 365 agenti jsou spravováni v samostatných sekcích níže.",
+    "agentSkillsLabel": "Dovednosti",
+    "agentSkillsHelp": "Se kterými dovednostmi organizace může tento agent pracovat při odpovídání. Uživatelé stále vidí pouze dovednosti, které jim jejich přístupová práva povolují.",
+    "agentSkills": {
+      "inherit": "Dovednosti označené „dostupné agentům“",
+      "selected": "Pouze níže vybrané dovednosti",
+      "none": "Žádné dovednosti"
+    },
+    "agentSkillsNone": "Nejsou dostupné žádné dovednosti k výběru."
   },
   "localModels": {
     "title": "Lokální modely",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Automatická",
       "always": "Vždy",
-      "off": "Vypnuto"
+      "off": "Vypnuto",
+      "manual": "Na požádání"
     },
     "activationHint": {
       "auto": "Vybráno automaticky, pokud aktuální úkol odpovídá popisu. Uživatelé jej mohou také vyžádat jednorázově nebo připnout do konverzace.",
       "always": "Přidává se do každé konverzace pro každého, kdo dovednost vidí. Používejte opatrně — zabírá trvale místo v promptu.",
-      "off": "Neaktivní: dovednost se nikdy nepoužije ani nenabízí uživatelům, ale zůstává zde pro úpravy."
+      "off": "Neaktivní: dovednost se nikdy nepoužije ani nenabízí uživatelům, ale zůstává zde pro úpravy.",
+      "manual": "Použije se pouze, když si ji uživatel vyžádá nebo připne. Nikdy není vybrána automaticky a není nabízena modelu jako načítatelná dovednost."
     },
     "instructionsLabel": "Instrukce",
     "instructionsHint": "Markdown, až 16 KB. Vkládá se přesně, když je dovednost aktivní.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Tyto dokumenty je nutné znovu indexovat podle aktuálního regionálního nastavení vyhledávání a vkládání. Nebudou vyhledávány, dokud nebude indexace dokončena."
     },
     "applyToAgents": "Dostupné agentům",
-    "applyToAgentsHint": "Ve výchozím nastavení vypnuto. Pokud je aktivováno, mohou agenti načíst tuto dovednost pomocí nástrojů pouze pro čtení, místo aby nahrazovali své persona instrukce. Volání dovedností mají vlastní limity kroků. Foundry agenti musí mít ve své definici již registrovány funkce load_skill a search_skill_documents."
+    "applyToAgentsHint": "Ve výchozím nastavení vypnuto. Pokud je aktivováno, mohou agenti načíst tuto dovednost pomocí nástrojů pouze pro čtení, místo aby nahrazovali své persona instrukce. Volání dovedností mají vlastní limity kroků. Foundry agenti musí mít ve své definici již registrovány funkce load_skill a search_skill_documents.",
+    "requireConsent": "Před použitím se dotázat",
+    "requireConsentHint": "Když chce model tuto dovednost použít sám, uživatel je nejprve dotázán. Použití na žádost a připnutí nepotřebuje potvrzení.",
+    "consentChip": "Nejdřív se zeptá",
+    "sourceChip": "Ze zdroje",
+    "sourceChipHint": "Dodáno odběrem ze zdroje dovedností; instrukce jsou obnoveny při synchronizaci. Nastavení aktivace, agenta a souhlasu jsou vaše.",
+    "sources": {
+      "title": "Zdroje dovedností",
+      "description": "Odebírejte externí katalog dovedností (index.json se seznamem SKILL.md souborů). Jeho dovednosti se stanou dovednostmi organizace a obnovují se přibližně každých šest hodin. Importuje se pouze SKILL.md; referenční dokumenty ne.",
+      "urlLabel": "URL katalogu",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Musí být https na veřejném hostu. Soubory dovedností se načítají pouze z tohoto umístění.",
+      "labelLabel": "Název (volitelné)",
+      "add": "Odebírat",
+      "adding": "Odebírání…",
+      "added": "{count, plural, =0 {Zdroj přidán; zatím nebyly importovány žádné dovednosti} one {Zdroj přidán; importována # dovednost} other {Zdroj přidán; importováno # dovedností}}",
+      "addedWithError": "Zdroj přidán, ale první synchronizace selhala. Zkontrolujte chybu u zdroje.",
+      "addError": "Nelze přidat zdroj dovednosti",
+      "sync": "Synchronizovat nyní",
+      "syncing": "Probíhá synchronizace…",
+      "synced": "Zdroj synchronizován.",
+      "syncError": "Nelze synchronizovat zdroj dovednosti",
+      "remove": "Odebrat zdroj",
+      "removeConfirm": "Odebrat tento zdroj? Dovednosti, které poskytl, zůstanou jako běžné dovednosti organizace a přestanou se obnovovat.",
+      "removed": "Zdroj odebrán.",
+      "removeError": "Nelze odebrat zdroj dovednosti",
+      "loading": "Načítání zdrojů…",
+      "loadError": "Zdroje dovedností nelze načíst.",
+      "empty": "Zatím žádné zdroje dovedností.",
+      "never": "Nikdy nesynchronizováno",
+      "statusOk": "Synchronizováno",
+      "statusError": "Synchronizace selhala",
+      "statusPartial": "{count, plural, one {# položka přeskočena} other {# položek přeskočeno}}",
+      "lastSync": "Poslední synchronizace {time}",
+      "entryCount": "{count, plural, one {# položka} other {# položek}}",
+      "entryStatus": {
+        "synced": "synchronizováno",
+        "skipped": "přeskočeno",
+        "conflict": "konflikt — nepřepsáno",
+        "invalid": "neplatné"
+      }
+    }
   },
   "personalSkills": {
     "title": "Osobní dovednosti",

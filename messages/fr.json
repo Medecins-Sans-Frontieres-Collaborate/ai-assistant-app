@@ -902,7 +902,10 @@
       "showDetails": "Afficher les détails de la compétence",
       "hideDetails": "Masquer les détails de la compétence",
       "agentLoad": "chargée par l'agent",
-      "agentSearch": "documents recherchés par l'agent"
+      "agentSearch": "documents recherchés par l'agent",
+      "needsApproval": "nécessite votre approbation",
+      "original": "tel qu’exécuté initialement",
+      "updated": "mis à jour depuis"
     },
     "skillsManualHint": "La sélection automatique est désactivée dans les paramètres. Utilisez une fois pour le prochain message, ou épinglez une compétence pour l'utiliser durant toute cette conversation.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Ajouter un agent de prompt",
     "m365AgentIndexStop": "Arrêter l’indexation",
     "foundryAgentsHeading": "Agents Foundry et de prompt",
-    "foundryAgentsDescription": "Agents découverts via Azure AI Foundry grâce à votre accès, ainsi que les agents de prompt définis ici. Les agents de connaissances et les agents Microsoft 365 sont gérés dans leurs propres sections ci-dessous."
+    "foundryAgentsDescription": "Agents découverts via Azure AI Foundry grâce à votre accès, ainsi que les agents de prompt définis ici. Les agents de connaissances et les agents Microsoft 365 sont gérés dans leurs propres sections ci-dessous.",
+    "agentSkillsLabel": "Compétences",
+    "agentSkillsHelp": "Quelles compétences de l’organisation cet agent peut charger lors des réponses. Les utilisateurs ne voient que les compétences autorisées par leurs règles d’accès.",
+    "agentSkills": {
+      "inherit": "Compétences marquées « disponibles pour les agents »",
+      "selected": "Seulement les compétences sélectionnées ci-dessous",
+      "none": "Aucune compétence"
+    },
+    "agentSkillsNone": "Aucune compétence disponible à sélectionner."
   },
   "localModels": {
     "title": "Modèles locaux",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Automatique",
       "always": "Toujours",
-      "off": "Désactivée"
+      "off": "Désactivée",
+      "manual": "Sur demande"
     },
     "activationHint": {
       "auto": "Sélectionné automatiquement lorsque la tâche actuelle correspond à la description. Les utilisateurs peuvent aussi la demander une fois ou l’épingler à une conversation.",
       "always": "Ajoutée à chaque conversation pour tous ceux qui peuvent voir la compétence. À utiliser avec parcimonie — espace de prompt permanent.",
-      "off": "Inactive : jamais appliquée et non proposée aux utilisateurs, mais conservée ici pour modification."
+      "off": "Inactive : jamais appliquée et non proposée aux utilisateurs, mais conservée ici pour modification.",
+      "manual": "Appliqué seulement quand un utilisateur le demande ou l’épingle. Jamais sélectionné automatiquement et non proposé au modèle comme compétence à charger."
     },
     "instructionsLabel": "Instructions",
     "instructionsHint": "Markdown, jusqu'à 16 Ko. Injecté tel quel lorsque la compétence est active.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Ces documents doivent être réindexés pour la configuration actuelle de recherche et d’intégration régionale. Ils ne seront pas accessibles par la recherche tant que l’indexation n’est pas terminée."
     },
     "applyToAgents": "Disponible pour les agents",
-    "applyToAgentsHint": "Désactivé par défaut. Lorsqu’il est activé, les agents peuvent charger cette compétence via des outils en lecture seule, au lieu de remplacer les instructions de leur persona. Les appels de compétence ont des limites d’étapes indépendantes. Les agents Foundry doivent déjà avoir les fonctions load_skill et search_skill_documents enregistrées dans leur définition."
+    "applyToAgentsHint": "Désactivé par défaut. Lorsqu’il est activé, les agents peuvent charger cette compétence via des outils en lecture seule, au lieu de remplacer les instructions de leur persona. Les appels de compétence ont des limites d’étapes indépendantes. Les agents Foundry doivent déjà avoir les fonctions load_skill et search_skill_documents enregistrées dans leur définition.",
+    "requireConsent": "Demander avant d’appliquer",
+    "requireConsentHint": "Quand le modèle souhaite appliquer cette compétence de façon autonome, l’utilisateur est d’abord sollicité. Les usages demandés et épinglés ne nécessitent pas de confirmation.",
+    "consentChip": "Demande d’abord",
+    "sourceChip": "Depuis la source",
+    "sourceChipHint": "Fournie par une source de compétence souscrite ; les instructions sont actualisées lors de la synchronisation. Activation, agent et paramètres de consentement vous appartiennent.",
+    "sources": {
+      "title": "Sources de compétences",
+      "description": "Abonnez-vous à un catalogue externe de compétences (un index.json listant des fichiers SKILL.md). Ses compétences deviennent les compétences de l’organisation et sont actualisées toutes les six heures environ. Seul SKILL.md est importé ; les documents de référence ne le sont pas.",
+      "urlLabel": "URL du catalogue",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Doit être en https sur un hôte public. Les fichiers de compétence sont lus uniquement depuis le même emplacement.",
+      "labelLabel": "Libellé (facultatif)",
+      "add": "S’abonner",
+      "adding": "Abonnement en cours…",
+      "added": "{count, plural, =0 {Source ajoutée ; aucune compétence importée pour l’instant} one {Source ajoutée ; # compétence importée} other {Source ajoutée ; # compétences importées}}",
+      "addedWithError": "Source ajoutée, mais la première synchronisation a échoué. Vérifiez l’erreur sur la source.",
+      "addError": "Impossible d’ajouter la source de compétences",
+      "sync": "Synchroniser maintenant",
+      "syncing": "Synchronisation…",
+      "synced": "Source synchronisée.",
+      "syncError": "Impossible de synchroniser la source de compétences",
+      "remove": "Retirer la source",
+      "removeConfirm": "Retirer cette source ? Les compétences fournies restent comme compétences ordinaires de l’organisation et cessent d’être actualisées.",
+      "removed": "Source retirée.",
+      "removeError": "Impossible de retirer la source de compétences",
+      "loading": "Chargement des sources…",
+      "loadError": "Impossible de charger les sources de compétences.",
+      "empty": "Aucune source de compétences pour le moment.",
+      "never": "Jamais synchronisée",
+      "statusOk": "Synchronisée",
+      "statusError": "Échec de la synchronisation",
+      "statusPartial": "{count, plural, one {# entrée ignorée} other {# entrées ignorées}}",
+      "lastSync": "Dernière synchronisation {time}",
+      "entryCount": "{count, plural, one {# entrée} other {# entrées}}",
+      "entryStatus": {
+        "synced": "synchronisée",
+        "skipped": "ignorée",
+        "conflict": "conflit — non remplacée",
+        "invalid": "non valide"
+      }
+    }
   },
   "personalSkills": {
     "title": "Compétences personnelles",

@@ -1014,7 +1014,10 @@
       "showDetails": "Erekana ibisobanuro by’ubumenyi",
       "hideDetails": "Hisha ibisobanuro by’ubumenyi",
       "agentLoad": "byapakuruwe n’umukozi",
-      "agentSearch": "inyandiko zashakishijwe n’umukozi"
+      "agentSearch": "inyandiko zashakishijwe n’umukozi",
+      "needsApproval": "bisaba ko ubishyiraho uruhushya",
+      "original": "uko byari bikorwa mbere",
+      "updated": "byahinduwe kuva icyo gihe"
     },
     "skillsManualHint": "Guhitamo byikora birazimye muri Settings. Koresha inshuro imwe ku butumwa bukurikira, cyangwa shyiraho ubuhanga bwihariye kugira ngo bukomeze gukoreshwa muri iki kiganiro.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Ongeraho umukozi w'amabwiriza",
     "m365AgentIndexStop": "Hagarika kubika ibigize",
     "foundryAgentsHeading": "Abakozi ba Foundry n'ab'amabwiriza",
-    "foundryAgentsDescription": "Abakozi babonetse muri Azure AI Foundry ukoresheje uburenganzira bwawe, hamwe n'abakozi b'amabwiriza washyize hano. Abakozi b'ubumenyi n'abakozi ba Microsoft 365 bashyirwa ahabugenewe hepfo."
+    "foundryAgentsDescription": "Abakozi babonetse muri Azure AI Foundry ukoresheje uburenganzira bwawe, hamwe n'abakozi b'amabwiriza washyize hano. Abakozi b'ubumenyi n'abakozi ba Microsoft 365 bashyirwa ahabugenewe hepfo.",
+    "agentSkillsLabel": "Ubumenyi",
+    "agentSkillsHelp": "Ni ubuhe bumenyi bw’umuryango uyu mukozi yemerewe gukoresha mu gusubiza. Abakoresha bakomeza kubona gusa ubumenyi bemerewe n’amategeko yo kubona.",
+    "agentSkills": {
+      "inherit": "Ubumenyi bwashyizweho “buboneka ku bakozi”",
+      "selected": "Ubumenyi bwatoranijwe hasi aha gusa",
+      "none": "Nta bumenyi"
+    },
+    "agentSkillsNone": "Nta bumenyi buboneka bwo gutoranya."
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Automatic",
       "always": "Burigihe",
-      "off": "Bikuyemo"
+      "off": "Bikuyemo",
+      "manual": "Ku busabe"
     },
     "activationHint": {
       "auto": "Buhitamo bwikoreye igihe akazi uri gukora gahuje n'ibisobanuro. Abakoresha bashobora no kubusaba rimwe cyangwa bakabushyira kuri ikiganiro.",
       "always": "Bikorera buri kiganiro ku muntu wese ubona ubu bushobozi. Bikoresha gake — ni umwanya uhoraho.",
-      "off": "Ntibikoreshwa: ntibyakoreshwa cyangwa ntibitangwa ku bakoreshwa, ariko bigumirwa hano kugira ngo bihindurwe."
+      "off": "Ntibikoreshwa: ntibyakoreshwa cyangwa ntibitangwa ku bakoreshwa, ariko bigumirwa hano kugira ngo bihindurwe.",
+      "manual": "Bishyirwa mu bikorwa igihe umukozi abisabye cyangwa abishyizeho urufunguzo. Ntibitoranwa byikora kandi ntibitangwa nk'ubumenyi bwabikwa ku cyitegererezo."
     },
     "instructionsLabel": "Amabwiriza",
     "instructionsHint": "Markdown, kugeza kuri 16 KB. Ishyirwa mo uko iri igihe ubumenyi bukora.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Ibi byangombwa bisaba kongera kubishyira mu rutonde kugira ngo bijyanye n'imikoreshereze y'ishakisha ndetse n'imiterere yo kubishyira hamwe y'akarere. Ntibizashakishwa kugeza igihe ibikorwa byo kubishyira mu rutonde birangiye."
     },
     "applyToAgents": "Bupfa kuboneka ku bakozi",
-    "applyToAgentsHint": "Ibi ntabwo bikora by default. Iyo byemewe, abakozi bashobora gukoresha ubu bumenyi binyuze mu bikoresho bisomeka gusa aho guhindura amabwiriza y'umwirondoro. Gutanga skill bifite imbibi z'intambwe zigenga. Abakozi ba Foundry bagomba kuba bafite imikorere ya load_skill na search_skill_documents yamaze kwandikwa mu isobanuro ryabo."
+    "applyToAgentsHint": "Ibi ntabwo bikora by default. Iyo byemewe, abakozi bashobora gukoresha ubu bumenyi binyuze mu bikoresho bisomeka gusa aho guhindura amabwiriza y'umwirondoro. Gutanga skill bifite imbibi z'intambwe zigenga. Abakozi ba Foundry bagomba kuba bafite imikorere ya load_skill na search_skill_documents yamaze kwandikwa mu isobanuro ryabo.",
+    "requireConsent": "Baza mbere yo gukoresha",
+    "requireConsentHint": "Igihe icyitegererezo gishaka gukoresha ubu bumenyi ku giti cyacyo, umukozi arabazwa mbere. Gukoreshwa bisabwe cyangwa byashizwemo urufunguzo ntibisaba kwemezwa.",
+    "consentChip": "Barabaza mbere",
+    "sourceChip": "Biva ku isoko",
+    "sourceChipHint": "Bitangwa n’isoko ry’ubumenyi uba waranditseho; amabwiriza avugururwa igihe ushyizeho sync. Imikoreshereze, abanyabumeni n'ibijyanye no kwemera ni ibyawe.",
+    "sources": {
+      "title": "Amasoko y'ubumenyi",
+      "description": "Iyandikishe ku gitabo cy’ubumenyi cyo hanze (index.json ikubiyemo SKILL.md). Ubu bumenyi buboneka nk’ubw’umuryango bugasubirwamo buri masaha atandatu. SKILL.md niyo yinjizwa gusa; inyandiko z’inyongera ntizijyamo.",
+      "urlLabel": "URL y'igitabo",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Bigomba kuba ari https ku rubuga rusanzwe. Imfashanyigisho z'ubumenyi zisomwa gusa aho hantu.",
+      "labelLabel": "Izina (si ngombwa)",
+      "add": "Iyandikishe",
+      "adding": "Birimo kwiyandikisha…",
+      "added": "{count, plural, =0 {Isoko ryashyizweho; nta bumenyi burinjizwa} one {Isoko ryashyizweho; # bumenyi ryarinjiye} other {Isoko ryashyizweho; # bumenyi byinjiye}}",
+      "addedWithError": "Isoko ryashyizweho, ariko synchronization ya mbere yananiranye. Reba ikosa kuri iryo soko.",
+      "addError": "Ntibyakunze kongera isoko y'ubumenyi",
+      "sync": "Sukuma ubu",
+      "syncing": "Birimo gusukuma…",
+      "synced": "Isoko isukuwe.",
+      "syncError": "Ntibyakunze gusukuma isoko y'ubumenyi",
+      "remove": "Kuraho isoko",
+      "removeConfirm": "Ushaka kuvanaho iri soko? Ubumenyi bwayo burasigara nk’ubw’umuryango busanzwe kandi ntibuzongera kuvugururwa.",
+      "removed": "Isoko yavanyweho.",
+      "removeError": "Ntibyakunze gukuraho isoko y'ubumenyi",
+      "loading": "Birimo gukura amasoko…",
+      "loadError": "Amasoko y’ubumenyi ntashoboye kwinjizwa.",
+      "empty": "Nta masoko y'ubumenyi araboneka.",
+      "never": "Ntirasukurwa na rimwe",
+      "statusOk": "Byasukuwe",
+      "statusError": "Gusukura byaranze",
+      "statusPartial": "{count, plural, one {# ntibyinjijwe} other {# ntibyinjijwe}}",
+      "lastSync": "Gusukura kwa nyuma {time}",
+      "entryCount": "{count, plural, one {# winjiye} other {# byinjiye}}",
+      "entryStatus": {
+        "synced": "bysukuwe",
+        "skipped": "byasimbuwe",
+        "conflict": "kutumvikana — ntibyanditsweho",
+        "invalid": "bidakurikije amabwiriza"
+      }
+    }
   },
   "personalSkills": {
     "title": "Ubumenyi ku giti cyawe",

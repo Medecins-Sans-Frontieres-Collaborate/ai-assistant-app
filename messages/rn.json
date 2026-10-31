@@ -1014,7 +1014,10 @@
       "showDetails": "Emeza ivyerekeye ubumenyi",
       "hideDetails": "Nyegeza ivyerekeye ubumenyi",
       "agentLoad": "vyashizweko n'uwukora",
-      "agentSearch": "inyandiko zarashakwe n'uwukora"
+      "agentSearch": "inyandiko zarashakwe n'uwukora",
+      "needsApproval": "bisaba uruhushwa rwawe",
+      "original": "uko vyakoreshejwe ubwa mbere",
+      "updated": "vyahinduwe kuva ico gihe"
     },
     "skillsManualHint": "Guhitamwo bihanitse vyakuwe muri Ivyashizweho. Koresha rimwe ku butumwa bukurikira, canke ufate ubumenyi kugirango ubukoreshe muri iyi biganiro yose.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Ongerako agent wa prompt",
     "m365AgentIndexStop": "Hagarika indexing",
     "foundryAgentsHeading": "Agents ba Foundry n'aba prompt",
-    "foundryAgentsDescription": "Agents basanzwe barabonetse avyavuye kuri Azure AI Foundry uko wavyemerewe, hamwe n'aba prompt agents wanditse hano. Agents b'ubumenyi hamwe n'aba Microsoft 365 agents biragengwa mu mashira yabo hasi."
+    "foundryAgentsDescription": "Agents basanzwe barabonetse avyavuye kuri Azure AI Foundry uko wavyemerewe, hamwe n'aba prompt agents wanditse hano. Agents b'ubumenyi hamwe n'aba Microsoft 365 agents biragengwa mu mashira yabo hasi.",
+    "agentSkillsLabel": "Ubushobozi",
+    "agentSkillsHelp": "Ni ubushobozi bwo mu gisata uyu mugenzi ashobora gukoresha mu gusubiza. Abakoresha babona gusa ubushobozi bemerewe n'ibiteganywa n'amategeko.",
+    "agentSkills": {
+      "inherit": "Ubushobozi bwanditse \"buboneka ku bagenzi\"",
+      "selected": "Ubushobozi bwatorwa hepfo",
+      "none": "Nta bushobozi"
+    },
+    "agentSkillsNone": "Nta bushobozi buboneka vyo gutora."
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Automatic",
       "always": "Always",
-      "off": "Off"
+      "off": "Off",
+      "manual": "Bisabwe"
     },
     "activationHint": {
       "auto": "Buhitwako bwikora igihe igikorwa gihuye n'ivyo bisobanuro. Abakoresha bashobora kandi kubusaba rimwe canke bakabusweza mu kiganiro.",
       "always": "Ishirwa ku kiganiro cose ku wose abibona. Koresha gake — iyi ni espace y'amabwirizwa igihe cose.",
-      "off": "Ntibikora: ntibikora ntibihabwa abakoresha, ariko bisigara ngaha vyogurikurwa."
+      "off": "Ntibikora: ntibikora ntibihabwa abakoresha, ariko bisigara ngaha vyogurikurwa.",
+      "manual": "Bikora gusa iyo umukoresha abisavye canke abishize imbere. Ntivyatorwa vyikora kandi ntibihabwa model kugira bikoreshe."
     },
     "instructionsLabel": "Amabwirizwa",
     "instructionsHint": "Markdown, gushika kuri 16 KB. Irashirwa uko imeze igihe ubushobozi bukora.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Ivyandikwa vy'aha birakeneye gusubira kugirwa indexing kugira bihuye n'ikorwa rya Search n'ishirwaho ry'ishema rigezweho ry'akarere. Ntibizoshobora kuronderwa gushika indexing irangiye."
     },
     "applyToAgents": "Biboneka ku bakozi",
-    "applyToAgentsHint": "Kigenwa ko atari ngombwa. Iyo wemeje, abakozi bashobora kugurura ubu bumenyi biciye mu bikoresho bisomeka gusa aho gusimbuza amabwirizwa yabo y'ukuntu bakora. Uko ukoresheje ubumenyi ufise umupaka w'intambwe wigenga. Abakozi ba Foundry bagomba kuba bafise functions za load_skill na search_skill_documents ziri muri definition yabo."
+    "applyToAgentsHint": "Kigenwa ko atari ngombwa. Iyo wemeje, abakozi bashobora kugurura ubu bumenyi biciye mu bikoresho bisomeka gusa aho gusimbuza amabwirizwa yabo y'ukuntu bakora. Uko ukoresheje ubumenyi ufise umupaka w'intambwe wigenga. Abakozi ba Foundry bagomba kuba bafise functions za load_skill na search_skill_documents ziri muri definition yabo.",
+    "requireConsent": "Baza mbere yo kubikoresha",
+    "requireConsentHint": "Iyo model ishaka gutunganya ubu bushobozi yonyene, umukoresha abanza kubisabwa. Bisabwe canke vyashizwe imbere ntibisaba kwemeza.",
+    "consentChip": "Ibaza mbere",
+    "sourceChip": "Vyaturutse ku soko",
+    "sourceChipHint": "Bitangwa n’isoko ry’ubushobozi wiyandikiyeko; amabwirizwa aravugururwa igihe ugize sync. Ugomba gutunganya uko bishirwa mu bikorwa, abagenzi, no gusaba uruhushwa.",
+    "sources": {
+      "title": "Amasoko y’ubushobozi",
+      "description": "Iyandikishe kuri catalog y’ubushobozi yo hanze (index.json iranga SKILL.md). Ubushobozi bwa catalog bubaye ubw’ishirahamwe kandi bugavugururwa buri masaha atandatu. SKILL.md gusa niyo yinjizwa; inyandiko z’ivyerekezo ntiziyinjizwa.",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "URL igomba kuba https kuri host izwi. Files z’ubushobozi zisomwa aho nyene gusa.",
+      "labelLabel": "Label (ntibiteguwe)",
+      "add": "Iyandikishe",
+      "adding": "Hariko hariyandikisha…",
+      "added": "{count, plural, =0 {Isoko ryiyandikishijwe; ntabu bushobozi bwashizweko} one {Isoko ryiyandikishijwe; ubushobozi bumwe bwashizweko} other {Isoko ryiyandikishijwe; ubushobozi # bwashizweko}}",
+      "addedWithError": "Isoko ryiyandikishijwe, ariko sync ya mbere yarananiranye. Raba ikosa kuri iryo soko.",
+      "addError": "Ntivyashobotse kwiyandikisha ku soko ry’ubushobozi",
+      "sync": "Sync ubu",
+      "syncing": "Hariko harakora sync…",
+      "synced": "Isoko ryavuguruwe.",
+      "syncError": "Ntivyashobotse gukora sync ku soko ry’ubushobozi",
+      "remove": "Kuraho isoko",
+      "removeConfirm": "Kuraho isoko? Ubushobozi bwashizweko busigara nk’ubwa organisation kandi ntibukivugururwa.",
+      "removed": "Isoko ryakuweho.",
+      "removeError": "Ntivyashobotse gukuraho isoko ry’ubushobozi",
+      "loading": "Hariko harashora amasoko…",
+      "loadError": "Amasoko y’ubushobozi ntashoboye gushingwa.",
+      "empty": "Nta soko ry’ubushobozi rirashirwa.",
+      "never": "Ntivyigeze bivugururwa",
+      "statusOk": "Vyavuguruwe",
+      "statusError": "Sync yarananiranye",
+      "statusPartial": "{count, plural, one {Entry imwe yasizwe} other {Entries # zasizwe}}",
+      "lastSync": "Sync ya nyuma {time}",
+      "entryCount": "{count, plural, one {Entry imwe} other {Entries #}}",
+      "entryStatus": {
+        "synced": "vyavuguruwe",
+        "skipped": "vyarengagijwe",
+        "conflict": "ukunanirwa — ntivyashizweko",
+        "invalid": "ntibikwiye"
+      }
+    }
   },
   "personalSkills": {
     "title": "Ubushobozi bwite",

@@ -1014,7 +1014,10 @@
       "showDetails": "Faahfaahinta aqoonta muuji",
       "hideDetails": "Faahfaahinta aqoonta qari",
       "agentLoad": "waxa uu wakiilku xambaarsaday",
-      "agentSearch": "dukumentiyada uu wakiilku raadiyay"
+      "agentSearch": "dukumentiyada uu wakiilku raadiyay",
+      "needsApproval": "waxaa u baahan oggolaanshahaaga",
+      "original": "sida markii hore loo orodsiiyay",
+      "updated": "waxaa la cusboonaysiiyay tan iyo"
     },
     "skillsManualHint": "Xulashada otomaatiga ah waa deman tahay ee Dejinta. Isticmaal hal mar farriinta xigta, ama ku lifaaq xirfadda si aad ugu isticmaasho wada sheekaysigan oo dhan.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Ku dar wakiil prompt ah",
     "m365AgentIndexStop": "Jooji tusmada",
     "foundryAgentsHeading": "Wakiillada Foundry iyo prompt-ka",
-    "foundryAgentsDescription": "Wakiillo laga helay Azure AI Foundry oo la marayo gelitaankaaga, iyo sidoo kale wakiillada prompt-ka ee halkan lagu qeexay. Wakiillada aqoonta iyo Microsoft 365 waa lagu xakameeyaa qaybaha hoose ee gaarka ah."
+    "foundryAgentsDescription": "Wakiillo laga helay Azure AI Foundry oo la marayo gelitaankaaga, iyo sidoo kale wakiillada prompt-ka ee halkan lagu qeexay. Wakiillada aqoonta iyo Microsoft 365 waa lagu xakameeyaa qaybaha hoose ee gaarka ah.",
+    "agentSkillsLabel": "Xirfadaha",
+    "agentSkillsHelp": "Xirfadee ururka ayuusan wakiilkani culeysan karo intuu jawaabayo. Isticmaalayaashu haddana waxay arki karaan oo kali ah xirfadaha ay shuruucda gelitaanka u oggol yihiin.",
+    "agentSkills": {
+      "inherit": "Xirfadaha loo calaamadeeyay \"loo heli karo wakiillada\"",
+      "selected": "Kaliya xirfadaha la doortay ee hoose",
+      "none": "Xirfado la'aan"
+    },
+    "agentSkillsNone": "Xirfado aan la heli karin si loo doorto."
   },
   "localModels": {
     "title": "Moodallo maxalli ah",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Toos ah",
       "always": "Had iyo Jeer",
-      "off": "Dami"
+      "off": "Dami",
+      "manual": "Marka la codsado"
     },
     "activationHint": {
       "auto": "Si toos ah ayaa loo doortaa marka hawsha hadda jirta la mid tahay sharraxaadda. Isticmaalayaashu waxay sidoo kale codsan karaan hal mar ama si joogto ah ugu xiraan wada hadalka.",
       "always": "Waa lagu darayaa wadahadal kasta qof walba oo arka xirfadda. Si dheellitiran u isticmaal — tani waa meel joogto ah oo loo qoondeeyo tilmaamaha.",
-      "off": "Aan firfircoonayn: waligeed lama adeegsanayo lagumana soo bandhigayo isticmaalayaasha, balse waa lagu hayaa halkan si loo tafatiro."
+      "off": "Aan firfircoonayn: waligeed lama adeegsanayo lagumana soo bandhigayo isticmaalayaasha, balse waa lagu hayaa halkan si loo tafatiro.",
+      "manual": "Kaliya la adeegsado marka isticmaale codsado ama ku dhajiyo. Si otomaatig ah looma doorto mana loo soo bandhigo moodeelka sidii xirfad la culeysan karo."
     },
     "instructionsLabel": "Tilmaamaha",
     "instructionsHint": "Markdown, ilaa 16 KB. Waxaa si toos ah loogu dari doonaa marka xirfadda firfircoon tahay.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Dukumentiyadan waa in si dib ah loo tusmeeyaa si ay ugu ekaadaan habeynta Raadinta iyo Embedding ee gobolka hadda. Lama raadin doono ilaa tusmeyntu dhammaato."
     },
     "applyToAgents": "Wakiillada waa u diyaar",
-    "applyToAgentsHint": "Waa dansan yahay asalka. Markaad hawlgeliso, wakiilladu waxay xirfaddan ku furi karaan qalab akhris oo keliya ah halkii ay ka beddeli lahaayeen tilmaamahooda shaqsiyeed. Wicitaanada xirfadda waxay leeyihiin xad tallaabo oo madax bannaan. Wakiillada Foundry waa in horay loogu diiwaangeliyey shaqooyinka load_skill iyo search_skill_documents."
+    "applyToAgentsHint": "Waa dansan yahay asalka. Markaad hawlgeliso, wakiilladu waxay xirfaddan ku furi karaan qalab akhris oo keliya ah halkii ay ka beddeli lahaayeen tilmaamahooda shaqsiyeed. Wicitaanada xirfadda waxay leeyihiin xad tallaabo oo madax bannaan. Wakiillada Foundry waa in horay loogu diiwaangeliyey shaqooyinka load_skill iyo search_skill_documents.",
+    "requireConsent": "Weydii ka hor intaadan adeegsan",
+    "requireConsentHint": "Marka moodeelku uu doonayo inuu si iskiis ah u adeegsado xirfadan, isticmaalaha waa la weydiin doonaa marka hore. Isticmaalka la codsaday ama la dhajiyay ma u baahna xaqiijin.",
+    "consentChip": "Weydii marka hore",
+    "sourceChip": "Ka timi il",
+    "sourceChipHint": "Waxaa keenay ilo xirfadeed oo la isdiiwaan geliyay; tilmaamaha waala cusbooneysiiyaa marka la is waafajiyo. Dejiyaasha hawlgelinta, wakiilka iyo oggolaanshaha adigaa iska leh.",
+    "sources": {
+      "title": "Ilaha xirfadaha",
+      "description": "Isdiiwaan geli liiska xirfadaha dibedda (index.json oo ay ku taxan yihiin faylasha SKILL.md). Xirfadahiisa waxay noqonayaan xirfadaha ururka waxayna is cusbooneysiiyaan qiyaastii lixdii saacba mar. Kaliya SKILL.md ayaa la soo dhoofsadaa; dukumeentiyada tixraaca lama soo dhoofiyo.",
+      "urlLabel": "URL Liiska",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Waa inuu noqdaa https oo ku jira host dadweyne. Faylasha xirfadaha waxaa laga akhriyaa isla meeshaas oo kaliya.",
+      "labelLabel": "Summad (ikhtiyaari)",
+      "add": "Isdiiwaan geli",
+      "adding": "Isdiiwaan gelinaya…",
+      "added": "{count, plural, =0 {Isha waa la daray; wali lagama dhoofin xirfado} one {Isha waa la daray; # xirfad waa la dhoofiyay} other {Isha waa la daray; # xirfado waa la dhoofiyay}}",
+      "addedWithError": "Isha waa la daray, balse is-waafajintii hore waa ay fashilantay. Fiiri khaladka ku jira isha.",
+      "addError": "Lama awoodo in la daro isha xirfadda",
+      "sync": "Waafaji hadda",
+      "syncing": "Waa la waafajinayaa…",
+      "synced": "Isha waa la waafajiyay.",
+      "syncError": "Lama awoodo in la waafajiyo isha xirfadda",
+      "remove": "Ka saar isha",
+      "removeConfirm": "Ma ka saari doontaa ishan? Xirfadaha ay keentay waxay sii ahaanayaan xirfado caadi ah oo urur ah waana ka istaagaan inay is cusbooneysiiyaan.",
+      "removed": "Isha waa la saaray.",
+      "removeError": "Lama awoodo in la saaro isha xirfadda",
+      "loading": "Waa la soo xambaarayaa ilaha…",
+      "loadError": "Ilaha xirfadaha lama soo xambaarin karo.",
+      "empty": "Ilaha xirfado lama helin weli.",
+      "never": "Waligaa lama waafajin",
+      "statusOk": "La waafajiyay",
+      "statusError": "Waafajin waa ay fashilantay",
+      "statusPartial": "{count, plural, one {# diiwaan la booday} other {# diiwaan la booday}}",
+      "lastSync": "Waafajintii ugu dambeysay {time}",
+      "entryCount": "{count, plural, one {# diiwaan} other {# diiwaan}}",
+      "entryStatus": {
+        "synced": "la waafajiyay",
+        "skipped": "la booday",
+        "conflict": "iska horimaad — lama baddalin",
+        "invalid": "aan sax ahayn"
+      }
+    }
   },
   "personalSkills": {
     "title": "Xirfadaha shaqsiyeed",

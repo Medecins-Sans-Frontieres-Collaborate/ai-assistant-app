@@ -956,7 +956,10 @@
       "showDetails": "Beceri detaylarını göster",
       "hideDetails": "Beceri detaylarını gizle",
       "agentLoad": "ajan tarafından yüklendi",
-      "agentSearch": "ajan tarafından belgeler arandı"
+      "agentSearch": "ajan tarafından belgeler arandı",
+      "needsApproval": "onayınızı gerektiriyor",
+      "original": "ilk çalıştırıldığı gibi",
+      "updated": "sonradan güncellendi"
     },
     "skillsManualHint": "Otomatik seçim Ayarlar'da kapalı. Bir sonraki mesaj için bir kez kullanabilir veya bir yeteneği sabitleyerek bu görüşme boyunca kullanabilirsiniz.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Prompt ajanı ekle",
     "m365AgentIndexStop": "Dizini durdur",
     "foundryAgentsHeading": "Foundry ve prompt ajanları",
-    "foundryAgentsDescription": "Azure AI Foundry'den kendi erişiminizle keşfedilen ajanlar ve burada tanımlanan prompt ajanları. Bilgi ajanları ve Microsoft 365 ajanları aşağıda kendi bölümlerinde yönetilmektedir."
+    "foundryAgentsDescription": "Azure AI Foundry'den kendi erişiminizle keşfedilen ajanlar ve burada tanımlanan prompt ajanları. Bilgi ajanları ve Microsoft 365 ajanları aşağıda kendi bölümlerinde yönetilmektedir.",
+    "agentSkillsLabel": "Yetenekler",
+    "agentSkillsHelp": "Bu ajanın yanıtlarken yükleyebileceği organizasyon yetenekleri. Kullanıcılar sadece erişim kurallarının izin verdiği yetenekleri görebilir.",
+    "agentSkills": {
+      "inherit": "“Ajana açık” olarak işaretlenmiş yetenekler",
+      "selected": "Yalnızca aşağıda seçilen yetenekler",
+      "none": "Yetenek yok"
+    },
+    "agentSkillsNone": "Seçilebilecek yetenek yok."
   },
   "localModels": {
     "title": "Yerel modeller",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Otomatik",
       "always": "Her zaman",
-      "off": "Kapalı"
+      "off": "Kapalı",
+      "manual": "İstek üzerine"
     },
     "activationHint": {
       "auto": "Mevcut görev açıklamayla eşleştiğinde otomatik olarak seçilir. Kullanıcılar ayrıca bir kez kullanmayı talep edebilir veya bir sohbet için sabitleyebilir.",
       "always": "Yetenek gören herkes için her konuşmaya eklenir. Dikkatli kullanın — bu alan kalıcıdır.",
-      "off": "Etkin değil: Asla uygulanmaz ve kullanıcılara sunulmaz, ancak düzenleme için burada tutulur."
+      "off": "Etkin değil: Asla uygulanmaz ve kullanıcılara sunulmaz, ancak düzenleme için burada tutulur.",
+      "manual": "Sadece bir kullanıcı talep ettiğinde veya sabitlediğinde uygulanır. Asla otomatik seçilmez ve modele yüklenebilir yetenek olarak sunulmaz."
     },
     "instructionsLabel": "Talimatlar",
     "instructionsHint": "Markdown, en fazla 16 KB. Yetenek etkin olduğunda olduğu gibi eklenir.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Bu belgelerin, mevcut bölgesel Arama ve gömme yapılandırması için yeniden indekslenmesi gerekiyor. İndeksleme tamamlanana kadar arama yapılamayacaktır."
     },
     "applyToAgents": "Ajanlar için kullanılabilir",
-    "applyToAgentsHint": "Varsayılan olarak kapalıdır. Etkinleştirildiğinde, ajanlar bu beceriyi sadece okuma modunda araçlar üzerinden yükleyebilir ve kendi kimlik talimatlarını değiştirmeden kullanabilir. Beceri çağrılarının adım sınırları birbirinden bağımsızdır. Foundry ajanlarının tanımlarında load_skill ve search_skill_documents fonksiyonlarının zaten kayıtlı olması gerekir."
+    "applyToAgentsHint": "Varsayılan olarak kapalıdır. Etkinleştirildiğinde, ajanlar bu beceriyi sadece okuma modunda araçlar üzerinden yükleyebilir ve kendi kimlik talimatlarını değiştirmeden kullanabilir. Beceri çağrılarının adım sınırları birbirinden bağımsızdır. Foundry ajanlarının tanımlarında load_skill ve search_skill_documents fonksiyonlarının zaten kayıtlı olması gerekir.",
+    "requireConsent": "Uygulamadan önce sor",
+    "requireConsentHint": "Model bu yeteneği kendi başına uygulamak istediğinde, önce kullanıcıya sorulur. İstenilen ve sabitlenmiş kullanımlar onay gerektirmez.",
+    "consentChip": "Önce sorar",
+    "sourceChip": "Kaynaktan",
+    "sourceChipHint": "Abone olunan bir yetenek kaynağından sağlanır; talimatlar senkronize edilirken güncellenir. Aktifleştirme, ajan ve onay ayarları size aittir.",
+    "sources": {
+      "title": "Yetenek kaynakları",
+      "description": "Harici bir yetenek kataloğuna abone olun (SKILL.md dosyalarını listeleyen bir index.json). Yetenekleri organizasyon yeteneği olur ve yaklaşık her altı saatte bir yenilenir. Sadece SKILL.md içe aktarılır; referans belgeleri dahil değildir.",
+      "urlLabel": "Katalog URL’si",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Genel bir sunucuda https olmalı. Yetenek dosyaları yalnızca aynı konumdan okunur.",
+      "labelLabel": "Etiket (isteğe bağlı)",
+      "add": "Abone ol",
+      "adding": "Abone olunuyor…",
+      "added": "{count, plural, =0 {Kaynak eklendi; henüz yetenek içe aktarılmadı} one {Kaynak eklendi; # yetenek içe aktarıldı} other {Kaynak eklendi; # yetenek içe aktarıldı}}",
+      "addedWithError": "Kaynak eklendi, ancak ilk senkronizasyon başarısız oldu. Kaynaktaki hataya bakın.",
+      "addError": "Yetenek kaynağı eklenemedi",
+      "sync": "Şimdi senkronize et",
+      "syncing": "Senkronize ediliyor…",
+      "synced": "Kaynak senkronize edildi.",
+      "syncError": "Yetenek kaynağı senkronize edilemedi",
+      "remove": "Kaynağı kaldır",
+      "removeConfirm": "Bu kaynağı kaldırmak istiyor musunuz? Sağladığı yetenekler sıradan organizasyon yeteneği olarak kalır ve yenilenmez.",
+      "removed": "Kaynak kaldırıldı.",
+      "removeError": "Yetenek kaynağı kaldırılamadı",
+      "loading": "Kaynaklar yükleniyor…",
+      "loadError": "Yetenek kaynakları yüklenemedi.",
+      "empty": "Henüz yetenek kaynağı yok.",
+      "never": "Hiç senkronize edilmedi",
+      "statusOk": "Senkronize edildi",
+      "statusError": "Senkronizasyon başarısız",
+      "statusPartial": "{count, plural, one {# kayıt atlandı} other {# kayıtlar atlandı}}",
+      "lastSync": "Son senkronizasyon {time}",
+      "entryCount": "{count, plural, one {# kayıt} other {# kayıt}}",
+      "entryStatus": {
+        "synced": "senkronize edildi",
+        "skipped": "atlandı",
+        "conflict": "çatışma — üzerine yazılmadı",
+        "invalid": "geçersiz"
+      }
+    }
   },
   "personalSkills": {
     "title": "Kişisel beceriler",

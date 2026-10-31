@@ -931,7 +931,10 @@
       "showDetails": "Näytä taidon tiedot",
       "hideDetails": "Piilota taidon tiedot",
       "agentLoad": "agentti latasi",
-      "agentSearch": "agentti haki dokumentteja"
+      "agentSearch": "agentti haki dokumentteja",
+      "needsApproval": "vaatii hyväksyntäsi",
+      "original": "alun perin suoritettu",
+      "updated": "päivitetty sen jälkeen"
     },
     "skillsManualHint": "Automaattinen valinta on pois päältä asetuksissa. Käytä kerran seuraavan viestin kohdalla tai kiinnitä taito käyttääksesi sitä koko keskustelun ajan.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Lisää prompt-agentti",
     "m365AgentIndexStop": "Lopeta indeksointi",
     "foundryAgentsHeading": "Foundry- ja prompt-agentit",
-    "foundryAgentsDescription": "Azure AI Foundrysta oman käyttöoikeutesi kautta löydetyt agentit sekä täällä määritellyt prompt-agentit. Knowledge-agentit ja Microsoft 365 -agentit hallitaan omissa osioissaan alla."
+    "foundryAgentsDescription": "Azure AI Foundrysta oman käyttöoikeutesi kautta löydetyt agentit sekä täällä määritellyt prompt-agentit. Knowledge-agentit ja Microsoft 365 -agentit hallitaan omissa osioissaan alla.",
+    "agentSkillsLabel": "Osaamiset",
+    "agentSkillsHelp": "Mitkä organisaation osaamiset agentti voi ladata vastatessaan. Käyttäjät näkevät edelleen vain osaamiset, joihin heidän käyttöoikeutensa riittävät.",
+    "agentSkills": {
+      "inherit": "Osaamiset, joille on merkitty \"saatavilla agenteille\"",
+      "selected": "Vain alla valitut osaamiset",
+      "none": "Ei osaamisia"
+    },
+    "agentSkillsNone": "Ei valittavia osaamisia."
   },
   "localModels": {
     "title": "Paikalliset mallit",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Automaattinen",
       "always": "Aina",
-      "off": "Pois päältä"
+      "off": "Pois päältä",
+      "manual": "Pyynnöstä"
     },
     "activationHint": {
       "auto": "Valitaan automaattisesti, kun nykyinen tehtävä vastaa kuvausta. Käyttäjät voivat myös pyytää sitä kerran tai kiinnittää sen keskusteluun.",
       "always": "Lisätään jokaiseen keskusteluun niille, jotka näkevät osaamisen. Käytä harkiten — tämä on pysyvää ohjetilaa.",
-      "off": "Ei aktiivinen: ei käytetä eikä tarjota käyttäjille, mutta on muokattavissa täällä."
+      "off": "Ei aktiivinen: ei käytetä eikä tarjota käyttäjille, mutta on muokattavissa täällä.",
+      "manual": "Käytetään vain, kun käyttäjä pyytää tai kiinnittää sen. Ei valita automaattisesti eikä tarjota mallille ladattavaksi osaamiseksi."
     },
     "instructionsLabel": "Ohjeet",
     "instructionsHint": "Markdown, enintään 16 kt. Lisätään sellaisenaan, kun taito on aktiivinen.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Nämä asiakirjat on indeksoitava uudelleen nykyistä alueellista hakua ja upotuksia varten. Niitä ei voi hakea ennen kuin indeksointi on valmis."
     },
     "applyToAgents": "Saatavilla agenteille",
-    "applyToAgentsHint": "Pois päältä oletuksena. Kun tämä on käytössä, agentit voivat ladata tämän taidon vain luku -työkaluina oman persoonakuvauksensa korvaamisen sijaan. Taitokutsujen askelmäärillä on omat rajansa. Foundry-agenttien määrittelyyn tulee olla rekisteröitynä sekä load_skill- että search_skill_documents-toiminnot."
+    "applyToAgentsHint": "Pois päältä oletuksena. Kun tämä on käytössä, agentit voivat ladata tämän taidon vain luku -työkaluina oman persoonakuvauksensa korvaamisen sijaan. Taitokutsujen askelmäärillä on omat rajansa. Foundry-agenttien määrittelyyn tulee olla rekisteröitynä sekä load_skill- että search_skill_documents-toiminnot.",
+    "requireConsent": "Kysy ennen käyttöä",
+    "requireConsentHint": "Kun malli haluaa käyttää tätä osaamista itsenäisesti, käyttäjältä kysytään ensin. Pyydettäessä ja kiinnitettäessä ei tarvita vahvistusta.",
+    "consentChip": "Kysyy ensin",
+    "sourceChip": "Lähteestä",
+    "sourceChipHint": "Tuotu tilatusta osaamislähteestä; ohjeet päivitetään synkronoinnissa. Aktivointi-, agentti- ja suostumusasetukset ovat omiasi.",
+    "sources": {
+      "title": "Osaamislähteet",
+      "description": "Tilaa ulkoinen osaamiskatalogi (index.json, joka luettelee SKILL.md-tiedostot). Osaamiset siirtyvät organisaatiolle ja päivittyvät noin kuuden tunnin välein. Vain SKILL.md tuodaan; viitedokumentteja ei tuoda.",
+      "urlLabel": "Katalogin URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Täytyy olla https-julkisella palvelimella. Osaamistiedostot luetaan vain samasta sijainnista.",
+      "labelLabel": "Nimi (valinnainen)",
+      "add": "Tilaa",
+      "adding": "Tilataan…",
+      "added": "{count, plural, =0 {Lähde lisätty; osaamisia ei vielä tuotu} one {Lähde lisätty; # osaaminen tuotu} other {Lähde lisätty; # osaamista tuotu}}",
+      "addedWithError": "Lähde lisätty, mutta ensimmäinen synkronointi epäonnistui. Tarkista virhe lähteestä.",
+      "addError": "Osaamislähdettä ei voitu lisätä",
+      "sync": "Synkronoi nyt",
+      "syncing": "Synkronoidaan…",
+      "synced": "Lähde synkronoitu.",
+      "syncError": "Osaamislähdettä ei voitu synkronoida",
+      "remove": "Poista lähde",
+      "removeConfirm": "Poistetaanko tämä lähde? Sen tuomat osaamiset jäävät tavallisiksi organisaation osaamisiksi eivätkä enää päivity.",
+      "removed": "Lähde poistettu.",
+      "removeError": "Osaamislähdettä ei voitu poistaa",
+      "loading": "Lähteitä ladataan…",
+      "loadError": "Osaamislähteitä ei voitu ladata.",
+      "empty": "Ei osaamislähteitä vielä.",
+      "never": "Ei koskaan synkronoitu",
+      "statusOk": "Synkronoitu",
+      "statusError": "Synkronointi epäonnistui",
+      "statusPartial": "{count, plural, one {# tietue ohitettu} other {# tietuetta ohitettu}}",
+      "lastSync": "Viimeksi synkronoitu {time}",
+      "entryCount": "{count, plural, one {# tietue} other {# tietuetta}}",
+      "entryStatus": {
+        "synced": "synkronoitu",
+        "skipped": "ohitettu",
+        "conflict": "ristiriita — ei korvattu",
+        "invalid": "virheellinen"
+      }
+    }
   },
   "personalSkills": {
     "title": "Henkilökohtaiset taidot",

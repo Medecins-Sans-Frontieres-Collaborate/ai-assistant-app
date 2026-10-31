@@ -957,7 +957,10 @@
       "showDetails": "Hiện chi tiết kỹ năng",
       "hideDetails": "Ẩn chi tiết kỹ năng",
       "agentLoad": "được agent tải lên",
-      "agentSearch": "tài liệu được agent tìm kiếm"
+      "agentSearch": "tài liệu được agent tìm kiếm",
+      "needsApproval": "cần bạn phê duyệt",
+      "original": "như lúc chạy ban đầu",
+      "updated": "đã cập nhật kể từ đó"
     },
     "skillsManualHint": "Tự động chọn đã tắt trong Cài đặt. Sử dụng một lần cho tin nhắn tiếp theo hoặc ghim kỹ năng để dùng xuyên suốt cuộc trò chuyện này.",
     "queuedMessage": {
@@ -5386,7 +5389,15 @@
     "addPromptAgent": "Thêm tác nhân prompt",
     "m365AgentIndexStop": "Dừng lập chỉ mục",
     "foundryAgentsHeading": "Các tác nhân Foundry và prompt",
-    "foundryAgentsDescription": "Các tác nhân được phát hiện từ Azure AI Foundry qua quyền truy cập của bạn, cùng với các tác nhân prompt được xác định tại đây. Các tác nhân tri thức và tác nhân Microsoft 365 được quản lý ở các phần riêng phía dưới."
+    "foundryAgentsDescription": "Các tác nhân được phát hiện từ Azure AI Foundry qua quyền truy cập của bạn, cùng với các tác nhân prompt được xác định tại đây. Các tác nhân tri thức và tác nhân Microsoft 365 được quản lý ở các phần riêng phía dưới.",
+    "agentSkillsLabel": "Kỹ năng",
+    "agentSkillsHelp": "Những kỹ năng tổ chức mà tác nhân này có thể tải khi trả lời. Người dùng vẫn chỉ thấy những kỹ năng mà quy tắc truy cập cho phép.",
+    "agentSkills": {
+      "inherit": "Kỹ năng được đánh dấu \"có sẵn cho tác nhân\"",
+      "selected": "Chỉ những kỹ năng được chọn bên dưới",
+      "none": "Không có kỹ năng nào"
+    },
+    "agentSkillsNone": "Không có kỹ năng nào để chọn."
   },
   "localModels": {
     "title": "Mô hình cục bộ",
@@ -7766,12 +7777,14 @@
     "activation": {
       "auto": "Tự động",
       "always": "Luôn",
-      "off": "Tắt"
+      "off": "Tắt",
+      "manual": "Theo yêu cầu"
     },
     "activationHint": {
       "auto": "Được chọn tự động khi nhiệm vụ hiện tại phù hợp với mô tả. Người dùng cũng có thể yêu cầu sử dụng một lần hoặc ghim vào cuộc trò chuyện.",
       "always": "Thêm vào mọi cuộc trò chuyện cho tất cả người có thể xem kỹ năng này. Sử dụng hạn chế — đây là phần nhắc vĩnh viễn.",
-      "off": "Không hoạt động: không bao giờ áp dụng và không hiển thị cho người dùng, nhưng vẫn lưu để chỉnh sửa."
+      "off": "Không hoạt động: không bao giờ áp dụng và không hiển thị cho người dùng, nhưng vẫn lưu để chỉnh sửa.",
+      "manual": "Chỉ áp dụng khi người dùng yêu cầu hoặc ghim. Không bao giờ tự động được chọn và không được đề xuất cho mô hình như một kỹ năng có thể tải."
     },
     "instructionsLabel": "Hướng dẫn",
     "instructionsHint": "Markdown, tối đa 16 KB. Được chèn nguyên văn khi kỹ năng được kích hoạt.",
@@ -7804,7 +7817,48 @@
       "reindexRequired": "Các tài liệu này cần được đánh chỉ mục lại theo cấu hình Tìm kiếm và nhúng của khu vực hiện tại. Chúng sẽ không được tìm kiếm cho đến khi việc đánh chỉ mục hoàn tất."
     },
     "applyToAgents": "Có sẵn cho đại diện",
-    "applyToAgentsHint": "Mặc định là tắt. Khi bật, đại diện có thể tải kỹ năng này qua các công cụ chỉ đọc thay vì thay thế hướng dẫn persona của họ. Các lần gọi kỹ năng có giới hạn bước độc lập. Đại diện Foundry phải đã đăng ký các hàm load_skill và search_skill_documents trong định nghĩa của họ."
+    "applyToAgentsHint": "Mặc định là tắt. Khi bật, đại diện có thể tải kỹ năng này qua các công cụ chỉ đọc thay vì thay thế hướng dẫn persona của họ. Các lần gọi kỹ năng có giới hạn bước độc lập. Đại diện Foundry phải đã đăng ký các hàm load_skill và search_skill_documents trong định nghĩa của họ.",
+    "requireConsent": "Hỏi trước khi áp dụng",
+    "requireConsentHint": "Khi mô hình muốn tự áp dụng kỹ năng này, người dùng sẽ được hỏi trước. Các trường hợp được yêu cầu hoặc ghim thì không cần xác nhận.",
+    "consentChip": "Hỏi trước",
+    "sourceChip": "Từ nguồn",
+    "sourceChipHint": "Được cung cấp bởi một nguồn kỹ năng đã đăng ký; hướng dẫn sẽ được làm mới khi đồng bộ. Bạn kiểm soát cài đặt kích hoạt, tác nhân và yêu cầu xác nhận.",
+    "sources": {
+      "title": "Nguồn kỹ năng",
+      "description": "Đăng ký từ một danh mục kỹ năng bên ngoài (một file index.json liệt kê các file SKILL.md). Các kỹ năng này trở thành kỹ năng tổ chức và được làm mới khoảng mỗi sáu giờ. Chỉ SKILL.md được nhập; tài liệu tham khảo thì không.",
+      "urlLabel": "URL danh mục",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Phải là https trên máy chủ công khai. File kỹ năng chỉ được đọc từ đúng vị trí này.",
+      "labelLabel": "Nhãn (tuỳ chọn)",
+      "add": "Đăng ký",
+      "adding": "Đang đăng ký…",
+      "added": "{count, plural, =0 {Nguồn đã được thêm; chưa nhập kỹ năng nào} one {Nguồn đã được thêm; đã nhập # kỹ năng} other {Nguồn đã được thêm; đã nhập # kỹ năng}}",
+      "addedWithError": "Đã thêm nguồn, nhưng đồng bộ lần đầu thất bại. Kiểm tra lỗi ở nguồn.",
+      "addError": "Không thể thêm nguồn kỹ năng",
+      "sync": "Đồng bộ ngay",
+      "syncing": "Đang đồng bộ…",
+      "synced": "Đã đồng bộ nguồn.",
+      "syncError": "Không thể đồng bộ nguồn kỹ năng",
+      "remove": "Xoá nguồn",
+      "removeConfirm": "Xoá nguồn này? Các kỹ năng đã nhận sẽ trở thành kỹ năng tổ chức thông thường và dừng làm mới.",
+      "removed": "Đã xoá nguồn.",
+      "removeError": "Không thể xoá nguồn kỹ năng",
+      "loading": "Đang tải các nguồn…",
+      "loadError": "Không thể tải các nguồn kỹ năng.",
+      "empty": "Chưa có nguồn kỹ năng nào.",
+      "never": "Chưa từng đồng bộ",
+      "statusOk": "Đã đồng bộ",
+      "statusError": "Đồng bộ thất bại",
+      "statusPartial": "{count, plural, one {Bỏ qua # mục} other {Bỏ qua # mục}}",
+      "lastSync": "Đồng bộ lần cuối {time}",
+      "entryCount": "{count, plural, one {# mục} other {# mục}}",
+      "entryStatus": {
+        "synced": "đã đồng bộ",
+        "skipped": "đã bỏ qua",
+        "conflict": "xung đột — không ghi đè",
+        "invalid": "không hợp lệ"
+      }
+    }
   },
   "personalSkills": {
     "title": "Kỹ năng cá nhân",

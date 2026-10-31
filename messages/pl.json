@@ -953,7 +953,10 @@
       "showDetails": "Pokaż szczegóły umiejętności",
       "hideDetails": "Ukryj szczegóły umiejętności",
       "agentLoad": "załadowane przez agenta",
-      "agentSearch": "dokumenty przeszukane przez agenta"
+      "agentSearch": "dokumenty przeszukane przez agenta",
+      "needsApproval": "wymaga Twojej akceptacji",
+      "original": "jak pierwotnie uruchomione",
+      "updated": "zaktualizowane od tego czasu"
     },
     "skillsManualHint": "Automatyczny wybór jest wyłączony w Ustawieniach. Użyj jednorazowo przy następnej wiadomości lub przypnij umiejętność, aby korzystać z niej przez całą rozmowę.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Dodaj agenta promptu",
     "m365AgentIndexStop": "Zatrzymaj indeksowanie",
     "foundryAgentsHeading": "Agenci Foundry i promptu",
-    "foundryAgentsDescription": "Agenci odnalezieni w Azure AI Foundry na podstawie Twojego dostępu oraz agenci promptu zdefiniowani tutaj. Agenci wiedzy i Microsoft 365 są zarządzani w oddzielnych sekcjach poniżej."
+    "foundryAgentsDescription": "Agenci odnalezieni w Azure AI Foundry na podstawie Twojego dostępu oraz agenci promptu zdefiniowani tutaj. Agenci wiedzy i Microsoft 365 są zarządzani w oddzielnych sekcjach poniżej.",
+    "agentSkillsLabel": "Umiejętności",
+    "agentSkillsHelp": "Jakie umiejętności organizacji ten agent może ładować podczas udzielania odpowiedzi. Użytkownicy widzą tylko umiejętności zgodne z ich zasadami dostępu.",
+    "agentSkills": {
+      "inherit": "Umiejętności oznaczone „dostępne dla agentów”",
+      "selected": "Tylko wybrane poniżej umiejętności",
+      "none": "Brak umiejętności"
+    },
+    "agentSkillsNone": "Brak dostępnych umiejętności do wyboru."
   },
   "localModels": {
     "title": "Modele lokalne",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Automatyczne",
       "always": "Zawsze",
-      "off": "Wyłączone"
+      "off": "Wyłączone",
+      "manual": "Na żądanie"
     },
     "activationHint": {
       "auto": "Wybierana automatycznie, gdy bieżące zadanie pasuje do opisu. Użytkownicy mogą też poprosić o użycie jednorazowe lub przypiąć ją do rozmowy.",
       "always": "Dodawana do każdej rozmowy dla wszystkich użytkowników mających dostęp do umiejętności. Stosuj oszczędnie — to stała przestrzeń podpowiedzi.",
-      "off": "Nieaktywna: nigdy nie stosowana ani nie oferowana użytkownikom, zachowana do edycji."
+      "off": "Nieaktywna: nigdy nie stosowana ani nie oferowana użytkownikom, zachowana do edycji.",
+      "manual": "Stosowane tylko, gdy użytkownik poprosi lub przypnie. Nigdy nie wybierane automatycznie i nie oferowane modelowi jako ładowalna umiejętność."
     },
     "instructionsLabel": "Instrukcje",
     "instructionsHint": "Markdown, do 16 KB. Wstawiany dosłownie, gdy umiejętność jest aktywna.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Te dokumenty wymagają ponownego indeksowania zgodnie z obecną regionalną konfiguracją wyszukiwania i osadzania. Nie będą możliwe do wyszukania, dopóki indeksowanie się nie zakończy."
     },
     "applyToAgents": "Dostępne dla agentów",
-    "applyToAgentsHint": "Domyślnie wyłączone. Po włączeniu agenci mogą załadować tę umiejętność przez narzędzia tylko do odczytu, zamiast zastępować swoje instrukcje osobiste. Wywołania umiejętności mają niezależne limity kroków. Agenci Foundry muszą już mieć w swojej definicji zarejestrowane funkcje load_skill i search_skill_documents."
+    "applyToAgentsHint": "Domyślnie wyłączone. Po włączeniu agenci mogą załadować tę umiejętność przez narzędzia tylko do odczytu, zamiast zastępować swoje instrukcje osobiste. Wywołania umiejętności mają niezależne limity kroków. Agenci Foundry muszą już mieć w swojej definicji zarejestrowane funkcje load_skill i search_skill_documents.",
+    "requireConsent": "Zapytaj przed zastosowaniem",
+    "requireConsentHint": "Gdy model chce samodzielnie zastosować tę umiejętność, użytkownik jest proszony o zgodę. Użycie na żądanie i przypięcie nie wymaga potwierdzenia.",
+    "consentChip": "Najpierw pyta",
+    "sourceChip": "Z źródła",
+    "sourceChipHint": "Dostarczone przez subskrybowane źródło umiejętności; instrukcje są odświeżane podczas synchronizacji. Ustawienia aktywacji, agenta i zgody należą do Ciebie.",
+    "sources": {
+      "title": "Źródła umiejętności",
+      "description": "Subskrybuj zewnętrzny katalog umiejętności (index.json zawierający pliki SKILL.md). Jego umiejętności stają się umiejętnościami organizacji i odświeżają się co około sześć godzin. Importowany jest tylko SKILL.md; dokumenty referencyjne nie są.",
+      "urlLabel": "URL katalogu",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Adres musi być https na publicznym hoście. Pliki umiejętności pobierane są tylko z tej lokalizacji.",
+      "labelLabel": "Etykieta (opcjonalnie)",
+      "add": "Subskrybuj",
+      "adding": "Subskrybowanie…",
+      "added": "{count, plural, =0 {Źródło dodane; brak zaimportowanych umiejętności} one {Źródło dodane; zaimportowano # umiejętność} other {Źródło dodane; zaimportowano # umiejętności}}",
+      "addedWithError": "Źródło dodane, ale pierwsza synchronizacja nie powiodła się. Sprawdź błąd przy źródle.",
+      "addError": "Nie można dodać źródła umiejętności",
+      "sync": "Synchronizuj teraz",
+      "syncing": "Synchronizowanie…",
+      "synced": "Źródło zsynchronizowane.",
+      "syncError": "Nie można zsynchronizować źródła umiejętności",
+      "remove": "Usuń źródło",
+      "removeConfirm": "Usunąć to źródło? Umiejętności, które dostarczyło, pozostaną jako zwykłe umiejętności organizacji i przestaną się odświeżać.",
+      "removed": "Źródło usunięte.",
+      "removeError": "Nie można usunąć źródła umiejętności",
+      "loading": "Ładowanie źródeł…",
+      "loadError": "Nie można załadować źródeł umiejętności.",
+      "empty": "Brak źródeł umiejętności.",
+      "never": "Nigdy nie synchronizowano",
+      "statusOk": "Zsynchronizowano",
+      "statusError": "Synchronizacja nie powiodła się",
+      "statusPartial": "{count, plural, one {pomiń # wpis} other {pominięto # wpisów}}",
+      "lastSync": "Ostatnia synchronizacja {time}",
+      "entryCount": "{count, plural, one {# wpis} other {# wpisów}}",
+      "entryStatus": {
+        "synced": "zsynchronizowano",
+        "skipped": "pominięto",
+        "conflict": "konflikt — nie nadpisano",
+        "invalid": "nieprawidłowe"
+      }
+    }
   },
   "personalSkills": {
     "title": "Umiejętności osobiste",

@@ -1014,7 +1014,10 @@
       "showDetails": "Jokku skill details",
       "hideDetails": "Sosnu skill details",
       "agentLoad": "agent mo jahii",
-      "agentSearch": "documents agent mo njahi"
+      "agentSearch": "documents agent mo njahi",
+      "needsApproval": "ɗum naatani heɓugol jamma maa",
+      "original": "ko ɗum waɗii kisa",
+      "updated": "woneede hesere"
     },
     "skillsManualHint": "Suɓo yimitte e Teelte. Waɗ yontondiral gooto e junngidole, walla fabo so tawii aɗa heɓi tokku e hito e wannan jawdi.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Ɓeydu jeytinoore prompt",
     "m365AgentIndexStop": "Toppu coggil index",
     "foundryAgentsHeading": "Foundry e jeytinooji prompt",
-    "foundryAgentsDescription": "Jeytinooji eɓɓi e Azure AI Foundry ɗo waawanii e boowol maa, jammaa jeytinooji prompt ɓe ɗe woni fii. Jeytinooji knowledge e Microsoft 365 jeytinooji ɓe heddii e bingel makko doole ɗii dow laawol."
+    "foundryAgentsDescription": "Jeytinooji eɓɓi e Azure AI Foundry ɗo waawanii e boowol maa, jammaa jeytinooji prompt ɓe ɗe woni fii. Jeytinooji knowledge e Microsoft 365 jeytinooji ɓe heddii e bingel makko doole ɗii dow laawol.",
+    "agentSkillsLabel": "Tawas",
+    "agentSkillsHelp": "Tawas waɗi agent on waawi fayda tuma o mbaawi jogordu. Jeytere on waɗi takkito tawas tawa nodda booweede.",
+    "agentSkills": {
+      "inherit": "Tawas ɗee “jogorɗe agent'en”",
+      "selected": "Tawas tan ɗee waɗi laawde ko yeeso",
+      "none": "Tawas alaa"
+    },
+    "agentSkillsNone": "Alaa tawas tawa suɓo."
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Automatic",
       "always": "Always",
-      "off": "Off"
+      "off": "Off",
+      "manual": "Ko tuma mbayla"
     },
     "activationHint": {
       "auto": "Jeyɗee jogii mo ɗobo tawi jango binndol jokkanii faaɗi ko jeye. Ko jogii kadi ɗuum walla pin konngol binndol binndol.",
       "always": "Teewi e kala baatuka jogii e jogi ndikkaaji. Yiɗi tuggii — mo inndii e prompt mo jogi.",
-      "off": "Inactive: waawaani majjata mo waawaani jogii, kono mo ummora e talli."
+      "off": "Inactive: waawaani majjata mo waawaani jogii, kono mo ummora e talli.",
+      "manual": "Fayda tan tuma jaɓnirɗo walla heɓi pin. Hormi ko woni yongoda ka waawde walla siifto tawas on."
     },
     "instructionsLabel": "Bakkaaji",
     "instructionsHint": "Markdown, ko 16 KB woni kammu. Naatani cokka-makko so skill hakkitii.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Aade gooto ɗee soɓɓi reindexing so o waawi jooɗiiɗe e teelteeri Search e embedding ngam moƴƴi. O tawii, aade ɗee waawi jooɗiiɗe e search tan so indexing nde heddii."
     },
     "applyToAgents": "Waawi agent ji",
-    "applyToAgentsHint": "Ka kadi feere. So feewi, agentji waawi loowdi kisal ɗee e jogi-jogorɗe, baalini njoɓdi persona. Kisal jogii shaareeri galɗe. Agentji Foundry so jogii load_skill e search_skill_documents e keɓe."
+    "applyToAgentsHint": "Ka kadi feere. So feewi, agentji waawi loowdi kisal ɗee e jogi-jogorɗe, baalini njoɓdi persona. Kisal jogii shaareeri galɗe. Agentji Foundry so jogii load_skill e search_skill_documents e keɓe.",
+    "requireConsent": "Naatnu jamma ko tuma fayda",
+    "requireConsentHint": "Tuma model on yiɗi fayda tawas on bakkila, jaɓnirɗo jogii laawol. Jettinirɗe e pinndiɗe alaa gar Njamma.",
+    "consentChip": "Naatani jamma",
+    "sourceChip": "E jawdi on",
+    "sourceChipHint": "Lolli ngam moƴƴo e jawdi tawas; doggol ngol heɓa tukke hinaa. Activateede, agent e jamma tawa waawi canngo.",
+    "sources": {
+      "title": "Jawdi tawas",
+      "description": "Koppu e kumbuudiral tawas kala (index.json yardi SKILL.md). Tawas makko jogor e jawdi, noddude ngal si taw kaje e gese jeeɗi. SKILL.md tan jogii; dokomenti koppi naatani.",
+      "urlLabel": "URL Catalog",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Naatata ko https e host bikkinde. Fiilde tawas'en ndiyam jogi e window on tan.",
+      "labelLabel": "Tag (so tawii)",
+      "add": "Koppu",
+      "adding": "Koppiing...",
+      "added": "{count, plural, =0 {Jawdi toggi; tawas alaa koppii tawit} one {Jawdi toggi; # tawas koppii} other {Jawdi toggi; # tawas koppii}}",
+      "addedWithError": "Jawdi toggi, am syncing mawnde ɗotti. Ɓeydii bayyinol jawdi on.",
+      "addError": "Alaa waawi koppugol jawdi tawas",
+      "sync": "Sync tuma",
+      "syncing": "Syncing...",
+      "synced": "Jawdi synci.",
+      "syncError": "Alaa waawi syncugol jawdi tawas",
+      "remove": "Momtu jawdi",
+      "removeConfirm": "Momtu jawdi on? Tawas e waɗi laawde ko tawas orginisasi njaŋndi, heɓugol nodeede.",
+      "removed": "Jawdi momti.",
+      "removeError": "Alaa waawi momtugol jawdi tawas",
+      "loading": "Naatajii jawdi...",
+      "loadError": "Alaa waawi naatugol jawdi tawas.",
+      "empty": "Jawdi tawas alaa ina waawi.",
+      "never": "Alaa sync",
+      "statusOk": "Synci",
+      "statusError": "Sync ɗotti",
+      "statusPartial": "{count, plural, one {# entry ndañtii} other {# entries ndañtii}}",
+      "lastSync": "Sync jeɗɗo {time}",
+      "entryCount": "{count, plural, one {# entry} other {# entries}}",
+      "entryStatus": {
+        "synced": "synci",
+        "skipped": "ndaɗii",
+        "conflict": "tawortu — alaa tubbitugol",
+        "invalid": "bannge"
+      }
+    }
   },
   "personalSkills": {
     "title": "Keertugoji",

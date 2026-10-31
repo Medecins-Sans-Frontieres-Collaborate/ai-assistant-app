@@ -923,7 +923,10 @@
       "showDetails": "Tampilkan detail keahlian",
       "hideDetails": "Sembunyikan detail keahlian",
       "agentLoad": "dimuat oleh agen",
-      "agentSearch": "dokumen dicari oleh agen"
+      "agentSearch": "dokumen dicari oleh agen",
+      "needsApproval": "memerlukan persetujuan Anda",
+      "original": "sesuai dijalankan awalnya",
+      "updated": "diperbarui sejak itu"
     },
     "skillsManualHint": "Pemilihan otomatis dimatikan di Pengaturan. Gunakan sekali untuk pesan berikutnya, atau sematkan sebuah skill untuk menggunakannya selama percakapan ini.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Tambah agen prompt",
     "m365AgentIndexStop": "Hentikan pengindeksan",
     "foundryAgentsHeading": "Agen Foundry dan prompt",
-    "foundryAgentsDescription": "Agen yang ditemukan dari Azure AI Foundry melalui akses Anda sendiri, ditambah agen prompt yang didefinisikan di sini. Agen pengetahuan dan agen Microsoft 365 dikelola di bagian masing-masing di bawah ini."
+    "foundryAgentsDescription": "Agen yang ditemukan dari Azure AI Foundry melalui akses Anda sendiri, ditambah agen prompt yang didefinisikan di sini. Agen pengetahuan dan agen Microsoft 365 dikelola di bagian masing-masing di bawah ini.",
+    "agentSkillsLabel": "Keahlian",
+    "agentSkillsHelp": "Keahlian organisasi mana yang dapat dimuat agen ini saat menjawab. Pengguna tetap hanya melihat keahlian sesuai aturan akses mereka.",
+    "agentSkills": {
+      "inherit": "Keahlian yang ditandai 'tersedia untuk agen'",
+      "selected": "Hanya keahlian yang dipilih di bawah ini",
+      "none": "Tidak ada keahlian"
+    },
+    "agentSkillsNone": "Tidak ada keahlian yang dapat dipilih."
   },
   "localModels": {
     "title": "Model lokal",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Otomatis",
       "always": "Selalu",
-      "off": "Nonaktif"
+      "off": "Nonaktif",
+      "manual": "Atas permintaan"
     },
     "activationHint": {
       "auto": "Dipilih secara otomatis ketika tugas saat ini sesuai dengan deskripsi. Pengguna juga dapat memintanya sekali atau menyematkannya ke dalam percakapan.",
       "always": "Ditambahkan ke setiap percakapan untuk semua yang dapat melihat keterampilan. Gunakan dengan hati-hati — ini ruang prompt permanen.",
-      "off": "Nonaktif: tidak pernah diterapkan dan tidak ditawarkan ke pengguna, tetapi tetap disimpan di sini untuk pengeditan."
+      "off": "Nonaktif: tidak pernah diterapkan dan tidak ditawarkan ke pengguna, tetapi tetap disimpan di sini untuk pengeditan.",
+      "manual": "Diterapkan hanya saat pengguna meminta atau menyematkannya. Tidak pernah dipilih otomatis dan tidak ditawarkan ke model sebagai keahlian yang dapat dimuat."
     },
     "instructionsLabel": "Instruksi",
     "instructionsHint": "Markdown, hingga 16 KB. Disisipkan apa adanya saat skill aktif.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Dokumen-dokumen ini perlu diindeks ulang sesuai konfigurasi Pencarian dan embedding regional saat ini. Dokumen-dokumen tersebut tidak akan dapat dicari sampai proses pengindeksan selesai."
     },
     "applyToAgents": "Tersedia untuk agen",
-    "applyToAgentsHint": "Nonaktif secara default. Jika diaktifkan, agen dapat memuat keterampilan ini melalui alat baca saja, bukan mengganti instruksi persona mereka. Setiap panggilan keterampilan memiliki batas langkah tersendiri. Agen Foundry harus sudah memiliki fungsi load_skill dan search_skill_documents yang terdaftar dalam definisinya."
+    "applyToAgentsHint": "Nonaktif secara default. Jika diaktifkan, agen dapat memuat keterampilan ini melalui alat baca saja, bukan mengganti instruksi persona mereka. Setiap panggilan keterampilan memiliki batas langkah tersendiri. Agen Foundry harus sudah memiliki fungsi load_skill dan search_skill_documents yang terdaftar dalam definisinya.",
+    "requireConsent": "Tanya sebelum menerapkan",
+    "requireConsentHint": "Ketika model ingin menerapkan keahlian ini sendiri, pengguna akan diminta persetujuan terlebih dahulu. Penggunaan yang diminta atau disematkan tidak memerlukan konfirmasi.",
+    "consentChip": "Minta izin dahulu",
+    "sourceChip": "Dari sumber",
+    "sourceChipHint": "Dikirim dari sumber keahlian berlangganan; instruksi diperbarui saat sinkronisasi. Pengaturan aktivasi, agen, dan persetujuan merupakan milik Anda.",
+    "sources": {
+      "title": "Sumber keahlian",
+      "description": "Berlangganan ke katalog keahlian eksternal (index.json berisi file SKILL.md). Keahlian dalam katalog akan menjadi keahlian organisasi dan diperbarui setiap enam jam. Hanya SKILL.md yang diimpor; dokumen referensi tidak.",
+      "urlLabel": "URL Katalog",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Harus https di host publik. File keahlian hanya diambil dari lokasi yang sama.",
+      "labelLabel": "Label (opsional)",
+      "add": "Berlangganan",
+      "adding": "Berlangganan…",
+      "added": "{count, plural, =0 {Sumber ditambahkan; belum ada keahlian yang diimpor} one {Sumber ditambahkan; # keahlian diimpor} other {Sumber ditambahkan; # keahlian diimpor}}",
+      "addedWithError": "Sumber ditambahkan, namun sinkronisasi pertama gagal. Periksa kesalahan pada sumber tersebut.",
+      "addError": "Tidak dapat menambahkan sumber keahlian",
+      "sync": "Sinkronkan sekarang",
+      "syncing": "Menyinkronkan…",
+      "synced": "Sumber telah disinkronkan.",
+      "syncError": "Tidak dapat menyinkronkan sumber keahlian",
+      "remove": "Hapus sumber",
+      "removeConfirm": "Hapus sumber ini? Keahlian yang telah diberikan tetap sebagai keahlian organisasi biasa dan tidak akan diperbarui lagi.",
+      "removed": "Sumber dihapus.",
+      "removeError": "Tidak dapat menghapus sumber keahlian",
+      "loading": "Memuat sumber…",
+      "loadError": "Sumber keahlian tidak dapat dimuat.",
+      "empty": "Belum ada sumber keahlian.",
+      "never": "Belum pernah disinkronkan",
+      "statusOk": "Tersinkron",
+      "statusError": "Sinkronisasi gagal",
+      "statusPartial": "{count, plural, one {# entri dilewati} other {# entri dilewati}}",
+      "lastSync": "Sinkronisasi terakhir {time}",
+      "entryCount": "{count, plural, one {# entri} other {# entri}}",
+      "entryStatus": {
+        "synced": "tersinkron",
+        "skipped": "dilewati",
+        "conflict": "konflik — tidak ditimpa",
+        "invalid": "tidak valid"
+      }
+    }
   },
   "personalSkills": {
     "title": "Keterampilan pribadi",

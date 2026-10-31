@@ -1014,7 +1014,10 @@
       "showDetails": "Yeke na vina skill ti gbogbo",
       "hideDetails": "Yeke na sô skill ti gbogbo",
       "agentLoad": "ngbala na agent",
-      "agentSearch": "documents ku agent yeke na mara"
+      "agentSearch": "documents ku agent yeke na mara",
+      "needsApproval": "asila na mo",
+      "original": "tî lâ zo",
+      "updated": "fâfâ na"
     },
     "skillsManualHint": "Poko so ti yeke na Settings. Mbi kama na yeke mo ti wa na ni, to pin na skill ti yeke na wa na makara ti nzoni so alingo.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Kubä prompt agent",
     "m365AgentIndexStop": "Gbalé kobanga",
     "foundryAgentsHeading": "Foundry na prompt agents",
-    "foundryAgentsDescription": "Agents a zu ti Azure AI Foundry na ndokodi mo, na prompt agents a defî ti mobio. Knowledge agents na Microsoft 365 agents na sa mo na gbanga ti bara ti bangi."
+    "foundryAgentsDescription": "Agents a zu ti Azure AI Foundry na ndokodi mo, na prompt agents a defî ti mobio. Knowledge agents na Microsoft 365 agents na sa mo na gbanga ti bara ti bangi.",
+    "agentSkillsLabel": "Makandï",
+    "agentSkillsHelp": "Makandï sî ngbangba na mo agenze wa ïrî asâ wa mo ti yeke ku. Wanï wa yeke sô na makandï sî na bâ tî bana kodê na wanï.",
+    "agentSkills": {
+      "inherit": "Makandï sî bâ ti “asâ na agenze”",
+      "selected": "Makandï sî ku na ilî ape",
+      "none": "Makandï ala"
+    },
+    "agentSkillsNone": "Makandï ala ku na ilî."
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Automatic",
       "always": "Always",
-      "off": "Ayeke"
+      "off": "Ayeke",
+      "manual": "Fa na yângâ"
     },
     "activationHint": {
       "auto": "Na gbêndê kodro wa na da ti sala ayeke kodro ti mô. Ôko yeke bê na wa, wa saka na mbênî da be ti sànzi.",
       "always": "A yeke na mesaje kodé na mo yeke bakara na. Sô ti na mo ti kodé — e yeke ti gbabâ na kodé.",
-      "off": "Ayeke: a gu na nga na mo na nga na gu ti sôkô, sô la ti gbabâ na kodé."
+      "off": "Ayeke: a gu na nga na mo na nga na gu ti sôkô, sô la ti gbabâ na kodé.",
+      "manual": "Kûsê yê na wanï sî yângâ ko na or ti linga. Ala kû na bâ ti kûsê na model sî mo wa agenze na makandï."
     },
     "instructionsLabel": "Instruksi",
     "instructionsHint": "Markdown, ti na 16 KB so ape. Lo na a we ti sô ndö kwa na akombere ti fee.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Dokument ti mbi na reindex mpo na yeke na ndari Search ti region na koko embeding. A kue mbi na mbota biani na lo ti indexing a kete."
     },
     "applyToAgents": "Mo yeke na agents",
-    "applyToAgentsHint": "Mo yeke na voko na pa. Soki mo eseni, agents ayeke a akan skill na tool ti škol ti a yeke na gbegbé pa na ngbangui persona instructions ti mo. Skill ti gbegbé ayeke na step limits ti mo ti moti. Foundry agents ayeke a yeke na load_skill na search_skill_documents functions na da na mbeti ti mo."
+    "applyToAgentsHint": "Mo yeke na voko na pa. Soki mo eseni, agents ayeke a akan skill na tool ti škol ti a yeke na gbegbé pa na ngbangui persona instructions ti mo. Skill ti gbegbé ayeke na step limits ti mo ti moti. Foundry agents ayeke a yeke na load_skill na search_skill_documents functions na da na mbeti ti mo.",
+    "requireConsent": "Fâ na wanï",
+    "requireConsentHint": "Model sî mo wa fâ makandï ti yângâ na or, wanï mo wa tena na model. Kûsê na or ape wa dongpî na wanï.",
+    "consentChip": "Wanï mbî",
+    "sourceChip": "Tî kô tî makandï",
+    "sourceChipHint": "Makandï na ngbangba na yê na tî kô; makandï ti sî ya tî sync. Activation, agenze na wanï sî ku na mo.",
+    "sources": {
+      "title": "Makandï kô",
+      "description": "Fâ na catalog ti makandï tî gbata (index.json sî yê na SKILL.md). Makandï wa yeke makandï tî ngbangba na or, yê na six heures. SKILL.md wa yê gbata; document référence ala wa yê.",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "URL sî yeke https na ti kô. Makandï wa yê na gbata tî kô ape.",
+      "labelLabel": "Label (kwê kwê)",
+      "add": "Fâ na gbata",
+      "adding": "Fâ na gbata...",
+      "added": "{count, plural, =0 {Kô wa yê; makandï ala wa yê gbata} one {Kô wa yê; # makandï wa yê gbata} other {Kô wa yê; # makandï wa yê gbata}}",
+      "addedWithError": "Kô wa yê, mais sync wa yê ala. Gbalêbâ na mbî ti kô.",
+      "addError": "Kô ti makandï wa yê ala",
+      "sync": "Sync na",
+      "syncing": "Sync na...",
+      "synced": "Kô wa sync na.",
+      "syncError": "Kô ti makandï wa sync ala",
+      "remove": "Gbalêbâ kô",
+      "removeConfirm": "Gbâ kô na or? Makandï wa yê na or yeke makandï tî ngbangba ape na sync na.",
+      "removed": "Kô wa gbalêbâ.",
+      "removeError": "Kô ti makandï wa gbalêbâ ala",
+      "loading": "Makandï kô wa yê...",
+      "loadError": "Makandï kô wa yê ala.",
+      "empty": "Makandï kô ala.",
+      "never": "Ala wa sync",
+      "statusOk": "Wa sync na",
+      "statusError": "Sync wa yê ala",
+      "statusPartial": "{count, plural, one {# ti na yê ala} other {# ti na yê ala}}",
+      "lastSync": "Sync ti gba {time}",
+      "entryCount": "{count, plural, one {# makandï} other {# makandï}}",
+      "entryStatus": {
+        "synced": "wa sync na",
+        "skipped": "na yê",
+        "conflict": "bate — ala wa yê",
+        "invalid": "ala ti kû"
+      }
+    }
   },
   "personalSkills": {
     "title": "Mbeni tî mbi",

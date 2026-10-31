@@ -954,7 +954,10 @@
       "showDetails": "Afișează detaliile abilității",
       "hideDetails": "Ascunde detaliile abilității",
       "agentLoad": "încărcat de agent",
-      "agentSearch": "documente căutate de agent"
+      "agentSearch": "documente căutate de agent",
+      "needsApproval": "necesită aprobarea dvs.",
+      "original": "așa cum a fost executat inițial",
+      "updated": "actualizat de atunci"
     },
     "skillsManualHint": "Selecția automată este dezactivată în Setări. Utilizați o dată pentru următorul mesaj sau fixați o abilitate pentru a o folosi pe tot parcursul acestei conversații.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Adăugați agent de prompt",
     "m365AgentIndexStop": "Opriți indexarea",
     "foundryAgentsHeading": "Agenți Foundry și agenți de prompt",
-    "foundryAgentsDescription": "Agenți descoperiți din Azure AI Foundry prin accesul dumneavoastră, plus agenți de prompt definiți aici. Agenții de cunoștințe și agenții Microsoft 365 sunt gestionați în secțiunile lor proprii mai jos."
+    "foundryAgentsDescription": "Agenți descoperiți din Azure AI Foundry prin accesul dumneavoastră, plus agenți de prompt definiți aici. Agenții de cunoștințe și agenții Microsoft 365 sunt gestionați în secțiunile lor proprii mai jos.",
+    "agentSkillsLabel": "Abilități",
+    "agentSkillsHelp": "Ce abilități ale organizației poate încărca acest agent în timp ce răspunde. Utilizatorii văd doar abilitățile permise de regulile lor de acces.",
+    "agentSkills": {
+      "inherit": "Abilități marcate „disponibil pentru agenți”",
+      "selected": "Doar abilitățile selectate mai jos",
+      "none": "Nicio abilitate"
+    },
+    "agentSkillsNone": "Nu există abilități disponibile pentru selecție."
   },
   "localModels": {
     "title": "Modele locale",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Automat",
       "always": "Întotdeauna",
-      "off": "Oprit"
+      "off": "Oprit",
+      "manual": "La cerere"
     },
     "activationHint": {
       "auto": "Selectat automat când sarcina curentă se potrivește cu descrierea. Utilizatorii pot solicita și folosirea o dată sau fixarea la conversație.",
       "always": "Adăugată în orice conversație pentru toți cei care pot vedea abilitatea. Utilizați cu moderație — acest spațiu de prompt este permanent.",
-      "off": "Inactivă: nu este niciodată aplicată și nu este oferită utilizatorilor, dar poate fi editată aici."
+      "off": "Inactivă: nu este niciodată aplicată și nu este oferită utilizatorilor, dar poate fi editată aici.",
+      "manual": "Se aplică doar când un utilizator o solicită sau o fixează. Nu este selecționată automat și nu este oferită modelului ca abilitate încărcabilă."
     },
     "instructionsLabel": "Instrucțiuni",
     "instructionsHint": "Markdown, până la 16 KB. Este introdus textual când skill-ul este activ.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Aceste documente trebuie reindexate pentru configurația actuală a Căutării și a includerii pe regiune. Nu vor putea fi căutate până la finalizarea indexării."
     },
     "applyToAgents": "Disponibil pentru agenți",
-    "applyToAgentsHint": "Dezactivat implicit. Când este activat, agenții pot încărca această abilitate prin instrumente doar pentru citire în loc să înlocuiască instrucțiunile de personalitate. Apelurile de abilitate au limite independente de pași. Agenții Foundry trebuie să aibă deja funcțiile load_skill și search_skill_documents înregistrate în definiția lor."
+    "applyToAgentsHint": "Dezactivat implicit. Când este activat, agenții pot încărca această abilitate prin instrumente doar pentru citire în loc să înlocuiască instrucțiunile de personalitate. Apelurile de abilitate au limite independente de pași. Agenții Foundry trebuie să aibă deja funcțiile load_skill și search_skill_documents înregistrate în definiția lor.",
+    "requireConsent": "Solicită confirmare înainte de aplicare",
+    "requireConsentHint": "Dacă modelul dorește să aplice această abilitate singur, utilizatorul este întrebat mai întâi. Solicitările și fixările nu necesită confirmare.",
+    "consentChip": "Solicită mai întâi",
+    "sourceChip": "Din sursă",
+    "sourceChipHint": "Livrat de o sursă de abilități la care s-a abonat; instrucțiunile se actualizează la sincronizare. Setările de activare, agenți și consimțământ sunt ale dvs.",
+    "sources": {
+      "title": "Surse de abilități",
+      "description": "Abonați-vă la un catalog extern de abilități (un index.json care listează fișiere SKILL.md). Abilitățile devin abilități organizaționale și se actualizează la circa șase ore. Se importă doar SKILL.md; documentele de referință nu.",
+      "urlLabel": "URL catalog",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Trebuie să fie https pe un host public. Fișierele de abilități sunt citite doar din aceeași locație.",
+      "labelLabel": "Etichetă (opțional)",
+      "add": "Abonează-te",
+      "adding": "Se abonează…",
+      "added": "{count, plural, =0 {Sursa adăugată; nicio abilitate importată încă} one {Sursa adăugată; # abilitate importată} other {Sursa adăugată; # abilități importate}}",
+      "addedWithError": "Sursa a fost adăugată, dar prima sincronizare a eșuat. Verificați eroarea la sursă.",
+      "addError": "Nu s-a putut adăuga sursa de abilități",
+      "sync": "Sincronizează acum",
+      "syncing": "Se sincronizează…",
+      "synced": "Sursa a fost sincronizată.",
+      "syncError": "Nu s-a putut sincroniza sursa de abilități",
+      "remove": "Elimină sursa",
+      "removeConfirm": "Eliminați această sursă? Abilitățile livrate rămân ca abilități obișnuite ale organizației și nu se vor mai actualiza.",
+      "removed": "Sursa a fost eliminată.",
+      "removeError": "Nu s-a putut elimina sursa de abilități",
+      "loading": "Se încarcă sursele…",
+      "loadError": "Nu s-au putut încărca sursele de abilități.",
+      "empty": "Nu există surse de abilități încă.",
+      "never": "Niciodată sincronizat",
+      "statusOk": "Sincronizat",
+      "statusError": "Sincronizare eșuată",
+      "statusPartial": "{count, plural, one {# intrare omisă} other {# intrări omise}}",
+      "lastSync": "Ultima sincronizare {time}",
+      "entryCount": "{count, plural, one {# intrare} other {# intrări}}",
+      "entryStatus": {
+        "synced": "sincronizat",
+        "skipped": "omise",
+        "conflict": "conflict — nu a fost suprascris",
+        "invalid": "invalid"
+      }
+    }
   },
   "personalSkills": {
     "title": "Abilități personale",

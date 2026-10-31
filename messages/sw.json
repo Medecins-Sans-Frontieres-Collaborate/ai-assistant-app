@@ -956,7 +956,10 @@
       "showDetails": "Onyesha maelezo ya ujuzi",
       "hideDetails": "Ficha maelezo ya ujuzi",
       "agentLoad": "imewekwa na wakala",
-      "agentSearch": "nyaraka zilizopekuliwa na wakala"
+      "agentSearch": "nyaraka zilizopekuliwa na wakala",
+      "needsApproval": "inahitaji idhini yako",
+      "original": "kama ilivyotekelezwa asili",
+      "updated": "imesasishwa tangu"
     },
     "skillsManualHint": "Uteuzi wa moja kwa moja umezimwa kwenye Mipangilio. Tumia mara moja kwa ujumbe unaofuata, au weka skill ili itumike kwenye mazungumzo haya yote.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Ongeza wakala wa prompt",
     "m365AgentIndexStop": "Acha kuorodhesha",
     "foundryAgentsHeading": "Maajenti wa Foundry na prompt",
-    "foundryAgentsDescription": "Maajenti waliogunduliwa kutoka Azure AI Foundry kupitia ufikiaji wako, pamoja na maajenti wa prompt walioainishwa hapa. Maajenti wa maarifa na maajenti wa Microsoft 365 husimamiwa katika sehemu zao hapa chini."
+    "foundryAgentsDescription": "Maajenti waliogunduliwa kutoka Azure AI Foundry kupitia ufikiaji wako, pamoja na maajenti wa prompt walioainishwa hapa. Maajenti wa maarifa na maajenti wa Microsoft 365 husimamiwa katika sehemu zao hapa chini.",
+    "agentSkillsLabel": "Ujuzi",
+    "agentSkillsHelp": "Ni ujuzi gani wa shirika wakala huyu anaweza kupakia wakati wa kujibu. Watumiaji bado wataona tu ujuzi ambao sheria za upatikanaji zao zinaruhusu.",
+    "agentSkills": {
+      "inherit": "Ujuzi uliowekwa \"unapatikana kwa wakala\"",
+      "selected": "Ni ujuzi ulioteuliwa hapa chini pekee",
+      "none": "Hakuna ujuzi"
+    },
+    "agentSkillsNone": "Hakuna ujuzi unaopatikana kuchagua."
   },
   "localModels": {
     "title": "Miundo ya ndani",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Kiotomatiki",
       "always": "Daima",
-      "off": "Imezimwa"
+      "off": "Imezimwa",
+      "manual": "Kwa ombi"
     },
     "activationHint": {
       "auto": "Unachaguliwa moja kwa moja kazi ya sasa inapotimiza maelezo. Watumiaji pia wanaweza kuuomba mara moja au kuubandika kwenye mazungumzo.",
       "always": "Inaongezwa kwenye kila mazungumzo kwa kila anayweza kuona ujuzi huu. Tumia kwa tahadhari — hili ni eneo la kudumu la msaada.",
-      "off": "Haitumiki: haitatumika na haitawasilishwa kwa watumiaji, lakini inabaki hapa kwa ajili ya uhariri."
+      "off": "Haitumiki: haitatumika na haitawasilishwa kwa watumiaji, lakini inabaki hapa kwa ajili ya uhariri.",
+      "manual": "Inatumika tu wakati mtumiaji anaomba au kuibandika. Haiwezi kuchaguliwa kiotomatiki na haitolewi kwa mfano kama ujuzi unaoweza kupakiwa."
     },
     "instructionsLabel": "Maagizo",
     "instructionsHint": "Markdown, hadi 16 KB. Inaingizwa kama ilivyo wakati ujuzi unatumika.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Hati hizi zinahitaji kuorodheshwa upya ili kufuata mpangilio wa sasa wa Utafutaji na ujazaji wa kanda. Hazitatafutwa hadi uorodheshaji ukamilike."
     },
     "applyToAgents": "Inapatikana kwa mawakala",
-    "applyToAgentsHint": "Imesitishwa kwa chaguo-msingi. Ukiwezeshwa, mawakala wanaweza kupakua ujuzi huu kupitia zana za kusoma tu badala ya kubadilisha maagizo yao ya utambulisho. Wito wa ujuzi una kikomo cha hatua kinachojitegemea. Mawakala wa Foundry lazima wawe tayari wamejiandikisha na kazi za load_skill na search_skill_documents katika ufafanuzi wao."
+    "applyToAgentsHint": "Imesitishwa kwa chaguo-msingi. Ukiwezeshwa, mawakala wanaweza kupakua ujuzi huu kupitia zana za kusoma tu badala ya kubadilisha maagizo yao ya utambulisho. Wito wa ujuzi una kikomo cha hatua kinachojitegemea. Mawakala wa Foundry lazima wawe tayari wamejiandikisha na kazi za load_skill na search_skill_documents katika ufafanuzi wao.",
+    "requireConsent": "Uliza kabla ya kutumia",
+    "requireConsentHint": "Wakati mfano unataka kutumia ujuzi huu pekee, mtumiaji huulizwa kwanza. Matumizi yaliyoombwa na yaliyobandikwa hayahitaji uthibitisho.",
+    "consentChip": "Huuliza kwanza",
+    "sourceChip": "Kutoka chanzo",
+    "sourceChipHint": "Imetolewa na chanzo cha ujuzi kilichosajiliwa; maagizo husasishwa kwenye usawazishaji. Mipangilio ya kuwasha, wakala na idhini ni yako.",
+    "sources": {
+      "title": "Vyanzo vya ujuzi",
+      "description": "Jiunge na katalogi ya ujuzi wa nje (index.json inayoorodhesha faili za SKILL.md). Ujuzi wake unakuwa ujuzi wa shirika na husasishwa kila saa sita. Ni SKILL.md pekee inayoletwa; nyaraka za marejeo haziletiwi.",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Lazima iwe https kwenye hosti ya umma. Faili za ujuzi husomwa kutoka eneo hilo pekee.",
+      "labelLabel": "Lebo (si lazima)",
+      "add": "Jiunge",
+      "adding": "Inajiunga…",
+      "added": "{count, plural, =0 {Chanzo kimeongezwa; hakuna ujuzi uliopokelewa bado} one {Chanzo kimeongezwa; ujuzi # umeletwa} other {Chanzo kimeongezwa; ujuzi # umeletwa}}",
+      "addedWithError": "Chanzo kimeongezwa, lakini usawazishaji wa kwanza umeshindwa. Angalia kosa kwenye chanzo.",
+      "addError": "Imeshindwa kuongeza chanzo cha ujuzi",
+      "sync": "Sawazisha sasa",
+      "syncing": "Inasawazisha…",
+      "synced": "Chanzo kimesawazishwa.",
+      "syncError": "Imeshindwa kusawazisha chanzo cha ujuzi",
+      "remove": "Ondoa chanzo",
+      "removeConfirm": "Ondoa chanzo hiki? Ujuzi uliotoa utabaki kama ujuzi wa kawaida wa shirika na utaacha kusasishwa.",
+      "removed": "Chanzo kimeondolewa.",
+      "removeError": "Imeshindwa kuondoa chanzo cha ujuzi",
+      "loading": "Inapakia vyanzo…",
+      "loadError": "Vyanzo vya ujuzi vimeshindwa kupakia.",
+      "empty": "Hakuna vyanzo vya ujuzi bado.",
+      "never": "Haijasawazishwa kamwe",
+      "statusOk": "Imesawazishwa",
+      "statusError": "Usawazishaji umeshindwa",
+      "statusPartial": "{count, plural, one {# rekodi imeondolewa} other {# rekodi zimeondolewa}}",
+      "lastSync": "Usawazishaji wa mwisho {time}",
+      "entryCount": "{count, plural, one {# rekodi} other {# rekodi}}",
+      "entryStatus": {
+        "synced": "imesawazishwa",
+        "skipped": "imeondolewa",
+        "conflict": "mgongano — haikuandikwa upya",
+        "invalid": "si sahihi"
+      }
+    }
   },
   "personalSkills": {
     "title": "Ujuzi binafsi",

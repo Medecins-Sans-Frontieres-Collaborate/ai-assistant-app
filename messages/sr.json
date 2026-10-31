@@ -1014,7 +1014,10 @@
       "showDetails": "Prikaži detalje veštine",
       "hideDetails": "Sakrij detalje veštine",
       "agentLoad": "učitano od strane agenta",
-      "agentSearch": "dokumenta pretražio agent"
+      "agentSearch": "dokumenta pretražio agent",
+      "needsApproval": "zahteva vašu odobrenje",
+      "original": "kao što je prvobitno pokrenuto",
+      "updated": "ažurirano od"
     },
     "skillsManualHint": "Automatski izbor je isključen u Podešavanjima. Upotrebite veštinu jednom za sledeću poruku ili je zakačite da bi se koristila tokom celog razgovora.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Dodaj prompt agenta",
     "m365AgentIndexStop": "Zaustavi indeksiranje",
     "foundryAgentsHeading": "Foundry i prompt agenti",
-    "foundryAgentsDescription": "Agenti otkriveni putem Azure AI Foundry preko vašeg pristupa, kao i prompt agenti definisani ovde. Agenti za znanje i Microsoft 365 agenti se upravljaju u svojim zasebnim odeljcima ispod."
+    "foundryAgentsDescription": "Agenti otkriveni putem Azure AI Foundry preko vašeg pristupa, kao i prompt agenti definisani ovde. Agenti za znanje i Microsoft 365 agenti se upravljaju u svojim zasebnim odeljcima ispod.",
+    "agentSkillsLabel": "Veštine",
+    "agentSkillsHelp": "Koje veštine organizacije ovaj agent može učitati prilikom odgovaranja. Korisnici i dalje vide samo veštine za koje imaju dozvolu pristupa.",
+    "agentSkills": {
+      "inherit": "Veštine označene kao „dostupne agentima“",
+      "selected": "Samo veštine izabrane ispod",
+      "none": "Bez veština"
+    },
+    "agentSkillsNone": "Nema dostupnih veština za izbor."
   },
   "localModels": {
     "title": "Lokalni modeli",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Automatski",
       "always": "Uvek",
-      "off": "Isključeno"
+      "off": "Isključeno",
+      "manual": "Na zahtev"
     },
     "activationHint": {
       "auto": "Bira se automatski kada trenutni zadatak odgovara opisu. Korisnici takođe mogu zatražiti upotrebu jednom ili prikačiti veštinu na razgovor.",
       "always": "Dodaje se svakom razgovoru za svakoga ko može da vidi veštinu. Koristite štedljivo — ovo je trajni prostor za prompt.",
-      "off": "Neaktivno: ne primenjuje se i nije ponuđeno korisnicima, ali ostaje ovde za izmene."
+      "off": "Neaktivno: ne primenjuje se i nije ponuđeno korisnicima, ali ostaje ovde za izmene.",
+      "manual": "Primeni se samo kada korisnik zahteva ili postavi. Nikada se ne bira automatski i nije ponuđena modelu kao učitava veština."
     },
     "instructionsLabel": "Instrukcije",
     "instructionsHint": "Markdown, do 16 KB. Ubacuje se doslovno kada je veština aktivna.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Ovi dokumenti zahtevaju ponovno indeksiranje zbog trenutne regionalne konfiguracije pretrage i ugrađivanja. Neće biti pretraživani dok indeksiranje ne bude završeno."
     },
     "applyToAgents": "Dostupno agentima",
-    "applyToAgentsHint": "Podrazumevano isključeno. Kada je omogućeno, agenti mogu učitati ovu veštinu putem alata samo za čitanje, umesto da zamene svoje instrukcije o ličnosti. Pozivi veštine imaju nezavisna ograničenja koraka. Foundry agenti moraju imati registrovane funkcije load_skill i search_skill_documents u svojoj definiciji."
+    "applyToAgentsHint": "Podrazumevano isključeno. Kada je omogućeno, agenti mogu učitati ovu veštinu putem alata samo za čitanje, umesto da zamene svoje instrukcije o ličnosti. Pozivi veštine imaju nezavisna ograničenja koraka. Foundry agenti moraju imati registrovane funkcije load_skill i search_skill_documents u svojoj definiciji.",
+    "requireConsent": "Zatraži odobrenje pre primene",
+    "requireConsentHint": "Kada model želi samostalno da primeni ovu veštinu, korisnik se prethodno pita. Za zahtevane i postavljene veštine nije potrebna potvrda.",
+    "consentChip": "Prvo traži odobrenje",
+    "sourceChip": "Iz izvora",
+    "sourceChipHint": "Dostavljeno putem pretplaćenog izvora veština; uputstva se osvežavaju prilikom sinhronizacije. Podešavanja aktivacije, agenta i odobrenja su vaša.",
+    "sources": {
+      "title": "Izvori veština",
+      "description": "Pretplatite se na eksterni katalog veština (index.json sa listom SKILL.md fajlova). Njegove veštine postaju veštine organizacije i osvežavaju se na oko svakih šest sati. Uvozi se samo SKILL.md; referentni dokumenti nisu.",
+      "urlLabel": "URL kataloga",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Mora biti https na javnom hostu. Fajlovi veština čitaju se samo sa iste lokacije.",
+      "labelLabel": "Oznaka (opciono)",
+      "add": "Pretplati se",
+      "adding": "Pretplaćivanje…",
+      "added": "{count, plural, =0 {Izvor dodat; veštine još nisu uvezene} one {Izvor dodat; uvezena je # veština} other {Izvor dodat; uvezeno je # veština}}",
+      "addedWithError": "Izvor je dodat, ali prva sinhronizacija nije uspela. Proverite grešku na izvoru.",
+      "addError": "Nije moguće dodati izvor veština",
+      "sync": "Sinhronizuj sada",
+      "syncing": "Sinhronizacija…",
+      "synced": "Izvor je sinhronizovan.",
+      "syncError": "Nije moguće sinhronizovati izvor veština",
+      "remove": "Ukloni izvor",
+      "removeConfirm": "Ukloniti ovaj izvor? Veštine koje je dostavio ostaju kao obične veštine organizacije i prestaju da se osvežavaju.",
+      "removed": "Izvor je uklonjen.",
+      "removeError": "Nije moguće ukloniti izvor veština",
+      "loading": "Učitavanje izvora…",
+      "loadError": "Nije moguće učitati izvore veština.",
+      "empty": "Još nema izvora veština.",
+      "never": "Nikada nije sinhronizovan",
+      "statusOk": "Sinhronizovan",
+      "statusError": "Sinhronizacija nije uspela",
+      "statusPartial": "{count, plural, one {# stavka preskočena} other {# stavki preskočeno}}",
+      "lastSync": "Poslednja sinhronizacija {time}",
+      "entryCount": "{count, plural, one {# stavka} other {# stavki}}",
+      "entryStatus": {
+        "synced": "sinhronizovano",
+        "skipped": "preskočeno",
+        "conflict": "sukob — nije prepisano",
+        "invalid": "nevažeće"
+      }
+    }
   },
   "personalSkills": {
     "title": "Lične veštine",

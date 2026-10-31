@@ -987,7 +987,10 @@
       "showDetails": "显示技能详情",
       "hideDetails": "隐藏技能详情",
       "agentLoad": "由代理加载",
-      "agentSearch": "由代理检索文档"
+      "agentSearch": "由代理检索文档",
+      "needsApproval": "需要您的批准",
+      "original": "按最初运行",
+      "updated": "已更新"
     },
     "skillsManualHint": "设置中已关闭自动选择。可选择在下条消息中使用一次，或固定某个技能以在本次对话中持续使用。",
     "queuedMessage": {
@@ -5386,7 +5389,15 @@
     "addPromptAgent": "添加提示代理",
     "m365AgentIndexStop": "停止索引",
     "foundryAgentsHeading": "Foundry 代理和提示代理",
-    "foundryAgentsDescription": "通过您的访问权限，从 Azure AI Foundry 发现的代理，以及此处定义的提示代理。知识代理和 Microsoft 365 代理请在下方各自的部分进行管理。"
+    "foundryAgentsDescription": "通过您的访问权限，从 Azure AI Foundry 发现的代理，以及此处定义的提示代理。知识代理和 Microsoft 365 代理请在下方各自的部分进行管理。",
+    "agentSkillsLabel": "技能",
+    "agentSkillsHelp": "此代理在回答时可加载哪些组织技能。用户仅能看到其访问规则允许的技能。",
+    "agentSkills": {
+      "inherit": "标记为“可供代理使用”的技能",
+      "selected": "仅限下方选中的技能",
+      "none": "无技能"
+    },
+    "agentSkillsNone": "无可选技能。"
   },
   "localModels": {
     "title": "本地模型",
@@ -7766,12 +7777,14 @@
     "activation": {
       "auto": "自动",
       "always": "始终",
-      "off": "关闭"
+      "off": "关闭",
+      "manual": "按需启用"
     },
     "activationHint": {
       "auto": "当前任务与描述匹配时自动选择。用户也可以请求使用一次或固定到对话中。",
       "always": "所有可见该技能的人参与的每个会话中都会加入。请慎用 —— 此为永久提示空间。",
-      "off": "未激活：不会被应用或供用户选择，但保留在此处供编辑。"
+      "off": "未激活：不会被应用或供用户选择，但保留在此处供编辑。",
+      "manual": "仅在用户请求或固定时应用。不会自动选择，且不会作为可加载技能提供给模型。"
     },
     "instructionsLabel": "指令",
     "instructionsHint": "Markdown，最大16KB。技能激活时将原样注入。",
@@ -7804,7 +7817,48 @@
       "reindexRequired": "这些文档需要根据当前的区域搜索和嵌入配置重新建立索引。在索引完成之前，这些文档无法被搜索。"
     },
     "applyToAgents": "对代理可用",
-    "applyToAgentsHint": "默认关闭。启用后，代理可通过只读工具加载该技能，而不会替换其人物设定说明。技能调用有独立的步骤限制。Foundry 代理需在定义中已注册 load_skill 和 search_skill_documents 函数。"
+    "applyToAgentsHint": "默认关闭。启用后，代理可通过只读工具加载该技能，而不会替换其人物设定说明。技能调用有独立的步骤限制。Foundry 代理需在定义中已注册 load_skill 和 search_skill_documents 函数。",
+    "requireConsent": "应用前须确认",
+    "requireConsentHint": "当模型希望自动应用该技能时，将先征求用户同意。主动请求和固定使用不需再确认。",
+    "consentChip": "先询问",
+    "sourceChip": "来自源",
+    "sourceChipHint": "由订阅的技能源提供；说明会在同步时刷新。激活、代理和授权设置归您管理。",
+    "sources": {
+      "title": "技能源",
+      "description": "订阅外部技能目录（index.json 列出 SKILL.md 文件）。其技能将变为组织技能，并每六小时刷新一次。仅导入 SKILL.md，参考文档不包含在内。",
+      "urlLabel": "目录 URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "必须是公共主机上的 https。技能文件只从同一位置读取。",
+      "labelLabel": "标签（可选）",
+      "add": "订阅",
+      "adding": "正在订阅…",
+      "added": "{count, plural, =0 {已添加源，尚未导入技能} one {已添加源，已导入 # 个技能} other {已添加源，已导入 # 个技能}}",
+      "addedWithError": "源已添加，但首次同步失败。请在源上查看错误。",
+      "addError": "无法添加该技能源",
+      "sync": "立即同步",
+      "syncing": "正在同步…",
+      "synced": "源已同步。",
+      "syncError": "无法同步该技能源",
+      "remove": "移除源",
+      "removeConfirm": "确认移除此源？其已交付的技能将保留为普通组织技能，并停止刷新。",
+      "removed": "源已移除。",
+      "removeError": "无法移除该技能源",
+      "loading": "正在加载源…",
+      "loadError": "无法加载技能源。",
+      "empty": "暂无技能源。",
+      "never": "从未同步",
+      "statusOk": "已同步",
+      "statusError": "同步失败",
+      "statusPartial": "{count, plural, one {跳过 # 条目} other {跳过 # 条目}}",
+      "lastSync": "上次同步 {time}",
+      "entryCount": "{count, plural, one {# 条目} other {# 条目}}",
+      "entryStatus": {
+        "synced": "已同步",
+        "skipped": "已跳过",
+        "conflict": "冲突 — 未覆盖",
+        "invalid": "无效"
+      }
+    }
   },
   "personalSkills": {
     "title": "个人技能",

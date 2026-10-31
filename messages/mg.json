@@ -1014,7 +1014,10 @@
       "showDetails": "Asehoy ny antsipiriany fahaiza-manao",
       "hideDetails": "Afeno ny antsipiriany fahaiza-manao",
       "agentLoad": "nataon’ny agent",
-      "agentSearch": "antontan-taratasy notadiavin’ny agent"
+      "agentSearch": "antontan-taratasy notadiavin’ny agent",
+      "needsApproval": "mila fankatoavanao",
+      "original": "araka ny fomba nanombohana azy",
+      "updated": "novaina hatramin'ny"
     },
     "skillsManualHint": "Tsy mandeha ho azy ny fisafidianana ao amin'ny Fikirana. Ampiasao indray mandeha amin'ny hafatra manaraka, na aparitaho mandritra ity resaka ity ny fahaiza-manao iray.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Ampio agent prompt",
     "m365AgentIndexStop": "Atsaharo ny fanasokajiana",
     "foundryAgentsHeading": "Agent Foundry sy agent prompt",
-    "foundryAgentsDescription": "Ny agent hita avy amin'ny Azure AI Foundry amin'ny alalan'ny fidiranao manokana, ankoatra ireo agent prompt voafaritra eto. Ny agent fahalalana sy agent Microsoft 365 dia tantanina amin'ny fizarana natokana ho azy etsy ambany."
+    "foundryAgentsDescription": "Ny agent hita avy amin'ny Azure AI Foundry amin'ny alalan'ny fidiranao manokana, ankoatra ireo agent prompt voafaritra eto. Ny agent fahalalana sy agent Microsoft 365 dia tantanina amin'ny fizarana natokana ho azy etsy ambany.",
+    "agentSkillsLabel": "Fahaiza-manao",
+    "agentSkillsHelp": "Ireo fahaiza-manao azony ampiasaina rehefa mamaly ity agent ity. Ny mpampiasa dia ahita fahaiza-manao araka ny fepetra napetraka aminy ihany.",
+    "agentSkills": {
+      "inherit": "Fahaiza-manao voamarika hoe 'azo ampiasain'ny agents'",
+      "selected": "Ireo fahaiza-manao voafantina eto ambany ihany",
+      "none": "Tsy misy fahaiza-manao"
+    },
+    "agentSkillsNone": "Tsy misy fahaiza-manao azo hofidiana."
   },
   "localModels": {
     "title": "Model eo an-toerana",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Ho azy",
       "always": "Hatrany",
-      "off": "Miato"
+      "off": "Miato",
+      "manual": "Amin'ny fangatahana"
     },
     "activationHint": {
       "auto": "Misafidy ho azy rehefa mifanaraka amin'ny asa ankehitriny ny famaritana. Afaka mangataka indray mandeha na manapetaka izany amin'ny resaka ihany koa ny mpampiasa.",
       "always": "Ampiana amin'ny resaka rehetra ho an'ny rehetra mahita azy. Ampiasao amin'ny fatra iraisana — toerana mandrakizay eo amin'ny tondro izany.",
-      "off": "Tsy mandeha: tsy ampiharina na aseho amin'ny mpampiasa, fa tahirizina eto ihany ho amin'ny fanovàna."
+      "off": "Tsy mandeha: tsy ampiharina na aseho amin'ny mpampiasa, fa tahirizina eto ihany ho amin'ny fanovàna.",
+      "manual": "Ampiharina ihany raha mangataka na manisy marika ilay mpampiasa. Tsy hofidiana ho azy mihitsy ary tsy atolotra amin’ny modely ho fahaiza-manao azo entina."
     },
     "instructionsLabel": "Toromarika",
     "instructionsHint": "Markdown, hatramin'ny 16 KB. Ampidirina mivantana rehefa miasa ny fahaiza-manao.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Ireo antontan-taratasy ireo dia mila havaozina amin'ny fikirakirana Search sy embedding amin'ny faritra ankehitriny. Tsy ho azo itadiavana izy ireny raha tsy vita ny fanavaozana."
     },
     "applyToAgents": "Azon'ny mpiasan'ny fikambanana ampiasaina",
-    "applyToAgentsHint": "Tsy mandeha avy hatrany. Raha ampiasaina, dia afaka mampiditra ity fahaiza-manao ity amin'ny alalan'ny fitaovana vakiana ihany ny mpiasan'ny fikambanana, fa tsy manolo ny toromarika momba ny mombamomba azy. Manana fetra tsy miankina amin'ny dingana tsirairay ny antso amin'ny fahaiza-manao. Tsy maintsy efa manana asa load_skill sy search_skill_documents voasoratra ao amin'ny famaritany ny Foundry agents."
+    "applyToAgentsHint": "Tsy mandeha avy hatrany. Raha ampiasaina, dia afaka mampiditra ity fahaiza-manao ity amin'ny alalan'ny fitaovana vakiana ihany ny mpiasan'ny fikambanana, fa tsy manolo ny toromarika momba ny mombamomba azy. Manana fetra tsy miankina amin'ny dingana tsirairay ny antso amin'ny fahaiza-manao. Tsy maintsy efa manana asa load_skill sy search_skill_documents voasoratra ao amin'ny famaritany ny Foundry agents.",
+    "requireConsent": "Mangataha alalana alohan'ny ampiharana",
+    "requireConsentHint": "Raha te hampihatra ity fahaiza-manao ity irery ny modely dia anontaniana voalohany ny mpampiasa. Tsy mila fanamafisana ny fangatahana sy fametrahana marika.",
+    "consentChip": "Manontany aloha",
+    "sourceChip": "Avy amin'ny loharano",
+    "sourceChipHint": "Atolotry ny loharano fahaiza-manao nisoratra anarana; havaozina amin’ny fanavaozana izy ireo. Ny fanapahana, agent, ary ny fepetra alalana no fanapahan-kevitrao.",
+    "sources": {
+      "title": "Loharanon'ny fahaiza-manao",
+      "description": "Midira amin'ny katalaogin'ny fahaiza-manao ivelany (index.json misy lisitra SKILL.md). Ho lasa fahaiza-manao an'ny fikambanana izy ireo ary havaozina isaky ny 6 ora eo ho eo. Ny SKILL.md ihany no ampidirina; tsy tafiditra ireo antontan-taratasy hafa.",
+      "urlLabel": "URL-n'ny katalaogy",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Tokony ho https amin'ny sehatra ampahibemaso. Tsy avy amin’io toerana io ihany no ahitana ireo rakitra fahaiza-manao.",
+      "labelLabel": "Marika (tsy voatery)",
+      "add": "Hisoratra anarana",
+      "adding": "Misoratra anarana...",
+      "added": "{count, plural, =0 {Vita nampiana ny loharano; tsy mbola nisy fahaiza-manao nampidirina} one {Vita nampiana ny loharano; fahaiza-manao # no nampidirina} other {Vita nampiana ny loharano; fahaiza-manao # no nampidirina}}",
+      "addedWithError": "Vita nampiana ny loharano, fa tsy nety ny sync voalohany. Hamarino ny lesoka ao amin'ny loharano.",
+      "addError": "Tsy afaka nanampy loharano fahaiza-manao",
+      "sync": "Sync ankehitriny",
+      "syncing": "Manao sync...",
+      "synced": "Vita ny sync an'ny loharano.",
+      "syncError": "Tsy afaka nanao sync loharano fahaiza-manao",
+      "remove": "Esory ny loharano",
+      "removeConfirm": "Esorina ity loharano ity? Ho fahaiza-manao tsotra amin’ny fikambanana sisa ireo fahaiza-manao nitondra azy ary tsy havaozina intsony.",
+      "removed": "Voafafa ny loharano.",
+      "removeError": "Tsy afaka nanala loharano fahaiza-manao",
+      "loading": "Manokatra loharano...",
+      "loadError": "Tsy afa-nisokatra ireo loharano fahaiza-manao.",
+      "empty": "Tsy misy loharano fahaiza-manao hatreto.",
+      "never": "Tsy mbola nanao sync",
+      "statusOk": "Vita sync",
+      "statusError": "Tsy nety ny sync",
+      "statusPartial": "{count, plural, one {# tsy nampidirina} other {# tsy nampidirina}}",
+      "lastSync": "Sync farany {time}",
+      "entryCount": "{count, plural, one {# fidirana} other {# fidirana}}",
+      "entryStatus": {
+        "synced": "vita sync",
+        "skipped": "tsy nampidirina",
+        "conflict": "diso fifandirana — tsy voasolo",
+        "invalid": "tsy manankery"
+      }
+    }
   },
   "personalSkills": {
     "title": "Fahaiza-manao manokana",

@@ -1014,7 +1014,10 @@
       "showDetails": "Komona makambo mingi ya skill",
       "hideDetails": "Kokunda makambo mingi ya skill",
       "agentLoad": "ebongisami na agent",
-      "agentSearch": "ba ndakisa basalelamaki na agent"
+      "agentSearch": "ba ndakisa basalelamaki na agent",
+      "needsApproval": "ezali na posa ya ndingisa na yo",
+      "original": "lokola etambolaki na ebandeli",
+      "updated": "ebongwanaki banda kala"
     },
     "skillsManualHint": "Kopona ya automatique ezali te na Paramètres. Salela mbala moko na sango elandi, to pindá mayele moko mpo esalela na nsuka ya lisungi oyo.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Bakisa agent ya prompt",
     "m365AgentIndexStop": "Tika kosala indexing",
     "foundryAgentsHeading": "Bafoundry ná ba agent ya prompt",
-    "foundryAgentsDescription": "Ba agent oyo ezwámí na Azure AI Foundry na nzela ya accès na yo, elongo na ba agent ya prompt oyo basalemi awa. Ba agent ya mayebisi ná ba agent ya Microsoft 365 bazali kozwa bososoli na biteni na bango moko na se."
+    "foundryAgentsDescription": "Ba agent oyo ezwámí na Azure AI Foundry na nzela ya accès na yo, elongo na ba agent ya prompt oyo basalemi awa. Ba agent ya mayebisi ná ba agent ya Microsoft 365 bazali kozwa bososoli na biteni na bango moko na se.",
+    "agentSkillsLabel": "Mayekoli",
+    "agentSkillsHelp": "Mayekoli nini ya mosala oyo agent akoki kokota na yango ntango azali kopesa biyano. Base nganga misala bakoki kokona kaka mayekoli oyo mibeko ya kokota epesaka bango nzela.",
+    "agentSkills": {
+      "inherit": "Mayekoli oyo elemaki \"openeli ba agent\"",
+      "selected": "Kaka mayekoli oyo epɔnami awa na se",
+      "none": "Mayekoli te"
+    },
+    "agentSkillsNone": "Mayekoli moko te ya kopona."
   },
   "localModels": {
     "title": "Bamodelo ya esika",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Automatique",
       "always": "Toujours",
-      "off": "Likolo te"
+      "off": "Likolo te",
+      "manual": "Na senga"
     },
     "activationHint": {
       "auto": "Ezwami na nzungu soki mosala ezali kopesa elilingi. Basaleli bakoki mpe kosenga yango mbala moko to kokangisa yango na bosololi.",
       "always": "Ezalaka na lisolo nyonso na moto nyonso oyo amonaka compétence. Sala yango na pasito — esika ya prompt ekotikala.",
-      "off": "Ezali te : ekosalama te mpe ekozungwa te na ba utilisateur, kasi ekotikala mpo na kobongisa."
+      "off": "Ezali te : ekosalama te mpe ekozungwa te na ba utilisateur, kasi ekotikala mpo na kobongisa.",
+      "manual": "Ekosalama kaka soki mosaleli asengi to asimbeli yango. Ekoponama te na lolenge ya automatique mpe model ekotindama te lokola mayekoli oyo ekoki kotombwama."
     },
     "instructionsLabel": "Mateya",
     "instructionsHint": "Markdown, kino 16 KB. Ekozala na molimbolimbo bongo soki skill ezali active.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Mikanda oyo esengeli esalema lisusu index mpo na misala ya Search mpe embedding ya region ya sikoyo. Ekozala na posa te ekokanisa te tii index ekosila."
     },
     "applyToAgents": "Ezali mpo na basali",
-    "applyToAgentsHint": "Ezali na bitika te na ebandeli. Soki opesi nzela, basali bakoki kokota na mayele oyo na nzela ya ba outils ya motuni kaka, na esika ya kobongola mitindo ya persona na bango. Appel ya mayele ezali na limite na yango moko ya ba étapes. Basali ya Foundry esengeli kozala na ba fonction load_skill mpe search_skill_documents oyo ebongisami na ndakisa na bango."
+    "applyToAgentsHint": "Ezali na bitika te na ebandeli. Soki opesi nzela, basali bakoki kokota na mayele oyo na nzela ya ba outils ya motuni kaka, na esika ya kobongola mitindo ya persona na bango. Appel ya mayele ezali na limite na yango moko ya ba étapes. Basali ya Foundry esengeli kozala na ba fonction load_skill mpe search_skill_documents oyo ebongisami na ndakisa na bango.",
+    "requireConsent": "Tuna liboso ya kosala",
+    "requireConsentHint": "Soki model elingi kosala mayekoli oyo na lolenge na yango moko, ekozala na motuna epai ya mosaleli liboso. Kosenga to komanga esengeli ondima te.",
+    "consentChip": "Etuni liboso",
+    "sourceChip": "Euti na esika ya sika",
+    "sourceChipHint": "Euti na source ya mayekoli oyo ozo abonner; mitindo ebongwanaka ntango ya kosimbana. Mayekoli ya activation, agent mpe ndingisa ezali oyo ya yo.",
+    "sources": {
+      "title": "Ba source ya mayekoli",
+      "description": "Abonner na katalog ya mayekoli ya libanda (index.json oyo ezali na liste ya babuku SKILL.md). Mayekoli na yango ekoma mayekoli ya misala mpe ebongwanaka nyonso bitambu ya heures motoba. Ekotaka kaka SKILL.md; bantando ya misala te.",
+      "urlLabel": "URL ya Katalog",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Esengeli kozala https na host ya polele. Ba fichier ya mayekoli ekokatama kaka na esika moko.",
+      "labelLabel": "Label (koponama)",
+      "add": "Abonner",
+      "adding": "Ba abonner…",
+      "added": "{count, plural, =0 {Source ebandaki; mayekoli moko te ekotaki naino} one {Source ebandaki; mayekoli # ekotaki} other {Source ebandaki; mayekoli # ekotaki}}",
+      "addedWithError": "Source ebandaki, kasi synchronisation ya liboso efandaki pamba. Talela libunga na source.",
+      "addError": "Ekoki te kobakisa source ya mayekoli",
+      "sync": "Synchroniser sik’oyo",
+      "syncing": "Synchronisation…",
+      "synced": "Source esynchronisé.",
+      "syncError": "Ekoki te kosynchroniser source ya mayekoli",
+      "remove": "Longola source",
+      "removeConfirm": "Olingi kolongola source oyo? Mayekoli oyo abakisaki ekovanda mayekoli ya organisation lokola mosusu mpe ekotika kobongwana.",
+      "removed": "Source elongwaki.",
+      "removeError": "Ekoki te kolongola source ya mayekoli",
+      "loading": "Kozwa ba source…",
+      "loadError": "Ba source ya mayekoli ekoki te kozwa.",
+      "empty": "Ba source ya mayekoli naino te.",
+      "never": "Elongaki naino te",
+      "statusOk": "Synchronisé",
+      "statusError": "Synchronisation efandi pamba",
+      "statusPartial": "{count, plural, one {entrée # elongwaki te} other {ba entrée # elongwaki te}}",
+      "lastSync": "Synchronisation ya suka {time}",
+      "entryCount": "{count, plural, one {entrée #} other {ba entrée #}}",
+      "entryStatus": {
+        "synced": "esynchronisé",
+        "skipped": "elongwaki te",
+        "conflict": "botongami — esalemi te",
+        "invalid": "etondi na libunga"
+      }
+    }
   },
   "personalSkills": {
     "title": "Mikoki ya moto",

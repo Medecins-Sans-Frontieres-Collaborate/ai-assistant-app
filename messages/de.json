@@ -902,7 +902,10 @@
       "showDetails": "Skill-Details anzeigen",
       "hideDetails": "Skill-Details ausblenden",
       "agentLoad": "vom Agent geladen",
-      "agentSearch": "vom Agent durchsuchte Dokumente"
+      "agentSearch": "vom Agent durchsuchte Dokumente",
+      "needsApproval": "benötigt Ihre Zustimmung",
+      "original": "wie ursprünglich ausgeführt",
+      "updated": "seitdem aktualisiert"
     },
     "skillsManualHint": "Die automatische Auswahl ist in den Einstellungen deaktiviert. Verwenden Sie eine Fähigkeit einmal für die nächste Nachricht oder heften Sie sie an, um sie während des gesamten Gesprächs zu nutzen.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Prompt-Agent hinzufügen",
     "m365AgentIndexStop": "Indexierung beenden",
     "foundryAgentsHeading": "Foundry- und Prompt-Agents",
-    "foundryAgentsDescription": "Agents, die über Ihren eigenen Zugriff aus Azure AI Foundry erkannt wurden, sowie hier definierte Prompt-Agents. Wissens-Agents und Microsoft 365-Agents werden in den jeweiligen Abschnitten unten verwaltet."
+    "foundryAgentsDescription": "Agents, die über Ihren eigenen Zugriff aus Azure AI Foundry erkannt wurden, sowie hier definierte Prompt-Agents. Wissens-Agents und Microsoft 365-Agents werden in den jeweiligen Abschnitten unten verwaltet.",
+    "agentSkillsLabel": "Fähigkeiten",
+    "agentSkillsHelp": "Welche Organisationsfähigkeiten dieser Agent beim Beantworten laden darf. Nutzer sehen weiterhin nur Fähigkeiten, für die ihre Zugriffsregeln gelten.",
+    "agentSkills": {
+      "inherit": "Fähigkeiten, die als „für Agenten verfügbar“ markiert sind",
+      "selected": "Nur die unten ausgewählten Fähigkeiten",
+      "none": "Keine Fähigkeiten"
+    },
+    "agentSkillsNone": "Keine Fähigkeiten zur Auswahl verfügbar."
   },
   "localModels": {
     "title": "Lokale Modelle",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Automatisch",
       "always": "Immer",
-      "off": "Aus"
+      "off": "Aus",
+      "manual": "Auf Anfrage"
     },
     "activationHint": {
       "auto": "Wird automatisch ausgewählt, wenn die aktuelle Aufgabe zur Beschreibung passt. Nutzer können sie außerdem einmalig anfordern oder an eine Konversation anheften.",
       "always": "Wird jeder Unterhaltung hinzugefügt und ist für alle sichtbar. Sparsam verwenden – dies ist dauerhafter Prompt-Platz.",
-      "off": "Inaktiv: wird nie angewendet und nicht für Nutzer angeboten, bleibt aber zum Bearbeiten hier gespeichert."
+      "off": "Inaktiv: wird nie angewendet und nicht für Nutzer angeboten, bleibt aber zum Bearbeiten hier gespeichert.",
+      "manual": "Wird nur angewendet, wenn ein Nutzer sie anfordert oder anpinnt. Wird nie automatisch ausgewählt und dem Modell nicht als ladbare Fähigkeit angeboten."
     },
     "instructionsLabel": "Anweisungen",
     "instructionsHint": "Markdown, bis zu 16 KB. Wird beim Aktivieren des Skills wie eingegeben übernommen.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Diese Dokumente müssen für die aktuelle regionale Such- und Einbettungskonfiguration neu indiziert werden. Sie sind erst nach Abschluss der Indizierung durchsuchbar."
     },
     "applyToAgents": "Für Agents verfügbar",
-    "applyToAgentsHint": "Standardmäßig deaktiviert. Wenn aktiviert, können Agents diesen Skill über Nur-Lesen-Tools laden, anstatt ihre Persona-Anweisungen zu ersetzen. Skill-Aufrufe haben eigene Schrittlimits. Foundry-Agents müssen bereits die Funktionen load_skill und search_skill_documents in ihrer Definition registriert haben."
+    "applyToAgentsHint": "Standardmäßig deaktiviert. Wenn aktiviert, können Agents diesen Skill über Nur-Lesen-Tools laden, anstatt ihre Persona-Anweisungen zu ersetzen. Skill-Aufrufe haben eigene Schrittlimits. Foundry-Agents müssen bereits die Funktionen load_skill und search_skill_documents in ihrer Definition registriert haben.",
+    "requireConsent": "Vor der Anwendung nachfragen",
+    "requireConsentHint": "Wenn das Modell diese Fähigkeit selbst anwenden möchte, wird der Nutzer vorher gefragt. Bei angeforderten und angepinnten Verwendungen ist keine Bestätigung nötig.",
+    "consentChip": "Fragt vorher",
+    "sourceChip": "Aus Quelle",
+    "sourceChipHint": "Bereitgestellt durch eine abonnierte Fähigkeitsquelle; die Anweisungen werden beim Synchronisieren aktualisiert. Aktivierung, Agenten- und Zustimmungseinstellungen sind Ihre.",
+    "sources": {
+      "title": "Fähigkeitsquellen",
+      "description": "Abonnieren Sie einen externen Fähigkeitskatalog (eine index.json mit SKILL.md-Dateien). Dessen Fähigkeiten werden zu Organisationsfähigkeiten und etwa alle sechs Stunden aktualisiert. Es wird nur SKILL.md importiert; Referenzdokumente nicht.",
+      "urlLabel": "Katalog-URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Muss https auf einem öffentlichen Host sein. Fähigkeitsdateien werden nur von diesem Ort gelesen.",
+      "labelLabel": "Bezeichnung (optional)",
+      "add": "Abonnieren",
+      "adding": "Wird abonniert…",
+      "added": "{count, plural, =0 {Quelle hinzugefügt; noch keine Fähigkeiten importiert} one {Quelle hinzugefügt; # Fähigkeit importiert} other {Quelle hinzugefügt; # Fähigkeiten importiert}}",
+      "addedWithError": "Quelle hinzugefügt, aber die erste Synchronisation ist fehlgeschlagen. Prüfen Sie den Fehler an der Quelle.",
+      "addError": "Fähigkeitsquelle konnte nicht hinzugefügt werden",
+      "sync": "Jetzt synchronisieren",
+      "syncing": "Synchronisiere…",
+      "synced": "Quelle synchronisiert.",
+      "syncError": "Fähigkeitsquelle konnte nicht synchronisiert werden",
+      "remove": "Quelle entfernen",
+      "removeConfirm": "Diese Quelle entfernen? Gelieferte Fähigkeiten bleiben als normale Organisationsfähigkeiten bestehen und werden nicht mehr aktualisiert.",
+      "removed": "Quelle entfernt.",
+      "removeError": "Fähigkeitsquelle konnte nicht entfernt werden",
+      "loading": "Quellen werden geladen…",
+      "loadError": "Fähigkeitsquellen konnten nicht geladen werden.",
+      "empty": "Noch keine Fähigkeitsquellen.",
+      "never": "Nie synchronisiert",
+      "statusOk": "Synchronisiert",
+      "statusError": "Synchronisation fehlgeschlagen",
+      "statusPartial": "{count, plural, one {# Eintrag übersprungen} other {# Einträge übersprungen}}",
+      "lastSync": "Letzte Synchronisation {time}",
+      "entryCount": "{count, plural, one {# Eintrag} other {# Einträge}}",
+      "entryStatus": {
+        "synced": "synchronisiert",
+        "skipped": "übersprungen",
+        "conflict": "Konflikt — nicht überschrieben",
+        "invalid": "ungültig"
+      }
+    }
   },
   "personalSkills": {
     "title": "Persönliche Fähigkeiten",

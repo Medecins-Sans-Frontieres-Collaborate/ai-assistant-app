@@ -956,7 +956,10 @@
       "showDetails": "スキル詳細を表示",
       "hideDetails": "スキル詳細を非表示",
       "agentLoad": "エージェントによってロード",
-      "agentSearch": "エージェントによる文書検索"
+      "agentSearch": "エージェントによる文書検索",
+      "needsApproval": "承認が必要です",
+      "original": "元の実行時",
+      "updated": "更新済み"
     },
     "skillsManualHint": "設定で自動選択がオフになっています。次のメッセージのみ使用するか、スキルをピン止めしてこの会話全体で使用してください。",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "プロンプトエージェントを追加",
     "m365AgentIndexStop": "インデックス作成を停止",
     "foundryAgentsHeading": "Foundry エージェントとプロンプトエージェント",
-    "foundryAgentsDescription": "Azure AI Foundry からご自身のアクセスで検出されたエージェントと、ここで定義されたプロンプトエージェントが含まれます。ナレッジエージェントと Microsoft 365 エージェントは下記の各セクションで管理されます。"
+    "foundryAgentsDescription": "Azure AI Foundry からご自身のアクセスで検出されたエージェントと、ここで定義されたプロンプトエージェントが含まれます。ナレッジエージェントと Microsoft 365 エージェントは下記の各セクションで管理されます。",
+    "agentSkillsLabel": "スキル",
+    "agentSkillsHelp": "このエージェントが回答時にロードできる組織スキルです。ユーザーが閲覧できるのは自身のアクセス権限で許可されたスキルのみです。",
+    "agentSkills": {
+      "inherit": "「エージェントに利用可能」とマークされたスキル",
+      "selected": "下記で選択したスキルのみ",
+      "none": "スキルなし"
+    },
+    "agentSkillsNone": "選択できるスキルがありません。"
   },
   "localModels": {
     "title": "ローカルモデル",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "自動",
       "always": "常時",
-      "off": "オフ"
+      "off": "オフ",
+      "manual": "リクエスト時のみ"
     },
     "activationHint": {
       "auto": "現在のタスクが説明と一致すると自動的に選択されます。ユーザーは1回のみの使用や会話へのピン留めもできます。",
       "always": "スキルを見られる全員の会話に追加されます。頻度は抑えてご利用ください―これは永続的なプロンプトのスペースです。",
-      "off": "非アクティブ：適用されずユーザーにも提供されませんが、編集用にここに保持されます。"
+      "off": "非アクティブ：適用されずユーザーにも提供されませんが、編集用にここに保持されます。",
+      "manual": "ユーザーがリクエストまたはピンした場合のみ適用されます。自動的に選択されることはなく、モデルにはロード可能なスキルとして提供されません。"
     },
     "instructionsLabel": "指示内容",
     "instructionsHint": "Markdown、最大16KB。スキルがアクティブになるとそのまま挿入されます。",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "これらのドキュメントは現在の地域検索と埋め込み設定のために再インデックスが必要です。インデックスが完了するまで検索されません。"
     },
     "applyToAgents": "エージェントが利用可能",
-    "applyToAgentsHint": "デフォルトではオフです。有効にすると、エージェントはこのスキルを閲覧専用ツールとして読み込むことができ、ペルソナの指示を置き換える必要がありません。スキル呼び出しには独立したステップ上限があります。Foundryエージェントには、定義にload_skillおよびsearch_skill_documents関数が登録されている必要があります。"
+    "applyToAgentsHint": "デフォルトではオフです。有効にすると、エージェントはこのスキルを閲覧専用ツールとして読み込むことができ、ペルソナの指示を置き換える必要がありません。スキル呼び出しには独立したステップ上限があります。Foundryエージェントには、定義にload_skillおよびsearch_skill_documents関数が登録されている必要があります。",
+    "requireConsent": "適用前に確認",
+    "requireConsentHint": "モデルが自動でこのスキルを適用しようとした場合、事前にユーザーに確認します。リクエストやピン留め時は確認不要です。",
+    "consentChip": "適用前に確認",
+    "sourceChip": "ソースから取得",
+    "sourceChipHint": "購読したスキルソースから提供されます。同期時に手順が更新されます。アクティベーションやエージェント、同意の設定は自身で管理できます。",
+    "sources": {
+      "title": "スキルソース",
+      "description": "外部のスキルカタログ（SKILL.mdファイルを一覧するindex.json）を購読します。スキルは組織スキルとなり、約6時間ごとに更新されます。SKILL.mdのみ取り込まれ、参照資料は対象外です。",
+      "urlLabel": "カタログURL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "パブリックホスト上のhttpsである必要があります。スキルファイルは同一の場所からのみ読み込まれます。",
+      "labelLabel": "ラベル（任意）",
+      "add": "購読する",
+      "adding": "購読中…",
+      "added": "{count, plural, =0 {ソースを追加しましたが、スキルはまだインポートされていません} one {ソースを追加しました；#件のスキルをインポートしました} other {ソースを追加しました；#件のスキルをインポートしました}}",
+      "addedWithError": "ソースは追加されましたが、最初の同期に失敗しました。ソースのエラーをご確認ください。",
+      "addError": "スキルソースを追加できませんでした",
+      "sync": "今すぐ同期",
+      "syncing": "同期中…",
+      "synced": "ソースを同期しました。",
+      "syncError": "スキルソースを同期できませんでした",
+      "remove": "ソースを削除",
+      "removeConfirm": "このソースを削除しますか？配信されたスキルは通常の組織スキルとして残り、更新は停止します。",
+      "removed": "ソースを削除しました。",
+      "removeError": "スキルソースを削除できませんでした",
+      "loading": "ソースを読み込み中…",
+      "loadError": "スキルソースを読み込めませんでした。",
+      "empty": "スキルソースはまだありません。",
+      "never": "未同期",
+      "statusOk": "同期済み",
+      "statusError": "同期失敗",
+      "statusPartial": "{count, plural, one {#件スキップされました} other {#件スキップされました}}",
+      "lastSync": "最終同期 {time}",
+      "entryCount": "{count, plural, one {#件} other {#件}}",
+      "entryStatus": {
+        "synced": "同期済み",
+        "skipped": "スキップ",
+        "conflict": "競合 — 上書きされません",
+        "invalid": "無効"
+      }
+    }
   },
   "personalSkills": {
     "title": "個人スキル",

@@ -1014,7 +1014,10 @@
       "showDetails": "Nuna cikakken bayani na fasaha",
       "hideDetails": "Rufe cikakken bayani na fasaha",
       "agentLoad": "wakili ya loda",
-      "agentSearch": "wakili ya bincika takardu"
+      "agentSearch": "wakili ya bincika takardu",
+      "needsApproval": "yana buƙatar amincewarka",
+      "original": "kamar yadda aka fara gudanar",
+      "updated": "an sabunta tun"
     },
     "skillsManualHint": "Zaɓin kai tsaye yana kashe a Saituna. Yi amfani da shi sau ɗaya don saƙon na gaba, ko kunshi ƙwarewar da za ka so a duk wannan tattaunawar.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Ƙara wakilin umarni",
     "m365AgentIndexStop": "Dakatar da yin fahimta",
     "foundryAgentsHeading": "Wakilan Foundry da umarni",
-    "foundryAgentsDescription": "Wakilan da aka gano daga Azure AI Foundry ta hanyar damar ku, da kuma wakilan umarni da aka saita a nan. Wakilan ilimi da wakilan Microsoft 365 ana tafiyar da su a rarrabensu daban a ƙasa."
+    "foundryAgentsDescription": "Wakilan da aka gano daga Azure AI Foundry ta hanyar damar ku, da kuma wakilan umarni da aka saita a nan. Wakilan ilimi da wakilan Microsoft 365 ana tafiyar da su a rarrabensu daban a ƙasa.",
+    "agentSkillsLabel": "Kwarewa",
+    "agentSkillsHelp": "Wadanne kwarewar ƙungiya wannan wakili zai iya ɗauka yayin amsawa. Masu amfani har yanzu za su iya ganin kwarewar da dokokin damar su suka amince da su kawai.",
+    "agentSkills": {
+      "inherit": "Kwarewar da aka sanya \"na samuwa ga wakilai”",
+      "selected": "Kawai kwarewar da aka zaɓa a ƙasa",
+      "none": "Babu kwarewa"
+    },
+    "agentSkillsNone": "Babu kwarewa da za a iya zaɓa."
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Ta atomatik",
       "always": "Kullum",
-      "off": "A kashe"
+      "off": "A kashe",
+      "manual": "Bisa buƙata"
     },
     "activationHint": {
       "auto": "Ana zaɓar ta atomatik idan aikin yanzu ya dace da bayanin. Masu amfani kuma za su iya buƙatarta sau ɗaya ko manne ta cikin tattaunawa.",
       "always": "Za a ƙara ta a kowace tattaunawa ga duk mai ganin kwarewar. A yi amfani da ita da hankali — wannan na dindindin ne.",
-      "off": "Bata aiki: ba za a yi amfani da ita ba kuma ba za a nuna wa masu amfani ba, amma za ta kasance don gyare-gyare."
+      "off": "Bata aiki: ba za a yi amfani da ita ba kuma ba za a nuna wa masu amfani ba, amma za ta kasance don gyare-gyare.",
+      "manual": "Ana amfani da ita ne kawai idan mai amfani ya nema ko ya kafa ta. Ba a zaba ta ta atomatik kuma ba a ba da ita ga samfurin a matsayin kwarewar da za a iya ɗorawa."
     },
     "instructionsLabel": "Umarni",
     "instructionsHint": "Markdown, har zuwa 16 KB. Za a saka shi kai tsaye idan an kunna fasalin.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Wadannan takardu suna buƙatar a sake yin index don ƙirar Bincike da embedding na yankin yanzu. Ba za a iya bincika su ba har sai an kammala aikin indexing."
     },
     "applyToAgents": "Akwai ga wakilai",
-    "applyToAgentsHint": "A kashe ta tsohuwa. Idan an kunna, wakilai za su iya load wannan ƙwarewa ta hanyar kayan aiki na karanta kawai maimakon maye gurbin umarnin personansu. Kiraye-kiraye na ƙwarewar suna da iyakokin matakai (steps) masu zaman kansu. Dole ne Foundry agents su riga sun yi rajista da fasalulluka load_skill da search_skill_documents a cikin bayaninsu."
+    "applyToAgentsHint": "A kashe ta tsohuwa. Idan an kunna, wakilai za su iya load wannan ƙwarewa ta hanyar kayan aiki na karanta kawai maimakon maye gurbin umarnin personansu. Kiraye-kiraye na ƙwarewar suna da iyakokin matakai (steps) masu zaman kansu. Dole ne Foundry agents su riga sun yi rajista da fasalulluka load_skill da search_skill_documents a cikin bayaninsu.",
+    "requireConsent": "Tambaya kafin amfani",
+    "requireConsentHint": "Idan samfurin yana son amfani da wannan kwarewa da kansa, za a tambayi mai amfani kafin. Bukatu da kafa ba sa buƙatar tabbatarwa.",
+    "consentChip": "Tana tambaya da fari",
+    "sourceChip": "Daga tushe",
+    "sourceChipHint": "An kawo daga majiyar kwarewa da aka biya; umarnin suna sabuntawa a lokacin da aka haɗe. Wannan sashi na kunnawa, wakili da saitunan amincewa naka ne.",
+    "sources": {
+      "title": "Tushen kwarewa",
+      "description": "Biyo jerin kwarewa na waje (index.json da ke dauke da fayilolin SKILL.md). Kwarewar da ke ciki za su zama na ƙungiya kuma ana sabuntawa kimanin kowane awa shida. Ana shigo da SKILL.md kawai; ba a samu takardun bayanin daga wajen ba.",
+      "urlLabel": "URL na kasidar",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Dole ne ya kasance https a mai masaukin jama'a. Ana karanta fayilolin kwarewa daga wannan wuri kawai.",
+      "labelLabel": "Lakabi (zaɓi ne)",
+      "add": "Bi majiyar",
+      "adding": "Ana biyo…",
+      "added": "{count, plural, =0 {Tushe an ƙara; ba a shigo da kowace kwarewa ba tukuna} one {Tushe an ƙara; an shigo da kwarewa #} other {Tushe an ƙara; an shigo da kwarewa #}}",
+      "addedWithError": "An ƙara tushe, amma haɗin farko ya gaza. Duba kuskure a tushe.",
+      "addError": "Ba a iya ƙara tushen kwarewa ba",
+      "sync": "Haɗa yanzu",
+      "syncing": "Ana haɗawa…",
+      "synced": "An haɗa tushe.",
+      "syncError": "Ba a iya haɗa tushen kwarewa ba",
+      "remove": "Cire tushe",
+      "removeConfirm": "A cire wannan tushe? Kwarewar da ta kawo za su zama na al’ada kuma za su daina sabuntawa.",
+      "removed": "An cire tushe.",
+      "removeError": "Ba a iya cire tushen kwarewa ba",
+      "loading": "Ana loda tushen…",
+      "loadError": "Ba a iya lodawa tushen kwarewa ba.",
+      "empty": "Babu tushen kwarewa tukuna.",
+      "never": "Ba a taɓa haɗawa ba",
+      "statusOk": "An haɗa",
+      "statusError": "Haɗawa ta gaza",
+      "statusPartial": "{count, plural, one {an tsallake shigarwa #} other {an tsallake shigarwa #}}",
+      "lastSync": "Haɗa na ƙarshe {time}",
+      "entryCount": "{count, plural, one {shigarwa #} other {shigarwa #}}",
+      "entryStatus": {
+        "synced": "an haɗa",
+        "skipped": "an tsallake",
+        "conflict": "rikici — ba a maye gurbinta ba",
+        "invalid": "bai dace ba"
+      }
+    }
   },
   "personalSkills": {
     "title": "Kwarewar kaina",

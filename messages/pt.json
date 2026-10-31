@@ -902,7 +902,10 @@
       "showDetails": "Mostrar detalhes da habilidade",
       "hideDetails": "Ocultar detalhes da habilidade",
       "agentLoad": "carregado pelo agente",
-      "agentSearch": "documentos pesquisados pelo agente"
+      "agentSearch": "documentos pesquisados pelo agente",
+      "needsApproval": "precisa da sua aprovação",
+      "original": "como executado originalmente",
+      "updated": "atualizado desde então"
     },
     "skillsManualHint": "A seleção automática está desativada nas Configurações. Use uma vez para a próxima mensagem ou fixe uma habilidade para utilizá-la durante toda esta conversa.",
     "queuedMessage": {
@@ -5355,7 +5358,15 @@
     "addPromptAgent": "Adicionar agente de prompt",
     "m365AgentIndexStop": "Parar indexação",
     "foundryAgentsHeading": "Agentes Foundry e de prompt",
-    "foundryAgentsDescription": "Agentes descobertos no Azure AI Foundry através do seu próprio acesso, além de agentes de prompt definidos aqui. Agentes de conhecimento e agentes Microsoft 365 são gerenciados em suas próprias seções abaixo."
+    "foundryAgentsDescription": "Agentes descobertos no Azure AI Foundry através do seu próprio acesso, além de agentes de prompt definidos aqui. Agentes de conhecimento e agentes Microsoft 365 são gerenciados em suas próprias seções abaixo.",
+    "agentSkillsLabel": "Habilidades",
+    "agentSkillsHelp": "Quais habilidades da organização este agente pode carregar ao responder. Os usuários ainda veem apenas as habilidades permitidas pelas regras de acesso.",
+    "agentSkills": {
+      "inherit": "Habilidades marcadas como “disponíveis para agentes”",
+      "selected": "Apenas as habilidades selecionadas abaixo",
+      "none": "Sem habilidades"
+    },
+    "agentSkillsNone": "Nenhuma habilidade disponível para selecionar."
   },
   "localModels": {
     "title": "Modelos locais",
@@ -7735,12 +7746,14 @@
     "activation": {
       "auto": "Automático",
       "always": "Sempre",
-      "off": "Desligado"
+      "off": "Desligado",
+      "manual": "Mediante solicitação"
     },
     "activationHint": {
       "auto": "Selecionada automaticamente quando a tarefa atual corresponde à descrição. Os usuários também podem solicitá-la uma vez ou fixá-la em uma conversa.",
       "always": "Adicionada a todas as conversas para todos que podem ver a habilidade. Use com moderação — este é um espaço de prompt permanente.",
-      "off": "Inativa: nunca é aplicada nem oferecida aos usuários, mas permanece aqui para edição."
+      "off": "Inativa: nunca é aplicada nem oferecida aos usuários, mas permanece aqui para edição.",
+      "manual": "Aplicada apenas quando um usuário solicita ou fixa. Nunca selecionada automaticamente e não oferecida ao modelo como uma habilidade carregável."
     },
     "instructionsLabel": "Instruções",
     "instructionsHint": "Markdown, até 16 KB. Inserido exatamente como está quando a habilidade está ativa.",
@@ -7773,7 +7786,48 @@
       "reindexRequired": "Estes documentos precisam ser reindexados para a configuração atual de Pesquisa e incorporação regional. Eles não serão pesquisados até que a indexação seja concluída."
     },
     "applyToAgents": "Disponível para agentes",
-    "applyToAgentsHint": "Desativado por padrão. Quando ativado, agentes podem carregar esta habilidade por meio de ferramentas de leitura, em vez de substituir suas instruções pessoais. As chamadas de habilidade possuem limites de etapas independentes. Agentes Foundry já devem ter as funções load_skill e search_skill_documents registradas em sua definição."
+    "applyToAgentsHint": "Desativado por padrão. Quando ativado, agentes podem carregar esta habilidade por meio de ferramentas de leitura, em vez de substituir suas instruções pessoais. As chamadas de habilidade possuem limites de etapas independentes. Agentes Foundry já devem ter as funções load_skill e search_skill_documents registradas em sua definição.",
+    "requireConsent": "Perguntar antes de aplicar",
+    "requireConsentHint": "Quando o modelo deseja aplicar esta habilidade por conta própria, o usuário é consultado primeiro. Solicitações e fixações não precisam de confirmação.",
+    "consentChip": "Consulta antes",
+    "sourceChip": "Da fonte",
+    "sourceChipHint": "Fornecida por uma fonte de habilidades assinada; as instruções são atualizadas na sincronização. Configurações de ativação, agente e consentimento são suas.",
+    "sources": {
+      "title": "Fontes de habilidades",
+      "description": "Assine um catálogo externo de habilidades (um index.json listando arquivos SKILL.md). Suas habilidades tornam-se habilidades da organização e são atualizadas a cada cerca de seis horas. Apenas SKILL.md é importado; documentos de referência não.",
+      "urlLabel": "URL do catálogo",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Deve usar https em um host público. Os arquivos de habilidades são lidos apenas deste local.",
+      "labelLabel": "Rótulo (opcional)",
+      "add": "Assinar",
+      "adding": "Assinando…",
+      "added": "{count, plural, =0 {Fonte adicionada; nenhuma habilidade importada ainda} one {Fonte adicionada; # habilidade importada} other {Fonte adicionada; # habilidades importadas}}",
+      "addedWithError": "Fonte adicionada, mas a primeira sincronização falhou. Verifique o erro na fonte.",
+      "addError": "Não foi possível adicionar a fonte de habilidades",
+      "sync": "Sincronizar agora",
+      "syncing": "Sincronizando…",
+      "synced": "Fonte sincronizada.",
+      "syncError": "Não foi possível sincronizar a fonte de habilidades",
+      "remove": "Remover fonte",
+      "removeConfirm": "Remover esta fonte? As habilidades fornecidas permanecem como habilidades comuns da organização e deixam de ser atualizadas.",
+      "removed": "Fonte removida.",
+      "removeError": "Não foi possível remover a fonte de habilidades",
+      "loading": "Carregando fontes…",
+      "loadError": "Não foi possível carregar as fontes de habilidades.",
+      "empty": "Nenhuma fonte de habilidades ainda.",
+      "never": "Nunca sincronizada",
+      "statusOk": "Sincronizada",
+      "statusError": "Falha na sincronização",
+      "statusPartial": "{count, plural, one {# entrada ignorada} other {# entradas ignoradas}}",
+      "lastSync": "Última sincronização {time}",
+      "entryCount": "{count, plural, one {# entrada} other {# entradas}}",
+      "entryStatus": {
+        "synced": "sincronizada",
+        "skipped": "ignorada",
+        "conflict": "conflito — não substituído",
+        "invalid": "inválida"
+      }
+    }
   },
   "personalSkills": {
     "title": "Habilidades pessoais",

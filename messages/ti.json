@@ -1014,7 +1014,10 @@
       "showDetails": "ዝርዝራት ሰርክ ምርኣይ",
       "hideDetails": "ዝርዝራት ሰርክ ምሕባብ",
       "agentLoad": "ኣብ agent ዝተግበሩ",
-      "agentSearch": "ሰነዶታት ብ agent ዝተወሰዱ"
+      "agentSearch": "ሰነዶታት ብ agent ዝተወሰዱ",
+      "needsApproval": "ሓላፊን ማሕበራዊ ምድሓን ይፃወት የለዎ",
+      "original": "እንተ መጀመርያ ንሰርሕ",
+      "updated": "ካብ ዚቀደሙ፡ ተሓዲሱ"
     },
     "skillsManualHint": "ሓሳብ ኣብ ቅድሚ ኣይተሰረዙን። ንብቲ መልእኽቲ ናይ ሓደ ግዜ ጭን ወይ ትክክል ናይ ኣዚ ባይ ትምህርት ሓሳብ ምርጫ ምሕባ የኽንስ።",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "ፕሮምፕት ኤጅንት ወስኽ",
     "m365AgentIndexStop": "መርእዝን ምቁራብ ዘርከስ",
     "foundryAgentsHeading": "ፋውንድሪን ፕሮምፕት ኤጅንታት",
-    "foundryAgentsDescription": "ኤጅንታት ካብ Azure AI Foundry ብኣንተ ግዝኣት ተስማምዐኩ፣ ከምኡን ናይ ኣብዚ ዝተገምገመ ፕሮምፕት ኤጅንታት። ናይ እውንታት ኤጅንታትን Microsoft 365 ኤጅንታትን ናይ ምድርኡ ክፍሊታት ተምሓላሉ።"
+    "foundryAgentsDescription": "ኤጅንታት ካብ Azure AI Foundry ብኣንተ ግዝኣት ተስማምዐኩ፣ ከምኡን ናይ ኣብዚ ዝተገምገመ ፕሮምፕት ኤጅንታት። ናይ እውንታት ኤጅንታትን Microsoft 365 ኤጅንታትን ናይ ምድርኡ ክፍሊታት ተምሓላሉ።",
+    "agentSkillsLabel": "ትምህርታት",
+    "agentSkillsHelp": "እዚ ባዕሉ ናይ ግምት ትምህርታት ዝነበሩ ዓዳጅ ኣብ መልሲ ዘለዎ ግዜ ምናጽእ። ተጠቃሚታት ንትምህርታት እቲ ትርዒት ኣይሰርሑን፡ ንዝፈቱ ጥዕና ኢዩ ዝገብር።",
+    "agentSkills": {
+      "inherit": "ትምህርታት ዝተጸናኡ “ነበሩ ዓዳጅ”",
+      "selected": "ንትምህርታት ዝተመርጡ ብታንቲ",
+      "none": "ትምህርታት የለን"
+    },
+    "agentSkillsNone": "ትምህርታት ይበጽሑ ዘይኮኑ ኣሎ።"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "ሓወይነት",
       "always": "ኤውር",
-      "off": "ምጽናው"
+      "off": "ምጽናው",
+      "manual": "ብምርኣይ"
     },
     "activationHint": {
       "auto": "እቲ ግዜ ሓላፍነት ዘለዎ ዓላማ ምስ መዛገብ ብናብ ብዝሒ ይተመርጽ። ተጠቃሚ ንዓብ ግዜ ይትደርፍዎ ወይ ዓላማ ይሓተት ኢዩ።",
       "always": "ናይ ሕዝባዊ ኩሉ ምዕባለ ተጠቃሚ ክትቀመጥ ይኽእል። ነገር ምሕማም — እቲ ምስራሕ እዚ በየግዛዝ።",
-      "off": "ዘይሕተት፡ ኣይተሰርሕን ብተጠቃሚ ኣይተቐረበን፣ ንምምሕዳር ደገፍ የትረኽቦ እዩ።"
+      "off": "ዘይሕተት፡ ኣይተሰርሕን ብተጠቃሚ ኣይተቐረበን፣ ንምምሕዳር ደገፍ የትረኽቦ እዩ።",
+      "manual": "ብተጠቃሚ ምድሓን ክምትሓበ ንብምድሓን ብትረኽት ይግበሩ። ብሓንጻ ምርጫ ኣይግበሩን ናብ ሞዴል ንምስትር ትምህርታት ኣይጠሓቀውን።"
     },
     "instructionsLabel": "ትእዛዝ",
     "instructionsHint": "Markdown, ክንደይ 16 KB ድሕሪ. ብትፋህ እተረኽበ ከም ትግበሩ ዝገብር ይምልከት።",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "እዚ ሰነዳት ንኣሁናዊ ልዩ ሃገራዊ ዓበይቲ ዝተዘምኑ ሓበሬታን ዕብደታን ናይ ፍለጥ ምብታ እንተደለኹ፡ ክድፍሉ ይኽእል ኣይኮነን እምበኻ ምእካት ዝተፈጸመ ድኣ።"
     },
     "applyToAgents": "ፀጋ ኣተሓሓዛይ ይገናኛላ።",
-    "applyToAgentsHint": "ናይ ቀዳም ብኣይ ተገልግሎ እዩ። ዝተፀይ እንተኾነ ኣተሓሓዛይ እዚን ብትኣክት tools ክዛዕበሉ ይከኣል፣ ዝኾነ persona instructions ከም ዘለዎም ውፅኢ የቕልም። ኣጠራር ናይ skill step ዝበለ limits እዩ ዝሓለፈ። ናይ Foundry agents የምንባር ብ load_skill ከምኡ search_skill_documents functions ተመዝግቡ ኣሎም ትፈትሓ ክንበር ይኽእል።"
+    "applyToAgentsHint": "ናይ ቀዳም ብኣይ ተገልግሎ እዩ። ዝተፀይ እንተኾነ ኣተሓሓዛይ እዚን ብትኣክት tools ክዛዕበሉ ይከኣል፣ ዝኾነ persona instructions ከም ዘለዎም ውፅኢ የቕልም። ኣጠራር ናይ skill step ዝበለ limits እዩ ዝሓለፈ። ናይ Foundry agents የምንባር ብ load_skill ከምኡ search_skill_documents functions ተመዝግቡ ኣሎም ትፈትሓ ክንበር ይኽእል።",
+    "requireConsent": "እተሓበ ቅድሚ ምግባር ተደልዩ",
+    "requireConsentHint": "ሞዴል ገና ምስ ንሓበ ብነዚ ትምህርት ምግባር ደሊኩ፡ ቀዳም ተጠቃሚ ይሕረው። ዝተሓበ ኣብ ምድሓን ወይ ተምልከት ውን ምረጽ ደኣ እዚ ኣይፈላምን።",
+    "consentChip": "ቅድሚ ምግባር ተደልዩ",
+    "sourceChip": "ካብ ምንጪ",
+    "sourceChipHint": "ካብ ትምህርታት ብዓመዓዊ ምንጪ ዝተጸናኑ ይሕበሩ፤ መምጻኸት ብ ምስክፍ ይቐሓለ። ምሕዳሩ፡ ዓዳጅን ምምሕዳርን እንዳብርሃን ኢዩ እቲ ተዐቢት።",
+    "sources": {
+      "title": "ምንጪ ትምህርታት",
+      "description": "ናብ ዝኾነ ትምህርታት ምናይ የገበረ ዓለም ትምህርታት (index.json ዝሰናይ SKILL.md ፋይላት ዝወሰኑ) ተሳተፉ። እቲ ትምህርታት ናይ ተበጊስ ምናይ ትምህርታት ይኸዉም፡ ባዕሉ ካብ ሓዚ ሰአት ዝበሃል። ብ ነዚ SKILL.md ብኸዳ ይመዝገቡ፡ ናይ ግምት ሰነዳት ኣይኸዉም።",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "ኣብ public host https ይኸው። ፋይላት ትምህርታት ካብ ተሓዋጋ location ብዓንዲ ይኸው።",
+      "labelLabel": "Label (ንኣስተኻኸይ)",
+      "add": "ተሳተፉ",
+      "adding": "ኣብ ምስተባበር…",
+      "added": "{count, plural, =0 {ምንጪ ተሳተፈ፤ ትምህርታት ኣይኸዉም} one {ምንጪ ተሳተፈ፤ # ትምህርት ገበረ} other {ምንጪ ተሳተፈ፤ # ትምህርታት ገበሩ}}",
+      "addedWithError": "ምንጪ ተሳተፈ፡ ሀገር መጀመርያ ምምቃር ኣፍደደ። ጌጋ ኣብቲ ምንጪ ኣረጋግፉ።",
+      "addError": "ምንጪ ትምህርታት ፍትሓ ኣይከኣልን",
+      "sync": "ኣሕዋር ምዝሓዝ",
+      "syncing": "ኣብ ምዝሓዝ…",
+      "synced": "ምንጪ ተዝሓዙ።",
+      "syncError": "ምንጪ ትምህርታት ኣሕዋር ምዝሓዝ ኣይከኣልን",
+      "remove": "ምንጪ ወፅአ",
+      "removeConfirm": "እዚ ምንጪ ወፅኡ? ዝፈጠሱ ትምህርታት እንተ ነበሩ ናይ መደበኛ ዝተባህቱ ትምህርታት ይኸው፡ ምዝሓዝ ይቁልሉ።",
+      "removed": "ምንጪ ወፅኡ።",
+      "removeError": "ምንጪ ትምህርታት ወፅኡ ኣይከኣልን",
+      "loading": "ምንጪታት ኣብ ምቅ loading…",
+      "loadError": "ምንጪ ትምህርታት ምቅ ኣይከኣልን።",
+      "empty": "ኣይኮኑ ምንጪ ትምህርታት ኣሎ።",
+      "never": "ኣብ ምዝሓዝ ዘይኮነ",
+      "statusOk": "ተዝሓዙ",
+      "statusError": "ምዝሓዝ ኣፍደደ",
+      "statusPartial": "{count, plural, one {# እተንገብኡ} other {# እታንገብኡ}}",
+      "lastSync": "ኣመሓየሽቲ ምዝሓዝ {time}",
+      "entryCount": "{count, plural, one {# ዝኣበል} other {# ዝኣበልታት}}",
+      "entryStatus": {
+        "synced": "ተዝሓዙ",
+        "skipped": "ተንገበኡ",
+        "conflict": "ተጣትጣት — የተሓዘን",
+        "invalid": "ዘይተቃለለ"
+      }
+    }
   },
   "personalSkills": {
     "title": "ናይ ውሕስታ ኽእለታት",

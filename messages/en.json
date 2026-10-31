@@ -973,8 +973,11 @@
       "referencesUnavailable": "Some reference documents were unavailable",
       "showDetails": "Show skill details",
       "hideDetails": "Hide skill details",
-      "agentLoad": "loaded by agent",
-      "agentSearch": "documents searched by agent"
+      "agentLoad": "loaded on demand",
+      "agentSearch": "documents searched on demand",
+      "needsApproval": "needs your approval",
+      "original": "as originally run",
+      "updated": "updated since"
     },
     "consent": {
       "authorizeRequired": "Authorization required",
@@ -5274,7 +5277,15 @@
     "deleteFormTemplate": "Delete",
     "deleteFormTemplateConfirm": "Delete the template \"{name}\"? Conversations that already use it keep their snapshot.",
     "confirmDeleteFormTemplate": "Delete template",
-    "channelSetsTab": "Channel sets"
+    "channelSetsTab": "Channel sets",
+    "agentSkillsLabel": "Skills",
+    "agentSkillsHelp": "Which organization skills this agent may load while answering. Users still only see skills their access rules allow.",
+    "agentSkills": {
+      "inherit": "Skills marked “available to agents”",
+      "selected": "Only the skills selected below",
+      "none": "No skills"
+    },
+    "agentSkillsNone": "No skills available to select."
   },
   "admin": {
     "title": "Admin",
@@ -5402,18 +5413,61 @@
     "activation": {
       "auto": "Automatic",
       "always": "Always",
-      "off": "Off"
+      "off": "Off",
+      "manual": "On request"
     },
     "activationHint": {
       "auto": "Selected automatically when the current task matches the description. Users can also request it once or pin it to a conversation.",
       "always": "Added to every conversation for everyone who can see the skill. Use sparingly — this is permanent prompt space.",
-      "off": "Inactive: never applied and not offered to users, but kept here for editing."
+      "off": "Inactive: never applied and not offered to users, but kept here for editing.",
+      "manual": "Applied only when a user requests or pins it. Never selected automatically and not offered to the model as a loadable skill."
     },
     "instructionsLabel": "Instructions",
     "instructionsHint": "Markdown, up to 16 KB. Injected verbatim when the skill is active.",
     "saving": "Saving…",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "requireConsent": "Ask before applying",
+    "requireConsentHint": "When the model wants to apply this skill on its own, the user is asked first. Requested and pinned uses need no confirmation.",
+    "consentChip": "Asks first",
+    "sourceChip": "From source",
+    "sourceChipHint": "Delivered by a subscribed skill source; the instructions are refreshed on sync. Activation, agent and consent settings are yours.",
+    "sources": {
+      "title": "Skill sources",
+      "description": "Subscribe to an external skill catalog (an index.json listing SKILL.md files). Its skills become organization skills and refresh about every six hours. Only SKILL.md is imported; reference documents are not.",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Must be https on a public host. Skill files are read from the same location only.",
+      "labelLabel": "Label (optional)",
+      "add": "Subscribe",
+      "adding": "Subscribing…",
+      "added": "{count, plural, =0 {Source added; no skills imported yet} one {Source added; # skill imported} other {Source added; # skills imported}}",
+      "addedWithError": "Source added, but the first sync failed. Check the error on the source.",
+      "addError": "Could not add the skill source",
+      "sync": "Sync now",
+      "syncing": "Syncing…",
+      "synced": "Source synced.",
+      "syncError": "Could not sync the skill source",
+      "remove": "Remove source",
+      "removeConfirm": "Remove this source? Skills it delivered stay as ordinary organization skills and stop refreshing.",
+      "removed": "Source removed.",
+      "removeError": "Could not remove the skill source",
+      "loading": "Loading sources…",
+      "loadError": "Skill sources could not be loaded.",
+      "empty": "No skill sources yet.",
+      "never": "Never synced",
+      "statusOk": "Synced",
+      "statusError": "Sync failed",
+      "statusPartial": "{count, plural, one {# entry skipped} other {# entries skipped}}",
+      "lastSync": "Last sync {time}",
+      "entryCount": "{count, plural, one {# entry} other {# entries}}",
+      "entryStatus": {
+        "synced": "synced",
+        "skipped": "skipped",
+        "conflict": "conflict — not overwritten",
+        "invalid": "invalid"
+      }
+    }
   },
   "limits": {
     "title": "Usage limits",

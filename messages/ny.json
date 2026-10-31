@@ -1014,7 +1014,10 @@
       "showDetails": "Onetsani zambiri za luso",
       "hideDetails": "Bisani zambiri za luso",
       "agentLoad": "zatsegulidwa ndi agent",
-      "agentSearch": "zolemba zasakidwa ndi agent"
+      "agentSearch": "zolemba zasakidwa ndi agent",
+      "needsApproval": "akufunika kuvomereza kwanu",
+      "original": "monga anaendetsedwa poyamba",
+      "updated": "zasinthidwa kuyambira pamenepo"
     },
     "skillsManualHint": "Kusankhidwa kwa ntchito zokha kwazimitsidwa mu Zikhazikiko. Gwiritsani ntchito kamodzi pa uthenga wotsatira, kapena pangani pin ntchito kuti igwiritsidwe mu zokambirana zonsezi.",
     "queuedMessage": {
@@ -5339,7 +5342,15 @@
     "addPromptAgent": "Onjezani prompt agent",
     "m365AgentIndexStop": "Lekani ku index",
     "foundryAgentsHeading": "Foundry ndi prompt agents",
-    "foundryAgentsDescription": "Ma agents omwe awoneka kuchokera ku Azure AI Foundry pogwiritsa ntchito mwayi wanu, komanso prompt agents omwe akufotokozedwa pano. Knowledge agents ndi Microsoft 365 agents amasamalidwa m'gawo lawo pansipa."
+    "foundryAgentsDescription": "Ma agents omwe awoneka kuchokera ku Azure AI Foundry pogwiritsa ntchito mwayi wanu, komanso prompt agents omwe akufotokozedwa pano. Knowledge agents ndi Microsoft 365 agents amasamalidwa m'gawo lawo pansipa.",
+    "agentSkillsLabel": "Mauzimu",
+    "agentSkillsHelp": "Mauzimu omwe ogwira ntchito uyu angathe kugwiritsa ntchito pothandiza. Ogwiritsa ntchito amaona mauzimu okha malinga ndi malamulo awo.",
+    "agentSkills": {
+      "inherit": "Mauzimu olembedwa kuti “opezeka kwa ogwira ntchito”",
+      "selected": "Mauzimu omwe asankhidwa pansipa okha",
+      "none": "Palibe mauzimu"
+    },
+    "agentSkillsNone": "Palibe mauzimu omwe angasankhidwe."
   },
   "localModels": {
     "title": "Mitundu yapafupi",
@@ -7719,12 +7730,14 @@
     "activation": {
       "auto": "Zikuchitika zokha",
       "always": "Nthawi zonse",
-      "off": "Zayimitsidwa"
+      "off": "Zayimitsidwa",
+      "manual": "Pa pempho"
     },
     "activationHint": {
       "auto": "Imasankhidwa yokha ngati ntchito yomwe ikuchitika ikufanana ndi kufotokoza kwake. Ogwiritsa athanso kufunsa kamodzi kapena kuyika pa zokambirana.",
       "always": "Zimawonjezedwa pa kukambirana kulikonse kwa aliyense woziona luso. Gwiritsani ntchito pang'ono — ichi ndi malo osalota malangizo.",
-      "off": "Zayimitsidwa: sichigwiritsidwa ntchito ndipo siziperekedwa kwa ogwiritsa ntchito, koma likupitirira pano kuti lisinthe."
+      "off": "Zayimitsidwa: sichigwiritsidwa ntchito ndipo siziperekedwa kwa ogwiritsa ntchito, koma likupitirira pano kuti lisinthe.",
+      "manual": "Amagwiritsidwa ntchito kokha ngati wogwiritsa ntchito wapempha kapena wapin. Sazisankhidwa zokha ndipo sizimawonetsedwa kwa model kuti zidalowe."
     },
     "instructionsLabel": "Malangizo",
     "instructionsHint": "Markdown, mpaka 16 KB. Zimayikidwa monga zilili nthawi yomwe luso likugwiritsidwa ntchito.",
@@ -7757,7 +7770,48 @@
       "reindexRequired": "Zikalatazi ziyenera kukonzanso index kuti zigwire ntchito bwino ndi makonzedwe a Search ndi embedding apano. Sizidzapezeka pokhazikika kufunsa mpaka indexing itatha."
     },
     "applyToAgents": "Zilipo kwa ogwira ntchito",
-    "applyToAgentsHint": "Zimalakwika mwachisawawa. Akayatsidwa, ogwira ntchito angathe kutsegula luso ili kudzera mu zida zowonera okha osasintha malangizo awo a persona. Kuyitana luso kuli ndi malire awo a masitepe. Ogwira ntchito a Foundry ayenera kale kukhala ndi load_skill ndi search_skill_documents functions m'matanidwe awo."
+    "applyToAgentsHint": "Zimalakwika mwachisawawa. Akayatsidwa, ogwira ntchito angathe kutsegula luso ili kudzera mu zida zowonera okha osasintha malangizo awo a persona. Kuyitana luso kuli ndi malire awo a masitepe. Ogwira ntchito a Foundry ayenera kale kukhala ndi load_skill ndi search_skill_documents functions m'matanidwe awo.",
+    "requireConsent": "Funsani musanagwiritse ntchito",
+    "requireConsentHint": "Ngati model ikufuna kugwiritsa ntchito mauzimu awa yokha, wogwiritsa ntchito afunsidwa poyamba. Kugwiritsa ntchito kopempha kapena kopin, sikufunika kuvomereza.",
+    "consentChip": "Amafunsa poyamba",
+    "sourceChip": "Kuchokera ku gwero",
+    "sourceChipHint": "Kupereka kuchokera kugwero lomwe lalezedwa; malangizo amasinthidwa pa sync. Zoyambira, zokhudzana ndi ogwira ntchito ndi kasinthidwe ka kuvomereza ndi anu.",
+    "sources": {
+      "title": "Magwero a mauzimu",
+      "description": "Lembani ku katalogi yakunja ya mauzimu (index.json yomwe ili ndi SKILL.md files). Mauzimu ake amakhala mauzimu a bungwe ndipo amasinthidwa pafupifupi zigawa zisanu ndi chimodzi. SKILL.md okha amaloledwa; zikalata zothandiza siziloledwa.",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Ayenera kukhala https pa host wamagulu. Mafayilo a mauzimu amavomekedwa kuchokera pamalo omwewo okha.",
+      "labelLabel": "Label (kusankha)",
+      "add": "Lembani",
+      "adding": "Kuikidwa…",
+      "added": "{count, plural, =0 {Gwero laikidwa; palibe mauzimu amene alowetsedwa} one {Gwero laikidwa; mauzimu # alowetsedwa} other {Gwero laikidwa; mauzimu # alowetsedwa}}",
+      "addedWithError": "Gwero laikidwa, koma sync yoyamba yalephera. Onani zolakwika pa gwero.",
+      "addError": "Zalephera kuika gwero la mauzimu",
+      "sync": "Sync tsopano",
+      "syncing": "Kusinkha…",
+      "synced": "Gwero lasankha.",
+      "syncError": "Zalephera kusinkha gwero la mauzimu",
+      "remove": "Chotsani gwero",
+      "removeConfirm": "Mukufuna kuchotsa gwero lino? Mauzimu omwe anakupatsani azikhala mauzimu a bungwe wamba ndipo sadzasinthidwanso.",
+      "removed": "Gwero lachotsedwa.",
+      "removeError": "Zalephera kuchotsa gwero la mauzimu",
+      "loading": "Kuchita kutsitsa magwero…",
+      "loadError": "Magwero a mauzimu sakwanitsa kutsegulidwa.",
+      "empty": "Palibe magwero a mauzimu.",
+      "never": "Sanakwanitse kusankha",
+      "statusOk": "Zasinkha",
+      "statusError": "Sync yalephera",
+      "statusPartial": "{count, plural, one {# chololedwa kapena chotsalira} other {# zololedwa kapena zotsalira}}",
+      "lastSync": "Sync yomaliza {time}",
+      "entryCount": "{count, plural, one {# lopanga} other {# lopanga}}",
+      "entryStatus": {
+        "synced": "zasinkha",
+        "skipped": "zachotsedwa",
+        "conflict": "kutheka — sikunasinthidwe",
+        "invalid": "sipangidwe"
+      }
+    }
   },
   "personalSkills": {
     "title": "Zokhudza munthu",
