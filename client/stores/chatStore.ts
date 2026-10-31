@@ -1626,7 +1626,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         ? sourceUser.appliedSkillVersions
         : undefined,
       skillSelection.forcedSkillIds,
-      inputState.forcedSkillIds.length === 0,
+      inputState.forcedSkillIds.length === 0 || !!approvalResponses?.length,
     );
     if (inputState.forcedSkillIds.length > 0 && !approvalResponses?.length) {
       // Persist only ids, never instruction bodies. Update the live store,
@@ -2608,6 +2608,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       abortController: null,
       stopRequested: false,
       isRetrying: false,
+      // A failed regeneration must not leave the next fresh send finalizing
+      // as a version of the old answer (and pinning skill versions onto the
+      // wrong user message).
+      regeneratingIndex: null,
       failedConversation: conversationForRetry,
       failedSearchMode: searchMode,
       errorIsRecoverable,
