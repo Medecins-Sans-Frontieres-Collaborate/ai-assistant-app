@@ -293,6 +293,24 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
   };
 
+  /**
+   * Tear-down for paths that never hand the readable side to a client
+   * (non-streaming requests, context-build failures). Nothing drains the
+   * stream there, so a marker write from a pre-model stage can sit on
+   * backpressure for good, and `writer.abort()` waits for the in-flight
+   * write before it settles — awaiting it would hang the response (the
+   * skill enrichers write markers on every request, streaming or not).
+   * Cancelling the readable errors the writable and rejects that write;
+   * the abort is then fire-and-forget.
+   */
+  const discardWriter = (err: unknown): void => {
+    const reason = err instanceof Error ? err : new Error(String(err));
+    void streamReadable.cancel(reason).catch(() => {
+      // already cancelled / locked by a reader that was never attached
+    });
+    void abortWriter(reason);
+  };
+
   const closeWriter = async (): Promise<void> => {
     try {
       await streamWriter.close();
@@ -462,7 +480,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         if (errorResponse) return errorResponse;
         return result.response!;
       } finally {
-        await abortWriter(new Error('non-streaming request'));
+        discardWriter(new Error('non-streaming request'));
       }
     }
 
@@ -578,7 +596,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   } catch (error) {
     // Context construction failed — the stream was never returned, so
     // classic HTTP error semantics apply (auth 401, validation 400, …).
-    await abortWriter(error);
+    discardWriter(error);
     console.error('[Unified Chat] Error:', sanitizeForLog(error));
 
     if (error instanceof PipelineError) {
