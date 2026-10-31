@@ -47,7 +47,7 @@ import { BasePipelineStage } from '../pipeline/PipelineStage';
 import {
   interpreterRequested,
   nativeInterpreterCapable,
-} from './ToolRouterEnricher';
+} from './interpreterCapability';
 
 import { env } from '@/config/environment';
 import { emitToolCallRecord } from '@/lib/streamMarkers';
