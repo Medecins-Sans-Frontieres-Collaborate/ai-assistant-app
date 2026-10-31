@@ -19,10 +19,12 @@ import {
   ResolvedLimit,
   activeDelegationIds,
   counterCellName,
+  effectiveDefaults,
   matchingOverrides,
   resolveAllLimits,
   resolveLimit,
   resolveModelCells,
+  resolveModelGate,
 } from '@/lib/services/limits/resolver';
 import { canPreviewMail } from '@/lib/services/limits/scopedVerdicts';
 import { SURFACE_CELL_SUFFIX } from '@/lib/services/limits/tokenDebit';
@@ -52,7 +54,9 @@ import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { auth } from '@/auth';
 import {
+  CATALOG_MODEL_DEFAULTS,
   LIMIT_DEFINITIONS,
+  LimitDefinition,
   getLimitDefinition,
   isValidDimension,
 } from '@/config/limits';
@@ -406,6 +410,12 @@ const PER_MODEL_COUNTER_RE = new RegExp(
 interface Qualifiers {
   modelIds: string[];
   series: string[];
+  /**
+   * Series the CATALOG alone mentions (external families unavailable until
+   * granted): they get the availability row only, never counter rows built
+   * from unqualified defaults the policy never aimed at them.
+   */
+  catalogOnlySeries: Set<string>;
 }
 
 /**
@@ -449,13 +459,17 @@ function mentionedQualifiers(
     const key = s.toLowerCase();
     if (!series.has(key)) series.set(key, s);
   };
-  const note = (entry: LimitEntry) => {
+  const note = (entry: Pick<LimitEntry, 'limitKey' | 'modelId' | 'series'>) => {
     if (!PER_MODEL_KEYS.has(entry.limitKey)) return;
     if (entry.modelId) noteModelId(entry.modelId);
     else if (entry.series) noteSeries(entry.series);
   };
   if (policy) {
-    policy.defaults.forEach(note);
+    // Effective, not stored: the model approval rules expand into defaults
+    // and overrides the resolver competes (resolver.ts), so their qualifiers
+    // must get rows too or the preview shows a model as allowed that the
+    // send refuses.
+    effectiveDefaults(policy).forEach(note);
     for (const override of matchingOverrides(policy, principal, active)) {
       override.entries.forEach(note);
     }
@@ -466,7 +480,46 @@ function mentionedQualifiers(
     if (match[1] === 'model') noteModelId(match[2]);
     else noteSeries(match[2]);
   }
-  return { modelIds: [...modelIds.values()], series: [...series.values()] };
+  // The catalog's own qualified defaults (external models unavailable until
+  // granted) bite with no rule mentioning them — the preview must show that
+  // block, not an unqualified "allowed". Family entries only: one row per
+  // external family says it; a row per external model would be noise.
+  const catalogOnlySeries = new Set<string>();
+  for (const d of CATALOG_MODEL_DEFAULTS) {
+    if (!d.series || d.modelId) continue;
+    if (!series.has(d.series.toLowerCase())) {
+      noteSeries(d.series);
+      catalogOnlySeries.add(d.series.toLowerCase());
+    }
+  }
+  return {
+    modelIds: [...modelIds.values()],
+    series: [...series.values()],
+    catalogOnlySeries,
+  };
+}
+
+/**
+ * The merged gate answer presented as the MODEL's row: the family qualifier
+ * it competed with is dropped so the row keys on `modelId` alone, like every
+ * other model row the client reads.
+ */
+function modelGateRow(
+  def: LimitDefinition,
+  policy: LimitsPolicy | null,
+  principal: Principal,
+  modelId: string,
+  active: ReadonlySet<string>,
+): ResolvedLimit {
+  const { series: _family, ...row } = resolveModelGate(
+    def,
+    policy,
+    principal,
+    modelId,
+    OpenAIModels[modelId as OpenAIModelID]?.series,
+    active,
+  );
+  return row;
 }
 
 function resolveQualifiedRows(
@@ -475,7 +528,7 @@ function resolveQualifiedRows(
   usage: Readonly<Record<string, UsageCell>> | undefined,
 ): ResolvedLimit[] {
   const active = activeDelegationIds(policy, principal);
-  const { modelIds, series } = mentionedQualifiers(
+  const { modelIds, series, catalogOnlySeries } = mentionedQualifiers(
     policy,
     principal,
     active,
@@ -484,11 +537,19 @@ function resolveQualifiedRows(
   const rows: ResolvedLimit[] = [];
   for (const def of PER_MODEL_DEFINITIONS) {
     for (const modelId of modelIds) {
+      // A GATE row answers what the send answers: the merged model + family
+      // cell (resolver.ts resolveModelGate), with the family taken from the
+      // static catalog as Middleware does. Counters stay per cell.
       rows.push(
-        resolveLimit(def, policy, principal, modelId, undefined, active),
+        def.unit === 'boolean'
+          ? modelGateRow(def, policy, principal, modelId, active)
+          : resolveLimit(def, policy, principal, modelId, undefined, active),
       );
     }
     for (const s of series) {
+      if (def.unit !== 'boolean' && catalogOnlySeries.has(s.toLowerCase())) {
+        continue;
+      }
       rows.push(resolveLimit(def, policy, principal, undefined, s, active));
     }
   }
