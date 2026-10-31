@@ -822,6 +822,8 @@ describe('AgentAccessPanel', () => {
       description: '',
       systemPrompt: 'You are a concierge.',
       modelId: 'gpt-5.2',
+      skillAccess: 'inherit',
+      skillIds: [],
     });
     // Create-only: no If-Match rides along.
     expect(agentPostCalls[0].headers['If-Match']).toBeUndefined();
@@ -917,6 +919,8 @@ describe('AgentAccessPanel', () => {
       description: 'Helps plan travel',
       systemPrompt: 'You are a travel advisor.',
       modelId: 'gpt-5.2',
+      skillAccess: 'inherit',
+      skillIds: [],
     });
   });
 
