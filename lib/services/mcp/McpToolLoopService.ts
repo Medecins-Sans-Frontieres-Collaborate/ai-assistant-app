@@ -186,5 +186,6 @@ export async function runMcpToolLoop(
     builtinExecutor: options.builtinExecutor,
     builtinExecutors: options.builtinExecutors,
     maxImmediateRounds: options.maxImmediateRounds,
+    signal: options.signal,
   });
 }
