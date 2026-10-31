@@ -68,6 +68,7 @@ export class AgentChatHandler extends BasePipelineStage {
           signal: context.stageSignal,
           agentSkillsEnabled: context.agentSkillsEnabled,
           forcedSkillIds: context.forcedSkillIds,
+          skillsAuto: context.skillsAuto,
           hostedRegion: context.hostedRegion,
           emitMarker: context.emitMarker,
         },

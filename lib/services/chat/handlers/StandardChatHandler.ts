@@ -425,6 +425,7 @@ export class StandardChatHandler extends BasePipelineStage {
             const executor = await createSkillToolExecutor({
               userMail: context.user.mail ?? undefined,
               forcedIds: context.forcedSkillIds,
+              autoEnabled: context.skillsAuto !== false,
               state: await restoreAgentSkillState(
                 context.user.id ?? context.user.mail ?? 'unknown',
                 context.mcpLoopRound ?? 0,
