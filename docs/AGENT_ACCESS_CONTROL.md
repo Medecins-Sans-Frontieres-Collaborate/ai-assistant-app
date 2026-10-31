@@ -376,6 +376,16 @@ the usual ≤60s TTL.
 - Global admins see: all agents from their own `/api/agents` discovery, merged with all existing
   rules (rules whose agent they can't discover appear as "not discoverable by you").
   Local admins see only their delegated keys.
+- The Agents area is three labelled groups with the same row shape: **Foundry and prompt agents**
+  (the merged list), **Microsoft 365 agents** and **Organization knowledge agents**. Discovery
+  emits knowledge and M365 agents under the SAME canonical key their sections edit
+  (`org-agent::<id>`, `m365-agent::<id>`), so the merged list leaves them to their sections
+  (`isAgentListSource`, `components/AgentAccess/types.ts`) instead of listing one agent twice;
+  rules for non-agent sources (connectors, guides, datasets, form templates, channel profiles…)
+  never surface as "not discoverable" agent rows either. The delegation picker still sees every
+  row. Every list uses the same vocabulary: **Access** opens the rule editor (toggles to Cancel
+  while open), **Edit agent** / **Edit** the record, **Delete** a red text button with an inline
+  "Yes, delete / Cancel" confirm; the access pill is the shared `AccessPill`.
 - Editor: access type (Everyone / Restricted), chip inputs for domains and user emails, and a
   **disabled Groups section** labeled as pending tenant consent.
 - Saves send the ETag; a 409 prompts a reload-and-retry.
