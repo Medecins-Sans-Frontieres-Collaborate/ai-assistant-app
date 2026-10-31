@@ -22,10 +22,31 @@ const MSF_METADATA_KEYS = {
   activation: 'msf-activation',
   displayName: 'msf-display-name',
   applyToAgents: 'msf-apply-to-agents',
+  requireConsent: 'msf-require-consent',
 } as const;
 
-/** Standard frontmatter fields we map onto our own schema. */
-const MAPPED_KEYS = new Set(['name', 'description']);
+/**
+ * Standard frontmatter fields we map onto our own schema.
+ * `disable-model-invocation` (Agent Skills / Claude Code) means "never
+ * offered to the model, explicit use only" — our 'manual' activation. The
+ * OpenCode spelling, `metadata.opencode/autoinvoke: false`, is honoured on
+ * import as well but stays preserved as foreign metadata.
+ */
+const MAPPED_KEYS = new Set([
+  'name',
+  'description',
+  'disable-model-invocation',
+]);
+const OPENCODE_AUTOINVOKE_KEY = 'opencode/autoinvoke';
+
+/** Lenient boolean for interchange flags; undefined when not a recognisable boolean. */
+function booleanish(value: string | undefined): boolean | undefined {
+  if (value === undefined) return undefined;
+  const normalized = value.trim().toLowerCase();
+  if (['true', 'yes', 'on', '1'].includes(normalized)) return true;
+  if (['false', 'no', 'off', '0'].includes(normalized)) return false;
+  return undefined;
+}
 
 /**
  * A parsed SKILL.md ready to become a stored skill. Not a full `Skill`:
@@ -38,6 +59,7 @@ export interface ParsedSkillMarkdown {
   instructions: string;
   activation: SkillActivation;
   applyToAgents: boolean;
+  requireConsent: boolean;
   /** Preserved, never interpreted; `metadata.*` keys are flattened. */
   foreignFrontmatter?: Record<string, string>;
 }
@@ -164,7 +186,18 @@ export function parseSkillMarkdown(content: string): ParseSkillResult {
 
   // Our own exported properties come back out of `metadata:`; anything else
   // is foreign and preserved verbatim.
-  let activation: SkillActivation = 'auto';
+  // Interchange flags: a skill the author hid from model invocation
+  // imports as 'manual' unless our own metadata says otherwise (ours is
+  // the more specific statement and wins).
+  const disableModelInvocation = booleanish(fields['disable-model-invocation']);
+  if (
+    fields['disable-model-invocation'] !== undefined &&
+    disableModelInvocation === undefined
+  )
+    errors.push('disable-model-invocation must be true or false.');
+  const autoinvoke = booleanish(metadata[OPENCODE_AUTOINVOKE_KEY]);
+  let activation: SkillActivation =
+    disableModelInvocation === true || autoinvoke === false ? 'manual' : 'auto';
   const rawActivation = metadata[MSF_METADATA_KEYS.activation];
   if (rawActivation !== undefined) {
     const parsed = SkillActivationSchema.safeParse(rawActivation);
@@ -172,10 +205,19 @@ export function parseSkillMarkdown(content: string): ParseSkillResult {
       activation = parsed.data;
     } else {
       errors.push(
-        `metadata.${MSF_METADATA_KEYS.activation} must be one of: auto, always, off.`,
+        `metadata.${MSF_METADATA_KEYS.activation} must be one of: auto, always, manual, off.`,
       );
     }
   }
+  const rawRequireConsent = metadata[MSF_METADATA_KEYS.requireConsent];
+  const requireConsent = booleanish(rawRequireConsent) === true;
+  if (
+    rawRequireConsent !== undefined &&
+    booleanish(rawRequireConsent) === undefined
+  )
+    errors.push(
+      `metadata.${MSF_METADATA_KEYS.requireConsent} must be true or false.`,
+    );
   const name =
     metadata[MSF_METADATA_KEYS.displayName] ??
     (idCheck.success ? displayNameFromId(id) : '');
@@ -217,6 +259,7 @@ export function parseSkillMarkdown(content: string): ParseSkillResult {
       instructions,
       activation,
       applyToAgents,
+      requireConsent,
       foreignFrontmatter:
         Object.keys(foreignFrontmatter).length > 0
           ? foreignFrontmatter
@@ -244,6 +287,10 @@ export function serializeSkillMarkdown(skill: ParsedSkillMarkdown): string {
   SkillForeignFrontmatterSchema.parse(skill.foreignFrontmatter ?? {});
   const lines: string[] = ['---', `name: ${skill.id}`];
   lines.push(`description: ${frontmatterValue(skill.description)}`);
+  // Interchange: other runtimes read this standard flag; ours is restated
+  // under metadata so the round trip is exact.
+  if (skill.activation === 'manual')
+    lines.push('disable-model-invocation: true');
 
   const foreign = skill.foreignFrontmatter ?? {};
   for (const [key, value] of Object.entries(foreign)) {
@@ -258,6 +305,9 @@ export function serializeSkillMarkdown(skill: ParsedSkillMarkdown): string {
   ];
   if (skill.applyToAgents) {
     metadataEntries.push([MSF_METADATA_KEYS.applyToAgents, 'true']);
+  }
+  if (skill.requireConsent) {
+    metadataEntries.push([MSF_METADATA_KEYS.requireConsent, 'true']);
   }
   for (const [key, value] of Object.entries(foreign)) {
     if (key.startsWith('metadata.')) {
