@@ -346,7 +346,8 @@ export interface CatalogSkill {
 
 /** Per-entry outcome of the last sync, kept for the admin list. */
 export const SkillSourceEntryStateSchema = z.object({
-  id: SkillIdSchema,
+  /** The catalog's entry name as given (invalid names are reported too). */
+  id: z.string().min(1).max(64),
   version: z.string().optional(),
   status: z.enum(['synced', 'skipped', 'conflict', 'invalid']),
   detail: z.string().optional(),
@@ -389,6 +390,8 @@ export const SkillSourceIndexSchema = z.object({
         files: z.array(z.string().min(1).max(512)).max(64),
       }),
     )
-    .max(SKILL_LIMITS.maxSourceSkills),
+    // Oversized indexes are truncated to `maxSourceSkills` by the sync, not
+    // rejected wholesale; this is only a memory bound (the body is 256 KB).
+    .max(2000),
 });
 export type SkillSourceIndex = z.infer<typeof SkillSourceIndexSchema>;
