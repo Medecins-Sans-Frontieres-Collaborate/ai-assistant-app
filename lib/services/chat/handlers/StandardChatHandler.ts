@@ -481,6 +481,8 @@ export class StandardChatHandler extends BasePipelineStage {
             verbosity: context.verbosity,
             // Stage timeout → cancel the upstream model call (issue #130).
             signal: context.stageSignal,
+            // Loader channel for pre-stream retry / trim notices.
+            emitActivity: context.emitActivity,
             botId: ragConfig?.botId,
             telemetry: context.telemetry,
             hostedRegion: context.hostedRegion,
