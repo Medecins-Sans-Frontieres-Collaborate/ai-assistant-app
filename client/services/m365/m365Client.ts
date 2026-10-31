@@ -521,3 +521,56 @@ export async function saveToOneDrive(
     body: form,
   });
 }
+
+// ---------------------------------------------------------------------------
+// Daily digest (docs/M365_DAILY_DIGEST.md)
+// ---------------------------------------------------------------------------
+
+export async function startDigestJob(
+  request: import('@/types/m365Digest').DigestRequest,
+): Promise<{
+  jobId: string;
+  status: import('@/types/m365Digest').DigestJobStatus;
+}> {
+  return requestJson('/api/m365/digest', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request),
+  });
+}
+
+export interface DigestJobSnapshot {
+  jobId: string;
+  status: import('@/types/m365Digest').DigestJobStatus;
+  progress: import('@/types/m365Digest').DigestJobProgress;
+  result?: import('@/types/m365Digest').CommsDigest;
+  error?: string;
+}
+
+export async function fetchDigestJob(
+  jobId: string,
+): Promise<DigestJobSnapshot> {
+  return requestJson(`/api/m365/digest/${encodeURIComponent(jobId)}`);
+}
+
+/** Drops the server-side record once the card holds the result. */
+export async function deleteDigestJob(jobId: string): Promise<void> {
+  await requestJson(`/api/m365/digest/${encodeURIComponent(jobId)}`, {
+    method: 'DELETE',
+  });
+}
+
+export interface M365ChannelEntry {
+  channelId: string;
+  name: string;
+}
+
+/** Channels of one joined team, for the digest channel picker. */
+export async function listTeamChannels(
+  groupId: string,
+): Promise<M365ChannelEntry[]> {
+  const data = await requestJson<{ channels: M365ChannelEntry[] }>(
+    `/api/m365/teams?channelsOf=${encodeURIComponent(groupId)}`,
+  );
+  return data.channels;
+}
