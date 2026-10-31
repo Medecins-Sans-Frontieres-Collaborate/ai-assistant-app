@@ -833,7 +833,9 @@
       "deniedByRuleHint": "Bloqueado por sua regra — gerencie em Configurações → Conectores.",
       "batchPendingHint": "{count} solicitações de ferramenta pendentes",
       "approveAllButton": "Aprovar todas",
-      "denyAllButton": "Recusar todas"
+      "denyAllButton": "Recusar todas",
+      "applySkillTitle": "Aplicar a habilidade \"{skill}\"?",
+      "skillConsentNote": "Um administrador definiu esta habilidade para pedir autorização antes de ser aplicada. Ao aprovar, será carregada apenas a orientação para esta resposta."
     },
     "openImage": "Abrir imagem",
     "copyMessage": "Copiar mensagem",
@@ -5366,7 +5368,10 @@
       "selected": "Apenas as habilidades selecionadas abaixo",
       "none": "Sem habilidades"
     },
-    "agentSkillsNone": "Nenhuma habilidade disponível para selecionar."
+    "agentSkillsNone": "Nenhuma habilidade disponível para selecionar.",
+    "agentSkillsLoading": "Carregando habilidades...",
+    "agentSkillsLoadError": "Não foi possível carregar as habilidades. As seleções salvas anteriormente foram mantidas.",
+    "agentSkillsNotVisible": "(não visível para você — desmarque para remover)"
   },
   "localModels": {
     "title": "Modelos locais",
@@ -7827,7 +7832,8 @@
         "conflict": "conflito — não substituído",
         "invalid": "inválida"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Somente habilidades automáticas podem pedir autorização primeiro: habilidades solicitadas, fixadas e sempre ativas aplicam-se sem aviso, e habilidades sob demanda nunca são escolhidas pelo modelo."
   },
   "personalSkills": {
     "title": "Habilidades pessoais",

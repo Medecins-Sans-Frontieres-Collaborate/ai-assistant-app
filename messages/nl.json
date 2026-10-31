@@ -852,7 +852,9 @@
       "deniedByRuleHint": "Geblokkeerd door uw regel — beheren via Instellingen → Connectors.",
       "batchPendingHint": "{count} toolverzoeken in behandeling",
       "approveAllButton": "Alles goedkeuren",
-      "denyAllButton": "Alles weigeren"
+      "denyAllButton": "Alles weigeren",
+      "applySkillTitle": "De vaardigheid “{skill}” toepassen?",
+      "skillConsentNote": "Een beheerder heeft ingesteld dat voor deze vaardigheid toestemming gevraagd moet worden voordat deze wordt toegepast. Goedkeuren laadt de richtlijnen alleen voor dit antwoord."
     },
     "openImage": "Afbeelding openen",
     "copyMessage": "Bericht kopiëren",
@@ -5366,7 +5368,10 @@
       "selected": "Alleen de hieronder geselecteerde vaardigheden",
       "none": "Geen vaardigheden"
     },
-    "agentSkillsNone": "Geen vaardigheden beschikbaar om te selecteren."
+    "agentSkillsNone": "Geen vaardigheden beschikbaar om te selecteren.",
+    "agentSkillsLoading": "Vaardigheden laden…",
+    "agentSkillsLoadError": "Vaardigheden konden niet worden geladen. Eerder opgeslagen selecties blijven behouden.",
+    "agentSkillsNotVisible": "(niet zichtbaar voor u — deselecteer om te verwijderen)"
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -7827,7 +7832,8 @@
         "conflict": "conflict — niet overschreven",
         "invalid": "ongeldig"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Alleen automatische vaardigheden kunnen vooraf toestemming vragen: aangevraagde, vastgepinde en altijd-actieve vaardigheden worden zonder melding toegepast, en op-aanvraag vaardigheden worden nooit door het model gekozen."
   },
   "personalSkills": {
     "title": "Persoonlijke vaardigheden",

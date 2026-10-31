@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Yaletsedwa ndi malamulo anu — sinthani mu Zikhazikiko → Connectors.",
       "batchPendingHint": "Pali pempho la zida {count} zikudikirira",
       "approveAllButton": "Vomerani zonse",
-      "denyAllButton": "Khana zonse"
+      "denyAllButton": "Khana zonse",
+      "applySkillTitle": "Mugwiritsa ntchito luso “{skill}”?",
+      "skillConsentNote": "Admin anakhazikitsa luso ili kuti lipemphe chilolezo musanagwiritse ntchito. Kuvomera kwanu kudzawonetsa malangizo ake pa yankho lino okha."
     },
     "openImage": "Tsegulani chithunzichi",
     "copyMessage": "Kopera uthengawu",
@@ -5350,7 +5352,10 @@
       "selected": "Mauzimu omwe asankhidwa pansipa okha",
       "none": "Palibe mauzimu"
     },
-    "agentSkillsNone": "Palibe mauzimu omwe angasankhidwe."
+    "agentSkillsNone": "Palibe mauzimu omwe angasankhidwe.",
+    "agentSkillsLoading": "Ikutsegula maluso...",
+    "agentSkillsLoadError": "Maluso sanathe kutsegulidwa. Zosankha zomwe zinasungidwa kale zikusungidwa.",
+    "agentSkillsNotVisible": "(simukuchiona — chotsani kuti muchotse)"
   },
   "localModels": {
     "title": "Mitundu yapafupi",
@@ -7811,7 +7816,8 @@
         "conflict": "kutheka — sikunasinthidwe",
         "invalid": "sipangidwe"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Maluso amene amagwira ntchito zokha okha amene angafunse chilolezo: ophunzitsidwa, operekedwa nthawi zonse komanso ofunikira amaikidwa popanda pempho, ndipo maluso opempha nthawi zina sapezedwa ndi model."
   },
   "personalSkills": {
     "title": "Zokhudza munthu",

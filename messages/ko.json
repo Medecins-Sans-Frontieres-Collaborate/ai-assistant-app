@@ -887,7 +887,9 @@
       "deniedByRuleHint": "규칙에 의해 차단됨 — 설정 → 커넥터에서 관리하세요.",
       "batchPendingHint": "{count}개의 도구 요청 대기 중",
       "approveAllButton": "모두 허용",
-      "denyAllButton": "모두 거부"
+      "denyAllButton": "모두 거부",
+      "applySkillTitle": "“{skill}” 스킬을 적용하시겠습니까?",
+      "skillConsentNote": "관리자가 이 스킬을 적용 전에 확인하도록 설정했습니다. 승인하면 이 답변에만 가이드가 로드됩니다."
     },
     "openImage": "이미지 열기",
     "copyMessage": "메시지 복사",
@@ -5366,7 +5368,10 @@
       "selected": "아래에서 선택한 스킬만",
       "none": "스킬 없음"
     },
-    "agentSkillsNone": "선택할 수 있는 스킬이 없습니다."
+    "agentSkillsNone": "선택할 수 있는 스킬이 없습니다.",
+    "agentSkillsLoading": "스킬 불러오는 중…",
+    "agentSkillsLoadError": "스킬을 불러올 수 없습니다. 이전에 저장된 선택 사항은 유지됩니다.",
+    "agentSkillsNotVisible": "(회원님께는 표시되지 않습니다 — 체크 해제 시 제거)"
   },
   "localModels": {
     "title": "로컬 모델",
@@ -7827,7 +7832,8 @@
         "conflict": "충돌 — 덮어쓰지 않음",
         "invalid": "잘못됨"
       }
-    }
+    },
+    "requireConsentDisabledHint": "자동 스킬만 사전 확인이 가능합니다: 요청, 고정, 항상 활성화 스킬은 확인 없이 바로 적용되며, 요청 시 스킬은 모델이 직접 선택하지 않습니다."
   },
   "personalSkills": {
     "title": "개인 스킬",

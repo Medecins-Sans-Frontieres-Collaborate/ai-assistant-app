@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Bloke pa règ ou — jere nan Anviwònman → Konektè.",
       "batchPendingHint": "{count} demann zouti an atant",
       "approveAllButton": "Apwouve tout",
-      "denyAllButton": "Refize tout"
+      "denyAllButton": "Refize tout",
+      "applySkillTitle": "Aplike konpetans “{skill}”?",
+      "skillConsentNote": "Yon admin mete konpetans sa pou mande pèmisyon avan li aplike. Si ou dakò, l ap chaje gid la sèlman pou repons sa a."
     },
     "openImage": "Louvri imaj",
     "copyMessage": "Kopi mesaj",
@@ -5350,7 +5352,10 @@
       "selected": "Sèlman konpetans ou chwazi anba a",
       "none": "Pa gen okenn konpetans"
     },
-    "agentSkillsNone": "Pa gen okenn konpetans disponib pou chwazi."
+    "agentSkillsNone": "Pa gen okenn konpetans disponib pou chwazi.",
+    "agentSkillsLoading": "Y ap chaje konpetans yo…",
+    "agentSkillsLoadError": "Konpetans yo pa t ka chaje. Chwa ou te sove anvan yo rete.",
+    "agentSkillsNotVisible": "(pa vizib pou ou — dekoche pou retire)"
   },
   "localModels": {
     "title": "Modèl lokal",
@@ -7811,7 +7816,8 @@
         "conflict": "konfli — pa ranplase",
         "invalid": "envalib"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Se sèlman konpetans otomatik kap mande anvan: konpetans mande, fikse ak toujou aktive ap aplike san demann, epi konpetans sou demann pa janm chwazi pa modèl la."
   },
   "personalSkills": {
     "title": "Konpetans pèsonèl",

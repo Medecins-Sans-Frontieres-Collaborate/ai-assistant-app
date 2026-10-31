@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Hunnde mum suusii — wallita e Settings → Connectors.",
       "batchPendingHint": "{count} ñaare hurmiti hurmiti doon ena doole",
       "approveAllButton": "Ayda fow",
-      "denyAllButton": "Suus fow"
+      "denyAllButton": "Suus fow",
+      "applySkillTitle": "Ndene “{skill}” hañnde?",
+      "skillConsentNote": "Admin ngal o jagii ndene ngol so mbaɗen tan kadi. Terewa hande ngal loowdi e tawa ngal."
     },
     "openImage": "Uddu njaajeendi",
     "copyMessage": "Natto ndemgol",
@@ -5350,7 +5352,10 @@
       "selected": "Tawas tan ɗee waɗi laawde ko yeeso",
       "none": "Tawas alaa"
     },
-    "agentSkillsNone": "Alaa tawas tawa suɓo."
+    "agentSkillsNone": "Alaa tawas tawa suɓo.",
+    "agentSkillsLoading": "Ndeneji ndi loowdi…",
+    "agentSkillsLoadError": "Ndeneji ndi waawi loowde. Kuusal ngal so hullii ngal, o nanii.",
+    "agentSkillsNotVisible": "(keɓaani e ma—yof tuuma ndon moƴƴi)"
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",
@@ -7811,7 +7816,8 @@
         "conflict": "tawortu — alaa tubbitugol",
         "invalid": "bannge"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Ndeneji automatic tan no mbaɗii ask: ndeneji juulii, ummoraaki e daɗi, ndeneji dow-umoral ngal e model waawi ummoraaki wonande tawa."
   },
   "personalSkills": {
     "title": "Keertugoji",

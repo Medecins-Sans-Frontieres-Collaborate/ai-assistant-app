@@ -887,7 +887,9 @@
       "deniedByRuleHint": "Blokováno vaším pravidlem — spravujte v Nastavení → Konektory.",
       "batchPendingHint": "{count} žádostí o nástroj čeká na schválení",
       "approveAllButton": "Schválit vše",
-      "denyAllButton": "Odmítnout vše"
+      "denyAllButton": "Odmítnout vše",
+      "applySkillTitle": "Použít dovednost „{skill}“?",
+      "skillConsentNote": "Administrátor nastavil tuto dovednost tak, aby bylo nutné se před použitím zeptat. Schválením se použije její doporučení pouze pro tuto odpověď."
     },
     "openImage": "Otevřít obrázek",
     "copyMessage": "Kopírovat zprávu",
@@ -5366,7 +5368,10 @@
       "selected": "Pouze níže vybrané dovednosti",
       "none": "Žádné dovednosti"
     },
-    "agentSkillsNone": "Nejsou dostupné žádné dovednosti k výběru."
+    "agentSkillsNone": "Nejsou dostupné žádné dovednosti k výběru.",
+    "agentSkillsLoading": "Načítání dovedností…",
+    "agentSkillsLoadError": "Dovednosti se nepodařilo načíst. Dříve uložený výběr zůstává zachován.",
+    "agentSkillsNotVisible": "(neviditelné pro vás — odškrtněte pro odebrání)"
   },
   "localModels": {
     "title": "Lokální modely",
@@ -7827,7 +7832,8 @@
         "conflict": "konflikt — nepřepsáno",
         "invalid": "neplatné"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Jen automatické dovednosti se mohou nejdřív zeptat: žádané, připnuté a trvale aktivní dovednosti se použijí bez potvrzení, a dovednosti na požádání model nikdy nevybírá."
   },
   "personalSkills": {
     "title": "Osobní dovednosti",

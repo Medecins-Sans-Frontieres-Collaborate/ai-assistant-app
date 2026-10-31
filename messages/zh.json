@@ -918,7 +918,9 @@
       "deniedByRuleHint": "已被您的规则阻止 — 请在设置 → 连接器中管理。",
       "batchPendingHint": "有 {count} 个工具请求待处理",
       "approveAllButton": "全部允许",
-      "denyAllButton": "全部拒绝"
+      "denyAllButton": "全部拒绝",
+      "applySkillTitle": "要应用技能“{skill}”吗？",
+      "skillConsentNote": "管理员已设置此技能在应用前需征得同意。批准后仅加载本次回答的指导内容。"
     },
     "openImage": "打开图片",
     "copyMessage": "复制消息",
@@ -5397,7 +5399,10 @@
       "selected": "仅限下方选中的技能",
       "none": "无技能"
     },
-    "agentSkillsNone": "无可选技能。"
+    "agentSkillsNone": "无可选技能。",
+    "agentSkillsLoading": "正在加载技能…",
+    "agentSkillsLoadError": "无法加载技能。先前保存的选择将被保留。",
+    "agentSkillsNotVisible": "（您不可见 — 取消勾选可移除）"
   },
   "localModels": {
     "title": "本地模型",
@@ -7858,7 +7863,8 @@
         "conflict": "冲突 — 未覆盖",
         "invalid": "无效"
       }
-    }
+    },
+    "requireConsentDisabledHint": "仅自动技能可要求先确认：请求、固定和始终启用的技能将直接应用，无需提示，按需技能不会被模型选择。"
   },
   "personalSkills": {
     "title": "个人技能",

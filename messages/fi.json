@@ -862,7 +862,9 @@
       "deniedByRuleHint": "Estetty sääntösi vuoksi — hallitse asetuksista → Yhdistäjät.",
       "batchPendingHint": "{count} työkalupyyntöä odottaa",
       "approveAllButton": "Hyväksy kaikki",
-      "denyAllButton": "Hylkää kaikki"
+      "denyAllButton": "Hylkää kaikki",
+      "applySkillTitle": "Käytetäänkö taitoa ”{skill}”?",
+      "skillConsentNote": "Ylläpitäjä on asettanut tämän taidon kysymään luvan ennen käyttöä. Hyväksyminen tuo ohjeet vain tähän vastaukseen."
     },
     "openImage": "Avaa kuva",
     "copyMessage": "Kopioi viesti",
@@ -5366,7 +5368,10 @@
       "selected": "Vain alla valitut osaamiset",
       "none": "Ei osaamisia"
     },
-    "agentSkillsNone": "Ei valittavia osaamisia."
+    "agentSkillsNone": "Ei valittavia osaamisia.",
+    "agentSkillsLoading": "Ladataan taitoja…",
+    "agentSkillsLoadError": "Taitoja ei voitu ladata. Aiemmin tallennetut valinnat säilytetään.",
+    "agentSkillsNotVisible": "(ei näy sinulle — poista valinta poistaaksesi)"
   },
   "localModels": {
     "title": "Paikalliset mallit",
@@ -7827,7 +7832,8 @@
         "conflict": "ristiriita — ei korvattu",
         "invalid": "virheellinen"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Vain automaattiset taidot voivat pyytää lupaa: pyydetyt, kiinnitetyt ja aina päällä olevat taidot otetaan käyttöön ilman kyselyä, ja pyynnöstä käytettäviä taitoja ei koskaan valita mallin toimesta."
   },
   "personalSkills": {
     "title": "Henkilökohtaiset taidot",

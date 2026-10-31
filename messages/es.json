@@ -833,7 +833,9 @@
       "deniedByRuleHint": "Bloqueado por su regla — administre en Configuración → Conectores.",
       "batchPendingHint": "{count} solicitudes de herramientas pendientes",
       "approveAllButton": "Aprobar todas",
-      "denyAllButton": "Denegar todas"
+      "denyAllButton": "Denegar todas",
+      "applySkillTitle": "¿Aplicar la habilidad \"{skill}\"?",
+      "skillConsentNote": "Un administrador configuró esta habilidad para que solicite autorización antes de aplicarse. Si aprueba, se cargará su orientación solo para esta respuesta."
     },
     "openImage": "Abrir imagen",
     "copyMessage": "Copiar mensaje",
@@ -5366,7 +5368,10 @@
       "selected": "Solo las habilidades seleccionadas abajo",
       "none": "Sin habilidades"
     },
-    "agentSkillsNone": "No hay habilidades disponibles para seleccionar."
+    "agentSkillsNone": "No hay habilidades disponibles para seleccionar.",
+    "agentSkillsLoading": "Cargando habilidades…",
+    "agentSkillsLoadError": "No se pudieron cargar las habilidades. Se mantienen las selecciones guardadas anteriormente.",
+    "agentSkillsNotVisible": "(no visible para usted — desmarque para eliminar)"
   },
   "localModels": {
     "title": "Modelos locales",
@@ -7827,7 +7832,8 @@
         "conflict": "conflicto — no sobrescrita",
         "invalid": "inválida"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Solo las habilidades automáticas pueden solicitar confirmación: las solicitadas, fijadas y siempre activas se aplican sin aviso, y las habilidades a petición nunca las elige el modelo."
   },
   "personalSkills": {
     "title": "Habilidades personales",

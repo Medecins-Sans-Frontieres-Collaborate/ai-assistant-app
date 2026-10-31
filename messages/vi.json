@@ -888,7 +888,9 @@
       "deniedByRuleHint": "Bị chặn theo quy tắc của bạn — quản lý trong Cài đặt → Kết nối.",
       "batchPendingHint": "{count} yêu cầu dùng công cụ đang chờ xử lý",
       "approveAllButton": "Chấp thuận tất cả",
-      "denyAllButton": "Từ chối tất cả"
+      "denyAllButton": "Từ chối tất cả",
+      "applySkillTitle": "Áp dụng kỹ năng “{skill}”?",
+      "skillConsentNote": "Quản trị viên đã thiết lập kỹ năng này yêu cầu xác nhận trước khi áp dụng. Nếu đồng ý, hướng dẫn sẽ chỉ được sử dụng cho câu trả lời này."
     },
     "openImage": "Mở hình ảnh",
     "copyMessage": "Sao chép tin nhắn",
@@ -5397,7 +5399,10 @@
       "selected": "Chỉ những kỹ năng được chọn bên dưới",
       "none": "Không có kỹ năng nào"
     },
-    "agentSkillsNone": "Không có kỹ năng nào để chọn."
+    "agentSkillsNone": "Không có kỹ năng nào để chọn.",
+    "agentSkillsLoading": "Đang tải các kỹ năng…",
+    "agentSkillsLoadError": "Không thể tải các kỹ năng. Các lựa chọn đã lưu trước đó được giữ nguyên.",
+    "agentSkillsNotVisible": "(không hiển thị với bạn — bỏ chọn để xóa)"
   },
   "localModels": {
     "title": "Mô hình cục bộ",
@@ -7858,7 +7863,8 @@
         "conflict": "xung đột — không ghi đè",
         "invalid": "không hợp lệ"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Chỉ kỹ năng tự động mới có thể yêu cầu xác nhận trước: kỹ năng đã yêu cầu, đã ghim và luôn bật sẽ được áp dụng mà không cần hỏi, còn kỹ năng theo yêu cầu thì mô hình sẽ không tự chọn."
   },
   "personalSkills": {
     "title": "Kỹ năng cá nhân",

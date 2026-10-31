@@ -945,7 +945,9 @@
       "deniedByRuleHint": "An toshe ta hanyar dokarka — sarrafa a Saituna → Haɗa-haɗa.",
       "batchPendingHint": "Akwai buƙatun kayan aiki {count} da ke jiran izini",
       "approveAllButton": "Amince duka",
-      "denyAllButton": "Ƙi duka"
+      "denyAllButton": "Ƙi duka",
+      "applySkillTitle": "Aiwatar da fasaha “{skill}”?",
+      "skillConsentNote": "Admin ya sa wannan fasaha ta nemi izini kafin a aiwatar da ita. Idan ka amince, za a kawo shawararta don wannan amsa kawai."
     },
     "openImage": "Buɗe hoto",
     "copyMessage": "Kwafi saƙo",
@@ -5350,7 +5352,10 @@
       "selected": "Kawai kwarewar da aka zaɓa a ƙasa",
       "none": "Babu kwarewa"
     },
-    "agentSkillsNone": "Babu kwarewa da za a iya zaɓa."
+    "agentSkillsNone": "Babu kwarewa da za a iya zaɓa.",
+    "agentSkillsLoading": "Ana loda fasahohi...",
+    "agentSkillsLoadError": "Ba a samu lodawa fasahohi ba. Za a ci gaba da amfani da zaɓin da aka adana a baya.",
+    "agentSkillsNotVisible": "(ba ta bayyana gare ka — cire alama don cirewa)"
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -7811,7 +7816,8 @@
         "conflict": "rikici — ba a maye gurbinta ba",
         "invalid": "bai dace ba"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Fasahohin atomatik kaɗai ne za su iya nema kafin a aiwatar: wanda aka nema, wanda aka ɗora, da wanda kullum ake amfani da shi sukan aiwatar ba tare da tambaya ba, kuma fasahohin da ake bukata kawai ba za su taɓa zaɓar su ba ta model."
   },
   "personalSkills": {
     "title": "Kwarewar kaina",

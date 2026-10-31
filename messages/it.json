@@ -808,7 +808,9 @@
       "deniedByRuleHint": "Bloccato dalla tua regola — gestisci in Impostazioni → Connettori.",
       "batchPendingHint": "{count} richieste di strumenti in sospeso",
       "approveAllButton": "Approva tutte",
-      "denyAllButton": "Rifiuta tutte"
+      "denyAllButton": "Rifiuta tutte",
+      "applySkillTitle": "Applicare la skill “{skill}”?",
+      "skillConsentNote": "Un amministratore ha impostato questa skill per chiedere il consenso prima di applicarla. L'approvazione carica le sue istruzioni solo per questa risposta."
     },
     "openImage": "Apri immagine",
     "copyMessage": "Copia messaggio",
@@ -5366,7 +5368,10 @@
       "selected": "Solo le competenze selezionate qui sotto",
       "none": "Nessuna competenza"
     },
-    "agentSkillsNone": "Nessuna competenza disponibile da selezionare."
+    "agentSkillsNone": "Nessuna competenza disponibile da selezionare.",
+    "agentSkillsLoading": "Caricamento delle skill…",
+    "agentSkillsLoadError": "Impossibile caricare le skill. Le selezioni salvate in precedenza sono mantenute.",
+    "agentSkillsNotVisible": "(non visibile — deseleziona per rimuovere)"
   },
   "localModels": {
     "title": "Modelli locali",
@@ -7827,7 +7832,8 @@
         "conflict": "conflitto — non sovrascritta",
         "invalid": "non valida"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Solo le skill automatiche possono chiedere prima: quelle richieste, fissate e sempre attive si applicano senza avviso, mentre le skill su richiesta non sono mai selezionate dal modello."
   },
   "personalSkills": {
     "title": "Competenze personali",

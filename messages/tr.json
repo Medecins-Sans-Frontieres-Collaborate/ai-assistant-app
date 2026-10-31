@@ -887,7 +887,9 @@
       "deniedByRuleHint": "Kuralınız tarafından engellendi — Ayarlar → Bağlayıcılar bölümünden yönetin.",
       "batchPendingHint": "{count} araç isteği beklemede",
       "approveAllButton": "Tümünü onayla",
-      "denyAllButton": "Tümünü reddet"
+      "denyAllButton": "Tümünü reddet",
+      "applySkillTitle": "“{skill}” becerisi uygulansın mı?",
+      "skillConsentNote": "Bir admin bu becerinin uygulanmadan önce sormasını belirledi. Onayladığınızda, yalnızca bu cevap için yönlendirmesi yüklenir."
     },
     "openImage": "Görseli aç",
     "copyMessage": "Mesajı kopyala",
@@ -5366,7 +5368,10 @@
       "selected": "Yalnızca aşağıda seçilen yetenekler",
       "none": "Yetenek yok"
     },
-    "agentSkillsNone": "Seçilebilecek yetenek yok."
+    "agentSkillsNone": "Seçilebilecek yetenek yok.",
+    "agentSkillsLoading": "Beceri yükleniyor…",
+    "agentSkillsLoadError": "Beceriler yüklenemedi. Daha önce kaydedilen seçimler korunur.",
+    "agentSkillsNotVisible": "(size görünmüyor — kaldırmak için işareti kaldırın)"
   },
   "localModels": {
     "title": "Yerel modeller",
@@ -7827,7 +7832,8 @@
         "conflict": "çatışma — üzerine yazılmadı",
         "invalid": "geçersiz"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Yalnızca otomatik beceriler önce sorabilir: istenen, sabitlenen ve her zaman açık beceriler uyarı olmadan uygulanır; isteğe bağlı beceriler model tarafından asla seçilmez."
   },
   "personalSkills": {
     "title": "Kişisel beceriler",

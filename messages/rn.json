@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Vyabujijwe n’itegeko ryawe — ivugurura muri Settings → Connectors.",
       "batchPendingHint": "Ibisaba ibikoresho {count} birindiriye",
       "approveAllButton": "Emera vyose",
-      "denyAllButton": "Hakana vyose"
+      "denyAllButton": "Hakana vyose",
+      "applySkillTitle": "Kubikora ubushobozi “{skill}”?",
+      "skillConsentNote": "Umuyobozi yashize iki bushobozi gusaba mbere yo kubikora. Ubiwemeye bitanga inyigisho yaco kuri iki gisubizo gusa."
     },
     "openImage": "Fungura ishusho",
     "copyMessage": "Gufata ubutumwa",
@@ -5350,7 +5352,10 @@
       "selected": "Ubushobozi bwatorwa hepfo",
       "none": "Nta bushobozi"
     },
-    "agentSkillsNone": "Nta bushobozi buboneka vyo gutora."
+    "agentSkillsNone": "Nta bushobozi buboneka vyo gutora.",
+    "agentSkillsLoading": "Biriko biradukura ubushobozi...",
+    "agentSkillsLoadError": "Ubushobozi ntibashoboye kudukurwa. Ivyo wahisemo mbere bikazigamwa.",
+    "agentSkillsNotVisible": "(ntibiboneka kuri wewe — sogota kugira uvyikure)"
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",
@@ -7811,7 +7816,8 @@
         "conflict": "ukunanirwa — ntivyashizweko",
         "invalid": "ntibikwiye"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Ubushobozi bukora bwonyene ni bwo bushobora gusaba ubwa mbere: ubusabwe, uburambitswe, kandi bukora igihe cose bikora ata kubaza, naho ubushobozi busabwa butihari ntibutorwa model."
   },
   "personalSkills": {
     "title": "Ubushobozi bwite",

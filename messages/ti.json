@@ -945,7 +945,9 @@
       "deniedByRuleHint": "ብህግየ ተዓግድካ፡ ኣብ ትካኺታት → ኮነክተሮት ውስኽ ኣስተዳድድ።",
       "batchPendingHint": "{count} ዝተጠየቑ ጥያቄታት ኣገልግሎታት ምጽእ ኣሎ",
       "approveAllButton": "ኩሉ ኣጽደቕ",
-      "denyAllButton": "ኩሉ ኣልቦ"
+      "denyAllButton": "ኩሉ ኣልቦ",
+      "applySkillTitle": "ብምግባር ስልኪ “{skill}”?",
+      "skillConsentNote": "ኣድሚን ዝተመደበ ስልኪ ክትግበሩ ትሕቲ በዓል ይሕዝ። ብምፍታው ሓበሻ ምስሓቐ ንእዚ ብሓደ መልስ እዚ ዘይተሓገረ።"
     },
     "openImage": "ስእሊ ክፈት",
     "copyMessage": "መልእኽቲ ቅድሚ",
@@ -5350,7 +5352,10 @@
       "selected": "ንትምህርታት ዝተመርጡ ብታንቲ",
       "none": "ትምህርታት የለን"
     },
-    "agentSkillsNone": "ትምህርታት ይበጽሑ ዘይኮኑ ኣሎ።"
+    "agentSkillsNone": "ትምህርታት ይበጽሑ ዘይኮኑ ኣሎ።",
+    "agentSkillsLoading": "ስልታት እዘንሓይ...",
+    "agentSkillsLoadError": "ስልታት ምጽናዕ ኣይተኻነ። ንቅርብ ንምሩጽ ዝተዘበነ ምሉእ ይንበር።",
+    "agentSkillsNotVisible": "(ንሓሳብኻ ዘይብሉ ፥ ንምሕዳስ ትዕገት)"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",
@@ -7811,7 +7816,8 @@
         "conflict": "ተጣትጣት — የተሓዘን",
         "invalid": "ዘይተቃለለ"
       }
-    }
+    },
+    "requireConsentDisabledHint": "ንሓይሊ ስልታት ዶኻ እንተተጠይቑ። ዘዘናዘኑ፣ ዝተሓበረ፣ ዘይቅርብ ዝግበሩ ስልታት ኤላ ከተሓገሩ፣ ንጥንቁቕ እተስዓም ኣለዎ።"
   },
   "personalSkills": {
     "title": "ናይ ውሕስታ ኽእለታት",

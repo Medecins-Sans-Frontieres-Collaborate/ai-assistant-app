@@ -854,7 +854,9 @@
       "deniedByRuleHint": "Diblokir oleh aturan Anda — kelola di Pengaturan → Konektor.",
       "batchPendingHint": "{count} permintaan alat tertunda",
       "approveAllButton": "Izinkan semua",
-      "denyAllButton": "Tolak semua"
+      "denyAllButton": "Tolak semua",
+      "applySkillTitle": "Terapkan keterampilan \"{skill}\"?",
+      "skillConsentNote": "Seorang admin menetapkan keterampilan ini untuk meminta persetujuan sebelum diterapkan. Jika disetujui, panduannya akan digunakan hanya untuk jawaban ini."
     },
     "openImage": "Buka gambar",
     "copyMessage": "Salin pesan",
@@ -5366,7 +5368,10 @@
       "selected": "Hanya keahlian yang dipilih di bawah ini",
       "none": "Tidak ada keahlian"
     },
-    "agentSkillsNone": "Tidak ada keahlian yang dapat dipilih."
+    "agentSkillsNone": "Tidak ada keahlian yang dapat dipilih.",
+    "agentSkillsLoading": "Memuat keterampilan...",
+    "agentSkillsLoadError": "Keterampilan tidak dapat dimuat. Pilihan yang telah disimpan sebelumnya tetap dipertahankan.",
+    "agentSkillsNotVisible": "(tidak terlihat oleh Anda — hapus centang untuk menghapus)"
   },
   "localModels": {
     "title": "Model lokal",
@@ -7827,7 +7832,8 @@
         "conflict": "konflik — tidak ditimpa",
         "invalid": "tidak valid"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Hanya keterampilan otomatis yang dapat meminta persetujuan terlebih dahulu: keterampilan yang diminta, dipin, dan selalu aktif akan diterapkan tanpa pemberitahuan, dan keterampilan berdasarkan permintaan tidak pernah dipilih oleh model."
   },
   "personalSkills": {
     "title": "Keterampilan pribadi",

@@ -887,7 +887,9 @@
       "deniedByRuleHint": "ご自身のルールによりブロックされています ― 設定 → コネクターで管理できます。",
       "batchPendingHint": "{count}件のツールリクエストが保留中",
       "approveAllButton": "すべて許可",
-      "denyAllButton": "すべて拒否"
+      "denyAllButton": "すべて拒否",
+      "applySkillTitle": "スキル「{skill}」を適用しますか？",
+      "skillConsentNote": "管理者により、このスキルは適用前に確認するよう設定されています。承認すると、この回答のみにガイダンスが適用されます。"
     },
     "openImage": "画像を開く",
     "copyMessage": "メッセージをコピー",
@@ -5366,7 +5368,10 @@
       "selected": "下記で選択したスキルのみ",
       "none": "スキルなし"
     },
-    "agentSkillsNone": "選択できるスキルがありません。"
+    "agentSkillsNone": "選択できるスキルがありません。",
+    "agentSkillsLoading": "スキルを読み込み中…",
+    "agentSkillsLoadError": "スキルを読み込めませんでした。以前保存された選択は保持されています。",
+    "agentSkillsNotVisible": "（表示されていません — チェックを外すと削除されます）"
   },
   "localModels": {
     "title": "ローカルモデル",
@@ -7827,7 +7832,8 @@
         "conflict": "競合 — 上書きされません",
         "invalid": "無効"
       }
-    }
+    },
+    "requireConsentDisabledHint": "自動スキルのみ確認が可能です：リクエスト済み、ピン留め、常時適用スキルは確認なしで適用され、オンリクエストスキルはモデルによって自動で選択されません。"
   },
   "personalSkills": {
     "title": "個人スキル",

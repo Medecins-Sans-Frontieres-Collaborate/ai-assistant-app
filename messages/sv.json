@@ -887,7 +887,9 @@
       "deniedByRuleHint": "Blockerat av din regel — hantera i Inställningar → Anslutningar.",
       "batchPendingHint": "{count} verktygsförfrågningar väntar",
       "approveAllButton": "Godkänn alla",
-      "denyAllButton": "Avvisa alla"
+      "denyAllButton": "Avvisa alla",
+      "applySkillTitle": "Använd färdigheten ”{skill}”?",
+      "skillConsentNote": "En administratör har ställt in att denna färdighet ska fråga innan den används. Godkännande laddar dess vägledning endast för detta svar."
     },
     "openImage": "Öppna bild",
     "copyMessage": "Kopiera meddelande",
@@ -5366,7 +5368,10 @@
       "selected": "Endast valda färdigheter nedan",
       "none": "Inga färdigheter"
     },
-    "agentSkillsNone": "Inga färdigheter tillgängliga att välja."
+    "agentSkillsNone": "Inga färdigheter tillgängliga att välja.",
+    "agentSkillsLoading": "Laddar färdigheter…",
+    "agentSkillsLoadError": "Färdigheter kunde inte laddas. Tidigare sparade val behålls.",
+    "agentSkillsNotVisible": "(inte synlig för dig — avmarkera för att ta bort)"
   },
   "localModels": {
     "title": "Lokala modeller",
@@ -7827,7 +7832,8 @@
         "conflict": "konflikt — inte överskriven",
         "invalid": "ogiltig"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Endast automatiska färdigheter kan fråga först: begärda, fästa och alltid aktiva färdigheter används utan bekräftelse, och färdigheter på begäran väljs aldrig av modellen."
   },
   "personalSkills": {
     "title": "Personliga färdigheter",

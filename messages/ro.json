@@ -885,7 +885,9 @@
       "deniedByRuleHint": "Blocat de regula dvs. — gestionați în Setări → Conectori.",
       "batchPendingHint": "{count} cereri de instrumente în așteptare",
       "approveAllButton": "Aprobă tot",
-      "denyAllButton": "Respinge tot"
+      "denyAllButton": "Respinge tot",
+      "applySkillTitle": "Aplică abilitatea „{skill}”?",
+      "skillConsentNote": "Un administrator a setat această abilitate să solicite permisiunea înainte de aplicare. Aprobarea va încărca ghidul său doar pentru acest răspuns."
     },
     "openImage": "Deschide imaginea",
     "copyMessage": "Copiază mesajul",
@@ -5366,7 +5368,10 @@
       "selected": "Doar abilitățile selectate mai jos",
       "none": "Nicio abilitate"
     },
-    "agentSkillsNone": "Nu există abilități disponibile pentru selecție."
+    "agentSkillsNone": "Nu există abilități disponibile pentru selecție.",
+    "agentSkillsLoading": "Se încarcă abilitățile…",
+    "agentSkillsLoadError": "Abilitățile nu au putut fi încărcate. Se păstrează selecțiile salvate anterior.",
+    "agentSkillsNotVisible": "(nu este vizibil pentru dvs. — debifați pentru a elimina)"
   },
   "localModels": {
     "title": "Modele locale",
@@ -7827,7 +7832,8 @@
         "conflict": "conflict — nu a fost suprascris",
         "invalid": "invalid"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Doar abilitățile automate pot solicita prima dată: cele solicitate, fixate și permanent active se aplică fără confirmare, iar abilitățile la cerere nu sunt niciodată alese de model."
   },
   "personalSkills": {
     "title": "Abilități personale",

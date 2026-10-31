@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Mbârï ti yângâ mo sô kété — kêtê na Settings → Connectors.",
       "batchPendingHint": "{count} sorô ti tool gbângbâ sô ngbênî",
       "approveAllButton": "Mângâ kõtõ",
-      "denyAllButton": "Kété kõtõ"
+      "denyAllButton": "Kété kõtõ",
+      "applySkillTitle": "Yeke na skill \"{skill}\"?",
+      "skillConsentNote": "Admin azo kangbida skill a na mbe ti yeke fo ora na yeke ti yeke. Sê yeke ti la guidance na nginza a mo na wa ye wa na wa."
     },
     "openImage": "Fungbä lo tö",
     "copyMessage": "Kopi mesajï",
@@ -5350,7 +5352,10 @@
       "selected": "Makandï sî ku na ilî ape",
       "none": "Makandï ala"
     },
-    "agentSkillsNone": "Makandï ala ku na ilî."
+    "agentSkillsNone": "Makandï ala ku na ilî.",
+    "agentSkillsLoading": "Yeke ti zo skills...",
+    "agentSkillsLoadError": "Skills ala yeke ti zo. Skill oko na mo ti kangbida na awa mo ti yeke.",
+    "agentSkillsNotVisible": "(ala na mboko ti mo — tiro na wa ti yeke)"
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",
@@ -7811,7 +7816,8 @@
         "conflict": "bate — ala wa yê",
         "invalid": "ala ti kû"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Skill automatic mo na a yeke fo ora: skill na yeke, skill na kangbida na awa na skill na yeke ti na, skill na mo na ti la yeke select ti model."
   },
   "personalSkills": {
     "title": "Mbeni tî mbi",

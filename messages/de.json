@@ -833,7 +833,9 @@
       "deniedByRuleHint": "Durch Ihre Regel blockiert — verwalten in Einstellungen → Connectors.",
       "batchPendingHint": "{count} Tool-Anfragen ausstehend",
       "approveAllButton": "Alle zulassen",
-      "denyAllButton": "Alle ablehnen"
+      "denyAllButton": "Alle ablehnen",
+      "applySkillTitle": "Die Fähigkeit „{skill}“ anwenden?",
+      "skillConsentNote": "Ein:e Administrator:in hat festgelegt, dass vor dem Anwenden dieser Fähigkeit gefragt wird. Bei Zustimmung wird die Anleitung nur für diese Antwort geladen."
     },
     "openImage": "Bild öffnen",
     "copyMessage": "Nachricht kopieren",
@@ -5366,7 +5368,10 @@
       "selected": "Nur die unten ausgewählten Fähigkeiten",
       "none": "Keine Fähigkeiten"
     },
-    "agentSkillsNone": "Keine Fähigkeiten zur Auswahl verfügbar."
+    "agentSkillsNone": "Keine Fähigkeiten zur Auswahl verfügbar.",
+    "agentSkillsLoading": "Fähigkeiten werden geladen…",
+    "agentSkillsLoadError": "Fähigkeiten konnten nicht geladen werden. Frühere Auswahlen bleiben erhalten.",
+    "agentSkillsNotVisible": "(für Sie nicht sichtbar — zum Entfernen abwählen)"
   },
   "localModels": {
     "title": "Lokale Modelle",
@@ -7827,7 +7832,8 @@
         "conflict": "Konflikt — nicht überschrieben",
         "invalid": "ungültig"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Nur automatische Fähigkeiten können zuvor um Erlaubnis bitten: angeforderte, angeheftete und immer-aktive Fähigkeiten werden sofort angewendet, und auf Anfrage gewählte Fähigkeiten werden vom Modell nie ausgewählt."
   },
   "personalSkills": {
     "title": "Persönliche Fähigkeiten",

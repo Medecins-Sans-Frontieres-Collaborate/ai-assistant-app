@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Byabujijwe n'amategeko yawe — byemeze muri Settings → Connectors.",
       "batchPendingHint": "Gusaba ibikoresho {count} birategereje",
       "approveAllButton": "Emera byose",
-      "denyAllButton": "Hanga byose"
+      "denyAllButton": "Hanga byose",
+      "applySkillTitle": "Ushaka gukoresha ubuhanga “{skill}”?",
+      "skillConsentNote": "Umuyobozi yashyizeho ko ubu buhanga bugomba kubanza gusabirwa mbere yo gukorwa. Kwemeza bizazana inama yabwo kuri iyi gisubizo gusa."
     },
     "openImage": "Fungura ifoto",
     "copyMessage": "Gusubiramo ubutumwa",
@@ -5350,7 +5352,10 @@
       "selected": "Ubumenyi bwatoranijwe hasi aha gusa",
       "none": "Nta bumenyi"
     },
-    "agentSkillsNone": "Nta bumenyi buboneka bwo gutoranya."
+    "agentSkillsNone": "Nta bumenyi buboneka bwo gutoranya.",
+    "agentSkillsLoading": "Turimo turagura ubumenyi...",
+    "agentSkillsLoadError": "Ubumenyi ntibwabonetse. Ibyo wahisemo mbere biracyahari.",
+    "agentSkillsNotVisible": "(ntibigaragara kuri wowe — kurenzaho akamenyetso bivana)"
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",
@@ -7811,7 +7816,8 @@
         "conflict": "kutumvikana — ntibyanditsweho",
         "invalid": "bidakurikije amabwiriza"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Ubumenyi bukora bwonyine ni bwo bushobora kubanza kubaza: Ubusabwe, ubwafashweho, n'ubukora igihe cyose burakoresha nta kubaza, naho ubusabirwa ntibutoranywa n'ubwenge bwubatswemo."
   },
   "personalSkills": {
     "title": "Ubumenyi ku giti cyawe",

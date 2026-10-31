@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Blokirano vašim pravilom — upravljajte u Podešavanjima → Konektori.",
       "batchPendingHint": "{count} zahteva za alat čeka odobrenje",
       "approveAllButton": "Odobri sve",
-      "denyAllButton": "Odbij sve"
+      "denyAllButton": "Odbij sve",
+      "applySkillTitle": "Primeni veštinu „{skill}“?",
+      "skillConsentNote": "Administrator je postavio ovu veštinu da zahteva odobrenje pre primene. Odlukom se učitavaju uputstva samo za ovaj odgovor."
     },
     "openImage": "Otvori sliku",
     "copyMessage": "Kopiraj poruku",
@@ -5350,7 +5352,10 @@
       "selected": "Samo veštine izabrane ispod",
       "none": "Bez veština"
     },
-    "agentSkillsNone": "Nema dostupnih veština za izbor."
+    "agentSkillsNone": "Nema dostupnih veština za izbor.",
+    "agentSkillsLoading": "Učitavanje veština…",
+    "agentSkillsLoadError": "Veštine nije moguće učitati. Prethodno sačuvane selekcije su zadržane.",
+    "agentSkillsNotVisible": "(nije vidljivo vama — opozovite izbor za uklanjanje)"
   },
   "localModels": {
     "title": "Lokalni modeli",
@@ -7811,7 +7816,8 @@
         "conflict": "sukob — nije prepisano",
         "invalid": "nevažeće"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Samo automatske veštine mogu prvo tražiti odobrenje: tražene, zakačene i stalno aktivne veštine se primenjuju bez potvrde, dok se veštine na zahtev nikada ne biraju od strane modela."
   },
   "personalSkills": {
     "title": "Lične veštine",

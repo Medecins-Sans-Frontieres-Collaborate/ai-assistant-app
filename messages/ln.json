@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Ekokisami na mobeko na yo — Sambisa na Paramètres → Connectors.",
       "batchPendingHint": "Mposa ya ndenge oyo ezali {count}",
       "approveAllButton": "Kondima nyonso",
-      "denyAllButton": "Kokanga nyonso"
+      "denyAllButton": "Kokanga nyonso",
+      "applySkillTitle": "Kolakisa mayele \"{skill}\"?",
+      "skillConsentNote": "Admin asalaki ete mayele oyo asengeli kosɛnga liboso esalama. Kondima ekopesa mabɔkɔ kaka mpo na eyano oyo."
     },
     "openImage": "Kofungola elilingi",
     "copyMessage": "Kokɔpya nsango",
@@ -5350,7 +5352,10 @@
       "selected": "Kaka mayekoli oyo epɔnami awa na se",
       "none": "Mayekoli te"
     },
-    "agentSkillsNone": "Mayekoli moko te ya kopona."
+    "agentSkillsNone": "Mayekoli moko te ya kopona.",
+    "agentSkillsLoading": "Kozwa mayele...",
+    "agentSkillsLoadError": "Mayele ekokaki te kozwa. Makambo osali ndambo ebatami.",
+    "agentSkillsNotVisible": "(emonanaka te epai na yo — simbá elongi pona kolongola)"
   },
   "localModels": {
     "title": "Bamodelo ya esika",
@@ -7811,7 +7816,8 @@
         "conflict": "botongami — esalemi te",
         "invalid": "etondi na libunga"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Mayele ya automatique kaka nde ekoki kosɛnga liboso: oyo basengi, bapineli to oyo esalaka ntango nyonso ekosalema kaka na litomba, mpe oyo basɛngi ntango mosusu model ekopona yango te."
   },
   "personalSkills": {
     "title": "Mikoki ya moto",

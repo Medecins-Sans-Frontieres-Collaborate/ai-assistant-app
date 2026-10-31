@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Kublockiwe ngumthetho wakho — phatha ku-Izilungiselelo → Connectors.",
       "batchPendingHint": "{count} izicelo zethuluzi zisalindile",
       "approveAllButton": "Vuma zonke",
-      "denyAllButton": "Enqaba zonke"
+      "denyAllButton": "Enqaba zonke",
+      "applySkillTitle": "Faka ikhono elithi “{skill}”?",
+      "skillConsentNote": "Umphathi usethe leli khono ukuthi licela imvume ngaphambi kokufakwa. Ukuvuma kuyalilayisha iziqondiso zalo kule mpendulo kuphela."
     },
     "openImage": "Vula isithombe",
     "copyMessage": "Kopisha umlayezo",
@@ -5350,7 +5352,10 @@
       "selected": "Amakhono akhethiwe ngezansi kuphela",
       "none": "Awekho amakhono"
     },
-    "agentSkillsNone": "Awekho amakhono akhona ongawakhetha."
+    "agentSkillsNone": "Awekho amakhono akhona ongawakhetha.",
+    "agentSkillsLoading": "Kulayishwa amakhono…",
+    "agentSkillsLoadError": "Amakhono awakwazi ukulayishwa. Okukhethwe ngaphambili kusagcinwa.",
+    "agentSkillsNotVisible": "(awabonakali kuwe — susa uphawu ukukususa)"
   },
   "localModels": {
     "title": "Amamodeli endaweni",
@@ -7811,7 +7816,8 @@
         "conflict": "ungqubuzano — akushintshiwe",
         "invalid": "akuvumelekile"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Amakhono azisebenzelayo kuphela angacela imvume kuqala: amakhono acelwe, agcinwe phezulu, nawasebenza njalo afakwa ngaphandle kwesixwayiso, kanti amakhono acelwa kuphela awakhethwa yimodeli nhlobo."
   },
   "personalSkills": {
     "title": "Amakhono omuntu siqu",

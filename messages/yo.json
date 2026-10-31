@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Ti dina nipasẹ ofin rẹ — ṣakoso ninu Eto → Connectors.",
       "batchPendingHint": "Aṣẹ irinṣẹ {count} duro de ìmúlò",
       "approveAllButton": "Fọwọsi gbogbo",
-      "denyAllButton": "Deni gbogbo"
+      "denyAllButton": "Deni gbogbo",
+      "applySkillTitle": "Ṣe lo ọgbọn “{skill}”?",
+      "skillConsentNote": "Alakoso kan ṣeto ọgbọn yii lati beere ṣaaju ki o to lo. Gbigba yoo fa itọsọna rẹ fun idahun yii nikan."
     },
     "openImage": "Ṣí aworan",
     "copyMessage": "Daakọ ifiranṣẹ",
@@ -5350,7 +5352,10 @@
       "selected": "Ọgbọn tí a yàn nílẹ̀ nikan",
       "none": "Kò sí ọgbọn"
     },
-    "agentSkillsNone": "Kò sí ọgbọn tó wà fún yíyàn."
+    "agentSkillsNone": "Kò sí ọgbọn tó wà fún yíyàn.",
+    "agentSkillsLoading": "Nṣiṣẹ awọn ọgbọn…",
+    "agentSkillsLoadError": "A ko le gbe awọn ọgbọn wọle. A tọju awọn yiyan ti o fipamọ tẹlẹ.",
+    "agentSkillsNotVisible": "(ko han fun ọ — yọ ami kuro lati pa rẹ)"
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",
@@ -7811,7 +7816,8 @@
         "conflict": "ìyapa — a kò kọ́wọ́ lórí",
         "invalid": "àìtọ"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Awọn ọgbọn aifọwọyi nikan ni le beere tẹlẹ: awọn ti a beere, ti a fi mọlẹ ati awọn ti nṣiṣẹ laifọwọyi maa n lo laisi ìkìlọ́, ati pe awoṣe ko yan awọn ọgbọn ti o nilo ìbéèrè rara."
   },
   "personalSkills": {
     "title": "Ọgbọn ara ẹni",

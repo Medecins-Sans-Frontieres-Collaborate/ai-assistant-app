@@ -833,7 +833,9 @@
       "deniedByRuleHint": "Bloqué par votre règle — gérez dans Paramètres → Connecteurs.",
       "batchPendingHint": "{count} demandes d'outil en attente",
       "approveAllButton": "Tout approuver",
-      "denyAllButton": "Tout refuser"
+      "denyAllButton": "Tout refuser",
+      "applySkillTitle": "Appliquer la compétence « {skill} » ?",
+      "skillConsentNote": "Un administrateur a configuré cette compétence pour demander une validation avant d’être appliquée. L’approbation charge sa guidance uniquement pour cette réponse."
     },
     "openImage": "Ouvrir l’image",
     "copyMessage": "Copier le message",
@@ -5366,7 +5368,10 @@
       "selected": "Seulement les compétences sélectionnées ci-dessous",
       "none": "Aucune compétence"
     },
-    "agentSkillsNone": "Aucune compétence disponible à sélectionner."
+    "agentSkillsNone": "Aucune compétence disponible à sélectionner.",
+    "agentSkillsLoading": "Chargement des compétences…",
+    "agentSkillsLoadError": "Impossible de charger les compétences. Les sélections enregistrées précédemment sont conservées.",
+    "agentSkillsNotVisible": "(non visible pour vous — décochez pour retirer)"
   },
   "localModels": {
     "title": "Modèles locaux",
@@ -7827,7 +7832,8 @@
         "conflict": "conflit — non remplacée",
         "invalid": "non valide"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Seules les compétences automatiques peuvent demander une validation : les compétences demandées, épinglées ou toujours actives s’appliquent sans confirmation, et les compétences sur demande ne sont jamais choisies par le modèle."
   },
   "personalSkills": {
     "title": "Compétences personnelles",

@@ -884,7 +884,9 @@
       "deniedByRuleHint": "Zablokowane przez Twoją regułę — zarządzaj w Ustawieniach → Konektory.",
       "batchPendingHint": "{count} oczekujących żądań narzędzi",
       "approveAllButton": "Zatwierdź wszystkie",
-      "denyAllButton": "Odmów wszystkim"
+      "denyAllButton": "Odmów wszystkim",
+      "applySkillTitle": "Zastosować umiejętność „{skill}”?",
+      "skillConsentNote": "Administrator ustawił tę umiejętność tak, by wymagała zgody przed użyciem. Zatwierdzenie załaduje jej wskazówki tylko dla tej odpowiedzi."
     },
     "openImage": "Otwórz obraz",
     "copyMessage": "Kopiuj wiadomość",
@@ -5366,7 +5368,10 @@
       "selected": "Tylko wybrane poniżej umiejętności",
       "none": "Brak umiejętności"
     },
-    "agentSkillsNone": "Brak dostępnych umiejętności do wyboru."
+    "agentSkillsNone": "Brak dostępnych umiejętności do wyboru.",
+    "agentSkillsLoading": "Ładowanie umiejętności…",
+    "agentSkillsLoadError": "Nie udało się załadować umiejętności. Wcześniej zapisane wybory zostały zachowane.",
+    "agentSkillsNotVisible": "(niewidoczne dla Ciebie — odznacz, aby usunąć)"
   },
   "localModels": {
     "title": "Modele lokalne",
@@ -7827,7 +7832,8 @@
         "conflict": "konflikt — nie nadpisano",
         "invalid": "nieprawidłowe"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Tylko umiejętności automatyczne mogą pytać o zgodę: wywołane na żądanie, przypięte i zawsze aktywne umiejętności stosowane są bez pytania, a umiejętności na żądanie nigdy nie są wybierane przez model."
   },
   "personalSkills": {
     "title": "Umiejętności osobiste",

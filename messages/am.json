@@ -830,7 +830,9 @@
       "deniedByRuleHint": "በየእርስዎ መስክ ተደግፏል — በቅንብሮች → Connector-ዎች ውስጥ ያቀናብሩ።",
       "batchPendingHint": "{count} የመሳሪያ ጥያቄዎች በትዕዛዝ ላይ",
       "approveAllButton": "ሁሉንም ይፍቀዱ",
-      "denyAllButton": "ሁሉንም አይፈቀዱ"
+      "denyAllButton": "ሁሉንም አይፈቀዱ",
+      "applySkillTitle": "የ“{skill}” ክህሎት አግባ?",
+      "skillConsentNote": "መካን ይህን ክህሎት ለመተግበር በፊት እንዲያስተውሉ ያዘጋጀዋል። ማጽደቅ የዚህ መልስ አግልግሎትን ብቻ ይጫናል።"
     },
     "openImage": "ምስሉን ክፈት",
     "copyMessage": "መልእክት ቅዳ",
@@ -5366,7 +5368,10 @@
       "selected": "የታሰሩትን ችሎታዎች ብቻ",
       "none": "ችሎታ የለም"
     },
-    "agentSkillsNone": "መምረጥ የሚችሉ ችሎታዎች አይታዩም።"
+    "agentSkillsNone": "መምረጥ የሚችሉ ችሎታዎች አይታዩም።",
+    "agentSkillsLoading": "ክህሎቶች በመጫን ላይ…",
+    "agentSkillsLoadError": "ክህሎቶች ማጫን አልተቻለም። ቀድሞ የተወሰኑ ምርጦች ተከበሩ።",
+    "agentSkillsNotVisible": "(ለእርስዎ የማይታይ — ለማጥፋት ምልክቱን አጥፉ)"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",
@@ -7827,7 +7832,8 @@
         "conflict": "ግጭት — አልተለዋለውም",
         "invalid": "መድኃኒት አይሆንም"
       }
-    }
+    },
+    "requireConsentDisabledHint": "በራስ ሰር የሚተገበሩ ክህሎቶች ብቻ መቀየር ማካሄድ ይችላሉ፡ የተፈለገው፣ የተወሰነውና ሁልጊዜ የሚሰራው ክህሎት እንግዲኛ ሳይጠየቅ ይተገበራል፣ በማጠየቅ እንዳይመረጥ አይመረጥም።"
   },
   "personalSkills": {
     "title": "የግል ክህሎቶች",

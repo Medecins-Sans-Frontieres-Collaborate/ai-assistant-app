@@ -1027,7 +1027,9 @@
       "approvedState": "Approved — agent resumed",
       "deniedState": "Denied",
       "submittingApproval": "Approving and resuming the agent…",
-      "submittingDenial": "Sending your denial…"
+      "submittingDenial": "Sending your denial…",
+      "applySkillTitle": "Apply the skill “{skill}”?",
+      "skillConsentNote": "An admin set this skill to ask before it is applied. Approving loads its guidance for this answer only."
     },
     "voiceInputTranscribing": "Transcribing...",
     "openImage": "Open image",
@@ -5285,7 +5287,10 @@
       "selected": "Only the skills selected below",
       "none": "No skills"
     },
-    "agentSkillsNone": "No skills available to select."
+    "agentSkillsNone": "No skills available to select.",
+    "agentSkillsLoading": "Loading skills…",
+    "agentSkillsLoadError": "Skills could not be loaded. Selections saved earlier are kept.",
+    "agentSkillsNotVisible": "(not visible to you — untick to remove)"
   },
   "admin": {
     "title": "Admin",
@@ -5467,7 +5472,8 @@
         "conflict": "conflict — not overwritten",
         "invalid": "invalid"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Only automatic skills can ask first: requested, pinned and always-on skills apply without a prompt, and on-request skills are never chosen by the model."
   },
   "limits": {
     "title": "Usage limits",

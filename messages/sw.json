@@ -887,7 +887,9 @@
       "deniedByRuleHint": "Imefungwa na kanuni yako — dhibiti kwenye Mipangilio → Viunganishi.",
       "batchPendingHint": "Maombi ya zana {count} yanangojea",
       "approveAllButton": "Idhinisha zote",
-      "denyAllButton": "Kataa zote"
+      "denyAllButton": "Kataa zote",
+      "applySkillTitle": "Tumia ujuzi “{skill}”?",
+      "skillConsentNote": "Msimamizi ameweka ujuzi huu uombe ruhusa kabla ya kutumika. Kuiruhusu kutapakia mwongozo wake kwa jibu hili pekee."
     },
     "openImage": "Fungua picha",
     "copyMessage": "Nakili ujumbe",
@@ -5366,7 +5368,10 @@
       "selected": "Ni ujuzi ulioteuliwa hapa chini pekee",
       "none": "Hakuna ujuzi"
     },
-    "agentSkillsNone": "Hakuna ujuzi unaopatikana kuchagua."
+    "agentSkillsNone": "Hakuna ujuzi unaopatikana kuchagua.",
+    "agentSkillsLoading": "Inapakia ujuzi…",
+    "agentSkillsLoadError": "Ujuzi haukuweza kupakiwa. Machaguo yaliyohifadhiwa awali yamebaki.",
+    "agentSkillsNotVisible": "(haionekani kwako — toa tiki kuondoa)"
   },
   "localModels": {
     "title": "Miundo ya ndani",
@@ -7827,7 +7832,8 @@
         "conflict": "mgongano — haikuandikwa upya",
         "invalid": "si sahihi"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Ni ujuzi wa moja kwa moja pekee unaoweza kuomba ruhusa kwanza: ujuzi unaoombwa, uliowekwa juu na ule uliowashwa muda wote hutumiwa bila arifa, na ujuzi wa ombi hautachaguliwa kamwe na modeli."
   },
   "personalSkills": {
     "title": "Ujuzi binafsi",

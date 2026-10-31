@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Sakanan'ny fitsipinao — tantano ao amin'ny Setting → Connectors.",
       "batchPendingHint": "Fangatahana fitaovana {count} miandry",
       "approveAllButton": "Ekeo rehetra",
-      "denyAllButton": "Lavina rehetra"
+      "denyAllButton": "Lavina rehetra",
+      "applySkillTitle": "Hampihatra ny fahaiza-manao “{skill}” ve?",
+      "skillConsentNote": "Nanamboatra ity fahaiza-manao ity ho mangataka fanekena aloha ny tompon'andraikitra. Raha ekena dia ho ampiasaina amin'ity valiny ity ihany ny torolàlàny."
     },
     "openImage": "Sokafy sary",
     "copyMessage": "Adikao hafatra",
@@ -5350,7 +5352,10 @@
       "selected": "Ireo fahaiza-manao voafantina eto ambany ihany",
       "none": "Tsy misy fahaiza-manao"
     },
-    "agentSkillsNone": "Tsy misy fahaiza-manao azo hofidiana."
+    "agentSkillsNone": "Tsy misy fahaiza-manao azo hofidiana.",
+    "agentSkillsLoading": "Manokatra fahaiza-manao…",
+    "agentSkillsLoadError": "Tsy afaka nisintona fahaiza-manao. Hovitaina ny safidy voatahiry teo aloha.",
+    "agentSkillsNotVisible": "(tsy hita aminao — esory amin'ny fakàna ilay marika)"
   },
   "localModels": {
     "title": "Model eo an-toerana",
@@ -7811,7 +7816,8 @@
         "conflict": "diso fifandirana — tsy voasolo",
         "invalid": "tsy manankery"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Ny fahaiza-manao mandeha ho azy ihany no afaka mangataka fanekena: ny fahaiza-manao amin'ny fangatahana, voatazona, ary maharitra dia mihatra avy hatrany tsy misy fanontaniana, ary ny fahaiza-manao amin'ny fangatahana tsy hisafidin'ny modely mihitsy."
   },
   "personalSkills": {
     "title": "Fahaiza-manao manokana",

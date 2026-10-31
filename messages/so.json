@@ -945,7 +945,9 @@
       "deniedByRuleHint": "Waxa xannibay xeerkaaga — maamul Dejinta → Xiriiriyeyaasha.",
       "batchPendingHint": "{count} codsi aalad ah ayaa sugaya",
       "approveAllButton": "Ogolow dhammaan",
-      "denyAllButton": "Diid dhammaan"
+      "denyAllButton": "Diid dhammaan",
+      "applySkillTitle": "Ma doonaysaa in la adeegsado xirfadda “{skill}”?",
+      "skillConsentNote": "Maamuluhu wuxuu jeclaystay in xirfaddan la xaqiijiyo kahor intaan la adeegsan. Ogolaanshaha wuxuu kaliya furaa tilmaamaha su’aashan."
     },
     "openImage": "Fur sawirka",
     "copyMessage": "Nuqul fariinta",
@@ -5350,7 +5352,10 @@
       "selected": "Kaliya xirfadaha la doortay ee hoose",
       "none": "Xirfado la'aan"
     },
-    "agentSkillsNone": "Xirfado aan la heli karin si loo doorto."
+    "agentSkillsNone": "Xirfado aan la heli karin si loo doorto.",
+    "agentSkillsLoading": "Xirfado ayaa la soo dajinayaa…",
+    "agentSkillsLoadError": "Xirfadihii lama soo dajin karin. Doorashadii hore ayaa la hayaa.",
+    "agentSkillsNotVisible": "(adiga laguma tusayo — calaamadda ka saar si aad u tirtirto)"
   },
   "localModels": {
     "title": "Moodallo maxalli ah",
@@ -7811,7 +7816,8 @@
         "conflict": "iska horimaad — lama baddalin",
         "invalid": "aan sax ahayn"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Kaliya xirfadaha si otomaatig ah u shaqeeya ayaa waydiin kara ogolaansho: kuwa la codsaday, la xushay ama marwalba shaqeeya si toos ah ayay u dhaqan galaan, kuwa dalabka ku saleysanna marnaba lama doorto model-ka."
   },
   "personalSkills": {
     "title": "Xirfadaha shaqsiyeed",

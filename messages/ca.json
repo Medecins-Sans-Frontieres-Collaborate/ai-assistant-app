@@ -862,7 +862,9 @@
       "deniedByRuleHint": "Bloquejat per la teva norma — gestiona-ho a Configuració → Connectors.",
       "batchPendingHint": "{count} sol·licituds d'eina pendents",
       "approveAllButton": "Aprova-ho tot",
-      "denyAllButton": "Denega-ho tot"
+      "denyAllButton": "Denega-ho tot",
+      "applySkillTitle": "Voleu aplicar l’habilitat «{skill}»?",
+      "skillConsentNote": "Un administrador ha configurat aquesta habilitat perquè es demani abans d’aplicar-la. L’aprovació carrega les seves indicacions només per a aquesta resposta."
     },
     "openImage": "Obre la imatge",
     "copyMessage": "Copia el missatge",
@@ -5366,7 +5368,10 @@
       "selected": "Només les habilitats seleccionades a continuació",
       "none": "Sense habilitats"
     },
-    "agentSkillsNone": "No hi ha habilitats disponibles per seleccionar."
+    "agentSkillsNone": "No hi ha habilitats disponibles per seleccionar.",
+    "agentSkillsLoading": "Carregant habilitats…",
+    "agentSkillsLoadError": "No s’han pogut carregar les habilitats. Es conserven les seleccions desades anteriorment.",
+    "agentSkillsNotVisible": "(no visible per a vostè — desmarqueu-ho per eliminar-ho)"
   },
   "localModels": {
     "title": "Models locals",
@@ -7827,7 +7832,8 @@
         "conflict": "conflicte — no sobreescrita",
         "invalid": "invàlida"
       }
-    }
+    },
+    "requireConsentDisabledHint": "Només les habilitats automàtiques poden demanar confirmació: les sol·licitades, fixades i sempre actives s’apliquen sense avís, i les habilitats a demanda mai no són triades pel model."
   },
   "personalSkills": {
     "title": "Habilitats personals",
