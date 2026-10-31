@@ -499,7 +499,7 @@ export class AIFoundryAgentHandler {
             // Bodies already in the thread AND unchanged since: present,
             // not re-posted. A changed skill is preloaded again.
             const retained = Object.fromEntries(
-              Object.entries(threadState?.state.preloaded ?? {}).filter(
+              Object.entries(threadState?.state?.preloaded ?? {}).filter(
                 ([id, updatedAt]) => currentVersions.get(id) === updatedAt,
               ),
             );
@@ -546,7 +546,7 @@ export class AIFoundryAgentHandler {
               // the agent's persona/instructions are never replaced. A
               // thread that already saw the catalog gets only what changed.
               const catalog = skillExecutor.advertisedCatalog();
-              const catalogMessage = threadState
+              const catalogMessage = threadState?.state
                 ? renderSkillCatalogDelta(
                     threadState.state.catalog,
                     catalog.entries,
