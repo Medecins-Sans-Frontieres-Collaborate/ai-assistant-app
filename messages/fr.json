@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Paramètre par défaut intégré",
     "previewSourceGlobal": "Paramètre global par défaut",
     "previewSourceOverride": "Priorisation : {label}",
-    "previewNotEvaluated": "Les priorisations par département, entreprise/bureau ou groupe ne peuvent pas être évaluées ici — elles dépendent de la propre connexion de la personne.",
+    "previewNotEvaluated": "Le répertoire est inaccessible, les règles de département/entreprise/bureau et de groupe n’ont donc pas été évaluées pour cette personne. Veuillez réessayer dans un instant.",
     "previewUnsaved": "Affichage de la dernière politique enregistrée. Enregistrez vos modifications pour les prévisualiser.",
     "previewColumnLimit": "Limite",
     "previewColumnValue": "Valeur",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Groupes uniquement",
     "yourScopeGroupOnlyNote": "Défini uniquement par groupes ou attributs, donc les limites ne peuvent pas être prévisualisées par adresse e-mail.",
     "previewOutOfScope": "Cette personne est hors de votre périmètre.",
-    "previewGroupOnlyScope": "Votre périmètre est défini par groupes ou attributs, donc les limites ne peuvent pas être prévisualisées par adresse e-mail.",
+    "previewGroupOnlyScope": "Votre périmètre est défini par des groupes ou des attributs. Les aperçus consultent le répertoire pour déterminer si la personne en fait partie.",
     "previewCeilingPinned": "Bloqué par le plafond : {label}",
     "previewShowUsage": "Afficher l'utilisation actuelle",
     "previewColumnUsage": "Utilisé",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Un plafond strict sur une ligne fige cette valeur pour les cibles de ce dépassement : les administrateurs concernés ne peuvent pas l'augmenter et, en cas de plafonds multiples, le plus spécifique l'emporte.",
     "confirmDeleteOverride": "Supprimer « {label} » ? Il sera immédiatement retiré du serveur et ses cibles retrouveront les limites inférieures. Cette action est irréversible.",
     "confirmDeleteOverrideAction": "Supprimer le dépassement",
-    "previewUndecidableScope": "Votre périmètre inclut des groupes ou des attributs, il n'est donc pas possible de déterminer si cette personne en fait partie uniquement par adresse e-mail.",
+    "previewUndecidableScope": "Votre périmètre inclut des groupes ou des attributs et le répertoire est inaccessible ; il est donc impossible de déterminer pour l’instant si cette personne en fait partie. Veuillez réessayer dans un instant.",
     "previewNoLongerAdmin": "Vous n'êtes plus nommé dans une délégation active, vous ne pouvez donc pas prévisualiser les limites. Rechargez la page pour voir vos droits d'accès actuels.",
     "previewScopeMatchesNobody": "Votre périmètre ne correspond actuellement à personne, il n'y a donc personne à prévisualiser par adresse e-mail.",
     "yourScopeMatchesNobodyChip": "Ne correspond à personne",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Aussi dans les paramètres globaux par défaut",
       "collisionWarning": "Ce modèle ou cette famille est également configuré(e) dans les paramètres globaux par défaut. L’enregistrement sera refusé jusqu’à ce que l’un des deux soit supprimé."
     },
-    "previewSourceModelAccess": "Approbation du modèle — {list}"
+    "previewSourceModelAccess": "Approbation du modèle — {list}",
+    "groupMembershipDegradedStructural": "Les recherches d'appartenance aux groupes échouent sur ce serveur ({reason}). Les règles et autorisations basées sur les groupes ne sont pas appliquées aux personnes concernées — vérifiez le consentement Group.Read.All du locataire et l'enregistrement de l'application.",
+    "groupMembershipDegradedRetryable": "Certaines recherches d'appartenance aux groupes ont échoué sur ce serveur ces dernières minutes ({reason}). Les règles basées sur les groupes peuvent ne pas s'appliquer à ces personnes pendant une minute le temps que les recherches soient réessayées.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# personne} other {# personnes}} actuellement concernées sur ce serveur.",
+    "previewDirectoryNotFound": "Aucun utilisateur de l’annuaire n’a cette adresse e-mail, donc les règles de département/entreprise/bureau et de groupe ont été évaluées comme si la personne n’appartenait à aucun."
   },
   "m365": {
     "connections": {

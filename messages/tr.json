@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Yerleşik varsayılan",
     "previewSourceGlobal": "Küresel varsayılan",
     "previewSourceOverride": "Geçersiz kılma: {label}",
-    "previewNotEvaluated": "Departman/şirket/ofis ve grup geçersiz kılmaları burada değerlendirilemez — kişinin kendi oturum açmasına bağlıdır.",
+    "previewNotEvaluated": "Dizine erişilemediği için bu kişi için departman/şirket/ofis ve grup kuralları değerlendirilemedi. Lütfen kısa bir süre sonra tekrar deneyin.",
     "previewUnsaved": "Son kaydedilen politika gösteriliyor. Değişiklikleri önizlemek için kaydedin.",
     "previewColumnLimit": "Sınır",
     "previewColumnValue": "Değer",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Sadece gruplar",
     "yourScopeGroupOnlyNote": "Yalnızca grup veya niteliklerle tanımlanmış, bu nedenle sınırlar e-posta adresine göre önizlenemez.",
     "previewOutOfScope": "Bu kişi kapsamınız dışında.",
-    "previewGroupOnlyScope": "Kapsamınız gruplar veya niteliklerle tanımlanmış, bu nedenle sınırlar e-posta ile önizlenemez.",
+    "previewGroupOnlyScope": "Kapsamınız gruplar veya niteliklerle tanımlanmıştır. Önizlemeler, kişinin bu kapsama dahil olup olmadığını belirlemek için dizinde arama yapar.",
     "previewCeilingPinned": "Sınırlandırma ile sabitlendi: {label}",
     "previewShowUsage": "Mevcut kullanımı göster",
     "previewColumnUsage": "Kullanılan",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Bir satırda belirlenen sert üst sınır, bu geçersiz kılmanın hedefleri için o değeri sabitler: kapsamlı yöneticiler bunu kaldıramaz ve birden fazla üst sınır varsa en spesifik olanı uygulanır.",
     "confirmDeleteOverride": "\"{label}\" silinsin mi? Sunucudan hemen kaldırılır ve hedefleri altındaki limitlere döner. Bu işlem geri alınamaz.",
     "confirmDeleteOverrideAction": "Geçersiz kılmayı sil",
-    "previewUndecidableScope": "Kapsamınızda gruplar veya özellikler var, bu nedenle bu kişinin kapsamda olup olmadığı e-posta adresiyle belirlenemez.",
+    "previewUndecidableScope": "Kapsamınız gruplar veya nitelikleri içeriyor ve dizine erişilemediği için bu kişinin kapsama dahil olup olmadığı şu anda belirlenemiyor. Lütfen kısa bir süre sonra tekrar deneyin.",
     "previewNoLongerAdmin": "Artık etkin bir delege içinde adınız geçmiyor, bu yüzden limitleri önizleyemezsiniz. Mevcut erişiminizi görmek için sayfayı yeniden yükleyin.",
     "previewScopeMatchesNobody": "Kapsamınız şu anda kimseyle eşleşmiyor, bu yüzden e-posta ile önizlenecek kimse yok.",
     "yourScopeMatchesNobodyChip": "Hiçbiriyle eşleşmiyor",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Global varsayılanlarda da mevcut",
       "collisionWarning": "Bu model veya ailesi ayrıca Global varsayılanlarda yapılandırılmıştır. Kaydetme işlemi, ikisinden biri temizlenene kadar reddedilecektir."
     },
-    "previewSourceModelAccess": "Model onayı — {list}"
+    "previewSourceModelAccess": "Model onayı — {list}",
+    "groupMembershipDegradedStructural": "Grup üyeliği sorgulamaları bu sunucuda başarısız oluyor ({reason}). Grup tabanlı kurallar ve yetkiler, etkilenen kişiler için uygulanamıyor — tenant'ın Group.Read.All onayını ve uygulama kaydını kontrol edin.",
+    "groupMembershipDegradedRetryable": "Son birkaç dakika içinde bu sunucuda bazı grup üyeliği sorgulamaları başarısız oldu ({reason}). Grup tabanlı kurallar, sorgulamalar yeniden denenirken bu kişiler için en fazla bir dakika uygulanmayabilir.",
+    "groupMembershipDegradedUsers": "Şu anda bu sunucuda {count, plural, one {# kişi} other {# kişi}} etkileniyor.",
+    "previewDirectoryNotFound": "Hiçbir dizin kullanıcısında bu e-posta adresi yok, bu nedenle departman/şirket/ofis ve grup kuralları, kişinin hiçbirine ait olmadığı varsayımıyla değerlendirildi."
   },
   "m365": {
     "connections": {

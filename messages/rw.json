@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "Default isanzwe",
     "previewSourceGlobal": "Default rusange",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Overrides z’ishami/ikigo/ofisi n’itsinda ntizishobora kwigwa hano — zishingira ku kwinjira kwa nyirazo.",
+    "previewNotEvaluated": "Ntibyashobotse kugera kuri direktori, bityo amategeko ajyanye n’ishami, kompanyi, ibiro n’amatsinda ntibyashobotse kuyagenzura kuri uyu muntu. Gerageza kongera nyuma y’akanya.",
     "previewUnsaved": "Urimo kubona politiki iheruka kubikwa. Bika impinduka kugira ngo uzibone.",
     "previewColumnLimit": "Limiti",
     "previewColumnValue": "Agaciro",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "Amatsinda gusa",
     "yourScopeGroupOnlyNote": "Igenwa n’amatsinda cyangwa imiterere gusa, ntibishobora kwerekanwa hifashishijwe aderesi email.",
     "previewOutOfScope": "Uyu muntu ari hanze y’imbibi zawe.",
-    "previewGroupOnlyScope": "Imbibi zawe igenwa n’amatsinda cyangwa imiterere, ntibishobora kwerekanwa hifashishijwe aderesi email.",
+    "previewGroupOnlyScope": "Urugero rwawe rugenwa n’amatsinda cyangwa imiterere. Ibyavuyemo bigenzura uwo muntu muri direktori kugira ngo hamenyekane niba arimo.",
     "previewCeilingPinned": "Byashyizweho n’urugero ntarengwa: {label}",
     "previewShowUsage": "Erekana uko bikoresha",
     "previewColumnUsage": "Byakoreshejwe",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "Igipimo ntarengwa kuri uyu murongo gifata agaciro kuri ibi bigenerwa: abayobozi bafite aho bagarukira ntibashobora kongera iki gipimo, naho ahari ibipimo byinshi bikubiye, igifite aho gihuye neza n'indorerwamo gikora.",
     "confirmDeleteOverride": "Ushaka gusiba \"{label}\"? Bizakurwaho kuri server ako kanya, ibisabwa byabyo bigasubira ku bipimo biri hasi. Ibi ntibishobora gusubirwamo.",
     "confirmDeleteOverrideAction": "Siba gukosora",
-    "previewUndecidableScope": "Icyo ureba kirimo amatsinda cyangwa imiterere, bityo ntabwo ushobora kumenya niba uyu muntu abikwirakwamo ukoresheje aderesi email.",
+    "previewUndecidableScope": "Urugero rwawe rurimo amatsinda cyangwa imiterere kandi direktori ntiyabashije kugerwaho, bityo ntibishoboka kumenya niba uyu muntu arimo ubu. Gerageza kongera nyuma y’akanya.",
     "previewNoLongerAdmin": "Ntukiri kuri delegasiyo iri mu cyiciro, ntushobora kureba ibipimo. Funga wongere ufungure uru rupapuro urebe aho ugera ubu.",
     "previewScopeMatchesNobody": "Icyo ugenzura ubu ntigihura n'umuntu n'umwe, bityo ntawe ushobora kureberaho ukoresheje aderesi email.",
     "yourScopeMatchesNobodyChip": "Nta n'umwe bihuye na we",
@@ -6083,7 +6083,11 @@
       "collisionChip": "Biri no mu Migenzo ya Global",
       "collisionWarning": "Iyi model cyangwa umuryango wayo nabyo byateguwe muri Global defaults. Kubika ntibizashoboka kugeza kimwe muri byo gikuwemo."
     },
-    "previewSourceModelAccess": "Kwemeza model — {list}"
+    "previewSourceModelAccess": "Kwemeza model — {list}",
+    "groupMembershipDegradedStructural": "Kugenzura abanyamuryango b’amatsinda biri kunanirana kuri uyu muyoboro ({reason}). Amabwiriza n’uburenganzira bishingiye ku matsinda ntibiri gushyirwa mu bikorwa ku bantu babangamiwe—suzuma Group.Read.All consent ya tenant hamwe na app registration.",
+    "groupMembershipDegradedRetryable": "Bimwe mu bigenzura by’abanyamuryango b’amatsinda byanze kuri uyu muyoboro mu minota mike ishize ({reason}). Amabwiriza ashingiye ku matsinda ntashobora gukurikizwa kuri abo bantu kugeza ku munota umwe mu gihe byongeye kugeragezwa.",
+    "groupMembershipDegradedUsers": "Abantu {count, plural, one {# umwe} other {#} bari} bafite ikibazo kuri uyu muyoboro.",
+    "previewDirectoryNotFound": "Nta mukoresha wa directory ufite iyi email, bityo amabwiriza ya departema/sosiyete/ofisi n’itsinda byafashwe nk'aho uwo muntu atabarizwamo na hamwe."
   },
   "m365": {
     "connections": {

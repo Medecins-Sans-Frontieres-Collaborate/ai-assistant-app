@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Domyślne (wbudowane)",
     "previewSourceGlobal": "Globalne domyślne",
     "previewSourceOverride": "Zastąpienie: {label}",
-    "previewNotEvaluated": "Zastąpienia dla działu/firmy/biura i grup nie są oceniane tutaj — zależą od logowania danej osoby.",
+    "previewNotEvaluated": "Nie udało się uzyskać dostępu do katalogu, dlatego zasady dotyczące działu/firmy/biura oraz grup nie zostały ocenione dla tej osoby. Spróbuj ponownie za chwilę.",
     "previewUnsaved": "Wyświetlana jest ostatnia zapisana polityka. Zapisz zmiany, aby zobaczyć podgląd.",
     "previewColumnLimit": "Limit",
     "previewColumnValue": "Wartość",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Tylko grupy",
     "yourScopeGroupOnlyNote": "Zakres zdefiniowany wyłącznie przez grupy lub atrybuty, dlatego limity nie mogą być podglądane po adresie e-mail.",
     "previewOutOfScope": "Ta osoba jest poza twoim zakresem.",
-    "previewGroupOnlyScope": "Twój zakres jest zdefiniowany przez grupy lub atrybuty, więc limity nie mogą być podglądane po adresie e-mail.",
+    "previewGroupOnlyScope": "Twój zakres jest określony przez grupy lub atrybuty. Podglądy wyszukują osobę w katalogu, aby ustalić, czy się w nim znajduje.",
     "previewCeilingPinned": "Zablokowane przez limit najwyższy: {label}",
     "previewShowUsage": "Pokaż bieżące użycie",
     "previewColumnUsage": "Zużyto",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Sztywny limit w wierszu przypisuje tę wartość wybranym celom tego nadpisania: administratorzy z ograniczonymi uprawnieniami nie mogą go podnieść, a gdy stosuje się kilka limitów, obowiązuje najbardziej szczegółowy.",
     "confirmDeleteOverride": "Usunąć \"{label}\"? Zostanie natychmiast usunięty z serwera, a wyznaczone cele powrócą do niższych limitów. Tej operacji nie można cofnąć.",
     "confirmDeleteOverrideAction": "Usuń nadpisanie",
-    "previewUndecidableScope": "Twój zakres obejmuje grupy lub atrybuty, więc nie można ustalić na podstawie adresu e-mail, czy ta osoba do niego należy.",
+    "previewUndecidableScope": "Twój zakres obejmuje grupy lub atrybuty, a katalog jest niedostępny, dlatego nie można teraz ustalić, czy ta osoba się w nim znajduje. Spróbuj ponownie za chwilę.",
     "previewNoLongerAdmin": "Nie jesteś już wymieniony w aktywnej delegacji, więc nie możesz wyświetlać limitów. Odśwież stronę, aby zobaczyć aktualny dostęp.",
     "previewScopeMatchesNobody": "Twój aktualny zakres nie obejmuje żadnej osoby, więc nie można sprawdzić podglądu według adresu e-mail.",
     "yourScopeMatchesNobodyChip": "Nie pasuje do nikogo",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Także w ustawieniach globalnych",
       "collisionWarning": "Ten model lub rodzina jest również skonfigurowana w ustawieniach globalnych. Zapisanie będzie niemożliwe, dopóki jedno z tych ustawień nie zostanie usunięte."
     },
-    "previewSourceModelAccess": "Zatwierdzenie modelu — {list}"
+    "previewSourceModelAccess": "Zatwierdzenie modelu — {list}",
+    "groupMembershipDegradedStructural": "Wyszukiwania członkostwa w grupie zawodzą na tym serwerze ({reason}). Zasady i uprawnienia oparte na grupach nie są stosowane wobec osób, których to dotyczy — sprawdź zgodę Group.Read.All najemcy oraz rejestrację aplikacji.",
+    "groupMembershipDegradedRetryable": "W ciągu ostatnich kilku minut na tym serwerze nie powiodły się niektóre wyszukiwania członkostwa w grupie ({reason}). Przez maksymalnie minutę zasady oparte na grupach mogą nie być stosowane wobec tych osób podczas ponawiania prób wyszukiwania.",
+    "groupMembershipDegradedUsers": "Obecnie dotyczy to {count, plural, one {# osoby} other {# osób}} na tym serwerze.",
+    "previewDirectoryNotFound": "Żaden użytkownik katalogu nie ma tego adresu e-mail, więc zasady dotyczące działu/firmy/biura i grup zostały ocenione tak, jakby osoba nie należała do żadnej z nich."
   },
   "m365": {
     "connections": {

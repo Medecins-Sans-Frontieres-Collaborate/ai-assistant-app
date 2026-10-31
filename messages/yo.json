@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "Aiyédẹ̀tọ̀ tó wà inú rẹ",
     "previewSourceGlobal": "Aiyédẹ̀tọ̀ àgbáyé",
     "previewSourceOverride": "Àfikún: {label}",
-    "previewNotEvaluated": "Àfikún ẹ̀ka/ṣọ́ọ̀ṣì/ilé-iṣẹ́ àti ẹgbẹ́ kò le ṣe àyẹ̀wò níbí – ó dá lórí agbawèrèmẹ́sìn ènìyàn kọọkan.",
+    "previewNotEvaluated": "A ko le de ọdọ itọsọna naa, nítorí náà, a ko ṣe ayẹwo ofin ẹka/ile-iṣẹ/ọfiisi ati ẹgbẹ fun eniyan yi. Tun gbiyanju lẹ́ẹkansi pẹ́lẹ́.",
     "previewUnsaved": "Ìlànà tó kẹ́hìn ni a fi hàn. Fipamọ́ àtúnṣe rẹ kí ó le fọwọsi wọn.",
     "previewColumnLimit": "Ìlàákàyè",
     "previewColumnValue": "Iye",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "Àwọn ẹgbẹ́ nìkan",
     "yourScopeGroupOnlyNote": "A ṣàtọka rẹ̀ pẹ̀lú ẹgbẹ́ tàbí àyípadà pẹ̀lú ààmì, torí náà, a kò le tò àwọn ààlà yìí wo pẹ̀lú adirẹsi imeeli.",
     "previewOutOfScope": "Ènìyàn yìí kò sí nínú ààyè rẹ.",
-    "previewGroupOnlyScope": "Ààyè rẹ ni ẹgbẹ́ tàbí ààmì, ààlà kò le tó wo pẹ̀lú adirẹsi imeeli.",
+    "previewGroupOnlyScope": "Iwọn iṣẹ rẹ jẹ kọ́ nipasẹ awọn ẹgbẹ tàbí awọn àyọkà. Awotẹlẹ n wa eniyan naa ninu itọsọna lati pinnu boya wọn wà ninu rẹ.",
     "previewCeilingPinned": "Ti dákẹ́ níbi gíga: {label}",
     "previewShowUsage": "Fi lílo lọwọlọwọ hàn",
     "previewColumnUsage": "Ti lò",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "Iṣinmi lókè tó lagbara lori fẹlẹ-ọkan ṣàfirọ̀ yìí mọ́ àìmúlò, àwọn aṣẹ-iṣẹ tí a fọ́nsìn ko le yọ ọ́ kúrò, àwọn lókè tí ọ̀pọ̀ jẹ̀, ti o jùmọ̀ mọ́ ìdí náà la n lọ.",
     "confirmDeleteOverride": "Pa \"{label}\" rẹ? Yoo yọ kúrò nínú server lẹsẹkẹsẹ, àwọn ibi-afẹde rẹ yoo pada sẹhin si awọn opin tó wà labe rẹ. E ko le le e bọ̀ sẹ́yìn.",
     "confirmDeleteOverrideAction": "Pa atunṣe rẹ",
-    "previewUndecidableScope": "Apejọ rẹ pẹlu awọn ẹgbẹ tabi awọn ohun-ini, nitorina a ko le pinnu boya eniyan yii wa ninu rẹ nipasẹ adirẹsi imeeli.",
+    "previewUndecidableScope": "Iwọn iṣẹ rẹ pẹlu ẹgbẹ tàbí àyọkà ati a ko le de ọdọ itọsọna naa, nítorí náà, a ko le pinnu boya eniyan yii wà ninu rẹ ni bayi. Tun gbiyanju lẹ́ẹkansi pẹ́lẹ́.",
     "previewNoLongerAdmin": "Orukọ rẹ ko si mọ̀ nínú igbanilẹṣẹ tó n ṣiṣẹ, nitorina o ko le ṣàyẹ̀wò awọn opin. Tun oju ewe yii ṣe lati rí iraye lọwọlọwọ rẹ.",
     "previewScopeMatchesNobody": "Apejọ rẹ kò ba ẹni kankan mu lọwọlọwọ, nitorina kò sí ẹni tí a le ṣàyẹ̀wò pẹ̀lú adirẹsi imeeli.",
     "yourScopeMatchesNobodyChip": "Kò ba ènìyàn kankan mu",
@@ -6083,7 +6083,11 @@
       "collisionChip": "Tun wà nínú Àwọn àyípasẹ Gbólóhùn",
       "collisionWarning": "Àwọ̀n àyíkọ́ tàbí ẹbí yìí tún jẹ́ pàtó nínú Àwọn àyípasẹ Gbólóhùn. Títípamọ̀ yóò kọ́ láì gba kókan kúrò nínú wọn."
     },
-    "previewSourceModelAccess": "Ìfọwọ́si àyíkọ́ — {list}"
+    "previewSourceModelAccess": "Ìfọwọ́si àyíkọ́ — {list}",
+    "groupMembershipDegradedStructural": "Ṣàwárí ìsúnmọ́ ẹgbẹ́ ń kuna lórí olùṣàkóso yìí ({reason}). Àwọn ìlànà àti àṣẹ tó dá lórí ẹgbẹ́ kì í ní ṣiṣẹ́ fún àwọn ènìyàn tí ìpalára ti kan — ṣàyẹ̀wò ìfọwọ́sí Group.Read.All ti tenant àti ìforúkọsílẹ̀ app.",
+    "groupMembershipDegradedRetryable": "Diẹ lára àwọn ṣàwárí ìsúnmọ́ ẹgbẹ́ kuna lórí olùṣàkóso yìí ní iṣẹjú diẹ sẹ́yìn ({reason}). Àwọn ìlànà lórí ẹgbẹ́ lè má ṣiṣẹ́ fún àwọn ènìyàn wọ̀nyí títí dí iṣẹ́ju kan nígbà tí a tún ń ṣàyẹ̀wò wọn.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# ènìyàn} other {# àwọn ènìyàn}} ni ó kan lórí olùṣàkóso yìí.",
+    "previewDirectoryNotFound": "Kò sí ìdánimọ̀ olumulo directory pẹ̀lú àdírẹ́sì imeeli yìí, nítorí náà, àwọn ìlànà ẹka/ilé iṣẹ́/ọ́fiisi àti ẹgbẹ́ ni a ṣe àyẹ̀wò bí ẹni pé ẹni náà kò sí nínú ẹnikẹ́ni."
   },
   "m365": {
     "connections": {

@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Bawaan",
     "previewSourceGlobal": "Bawaan global",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Override departemen/perusahaan/kantor dan grup tidak bisa dievaluasi di sini — tergantung pada login masing-masing orang.",
+    "previewNotEvaluated": "Direktori tidak dapat diakses, sehingga aturan departemen/perusahaan/kantor dan grup tidak dievaluasi untuk orang ini. Coba lagi beberapa saat lagi.",
     "previewUnsaved": "Menampilkan kebijakan terakhir yang disimpan. Simpan perubahan Anda untuk melihat pratinjau.",
     "previewColumnLimit": "Batas",
     "previewColumnValue": "Nilai",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Hanya grup",
     "yourScopeGroupOnlyNote": "Ditetapkan hanya oleh grup atau atribut, sehingga batas tidak dapat dilihat berdasarkan alamat email.",
     "previewOutOfScope": "Orang ini di luar ruang lingkup Anda.",
-    "previewGroupOnlyScope": "Ruang lingkup Anda ditetapkan oleh grup atau atribut, sehingga batas tidak dapat dilihat berdasarkan alamat email.",
+    "previewGroupOnlyScope": "Ruang lingkup Anda ditentukan oleh grup atau atribut. Pratinjau mencari orang tersebut di direktori untuk menentukan apakah mereka termasuk di dalamnya.",
     "previewCeilingPinned": "Dibatasi oleh batas maksimum: {label}",
     "previewShowUsage": "Tampilkan penggunaan saat ini",
     "previewColumnUsage": "Digunakan",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Batas maksimal yang diatur pada baris ini akan mengunci nilai tersebut untuk target override ini: admin yang memiliki cakupan tidak dapat menaikkannya, dan jika ada beberapa batas sekaligus, yang paling spesifik akan digunakan.",
     "confirmDeleteOverride": "Hapus \"{label}\"? Ini akan langsung dihapus dari server dan targetnya akan kembali ke batas di bawahnya. Tindakan ini tidak dapat dibatalkan.",
     "confirmDeleteOverrideAction": "Hapus override",
-    "previewUndecidableScope": "Cakupan Anda mencakup grup atau atribut, sehingga apakah orang ini termasuk di dalamnya tidak dapat diputuskan hanya berdasarkan alamat email.",
+    "previewUndecidableScope": "Ruang lingkup Anda mencakup grup atau atribut dan direktori tidak dapat diakses, sehingga tidak dapat dipastikan saat ini apakah orang ini termasuk di dalamnya. Coba lagi beberapa saat lagi.",
     "previewNoLongerAdmin": "Anda tidak lagi tercantum dalam delegasi yang aktif, sehingga Anda tidak dapat meninjau batas. Muat ulang halaman untuk melihat akses Anda saat ini.",
     "previewScopeMatchesNobody": "Cakupan Anda saat ini tidak mencakup siapa pun, jadi tidak ada yang dapat ditinjau berdasarkan alamat email.",
     "yourScopeMatchesNobodyChip": "Tidak cocok siapa pun",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Juga terdapat pada pengaturan Global",
       "collisionWarning": "Model atau keluarga ini juga dikonfigurasi dalam pengaturan Global. Penyimpanan akan ditolak sampai salah satu dari dua pengaturan dihapus."
     },
-    "previewSourceModelAccess": "Persetujuan model — {list}"
+    "previewSourceModelAccess": "Persetujuan model — {list}",
+    "groupMembershipDegradedStructural": "Pencarian keanggotaan grup gagal di server ini ({reason}). Aturan dan izin berbasis grup tidak diterapkan untuk orang yang terdampak — periksa persetujuan Group.Read.All tenant dan registrasi aplikasi.",
+    "groupMembershipDegradedRetryable": "Beberapa pencarian keanggotaan grup gagal di server ini dalam beberapa menit terakhir ({reason}). Aturan berbasis grup mungkin tidak diterapkan untuk orang tersebut hingga satu menit saat pencarian diulang.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# orang} other {# orang}} saat ini terdampak di server ini.",
+    "previewDirectoryNotFound": "Tidak ada pengguna direktori dengan alamat email ini, sehingga aturan departemen/perusahaan/kantor dan grup dievaluasi seolah-olah orang tersebut tidak termasuk dalam grup mana pun."
   },
   "m365": {
     "connections": {

@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Vestavěné výchozí",
     "previewSourceGlobal": "Globální výchozí",
     "previewSourceOverride": "Přepsání: {label}",
-    "previewNotEvaluated": "Oddělení/společnost/kancelář a skupinová přepsání zde nelze vyhodnotit — závisí na přihlášení uživatele.",
+    "previewNotEvaluated": "Adresář nebyl dostupný, proto nebyla pravidla pro oddělení/společnost/kancelář a skupinu u této osoby vyhodnocena. Zkuste to znovu za chvíli.",
     "previewUnsaved": "Zobrazuje se naposledy uložené nastavení. Pro náhled změn je nejprve uložte.",
     "previewColumnLimit": "Omezení",
     "previewColumnValue": "Hodnota",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Jen skupiny",
     "yourScopeGroupOnlyNote": "Definováno pouze podle skupin nebo atributů, limity nelze zobrazit podle e-mailové adresy.",
     "previewOutOfScope": "Tato osoba je mimo váš rozsah.",
-    "previewGroupOnlyScope": "Váš rozsah je definován skupinami nebo atributy, limity nelze zobrazit podle e-mailové adresy.",
+    "previewGroupOnlyScope": "Váš rozsah je definován skupinami nebo atributy. Náhledy vyhledávají osobu v adresáři, aby zjistily, zda je v rozsahu.",
     "previewCeilingPinned": "Připnuto limitem: {label}",
     "previewShowUsage": "Zobrazit aktuální využití",
     "previewColumnUsage": "Využito",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Tvrdý strop v řádku zajistí tuto hodnotu pro cíle tohoto override: přiřazení administrátoři jej nemohou navýšit a pokud platí více stropů, vyhrává ten nejpřesnější.",
     "confirmDeleteOverride": "Smazat \"{label}\"? Okamžitě bude odstraněno ze serveru a jeho cíle přejdou pod nižší limity. Tuto akci nelze vrátit zpět.",
     "confirmDeleteOverrideAction": "Smazat override",
-    "previewUndecidableScope": "Váš rozsah obsahuje skupiny nebo atributy, takže podle e-mailové adresy nelze rozhodnout, zda do něj tato osoba spadá.",
+    "previewUndecidableScope": "Váš rozsah zahrnuje skupiny nebo atributy a adresář nebyl dostupný, proto není možné právě teď rozhodnout, zda je tato osoba v rozsahu. Zkuste to znovu za chvíli.",
     "previewNoLongerAdmin": "Již nejste uvedeni v žádné povolené delegaci, proto nelze zobrazit náhled limitů. Načtěte stránku znovu pro zobrazení aktuálního přístupu.",
     "previewScopeMatchesNobody": "Váš rozsah aktuálně neodpovídá nikomu, takže není možné zobrazit náhled podle e-mailové adresy.",
     "yourScopeMatchesNobodyChip": "Neodpovídá nikomu",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Také v globálních výchozích hodnotách",
       "collisionWarning": "Tento model nebo rodina je také nastavena v globálních výchozích hodnotách. Uložení bude odmítnuto, dokud nebude jeden z těchto dvou vymazán."
     },
-    "previewSourceModelAccess": "Schválení modelu — {list}"
+    "previewSourceModelAccess": "Schválení modelu — {list}",
+    "groupMembershipDegradedStructural": "Vyhledávání členů skupiny na tomto serveru selhává ({reason}). Pravidla a oprávnění založená na skupinách nejsou u dotčených osob uplatňována — zkontrolujte souhlas Group.Read.All tenanta a registraci aplikace.",
+    "groupMembershipDegradedRetryable": "Některá vyhledávání členství ve skupinách na tomto serveru v posledních minutách selhala ({reason}). Pravidla založená na skupinách se u těchto osob nemusí až minutu uplatnit, dokud se vyhledávání zopakuje.",
+    "groupMembershipDegradedUsers": "Aktuálně je na tomto serveru ovlivněno {count, plural, one {# osoba} other {# osob}}.",
+    "previewDirectoryNotFound": "Žádný adresářový uživatel nemá tuto e-mailovou adresu, proto byla oddělení/společnost/kancelář i skupinová pravidla vyhodnocena, jako by daná osoba do žádné nepatřila."
   },
   "m365": {
     "connections": {

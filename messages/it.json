@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Predefinito integrato",
     "previewSourceGlobal": "Predefinito globale",
     "previewSourceOverride": "Sovrascrittura: {label}",
-    "previewNotEvaluated": "Le sovrascritture per dipartimento/azienda/ufficio e gruppo non possono essere valutate qui: dipendono dall’accesso personale.",
+    "previewNotEvaluated": "La directory non è raggiungibile, quindi le regole di dipartimento/azienda/ufficio e gruppo non sono state valutate per questa persona. Riprovare tra poco.",
     "previewUnsaved": "Visualizzazione delle ultime regole salvate. Salva le modifiche per visualizzare l’anteprima.",
     "previewColumnLimit": "Limite",
     "previewColumnValue": "Valore",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Solo gruppi",
     "yourScopeGroupOnlyNote": "Definito solo da gruppi o attributi, quindi i limiti non possono essere visualizzati per indirizzo email.",
     "previewOutOfScope": "Questa persona è fuori dal tuo ambito.",
-    "previewGroupOnlyScope": "Il tuo ambito è definito da gruppi o attributi, quindi i limiti non possono essere visualizzati per indirizzo email.",
+    "previewGroupOnlyScope": "Il tuo ambito è definito da gruppi o attributi. Le anteprime cercano la persona nella directory per decidere se ne fa parte.",
     "previewCeilingPinned": "Bloccato dal limite superiore: {label}",
     "previewShowUsage": "Mostra utilizzo attuale",
     "previewColumnUsage": "Utilizzato",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Un limite rigido su una riga fissa quel valore per i destinatari di questa eccezione: gli amministratori con ambito non possono modificarlo e, se si applicano più limiti, prevale quello più specifico.",
     "confirmDeleteOverride": "Eliminare \"{label}\"? Verrà rimosso immediatamente dal server e i suoi destinatari torneranno ai limiti sottostanti. Questa operazione non può essere annullata.",
     "confirmDeleteOverrideAction": "Elimina eccezione",
-    "previewUndecidableScope": "Il tuo ambito include gruppi o attributi, quindi non è possibile stabilire se questa persona ne fa parte solo dall'indirizzo email.",
+    "previewUndecidableScope": "Il tuo ambito include gruppi o attributi e la directory non è raggiungibile, quindi non è possibile stabilire se questa persona ne fa parte in questo momento. Riprovare tra poco.",
     "previewNoLongerAdmin": "Non sei più nominato in una delega attiva, quindi non puoi visualizzare le anteprime dei limiti. Ricarica la pagina per vedere l'accesso attuale.",
     "previewScopeMatchesNobody": "Attualmente il tuo ambito non corrisponde a nessuno, quindi non c'è nessuno da verificare tramite indirizzo email.",
     "yourScopeMatchesNobodyChip": "Nessuna corrispondenza",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Anche nelle impostazioni globali",
       "collisionWarning": "Questo modello o famiglia è già configurato nelle impostazioni globali. Il salvataggio sarà rifiutato finché uno dei due non sarà rimosso."
     },
-    "previewSourceModelAccess": "Approvazione modello — {list}"
+    "previewSourceModelAccess": "Approvazione modello — {list}",
+    "groupMembershipDegradedStructural": "Le ricerche di appartenenza ai gruppi stanno fallendo su questo server ({reason}). Le regole e le autorizzazioni basate sui gruppi non vengono applicate alle persone coinvolte — verifica il consenso Group.Read.All del tenant e la registrazione dell'app.",
+    "groupMembershipDegradedRetryable": "Alcune ricerche di appartenenza ai gruppi sono fallite su questo server negli ultimi minuti ({reason}). Le regole basate sui gruppi potrebbero non essere applicate a queste persone per un massimo di un minuto, mentre le ricerche vengono ripetute.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# persona} other {# persone}} attualmente coinvolte su questo server.",
+    "previewDirectoryNotFound": "Nessun utente della directory ha questo indirizzo email, quindi le regole di dipartimento/azienda/ufficio e gruppo sono state valutate come se la persona non appartenesse a nessuno."
   },
   "m365": {
     "connections": {

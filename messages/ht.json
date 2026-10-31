@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "Default entegre",
     "previewSourceGlobal": "Default global",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Override depatman/konpayi/birò ak gwoup pa ka verifye isit la—yo depann de koneksyon moun nan.",
+    "previewNotEvaluated": "Nou pa t kapab jwenn aksè ak anyè a, kidonk règ depatman/konpayi/biwo ak gwoup yo pa t evalye pou moun sa a. Tanpri eseye ankò apre yon ti tan.",
     "previewUnsaved": "Montre dènye politik ki anrejistre. Sove chanjman ou yo pou verifye yo.",
     "previewColumnLimit": "Limit",
     "previewColumnValue": "Valè",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "Sèlman gwoup",
     "yourScopeGroupOnlyNote": "Defini pa gwoup oswa atribi sèlman, se konsa limit pa ka previzyalize pa adrès imel.",
     "previewOutOfScope": "Moun sa pa nan domèn ou.",
-    "previewGroupOnlyScope": "Domèn ou defini pa gwoup oswa atribi, se konsa limit pa ka previzyalize pa adrès imel.",
+    "previewGroupOnlyScope": "Sijè ou depann de gwoup oswa atribi. Previzyòn yo itilize anyè a pou chèche moun nan epi deside si li ladan l.",
     "previewCeilingPinned": "Bloke pa plafon: {label}",
     "previewShowUsage": "Montre itilizasyon aktyèl",
     "previewColumnUsage": "Itilize",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "Yon plafon strik sou yon liy fikse valè a pou sib eksepsyon sa a: administratè ki gen domèn pa ka depase li, e pi egzak la pami plizyè plafon va genyen.",
     "confirmDeleteOverride": "Efase \"{label}\"? Li retire imedyatman sou sèvè a epi sib li yo retounen sou limit ki anba li. Sa pa ka anile.",
     "confirmDeleteOverrideAction": "Efase eksepsyon",
-    "previewUndecidableScope": "Domèn ou enkli gwoup oswa atribi, sa vle di si moun sa a ladan li pa ka detèmine sèlman ak adrès imel.",
+    "previewUndecidableScope": "Sijè ou gen ladan l gwoup oswa atribi epi nou pa t kapab jwenn aksè ak anyè a, kidonk nou pa ka detèmine si moun sa a ladan l kounye a. Tanpri eseye ankò apre yon ti tan.",
     "previewNoLongerAdmin": "Ou pa parèt ankò nan yon delegasyon aktive, kidonk ou pa ka prévizyone limit yo. Rekarj paj la pou w wè nivo aksè ou kounye a.",
     "previewScopeMatchesNobody": "Pa gen moun ki antre nan domèn ou kounye a, pa gen moun ou ka prévizyone pa adrès imel.",
     "yourScopeMatchesNobodyChip": "Pa makonnen ak pèsonn",
@@ -6083,7 +6083,11 @@
       "collisionChip": "Tou prezan nan Definisyon Global yo",
       "collisionWarning": "Modèl oswa fanmi sa a anrejistre tou anba Definisyon Global yo. Pa ka sove chanjman jiskaske youn nan de yo efase."
     },
-    "previewSourceModelAccess": "Apwobasyon modèl — {list}"
+    "previewSourceModelAccess": "Apwobasyon modèl — {list}",
+    "groupMembershipDegradedStructural": "Rechèch manm gwoup yo pa mache sou sèvè sa a ({reason}). Règ ak aksè ki baze sou gwoup yo pa aplike pou moun sa yo — tanpri verifye konsantman Group.Read.All tenant lan ak enskripsyon aplikasyon an.",
+    "groupMembershipDegradedRetryable": "Gen kèk rechèch manm gwoup ki echwe sou sèvè sa a pandan kèk dènye minit ({reason}). Règ ki baze sou gwoup yo ka pa aplike pou moun sa yo pandan jiska yon minit pandan rechèch yo ap eseye ankò.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# moun} other {# moun}} ki afekte sou sèvè sa a kounye a.",
+    "previewDirectoryNotFound": "Pa gen okenn itilizatè nan katalòg la ki gen adrès imel sa a, kidonk règ depatman/konpayi/birò ak gwoup yo evalye kòm si moun nan pa fè pati okèn."
   },
   "m365": {
     "connections": {

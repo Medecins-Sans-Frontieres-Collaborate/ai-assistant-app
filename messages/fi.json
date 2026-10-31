@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Sisäänrakennettu oletus",
     "previewSourceGlobal": "Yleinen oletus",
     "previewSourceOverride": "Poikkeus: {label}",
-    "previewNotEvaluated": "Osasto-, yritys- ja ryhmäpoikkeuksia ei voi arvioida tässä – ne riippuvat käyttäjän omasta kirjautumisesta.",
+    "previewNotEvaluated": "Hakemistoa ei voitu tavoittaa, joten osasto-/yritys-/toimisto- ja ryhmäsääntöjä ei voitu arvioida tälle henkilölle. Yritä uudelleen hetken päästä.",
     "previewUnsaved": "Näytetään viimeksi tallennettu käytäntö. Tallenna muutokset esikatsellaksesi niitä.",
     "previewColumnLimit": "Rajoitus",
     "previewColumnValue": "Arvo",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Vain ryhmät",
     "yourScopeGroupOnlyNote": "Määritetty vain ryhmillä tai attribuuteilla, joten rajoituksia ei voi esikatsella sähköpostiosoitteella.",
     "previewOutOfScope": "Tämä henkilö on omien rajojesi ulkopuolella.",
-    "previewGroupOnlyScope": "Rajaus määritetty ryhmillä tai attribuuteilla, joten rajoituksia ei voi esikatsella sähköpostiosoitteella.",
+    "previewGroupOnlyScope": "Alueesi määritellään ryhmien tai attribuuttien perusteella. Esikatselut tarkistavat hakemistosta, kuuluuko henkilö siihen.",
     "previewCeilingPinned": "Yläraja kiinnitetty: {label}",
     "previewShowUsage": "Näytä nykyinen käyttö",
     "previewColumnUsage": "Käytetty",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Kova yläraja riviin kiinnittää arvon tämän ohituksen kohteille: rajatut ylläpitäjät eivät voi nostaa sitä, ja kun useita rajoja on voimassa, tarkin voittaa.",
     "confirmDeleteOverride": "Poistetaanko \"{label}\"? Se poistetaan välittömästi palvelimelta ja sen kohteet palautuvat alemman tason rajoihin. Poistoa ei voi perua.",
     "confirmDeleteOverrideAction": "Poista ohitus",
-    "previewUndecidableScope": "Alueesi sisältää ryhmiä tai attribuutteja, joten tämän henkilön kuulumista siihen ei voi varmistaa sähköpostiosoitteen perusteella.",
+    "previewUndecidableScope": "Alueeseesi kuuluu ryhmiä tai attribuutteja, ja hakemistoa ei voitu tavoittaa, joten ei voida tällä hetkellä päättää, kuuluuko tämä henkilö siihen. Yritä uudelleen hetken päästä.",
     "previewNoLongerAdmin": "Sinua ei enää nimetä käytössä olevaan delegointiin, joten et voi esikatsella rajoja. Lataa sivu uudelleen nähdäksesi nykyiset oikeutesi.",
     "previewScopeMatchesNobody": "Alueesi ei tällä hetkellä vastaa ketään, joten sähköpostin perusteella ei ole ketään esikatseltavaa.",
     "yourScopeMatchesNobodyChip": "Ei vastaa ketään",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Myös globaaliasetuksissa",
       "collisionWarning": "Tämä malli tai perhe on myös määritetty globaaliasetuksissa. Tallennusta ei sallita, ennen kuin toinen näistä poistetaan."
     },
-    "previewSourceModelAccess": "Mallin hyväksyntä — {list}"
+    "previewSourceModelAccess": "Mallin hyväksyntä — {list}",
+    "groupMembershipDegradedStructural": "Ryhmän jäsenyyksien tarkistukset epäonnistuvat tällä palvelimella ({reason}). Ryhmäperusteisia sääntöjä ja oikeuksia ei sovelleta asianomaisiin henkilöihin — tarkista vuokralaisen Group.Read.All-suostumus ja sovelluksen rekisteröinti.",
+    "groupMembershipDegradedRetryable": "Joidenkin ryhmän jäsenyyksien tarkistukset epäonnistuivat tällä palvelimella viime minuuttien aikana ({reason}). Ryhmäperusteisia sääntöjä ei ehkä sovelleta näihin henkilöihin jopa minuutin ajan tarkistusten uudelleenyritysten ajan.",
+    "groupMembershipDegradedUsers": "Tällä palvelimella tällä hetkellä {count, plural, one {# henkilö} other {# henkilöä}} vaikuttaa asiaan.",
+    "previewDirectoryNotFound": "Kellään hakemiston käyttäjällä ei ole tätä sähköpostiosoitetta, joten osasto-/yritys-/toimisto- ja ryhmäsäännöt arvioitiin ikään kuin henkilö ei kuuluisi yhteenkään."
   },
   "m365": {
     "connections": {

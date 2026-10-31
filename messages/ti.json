@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "ብዝተሸማገረ ነባሪ ዝሓወተ",
     "previewSourceGlobal": "ናይ ትሕቲ ደረጃ ነባሪ",
     "previewSourceOverride": "ውግእ፡ {label}",
-    "previewNotEvaluated": "ናይ ውሳኔ ቦታ/ኩባንያ/ጽሕፈት ንፀታታትን ናይ ቡድን ውግእታት ኣብዚ ኣይኽእሉን– ምስ ሰብ ዝኸድኦ ምእካብ ይደፍም።",
+    "previewNotEvaluated": "ዳይሬክቶሪ ክትበቕል አይተኻዉን፣ ብምኽንያት ምድላድ/መንእሰይ/ቢሮ እና ቡድን መሰረታት ዝኾኑ ሕጋታት ንዚ ሰብ አይተወሰኹን። ትንሳት እንታይ ጽሑፍ ኣይተሰርሕን።",
     "previewUnsaved": "ናይ መወሰኸ ስርዓት እዚ ኣብቲ ዝሓወተ ክግቦም ክረእዮም ይኽእሉ።",
     "previewColumnLimit": "ውሕደት",
     "previewColumnValue": "ዋጋ",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "ብቡድን ብቑል።",
     "yourScopeGroupOnlyNote": "ብቡድን ወይ ብዝሓዋስቲ ዝተደከሰ፣ ስም ኢሜይል ብምርካብ ደቂቕታት ይወጽኡን እየ.",
     "previewOutOfScope": "እዚ ሰብ ካብ ክብልኩም ደገፋ።",
-    "previewGroupOnlyScope": "ክብልኩም ብቡድን ወይ ብዝሓዋስቲ ዝተወሰነ፣ ስም ኢሜይል ብምርካብ ዳግም ክትቕየሩ ኣይከኣሉን።",
+    "previewGroupOnlyScope": "መድብኻ ብቡድን ንዝኾኑ ወይ ብዛዕባታት ዝተበጽሖ እዩ። ናይ ቅድሚ እዋነት ሓሳብ ዳይሬክቶሪ ውሽጣዉ ዘሎ ወይ ኣይተበጸሓን እንደይ ኣይተርኢን።",
     "previewCeilingPinned": "ብገደል ዝተሰቐለ፡ {label}",
     "previewShowUsage": "ናይ ሕሳብ ምትግባር ኣርእዩ",
     "previewColumnUsage": "ተጠቒሙ",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "ናይ መሰረታዊ ገደብ ብቅድሚ ዝፍለጥ እቲ ቁጽሪ ኣብዚ ርኸብ ኣርእስቲ: ተወሳኺ ኣመሓዳሪ ክንደይኑ ይውሰዱን, ምስ ብምውህዳእ ዝርከብ ገደባት ውሽጢ ዝኾነ ከምዚ ኣብዚ ተወሲኑ ይኸውን።",
     "confirmDeleteOverride": "\"{label}\" ክትሰርዑ ትፈልጡ? ካብ server ንስኻ ውሽጢ ብሓቂ እዩ ይሰርዕ። ናይ ቅድሚጥ ትሕዝቶ እዩ ይመለስ። እዚ ክትተመልስ ኣይከኣልን።",
     "confirmDeleteOverrideAction": "ምስርሕ ሰርሕ",
-    "previewUndecidableScope": "እቲ ድሕሪ ዓቕሚ ቤት ቡድን ወይ ባህሪ የብል፡ እንተዘይኮነ ዝስተዋድዶ ዝሓለፈ ሰብ ብ email ኣይከተልን።",
+    "previewUndecidableScope": "መድብኻ ቡድን ንዝኾኑ ወይ ዛዕባታት ዘሎ፣ ዳይሬክቶሪ ክትበቕል አይተኻዉን ብምኽንያት ዚ ሰብ ውሽጣዉ ዘሎ ወይ ኣይተበጸሓን እንደይ ፈሊጡን ኣይተሰርሕን። ትንሳት እንታይ ጽሑፍ ኣይተሰርሕን።",
     "previewNoLongerAdmin": "ኣብ ዝሓሰበ ክዕቢብካ ኣብdelegation ኣይስምዕካንን። ስለዚ ትሕዝቶ ክትይብ ክንደይኑ ኣይከኣልን። ፈጸም ገጽካ ብሽዓ ርኣየ ዕድልካ እዚ ወትሩ ርኢ።",
     "previewScopeMatchesNobody": "ከምኡን ሕቶኻ ሓሳብ ሰብኣይ ኣይተመሃዙን። ብ email ኣድራሻ ኣብዚ ሰብ ክትትይብ የለን።",
     "yourScopeMatchesNobodyChip": "ሓደ ኣይተመሃዙን",
@@ -6083,7 +6083,11 @@
       "collisionChip": "ኣብ ናይ ዓለም ዋሕዋሐ ምስክር እዶም ምስተተፅናና",
       "collisionWarning": "እዚ ሞዴል ወይ ቤተሰብ ኣብ ናይ ዓለም ዋሕዋሐ ምስክር ተተፅናና እዩ። ምውህላው ክተሰርፅ ኣይከኣልን እምበር ናይ ሞዴል ወይ ናይ ቤተሰብ ንከንነው ብዙሕዋይ ክወጽእ ይግበሩ።"
     },
-    "previewSourceModelAccess": "ምሉእ ምዝርግታ ሞዴል — {list}"
+    "previewSourceModelAccess": "ምሉእ ምዝርግታ ሞዴል — {list}",
+    "groupMembershipDegradedStructural": "ብዝሒ ሓደጋ ኣብዚ ሰርቨር ናይ ምኦፃህ ባህሪ ናይ ቡድን ኣባልነት ምትሕትዋት ካይደለን ({reason})። ነቲ ተጋደልቲ ሰባት ናይ ቡድን መስፈርታትን ኣገዳሲን ኣይተተቐበሉን — ናይ tenant Group.Read.All ምምሕዳስን app registration ፈትን።",
+    "groupMembershipDegradedRetryable": "ብዝሒ ሓደጋ ቡድን ኣባልነት ምትሕትዋት ካብዚ ሰርቨር ኣብ ቅድሚ ቅሩት ደቒቑስ ኣይደለን ({reason})። ናይ ቡድን መስፈርታት ንነቲ ሰባት ካብ ሓደ ደቒቑስ ክብሉ ይኽእል ተምሃል፣ ንዝተሓለፉ መርከቦም ይሙሉ።",
+    "groupMembershipDegradedUsers": "{count, plural, one {# ሰብ} other {# ሰባት}} ሕጂ ተጋደልቲ ኣብዚ ሰርቨር።",
+    "previewDirectoryNotFound": "ዚ email address ዘለዎ ዝተረኸበ ደብተር ተጠቃሚ የለን፣ ምስ department/company/office ንግህ ቡድን መስፈርታት ናይ ነቲ ሰብ ዘይምኾኑ እዩ ተይዩ።"
   },
   "m365": {
     "connections": {

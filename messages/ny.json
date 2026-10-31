@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "Default yomangidwa mkati",
     "previewSourceGlobal": "Default ya dziko lonse",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Ma override a dipatimenti/ kampani /ofesi komanso gulu sangathe kuwerengedwera pano — zimadalira chidziwitso cha kulowa kwa munthuyo.",
+    "previewNotEvaluated": "Sizinatha kufikira chikwatu, choncho malamulo a dipatimenti/kampani/kantolo ndi magulu sanarandikiridwe kwa munthu uyu. Yesani kachiwiri nthawi ina.",
     "previewUnsaved": "Mukuwonetsa ndondomeko yomaliza yosungidwa. Sungani zosintha zanu kuti muwone.",
     "previewColumnLimit": "Malire",
     "previewColumnValue": "Mtengo",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "Magulu okha",
     "yourScopeGroupOnlyNote": "Malire awa akuikidwa ndi magulu kapena makhalidwe okha, choncho sizingaonedwe kudzera pa imelo.",
     "previewOutOfScope": "Munthu uyu ali kunja kwa m’malire anu.",
-    "previewGroupOnlyScope": "Malire anu awa akuikidwa ndi magulu kapena makhalidwe, choncho sizingaonedwe kudzera pa imelo.",
+    "previewGroupOnlyScope": "Malo anu amatanthauzidwa ndi magulu kapena katundu. Zoyerekezera zimayang'ana munthu mu chikwatu kuti ziwone ngati ali mkati.",
     "previewCeilingPinned": "Yakakamizidwa ndi ceiling: {label}",
     "previewShowUsage": "Onetsani zomwe zikupezeka pano",
     "previewColumnUsage": "Zagwiritsidwa ntchito",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "Hard ceiling pa mzere umapanga mtengo wa overrideyi kwa omwe akugwirako: ma admin omwe ali ndi malire sangathe kuchotsa izi, ndipo ngati ceiling zambiri zogwirizana zilipo, imene yatengera bwino kwambiri ndiyo ipambana.",
     "confirmDeleteOverride": "Mukufuna kuchotsa \"{label}\"? Izi zidzachotsedwa pa seva nthawi yomweyo ndipo omwe akugwirako apita ku malire abwino omwe ali pansipa. Izi sizingabwezeretsedwenso.",
     "confirmDeleteOverrideAction": "Chotsa override",
-    "previewUndecidableScope": "Scope yanu ili ndi magulu kapena ma attributes, choncho sangathe kudziwa ngati munthu uyu ali mkati mwa scope pogwiritsa ntchito imelo.",
+    "previewUndecidableScope": "Malo anu amaphatikizapo magulu kapena katundu ndipo sizinathe kufikira chikwatu, choncho simungathe kudziwa ngati munthu uyu ali mkati panopa. Yesani kachiwiri nthawi ina.",
     "previewNoLongerAdmin": "Simunena m'malo mwa delegation yomwe ili enabled, kotero simungathe preview malire. Bwezerani tsamba kuti muone mwayi wanu waposachedwa.",
     "previewScopeMatchesNobody": "Scope yanu pakadali pano silikugwirizana ndi aliyense, kotero palibe woti muwonere pogwiritsa ntchito imelo.",
     "yourScopeMatchesNobodyChip": "Silinagwirizane ndi aliyense",
@@ -6083,7 +6083,11 @@
       "collisionChip": "Ili komanso mu Global defaults",
       "collisionWarning": "Chitsanzo ichi kapena banja lili ndi makonzedwe mu Global defaults. Kusunga sikuzaloledwa mpaka chimodzi mwaziwiri zichotsedwa."
     },
-    "previewSourceModelAccess": "Kuvomereza chitsanzo — {list}"
+    "previewSourceModelAccess": "Kuvomereza chitsanzo — {list}",
+    "groupMembershipDegradedStructural": "Kufufuza za membala wa magulu zikuolephera pa server ino ({reason}). Malamulo ndi zilolezo za magulu sizikugwira ntchito kwa anthu okhudzidwa — onani Group.Read.All consent ya tenant ndi kulembetsa kwa app.",
+    "groupMembershipDegradedRetryable": "Kufufuzira kwa membala wa magulu zinaolephera pa server ino m'minits masiku angapo apitawa ({reason}). Malamulo a magulu akhoza kusagwira kwa anthuwo kwa mphindi imodzi pamene kufufuza kukubwerezedwa.",
+    "groupMembershipDegradedUsers": "{count, plural, one {Munthu # akhudzidwa pa server ino.} other {Anthuni # akhudzidwa pa server ino.}}",
+    "previewDirectoryNotFound": "Palibe ogwiritsa ntchito directory ali ndi imelo iyi, choncho malamulo a dipatimenti/kampani/ku office ndi magulu adawerengedwa ngati munthu waimayo alibe gulu lililonse."
   },
   "m365": {
     "connections": {

@@ -5805,7 +5805,7 @@
     "previewSourceCatalog": "内置默认",
     "previewSourceGlobal": "全局默认",
     "previewSourceOverride": "覆盖：{label}",
-    "previewNotEvaluated": "部门/公司/办公室及分组的覆盖无法在此评估——取决于本人登录信息。",
+    "previewNotEvaluated": "无法访问目录，因此未针对此人评估部门/公司/办公室和组规则。请稍后重试。",
     "previewUnsaved": "显示最后保存的策略。如需预览更改，请先保存。",
     "previewColumnLimit": "限制项",
     "previewColumnValue": "数值",
@@ -5901,7 +5901,7 @@
     "yourScopeGroupOnlyChip": "仅限组",
     "yourScopeGroupOnlyNote": "仅通过组或属性定义，因此无法通过邮箱预览限制。",
     "previewOutOfScope": "此人员不在您的范围。",
-    "previewGroupOnlyScope": "您的范围由组或属性定义，因此无法通过邮箱预览限制。",
+    "previewGroupOnlyScope": "您的范围由组或属性定义。预览会在目录中查找此人，以确定其是否在范围内。",
     "previewCeilingPinned": "由上限固定：{label}",
     "previewShowUsage": "显示当前用量",
     "previewColumnUsage": "已用",
@@ -5917,7 +5917,7 @@
     "overrideCeilingHint": "行中的硬上限会锁定此覆盖的目标值：受限管理员无法提高；若有多个上限，最具体的优先生效。",
     "confirmDeleteOverride": "确定要删除“{label}”吗？该项会立即从服务器移除，其目标将回退至下一级限额。此操作无法撤销。",
     "confirmDeleteOverrideAction": "删除覆盖",
-    "previewUndecidableScope": "您的范围包含群组或属性，无法单凭邮箱地址判断此人是否包含在范围内。",
+    "previewUndecidableScope": "您的范围包含组或属性，但无法访问目录，因此目前无法确定此人是否在范围内。请稍后重试。",
     "previewNoLongerAdmin": "您不再被包含在已启用的委托中，因此无法预览限额。请刷新页面以查看当前权限。",
     "previewScopeMatchesNobody": "您的当前范围未匹配任何人，因此无法通过邮箱地址进行预览。",
     "yourScopeMatchesNobodyChip": "未匹配任何人",
@@ -6130,7 +6130,11 @@
       "collisionChip": "也在全局默认设置中",
       "collisionWarning": "该模型或系列也已在全局默认设置中配置。请在两个设置中清除其一后再保存。"
     },
-    "previewSourceModelAccess": "模型审批 — {list}"
+    "previewSourceModelAccess": "模型审批 — {list}",
+    "groupMembershipDegradedStructural": "此服务器上的群组成员查找失败（{reason}）。受影响人员的基于群组的规则和授权未被应用——请检查租户的 Group.Read.All 授权和应用注册。",
+    "groupMembershipDegradedRetryable": "此服务器在过去几分钟内有部分群组成员查找失败（{reason}）。相关人员的基于群组的规则可能最长一分钟内不会生效，查找过程中将重试。",
+    "groupMembershipDegradedUsers": "当前有{count, plural, one {#人} other {#人}}受此服务器影响。",
+    "previewDirectoryNotFound": "没有目录用户拥有此邮箱地址，因此部门/公司/办公室及群组规则将被视为此人不属于任何单位来评估。"
   },
   "m365": {
     "connections": {

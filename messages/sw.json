@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Chaguo-msingi ya ndani",
     "previewSourceGlobal": "Chaguo-msingi ya kimataifa",
     "previewSourceOverride": "Batilisho: {label}",
-    "previewNotEvaluated": "Batilisho za idara/kampuni/ofisi na kundi haziwezi kutathminiwa hapa — zinategemea mtu mwenyewe kuingia.",
+    "previewNotEvaluated": "Mkusanyiko haukupatikana, hivyo kanuni za idara/kampuni/ofisi na kundi hazikupimwa kwa mtu huyu. Jaribu tena baada ya muda.",
     "previewUnsaved": "Inaonyesha sera iliyohifadhiwa mwisho. Hifadhi mabadiliko yako ili uone hakikisho.",
     "previewColumnLimit": "Kikomo",
     "previewColumnValue": "Thamani",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Makundi pekee",
     "yourScopeGroupOnlyNote": "Imedhihirishwa na makundi au sifa pekee, hivyo mipaka haiwezi kutazamwa kwa anwani ya barua pepe.",
     "previewOutOfScope": "Mtu huyu yuko nje ya wigo wako.",
-    "previewGroupOnlyScope": "Wigo wako umebainishwa na makundi au sifa, hivyo mipaka haiwezi kutazamwa kwa anwani ya barua pepe.",
+    "previewGroupOnlyScope": "Eneo lako limebainishwa na makundi au sifa. Muonekano hutafuta mtu kwenye mkusanyiko ili kuamua kama yuko ndani yake.",
     "previewCeilingPinned": "Imezuiwa na kikomo: {label}",
     "previewShowUsage": "Onyesha matumizi ya sasa",
     "previewColumnUsage": "Imetumika",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Kiwango cha juu kilichowekwa kwenye mstari kinabana thamani hiyo kwa walengwa wa mabadiliko haya: wasimamizi wa eneo hawawezi kuongeza, na ambapo vikwazo vingi vipo, kile kinacholenga zaidi ndicho kinashinda.",
     "confirmDeleteOverride": "Futa \"{label}\"? Itaondolewa kwenye seva mara moja na walengwa wake watarudi kwenye mipaka iliyo chini yake. Hili haliwezi kurejeshwa.",
     "confirmDeleteOverrideAction": "Futa mabadiliko",
-    "previewUndecidableScope": "Eneo lako linajumuisha makundi au sifa, hivyo kama mtu huyu yumo huwezi kubaini kwa anwani ya barua pepe.",
+    "previewUndecidableScope": "Eneo lako linajumuisha makundi au sifa na mkusanyiko haukupatikana, hivyo huwezi kuamua kama mtu huyu yuko ndani yake kwa sasa. Jaribu tena baada ya muda.",
     "previewNoLongerAdmin": "Hutajwi tena katika mgawanyo ulioamilishwa, hivyo huwezi kutazama mipaka. Pakia ukurasa upya kuona upatikanaji wako wa sasa.",
     "previewScopeMatchesNobody": "Eneo lako halilingani na mtu yeyote hivi sasa, hivyo hakuna wa kutazama kwa anwani ya barua pepe.",
     "yourScopeMatchesNobodyChip": "Hailingani na yeyote",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Pia katika mipangilio ya kimataifa",
       "collisionWarning": "Muundo huu au familia yake imepangwa pia chini ya mipangilio ya kimataifa. Kuhifadhi hakutaruhusiwa hadi moja kati ya mbili iondolewe."
     },
-    "previewSourceModelAccess": "Idhini ya muundo — {list}"
+    "previewSourceModelAccess": "Idhini ya muundo — {list}",
+    "groupMembershipDegradedStructural": "Utafutaji wa uanachama wa kikundi unashindwa kwenye seva hii ({reason}). Sheria na ruhusa zinazotegemea kikundi hazifuatwi kwa watu walioathirika — tafadhali hakikisha idhini ya Group.Read.All ya mpangaji na usajili wa programu.",
+    "groupMembershipDegradedRetryable": "Baadhi ya utafutaji wa uanachama wa kikundi umeshindwa kwenye seva hii katika dakika chache zilizopita ({reason}). Sheria zinazotegemea kikundi zinaweza zisifuatwe kwa watu hawa kwa hadi dakika moja wakati utafutaji unarudiwa.",
+    "groupMembershipDegradedUsers": "{count, plural, one {Mtu mmoja} other {Watu #}} wanaathirika kwa sasa kwenye seva hii.",
+    "previewDirectoryNotFound": "Hakuna mtumiaji wa saraka aliye na anwani hii ya barua pepe, kwa hiyo sheria za idara/kampuni/ofisi na kikundi zimepitiwa kama vile mtu huyu hakuwa wa yoyote."
   },
   "m365": {
     "connections": {

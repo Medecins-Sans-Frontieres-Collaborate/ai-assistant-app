@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Predeterminado de la aplicación",
     "previewSourceGlobal": "Predeterminado global",
     "previewSourceOverride": "Anulación: {label}",
-    "previewNotEvaluated": "No se pueden evaluar aquí las anulaciones por departamento/empresa/oficina y grupo: dependen del propio inicio de sesión de la persona.",
+    "previewNotEvaluated": "No se pudo acceder al directorio, por lo que no se evaluaron las reglas de departamento/empresa/oficina y grupo para esta persona. Intente nuevamente en un momento.",
     "previewUnsaved": "Mostrando la última política guardada. Guarde los cambios para ver la vista previa.",
     "previewColumnLimit": "Límite",
     "previewColumnValue": "Valor",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Solo grupos",
     "yourScopeGroupOnlyNote": "Definido solo por grupos o atributos, por lo que los límites no pueden previsualizarse por dirección de correo electrónico.",
     "previewOutOfScope": "Esta persona está fuera de su alcance.",
-    "previewGroupOnlyScope": "Su alcance está definido por grupos o atributos, por lo que los límites no pueden previsualizarse por dirección de correo electrónico.",
+    "previewGroupOnlyScope": "Su alcance está definido por grupos o atributos. Las previsualizaciones buscan a la persona en el directorio para decidir si está incluida.",
     "previewCeilingPinned": "Fijado por techo: {label}",
     "previewShowUsage": "Mostrar uso actual",
     "previewColumnUsage": "Usado",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Un límite superior en una fila fija ese valor para los destinatarios de esta excepción: los administradores con alcance no pueden eliminarlo y, cuando se aplican varios límites, prevalece el más específico.",
     "confirmDeleteOverride": "¿Eliminar \"{label}\"? Se elimina inmediatamente del servidor y sus destinatarios pasan a los límites inferiores. Esta acción no se puede deshacer.",
     "confirmDeleteOverrideAction": "Eliminar excepción",
-    "previewUndecidableScope": "Su alcance incluye grupos o atributos, por lo que no se puede determinar si esta persona está incluida solo por la dirección de correo electrónico.",
+    "previewUndecidableScope": "Su alcance incluye grupos o atributos y no se pudo acceder al directorio, por lo que no es posible determinar si esta persona está incluida en este momento. Intente nuevamente en un momento.",
     "previewNoLongerAdmin": "Ya no figura en una delegación habilitada, por lo que no puede previsualizar los límites. Recargue la página para ver su acceso actual.",
     "previewScopeMatchesNobody": "Su alcance actualmente no coincide con nadie, por lo que no hay a quién previsualizar por correo electrónico.",
     "yourScopeMatchesNobodyChip": "No coincide con nadie",
@@ -6099,7 +6099,11 @@
       "collisionChip": "También en los valores predeterminados globales",
       "collisionWarning": "Este modelo o familia también está configurado en los valores predeterminados globales. No se podrá guardar hasta que se elimine una de las dos configuraciones."
     },
-    "previewSourceModelAccess": "Aprobación del modelo — {list}"
+    "previewSourceModelAccess": "Aprobación del modelo — {list}",
+    "groupMembershipDegradedStructural": "Las consultas de membresía de grupo están fallando en este servidor ({reason}). Las reglas y asignaciones basadas en grupos no se están aplicando a las personas afectadas; verifique el consentimiento Group.Read.All del inquilino y el registro de la aplicación.",
+    "groupMembershipDegradedRetryable": "Algunas consultas de membresía de grupo fallaron en este servidor en los últimos minutos ({reason}). Las reglas basadas en grupos pueden no aplicarse para esas personas durante hasta un minuto mientras se reintentan las consultas.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# persona} other {# personas}} actualmente afectadas en este servidor.",
+    "previewDirectoryNotFound": "Ningún usuario del directorio tiene este correo electrónico, por lo que las reglas de departamento/empresa/oficina y de grupo se evaluaron como si la persona no perteneciera a ninguno."
   },
   "m365": {
     "connections": {

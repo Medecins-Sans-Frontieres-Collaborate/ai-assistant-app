@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "Tsoho mai ɗauke da kanta",
     "previewSourceGlobal": "Tsohon saitin duniya",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Cannot duba overrides na sashen/kamfani/ofis da na rukuni anan — suna dogara da shigar mutum na kansa.",
+    "previewNotEvaluated": "Ba a iya samun kundin bayanai ba, don haka dokokin sashen/kamfani/ofis da rukuni ba a tantance su ba ga wannan mutum. Yi ƙoƙarin sake gwadawa daga baya.",
     "previewUnsaved": "Ana nuna manufar da aka ajiye karshe. Ajiye canjinkanku don duba su.",
     "previewColumnLimit": "Iyaka",
     "previewColumnValue": "Ƙima",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "Rukuni kawai",
     "yourScopeGroupOnlyNote": "An kayyade ta rukuni ko halaye kawai, don haka ba za a iya duba iyakoki ta adireshin imel ba.",
     "previewOutOfScope": "Wannan mutumin baya cikin iyakarka.",
-    "previewGroupOnlyScope": "Iyakarka an kayyade ta rukuni ko halaye, don haka ba za a iya duba iyakoki ta adireshin imel ba.",
+    "previewGroupOnlyScope": "An kayyade kundinku ta rukuni ko siffofi. Taron nuna zai duba wannan mutum a kundin bayanai don tantance ko yana ciki.",
     "previewCeilingPinned": "An tsayar da iyaka: {label}",
     "previewShowUsage": "Nuna amfani na yanzu",
     "previewColumnUsage": "An yi amfani da shi",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "Matsakaicin ƙima a layi yana kulle wannan ƙima ga waɗanda wannan override ɗin ya shafa: admins masu iyaka ba za su iya cire ta ba, kuma inda ƙayyadaddu da dama suka shafi, mafi dacewa ce ke amfani.",
     "confirmDeleteOverride": "A goge \"{label}\"? Za a cire shi kai tsaye daga sabar, kuma abin da ya shafa za su koma ƙarƙashin iyakar da ke ƙasa da shi. Ba za a iya dawowa da hakan ba.",
     "confirmDeleteOverrideAction": "Goge override",
-    "previewUndecidableScope": "Iyakarka ta haɗa da ƙungiyoyi ko siffofi, don haka ba za a iya tantance ko wannan mutumin na cikin ta ta hanyar adireshin imel kawai ba.",
+    "previewUndecidableScope": "Kundinku ya haɗa rukuni ko siffofi kuma ba a iya samun kundin bayanai ba, don haka ba za a iya tantance ko wannan mutum yana ciki ba a yanzu. Yi ƙoƙarin sake gwadawa daga baya.",
     "previewNoLongerAdmin": "Ba a ƙara sunanka a cikin wani izini mai aiki ba, don haka ba za ka iya duba iyakoki ba. Sabunta shafin don ganin damar da kake da ita yanzu.",
     "previewScopeMatchesNobody": "A halin yanzu, iyakarka ba ta dace da kowa ba, saboda haka babu wanda za ka iya duba ta adireshin imel.",
     "yourScopeMatchesNobodyChip": "Ba ya dace da kowa",
@@ -6083,7 +6083,11 @@
       "collisionChip": "Hakanan yana cikin Tsarin Duniya",
       "collisionWarning": "Wannan samfur ko iyali an saita shi a cikin Tsarin Duniya. Za a hana adanawa sai daya daga cikin biyun aka cire."
     },
-    "previewSourceModelAccess": "Amincewa da samfur — {list}"
+    "previewSourceModelAccess": "Amincewa da samfur — {list}",
+    "groupMembershipDegradedStructural": "Neman mambobin ƙungiyoyi yana kasa a wannan server ({reason}). Dokoki da damar da suka danganci ƙungiyoyi ba za su yi aiki ba ga mutanen da abin ya shafa — duba Group.Read.All consent na tenant da rajistar app.",
+    "groupMembershipDegradedRetryable": "Wasu neman mambobin ƙungiyoyi sun kasa a wannan server cikin 'yan mintuna da suka gabata ({reason}). Dokoki da suka danganci ƙungiyoyi na iya rashin aiki ga wadannan mutane har na dakika daya yayin da ake ƙoƙarin sake nema.",
+    "groupMembershipDegradedUsers": "{count, plural, one {Mutum #} other {Mutane #}} ke cikin wanda abin ya shafa a wannan server.",
+    "previewDirectoryNotFound": "Babu wani mai amfani a directory da wannan adireshin imel, don haka an duba dokokin sashen / kamfani / ofis da na ƙungiyoyi kamar mutumin bai da wata alaƙa da su."
   },
   "m365": {
     "connections": {

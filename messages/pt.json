@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Padrão do sistema",
     "previewSourceGlobal": "Padrão global",
     "previewSourceOverride": "Substituição: {label}",
-    "previewNotEvaluated": "Substituições de departamento, empresa, escritório e grupo não podem ser avaliadas aqui — dependem do login da própria pessoa.",
+    "previewNotEvaluated": "Não foi possível acessar o diretório, portanto as regras de departamento/empresa/escritório e de grupo não foram avaliadas para esta pessoa. Tente novamente em instantes.",
     "previewUnsaved": "Exibindo a última política salva. Salve suas alterações para visualizá-las.",
     "previewColumnLimit": "Limite",
     "previewColumnValue": "Valor",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Apenas grupos",
     "yourScopeGroupOnlyNote": "Definido apenas por grupos ou atributos, portanto os limites não podem ser pré-visualizados pelo endereço de e-mail.",
     "previewOutOfScope": "Esta pessoa está fora do seu escopo.",
-    "previewGroupOnlyScope": "Seu escopo é definido por grupos ou atributos, por isso os limites não podem ser pré-visualizados pelo endereço de e-mail.",
+    "previewGroupOnlyScope": "Seu escopo é definido por grupos ou atributos. As prévias consultam a pessoa no diretório para decidir se ela está incluída.",
     "previewCeilingPinned": "Fixado pelo teto: {label}",
     "previewShowUsage": "Mostrar uso atual",
     "previewColumnUsage": "Usado",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Um teto rígido em uma linha fixa esse valor para os alvos deste override: administradores com escopo não podem removê-lo e, onde houver vários tetos, vence o mais específico.",
     "confirmDeleteOverride": "Excluir \"{label}\"? Será removido imediatamente do servidor e seus alvos voltarão aos limites inferiores. Isto não pode ser desfeito.",
     "confirmDeleteOverrideAction": "Excluir override",
-    "previewUndecidableScope": "Seu escopo inclui grupos ou atributos, portanto não é possível determinar se esta pessoa está dentro dele apenas pelo e-mail.",
+    "previewUndecidableScope": "Seu escopo inclui grupos ou atributos e não foi possível acessar o diretório, portanto não é possível decidir se esta pessoa está incluída no momento. Tente novamente em instantes.",
     "previewNoLongerAdmin": "Você não está mais nomeado em uma delegação ativa, por isso não pode visualizar limites. Recarregue a página para ver o seu acesso atual.",
     "previewScopeMatchesNobody": "Seu escopo atualmente não corresponde a ninguém, então não há como visualizar por e-mail.",
     "yourScopeMatchesNobodyChip": "Não corresponde a ninguém",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Também nas configurações globais",
       "collisionWarning": "Este modelo ou família também está configurado nas configurações globais. O salvamento será recusado até que uma das duas opções seja removida."
     },
-    "previewSourceModelAccess": "Aprovação do modelo — {list}"
+    "previewSourceModelAccess": "Aprovação do modelo — {list}",
+    "groupMembershipDegradedStructural": "Consultas de associação a grupos estão falhando neste servidor ({reason}). Regras e permissões baseadas em grupos não estão sendo aplicadas para as pessoas afetadas — verifique o consentimento Group.Read.All do tenant e o registro do aplicativo.",
+    "groupMembershipDegradedRetryable": "Algumas consultas de associação a grupos falharam neste servidor nos últimos minutos ({reason}). As regras baseadas em grupos podem não ser aplicadas para essas pessoas por até um minuto enquanto as consultas são refeitas.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# pessoa} other {# pessoas}} atualmente afetadas neste servidor.",
+    "previewDirectoryNotFound": "Nenhum usuário de diretório possui este endereço de e-mail, então as regras de departamento/empresa/escritório e grupo foram avaliadas como se a pessoa não pertencesse a nenhum."
   },
   "m365": {
     "connections": {

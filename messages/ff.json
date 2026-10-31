@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "Default e jamfaare",
     "previewSourceGlobal": "Default lesdi",
     "previewSourceOverride": "Feccere: {label}",
-    "previewNotEvaluated": "Override departement/kompanii/birni e grup ɓe waawaani njuulude e ɗoo—ko kuure ndiyan signin mum laaɓi.",
+    "previewNotEvaluated": "Boowal ngol hummii waawaniima, kono kaɗowol/gese/fayande e keewalude ruleji e baliidon nguurndam ngam mo nde. Waawi ko haa mafaa.",
     "previewUnsaved": "Nana hollu yamiro jokkondirde kisa. Danndu cawre maa jokkude ɓe finnoo.",
     "previewColumnLimit": "Teelte",
     "previewColumnValue": "Fiilde",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "Jamɗe tan",
     "yourScopeGroupOnlyNote": "Ɗumɗi e jamɗe walla ceertu tan, oɗon ndiyii debbo ndoddi e adires e-mayal.",
     "previewOutOfScope": "Neɗɗo ɗemngal wondaani e laawol maa.",
-    "previewGroupOnlyScope": "Laawol maa ɗum jamɗe walla ceertu, ko fii ndoddi ndiyii e adires e-mayal.",
+    "previewGroupOnlyScope": "Holirnde maa ina ɗaɓɓitii keewalgol keewal e keɓe. Holnude worɗo ina weɗiima mo e boowal ngol, ngam hokkude so o njaa e feewal.",
     "previewCeilingPinned": "Tuɓɓitii e seernde: {label}",
     "previewShowUsage": "Hollu ndoddi jooni",
     "previewColumnUsage": "Huutoraade",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "Celaa doole dow leydi rewti no moƴƴi nder gullitam: admins waɗi leydi waawani anndaa, e so ceelaaji jiɗɗi jogii, jawabdu moƴƴi.",
     "confirmDeleteOverride": "A fayda \"{label}\"? Golle tigi gollii e server tuma nde e naapitaaji makko nduugi lekki politii seŋngo. Ko waawaa nodda.",
     "confirmDeleteOverrideAction": "Fayda override",
-    "previewUndecidableScope": "Naa e leydi goɗɗum naatna gese walla ɓamtuɗi, ɗum woni waawaa anndaa so ne ɗuum jogi e gese nde e email address.",
+    "previewUndecidableScope": "Holirnde maa ina ɓurii keewal e keɓe tee boowal ngol waawi waawaniima, ko fii waawaniima jooɗude so mo njaa e feewal. Waawi ko haa mafaa.",
     "previewNoLongerAdmin": "E jamfa, inna aɗa waawani barke e min he delegation moƴƴi, ɗuum ne a waawani naatnu politii. Naatnu hello ngu ngam hollu barke maa woni jooni.",
     "previewScopeMatchesNobody": "Naa e leydi goɗɗum ne njogi jannoo, ɗuum ne wayno e-mayli gooto.",
     "yourScopeMatchesNobodyChip": "Naa-jannoo",
@@ -6083,7 +6083,11 @@
       "collisionChip": "E jamɗe Global defaults fow",
       "collisionWarning": "Model gila walla leydi-ɗe ɗee woni ko e jamɗe Global defaults. Ndaade mbaydi, waawani goɗɗum maa ɗiɗo epa juutde."
     },
-    "previewSourceModelAccess": "Cuɓoraa model — {list}"
+    "previewSourceModelAccess": "Cuɓoraa model — {list}",
+    "groupMembershipDegradedStructural": "Ñaamugol cine weltaali baɗɗi e server maa ({reason}). Kaawtol e reftaaji gese e hoore mum-enen so wonaa neldaade — yuðu Group.Read.All consent e tenant e app registration.",
+    "groupMembershipDegradedRetryable": "Ko gooɓdi cine weltaali baɗɗi e server maa e jamma majji {reason}. Kaawtol e reftaaji gese ena waawaa neldaade hoore mum-enen so ɓuri jamma sa'e kono yamiraa neldaade.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# gooto} other {# mon}} ina fiɗɗi baɗɗo e server maa.",
+    "previewDirectoryNotFound": "Ngoɗum user so wonaa e ɗiɗdi ba email makko, tee walleji department/company/office e gese tawi e fannu so ngoɗum alaa gese ngon makko."
   },
   "m365": {
     "connections": {

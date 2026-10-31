@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "Ugrađeni podrazumevani",
     "previewSourceGlobal": "Globalni podrazumevani",
     "previewSourceOverride": "Izuzimanje: {label}",
-    "previewNotEvaluated": "Izuzimanja po departmanu/kompaniji/kancelariji i grupi ne mogu se proveriti ovde — zavise od samog prijavljivanja korisnika.",
+    "previewNotEvaluated": "Direktorijum nije dostupan, pa pravila za sektor/kompaniju/kancelariju i grupu nisu procenjena za ovu osobu. Pokušajte ponovo za trenutak.",
     "previewUnsaved": "Prikazuje se poslednja sačuvana politika. Sačuvajte izmene da biste ih pregledali.",
     "previewColumnLimit": "Ograničenje",
     "previewColumnValue": "Vrednost",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "Samo grupe",
     "yourScopeGroupOnlyNote": "Definisano isključivo grupama ili atributima, pa ograničenja nije moguće pregledati prema e-mail adresi.",
     "previewOutOfScope": "Ova osoba je van vašeg opsega.",
-    "previewGroupOnlyScope": "Vaš opseg je definisan grupama ili atributima, pa ograničenja nije moguće pregledati prema e-mail adresi.",
+    "previewGroupOnlyScope": "Vaš opseg se definiše grupama ili atributima. Pregledi proveravaju osobu u direktorijumu da bi utvrdili da li je unutar opsega.",
     "previewCeilingPinned": "Zadato gornjom granicom: {label}",
     "previewShowUsage": "Prikaži trenutnu upotrebu",
     "previewColumnUsage": "Iskorišćeno",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "Čvrsto ograničenje u redu određuje vrednost ciljevima ovog override-a: administratori sa ograničenim pristupom ne mogu da ga uklone, a kada postoji više ograničenja primenjuje se najpreciznije.",
     "confirmDeleteOverride": "Obrisati \"{label}\"? Biće odmah uklonjen sa servera i ciljevi se vraćaju na niža ograničenja. Ovo nije moguće poništiti.",
     "confirmDeleteOverrideAction": "Obriši override",
-    "previewUndecidableScope": "Vaš opseg uključuje grupe ili atribute, tako da se ne može odrediti da li se ova osoba nalazi unutra samo po email adresi.",
+    "previewUndecidableScope": "Vaš opseg uključuje grupe ili atribute i direktorijum nije dostupan, pa trenutno nije moguće utvrditi da li je ova osoba u opsegu. Pokušajte ponovo za trenutak.",
     "previewNoLongerAdmin": "Vi više niste navedeni u aktivnoj delegaciji, pa ne možete da pregledate ograničenja. Osvežite stranicu da vidite vaš trenutni pristup.",
     "previewScopeMatchesNobody": "Vaš opseg trenutno ne obuhvata nikoga, pa nema koga da pregledate putem email adrese.",
     "yourScopeMatchesNobodyChip": "Ne obuhvata nikoga",
@@ -6083,7 +6083,11 @@
       "collisionChip": "Takođe u globalnim podrazumevanim vrednostima",
       "collisionWarning": "Ovaj model ili porodica je takođe podešena pod globalnim podrazumevanim vrednostima. Čuvanje neće biti dozvoljeno dok se jedno od dva ne ukloni."
     },
-    "previewSourceModelAccess": "Odobrenje modela — {list}"
+    "previewSourceModelAccess": "Odobrenje modela — {list}",
+    "groupMembershipDegradedStructural": "Pretrage članstva u grupi ne uspevaju na ovom serveru ({reason}). Pravila i dozvole zasnovane na grupama nisu primenjena za pogođene osobe — proverite tenantovu Group.Read.All saglasnost i registraciju aplikacije.",
+    "groupMembershipDegradedRetryable": "Neke pretrage članstva u grupi nisu uspele na ovom serveru u poslednjih nekoliko minuta ({reason}). Pravila zasnovana na grupama možda neće biti primenjena za te osobe do jednog minuta dok se pretrage ponovo pokušavaju.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# osoba} other {# osoba}} je trenutno pogođeno na ovom serveru.",
+    "previewDirectoryNotFound": "Nijedan korisnik direktorijuma nema ovu email adresu, pa su pravila za odeljenje/kompaniju/kancelariju i grupu procenjena kao da osoba ne pripada nijednoj."
   },
   "m365": {
     "connections": {

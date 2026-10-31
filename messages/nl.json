@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Standaard ingebouwd",
     "previewSourceGlobal": "Globale standaard",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Afdelings-, bedrijfs- en groepsoverrides kunnen hier niet worden beoordeeld — deze hangen af van de eigen aanmelding van de persoon.",
+    "previewNotEvaluated": "De directory kon niet worden bereikt, waardoor afdelings-/bedrijfs-/kantooren groepsregels voor deze persoon niet zijn geëvalueerd. Probeer het over een moment opnieuw.",
     "previewUnsaved": "Toont het laatst opgeslagen beleid. Sla uw wijzigingen op om ze hier te zien.",
     "previewColumnLimit": "Limiet",
     "previewColumnValue": "Waarde",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Alleen groepen",
     "yourScopeGroupOnlyNote": "Gedefinieerd op basis van groepen of attributen, limieten kunnen hierdoor niet per e-mailadres worden getoond.",
     "previewOutOfScope": "Deze persoon valt buiten uw bereik.",
-    "previewGroupOnlyScope": "Uw bereik is gedefinieerd door groepen of attributen, dus limieten kunnen niet per e-mailadres worden getoond.",
+    "previewGroupOnlyScope": "Uw scope wordt bepaald door groepen of attributen. Previews zoeken de persoon op in de directory om te bepalen of zij binnen deze scope vallen.",
     "previewCeilingPinned": "Beperkt door maximum: {label}",
     "previewShowUsage": "Huidig gebruik tonen",
     "previewColumnUsage": "Gebruikt",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Een harde bovengrens in een rij vergrendelt die waarde voor de doelen van deze override: beperkte beheerders kunnen deze niet opheffen, en waar meerdere bovengrenzen gelden, geldt de meest specifieke.",
     "confirmDeleteOverride": "\"{label}\" verwijderen? Dit wordt direct van de server verwijderd en de doelen vallen terug op de onderliggende limieten. Dit kan niet ongedaan worden gemaakt.",
     "confirmDeleteOverrideAction": "Override verwijderen",
-    "previewUndecidableScope": "Uw scope bevat groepen of attributen, dus het is niet mogelijk om te bepalen of deze persoon binnen de scope valt op basis van het e-mailadres.",
+    "previewUndecidableScope": "Uw scope bevat groepen of attributen en de directory kon niet worden bereikt, waardoor nu niet kan worden bepaald of deze persoon binnen de scope valt. Probeer het over een moment opnieuw.",
     "previewNoLongerAdmin": "U bent niet langer opgenomen in een actieve delegatie, waardoor u de limieten niet kunt bekijken. Herlaad de pagina om uw huidige toegang te zien.",
     "previewScopeMatchesNobody": "Uw scope komt momenteel met niemand overeen, er is dus niemand om te bekijken op e-mailadres.",
     "yourScopeMatchesNobodyChip": "Komt met niemand overeen",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Ook in wereldwijde standaardinstellingen",
       "collisionWarning": "Dit model of deze familie is ook geconfigureerd onder wereldwijde standaardinstellingen. Opslaan wordt geweigerd totdat een van de twee is verwijderd."
     },
-    "previewSourceModelAccess": "Modelgoedkeuring — {list}"
+    "previewSourceModelAccess": "Modelgoedkeuring — {list}",
+    "groupMembershipDegradedStructural": "Groepslidmaatschap-zoekopdrachten werken niet op deze server ({reason}). Regels en machtigingen op basis van groepen worden niet toegepast voor de getroffen personen — controleer de Group.Read.All-toestemming van de tenant en de app-registratie.",
+    "groupMembershipDegradedRetryable": "Sommige groepslidmaatschap-zoekopdrachten zijn de afgelopen minuten mislukt op deze server ({reason}). Groepsgebaseerde regels kunnen tot een minuut niet van toepassing zijn op deze personen terwijl de zoekopdrachten worden herhaald.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# persoon} other {# personen}} momenteel getroffen op deze server.",
+    "previewDirectoryNotFound": "Geen enkele gebruikersdirectory bevat dit e-mailadres, dus afdelings-/bedrijfs-/kantoor- en groepsregels zijn geëvalueerd alsof de persoon tot geen enkele behoorde."
   },
   "m365": {
     "connections": {

@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Predeterminat integrat",
     "previewSourceGlobal": "Predeterminat global",
     "previewSourceOverride": "Desviació: {label}",
-    "previewNotEvaluated": "Les desviacions per departament/empresa/oficina i grup no es poden avaluar aquí — depenen de l'inici de sessió de la persona.",
+    "previewNotEvaluated": "No s'ha pogut accedir al directori, així que no s'han pogut avaluar les normes de departament, empresa/oficina i grup per a aquesta persona. Torna-ho a intentar d'aquí un moment.",
     "previewUnsaved": "Es mostra la darrera política desada. Desa els canvis per previsualitzar-los.",
     "previewColumnLimit": "Límit",
     "previewColumnValue": "Valor",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Només grups",
     "yourScopeGroupOnlyNote": "Definit només per grups o atributs; els límits no es poden previsualitzar per adreça electrònica.",
     "previewOutOfScope": "Aquesta persona està fora del teu àmbit.",
-    "previewGroupOnlyScope": "El teu àmbit és definit per grups o atributs, així que els límits no es poden previsualitzar per adreça electrònica.",
+    "previewGroupOnlyScope": "El teu abast es defineix per grups o atributs. Les previsualitzacions consulten la persona al directori per decidir si hi està inclosa.",
     "previewCeilingPinned": "Fixat pel límit superior: {label}",
     "previewShowUsage": "Mostra l’ús actual",
     "previewColumnUsage": "Utilitzat",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Un límit màxim fixat a una fila bloqueja aquest valor per als destinataris de l’excepció: els administradors amb àmbit no el poden aixecar, i si hi ha diversos límits màxims s’aplica el més específic.",
     "confirmDeleteOverride": "Vols suprimir «{label}»? S’elimina del servidor immediatament i els seus destinataris passen als límits inferiors. Això no es pot desfer.",
     "confirmDeleteOverrideAction": "Suprimeix excepció",
-    "previewUndecidableScope": "El teu àmbit inclou grups o atributs, per tant, no es pot determinar si aquesta persona hi pertany només amb l'adreça electrònica.",
+    "previewUndecidableScope": "El teu abast inclou grups o atributs i no s'ha pogut accedir al directori, així que no es pot determinar si aquesta persona hi està inclosa ara mateix. Torna-ho a intentar d'aquí un moment.",
     "previewNoLongerAdmin": "Ja no ets inclòs en cap delegació activa, així que no pots previsualitzar límits. Torna a carregar la pàgina per veure el teu accés actual.",
     "previewScopeMatchesNobody": "El teu àmbit ara mateix no coincideix amb ningú, així que no pots fer cap previsualització per adreça electrònica.",
     "yourScopeMatchesNobodyChip": "No coincideix amb ningú",
@@ -6099,7 +6099,11 @@
       "collisionChip": "També als valors predeterminats globals",
       "collisionWarning": "Aquest model o família també està configurat als valors predeterminats globals. No es podrà desar fins que s'esborri una de les dues opcions."
     },
-    "previewSourceModelAccess": "Aprovació del model — {list}"
+    "previewSourceModelAccess": "Aprovació del model — {list}",
+    "groupMembershipDegradedStructural": "Les consultes de membres de grup estan fallant en aquest servidor ({reason}). No s’estan aplicant les regles i concessions basades en grup per a les persones afectades; comproveu el consentiment de Group.Read.All del tenant i el registre de l’aplicació.",
+    "groupMembershipDegradedRetryable": "Algunes consultes de membres de grup han fallat en aquest servidor en els últims minuts ({reason}). Les regles basades en grup podrien no aplicar-se per a aquestes persones durant un minut mentre es repeteixen les consultes.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# persona} other {# persones}} afectades actualment en aquest servidor.",
+    "previewDirectoryNotFound": "Cap usuari del directori té aquesta adreça electrònica, per tant les regles de departament/empresa/oficina i de grup s’han avaluat com si la persona no pertanyés a cap."
   },
   "m365": {
     "connections": {

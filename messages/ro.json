@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Implicit încorporat",
     "previewSourceGlobal": "Implicit global",
     "previewSourceOverride": "Supra-scriere: {label}",
-    "previewNotEvaluated": "Supra-scrierile de departament/companie/birou și grup nu pot fi evaluate aici — depind de autentificarea persoanei.",
+    "previewNotEvaluated": "Nu s-a putut accesa directorul, astfel încât regulile pentru departament/companie/birou și grup nu au fost evaluate pentru această persoană. Încercați din nou în curând.",
     "previewUnsaved": "Se afișează ultima politică salvată. Salvați modificările pentru a le previzualiza.",
     "previewColumnLimit": "Limită",
     "previewColumnValue": "Valoare",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Numai grupuri",
     "yourScopeGroupOnlyNote": "Definit doar prin grupuri sau atribute, astfel încât limitele nu pot fi previzualizate după adresă de email.",
     "previewOutOfScope": "Această persoană este în afara ariei tale.",
-    "previewGroupOnlyScope": "Aria ta este definită prin grupuri sau atribute, deci limitele nu pot fi previzualizate după adresă de email.",
+    "previewGroupOnlyScope": "Domeniul dvs. este definit de grupuri sau atribute. Previzualizările verifică persoana în director pentru a decide dacă se află în acesta.",
     "previewCeilingPinned": "Fixat de plafon: {label}",
     "previewShowUsage": "Afișează utilizarea curentă",
     "previewColumnUsage": "Utilizat",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Impunerea unei limite dure pe un rând blochează acea valoare pentru țintele acestui override: administratorii cu drepturi limitate nu o pot ridica, iar când se aplică mai multe limite, câștigă cea mai specifică.",
     "confirmDeleteOverride": "Ștergeți \"{label}\"? Va fi eliminat imediat de pe server iar țintele sale vor reveni la limitările de dedesubt. Această acțiune nu poate fi anulată.",
     "confirmDeleteOverrideAction": "Șterge override-ul",
-    "previewUndecidableScope": "Domeniul dumneavoastră include grupuri sau atribute, deci nu se poate stabili dacă această persoană este inclusă doar după adresa de e-mail.",
+    "previewUndecidableScope": "Domeniul dvs. include grupuri sau atribute, iar directorul nu a putut fi accesat, astfel încât nu se poate determina momentan dacă această persoană este inclusă. Încercați din nou în curând.",
     "previewNoLongerAdmin": "Nu mai sunteți menționat într-o delegare activă, deci nu puteți previzualiza limitările. Reîncărcați pagina pentru a vedea drepturile actuale de acces.",
     "previewScopeMatchesNobody": "Domeniul dumneavoastră nu corespunde momentan niciunei persoane, deci nu există persoane de previzualizat după adresă de e-mail.",
     "yourScopeMatchesNobodyChip": "Nu se potrivește cu nimeni",
@@ -6099,7 +6099,11 @@
       "collisionChip": "De asemenea, în valorile implicite globale",
       "collisionWarning": "Acest model sau familie este configurat(ă) și în valorile implicite globale. Salvarea va fi refuzată până când una dintre cele două va fi eliminată."
     },
-    "previewSourceModelAccess": "Aprobare model — {list}"
+    "previewSourceModelAccess": "Aprobare model — {list}",
+    "groupMembershipDegradedStructural": "Căutările privind apartenența la grupuri eșuează pe acest server ({reason}). Regulile și drepturile bazate pe grup nu sunt aplicate persoanelor afectate — verificați consimțământul Group.Read.All al tenantului și înregistrarea aplicației.",
+    "groupMembershipDegradedRetryable": "Unele căutări privind apartenența la grupuri au eșuat pe acest server în ultimele câteva minute ({reason}). Regulile bazate pe grup pot să nu se aplice acelor persoane până la un minut în timp ce se retrimit căutările.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# persoană} other {# persoane}} sunt afectate momentan pe acest server.",
+    "previewDirectoryNotFound": "Niciun utilizator de director nu are această adresă de email, astfel încât regulile pentru departament/companie/birou și grup au fost evaluate ca și cum persoana nu aparține niciunuia."
   },
   "m365": {
     "connections": {

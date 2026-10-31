@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Inbyggd standard",
     "previewSourceGlobal": "Global standard",
     "previewSourceOverride": "Åsidosättning: {label}",
-    "previewNotEvaluated": "Avdelnings-, företags- och gruppåsidosättningar kan inte utvärderas här – de beror på personens egen inloggning.",
+    "previewNotEvaluated": "Katalogen kunde inte nås, så regler för avdelning/företag/kontor och grupper utvärderades inte för denna person. Försök igen om en stund.",
     "previewUnsaved": "Visar den senast sparade policyn. Spara dina ändringar för att förhandsgranska dem.",
     "previewColumnLimit": "Begränsning",
     "previewColumnValue": "Värde",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Endast grupper",
     "yourScopeGroupOnlyNote": "Definierad endast av grupper eller attribut, så gränser kan inte förhandsgranskas med e-postadress.",
     "previewOutOfScope": "Denna person är utanför din räckvidd.",
-    "previewGroupOnlyScope": "Din räckvidd definieras av grupper eller attribut, så gränser kan inte förhandsgranskas med e-postadress.",
+    "previewGroupOnlyScope": "Ditt omfång definieras av grupper eller attribut. Förhandsvisningen söker upp personen i katalogen för att avgöra om de ingår.",
     "previewCeilingPinned": "Begränsad av tak: {label}",
     "previewShowUsage": "Visa aktuell användning",
     "previewColumnUsage": "Använt",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "En hård gräns i en rad låser det värdet för denna överskrivnings mål: avgränsade administratörer kan inte höja den, och där flera tak gäller vinner det mest specifika.",
     "confirmDeleteOverride": "Radera \"{label}\"? Det tas bort omedelbart från servern och dess mål återgår till gällande bakomliggande gränser. Detta kan inte ångras.",
     "confirmDeleteOverrideAction": "Radera överskrivning",
-    "previewUndecidableScope": "Ditt omfång inkluderar grupper eller attribut, så det kan inte avgöras via e-postadress om denna person omfattas.",
+    "previewUndecidableScope": "Ditt omfång omfattar grupper eller attribut och katalogen kunde inte nås, så det går inte att avgöra om denna person ingår just nu. Försök igen om en stund.",
     "previewNoLongerAdmin": "Du är inte längre namngiven i en aktiv delegering och kan därför inte förhandsgranska gränser. Ladda om sidan för att se dina aktuella rättigheter.",
     "previewScopeMatchesNobody": "Ditt omfång matchar för närvarande ingen, så det finns ingen att förhandsgranska via e-postadress.",
     "yourScopeMatchesNobodyChip": "Matchar ingen",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Finns även i globala standardinställningar",
       "collisionWarning": "Den här modellen eller familjen är också konfigurerad under globala standardinställningar. Spara kommer att nekas tills en av de två tas bort."
     },
-    "previewSourceModelAccess": "Modelgodkännande — {list}"
+    "previewSourceModelAccess": "Modelgodkännande — {list}",
+    "groupMembershipDegradedStructural": "Gruppmedlemskap kan inte slås upp på den här servern ({reason}). Gruppbaserade regler och behörigheter tillämpas inte för de berörda personerna – kontrollera tenantens Group.Read.All-samtycke och appregistreringen.",
+    "groupMembershipDegradedRetryable": "Vissa uppslag av gruppmedlemskap misslyckades på den här servern under de senaste minuterna ({reason}). Gruppbaserade regler kan utebli för dessa personer i upp till en minut medan uppslagen försöks igen.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# person} other {# personer}} påverkas för närvarande på den här servern.",
+    "previewDirectoryNotFound": "Ingen användare i katalogen har denna e-postadress, så avdelnings-, företags-, kontors- och grupptillhörighet utvärderades som om personen inte tillhörde någon."
   },
   "m365": {
     "connections": {

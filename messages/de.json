@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "Integrierte Standardeinstellung",
     "previewSourceGlobal": "Globale Standardeinstellung",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Abteilungs-/Firmen-/Büro- und Gruppen-Overrides können hier nicht bewertet werden – diese hängen von der eigenen Anmeldung der Person ab.",
+    "previewNotEvaluated": "Das Verzeichnis konnte nicht erreicht werden, daher wurden Abteilungs-/Firmen-/Büro- und Gruppenregeln für diese Person nicht geprüft. Versuchen Sie es in einem Moment erneut.",
     "previewUnsaved": "Die zuletzt gespeicherte Richtlinie wird angezeigt. Speichern Sie Ihre Änderungen, um die Vorschau zu sehen.",
     "previewColumnLimit": "Limit",
     "previewColumnValue": "Wert",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "Nur Gruppen",
     "yourScopeGroupOnlyNote": "Nur durch Gruppen oder Attribute definiert, daher können Limits nicht nach E-Mail-Adresse angezeigt werden.",
     "previewOutOfScope": "Diese Person liegt außerhalb Ihres Bereichs.",
-    "previewGroupOnlyScope": "Ihr Bereich ist durch Gruppen oder Attribute definiert, daher können Limits nicht nach E-Mail-Adresse angezeigt werden.",
+    "previewGroupOnlyScope": "Ihr Geltungsbereich wird durch Gruppen oder Attribute definiert. In der Vorschau wird die Person im Verzeichnis gesucht, um festzustellen, ob sie dazugehört.",
     "previewCeilingPinned": "Durch Obergrenze fixiert: {label}",
     "previewShowUsage": "Aktuellen Verbrauch anzeigen",
     "previewColumnUsage": "Verwendet",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Ein fester Grenzwert in einer Zeile fixiert diesen Wert für die Ziele dieses Overrides: Eingeschränkte Admins können ihn nicht aufheben. Wenn mehrere Grenzwerte gelten, gewinnt der spezifischste.",
     "confirmDeleteOverride": "\"{label}\" löschen? Die Regel wird sofort vom Server entfernt und ihre Ziele fallen auf die darunterliegenden Limits zurück. Dies kann nicht rückgängig gemacht werden.",
     "confirmDeleteOverrideAction": "Override löschen",
-    "previewUndecidableScope": "Ihr Geltungsbereich umfasst Gruppen oder Attribute, daher kann anhand der E-Mail-Adresse nicht entschieden werden, ob diese Person dazugehört.",
+    "previewUndecidableScope": "Ihr Geltungsbereich umfasst Gruppen oder Attribute und das Verzeichnis konnte nicht erreicht werden, daher kann momentan nicht entschieden werden, ob diese Person dazugehört. Versuchen Sie es in einem Moment erneut.",
     "previewNoLongerAdmin": "Sie sind nicht mehr in einer aktivierten Delegation genannt und können daher keine Limits mehr prüfen. Laden Sie die Seite neu, um Ihre aktuellen Zugriffsrechte zu sehen.",
     "previewScopeMatchesNobody": "Ihr Geltungsbereich umfasst derzeit niemanden, daher gibt es keine Vorschau per E-Mail-Adresse.",
     "yourScopeMatchesNobodyChip": "Trifft auf niemanden zu",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Auch in den globalen Standardwerten",
       "collisionWarning": "Dieses Modell oder diese Familie ist auch unter den globalen Standardwerten konfiguriert. Das Speichern wird verweigert, bis eine der beiden Konfigurationen entfernt wurde."
     },
-    "previewSourceModelAccess": "Modellfreigabe — {list}"
+    "previewSourceModelAccess": "Modellfreigabe — {list}",
+    "groupMembershipDegradedStructural": "Gruppenzugehörigkeitsabfragen schlagen auf diesem Server fehl ({reason}). Gruppenbasierte Regeln und Berechtigungen werden für die betroffenen Personen nicht angewendet — prüfen Sie die Berechtigung Group.Read.All des Mandanten und die App-Registrierung.",
+    "groupMembershipDegradedRetryable": "Einige Gruppenzugehörigkeitsabfragen sind auf diesem Server in den letzten Minuten fehlgeschlagen ({reason}). Für diese Personen gelten gruppenbasierte Regeln möglicherweise für bis zu eine Minute nicht, während die Abfragen erneut versucht werden.",
+    "groupMembershipDegradedUsers": "Derzeit sind {count, plural, one {# Person} other {# Personen}} auf diesem Server betroffen.",
+    "previewDirectoryNotFound": "Kein Verzeichnisbenutzer hat diese E-Mail-Adresse, daher wurden Abteilungs-/Unternehmens-/Büro- und Gruppenregeln so bewertet, als würde die Person zu keiner gehören."
   },
   "m365": {
     "connections": {

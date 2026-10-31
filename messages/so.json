@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "Asalka ku jira barnaamijka",
     "previewSourceGlobal": "Asalka guud",
     "previewSourceOverride": "Badal: {label}",
-    "previewNotEvaluated": "Badallada waaxda/shirkadda/xafiiska iyo kooxda lagama ogaan karo halkan — waxay ku xirantahay galitaanka qofka laftiisa.",
+    "previewNotEvaluated": "Galka lama gaari karo, sidaas darteed xeerarka waaxda/shirkadda/xafiiska iyo kooxda looma qiimeyn qofkan. Fadlan dib iskuday goor dhow.",
     "previewUnsaved": "Waxa la soo bandhigayaa siyaasaddii ugu dambaysay ee la keydiyay. Keydi isbedelada si aad u aragto.",
     "previewColumnLimit": "Xadidan",
     "previewColumnValue": "Qiimaha",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "Kooxo kaliya",
     "yourScopeGroupOnlyNote": "Waxaa lagu qeexay kooxo ama astaamo uun, sidaas darteed xaddidaadaha looma eegayo cinwaanka email.",
     "previewOutOfScope": "Qofkani kama mid aha xadkaaga.",
-    "previewGroupOnlyScope": "Xadkaaga waxa lagu qeexay kooxo ama astaamo, sidaas darteed xaddidaadaha looma eegi karo cinwaanka email.",
+    "previewGroupOnlyScope": "Xadkaaga waxaa lagu qeexay kooxo ama astaamo. Dulmaradu waxay qofka ka raadisaa galka si ay u go'aamiso inuu ku jiro iyo in kale.",
     "previewCeilingPinned": "Waxaa lagu xadiday sare: {label}",
     "previewShowUsage": "Isticmaalka hadda bandhg",
     "previewColumnUsage": "La isticmaalay",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "Xadka ugu sareeya ee saaran safkaas wuxuu xeerinayaa qiimaha la xidhiidha bartilmaameedyada override-kan: maamulayaasha xadidan ma kor u qaadi karaan, haddii xaddiyo badan la isticmaalo midka ugu qaasan ayaa shaqaynaya.",
     "confirmDeleteOverride": "Ma tirtirtaa \"{label}\"? Waxaa isla markiiba laga saarayaa server-ka waxaana bartilmaameedyadiisa lagu soo celinayaa xadidaadihii hoosta ka jiray. Tan dib looma soo celin karo.",
     "confirmDeleteOverrideAction": "Tirti override-ka",
-    "previewUndecidableScope": "Xadidaada waxa ay ku jirtaa kooxo ama astaamo, sidaas darteed qofkani in uu ku jiro lagama go'aamin karo cinwaan email ah.",
+    "previewUndecidableScope": "Xadkaaga waxa uu ka kooban yahay kooxo ama astaamo, balse galka lama gaari karo, sidaas darteed lama hubin karo in qofkan uu ku jiro xadka hadda. Fadlan dib iskuday goor dhow.",
     "previewNoLongerAdmin": "Waa lagaa saaray magacyada kuwa loo xil saaray ee firfircoon, sidaas darteed ma daawan kartid xadidaadaha. Bogga dib u rar si aad u aragto heerkaaga hadda.",
     "previewScopeMatchesNobody": "Xadidaada hadda ma qalmaan qofna, sidaas darteed qof email ah laguma daawan karo.",
     "yourScopeMatchesNobodyChip": "Kuma haboona qofna",
@@ -6083,7 +6083,11 @@
       "collisionChip": "Sidoo kale waxa ku jira Dejinta Guud",
       "collisionWarning": "Qaabkan ama qoyska waxa kale oo lagu habeeyey Dejinta Guud. Kaydin lama ogola illaa mid ka mid ah labadaasi la tirtiray."
     },
-    "previewSourceModelAccess": "Oggolaanshaha model-ka — {list}"
+    "previewSourceModelAccess": "Oggolaanshaha model-ka — {list}",
+    "groupMembershipDegradedStructural": "Helitaanka xubinnimada kooxda ayaa ka fashilmay server-kan ({reason}). Xeerarka iyo oggolaanshaha la xiriira kooxaha laguma dabaqayo dadka ay tani saameysey — fadlan hubi oggolaanshaha tenant-ka ee Group.Read.All iyo diiwaangelinta app-ka.",
+    "groupMembershipDegradedRetryable": "Waxaa fashilmay qaar ka mid ah hubinta xubinnimada kooxaha server-kan daqiiqadihii la soo dhaafay ({reason}). Xeerarka la xiriira kooxaha lagama yaabo in si sax ah loogu dabaqo dadkaas illaa hal daqiiqo inta la isku dayayo mar kale.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# qof} other {# qof}} ayaa hadda ay saameysay arrintan server-kan.",
+    "previewDirectoryNotFound": "Ma jiro isticmaale directory ah oo leh ciwaankaan email-ka, sidaas darteed xeerarka waaxda/shirkadda/xafiiska iyo kooxda waxaa loo tixgeliyey in qofku uusan midna ka tirsaneyn."
   },
   "m365": {
     "connections": {

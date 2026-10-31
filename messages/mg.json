@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "Default ao anatiny",
     "previewSourceGlobal": "Default maneran-tany",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Tsy azo zahana eto ny override ho an'ny departemanta/kaompania/biraon'ny vondrona — miankina amin'ilay olona miditra.",
+    "previewNotEvaluated": "Tsy tratra ilay directory, ka tsy afaka nojerena ho an'ity olona ity ny fitsipika momba ny sampana/orinasam-panjakana/biraon'ny asa sy vondrona. Andramo indray afaka kelikely.",
     "previewUnsaved": "Asehoy ny politika farany voatahiry. Tehirizo aloha ny fanovana vao ahitana azy eto.",
     "previewColumnLimit": "Fetra",
     "previewColumnValue": "Sanda",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "Vondrona ihany",
     "yourScopeGroupOnlyNote": "Amin'ny alalan'ny vondrona na toetra manokana fotsiny no anoratana, ka tsy azo jerena amin'ny adiresy mailaka ny fepetra.",
     "previewOutOfScope": "Ity olona ity dia ivelan'ny sandrinao.",
-    "previewGroupOnlyScope": "Amin'ny alalan'ny vondrona na toetra no anoratana ny sandrinao, ka tsy azo zahana amin'ny adiresy mailaka ny fepetra.",
+    "previewGroupOnlyScope": "Ny vondrona na ny toe-javatra manokana no mamaritra ny sehatra azonao. Mijery ao amin'ny directory ny topy maso mba hijerena raha ao anatiny ilay olona.",
     "previewCeilingPinned": "Voafetra amin'ny sandan'ny ambony indrindra: {label}",
     "previewShowUsage": "Asehoy ny fampiasana ankehitriny",
     "previewColumnUsage": "Efa nampiasaina",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "Ny fetra mafy amin’ny tsipika dia mametraka an’ilay sanda ho an’ny kendrena amin’ity override ity: tsy afaka manova izany ny admin voafetra, ary rehefa misy fetra maromaro dia ilay tena manokana indrindra no manan-kery.",
     "confirmDeleteOverride": "Fafana \"{label}\"? Esorina avy hatrany amin’ny mpizara izy io ary hiverina amin’ny fetra ambaniny ny kendrena aminy. Tsy azo averina izany.",
     "confirmDeleteOverrideAction": "Fafana override",
-    "previewUndecidableScope": "Misy vondrona na toetra isan-karazany ao amin’ny faritra kendrena, ka tsy azo faritana amin’ny adiresy mailaka raha ao anatiny ity olona ity na tsia.",
+    "previewUndecidableScope": "Misy vondrona na toe-javatra manokana ao anatin'ny sehatra azonao ary tsy tratra ilay directory, ka tsy azo faritana amin'izao fotoana izao raha ao anatiny ity olona ity na tsia. Andramo indray afaka kelikely.",
     "previewNoLongerAdmin": "Tsy ao anaty delegasiona mavitrika intsony ny anaranao, ka tsy afaka mijery mialoha ny fetra ianao. Avereno ny pejy raha hijery ny fahazoanao fidirana ankehitriny.",
     "previewScopeMatchesNobody": "Amin’izao fotoana izao dia tsy misy olona mifanaraka amin’ny faritra kendrenao, ka tsy misy hojerena amin’ny alalan’ny adiresy mailaka.",
     "yourScopeMatchesNobodyChip": "Tsy misy mifanaraka",
@@ -6083,7 +6083,11 @@
       "collisionChip": "Ao amin'ny safidy Global defaults koa",
       "collisionWarning": "Ity modely ity na ny sokajiny dia efa voahevitra ao amin'ny Global defaults. Tsy ho voavonjy raha tsy nesorina amin'ny iray amin'ireo."
     },
-    "previewSourceModelAccess": "Fanekena modely — {list}"
+    "previewSourceModelAccess": "Fanekena modely — {list}",
+    "groupMembershipDegradedStructural": "Tsy mandeha tsara ny fikarohana mpikambana ao amin'ny vondrona amin'ity mpizara ity ({reason}). Tsy mihatra amin'ireo olona voakasik'izany ny fitsipika sy fankatoavana mifototra amin'ny vondrona — jereo ny Group.Read.All consent an'ny tenant sy ny fisoratana anarana amin'ny app.",
+    "groupMembershipDegradedRetryable": "Nisy fikarohana mpikambana amin'ny vondrona tsy nahomby tao amin'ity mpizara ity tao anatin'ny minitra vitsy lasa ({reason}). Mety tsy mihatra mandritra ny iray minitra amin'ireo olona ireo ny fitsipika mifototra amin'ny vondrona mandra-piandry ny fanavaozana ny fikarohana.",
+    "groupMembershipDegradedUsers": "Olona {count, plural, one {#} other {#}} ankehitriny no voakasika amin'ity mpizara ity.",
+    "previewDirectoryNotFound": "Tsy misy mpampiasa ao amin'ny directory manana ity adiresy mailaka ity, ka dia noheverina ho tsy anisan'ny departemanta/orinasa/biraona sy vondrona ny fitsipika mifandraika amin'ilay olona."
   },
   "m365": {
     "connections": {

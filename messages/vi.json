@@ -5805,7 +5805,7 @@
     "previewSourceCatalog": "Giá trị mặc định tích hợp",
     "previewSourceGlobal": "Giá trị mặc định toàn hệ thống",
     "previewSourceOverride": "Ghi đè: {label}",
-    "previewNotEvaluated": "Không thể kiểm tra ghi đè theo phòng ban/công ty/văn phòng và nhóm tại đây — cần đăng nhập tài khoản của người đó.",
+    "previewNotEvaluated": "Không thể truy cập thư mục, do đó các quy tắc về phòng ban/công ty/văn phòng và nhóm không được đánh giá cho người này. Vui lòng thử lại sau.",
     "previewUnsaved": "Đang hiển thị chính sách vừa lưu gần nhất. Hãy lưu các thay đổi để kiểm tra chúng.",
     "previewColumnLimit": "Giới hạn",
     "previewColumnValue": "Giá trị",
@@ -5901,7 +5901,7 @@
     "yourScopeGroupOnlyChip": "Chỉ nhóm",
     "yourScopeGroupOnlyNote": "Chỉ được xác định bởi nhóm hoặc thuộc tính, nên không thể xem trước giới hạn theo địa chỉ email.",
     "previewOutOfScope": "Người này ngoài phạm vi của bạn.",
-    "previewGroupOnlyScope": "Phạm vi của bạn được xác định bởi nhóm hoặc thuộc tính nên không thể xem trước giới hạn theo địa chỉ email.",
+    "previewGroupOnlyScope": "Phạm vi của bạn được xác định bởi các nhóm hoặc thuộc tính. Bản xem trước sẽ tìm kiếm người này trong thư mục để xác định họ có nằm trong phạm vi đó không.",
     "previewCeilingPinned": "Đã cố định do giới hạn trên: {label}",
     "previewShowUsage": "Hiển thị mức sử dụng hiện tại",
     "previewColumnUsage": "Đã sử dụng",
@@ -5917,7 +5917,7 @@
     "overrideCeilingHint": "Giới hạn cứng trên một hàng sẽ áp dụng cố định giá trị đó cho các đối tượng của override này: quản trị viên bị giới hạn không thể nâng lên, và khi có nhiều giới hạn cứng thì giới hạn cụ thể nhất sẽ được ưu tiên.",
     "confirmDeleteOverride": "Xóa \"{label}\"? Mục này sẽ bị xóa ngay lập tức khỏi máy chủ và các đối tượng của nó sẽ chuyển về các giới hạn bên dưới. Không thể hoàn tác thao tác này.",
     "confirmDeleteOverrideAction": "Xóa override",
-    "previewUndecidableScope": "Phạm vi của bạn bao gồm nhóm hoặc thuộc tính, nên không thể xác định người này có nằm trong phạm vi chỉ dựa vào địa chỉ email.",
+    "previewUndecidableScope": "Phạm vi của bạn bao gồm các nhóm hoặc thuộc tính và không thể truy cập thư mục, nên hiện tại không thể xác định người này có nằm trong phạm vi đó hay không. Vui lòng thử lại sau.",
     "previewNoLongerAdmin": "Bạn không còn nằm trong nhóm phân quyền được bật, nên không thể xem trước các giới hạn. Hãy tải lại trang để cập nhật quyền truy cập hiện tại của bạn.",
     "previewScopeMatchesNobody": "Phạm vi của bạn hiện không khớp với ai cả, nên không có ai để xem trước theo địa chỉ email.",
     "yourScopeMatchesNobodyChip": "Không khớp với ai cả",
@@ -6130,7 +6130,11 @@
       "collisionChip": "Cũng có trong Thiết lập mặc định toàn cầu",
       "collisionWarning": "Mô hình hoặc nhóm này cũng được cấu hình trong Thiết lập mặc định toàn cầu. Việc lưu sẽ bị từ chối cho đến khi một trong hai được xóa."
     },
-    "previewSourceModelAccess": "Phê duyệt mô hình — {list}"
+    "previewSourceModelAccess": "Phê duyệt mô hình — {list}",
+    "groupMembershipDegradedStructural": "Tìm kiếm thành viên nhóm đang gặp lỗi trên máy chủ này ({reason}). Các quy tắc và phân quyền dựa trên nhóm không được áp dụng cho những người bị ảnh hưởng — hãy kiểm tra quyền đồng ý Group.Read.All của tenant và đăng ký ứng dụng.",
+    "groupMembershipDegradedRetryable": "Một số tìm kiếm thành viên nhóm đã thất bại trên máy chủ này trong vài phút gần đây ({reason}). Các quy tắc dựa trên nhóm có thể không áp dụng cho những người đó trong tối đa một phút khi hệ thống thử lại tìm kiếm.",
+    "groupMembershipDegradedUsers": "Hiện có {count, plural, one {# người} other {# người}} bị ảnh hưởng trên máy chủ này.",
+    "previewDirectoryNotFound": "Không có người dùng thư mục nào có địa chỉ email này, vì vậy các quy tắc phòng ban/công ty/văn phòng và nhóm được đánh giá như thể người đó không thuộc bất kỳ nhóm nào."
   },
   "m365": {
     "connections": {

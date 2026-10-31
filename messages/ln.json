@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "Défaut oyo etangamaki na application",
     "previewSourceGlobal": "Défaut ya monde mobimba",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Département/kompani/ofisi pe ba override ya groupe ekoki te kotangama awa — esengi kobanda na ko-connexion ya moto.",
+    "previewNotEvaluated": "Directory ezalaki te kokoma, yango wana mibeko ya departema/kompanyi/bureau mpe ya groupe esalemi te mpo na moto oyo. Bemisa lisusu mwa moke.",
     "previewUnsaved": "Epesami polele politiki ya suka. Bomba mbongwana na yo mpo otalela yango.",
     "previewColumnLimit": "Limite",
     "previewColumnValue": "Motuya",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "Ba groupe kaka",
     "yourScopeGroupOnlyNote": "Ekangami na ba groupe to ba attribute kaka, mbala mosusu wayebi te ekoki komonama na email address.",
     "previewOutOfScope": "Moto oyo azali libanda ya etando na yo.",
-    "previewGroupOnlyScope": "Etando na yo ekangami na ba groupe to ba attribute, yango ekoki komonama te na email.",
+    "previewGroupOnlyScope": "Esika na yo epesami na banzela ya groupe to bimiseli. Previews ezali koluka moto na directory mpo ekoka koyeba soki azali kati na yango.",
     "previewCeilingPinned": "Ekangami na ndelo: {label}",
     "previewShowUsage": "Monisa ndenge esalemi",
     "previewColumnUsage": "Esalemi",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "Ceiling makasi na ligne moko ekangaka motuya wana pona ba cible ya override oyo: ba admin oyo bazali limité bakoki kolongola yango te, mpe soki ba ceiling mingi ezali wana, oyo ezali spécifique koleka nde ezwama.",
     "confirmDeleteOverride": "Kolongola \"{label}\"? Ekobongwana mbala moko na serveur mpe ba cible na yango bakozwa ndelo ya liboso na se. Okoki kozongisa yango te.",
     "confirmDeleteOverrideAction": "Longola override",
-    "previewUndecidableScope": "Scope na yo ezali na ba groupes to ba attributs, yango wana kokoka te koyeba s'il y a moto moko na kati soki ozali koluka na email.",
+    "previewUndecidableScope": "Esika na yo ezali na banzela ya groupe to bimiseli mpe directory ekokaki te kokoma, yango wana tokoki te koyeba soki moto oyo azali kati na yango sikoyo. Bemisa lisusu mwa moke.",
     "previewNoLongerAdmin": "Ozali lisusu na kati ya ba délégués te, yango wana okoki te kozwa aperçu ya ba limites. Sala recharger ya page mpo omona accès na yo ya sik’oyo.",
     "previewScopeMatchesNobody": "Scope na yo ezalaka sik’oyo na muntu moko te, yango wana moto moko te akoki kozwa aperçu na email.",
     "yourScopeMatchesNobodyChip": "Ezali na moto moko te",
@@ -6083,7 +6083,11 @@
       "collisionChip": "Pe ezali na Basaleli ya Global",
       "collisionWarning": "Modɛle oyo to libota na yango ezali mpe kosalelama na Basaleli ya Global. Kobomba ekokóma mbeba soki moko na moko elongoli te."
     },
-    "previewSourceModelAccess": "Ndongolá modelɛ — {list}"
+    "previewSourceModelAccess": "Ndongolá modelɛ — {list}",
+    "groupMembershipDegradedStructural": "Koluka ba membre ya groupe ezali koleka te na serveur oyo ({reason}). Mitindo mpe makabo misalemaka na base ya groupe epesami te mpo na bato oyo ekwei — tala ndingisa ya Group.Read.All ya tenant mpe bakisa appli.",
+    "groupMembershipDegradedRetryable": "Bokoluka mosusu ya bazali na groupe ekwei na serveur oyo na baminitɛ nyonso eleki ({reason}). Mitindo ekoki kosalama te mpo na bato wana na moke moke, ntango boluka ezali kosilama lisusu.",
+    "groupMembershipDegradedUsers": "{count, plural, one {Moto moko} other {Ba moto #}} bazali kosangana na likambo oyo na serveur oyo.",
+    "previewDirectoryNotFound": "Moto moko te na directory azali na adresse email oyo, yango wana mitindo ya department/compagnie/bureau mpe groupe esalemaki lokola moto azalaki na moko te."
   },
   "m365": {
     "connections": {

@@ -5758,7 +5758,7 @@
     "previewSourceCatalog": "Okuziyelayelayo kuqala",
     "previewSourceGlobal": "Okumisiwe emhlabeni wonke",
     "previewSourceOverride": "Okuphambili: {label}",
-    "previewNotEvaluated": "Ukuvinjelwa kwedipatimende/inkampani/ihhovisi namaqembu akukwazi ukuhlolwa lapha — kuncike ekungeneni komuntu mathupha.",
+    "previewNotEvaluated": "Ithala alitholakali, ngakho imithetho yesigaba/inkampani/ihhovisi kanye neqembu ayizange ihlolwe kulomuntu. Phinda uzame emva kwesikhashana.",
     "previewUnsaved": "Kubukwa inqubomgomo egcinwe okokugcina. Londoloza izinguquko zakho ukuze uzibuke.",
     "previewColumnLimit": "Umkhawulo",
     "previewColumnValue": "Inani",
@@ -5854,7 +5854,7 @@
     "yourScopeGroupOnlyChip": "Amaqembu kuphela",
     "yourScopeGroupOnlyNote": "Kubekwe ngamaqembu noma izimfanelo kuphela, imingcele ayikwazi ukuboniswa nge-imeyili.",
     "previewOutOfScope": "Lo muntu uphumele ngaphandle kwemingcele yakho.",
-    "previewGroupOnlyScope": "Imingcele yakho ibekwe ngamaqembu noma izimfanelo, awukwazi ukubona imingcele nge-imeyili.",
+    "previewGroupOnlyScope": "Ububanzi bakho bumnciselwa amaqembu noma izici. Izibukwayo zihlola lomuntu kuthala ukuze zinqume ukuthi ungaphakathi yini.",
     "previewCeilingPinned": "Kuboshelwe phezulu: {label}",
     "previewShowUsage": "Bonisa ukusetshenziswa kwamanje",
     "previewColumnUsage": "Kusetshenzisiwe",
@@ -5870,7 +5870,7 @@
     "overrideCeilingHint": "I-ceiling eqinile kulayini ibethela inani le-targets zale override: ama-admin abhalwe ngaphansi kwe-scope ngeke bakwazi ukukususa, futhi lapho kunezicingo eziningi, okuphambili kakhulu kuyasebenza.",
     "confirmDeleteOverride": "Susa \"{label}\"? Izosuswa ku-server ngephutha futhi ama-targets azo abuyele emikhawulweni engaphansi kwabo. Lokhu ngeke kuphinde kulungiswe.",
     "confirmDeleteOverrideAction": "Susa i-override",
-    "previewUndecidableScope": "I-scope yakho iqukethe amaqembu noma izimfanelo, ngakho ukuthi lo muntu ungaphakathi kuyo angeke kunqunywe ngekheli le-imeyili.",
+    "previewUndecidableScope": "Ububanzi bakho buhlanganisa amaqembu noma izici, futhi ithala alitholakali, ngakho akukwazi ukunqunywa manje ukuthi lomuntu ungaphakathi yini. Phinda uzame emva kwesikhashana.",
     "previewNoLongerAdmin": "Sewungasabhalwanga kunoma yikuphi uk delegation oluvuliwe, ngaleyo ndlela awusakwazi ukubuka imikhawulo. Buyekeza ikhasi ukuze ubone ukufinyelela kwakho okwamanje.",
     "previewScopeMatchesNobody": "Okwamanje i-scope yakho ayihambisani namuntu, ngakho akukho muntu ongabukwa ngekheli le-imeyili.",
     "yourScopeMatchesNobodyChip": "Akufani namuntu",
@@ -6083,7 +6083,11 @@
       "collisionChip": "Iphinde itholakale ku-Global defaults",
       "collisionWarning": "Le modeli noma umndeni wayo iphinde yamiswa ngaphansi kwe-Global defaults. Ukulondoloza kuzonqatshwa kuze kube omunye wabo ususiwe."
     },
-    "previewSourceModelAccess": "Ukuvunywa kwemodeli — {list}"
+    "previewSourceModelAccess": "Ukuvunywa kwemodeli — {list}",
+    "groupMembershipDegradedStructural": "Ukuseshwa kobulungu beqembu kuyahluleka kule seva ({reason}). Imithetho nemvume esekelwe emaqenjini ayisebenzi kulabo abathintekayo — hlola imvume ye-tenant ethi Group.Read.All nokubhaliswa kohlelo.",
+    "groupMembershipDegradedRetryable": "Ezinye izicelo zokufuna ubulungu beqembu aziphumelelanga kule seva emizuzwini embalwa edlule ({reason}). Imithetho esekelwe emaqenjini ingase ingasebenzi kubantu abathintekayo kuze kube umzuzu owodwa ngenkathi izicelo ziphindwa.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# umuntu usephazamisekile} other {# abantu basephazamisekile}} kule seva.",
+    "previewDirectoryNotFound": "Akekho umsebenzisi kudayari onale ikheli le-imeyili, ngakho imithetho yomnyango/inkampani/ihhovisi neyeqembu ibalwe njengokungathi lowo muntu akawulona ilungu lutho."
   },
   "m365": {
     "connections": {

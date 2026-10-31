@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "የተካተተው ነባሪ",
     "previewSourceGlobal": "የአለም አቀፍ ነባሪ",
     "previewSourceOverride": "መቀየሪያ፡ {label}",
-    "previewNotEvaluated": "የዳፓርትመንት/ኩባንያ/ቢሮ እና የቡድን መቀየሪያዎች እዚህ ላይ ሊወገዱ አይችሉም — በሰዉ የግል ወረዳ መንካት ይገባዋል።",
+    "previewNotEvaluated": "ዳይሬክቶሪው ማድረስ አልተቻለም፣ ስለዚህ የመስራችው/የኩባንያው/የቢሮው እና የቡድን መደበኞች ለዚህ ግለሰብ አልተገምገሙም። እባክዎ በአንድ ጊዜ እንደገና ይሞክሩ።",
     "previewUnsaved": "መጨረሻ የተቀመጠውን ፖሊሲ እየተሳየ ነው። ለመኖር ለዚያ ለውጦት ይቀመጡ።",
     "previewColumnLimit": "ገደብ",
     "previewColumnValue": "ዋጋ",
@@ -5869,7 +5869,7 @@
     "yourScopeGroupOnlyChip": "ቡድኖች ብቻ",
     "yourScopeGroupOnlyNote": "በቡድኖች ወይም ባህሪያት ብቻ ተወስኗል፤ ስለዚህ ገደቦች በኢሜይል አይታዩም።",
     "previewOutOfScope": "ይህ ሰው ከመጠበቂያዎ ውጭ ነው።",
-    "previewGroupOnlyScope": "መጠበቂያዎ በቡድኖች ወይም ባህሪያት ብቻ ተወስኗል፤ ስለዚህ ገደቦች በኢሜይል አይታዩም።",
+    "previewGroupOnlyScope": "የእርስዎ ክብረ ትውልድ በቡድኖች ወይም ባህሪዎች ይቀጥላል። ቅድመ እይታዎች ውስጥ ግለሰቡን በዳይሬክቶሪ ውስጥ እንዳለ ይመረምራሉ።",
     "previewCeilingPinned": "በየገደቡ ተያይዞበታል፡ {label}",
     "previewShowUsage": "የአሁኑን አጠቃቀም አሳይ",
     "previewColumnUsage": "ተጠቅመዋል",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "በአንድ ተራ ላይ ያለው ከፍተኛ ገደብ የዚህ ተስተናጋጅ ዓላማዎችን ይከላከላል፤ የተወሰነ አስተዳዳሪን ማንም አይለቀቅም፣ እና በብዙ ገደቦች ላይ መተግበሪያ ሲኖረው ጥሩው ይቆራል።",
     "confirmDeleteOverride": "\"{label}\" ማጥፋት ይፈልጋሉ? ከሰርቨሩ በአንድ ጊዜ ይጠፋልና ዓላማዎቹም ወደታች ያሉትን ግዴታዎች ይጠቀማሉ። ይህ መተደል አይቻልም።",
     "confirmDeleteOverrideAction": "የተስተናጋጁን ማጥፋት",
-    "previewUndecidableScope": "የእርስዎ ድርድር ቡድኖች ወይም ባህሪያትን ያካተተዋል፣ ስለዚህ ይህ ሰው ውስጥ አለን አይቻልም።",
+    "previewUndecidableScope": "የእርስዎ ክብረ ትውልድ ቡድኖች ወይም ባህሪዎችን ያካትታል እና ዳይሬክቶሪው ማድረስ አልተቻለም፣ ስለዚህ ይህ ግለሰብ ውስጥ መሆኑ አሁን ልትወሰን አይቻልም። እባክዎ በአንድ ጊዜ ይሞክሩ።",
     "previewNoLongerAdmin": "አሁን ከንቁ ዝግጅት ውስጥ አትቀርበውም፣ ስለዚህ ግዴታዎችን ማቅረብ አይችሉም። ወቅታዊ ፈቃድዎን ለማየት ገፁን ይቀምጡ።",
     "previewScopeMatchesNobody": "የእርስዎ ድርድር አሁን ማንኛውንም አያዛመደውም፣ ስለዚህ በኢሜይል አድራሻ በሚታይ ማንም የለም።",
     "yourScopeMatchesNobodyChip": "ማንኛውንም አያዛመደውም",
@@ -6099,7 +6099,11 @@
       "collisionChip": "በGlobal defaults ውስጥም አለ",
       "collisionWarning": "ይህ ሞዴል ወይም ቤተሰብ በGlobal defaults ውስጥም ተሸጠ ነው። አንዱን ከሁለቱ ያጽዱ እስከዚያ ድረስ ማስቀመጥ አይቻልም።"
     },
-    "previewSourceModelAccess": "ሞዴል ማጽደቅ — {list}"
+    "previewSourceModelAccess": "ሞዴል ማጽደቅ — {list}",
+    "groupMembershipDegradedStructural": "የቡድን አባልነት በዚህ ሰርቨር ላይ አልተሳካም ({reason})። በቡድን ላይ የተያዘው የመመሪያዎችና የፈቃድ ህጎች ለተጎዳው ሰው አይተገቡም—እባክዎ የተነንቱ የGroup.Read.All ስምምነትንና የአፕ ምዝገባን ያረጋግጡ።",
+    "groupMembershipDegradedRetryable": "በዚህ ሰርቨር በቅርቡ በዘመኑ የቡድን አባልነት መደበቂያዎች አልተሳካም ({reason})። በቡድን ያሉ መመሪያዎች ለዚህ ሰው ለአንድ ደቂቃ ሊሰናከል ይችላሉ ተመድበው እየተቸለው ስላሉ።",
+    "groupMembershipDegradedUsers": "በዚህ ሰርቨር በአሁኑ ጊዜ {count, plural, one {# ሰው} other {# ሰዎች}} ተጎዳው ነው።",
+    "previewDirectoryNotFound": "ከዚህ ኢሜል አድራሻ ጋር የተያያዘ የድርሻ ተጠቃሚ የለም። ስለዚህ የክፍል/ኩባንያ/ቢሮና የቡድን መመሪያዎች እንደማያሸማም ተተናገዱ።"
   },
   "m365": {
     "connections": {

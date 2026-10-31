@@ -5774,7 +5774,7 @@
     "previewSourceCatalog": "စနစ်ပါ default",
     "previewSourceGlobal": "Global default",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "ဌာန/ကုမ္ပဏီ/ရုံးနှင့် group override များကို ဤနေရာတွင် မခန့်မှန်းနိုင်ပါ — ၎င်းသည် ကိုယ်ပိုင် log-in မှသာ မှီခိုသည်။",
+    "previewNotEvaluated": "ဒီ directory ကို ဝင်ရောက်လို့မရသေးပါ၊ ဒါကြောင့် ဌာန/ကုမ္ပဏီ/ရုံးနှင့် အဖွဲ့စည်းသတ်မှတ်ချက်များကို ဤပုဂ္ဂိုလ်အတွက် မခန့်မှန်းနိုင်ပါ။ ခဏနားပြီး ပြန်လည်ကြိုးစားပါ။",
     "previewUnsaved": "နောက်ဆုံးသိမ်းဆည်းထားသော policy ကို ပြသနေသည်။ ပြောင်းလဲမှုကို သိမ်းပြီးမှ စမ်းကြည့်နိုင်သည်။",
     "previewColumnLimit": "သတ်မှတ်ချက်",
     "previewColumnValue": "တန်ဖိုး",
@@ -5870,7 +5870,7 @@
     "yourScopeGroupOnlyChip": "ဦးစုများသာ",
     "yourScopeGroupOnlyNote": "ဦးစုများ သို့မဟုတ် ဂုဏ်သတ္တိများဖြင့်သာ သတ်မှတ်ထားသောကြောင့်၊ အီးမေးလ်လိပ်စာဖြင့် ကန့်သတ်ချက်များ မကြိုတင်ကြည့်ရှုနိုင်ပါ။",
     "previewOutOfScope": "ဤသူသည် သင့်အရေးအခင်းအပြင်တွင်ရှိသည်။",
-    "previewGroupOnlyScope": "သင့်အရေးအခင်းသည် ဦးစုများ သို့မဟုတ် ဂုဏ်သတ္တိများဖြင့်သတ်မှတ်ထားသောကြောင့်၊ အီးမေးလ်လိပ်စာဖြင့် ကန့်သတ်ချက်များ မကြိုတင်ကြည့်ရှုနိုင်ပါ။",
+    "previewGroupOnlyScope": "သင့်အတိုင်းအတာကို အဖွဲ့များ သို့မဟုတ် attribute များဖြင့် သတ်မှတ်ထားသည်။ Preview များသည် ဤပုဂ္ဂိုလ်သည် directory ထဲတွင် ရှိ/မရှိ စစ်ဆေးရန် directory တွင် ရှာဖွေပါသည်။",
     "previewCeilingPinned": "မျက်နှာ‌စာကန့်သတ်ထားသည်: {label}",
     "previewShowUsage": "လက်ရှိသုံးစွဲမှုပြပါ",
     "previewColumnUsage": "သုံးထားသည်",
@@ -5886,7 +5886,7 @@
     "overrideCeilingHint": "Row တစ်ခုတွင် Hard ceiling သတ်မှတ်ပါက ဒီ override targets များအတွက် ဤတန်ဖိုးကို ​ကော်တော်ထားသည်။ Scoped admins မပြင်နိုင်ပါ၊ ceilings များထဲတွင် အတိအကျဆုံး ceiling သက်တမ်းရှိသည်။",
     "confirmDeleteOverride": "\"{label}\" ကိုဖျက်ရန် သေချာပါသလား? Server မှအသက်တာဖျက်သွားပြီး ၎င်း၏ targets များသည် အောက်ပါ limits သို့ပြန်သွားပါမည်။ သေချာပြန်ပြင်၍မရပါ။",
     "confirmDeleteOverrideAction": "Override ဖျက်ပါ",
-    "previewUndecidableScope": "သင့် scope တွင် group များ သို့မဟုတ် attribute များပါဝင်သဖြင့် ဤပုဂ္ဂိုလ်သည် scope အတွင်းပါ/မပါ သေချာဆုံးဖြတ်နိုင်ရန် email address ဖြစ်လို့မရပါ။",
+    "previewUndecidableScope": "သင့်အတိုင်းအတာတွင် အဖွဲ့များ သို့မဟုတ် attribute များပါရှိပြီး directory ကို ဝင်ရောက်နိုင်ခြင်း မရှိသဖြင့် ဤပုဂ္ဂိုလ်သည် ထဲတွင်ရှိ/မရှိကို ယခုအချိန်တွင် ဆုံးဖြတ်လို့ မရပါ။ ခဏနားပြီး ပြန်ကြိုးစားပါ။",
     "previewNoLongerAdmin": "သင်သည် enabled delegation တစ်ခုတွင် မရှိတော့ပါကြောင်း၊ limits ကိုမကြည့်ရှုနိုင်တော့ပါ။ သင့်လက်ရှိ access ကိုကြည့်ရန် reload ပြုလုပ်ပါ။",
     "previewScopeMatchesNobody": "သင့် scope သည် ယခုအချိန်တွင် မည်သူမသက်ဆိုင်ပါ၊ ထို့ကြောင့် email နဲ့ preview မပြုလုပ်နိုင်ပါ။",
     "yourScopeMatchesNobodyChip": "မည်သူကိုမှမသက်ဆိုင်ပါ",
@@ -6099,7 +6099,11 @@
       "collisionChip": "Global defaults တွင်ပါ ပါဝင်သည်",
       "collisionWarning": "ဤမော်ဒယ် သို့မဟုတ် မိသားစုကိုလည်း Global defaults တွင်ဖော်ပြထားသည်။ နှစ်ခုမှတစ်ခုကို ဖယ်ရှားမချင်း သိမ်းဆည်းရန်မရပါ။"
     },
-    "previewSourceModelAccess": "မော်ဒယ်အတည်ပြုချက် — {list}"
+    "previewSourceModelAccess": "မော်ဒယ်အတည်ပြုချက် — {list}",
+    "groupMembershipDegradedStructural": "ဤဆာဗာတွင် Group membership ကိုရှာဖွေခြင်း အလုပ်မလုပ်နိုင်ပါ ({reason})။ သက်ဆိုင်သောလူများအတွက် Group အပေါ် မူတည်သည့်စည်းမျဉ်းနှင့် ပေးအပ်ခွင့်များ မရောက်ရှိသော်လည်း၊ tenant ၏ Group.Read.All ခွင့်ပြုချက်နှင့် app registration ကိုစစ်ဆေးပါ။",
+    "groupMembershipDegradedRetryable": "နောက်ဆုံး မိနစ်အနည်းငယ်အတွင်း ဤဆာဗာပေါ်တွင် အချို့၏ group membership ရှာဖွေမှု မအောင်မြင်ခဲ့ပါ ({reason})။ ထိုလူများအတွက် group အပေါ် အခြေခံသည့်စည်းမျဉ်းများသည် စာရင်းပြန်စစ်နေချိန် တစ်မိနစ်အထိ မာဏ်မလုပ်နိုင်ပေါ်နိုင်ပါ။",
+    "groupMembershipDegradedUsers": "ဤဆာဗာပေါ်တွင် လောလောဆယ် သက်တောင့်သက်သာခံနေရသူ {count, plural, one {# ဦး} other {# ဦး}}။",
+    "previewDirectoryNotFound": "ဤအီးမေးလ်လိပ်စာရှိသော directory user မရှိပါ။ ထို့ကြောင့် ဌာန/ကုမ္ပဏီ/ရုံးနှင့် group စည်းမျဉ်းများကို ထိုလူသည် မည်သည့်အဖွဲ့မှ မပါဝင်သကဲ့သို့ဖြင့် တွက်ချက်ခဲ့ပါသည်။"
   },
   "m365": {
     "connections": {
