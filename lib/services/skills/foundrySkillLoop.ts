@@ -33,6 +33,10 @@ export interface FoundrySkillEvent {
  * Continues a registered Foundry function call without replacing agent_reference
  * or injecting tools into its request (a combination Foundry rejects).
  * At most three skill execution rounds plus a final answer round are allowed.
+ * At the cap the pending calls are answered with the executor's own
+ * "step limit reached" results and the agent gets ONE more round to answer
+ * from what it has (the shared tool loop withholds tools the same way);
+ * only a further skill call after that fails the turn.
  */
 export async function* runFoundrySkillLoop(
   initial: AsyncIterable<FoundrySkillEvent>,
@@ -43,6 +47,7 @@ export async function* runFoundrySkillLoop(
 ): AsyncGenerator<FoundrySkillEvent> {
   let stream = initial;
   let rounds = 0;
+  let capAnswered = false;
   const aggregate = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
   while (true) {
     const calls = new Map<string, FoundrySkillCall>();
@@ -82,7 +87,8 @@ export async function* runFoundrySkillLoop(
       };
       return;
     }
-    if (rounds >= 3 || executor.remainingRounds() === 0) {
+    const atCap = rounds >= 3 || executor.remainingRounds() === 0;
+    if (atCap && capAnswered) {
       yield {
         type: 'response.failed',
         response: {
@@ -130,8 +136,14 @@ export async function* runFoundrySkillLoop(
       };
       return;
     }
-    executor.completeRound();
-    rounds += 1;
+    if (atCap) {
+      // The executor answered every call with its limit notice (it refuses
+      // past its round cap); the agent now gets its final answer round.
+      capAnswered = true;
+    } else {
+      executor.completeRound();
+      rounds += 1;
+    }
     stream = await next(outputs);
   }
 }
