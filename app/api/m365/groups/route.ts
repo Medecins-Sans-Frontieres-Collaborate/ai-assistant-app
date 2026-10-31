@@ -1,23 +1,28 @@
 /**
- * Entra group search for the admin group pickers (third pass §5).
+ * Entra group search + name resolution for the admin group pickers.
  *
- * GET /api/m365/groups?q=…   → groups whose displayName starts with the query
- * GET /api/m365/groups?ids=… → display names for stored object ids (comma
- *     list, ≤50) — the editors resolve names on open, which answers the
- *     fourth pass's display-name-drift question: names are always fetched
- *     fresh, never persisted.
+ * GET  /api/m365/groups?q=…    → groups whose displayName starts with the query
+ * GET  /api/m365/groups?ids=…  → display names for ≤50 stored object ids (legacy
+ *      comma list; kept for old clients)
+ * POST /api/m365/groups {ids}  → display names for ≤500 stored object ids in
+ *      one call — the editors and list views resolve names on open, so names
+ *      are always fetched fresh and never trusted from storage.
  *
- * Delegated Graph (Group.Read.All). Serves object id + display name only
- * — the access-rule and limit-override schemas persist bare object ids, so
+ * Delegated Graph (Group.Read.All). Serves object id + display name only —
+ * the access-rule and limit-override schemas persist bare object ids, so
  * this is a name-resolution convenience, never an authorization surface.
+ * Resolution is one `directoryObjects/getByIds` per ≤1000 ids behind a
+ * per-replica name cache (lib/services/m365/groupDirectory.ts), not one GET
+ * per id.
  */
 import { NextRequest } from 'next/server';
 
+import { graphJson, m365ErrorResponse } from '@/lib/services/m365/graphApi';
 import {
-  graphJson,
-  isValidGraphId,
-  m365ErrorResponse,
-} from '@/lib/services/m365/graphApi';
+  GROUP_SCOPES,
+  fetchGroupNames,
+} from '@/lib/services/m365/groupDirectory';
+import { isEntraGroupId } from '@/lib/services/shared/principalMatching';
 
 import {
   badRequestResponse,
@@ -27,10 +32,63 @@ import {
 
 import { auth } from '@/auth';
 
-const SCOPES = ['Group.Read.All'];
-
 const MIN_QUERY_LENGTH = 2;
-const MAX_ID_LOOKUPS = 50;
+const MAX_ID_LOOKUPS_GET = 50;
+const MAX_ID_LOOKUPS_POST = 500;
+
+async function resolveNames(req: NextRequest, ids: string[]) {
+  const names = await fetchGroupNames(req, ids);
+  const groups = ids
+    .filter((id) => names.has(id))
+    .map((id) => ({ id, name: names.get(id) as string }));
+  return successResponse({ groups });
+}
+
+function parseIds(raw: unknown, max: number): string[] | null {
+  const list = Array.isArray(raw)
+    ? raw
+    : typeof raw === 'string'
+      ? raw.split(',')
+      : [];
+  const ids = [
+    ...new Set(
+      list
+        .filter((id): id is string => typeof id === 'string')
+        .map((id) => id.trim().toLowerCase())
+        .filter(Boolean),
+    ),
+  ];
+  if (ids.length === 0 || ids.length > max) return null;
+  if (!ids.every((id) => isEntraGroupId(id))) return null;
+  return ids;
+}
+
+export async function POST(req: NextRequest) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return unauthorizedResponse();
+  }
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return badRequestResponse('Invalid JSON body');
+  }
+  const ids = parseIds(
+    (body as { ids?: unknown } | null)?.ids,
+    MAX_ID_LOOKUPS_POST,
+  );
+  if (!ids) {
+    return badRequestResponse(
+      `ids must list 1-${MAX_ID_LOOKUPS_POST} Entra group object ids`,
+    );
+  }
+  try {
+    return await resolveNames(req, ids);
+  } catch (error) {
+    return m365ErrorResponse(error);
+  }
+}
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -40,40 +98,17 @@ export async function GET(req: NextRequest) {
 
   const rawIds = req.nextUrl.searchParams.get('ids');
   if (rawIds !== null) {
-    const ids = rawIds
-      .split(',')
-      .map((id) => id.trim())
-      .filter(Boolean);
-    if (ids.length === 0 || ids.length > MAX_ID_LOOKUPS) {
-      return badRequestResponse('ids must list 1-50 group ids');
+    const ids = parseIds(rawIds, MAX_ID_LOOKUPS_GET);
+    if (!ids) {
+      return badRequestResponse(
+        `ids must list 1-${MAX_ID_LOOKUPS_GET} Entra group object ids`,
+      );
     }
-    if (!ids.every((id) => isValidGraphId(id))) {
-      return badRequestResponse('Invalid group id');
+    try {
+      return await resolveNames(req, ids);
+    } catch (error) {
+      return m365ErrorResponse(error);
     }
-    // Per-id fetches: the `id in (…)` filter needs advanced-query headers
-    // that not every tenant honors; unknown/deleted ids resolve to nothing
-    // rather than failing the batch.
-    const results = await Promise.allSettled(
-      ids.map((id) =>
-        graphJson<{ id?: string; displayName?: string }>(
-          req,
-          SCOPES,
-          `/groups/${encodeURIComponent(id)}?$select=id,displayName`,
-        ),
-      ),
-    );
-    const groups = results
-      .filter(
-        (
-          r,
-        ): r is PromiseFulfilledResult<{ id?: string; displayName?: string }> =>
-          r.status === 'fulfilled' && !!r.value.id,
-      )
-      .map((r) => ({
-        id: r.value.id as string,
-        name: r.value.displayName || (r.value.id as string),
-      }));
-    return successResponse({ groups });
   }
 
   const query = req.nextUrl.searchParams.get('q')?.trim() ?? '';
@@ -89,7 +124,7 @@ export async function GET(req: NextRequest) {
       value?: { id?: string; displayName?: string }[];
     }>(
       req,
-      SCOPES,
+      GROUP_SCOPES,
       `/groups?$filter=startswith(displayName,'${escaped}')&$select=id,displayName&$top=20`,
     );
     const groups = (data.value ?? [])
