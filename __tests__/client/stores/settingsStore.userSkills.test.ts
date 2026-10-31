@@ -13,7 +13,7 @@ describe('personal skill storage', () => {
   it('persists personal skills with the browser settings payload', () => {
     useSettingsStore.getState().setUserSkills([skill]);
     const options = useSettingsStore.persist.getOptions();
-    expect(options.version).toBe(72);
+    expect(options.version).toBe(73);
     expect(options.partialize!(useSettingsStore.getState())).toHaveProperty(
       'userSkills',
       [skill],
