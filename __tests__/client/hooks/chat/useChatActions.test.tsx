@@ -26,6 +26,7 @@ vi.mock('@/client/stores/conversationStore', () => {
 const mockChatState = {
   setRegeneratingIndex: vi.fn(),
   isStreaming: false,
+  isRetrying: false,
   streamingConversationId: null as string | null,
   error: null as string | null,
   queuedSends: [] as unknown[],
