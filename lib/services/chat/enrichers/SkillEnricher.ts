@@ -83,6 +83,16 @@ export function skillDeliveryMode(context: ChatContext): SkillDeliveryMode {
   if (context.skillsAuto === false) return 'prompt';
   if (nativeInterpreterCapable(context) && interpreterRequested(context))
     return 'prompt';
+  // Adding a tool server moves a turn onto the chat.completions tool loop
+  // (StandardChatService). Responses-API models must keep their native
+  // path (reasoning summaries, deployment fallback) unless the turn is
+  // already on the loop because the user connected MCP tools.
+  if (
+    context.model?.supportsResponsesApi === true &&
+    context.model?.sdk === 'azure-openai' &&
+    !context.mcpServers?.length
+  )
+    return 'prompt';
   return 'tools';
 }
 
@@ -218,19 +228,18 @@ export class SkillEnricher extends BasePipelineStage {
     // base prompt must not duplicate the content the skill now carries.
     // With automatic selection off the skill can only arrive explicitly, so
     // the base prompt keeps its sections unless it did. In tools delivery
-    // the model can load it, which is enough.
+    // nothing proves the model will load it (or that the skill server can
+    // even be built), so the base sections stay unless the skill was
+    // injected — the status quo, never missing platform knowledge.
     let systemPrompt = context.systemPrompt;
     const platformHelpActive = active.some(
       ({ skill }) => skill.id === PLATFORM_HELP_ID,
     );
     if (
+      (delivery === 'prompt' || platformHelpActive) &&
       (autoEnabled || platformHelpActive) &&
       (!routing?.degraded || platformHelpActive) &&
-      visible.some(
-        (entry) =>
-          entry.skill.id === PLATFORM_HELP_ID &&
-          (delivery === 'prompt' || entry.skill.activation !== 'manual'),
-      )
+      visible.some((entry) => entry.skill.id === PLATFORM_HELP_ID)
     ) {
       // Only rewrite the base portion. User instructions and memories may
       // contain headings with these names; those are not platform sections.
