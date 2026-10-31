@@ -5,6 +5,7 @@ import { auditAdminWrite } from '@/lib/services/agentAccess/adminRouteHelpers';
 import { AgentAccessConflictError } from '@/lib/services/agentAccess/blobCas';
 import { requireSkillSourceAdmin } from '@/lib/services/skills/skillSourceAuth';
 import {
+  SkillSourcesCorruptError,
   readSkillSources,
   writeSkillSources,
 } from '@/lib/services/skills/skillSourceStore';
@@ -68,7 +69,8 @@ export async function POST(request: NextRequest) {
   }
   const storage = createAgentAccessBlobStorage();
   try {
-    const { document, etag } = await readSkillSources(storage);
+    const { document, etag, corrupt } = await readSkillSources(storage);
+    if (corrupt) throw new SkillSourcesCorruptError();
     if (document.sources.length >= SKILL_LIMITS.maxSkillSources)
       return badRequestResponse(
         `At most ${SKILL_LIMITS.maxSkillSources} skill sources are allowed`,
@@ -106,6 +108,13 @@ export async function POST(request: NextRequest) {
         undefined,
         'AGENT_ACCESS_CONFLICT',
       );
+    if (error instanceof SkillSourcesCorruptError)
+      return errorResponse(
+        error.message,
+        500,
+        undefined,
+        'SKILL_SOURCES_CORRUPT',
+      );
     return handleApiError(error, 'Failed to add skill source');
   }
 }
@@ -119,9 +128,14 @@ export async function DELETE(request: NextRequest) {
     return badRequestResponse('id is not a valid source id');
   const storage = createAgentAccessBlobStorage();
   try {
-    const { document, etag } = await readSkillSources(storage);
+    const { document, etag, corrupt } = await readSkillSources(storage);
+    if (corrupt) throw new SkillSourcesCorruptError();
     const source = document.sources.find((entry) => entry.id === id);
     if (!source) return notFoundResponse('Skill source');
+    // Detach FIRST: if it fails the subscription is still listed and the
+    // admin can retry; a removed entry with dangling references would be
+    // unrecoverable from the UI.
+    await detachSkillSource(storage, source, gate.userMail);
     await writeSkillSources(
       storage,
       {
@@ -135,7 +149,6 @@ export async function DELETE(request: NextRequest) {
       `skill-source::${id}`,
       gate.userMail,
     );
-    await detachSkillSource(storage, source, gate.userMail);
     return successResponse({ removed: true });
   } catch (error) {
     if (error instanceof AgentAccessConflictError)
@@ -144,6 +157,13 @@ export async function DELETE(request: NextRequest) {
         409,
         undefined,
         'AGENT_ACCESS_CONFLICT',
+      );
+    if (error instanceof SkillSourcesCorruptError)
+      return errorResponse(
+        error.message,
+        500,
+        undefined,
+        'SKILL_SOURCES_CORRUPT',
       );
     return handleApiError(error, 'Failed to remove skill source');
   }
