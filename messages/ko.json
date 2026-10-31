@@ -812,7 +812,16 @@
       "stillWorking": "작업 진행 중…",
       "assessingSearchResults": "결과가 질문에 답하는지 확인 중…",
       "refiningSearch": "다시 검색 중: “{query}”…",
-      "readingSearchPages": "{count}개의 결과 페이지 읽는 중…"
+      "readingSearchPages": "{count}개의 결과 페이지 읽는 중…",
+      "toolRoutingUnavailableInRegion": "{region} 엔드포인트에서는 도구 라우팅이 사용할 수 없습니다 — 도구 없이 답변합니다…",
+      "applyingSkill": "스킬 적용 중: {skills}…",
+      "applyingSkills": "스킬 적용 중: {skills}…",
+      "readingSkillReferences": "스킬 참고 문서 읽는 중…",
+      "selectingSkills": "기술을 선택하는 중…",
+      "retryingModel": "모델이 바쁩니다 — {seconds}초 후에 다시 시도 중입니다 (시도 {attempt})…",
+      "resumingResponse": "모델과의 연결이 끊어졌습니다 — 이어서 계속 진행합니다…",
+      "continuingResponse": "답변이 길이 제한에 도달했습니다 — 계속 진행합니다…",
+      "trimmingContext": "대화가 모델에 너무 깁니다 — 이전 기록을 줄이고 다시 시도합니다…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {#개 도구 사용} other {#개 도구 사용}}",
@@ -878,7 +887,9 @@
       "deniedByRuleHint": "규칙에 의해 차단됨 — 설정 → 커넥터에서 관리하세요.",
       "batchPendingHint": "{count}개의 도구 요청 대기 중",
       "approveAllButton": "모두 허용",
-      "denyAllButton": "모두 거부"
+      "denyAllButton": "모두 거부",
+      "applySkillTitle": "“{skill}” 스킬을 적용하시겠습니까?",
+      "skillConsentNote": "관리자가 이 스킬을 적용 전에 확인하도록 설정했습니다. 승인하면 이 답변에만 가이드가 로드됩니다."
     },
     "openImage": "이미지 열기",
     "copyMessage": "메시지 복사",
@@ -918,7 +929,54 @@
     "alwaysWaitThisLong": "항상 최대 {duration}까지 대기",
     "keepSearching": "계속 검색하기",
     "keepSearchingHint": "검색이 이 항목을 찾기 전에 중단되었습니다. 보조 도우미에게 다른 방법을 시도해 달라고 요청하세요.",
-    "keepSearchingMessage": "계속 검색해 주세요 — 다른 방법을 시도해 보세요."
+    "keepSearchingMessage": "계속 검색해 주세요 — 다른 방법을 시도해 보세요.",
+    "addSkill": "스킬",
+    "removeSkill": "스킬 제거",
+    "skillsMenuLabel": "사용 가능한 스킬",
+    "skillsLimit": "메시지당 최대 3개 스킬.",
+    "skillPin": "대화에 고정",
+    "skillUseOnce": "한 번 사용",
+    "skillPinned": "고정됨",
+    "skillOnce": "다음 메시지",
+    "skillsPaused": "일시 중지됨",
+    "skillUnavailable": "사용 불가",
+    "skillsAutomaticHint": "관련된 기술이 자동으로 선택됩니다. 다음 메시지에 한 번 사용하거나, 대화 전체에 사용할 기술을 고정하세요.",
+    "skillsAgentDisabled": "상담원이 연결된 동안에는 기술이 일시 중지됩니다. 상담원이 연결 해제되면 고정된 기술이 다시 활성화됩니다.",
+    "skillPersonal": "개인",
+    "skillsAgentToolsHint": "조직 관리자에 의해 에이전트 사용을 위해 활성화된 조직 스킬만 이곳에서 제공합니다. 에이전트는 이를 읽기 전용 도구로 불러올 수 있습니다. 다른 핀들은 일시 중지되며, 개인 스킬은 에이전트에게 제공되지 않습니다.",
+    "skillAlwaysOn": "항상 활성화됨",
+    "skillAlwaysOnHint": "관리자가 이 대화의 모든 메시지에 추가했습니다.",
+    "skillUsage": {
+      "label": "스킬",
+      "requested": "요청됨",
+      "pinned": "고정됨",
+      "auto": "자동",
+      "unavailable": "사용 불가",
+      "incomplete": "일부 스킬이 적용되지 않았습니다",
+      "references": "{count, plural, one {# 참고 구절} other {# 참고 구절들}}",
+      "referencesUnavailable": "일부 참고 문서를 사용할 수 없습니다",
+      "showDetails": "스킬 상세보기",
+      "hideDetails": "스킬 상세 숨기기",
+      "agentLoad": "에이전트가 로드함",
+      "agentSearch": "에이전트가 검색한 문서",
+      "needsApproval": "승인이 필요합니다",
+      "original": "원래 실행대로",
+      "updated": "이후로 업데이트됨"
+    },
+    "skillsManualHint": "자동 선택 기능이 설정에서 꺼져 있습니다. 다음 메시지에 한 번 사용하거나, 스킬을 고정하여 대화 내내 사용할 수 있습니다.",
+    "queuedMessage": {
+      "label": "대기 중",
+      "attachmentOnly": "첨부 파일",
+      "cancel": "대기 메시지 취소"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "응답이 콘텐츠 안전 필터에 의해 중단되었습니다. 요청을 다시 표현하거나, 해당 필터가 작동할 수 있는 부분을 제거하세요.",
+      "MODEL_CONTEXT_TOO_LONG": "이 대화는 선택한 모델로도 너무 깁니다. 이전 기록을 줄인 후에도 문제가 지속됩니다. 새로운 대화를 시작하거나, 일부 첨부 파일을 제거하거나, 더 큰 컨텍스트 윈도우를 가진 모델을 선택하세요.",
+      "MODEL_OUTPUT_LIMIT": "모델이 답변 없이 출력 제한을 모두 사용했습니다. 더 낮은 추론 옵션이나 더 짧은 요청을 시도하세요.",
+      "MODEL_RATE_LIMITED": "현재 모델이 너무 많은 요청을 받고 있습니다. 자동으로 재시도되었습니다; 잠시 후 다시 시도해주세요.",
+      "MODEL_QUOTA_EXCEEDED": "모델의 용량 할당량이 소진되었습니다. 다른 모델을 선택하거나 나중에 다시 시도하세요.",
+      "MODEL_AUTH_FAILED": "앱이 모델 서비스와 인증할 수 없습니다. 설정 문제입니다 — 지원팀에 문의하세요."
+    }
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -1325,7 +1383,11 @@
       "preferModelTitle": "선택한 모델 우선 사용",
       "preferModelDescription": "요청이 실패해도 자동으로 다른 모델로 전환하지 않습니다. 오류 시 전환 옵션은 계속 제공됩니다."
     },
-    "Analytics": "분석"
+    "Analytics": "분석",
+    "skills": {
+      "autoApply": "어시스턴트가 스킬을 자동으로 적용하도록 허용",
+      "autoApplyDescription": "관련 스킬과 개인 스킬이 각 메시지에 맞게 선택됩니다. 이 기능을 끄면, 요청하거나 고정한 스킬과 관리자가 모든 대화에 적용한 스킬만 사용됩니다."
+    }
   },
   "notFound": {
     "lostDog": "잃어버린 개"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "초",
     "chipAutoHideHint": "{min}초에서 {max}초 사이.",
     "byWorkflow": "워크플로우별",
-    "byWorkflowNote": "위의 합계에 포함된 일부를 별도로 표시한 것으로, 추가 사용이 아닙니다. 승인된 실행은 귀하의 조직 보고 및 토큰 예산에는 포함되지만, 이 로컬 총계에는 포함되지 않습니다."
+    "byWorkflowNote": "위의 합계에 포함된 일부를 별도로 표시한 것으로, 추가 사용이 아닙니다. 승인된 실행은 귀하의 조직 보고 및 토큰 예산에는 포함되지만, 이 로컬 총계에는 포함되지 않습니다.",
+    "chipLabelTitle": "칩 레이블",
+    "chipLabelHint": "항목별 내역에는 항상 배출량과 비용이 나란히 표시됩니다. 이 설정은 축소된 칩에 표시될 항목만 선택합니다.",
+    "chipLabelEmissions": "배출량",
+    "chipLabelCost": "비용",
+    "chipLabelBoth": "둘 다",
+    "costTile": "예상 비용",
+    "costDisclosure": "{asOf} 기준 목록가(Global Standard rate, 입력 캐시 할인 미적용)로 산정된 비용입니다. 청구 금액이 아니라 최대치입니다. 웹 검색, 코드 실행, 전사, 음성, 번역, 문서 색인은 포함되지 않습니다.",
+    "costUnpriced": "{count, plural, one {목록가가 없는 요청 #건이} other {목록가가 없는 요청 #건이}} 포함되지 않았습니다."
   },
   "extraction": {
     "toggleLabel": "구조화 데이터 추출",
@@ -4502,7 +4572,16 @@
         "auto": "자동",
         "hidden": "숨김"
       },
-      "visibilityHint": "자동은 추정치가 업데이트되거나 마우스를 올릴 때 칩을 표시합니다. 이 설정은 환경설정 › 사용량 및 영향에서 다시 변경할 수 있습니다."
+      "visibilityHint": "자동은 추정치가 업데이트되거나 마우스를 올릴 때 칩을 표시합니다. 이 설정은 환경설정 › 사용량 및 영향에서 다시 변경할 수 있습니다.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "예상 비용 {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "이 행의 요청에는 목록가가 없습니다.",
+        "unpriced": "{count, plural, one {목록가가 없는 요청 #건이} other {목록가가 없는 요청 #건이}} 비용에 포함되지 않았습니다.",
+        "noPriceData": "비용이 표시되지 않습니다: 이 대화의 모델에는 목록가가 없습니다(자체 소스, 로컬 런타임, agent는 가격이 매겨지지 않음).",
+        "note": "{asOf} 기준 목록가(Global Standard rate, 입력 캐시 할인 미적용)로 산정된 비용입니다. 청구 금액이 아니라 최대치입니다. 웹 검색, 코드 실행, 전사, 음성, 번역, 문서 색인은 포함되지 않습니다."
+      }
     },
     "workflow": {
       "title": "이 작업 공간(추정)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "용어집 삭제",
     "glossaryDeleteSuccess": "용어집이 삭제되었습니다",
     "channelProfilesTab": "플랫폼",
-    "channelSetsTab": "채널 세트"
+    "channelSetsTab": "채널 세트",
+    "addPromptAgent": "프롬프트 에이전트 추가",
+    "m365AgentIndexStop": "인덱싱 중지",
+    "foundryAgentsHeading": "Foundry 및 프롬프트 에이전트",
+    "foundryAgentsDescription": "Azure AI Foundry에서 사용자의 액세스를 통해 발견된 에이전트와 여기서 정의된 프롬프트 에이전트가 포함됩니다. 지식 에이전트와 Microsoft 365 에이전트는 아래의 해당 섹션에서 관리됩니다.",
+    "agentSkillsLabel": "스킬",
+    "agentSkillsHelp": "이 에이전트가 답변 중에 사용할 수 있는 조직 스킬입니다. 사용자는 자신에게 허용된 스킬만 볼 수 있습니다.",
+    "agentSkills": {
+      "inherit": "“에이전트에게 제공”으로 표시된 스킬",
+      "selected": "아래에서 선택한 스킬만",
+      "none": "스킬 없음"
+    },
+    "agentSkillsNone": "선택할 수 있는 스킬이 없습니다.",
+    "agentSkillsLoading": "스킬 불러오는 중…",
+    "agentSkillsLoadError": "스킬을 불러올 수 없습니다. 이전에 저장된 선택 사항은 유지됩니다.",
+    "agentSkillsNotVisible": "(회원님께는 표시되지 않습니다 — 체크 해제 시 제거)"
   },
   "localModels": {
     "title": "로컬 모델",
@@ -5521,7 +5615,8 @@
       "channelSets": "각 팀의 플랫폼 작성 규칙: 가이드, 목소리, 기본값, 사용 및 전송 가능 대상 등.",
       "webSearch": "웹 검색의 범위: 다단계 검색, 평가 모델 및 제한 사항.",
       "contextBudget": "각 모델이 매 회차에 받는 대화량",
-      "analytics": "전달된 보고서: 도착한 항목, 각 폴더의 열람 권한, 표시할 수 있는 필드."
+      "analytics": "전달된 보고서: 도착한 항목, 각 폴더의 열람 권한, 표시할 수 있는 필드.",
+      "skills": "대화에 필요할 때 어시스턴트가 적용하는 재사용 가능한 지시문 블록입니다."
     },
     "openSettings": "설정 열기",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "위임",
       "webSearch": "웹 검색",
       "contextBudget": "컨텍스트 예산",
-      "analytics": "분석"
+      "analytics": "분석",
+      "skills": "스킬"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "글로벌 기본값",
       "overrides": "개별 설정",
-      "delegations": "위임"
+      "delegations": "위임",
+      "models": "모델"
     },
     "tabsLabel": "제한 섹션",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 도구 일일 호출 수",
       "m365MailReadsPerDay": "메일 일일 읽기 수",
       "m365MailDraftsPerDay": "메일 일일 초안 수",
-      "m365MailDeepScansPerDay": "메일 일일 심층 검사 수"
+      "m365MailDeepScansPerDay": "메일 일일 심층 검사 수",
+      "m365DigestRunsPerDay": "일일 다이제스트 실행 횟수"
     },
     "valueModeLabel": "제한 유형",
     "valueAmountLabel": "제한 수량",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 도구 호출(캘린더, 연락처, 작업, Teams) 일일 제한입니다. 한도를 초과하면 채팅이 실패하는 대신 ‘내일 다시 시도하세요’라는 안내가 표시됩니다.",
       "m365MailReadsPerDay": "메일 검색 및 메시지/스레드 열람의 일일 제한입니다. 한도를 초과하면 메일 도구에서 ‘내일 다시 시도하세요’라는 안내가 제공됩니다.",
       "m365MailDraftsPerDay": "어시스턴트가 하루에 생성할 수 있는 이메일 초안 수(각각 개별 확인 필요). 일부러 엄격하게 설정됨.",
-      "m365MailDeepScansPerDay": "종합 메일 분석(다이제스트, 심층 검색, 약속 확인) 일일 제한입니다. 각 분석은 내부 읽기 횟수와 관계없이 1회로 계산됩니다."
+      "m365MailDeepScansPerDay": "종합 메일 분석(다이제스트, 심층 검색, 약속 확인) 일일 제한입니다. 각 분석은 내부 읽기 횟수와 관계없이 1회로 계산됩니다.",
+      "m365DigestRunsPerDay": "Microsoft 365의 일일 다이제스트 실행 횟수입니다. 한 번 실행하면 여러 번의 Graph 읽기와 두 번의 분석 모델 호출이 이루어집니다. 기간 선택기를 통해 재실행 요청이 쉽게 이루어질 수 있으므로 기본값이 엄격하게 설정되어 있습니다."
     },
     "scopeFamily": "패밀리",
     "scopeModel": "모델",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "내장 기본값",
     "previewSourceGlobal": "글로벌 기본값",
     "previewSourceOverride": "오버라이드: {label}",
-    "previewNotEvaluated": "부서/회사/지사 및 그룹 오버라이드는 여기서 평가할 수 없습니다 — 해당 사용자의 로그인에 따라 달라집니다.",
+    "previewNotEvaluated": "디렉터리에 접근할 수 없어 이 사람에 대한 부서/회사/사무소 및 그룹 규칙이 평가되지 않았습니다. 잠시 후 다시 시도해 주세요.",
     "previewUnsaved": "마지막으로 저장된 정책을 표시합니다. 변경 사항을 저장한 후 미리 볼 수 있습니다.",
     "previewColumnLimit": "제한",
     "previewColumnValue": "값",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "그룹만",
     "yourScopeGroupOnlyNote": "그룹이나 속성으로만 정의되어 있으므로 이메일 주소로 미리보기가 불가능합니다.",
     "previewOutOfScope": "이 사용자는 범위 외입니다.",
-    "previewGroupOnlyScope": "범위가 그룹이나 속성으로만 정의되어 있으므로 이메일 주소로 제한을 미리 볼 수 없습니다.",
+    "previewGroupOnlyScope": "귀하의 범위는 그룹이나 속성에 의해 정의됩니다. 미리보기는 이 사람이 해당 범위 내에 있는지 디렉터리에서 조회하여 결정합니다.",
     "previewCeilingPinned": "최대치에 고정됨: {label}",
     "previewShowUsage": "현재 사용량 보기",
     "previewColumnUsage": "사용됨",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "행의 하드 상한은 이 오버라이드의 대상에 대해 해당 값을 고정합니다. 범위 관리자는 이를 해제할 수 없으며, 여러 상한이 적용될 때 가장 구체적인 것이 우선합니다.",
     "confirmDeleteOverride": "\"{label}\"을(를) 삭제하시겠습니까? 서버에서 즉시 제거되며, 그 대상은 하위 제한으로 돌아갑니다. 이 작업은 되돌릴 수 없습니다.",
     "confirmDeleteOverrideAction": "오버라이드 삭제",
-    "previewUndecidableScope": "스코프에 그룹 또는 속성이 포함되어 있어, 이 사용자가 해당 범위에 포함되는지 이메일 주소만으로는 판단할 수 없습니다.",
+    "previewUndecidableScope": "귀하의 범위에 그룹이나 속성이 포함되어 있고 디렉터리에 접근할 수 없어 이 사람이 범위 내에 있는지 지금은 결정할 수 없습니다. 잠시 후 다시 시도해 주세요.",
     "previewNoLongerAdmin": "더 이상 활성 위임에 지정되어 있지 않으므로 제한 미리보기를 할 수 없습니다. 페이지를 새로고침하여 현재 접근 권한을 확인하세요.",
     "previewScopeMatchesNobody": "현재 범위와 일치하는 사용자가 없어 이메일 주소로 미리볼 대상이 없습니다.",
     "yourScopeMatchesNobodyChip": "일치 대상 없음",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "위임이 비활성화되어 있으므로, 위임이 다시 활성화되기 전까지 이 재정의는 아무에게도 적용되지 않습니다. 전역 계층으로 승격되지 않습니다.",
     "betaPolicyNotice": "베타 환경: 이 정책과 사용 카운터는 운영 환경과 별도로 저장됩니다(policy.beta.json). 여기서 변경하는 내용은 운영 환경에 영향을 주지 않습니다.",
     "delegationsManagedElsewhere": "위임 관리는 읽기 전용으로 표시됩니다. 위임의 구성원, 포함 사용자, 각 관리자의 권한은 위임 영역에서 관리됩니다.",
-    "delegationsManagedElsewhereLink": "위임 열기"
+    "delegationsManagedElsewhereLink": "위임 열기",
+    "modelAccess": {
+      "intro": "각 모델의 사용 권한을 결정하세요. 패밀리 설정은 그 패밀리의 모델들에 적용되며, 모델별 설정이 있으면 우선합니다. 목록에 있는 사람은 기본 설정을 뛰어넘고, 차단 목록은 모든 권한을 무효화합니다.",
+      "externalNote": "Azure 환경 외부에 호스팅된 모델({families})은 여기에서 권한을 부여하기 전까지 모든 사용자에게 사용할 수 없습니다. 기본값 또는 그룹, 도메인, 개별 사용자에게 권한을 부여할 수 있습니다.",
+      "envelopeNote": "패밀리에 대한 요청 제한은 해당 패밀리의 모델들이 공유하는 일일 예산입니다. 모델에 대한 제한은 그 모델 내에서만 적용됩니다. 모델의 무제한 설정은 패밀리 예산 제한을 해제하지 않습니다.",
+      "observeNote": "관찰 모드가 켜져 있습니다. 현재 설정으로는 모델 숨김이나 요청 차단이 적용되지 않습니다. 규칙이 맞을 때 상단에서 Enforcement로 전환하세요.",
+      "familyChip": "패밀리",
+      "modelChip": "모델",
+      "otherModels": "패밀리가 없는 모델",
+      "modelsInFamily": "{count, plural, one {이 패밀리에 모델 #개} other {이 패밀리에 모델 #개}}",
+      "noModels": "카탈로그에 아직 모델이 없습니다.",
+      "expand": "모델 보기",
+      "collapse": "모델 숨기기",
+      "edit": "편집",
+      "doneEditing": "완료",
+      "editNode": "{label}에 대한 접근 권한 편집",
+      "defaultLabel": "기타 모든 사용자",
+      "defaultInherit": "상속",
+      "defaultUnlimited": "무제한",
+      "defaultLimited": "최대",
+      "defaultUnavailable": "사용 불가",
+      "defaultRequestsLabel": "기타 모든 사용자의 일일 요청 수",
+      "requestsPerDay": "요청 / 일",
+      "inheritedFrom": "{origin}에서 {state}를 상속받습니다.",
+      "effectiveLabel": "목록에 없으면 {state}가 적용됩니다.",
+      "inheritedChip": "상속됨",
+      "origin": {
+        "model": "현재 설정",
+        "family": "해당 패밀리",
+        "defaults": "전역 기본값",
+        "catalogExternal": "외부 모델은 권한 부여 전까지 사용 불가 규칙",
+        "catalog": "카탈로그 기본값"
+      },
+      "state": {
+        "unlimited": "무제한",
+        "limited": "{requests} / 일로 제한됨",
+        "unavailable": "사용 불가"
+      },
+      "list": {
+        "groups": "접근 가능한 그룹",
+        "domains": "접근 가능한 도메인",
+        "allow": "허용된 사용자",
+        "deny": "차단된 사용자"
+      },
+      "listHint": {
+        "groups": "이 Entra 그룹의 구성원은 그룹별로 설정된 조건에 따라 사용할 수 있습니다.",
+        "domains": "이 도메인의 이메일 주소를 가진 모든 사용자는 도메인별로 설정된 조건에 따라 사용할 수 있습니다.",
+        "allow": "이름이 지정된 사용자는 기본값이나 도메인 설정과 관계없이 사용할 수 있습니다.",
+        "deny": "이름이 지정된 사용자는 절대 사용할 수 없습니다. 이는 모든 상위 권한보다 우선합니다."
+      },
+      "grantUnlimited": "무제한",
+      "grantLimited": "최대",
+      "termsLabel": "{target}에 대한 조건",
+      "requestsLabel": "{target}의 일일 요청 수",
+      "removeGrant": "{target} 제거",
+      "groupsCount": "{count, plural, one {그룹 #개} other {그룹 #개}}",
+      "domainsCount": "{count, plural, one {도메인 #개} other {도메인 #개}}",
+      "allowCount": "{count, plural, one {사용자 #명 허용됨} other {사용자 #명 허용됨}}",
+      "denyCount": "{count, plural, one {사용자 #명 차단됨} other {사용자 #명 차단됨}}",
+      "collisionChip": "글로벌 기본값에도 포함되어 있습니다.",
+      "collisionWarning": "이 모델 또는 계열이 글로벌 기본값에도 설정되어 있습니다. 둘 중 하나를 해제해야 저장이 가능합니다."
+    },
+    "previewSourceModelAccess": "모델 승인 — {list}",
+    "groupMembershipDegradedStructural": "이 서버에서 그룹 멤버십 조회가 실패하고 있습니다({reason}). 영향을 받은 사람들에게 그룹 기반 규칙과 권한이 적용되지 않습니다. 테넌트의 Group.Read.All 동의와 앱 등록을 확인하세요.",
+    "groupMembershipDegradedRetryable": "최근 몇 분 동안 이 서버에서 일부 그룹 멤버십 조회가 실패했습니다({reason}). 조회가 재시도되는 최대 1분 동안 해당 사람들에게 그룹 기반 규칙이 적용되지 않을 수 있습니다.",
+    "groupMembershipDegradedUsers": "현재 이 서버에서 영향을 받는 사람은 {count, plural, one {#명} other {#명}}입니다.",
+    "previewDirectoryNotFound": "이 이메일 주소를 가진 디렉터리 사용자가 없으므로, 부서/회사/사무실 및 그룹 규칙이 해당 인원이 아무 곳에도 속하지 않은 것으로 평가되었습니다."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "아침 업무 정리",
-        "description": "받은 메일, 내가 해야 할 일, 오늘 일정 — 한 번에 요약"
+        "description": "전 근무일 이후의 요약 — 들어온 내용, 처리해야 할 일, 초대 및 업데이트 사항; 월요일에는 금요일과 주말 내용을 포함합니다."
       },
       "chipsSettingLabel": "Microsoft 365 플레이북 제안",
       "chipsSettingHint": "적용 가능한 경우(예: 회의 기록을 가져온 후) 메시지 상자 위에 플레이북 제안을 표시합니다.",
-      "dismissChip": "{title} 닫기"
+      "dismissChip": "{title} 닫기",
+      "dailyDigest": {
+        "title": "일일 다이제스트",
+        "description": "최근 메일, Teams, 일정 정보를 필요, 대기 중, 업데이트 및 참고 사항으로 분류합니다 — 기간을 선택하세요"
+      }
+    },
+    "digest": {
+      "title": "일일 다이제스트",
+      "intro": "지정한 기간에 도착한 내용을 검사하여 답변이 필요한 것, 요청 받은 것, 대기 중인 것, 일정, 회사 및 프로젝트 업데이트, 참고용으로 분류합니다. 아무 것도 전송되거나 변경되지 않습니다.",
+      "periodLabel": "기간",
+      "preset": {
+        "lastWorkday": "마지막 근무일 이후",
+        "1d": "지난 24시간",
+        "3d": "지난 3일",
+        "7d": "지난 7일",
+        "14d": "지난 14일",
+        "custom": "사용자 지정 범위"
+      },
+      "lastWorkdayHint": "오늘 이전 가장 최근 평일의 시작부터—월요일에는 금요일과 주말이 포함됩니다.",
+      "from": "시작",
+      "to": "종료",
+      "customInvalid": "최대 {days}일 내의 순서를 유지한 범위를 선택하세요.",
+      "sourcesLabel": "소스",
+      "sourceNoConsent": "이 소스에 대한 권한이 없습니다.",
+      "sourceHint": {
+        "mail": "받은편지함 봉투와 미리보기; 보낸 편지함으로 답변 여부를 결정합니다.",
+        "chat": "최근 Teams 채팅, 답변하지 않은 @멘션 포함.",
+        "channel": "아래에서 선택한 채널의 게시글.",
+        "calendar": "답변을 기다리는 초대와, 다른 사람이 아직 응답하지 않은 회의."
+      },
+      "channelsLabel": "채널 ({count} / {max})",
+      "removeChannel": "{name} 제거",
+      "channelsSlow": "채널마다 추가로 읽기가 필요하므로, 채널이 많아질수록 처리 시간이 길어집니다.",
+      "channelsMax": "최대 {max}개의 채널에 도달했습니다.",
+      "channelsNeeded": "최소 한 개의 채널을 선택하거나 다른 소스를 추가하세요.",
+      "teamLabel": "팀",
+      "loadingTeams": "팀 불러오는 중…",
+      "pickTeam": "팀을 선택하여 채널 목록을 확인하세요",
+      "loadingChannels": "채널 불러오는 중…",
+      "noChannels": "이 팀에서 채널을 찾을 수 없습니다.",
+      "privacyNote": "제목, 발신자, 짧은 미리보기만 읽으며 메시지 본문과 첨부파일은 Microsoft 365에 그대로 남아 있습니다. 항목은 사용자 데이터의 요약입니다.",
+      "cancel": "취소",
+      "run": "다이제스트 실행",
+      "starting": "시작 중…",
+      "startFailed": "다이제스트를 시작할 수 없습니다.",
+      "userMessage": "일일 다이제스트 — {period}; 소스: {sources}",
+      "working": "Microsoft 365 커뮤니케이션을 스캔 중…",
+      "failed": "다이제스트 실행에 실패했습니다.",
+      "failedPrefix": "일일 다이제스트 실패:",
+      "expired": "이 다이제스트 실행이 만료되었습니다. 새로 실행하여 최신 결과를 받아보세요.",
+      "runAgain": "다시 실행",
+      "changePeriod": "기간 변경",
+      "period": {
+        "lastWorkday": "마지막 근무일 이후",
+        "lastDays": "{count, plural, one {지난 하루} other {지난 #일}}"
+      },
+      "source": {
+        "mail": "메일",
+        "chat": "Teams 채팅",
+        "channel": "Teams 채널",
+        "calendar": "캘린더"
+      },
+      "sourceStatus": {
+        "ok": "완료됨",
+        "partial": "부분 완료",
+        "skipped": "건너뜀",
+        "unavailable": "권한 없음",
+        "error": "실패함"
+      },
+      "degraded": "분석 모델을 사용할 수 없어, 카테고리는 규칙만으로 분류되었습니다.",
+      "withheld": "{count, plural, one {#개 항목이} other {#개 항목이}} 안전 필터에 의해 보류되었습니다.",
+      "empty": "이 기간과 소스에는 보고할 내용이 없습니다.",
+      "actionItems": "실행 항목",
+      "createTasks": "{count, plural, =0 {할 일에 추가} one {할 일에 #개 작업 추가} other {할 일에 #개 작업 추가}}",
+      "taskCreated": "할 일에 추가됨",
+      "tasksCreated": "{count, plural, one {#개 작업} other {#개 작업}} \"{list}\" 목록에 추가되었습니다.",
+      "tasksFailed": "작업을 생성할 수 없습니다.",
+      "category": {
+        "needsReply": "내 답장이 필요함",
+        "askedOfMe": "나에게 요청됨",
+        "waitingOnOthers": "다른 사람 기다림",
+        "scheduling": "일정 조정",
+        "companyUpdates": "회사 및 프로젝트 업데이트",
+        "fyi": "참고 (FYI)",
+        "bulk": "자동 및 대량"
+      },
+      "companyUpdatesHint": "중요하지만 긴급하지 않음",
+      "markDone": "{title} 처리 완료로 표시",
+      "badge": {
+        "unanswered": "미답변",
+        "mentioned": "언급됨",
+        "important": "높은 중요도"
+      },
+      "askAbout": "이 항목 문의",
+      "askPrompt": "상기 다이제스트의 {source} 항목 \"{title}\" ({when}, {from})에 대해: 요청 내용과 바람직한 답변은 무엇인가요?",
+      "open": {
+        "mail": "Outlook에서 열기",
+        "chat": "Teams에서 열기",
+        "channel": "Teams에서 열기",
+        "calendar": "Outlook에서 열기"
+      },
+      "footnote": "카테고리는 본인의 신호(미답변, 언급, 브로드캐스트)와 AI 분류에 따라 생성됩니다. 실행 전에 반드시 확인하세요. 아무것도 전송되지 않습니다.",
+      "age": {
+        "now": "방금",
+        "hours": "{count}시간 전",
+        "days": "{count}일 전"
+      },
+      "waitForReply": "현재 답장이 끝날 때까지 요약을 시작하지 마세요."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "지식",
       "prompt": "페르소나",
-      "m365": "지식(Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "지식",
-      "foundry": "Foundry 에이전트",
+      "foundry": "사용자 지정 에이전트",
       "connector": "커넥터"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "자체 모델로 실행"
     },
     "loadError": "지금 에이전트를 불러올 수 없습니다. 대부분 일시적인 문제입니다.",
-    "discoveryLoading": "Foundry 에이전트를 찾는 중…",
-    "discoveryError": "Foundry 에이전트를 불러올 수 없습니다.",
+    "discoveryLoading": "추가 에이전트를 찾는 중…",
+    "discoveryError": "일부 에이전트를 불러올 수 없습니다.",
     "retry": "다시 시도하기"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "이 폴더의 보존 기간 {months}개월보다 오래되어 더 이상 표시되지 않습니다.",
       "unknown": "보고된 문제: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "스킬",
+    "description": "대화에 필요할 때 어시스턴트가 적용하는 재사용 가능한 지시문 블록입니다. Claude 및 ChatGPT에서 사용하는 Agent Skills SKILL.md 형식과 호환됩니다.",
+    "loading": "스킬 로딩 중…",
+    "loadError": "스킬을 불러올 수 없습니다.",
+    "retry": "다시 시도",
+    "unavailableBanner": "현재 스킬 저장소에 접근할 수 없습니다 — 기본 내장 스킬만 표시됩니다. 저장된 스킬 및 편집은 복구될 때까지 사용할 수 없습니다.",
+    "conflictError": "다른 관리자가 이 스킬을 변경했습니다. 목록이 다시 불러와졌으니, 편집 내용을 다시 적용하세요.",
+    "alwaysWarning": "{count}개의 스킬이 항상으로 설정되어 있습니다. 모든 대화에 각각 추가됩니다 — 주제별 스킬에는 자동을 선호하세요.",
+    "newSkill": "새 스킬",
+    "importSkill": "SKILL.md 가져오기",
+    "importTitle": "SKILL.md 파일 붙여넣기",
+    "importPlaceholder": "---\nname: my-skill\ndescription: 이 스킬의 기능과 사용 시기.\n---\n\n지시문…",
+    "importHint": "파싱된 스킬이 검토를 위해 편집기에 열립니다 — 저장하기 전까지 아무것도 저장되지 않습니다.",
+    "importParse": "파싱 및 검토",
+    "invalidId": "스킬 ID는 소문자, 숫자, 한 개의 하이픈을 사용합니다.",
+    "saveSuccess": "스킬이 저장되었습니다.",
+    "saveError": "스킬을 저장할 수 없습니다.",
+    "deleteConfirm": "이 스킬을 삭제하시겠습니까? 대화에 즉시 적용이 중단됩니다.",
+    "restoreConfirm": "커스터마이징을 제거하고 이 내장 스킬의 기본값을 복원하시겠습니까?",
+    "deleteSuccess": "스킬이 삭제되었습니다.",
+    "restoreSuccess": "내장 기본값이 복원되었습니다.",
+    "deleteError": "스킬을 삭제할 수 없습니다.",
+    "empty": "아직 스킬이 없습니다. 새로 만들거나 SKILL.md를 가져오세요.",
+    "builtinChip": "내장",
+    "customizedChip": "커스터마이즈됨",
+    "exportSkill": "SKILL.md로 내보내기",
+    "edit": "편집",
+    "delete": "삭제",
+    "restoreDefault": "기본값 복원",
+    "createTitle": "새 스킬",
+    "editTitle": "{name} 편집",
+    "idLabel": "ID",
+    "idHint": "소문자, 숫자, 하이픈 사용. 스킬의 SKILL.md 이름이 되며, 생성 후 변경할 수 없습니다.",
+    "nameLabel": "표시 이름",
+    "descriptionLabel": "설명",
+    "descriptionHint": "스킬의 기능과 사용 시기 — 스킬을 선택하는 기준이므로, 반응해야 하는 구체적 주제와 표현을 포함하세요.",
+    "activationLabel": "활성화",
+    "activation": {
+      "auto": "자동",
+      "always": "항상",
+      "off": "비활성화",
+      "manual": "요청 시"
+    },
+    "activationHint": {
+      "auto": "현재 작업이 설명과 일치할 때 자동으로 선택됩니다. 사용자는 한 번 요청하거나 대화에 고정할 수도 있습니다.",
+      "always": "스킬을 볼 수 있는 모든 사람의 대화에 추가됩니다. 신중하게 사용하세요 — 항상 적용되는 프롬프트 공간입니다.",
+      "off": "비활성화: 적용되지 않으며 사용자에게 제공되지 않으나 편집을 위해 유지됩니다.",
+      "manual": "사용자가 요청하거나 고정할 때만 적용됩니다. 자동으로 선택되지 않으며, 로드 가능한 스킬로 모델에 제공되지 않습니다."
+    },
+    "instructionsLabel": "지시문",
+    "instructionsHint": "Markdown 형식, 최대 16 KB. 스킬 활성화 시 그대로 삽입됩니다.",
+    "saving": "저장 중…",
+    "save": "저장",
+    "cancel": "취소",
+    "documents": {
+      "title": "문서",
+      "hint": "참조 자료는 이 스킬과 함께 저장됩니다. 작은 문서는 직접 로드되고, 큰 문서는 인덱싱되어 인용 검색에 사용됩니다. 최대 20개 자료, 각 10MB, 총 20MB까지 허용됩니다. 에셋은 다운로드용으로만 저장됩니다.",
+      "saveFirst": "문서를 추가하기 전에 이 내장 스킬을 먼저 맞춤 설정하여 저장하십시오.",
+      "upload": "참조 문서 추가",
+      "remove": "제거",
+      "stop": "인덱싱 중지",
+      "resume": "문서 인덱싱 또는 재개",
+      "empty": "첨부된 문서가 아직 없습니다.",
+      "requestFailed": "문서 요청에 실패했습니다. 다시 로드하고 재시도하십시오.",
+      "importZip": "스킬 ZIP 가져오기",
+      "zipTooLarge": "스킬 ZIP 파일은 20MB 이하이어야 합니다.",
+      "importCount": "저장 후 첨부할 자료: {count}",
+      "skippedScripts": "실행 가능한 스크립트는 건너뛰었습니다.",
+      "status": {
+        "pending": "인덱싱 대기 중",
+        "processing": "인덱싱 중",
+        "inline": "준비됨 (직접 로드됨)",
+        "indexed": "준비됨 (검색 가능)",
+        "failed": "인덱싱 실패",
+        "asset": "다운로드 가능한 에셋"
+      },
+      "confirmRemove": "이 기술에서 {filename}을(를) 제거하시겠습니까? 저장된 원본 파일이 삭제되며 인용 자료로 더 이상 사용할 수 없습니다.",
+      "reindexRequired": "이 문서는 현재 지역별 검색 및 임베딩 설정에 맞게 다시 색인해야 합니다. 색인 작업이 완료될 때까지 검색되지 않습니다."
+    },
+    "applyToAgents": "에이전트에게 제공됨",
+    "applyToAgentsHint": "기본값은 꺼짐입니다. 활성화하면, 에이전트는 해당 스킬을 자신의 페르소나 지침을 대체하는 대신 읽기 전용 도구로 불러올 수 있습니다. 스킬 호출은 각기 별도의 단계 제한이 있습니다. Foundry 에이전트는 이미 load_skill 및 search_skill_documents 함수가 정의에 등록되어 있어야 합니다.",
+    "requireConsent": "적용 전에 확인 요청",
+    "requireConsentHint": "모델이 이 스킬을 자체적으로 적용하려고 할 때 사용자의 확인을 요청합니다. 사용자가 요청하거나 고정한 경우에는 확인이 필요하지 않습니다.",
+    "consentChip": "적용 전 확인",
+    "sourceChip": "소스에서 가져옴",
+    "sourceChipHint": "구독한 스킬 소스에서 제공됩니다. 동기화 시 안내문이 새로 고쳐집니다. 적용, 에이전트, 동의 설정은 사용자가 관리합니다.",
+    "sources": {
+      "title": "스킬 소스",
+      "description": "외부 스킬 카탈로그(index.json에 SKILL.md 파일 목록)를 구독합니다. 해당 스킬이 조직 스킬로 추가되며 약 6시간마다 새로 고쳐집니다. SKILL.md만 가져오며, 참고 문서는 가져오지 않습니다.",
+      "urlLabel": "카탈로그 URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "공개 호스트의 https여야 합니다. 스킬 파일은 해당 위치에서만 읽힙니다.",
+      "labelLabel": "레이블(선택 사항)",
+      "add": "구독",
+      "adding": "구독 중...",
+      "added": "{count, plural, =0 {소스가 추가됨. 스킬이 아직 가져와지지 않음} one {소스가 추가됨. #개의 스킬이 가져와짐} other {소스가 추가됨. #개의 스킬이 가져와짐}}",
+      "addedWithError": "소스가 추가되었으나 첫번째 동기화에 실패했습니다. 소스의 오류를 확인하세요.",
+      "addError": "스킬 소스를 추가할 수 없습니다",
+      "sync": "지금 동기화",
+      "syncing": "동기화 중...",
+      "synced": "소스가 동기화되었습니다.",
+      "syncError": "스킬 소스를 동기화할 수 없습니다",
+      "remove": "소스 제거",
+      "removeConfirm": "이 소스를 제거하시겠습니까? 이 소스가 제공한 스킬은 일반 조직 스킬로 남으며 새로 고쳐지지 않습니다.",
+      "removed": "소스가 제거되었습니다.",
+      "removeError": "스킬 소스를 제거할 수 없습니다",
+      "loading": "소스 불러오는 중...",
+      "loadError": "스킬 소스를 불러올 수 없습니다.",
+      "empty": "아직 스킬 소스가 없습니다.",
+      "never": "아직 동기화되지 않음",
+      "statusOk": "동기화됨",
+      "statusError": "동기화 실패",
+      "statusPartial": "{count, plural, one {#개 항목 건너뜀} other {#개 항목 건너뜀}}",
+      "lastSync": "마지막 동기화 {time}",
+      "entryCount": "{count, plural, one {#개 항목} other {#개 항목}}",
+      "entryStatus": {
+        "synced": "동기화됨",
+        "skipped": "건너뜀",
+        "conflict": "충돌 — 덮어쓰지 않음",
+        "invalid": "잘못됨"
+      }
+    },
+    "requireConsentDisabledHint": "자동 스킬만 사전 확인이 가능합니다: 요청, 고정, 항상 활성화 스킬은 확인 없이 바로 적용되며, 요청 시 스킬은 모델이 직접 선택하지 않습니다."
+  },
+  "personalSkills": {
+    "title": "개인 스킬",
+    "description": "본인 대화에서 재사용 가능한 지침을 저장할 수 있습니다. 스킬은 이 브라우저에만 저장되며, 채팅할 때에만 모델로 전송됩니다. 관련 스킬은 자동으로 선택되거나, 한 번 사용하거나, 고정할 수 있습니다. 스킬로 조직 정책을 변경하거나 도구 접근 권한을 부여할 수 없습니다. 스킬 사용은 해당 배포에서 스킬이 활성화되어 있어야 하며, 에이전트 대화에서는 개인 스킬을 사용하지 않습니다.",
+    "importFile": "SKILL.md 또는 ZIP 가져오기",
+    "review": "저장하기 전에 전체 지침을 검토하세요. 가져온 지침은 사용자 설정이며, 신뢰된 조직 정책이 아닙니다.",
+    "skipped": "실행 가능한 스크립트는 건너뛰었습니다",
+    "importTooLarge": "가져오는 파일은 20 MB 이하여야 합니다.",
+    "invalid": "스킬을 가져올 수 없습니다.",
+    "duplicate": "해당 개인 스킬 ID가 이미 존재합니다. 기존 스킬을 수정하거나 다른 ID를 선택하세요.",
+    "countLimit": "최대 20개의 개인 스킬을 저장할 수 있습니다.",
+    "requestLimit": "활성화된 개인 스킬이 160 KB 요청 한도를 초과했습니다. 일부 스킬을 비활성화하거나 지침을 줄이세요.",
+    "saved": "개인 스킬이 이 브라우저에 저장되었습니다.",
+    "instructionsHint": "가져온 텍스트 참조를 포함해 최대 16 KB의 지침이 가능합니다. 바이너리 파일과 지속적인 문서 색인 기능은 조직 스킬에서만 지원됩니다. 내보내기는 user: 접두사 없이 일반 SKILL.md 이름을 사용합니다.",
+    "enabled": "내 대화에서 활성화됨",
+    "empty": "반복 작업을 위한 스킬을 만들거나 SKILL.md를 가져와 검토 후 저장하세요."
   }
 }

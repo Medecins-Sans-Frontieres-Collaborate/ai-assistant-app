@@ -90,6 +90,35 @@ describe('UsageImpactSection', () => {
     expect(screen.getByText(/No usage tracked yet/i)).toBeInTheDocument();
   });
 
+  it('renders an estimated-cost tile with the list-price disclosure when buckets are priced', () => {
+    useSettingsStore.setState({
+      tokenUsageStats: {
+        // gpt-5.2 carries a list price; an unknown id does not.
+        [`${OpenAIModelID.GPT_5_2}|US|none`]: {
+          promptTokens: 1000,
+          completionTokens: 2000,
+          requests: 3,
+        },
+        'retired-model|US|none': {
+          promptTokens: 100,
+          completionTokens: 100,
+          requests: 2,
+        },
+      },
+      tokenUsageFirstTrackedAt: '2026-07-01T00:00:00.000Z',
+    });
+
+    render(<UsageImpactSection />);
+
+    expect(screen.getByText('Estimated cost')).toBeInTheDocument();
+    expect(screen.getByText(/Cost at list prices as of/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/2 requests without a list price are not included/i),
+    ).toBeInTheDocument();
+    // The chip label picker sits with the chip setting.
+    expect(screen.getByText('Chip label')).toBeInTheDocument();
+  });
+
   it('renders totals and a CO2e estimate from accumulated stats', () => {
     useSettingsStore.setState({
       tokenUsageStats: {

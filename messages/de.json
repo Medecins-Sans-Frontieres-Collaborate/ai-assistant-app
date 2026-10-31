@@ -758,7 +758,16 @@
       "stillWorking": "Noch in Arbeit…",
       "assessingSearchResults": "Prüfe, ob die Ergebnisse die Frage beantworten…",
       "refiningSearch": "Suche erneut: „{query}“…",
-      "readingSearchPages": "Lese {count} Ergebnisseiten…"
+      "readingSearchPages": "Lese {count} Ergebnisseiten…",
+      "toolRoutingUnavailableInRegion": "Tool-Routing am {region}-Endpunkt nicht verfügbar — Antwort erfolgt ohne Tools…",
+      "applyingSkill": "Skill wird angewendet: {skills}…",
+      "applyingSkills": "Skills werden angewendet: {skills}…",
+      "readingSkillReferences": "Skill-Referenzdokumente werden gelesen…",
+      "selectingSkills": "Fähigkeiten werden ausgewählt…",
+      "retryingModel": "Modell ist beschäftigt — erneuter Versuch in {seconds}s (Versuch {attempt})…",
+      "resumingResponse": "Verbindung zum Modell unterbrochen — fahre fort, wo aufgehört wurde…",
+      "continuingResponse": "Antwort hat das Längenlimit erreicht — fahre fort…",
+      "trimmingContext": "Unterhaltung zu lang für das Modell — älteren Verlauf kürzen und erneut versuchen…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# Tool verwendet} other {# Tools verwendet}}",
@@ -824,7 +833,9 @@
       "deniedByRuleHint": "Durch Ihre Regel blockiert — verwalten in Einstellungen → Connectors.",
       "batchPendingHint": "{count} Tool-Anfragen ausstehend",
       "approveAllButton": "Alle zulassen",
-      "denyAllButton": "Alle ablehnen"
+      "denyAllButton": "Alle ablehnen",
+      "applySkillTitle": "Die Fähigkeit „{skill}“ anwenden?",
+      "skillConsentNote": "Ein:e Administrator:in hat festgelegt, dass vor dem Anwenden dieser Fähigkeit gefragt wird. Bei Zustimmung wird die Anleitung nur für diese Antwort geladen."
     },
     "openImage": "Bild öffnen",
     "copyMessage": "Nachricht kopieren",
@@ -864,7 +875,54 @@
     "alwaysWaitThisLong": "Immer bis zu {duration} warten",
     "keepSearching": "Weiter suchen",
     "keepSearchingHint": "Die Suche wurde beendet, bevor dies gefunden wurde. Bitten Sie den Assistenten, andere Ansätze zu versuchen.",
-    "keepSearchingMessage": "Bitte weiter danach suchen – versuchen Sie einen anderen Ansatz."
+    "keepSearchingMessage": "Bitte weiter danach suchen – versuchen Sie einen anderen Ansatz.",
+    "addSkill": "Fähigkeiten",
+    "removeSkill": "Fähigkeit entfernen",
+    "skillsMenuLabel": "Verfügbare Fähigkeiten",
+    "skillsLimit": "Bis zu 3 Fähigkeiten pro Nachricht.",
+    "skillPin": "An Konversation anheften",
+    "skillUseOnce": "Einmal verwenden",
+    "skillPinned": "angeheftet",
+    "skillOnce": "nächste Nachricht",
+    "skillsPaused": "pausiert",
+    "skillUnavailable": "nicht verfügbar",
+    "skillsAutomaticHint": "Relevante Skills werden automatisch ausgewählt. Verwenden Sie einmal für die nächste Nachricht oder heften Sie einen Skill an, um ihn während der gesamten Konversation zu nutzen.",
+    "skillsAgentDisabled": "Skills sind pausiert, solange ein Agent verbunden ist. Ihre Anheftungen werden fortgesetzt, wenn Sie den Agenten trennen.",
+    "skillPersonal": "persönlich",
+    "skillsAgentToolsHint": "Hier werden nur von einem Administrator für die Nutzung durch Agents freigegebene Organisations-Skills angeboten. Der Agent kann diese als Nur-Lesen-Tools laden. Andere Pins bleiben pausiert, und persönliche Skills stehen Agents nicht zur Verfügung.",
+    "skillAlwaysOn": "immer aktiv",
+    "skillAlwaysOnHint": "Von einem Administrator zu jeder Nachricht in diesem Gespräch hinzugefügt.",
+    "skillUsage": {
+      "label": "Skills",
+      "requested": "angefordert",
+      "pinned": "angeheftet",
+      "auto": "auto",
+      "unavailable": "nicht verfügbar",
+      "incomplete": "Einige Skills konnten nicht angewendet werden",
+      "references": "{count, plural, one {# Referenzabschnitt} other {# Referenzabschnitte}}",
+      "referencesUnavailable": "Einige Referenzdokumente waren nicht verfügbar",
+      "showDetails": "Skill-Details anzeigen",
+      "hideDetails": "Skill-Details ausblenden",
+      "agentLoad": "vom Agent geladen",
+      "agentSearch": "vom Agent durchsuchte Dokumente",
+      "needsApproval": "benötigt Ihre Zustimmung",
+      "original": "wie ursprünglich ausgeführt",
+      "updated": "seitdem aktualisiert"
+    },
+    "skillsManualHint": "Die automatische Auswahl ist in den Einstellungen deaktiviert. Verwenden Sie eine Fähigkeit einmal für die nächste Nachricht oder heften Sie sie an, um sie während des gesamten Gesprächs zu nutzen.",
+    "queuedMessage": {
+      "label": "Warteschlange",
+      "attachmentOnly": "Anhang",
+      "cancel": "Nachricht aus Warteschlange entfernen"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Die Antwort wurde vom Inhaltsfilter gestoppt. Formulieren Sie die Anfrage um oder entfernen Sie den möglicherweise auslösenden Teil.",
+      "MODEL_CONTEXT_TOO_LONG": "Diese Unterhaltung ist für das gewählte Modell zu lang, selbst nach Kürzen des Verlaufs. Starten Sie eine neue Unterhaltung, entfernen Sie einige Anhänge oder wählen Sie ein Modell mit größerem Kontextfenster.",
+      "MODEL_OUTPUT_LIMIT": "Das Modell hat sein gesamtes Ausgabekontingent verbraucht, ohne eine Antwort zu liefern. Versuchen Sie einen geringeren Bearbeitungsaufwand oder eine kürzere Anfrage.",
+      "MODEL_RATE_LIMITED": "Das Modell erhält derzeit zu viele Anfragen. Es wurde automatisch erneut versucht; bitte versuchen Sie es in Kürze erneut.",
+      "MODEL_QUOTA_EXCEEDED": "Das Kapazitätskontingent des Modells ist erschöpft. Versuchen Sie ein anderes Modell oder versuchen Sie es später erneut.",
+      "MODEL_AUTH_FAILED": "Die App konnte sich nicht beim Modelldienst authentifizieren. Dies ist ein Konfigurationsproblem — bitte wenden Sie sich an den Support."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -1325,7 +1383,11 @@
       "preferModelTitle": "Bevorzugtes Modell verwenden",
       "preferModelDescription": "Nicht automatisch zu einem anderen Modell wechseln, wenn eine Anfrage fehlschlägt. Der Fehler bietet weiterhin das Wechseln an."
     },
-    "Analytics": "Analytics"
+    "Analytics": "Analytics",
+    "skills": {
+      "autoApply": "Den Assistenten Fähigkeiten automatisch anwenden lassen",
+      "autoApplyDescription": "Relevante Fähigkeiten und Ihre persönlichen Fähigkeiten werden für jede Nachricht ausgewählt. Wenn ausgeschaltet, werden nur die von Ihnen angeforderten oder angehefteten Fähigkeiten sowie die von einem Administrator für alle Gespräche festgelegten Fähigkeiten verwendet."
+    }
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "Sekunden",
     "chipAutoHideHint": "Zwischen {min} und {max} Sekunden.",
     "byWorkflow": "Nach Workflow",
-    "byWorkflowNote": "Teil der obigen Gesamtwerte, separat dargestellt – keine zusätzliche Nutzung. Grant-Durchläufe werden für das Reporting Ihrer Organisation und Ihr Token-Budget gezählt, aber nicht in dieser lokalen Summe."
+    "byWorkflowNote": "Teil der obigen Gesamtwerte, separat dargestellt – keine zusätzliche Nutzung. Grant-Durchläufe werden für das Reporting Ihrer Organisation und Ihr Token-Budget gezählt, aber nicht in dieser lokalen Summe.",
+    "chipLabelTitle": "Chip-Beschriftung",
+    "chipLabelHint": "Die Aufschlüsselung zeigt immer Emissionen und Kosten nebeneinander; dies legt nur fest, was im komprimierten Chip angezeigt wird.",
+    "chipLabelEmissions": "Emissionen",
+    "chipLabelCost": "Kosten",
+    "chipLabelBoth": "Beides",
+    "costTile": "Geschätzte Kosten",
+    "costDisclosure": "Kosten zu Listenpreisen mit Stand {asOf} (Global-Standard-Tarif, kein Rabatt für zwischengespeicherte Eingaben): ein Höchstbetrag, keine Rechnung. Websuche, Code-Ausführung, Transkription, Sprache, Übersetzung und Dokumentenindexierung sind nicht enthalten.",
+    "costUnpriced": "{count, plural, one {# Anfrage ohne Listenpreis wird} other {# Anfragen ohne Listenpreis werden}} nicht berücksichtigt."
   },
   "extraction": {
     "toggleLabel": "Strukturierte Daten extrahieren",
@@ -4502,7 +4572,16 @@
         "auto": "Automatisch",
         "hidden": "Ausblenden"
       },
-      "visibilityHint": "Automatisch zeigt den Chip an, wenn die Schätzung aktualisiert wird oder Sie mit der Maus darüber fahren. Dies kann in den Einstellungen › Nutzung & Auswirkungen erneut geändert werden."
+      "visibilityHint": "Automatisch zeigt den Chip an, wenn die Schätzung aktualisiert wird oder Sie mit der Maus darüber fahren. Dies kann in den Einstellungen › Nutzung & Auswirkungen erneut geändert werden.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Geschätzte Kosten {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Kein Listenpreis für die Anfragen in dieser Zeile",
+        "unpriced": "{count, plural, one {# Anfrage ohne Listenpreis wird} other {# Anfragen ohne Listenpreis werden}} bei den Kosten nicht berücksichtigt.",
+        "noPriceData": "Keine Kosten angezeigt: Das Modell dieses Gesprächs hat keinen Listenpreis (eigene Quellen, lokale Laufzeiten und Agents werden nicht bepreist).",
+        "note": "Kosten zu Listenpreisen mit Stand {asOf} (Global-Standard-Tarif, kein Rabatt für zwischengespeicherte Eingaben): ein Höchstbetrag, keine Rechnung. Websuche, Code-Ausführung, Transkription, Sprache, Übersetzung und Dokumentenindexierung sind nicht enthalten."
+      }
     },
     "workflow": {
       "title": "Dieser Arbeitsbereich (geschätzt)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "Glossar löschen",
     "glossaryDeleteSuccess": "Glossar gelöscht",
     "channelProfilesTab": "Plattformen",
-    "channelSetsTab": "Kanalsets"
+    "channelSetsTab": "Kanalsets",
+    "addPromptAgent": "Prompt-Agent hinzufügen",
+    "m365AgentIndexStop": "Indexierung beenden",
+    "foundryAgentsHeading": "Foundry- und Prompt-Agents",
+    "foundryAgentsDescription": "Agents, die über Ihren eigenen Zugriff aus Azure AI Foundry erkannt wurden, sowie hier definierte Prompt-Agents. Wissens-Agents und Microsoft 365-Agents werden in den jeweiligen Abschnitten unten verwaltet.",
+    "agentSkillsLabel": "Fähigkeiten",
+    "agentSkillsHelp": "Welche Organisationsfähigkeiten dieser Agent beim Beantworten laden darf. Nutzer sehen weiterhin nur Fähigkeiten, für die ihre Zugriffsregeln gelten.",
+    "agentSkills": {
+      "inherit": "Fähigkeiten, die als „für Agenten verfügbar“ markiert sind",
+      "selected": "Nur die unten ausgewählten Fähigkeiten",
+      "none": "Keine Fähigkeiten"
+    },
+    "agentSkillsNone": "Keine Fähigkeiten zur Auswahl verfügbar.",
+    "agentSkillsLoading": "Fähigkeiten werden geladen…",
+    "agentSkillsLoadError": "Fähigkeiten konnten nicht geladen werden. Frühere Auswahlen bleiben erhalten.",
+    "agentSkillsNotVisible": "(für Sie nicht sichtbar — zum Entfernen abwählen)"
   },
   "localModels": {
     "title": "Lokale Modelle",
@@ -5521,7 +5615,8 @@
       "channelSets": "Die Regeln jedes Teams für das Veröffentlichen auf Plattformen: Richtlinien, Stimmen, Vorgaben, wer das Set nutzen und wer senden darf.",
       "webSearch": "Wie weit eine Websuche gehen kann: mehrschrittige Suche, Bewertungsmodell und Grenzen.",
       "contextBudget": "Wie viel einer Konversation pro Zug an jedes Modell gesendet wird.",
-      "analytics": "Gelieferte Berichte: Was eingetroffen ist, wer auf welchen Ordner zugreifen darf und welche Felder angezeigt werden können."
+      "analytics": "Gelieferte Berichte: Was eingetroffen ist, wer auf welchen Ordner zugreifen darf und welche Felder angezeigt werden können.",
+      "skills": "Wiederverwendbare Anweisungsblöcke, die der Assistent bei Bedarf in einer Unterhaltung anwendet."
     },
     "openSettings": "Einstellungen öffnen",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "Delegationen",
       "webSearch": "Websuche",
       "contextBudget": "Kontextbudget",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "Fähigkeiten"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "Globale Standardwerte",
       "overrides": "Überschreibungen",
-      "delegations": "Delegationen"
+      "delegations": "Delegationen",
+      "models": "Modelle"
     },
     "tabsLabel": "Limitabschnitte",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 Tool-Aufrufe pro Tag",
       "m365MailReadsPerDay": "Mail-Lesungen pro Tag",
       "m365MailDraftsPerDay": "Mail-Entwürfe pro Tag",
-      "m365MailDeepScansPerDay": "Mail-Deep-Scans pro Tag"
+      "m365MailDeepScansPerDay": "Mail-Deep-Scans pro Tag",
+      "m365DigestRunsPerDay": "Tägliche Digest-Läufe pro Tag"
     },
     "valueModeLabel": "Limit-Typ",
     "valueAmountLabel": "Limit-Anzahl",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 Tool-Aufrufe (Kalender, Personen, Aufgaben, Teams) pro Tag. Bei Überschreitung erhalten Sie eine freundliche „Versuchen Sie es morgen erneut“-Meldung, anstatt dass der Chat fehlschlägt.",
       "m365MailReadsPerDay": "E-Mail-Suchen und Nachrichten-/Thread-Lesevorgänge pro Tag. Bei Überschreitung geben die E-Mail-Tools eine „Versuchen Sie es morgen erneut“-Meldung zurück.",
       "m365MailDraftsPerDay": "E-Mail-Entwürfe, die der Assistent pro Tag erstellen darf – jeder muss einzeln bestätigt werden. Absichtlich streng limitiert.",
-      "m365MailDeepScansPerDay": "Zusammengesetzte E-Mail-Analysen (Zusammenfassungen, Tiefensuche, Verpflichtungen) pro Tag. Jeder Scan entspricht einer Budgeteinheit, unabhängig von der Anzahl interner Lesevorgänge."
+      "m365MailDeepScansPerDay": "Zusammengesetzte E-Mail-Analysen (Zusammenfassungen, Tiefensuche, Verpflichtungen) pro Tag. Jeder Scan entspricht einer Budgeteinheit, unabhängig von der Anzahl interner Lesevorgänge.",
+      "m365DigestRunsPerDay": "Microsoft 365 tägliche Digest-Läufe pro Tag. Ein Lauf besteht aus dutzenden Graph-Lesevorgängen plus zwei Analysemodell-Aufrufen; der Zeitraum-Auswähler macht Wiederholungen einfach, daher ist der Standardwert streng."
     },
     "scopeFamily": "Familie",
     "scopeModel": "Modell",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "Integrierte Standardeinstellung",
     "previewSourceGlobal": "Globale Standardeinstellung",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Abteilungs-/Firmen-/Büro- und Gruppen-Overrides können hier nicht bewertet werden – diese hängen von der eigenen Anmeldung der Person ab.",
+    "previewNotEvaluated": "Das Verzeichnis konnte nicht erreicht werden, daher wurden Abteilungs-/Firmen-/Büro- und Gruppenregeln für diese Person nicht geprüft. Versuchen Sie es in einem Moment erneut.",
     "previewUnsaved": "Die zuletzt gespeicherte Richtlinie wird angezeigt. Speichern Sie Ihre Änderungen, um die Vorschau zu sehen.",
     "previewColumnLimit": "Limit",
     "previewColumnValue": "Wert",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "Nur Gruppen",
     "yourScopeGroupOnlyNote": "Nur durch Gruppen oder Attribute definiert, daher können Limits nicht nach E-Mail-Adresse angezeigt werden.",
     "previewOutOfScope": "Diese Person liegt außerhalb Ihres Bereichs.",
-    "previewGroupOnlyScope": "Ihr Bereich ist durch Gruppen oder Attribute definiert, daher können Limits nicht nach E-Mail-Adresse angezeigt werden.",
+    "previewGroupOnlyScope": "Ihr Geltungsbereich wird durch Gruppen oder Attribute definiert. In der Vorschau wird die Person im Verzeichnis gesucht, um festzustellen, ob sie dazugehört.",
     "previewCeilingPinned": "Durch Obergrenze fixiert: {label}",
     "previewShowUsage": "Aktuellen Verbrauch anzeigen",
     "previewColumnUsage": "Verwendet",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "Ein fester Grenzwert in einer Zeile fixiert diesen Wert für die Ziele dieses Overrides: Eingeschränkte Admins können ihn nicht aufheben. Wenn mehrere Grenzwerte gelten, gewinnt der spezifischste.",
     "confirmDeleteOverride": "\"{label}\" löschen? Die Regel wird sofort vom Server entfernt und ihre Ziele fallen auf die darunterliegenden Limits zurück. Dies kann nicht rückgängig gemacht werden.",
     "confirmDeleteOverrideAction": "Override löschen",
-    "previewUndecidableScope": "Ihr Geltungsbereich umfasst Gruppen oder Attribute, daher kann anhand der E-Mail-Adresse nicht entschieden werden, ob diese Person dazugehört.",
+    "previewUndecidableScope": "Ihr Geltungsbereich umfasst Gruppen oder Attribute und das Verzeichnis konnte nicht erreicht werden, daher kann momentan nicht entschieden werden, ob diese Person dazugehört. Versuchen Sie es in einem Moment erneut.",
     "previewNoLongerAdmin": "Sie sind nicht mehr in einer aktivierten Delegation genannt und können daher keine Limits mehr prüfen. Laden Sie die Seite neu, um Ihre aktuellen Zugriffsrechte zu sehen.",
     "previewScopeMatchesNobody": "Ihr Geltungsbereich umfasst derzeit niemanden, daher gibt es keine Vorschau per E-Mail-Adresse.",
     "yourScopeMatchesNobodyChip": "Trifft auf niemanden zu",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "Die Delegation ist deaktiviert, daher gilt diese Überschreibung für niemanden, bis die Delegation wieder aktiviert ist. Sie wird nie auf die globale Ebene übertragen.",
     "betaPolicyNotice": "Beta-Umgebung: Diese Richtlinie und ihre Nutzungszähler werden getrennt von der Produktion gespeichert (policy.beta.json). Änderungen hier haben keinen Einfluss auf die Produktion.",
     "delegationsManagedElsewhere": "Delegationen werden hier nur gelesen angezeigt. Wer zu einer Delegation gehört, welche Nutzer sie umfasst und was jeder Admin darf, wird im Bereich \"Delegationen\" verwaltet.",
-    "delegationsManagedElsewhereLink": "Delegationen öffnen"
+    "delegationsManagedElsewhereLink": "Delegationen öffnen",
+    "modelAccess": {
+      "intro": "Legen Sie fest, wer welches Modell nutzen darf. Die Einstellung einer Familie gilt für deren Modelle, es sei denn, ein Modell hat eine eigene Einstellung; Personen auf einer Liste haben Vorrang vor dem Standard für alle anderen; die Blockliste schlägt jede Berechtigung.",
+      "externalNote": "Modelle, die außerhalb der Azure-Umgebung ({families}) gehostet werden, sind für alle gesperrt, bis Sie hier Zugriff gewähren – entweder für alle über den Standard oder für Gruppen, Domains und einzelne Personen.",
+      "envelopeNote": "Ein Anforderungs-Limit für eine Familie ist ein gemeinsames Tagesbudget für alle ihre Modelle; ein Limit für ein Modell ist eine Begrenzung darin. Unbegrenzt für ein Modell hebt das Familienbudget nicht auf.",
+      "observeNote": "Beobachtungsmodus ist aktiv: Hier verbirgt nichts ein Modell oder verhindert eine Anfrage. Wechseln Sie oben auf Durchsetzen, wenn die Regeln korrekt sind.",
+      "familyChip": "Familie",
+      "modelChip": "Modell",
+      "otherModels": "Modelle ohne Familie",
+      "modelsInFamily": "{count, plural, one {# Modell in dieser Familie} other {# Modelle in dieser Familie}}",
+      "noModels": "Noch keine Modelle im Katalog.",
+      "expand": "Modelle anzeigen",
+      "collapse": "Modelle ausblenden",
+      "edit": "Bearbeiten",
+      "doneEditing": "Fertig",
+      "editNode": "Zugriff für {label} bearbeiten",
+      "defaultLabel": "Alle anderen",
+      "defaultInherit": "Vererben",
+      "defaultUnlimited": "Unbegrenzt",
+      "defaultLimited": "Begrenzt auf",
+      "defaultUnavailable": "Nicht verfügbar",
+      "defaultRequestsLabel": "Anfragen pro Tag für alle anderen",
+      "requestsPerDay": "Anfragen / Tag",
+      "inheritedFrom": "Erbt {state} von {origin}.",
+      "effectiveLabel": "Alle, die nicht auf einer Liste stehen, erhalten: {state}.",
+      "inheritedChip": "vererbt",
+      "origin": {
+        "model": "diese Einstellung",
+        "family": "seine Familie",
+        "defaults": "Globale Vorgaben",
+        "catalogExternal": "die Regel, dass externe Modelle bis zur Freigabe nicht verfügbar sind",
+        "catalog": "der Standard des Katalogs"
+      },
+      "state": {
+        "unlimited": "Unbegrenzt",
+        "limited": "Begrenzt auf {requests} / Tag",
+        "unavailable": "Nicht verfügbar"
+      },
+      "list": {
+        "groups": "Gruppen mit Zugriff",
+        "domains": "Domains mit Zugriff",
+        "allow": "Erlaubte Personen",
+        "deny": "Blockierte Personen"
+      },
+      "listHint": {
+        "groups": "Mitglieder dieser Entra-Gruppen können es gemäß den jeweiligen Bedingungen nutzen.",
+        "domains": "Alle mit einer E-Mail-Adresse in diesen Domains, gemäß den jeweiligen Bedingungen pro Domain.",
+        "allow": "Genannte Personen können es nutzen, unabhängig vom Standard oder ihrer Domain.",
+        "deny": "Genannte Personen dürfen es nie nutzen. Dies schlägt jede Berechtigung oben."
+      },
+      "grantUnlimited": "Unbegrenzt",
+      "grantLimited": "Begrenzt auf",
+      "termsLabel": "Bedingungen für {target}",
+      "requestsLabel": "Anfragen pro Tag für {target}",
+      "removeGrant": "{target} entfernen",
+      "groupsCount": "{count, plural, one {# Gruppe} other {# Gruppen}}",
+      "domainsCount": "{count, plural, one {# Domain} other {# Domains}}",
+      "allowCount": "{count, plural, one {# Person erlaubt} other {# Personen erlaubt}}",
+      "denyCount": "{count, plural, one {# Person blockiert} other {# Personen blockiert}}",
+      "collisionChip": "Auch in den globalen Standardwerten",
+      "collisionWarning": "Dieses Modell oder diese Familie ist auch unter den globalen Standardwerten konfiguriert. Das Speichern wird verweigert, bis eine der beiden Konfigurationen entfernt wurde."
+    },
+    "previewSourceModelAccess": "Modellfreigabe — {list}",
+    "groupMembershipDegradedStructural": "Gruppenzugehörigkeitsabfragen schlagen auf diesem Server fehl ({reason}). Gruppenbasierte Regeln und Berechtigungen werden für die betroffenen Personen nicht angewendet — prüfen Sie die Berechtigung Group.Read.All des Mandanten und die App-Registrierung.",
+    "groupMembershipDegradedRetryable": "Einige Gruppenzugehörigkeitsabfragen sind auf diesem Server in den letzten Minuten fehlgeschlagen ({reason}). Für diese Personen gelten gruppenbasierte Regeln möglicherweise für bis zu eine Minute nicht, während die Abfragen erneut versucht werden.",
+    "groupMembershipDegradedUsers": "Derzeit sind {count, plural, one {# Person} other {# Personen}} auf diesem Server betroffen.",
+    "previewDirectoryNotFound": "Kein Verzeichnisbenutzer hat diese E-Mail-Adresse, daher wurden Abteilungs-/Unternehmens-/Büro- und Gruppenregeln so bewertet, als würde die Person zu keiner gehören."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Morgen-Triage",
-        "description": "Was eingegangen ist, was auf Sie wartet und der heutige Kalender — ein kurzes Briefing"
+        "description": "Eine Zusammenfassung seit dem letzten Arbeitstag – was eingegangen ist, was auf Sie wartet, Einladungen und Updates; am Montag umfasst sie Freitag und das Wochenende."
       },
       "chipsSettingLabel": "Microsoft 365 Playbooks vorschlagen",
       "chipsSettingHint": "Playbook-Vorschläge oberhalb des Nachrichtenfeldes anzeigen, wenn sie relevant sind (z. B. nach dem Importieren eines Sitzungsprotokolls).",
-      "dismissChip": "{title} ausblenden"
+      "dismissChip": "{title} ausblenden",
+      "dailyDigest": {
+        "title": "Täglicher Digest",
+        "description": "Sortiert aktuelle E-Mails, Teams und Kalender nach dem, was Ihre Aufmerksamkeit benötigt, worauf Sie warten, Updates und FYI — wählen Sie den Zeitraum"
+      }
+    },
+    "digest": {
+      "title": "Täglicher Digest",
+      "intro": "Scannt, was Sie im gewählten Zeitraum erreicht hat, und sortiert es nach Dingen, die beantwortet werden müssen, Anforderungen an Sie, worauf Sie warten, Terminplanung, Firmen- und Projektupdates sowie FYI. Nichts wird versendet oder verändert.",
+      "periodLabel": "Zeitraum",
+      "preset": {
+        "lastWorkday": "Seit dem letzten Arbeitstag",
+        "1d": "Letzte 24 Stunden",
+        "3d": "Letzte 3 Tage",
+        "7d": "Letzte 7 Tage",
+        "14d": "Letzte 14 Tage",
+        "custom": "Benutzerdefinierter Zeitraum"
+      },
+      "lastWorkdayHint": "Vom Beginn des letzten Werktags vor heute — an einem Montag sind das Freitag und das Wochenende.",
+      "from": "Von",
+      "to": "Bis",
+      "customInvalid": "Wählen Sie einen aufeinanderfolgenden Zeitraum von höchstens {days} Tagen.",
+      "sourcesLabel": "Quellen",
+      "sourceNoConsent": "Berechtigung für diese Quelle nicht erteilt.",
+      "sourceHint": {
+        "mail": "Posteingang-Umschläge und Vorschauen; Ihre Gesendeten Elemente bestimmen, was als beantwortet gilt.",
+        "chat": "Aktuelle Teams-Chats mit @Erwähnungen, die Sie nicht beantwortet haben.",
+        "channel": "Beiträge in den unten ausgewählten Kanälen.",
+        "calendar": "Einladungen, auf die Sie noch antworten müssen, und Ihre Meetings, auf die andere nicht geantwortet haben."
+      },
+      "channelsLabel": "Kanäle ({count} von {max})",
+      "removeChannel": "{name} entfernen",
+      "channelsSlow": "Jeder Kanal erhöht die Lesezugriffe; mehr Kanäle verlängern die Verarbeitung des Digests.",
+      "channelsMax": "Maximale Anzahl von {max} Kanälen erreicht.",
+      "channelsNeeded": "Wählen Sie mindestens einen Kanal aus oder fügen Sie eine andere Quelle hinzu.",
+      "teamLabel": "Team",
+      "loadingTeams": "Teams werden geladen…",
+      "pickTeam": "Wählen Sie ein Team aus, um seine Kanäle anzuzeigen",
+      "loadingChannels": "Kanäle werden geladen…",
+      "noChannels": "Keine Kanäle in diesem Team gefunden.",
+      "privacyNote": "Es werden nur Betreff, Absender und kurze Vorschauen gelesen; Nachrichteninhalte und Anhänge bleiben in Microsoft 365. Die Elemente sind Zusammenfassungen Ihrer eigenen Daten.",
+      "cancel": "Abbrechen",
+      "run": "Digest ausführen",
+      "starting": "Wird gestartet…",
+      "startFailed": "Der Digest konnte nicht gestartet werden.",
+      "userMessage": "Täglicher Digest — {period}; Quellen: {sources}",
+      "working": "Ihre Microsoft 365-Kommunikation wird gescannt…",
+      "failed": "Der Digest ist fehlgeschlagen.",
+      "failedPrefix": "Täglicher Digest fehlgeschlagen:",
+      "expired": "Dieser Digest-Lauf ist abgelaufen. Führen Sie ihn erneut aus, um einen neuen zu erhalten.",
+      "runAgain": "Erneut ausführen",
+      "changePeriod": "Zeitraum ändern",
+      "period": {
+        "lastWorkday": "seit dem letzten Arbeitstag",
+        "lastDays": "{count, plural, one {letzter Tag} other {letzte # Tage}}"
+      },
+      "source": {
+        "mail": "E-Mail",
+        "chat": "Teams-Chats",
+        "channel": "Teams-Kanäle",
+        "calendar": "Kalender"
+      },
+      "sourceStatus": {
+        "ok": "abgeschlossen",
+        "partial": "teilweise",
+        "skipped": "übersprungen",
+        "unavailable": "keine Berechtigung",
+        "error": "fehlgeschlagen"
+      },
+      "degraded": "Das Analysemodell war nicht verfügbar, daher basieren die Kategorien nur auf Regeln.",
+      "withheld": "{count, plural, one {# Element wurde} other {# Elemente wurden}} durch Sicherheitssperren zurückgehalten.",
+      "empty": "Für diesen Zeitraum und diese Quellen gibt es nichts zu berichten.",
+      "actionItems": "Aufgabenpunkte",
+      "createTasks": "{count, plural, =0 {Zu To Do hinzufügen} one {# Aufgabe zu To Do hinzufügen} other {# Aufgaben zu To Do hinzufügen}}",
+      "taskCreated": "zu To Do hinzugefügt",
+      "tasksCreated": "{count, plural, one {# Aufgabe} other {# Aufgaben}} zur Liste \"{list}\" hinzugefügt.",
+      "tasksFailed": "Die Aufgaben konnten nicht erstellt werden.",
+      "category": {
+        "needsReply": "Benötigt meine Antwort",
+        "askedOfMe": "An mich gerichtet",
+        "waitingOnOthers": "Warte auf andere",
+        "scheduling": "Terminplanung",
+        "companyUpdates": "Unternehmens- und Projektupdates",
+        "fyi": "Zur Info",
+        "bulk": "Automatisiert und Massenversand"
+      },
+      "companyUpdatesHint": "wichtig, selten dringend",
+      "markDone": "{title} als erledigt markieren",
+      "badge": {
+        "unanswered": "unbeantwortet",
+        "mentioned": "hat Sie erwähnt",
+        "important": "hohe Wichtigkeit"
+      },
+      "askAbout": "Dazu nachfragen",
+      "askPrompt": "Zum {source}-Element \"{title}\" von {from} ({when}) im obigen Digest: Was wird gefragt und was wäre eine gute Antwort?",
+      "open": {
+        "mail": "In Outlook öffnen",
+        "chat": "In Teams öffnen",
+        "channel": "In Teams öffnen",
+        "calendar": "In Outlook öffnen"
+      },
+      "footnote": "Kategorien stammen aus eigenen Signalen (unbeantwortet, erwähnt, Rundmail) und KI-Klassifizierung; bitte vor dem Handeln prüfen. Es wurde nichts versendet.",
+      "age": {
+        "now": "gerade eben",
+        "hours": "vor {count} Std.",
+        "days": "vor {count} Tg."
+      },
+      "waitForReply": "Warten Sie, bis die aktuelle Antwort abgeschlossen ist, bevor Sie eine Zusammenfassung starten."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "Wissen",
       "prompt": "Persona",
-      "m365": "Wissen (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Wissen",
-      "foundry": "Foundry-Agent",
+      "foundry": "Benutzerdefinierter Agent",
       "connector": "Connector"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "nutzt eigenes Modell"
     },
     "loadError": "Ihre Agents konnten gerade nicht geladen werden. Dies ist in der Regel vorübergehend.",
-    "discoveryLoading": "Es wird nach Foundry Agents gesucht…",
-    "discoveryError": "Foundry Agents konnten nicht geladen werden.",
+    "discoveryLoading": "Suche nach weiteren Agents…",
+    "discoveryError": "Einige Agents konnten nicht geladen werden.",
     "retry": "Erneut versuchen"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "Älter als die {months} Monate Aufbewahrungsfrist dieses Ordners; wird nicht mehr angezeigt.",
       "unknown": "Gemeldetes Problem: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Fähigkeiten",
+    "description": "Wiederverwendbare Anweisungsblöcke, die der Assistent bei Bedarf in einer Unterhaltung anwendet. Kompatibel mit dem Agent Skills SKILL.md-Format, wie es von Claude und ChatGPT verwendet wird.",
+    "loading": "Fähigkeiten werden geladen…",
+    "loadError": "Fähigkeiten konnten nicht geladen werden.",
+    "retry": "Erneut versuchen",
+    "unavailableBanner": "Der Fähigkeitsspeicher ist derzeit nicht erreichbar – es werden integrierte Standardwerte angezeigt; gespeicherte Fähigkeiten und Bearbeitungen sind erst wieder verfügbar, wenn der Zugriff möglich ist.",
+    "conflictError": "Diese Fähigkeit wurde von einem anderen Admin geändert. Die Liste wurde neu geladen – wenden Sie Ihre Änderung erneut an.",
+    "alwaysWarning": "{count} Fähigkeiten sind auf Immer gesetzt. Jede davon wird jeder Unterhaltung hinzugefügt – nutzen Sie für themenspezifische Fähigkeiten bevorzugt Automatisch.",
+    "newSkill": "Neue Fähigkeit",
+    "importSkill": "SKILL.md importieren",
+    "importTitle": "SKILL.md-Datei einfügen",
+    "importPlaceholder": "---\nname: meine-fähigkeit\nbeschreibung: Was diese Fähigkeit tut und wann sie verwendet wird.\n---\n\nAnweisungen…",
+    "importHint": "Die geparste Fähigkeit wird im Editor zur Überprüfung geöffnet – erst beim Speichern wird sie übernommen.",
+    "importParse": "Parsen und überprüfen",
+    "invalidId": "Fähigkeits-IDs verwenden Kleinbuchstaben, Zahlen und einzelne Bindestriche.",
+    "saveSuccess": "Fähigkeit gespeichert.",
+    "saveError": "Fähigkeit konnte nicht gespeichert werden.",
+    "deleteConfirm": "Diese Fähigkeit löschen? Unterhaltungen erhalten sie ab sofort nicht mehr.",
+    "restoreConfirm": "Anpassung entfernen und die Standardversion dieser integrierten Fähigkeit wiederherstellen?",
+    "deleteSuccess": "Fähigkeit gelöscht.",
+    "restoreSuccess": "Integrierter Standard wiederhergestellt.",
+    "deleteError": "Fähigkeit konnte nicht gelöscht werden.",
+    "empty": "Noch keine Fähigkeiten. Erstellen Sie eine oder importieren Sie eine SKILL.md.",
+    "builtinChip": "Integriert",
+    "customizedChip": "Angepasst",
+    "exportSkill": "Als SKILL.md exportieren",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "restoreDefault": "Standard wiederherstellen",
+    "createTitle": "Neue Fähigkeit",
+    "editTitle": "{name} bearbeiten",
+    "idLabel": "ID",
+    "idHint": "Kleinbuchstaben, Zahlen und Bindestriche. Wird zum SKILL.md-Namen der Fähigkeit und kann nach der Erstellung nicht mehr geändert werden.",
+    "nameLabel": "Anzeigename",
+    "descriptionLabel": "Beschreibung",
+    "descriptionHint": "Was die Fähigkeit tut UND wann sie zu verwenden ist – daran wird die Fähigkeit ausgewählt, also relevante Themen und Formulierungen angeben.",
+    "activationLabel": "Aktivierung",
+    "activation": {
+      "auto": "Automatisch",
+      "always": "Immer",
+      "off": "Aus",
+      "manual": "Auf Anfrage"
+    },
+    "activationHint": {
+      "auto": "Wird automatisch ausgewählt, wenn die aktuelle Aufgabe zur Beschreibung passt. Nutzer können sie außerdem einmalig anfordern oder an eine Konversation anheften.",
+      "always": "Wird jeder Unterhaltung hinzugefügt und ist für alle sichtbar. Sparsam verwenden – dies ist dauerhafter Prompt-Platz.",
+      "off": "Inaktiv: wird nie angewendet und nicht für Nutzer angeboten, bleibt aber zum Bearbeiten hier gespeichert.",
+      "manual": "Wird nur angewendet, wenn ein Nutzer sie anfordert oder anpinnt. Wird nie automatisch ausgewählt und dem Modell nicht als ladbare Fähigkeit angeboten."
+    },
+    "instructionsLabel": "Anweisungen",
+    "instructionsHint": "Markdown, bis zu 16 KB. Wird beim Aktivieren des Skills wie eingegeben übernommen.",
+    "saving": "Wird gespeichert…",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "documents": {
+      "title": "Dokumente",
+      "hint": "Referenzen werden mit dieser Fähigkeit gespeichert. Kleine Dokumente werden direkt geladen, größere Dokumente werden zum zitierten Suchen indexiert. Bis zu 20 Ressourcen, jeweils 10 MB und insgesamt 20 MB. Assets werden nur zum Herunterladen gespeichert.",
+      "saveFirst": "Speichern Sie eine Anpassung dieser eingebauten Fähigkeit, bevor Sie Dokumente hinzufügen.",
+      "upload": "Referenzdokumente hinzufügen",
+      "remove": "Entfernen",
+      "stop": "Indexierung stoppen",
+      "resume": "Dokumente indexieren oder fortsetzen",
+      "empty": "Noch keine Dokumente angehängt.",
+      "requestFailed": "Die Dokumentenanfrage ist fehlgeschlagen. Bitte neu laden und erneut versuchen.",
+      "importZip": "Skill-ZIP importieren",
+      "zipTooLarge": "Das Skill-ZIP darf maximal 20 MB groß sein.",
+      "importCount": "Ressourcen zum Anhängen nach dem Speichern: {count}",
+      "skippedScripts": "Ausführbare Skripte wurden übersprungen",
+      "status": {
+        "pending": "Indexierung ausstehend",
+        "processing": "Indexierung läuft",
+        "inline": "Bereit (direkt geladen)",
+        "indexed": "Bereit (durchsuchbar)",
+        "failed": "Indexierung fehlgeschlagen",
+        "asset": "Herunterladbares Asset"
+      },
+      "confirmRemove": "{filename} aus dieser Fähigkeit entfernen? Die gespeicherte Originaldatei wird gelöscht und steht nicht mehr als Zitationsquelle zur Verfügung.",
+      "reindexRequired": "Diese Dokumente müssen für die aktuelle regionale Such- und Einbettungskonfiguration neu indiziert werden. Sie sind erst nach Abschluss der Indizierung durchsuchbar."
+    },
+    "applyToAgents": "Für Agents verfügbar",
+    "applyToAgentsHint": "Standardmäßig deaktiviert. Wenn aktiviert, können Agents diesen Skill über Nur-Lesen-Tools laden, anstatt ihre Persona-Anweisungen zu ersetzen. Skill-Aufrufe haben eigene Schrittlimits. Foundry-Agents müssen bereits die Funktionen load_skill und search_skill_documents in ihrer Definition registriert haben.",
+    "requireConsent": "Vor der Anwendung nachfragen",
+    "requireConsentHint": "Wenn das Modell diese Fähigkeit selbst anwenden möchte, wird der Nutzer vorher gefragt. Bei angeforderten und angepinnten Verwendungen ist keine Bestätigung nötig.",
+    "consentChip": "Fragt vorher",
+    "sourceChip": "Aus Quelle",
+    "sourceChipHint": "Bereitgestellt durch eine abonnierte Fähigkeitsquelle; die Anweisungen werden beim Synchronisieren aktualisiert. Aktivierung, Agenten- und Zustimmungseinstellungen sind Ihre.",
+    "sources": {
+      "title": "Fähigkeitsquellen",
+      "description": "Abonnieren Sie einen externen Fähigkeitskatalog (eine index.json mit SKILL.md-Dateien). Dessen Fähigkeiten werden zu Organisationsfähigkeiten und etwa alle sechs Stunden aktualisiert. Es wird nur SKILL.md importiert; Referenzdokumente nicht.",
+      "urlLabel": "Katalog-URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Muss https auf einem öffentlichen Host sein. Fähigkeitsdateien werden nur von diesem Ort gelesen.",
+      "labelLabel": "Bezeichnung (optional)",
+      "add": "Abonnieren",
+      "adding": "Wird abonniert…",
+      "added": "{count, plural, =0 {Quelle hinzugefügt; noch keine Fähigkeiten importiert} one {Quelle hinzugefügt; # Fähigkeit importiert} other {Quelle hinzugefügt; # Fähigkeiten importiert}}",
+      "addedWithError": "Quelle hinzugefügt, aber die erste Synchronisation ist fehlgeschlagen. Prüfen Sie den Fehler an der Quelle.",
+      "addError": "Fähigkeitsquelle konnte nicht hinzugefügt werden",
+      "sync": "Jetzt synchronisieren",
+      "syncing": "Synchronisiere…",
+      "synced": "Quelle synchronisiert.",
+      "syncError": "Fähigkeitsquelle konnte nicht synchronisiert werden",
+      "remove": "Quelle entfernen",
+      "removeConfirm": "Diese Quelle entfernen? Gelieferte Fähigkeiten bleiben als normale Organisationsfähigkeiten bestehen und werden nicht mehr aktualisiert.",
+      "removed": "Quelle entfernt.",
+      "removeError": "Fähigkeitsquelle konnte nicht entfernt werden",
+      "loading": "Quellen werden geladen…",
+      "loadError": "Fähigkeitsquellen konnten nicht geladen werden.",
+      "empty": "Noch keine Fähigkeitsquellen.",
+      "never": "Nie synchronisiert",
+      "statusOk": "Synchronisiert",
+      "statusError": "Synchronisation fehlgeschlagen",
+      "statusPartial": "{count, plural, one {# Eintrag übersprungen} other {# Einträge übersprungen}}",
+      "lastSync": "Letzte Synchronisation {time}",
+      "entryCount": "{count, plural, one {# Eintrag} other {# Einträge}}",
+      "entryStatus": {
+        "synced": "synchronisiert",
+        "skipped": "übersprungen",
+        "conflict": "Konflikt — nicht überschrieben",
+        "invalid": "ungültig"
+      }
+    },
+    "requireConsentDisabledHint": "Nur automatische Fähigkeiten können zuvor um Erlaubnis bitten: angeforderte, angeheftete und immer-aktive Fähigkeiten werden sofort angewendet, und auf Anfrage gewählte Fähigkeiten werden vom Modell nie ausgewählt."
+  },
+  "personalSkills": {
+    "title": "Persönliche Fähigkeiten",
+    "description": "Speichern Sie wiederverwendbare Anweisungen für Ihre eigenen Gespräche. Fähigkeiten bleiben in diesem Browser und werden nur beim Chatten an das Modell gesendet. Relevante Fähigkeiten können automatisch ausgewählt, einmalig verwendet oder angeheftet werden. Sie können keine Organisationsrichtlinien ändern oder Toolzugriff gewähren. Die Nutzung von Fähigkeiten erfordert, dass diese für diese Bereitstellung aktiviert sind; Agentengespräche verwenden keine persönlichen Fähigkeiten.",
+    "importFile": "SKILL.md oder ZIP importieren",
+    "review": "Überprüfen Sie die gesamten Anweisungen, bevor Sie speichern. Importierte Anweisungen sind Benutzerpräferenzen und keine vertrauenswürdigen Organisationsrichtlinien.",
+    "skipped": "Ausführbare Skripte wurden übersprungen",
+    "importTooLarge": "Der Import muss 20 MB oder kleiner sein.",
+    "invalid": "Die Fähigkeit konnte nicht importiert werden.",
+    "duplicate": "Diese persönliche Skill-ID existiert bereits. Bearbeiten Sie die bestehende Fähigkeit oder wählen Sie eine andere ID.",
+    "countLimit": "Sie können bis zu 20 persönliche Fähigkeiten speichern.",
+    "requestLimit": "Aktivierte persönliche Fähigkeiten überschreiten das 160 KB-Anfragelimit. Deaktivieren Sie einige Fähigkeiten oder kürzen Sie deren Anweisungen.",
+    "saved": "Persönliche Fähigkeit in diesem Browser gespeichert.",
+    "instructionsHint": "Bis zu 16 KB Anweisungen, einschließlich importierter Textreferenzen. Binärdateien und dauerhafte Dokumentenindizierung sind nur für Organisationsfähigkeiten verfügbar. Der Export verwendet den Standardnamen SKILL.md ohne user:-Präfix.",
+    "enabled": "Für meine Gespräche aktiviert",
+    "empty": "Erstellen Sie eine Fähigkeit für wiederkehrende Aufgaben oder importieren Sie eine SKILL.md, um sie hier zu prüfen und zu speichern."
   }
 }

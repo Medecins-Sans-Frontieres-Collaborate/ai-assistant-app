@@ -9,6 +9,10 @@ import { applyViewAs, readViewAs } from '@/lib/services/admin/viewAs';
 import { isGlobalAdmin } from '@/lib/services/agentAccess/adminAuth';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { qualifyGraphScopes } from '@/lib/services/auth/m365GraphScopes';
+import {
+  mergeRefreshedProfile,
+  profileRefreshDue,
+} from '@/lib/services/auth/sessionProfile';
 
 import {
   REGION_OVERRIDE_COOKIE,
@@ -77,6 +81,8 @@ declare module 'next-auth/jwt' {
     userRegion?: 'US' | 'EU';
     userOfficeId?: string | null;
     userOfficeName?: string | null;
+    /** Epoch ms of the last `/me` profile read (lib/services/auth/sessionProfile.ts). */
+    profileRefreshedAt?: number;
   }
 }
 
@@ -138,13 +144,31 @@ const refreshAccessToken = async (token: JWT): Promise<JWT> => {
       );
     }
 
-    return {
+    let next: JWT = {
       ...token,
       accessToken: refreshedTokens.access_token,
       accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
       error: undefined,
     };
+
+    // Profile fields (department, company, office…) feed the limits
+    // `attribute` scope and the analytics attributes; re-read them at most
+    // hourly so a directory change reaches the policy within the hour, not
+    // at the next sign-in. Best effort: a failed read keeps the old fields
+    // and is retried on the next token refresh.
+    if (profileRefreshDue(token)) {
+      try {
+        const userData = await fetchUserData(refreshedTokens.access_token);
+        next = mergeRefreshedProfile(next, userData, resolveOfficeAndRegion);
+      } catch (error) {
+        console.warn(
+          '[auth] profile refresh skipped:',
+          error instanceof Error ? error.message : 'unknown error',
+        );
+      }
+    }
+    return next;
   } catch (error) {
     return {
       ...token,
@@ -399,6 +423,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             userRegion: region,
             userOfficeId: officeId,
             userOfficeName: officeName,
+            profileRefreshedAt: Date.now(),
           };
         } catch (error) {
           console.error('Error fetching user data during login:', error);

@@ -788,6 +788,23 @@
     "stopGeneration": "Stop generation",
     "sendMessage": "Send message",
     "removeTone": "Remove tone",
+    "addSkill": "Skills",
+    "removeSkill": "Remove skill",
+    "skillsMenuLabel": "Available skills",
+    "skillsLimit": "Up to 3 skills per message.",
+    "skillPersonal": "personal",
+    "skillsAgentToolsHint": "Only organization skills enabled by an admin for agent use are offered here. The agent can load them as read-only tools. Other pins remain paused, and personal skills are not available to agents.",
+    "skillPin": "Pin to conversation",
+    "skillUseOnce": "Use once",
+    "skillPinned": "pinned",
+    "skillOnce": "next message",
+    "skillsPaused": "paused",
+    "skillUnavailable": "unavailable",
+    "skillsAutomaticHint": "Relevant skills are selected automatically. Use once for the next message, or pin a skill to use it throughout this conversation.",
+    "skillsManualHint": "Automatic selection is off in Settings. Use once for the next message, or pin a skill to use it throughout this conversation.",
+    "skillsAgentDisabled": "Skills are paused while an agent is attached. Your pins will resume when you detach the agent.",
+    "skillAlwaysOn": "always on",
+    "skillAlwaysOnHint": "Added to every message in this conversation by an admin.",
     "disableWebSearch": "Disable web search",
     "interpreterBadge": "Run code",
     "disableCodeInterpreter": "Disable code execution",
@@ -904,6 +921,11 @@
       "searchingKnowledge": "Searching the knowledge base…",
       "cancellingPriorTool": "Cancelling previous tool request…",
       "toolRoutingUnavailable": "Tool routing unavailable — answering without tools…",
+      "toolRoutingUnavailableInRegion": "Tool routing unavailable on the {region} endpoint — answering without tools…",
+      "applyingSkill": "Applying skill: {skills}…",
+      "applyingSkills": "Applying skills: {skills}…",
+      "readingSkillReferences": "Reading skill reference documents…",
+      "selectingSkills": "Choosing skills…",
       "webSearchLimitReached": "Daily web search limit reached — answering without search…",
       "codeInterpreterLimitReached": "Daily code execution limit reached — answering without running code…",
       "workflow": {
@@ -918,7 +940,11 @@
         "findingLocations": "Identifying locations…",
         "updatingMap": "Updating the map…"
       },
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "retryingModel": "Model busy — retrying in {seconds}s (attempt {attempt})…",
+      "resumingResponse": "Connection to the model dropped — resuming where it left off…",
+      "continuingResponse": "Answer hit the length limit — continuing…",
+      "trimmingContext": "Conversation too long for the model — trimming older history and retrying…"
     },
     "toolSummary": {
       "usedTools": "Used {count, plural, one {# tool} other {# tools}}",
@@ -935,6 +961,23 @@
       "mailFlagShowAnyway": "Show this message anyway",
       "mailFlagOverridden": "Flag overridden — the body will be shown next time it’s read.",
       "mailFlagOverrideToast": "Flag overridden for this message. Ask again to include its content."
+    },
+    "skillUsage": {
+      "label": "Skills",
+      "requested": "requested",
+      "pinned": "pinned",
+      "auto": "auto",
+      "unavailable": "unavailable",
+      "incomplete": "Some skills could not be applied",
+      "references": "{count, plural, one {# reference passage} other {# reference passages}}",
+      "referencesUnavailable": "Some reference documents were unavailable",
+      "showDetails": "Show skill details",
+      "hideDetails": "Hide skill details",
+      "agentLoad": "loaded on demand",
+      "agentSearch": "documents searched on demand",
+      "needsApproval": "needs your approval",
+      "original": "as originally run",
+      "updated": "updated since"
     },
     "consent": {
       "authorizeRequired": "Authorization required",
@@ -984,7 +1027,9 @@
       "approvedState": "Approved — agent resumed",
       "deniedState": "Denied",
       "submittingApproval": "Approving and resuming the agent…",
-      "submittingDenial": "Sending your denial…"
+      "submittingDenial": "Sending your denial…",
+      "applySkillTitle": "Apply the skill “{skill}”?",
+      "skillConsentNote": "An admin set this skill to ask before it is applied. Approving loads its guidance for this answer only."
     },
     "voiceInputTranscribing": "Transcribing...",
     "openImage": "Open image",
@@ -996,7 +1041,20 @@
     "ttsError": "Error generating audio. Please try again.",
     "ttsEquationPlaceholder": "equation",
     "unsupportedMessageType": "Error rendering message: Unsupported message type",
-    "createTodoTasks": "Create To Do tasks from this response"
+    "createTodoTasks": "Create To Do tasks from this response",
+    "queuedMessage": {
+      "label": "Queued",
+      "attachmentOnly": "Attachment",
+      "cancel": "Cancel queued message"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "The response was stopped by the content safety filter. Rephrase the request, or remove the part that may have triggered it.",
+      "MODEL_CONTEXT_TOO_LONG": "This conversation is too long for the selected model, even after trimming older history. Start a new conversation, remove some attachments, or pick a model with a larger context window.",
+      "MODEL_OUTPUT_LIMIT": "The model used its whole output budget without producing an answer. Try a lower reasoning effort or a shorter request.",
+      "MODEL_RATE_LIMITED": "The model is receiving too many requests right now. It was retried automatically; please try again in a moment.",
+      "MODEL_QUOTA_EXCEEDED": "The model's capacity quota is exhausted. Try another model, or try again later.",
+      "MODEL_AUTH_FAILED": "The app could not authenticate with the model service. This is a configuration problem — please contact support."
+    }
   },
   "transcript": {
     "originalTranscript": "Original Transcript",
@@ -1474,6 +1532,10 @@
       "additionalContext": "Additional Context",
       "additionalContextPlaceholder": "E.g., I work in field operations, prefer concise responses, often ask about medical protocols...",
       "additionalContextDescription": "Any other information you'd like the AI to know about you"
+    },
+    "skills": {
+      "autoApply": "Let the assistant apply skills automatically",
+      "autoApplyDescription": "Relevant skills, and your personal skills, are selected for each message. When off, only skills you request or pin and skills an admin applies to every conversation are used."
     },
     "tts": {
       "title": "Text-to-Speech",
@@ -4309,7 +4371,16 @@
         "auto": "Auto",
         "hidden": "Hide"
       },
-      "visibilityHint": "Auto shows the chip when the estimate updates or you hover it. Change this again in Settings › Usage & Impact."
+      "visibilityHint": "Auto shows the chip when the estimate updates or you hover it. Change this again in Settings › Usage & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Estimated cost {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "No list price for the requests in this row",
+        "unpriced": "{count, plural, one {# request without a list price is} other {# requests without a list price are}} not included in the cost.",
+        "noPriceData": "No cost is shown: this conversation’s model has no list price (own sources, local runtimes and agents are not priced).",
+        "note": "Cost at list prices as of {asOf} (Global Standard rate, no cached-input discount): an upper bound, not a bill. Web search, code execution, transcription, speech, translation and document indexing are not included."
+      }
     },
     "workflow": {
       "title": "This workspace (estimated)",
@@ -4368,7 +4439,15 @@
     "chipAutoHideUnit": "seconds",
     "chipAutoHideHint": "Between {min} and {max} seconds.",
     "byWorkflow": "By workflow",
-    "byWorkflowNote": "Part of the totals above, shown separately — not extra usage. Grants runs are counted toward your organisation's reporting and your token budget, but not in this local total."
+    "byWorkflowNote": "Part of the totals above, shown separately — not extra usage. Grants runs are counted toward your organisation's reporting and your token budget, but not in this local total.",
+    "chipLabelTitle": "Chip label",
+    "chipLabelHint": "The breakdown always shows emissions and cost side by side; this only picks what the collapsed chip reads.",
+    "chipLabelEmissions": "Emissions",
+    "chipLabelCost": "Cost",
+    "chipLabelBoth": "Both",
+    "costTile": "Estimated cost",
+    "costDisclosure": "Cost at list prices as of {asOf} (Global Standard rate, no cached-input discount): an upper bound, not a bill. Web search, code execution, transcription, speech, translation and document indexing are not included.",
+    "costUnpriced": "{count, plural, one {# request without a list price is} other {# requests without a list price are}} not included."
   },
   "connectors": {
     "title": "Connectors",
@@ -4760,7 +4839,7 @@
     "localAdminDiscard": "Discard changes",
     "configSaveSuccess": "Local admins saved.",
     "configConflictError": "Someone else changed the local admin list while you were editing. Reload and retry.",
-    "addAgent": "Add agent",
+    "addPromptAgent": "Add prompt agent",
     "newPromptAgentTitle": "New prompt agent",
     "editPromptAgentTitle": "Edit prompt agent",
     "agentNameLabel": "Name",
@@ -4943,7 +5022,7 @@
     "m365AgentIndexStartedBy": "started by {name}",
     "m365AgentIndexResume": "Resume",
     "m365AgentIndexResumeHint": "Continue indexing from where it stopped, using your Microsoft 365 access. Keep this tab open.",
-    "m365AgentIndexCancel": "Cancel",
+    "m365AgentIndexStop": "Stop indexing",
     "m365AgentIndexCancelled": "Indexing cancelled — documents already processed stay searchable.",
     "m365AgentIndexJobFailed": "Indexing stopped: {error}",
     "m365AgentIndexDone": "Indexing finished: {indexed} indexed, {failed} failed, {noText} without text.",
@@ -5110,6 +5189,8 @@
       "typeFilter": "not in the type filter"
     },
     "orgAgentsHeading": "Organization knowledge agents",
+    "foundryAgentsHeading": "Foundry and prompt agents",
+    "foundryAgentsDescription": "Agents discovered from Azure AI Foundry through your own access, plus prompt agents defined here. Knowledge agents and Microsoft 365 agents are managed in their own sections below.",
     "orgAgentsDescription": "RAG agents over Azure AI Search indexes — the editable counterpart of the built-in organization agents. Each save is validated against the live index (fields, vectorizer, semantic config, probe query); an agent that fails validation is kept but never served.",
     "addOrgAgent": "Add knowledge agent",
     "noOrgAgents": "No admin-defined knowledge agents yet.",
@@ -5215,7 +5296,18 @@
     "deleteFormTemplate": "Delete",
     "deleteFormTemplateConfirm": "Delete the template \"{name}\"? Conversations that already use it keep their snapshot.",
     "confirmDeleteFormTemplate": "Delete template",
-    "channelSetsTab": "Channel sets"
+    "channelSetsTab": "Channel sets",
+    "agentSkillsLabel": "Skills",
+    "agentSkillsHelp": "Which organization skills this agent may load while answering. Users still only see skills their access rules allow.",
+    "agentSkills": {
+      "inherit": "Skills marked “available to agents”",
+      "selected": "Only the skills selected below",
+      "none": "No skills"
+    },
+    "agentSkillsNone": "No skills available to select.",
+    "agentSkillsLoading": "Loading skills…",
+    "agentSkillsLoadError": "Skills could not be loaded. Selections saved earlier are kept.",
+    "agentSkillsNotVisible": "(not visible to you — untick to remove)"
   },
   "admin": {
     "title": "Admin",
@@ -5244,7 +5336,8 @@
       "announcements": "Banner messages for users: who sees them, when, and in which languages.",
       "delegations": "Who administers which users, and what each of them is allowed to do.",
       "analytics": "Delivered reports: what arrived, who may open each folder, and which fields may be shown.",
-      "channelSets": "Each team's rules for writing on the platforms: guidance, voices, defaults, who may use the set and who may send."
+      "channelSets": "Each team's rules for writing on the platforms: guidance, voices, defaults, who may use the set and who may send.",
+      "skills": "Reusable instruction blocks the assistant applies when a conversation needs them."
     },
     "area": {
       "workflows": "Workflows",
@@ -5254,8 +5347,150 @@
       "globalAdmins": "Global admins",
       "announcements": "Announcements",
       "delegations": "Delegations",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "Skills"
     }
+  },
+  "personalSkills": {
+    "title": "Personal skills",
+    "description": "Save reusable instructions for your own conversations. Skills stay in this browser and are sent to the model only when you chat. Relevant skills can be selected automatically, used once, or pinned. They cannot change organization policy or grant tool access. Personal skills are used only while automatic skill selection is on in Settings; agent conversations do not use personal skills.",
+    "importFile": "Import SKILL.md or ZIP",
+    "review": "Review the complete instructions before saving. Imported instructions are user preferences, not trusted organization policy.",
+    "skipped": "Executable scripts were skipped",
+    "importTooLarge": "The import must be 20 MB or smaller.",
+    "invalid": "The skill could not be imported.",
+    "duplicate": "That personal skill id already exists. Edit the existing skill or choose a different id.",
+    "countLimit": "You can save up to 20 personal skills.",
+    "requestLimit": "Enabled personal skills exceed the 160 KB request limit. Disable some skills or shorten their instructions.",
+    "saved": "Personal skill saved in this browser.",
+    "instructionsHint": "Up to 16 KB of instructions, including any imported text references. Binary files and persistent document indexing are available only for organization skills. Export uses the standard SKILL.md name without the user: prefix.",
+    "enabled": "Enabled for my conversations",
+    "empty": "Create a skill for a recurring task, or import a SKILL.md to review and save it here."
+  },
+  "skillsAdmin": {
+    "applyToAgents": "Available to agents",
+    "applyToAgentsHint": "Off by default. When enabled, agents may load this skill through read-only tools instead of replacing their persona instructions. Skill calls have independent step limits. Foundry agents must already have load_skill and search_skill_documents functions registered in their definition.",
+    "documents": {
+      "title": "Documents",
+      "hint": "References are stored with this skill. Small documents load directly; larger documents are indexed for cited search. Up to 20 resources, 10 MB each and 20 MB total. Assets are stored for download only.",
+      "saveFirst": "Save a customization of this built-in skill before adding documents.",
+      "upload": "Add reference documents",
+      "remove": "Remove",
+      "stop": "Stop indexing",
+      "resume": "Index or resume documents",
+      "reindexRequired": "These documents need reindexing for the current regional Search and embedding configuration. They will not be searched until indexing completes.",
+      "confirmRemove": "Remove {filename} from this skill? The stored original will be deleted and will no longer be available as a citation source.",
+      "empty": "No documents attached yet.",
+      "requestFailed": "The document request failed. Reload and retry.",
+      "importZip": "Import a skill ZIP",
+      "zipTooLarge": "The skill ZIP must be 20 MB or smaller.",
+      "importCount": "Resources to attach after saving: {count}",
+      "skippedScripts": "Executable scripts were skipped",
+      "status": {
+        "pending": "Waiting to index",
+        "processing": "Indexing",
+        "inline": "Ready (loaded directly)",
+        "indexed": "Ready (searchable)",
+        "failed": "Indexing failed",
+        "asset": "Downloadable asset"
+      }
+    },
+    "title": "Skills",
+    "description": "Reusable instruction blocks the assistant applies when a conversation needs them. Compatible with the Agent Skills SKILL.md format used by Claude and ChatGPT.",
+    "loading": "Loading skills…",
+    "loadError": "Could not load skills.",
+    "retry": "Retry",
+    "unavailableBanner": "Skill storage is currently unreachable — built-in defaults are shown; stored skills and edits are unavailable until it recovers.",
+    "conflictError": "This skill was changed by another admin. The list has been reloaded — reapply your edit.",
+    "alwaysWarning": "{count} skills are set to Always. Every one of them is added to every conversation — prefer Automatic for topic-specific skills.",
+    "newSkill": "New skill",
+    "importSkill": "Import SKILL.md",
+    "importTitle": "Paste a SKILL.md file",
+    "importPlaceholder": "---\nname: my-skill\ndescription: What this skill does and when to use it.\n---\n\nInstructions…",
+    "importHint": "The parsed skill opens in the editor for review — nothing is saved until you save it.",
+    "importParse": "Parse and review",
+    "invalidId": "Skill ids use lowercase letters, numbers, and single hyphens.",
+    "saveSuccess": "Skill saved.",
+    "saveError": "Could not save the skill.",
+    "deleteConfirm": "Delete this skill? Conversations stop receiving it immediately.",
+    "restoreConfirm": "Remove the customization and restore this built-in skill's default?",
+    "deleteSuccess": "Skill deleted.",
+    "restoreSuccess": "Built-in default restored.",
+    "deleteError": "Could not delete the skill.",
+    "empty": "No skills yet. Create one, or import a SKILL.md.",
+    "builtinChip": "Built-in",
+    "customizedChip": "Customized",
+    "exportSkill": "Export as SKILL.md",
+    "edit": "Edit",
+    "delete": "Delete",
+    "restoreDefault": "Restore default",
+    "createTitle": "New skill",
+    "editTitle": "Edit {name}",
+    "idLabel": "Id",
+    "idHint": "Lowercase letters, numbers, and hyphens. Becomes the skill's SKILL.md name and cannot change after creation.",
+    "nameLabel": "Display name",
+    "descriptionLabel": "Description",
+    "descriptionHint": "What the skill does AND when to use it — this is what selects the skill, so include the specific topics and phrasings it should respond to.",
+    "activationLabel": "Activation",
+    "activation": {
+      "auto": "Automatic",
+      "always": "Always",
+      "off": "Off",
+      "manual": "On request"
+    },
+    "activationHint": {
+      "auto": "Selected automatically when the current task matches the description. Users can also request it once or pin it to a conversation.",
+      "always": "Added to every conversation for everyone who can see the skill. Use sparingly — this is permanent prompt space.",
+      "off": "Inactive: never applied and not offered to users, but kept here for editing.",
+      "manual": "Applied only when a user requests or pins it. Never selected automatically and not offered to the model as a loadable skill."
+    },
+    "instructionsLabel": "Instructions",
+    "instructionsHint": "Markdown, up to 16 KB. Injected verbatim when the skill is active.",
+    "saving": "Saving…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "requireConsent": "Ask before applying",
+    "requireConsentHint": "When the model wants to apply this skill on its own, the user is asked first. Requested and pinned uses need no confirmation.",
+    "consentChip": "Asks first",
+    "sourceChip": "From source",
+    "sourceChipHint": "Delivered by a subscribed skill source; the instructions are refreshed on sync. Activation, agent and consent settings are yours.",
+    "sources": {
+      "title": "Skill sources",
+      "description": "Subscribe to an external skill catalog (an index.json listing SKILL.md files). Its skills become organization skills and refresh about every six hours. Only SKILL.md is imported; reference documents are not.",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Must be https on a public host. Skill files are read from the same location only.",
+      "labelLabel": "Label (optional)",
+      "add": "Subscribe",
+      "adding": "Subscribing…",
+      "added": "{count, plural, =0 {Source added; no skills imported yet} one {Source added; # skill imported} other {Source added; # skills imported}}",
+      "addedWithError": "Source added, but the first sync failed. Check the error on the source.",
+      "addError": "Could not add the skill source",
+      "sync": "Sync now",
+      "syncing": "Syncing…",
+      "synced": "Source synced.",
+      "syncError": "Could not sync the skill source",
+      "remove": "Remove source",
+      "removeConfirm": "Remove this source? Skills it delivered stay as ordinary organization skills and stop refreshing.",
+      "removed": "Source removed.",
+      "removeError": "Could not remove the skill source",
+      "loading": "Loading sources…",
+      "loadError": "Skill sources could not be loaded.",
+      "empty": "No skill sources yet.",
+      "never": "Never synced",
+      "statusOk": "Synced",
+      "statusError": "Sync failed",
+      "statusPartial": "{count, plural, one {# entry skipped} other {# entries skipped}}",
+      "lastSync": "Last sync {time}",
+      "entryCount": "{count, plural, one {# entry} other {# entries}}",
+      "entryStatus": {
+        "synced": "synced",
+        "skipped": "skipped",
+        "conflict": "conflict — not overwritten",
+        "invalid": "invalid"
+      }
+    },
+    "requireConsentDisabledHint": "Only automatic skills can ask first: requested, pinned and always-on skills apply without a prompt, and on-request skills are never chosen by the model."
   },
   "limits": {
     "title": "Usage limits",
@@ -5284,10 +5519,75 @@
     "observeNotice": "Observe mode is on: nothing is blocked. Every limit that would have blocked someone is written to the server log instead, so you can check the policy against real usage before enforcing it.",
     "propagationNotice": "Changes take up to 60 seconds to reach every server.",
     "betaPolicyNotice": "Beta environment: this policy and its usage counters are stored separately from production (policy.beta.json). Nothing you change here affects production.",
+    "groupMembershipDegradedStructural": "Group membership lookups are failing on this server ({reason}). Group-based rules and grants are not being applied for the people affected — check the tenant's Group.Read.All consent and the app registration.",
+    "groupMembershipDegradedRetryable": "Some group membership lookups failed on this server in the last few minutes ({reason}). Group-based rules may not apply for those people for up to a minute while the lookups are retried.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# person} other {# people}} currently affected on this server.",
     "tab": {
       "defaults": "Global defaults",
+      "models": "Models",
       "overrides": "Overrides",
       "delegations": "Delegations"
+    },
+    "modelAccess": {
+      "intro": "Decide who may use each model. A family's setting applies to its models unless a model sets its own; people on a list beat the default for everyone else; the block list beats every grant.",
+      "externalNote": "Models hosted outside the Azure environment ({families}) are unavailable to everyone until you grant them here — to everyone via the default, or to groups, domains and people.",
+      "envelopeNote": "A request limit on a family is a shared daily budget across its models; a limit on a model is a cap within it. Unlimited on a model does not lift a family budget.",
+      "observeNote": "Observe mode is on: nothing here hides a model or stops a request yet. Switch to Enforce above once the rules are right.",
+      "familyChip": "Family",
+      "modelChip": "Model",
+      "otherModels": "Models without a family",
+      "modelsInFamily": "{count, plural, one {# model in this family} other {# models in this family}}",
+      "noModels": "No models in the catalog yet.",
+      "expand": "Show models",
+      "collapse": "Hide models",
+      "edit": "Edit",
+      "doneEditing": "Done",
+      "editNode": "Edit access for {label}",
+      "defaultLabel": "Everyone else",
+      "defaultInherit": "Inherit",
+      "defaultUnlimited": "Unlimited",
+      "defaultLimited": "Limited to",
+      "defaultUnavailable": "Unavailable",
+      "defaultRequestsLabel": "Requests per day for everyone else",
+      "requestsPerDay": "requests / day",
+      "inheritedFrom": "Inherits {state} from {origin}.",
+      "effectiveLabel": "Everyone not on a list gets: {state}.",
+      "inheritedChip": "inherited",
+      "origin": {
+        "model": "this setting",
+        "family": "its family",
+        "defaults": "Global defaults",
+        "catalogExternal": "the rule that external models are unavailable until granted",
+        "catalog": "the catalog default"
+      },
+      "state": {
+        "unlimited": "Unlimited",
+        "limited": "Limited to {requests} / day",
+        "unavailable": "Unavailable"
+      },
+      "list": {
+        "groups": "Groups with access",
+        "domains": "Domains with access",
+        "allow": "Allowed people",
+        "deny": "Blocked people"
+      },
+      "listHint": {
+        "groups": "Members of these Entra groups may use it, on the terms set per group.",
+        "domains": "Everyone with an email address at these domains, on the terms set per domain.",
+        "allow": "Named people may use it whatever the default or their domain says.",
+        "deny": "Named people may never use it. This beats every grant above."
+      },
+      "grantUnlimited": "Unlimited",
+      "grantLimited": "Limited to",
+      "termsLabel": "Terms for {target}",
+      "requestsLabel": "Requests per day for {target}",
+      "removeGrant": "Remove {target}",
+      "groupsCount": "{count, plural, one {# group} other {# groups}}",
+      "domainsCount": "{count, plural, one {# domain} other {# domains}}",
+      "allowCount": "{count, plural, one {# person allowed} other {# people allowed}}",
+      "denyCount": "{count, plural, one {# person blocked} other {# people blocked}}",
+      "collisionChip": "Also in Global defaults",
+      "collisionWarning": "This model or family is also configured under Global defaults. Saving will be refused until one of the two is cleared."
     },
     "tabsLabel": "Limits sections",
     "group": {
@@ -5333,6 +5633,7 @@
       "m365MailReadsPerDay": "Mail reads per day",
       "m365MailDraftsPerDay": "Mail drafts per day",
       "m365MailDeepScansPerDay": "Mail deep scans per day",
+      "m365DigestRunsPerDay": "Daily digest runs per day",
       "codeInterpreterRunsPerDay": "Code interpreter runs per day",
       "uploadFilesPerDay": "File uploads per day"
     },
@@ -5415,7 +5716,9 @@
     "previewSourceCatalog": "Built-in default",
     "previewSourceGlobal": "Global default",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Department/company/office and group overrides can't be evaluated here — they depend on the person's own sign-in.",
+    "previewSourceModelAccess": "Model approval — {list}",
+    "previewNotEvaluated": "The directory couldn't be reached, so department/company/office and group rules were not evaluated for this person. Retry in a moment.",
+    "previewDirectoryNotFound": "No directory user has this email address, so department/company/office and group rules were evaluated as if the person belonged to none.",
     "previewUnsaved": "Showing the last saved policy. Save your changes to preview them.",
     "previewColumnLimit": "Limit",
     "previewColumnValue": "Value",
@@ -5441,6 +5744,7 @@
       "m365MailReadsPerDay": "Mail searches and message/thread reads per day. Over the limit, mail tools return a “try again tomorrow” result.",
       "m365MailDraftsPerDay": "Email drafts the assistant may create per day — each one individually confirmed. Deliberately tight.",
       "m365MailDeepScansPerDay": "Composite mail analyses (digests, deep search, commitments) per day. Each scan is one budget unit regardless of its internal reads.",
+      "m365DigestRunsPerDay": "Microsoft 365 daily digest runs per day. One run is dozens of Graph reads plus two analysis-model calls; the period picker makes re-runs cheap to request, so the default is tight.",
       "codeInterpreterRunsPerDay": "Code interpreter runs per day. Over the limit, messages are answered without running code.",
       "uploadFilesPerDay": "Files uploaded per day."
     },
@@ -5544,7 +5848,7 @@
     "yourScopeGroupOnlyChip": "Groups only",
     "yourScopeGroupOnlyNote": "Defined by groups or attributes only, so limits cannot be previewed by email address.",
     "previewOutOfScope": "This person is outside your scope.",
-    "previewGroupOnlyScope": "Your scope is defined by groups or attributes, so limits cannot be previewed by email address.",
+    "previewGroupOnlyScope": "Your scope is defined by groups or attributes. Previews look the person up in the directory to decide whether they are inside it.",
     "previewCeilingPinned": "Pinned by ceiling: {label}",
     "previewShowUsage": "Show current usage",
     "previewColumnUsage": "Used",
@@ -5559,7 +5863,7 @@
     "overrideCeilingHint": "Hard ceiling on a row pins that value for this override's targets: scoped admins cannot lift it, and where several ceilings apply the most specific one wins.",
     "confirmDeleteOverride": "Delete \"{label}\"? It is removed from the server immediately and its targets fall back to the limits beneath it. This cannot be undone.",
     "confirmDeleteOverrideAction": "Delete override",
-    "previewUndecidableScope": "Your scope includes groups or attributes, so whether this person is inside it cannot be decided by email address.",
+    "previewUndecidableScope": "Your scope includes groups or attributes and the directory couldn't be reached, so whether this person is inside it cannot be decided right now. Retry in a moment.",
     "previewNoLongerAdmin": "You are no longer named in an enabled delegation, so you cannot preview limits. Reload the page to see your current access.",
     "previewScopeMatchesNobody": "Your scope currently matches nobody, so there is no one to preview by email address.",
     "yourScopeMatchesNobodyChip": "Matches nobody",
@@ -5761,8 +6065,8 @@
     "searchPlaceholder": "Search agents and connectors…",
     "loading": "Loading agents…",
     "loadError": "Your agents couldn't be loaded just now. This is usually temporary.",
-    "discoveryLoading": "Looking for Foundry agents…",
-    "discoveryError": "Foundry agents couldn't be loaded.",
+    "discoveryLoading": "Looking for more agents…",
+    "discoveryError": "Some agents couldn't be loaded.",
     "retry": "Try again",
     "noMatches": "Nothing matches your search.",
     "noAgents": "No agents available.",
@@ -5778,9 +6082,9 @@
     "kind": {
       "rag": "Knowledge",
       "prompt": "Persona",
-      "m365": "Knowledge (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Knowledge",
-      "foundry": "Foundry agent",
+      "foundry": "Custom agent",
       "connector": "Connector"
     },
     "semantics": {
@@ -6367,11 +6671,118 @@
       },
       "morningTriage": {
         "title": "Morning triage",
-        "description": "What came in, what’s waiting on you, and today’s calendar — one briefing"
+        "description": "A digest since the last workday — what came in, what’s waiting on you, invitations and updates; on a Monday it covers Friday and the weekend"
+      },
+      "dailyDigest": {
+        "title": "Daily digest",
+        "description": "Sort recent mail, Teams and calendar into what needs you, what you’re waiting on, updates and FYI — pick the period"
       },
       "chipsSettingLabel": "Suggest Microsoft 365 playbooks",
       "chipsSettingHint": "Show playbook suggestions above the message box when they apply (e.g. after importing a meeting transcript).",
       "dismissChip": "Dismiss {title}"
+    },
+    "digest": {
+      "title": "Daily digest",
+      "intro": "Scans what reached you in the period and sorts it into what needs a reply, what was asked of you, what you're waiting on, scheduling, company and project updates, and FYI. Nothing is sent or changed.",
+      "periodLabel": "Period",
+      "preset": {
+        "lastWorkday": "Since the last workday",
+        "1d": "Last 24 hours",
+        "3d": "Last 3 days",
+        "7d": "Last 7 days",
+        "14d": "Last 14 days",
+        "custom": "Custom range"
+      },
+      "lastWorkdayHint": "From the start of the most recent weekday before today — on a Monday that covers Friday and the weekend.",
+      "from": "From",
+      "to": "To",
+      "customInvalid": "Pick an ordered range of at most {days} days.",
+      "sourcesLabel": "Sources",
+      "sourceNoConsent": "Permission not granted for this source.",
+      "sourceHint": {
+        "mail": "Inbox envelopes and previews; your Sent Items decide what counts as answered.",
+        "chat": "Recent Teams chats, with @mentions you have not answered.",
+        "channel": "Posts in the channels you pick below.",
+        "calendar": "Invitations awaiting your response and your meetings others have not answered."
+      },
+      "channelsLabel": "Channels ({count} of {max})",
+      "removeChannel": "Remove {name}",
+      "channelsSlow": "Each channel adds reads; more channels make the digest take longer.",
+      "channelsMax": "Maximum of {max} channels reached.",
+      "channelsNeeded": "Pick at least one channel, or add another source.",
+      "teamLabel": "Team",
+      "loadingTeams": "Loading teams…",
+      "pickTeam": "Pick a team to list its channels",
+      "loadingChannels": "Loading channels…",
+      "noChannels": "No channels found in this team.",
+      "privacyNote": "Only subjects, senders and short previews are read; message bodies and attachments stay in Microsoft 365. Items are summaries of your own data.",
+      "cancel": "Cancel",
+      "run": "Run digest",
+      "starting": "Starting…",
+      "startFailed": "The digest could not be started.",
+      "waitForReply": "Wait for the current reply to finish before starting a digest.",
+      "userMessage": "Daily digest — {period}; sources: {sources}",
+      "working": "Scanning your Microsoft 365 communications…",
+      "failed": "The digest failed.",
+      "failedPrefix": "Daily digest failed:",
+      "expired": "This digest run has expired. Run it again to get a fresh one.",
+      "runAgain": "Run again",
+      "changePeriod": "Change period",
+      "period": {
+        "lastWorkday": "since the last workday",
+        "lastDays": "{count, plural, one {last day} other {last # days}}"
+      },
+      "source": {
+        "mail": "Mail",
+        "chat": "Teams chats",
+        "channel": "Teams channels",
+        "calendar": "Calendar"
+      },
+      "sourceStatus": {
+        "ok": "complete",
+        "partial": "partial",
+        "skipped": "skipped",
+        "unavailable": "no permission",
+        "error": "failed"
+      },
+      "degraded": "The analysis model was unavailable, so categories come from rules alone.",
+      "withheld": "{count, plural, one {# item was} other {# items were}} withheld by the safety screens.",
+      "empty": "Nothing to report for this period and these sources.",
+      "actionItems": "Action items",
+      "createTasks": "{count, plural, =0 {Add to To Do} one {Add # task to To Do} other {Add # tasks to To Do}}",
+      "taskCreated": "added to To Do",
+      "tasksCreated": "{count, plural, one {# task} other {# tasks}} added to the \"{list}\" list.",
+      "tasksFailed": "Could not create the tasks.",
+      "category": {
+        "needsReply": "Needs my reply",
+        "askedOfMe": "Asked of me",
+        "waitingOnOthers": "Waiting on others",
+        "scheduling": "Scheduling",
+        "companyUpdates": "Company and project updates",
+        "fyi": "FYI",
+        "bulk": "Automated and bulk"
+      },
+      "companyUpdatesHint": "important, rarely urgent",
+      "markDone": "Mark {title} as handled",
+      "badge": {
+        "unanswered": "unanswered",
+        "mentioned": "mentioned you",
+        "important": "high importance"
+      },
+      "askAbout": "Ask about this",
+      "askPrompt": "About the {source} item \"{title}\" from {from} ({when}) in the digest above: what is being asked, and what would a good response be?",
+      "open": {
+        "mail": "Open in Outlook",
+        "chat": "Open in Teams",
+        "channel": "Open in Teams",
+        "calendar": "Open in Outlook"
+      },
+      "footnote": "Categories come from your own signals (unanswered, mentioned, broadcast) plus AI classification; verify before acting. Nothing was sent.",
+      "age": {
+        "now": "just now",
+        "hours": "{count}h ago",
+        "days": "{count}d ago"
+      }
     }
   },
   "share": {

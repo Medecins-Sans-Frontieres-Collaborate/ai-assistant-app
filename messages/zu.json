@@ -870,7 +870,16 @@
       "stillWorking": "Sisasebenza…",
       "assessingSearchResults": "Kuyaqinisekiswa ukuthi imiphumela iyaphendula yini umbuzo…",
       "refiningSearch": "Kubuyekezwa usesho: “{query}”…",
-      "readingSearchPages": "Kufundwa amakhasi emiphumela engu-{count}…"
+      "readingSearchPages": "Kufundwa amakhasi emiphumela engu-{count}…",
+      "toolRoutingUnavailableInRegion": "Ukudlulisela amathuluzi akutholakali ku-{region} endpoint — kuyaqhubeka kungasetshenziswa amathuluzi…",
+      "applyingSkill": "Kufaka ikhono: {skills}…",
+      "applyingSkills": "Kufaka amakhono: {skills}…",
+      "readingSkillReferences": "Kufundwa imibhalo yesithenjwa samakhono…",
+      "selectingSkills": "Kukhethwa amakhono…",
+      "retryingModel": "Imodeli imatasa — kuzophindwa ngemizuzwana engu-{seconds}s (uzama okwesithathu {attempt})...",
+      "resumingResponse": "Uxhumano nemodeli luphele — kuliqhubeka lapho kugcine khona...",
+      "continuingResponse": "Impendulo ifinyelele umkhawulo wobude — kuyaqhubeka...",
+      "trimmingContext": "Ingxoxo ende kakhulu yemodeli — kusikwa umlando wakudala bese kuqalwa futhi..."
     },
     "toolSummary": {
       "usedTools": "Kusetshenzisiwe {count, plural, one {# ithuluzi} other {# amathuluzi}}",
@@ -936,7 +945,9 @@
       "deniedByRuleHint": "Kublockiwe ngumthetho wakho — phatha ku-Izilungiselelo → Connectors.",
       "batchPendingHint": "{count} izicelo zethuluzi zisalindile",
       "approveAllButton": "Vuma zonke",
-      "denyAllButton": "Enqaba zonke"
+      "denyAllButton": "Enqaba zonke",
+      "applySkillTitle": "Faka ikhono elithi “{skill}”?",
+      "skillConsentNote": "Umphathi usethe leli khono ukuthi licela imvume ngaphambi kokufakwa. Ukuvuma kuyalilayisha iziqondiso zalo kule mpendulo kuphela."
     },
     "openImage": "Vula isithombe",
     "copyMessage": "Kopisha umlayezo",
@@ -976,7 +987,54 @@
     "alwaysWaitThisLong": "Hlale ulinda kufika ku-{duration}",
     "keepSearching": "Qhubeka usesha",
     "keepSearchingHint": "Ukusesha kumisiwe kungakutholi lokhu. Cela usizo ukuthi uzame ezinye izindlela.",
-    "keepSearchingMessage": "Qhubeka usesha lokhu, ngicela — zama enye indlela."
+    "keepSearchingMessage": "Qhubeka usesha lokhu, ngicela — zama enye indlela.",
+    "addSkill": "Amakhono",
+    "removeSkill": "Susa ikhono",
+    "skillsMenuLabel": "Amakhono atholakalayo",
+    "skillsLimit": "Kufika ku-3 amakhono emlayeni.",
+    "skillPin": "Bopha engxoxweni",
+    "skillUseOnce": "Sebenzisa kanye",
+    "skillPinned": "bophwe",
+    "skillOnce": "umyalezo olandelayo",
+    "skillsPaused": "kumisiwe",
+    "skillUnavailable": "akutholakali",
+    "skillsAutomaticHint": "Amakhono afanele akhethwa ngokuzenzakalayo. Sebenzisa kanye kumyalezo olandelayo, noma bopha ikhono ukuze lihlale lisebenza kulo ngxoxo.",
+    "skillsAgentDisabled": "Amakhono amisiwe uma i-agent ixhunywe. Amakhono obophwe azoqhubeka uma usukhulule i-agent.",
+    "skillPersonal": "omuntu siqu",
+    "skillsAgentToolsHint": "Amand skills enenhlangano avunyelwe admin ukuze asetshenziswe ngama-agent kuphela ayatholakala lapha. I-agent ingawalayisha njengamathuluzi okufunda kuphela. Amanye ama-pin ahlala emisiwe, futhi amakhono omuntu siqu awatholakali kuma-agent.",
+    "skillAlwaysOn": "kuhlala kukuvuliwe",
+    "skillAlwaysOnHint": "Kufakiwe kuyo yonke imilayezo kule ngxoxo ngumlawuli.",
+    "skillUsage": {
+      "label": "Amakhono",
+      "requested": "kuceliwe",
+      "pinned": "kubekwe phezulu",
+      "auto": "okuzenzakalelayo",
+      "unavailable": "akutholakali",
+      "incomplete": "Amanye amakhono awakwazanga ukufakwa",
+      "references": "{count, plural, one {# isiqephu sesithenjwa} other {# iziqephu zesithenjwa}}",
+      "referencesUnavailable": "Ezinye izincwadi zesithenjwa azitholakali",
+      "showDetails": "Bonisa imininingwane yekhono",
+      "hideDetails": "Fihla imininingwane yekhono",
+      "agentLoad": "kufakwe umenzeli",
+      "agentSearch": "imibhalo ifunwe umenzeli",
+      "needsApproval": "kudinga ukuvunywa kwakho",
+      "original": "njengoba kusetshenziswe ekuqaleni",
+      "updated": "kubuyekeziwe kusukela lapho"
+    },
+    "skillsManualHint": "Ukuzikhethela okuzenzakalelayo kuvaliwe Ezilungisezweni. Sebenzisa kanye umlayezo olandelayo, noma mni izibalo ukuze zisetshenziswe kulo ngxoxo.",
+    "queuedMessage": {
+      "label": "Kulindelwe",
+      "attachmentOnly": "Okuhambisana",
+      "cancel": "Khansela umlayezo olindile"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Impendulo imisiwe ngenxa yokuhlungwa kokuqukethwe okubhekele ukuphepha. Bhala kabusha isicelo, noma susa ingxenye engahle iveze inkinga.",
+      "MODEL_CONTEXT_TOO_LONG": "Le ngxoxo inde kakhulu kunemodeli ekhethiwe, ngisho nasekuhlungeni umlando wakudala. Qala ingxoxo entsha, susa ezinye izithasiselo, noma khetha imodeli enendawo enkulu yomongo.",
+      "MODEL_OUTPUT_LIMIT": "Imodeli isisebenzise wonke amandla ayo wokuphendula ingakhiphanga mpendulo. Zama ukunciphisa ubunzima bokucabanga noma wenze isicelo esifushane.",
+      "MODEL_RATE_LIMITED": "Imodeli ithola izicelo eziningi ngesikhathi esifanayo. Iphinde yazama ngokuzenzakalelayo; sicela uzame futhi kungakapheli isikhathi.",
+      "MODEL_QUOTA_EXCEEDED": "Umkhawulo wemodeli uphelile. Zama enye imodeli, noma uzame futhi ngemuva kwesikhathi.",
+      "MODEL_AUTH_FAILED": "Uhlelo alukwazanga ukuzazisa kusevisi yemodeli. Le yinkinga yokumiswa kohlelo — sicela uthinte ukwesekwa."
+    }
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -1484,7 +1542,11 @@
       "preferModelTitle": "Khetha imodeli engiyithandayo",
       "preferModelDescription": "Ungashintshi ngokuzenzakalelayo uma isicelo siphazamiseka. Iphutha lizobe lisavumela ukushintsha imodeli."
     },
-    "Analytics": "Izibalo"
+    "Analytics": "Izibalo",
+    "skills": {
+      "autoApply": "Vumela umsizi asebenzise amakhono ngokuzenzakalelayo",
+      "autoApplyDescription": "Amakhono afanele, kanye namakhono akho siqu, akhethwa kuwo wonke umlayezo. Lapho kuvaliwe, kusetshenziswa kuphela amakhono owacelayo noma owabophezela kanye namakhono abekwa admin kuzo zonke izingxoxo."
+    }
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -2684,7 +2746,15 @@
     "chipAutoHideUnit": "amasekhondi",
     "chipAutoHideHint": "Phakathi kuka-{min} no-{max} amasekhondi.",
     "byWorkflow": "Ngokwe-workflow",
-    "byWorkflowNote": "Ingxenye yemiphumela engenhla, ekhishwe ngokuhlukile — akusiyona enye ukusetshenziswa. Ukugijima kwe-grant kubizwa kubikwa kwenhlangano yakho kanye nesabelomali sakho samathokheni, kodwa akukho kuleli zinga lendawo."
+    "byWorkflowNote": "Ingxenye yemiphumela engenhla, ekhishwe ngokuhlukile — akusiyona enye ukusetshenziswa. Ukugijima kwe-grant kubizwa kubikwa kwenhlangano yakho kanye nesabelomali sakho samathokheni, kodwa akukho kuleli zinga lendawo.",
+    "chipLabelTitle": "Ilebula ye-chip",
+    "chipLabelHint": "Ukuhlukaniswa kuhlala kukhombisa ukuputshuka kwemvelo nezindleko ndawonye; lokhu kukhetha kuphela lokho okuboniswa i-chip.",
+    "chipLabelEmissions": "Ukuputshuka kwemvelo",
+    "chipLabelCost": "Izindleko",
+    "chipLabelBoth": "Zonke ezimbili",
+    "costTile": "Izindleko ezilinganisiwe",
+    "costDisclosure": "Izindleko zentengo ehleliwe kusukela ngo-{asOf} (Izinga Lomhlaba Wonke, akukho isaphulelo sokufakwa okuphindayo): isilinganiso esiphezulu, hhayi i-invoyisi. Ukusesha kwewebhu, ukugijima kwekhodi, ukurekhoda, inkulumo, ukuhumusha nokufakwa kwemibhalo akufakiwe.",
+    "costUnpriced": "{count, plural, one {# isicelo elingenayo intengo alifakwanga} other {# izicelo ezingekho intengo azifakwanga}}."
   },
   "extraction": {
     "toggleLabel": "Khipha idatha ehlelekile",
@@ -4486,7 +4556,16 @@
         "auto": "Okuzenzakalelayo",
         "hidden": "Fihla"
       },
-      "visibilityHint": "Okwenziwa ngokuzenzakalelayo kubonisa i-chip uma inani libuyekezwa noma uma ubeka igundane phezu kwayo. Ungashintsha lokhu futhi kokuthi Izilungiselelo › Ukusetshenziswa & Umthelela."
+      "visibilityHint": "Okwenziwa ngokuzenzakalelayo kubonisa i-chip uma inani libuyekezwa noma uma ubeka igundane phezu kwayo. Ungashintsha lokhu futhi kokuthi Izilungiselelo › Ukusetshenziswa & Umthelela.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Izindleko ezilinganisiwe {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Azikho izindleko ezitholakalayo zezicelo ezikule row",
+        "noPriceData": "Azikho izindleko ezikhonjisiwe: imodeli yango lengxoxo ayinayo intengo ohlwini (imithombo yangasese, ukusetshenziswa kwendawo nama-agent akahlawuliswa).",
+        "note": "Izindleko zentengo ehleliwe kusukela ngo-{asOf} (Izinga Lomhlaba Wonke, akukho isaphulelo sokufakwa okuphindayo): isilinganiso esiphezulu, hhayi i-invoyisi. Ukusesha kwewebhu, ukugijima kwekhodi, ukurekhoda, inkulumo, ukuhumusha nokufakwa kwemibhalo akufakiwe.",
+        "unpriced": "{count, plural, one {# isicelo elingenayo intengo alifakwanga} other {# izicelo ezingekho intengo azifakwanga}} kumali."
+      }
     },
     "workflow": {
       "title": "Le workspace (okulinganiselwe)",
@@ -5278,7 +5357,22 @@
     "confirmDeleteGlossary": "Susa iglosari",
     "glossaryDeleteSuccess": "Iglosari isusiwe",
     "channelProfilesTab": "Amapulatifomu",
-    "channelSetsTab": "Amasethi wesiteshi"
+    "channelSetsTab": "Amasethi wesiteshi",
+    "addPromptAgent": "Engeza i-agent ye-prompt",
+    "m365AgentIndexStop": "Yeka uku-indexa",
+    "foundryAgentsHeading": "Ama-agent e-Foundry kanye nama-agent e-prompt",
+    "foundryAgentsDescription": "Ama-agent atholakele ku-Azure AI Foundry ngokusebenzisa ukufinyelela kwakho, kanye nama-agent e-prompt achazwe lapha. Ama-agent olwazi nama-agent e-Microsoft 365 aphathwa ezigabeni zawo ezingezansi.",
+    "agentSkillsLabel": "Amakhono",
+    "agentSkillsHelp": "Yimiphi imikhono yenhlangano engalayishwa yileli gentshi lapho liphendula. Abasebenzisi babona kuphela amakhono okuvunyelwe imithetho yabo yokufinyelela.",
+    "agentSkills": {
+      "inherit": "Amakhono abhalwe \"atholakala kubagentshi\"",
+      "selected": "Amakhono akhethiwe ngezansi kuphela",
+      "none": "Awekho amakhono"
+    },
+    "agentSkillsNone": "Awekho amakhono akhona ongawakhetha.",
+    "agentSkillsLoading": "Kulayishwa amakhono…",
+    "agentSkillsLoadError": "Amakhono awakwazi ukulayishwa. Okukhethwe ngaphambili kusagcinwa.",
+    "agentSkillsNotVisible": "(awabonakali kuwe — susa uphawu ukukususa)"
   },
   "localModels": {
     "title": "Amamodeli endaweni",
@@ -5505,7 +5599,8 @@
       "channelSets": "Imithetho yeqembu ngalinye yokubhala kumapulatifomu: iziqondiso, amazwi abasebenzisa, okuzosetshenziswa ngokuzenzakalelayo, ukuthi ngubani ovumelekile ukusebenzisa noma ukuthumela.",
       "webSearch": "Ukuthi usesho lwewebhu lungahamba luze kufike kuphi: usesho lwezinyathelo eziningi, imodeli yokuhlola nemingcele yayo.",
       "contextBudget": "Inani lengxoxo elithunyelwa kwimodeli ngayinye ngomjikelezo ngamunye.",
-      "analytics": "Imibiko elayishiwe: okuthunyelwe, ukuthi ubani ongavula ifolda ngayinye, nezinkambu ezingaboniswa."
+      "analytics": "Imibiko elayishiwe: okuthunyelwe, ukuthi ubani ongavula ifolda ngayinye, nezinkambu ezingaboniswa.",
+      "skills": "Amabhulokhi wemiyalelo angasetshenziswa kabusha uwusizo uma ingxoxo idinga wona."
     },
     "openSettings": "Vula izilungiselelo",
     "area": {
@@ -5516,7 +5611,8 @@
       "delegations": "Ukuqokwa",
       "webSearch": "Ukusesha kwewebhu",
       "contextBudget": "Isabelomali somongo",
-      "analytics": "Izibalo"
+      "analytics": "Izibalo",
+      "skills": "Amakhono"
     }
   },
   "limits": {
@@ -5546,7 +5642,8 @@
     "tab": {
       "defaults": "Izilungiselelo zomhlaba wonke",
       "overrides": "Okuphambili",
-      "delegations": "Izithunywa"
+      "delegations": "Izithunywa",
+      "models": "Amaphutha"
     },
     "tabsLabel": "Izigaba zemingcele",
     "category": {
@@ -5578,7 +5675,8 @@
       "m365ToolCallsPerDay": "Izingcingo zethuluzi le-Microsoft 365 ngosuku",
       "m365MailReadsPerDay": "Ukufunda i-imeyili ngosuku",
       "m365MailDraftsPerDay": "Amadrafti e-imeyili ngosuku",
-      "m365MailDeepScansPerDay": "Ukuhlolwa okujulile kwe-imeyili ngosuku"
+      "m365MailDeepScansPerDay": "Ukuhlolwa okujulile kwe-imeyili ngosuku",
+      "m365DigestRunsPerDay": "Izikhathi zokwenza i-daily digest ngosuku"
     },
     "valueModeLabel": "Uhlobo lomkhawulo",
     "valueAmountLabel": "Inani lomkhawulo",
@@ -5656,7 +5754,8 @@
       "m365ToolCallsPerDay": "Izingcingo zamathuluzi e-Microsoft 365 (ikalenda, abantu, imisebenzi, Teams) ngosuku. Uma kudlula umkhawulo, amathuluzi abuyisa umphumela othi 'zama futhi kusasa' esikhundleni sokuwohloka kwe-chat.",
       "m365MailReadsPerDay": "Ukusesha i-imeyili nokufunda imilayezo/izingxoxo ngosuku. Uma kudlula umkhawulo, amathuluzi e-imeyili abuyisa umphumela othi 'zama futhi kusasa'.",
       "m365MailDraftsPerDay": "Izimpelesi ze-imeyili i-assistant engazidala ngosuku — ngayinye iqinisekiswa eyodwa. Kuncishisiwe ngamabomu.",
-      "m365MailDeepScansPerDay": "Ukuhlaziywa kwe-imeyili okuhlanganisiwe (ama-digest, usesho olunzulu, izifungo) ngosuku. Ukusesha ngakunye kubalwa kanye noma ngabe kunokufunda okuthize ngaphakathi."
+      "m365MailDeepScansPerDay": "Ukuhlaziywa kwe-imeyili okuhlanganisiwe (ama-digest, usesho olunzulu, izifungo) ngosuku. Ukusesha ngakunye kubalwa kanye noma ngabe kunokufunda okuthize ngaphakathi.",
+      "m365DigestRunsPerDay": "I-Microsoft 365 daily digest yenziwa ngosuku. Ukuqhuba okukodwa kufaka ukufunda okuningi ku-Graph kanye nezicelomodel ezibili zokuhlaziya; ukukhetha isikhathi kwenza kube lula ukuphinda, ngakho-ke okuzenzakalelayo kuqinile."
     },
     "scopeFamily": "Umndeni",
     "scopeModel": "Imodeli",
@@ -5711,7 +5810,7 @@
     "previewSourceCatalog": "Okuziyelayelayo kuqala",
     "previewSourceGlobal": "Okumisiwe emhlabeni wonke",
     "previewSourceOverride": "Okuphambili: {label}",
-    "previewNotEvaluated": "Ukuvinjelwa kwedipatimende/inkampani/ihhovisi namaqembu akukwazi ukuhlolwa lapha — kuncike ekungeneni komuntu mathupha.",
+    "previewNotEvaluated": "Ithala alitholakali, ngakho imithetho yesigaba/inkampani/ihhovisi kanye neqembu ayizange ihlolwe kulomuntu. Phinda uzame emva kwesikhashana.",
     "previewUnsaved": "Kubukwa inqubomgomo egcinwe okokugcina. Londoloza izinguquko zakho ukuze uzibuke.",
     "previewColumnLimit": "Umkhawulo",
     "previewColumnValue": "Inani",
@@ -5807,7 +5906,7 @@
     "yourScopeGroupOnlyChip": "Amaqembu kuphela",
     "yourScopeGroupOnlyNote": "Kubekwe ngamaqembu noma izimfanelo kuphela, imingcele ayikwazi ukuboniswa nge-imeyili.",
     "previewOutOfScope": "Lo muntu uphumele ngaphandle kwemingcele yakho.",
-    "previewGroupOnlyScope": "Imingcele yakho ibekwe ngamaqembu noma izimfanelo, awukwazi ukubona imingcele nge-imeyili.",
+    "previewGroupOnlyScope": "Ububanzi bakho bumnciselwa amaqembu noma izici. Izibukwayo zihlola lomuntu kuthala ukuze zinqume ukuthi ungaphakathi yini.",
     "previewCeilingPinned": "Kuboshelwe phezulu: {label}",
     "previewShowUsage": "Bonisa ukusetshenziswa kwamanje",
     "previewColumnUsage": "Kusetshenzisiwe",
@@ -5823,7 +5922,7 @@
     "overrideCeilingHint": "I-ceiling eqinile kulayini ibethela inani le-targets zale override: ama-admin abhalwe ngaphansi kwe-scope ngeke bakwazi ukukususa, futhi lapho kunezicingo eziningi, okuphambili kakhulu kuyasebenza.",
     "confirmDeleteOverride": "Susa \"{label}\"? Izosuswa ku-server ngephutha futhi ama-targets azo abuyele emikhawulweni engaphansi kwabo. Lokhu ngeke kuphinde kulungiswe.",
     "confirmDeleteOverrideAction": "Susa i-override",
-    "previewUndecidableScope": "I-scope yakho iqukethe amaqembu noma izimfanelo, ngakho ukuthi lo muntu ungaphakathi kuyo angeke kunqunywe ngekheli le-imeyili.",
+    "previewUndecidableScope": "Ububanzi bakho buhlanganisa amaqembu noma izici, futhi ithala alitholakali, ngakho akukwazi ukunqunywa manje ukuthi lomuntu ungaphakathi yini. Phinda uzame emva kwesikhashana.",
     "previewNoLongerAdmin": "Sewungasabhalwanga kunoma yikuphi uk delegation oluvuliwe, ngaleyo ndlela awusakwazi ukubuka imikhawulo. Buyekeza ikhasi ukuze ubone ukufinyelela kwakho okwamanje.",
     "previewScopeMatchesNobody": "Okwamanje i-scope yakho ayihambisani namuntu, ngakho akukho muntu ongabukwa ngekheli le-imeyili.",
     "yourScopeMatchesNobodyChip": "Akufani namuntu",
@@ -5974,7 +6073,73 @@
     "disabledDelegationNote": "Ukwabelana kwakhona akusebenzi, ngakho lokhu kungena akufanele muntu kuze kube sekuvuliwe futhi. Akukaze kufakwe ezingeni le-global.",
     "betaPolicyNotice": "Imvelo ye-Beta: le nqubomgomo kanye nezibali zayo zokusetshenziswa zigcinwa ngokwehlukana kokukhiqiza (policy.beta.json). Lutho olushintsha lapha luzothinta okukhiqiza.",
     "delegationsManagedElsewhere": "Ukuqokwa kuboniswa lapha kuphela ukufunda. Ubani okuqokwe yena, abasebenzisi abayihlanganisayo nokuthi yibaphi amalungelo onompetha bekuphathwa endaweni yokuqokwa.",
-    "delegationsManagedElsewhereLink": "Vula Ukuqokwa"
+    "delegationsManagedElsewhereLink": "Vula Ukuqokwa",
+    "modelAccess": {
+      "intro": "Nquma ukuthi ubani ongasebenzisa imodeli ngayinye. Isilungiselelo somndeni sisebenza kumamodeli awo ngaphandle kokuba imodeli isete esayo; abantu abakuhlu bangathelela okuzenzakalelayo kwabanye bonke; uhlu lokuvimba lunqoba noma yikuphi ukugunyazwa.",
+      "externalNote": "Amaphutha agcinwe ngaphandle kwendawo ye-Azure ({families}) awatholakali kubo bonke kuze kube uwanikeza imvume lapha — kubo bonke ngokuthi kube yinto okuzenzakalelayo, noma kumaqembu, izizinda, nabantu.",
+      "envelopeNote": "Umkhawulo wesicelo kumndeni uyibhajethi yansuku zonke eyabelwana phakathi kwamamodeli awo; umkhawulo kwimodeli usho umkhawulo ngaphakathi kuyo. Okungapheli kwimodeli akusho ukukhulula umkhawulo womndeni.",
+      "observeNote": "Imodi yokubuka ivuliwe: akukho okucashiwa noma okuvimba isicelo okwamanje. Shintshela ku-Enforce ngenhla uma imithetho isilungile.",
+      "familyChip": "Umndeni",
+      "modelChip": "Imodeli",
+      "otherModels": "Amaphutha angenawo umndeni",
+      "modelsInFamily": "{count, plural, one {# imodeli kulomndeni} other {# amamodeli kulomndeni}}",
+      "noModels": "Awekho amamodeli ekhasini okwamanje.",
+      "expand": "Bonisa amamodeli",
+      "collapse": "Fihla amamodeli",
+      "edit": "Hlela",
+      "doneEditing": "Kuqediwe",
+      "editNode": "Hlela ukufinyelela kuka-{label}",
+      "defaultLabel": "Abanye bonke",
+      "defaultInherit": "Landela",
+      "defaultUnlimited": "Akekho umkhawulo",
+      "defaultLimited": "Kunqunyelwe ku",
+      "defaultUnavailable": "Akutholakali",
+      "defaultRequestsLabel": "Izicelo ngosuku kwabanye bonke",
+      "requestsPerDay": "izicelo / usuku",
+      "inheritedFrom": "Kuthatha {state} ku-{origin}.",
+      "effectiveLabel": "Abangekho ohlwini bathola: {state}.",
+      "inheritedChip": "kuthathiwe",
+      "origin": {
+        "model": "lesi silungiselelo",
+        "family": "umndeni wakhe",
+        "defaults": "Okuzenzakalelayo kwendawo",
+        "catalogExternal": "umthetho wokuthi amamodeli angaphandle awatholakali kuze kunikwe imvume",
+        "catalog": "okuzenzakalelayo kwekhasikhali"
+      },
+      "state": {
+        "unlimited": "Akekho umkhawulo",
+        "limited": "Kunqunyelwe ku-{requests} / usuku",
+        "unavailable": "Akutholakali"
+      },
+      "list": {
+        "groups": "Amaqembu anegunya",
+        "domains": "Izizinda ezinokufinyelela",
+        "allow": "Abantu abavunyelwe",
+        "deny": "Abantu abavinjiwe"
+      },
+      "listHint": {
+        "groups": "Amalungu ala maqembu e-Entra angayisebenzisa, ngemigomo elungiselelwe iqembu ngalinye.",
+        "domains": "Wonke umuntu onekheli le-imeyili kulezi zindao, ngemigomo elungiselelwe isizinda.",
+        "allow": "Abantu abaqokiwe bangayisebenzisa noma ngabe yini okuzenzakalelayo noma isizinda sabo sisho ini.",
+        "deny": "Abantu abaqokiwe abakaze bayisebenzise. Lokhu kudlula yonke imvume."
+      },
+      "grantUnlimited": "Akekho umkhawulo",
+      "grantLimited": "Kunqunyelwe ku",
+      "termsLabel": "Imigomo ye-{target}",
+      "requestsLabel": "Izicelo ngosuku zika-{target}",
+      "removeGrant": "Susa u-{target}",
+      "groupsCount": "{count, plural, one {# iqembu} other {# amaqembu}}",
+      "domainsCount": "{count, plural, one {# isizinda} other {# izizinda}}",
+      "allowCount": "{count, plural, one {# umuntu ovunyelwe} other {# abantu abavunyelwe}}",
+      "denyCount": "{count, plural, one {# umuntu ovinjiwe} other {# abantu abavinjiwe}}",
+      "collisionChip": "Iphinde itholakale ku-Global defaults",
+      "collisionWarning": "Le modeli noma umndeni wayo iphinde yamiswa ngaphansi kwe-Global defaults. Ukulondoloza kuzonqatshwa kuze kube omunye wabo ususiwe."
+    },
+    "previewSourceModelAccess": "Ukuvunywa kwemodeli — {list}",
+    "groupMembershipDegradedStructural": "Ukuseshwa kobulungu beqembu kuyahluleka kule seva ({reason}). Imithetho nemvume esekelwe emaqenjini ayisebenzi kulabo abathintekayo — hlola imvume ye-tenant ethi Group.Read.All nokubhaliswa kohlelo.",
+    "groupMembershipDegradedRetryable": "Ezinye izicelo zokufuna ubulungu beqembu aziphumelelanga kule seva emizuzwini embalwa edlule ({reason}). Imithetho esekelwe emaqenjini ingase ingasebenzi kubantu abathintekayo kuze kube umzuzu owodwa ngenkathi izicelo ziphindwa.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# umuntu usephazamisekile} other {# abantu basephazamisekile}} kule seva.",
+    "previewDirectoryNotFound": "Akekho umsebenzisi kudayari onale ikheli le-imeyili, ngakho imithetho yomnyango/inkampani/ihhovisi neyeqembu ibalwe njengokungathi lowo muntu akawulona ilungu lutho."
   },
   "m365": {
     "connections": {
@@ -6325,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Ukuhlunga kwasekuseni",
-        "description": "Okufikile, okulindele wena, nekhalenda lanamuhla — umbiko owodwa"
+        "description": "Uhlaziyo lwakamuva kusukela ngosuku lokugcina lomsebenzi — okungene, okulindele wena, izimemo nezibuyekezo; uma kuwumsebenzi kaMsombuluko kufaka uLwesihlanu nempelasonto."
       },
       "chipsSettingLabel": "Phakamisa ama-playbook e-Microsoft 365",
       "chipsSettingHint": "Bonisa izincomo ze-playbook ngaphezulu kwebhokisi yemilayezo uma zisebenza (isb. ngemuva kokungenisa umbhalo womhlangano).",
-      "dismissChip": "Khipha {title}"
+      "dismissChip": "Khipha {title}",
+      "dailyDigest": {
+        "title": "Daily digest",
+        "description": "Hlela i-imeyili, ama-Teams kanye nekhalenda kwakamuva ngokuthi kudinga wena, okulindelekile, izibuyekezo ne-FYI — khetha isikhathi"
+      }
+    },
+    "digest": {
+      "title": "Daily digest",
+      "intro": "Hlola okukuqhamukele ngaleso sikhathi bese kuhlela okulindele impendulo, okuceliwe, okulindelekile, uhlelo, izibuyekezo zenkampani neprojekthi, kanye ne-FYI. Akuthunyelwa noma kushintshwa lutho.",
+      "periodLabel": "Isikhathi",
+      "preset": {
+        "lastWorkday": "Kusukela ngosuku lwokusebenza lokugcina",
+        "1d": "Amahora angu-24 adlule",
+        "3d": "Izinsuku ezingu-3 ezedlule",
+        "7d": "Izinsuku ezingu-7 ezedlule",
+        "14d": "Izinsuku ezingu-14 ezedlule",
+        "custom": "Uhla olwenziwe ngendlela yakho"
+      },
+      "lastWorkdayHint": "Kusukela ekuqaleni kosuku lwokusebenza olusondele kunazo zonke ngaphambi kwanamuhla — ngoMsombuluko kufaka uLwesihlanu namaholide.",
+      "from": "Kusuka",
+      "to": "Kuya",
+      "customInvalid": "Khetha uhla olulandelanayo olugcine {days} izinsuku.",
+      "sourcesLabel": "Imithombo",
+      "sourceNoConsent": "Imvume ayikanikezwa kule mthombo.",
+      "sourceHint": {
+        "mail": "Ama-imeyili angenayo nokubukwayo; izinto ozithumele zibonisa okuphenduliwe.",
+        "chat": "Izingxoxo zakamuva ze-Teams, nama-@mentions ongekaphenduli.",
+        "channel": "Okuthunyelwe kumachannel owakhethile ngezansi.",
+        "calendar": "Izimemo ezilindele impendulo yakho nemihlangano yakho abanye abangakayiphenduli."
+      },
+      "channelsLabel": "Amachannel ({count} ku-{max})",
+      "removeChannel": "Susa {name}",
+      "channelsSlow": "I-channel ngalinye lengeza ukufunda; amaningi enza kubambezeleke i-digest.",
+      "channelsMax": "Sifinyelele ku-{max} amachannel aphezulu.",
+      "channelsNeeded": "Khetha okungenani i-channel eyodwa, noma engeza enye imithombo.",
+      "teamLabel": "Ithimu",
+      "loadingTeams": "Kulayishwa amathimu...",
+      "pickTeam": "Khetha ithimu ukubonisa amachannel ayo",
+      "loadingChannels": "Kulayishwa amachannel...",
+      "noChannels": "Awatholakali amachannel kulethimu.",
+      "privacyNote": "Kupheqa kuphela izihloko, abathumeli nabuka okuncane; imibhalo yangaphakathi nezithasiselo zihlala ku-Microsoft 365. Izinto ezikwi-digest zingamafingqo wedatha yakho.",
+      "cancel": "Khansela",
+      "run": "Qalisa i-digest",
+      "starting": "Kuqalwa...",
+      "startFailed": "I-digest ayikwazanga ukuqala.",
+      "userMessage": "Daily digest — {period}; imithombo: {sources}",
+      "working": "Kuqashwa izixhumanisi zakho ku-Microsoft 365...",
+      "failed": "I-digest yehlulekile.",
+      "failedPrefix": "I-daily digest yehlulekile:",
+      "expired": "Le digest isidlulile isikhathi. Qalisa futhi ukuze uthole entsha.",
+      "runAgain": "Qalisa futhi",
+      "changePeriod": "Shintsha isikhathi",
+      "period": {
+        "lastWorkday": "kusukela ngosuku lokusebenza lokugcina",
+        "lastDays": "{count, plural, one {usuku lokugcina} other {izinsuku ezingu-# ezedlule}}"
+      },
+      "source": {
+        "mail": "I-imeyili",
+        "chat": "Izingxoxo ze-Teams",
+        "channel": "Amachannel e-Teams",
+        "calendar": "Ikhalenda"
+      },
+      "sourceStatus": {
+        "ok": "kuphelile",
+        "partial": "kulinganiselwe",
+        "skipped": "kwedlulwe",
+        "unavailable": "awunasemvume",
+        "error": "kwahlulekile"
+      },
+      "degraded": "Imodeli yokuhlaziya ayitholakali, ngakho izigaba zivela kuphela emithethweni.",
+      "withheld": "{count, plural, one {# into ibanjelwe} other {# izinto zibanjiwe}} yizihluzo zokuphepha.",
+      "empty": "Akukho okumele kubikwe kule nkathi nalamathandazo.",
+      "actionItems": "Izinto ezenziwayo",
+      "createTasks": "{count, plural, =0 {Engeza ku-To Do} one {Engeza umsebenzi oyodwa ku-To Do} other {Engeza imisebenzi engu-# ku-To Do}}",
+      "taskCreated": "kufakwe ku-To Do",
+      "tasksCreated": "{count, plural, one {umsebenzi oyodwa} other {imisebenzi engu-#}} kufakwe ohlwini lwama-\"{list}\".",
+      "tasksFailed": "Imisebenzi ayikwazanga ukudalwa.",
+      "category": {
+        "needsReply": "Kudinga impendulo yami",
+        "askedOfMe": "Kucelwe kimi",
+        "waitingOnOthers": "Kulungiselelwe abanye",
+        "scheduling": "Ukubekisa isikhathi",
+        "companyUpdates": "Izaziso zenkampani neprojekthi",
+        "fyi": "FYI",
+        "bulk": "Okuzenzakalelayo nokubunjiwe"
+      },
+      "companyUpdatesHint": "kubalulekile, akuvamisile ukuba kubhenywa",
+      "markDone": "Phawula u-{title} ukuthi usuphathwe",
+      "badge": {
+        "unanswered": "awuphendulwanga",
+        "mentioned": "ukhulunywa ngawe",
+        "important": "kubalulekile kakhulu"
+      },
+      "askAbout": "Buza ngokuhlobene nalesi",
+      "askPrompt": "Mayelana nento ye-{source} ethi \"{title}\" evela ku-{from} ({when}) ku-digest engenhla: yini ecelwa, futhi ukuphendula okuhle kungaba yini?",
+      "open": {
+        "mail": "Vula ku-Outlook",
+        "chat": "Vula ku-Teams",
+        "channel": "Vula ku-Teams",
+        "calendar": "Vula ku-Outlook"
+      },
+      "footnote": "Izigaba zivela kozibikezelo zakho (awuphendulwanga, ukhulumwe, kwaziswa) kanye nokwahlukaniswa kwe-AI; qinisekisa ngaphambi kokwenza. Akukho okuthunyelwe.",
+      "age": {
+        "now": "manje nje",
+        "hours": "{count}h edlule",
+        "days": "{count}d edlule"
+      },
+      "waitForReply": "Linda impendulo yamanje iphele ngaphambi kokuthi uqale ukuhlanganisa."
     }
   },
   "share": {
@@ -6394,9 +6666,9 @@
     "kind": {
       "rag": "Ulwazi",
       "prompt": "Uhlamvu",
-      "m365": "Ulwazi (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Ulwazi",
-      "foundry": "Umsebenzi we-Foundry",
+      "foundry": "I-ejenti engokwezifiso",
       "connector": "Isixhumi"
     },
     "semantics": {
@@ -6405,8 +6677,8 @@
       "own-model": "isebenzisa imodeli yayo"
     },
     "loadError": "Imisebenzi yakho ayikwazanga ukulayishwa njengamanje. Lokhu kujwayele ukuba isikhashana.",
-    "discoveryLoading": "Sifuna imisebenzi ye-Foundry…",
-    "discoveryError": "Imisebenzi ye-Foundry ayikwazanga ukulayishwa.",
+    "discoveryLoading": "Sifuna ama-ejenti angeziwe...",
+    "discoveryError": "Amanye ama-ejenti awazange akwazi ukulayishwa.",
     "retry": "Zama futhi"
   },
   "peopleSuggest": {
@@ -7547,5 +7819,146 @@
       "past-retention": "Idlule izinyanga ezingama-{months} zokugcina zale folda; ayisaboniswa.",
       "unknown": "Inkinga ebikiwe: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Amakhono",
+    "description": "Amabhulokhi wemiyalelo angasetshenziswa kabusha, uwusizo uma ingxoxo idinga wona. Iyahambisana nefomethi ye-Agent Skills SKILL.md esetshenziswa u-Claude no-ChatGPT.",
+    "loading": "Kulayishwa amakhono…",
+    "loadError": "Amakhono awakwazanga ukulayishwa.",
+    "retry": "Phinda uzame",
+    "unavailableBanner": "Isitoreji samakhono asitholakali okwamanje — kukhombiswa ama-default asebenzayo; amakhono agciniwe kanye nokuhlela akutholakali kuze kulunge.",
+    "conflictError": "Le khono ishintshwe omunye umqondisi. Uhlu selulayishwe kabusha — phinda uhlele njalo.",
+    "alwaysWarning": "{count} amakhono amiswe ku-Always. Onke engezwa kuyo yonke ingxoxo — yenza Automatic kumakhono ahambisana nesihloko.",
+    "newSkill": "Ikhono elisha",
+    "importSkill": "Faka SKILL.md",
+    "importTitle": "Namathisela ifayela le-SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Lokhu ikhono elikwenzayo nokuqhamuka kulo.\n---\n\nImiyalelo…",
+    "importHint": "Ikhono elihunyushiwe livuleka kumhleli ukuze ubuyekeze — aligcinwa kuze kube ugcine.",
+    "importParse": "Hlalutya futhi ubuyekeze",
+    "invalidId": "Ama-ids amakhono asebenzisa izinhlamvu ezimincane, amanani, kanye no-hyphen oyedwa.",
+    "saveSuccess": "Ikhono ligciniwe.",
+    "saveError": "Ikhono alikwazanga ukugcinwa.",
+    "deleteConfirm": "Susa le khono? Ingxoxo ayisayitholi ngaso leso sikhathi.",
+    "restoreConfirm": "Susa ukwenza kube ngokwakho bese ubuyisela ikhono le-default elakhelwe ngaphakathi?",
+    "deleteSuccess": "Ikhono lisusiwe.",
+    "restoreSuccess": "I-default yakhelwe ngaphakathi ibuyiselwe.",
+    "deleteError": "Ikhono alikwazanga ukususwa.",
+    "empty": "Awakatholakali amakhono. Dala elilodwa, noma faka i-SKILL.md.",
+    "builtinChip": "Yakhelwe ngaphakathi",
+    "customizedChip": "Kwenziwe ngokwezifiso",
+    "exportSkill": "Thumela njenge-SKILL.md",
+    "edit": "Hlela",
+    "delete": "Susa",
+    "restoreDefault": "Buyisela i-default",
+    "createTitle": "Ikhono elisha",
+    "editTitle": "Hlela {name}",
+    "idLabel": "Id",
+    "idHint": "Izinhlamvu ezimincane, amanani, no-hyphen. Kuba igama le-SKILL.md lekhono futhi alikwazi ukushintshwa ngemuva kokudala.",
+    "nameLabel": "Igama lokubonisa",
+    "descriptionLabel": "Incazelo",
+    "descriptionHint": "Lokhu ikhono elikwenzayo NOKUQHAMUKA kulo — lokhu okukhetha ikhono, ngakho faka izihloko ezithile nezindlela okufanele liphendule kuzona.",
+    "activationLabel": "Ukusebenza",
+    "activation": {
+      "auto": "Okuzenzakalelayo",
+      "always": "Njalo",
+      "off": "Cishiwe",
+      "manual": "Ngokucela"
+    },
+    "activationHint": {
+      "auto": "Akhethwa ngokuzenzakalayo uma umsebenzi wamanje ufana nencazelo. Umsebenzisi angawacela kanye noma awabophe engxoxweni.",
+      "always": "Engezwa kuyo yonke ingxoxo wabo bonke ababona ikhono. Sebenzisa kancane — lokhu kuyindawo yokuthi imiyalelo igxile khona.",
+      "off": "Ayisebenzi: ayisekho futhi ayikhonjiswa kubasebenzisi, kodwa igcinwe lapha ukuze ihlelwe.",
+      "manual": "Isebenza kuphela uma umsebenzisi ecela noma ebeka ephambili. Ayikhethiwa ngokuzenzakalelayo futhi ayinikezwa imodeli njengamakhono angalayishwa."
+    },
+    "instructionsLabel": "Imiyalelo",
+    "instructionsHint": "Markdown, kuze kufike ku-16 KB. Ifakwa ngqo lapho ikhono lisebenza.",
+    "saving": "Kuyalondolozwa…",
+    "save": "Londoloza",
+    "cancel": "Khansela",
+    "documents": {
+      "title": "Amadokhumenti",
+      "hint": "Izikhombo zigcinwa ngaleli khono. Amadokhumenti amancane alayishwa ngqo; amakhulu aye afakwa ohlwini ukuze atholakale uma kufunwa. Imithombo ingafika kwangu-20, ngayinye ibe ngu-10 MB, sekukonke kube ngu-20 MB. Izimpahla zigcinwa kuphela ukuze zilandwe.",
+      "saveFirst": "Gcina izilungiselelo zaleli khono ngaphambi kokwengeza amadokhumenti.",
+      "upload": "Engeza amadokhumenti ezikhombo",
+      "remove": "Susa",
+      "stop": "Misa ukufaka ohlwini",
+      "resume": "Faka ohlwini noma uqhubeke namadokhumenti",
+      "empty": "Asikabi namadokhumenti ahlanganisiwe.",
+      "requestFailed": "Isicelo sedokhumenti asiphumelelanga. Layisha kabusha bese uzama futhi.",
+      "importZip": "Ngenisa i-ZIP yekhono",
+      "zipTooLarge": "I-ZIP yekhono kumele ibe ngu-20 MB noma ingaphansi.",
+      "importCount": "Imithombo ezohlanganiswa ngemva kokulondoloza: {count}",
+      "skippedScripts": "Ama-script adlalekayo awadlulile",
+      "status": {
+        "pending": "Kulindwe ukufaka ohlwini",
+        "processing": "Kuyafakwa ohlwini",
+        "inline": "Ikulungele (ilayishwe ngqo)",
+        "indexed": "Ikulungele (iyaphendwa uma kufunwa)",
+        "failed": "Ukufaka ohlwini akuphumelelanga",
+        "asset": "Iphahla elilandiwayo"
+      },
+      "confirmRemove": "Susa u-{filename} kulesi sikili? Ifayela eliyisiqalo eligcinwe lizoshiwo futhi ngeke litholakale njengomthombo wokucaphuna.",
+      "reindexRequired": "Le mibhalo idinga ukuvuselelwa ukuze ilingane namalungiselelo esifunda samanje sokusesha nokufakwa kwemininingwane. Ngeke ifunwe kuze kube ukuqedwa kokuvuselela."
+    },
+    "applyToAgents": "Ayatholakala kuma-agent",
+    "applyToAgentsHint": "Ivaliwe ngokuzenzakalelayo. Uma ivuliwe, ama-agent angalayisha le skill nge amathuluzi okufunda kuphela kunokushintsha imiyalelo yomuntu siqu. Ukusetshenziswa kwe-skill kunemikhawulo yesinyathelo ezimele. Ama-Foundry agents kumele abe sevele ebhalise imisebenzi ye-load_skill ne-search_skill_documents kudefinition yawo.",
+    "requireConsent": "Cela imvume kuqala",
+    "requireConsentHint": "Uma imodeli ifuna ukusebenzisa leli khono yodwa, umsebenzisi uyacelwa kuqala. Uma iliceliwe noma ebekwe ephambili, imvume ayidingeki.",
+    "consentChip": "Cela kuqala",
+    "sourceChip": "Isuka kumthombo",
+    "sourceChipHint": "Ilethwe kumthombo wamakhono obhalisile; imiyalelo ivuselelwa ngesikhathi sokuhlanganisa. Izilungiselelo zokuvula, igentshi nemvume zingenzakalela.",
+    "sources": {
+      "title": "Imithombo yamakhono",
+      "description": "Bhalisela ikhatala elingaphandle lamakhono (uhlu lwe-index.json olunamafayela e-SKILL.md). Amakhono alo aba amakhono enhlangano bese evuselelwa njalo ngemva kwamahora ayisithupha. Kungeniswa kuphela i-SKILL.md; imibhalo ebhekisiwe ayingeniswa.",
+      "urlLabel": "Ikheli le-Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Kufanele kube yi-https kumphathi womphakathi. Amakhono afundwa endaweni efanayo kuphela.",
+      "labelLabel": "Ilebula (okuzikhethela)",
+      "add": "Bhalisa",
+      "adding": "Kubhaliswa...",
+      "added": "{count, plural, =0 {Umthombo wengeziwe; awekho amakhono angenisiwe okwamanje} one {Umthombo wengeziwe; # khono langeniswa} other {Umthombo wengeziwe; # amakhono angenisiwe}}",
+      "addedWithError": "Umthombo wengeziwe, kodwa ukuhlanganisa kokuqala kwehlulekile. Hlola iphutha kumthombo.",
+      "addError": "Awukwazanga ukwengeza umthombo wamakhono",
+      "sync": "Hlanganisa manje",
+      "syncing": "Kuhlanganiswa...",
+      "synced": "Umthombo uhlanganisiwe.",
+      "syncError": "Awukwazanga ukuhlanganisa umthombo wamakhono",
+      "remove": "Susa umthombo",
+      "removeConfirm": "Susa lo mthombo? Amakhono elethwe kuwo ahlala njengamakhono enhlangano ajwayelekile bese eyeka ukuvuseleleka.",
+      "removed": "Umthombo ususiwe.",
+      "removeError": "Awukwazanga ukususa umthombo wamakhono",
+      "loading": "Kulayishwa imithombo...",
+      "loadError": "Imithombo yamakhono ayikwazanga ukulayishwa.",
+      "empty": "Akukabi nemithombo yamakhono.",
+      "never": "Akwaze kwahlanganiswa",
+      "statusOk": "Kuhlanganisiwe",
+      "statusError": "Ukuhlanganisa kwehlulekile",
+      "statusPartial": "{count, plural, one {# okweqa} other {# okuqawe}}",
+      "lastSync": "Ukuhlanganiswa kokugcina {time}",
+      "entryCount": "{count, plural, one {# okuwukuphela} other {# okungenile}}",
+      "entryStatus": {
+        "synced": "kuhlanganisiwe",
+        "skipped": "kweqawe",
+        "conflict": "ungqubuzano — akushintshiwe",
+        "invalid": "akuvumelekile"
+      }
+    },
+    "requireConsentDisabledHint": "Amakhono azisebenzelayo kuphela angacela imvume kuqala: amakhono acelwe, agcinwe phezulu, nawasebenza njalo afakwa ngaphandle kwesixwayiso, kanti amakhono acelwa kuphela awakhethwa yimodeli nhlobo."
+  },
+  "personalSkills": {
+    "title": "Amakhono omuntu siqu",
+    "description": "Gcina imiyalelo ongayisebenzisa kaningi engxoxweni yakho. Amakhono agcinwa kulo browser futhi athunyelwa kumodeli kuphela uma uxoxa. Amakhono afanele angakhethwa ngokuzenzakalelayo, asetshenziswe kanye, noma anqanyelwe. Awakwazi ukushintsha inqubomgomo yenhlangano noma ukunikeza ukufinyelela amathuluzi. Ukusetshenziswa kwamakhono kudinga ukuthi kube kuvunyelwe kulo deployment; izingxoxo ze-agent azisebenzisi amakhono omuntu siqu.",
+    "importFile": "Faka SKILL.md noma ZIP",
+    "review": "Bheka imiyalelo ephelele ngaphambi kokuyigcina. Imiyalelo engenisiwe iyizintandokazi zomsebenzisi, hhayi inqubomgomo ethembekile yenhlangano.",
+    "skipped": "Ama-scripts angasebenziseka ashiwo",
+    "importTooLarge": "Ifayela lokungenisa kumele libe ngu-20 MB noma lincane.",
+    "invalid": "Ikhono alikwazanga ukungeniswa.",
+    "duplicate": "Le id yekhono lomuntu siqu seyikhona. Hlela ikhono elikhona noma khetha enye id.",
+    "countLimit": "Ungagcina amakhono omuntu siqu angafika kwangu-20.",
+    "requestLimit": "Amakhono omuntu siqu avunyelwe adlula i-160 KB request limit. Khipha amanye amakhono noma ukufushane imiyalelo yawo.",
+    "saved": "Ikhono lomuntu siqu ligcinwe kulo browser.",
+    "instructionsHint": "Ifinyelela ku-16 KB yemiyalelo, kufaka phakathi noma yimiphi imibhalo engenisiwe. Amafayela angama-binary kanye nokuhlola imibhalo njalo kungatholakale kuphela kumakhono enhlangano. Ukuthekelisa kusebenzisa igama elijwayelekile elithi SKILL.md ngaphandle kowe-user: prefix.",
+    "enabled": "Kuvunyelwe ezingxoxweni zami",
+    "empty": "Dala ikhono lomsebenzi ophindaphindayo, noma faka i-SKILL.md ukuze uyibheke futhi uyigcine lapha."
   }
 }

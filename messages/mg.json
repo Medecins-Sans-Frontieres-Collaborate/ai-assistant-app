@@ -870,7 +870,16 @@
       "stillWorking": "Mbola miasa... ",
       "assessingSearchResults": "Jerenay raha mamaly ilay fanontaniana ny valiny...",
       "refiningSearch": "Averina karohina: “{query}”...",
-      "readingSearchPages": "Mamaky pejy valiny {count}... "
+      "readingSearchPages": "Mamaky pejy valiny {count}... ",
+      "toolRoutingUnavailableInRegion": "Tsy azo ampiasaina amin’ny {region} endpoint ny fanasokajiana fitaovana — hamaly tsy misy fitaovana…",
+      "applyingSkill": "Manatanteraka fahaiza-manao: {skills}…",
+      "applyingSkills": "Manatanteraka fahaiza-manao: {skills}…",
+      "readingSkillReferences": "Mamaky antontan-taratasy fahaiza-manao…",
+      "selectingSkills": "Misafidy fahaiza-manao…",
+      "retryingModel": "Modely mandeha be — hanandrana indray ao anatin'ny {seconds}s (fiezahana faha-{attempt})…",
+      "resumingResponse": "Tapaka ny fifandraisana amin'ny modely — manohy avy amin'izay nijanona…",
+      "continuingResponse": "Tafahoatra ny halavan'ny valiny — manohy…",
+      "trimmingContext": "Lava loatra ny resaka ho an'ny modely — manaisotra tantara taloha sy manandrana indray…"
     },
     "toolSummary": {
       "usedTools": "Fitaovana nampiasaina {count, plural, one {#} other {#}}",
@@ -936,7 +945,9 @@
       "deniedByRuleHint": "Sakanan'ny fitsipinao — tantano ao amin'ny Setting → Connectors.",
       "batchPendingHint": "Fangatahana fitaovana {count} miandry",
       "approveAllButton": "Ekeo rehetra",
-      "denyAllButton": "Lavina rehetra"
+      "denyAllButton": "Lavina rehetra",
+      "applySkillTitle": "Hampihatra ny fahaiza-manao “{skill}” ve?",
+      "skillConsentNote": "Nanamboatra ity fahaiza-manao ity ho mangataka fanekena aloha ny tompon'andraikitra. Raha ekena dia ho ampiasaina amin'ity valiny ity ihany ny torolàlàny."
     },
     "openImage": "Sokafy sary",
     "copyMessage": "Adikao hafatra",
@@ -976,7 +987,54 @@
     "alwaysWaitThisLong": "Miandrasa hatramin'ny {duration} hatrany",
     "keepSearching": "Tohizo ny fikarohana",
     "keepSearchingHint": "Nijanona ny fikarohana talohan'ny nahitana ity. Angataho ny mpanampy mba hanandrana fomba hafa.",
-    "keepSearchingMessage": "Tohizo azafady ny fikarohana ity — andramo fomba hafa."
+    "keepSearchingMessage": "Tohizo azafady ny fikarohana ity — andramo fomba hafa.",
+    "addSkill": "Fahaiza-manao",
+    "removeSkill": "Esory ny fahaiza-manao",
+    "skillsMenuLabel": "Fahaiza-manao azo ampiasaina",
+    "skillsLimit": "Fahaiza-manao 3 indrindra isaky ny hafatra.",
+    "skillPin": "Apetaho amin'ny resaka",
+    "skillUseOnce": "Ampiasao indray mandeha",
+    "skillPinned": "napetaka",
+    "skillOnce": "hafatra manaraka",
+    "skillsPaused": "naato",
+    "skillUnavailable": "tsy azo ampiasaina",
+    "skillsAutomaticHint": "Misafidy ho azy ireo fahaiza-manao mifanaraka. Ampiasao indray mandeha amin'ny hafatra manaraka, na apetaho amin'ny resaka iray fahaiza-manao iray ho ampiasaina mandritra ity resaka ity.",
+    "skillsAgentDisabled": "Naato ny fahaiza-manao raha mipetraka ny mpiasan'ny serivisy. Hiverina ho ampiasaina ny napetakao rehefa esorina ilay mpiasan'ny serivisy.",
+    "skillPersonal": "manokana",
+    "skillsAgentToolsHint": "Ny fahaizan'ny fikambanana natolotry ny mpitantana ho azon'ny mpiasan'ny fikambanana ihany no hita eto. Azon'ny mpiasan'ny fikambanana ampiasaina amin'ny fomba vakiana ihany ireo fitaovana ireo. Ny fanjairana hafa dia mijanona tsy mandeha, ary tsy azon'ny mpiasan'ny fikambanana ampiasaina ny fahaizana manokana.",
+    "skillAlwaysOn": "miasa mandrakariva",
+    "skillAlwaysOnHint": "Ampiana amin’ny hafatra tsirairay amin’ity resaka ity, nataon’ny mpandrindra.",
+    "skillUsage": {
+      "label": "Fahaiza-manao",
+      "requested": "nofangatahana",
+      "pinned": "nahetsika",
+      "auto": "avy amin’ny rafitra",
+      "unavailable": "tsy misy",
+      "incomplete": "Nisy fahaiza-manao tsy afaka nampiharina",
+      "references": "{count, plural, one {# tapany fanovàna} other {# tapany fanovàna}}",
+      "referencesUnavailable": "Nisy antontan-taratasy fanovàna tsy azo nidirana",
+      "showDetails": "Asehoy ny antsipiriany fahaiza-manao",
+      "hideDetails": "Afeno ny antsipiriany fahaiza-manao",
+      "agentLoad": "nataon’ny agent",
+      "agentSearch": "antontan-taratasy notadiavin’ny agent",
+      "needsApproval": "mila fankatoavanao",
+      "original": "araka ny fomba nanombohana azy",
+      "updated": "novaina hatramin'ny"
+    },
+    "skillsManualHint": "Tsy mandeha ho azy ny fisafidianana ao amin'ny Fikirana. Ampiasao indray mandeha amin'ny hafatra manaraka, na aparitaho mandritra ity resaka ity ny fahaiza-manao iray.",
+    "queuedMessage": {
+      "label": "Eo am-pilaharana",
+      "attachmentOnly": "Rakitra mifatotra",
+      "cancel": "Foano ny hafatra an-dalana"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Najanon'ny sivana momba ny atiny ny valiny. Hazavao amin'ny fomba hafa azafady, na esory ilay mety nampiteraka izany.",
+      "MODEL_CONTEXT_TOO_LONG": "Lava loatra ity resaka ity ho an'ny modely voafidy, na dia efa nesorina aza ny tantara taloha. Manomboka resaka vaovao, esory ny rakitra, na mifidiana modely afaka mandray tantara lava kokoa.",
+      "MODEL_OUTPUT_LIMIT": "Lany tanteraka ny fetra famoahan'ny modely nefa tsy nisy valiny azo. Andramo ahena ny fahasarotan'ny fangatahana na fohazy.",
+      "MODEL_RATE_LIMITED": "Maro loatra izao ny fangatahana raisin'ny modely. Niezaka ho azy indray izy; andramo azafady afaka kelikely.",
+      "MODEL_QUOTA_EXCEEDED": "Tapitra ny fetran'ny fahafahan'ny modely. Andramo modely hafa, na avereno manandrana amin'ny manaraka.",
+      "MODEL_AUTH_FAILED": "Tsy afaka nampifandray amin'ny tolotra modely ny app. Olana amin'ny fikirakirana izany — mifandraisa amin'ny fanohanana azafady."
+    }
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -1484,7 +1542,11 @@
       "preferModelTitle": "Aleoko ilay modely voafidy",
       "preferModelDescription": "Aza mifanova ho modely hafa ho azy raha tsy mahomby ny fangatahana. Mbola ho hita amin'ny hadisoana ihany ny safidy hanova."
     },
-    "Analytics": "Analytics"
+    "Analytics": "Analytics",
+    "skills": {
+      "autoApply": "Avelao ny mpanampy hampihatra ho azy ny fahaiza-manao",
+      "autoApplyDescription": "Fahaiza-manao mifandraika, sy ireo fahaiza-manao manokana anananao, no voafantina amin'ny hafatra tsirairay. Raha tsy mandeha, dia ireo fahaiza-manao angatahanao na aparitaka, sy ireo fahaiza-manao ampiharina amin'ny resaka rehetra amin'ny alàlan'ny admin ihany no ampiasaina."
+    }
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -2684,7 +2746,15 @@
     "chipAutoHideUnit": "segondra",
     "chipAutoHideHint": "Eo anelanelan'ny {min} sy {max} segondra.",
     "byWorkflow": "Araka ny fikirakirana",
-    "byWorkflowNote": "Anisan'ny totaly etsy ambony, aseho misaraka — tsy fandraisana fanampiny. Voaisa anatin'ny tatitra sy tetibola token'ny fikambananareo ireo fitsidihana 'grants', saingy tsy tafiditra ato amin'ity totaly eto an-toerana ity."
+    "byWorkflowNote": "Anisan'ny totaly etsy ambony, aseho misaraka — tsy fandraisana fanampiny. Voaisa anatin'ny tatitra sy tetibola token'ny fikambananareo ireo fitsidihana 'grants', saingy tsy tafiditra ato amin'ity totaly eto an-toerana ity.",
+    "chipLabelTitle": "Chip label",
+    "chipLabelHint": "Foana ny fisehoan’ny antsipiriany dia mampiseho ny entona sy ny vidiny miaraka; ity dia misafidy fotsiny izay aseho amin’ny chip voakendry.",
+    "chipLabelEmissions": "Entona",
+    "chipLabelCost": "Vidiny",
+    "chipLabelBoth": "Samy roa",
+    "costTile": "Vidiny vinavinaina",
+    "costDisclosure": "Vidiny amin’ny lisitra voatanisa amin’ny {asOf} (Global Standard rate, tsy misy fihenam-bidy cached-input): ambony indrindra, fa tsy faktiora. Tsy tafiditra ny fikarohana web, fanaovana code, fandikàna feo sy lahatsoratra, fandikana teny ary fanasokajiana antontan-taratasy.",
+    "costUnpriced": "{count, plural, one {# fangatahana tsy misy vidiny voatanisa no} other {# fangatahana tsy misy vidiny voatanisa no}} tsy tafiditra."
   },
   "extraction": {
     "toggleLabel": "Alaivo ny angona voaendrika",
@@ -4486,7 +4556,16 @@
         "auto": "Auto",
         "hidden": "Afeno"
       },
-      "visibilityHint": "Asehon'ny Auto ny chip rehefa misy fanavaozana amin'ny vinavina na rehefa soratana amin'izay ianao. Azonao ovaina indray eto: Settings › Usage & Impact."
+      "visibilityHint": "Asehon'ny Auto ny chip rehefa misy fanavaozana amin'ny vinavina na rehefa soratana amin'izay ianao. Azonao ovaina indray eto: Settings › Usage & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Vidiny vinavinaina {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Tsy misy vidiny voatanisa amin’ny fangatahana ao amin’ity andalana ity",
+        "unpriced": "{count, plural, one {# fangatahana tsy misy vidiny voatanisa no} other {# fangatahana tsy misy vidiny voatanisa no}} tsy tafiditra amin’ny kajy vidiny.",
+        "noPriceData": "Tsy aseho ny vidiny: tsy misy vidiny voatanisa amin’ny modely amin’ity fifanakalozan-kevitra ity (tsy voavidy ireo loharano manokana, fandehanan-draharaha eo an-toerana sy agent).",
+        "note": "Vidiny amin’ny lisitra voatanisa amin’ny {asOf} (Global Standard rate, tsy misy fihenam-bidy cached-input): ambony indrindra, fa tsy faktiora. Tsy tafiditra ny fikarohana web, fanaovana code, fandikàna feo sy lahatsoratra, fandikana teny ary fanasokajiana antontan-taratasy."
+      }
     },
     "workflow": {
       "title": "Ity sehatra ity (tombanana)",
@@ -5278,7 +5357,22 @@
     "confirmDeleteGlossary": "Fafana ny voambolana",
     "glossaryDeleteSuccess": "Voafafa ny voambolana",
     "channelProfilesTab": "Sehatra",
-    "channelSetsTab": "Andiana fantsona"
+    "channelSetsTab": "Andiana fantsona",
+    "addPromptAgent": "Ampio agent prompt",
+    "m365AgentIndexStop": "Atsaharo ny fanasokajiana",
+    "foundryAgentsHeading": "Agent Foundry sy agent prompt",
+    "foundryAgentsDescription": "Ny agent hita avy amin'ny Azure AI Foundry amin'ny alalan'ny fidiranao manokana, ankoatra ireo agent prompt voafaritra eto. Ny agent fahalalana sy agent Microsoft 365 dia tantanina amin'ny fizarana natokana ho azy etsy ambany.",
+    "agentSkillsLabel": "Fahaiza-manao",
+    "agentSkillsHelp": "Ireo fahaiza-manao azony ampiasaina rehefa mamaly ity agent ity. Ny mpampiasa dia ahita fahaiza-manao araka ny fepetra napetraka aminy ihany.",
+    "agentSkills": {
+      "inherit": "Fahaiza-manao voamarika hoe 'azo ampiasain'ny agents'",
+      "selected": "Ireo fahaiza-manao voafantina eto ambany ihany",
+      "none": "Tsy misy fahaiza-manao"
+    },
+    "agentSkillsNone": "Tsy misy fahaiza-manao azo hofidiana.",
+    "agentSkillsLoading": "Manokatra fahaiza-manao…",
+    "agentSkillsLoadError": "Tsy afaka nisintona fahaiza-manao. Hovitaina ny safidy voatahiry teo aloha.",
+    "agentSkillsNotVisible": "(tsy hita aminao — esory amin'ny fakàna ilay marika)"
   },
   "localModels": {
     "title": "Model eo an-toerana",
@@ -5505,7 +5599,8 @@
       "channelSets": "Fitsipika ho an'ny ekipa tsirairay rehefa manoratra amin'ny sehatra: torolalana, feo, fomba masontsivana, iza no afaka mampiasa sy mandefa.",
       "webSearch": "Hatramin’ny aiza no atao amin’ny fikarohana web: fikarohana andalana maromaro, modely manasitrana azy, ary fetra.",
       "contextBudget": "Firy ny tantaran’ny resaka alefa isaky ny mandeha amin’ny modely tsirairay.",
-      "analytics": "Tatitra nalefa: inona no tonga, iza afaka manokatra folder tsirairay, ary iza avy amin’ny saha no hita."
+      "analytics": "Tatitra nalefa: inona no tonga, iza afaka manokatra folder tsirairay, ary iza avy amin’ny saha no hita.",
+      "skills": "Boky toromarika azo averina ampiasaina rehefa ilain'ny resaka iray izany."
     },
     "openSettings": "Sokafy ny fikirakirana",
     "area": {
@@ -5516,7 +5611,8 @@
       "delegations": "Fanolorana andraikitra",
       "webSearch": "Fikarohana web",
       "contextBudget": "Teti-bola amin'ny sehatra",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "Fahaiza-manao"
     }
   },
   "limits": {
@@ -5546,7 +5642,8 @@
     "tab": {
       "defaults": "Fikirakirana ankapobeny",
       "overrides": "Manova",
-      "delegations": "Delegations"
+      "delegations": "Delegations",
+      "models": "Modely"
     },
     "tabsLabel": "Fizarana fetra",
     "category": {
@@ -5578,7 +5675,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 antso fitaovana isan'andro",
       "m365MailReadsPerDay": "Mamaky mailaka isan'andro",
       "m365MailDraftsPerDay": "Draft mailaka isan'andro",
-      "m365MailDeepScansPerDay": "Famotopotorana lalina mailaka isan'andro"
+      "m365MailDeepScansPerDay": "Famotopotorana lalina mailaka isan'andro",
+      "m365DigestRunsPerDay": "Famintinana isan'andro isan'andro"
     },
     "valueModeLabel": "Karazan'ny fetra",
     "valueAmountLabel": "Habetsahan'ny fetra",
@@ -5656,7 +5754,8 @@
       "m365ToolCallsPerDay": "Antso fitaovana Microsoft 365 (kalendrie, olona, asa, Teams) isan'andro. Raha mihoatra ny fetra, dia hafatra \"miezaha indray rahampitso\" no ho averin'ny fitaovana fa tsy hanimba ny resaka.",
       "m365MailReadsPerDay": "Fikarohana sy famakiana mailaka/sotekan-dresaka isan'andro. Raha mihoatra ny fetra, dia hafatra \"miezaha indray rahampitso\" no ho averin'ny fitaovana mailaka.",
       "m365MailDraftsPerDay": "Dikasary mailaka azon'ny mpanampy foronina isan'andro — tsirairay dia voamarina. Tena voafaritra henjana.",
-      "m365MailDeepScansPerDay": "Fanadihadiana mailaka mifangaro (famintinana, fikarohana lalina, fanoloran-tena) isan'andro. Isaky ny scan iray dia iray ny teti-bola, na firy na firy ny famakiana anatiny."
+      "m365MailDeepScansPerDay": "Fanadihadiana mailaka mifangaro (famintinana, fikarohana lalina, fanoloran-tena) isan'andro. Isaky ny scan iray dia iray ny teti-bola, na firy na firy ny famakiana anatiny.",
+      "m365DigestRunsPerDay": "Famintinana isan'andro Microsoft 365 isan'andro. Ny famintinana iray dia ahitana famakiana Graph maromaro sy antso modely fanadihadiana roa; mora atao indray ny fangatahana amin'ny alàlan'ny safidy vanim-potoana, ka tery ny fatra mahazatra."
     },
     "scopeFamily": "Fianakaviana",
     "scopeModel": "Modely",
@@ -5711,7 +5810,7 @@
     "previewSourceCatalog": "Default ao anatiny",
     "previewSourceGlobal": "Default maneran-tany",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Tsy azo zahana eto ny override ho an'ny departemanta/kaompania/biraon'ny vondrona — miankina amin'ilay olona miditra.",
+    "previewNotEvaluated": "Tsy tratra ilay directory, ka tsy afaka nojerena ho an'ity olona ity ny fitsipika momba ny sampana/orinasam-panjakana/biraon'ny asa sy vondrona. Andramo indray afaka kelikely.",
     "previewUnsaved": "Asehoy ny politika farany voatahiry. Tehirizo aloha ny fanovana vao ahitana azy eto.",
     "previewColumnLimit": "Fetra",
     "previewColumnValue": "Sanda",
@@ -5807,7 +5906,7 @@
     "yourScopeGroupOnlyChip": "Vondrona ihany",
     "yourScopeGroupOnlyNote": "Amin'ny alalan'ny vondrona na toetra manokana fotsiny no anoratana, ka tsy azo jerena amin'ny adiresy mailaka ny fepetra.",
     "previewOutOfScope": "Ity olona ity dia ivelan'ny sandrinao.",
-    "previewGroupOnlyScope": "Amin'ny alalan'ny vondrona na toetra no anoratana ny sandrinao, ka tsy azo zahana amin'ny adiresy mailaka ny fepetra.",
+    "previewGroupOnlyScope": "Ny vondrona na ny toe-javatra manokana no mamaritra ny sehatra azonao. Mijery ao amin'ny directory ny topy maso mba hijerena raha ao anatiny ilay olona.",
     "previewCeilingPinned": "Voafetra amin'ny sandan'ny ambony indrindra: {label}",
     "previewShowUsage": "Asehoy ny fampiasana ankehitriny",
     "previewColumnUsage": "Efa nampiasaina",
@@ -5823,7 +5922,7 @@
     "overrideCeilingHint": "Ny fetra mafy amin’ny tsipika dia mametraka an’ilay sanda ho an’ny kendrena amin’ity override ity: tsy afaka manova izany ny admin voafetra, ary rehefa misy fetra maromaro dia ilay tena manokana indrindra no manan-kery.",
     "confirmDeleteOverride": "Fafana \"{label}\"? Esorina avy hatrany amin’ny mpizara izy io ary hiverina amin’ny fetra ambaniny ny kendrena aminy. Tsy azo averina izany.",
     "confirmDeleteOverrideAction": "Fafana override",
-    "previewUndecidableScope": "Misy vondrona na toetra isan-karazany ao amin’ny faritra kendrena, ka tsy azo faritana amin’ny adiresy mailaka raha ao anatiny ity olona ity na tsia.",
+    "previewUndecidableScope": "Misy vondrona na toe-javatra manokana ao anatin'ny sehatra azonao ary tsy tratra ilay directory, ka tsy azo faritana amin'izao fotoana izao raha ao anatiny ity olona ity na tsia. Andramo indray afaka kelikely.",
     "previewNoLongerAdmin": "Tsy ao anaty delegasiona mavitrika intsony ny anaranao, ka tsy afaka mijery mialoha ny fetra ianao. Avereno ny pejy raha hijery ny fahazoanao fidirana ankehitriny.",
     "previewScopeMatchesNobody": "Amin’izao fotoana izao dia tsy misy olona mifanaraka amin’ny faritra kendrenao, ka tsy misy hojerena amin’ny alalan’ny adiresy mailaka.",
     "yourScopeMatchesNobodyChip": "Tsy misy mifanaraka",
@@ -5974,7 +6073,73 @@
     "disabledDelegationNote": "Voahilika ny delegasiona, ka tsy mihatra amin’iza na iza ity fandavana ity raha tsy averina ampiasaina indray ny delegasiona. Tsy havaozina ho amin’ny sehatra maneran-tany izany.",
     "betaPolicyNotice": "Beta environment: voatahiry misaraka amin'ny production (policy.beta.json) ity politika ity sy ny fanisam-pampiasana azy. Tsy misy zavatra ovainao eto hisy fiantraikany amin'ny production.",
     "delegationsManagedElsewhere": "Fanolorana andraikitra aseho eto amin'ny fomba famakiana fotsiny. Ny hoe iza no ao anaty delegasiona, iza no rakofiny ary inona no azony ataon'ny mpitantana tsirairay dia fehezina ao amin'ny faritra Delegations.",
-    "delegationsManagedElsewhereLink": "Sokafy ny Fanolorana andraikitra"
+    "delegationsManagedElsewhereLink": "Sokafy ny Fanolorana andraikitra",
+    "modelAccess": {
+      "intro": "Fidio hoe iza no mahazo mampiasa ny modely tsirairay. Raha tsy manokana fanamboarana manokana ny modely iray, dia manara-dalàna amin'ny an'ny fianakaviana. Ireo olona ao anaty lisitra dia mahazo safidy mihoatra noho ny an'ny rehetra; ary ny ao anaty block list dia mandresy an'izay fanomezan-dalana rehetra.",
+      "externalNote": "Ireo modely mitahiry ivelan'ny tontolo Azure ({families}) dia tsy azo idiran'ny olona rehetra raha tsy omena alalana eto — amin'ny alalan'ny default ho an'ny rehetra, na ho an'ny vondrona, domains, ary olona.",
+      "envelopeNote": "Ny fetran'ny fangatahana amin'ny fianakaviana dia teti-bola iombonana isan'andro ho an'ny modely ao aminy; ny fetra amin'ny modely iray dia fitsipika manokana amin'izany modely izany. Raha tsy voafetra ny modely iray dia tsy midika hoe tsy misy fetra ny fianakaviana.",
+      "observeNote": "Mihetsika ny fomba fanaraha-maso: tsy misy zavatra voafina na tsy avela mandefa fangatahana eto aloha. Ampiasao ny Enforce etsy ambony rehefa efa marina ny fitsipika.",
+      "familyChip": "Fianakaviana",
+      "modelChip": "Modely",
+      "otherModels": "Modely tsy an'ny fianakaviana",
+      "modelsInFamily": "{count, plural, one {# modely ao amin'ity fianakaviana ity} other {# modely ao amin'ity fianakaviana ity}}",
+      "noModels": "Tsy mbola misy modely ao amin'ny katalaogy.",
+      "expand": "Asehoy ny modely",
+      "collapse": "Afeno ny modely",
+      "edit": "Hanova",
+      "doneEditing": "Vita",
+      "editNode": "Ovao ny fidirana ho an'i {label}",
+      "defaultLabel": "Sisa rehetra",
+      "defaultInherit": "Manaram-penitra",
+      "defaultUnlimited": "Tsy voafetra",
+      "defaultLimited": "Voafetra ho",
+      "defaultUnavailable": "Tsy azo idirana",
+      "defaultRequestsLabel": "Fangatahana isan'andro ho an'ny sisa rehetra",
+      "requestsPerDay": "fangatahana / andro",
+      "inheritedFrom": "Mandova ny {state} avy amin'ny {origin}.",
+      "effectiveLabel": "Izay tsy ao anaty lisitra dia mahazo: {state}.",
+      "inheritedChip": "navoaka",
+      "origin": {
+        "model": "io fanamboarana io",
+        "family": "ny fianakaviany",
+        "defaults": "Default maneran-tany",
+        "catalogExternal": "ny fitsipika hoe tsy azo idirana ny modely ivelany raha tsy omena alalana",
+        "catalog": "ny default an'ny katalaogy"
+      },
+      "state": {
+        "unlimited": "Tsy voafetra",
+        "limited": "Voafetra ho {requests} / andro",
+        "unavailable": "Tsy azo idirana"
+      },
+      "list": {
+        "groups": "Vondrona mahazo miditra",
+        "domains": "Domaina mahazo miditra",
+        "allow": "Olona mahazo alalana",
+        "deny": "Olona voasakana"
+      },
+      "listHint": {
+        "groups": "Ny mpikambana amin'ireo vondrona Entra ireo dia afaka mampiasa izany, araka ny fepetra isaky ny vondrona.",
+        "domains": "Ny olona manana adiresy mailaka amin'ireo domaina ireo rehetra, araka ny fepetra isaky ny domaina.",
+        "allow": "Olona voatondro anarana dia afaka mampiasa izany na inona na inona voalaza amin'ny default na ny domainany.",
+        "deny": "Olona voatondro anarana tsy mahazo mampiasa izany mihitsy. Mandresy fetra am-baravarana rehetra io."
+      },
+      "grantUnlimited": "Tsy voafetra",
+      "grantLimited": "Voafetra ho",
+      "termsLabel": "Fepetra ho an'i {target}",
+      "requestsLabel": "Fangatahana isan'andro ho an'i {target}",
+      "removeGrant": "Esory i {target}",
+      "groupsCount": "{count, plural, one {# vondrona} other {# vondrona}}",
+      "domainsCount": "{count, plural, one {# domaina} other {# domaina}}",
+      "allowCount": "{count, plural, one {# olona nahazo alalana} other {# olona nahazo alalana}}",
+      "denyCount": "{count, plural, one {# olona voasakana} other {# olona voasakana}}",
+      "collisionChip": "Ao amin'ny safidy Global defaults koa",
+      "collisionWarning": "Ity modely ity na ny sokajiny dia efa voahevitra ao amin'ny Global defaults. Tsy ho voavonjy raha tsy nesorina amin'ny iray amin'ireo."
+    },
+    "previewSourceModelAccess": "Fanekena modely — {list}",
+    "groupMembershipDegradedStructural": "Tsy mandeha tsara ny fikarohana mpikambana ao amin'ny vondrona amin'ity mpizara ity ({reason}). Tsy mihatra amin'ireo olona voakasik'izany ny fitsipika sy fankatoavana mifototra amin'ny vondrona — jereo ny Group.Read.All consent an'ny tenant sy ny fisoratana anarana amin'ny app.",
+    "groupMembershipDegradedRetryable": "Nisy fikarohana mpikambana amin'ny vondrona tsy nahomby tao amin'ity mpizara ity tao anatin'ny minitra vitsy lasa ({reason}). Mety tsy mihatra mandritra ny iray minitra amin'ireo olona ireo ny fitsipika mifototra amin'ny vondrona mandra-piandry ny fanavaozana ny fikarohana.",
+    "groupMembershipDegradedUsers": "Olona {count, plural, one {#} other {#}} ankehitriny no voakasika amin'ity mpizara ity.",
+    "previewDirectoryNotFound": "Tsy misy mpampiasa ao amin'ny directory manana ity adiresy mailaka ity, ka dia noheverina ho tsy anisan'ny departemanta/orinasa/biraona sy vondrona ny fitsipika mifandraika amin'ilay olona."
   },
   "m365": {
     "connections": {
@@ -6325,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Fandaminana maraina",
-        "description": "Izay tonga, izay miandry aminao, ary tetiandro anio — tatitra iray"
+        "description": "Digest hatramin'ny andro fiasana farany — ny tonga, ny miandry anao, fanasana sy fanavaozam-baovao; amin'ny alatsinainy dia mandrakotra ny zoma sy ny faran'ny herinandro."
       },
       "chipsSettingLabel": "Manolotra Microsoft 365 playbooks",
       "chipsSettingHint": "Asehoy eo ambonin'ny boaty hafatra ny soso-kevitra playbook rehefa misy (ohatra, rehefa avy nanafatra transcript-n'ny fivoriana).",
-      "dismissChip": "Esory {title}"
+      "dismissChip": "Esory {title}",
+      "dailyDigest": {
+        "title": "Famintinana isan'andro",
+        "description": "Handamina mailaka, resaka ao amin'ny Teams ary kalandrie farany teo araka izay mila fandraisanao andraikitra, miandry anao, fanavaozana, sy FYI — misafidiana vanim-potoana"
+      }
+    },
+    "digest": {
+      "title": "Famintinana isan'andro",
+      "intro": "Hijery izay voaray mandritra ny vanim-potoana, ary handamina azy ho izay mila valiny, izay nangatahina taminao, izay mbola andrasana, fandaharam-potoana, fanavaozam-baovao avy amin’ny orinasanao sy tetikasa, ary FYI. Tsy misy andefasana na fanovana zavatra.",
+      "periodLabel": "Vanim-potoana",
+      "preset": {
+        "lastWorkday": "Hatramin'ny andro fiasana farany",
+        "1d": "Ora 24 farany",
+        "3d": "Andro 3 farany",
+        "7d": "Andro 7 farany",
+        "14d": "Andro 14 farany",
+        "custom": "Elanelana manokana"
+      },
+      "lastWorkdayHint": "Hatramin'ny fiandohan'ny andro fiasana farany vao haingana alohan'ny anio — amin'ny Alatsinainy dia ahitana ny Zoma sy faran'ny herinandro.",
+      "from": "Hatramin'ny",
+      "to": "Hatramin'ny",
+      "customInvalid": "Misafidiana elanelana voalamina tsy mihoatra ny {days} andro.",
+      "sourcesLabel": "Loharano",
+      "sourceNoConsent": "Tsy nahazoan-dalana ity loharano ity.",
+      "sourceHint": {
+        "mail": "Taratasim-pandefasana sy topy maso avy amin'ny Inbox; ny Sent Items no manapa-kevitra izay razona ho valiana.",
+        "chat": "Resadresaka Teams farany, misy @mentions tsy mbola navalinao.",
+        "channel": "Hafatra amin'ny fantsona fidinao etsy ambany.",
+        "calendar": "Fanasa miandry ny valinteninao sy ny fivoriana izay mbola tsy namaly ny hafa."
+      },
+      "channelsLabel": "Fantsona ({count} amin'ny {max})",
+      "removeChannel": "Esory {name}",
+      "channelsSlow": "Manampy famakiana ny fantsona tsirairay; mampihena ny hafainganan’ny famintinana ny fantsona maro.",
+      "channelsMax": "Voafetra amin'ny fantsona {max} ambony indrindra.",
+      "channelsNeeded": "Safidio farafahakeliny fantsona iray, na ampio loharano hafa.",
+      "teamLabel": "Ekipa",
+      "loadingTeams": "Manokatra ekipa…",
+      "pickTeam": "Safidio ny ekipa hijerena ny fantsony",
+      "loadingChannels": "Manokatra fantsona…",
+      "noChannels": "Tsy misy fantsona hita ao amin'ity ekipa ity.",
+      "privacyNote": "Lohahevitra, mpandefa, sy topy maso fohy ihany no vakina; mijanona ao amin'ny Microsoft 365 ny vatan'ny hafatra sy ireo rakitra manampy. Famintinana an-tsoratra amin'ny angon-drakitrao manokana no hita.",
+      "cancel": "Foano",
+      "run": "Alefaso ny famintinana",
+      "starting": "Manomboka…",
+      "startFailed": "Tsy afaka nanomboka ny famintinana.",
+      "userMessage": "Famintinana isan'andro — {period}; loharano: {sources}",
+      "working": "Mandinika ny fifandraisanao ao amin'ny Microsoft 365…",
+      "failed": "Tsy nahomby ny famintinana.",
+      "failedPrefix": "Tsy nahomby ny famintinana isan'andro:",
+      "expired": "Lany daty ity famintinana ity. Avereno mba hahazoana vaovao farany.",
+      "runAgain": "Avereno indray",
+      "changePeriod": "Ovay ny vanim-potoana",
+      "period": {
+        "lastWorkday": "hatramin'ny andro fiasana farany",
+        "lastDays": "{count, plural, one {andro farany} other {andro # farany}}"
+      },
+      "source": {
+        "mail": "Mailaka",
+        "chat": "Resaka Teams",
+        "channel": "Fantsona Teams",
+        "calendar": "Kalandrie"
+      },
+      "sourceStatus": {
+        "ok": "vita",
+        "partial": "ampahany",
+        "skipped": "nofisaka",
+        "unavailable": "tsy manana fahazoan-dàlana",
+        "error": "tsy nahomby"
+      },
+      "degraded": "Tsy azo nampiasaina ny modely fanadihadiana, ka avy amin’ny fitsipika fotsiny ny sokajy.",
+      "withheld": "{count, plural, one {Nahalain'ny efijery fiarovana ilay zavatra} other {Nahalain'ny efijery fiarovana ireo zavatra #}}.",
+      "empty": "Tsy misy tatitra amin'ity vanim-potoana sy loharano ireo.",
+      "actionItems": "Zavatra hatao",
+      "createTasks": "{count, plural, =0 {Ampidiro ao amin'ny To Do} one {Ampio asa # ao amin'ny To Do} other {Ampio asa # ao amin'ny To Do}}",
+      "taskCreated": "napetraka ao amin'ny To Do",
+      "tasksCreated": "{count, plural, one {Asa #} other {Asa #}} napetraka ao amin'ny lisitra \"{list}\".",
+      "tasksFailed": "Tsy afaka namorona ireo asa.",
+      "category": {
+        "needsReply": "Mila valiny avy amiko",
+        "askedOfMe": "Nangatahina tamiko",
+        "waitingOnOthers": "Miandry ny hafa",
+        "scheduling": "Fandaharam-potoana",
+        "companyUpdates": "Vaovao farany momba ny orinasa sy tetikasa",
+        "fyi": "FYI",
+        "bulk": "Ho azy sy betsaka"
+      },
+      "companyUpdatesHint": "manan-danja, zara raha maika",
+      "markDone": "Mariho fa efa voakarakara i {title}",
+      "badge": {
+        "unanswered": "tsy mbola voavalina",
+        "mentioned": "noresahina ianao",
+        "important": "manan-danja be"
+      },
+      "askAbout": "Anontanio momba ity",
+      "askPrompt": "Momba ilay entana {source} \"{title}\" avy amin'i {from} ({when}) ao amin'ny digest etsy ambony: inona no angatahana, ary inona no valiny tsara mety ho izy?",
+      "open": {
+        "mail": "Sokafy ao amin'ny Outlook",
+        "chat": "Sokafy ao amin'ny Teams",
+        "channel": "Sokafy ao amin'ny Teams",
+        "calendar": "Sokafy ao amin'ny Outlook"
+      },
+      "footnote": "Avy amin'ny mari-pamantarana manokana (tsy voavalina, noresahina, nandefa) sy fanasokajin'ny AI ny sokajy; ataovy azo antoka aloha alohan'ny hanaovana fihetsika. Tsy nisy nalefa.",
+      "age": {
+        "now": "vao izao",
+        "hours": "{count}h lasa",
+        "days": "{count}a lasa"
+      },
+      "waitForReply": "Andraso ho vita ny valiny amin'izao vao manomboka digest."
     }
   },
   "share": {
@@ -6394,9 +6666,9 @@
     "kind": {
       "rag": "Fahalalana",
       "prompt": "Toetra",
-      "m365": "Fahalalana (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Fahalalana",
-      "foundry": "Mpanampy Foundry",
+      "foundry": "Agent manokana",
       "connector": "Mpampifandray"
     },
     "semantics": {
@@ -6405,8 +6677,8 @@
       "own-model": "miasa amin'ny modeliny manokana"
     },
     "loadError": "Tsy afaka navahana izao ireo agents-nao. Matetika vetivety monja izany.",
-    "discoveryLoading": "Mitady agents Foundry…",
-    "discoveryError": "Tsy afaka navahana ireo agents Foundry.",
+    "discoveryLoading": "Mitady agent hafa...",
+    "discoveryError": "Misy agent tsy afaka nampidirina.",
     "retry": "Avereno andramana"
   },
   "peopleSuggest": {
@@ -7547,5 +7819,146 @@
       "past-retention": "Lasa aloha noho ny fitanana {months} volana amin’ity folder ity; tsy aseho intsony.",
       "unknown": "Olana navoaka: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Fahaiza-manao",
+    "description": "Boky toromarika azo averina ampiasaina rehefa ilain'ny resaka iray izany. Mifanaraka amin'ny endrika Agent Skills SKILL.md ampiasain'i Claude sy ChatGPT.",
+    "loading": "Mampiditra fahaiza-manao...",
+    "loadError": "Tsy tafiditra ny fahaiza-manao.",
+    "retry": "Andramo indray",
+    "unavailableBanner": "Tsy azo idirana amin'izao fotoana izao ny fitahirizana fahaiza-manao — hita ireo fahaiza-manao efa napetraka; tsy azo ampiasaina ny fahaiza-manao voatahiry sy fanovàna raha tsy miverina amin'ny laoniny.",
+    "conflictError": "Nisy admin hafa nanova ity fahaiza-manao ity. Naverina nisy ilay lisitra — avereno ampiharina ny fanovàna nataonao.",
+    "alwaysWarning": "{count} amin'ny fahaiza-manao no napetraka ho Hatrany. Ireo rehetra ireo dia ampiana amin'ny resaka rehetra — aleo atao ho Automatic ny fahaiza-manao manokana amin'ny lohahevitra.",
+    "newSkill": "Fahaiza-manao vaovao",
+    "importSkill": "Ampidiro SKILL.md",
+    "importTitle": "Apetraho eto ny rakitra SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Ny asan'ity fahaiza-manao ity sy ny fotoana ampiasana azy.\n---\n\nToromarika...",
+    "importHint": "Hisokatra ao amin'ny fanovàna ny fahaiza-manao nandalina — tsy misy voatahiry raha tsy voavonjy.",
+    "importParse": "Hadihadiana sy jereo",
+    "invalidId": "Litera kely, isa ary tery tokana ihany no ampiasaina amin'ny id.",
+    "saveSuccess": "Voavonjy ny fahaiza-manao.",
+    "saveError": "Tsy afaka namonjy ny fahaiza-manao.",
+    "deleteConfirm": "Hofafana ity fahaiza-manao ity? Hitsahatra avy hatrany amin'ny resaka izany.",
+    "restoreConfirm": "Esory ny fanamboarana ary avereno amin'ny fahazavana napetraka ity fahaiza-manao fototra ity?",
+    "deleteSuccess": "Voafafa ny fahaiza-manao.",
+    "restoreSuccess": "Voaverina amin'ny napetraka izy.",
+    "deleteError": "Tsy afaka namafa ny fahaiza-manao.",
+    "empty": "Tsy mbola misy fahaiza-manao. Mamoròna iray, na ampidiro SKILL.md.",
+    "builtinChip": "Voarakitra",
+    "customizedChip": "Namboarina manokana",
+    "exportSkill": "Avoahy ho SKILL.md",
+    "edit": "Ovay",
+    "delete": "Fafao",
+    "restoreDefault": "Avereno amin'ny napetraka",
+    "createTitle": "Fahaiza-manao vaovao",
+    "editTitle": "Ovao {name}",
+    "idLabel": "Id",
+    "idHint": "Litera kely, isa ary tery tokana. Izany no lasa SKILL.md an'ilay fahaiza-manao ary tsy azo ovaina aoriana.",
+    "nameLabel": "Anarana haseho",
+    "descriptionLabel": "Famaritana",
+    "descriptionHint": "Ny asan'ny fahaiza-manao sy ny fotoana ampiasana azy — io no isafidianana azy, koa soraty ao ny lohahevitra sy fomba fiteny tokony havaly.",
+    "activationLabel": "Fanaingoana",
+    "activation": {
+      "auto": "Ho azy",
+      "always": "Hatrany",
+      "off": "Miato",
+      "manual": "Amin'ny fangatahana"
+    },
+    "activationHint": {
+      "auto": "Misafidy ho azy rehefa mifanaraka amin'ny asa ankehitriny ny famaritana. Afaka mangataka indray mandeha na manapetaka izany amin'ny resaka ihany koa ny mpampiasa.",
+      "always": "Ampiana amin'ny resaka rehetra ho an'ny rehetra mahita azy. Ampiasao amin'ny fatra iraisana — toerana mandrakizay eo amin'ny tondro izany.",
+      "off": "Tsy mandeha: tsy ampiharina na aseho amin'ny mpampiasa, fa tahirizina eto ihany ho amin'ny fanovàna.",
+      "manual": "Ampiharina ihany raha mangataka na manisy marika ilay mpampiasa. Tsy hofidiana ho azy mihitsy ary tsy atolotra amin’ny modely ho fahaiza-manao azo entina."
+    },
+    "instructionsLabel": "Toromarika",
+    "instructionsHint": "Markdown, hatramin'ny 16 KB. Ampidirina mivantana rehefa miasa ny fahaiza-manao.",
+    "saving": "Tehirizina…",
+    "save": "Tehirizo",
+    "cancel": "Hanafoana",
+    "documents": {
+      "title": "Taratasy",
+      "hint": "Tehirizina miaraka amin'ity fahaiza-manao ity ny reference. Mivantana ny fampidirana taratasy kely; ny lehibe kosa voaorina ho hitadiavana loharano. Hatramin'ny loharano 20, 10 MB isanisany, ary 20 MB farafahabetsany. Natokana ho fisintonana ihany ny rakitra (assets).",
+      "saveFirst": "Tehirizo aloha ny namboarinao amin'ity fahaiza-manao iray ity alohan'ny hanampiana taratasy.",
+      "upload": "Ampio taratasy reference",
+      "remove": "Esory",
+      "stop": "Atsaharo ny fanasokajiana",
+      "resume": "Sokajio na tohizo ny fanasokajiana taratasy",
+      "empty": "Tsy mbola misy taratasy mifatotra.",
+      "requestFailed": "Tsy nahomby ny fangatahana taratasy. Avereno ny pejy dia andramo indray.",
+      "importZip": "Ampidiro ZIP misy fahaiza-manao",
+      "zipTooLarge": "Tsy maintsy latsaky ny 20 MB ny ZIP misy fahaiza-manao.",
+      "importCount": "Loharano ho apetraka aorian'ny famonjena: {count}",
+      "skippedScripts": "Nodiana tsy noraisina ny script azo tanterahina",
+      "status": {
+        "pending": "Miandry ho sokajiana",
+        "processing": "Eo am-panasokajiana",
+        "inline": "Vonona (naveran-drakitra mivantana)",
+        "indexed": "Vonona (azo tadiavina)",
+        "failed": "Tsy nahomby ny fanasokajiana",
+        "asset": "Rakitra azo sintonina"
+      },
+      "confirmRemove": "Esorina ve {filename} amin'ity fahaiza-manao ity? Ny rakitra voalohany voatahiry dia ho voafafa ary tsy ho azon'ny olona ampiasaina intsony ho loharano fanovàna.",
+      "reindexRequired": "Ireo antontan-taratasy ireo dia mila havaozina amin'ny fikirakirana Search sy embedding amin'ny faritra ankehitriny. Tsy ho azo itadiavana izy ireny raha tsy vita ny fanavaozana."
+    },
+    "applyToAgents": "Azon'ny mpiasan'ny fikambanana ampiasaina",
+    "applyToAgentsHint": "Tsy mandeha avy hatrany. Raha ampiasaina, dia afaka mampiditra ity fahaiza-manao ity amin'ny alalan'ny fitaovana vakiana ihany ny mpiasan'ny fikambanana, fa tsy manolo ny toromarika momba ny mombamomba azy. Manana fetra tsy miankina amin'ny dingana tsirairay ny antso amin'ny fahaiza-manao. Tsy maintsy efa manana asa load_skill sy search_skill_documents voasoratra ao amin'ny famaritany ny Foundry agents.",
+    "requireConsent": "Mangataha alalana alohan'ny ampiharana",
+    "requireConsentHint": "Raha te hampihatra ity fahaiza-manao ity irery ny modely dia anontaniana voalohany ny mpampiasa. Tsy mila fanamafisana ny fangatahana sy fametrahana marika.",
+    "consentChip": "Manontany aloha",
+    "sourceChip": "Avy amin'ny loharano",
+    "sourceChipHint": "Atolotry ny loharano fahaiza-manao nisoratra anarana; havaozina amin’ny fanavaozana izy ireo. Ny fanapahana, agent, ary ny fepetra alalana no fanapahan-kevitrao.",
+    "sources": {
+      "title": "Loharanon'ny fahaiza-manao",
+      "description": "Midira amin'ny katalaogin'ny fahaiza-manao ivelany (index.json misy lisitra SKILL.md). Ho lasa fahaiza-manao an'ny fikambanana izy ireo ary havaozina isaky ny 6 ora eo ho eo. Ny SKILL.md ihany no ampidirina; tsy tafiditra ireo antontan-taratasy hafa.",
+      "urlLabel": "URL-n'ny katalaogy",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Tokony ho https amin'ny sehatra ampahibemaso. Tsy avy amin’io toerana io ihany no ahitana ireo rakitra fahaiza-manao.",
+      "labelLabel": "Marika (tsy voatery)",
+      "add": "Hisoratra anarana",
+      "adding": "Misoratra anarana...",
+      "added": "{count, plural, =0 {Vita nampiana ny loharano; tsy mbola nisy fahaiza-manao nampidirina} one {Vita nampiana ny loharano; fahaiza-manao # no nampidirina} other {Vita nampiana ny loharano; fahaiza-manao # no nampidirina}}",
+      "addedWithError": "Vita nampiana ny loharano, fa tsy nety ny sync voalohany. Hamarino ny lesoka ao amin'ny loharano.",
+      "addError": "Tsy afaka nanampy loharano fahaiza-manao",
+      "sync": "Sync ankehitriny",
+      "syncing": "Manao sync...",
+      "synced": "Vita ny sync an'ny loharano.",
+      "syncError": "Tsy afaka nanao sync loharano fahaiza-manao",
+      "remove": "Esory ny loharano",
+      "removeConfirm": "Esorina ity loharano ity? Ho fahaiza-manao tsotra amin’ny fikambanana sisa ireo fahaiza-manao nitondra azy ary tsy havaozina intsony.",
+      "removed": "Voafafa ny loharano.",
+      "removeError": "Tsy afaka nanala loharano fahaiza-manao",
+      "loading": "Manokatra loharano...",
+      "loadError": "Tsy afa-nisokatra ireo loharano fahaiza-manao.",
+      "empty": "Tsy misy loharano fahaiza-manao hatreto.",
+      "never": "Tsy mbola nanao sync",
+      "statusOk": "Vita sync",
+      "statusError": "Tsy nety ny sync",
+      "statusPartial": "{count, plural, one {# tsy nampidirina} other {# tsy nampidirina}}",
+      "lastSync": "Sync farany {time}",
+      "entryCount": "{count, plural, one {# fidirana} other {# fidirana}}",
+      "entryStatus": {
+        "synced": "vita sync",
+        "skipped": "tsy nampidirina",
+        "conflict": "diso fifandirana — tsy voasolo",
+        "invalid": "tsy manankery"
+      }
+    },
+    "requireConsentDisabledHint": "Ny fahaiza-manao mandeha ho azy ihany no afaka mangataka fanekena: ny fahaiza-manao amin'ny fangatahana, voatazona, ary maharitra dia mihatra avy hatrany tsy misy fanontaniana, ary ny fahaiza-manao amin'ny fangatahana tsy hisafidin'ny modely mihitsy."
+  },
+  "personalSkills": {
+    "title": "Fahaiza-manao manokana",
+    "description": "Tehirizo ato ireo toromarika azo averina ampiasaina amin'ny resakao manokana. Mitahiry ato amin'ity navigateur ity ny fahaiza-manao ary alefa amin'ny modely ihany rehefa miresaka ianao. Azon'ny rafitra fidiana ho azy, ampiasaina indray mandeha, na apetaka ho zatra. Tsy afaka manova politika fikambanana na manome fahazoan-tsampy amin'ny fitaovana izy ireny. Mila asiana fahaiza-manao amin'ity fametrahana ity vao afaka mampiasa. Tsy mampiasa fahaiza-manao manokana ny resaka amin'ny agent.",
+    "importFile": "Ampidiro SKILL.md na ZIP",
+    "review": "Diniho manontolo ny toromarika alohan'ny hitahirizana. Safidin'ny mpampiasa ihany, fa tsy politika ofisialy fikambanana, ireo toromarika nampidirina.",
+    "skipped": "Nafaingana ireo script azo tanterahana",
+    "importTooLarge": "Tokony ho 20 MB na latsaka ny rakitra ampidirina.",
+    "invalid": "Tsy afaka nampidirina ilay fahaiza-manao.",
+    "duplicate": "Efa misy io id fahaiza-manao manokana io. Ahitsy ilay efa misy na mifidiana id hafa.",
+    "countLimit": "Afaka mitahiry fahaiza-manao manokana 20 farafahabetsany ianao.",
+    "requestLimit": "Mihoatra ny fetra fangatahana 160 KB ny fahaiza-manao manokana ampiasaina. Atsaharo na fohazy ny toromarika sasany.",
+    "saved": "Voatahiry ato amin'ity navigateur ity ny fahaiza-manao manokana.",
+    "instructionsHint": "Hatramin’ny 16 KB ny toromarika, anisan’izany ireo refy soratra nampidirina. Ho an’ny fahaiza-manao fikambanana ihany no azo anaovana fichier binerika sy fampidirana lova antontan-taratasy maharitra. Mampiasa anarana SKILL.md tsy misy user: rehefa manondrana.",
+    "enabled": "Azo ampiasaina amin'ny resako",
+    "empty": "Mamoròna fahaiza-manao ho an’ny asa miverimberina, na ampidiro SKILL.md, izay ho azonao jerena sy tehirizina eto."
   }
 }

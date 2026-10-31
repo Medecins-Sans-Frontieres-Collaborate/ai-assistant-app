@@ -23,6 +23,7 @@ import {
   AGENT_ACCESS_ORG_AGENTS_PREFIX,
   AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
+  AGENT_ACCESS_SKILLS_PREFIX,
   AdminChannelProfile,
   AdminChannelProfileHistoryEntry,
   AdminChannelProfileHistoryEntrySchema,
@@ -85,6 +86,7 @@ import {
   PromptAgentHistoryEntry,
   PromptAgentHistoryEntrySchema,
   PromptAgentSchema,
+  SKILL_SOURCE,
   canonicalAgentKey,
   catalogOauthBlobPath,
   channelProfileBlobPath,
@@ -102,7 +104,14 @@ import {
   orgAgentBlobPath,
   promptAgentBlobPath,
   ruleBlobPath,
+  skillBlobPath,
 } from '@/lib/services/agentAccess/types';
+import {
+  Skill,
+  SkillHistoryEntry,
+  SkillHistoryEntrySchema,
+  SkillSchema,
+} from '@/lib/services/skills/types';
 
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
@@ -678,6 +687,17 @@ const guideEntity = defineBlobEntity<Guide, GuideHistoryEntry>({
   labelBase: 'Guide',
 });
 
+const skillEntity = defineBlobEntity<Skill, SkillHistoryEntry>({
+  logNoun: 'skill',
+  errorNoun: 'skill',
+  source: SKILL_SOURCE,
+  listPrefix: AGENT_ACCESS_SKILLS_PREFIX,
+  blobPath: skillBlobPath,
+  schema: SkillSchema,
+  historySchema: SkillHistoryEntrySchema,
+  labelBase: 'Skill',
+});
+
 /* --- Prompt agents ------------------------------------------------- */
 
 export async function listAllPromptAgents(
@@ -1025,6 +1045,89 @@ export function writeGuideHistoryEntry(
   entry: GuideHistoryEntry,
 ): Promise<void> {
   return guideEntity.writeHistory(storage, entry);
+}
+
+/* --- Skills (docs/SKILLS_DESIGN.md) ---------------------------------- */
+
+export type StoredSkill = Awaited<
+  ReturnType<typeof skillEntity.listAll>
+>[number];
+
+export interface SkillReadResult {
+  skill: Skill;
+  etag: string;
+}
+
+export function listAllSkills(storage: BlobStorage): Promise<StoredSkill[]> {
+  return skillEntity.listAll(storage);
+}
+
+/** Reads a single skill record by id. Returns null when none exists. */
+export async function readSkill(
+  storage: BlobStorage,
+  id: string,
+  signal?: AbortSignal,
+): Promise<SkillReadResult | null> {
+  const deadline = AbortSignal.timeout(10_000);
+  const result = await skillEntity.read(storage, id, {
+    abortSignal: signal ? AbortSignal.any([signal, deadline]) : deadline,
+    maxBytes: 1024 * 1024,
+  });
+  return result && { skill: result.record, etag: result.etag };
+}
+
+export function writeSkill(
+  storage: BlobStorage,
+  skill: Skill,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  return skillEntity.write(storage, skill, ifMatchEtag);
+}
+
+export function deleteSkill(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  return skillEntity.remove(storage, id, ifMatchEtag);
+}
+
+export function writeSkillHistoryEntry(
+  storage: BlobStorage,
+  entry: SkillHistoryEntry,
+): Promise<void> {
+  return skillEntity.writeHistory(storage, entry);
+}
+
+/**
+ * The exact version of a skill as it stood at `updatedAt`, from the
+ * immutable history (docs/SKILLS_DESIGN.md §5.7): history entries are keyed
+ * by the same timestamp the record carried, so this is one blob read. Null
+ * when no such version exists (never written, swept, or a tombstone).
+ */
+export async function readSkillHistoryVersion(
+  storage: BlobStorage,
+  id: string,
+  updatedAt: string,
+  signal?: AbortSignal,
+): Promise<Skill | null> {
+  if (!/^\d{4}-\d{2}-\d{2}T[0-9:.]+Z$/.test(updatedAt)) return null;
+  const blob = await downloadBlob(
+    storage,
+    historyBlobPath(canonicalAgentKey(SKILL_SOURCE, id), updatedAt),
+    'agentAccess.readSkillHistoryVersion',
+    {
+      abortSignal: signal ?? AbortSignal.timeout(5000),
+      maxBytes: 1024 * 1024,
+    },
+  );
+  if (!blob) return null;
+  const parsed = SkillHistoryEntrySchema.safeParse(
+    JSON.parse(blob.buffer.toString('utf8')),
+  );
+  if (!parsed.success || parsed.data.action !== 'upsert' || !parsed.data.skill)
+    return null;
+  return parsed.data.skill.id === id ? parsed.data.skill : null;
 }
 
 /* --- Form templates ------------------------------------------------- */

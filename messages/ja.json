@@ -812,7 +812,16 @@
       "stillWorking": "処理中…",
       "assessingSearchResults": "結果が質問に答えているか確認中…",
       "refiningSearch": "再検索中: 「{query}」…",
-      "readingSearchPages": "{count}件の結果ページを読んでいます…"
+      "readingSearchPages": "{count}件の結果ページを読んでいます…",
+      "toolRoutingUnavailableInRegion": "{region} エンドポイントではツールのルーティングが利用できません。ツールなしで回答します…",
+      "applyingSkill": "スキルを適用中: {skills}…",
+      "applyingSkills": "スキルを適用中: {skills}…",
+      "readingSkillReferences": "スキル参照文書を読んでいます…",
+      "selectingSkills": "スキルを選択中…",
+      "retryingModel": "モデルが混雑しています — {seconds}秒後に再試行します（{attempt}回目）…",
+      "resumingResponse": "モデルとの接続が切断されました — 続きから再開します…",
+      "continuingResponse": "回答が上限に達しました — 続行します…",
+      "trimmingContext": "会話が長すぎるため、古い履歴を削除して再試行します…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# 件のツールを使用} other {# 件のツールを使用}}",
@@ -878,7 +887,9 @@
       "deniedByRuleHint": "ご自身のルールによりブロックされています ― 設定 → コネクターで管理できます。",
       "batchPendingHint": "{count}件のツールリクエストが保留中",
       "approveAllButton": "すべて許可",
-      "denyAllButton": "すべて拒否"
+      "denyAllButton": "すべて拒否",
+      "applySkillTitle": "スキル「{skill}」を適用しますか？",
+      "skillConsentNote": "管理者により、このスキルは適用前に確認するよう設定されています。承認すると、この回答のみにガイダンスが適用されます。"
     },
     "openImage": "画像を開く",
     "copyMessage": "メッセージをコピー",
@@ -918,7 +929,54 @@
     "alwaysWaitThisLong": "常に最大 {duration} 待機する",
     "keepSearching": "検索を続ける",
     "keepSearchingHint": "検索が途中で止まりました。アシスタントに別の方法で検索するよう依頼してください。",
-    "keepSearchingMessage": "これについて検索を続行してください。別の方法を試してください。"
+    "keepSearchingMessage": "これについて検索を続行してください。別の方法を試してください。",
+    "addSkill": "スキル",
+    "removeSkill": "スキルを削除",
+    "skillsMenuLabel": "利用可能なスキル",
+    "skillsLimit": "1メッセージにつき最大3つまでスキルを追加できます。",
+    "skillPin": "会話にピン留めする",
+    "skillUseOnce": "1回のみ使用",
+    "skillPinned": "ピン留め済み",
+    "skillOnce": "次のメッセージ",
+    "skillsPaused": "一時停止中",
+    "skillUnavailable": "利用不可",
+    "skillsAutomaticHint": "関連するスキルは自動的に選択されます。次のメッセージで1回だけ使用するか、会話全体で使いたい場合はピン留めしてください。",
+    "skillsAgentDisabled": "エージェントが接続されている間はスキルが一時停止されます。エージェントを解除するとピン留めしたスキルが再開されます。",
+    "skillPersonal": "個人",
+    "skillsAgentToolsHint": "管理者がエージェント用に有効化した組織スキルのみ、ここで利用できます。エージェントはこれらを閲覧専用ツールとして読み込むことができます。他のピンは一時停止され、個人用スキルはエージェントには利用できません。",
+    "skillAlwaysOn": "常時使用",
+    "skillAlwaysOnHint": "管理者によって、この会話のすべてのメッセージに追加されます。",
+    "skillUsage": {
+      "label": "スキル",
+      "requested": "リクエスト済み",
+      "pinned": "ピン留め",
+      "auto": "自動",
+      "unavailable": "利用不可",
+      "incomplete": "一部のスキルが適用できませんでした",
+      "references": "{count, plural, one {# 件の参照パッセージ} other {# 件の参照パッセージ}}",
+      "referencesUnavailable": "一部の参照文書が利用できませんでした",
+      "showDetails": "スキル詳細を表示",
+      "hideDetails": "スキル詳細を非表示",
+      "agentLoad": "エージェントによってロード",
+      "agentSearch": "エージェントによる文書検索",
+      "needsApproval": "承認が必要です",
+      "original": "元の実行時",
+      "updated": "更新済み"
+    },
+    "skillsManualHint": "設定で自動選択がオフになっています。次のメッセージのみ使用するか、スキルをピン止めしてこの会話全体で使用してください。",
+    "queuedMessage": {
+      "label": "キューに追加済み",
+      "attachmentOnly": "添付ファイル",
+      "cancel": "キュー内メッセージをキャンセル"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "返答がコンテンツ安全フィルターで停止されました。リクエストの言い回しを変えるか、該当部分を削除してください。",
+      "MODEL_CONTEXT_TOO_LONG": "この会話は、選択したモデルの許容範囲を超えています。新しい会話を開始するか、添付ファイルを減らすか、より大きな文脈ウィンドウのモデルを選択してください。",
+      "MODEL_OUTPUT_LIMIT": "モデルが出力上限に達し、回答できませんでした。推論レベルを下げるか、リクエストを短くしてください。",
+      "MODEL_RATE_LIMITED": "現在、モデルへのリクエストが集中しています。自動で再試行されましたので、少し経ってから再度お試しください。",
+      "MODEL_QUOTA_EXCEEDED": "モデルの利用枠が上限に達しました。別のモデルを試すか、しばらくしてから再度お試しください。",
+      "MODEL_AUTH_FAILED": "アプリがモデルサービスと認証できませんでした。設定に問題がありますので、サポートへご連絡ください。"
+    }
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -1325,7 +1383,11 @@
       "preferModelTitle": "選択したモデルを優先",
       "preferModelDescription": "リクエストが失敗しても自動的に他のモデルに切り替えません。エラー時には切り替えの案内が表示されます。"
     },
-    "Analytics": "アナリティクス"
+    "Analytics": "アナリティクス",
+    "skills": {
+      "autoApply": "アシスタントがスキルを自動で適用する",
+      "autoApplyDescription": "関連するスキルやご自身のスキルが各メッセージごとに選択されます。オフの場合、リクエストまたはピン止めされたスキル、管理者がすべての会話に適用するスキルのみが使用されます。"
+    }
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "秒",
     "chipAutoHideHint": "{min}〜{max}秒の間で設定できます。",
     "byWorkflow": "ワークフロー別",
-    "byWorkflowNote": "上記合計の一部が個別に表示されています ― 追加の使用量ではありません。Grantsの実行は組織のレポートやトークン予算に算入されますが、このローカル合計には含まれません。"
+    "byWorkflowNote": "上記合計の一部が個別に表示されています ― 追加の使用量ではありません。Grantsの実行は組織のレポートやトークン予算に算入されますが、このローカル合計には含まれません。",
+    "chipLabelTitle": "チップラベル",
+    "chipLabelHint": "内訳は常に排出量とコストを並べて表示します。この項目は折りたたみ時のチップ表示のみ選びます。",
+    "chipLabelEmissions": "排出量",
+    "chipLabelCost": "コスト",
+    "chipLabelBoth": "両方",
+    "costTile": "推定コスト",
+    "costDisclosure": "{asOf}時点のリスト価格で計算（グローバル標準レート、キャッシュ済み入力割引なし）：請求額ではなく上限です。ウェブ検索、コード実行、文字起こし、音声、翻訳、文書インデックスは含まれていません。",
+    "costUnpriced": "{count, plural, one {リスト価格のないリクエスト # 件は} other {リスト価格のないリクエスト # 件は}}含まれていません。"
   },
   "extraction": {
     "toggleLabel": "構造化データを抽出",
@@ -4502,7 +4572,16 @@
         "auto": "自動",
         "hidden": "非表示"
       },
-      "visibilityHint": "「自動」は、見積りが更新されたときやホバーしたときにチップを表示します。設定 › 使用状況と影響 で変更できます。"
+      "visibilityHint": "「自動」は、見積りが更新されたときやホバーしたときにチップを表示します。設定 › 使用状況と影響 で変更できます。",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "推定コスト {cost}。",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "この行のリクエストにはリスト価格がありません",
+        "unpriced": "{count, plural, one {リスト価格のないリクエスト # 件は} other {リスト価格のないリクエスト # 件は}}コストに含まれていません。",
+        "noPriceData": "コストは表示されません：この会話のモデルにはリスト価格がありません（独自ソース、ローカルランタイム、エージェントは価格設定されていません）。",
+        "note": "{asOf}時点のリスト価格で計算（グローバル標準レート、キャッシュ済み入力割引なし）：請求額ではなく上限です。ウェブ検索、コード実行、文字起こし、音声、翻訳、文書インデックスは含まれていません。"
+      }
     },
     "workflow": {
       "title": "このワークスペース（推定）",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "用語集を削除",
     "glossaryDeleteSuccess": "用語集が削除されました",
     "channelProfilesTab": "プラットフォーム",
-    "channelSetsTab": "チャンネルセット"
+    "channelSetsTab": "チャンネルセット",
+    "addPromptAgent": "プロンプトエージェントを追加",
+    "m365AgentIndexStop": "インデックス作成を停止",
+    "foundryAgentsHeading": "Foundry エージェントとプロンプトエージェント",
+    "foundryAgentsDescription": "Azure AI Foundry からご自身のアクセスで検出されたエージェントと、ここで定義されたプロンプトエージェントが含まれます。ナレッジエージェントと Microsoft 365 エージェントは下記の各セクションで管理されます。",
+    "agentSkillsLabel": "スキル",
+    "agentSkillsHelp": "このエージェントが回答時にロードできる組織スキルです。ユーザーが閲覧できるのは自身のアクセス権限で許可されたスキルのみです。",
+    "agentSkills": {
+      "inherit": "「エージェントに利用可能」とマークされたスキル",
+      "selected": "下記で選択したスキルのみ",
+      "none": "スキルなし"
+    },
+    "agentSkillsNone": "選択できるスキルがありません。",
+    "agentSkillsLoading": "スキルを読み込み中…",
+    "agentSkillsLoadError": "スキルを読み込めませんでした。以前保存された選択は保持されています。",
+    "agentSkillsNotVisible": "（表示されていません — チェックを外すと削除されます）"
   },
   "localModels": {
     "title": "ローカルモデル",
@@ -5521,7 +5615,8 @@
       "channelSets": "各チームによるプラットフォームでの投稿ルール：ガイダンス、声のトーン、デフォルト設定、誰がセットを使用・送信できるか。",
       "webSearch": "ウェブ検索がどこまで可能か：マルチステップ検索、その評価用モデルと制限。",
       "contextBudget": "各モデルが毎回送信する会話の量。",
-      "analytics": "配布されたレポート：到着した内容、各フォルダーを開く可能性のある人物、表示可能な項目。"
+      "analytics": "配布されたレポート：到着した内容、各フォルダーを開く可能性のある人物、表示可能な項目。",
+      "skills": "会話で必要な際にアシスタントが適用する再利用可能な指示ブロックです。"
     },
     "openSettings": "設定を開く",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "デリゲーション",
       "webSearch": "ウェブ検索",
       "contextBudget": "コンテキスト予算",
-      "analytics": "アナリティクス"
+      "analytics": "アナリティクス",
+      "skills": "スキル"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "グローバルのデフォルト",
       "overrides": "上書き設定",
-      "delegations": "デリゲーション"
+      "delegations": "デリゲーション",
+      "models": "モデル"
     },
     "tabsLabel": "制限セクション",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 ツール呼び出し/日",
       "m365MailReadsPerDay": "メール参照/日",
       "m365MailDraftsPerDay": "メール下書き/日",
-      "m365MailDeepScansPerDay": "メールディープスキャン/日"
+      "m365MailDeepScansPerDay": "メールディープスキャン/日",
+      "m365DigestRunsPerDay": "1日あたりのダイジェスト実行回数"
     },
     "valueModeLabel": "制限タイプ",
     "valueAmountLabel": "上限値",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "1日に利用できるMicrosoft 365ツール（カレンダー、連絡先、タスク、Teams）の呼び出し回数です。上限を超えると、チャット失敗の代わりに「明日もう一度お試しください」と返されます。",
       "m365MailReadsPerDay": "1日にできるメール検索やメッセージ／スレッドの閲覧回数です。上限を超えると「明日もう一度お試しください」と返されます。",
       "m365MailDraftsPerDay": "アシスタントが1日に作成できる下書きメール数 — それぞれ個別に確認されます。厳しい上限となります。",
-      "m365MailDeepScansPerDay": "1日にできる複合メール解析（ダイジェスト、詳細検索、コミットメント）。各解析は内部の読取回数にかかわらず1ユニットとしてカウントされます。"
+      "m365MailDeepScansPerDay": "1日にできる複合メール解析（ダイジェスト、詳細検索、コミットメント）。各解析は内部の読取回数にかかわらず1ユニットとしてカウントされます。",
+      "m365DigestRunsPerDay": "Microsoft 365の1日あたりのダイジェスト実行回数です。1回の実行で多数のGraphリードと分析モデルコールを含みます。期間ピッカーで再実行が容易なため、初期設定は厳しくなっています。"
     },
     "scopeFamily": "ファミリー",
     "scopeModel": "モデル",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "組み込みデフォルト",
     "previewSourceGlobal": "グローバルデフォルト",
     "previewSourceOverride": "オーバーライド: {label}",
-    "previewNotEvaluated": "部署／会社／オフィスおよびグループのオーバーライドはここでは評価できません。これらはユーザー本人のサインインに依存します。",
+    "previewNotEvaluated": "ディレクトリにアクセスできなかったため、この人物に対して部門／会社／オフィスやグループのルールが評価されませんでした。少し待ってから再試行してください。",
     "previewUnsaved": "最後に保存されたポリシーを表示しています。変更を保存してからプレビューしてください。",
     "previewColumnLimit": "制限",
     "previewColumnValue": "値",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "グループのみ",
     "yourScopeGroupOnlyNote": "グループや属性で定義されているため、メールアドレスによるプレビューはできません。",
     "previewOutOfScope": "この人はあなたのスコープ外です。",
-    "previewGroupOnlyScope": "あなたのスコープはグループまたは属性で定義されているため、メールアドレスによるプレビューはできません。",
+    "previewGroupOnlyScope": "範囲はグループまたは属性で定義されています。プレビューでは、この人物が範囲内かどうかを判断するためにディレクトリで検索します。",
     "previewCeilingPinned": "天井で固定: {label}",
     "previewShowUsage": "現在の利用状況を表示",
     "previewColumnUsage": "使用状況",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "この行で設定した上限は対象に固定されます：範囲付き管理者は解除できません。複数の上限がある場合、最も具体的なものが適用されます。",
     "confirmDeleteOverride": "「{label}」を削除しますか？サーバーから直ちに削除され、対象は下位の制限に戻ります。この操作は元に戻せません。",
     "confirmDeleteOverrideAction": "上書きを削除",
-    "previewUndecidableScope": "スコープにグループや属性が含まれているため、この人物が対象かどうかメールアドレスでは判定できません。",
+    "previewUndecidableScope": "範囲にグループまたは属性が含まれており、ディレクトリにアクセスできないため、この人物が範囲内かどうかは現在判断できません。少し待ってから再試行してください。",
     "previewNoLongerAdmin": "現在、有効な委任にあなたの名前が含まれていないため、制限のプレビューは利用できません。ページを再読み込みして現在のアクセス権をご確認ください。",
     "previewScopeMatchesNobody": "スコープに現在一致する対象がいないため、メールアドレスでプレビューできる人はいません。",
     "yourScopeMatchesNobodyChip": "一致なし",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "この委任は無効になっているため、再度有効にするまでオーバーライドは誰にも適用されません。グローバル階層に昇格することもありません。",
     "betaPolicyNotice": "ベータ環境：このポリシーとその使用状況カウンターは本番環境とは別に保存されます（policy.beta.json）。ここでの変更は本番環境には影響しません。",
     "delegationsManagedElsewhere": "デリゲーションは読み取り専用で表示されています。メンバーやその範囲、各管理者の権限は「デリゲーション」エリアで管理します。",
-    "delegationsManagedElsewhereLink": "デリゲーションを開く"
+    "delegationsManagedElsewhereLink": "デリゲーションを開く",
+    "modelAccess": {
+      "intro": "各モデルの利用者を決定します。ファミリの設定は、モデルが独自に設定しない限り、ファミリ内のモデルに適用されます。リストに載っている人は全員向けのデフォルトより優先され、ブロックリストはすべての許可より優先されます。",
+      "externalNote": "Azure環境外にホストされたモデル（{families}）は、ここで全員またはグループ・ドメイン・個人へ許可を付与するまで、利用できません。",
+      "envelopeNote": "ファミリへのリクエスト制限は、該当するモデル間で共有される1日あたりの予算です。モデルへの制限はそのモデル内での上限です。モデル単位で無制限にしても、ファミリ全体の予算は超えられません。",
+      "observeNote": "観察モードが有効です：ここでの設定はモデルを非表示にしたり、リクエストを拒否したりしません。ルールが正しければ上部の「適用」に切り替えてください。",
+      "familyChip": "ファミリ",
+      "modelChip": "モデル",
+      "otherModels": "ファミリがないモデル",
+      "modelsInFamily": "{count, plural, one {このファミリのモデル # 件} other {このファミリのモデル # 件}}",
+      "noModels": "カタログにモデルがまだありません。",
+      "expand": "モデルを表示",
+      "collapse": "モデルを非表示",
+      "edit": "編集",
+      "doneEditing": "完了",
+      "editNode": "{label} のアクセスを編集",
+      "defaultLabel": "その他全員",
+      "defaultInherit": "継承",
+      "defaultUnlimited": "無制限",
+      "defaultLimited": "上限",
+      "defaultUnavailable": "利用不可",
+      "defaultRequestsLabel": "その他全員の1日あたりリクエスト数",
+      "requestsPerDay": "リクエスト / 日",
+      "inheritedFrom": "{origin} から {state} を継承しています。",
+      "effectiveLabel": "リストに載っていないすべての方: {state}",
+      "inheritedChip": "継承",
+      "origin": {
+        "model": "この設定",
+        "family": "ファミリ",
+        "defaults": "グローバルデフォルト",
+        "catalogExternal": "外部モデルは許可がない限り利用不可というルール",
+        "catalog": "カタログデフォルト"
+      },
+      "state": {
+        "unlimited": "無制限",
+        "limited": "{requests} / 日まで",
+        "unavailable": "利用不可"
+      },
+      "list": {
+        "groups": "アクセス可能なグループ",
+        "domains": "アクセス可能なドメイン",
+        "allow": "許可された人物",
+        "deny": "ブロックされた人物"
+      },
+      "listHint": {
+        "groups": "これらのEntraグループのメンバーは、グループごとに設定された利用条件で利用できます。",
+        "domains": "これらのドメインのメールアドレスを持つ方は、ドメインごとに設定された条件で利用できます。",
+        "allow": "指名された人物は、デフォルトやドメインの設定に関わらず利用できます。",
+        "deny": "指名された人物は利用できません。これはすべての許可より優先されます。"
+      },
+      "grantUnlimited": "無制限",
+      "grantLimited": "上限",
+      "termsLabel": "{target} の条件",
+      "requestsLabel": "{target} の1日あたりリクエスト数",
+      "removeGrant": "{target} を削除",
+      "groupsCount": "{count, plural, one {グループ # 件} other {グループ # 件}}",
+      "domainsCount": "{count, plural, one {ドメイン # 件} other {ドメイン # 件}}",
+      "allowCount": "{count, plural, one {許可された人物 # 名} other {許可された人物 # 名}}",
+      "denyCount": "{count, plural, one {ブロックされた人物 # 名} other {ブロックされた人物 # 名}}",
+      "collisionChip": "グローバルデフォルトにも設定されています",
+      "collisionWarning": "このモデルまたはファミリーはグローバルデフォルトにも設定されています。どちらか一方を解除しない限り、保存できません。"
+    },
+    "previewSourceModelAccess": "モデル承認 — {list}",
+    "groupMembershipDegradedStructural": "このサーバーでグループメンバーシップの検索が失敗しています（{reason}）。影響を受ける人々には、グループベースのルールや権限が適用されていません。テナントの Group.Read.All 同意設定やアプリ登録を確認してください。",
+    "groupMembershipDegradedRetryable": "過去数分間にこのサーバーで一部のグループメンバーシップ検索が失敗しました（{reason}）。検索が再試行されている間、該当する人々には最大1分間グループベースのルールが適用されない場合があります。",
+    "groupMembershipDegradedUsers": "現在このサーバーで影響を受けている人数：{count, plural, one {# 人} other {# 人}}。",
+    "previewDirectoryNotFound": "このメールアドレスを持つディレクトリユーザーがいないため、部署／会社／オフィスやグループのルールは、その人がどこにも属していないものとして評価されました。"
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "朝の仕分け",
-        "description": "受信済み／対応待ち／本日のカレンダー — まとめて確認"
+        "description": "前回の勤務日以降に受信した内容、対応待ちの事項、招待やアップデートなどのダイジェストです。月曜日には金曜日と週末分も含みます。"
       },
       "chipsSettingLabel": "Microsoft 365 プレイブックを提案",
       "chipsSettingHint": "該当する場合（例：会議の書き起こしをインポート後など）に、メッセージボックス上部にプレイブック提案を表示します。",
-      "dismissChip": "{title} を閉じる"
+      "dismissChip": "{title} を閉じる",
+      "dailyDigest": {
+        "title": "デイリーダイジェスト",
+        "description": "最近のメール、Teams、カレンダーを、「あなたが対応すべきもの」「あなたが待っているもの」「更新情報」と「参考情報」に分類します — 期間を選択してください"
+      }
+    },
+    "digest": {
+      "title": "デイリーダイジェスト",
+      "intro": "指定した期間で受信した内容をスキャンし、「返信が必要なもの」「あなたへの依頼」「あなたが待っているもの」「スケジュール」「企業やプロジェクトの更新」「参考情報」に分類します。何も送信・変更はされません。",
+      "periodLabel": "期間",
+      "preset": {
+        "lastWorkday": "前回の勤務日以降",
+        "1d": "直近24時間",
+        "3d": "直近3日間",
+        "7d": "直近7日間",
+        "14d": "直近14日間",
+        "custom": "カスタム範囲"
+      },
+      "lastWorkdayHint": "本日以前の直近の平日開始から集計されます — 月曜の場合、金曜と週末を含みます。",
+      "from": "開始",
+      "to": "終了",
+      "customInvalid": "最大{{days}}日までの、順序通りの範囲を選択してください。",
+      "sourcesLabel": "情報源",
+      "sourceNoConsent": "この情報源の権限が許可されていません。",
+      "sourceHint": {
+        "mail": "受信トレイの封筒とプレビュー。送信済みアイテムで返信済みかどうかを判定します。",
+        "chat": "最新のTeamsチャット、未返信の@メンション。",
+        "channel": "下記で選択したチャンネル内の投稿。",
+        "calendar": "未返信の招待状、あなたが主催し他者が未返信の会議。"
+      },
+      "channelsLabel": "チャンネル（{count} / {max}）",
+      "removeChannel": "{name}を削除",
+      "channelsSlow": "チャンネルごとに読み込みが追加されます。数が増えるとダイジェスト処理が遅くなります。",
+      "channelsMax": "最大{max}チャンネルに達しました。",
+      "channelsNeeded": "1つ以上のチャンネルを選択するか、他の情報源を追加してください。",
+      "teamLabel": "チーム",
+      "loadingTeams": "チームを読み込み中…",
+      "pickTeam": "チャンネルを表示するチームを選択してください",
+      "loadingChannels": "チャンネルを読み込み中…",
+      "noChannels": "このチームにはチャンネルがありません。",
+      "privacyNote": "件名、送信者、および短いプレビューのみ読み取ります。メッセージ本文と添付ファイルはMicrosoft 365に残ります。項目はご自身のデータの概要です。",
+      "cancel": "キャンセル",
+      "run": "ダイジェストを実行",
+      "starting": "開始中…",
+      "startFailed": "ダイジェストを開始できませんでした。",
+      "userMessage": "デイリーダイジェスト — {period}；情報源：{sources}",
+      "working": "Microsoft 365の通信をスキャンしています…",
+      "failed": "ダイジェストが失敗しました。",
+      "failedPrefix": "デイリーダイジェスト失敗：",
+      "expired": "このダイジェスト実行は期限切れです。最新の結果を得るには再実行してください。",
+      "runAgain": "再実行",
+      "changePeriod": "期間を変更",
+      "period": {
+        "lastWorkday": "前回の勤務日以降",
+        "lastDays": "{count, plural, one {直近1日} other {直近#日間}}"
+      },
+      "source": {
+        "mail": "メール",
+        "chat": "Teamsチャット",
+        "channel": "Teamsチャンネル",
+        "calendar": "カレンダー"
+      },
+      "sourceStatus": {
+        "ok": "完了",
+        "partial": "一部完了",
+        "skipped": "スキップ",
+        "unavailable": "権限なし",
+        "error": "失敗"
+      },
+      "degraded": "分析モデルが利用できないため、カテゴリーはルールのみに基づいています。",
+      "withheld": "{count, plural, one {# 件が} other {# 件が}}セーフティ画面で保留されました。",
+      "empty": "この期間とソースにはレポートする内容がありません。",
+      "actionItems": "アクション項目",
+      "createTasks": "{count, plural, =0 {To Do に追加} one {To Do に # 件のタスクを追加} other {To Do に # 件のタスクを追加}}",
+      "taskCreated": "To Do に追加されました",
+      "tasksCreated": "{count, plural, one {# 件のタスク} other {# 件のタスク}}が「{list}」リストに追加されました。",
+      "tasksFailed": "タスクを作成できませんでした。",
+      "category": {
+        "needsReply": "返信が必要",
+        "askedOfMe": "自分への依頼",
+        "waitingOnOthers": "他者待ち",
+        "scheduling": "スケジューリング",
+        "companyUpdates": "会社・プロジェクトの更新",
+        "fyi": "FYI",
+        "bulk": "自動・一括"
+      },
+      "companyUpdatesHint": "重要、緊急度は低いことが多い",
+      "markDone": "{title} を完了としてマーク",
+      "badge": {
+        "unanswered": "未回答",
+        "mentioned": "あなたがメンションされました",
+        "important": "高重要度"
+      },
+      "askAbout": "詳細を確認",
+      "askPrompt": "上記ダイジェストの {source} アイテム「{title}」（{from}、{when}）について：何を尋ねられており、どのような回答が適切ですか？",
+      "open": {
+        "mail": "Outlook で開く",
+        "chat": "Teams で開く",
+        "channel": "Teams で開く",
+        "calendar": "Outlook で開く"
+      },
+      "footnote": "カテゴリーはご自身のシグナル（未回答、メンション、ブロードキャスト）とAI分類から生成されます。操作前にご確認ください。何も送信されていません。",
+      "age": {
+        "now": "たった今",
+        "hours": "{count}時間前",
+        "days": "{count}日前"
+      },
+      "waitForReply": "ダイジェストを開始する前に、現在の返信が完了するのをお待ちください。"
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "ナレッジ",
       "prompt": "ペルソナ",
-      "m365": "ナレッジ（Microsoft 365）",
+      "m365": "Microsoft 365",
       "org": "ナレッジ",
-      "foundry": "Foundry エージェント",
+      "foundry": "カスタムエージェント",
       "connector": "コネクター"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "独自のモデルで動作"
     },
     "loadError": "エージェントをただいま読み込めませんでした。通常は一時的な問題です。",
-    "discoveryLoading": "Foundryエージェントを検索中…",
-    "discoveryError": "Foundryエージェントを読み込めませんでした。",
+    "discoveryLoading": "追加のエージェントを検索中…",
+    "discoveryError": "一部のエージェントを読み込めませんでした。",
     "retry": "再試行"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "このフォルダの保持期間{months}か月を超えたため、表示されません。",
       "unknown": "報告された問題: {code}。"
     }
+  },
+  "skillsAdmin": {
+    "title": "スキル",
+    "description": "会話で必要な際にアシスタントが適用する再利用可能な指示ブロックです。ClaudeやChatGPTで使われるAgent Skills SKILL.md形式に対応しています。",
+    "loading": "スキルを読み込み中…",
+    "loadError": "スキルを読み込めませんでした。",
+    "retry": "再試行",
+    "unavailableBanner": "現在スキルストレージに接続できません―内蔵のデフォルトのみ表示されています。保存済みスキルや編集は復旧されるまで利用できません。",
+    "conflictError": "他の管理者によってこのスキルが変更されました。リストを再読み込みしましたので、編集を再度適用してください。",
+    "alwaysWarning": "{count}件のスキルが「常時」に設定されています。すべての会話に追加されます。トピックごとのスキルには「自動」を推奨します。",
+    "newSkill": "新規スキル",
+    "importSkill": "SKILL.mdをインポート",
+    "importTitle": "SKILL.mdファイルを貼り付けてください",
+    "importPlaceholder": "---\nname: my-skill\ndescription: このスキルの内容と使用タイミング。\n---\n\n指示内容…",
+    "importHint": "解析されたスキルが編集画面で開かれます。保存するまで何も保存されません。",
+    "importParse": "解析・確認",
+    "invalidId": "スキルIDには小文字、数字、単一のハイフンを使用してください。",
+    "saveSuccess": "スキルを保存しました。",
+    "saveError": "スキルを保存できませんでした。",
+    "deleteConfirm": "このスキルを削除しますか？会話への適用は即時停止されます。",
+    "restoreConfirm": "カスタマイズを解除し、この内蔵スキルのデフォルトに戻しますか？",
+    "deleteSuccess": "スキルを削除しました。",
+    "restoreSuccess": "内蔵デフォルトを復元しました。",
+    "deleteError": "スキルを削除できませんでした。",
+    "empty": "スキルはまだありません。新規作成するか、SKILL.mdをインポートしてください。",
+    "builtinChip": "内蔵",
+    "customizedChip": "カスタマイズ",
+    "exportSkill": "SKILL.mdとしてエクスポート",
+    "edit": "編集",
+    "delete": "削除",
+    "restoreDefault": "デフォルトに戻す",
+    "createTitle": "新規スキル",
+    "editTitle": "{name}を編集",
+    "idLabel": "ID",
+    "idHint": "小文字、数字、ハイフンを使用してください。スキルのSKILL.md名となり、作成後は編集できません。",
+    "nameLabel": "表示名",
+    "descriptionLabel": "説明",
+    "descriptionHint": "スキルの内容と使用タイミングを記載してください。これがスキル選択情報となるため、対応するトピックやフレーズを具体的に入力してください。",
+    "activationLabel": "アクティベーション",
+    "activation": {
+      "auto": "自動",
+      "always": "常時",
+      "off": "オフ",
+      "manual": "リクエスト時のみ"
+    },
+    "activationHint": {
+      "auto": "現在のタスクが説明と一致すると自動的に選択されます。ユーザーは1回のみの使用や会話へのピン留めもできます。",
+      "always": "スキルを見られる全員の会話に追加されます。頻度は抑えてご利用ください―これは永続的なプロンプトのスペースです。",
+      "off": "非アクティブ：適用されずユーザーにも提供されませんが、編集用にここに保持されます。",
+      "manual": "ユーザーがリクエストまたはピンした場合のみ適用されます。自動的に選択されることはなく、モデルにはロード可能なスキルとして提供されません。"
+    },
+    "instructionsLabel": "指示内容",
+    "instructionsHint": "Markdown、最大16KB。スキルがアクティブになるとそのまま挿入されます。",
+    "saving": "保存中…",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "documents": {
+      "title": "ドキュメント",
+      "hint": "このスキルに参照資料が保存されます。小さなドキュメントは直接読み込まれますが、大きなものは検索用にインデックスされます。最大20件（各10MB、合計20MBまで）。アセットはダウンロード専用で保存されます。",
+      "saveFirst": "ドキュメント追加の前に、この組み込みスキルをカスタマイズして保存してください。",
+      "upload": "参照ドキュメントを追加",
+      "remove": "削除",
+      "stop": "インデックス処理を停止",
+      "resume": "ドキュメントをインデックスまたは再開",
+      "empty": "まだドキュメントは添付されていません。",
+      "requestFailed": "ドキュメントのリクエストが失敗しました。再読み込みして再試行してください。",
+      "importZip": "スキルZIPをインポート",
+      "zipTooLarge": "スキルZIPは20MB以下でなければなりません。",
+      "importCount": "保存後に添付するリソース数: {count}",
+      "skippedScripts": "実行可能なスクリプトはスキップされました",
+      "status": {
+        "pending": "インデックス待機中",
+        "processing": "インデックス処理中",
+        "inline": "準備完了（直接読み込み）",
+        "indexed": "準備完了（検索可能）",
+        "failed": "インデックス失敗",
+        "asset": "ダウンロード可能なアセット"
+      },
+      "confirmRemove": "このスキルから {filename} を削除しますか？保存されている元のファイルは削除され、引用元として利用できなくなります。",
+      "reindexRequired": "これらのドキュメントは現在の地域検索と埋め込み設定のために再インデックスが必要です。インデックスが完了するまで検索されません。"
+    },
+    "applyToAgents": "エージェントが利用可能",
+    "applyToAgentsHint": "デフォルトではオフです。有効にすると、エージェントはこのスキルを閲覧専用ツールとして読み込むことができ、ペルソナの指示を置き換える必要がありません。スキル呼び出しには独立したステップ上限があります。Foundryエージェントには、定義にload_skillおよびsearch_skill_documents関数が登録されている必要があります。",
+    "requireConsent": "適用前に確認",
+    "requireConsentHint": "モデルが自動でこのスキルを適用しようとした場合、事前にユーザーに確認します。リクエストやピン留め時は確認不要です。",
+    "consentChip": "適用前に確認",
+    "sourceChip": "ソースから取得",
+    "sourceChipHint": "購読したスキルソースから提供されます。同期時に手順が更新されます。アクティベーションやエージェント、同意の設定は自身で管理できます。",
+    "sources": {
+      "title": "スキルソース",
+      "description": "外部のスキルカタログ（SKILL.mdファイルを一覧するindex.json）を購読します。スキルは組織スキルとなり、約6時間ごとに更新されます。SKILL.mdのみ取り込まれ、参照資料は対象外です。",
+      "urlLabel": "カタログURL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "パブリックホスト上のhttpsである必要があります。スキルファイルは同一の場所からのみ読み込まれます。",
+      "labelLabel": "ラベル（任意）",
+      "add": "購読する",
+      "adding": "購読中…",
+      "added": "{count, plural, =0 {ソースを追加しましたが、スキルはまだインポートされていません} one {ソースを追加しました；#件のスキルをインポートしました} other {ソースを追加しました；#件のスキルをインポートしました}}",
+      "addedWithError": "ソースは追加されましたが、最初の同期に失敗しました。ソースのエラーをご確認ください。",
+      "addError": "スキルソースを追加できませんでした",
+      "sync": "今すぐ同期",
+      "syncing": "同期中…",
+      "synced": "ソースを同期しました。",
+      "syncError": "スキルソースを同期できませんでした",
+      "remove": "ソースを削除",
+      "removeConfirm": "このソースを削除しますか？配信されたスキルは通常の組織スキルとして残り、更新は停止します。",
+      "removed": "ソースを削除しました。",
+      "removeError": "スキルソースを削除できませんでした",
+      "loading": "ソースを読み込み中…",
+      "loadError": "スキルソースを読み込めませんでした。",
+      "empty": "スキルソースはまだありません。",
+      "never": "未同期",
+      "statusOk": "同期済み",
+      "statusError": "同期失敗",
+      "statusPartial": "{count, plural, one {#件スキップされました} other {#件スキップされました}}",
+      "lastSync": "最終同期 {time}",
+      "entryCount": "{count, plural, one {#件} other {#件}}",
+      "entryStatus": {
+        "synced": "同期済み",
+        "skipped": "スキップ",
+        "conflict": "競合 — 上書きされません",
+        "invalid": "無効"
+      }
+    },
+    "requireConsentDisabledHint": "自動スキルのみ確認が可能です：リクエスト済み、ピン留め、常時適用スキルは確認なしで適用され、オンリクエストスキルはモデルによって自動で選択されません。"
+  },
+  "personalSkills": {
+    "title": "個人スキル",
+    "description": "自分の会話用に再利用可能な指示を保存できます。スキルはこのブラウザ内に保存され、チャット時のみモデルに送信されます。関連スキルは自動選択、一時使用、またはピン留めが可能です。組織ポリシーの変更やツールアクセスの許可はできません。スキルの利用は、このデプロイメントでスキルが有効になっている必要があります。エージェントとの会話では個人スキルは使用されません。",
+    "importFile": "SKILL.md または ZIP をインポート",
+    "review": "保存前に指示内容をすべて確認してください。インポートされた指示はユーザーの設定であり、信頼された組織ポリシーではありません。",
+    "skipped": "実行可能スクリプトはスキップされました",
+    "importTooLarge": "インポートは20MB以下にしてください。",
+    "invalid": "スキルをインポートできませんでした。",
+    "duplicate": "その個人スキルIDはすでに存在します。既存のスキルを編集するか、別のIDを選択してください。",
+    "countLimit": "個人スキルは最大20個まで保存できます。",
+    "requestLimit": "有効な個人スキルがリクエスト制限160KBを超えています。いくつかのスキルを無効にするか、指示を短縮してください。",
+    "saved": "個人スキルがこのブラウザに保存されました。",
+    "instructionsHint": "インポートされたテキスト参照を含め、最大16KBの指示が可能です。バイナリファイルや恒常的なドキュメント索引は組織スキルのみで利用できます。エクスポート時は user: プレフィックスなしで標準の SKILL.md 名が使用されます。",
+    "enabled": "自分の会話で有効",
+    "empty": "繰り返し作業用のスキルを作成するか、SKILL.md をインポートして内容を確認して保存してください。"
   }
 }

@@ -134,9 +134,9 @@ describe('the seeding rule ScopedLimitRows depends on', () => {
     expect(resolveLimit(MODEL_ALLOWED, p, principal, 'gpt-5.2').value).toBe(
       false,
     );
-    expect(
-      resolveLimit(MODEL_ALLOWED, p, principal, 'claude-opus-5').value,
-    ).toBe(true);
+    expect(resolveLimit(MODEL_ALLOWED, p, principal, 'gpt-5.4').value).toBe(
+      true,
+    );
   });
 });
 

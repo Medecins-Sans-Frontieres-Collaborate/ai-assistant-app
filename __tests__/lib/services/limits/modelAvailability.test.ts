@@ -1,11 +1,11 @@
 /**
  * modelAvailability.ts — the pure per-model answer the picker consumes
  * (docs/LIMITS_USER_FACING_UX.md §7.1). What matters here is that it mirrors
- * ENFORCEMENT cell for cell: conjunctive model + family gate (so a
- * model-level allow cannot rescue a family block, the divergence §2a.4
- * describes), the same counter set the middleware reserves, read back under
- * the same cell names, and the same byom exemption — while applying no mode
- * and touching no storage.
+ * ENFORCEMENT cell for cell: the ONE merged model + family gate (so a
+ * model rule overrides its family's at the same layer, exactly as checkGate
+ * resolves it), the same counter set the middleware reserves, read back
+ * under the same cell names, and the same byom exemption — while applying
+ * no mode and touching no storage.
  */
 import {
   isModelBlocked,
@@ -77,15 +77,64 @@ describe('isModelBlocked', () => {
     expect(isModelBlocked(policy, alice, GPT52.id, GPT52.series)).toBe(false);
   });
 
-  it('a model-level allow does NOT rescue a family block (conjunctive, as checkGate)', () => {
-    // The old single-cell filter resolved (modelId, series) together and let
-    // the more specific `true` shadow the family `false`; enforcement never
-    // did, and the picker must agree with the send.
+  it('a model-level allow DOES override a family block at the same layer (inheritance, as checkGate)', () => {
+    // Model approval semantics (docs/LIMITS.md "Model approval"): a model
+    // inherits its family's availability unless it says otherwise. The
+    // picker and the send resolve the same merged gate cell.
     const policy = policyWith([
       { limitKey: 'model.allowed', series: 'o-series', value: false },
       { limitKey: 'model.allowed', modelId: 'o3', value: true },
     ]);
+    expect(isModelBlocked(policy, alice, 'o3', 'o-series')).toBe(false);
+    expect(isModelBlocked(policy, alice, 'o4-mini', 'o-series')).toBe(true);
+  });
+
+  it('a person-level family block still beats a model-level default allow (layer ranks first)', () => {
+    const policy = policyWith(
+      [{ limitKey: 'model.allowed', modelId: 'o3', value: true }],
+      {
+        overrides: [
+          {
+            id: 'lim-0000000000aa',
+            label: '',
+            enabled: true,
+            scope: 'user',
+            targets: ['alice@msf.org'],
+            priority: 0,
+            entries: [
+              {
+                limitKey: 'model.allowed',
+                series: 'o-series',
+                value: false,
+                ceiling: false,
+              },
+            ],
+            createdBy: 'test',
+            createdAt: '2026-01-01T00:00:00.000Z',
+            updatedBy: 'test',
+            updatedAt: '2026-01-01T00:00:00.000Z',
+          },
+        ],
+      },
+    );
     expect(isModelBlocked(policy, alice, 'o3', 'o-series')).toBe(true);
+  });
+
+  it('external models are unavailable by catalog until granted', () => {
+    expect(isModelBlocked(null, alice, 'claude-sonnet-5', 'claude')).toBe(true);
+    expect(isModelBlocked(null, alice, GPT52.id, GPT52.series)).toBe(false);
+    // A family-level grant lifts the whole family; a model-level one just that model.
+    const family = policyWith([
+      { limitKey: 'model.allowed', series: 'claude', value: true },
+    ]);
+    expect(isModelBlocked(family, alice, 'claude-sonnet-5', 'claude')).toBe(
+      false,
+    );
+    const one = policyWith([
+      { limitKey: 'model.allowed', modelId: 'claude-sonnet-5', value: true },
+    ]);
+    expect(isModelBlocked(one, alice, 'claude-sonnet-5', 'claude')).toBe(false);
+    expect(isModelBlocked(one, alice, 'claude-opus-5', 'claude')).toBe(true);
   });
 
   it('a model block alone hides only that model', () => {

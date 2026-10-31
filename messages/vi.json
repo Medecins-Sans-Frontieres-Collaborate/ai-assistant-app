@@ -813,7 +813,16 @@
       "stillWorking": "Vẫn đang xử lý…",
       "assessingSearchResults": "Đang kiểm tra kết quả xem có trả lời được câu hỏi không…",
       "refiningSearch": "Đang tìm lại: “{query}”…",
-      "readingSearchPages": "Đang đọc {count} trang kết quả…"
+      "readingSearchPages": "Đang đọc {count} trang kết quả…",
+      "toolRoutingUnavailableInRegion": "Định tuyến công cụ không khả dụng tại điểm cuối {region} — trả lời mà không có công cụ…",
+      "applyingSkill": "Đang áp dụng kỹ năng: {skills}…",
+      "applyingSkills": "Đang áp dụng các kỹ năng: {skills}…",
+      "readingSkillReferences": "Đang đọc tài liệu tham khảo kỹ năng…",
+      "selectingSkills": "Đang chọn kỹ năng…",
+      "retryingModel": "Mô hình đang bận — sẽ thử lại sau {seconds}s (lần thử {attempt})…",
+      "resumingResponse": "Kết nối với mô hình bị ngắt — sẽ tiếp tục từ chỗ dừng…",
+      "continuingResponse": "Câu trả lời đã đạt giới hạn độ dài — đang tiếp tục…",
+      "trimmingContext": "Cuộc trò chuyện quá dài với mô hình — đang cắt bớt lịch sử cũ và thử lại…"
     },
     "toolSummary": {
       "usedTools": "Đã sử dụng {count, plural, one {# công cụ} other {# công cụ}}",
@@ -879,7 +888,9 @@
       "deniedByRuleHint": "Bị chặn theo quy tắc của bạn — quản lý trong Cài đặt → Kết nối.",
       "batchPendingHint": "{count} yêu cầu dùng công cụ đang chờ xử lý",
       "approveAllButton": "Chấp thuận tất cả",
-      "denyAllButton": "Từ chối tất cả"
+      "denyAllButton": "Từ chối tất cả",
+      "applySkillTitle": "Áp dụng kỹ năng “{skill}”?",
+      "skillConsentNote": "Quản trị viên đã thiết lập kỹ năng này yêu cầu xác nhận trước khi áp dụng. Nếu đồng ý, hướng dẫn sẽ chỉ được sử dụng cho câu trả lời này."
     },
     "openImage": "Mở hình ảnh",
     "copyMessage": "Sao chép tin nhắn",
@@ -919,7 +930,54 @@
     "alwaysWaitThisLong": "Luôn chờ tối đa {duration}",
     "keepSearching": "Tiếp tục tìm kiếm",
     "keepSearchingHint": "Việc tìm kiếm đã dừng lại trước khi tìm được thông tin này. Hãy yêu cầu trợ lý thử các phương pháp khác.",
-    "keepSearchingMessage": "Vui lòng tiếp tục tìm kiếm nội dung này — hãy thử cách khác."
+    "keepSearchingMessage": "Vui lòng tiếp tục tìm kiếm nội dung này — hãy thử cách khác.",
+    "addSkill": "Kỹ năng",
+    "removeSkill": "Xóa kỹ năng",
+    "skillsMenuLabel": "Kỹ năng có sẵn",
+    "skillsLimit": "Tối đa 3 kỹ năng cho mỗi tin nhắn.",
+    "skillPin": "Ghim vào cuộc trò chuyện",
+    "skillUseOnce": "Sử dụng một lần",
+    "skillPinned": "đã ghim",
+    "skillOnce": "tin nhắn tiếp theo",
+    "skillsPaused": "đã tạm dừng",
+    "skillUnavailable": "không khả dụng",
+    "skillsAutomaticHint": "Kỹ năng liên quan sẽ được chọn tự động. Sử dụng một lần cho tin nhắn tiếp theo hoặc ghim kỹ năng để dùng xuyên suốt cuộc trò chuyện này.",
+    "skillsAgentDisabled": "Các kỹ năng sẽ tạm dừng trong khi có tác nhân được đính kèm. Ghim của bạn sẽ tiếp tục khi bạn gỡ tác nhân ra.",
+    "skillPersonal": "cá nhân",
+    "skillsAgentToolsHint": "Chỉ các kỹ năng của tổ chức đã được quản trị viên bật cho đại diện sử dụng mới được cung cấp ở đây. Đại diện có thể tải chúng như các công cụ chỉ đọc. Các pin khác sẽ tạm dừng và các kỹ năng cá nhân sẽ không khả dụng cho đại diện.",
+    "skillAlwaysOn": "luôn bật",
+    "skillAlwaysOnHint": "Được quản trị viên thêm vào mọi tin nhắn trong cuộc trò chuyện này.",
+    "skillUsage": {
+      "label": "Kỹ năng",
+      "requested": "đã yêu cầu",
+      "pinned": "ghim",
+      "auto": "tự động",
+      "unavailable": "không khả dụng",
+      "incomplete": "Một số kỹ năng không thể được áp dụng",
+      "references": "{count, plural, one {# đoạn tham khảo} other {# đoạn tham khảo}}",
+      "referencesUnavailable": "Một số tài liệu tham khảo không khả dụng",
+      "showDetails": "Hiện chi tiết kỹ năng",
+      "hideDetails": "Ẩn chi tiết kỹ năng",
+      "agentLoad": "được agent tải lên",
+      "agentSearch": "tài liệu được agent tìm kiếm",
+      "needsApproval": "cần bạn phê duyệt",
+      "original": "như lúc chạy ban đầu",
+      "updated": "đã cập nhật kể từ đó"
+    },
+    "skillsManualHint": "Tự động chọn đã tắt trong Cài đặt. Sử dụng một lần cho tin nhắn tiếp theo hoặc ghim kỹ năng để dùng xuyên suốt cuộc trò chuyện này.",
+    "queuedMessage": {
+      "label": "Đang chờ",
+      "attachmentOnly": "Tệp đính kèm",
+      "cancel": "Hủy tin nhắn đang chờ"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Phản hồi đã bị dừng bởi bộ lọc an toàn nội dung. Vui lòng diễn đạt lại yêu cầu hoặc bỏ phần có thể gây ra vấn đề.",
+      "MODEL_CONTEXT_TOO_LONG": "Cuộc trò chuyện này quá dài với mô hình đã chọn, kể cả sau khi cắt bớt lịch sử. Hãy bắt đầu cuộc trò chuyện mới, xóa bớt tệp đính kèm hoặc chọn mô hình có cửa sổ ngữ cảnh lớn hơn.",
+      "MODEL_OUTPUT_LIMIT": "Mô hình đã dùng hết mức đầu ra nhưng chưa tạo được câu trả lời. Hãy thử giảm mức độ suy luận hoặc rút ngắn yêu cầu.",
+      "MODEL_RATE_LIMITED": "Mô hình đang nhận quá nhiều yêu cầu cùng lúc. Hệ thống đã tự động thử lại; vui lòng thử lại sau một lúc.",
+      "MODEL_QUOTA_EXCEEDED": "Mô hình đã hết hạn mức sử dụng. Hãy thử mô hình khác hoặc thử lại sau.",
+      "MODEL_AUTH_FAILED": "Ứng dụng không thể xác thực với dịch vụ mô hình. Đây là lỗi cấu hình — vui lòng liên hệ bộ phận hỗ trợ."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -1326,7 +1384,11 @@
       "preferModelTitle": "Ưu tiên mô hình đã chọn",
       "preferModelDescription": "Không tự động chuyển mô hình khác khi yêu cầu thất bại. Lỗi vẫn sẽ cho phép bạn chuyển đổi."
     },
-    "Analytics": "Phân tích"
+    "Analytics": "Phân tích",
+    "skills": {
+      "autoApply": "Cho phép trợ lý tự động áp dụng kỹ năng",
+      "autoApplyDescription": "Các kỹ năng liên quan và kỹ năng cá nhân của bạn sẽ được chọn cho từng tin nhắn. Khi tắt, chỉ những kỹ năng bạn yêu cầu hoặc ghim, và các kỹ năng quản trị viên áp dụng cho tất cả cuộc trò chuyện mới được sử dụng."
+    }
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -2731,7 +2793,15 @@
     "chipAutoHideUnit": "giây",
     "chipAutoHideHint": "Từ {min} đến {max} giây.",
     "byWorkflow": "Theo quy trình",
-    "byWorkflowNote": "Một phần của tổng số trên, hiển thị riêng — không phải sử dụng thêm. Các lần chạy tại khoá tài trợ được tính vào báo cáo của tổ chức bạn và ngân sách token, nhưng không tính vào tổng cục bộ này."
+    "byWorkflowNote": "Một phần của tổng số trên, hiển thị riêng — không phải sử dụng thêm. Các lần chạy tại khoá tài trợ được tính vào báo cáo của tổ chức bạn và ngân sách token, nhưng không tính vào tổng cục bộ này.",
+    "chipLabelTitle": "Nhãn chip",
+    "chipLabelHint": "Bảng phân tích luôn hiển thị phát thải và chi phí song song; mục này chỉ chọn nội dung hiển thị của chip đã thu gọn.",
+    "chipLabelEmissions": "Phát thải",
+    "chipLabelCost": "Chi phí",
+    "chipLabelBoth": "Cả hai",
+    "costTile": "Chi phí ước tính",
+    "costDisclosure": "Chi phí theo giá niêm yết tại thời điểm {asOf} (tỉ giá Chuẩn Toàn Cầu, không áp dụng giảm giá đầu vào được lưu sẵn): là mức chi phí cao nhất, không phải hóa đơn. Tìm kiếm web, thực thi mã, chuyển âm, giọng nói, dịch thuật và lập chỉ mục tài liệu không được tính vào.",
+    "costUnpriced": "{count, plural, one {# yêu cầu không có giá niêm yết} other {# yêu cầu không có giá niêm yết}} không được tính vào."
   },
   "extraction": {
     "toggleLabel": "Trích xuất dữ liệu có cấu trúc",
@@ -4533,7 +4603,16 @@
         "auto": "Tự động",
         "hidden": "Ẩn"
       },
-      "visibilityHint": "Chế độ Tự động sẽ hiển thị chip khi ước tính được cập nhật hoặc khi bạn di chuột vào. Bạn có thể thay đổi lại trong Cài đặt › Sử dụng & Tác động."
+      "visibilityHint": "Chế độ Tự động sẽ hiển thị chip khi ước tính được cập nhật hoặc khi bạn di chuột vào. Bạn có thể thay đổi lại trong Cài đặt › Sử dụng & Tác động.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Chi phí ước tính {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Không có giá niêm yết cho các yêu cầu trong hàng này",
+        "unpriced": "{count, plural, one {# yêu cầu không có giá niêm yết} other {# yêu cầu không có giá niêm yết}} không được tính vào chi phí.",
+        "noPriceData": "Không hiển thị chi phí: mô hình cuộc hội thoại này không có giá niêm yết (nguồn riêng, thời gian chạy cục bộ và agent không được định giá).",
+        "note": "Chi phí theo giá niêm yết tại thời điểm {asOf} (tỉ giá Chuẩn Toàn Cầu, không áp dụng giảm giá đầu vào được lưu sẵn): là mức chi phí cao nhất, không phải hóa đơn. Tìm kiếm web, thực thi mã, chuyển âm, giọng nói, dịch thuật và lập chỉ mục tài liệu không được tính vào."
+      }
     },
     "workflow": {
       "title": "Không gian làm việc này (ước tính)",
@@ -5325,7 +5404,22 @@
     "confirmDeleteGlossary": "Xóa bảng thuật ngữ",
     "glossaryDeleteSuccess": "Đã xóa bảng thuật ngữ",
     "channelProfilesTab": "Nền tảng",
-    "channelSetsTab": "Bộ kênh"
+    "channelSetsTab": "Bộ kênh",
+    "addPromptAgent": "Thêm tác nhân prompt",
+    "m365AgentIndexStop": "Dừng lập chỉ mục",
+    "foundryAgentsHeading": "Các tác nhân Foundry và prompt",
+    "foundryAgentsDescription": "Các tác nhân được phát hiện từ Azure AI Foundry qua quyền truy cập của bạn, cùng với các tác nhân prompt được xác định tại đây. Các tác nhân tri thức và tác nhân Microsoft 365 được quản lý ở các phần riêng phía dưới.",
+    "agentSkillsLabel": "Kỹ năng",
+    "agentSkillsHelp": "Những kỹ năng tổ chức mà tác nhân này có thể tải khi trả lời. Người dùng vẫn chỉ thấy những kỹ năng mà quy tắc truy cập cho phép.",
+    "agentSkills": {
+      "inherit": "Kỹ năng được đánh dấu \"có sẵn cho tác nhân\"",
+      "selected": "Chỉ những kỹ năng được chọn bên dưới",
+      "none": "Không có kỹ năng nào"
+    },
+    "agentSkillsNone": "Không có kỹ năng nào để chọn.",
+    "agentSkillsLoading": "Đang tải các kỹ năng…",
+    "agentSkillsLoadError": "Không thể tải các kỹ năng. Các lựa chọn đã lưu trước đó được giữ nguyên.",
+    "agentSkillsNotVisible": "(không hiển thị với bạn — bỏ chọn để xóa)"
   },
   "localModels": {
     "title": "Mô hình cục bộ",
@@ -5552,7 +5646,8 @@
       "channelSets": "Quy tắc của từng nhóm khi đăng trên nền tảng: hướng dẫn, giọng điệu, mặc định, ai có thể sử dụng và ai được phép gửi.",
       "webSearch": "Giới hạn phạm vi tìm kiếm web: tìm kiếm nhiều bước, mô hình đánh giá và các giới hạn của nó.",
       "contextBudget": "Lượng thông tin cuộc trò chuyện mỗi mô hình nhận được trong mỗi lượt.",
-      "analytics": "Báo cáo đã chuyển: nội dung đã nhận, ai có thể mở từng thư mục và các trường có thể hiển thị."
+      "analytics": "Báo cáo đã chuyển: nội dung đã nhận, ai có thể mở từng thư mục và các trường có thể hiển thị.",
+      "skills": "Các khối hướng dẫn có thể tái sử dụng mà trợ lý áp dụng khi cuộc trò chuyện cần."
     },
     "openSettings": "Mở cài đặt",
     "area": {
@@ -5563,7 +5658,8 @@
       "delegations": "Phân quyền",
       "webSearch": "Tìm kiếm web",
       "contextBudget": "Ngân sách ngữ cảnh",
-      "analytics": "Phân tích"
+      "analytics": "Phân tích",
+      "skills": "Kỹ năng"
     }
   },
   "limits": {
@@ -5593,7 +5689,8 @@
     "tab": {
       "defaults": "Mặc định toàn cầu",
       "overrides": "Ghi đè",
-      "delegations": "Ủy quyền"
+      "delegations": "Ủy quyền",
+      "models": "Mô hình"
     },
     "tabsLabel": "Các mục giới hạn",
     "category": {
@@ -5625,7 +5722,8 @@
       "m365ToolCallsPerDay": "Lượt gọi công cụ Microsoft 365 mỗi ngày",
       "m365MailReadsPerDay": "Lượt đọc thư mỗi ngày",
       "m365MailDraftsPerDay": "Bản nháp thư mỗi ngày",
-      "m365MailDeepScansPerDay": "Quét sâu thư mỗi ngày"
+      "m365MailDeepScansPerDay": "Quét sâu thư mỗi ngày",
+      "m365DigestRunsPerDay": "Số lần chạy tổng hợp mỗi ngày"
     },
     "valueModeLabel": "Loại giới hạn",
     "valueAmountLabel": "Giá trị giới hạn",
@@ -5703,7 +5801,8 @@
       "m365ToolCallsPerDay": "Số lần gọi công cụ Microsoft 365 (lịch, danh bạ, tác vụ, Teams) mỗi ngày. Khi vượt giới hạn, công cụ sẽ trả về kết quả \"vui lòng thử lại vào ngày mai\" thay vì làm gián đoạn cuộc trò chuyện.",
       "m365MailReadsPerDay": "Số lượt tìm kiếm thư và đọc tin nhắn/chủ đề mỗi ngày. Khi vượt giới hạn, công cụ thư sẽ trả về \"vui lòng thử lại vào ngày mai\".",
       "m365MailDraftsPerDay": "Số bản nháp email trợ lý có thể tạo mỗi ngày — mỗi bản cần xác nhận riêng. Hạn mức được đặt nghiêm ngặt.",
-      "m365MailDeepScansPerDay": "Số lượt phân tích thư tổng hợp (tóm tắt, tìm kiếm sâu, cam kết) mỗi ngày. Mỗi lượt quét tính là một đơn vị ngân sách, bất kể số lần đọc bên trong."
+      "m365MailDeepScansPerDay": "Số lượt phân tích thư tổng hợp (tóm tắt, tìm kiếm sâu, cam kết) mỗi ngày. Mỗi lượt quét tính là một đơn vị ngân sách, bất kể số lần đọc bên trong.",
+      "m365DigestRunsPerDay": "Số lần chạy tổng hợp Microsoft 365 mỗi ngày. Một lần chạy gồm hàng chục lượt đọc Graph cùng hai lần gọi phân tích; bộ chọn khoảng thời gian giúp dễ yêu cầu chạy lại, do đó giới hạn mặc định khá chặt."
     },
     "scopeFamily": "Nhóm",
     "scopeModel": "Mô hình",
@@ -5758,7 +5857,7 @@
     "previewSourceCatalog": "Giá trị mặc định tích hợp",
     "previewSourceGlobal": "Giá trị mặc định toàn hệ thống",
     "previewSourceOverride": "Ghi đè: {label}",
-    "previewNotEvaluated": "Không thể kiểm tra ghi đè theo phòng ban/công ty/văn phòng và nhóm tại đây — cần đăng nhập tài khoản của người đó.",
+    "previewNotEvaluated": "Không thể truy cập thư mục, do đó các quy tắc về phòng ban/công ty/văn phòng và nhóm không được đánh giá cho người này. Vui lòng thử lại sau.",
     "previewUnsaved": "Đang hiển thị chính sách vừa lưu gần nhất. Hãy lưu các thay đổi để kiểm tra chúng.",
     "previewColumnLimit": "Giới hạn",
     "previewColumnValue": "Giá trị",
@@ -5854,7 +5953,7 @@
     "yourScopeGroupOnlyChip": "Chỉ nhóm",
     "yourScopeGroupOnlyNote": "Chỉ được xác định bởi nhóm hoặc thuộc tính, nên không thể xem trước giới hạn theo địa chỉ email.",
     "previewOutOfScope": "Người này ngoài phạm vi của bạn.",
-    "previewGroupOnlyScope": "Phạm vi của bạn được xác định bởi nhóm hoặc thuộc tính nên không thể xem trước giới hạn theo địa chỉ email.",
+    "previewGroupOnlyScope": "Phạm vi của bạn được xác định bởi các nhóm hoặc thuộc tính. Bản xem trước sẽ tìm kiếm người này trong thư mục để xác định họ có nằm trong phạm vi đó không.",
     "previewCeilingPinned": "Đã cố định do giới hạn trên: {label}",
     "previewShowUsage": "Hiển thị mức sử dụng hiện tại",
     "previewColumnUsage": "Đã sử dụng",
@@ -5870,7 +5969,7 @@
     "overrideCeilingHint": "Giới hạn cứng trên một hàng sẽ áp dụng cố định giá trị đó cho các đối tượng của override này: quản trị viên bị giới hạn không thể nâng lên, và khi có nhiều giới hạn cứng thì giới hạn cụ thể nhất sẽ được ưu tiên.",
     "confirmDeleteOverride": "Xóa \"{label}\"? Mục này sẽ bị xóa ngay lập tức khỏi máy chủ và các đối tượng của nó sẽ chuyển về các giới hạn bên dưới. Không thể hoàn tác thao tác này.",
     "confirmDeleteOverrideAction": "Xóa override",
-    "previewUndecidableScope": "Phạm vi của bạn bao gồm nhóm hoặc thuộc tính, nên không thể xác định người này có nằm trong phạm vi chỉ dựa vào địa chỉ email.",
+    "previewUndecidableScope": "Phạm vi của bạn bao gồm các nhóm hoặc thuộc tính và không thể truy cập thư mục, nên hiện tại không thể xác định người này có nằm trong phạm vi đó hay không. Vui lòng thử lại sau.",
     "previewNoLongerAdmin": "Bạn không còn nằm trong nhóm phân quyền được bật, nên không thể xem trước các giới hạn. Hãy tải lại trang để cập nhật quyền truy cập hiện tại của bạn.",
     "previewScopeMatchesNobody": "Phạm vi của bạn hiện không khớp với ai cả, nên không có ai để xem trước theo địa chỉ email.",
     "yourScopeMatchesNobodyChip": "Không khớp với ai cả",
@@ -6021,7 +6120,73 @@
     "disabledDelegationNote": "Ủy quyền của nó đang bị tắt, nên ghi đè này sẽ không áp dụng cho ai cho đến khi ủy quyền được bật lại. Nó không bao giờ được nâng lên mức toàn cầu.",
     "betaPolicyNotice": "Môi trường beta: chính sách này và bộ đếm sử dụng của nó được lưu trữ riêng biệt với môi trường sản xuất (policy.beta.json). Mọi thay đổi tại đây sẽ không ảnh hưởng đến môi trường sản xuất.",
     "delegationsManagedElsewhere": "Phân quyền được hiển thị ở đây chỉ để xem. Ai thuộc phân quyền nào, người dùng nào được bao phủ và mỗi quản trị viên được phép làm gì sẽ được quản lý trong mục Phân quyền.",
-    "delegationsManagedElsewhereLink": "Mở Phân quyền"
+    "delegationsManagedElsewhereLink": "Mở Phân quyền",
+    "modelAccess": {
+      "intro": "Quyết định ai có thể sử dụng từng mô hình. Thiết lập của một nhóm áp dụng cho các mô hình của nó trừ khi mô hình có thiết lập riêng; những người có trong danh sách sẽ được ưu tiên hơn mặc định cho những người khác; danh sách chặn có quyền ưu tiên cao nhất.",
+      "externalNote": "Các mô hình được lưu trữ bên ngoài môi trường Azure ({families}) sẽ không khả dụng cho bất kỳ ai cho đến khi bạn cấp quyền tại đây — cho tất cả mọi người thông qua mặc định, hoặc cho nhóm, tên miền và cá nhân.",
+      "envelopeNote": "Giới hạn yêu cầu trên một nhóm là ngân sách chia sẻ hàng ngày cho các mô hình của nó; giới hạn trên một mô hình là giới hạn trong chính mô hình đó. Không giới hạn trên một mô hình không nâng ngân sách chung của nhóm.",
+      "observeNote": "Chế độ quan sát đang bật: các thiết lập ở đây chưa ẩn mô hình hoặc từ chối yêu cầu nào. Hãy chuyển sang Chế độ áp dụng ở trên khi đã cấu hình đúng quy tắc.",
+      "familyChip": "Nhóm",
+      "modelChip": "Mô hình",
+      "otherModels": "Mô hình không thuộc nhóm nào",
+      "modelsInFamily": "{count, plural, one {# mô hình trong nhóm này} other {# mô hình trong nhóm này}}",
+      "noModels": "Chưa có mô hình nào trong danh mục.",
+      "expand": "Hiển thị mô hình",
+      "collapse": "Ẩn mô hình",
+      "edit": "Chỉnh sửa",
+      "doneEditing": "Hoàn thành",
+      "editNode": "Chỉnh sửa quyền truy cập cho {label}",
+      "defaultLabel": "Những người khác",
+      "defaultInherit": "Kế thừa",
+      "defaultUnlimited": "Không giới hạn",
+      "defaultLimited": "Giới hạn đến",
+      "defaultUnavailable": "Không khả dụng",
+      "defaultRequestsLabel": "Số yêu cầu mỗi ngày cho những người khác",
+      "requestsPerDay": "yêu cầu / ngày",
+      "inheritedFrom": "Kế thừa {state} từ {origin}.",
+      "effectiveLabel": "Ai không có trên danh sách sẽ nhận: {state}.",
+      "inheritedChip": "kế thừa",
+      "origin": {
+        "model": "thiết lập này",
+        "family": "nhóm của nó",
+        "defaults": "Mặc định toàn hệ thống",
+        "catalogExternal": "quy tắc rằng mô hình bên ngoài không khả dụng cho đến khi được cấp quyền",
+        "catalog": "mặc định của danh mục"
+      },
+      "state": {
+        "unlimited": "Không giới hạn",
+        "limited": "Giới hạn {requests} / ngày",
+        "unavailable": "Không khả dụng"
+      },
+      "list": {
+        "groups": "Nhóm có quyền truy cập",
+        "domains": "Tên miền có quyền truy cập",
+        "allow": "Người được phép",
+        "deny": "Người bị chặn"
+      },
+      "listHint": {
+        "groups": "Thành viên của các nhóm Entra này có thể sử dụng, theo điều kiện của từng nhóm.",
+        "domains": "Tất cả người có địa chỉ email tại các tên miền này, theo điều kiện ứng với từng tên miền.",
+        "allow": "Những người được chỉ định này có thể sử dụng dù mặc định hoặc tên miền của họ quy định thế nào.",
+        "deny": "Những người được chỉ định này sẽ không bao giờ được sử dụng. Luôn ưu tiên quyền chặn này."
+      },
+      "grantUnlimited": "Không giới hạn",
+      "grantLimited": "Giới hạn đến",
+      "termsLabel": "Điều kiện cho {target}",
+      "requestsLabel": "Số yêu cầu mỗi ngày cho {target}",
+      "removeGrant": "Xóa {target}",
+      "groupsCount": "{count, plural, one {# nhóm} other {# nhóm}}",
+      "domainsCount": "{count, plural, one {# tên miền} other {# tên miền}}",
+      "allowCount": "{count, plural, one {# người được phép} other {# người được phép}}",
+      "denyCount": "{count, plural, one {# người bị chặn} other {# người bị chặn}}",
+      "collisionChip": "Cũng có trong Thiết lập mặc định toàn cầu",
+      "collisionWarning": "Mô hình hoặc nhóm này cũng được cấu hình trong Thiết lập mặc định toàn cầu. Việc lưu sẽ bị từ chối cho đến khi một trong hai được xóa."
+    },
+    "previewSourceModelAccess": "Phê duyệt mô hình — {list}",
+    "groupMembershipDegradedStructural": "Tìm kiếm thành viên nhóm đang gặp lỗi trên máy chủ này ({reason}). Các quy tắc và phân quyền dựa trên nhóm không được áp dụng cho những người bị ảnh hưởng — hãy kiểm tra quyền đồng ý Group.Read.All của tenant và đăng ký ứng dụng.",
+    "groupMembershipDegradedRetryable": "Một số tìm kiếm thành viên nhóm đã thất bại trên máy chủ này trong vài phút gần đây ({reason}). Các quy tắc dựa trên nhóm có thể không áp dụng cho những người đó trong tối đa một phút khi hệ thống thử lại tìm kiếm.",
+    "groupMembershipDegradedUsers": "Hiện có {count, plural, one {# người} other {# người}} bị ảnh hưởng trên máy chủ này.",
+    "previewDirectoryNotFound": "Không có người dùng thư mục nào có địa chỉ email này, vì vậy các quy tắc phòng ban/công ty/văn phòng và nhóm được đánh giá như thể người đó không thuộc bất kỳ nhóm nào."
   },
   "m365": {
     "connections": {
@@ -6372,11 +6537,118 @@
       },
       "morningTriage": {
         "title": "Sàng lọc buổi sáng",
-        "description": "Có gì mới, việc nào đang chờ bạn, và lịch hôm nay — một bản tóm tắt"
+        "description": "Tổng hợp kể từ ngày làm việc trước — những gì đã đến, những việc đang chờ bạn, lời mời và cập nhật; vào thứ Hai sẽ bao gồm cả thứ Sáu và cuối tuần."
       },
       "chipsSettingLabel": "Đề xuất quy trình Microsoft 365",
       "chipsSettingHint": "Hiển thị gợi ý playbook phía trên hộp soạn khi phù hợp (ví dụ: sau khi nhập bản ghi họp).",
-      "dismissChip": "Bỏ qua {title}"
+      "dismissChip": "Bỏ qua {title}",
+      "dailyDigest": {
+        "title": "Tổng hợp hằng ngày",
+        "description": "Sắp xếp thư mới, Teams và lịch vào các mục cần bạn xử lý, đang chờ phản hồi, cập nhật và FYI — chọn khoảng thời gian"
+      }
+    },
+    "digest": {
+      "title": "Tổng hợp hằng ngày",
+      "intro": "Quét những gì bạn nhận được trong khoảng thời gian đã chọn và phân loại thành các mục cần phản hồi, các yêu cầu gửi đến bạn, việc đang chờ, lịch trình, cập nhật công ty/dự án và thông báo FYI. Không gửi đi hay thay đổi gì.",
+      "periodLabel": "Khoảng thời gian",
+      "preset": {
+        "lastWorkday": "Từ ngày làm việc trước",
+        "1d": "24 giờ qua",
+        "3d": "3 ngày qua",
+        "7d": "7 ngày qua",
+        "14d": "14 ngày qua",
+        "custom": "Khoảng tùy chọn"
+      },
+      "lastWorkdayHint": "Từ đầu ngày làm việc gần nhất trước hôm nay — nếu là thứ Hai thì gồm cả thứ Sáu và cuối tuần.",
+      "from": "Từ",
+      "to": "Đến",
+      "customInvalid": "Chọn một khoảng liên tục tối đa {days} ngày.",
+      "sourcesLabel": "Nguồn",
+      "sourceNoConsent": "Chưa cấp quyền truy cập nguồn này.",
+      "sourceHint": {
+        "mail": "Phong bì hộp thư đến và bản xem trước; mục Đã gửi quyết định thư nào được coi là đã trả lời.",
+        "chat": "Tin nhắn Teams gần đây, với các @mention bạn chưa trả lời.",
+        "channel": "Bài đăng trong các kênh bạn chọn phía dưới.",
+        "calendar": "Lời mời đang chờ bạn trả lời và các cuộc họp bạn tổ chức nhưng người khác chưa phản hồi."
+      },
+      "channelsLabel": "Kênh ({count} trên {max})",
+      "removeChannel": "Xóa {name}",
+      "channelsSlow": "Mỗi kênh đều tăng lượt đọc; càng nhiều kênh thì tổng hợp càng lâu.",
+      "channelsMax": "Đã đạt tối đa {max} kênh.",
+      "channelsNeeded": "Chọn ít nhất một kênh hoặc thêm một nguồn khác.",
+      "teamLabel": "Nhóm",
+      "loadingTeams": "Đang tải nhóm…",
+      "pickTeam": "Chọn nhóm để liệt kê kênh",
+      "loadingChannels": "Đang tải kênh…",
+      "noChannels": "Không tìm thấy kênh nào trong nhóm này.",
+      "privacyNote": "Chỉ đọc tiêu đề, người gửi và bản xem trước ngắn; nội dung và tệp đính kèm vẫn ở Microsoft 365. Các mục đều tóm tắt dữ liệu của bạn.",
+      "cancel": "Hủy",
+      "run": "Chạy tổng hợp",
+      "starting": "Đang bắt đầu…",
+      "startFailed": "Không thể bắt đầu tổng hợp.",
+      "userMessage": "Tổng hợp hằng ngày — {period}; nguồn: {sources}",
+      "working": "Đang quét liên lạc Microsoft 365 của bạn…",
+      "failed": "Tổng hợp thất bại.",
+      "failedPrefix": "Tổng hợp hằng ngày thất bại:",
+      "expired": "Kết quả tổng hợp này đã hết hạn. Hãy chạy lại để có bản mới.",
+      "runAgain": "Chạy lại",
+      "changePeriod": "Đổi khoảng thời gian",
+      "period": {
+        "lastWorkday": "từ ngày làm việc trước",
+        "lastDays": "{count, plural, one {ngày qua} other {# ngày qua}}"
+      },
+      "source": {
+        "mail": "Thư",
+        "chat": "Teams chat",
+        "channel": "Teams channel",
+        "calendar": "Lịch"
+      },
+      "sourceStatus": {
+        "ok": "hoàn thành",
+        "partial": "một phần",
+        "skipped": "bỏ qua",
+        "unavailable": "không có quyền",
+        "error": "thất bại"
+      },
+      "degraded": "Mô hình phân tích không khả dụng, các danh mục chỉ dựa trên quy tắc.",
+      "withheld": "{count, plural, one {# mục đã} other {# mục đã}} bị ẩn bởi bộ lọc an toàn.",
+      "empty": "Không có nội dung báo cáo cho giai đoạn và nguồn này.",
+      "actionItems": "Mục hành động",
+      "createTasks": "{count, plural, =0 {Thêm vào To Do} one {Thêm # nhiệm vụ vào To Do} other {Thêm # nhiệm vụ vào To Do}}",
+      "taskCreated": "đã thêm vào To Do",
+      "tasksCreated": "{count, plural, one {# nhiệm vụ} other {# nhiệm vụ}} đã thêm vào danh sách \"{list}\".",
+      "tasksFailed": "Không thể tạo nhiệm vụ.",
+      "category": {
+        "needsReply": "Cần phản hồi",
+        "askedOfMe": "Yêu cầu cho tôi",
+        "waitingOnOthers": "Đang chờ người khác",
+        "scheduling": "Lên lịch",
+        "companyUpdates": "Cập nhật công ty và dự án",
+        "fyi": "FYI",
+        "bulk": "Tự động và hàng loạt"
+      },
+      "companyUpdatesHint": "quan trọng, hiếm khi khẩn cấp",
+      "markDone": "Đánh dấu {title} đã xử lý",
+      "badge": {
+        "unanswered": "chưa trả lời",
+        "mentioned": "đề cập đến bạn",
+        "important": "quan trọng cao"
+      },
+      "askAbout": "Hỏi về mục này",
+      "askPrompt": "Về mục {source} \"{title}\" từ {from} ({when}) trong bảng tổng hợp trên: đang yêu cầu điều gì, và phản hồi tốt sẽ là gì?",
+      "open": {
+        "mail": "Mở bằng Outlook",
+        "chat": "Mở bằng Teams",
+        "channel": "Mở bằng Teams",
+        "calendar": "Mở bằng Outlook"
+      },
+      "footnote": "Các danh mục dựa trên tín hiệu cá nhân (chưa trả lời, đã đề cập, phát sóng) và phân loại AI; hãy kiểm tra trước khi thực hiện. Không có gì được gửi đi.",
+      "age": {
+        "now": "vừa xong",
+        "hours": "{count}g trước",
+        "days": "{count}ng trước"
+      },
+      "waitForReply": "Vui lòng chờ phản hồi hiện tại kết thúc trước khi bắt đầu tổng hợp."
     }
   },
   "share": {
@@ -6441,9 +6713,9 @@
     "kind": {
       "rag": "Kiến thức",
       "prompt": "Nhân cách",
-      "m365": "Kiến thức (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Kiến thức",
-      "foundry": "Tác nhân Foundry",
+      "foundry": "Agent tùy chỉnh",
       "connector": "Kết nối"
     },
     "semantics": {
@@ -6452,8 +6724,8 @@
       "own-model": "chạy trên chính mô hình của nó"
     },
     "loadError": "Không thể tải các agent của bạn lúc này. Thông thường đây chỉ là tạm thời.",
-    "discoveryLoading": "Đang tìm agent Foundry…",
-    "discoveryError": "Không thể tải agent Foundry.",
+    "discoveryLoading": "Đang tìm thêm agent…",
+    "discoveryError": "Một số agent không thể tải được.",
     "retry": "Thử lại"
   },
   "peopleSuggest": {
@@ -7594,5 +7866,146 @@
       "past-retention": "Lâu hơn {months} tháng lưu trữ của thư mục này; không còn hiển thị nữa.",
       "unknown": "Có sự cố được báo cáo: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Kỹ năng",
+    "description": "Các khối hướng dẫn có thể tái sử dụng mà trợ lý áp dụng khi cuộc trò chuyện cần. Tương thích với định dạng Agent Skills SKILL.md do Claude và ChatGPT sử dụng.",
+    "loading": "Đang tải kỹ năng…",
+    "loadError": "Không thể tải kỹ năng.",
+    "retry": "Thử lại",
+    "unavailableBanner": "Kho kỹ năng hiện không truy cập được — các mặc định tích hợp sẵn đang được hiển thị; kỹ năng lưu trữ và chỉnh sửa sẽ không khả dụng cho đến khi phục hồi.",
+    "conflictError": "Kỹ năng này đã bị thay đổi bởi quản trị viên khác. Danh sách đã được tải lại — hãy áp dụng lại chỉnh sửa của bạn.",
+    "alwaysWarning": "{count} kỹ năng được đặt là Luôn. Mỗi kỹ năng này đều được thêm vào mọi cuộc trò chuyện — ưu tiên Tự động cho các kỹ năng theo chủ đề.",
+    "newSkill": "Kỹ năng mới",
+    "importSkill": "Nhập SKILL.md",
+    "importTitle": "Dán file SKILL.md",
+    "importPlaceholder": "---\ntên: my-skill\nmô tả: Kỹ năng này làm gì và khi nào sử dụng.\n---\n\nHướng dẫn…",
+    "importHint": "Kỹ năng đã phân tích sẽ mở trong trình chỉnh sửa để xem xét — chưa lưu lại cho đến khi bạn lưu.",
+    "importParse": "Phân tích và xem xét",
+    "invalidId": "Id kỹ năng sử dụng chữ thường, số và dấu gạch ngang đơn.",
+    "saveSuccess": "Đã lưu kỹ năng.",
+    "saveError": "Không thể lưu kỹ năng.",
+    "deleteConfirm": "Xóa kỹ năng này? Cuộc trò chuyện sẽ dừng nhận kỹ năng ngay lập tức.",
+    "restoreConfirm": "Xóa tùy chỉnh và khôi phục mặc định tích hợp cho kỹ năng này?",
+    "deleteSuccess": "Đã xóa kỹ năng.",
+    "restoreSuccess": "Đã khôi phục mặc định tích hợp.",
+    "deleteError": "Không thể xóa kỹ năng.",
+    "empty": "Chưa có kỹ năng. Tạo mới hoặc nhập SKILL.md.",
+    "builtinChip": "Tích hợp sẵn",
+    "customizedChip": "Tùy chỉnh",
+    "exportSkill": "Xuất dưới dạng SKILL.md",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "restoreDefault": "Khôi phục mặc định",
+    "createTitle": "Kỹ năng mới",
+    "editTitle": "Chỉnh sửa {name}",
+    "idLabel": "Id",
+    "idHint": "Chữ thường, số và dấu gạch ngang. Được dùng làm tên SKILL.md của kỹ năng và không thể thay đổi sau khi tạo.",
+    "nameLabel": "Tên hiển thị",
+    "descriptionLabel": "Mô tả",
+    "descriptionHint": "Kỹ năng làm gì VÀ khi nào nên sử dụng — đây là phần quyết định chọn kỹ năng, nên hãy nêu rõ chủ đề và cụm từ mà kỹ năng cần phản hồi.",
+    "activationLabel": "Kích hoạt",
+    "activation": {
+      "auto": "Tự động",
+      "always": "Luôn",
+      "off": "Tắt",
+      "manual": "Theo yêu cầu"
+    },
+    "activationHint": {
+      "auto": "Được chọn tự động khi nhiệm vụ hiện tại phù hợp với mô tả. Người dùng cũng có thể yêu cầu sử dụng một lần hoặc ghim vào cuộc trò chuyện.",
+      "always": "Thêm vào mọi cuộc trò chuyện cho tất cả người có thể xem kỹ năng này. Sử dụng hạn chế — đây là phần nhắc vĩnh viễn.",
+      "off": "Không hoạt động: không bao giờ áp dụng và không hiển thị cho người dùng, nhưng vẫn lưu để chỉnh sửa.",
+      "manual": "Chỉ áp dụng khi người dùng yêu cầu hoặc ghim. Không bao giờ tự động được chọn và không được đề xuất cho mô hình như một kỹ năng có thể tải."
+    },
+    "instructionsLabel": "Hướng dẫn",
+    "instructionsHint": "Markdown, tối đa 16 KB. Được chèn nguyên văn khi kỹ năng được kích hoạt.",
+    "saving": "Đang lưu…",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "documents": {
+      "title": "Tài liệu",
+      "hint": "Tham khảo được lưu cùng kỹ năng này. Tài liệu nhỏ sẽ được tải trực tiếp; tài liệu lớn hơn sẽ được lập chỉ mục để tìm kiếm có trích dẫn. Tối đa 20 tài nguyên, mỗi tài nguyên 10 MB và tổng cộng 20 MB. Tài sản chỉ lưu để tải xuống.",
+      "saveFirst": "Vui lòng lưu tuỳ chỉnh kỹ năng tích hợp này trước khi thêm tài liệu.",
+      "upload": "Thêm tài liệu tham khảo",
+      "remove": "Xoá",
+      "stop": "Dừng lập chỉ mục",
+      "resume": "Lập chỉ mục hoặc tiếp tục tài liệu",
+      "empty": "Chưa có tài liệu nào được đính kèm.",
+      "requestFailed": "Yêu cầu tài liệu thất bại. Vui lòng tải lại và thử lại.",
+      "importZip": "Nhập tệp ZIP kỹ năng",
+      "zipTooLarge": "Tệp ZIP kỹ năng phải nhỏ hơn hoặc bằng 20 MB.",
+      "importCount": "Tài nguyên sẽ đính kèm sau khi lưu: {count}",
+      "skippedScripts": "Các script có thể thực thi đã bị bỏ qua",
+      "status": {
+        "pending": "Chờ lập chỉ mục",
+        "processing": "Đang lập chỉ mục",
+        "inline": "Sẵn sàng (tải trực tiếp)",
+        "indexed": "Sẵn sàng (có thể tìm kiếm)",
+        "failed": "Lập chỉ mục thất bại",
+        "asset": "Tài nguyên có thể tải xuống"
+      },
+      "confirmRemove": "Xóa {filename} khỏi kỹ năng này? Tệp gốc đã lưu sẽ bị xóa và không còn được sử dụng làm nguồn trích dẫn.",
+      "reindexRequired": "Các tài liệu này cần được đánh chỉ mục lại theo cấu hình Tìm kiếm và nhúng của khu vực hiện tại. Chúng sẽ không được tìm kiếm cho đến khi việc đánh chỉ mục hoàn tất."
+    },
+    "applyToAgents": "Có sẵn cho đại diện",
+    "applyToAgentsHint": "Mặc định là tắt. Khi bật, đại diện có thể tải kỹ năng này qua các công cụ chỉ đọc thay vì thay thế hướng dẫn persona của họ. Các lần gọi kỹ năng có giới hạn bước độc lập. Đại diện Foundry phải đã đăng ký các hàm load_skill và search_skill_documents trong định nghĩa của họ.",
+    "requireConsent": "Hỏi trước khi áp dụng",
+    "requireConsentHint": "Khi mô hình muốn tự áp dụng kỹ năng này, người dùng sẽ được hỏi trước. Các trường hợp được yêu cầu hoặc ghim thì không cần xác nhận.",
+    "consentChip": "Hỏi trước",
+    "sourceChip": "Từ nguồn",
+    "sourceChipHint": "Được cung cấp bởi một nguồn kỹ năng đã đăng ký; hướng dẫn sẽ được làm mới khi đồng bộ. Bạn kiểm soát cài đặt kích hoạt, tác nhân và yêu cầu xác nhận.",
+    "sources": {
+      "title": "Nguồn kỹ năng",
+      "description": "Đăng ký từ một danh mục kỹ năng bên ngoài (một file index.json liệt kê các file SKILL.md). Các kỹ năng này trở thành kỹ năng tổ chức và được làm mới khoảng mỗi sáu giờ. Chỉ SKILL.md được nhập; tài liệu tham khảo thì không.",
+      "urlLabel": "URL danh mục",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Phải là https trên máy chủ công khai. File kỹ năng chỉ được đọc từ đúng vị trí này.",
+      "labelLabel": "Nhãn (tuỳ chọn)",
+      "add": "Đăng ký",
+      "adding": "Đang đăng ký…",
+      "added": "{count, plural, =0 {Nguồn đã được thêm; chưa nhập kỹ năng nào} one {Nguồn đã được thêm; đã nhập # kỹ năng} other {Nguồn đã được thêm; đã nhập # kỹ năng}}",
+      "addedWithError": "Đã thêm nguồn, nhưng đồng bộ lần đầu thất bại. Kiểm tra lỗi ở nguồn.",
+      "addError": "Không thể thêm nguồn kỹ năng",
+      "sync": "Đồng bộ ngay",
+      "syncing": "Đang đồng bộ…",
+      "synced": "Đã đồng bộ nguồn.",
+      "syncError": "Không thể đồng bộ nguồn kỹ năng",
+      "remove": "Xoá nguồn",
+      "removeConfirm": "Xoá nguồn này? Các kỹ năng đã nhận sẽ trở thành kỹ năng tổ chức thông thường và dừng làm mới.",
+      "removed": "Đã xoá nguồn.",
+      "removeError": "Không thể xoá nguồn kỹ năng",
+      "loading": "Đang tải các nguồn…",
+      "loadError": "Không thể tải các nguồn kỹ năng.",
+      "empty": "Chưa có nguồn kỹ năng nào.",
+      "never": "Chưa từng đồng bộ",
+      "statusOk": "Đã đồng bộ",
+      "statusError": "Đồng bộ thất bại",
+      "statusPartial": "{count, plural, one {Bỏ qua # mục} other {Bỏ qua # mục}}",
+      "lastSync": "Đồng bộ lần cuối {time}",
+      "entryCount": "{count, plural, one {# mục} other {# mục}}",
+      "entryStatus": {
+        "synced": "đã đồng bộ",
+        "skipped": "đã bỏ qua",
+        "conflict": "xung đột — không ghi đè",
+        "invalid": "không hợp lệ"
+      }
+    },
+    "requireConsentDisabledHint": "Chỉ kỹ năng tự động mới có thể yêu cầu xác nhận trước: kỹ năng đã yêu cầu, đã ghim và luôn bật sẽ được áp dụng mà không cần hỏi, còn kỹ năng theo yêu cầu thì mô hình sẽ không tự chọn."
+  },
+  "personalSkills": {
+    "title": "Kỹ năng cá nhân",
+    "description": "Lưu các hướng dẫn có thể tái sử dụng cho hội thoại của bạn. Kỹ năng sẽ chỉ ở trình duyệt này và chỉ gửi đến mô hình khi bạn trò chuyện. Kỹ năng liên quan có thể được tự động chọn, sử dụng một lần hoặc ghim lại. Chúng không thể thay đổi chính sách tổ chức hoặc cấp quyền truy cập công cụ. Sử dụng kỹ năng yêu cầu kỹ năng đã được bật cho lần triển khai này; hội thoại với tác tử không sử dụng kỹ năng cá nhân.",
+    "importFile": "Nhập SKILL.md hoặc ZIP",
+    "review": "Xem lại toàn bộ hướng dẫn trước khi lưu. Hướng dẫn nhập vào là tùy chọn cá nhân của người dùng, không phải chính sách tổ chức đáng tin cậy.",
+    "skipped": "Đã bỏ qua các script thực thi",
+    "importTooLarge": "Tệp nhập phải nhỏ hơn hoặc bằng 20 MB.",
+    "invalid": "Không thể nhập kỹ năng này.",
+    "duplicate": "ID kỹ năng cá nhân đó đã tồn tại. Vui lòng chỉnh sửa kỹ năng hiện tại hoặc chọn một ID khác.",
+    "countLimit": "Bạn có thể lưu tối đa 20 kỹ năng cá nhân.",
+    "requestLimit": "Số kỹ năng cá nhân được bật vượt quá giới hạn yêu cầu 160 KB. Vui lòng tắt một số kỹ năng hoặc rút ngắn hướng dẫn.",
+    "saved": "Kỹ năng cá nhân được lưu trong trình duyệt này.",
+    "instructionsHint": "Tối đa 16 KB hướng dẫn, bao gồm mọi tham chiếu văn bản đã nhập. Tệp nhị phân và lập chỉ mục tài liệu liên tục chỉ có ở kỹ năng tổ chức. Xuất ra sẽ dùng tên chuẩn SKILL.md mà không có tiền tố user:.",
+    "enabled": "Đã bật cho hội thoại của tôi",
+    "empty": "Tạo kỹ năng cho một nhiệm vụ lặp lại, hoặc nhập SKILL.md để xem và lưu tại đây."
   }
 }

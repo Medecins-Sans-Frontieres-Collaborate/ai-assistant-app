@@ -3,6 +3,10 @@ import React from 'react';
 import '@testing-library/jest-dom/vitest';
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 
+// Model-call retries (lib/services/chat/modelRetry.ts) never sleep in tests.
+process.env.MODEL_RETRY_BASE_DELAY_MS = '0';
+process.env.MODEL_RETRY_MAX_DELAY_MS = '0';
+
 // Mock next-auth to prevent module resolution errors in test environment
 vi.mock('next-auth', () => ({
   default: () => ({
@@ -332,8 +336,8 @@ const mockMessages: Record<string, unknown> = {
     loading: 'Loading agents…',
     loadError:
       "Your agents couldn't be loaded just now. This is usually temporary.",
-    discoveryLoading: 'Looking for Foundry agents…',
-    discoveryError: "Foundry agents couldn't be loaded.",
+    discoveryLoading: 'Looking for more agents…',
+    discoveryError: "Some agents couldn't be loaded.",
     retry: 'Try again',
     noMatches: 'Nothing matches your search.',
     noAgents: 'No agents available.',
@@ -349,9 +353,9 @@ const mockMessages: Record<string, unknown> = {
     kind: {
       rag: 'Knowledge',
       prompt: 'Persona',
-      m365: 'Knowledge (Microsoft 365)',
+      m365: 'Microsoft 365',
       org: 'Knowledge',
-      foundry: 'Foundry agent',
+      foundry: 'Custom agent',
       connector: 'Connector',
     },
     semantics: {
@@ -392,6 +396,11 @@ const mockMessages: Record<string, unknown> = {
         description:
           'Summary, action items, follow-up draft and (if needed) the next meeting — from this transcript',
       },
+      dailyDigest: {
+        title: 'Daily digest',
+        description:
+          'Sort recent mail, Teams and calendar into what needs you, what you’re waiting on, updates and FYI — pick the period',
+      },
       morningTriage: {
         title: 'Morning triage',
         description:
@@ -400,6 +409,118 @@ const mockMessages: Record<string, unknown> = {
       chipsSettingLabel: 'Suggest Microsoft 365 playbooks',
       chipsSettingHint:
         'Show playbook suggestions above the message box when they apply (e.g. after importing a meeting transcript).',
+    },
+    digest: {
+      title: 'Daily digest',
+      intro:
+        "Scans what reached you in the period and sorts it into what needs a reply, what was asked of you, what you're waiting on, scheduling, company and project updates, and FYI. Nothing is sent or changed.",
+      periodLabel: 'Period',
+      preset: {
+        lastWorkday: 'Since the last workday',
+        '1d': 'Last 24 hours',
+        '3d': 'Last 3 days',
+        '7d': 'Last 7 days',
+        '14d': 'Last 14 days',
+        custom: 'Custom range',
+      },
+      lastWorkdayHint:
+        'From the start of the most recent weekday before today — on a Monday that covers Friday and the weekend.',
+      from: 'From',
+      to: 'To',
+      customInvalid: 'Pick an ordered range of at most {days} days.',
+      sourcesLabel: 'Sources',
+      sourceNoConsent: 'Permission not granted for this source.',
+      sourceHint: {
+        mail: 'Inbox envelopes and previews; your Sent Items decide what counts as answered.',
+        chat: 'Recent Teams chats, with @mentions you have not answered.',
+        channel: 'Posts in the channels you pick below.',
+        calendar:
+          'Invitations awaiting your response and your meetings others have not answered.',
+      },
+      channelsLabel: 'Channels ({count} of {max})',
+      removeChannel: 'Remove {name}',
+      channelsSlow:
+        'Each channel adds reads; more channels make the digest take longer.',
+      channelsMax: 'Maximum of {max} channels reached.',
+      channelsNeeded: 'Pick at least one channel, or add another source.',
+      teamLabel: 'Team',
+      loadingTeams: 'Loading teams…',
+      pickTeam: 'Pick a team to list its channels',
+      loadingChannels: 'Loading channels…',
+      noChannels: 'No channels found in this team.',
+      privacyNote:
+        'Only subjects, senders and short previews are read; message bodies and attachments stay in Microsoft 365. Items are summaries of your own data.',
+      cancel: 'Cancel',
+      run: 'Run digest',
+      starting: 'Starting…',
+      startFailed: 'The digest could not be started.',
+      waitForReply:
+        'Wait for the current reply to finish before starting a digest.',
+      userMessage: 'Daily digest — {period}; sources: {sources}',
+      working: 'Scanning your Microsoft 365 communications…',
+      failed: 'The digest failed.',
+      failedPrefix: 'Daily digest failed:',
+      expired: 'This digest run has expired. Run it again to get a fresh one.',
+      runAgain: 'Run again',
+      changePeriod: 'Change period',
+      period: {
+        lastWorkday: 'since the last workday',
+        lastDays: 'last {count} days',
+      },
+      source: {
+        mail: 'Mail',
+        chat: 'Teams chats',
+        channel: 'Teams channels',
+        calendar: 'Calendar',
+      },
+      sourceStatus: {
+        ok: 'complete',
+        partial: 'partial',
+        skipped: 'skipped',
+        unavailable: 'no permission',
+        error: 'failed',
+      },
+      degraded:
+        'The analysis model was unavailable, so categories come from rules alone.',
+      withheld: '{count} items were withheld by the safety screens.',
+      empty: 'Nothing to report for this period and these sources.',
+      actionItems: 'Action items',
+      createTasks: 'Add {count} tasks to To Do',
+      taskCreated: 'added to To Do',
+      tasksCreated: '{count} tasks added to the "{list}" list.',
+      tasksFailed: 'Could not create the tasks.',
+      category: {
+        needsReply: 'Needs my reply',
+        askedOfMe: 'Asked of me',
+        waitingOnOthers: 'Waiting on others',
+        scheduling: 'Scheduling',
+        companyUpdates: 'Company and project updates',
+        fyi: 'FYI',
+        bulk: 'Automated and bulk',
+      },
+      companyUpdatesHint: 'important, rarely urgent',
+      markDone: 'Mark {title} as handled',
+      badge: {
+        unanswered: 'unanswered',
+        mentioned: 'mentioned you',
+        important: 'high importance',
+      },
+      askAbout: 'Ask about this',
+      askPrompt:
+        'About the {source} item "{title}" from {from} ({when}) in the digest above: what is being asked, and what would a good response be?',
+      open: {
+        mail: 'Open in Outlook',
+        chat: 'Open in Teams',
+        channel: 'Open in Teams',
+        calendar: 'Open in Outlook',
+      },
+      footnote:
+        'Categories come from your own signals (unanswered, mentioned, broadcast) plus AI classification; verify before acting. Nothing was sent.',
+      age: {
+        now: 'just now',
+        hours: '{count}h ago',
+        days: '{count}d ago',
+      },
     },
   },
   toolApprovals: {
@@ -578,7 +699,11 @@ const mockMessages: Record<string, unknown> = {
     conflictError:
       'Someone else changed this while you were editing. Reload to load the latest version, then make your change again.',
     reload: 'Reload',
-    addAgent: 'Add agent',
+    addPromptAgent: 'Add prompt agent',
+    foundryAgentsHeading: 'Foundry and prompt agents',
+    foundryAgentsDescription:
+      'Agents discovered from Azure AI Foundry through your own access, plus prompt agents defined here.',
+    m365AgentIndexStop: 'Stop indexing',
     newPromptAgentTitle: 'New prompt agent',
     editPromptAgentTitle: 'Edit prompt agent',
     agentNameLabel: 'Name',
@@ -887,6 +1012,15 @@ const mockMessages: Record<string, unknown> = {
       'Includes ~{grams} g CO2e ({requests} requests) estimated from chats that predate tracking',
     disclosure: 'Estimates based on assumptions v{version} - since {since}.',
     reset: 'Reset usage stats',
+    chipLabelTitle: 'Chip label',
+    chipLabelHint: 'Picks what the collapsed chip reads.',
+    chipLabelEmissions: 'Emissions',
+    chipLabelCost: 'Cost',
+    chipLabelBoth: 'Both',
+    costTile: 'Estimated cost',
+    costDisclosure:
+      'Cost at list prices as of {asOf} (Global Standard rate): an upper bound, not a bill.',
+    costUnpriced: '{count} requests without a list price are not included.',
   },
   emissions: {
     tier: {
@@ -935,6 +1069,17 @@ const mockMessages: Record<string, unknown> = {
       },
       visibilityHint:
         'Auto shows the chip when the estimate updates or you hover it.',
+      labelBoth: '{grams} g · {cost}',
+      costAria: 'Estimated cost {cost}.',
+      cost: {
+        lessThan: '< {amount}',
+        rowUnpriced: 'No list price for the requests in this row',
+        unpriced:
+          '{count} requests without a list price are not included in the cost.',
+        noPriceData:
+          'No cost is shown: this conversation\u2019s model has no list price.',
+        note: 'Cost at list prices as of {asOf} (Global Standard rate): an upper bound, not a bill.',
+      },
     },
   },
   modelSelect: {

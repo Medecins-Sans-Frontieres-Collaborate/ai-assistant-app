@@ -5,14 +5,19 @@ import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
 import { runAnthropicMcpToolLoop } from '@/lib/services/mcp/AnthropicMcpToolLoopService';
 import { planMcpSteps } from '@/lib/services/mcp/McpPlannerService';
 import { runMcpToolLoop } from '@/lib/services/mcp/McpToolLoopService';
+import type { BuiltinExecutor } from '@/lib/services/mcp/builtinExecutor';
 import { sanitizeMcpPlan } from '@/lib/services/mcp/mcpPlan';
 import { appendMcpSystemContext } from '@/lib/services/mcp/mcpSystemContext';
-import { getAzureMonitorLogger } from '@/lib/services/observability';
+import {
+  MetricsService,
+  getAzureMonitorLogger,
+} from '@/lib/services/observability';
 import {
   ToolCallTelemetry,
   recordTokenUsage,
   recordToolCall,
 } from '@/lib/services/observability/tokenUsageRecorder';
+import { SKILL_SERVER_ID } from '@/lib/services/skills/skillTools';
 
 import { OPENAI_API_VERSION } from '@/lib/utils/app/const';
 import {
@@ -45,9 +50,27 @@ import { Citation } from '@/types/rag';
 import { Tone } from '@/types/tone';
 
 import { ModelSelector, StreamingService, ToneService } from '../shared';
+import {
+  MAX_OVERFLOW_SHRINKS,
+  shrinkChatHistoryForOverflow,
+} from './contextOverflowRecovery';
 import { AnthropicFoundryHandler } from './handlers/AnthropicFoundryHandler';
 import { HandlerFactory } from './handlers/HandlerFactory';
+import type { ModelHandler } from './handlers/ModelHandler';
 import { ResponsesApiHandler } from './handlers/ResponsesApiHandler';
+import {
+  MODEL_RETRY_ACTIVITY_KEY,
+  RetryNotice,
+  WithModelRetryOptions,
+  retryActivityParams,
+  withModelRetry,
+} from './modelRetry';
+import { classifyProviderError } from './providerErrors';
+import {
+  StreamContinuation,
+  TRIM_CONTEXT_ACTIVITY_KEY,
+  continuationNudge,
+} from './streamContinuation';
 import {
   CodeInterpreterInputFile,
   persistContainerFiles,
@@ -58,6 +81,7 @@ import { ResolvedMcpServer } from '@/config/mcpCatalog';
 import { getFallbackModel, isDeploymentNotFoundError } from '@/config/models';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { AnthropicFoundry } from '@anthropic-ai/foundry-sdk';
+import type Anthropic from '@anthropic-ai/sdk';
 import { TokenCredential, getBearerTokenProvider } from '@azure/identity';
 import OpenAI, { AzureOpenAI } from 'openai';
 import { performance } from 'perf_hooks';
@@ -101,6 +125,16 @@ export interface StandardChatRequest {
    * of starting a fresh upstream call the caller will never consume.
    */
   signal?: AbortSignal;
+  /**
+   * Loader activity channel (ChatContext.emitActivity). Used for the
+   * "retrying in N s" / "trimming history" notices that happen BEFORE the
+   * model stream exists — once it does, the stream processors write their
+   * own markers.
+   */
+  emitActivity?: (
+    key: string,
+    params?: Record<string, string>,
+  ) => void | Promise<void>;
   botId?: string;
   /** Per-request agent + correlation telemetry (see ChatContext.telemetry). */
   telemetry?: RequestTelemetry;
@@ -124,6 +158,7 @@ export interface StandardChatRequest {
    * cached across requests.
    */
   builtinExecutor?: M365BuiltinExecutor;
+  builtinExecutors?: Record<string, BuiltinExecutor>;
   /**
    * Admin-configured cap from `feature.mcp.roundsPerRequest` (docs/LIMITS.md),
    * resolved once in createLimitsMiddleware. Absent → the compiled default.
@@ -252,6 +287,7 @@ export class StandardChatService {
       // The Azure OpenAI SDK targets the Cognitive Services alias of the
       // same account (Foundry accounts expose both hostnames).
       azureOpenAIClient: new AzureOpenAI({
+        baseURL: '',
         endpoint: source.endpoint.replace(
           '.services.ai.azure.com',
           '.cognitiveservices.azure.com',
@@ -276,6 +312,62 @@ export class StandardChatService {
    * event + OTel counters. Never throws (a telemetry failure must not break
    * chat) and never delays the response path.
    */
+  /**
+   * Retry options for one model call: every wait is announced on the
+   * loader (so the user sees "retrying" instead of a frozen spinner), logged
+   * with the provider error kind, and counted.
+   */
+  private retryOptions(
+    request: Pick<StandardChatRequest, 'signal' | 'emitActivity'>,
+    modelId: string,
+  ): WithModelRetryOptions {
+    return {
+      signal: request.signal,
+      onRetry: (notice: RetryNotice) => {
+        console.warn(
+          `[StandardChatService] ${sanitizeForLog(modelId)}: model call failed (${notice.error.kind}${notice.error.status ? ` ${notice.error.status}` : ''}); retrying in ${notice.delayMs} ms (attempt ${notice.attempt})`,
+        );
+        MetricsService.recordModelRecovery('retry', notice.error.kind);
+        void request.emitActivity?.(
+          MODEL_RETRY_ACTIVITY_KEY,
+          retryActivityParams(notice),
+        );
+      },
+      onGiveUp: (decision) => {
+        console.warn(
+          `[StandardChatService] ${sanitizeForLog(modelId)}: giving up after ${decision.error.kind} (${decision.reason})`,
+        );
+        MetricsService.recordModelRecovery('give_up', decision.error.kind);
+      },
+    };
+  }
+
+  /**
+   * Context-overflow recovery shared by every path: when the provider says
+   * the prompt is too long, drop the oldest half of the droppable history
+   * and let the caller rebuild its request. Returns null once the budget of
+   * shrinks is spent or nothing more can be dropped — the overflow then
+   * surfaces to the user with its own message.
+   */
+  private shrinkForOverflow(
+    error: unknown,
+    messages: Message[],
+    shrinksSoFar: number,
+    request: Pick<StandardChatRequest, 'emitActivity'>,
+    modelId: string,
+  ): Message[] | null {
+    if (shrinksSoFar >= MAX_OVERFLOW_SHRINKS) return null;
+    if (classifyProviderError(error).kind !== 'context_overflow') return null;
+    const shrunk = shrinkChatHistoryForOverflow(messages);
+    if (!shrunk) return null;
+    console.warn(
+      `[StandardChatService] ${sanitizeForLog(modelId)}: provider rejected the prompt as too long; retrying with ${shrunk.length} of ${messages.length} messages`,
+    );
+    MetricsService.recordModelRecovery('trim', 'context_overflow');
+    void request.emitActivity?.(TRIM_CONTEXT_ACTIVITY_KEY);
+    return shrunk;
+  }
+
   private recordUsage(
     usage: TokenUsageMetadata,
     servedConfig: OpenAIModel,
@@ -436,7 +528,7 @@ export class StandardChatService {
     const budgets = ContextBudgetService.getInstance();
     await budgets.ensureFresh();
     const budget = budgets.getBudget(modelConfig);
-    const messagesToSend = await getMessagesToSend(
+    let messagesToSend = await getMessagesToSend(
       request.messages,
       encoding,
       promptTokens.length,
@@ -478,6 +570,24 @@ export class StandardChatService {
     const clients = customSource
       ? await this.buildCustomSourceClients(customSource)
       : this.resolveClients(chatRegion);
+    const regionalClients =
+      !customSource && chatRegion
+        ? this.getRegionClients?.(chatRegion)
+        : undefined;
+    const requireRegionalClient = (config: OpenAIModel) => {
+      if (customSource || !chatRegion) return;
+      const available =
+        config.sdk === 'anthropic-foundry'
+          ? regionalClients?.anthropicFoundryClient
+          : config.sdk === 'azure-openai'
+            ? regionalClients?.azureOpenAIClient
+            : regionalClients?.openAIClient;
+      if (!available)
+        throw new Error(
+          `No ${chatRegion} endpoint configured for ${config.sdk ?? 'OpenAI-compatible'} inference. Unpinned default endpoints are not a residency fallback.`,
+        );
+    };
+    requireRegionalClient(modelConfig);
     if (customSource) {
       console.log(
         `[StandardChatService] Routing chat to custom-source endpoint: ${customSource.endpoint}`,
@@ -502,7 +612,16 @@ export class StandardChatService {
     const mcpPlanner = (
       userMessage: string,
       serversWithTools: Parameters<typeof planMcpSteps>[2],
-    ) => planMcpSteps(this.openAIClient, userMessage, serversWithTools);
+    ) => {
+      const plannerClient =
+        chatRegion && !customSource
+          ? (regionalClients?.openAIClient ??
+            regionalClients?.azureOpenAIClient)
+          : clients.openAIClient;
+      return plannerClient
+        ? planMcpSteps(plannerClient, userMessage, serversWithTools)
+        : Promise.resolve(null);
+    };
 
     if (
       HandlerFactory.isAnthropicModel(modelConfig) &&
@@ -521,7 +640,11 @@ export class StandardChatService {
         clients.anthropicFoundryClient,
         chatRegion,
         {
-          planner: mcpPlanner,
+          planner: request.mcpServers?.some(
+            (server) => server.id !== SKILL_SERVER_ID,
+          )
+            ? mcpPlanner
+            : undefined,
           existingPlan: mcpExistingPlan,
           userMessageText: mcpUserMessageText,
         },
@@ -544,6 +667,7 @@ export class StandardChatService {
         request.telemetry,
         request.reasoningEffort,
         request.signal,
+        request,
       );
     }
 
@@ -588,6 +712,7 @@ export class StandardChatService {
           ) as OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming,
         servers: request.mcpServers,
         builtinExecutor: request.builtinExecutor,
+        builtinExecutors: request.builtinExecutors,
         signal: request.signal,
         pendingToolCalls: request.mcpPendingToolCalls,
         approvalResponses: request.approvalResponses,
@@ -595,7 +720,11 @@ export class StandardChatService {
         maxRounds: request.mcpMaxRounds,
         userId: request.user?.id ?? request.user?.mail ?? 'unknown',
         citations: request.citations,
-        planner: mcpPlanner,
+        planner: request.mcpServers.some(
+          (server) => server.id !== SKILL_SERVER_ID,
+        )
+          ? mcpPlanner
+          : undefined,
         existingPlan: mcpExistingPlan,
         userMessageText: mcpUserMessageText,
         onToolCall: (info) =>
@@ -712,12 +841,20 @@ export class StandardChatService {
     // logic applies to each attempt.
     const attemptedModelIds: string[] = [];
     let activeConfig: OpenAIModel = modelConfig;
+    let overflowShrinks = 0;
     let response:
       | OpenAI.Chat.Completions.ChatCompletion
       | AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>;
+    // The handler + prepared transcript that produced `response`, kept for
+    // the stream's continuation hook (resume after an interruption or an
+    // output-limit finish on the SAME model).
+    let servedHandler!: ModelHandler;
+    let servedMessages!: OpenAI.Chat.Completions.ChatCompletionMessageParam[];
 
     for (;;) {
-      attemptedModelIds.push(activeConfig.id);
+      requireRegionalClient(activeConfig);
+      if (!attemptedModelIds.includes(activeConfig.id))
+        attemptedModelIds.push(activeConfig.id);
 
       const handler = HandlerFactory.getHandler(
         activeConfig,
@@ -746,26 +883,38 @@ export class StandardChatService {
         request.verbosity,
       );
 
-      // Execute request
+      // Execute request. Rate limits, 5xx and connection failures are
+      // retried in place with backoff (modelRetry.ts) — the loader shows
+      // each wait — before any fallback-model logic runs.
       const perfExecStart = performance.now();
       try {
-        response = await handler.executeRequest(
-          requestParams,
-          stream,
-          request.signal,
+        response = await withModelRetry(
+          () => handler.executeRequest(requestParams, stream, request.signal),
+          this.retryOptions(request, activeConfig.id),
         );
+        servedHandler = handler;
+        servedMessages = preparedMessages;
         perfLog('StandardChatService.executeRequest', perfExecStart);
         break;
       } catch (error) {
+        if (request.signal?.aborted) throw error;
+        // Prompt too long for the model: drop old history and try again
+        // (bounded) before surfacing the overflow.
+        const shrunk = this.shrinkForOverflow(
+          error,
+          messagesToSend,
+          overflowShrinks,
+          request,
+          activeConfig.id,
+        );
+        if (shrunk) {
+          overflowShrinks += 1;
+          messagesToSend = shrunk;
+          continue;
+        }
         // Custom-source requests never fall back: a missing deployment on the
         // user's own account must surface, not silently reroute to app models.
-        // Neither does a call the stage timeout already cancelled.
-        if (
-          customSource ||
-          request.signal?.aborted ||
-          !isDeploymentNotFoundError(error)
-        )
-          throw error;
+        if (customSource || !isDeploymentNotFoundError(error)) throw error;
 
         const fallback = getFallbackModel(
           attemptedModelIds,
@@ -807,6 +956,41 @@ export class StandardChatService {
 
     // Return appropriate response format
     if (stream) {
+      // Mid-answer recovery: after an interruption or an output-limit
+      // finish, re-ask the SAME model with the partial answer and a
+      // "continue" nudge appended, so the text the client already has is
+      // kept (and no tool re-runs on a fallback model).
+      const continuation: StreamContinuation<OpenAI.Chat.Completions.ChatCompletionChunk> =
+        {
+          resume: async (partialText, reason) => {
+            const continued: OpenAI.Chat.Completions.ChatCompletionMessageParam[] =
+              partialText.trim()
+                ? [
+                    ...servedMessages,
+                    { role: 'assistant', content: partialText },
+                    { role: 'user', content: continuationNudge(reason) },
+                  ]
+                : servedMessages;
+            const params = servedHandler.buildRequestParams(
+              servedHandler.getModelIdForRequest(servedConfig.id, servedConfig),
+              continued,
+              temperature,
+              request.user,
+              true,
+              servedConfig,
+              request.reasoningEffort,
+              request.verbosity,
+            );
+            MetricsService.recordModelRecovery(
+              reason === 'length' ? 'continue' : 'resume',
+              reason === 'length' ? 'output_limit' : 'incomplete_stream',
+            );
+            return (await withModelRetry(
+              () => servedHandler.executeRequest(params, true, request.signal),
+              this.retryOptions(request, servedConfig.id),
+            )) as AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>;
+          },
+        };
       const processedStream = createAzureOpenAIStreamProcessor(
         response as AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>,
         undefined, // ragService
@@ -815,6 +999,7 @@ export class StandardChatService {
         request.citations, // web search citations
         request.pendingTranscriptions, // async batch transcription jobs
         usageContext,
+        { continuation },
       );
 
       perfLog('StandardChatService.handleChat total', perfStart, '(stream)');
@@ -927,14 +1112,46 @@ export class StandardChatService {
 
     if (stream) {
       let events: Awaited<ReturnType<typeof handler.executeStreaming>>;
+      const retryOptions = this.retryOptions(request, modelConfig.id);
       try {
-        events = await handler.executeStreaming(params, request.signal);
+        events = await withModelRetry(
+          () => handler.executeStreaming(params, request.signal),
+          retryOptions,
+        );
       } catch (error) {
         // The uploads outlive a failed create call — clean up before the
         // caller retries on a fallback deployment (which re-uploads).
         if (ciFileIds.length > 0) void handler.deleteInputFiles(ciFileIds);
         throw error;
       }
+      // Mid-answer recovery on the same model. Declined when the native
+      // code interpreter is attached: a continuation call would start a
+      // fresh container and could not see the files of the first one.
+      const continuation: StreamContinuation<OpenAI.Responses.ResponseStreamEvent> =
+        {
+          resume: async (partialText, reason) => {
+            if (nativeCI) return null;
+            const continued: OpenAI.Responses.ResponseInput = partialText.trim()
+              ? [
+                  ...input,
+                  { role: 'assistant', content: partialText },
+                  { role: 'user', content: continuationNudge(reason) },
+                ]
+              : input;
+            MetricsService.recordModelRecovery(
+              reason === 'length' ? 'continue' : 'resume',
+              reason === 'length' ? 'output_limit' : 'incomplete_stream',
+            );
+            return withModelRetry(
+              () =>
+                handler.executeStreaming(
+                  { ...params, input: continued },
+                  request.signal,
+                ),
+              retryOptions,
+            );
+          },
+        };
       const processedStream = createResponsesStreamProcessor(
         events,
         request.transcript,
@@ -981,15 +1198,16 @@ export class StandardChatService {
             operation: 'responsesStream',
             model: modelConfig.id,
           }),
+        continuation,
       );
       return new Response(processedStream, {
         headers: STREAMING_RESPONSE_HEADERS,
       });
     }
 
-    const completion = await handler.executeNonStreaming(
-      params,
-      request.signal,
+    const completion = await withModelRetry(
+      () => handler.executeNonStreaming(params, request.signal),
+      this.retryOptions(request, modelConfig.id),
     );
     const thinking = handler.extractReasoningSummary(completion);
 
@@ -1079,6 +1297,7 @@ export class StandardChatService {
         ),
       servers: request.mcpServers ?? [],
       builtinExecutor: request.builtinExecutor,
+      builtinExecutors: request.builtinExecutors,
       signal: request.signal,
       pendingToolCalls: request.mcpPendingToolCalls,
       approvalResponses: request.approvalResponses,
@@ -1138,6 +1357,10 @@ export class StandardChatService {
     telemetry?: RequestTelemetry,
     reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high',
     signal?: AbortSignal,
+    /** Loader channel for retry / trim notices (see StandardChatRequest). */
+    recovery: Pick<StandardChatRequest, 'signal' | 'emitActivity'> = {
+      signal,
+    },
   ): Promise<Response> {
     const client = anthropicClient ?? this.anthropicFoundryClient;
     // Validate Anthropic client is configured
@@ -1159,26 +1382,89 @@ export class StandardChatService {
       `[StandardChatService] Using AnthropicFoundryHandler for model: ${sanitizeForLog(modelConfig.id)}`,
     );
 
-    // Prepare messages for Anthropic format
-    const preparedMessages = handler.prepareMessages(messages, modelConfig);
+    // Prepare messages for Anthropic format. Rebuilt when the provider
+    // rejects the prompt as too long and the history is shrunk.
+    let historyMessages = messages;
+    let preparedMessages = handler.prepareMessages(
+      historyMessages,
+      modelConfig,
+    );
+    const retryOptions = this.retryOptions(recovery, modelConfig.id);
 
     if (stream) {
-      // Build streaming request parameters
-      const requestParams = handler.buildStreamingRequestParams(
-        modelConfig.id,
-        preparedMessages,
-        systemPrompt,
-        temperature,
-        user,
-        modelConfig,
-        reasoningEffort,
-      );
+      let response: Awaited<ReturnType<typeof handler.executeStreamingRequest>>;
+      let overflowShrinks = 0;
+      for (;;) {
+        // Build streaming request parameters
+        const requestParams = handler.buildStreamingRequestParams(
+          modelConfig.id,
+          preparedMessages,
+          systemPrompt,
+          temperature,
+          user,
+          modelConfig,
+          reasoningEffort,
+        );
+        try {
+          // Execute streaming request (rate limits / 5xx / connection
+          // failures retried in place with backoff).
+          response = await withModelRetry(
+            () => handler.executeStreamingRequest(requestParams, signal),
+            retryOptions,
+          );
+          break;
+        } catch (error) {
+          if (signal?.aborted) throw error;
+          const shrunk = this.shrinkForOverflow(
+            error,
+            historyMessages,
+            overflowShrinks,
+            recovery,
+            modelConfig.id,
+          );
+          if (!shrunk) throw error;
+          overflowShrinks += 1;
+          historyMessages = shrunk;
+          preparedMessages = handler.prepareMessages(
+            historyMessages,
+            modelConfig,
+          );
+        }
+      }
 
-      // Execute streaming request
-      const response = await handler.executeStreamingRequest(
-        requestParams,
-        signal,
-      );
+      // Mid-answer recovery on the SAME model (see streamContinuation.ts):
+      // the partial answer becomes an assistant turn, a "continue" nudge a
+      // user turn — Anthropic requires strict alternation, which this
+      // preserves (prepared history ends with the user's message).
+      const continuation: StreamContinuation<Anthropic.RawMessageStreamEvent> =
+        {
+          resume: async (partialText, reason) => {
+            const continued: Anthropic.MessageParam[] = partialText.trim()
+              ? [
+                  ...preparedMessages,
+                  { role: 'assistant', content: partialText },
+                  { role: 'user', content: continuationNudge(reason) },
+                ]
+              : preparedMessages;
+            const params = handler.buildStreamingRequestParams(
+              modelConfig.id,
+              continued,
+              systemPrompt,
+              temperature,
+              user,
+              modelConfig,
+              reasoningEffort,
+            );
+            MetricsService.recordModelRecovery(
+              reason === 'length' ? 'continue' : 'resume',
+              reason === 'length' ? 'output_limit' : 'incomplete_stream',
+            );
+            return withModelRetry(
+              () => handler.executeStreamingRequest(params, signal),
+              retryOptions,
+            );
+          },
+        };
 
       // Process the stream with Anthropic-specific processor. Claude models
       // don't use the fallback chain, so modelConfig IS the served model.
@@ -1201,6 +1487,7 @@ export class StandardChatService {
           onUsage: (usage) =>
             this.recordUsage(usage, modelConfig, user, true, telemetry),
         },
+        { continuation },
       );
 
       return new Response(processedStream, {
@@ -1219,7 +1506,10 @@ export class StandardChatService {
       );
 
       // Execute non-streaming request
-      const message = await handler.executeRequest(requestParams, signal);
+      const message = await withModelRetry(
+        () => handler.executeRequest(requestParams, signal),
+        retryOptions,
+      );
 
       // Extract text content from response
       const textContent = handler.extractTextContent(message);

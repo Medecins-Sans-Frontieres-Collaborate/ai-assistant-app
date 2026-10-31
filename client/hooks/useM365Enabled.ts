@@ -33,6 +33,8 @@ export function useM365Enabled(): {
   backupEnabled: boolean;
   /** Share conversations/messages as readable OneDrive docs w/ Graph permissions. */
   sharingEnabled: boolean;
+  /** Daily digest card over mail, Teams and calendar (docs/M365_DAILY_DIGEST.md). */
+  digestEnabled: boolean;
 } {
   const {
     m365Files,
@@ -46,6 +48,7 @@ export function useM365Enabled(): {
     m365Playbooks,
     m365Backup,
     m365Sharing,
+    m365Digest,
   } = useFlags();
   const isLocalhost =
     typeof window !== 'undefined' &&
@@ -63,5 +66,6 @@ export function useM365Enabled(): {
     playbooksEnabled: m365Playbooks === true || isLocalhost,
     backupEnabled: m365Backup === true || isLocalhost,
     sharingEnabled: m365Sharing === true || isLocalhost,
+    digestEnabled: m365Digest === true || isLocalhost,
   };
 }

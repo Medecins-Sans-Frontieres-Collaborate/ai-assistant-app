@@ -870,7 +870,16 @@
       "stillWorking": "Toujou ap travay...",
       "assessingSearchResults": "Nap verifye si rezilta yo reponn kesyon an…",
       "refiningSearch": "Nap rechèche ankò : “{query}”…",
-      "readingSearchPages": "Nap li {count} paj rezilta…"
+      "readingSearchPages": "Nap li {count} paj rezilta…",
+      "toolRoutingUnavailableInRegion": "Wout zouti pa disponib sou {region} endpoint — reponn san zouti...",
+      "applyingSkill": "Ap aplike konpetans: {skills}...",
+      "applyingSkills": "Ap aplike konpetans yo: {skills}...",
+      "readingSkillReferences": "Ap li dokiman referans konpetans yo...",
+      "selectingSkills": "Chwazi konpetans…",
+      "retryingModel": "Modèl okipe — n ap eseye ankò nan {seconds}s (tantativ {attempt})…",
+      "resumingResponse": "Koneksyon ak modèl la pèdi — n ap rekòmanse kote li te rete a…",
+      "continuingResponse": "Repons lan rive limit longè — n ap kontinye…",
+      "trimmingContext": "Konvèsasyon an twò long pou modèl la — n ap retire pi ansyen istwa epi eseye ankò…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# zouti itilize} other {# zouti yo itilize}}",
@@ -936,7 +945,9 @@
       "deniedByRuleHint": "Bloke pa règ ou — jere nan Anviwònman → Konektè.",
       "batchPendingHint": "{count} demann zouti an atant",
       "approveAllButton": "Apwouve tout",
-      "denyAllButton": "Refize tout"
+      "denyAllButton": "Refize tout",
+      "applySkillTitle": "Aplike konpetans “{skill}”?",
+      "skillConsentNote": "Yon admin mete konpetans sa pou mande pèmisyon avan li aplike. Si ou dakò, l ap chaje gid la sèlman pou repons sa a."
     },
     "openImage": "Louvri imaj",
     "copyMessage": "Kopi mesaj",
@@ -976,7 +987,54 @@
     "alwaysWaitThisLong": "Toujou tann jiska {duration}",
     "keepSearching": "Kontinye chèche",
     "keepSearchingHint": "Rechèch la te sispann anvan li jwenn sa. Mande asistan an pou eseye lòt metòd.",
-    "keepSearchingMessage": "Kontinye chèche sa, tanpri — eseye yon lòt apwòch."
+    "keepSearchingMessage": "Kontinye chèche sa, tanpri — eseye yon lòt apwòch.",
+    "addSkill": "Konpetans",
+    "removeSkill": "Retire konpetans",
+    "skillsMenuLabel": "Konpetans ki disponib",
+    "skillsLimit": "Jiska 3 konpetans pa mesaj.",
+    "skillPin": "Fikse nan konvèsasyon an",
+    "skillUseOnce": "Sèvi yon sèl fwa",
+    "skillPinned": "fikse",
+    "skillOnce": "pwochen mesaj la",
+    "skillsPaused": "pòze",
+    "skillUnavailable": "endispo",
+    "skillsAutomaticHint": "Konpetans ki enpòtan yo chwazi otomatikman. Sèvi yon sèl fwa pou pwochen mesaj la, oswa fikse yon konpetans pou sèvi l pandan tout konvèsasyon an.",
+    "skillsAgentDisabled": "Konpetans yo pòze pandan yon ajan konekte. Konpetans ou fikse yo ap reprann lè ou dekonekte ajan an.",
+    "skillPersonal": "pèsonèl",
+    "skillsAgentToolsHint": "Sèlman kapasite òganizasyon an ke yon administratè aktive pou ajan yo ap parèt isit la. Ajan yo ka itilize yo kòm zouti pou li sèlman. Lòt pin yo rete an poz e ajan yo pa gen aksè ak kapasite pèsonèl yo.",
+    "skillAlwaysOn": "toujou aktive",
+    "skillAlwaysOnHint": "Ajoute sou chak mesaj nan konvèsasyon sa pa yon admin.",
+    "skillUsage": {
+      "label": "Konpetans",
+      "requested": "mande",
+      "pinned": "fikse",
+      "auto": "otomatik",
+      "unavailable": "pa disponib",
+      "incomplete": "Gen kèk konpetans ki pa t ka aplike",
+      "references": "{count, plural, one {# pasaj referans} other {# pasaj referans}}",
+      "referencesUnavailable": "Gen kèk dokiman referans ki pa t disponib",
+      "showDetails": "Montre detay sou konpetans",
+      "hideDetails": "Kache detay sou konpetans",
+      "agentLoad": "chaje pa ajan",
+      "agentSearch": "dokiman chèche pa ajan",
+      "needsApproval": "bezwen apwobasyon ou",
+      "original": "jan li te egzekite okòmansman",
+      "updated": "mete ajou depi"
+    },
+    "skillsManualHint": "Seleksyon otomatik la fèmen nan Anviwònman. Sèvi avè l yon sèl fwa pou pwochen mesaj la, oswa fikse yon konpetans pou itilize li pandan tout konvèsasyon sa a.",
+    "queuedMessage": {
+      "label": "Anpil",
+      "attachmentOnly": "Pjès annèks",
+      "cancel": "Anile mesaj ki nan fil la"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Repons lan sispann pa filtè sekirite kontni. Reekri demann lan oswa retire pati ki ka koze pwoblèm lan.",
+      "MODEL_CONTEXT_TOO_LONG": "Konvèsasyon sa a twò long pou modèl chwazi a, menm apre retire istwa ki pi ansyen an. Kòmanse yon nouvo konvèsasyon, retire kèk pjès annèks, oswa chwazi yon modèl ki gen plis kapasite kontèks.",
+      "MODEL_OUTPUT_LIMIT": "Modèl la itilize tout bidjè repons li san li pa pwodui okenn repons. Eseye ak yon demann pi kout oswa ak mwens efò rezònman.",
+      "MODEL_RATE_LIMITED": "Modèl la resevwa twòp demann kounye a. Li te re-eseye otomatikman; souple eseye ankò apre yon ti tan.",
+      "MODEL_QUOTA_EXCEEDED": "Kantite kapasite modèl la depase. Eseye yon lòt modèl oswa eseye ankò pita.",
+      "MODEL_AUTH_FAILED": "Aplikasyon an pa ka otantifye ak sèvis modèl la. Sa a gen rapò ak konfigirasyon — tanpri kontakte sipò teknik."
+    }
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1484,7 +1542,11 @@
       "preferModelTitle": "Bay modèl mwen chwazi a prioritè",
       "preferModelDescription": "Pa chanje otomatikman pou yon lòt modèl lè yon demann echwe. Erè a ap toujou ofri opsyon pou chanje."
     },
-    "Analytics": "Analiz"
+    "Analytics": "Analiz",
+    "skills": {
+      "autoApply": "Kite asistan an aplike konpetans yo otomatikman",
+      "autoApplyDescription": "Konpetans ki enpòtan, ak sa w genyen pèsonèlman, yo chwazi pou chak mesaj. Lè fonksyon sa a fèmen, se sèlman konpetans ou mande oswa fikse, ak sa administratè a mete pou tout konvèsasyon, ki itilize."
+    }
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -2684,7 +2746,15 @@
     "chipAutoHideUnit": "segond",
     "chipAutoHideHint": "Ant {min} ak {max} segond.",
     "byWorkflow": "Pa workflow",
-    "byWorkflowNote": "Pati nan total ki anlè yo, montre separeman — pa itilize anplis. Egzekisyon Grant yo konte pou rapò òganizasyon w la ak bidjè token ou, men yo pa ladan total lokal sa a."
+    "byWorkflowNote": "Pati nan total ki anlè yo, montre separeman — pa itilize anplis. Egzekisyon Grant yo konte pou rapò òganizasyon w la ak bidjè token ou, men yo pa ladan total lokal sa a.",
+    "chipLabelTitle": "Tit etikèt chip",
+    "chipLabelHint": "Detay yo toujou montre emisyon ak pri kote pa kote; sa a sèlman chwazi sa chip rekli a montre.",
+    "chipLabelEmissions": "Emisyon",
+    "chipLabelCost": "Pri",
+    "chipLabelBoth": "Toude",
+    "costTile": "Pri estime",
+    "costDisclosure": "Pri sou lis jan li ye nan {asOf} (To Global Standard, pa gen rabè pou antre kach): yon limit siperyè, pa yon bòdwo. Rechèch sou entènèt, ekzekisyon kòd, transkripsyon, pale, tradiksyon ak endèks dokiman pa enkli.",
+    "costUnpriced": "{count, plural, one {# demann san pri sou lis pa} other {# demann san pri sou lis yo pa}} enkli."
   },
   "extraction": {
     "toggleLabel": "Extra done estriktire",
@@ -4486,7 +4556,16 @@
         "auto": "Otomatik",
         "hidden": "Kache"
       },
-      "visibilityHint": "Otomatik ap montre chip la lè estimasyon an ap mete ajou oswa ou pase sourit sou li. Ou ka chanje sa ankò nan Anviwònman › Itilizasyon & Enpak."
+      "visibilityHint": "Otomatik ap montre chip la lè estimasyon an ap mete ajou oswa ou pase sourit sou li. Ou ka chanje sa ankò nan Anviwònman › Itilizasyon & Enpak.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Pri estime: {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Pa gen pri sou lis pou demann ki nan liy sa a",
+        "unpriced": "{count, plural, one {# demann san pri sou lis pa} other {# demann san pri sou lis yo pa}} enkli nan pri a.",
+        "noPriceData": "Pa gen pri ki parèt: modèl konvèsasyon sa a pa gen pri sou lis (resous pwòp yo, ekzekisyon lokal yo ak ajan pa gen pri).",
+        "note": "Pri sou lis jan li ye nan {asOf} (To Global Standard, pa gen rabè pou antre kach): yon limit siperyè, pa yon bòdwo. Rechèch sou entènèt, ekzekisyon kòd, transkripsyon, pale, tradiksyon ak endèks dokiman pa enkli."
+      }
     },
     "workflow": {
       "title": "Espas travay sa a (evalye)",
@@ -5278,7 +5357,22 @@
     "confirmDeleteGlossary": "Efase glosè a",
     "glossaryDeleteSuccess": "Glosè efase",
     "channelProfilesTab": "Platfòm yo",
-    "channelSetsTab": "Gwoup chanèl yo"
+    "channelSetsTab": "Gwoup chanèl yo",
+    "addPromptAgent": "Ajoute ajan pou sijesyon",
+    "m365AgentIndexStop": "Sispann endèksaj",
+    "foundryAgentsHeading": "Ajan Foundry ak ajan pou sijesyon",
+    "foundryAgentsDescription": "Ajan ki dekouvri soti nan Azure AI Foundry atravè aksè pa w, plis ajan pou sijesyon ou defini isit la. Ajan konesans ak ajan Microsoft 365 jere nan seksyon pa yo anba a.",
+    "agentSkillsLabel": "Konpetans",
+    "agentSkillsHelp": "Ki konpetans òganizasyon ajan sa ka chaje pandan li reponn. Itilizatè yo ap kontinye wè sèlman konpetans règ aksè yo pèmèt.",
+    "agentSkills": {
+      "inherit": "Konpetans make “disponib pou ajan yo”",
+      "selected": "Sèlman konpetans ou chwazi anba a",
+      "none": "Pa gen okenn konpetans"
+    },
+    "agentSkillsNone": "Pa gen okenn konpetans disponib pou chwazi.",
+    "agentSkillsLoading": "Y ap chaje konpetans yo…",
+    "agentSkillsLoadError": "Konpetans yo pa t ka chaje. Chwa ou te sove anvan yo rete.",
+    "agentSkillsNotVisible": "(pa vizib pou ou — dekoche pou retire)"
   },
   "localModels": {
     "title": "Modèl lokal",
@@ -5505,7 +5599,8 @@
       "channelSets": "Règ chak ekip pou ekri sou platfòm yo: gid, vwa, sa ki default, kilès ki ka sèvi ak chanèl la epi kilès ki ka voye mesaj.",
       "webSearch": "Jiska ki nivo rechèch sou entènèt ka ale: rechèch plizyè etap, modèl ki verifye ak limit li yo.",
       "contextBudget": "Konbyen nan chak konvèsasyon ki voye bay chak modèl sou chak etap.",
-      "analytics": "Rapò yo delivre: sa ki rive, kiyès ki ka ouvri chak dosye, ak ki jaden ki ka montre."
+      "analytics": "Rapò yo delivre: sa ki rive, kiyès ki ka ouvri chak dosye, ak ki jaden ki ka montre.",
+      "skills": "Blòk enstriksyon reutilizab asistan an aplike lè yon konvèsasyon bezwen yo."
     },
     "openSettings": "Louvri anviwònman yo",
     "area": {
@@ -5516,7 +5611,8 @@
       "delegations": "Delegasyon",
       "webSearch": "Rechèch sou entènèt",
       "contextBudget": "Bidjè kontèks",
-      "analytics": "Analiz"
+      "analytics": "Analiz",
+      "skills": "Konpetans"
     }
   },
   "limits": {
@@ -5546,7 +5642,8 @@
     "tab": {
       "defaults": "Definisyon global yo",
       "overrides": "Eksepsyon yo",
-      "delegations": "Delegasyon"
+      "delegations": "Delegasyon",
+      "models": "Modèl yo"
     },
     "tabsLabel": "Seksyon limit yo",
     "category": {
@@ -5578,7 +5675,8 @@
       "m365ToolCallsPerDay": "Apèl zouti Microsoft 365 pa jou",
       "m365MailReadsPerDay": "Lekti imel pa jou",
       "m365MailDraftsPerDay": "Boukonn imel pa jou",
-      "m365MailDeepScansPerDay": "Skan fon imel pa jou"
+      "m365MailDeepScansPerDay": "Skan fon imel pa jou",
+      "m365DigestRunsPerDay": "Rapò chak jou pa jou"
     },
     "valueModeLabel": "Kalite limit",
     "valueAmountLabel": "Montan limit",
@@ -5656,7 +5754,8 @@
       "m365ToolCallsPerDay": "Apèl zouti Microsoft 365 (kalandriye, moun, travay, Teams) pa jou. Si w depase limit la, zouti yo ap retounen yon mesaj “rekòmanse demen” olye yo echwe konvèsasyon an.",
       "m365MailReadsPerDay": "Rechèch imel ak lekti mesaj/sijè pa jou. Si w depase limit la, zouti imel yo ap retounen yon mesaj “rekòmanse demen”.",
       "m365MailDraftsPerDay": "Brouyon imèl asistan an ka kreye chak jou — chak youn konfime separeman. Limit la byen sere.",
-      "m365MailDeepScansPerDay": "Analiz imel konpoze (rezime, rechèch pwofon, angajman) pa jou. Chak analiz konte kòm yon inite bidjè kèlkeswa kantite lekti andedan l."
+      "m365MailDeepScansPerDay": "Analiz imel konpoze (rezime, rechèch pwofon, angajman) pa jou. Chak analiz konte kòm yon inite bidjè kèlkeswa kantite lekti andedan l.",
+      "m365DigestRunsPerDay": "Microsoft 365 rapò chak jou pa jou. Chak egzekisyon vle di plizyè lekti Graph plis de apèl modèl analiz; chwa peryòd la fè fasil repase, se poutèt sa limit la sere pa default."
     },
     "scopeFamily": "Fanmi",
     "scopeModel": "Modèl",
@@ -5711,7 +5810,7 @@
     "previewSourceCatalog": "Default entegre",
     "previewSourceGlobal": "Default global",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Override depatman/konpayi/birò ak gwoup pa ka verifye isit la—yo depann de koneksyon moun nan.",
+    "previewNotEvaluated": "Nou pa t kapab jwenn aksè ak anyè a, kidonk règ depatman/konpayi/biwo ak gwoup yo pa t evalye pou moun sa a. Tanpri eseye ankò apre yon ti tan.",
     "previewUnsaved": "Montre dènye politik ki anrejistre. Sove chanjman ou yo pou verifye yo.",
     "previewColumnLimit": "Limit",
     "previewColumnValue": "Valè",
@@ -5807,7 +5906,7 @@
     "yourScopeGroupOnlyChip": "Sèlman gwoup",
     "yourScopeGroupOnlyNote": "Defini pa gwoup oswa atribi sèlman, se konsa limit pa ka previzyalize pa adrès imel.",
     "previewOutOfScope": "Moun sa pa nan domèn ou.",
-    "previewGroupOnlyScope": "Domèn ou defini pa gwoup oswa atribi, se konsa limit pa ka previzyalize pa adrès imel.",
+    "previewGroupOnlyScope": "Sijè ou depann de gwoup oswa atribi. Previzyòn yo itilize anyè a pou chèche moun nan epi deside si li ladan l.",
     "previewCeilingPinned": "Bloke pa plafon: {label}",
     "previewShowUsage": "Montre itilizasyon aktyèl",
     "previewColumnUsage": "Itilize",
@@ -5823,7 +5922,7 @@
     "overrideCeilingHint": "Yon plafon strik sou yon liy fikse valè a pou sib eksepsyon sa a: administratè ki gen domèn pa ka depase li, e pi egzak la pami plizyè plafon va genyen.",
     "confirmDeleteOverride": "Efase \"{label}\"? Li retire imedyatman sou sèvè a epi sib li yo retounen sou limit ki anba li. Sa pa ka anile.",
     "confirmDeleteOverrideAction": "Efase eksepsyon",
-    "previewUndecidableScope": "Domèn ou enkli gwoup oswa atribi, sa vle di si moun sa a ladan li pa ka detèmine sèlman ak adrès imel.",
+    "previewUndecidableScope": "Sijè ou gen ladan l gwoup oswa atribi epi nou pa t kapab jwenn aksè ak anyè a, kidonk nou pa ka detèmine si moun sa a ladan l kounye a. Tanpri eseye ankò apre yon ti tan.",
     "previewNoLongerAdmin": "Ou pa parèt ankò nan yon delegasyon aktive, kidonk ou pa ka prévizyone limit yo. Rekarj paj la pou w wè nivo aksè ou kounye a.",
     "previewScopeMatchesNobody": "Pa gen moun ki antre nan domèn ou kounye a, pa gen moun ou ka prévizyone pa adrès imel.",
     "yourScopeMatchesNobodyChip": "Pa makonnen ak pèsonn",
@@ -5974,7 +6073,73 @@
     "disabledDelegationNote": "Delegasyon li dezaktive, donk eksepsyon sa a pa aplike pou pèsonn jiskaske delegasyon an aktive ankò. Li pap janm monte nan nivo global la.",
     "betaPolicyNotice": "Anviwònman beta : règleman sa a ak konte itilizasyon li yo estoke apa de prensipal la (policy.beta.json). Sa ou chanje isit la pa gen okenn efè sou prensipal la.",
     "delegationsManagedElsewhere": "Delegasyon yo ap parèt isit la sèlman pou lekti. Kiyès ki ladan yo, ki itilizatè yo kouvri ak sa chak admin ka fè, sa jere nan espas Delegasyon an.",
-    "delegationsManagedElsewhereLink": "Ouvri Delegasyon yo"
+    "delegationsManagedElsewhereLink": "Ouvri Delegasyon yo",
+    "modelAccess": {
+      "intro": "Deside kilès ki ka itilize chak modèl. Paramèt yon fanmi aplike pou modèl li yo sof si yon modèl gen pwòp paramèt li; moun sou yon lis pase default pou tout lòt moun; lis blokaj la pase tout lòt otorizasyon.",
+      "externalNote": "Modèl ki anime deyò anviwònman Azure la ({families}) pap disponib pou pèsonn jiskaske ou bay aksè isit la – swa pou tout moun atravè default la, oswa pou gwoup, domèn ak moun.",
+      "envelopeNote": "Yon limit demann sou yon fanmi se yon bidjè pataje pa jou atravè modèl fanmi sa yo; yon limit sou yon modèl se yon plafon andedan li. San limit sou yon modèl pa leve bidjè fanmi an.",
+      "observeNote": "Mòd obsèvasyon limen : anyen isit la pa kache yon modèl ni bloke yon demann pou kounye a. Pase sou Mode Egzekite anlè a lè règ yo kòrèk.",
+      "familyChip": "Fanmi",
+      "modelChip": "Modèl",
+      "otherModels": "Modèl san fanmi",
+      "modelsInFamily": "{count, plural, one {# modèl nan fanmi sa} other {# modèl nan fanmi sa}}",
+      "noModels": "Pa gen okenn modèl nan katalòg la pou kounye a.",
+      "expand": "Montre modèl yo",
+      "collapse": "Kache modèl yo",
+      "edit": "Modifye",
+      "doneEditing": "Fini",
+      "editNode": "Modifye aksè pou {label}",
+      "defaultLabel": "Tout rès moun yo",
+      "defaultInherit": "Eritaj",
+      "defaultUnlimited": "San limit",
+      "defaultLimited": "Limite a",
+      "defaultUnavailable": "Endisponib",
+      "defaultRequestsLabel": "Demann pa jou pou tout rès moun yo",
+      "requestsPerDay": "demann / jou",
+      "inheritedFrom": "Eritaj {state} soti nan {origin}.",
+      "effectiveLabel": "Tout moun ki pa sou lis la jwenn : {state}.",
+      "inheritedChip": "erite",
+      "origin": {
+        "model": "paramèt sa",
+        "family": "fanmi li",
+        "defaults": "Default global yo",
+        "catalogExternal": "règ ki fè modèl ekstèn endisponib jiskaske yo otorize",
+        "catalog": "default katalòg la"
+      },
+      "state": {
+        "unlimited": "San limit",
+        "limited": "Limite a {requests} / jou",
+        "unavailable": "Endisponib"
+      },
+      "list": {
+        "groups": "Gwoup ki gen aksè",
+        "domains": "Domèn ki gen aksè",
+        "allow": "Moun otorize",
+        "deny": "Moun bloke"
+      },
+      "listHint": {
+        "groups": "Manm gwoup Entra sa yo ka itilize li, dapre tèm ki tabli pou chak gwoup.",
+        "domains": "Tout moun ki gen yon adrès imèl nan domèn sa yo, dapre tèm ki tabli pou chak domèn.",
+        "allow": "Moun yo nonmen ka itilize li kèlkeswa sa default oswa domèn yo di.",
+        "deny": "Moun yo nonmen p ap janm ka itilize li. Sa pase tout otorizasyon anlè a."
+      },
+      "grantUnlimited": "San limit",
+      "grantLimited": "Limite a",
+      "termsLabel": "Tèm pou {target}",
+      "requestsLabel": "Demann pa jou pou {target}",
+      "removeGrant": "Retire {target}",
+      "groupsCount": "{count, plural, one {# gwoup} other {# gwoup}}",
+      "domainsCount": "{count, plural, one {# domèn} other {# domèn}}",
+      "allowCount": "{count, plural, one {# moun otorize} other {# moun otorize}}",
+      "denyCount": "{count, plural, one {# moun bloke} other {# moun bloke}}",
+      "collisionChip": "Tou prezan nan Definisyon Global yo",
+      "collisionWarning": "Modèl oswa fanmi sa a anrejistre tou anba Definisyon Global yo. Pa ka sove chanjman jiskaske youn nan de yo efase."
+    },
+    "previewSourceModelAccess": "Apwobasyon modèl — {list}",
+    "groupMembershipDegradedStructural": "Rechèch manm gwoup yo pa mache sou sèvè sa a ({reason}). Règ ak aksè ki baze sou gwoup yo pa aplike pou moun sa yo — tanpri verifye konsantman Group.Read.All tenant lan ak enskripsyon aplikasyon an.",
+    "groupMembershipDegradedRetryable": "Gen kèk rechèch manm gwoup ki echwe sou sèvè sa a pandan kèk dènye minit ({reason}). Règ ki baze sou gwoup yo ka pa aplike pou moun sa yo pandan jiska yon minit pandan rechèch yo ap eseye ankò.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# moun} other {# moun}} ki afekte sou sèvè sa a kounye a.",
+    "previewDirectoryNotFound": "Pa gen okenn itilizatè nan katalòg la ki gen adrès imel sa a, kidonk règ depatman/konpayi/birò ak gwoup yo evalye kòm si moun nan pa fè pati okèn."
   },
   "m365": {
     "connections": {
@@ -6325,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Triaj maten",
-        "description": "Sa ki rive, sa k’ap tann ou, ak kalandriye jodi a — yon sèl rale"
+        "description": "Yon dijesyon depi dènye jou travay la — sa ki rive, sa k ap tann ou, envitasyon ak mizajou; lendi li kouvri vandredi ak wikenn nan"
       },
       "chipsSettingLabel": "Sijere playbook Microsoft 365",
       "chipsSettingHint": "Montre sijesyon plan aksyon pi wo bwat mesaj la lè yo apwopriye (pa egzanp apre enpòte yon transkip lis reyinyon).",
-      "dismissChip": "Fèmen {title}"
+      "dismissChip": "Fèmen {title}",
+      "dailyDigest": {
+        "title": "Rapò chak jou",
+        "description": "Klasifye imèl, mesaj Teams, ak kalandriye resan selon sa ki mande atansyon, sa w ap tann, mizajou ak FYI — chwazi peryòd la"
+      }
+    },
+    "digest": {
+      "title": "Rapò chak jou",
+      "intro": "Li analize sa ou resevwa pandan peryòd la epi klase yo: sa ki mande repons, sa yo mande ou fè, sa w ap tann, randevou, nouvèl konpayi ak pwojè, ak FYI. Pa gen anyen ki voye oswa modifye.",
+      "periodLabel": "Peryòd",
+      "preset": {
+        "lastWorkday": "Depi dènye jou travay",
+        "1d": "Dènye 24 èdtan",
+        "3d": "Dènye 3 jou",
+        "7d": "Dènye 7 jou",
+        "14d": "Dènye 14 jou",
+        "custom": "Ranje pèsonalize"
+      },
+      "lastWorkdayHint": "Depi kòmansman dènye jou travay anvan jodi a — sou yon lendi sa kouvri vandredi ak fen semèn lan.",
+      "from": "Soti",
+      "to": "Jiska",
+      "customInvalid": "Chwazi yon ranje ki pa depase {days} jou.",
+      "sourcesLabel": "Sous",
+      "sourceNoConsent": "Otorizasyon pa bay pou sous sa a.",
+      "sourceHint": {
+        "mail": "Mesaj nan bwat resepsyon ak aperçu; Atik ou voye yo detèmine sa ki konsidere kòm reponn.",
+        "chat": "Dènye konvèsasyon Teams kote gen @mentions ou poko reponn.",
+        "channel": "Piblikasyon nan chanèl ou chwazi anba la.",
+        "calendar": "Envitasyon w ap tann repons ou ak reyinyon ou kote lòt moun poko reponn."
+      },
+      "channelsLabel": "Chanèl ({count} sou {max})",
+      "removeChannel": "Retire {name}",
+      "channelsSlow": "Chak chanèl ajoute plis lekti; plis chanèl, plis tan pou rapò a fini.",
+      "channelsMax": "Ou rive nan maksimum {max} chanèl.",
+      "channelsNeeded": "Chwazi omwen yon chanèl, oswa ajoute yon lòt sous.",
+      "teamLabel": "Ekip",
+      "loadingTeams": "Y ap chaje ekip yo…",
+      "pickTeam": "Chwazi yon ekip pou lis chanèl li yo",
+      "loadingChannels": "Y ap chaje chanèl yo…",
+      "noChannels": "Pa gen chanèl nan ekip sa a.",
+      "privacyNote": "Sèlman sije, ekspeditè ak kout aperçu ap li; kò mesaj ak atachman rete nan Microsoft 365. Atik yo se rezime done pa w yo.",
+      "cancel": "Anile",
+      "run": "Egzekite rapò",
+      "starting": "Kòmanse…",
+      "startFailed": "Pa t kapab kòmanse rapò a.",
+      "userMessage": "Rapò chak jou — {period}; sous: {sources}",
+      "working": "Y ap analize kominikasyon ou nan Microsoft 365…",
+      "failed": "Rapò a echwe.",
+      "failedPrefix": "Rapò chak jou echwe:",
+      "expired": "Egzekisyon rapò sa a ekspire. Kouri li ankò pou jwenn yon nouvo.",
+      "runAgain": "Kouri ankò",
+      "changePeriod": "Chanje peryòd",
+      "period": {
+        "lastWorkday": "depi dènye jou travay",
+        "lastDays": "{count, plural, one {dènye jou} other {dènye # jou}}"
+      },
+      "source": {
+        "mail": "Imèl",
+        "chat": "Konvèsasyon Teams",
+        "channel": "Chanèl Teams",
+        "calendar": "Kalendriye"
+      },
+      "sourceStatus": {
+        "ok": "konplè",
+        "partial": "pasyèl",
+        "skipped": "sote",
+        "unavailable": "pa gen pèmisyon",
+        "error": "echwe"
+      },
+      "degraded": "Modèl analiz la pa disponib, se règ sèlman ki bay kategori yo.",
+      "withheld": "{count, plural, one {# atik te} other {# atik yo te}} bloke pa ekran sekirite yo.",
+      "empty": "Pa gen anyen pou rapòte pou peryòd ak sous sa yo.",
+      "actionItems": "Pwen aksyon",
+      "createTasks": "{count, plural, =0 {Ajoute nan To Do} one {Ajoute # tach nan To Do} other {Ajoute # tach nan To Do}}",
+      "taskCreated": "ajoute nan To Do",
+      "tasksCreated": "{count, plural, one {# tach} other {# tach}} ajoute nan lis \"{list}\" la.",
+      "tasksFailed": "Tach yo pa t kapab kreye.",
+      "category": {
+        "needsReply": "Bezwen repons mwen",
+        "askedOfMe": "M mande",
+        "waitingOnOthers": "Ret tann sou lòt moun",
+        "scheduling": "Planifikasyon",
+        "companyUpdates": "Mizajou konpayi ak pwojè",
+        "fyi": "FYI",
+        "bulk": "Otomatize ak an mas"
+      },
+      "companyUpdatesHint": "enpòtan, raman ijan",
+      "markDone": "Mete {title} kòm trete",
+      "badge": {
+        "unanswered": "san repons",
+        "mentioned": "mansyone ou",
+        "important": "enpòtans segondè"
+      },
+      "askAbout": "Mande sou sa",
+      "askPrompt": "Konsènan atik {source} \"{title}\" soti bò {from} ({when}) nan rezime anlè a: kisa yap mande, epi kisa ki ta yon bon repons?",
+      "open": {
+        "mail": "Louvri nan Outlook",
+        "chat": "Louvri nan Teams",
+        "channel": "Louvri nan Teams",
+        "calendar": "Louvri nan Outlook"
+      },
+      "footnote": "Kategori yo soti nan pwòp siyal ou yo (san repons, mansyone, difize) ak klasifikasyon AI; verifye avan ou aji. Pa gen anyen ki te voye.",
+      "age": {
+        "now": "kounye a",
+        "hours": "sa gen {count}h",
+        "days": "sa gen {count}j"
+      },
+      "waitForReply": "Tanpri tann repons aktyèl la fini avan ou kòmanse yon dijesyon."
     }
   },
   "share": {
@@ -6394,9 +6666,9 @@
     "kind": {
       "rag": "Konesans",
       "prompt": "Pèsonalite",
-      "m365": "Konesans (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Konesans",
-      "foundry": "Ajan Foundry",
+      "foundry": "Ajan pèsonalize",
       "connector": "Konektè"
     },
     "semantics": {
@@ -6405,8 +6677,8 @@
       "own-model": "kouri sou pwòp modèl li"
     },
     "loadError": "Nou pa t ka chaje ajan ou yo kounye a. Sa tipikman se yon pwoblèm tanporè.",
-    "discoveryLoading": "N ap chèche ajan Foundry…",
-    "discoveryError": "Nou pa t ka chaje ajan Foundry yo.",
+    "discoveryLoading": "Nap chèche plis ajan...",
+    "discoveryError": "Gen kèk ajan ki pa t ka chaje.",
     "retry": "Reeseye"
   },
   "peopleSuggest": {
@@ -7547,5 +7819,146 @@
       "past-retention": "Pi ansyen pase {months} mwa retansyon nan dosye sa a; li pap parèt ankò.",
       "unknown": "Pwoblèm rapòte : {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Konpetans",
+    "description": "Blòk enstriksyon reutilizab asistan an aplike lè yon konvèsasyon bezwen yo. Konpatib ak fòma Agent Skills SKILL.md ke Claude ak ChatGPT itilize.",
+    "loading": "Y ap chaje konpetans…",
+    "loadError": "Pa kapab chaje konpetans yo.",
+    "retry": "Repran",
+    "unavailableBanner": "Depo konpetans yo pa aksesib kounye a — n ap montre sa ki entegre; konpetans anrejistre ak modifikasyon yo pa disponib jiskaske sa tounen.",
+    "conflictError": "Yon lòt administratè te modifye konpetans sa. Lis la re-chaje — reaplike modifikasyon ou a.",
+    "alwaysWarning": "{count} konpetans mete sou toujou. Chak ladan yo ajoute sou chak konvèsasyon — pito sèvi ak Otomatik pou konpetans espesifik ak sijè.",
+    "newSkill": "Nouvo konpetans",
+    "importSkill": "Enpòte SKILL.md",
+    "importTitle": "Kole yon fichye SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Sa konpetans sa a fè ak lè pou w itilize li.\n---\n\nEnstriksyon…",
+    "importHint": "Konpetans analize a ap louvri nan editè a pou w revize — anyen pa sove jiskaske ou sove li.",
+    "importParse": "Analize epi revize",
+    "invalidId": "Id konpetans la dwe sèvi ak lèt miniskil, chif, ak yon sèl tirè.",
+    "saveSuccess": "Konpetans sove.",
+    "saveError": "Pa kapab sove konpetans la.",
+    "deleteConfirm": "Efase konpetans sa a? Konvèsasyon yo sispann resevwa li imedyatman.",
+    "restoreConfirm": "Retire personnalisation la epi retabli konpetans sa a nan vèsyon defo entegre a?",
+    "deleteSuccess": "Konpetans efase.",
+    "restoreSuccess": "Vèsyon defo entegre retabli.",
+    "deleteError": "Pa kapab efase konpetans la.",
+    "empty": "Pa gen konpetans ankò. Kreye youn, oswa enpòte yon SKILL.md.",
+    "builtinChip": "Entegre",
+    "customizedChip": "Pèsonalize",
+    "exportSkill": "Ekspòte kòm SKILL.md",
+    "edit": "Modifye",
+    "delete": "Efase",
+    "restoreDefault": "Retabli defo",
+    "createTitle": "Nouvo konpetans",
+    "editTitle": "Modifye {name}",
+    "idLabel": "Id",
+    "idHint": "Lèt miniskil, chif, ak tirè. Sa vin non SKILL.md konpetans lan epi li pa ka chanje apre kreasyon.",
+    "nameLabel": "Non ki parèt",
+    "descriptionLabel": "Deskripsyon",
+    "descriptionHint": "Sa konpetans la fè AK kilè pou w itilize li — se sa ki pèmèt konpetans la chwazi, kidonk mete sijè espesifik ak fason pou reponn yo.",
+    "activationLabel": "Aktivasyon",
+    "activation": {
+      "auto": "Otomatik",
+      "always": "Toujou",
+      "off": "Dekonekte",
+      "manual": "Sou demann"
+    },
+    "activationHint": {
+      "auto": "Chwazi otomatikman lè travay aktyèl la koresponn ak deskripsyon an. Itilizatè yo ka mande l yon sèl fwa oswa fikse l nan yon konvèsasyon.",
+      "always": "Ajoute sou chak konvèsasyon pou tout moun ki ka wè konpetans lan. Sèvi avè l ak modération — espas pou prompt lan pemanman.",
+      "off": "Inaktif : pa janm aplike epi li pa ofri itilizatè yo, men li ret la pou w modifye.",
+      "manual": "Aplike sèlman lè yon itilizatè mande oswa fikse li. Pa janm chwazi otomatikman epi li pa ofri modèl la kòm yon konpetans ki ka chaje."
+    },
+    "instructionsLabel": "Enstriksyon",
+    "instructionsHint": "Markdown, jiska 16 KB. Li antre egzakteman jan li ye lè konpetans lan aktif.",
+    "saving": "Ap sove...",
+    "save": "Sove",
+    "cancel": "Anile",
+    "documents": {
+      "title": "Dokiman",
+      "hint": "Referans yo sere ak konpetans sa a. Ti dokiman yo chaje dirèkteman; pi gwo dokiman yo endèks pou rechèch ak sitasyon. Jiska 20 resous, 10 MB chak, epi 20 MB tout ansanm. Dosye yo disponib sèlman pou telechajman.",
+      "saveFirst": "Sove yon personnalizasyon konpetans sa a anvan ou ajoute dokiman.",
+      "upload": "Ajoute dokiman referans",
+      "remove": "Retire",
+      "stop": "Sispann endèksaj",
+      "resume": "Endèkse oswa rekòmanse dokiman",
+      "empty": "Pa gen okenn dokiman atache ankò.",
+      "requestFailed": "Demann dokiman an echwe. Rekarche epi eseye ankò.",
+      "importZip": "Enpòte yon ZIP konpetans",
+      "zipTooLarge": "ZIP konpetans lan dwe 20 MB oswa mwens.",
+      "importCount": "Resous pou atache apre sove: {count}",
+      "skippedScripts": "Skript egzekitab yo te sote",
+      "status": {
+        "pending": "Ap tann pou endèksaj",
+        "processing": "Ap endèkse",
+        "inline": "Pare (chaje dirèkteman)",
+        "indexed": "Pare (ka rechèch)",
+        "failed": "Endèksaj la echwe",
+        "asset": "Resous telechajab"
+      },
+      "confirmRemove": "Retire {filename} nan konpetans sa a? Orijinal ki te anrejistre a pral efase epi li p ap disponib ankò kòm sous sitasyon.",
+      "reindexRequired": "Dokiman sa yo bezwen reindex selon konfigirasyon rechèch ak anbadman rejyonal aktyèl la. Yo pap disponib nan rechèch jiskaske reindexing fini."
+    },
+    "applyToAgents": "Disponib pou ajan yo",
+    "applyToAgentsHint": "Fèmen pa default. Lè li aktive, ajan yo ka chaje kapasite sa a atravè zouti pou li sèlman olye de ranplase enstriksyon pèsonaj yo. Apèl kapasite yo gen limit pa yo chak. Ajan Foundry yo dwe deja gen fonksyon load_skill ak search_skill_documents anrejistre nan definisyon yo.",
+    "requireConsent": "Mande avan aplike",
+    "requireConsentHint": "Lè modèl la vle itilize konpetans sa pou kont li, yo mande itilizatè a anvan. Lè mande oswa fikse, pa bezwen konfimasyon.",
+    "consentChip": "Mande anvan",
+    "sourceChip": "Soti nan sous",
+    "sourceChipHint": "Delivre pa yon sous konpetans ou abòne; enstriksyon yo mete ajou pandan senkronizasyon. Paramèt reyalizasyon, ajan, ak konsantman se pa ou.",
+    "sources": {
+      "title": "Sous konpetans",
+      "description": "Abòne sou yon katalòg konpetans ekstèn (yon index.json ki gen lis SKILL.md). Konpetans sa yo vin tounen konpetans òganizasyon epi yo mete ajou anviwon chak sis èdtan. Se sèlman SKILL.md ki enpòte; dokiman referans pa enkli.",
+      "urlLabel": "URL katalòg la",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Dwe https sou yon sèvè piblik. Yo li fichye konpetans yo nan menm kote sa sèlman.",
+      "labelLabel": "Label (opsyonèl)",
+      "add": "Abòne",
+      "adding": "Ap abòne…",
+      "added": "{count, plural, =0 {Sous ajoute; pa gen okenn konpetans enpòte poko} one {Sous ajoute; # konpetans enpòte} other {Sous ajoute; # konpetans enpòte}}",
+      "addedWithError": "Sous la te ajoute, men premye senkronizasyon an pa reyisi. Tcheke erè sou sous la.",
+      "addError": "Pa t kapab ajoute sous konpetans la",
+      "sync": "Senkronize kounye a",
+      "syncing": "Ap senkronize…",
+      "synced": "Sous senkronize.",
+      "syncError": "Pa t kapab senkronize sous konpetans la",
+      "remove": "Retire sous la",
+      "removeConfirm": "Retire sous sa a? Konpetans li te pote yo ap rete kòm konpetans òganizasyon nòmal epi yo sispann mete ajou.",
+      "removed": "Sous retire.",
+      "removeError": "Pa t kapab retire sous konpetans la",
+      "loading": "Ap chaje sous yo…",
+      "loadError": "Pa t kapab chaje sous konpetans yo.",
+      "empty": "Pa gen okenn sous konpetans pou kounye a.",
+      "never": "Pa janm senkronize",
+      "statusOk": "Senkronize",
+      "statusError": "Senkronizasyon echwe",
+      "statusPartial": "{count, plural, one {# antre sote} other {# antre sote}}",
+      "lastSync": "Dènye senkronizasyon {time}",
+      "entryCount": "{count, plural, one {# antre} other {# antre}}",
+      "entryStatus": {
+        "synced": "senkronize",
+        "skipped": "sote",
+        "conflict": "konfli — pa ranplase",
+        "invalid": "envalib"
+      }
+    },
+    "requireConsentDisabledHint": "Se sèlman konpetans otomatik kap mande anvan: konpetans mande, fikse ak toujou aktive ap aplike san demann, epi konpetans sou demann pa janm chwazi pa modèl la."
+  },
+  "personalSkills": {
+    "title": "Konpetans pèsonèl",
+    "description": "Sove enstriksyon ou ka itilize plizyè fwa pou konvèsasyon pèsonèl ou yo. Konpetans sa yo rete nan navigatè sa a epi yo voye bay modèl la sèlman lè ou ap pale. Konpetans ki apwopriye yo ka chwazi otomatikman, itilize yon sèl fwa, oswa fikse. Yo pa ka chanje règleman òganizasyon an ni bay aksè ak zouti. Pou itilize konpetans yo, yo dwe aktive nan depwoyman sa a; ajan pa itilize konpetans pèsonèl.",
+    "importFile": "Enpòte SKILL.md oswa ZIP",
+    "review": "Revize tout enstriksyon yo anvan ou sove yo. Enstriksyon ou enpòte yo se preferans itilizatè, yo pa yon règleman òganizasyon ki fè konfyans.",
+    "skipped": "Script ki ka egzekite yo pa te enpòte",
+    "importTooLarge": "Dosye ou ap enpòte a dwe 20 MB oswa mwens.",
+    "invalid": "Konpetans lan pa t ka enpòte.",
+    "duplicate": "ID konpetans pèsonèl sa a egziste deja. Modifye konpetans ki la deja oswa chwazi yon lòt ID.",
+    "countLimit": "Ou ka sove jiska 20 konpetans pèsonèl.",
+    "requestLimit": "Konpetans pèsonèl aktive yo depase limit demann 160 KB la. Dezaktive kèk konpetans oswa diminye enstriksyon yo.",
+    "saved": "Konpetans pèsonèl sove nan navigatè sa a.",
+    "instructionsHint": "Jiska 16 KB enstriksyon, enkli nenpòt referans tèks ou enpòte. Fichye binè ak endèks fichye pèmanan yo disponib sèlman pou konpetans òganizasyon. Ekspòtasyon ap itilize non estanda SKILL.md san prefiks user: la.",
+    "enabled": "Aktive pou konvèsasyon mwen yo",
+    "empty": "Kreye yon konpetans pou yon travay ki repete, oswa enpòte yon SKILL.md pou revize epi sove li isit la."
   }
 }

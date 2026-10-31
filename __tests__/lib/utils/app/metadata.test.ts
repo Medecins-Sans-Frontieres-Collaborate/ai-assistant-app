@@ -1,6 +1,7 @@
 import {
   StreamMetadata,
   TokenUsageMetadata,
+  appendMetadataToStream,
   parseMetadataFromContent,
 } from '@/lib/utils/app/metadata';
 
@@ -90,5 +91,27 @@ describe('parseMetadataFromContent — multi-block', () => {
     );
     expect(parsed.streamError?.message).toBe('boom');
     expect(parsed.streamError?.fileUrl).toBeUndefined();
+  });
+});
+
+describe('appendMetadataToStream — field whitelist', () => {
+  it('forwards citationQuoteSources (claim-quote verification corpus)', () => {
+    const chunks: Uint8Array[] = [];
+    const controller = {
+      enqueue: (chunk: Uint8Array) => chunks.push(chunk),
+    } as unknown as ReadableStreamDefaultController;
+    appendMetadataToStream(controller, {
+      citationQuoteSources: { '1': 'verbatim passage' },
+      usage: {
+        promptTokens: 1,
+        completionTokens: 1,
+        totalTokens: 2,
+        modelId: 'gpt-5.2',
+        region: 'US',
+      },
+    });
+    const text = new TextDecoder().decode(chunks[0]);
+    const parsed = parseMetadataFromContent(text);
+    expect(parsed.citationQuoteSources).toEqual({ '1': 'verbatim passage' });
   });
 });

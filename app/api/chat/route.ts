@@ -3,11 +3,17 @@ import { NextRequest } from 'next/server';
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { AgentEnricher } from '@/lib/services/chat/enrichers/AgentEnricher';
+import { AgentSkillEnricher } from '@/lib/services/chat/enrichers/AgentSkillEnricher';
 import { ExtractionEnricher } from '@/lib/services/chat/enrichers/ExtractionEnricher';
 import { GeneratedFileManifestEnricher } from '@/lib/services/chat/enrichers/GeneratedFileManifestEnricher';
 import { M365AgentEnricher } from '@/lib/services/chat/enrichers/M365AgentEnricher';
 import { PromptAgentEnricher } from '@/lib/services/chat/enrichers/PromptAgentEnricher';
 import { RAGEnricher } from '@/lib/services/chat/enrichers/RAGEnricher';
+import {
+  SkillCatalogEnricher,
+  SkillEnricher,
+} from '@/lib/services/chat/enrichers/SkillEnricher';
+import { SkillReferenceEnricher } from '@/lib/services/chat/enrichers/SkillReferenceEnricher';
 import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnricher';
 import { AgentChatHandler } from '@/lib/services/chat/handlers/AgentChatHandler';
 import { StandardChatHandler } from '@/lib/services/chat/handlers/StandardChatHandler';
@@ -20,6 +26,12 @@ import {
 } from '@/lib/services/chat/pipeline';
 import { FileProcessor } from '@/lib/services/chat/processors/FileProcessor';
 import { ImageProcessor } from '@/lib/services/chat/processors/ImageProcessor';
+import {
+  ProviderErrorKind,
+  classifyProviderError,
+  describeProviderError,
+  providerErrorCode,
+} from '@/lib/services/chat/providerErrors';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 
 import { devTrace } from '@/lib/utils/server/debug/devTrace';
@@ -35,10 +47,12 @@ import { HEARTBEAT_ACTIVITY_KEY, emitAgentActivity } from '@/lib/streamMarkers';
  * Budget for everything BEFORE the model handler stage (file download +
  * extraction, RAG, tool router, …). The whole-request guard is this plus
  * the model timeout, so a user who asks to wait longer for the model never
- * eats into the pre-stage budget. Was a flat 300 s with a 90 s handler
- * stage before issue #130 — the sum is unchanged at the default.
+ * eats into the pre-stage budget. Sized to the longest pre-model stage
+ * (ToolRouterEnricher, 240 s — code interpreter / document trim) plus
+ * slack, so an enricher degrades through its own timeout path before the
+ * whole request is declared timed out.
  */
-const PRE_MODEL_BUDGET_MS = 210_000;
+const PRE_MODEL_BUDGET_MS = 250_000;
 
 /**
  * Keepalive cadence while the pipeline is silent (no activity marker).
@@ -47,9 +61,14 @@ const PRE_MODEL_BUDGET_MS = 210_000;
  * the user sees a frozen loader. The heartbeat is a real activity marker
  * (HEARTBEAT_ACTIVITY_KEY), so a plain "Thinking…" loader also gains the
  * elapsed counter; the client ignores it while a more specific activity
- * is showing.
+ * is showing. The heartbeat runs for the WHOLE response, not just the
+ * pre-model stages: a reasoning model can accept the request and then send
+ * nothing for minutes, and a multi-round tool loop goes quiet between
+ * rounds. Markers are only ever written between whole handler chunks (the
+ * pipe loop below awaits each write), so they can never land inside a
+ * metadata block.
  */
-const HEARTBEAT_INTERVAL_MS = 15_000;
+const HEARTBEAT_INTERVAL_MS = 10_000;
 const HEARTBEAT_QUIET_MS = 20_000;
 
 /**
@@ -80,20 +99,48 @@ function pickReportableError(errors: Error[]): Error {
 }
 
 /**
+ * A raw provider/SDK error that escaped a handler stage (StandardChatHandler
+ * pushes the thrown error as-is), classified by CAUSE — see
+ * lib/services/chat/providerErrors.ts. PipelineErrors already carry their
+ * own code and are never reclassified; a handler-stage timeout keeps its
+ * MODEL_TIMEOUT treatment.
+ */
+function classifyReportable(
+  error: Error,
+): ReturnType<typeof classifyProviderError> | null {
+  if (error instanceof PipelineError) return null;
+  const classified = classifyProviderError(error);
+  // The classifier's catch-all is "unknown, retryable"; a plain Error from
+  // our own code (a thrown validation message, say) must still read as an
+  // internal failure, so only PROVIDER-shaped causes get a model code.
+  return classified.kind === 'unknown' && classified.status === undefined
+    ? null
+    : classified;
+}
+
+/**
  * The code the client is told. A model-handler timeout is reported as
  * MODEL_TIMEOUT so the client can tell it apart from any other stage's
- * PIPELINE_TIMEOUT (which a longer model wait cannot fix).
+ * PIPELINE_TIMEOUT (which a longer model wait cannot fix). A raw provider
+ * error gets its cause's code (MODEL_RATE_LIMITED, MODEL_CONTEXT_TOO_LONG,
+ * MODEL_CONTENT_FILTERED, …) instead of a blanket INTERNAL_ERROR.
  */
 function reportableErrorCode(error: Error): ErrorCode {
   if (isModelHandlerTimeout(error)) return ErrorCode.MODEL_TIMEOUT;
-  return error instanceof PipelineError ? error.code : ErrorCode.INTERNAL_ERROR;
+  if (error instanceof PipelineError) return error.code;
+  const classified = classifyReportable(error);
+  return classified
+    ? (providerErrorCode(classified.kind) as ErrorCode)
+    : ErrorCode.INTERNAL_ERROR;
 }
 
 /**
  * User-facing message for a reportable error. The pipeline's own timeout
  * text ("Stage StandardChatHandler exceeded timeout of 90000ms") is a log
  * line, not something to show a person; the client renders localized copy
- * from the code, and non-streaming callers get a plain sentence.
+ * from the code, and non-streaming callers get a plain sentence. Raw
+ * provider errors get a client-safe sentence for their cause rather than
+ * the SDK's message (which can carry request ids and deployment names).
  */
 function describeReportableError(error: Error): string {
   if (isModelHandlerTimeout(error)) {
@@ -102,7 +149,29 @@ function describeReportableError(error: Error): string {
       ? `The model did not start responding within ${seconds} seconds.`
       : 'The model did not start responding in time.';
   }
+  const classified = classifyReportable(error);
+  if (classified) return describeProviderError(classified.kind);
   return error.message;
+}
+
+/**
+ * Extra streamError fields for a classified provider failure: the cause
+ * `kind`, and `retry: true` when the cause is transient — nothing has
+ * reached the client yet at this point, so a fallback-model resend loses
+ * nothing and is the right next move. Permanent causes (context too long,
+ * content filter, auth, quota, bad request) get no retry hint and the
+ * client shows the explanation instead of silently re-sending.
+ */
+function providerStreamErrorExtra(error: Error): {
+  kind?: ProviderErrorKind;
+  retry?: boolean;
+} {
+  const classified = classifyReportable(error);
+  if (!classified) return {};
+  return {
+    kind: classified.kind,
+    ...(classified.retryable ? { retry: true } : {}),
+  };
 }
 
 /**
@@ -177,13 +246,15 @@ export async function POST(req: NextRequest): Promise<Response> {
   const writeStreamError = async (
     message: string,
     code?: string,
-    extra?: { fileUrl?: string },
+    extra?: { fileUrl?: string; kind?: ProviderErrorKind; retry?: boolean },
   ): Promise<void> => {
     const payload = `\n\n<<<METADATA_START>>>${JSON.stringify({
       streamError: {
         message,
         ...(code ? { code } : {}),
         ...(extra?.fileUrl ? { fileUrl: extra.fileUrl } : {}),
+        ...(extra?.kind ? { kind: extra.kind } : {}),
+        ...(extra?.retry ? { retry: true } : {}),
       },
     })}<<<METADATA_END>>>`;
     try {
@@ -199,10 +270,18 @@ export async function POST(req: NextRequest): Promise<Response> {
    * SDK internals. `fileUrl` is the user's own `/api/file/…` reference,
    * needed client-side to flag/strip an expired attachment.
    */
-  const streamErrorExtra = (err: unknown): { fileUrl?: string } | undefined =>
-    err instanceof PipelineError && typeof err.metadata?.fileUrl === 'string'
-      ? { fileUrl: err.metadata.fileUrl }
-      : undefined;
+  const streamErrorExtra = (
+    err: unknown,
+  ):
+    | { fileUrl?: string; kind?: ProviderErrorKind; retry?: boolean }
+    | undefined => {
+    if (err instanceof PipelineError) {
+      return typeof err.metadata?.fileUrl === 'string'
+        ? { fileUrl: err.metadata.fileUrl }
+        : undefined;
+    }
+    return err instanceof Error ? providerStreamErrorExtra(err) : undefined;
+  };
 
   const abortWriter = async (err: unknown): Promise<void> => {
     try {
@@ -212,6 +291,24 @@ export async function POST(req: NextRequest): Promise<Response> {
     } catch {
       // already closed / errored
     }
+  };
+
+  /**
+   * Tear-down for paths that never hand the readable side to a client
+   * (non-streaming requests, context-build failures). Nothing drains the
+   * stream there, so a marker write from a pre-model stage can sit on
+   * backpressure for good, and `writer.abort()` waits for the in-flight
+   * write before it settles — awaiting it would hang the response (the
+   * skill enrichers write markers on every request, streaming or not).
+   * Cancelling the readable errors the writable and rejects that write;
+   * the abort is then fire-and-forget.
+   */
+  const discardWriter = (err: unknown): void => {
+    const reason = err instanceof Error ? err : new Error(String(err));
+    void streamReadable.cancel(reason).catch(() => {
+      // already cancelled / locked by a reader that was never attached
+    });
+    void abortWriter(reason);
   };
 
   const closeWriter = async (): Promise<void> => {
@@ -291,10 +388,16 @@ export async function POST(req: NextRequest): Promise<Response> {
         // after the persona/RAG stages that may replace systemPrompt, before
         // the tool router that may remount those files.
         new GeneratedFileManifestEnricher(),
+        new AgentSkillEnricher(),
+        // Prepare skill metadata for the shared router. SkillEnricher below
+        // delivers selected bodies and handles turns where routing skipped.
+        new SkillCatalogEnricher(),
         new ToolRouterEnricher(
           toolRouterService,
           container.getSearchAssessor(),
         ),
+        new SkillEnricher(toolRouterService),
+        new SkillReferenceEnricher(),
         // Structured-data extraction: composes the JSON-schema response
         // format when the request carries an `extraction` payload.
         new ExtractionEnricher(),
@@ -314,12 +417,39 @@ export async function POST(req: NextRequest): Promise<Response> {
       context.modelTimeoutMs ?? STAGE_TIMEOUTS.StandardChatHandler;
     const timeoutMs = PRE_MODEL_BUDGET_MS + modelTimeoutMs;
 
+    // Request-level cancellation: when the guard below fires, or the
+    // client goes away (Stop button, tab closed, network dropped), the
+    // pipeline is told to stop — the running stage's upstream call is
+    // aborted and no later stage (in particular the model) starts on a
+    // request nobody is waiting for. The model handler keeps listening
+    // after it returned its Response (see ChatPipeline), so a disconnect
+    // during generation aborts the upstream model/tool-loop call too
+    // instead of leaving a zombie turn that is metered and may still run
+    // approved side effects.
+    const requestAbort = new AbortController();
+    const onClientAbort = () => {
+      if (requestAbort.signal.aborted) return;
+      console.log('[Unified Chat] Client disconnected; aborting pipeline');
+      requestAbort.abort(new Error('Client disconnected'));
+    };
+    if (req.signal.aborted) onClientAbort();
+    else req.signal.addEventListener('abort', onClientAbort, { once: true });
+
+    // Keepalive while nothing has been written for HEARTBEAT_QUIET_MS
+    // (streaming only — the non-streaming path has nothing to write to).
+    const heartbeat = context.stream
+      ? setInterval(() => {
+          if (requestAbort.signal.aborted) return;
+          if (Date.now() - lastMarkerAt < HEARTBEAT_QUIET_MS) return;
+          void emitActivity(HEARTBEAT_ACTIVITY_KEY);
+        }, HEARTBEAT_INTERVAL_MS)
+      : null;
+    const stopHeartbeat = () => {
+      if (heartbeat) clearInterval(heartbeat);
+      req.signal.removeEventListener('abort', onClientAbort);
+    };
+
     const executePipeline = async () => {
-      // Request-level cancellation: when the guard below fires, the
-      // pipeline is told to stop — the running stage's upstream call is
-      // aborted and no later stage (in particular the model) starts on a
-      // request the client has already been told failed.
-      const requestAbort = new AbortController();
       let guardTimer: ReturnType<typeof setTimeout> | null = null;
       const timeoutPromise = new Promise<never>((_, reject) => {
         guardTimer = setTimeout(() => {
@@ -332,23 +462,12 @@ export async function POST(req: NextRequest): Promise<Response> {
           reject(error);
         }, timeoutMs);
       });
-      // Keepalive while the stages are silent (streaming only — the
-      // non-streaming path has nothing to write to). Stops the moment the
-      // pipeline returns, i.e. before any handler bytes are piped, so it
-      // can never interleave with model output.
-      const heartbeat = context.stream
-        ? setInterval(() => {
-            if (Date.now() - lastMarkerAt < HEARTBEAT_QUIET_MS) return;
-            void emitActivity(HEARTBEAT_ACTIVITY_KEY);
-          }, HEARTBEAT_INTERVAL_MS)
-        : null;
       try {
         return await Promise.race([
           pipeline.execute(context, { signal: requestAbort.signal }),
           timeoutPromise,
         ]);
       } finally {
-        if (heartbeat) clearInterval(heartbeat);
         if (guardTimer) clearTimeout(guardTimer);
       }
     };
@@ -356,12 +475,12 @@ export async function POST(req: NextRequest): Promise<Response> {
     // ── Non-streaming: classic single-response behavior ────────────────
     if (!context.stream) {
       try {
-        const result = await executePipeline();
+        const result = await executePipeline().finally(stopHeartbeat);
         const errorResponse = buildPipelineErrorResponse(result);
         if (errorResponse) return errorResponse;
         return result.response!;
       } finally {
-        await abortWriter(new Error('non-streaming request'));
+        discardWriter(new Error('non-streaming request'));
       }
     }
 
@@ -424,10 +543,24 @@ export async function POST(req: NextRequest): Promise<Response> {
 
         console.log('[Unified Chat] Piping handler stream to client');
         const reader = result.response.body.getReader();
+        // Client gone mid-generation: stop draining the handler stream
+        // (its cancel() hook — where one exists — aborts upstream) in
+        // addition to the request-level abort above.
+        const cancelReader = () => {
+          void reader.cancel(requestAbort.signal.reason).catch(() => {});
+        };
+        if (requestAbort.signal.aborted) cancelReader();
+        else
+          requestAbort.signal.addEventListener('abort', cancelReader, {
+            once: true,
+          });
         try {
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
+            // Handler bytes count as liveness — the heartbeat only fills
+            // genuine silences (reasoning TTFB, between tool rounds).
+            lastMarkerAt = Date.now();
             await streamWriter.write(value);
           }
         } catch (pipeErr) {
@@ -436,6 +569,8 @@ export async function POST(req: NextRequest): Promise<Response> {
           console.error('[Unified Chat] Stream pipe error:', pipeErr);
           aborted = true;
           await abortWriter(pipeErr);
+        } finally {
+          requestAbort.signal.removeEventListener('abort', cancelReader);
         }
       } catch (err) {
         // Pipeline threw before any handler bytes were piped — report
@@ -447,6 +582,7 @@ export async function POST(req: NextRequest): Promise<Response> {
           streamErrorExtra(err),
         );
       } finally {
+        stopHeartbeat();
         if (!aborted) {
           await closeWriter();
         }
@@ -460,7 +596,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   } catch (error) {
     // Context construction failed — the stream was never returned, so
     // classic HTTP error semantics apply (auth 401, validation 400, …).
-    await abortWriter(error);
+    discardWriter(error);
     console.error('[Unified Chat] Error:', sanitizeForLog(error));
 
     if (error instanceof PipelineError) {

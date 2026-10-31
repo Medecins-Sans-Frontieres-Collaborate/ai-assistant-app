@@ -755,7 +755,16 @@
       "stillWorking": "በመስራት ላይ…",
       "assessingSearchResults": "ውጤቶቹ ጥያቄውን መልሰው እንደሆነ የመርመራ ላይ...",
       "refiningSearch": "ዳግመኛ ፍለጋ: “{query}”...",
-      "readingSearchPages": "{count} የውጤት ገፆችን በመንበብ ላይ..."
+      "readingSearchPages": "{count} የውጤት ገፆችን በመንበብ ላይ...",
+      "toolRoutingUnavailableInRegion": "በ{region} እንደመጨረሻ ቀጥታ tool routing አይገኝም — ሳይጠቀም መረጃ ማቅረብ...",
+      "applyingSkill": "ዘዴ እየተሰረዘ፡ {skills}...",
+      "applyingSkills": "ዘዴዎች እየተሰረዙ፡ {skills}...",
+      "readingSkillReferences": "የዘዴ ማጣሪያ ሰነዶችን በመነበብ...",
+      "selectingSkills": "ክህሎቶችን በማሰራጨት ላይ…",
+      "retryingModel": "ሞዴሉ ተግባራዊ ነው — በ {seconds} ሴኮንድ ውስጥ እንደገና ሞከርን (አድርጎ {attempt})…",
+      "resumingResponse": "ከሞዴሉ ጋር ግንኙነቱ ቆልፏል — ከተቋረጠበት ቦታ ቀጥሏል…",
+      "continuingResponse": "መልስ የርዝመት ግስጋሴን ደረሰ — ቀጥሏል…",
+      "trimmingContext": "ውይይቱ ለሞዴሉ ከፍተኛ ነው — የቆዩትን ታሪክ ቀውጥ እና እንደገና ሞከር…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳሪያ} other {# መሳሪያዎች}} ተጠቅመዋል",
@@ -821,7 +830,9 @@
       "deniedByRuleHint": "በየእርስዎ መስክ ተደግፏል — በቅንብሮች → Connector-ዎች ውስጥ ያቀናብሩ።",
       "batchPendingHint": "{count} የመሳሪያ ጥያቄዎች በትዕዛዝ ላይ",
       "approveAllButton": "ሁሉንም ይፍቀዱ",
-      "denyAllButton": "ሁሉንም አይፈቀዱ"
+      "denyAllButton": "ሁሉንም አይፈቀዱ",
+      "applySkillTitle": "የ“{skill}” ክህሎት አግባ?",
+      "skillConsentNote": "መካን ይህን ክህሎት ለመተግበር በፊት እንዲያስተውሉ ያዘጋጀዋል። ማጽደቅ የዚህ መልስ አግልግሎትን ብቻ ይጫናል።"
     },
     "openImage": "ምስሉን ክፈት",
     "copyMessage": "መልእክት ቅዳ",
@@ -861,7 +872,54 @@
     "alwaysWaitThisLong": "ሁልጊዜ እስከ {duration} ድረስ ይጠብቁ",
     "keepSearching": "መፈለግ ይቀጥሉ",
     "keepSearchingHint": "ፍለጉ ወደዚህ ሳይደርስ ቆመ። የሚሻሉ ዘዴዎችን እንዲሞክሩ ለእገዳ ረዳት ይጠይቁ።",
-    "keepSearchingMessage": "እባክዎ ይህን ማግኘት ይቀጥሉ — ሌላ መንገድ ይሞክሩ።"
+    "keepSearchingMessage": "እባክዎ ይህን ማግኘት ይቀጥሉ — ሌላ መንገድ ይሞክሩ።",
+    "addSkill": "ክህሎቶች",
+    "removeSkill": "ክህልት ያስወግዱ",
+    "skillsMenuLabel": "የሚገኙ ክህሎቶች",
+    "skillsLimit": "ከ3 ክህሎቶች በታች በመልኩ ውስጥ።",
+    "skillPin": "ወደ ውይይቱ ማስያዝ",
+    "skillUseOnce": "አንድ ጊዜ መጠቀም",
+    "skillPinned": "ተያይዟል",
+    "skillOnce": "ቀጣዩ መልእክት",
+    "skillsPaused": "ቆሟል",
+    "skillUnavailable": "አይገኝም",
+    "skillsAutomaticHint": "ተዛማጅ ችሎታዎች በራስ-አውጪ ይመረጣሉ። ለቀጣዩ መልእክት አንድ ጊዜ ይጠቀሙ፣ ወይም ችሎታን ቀይሩ ሁሉም ውይይት ውስጥ ይጠቀሙበት።",
+    "skillsAgentDisabled": "ችሎታዎች ባንተ ባለሙያ ሲያያዥ ቆሟል። ባለሙያውን ከማሰናከዝዎ በኋላ የተያዩበት ችሎታዎት ይቀጥላል።",
+    "skillPersonal": "የግል",
+    "skillsAgentToolsHint": "የድርጅቱ አስተዳደር ለጀብረ ሰራተኞች የአንባቢ ብቻ ባሉ ችሎታዎች እዚህ የሚገኙት ናቸው። ጀብረ ሰራተኞቹ እነሱን ማንበብ ብቻ የሚችሉ መሣሪያዎች አይቻሉ። ሌሎች ፒንዎች የተዘጋበት ሁኔታ ይቆያሉ፣ የግል ችሎታዎች ለጀብረ ሰራተኞች አያገለግሉም።",
+    "skillAlwaysOn": "ዘወትር እየሰራ ያለ",
+    "skillAlwaysOnHint": "በአድሚን በዚህ ውይይት የተጨመረ ወደ እያንዳንዱ መልእክት።",
+    "skillUsage": {
+      "label": "ዘዴዎች",
+      "requested": "ተጠየቀ",
+      "pinned": "ተመሰከረ",
+      "auto": "ራስ",
+      "unavailable": "አይገኝም",
+      "incomplete": "አንዳንድ ዘዴዎች ማድረግ አልተቻለም",
+      "references": "{count, plural, one {# የማጣሪያ አካል} other {# የማጣሪያ አካላት}}",
+      "referencesUnavailable": "አንዳንድ ማጣሪያ ሰነዶች አይገኝም",
+      "showDetails": "የዘዴ ዝርዝሮችን አሳይ",
+      "hideDetails": "የዘዴ ዝርዝሮችን ደብቅ",
+      "agentLoad": "በagent ተጫነ",
+      "agentSearch": "በagent የተወደዱ ሰነዶች",
+      "needsApproval": "የእርስዎ ማረጋገጥ ያስፈልጋል",
+      "original": "እንደ መጀመሪያ ሁኔታ",
+      "updated": "ከዚያ በኋላ ዘመናዊ ተደርጓል"
+    },
+    "skillsManualHint": "በሴቲንግስ ላይ ራስ-ሰር መምረጥ ተዘግቷል። ለቀጣይ መልእክት አንድ ጊዜ ይጠቀሙ፣ ወይም ችሎታን ለዚህ ውይይት ሁሉ ይጠቁሙ።",
+    "queuedMessage": {
+      "label": "ተሰብስቦ ተያይዞ",
+      "attachmentOnly": "ቅድመ ያስታውቆ የቀረበ",
+      "cancel": "ተሰብስቦ ተያይዞ መልእክት ሰርዝ"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "መልሱ በይዞታ ቅድመ መሳሪያ ተወከለ። ጥያቄውን ደግመው ይግጠሙ፣ ወይም ተፈጥሯቸው የሚገምቱትን አካል ያስወግዱ።",
+      "MODEL_CONTEXT_TOO_LONG": "ውይይቱ በተመረጠው ሞዴል ውስጥ ለመስጠት ከፍተኛ ነው፣ ከቆዩት ታሪክ በኋላም። አዲስ ውይይት ይጀምሩ፣ ቅድመ ያስታውቆ የቀረበውን ያስወግዱ፣ ወይም የበለጠ የርዝመት ማጠቃለያ ሞዴል ይመርጡ።",
+      "MODEL_OUTPUT_LIMIT": "ሞዴሉ ሙሉ output በጀቱን አጠናቀቀ፣ መልስ አልሰጠም። የታቀደ reasoning effort ወይም አነስተኛ ጥያቄ ይይዙ።",
+      "MODEL_RATE_LIMITED": "ሞዴሉ አብዛኛውን ጥያቄዎች አገናኞበት። ሞከር በራሱ ተደጋጋሚ ተካፋፍ፣ እባክዎ ከትንሹ ጊዜ በኋላ ይሞክሩ።",
+      "MODEL_QUOTA_EXCEEDED": "የሞዴሉ ችሎታ quota ተጠናቀቀ። ሌላ ሞዴል ይሞክሩ፣ ወይም ከትንሹ ጊዜ በኋላ ይሞክሩ።",
+      "MODEL_AUTH_FAILED": "መተግበሪያው ከሞዴል አገልግሎት ጋር ማረጋጋት አልተቻለም። ይህ የማዋቀር ችግር ነው — እባክዎ ድጋፍ ያግኙ።"
+    }
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -1268,7 +1326,11 @@
       "preferModelTitle": "የተመረጠውን ሞዴል መርጠው ይጠቀሙ",
       "preferModelDescription": "ጥያቄ ሳይሳካ ሞዴል ራሱን ለወጥ አያደርግም። ችግሩ ቢኖር ይቅዱ የሚለው አንድ አማራጭ ይሆናል።"
     },
-    "Analytics": "ትንተና"
+    "Analytics": "ትንተና",
+    "skills": {
+      "autoApply": "አማካሪው ችሎታዎችን ራስ-ሰር እንዲተገበሩ ይፍቀዱ",
+      "autoApplyDescription": "ተዛማጅ ችሎታዎች እና የግል ችሎታዎ ለእያንዳንዱ መልእክት ይመረጣሉ። ይህ ሲዘጋ ከእርስዎ የተጠየቁ ወይም የቆሙና አስተዳዳሪ በሁሉም ውይይት የወሰኑ ችሎታዎች ብቻ ይጠቀማሉ።"
+    }
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "ሰከንዶች",
     "chipAutoHideHint": "በ {min} እና {max} ሰከንዶች መካከል።",
     "byWorkflow": "በስራ ሂደት",
-    "byWorkflowNote": "ከላይ ያሉትን መጠሪያዎች አካትቶ በተለይ የተቀረበ ነው፤ ተጨማሪ አይደለም። የተመደቡ ማስኬያዎች ለድርጅትዎ ሪፖርትና የቶክን ብጀት ውስጥ በመቀመጥ ይቆጠራሉ፣ ነገር ግን በዚህ በአካባቢ ጠቅላላ ውቅር ውስጥ አይገቡም።"
+    "byWorkflowNote": "ከላይ ያሉትን መጠሪያዎች አካትቶ በተለይ የተቀረበ ነው፤ ተጨማሪ አይደለም። የተመደቡ ማስኬያዎች ለድርጅትዎ ሪፖርትና የቶክን ብጀት ውስጥ በመቀመጥ ይቆጠራሉ፣ ነገር ግን በዚህ በአካባቢ ጠቅላላ ውቅር ውስጥ አይገቡም።",
+    "chipLabelTitle": "ቺፕ መለያ",
+    "chipLabelHint": "መከፋፈያው ሁልጊዜ ከአየር ተፅዕኖና ወጪ አንድ አንድ ያሳያል፤ ይህ ግን ማቅረቡ ተጠቃሚ ቺፕ የሚያነበበውን ትክክለኛ ትምህርት ይመረጣል።",
+    "chipLabelEmissions": "አየር ተፅዕኖ",
+    "chipLabelCost": "ወጪ",
+    "chipLabelBoth": "ሁለቱ",
+    "costTile": "የተገመተው ወጪ",
+    "costDisclosure": "የወጪ ዝርዝር ዋጋ እስከ {asOf} (ዓለም ጠቀላላ መደበኛ ደረጃ፣ የተቆሰለ ግብዓት ቅናሽ የለውም): በላይ የሚገምት ዋጋ ነው፣ የተከፈለ ዋጋ አይደለም። የድረ ገፅ ፍለጋ፣ ኮድ አከል፣ የመጻፍ መቀየር፣ ንግግር፣ ትርጉምና ደብዳቤ አሰናዳድ አካትተው አይመለከቱም።",
+    "costUnpriced": "{count, plural, one {ዋጋ የሌለው 1 ጥያቄ} other {ዋጋ የሌላቸው # ጥያቄዎች}} አስቀምጦ አይቀመጥም።"
   },
   "extraction": {
     "toggleLabel": "የዋቅ መረጃ ያውጡ",
@@ -4502,7 +4572,16 @@
         "auto": "ራስ-ሰር",
         "hidden": "ሰውም አትል"
       },
-      "visibilityHint": "\"ራስ-ሰር\" ቺፑን ግምቱ ሲቀየር ወይም ሲታገድ ብቻ ያሳያል። ይህን ከዚህ በኋላ Settings › Usage & Impact ውስጥ ማሻሻል ይችላሉ።"
+      "visibilityHint": "\"ራስ-ሰር\" ቺፑን ግምቱ ሲቀየር ወይም ሲታገድ ብቻ ያሳያል። ይህን ከዚህ በኋላ Settings › Usage & Impact ውስጥ ማሻሻል ይችላሉ።",
+      "labelBoth": "{grams} ግ· {cost}",
+      "costAria": "የተገመተው ወጪ {cost} ነው።",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "በዚህ ተስተካከው ላይ ለተጠየቁ መዝገብ ዋጋ የለውም",
+        "unpriced": "{count, plural, one {ዋጋ የሌለው 1 ጥያቄ} other {ዋጋ የሌላቸው # ጥያቄዎች}} በወጪ አላቀረበትም።",
+        "noPriceData": "ወጪ አሳየ አይደለም፡፡ የውይይቱ ሞዴል የመዝገብ ዋጋ የለውም (የራስ ምንጮች፣ የአካባቢ ሰርተርና ኤጅንቶች ዋጋ አይቀርበትም።)",
+        "note": "የወጪ ዝርዝር ዋጋ እስከ {asOf} (ዓለም ጠቀላላ መደበኛ ደረጃ፣ የተቆሰለ ግብዓት ቅናሽ የለውም): በላይ የሚገምት ዋጋ ነው፣ የተከፈለ ዋጋ አይደለም። የድረ ገፅ ፍለጋ፣ ኮድ አከል፣ የመጻፍ መቀየር፣ ንግግር፣ ትርጉምና ደብዳቤ አሰናዳድ አካትተው አይመለከቱም።"
+      }
     },
     "workflow": {
       "title": "ይህ የስራ ቦታ (የተገመተው)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "የቃላት አክሊል ያጥፉ",
     "glossaryDeleteSuccess": "የቃላት አክሊል ተሰርዟል",
     "channelProfilesTab": "ᕃዴሎች",
-    "channelSetsTab": "የሚያደርጉት ሰቦች"
+    "channelSetsTab": "የሚያደርጉት ሰቦች",
+    "addPromptAgent": "ፕሮምፕት ወኪል ያክሉ",
+    "m365AgentIndexStop": "መዝገበ-ሁኔታን ቁም",
+    "foundryAgentsHeading": "Foundry እና ፕሮምፕት ወኪሎች",
+    "foundryAgentsDescription": "ከAzure AI Foundry በራስዎ መዳረሻ የተገኙ ወኪሎች፣ እና በእዚህ የተገለጹ ፕሮምፕት ወኪሎች። የእውቀት ወኪሎች እና Microsoft 365 ወኪሎች ከታች በዚህ ክፍል የተለያዩ ይታገዳሉ።",
+    "agentSkillsLabel": "ችሎታዎች",
+    "agentSkillsHelp": "ይህ ኤጀንት በመስማማት ላይ የደረሰውን የድርጅቱ ችሎታዎች የሚጫንበት ነው። አባላት ካሉበት ፈቃድ መሠረት ችሎታዎችን ብቻ ያያሉ።",
+    "agentSkills": {
+      "inherit": "\"ለኤጀንቶች ምርጥ\" ተይዟል",
+      "selected": "የታሰሩትን ችሎታዎች ብቻ",
+      "none": "ችሎታ የለም"
+    },
+    "agentSkillsNone": "መምረጥ የሚችሉ ችሎታዎች አይታዩም።",
+    "agentSkillsLoading": "ክህሎቶች በመጫን ላይ…",
+    "agentSkillsLoadError": "ክህሎቶች ማጫን አልተቻለም። ቀድሞ የተወሰኑ ምርጦች ተከበሩ።",
+    "agentSkillsNotVisible": "(ለእርስዎ የማይታይ — ለማጥፋት ምልክቱን አጥፉ)"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",
@@ -5521,7 +5615,8 @@
       "channelSets": "እያንዳንዱ ቡድን በᕃዴ ላይ ለማቅረብ ያለው ደንብ፤ መመሪያ፣ ድምፅ፣ ነባሪ ቅንብር፣ መንበሩን ማን ማገልገል እና ማን መላክ እንደሚችል።",
       "webSearch": "የድህረገፅ ፍለጋ መሄድ የሚችለው ድንበር፣ በብዛት እሴት የተደረገ ፍለጋ፣ የአስተዳደር ሞዴሉና ውስንነቱ።",
       "contextBudget": "በእያንዳንዱ ዙር ለየትኛውም ሞዴል ምን ያህል የውይይት ታሪክ ይላካል።",
-      "analytics": "የተደረሱ ሪፖርቶች፡ የደረሱትን፣ ማን ጎራውን ማክፈት የሚችል እና የሚታዩትን መስኮች።"
+      "analytics": "የተደረሱ ሪፖርቶች፡ የደረሱትን፣ ማን ጎራውን ማክፈት የሚችል እና የሚታዩትን መስኮች።",
+      "skills": "የሚደጋገመ የመመሪያ ቅርፄዎች የሚያስፈልግ ጊዜ የሚተገበሩ በአስሸጋገሩ የሚደረጉ።"
     },
     "openSettings": "ማቀናበሪያዎችን ክፈት",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "ዲሌጌሽኖች",
       "webSearch": "የድህረገፅ ፍለጋ",
       "contextBudget": "ኮንቴክስት በጀት",
-      "analytics": "ትንተና"
+      "analytics": "ትንተና",
+      "skills": "ክህሎቶች"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "አጠቃላይ ነባር",
       "overrides": "ተሻሻሎች",
-      "delegations": "ዲሌጌሽኖች"
+      "delegations": "ዲሌጌሽኖች",
+      "models": "ናይሎች"
     },
     "tabsLabel": "የገደቦች ክፍሎች",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 የመሳሪያ ጥሪዎች በቀን",
       "m365MailReadsPerDay": "የኢሜይል ንባቦች በቀን",
       "m365MailDraftsPerDay": "የኢሜይል ረቂቅ በቀን",
-      "m365MailDeepScansPerDay": "የኢሜይል ደርድር በቀን"
+      "m365MailDeepScansPerDay": "የኢሜይል ደርድር በቀን",
+      "m365DigestRunsPerDay": "ዕንድነት በዕለት የሚሰራው ማጠቃለያ"
     },
     "valueModeLabel": "የገደብ አይነት",
     "valueAmountLabel": "የገደብ መጠን",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "የMicrosoft 365 መሳሪያ ጥሪዎች (የካሌንደር፣ ሰዎች፣ ተግባራት፣ Teams) በቀን። ከገደቡ በላይ መሳሪያዎቹ \"እባክዎ ነገ ይደግሙ\" ተመናበት የሚሰጥ ይመልሳሉ፣ ውይይቱም አይቋረጥም።",
       "m365MailReadsPerDay": "የኢሜይል ፍለጋና መልእክት/ክፍል ንባቦች በቀን። ከገደቡ በላይ፣ የኢሜይል መሳሪያዎች \"እባክዎ ነገ ይደግሙ\" ይመልሳሉ።",
       "m365MailDraftsPerDay": "የአጋሩ በቀን ሊፈጥሩት የሚችሉ የኢሜይል ረቂቅ። እያንዳንዳቸው በተናጽፎ ይረጋገጣሉ። በትክክል የተጠበቀ።",
-      "m365MailDeepScansPerDay": "የተደበቀ የኢሜይል አስተ تحليل (ዳይጀስት፣ ጥልቅ ፍለጋ፣ ተግባራት) በቀን። እያንዳንዱ ፍለጋ አንድ ጀብዱ ነው፤ የውስጥ ንባቦች አይቀመጡበትም።"
+      "m365MailDeepScansPerDay": "የተደበቀ የኢሜይል አስተ تحليل (ዳይጀስት፣ ጥልቅ ፍለጋ፣ ተግባራት) በቀን። እያንዳንዱ ፍለጋ አንድ ጀብዱ ነው፤ የውስጥ ንባቦች አይቀመጡበትም።",
+      "m365DigestRunsPerDay": "Microsoft 365 ዕለታዊ ማጠቃለያ በዕለት የሚሰራው፡ አንድ ማጠቃለያ ብዙ የGraph እየተነበበ ከመድረክ ተጠቃሚዎች ተጠቃሚዎችን ያካትታል፣ እና ሁለት የትንበያ-ሞዴል ጥሪዎች አሉ፡ የፈተናው የወቅት መለያያ እንደገና ማድረግ አሳካኝ ያደርገዋል፣ ስለዚህ የችሎታው ድፍረት አጠቃላይ ነው።"
     },
     "scopeFamily": "ቤተሰብ",
     "scopeModel": "ሞዴል",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "የተካተተው ነባሪ",
     "previewSourceGlobal": "የአለም አቀፍ ነባሪ",
     "previewSourceOverride": "መቀየሪያ፡ {label}",
-    "previewNotEvaluated": "የዳፓርትመንት/ኩባንያ/ቢሮ እና የቡድን መቀየሪያዎች እዚህ ላይ ሊወገዱ አይችሉም — በሰዉ የግል ወረዳ መንካት ይገባዋል።",
+    "previewNotEvaluated": "ዳይሬክቶሪው ማድረስ አልተቻለም፣ ስለዚህ የመስራችው/የኩባንያው/የቢሮው እና የቡድን መደበኞች ለዚህ ግለሰብ አልተገምገሙም። እባክዎ በአንድ ጊዜ እንደገና ይሞክሩ።",
     "previewUnsaved": "መጨረሻ የተቀመጠውን ፖሊሲ እየተሳየ ነው። ለመኖር ለዚያ ለውጦት ይቀመጡ።",
     "previewColumnLimit": "ገደብ",
     "previewColumnValue": "ዋጋ",
@@ -5822,7 +5921,7 @@
     "yourScopeGroupOnlyChip": "ቡድኖች ብቻ",
     "yourScopeGroupOnlyNote": "በቡድኖች ወይም ባህሪያት ብቻ ተወስኗል፤ ስለዚህ ገደቦች በኢሜይል አይታዩም።",
     "previewOutOfScope": "ይህ ሰው ከመጠበቂያዎ ውጭ ነው።",
-    "previewGroupOnlyScope": "መጠበቂያዎ በቡድኖች ወይም ባህሪያት ብቻ ተወስኗል፤ ስለዚህ ገደቦች በኢሜይል አይታዩም።",
+    "previewGroupOnlyScope": "የእርስዎ ክብረ ትውልድ በቡድኖች ወይም ባህሪዎች ይቀጥላል። ቅድመ እይታዎች ውስጥ ግለሰቡን በዳይሬክቶሪ ውስጥ እንዳለ ይመረምራሉ።",
     "previewCeilingPinned": "በየገደቡ ተያይዞበታል፡ {label}",
     "previewShowUsage": "የአሁኑን አጠቃቀም አሳይ",
     "previewColumnUsage": "ተጠቅመዋል",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "በአንድ ተራ ላይ ያለው ከፍተኛ ገደብ የዚህ ተስተናጋጅ ዓላማዎችን ይከላከላል፤ የተወሰነ አስተዳዳሪን ማንም አይለቀቅም፣ እና በብዙ ገደቦች ላይ መተግበሪያ ሲኖረው ጥሩው ይቆራል።",
     "confirmDeleteOverride": "\"{label}\" ማጥፋት ይፈልጋሉ? ከሰርቨሩ በአንድ ጊዜ ይጠፋልና ዓላማዎቹም ወደታች ያሉትን ግዴታዎች ይጠቀማሉ። ይህ መተደል አይቻልም።",
     "confirmDeleteOverrideAction": "የተስተናጋጁን ማጥፋት",
-    "previewUndecidableScope": "የእርስዎ ድርድር ቡድኖች ወይም ባህሪያትን ያካተተዋል፣ ስለዚህ ይህ ሰው ውስጥ አለን አይቻልም።",
+    "previewUndecidableScope": "የእርስዎ ክብረ ትውልድ ቡድኖች ወይም ባህሪዎችን ያካትታል እና ዳይሬክቶሪው ማድረስ አልተቻለም፣ ስለዚህ ይህ ግለሰብ ውስጥ መሆኑ አሁን ልትወሰን አይቻልም። እባክዎ በአንድ ጊዜ ይሞክሩ።",
     "previewNoLongerAdmin": "አሁን ከንቁ ዝግጅት ውስጥ አትቀርበውም፣ ስለዚህ ግዴታዎችን ማቅረብ አይችሉም። ወቅታዊ ፈቃድዎን ለማየት ገፁን ይቀምጡ።",
     "previewScopeMatchesNobody": "የእርስዎ ድርድር አሁን ማንኛውንም አያዛመደውም፣ ስለዚህ በኢሜይል አድራሻ በሚታይ ማንም የለም።",
     "yourScopeMatchesNobodyChip": "ማንኛውንም አያዛመደውም",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "እዚህ የተገለጸው አሻሻይ በማንም ላይ እስካልተጠናቀቀ ድረስ አይሰራም። ወደ አጠቃላይ ደረጃ ፈጽሞ አይገባም።",
     "betaPolicyNotice": "ቤታ አካባቢ፡ ይህ ፖሊሲ እና የአጠቃቀም ቁጥሮቹ ከስራ ላይ ያለው በተለየ ሁኔታ policy.beta.json ውስጥ ይቆመዋል። እዚህ የሚያደርጉት ማንኛውም ለውጥ በስራ ላይ ያለውን አይቀይርም።",
     "delegationsManagedElsewhere": "ዲሌጌሽኖች እዚህ መብት ሳይኖራቸው ለማየት ብቻ ናቸው። የዲሌጌሽኑ አባላት፣ የሚሸፍኑ ተጠቃሚዎች፣ እና አድሚን ምን ማድረግ እንደሚችሉ በዲሌጌሽኖች ቦታ ይቆጠባል።",
-    "delegationsManagedElsewhereLink": "ዲሌጌሽኖችን ክፈት"
+    "delegationsManagedElsewhereLink": "ዲሌጌሽኖችን ክፈት",
+    "modelAccess": {
+      "intro": "እያንዳንዱ ናይል ለመጠቀም የሚችለው ማን እንደሆነ ይወስኑ። የቤተሰቡ ቅንብር ወደ ናይሎቹ ይተገበራል በሚገኙ፣ ሆኖም ናይሉ የራሱን ቅንብር ከቀየረ፣ የሰንዴ ሰዎች በሁሉም ላይ የተወሰኑትን ይመልከታሉ፣ የተገደበ ሰንዴ ግን ሁሉንም ይሻላል።",
+      "externalNote": "ከAzure አካባቢ ውጭ የተያዘው ናይል ({families}) ለሁሉም ሰዎች እስከታደረው እዚህ ድረስ አይገኝም — ለሁሉም በነባሪው፣ ወይም ለቡድኖች፣ የኢሜል አድራሻዎች እና ሰዎች።",
+      "envelopeNote": "ቤተሰብ ላይ የተወሰነ ሰነድ የበዓሉን በዓል ብዛት በናይሎቹ የሚጋራው ነው፤ በናይል ላይ ያለው ደግሞ የውስጥ ገደብ ነው። በናይል ውስጥ ያለው አልቋም ቤተሰብ ሰነድ አይወጣም።",
+      "observeNote": "እየታየ ሁኔታ ይተገበራል፤ እዚህ ላይ ያለው ምንም ናይልን አይያዝም ወይም ጥያቄን አያቋርጥም። የህዝብ ህጎች ትክክለኛ ሲሆኑ ወደ Enforce ቀይር።",
+      "familyChip": "ቤተሰብ",
+      "modelChip": "ናይል",
+      "otherModels": "የቤተሰብ ካልተካተቱ ናይሎች",
+      "modelsInFamily": "{count, plural, one {ይህበተሰብ ውስጥ ናይል አንዱ} other {ይህበተሰብ ውስጥ ናይሎች #}}",
+      "noModels": "አሁን በካታሎግ ውስጥ ናይሎች የሉም።",
+      "expand": "ናይሎችን አሳይ",
+      "collapse": "ናይሎችን ደብቅ",
+      "edit": "አርትዕ",
+      "doneEditing": "ወደ ተጠናቀቀ",
+      "editNode": "የ{label} መዳረሻ አርትዕ",
+      "defaultLabel": "ደግሞ ሁሉም",
+      "defaultInherit": "ይወርሳል",
+      "defaultUnlimited": "አልቋም",
+      "defaultLimited": "ወደ",
+      "defaultUnavailable": "የማይገኝ",
+      "defaultRequestsLabel": "ለሁሉም ጥያቄዎች በቀን",
+      "requestsPerDay": "ጥያቄዎች / ቀን",
+      "inheritedFrom": "ፈላጊው {origin} ከ{state} ይወርሳል።",
+      "effectiveLabel": "በሰንዴ ያልተገኙ ሁሉ፡ {state} ይሰማዋል።",
+      "inheritedChip": "የተወሰነ",
+      "origin": {
+        "model": "ይህ ቅንብር",
+        "family": "ቤተሰቡ",
+        "defaults": "የአጠቃላይ ነባሪዎች",
+        "catalogExternal": "የውጭ ናይሎች እስከታደሩ ድረስ የማይገኙ ህግ",
+        "catalog": "የካታሎግ ነባሪ"
+      },
+      "state": {
+        "unlimited": "አልቋም",
+        "limited": "ተገደበ ወደ {requests} / ቀን",
+        "unavailable": "የማይገኝ"
+      },
+      "list": {
+        "groups": "በመዳረሻ የተወሰኑ ቡድኖች",
+        "domains": "በመዳረሻ የተወሰኑ ደብዳቤዎች",
+        "allow": "የተፈቀዱ ሰዎች",
+        "deny": "የተገዱ ሰዎች"
+      },
+      "listHint": {
+        "groups": "ይህንን የEntra ቡድን አባላት በዚያ ቡድን የተገለፀው ይተጠቀማሉ።",
+        "domains": "በመመዝገብ የተወሰኑ ደብዳቤዎች ውስጥ ኢሜይል አድራሻ ያላቸው ሁሉ በዚያ ደብዳቤ የተገለፀው ይሰማቸዋል።",
+        "allow": "በስም ተጠቃሚዎች በነባሪው ምንም ብቻ፣ ወይም በደብዳቤው እንዳትገደቡ ልዩ መዳረሻ ይያዛሉ።",
+        "deny": "በስም ተጠቃሚዎች ፈውስ የማያገኙ። ይህ ሁለቱንም ህጎች ይበልጣል።"
+      },
+      "grantUnlimited": "አልቋም",
+      "grantLimited": "ወደ",
+      "termsLabel": "የ{target} ውሎች",
+      "requestsLabel": "በ{target} ቀን ጥያቄዎች",
+      "removeGrant": "{target} አስወግድ",
+      "groupsCount": "{count, plural, one {የተፈቀደ የቡድን ቁጥር #} other {የተፈቀዱ ቡድኖች #}}",
+      "domainsCount": "{count, plural, one {የተፈቀደ የደብዳቤ ቁጥር #} other {የተፈቀዱ ደብዳቤዎች #}}",
+      "allowCount": "{count, plural, one {የተፈቀደ ሰው #} other {የተፈቀዱ ሰዎች #}}",
+      "denyCount": "{count, plural, one {የተገደበ ሰው #} other {የተገዱ ሰዎች #}}",
+      "collisionChip": "በGlobal defaults ውስጥም አለ",
+      "collisionWarning": "ይህ ሞዴል ወይም ቤተሰብ በGlobal defaults ውስጥም ተሸጠ ነው። አንዱን ከሁለቱ ያጽዱ እስከዚያ ድረስ ማስቀመጥ አይቻልም።"
+    },
+    "previewSourceModelAccess": "ሞዴል ማጽደቅ — {list}",
+    "groupMembershipDegradedStructural": "የቡድን አባልነት በዚህ ሰርቨር ላይ አልተሳካም ({reason})። በቡድን ላይ የተያዘው የመመሪያዎችና የፈቃድ ህጎች ለተጎዳው ሰው አይተገቡም—እባክዎ የተነንቱ የGroup.Read.All ስምምነትንና የአፕ ምዝገባን ያረጋግጡ።",
+    "groupMembershipDegradedRetryable": "በዚህ ሰርቨር በቅርቡ በዘመኑ የቡድን አባልነት መደበቂያዎች አልተሳካም ({reason})። በቡድን ያሉ መመሪያዎች ለዚህ ሰው ለአንድ ደቂቃ ሊሰናከል ይችላሉ ተመድበው እየተቸለው ስላሉ።",
+    "groupMembershipDegradedUsers": "በዚህ ሰርቨር በአሁኑ ጊዜ {count, plural, one {# ሰው} other {# ሰዎች}} ተጎዳው ነው።",
+    "previewDirectoryNotFound": "ከዚህ ኢሜል አድራሻ ጋር የተያያዘ የድርሻ ተጠቃሚ የለም። ስለዚህ የክፍል/ኩባንያ/ቢሮና የቡድን መመሪያዎች እንደማያሸማም ተተናገዱ።"
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "የጡዋት መወሰኛ",
-        "description": "ምን ገባ፣ ምን በእርስዎ ላይ ይጠበቃል፣ የዛሬው ቀን መቁጠሪያ — አንድ ማግናባቢ"
+        "description": "ከመጨረሻው የስራ ቀን ጀምሮ ዲጄስት — የገቡ, የሚጠብቁ የሚሻሉ ማስጠንቀቂያዎች እና አዳዲስ መረጃዎች; በሰኞ የአርብና በየሳምንቱ መጨረሻ የደረሱን ያካትታል።"
       },
       "chipsSettingLabel": "የMicrosoft 365 playbooks ይጠይቁ",
       "chipsSettingHint": "ሚስጥሮች ሲያገለግሉ እንደ ምሳሌ የስብሰባ ጽሁፍ ከሚሰቀል በኋላ የplaybook ጥቆማዎችን በመልዕክት ቦታው ላይ አሳይ።",
-      "dismissChip": "{title} አስወግድ"
+      "dismissChip": "{title} አስወግድ",
+      "dailyDigest": {
+        "title": "ዕለታዊ ማጠቃለያ",
+        "description": "የቅርብ ውጤት ፖስታ፣ Teams እና ካሌንደርን ወደ የእርስዎ ፍላጎት፣ የትኛውን ትኛው ይጠበቅበታል፣ ማደስ እና FYI — የወቅቱ ይምረጡ።"
+      }
+    },
+    "digest": {
+      "title": "ዕለታዊ ማጠቃለያ",
+      "intro": "በተመረጠው ወቅት ወደ እርስዎ የደረሰውን ፈጥን ይቃኘል እና ወደ። ይሠራዋል፡ የሚፈልጉት ፍላጎት፣ የእርስዎን የተጠየቀው፣ የሚጠበቅበት፣ ክፍለ ጊዜ፣ የኩባና እና ፕሮጀክት አዳዲስ፣ እና FYI ይመደብ። ምንም ነገር አይላከም ወይም አይቀየምም።",
+      "periodLabel": "ወቅት",
+      "preset": {
+        "lastWorkday": "ከመጨረሻው የስራ ቀን በኋላ",
+        "1d": "የፊትለፊት 24 ሰዓታት",
+        "3d": "የፊትለፊት 3 ቀናት",
+        "7d": "የፊትለፊት 7 ቀናት",
+        "14d": "የፊትለፊት 14 ቀናት",
+        "custom": "በግል ክልል"
+      },
+      "lastWorkdayHint": "ከዛሬ በላይ የቆይተ ቀን መጀመሪያ ቀን ጀምሮ — በሰኞ የአርብና የመጨረሻ ሳምንት ቀናትን ያካትታል።",
+      "from": "ከ",
+      "to": "ወደ",
+      "customInvalid": "በተመደበ ቅደም ትክክል የቢያንስ {days} ቀናት ይምረጡ።",
+      "sourcesLabel": "ምንጮች",
+      "sourceNoConsent": "በዚህ ምንጭ ፍቃድ አልተሰጠም።",
+      "sourceHint": {
+        "mail": "የግብዣ ፖስታ እና አጭር ቅድመ እይታ፤ የእርስዎ የታዩ ነገሮች የተመለሱ እንደሆኑ ይገለጻሉ።",
+        "chat": "የቅርብ የTeams ቻትዎች፣ እና @mentions ላይ የላሉ የተመለሱ አይደሉም።",
+        "channel": "በታች የምትምረጡት ቻናሎች የተጻፉ ልጥፎች።",
+        "calendar": "እርስዎ ሊመለሱ የተጠበቁ አስገባቢዎች እና ሌሎች ሊመለሱ የተጠበቁ ስብሰባዎች።"
+      },
+      "channelsLabel": "ቻናሎች ({count} ከ {max})",
+      "removeChannel": "{name} ያስወግዱ",
+      "channelsSlow": "ቻናል እያካትቷ የሚነበብ ይጨምራል፤ ቻናሎቹን መጨመር ማጠቃለያን ብዙ ጊዜ ያስወጣል።",
+      "channelsMax": "ከፍተኛው {max} ቻናሎች ተደርሷል።",
+      "channelsNeeded": "ቢያንስ አንድ ቻናል ይምረጡ፣ ወይም ሌላ ምንጭ ያክሉ።",
+      "teamLabel": "ቡድን",
+      "loadingTeams": "ቡድኖችን እየተጫኑ ነው...",
+      "pickTeam": "ቻናሎቹን ለማየት ቡድን ይምረጡ",
+      "loadingChannels": "ቻናሎችን እየተጫኑ ነው...",
+      "noChannels": "በዚህ ቡድን ውስጥ ቻናሎች አልተገኙም።",
+      "privacyNote": "የሚነበቡት የርዕስ፣ መላኪዎች እና አጭር ቅድመ እይታዎች ብቻ ናቸው። የመልእክት ሰነዶችና ቅጥቅጦች Microsoft 365 ውስጥ ይቆያሉ። እቃዎቹ የእርስዎን ውሂብ ጥቅም ላይ የተዋሉ ማጠቃለያዎች ናቸው።",
+      "cancel": "ይቅር",
+      "run": "ማጠቃለያን ያስጀምሩ",
+      "starting": "በመጀመር ላይ...",
+      "startFailed": "ማጠቃለያው ማስጀመር አልተቻለም።",
+      "userMessage": "ዕለታዊ ማጠቃለያ — {period}; ምንጮች፡ {sources}",
+      "working": "Microsoft 365 ግንኙነቶችዎን እየተመርምሩ ነው...",
+      "failed": "ማጠቃለያው አልተሳካም።",
+      "failedPrefix": "ዕለታዊ ማጠቃለያ አልተሳካም፡",
+      "expired": "የዚህ ማጠቃለያ ፈተና ጊዜው አልፏል። አዲስ ለማግኘት ድጋፍ ያድርጉ።",
+      "runAgain": "እንደገና ያስጀምሩ",
+      "changePeriod": "ወቅት ያስተካክሉ",
+      "period": {
+        "lastWorkday": "ከመጨረሻው የስራ ቀን በኋላ",
+        "lastDays": "{count, plural, one {የፊትለፊት ቀን} other {የፊትለፊት # ቀናት}}"
+      },
+      "source": {
+        "mail": "ፖስታ",
+        "chat": "Teams ቻትዎች",
+        "channel": "Teams ቻናሎች",
+        "calendar": "የዕለቱ መመዝገቢያ"
+      },
+      "sourceStatus": {
+        "ok": "ተጠናቋል",
+        "partial": "በከፊል",
+        "skipped": "ተወግዷል",
+        "unavailable": "ፍቃድ የለም",
+        "error": "አልተሳካም"
+      },
+      "degraded": "የትንተናው ሞዴል አልተገኘም፣ ስለዚህ ምድቦች በደንቦች ብቻ የተዘጋጁ ናቸው።",
+      "withheld": "{count, plural, one {# እቃ ታገዷል} other {# እቃዎች ታገዱ}} በደህንነት መመለከቻዎቹ ተከልክሏል።",
+      "empty": "ለዚህ ጊዜ እና ምንጮቹ ምንም ሪፖርት የለም።",
+      "actionItems": "የሚደረጉ እቃዎች",
+      "createTasks": "{count, plural, =0 {ወደ To Do ያክሉ} one {# ተግባር ወደ To Do ያክሉ} other {# ተግባሮች ወደ To Do ያክሉ}}",
+      "taskCreated": "ወደ To Do ታከለ",
+      "tasksCreated": "{count, plural, one {# ተግባር} other {# ተግባሮች}} ወደ \"{list}\" ዝርዝር ታከሉ።",
+      "tasksFailed": "ተግባሮቹን ማመንጨት አልተቻለም።",
+      "category": {
+        "needsReply": "መልስ የሚፈልግ",
+        "askedOfMe": "በመጠየቅ የተጠየቀ",
+        "waitingOnOthers": "በሌሎች ላይ ይጠባበቃል",
+        "scheduling": "መቅደም ወይም ማቅረብ",
+        "companyUpdates": "የድርጅትና ፕሮጀክት አዳዲስ መረጃዎች",
+        "fyi": "ለእባክዎ",
+        "bulk": "አውቶማቲክና በሙሉ"
+      },
+      "companyUpdatesHint": "አስፈላጊ፣ ብዙውን ጊዜ አጭር በሆነ ጊዜ አያስፈልግም",
+      "markDone": "{title} እንደታደሰ ምልክት ያድርጉ",
+      "badge": {
+        "unanswered": "ያልተመለሰ",
+        "mentioned": "እርስዎን ተዘምኗል",
+        "important": "ውስጥ ጠቃሚ"
+      },
+      "askAbout": "ስለዚህ ይጠይቁ",
+      "askPrompt": "በላይ ያለው ቅጽበት ውስጥ ከ{from} ({when}) የመጣው የ{source} ንጥል \"{title}\" ስለ፡ ምን ተጠየቀ? ጥሩ እንዴት መልስ ሊሆን ይገባል?",
+      "open": {
+        "mail": "በOutlook ውስጥ ይክፈቱ",
+        "chat": "በTeams ውስጥ ይክፈቱ",
+        "channel": "በTeams ውስጥ ይክፈቱ",
+        "calendar": "በOutlook ውስጥ ይክፈቱ"
+      },
+      "footnote": "ምድቦች ከራስዎ ግዛት (ያልተመለሱ፣ ተጠቅመዋል፣ ተላልፏል) እና AI መዋቅር ይሆናሉ፤ ሲደርስ ከመተግበርዎ በፊት ያረጋግጡ። ምንም አልተልከም።",
+      "age": {
+        "now": "አሁን በቅርቡ",
+        "hours": "{count}ሰ. በፊት",
+        "days": "{count}ቀን በፊት"
+      },
+      "waitForReply": "ዲጄስትን መጀመር ከመቻሉ በፊት የአሁኑን ምላሽ እንዲጨርስ ይጠብቁ።"
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "እውቀት",
       "prompt": "ግልባጭ ባህሪ",
-      "m365": "እውቀት (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "እውቀት",
-      "foundry": "Foundry ወኪል",
+      "foundry": "ብጁ ወኪል",
       "connector": "ማገናኛ"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "በራሱ ሞዴል ላይ ይሰራል"
     },
     "loadError": "agent ዎት በአሁኑ ጊዜ መጫን አልተቻለም። ይህ ብዙ ጊዜ ጊዜያዊ ነው።",
-    "discoveryLoading": "Foundry agent እየተፈለጉ ነው…",
-    "discoveryError": "Foundry agent መጫን አልተቻለም።",
+    "discoveryLoading": "ተጨማሪ ወኪሎችን በመፈለግ ላይ…",
+    "discoveryError": "አንዳንድ ወኪሎች መጫን አልተቻለም።",
     "retry": "ደግመው ይሞክሩ"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "ከዚህ ፎልደር የ{months} ወር ግዥ ያሻገረ፤ አይታየትም።",
       "unknown": "ችግር ተዘግቷል፡ {code}።"
     }
+  },
+  "skillsAdmin": {
+    "title": "ክህሎቶች",
+    "description": "የሚደጋገመ የመመሪያ ቅርፄዎች አስሸጋገሩ ወደ ውይይት ሲያስፈልግ የሚያስተግበሩ። ከClaude እና ChatGPT የAgent Skills SKILL.md ቅርፅ ጋር ተመጣጣኝ ነው።",
+    "loading": "ክህሎቶች በመጫን ላይ…",
+    "loadError": "ክህሎቶችን መጫን አልተቻለም።",
+    "retry": "እንደገና ይሞክሩ",
+    "unavailableBanner": "የክህልት ማከማቻ በአሁኑ ጊዜ ማግኘት አይቻለም — የተገነቡ ማዕከላዊው ነባሪ ገጾች ታይተዋል፤ የተቀመጡ ክህሎቶችና እንዲሁም ማሻሻያዎች እስከሚመለሱ ድረስ አይገኙም።",
+    "conflictError": "ይህ ክህልት በሌላ አስተዳዳሪ ተለውጧል። ዝርዝሩ ዳግመኛ ተጫኗል — ማሻሻያዎትን ድጋሚ ያመለክቱ።",
+    "alwaysWarning": "{count} ክህሎቶች ወደ \"ሁልጊዜ\" ተዘግተዋል። እያንዳንዱ ወደ እያንዳንዱ ውይይት ይጨምራል — ለጉዳይ የተወሰኑ ክህሎቶች በፈጣን እንዲሆን አውቶማቲክን ይመክሩ።",
+    "newSkill": "አዲስ ክህልት",
+    "importSkill": "SKILL.md ያስገቡ",
+    "importTitle": "SKILL.md ፋይል ይጨምሩ",
+    "importPlaceholder": "---\nname: my-skill\ndescription: ይህ ክህልት ምን ያደርጋልና መቼ መጠቀም እንደሚገባ።\n---\n\nመመሪያዎች…",
+    "importHint": "የተተረጎመው ክህልት እንደ ግምገማ ላይ በአርታዒው ይከፈታል — ምንም ሳይቀመጥ እስከሚያስቀመጡት ድረስ።",
+    "importParse": "ተተርጎመ ይዩ",
+    "invalidId": "የክህልት መታወቂያዎች በታችኛው ፊደል፣ ቁጥር እና አንድ ሃይፈን ይጠቀማሉ።",
+    "saveSuccess": "ክህልት ተቀመጠ።",
+    "saveError": "ክህልትን ማስቀመጥ አልተቻለም።",
+    "deleteConfirm": "ይህን ክህልት ይሰረዙ? ውይይቶች አንቺዉን ወዲያውኑ አይቀበሉትም።",
+    "restoreConfirm": "ከተቀየሩት ማሻሻያዎች ይውጡ እና የነባሪውን የቆሻሻውን ክህልት ዳግመኛ ያድሱ?",
+    "deleteSuccess": "ክህልት ተሰረዘ።",
+    "restoreSuccess": "የነባሪ ቁልፍ ተመለሰ።",
+    "deleteError": "ክህልትን ማጥፋት አልተቻለም።",
+    "empty": "አሁን የሚገኙ ክህሎቶች የሉም። አንዱን ይፍጠሩ ወይም SKILL.md ይስቀሉ።",
+    "builtinChip": "በመደበኛ",
+    "customizedChip": "በተቀየረ",
+    "exportSkill": "ወደ SKILL.md ይላኩ",
+    "edit": "አርትዕ",
+    "delete": "ሰርዝ",
+    "restoreDefault": "ወደ ነባሪ አድስ",
+    "createTitle": "አዲስ ክህልት",
+    "editTitle": "{name} ያስተካክሉ",
+    "idLabel": "መታወቂያ",
+    "idHint": "በታችኛው ፊደል፣ ቁጥር እና ሃይፈን ይጠቀማል። የክህልት የSKILL.md ስም ይሆናል እና ከመፍጠሩ በኋላ ሊቀየር አይችልም።",
+    "nameLabel": "የሚታይ ስም",
+    "descriptionLabel": "መግለጫ",
+    "descriptionHint": "ክህልቱ ምን እንደሚያደርግና መቼ እንደሚጠቀምበት — ክህልቱን የሚረጥበው ይህ ስለሆነ፣ የሚመለከቱበትን ርዕሶችና አንዳንድ መናገሪያዎችን አካትቱ።",
+    "activationLabel": "እንቅስቃሴ",
+    "activation": {
+      "auto": "አውቶማቲክ",
+      "always": "ሁልጊዜ",
+      "off": "ጠፍቷል",
+      "manual": "በጥያቄ"
+    },
+    "activationHint": {
+      "auto": "የአሁኑ ተግባር ማብራሪያውን ከሚሻሽ በሆነ ጊዜ በራስ-አውጪ ይመረጣል። ተጠቃሚዎችም አንድ ጊዜ ማጠቀም ወይም ለውይይት ማስያዝ ይችላሉ።",
+      "always": "የክህልቱን ብዛት ማየት የሚችሉ ሁሉም ወደ እያንዳንዱ ውይይት ይጨምራል። እጅግ በጥንቃቄ ይጠቀሙ — ይህ ቋሚ የጥያቄ ቦታ ነው።",
+      "off": "አልተነቃችሁም፡ በተጠቃሚዎች አይቀርበውም እና አይተገበርም፣ ነገር ግን ለማርትዕ እዚህ ይቆያል።",
+      "manual": "ተግባራዊ የሚሆነው ተጠቃሚዉ ሲጠይቅ ወይም ሲቀርጽ ብቻ ነው። ራሱ በራሱ ለማስተናገድ አይምረጥም እና በሞዴሉ ውስጥ የሚጫን ችሎታ አይሆንም።"
+    },
+    "instructionsLabel": "መመሪያዎች",
+    "instructionsHint": "Markdown፣ ከ16 ኪባ ድረስ። ችሎታው ሲሰራ በትክክል ይገባል።",
+    "saving": "በማስቀመጥ ላይ…",
+    "save": "አስቀምጥ",
+    "cancel": "ይቅር",
+    "documents": {
+      "title": "ሰነዶች",
+      "hint": "አእምሮ ግምገማዎች ከዚህ ክህሎት ጋር ይቀመጣሉ። ትንሹ ሰነዶች ቀጥታ ይጫናሉ፤ የትልቁ ሰነዶች ደግሞ ለተጠቃሚ ፍለጋ ይማየዳሉ። እስከ 20 ምንጮች፣ መተላለፊያው ከአንዱ ሰነድ 10 MB እና ጠቅላላው 20 MB ብቻ። ንብረት (asset) መጫኛ ብቻ ሆኖ ይቀመጣል።",
+      "saveFirst": "ሰነዶችን ማከል ከመጀመርዎ በፊት ይህን በውስጥ ያለ ክህሎት የቀይረውን ያስቀምጡ።",
+      "upload": "የአእምሮ ሰነዶችን ያክሉ",
+      "remove": "ያስወግዱ",
+      "stop": "ማየዳ አቁሙ",
+      "resume": "ሰነዶችን ያድሱ ወይም ይቀጥሉ",
+      "empty": "ምንም ሰነዶች አልተያዙም።",
+      "requestFailed": "የሰነዱ ጥያቄ አልተሳካም። ይመልሱና ደግመው ይሞክሩ።",
+      "importZip": "የክህሎት ZIP ማምጫ",
+      "zipTooLarge": "የክህሎቱ ZIP 20 MB ወይም ከዚያ ታንሽ መሆን አለበት።",
+      "importCount": "ማስቀመጫ በኋላ ለማያያዝ የቀሩ ምንጮች፡ {count}",
+      "skippedScripts": "ሊፈጠሩ የችሉ ፕሮግራሞች ተወው",
+      "status": {
+        "pending": "ለማየዳ በመጠበቅ ላይ",
+        "processing": "በመደሰሰት ላይ",
+        "inline": "ዝግጁ (ቀጥታ ተጫኗል)",
+        "indexed": "ዝግጁ (ለፍለጋ ዝግጁ)",
+        "failed": "ማየዳ አልተሳካም",
+        "asset": "ለመጫን ዝግጁ ንብረት"
+      },
+      "confirmRemove": "የተፈጥሯቸውን {filename} ከዚህ ችሎታ ይወግዱ? የተጠባበቀው ኦሪጅናል ይሰረዛል እና ከዚያ በኋላ እንደ የጥቅስ ምንጭ ማግኘት አይቻልም።",
+      "reindexRequired": "እነዚህ ሰነዶች ለአሁኑ አካባቢያዊ ፍለጋ እና embedding ውቅርጫ እንደገና መመዝገብ ያስፈልጋቸዋል። ማስመዝገቡ እስካልተጠናቀቀ ድረስ መፈለግ አይችሉም።"
+    },
+    "applyToAgents": "ለጀብረ ሰራተኞች የሚገኙ",
+    "applyToAgentsHint": "በቀዳሚ ሁኔታ በዝግታ ነው። በተከፈተ ሁኔታ ሲሆን ጀብረ ሰራተኞች ይህንን ችሎታ በአንባቢ ብቻ ባሉ መሣሪያዎች ማንበብ ይችላሉ፤ የግል መመሪያዎቻቸውን ሳይተካ። የችሎታ ጥሪዎች በተለያዩ ደረጃ ገደብ ይኖራቸዋል። የFoundry ጀብረ ሰራተኞች በትንሣኤ መግለጫዎቻቸው ውስጥ load_skill እና search_skill_documents ፋንቸኖች አስቀድሞ የተመዘገቡ መሆን ይአለብ።",
+    "requireConsent": "ከመተግበር በፊት ይጠይቁ",
+    "requireConsentHint": "ሞዴሉ ችሎታውን በራሱ ሲፈፀም ተጠቃሚውን በመጀመሪያ ያጠይቃል። የተጠየቀና የታሰረ አጠቃቀም ማረጋገጥ አያስፈልግም።",
+    "consentChip": "መጀመሪያ ይጠይቃል",
+    "sourceChip": "ከምንጭ",
+    "sourceChipHint": "በየተደከማው ችሎታ ምንጭ ይደርሳል፤ መመዝገቢያዎች በስኬን ሲያድስ ይሻሻል። አነሳሽ፣ የኤጀንትና የማረጋገጫ ስደን የእርስዎ ነው።",
+    "sources": {
+      "title": "የችሎታ ምንጮች",
+      "description": "ወደ ውጭ የችሎታ ካታሎግ (የ SKILL.md ፋይሎች ዝርዝር index.json) ይለውጡ። ችሎታዎቹ የድርጅቱ ችሎታዎች ይሆናሉና ስድስት ሰዓት ግድፍ ይታያሉ። እስከ SKILL.md ብቻ ይሰደዳል፤ የማብራሪያ ሰነዶች አይገባዉም።",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "ይህ በ public host https ላይ መሆን አለበት። የችሎታ ፋይሎች በዚያ የሚገኙበት አካባቢ ብቻ ይደበደቡ።",
+      "labelLabel": "መለያ (አስደሳች)",
+      "add": "ይተይዙ",
+      "adding": "በሺህ ሂደት ላይ…",
+      "added": "{count, plural, =0 {ምንጭ ታስተውሏል፤ ብዙ ችሎታ አአልገባው} one {ምንጭ ታስተውሏል፤ # ችሎታ ተገባ} other {ምንጭ ታስተውሏል፤ # ችሎታዎች ተገቡ}}",
+      "addedWithError": "ምንጩ ታካበ፣ ግን የመጀመሪያው ሲንክ አሳደገ። የምንጩን ስህተት ይፈትሹ።",
+      "addError": "የችሎታ ምንጩን ማከተት አልቻሉም",
+      "sync": "አሁን ይሻሽዉ",
+      "syncing": "ሻሽው በሂደት…",
+      "synced": "ምንጭ ተሻሽው።",
+      "syncError": "የችሎታ ምንጩን ማሻሻል አልቻሉም",
+      "remove": "ምንጩን ያስወግዡ",
+      "removeConfirm": "ይህን ምንጭ ያስወግዡ? የተደረሰ ችሎታዎቹ ከዚህ በኋላ የድርጅት ችሎታዎች እንደ መደበኛ ይቆያሉና አይታያቸውም።",
+      "removed": "ምንጩ ታስወገደ።",
+      "removeError": "ምንጩን ማስወገድ አልቻሉም",
+      "loading": "ምንጮችን በመጫን ላይ…",
+      "loadError": "የችሎታ ምንጮችን መጫን አልቻሉም።",
+      "empty": "እስካሁን የችሎታ ምንጮች የሉም።",
+      "never": "ሻሽው የለም",
+      "statusOk": "ተሻሽው",
+      "statusError": "ሻሽው አሳደገ",
+      "statusPartial": "{count, plural, one {# ቅድሚያ ተወደደ} other {# ቅድሚያዎች ተወደዱ}}",
+      "lastSync": "የመጨረሻ ሻሽይ {time}",
+      "entryCount": "{count, plural, one {# ቅድሚያ} other {# ቅድሚያዎች}}",
+      "entryStatus": {
+        "synced": "ተሻሽው",
+        "skipped": "ተወደደ",
+        "conflict": "ግጭት — አልተለዋለውም",
+        "invalid": "መድኃኒት አይሆንም"
+      }
+    },
+    "requireConsentDisabledHint": "በራስ ሰር የሚተገበሩ ክህሎቶች ብቻ መቀየር ማካሄድ ይችላሉ፡ የተፈለገው፣ የተወሰነውና ሁልጊዜ የሚሰራው ክህሎት እንግዲኛ ሳይጠየቅ ይተገበራል፣ በማጠየቅ እንዳይመረጥ አይመረጥም።"
+  },
+  "personalSkills": {
+    "title": "የግል ክህሎቶች",
+    "description": "በግል ንግግርዎ ላይ የተደጋጋሚ መመሪያዎችን አካትት። ክህሎቶቹ በዚህ መሳሪያ አስቀምጠው ይቆያሉ እና በመደበኛው ንግግር ብቻ ወደ ሞዴል ይላካሉ። ቅርንጫፍ ክህሎቶች ራስን በራስ ስር ይመረጣሉ፣ አንድ ጊዜ የተጠቀሱ ሊሆኑ ይችላሉ፣ ወይም ቀጥሎ ለመጠቀም ሊፒኑ ይችላሉ። አንዳንድ የክህሎት አጠቃቀም የድርጅት ፖሊሲ ማስተካከል ወይም የመሳሪያ መድረሻ ማስገኘት አይችልም። ክህሎት መጠቀም በዚህ ርዕስ ክህሎቶች እንዲነቃ ያስፈልጋል፤ የወኪሎች ንግግሮች የግል ክህሎቶችን አያጠቀምም።",
+    "importFile": "SKILL.md ወይም ZIP ያስገቡ",
+    "review": "ማስቀመጥ ከመደገፍ በፊት ጠቅላላ መመሪያዎችን ይገምግሙ። የታቀቀ መመሪያ የተጠቃሚ ተፈትኖ ነው፣ የታመነ የድርጅት ፖሊሲ አይደለም።",
+    "skipped": "የሚወጣ ፕሮግራሞች ተዘጋጁ",
+    "importTooLarge": "የሚወሰው ፋይል 20 MB ማነስ ይኖረዋል።",
+    "invalid": "ክህሎቱ ማስገባት አልተቻለም።",
+    "duplicate": "ይህ የግል ክህሎት id አስቀድሞ አለ። አሁኑኑ ክህሎትን ያስተካክሉ ወይም በተለያዩ id ይምረጡ።",
+    "countLimit": "እርስዎ ከ20 የግል ክህሎቶች እስከ ማስቀመጥ ይችላሉ።",
+    "requestLimit": "የተነቀኑ የግል ክህሎቶች የ160 KB የጥያቄ ጭነትን በላይ አደረሱ። አንዳንድ ክህሎቶችን ማጠፍ ወይም መመሪያዎችን ማጣራት ይደርሳሉ።",
+    "saved": "የግል ክህሎት በዚህ መሳሪያ ውስጥ ተቀመጠ።",
+    "instructionsHint": "እስከ 16 KB የመመሪያዎች፣ የታቀቀ የጽሁፍ ማጣቀሻ ጨምሮ። የባይኔሪ ፋይሎችና ዘዴያዊ የሰነድ ማረጋጋት በድርጅት ክህሎቶች ብቻ ይገኛሉ። ማስወገጃ አጠቃላይ SKILL.md ስምን የተጠቀመ ነው፣ የተጠቃሚ: ቅደም ሳይሆን።",
+    "enabled": "ለንግግሮቼ ተነቃቃ",
+    "empty": "በተደጋጋሚ ስራዎ ላይ ክህሎት ያስቀመጡ፣ ወይም SKILL.md ያስገቡ እና እዚህ ይገምግሙ ተቀምጡ።"
   }
 }

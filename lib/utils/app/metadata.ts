@@ -106,6 +106,13 @@ export interface StreamMetadata {
     code?: string;
     retry?: boolean;
     fileUrl?: string;
+    /**
+     * Provider failure class (lib/services/chat/providerErrors.ts) so the
+     * client can branch on the CAUSE — a content-filter stop is never
+     * worth a fallback-model resend, a rate limit the server already
+     * retried may be.
+     */
+    kind?: import('@/lib/services/chat/providerErrors').ProviderErrorKind;
   };
   /**
    * Retrieved chunk text per citation number, shipped by the server so the
@@ -136,6 +143,7 @@ export interface ParsedMetadata {
     code?: string;
     retry?: boolean;
     fileUrl?: string;
+    kind?: import('@/lib/services/chat/providerErrors').ProviderErrorKind;
   };
   mcpPlan?: import('@/types/mcp').McpPlan;
   /**
@@ -356,6 +364,9 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
             ...(typeof parsedData.streamError.fileUrl === 'string'
               ? { fileUrl: parsedData.streamError.fileUrl }
               : {}),
+            ...(typeof parsedData.streamError.kind === 'string'
+              ? { kind: parsedData.streamError.kind }
+              : {}),
           };
         }
         const anyData = parsedData as unknown as {
@@ -455,6 +466,13 @@ export function appendMetadataToStream(
   if (metadata.usage) cleanMetadata.usage = metadata.usage;
   if (metadata.streamError) cleanMetadata.streamError = metadata.streamError;
   if (metadata.mcpPlan) cleanMetadata.mcpPlan = metadata.mcpPlan;
+  // Claim-quote verification corpus (skill evidence on MCP and agent
+  // turns). Dropping it here silently disabled verification on those paths.
+  if (
+    metadata.citationQuoteSources &&
+    Object.keys(metadata.citationQuoteSources).length > 0
+  )
+    cleanMetadata.citationQuoteSources = metadata.citationQuoteSources;
 
   // Only append if we have actual metadata
   if (Object.keys(cleanMetadata).length > 0) {

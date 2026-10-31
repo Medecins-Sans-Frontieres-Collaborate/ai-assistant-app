@@ -3,6 +3,9 @@ import {
   M365_BUILTIN_SERVER_ID,
 } from '@/lib/services/m365/tools/toolCatalog';
 
+/** `SKILL_SERVER_ID` (lib/services/skills/skillTools.ts is server-only). */
+const SKILL_SERVER_ID = 'builtin-skills';
+
 /**
  * Global (cross-conversation) MCP tool approval rules.
  *
@@ -58,6 +61,10 @@ export function isAlwaysConfirmTool(
   serverId: string | null | undefined,
   toolName: string | null | undefined,
 ): boolean {
+  // Consent-gated skills (docs/SKILLS_DESIGN.md §5.5) ask EVERY time the
+  // model wants one: an admin marked them "ask before applying", so no
+  // standing approval may silence the question.
+  if (serverId === SKILL_SERVER_ID) return toolName === 'load_skill';
   return (
     serverId === M365_BUILTIN_SERVER_ID &&
     !!toolName &&

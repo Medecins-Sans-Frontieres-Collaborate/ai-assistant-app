@@ -1,5 +1,14 @@
+import {
+  SkillRoutingEntry,
+  selectedSkillIds,
+  skillRoutingPrompt,
+  skillRoutingSchema,
+} from '@/lib/services/skills/skillRouting';
+import { SKILL_LIMITS } from '@/lib/services/skills/types';
+
 import { devTrace } from '@/lib/utils/server/debug/devTrace';
 
+import type { AuxiliaryFailureReason } from '@/types/chat';
 import {
   Message,
   ToolRouterRequest,
@@ -60,10 +69,188 @@ const TRIM_CLASSIFY_SCHEMA = {
  * Determines which tools are needed for a given message using gpt-5.4-nano.
  * Uses a lightweight model to intelligently decide when web search is beneficial.
  */
+/**
+ * The auxiliary classifier every routing decision rides (tool routing,
+ * document-trim classification, skills-only selection). It must be
+ * deployed in EVERY Foundry account a region can pin to — a missing
+ * deployment degrades every decision in that region to "no tools".
+ */
+export const AUXILIARY_ROUTER_MODEL = 'gpt-5.4-nano';
+
+/** Thrown when a region-pinned call has no regional client to run on. */
+export class AuxiliaryEndpointMissingError extends Error {
+  constructor(public readonly region: 'US' | 'EU') {
+    super(
+      `No ${region} auxiliary model endpoint configured. Set AZURE_AI_FOUNDRY_ENDPOINT_${region} (or AZURE_OPENAI_ENDPOINT_${region}), or declare AZURE_DEFAULT_REGION=${region} when the default endpoints live there.`,
+    );
+    this.name = 'AuxiliaryEndpointMissingError';
+  }
+}
+
+/**
+ * Classifies a failed auxiliary call so the log line names the remedy
+ * instead of a bare SDK message. A 404 on a region-pinned call almost
+ * always means the account behind that region has no
+ * AUXILIARY_ROUTER_MODEL deployment; 401/403 means the app identity lacks
+ * a data-plane role on that account.
+ */
+export function describeAuxiliaryFailure(
+  error: unknown,
+  region?: 'US' | 'EU',
+): { reason: AuxiliaryFailureReason; message: string } {
+  const where = region
+    ? `the ${region} auxiliary endpoint`
+    : 'the default endpoint';
+  if (error instanceof AuxiliaryEndpointMissingError) {
+    return { reason: 'endpoint_missing', message: error.message };
+  }
+  const status =
+    typeof error === 'object' && error !== null && 'status' in error
+      ? Number((error as { status?: unknown }).status)
+      : undefined;
+  const text = error instanceof Error ? error.message : String(error);
+  if (status === 404 || /DeploymentNotFound/i.test(text)) {
+    return {
+      reason: 'deployment_missing',
+      message: `${AUXILIARY_ROUTER_MODEL} is not deployed on ${where} (${text}). Deploy it in that account.`,
+    };
+  }
+  if (status === 401 || status === 403) {
+    return {
+      reason: 'unauthorized',
+      message: `The app identity cannot call ${where} (${status}): grant it a Cognitive Services data-plane role on that account. (${text})`,
+    };
+  }
+  if (
+    (error instanceof Error && /abort/i.test(error.name)) ||
+    /timed? ?out|APIConnectionTimeoutError/i.test(text)
+  ) {
+    return { reason: 'timeout', message: `${where} timed out: ${text}` };
+  }
+  return { reason: 'provider', message: `${where} failed: ${text}` };
+}
+
 export class ToolRouterService {
   private tracer = trace.getTracer('tool-router-service');
 
-  constructor(private openAIClient: OpenAI) {}
+  constructor(
+    private openAIClient: OpenAI,
+    private regionalClient?: (region: 'US' | 'EU') => OpenAI | undefined,
+  ) {}
+
+  private warnedUsFallback = false;
+
+  /**
+   * EU-pinned requests never fall back to the unpinned default client — EU
+   * is the residency-constrained direction. A US pin without a US client
+   * uses the default set, exactly as chat does for US users
+   * (resolveChatRegion → null → default clients); US data may flow to the
+   * default endpoints wherever they live.
+   */
+  private clientFor(region?: 'US' | 'EU'): OpenAI {
+    if (!region) return this.openAIClient;
+    const client = this.regionalClient?.(region);
+    if (client) return client;
+    if (region === 'US') {
+      if (!this.warnedUsFallback) {
+        this.warnedUsFallback = true;
+        console.warn(
+          '[ToolRouterService] No US auxiliary endpoint configured; US-pinned routing uses the default endpoint.',
+        );
+      }
+      return this.openAIClient;
+    }
+    throw new AuxiliaryEndpointMissingError(region);
+  }
+
+  /**
+   * Skills-only fallback for turns without a normal router call. Uses the
+   * same catalog contract as determineTool, never executes search or code.
+   * Returns degraded on timeout/provider failure so explicit skills survive.
+   */
+  async determineSkills(request: {
+    messages: Message[];
+    currentMessage: string;
+    skillCatalog: SkillRoutingEntry[];
+    signal?: AbortSignal;
+    region?: 'US' | 'EU';
+  }): Promise<
+    Pick<
+      ToolRouterResponse,
+      'relevantSkills' | 'degraded' | 'degradedReason' | 'degradedRegion'
+    >
+  > {
+    const catalog = request.skillCatalog.slice(
+      0,
+      SKILL_LIMITS.maxRouterCatalog,
+    );
+    if (!catalog.length) return { relevantSkills: [] };
+    try {
+      const recent = this.getRecentMessages(request.messages, 6);
+      const response = await this.clientFor(
+        request.region,
+      ).chat.completions.create(
+        {
+          model: AUXILIARY_ROUTER_MODEL,
+          messages: [
+            {
+              role: 'system',
+              content:
+                'Select useful organization skills.' +
+                skillRoutingPrompt(catalog),
+            },
+            ...recent.slice(0, -1).map((message) => ({
+              role:
+                message.role === 'assistant'
+                  ? ('assistant' as const)
+                  : ('user' as const),
+              content: this.extractTextContent(message.content).slice(0, 6000),
+            })),
+            { role: 'user', content: request.currentMessage.slice(0, 12000) },
+          ],
+          reasoning_effort: 'minimal',
+          max_completion_tokens: 256,
+          response_format: {
+            type: 'json_schema',
+            json_schema: {
+              name: 'skill_selection',
+              strict: true,
+              schema: {
+                type: 'object',
+                properties: { relevantSkills: skillRoutingSchema(catalog) },
+                required: ['relevantSkills'],
+                additionalProperties: false,
+              },
+            },
+          },
+        },
+        {
+          signal: request.signal,
+          timeout: SKILL_LIMITS.routingTimeoutMs,
+          maxRetries: 0,
+        },
+      );
+      const result = JSON.parse(
+        response.choices[0]?.message?.content || 'null',
+      );
+      if (!Array.isArray(result?.relevantSkills))
+        throw new Error('Missing skill selection');
+      return {
+        relevantSkills: selectedSkillIds(result.relevantSkills, catalog),
+      };
+    } catch (error) {
+      const failure = describeAuxiliaryFailure(error, request.region);
+      console.error(
+        `[ToolRouterService] Skill selection unavailable (${failure.reason}): ${failure.message}`,
+      );
+      return {
+        relevantSkills: [],
+        degraded: true,
+        degradedReason: failure.reason,
+        degradedRegion: request.region,
+      };
+    }
+  }
 
   /**
    * Multilingual intent classification for the dedicated document-trim
@@ -80,6 +267,8 @@ export class ToolRouterService {
     messages: Message[];
     currentMessage: string;
     documentFilename: string;
+    region?: 'US' | 'EU';
+    signal?: AbortSignal;
   }): Promise<TrimTarget | null> {
     try {
       const recentMessages = this.getRecentMessages(request.messages, 6);
@@ -100,31 +289,43 @@ targetIsAttachedDocument identifies WHAT is being shortened. It is true only whe
 
 When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit "none".`;
 
-      const response = await this.openAIClient.chat.completions.create({
-        model: 'gpt-5.4-nano',
-        messages: [
-          { role: 'system' as const, content: systemPrompt },
-          ...recentMessages.map((msg, index) => ({
-            role: msg.role as 'user' | 'assistant' | 'system',
-            content:
-              index === lastIndex
-                ? request.currentMessage
-                : typeof msg.content === 'string'
-                  ? msg.content
-                  : this.extractTextContent(msg.content),
-          })),
-        ],
-        reasoning_effort: 'minimal',
-        max_completion_tokens: 60,
-        response_format: {
-          type: 'json_schema',
-          json_schema: {
-            name: 'document_trim_classification',
-            strict: true,
-            schema: TRIM_CLASSIFY_SCHEMA as unknown as Record<string, unknown>,
+      const response = await this.clientFor(
+        request.region,
+      ).chat.completions.create(
+        {
+          model: AUXILIARY_ROUTER_MODEL,
+          messages: [
+            { role: 'system' as const, content: systemPrompt },
+            ...recentMessages.map((msg, index) => ({
+              role: msg.role as 'user' | 'assistant' | 'system',
+              content:
+                index === lastIndex
+                  ? request.currentMessage
+                  : typeof msg.content === 'string'
+                    ? msg.content
+                    : this.extractTextContent(msg.content),
+            })),
+          ],
+          reasoning_effort: 'minimal',
+          max_completion_tokens: 60,
+          response_format: {
+            type: 'json_schema',
+            json_schema: {
+              name: 'document_trim_classification',
+              strict: true,
+              schema: TRIM_CLASSIFY_SCHEMA as unknown as Record<
+                string,
+                unknown
+              >,
+            },
           },
         },
-      });
+        {
+          signal: request.signal,
+          timeout: SKILL_LIMITS.routingTimeoutMs,
+          maxRetries: 0,
+        },
+      );
 
       const raw = response.choices[0]?.message?.content;
       if (!raw) return null;
@@ -321,6 +522,9 @@ The user has switched web search ON for this message: it WILL run. needsWebSearc
               ? `- additionalSearchQueries: 0 to 4 EXTRA queries that run in parallel with searchQuery and widen coverage. YOU decide how many: none for a single-fact lookup one query answers ("population of Kenya"); 1-2 for a question with a couple of facets; 3-4 for broad, open-ended, comparative or research questions. Each extra query must retrieve DIFFERENT results — a distinct facet, sub-topic, entity, time frame or alternative terminology (e.g. "what is happening in Sudan" → searchQuery "Sudan", extras "Sudan conflict RSF", "Sudan humanitarian crisis", "Sudan peace talks"). When the topic is local to a non-English-speaking region, one extra query in that region's main language often surfaces better local sources. Never add rewordings or synonyms of a query you already have; each follows the same 3-8 keyword rules`
               : `- additionalSearchQueries: almost always EMPTY — one query should cover the question whenever possible. Populate ONLY when the message contains multiple clearly SEPARABLE information needs that no single query can cover (e.g. "compare the France strikes with the Germany rail dispute" → one extra query). Max 4 extra queries; each follows the same 3-8 keyword rules. Never split one topic into variations of the same query`;
 
+            const catalog =
+              request.skillCatalog?.slice(0, SKILL_LIMITS.maxRouterCatalog) ??
+              [];
             const systemPrompt = `You are a tool router that determines if web search is needed.
 
 Today's date is ${currentDate}. The current year is ${currentYear}.
@@ -354,7 +558,7 @@ Also tune the search when needsWebSearch is true:
 - searchRecency: "day" for breaking news/live data, "week" or "month" for recent developments, "none" when age doesn't matter
 - searchComprehensive: true for research-style questions wanting breadth (comparisons, overviews, "what are my options"), false for single-fact lookups
 - searchCategory: which kind of source answers best — "news" for current events, recent developments and open-ended "what is happening in/with X" questions; "science" for medical, clinical, public-health and academic research questions (journals, studies, MSF research publications); "it" for programming, software and technical documentation; "humanitarian" for humanitarian crises, operations and datasets (displacement, outbreaks, country situations); "general" for everything else or when unsure
-${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecutionPromptSection}`;
+${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecutionPromptSection}${catalog.length ? skillRoutingPrompt(catalog) : ''}`;
 
             // Include recent conversation history for context-aware decisions
             // Take last 3 message pairs (6 messages max) to keep it efficient
@@ -379,6 +583,9 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                       ? msg.content
                       : this.extractTextContent(msg.content),
               })),
+              ...(recentMessages.length === 0
+                ? [{ role: 'user' as const, content: request.currentMessage }]
+                : []),
             ];
 
             console.log('[ToolRouterService] Using conversation context:', {
@@ -470,38 +677,71 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               requiredFields.push('needsCodeExecution', 'codeTask');
             }
 
-            const response = await this.openAIClient.chat.completions.create({
-              model: 'gpt-5.4-nano',
-              messages: conversationMessages,
-              reasoning_effort: 'minimal',
-              // +60 headroom for the (usually empty) additionalSearchQueries
-              // array — a populated fan-out is a few short keyword strings.
-              max_completion_tokens:
-                (considerCodeExecution ? 290 : 210) +
-                (hasPriorSearchCitations ? 20 : 0) +
-                (hasPriorSearchState ? 20 : 0) +
-                // searchLanguage is a two-letter code.
-                12 +
-                // A planned fan-out is up to four more keyword queries.
-                (searchFanOut ? 80 : 0),
-              response_format: {
-                type: 'json_schema',
-                json_schema: {
-                  name: 'tool_router_response',
-                  strict: true,
-                  schema: {
-                    type: 'object',
-                    properties: schemaProperties,
-                    required: requiredFields,
-                    additionalProperties: false,
+            if (catalog.length) {
+              schemaProperties.relevantSkills = skillRoutingSchema(catalog);
+              requiredFields.push('relevantSkills');
+            }
+            const response = await this.clientFor(
+              request.region,
+            ).chat.completions.create(
+              {
+                model: AUXILIARY_ROUTER_MODEL,
+                messages: conversationMessages,
+                reasoning_effort: 'minimal',
+                // +60 headroom for the (usually empty) additionalSearchQueries
+                // array — a populated fan-out is a few short keyword strings.
+                max_completion_tokens:
+                  (considerCodeExecution ? 290 : 210) +
+                  (hasPriorSearchCitations ? 20 : 0) +
+                  (hasPriorSearchState ? 20 : 0) +
+                  // searchLanguage is a two-letter code.
+                  12 +
+                  // A planned fan-out is up to four more keyword queries.
+                  (searchFanOut ? 80 : 0) +
+                  (catalog.length ? 256 : 0),
+                response_format: {
+                  type: 'json_schema',
+                  json_schema: {
+                    name: 'tool_router_response',
+                    strict: true,
+                    schema: {
+                      type: 'object',
+                      properties: schemaProperties,
+                      required: requiredFields,
+                      additionalProperties: false,
+                    },
                   },
                 },
               },
-            });
+              catalog.length
+                ? {
+                    signal: request.signal,
+                    timeout: SKILL_LIMITS.routingTimeoutMs,
+                    maxRetries: 0,
+                  }
+                : undefined,
+            );
 
             const result = JSON.parse(
               response.choices[0].message.content || '{}',
             );
+            const relevantSkills = selectedSkillIds(
+              result.relevantSkills,
+              catalog,
+            );
+            // A missing/unusable skill selection must not cancel the tools
+            // decision in the same response: search and code execution
+            // stand, and only the skill side is reported as degraded.
+            const skillSelectionDegraded =
+              catalog.length > 0 && !Array.isArray(result.relevantSkills);
+            if (skillSelectionDegraded) {
+              console.warn(
+                '[ToolRouterService] Skill selection missing from the tool router response; tools decision kept, skills treated as degraded',
+              );
+              span.setAttribute('tool_router.skills_degraded', true);
+            }
+            if (catalog.length)
+              span.setAttribute('tool_router.skills', relevantSkills);
 
             console.log('[ToolRouterService] AI decision:', result);
             // The search was decided upstream; the model only planned it.
@@ -567,6 +807,8 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               const recency = result.searchRecency;
               return {
                 tools,
+                relevantSkills,
+                ...(skillSelectionDegraded ? { skillSelectionDegraded } : {}),
                 searchQuery: primaryQuery,
                 searchQueries,
                 searchRecency:
@@ -596,6 +838,8 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
 
             return {
               tools: [] as ToolType[],
+              relevantSkills,
+              ...(skillSelectionDegraded ? { skillSelectionDegraded } : {}),
               reasoning: 'No tools needed',
             };
           } catch (error) {
@@ -605,19 +849,24 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
             // search" — which is a real regression, not just a transient
             // failure. Mark it on the span so it surfaces in telemetry,
             // and log with enough detail to diagnose without re-running.
-            const errMessage =
-              error instanceof Error ? error.message : String(error);
+            const failure = describeAuxiliaryFailure(error, request.region);
+            const errMessage = failure.message;
             console.error(
-              `[ToolRouterService] Falling back to no-tools (web_search disabled). Cause: ${errMessage}`,
+              `[ToolRouterService] Falling back to no-tools (web_search disabled) — ${failure.reason}: ${errMessage}`,
             );
             // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
             devTrace('tool-router-error', { error: errMessage.slice(0, 300) });
             span.recordException(error as Error);
             span.setAttribute('tool_router.fallback', 'error');
             span.setAttribute('tool_router.fallback_reason', errMessage);
+            span.setAttribute('tool_router.fallback_kind', failure.reason);
+            if (request.region)
+              span.setAttribute('tool_router.region', request.region);
             return {
               tools: [],
               degraded: true,
+              degradedReason: failure.reason,
+              degradedRegion: request.region,
               reasoning: 'Error determining tools, proceeding without search',
             };
           }

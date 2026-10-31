@@ -78,6 +78,14 @@ interface ChatInputState {
   extractionRecipeIds: string[];
 
   /**
+   * Skills explicitly invoked for the NEXT message (composer skill picker,
+   * docs/SKILLS_DESIGN.md §5.1). Per-message: consumed by the send in
+   * chatStore, capped at 3 (the server validator's cap). Ephemeral — never
+   * persisted; resets between conversations.
+   */
+  forcedSkillIds: string[];
+
+  /**
    * Whether the connector-focus tray is open while NO connector is pinned
    * yet (the picking state). Once a pin exists, the tray renders from the
    * conversation's persisted `pinnedMcpServerId` instead. Ephemeral —
@@ -128,6 +136,8 @@ interface ChatInputState {
 
   // Actions - Extraction
   setExtractionMode: (enabled: boolean) => void;
+  toggleForcedSkillId: (id: string) => void;
+  clearForcedSkillIds: () => void;
   addExtractionRecipeId: (id: string) => void;
   removeExtractionRecipeId: (id: string) => void;
   clearExtractionRecipeIds: () => void;
@@ -198,6 +208,9 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
   extractionMode: false,
   extractionRecipeIds: [],
 
+  // Initial state - Skills (ephemeral; per-message)
+  forcedSkillIds: [],
+
   // Initial state - Connector focus (ephemeral; per-conversation)
   connectorPinTrayOpen: false,
 
@@ -259,6 +272,17 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
 
   // Actions - Extraction
   setExtractionMode: (enabled) => set({ extractionMode: enabled }),
+
+  // Actions - Skills (explicit use; cap mirrors the server validator)
+  toggleForcedSkillId: (id) =>
+    set((state) => {
+      if (state.forcedSkillIds.includes(id)) {
+        return { forcedSkillIds: state.forcedSkillIds.filter((s) => s !== id) };
+      }
+      if (state.forcedSkillIds.length >= 3) return state;
+      return { forcedSkillIds: [...state.forcedSkillIds, id] };
+    }),
+  clearForcedSkillIds: () => set({ forcedSkillIds: [] }),
 
   setConnectorPinTrayOpen: (open) => set({ connectorPinTrayOpen: open }),
   addExtractionRecipeId: (id) =>
@@ -448,6 +472,7 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       selectedToneId: null,
       extractionMode: false,
       extractionRecipeIds: [],
+      forcedSkillIds: [],
       connectorPinTrayOpen: false,
       filePreviews: [],
       fileFieldValue: null,

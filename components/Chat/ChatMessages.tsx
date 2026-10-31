@@ -265,7 +265,11 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   const lastDisplayMessage = lastEntry
     ? entryToDisplayMessage(lastEntry)
     : null;
+  // Hidden while ANY conversation is streaming, not just this one: the
+  // store runs one stream at a time (a second send is refused), so offering
+  // the button here while another chat generates would be a dead click.
   const showGenerateResponse =
+    !isStreaming &&
     !showStreamingDiv &&
     !!lastDisplayMessage &&
     (lastDisplayMessage.role === 'user' ||

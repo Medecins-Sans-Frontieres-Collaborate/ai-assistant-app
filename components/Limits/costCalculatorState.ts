@@ -19,8 +19,13 @@ import {
   counterCellName,
   resolveLimit,
   resolveModelCells,
+  resolveModelGate,
 } from '@/lib/services/limits/resolver';
-import type { LimitEntry, LimitsPolicy } from '@/lib/services/limits/types';
+import type {
+  LimitEntry,
+  LimitsPolicy,
+  ModelAccessRule,
+} from '@/lib/services/limits/types';
 import type { Principal } from '@/lib/services/shared/principalMatching';
 
 import { PricingIndex, lookupPricing } from '@/lib/utils/app/limitsPricing';
@@ -315,11 +320,16 @@ export const DRAFT_PRINCIPAL: Principal = {
  */
 export function synthesizeCapsPolicy(
   caps: readonly LimitEntry[],
+  modelAccess: readonly ModelAccessRule[] = [],
 ): LimitsPolicy {
   return {
     version: 1,
     defaults: [...caps],
     overrides: [],
+    // The Models tab's rules shape availability and request caps exactly as
+    // enforcement reads them (resolver.ts effectiveDefaults), so the
+    // estimate must see them too or it drifts from the send.
+    modelAccess: [...modelAccess],
     delegations: [],
     mode: 'enforce',
     failMode: 'open',
@@ -355,17 +365,19 @@ function seriesOf(
 }
 
 /**
- * `cellsByModelId` for estimateSpendWithCaps: EVERY conjunctive cell a
- * request on each mix model must satisfy — model.allowed and model.requests
- * (model + family cells) plus the unqualified message and token caps — the
- * same recipe the estimator's own tests use.
+ * `cellsByModelId` for estimateSpendWithCaps: EVERY cell a request on each
+ * mix model must satisfy — the merged model + family availability gate
+ * (resolveModelGate, as the send and the picker resolve it), the conjunctive
+ * model.requests cells (model + family) and the unqualified message and
+ * token caps — the same recipe the estimator's own tests use.
  */
 export function cellsByModelIdFor(
   caps: readonly LimitEntry[],
   modelIds: readonly string[],
   index: PricingIndex | null,
+  modelAccess: readonly ModelAccessRule[] = [],
 ): Record<string, ResolvedLimit[]> {
-  const policy = synthesizeCapsPolicy(caps);
+  const policy = synthesizeCapsPolicy(caps, modelAccess);
   const allowed = getLimitDefinition(CAP_KEYS.allowed);
   const requests = getLimitDefinition(CAP_KEYS.requests);
   const messages = getLimitDefinition(CAP_KEYS.messages);
@@ -378,7 +390,7 @@ export function cellsByModelIdFor(
   for (const modelId of modelIds) {
     const series = seriesOf(modelId, index);
     out[modelId] = [
-      ...resolveModelCells(allowed, policy, DRAFT_PRINCIPAL, modelId, series),
+      resolveModelGate(allowed, policy, DRAFT_PRINCIPAL, modelId, series),
       ...resolveModelCells(requests, policy, DRAFT_PRINCIPAL, modelId, series),
       resolveLimit(messages, policy, DRAFT_PRINCIPAL),
       resolveLimit(tokensDay, policy, DRAFT_PRINCIPAL),
@@ -453,6 +465,7 @@ export function runCalculator(
   models: readonly OpenAIModel[],
   caps: readonly LimitEntry[],
   index: PricingIndex | null,
+  modelAccess: readonly ModelAccessRule[] = [],
 ): CalculatorRun | { issues: CalculatorIssue[] } {
   const parsed = parseCalculatorState({
     ...state,
@@ -462,7 +475,7 @@ export function runCalculator(
   const rows = parsed.input.models;
   const modelIds =
     typeof rows === 'string' ? [rows] : rows.map((row) => row.modelId);
-  const cellsByModelId = cellsByModelIdFor(caps, modelIds, index);
+  const cellsByModelId = cellsByModelIdFor(caps, modelIds, index, modelAccess);
   const result = estimateSpendWithCaps(parsed.input, models, cellsByModelId);
   return {
     parsed,

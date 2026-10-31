@@ -3,6 +3,7 @@
  *
  * GET /api/m365/teams              → the user's joined teams
  * GET /api/m365/teams?groupId=…    → that team's default document library
+ * GET /api/m365/teams?channelsOf=… → that team's channels (digest channel picker)
  *
  * A Teams team IS an M365 group, so "pick from the Logistics team's files"
  * is `/groups/{id}/drive` — the natural pairing with a group access rule
@@ -26,6 +27,10 @@ import { auth } from '@/auth';
 
 const TEAMS_SCOPES = ['Team.ReadBasic.All'];
 const DRIVE_SCOPES = ['Files.ReadWrite.All'];
+// Listing channels needs Channel.ReadBasic.All (ChannelMessage.Read.All does
+// not cover /teams/{id}/channels); the digest also requires the message
+// grant so only channels it may read are offered.
+const CHANNEL_SCOPES = ['Channel.ReadBasic.All', 'ChannelMessage.Read.All'];
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -34,8 +39,32 @@ export async function GET(req: NextRequest) {
   }
 
   const groupId = req.nextUrl.searchParams.get('groupId');
+  const channelsOf = req.nextUrl.searchParams.get('channelsOf');
 
   try {
+    if (channelsOf !== null) {
+      if (!isValidGraphId(channelsOf)) {
+        return badRequestResponse('Invalid channelsOf');
+      }
+      const data = await graphJson<{
+        value?: { id?: string; displayName?: string }[];
+      }>(
+        req,
+        CHANNEL_SCOPES,
+        `/teams/${encodeURIComponent(channelsOf)}/channels?$select=id,displayName`,
+      );
+      const channels = (data.value ?? [])
+        .filter(
+          (channel): channel is { id: string; displayName?: string } =>
+            !!channel.id,
+        )
+        .map((channel) => ({
+          channelId: channel.id,
+          name: channel.displayName || 'Channel',
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      return successResponse({ channels });
+    }
     if (groupId !== null) {
       if (!isValidGraphId(groupId)) {
         return badRequestResponse('Invalid groupId');

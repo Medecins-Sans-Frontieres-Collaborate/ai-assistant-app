@@ -870,7 +870,16 @@
       "stillWorking": "Još uvek radim…",
       "assessingSearchResults": "Proveravam da li rezultati odgovaraju na pitanje…",
       "refiningSearch": "Ponovo pretražujem: „{query}“…",
-      "readingSearchPages": "Čitam {count} rezultata stranica…"
+      "readingSearchPages": "Čitam {count} rezultata stranica…",
+      "toolRoutingUnavailableInRegion": "Usmeravanje alata nije dostupno na {region} endpointu — odgovaram bez upotrebe alata…",
+      "applyingSkill": "Primena veštine: {skills}…",
+      "applyingSkills": "Primena veština: {skills}…",
+      "readingSkillReferences": "Čitam referentna dokumenta za veštine…",
+      "selectingSkills": "Biranje veština…",
+      "retryingModel": "Model je zauzet — pokušavam ponovo za {seconds}s (pokušaj {attempt})…",
+      "resumingResponse": "Veza sa modelom je prekinuta — nastavljamo odakle je stalo…",
+      "continuingResponse": "Odgovor je dostigao ograničenje dužine — nastavljamo…",
+      "trimmingContext": "Razgovor je predug za model — skraćujem stariju istoriju i pokušavam ponovo…"
     },
     "toolSummary": {
       "usedTools": "Korišćen{count, plural, one {# alat} other {# alata}}",
@@ -936,7 +945,9 @@
       "deniedByRuleHint": "Blokirano vašim pravilom — upravljajte u Podešavanjima → Konektori.",
       "batchPendingHint": "{count} zahteva za alat čeka odobrenje",
       "approveAllButton": "Odobri sve",
-      "denyAllButton": "Odbij sve"
+      "denyAllButton": "Odbij sve",
+      "applySkillTitle": "Primeni veštinu „{skill}“?",
+      "skillConsentNote": "Administrator je postavio ovu veštinu da zahteva odobrenje pre primene. Odlukom se učitavaju uputstva samo za ovaj odgovor."
     },
     "openImage": "Otvori sliku",
     "copyMessage": "Kopiraj poruku",
@@ -976,7 +987,54 @@
     "alwaysWaitThisLong": "Uvek čekaj do {duration}",
     "keepSearching": "Nastavite sa pretragom",
     "keepSearchingHint": "Pretraga je zaustavljena pre nego što je pronašla ovo. Zamolite asistenta da pokuša drugačijim pristupom.",
-    "keepSearchingMessage": "Molim vas, nastavite sa pretragom za ovim — pokušajte drugačiji pristup."
+    "keepSearchingMessage": "Molim vas, nastavite sa pretragom za ovim — pokušajte drugačiji pristup.",
+    "addSkill": "Veštine",
+    "removeSkill": "Ukloni veštinu",
+    "skillsMenuLabel": "Dostupne veštine",
+    "skillsLimit": "Do 3 veštine po poruci.",
+    "skillPin": "Prikači na razgovor",
+    "skillUseOnce": "Upotrebi jednom",
+    "skillPinned": "prikačeno",
+    "skillOnce": "sledeća poruka",
+    "skillsPaused": "pauzirano",
+    "skillUnavailable": "nedostupno",
+    "skillsAutomaticHint": "Relevantne veštine se automatski biraju. Upotrebite jednu za sledeću poruku ili prikačite veštinu da biste je koristili tokom celog razgovora.",
+    "skillsAgentDisabled": "Veštine su pauzirane dok je agent povezan. Vaše prikačene veštine će se nastaviti kada odvojite agenta.",
+    "skillPersonal": "lični",
+    "skillsAgentToolsHint": "Ovde su dostupne samo organizacijske veštine koje je administrator omogućio za upotrebu agentima. Agent ih može učitati kao alate samo za čitanje. Ostali pinovi ostaju pauzirani, a lične veštine nisu dostupne agentima.",
+    "skillAlwaysOn": "uvek aktivno",
+    "skillAlwaysOnHint": "Administrator dodaje svaku poruku u ovom razgovoru.",
+    "skillUsage": {
+      "label": "Veštine",
+      "requested": "zatraženo",
+      "pinned": "prikačeno",
+      "auto": "automatski",
+      "unavailable": "nedostupno",
+      "incomplete": "Neke veštine nije bilo moguće primeniti",
+      "references": "{count, plural, one {# referentni odlomak} other {# referentna odlomka}}",
+      "referencesUnavailable": "Neki referentni dokumenti su nedostupni",
+      "showDetails": "Prikaži detalje veštine",
+      "hideDetails": "Sakrij detalje veštine",
+      "agentLoad": "učitano od strane agenta",
+      "agentSearch": "dokumenta pretražio agent",
+      "needsApproval": "zahteva vašu odobrenje",
+      "original": "kao što je prvobitno pokrenuto",
+      "updated": "ažurirano od"
+    },
+    "skillsManualHint": "Automatski izbor je isključen u Podešavanjima. Upotrebite veštinu jednom za sledeću poruku ili je zakačite da bi se koristila tokom celog razgovora.",
+    "queuedMessage": {
+      "label": "U redu za slanje",
+      "attachmentOnly": "Prilog",
+      "cancel": "Otkaži poruku u redu"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Odgovor je zaustavljen zbog filtera bezbednosti sadržaja. Preformulišite zahtev ili uklonite deo koji je možda izazvao filter.",
+      "MODEL_CONTEXT_TOO_LONG": "Ovaj razgovor je predug za izabrani model, čak i nakon skraćivanja starije istorije. Započnite novi razgovor, uklonite neke priloge ili izaberite model sa većim kontekstom.",
+      "MODEL_OUTPUT_LIMIT": "Model je potrošio celu dozvoljenu izlaznu vrednost bez odgovora. Probajte sa manjim nivoom zaključivanja ili kraćim zahtevom.",
+      "MODEL_RATE_LIMITED": "Model prima previše zahteva trenutno. Pokušano je automatski; pokušajte ponovo za trenutak.",
+      "MODEL_QUOTA_EXCEEDED": "Model je dostigao kapacitet. Probajte drugi model ili pokušajte kasnije.",
+      "MODEL_AUTH_FAILED": "Aplikacija nije uspela da se autentifikuje na model servis. Ovo je problem sa konfiguracijom — obratite se podršci."
+    }
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1484,7 +1542,11 @@
       "preferModelTitle": "Preferiraj moj izabrani model",
       "preferModelDescription": "Nemoj automatski prebacivati na drugi model kada zahtev ne uspe. Greška će i dalje ponuditi promenu modela."
     },
-    "Analytics": "Analitika"
+    "Analytics": "Analitika",
+    "skills": {
+      "autoApply": "Dozvolite asistentu da automatski primenjuje veštine",
+      "autoApplyDescription": "Relevantne veštine, kao i vaše lične veštine, biraju se za svaku poruku. Kada je isključeno, koriste se samo veštine koje vi zahtevate ili zakačite, i veštine koje administrator primenjuje na svaki razgovor."
+    }
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -2684,7 +2746,15 @@
     "chipAutoHideUnit": "sekundi",
     "chipAutoHideHint": "Između {min} i {max} sekundi.",
     "byWorkflow": "Po workflow-u",
-    "byWorkflowNote": "Deo ukupnih vrednosti prikazanih iznad, prikazan odvojeno — ne predstavlja dodatnu upotrebu. Grant pokretanja se računaju u izveštaje vaše organizacije i vaš token budžet, ali ne i u ovaj lokalni zbir."
+    "byWorkflowNote": "Deo ukupnih vrednosti prikazanih iznad, prikazan odvojeno — ne predstavlja dodatnu upotrebu. Grant pokretanja se računaju u izveštaje vaše organizacije i vaš token budžet, ali ne i u ovaj lokalni zbir.",
+    "chipLabelTitle": "Oznaka čipa",
+    "chipLabelHint": "Prikaz uvek pokazuje emisije i cenu; ovo određuje šta piše na sažetoj oznaci.",
+    "chipLabelEmissions": "Emisije",
+    "chipLabelCost": "Cena",
+    "chipLabelBoth": "Oba",
+    "costTile": "Procenjena cena",
+    "costDisclosure": "Cena prema važećem cenovniku na dan {asOf} (Globalna standardna tarifa, bez popusta za keširane ulaze): predstavlja gornju granicu, nije račun. Pretraga na webu, izvršavanje koda, transkripcija, govor, prevod i indeksiranje dokumenata nisu uključeni.",
+    "costUnpriced": "{count, plural, one {# zahtev bez cene nije} other {# zahteva bez cene nisu}} uračunati."
   },
   "extraction": {
     "toggleLabel": "Ekstrahuj strukturirane podatke",
@@ -4486,7 +4556,16 @@
         "auto": "Automatski",
         "hidden": "Sakrij"
       },
-      "visibilityHint": "Automatski prikazuje oznaku kada se procena osveži ili pređete mišem preko nje. Ovo možete ponovo promeniti u Podešavanja › Upotreba i uticaj."
+      "visibilityHint": "Automatski prikazuje oznaku kada se procena osveži ili pređete mišem preko nje. Ovo možete ponovo promeniti u Podešavanja › Upotreba i uticaj.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Procenjena cena {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Nema cene za zahteve u ovom redu",
+        "unpriced": "{count, plural, one {# zahtev bez cene nije} other {# zahteva bez cene nisu}} uračunati u cenu.",
+        "noPriceData": "Nema prikazane cene: model ove konverzacije nema definisanu cenu (vlastiti izvori, lokalni runtime-i i agenti nisu cenjeni).",
+        "note": "Cena prema važećem cenovniku na dan {asOf} (Globalna standardna tarifa, bez popusta za keširane ulaze): predstavlja gornju granicu, nije račun. Pretraga na webu, izvršavanje koda, transkripcija, govor, prevod i indeksiranje dokumenata nisu uključeni."
+      }
     },
     "workflow": {
       "title": "Ovaj workspace (procena)",
@@ -5278,7 +5357,22 @@
     "confirmDeleteGlossary": "Obriši glosar",
     "glossaryDeleteSuccess": "Glosar je obrisan",
     "channelProfilesTab": "Platforme",
-    "channelSetsTab": "Setovi kanala"
+    "channelSetsTab": "Setovi kanala",
+    "addPromptAgent": "Dodaj prompt agenta",
+    "m365AgentIndexStop": "Zaustavi indeksiranje",
+    "foundryAgentsHeading": "Foundry i prompt agenti",
+    "foundryAgentsDescription": "Agenti otkriveni putem Azure AI Foundry preko vašeg pristupa, kao i prompt agenti definisani ovde. Agenti za znanje i Microsoft 365 agenti se upravljaju u svojim zasebnim odeljcima ispod.",
+    "agentSkillsLabel": "Veštine",
+    "agentSkillsHelp": "Koje veštine organizacije ovaj agent može učitati prilikom odgovaranja. Korisnici i dalje vide samo veštine za koje imaju dozvolu pristupa.",
+    "agentSkills": {
+      "inherit": "Veštine označene kao „dostupne agentima“",
+      "selected": "Samo veštine izabrane ispod",
+      "none": "Bez veština"
+    },
+    "agentSkillsNone": "Nema dostupnih veština za izbor.",
+    "agentSkillsLoading": "Učitavanje veština…",
+    "agentSkillsLoadError": "Veštine nije moguće učitati. Prethodno sačuvane selekcije su zadržane.",
+    "agentSkillsNotVisible": "(nije vidljivo vama — opozovite izbor za uklanjanje)"
   },
   "localModels": {
     "title": "Lokalni modeli",
@@ -5505,7 +5599,8 @@
       "channelSets": "Pravila svakog tima za pisanje na platformama: smernice, glasovi, podrazumevane vrednosti, ko može koristiti set i ko može slati.",
       "webSearch": "Koliko daleko može ići web pretraga: višekorak pretraga, njen model procene i granice.",
       "contextBudget": "Koliko se istorije razgovora šalje svakom modelu u svakom krugu.",
-      "analytics": "Dostavljeni izveštaji: šta je stiglo, ko može da otvori svaki folder i koja polja mogu biti prikazana."
+      "analytics": "Dostavljeni izveštaji: šta je stiglo, ko može da otvori svaki folder i koja polja mogu biti prikazana.",
+      "skills": "Ponovo upotrebljivi blokovi instrukcija koje asistent primenjuje kada su potrebni u razgovoru."
     },
     "openSettings": "Otvori podešavanja",
     "area": {
@@ -5516,7 +5611,8 @@
       "delegations": "Delegacije",
       "webSearch": "Web pretraga",
       "contextBudget": "Budžet konteksta",
-      "analytics": "Analitika"
+      "analytics": "Analitika",
+      "skills": "Veštine"
     }
   },
   "limits": {
@@ -5546,7 +5642,8 @@
     "tab": {
       "defaults": "Globalna podešavanja",
       "overrides": "Prečice",
-      "delegations": "Delegacije"
+      "delegations": "Delegacije",
+      "models": "Modeli"
     },
     "tabsLabel": "Odeljci ograničenja",
     "category": {
@@ -5578,7 +5675,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 poziva alata dnevno",
       "m365MailReadsPerDay": "Čitanje pošte dnevno",
       "m365MailDraftsPerDay": "Draftovi pošte dnevno",
-      "m365MailDeepScansPerDay": "Dubinske pretrage pošte dnevno"
+      "m365MailDeepScansPerDay": "Dubinske pretrage pošte dnevno",
+      "m365DigestRunsPerDay": "Dnevnih pokretanja sažetka po danu"
     },
     "valueModeLabel": "Tip ograničenja",
     "valueAmountLabel": "Vrednost ograničenja",
@@ -5656,7 +5754,8 @@
       "m365ToolCallsPerDay": "Pozivi Microsoft 365 alata (kalendar, kontakti, zadaci, Teams) po danu. Kada pređete limit, alati vraćaju prijateljsku poruku „pokušajte ponovo sutra“ umesto da chat ne uspe.",
       "m365MailReadsPerDay": "Pretrage pošte i čitanja poruka/niti po danu. Kada pređete limit, alati za poštu vraćaju poruku „pokušajte ponovo sutra“.",
       "m365MailDraftsPerDay": "Broj email nacrta koje asistent može napraviti dnevno — svaki posebno potvrđen. Svesno ograničeno.",
-      "m365MailDeepScansPerDay": "Složene analize pošte (sažeci, dubinsko pretraživanje, obaveze) po danu. Svako skeniranje je jedna budžetska jedinica bez obzira na broj unutrašnjih čitanja."
+      "m365MailDeepScansPerDay": "Složene analize pošte (sažeci, dubinsko pretraživanje, obaveze) po danu. Svako skeniranje je jedna budžetska jedinica bez obzira na broj unutrašnjih čitanja.",
+      "m365DigestRunsPerDay": "Microsoft 365 dnevni sažetak po danu. Jedno pokretanje obuhvata desetine Graph čitanja i dva poziva analiznog modela; izbor perioda omogućava lako ponovno pokretanje, pa je podrazumevana granica stroga."
     },
     "scopeFamily": "Porodica",
     "scopeModel": "Model",
@@ -5711,7 +5810,7 @@
     "previewSourceCatalog": "Ugrađeni podrazumevani",
     "previewSourceGlobal": "Globalni podrazumevani",
     "previewSourceOverride": "Izuzimanje: {label}",
-    "previewNotEvaluated": "Izuzimanja po departmanu/kompaniji/kancelariji i grupi ne mogu se proveriti ovde — zavise od samog prijavljivanja korisnika.",
+    "previewNotEvaluated": "Direktorijum nije dostupan, pa pravila za sektor/kompaniju/kancelariju i grupu nisu procenjena za ovu osobu. Pokušajte ponovo za trenutak.",
     "previewUnsaved": "Prikazuje se poslednja sačuvana politika. Sačuvajte izmene da biste ih pregledali.",
     "previewColumnLimit": "Ograničenje",
     "previewColumnValue": "Vrednost",
@@ -5807,7 +5906,7 @@
     "yourScopeGroupOnlyChip": "Samo grupe",
     "yourScopeGroupOnlyNote": "Definisano isključivo grupama ili atributima, pa ograničenja nije moguće pregledati prema e-mail adresi.",
     "previewOutOfScope": "Ova osoba je van vašeg opsega.",
-    "previewGroupOnlyScope": "Vaš opseg je definisan grupama ili atributima, pa ograničenja nije moguće pregledati prema e-mail adresi.",
+    "previewGroupOnlyScope": "Vaš opseg se definiše grupama ili atributima. Pregledi proveravaju osobu u direktorijumu da bi utvrdili da li je unutar opsega.",
     "previewCeilingPinned": "Zadato gornjom granicom: {label}",
     "previewShowUsage": "Prikaži trenutnu upotrebu",
     "previewColumnUsage": "Iskorišćeno",
@@ -5823,7 +5922,7 @@
     "overrideCeilingHint": "Čvrsto ograničenje u redu određuje vrednost ciljevima ovog override-a: administratori sa ograničenim pristupom ne mogu da ga uklone, a kada postoji više ograničenja primenjuje se najpreciznije.",
     "confirmDeleteOverride": "Obrisati \"{label}\"? Biće odmah uklonjen sa servera i ciljevi se vraćaju na niža ograničenja. Ovo nije moguće poništiti.",
     "confirmDeleteOverrideAction": "Obriši override",
-    "previewUndecidableScope": "Vaš opseg uključuje grupe ili atribute, tako da se ne može odrediti da li se ova osoba nalazi unutra samo po email adresi.",
+    "previewUndecidableScope": "Vaš opseg uključuje grupe ili atribute i direktorijum nije dostupan, pa trenutno nije moguće utvrditi da li je ova osoba u opsegu. Pokušajte ponovo za trenutak.",
     "previewNoLongerAdmin": "Vi više niste navedeni u aktivnoj delegaciji, pa ne možete da pregledate ograničenja. Osvežite stranicu da vidite vaš trenutni pristup.",
     "previewScopeMatchesNobody": "Vaš opseg trenutno ne obuhvata nikoga, pa nema koga da pregledate putem email adrese.",
     "yourScopeMatchesNobodyChip": "Ne obuhvata nikoga",
@@ -5974,7 +6073,73 @@
     "disabledDelegationNote": "Njegova delegacija je onemogućena, tako da ova izmena ne važi za nikoga dok se delegacija ponovo ne omogući. Nikada se ne promoviše na globalni nivo.",
     "betaPolicyNotice": "Beta okruženje: ova pravila i njihovi brojači upotrebe čuvaju se odvojeno od produkcije (policy.beta.json). Sve što ovde promenite ne utiče na produkciju.",
     "delegationsManagedElsewhere": "Delegacije su ovde prikazane samo za čitanje. Ko je u delegaciji, koje korisnike obuhvata i šta svaki administrator može, uređuje se u oblasti Delegacije.",
-    "delegationsManagedElsewhereLink": "Otvori Delegacije"
+    "delegationsManagedElsewhereLink": "Otvori Delegacije",
+    "modelAccess": {
+      "intro": "Odlučite ko može koristiti svaki model. Podešavanje porodice važi za njene modele, osim ako model nema svoje podešavanje; ljudi na listi imaju prednost nad podrazumevanim za sve ostale; blok lista ima prednost nad svim odobrenjima.",
+      "externalNote": "Modeli koji su hostovani izvan Azure okruženja ({families}) nisu dostupni nikome dok ih ovde ne odobrite — svima preko podrazumevanog ili određenim grupama, domenima i osobama.",
+      "envelopeNote": "Ograničenje zahteva na porodicu predstavlja zajednički dnevni budžet za njene modele; ograničenje na model predstavlja limit unutar njega. Neograničeno na modelu ne ukida budžet porodice.",
+      "observeNote": "Režim posmatranja je uključen: ništa ovde još ne skriva model ili ne zaustavlja zahtev. Prebacite na režim sprovođenja iznad kad pravila budu ispravna.",
+      "familyChip": "Porodica",
+      "modelChip": "Model",
+      "otherModels": "Modeli bez porodice",
+      "modelsInFamily": "{count, plural, one {# model u ovoj porodici} other {# modela u ovoj porodici}}",
+      "noModels": "Još nema modela u katalogu.",
+      "expand": "Prikaži modele",
+      "collapse": "Sakrij modele",
+      "edit": "Izmeni",
+      "doneEditing": "Završeno",
+      "editNode": "Izmeni pristup za {label}",
+      "defaultLabel": "Svi ostali",
+      "defaultInherit": "Nasleđuje",
+      "defaultUnlimited": "Neograničeno",
+      "defaultLimited": "Ograničeno na",
+      "defaultUnavailable": "Nedostupno",
+      "defaultRequestsLabel": "Zahtevi po danu za sve ostale",
+      "requestsPerDay": "zahteva / dan",
+      "inheritedFrom": "Nasleđuje {state} od {origin}.",
+      "effectiveLabel": "Svi koji nisu na listi dobijaju: {state}.",
+      "inheritedChip": "nasleđeno",
+      "origin": {
+        "model": "ovo podešavanje",
+        "family": "njena porodica",
+        "defaults": "Globalna podrazumevana",
+        "catalogExternal": "pravilo da su eksterni modeli nedostupni dok nisu odobreni",
+        "catalog": "podrazumevano iz kataloga"
+      },
+      "state": {
+        "unlimited": "Neograničeno",
+        "limited": "Ograničeno na {requests} / dan",
+        "unavailable": "Nedostupno"
+      },
+      "list": {
+        "groups": "Grupe sa pristupom",
+        "domains": "Domeni sa pristupom",
+        "allow": "Odobrene osobe",
+        "deny": "Blokirane osobe"
+      },
+      "listHint": {
+        "groups": "Članovi ovih Entra grupa mogu ga koristiti, prema pravilima za svaku grupu.",
+        "domains": "Svi sa email adresom na ovim domenima, prema pravilima za svaki domen.",
+        "allow": "Imenovane osobe mogu ga koristiti bez obzira na podrazumevano ili njihov domen.",
+        "deny": "Imenovane osobe ga nikada ne mogu koristiti. Ovo ima prednost nad svim odobrenjima iznad."
+      },
+      "grantUnlimited": "Neograničeno",
+      "grantLimited": "Ograničeno na",
+      "termsLabel": "Uslovi za {target}",
+      "requestsLabel": "Zahteva po danu za {target}",
+      "removeGrant": "Ukloni {target}",
+      "groupsCount": "{count, plural, one {# grupa} other {# grupa}}",
+      "domainsCount": "{count, plural, one {# domen} other {# domena}}",
+      "allowCount": "{count, plural, one {# odobrena osoba} other {# odobrenih osoba}}",
+      "denyCount": "{count, plural, one {# blokirana osoba} other {# blokiranih osoba}}",
+      "collisionChip": "Takođe u globalnim podrazumevanim vrednostima",
+      "collisionWarning": "Ovaj model ili porodica je takođe podešena pod globalnim podrazumevanim vrednostima. Čuvanje neće biti dozvoljeno dok se jedno od dva ne ukloni."
+    },
+    "previewSourceModelAccess": "Odobrenje modela — {list}",
+    "groupMembershipDegradedStructural": "Pretrage članstva u grupi ne uspevaju na ovom serveru ({reason}). Pravila i dozvole zasnovane na grupama nisu primenjena za pogođene osobe — proverite tenantovu Group.Read.All saglasnost i registraciju aplikacije.",
+    "groupMembershipDegradedRetryable": "Neke pretrage članstva u grupi nisu uspele na ovom serveru u poslednjih nekoliko minuta ({reason}). Pravila zasnovana na grupama možda neće biti primenjena za te osobe do jednog minuta dok se pretrage ponovo pokušavaju.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# osoba} other {# osoba}} je trenutno pogođeno na ovom serveru.",
+    "previewDirectoryNotFound": "Nijedan korisnik direktorijuma nema ovu email adresu, pa su pravila za odeljenje/kompaniju/kancelariju i grupu procenjena kao da osoba ne pripada nijednoj."
   },
   "m365": {
     "connections": {
@@ -6325,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Jutarnja trijaža",
-        "description": "Šta je stiglo, šta vas čeka, i današnji kalendar — jednom briefingu"
+        "description": "Digest od poslednjeg radnog dana — šta je pristiglo, šta čeka na vas, pozivi i ažuriranja; u ponedeljak obuhvata petak i vikend."
       },
       "chipsSettingLabel": "Predloži Microsoft 365 playbooks",
       "chipsSettingHint": "Prikazujte predloge priručnika iznad okvira za poruke kada su primenljivi (npr. nakon uvoza transkripta sastanka).",
-      "dismissChip": "Odbaci {title}"
+      "dismissChip": "Odbaci {title}",
+      "dailyDigest": {
+        "title": "Dnevni sažetak",
+        "description": "Sortirajte nedavne mejlove, Teams i kalendar prema onome što zahteva vašu pažnju, šta čekate, ažuriranjima i FYI — izaberite period"
+      }
+    },
+    "digest": {
+      "title": "Dnevni sažetak",
+      "intro": "Pregledava što vam je stiglo u izabranom periodu i sortira u ono što zahteva odgovor, šta je traženo od vas, šta čekate, zakazivanje, ažuriranja kompanije i projekta, i FYI. Ništa se ne šalje niti menja.",
+      "periodLabel": "Period",
+      "preset": {
+        "lastWorkday": "Od poslednjeg radnog dana",
+        "1d": "Poslednjih 24 sata",
+        "3d": "Poslednja 3 dana",
+        "7d": "Poslednjih 7 dana",
+        "14d": "Poslednjih 14 dana",
+        "custom": "Prilagođen opseg"
+      },
+      "lastWorkdayHint": "Od početka najnovijeg radnog dana pre danas — u ponedeljak to obuhvata petak i vikend.",
+      "from": "Od",
+      "to": "Do",
+      "customInvalid": "Izaberite uzastopni opseg od najviše {days} dana.",
+      "sourcesLabel": "Izvori",
+      "sourceNoConsent": "Dozvola za ovaj izvor nije odobrena.",
+      "sourceHint": {
+        "mail": "Koverte iz prijemnog sandučeta i pregledi; vaša Poslana pošta definiše šta se smatra odgovoreno.",
+        "chat": "Nedavni Teams četovi, sa @pominjanjima na koja niste odgovorili.",
+        "channel": "Objave na kanalima koje odaberete dole.",
+        "calendar": "Pozivi koji čekaju vašu potvrdu i vaši sastanci na koje drugi nisu odgovorili."
+      },
+      "channelsLabel": "Kanali ({count} od {max})",
+      "removeChannel": "Ukloni {name}",
+      "channelsSlow": "Svaki kanal dodaje čitanja; više kanala produžava vreme za sažetak.",
+      "channelsMax": "Dostigli ste maksimalan broj kanala: {max}.",
+      "channelsNeeded": "Izaberite barem jedan kanal ili dodajte drugi izvor.",
+      "teamLabel": "Tim",
+      "loadingTeams": "Učitavanje timova…",
+      "pickTeam": "Izaberite tim da prikažete njegove kanale",
+      "loadingChannels": "Učitavanje kanala…",
+      "noChannels": "Nema pronađenih kanala u ovom timu.",
+      "privacyNote": "Čitaju se samo teme, pošiljaoci i kratki pregledi; tela poruka i priloge ostaju u Microsoft 365. Stavke su sažeci vaših podataka.",
+      "cancel": "Otkaži",
+      "run": "Pokreni sažetak",
+      "starting": "Pokrećem…",
+      "startFailed": "Sažetak nije mogao biti pokrenut.",
+      "userMessage": "Dnevni sažetak — {period}; izvori: {sources}",
+      "working": "Skeniram vaše Microsoft 365 komunikacije…",
+      "failed": "Sažetak nije uspeo.",
+      "failedPrefix": "Dnevni sažetak nije uspeo:",
+      "expired": "Ovo pokretanje sažetka je isteklo. Pokrenite ga ponovo za novi sažetak.",
+      "runAgain": "Pokreni ponovo",
+      "changePeriod": "Promeni period",
+      "period": {
+        "lastWorkday": "od poslednjeg radnog dana",
+        "lastDays": "{count, plural, one {poslednji dan} other {poslednjih # dana}}"
+      },
+      "source": {
+        "mail": "Mejl",
+        "chat": "Teams četovi",
+        "channel": "Teams kanali",
+        "calendar": "Kalendar"
+      },
+      "sourceStatus": {
+        "ok": "završeno",
+        "partial": "delimično",
+        "skipped": "preskočeno",
+        "unavailable": "bez dozvole",
+        "error": "neuspešno"
+      },
+      "degraded": "Model analize nije bio dostupan, pa kategorije dolaze isključivo iz pravila.",
+      "withheld": "{count, plural, one {# stavka je} other {# stavki je}} zadržano zbog bezbednosnih filtera.",
+      "empty": "Nema izveštaja za ovaj period i ove izvore.",
+      "actionItems": "Akcione stavke",
+      "createTasks": "{count, plural, =0 {Dodaj u To Do} one {Dodaj # zadatak u To Do} other {Dodaj # zadatka u To Do}}",
+      "taskCreated": "dodato u To Do",
+      "tasksCreated": "{count, plural, one {# zadatak} other {# zadatka}} dodato u listu \"{list}\".",
+      "tasksFailed": "Zadaci nisu mogli da se kreiraju.",
+      "category": {
+        "needsReply": "Potrebno je da odgovorim",
+        "askedOfMe": "Traženo od mene",
+        "waitingOnOthers": "Čekam druge",
+        "scheduling": "Zakazivanje",
+        "companyUpdates": "Ažuriranja kompanije i projekta",
+        "fyi": "Za informaciju (FYI)",
+        "bulk": "Automatizovano i masovno"
+      },
+      "companyUpdatesHint": "važno, retko hitno",
+      "markDone": "Označi {title} kao obrađeno",
+      "badge": {
+        "unanswered": "neodgovoreno",
+        "mentioned": "spomenuli su vas",
+        "important": "visoka važnost"
+      },
+      "askAbout": "Pitaj o ovome",
+      "askPrompt": "O stavci {source} \"{title}\" od {from} ({when}) u gornjem sažetku: šta je traženo i kakav bi bio dobar odgovor?",
+      "open": {
+        "mail": "Otvori u Outlook-u",
+        "chat": "Otvori u Teams-u",
+        "channel": "Otvori u Teams-u",
+        "calendar": "Otvori u Outlook-u"
+      },
+      "footnote": "Kategorije su određene prema sopstvenim signalima (neodgovoreno, spomenuto, emitovano) i AI klasifikaciji; proverite pre preduzimanja akcije. Ništa nije poslato.",
+      "age": {
+        "now": "upravo sada",
+        "hours": "pre {count}h",
+        "days": "pre {count}d"
+      },
+      "waitForReply": "Sačekajte da trenutni odgovor završi pre nego što započnete digest."
     }
   },
   "share": {
@@ -6394,9 +6666,9 @@
     "kind": {
       "rag": "Znanje",
       "prompt": "Persona",
-      "m365": "Znanje (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Znanje",
-      "foundry": "Foundry agent",
+      "foundry": "Prilagođeni agent",
       "connector": "Konektor"
     },
     "semantics": {
@@ -6405,8 +6677,8 @@
       "own-model": "koristi svoj sopstveni model"
     },
     "loadError": "Vaši agenti trenutno nisu mogli da se učitaju. Ovo je obično privremeno.",
-    "discoveryLoading": "Tražimo Foundry agente…",
-    "discoveryError": "Foundry agenti nisu mogli da se učitaju.",
+    "discoveryLoading": "Tražim dodatne agente…",
+    "discoveryError": "Neki agenti nisu mogli da se učitaju.",
     "retry": "Pokušajte ponovo"
   },
   "peopleSuggest": {
@@ -7547,5 +7819,146 @@
       "past-retention": "Starije od {months} meseci zadržavanja za ovaj folder; više nije prikazano.",
       "unknown": "Prijavljen problem: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Veštine",
+    "description": "Ponovo upotrebljivi blokovi instrukcija koje asistent primenjuje kada su potrebni u razgovoru. Kompatibilno sa Agent Skills SKILL.md formatom koji koriste Claude i ChatGPT.",
+    "loading": "Učitavanje veština…",
+    "loadError": "Nije moguće učitati veštine.",
+    "retry": "Pokušaj ponovo",
+    "unavailableBanner": "Skladište veština trenutno nije dostupno — prikazane su ugrađene podrazumevane; sačuvane veštine i izmene nisu dostupne dok se ne obnovi.",
+    "conflictError": "Ovu veštinu je promenio drugi administrator. Lista je ažurirana — ponovo primenite svoju izmenu.",
+    "alwaysWarning": "{count} veština je postavljeno na Uvek. Sve se dodaju svakom razgovoru — preferirajte Automatski za veštine koje se odnose na određene teme.",
+    "newSkill": "Nova veština",
+    "importSkill": "Uvezi SKILL.md",
+    "importTitle": "Nalepite SKILL.md datoteku",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Šta ova veština radi i kada se koristi.\n---\n\nInstrukcije…",
+    "importHint": "Parsirana veština se otvara u uređivaču za pregled — ništa nije sačuvano dok ne sačuvate.",
+    "importParse": "Parsiraj i pregledaj",
+    "invalidId": "ID veštine koristi mala slova, brojeve i jednu crticu.",
+    "saveSuccess": "Veština sačuvana.",
+    "saveError": "Nije moguće sačuvati veštinu.",
+    "deleteConfirm": "Obrisati ovu veštinu? Razgovori je odmah više neće primati.",
+    "restoreConfirm": "Ukloniti prilagođavanje i vratiti podrazumevanu vrednost ove ugrađene veštine?",
+    "deleteSuccess": "Veština obrisana.",
+    "restoreSuccess": "Ugrađena podrazumevana vrednost vraćena.",
+    "deleteError": "Nije moguće obrisati veštinu.",
+    "empty": "Još nema veština. Kreirajte jednu ili uvezite SKILL.md.",
+    "builtinChip": "Ugrađeno",
+    "customizedChip": "Prilagođeno",
+    "exportSkill": "Izvezi kao SKILL.md",
+    "edit": "Izmeni",
+    "delete": "Obriši",
+    "restoreDefault": "Vrati podrazumevano",
+    "createTitle": "Nova veština",
+    "editTitle": "Izmeni {name}",
+    "idLabel": "ID",
+    "idHint": "Mala slova, brojevi i crtice. Postaje naziv veštine u SKILL.md datoteci i ne može da se menja nakon kreiranja.",
+    "nameLabel": "Prikazano ime",
+    "descriptionLabel": "Opis",
+    "descriptionHint": "Šta veština radi I kada se koristi — ovo određuje izbor veštine, pa uključite konkretne teme i formulacije na koje treba da reaguje.",
+    "activationLabel": "Aktivacija",
+    "activation": {
+      "auto": "Automatski",
+      "always": "Uvek",
+      "off": "Isključeno",
+      "manual": "Na zahtev"
+    },
+    "activationHint": {
+      "auto": "Bira se automatski kada trenutni zadatak odgovara opisu. Korisnici takođe mogu zatražiti upotrebu jednom ili prikačiti veštinu na razgovor.",
+      "always": "Dodaje se svakom razgovoru za svakoga ko može da vidi veštinu. Koristite štedljivo — ovo je trajni prostor za prompt.",
+      "off": "Neaktivno: ne primenjuje se i nije ponuđeno korisnicima, ali ostaje ovde za izmene.",
+      "manual": "Primeni se samo kada korisnik zahteva ili postavi. Nikada se ne bira automatski i nije ponuđena modelu kao učitava veština."
+    },
+    "instructionsLabel": "Instrukcije",
+    "instructionsHint": "Markdown, do 16 KB. Ubacuje se doslovno kada je veština aktivna.",
+    "saving": "Čuvanje…",
+    "save": "Sačuvaj",
+    "cancel": "Otkaži",
+    "documents": {
+      "title": "Dokumenti",
+      "hint": "Reference se čuvaju uz ovu veštinu. Mali dokumenti se učitavaju direktno, veći se indeksiraju za pretragu sa citatima. Do 20 resursa, po 10 MB svaki i ukupno 20 MB. Sredstva su sačuvana samo za preuzimanje.",
+      "saveFirst": "Sačuvajte prilagođenu verziju ove ugrađene veštine pre dodavanja dokumenata.",
+      "upload": "Dodajte referentne dokumente",
+      "remove": "Ukloni",
+      "stop": "Prekini indeksiranje",
+      "resume": "Indeksiraj ili nastavi dokumente",
+      "empty": "Još nema priloženih dokumenata.",
+      "requestFailed": "Zahtev za dokument nije uspeo. Osvežite i pokušajte ponovo.",
+      "importZip": "Uvezi ZIP veštine",
+      "zipTooLarge": "ZIP veštine mora biti 20 MB ili manji.",
+      "importCount": "Resursi za povezivanje nakon čuvanja: {count}",
+      "skippedScripts": "Izvršni skriptovi su preskočeni",
+      "status": {
+        "pending": "Čeka na indeksiranje",
+        "processing": "Indeksiranje",
+        "inline": "Spremno (učitano direktno)",
+        "indexed": "Spremno (pretraživo)",
+        "failed": "Indeksiranje nije uspelo",
+        "asset": "Resurs za preuzimanje"
+      },
+      "confirmRemove": "Ukloniti {filename} iz ove veštine? Sačuvani original će biti izbrisan i više neće biti dostupan kao izvor za citiranje.",
+      "reindexRequired": "Ovi dokumenti zahtevaju ponovno indeksiranje zbog trenutne regionalne konfiguracije pretrage i ugrađivanja. Neće biti pretraživani dok indeksiranje ne bude završeno."
+    },
+    "applyToAgents": "Dostupno agentima",
+    "applyToAgentsHint": "Podrazumevano isključeno. Kada je omogućeno, agenti mogu učitati ovu veštinu putem alata samo za čitanje, umesto da zamene svoje instrukcije o ličnosti. Pozivi veštine imaju nezavisna ograničenja koraka. Foundry agenti moraju imati registrovane funkcije load_skill i search_skill_documents u svojoj definiciji.",
+    "requireConsent": "Zatraži odobrenje pre primene",
+    "requireConsentHint": "Kada model želi samostalno da primeni ovu veštinu, korisnik se prethodno pita. Za zahtevane i postavljene veštine nije potrebna potvrda.",
+    "consentChip": "Prvo traži odobrenje",
+    "sourceChip": "Iz izvora",
+    "sourceChipHint": "Dostavljeno putem pretplaćenog izvora veština; uputstva se osvežavaju prilikom sinhronizacije. Podešavanja aktivacije, agenta i odobrenja su vaša.",
+    "sources": {
+      "title": "Izvori veština",
+      "description": "Pretplatite se na eksterni katalog veština (index.json sa listom SKILL.md fajlova). Njegove veštine postaju veštine organizacije i osvežavaju se na oko svakih šest sati. Uvozi se samo SKILL.md; referentni dokumenti nisu.",
+      "urlLabel": "URL kataloga",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Mora biti https na javnom hostu. Fajlovi veština čitaju se samo sa iste lokacije.",
+      "labelLabel": "Oznaka (opciono)",
+      "add": "Pretplati se",
+      "adding": "Pretplaćivanje…",
+      "added": "{count, plural, =0 {Izvor dodat; veštine još nisu uvezene} one {Izvor dodat; uvezena je # veština} other {Izvor dodat; uvezeno je # veština}}",
+      "addedWithError": "Izvor je dodat, ali prva sinhronizacija nije uspela. Proverite grešku na izvoru.",
+      "addError": "Nije moguće dodati izvor veština",
+      "sync": "Sinhronizuj sada",
+      "syncing": "Sinhronizacija…",
+      "synced": "Izvor je sinhronizovan.",
+      "syncError": "Nije moguće sinhronizovati izvor veština",
+      "remove": "Ukloni izvor",
+      "removeConfirm": "Ukloniti ovaj izvor? Veštine koje je dostavio ostaju kao obične veštine organizacije i prestaju da se osvežavaju.",
+      "removed": "Izvor je uklonjen.",
+      "removeError": "Nije moguće ukloniti izvor veština",
+      "loading": "Učitavanje izvora…",
+      "loadError": "Nije moguće učitati izvore veština.",
+      "empty": "Još nema izvora veština.",
+      "never": "Nikada nije sinhronizovan",
+      "statusOk": "Sinhronizovan",
+      "statusError": "Sinhronizacija nije uspela",
+      "statusPartial": "{count, plural, one {# stavka preskočena} other {# stavki preskočeno}}",
+      "lastSync": "Poslednja sinhronizacija {time}",
+      "entryCount": "{count, plural, one {# stavka} other {# stavki}}",
+      "entryStatus": {
+        "synced": "sinhronizovano",
+        "skipped": "preskočeno",
+        "conflict": "sukob — nije prepisano",
+        "invalid": "nevažeće"
+      }
+    },
+    "requireConsentDisabledHint": "Samo automatske veštine mogu prvo tražiti odobrenje: tražene, zakačene i stalno aktivne veštine se primenjuju bez potvrde, dok se veštine na zahtev nikada ne biraju od strane modela."
+  },
+  "personalSkills": {
+    "title": "Lične veštine",
+    "description": "Sačuvajte instrukcije koje se mogu ponovo koristiti za vaše sopstvene razgovore. Veštine ostaju u ovom pregledaču i šalju se modelu samo kada razgovarate. Relevantne veštine mogu biti automatski izabrane, korišćene jednom ili zakačene. One ne mogu menjati organizacionu politiku niti omogućiti pristup alatima. Korišćenje veština zahteva da veštine budu omogućene za ovu instalaciju; agentovi razgovori ne koriste lične veštine.",
+    "importFile": "Importujte SKILL.md ili ZIP",
+    "review": "Pregledajte kompletne instrukcije pre čuvanja. Importovane instrukcije su korisničke preferencije, a ne pouzdana politika organizacije.",
+    "skipped": "Izvršni skriptovi su preskočeni",
+    "importTooLarge": "Import mora biti 20 MB ili manji.",
+    "invalid": "Veština nije mogla biti importovana.",
+    "duplicate": "ID te lične veštine već postoji. Izmenite postojeću veštinu ili izaberite drugi ID.",
+    "countLimit": "Možete sačuvati do 20 ličnih veština.",
+    "requestLimit": "Omogućene lične veštine prelaze limit zahteva od 160 KB. Onemogućite neke veštine ili skratite njihove instrukcije.",
+    "saved": "Lična veština je sačuvana u ovom pregledaču.",
+    "instructionsHint": "Do 16 KB instrukcija, uključujući bilo koje importovane tekstualne reference. Binarni fajlovi i trajno indeksiranje dokumenata dostupni su samo za organizacione veštine. Export koristi standardni SKILL.md naziv bez user: prefiksa.",
+    "enabled": "Omogućeno za moje razgovore",
+    "empty": "Kreirajte veštinu za ponavljajući zadatak ili importujte SKILL.md da je pregledate i sačuvate ovde."
   }
 }

@@ -810,7 +810,16 @@
       "stillWorking": "Se lucrează în continuare…",
       "assessingSearchResults": "Se verifică dacă rezultatele răspund la întrebare…",
       "refiningSearch": "Se caută din nou: „{query}”…",
-      "readingSearchPages": "Se citesc {count} pagini de rezultate…"
+      "readingSearchPages": "Se citesc {count} pagini de rezultate…",
+      "toolRoutingUnavailableInRegion": "Routarea instrumentelor nu este disponibilă pe endpoint-ul {region} — răspuns fără instrumente…",
+      "applyingSkill": "Se aplică abilitatea: {skills}…",
+      "applyingSkills": "Se aplică abilitățile: {skills}…",
+      "readingSkillReferences": "Se citesc documentele de referință pentru abilități…",
+      "selectingSkills": "Se selectează abilități…",
+      "retryingModel": "Modelul este ocupat — se retry în {seconds}s (încercarea {attempt})…",
+      "resumingResponse": "Conexiunea cu modelul s-a întrerupt — reluăm de unde a rămas…",
+      "continuingResponse": "Răspunsul a atins limita de lungime — continuăm…",
+      "trimmingContext": "Conversația este prea lungă pentru model — se elimină istoricul mai vechi și se retry…"
     },
     "toolSummary": {
       "usedTools": "Folosit {count, plural, one {# instrument} other {# instrumente}}",
@@ -876,7 +885,9 @@
       "deniedByRuleHint": "Blocat de regula dvs. — gestionați în Setări → Conectori.",
       "batchPendingHint": "{count} cereri de instrumente în așteptare",
       "approveAllButton": "Aprobă tot",
-      "denyAllButton": "Respinge tot"
+      "denyAllButton": "Respinge tot",
+      "applySkillTitle": "Aplică abilitatea „{skill}”?",
+      "skillConsentNote": "Un administrator a setat această abilitate să solicite permisiunea înainte de aplicare. Aprobarea va încărca ghidul său doar pentru acest răspuns."
     },
     "openImage": "Deschide imaginea",
     "copyMessage": "Copiază mesajul",
@@ -916,7 +927,54 @@
     "alwaysWaitThisLong": "Așteptați mereu până la {duration}",
     "keepSearching": "Continuă căutarea",
     "keepSearchingHint": "Căutarea s-a oprit înainte să găsească acest rezultat. Rugați asistentul să încerce alte variante.",
-    "keepSearchingMessage": "Continuați căutarea pentru acest lucru, vă rog — încercați o altă abordare."
+    "keepSearchingMessage": "Continuați căutarea pentru acest lucru, vă rog — încercați o altă abordare.",
+    "addSkill": "Abilități",
+    "removeSkill": "Elimină abilitatea",
+    "skillsMenuLabel": "Abilități disponibile",
+    "skillsLimit": "Până la 3 abilități per mesaj.",
+    "skillPin": "Fixează la conversație",
+    "skillUseOnce": "Folosește o dată",
+    "skillPinned": "fixat",
+    "skillOnce": "următorul mesaj",
+    "skillsPaused": "pauzat",
+    "skillUnavailable": "indisponibil",
+    "skillsAutomaticHint": "Abilitățile relevante sunt selectate automat. Folosește o dată pentru următorul mesaj sau fixează o abilitate pentru a o folosi pe tot parcursul conversației.",
+    "skillsAgentDisabled": "Abilitățile sunt pauzate cât timp un agent este atașat. Abilitățile fixate vor fi reluate după ce detașați agentul.",
+    "skillPersonal": "personal",
+    "skillsAgentToolsHint": "Doar abilitățile organizației activate de un administrator pentru utilizarea de către agenți sunt oferite aici. Agenții le pot încărca ca instrumente doar pentru citire. Alte pin-uri rămân întrerupte, iar abilitățile personale nu sunt disponibile agenților.",
+    "skillAlwaysOn": "activ permanent",
+    "skillAlwaysOnHint": "Adăugat la fiecare mesaj din această conversație de către un administrator.",
+    "skillUsage": {
+      "label": "Abilități",
+      "requested": "solicitat",
+      "pinned": "fixat",
+      "auto": "automat",
+      "unavailable": "indisponibil",
+      "incomplete": "Unele abilități nu au putut fi aplicate",
+      "references": "{count, plural, one {# pasaj de referință} other {# pasaje de referință}}",
+      "referencesUnavailable": "Unele documente de referință au fost indisponibile",
+      "showDetails": "Afișează detaliile abilității",
+      "hideDetails": "Ascunde detaliile abilității",
+      "agentLoad": "încărcat de agent",
+      "agentSearch": "documente căutate de agent",
+      "needsApproval": "necesită aprobarea dvs.",
+      "original": "așa cum a fost executat inițial",
+      "updated": "actualizat de atunci"
+    },
+    "skillsManualHint": "Selecția automată este dezactivată în Setări. Utilizați o dată pentru următorul mesaj sau fixați o abilitate pentru a o folosi pe tot parcursul acestei conversații.",
+    "queuedMessage": {
+      "label": "În așteptare",
+      "attachmentOnly": "Atașament",
+      "cancel": "Anulează mesajul în așteptare"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Răspunsul a fost oprit de filtrul de siguranță a conținutului. Reformulați cererea sau eliminați partea care ar fi putut declanșa filtrul.",
+      "MODEL_CONTEXT_TOO_LONG": "Această conversație este prea lungă pentru modelul selectat, chiar și după eliminarea istoricului mai vechi. Începeți o nouă conversație, eliminați unele atașamente sau alegeți un model cu o fereastră de context mai mare.",
+      "MODEL_OUTPUT_LIMIT": "Modelul a folosit tot bugetul de output fără a produce un răspuns. Încercați cu un efort de raționament mai mic sau cu o cerere mai scurtă.",
+      "MODEL_RATE_LIMITED": "Modelul primește prea multe cereri acum. S-a încercat automat; vă rugăm să încercați din nou în scurt timp.",
+      "MODEL_QUOTA_EXCEEDED": "Cota de capacitate a modelului este epuizată. Încercați alt model sau reveniți mai târziu.",
+      "MODEL_AUTH_FAILED": "Aplicația nu s-a putut autentifica cu serviciul modelului. Aceasta este o problemă de configurare — contactați suportul."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -1323,7 +1381,11 @@
       "preferModelTitle": "Prefer modelul selectat",
       "preferModelDescription": "Nu comuta automat la un alt model când o solicitare eșuează. Eroarea va permite în continuare schimbarea modelului."
     },
-    "Analytics": "Analitice"
+    "Analytics": "Analitice",
+    "skills": {
+      "autoApply": "Permiteți asistentului să aplice abilitățile automat",
+      "autoApplyDescription": "Abilitățile relevante și abilitățile dvs. personale sunt selectate pentru fiecare mesaj. Când este dezactivat, sunt folosite doar abilitățile pe care le solicitați sau le fixați și abilitățile aplicate de un administrator la fiecare conversație."
+    }
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "secunde",
     "chipAutoHideHint": "Între {min} și {max} secunde.",
     "byWorkflow": "Pe flux de lucru",
-    "byWorkflowNote": "Parte din totalurile de mai sus, prezentate separat — nu este utilizare suplimentară. Rulările pentru granturi sunt incluse în raportarea organizației și în bugetul dvs. de tokeni, dar nu și în acest total local."
+    "byWorkflowNote": "Parte din totalurile de mai sus, prezentate separat — nu este utilizare suplimentară. Rulările pentru granturi sunt incluse în raportarea organizației și în bugetul dvs. de tokeni, dar nu și în acest total local.",
+    "chipLabelTitle": "Etichetă chip",
+    "chipLabelHint": "Defalcarea afișează întotdeauna emisiile și costul una lângă alta; aceasta alege doar ce citește chip-ul restrâns.",
+    "chipLabelEmissions": "Emisii",
+    "chipLabelCost": "Cost",
+    "chipLabelBoth": "Ambele",
+    "costTile": "Cost estimat",
+    "costDisclosure": "Cost la prețurile de listă de la {asOf} (tarif Global Standard, fără discount pentru input-uri cache): un prag maxim, nu o factură. Căutarea web, execuția codului, transcrierea, vorbirea, traducerea și indexarea documentelor nu sunt incluse.",
+    "costUnpriced": "{count, plural, one {# cerere fără preț de listă nu este} other {# cereri fără preț de listă nu sunt}} incluse."
   },
   "extraction": {
     "toggleLabel": "Extrage date structurate",
@@ -4502,7 +4572,16 @@
         "auto": "Automat",
         "hidden": "Ascunde"
       },
-      "visibilityHint": "Modul automat afișează insigna când estimarea se actualizează sau la trecerea mouse-ului peste. Poți schimba această opțiune oricând din Setări › Utilizare & Impact."
+      "visibilityHint": "Modul automat afișează insigna când estimarea se actualizează sau la trecerea mouse-ului peste. Poți schimba această opțiune oricând din Setări › Utilizare & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Cost estimat {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Nu există preț de listă pentru cererile din acest rând",
+        "unpriced": "{count, plural, one {# cerere fără preț de listă nu este} other {# cereri fără preț de listă nu sunt}} incluse în cost.",
+        "noPriceData": "Nu se afișează costul: modelul acestei conversații nu are preț de listă (surse proprii, runtime-uri locale și agenți nu au preț).",
+        "note": "Cost la prețurile de listă de la {asOf} (tarif Global Standard, fără discount pentru input-uri cache): un prag maxim, nu o factură. Căutarea web, execuția codului, transcrierea, vorbirea, traducerea și indexarea documentelor nu sunt incluse."
+      }
     },
     "workflow": {
       "title": "Acest spațiu de lucru (estimat)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "Ștergeți glosarul",
     "glossaryDeleteSuccess": "Glosar șters",
     "channelProfilesTab": "Platforme",
-    "channelSetsTab": "Seturi de canale"
+    "channelSetsTab": "Seturi de canale",
+    "addPromptAgent": "Adăugați agent de prompt",
+    "m365AgentIndexStop": "Opriți indexarea",
+    "foundryAgentsHeading": "Agenți Foundry și agenți de prompt",
+    "foundryAgentsDescription": "Agenți descoperiți din Azure AI Foundry prin accesul dumneavoastră, plus agenți de prompt definiți aici. Agenții de cunoștințe și agenții Microsoft 365 sunt gestionați în secțiunile lor proprii mai jos.",
+    "agentSkillsLabel": "Abilități",
+    "agentSkillsHelp": "Ce abilități ale organizației poate încărca acest agent în timp ce răspunde. Utilizatorii văd doar abilitățile permise de regulile lor de acces.",
+    "agentSkills": {
+      "inherit": "Abilități marcate „disponibil pentru agenți”",
+      "selected": "Doar abilitățile selectate mai jos",
+      "none": "Nicio abilitate"
+    },
+    "agentSkillsNone": "Nu există abilități disponibile pentru selecție.",
+    "agentSkillsLoading": "Se încarcă abilitățile…",
+    "agentSkillsLoadError": "Abilitățile nu au putut fi încărcate. Se păstrează selecțiile salvate anterior.",
+    "agentSkillsNotVisible": "(nu este vizibil pentru dvs. — debifați pentru a elimina)"
   },
   "localModels": {
     "title": "Modele locale",
@@ -5521,7 +5615,8 @@
       "channelSets": "Regulile fiecărei echipe privind scrierea pe platforme: ghidaj, tonuri, setări implicite, cine poate folosi setul și cine poate trimite.",
       "webSearch": "Cât de departe poate merge o căutare pe web: multi-step search, modelul evaluator și limitele sale.",
       "contextBudget": "Câtă parte din conversație primește fiecare model la fiecare răspuns.",
-      "analytics": "Rapoarte livrate: ce a sosit, cine poate accesa fiecare dosar și ce câmpuri pot fi afişate."
+      "analytics": "Rapoarte livrate: ce a sosit, cine poate accesa fiecare dosar și ce câmpuri pot fi afişate.",
+      "skills": "Blocuri de instrucțiuni reutilizabile pe care asistentul le aplică atunci când conversația necesită acest lucru."
     },
     "openSettings": "Deschide setările",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "Delegații",
       "webSearch": "Căutare web",
       "contextBudget": "Buget context",
-      "analytics": "Analitice"
+      "analytics": "Analitice",
+      "skills": "Abilități"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "Setări globale implicite",
       "overrides": "Suprascrieri",
-      "delegations": "Delegații"
+      "delegations": "Delegații",
+      "models": "Modele"
     },
     "tabsLabel": "Secțiuni limite",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Apeluri instrumente Microsoft 365 pe zi",
       "m365MailReadsPerDay": "Citiri e-mail pe zi",
       "m365MailDraftsPerDay": "Ciorne e-mail pe zi",
-      "m365MailDeepScansPerDay": "Scanări detaliate e-mail pe zi"
+      "m365MailDeepScansPerDay": "Scanări detaliate e-mail pe zi",
+      "m365DigestRunsPerDay": "Raport zilnic pe zi"
     },
     "valueModeLabel": "Tip limită",
     "valueAmountLabel": "Valoare limită",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Apeluri ale instrumentelor Microsoft 365 (calendar, persoane, sarcini, Teams) pe zi. Dacă se depășește limita, instrumentele vor returna un mesaj prietenos „încercați din nou mâine” în loc să eșueze conversația.",
       "m365MailReadsPerDay": "Căutări e-mail și citiri de mesaje/fire pe zi. Peste limită, instrumentele mail returnează un mesaj „încercați din nou mâine”.",
       "m365MailDraftsPerDay": "Schimburi de e-mailuri pe care asistentul le poate crea zilnic — fiecare confirmat individual. Limită restrânsă intenționat.",
-      "m365MailDeepScansPerDay": "Analize compuse de e-mail (sumare, căutare detaliată, angajamente) pe zi. Fiecare scanare reprezintă o unitate din buget, indiferent de numărul de citiri interne."
+      "m365MailDeepScansPerDay": "Analize compuse de e-mail (sumare, căutare detaliată, angajamente) pe zi. Fiecare scanare reprezintă o unitate din buget, indiferent de numărul de citiri interne.",
+      "m365DigestRunsPerDay": "Rapoartele zilnice Microsoft 365 pe zi. Un raport implică zeci de citiri Graph și două apeluri pentru analiza modelului; selectorul de perioadă permite reexecutări ușor de cerut, astfel că limita implicită este strictă."
     },
     "scopeFamily": "Familie",
     "scopeModel": "Model",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "Implicit încorporat",
     "previewSourceGlobal": "Implicit global",
     "previewSourceOverride": "Supra-scriere: {label}",
-    "previewNotEvaluated": "Supra-scrierile de departament/companie/birou și grup nu pot fi evaluate aici — depind de autentificarea persoanei.",
+    "previewNotEvaluated": "Nu s-a putut accesa directorul, astfel încât regulile pentru departament/companie/birou și grup nu au fost evaluate pentru această persoană. Încercați din nou în curând.",
     "previewUnsaved": "Se afișează ultima politică salvată. Salvați modificările pentru a le previzualiza.",
     "previewColumnLimit": "Limită",
     "previewColumnValue": "Valoare",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "Numai grupuri",
     "yourScopeGroupOnlyNote": "Definit doar prin grupuri sau atribute, astfel încât limitele nu pot fi previzualizate după adresă de email.",
     "previewOutOfScope": "Această persoană este în afara ariei tale.",
-    "previewGroupOnlyScope": "Aria ta este definită prin grupuri sau atribute, deci limitele nu pot fi previzualizate după adresă de email.",
+    "previewGroupOnlyScope": "Domeniul dvs. este definit de grupuri sau atribute. Previzualizările verifică persoana în director pentru a decide dacă se află în acesta.",
     "previewCeilingPinned": "Fixat de plafon: {label}",
     "previewShowUsage": "Afișează utilizarea curentă",
     "previewColumnUsage": "Utilizat",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "Impunerea unei limite dure pe un rând blochează acea valoare pentru țintele acestui override: administratorii cu drepturi limitate nu o pot ridica, iar când se aplică mai multe limite, câștigă cea mai specifică.",
     "confirmDeleteOverride": "Ștergeți \"{label}\"? Va fi eliminat imediat de pe server iar țintele sale vor reveni la limitările de dedesubt. Această acțiune nu poate fi anulată.",
     "confirmDeleteOverrideAction": "Șterge override-ul",
-    "previewUndecidableScope": "Domeniul dumneavoastră include grupuri sau atribute, deci nu se poate stabili dacă această persoană este inclusă doar după adresa de e-mail.",
+    "previewUndecidableScope": "Domeniul dvs. include grupuri sau atribute, iar directorul nu a putut fi accesat, astfel încât nu se poate determina momentan dacă această persoană este inclusă. Încercați din nou în curând.",
     "previewNoLongerAdmin": "Nu mai sunteți menționat într-o delegare activă, deci nu puteți previzualiza limitările. Reîncărcați pagina pentru a vedea drepturile actuale de acces.",
     "previewScopeMatchesNobody": "Domeniul dumneavoastră nu corespunde momentan niciunei persoane, deci nu există persoane de previzualizat după adresă de e-mail.",
     "yourScopeMatchesNobodyChip": "Nu se potrivește cu nimeni",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "Delegarea este dezactivată, astfel încât această suprascriere nu se aplică nimănui până când delegarea va fi reactivată. Nu este niciodată promovată la nivel global.",
     "betaPolicyNotice": "Mediu beta: această politică și contoarele ei de utilizare sunt stocate separat față de producție (policy.beta.json). Nimic din ce modificați aici nu afectează mediul de producție.",
     "delegationsManagedElsewhere": "Delegațiile sunt afișate aici doar pentru citire. Ce utilizatori fac parte dintr-o delegație, pe cine acoperă aceasta și ce poate face fiecare administrator se gestionează în secțiunea Delegații.",
-    "delegationsManagedElsewhereLink": "Deschide Delegații"
+    "delegationsManagedElsewhereLink": "Deschide Delegații",
+    "modelAccess": {
+      "intro": "Decideți cine poate folosi fiecare model. Setarea unei familii se aplică modelelor din cadrul acesteia, cu excepția cazului în care un model are propria setare; persoanele din listă au prioritate față de implicitul pentru ceilalți; lista de blocare are prioritate față de orice permisiune.",
+      "externalNote": "Modelele găzduite în afara mediului Azure ({families}) nu sunt disponibile pentru nimeni până când le acordați acces aici — tuturor prin setarea implicită sau grupurilor, domeniilor și persoanelor.",
+      "envelopeNote": "Limita de cereri pe o familie este un buget zilnic partajat între modelele ei; o limită pe un model este o restricție în cadrul acestuia. Fără limită pe un model nu ridică bugetul familiei.",
+      "observeNote": "Modul de observare este activat: nimic de aici nu ascunde un model sau nu oprește încă o cerere. Treceți la Enforce mai sus când regulile sunt corecte.",
+      "familyChip": "Familie",
+      "modelChip": "Model",
+      "otherModels": "Modele fără familie",
+      "modelsInFamily": "{count, plural, one {# model din această familie} other {# modele din această familie}}",
+      "noModels": "Nu există încă modele în catalog.",
+      "expand": "Afișați modelele",
+      "collapse": "Ascundeți modelele",
+      "edit": "Editați",
+      "doneEditing": "Finalizat",
+      "editNode": "Editați accesul pentru {label}",
+      "defaultLabel": "Restul utilizatorilor",
+      "defaultInherit": "Moștenește",
+      "defaultUnlimited": "Nelimitat",
+      "defaultLimited": "Limitat la",
+      "defaultUnavailable": "Indisponibil",
+      "defaultRequestsLabel": "Cereri pe zi pentru restul utilizatorilor",
+      "requestsPerDay": "cereri / zi",
+      "inheritedFrom": "Moștenește {state} de la {origin}.",
+      "effectiveLabel": "Oricine nu se află pe o listă primește: {state}.",
+      "inheritedChip": "moștenit",
+      "origin": {
+        "model": "această setare",
+        "family": "familia sa",
+        "defaults": "Implicite globale",
+        "catalogExternal": "regula că modelele externe sunt indisponibile până la acordul de acces",
+        "catalog": "setarea implicită a catalogului"
+      },
+      "state": {
+        "unlimited": "Nelimitat",
+        "limited": "Limitat la {requests} / zi",
+        "unavailable": "Indisponibil"
+      },
+      "list": {
+        "groups": "Grupuri cu acces",
+        "domains": "Domenii cu acces",
+        "allow": "Persoane permise",
+        "deny": "Persoane blocate"
+      },
+      "listHint": {
+        "groups": "Membrii acestor grupuri Entra pot utiliza modelul, conform condițiilor stabilite pentru fiecare grup.",
+        "domains": "Oricine cu adresă de email din aceste domenii, conform condițiilor stabilite pentru domeniu.",
+        "allow": "Persoanele nominalizate pot utiliza modelul indiferent de implicit sau domeniul lor.",
+        "deny": "Persoanele nominalizate nu pot folosi niciodată modelul. Aceasta are prioritate față de orice permisiune de mai sus."
+      },
+      "grantUnlimited": "Nelimitat",
+      "grantLimited": "Limitat la",
+      "termsLabel": "Condiții pentru {target}",
+      "requestsLabel": "Cereri pe zi pentru {target}",
+      "removeGrant": "Eliminați {target}",
+      "groupsCount": "{count, plural, one {# grup} other {# grupuri}}",
+      "domainsCount": "{count, plural, one {# domeniu} other {# domenii}}",
+      "allowCount": "{count, plural, one {# persoană permisă} other {# persoane permise}}",
+      "denyCount": "{count, plural, one {# persoană blocată} other {# persoane blocate}}",
+      "collisionChip": "De asemenea, în valorile implicite globale",
+      "collisionWarning": "Acest model sau familie este configurat(ă) și în valorile implicite globale. Salvarea va fi refuzată până când una dintre cele două va fi eliminată."
+    },
+    "previewSourceModelAccess": "Aprobare model — {list}",
+    "groupMembershipDegradedStructural": "Căutările privind apartenența la grupuri eșuează pe acest server ({reason}). Regulile și drepturile bazate pe grup nu sunt aplicate persoanelor afectate — verificați consimțământul Group.Read.All al tenantului și înregistrarea aplicației.",
+    "groupMembershipDegradedRetryable": "Unele căutări privind apartenența la grupuri au eșuat pe acest server în ultimele câteva minute ({reason}). Regulile bazate pe grup pot să nu se aplice acelor persoane până la un minut în timp ce se retrimit căutările.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# persoană} other {# persoane}} sunt afectate momentan pe acest server.",
+    "previewDirectoryNotFound": "Niciun utilizator de director nu are această adresă de email, astfel încât regulile pentru departament/companie/birou și grup au fost evaluate ca și cum persoana nu aparține niciunuia."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Triere de dimineață",
-        "description": "Ce a sosit, ce așteaptă de la dvs. și calendarul zilei — totul într-un sumar"
+        "description": "Un rezumat de la ultima zi de lucru — ce a sosit, ce vă așteaptă, invitații și actualizări; lunea acoperă vineri și weekendul."
       },
       "chipsSettingLabel": "Sugerează playbook-uri Microsoft 365",
       "chipsSettingHint": "Afișează sugestii de playbook deasupra casetei de mesaj când se aplică (de exemplu, după importarea unei transcrieri de întâlnire).",
-      "dismissChip": "Respinge {title}"
+      "dismissChip": "Respinge {title}",
+      "dailyDigest": {
+        "title": "Raport zilnic",
+        "description": "Sortează e-mailurile, mesajele Teams și calendarul recente după ce necesită atenția ta, ce aștepți, actualizări și pentru informare — alege perioada"
+      }
+    },
+    "digest": {
+      "title": "Raport zilnic",
+      "intro": "Analizează mesajele primite în perioada aleasă și le sortează în: ce necesită răspuns, ce ți s-a cerut, la ce aștepți un răspuns, programări, actualizări ale companiei și proiectelor, și pentru informare. Nu se trimite nimic și nu se modifică datele.",
+      "periodLabel": "Perioadă",
+      "preset": {
+        "lastWorkday": "De la ultima zi lucrătoare",
+        "1d": "Ultimele 24 de ore",
+        "3d": "Ultimele 3 zile",
+        "7d": "Ultimele 7 zile",
+        "14d": "Ultimele 14 zile",
+        "custom": "Interval personalizat"
+      },
+      "lastWorkdayHint": "De la începutul ultimei zile lucrătoare înainte de azi — luni acoperă vineri și weekendul.",
+      "from": "De la",
+      "to": "Până la",
+      "customInvalid": "Alege un interval ordonat de cel mult {days} zile.",
+      "sourcesLabel": "Surse",
+      "sourceNoConsent": "Permisiunea nu a fost acordată pentru această sursă.",
+      "sourceHint": {
+        "mail": "Plicuri și previzualizări din inbox; elementele din 'Trimise' decid ce este considerat răspuns.",
+        "chat": "Conversații Teams recente, cu @mențiuni la care nu ai răspuns.",
+        "channel": "Postări în canalele selectate mai jos.",
+        "calendar": "Invitații care așteaptă răspunsul tău și întâlniri la care alții nu au răspuns."
+      },
+      "channelsLabel": "Canale ({count} din {max})",
+      "removeChannel": "Elimină {name}",
+      "channelsSlow": "Fiecare canal adaugă citiri; mai multe canale cresc timpul de generare a raportului.",
+      "channelsMax": "A fost atins numărul maxim de {max} canale.",
+      "channelsNeeded": "Alege cel puțin un canal sau adaugă o altă sursă.",
+      "teamLabel": "Echipă",
+      "loadingTeams": "Se încarcă echipele…",
+      "pickTeam": "Alege o echipă pentru a-i afișa canalele",
+      "loadingChannels": "Se încarcă canalele…",
+      "noChannels": "Nu s-au găsit canale în această echipă.",
+      "privacyNote": "Sunt citite doar subiectele, expeditorii și scurte previzualizări; conținutul mesajelor și atașamentele rămân în Microsoft 365. Elementele sunt rezumate ale datelor tale.",
+      "cancel": "Anulează",
+      "run": "Rulare raport",
+      "starting": "Se pornește…",
+      "startFailed": "Raportul nu a putut fi pornit.",
+      "userMessage": "Raport zilnic — {period}; surse: {sources}",
+      "working": "Se scanează comunicațiile din Microsoft 365…",
+      "failed": "Raportul a eșuat.",
+      "failedPrefix": "Raportul zilnic a eșuat:",
+      "expired": "Acest raport a expirat. Rulează din nou pentru unul actualizat.",
+      "runAgain": "Rulează din nou",
+      "changePeriod": "Schimbă perioada",
+      "period": {
+        "lastWorkday": "de la ultima zi lucrătoare",
+        "lastDays": "{count, plural, one {ultima zi} other {ultimele # zile}}"
+      },
+      "source": {
+        "mail": "E-mail",
+        "chat": "Conversații Teams",
+        "channel": "Canale Teams",
+        "calendar": "Calendar"
+      },
+      "sourceStatus": {
+        "ok": "complet",
+        "partial": "parțial",
+        "skipped": "omis",
+        "unavailable": "fără permisiune",
+        "error": "eșuat"
+      },
+      "degraded": "Modelul de analiză nu a fost disponibil, astfel că categoriile provin doar din reguli.",
+      "withheld": "{count, plural, one {# articol a fost} other {# articole au fost}} reținute de filtrele de siguranță.",
+      "empty": "Nimic de raportat pentru această perioadă și aceste surse.",
+      "actionItems": "Sarcini de acțiune",
+      "createTasks": "{count, plural, =0 {Adaugă în To Do} one {Adaugă # sarcină în To Do} other {Adaugă # sarcini în To Do}}",
+      "taskCreated": "adăugat în To Do",
+      "tasksCreated": "{count, plural, one {# sarcină} other {# sarcini}} adăugate în lista \"{list}\".",
+      "tasksFailed": "Nu s-au putut crea sarcinile.",
+      "category": {
+        "needsReply": "Necesită răspunsul meu",
+        "askedOfMe": "Solicitate de la mine",
+        "waitingOnOthers": "Aștept de la alții",
+        "scheduling": "Programare",
+        "companyUpdates": "Actualizări companie și proiect",
+        "fyi": "Doar informare",
+        "bulk": "Automat și în masă"
+      },
+      "companyUpdatesHint": "important, rareori urgent",
+      "markDone": "Marchează {title} ca gestionat",
+      "badge": {
+        "unanswered": "fără răspuns",
+        "mentioned": "te-a menționat",
+        "important": "importanță mare"
+      },
+      "askAbout": "Întreabă despre acest lucru",
+      "askPrompt": "Despre elementul {source} „{title}” de la {from} ({when}) din sumarul de mai sus: ce se solicită și cum ar arăta un răspuns potrivit?",
+      "open": {
+        "mail": "Deschide în Outlook",
+        "chat": "Deschide în Teams",
+        "channel": "Deschide în Teams",
+        "calendar": "Deschide în Outlook"
+      },
+      "footnote": "Categoriile provin din semnalele proprii (fără răspuns, menționat, difuzare) plus clasificarea AI; verifică înainte de a acționa. Nu s-a trimis nimic.",
+      "age": {
+        "now": "chiar acum",
+        "hours": "acum {count}h",
+        "days": "acum {count}z"
+      },
+      "waitForReply": "Așteptați finalizarea răspunsului curent înainte de a începe un rezumat."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "Cunoaștere",
       "prompt": "Persoană",
-      "m365": "Cunoaștere (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Cunoaștere",
-      "foundry": "Agent Foundry",
+      "foundry": "Agent personalizat",
       "connector": "Conector"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "rulează pe propriul său model"
     },
     "loadError": "Agenții nu au putut fi încărcați momentan. De obicei, aceasta este o situație temporară.",
-    "discoveryLoading": "Se caută agenți Foundry…",
-    "discoveryError": "Agenții Foundry nu au putut fi încărcați.",
+    "discoveryLoading": "Se caută mai mulți agenți…",
+    "discoveryError": "Unii agenți nu au putut fi încărcați.",
     "retry": "Reîncercați"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "Mai vechi decât {months} luni de retenție ale acestui folder; nu mai este afișat.",
       "unknown": "A fost raportată o problemă: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Abilități",
+    "description": "Blocuri de instrucțiuni reutilizabile pe care asistentul le aplică atunci când conversația necesită acest lucru. Compatibil cu formatul Agent Skills SKILL.md folosit de Claude și ChatGPT.",
+    "loading": "Se încarcă abilitățile…",
+    "loadError": "Nu s-au putut încărca abilitățile.",
+    "retry": "Reîncearcă",
+    "unavailableBanner": "Stocarea abilităților nu este disponibilă momentan — sunt afișate valorile implicite; abilitățile salvate și editările vor fi indisponibile până la remediere.",
+    "conflictError": "Această abilitate a fost modificată de un alt administrator. Lista a fost reîncărcată — reaplicați editarea.",
+    "alwaysWarning": "{count} abilități sunt setate pe Întotdeauna. Fiecare dintre ele este adăugată în orice conversație — folosiți Automată pentru abilități specifice subiectului.",
+    "newSkill": "Abilitate nouă",
+    "importSkill": "Importă SKILL.md",
+    "importTitle": "Lipiți un fișier SKILL.md",
+    "importPlaceholder": "---\nnume: my-skill\ndescriere: Ce face această abilitate și când trebuie folosită.\n---\n\nInstrucțiuni…",
+    "importHint": "Abilitatea analizată se deschide în editor pentru revizuire — nimic nu este salvat până nu salvați.",
+    "importParse": "Analizează și revizuiește",
+    "invalidId": "Id-ul abilității folosește doar litere mici, cifre și un singur cratima.",
+    "saveSuccess": "Abilitate salvată.",
+    "saveError": "Nu s-a putut salva abilitatea.",
+    "deleteConfirm": "Ștergeți această abilitate? Nu va mai fi primită imediat în conversații.",
+    "restoreConfirm": "Eliminați personalizarea și restaurați valoarea implicită pentru această abilitate predefinită?",
+    "deleteSuccess": "Abilitate ștearsă.",
+    "restoreSuccess": "Valoarea implicită a fost restaurată.",
+    "deleteError": "Nu s-a putut șterge abilitatea.",
+    "empty": "Nicio abilitate deocamdată. Creați una sau importați un SKILL.md.",
+    "builtinChip": "Predefinită",
+    "customizedChip": "Personalizată",
+    "exportSkill": "Exportă ca SKILL.md",
+    "edit": "Editează",
+    "delete": "Șterge",
+    "restoreDefault": "Restaurează implicitul",
+    "createTitle": "Abilitate nouă",
+    "editTitle": "Editează {name}",
+    "idLabel": "Id",
+    "idHint": "Litere mici, cifre și cratime. Devine numele SKILL.md și nu poate fi modificat după creare.",
+    "nameLabel": "Nume afișat",
+    "descriptionLabel": "Descriere",
+    "descriptionHint": "Ce face abilitatea ȘI când trebuie folosită — acest text determină selectarea abilității, deci includeți subiecte și formulări specifice la care trebuie să răspundă.",
+    "activationLabel": "Activare",
+    "activation": {
+      "auto": "Automat",
+      "always": "Întotdeauna",
+      "off": "Oprit",
+      "manual": "La cerere"
+    },
+    "activationHint": {
+      "auto": "Selectat automat când sarcina curentă se potrivește cu descrierea. Utilizatorii pot solicita și folosirea o dată sau fixarea la conversație.",
+      "always": "Adăugată în orice conversație pentru toți cei care pot vedea abilitatea. Utilizați cu moderație — acest spațiu de prompt este permanent.",
+      "off": "Inactivă: nu este niciodată aplicată și nu este oferită utilizatorilor, dar poate fi editată aici.",
+      "manual": "Se aplică doar când un utilizator o solicită sau o fixează. Nu este selecționată automat și nu este oferită modelului ca abilitate încărcabilă."
+    },
+    "instructionsLabel": "Instrucțiuni",
+    "instructionsHint": "Markdown, până la 16 KB. Este introdus textual când skill-ul este activ.",
+    "saving": "Se salvează…",
+    "save": "Salvează",
+    "cancel": "Anulează",
+    "documents": {
+      "title": "Documente",
+      "hint": "Referințele sunt stocate împreună cu această competență. Documentele mici se încarcă direct; cele mai mari sunt indexate pentru căutare cu citate. Până la 20 de resurse, 10 MB fiecare și 20 MB în total. Resursele sunt stocate doar pentru descărcare.",
+      "saveFirst": "Salvați o personalizare a acestei competențe implicite înainte de a adăuga documente.",
+      "upload": "Adaugă documente de referință",
+      "remove": "Elimină",
+      "stop": "Oprește indexarea",
+      "resume": "Indexează sau reia documentele",
+      "empty": "Nu există documente atașate încă.",
+      "requestFailed": "Solicitarea documentului a eșuat. Reîncărcați și încercați din nou.",
+      "importZip": "Importă un ZIP de competență",
+      "zipTooLarge": "Arhiva ZIP de competență trebuie să aibă 20 MB sau mai puțin.",
+      "importCount": "Resurse de atașat după salvare: {count}",
+      "skippedScripts": "Scripturile executabile au fost omise",
+      "status": {
+        "pending": "Așteptare pentru indexare",
+        "processing": "Se indexează",
+        "inline": "Pregătit (încărcat direct)",
+        "indexed": "Pregătit (se poate căuta)",
+        "failed": "Indexarea a eșuat",
+        "asset": "Resursă descărcabilă"
+      },
+      "confirmRemove": "Eliminați {filename} din această competență? Originalul stocat va fi șters și nu va mai fi disponibil ca sursă de citare.",
+      "reindexRequired": "Aceste documente trebuie reindexate pentru configurația actuală a Căutării și a includerii pe regiune. Nu vor putea fi căutate până la finalizarea indexării."
+    },
+    "applyToAgents": "Disponibil pentru agenți",
+    "applyToAgentsHint": "Dezactivat implicit. Când este activat, agenții pot încărca această abilitate prin instrumente doar pentru citire în loc să înlocuiască instrucțiunile de personalitate. Apelurile de abilitate au limite independente de pași. Agenții Foundry trebuie să aibă deja funcțiile load_skill și search_skill_documents înregistrate în definiția lor.",
+    "requireConsent": "Solicită confirmare înainte de aplicare",
+    "requireConsentHint": "Dacă modelul dorește să aplice această abilitate singur, utilizatorul este întrebat mai întâi. Solicitările și fixările nu necesită confirmare.",
+    "consentChip": "Solicită mai întâi",
+    "sourceChip": "Din sursă",
+    "sourceChipHint": "Livrat de o sursă de abilități la care s-a abonat; instrucțiunile se actualizează la sincronizare. Setările de activare, agenți și consimțământ sunt ale dvs.",
+    "sources": {
+      "title": "Surse de abilități",
+      "description": "Abonați-vă la un catalog extern de abilități (un index.json care listează fișiere SKILL.md). Abilitățile devin abilități organizaționale și se actualizează la circa șase ore. Se importă doar SKILL.md; documentele de referință nu.",
+      "urlLabel": "URL catalog",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Trebuie să fie https pe un host public. Fișierele de abilități sunt citite doar din aceeași locație.",
+      "labelLabel": "Etichetă (opțional)",
+      "add": "Abonează-te",
+      "adding": "Se abonează…",
+      "added": "{count, plural, =0 {Sursa adăugată; nicio abilitate importată încă} one {Sursa adăugată; # abilitate importată} other {Sursa adăugată; # abilități importate}}",
+      "addedWithError": "Sursa a fost adăugată, dar prima sincronizare a eșuat. Verificați eroarea la sursă.",
+      "addError": "Nu s-a putut adăuga sursa de abilități",
+      "sync": "Sincronizează acum",
+      "syncing": "Se sincronizează…",
+      "synced": "Sursa a fost sincronizată.",
+      "syncError": "Nu s-a putut sincroniza sursa de abilități",
+      "remove": "Elimină sursa",
+      "removeConfirm": "Eliminați această sursă? Abilitățile livrate rămân ca abilități obișnuite ale organizației și nu se vor mai actualiza.",
+      "removed": "Sursa a fost eliminată.",
+      "removeError": "Nu s-a putut elimina sursa de abilități",
+      "loading": "Se încarcă sursele…",
+      "loadError": "Nu s-au putut încărca sursele de abilități.",
+      "empty": "Nu există surse de abilități încă.",
+      "never": "Niciodată sincronizat",
+      "statusOk": "Sincronizat",
+      "statusError": "Sincronizare eșuată",
+      "statusPartial": "{count, plural, one {# intrare omisă} other {# intrări omise}}",
+      "lastSync": "Ultima sincronizare {time}",
+      "entryCount": "{count, plural, one {# intrare} other {# intrări}}",
+      "entryStatus": {
+        "synced": "sincronizat",
+        "skipped": "omise",
+        "conflict": "conflict — nu a fost suprascris",
+        "invalid": "invalid"
+      }
+    },
+    "requireConsentDisabledHint": "Doar abilitățile automate pot solicita prima dată: cele solicitate, fixate și permanent active se aplică fără confirmare, iar abilitățile la cerere nu sunt niciodată alese de model."
+  },
+  "personalSkills": {
+    "title": "Abilități personale",
+    "description": "Salvați instrucțiuni reutilizabile pentru propriile conversații. Abilitățile rămân în acest browser și sunt trimise către model doar când conversați. Abilitățile relevante pot fi selectate automat, folosite o dată sau fixate. Ele nu pot schimba politica organizației și nu acordă acces la instrumente. Utilizarea abilităților presupune activarea lor pentru această implementare; conversațiile cu agenți nu folosesc abilități personale.",
+    "importFile": "Importați SKILL.md sau ZIP",
+    "review": "Verificați instrucțiunile complete înainte de salvare. Instrucțiunile importate sunt preferințe ale utilizatorului, nu reguli de încredere ale organizației.",
+    "skipped": "Scripturile executabile au fost omise",
+    "importTooLarge": "Importul trebuie să aibă cel mult 20 MB.",
+    "invalid": "Abilitatea nu a putut fi importată.",
+    "duplicate": "Acest ID de abilitate personală există deja. Editați abilitatea existentă sau alegeți un alt ID.",
+    "countLimit": "Puteți salva până la 20 de abilități personale.",
+    "requestLimit": "Abilitățile personale activate depășesc limita de 160 KB per cerere. Dezactivați unele abilități sau scurtați instrucțiunile acestora.",
+    "saved": "Abilitatea personală a fost salvată în acest browser.",
+    "instructionsHint": "Până la 16 KB de instrucțiuni, inclusiv orice referințe de text importate. Fișierele binare și indexarea persistentă a documentelor sunt disponibile doar pentru abilitățile organizației. Exportarea folosește numele standard SKILL.md fără prefixul user:.",
+    "enabled": "Activată pentru conversațiile mele",
+    "empty": "Creați o abilitate pentru o sarcină recurentă sau importați un SKILL.md pentru a-l verifica și salva aici."
   }
 }

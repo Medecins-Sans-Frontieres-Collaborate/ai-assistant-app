@@ -870,7 +870,16 @@
       "stillWorking": "Kozo ti kîrî…",
       "assessingSearchResults": "Yeke ködrö sô sohu bâa awâ tî yê...",
       "refiningSearch": "Yeke sônya wa : “{query}”...",
-      "readingSearchPages": "Yeke lê {count} kpökö tî sohu..."
+      "readingSearchPages": "Yeke lê {count} kpökö tî sohu...",
+      "toolRoutingUnavailableInRegion": "Le endpoint {region}, tool routing ti kpala na ku, yeke na zinga na wala tool…",
+      "applyingSkill": "Yeke na bara skill: {skills}…",
+      "applyingSkills": "Yeke na bara skills: {skills}…",
+      "readingSkillReferences": "Yeke na gbanga na skill reference documents…",
+      "selectingSkills": "Ti bini ti yeke sala…",
+      "retryingModel": "Model atene — akangbi ti {seconds}s (liko ti {attempt})...",
+      "resumingResponse": "Kombili na model azo — azolinga na nzoni...",
+      "continuingResponse": "Mawakili ti doro ya answer azo — azolinga...",
+      "trimmingContext": "Kombili tene awa lenge na model — abakisa ti gbaza ti mo na liko..."
     },
     "toolSummary": {
       "usedTools": "Tool {count, plural, one {# ya kötï} other {# ya kötï}}",
@@ -936,7 +945,9 @@
       "deniedByRuleHint": "Mbârï ti yângâ mo sô kété — kêtê na Settings → Connectors.",
       "batchPendingHint": "{count} sorô ti tool gbângbâ sô ngbênî",
       "approveAllButton": "Mângâ kõtõ",
-      "denyAllButton": "Kété kõtõ"
+      "denyAllButton": "Kété kõtõ",
+      "applySkillTitle": "Yeke na skill \"{skill}\"?",
+      "skillConsentNote": "Admin azo kangbida skill a na mbe ti yeke fo ora na yeke ti yeke. Sê yeke ti la guidance na nginza a mo na wa ye wa na wa."
     },
     "openImage": "Fungbä lo tö",
     "copyMessage": "Kopi mesajï",
@@ -976,7 +987,54 @@
     "alwaysWaitThisLong": "Yembeti sôngo na {duration} ninga",
     "keepSearching": "Kɔlo yeke luka",
     "keepSearchingHint": "Luka afungbi na asali kodro ti goedo. Sûkü ti zou ti ayeke binga kodro sô ayeke feta.",
-    "keepSearchingMessage": "Kɔlɔ yeke luka mbîrî azo — gira nzoni ti ayeke kûê ka lâ."
+    "keepSearchingMessage": "Kɔlɔ yeke luka mbîrî azo — gira nzoni ti ayeke kûê ka lâ.",
+    "addSkill": "Bakara",
+    "removeSkill": "Gu gwa bakara",
+    "skillsMenuLabel": "Bakara ti yeke",
+    "skillsLimit": "Bakara 3 mo soro na kodé na yeke na mesaje",
+    "skillPin": "Saka na mbênî ti sànzi",
+    "skillUseOnce": "Bê na wa",
+    "skillPinned": "gbêndê",
+    "skillOnce": "gonda ti na",
+    "skillsPaused": "gbêda",
+    "skillUnavailable": "bê ti la",
+    "skillsAutomaticHint": "Mbênî ti hinga ti na ti kodro. Bê na wa na gonda ti na, wa saka na mbênî da be ti sànzi mbênî mo seka.",
+    "skillsAgentDisabled": "Mbênî ti gbêda wa agent ayeke ti sànzi. Saka na mbênî mo yeke kodro wa lo agent bûko.",
+    "skillPersonal": "mbeni tî mbi",
+    "skillsAgentToolsHint": "Fini mo yeke na admin ti organisation mo eseni na agent ti lo sangasanga. Agent azo akan mo na tool ti škol ti a yeke na gbegbé. Biyeke pins ti mo yeke ti mo eseni ana na pa ti bangi na agents na ngbangui, na skills ti moti yeke na agents na pa.",
+    "skillAlwaysOn": "ala ti ye sukü",
+    "skillAlwaysOnHint": "Admin ayeke ti bara na yeke na gbata na ni kumanda ku epe.",
+    "skillUsage": {
+      "label": "Skills",
+      "requested": "bengbi",
+      "pinned": "swê ku",
+      "auto": "auto",
+      "unavailable": "ti kpala ku",
+      "incomplete": "Skills mingi ti ngbala gbada na ku",
+      "references": "{count, plural, one {# reference passage} other {# reference passages}}",
+      "referencesUnavailable": "Reference documents mingi ti kpala na ku",
+      "showDetails": "Yeke na vina skill ti gbogbo",
+      "hideDetails": "Yeke na sô skill ti gbogbo",
+      "agentLoad": "ngbala na agent",
+      "agentSearch": "documents ku agent yeke na mara",
+      "needsApproval": "asila na mo",
+      "original": "tî lâ zo",
+      "updated": "fâfâ na"
+    },
+    "skillsManualHint": "Poko so ti yeke na Settings. Mbi kama na yeke mo ti wa na ni, to pin na skill ti yeke na wa na makara ti nzoni so alingo.",
+    "queuedMessage": {
+      "label": "Soro",
+      "attachmentOnly": "Bagu",
+      "cancel": "Gbeni soro ti message"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Wen ti model faho ti content safety filter. Binga ti damine ti mo, oba guinea ti part a ti mo faho na filter.",
+      "MODEL_CONTEXT_TOO_LONG": "Kombili tene awa lenge na model a yeke ti teni, abakisa ti gbaza ti mo, awe. Bera kombili tene, gbeni bagu, oba guinea na model a ti tena ti context a yeke ti mingi.",
+      "MODEL_OUTPUT_LIMIT": "Model ale ti doro na output budget ti mo, a ala ti answer. Binga reasoning effort a ti wa, oba guinea ti damine a yeke ti ngolo.",
+      "MODEL_RATE_LIMITED": "Model azo ti mingi ti damine na wa. A kangbi auto — binga ti wa na la.",
+      "MODEL_QUOTA_EXCEEDED": "Quota ti model a ti capacity ale. Binga model a ti wa, oba guinea na la.",
+      "MODEL_AUTH_FAILED": "App wa ala ti authentication na model service. A ye ti configuration problem — binga ti moussupport."
+    }
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1484,7 +1542,11 @@
       "preferModelTitle": "Pênda model a mo a tî",
       "preferModelDescription": "Ala gbanga model bâla tî bî tî demanda ayeke bô. Erö ayeke tî mbi kété model."
     },
-    "Analytics": "Ánalîtiki"
+    "Analytics": "Ánalîtiki",
+    "skills": {
+      "autoApply": "Mbi ti assistant ti yeke skills na mbata",
+      "autoApplyDescription": "Skills ti yeke na singa na skills ti londu na yengi, ti seleka wa na ndoye. To poko so, mo ti yeke na skills ti mo ti sala na pin na skills ti admin ti yeke na yenga ti nzoni so alingo."
+    }
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -2684,7 +2746,15 @@
     "chipAutoHideUnit": "sekônde",
     "chipAutoHideHint": "Lâ sô {min} na {max} sekônde.",
     "byWorkflow": "Na workflow",
-    "byWorkflowNote": "Tî bara totâ mbi wala, a yeke na tî biani—sô a köta usage. Run ti grants a zî ti laporan ti organisation na ti budget ti token, tî wala a köta na tî totâ lokal."
+    "byWorkflowNote": "Tî bara totâ mbi wala, a yeke na tî biani—sô a köta usage. Run ti grants a zî ti laporan ti organisation na ti budget ti token, tî wala a köta na tî totâ lokal.",
+    "chipLabelTitle": "Label tî chip",
+    "chipLabelHint": "Breakdown tî yeke mo na fe ti emissions na gbɛnɛ tî kɔlɛ tî mo na mo; label tî chip ti ga yeke na mo.",
+    "chipLabelEmissions": "Emissions",
+    "chipLabelCost": "Gbɛnɛ",
+    "chipLabelBoth": "Mo du",
+    "costTile": "Gbɛnɛ ti yeke",
+    "costDisclosure": "Gbɛnɛ tî kɔlɛ tî yeke na {asOf} (Global Standard rate, mo na discount tî cached-input): ti te mbule mbula, mo tî bill. Web search, code execution, transcription, speech, translation na document indexing ala na fa wa.",
+    "costUnpriced": "{count, plural, one {# moto ti ala na ni kɔlɛ ti yeke ti fa wa} other {# moto ti ala na ni kɔlɛ ti yeke ti fa wa}} mo yeke wa."
   },
   "extraction": {
     "toggleLabel": "Hâ lâ tî data ti yângâ",
@@ -4486,7 +4556,16 @@
         "auto": "Auto",
         "hidden": "Hida"
       },
-      "visibilityHint": "Auto ape na chip sô ti estimá ti dzî na bê ti loo sè mbi yângâ ti yéké. O yeke fâla tî cîni na Settings › Usage & Impact."
+      "visibilityHint": "Auto ape na chip sô ti estimá ti dzî na bê ti loo sè mbi yângâ ti yéké. O yeke fâla tî cîni na Settings › Usage & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Gbɛnɛ ti yeke {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "La moto ti ala na ni kɔlɛ ti sari na row tî bucɔ tî yeke ti fa wa",
+        "unpriced": "{count, plural, one {# moto ti ala na ni kɔlɛ ti yeke ti fa wa} other {# moto ti ala na ni kɔlɛ ti yeke ti fa wa}} mo yeke na ti gbɛnɛ.",
+        "noPriceData": "Gbɛnɛ ala na fa: model tî konversio ane ala na ni kɔlɛ (source tî mbirî, runtime tî local na agent ala na kɔlɛ).",
+        "note": "Gbɛnɛ tî kɔlɛ tî yeke na {asOf} (Global Standard rate, mo na discount tî cached-input): ti te mbule mbula, mo tî bill. Web search, code execution, transcription, speech, translation na document indexing ala na fa wa."
+      }
     },
     "workflow": {
       "title": "Workplace âli (sômbéni)",
@@ -5278,7 +5357,22 @@
     "confirmDeleteGlossary": "Kèngä glossary",
     "glossaryDeleteSuccess": "Glossary a kèngï",
     "channelProfilesTab": "Platform ti wâ",
-    "channelSetsTab": "Ngânda ti balê ti channel"
+    "channelSetsTab": "Ngânda ti balê ti channel",
+    "addPromptAgent": "Kubä prompt agent",
+    "m365AgentIndexStop": "Gbalé kobanga",
+    "foundryAgentsHeading": "Foundry na prompt agents",
+    "foundryAgentsDescription": "Agents a zu ti Azure AI Foundry na ndokodi mo, na prompt agents a defî ti mobio. Knowledge agents na Microsoft 365 agents na sa mo na gbanga ti bara ti bangi.",
+    "agentSkillsLabel": "Makandï",
+    "agentSkillsHelp": "Makandï sî ngbangba na mo agenze wa ïrî asâ wa mo ti yeke ku. Wanï wa yeke sô na makandï sî na bâ tî bana kodê na wanï.",
+    "agentSkills": {
+      "inherit": "Makandï sî bâ ti “asâ na agenze”",
+      "selected": "Makandï sî ku na ilî ape",
+      "none": "Makandï ala"
+    },
+    "agentSkillsNone": "Makandï ala ku na ilî.",
+    "agentSkillsLoading": "Yeke ti zo skills...",
+    "agentSkillsLoadError": "Skills ala yeke ti zo. Skill oko na mo ti kangbida na awa mo ti yeke.",
+    "agentSkillsNotVisible": "(ala na mboko ti mo — tiro na wa ti yeke)"
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",
@@ -5505,7 +5599,8 @@
       "channelSets": "Lô tî règlement ti équipe ûsû platform ti balê: mo na bâ tî kôzo, mo tî sâra, so ti wâ lè ti mo na sala ti balê na mo na hînga e.",
       "webSearch": "Limâ so luka tî web alê: luka maboko, model tî ködrö na mabôndo tî bängö.",
       "contextBudget": "Limê tî karê gbanî tî kônvu ti model da dö tî turn kölü.",
-      "analytics": "Rapô so asara: mbîrî asarê, azo anza tî kufa na foldere, na châ tî gbâ chô so ayeke hîla."
+      "analytics": "Rapô so asara: mbîrî asarê, azo anza tî kufa na foldere, na châ tî gbâ chô so ayeke hîla.",
+      "skills": "Ti barara na yeke soro, assistant a yeke gu na mo na di ala na soro."
     },
     "openSettings": "Fungbi tî settings",
     "area": {
@@ -5516,7 +5611,8 @@
       "delegations": "Béni tî yângâ",
       "webSearch": "Luka tî web",
       "contextBudget": "Budget tî kônvu",
-      "analytics": "Ánalîtiki"
+      "analytics": "Ánalîtiki",
+      "skills": "Bakara"
     }
   },
   "limits": {
@@ -5546,7 +5642,8 @@
     "tab": {
       "defaults": "Nzoni ya mbi",
       "overrides": "Kété ti mbéni",
-      "delegations": "Delegation"
+      "delegations": "Delegation",
+      "models": "Model ti mbi"
     },
     "tabsLabel": "Pöngö na nzoni",
     "category": {
@@ -5578,7 +5675,8 @@
       "m365ToolCallsPerDay": "Appel ti outil Microsoft 365 par jour",
       "m365MailReadsPerDay": "Lecture ti courrier par jour",
       "m365MailDraftsPerDay": "Bê ti rédaction ti courrier par jour",
-      "m365MailDeepScansPerDay": "Bê ti scan approfondi ti courrier par jour"
+      "m365MailDeepScansPerDay": "Bê ti scan approfondi ti courrier par jour",
+      "m365DigestRunsPerDay": "Zinga na mbëtï na téne na yeke pasi"
     },
     "valueModeLabel": "Zoni tî nzoni",
     "valueAmountLabel": "Zöngö tî nzoni",
@@ -5656,7 +5754,8 @@
       "m365ToolCallsPerDay": "M365 tool sô hudu bï tî kalendä, molenge, zwä, Teams bï lönji. Sô yeke na mbi kïri, tool a teni \"bo sô mâle\" da, ndakü kombere tângbô.",
       "m365MailReadsPerDay": "Söngö tî mail na nzönî/ngangu bï lönji. Sô mbi kïri, tool tî mail a teni \"bo sô mâle\" da.",
       "m365MailDraftsPerDay": "Mail draft sô assistant a kunna bï lönji na yeke gï. Yëngö sô mbeni bi ködä.",
-      "m365MailDeepScansPerDay": "Analiz tî mail sô gbû (digest, deep search, commitments) bï lönji. Analiz sî kötä mbi kïri ndö, tool sô na lo ape."
+      "m365MailDeepScansPerDay": "Analiz tî mail sô gbû (digest, deep search, commitments) bï lönji. Analiz sî kötä mbi kïri ndö, tool sô na lo ape.",
+      "m365DigestRunsPerDay": "Microsoft 365 zinga na mbëtï na téne na yeke pasi. Yeke pasi e lingbi kété na ndokua na Graph na yeke gbanga mo na mbînda analysis-model; mo na period picker na yeke maboko, ngangu na default na yeke ngbanga."
     },
     "scopeFamily": "Famili",
     "scopeModel": "Modèle",
@@ -5711,7 +5810,7 @@
     "previewSourceCatalog": "Default tî app",
     "previewSourceGlobal": "Default global",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Département/société/bureau na override groupe apê kêtê na ndö — mo yéké sô tî singi zo yeke akpi.",
+    "previewNotEvaluated": "Tîngi tî ti gbângbâ na ngbâ, nde asala tî siriri/kompanyi/ofisi na règle tî groupe tî la Gbâgâ tî sîngâ ti na lingbi, na zo na. Kûlû ti sôka.",
     "previewUnsaved": "Ayeke lê policy tî sô yèkê sèngö. Sèngö mbïtï tî mo sô la tî kêtê na wa.",
     "previewColumnLimit": "Limite",
     "previewColumnValue": "Valeur",
@@ -5807,7 +5906,7 @@
     "yourScopeGroupOnlyChip": "Groupe tê",
     "yourScopeGroupOnlyNote": "Ayeke défini na groupe mbï attributes tê, baso limite mbi ayeke preview na adresi email ni.",
     "previewOutOfScope": "Zo a mbi la na gbânî mo.",
-    "previewGroupOnlyScope": "Gbânî mo ayeke défini na groupe mbï attributes, baso limite mbi ayeke preview na adresi email ni.",
+    "previewGroupOnlyScope": "Ndâ tî mo sô têrê na groupe na attribut. Lôngo na sô tî na ti mô tî ti na directory na hîngbi na hinga ti gbâgâ.",
     "previewCeilingPinned": "Ayeke bloké na plafond: {label}",
     "previewShowUsage": "Wanda so ayeke yeke",
     "previewColumnUsage": "So ayeke yeke",
@@ -5823,7 +5922,7 @@
     "overrideCeilingHint": "Ceiling ngbanga na row mo yeke na valeur nî ti overrides na targets: admins na scope apêî yeke kufa yângô, sô ngbanga mo gbâ tî céiling, celle mo na details mingi lo yê ku.",
     "confirmDeleteOverride": "Kwîrî \"{label}\"? Lo yeke su na server lo, targets ti lo yeke ndî na limits mo ape gî tî lo. Nî apêi yeke bini zî.",
     "confirmDeleteOverrideAction": "Kwîrî override",
-    "previewUndecidableScope": "Scope ti wâ sô ai yeke group sô attributes, nî awé sô agbe fata mo na scope nî apêi yeke gbesenî na email address.",
+    "previewUndecidableScope": "Ndâ tî mo yângô na groupe na attribut na tîngi tî directory na ngbâ, nde hîngbi na hinga ti gbâgâ tî mô na ti na ti na lingbi na zo na. Kûlû ti sôka.",
     "previewNoLongerAdmin": "Ngbé tî wâ apêi na délégation mo yeke, nî awé apêi yeke téré limits. Zo sô yeke sôngô page tî dia yângâ ti accès ti wâ.",
     "previewScopeMatchesNobody": "Scope ti wâ mo tî yé apêi na lo i, awé apêi séni yângâ par email address.",
     "yourScopeMatchesNobodyChip": "Apêi na mbi zo",
@@ -5974,7 +6073,73 @@
     "disabledDelegationNote": "Delegation tî yâ apê kîri, ebe kodro na sô apê linga ti môkô tî delegation a kîri na yâ tî sôsö. Ködörö na apê bêti gbalo na mbi.",
     "betaPolicyNotice": "Beta ti mbi: Bê ti lo kêtê na sô ti mbi ti, ti usage counters na yeke sô ti lo na bê lo sô ti mbi bê ti mbi ti bê (policy.beta.json). Yeke ti oko na kêtê ape na sô ti mbi na production.",
     "delegationsManagedElsewhere": "Béni tî yângâ yumbu ape na ngû tî lê kodro. Ani nani yângâ, nani kodro sô a zarama na nti yângâ, na wa admin ngû ngû a ke lê tî zarama, mbi yé sô na Béni tî yângâ.",
-    "delegationsManagedElsewhereLink": "Ouvri Béni tî yângâ"
+    "delegationsManagedElsewhereLink": "Ouvri Béni tî yângâ",
+    "modelAccess": {
+      "intro": "Bini na sô na mbi na sâ model mo azoyé. Afamilia na model bako na mo azoyé mo, koto model mo kpe na na zo azoyé. Ba mo na list mo ti azoyé ti mbi, mbi mpo so; ba mo na block list mo ti mbi kangbi na azoyé ti mbi.",
+      "externalNote": "Model ti mbi mo na ko na Azure ({families}) mo mbi kangbi na mbi, ti mbi azoyé mo fa — na mbi lô mo ti mbi, ayeke na group, domain na mo ti mbi.",
+      "envelopeNote": "Limiti na request na familia na model bako na mbi mo ti mbi, limite na model mo ti mbi fa. Unlimited na model mbi mbi kangbi fa limite na familia.",
+      "observeNote": "Mode ti observe ti mbi: ni mbi azoyé model na mbi dampi request. Kwe na Enforce ti mbi so na règle mo zo azoyé.",
+      "familyChip": "Familia",
+      "modelChip": "Model",
+      "otherModels": "Model ti mbi na mbi familia",
+      "modelsInFamily": "{count, plural, one {# model na familia ti mbi} other {# model ti mbi na familia ti mbi}}",
+      "noModels": "Bé model ti mbi na catalog na mbi.",
+      "expand": "Mo model ti mbi",
+      "collapse": "Ka model ti mbi",
+      "edit": "Labo",
+      "doneEditing": "Labo esese",
+      "editNode": "Labo accès ti {label}",
+      "defaultLabel": "Mo ti mbi lô",
+      "defaultInherit": "Kwere",
+      "defaultUnlimited": "Bé limite",
+      "defaultLimited": "Limiti na",
+      "defaultUnavailable": "Mbi kangbi",
+      "defaultRequestsLabel": "Request ti mbi lô na denge",
+      "requestsPerDay": "request / denge",
+      "inheritedFrom": "Akwere {state} fa {origin}.",
+      "effectiveLabel": "Mo ti mbi na list mo ti mbi lô na: {state}.",
+      "inheritedChip": "akwere",
+      "origin": {
+        "model": "setting ti mbi so",
+        "family": "familia ti mbi",
+        "defaults": "Global defaults",
+        "catalogExternal": "règle ti mbi na model ti mbi na ko kangbi na mbi azoyé",
+        "catalog": "catalog default"
+      },
+      "state": {
+        "unlimited": "Bé limite",
+        "limited": "Limiti na {requests} / denge",
+        "unavailable": "Mbi kangbi"
+      },
+      "list": {
+        "groups": "Group ti mbi na accès",
+        "domains": "Domain ti mbi na accès",
+        "allow": "Mo ti mbi na azoyé",
+        "deny": "Mo ti mbi na kangbi"
+      },
+      "listHint": {
+        "groups": "Mo ti Entra group so mo azoyé mo, na règle mo ti group.",
+        "domains": "Mo ti mbi na email na domain so, na règle mo ti domain.",
+        "allow": "Mo ti mbi na azoyé na setting ti domain na default.",
+        "deny": "Mo ti mbi na kangbi. Mo ti mbi na kangbi na azoyé."
+      },
+      "grantUnlimited": "Bé limite",
+      "grantLimited": "Limiti na",
+      "termsLabel": "Règle ti {target}",
+      "requestsLabel": "Request ti denge na {target}",
+      "removeGrant": "Lé {target}",
+      "groupsCount": "{count, plural, one {# group} other {# group ti mbi}}",
+      "domainsCount": "{count, plural, one {# domain} other {# domain ti mbi}}",
+      "allowCount": "{count, plural, one {# mo ti mbi na azoyé} other {# mo ti mbi na azoyé}}",
+      "denyCount": "{count, plural, one {# mo ti mbi na kangbi} other {# mo ti mbi na kangbi}}",
+      "collisionChip": "Duti na Global defaults",
+      "collisionWarning": "Model ti so familia ti yeke na Global defaults. Oko na klé ti model ou familia ti so oko ti la futi mo kui kidô."
+    },
+    "previewSourceModelAccess": "Model ti yame — {list}",
+    "groupMembershipDegradedStructural": "Bingbi ti group membership ti na fa na ndawa na serveur ti mbi ({reason}). Lingbi ti group-based rules na grants ti na fa na kwe ti na yeke da, na bale ti tenant's Group.Read.All consent na app registration.",
+    "groupMembershipDegradedRetryable": "Bingbi ti group membership ti na fa na ndawa na serveur ti mbi na kété na wa ({reason}). Lingbi ti group-based rules ti mbi ti na yeke da na kwe, nzoni na minute mô na server ti na na retry.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# mo} other {# moto}} ti na ndawa na serveur ti mbi.",
+    "previewDirectoryNotFound": "Usu ti directory ti na tene email so, lingbi ti department/company/office na group rules ti na yeke da so mo ti na vemo na yag."
   },
   "m365": {
     "connections": {
@@ -6325,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Triage na mbëtï",
-        "description": "Mba zo kodro, mba bé zî na lo, na calendrier ti lo le ti lo kêtê — brîfin yê mô."
+        "description": "Digest tî saa bako na bâa—mbênî tî mo yeke, mbênî ti mo la ti bâa, invite na updates; na Monde, digest na bara na Vendredi na week-end."
       },
       "chipsSettingLabel": "Zî playbooks ti Microsoft 365",
       "chipsSettingHint": "Fâara playbook tî nzönî na mo sô âmbênî sô ngbê, mo yeke na mbi bale mo kêtê yângâ (ex: bêndê sô mo ti lo transcript tî réunion).",
-      "dismissChip": "Kûâ {title}"
+      "dismissChip": "Kûâ {title}",
+      "dailyDigest": {
+        "title": "Zinga na mbëtï na téne",
+        "description": "Gbéngö mail, Teams na calendar mo na yeke na ko na yeke bé ti mo, mo na yeke bé mo sé sï, na ngangu na sï na mo na yeke Sï na FYI — ko period"
+      }
+    },
+    "digest": {
+      "title": "Zinga na mbëtï na téne",
+      "intro": "Na yeke gbéngö na mo na yeke na period na yeke ndokua mo na yeke bé ti mo na yeke bé a sï, mo na yeke bé a sï ti mo, mo na yeke bé mo sé sï, na scheduling, company na project updates na FYI. A zinga ayeke na yeke kéré na ayeke sï.",
+      "periodLabel": "Period",
+      "preset": {
+        "lastWorkday": "Képe na yeke sï na tî mo",
+        "1d": "Zinga na mbëtï 24h",
+        "3d": "Zinga na mbëtï 3 na lï",
+        "7d": "Zinga na mbëtï 7 na lï",
+        "14d": "Zinga na mbëtï 14 na lï",
+        "custom": "Ngangu na yeke sï"
+      },
+      "lastWorkdayHint": "Képe na yeke sï na weekday mo nyini — na Monday na yeke Friday na weekend.",
+      "from": "Na",
+      "to": "Ôko",
+      "customInvalid": "Ko ngangu na yeke ndokua na yeke té {days} na lï.",
+      "sourcesLabel": "Sources",
+      "sourceNoConsent": "Mo na yeke maboko na source ti mo.",
+      "sourceHint": {
+        "mail": "Inbox envelopes na previews; Sent Items ti mo na yeke bé mo sï.",
+        "chat": "Teams chats na yeke ngbakê mo, na @mentions mo na yeke bé mo sï.",
+        "channel": "Posts na channels mo na yeke bé ti mo ka.",
+        "calendar": "Invitation na yeke bé mo sï na gbangu ti mo na yeke bé bé ti mo sï."
+      },
+      "channelsLabel": "Channels ({count} na {max})",
+      "removeChannel": "Kpunga {name}",
+      "channelsSlow": "Channel na yeke duma na yeke ndokua; na ngbanga na channels na yeke ndokua na téne na yeke tîa a ti",
+      "channelsMax": "Na yeke max {max} channels na yeke bé.",
+      "channelsNeeded": "Ko yeke channel na ôko, mo ko source na yeke bé.",
+      "teamLabel": "Team",
+      "loadingTeams": "Na yeke ndokua teams...",
+      "pickTeam": "Ko yeke team na na yeke channels ti mo",
+      "loadingChannels": "Na yeke ndokua channels...",
+      "noChannels": "Channel ayeke na team ti mo.",
+      "privacyNote": "A yeke ndokua mo na subject, senders na previews na yeke bé; message bodies na attachments na yeke na Microsoft 365. Item na yeke summary ti data ti mo.",
+      "cancel": "Funga",
+      "run": "Na yeke téne",
+      "starting": "Na yeke kété...",
+      "startFailed": "Na yeke téne ayeke na kété.",
+      "userMessage": "Zinga na mbëtï na téne — {period}; sources: {sources}",
+      "working": "Na yeke gbéngö communications Microsoft 365 ti mo...",
+      "failed": "Na yeke téne ayeke.",
+      "failedPrefix": "Zinga na mbëtï na téne ayeke:",
+      "expired": "Na yeke téne ayeke na yeke ndokua. Na yeke téne na ngangu na na yeke bé.",
+      "runAgain": "Na yeke téne na ngangu",
+      "changePeriod": "Ko period",
+      "period": {
+        "lastWorkday": "képé na yeke sï na tî mo",
+        "lastDays": "{count, plural, one {yeke lï na sï} other {yeke # na lï}}"
+      },
+      "source": {
+        "mail": "Mail",
+        "chat": "Teams chats",
+        "channel": "Teams channels",
+        "calendar": "Kalende"
+      },
+      "sourceStatus": {
+        "ok": "yamuso",
+        "partial": "ngbangui",
+        "skipped": "bînga",
+        "unavailable": "ngé kwé na yeke",
+        "error": "afinga"
+      },
+      "degraded": "Modeli ti análise ayeke, na kategori ti lo na règle gusa.",
+      "withheld": "{count, plural, one {# item ti yeke} other {# items ti yeke}} ti ayeke na écran ti sécurité.",
+      "empty": "Tene ala ti fadere na periyode mbi na mbundu na.",
+      "actionItems": "Fadere ti abara",
+      "createTasks": "{count, plural, =0 {Gbazila na To Do} one {Gbazila # abara na To Do} other {Gbazila # abara na To Do}}",
+      "taskCreated": "ayeke na To Do",
+      "tasksCreated": "{count, plural, one {# abara} other {# abara}} ti ayeke na list \"{list}\".",
+      "tasksFailed": "Abara ayeke ala.",
+      "category": {
+        "needsReply": "Balé na mbí",
+        "askedOfMe": "Mbí ti ndiyo",
+        "waitingOnOthers": "Balé na bángo",
+        "scheduling": "Kalende",
+        "companyUpdates": "Sonde ti kompani na project",
+        "fyi": "FYI",
+        "bulk": "Automatique na gbundu"
+      },
+      "companyUpdatesHint": "so ti yeke, so ti urgence",
+      "markDone": "Kaba {title} ti ayeke",
+      "badge": {
+        "unanswered": "ayeke ala",
+        "mentioned": "balé na mbi",
+        "important": "so ti yeke"
+      },
+      "askAbout": "Kü balé na gué",
+      "askPrompt": "Na {source} item \"{title}\" ti {from} ({when}) na digest a mbi: mi balé mbi, na mi kombéné ala a mbi?",
+      "open": {
+        "mail": "Akwé na Outlook",
+        "chat": "Akwé na Teams",
+        "channel": "Akwé na Teams",
+        "calendar": "Akwé na Outlook"
+      },
+      "footnote": "Kategorí ti na signál mbi (ayeke ala, balé mbi, broadcast) na AI classifikásion; bala na abara. Té alingo ayeke.",
+      "age": {
+        "now": "ngü da",
+        "hours": "{count}h ti ago",
+        "days": "{count}d ti ago"
+      },
+      "waitForReply": "Tîmbî nî lo na yî tî bata na lo, sô na bâa na ngû da digest."
     }
   },
   "share": {
@@ -6394,9 +6666,9 @@
     "kind": {
       "rag": "Sûngö",
       "prompt": "Ngangu",
-      "m365": "Sûngö (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Sûngö",
-      "foundry": "Bângbi Foundry",
+      "foundry": "Agent ti so ala",
       "connector": "Connector"
     },
     "semantics": {
@@ -6405,8 +6677,8 @@
       "own-model": "yeke na model iye"
     },
     "loadError": "Agents mo ape yeke koui tî lo nzoni. Doko mbênî ape na ndatabarî.",
-    "discoveryLoading": "Bi na na sô lo agents tî Foundry…",
-    "discoveryError": "Agents tî Foundry ape yeke koui.",
+    "discoveryLoading": "Zo na la tî ti agents sô…",
+    "discoveryError": "Agents mo tî mendé na gu na gbu.",
     "retry": "Koke"
   },
   "peopleSuggest": {
@@ -7547,5 +7819,146 @@
       "past-retention": "Mbênî pâpï tî {months} ngonda tî rétention tî dossier a; o ape ti yèkè.",
       "unknown": "Problem sô singbî: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Bakara",
+    "description": "Ti barara na yeke soro, assistant a yeke gu na mo na di ala na soro. E yeke galê na Agent Skills SKILL.md ti Claude na ChatGPT.",
+    "loading": "Bakara a yeke gu...",
+    "loadError": "Bakara a yeke gu na nga.",
+    "retry": "Gu ti dibo",
+    "unavailableBanner": "Bakara na gu mo yeke ti tî na nga — ti yeke na mo na kodi na ti yeké; bakara na soro na yeke ayeke kodé na gu na tî na eke.",
+    "conflictError": "Bakara a yeke na gbabâ na admin uko. List a yeke gu na nga — gu la ti a kodé na gu.",
+    "alwaysWarning": "{count} bakara yeke ti Always. Bakara kodé na mo yeke na soro na soro — sôkô ti Automatic na bakara ti soro na topik na soro.",
+    "newSkill": "Bakara na sôkô",
+    "importSkill": "Gu ti SKILL.md",
+    "importTitle": "Gu ti dosié SKILL.md",
+    "importPlaceholder": "---\nnam: my-skill\ngbabâ: Bakara ti a yeke na mo na di na mo na soro.\n---\n\nInstruksi...",
+    "importHint": "Bakara na gu ti editor, mo soro la ti isiba — mo soro la ti kodé na mo ti kodé.",
+    "importParse": "Gu ti sôkô na gbabâ",
+    "invalidId": "Id ti bakara yeke na mo na lettr ti kodé, nombor na tirè na finga.",
+    "saveSuccess": "Bakara a kodé.",
+    "saveError": "Bakara a kodé na nga.",
+    "deleteConfirm": "Gu bakara a? Mesaje na mo na soro na nga la ti yeke.",
+    "restoreConfirm": "Gu la ti gbabâ na mo na mo na sôkô na gu ti bakara na kodé ti yeke?",
+    "deleteSuccess": "Bakara a gu.",
+    "restoreSuccess": "Kodé ti yeke a gu.",
+    "deleteError": "Bakara a gu na nga.",
+    "empty": "Bakara titene na nga. Sôkô na mo, sô gbabâ ti SKILL.md.",
+    "builtinChip": "Kodé ti yeke",
+    "customizedChip": "Kodé ti sôkô",
+    "exportSkill": "Gu ti SKILL.md",
+    "edit": "Kodé",
+    "delete": "Gu",
+    "restoreDefault": "Gu kodé ti yeke",
+    "createTitle": "Bakara na sôkô",
+    "editTitle": "Kodé {name}",
+    "idLabel": "Id",
+    "idHint": "Lettr ti kodé, nombor na tirè. Mo yeke ti SKILL.md na bakara na gu na nga ti kodé.",
+    "nameLabel": "Nam ti mesaje",
+    "descriptionLabel": "Gbabâ",
+    "descriptionHint": "Bakara na mo na di na mo na soro — e sô ti na mo na gu la bakara, sô kêtê ti topik na tambi na mo na soro na mo.",
+    "activationLabel": "Kêtê gbegbe",
+    "activation": {
+      "auto": "Automatic",
+      "always": "Always",
+      "off": "Ayeke",
+      "manual": "Fa na yângâ"
+    },
+    "activationHint": {
+      "auto": "Na gbêndê kodro wa na da ti sala ayeke kodro ti mô. Ôko yeke bê na wa, wa saka na mbênî da be ti sànzi.",
+      "always": "A yeke na mesaje kodé na mo yeke bakara na. Sô ti na mo ti kodé — e yeke ti gbabâ na kodé.",
+      "off": "Ayeke: a gu na nga na mo na nga na gu ti sôkô, sô la ti gbabâ na kodé.",
+      "manual": "Kûsê yê na wanï sî yângâ ko na or ti linga. Ala kû na bâ ti kûsê na model sî mo wa agenze na makandï."
+    },
+    "instructionsLabel": "Instruksi",
+    "instructionsHint": "Markdown, ti na 16 KB so ape. Lo na a we ti sô ndö kwa na akombere ti fee.",
+    "saving": "Kôzo na…",
+    "save": "Kôzo",
+    "cancel": "Gbé",
+    "documents": {
+      "title": "Ndokume",
+      "hint": "Referense ti yeke na ndokume ya mbeti ti keti ti yeke ti abakara. Ndokume ti lokoloko te yeke ti gbâ; ndokume ti sôngo yenyenye ti sôndô ti yeke ti kangö ti gbîla ti tâh. Kötî 20 ti ndokume, 10 MB ti ndokume mo na 20 MB ti ndokume bângö-gbângö. Ndokume ti assets ti yeke ti kuku na download sô tî tî.",
+      "saveFirst": "Gbâ nze ti ndukume olo so ti yeke tî keti, sö ti yeke ti kambia ndokume.",
+      "upload": "Zâ ndokume ti referense",
+      "remove": "Gbi",
+      "stop": "Sô ti kangö index",
+      "resume": "Kangö index na yeke ndokume",
+      "empty": "Ndokume oko na yeke pâ.",
+      "requestFailed": "Ndokume ti ndingbi mbi te gbâ. Kuli ti kangbi na kôli.",
+      "importZip": "Import skill ZIP",
+      "zipTooLarge": "Skill ZIP ti yeke na 20 MB ou mbâ gbâ.",
+      "importCount": "Ndokume ti yeke na kangbi so gbâ: {count}",
+      "skippedScripts": "Ndokume ti script ti yeke ti baka",
+      "status": {
+        "pending": "Yeke na la index",
+        "processing": "Bayi ti index",
+        "inline": "Gbâ (yeke na la direkt)",
+        "indexed": "Gbâ (yeke ti yî ti tongana)",
+        "failed": "Index ti te gbâ",
+        "asset": "Ndokume ti yeke ti download"
+      },
+      "confirmRemove": "Gbâ {filename} ti skill êzo? Fa na ti so na bala sô ti gbinî ti otara ti te na, ti yeke tî kundû, ti bê tî yeke tî balê ti ndika ti citation.",
+      "reindexRequired": "Dokument ti mbi na reindex mpo na yeke na ndari Search ti region na koko embeding. A kue mbi na mbota biani na lo ti indexing a kete."
+    },
+    "applyToAgents": "Mo yeke na agents",
+    "applyToAgentsHint": "Mo yeke na voko na pa. Soki mo eseni, agents ayeke a akan skill na tool ti škol ti a yeke na gbegbé pa na ngbangui persona instructions ti mo. Skill ti gbegbé ayeke na step limits ti mo ti moti. Foundry agents ayeke a yeke na load_skill na search_skill_documents functions na da na mbeti ti mo.",
+    "requireConsent": "Fâ na wanï",
+    "requireConsentHint": "Model sî mo wa fâ makandï ti yângâ na or, wanï mo wa tena na model. Kûsê na or ape wa dongpî na wanï.",
+    "consentChip": "Wanï mbî",
+    "sourceChip": "Tî kô tî makandï",
+    "sourceChipHint": "Makandï na ngbangba na yê na tî kô; makandï ti sî ya tî sync. Activation, agenze na wanï sî ku na mo.",
+    "sources": {
+      "title": "Makandï kô",
+      "description": "Fâ na catalog ti makandï tî gbata (index.json sî yê na SKILL.md). Makandï wa yeke makandï tî ngbangba na or, yê na six heures. SKILL.md wa yê gbata; document référence ala wa yê.",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "URL sî yeke https na ti kô. Makandï wa yê na gbata tî kô ape.",
+      "labelLabel": "Label (kwê kwê)",
+      "add": "Fâ na gbata",
+      "adding": "Fâ na gbata...",
+      "added": "{count, plural, =0 {Kô wa yê; makandï ala wa yê gbata} one {Kô wa yê; # makandï wa yê gbata} other {Kô wa yê; # makandï wa yê gbata}}",
+      "addedWithError": "Kô wa yê, mais sync wa yê ala. Gbalêbâ na mbî ti kô.",
+      "addError": "Kô ti makandï wa yê ala",
+      "sync": "Sync na",
+      "syncing": "Sync na...",
+      "synced": "Kô wa sync na.",
+      "syncError": "Kô ti makandï wa sync ala",
+      "remove": "Gbalêbâ kô",
+      "removeConfirm": "Gbâ kô na or? Makandï wa yê na or yeke makandï tî ngbangba ape na sync na.",
+      "removed": "Kô wa gbalêbâ.",
+      "removeError": "Kô ti makandï wa gbalêbâ ala",
+      "loading": "Makandï kô wa yê...",
+      "loadError": "Makandï kô wa yê ala.",
+      "empty": "Makandï kô ala.",
+      "never": "Ala wa sync",
+      "statusOk": "Wa sync na",
+      "statusError": "Sync wa yê ala",
+      "statusPartial": "{count, plural, one {# ti na yê ala} other {# ti na yê ala}}",
+      "lastSync": "Sync ti gba {time}",
+      "entryCount": "{count, plural, one {# makandï} other {# makandï}}",
+      "entryStatus": {
+        "synced": "wa sync na",
+        "skipped": "na yê",
+        "conflict": "bate — ala wa yê",
+        "invalid": "ala ti kû"
+      }
+    },
+    "requireConsentDisabledHint": "Skill automatic mo na a yeke fo ora: skill na yeke, skill na kangbida na awa na skill na yeke ti na, skill na mo na ti la yeke select ti model."
+  },
+  "personalSkills": {
+    "title": "Mbeni tî mbi",
+    "description": "Küê ti küzô tî lingbi nî na bîrini anï ti mo. Mbeni ti sô ti yê na browser na mo, na yê kodro na model lôko sè oko mo yâ na yângä. Mbeni ti perteni ti yê kpöngö bîanî, yâ ködörö oko, na yâ kpêlê. Alê yê kundü tî politiki tî organization abâ tî bâa na accès tî tool. Tî yê za mbeni, mbi a yê ti fallait yê bi na déploiment nî; dialogue tî agent abâ ti mbi tî yê.",
+    "importFile": "Import-SKILL.md wala ZIP",
+    "review": "Bâ na instructions kâ tî yângâ kîri wa mbi kodro. Instructions tî yê impôrté, zia préférences tî utilisateur, abâ tî confiance politique tî organization.",
+    "skipped": "Scripts tî executé a sô yê bîanî",
+    "importTooLarge": "Fichî tî import so yê 20 MB wala mbi.",
+    "invalid": "Mbeni ayeke importé.",
+    "duplicate": "ID tî mbi nî a bini. Sêgnî mbi sô yê exister wala yê ti fä undö i.",
+    "countLimit": "A yeke ndö 20 mbi sô yê ti kpê.",
+    "requestLimit": "Mbeni ti mbi sô yê bi a dépassé limite tî demande 160 KB. Disable mbi na wüngö ti instructions ti mbi na.",
+    "saved": "Mbeni ti mbi a yê ti kpê na browser nî.",
+    "instructionsHint": "Instructions kokü 16 KB, yimbi wala texte importé. Fichî binêr na document sô yê ti indexation persistante a yê ti mbi tî organization. Export yê ti SKILL.md standard abâ préfixe utilisateur.",
+    "enabled": "Ayeke ti dialogue ti mbi",
+    "empty": "Küê mbi tî tâche sô yê ti végî na sôko, wala import SKILL.md tî bâ na yî tî yê ti kpê na nga nzönî."
   }
 }

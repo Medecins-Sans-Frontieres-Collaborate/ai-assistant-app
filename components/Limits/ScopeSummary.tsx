@@ -10,6 +10,10 @@ import { FC, useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { ScopedDelegationView } from '@/client/hooks/settings/useLimitsAdmin';
+import {
+  collectClientGroupIds,
+  useGroupNames,
+} from '@/client/hooks/useGroupNames';
 
 import { OverrideScope } from '@/lib/services/limits/types';
 
@@ -58,6 +62,11 @@ export const ScopeSummary: FC<ScopeSummaryProps> = ({
   const t = useTranslations('limits');
   const headingId = useId();
   const [expanded, setExpanded] = useState(false);
+  const groupNames = useGroupNames(
+    collectClientGroupIds({
+      jurisdictions: delegations.map((d) => d.jurisdiction),
+    }),
+  );
 
   return (
     <section
@@ -134,7 +143,7 @@ export const ScopeSummary: FC<ScopeSummaryProps> = ({
                   )}
                   {!expanded && (
                     <span className={ADMIN_MUTED}>
-                      {jurisdictionLine(t, delegation.jurisdiction)}
+                      {jurisdictionLine(t, delegation.jurisdiction, groupNames)}
                     </span>
                   )}
                 </div>

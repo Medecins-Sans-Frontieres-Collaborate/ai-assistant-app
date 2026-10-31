@@ -812,7 +812,16 @@
       "stillWorking": "Stále pracuji…",
       "assessingSearchResults": "Kontroluje se, zda výsledky odpovídají na otázku…",
       "refiningSearch": "Znovu se hledá: „{query}“…",
-      "readingSearchPages": "Čte se {count} výsledkových stránek…"
+      "readingSearchPages": "Čte se {count} výsledkových stránek…",
+      "toolRoutingUnavailableInRegion": "Směrování nástrojů není na koncovém bodu {region} k dispozici — odpovídám bez nástrojů…",
+      "applyingSkill": "Aplikuji dovednost: {skills}…",
+      "applyingSkills": "Aplikuji dovednosti: {skills}…",
+      "readingSkillReferences": "Čtu referenční dokumenty k dovednostem…",
+      "selectingSkills": "Výběr dovedností…",
+      "retryingModel": "Model je zaneprázdněný — opakuji za {seconds}s (pokus {attempt})…",
+      "resumingResponse": "Spojení s modelem bylo přerušeno — pokračuji tam, kde bylo zastaveno…",
+      "continuingResponse": "Odpověď dosáhla délkového limitu — pokračuji…",
+      "trimmingContext": "Konverzace je na model příliš dlouhá — zkracuji starší historii a opakuji pokus…"
     },
     "toolSummary": {
       "usedTools": "Použito {count, plural, one {# nástroj} few {# nástroje} other {# nástrojů}}",
@@ -878,7 +887,9 @@
       "deniedByRuleHint": "Blokováno vaším pravidlem — spravujte v Nastavení → Konektory.",
       "batchPendingHint": "{count} žádostí o nástroj čeká na schválení",
       "approveAllButton": "Schválit vše",
-      "denyAllButton": "Odmítnout vše"
+      "denyAllButton": "Odmítnout vše",
+      "applySkillTitle": "Použít dovednost „{skill}“?",
+      "skillConsentNote": "Administrátor nastavil tuto dovednost tak, aby bylo nutné se před použitím zeptat. Schválením se použije její doporučení pouze pro tuto odpověď."
     },
     "openImage": "Otevřít obrázek",
     "copyMessage": "Kopírovat zprávu",
@@ -918,7 +929,54 @@
     "alwaysWaitThisLong": "Vždy čekat až do {duration}",
     "keepSearching": "Pokračovat v hledání",
     "keepSearchingHint": "Hledání bylo ukončeno dříve, než to bylo nalezeno. Požádejte asistenta, aby zkusil jiné postupy.",
-    "keepSearchingMessage": "Pokračujte prosím v hledání tohoto, zkuste jiný postup."
+    "keepSearchingMessage": "Pokračujte prosím v hledání tohoto, zkuste jiný postup.",
+    "addSkill": "Dovednosti",
+    "removeSkill": "Odebrat dovednost",
+    "skillsMenuLabel": "Dostupné dovednosti",
+    "skillsLimit": "Až 3 dovednosti na zprávu.",
+    "skillPin": "Připnout ke konverzaci",
+    "skillUseOnce": "Použít jednou",
+    "skillPinned": "připnuto",
+    "skillOnce": "další zpráva",
+    "skillsPaused": "pozastaveno",
+    "skillUnavailable": "nedostupné",
+    "skillsAutomaticHint": "Relevantní funkce jsou vybírány automaticky. Použijte jednou pro další zprávu nebo připněte funkci pro použití v celé konverzaci.",
+    "skillsAgentDisabled": "Funkce jsou pozastaveny, dokud je připojen agent. Vaše připnuté funkce se obnoví po jeho odpojení.",
+    "skillPersonal": "osobní",
+    "skillsAgentToolsHint": "Jsou zde nabízeny pouze organizační dovednosti povolené správcem pro použití agentem. Agent je může načíst jako nástroje pouze pro čtení. Ostatní připnuté položky zůstávají pozastavené a osobní dovednosti nejsou agentům dostupné.",
+    "skillAlwaysOn": "vždy aktivní",
+    "skillAlwaysOnHint": "Přidáno ke každé zprávě v této konverzaci správcem.",
+    "skillUsage": {
+      "label": "Dovednosti",
+      "requested": "vyžádáno",
+      "pinned": "připnuto",
+      "auto": "automaticky",
+      "unavailable": "nedostupné",
+      "incomplete": "Některé dovednosti nebylo možné použít",
+      "references": "{count, plural, one {# referenční úryvek} few {# referenční úryvky} other {# referenčních úryvků}}",
+      "referencesUnavailable": "Některé referenční dokumenty nebyly dostupné",
+      "showDetails": "Zobrazit detaily dovednosti",
+      "hideDetails": "Skrýt detaily dovednosti",
+      "agentLoad": "načteno agentem",
+      "agentSearch": "dokumenty vyhledané agentem",
+      "needsApproval": "vyžaduje vaše schválení",
+      "original": "původní provedení",
+      "updated": "aktualizováno od té doby"
+    },
+    "skillsManualHint": "Automatický výběr je vypnutý v nastavení. Použijte jednorázově pro další zprávu nebo připněte dovednost, aby byla používána v celém tomto rozhovoru.",
+    "queuedMessage": {
+      "label": "Ve frontě",
+      "attachmentOnly": "Příloha",
+      "cancel": "Zrušit zprávu ve frontě"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Odpověď byla zastavena filtrem bezpečnosti obsahu. Zkuste přeformulovat dotaz nebo odstraňte část, která mohla filtr spustit.",
+      "MODEL_CONTEXT_TOO_LONG": "Tato konverzace je pro vybraný model příliš dlouhá i po zkrácení historie. Začněte novou konverzaci, odeberte některé přílohy, nebo vyberte model s větším kontextovým oknem.",
+      "MODEL_OUTPUT_LIMIT": "Model vyčerpal svůj výstupní limit, aniž by vytvořil odpověď. Zkuste nižší úroveň uvažování nebo kratší dotaz.",
+      "MODEL_RATE_LIMITED": "Model právě přijímá příliš mnoho požadavků. Proběhl automatický opakovaný pokus; zkuste to prosím za chvíli znovu.",
+      "MODEL_QUOTA_EXCEEDED": "Kapacitní kvóta modelu byla vyčerpána. Zkuste jiný model nebo to zkuste později.",
+      "MODEL_AUTH_FAILED": "Aplikaci se nepodařilo ověřit u služby modelu. Jedná se o problém s nastavením — kontaktujte prosím podporu."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -1325,7 +1383,11 @@
       "preferModelTitle": "Preferovat vybraný model",
       "preferModelDescription": "Nepřepínat automaticky na jiný model při neúspěšném požadavku. Chybové hlášení stále nabídne možnost přepnout."
     },
-    "Analytics": "Analytika"
+    "Analytics": "Analytika",
+    "skills": {
+      "autoApply": "Povolit asistentovi automaticky aplikovat dovednosti",
+      "autoApplyDescription": "Relevantní dovednosti a vaše osobní dovednosti jsou vybírány pro každou zprávu. Pokud je tato volba vypnutá, použijí se pouze dovednosti, které si vyžádáte nebo připnete, a dovednosti, které nastaví administrátor pro každý rozhovor."
+    }
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "sekundách",
     "chipAutoHideHint": "Mezi {min} a {max} sekundami.",
     "byWorkflow": "Podle pracovního postupu",
-    "byWorkflowNote": "Část výše uvedených součtů, zobrazená zvlášť — nejedná se o dodatečnou spotřebu. Spuštění grantů se započítávají do hlášení vaší organizace a rozpočtu tokenů, ale nejsou zahrnuta v tomto místním součtu."
+    "byWorkflowNote": "Část výše uvedených součtů, zobrazená zvlášť — nejedná se o dodatečnou spotřebu. Spuštění grantů se započítávají do hlášení vaší organizace a rozpočtu tokenů, ale nejsou zahrnuta v tomto místním součtu.",
+    "chipLabelTitle": "Štítek čipu",
+    "chipLabelHint": "Rozpis vždy ukazuje emise a cenu vedle sebe; toto určuje pouze text na sbaleném čipu.",
+    "chipLabelEmissions": "Emise",
+    "chipLabelCost": "Cena",
+    "chipLabelBoth": "Obojí",
+    "costTile": "Odhadovaná cena",
+    "costDisclosure": "Cena dle ceníku k {asOf} (globální standardní sazba, bez slevy za cachovaný vstup): horní hranice, nikoli faktura. Vyhledávání na webu, spouštění kódu, přepis, řeč, překlad a indexace dokumentů nejsou zahrnuty.",
+    "costUnpriced": "{count, plural, one {# požadavek bez ceny není} other {# požadavků bez ceny není}} zahrnuto."
   },
   "extraction": {
     "toggleLabel": "Extrahovat strukturovaná data",
@@ -4502,7 +4572,16 @@
         "auto": "Automaticky",
         "hidden": "Skrýt"
       },
-      "visibilityHint": "Při volbě Automaticky se čip zobrazí, když se odhad aktualizuje nebo na něj najedete myší. Toto nastavení můžete kdykoli změnit v Nastavení › Využití a dopad."
+      "visibilityHint": "Při volbě Automaticky se čip zobrazí, když se odhad aktualizuje nebo na něj najedete myší. Toto nastavení můžete kdykoli změnit v Nastavení › Využití a dopad.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Odhadovaná cena {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "U požadavků v tomto řádku není uvedena cena",
+        "unpriced": "{count, plural, one {# požadavek bez ceny není} other {# požadavků bez ceny není}} zahrnuto do ceny.",
+        "noPriceData": "Cena není zobrazena: model tohoto rozhovoru nemá uvedenou cenu (vlastní zdroje, lokální prostředí a agenti nejsou oceňováni).",
+        "note": "Cena dle ceníku k {asOf} (globální standardní sazba, bez slevy za cachovaný vstup): horní hranice, nikoli faktura. Vyhledávání na webu, spouštění kódu, přepis, řeč, překlad a indexace dokumentů nejsou zahrnuty."
+      }
     },
     "workflow": {
       "title": "Tento pracovní prostor (odhadováno)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "Smazat glosář",
     "glossaryDeleteSuccess": "Glosář byl smazán",
     "channelProfilesTab": "Platformy",
-    "channelSetsTab": "Sady kanálů"
+    "channelSetsTab": "Sady kanálů",
+    "addPromptAgent": "Přidat prompt agenta",
+    "m365AgentIndexStop": "Zastavit indexování",
+    "foundryAgentsHeading": "Foundry a prompt agenti",
+    "foundryAgentsDescription": "Agenti nalezení v Azure AI Foundry prostřednictvím vašeho přístupu, plus prompt agenti definovaní zde. Agenti znalostí a Microsoft 365 agenti jsou spravováni v samostatných sekcích níže.",
+    "agentSkillsLabel": "Dovednosti",
+    "agentSkillsHelp": "Se kterými dovednostmi organizace může tento agent pracovat při odpovídání. Uživatelé stále vidí pouze dovednosti, které jim jejich přístupová práva povolují.",
+    "agentSkills": {
+      "inherit": "Dovednosti označené „dostupné agentům“",
+      "selected": "Pouze níže vybrané dovednosti",
+      "none": "Žádné dovednosti"
+    },
+    "agentSkillsNone": "Nejsou dostupné žádné dovednosti k výběru.",
+    "agentSkillsLoading": "Načítání dovedností…",
+    "agentSkillsLoadError": "Dovednosti se nepodařilo načíst. Dříve uložený výběr zůstává zachován.",
+    "agentSkillsNotVisible": "(neviditelné pro vás — odškrtněte pro odebrání)"
   },
   "localModels": {
     "title": "Lokální modely",
@@ -5521,7 +5615,8 @@
       "channelSets": "Pravidla každého týmu pro psaní na platformách: pokyny, styly, výchozí nastavení, kdo může soupravu používat a kdo smí odesílat.",
       "webSearch": "Jak daleko může webové hledání jít: vícekrokové hledání, posuzovací model a limity.",
       "contextBudget": "Kolik konverzace je každý modelu posíláno při každém kroku.",
-      "analytics": "Doručené reporty: co dorazilo, kdo může otevřít kterou složku a která pole lze zobrazit."
+      "analytics": "Doručené reporty: co dorazilo, kdo může otevřít kterou složku a která pole lze zobrazit.",
+      "skills": "Znovupoužitelné bloky instrukcí, které asistent použije, když je to v konverzaci potřeba."
     },
     "openSettings": "Otevřít nastavení",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "Delegace",
       "webSearch": "Webové hledání",
       "contextBudget": "Rozpočet kontextu",
-      "analytics": "Analytika"
+      "analytics": "Analytika",
+      "skills": "Dovednosti"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "Globální výchozí hodnoty",
       "overrides": "Přepsání",
-      "delegations": "Delegace"
+      "delegations": "Delegace",
+      "models": "Modely"
     },
     "tabsLabel": "Sekce limitů",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Počet volání nástrojů Microsoft 365 za den",
       "m365MailReadsPerDay": "Čtení pošty za den",
       "m365MailDraftsPerDay": "Návrhy pošty za den",
-      "m365MailDeepScansPerDay": "Hloubkové skeny pošty za den"
+      "m365MailDeepScansPerDay": "Hloubkové skeny pošty za den",
+      "m365DigestRunsPerDay": "Denní počet spuštění souhrnu"
     },
     "valueModeLabel": "Typ limitu",
     "valueAmountLabel": "Množství limitu",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Počet denních volání nástrojů Microsoft 365 (kalendář, lidé, úkoly, Teams). Při překročení limitu vrací nástroje místo chyby přívětivou zprávu „zkuste to zítra znovu“.",
       "m365MailReadsPerDay": "Denní vyhledávání v e-mailech a čtení zpráv/vláken. Při překročení limitu vrátí poštovní nástroje zprávu „zkuste to zítra znovu“.",
       "m365MailDraftsPerDay": "Návrhy e-mailů, které může asistent denně vytvořit — každý je zvlášť potvrzen. Omezení je záměrně přísné.",
-      "m365MailDeepScansPerDay": "Složené analýzy e-mailů (souhrny, hluboké vyhledávání, závazky) za den. Každý sken je jedna jednotka, nezávisle na počtu vnitřních čtení."
+      "m365MailDeepScansPerDay": "Složené analýzy e-mailů (souhrny, hluboké vyhledávání, závazky) za den. Každý sken je jedna jednotka, nezávisle na počtu vnitřních čtení.",
+      "m365DigestRunsPerDay": "Microsoft 365 denný souhrn spuštění za den. Jedno spuštění znamená desítky čtení Graph a dvě volání analýzy modelu; výběr období umožňuje snadné opakování, proto je výchozí limit přísný."
     },
     "scopeFamily": "Rodina",
     "scopeModel": "Model",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "Vestavěné výchozí",
     "previewSourceGlobal": "Globální výchozí",
     "previewSourceOverride": "Přepsání: {label}",
-    "previewNotEvaluated": "Oddělení/společnost/kancelář a skupinová přepsání zde nelze vyhodnotit — závisí na přihlášení uživatele.",
+    "previewNotEvaluated": "Adresář nebyl dostupný, proto nebyla pravidla pro oddělení/společnost/kancelář a skupinu u této osoby vyhodnocena. Zkuste to znovu za chvíli.",
     "previewUnsaved": "Zobrazuje se naposledy uložené nastavení. Pro náhled změn je nejprve uložte.",
     "previewColumnLimit": "Omezení",
     "previewColumnValue": "Hodnota",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "Jen skupiny",
     "yourScopeGroupOnlyNote": "Definováno pouze podle skupin nebo atributů, limity nelze zobrazit podle e-mailové adresy.",
     "previewOutOfScope": "Tato osoba je mimo váš rozsah.",
-    "previewGroupOnlyScope": "Váš rozsah je definován skupinami nebo atributy, limity nelze zobrazit podle e-mailové adresy.",
+    "previewGroupOnlyScope": "Váš rozsah je definován skupinami nebo atributy. Náhledy vyhledávají osobu v adresáři, aby zjistily, zda je v rozsahu.",
     "previewCeilingPinned": "Připnuto limitem: {label}",
     "previewShowUsage": "Zobrazit aktuální využití",
     "previewColumnUsage": "Využito",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "Tvrdý strop v řádku zajistí tuto hodnotu pro cíle tohoto override: přiřazení administrátoři jej nemohou navýšit a pokud platí více stropů, vyhrává ten nejpřesnější.",
     "confirmDeleteOverride": "Smazat \"{label}\"? Okamžitě bude odstraněno ze serveru a jeho cíle přejdou pod nižší limity. Tuto akci nelze vrátit zpět.",
     "confirmDeleteOverrideAction": "Smazat override",
-    "previewUndecidableScope": "Váš rozsah obsahuje skupiny nebo atributy, takže podle e-mailové adresy nelze rozhodnout, zda do něj tato osoba spadá.",
+    "previewUndecidableScope": "Váš rozsah zahrnuje skupiny nebo atributy a adresář nebyl dostupný, proto není možné právě teď rozhodnout, zda je tato osoba v rozsahu. Zkuste to znovu za chvíli.",
     "previewNoLongerAdmin": "Již nejste uvedeni v žádné povolené delegaci, proto nelze zobrazit náhled limitů. Načtěte stránku znovu pro zobrazení aktuálního přístupu.",
     "previewScopeMatchesNobody": "Váš rozsah aktuálně neodpovídá nikomu, takže není možné zobrazit náhled podle e-mailové adresy.",
     "yourScopeMatchesNobodyChip": "Neodpovídá nikomu",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "Žádné delegování není aktivní, takže toto přepsání neplatí pro nikoho, dokud nebude delegování znovu povoleno. Nikdy nebude povýšeno na globální úroveň.",
     "betaPolicyNotice": "Testovací prostředí: tato zásada a její čítače použití jsou uloženy odděleně od produkčního prostředí (policy.beta.json). Změny provedené zde neovlivní produkci.",
     "delegationsManagedElsewhere": "Delegace jsou zde zobrazeny pouze pro čtení. Kdo je v delegaci, na které uživatele se vztahuje a co může každý správce, se spravuje v sekci Delegace.",
-    "delegationsManagedElsewhereLink": "Otevřít delegace"
+    "delegationsManagedElsewhereLink": "Otevřít delegace",
+    "modelAccess": {
+      "intro": "Rozhodněte, kdo může používat každý model. Nastavení rodiny platí pro její modely, pokud si model nenastaví vlastní; osoby na seznamu mají přednost před výchozím nastavením pro ostatní; blokovací seznam přebije každé povolení.",
+      "externalNote": "Modely hostované mimo prostředí Azure ({families}) nejsou dostupné nikomu, dokud je zde nepovolíte – buď pro všechny prostřednictvím výchozího nastavení, nebo pro skupiny, domény a osoby.",
+      "envelopeNote": "Limit požadavků na rodinu je sdílený denní rozpočet mezi jejími modely; limit na modelu je omezení v rámci něj. Neomezený model nezvyšuje rodinný rozpočet.",
+      "observeNote": "Režim sledování je aktivní: nic zde zatím model neskrývá ani neblokuje požadavky. Přepněte výše na Vynutit, až budou pravidla správná.",
+      "familyChip": "Rodina",
+      "modelChip": "Model",
+      "otherModels": "Modely bez rodiny",
+      "modelsInFamily": "{count, plural, one {# model v této rodině} other {# modelů v této rodině}}",
+      "noModels": "V katalogu zatím nejsou žádné modely.",
+      "expand": "Zobrazit modely",
+      "collapse": "Skrýt modely",
+      "edit": "Upravit",
+      "doneEditing": "Hotovo",
+      "editNode": "Upravit přístup pro {label}",
+      "defaultLabel": "Všichni ostatní",
+      "defaultInherit": "Zdědit",
+      "defaultUnlimited": "Neomezeně",
+      "defaultLimited": "Omezeno na",
+      "defaultUnavailable": "Nedostupné",
+      "defaultRequestsLabel": "Požadavky za den pro všechny ostatní",
+      "requestsPerDay": "požadavků / den",
+      "inheritedFrom": "Zdědí {state} od {origin}.",
+      "effectiveLabel": "Všichni, kdo nejsou na seznamu, mají: {state}.",
+      "inheritedChip": "zděděno",
+      "origin": {
+        "model": "toto nastavení",
+        "family": "její rodina",
+        "defaults": "Globální výchozí",
+        "catalogExternal": "pravidlo, že externí modely jsou nedostupné, dokud nejsou povoleny",
+        "catalog": "výchozí katalog"
+      },
+      "state": {
+        "unlimited": "Neomezeně",
+        "limited": "Omezeno na {requests} / den",
+        "unavailable": "Nedostupné"
+      },
+      "list": {
+        "groups": "Skupiny s přístupem",
+        "domains": "Domény s přístupem",
+        "allow": "Povolené osoby",
+        "deny": "Blokované osoby"
+      },
+      "listHint": {
+        "groups": "Členové těchto Entra skupin jej mohou používat za podmínek nastavených pro skupinu.",
+        "domains": "Každý s e-mailovou adresou na těchto doménách jej může používat za podmínek nastavených pro doménu.",
+        "allow": "Pojmenované osoby jej mohou používat bez ohledu na výchozí nebo jejich doménu.",
+        "deny": "Pojmenované osoby jej nesmí nikdy používat. Toto přebíjí každé povolení výše."
+      },
+      "grantUnlimited": "Neomezeně",
+      "grantLimited": "Omezeno na",
+      "termsLabel": "Podmínky pro {target}",
+      "requestsLabel": "Požadavky za den pro {target}",
+      "removeGrant": "Odebrat {target}",
+      "groupsCount": "{count, plural, one {# skupina} other {# skupin}}",
+      "domainsCount": "{count, plural, one {# doména} other {# domén}}",
+      "allowCount": "{count, plural, one {# povolená osoba} other {# povolených osob}}",
+      "denyCount": "{count, plural, one {# blokovaná osoba} other {# blokovaných osob}}",
+      "collisionChip": "Také v globálních výchozích hodnotách",
+      "collisionWarning": "Tento model nebo rodina je také nastavena v globálních výchozích hodnotách. Uložení bude odmítnuto, dokud nebude jeden z těchto dvou vymazán."
+    },
+    "previewSourceModelAccess": "Schválení modelu — {list}",
+    "groupMembershipDegradedStructural": "Vyhledávání členů skupiny na tomto serveru selhává ({reason}). Pravidla a oprávnění založená na skupinách nejsou u dotčených osob uplatňována — zkontrolujte souhlas Group.Read.All tenanta a registraci aplikace.",
+    "groupMembershipDegradedRetryable": "Některá vyhledávání členství ve skupinách na tomto serveru v posledních minutách selhala ({reason}). Pravidla založená na skupinách se u těchto osob nemusí až minutu uplatnit, dokud se vyhledávání zopakuje.",
+    "groupMembershipDegradedUsers": "Aktuálně je na tomto serveru ovlivněno {count, plural, one {# osoba} other {# osob}}.",
+    "previewDirectoryNotFound": "Žádný adresářový uživatel nemá tuto e-mailovou adresu, proto byla oddělení/společnost/kancelář i skupinová pravidla vyhodnocena, jako by daná osoba do žádné nepatřila."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Ranní třídění",
-        "description": "Co přišlo, co na vás čeká a dnešní kalendář — jedno shrnutí"
+        "description": "Souhrn od posledního pracovního dne — co přišlo, co čeká na vás, pozvánky a aktualizace; v pondělí zahrnuje pátek a víkend."
       },
       "chipsSettingLabel": "Navrhovat Microsoft 365 playbooky",
       "chipsSettingHint": "Zobrazit návrhy Playbooku nad polem zprávy, pokud jsou relevantní (např. po importu přepisu schůzky).",
-      "dismissChip": "Zavřít {title}"
+      "dismissChip": "Zavřít {title}",
+      "dailyDigest": {
+        "title": "Denní souhrn",
+        "description": "Seřaďte nedávné e-maily, Teams a kalendář podle toho, co potřebuje vaši reakci, na co čekáte, aktualizací a informací — vyberte období"
+      }
+    },
+    "digest": {
+      "title": "Denní souhrn",
+      "intro": "Prohlédne, co vás v daném období oslovilo, a roztřídí to na položky vyžadující odpověď, požadavky na vás, položky na které čekáte, plánování, firemní a projektové aktualizace a informativní zprávy. Nic není odesláno ani změněno.",
+      "periodLabel": "Období",
+      "preset": {
+        "lastWorkday": "Od posledního pracovního dne",
+        "1d": "Posledních 24 hodin",
+        "3d": "Poslední 3 dny",
+        "7d": "Posledních 7 dní",
+        "14d": "Posledních 14 dní",
+        "custom": "Vlastní rozsah"
+      },
+      "lastWorkdayHint": "Od začátku posledního všedního dne před dneškem — v pondělí zahrnuje pátek a víkend.",
+      "from": "Od",
+      "to": "Do",
+      "customInvalid": "Vyberte uspořádaný rozsah maximálně {days} dní.",
+      "sourcesLabel": "Zdroje",
+      "sourceNoConsent": "Tento zdroj nemá udělené oprávnění.",
+      "sourceHint": {
+        "mail": "Obálky a náhledy v doručené poště; položky v Odeslaných určují, co je označeno jako zodpovězené.",
+        "chat": "Nedávné Teams zprávy s @zmínkami, na které jste neodpověděli.",
+        "channel": "Příspěvky ve kanálech, které si vyberete níže.",
+        "calendar": "Pozvánky čekající na vaši reakci a schůzky, na které dosud neodpověděli ostatní."
+      },
+      "channelsLabel": "Kanály ({count} z {max})",
+      "removeChannel": "Odebrat {name}",
+      "channelsSlow": "Každý kanál přidává čtení; více kanálů znamená delší zpracování souhrnu.",
+      "channelsMax": "Byl dosažen maximální počet {max} kanálů.",
+      "channelsNeeded": "Vyberte alespoň jeden kanál nebo přidejte další zdroj.",
+      "teamLabel": "Tým",
+      "loadingTeams": "Načítání týmů…",
+      "pickTeam": "Vyberte tým pro zobrazení jeho kanálů",
+      "loadingChannels": "Načítání kanálů…",
+      "noChannels": "V tomto týmu nebyly nalezeny žádné kanály.",
+      "privacyNote": "Čteny jsou pouze předměty, odesílatelé a krátké náhledy; těla zpráv a přílohy zůstávají v Microsoft 365. Položky jsou souhrny vašich vlastních dat.",
+      "cancel": "Zrušit",
+      "run": "Spustit souhrn",
+      "starting": "Spouštím…",
+      "startFailed": "Souhrn nelze spustit.",
+      "userMessage": "Denní souhrn — {period}; zdroje: {sources}",
+      "working": "Prohledávám vaši komunikaci v Microsoft 365…",
+      "failed": "Souhrn selhal.",
+      "failedPrefix": "Denní souhrn selhal:",
+      "expired": "Toto spuštění souhrnu vypršelo. Spusťte jej znovu pro aktuální přehled.",
+      "runAgain": "Spustit znovu",
+      "changePeriod": "Změnit období",
+      "period": {
+        "lastWorkday": "od posledního pracovního dne",
+        "lastDays": "{count, plural, one {poslední den} other {posledních # dní}}"
+      },
+      "source": {
+        "mail": "Pošta",
+        "chat": "Teams zprávy",
+        "channel": "Teams kanály",
+        "calendar": "Kalendář"
+      },
+      "sourceStatus": {
+        "ok": "dokončeno",
+        "partial": "částečně",
+        "skipped": "přeskočeno",
+        "unavailable": "bez oprávnění",
+        "error": "neúspěšné"
+      },
+      "degraded": "Analytický model nebyl dostupný, kategorie jsou proto pouze podle pravidel.",
+      "withheld": "{count, plural, one {# položka byla} other {# položek bylo}} zadrženo bezpečnostními kontrolami.",
+      "empty": "Za toto období a z těchto zdrojů nejsou k dispozici žádné informace.",
+      "actionItems": "Akční položky",
+      "createTasks": "{count, plural, =0 {Přidat do To Do} one {Přidat # úkol do To Do} other {Přidat # úkolů do To Do}}",
+      "taskCreated": "přidáno do To Do",
+      "tasksCreated": "{count, plural, one {# úkol} other {# úkolů}} přidán do seznamu \"{list}\".",
+      "tasksFailed": "Úkoly se nepodařilo vytvořit.",
+      "category": {
+        "needsReply": "Vyžaduje mou odpověď",
+        "askedOfMe": "Žádost o moji akci",
+        "waitingOnOthers": "Čeká se na ostatní",
+        "scheduling": "Plánování",
+        "companyUpdates": "Firemní a projektové novinky",
+        "fyi": "Pro informaci",
+        "bulk": "Automatické a hromadné"
+      },
+      "companyUpdatesHint": "důležité, málokdy urgentní",
+      "markDone": "Označit {title} za vyřízené",
+      "badge": {
+        "unanswered": "bez odpovědi",
+        "mentioned": "zmínil vás",
+        "important": "vysoká důležitost"
+      },
+      "askAbout": "Zjistit více",
+      "askPrompt": "K položce {source} \"{title}\" od {from} ({when}) výše v přehledu: na co se ptá a jaká by byla vhodná odpověď?",
+      "open": {
+        "mail": "Otevřít v Outlooku",
+        "chat": "Otevřít v Teams",
+        "channel": "Otevřít v Teams",
+        "calendar": "Otevřít v Outlooku"
+      },
+      "footnote": "Kategorie vycházejí z vašich vlastních signálů (bez odpovědi, zmínky, hromadné) a z AI klasifikace; před akcí ověřte. Nic nebylo odesláno.",
+      "age": {
+        "now": "právě teď",
+        "hours": "před {count}h",
+        "days": "před {count}d"
+      },
+      "waitForReply": "Počkejte, až aktuální odpověď bude dokončena, než začnete vytvářet souhrn."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "Znalosti",
       "prompt": "Osobnost",
-      "m365": "Znalosti (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Znalosti",
-      "foundry": "Foundry agent",
+      "foundry": "Vlastní agent",
       "connector": "Konektor"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "běží na vlastním modelu"
     },
     "loadError": "Vaše agenty se nyní nepodařilo načíst. Obvykle jde o dočasný problém.",
-    "discoveryLoading": "Vyhledávají se Foundry agenti…",
-    "discoveryError": "Foundry agenti se nepodařili načíst.",
+    "discoveryLoading": "Vyhledávání dalších agentů…",
+    "discoveryError": "Některé agenty se nepodařilo načíst.",
     "retry": "Zkusit znovu"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "Starší než {months} měsíců uchování této složky; již se nezobrazuje.",
       "unknown": "Nahlášený problém: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Dovednosti",
+    "description": "Znovupoužitelné bloky instrukcí, které asistent použije, když je to v konverzaci potřeba. Kompatibilní s formátem Agent Skills SKILL.md používaným Claude a ChatGPT.",
+    "loading": "Načítání dovedností…",
+    "loadError": "Dovednosti nelze načíst.",
+    "retry": "Opakovat",
+    "unavailableBanner": "Úložiště dovedností je momentálně nedostupné — zobrazují se vestavěné výchozí; uložené dovednosti a úpravy nejsou přístupné, dokud se služba neobnoví.",
+    "conflictError": "Tuto dovednost změnil jiný správce. Seznam byl znovu načten — proveďte úpravu znovu.",
+    "alwaysWarning": "{count} dovedností je nastaveno na Vždy. Každá z nich je přidána do každé konverzace — pro tématické dovednosti preferujte Automatické.",
+    "newSkill": "Nová dovednost",
+    "importSkill": "Importovat SKILL.md",
+    "importTitle": "Vložte soubor SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Co tato dovednost dělá a kdy ji použít.\n---\n\nInstrukce…",
+    "importHint": "Načtená dovednost se otevře v editoru ke kontrole — nic se neukládá, dokud ji neuložíte.",
+    "importParse": "Načíst a zkontrolovat",
+    "invalidId": "ID dovedností používají malá písmena, číslice a jednotlivé pomlčky.",
+    "saveSuccess": "Dovednost byla uložena.",
+    "saveError": "Dovednost nelze uložit.",
+    "deleteConfirm": "Opravdu chcete tuto dovednost smazat? Konverzace ji okamžitě přestanou přijímat.",
+    "restoreConfirm": "Odebrat úpravu a obnovit výchozí nastavení této vestavěné dovednosti?",
+    "deleteSuccess": "Dovednost byla smazána.",
+    "restoreSuccess": "Vestavěné výchozí nastavení obnoveno.",
+    "deleteError": "Dovednost nelze smazat.",
+    "empty": "Zatím žádné dovednosti. Vytvořte dovednost nebo importujte SKILL.md.",
+    "builtinChip": "Vestavěná",
+    "customizedChip": "Upravená",
+    "exportSkill": "Exportovat jako SKILL.md",
+    "edit": "Upravit",
+    "delete": "Smazat",
+    "restoreDefault": "Obnovit výchozí",
+    "createTitle": "Nová dovednost",
+    "editTitle": "Upravit {name}",
+    "idLabel": "ID",
+    "idHint": "Malá písmena, číslice a pomlčky. Použije se jako název SKILL.md a po vytvoření ho nelze změnit.",
+    "nameLabel": "Zobrazovaný název",
+    "descriptionLabel": "Popis",
+    "descriptionHint": "Co dovednost dělá A kdy ji použít — podle toho se dovednost vybírá, proto uveďte konkrétní témata a fráze, na které má reagovat.",
+    "activationLabel": "Aktivace",
+    "activation": {
+      "auto": "Automatická",
+      "always": "Vždy",
+      "off": "Vypnuto",
+      "manual": "Na požádání"
+    },
+    "activationHint": {
+      "auto": "Vybráno automaticky, pokud aktuální úkol odpovídá popisu. Uživatelé jej mohou také vyžádat jednorázově nebo připnout do konverzace.",
+      "always": "Přidává se do každé konverzace pro každého, kdo dovednost vidí. Používejte opatrně — zabírá trvale místo v promptu.",
+      "off": "Neaktivní: dovednost se nikdy nepoužije ani nenabízí uživatelům, ale zůstává zde pro úpravy.",
+      "manual": "Použije se pouze, když si ji uživatel vyžádá nebo připne. Nikdy není vybrána automaticky a není nabízena modelu jako načítatelná dovednost."
+    },
+    "instructionsLabel": "Instrukce",
+    "instructionsHint": "Markdown, až 16 KB. Vkládá se přesně, když je dovednost aktivní.",
+    "saving": "Ukládání…",
+    "save": "Uložit",
+    "cancel": "Zrušit",
+    "documents": {
+      "title": "Dokumenty",
+      "hint": "Reference jsou uložené s touto dovedností. Malé dokumenty se načtou přímo, větší jsou indexovány pro citované vyhledávání. Maximálně 20 zdrojů, každý do 10 MB a celkem 20 MB. Soubory jsou uložené pouze ke stažení.",
+      "saveFirst": "Nejprve uložte úpravu této vestavěné dovednosti, než přidáte dokumenty.",
+      "upload": "Přidat referenční dokumenty",
+      "remove": "Odstranit",
+      "stop": "Zastavit indexování",
+      "resume": "Indexovat nebo obnovit dokumenty",
+      "empty": "Zatím nejsou připojeny žádné dokumenty.",
+      "requestFailed": "Požadavek na dokument selhal. Zkuste načíst znovu.",
+      "importZip": "Importovat ZIP dovednosti",
+      "zipTooLarge": "ZIP dovednosti musí mít maximálně 20 MB.",
+      "importCount": "Zdroje k připojení po uložení: {count}",
+      "skippedScripts": "Spustitelné skripty byly přeskočeny",
+      "status": {
+        "pending": "Čeká na indexování",
+        "processing": "Indexování",
+        "inline": "Připraveno (načteno přímo)",
+        "indexed": "Připraveno (vyhledatelné)",
+        "failed": "Indexování selhalo",
+        "asset": "Stáhnutelný soubor"
+      },
+      "confirmRemove": "Odstranit {filename} z této dovednosti? Uložený originál bude smazán a již nebude dostupný jako zdroj citace.",
+      "reindexRequired": "Tyto dokumenty je nutné znovu indexovat podle aktuálního regionálního nastavení vyhledávání a vkládání. Nebudou vyhledávány, dokud nebude indexace dokončena."
+    },
+    "applyToAgents": "Dostupné agentům",
+    "applyToAgentsHint": "Ve výchozím nastavení vypnuto. Pokud je aktivováno, mohou agenti načíst tuto dovednost pomocí nástrojů pouze pro čtení, místo aby nahrazovali své persona instrukce. Volání dovedností mají vlastní limity kroků. Foundry agenti musí mít ve své definici již registrovány funkce load_skill a search_skill_documents.",
+    "requireConsent": "Před použitím se dotázat",
+    "requireConsentHint": "Když chce model tuto dovednost použít sám, uživatel je nejprve dotázán. Použití na žádost a připnutí nepotřebuje potvrzení.",
+    "consentChip": "Nejdřív se zeptá",
+    "sourceChip": "Ze zdroje",
+    "sourceChipHint": "Dodáno odběrem ze zdroje dovedností; instrukce jsou obnoveny při synchronizaci. Nastavení aktivace, agenta a souhlasu jsou vaše.",
+    "sources": {
+      "title": "Zdroje dovedností",
+      "description": "Odebírejte externí katalog dovedností (index.json se seznamem SKILL.md souborů). Jeho dovednosti se stanou dovednostmi organizace a obnovují se přibližně každých šest hodin. Importuje se pouze SKILL.md; referenční dokumenty ne.",
+      "urlLabel": "URL katalogu",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Musí být https na veřejném hostu. Soubory dovedností se načítají pouze z tohoto umístění.",
+      "labelLabel": "Název (volitelné)",
+      "add": "Odebírat",
+      "adding": "Odebírání…",
+      "added": "{count, plural, =0 {Zdroj přidán; zatím nebyly importovány žádné dovednosti} one {Zdroj přidán; importována # dovednost} other {Zdroj přidán; importováno # dovedností}}",
+      "addedWithError": "Zdroj přidán, ale první synchronizace selhala. Zkontrolujte chybu u zdroje.",
+      "addError": "Nelze přidat zdroj dovednosti",
+      "sync": "Synchronizovat nyní",
+      "syncing": "Probíhá synchronizace…",
+      "synced": "Zdroj synchronizován.",
+      "syncError": "Nelze synchronizovat zdroj dovednosti",
+      "remove": "Odebrat zdroj",
+      "removeConfirm": "Odebrat tento zdroj? Dovednosti, které poskytl, zůstanou jako běžné dovednosti organizace a přestanou se obnovovat.",
+      "removed": "Zdroj odebrán.",
+      "removeError": "Nelze odebrat zdroj dovednosti",
+      "loading": "Načítání zdrojů…",
+      "loadError": "Zdroje dovedností nelze načíst.",
+      "empty": "Zatím žádné zdroje dovedností.",
+      "never": "Nikdy nesynchronizováno",
+      "statusOk": "Synchronizováno",
+      "statusError": "Synchronizace selhala",
+      "statusPartial": "{count, plural, one {# položka přeskočena} other {# položek přeskočeno}}",
+      "lastSync": "Poslední synchronizace {time}",
+      "entryCount": "{count, plural, one {# položka} other {# položek}}",
+      "entryStatus": {
+        "synced": "synchronizováno",
+        "skipped": "přeskočeno",
+        "conflict": "konflikt — nepřepsáno",
+        "invalid": "neplatné"
+      }
+    },
+    "requireConsentDisabledHint": "Jen automatické dovednosti se mohou nejdřív zeptat: žádané, připnuté a trvale aktivní dovednosti se použijí bez potvrzení, a dovednosti na požádání model nikdy nevybírá."
+  },
+  "personalSkills": {
+    "title": "Osobní dovednosti",
+    "description": "Uložte si znovupoužitelné pokyny pro vlastní konverzace. Dovednosti zůstávají v tomto prohlížeči a modelu jsou odeslány pouze během chatu. Relevantní dovednosti lze vybrat automaticky, použít jednorázově nebo připnout. Nemohou měnit politiku organizace ani udělovat přístup k nástrojům. Použití dovedností vyžaduje jejich povolení pro toto nasazení; konverzace s agentem osobní dovednosti nepoužívají.",
+    "importFile": "Importovat SKILL.md nebo ZIP",
+    "review": "Před uložením si pečlivě zkontrolujte celé pokyny. Importované pokyny jsou uživatelským nastavením, nikoli ověřenou politikou organizace.",
+    "skipped": "Spustitelné skripty byly přeskočeny",
+    "importTooLarge": "Importovaný soubor musí mít maximálně 20 MB.",
+    "invalid": "Tuto dovednost se nepodařilo importovat.",
+    "duplicate": "Toto ID osobní dovednosti již existuje. Upravte stávající dovednost nebo zvolte jiné ID.",
+    "countLimit": "Můžete uložit až 20 osobních dovedností.",
+    "requestLimit": "Povolené osobní dovednosti překračují limit požadavku 160 KB. Některé dovednosti zakažte nebo zkraťte jejich pokyny.",
+    "saved": "Osobní dovednost uložena v tomto prohlížeči.",
+    "instructionsHint": "Až 16 KB pokynů včetně importovaných textových odkazů. Binární soubory a trvalé indexování dokumentů je dostupné jen pro organizační dovednosti. Export používá standardní název SKILL.md bez předpony user:.",
+    "enabled": "Povoleno pro mé konverzace",
+    "empty": "Vytvořte dovednost pro opakovaný úkol či importujte SKILL.md k revizi a uložení zde."
   }
 }

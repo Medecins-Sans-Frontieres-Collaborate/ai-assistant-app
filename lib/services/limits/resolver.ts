@@ -32,6 +32,7 @@
  * them: a scoped candidate is compared as `priority: 0`, and a scoped entry
  * is never a ceiling candidate, regardless of the stored values.
  */
+import { expandModelAccess } from '@/lib/services/limits/modelAccess';
 import {
   LimitDelegation,
   LimitEntry,
@@ -47,6 +48,7 @@ import {
 } from '@/lib/services/shared/principalMatching';
 
 import {
+  CATALOG_MODEL_DEFAULTS,
   LIMIT_DEFINITIONS,
   LimitDefinition,
   isValidDimension,
@@ -206,6 +208,52 @@ function clampNumeric(value: LimitValue, ceiling: LimitValue): LimitValue {
 }
 
 // ---------------------------------------------------------------------------
+// Effective policy: stored arrays + the model approval rules expanded
+// ---------------------------------------------------------------------------
+
+interface EffectivePolicyArrays {
+  defaults: LimitEntry[];
+  overrides: LimitOverride[];
+}
+
+/**
+ * Memoized per policy OBJECT: a snapshot is a stable object for its cache
+ * TTL and the resolver runs several cells per request, so the expansion runs
+ * once per snapshot, never per cell. The WeakMap lives exactly as long as
+ * the snapshot does.
+ */
+const effectiveArrays = new WeakMap<LimitsPolicy, EffectivePolicyArrays>();
+
+function effective(policy: LimitsPolicy): EffectivePolicyArrays {
+  const cached = effectiveArrays.get(policy);
+  if (cached) return cached;
+  const expanded = expandModelAccess(policy.modelAccess);
+  const built: EffectivePolicyArrays = {
+    defaults: [...policy.defaults, ...expanded.defaults],
+    overrides: [...policy.overrides, ...expanded.overrides],
+  };
+  effectiveArrays.set(policy, built);
+  return built;
+}
+
+/**
+ * The global defaults the resolver competes: the stored `defaults` plus the
+ * node defaults of every model approval rule (modelAccess.ts). Everything
+ * that enumerates "which cells does the policy speak to" must read THIS,
+ * not `policy.defaults`, or the preview and enforcement disagree.
+ */
+export function effectiveDefaults(policy: LimitsPolicy | null): LimitEntry[] {
+  return policy ? effective(policy).defaults : [];
+}
+
+/** The overrides the resolver competes: stored + the approval lists expanded. */
+export function effectiveOverrides(
+  policy: LimitsPolicy | null,
+): LimitOverride[] {
+  return policy ? effective(policy).overrides : [];
+}
+
+// ---------------------------------------------------------------------------
 // Jurisdictions
 // ---------------------------------------------------------------------------
 
@@ -317,7 +365,7 @@ export function matchingOverrides(
   active: ReadonlySet<string>,
 ): LimitOverride[] {
   if (!policy) return [];
-  return policy.overrides.filter(
+  return effectiveOverrides(policy).filter(
     (override) =>
       override.enabled &&
       matchesPrincipal(principal, override.scope, override.targets) &&
@@ -354,6 +402,24 @@ export function resolveLimit(
     ceiling: false,
   };
 
+  // 1b. Model-qualified catalog defaults — external models are unavailable
+  //     until granted (config/limits.ts CATALOG_MODEL_DEFAULTS). Same layer
+  //     as the seed, so only specificity separates them: a qualified catalog
+  //     answer beats the unqualified seed and loses to ANY authored layer.
+  for (const catalogDefault of CATALOG_MODEL_DEFAULTS) {
+    const entry: LimitEntry = { ...catalogDefault, ceiling: false };
+    if (!entryAppliesTo(entry, def.key, modelId, series)) continue;
+    const candidate: Candidate = {
+      value: entry.value,
+      source: 'catalog',
+      tier: 'global',
+      priority: 0,
+      specificity: qualifierSpecificity(entry),
+      ceiling: false,
+    };
+    if (beats(candidate, winner)) winner = candidate;
+  }
+
   // 2. Global defaults — ordinary candidates through the SAME comparator as
   //    every override (layer 1 beats the catalog seed; among defaults,
   //    specificity then restrictiveness decide, as before). Every flagged
@@ -364,7 +430,7 @@ export function resolveLimit(
   //    could pin, which silently un-pinned exactly those two shapes.
   let ceilingWinner: Candidate | undefined;
   if (policy) {
-    for (const entry of policy.defaults) {
+    for (const entry of effectiveDefaults(policy)) {
       if (!entryAppliesTo(entry, def.key, modelId, series)) continue;
       const candidate: Candidate = {
         value: entry.value,
@@ -526,6 +592,31 @@ export function resolveModelCells(
     cells.push(resolveLimit(def, policy, principal, undefined, series, active));
   }
   return cells;
+}
+
+/**
+ * The ONE cell a per-model GATE (`model.allowed`) resolves: the model and
+ * family qualifiers compete in a single comparator, so at the same layer a
+ * rule about the model overrides a rule about its family — the approval
+ * view's inheritance ("models inherit the family's availability unless set
+ * themselves"), while a person-level rule on either still beats every
+ * default because layer ranks first. Counters keep `resolveModelCells`:
+ * a family request cap is an envelope, not a default to inherit.
+ *
+ * Invalid dimensions are dropped exactly as resolveModelCells drops them,
+ * so a model with no valid cell still gets the unqualified answer.
+ */
+export function resolveModelGate(
+  def: LimitDefinition,
+  policy: LimitsPolicy | null,
+  principal: Principal,
+  modelId: string | undefined,
+  series: string | undefined,
+  active: ReadonlySet<string> = activeDelegationIds(policy, principal),
+): ResolvedLimit {
+  const id = modelId && isValidDimension(modelId) ? modelId : undefined;
+  const family = series && isValidDimension(series) ? series : undefined;
+  return resolveLimit(def, policy, principal, id, family, active);
 }
 
 export function isUnlimited(resolved: ResolvedLimit | undefined): boolean {

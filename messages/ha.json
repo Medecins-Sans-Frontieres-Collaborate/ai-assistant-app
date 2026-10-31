@@ -870,7 +870,16 @@
       "stillWorking": "Har yanzu ana aiki…",
       "assessingSearchResults": "Ana duba ko sakamakon ya amsa tambayar...",
       "refiningSearch": "Ana sake bincike: “{query}”...",
-      "readingSearchPages": "Ana karanta shafuka {count} na sakamako..."
+      "readingSearchPages": "Ana karanta shafuka {count} na sakamako...",
+      "toolRoutingUnavailableInRegion": "Ba a samun hanyar amfani da kayan aikin a {region} — za a amsa ba tare da kayan aiki ba...",
+      "applyingSkill": "Ana amfani da fasaha: {skills}...",
+      "applyingSkills": "Ana amfani da fasahohi: {skills}...",
+      "readingSkillReferences": "Ana karanta takardun bayanin fasaha...",
+      "selectingSkills": "Ana zabar fasaha…",
+      "retryingModel": "Samfurin yana aiki — ana ƙoƙarin sake gwadawa a cikin {seconds}s (ƙoƙari na {attempt})…",
+      "resumingResponse": "An yanke haɗin zuwa samfurin — ana cigaba daga inda aka tsaya…",
+      "continuingResponse": "Amsa ta kai iyakar tsawo — ana cigaba…",
+      "trimmingContext": "Hira ta yi tsawo fiye da abin da samfurin ke iya ɗauka — ana kange tsohuwar tarihi da ƙoƙarin sake gwadawa…"
     },
     "toolSummary": {
       "usedTools": "An yi amfani da {count, plural, one {# kayan aiki} other {# kayan aiki}}",
@@ -936,7 +945,9 @@
       "deniedByRuleHint": "An toshe ta hanyar dokarka — sarrafa a Saituna → Haɗa-haɗa.",
       "batchPendingHint": "Akwai buƙatun kayan aiki {count} da ke jiran izini",
       "approveAllButton": "Amince duka",
-      "denyAllButton": "Ƙi duka"
+      "denyAllButton": "Ƙi duka",
+      "applySkillTitle": "Aiwatar da fasaha “{skill}”?",
+      "skillConsentNote": "Admin ya sa wannan fasaha ta nemi izini kafin a aiwatar da ita. Idan ka amince, za a kawo shawararta don wannan amsa kawai."
     },
     "openImage": "Buɗe hoto",
     "copyMessage": "Kwafi saƙo",
@@ -976,7 +987,54 @@
     "alwaysWaitThisLong": "Ko da yaushe a jira har zuwa {duration}",
     "keepSearching": "Ci gaba da bincike",
     "keepSearchingHint": "Binciken ya tsaya kafin a samo wannan. Tambayi mataimaki ya gwada wata hanya daban.",
-    "keepSearchingMessage": "Don Allah, ci gaba da bincike — gwada wata hanya daban."
+    "keepSearchingMessage": "Don Allah, ci gaba da bincike — gwada wata hanya daban.",
+    "addSkill": "Kwarewa",
+    "removeSkill": "Cire kwarewa",
+    "skillsMenuLabel": "Kwarewa da ake da su",
+    "skillsLimit": "Har kwarewa 3 za a iya amfani da su a kowace saƙo.",
+    "skillPin": "Manne zuwa tattaunawa",
+    "skillUseOnce": "Yi amfani sau ɗaya",
+    "skillPinned": "an manne",
+    "skillOnce": "saƙon gaba",
+    "skillsPaused": "an dakata",
+    "skillUnavailable": "ba a samuwa",
+    "skillsAutomaticHint": "Ana zaɓar ƙwarewa da suka dace ta atomatik. Yi amfani sau ɗaya don saƙon gaba, ko manne wata ƙwarewa don amfani da ita a duk wannan tattaunawar.",
+    "skillsAgentDisabled": "An dakatar da ƙwarewa yayin da aka haɗa wakili. Mannewan ka za su ci gaba idan ka cire wakilin.",
+    "skillPersonal": "na kaina",
+    "skillsAgentToolsHint": "Kawai ƙwarewar ƙungiya da aka ba damar amfani da su ta hanyar mai gudanarwa ga wakilai ne ake bayarwa anan. Wakilin zai iya ɗorawa su a matsayin kayan aiki na karanta kawai. Wasu da aka saka (pins) za su tsaya a dakatar, kuma wakilai ba su da damar amfani da ƙwarewar kashin kansu.",
+    "skillAlwaysOn": "a kullum",
+    "skillAlwaysOnHint": "Ana kara da kowanne saƙo a wannan tattaunawa daga mai gudanarwa.",
+    "skillUsage": {
+      "label": "Fasahohi",
+      "requested": "an nema",
+      "pinned": "an manne",
+      "auto": "ta atomatik",
+      "unavailable": "ba a samu ba",
+      "incomplete": "Ba a iya amfani da wasu fasahohi ba",
+      "references": "{count, plural, one {# bayanin takarda} other {# bayanan takardu}}",
+      "referencesUnavailable": "Ba a samun wasu takardun bayanin",
+      "showDetails": "Nuna cikakken bayani na fasaha",
+      "hideDetails": "Rufe cikakken bayani na fasaha",
+      "agentLoad": "wakili ya loda",
+      "agentSearch": "wakili ya bincika takardu",
+      "needsApproval": "yana buƙatar amincewarka",
+      "original": "kamar yadda aka fara gudanar",
+      "updated": "an sabunta tun"
+    },
+    "skillsManualHint": "Zaɓin kai tsaye yana kashe a Saituna. Yi amfani da shi sau ɗaya don saƙon na gaba, ko kunshi ƙwarewar da za ka so a duk wannan tattaunawar.",
+    "queuedMessage": {
+      "label": "An jera",
+      "attachmentOnly": "Abin haɗe",
+      "cancel": "Soke saƙon da aka jera"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Matatar tsaro ta dakatar da amsar. Da fatan za a sake fasalta bukatar, ko cire abin da zai iya haifar da haka.",
+      "MODEL_CONTEXT_TOO_LONG": "Wannan hirar ta yi tsawo fiye da abin da samfurin da aka zaɓa zai iya ɗauka, ko bayan an rage tsohuwar tarihi. Fara sabon hira, cire wasu abubuwa, ko zaɓi samfurin da ke da babban taga na mahallin magana.",
+      "MODEL_OUTPUT_LIMIT": "Samfurin ya ƙare da duk damar amsarsa ba tare da ba da amsa ba. Gwada rage matakin zurfin nazari ko ka taƙaita abin da kake tambaya.",
+      "MODEL_RATE_LIMITED": "Ana aika wa samfurin da buƙatu da yawa a lokaci guda. An sake gwadawa ta atomatik; don Allah a gwada baya maɗan lokaci kaɗan.",
+      "MODEL_QUOTA_EXCEEDED": "An ƙare da damar amfani da samfurin. Gwada wani samfurin, ko kuma a sake gwadawa daga baya.",
+      "MODEL_AUTH_FAILED": "Manhaja ba ta samu izinin haɗawa da sabis ɗin samfurin ba. Wannan matsalar saitawa ce — don Allah a tuntuɓi goyon bayan fasaha."
+    }
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1484,7 +1542,11 @@
       "preferModelTitle": "Fi son samfurin da na zaɓa",
       "preferModelDescription": "Kar a sauya zuwa wani model kai tsaye lokacin da akayi kuskure. Za a ci gaba da nuna zaɓin sauyawa a kuskuren."
     },
-    "Analytics": "Nazari"
+    "Analytics": "Nazari",
+    "skills": {
+      "autoApply": "Bari mataimaki ya shigar da ƙwarewa kai tsaye",
+      "autoApplyDescription": "Za a zaɓi ƙwarewar da suka dace, har da na kanka, don kowanne saƙo. Idan an kashe, ana amfani da ƙwarewar da ka buƙata ko ka kunshi, da ƙwarewar da admin ya shigar a kowace tattaunawa kaɗai."
+    }
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -2684,7 +2746,15 @@
     "chipAutoHideUnit": "daƙiƙu",
     "chipAutoHideHint": "Tsakanin {min} da {max} daƙiƙu.",
     "byWorkflow": "Ta tsarin aiki",
-    "byWorkflowNote": "Sashe ne daga jimillar da ke sama, an nuna daban—ba ƙarin amfani ba. Ana kirga gudun tallafi cikin rahoton kungiyarku da kasafin lambobinku, amma ba a kirga shi a wannan jimillar ta gida ba."
+    "byWorkflowNote": "Sashe ne daga jimillar da ke sama, an nuna daban—ba ƙarin amfani ba. Ana kirga gudun tallafi cikin rahoton kungiyarku da kasafin lambobinku, amma ba a kirga shi a wannan jimillar ta gida ba.",
+    "chipLabelTitle": "Lakabin chip",
+    "chipLabelHint": "Bambance-bambancen kullum suna nuna fitar iskar da kuma kudi tare; wannan yana zaɓar abin da aka rubuta a taƙaitaccen chip.",
+    "chipLabelEmissions": "Fitar iska",
+    "chipLabelCost": "Kudi",
+    "chipLabelBoth": "Duka biyu",
+    "costTile": "Jimlar kudin da aka kiyasta",
+    "costDisclosure": "Kudin a farashin jerin kamar na {asOf} (Farashin Matsayin Duniya, ba tare da rangwamen bayanan da aka adana ba): iyakar kima ne, ba takardar biyan kuɗi ba. Bincike a yanar gizo, aiwatar da lamba, fassara, magana, fassarar magana da kimanta takardu ba a haɗa su ba.",
+    "costUnpriced": "{count, plural, one {# buƙata ba tare da farashi ba ba} other {# buƙatu ba tare da farashi ba ba}} ba a haɗa ba."
   },
   "extraction": {
     "toggleLabel": "Ciro bayani tsari",
@@ -4486,7 +4556,16 @@
         "auto": "Ta atomatik",
         "hidden": "Boye"
       },
-      "visibilityHint": "Ta atomatik zai nuna gunkin idan an sabunta hasashe ko ka matsa sama da shi. Za ka iya canza wannan daga Saituna › Amfani & Tasiri."
+      "visibilityHint": "Ta atomatik zai nuna gunkin idan an sabunta hasashe ko ka matsa sama da shi. Za ka iya canza wannan daga Saituna › Amfani & Tasiri.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Kudin da aka kiyasta {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Ba a ƙayyade farashi don buƙatun da ke wannan jerin ba",
+        "unpriced": "{count, plural, one {# buƙata ba tare da farashi ba ba} other {# buƙatu ba tare da farashi ba ba}} a haɗa cikin lissafin kudin.",
+        "noPriceData": "Ba a nuna kudin ba: Samfurin wannan tattaunawar ba shi da farashi a jerin (tushen kai, yanayin gida da wakilai ba a ƙididdige farashinsu ba).",
+        "note": "Kudin a farashin jerin kamar na {asOf} (Farashin Matsayin Duniya, ba tare da rangwamen bayanan da aka adana ba): iyakar kima ne, ba takardar biyan kuɗi ba. Bincike a yanar gizo, aiwatar da lamba, fassara, magana, fassarar magana da kimanta takardu ba a haɗa su ba."
+      }
     },
     "workflow": {
       "title": "Wannan wurin aiki (kimantawa)",
@@ -5278,7 +5357,22 @@
     "confirmDeleteGlossary": "Goge kundin magana",
     "glossaryDeleteSuccess": "An goge kundin magana",
     "channelProfilesTab": "Manhajoji",
-    "channelSetsTab": "Saitunan tashoshi"
+    "channelSetsTab": "Saitunan tashoshi",
+    "addPromptAgent": "Ƙara wakilin umarni",
+    "m365AgentIndexStop": "Dakatar da yin fahimta",
+    "foundryAgentsHeading": "Wakilan Foundry da umarni",
+    "foundryAgentsDescription": "Wakilan da aka gano daga Azure AI Foundry ta hanyar damar ku, da kuma wakilan umarni da aka saita a nan. Wakilan ilimi da wakilan Microsoft 365 ana tafiyar da su a rarrabensu daban a ƙasa.",
+    "agentSkillsLabel": "Kwarewa",
+    "agentSkillsHelp": "Wadanne kwarewar ƙungiya wannan wakili zai iya ɗauka yayin amsawa. Masu amfani har yanzu za su iya ganin kwarewar da dokokin damar su suka amince da su kawai.",
+    "agentSkills": {
+      "inherit": "Kwarewar da aka sanya \"na samuwa ga wakilai”",
+      "selected": "Kawai kwarewar da aka zaɓa a ƙasa",
+      "none": "Babu kwarewa"
+    },
+    "agentSkillsNone": "Babu kwarewa da za a iya zaɓa.",
+    "agentSkillsLoading": "Ana loda fasahohi...",
+    "agentSkillsLoadError": "Ba a samu lodawa fasahohi ba. Za a ci gaba da amfani da zaɓin da aka adana a baya.",
+    "agentSkillsNotVisible": "(ba ta bayyana gare ka — cire alama don cirewa)"
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -5505,7 +5599,8 @@
       "channelSets": "Dokokin kowace ƙungiya don rubutu a manhajoji: jagora, salo, tsoffin saituna, wa zai iya amfani da wannan saiti da wa zai iya tura saƙonni.",
       "webSearch": "Inda binciken yanar gizo zai iya kaiwa: bincike mai matakai da dama, tsarin tantancewa, da iyakokinsa.",
       "contextBudget": "Yawan tarihin hira da kowanne tsarin za a tura a kowane zagaye.",
-      "analytics": "Rahotannin da aka isar: abin da ya iso, wanda zai iya bude kowane fayil, da wadanne filaye za a iya nuna su."
+      "analytics": "Rahotannin da aka isar: abin da ya iso, wanda zai iya bude kowane fayil, da wadanne filaye za a iya nuna su.",
+      "skills": "Block na umarni da ake iya amfani da su wanda mai taimako ke amfani da su idan tattaunawa ta bukata."
     },
     "openSettings": "Buɗe saituna",
     "area": {
@@ -5516,7 +5611,8 @@
       "delegations": "Wakilai",
       "webSearch": "Binciken yanar gizo",
       "contextBudget": "Kasafin mahallin hirar",
-      "analytics": "Nazari"
+      "analytics": "Nazari",
+      "skills": "Kwarewa"
     }
   },
   "limits": {
@@ -5546,7 +5642,8 @@
     "tab": {
       "defaults": "Daidaitattun ƙa'idodi na gaba ɗaya",
       "overrides": "Canje-canje",
-      "delegations": "Rarrabawa"
+      "delegations": "Rarrabawa",
+      "models": "Misalai"
     },
     "tabsLabel": "Sassan iyaka",
     "category": {
@@ -5578,7 +5675,8 @@
       "m365ToolCallsPerDay": "Kiran ƙa'idar Microsoft 365 a rana",
       "m365MailReadsPerDay": "Karanta imel a rana",
       "m365MailDraftsPerDay": "Rubutun imel a rana",
-      "m365MailDeepScansPerDay": "Cikakken duba imel a rana"
+      "m365MailDeepScansPerDay": "Cikakken duba imel a rana",
+      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na kullum a rana"
     },
     "valueModeLabel": "Irin iyaka",
     "valueAmountLabel": "Adadin iyaka",
@@ -5656,7 +5754,8 @@
       "m365ToolCallsPerDay": "Kiran kayan aikin Microsoft 365 (kalanda, mutane, aiki, Teams) a rana. Idan an wuce iyaka, kayan aikin za su nuna sakon “gwada gobe” maimakon chat ɗin ya gaza.",
       "m365MailReadsPerDay": "Binciken imel da karanta saƙonni/lambobin zance a rana. Idan an wuce iyaka, kayan aikin imel za su nuna “gwada gobe”.",
       "m365MailDraftsPerDay": "Kirkiran rubutattun imel ɗin da mataimakin zai iya yi a rana — kowannensu ana tabbatarwa dabam. An yi da gangan don kar a wuce gona da iri.",
-      "m365MailDeepScansPerDay": "Cikakkun nazarin imel (taƙaitawa, bincike mai zurfi, alƙawari) a rana. Kowanne bincike guda yana ɗauke da tamkar ɗaya daga cikin kasafin, ko da yawan karatunsu a ciki."
+      "m365MailDeepScansPerDay": "Cikakkun nazarin imel (taƙaitawa, bincike mai zurfi, alƙawari) a rana. Kowanne bincike guda yana ɗauke da tamkar ɗaya daga cikin kasafin, ko da yawan karatunsu a ciki.",
+      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na Microsoft 365 a rana. Gudun guda yana kunshe da karanta Graph da dama tare da kira na analysis-model guda biyu; zaɓin lokacin yana sauƙaƙa maidowa, saboda haka an sa iyaka a bisa tsoho."
     },
     "scopeFamily": "Dangi",
     "scopeModel": "Samfuri",
@@ -5711,7 +5810,7 @@
     "previewSourceCatalog": "Tsoho mai ɗauke da kanta",
     "previewSourceGlobal": "Tsohon saitin duniya",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Cannot duba overrides na sashen/kamfani/ofis da na rukuni anan — suna dogara da shigar mutum na kansa.",
+    "previewNotEvaluated": "Ba a iya samun kundin bayanai ba, don haka dokokin sashen/kamfani/ofis da rukuni ba a tantance su ba ga wannan mutum. Yi ƙoƙarin sake gwadawa daga baya.",
     "previewUnsaved": "Ana nuna manufar da aka ajiye karshe. Ajiye canjinkanku don duba su.",
     "previewColumnLimit": "Iyaka",
     "previewColumnValue": "Ƙima",
@@ -5807,7 +5906,7 @@
     "yourScopeGroupOnlyChip": "Rukuni kawai",
     "yourScopeGroupOnlyNote": "An kayyade ta rukuni ko halaye kawai, don haka ba za a iya duba iyakoki ta adireshin imel ba.",
     "previewOutOfScope": "Wannan mutumin baya cikin iyakarka.",
-    "previewGroupOnlyScope": "Iyakarka an kayyade ta rukuni ko halaye, don haka ba za a iya duba iyakoki ta adireshin imel ba.",
+    "previewGroupOnlyScope": "An kayyade kundinku ta rukuni ko siffofi. Taron nuna zai duba wannan mutum a kundin bayanai don tantance ko yana ciki.",
     "previewCeilingPinned": "An tsayar da iyaka: {label}",
     "previewShowUsage": "Nuna amfani na yanzu",
     "previewColumnUsage": "An yi amfani da shi",
@@ -5823,7 +5922,7 @@
     "overrideCeilingHint": "Matsakaicin ƙima a layi yana kulle wannan ƙima ga waɗanda wannan override ɗin ya shafa: admins masu iyaka ba za su iya cire ta ba, kuma inda ƙayyadaddu da dama suka shafi, mafi dacewa ce ke amfani.",
     "confirmDeleteOverride": "A goge \"{label}\"? Za a cire shi kai tsaye daga sabar, kuma abin da ya shafa za su koma ƙarƙashin iyakar da ke ƙasa da shi. Ba za a iya dawowa da hakan ba.",
     "confirmDeleteOverrideAction": "Goge override",
-    "previewUndecidableScope": "Iyakarka ta haɗa da ƙungiyoyi ko siffofi, don haka ba za a iya tantance ko wannan mutumin na cikin ta ta hanyar adireshin imel kawai ba.",
+    "previewUndecidableScope": "Kundinku ya haɗa rukuni ko siffofi kuma ba a iya samun kundin bayanai ba, don haka ba za a iya tantance ko wannan mutum yana ciki ba a yanzu. Yi ƙoƙarin sake gwadawa daga baya.",
     "previewNoLongerAdmin": "Ba a ƙara sunanka a cikin wani izini mai aiki ba, don haka ba za ka iya duba iyakoki ba. Sabunta shafin don ganin damar da kake da ita yanzu.",
     "previewScopeMatchesNobody": "A halin yanzu, iyakarka ba ta dace da kowa ba, saboda haka babu wanda za ka iya duba ta adireshin imel.",
     "yourScopeMatchesNobodyChip": "Ba ya dace da kowa",
@@ -5974,7 +6073,73 @@
     "disabledDelegationNote": "An kashe mayar da hankali, don haka wannan canji bazai shafi kowa ba sai an saita mayar da hankalin. Ba a taba mayar da shi zuwa matakin duniya ba.",
     "betaPolicyNotice": "Mahallin Beta: Ana adana wannan manufar da ƙididdigar amfani nata daban da na samarwa (policy.beta.json). Duk wani canji da ka yi a nan ba zai shafi samarwa ba.",
     "delegationsManagedElsewhere": "Wakilai an nuna su a nan don karantawa kawai. Wanene ke cikin wakilai, wa suke wakilta, da abin da kowanne admin zai iya yi ana sarrafa su a sashen Wakilai.",
-    "delegationsManagedElsewhereLink": "Buɗe Wakilai"
+    "delegationsManagedElsewhereLink": "Buɗe Wakilai",
+    "modelAccess": {
+      "intro": "Kayyade wa zai iya amfani da kowanne misali. Saitin dangin zai shafi misalansa sai dai idan an kafa na musamman; mutanen da ke jerin suna kan gaba akan sauran; jerin toshewa ya fi kowanne izini.",
+      "externalNote": "Misalan da ke waje da Azure ({families}) ba su samuwa ga kowa har sai an ba da izini a nan — ga kowa ta hanyar tsohuwar hanya, ko ga rukuni, yanki da mutane.",
+      "envelopeNote": "Iyakar buƙata a kan dangi, kasafin kudi ne na kullum da ya shafi dukkan misalansa; iyaka a kan misali na nashi ne kadai. Ba iyaka a kan misali ba yana cire iyakar dangi ba.",
+      "observeNote": "Yanayin lura yana kunne: babu wani abu a nan da zai ɓoye misali ko dakatar da buƙata a yanzu. Sauya zuwa Aiwatar sama idan an daidaita dokokin.",
+      "familyChip": "Dangi",
+      "modelChip": "Misali",
+      "otherModels": "Misalan da ba su da dangi",
+      "modelsInFamily": "{count, plural, one {# misali a wannan dangi} other {# misalai a wannan dangi}}",
+      "noModels": "Ba a saka misalai cikin kundin ba tukuna.",
+      "expand": "Nuna misalai",
+      "collapse": "Ɓoye misalai",
+      "edit": "Gyara",
+      "doneEditing": "An gama",
+      "editNode": "Gyara damar shiga na {label}",
+      "defaultLabel": "Sauran kowa",
+      "defaultInherit": "Gada",
+      "defaultUnlimited": "Ba iyaka",
+      "defaultLimited": "An takaita zuwa",
+      "defaultUnavailable": "Ba samuwa",
+      "defaultRequestsLabel": "Buƙatu a rana ga sauran kowa",
+      "requestsPerDay": "buƙatu / rana",
+      "inheritedFrom": "Ya gada {state} daga {origin}.",
+      "effectiveLabel": "Duk wanda ba a jeri ba zai samu: {state}.",
+      "inheritedChip": "gada",
+      "origin": {
+        "model": "wannan saitin",
+        "family": "danginsa",
+        "defaults": "Tsoffin duniya",
+        "catalogExternal": "doka cewa misalan waje ba su samuwa sai an ba da izini",
+        "catalog": "tsohuwar hanyar kundin"
+      },
+      "state": {
+        "unlimited": "Ba iyaka",
+        "limited": "An takaita zuwa {requests} / rana",
+        "unavailable": "Ba samuwa"
+      },
+      "list": {
+        "groups": "Rukunin da ke da damar shiga",
+        "domains": "Yankuna da ke da damar shiga",
+        "allow": "Mutanen da aka yarda",
+        "deny": "Mutanen da aka toshe"
+      },
+      "listHint": {
+        "groups": "Mambobi cikin waɗannan rukunin Entra na iya amfani da shi, bisa sharuddan kowane rukunin.",
+        "domains": "Duk mai adireshin imel a waɗannan yankuna, bisa sharuddan kowanne yanki.",
+        "allow": "Mutanen da aka ambata za su iya amfani da shi duk yadda tsoho ko yanki ya ce.",
+        "deny": "Mutanen da aka ambata ba za su taɓa amfani da shi ba. Wannan yana da fifiko akan duk wani izini da ke sama."
+      },
+      "grantUnlimited": "Ba iyaka",
+      "grantLimited": "An takaita zuwa",
+      "termsLabel": "Sharudda ga {target}",
+      "requestsLabel": "Buƙatu a rana ga {target}",
+      "removeGrant": "Cire {target}",
+      "groupsCount": "{count, plural, one {# rukuni} other {# rukunoni}}",
+      "domainsCount": "{count, plural, one {# yanki} other {# yankuna}}",
+      "allowCount": "{count, plural, one {# mutum an yarda} other {# mutane an yarda}}",
+      "denyCount": "{count, plural, one {# mutum an toshe} other {# mutane an toshe}}",
+      "collisionChip": "Hakanan yana cikin Tsarin Duniya",
+      "collisionWarning": "Wannan samfur ko iyali an saita shi a cikin Tsarin Duniya. Za a hana adanawa sai daya daga cikin biyun aka cire."
+    },
+    "previewSourceModelAccess": "Amincewa da samfur — {list}",
+    "groupMembershipDegradedStructural": "Neman mambobin ƙungiyoyi yana kasa a wannan server ({reason}). Dokoki da damar da suka danganci ƙungiyoyi ba za su yi aiki ba ga mutanen da abin ya shafa — duba Group.Read.All consent na tenant da rajistar app.",
+    "groupMembershipDegradedRetryable": "Wasu neman mambobin ƙungiyoyi sun kasa a wannan server cikin 'yan mintuna da suka gabata ({reason}). Dokoki da suka danganci ƙungiyoyi na iya rashin aiki ga wadannan mutane har na dakika daya yayin da ake ƙoƙarin sake nema.",
+    "groupMembershipDegradedUsers": "{count, plural, one {Mutum #} other {Mutane #}} ke cikin wanda abin ya shafa a wannan server.",
+    "previewDirectoryNotFound": "Babu wani mai amfani a directory da wannan adireshin imel, don haka an duba dokokin sashen / kamfani / ofis da na ƙungiyoyi kamar mutumin bai da wata alaƙa da su."
   },
   "m365": {
     "connections": {
@@ -6325,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Tantance safiya",
-        "description": "Me ya shigo, me ke jiran ka, da jadawalin yau — bayanin gaba ɗaya"
+        "description": "Takaitaccen bayani tun daga ranar aiki ta ƙarshe — abubuwan da suka shigo, waɗanda ke jiran amsarka, gayyata da sabunta bayanai; a ranar Litinin ya haɗa da na Juma'a da ƙarshen mako."
       },
       "chipsSettingLabel": "Ba da shawarar Microsoft 365 playbooks",
       "chipsSettingHint": "Nuna shawarwarin playbook a saman akwatin saƙo idan ya dace (misali bayan shigo da rubutun taro).",
-      "dismissChip": "Ƙi {title}"
+      "dismissChip": "Ƙi {title}",
+      "dailyDigest": {
+        "title": "Takaitaccen rahoto na kullum",
+        "description": "Tsara imel ɗin da ya zo kwanan nan, tattaunawar Teams da kalanda zuwa abin da ke buƙatar ka/ki, abin da kake jira, sabunta bayanai da FYI — zaɓi lokacin"
+      }
+    },
+    "digest": {
+      "title": "Takaitaccen rahoto na kullum",
+      "intro": "Yana dubawa abin da ya iso naka a cikin lokacin, kuma yana tsara shi zuwa abin da ke bukatar amsa, abin da aka nema daga gare ka/ki, abin da kake jira, jadawali, sabunta bayanan kamfani da aiki, da FYI. Ba a aika ko canja komai ba.",
+      "periodLabel": "Lokaci",
+      "preset": {
+        "lastWorkday": "Tun daga ranar aiki ta ƙarshe",
+        "1d": "Awanni 24 da suka wuce",
+        "3d": "Kwanaki 3 da suka wuce",
+        "7d": "Kwanaki 7 da suka wuce",
+        "14d": "Kwanaki 14 da suka wuce",
+        "custom": "Zaɓin rana na musamman"
+      },
+      "lastWorkdayHint": "Daga farkon ranar aiki mafi kusa kafin yau — idan yau Litinin ne, zai haɗa da Juma’a da ƙarshen mako.",
+      "from": "Daga",
+      "to": "Zuƙ",
+      "customInvalid": "Zaɓi rana masu jere ba fiye da {days} ba.",
+      "sourcesLabel": "Tushen bayanai",
+      "sourceNoConsent": "Ba a ba da izini ga wannan tushe ba.",
+      "sourceHint": {
+        "mail": "Envelopes da samfotin inbox; Abubuwan da ka aiko a Sent Items suna ayyana abin da aka amsa.",
+        "chat": "Tattaunawar Teams na baya-bayan nan, da @mentions da ba ka/ki amsa ba.",
+        "channel": "Sakon da aka sanya a tashoshin da ka zaɓa a kasa.",
+        "calendar": "Gayyata da ke jiran amsarka da tarurruka naka da wasu ba su amsa ba."
+      },
+      "channelsLabel": "Tashoshi ({count} daga {max})",
+      "removeChannel": "Cire {name}",
+      "channelsSlow": "Kowane tasha na ƙara karantawa; ƙarin tashoshi na sa rahoto ya ɗauki lokaci.",
+      "channelsMax": "An kai iyakar tashoshi {max}.",
+      "channelsNeeded": "Zaɓi aƙalla tasha ɗaya, ko ƙara wani tushe.",
+      "teamLabel": "Ƙungiya",
+      "loadingTeams": "Ana loda ƙungiyoyi…",
+      "pickTeam": "Zaɓi ƙungiya don nuna tashoshinta",
+      "loadingChannels": "Ana loda tashoshi…",
+      "noChannels": "Ba a samu tashoshi a wannan ƙungiyar ba.",
+      "privacyNote": "Ana karanta batutuwa, masu aiko da saƙonni da samfoti kaɗan kawai; jikin saƙonni da abubuwan haɗe-haɗe zauna a cikin Microsoft 365. Kayan yana taƙaita bayananka kawai.",
+      "cancel": "Soke",
+      "run": "Gudanar da rahoto",
+      "starting": "Ana farawa…",
+      "startFailed": "Ba a iya farawa rahoton ba.",
+      "userMessage": "Takaitaccen rahoto na kullum — {period}; tushe: {sources}",
+      "working": "Ana duba sadarwar ka/ki na Microsoft 365…",
+      "failed": "Rahoton ya kasa.",
+      "failedPrefix": "Takaitaccen rahoto ya kasa:",
+      "expired": "Wannan rahoton ya ƙare. Gudanar da shi daga farko don samun sabo.",
+      "runAgain": "Sake gudanarwa",
+      "changePeriod": "Sauya lokaci",
+      "period": {
+        "lastWorkday": "tun daga ranar aiki ta ƙarshe",
+        "lastDays": "{count, plural, one {rana ta ƙarshe} other {kwanaki # da suka wuce}}"
+      },
+      "source": {
+        "mail": "Imel",
+        "chat": "Tattaunawar Teams",
+        "channel": "Tashoshin Teams",
+        "calendar": "Kalanda"
+      },
+      "sourceStatus": {
+        "ok": "kammala",
+        "partial": "bangare",
+        "skipped": "an wuce",
+        "unavailable": "ba da izini",
+        "error": "ba a yi nasara ba"
+      },
+      "degraded": "Samfurin nazari bai samu ba, don haka kashi-kashin sun fito daga dokoki kaɗai.",
+      "withheld": "{count, plural, one {# abu aka} other {# abubuwa aka}} dakatar da su ta matakan tsaro.",
+      "empty": "Babu abin da za a bayar rahoto a wannan lokacin da wadannan tushe.",
+      "actionItems": "Abubuwan aiki",
+      "createTasks": "{count, plural, =0 {Ƙara zuwa To Do} one {Ƙara # aiki zuwa To Do} other {Ƙara # ayyuka zuwa To Do}}",
+      "taskCreated": "an ƙara zuwa To Do",
+      "tasksCreated": "{count, plural, one {# aiki} other {# ayyuka}} an ƙara zuwa jerin \"{list}\".",
+      "tasksFailed": "Ba a iya ƙirƙirar ayyukan ba.",
+      "category": {
+        "needsReply": "Nayi bukatar amsa",
+        "askedOfMe": "An tambaye ni",
+        "waitingOnOthers": "Ina jiran wasu",
+        "scheduling": "Tsara lokaci",
+        "companyUpdates": "Sabbin bayanai na kamfani da ayyuka",
+        "fyi": "Don sani",
+        "bulk": "na atomatik da yawa"
+      },
+      "companyUpdatesHint": "muhimmin, mai wuya gaggawa",
+      "markDone": "Alama {title} kamar an kammala",
+      "badge": {
+        "unanswered": "ba a amsa ba",
+        "mentioned": "an ambaci ka",
+        "important": "muhimmanci mai yawa"
+      },
+      "askAbout": "Tambayi game da wannan",
+      "askPrompt": "Game da abu {source} \"{title}\" daga {from} ({when}) a cikin keɓaɓɓen rahoton da ke sama: me ake tambaya, kuma menene amsa mai kyau?",
+      "open": {
+        "mail": "Buɗe a Outlook",
+        "chat": "Buɗe a Teams",
+        "channel": "Buɗe a Teams",
+        "calendar": "Buɗe a Outlook"
+      },
+      "footnote": "Kashi-kashi sun fito daga alamun ka (ba a amsa, an ambata, an watsa) da kuma rarrabuwa ta AI; tabbatar kafin ka dauki mataki. Ba a tura komai ba.",
+      "age": {
+        "now": "yanzu-yanzu",
+        "hours": "{count}h da suka wuce",
+        "days": "{count}d da suka wuce"
+      },
+      "waitForReply": "Jira amsa yanzu ta gama kafin fara takaitaccen bayani."
     }
   },
   "share": {
@@ -6394,9 +6666,9 @@
     "kind": {
       "rag": "Sanin ilimi",
       "prompt": "Hali",
-      "m365": "Sanin ilimi (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Sanin ilimi",
-      "foundry": "Wakilin Foundry",
+      "foundry": "Wakili na musamman",
       "connector": "Mai haɗawa"
     },
     "semantics": {
@@ -6405,8 +6677,8 @@
       "own-model": "yana aiki da samfurinsa kansa"
     },
     "loadError": "Ba a iya ɗora wakilanka a yanzu. Wannan yawanci na ɗan lokaci ne.",
-    "discoveryLoading": "Ana neman wakilan Foundry…",
-    "discoveryError": "An kasa ɗora wakilan Foundry.",
+    "discoveryLoading": "Ana neman ƙarin wakilai…",
+    "discoveryError": "Ba a iya loda wasu daga cikin wakilan ba.",
     "retry": "Sake ƙoƙari"
   },
   "peopleSuggest": {
@@ -7547,5 +7819,146 @@
       "past-retention": "Ya wuce watanni {months} na adana bayanai a cikin wannan babban fayil; ba a ƙara nunawa ba.",
       "unknown": "An bayar da rahoton matsala: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Kwarewa",
+    "description": "Block na umarni da ake iya amfani da su wanda mai taimako ke amfani da su idan tattaunawa ta bukata. Ya dace da tsarin Agent Skills SKILL.md da Claude da ChatGPT ke amfani da shi.",
+    "loading": "Ana loda kwarewa…",
+    "loadError": "Ba a samu loda kwarewa ba.",
+    "retry": "Sake kokari",
+    "unavailableBanner": "Ba a iya samun wurin ajiyar kwarewa yanzu — na asali kawai ake nuna; kwarewa da aka adana da gyare-gyare ba za a samu ba sai an gyara.",
+    "conflictError": "Wani admin ya canza wannan kwarewar. An sake loda jerin — a sake sa gyare-gare.",
+    "alwaysWarning": "{count} kwarewa an sa su Always. Duk tattaunawa za ta samu kowannensu — zaɓi Automatic don kwarewar da ta shafi sanyi ko wani takamaiman abu.",
+    "newSkill": "Sabuwar kwarewa",
+    "importSkill": "Shigo da SKILL.md",
+    "importTitle": "Manna fayil ɗin SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Abin da wannan kwarewa ke yi da lokacin da za a amfani da ita.\n---\n\nUmarni…",
+    "importHint": "Kwarewar da aka fassara za ta buɗe a editan don duba — ba a adana komai har sai ka adana.",
+    "importParse": "Fassara da duba",
+    "invalidId": "Id na kwarewa yana amfani da ƙananan haruffa, lambobi, da hyphen ɗaya.",
+    "saveSuccess": "An adana kwarewa.",
+    "saveError": "Ba a samu adana kwarewar ba.",
+    "deleteConfirm": "A cire wannan kwarewar? Tattaunawa za su daina karɓar ta nan take.",
+    "restoreConfirm": "A cire gyare-gyare a dawo da kwarewar na asali?",
+    "deleteSuccess": "An cire kwarewa.",
+    "restoreSuccess": "An dawo da na asali.",
+    "deleteError": "Ba a samu cire kwarewar ba.",
+    "empty": "Babu kwarewa tukuna. Ƙirƙiri guda, ko shigo da SKILL.md.",
+    "builtinChip": "Na asali",
+    "customizedChip": "An yi gyare-gyare",
+    "exportSkill": "Fitar da SKILL.md",
+    "edit": "Gyara",
+    "delete": "Cire",
+    "restoreDefault": "Dawo da asali",
+    "createTitle": "Sabuwar kwarewa",
+    "editTitle": "Gyara {name}",
+    "idLabel": "Id",
+    "idHint": "Ƙananan haruffa, lambobi, da hyphen. Za su zama sunan SKILL.md na kwarewar kuma ba za a iya canza bayan an ƙirƙira ba.",
+    "nameLabel": "Sunan da ake nunawa",
+    "descriptionLabel": "Bayanin",
+    "descriptionHint": "Abin da kwarewa ke yi DA lokacin da za a amfani da ita — wannan ne ke zaɓar kwarewa, don haka saka takamaiman batutuwa da kalmomin da ta dace ta amsa su.",
+    "activationLabel": "Kunshin aiki",
+    "activation": {
+      "auto": "Ta atomatik",
+      "always": "Kullum",
+      "off": "A kashe",
+      "manual": "Bisa buƙata"
+    },
+    "activationHint": {
+      "auto": "Ana zaɓar ta atomatik idan aikin yanzu ya dace da bayanin. Masu amfani kuma za su iya buƙatarta sau ɗaya ko manne ta cikin tattaunawa.",
+      "always": "Za a ƙara ta a kowace tattaunawa ga duk mai ganin kwarewar. A yi amfani da ita da hankali — wannan na dindindin ne.",
+      "off": "Bata aiki: ba za a yi amfani da ita ba kuma ba za a nuna wa masu amfani ba, amma za ta kasance don gyare-gyare.",
+      "manual": "Ana amfani da ita ne kawai idan mai amfani ya nema ko ya kafa ta. Ba a zaba ta ta atomatik kuma ba a ba da ita ga samfurin a matsayin kwarewar da za a iya ɗorawa."
+    },
+    "instructionsLabel": "Umarni",
+    "instructionsHint": "Markdown, har zuwa 16 KB. Za a saka shi kai tsaye idan an kunna fasalin.",
+    "saving": "Ana adanawa…",
+    "save": "Ajiye",
+    "cancel": "Soke",
+    "documents": {
+      "title": "Takardu",
+      "hint": "Ana adana madogaran tare da wannan fasahar. Ƙananan takardu suna loda kai tsaye; manyan takardu ana yin index don bincike da citata. Har zuwa madogara 20, 10 MB kowanne, da jimillar 20 MB. Kayan sun adana don sauke kawai.",
+      "saveFirst": "Ajiye gyara na wannan fasahar kafin ƙara takardu.",
+      "upload": "Ƙara takardun madogara",
+      "remove": "Cire",
+      "stop": "Dakatar da yin index",
+      "resume": "Yin index ko ci gaba da takardu",
+      "empty": "Ba a haɗa takardu ba tukuna.",
+      "requestFailed": "Buƙatar takardu ta gaza. Sake loda sannan a sake gwadawa.",
+      "importZip": "Shigo da ZIP na fasaha",
+      "zipTooLarge": "ZIP na fasaha bai wuce 20 MB ba.",
+      "importCount": "Madogara da za a haɗa bayan ajiye: {count}",
+      "skippedScripts": "An watsar da script masu aiki",
+      "status": {
+        "pending": "Ana jiran a yi index",
+        "processing": "Ana yin index",
+        "inline": "A shirye (an loda kai tsaye)",
+        "indexed": "A shirye (ana iya bincika)",
+        "failed": "Yin index ya gaza",
+        "asset": "Kayan da za a sauke"
+      },
+      "confirmRemove": "A cire {filename} daga wannan fasaha? Za a goge asalin da aka adana kuma ba za a iya amfani da shi a matsayin tushen shaida ba.",
+      "reindexRequired": "Wadannan takardu suna buƙatar a sake yin index don ƙirar Bincike da embedding na yankin yanzu. Ba za a iya bincika su ba har sai an kammala aikin indexing."
+    },
+    "applyToAgents": "Akwai ga wakilai",
+    "applyToAgentsHint": "A kashe ta tsohuwa. Idan an kunna, wakilai za su iya load wannan ƙwarewa ta hanyar kayan aiki na karanta kawai maimakon maye gurbin umarnin personansu. Kiraye-kiraye na ƙwarewar suna da iyakokin matakai (steps) masu zaman kansu. Dole ne Foundry agents su riga sun yi rajista da fasalulluka load_skill da search_skill_documents a cikin bayaninsu.",
+    "requireConsent": "Tambaya kafin amfani",
+    "requireConsentHint": "Idan samfurin yana son amfani da wannan kwarewa da kansa, za a tambayi mai amfani kafin. Bukatu da kafa ba sa buƙatar tabbatarwa.",
+    "consentChip": "Tana tambaya da fari",
+    "sourceChip": "Daga tushe",
+    "sourceChipHint": "An kawo daga majiyar kwarewa da aka biya; umarnin suna sabuntawa a lokacin da aka haɗe. Wannan sashi na kunnawa, wakili da saitunan amincewa naka ne.",
+    "sources": {
+      "title": "Tushen kwarewa",
+      "description": "Biyo jerin kwarewa na waje (index.json da ke dauke da fayilolin SKILL.md). Kwarewar da ke ciki za su zama na ƙungiya kuma ana sabuntawa kimanin kowane awa shida. Ana shigo da SKILL.md kawai; ba a samu takardun bayanin daga wajen ba.",
+      "urlLabel": "URL na kasidar",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Dole ne ya kasance https a mai masaukin jama'a. Ana karanta fayilolin kwarewa daga wannan wuri kawai.",
+      "labelLabel": "Lakabi (zaɓi ne)",
+      "add": "Bi majiyar",
+      "adding": "Ana biyo…",
+      "added": "{count, plural, =0 {Tushe an ƙara; ba a shigo da kowace kwarewa ba tukuna} one {Tushe an ƙara; an shigo da kwarewa #} other {Tushe an ƙara; an shigo da kwarewa #}}",
+      "addedWithError": "An ƙara tushe, amma haɗin farko ya gaza. Duba kuskure a tushe.",
+      "addError": "Ba a iya ƙara tushen kwarewa ba",
+      "sync": "Haɗa yanzu",
+      "syncing": "Ana haɗawa…",
+      "synced": "An haɗa tushe.",
+      "syncError": "Ba a iya haɗa tushen kwarewa ba",
+      "remove": "Cire tushe",
+      "removeConfirm": "A cire wannan tushe? Kwarewar da ta kawo za su zama na al’ada kuma za su daina sabuntawa.",
+      "removed": "An cire tushe.",
+      "removeError": "Ba a iya cire tushen kwarewa ba",
+      "loading": "Ana loda tushen…",
+      "loadError": "Ba a iya lodawa tushen kwarewa ba.",
+      "empty": "Babu tushen kwarewa tukuna.",
+      "never": "Ba a taɓa haɗawa ba",
+      "statusOk": "An haɗa",
+      "statusError": "Haɗawa ta gaza",
+      "statusPartial": "{count, plural, one {an tsallake shigarwa #} other {an tsallake shigarwa #}}",
+      "lastSync": "Haɗa na ƙarshe {time}",
+      "entryCount": "{count, plural, one {shigarwa #} other {shigarwa #}}",
+      "entryStatus": {
+        "synced": "an haɗa",
+        "skipped": "an tsallake",
+        "conflict": "rikici — ba a maye gurbinta ba",
+        "invalid": "bai dace ba"
+      }
+    },
+    "requireConsentDisabledHint": "Fasahohin atomatik kaɗai ne za su iya nema kafin a aiwatar: wanda aka nema, wanda aka ɗora, da wanda kullum ake amfani da shi sukan aiwatar ba tare da tambaya ba, kuma fasahohin da ake bukata kawai ba za su taɓa zaɓar su ba ta model."
+  },
+  "personalSkills": {
+    "title": "Kwarewar kaina",
+    "description": "Ajiye umarni masu amfani don tattaunawarka. Kwarewar kaina suna nan a cikin wannan burauzar, kuma za a aika da su zuwa samfurin ne lokacin da ka fara hira. Za a iya zabar kwarewar da suka dace ta atomatik, amfani da su sau daya, ko manne su. Ba za su iya canza tsarin kungiyar ko su ba damar amfani da kayan aiki ba. Amfani da kwarewar kaina yana bukatar a kunna kwarewa don wannan aikawa; tattaunawar wakilai ba sa amfani da kwarewar kaina.",
+    "importFile": "Shigo da SKILL.md ko ZIP",
+    "review": "Duba cikakken umarni kafin ajiye. Umarnin da aka shigo da su suna matsayin zabin mai amfani, ba su da alaka da tsarin kungiya.",
+    "skipped": "An watsar da rubutattun skrip masu aiwatarwa",
+    "importTooLarge": "Shigo da bayanan bai wuce 20 MB ba.",
+    "invalid": "Ba a samu daman shigo da kwarewar ba.",
+    "duplicate": "Wannan lambar kwarewar kaina ta riga ta wanzu. Gyara kwarewar da take akwai ko zabi wata lamba daban.",
+    "countLimit": "Za ka iya ajiye har kwarewar kaina 20.",
+    "requestLimit": "Kwarewar kaina da aka kunna sun wuce iyakar bukatar 160 KB. Kashe wasu kwarewar ko rage umarninsu.",
+    "saved": "An ajiye kwarewar kaina a wannan burauzar.",
+    "instructionsHint": "Har zuwa 16 KB na umarni, da sun haɗa da duk wani rubutun da aka shigo da shi. Fayilolin binary da dogayen index na takardu sai ga kwarewar kungiya. Fitarwa yana amfani da sunan SKILL.md ba tare da user: a gaba ba.",
+    "enabled": "An kunna don tattaunawata",
+    "empty": "Kirkiri kwarewa don al'amuran da ake maimaitawa, ko shigo da SKILL.md don dubawa da ajiye ta a nan."
   }
 }

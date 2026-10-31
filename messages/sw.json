@@ -812,7 +812,16 @@
       "stillWorking": "Bado inaendelea kufanya kazi…",
       "assessingSearchResults": "Kukagua kama matokeo yanajibu swali…",
       "refiningSearch": "Kutafuta tena: “{query}”…",
-      "readingSearchPages": "Kusoma kurasa {count} za matokeo…"
+      "readingSearchPages": "Kusoma kurasa {count} za matokeo…",
+      "toolRoutingUnavailableInRegion": "Usambazaji wa zana haupatikani kwenye sehemu ya {region} — kujibu bila zana...",
+      "applyingSkill": "Inatumia ujuzi: {skills}...",
+      "applyingSkills": "Inatumia ujuzi: {skills}...",
+      "readingSkillReferences": "Inasoma nyaraka za marejeo ya ujuzi...",
+      "selectingSkills": "Inachagua ujuzi…",
+      "retryingModel": "Mfumo uko na shughuli nyingi — inajaribu tena ndani ya sekunde {seconds} (jaribio la {attempt})…",
+      "resumingResponse": "Uunganisho na mfumo umekatika — inaendelea kutoka mahali ilipoacha…",
+      "continuingResponse": "Jibu limefikia kikomo cha urefu — inaendelea…",
+      "trimmingContext": "Mazungumzo ni marefu sana kwa mfumo — inapunguza historia ya zamani na inajaribu tena…"
     },
     "toolSummary": {
       "usedTools": "Imetumika {count, plural, one {# zana} other {# zana}}",
@@ -878,7 +887,9 @@
       "deniedByRuleHint": "Imefungwa na kanuni yako — dhibiti kwenye Mipangilio → Viunganishi.",
       "batchPendingHint": "Maombi ya zana {count} yanangojea",
       "approveAllButton": "Idhinisha zote",
-      "denyAllButton": "Kataa zote"
+      "denyAllButton": "Kataa zote",
+      "applySkillTitle": "Tumia ujuzi “{skill}”?",
+      "skillConsentNote": "Msimamizi ameweka ujuzi huu uombe ruhusa kabla ya kutumika. Kuiruhusu kutapakia mwongozo wake kwa jibu hili pekee."
     },
     "openImage": "Fungua picha",
     "copyMessage": "Nakili ujumbe",
@@ -918,7 +929,54 @@
     "alwaysWaitThisLong": "Kusubiri daima hadi {duration}",
     "keepSearching": "Endelea kutafuta",
     "keepSearchingHint": "Utafutaji ulisitishwa kabla haujapata hiki. Mwombe msaidizi ajaribu njia tofauti.",
-    "keepSearchingMessage": "Tafadhali endelea kutafuta hili — jaribu njia tofauti."
+    "keepSearchingMessage": "Tafadhali endelea kutafuta hili — jaribu njia tofauti.",
+    "addSkill": "Ujuzi",
+    "removeSkill": "Ondoa ujuzi",
+    "skillsMenuLabel": "Ujuzi unaopatikana",
+    "skillsLimit": "Ujuzi hadi 3 kwa kila ujumbe.",
+    "skillPin": "Bandika kwenye mazungumzo",
+    "skillUseOnce": "Tumia mara moja",
+    "skillPinned": "imebandikwa",
+    "skillOnce": "ujumbe unaofuata",
+    "skillsPaused": "imesitishwa",
+    "skillUnavailable": "haipatikani",
+    "skillsAutomaticHint": "Ujuzi unaofaa unachaguliwa moja kwa moja. Tumia mara moja kwa ujumbe unaofuata, au bandika ujuzi utumike katika mazungumzo haya yote.",
+    "skillsAgentDisabled": "Ujuzi umesitishwa wakati wakala ameunganishwa. Ujuzi uliobandikwa utaendelea ukiondoa wakala.",
+    "skillPersonal": "binafsi",
+    "skillsAgentToolsHint": "Ni ujuzi wa shirika pekee uliowezeshwa na msimamizi kwa matumizi ya wakala ndio unaopatikana hapa. Wakala anaweza kupakua kama zana za kusoma tu. Pini nyingine zitasalia kusitishwa, na ujuzi binafsi haupatikani kwa mawakala.",
+    "skillAlwaysOn": "daima imewashwa",
+    "skillAlwaysOnHint": "Imeongezwa kwenye kila ujumbe wa mazungumzo haya na msimamizi.",
+    "skillUsage": {
+      "label": "Ujuzi",
+      "requested": "imeombwa",
+      "pinned": "imepachikwa",
+      "auto": "otomatiki",
+      "unavailable": "haipatikani",
+      "incomplete": "Baadhi ya ujuzi haukuweza kutumika",
+      "references": "{count, plural, one {# kifungu cha marejeo} other {# vifungu vya marejeo}}",
+      "referencesUnavailable": "Baadhi ya nyaraka za marejeo hazikupatikana",
+      "showDetails": "Onyesha maelezo ya ujuzi",
+      "hideDetails": "Ficha maelezo ya ujuzi",
+      "agentLoad": "imewekwa na wakala",
+      "agentSearch": "nyaraka zilizopekuliwa na wakala",
+      "needsApproval": "inahitaji idhini yako",
+      "original": "kama ilivyotekelezwa asili",
+      "updated": "imesasishwa tangu"
+    },
+    "skillsManualHint": "Uteuzi wa moja kwa moja umezimwa kwenye Mipangilio. Tumia mara moja kwa ujumbe unaofuata, au weka skill ili itumike kwenye mazungumzo haya yote.",
+    "queuedMessage": {
+      "label": "Imesubiri",
+      "attachmentOnly": "Kiambatisho",
+      "cancel": "Ghairi ujumbe uliosubiri"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Majibu yamesimamishwa na kichujio cha usalama wa maudhui. Tafadhali rejesha ombi, au ondoa sehemu inayoweza kuwa imesababisha hilo.",
+      "MODEL_CONTEXT_TOO_LONG": "Mazungumzo haya ni marefu sana kwa mfumo uliochaguliwa, hata baada ya kupunguza historia ya zamani. Anza mazungumzo mapya, ondoa baadhi ya viambatisho, au chagua mfumo wenye dirisha kubwa la muktadha.",
+      "MODEL_OUTPUT_LIMIT": "Mfumo umetumia bajeti yote ya majibu bila kutoa jibu. Jaribu kwa kiwango cha chini cha hoja au ombi fupi zaidi.",
+      "MODEL_RATE_LIMITED": "Mfumo unapokea maombi mengi sana kwa sasa. Imejaribiwa tena kiotomatiki; tafadhali jaribu tena baada ya muda.",
+      "MODEL_QUOTA_EXCEEDED": "Kiwango cha uwezo wa mfumo kimeisha. Jaribu mfumo mwingine, au jaribu tena baadaye.",
+      "MODEL_AUTH_FAILED": "App haikuweza kuthibitisha na huduma ya mfumo. Hili ni tatizo la usanidi — tafadhali wasiliana na msaada."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -1325,7 +1383,11 @@
       "preferModelTitle": "Pendelea mfano niliouchagua",
       "preferModelDescription": "Usibadilishe mfano kiotomatiki ombi likishindikana. Ujumbe wa kosa bado utapendekeza kubadilisha."
     },
-    "Analytics": "Takwimu"
+    "Analytics": "Takwimu",
+    "skills": {
+      "autoApply": "Ruhusu msaidizi kutumia skills moja kwa moja",
+      "autoApplyDescription": "Skills zinazofaa, pamoja na skills zako binafsi, zitachaguliwa kwa kila ujumbe. Iwapo imezimwa, utatumia skills unazoomba au kuweka, pamoja na skills ambazo admin anaweka kwa kila mazungumzo."
+    }
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "sekunde",
     "chipAutoHideHint": "Kati ya {min} na {max} sekunde.",
     "byWorkflow": "Kwa mpangilio wa kazi",
-    "byWorkflowNote": "Sehemu ya jumla hapo juu, inaonyeshwa kando — si matumizi ya ziada. Utekelezaji wa ruzuku unahesabiwa kwenye taarifa ya shirika lako na bajeti yako ya tokeni, lakini si kwenye jumla hii ya hapa."
+    "byWorkflowNote": "Sehemu ya jumla hapo juu, inaonyeshwa kando — si matumizi ya ziada. Utekelezaji wa ruzuku unahesabiwa kwenye taarifa ya shirika lako na bajeti yako ya tokeni, lakini si kwenye jumla hii ya hapa.",
+    "chipLabelTitle": "Lebo ya chipu",
+    "chipLabelHint": "Mgawanyo huonyesha uzalishaji na gharama pamoja; hii huchagua tu kinachoonekana kwenye chipu iliyofupishwa.",
+    "chipLabelEmissions": "Uzalishaji",
+    "chipLabelCost": "Gharama",
+    "chipLabelBoth": "Vyote",
+    "costTile": "Gharama inayokadiriwa",
+    "costDisclosure": "Gharama kwa bei za orodha kufikia {asOf} (Kiwango cha Global Standard, hakuna punguzo la ingizo lililohifadhiwa): kiwango cha juu, si bili. Utafutaji wa wavuti, utekelezaji wa msimbo, unukuu, sauti, tafsiri na kuweka faharisi nyaraka havijajumuishwa.",
+    "costUnpriced": "{count, plural, one {# ombi bila bei ya orodha halijumuishwi.} other {# maombi bila bei ya orodha hayajumuishwi.}}"
   },
   "extraction": {
     "toggleLabel": "Dondoa data iliyo na muundo",
@@ -4502,7 +4572,16 @@
         "auto": "Otomatiki",
         "hidden": "Ficha"
       },
-      "visibilityHint": "Otomatiki itaonyesha chipu wakati makadirio yanasasishwa au unapobonya juu yake. Badilisha hili tena kwenye Mipangilio › Matumizi & Athari."
+      "visibilityHint": "Otomatiki itaonyesha chipu wakati makadirio yanasasishwa au unapobonya juu yake. Badilisha hili tena kwenye Mipangilio › Matumizi & Athari.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Gharama inayokadiriwa {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Hakuna bei ya orodha kwa maombi kwenye safu hii",
+        "unpriced": "{count, plural, one {# ombi bila bei ya orodha halijumuishwi} other {# maombi bila bei ya orodha hayajumuishwi}} kwenye gharama.",
+        "noPriceData": "Hakuna gharama inayoonyeshwa: mfano wa mazungumzo haya hauna bei ya orodha (vyanzo binafsi, matumizi ya ndani na mawakala havina bei).",
+        "note": "Gharama kwa bei za orodha kufikia {asOf} (Kiwango cha Global Standard, hakuna punguzo la ingizo lililohifadhiwa): kiwango cha juu, si bili. Utafutaji wa wavuti, utekelezaji wa msimbo, unukuu, sauti, tafsiri na kuweka faharisi nyaraka havijajumuishwa."
+      }
     },
     "workflow": {
       "title": "Sehemu hii ya kazi (kadirio)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "Futa kamusi",
     "glossaryDeleteSuccess": "Kamusi imefutwa",
     "channelProfilesTab": "Majukwaa",
-    "channelSetsTab": "Seti za njia"
+    "channelSetsTab": "Seti za njia",
+    "addPromptAgent": "Ongeza wakala wa prompt",
+    "m365AgentIndexStop": "Acha kuorodhesha",
+    "foundryAgentsHeading": "Maajenti wa Foundry na prompt",
+    "foundryAgentsDescription": "Maajenti waliogunduliwa kutoka Azure AI Foundry kupitia ufikiaji wako, pamoja na maajenti wa prompt walioainishwa hapa. Maajenti wa maarifa na maajenti wa Microsoft 365 husimamiwa katika sehemu zao hapa chini.",
+    "agentSkillsLabel": "Ujuzi",
+    "agentSkillsHelp": "Ni ujuzi gani wa shirika wakala huyu anaweza kupakia wakati wa kujibu. Watumiaji bado wataona tu ujuzi ambao sheria za upatikanaji zao zinaruhusu.",
+    "agentSkills": {
+      "inherit": "Ujuzi uliowekwa \"unapatikana kwa wakala\"",
+      "selected": "Ni ujuzi ulioteuliwa hapa chini pekee",
+      "none": "Hakuna ujuzi"
+    },
+    "agentSkillsNone": "Hakuna ujuzi unaopatikana kuchagua.",
+    "agentSkillsLoading": "Inapakia ujuzi…",
+    "agentSkillsLoadError": "Ujuzi haukuweza kupakiwa. Machaguo yaliyohifadhiwa awali yamebaki.",
+    "agentSkillsNotVisible": "(haionekani kwako — toa tiki kuondoa)"
   },
   "localModels": {
     "title": "Miundo ya ndani",
@@ -5521,7 +5615,8 @@
       "channelSets": "Sheria za kila timu za kuandika kwenye majukwaa: mwongozo, sauti, chaguomsingi, nani anaweza kutumia seti na nani anaweza kutuma.",
       "webSearch": "Jinsi utafutaji wa wavuti unaweza kufanyika: utafutaji wa hatua nyingi, modeli ya kukagua na mipaka yake.",
       "contextBudget": "Sehemu ya mazungumzo inayotumwa kwa kila modeli kila mara.",
-      "analytics": "Ripoti zilizowasilishwa: kilichofika, nani anaweza kufungua kila folda, na ni vipimo gani vinaweza kuonyeshwa."
+      "analytics": "Ripoti zilizowasilishwa: kilichofika, nani anaweza kufungua kila folda, na ni vipimo gani vinaweza kuonyeshwa.",
+      "skills": "Vifurushi vya maagizo vinavyoweza kutumiwa tena ambavyo msaidizi anatumia pale inapohitajika kwenye mazungumzo."
     },
     "openSettings": "Fungua mipangilio",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "Uwakilishi",
       "webSearch": "Utafutaji wa wavuti",
       "contextBudget": "Bajeti ya muktadha",
-      "analytics": "Takwimu"
+      "analytics": "Takwimu",
+      "skills": "Ujuzi"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "Mipangilio ya kimataifa",
       "overrides": "Vipengele vilivyozidiwa",
-      "delegations": "Wakilishi"
+      "delegations": "Wakilishi",
+      "models": "Mifano"
     },
     "tabsLabel": "Sehemu za mipaka",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Miito ya zana za Microsoft 365 kwa siku",
       "m365MailReadsPerDay": "Usomaji wa barua kwa siku",
       "m365MailDraftsPerDay": "Rasimu za barua kwa siku",
-      "m365MailDeepScansPerDay": "Uchambuzi wa kina wa barua kwa siku"
+      "m365MailDeepScansPerDay": "Uchambuzi wa kina wa barua kwa siku",
+      "m365DigestRunsPerDay": "Digest za kila siku kwa siku"
     },
     "valueModeLabel": "Aina ya kikomo",
     "valueAmountLabel": "Kiwango cha kikomo",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Idadi ya miito ya zana za Microsoft 365 (kalenda, watu, kazi, Teams) kwa siku. Ukizidisha kikomo, zana zitarudisha ujumbe wa kirafiki wa \"jaribu tena kesho\" badala ya kushindwa mazungumzo.",
       "m365MailReadsPerDay": "Utafutaji wa barua na usomaji wa ujumbe/mitiririko kwa siku. Ukizidisha kikomo, zana za barua zitarudisha \"jaribu tena kesho\".",
       "m365MailDraftsPerDay": "Rasimu za barua pepe ambazo msaidizi anaweza kuunda kwa siku — kila moja inathibitishwa kando. Kikomo hiki ni makusudi kuwa kidogo.",
-      "m365MailDeepScansPerDay": "Uchanganuzi wa barua pepe uliounganishwa (mwhtasari, utafutaji wa kina, ahadi) kwa siku. Kila uchunguzi huhesabiwa kama kitengo kimoja, bila kujali idadi ya usomaji wake wa ndani."
+      "m365MailDeepScansPerDay": "Uchanganuzi wa barua pepe uliounganishwa (mwhtasari, utafutaji wa kina, ahadi) kwa siku. Kila uchunguzi huhesabiwa kama kitengo kimoja, bila kujali idadi ya usomaji wake wa ndani.",
+      "m365DigestRunsPerDay": "Digest za Microsoft 365 za kila siku kwa siku. Digest moja inajumuisha kusoma kwa Graph mara nyingi pamoja na miito miwili ya modeli ya uchambuzi; chaguo la kipindi hufanya kurudia kuwa rahisi kuomba, hivyo kizingiti cha kawaida ni kidogo."
     },
     "scopeFamily": "Familia",
     "scopeModel": "Mfano",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "Chaguo-msingi ya ndani",
     "previewSourceGlobal": "Chaguo-msingi ya kimataifa",
     "previewSourceOverride": "Batilisho: {label}",
-    "previewNotEvaluated": "Batilisho za idara/kampuni/ofisi na kundi haziwezi kutathminiwa hapa — zinategemea mtu mwenyewe kuingia.",
+    "previewNotEvaluated": "Mkusanyiko haukupatikana, hivyo kanuni za idara/kampuni/ofisi na kundi hazikupimwa kwa mtu huyu. Jaribu tena baada ya muda.",
     "previewUnsaved": "Inaonyesha sera iliyohifadhiwa mwisho. Hifadhi mabadiliko yako ili uone hakikisho.",
     "previewColumnLimit": "Kikomo",
     "previewColumnValue": "Thamani",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "Makundi pekee",
     "yourScopeGroupOnlyNote": "Imedhihirishwa na makundi au sifa pekee, hivyo mipaka haiwezi kutazamwa kwa anwani ya barua pepe.",
     "previewOutOfScope": "Mtu huyu yuko nje ya wigo wako.",
-    "previewGroupOnlyScope": "Wigo wako umebainishwa na makundi au sifa, hivyo mipaka haiwezi kutazamwa kwa anwani ya barua pepe.",
+    "previewGroupOnlyScope": "Eneo lako limebainishwa na makundi au sifa. Muonekano hutafuta mtu kwenye mkusanyiko ili kuamua kama yuko ndani yake.",
     "previewCeilingPinned": "Imezuiwa na kikomo: {label}",
     "previewShowUsage": "Onyesha matumizi ya sasa",
     "previewColumnUsage": "Imetumika",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "Kiwango cha juu kilichowekwa kwenye mstari kinabana thamani hiyo kwa walengwa wa mabadiliko haya: wasimamizi wa eneo hawawezi kuongeza, na ambapo vikwazo vingi vipo, kile kinacholenga zaidi ndicho kinashinda.",
     "confirmDeleteOverride": "Futa \"{label}\"? Itaondolewa kwenye seva mara moja na walengwa wake watarudi kwenye mipaka iliyo chini yake. Hili haliwezi kurejeshwa.",
     "confirmDeleteOverrideAction": "Futa mabadiliko",
-    "previewUndecidableScope": "Eneo lako linajumuisha makundi au sifa, hivyo kama mtu huyu yumo huwezi kubaini kwa anwani ya barua pepe.",
+    "previewUndecidableScope": "Eneo lako linajumuisha makundi au sifa na mkusanyiko haukupatikana, hivyo huwezi kuamua kama mtu huyu yuko ndani yake kwa sasa. Jaribu tena baada ya muda.",
     "previewNoLongerAdmin": "Hutajwi tena katika mgawanyo ulioamilishwa, hivyo huwezi kutazama mipaka. Pakia ukurasa upya kuona upatikanaji wako wa sasa.",
     "previewScopeMatchesNobody": "Eneo lako halilingani na mtu yeyote hivi sasa, hivyo hakuna wa kutazama kwa anwani ya barua pepe.",
     "yourScopeMatchesNobodyChip": "Hailingani na yeyote",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "Ugawaji wake umesitishwa, hivyo mabadiliko haya hayamhusu mtu yeyote hadi ugawaji utakapowezeshwa tena. Haiwahi kupandishwa hadi ngazi ya dunia nzima.",
     "betaPolicyNotice": "Mazingira ya Beta: sera hii na kaunta zake za matumizi zimehifadhiwa kando na zile za uzalishaji (policy.beta.json). Hakuna unachobadilisha hapa kitakachoathiri uzalishaji.",
     "delegationsManagedElsewhere": "Uwakilishi unaonyeshwa hapa kwa usomaji pekee. Nani yuko kwenye uwakilishi, watumiaji wanaofikiwa na kila msimamizi anachoweza kufanya inasimamiwa kwenye eneo la Uwakilishi.",
-    "delegationsManagedElsewhereLink": "Fungua Uwakilishi"
+    "delegationsManagedElsewhereLink": "Fungua Uwakilishi",
+    "modelAccess": {
+      "intro": "Amua ni nani anaweza kutumia kila mfano. Mpangilio wa familia unatumika kwa mifano yake isipokuwa mfano umeweka lake; walio kwenye orodha hushinda chaguo-msingi kwa wengine wote; orodha ya waliozuiwa hushinda ruhusa zote.",
+      "externalNote": "Mifano inayohifadhiwa nje ya mazingira ya Azure ({families}) haitapatikana kwa yeyote hadi uruhusu hapa — kwa wote kupitia chaguo-msingi, au kwa makundi, domains na watu.",
+      "envelopeNote": "Kikomo cha maombi kwenye familia ni bajeti ya siku inayoshirikiwa kati ya mifano yake; kikomo kwenye mfano ni kikomo kwake pekee. Hakuna kikomo kwenye mfano hakiondoi bajeti ya familia.",
+      "observeNote": "Hali ya uangalizi imewashwa: hakuna kinachofichwa au kusitisha ombi kwa sasa. Badilisha kuwa Tekeleza juu mara sheria zitakapokamilika.",
+      "familyChip": "Familia",
+      "modelChip": "Mfano",
+      "otherModels": "Mifano bila familia",
+      "modelsInFamily": "{count, plural, one {# mfano katika familia hii} other {# mifano katika familia hii}}",
+      "noModels": "Hakuna mifano kwenye orodha bado.",
+      "expand": "Onyesha mifano",
+      "collapse": "Ficha mifano",
+      "edit": "Hariri",
+      "doneEditing": "Imekamilika",
+      "editNode": "Hariri upatikanaji wa {label}",
+      "defaultLabel": "Wengine wote",
+      "defaultInherit": "Rithi",
+      "defaultUnlimited": "Bila kikomo",
+      "defaultLimited": "Imewekewa kikomo",
+      "defaultUnavailable": "Haipatikani",
+      "defaultRequestsLabel": "Maombi kwa siku kwa wengine wote",
+      "requestsPerDay": "maombi / siku",
+      "inheritedFrom": "Imeturithi {state} kutoka {origin}.",
+      "effectiveLabel": "Wote ambao hawako kwenye orodha wanapata: {state}.",
+      "inheritedChip": "imeturithiwa",
+      "origin": {
+        "model": "mpangilio huu",
+        "family": "familia yake",
+        "defaults": "Chaguo-msingi za kimataifa",
+        "catalogExternal": "kanuni kwamba mifano ya nje haipatikani hadi iruhusiwe",
+        "catalog": "chaguo-msingi ya orodha"
+      },
+      "state": {
+        "unlimited": "Bila kikomo",
+        "limited": "Imewekewa kikomo cha {requests} / siku",
+        "unavailable": "Haipatikani"
+      },
+      "list": {
+        "groups": "Makundi yenye upatikanaji",
+        "domains": "Domains zenye upatikanaji",
+        "allow": "Watu walioruhusiwa",
+        "deny": "Watu waliozuiwa"
+      },
+      "listHint": {
+        "groups": "Wanachama wa makundi haya ya Entra wanaweza kutumia, kwa masharti yaliyowekwa kwa kila kundi.",
+        "domains": "Kila mtu mwenye anwani ya barua pepe kwenye domains hizi, kwa masharti yaliyowekwa kwa domain.",
+        "allow": "Watu waliotajwa wanaweza kutumia bila kujali chaguo-msingi au domain yao.",
+        "deny": "Watu waliotajwa hawawezi kutumia kabisa. Hii hushinda ruhusa zote juu."
+      },
+      "grantUnlimited": "Bila kikomo",
+      "grantLimited": "Imewekewa kikomo",
+      "termsLabel": "Masharti kwa {target}",
+      "requestsLabel": "Maombi kwa siku kwa {target}",
+      "removeGrant": "Ondoa {target}",
+      "groupsCount": "{count, plural, one {# kundi} other {# makundi}}",
+      "domainsCount": "{count, plural, one {# domaini} other {# domaini}}",
+      "allowCount": "{count, plural, one {# mtu ameruhusiwa} other {# watu wameruhusiwa}}",
+      "denyCount": "{count, plural, one {# mtu amezuiwa} other {# watu wamezuiwa}}",
+      "collisionChip": "Pia katika mipangilio ya kimataifa",
+      "collisionWarning": "Muundo huu au familia yake imepangwa pia chini ya mipangilio ya kimataifa. Kuhifadhi hakutaruhusiwa hadi moja kati ya mbili iondolewe."
+    },
+    "previewSourceModelAccess": "Idhini ya muundo — {list}",
+    "groupMembershipDegradedStructural": "Utafutaji wa uanachama wa kikundi unashindwa kwenye seva hii ({reason}). Sheria na ruhusa zinazotegemea kikundi hazifuatwi kwa watu walioathirika — tafadhali hakikisha idhini ya Group.Read.All ya mpangaji na usajili wa programu.",
+    "groupMembershipDegradedRetryable": "Baadhi ya utafutaji wa uanachama wa kikundi umeshindwa kwenye seva hii katika dakika chache zilizopita ({reason}). Sheria zinazotegemea kikundi zinaweza zisifuatwe kwa watu hawa kwa hadi dakika moja wakati utafutaji unarudiwa.",
+    "groupMembershipDegradedUsers": "{count, plural, one {Mtu mmoja} other {Watu #}} wanaathirika kwa sasa kwenye seva hii.",
+    "previewDirectoryNotFound": "Hakuna mtumiaji wa saraka aliye na anwani hii ya barua pepe, kwa hiyo sheria za idara/kampuni/ofisi na kikundi zimepitiwa kama vile mtu huyu hakuwa wa yoyote."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Upangaji wa asubuhi",
-        "description": "Nini kimeingia, nini kinakungoja, na kalenda ya leo — maelezo ya haraka"
+        "description": "Muhtasari tangu siku ya mwisho ya kazi — yaliyoingia, yaliyosubiriwa kwako, mwaliko na masasisho; Jumatatu inachukua Ijumaa na wikendi."
       },
       "chipsSettingLabel": "Pendekeza Playbooks za Microsoft 365",
       "chipsSettingHint": "Onyesha mapendekezo ya playbook juu ya kisanduku cha ujumbe inapofaa (mfano baada ya kuingiza muhtasari wa kikao).",
-      "dismissChip": "Futa {title}"
+      "dismissChip": "Futa {title}",
+      "dailyDigest": {
+        "title": "Digest ya kila siku",
+        "description": "Panga barua pepe, Teams na kalenda za hivi karibuni katika kinachokuhitaji, unachongojea, taarifa na FYI — chagua kipindi"
+      }
+    },
+    "digest": {
+      "title": "Digest ya kila siku",
+      "intro": "Inachanganua kilichokufikia katika kipindi na kupanga katika kinachohitaji jibu, ulichotakiwa, unachongojea, kupanga ratiba, taarifa za kampuni na mradi, na FYI. Hakuna kinachotumwa au kubadilishwa.",
+      "periodLabel": "Kipindi",
+      "preset": {
+        "lastWorkday": "Tangu siku ya kazi iliyopita",
+        "1d": "Masaa 24 yaliyopita",
+        "3d": "Siku 3 zilizopita",
+        "7d": "Siku 7 zilizopita",
+        "14d": "Siku 14 zilizopita",
+        "custom": "Kipindi maalum"
+      },
+      "lastWorkdayHint": "Kuanzia mwanzo wa siku ya kazi iliyopita kabla ya leo — Jumatatu inajumuisha Ijumaa na wikendi.",
+      "from": "Kutoka",
+      "to": "Mpaka",
+      "customInvalid": "Chagua kipindi kilichopangwa isiyozidi {days} siku.",
+      "sourcesLabel": "Vyanzo",
+      "sourceNoConsent": "Ruhusa haijatolewa kwa chanzo hiki.",
+      "sourceHint": {
+        "mail": "Bahasha za kikasha na muhtasari; Sent Items zako huamua vilivyojibiwa.",
+        "chat": "Mazungumzo ya hivi karibuni kwenye Teams, na @mentions ambazo hujajibu.",
+        "channel": "Machapisho katika chaneli unazochagua hapa chini.",
+        "calendar": "Mialiko inayosubiri majibu yako na mikutano yako ambayo wengine hawajajibu."
+      },
+      "channelsLabel": "Chaneli ({count} kati ya {max})",
+      "removeChannel": "Ondoa {name}",
+      "channelsSlow": "Kila chaneli inaongeza kusoma; chaneli nyingi zinachelewesha digest.",
+      "channelsMax": "Umefikia kiwango cha juu cha chaneli {max}.",
+      "channelsNeeded": "Chagua angalau chaneli moja, au ongeza chanzo kingine.",
+      "teamLabel": "Timu",
+      "loadingTeams": "Inapakia timu…",
+      "pickTeam": "Chagua timu ili uone chaneli zake",
+      "loadingChannels": "Inapakia chaneli…",
+      "noChannels": "Hakuna chaneli zimepatikana kwenye timu hii.",
+      "privacyNote": "Ni mada, watumaji na muhtasari mfupi tu husomwa; miili ya ujumbe na viambatisho hubaki kwenye Microsoft 365. Kipengee ni muhtasari wa data yako mwenyewe.",
+      "cancel": "Ghairi",
+      "run": "Endesha digest",
+      "starting": "Inaanza…",
+      "startFailed": "Digest imeshindwa kuanzishwa.",
+      "userMessage": "Digest ya kila siku — {period}; vyanzo: {sources}",
+      "working": "Inachanganua mawasiliano yako ya Microsoft 365…",
+      "failed": "Digest imeshindwa.",
+      "failedPrefix": "Digest ya kila siku imeshindwa:",
+      "expired": "Digest hii imekwisha muda wake. Iendeshe tena ili kupata mpya.",
+      "runAgain": "Endesha tena",
+      "changePeriod": "Badilisha kipindi",
+      "period": {
+        "lastWorkday": "tangu siku ya kazi iliyopita",
+        "lastDays": "{count, plural, one {siku iliyopita} other {siku # zilizopita}}"
+      },
+      "source": {
+        "mail": "Barua pepe",
+        "chat": "Mazungumzo ya Teams",
+        "channel": "Chaneli za Teams",
+        "calendar": "Kalenda"
+      },
+      "sourceStatus": {
+        "ok": "imekamilika",
+        "partial": "sehemu",
+        "skipped": "ilipitwa",
+        "unavailable": "hakuna ruhusa",
+        "error": "imefeli"
+      },
+      "degraded": "Mfumo wa uchambuzi haukupatikana, hivyo makundi yametolewa na sheria pekee.",
+      "withheld": "{count, plural, one {kipengele kimoja} other {vipengele #}} vimezuiwa na skrini za usalama.",
+      "empty": "Hakuna cha kuripoti kwa kipindi hiki na vyanzo hivi.",
+      "actionItems": "Vipengele vya kuchukua hatua",
+      "createTasks": "{count, plural, =0 {Ongeza kwenye To Do} one {Ongeza kazi # kwenye To Do} other {Ongeza kazi # kwenye To Do}}",
+      "taskCreated": "imeongezwa kwenye To Do",
+      "tasksCreated": "{count, plural, one {kazi #} other {kazi #}} zimeongezwa kwenye orodha \"{list}\".",
+      "tasksFailed": "Haikuwezekana kuunda kazi.",
+      "category": {
+        "needsReply": "Inahitaji jibu langu",
+        "askedOfMe": "Imeniulizwa",
+        "waitingOnOthers": "Inasubiri wengine",
+        "scheduling": "Ratiba",
+        "companyUpdates": "Taarifa za kampuni na mradi",
+        "fyi": "Kwa taarifa yako (FYI)",
+        "bulk": "Kiotomatiki na nyingi"
+      },
+      "companyUpdatesHint": "muhimu, mara chache ya dharura",
+      "markDone": "Weka {title} kuwa imeshughulikiwa",
+      "badge": {
+        "unanswered": "haijajibiwa",
+        "mentioned": "umetajwa",
+        "important": "umuhimu wa juu"
+      },
+      "askAbout": "Uliza kuhusu hili",
+      "askPrompt": "Kuhusu kipengele cha {source} \"{title}\" kutoka {from} ({when}) katika muhtasari hapo juu: nini kinaulizwa, na jibu zuri lingekuwa nini?",
+      "open": {
+        "mail": "Fungua kwenye Outlook",
+        "chat": "Fungua kwenye Teams",
+        "channel": "Fungua kwenye Teams",
+        "calendar": "Fungua kwenye Outlook"
+      },
+      "footnote": "Makundi hutokana na ishara zako binafsi (haijajibiwa, umetajwa, matangazo) pamoja na upangaji wa AI; hakikisha kabla ya kuchukua hatua. Hakuna kilichotumwa.",
+      "age": {
+        "now": "sasa hivi",
+        "hours": "{count}h zilizopita",
+        "days": "{count}d zilizopita"
+      },
+      "waitForReply": "Subiri majibu ya sasa yakamilike kabla ya kuanzisha muhtasari."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "Maarifa",
       "prompt": "Persona",
-      "m365": "Maarifa (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Maarifa",
-      "foundry": "Wakala wa Foundry",
+      "foundry": "Ajemu maalum",
       "connector": "Kiunganishi"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "inaendeshwa na mfano wake binafsi"
     },
     "loadError": "Mawakala wako hawakuweza kupakiwa sasa hivi. Hii mara nyingi ni ya muda mfupi.",
-    "discoveryLoading": "Inatafuta mawakala wa Foundry…",
-    "discoveryError": "Mawakala wa Foundry hawakuweza kupakiwa.",
+    "discoveryLoading": "Inatafuta ajemu zaidi...",
+    "discoveryError": "Baadhi ya ajemu hazikuweza kupakiwa.",
     "retry": "Jaribu tena"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "Zaidi ya miezi {months} ya kuhifadhi kwenye folda hii; haziwezi kuonyeshwa tena.",
       "unknown": "Tatizo lililoripotiwa: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Ujuzi",
+    "description": "Vifurushi vya maagizo vinavyoweza kutumiwa tena ambavyo msaidizi anatumia pale inapohitajika kwenye mazungumzo. Inayoendana na muundo wa Agent Skills SKILL.md unaotumika na Claude na ChatGPT.",
+    "loading": "Inapakia ujuzi…",
+    "loadError": "Imeshindikana kupakia ujuzi.",
+    "retry": "Jaribu tena",
+    "unavailableBanner": "Hifadhi ya ujuzi haifikiwi kwa sasa — chaguo za ndani ndizo zinaonyeshwa; ujuzi uliohifadhiwa na mabadiliko havipatikani hadi hali itakaporejea.",
+    "conflictError": "Ujuzi huu umebadilishwa na msimamizi mwingine. Orodha imepakiwa upya — tafadhali rudia mabadiliko yako.",
+    "alwaysWarning": "Ujuzi {count} umewekwa kwenye Daima. Kila mojawapo huongezwa kwenye kila mazungumzo — tumia Kiotomatiki kwa ujuzi wa mada maalum.",
+    "newSkill": "Ujuzi mpya",
+    "importSkill": "Ingiza SKILL.md",
+    "importTitle": "Bandika faili ya SKILL.md",
+    "importPlaceholder": "---\njina: my-skill\nmaelezo: Kile ujuzi huu unafanya na lini uitumie.\n---\n\nMaagizo…",
+    "importHint": "Ujuzi uliotafsiriwa unafunguka kwenye kihariri ili kukaguliwa — hakuna kinachohifadhiwa mpaka ubofye kuhifadhi.",
+    "importParse": "Tafsiri na kagua",
+    "invalidId": "Vitambulisho vya ujuzi hutumia herufi ndogo, nambari, na vizuizi vya katikati pekee.",
+    "saveSuccess": "Ujuzi umehifadhiwa.",
+    "saveError": "Imeshindikana kuhifadhi ujuzi.",
+    "deleteConfirm": "Ungependa kufuta ujuzi huu? Mazungumzo yatasitisha kupokea mara moja.",
+    "restoreConfirm": "Ondoa ubinafsishaji na rejesha ujuzi huu wa ndani kwenye chaguo msingi?",
+    "deleteSuccess": "Ujuzi umefutwa.",
+    "restoreSuccess": "Chaguo msingi la ndani limesharejeshwa.",
+    "deleteError": "Imeshindikana kufuta ujuzi.",
+    "empty": "Bado hakuna ujuzi. Tengeneza mmoja, au ingiza SKILL.md.",
+    "builtinChip": "Chaguo la ndani",
+    "customizedChip": "Umetengenezwa maalum",
+    "exportSkill": "Hamisha kama SKILL.md",
+    "edit": "Hariri",
+    "delete": "Futa",
+    "restoreDefault": "Rejesha chaguo msingi",
+    "createTitle": "Ujuzi mpya",
+    "editTitle": "Hariri {name}",
+    "idLabel": "Kitambulisho",
+    "idHint": "Herufi ndogo, nambari, na vizuizi vya katikati. Hutumika kama jina la SKILL.md la ujuzi na haliwezi kubadilishwa baada ya kutengenezwa.",
+    "nameLabel": "Jina la kuonyesha",
+    "descriptionLabel": "Maelezo",
+    "descriptionHint": "Kile ujuzi huu unafanya NA lini uitumie — hii ndiyo huchagua ujuzi, hivyo weka mada maalum na maneno ambayo inapaswa kujibu.",
+    "activationLabel": "Uanzishaji",
+    "activation": {
+      "auto": "Kiotomatiki",
+      "always": "Daima",
+      "off": "Imezimwa",
+      "manual": "Kwa ombi"
+    },
+    "activationHint": {
+      "auto": "Unachaguliwa moja kwa moja kazi ya sasa inapotimiza maelezo. Watumiaji pia wanaweza kuuomba mara moja au kuubandika kwenye mazungumzo.",
+      "always": "Inaongezwa kwenye kila mazungumzo kwa kila anayweza kuona ujuzi huu. Tumia kwa tahadhari — hili ni eneo la kudumu la msaada.",
+      "off": "Haitumiki: haitatumika na haitawasilishwa kwa watumiaji, lakini inabaki hapa kwa ajili ya uhariri.",
+      "manual": "Inatumika tu wakati mtumiaji anaomba au kuibandika. Haiwezi kuchaguliwa kiotomatiki na haitolewi kwa mfano kama ujuzi unaoweza kupakiwa."
+    },
+    "instructionsLabel": "Maagizo",
+    "instructionsHint": "Markdown, hadi 16 KB. Inaingizwa kama ilivyo wakati ujuzi unatumika.",
+    "saving": "Inahifadhi…",
+    "save": "Hifadhi",
+    "cancel": "Ghairi",
+    "documents": {
+      "title": "Nyaraka",
+      "hint": "Marejeleo huhifadhiwa na ujuzi huu. Nyaraka ndogo hupakiwa moja kwa moja; nyaraka kubwa huorodheshwa kwa utafutaji wa kunukuu. Hadi rasilimali 20, kila moja MB 10 na jumla ya MB 20. Rasilimali huhifadhiwa kwa kupakua pekee.",
+      "saveFirst": "Hifadhi muundo wa ujuzi huu kabla ya kuongeza nyaraka.",
+      "upload": "Ongeza nyaraka za marejeleo",
+      "remove": "Ondoa",
+      "stop": "Sitisha kuorodhesha",
+      "resume": "Orodhesha au endelea na nyaraka",
+      "empty": "Hakuna nyaraka zilizounganishwa bado.",
+      "requestFailed": "Maombi ya nyaraka yameshindwa. Pakia upya na jaribu tena.",
+      "importZip": "Ingiza ZIP ya ujuzi",
+      "zipTooLarge": "ZIP ya ujuzi inapaswa kuwa MB 20 au chini.",
+      "importCount": "Rasilimali za kuunganisha baada ya kuhifadhi: {count}",
+      "skippedScripts": "Scripti zinazoendeshwa zimeskimiwa",
+      "status": {
+        "pending": "Inasubiri kuorodheshwa",
+        "processing": "Inaorodheshwa",
+        "inline": "Tayari (imepakiwa moja kwa moja)",
+        "indexed": "Tayari (inaweza kutafutwa)",
+        "failed": "Kuorodhesha kumeshindwa",
+        "asset": "Rasilimali ya kupakua"
+      },
+      "confirmRemove": "Ondoa {filename} kutoka kwenye ujuzi huu? Faili asilia iliyohifadhiwa itafutwa na haitapatikana tena kama chanzo cha rejea.",
+      "reindexRequired": "Hati hizi zinahitaji kuorodheshwa upya ili kufuata mpangilio wa sasa wa Utafutaji na ujazaji wa kanda. Hazitatafutwa hadi uorodheshaji ukamilike."
+    },
+    "applyToAgents": "Inapatikana kwa mawakala",
+    "applyToAgentsHint": "Imesitishwa kwa chaguo-msingi. Ukiwezeshwa, mawakala wanaweza kupakua ujuzi huu kupitia zana za kusoma tu badala ya kubadilisha maagizo yao ya utambulisho. Wito wa ujuzi una kikomo cha hatua kinachojitegemea. Mawakala wa Foundry lazima wawe tayari wamejiandikisha na kazi za load_skill na search_skill_documents katika ufafanuzi wao.",
+    "requireConsent": "Uliza kabla ya kutumia",
+    "requireConsentHint": "Wakati mfano unataka kutumia ujuzi huu pekee, mtumiaji huulizwa kwanza. Matumizi yaliyoombwa na yaliyobandikwa hayahitaji uthibitisho.",
+    "consentChip": "Huuliza kwanza",
+    "sourceChip": "Kutoka chanzo",
+    "sourceChipHint": "Imetolewa na chanzo cha ujuzi kilichosajiliwa; maagizo husasishwa kwenye usawazishaji. Mipangilio ya kuwasha, wakala na idhini ni yako.",
+    "sources": {
+      "title": "Vyanzo vya ujuzi",
+      "description": "Jiunge na katalogi ya ujuzi wa nje (index.json inayoorodhesha faili za SKILL.md). Ujuzi wake unakuwa ujuzi wa shirika na husasishwa kila saa sita. Ni SKILL.md pekee inayoletwa; nyaraka za marejeo haziletiwi.",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Lazima iwe https kwenye hosti ya umma. Faili za ujuzi husomwa kutoka eneo hilo pekee.",
+      "labelLabel": "Lebo (si lazima)",
+      "add": "Jiunge",
+      "adding": "Inajiunga…",
+      "added": "{count, plural, =0 {Chanzo kimeongezwa; hakuna ujuzi uliopokelewa bado} one {Chanzo kimeongezwa; ujuzi # umeletwa} other {Chanzo kimeongezwa; ujuzi # umeletwa}}",
+      "addedWithError": "Chanzo kimeongezwa, lakini usawazishaji wa kwanza umeshindwa. Angalia kosa kwenye chanzo.",
+      "addError": "Imeshindwa kuongeza chanzo cha ujuzi",
+      "sync": "Sawazisha sasa",
+      "syncing": "Inasawazisha…",
+      "synced": "Chanzo kimesawazishwa.",
+      "syncError": "Imeshindwa kusawazisha chanzo cha ujuzi",
+      "remove": "Ondoa chanzo",
+      "removeConfirm": "Ondoa chanzo hiki? Ujuzi uliotoa utabaki kama ujuzi wa kawaida wa shirika na utaacha kusasishwa.",
+      "removed": "Chanzo kimeondolewa.",
+      "removeError": "Imeshindwa kuondoa chanzo cha ujuzi",
+      "loading": "Inapakia vyanzo…",
+      "loadError": "Vyanzo vya ujuzi vimeshindwa kupakia.",
+      "empty": "Hakuna vyanzo vya ujuzi bado.",
+      "never": "Haijasawazishwa kamwe",
+      "statusOk": "Imesawazishwa",
+      "statusError": "Usawazishaji umeshindwa",
+      "statusPartial": "{count, plural, one {# rekodi imeondolewa} other {# rekodi zimeondolewa}}",
+      "lastSync": "Usawazishaji wa mwisho {time}",
+      "entryCount": "{count, plural, one {# rekodi} other {# rekodi}}",
+      "entryStatus": {
+        "synced": "imesawazishwa",
+        "skipped": "imeondolewa",
+        "conflict": "mgongano — haikuandikwa upya",
+        "invalid": "si sahihi"
+      }
+    },
+    "requireConsentDisabledHint": "Ni ujuzi wa moja kwa moja pekee unaoweza kuomba ruhusa kwanza: ujuzi unaoombwa, uliowekwa juu na ule uliowashwa muda wote hutumiwa bila arifa, na ujuzi wa ombi hautachaguliwa kamwe na modeli."
+  },
+  "personalSkills": {
+    "title": "Ujuzi binafsi",
+    "description": "Hifadhi maagizo yanayotumika tena kwa mazungumzo yako. Ujuzi hubaki kwenye kivinjari hiki na hutumwa kwa modeli tu unapoongea. Ujuzi husika unaweza kuchaguliwa kiotomatiki, kutumika mara moja, au kunaswa. Haviwezi kubadilisha sera ya shirika au kutoa ufikiaji wa zana. Matumizi ya ujuzi yanahitaji ujuzi kuwezeshwa katika matumizi haya; mazungumzo ya wakala hayatumii ujuzi binafsi.",
+    "importFile": "Ingiza SKILL.md au ZIP",
+    "review": "Kagua maagizo yote kabla ya kuhifadhi. Maagizo yaliyoingizwa ni mapendeleo ya mtumiaji, sio sera rasmi ya shirika.",
+    "skipped": "Skripti zinazoendeshwa zimerukwa",
+    "importTooLarge": "Faili ya kuingiza lazima iwe MB 20 au chini.",
+    "invalid": "Ujuzi haukuweza kuingizwa.",
+    "duplicate": "Kitambulisho hicho cha ujuzi binafsi tayari kipo. Hariri ujuzi uliopo au chagua kitambulisho kingine.",
+    "countLimit": "Unaweza kuhifadhi hadi ujuzi binafsi 20.",
+    "requestLimit": "Ujuzi binafsi walioenezeshwa wamezidi kikomo cha ombi cha KB 160. Zima baadhi ya ujuzi au fupisha maagizo yao.",
+    "saved": "Ujuzi binafsi umehifadhiwa kwenye kivinjari hiki.",
+    "instructionsHint": "Hadi KB 16 za maagizo, ikijumuisha marejeo yoyote ya maandishi yaliyoingizwa. Faili za binary na kuorodhesha nyaraka kwa kudumu vinapatikana tu kwa ujuzi wa shirika. Uzalishaji unatumia jina la SKILL.md bila kiambishi awali cha mtumiaji:.",
+    "enabled": "Imewezeshwa kwa mazungumzo yangu",
+    "empty": "Unda ujuzi kwa kazi inayojirudia, au ingiza SKILL.md ili kukagua na kuhifadhi hapa."
   }
 }

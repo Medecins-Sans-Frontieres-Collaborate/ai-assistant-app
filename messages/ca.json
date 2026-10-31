@@ -787,7 +787,16 @@
       "stillWorking": "Encara treballant…",
       "assessingSearchResults": "Verificant si els resultats responen a la pregunta…",
       "refiningSearch": "Cercant de nou: “{query}”…",
-      "readingSearchPages": "Llegint {count} pàgines de resultats…"
+      "readingSearchPages": "Llegint {count} pàgines de resultats…",
+      "toolRoutingUnavailableInRegion": "Enrutament d’eines no disponible a l'endpoint de {region} — responent sense eines…",
+      "applyingSkill": "S'està aplicant la habilitat: {skills}…",
+      "applyingSkills": "S'estan aplicant les habilitats: {skills}…",
+      "readingSkillReferences": "Llegint documents de referència de la habilitat…",
+      "selectingSkills": "S'estan seleccionant les habilitats…",
+      "retryingModel": "Model ocupat — tornant a intentar-ho en {seconds}s (intent {attempt})…",
+      "resumingResponse": "S'ha perdut la connexió amb el model — reprenent des d'on s'havia quedat…",
+      "continuingResponse": "La resposta ha assolit el límit de longitud — continuant…",
+      "trimmingContext": "Conversa massa llarga per al model — es retalla l'historial antic i es torna a intentar…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# eina utilitzada} other {# eines utilitzades}}",
@@ -853,7 +862,9 @@
       "deniedByRuleHint": "Bloquejat per la teva norma — gestiona-ho a Configuració → Connectors.",
       "batchPendingHint": "{count} sol·licituds d'eina pendents",
       "approveAllButton": "Aprova-ho tot",
-      "denyAllButton": "Denega-ho tot"
+      "denyAllButton": "Denega-ho tot",
+      "applySkillTitle": "Voleu aplicar l’habilitat «{skill}»?",
+      "skillConsentNote": "Un administrador ha configurat aquesta habilitat perquè es demani abans d’aplicar-la. L’aprovació carrega les seves indicacions només per a aquesta resposta."
     },
     "openImage": "Obre la imatge",
     "copyMessage": "Copia el missatge",
@@ -893,7 +904,54 @@
     "alwaysWaitThisLong": "Espera sempre fins a {duration}",
     "keepSearching": "Continua cercant",
     "keepSearchingHint": "La cerca es va aturar abans de trobar això. Demana a l'assistent que provi diferents enfocaments.",
-    "keepSearchingMessage": "Si us plau, continua cercant això: prova un enfocament diferent."
+    "keepSearchingMessage": "Si us plau, continua cercant això: prova un enfocament diferent.",
+    "addSkill": "Habilitats",
+    "removeSkill": "Elimina habilitat",
+    "skillsMenuLabel": "Habilitats disponibles",
+    "skillsLimit": "Fins a 3 habilitats per missatge.",
+    "skillPin": "Fixa a la conversa",
+    "skillUseOnce": "Utilitza un cop",
+    "skillPinned": "fixat",
+    "skillOnce": "missatge següent",
+    "skillsPaused": "en pausa",
+    "skillUnavailable": "no disponible",
+    "skillsAutomaticHint": "Les habilitats rellevants se seleccionen automàticament. Utilitza una vegada per al proper missatge o fixa una habilitat per fer-la servir durant tota la conversa.",
+    "skillsAgentDisabled": "Les habilitats estan en pausa mentre hi ha un agent connectat. Les habilitats fixades es reprendran quan desconnectis l’agent.",
+    "skillPersonal": "personal",
+    "skillsAgentToolsHint": "Només s'ofereixen aquí les habilitats de l'organització activades per un administrador per a ús de l'agent. L'agent pot carregar-les com a eines de només lectura. Les altres fixacions queden en pausa i les habilitats personals no estan disponibles per als agents.",
+    "skillAlwaysOn": "sempre actiu",
+    "skillAlwaysOnHint": "Afegit a cada missatge d'aquesta conversa per un administrador.",
+    "skillUsage": {
+      "label": "Habilitats",
+      "requested": "sol·licitada",
+      "pinned": "fixada",
+      "auto": "automàtica",
+      "unavailable": "no disponible",
+      "incomplete": "Algunes habilitats no s'han pogut aplicar",
+      "references": "{count, plural, one {# fragment de referència} other {# fragments de referència}}",
+      "referencesUnavailable": "Alguns documents de referència no estaven disponibles",
+      "showDetails": "Mostra els detalls de la habilitat",
+      "hideDetails": "Amaga els detalls de la habilitat",
+      "agentLoad": "carregada per l’agent",
+      "agentSearch": "documents cercats per l’agent",
+      "needsApproval": "requereix la vostra aprovació",
+      "original": "tal com es va executar originalment",
+      "updated": "actualitzat des de llavors"
+    },
+    "skillsManualHint": "La selecció automàtica està desactivada a Configuració. Utilitzeu una habilitat per al proper missatge o fixeuneu-ne una per utilitzar-la durant tota aquesta conversa.",
+    "queuedMessage": {
+      "label": "A la cua",
+      "attachmentOnly": "Adjunt",
+      "cancel": "Cancel·la el missatge en cua"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "La resposta ha estat aturada pel filtre de seguretat de contingut. Reformula la sol·licitud o elimina la part que pot haver-lo activat.",
+      "MODEL_CONTEXT_TOO_LONG": "Aquesta conversa és massa llarga per al model seleccionat, fins i tot després de retallar l'historial antic. Comença una conversa nova, elimina alguns adjunts o tria un model amb una finestra de context més gran.",
+      "MODEL_OUTPUT_LIMIT": "El model ha utilitzat tot el límit de sortida sense produir una resposta. Prova amb un esforç de raonament menor o una sol·licitud més curta.",
+      "MODEL_RATE_LIMITED": "El model rep massa sol·licituds en aquest moment. S'ha tornat a intentar automàticament; torna-ho a provar d'aquí a un moment.",
+      "MODEL_QUOTA_EXCEEDED": "La quota de capacitat del model està exhaurida. Prova un altre model o intenta-ho més tard.",
+      "MODEL_AUTH_FAILED": "L'aplicació no ha pogut autenticar-se amb el servei del model. Això és un problema de configuració — contacta amb el suport."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -1300,7 +1358,11 @@
       "preferModelTitle": "Preferesc el meu model seleccionat",
       "preferModelDescription": "No canviïs automàticament a un altre model quan una petició falla. L'error igualment oferirà el canvi."
     },
-    "Analytics": "Analítica"
+    "Analytics": "Analítica",
+    "skills": {
+      "autoApply": "Permet que l'assistent apliqui habilitats automàticament",
+      "autoApplyDescription": "S'escullen habilitats rellevants i les teves habilitats personals per a cada missatge. Si està desactivat, només s'utilitzen les habilitats que sol·licitis o fixis, i aquelles que un administrador apliqui a totes les converses."
+    }
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "segons",
     "chipAutoHideHint": "Entre {min} i {max} segons.",
     "byWorkflow": "Per flux de treball",
-    "byWorkflowNote": "Forma part dels totals anteriors, mostrat per separat — no és ús addicional. Les execucions de les subvencions es compten per a l’informe de la vostra organització i el pressupost de tokens, però no en aquest total local."
+    "byWorkflowNote": "Forma part dels totals anteriors, mostrat per separat — no és ús addicional. Les execucions de les subvencions es compten per a l’informe de la vostra organització i el pressupost de tokens, però no en aquest total local.",
+    "chipLabelTitle": "Etiqueta del xip",
+    "chipLabelHint": "La desglossament sempre mostra emissions i cost costat a costat; això només escull què llegeix el xip comprimit.",
+    "chipLabelEmissions": "Emissions",
+    "chipLabelCost": "Cost",
+    "chipLabelBoth": "Ambdós",
+    "costTile": "Cost estimat",
+    "costDisclosure": "Cost segons preus de llista a data de {asOf} (tarifa Estàndard Global, sense descompte per entrada en memòria cau): és un límit superior, no una factura. Cerca web, execució de codi, transcripció, veu, traducció i indexació de documents no estan inclosos.",
+    "costUnpriced": "{count, plural, one {# sol·licitud sense preu de llista no s'} other {# sol·licituds sense preu de llista no s'}}inclouen."
   },
   "extraction": {
     "toggleLabel": "Extreu dades estructurades",
@@ -4502,7 +4572,16 @@
         "auto": "Automàtic",
         "hidden": "Amaga"
       },
-      "visibilityHint": "El mode automàtic mostra el xip quan s’actualitza l’estimació o en passar-hi el cursor. Pots canviar això de nou a Configuració › Ús i Impacte."
+      "visibilityHint": "El mode automàtic mostra el xip quan s’actualitza l’estimació o en passar-hi el cursor. Pots canviar això de nou a Configuració › Ús i Impacte.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Cost estimat {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "No hi ha preu de llista per a les sol·licituds d’aquesta fila",
+        "unpriced": "{count, plural, one {# sol·licitud sense preu de llista no s'} other {# sol·licituds sense preu de llista no s'}}inclouen en el cost.",
+        "noPriceData": "No es mostra cap cost: el model d’aquesta conversa no té preu de llista (fonts pròpies, execució local i agents no tenen preu assignat).",
+        "note": "Cost segons preus de llista a data de {asOf} (tarifa Estàndard Global, sense descompte per entrada en memòria cau): és un límit superior, no una factura. Cerca web, execució de codi, transcripció, veu, traducció i indexació de documents no estan inclosos."
+      }
     },
     "workflow": {
       "title": "Aquest espai de treball (estimació)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "Suprimeix el glossari",
     "glossaryDeleteSuccess": "Glossari suprimit",
     "channelProfilesTab": "Plataformes",
-    "channelSetsTab": "Conjunts de canals"
+    "channelSetsTab": "Conjunts de canals",
+    "addPromptAgent": "Afegeix un agent de prompt",
+    "m365AgentIndexStop": "Atura la indexació",
+    "foundryAgentsHeading": "Agents de Foundry i de prompt",
+    "foundryAgentsDescription": "Agents descoberts d’Azure AI Foundry amb el teu propi accés, més els agents de prompt definits aquí. Els agents de coneixement i els agents de Microsoft 365 es gestionen en les seves pròpies seccions a continuació.",
+    "agentSkillsLabel": "Habilitats",
+    "agentSkillsHelp": "Quines habilitats de l'organització pot carregar aquest agent mentre respon. Els usuaris només veuen les habilitats que permeten les seves regles d'accés.",
+    "agentSkills": {
+      "inherit": "Habilitats marcades com a “disponibles per als agents”",
+      "selected": "Només les habilitats seleccionades a continuació",
+      "none": "Sense habilitats"
+    },
+    "agentSkillsNone": "No hi ha habilitats disponibles per seleccionar.",
+    "agentSkillsLoading": "Carregant habilitats…",
+    "agentSkillsLoadError": "No s’han pogut carregar les habilitats. Es conserven les seleccions desades anteriorment.",
+    "agentSkillsNotVisible": "(no visible per a vostè — desmarqueu-ho per eliminar-ho)"
   },
   "localModels": {
     "title": "Models locals",
@@ -5521,7 +5615,8 @@
       "channelSets": "Les normes de cada equip per publicar a les plataformes: directrius, registres, predeterminats, qui pot utilitzar el conjunt i qui pot enviar.",
       "webSearch": "Fins on pot arribar una cerca web: cerca multi-pas, el model d'avaluació i els seus límits.",
       "contextBudget": "Quant de la conversa s'envia a cada model en cada torn.",
-      "analytics": "Informes lliurats: què ha arribat, qui pot obrir cada carpeta i quins camps es poden mostrar."
+      "analytics": "Informes lliurats: què ha arribat, qui pot obrir cada carpeta i quins camps es poden mostrar.",
+      "skills": "Blocs d'instruccions reutilitzables que l'assistent aplica quan una conversa els necessita."
     },
     "openSettings": "Obre la configuració",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "Delegacions",
       "webSearch": "Cerca web",
       "contextBudget": "Pressupost de context",
-      "analytics": "Analítica"
+      "analytics": "Analítica",
+      "skills": "Habilitats"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "Valors globals per defecte",
       "overrides": "Excepcions",
-      "delegations": "Delegacions"
+      "delegations": "Delegacions",
+      "models": "Models"
     },
     "tabsLabel": "Seccions de límits",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Trucades a eines de Microsoft 365 per dia",
       "m365MailReadsPerDay": "Lectures de correus per dia",
       "m365MailDraftsPerDay": "Esborranys de correus per dia",
-      "m365MailDeepScansPerDay": "Anàlisis profundes de correus per dia"
+      "m365MailDeepScansPerDay": "Anàlisis profundes de correus per dia",
+      "m365DigestRunsPerDay": "Execucions diàries del resum per dia"
     },
     "valueModeLabel": "Tipus de límit",
     "valueAmountLabel": "Quantitat límit",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Sol·licituds a eines de Microsoft 365 (calendari, contactes, tasques, Teams) al dia. Si se supera el límit, les eines tornaran un resultat amable de “torna-ho a provar demà” en lloc de fallar el xat.",
       "m365MailReadsPerDay": "Cerques de correu i lectures de missatges/converses al dia. Superat el límit, les eines de correu et donaran el resultat \"torna-ho a provar demà\".",
       "m365MailDraftsPerDay": "Esborranys de correu electrònic que l'assistent pot crear cada dia — cadascun confirmat individualment. Límit intencionadament restrictiu.",
-      "m365MailDeepScansPerDay": "Anàlisis de correu compostes (resums, cerques profundes, compromisos) al dia. Cada anàlisi compta com una unitat del pressupost, independentment de les lectures internes."
+      "m365MailDeepScansPerDay": "Anàlisis de correu compostes (resums, cerques profundes, compromisos) al dia. Cada anàlisi compta com una unitat del pressupost, independentment de les lectures internes.",
+      "m365DigestRunsPerDay": "Execucions del resum diari de Microsoft 365 per dia. Cada execució implica desenes de lectures Graph i dues trucades als models d'anàlisi; l’eina de selecció de període fa que repetir execucions sigui fàcil, per això el valor predeterminat és restrictiu."
     },
     "scopeFamily": "Família",
     "scopeModel": "Model",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "Predeterminat integrat",
     "previewSourceGlobal": "Predeterminat global",
     "previewSourceOverride": "Desviació: {label}",
-    "previewNotEvaluated": "Les desviacions per departament/empresa/oficina i grup no es poden avaluar aquí — depenen de l'inici de sessió de la persona.",
+    "previewNotEvaluated": "No s'ha pogut accedir al directori, així que no s'han pogut avaluar les normes de departament, empresa/oficina i grup per a aquesta persona. Torna-ho a intentar d'aquí un moment.",
     "previewUnsaved": "Es mostra la darrera política desada. Desa els canvis per previsualitzar-los.",
     "previewColumnLimit": "Límit",
     "previewColumnValue": "Valor",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "Només grups",
     "yourScopeGroupOnlyNote": "Definit només per grups o atributs; els límits no es poden previsualitzar per adreça electrònica.",
     "previewOutOfScope": "Aquesta persona està fora del teu àmbit.",
-    "previewGroupOnlyScope": "El teu àmbit és definit per grups o atributs, així que els límits no es poden previsualitzar per adreça electrònica.",
+    "previewGroupOnlyScope": "El teu abast es defineix per grups o atributs. Les previsualitzacions consulten la persona al directori per decidir si hi està inclosa.",
     "previewCeilingPinned": "Fixat pel límit superior: {label}",
     "previewShowUsage": "Mostra l’ús actual",
     "previewColumnUsage": "Utilitzat",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "Un límit màxim fixat a una fila bloqueja aquest valor per als destinataris de l’excepció: els administradors amb àmbit no el poden aixecar, i si hi ha diversos límits màxims s’aplica el més específic.",
     "confirmDeleteOverride": "Vols suprimir «{label}»? S’elimina del servidor immediatament i els seus destinataris passen als límits inferiors. Això no es pot desfer.",
     "confirmDeleteOverrideAction": "Suprimeix excepció",
-    "previewUndecidableScope": "El teu àmbit inclou grups o atributs, per tant, no es pot determinar si aquesta persona hi pertany només amb l'adreça electrònica.",
+    "previewUndecidableScope": "El teu abast inclou grups o atributs i no s'ha pogut accedir al directori, així que no es pot determinar si aquesta persona hi està inclosa ara mateix. Torna-ho a intentar d'aquí un moment.",
     "previewNoLongerAdmin": "Ja no ets inclòs en cap delegació activa, així que no pots previsualitzar límits. Torna a carregar la pàgina per veure el teu accés actual.",
     "previewScopeMatchesNobody": "El teu àmbit ara mateix no coincideix amb ningú, així que no pots fer cap previsualització per adreça electrònica.",
     "yourScopeMatchesNobodyChip": "No coincideix amb ningú",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "La seva delegació està desactivada, de manera que aquesta substitució no aplica a ningú fins que la delegació es torni a activar. Mai no s’eleva al nivell global.",
     "betaPolicyNotice": "Entorn beta: aquesta política i els seus comptadors d'ús s'emmagatzemen separadament de producció (policy.beta.json). Els canvis que feu aquí no afecten la producció.",
     "delegationsManagedElsewhere": "Les delegacions es mostren aquí només per a consulta. Qui forma part d’una delegació, quins usuaris cobreix i què pot fer cada administrador es gestiona a l’àrea de Delegacions.",
-    "delegationsManagedElsewhereLink": "Obrir Delegacions"
+    "delegationsManagedElsewhereLink": "Obrir Delegacions",
+    "modelAccess": {
+      "intro": "Decidiu qui pot utilitzar cada model. La configuració d’una família s’aplica als seus models, tret que un model tingui la seva pròpia; les persones d’una llista tenen prioritat sobre el valor per defecte dels altres; la llista de bloqueig preval sobre qualsevol permís.",
+      "externalNote": "Els models allotjats fora de l'entorn Azure ({families}) estan indisponibles per a tothom fins que els concedeixis accés aquí — tant a tothom amb el valor per defecte com a grups, dominis i persones.",
+      "envelopeNote": "Un límit de peticions a una família és un pressupost diari compartit entre els seus models; un límit a un model és un màxim dins d’ell. Il·limitat en un model no elimina el pressupost de la família.",
+      "observeNote": "El mode d'observació està activat: res d'aquí amaga un model ni atura una petició ara mateix. Canvia a Aplica a dalt quan les normes siguin correctes.",
+      "familyChip": "Família",
+      "modelChip": "Model",
+      "otherModels": "Models sense família",
+      "modelsInFamily": "{count, plural, one {# model en aquesta família} other {# models en aquesta família}}",
+      "noModels": "Encara no hi ha models al catàleg.",
+      "expand": "Mostra models",
+      "collapse": "Oculta models",
+      "edit": "Edita",
+      "doneEditing": "Fet",
+      "editNode": "Edita l'accés per a {label}",
+      "defaultLabel": "La resta",
+      "defaultInherit": "Hereta",
+      "defaultUnlimited": "Il·limitat",
+      "defaultLimited": "Limitat a",
+      "defaultUnavailable": "Indisponible",
+      "defaultRequestsLabel": "Peticions al dia per a la resta",
+      "requestsPerDay": "peticions / dia",
+      "inheritedFrom": "Hereta {state} de {origin}.",
+      "effectiveLabel": "Qui no és a cap llista rep: {state}.",
+      "inheritedChip": "heretat",
+      "origin": {
+        "model": "aquesta configuració",
+        "family": "la seva família",
+        "defaults": "Valors globals per defecte",
+        "catalogExternal": "la norma que indica que els models externs són indisponibles fins que es concedeixi accés",
+        "catalog": "el valor per defecte del catàleg"
+      },
+      "state": {
+        "unlimited": "Il·limitat",
+        "limited": "Limitat a {requests} / dia",
+        "unavailable": "Indisponible"
+      },
+      "list": {
+        "groups": "Grups amb accés",
+        "domains": "Dominis amb accés",
+        "allow": "Persones autoritzades",
+        "deny": "Persones bloquejades"
+      },
+      "listHint": {
+        "groups": "Els membres d’aquests grups Entra poden utilitzar-lo, segons les condicions fixades per grup.",
+        "domains": "Tothom amb una adreça de correu d’aquests dominis, segons les condicions fixades per domini.",
+        "allow": "Les persones designades podran utilitzar-lo, independentment del valor per defecte o del seu domini.",
+        "deny": "Les persones designades no el podran utilitzar mai. Això preval sobre qualsevol permís anterior."
+      },
+      "grantUnlimited": "Il·limitat",
+      "grantLimited": "Limitat a",
+      "termsLabel": "Condicions per a {target}",
+      "requestsLabel": "Peticions al dia per a {target}",
+      "removeGrant": "Elimina {target}",
+      "groupsCount": "{count, plural, one {# grup} other {# grups}}",
+      "domainsCount": "{count, plural, one {# domini} other {# dominis}}",
+      "allowCount": "{count, plural, one {# persona autoritzada} other {# persones autoritzades}}",
+      "denyCount": "{count, plural, one {# persona bloquejada} other {# persones bloquejades}}",
+      "collisionChip": "També als valors predeterminats globals",
+      "collisionWarning": "Aquest model o família també està configurat als valors predeterminats globals. No es podrà desar fins que s'esborri una de les dues opcions."
+    },
+    "previewSourceModelAccess": "Aprovació del model — {list}",
+    "groupMembershipDegradedStructural": "Les consultes de membres de grup estan fallant en aquest servidor ({reason}). No s’estan aplicant les regles i concessions basades en grup per a les persones afectades; comproveu el consentiment de Group.Read.All del tenant i el registre de l’aplicació.",
+    "groupMembershipDegradedRetryable": "Algunes consultes de membres de grup han fallat en aquest servidor en els últims minuts ({reason}). Les regles basades en grup podrien no aplicar-se per a aquestes persones durant un minut mentre es repeteixen les consultes.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# persona} other {# persones}} afectades actualment en aquest servidor.",
+    "previewDirectoryNotFound": "Cap usuari del directori té aquesta adreça electrònica, per tant les regles de departament/empresa/oficina i de grup s’han avaluat com si la persona no pertanyés a cap."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Triage del matí",
-        "description": "Què ha arribat, què espera resposta teva i l’agenda d’avui — tot en un resum"
+        "description": "Un resum des de l’últim dia feiner: el que ha arribat, el que està pendent de vosaltres, invitacions i actualitzacions; els dilluns cobreix el divendres i el cap de setmana."
       },
       "chipsSettingLabel": "Suggereix playbooks de Microsoft 365",
       "chipsSettingHint": "Mostra suggeriments de playbooks a sobre del quadre de missatge quan siguin aplicables (per exemple, després d'importar la transcripció d'una reunió).",
-      "dismissChip": "Descarta {title}"
+      "dismissChip": "Descarta {title}",
+      "dailyDigest": {
+        "title": "Resum diari",
+        "description": "Organitza el correu recent, Teams i el calendari segons el que requereix la teva atenció, el que esperes, actualitzacions i FYI — tria el període"
+      }
+    },
+    "digest": {
+      "title": "Resum diari",
+      "intro": "Revisa el que has rebut en el període seleccionat i ho classifica entre allò que cal respondre, peticions que t’han fet, allò que esperes, programacions, novetats d’empresa i projectes, i FYI. No s'envia ni es modifica res.",
+      "periodLabel": "Període",
+      "preset": {
+        "lastWorkday": "Des de l’últim dia laborable",
+        "1d": "Últimes 24 hores",
+        "3d": "Últims 3 dies",
+        "7d": "Últims 7 dies",
+        "14d": "Últims 14 dies",
+        "custom": "Rang personalitzat"
+      },
+      "lastWorkdayHint": "Des de l'inici del darrer dia laborable anterior a avui — els dilluns cobreix divendres i el cap de setmana.",
+      "from": "Des de",
+      "to": "Fins a",
+      "customInvalid": "Tria un interval ordenat de com a màxim {days} dies.",
+      "sourcesLabel": "Fonts",
+      "sourceNoConsent": "Permís no concedit per a aquesta font.",
+      "sourceHint": {
+        "mail": "Sobres i previsualitzacions de la safata d'entrada; els Elements Enviats determinen què es considera respost.",
+        "chat": "Xats recents de Teams, amb @mencions que no has respost.",
+        "channel": "Publicacions als canals que seleccionis a continuació.",
+        "calendar": "Invitacions pendents de la teva resposta i reunions que altres encara no han respost."
+      },
+      "channelsLabel": "Canals ({count} de {max})",
+      "removeChannel": "Elimina {name}",
+      "channelsSlow": "Cada canal afegeix lectures; més canals fan que el resum trigui més.",
+      "channelsMax": "S’ha assolit el màxim de {max} canals.",
+      "channelsNeeded": "Tria almenys un canal o afegeix una altra font.",
+      "teamLabel": "Equip",
+      "loadingTeams": "S'estan carregant els equips…",
+      "pickTeam": "Selecciona un equip per veure els seus canals",
+      "loadingChannels": "S'estan carregant els canals…",
+      "noChannels": "No s'han trobat canals en aquest equip.",
+      "privacyNote": "Només es llegeixen els assumptes, remitent i previsualitzacions curtes; els cossos dels missatges i els annexos romanen a Microsoft 365. Els elements són resums de les teves pròpies dades.",
+      "cancel": "Cancel·la",
+      "run": "Executa el resum",
+      "starting": "S'està iniciant…",
+      "startFailed": "No s'ha pogut iniciar el resum.",
+      "userMessage": "Resum diari — {period}; fonts: {sources}",
+      "working": "S'estan escanejant les teves comunicacions de Microsoft 365…",
+      "failed": "El resum ha fallat.",
+      "failedPrefix": "Resum diari amb error:",
+      "expired": "Aquesta execució del resum ha expirat. Torna-la a executar per obtenir-ne un de nou.",
+      "runAgain": "Torna a executar",
+      "changePeriod": "Canvia el període",
+      "period": {
+        "lastWorkday": "des de l’últim dia laborable",
+        "lastDays": "{count, plural, one {últim dia} other {últims # dies}}"
+      },
+      "source": {
+        "mail": "Correu",
+        "chat": "Xats de Teams",
+        "channel": "Canals de Teams",
+        "calendar": "Calendari"
+      },
+      "sourceStatus": {
+        "ok": "complet",
+        "partial": "parcial",
+        "skipped": "omès",
+        "unavailable": "sense permís",
+        "error": "ha fallat"
+      },
+      "degraded": "El model d'anàlisi no estava disponible, així que les categories provenen només de regles.",
+      "withheld": "{count, plural, one {S'ha retingut # element} other {S'han retingut # elements}} pels filtres de seguretat.",
+      "empty": "No hi ha res a informar en aquest període i aquestes fonts.",
+      "actionItems": "Accions pendents",
+      "createTasks": "{count, plural, =0 {Afegeix a Tasques} one {Afegeix # tasca a Tasques} other {Afegeix # tasques a Tasques}}",
+      "taskCreated": "afegit a Tasques",
+      "tasksCreated": "{count, plural, one {# tasca} other {# tasques}} afegides a la llista \"{list}\".",
+      "tasksFailed": "No s'han pogut crear les tasques.",
+      "category": {
+        "needsReply": "Cal que respongui",
+        "askedOfMe": "M'han demanat",
+        "waitingOnOthers": "Esperant resposta d'altri",
+        "scheduling": "Planificació",
+        "companyUpdates": "Actualitzacions d'empresa i projectes",
+        "fyi": "Per a la teva informació",
+        "bulk": "Automatitzat i massiu"
+      },
+      "companyUpdatesHint": "important, rara vegada urgent",
+      "markDone": "Marca {title} com a gestionat",
+      "badge": {
+        "unanswered": "sense resposta",
+        "mentioned": "t'han mencionat",
+        "important": "alta importància"
+      },
+      "askAbout": "Pregunta sobre això",
+      "askPrompt": "Sobre l'element {source} \"{title}\" de {from} ({when}) al resum anterior: què es demana i quina seria una bona resposta?",
+      "open": {
+        "mail": "Obre a Outlook",
+        "chat": "Obre a Teams",
+        "channel": "Obre a Teams",
+        "calendar": "Obre a Outlook"
+      },
+      "footnote": "Les categories provenen dels teus propis senyals (sense resposta, menció, difusió) i de la classificació d'IA; verifica abans d'actuar. No s'ha enviat res.",
+      "age": {
+        "now": "ara mateix",
+        "hours": "fa {count}h",
+        "days": "fa {count}d"
+      },
+      "waitForReply": "Espereu que acabi la resposta actual abans de començar un resum."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "Coneixement",
       "prompt": "Persona",
-      "m365": "Coneixement (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Coneixement",
-      "foundry": "Agent Foundry",
+      "foundry": "Agent personalitzat",
       "connector": "Connector"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "fa servir el seu propi model"
     },
     "loadError": "Ara mateix no s'han pogut carregar els teus agents. Normalment és temporal.",
-    "discoveryLoading": "S'estan cercant agents Foundry…",
-    "discoveryError": "No s'han pogut carregar els agents Foundry.",
+    "discoveryLoading": "Cercant més agents…",
+    "discoveryError": "Alguns agents no s'han pogut carregar.",
     "retry": "Torna-ho a provar"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "Més antic que els {months} mesos de retenció d'aquesta carpeta; ja no es mostra.",
       "unknown": "S'ha reportat un problema: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Habilitats",
+    "description": "Blocs d'instruccions reutilitzables que l'assistent aplica quan una conversa els necessita. Compatible amb el format Agent Skills SKILL.md utilitzat per Claude i ChatGPT.",
+    "loading": "S'estan carregant les habilitats…",
+    "loadError": "No s'han pogut carregar les habilitats.",
+    "retry": "Reintenta",
+    "unavailableBanner": "L'emmagatzematge d'habilitats no és accessible actualment — es mostren els valors predeterminats incorporats; les habilitats desades i les edicions no estaran disponibles fins que es restableixi.",
+    "conflictError": "Aquesta habilitat ha estat modificada per un altre administrador. S'ha recarregat la llista — torna a aplicar la teva edició.",
+    "alwaysWarning": "{count} habilitats estan establertes com a Sempre. Totes s'afegeixen a cada conversa — es recomana utilitzar Automàtic per a habilitats específiques de temes.",
+    "newSkill": "Nova habilitat",
+    "importSkill": "Importa SKILL.md",
+    "importTitle": "Enganxa un fitxer SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Què fa aquesta habilitat i quan utilitzar-la.\n---\n\nInstruccions…",
+    "importHint": "La habilitat analitzada s'obre a l'editor per revisar-la — no es desarà res fins que ho desis.",
+    "importParse": "Analitza i revisa",
+    "invalidId": "Els identificadors d'habilitat utilitzen lletres minúscules, números i guionets simples.",
+    "saveSuccess": "Habilitat desada.",
+    "saveError": "No s'ha pogut desar l'habilitat.",
+    "deleteConfirm": "Vols suprimir aquesta habilitat? Les converses deixaran de rebre-la immediatament.",
+    "restoreConfirm": "Vols eliminar la personalització i restaurar el valor predeterminat d'aquesta habilitat incorporada?",
+    "deleteSuccess": "Habilitat suprimida.",
+    "restoreSuccess": "Valor predeterminat incorporat restaurat.",
+    "deleteError": "No s'ha pogut suprimir l'habilitat.",
+    "empty": "Encara no hi ha habilitats. Crea'n una o importa un fitxer SKILL.md.",
+    "builtinChip": "Incorporada",
+    "customizedChip": "Personalitzada",
+    "exportSkill": "Exporta com a SKILL.md",
+    "edit": "Edita",
+    "delete": "Suprimeix",
+    "restoreDefault": "Restaura el valor predeterminat",
+    "createTitle": "Nova habilitat",
+    "editTitle": "Edita {name}",
+    "idLabel": "Identificador",
+    "idHint": "Lletres minúscules, números i guionets. Esdevé el nom SKILL.md de l'habilitat i no es pot canviar després de crear-la.",
+    "nameLabel": "Nom visible",
+    "descriptionLabel": "Descripció",
+    "descriptionHint": "Què fa l'habilitat I quan utilitzar-la — això és el que selecciona l'habilitat, així que inclou els temes específics i frases a les quals ha de respondre.",
+    "activationLabel": "Activació",
+    "activation": {
+      "auto": "Automàtic",
+      "always": "Sempre",
+      "off": "Desactivat",
+      "manual": "A petició"
+    },
+    "activationHint": {
+      "auto": "Seleccionada automàticament quan la tasca actual coincideix amb la descripció. Els usuaris també la poden demanar una vegada o fixar-la a una conversa.",
+      "always": "S'afegeix a totes les converses per a tothom qui pugui veure l'habilitat. Utilitza-ho amb moderació — aquest espai de prompt és permanent.",
+      "off": "Inactiva: mai no s'aplica ni s'ofereix als usuaris, però es manté aquí per a edició.",
+      "manual": "S’aplica només quan un usuari la sol·licita o la fixa. No es selecciona automàticament i no s’ofereix al model com a habilitat disponible."
+    },
+    "instructionsLabel": "Instruccions",
+    "instructionsHint": "Markdown, fins a 16 KB. S'injecta literalment quan l'habilitat està activa.",
+    "saving": "S'està desant…",
+    "save": "Desa",
+    "cancel": "Cancel·la",
+    "documents": {
+      "title": "Documents",
+      "hint": "Les referències s'emmagatzemen amb aquesta habilitat. Els documents petits es carreguen directament; els més grans s'indexen per a la cerca amb cita. Fins a 20 recursos, 10 MB cadascun i 20 MB en total. Els recursos només es guarden per a descàrrega.",
+      "saveFirst": "Guardeu una personalització d'aquesta habilitat integrada abans d'afegir documents.",
+      "upload": "Afegeix documents de referència",
+      "remove": "Elimina",
+      "stop": "Atura la indexació",
+      "resume": "Indexa o reprèn documents",
+      "empty": "Encara no hi ha documents adjunts.",
+      "requestFailed": "La sol·licitud del document ha fallat. Torneu a carregar i retry.",
+      "importZip": "Importa un ZIP d'habilitat",
+      "zipTooLarge": "El ZIP de l'habilitat ha de tenir 20 MB o menys.",
+      "importCount": "Recursos a adjuntar després de desar: {count}",
+      "skippedScripts": "S'han omès els scripts executables",
+      "status": {
+        "pending": "En espera per indexar",
+        "processing": "S'està indexant",
+        "inline": "Preparat (carregat directament)",
+        "indexed": "Preparat (cercable)",
+        "failed": "Ha fallat la indexació",
+        "asset": "Recurs descarregable"
+      },
+      "confirmRemove": "Voleu eliminar {filename} d'aquesta habilitat? L'original emmagatzemat s'esborrarà i ja no estarà disponible com a font de citacions.",
+      "reindexRequired": "Aquests documents necessiten tornar-se a indexar segons la configuració de Cerca i incrustació regional actual. No es podran cercar fins que s'acabi la indexació."
+    },
+    "applyToAgents": "Disponible per als agents",
+    "applyToAgentsHint": "Desactivat per defecte. Quan s'activa, els agents poden carregar aquesta habilitat mitjançant eines de només lectura en lloc de substituir les seves instruccions de persona. Les crides d'habilitat tenen límits de passos independents. Els agents de Foundry han de tenir ja registrades les funcions load_skill i search_skill_documents a la seva definició.",
+    "requireConsent": "Demana abans d'aplicar",
+    "requireConsentHint": "Quan el model vol aplicar aquesta habilitat pel seu compte, abans demana a l’usuari. L'ús sol·licitat o fixat no necessita confirmació.",
+    "consentChip": "Demana primer",
+    "sourceChip": "Des de la font",
+    "sourceChipHint": "Proporcionat per una font d’habilitats subscrita; les instruccions es refresquen en cada sincronització. L’activació, agent i consentiment són configurables per vosaltres.",
+    "sources": {
+      "title": "Fonts d’habilitats",
+      "description": "Subscriviu-vos a un catàleg extern d’habilitats (un index.json que enumera arxius SKILL.md). Aquestes habilitats passen a ser de l’organització i s’actualitzen aproximadament cada sis hores. Només s’importa SKILL.md; els documents de referència no.",
+      "urlLabel": "URL del catàleg",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Ha de ser https en un host públic. Els arxius d’habilitat només es llegeixen des de la mateixa ubicació.",
+      "labelLabel": "Etiqueta (opcional)",
+      "add": "Subscriu",
+      "adding": "Subscripció…",
+      "added": "{count, plural, =0 {Font afegida; encara no s’han importat habilitats} one {Font afegida; # habilitat importada} other {Font afegida; # habilitats importades}}",
+      "addedWithError": "Font afegida, però la primera sincronització ha fallat. Comproveu l’error a la font.",
+      "addError": "No s'ha pogut afegir la font d’habilitats",
+      "sync": "Sincronitza ara",
+      "syncing": "Sincronitzant…",
+      "synced": "Font sincronitzada.",
+      "syncError": "No s’ha pogut sincronitzar la font d’habilitats",
+      "remove": "Elimina la font",
+      "removeConfirm": "Voleu eliminar aquesta font? Les habilitats proporcionades quedaran com a habilitats ordinàries de l’organització i deixaran d’actualitzar-se.",
+      "removed": "Font eliminada.",
+      "removeError": "No s'ha pogut eliminar la font d’habilitats",
+      "loading": "S’estan carregant les fonts…",
+      "loadError": "No s’han pogut carregar les fonts d’habilitats.",
+      "empty": "Encara no hi ha cap font d’habilitats.",
+      "never": "Mai sincronitzada",
+      "statusOk": "Sincronitzada",
+      "statusError": "La sincronització ha fallat",
+      "statusPartial": "{count, plural, one {# entrada omesa} other {# entrades omeses}}",
+      "lastSync": "Darrera sincronització {time}",
+      "entryCount": "{count, plural, one {# entrada} other {# entrades}}",
+      "entryStatus": {
+        "synced": "sincronitzada",
+        "skipped": "omesa",
+        "conflict": "conflicte — no sobreescrita",
+        "invalid": "invàlida"
+      }
+    },
+    "requireConsentDisabledHint": "Només les habilitats automàtiques poden demanar confirmació: les sol·licitades, fixades i sempre actives s’apliquen sense avís, i les habilitats a demanda mai no són triades pel model."
+  },
+  "personalSkills": {
+    "title": "Habilitats personals",
+    "description": "Desa instruccions reutilitzables per a les teves converses. Les habilitats es guarden en aquest navegador i només s'envien al model quan xateges. Les habilitats rellevants es poden seleccionar automàticament, utilitzar una vegada o fixar. No poden modificar la política de l'organització ni concedir accés a eines. L'ús d'habilitats requereix que estiguin habilitades per a aquest desplegament; les converses amb agents no utilitzen habilitats personals.",
+    "importFile": "Importa SKILL.md o ZIP",
+    "review": "Revisa les instruccions completes abans de desar-les. Les instruccions importades són preferències de l'usuari, no polítiques de confiança de l'organització.",
+    "skipped": "S'han omès els scripts executables",
+    "importTooLarge": "La importació ha de ser de 20 MB o menys.",
+    "invalid": "No s'ha pogut importar l'habilitat.",
+    "duplicate": "Aquest id d'habilitat personal ja existeix. Edita l'habilitat existent o tria un altre id.",
+    "countLimit": "Pots desar fins a 20 habilitats personals.",
+    "requestLimit": "Les habilitats personals habilitades superen el límit de sol·licitud de 160 KB. Deshabilita algunes habilitats o escurça les seves instruccions.",
+    "saved": "Habilitat personal desada en aquest navegador.",
+    "instructionsHint": "Fins a 16 KB d'instruccions, incloent-hi qualsevol referència de text importada. Els fitxers binaris i la indexació persistent de documents només estan disponibles per a habilitats d'organització. L'exportació utilitza el nom estàndard SKILL.md sense el prefix user:.",
+    "enabled": "Habilitada per a les meves converses",
+    "empty": "Crea una habilitat per a una tasca recurrent, o importa un SKILL.md per revisar-lo i desar-lo aquí."
   }
 }

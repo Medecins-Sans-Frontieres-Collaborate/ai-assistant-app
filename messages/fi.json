@@ -787,7 +787,16 @@
       "stillWorking": "Työstetään yhä…",
       "assessingSearchResults": "Tarkistetaan, vastaavatko tulokset kysymykseen…",
       "refiningSearch": "Haetaan uudelleen: ”{query}”…",
-      "readingSearchPages": "Luetaan {count} hakutulossivua…"
+      "readingSearchPages": "Luetaan {count} hakutulossivua…",
+      "toolRoutingUnavailableInRegion": "Työkalureititys ei ole saatavilla alueen {region} päätepisteessä — vastaan ilman työkaluja…",
+      "applyingSkill": "Otetaan käyttöön taito: {skills}…",
+      "applyingSkills": "Otetaan käyttöön taidot: {skills}…",
+      "readingSkillReferences": "Luetaan taitojen viitedokumentteja…",
+      "selectingSkills": "Valitaan taitoja…",
+      "retryingModel": "Malli on varattu — yritetään uudelleen {seconds}s kuluttua (yritys {attempt})…",
+      "resumingResponse": "Yhteys malliin katkesi — jatketaan siitä, mihin jäätiin…",
+      "continuingResponse": "Vastaus saavutti pituusrajan — jatketaan…",
+      "trimmingContext": "Keskustelu on liian pitkä mallille — vanhempaa historiaa poistetaan ja yritetään uudelleen…"
     },
     "toolSummary": {
       "usedTools": "Käytetty {count, plural, one {# työkalu} other {# työkalua}}",
@@ -853,7 +862,9 @@
       "deniedByRuleHint": "Estetty sääntösi vuoksi — hallitse asetuksista → Yhdistäjät.",
       "batchPendingHint": "{count} työkalupyyntöä odottaa",
       "approveAllButton": "Hyväksy kaikki",
-      "denyAllButton": "Hylkää kaikki"
+      "denyAllButton": "Hylkää kaikki",
+      "applySkillTitle": "Käytetäänkö taitoa ”{skill}”?",
+      "skillConsentNote": "Ylläpitäjä on asettanut tämän taidon kysymään luvan ennen käyttöä. Hyväksyminen tuo ohjeet vain tähän vastaukseen."
     },
     "openImage": "Avaa kuva",
     "copyMessage": "Kopioi viesti",
@@ -893,7 +904,54 @@
     "alwaysWaitThisLong": "Odotetaan aina enintään {duration}",
     "keepSearching": "Jatka hakua",
     "keepSearchingHint": "Haku pysähtyi ennen kuin tämä löytyi. Pyydä avustajaa kokeilemaan eri lähestymistapoja.",
-    "keepSearchingMessage": "Jatka tämän hakemista, kiitos — kokeile toista lähestymistapaa."
+    "keepSearchingMessage": "Jatka tämän hakemista, kiitos — kokeile toista lähestymistapaa.",
+    "addSkill": "Osaamiset",
+    "removeSkill": "Poista osaaminen",
+    "skillsMenuLabel": "Saatavilla olevat osaamiset",
+    "skillsLimit": "Enintään 3 osaamista viestiä kohden.",
+    "skillPin": "Kiinnitä keskusteluun",
+    "skillUseOnce": "Käytä kerran",
+    "skillPinned": "kiinnitetty",
+    "skillOnce": "seuraava viesti",
+    "skillsPaused": "keskeytetty",
+    "skillUnavailable": "ei käytettävissä",
+    "skillsAutomaticHint": "Sopivat taidot valitaan automaattisesti. Käytä kerran seuraavaan viestiin tai kiinnitä taito, jos haluat käyttää sitä koko keskustelun ajan.",
+    "skillsAgentDisabled": "Taidot ovat keskeytettynä agentin ollessa liitettynä. Kiinnityksesi palautuvat käyttöön, kun irrotat agentin.",
+    "skillPersonal": "henkilökohtainen",
+    "skillsAgentToolsHint": "Vain järjestelmänvalvojan agenteille sallimat organisaatiotaidot ovat täällä saatavilla. Agentti voi ladata ne vain luku -työkaluina. Muut pin-tiedostot pysyvät keskeytettyinä, eikä henkilökohtaisia taitoja ole agenteille saatavilla.",
+    "skillAlwaysOn": "aina käytössä",
+    "skillAlwaysOnHint": "Ylläpitäjä on lisännyt tämän jokaiseen viestiin tässä keskustelussa.",
+    "skillUsage": {
+      "label": "Taidot",
+      "requested": "pyydetty",
+      "pinned": "kiinnitetty",
+      "auto": "automaattinen",
+      "unavailable": "ei saatavilla",
+      "incomplete": "Kaikkia taitoja ei voitu käyttää",
+      "references": "{count, plural, one {# viitejakso} other {# viitejaksoa}}",
+      "referencesUnavailable": "Jotkin viitedokumentit eivät olleet saatavilla",
+      "showDetails": "Näytä taidon tiedot",
+      "hideDetails": "Piilota taidon tiedot",
+      "agentLoad": "agentti latasi",
+      "agentSearch": "agentti haki dokumentteja",
+      "needsApproval": "vaatii hyväksyntäsi",
+      "original": "alun perin suoritettu",
+      "updated": "päivitetty sen jälkeen"
+    },
+    "skillsManualHint": "Automaattinen valinta on pois päältä asetuksissa. Käytä kerran seuraavan viestin kohdalla tai kiinnitä taito käyttääksesi sitä koko keskustelun ajan.",
+    "queuedMessage": {
+      "label": "Jonossa",
+      "attachmentOnly": "Liite",
+      "cancel": "Peruuta jonotettu viesti"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Sisällönsuodatin pysäytti vastauksen. Muotoile pyyntö uudelleen tai poista mahdollisesti suodatuksen laukaissut osa.",
+      "MODEL_CONTEXT_TOO_LONG": "Tämä keskustelu on valitulle mallille liian pitkä, vaikka aiempaa historiaa on lyhennetty. Aloita uusi keskustelu, poista joitakin liitteitä tai valitse malli, jolla on suurempi konteksti-ikkuna.",
+      "MODEL_OUTPUT_LIMIT": "Malli käytti koko tulosbudjettinsa tuottamatta vastausta. Kokeile pienempää päättelytehoa tai lyhyempää pyyntöä.",
+      "MODEL_RATE_LIMITED": "Malliin lähetetään tällä hetkellä liikaa pyyntöjä. Järjestelmä yritti automaattisesti uudelleen; yritä hetken kuluttua uudelleen.",
+      "MODEL_QUOTA_EXCEEDED": "Mallin kapasiteettikiintiö on täynnä. Kokeile toista mallia tai yritä myöhemmin uudelleen.",
+      "MODEL_AUTH_FAILED": "Sovellus ei voinut tunnistautua mallipalveluun. Kyseessä on määritysongelma — ota yhteyttä tukeen."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -1300,7 +1358,11 @@
       "preferModelTitle": "Suosi valitsemaani mallia",
       "preferModelDescription": "Älä vaihda toiseen malliin automaattisesti, jos pyyntö epäonnistuu. Virheilmoitus tarjoaa kuitenkin mallin vaihdon."
     },
-    "Analytics": "Analytiikka"
+    "Analytics": "Analytiikka",
+    "skills": {
+      "autoApply": "Anna avustajan soveltaa taitoja automaattisesti",
+      "autoApplyDescription": "Sopivat ja omat taitosi valitaan kullekin viestille. Kun tämä on pois päältä, käytetään vain pyytämiäsi tai kiinnittämiäsi taitoja sekä ylläpitäjän kaikkiin keskusteluihin lisäämiä taitoja."
+    }
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "sekuntia",
     "chipAutoHideHint": "{min}–{max} sekuntia.",
     "byWorkflow": "Työnkulun mukaan",
-    "byWorkflowNote": "Yllä esitettyjen kokonaisuuksien osa, näytetään erikseen – ei lisäkäyttöä. Grants-ajot lasketaan organisaationne raportointiin ja token-budjettiin, mutta eivät tähän paikalliseen kokonaisuuteen."
+    "byWorkflowNote": "Yllä esitettyjen kokonaisuuksien osa, näytetään erikseen – ei lisäkäyttöä. Grants-ajot lasketaan organisaationne raportointiin ja token-budjettiin, mutta eivät tähän paikalliseen kokonaisuuteen.",
+    "chipLabelTitle": "Siruetiketti",
+    "chipLabelHint": "Eritely näyttää aina päästöt ja kustannukset rinnakkain; tämä määrittää vain tiivistetyn sirun tekstin.",
+    "chipLabelEmissions": "Päästöt",
+    "chipLabelCost": "Kustannus",
+    "chipLabelBoth": "Molemmat",
+    "costTile": "Arvioitu kustannus",
+    "costDisclosure": "Kustannus listahinnoilla {asOf} (globaali vakiotaksa, ei välimuistialennusta): yläraja, ei lasku. Verkkohaku, koodin suoritus, transkriptio, puhe, käännös ja asiakirjojen indeksointi eivät sisälly.",
+    "costUnpriced": "{count, plural, one {# pyyntö ilman listahintaa ei ole} other {# pyyntöä ilman listahintaa eivät ole}} huomioitu."
   },
   "extraction": {
     "toggleLabel": "Luo jäsenneltyä dataa",
@@ -4502,7 +4572,16 @@
         "auto": "Automaattisesti",
         "hidden": "Piilota"
       },
-      "visibilityHint": "Automaattinen näyttää sirun, kun arvio päivittyy tai viet hiiren sen päälle. Voit muuttaa tätä asetuksissa kohdasta Käyttö ja vaikutus."
+      "visibilityHint": "Automaattinen näyttää sirun, kun arvio päivittyy tai viet hiiren sen päälle. Voit muuttaa tätä asetuksissa kohdasta Käyttö ja vaikutus.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Arvioitu kustannus {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Tällä rivillä ei ole pyyntöjen listahintaa",
+        "unpriced": "{count, plural, one {# pyyntö ilman listahintaa ei ole} other {# pyyntöä ilman listahintaa eivät ole}} huomioitu kustannuksessa.",
+        "noPriceData": "Kustannusta ei näytetä: tämän keskustelun mallilla ei ole listahintaa (omat lähteet, paikalliset suoritukset ja agentit eivät ole hinnoiteltuja).",
+        "note": "Kustannus listahinnoilla {asOf} (globaali vakiotaksa, ei välimuistialennusta): yläraja, ei lasku. Verkkohaku, koodin suoritus, transkriptio, puhe, käännös ja asiakirjojen indeksointi eivät sisälly."
+      }
     },
     "workflow": {
       "title": "Tämä työtila (arvio)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "Poista sanasto",
     "glossaryDeleteSuccess": "Sanasto poistettu",
     "channelProfilesTab": "Alustat",
-    "channelSetsTab": "Kanavasarjat"
+    "channelSetsTab": "Kanavasarjat",
+    "addPromptAgent": "Lisää prompt-agentti",
+    "m365AgentIndexStop": "Lopeta indeksointi",
+    "foundryAgentsHeading": "Foundry- ja prompt-agentit",
+    "foundryAgentsDescription": "Azure AI Foundrysta oman käyttöoikeutesi kautta löydetyt agentit sekä täällä määritellyt prompt-agentit. Knowledge-agentit ja Microsoft 365 -agentit hallitaan omissa osioissaan alla.",
+    "agentSkillsLabel": "Osaamiset",
+    "agentSkillsHelp": "Mitkä organisaation osaamiset agentti voi ladata vastatessaan. Käyttäjät näkevät edelleen vain osaamiset, joihin heidän käyttöoikeutensa riittävät.",
+    "agentSkills": {
+      "inherit": "Osaamiset, joille on merkitty \"saatavilla agenteille\"",
+      "selected": "Vain alla valitut osaamiset",
+      "none": "Ei osaamisia"
+    },
+    "agentSkillsNone": "Ei valittavia osaamisia.",
+    "agentSkillsLoading": "Ladataan taitoja…",
+    "agentSkillsLoadError": "Taitoja ei voitu ladata. Aiemmin tallennetut valinnat säilytetään.",
+    "agentSkillsNotVisible": "(ei näy sinulle — poista valinta poistaaksesi)"
   },
   "localModels": {
     "title": "Paikalliset mallit",
@@ -5521,7 +5615,8 @@
       "channelSets": "Jokaisen tiimin säännöt kirjoittamiseen alustoilla: ohjeistus, äänet, oletukset, kuka saa käyttää ja kuka saa lähettää.",
       "webSearch": "Kuinka laajalle verkkohaku voi mennä: monivaiheinen haku, arviointimalli ja sen rajat.",
       "contextBudget": "Kuinka paljon keskustelua kukin malli saa kerralla.",
-      "analytics": "Toimitetut raportit: mitä saapui, kuka saa avata kansion ja mitkä kentät voidaan näyttää."
+      "analytics": "Toimitetut raportit: mitä saapui, kuka saa avata kansion ja mitkä kentät voidaan näyttää.",
+      "skills": "Toistettavat ohjeet, joita avustaja käyttää tarvittaessa keskusteluissa."
     },
     "openSettings": "Avaa asetukset",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "Delegoinnit",
       "webSearch": "Verkkohaku",
       "contextBudget": "Kontekstibudjetti",
-      "analytics": "Analytiikka"
+      "analytics": "Analytiikka",
+      "skills": "Osaamiset"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "Globaalit oletukset",
       "overrides": "Ohitukset",
-      "delegations": "Delegoinnit"
+      "delegations": "Delegoinnit",
+      "models": "Mallit"
     },
     "tabsLabel": "Rajoitusosioita",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 -työkalukäytöt päivässä",
       "m365MailReadsPerDay": "Sähköpostien luku päivässä",
       "m365MailDraftsPerDay": "Sähköpostiluonnokset päivässä",
-      "m365MailDeepScansPerDay": "Sähköpostien syvätarkistukset päivässä"
+      "m365MailDeepScansPerDay": "Sähköpostien syvätarkistukset päivässä",
+      "m365DigestRunsPerDay": "Päivittäiset yhteenvetoraportit per päivä"
     },
     "valueModeLabel": "Rajoituksen tyyppi",
     "valueAmountLabel": "Rajoituksen määrä",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 -työkalukutsut (kalenteri, henkilöt, tehtävät, Teams) per päivä. Kun raja ylittyy, työkalut palauttavat ystävällisen “yritä uudelleen huomenna” -viestin sen sijaan, että keskustelu epäonnistuisi.",
       "m365MailReadsPerDay": "Sähköpostihakujen ja viestien/keskustelujen luku per päivä. Kun raja ylittyy, sähköpostityökalut palauttavat “yritä uudelleen huomenna” -viestin.",
       "m365MailDraftsPerDay": "Sähköpostiluonnokset, joita assistentti voi luoda päivässä — jokainen vahvistetaan erikseen. Raja on tarkoituksella tiukka.",
-      "m365MailDeepScansPerDay": "Yhdistetyt sähköpostianalyysit (koosteet, syvähaut, sitoumukset) päivässä. Jokainen skannaus vie yhden budjettiyksikön riippumatta sisäisistä luennoista."
+      "m365MailDeepScansPerDay": "Yhdistetyt sähköpostianalyysit (koosteet, syvähaut, sitoumukset) päivässä. Jokainen skannaus vie yhden budjettiyksikön riippumatta sisäisistä luennoista.",
+      "m365DigestRunsPerDay": "Microsoft 365 -päivittäiset yhteenvetoraportit per päivä. Yksi ajo sisältää kymmeniä Graph-lukuja ja kaksi analyysimallikutsua; ajanjakson valinta tekee uusinnat helpoiksi, joten oletus on tiukka."
     },
     "scopeFamily": "Perhe",
     "scopeModel": "Malli",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "Sisäänrakennettu oletus",
     "previewSourceGlobal": "Yleinen oletus",
     "previewSourceOverride": "Poikkeus: {label}",
-    "previewNotEvaluated": "Osasto-, yritys- ja ryhmäpoikkeuksia ei voi arvioida tässä – ne riippuvat käyttäjän omasta kirjautumisesta.",
+    "previewNotEvaluated": "Hakemistoa ei voitu tavoittaa, joten osasto-/yritys-/toimisto- ja ryhmäsääntöjä ei voitu arvioida tälle henkilölle. Yritä uudelleen hetken päästä.",
     "previewUnsaved": "Näytetään viimeksi tallennettu käytäntö. Tallenna muutokset esikatsellaksesi niitä.",
     "previewColumnLimit": "Rajoitus",
     "previewColumnValue": "Arvo",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "Vain ryhmät",
     "yourScopeGroupOnlyNote": "Määritetty vain ryhmillä tai attribuuteilla, joten rajoituksia ei voi esikatsella sähköpostiosoitteella.",
     "previewOutOfScope": "Tämä henkilö on omien rajojesi ulkopuolella.",
-    "previewGroupOnlyScope": "Rajaus määritetty ryhmillä tai attribuuteilla, joten rajoituksia ei voi esikatsella sähköpostiosoitteella.",
+    "previewGroupOnlyScope": "Alueesi määritellään ryhmien tai attribuuttien perusteella. Esikatselut tarkistavat hakemistosta, kuuluuko henkilö siihen.",
     "previewCeilingPinned": "Yläraja kiinnitetty: {label}",
     "previewShowUsage": "Näytä nykyinen käyttö",
     "previewColumnUsage": "Käytetty",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "Kova yläraja riviin kiinnittää arvon tämän ohituksen kohteille: rajatut ylläpitäjät eivät voi nostaa sitä, ja kun useita rajoja on voimassa, tarkin voittaa.",
     "confirmDeleteOverride": "Poistetaanko \"{label}\"? Se poistetaan välittömästi palvelimelta ja sen kohteet palautuvat alemman tason rajoihin. Poistoa ei voi perua.",
     "confirmDeleteOverrideAction": "Poista ohitus",
-    "previewUndecidableScope": "Alueesi sisältää ryhmiä tai attribuutteja, joten tämän henkilön kuulumista siihen ei voi varmistaa sähköpostiosoitteen perusteella.",
+    "previewUndecidableScope": "Alueeseesi kuuluu ryhmiä tai attribuutteja, ja hakemistoa ei voitu tavoittaa, joten ei voida tällä hetkellä päättää, kuuluuko tämä henkilö siihen. Yritä uudelleen hetken päästä.",
     "previewNoLongerAdmin": "Sinua ei enää nimetä käytössä olevaan delegointiin, joten et voi esikatsella rajoja. Lataa sivu uudelleen nähdäksesi nykyiset oikeutesi.",
     "previewScopeMatchesNobody": "Alueesi ei tällä hetkellä vastaa ketään, joten sähköpostin perusteella ei ole ketään esikatseltavaa.",
     "yourScopeMatchesNobodyChip": "Ei vastaa ketään",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "Delegointi on poistettu käytöstä, joten tämä yliajo ei koske ketään ennen kuin delegointi otetaan uudelleen käyttöön. Sitä ei koskaan edistetä yleiselle tasolle.",
     "betaPolicyNotice": "Beta-ympäristö: tämä ohjeistus ja sen käyttölaskurit tallennetaan erillään tuotannosta (policy.beta.json). Tämän tekemilläsi muutoksilla ei ole vaikutusta tuotantoon.",
     "delegationsManagedElsewhere": "Delegoinnit ovat täällä vain luku -tilassa. Delegoinnin jäsenet, ketkä käyttäjät siihen kuuluvat ja mitä kukin ylläpitäjä voi tehdä, hallitaan Delegoinnit-osiossa.",
-    "delegationsManagedElsewhereLink": "Avaa delegoinnit"
+    "delegationsManagedElsewhereLink": "Avaa delegoinnit",
+    "modelAccess": {
+      "intro": "Määritä, kuka saa käyttää mitäkin mallia. Perheen asetus koskee sen malleja, ellei mallin kohdalla ole poikkeusta; lista ohittaa oletuksen muille; estolista ohittaa kaikki myönnytykset.",
+      "externalNote": "Azure-ympäristön ulkopuolella isännöidyt mallit ({families}) eivät ole kenenkään käytettävissä, ennen kuin myönnät oikeuden täällä – kaikille oletuksen kautta tai ryhmille, domaineille ja henkilöille erikseen.",
+      "envelopeNote": "Perhetason pyyntöraja on yhteinen päivittäinen budjetti sen malleille; mallikohtainen raja on katto kyseisessä mallissa. Rajaton mallissa ei poista perheen budjettia.",
+      "observeNote": "Seurantatila on käytössä: mikään täällä ei vielä piilota mallia tai estä pyyntöjä. Vaihda ylhäältä valvontaan, kun säännöt ovat kunnossa.",
+      "familyChip": "Perhe",
+      "modelChip": "Malli",
+      "otherModels": "Mallit ilman perhettä",
+      "modelsInFamily": "{count, plural, one {# malli tässä perheessä} other {# mallia tässä perheessä}}",
+      "noModels": "Luettelossa ei ole vielä malleja.",
+      "expand": "Näytä mallit",
+      "collapse": "Piilota mallit",
+      "edit": "Muokkaa",
+      "doneEditing": "Valmis",
+      "editNode": "Muokkaa käyttöoikeuksia kohteelle {label}",
+      "defaultLabel": "Kaikki muut",
+      "defaultInherit": "Peritty",
+      "defaultUnlimited": "Rajaton",
+      "defaultLimited": "Rajattu",
+      "defaultUnavailable": "Ei saatavilla",
+      "defaultRequestsLabel": "Pyyntöjä päivässä muille",
+      "requestsPerDay": "pyyntöä / päivä",
+      "inheritedFrom": "Perii tilan {state} kohteesta {origin}.",
+      "effectiveLabel": "Kaikille, jotka eivät ole listalla: {state}.",
+      "inheritedChip": "peritty",
+      "origin": {
+        "model": "tämä asetus",
+        "family": "sen perhe",
+        "defaults": "Globaalit oletukset",
+        "catalogExternal": "sääntö, että ulkoiset mallit ovat käytettävissä vain myöntämisen jälkeen",
+        "catalog": "luettelon oletus"
+      },
+      "state": {
+        "unlimited": "Rajaton",
+        "limited": "Rajattu {requests} / päivä",
+        "unavailable": "Ei saatavilla"
+      },
+      "list": {
+        "groups": "Ryhmät joilla on käyttöoikeus",
+        "domains": "Domainit joilla on käyttöoikeus",
+        "allow": "Sallitut henkilöt",
+        "deny": "Estetyt henkilöt"
+      },
+      "listHint": {
+        "groups": "Nämä Entra-ryhmien jäsenet saavat käyttää sitä ryhmäkohtaisin ehdoin.",
+        "domains": "Kaikki, joilla on sähköpostiosoite näissä domaineissa, domainikohtaisin ehdoin.",
+        "allow": "Nimetyt henkilöt voivat käyttää sitä riippumatta oletuksesta tai domainista.",
+        "deny": "Nimetyt henkilöt eivät saa käyttää. Tämä ohittaa kaikki yllä olevat oikeudet."
+      },
+      "grantUnlimited": "Rajaton",
+      "grantLimited": "Rajattu",
+      "termsLabel": "Ehdot kohteelle {target}",
+      "requestsLabel": "Pyyntöjä päivässä kohteelle {target}",
+      "removeGrant": "Poista kohde {target}",
+      "groupsCount": "{count, plural, one {# ryhmä} other {# ryhmää}}",
+      "domainsCount": "{count, plural, one {# domain} other {# domainia}}",
+      "allowCount": "{count, plural, one {# sallittu henkilö} other {# sallittua henkilöä}}",
+      "denyCount": "{count, plural, one {# estetty henkilö} other {# estettyä henkilöä}}",
+      "collisionChip": "Myös globaaliasetuksissa",
+      "collisionWarning": "Tämä malli tai perhe on myös määritetty globaaliasetuksissa. Tallennusta ei sallita, ennen kuin toinen näistä poistetaan."
+    },
+    "previewSourceModelAccess": "Mallin hyväksyntä — {list}",
+    "groupMembershipDegradedStructural": "Ryhmän jäsenyyksien tarkistukset epäonnistuvat tällä palvelimella ({reason}). Ryhmäperusteisia sääntöjä ja oikeuksia ei sovelleta asianomaisiin henkilöihin — tarkista vuokralaisen Group.Read.All-suostumus ja sovelluksen rekisteröinti.",
+    "groupMembershipDegradedRetryable": "Joidenkin ryhmän jäsenyyksien tarkistukset epäonnistuivat tällä palvelimella viime minuuttien aikana ({reason}). Ryhmäperusteisia sääntöjä ei ehkä sovelleta näihin henkilöihin jopa minuutin ajan tarkistusten uudelleenyritysten ajan.",
+    "groupMembershipDegradedUsers": "Tällä palvelimella tällä hetkellä {count, plural, one {# henkilö} other {# henkilöä}} vaikuttaa asiaan.",
+    "previewDirectoryNotFound": "Kellään hakemiston käyttäjällä ei ole tätä sähköpostiosoitetta, joten osasto-/yritys-/toimisto- ja ryhmäsäännöt arvioitiin ikään kuin henkilö ei kuuluisi yhteenkään."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Aamun triage",
-        "description": "Saapuneet, sinulta odottavat ja tämän päivän kalenteri — yksi briiffaus"
+        "description": "Yhteenveto edellisen työpäivän jälkeen — saapuneet viestit, odottavat tehtävät, kutsut ja päivitykset; maanantaisin kattaa myös perjantain ja viikonlopun"
       },
       "chipsSettingLabel": "Ehdota Microsoft 365 -toimintapolkuja",
       "chipsSettingHint": "Näytä playbook-ehdotukset viestikentän yläpuolella, kun ne ovat käytettävissä (esim. kokousmuistion tuonnin jälkeen).",
-      "dismissChip": "Hylkää {title}"
+      "dismissChip": "Hylkää {title}",
+      "dailyDigest": {
+        "title": "Päivittäinen yhteenveto",
+        "description": "Järjestä viimeisimmät sähköpostit, Teams ja kalenteri: toimenpiteitä vaativat, odottamasi, päivitykset ja tiedoksi — valitse ajanjakso"
+      }
+    },
+    "digest": {
+      "title": "Päivittäinen yhteenveto",
+      "intro": "Käy läpi ajanjaksolla tulleet viestit ja lajittelee ne: edellyttääkö vastausta, onko sinulta pyydetty, odottamasi asiat, aikataulutukset, yritys- ja projektipäivitykset sekä tiedoksi. Mitään ei lähetetä tai muuteta.",
+      "periodLabel": "Ajanjakso",
+      "preset": {
+        "lastWorkday": "Viimeisestä työpäivästä lähtien",
+        "1d": "Viimeiset 24 tuntia",
+        "3d": "Viimeiset 3 päivää",
+        "7d": "Viimeiset 7 päivää",
+        "14d": "Viimeiset 14 päivää",
+        "custom": "Mukautettu aikaväli"
+      },
+      "lastWorkdayHint": "Alkaen viimeisen arkipäivän alusta ennen tätä päivää — maanantaina tämä kattaa perjantain ja viikonlopun.",
+      "from": "Alkaen",
+      "to": "Päättyen",
+      "customInvalid": "Valitse enintään {days} päivän järjestyksessä oleva aikaväli.",
+      "sourcesLabel": "Lähteet",
+      "sourceNoConsent": "Tälle lähteelle ei ole annettu lupaa.",
+      "sourceHint": {
+        "mail": "Saapuneet-kansion kirjekuoret ja esikatselut; lähetetyt määrittävät, mitkä lasketaan vastatuiksi.",
+        "chat": "Viimeisimmät Teams-keskustelut, joissa on @mainintoja joihin et ole vastannut.",
+        "channel": "Julkaisut alla valitsemissasi kanavissa.",
+        "calendar": "Kutsut, jotka odottavat vastaustasi, sekä kokoukset joissa muut eivät ole vastanneet."
+      },
+      "channelsLabel": "Kanavat ({count}/{max})",
+      "removeChannel": "Poista {name}",
+      "channelsSlow": "Jokainen kanava lisää lukuja; useampi kanava hidastaa yhteenvetoa.",
+      "channelsMax": "Kanavien enimmäismäärä {max} saavutettu.",
+      "channelsNeeded": "Valitse vähintään yksi kanava tai lisää toinen lähde.",
+      "teamLabel": "Tiimi",
+      "loadingTeams": "Ladataan tiimejä…",
+      "pickTeam": "Valitse tiimi näyttääksesi sen kanavat",
+      "loadingChannels": "Ladataan kanavia…",
+      "noChannels": "Tässä tiimissä ei löytynyt kanavia.",
+      "privacyNote": "Vain aiheet, lähettäjät ja lyhyet esikatselut luetaan; viestien sisällöt ja liitteet pysyvät Microsoft 365:ssä. Kohteet ovat omista tiedoistasi tehtyjä yhteenvetoja.",
+      "cancel": "Peruuta",
+      "run": "Käynnistä yhteenveto",
+      "starting": "Käynnistetään…",
+      "startFailed": "Yhteenvetoa ei voitu käynnistää.",
+      "userMessage": "Päivittäinen yhteenveto — {period}; lähteet: {sources}",
+      "working": "Skannataan Microsoft 365 -viestintääsi…",
+      "failed": "Yhteenveto epäonnistui.",
+      "failedPrefix": "Päivittäinen yhteenveto epäonnistui:",
+      "expired": "Tämä yhteenveto on vanhentunut. Suorita uudelleen saadaksesi tuoreen.",
+      "runAgain": "Suorita uudelleen",
+      "changePeriod": "Vaihda ajanjaksoa",
+      "period": {
+        "lastWorkday": "viimeisestä työpäivästä",
+        "lastDays": "{count, plural, one {viimeinen päivä} other {viimeiset # päivää}}"
+      },
+      "source": {
+        "mail": "Sähköposti",
+        "chat": "Teams-keskustelut",
+        "channel": "Teams-kanavat",
+        "calendar": "Kalenteri"
+      },
+      "sourceStatus": {
+        "ok": "valmis",
+        "partial": "osittainen",
+        "skipped": "ohitettu",
+        "unavailable": "ei oikeuksia",
+        "error": "epäonnistui"
+      },
+      "degraded": "Analyysimalli ei ollut käytettävissä, joten kategoriat perustuvat vain sääntöihin.",
+      "withheld": "{count, plural, one {# kohde pidätettiin} other {# kohdetta pidätettiin}} turvasuodattimien toimesta.",
+      "empty": "Tältä ajalta ja näistä lähteistä ei ole raportoitavaa.",
+      "actionItems": "Toimintakohteet",
+      "createTasks": "{count, plural, =0 {Lisää Tehtävälistaan} one {Lisää # tehtävä Tehtävälistaan} other {Lisää # tehtävää Tehtävälistaan}}",
+      "taskCreated": "lisätty Tehtävälistaan",
+      "tasksCreated": "{count, plural, one {# tehtävä} other {# tehtävää}} lisätty \"{list}\"-listaan.",
+      "tasksFailed": "Tehtäviä ei voitu luoda.",
+      "category": {
+        "needsReply": "Tarvitsee vastaukseni",
+        "askedOfMe": "Pyydetty minulta",
+        "waitingOnOthers": "Odottaa muilta",
+        "scheduling": "Aikataulutus",
+        "companyUpdates": "Yritys- ja projektipäivitykset",
+        "fyi": "Tiedoksi",
+        "bulk": "Automaattinen ja massapostitus"
+      },
+      "companyUpdatesHint": "tärkeä, harvoin kiireellinen",
+      "markDone": "Merkitse {title} käsitellyksi",
+      "badge": {
+        "unanswered": "vastaamatta",
+        "mentioned": "mainitsi sinut",
+        "important": "korkea tärkeys"
+      },
+      "askAbout": "Kysy tästä",
+      "askPrompt": "Yllä olevassa koosteessa oleva {source}-kohde \"{title}\" käyttäjältä {from} ({when}): mitä siinä kysytään ja millainen olisi hyvä vastaus?",
+      "open": {
+        "mail": "Avaa Outlookissa",
+        "chat": "Avaa Teamsissa",
+        "channel": "Avaa Teamsissa",
+        "calendar": "Avaa Outlookissa"
+      },
+      "footnote": "Kategoriat perustuvat omiin signaaleihisi (vastaamatta, mainittu, laajalevitteinen) sekä tekoälyluokitukseen; varmista ennen toimintaa. Mitään ei lähetetty.",
+      "age": {
+        "now": "juuri nyt",
+        "hours": "{count} t sitten",
+        "days": "{count} pv sitten"
+      },
+      "waitForReply": "Odota, että nykyinen vastaus valmistuu ennen yhteenvedon aloittamista."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "Tietämys",
       "prompt": "Persoona",
-      "m365": "Tietämys (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Tietämys",
-      "foundry": "Foundry-agentti",
+      "foundry": "Mukautettu agentti",
       "connector": "Liitin"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "käyttää omaa malliaan"
     },
     "loadError": "Agenntiesi lataaminen ei onnistunut juuri nyt. Tämä on yleensä väliaikaista.",
-    "discoveryLoading": "Etsitään Foundry-agentteja…",
-    "discoveryError": "Foundry-agenttien lataaminen epäonnistui.",
+    "discoveryLoading": "Etsitään lisää agentteja…",
+    "discoveryError": "Joidenkin agenttien lataaminen epäonnistui.",
     "retry": "Yritä uudelleen"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "Vanhempi kuin tämän kansion säilytysaika ({months} kuukautta); ei enää näytetä.",
       "unknown": "Ilmoitettu ongelma: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Osaamiset",
+    "description": "Toistettavat ohjeet, joita avustaja käyttää keskustelussa tarpeen mukaan. Yhteensopiva Agent Skills SKILL.md -formaatin (Claude ja ChatGPT) kanssa.",
+    "loading": "Ladataan osaamisia…",
+    "loadError": "Osaamisia ei voitu ladata.",
+    "retry": "Yritä uudelleen",
+    "unavailableBanner": "Osaamisten tallennustilaan ei juuri nyt saada yhteyttä — näytetään sisäänrakennetut oletukset; tallennetut osaamiset ja muokkaukset eivät ole käytettävissä, kunnes yhteys palautuu.",
+    "conflictError": "Toinen ylläpitäjä on muuttanut tätä osaamista. Lista on päivitetty — tee muokkauksesi uudelleen.",
+    "alwaysWarning": "{count} osaamista on asetettu toimintatilaan \"Aina\". Jokainen niistä lisätään jokaiseen keskusteluun — suosi automaattista valintaa aihekohtaisille osaamisille.",
+    "newSkill": "Uusi osaaminen",
+    "importSkill": "Tuo SKILL.md",
+    "importTitle": "Liitä SKILL.md-tiedosto",
+    "importPlaceholder": "---\nnimi: oma-osaaminen\nkuvaus: Mitä tämä osaaminen tekee ja milloin sitä käytetään.\n---\n\nOhjeet…",
+    "importHint": "Purettu osaaminen avautuu muokkaustilaan tarkistettavaksi — mitään ei tallenneta ennen kuin tallennat sen.",
+    "importParse": "Jäsennä ja tarkista",
+    "invalidId": "Osaamisen id saa sisältää pieniä kirjaimia, numeroita ja yhden väliviivan.",
+    "saveSuccess": "Osaaminen tallennettu.",
+    "saveError": "Osaamista ei voitu tallentaa.",
+    "deleteConfirm": "Poistetaanko tämä osaaminen? Keskustelut lakkaavat saamasta sitä välittömästi.",
+    "restoreConfirm": "Poistetaanko mukautus ja palautetaanko tämän sisäänrakennetun osaamisen oletus?",
+    "deleteSuccess": "Osaaminen poistettu.",
+    "restoreSuccess": "Sisäänrakennettu oletus palautettu.",
+    "deleteError": "Osaamista ei voitu poistaa.",
+    "empty": "Ei osaamisia vielä. Luo uusi tai tuo SKILL.md.",
+    "builtinChip": "Sisäänrakennettu",
+    "customizedChip": "Mukautettu",
+    "exportSkill": "Vie SKILL.md-muotoon",
+    "edit": "Muokkaa",
+    "delete": "Poista",
+    "restoreDefault": "Palauta oletus",
+    "createTitle": "Uusi osaaminen",
+    "editTitle": "Muokkaa: {name}",
+    "idLabel": "Tunniste",
+    "idHint": "Pienet kirjaimet, numerot ja yhdysviivat. Muodostaa osaamisen SKILL.md-nimen, eikä sitä voi muuttaa luomisen jälkeen.",
+    "nameLabel": "Näyttönimi",
+    "descriptionLabel": "Kuvaus",
+    "descriptionHint": "Mitä osaaminen tekee JA milloin sitä käytetään — tämä määrittää osaamisen valinnan, joten lisää selkeät aiheet ja sanamuodot, joihin sen tulee reagoida.",
+    "activationLabel": "Aktivointi",
+    "activation": {
+      "auto": "Automaattinen",
+      "always": "Aina",
+      "off": "Pois päältä",
+      "manual": "Pyynnöstä"
+    },
+    "activationHint": {
+      "auto": "Valitaan automaattisesti, kun nykyinen tehtävä vastaa kuvausta. Käyttäjät voivat myös pyytää sitä kerran tai kiinnittää sen keskusteluun.",
+      "always": "Lisätään jokaiseen keskusteluun niille, jotka näkevät osaamisen. Käytä harkiten — tämä on pysyvää ohjetilaa.",
+      "off": "Ei aktiivinen: ei käytetä eikä tarjota käyttäjille, mutta on muokattavissa täällä.",
+      "manual": "Käytetään vain, kun käyttäjä pyytää tai kiinnittää sen. Ei valita automaattisesti eikä tarjota mallille ladattavaksi osaamiseksi."
+    },
+    "instructionsLabel": "Ohjeet",
+    "instructionsHint": "Markdown, enintään 16 kt. Lisätään sellaisenaan, kun taito on aktiivinen.",
+    "saving": "Tallennetaan…",
+    "save": "Tallenna",
+    "cancel": "Peruuta",
+    "documents": {
+      "title": "Asiakirjat",
+      "hint": "Viitteet tallennetaan tähän taitoon. Pienet asiakirjat latautuvat suoraan; suuremmat asiakirjat indeksoidaan haettua viittausta varten. Enintään 20 resurssia, 10 Mt kukin ja yhteensä 20 Mt. Assetit ovat ladattavissa vain.",
+      "saveFirst": "Tallenna tämän sisäänrakennetun taidon mukautus ennen asiakirjojen lisäämistä.",
+      "upload": "Lisää viiteasiakirjoja",
+      "remove": "Poista",
+      "stop": "Keskeytä indeksointi",
+      "resume": "Indeksoi tai jatka asiakirjoja",
+      "empty": "Ei asiakirjoja liitetty.",
+      "requestFailed": "Asiakirjapyyntö epäonnistui. Lataa sivu uudelleen ja yritä uudelleen.",
+      "importZip": "Tuo taito ZIP-tiedostona",
+      "zipTooLarge": "Taito ZIP-tiedoston on oltava 20 Mt tai pienempi.",
+      "importCount": "Liitettäviä resursseja tallennuksen jälkeen: {count}",
+      "skippedScripts": "Suoritettavat skriptit ohitettiin",
+      "status": {
+        "pending": "Odottaa indeksointia",
+        "processing": "Indeksoidaan",
+        "inline": "Valmis (latautuu suoraan)",
+        "indexed": "Valmis (haettavissa)",
+        "failed": "Indeksointi epäonnistui",
+        "asset": "Ladattava assetti"
+      },
+      "confirmRemove": "Poistetaanko tiedosto {filename} tästä taidosta? Tallennettu alkuperäistiedosto poistetaan, eikä sitä voi enää käyttää lähteenä.",
+      "reindexRequired": "Nämä asiakirjat on indeksoitava uudelleen nykyistä alueellista hakua ja upotuksia varten. Niitä ei voi hakea ennen kuin indeksointi on valmis."
+    },
+    "applyToAgents": "Saatavilla agenteille",
+    "applyToAgentsHint": "Pois päältä oletuksena. Kun tämä on käytössä, agentit voivat ladata tämän taidon vain luku -työkaluina oman persoonakuvauksensa korvaamisen sijaan. Taitokutsujen askelmäärillä on omat rajansa. Foundry-agenttien määrittelyyn tulee olla rekisteröitynä sekä load_skill- että search_skill_documents-toiminnot.",
+    "requireConsent": "Kysy ennen käyttöä",
+    "requireConsentHint": "Kun malli haluaa käyttää tätä osaamista itsenäisesti, käyttäjältä kysytään ensin. Pyydettäessä ja kiinnitettäessä ei tarvita vahvistusta.",
+    "consentChip": "Kysyy ensin",
+    "sourceChip": "Lähteestä",
+    "sourceChipHint": "Tuotu tilatusta osaamislähteestä; ohjeet päivitetään synkronoinnissa. Aktivointi-, agentti- ja suostumusasetukset ovat omiasi.",
+    "sources": {
+      "title": "Osaamislähteet",
+      "description": "Tilaa ulkoinen osaamiskatalogi (index.json, joka luettelee SKILL.md-tiedostot). Osaamiset siirtyvät organisaatiolle ja päivittyvät noin kuuden tunnin välein. Vain SKILL.md tuodaan; viitedokumentteja ei tuoda.",
+      "urlLabel": "Katalogin URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Täytyy olla https-julkisella palvelimella. Osaamistiedostot luetaan vain samasta sijainnista.",
+      "labelLabel": "Nimi (valinnainen)",
+      "add": "Tilaa",
+      "adding": "Tilataan…",
+      "added": "{count, plural, =0 {Lähde lisätty; osaamisia ei vielä tuotu} one {Lähde lisätty; # osaaminen tuotu} other {Lähde lisätty; # osaamista tuotu}}",
+      "addedWithError": "Lähde lisätty, mutta ensimmäinen synkronointi epäonnistui. Tarkista virhe lähteestä.",
+      "addError": "Osaamislähdettä ei voitu lisätä",
+      "sync": "Synkronoi nyt",
+      "syncing": "Synkronoidaan…",
+      "synced": "Lähde synkronoitu.",
+      "syncError": "Osaamislähdettä ei voitu synkronoida",
+      "remove": "Poista lähde",
+      "removeConfirm": "Poistetaanko tämä lähde? Sen tuomat osaamiset jäävät tavallisiksi organisaation osaamisiksi eivätkä enää päivity.",
+      "removed": "Lähde poistettu.",
+      "removeError": "Osaamislähdettä ei voitu poistaa",
+      "loading": "Lähteitä ladataan…",
+      "loadError": "Osaamislähteitä ei voitu ladata.",
+      "empty": "Ei osaamislähteitä vielä.",
+      "never": "Ei koskaan synkronoitu",
+      "statusOk": "Synkronoitu",
+      "statusError": "Synkronointi epäonnistui",
+      "statusPartial": "{count, plural, one {# tietue ohitettu} other {# tietuetta ohitettu}}",
+      "lastSync": "Viimeksi synkronoitu {time}",
+      "entryCount": "{count, plural, one {# tietue} other {# tietuetta}}",
+      "entryStatus": {
+        "synced": "synkronoitu",
+        "skipped": "ohitettu",
+        "conflict": "ristiriita — ei korvattu",
+        "invalid": "virheellinen"
+      }
+    },
+    "requireConsentDisabledHint": "Vain automaattiset taidot voivat pyytää lupaa: pyydetyt, kiinnitetyt ja aina päällä olevat taidot otetaan käyttöön ilman kyselyä, ja pyynnöstä käytettäviä taitoja ei koskaan valita mallin toimesta."
+  },
+  "personalSkills": {
+    "title": "Henkilökohtaiset taidot",
+    "description": "Tallenna uudelleenkäytettäviä ohjeita omiin keskusteluihisi. Taidot säilyvät tässä selaimessa ja lähetetään mallille vain keskustelun aikana. Sopivat taidot voidaan valita automaattisesti, käyttää kerran tai kiinnittää. Niillä ei voi muuttaa organisaation käytäntöjä eikä antaa pääsyä työkaluihin. Taitojen käyttö edellyttää, että taidot on otettu käyttöön tässä käyttöympäristössä; agenttikeskusteluissa henkilökohtaisia taitoja ei käytetä.",
+    "importFile": "Tuo SKILL.md tai ZIP",
+    "review": "Tarkista ohjeet kokonaisuudessaan ennen tallennusta. Tuodut ohjeet ovat käyttäjän asetuksia, eivät luotettavia organisaation käytäntöjä.",
+    "skipped": "Suoritettavat skriptit ohitettiin",
+    "importTooLarge": "Tuotavan tiedoston on oltava enintään 20 Mt.",
+    "invalid": "Taitoa ei voitu tuoda.",
+    "duplicate": "Tämä henkilökohtaisen taidon id on jo olemassa. Muokkaa olemassa olevaa taitoa tai valitse toinen id.",
+    "countLimit": "Voit tallentaa enintään 20 henkilökohtaista taitoa.",
+    "requestLimit": "Käytössä olevat henkilökohtaiset taidot ylittävät 160 KB pyynnön rajan. Poista joitakin taitoja käytöstä tai lyhennä ohjeita.",
+    "saved": "Henkilökohtainen taito tallennettu tähän selaimeen.",
+    "instructionsHint": "Enintään 16 KB ohjeita, mukaan lukien mahdolliset tuodut tekstiviitteet. Binääritiedostot ja pysyvä asiakirjaindeksointi ovat käytettävissä vain organisaatiotaidoissa. Vientitoiminto käyttää oletuksena SKILL.md-nimeä ilman user:-etuliitettä.",
+    "enabled": "Käytössä omissa keskusteluissani",
+    "empty": "Luo taito toistuvaan tehtävään tai tuo SKILL.md tarkistaaksesi ja tallentaaksesi sen tähän."
   }
 }

@@ -68,11 +68,14 @@ import { ConnectorPinTray } from '@/components/Chat/ChatInput/ConnectorPinTray';
 import { ExtractionTray } from '@/components/Chat/ChatInput/ExtractionTray';
 import { InputControlsBar } from '@/components/Chat/ChatInput/InputControlsBar';
 import { InterpreterModeBadge } from '@/components/Chat/ChatInput/InterpreterModeBadge';
+import { M365DigestLauncherModal } from '@/components/Chat/ChatInput/M365DigestLauncherModal';
 import { M365PlaybookChips } from '@/components/Chat/ChatInput/M365PlaybookChips';
 import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
+import { SkillBadges } from '@/components/Chat/ChatInput/SkillBadges';
 import { ToneBadge } from '@/components/Chat/ChatInput/ToneBadge';
 import { M365AgentAccessBanner } from '@/components/Chat/M365AgentAccessBanner';
+import { QueuedMessagesTray } from '@/components/Chat/QueuedMessagesTray';
 
 import { PromptList } from './ChatInput/PromptList';
 import { VariableModal } from './ChatInput/VariableModal';
@@ -305,13 +308,8 @@ export const ChatInput = ({
   };
 
   const handleSend = () => {
-    if (isStreaming) {
-      if (filePreviews.length > 0) {
-        setFilePreviews([]);
-      }
-      return;
-    }
-
+    // While streaming the message is QUEUED (useChatActions.handleSend) and
+    // sent when the response finishes — no more waiting on the composer.
     handleMessageSend();
 
     if (
@@ -562,6 +560,9 @@ export const ChatInput = ({
       )}
 
       <div className="sticky bottom-0 bg-white dark:bg-surface-dark">
+        {selectedConversation && (
+          <QueuedMessagesTray conversationId={selectedConversation.id} />
+        )}
         {filePreviews.length > 0 && (
           <div className="max-h-52 overflow-y-auto">
             <ChatFileUploadPreviews
@@ -601,6 +602,7 @@ export const ChatInput = ({
         {(selectedConversation?.pinnedMcpServerId || connectorPinTrayOpen) && (
           <ConnectorPinTray />
         )}
+        <SkillBadges />
 
         {/* M365 agent source-access preflight (renders only when an M365
             file-backed agent is selected AND some sources are denied) */}
@@ -609,6 +611,7 @@ export const ChatInput = ({
         {/* Playbook suggestions — self-gating (flag, user toggle and each
             playbook's precondition are all checked inside). */}
         <M365PlaybookChips />
+        <M365DigestLauncherModal />
 
         <div className="items-center pt-4">
           <div className="flex justify-center items-center space-x-2 px-2 md:px-4">

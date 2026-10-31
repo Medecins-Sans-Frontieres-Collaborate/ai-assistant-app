@@ -26,6 +26,7 @@ import {
   StoredMcpConnector,
   StoredOrgRagAgent,
   StoredPromptAgent,
+  StoredSkill,
   bumpGeneration,
   createAgentAccessBlobStorage,
   listAllCatalogOauthApps,
@@ -35,6 +36,7 @@ import {
   listAllOrgAgents,
   listAllPromptAgents,
   listAllRules,
+  listAllSkills,
   readConfig,
   readGenerationEtag,
 } from '@/lib/services/agentAccess/accessRulesStore';
@@ -59,6 +61,7 @@ import {
   matchesPrincipal,
   normalizeMail,
 } from '@/lib/services/shared/principalMatching';
+import { Skill } from '@/lib/services/skills/types';
 
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -145,6 +148,8 @@ export interface AgentAccessSnapshot {
   catalogOauthApps: CatalogOauthApp[];
   /** Admin workflow guides; empty when the feature is off or never loaded. */
   guides: Guide[];
+  /** Admin skill records; empty when the feature is off or never loaded. */
+  skills: Skill[];
   /** M365 file-backed agents; empty when the feature is off or never loaded. */
   m365Agents: M365Agent[];
   /** Admin org RAG agents; empty when the feature is off or never loaded. */
@@ -210,6 +215,8 @@ interface LoadedState {
   catalogOauthAppsById: Map<string, CatalogOauthApp>;
   guides: Guide[];
   guidesById: Map<string, Guide>;
+  skills: Skill[];
+  skillsById: Map<string, Skill>;
   m365Agents: M365Agent[];
   m365AgentsById: Map<string, M365Agent>;
   orgAgents: OrgRagAgent[];
@@ -360,6 +367,7 @@ export class AgentAccessService {
       connectors: this.state?.connectors ?? [],
       catalogOauthApps: this.state?.catalogOauthApps ?? [],
       guides: this.state?.guides ?? [],
+      skills: this.state?.skills ?? [],
       m365Agents: this.state?.m365Agents ?? [],
       orgAgents: this.state?.orgAgents ?? [],
       rulesUnavailable: this.isEnabled() && this.state === null,
@@ -424,6 +432,23 @@ export class AgentAccessService {
   getGuideById(id: string): Guide | null {
     if (!this.isEnabled()) return null;
     return this.state?.guidesById.get(id) ?? null;
+  }
+
+  /**
+   * Admin skill RECORDS from the cached snapshot — callers ensureFresh()
+   * first. These are the stored blobs only; built-in defaults and override
+   * merging live in lib/services/skills/skillCatalog.ts, which is what the
+   * chat pipeline and routes consume.
+   */
+  getSkills(): Skill[] {
+    if (!this.isEnabled()) return [];
+    return this.state?.skills ?? [];
+  }
+
+  /** Single stored skill record by id; null when unknown (or feature off). */
+  getSkillById(id: string): Skill | null {
+    if (!this.isEnabled()) return null;
+    return this.state?.skillsById.get(id) ?? null;
   }
 
   /** M365 agents from the cached snapshot — callers ensureFresh() first. */
@@ -717,6 +742,28 @@ export class AgentAccessService {
         );
       }
 
+      // Skills: same isolated-failure contract as guides. A listing failure
+      // leaves admin records ABSENT — the catalog then serves the compiled
+      // built-ins only (last-known-good by definition), so failing to load
+      // degrades to defaults and need not mark the snapshot unavailable.
+      let skills: Skill[] = this.state?.skills ?? [];
+      let skillsById: Map<string, Skill> = this.state?.skillsById ?? new Map();
+      try {
+        const storedSkills = await listAllSkills(storage);
+        skills = storedSkills.map((stored: StoredSkill) => stored.record);
+        skillsById = new Map<string, Skill>(
+          skills.map((skill) => [skill.id, skill]),
+        );
+      } catch (error) {
+        console.error(
+          `[agent-access] skill listing failed (${
+            this.state
+              ? 'keeping last-known-good skills'
+              : 'built-in skills only until a load succeeds'
+          }; rules snapshot unaffected): ${sanitizeForLog(error)}`,
+        );
+      }
+
       // M365 agents: same isolated-failure contract as personas, connectors
       // and guides. A listing failure leaves the agents ABSENT — an absent
       // agent falls through to vanilla chat rather than exposing indexed
@@ -788,6 +835,8 @@ export class AgentAccessService {
         catalogOauthAppsById,
         guides,
         guidesById,
+        skills,
+        skillsById,
         m365Agents,
         m365AgentsById,
         orgAgents,

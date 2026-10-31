@@ -211,6 +211,39 @@ describe('ToolRouter Enricher', () => {
     });
   });
 
+  it('carries skill selections forward even when no tools execute', async () => {
+    mockToolRouterService.determineTool.mockResolvedValue({
+      tools: [],
+      relevantSkills: ['gdpr'],
+    });
+    const result = await enricher.execute({
+      ...createTestChatContext({ searchMode: SearchMode.INTELLIGENT }),
+      skillCatalog: [
+        {
+          builtin: false,
+          overridden: false,
+          skill: {
+            version: 1,
+            id: 'gdpr',
+            name: 'GDPR',
+            description: 'Data protection',
+            instructions: 'Never sent to the router',
+            activation: 'auto',
+            applyToAgents: false,
+            documents: [],
+            updatedAt: '',
+          },
+        },
+      ],
+    });
+    expect(result.skillRouting?.relevantSkills).toEqual(['gdpr']);
+    const request = mockToolRouterService.determineTool.mock.calls[0][0];
+    expect(request.skillCatalog).toEqual([
+      { id: 'gdpr', name: 'GDPR', description: 'Data protection' },
+    ]);
+    expect(JSON.stringify(request)).not.toContain('Never sent to the router');
+  });
+
   describe('executeStage', () => {
     describe('when no tools are needed', () => {
       it('should return context unchanged when tool router returns empty array', async () => {

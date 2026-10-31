@@ -812,7 +812,16 @@
       "stillWorking": "Hâlâ çalışıyor…",
       "assessingSearchResults": "Sonuçların soruya cevap verip vermediğini kontrol ediliyor…",
       "refiningSearch": "Yeniden aranıyor: “{query}”…",
-      "readingSearchPages": "{count} sonuç sayfası okunuyor…"
+      "readingSearchPages": "{count} sonuç sayfası okunuyor…",
+      "toolRoutingUnavailableInRegion": "{region} uç noktasında araç yönlendirmesi kullanılamıyor — araçsız yanıtlanıyor…",
+      "applyingSkill": "Beceri uygulanıyor: {skills}…",
+      "applyingSkills": "Beceriler uygulanıyor: {skills}…",
+      "readingSkillReferences": "Beceri referans belgeleri okunuyor…",
+      "selectingSkills": "Yetenekler seçiliyor…",
+      "retryingModel": "Model meşgul — {seconds}s içinde tekrar denenecek (deneme {attempt})…",
+      "resumingResponse": "Model ile bağlantı kesildi — kaldığı yerden devam ediliyor…",
+      "continuingResponse": "Yanıt uzunluk sınırına ulaştı — devam ediliyor…",
+      "trimmingContext": "Sohbet modeli için çok uzun — eski geçmiş kısaltılıyor ve tekrar deneniyor…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# araç kullanıldı} other {# araç kullanıldı}}",
@@ -878,7 +887,9 @@
       "deniedByRuleHint": "Kuralınız tarafından engellendi — Ayarlar → Bağlayıcılar bölümünden yönetin.",
       "batchPendingHint": "{count} araç isteği beklemede",
       "approveAllButton": "Tümünü onayla",
-      "denyAllButton": "Tümünü reddet"
+      "denyAllButton": "Tümünü reddet",
+      "applySkillTitle": "“{skill}” becerisi uygulansın mı?",
+      "skillConsentNote": "Bir admin bu becerinin uygulanmadan önce sormasını belirledi. Onayladığınızda, yalnızca bu cevap için yönlendirmesi yüklenir."
     },
     "openImage": "Görseli aç",
     "copyMessage": "Mesajı kopyala",
@@ -918,7 +929,54 @@
     "alwaysWaitThisLong": "Her zaman en fazla {duration} kadar bekle",
     "keepSearching": "Aramaya devam et",
     "keepSearchingHint": "Arama bunu bulmadan durdu. Asistanın farklı yollar denemesini isteyin.",
-    "keepSearchingMessage": "Bunu aramaya devam edin lütfen — farklı bir yöntem deneyin."
+    "keepSearchingMessage": "Bunu aramaya devam edin lütfen — farklı bir yöntem deneyin.",
+    "addSkill": "Yetenekler",
+    "removeSkill": "Yeteneği kaldır",
+    "skillsMenuLabel": "Mevcut yetenekler",
+    "skillsLimit": "Mesaj başına en fazla 3 yetenek.",
+    "skillPin": "Sohbete sabitle",
+    "skillUseOnce": "Bir kez kullan",
+    "skillPinned": "sabitle",
+    "skillOnce": "sonraki mesaj",
+    "skillsPaused": "duraklatıldı",
+    "skillUnavailable": "kullanılamıyor",
+    "skillsAutomaticHint": "İlgili beceriler otomatik olarak seçilir. Sadece sonraki mesaj için bir kez kullanabilir veya bir beceriyi bu sohbet boyunca kullanmak için sabitleyebilirsiniz.",
+    "skillsAgentDisabled": "Bir temsilci eklendiğinde beceriler duraklatılır. Temsilciyi kaldırdığınızda sabitlemeleriniz devam edecek.",
+    "skillPersonal": "kişisel",
+    "skillsAgentToolsHint": "Burada yalnızca bir yönetici tarafından ajanın kullanımı için etkinleştirilen organizasyon becerileri sunulur. Ajan bunları yalnızca okuma modu araçları olarak yükleyebilir. Diğer sabitlenmiş beceriler duraklatılır ve kişisel beceriler ajanlar tarafından kullanılamaz.",
+    "skillAlwaysOn": "her zaman açık",
+    "skillAlwaysOnHint": "Bir yönetici tarafından bu sohbetteki her mesaja eklendi.",
+    "skillUsage": {
+      "label": "Beceriler",
+      "requested": "talep edildi",
+      "pinned": "sabitledi",
+      "auto": "otomatik",
+      "unavailable": "kullanılamıyor",
+      "incomplete": "Bazı beceriler uygulanamadı",
+      "references": "{count, plural, one {# referans bölümü} other {# referans bölümleri}}",
+      "referencesUnavailable": "Bazı referans belgeleri kullanılamadı",
+      "showDetails": "Beceri detaylarını göster",
+      "hideDetails": "Beceri detaylarını gizle",
+      "agentLoad": "ajan tarafından yüklendi",
+      "agentSearch": "ajan tarafından belgeler arandı",
+      "needsApproval": "onayınızı gerektiriyor",
+      "original": "ilk çalıştırıldığı gibi",
+      "updated": "sonradan güncellendi"
+    },
+    "skillsManualHint": "Otomatik seçim Ayarlar'da kapalı. Bir sonraki mesaj için bir kez kullanabilir veya bir yeteneği sabitleyerek bu görüşme boyunca kullanabilirsiniz.",
+    "queuedMessage": {
+      "label": "Kuyrukta",
+      "attachmentOnly": "Ek",
+      "cancel": "Kuyruktaki mesajı iptal et"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Yanıt, içerik güvenliği filtresi tarafından durduruldu. İsteğinizi yeniden ifade edin veya bunu tetiklemiş olabilecek kısmı kaldırın.",
+      "MODEL_CONTEXT_TOO_LONG": "Bu sohbet, seçilen model için çok uzun; eski geçmiş kısaltıldıktan sonra bile uygun değil. Yeni bir sohbet başlatın, bazı ekleri kaldırın veya daha geniş bağlam penceresine sahip bir model seçin.",
+      "MODEL_OUTPUT_LIMIT": "Model, yanıt üretmeden çıktı sınırını kullandı. Daha düşük bir akıl yürütme seviyesi veya daha kısa bir istek deneyin.",
+      "MODEL_RATE_LIMITED": "Model şu anda çok fazla istek alıyor. Otomatik olarak tekrar denendi; lütfen kısa bir süre sonra tekrar deneyin.",
+      "MODEL_QUOTA_EXCEEDED": "Modelin kapasite kotası doldu. Başka bir model deneyin veya daha sonra tekrar deneyin.",
+      "MODEL_AUTH_FAILED": "Uygulama, model servisiyle kimlik doğrulaması yapamadı. Bu bir yapılandırma sorunu — lütfen destek ile iletişime geçin."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -1325,7 +1383,11 @@
       "preferModelTitle": "Seçili modelimi tercih et",
       "preferModelDescription": "Bir istek başarısız olduğunda otomatik olarak başka bir modele geçme. Hata, model değiştirme seçeneğini yine de sunacak."
     },
-    "Analytics": "Analitik"
+    "Analytics": "Analitik",
+    "skills": {
+      "autoApply": "Asistanın yetenekleri otomatik olarak uygulamasına izin ver",
+      "autoApplyDescription": "İlgili yetenekler ve kişisel yetenekleriniz her mesaj için seçilir. Kapalı olduğunda, yalnızca talep ettiğiniz veya sabitlediğiniz yetenekler ve bir yöneticinin tüm görüşmelere uyguladığı yetenekler kullanılır."
+    }
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "saniye",
     "chipAutoHideHint": "{min} ile {max} saniye arasında.",
     "byWorkflow": "İş akışına göre",
-    "byWorkflowNote": "Yukarıdaki toplamların bir parçası olup ayrıca gösterilir — ek kullanım değildir. Hibe çalışmalarınız kurumunuzun raporlamasına ve token bütçenize yansıtılır, ancak bu yerel toplamda sayılmaz."
+    "byWorkflowNote": "Yukarıdaki toplamların bir parçası olup ayrıca gösterilir — ek kullanım değildir. Hibe çalışmalarınız kurumunuzun raporlamasına ve token bütçenize yansıtılır, ancak bu yerel toplamda sayılmaz.",
+    "chipLabelTitle": "Çip etiketi",
+    "chipLabelHint": "Ayrıntılı gösterim her zaman emisyonları ve maliyeti yan yana gösterir; bu seçim, yalnızca daraltılmış çipin ne gösterdiğini belirler.",
+    "chipLabelEmissions": "Emisyonlar",
+    "chipLabelCost": "Maliyet",
+    "chipLabelBoth": "İkisi",
+    "costTile": "Tahmini maliyet",
+    "costDisclosure": "{asOf} tarihindeki liste fiyatlarıyla maliyet (Global Standard oranı, önbellekli girdilere indirim yok): bu bir üst sınırdır, fatura değildir. Web araması, kod çalıştırma, transkripsiyon, konuşma, çeviri ve belge indeksleme dahil değildir.",
+    "costUnpriced": "{count, plural, one {# istek için liste fiyatı yok ve dahil edilmedi} other {# istek için liste fiyatı yok ve dahil edilmedi}}"
   },
   "extraction": {
     "toggleLabel": "Yapılandırılmış veriyi çıkar",
@@ -4502,7 +4572,16 @@
         "auto": "Otomatik",
         "hidden": "Gizle"
       },
-      "visibilityHint": "Otomatik, çip güncellendiğinde veya üzerine geldiğinizde gösterir. Bunu Ayarlar › Kullanım ve Etki bölümünden tekrar değiştirebilirsiniz."
+      "visibilityHint": "Otomatik, çip güncellendiğinde veya üzerine geldiğinizde gösterir. Bunu Ayarlar › Kullanım ve Etki bölümünden tekrar değiştirebilirsiniz.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Tahmini maliyet {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Bu satırdaki istekler için liste fiyatı yok",
+        "unpriced": "{count, plural, one {# istek için liste fiyatı yok ve maliyete dahil edilmedi} other {# istek için liste fiyatı yok ve maliyete dahil edilmedi}}",
+        "noPriceData": "Maliyet gösterilmiyor: bu konuşmanın modelinin liste fiyatı yok (kendi kaynakları, yerel çalışma ortamları ve ajanlar fiyatlandırılmamıştır).",
+        "note": "{asOf} tarihindeki liste fiyatlarıyla maliyet (Global Standard oranı, önbellekli girdilere indirim yok): bu bir üst sınırdır, fatura değildir. Web araması, kod çalıştırma, transkripsiyon, konuşma, çeviri ve belge indeksleme dahil değildir."
+      }
     },
     "workflow": {
       "title": "Bu çalışma alanı (tahmini)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "Sözlüğü sil",
     "glossaryDeleteSuccess": "Sözlük silindi",
     "channelProfilesTab": "Platformlar",
-    "channelSetsTab": "Kanal setleri"
+    "channelSetsTab": "Kanal setleri",
+    "addPromptAgent": "Prompt ajanı ekle",
+    "m365AgentIndexStop": "Dizini durdur",
+    "foundryAgentsHeading": "Foundry ve prompt ajanları",
+    "foundryAgentsDescription": "Azure AI Foundry'den kendi erişiminizle keşfedilen ajanlar ve burada tanımlanan prompt ajanları. Bilgi ajanları ve Microsoft 365 ajanları aşağıda kendi bölümlerinde yönetilmektedir.",
+    "agentSkillsLabel": "Yetenekler",
+    "agentSkillsHelp": "Bu ajanın yanıtlarken yükleyebileceği organizasyon yetenekleri. Kullanıcılar sadece erişim kurallarının izin verdiği yetenekleri görebilir.",
+    "agentSkills": {
+      "inherit": "“Ajana açık” olarak işaretlenmiş yetenekler",
+      "selected": "Yalnızca aşağıda seçilen yetenekler",
+      "none": "Yetenek yok"
+    },
+    "agentSkillsNone": "Seçilebilecek yetenek yok.",
+    "agentSkillsLoading": "Beceri yükleniyor…",
+    "agentSkillsLoadError": "Beceriler yüklenemedi. Daha önce kaydedilen seçimler korunur.",
+    "agentSkillsNotVisible": "(size görünmüyor — kaldırmak için işareti kaldırın)"
   },
   "localModels": {
     "title": "Yerel modeller",
@@ -5521,7 +5615,8 @@
       "channelSets": "Her ekibin platformlarda yazma kuralları: rehberlik, sesler, varsayılanlar, kimlerin seti ve kimlerin gönderi gönderebileceği.",
       "webSearch": "Web aramasının ne kadar ileri gidebileceği: çok aşamalı arama, denetleyici modeli ve sınırları.",
       "contextBudget": "Her modelin her turda aldığı konuşma miktarı.",
-      "analytics": "Teslim edilen raporlar: neler geldi, her klasörü kim açabilir, hangi alanlar gösterilebilir."
+      "analytics": "Teslim edilen raporlar: neler geldi, her klasörü kim açabilir, hangi alanlar gösterilebilir.",
+      "skills": "Asistanın, gerektiğinde bir konuşmaya uyguladığı tekrar kullanılabilir talimat blokları."
     },
     "openSettings": "Ayarları aç",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "Delegasyonlar",
       "webSearch": "Web arama",
       "contextBudget": "Kontekst bütçesi",
-      "analytics": "Analitik"
+      "analytics": "Analitik",
+      "skills": "Yetenekler"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "Genel varsayılanlar",
       "overrides": "Geçersiz kılmalar",
-      "delegations": "Delegasyonlar"
+      "delegations": "Delegasyonlar",
+      "models": "Modeller"
     },
     "tabsLabel": "Sınır bölümleri",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Günde Microsoft 365 araç çağrıları",
       "m365MailReadsPerDay": "Günde e-posta okuma",
       "m365MailDraftsPerDay": "Günde e-posta taslakları",
-      "m365MailDeepScansPerDay": "Günde e-posta derin taramaları"
+      "m365MailDeepScansPerDay": "Günde e-posta derin taramaları",
+      "m365DigestRunsPerDay": "Günlük özeti çalışma sayısı"
     },
     "valueModeLabel": "Sınır türü",
     "valueAmountLabel": "Sınır miktarı",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 araç çağrıları (takvim, kişiler, görevler, Teams) günlük limiti. Limit aşılırsa, araçlar sohbeti başarısız kılmak yerine dostça bir 'yarın tekrar deneyin' sonucu döndürür.",
       "m365MailReadsPerDay": "Günlük e-posta aramaları ve mesaj/konu okumaları. Limit aşılırsa, e-posta araçları 'yarın tekrar deneyin' sonucu döndürür.",
       "m365MailDraftsPerDay": "Yardımcının günde oluşturabileceği e-posta taslakları — her biri tek tek onaylanır. Kasıtlı olarak sıkı tutulmuştur.",
-      "m365MailDeepScansPerDay": "Bileşik e-posta analizleri (özetler, derin arama, taahhütler) günlük limiti. Her tarama, içine kaç okuma girerse girsin bir bütçe birimidir."
+      "m365MailDeepScansPerDay": "Bileşik e-posta analizleri (özetler, derin arama, taahhütler) günlük limiti. Her tarama, içine kaç okuma girerse girsin bir bütçe birimidir.",
+      "m365DigestRunsPerDay": "Microsoft 365 günlük özeti çalışma sayısı. Bir çalışma, onlarca Graph okuması ve iki analiz modeli çağrısı içerir; dönem seçicisi tekrar çalıştırmaları kolaylaştırır, bu yüzden varsayılan sınır sıkıdır."
     },
     "scopeFamily": "Aile",
     "scopeModel": "Model",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "Yerleşik varsayılan",
     "previewSourceGlobal": "Küresel varsayılan",
     "previewSourceOverride": "Geçersiz kılma: {label}",
-    "previewNotEvaluated": "Departman/şirket/ofis ve grup geçersiz kılmaları burada değerlendirilemez — kişinin kendi oturum açmasına bağlıdır.",
+    "previewNotEvaluated": "Dizine erişilemediği için bu kişi için departman/şirket/ofis ve grup kuralları değerlendirilemedi. Lütfen kısa bir süre sonra tekrar deneyin.",
     "previewUnsaved": "Son kaydedilen politika gösteriliyor. Değişiklikleri önizlemek için kaydedin.",
     "previewColumnLimit": "Sınır",
     "previewColumnValue": "Değer",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "Sadece gruplar",
     "yourScopeGroupOnlyNote": "Yalnızca grup veya niteliklerle tanımlanmış, bu nedenle sınırlar e-posta adresine göre önizlenemez.",
     "previewOutOfScope": "Bu kişi kapsamınız dışında.",
-    "previewGroupOnlyScope": "Kapsamınız gruplar veya niteliklerle tanımlanmış, bu nedenle sınırlar e-posta ile önizlenemez.",
+    "previewGroupOnlyScope": "Kapsamınız gruplar veya niteliklerle tanımlanmıştır. Önizlemeler, kişinin bu kapsama dahil olup olmadığını belirlemek için dizinde arama yapar.",
     "previewCeilingPinned": "Sınırlandırma ile sabitlendi: {label}",
     "previewShowUsage": "Mevcut kullanımı göster",
     "previewColumnUsage": "Kullanılan",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "Bir satırda belirlenen sert üst sınır, bu geçersiz kılmanın hedefleri için o değeri sabitler: kapsamlı yöneticiler bunu kaldıramaz ve birden fazla üst sınır varsa en spesifik olanı uygulanır.",
     "confirmDeleteOverride": "\"{label}\" silinsin mi? Sunucudan hemen kaldırılır ve hedefleri altındaki limitlere döner. Bu işlem geri alınamaz.",
     "confirmDeleteOverrideAction": "Geçersiz kılmayı sil",
-    "previewUndecidableScope": "Kapsamınızda gruplar veya özellikler var, bu nedenle bu kişinin kapsamda olup olmadığı e-posta adresiyle belirlenemez.",
+    "previewUndecidableScope": "Kapsamınız gruplar veya nitelikleri içeriyor ve dizine erişilemediği için bu kişinin kapsama dahil olup olmadığı şu anda belirlenemiyor. Lütfen kısa bir süre sonra tekrar deneyin.",
     "previewNoLongerAdmin": "Artık etkin bir delege içinde adınız geçmiyor, bu yüzden limitleri önizleyemezsiniz. Mevcut erişiminizi görmek için sayfayı yeniden yükleyin.",
     "previewScopeMatchesNobody": "Kapsamınız şu anda kimseyle eşleşmiyor, bu yüzden e-posta ile önizlenecek kimse yok.",
     "yourScopeMatchesNobodyChip": "Hiçbiriyle eşleşmiyor",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "Delegasyonu devre dışı bırakıldı, bu yüzden bu geçersiz kılma, delegasyon yeniden etkinleştirilene kadar kimseye uygulanmaz. Asla genel düzeye yükseltilmez.",
     "betaPolicyNotice": "Beta ortamı: Bu politika ve kullanım sayaçları, üretimden (policy.beta.json) ayrı olarak saklanır. Burada yaptığınız hiçbir değişiklik üretimi etkilemez.",
     "delegationsManagedElsewhere": "Delegasyonlar burada yalnızca okunabilir olarak görüntülenir. Bir delegasyondaki kişiler, kapsadığı kullanıcılar ve her yöneticinin yetkileri Delegasyonlar alanında yönetilir.",
-    "delegationsManagedElsewhereLink": "Delegasyonları Aç"
+    "delegationsManagedElsewhereLink": "Delegasyonları Aç",
+    "modelAccess": {
+      "intro": "Her bir modeli kimin kullanabileceğine karar verin. Bir ailenin ayarı, model kendi ayarını belirlemediği sürece o ailenin modelleri için geçerlidir; bir listedeki kişiler, diğer herkes için varsayılanı geçersiz kılar; engelleme listesi ise tüm izinlerin üzerindedir.",
+      "externalNote": "Azure ortamı dışında barındırılan modeller ({families}), burada izin vermediğiniz sürece herkes için kullanılamaz — isteğe bağlı olarak tüm kullanıcılar (varsayılan), ya da gruplar, alan adları ve kişiler için.",
+      "envelopeNote": "Bir ailedeki istek limiti, o ailenin modelleri arasında paylaşılan günlük bir bütçedir; bir modeldeki limit ise model için bir üst sınırdır. Bir modelde 'Sınırsız' seçmek, aile bütçesini aşmaz.",
+      "observeNote": "Gözlem modu açık: Buradaki hiçbir ayar şu anda bir modeli gizlemez veya isteği engellemez. Kurallar doğru olduğunda yukarıdan Zorla seçeneğine geçin.",
+      "familyChip": "Aile",
+      "modelChip": "Model",
+      "otherModels": "Ailesi olmayan modeller",
+      "modelsInFamily": "{count, plural, one {Bu ailede # model var} other {Bu ailede # model var}}",
+      "noModels": "Katalogda henüz model yok.",
+      "expand": "Modelleri göster",
+      "collapse": "Modelleri gizle",
+      "edit": "Düzenle",
+      "doneEditing": "Bitti",
+      "editNode": "{label} için erişimi düzenle",
+      "defaultLabel": "Diğer herkes",
+      "defaultInherit": "Devral",
+      "defaultUnlimited": "Sınırsız",
+      "defaultLimited": "Şu kadar ile sınırla",
+      "defaultUnavailable": "Kullanılamaz",
+      "defaultRequestsLabel": "Diğer herkes için günlük istek",
+      "requestsPerDay": "istek / gün",
+      "inheritedFrom": "{origin} kaynağından {state} devralıyor.",
+      "effectiveLabel": "Listede olmayan herkes: {state}.",
+      "inheritedChip": "devralınan",
+      "origin": {
+        "model": "bu ayar",
+        "family": "aile ayarı",
+        "defaults": "Global varsayılanlar",
+        "catalogExternal": "dış modellerin izin verilene kadar kullanılamaz olma kuralı",
+        "catalog": "katalog varsayılanı"
+      },
+      "state": {
+        "unlimited": "Sınırsız",
+        "limited": "Günde {requests} ile sınırlı",
+        "unavailable": "Kullanılamaz"
+      },
+      "list": {
+        "groups": "Erişimi olan gruplar",
+        "domains": "Erişimi olan alan adları",
+        "allow": "İzin verilen kişiler",
+        "deny": "Engellenen kişiler"
+      },
+      "listHint": {
+        "groups": "Bu Entra gruplarının üyeleri, grup için belirlenen koşullarda kullanabilir.",
+        "domains": "Bu alan adlarında e-posta adresi olan herkes, alan için belirlenen şartlarda kullanabilir.",
+        "allow": "İsmi belirtilen kişiler, varsayılandan veya alan ayarlarından bağımsız olarak kullanabilir.",
+        "deny": "İsmi belirtilen kişiler asla kullanamaz. Bu, yukarıdaki tüm izinleri geçersiz kılar."
+      },
+      "grantUnlimited": "Sınırsız",
+      "grantLimited": "Şu kadar ile sınırla",
+      "termsLabel": "{target} için koşullar",
+      "requestsLabel": "{target} için günlük istek",
+      "removeGrant": "{target}'ı kaldır",
+      "groupsCount": "{count, plural, one {# grup} other {# grup}}",
+      "domainsCount": "{count, plural, one {# alan adı} other {# alan adı}}",
+      "allowCount": "{count, plural, one {# kişi izinli} other {# kişi izinli}}",
+      "denyCount": "{count, plural, one {# kişi engellendi} other {# kişi engellendi}}",
+      "collisionChip": "Global varsayılanlarda da mevcut",
+      "collisionWarning": "Bu model veya ailesi ayrıca Global varsayılanlarda yapılandırılmıştır. Kaydetme işlemi, ikisinden biri temizlenene kadar reddedilecektir."
+    },
+    "previewSourceModelAccess": "Model onayı — {list}",
+    "groupMembershipDegradedStructural": "Grup üyeliği sorgulamaları bu sunucuda başarısız oluyor ({reason}). Grup tabanlı kurallar ve yetkiler, etkilenen kişiler için uygulanamıyor — tenant'ın Group.Read.All onayını ve uygulama kaydını kontrol edin.",
+    "groupMembershipDegradedRetryable": "Son birkaç dakika içinde bu sunucuda bazı grup üyeliği sorgulamaları başarısız oldu ({reason}). Grup tabanlı kurallar, sorgulamalar yeniden denenirken bu kişiler için en fazla bir dakika uygulanmayabilir.",
+    "groupMembershipDegradedUsers": "Şu anda bu sunucuda {count, plural, one {# kişi} other {# kişi}} etkileniyor.",
+    "previewDirectoryNotFound": "Hiçbir dizin kullanıcısında bu e-posta adresi yok, bu nedenle departman/şirket/ofis ve grup kuralları, kişinin hiçbirine ait olmadığı varsayımıyla değerlendirildi."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Sabah triyajı",
-        "description": "Neler geldi, hangi işler sizde bekliyor ve bugünün takvimi — tek bir bilgilendirme"
+        "description": "Son iş gününden bu yana gelenler, bekleyenler, davetiyeler ve güncellemeler — Pazartesi günü Cuma ve hafta sonunu da kapsar."
       },
       "chipsSettingLabel": "Microsoft 365 playbook'larını öner",
       "chipsSettingHint": "Uygulandığında (ör. bir toplantı transkriptini içe aktardıktan sonra) mesaj kutusunun üzerinde playbook önerilerini göster.",
-      "dismissChip": "{title} öğesini kapat"
+      "dismissChip": "{title} öğesini kapat",
+      "dailyDigest": {
+        "title": "Günlük özet",
+        "description": "Son e-postaları, Teams ve takvimi size gerekli olanlar, beklediğinizler, güncellemeler ve bilgilendirmeler şeklinde sıralayın — dönemi seçin"
+      }
+    },
+    "digest": {
+      "title": "Günlük özet",
+      "intro": "Seçilen dönemde size ulaşanları tarar ve yanıt gerektirenler, sizden istenenler, bekledikleriniz, planlamalar, şirket ve proje güncellemeleri ile bilgilendirmeler olarak sıralar. Hiçbir şey gönderilmez veya değiştirilmez.",
+      "periodLabel": "Dönem",
+      "preset": {
+        "lastWorkday": "Son iş gününden itibaren",
+        "1d": "Son 24 saat",
+        "3d": "Son 3 gün",
+        "7d": "Son 7 gün",
+        "14d": "Son 14 gün",
+        "custom": "Özel aralık"
+      },
+      "lastWorkdayHint": "Bugünden önceki en son iş gününün başlangıcından itibaren — Pazartesi günleri Cuma ve hafta sonunu kapsar.",
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "customInvalid": "En fazla {days} gün olacak sıralı bir aralık seçin.",
+      "sourcesLabel": "Kaynaklar",
+      "sourceNoConsent": "Bu kaynak için izin verilmedi.",
+      "sourceHint": {
+        "mail": "Gelen kutusu zarfları ve önizlemeleri; Yanıtlananlar, Gönderilen Öğeler'inize göre belirlenir.",
+        "chat": "Yanıtlamadığınız @bahsedilmeler dahil son Teams sohbetleri.",
+        "channel": "Aşağıda seçtiğiniz kanallardaki gönderiler.",
+        "calendar": "Yanıtınızı bekleyen davetler ve sizin toplantılarınızdan diğerlerinin yanıtlamadığılar."
+      },
+      "channelsLabel": "Kanallar ({count} / {max})",
+      "removeChannel": "{name} kanalını kaldır",
+      "channelsSlow": "Her kanal ek okuma yapar; daha fazla kanal özeti daha uzun sürer.",
+      "channelsMax": "En fazla {max} kanal seçildi.",
+      "channelsNeeded": "En az bir kanal seçin veya başka bir kaynak ekleyin.",
+      "teamLabel": "Takım",
+      "loadingTeams": "Takımlar yükleniyor…",
+      "pickTeam": "Kanallarını listelemek için bir takım seçin",
+      "loadingChannels": "Kanallar yükleniyor…",
+      "noChannels": "Bu takımda kanal bulunamadı.",
+      "privacyNote": "Yalnızca konu, gönderici ve kısa önizlemeler okunur; mesaj gövdeleri ve ekler Microsoft 365'te kalır. Öğeler yalnızca kendi verinizin özetidir.",
+      "cancel": "İptal",
+      "run": "Özeti çalıştır",
+      "starting": "Başlıyor…",
+      "startFailed": "Özeti başlatılamadı.",
+      "userMessage": "Günlük özet — {period}; kaynaklar: {sources}",
+      "working": "Microsoft 365 iletişiminiz taranıyor…",
+      "failed": "Özet başarısız oldu.",
+      "failedPrefix": "Günlük özet başarısız oldu:",
+      "expired": "Bu özet çalışması sona erdi. Yenisi için tekrar çalıştırın.",
+      "runAgain": "Tekrar çalıştır",
+      "changePeriod": "Dönemi değiştir",
+      "period": {
+        "lastWorkday": "son iş gününden beri",
+        "lastDays": "{count, plural, one {son gün} other {son # gün}}"
+      },
+      "source": {
+        "mail": "E-posta",
+        "chat": "Teams sohbetleri",
+        "channel": "Teams kanalları",
+        "calendar": "Takvim"
+      },
+      "sourceStatus": {
+        "ok": "tamamlandı",
+        "partial": "kısmi",
+        "skipped": "atlandı",
+        "unavailable": "izin yok",
+        "error": "başarısız"
+      },
+      "degraded": "Analiz modeli kullanılamadı, bu nedenle kategoriler yalnızca kurallardan geliyor.",
+      "withheld": "{count, plural, one {# öğe} other {# öğe}} güvenlik kontrolleri tarafından tutuldu.",
+      "empty": "Bu dönem ve kaynaklar için rapor edilecek bir şey yok.",
+      "actionItems": "Yapılacaklar",
+      "createTasks": "{count, plural, =0 {To Do'ya ekle} one {# görevi To Do'ya ekle} other {# görevi To Do'ya ekle}}",
+      "taskCreated": "To Do'ya eklendi",
+      "tasksCreated": "{count, plural, one {# görev} other {# görev}} \"{list}\" listesine eklendi.",
+      "tasksFailed": "Görevler oluşturulamadı.",
+      "category": {
+        "needsReply": "Yanıtım gerekli",
+        "askedOfMe": "Bana soruldu",
+        "waitingOnOthers": "Diğerlerini bekliyor",
+        "scheduling": "Zamanlama",
+        "companyUpdates": "Şirket ve proje güncellemeleri",
+        "fyi": "Bilgilendirme",
+        "bulk": "Otomatik ve toplu"
+      },
+      "companyUpdatesHint": "önemli, nadiren acil",
+      "markDone": "{title} öğesini işlendi olarak işaretle",
+      "badge": {
+        "unanswered": "yanıtsız",
+        "mentioned": "sizi bahsetti",
+        "important": "yüksek önem"
+      },
+      "askAbout": "Bunu sor",
+      "askPrompt": "Yukarıdaki özetteki {source} kaynağındaki \"{title}\" başlıklı, {from} tarafından ({when}): ne soruluyor ve iyi bir yanıt nasıl olur?",
+      "open": {
+        "mail": "Outlook'ta aç",
+        "chat": "Teams'de aç",
+        "channel": "Teams'de aç",
+        "calendar": "Outlook'ta aç"
+      },
+      "footnote": "Kategoriler kendi sinyalleriniz (yanıtsız, bahsedilen, duyuru) ve AI sınıflandırmasına dayanır; işlem yapmadan önce doğrulayın. Hiçbir şey gönderilmedi.",
+      "age": {
+        "now": "az önce",
+        "hours": "{count} saat önce",
+        "days": "{count} gün önce"
+      },
+      "waitForReply": "Bir özet başlatmadan önce mevcut yanıtın tamamlanmasını bekleyin."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "Bilgi",
       "prompt": "Profil",
-      "m365": "Bilgi (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Bilgi",
-      "foundry": "Foundry agent",
+      "foundry": "Özel ajan",
       "connector": "Bağlayıcı"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "kendi modeli üzerinde çalışıyor"
     },
     "loadError": "Ajanlarınız şu anda yüklenemedi. Bu genellikle geçici bir durumdur.",
-    "discoveryLoading": "Foundry ajanları aranıyor…",
-    "discoveryError": "Foundry ajanları yüklenemedi.",
+    "discoveryLoading": "Daha fazla ajan aranıyor…",
+    "discoveryError": "Bazı ajanlar yüklenemedi.",
     "retry": "Tekrar deneyin"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "Bu klasörün {months} aylık saklama süresinden eski; artık gösterilmiyor.",
       "unknown": "Bildiren problem: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Yetenekler",
+    "description": "Asistanın, gerektiğinde bir konuşmada uyguladığı tekrar kullanılabilir talimat bloklarıdır. Claude ve ChatGPT tarafından kullanılan Agent Skills SKILL.md formatı ile uyumludur.",
+    "loading": "Yetenekler yükleniyor…",
+    "loadError": "Yetenekler yüklenemedi.",
+    "retry": "Yeniden dene",
+    "unavailableBanner": "Yetenek depolama şu anda erişilemiyor — yerleşik varsayılanlar gösteriliyor; depolanan yetenekler ve düzenlemeler geri gelene kadar kullanılamayacak.",
+    "conflictError": "Bu yetenek başka bir yönetici tarafından değiştirildi. Liste yeniden yüklendi — düzenlemenizi tekrar uygulayın.",
+    "alwaysWarning": "{count} yetenek 'Her zaman' olarak ayarlanmış. Hepsi her konuşmaya eklenir — konuya özel yetenekler için 'Otomatik'i tercih edin.",
+    "newSkill": "Yeni yetenek",
+    "importSkill": "SKILL.md İçe Aktar",
+    "importTitle": "Bir SKILL.md dosyası yapıştırın",
+    "importPlaceholder": "---\nname: benim-yetenegim\ndescription: Bu yetenek ne yapar ve ne zaman kullanılır.\n---\n\nTalimatlar…",
+    "importHint": "Ayrıştırılan yetenek, inceleme için editörde açılır — kaydetmeden önce hiçbir şey kaydedilmez.",
+    "importParse": "Ayrıştır ve incele",
+    "invalidId": "Yetenek kimliklerinde küçük harfler, rakamlar ve tek tire kullanılır.",
+    "saveSuccess": "Yetenek kaydedildi.",
+    "saveError": "Yetenek kaydedilemedi.",
+    "deleteConfirm": "Bu yetenek silinsin mi? Konuşmalara hemen uygulanması durur.",
+    "restoreConfirm": "Özelleştirmeyi kaldırıp bu yerleşik yeteneğin varsayılanını geri yükle?",
+    "deleteSuccess": "Yetenek silindi.",
+    "restoreSuccess": "Yerleşik varsayılan geri yüklendi.",
+    "deleteError": "Yetenek silinemedi.",
+    "empty": "Henüz hiç yetenek yok. Bir tane oluşturun veya bir SKILL.md içe aktarın.",
+    "builtinChip": "Yerleşik",
+    "customizedChip": "Özelleştirildi",
+    "exportSkill": "SKILL.md olarak dışa aktar",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "restoreDefault": "Varsayılanı geri yükle",
+    "createTitle": "Yeni yetenek",
+    "editTitle": "{name} düzenle",
+    "idLabel": "Kimlik",
+    "idHint": "Küçük harf, rakam ve tire bulunabilir. Yetenek için SKILL.md adı olur ve oluşturulduktan sonra değiştirilemez.",
+    "nameLabel": "Görünür ad",
+    "descriptionLabel": "Açıklama",
+    "descriptionHint": "Yetenek ne yapar ve ne zaman kullanılır — bu alan yeteneğin seçilmesini sağlar, bu nedenle yanıt vermesi gereken spesifik konu ve ifadeleri ekleyin.",
+    "activationLabel": "Aktivasyon",
+    "activation": {
+      "auto": "Otomatik",
+      "always": "Her zaman",
+      "off": "Kapalı",
+      "manual": "İstek üzerine"
+    },
+    "activationHint": {
+      "auto": "Mevcut görev açıklamayla eşleştiğinde otomatik olarak seçilir. Kullanıcılar ayrıca bir kez kullanmayı talep edebilir veya bir sohbet için sabitleyebilir.",
+      "always": "Yetenek gören herkes için her konuşmaya eklenir. Dikkatli kullanın — bu alan kalıcıdır.",
+      "off": "Etkin değil: Asla uygulanmaz ve kullanıcılara sunulmaz, ancak düzenleme için burada tutulur.",
+      "manual": "Sadece bir kullanıcı talep ettiğinde veya sabitlediğinde uygulanır. Asla otomatik seçilmez ve modele yüklenebilir yetenek olarak sunulmaz."
+    },
+    "instructionsLabel": "Talimatlar",
+    "instructionsHint": "Markdown, en fazla 16 KB. Yetenek etkin olduğunda olduğu gibi eklenir.",
+    "saving": "Kaydediliyor…",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "documents": {
+      "title": "Belgeler",
+      "hint": "Referanslar bu yetenek ile birlikte saklanır. Küçük belgeler doğrudan yüklenir; büyük belgeler ise atıfla arama için dizine eklenir. En fazla 20 kaynak, her biri 10 MB ve toplamda 20 MB. Varlıklar yalnızca indirme için saklanır.",
+      "saveFirst": "Belgeleri eklemeden önce bu yerleşik yeteneğin bir özelleştirmesini kaydedin.",
+      "upload": "Referans belgeleri ekle",
+      "remove": "Kaldır",
+      "stop": "Dizine eklemeyi durdur",
+      "resume": "Belgeleri dizine ekle veya devam et",
+      "empty": "Henüz ekli belge yok.",
+      "requestFailed": "Belge isteği başarısız oldu. Yeniden yükleyip tekrar deneyin.",
+      "importZip": "Bir yetenek ZIP'i içe aktar",
+      "zipTooLarge": "Yetenek ZIP'i 20 MB veya daha küçük olmalıdır.",
+      "importCount": "Kaydedildikten sonra eklenecek kaynaklar: {count}",
+      "skippedScripts": "Çalıştırılabilir komut dosyaları atlandı",
+      "status": {
+        "pending": "Dizine ekleme bekleniyor",
+        "processing": "Dizine ekleniyor",
+        "inline": "Hazır (doğrudan yüklendi)",
+        "indexed": "Hazır (aranabilir)",
+        "failed": "Dizine ekleme başarısız",
+        "asset": "İndirilebilir varlık"
+      },
+      "confirmRemove": "{filename} dosyasını bu yetenekten kaldırmak istiyor musunuz? Saklanan orijinali silinecek ve artık alıntı kaynağı olarak kullanılamayacaktır.",
+      "reindexRequired": "Bu belgelerin, mevcut bölgesel Arama ve gömme yapılandırması için yeniden indekslenmesi gerekiyor. İndeksleme tamamlanana kadar arama yapılamayacaktır."
+    },
+    "applyToAgents": "Ajanlar için kullanılabilir",
+    "applyToAgentsHint": "Varsayılan olarak kapalıdır. Etkinleştirildiğinde, ajanlar bu beceriyi sadece okuma modunda araçlar üzerinden yükleyebilir ve kendi kimlik talimatlarını değiştirmeden kullanabilir. Beceri çağrılarının adım sınırları birbirinden bağımsızdır. Foundry ajanlarının tanımlarında load_skill ve search_skill_documents fonksiyonlarının zaten kayıtlı olması gerekir.",
+    "requireConsent": "Uygulamadan önce sor",
+    "requireConsentHint": "Model bu yeteneği kendi başına uygulamak istediğinde, önce kullanıcıya sorulur. İstenilen ve sabitlenmiş kullanımlar onay gerektirmez.",
+    "consentChip": "Önce sorar",
+    "sourceChip": "Kaynaktan",
+    "sourceChipHint": "Abone olunan bir yetenek kaynağından sağlanır; talimatlar senkronize edilirken güncellenir. Aktifleştirme, ajan ve onay ayarları size aittir.",
+    "sources": {
+      "title": "Yetenek kaynakları",
+      "description": "Harici bir yetenek kataloğuna abone olun (SKILL.md dosyalarını listeleyen bir index.json). Yetenekleri organizasyon yeteneği olur ve yaklaşık her altı saatte bir yenilenir. Sadece SKILL.md içe aktarılır; referans belgeleri dahil değildir.",
+      "urlLabel": "Katalog URL’si",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Genel bir sunucuda https olmalı. Yetenek dosyaları yalnızca aynı konumdan okunur.",
+      "labelLabel": "Etiket (isteğe bağlı)",
+      "add": "Abone ol",
+      "adding": "Abone olunuyor…",
+      "added": "{count, plural, =0 {Kaynak eklendi; henüz yetenek içe aktarılmadı} one {Kaynak eklendi; # yetenek içe aktarıldı} other {Kaynak eklendi; # yetenek içe aktarıldı}}",
+      "addedWithError": "Kaynak eklendi, ancak ilk senkronizasyon başarısız oldu. Kaynaktaki hataya bakın.",
+      "addError": "Yetenek kaynağı eklenemedi",
+      "sync": "Şimdi senkronize et",
+      "syncing": "Senkronize ediliyor…",
+      "synced": "Kaynak senkronize edildi.",
+      "syncError": "Yetenek kaynağı senkronize edilemedi",
+      "remove": "Kaynağı kaldır",
+      "removeConfirm": "Bu kaynağı kaldırmak istiyor musunuz? Sağladığı yetenekler sıradan organizasyon yeteneği olarak kalır ve yenilenmez.",
+      "removed": "Kaynak kaldırıldı.",
+      "removeError": "Yetenek kaynağı kaldırılamadı",
+      "loading": "Kaynaklar yükleniyor…",
+      "loadError": "Yetenek kaynakları yüklenemedi.",
+      "empty": "Henüz yetenek kaynağı yok.",
+      "never": "Hiç senkronize edilmedi",
+      "statusOk": "Senkronize edildi",
+      "statusError": "Senkronizasyon başarısız",
+      "statusPartial": "{count, plural, one {# kayıt atlandı} other {# kayıtlar atlandı}}",
+      "lastSync": "Son senkronizasyon {time}",
+      "entryCount": "{count, plural, one {# kayıt} other {# kayıt}}",
+      "entryStatus": {
+        "synced": "senkronize edildi",
+        "skipped": "atlandı",
+        "conflict": "çatışma — üzerine yazılmadı",
+        "invalid": "geçersiz"
+      }
+    },
+    "requireConsentDisabledHint": "Yalnızca otomatik beceriler önce sorabilir: istenen, sabitlenen ve her zaman açık beceriler uyarı olmadan uygulanır; isteğe bağlı beceriler model tarafından asla seçilmez."
+  },
+  "personalSkills": {
+    "title": "Kişisel beceriler",
+    "description": "Kendi görüşmelerinizde yeniden kullanılabilir talimatları kaydedin. Beceriler bu tarayıcıda bulunur ve yalnızca sohbet ettiğinizde modele gönderilir. İlgili beceriler otomatik olarak seçilebilir, bir kez kullanılabilir veya sabitlenebilir. Kurum politikasını değiştiremez veya araç erişimi veremezler. Beceri kullanımı, bu dağıtım için becerilerin etkinleştirilmesini gerektirir; ajan görüşmelerinde kişisel beceriler kullanılmaz.",
+    "importFile": "SKILL.md veya ZIP dosyası içe aktar",
+    "review": "Kaydetmeden önce tüm talimatları inceleyin. İçe aktarılan talimatlar kullanıcı tercihidir, güvenilir kurum politikası değildir.",
+    "skipped": "Çalıştırılabilir betikler atlandı",
+    "importTooLarge": "İçe aktarma 20 MB veya daha küçük olmalıdır.",
+    "invalid": "Beceri içe aktarılamadı.",
+    "duplicate": "Bu kişisel beceri kimliği zaten mevcut. Mevcut beceriyi düzenleyin veya farklı bir kimlik seçin.",
+    "countLimit": "En fazla 20 kişisel beceri kaydedebilirsiniz.",
+    "requestLimit": "Etkin kişisel beceriler 160 KB istek sınırını aşıyor. Bazı becerileri devre dışı bırakın veya talimatlarını kısaltın.",
+    "saved": "Kişisel beceri bu tarayıcıya kaydedildi.",
+    "instructionsHint": "Her türlü içe aktarılan metin referansı dâhil en fazla 16 KB talimat. İkili dosyalar ve kalıcı doküman indekslemesi yalnızca kurum becerileri için kullanılabilir. Dışa aktarım, kullanıcı: öneki olmadan standart SKILL.md adını kullanır.",
+    "enabled": "Kendi sohbetlerim için etkin",
+    "empty": "Tekrarlayan bir görev için beceri oluşturun veya gözden geçirmek ve kaydetmek için bir SKILL.md içe aktarın."
   }
 }

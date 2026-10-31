@@ -758,7 +758,16 @@
       "stillWorking": "Ainda processando…",
       "assessingSearchResults": "Verificando se os resultados respondem à pergunta…",
       "refiningSearch": "Buscando novamente: “{query}”…",
-      "readingSearchPages": "Lendo {count} páginas de resultados…"
+      "readingSearchPages": "Lendo {count} páginas de resultados…",
+      "toolRoutingUnavailableInRegion": "Roteamento de ferramentas indisponível no endpoint {region} — respondendo sem ferramentas…",
+      "applyingSkill": "Aplicando habilidade: {skills}…",
+      "applyingSkills": "Aplicando habilidades: {skills}…",
+      "readingSkillReferences": "Lendo documentos de referência de habilidades…",
+      "selectingSkills": "Selecionando habilidades…",
+      "retryingModel": "Modelo ocupado — tentando novamente em {seconds}s (tentativa {attempt})…",
+      "resumingResponse": "Conexão com o modelo perdida — retomando de onde parou…",
+      "continuingResponse": "Resposta atingiu o limite de comprimento — continuando…",
+      "trimmingContext": "Conversa muito longa para o modelo — cortando o histórico mais antigo e tentando novamente…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ferramenta utilizada} other {# ferramentas utilizadas}}",
@@ -824,7 +833,9 @@
       "deniedByRuleHint": "Bloqueado por sua regra — gerencie em Configurações → Conectores.",
       "batchPendingHint": "{count} solicitações de ferramenta pendentes",
       "approveAllButton": "Aprovar todas",
-      "denyAllButton": "Recusar todas"
+      "denyAllButton": "Recusar todas",
+      "applySkillTitle": "Aplicar a habilidade \"{skill}\"?",
+      "skillConsentNote": "Um administrador definiu esta habilidade para pedir autorização antes de ser aplicada. Ao aprovar, será carregada apenas a orientação para esta resposta."
     },
     "openImage": "Abrir imagem",
     "copyMessage": "Copiar mensagem",
@@ -864,7 +875,54 @@
     "alwaysWaitThisLong": "Sempre aguardar até {duration}",
     "keepSearching": "Continuar procurando",
     "keepSearchingHint": "A busca foi interrompida antes de encontrar isto. Peça ao assistente para tentar abordagens diferentes.",
-    "keepSearchingMessage": "Continue procurando por isso, por favor — tente uma abordagem diferente."
+    "keepSearchingMessage": "Continue procurando por isso, por favor — tente uma abordagem diferente.",
+    "addSkill": "Habilidades",
+    "removeSkill": "Remover habilidade",
+    "skillsMenuLabel": "Habilidades disponíveis",
+    "skillsLimit": "Até 3 habilidades por mensagem.",
+    "skillPin": "Fixar na conversa",
+    "skillUseOnce": "Usar uma vez",
+    "skillPinned": "fixado",
+    "skillOnce": "próxima mensagem",
+    "skillsPaused": "pausado",
+    "skillUnavailable": "indisponível",
+    "skillsAutomaticHint": "As habilidades relevantes são selecionadas automaticamente. Use uma vez para a próxima mensagem ou fixe uma habilidade para utilizá-la durante toda esta conversa.",
+    "skillsAgentDisabled": "As habilidades ficam pausadas enquanto um agente está conectado. Suas habilidades fixadas serão retomadas ao desconectar o agente.",
+    "skillPersonal": "pessoal",
+    "skillsAgentToolsHint": "Somente habilidades da organização habilitadas por um administrador para uso de agentes são oferecidas aqui. O agente pode carregá-las como ferramentas de leitura. Outros pins permanecem pausados, e habilidades pessoais não estão disponíveis para agentes.",
+    "skillAlwaysOn": "sempre ativo",
+    "skillAlwaysOnHint": "Adicionado a cada mensagem nesta conversa por um administrador.",
+    "skillUsage": {
+      "label": "Habilidades",
+      "requested": "solicitado",
+      "pinned": "fixado",
+      "auto": "automático",
+      "unavailable": "indisponível",
+      "incomplete": "Algumas habilidades não puderam ser aplicadas",
+      "references": "{count, plural, one {# trecho de referência} other {# trechos de referência}}",
+      "referencesUnavailable": "Alguns documentos de referência estavam indisponíveis",
+      "showDetails": "Mostrar detalhes da habilidade",
+      "hideDetails": "Ocultar detalhes da habilidade",
+      "agentLoad": "carregado pelo agente",
+      "agentSearch": "documentos pesquisados pelo agente",
+      "needsApproval": "precisa da sua aprovação",
+      "original": "como executado originalmente",
+      "updated": "atualizado desde então"
+    },
+    "skillsManualHint": "A seleção automática está desativada nas Configurações. Use uma vez para a próxima mensagem ou fixe uma habilidade para utilizá-la durante toda esta conversa.",
+    "queuedMessage": {
+      "label": "Na fila",
+      "attachmentOnly": "Anexo",
+      "cancel": "Cancelar mensagem na fila"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "A resposta foi interrompida pelo filtro de segurança de conteúdo. Reformule o pedido ou remova a parte que possa ter causado isso.",
+      "MODEL_CONTEXT_TOO_LONG": "Esta conversa é muito longa para o modelo selecionado, mesmo após cortar o histórico antigo. Inicie uma nova conversa, remova alguns anexos ou escolha um modelo com maior capacidade de contexto.",
+      "MODEL_OUTPUT_LIMIT": "O modelo utilizou todo o orçamento de saída sem produzir uma resposta. Tente um esforço de raciocínio menor ou um pedido mais curto.",
+      "MODEL_RATE_LIMITED": "O modelo está recebendo muitos pedidos no momento. A tentativa foi automática; tente novamente em breve.",
+      "MODEL_QUOTA_EXCEEDED": "A cota de capacidade do modelo está esgotada. Experimente outro modelo ou tente mais tarde.",
+      "MODEL_AUTH_FAILED": "O aplicativo não conseguiu autenticar com o serviço do modelo. Trata-se de um problema de configuração — por favor, entre em contato com o suporte."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -1325,7 +1383,11 @@
       "preferModelTitle": "Preferir meu modelo selecionado",
       "preferModelDescription": "Não trocar automaticamente para outro modelo quando uma solicitação falhar. O erro ainda permitirá a troca."
     },
-    "Analytics": "Análises"
+    "Analytics": "Análises",
+    "skills": {
+      "autoApply": "Permitir que o assistente aplique habilidades automaticamente",
+      "autoApplyDescription": "Habilidades relevantes e suas habilidades pessoais são selecionadas para cada mensagem. Quando desativada, apenas habilidades solicitadas ou fixadas por você, e habilidades aplicadas por um administrador para todas as conversas, serão usadas."
+    }
   },
   "notFound": {
     "lostDog": "Cão perdido"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "segundos",
     "chipAutoHideHint": "Entre {min} e {max} segundos.",
     "byWorkflow": "Por fluxo de trabalho",
-    "byWorkflowNote": "Parte dos totais acima, apresentada separadamente — não é uso extra. Execuções de subvenções são contabilizadas no relatório da sua organização e no seu orçamento de tokens, mas não neste total local."
+    "byWorkflowNote": "Parte dos totais acima, apresentada separadamente — não é uso extra. Execuções de subvenções são contabilizadas no relatório da sua organização e no seu orçamento de tokens, mas não neste total local.",
+    "chipLabelTitle": "Rótulo do chip",
+    "chipLabelHint": "A divisão sempre mostra emissões e custo lado a lado; isto só define o que o chip colapsado exibe.",
+    "chipLabelEmissions": "Emissões",
+    "chipLabelCost": "Custo",
+    "chipLabelBoth": "Ambos",
+    "costTile": "Custo estimado",
+    "costDisclosure": "Custo conforme preços de lista em {asOf} (Taxa Padrão Global, sem desconto para entrada em cache): apenas um limite superior, não uma fatura. Busca na web, execução de código, transcrição, fala, tradução e indexação de documentos não estão incluídos.",
+    "costUnpriced": "{count, plural, one {# solicitação sem preço de lista não está} other {# solicitações sem preço de lista não estão}} incluídas."
   },
   "extraction": {
     "toggleLabel": "Extrair dados estruturados",
@@ -4502,7 +4572,16 @@
         "auto": "Automático",
         "hidden": "Ocultar"
       },
-      "visibilityHint": "O modo Automático exibe o chip quando a estimativa é atualizada ou ao passar o mouse sobre ele. Você pode alterar essa configuração em Configurações › Uso e Impacto."
+      "visibilityHint": "O modo Automático exibe o chip quando a estimativa é atualizada ou ao passar o mouse sobre ele. Você pode alterar essa configuração em Configurações › Uso e Impacto.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Custo estimado {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Sem preço de lista para as solicitações nesta linha",
+        "unpriced": "{count, plural, one {# solicitação sem preço de lista não está} other {# solicitações sem preço de lista não estão}} incluídas no custo.",
+        "noPriceData": "Nenhum custo mostrado: o modelo desta conversa não possui preço de lista (fontes próprias, execuções locais e agentes não têm preço).",
+        "note": "Custo conforme preços de lista em {asOf} (Taxa Padrão Global, sem desconto para entrada em cache): apenas um limite superior, não uma fatura. Busca na web, execução de código, transcrição, fala, tradução e indexação de documentos não estão incluídos."
+      }
     },
     "workflow": {
       "title": "Este espaço de trabalho (estimativa)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "Excluir glossário",
     "glossaryDeleteSuccess": "Glossário excluído",
     "channelProfilesTab": "Plataformas",
-    "channelSetsTab": "Conjuntos de canais"
+    "channelSetsTab": "Conjuntos de canais",
+    "addPromptAgent": "Adicionar agente de prompt",
+    "m365AgentIndexStop": "Parar indexação",
+    "foundryAgentsHeading": "Agentes Foundry e de prompt",
+    "foundryAgentsDescription": "Agentes descobertos no Azure AI Foundry através do seu próprio acesso, além de agentes de prompt definidos aqui. Agentes de conhecimento e agentes Microsoft 365 são gerenciados em suas próprias seções abaixo.",
+    "agentSkillsLabel": "Habilidades",
+    "agentSkillsHelp": "Quais habilidades da organização este agente pode carregar ao responder. Os usuários ainda veem apenas as habilidades permitidas pelas regras de acesso.",
+    "agentSkills": {
+      "inherit": "Habilidades marcadas como “disponíveis para agentes”",
+      "selected": "Apenas as habilidades selecionadas abaixo",
+      "none": "Sem habilidades"
+    },
+    "agentSkillsNone": "Nenhuma habilidade disponível para selecionar.",
+    "agentSkillsLoading": "Carregando habilidades...",
+    "agentSkillsLoadError": "Não foi possível carregar as habilidades. As seleções salvas anteriormente foram mantidas.",
+    "agentSkillsNotVisible": "(não visível para você — desmarque para remover)"
   },
   "localModels": {
     "title": "Modelos locais",
@@ -5521,7 +5615,8 @@
       "channelSets": "As regras de cada equipe para publicação nas plataformas: orientações, vozes, padrões, quem pode usar o conjunto e quem pode enviar.",
       "webSearch": "Até onde pode ir uma busca na web: busca em múltiplos passos, modelo avaliador e seus limites.",
       "contextBudget": "Quantas partes de uma conversa cada modelo recebe a cada rodada.",
-      "analytics": "Relatórios entregues: o que chegou, quem pode acessar cada pasta e quais campos podem ser exibidos."
+      "analytics": "Relatórios entregues: o que chegou, quem pode acessar cada pasta e quais campos podem ser exibidos.",
+      "skills": "Blocos de instruções reutilizáveis que o assistente aplica quando necessário em uma conversa."
     },
     "openSettings": "Abrir configurações",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "Delegações",
       "webSearch": "Busca na web",
       "contextBudget": "Orçamento de contexto",
-      "analytics": "Análises"
+      "analytics": "Análises",
+      "skills": "Habilidades"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "Padrões globais",
       "overrides": "Substituições",
-      "delegations": "Delegações"
+      "delegations": "Delegações",
+      "models": "Modelos"
     },
     "tabsLabel": "Seções de limites",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Chamadas de ferramentas Microsoft 365 por dia",
       "m365MailReadsPerDay": "Leituras de e-mail por dia",
       "m365MailDraftsPerDay": "Rascunhos de e-mail por dia",
-      "m365MailDeepScansPerDay": "Verificações profundas de e-mail por dia"
+      "m365MailDeepScansPerDay": "Verificações profundas de e-mail por dia",
+      "m365DigestRunsPerDay": "Execuções de resumo diário por dia"
     },
     "valueModeLabel": "Tipo de limite",
     "valueAmountLabel": "Quantidade de limite",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Chamadas de ferramentas do Microsoft 365 (calendário, pessoas, tarefas, Teams) por dia. Acima do limite, as ferramentas retornam uma mensagem amigável de “tente novamente amanhã” em vez de falhar o chat.",
       "m365MailReadsPerDay": "Pesquisas e leituras de mensagens/conversas de e-mail por dia. Acima do limite, as ferramentas de e-mail retornam uma mensagem de “tente novamente amanhã”.",
       "m365MailDraftsPerDay": "Rascunhos de e-mail que o assistente pode criar por dia — cada um confirmado individualmente. Limite propositalmente restrito.",
-      "m365MailDeepScansPerDay": "Análises compostas de e-mail (resumos, pesquisa aprofundada, compromissos) por dia. Cada análise consome uma unidade do orçamento, independentemente das leituras internas."
+      "m365MailDeepScansPerDay": "Análises compostas de e-mail (resumos, pesquisa aprofundada, compromissos) por dia. Cada análise consome uma unidade do orçamento, independentemente das leituras internas.",
+      "m365DigestRunsPerDay": "Execuções de resumo diário do Microsoft 365 por dia. Cada execução envolve dezenas de leituras do Graph e duas chamadas ao modelo de análise; o seletor de período facilita repetir a solicitação, por isso o padrão é restrito."
     },
     "scopeFamily": "Família",
     "scopeModel": "Modelo",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "Padrão do sistema",
     "previewSourceGlobal": "Padrão global",
     "previewSourceOverride": "Substituição: {label}",
-    "previewNotEvaluated": "Substituições de departamento, empresa, escritório e grupo não podem ser avaliadas aqui — dependem do login da própria pessoa.",
+    "previewNotEvaluated": "Não foi possível acessar o diretório, portanto as regras de departamento/empresa/escritório e de grupo não foram avaliadas para esta pessoa. Tente novamente em instantes.",
     "previewUnsaved": "Exibindo a última política salva. Salve suas alterações para visualizá-las.",
     "previewColumnLimit": "Limite",
     "previewColumnValue": "Valor",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "Apenas grupos",
     "yourScopeGroupOnlyNote": "Definido apenas por grupos ou atributos, portanto os limites não podem ser pré-visualizados pelo endereço de e-mail.",
     "previewOutOfScope": "Esta pessoa está fora do seu escopo.",
-    "previewGroupOnlyScope": "Seu escopo é definido por grupos ou atributos, por isso os limites não podem ser pré-visualizados pelo endereço de e-mail.",
+    "previewGroupOnlyScope": "Seu escopo é definido por grupos ou atributos. As prévias consultam a pessoa no diretório para decidir se ela está incluída.",
     "previewCeilingPinned": "Fixado pelo teto: {label}",
     "previewShowUsage": "Mostrar uso atual",
     "previewColumnUsage": "Usado",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "Um teto rígido em uma linha fixa esse valor para os alvos deste override: administradores com escopo não podem removê-lo e, onde houver vários tetos, vence o mais específico.",
     "confirmDeleteOverride": "Excluir \"{label}\"? Será removido imediatamente do servidor e seus alvos voltarão aos limites inferiores. Isto não pode ser desfeito.",
     "confirmDeleteOverrideAction": "Excluir override",
-    "previewUndecidableScope": "Seu escopo inclui grupos ou atributos, portanto não é possível determinar se esta pessoa está dentro dele apenas pelo e-mail.",
+    "previewUndecidableScope": "Seu escopo inclui grupos ou atributos e não foi possível acessar o diretório, portanto não é possível decidir se esta pessoa está incluída no momento. Tente novamente em instantes.",
     "previewNoLongerAdmin": "Você não está mais nomeado em uma delegação ativa, por isso não pode visualizar limites. Recarregue a página para ver o seu acesso atual.",
     "previewScopeMatchesNobody": "Seu escopo atualmente não corresponde a ninguém, então não há como visualizar por e-mail.",
     "yourScopeMatchesNobodyChip": "Não corresponde a ninguém",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "A delegação está desativada, então esta substituição não se aplica a ninguém até que a delegação seja ativada novamente. Nunca é promovida ao nível global.",
     "betaPolicyNotice": "Ambiente Beta: esta política e seus contadores de uso são armazenados separadamente do ambiente de produção (policy.beta.json). Nada do que você alterar aqui afetará a produção.",
     "delegationsManagedElsewhere": "Delegações exibidas aqui apenas para leitura. Quem está na delegação, quais usuários são abrangidos e o que cada administrador pode fazer são gerenciados na área de Delegações.",
-    "delegationsManagedElsewhereLink": "Abrir Delegações"
+    "delegationsManagedElsewhereLink": "Abrir Delegações",
+    "modelAccess": {
+      "intro": "Decida quem pode usar cada modelo. A configuração de uma família vale para seus modelos, exceto se um modelo tiver sua própria; pessoas em uma lista prevalecem sobre o padrão para os demais; a lista de bloqueio supera qualquer permissão.",
+      "externalNote": "Modelos hospedados fora do ambiente Azure ({families}) ficam indisponíveis para todos até que sejam concedidos aqui — para todos via padrão, ou para grupos, domínios e pessoas.",
+      "envelopeNote": "Um limite de solicitações em uma família é um orçamento diário compartilhado entre seus modelos; um limite em um modelo é uma restrição dentro dele. Ilimitado em um modelo não remove o orçamento da família.",
+      "observeNote": "Modo de observação está ativado: nada aqui esconde um modelo nem bloqueia solicitações ainda. Troque para Aplicar acima quando as regras estiverem certas.",
+      "familyChip": "Família",
+      "modelChip": "Modelo",
+      "otherModels": "Modelos sem família",
+      "modelsInFamily": "{count, plural, one {# modelo nesta família} other {# modelos nesta família}}",
+      "noModels": "Ainda não há modelos no catálogo.",
+      "expand": "Mostrar modelos",
+      "collapse": "Ocultar modelos",
+      "edit": "Editar",
+      "doneEditing": "Concluído",
+      "editNode": "Editar acesso para {label}",
+      "defaultLabel": "Demais pessoas",
+      "defaultInherit": "Herdar",
+      "defaultUnlimited": "Ilimitado",
+      "defaultLimited": "Limitado a",
+      "defaultUnavailable": "Indisponível",
+      "defaultRequestsLabel": "Solicitações por dia para demais pessoas",
+      "requestsPerDay": "solicitações / dia",
+      "inheritedFrom": "Herdado {state} de {origin}.",
+      "effectiveLabel": "Todos que não estão em uma lista recebem: {state}.",
+      "inheritedChip": "herdado",
+      "origin": {
+        "model": "esta configuração",
+        "family": "sua família",
+        "defaults": "Padrões globais",
+        "catalogExternal": "a regra de que modelos externos ficam indisponíveis até serem concedidos",
+        "catalog": "o padrão do catálogo"
+      },
+      "state": {
+        "unlimited": "Ilimitado",
+        "limited": "Limitado a {requests} / dia",
+        "unavailable": "Indisponível"
+      },
+      "list": {
+        "groups": "Grupos com acesso",
+        "domains": "Domínios com acesso",
+        "allow": "Pessoas permitidas",
+        "deny": "Pessoas bloqueadas"
+      },
+      "listHint": {
+        "groups": "Membros destes grupos Entra podem usar, conforme os termos definidos por grupo.",
+        "domains": "Todos com endereço de e-mail nestes domínios, conforme os termos definidos por domínio.",
+        "allow": "Pessoas nomeadas podem usar independentemente do padrão ou do domínio.",
+        "deny": "Pessoas nomeadas nunca podem usar. Isto supera qualquer permissão acima."
+      },
+      "grantUnlimited": "Ilimitado",
+      "grantLimited": "Limitado a",
+      "termsLabel": "Termos para {target}",
+      "requestsLabel": "Solicitações por dia para {target}",
+      "removeGrant": "Remover {target}",
+      "groupsCount": "{count, plural, one {# grupo} other {# grupos}}",
+      "domainsCount": "{count, plural, one {# domínio} other {# domínios}}",
+      "allowCount": "{count, plural, one {# pessoa permitida} other {# pessoas permitidas}}",
+      "denyCount": "{count, plural, one {# pessoa bloqueada} other {# pessoas bloqueadas}}",
+      "collisionChip": "Também nas configurações globais",
+      "collisionWarning": "Este modelo ou família também está configurado nas configurações globais. O salvamento será recusado até que uma das duas opções seja removida."
+    },
+    "previewSourceModelAccess": "Aprovação do modelo — {list}",
+    "groupMembershipDegradedStructural": "Consultas de associação a grupos estão falhando neste servidor ({reason}). Regras e permissões baseadas em grupos não estão sendo aplicadas para as pessoas afetadas — verifique o consentimento Group.Read.All do tenant e o registro do aplicativo.",
+    "groupMembershipDegradedRetryable": "Algumas consultas de associação a grupos falharam neste servidor nos últimos minutos ({reason}). As regras baseadas em grupos podem não ser aplicadas para essas pessoas por até um minuto enquanto as consultas são refeitas.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# pessoa} other {# pessoas}} atualmente afetadas neste servidor.",
+    "previewDirectoryNotFound": "Nenhum usuário de diretório possui este endereço de e-mail, então as regras de departamento/empresa/escritório e grupo foram avaliadas como se a pessoa não pertencesse a nenhum."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Triagem da manhã",
-        "description": "O que chegou, o que aguarda você e o calendário do dia — um briefing"
+        "description": "Um resumo desde o último dia útil — o que chegou, o que está esperando por você, convites e atualizações; na segunda-feira cobre sexta-feira e o fim de semana."
       },
       "chipsSettingLabel": "Sugerir playbooks do Microsoft 365",
       "chipsSettingHint": "Mostrar sugestões de playbooks acima da caixa de mensagem quando aplicável (ex.: após importar a transcrição de uma reunião).",
-      "dismissChip": "Dispensar {title}"
+      "dismissChip": "Dispensar {title}",
+      "dailyDigest": {
+        "title": "Resumo diário",
+        "description": "Organize e-mails, Teams e calendário recentes em itens que precisam de você, pendências, atualizações e FYI — selecione o período"
+      }
+    },
+    "digest": {
+      "title": "Resumo diário",
+      "intro": "Analisa o que chegou até você no período e classifica em itens que precisam de resposta, solicitações feitas a você, pendências, agendamentos, atualizações da empresa e projetos, e FYI. Nada é enviado ou alterado.",
+      "periodLabel": "Período",
+      "preset": {
+        "lastWorkday": "Desde o último dia útil",
+        "1d": "Últimas 24 horas",
+        "3d": "Últimos 3 dias",
+        "7d": "Últimos 7 dias",
+        "14d": "Últimos 14 dias",
+        "custom": "Intervalo personalizado"
+      },
+      "lastWorkdayHint": "A partir do início do dia útil mais recente antes de hoje — numa segunda-feira, inclui sexta-feira e o fim de semana.",
+      "from": "De",
+      "to": "Até",
+      "customInvalid": "Selecione um intervalo ordenado de no máximo {days} dias.",
+      "sourcesLabel": "Fontes",
+      "sourceNoConsent": "Permissão não concedida para esta fonte.",
+      "sourceHint": {
+        "mail": "Envelope e prévias da caixa de entrada; seus Itens Enviados definem o que foi respondido.",
+        "chat": "Chats recentes do Teams, com @menções que você ainda não respondeu.",
+        "channel": "Publicações nos canais selecionados abaixo.",
+        "calendar": "Convites aguardando resposta e reuniões suas ainda não respondidas por outros."
+      },
+      "channelsLabel": "Canais ({count} de {max})",
+      "removeChannel": "Remover {name}",
+      "channelsSlow": "Cada canal adiciona leituras; mais canais tornam o resumo mais lento.",
+      "channelsMax": "Máximo de {max} canais atingido.",
+      "channelsNeeded": "Selecione pelo menos um canal ou adicione outra fonte.",
+      "teamLabel": "Equipe",
+      "loadingTeams": "Carregando equipes…",
+      "pickTeam": "Selecione uma equipe para listar seus canais",
+      "loadingChannels": "Carregando canais…",
+      "noChannels": "Nenhum canal encontrado nesta equipe.",
+      "privacyNote": "Apenas assuntos, remetentes e prévias curtas são lidos; o corpo das mensagens e anexos permanecem no Microsoft 365. Os itens são resumos dos seus próprios dados.",
+      "cancel": "Cancelar",
+      "run": "Executar resumo",
+      "starting": "Iniciando…",
+      "startFailed": "Não foi possível iniciar o resumo.",
+      "userMessage": "Resumo diário — {period}; fontes: {sources}",
+      "working": "Analisando suas comunicações do Microsoft 365…",
+      "failed": "O resumo falhou.",
+      "failedPrefix": "Falha no resumo diário:",
+      "expired": "Este resumo expirou. Execute novamente para obter um novo.",
+      "runAgain": "Executar novamente",
+      "changePeriod": "Alterar período",
+      "period": {
+        "lastWorkday": "desde o último dia útil",
+        "lastDays": "{count, plural, one {último dia} other {últimos # dias}}"
+      },
+      "source": {
+        "mail": "E-mail",
+        "chat": "Chats do Teams",
+        "channel": "Canais do Teams",
+        "calendar": "Calendário"
+      },
+      "sourceStatus": {
+        "ok": "completo",
+        "partial": "parcial",
+        "skipped": "ignorado",
+        "unavailable": "sem permissão",
+        "error": "falhou"
+      },
+      "degraded": "O modelo de análise estava indisponível, então as categorias são determinadas apenas pelas regras.",
+      "withheld": "{count, plural, one {# item foi} other {# itens foram}} retidos pelas telas de segurança.",
+      "empty": "Nada a relatar neste período e nestas fontes.",
+      "actionItems": "Itens de ação",
+      "createTasks": "{count, plural, =0 {Adicionar ao To Do} one {Adicionar # tarefa ao To Do} other {Adicionar # tarefas ao To Do}}",
+      "taskCreated": "adicionado ao To Do",
+      "tasksCreated": "{count, plural, one {# tarefa} other {# tarefas}} adicionadas à lista \"{list}\".",
+      "tasksFailed": "Não foi possível criar as tarefas.",
+      "category": {
+        "needsReply": "Precisa da minha resposta",
+        "askedOfMe": "Pedido para mim",
+        "waitingOnOthers": "Aguardando outros",
+        "scheduling": "Agendamento",
+        "companyUpdates": "Atualizações da empresa e projetos",
+        "fyi": "Para sua informação",
+        "bulk": "Automatizado e em massa"
+      },
+      "companyUpdatesHint": "importante, raramente urgente",
+      "markDone": "Marcar {title} como tratado",
+      "badge": {
+        "unanswered": "não respondido",
+        "mentioned": "mencionou você",
+        "important": "alta importância"
+      },
+      "askAbout": "Perguntar sobre isso",
+      "askPrompt": "Sobre o item {source} \"{title}\" de {from} ({when}) no resumo acima: o que está sendo solicitado, e qual seria uma boa resposta?",
+      "open": {
+        "mail": "Abrir no Outlook",
+        "chat": "Abrir no Teams",
+        "channel": "Abrir no Teams",
+        "calendar": "Abrir no Outlook"
+      },
+      "footnote": "As categorias vêm de sinais próprios (não respondido, mencionado, broadcast) mais classificação por IA; verifique antes de agir. Nada foi enviado.",
+      "age": {
+        "now": "agora mesmo",
+        "hours": "{count}h atrás",
+        "days": "{count}d atrás"
+      },
+      "waitForReply": "Aguarde a resposta atual terminar antes de iniciar um resumo."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "Conhecimento",
       "prompt": "Persona",
-      "m365": "Conhecimento (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Conhecimento",
-      "foundry": "Agente Foundry",
+      "foundry": "Agente personalizado",
       "connector": "Conector"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "utiliza seu próprio modelo"
     },
     "loadError": "Seus agentes não puderam ser carregados agora. Isso geralmente é temporário.",
-    "discoveryLoading": "Procurando agentes Foundry…",
-    "discoveryError": "Não foi possível carregar os agentes Foundry.",
+    "discoveryLoading": "Procurando mais agentes…",
+    "discoveryError": "Alguns agentes não puderam ser carregados.",
     "retry": "Tentar novamente"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "Mais antigo que os {months} meses de retenção desta pasta; não será mais exibido.",
       "unknown": "Problema relatado: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Habilidades",
+    "description": "Blocos de instruções reutilizáveis que o assistente aplica quando necessário em uma conversa. Compatível com o formato Agent Skills SKILL.md usado pelo Claude e ChatGPT.",
+    "loading": "Carregando habilidades…",
+    "loadError": "Não foi possível carregar as habilidades.",
+    "retry": "Tentar novamente",
+    "unavailableBanner": "O armazenamento de habilidades está temporariamente inacessível — padrões internos estão sendo exibidos; habilidades armazenadas e edições não estarão disponíveis até a recuperação.",
+    "conflictError": "Esta habilidade foi alterada por outro administrador. A lista foi recarregada — aplique novamente sua edição.",
+    "alwaysWarning": "{count} habilidades estão definidas como Sempre. Cada uma delas é adicionada a toda conversa — prefira Automático para habilidades específicas por tema.",
+    "newSkill": "Nova habilidade",
+    "importSkill": "Importar SKILL.md",
+    "importTitle": "Cole um arquivo SKILL.md",
+    "importPlaceholder": "---\nnome: minha-habilidade\ndescrição: O que esta habilidade faz e quando usar.\n---\n\nInstruções…",
+    "importHint": "A habilidade analisada abre no editor para revisão — nada é salvo até que você salve.",
+    "importParse": "Analisar e revisar",
+    "invalidId": "IDs de habilidades usam letras minúsculas, números e hífens simples.",
+    "saveSuccess": "Habilidade salva.",
+    "saveError": "Não foi possível salvar a habilidade.",
+    "deleteConfirm": "Excluir esta habilidade? As conversas deixam de recebê-la imediatamente.",
+    "restoreConfirm": "Remover a personalização e restaurar o padrão interno desta habilidade?",
+    "deleteSuccess": "Habilidade excluída.",
+    "restoreSuccess": "Padrão interno restaurado.",
+    "deleteError": "Não foi possível excluir a habilidade.",
+    "empty": "Ainda não há habilidades. Crie uma ou importe um SKILL.md.",
+    "builtinChip": "Interna",
+    "customizedChip": "Personalizada",
+    "exportSkill": "Exportar como SKILL.md",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "restoreDefault": "Restaurar padrão",
+    "createTitle": "Nova habilidade",
+    "editTitle": "Editar {name}",
+    "idLabel": "Id",
+    "idHint": "Letras minúsculas, números e hífens. Torna-se o nome da habilidade no SKILL.md e não pode ser alterado após criação.",
+    "nameLabel": "Nome de exibição",
+    "descriptionLabel": "Descrição",
+    "descriptionHint": "O que a habilidade faz E quando usar — isto é o que seleciona a habilidade, então inclua os temas e frases específicas para os quais ela deve responder.",
+    "activationLabel": "Ativação",
+    "activation": {
+      "auto": "Automático",
+      "always": "Sempre",
+      "off": "Desligado",
+      "manual": "Mediante solicitação"
+    },
+    "activationHint": {
+      "auto": "Selecionada automaticamente quando a tarefa atual corresponde à descrição. Os usuários também podem solicitá-la uma vez ou fixá-la em uma conversa.",
+      "always": "Adicionada a todas as conversas para todos que podem ver a habilidade. Use com moderação — este é um espaço de prompt permanente.",
+      "off": "Inativa: nunca é aplicada nem oferecida aos usuários, mas permanece aqui para edição.",
+      "manual": "Aplicada apenas quando um usuário solicita ou fixa. Nunca selecionada automaticamente e não oferecida ao modelo como uma habilidade carregável."
+    },
+    "instructionsLabel": "Instruções",
+    "instructionsHint": "Markdown, até 16 KB. Inserido exatamente como está quando a habilidade está ativa.",
+    "saving": "Salvando…",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "documents": {
+      "title": "Documentos",
+      "hint": "Referências são armazenadas com esta habilidade. Documentos pequenos são carregados diretamente; documentos maiores são indexados para busca citada. Até 20 recursos, 10 MB cada e 20 MB no total. Os arquivos são armazenados apenas para download.",
+      "saveFirst": "Salve uma personalização desta habilidade incorporada antes de adicionar documentos.",
+      "upload": "Adicionar documentos de referência",
+      "remove": "Remover",
+      "stop": "Parar indexação",
+      "resume": "Indexar ou retomar documentos",
+      "empty": "Ainda não há documentos anexados.",
+      "requestFailed": "A solicitação do documento falhou. Recarregue e tente novamente.",
+      "importZip": "Importar um ZIP de habilidade",
+      "zipTooLarge": "O ZIP da habilidade deve ter 20 MB ou menos.",
+      "importCount": "Recursos para anexar após salvar: {count}",
+      "skippedScripts": "Scripts executáveis foram ignorados",
+      "status": {
+        "pending": "Aguardando indexação",
+        "processing": "Indexando",
+        "inline": "Pronto (carregado diretamente)",
+        "indexed": "Pronto (pesquisável)",
+        "failed": "Falha na indexação",
+        "asset": "Arquivo disponível para download"
+      },
+      "confirmRemove": "Remover {filename} desta competência? O original armazenado será excluído e não estará mais disponível como fonte de citação.",
+      "reindexRequired": "Estes documentos precisam ser reindexados para a configuração atual de Pesquisa e incorporação regional. Eles não serão pesquisados até que a indexação seja concluída."
+    },
+    "applyToAgents": "Disponível para agentes",
+    "applyToAgentsHint": "Desativado por padrão. Quando ativado, agentes podem carregar esta habilidade por meio de ferramentas de leitura, em vez de substituir suas instruções pessoais. As chamadas de habilidade possuem limites de etapas independentes. Agentes Foundry já devem ter as funções load_skill e search_skill_documents registradas em sua definição.",
+    "requireConsent": "Perguntar antes de aplicar",
+    "requireConsentHint": "Quando o modelo deseja aplicar esta habilidade por conta própria, o usuário é consultado primeiro. Solicitações e fixações não precisam de confirmação.",
+    "consentChip": "Consulta antes",
+    "sourceChip": "Da fonte",
+    "sourceChipHint": "Fornecida por uma fonte de habilidades assinada; as instruções são atualizadas na sincronização. Configurações de ativação, agente e consentimento são suas.",
+    "sources": {
+      "title": "Fontes de habilidades",
+      "description": "Assine um catálogo externo de habilidades (um index.json listando arquivos SKILL.md). Suas habilidades tornam-se habilidades da organização e são atualizadas a cada cerca de seis horas. Apenas SKILL.md é importado; documentos de referência não.",
+      "urlLabel": "URL do catálogo",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Deve usar https em um host público. Os arquivos de habilidades são lidos apenas deste local.",
+      "labelLabel": "Rótulo (opcional)",
+      "add": "Assinar",
+      "adding": "Assinando…",
+      "added": "{count, plural, =0 {Fonte adicionada; nenhuma habilidade importada ainda} one {Fonte adicionada; # habilidade importada} other {Fonte adicionada; # habilidades importadas}}",
+      "addedWithError": "Fonte adicionada, mas a primeira sincronização falhou. Verifique o erro na fonte.",
+      "addError": "Não foi possível adicionar a fonte de habilidades",
+      "sync": "Sincronizar agora",
+      "syncing": "Sincronizando…",
+      "synced": "Fonte sincronizada.",
+      "syncError": "Não foi possível sincronizar a fonte de habilidades",
+      "remove": "Remover fonte",
+      "removeConfirm": "Remover esta fonte? As habilidades fornecidas permanecem como habilidades comuns da organização e deixam de ser atualizadas.",
+      "removed": "Fonte removida.",
+      "removeError": "Não foi possível remover a fonte de habilidades",
+      "loading": "Carregando fontes…",
+      "loadError": "Não foi possível carregar as fontes de habilidades.",
+      "empty": "Nenhuma fonte de habilidades ainda.",
+      "never": "Nunca sincronizada",
+      "statusOk": "Sincronizada",
+      "statusError": "Falha na sincronização",
+      "statusPartial": "{count, plural, one {# entrada ignorada} other {# entradas ignoradas}}",
+      "lastSync": "Última sincronização {time}",
+      "entryCount": "{count, plural, one {# entrada} other {# entradas}}",
+      "entryStatus": {
+        "synced": "sincronizada",
+        "skipped": "ignorada",
+        "conflict": "conflito — não substituído",
+        "invalid": "inválida"
+      }
+    },
+    "requireConsentDisabledHint": "Somente habilidades automáticas podem pedir autorização primeiro: habilidades solicitadas, fixadas e sempre ativas aplicam-se sem aviso, e habilidades sob demanda nunca são escolhidas pelo modelo."
+  },
+  "personalSkills": {
+    "title": "Habilidades pessoais",
+    "description": "Salve instruções reutilizáveis para suas próprias conversas. As habilidades permanecem neste navegador e são enviadas ao modelo apenas quando você conversa. Habilidades relevantes podem ser selecionadas automaticamente, usadas uma vez ou fixadas. Elas não podem alterar políticas da organização ou conceder acesso a ferramentas. O uso das habilidades exige que estejam habilitadas neste ambiente; conversas com agentes não utilizam habilidades pessoais.",
+    "importFile": "Importar SKILL.md ou ZIP",
+    "review": "Revise as instruções completas antes de salvar. Instruções importadas são preferências do usuário, não políticas confiáveis da organização.",
+    "skipped": "Scripts executáveis foram ignorados",
+    "importTooLarge": "A importação deve ter 20 MB ou menos.",
+    "invalid": "Não foi possível importar a habilidade.",
+    "duplicate": "O ID dessa habilidade pessoal já existe. Edite a habilidade existente ou escolha um ID diferente.",
+    "countLimit": "Você pode salvar até 20 habilidades pessoais.",
+    "requestLimit": "As habilidades pessoais ativadas excedem o limite de 160 KB da solicitação. Desative algumas habilidades ou reduza suas instruções.",
+    "saved": "Habilidade pessoal salva neste navegador.",
+    "instructionsHint": "Até 16 KB de instruções, incluindo qualquer referência de texto importada. Arquivos binários e indexação persistente de documentos estão disponíveis apenas para habilidades da organização. A exportação usa o nome padrão SKILL.md sem o prefixo user:.",
+    "enabled": "Habilitado para minhas conversas",
+    "empty": "Crie uma habilidade para uma tarefa recorrente ou importe um SKILL.md para revisar e salvar aqui."
   }
 }

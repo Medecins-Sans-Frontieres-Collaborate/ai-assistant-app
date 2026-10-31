@@ -6,7 +6,7 @@ import {
   IconChevronRight,
   IconPlus,
 } from '@tabler/icons-react';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -14,6 +14,7 @@ import {
   ScopedDelegationView,
   ScopedLimitsView,
 } from '@/client/hooks/settings/useLimitsAdmin';
+import { seedGroupNames } from '@/client/hooks/useGroupNames';
 
 import { LimitEntry, LimitOverride } from '@/lib/services/limits/types';
 
@@ -60,6 +61,11 @@ export const ScopedOverridesTab: FC<ScopedOverridesTabProps> = ({
   const t = useTranslations('limits');
   const { calculator } = useLimitsCost();
   const [pendingNew, setPendingNew] = useState<LimitOverride[]>([]);
+  // Stored group names (pruned to this caller's scope by the server) feed
+  // the shared client cache so cards show names, not GUIDs, with no lookup.
+  useEffect(() => {
+    seedGroupNames(view.groupLabels);
+  }, [view.groupLabels]);
   const [dirtyIds, setDirtyIds] = useState<Set<string>>(() => new Set());
   // Collapsed by default so the calculator bundle loads only when asked for.
   const [calculatorOpen, setCalculatorOpen] = useState(false);

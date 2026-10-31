@@ -779,7 +779,16 @@
       "stillWorking": "Masih bekerja…",
       "assessingSearchResults": "Memeriksa apakah hasil sudah menjawab pertanyaan…",
       "refiningSearch": "Mencari ulang: “{query}”…",
-      "readingSearchPages": "Membaca {count} halaman hasil…"
+      "readingSearchPages": "Membaca {count} halaman hasil…",
+      "toolRoutingUnavailableInRegion": "Rute alat tidak tersedia di endpoint {region} — menjawab tanpa alat…",
+      "applyingSkill": "Menerapkan keahlian: {skills}…",
+      "applyingSkills": "Menerapkan keahlian: {skills}…",
+      "readingSkillReferences": "Membaca dokumen referensi keahlian…",
+      "selectingSkills": "Memilih keterampilan…",
+      "retryingModel": "Model sedang sibuk — mencoba ulang dalam {seconds}s (percobaan ke-{attempt})…",
+      "resumingResponse": "Koneksi ke model terputus — melanjutkan dari posisi terakhir…",
+      "continuingResponse": "Jawaban mencapai batas panjang — melanjutkan…",
+      "trimmingContext": "Percakapan terlalu panjang untuk model — memangkas riwayat lama dan mencoba ulang…"
     },
     "toolSummary": {
       "usedTools": "Digunakan {count, plural, one {# alat} other {# alat}}",
@@ -845,7 +854,9 @@
       "deniedByRuleHint": "Diblokir oleh aturan Anda — kelola di Pengaturan → Konektor.",
       "batchPendingHint": "{count} permintaan alat tertunda",
       "approveAllButton": "Izinkan semua",
-      "denyAllButton": "Tolak semua"
+      "denyAllButton": "Tolak semua",
+      "applySkillTitle": "Terapkan keterampilan \"{skill}\"?",
+      "skillConsentNote": "Seorang admin menetapkan keterampilan ini untuk meminta persetujuan sebelum diterapkan. Jika disetujui, panduannya akan digunakan hanya untuk jawaban ini."
     },
     "openImage": "Buka gambar",
     "copyMessage": "Salin pesan",
@@ -885,7 +896,54 @@
     "alwaysWaitThisLong": "Selalu tunggu hingga {duration}",
     "keepSearching": "Lanjutkan pencarian",
     "keepSearchingHint": "Pencarian berhenti sebelum menemukan ini. Minta asisten mencoba pendekatan lain.",
-    "keepSearchingMessage": "Tolong lanjutkan pencarian ini — coba pendekatan berbeda."
+    "keepSearchingMessage": "Tolong lanjutkan pencarian ini — coba pendekatan berbeda.",
+    "addSkill": "Keterampilan",
+    "removeSkill": "Hapus keterampilan",
+    "skillsMenuLabel": "Keterampilan yang tersedia",
+    "skillsLimit": "Maksimal 3 keterampilan per pesan.",
+    "skillPin": "Sematkan ke percakapan",
+    "skillUseOnce": "Gunakan sekali",
+    "skillPinned": "disematkan",
+    "skillOnce": "pesan berikutnya",
+    "skillsPaused": "ditangguhkan",
+    "skillUnavailable": "tidak tersedia",
+    "skillsAutomaticHint": "Skill yang relevan dipilih secara otomatis. Gunakan sekali untuk pesan berikutnya, atau sematkan skill untuk digunakan sepanjang percakapan ini.",
+    "skillsAgentDisabled": "Skill ditangguhkan ketika agen terpasang. Pin Anda akan aktif kembali saat Anda melepaskan agen.",
+    "skillPersonal": "pribadi",
+    "skillsAgentToolsHint": "Hanya keterampilan organisasi yang diaktifkan oleh admin untuk digunakan agen yang tersedia di sini. Agen dapat memuatnya sebagai alat baca saja. Pin lainnya tetap dijeda, dan keterampilan pribadi tidak tersedia untuk agen.",
+    "skillAlwaysOn": "selalu aktif",
+    "skillAlwaysOnHint": "Ditambahkan ke setiap pesan dalam percakapan ini oleh admin.",
+    "skillUsage": {
+      "label": "Keahlian",
+      "requested": "diminta",
+      "pinned": "disematkan",
+      "auto": "otomatis",
+      "unavailable": "tidak tersedia",
+      "incomplete": "Beberapa keahlian tidak dapat diterapkan",
+      "references": "{count, plural, one {# bagian referensi} other {# bagian referensi}}",
+      "referencesUnavailable": "Beberapa dokumen referensi tidak tersedia",
+      "showDetails": "Tampilkan detail keahlian",
+      "hideDetails": "Sembunyikan detail keahlian",
+      "agentLoad": "dimuat oleh agen",
+      "agentSearch": "dokumen dicari oleh agen",
+      "needsApproval": "memerlukan persetujuan Anda",
+      "original": "sesuai dijalankan awalnya",
+      "updated": "diperbarui sejak itu"
+    },
+    "skillsManualHint": "Pemilihan otomatis dimatikan di Pengaturan. Gunakan sekali untuk pesan berikutnya, atau sematkan sebuah skill untuk menggunakannya selama percakapan ini.",
+    "queuedMessage": {
+      "label": "Antrian",
+      "attachmentOnly": "Lampiran",
+      "cancel": "Batalkan pesan dalam antrian"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Respons dihentikan oleh filter keamanan konten. Silakan ubah permintaan atau hapus bagian yang mungkin memicunya.",
+      "MODEL_CONTEXT_TOO_LONG": "Percakapan ini terlalu panjang untuk model yang dipilih, meski riwayat lama sudah dipangkas. Mulai percakapan baru, hapus beberapa lampiran, atau pilih model dengan kapasitas konteks lebih besar.",
+      "MODEL_OUTPUT_LIMIT": "Model telah menggunakan seluruh batas output tanpa menghasilkan jawaban. Coba gunakan tingkat penalaran lebih rendah atau permintaan lebih singkat.",
+      "MODEL_RATE_LIMITED": "Model sedang menerima terlalu banyak permintaan. Sistem telah mencoba ulang secara otomatis; silakan coba lagi sebentar lagi.",
+      "MODEL_QUOTA_EXCEEDED": "Kuota kapasitas model telah habis. Coba gunakan model lain atau coba lagi nanti.",
+      "MODEL_AUTH_FAILED": "Aplikasi tidak dapat melakukan autentikasi dengan layanan model. Ini adalah masalah konfigurasi — silakan hubungi dukungan."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -1292,7 +1350,11 @@
       "preferModelTitle": "Utamakan model yang saya pilih",
       "preferModelDescription": "Jangan otomatis beralih ke model lain jika permintaan gagal. Pesan kesalahan masih akan menawarkan opsi ini."
     },
-    "Analytics": "Analitik"
+    "Analytics": "Analitik",
+    "skills": {
+      "autoApply": "Izinkan asisten menerapkan skill secara otomatis",
+      "autoApplyDescription": "Skill yang relevan dan skill pribadi Anda akan dipilih untuk setiap pesan. Jika dimatikan, hanya skill yang Anda minta atau sematkan, serta skill yang diterapkan admin untuk setiap percakapan, yang akan digunakan."
+    }
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "detik",
     "chipAutoHideHint": "Antara {min} dan {max} detik.",
     "byWorkflow": "Menurut alur kerja",
-    "byWorkflowNote": "Bagian dari total di atas, ditampilkan terpisah — bukan penggunaan tambahan. Jalankan grant dihitung dalam pelaporan organisasi dan anggaran token Anda, namun tidak termasuk dalam total lokal ini."
+    "byWorkflowNote": "Bagian dari total di atas, ditampilkan terpisah — bukan penggunaan tambahan. Jalankan grant dihitung dalam pelaporan organisasi dan anggaran token Anda, namun tidak termasuk dalam total lokal ini.",
+    "chipLabelTitle": "Label chip",
+    "chipLabelHint": "Rincian selalu menampilkan emisi dan biaya berdampingan; ini hanya memilih apa yang terbaca pada chip terlipat.",
+    "chipLabelEmissions": "Emisi",
+    "chipLabelCost": "Biaya",
+    "chipLabelBoth": "Keduanya",
+    "costTile": "Perkiraan biaya",
+    "costDisclosure": "Biaya berdasarkan harga daftar per {asOf} (tarif Global Standard, tanpa diskon input cache): batas atas, bukan tagihan. Pencarian web, eksekusi kode, transkripsi, suara, terjemahan, dan pengindeksan dokumen tidak termasuk.",
+    "costUnpriced": "{count, plural, one {# permintaan tanpa harga daftar} other {# permintaan tanpa harga daftar}} tidak termasuk."
   },
   "extraction": {
     "toggleLabel": "Ekstrak data terstruktur",
@@ -4502,7 +4572,16 @@
         "auto": "Otomatis",
         "hidden": "Sembunyikan"
       },
-      "visibilityHint": "Otomatis akan menampilkan chip saat estimasi diperbarui atau saat Anda mengarahkan kursor. Ubah pengaturan ini kembali di Pengaturan › Penggunaan & Dampak."
+      "visibilityHint": "Otomatis akan menampilkan chip saat estimasi diperbarui atau saat Anda mengarahkan kursor. Ubah pengaturan ini kembali di Pengaturan › Penggunaan & Dampak.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Perkiraan biaya {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Tidak ada harga daftar untuk permintaan di baris ini",
+        "unpriced": "{count, plural, one {# permintaan tanpa harga daftar} other {# permintaan tanpa harga daftar}} tidak termasuk dalam biaya.",
+        "noPriceData": "Tidak ada biaya yang ditampilkan: model percakapan ini tidak memiliki harga daftar (sumber sendiri, local runtimes, dan agen tidak diberi harga).",
+        "note": "Biaya berdasarkan harga daftar per {asOf} (tarif Global Standard, tanpa diskon input cache): batas atas, bukan tagihan. Pencarian web, eksekusi kode, transkripsi, suara, terjemahan, dan pengindeksan dokumen tidak termasuk."
+      }
     },
     "workflow": {
       "title": "Workspace ini (perkiraan)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "Hapus glosarium",
     "glossaryDeleteSuccess": "Glosarium telah dihapus",
     "channelProfilesTab": "Platform",
-    "channelSetsTab": "Set kanal"
+    "channelSetsTab": "Set kanal",
+    "addPromptAgent": "Tambah agen prompt",
+    "m365AgentIndexStop": "Hentikan pengindeksan",
+    "foundryAgentsHeading": "Agen Foundry dan prompt",
+    "foundryAgentsDescription": "Agen yang ditemukan dari Azure AI Foundry melalui akses Anda sendiri, ditambah agen prompt yang didefinisikan di sini. Agen pengetahuan dan agen Microsoft 365 dikelola di bagian masing-masing di bawah ini.",
+    "agentSkillsLabel": "Keahlian",
+    "agentSkillsHelp": "Keahlian organisasi mana yang dapat dimuat agen ini saat menjawab. Pengguna tetap hanya melihat keahlian sesuai aturan akses mereka.",
+    "agentSkills": {
+      "inherit": "Keahlian yang ditandai 'tersedia untuk agen'",
+      "selected": "Hanya keahlian yang dipilih di bawah ini",
+      "none": "Tidak ada keahlian"
+    },
+    "agentSkillsNone": "Tidak ada keahlian yang dapat dipilih.",
+    "agentSkillsLoading": "Memuat keterampilan...",
+    "agentSkillsLoadError": "Keterampilan tidak dapat dimuat. Pilihan yang telah disimpan sebelumnya tetap dipertahankan.",
+    "agentSkillsNotVisible": "(tidak terlihat oleh Anda — hapus centang untuk menghapus)"
   },
   "localModels": {
     "title": "Model lokal",
@@ -5521,7 +5615,8 @@
       "channelSets": "Aturan setiap tim saat menulis di platform: panduan, suara, setelan default, siapa yang dapat menggunakan set dan siapa yang dapat mengirim.",
       "webSearch": "Cakupan pencarian web: pencarian bertahap, model penilai dan batasannya.",
       "contextBudget": "Jumlah percakapan yang dikirim ke setiap model di setiap giliran.",
-      "analytics": "Laporan yang dikirim: apa saja yang diterima, siapa yang dapat membuka setiap folder, dan bidang mana yang dapat ditampilkan."
+      "analytics": "Laporan yang dikirim: apa saja yang diterima, siapa yang dapat membuka setiap folder, dan bidang mana yang dapat ditampilkan.",
+      "skills": "Blok instruksi yang dapat digunakan kembali, diterapkan oleh asisten saat percakapan membutuhkannya."
     },
     "openSettings": "Buka pengaturan",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "Delegasi",
       "webSearch": "Pencarian web",
       "contextBudget": "Anggaran konteks",
-      "analytics": "Analitik"
+      "analytics": "Analitik",
+      "skills": "Keterampilan"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "Default global",
       "overrides": "Penyesuaian",
-      "delegations": "Delegasi"
+      "delegations": "Delegasi",
+      "models": "Model"
     },
     "tabsLabel": "Bagian batas",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Panggilan alat Microsoft 365 per hari",
       "m365MailReadsPerDay": "Pembacaan email per hari",
       "m365MailDraftsPerDay": "Draft email per hari",
-      "m365MailDeepScansPerDay": "Deep scan email per hari"
+      "m365MailDeepScansPerDay": "Deep scan email per hari",
+      "m365DigestRunsPerDay": "Ringkasan harian per hari"
     },
     "valueModeLabel": "Jenis batas",
     "valueAmountLabel": "Jumlah batas",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Permintaan alat Microsoft 365 (kalender, orang, tugas, Teams) per hari. Jika melewati batas, alat akan menampilkan hasil ramah 'coba lagi besok' daripada gagal dalam percakapan.",
       "m365MailReadsPerDay": "Pencarian email dan pembacaan pesan/percakapan per hari. Jika melewati batas, alat email akan menampilkan hasil 'coba lagi besok'.",
       "m365MailDraftsPerDay": "Draft email yang dapat dibuat asisten per hari — masing-masing dikonfirmasi secara individual. Dibatasi secara ketat.",
-      "m365MailDeepScansPerDay": "Analisis email komposit (ringkasan, pencarian mendalam, komitmen) per hari. Setiap pemindaian dihitung satu unit anggaran tanpa melihat jumlah pembacaan di dalamnya."
+      "m365MailDeepScansPerDay": "Analisis email komposit (ringkasan, pencarian mendalam, komitmen) per hari. Setiap pemindaian dihitung satu unit anggaran tanpa melihat jumlah pembacaan di dalamnya.",
+      "m365DigestRunsPerDay": "Microsoft 365 ringkasan harian per hari. Satu jalankan terdiri dari puluhan pembacaan Graph dan dua panggilan model analisis; pemilih periode membuat permintaan ulang menjadi mudah, sehingga batas default ketat."
     },
     "scopeFamily": "Keluarga",
     "scopeModel": "Model",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "Bawaan",
     "previewSourceGlobal": "Bawaan global",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Override departemen/perusahaan/kantor dan grup tidak bisa dievaluasi di sini — tergantung pada login masing-masing orang.",
+    "previewNotEvaluated": "Direktori tidak dapat diakses, sehingga aturan departemen/perusahaan/kantor dan grup tidak dievaluasi untuk orang ini. Coba lagi beberapa saat lagi.",
     "previewUnsaved": "Menampilkan kebijakan terakhir yang disimpan. Simpan perubahan Anda untuk melihat pratinjau.",
     "previewColumnLimit": "Batas",
     "previewColumnValue": "Nilai",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "Hanya grup",
     "yourScopeGroupOnlyNote": "Ditetapkan hanya oleh grup atau atribut, sehingga batas tidak dapat dilihat berdasarkan alamat email.",
     "previewOutOfScope": "Orang ini di luar ruang lingkup Anda.",
-    "previewGroupOnlyScope": "Ruang lingkup Anda ditetapkan oleh grup atau atribut, sehingga batas tidak dapat dilihat berdasarkan alamat email.",
+    "previewGroupOnlyScope": "Ruang lingkup Anda ditentukan oleh grup atau atribut. Pratinjau mencari orang tersebut di direktori untuk menentukan apakah mereka termasuk di dalamnya.",
     "previewCeilingPinned": "Dibatasi oleh batas maksimum: {label}",
     "previewShowUsage": "Tampilkan penggunaan saat ini",
     "previewColumnUsage": "Digunakan",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "Batas maksimal yang diatur pada baris ini akan mengunci nilai tersebut untuk target override ini: admin yang memiliki cakupan tidak dapat menaikkannya, dan jika ada beberapa batas sekaligus, yang paling spesifik akan digunakan.",
     "confirmDeleteOverride": "Hapus \"{label}\"? Ini akan langsung dihapus dari server dan targetnya akan kembali ke batas di bawahnya. Tindakan ini tidak dapat dibatalkan.",
     "confirmDeleteOverrideAction": "Hapus override",
-    "previewUndecidableScope": "Cakupan Anda mencakup grup atau atribut, sehingga apakah orang ini termasuk di dalamnya tidak dapat diputuskan hanya berdasarkan alamat email.",
+    "previewUndecidableScope": "Ruang lingkup Anda mencakup grup atau atribut dan direktori tidak dapat diakses, sehingga tidak dapat dipastikan saat ini apakah orang ini termasuk di dalamnya. Coba lagi beberapa saat lagi.",
     "previewNoLongerAdmin": "Anda tidak lagi tercantum dalam delegasi yang aktif, sehingga Anda tidak dapat meninjau batas. Muat ulang halaman untuk melihat akses Anda saat ini.",
     "previewScopeMatchesNobody": "Cakupan Anda saat ini tidak mencakup siapa pun, jadi tidak ada yang dapat ditinjau berdasarkan alamat email.",
     "yourScopeMatchesNobodyChip": "Tidak cocok siapa pun",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "Delegasi ini dinonaktifkan, sehingga penggantian ini tidak berlaku untuk siapa pun sampai delegasi diaktifkan kembali. Tidak pernah dipromosikan ke tingkat global.",
     "betaPolicyNotice": "Lingkungan beta: kebijakan ini dan penghitung penggunaannya disimpan terpisah dari produksi (policy.beta.json). Perubahan apa pun di sini tidak akan memengaruhi produksi.",
     "delegationsManagedElsewhere": "Delegasi hanya dapat dilihat di sini (read-only). Siapa saja anggota delegasi, cakupan penggunanya, dan hak setiap admin dikelola di area Delegasi.",
-    "delegationsManagedElsewhereLink": "Buka Delegasi"
+    "delegationsManagedElsewhereLink": "Buka Delegasi",
+    "modelAccess": {
+      "intro": "Tentukan siapa saja yang dapat menggunakan setiap model. Pengaturan untuk sebuah keluarga berlaku pada model-model di dalamnya, kecuali jika model memiliki pengaturan sendiri; orang pada daftar tertentu mengesampingkan pengaturan default untuk yang lain; daftar blokir mengesampingkan semua pemberian akses.",
+      "externalNote": "Model yang di-host di luar lingkungan Azure ({families}) tidak tersedia untuk siapa pun sampai Anda memberikan akses di sini — untuk semua melalui default, atau untuk grup, domain, dan individu.",
+      "envelopeNote": "Batas permintaan pada sebuah keluarga adalah anggaran harian bersama untuk seluruh modelnya; batas pada model adalah batas khusus pada model itu. Jika model tidak memiliki batas, itu tidak menghapus batas anggaran keluarga.",
+      "observeNote": "Mode Observasi aktif: tidak ada yang tersembunyi atau menghentikan permintaan untuk model. Aktifkan Penegakan di atas setelah aturan sudah benar.",
+      "familyChip": "Keluarga",
+      "modelChip": "Model",
+      "otherModels": "Model tanpa keluarga",
+      "modelsInFamily": "{count, plural, one {# model dalam keluarga ini} other {# model dalam keluarga ini}}",
+      "noModels": "Belum ada model di katalog.",
+      "expand": "Tampilkan model",
+      "collapse": "Sembunyikan model",
+      "edit": "Edit",
+      "doneEditing": "Selesai",
+      "editNode": "Edit akses untuk {label}",
+      "defaultLabel": "Semua yang lain",
+      "defaultInherit": "Turun-temurun",
+      "defaultUnlimited": "Tanpa batas",
+      "defaultLimited": "Dibatasi hingga",
+      "defaultUnavailable": "Tidak tersedia",
+      "defaultRequestsLabel": "Permintaan per hari untuk semua yang lain",
+      "requestsPerDay": "permintaan / hari",
+      "inheritedFrom": "Mewarisi {state} dari {origin}.",
+      "effectiveLabel": "Semua yang tidak masuk daftar mendapatkan: {state}.",
+      "inheritedChip": "turunan",
+      "origin": {
+        "model": "pengaturan ini",
+        "family": "keluarganya",
+        "defaults": "Default global",
+        "catalogExternal": "aturan bahwa model eksternal tidak tersedia sampai diberikan akses",
+        "catalog": "default katalog"
+      },
+      "state": {
+        "unlimited": "Tanpa batas",
+        "limited": "Dibatasi hingga {requests} / hari",
+        "unavailable": "Tidak tersedia"
+      },
+      "list": {
+        "groups": "Grup dengan akses",
+        "domains": "Domain dengan akses",
+        "allow": "Orang yang diizinkan",
+        "deny": "Orang yang diblokir"
+      },
+      "listHint": {
+        "groups": "Anggota grup Entra ini dapat menggunakan, sesuai dengan ketentuan tiap grup.",
+        "domains": "Setiap orang dengan email di domain ini, sesuai ketentuan tiap domain.",
+        "allow": "Orang yang disebutkan dapat menggunakan tanpa memperhatikan default atau aturan domain mereka.",
+        "deny": "Orang yang disebutkan tidak dapat menggunakan kapan pun. Ini mengesampingkan semua pemberian akses di atasnya."
+      },
+      "grantUnlimited": "Tanpa batas",
+      "grantLimited": "Dibatasi hingga",
+      "termsLabel": "Ketentuan untuk {target}",
+      "requestsLabel": "Permintaan per hari untuk {target}",
+      "removeGrant": "Hapus {target}",
+      "groupsCount": "{count, plural, one {# grup} other {# grup}}",
+      "domainsCount": "{count, plural, one {# domain} other {# domain}}",
+      "allowCount": "{count, plural, one {# orang diizinkan} other {# orang diizinkan}}",
+      "denyCount": "{count, plural, one {# orang diblokir} other {# orang diblokir}}",
+      "collisionChip": "Juga terdapat pada pengaturan Global",
+      "collisionWarning": "Model atau keluarga ini juga dikonfigurasi dalam pengaturan Global. Penyimpanan akan ditolak sampai salah satu dari dua pengaturan dihapus."
+    },
+    "previewSourceModelAccess": "Persetujuan model — {list}",
+    "groupMembershipDegradedStructural": "Pencarian keanggotaan grup gagal di server ini ({reason}). Aturan dan izin berbasis grup tidak diterapkan untuk orang yang terdampak — periksa persetujuan Group.Read.All tenant dan registrasi aplikasi.",
+    "groupMembershipDegradedRetryable": "Beberapa pencarian keanggotaan grup gagal di server ini dalam beberapa menit terakhir ({reason}). Aturan berbasis grup mungkin tidak diterapkan untuk orang tersebut hingga satu menit saat pencarian diulang.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# orang} other {# orang}} saat ini terdampak di server ini.",
+    "previewDirectoryNotFound": "Tidak ada pengguna direktori dengan alamat email ini, sehingga aturan departemen/perusahaan/kantor dan grup dievaluasi seolah-olah orang tersebut tidak termasuk dalam grup mana pun."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Prioritas pagi",
-        "description": "Apa saja yang masuk, apa yang menunggu Anda, dan jadwal hari ini — satu ringkasan"
+        "description": "Ringkasan sejak hari kerja terakhir — apa saja yang masuk, apa yang menunggu Anda, undangan dan pembaruan; pada hari Senin mencakup Jumat dan akhir pekan."
       },
       "chipsSettingLabel": "Sarankan playbook Microsoft 365",
       "chipsSettingHint": "Tampilkan saran playbook di atas kotak pesan saat relevan (misalnya setelah mengimpor transkrip rapat).",
-      "dismissChip": "Tutup {title}"
+      "dismissChip": "Tutup {title}",
+      "dailyDigest": {
+        "title": "Ringkasan harian",
+        "description": "Urutkan email, Teams, dan kalender terbaru menjadi yang membutuhkan Anda, yang sedang Anda tunggu, pembaruan, dan FYI — pilih periode"
+      }
+    },
+    "digest": {
+      "title": "Ringkasan harian",
+      "intro": "Memindai semua yang masuk dalam periode ini dan mengelompokkan menjadi yang perlu dibalas, permintaan kepada Anda, yang sedang Anda tunggu, penjadwalan, pembaruan perusahaan dan proyek, serta FYI. Tidak ada yang dikirim atau diubah.",
+      "periodLabel": "Periode",
+      "preset": {
+        "lastWorkday": "Sejak hari kerja terakhir",
+        "1d": "24 jam terakhir",
+        "3d": "3 hari terakhir",
+        "7d": "7 hari terakhir",
+        "14d": "14 hari terakhir",
+        "custom": "Rentang khusus"
+      },
+      "lastWorkdayHint": "Dimulai dari awal hari biasa terakhir sebelum hari ini — pada hari Senin mencakup hari Jumat dan akhir pekan.",
+      "from": "Dari",
+      "to": "Sampai",
+      "customInvalid": "Pilih rentang berurutan maksimal {days} hari.",
+      "sourcesLabel": "Sumber",
+      "sourceNoConsent": "Izin tidak diberikan untuk sumber ini.",
+      "sourceHint": {
+        "mail": "Amplop dan pratinjau inbox; Sent Items Anda menentukan mana yang sudah dibalas.",
+        "chat": "Obrolan Teams terbaru, dengan @mention yang belum Anda balas.",
+        "channel": "Posting di channel yang Anda pilih di bawah.",
+        "calendar": "Undangan yang menunggu balasan Anda dan rapat Anda yang belum dijawab oleh peserta lain."
+      },
+      "channelsLabel": "Channel ({count} dari {max})",
+      "removeChannel": "Hapus {name}",
+      "channelsSlow": "Setiap channel menambah pembacaan; semakin banyak channel membuat ringkasan lebih lama.",
+      "channelsMax": "Maksimal {max} channel telah tercapai.",
+      "channelsNeeded": "Pilih minimal satu channel atau tambahkan sumber lain.",
+      "teamLabel": "Tim",
+      "loadingTeams": "Memuat tim…",
+      "pickTeam": "Pilih tim untuk melihat daftar channelnya",
+      "loadingChannels": "Memuat channel…",
+      "noChannels": "Tidak ditemukan channel di tim ini.",
+      "privacyNote": "Hanya subjek, pengirim, dan pratinjau singkat yang dibaca; isi pesan dan lampiran tetap di Microsoft 365. Semua item adalah ringkasan data Anda sendiri.",
+      "cancel": "Batal",
+      "run": "Jalankan ringkasan",
+      "starting": "Memulai…",
+      "startFailed": "Ringkasan tidak dapat dimulai.",
+      "userMessage": "Ringkasan harian — {period}; sumber: {sources}",
+      "working": "Memindai komunikasi Microsoft 365 Anda…",
+      "failed": "Ringkasan gagal.",
+      "failedPrefix": "Ringkasan harian gagal:",
+      "expired": "Ringkasan ini telah kedaluwarsa. Jalankan kembali untuk mendapatkan ringkasan baru.",
+      "runAgain": "Jalankan lagi",
+      "changePeriod": "Ubah periode",
+      "period": {
+        "lastWorkday": "sejak hari kerja terakhir",
+        "lastDays": "{count, plural, one {hari terakhir} other {# hari terakhir}}"
+      },
+      "source": {
+        "mail": "Email",
+        "chat": "Obrolan Teams",
+        "channel": "Channel Teams",
+        "calendar": "Kalender"
+      },
+      "sourceStatus": {
+        "ok": "lengkap",
+        "partial": "sebagian",
+        "skipped": "diabaikan",
+        "unavailable": "tidak ada izin",
+        "error": "gagal"
+      },
+      "degraded": "Model analisis tidak tersedia, sehingga kategori hanya berasal dari aturan.",
+      "withheld": "{count, plural, one {# item ditahan} other {# item ditahan}} oleh penyaringan keamanan.",
+      "empty": "Tidak ada laporan untuk periode dan sumber ini.",
+      "actionItems": "Item tindakan",
+      "createTasks": "{count, plural, =0 {Tambahkan ke To Do} one {Tambahkan # tugas ke To Do} other {Tambahkan # tugas ke To Do}}",
+      "taskCreated": "ditambahkan ke To Do",
+      "tasksCreated": "{count, plural, one {# tugas} other {# tugas}} ditambahkan ke daftar \"{list}\".",
+      "tasksFailed": "Tidak dapat membuat tugas-tugas.",
+      "category": {
+        "needsReply": "Butuh balasan saya",
+        "askedOfMe": "Diminta dari saya",
+        "waitingOnOthers": "Menunggu orang lain",
+        "scheduling": "Penjadwalan",
+        "companyUpdates": "Pembaruan perusahaan dan proyek",
+        "fyi": "Untuk informasi",
+        "bulk": "Otomatis dan massal"
+      },
+      "companyUpdatesHint": "penting, jarang mendesak",
+      "markDone": "Tandai {title} telah ditangani",
+      "badge": {
+        "unanswered": "belum dijawab",
+        "mentioned": "menyebut Anda",
+        "important": "kepentingan tinggi"
+      },
+      "askAbout": "Tanyakan tentang ini",
+      "askPrompt": "Tentang item {source} \"{title}\" dari {from} ({when}) dalam ringkasan di atas: apa yang diminta, dan bagaimana respons yang baik?",
+      "open": {
+        "mail": "Buka di Outlook",
+        "chat": "Buka di Teams",
+        "channel": "Buka di Teams",
+        "calendar": "Buka di Outlook"
+      },
+      "footnote": "Kategori berasal dari sinyal Anda sendiri (belum dijawab, disebut, broadcast) dan klasifikasi AI; verifikasi sebelum bertindak. Tidak ada yang dikirim.",
+      "age": {
+        "now": "baru saja",
+        "hours": "{count} jam lalu",
+        "days": "{count} hari lalu"
+      },
+      "waitForReply": "Tunggu hingga balasan saat ini selesai sebelum memulai ringkasan."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "Pengetahuan",
       "prompt": "Persona",
-      "m365": "Pengetahuan (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Pengetahuan",
-      "foundry": "Agen Foundry",
+      "foundry": "Agen kustom",
       "connector": "Konektor"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "berjalan di model sendiri"
     },
     "loadError": "Agen Anda tidak dapat dimuat saat ini. Biasanya ini hanya sementara.",
-    "discoveryLoading": "Mencari agen Foundry…",
-    "discoveryError": "Agen Foundry tidak dapat dimuat.",
+    "discoveryLoading": "Mencari agen lainnya…",
+    "discoveryError": "Beberapa agen tidak dapat dimuat.",
     "retry": "Coba lagi"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "Lebih lama dari {months} bulan masa retensi folder ini; tidak lagi ditampilkan.",
       "unknown": "Masalah dilaporkan: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Keterampilan",
+    "description": "Blok instruksi yang dapat digunakan kembali, diterapkan oleh asisten saat percakapan membutuhkannya. Kompatibel dengan format Agent Skills SKILL.md yang digunakan oleh Claude dan ChatGPT.",
+    "loading": "Memuat keterampilan…",
+    "loadError": "Gagal memuat keterampilan.",
+    "retry": "Coba lagi",
+    "unavailableBanner": "Penyimpanan keterampilan saat ini tidak dapat diakses — bawaan yang ditampilkan; keterampilan tersimpan dan perubahan tidak tersedia sampai pulih.",
+    "conflictError": "Keterampilan ini diubah oleh admin lain. Daftar telah dimuat ulang — lakukan ulang perubahan Anda.",
+    "alwaysWarning": "{count} keterampilan disetel ke Selalu. Semua keterampilan tersebut akan ditambahkan ke setiap percakapan — gunakan Otomatis untuk keterampilan dengan topik spesifik.",
+    "newSkill": "Keterampilan baru",
+    "importSkill": "Impor SKILL.md",
+    "importTitle": "Tempel file SKILL.md",
+    "importPlaceholder": "---\nnama: my-skill\ndeskripsi: Apa yang dilakukan keterampilan ini dan kapan digunakan.\n---\n\nInstruksi…",
+    "importHint": "Keterampilan yang telah diurai akan terbuka di editor untuk ditinjau — tidak akan disimpan sampai Anda menyimpannya.",
+    "importParse": "Parsing dan tinjau",
+    "invalidId": "ID keterampilan menggunakan huruf kecil, angka, dan tanda hubung tunggal.",
+    "saveSuccess": "Keterampilan berhasil disimpan.",
+    "saveError": "Gagal menyimpan keterampilan.",
+    "deleteConfirm": "Hapus keterampilan ini? Percakapan akan segera berhenti menerimanya.",
+    "restoreConfirm": "Hapus kustomisasi dan pulihkan pengaturan default keterampilan bawaan ini?",
+    "deleteSuccess": "Keterampilan berhasil dihapus.",
+    "restoreSuccess": "Pengaturan bawaan dipulihkan.",
+    "deleteError": "Gagal menghapus keterampilan.",
+    "empty": "Belum ada keterampilan. Buat baru, atau impor SKILL.md.",
+    "builtinChip": "Bawaan",
+    "customizedChip": "Kustom",
+    "exportSkill": "Ekspor sebagai SKILL.md",
+    "edit": "Edit",
+    "delete": "Hapus",
+    "restoreDefault": "Pulihkan default",
+    "createTitle": "Keterampilan baru",
+    "editTitle": "Edit {name}",
+    "idLabel": "Id",
+    "idHint": "Huruf kecil, angka, dan tanda hubung. Akan menjadi nama SKILL.md untuk keterampilan dan tidak bisa diubah setelah dibuat.",
+    "nameLabel": "Nama tampilan",
+    "descriptionLabel": "Deskripsi",
+    "descriptionHint": "Apa yang dilakukan keterampilan DAN kapan digunakan — ini yang menentukan pemilihan keterampilan, jadi cantumkan topik dan frasa spesifik yang harus dijawab.",
+    "activationLabel": "Aktivasi",
+    "activation": {
+      "auto": "Otomatis",
+      "always": "Selalu",
+      "off": "Nonaktif",
+      "manual": "Atas permintaan"
+    },
+    "activationHint": {
+      "auto": "Dipilih secara otomatis ketika tugas saat ini sesuai dengan deskripsi. Pengguna juga dapat memintanya sekali atau menyematkannya ke dalam percakapan.",
+      "always": "Ditambahkan ke setiap percakapan untuk semua yang dapat melihat keterampilan. Gunakan dengan hati-hati — ini ruang prompt permanen.",
+      "off": "Nonaktif: tidak pernah diterapkan dan tidak ditawarkan ke pengguna, tetapi tetap disimpan di sini untuk pengeditan.",
+      "manual": "Diterapkan hanya saat pengguna meminta atau menyematkannya. Tidak pernah dipilih otomatis dan tidak ditawarkan ke model sebagai keahlian yang dapat dimuat."
+    },
+    "instructionsLabel": "Instruksi",
+    "instructionsHint": "Markdown, hingga 16 KB. Disisipkan apa adanya saat skill aktif.",
+    "saving": "Menyimpan…",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "documents": {
+      "title": "Dokumen",
+      "hint": "Referensi disimpan dengan skill ini. Dokumen kecil dimuat langsung; dokumen besar diindeks untuk pencarian dengan kutipan. Maksimal 20 sumber daya, 10 MB per dokumen, dan 20 MB total. Aset hanya disimpan untuk diunduh.",
+      "saveFirst": "Simpan penyesuaian skill bawaan ini sebelum menambahkan dokumen.",
+      "upload": "Tambahkan dokumen referensi",
+      "remove": "Hapus",
+      "stop": "Hentikan pengindeksan",
+      "resume": "Indeks atau lanjutkan dokumen",
+      "empty": "Belum ada dokumen yang terlampir.",
+      "requestFailed": "Permintaan dokumen gagal. Muat ulang dan coba lagi.",
+      "importZip": "Impor skill ZIP",
+      "zipTooLarge": "Skill ZIP harus berukuran 20 MB atau kurang.",
+      "importCount": "Sumber daya yang akan dilampirkan setelah menyimpan: {count}",
+      "skippedScripts": "Skrip yang dapat dieksekusi dilewati",
+      "status": {
+        "pending": "Menunggu untuk diindeks",
+        "processing": "Mengindeks",
+        "inline": "Siap (dimuat langsung)",
+        "indexed": "Siap (dapat dicari)",
+        "failed": "Pengindeksan gagal",
+        "asset": "Aset dapat diunduh"
+      },
+      "confirmRemove": "Hapus {filename} dari keterampilan ini? File asli yang tersimpan akan dihapus dan tidak akan tersedia lagi sebagai sumber kutipan.",
+      "reindexRequired": "Dokumen-dokumen ini perlu diindeks ulang sesuai konfigurasi Pencarian dan embedding regional saat ini. Dokumen-dokumen tersebut tidak akan dapat dicari sampai proses pengindeksan selesai."
+    },
+    "applyToAgents": "Tersedia untuk agen",
+    "applyToAgentsHint": "Nonaktif secara default. Jika diaktifkan, agen dapat memuat keterampilan ini melalui alat baca saja, bukan mengganti instruksi persona mereka. Setiap panggilan keterampilan memiliki batas langkah tersendiri. Agen Foundry harus sudah memiliki fungsi load_skill dan search_skill_documents yang terdaftar dalam definisinya.",
+    "requireConsent": "Tanya sebelum menerapkan",
+    "requireConsentHint": "Ketika model ingin menerapkan keahlian ini sendiri, pengguna akan diminta persetujuan terlebih dahulu. Penggunaan yang diminta atau disematkan tidak memerlukan konfirmasi.",
+    "consentChip": "Minta izin dahulu",
+    "sourceChip": "Dari sumber",
+    "sourceChipHint": "Dikirim dari sumber keahlian berlangganan; instruksi diperbarui saat sinkronisasi. Pengaturan aktivasi, agen, dan persetujuan merupakan milik Anda.",
+    "sources": {
+      "title": "Sumber keahlian",
+      "description": "Berlangganan ke katalog keahlian eksternal (index.json berisi file SKILL.md). Keahlian dalam katalog akan menjadi keahlian organisasi dan diperbarui setiap enam jam. Hanya SKILL.md yang diimpor; dokumen referensi tidak.",
+      "urlLabel": "URL Katalog",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Harus https di host publik. File keahlian hanya diambil dari lokasi yang sama.",
+      "labelLabel": "Label (opsional)",
+      "add": "Berlangganan",
+      "adding": "Berlangganan…",
+      "added": "{count, plural, =0 {Sumber ditambahkan; belum ada keahlian yang diimpor} one {Sumber ditambahkan; # keahlian diimpor} other {Sumber ditambahkan; # keahlian diimpor}}",
+      "addedWithError": "Sumber ditambahkan, namun sinkronisasi pertama gagal. Periksa kesalahan pada sumber tersebut.",
+      "addError": "Tidak dapat menambahkan sumber keahlian",
+      "sync": "Sinkronkan sekarang",
+      "syncing": "Menyinkronkan…",
+      "synced": "Sumber telah disinkronkan.",
+      "syncError": "Tidak dapat menyinkronkan sumber keahlian",
+      "remove": "Hapus sumber",
+      "removeConfirm": "Hapus sumber ini? Keahlian yang telah diberikan tetap sebagai keahlian organisasi biasa dan tidak akan diperbarui lagi.",
+      "removed": "Sumber dihapus.",
+      "removeError": "Tidak dapat menghapus sumber keahlian",
+      "loading": "Memuat sumber…",
+      "loadError": "Sumber keahlian tidak dapat dimuat.",
+      "empty": "Belum ada sumber keahlian.",
+      "never": "Belum pernah disinkronkan",
+      "statusOk": "Tersinkron",
+      "statusError": "Sinkronisasi gagal",
+      "statusPartial": "{count, plural, one {# entri dilewati} other {# entri dilewati}}",
+      "lastSync": "Sinkronisasi terakhir {time}",
+      "entryCount": "{count, plural, one {# entri} other {# entri}}",
+      "entryStatus": {
+        "synced": "tersinkron",
+        "skipped": "dilewati",
+        "conflict": "konflik — tidak ditimpa",
+        "invalid": "tidak valid"
+      }
+    },
+    "requireConsentDisabledHint": "Hanya keterampilan otomatis yang dapat meminta persetujuan terlebih dahulu: keterampilan yang diminta, dipin, dan selalu aktif akan diterapkan tanpa pemberitahuan, dan keterampilan berdasarkan permintaan tidak pernah dipilih oleh model."
+  },
+  "personalSkills": {
+    "title": "Keterampilan pribadi",
+    "description": "Simpan instruksi yang dapat digunakan kembali untuk percakapan Anda sendiri. Keterampilan disimpan di browser ini dan hanya dikirim ke model saat Anda mengobrol. Keterampilan yang relevan dapat dipilih secara otomatis, digunakan sekali, atau dipasangkan. Keterampilan ini tidak dapat mengubah kebijakan organisasi atau memberikan akses ke alat. Penggunaan keterampilan memerlukan keterampilan diaktifkan untuk deployment ini; percakapan agen tidak menggunakan keterampilan pribadi.",
+    "importFile": "Impor SKILL.md atau ZIP",
+    "review": "Tinjau instruksi lengkap sebelum menyimpan. Instruksi yang diimpor adalah preferensi pengguna, bukan kebijakan organisasi yang terpercaya.",
+    "skipped": "Skrip yang dapat dijalankan dilewati",
+    "importTooLarge": "Impor harus berukuran 20 MB atau lebih kecil.",
+    "invalid": "Keterampilan tidak dapat diimpor.",
+    "duplicate": "Id keterampilan pribadi tersebut sudah ada. Edit keterampilan yang sudah ada atau pilih id lain.",
+    "countLimit": "Anda dapat menyimpan maksimal 20 keterampilan pribadi.",
+    "requestLimit": "Keterampilan pribadi yang diaktifkan melebihi batas permintaan 160 KB. Nonaktifkan beberapa keterampilan atau ringkas instruksinya.",
+    "saved": "Keterampilan pribadi disimpan di browser ini.",
+    "instructionsHint": "Instruksi hingga 16 KB, termasuk referensi teks yang diimpor. File biner dan pengindeksan dokumen permanen hanya tersedia untuk keterampilan organisasi. Ekspor menggunakan nama standar SKILL.md tanpa awalan user:.",
+    "enabled": "Diaktifkan untuk percakapan saya",
+    "empty": "Buat keterampilan untuk tugas berulang, atau impor SKILL.md untuk ditinjau dan disimpan di sini."
   }
 }

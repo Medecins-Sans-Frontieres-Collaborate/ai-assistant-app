@@ -95,4 +95,10 @@ export interface ScopedLimitsView {
   policyUnavailable: boolean;
   delegations: ScopedDelegationView[];
   overrides: ScopedOverrideView[];
+  /**
+   * Display names for the group ids in the caller's visible delegations and
+   * overrides (policy `groupLabels`, pruned to what they can see) — seeds
+   * the client name cache so cards read "Health team" instead of a GUID.
+   */
+  groupLabels?: Record<string, string>;
 }

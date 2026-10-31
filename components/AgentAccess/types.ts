@@ -578,3 +578,47 @@ export interface AdminFormTemplateResponse {
   etag: string;
   canonicalKey: string;
 }
+
+// ---------------------------------------------------------------------------
+// Which rule sources the merged agents list shows
+// ---------------------------------------------------------------------------
+
+/** Mirrors `CATALOG_OAUTH_SOURCE`, `PUBLISH_SOURCE`, `SKILL_SOURCE` (server types). */
+export const CLIENT_CATALOG_OAUTH_SOURCE = 'catalog-oauth';
+export const CLIENT_PUBLISH_SOURCE = 'publish';
+export const CLIENT_SKILL_SOURCE = 'skill';
+
+/**
+ * Agent kinds with a dedicated section under the merged list (knowledge
+ * agents, Microsoft 365 agents). Discovery emits them under the SAME
+ * canonical key the section edits, so listing them above as well showed one
+ * agent twice with two differently labelled rule buttons.
+ */
+export const CLIENT_SECTIONED_AGENT_SOURCES: ReadonlySet<string> = new Set([
+  CLIENT_ORG_AGENT_SOURCE,
+  CLIENT_M365_AGENT_SOURCE,
+]);
+
+/**
+ * Rule sources that are not agents at all — each has its own admin area. A
+ * stored rule for one must never surface as a "not discoverable" agent row.
+ */
+export const CLIENT_NON_AGENT_RULE_SOURCES: ReadonlySet<string> = new Set([
+  CLIENT_MCP_CONNECTOR_SOURCE,
+  CLIENT_GUIDE_SOURCE,
+  CLIENT_CATALOG_OAUTH_SOURCE,
+  CLIENT_MAP_DATASET_SOURCE,
+  CLIENT_FORM_TEMPLATE_SOURCE,
+  CLIENT_CHANNEL_PROFILE_SOURCE,
+  CLIENT_CHANNEL_SET_SOURCE,
+  CLIENT_PUBLISH_SOURCE,
+  CLIENT_SKILL_SOURCE,
+]);
+
+/** Foundry sources (ARM paths) and prompt agents: what the merged list is for. */
+export function isAgentListSource(source: string): boolean {
+  return (
+    !CLIENT_SECTIONED_AGENT_SOURCES.has(source) &&
+    !CLIENT_NON_AGENT_RULE_SOURCES.has(source)
+  );
+}

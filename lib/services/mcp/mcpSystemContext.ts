@@ -28,9 +28,15 @@ const TRUNCATION_NOTE = '\n[connector notes truncated]';
  * it never adds latency; per-server live data (instructions) rides the tool
  * loop instead.
  */
+/** `SKILL_SERVER_ID` in lib/services/skills/skillTools.ts (literal: no import cycle). */
+const SKILL_SERVER_ID = 'builtin-skills';
+
 export function buildMcpSystemContext(servers: ResolvedMcpServer[]): string {
-  if (servers.length === 0) return '';
-  const names = servers
+  // The read-only skill server is an app feature with its own instructions,
+  // not a user-connected connector: it must not trigger the MCP addendum.
+  const connectors = servers.filter((server) => server.id !== SKILL_SERVER_ID);
+  if (connectors.length === 0) return '';
+  const names = connectors
     .map((server) => sanitizeLabel(server.label))
     .filter(Boolean)
     .join(', ');

@@ -78,6 +78,123 @@ const validBody = {
 };
 
 const DEL_OCP = 'del-0000000000aa';
+
+describe('PUT /api/limits/policy — model approval rules', () => {
+  const claudeRule = {
+    series: 'claude',
+    defaultAccess: false,
+    groups: [{ target: '11111111-2222-3333-4444-555555555555', requests: 40 }],
+    domains: [],
+    allow: [{ target: 'Alice@msf.org', requests: null }],
+    deny: ['mallory@msf.org'],
+  };
+
+  beforeEach(() => {
+    mockAuth.mockResolvedValue(globalAdminSession);
+    vi.mocked(readPolicy).mockResolvedValue(null);
+    vi.mocked(loadDelegationsDocument).mockResolvedValue({
+      document: { version: 1, delegations: [] },
+      etag: null,
+    } as never);
+    vi.mocked(writePolicy).mockResolvedValue('"etag-1"');
+  });
+
+  it('stores the rules canonicalized and echoes them', async () => {
+    const response = await PUT(
+      putRequest({ ...validBody, modelAccess: [claudeRule] }),
+    );
+    expect(response.status).toBe(200);
+    const written = vi.mocked(writePolicy).mock.calls[0][1];
+    expect(written.modelAccess).toEqual([
+      { ...claudeRule, allow: [{ target: 'alice@msf.org', requests: null }] },
+    ]);
+  });
+
+  it('keeps the stored rules when a client omits the key', async () => {
+    const stored = LimitsPolicySchema.parse({
+      version: 1,
+      defaults: [],
+      overrides: [],
+      modelAccess: [claudeRule],
+      updatedBy: 'global@example.com',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    });
+    vi.mocked(readPolicy).mockResolvedValue({ policy: stored, etag: '"e1"' });
+    const response = await PUT(putRequest(validBody, { 'if-match': '"e1"' }));
+    expect(response.status).toBe(200);
+    expect(vi.mocked(writePolicy).mock.calls[0][1].modelAccess).toHaveLength(1);
+  });
+
+  it('refuses a global default that collides with a STORED rule when the client omits modelAccess', async () => {
+    const stored = LimitsPolicySchema.parse({
+      version: 1,
+      defaults: [],
+      overrides: [],
+      modelAccess: [
+        {
+          series: 'claude',
+          defaultAccess: null,
+          groups: [],
+          domains: [],
+          allow: [],
+          deny: [],
+        },
+      ],
+      updatedBy: 'global@example.com',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    });
+    vi.mocked(readPolicy).mockResolvedValue({ policy: stored, etag: '"e1"' });
+    const response = await PUT(
+      putRequest(
+        {
+          ...validBody,
+          defaults: [
+            { limitKey: 'model.allowed', series: 'claude', value: true },
+          ],
+        },
+        { 'if-match': '"e1"' },
+      ),
+    );
+    expect(response.status).toBe(400);
+  });
+
+  it('refuses two rules for one dimension', async () => {
+    const response = await PUT(
+      putRequest({
+        ...validBody,
+        modelAccess: [claudeRule, { ...claudeRule, series: 'Claude' }],
+      }),
+    );
+    expect(response.status).toBe(400);
+    const body = await parseJsonResponse(response);
+    expect(body.error).toMatch(/one model or family/);
+  });
+
+  it('refuses a node default that is also a global default for the same cell', async () => {
+    const response = await PUT(
+      putRequest({
+        ...validBody,
+        defaults: [
+          { limitKey: 'model.allowed', series: 'claude', value: true },
+        ],
+        modelAccess: [claudeRule],
+      }),
+    );
+    expect(response.status).toBe(400);
+    const body = await parseJsonResponse(response);
+    expect(body.error).toMatch(/one place/);
+  });
+
+  it('refuses a person on both the allow and the block list', async () => {
+    const response = await PUT(
+      putRequest({
+        ...validBody,
+        modelAccess: [{ ...claudeRule, deny: ['alice@msf.org'] }],
+      }),
+    );
+    expect(response.status).toBe(400);
+  });
+});
 const STAMP = {
   createdBy: 'first-author@example.com',
   createdAt: '2025-01-01T00:00:00.000Z',

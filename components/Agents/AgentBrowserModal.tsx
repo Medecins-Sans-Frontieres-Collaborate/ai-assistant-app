@@ -1,15 +1,19 @@
 'use client';
 
 import {
+  IconBook2,
+  IconBox,
   IconBrandWindows,
+  IconCheck,
   IconClock,
+  IconCpu,
   IconLock,
   IconPlugConnected,
-  IconRobot,
   IconSearch,
+  IconUserCircle,
   IconX,
 } from '@tabler/icons-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -29,6 +33,7 @@ import {
 
 import {
   AvailableAgent,
+  AvailableAgentKind,
   agentModelSemantics,
   attachAgentUpdates,
 } from '@/lib/utils/app/agentAttachment';
@@ -43,6 +48,7 @@ import {
   pinnedModelName,
   useModelAvailabilityMap,
 } from '@/components/Chat/ModelSelect/modelLimits';
+import { Tooltip } from '@/components/UI/Tooltip';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
@@ -61,8 +67,15 @@ interface BrowserItem {
   name: string;
   description?: string;
   kindLabel: string;
+  /**
+   * Model-semantics note, set only when attaching changes which model
+   * answers (pinned/own model). The default "uses your model" case is
+   * covered once by the modal subtitle instead of repeating on each row.
+   * Rendered as an icon tooltip at rest and as plain text on the active
+   * row, so pointer, keyboard, and touch users all have a path to it.
+   */
   semanticsLabel?: string;
-  icon: 'agent' | 'connector' | 'm365';
+  icon: 'knowledge' | 'persona' | 'custom' | 'connector' | 'm365';
   agent?: AvailableAgent;
   connectorId?: string;
   needsReauth?: boolean;
@@ -77,6 +90,18 @@ interface BrowserItem {
   /** True for a permanent block (never resets) — picks the lock icon over the clock. */
   modelUnavailableBlocked?: boolean;
 }
+
+/** Key-cap chip in the footer legend (0.625rem = the micro ramp step). */
+const KBD_CLASS =
+  'rounded border border-gray-300 bg-gray-50 px-1 py-0.5 font-sans text-[0.625rem] font-medium text-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300';
+
+/** Row icon for an agent kind: shape carries the kind, never color alone. */
+const agentIconKind = (kind: AvailableAgentKind): BrowserItem['icon'] => {
+  if (kind === 'prompt') return 'persona';
+  if (kind === 'foundry') return 'custom';
+  if (kind === 'm365') return 'm365';
+  return 'knowledge';
+};
 
 /**
  * The agent & connector browser: one searchable, keyboard-navigable list
@@ -98,6 +123,7 @@ export function AgentBrowserModal() {
   const tLimits = useTranslations('limitsUx.picker');
   const open = useUIStore((s) => s.agentBrowserOpen);
   const setOpen = useUIStore((s) => s.setAgentBrowserOpen);
+  const setIsSettingsOpen = useUIStore((s) => s.setIsSettingsOpen);
   const {
     agents,
     isLoading,
@@ -141,6 +167,8 @@ export function AgentBrowserModal() {
   const [now] = useState(() => Date.now());
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const attachedAgent = findAttachedAgent(agents, selectedConversation);
   const chatDisabledIds = useMemo(
@@ -179,13 +207,15 @@ export function AgentBrowserModal() {
     };
     const items: BrowserItem[] = agents.map((agent) => {
       const { note, blocked } = modelNoteFor(agent);
+      const semantics = agentModelSemantics(agent.kind);
       return {
         id: agent.id,
         name: agent.name,
         description: agent.description,
         kindLabel: t(`kind.${agent.kind}`),
-        semanticsLabel: t(`semantics.${agentModelSemantics(agent.kind)}`),
-        icon: 'agent' as const,
+        semanticsLabel:
+          semantics === 'your-model' ? undefined : t(`semantics.${semantics}`),
+        icon: agentIconKind(agent.kind),
         agent,
         activeInChat: !!attachedAgent && attachedAgent.id === agent.id,
         modelUnavailableNote: note,
@@ -261,6 +291,16 @@ export function AgentBrowserModal() {
       .getElementById(`agent-browser-item-${highlightIndex}`)
       ?.scrollIntoView?.({ block: 'nearest' });
   }, [highlightIndex]);
+
+  // Focus management: move focus into the search field on open (manually,
+  // not via autoFocus, so the previously focused trigger can be captured
+  // first) and hand it back when the dialog closes.
+  useEffect(() => {
+    if (!open) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    inputRef.current?.focus();
+    return () => previouslyFocused?.focus?.();
+  }, [open]);
 
   if (!open) return null;
 
@@ -363,9 +403,21 @@ export function AgentBrowserModal() {
     });
   };
 
+  /**
+   * A connector that lost its OAuth grant can only be fixed in Settings;
+   * activating its row goes there instead of silently doing nothing.
+   */
+  const openSettingsForReauth = () => {
+    close();
+    setIsSettingsOpen(true);
+  };
+
   /** Enter / row-click behavior: always "add to this chat" first. */
   const primaryAction = (item: BrowserItem) => {
-    if (item.needsReauth) return;
+    if (item.needsReauth) {
+      openSettingsForReauth();
+      return;
+    }
     if (item.agent) {
       if (canAttach) {
         if (!item.activeInChat) attachAgentToCurrent(item.agent);
@@ -387,7 +439,12 @@ export function AgentBrowserModal() {
     } else if (e.key === 'Enter') {
       e.preventDefault();
       const item = filtered[highlightIndex];
-      if (item) primaryAction(item);
+      if (!item) return;
+      // Shift+Enter is the keyboard path to the secondary action ("New
+      // chat" while a conversation is selected) — the per-row buttons are
+      // pointer affordances, announced via the footer legend instead.
+      if (e.shiftKey && item.agent && canAttach) startNewChat(item.agent);
+      else primaryAction(item);
     } else if (e.key === 'Escape') {
       e.preventDefault();
       // Don't bubble to the dialog's catch-all Escape handler — that would
@@ -399,35 +456,74 @@ export function AgentBrowserModal() {
     }
   };
 
-  const itemIcon = (item: BrowserItem) => {
-    if (item.icon === 'agent') {
-      return (
-        <IconRobot
-          size={18}
-          className="mt-0.5 flex-shrink-0 text-violet-500"
-          aria-hidden="true"
-        />
-      );
-    }
-    if (item.icon === 'm365') {
-      return (
-        <IconBrandWindows
-          size={18}
-          className="mt-0.5 flex-shrink-0 text-blue-500"
-          aria-hidden="true"
-        />
-      );
-    }
-    return (
-      <IconPlugConnected
-        size={18}
-        className={`mt-0.5 flex-shrink-0 ${
-          item.needsReauth ? 'text-amber-500' : 'text-cyan-600'
-        }`}
-        aria-hidden="true"
-      />
+  // Keep Tab cycling inside the dialog (close button + search field; the
+  // row buttons are pointer affordances at tabindex -1, reached by keyboard
+  // through Enter / Shift+Enter on the combobox instead).
+  const trapFocus = (e: React.KeyboardEvent) => {
+    if (e.key !== 'Tab' || !panelRef.current) return;
+    const focusables = Array.from(
+      panelRef.current.querySelectorAll<HTMLElement>(
+        'button:not([disabled]):not([tabindex="-1"]), input',
+      ),
     );
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
   };
+
+  // Icon shape carries the kind; color stays neutral so the single-accent
+  // palette holds (amber marks the one state that needs attention).
+  const itemIcon = (item: BrowserItem) => {
+    const neutral = 'mt-0.5 flex-shrink-0 text-gray-500 dark:text-gray-400';
+    const props = { size: 18, 'aria-hidden': true } as const;
+    switch (item.icon) {
+      case 'persona':
+        return <IconUserCircle {...props} className={neutral} />;
+      case 'custom':
+        return <IconBox {...props} className={neutral} />;
+      case 'm365':
+        return <IconBrandWindows {...props} className={neutral} />;
+      case 'connector':
+        return (
+          <IconPlugConnected
+            {...props}
+            className={
+              item.needsReauth
+                ? 'mt-0.5 flex-shrink-0 text-amber-600 dark:text-amber-400'
+                : neutral
+            }
+          />
+        );
+      default:
+        return <IconBook2 {...props} className={neutral} />;
+    }
+  };
+
+  // The footer legend tracks the highlighted row so "Enter" always names
+  // the exact thing it will do.
+  const highlighted = filtered[highlightIndex];
+  const enterHint = !highlighted
+    ? null
+    : highlighted.needsReauth
+      ? tPin('needsReconnect')
+      : highlighted.agent
+        ? canAttach
+          ? highlighted.activeInChat
+            ? t('attached')
+            : t('addToChat')
+          : t('newChat')
+        : !canAttach
+          ? null
+          : highlighted.activeInChat
+            ? t('removeFromChat')
+            : t('addToChat');
 
   return (
     <div
@@ -435,12 +531,14 @@ export function AgentBrowserModal() {
       onClick={close}
       onKeyDown={(e) => {
         if (e.key === 'Escape') close();
+        else trapFocus(e);
       }}
       role="dialog"
       aria-modal="true"
       aria-label={t('browserTitle')}
     >
       <div
+        ref={panelRef}
         className="relative flex max-h-[80vh] w-full max-w-xl flex-col overflow-hidden rounded-xl bg-white shadow-xl dark:bg-surface-dark animate-modal-in"
         onClick={(e) => e.stopPropagation()}
       >
@@ -451,22 +549,23 @@ export function AgentBrowserModal() {
             </h3>
             <button
               onClick={close}
-              className="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
+              className="-m-2.5 rounded-lg p-3 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
               aria-label={t('close')}
             >
-              <IconX size={20} />
+              <IconX size={20} aria-hidden="true" />
             </button>
           </div>
-          <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-0.5 text-xs text-gray-600 dark:text-gray-300">
             {t('browserSubtitle')}
           </p>
           <div className="relative mt-3">
             <IconSearch
               size={16}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400"
               aria-hidden="true"
             />
             <input
+              ref={inputRef}
               type="text"
               value={query}
               onChange={(e) => {
@@ -475,16 +574,19 @@ export function AgentBrowserModal() {
               }}
               onKeyDown={handleInputKeyDown}
               placeholder={t('searchPlaceholder')}
-              autoFocus
               role="combobox"
-              aria-expanded="true"
-              aria-controls="agent-browser-list"
+              aria-expanded={filtered.length > 0}
+              aria-controls={
+                filtered.length > 0 ? 'agent-browser-list' : undefined
+              }
+              aria-autocomplete="list"
+              aria-describedby="agent-browser-hints"
               aria-activedescendant={
                 filtered.length > 0
                   ? `agent-browser-item-${highlightIndex}`
                   : undefined
               }
-              className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+              className="w-full rounded-lg border border-gray-300 bg-white py-2 pe-3 ps-9 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
             />
           </div>
         </div>
@@ -525,37 +627,70 @@ export function AgentBrowserModal() {
                     onClick={() => primaryAction(item)}
                     className={`group flex cursor-pointer items-start gap-3 rounded-lg px-3 py-2 ${
                       isActive
-                        ? 'bg-gray-100 dark:bg-gray-800'
+                        ? 'bg-gray-100 ring-1 ring-inset ring-gray-300 dark:bg-gray-800 dark:ring-gray-600'
                         : 'hover:bg-gray-50 dark:hover:bg-gray-800/60'
                     }`}
                   >
                     {itemIcon(item)}
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-baseline gap-2">
-                        <span className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
+                      <div className="flex items-center gap-2">
+                        {/* The name never loses the space fight: it owns the
+                            flexible track and falls back to a title tooltip
+                            when it still has to truncate. */}
+                        <span
+                          className="min-w-0 truncate text-sm font-medium text-gray-900 dark:text-gray-100"
+                          title={item.name}
+                        >
                           {item.name}
                         </span>
-                        <span className="flex-shrink-0 text-[11px] text-gray-500 dark:text-gray-400">
+                        <span className="flex-shrink-0 text-xs text-gray-600 dark:text-gray-300">
                           {item.kindLabel}
-                          {item.semanticsLabel
-                            ? ` · ${item.semanticsLabel}`
-                            : ''}
                         </span>
+                        {item.semanticsLabel && (
+                          <span className="flex-shrink-0">
+                            <Tooltip content={item.semanticsLabel}>
+                              <IconCpu
+                                size={14}
+                                className="text-gray-500 dark:text-gray-400"
+                                aria-hidden="true"
+                              />
+                            </Tooltip>
+                          </span>
+                        )}
                       </div>
                       {item.description && (
-                        <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                        <p
+                          className={`text-xs text-gray-600 dark:text-gray-300 ${
+                            isActive ? '' : 'line-clamp-1'
+                          }`}
+                        >
                           {item.description}
                         </p>
                       )}
+                      {isActive && item.semanticsLabel && (
+                        <p className="mt-0.5 text-xs text-gray-600 dark:text-gray-300">
+                          {item.semanticsLabel}
+                        </p>
+                      )}
                       {item.needsReauth && (
-                        <p className="text-xs text-amber-600 dark:text-amber-400">
-                          {tPin('needsReconnect')}
+                        <p className="mt-0.5 text-xs text-amber-800 dark:text-amber-300">
+                          <button
+                            type="button"
+                            tabIndex={-1}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openSettingsForReauth();
+                            }}
+                            className="underline decoration-amber-800/40 underline-offset-2 hover:decoration-amber-800 dark:decoration-amber-300/40 dark:hover:decoration-amber-300"
+                          >
+                            {tPin('needsReconnect')}
+                          </button>
                         </p>
                       )}
                       {item.modelUnavailableNote && (
                         <p
                           data-testid="agent-model-unavailable"
-                          className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400"
+                          className="flex items-center gap-1 text-xs text-amber-800 dark:text-amber-300"
                         >
                           {item.modelUnavailableBlocked ? (
                             <IconLock size={12} aria-hidden="true" />
@@ -566,46 +701,60 @@ export function AgentBrowserModal() {
                         </p>
                       )}
                     </div>
+                    {/* Pointer affordances only — hidden from assistive tech
+                        (descendants of role="option" are presentational per
+                        ARIA) and untabbable; the keyboard paths are Enter and
+                        Shift+Enter on the combobox, named by the footer
+                        legend. Shown on the active row for mouse users and
+                        always on touch, where there is no hover to reveal
+                        them. */}
                     <div
-                      className="flex flex-shrink-0 items-center gap-1.5"
+                      className={`flex-shrink-0 items-center gap-2 ${
+                        isActive ? 'flex' : 'hidden [@media(hover:none)]:flex'
+                      }`}
+                      aria-hidden="true"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {item.agent ? (
                         <>
-                          {canAttach && (
-                            <button
-                              type="button"
-                              disabled={item.activeInChat}
-                              onClick={() => attachAgentToCurrent(item.agent!)}
-                              className="rounded-md bg-blue-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-default disabled:opacity-50"
-                            >
-                              {item.activeInChat
-                                ? t('attached')
-                                : t('addToChat')}
-                            </button>
-                          )}
+                          {canAttach &&
+                            (item.activeInChat ? (
+                              <span className="flex items-center gap-1 px-2 text-xs font-medium text-gray-600 dark:text-gray-300">
+                                <IconCheck size={14} aria-hidden="true" />
+                                {t('attached')}
+                              </span>
+                            ) : (
+                              <button
+                                type="button"
+                                tabIndex={-1}
+                                onClick={() =>
+                                  attachAgentToCurrent(item.agent!)
+                                }
+                                className="min-h-9 rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-blue-700 [@media(pointer:coarse)]:min-h-11"
+                              >
+                                {t('addToChat')}
+                              </button>
+                            ))}
                           <button
                             type="button"
+                            tabIndex={-1}
                             onClick={() => startNewChat(item.agent!)}
-                            className={`rounded-md px-2.5 py-1 text-xs transition-colors ${
-                              canAttach
-                                ? 'text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/30'
-                                : 'bg-blue-600 font-medium text-white hover:bg-blue-700'
-                            }`}
+                            className="min-h-9 rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 [@media(pointer:coarse)]:min-h-11"
                           >
                             {t('newChat')}
                           </button>
                         </>
                       ) : (
-                        canAttach && (
+                        canAttach &&
+                        !item.needsReauth && (
                           <button
                             type="button"
-                            disabled={item.needsReauth}
+                            tabIndex={-1}
                             onClick={() => toggleConnector(item)}
-                            className={`rounded-md px-2.5 py-1 text-xs transition-colors disabled:cursor-default disabled:opacity-50 ${
+                            className={`min-h-9 rounded-md px-3 py-1.5 text-xs font-medium transition-colors [@media(pointer:coarse)]:min-h-11 ${
                               item.activeInChat
-                                ? 'text-gray-500 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700'
-                                : 'bg-blue-600 font-medium text-white hover:bg-blue-700'
+                                ? 'text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700'
+                                : 'bg-blue-600 text-white hover:bg-blue-700'
                             }`}
                           >
                             {item.activeInChat
@@ -655,6 +804,32 @@ export function AgentBrowserModal() {
               </button>
             </p>
           )}
+        </div>
+
+        {/* Keyboard legend: names what Enter will do on the highlighted row
+            (and the Shift+Enter secondary), so the combobox-only keyboard
+            model stays discoverable. Referenced by the input's
+            aria-describedby; hidden on touch, where it doesn't apply. */}
+        <div
+          id="agent-browser-hints"
+          className="flex flex-shrink-0 flex-wrap items-center gap-x-4 gap-y-1 border-t border-gray-200 px-4 py-2 text-xs text-gray-600 dark:border-gray-700 dark:text-gray-300 [@media(pointer:coarse)]:hidden"
+        >
+          {enterHint && (
+            <span className="flex items-center gap-1.5">
+              <kbd className={KBD_CLASS}>↵</kbd>
+              {enterHint}
+            </span>
+          )}
+          {highlighted?.agent && canAttach && (
+            <span className="flex items-center gap-1.5">
+              <kbd className={KBD_CLASS}>⇧↵</kbd>
+              {t('newChat')}
+            </span>
+          )}
+          <span className="flex items-center gap-1.5">
+            <kbd className={KBD_CLASS}>Esc</kbd>
+            {t('close')}
+          </span>
         </div>
       </div>
     </div>

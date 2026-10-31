@@ -1,5 +1,9 @@
 import { isGlobalAdmin } from '@/lib/services/agentAccess/adminAuth';
 import {
+  collectGroupIds,
+  pruneGroupLabels,
+} from '@/lib/services/limits/groupLabels';
+import {
   PolicyReadResult,
   createLimitsBlobStorage,
   readPolicy,
@@ -116,6 +120,13 @@ export async function GET() {
     });
   }
 
+  // Labels only for the group ids the caller can see — another
+  // delegation's group names are not theirs to read.
+  const groupLabels = pruneGroupLabels(
+    policy.groupLabels,
+    collectGroupIds({ overrides, delegations: caller.visible }),
+  );
+
   const view: ScopedLimitsView = {
     isGlobalAdmin: caller.isGlobalAdmin,
     mode: policy.mode,
@@ -123,6 +134,7 @@ export async function GET() {
     policyUnavailable: false,
     delegations,
     overrides,
+    ...(groupLabels ? { groupLabels } : {}),
   };
   return successResponse(view);
 }

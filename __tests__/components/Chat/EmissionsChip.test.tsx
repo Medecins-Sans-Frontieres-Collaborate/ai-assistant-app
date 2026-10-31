@@ -79,11 +79,122 @@ const conversation = (
 describe('EmissionsChip', () => {
   beforeEach(() => {
     delete mockFlags.showUsageImpact;
+    delete mockFlags.showUsageCost;
     // Visibility is persisted, so it leaks between tests unless reset.
     useSettingsStore.setState({
       models: [],
       emissionsChipVisibility: 'always',
       emissionsChipAutoHideMs: EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+      emissionsChipLabelMode: 'emissions',
+    });
+  });
+
+  describe('cost column', () => {
+    // $10 / $30 per 1M: one 1000/500 request = $0.01 + $0.015 = $0.025 → "$0.03".
+    const pricedModel = {
+      id: 'gpt-test',
+      name: 'GPT Test',
+      pricing: { inputPer1M: 10, outputPer1M: 30 },
+    } as OpenAIModel;
+
+    it('shows list-price USD beside each row and the cost footnote when the model is priced', () => {
+      useSettingsStore.setState({ models: [pricedModel] });
+      render(
+        <EmissionsChip
+          conversation={conversation([user(10), assistant(20, true)])}
+        />,
+      );
+      fireEvent.click(
+        screen.getByRole('button', { name: /carbon footprint/i }),
+      );
+      // "All time" and "Last request" both carry the single request's cost.
+      expect(screen.getAllByText('$0.03')).toHaveLength(2);
+      expect(
+        screen.getByText(/Cost at list prices as of/i),
+      ).toBeInTheDocument();
+      // The collapsed label still reads emissions by default.
+      const button = screen.getByRole('button', { name: /carbon footprint/i });
+      expect(button).toHaveTextContent(/g CO2e/);
+      expect(button).not.toHaveTextContent('$');
+      expect(button).not.toHaveAccessibleName(/Estimated cost/);
+    });
+
+    it('explains why no cost is shown when the model has no list price', () => {
+      render(
+        <EmissionsChip
+          conversation={conversation([user(10), assistant(20, true)])}
+        />,
+      );
+      fireEvent.click(
+        screen.getByRole('button', { name: /carbon footprint/i }),
+      );
+      expect(screen.getByText(/has no list price/i)).toBeInTheDocument();
+      expect(
+        screen.queryByText(/Cost at list prices/i),
+      ).not.toBeInTheDocument();
+      expect(screen.queryByText(/\$/)).not.toBeInTheDocument();
+    });
+
+    it('reads cost on the collapsed chip when the user picks that label, and announces it', () => {
+      useSettingsStore.setState({
+        models: [pricedModel],
+        emissionsChipLabelMode: 'cost',
+      });
+      render(
+        <EmissionsChip
+          conversation={conversation([user(10), assistant(20, true)])}
+        />,
+      );
+      const button = screen.getByRole('button', {
+        name: /carbon footprint.*Estimated cost \$0\.03/i,
+      });
+      expect(button).toHaveTextContent('$0.03');
+      expect(button).not.toHaveTextContent(/g CO2e/);
+    });
+
+    it('falls back to the emissions label in cost mode when nothing could be priced', () => {
+      useSettingsStore.setState({ emissionsChipLabelMode: 'cost' });
+      render(
+        <EmissionsChip
+          conversation={conversation([user(10), assistant(20, true)])}
+        />,
+      );
+      expect(
+        screen.getByRole('button', { name: /carbon footprint/i }),
+      ).toHaveTextContent(/g CO2e/);
+    });
+
+    it('shows both figures in "both" mode', () => {
+      useSettingsStore.setState({
+        models: [pricedModel],
+        emissionsChipLabelMode: 'both',
+      });
+      render(
+        <EmissionsChip
+          conversation={conversation([user(10), assistant(20, true)])}
+        />,
+      );
+      expect(
+        screen.getByRole('button', { name: /carbon footprint/i }),
+      ).toHaveTextContent(/g · \$0\.03/);
+    });
+
+    it('hides every cost element when the showUsageCost flag is explicitly off', () => {
+      mockFlags.showUsageCost = false;
+      useSettingsStore.setState({
+        models: [pricedModel],
+        emissionsChipLabelMode: 'cost',
+      });
+      render(
+        <EmissionsChip
+          conversation={conversation([user(10), assistant(20, true)])}
+        />,
+      );
+      const button = screen.getByRole('button', { name: /carbon footprint/i });
+      expect(button).toHaveTextContent(/g CO2e/);
+      fireEvent.click(button);
+      expect(screen.queryByText(/\$/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/list price/i)).not.toBeInTheDocument();
     });
   });
 

@@ -870,7 +870,16 @@
       "stillWorking": "Weli wuu shaqeynayaa…",
       "assessingSearchResults": "Waxaa la hubinayaa in natiijooyinka ay su'aasha ka jawaabaan…",
       "refiningSearch": "Dib loo raadinayo: “{query}”…",
-      "readingSearchPages": "Waxaa la akhrinayaa {count} bog oo natiijo ah…"
+      "readingSearchPages": "Waxaa la akhrinayaa {count} bog oo natiijo ah…",
+      "toolRoutingUnavailableInRegion": "Tool routing lama heli karo barta {region} — jawaab la'aan qalab...",
+      "applyingSkill": "Aqoon gaar ah ayaa la isticmaalayaa: {skills}...",
+      "applyingSkills": "Aqoonta la isticmaalayo: {skills}...",
+      "readingSkillReferences": "Akhriyayaa dukumentiyada tixraaca ee aqoonta...",
+      "selectingSkills": "Xulashada xirfadaha…",
+      "retryingModel": "Qaabka wuu mashquulsan yahay — dib ayaa loo isku dayayaa {seconds}s (iskudayga {attempt})…",
+      "resumingResponse": "Xiriirka qaabka ayaa go'ay — dib ayaa looga sii wadayaa halkii uu ka joogay…",
+      "continuingResponse": "Jawaabtu waxay gaartay xadka dhererka — waa la sii wadayaa…",
+      "trimmingContext": "Wadahadalku aad buu u dheer yahay qaabka — taariikhda hore waa la tirtirayaa dibna waa loo isku dayayaa…"
     },
     "toolSummary": {
       "usedTools": "Waxaa la isticmaalay {count, plural, one {# qalab} other {# qalabyo}}",
@@ -936,7 +945,9 @@
       "deniedByRuleHint": "Waxa xannibay xeerkaaga — maamul Dejinta → Xiriiriyeyaasha.",
       "batchPendingHint": "{count} codsi aalad ah ayaa sugaya",
       "approveAllButton": "Ogolow dhammaan",
-      "denyAllButton": "Diid dhammaan"
+      "denyAllButton": "Diid dhammaan",
+      "applySkillTitle": "Ma doonaysaa in la adeegsado xirfadda “{skill}”?",
+      "skillConsentNote": "Maamuluhu wuxuu jeclaystay in xirfaddan la xaqiijiyo kahor intaan la adeegsan. Ogolaanshaha wuxuu kaliya furaa tilmaamaha su’aashan."
     },
     "openImage": "Fur sawirka",
     "copyMessage": "Nuqul fariinta",
@@ -976,7 +987,54 @@
     "alwaysWaitThisLong": "Had iyo jeer sug ilaa {duration}",
     "keepSearching": "Sii baaritaan",
     "keepSearchingHint": "Baaritaanku wuu istaagay intaanan tan helin. U weydii caawiyaha inuu isku dayo habab kale.",
-    "keepSearchingMessage": "Fadlan sii baaritaan tan — isku day hab kale."
+    "keepSearchingMessage": "Fadlan sii baaritaan tan — isku day hab kale.",
+    "addSkill": "Xirfadaha",
+    "removeSkill": "Ka saar xirfadda",
+    "skillsMenuLabel": "Xirfadaha la heli karo",
+    "skillsLimit": "Ilaa 3 xirfadood farriin kasta.",
+    "skillPin": "Ku xiro wada hadalka",
+    "skillUseOnce": "Isticmaal hal mar",
+    "skillPinned": "la xiro",
+    "skillOnce": "farriinta xigta",
+    "skillsPaused": "la hakiyay",
+    "skillUnavailable": "ma jiro",
+    "skillsAutomaticHint": "Aqoonta khuseysa si toos ah ayaa loo dooraa. Isticmaal hal mar farriinta xigta, ama ku xiro xirfad si aad loogu isticmaalo wada hadalkan oo dhan.",
+    "skillsAgentDisabled": "Aqoonta waa la hakiyay inta wakiilku ku xiran yahay. Ku xirnaantaada waxay dib u shaqeyn doontaa marka aad ka bixiso wakiilka.",
+    "skillPersonal": "shaqsiyeed",
+    "skillsAgentToolsHint": "Kaliya xirfadaha ururka ee uu oggolaaday maamule ayaa halkan loogu heli karaa wakiillada. Wakiilku wuxuu u isticmaali karaa xirfadahan qalab akhris oo keliya ah. Xirmooyinka kale way joogsanayaan, xirfadaha shaqsiyeedna uma furna wakiillada.",
+    "skillAlwaysOn": "mar walba shaqaynaya",
+    "skillAlwaysOnHint": "Wuxuu maamule ku daray fariin kasta oo wada hadal ah.",
+    "skillUsage": {
+      "label": "Aqoonta",
+      "requested": "la dalbaday",
+      "pinned": "la xafiday",
+      "auto": "si toos ah",
+      "unavailable": "lama heli karo",
+      "incomplete": "Qaar ka mid ah aqoonta lama dhaqan gelin",
+      "references": "{count, plural, one {# qoraal tixraac} other {# qoraallo tixraac}}",
+      "referencesUnavailable": "Qaar ka mid ah dukumentiyada tixraaca lama heli karo",
+      "showDetails": "Faahfaahinta aqoonta muuji",
+      "hideDetails": "Faahfaahinta aqoonta qari",
+      "agentLoad": "waxa uu wakiilku xambaarsaday",
+      "agentSearch": "dukumentiyada uu wakiilku raadiyay",
+      "needsApproval": "waxaa u baahan oggolaanshahaaga",
+      "original": "sida markii hore loo orodsiiyay",
+      "updated": "waxaa la cusboonaysiiyay tan iyo"
+    },
+    "skillsManualHint": "Xulashada otomaatiga ah waa deman tahay ee Dejinta. Isticmaal hal mar farriinta xigta, ama ku lifaaq xirfadda si aad ugu isticmaasho wada sheekaysigan oo dhan.",
+    "queuedMessage": {
+      "label": "Sugaya",
+      "attachmentOnly": "Lifaaq",
+      "cancel": "Baaji fariinta la sugayo"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Jawaabtu waxaa joojiyey xeerka badbaadada nuxurka. Fadlan u qor codsiga si kale, ama ka saar qaybta laga yaabo in ay keentay joojinta.",
+      "MODEL_CONTEXT_TOO_LONG": "Wadahadalkan aad buu ugu dheer yahay qaabka la xushay, xataa kadib markii taariikh hore la jaray. Bilow wadahadal cusub, ka saar lifaaqyo qaar, ama dooro qaab leh daaqad macno oo weyn.",
+      "MODEL_OUTPUT_LIMIT": "Qaabku wuxuu isticmaalay xisaabtiisa wax-soo-saarka oo dhan isagoo aan jawaab keenin. Isku day dadaal falanqayn hoose ama codsi gaaban.",
+      "MODEL_RATE_LIMITED": "Qaabka waxaa hadda gaaraya codsiyo aad u badan. Si toos ah ayaa dib loogu celiyey; fadlan isku day mar kale daqiiqad kadib.",
+      "MODEL_QUOTA_EXCEEDED": "Awoodda qaabka waa dhammaatay. Isku day qaab kale, ama isku day mar dambe.",
+      "MODEL_AUTH_FAILED": "App-ka uma suurtogelin in uu is-aqoonsiiyo adeegga qaabka. Tani waa arrin xagga la-habaynta ah — fadlan la xiriir taageerada."
+    }
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -1484,7 +1542,11 @@
       "preferModelTitle": "Dooro moodelkayga la xushay",
       "preferModelDescription": "Ha u wareegin moodel kale si toos ah marka codsi fashilmo. Khaladku weli wuxuu bixin doonaa beddelka."
     },
-    "Analytics": "Falcelin xogeed"
+    "Analytics": "Falcelin xogeed",
+    "skills": {
+      "autoApply": "U oggolow kaaliyaha in si otomaatig ah u adeegsado xirfadaha",
+      "autoApplyDescription": "Xirfadaha la xiriira, iyo xirfadahaaga gaarka ah, ayaa loo xulaa farriin kasta. Markay dansan tahay, kaliya xirfadaha aad codsato ama aad lifaaqdo iyo xirfadaha uu maamulaha ku dabaqo wada sheekaysi kasta ayaa la isticmaalaa."
+    }
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",
@@ -2684,7 +2746,15 @@
     "chipAutoHideUnit": "ilbiriqsi",
     "chipAutoHideHint": "U dhaxaysa {min} iyo {max} ilbiriqsi.",
     "byWorkflow": "Sida socodka shaqada",
-    "byWorkflowNote": "Qeyb ka mid ah wadarta kor ku xusan, si gooni ah loo muujiyay — isticmaalka dheeraad ah ma aha. Socodyada deeqaha waxaa loo tiriyaa warbixinta ururkiinna iyo miisaaniyadda tokens-ka, laakin kuma jiraan wadarta halkan maxalliga ah."
+    "byWorkflowNote": "Qeyb ka mid ah wadarta kor ku xusan, si gooni ah loo muujiyay — isticmaalka dheeraad ah ma aha. Socodyada deeqaha waxaa loo tiriyaa warbixinta ururkiinna iyo miisaaniyadda tokens-ka, laakin kuma jiraan wadarta halkan maxalliga ah.",
+    "chipLabelTitle": "Sumadda chip-ka",
+    "chipLabelHint": "Faahfaahintu had iyo jeer waxay muujinaysaa qiiqa iyo qiimaha isla garab; tani waxay kaliya qaadanaysaa waxa ay akhridaan chip-ka la soo gaabiyay.",
+    "chipLabelEmissions": "Qiiqa",
+    "chipLabelCost": "Qiimaha",
+    "chipLabelBoth": "Labadaba",
+    "costTile": "Qiimaha la qiyaasay",
+    "costDisclosure": "Qiimaha ayaa ah mid ku saleysan liis qiimo sida {asOf} (Heerka Caalamiga ah ee Standard, qiimo dhimis ma jiro waxyaabo keydsan): waa xadka ugu sarreeya, looma arko biil. Raadinta web, fulinta koodh, qoraal qoraal ah, hadal, tarjumaad iyo tusmada dukumentiyadu kuma jiraan.",
+    "costUnpriced": "{count, plural, one {# codsi aan qiimo liis lahayn lama darin} other {# codsiyo aan qiimo liis lahayn lama darin}} lama darin."
   },
   "extraction": {
     "toggleLabel": "Ka saar xog habaysan",
@@ -4486,7 +4556,16 @@
         "auto": "Toos",
         "hidden": "Qari"
       },
-      "visibilityHint": "Toos wuxuu muujiyaa chip-ka marka qiyaasta la cusbooneysiiyo ama aad dul istaagto. Waxaad tan markale ka beddeli kartaa Dejinta › Isticmaalka & Saameynta."
+      "visibilityHint": "Toos wuxuu muujiyaa chip-ka marka qiyaasta la cusbooneysiiyo ama aad dul istaagto. Waxaad tan markale ka beddeli kartaa Dejinta › Isticmaalka & Saameynta.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Qiimaha la qiyaasay {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Lama hayo qiime liiska ah codsiyada safkan",
+        "unpriced": "{count, plural, one {# codsi aan qiimo liis lahayn lama darin} other {# codsiyo aan qiimo liis lahayn lama darin}} qiimaha kuma jiraan.",
+        "noPriceData": "Lama soo bandhigin qiimo: moodeelka wada hadalkan ma laha qiime liis (ilaha gaarka ah, nidaamyada maxalliga ah iyo wakiilladu lama qiimeeyo).",
+        "note": "Qiimaha ayaa ah mid ku saleysan liis qiimo sida {asOf} (Heerka Caalamiga ah ee Standard, qiimo dhimis ma jiro waxyaabo keydsan): waa xadka ugu sarreeya, looma arko biil. Raadinta web, fulinta koodh, qoraal qoraal ah, hadal, tarjumaad iyo tusmada dukumentiyadu kuma jiraan."
+      }
     },
     "workflow": {
       "title": "Meesha shaqadan (qiyaas ah)",
@@ -5278,7 +5357,22 @@
     "confirmDeleteGlossary": "Tir ka saaro qeexitaanka ereyada",
     "glossaryDeleteSuccess": "Qeexitaanka ereyada waa la tirtiray",
     "channelProfilesTab": "Barnaamijyada",
-    "channelSetsTab": "Xirmooyinka kanaalada"
+    "channelSetsTab": "Xirmooyinka kanaalada",
+    "addPromptAgent": "Ku dar wakiil prompt ah",
+    "m365AgentIndexStop": "Jooji tusmada",
+    "foundryAgentsHeading": "Wakiillada Foundry iyo prompt-ka",
+    "foundryAgentsDescription": "Wakiillo laga helay Azure AI Foundry oo la marayo gelitaankaaga, iyo sidoo kale wakiillada prompt-ka ee halkan lagu qeexay. Wakiillada aqoonta iyo Microsoft 365 waa lagu xakameeyaa qaybaha hoose ee gaarka ah.",
+    "agentSkillsLabel": "Xirfadaha",
+    "agentSkillsHelp": "Xirfadee ururka ayuusan wakiilkani culeysan karo intuu jawaabayo. Isticmaalayaashu haddana waxay arki karaan oo kali ah xirfadaha ay shuruucda gelitaanka u oggol yihiin.",
+    "agentSkills": {
+      "inherit": "Xirfadaha loo calaamadeeyay \"loo heli karo wakiillada\"",
+      "selected": "Kaliya xirfadaha la doortay ee hoose",
+      "none": "Xirfado la'aan"
+    },
+    "agentSkillsNone": "Xirfado aan la heli karin si loo doorto.",
+    "agentSkillsLoading": "Xirfado ayaa la soo dajinayaa…",
+    "agentSkillsLoadError": "Xirfadihii lama soo dajin karin. Doorashadii hore ayaa la hayaa.",
+    "agentSkillsNotVisible": "(adiga laguma tusayo — calaamadda ka saar si aad u tirtirto)"
   },
   "localModels": {
     "title": "Moodallo maxalli ah",
@@ -5505,7 +5599,8 @@
       "channelSets": "Xeerarka koox walba ee wax-qorka barnaamijyada: tilmaamo, codadka, caadooyinka, cidda isticmaali karta iyo cidda diri karta.",
       "webSearch": "Baaxadda uu gaarayo baaritaanka webka: baaritaan tillaabo badan, modelka qiimeeyaha iyo xaddidaadiisa.",
       "contextBudget": "Inta taariikh-wada sheekaysi ah ee model kastaa loo diro marka la isticmaalo.",
-      "analytics": "Warbixino la keenay: waxa yimid, cidda furin karta gal kasta, iyo qaybahaa la tusin karo."
+      "analytics": "Warbixino la keenay: waxa yimid, cidda furin karta gal kasta, iyo qaybahaa la tusin karo.",
+      "skills": "Xirmooyin tilmaamo dib loo isticmaali karo oo kaaliyuhu adeegsado marka looga baahdo wadahadalka."
     },
     "openSettings": "Fur dejinta",
     "area": {
@@ -5516,7 +5611,8 @@
       "delegations": "Wakiillo",
       "webSearch": "Baaritaanka webka",
       "contextBudget": "Miisaaniyada macnaha guud",
-      "analytics": "Falcelin xogeed"
+      "analytics": "Falcelin xogeed",
+      "skills": "Xirfadaha"
     }
   },
   "limits": {
@@ -5546,7 +5642,8 @@
     "tab": {
       "defaults": "Dejimaha guud",
       "overrides": "Laga reebay",
-      "delegations": "Wakiillo"
+      "delegations": "Wakiillo",
+      "models": "Moodallo"
     },
     "tabsLabel": "Qaybaha xaddidaadda",
     "category": {
@@ -5578,7 +5675,8 @@
       "m365ToolCallsPerDay": "Wicitaanka Microsoft 365 ee maalintii",
       "m365MailReadsPerDay": "Akhriska iimaylada maalintii",
       "m365MailDraftsPerDay": "Qoraalka drafts ee iimayl maalintii",
-      "m365MailDeepScansPerDay": "Baaritaannada qoto-dheer ee iimayl maalintii"
+      "m365MailDeepScansPerDay": "Baaritaannada qoto-dheer ee iimayl maalintii",
+      "m365DigestRunsPerDay": "Tirada maalinlaha ah ee digest-ka Microsoft 365"
     },
     "valueModeLabel": "Nooca xadka",
     "valueAmountLabel": "Tirada xadka",
@@ -5656,7 +5754,8 @@
       "m365ToolCallsPerDay": "Wicitaannada qalabka Microsoft 365 (calendar, people, tasks, Teams) maalintii. Haddii xadka la dhaafo, qalabka waxa ay soo celiyaan natiijo ah \"isku day berrito\" halkii ay ku fashilmi lahaayeen sheekada.",
       "m365MailReadsPerDay": "Baadhista iimaylada iyo akhrinta fariimaha/xadhkaha maalintii. Haddii xadka la dhaafo, qalabka iyo warqadaha waxay soo celiyaan \"isku day berrito.\"",
       "m365MailDraftsPerDay": "Qoraallada email ee kaaliyuhu samayn karo maalintii — mid kasta waa in si gaar ah loo xaqiijiyaa. Si ula kac ah xadidan.",
-      "m365MailDeepScansPerDay": "Falanqaynta wadajirka ah ee iimaylada (warbixino, baadhis qoto dheer, ballanqaadyo) maalintii. Baadhis walba waa hal unug xisaabeed, si kasta oo faahfaahin ah oo ay leedahay."
+      "m365MailDeepScansPerDay": "Falanqaynta wadajirka ah ee iimaylada (warbixino, baadhis qoto dheer, ballanqaadyo) maalintii. Baadhis walba waa hal unug xisaabeed, si kasta oo faahfaahin ah oo ay leedahay.",
+      "m365DigestRunsPerDay": "Digest-ka maalinlaha Microsoft 365 ee la ordo maalintii. Hal orod waxay tahay akhrisyo faro badan oo Graph ah iyo wacitaan laba jeer oo analysis-model ah; xulashada muddada waxay ka dhigtaa in la codsado orod cusub mid fudud, sidaas darteed xadka caadiga ah waa xaddidan yahay."
     },
     "scopeFamily": "Qoys",
     "scopeModel": "Moodel",
@@ -5711,7 +5810,7 @@
     "previewSourceCatalog": "Asalka ku jira barnaamijka",
     "previewSourceGlobal": "Asalka guud",
     "previewSourceOverride": "Badal: {label}",
-    "previewNotEvaluated": "Badallada waaxda/shirkadda/xafiiska iyo kooxda lagama ogaan karo halkan — waxay ku xirantahay galitaanka qofka laftiisa.",
+    "previewNotEvaluated": "Galka lama gaari karo, sidaas darteed xeerarka waaxda/shirkadda/xafiiska iyo kooxda looma qiimeyn qofkan. Fadlan dib iskuday goor dhow.",
     "previewUnsaved": "Waxa la soo bandhigayaa siyaasaddii ugu dambaysay ee la keydiyay. Keydi isbedelada si aad u aragto.",
     "previewColumnLimit": "Xadidan",
     "previewColumnValue": "Qiimaha",
@@ -5807,7 +5906,7 @@
     "yourScopeGroupOnlyChip": "Kooxo kaliya",
     "yourScopeGroupOnlyNote": "Waxaa lagu qeexay kooxo ama astaamo uun, sidaas darteed xaddidaadaha looma eegayo cinwaanka email.",
     "previewOutOfScope": "Qofkani kama mid aha xadkaaga.",
-    "previewGroupOnlyScope": "Xadkaaga waxa lagu qeexay kooxo ama astaamo, sidaas darteed xaddidaadaha looma eegi karo cinwaanka email.",
+    "previewGroupOnlyScope": "Xadkaaga waxaa lagu qeexay kooxo ama astaamo. Dulmaradu waxay qofka ka raadisaa galka si ay u go'aamiso inuu ku jiro iyo in kale.",
     "previewCeilingPinned": "Waxaa lagu xadiday sare: {label}",
     "previewShowUsage": "Isticmaalka hadda bandhg",
     "previewColumnUsage": "La isticmaalay",
@@ -5823,7 +5922,7 @@
     "overrideCeilingHint": "Xadka ugu sareeya ee saaran safkaas wuxuu xeerinayaa qiimaha la xidhiidha bartilmaameedyada override-kan: maamulayaasha xadidan ma kor u qaadi karaan, haddii xaddiyo badan la isticmaalo midka ugu qaasan ayaa shaqaynaya.",
     "confirmDeleteOverride": "Ma tirtirtaa \"{label}\"? Waxaa isla markiiba laga saarayaa server-ka waxaana bartilmaameedyadiisa lagu soo celinayaa xadidaadihii hoosta ka jiray. Tan dib looma soo celin karo.",
     "confirmDeleteOverrideAction": "Tirti override-ka",
-    "previewUndecidableScope": "Xadidaada waxa ay ku jirtaa kooxo ama astaamo, sidaas darteed qofkani in uu ku jiro lagama go'aamin karo cinwaan email ah.",
+    "previewUndecidableScope": "Xadkaaga waxa uu ka kooban yahay kooxo ama astaamo, balse galka lama gaari karo, sidaas darteed lama hubin karo in qofkan uu ku jiro xadka hadda. Fadlan dib iskuday goor dhow.",
     "previewNoLongerAdmin": "Waa lagaa saaray magacyada kuwa loo xil saaray ee firfircoon, sidaas darteed ma daawan kartid xadidaadaha. Bogga dib u rar si aad u aragto heerkaaga hadda.",
     "previewScopeMatchesNobody": "Xadidaada hadda ma qalmaan qofna, sidaas darteed qof email ah laguma daawan karo.",
     "yourScopeMatchesNobodyChip": "Kuma haboona qofna",
@@ -5974,7 +6073,73 @@
     "disabledDelegationNote": "Wakaa is-wareejinta lama hawlgelin, sidaas darteed is-bedelkan cidna kuma kordhayo ilaa markale la furo. Waligood kuma darso tier-ka guud.",
     "betaPolicyNotice": "Deegaanka Beta: siyaasaddan iyo xisaabta isticmaalka waxaa si gooni ah looga kaydiyaa soosaarka (policy.beta.json). Wax kasta oo aad halkan ka beddesho ma saameeyaan soosaarka.",
     "delegationsManagedElsewhere": "Wakiillada waxaa halkan lagu tusaa oo keliya aqriso ahaan. Cidda wakiil ka ah, isticmaalayaasha ay daboolayaan, iyo waxa uu madaxda wakiil walba sameyn karo waxaa lagu maamulaa aagga Wakiillo.",
-    "delegationsManagedElsewhereLink": "Fur Wakiillo"
+    "delegationsManagedElsewhereLink": "Fur Wakiillo",
+    "modelAccess": {
+      "intro": "Go'aami qofka isticmaali kara moodal kasta. Dejinta qoysku waxay saameynaysaa moodallada la xiriira ilaa moodal gaar ah uu isagu gooni isu dejiyo; dadka liiska ku jira ayaa ka mudnaan badan kuwa kale; liiska xayiraaddu waxa uu ka sarreeyaa dhammaan rukhsiyada.",
+      "externalNote": "Moodallada ka baxsan deegaanka Azure ({families}) cidna lama heli karo ilaa aad halkan rukhsad siiso — dhammaan adoo adeegsanaya default ama kooxo, domains, iyo dadka.",
+      "envelopeNote": "Xaddiga codsiga ee qoys waxa uu la wadaaganyahay miisaaniyadda maalinlaha ee moodallada ku jira; xaddidaadda moodal keliya waxa ay xad u tahay gudaheeda. Haddii moodal aan xad lahayn laga dhigo, miisaaniyadda qoyska lagama saaro.",
+      "observeNote": "Habka Diiwaangelinta (Observe) waa shaqeeyaa: wax kasta oo halkan ah weli ma qariyo moodal mana joojiyo codsi. U beddel Enforce marka xeerarku sax noqdaan.",
+      "familyChip": "Qoys",
+      "modelChip": "Model",
+      "otherModels": "Moodallo aan qoys lahayn",
+      "modelsInFamily": "{count, plural, one {# moodal ku jira qoyska} other {# moodal ku jira qoyska}}",
+      "noModels": "Weli moodallo kuma jiro buugga.",
+      "expand": "Muuji moodallo",
+      "collapse": "Qari moodallo",
+      "edit": "Wax ka beddel",
+      "doneEditing": "Dhamey",
+      "editNode": "Wax ka beddel helitaanka {label}",
+      "defaultLabel": "Qof kasta oo kale",
+      "defaultInherit": "Raac",
+      "defaultUnlimited": "Aan xad lahayn",
+      "defaultLimited": "Xadidan ilaa",
+      "defaultUnavailable": "Aan la heli karin",
+      "defaultRequestsLabel": "Codsiyo maalintii qof walba oo kale ah",
+      "requestsPerDay": "codsiyo / maalinti",
+      "inheritedFrom": "Waxa uu ka dhaxlay {state} laga bilaabo {origin}.",
+      "effectiveLabel": "Qof kastaa oo aan liis ku jirin waxa uu helayaa: {state}.",
+      "inheritedChip": "la dhaxlay",
+      "origin": {
+        "model": "deejintan",
+        "family": "qoyskiisa",
+        "defaults": "Dejinta guud",
+        "catalogExternal": "xeerka sheegaya in moodallada dibadda aan la heli karin ilaa la siiyo rukhsad",
+        "catalog": "default-ka catalog-ga"
+      },
+      "state": {
+        "unlimited": "Aan xad lahayn",
+        "limited": "Xadidan ilaa {requests} / maalintii",
+        "unavailable": "Aan la heli karin"
+      },
+      "list": {
+        "groups": "Kooxo leh helitaan",
+        "domains": "Domains leh helitaan",
+        "allow": "Dadka la oggolyahay",
+        "deny": "Dadka la xayiray"
+      },
+      "listHint": {
+        "groups": "Xubnaha kooxahan Entra waxay isticmaali karaan, shuruudaha koox kasta ee loo dejiyay.",
+        "domains": "Dadka wata email ku yaal domains-kan, iyagoo ku saleynaya shuruudaha la dejiyay domain kasta.",
+        "allow": "Dadka magacaaban waxay isticmaali karaan inkastoo default ama domain-koodu uu kale yahay.",
+        "deny": "Dadka magacaaban waligood ma isticmaali karaan. Tani waa ka sarreysaa rukhsad kasta oo kor ku xusan."
+      },
+      "grantUnlimited": "Aan xad lahayn",
+      "grantLimited": "Xadidan ilaa",
+      "termsLabel": "Shuruudaha {target}",
+      "requestsLabel": "Codsiyo maalintii ah ee {target}",
+      "removeGrant": "Ka saar {target}",
+      "groupsCount": "{count, plural, one {# koox} other {# kooxood}}",
+      "domainsCount": "{count, plural, one {# domain} other {# domains}}",
+      "allowCount": "{count, plural, one {# qof la oggolyahay} other {# qof la oggolyahay}}",
+      "denyCount": "{count, plural, one {# qof la xayiray} other {# qof la xayiray}}",
+      "collisionChip": "Sidoo kale waxa ku jira Dejinta Guud",
+      "collisionWarning": "Qaabkan ama qoyska waxa kale oo lagu habeeyey Dejinta Guud. Kaydin lama ogola illaa mid ka mid ah labadaasi la tirtiray."
+    },
+    "previewSourceModelAccess": "Oggolaanshaha model-ka — {list}",
+    "groupMembershipDegradedStructural": "Helitaanka xubinnimada kooxda ayaa ka fashilmay server-kan ({reason}). Xeerarka iyo oggolaanshaha la xiriira kooxaha laguma dabaqayo dadka ay tani saameysey — fadlan hubi oggolaanshaha tenant-ka ee Group.Read.All iyo diiwaangelinta app-ka.",
+    "groupMembershipDegradedRetryable": "Waxaa fashilmay qaar ka mid ah hubinta xubinnimada kooxaha server-kan daqiiqadihii la soo dhaafay ({reason}). Xeerarka la xiriira kooxaha lagama yaabo in si sax ah loogu dabaqo dadkaas illaa hal daqiiqo inta la isku dayayo mar kale.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# qof} other {# qof}} ayaa hadda ay saameysay arrintan server-kan.",
+    "previewDirectoryNotFound": "Ma jiro isticmaale directory ah oo leh ciwaankaan email-ka, sidaas darteed xeerarka waaxda/shirkadda/xafiiska iyo kooxda waxaa loo tixgeliyey in qofku uusan midna ka tirsaneyn."
   },
   "m365": {
     "connections": {
@@ -6325,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Kala-soocida subaxda",
-        "description": "Waxyaabaha soo galay, waxa kula sugaya, iyo jadwalka maanta — warbixin hal mar ah"
+        "description": "Soo koobis wixii yimid tan iyo maalintii shaqadii u dambeysay — waxa kuu cusub, wixii ku sugan adiga, casuumaadaha iyo cusbooneysiinta; Isniinta waxay daboolaysaa Jimcaha iyo dhammaadka usbuuca."
       },
       "chipsSettingLabel": "Soo jeedi playbooks-yada Microsoft 365",
       "chipsSettingHint": "Tus talooyin Playbook kor ku xiga sanduuqa fariinta marka ay khuseeyaan (tusaale, marka la keeno qoraal kulan).",
-      "dismissChip": "Ka saar {title}"
+      "dismissChip": "Ka saar {title}",
+      "dailyDigest": {
+        "title": "Digest maalinle ah",
+        "description": "Kala saar e-mailadii ugu dambeeyay, Teams iyo jadwalka waxa aad u baahan tahay, waxa lagaa sugayo, warbixinnada iyo xogta – dooro muddada"
+      }
+    },
+    "digest": {
+      "title": "Digest maalinle ah",
+      "intro": "Waxay baaraysaa waxa kuu yimid mudada la xushay waxayna u kala saartaa waxa jawaab loo baahan yahay, waxa lagaa dalbaday, waxa aad sugayso, jadwal, warbixinno shirkadeed iyo mashruuc, iyo xogta. Waxba lama diro ama lama beddelo.",
+      "periodLabel": "Muddada",
+      "preset": {
+        "lastWorkday": "Laga bilaabo maalintii shaqo ee ugu dambeysay",
+        "1d": "24 saac ee u danbeeyay",
+        "3d": "3 maalmood ee u danbeeyay",
+        "7d": "7 maalmood ee u danbeeyay",
+        "14d": "14 maalmood ee u danbeeyay",
+        "custom": "Xulashada muddada aad dooneyso"
+      },
+      "lastWorkdayHint": "Laga bilaabo bilowgii maalintii shaqo ee ugu dhowayd ka hor maanta — Isniintuna waxay daboolaysaa Jimcaha iyo dhammaan usbuuca dhamaadkiisa.",
+      "from": "Laga bilaabo",
+      "to": "Ilaa",
+      "customInvalid": "Dooro muddada isku xiran ee ugu badnaan {days} maalmood.",
+      "sourcesLabel": "Ilo",
+      "sourceNoConsent": "Oggolaansho looma oggolaan ilahan.",
+      "sourceHint": {
+        "mail": "Sanduuqa soo gala iyo muuqaalada gaagaaban; Qodobbada aad dirtay ayaa go'aamiya waxa loo aqoonsanayo in laga jawaabay.",
+        "chat": "Wadahadaladii Teams ee ugu dambeeyay iyo @mentions aanad wali ka jawaabin.",
+        "channel": "Qoraallada kanaalada aad hoos ka xulato.",
+        "calendar": "Martiqaadyada sugaya jawaabtaada iyo shirarkaaga kuwa aan la hubin inay dadka kale jawaab ka bixin."
+      },
+      "channelsLabel": "Kanaalada ({count} mida {max})",
+      "removeChannel": "Ka saar {name}",
+      "channelsSlow": "Kanaal kasta wuxuu kordhiyaa akhrisyo; kanaalo badan waxay ka dhigaan digest-ka mid waqti badan qaata.",
+      "channelsMax": "Tirada ugu badan ee kanaalada ({max}) waa la gaaray.",
+      "channelsNeeded": "Dooro ugu yaraan hal kanaal, ama ku dar ilo kale.",
+      "teamLabel": "Koox",
+      "loadingTeams": "Kooxo la rarayo…",
+      "pickTeam": "Dooro koox si aad u aragto kanaaladooda",
+      "loadingChannels": "Kanaalada la rarayo…",
+      "noChannels": "Kanaalo lagama helin kooxdaan.",
+      "privacyNote": "Kaliya cinwaannada, dirayaasha iyo muuqaalada gaagaaban ayaa la akhriyaa; Jiritaanka fariimaha iyo lifaaqyadu waxay ku jiraan Microsoft 365. Qodobbadu waa kooban xogtaada gaarka ah.",
+      "cancel": "Jooji",
+      "run": "Orod digest",
+      "starting": "Wuu bilaabanayaa…",
+      "startFailed": "Digest-ka lama bilaabi karin.",
+      "userMessage": "Digest maalinle ah — {period}; ilo: {sources}",
+      "working": "Waxa la baarayaa isgaarsiintaada Microsoft 365…",
+      "failed": "Digest-ku wuu guuldareystay.",
+      "failedPrefix": "Digest maalinlaha ah wuu guuldareystay:",
+      "expired": "Digest-kan wuu dhacay. Dib ugu orod si aad u hesho mid cusub.",
+      "runAgain": "Dib u orod",
+      "changePeriod": "Bedel muddada",
+      "period": {
+        "lastWorkday": "laga bilaabo maalintii shaqo ee ugu dambeysay",
+        "lastDays": "{count, plural, one {maalintii u dambeysay} other {#{ } maalmood ee u dambeysay}}"
+      },
+      "source": {
+        "mail": "E-mail",
+        "chat": "Wadahadalada Teams",
+        "channel": "Kanaalada Teams",
+        "calendar": "Kalandarka"
+      },
+      "sourceStatus": {
+        "ok": "dhameystiran",
+        "partial": "qayb ah",
+        "skipped": "la dhaafay",
+        "unavailable": "ogolaansho la'aan",
+        "error": "wuu fashilmay"
+      },
+      "degraded": "Moodelka falanqaynta lama helin, sidaa darteed qeybaha waxay ka yimaadeen xeerar kaliya.",
+      "withheld": "{count, plural, one {# shay ayaa} other {# shay ayaa}} looga hakiyey shaandheeyeyaasha badbaadada.",
+      "empty": "Ma jiraan wax warbixin ah muddadan iyo ilooyinkan.",
+      "actionItems": "Arrimaha la qabanayo",
+      "createTasks": "{count, plural, =0 {Kudar Liiska To Do} one {Kudar # hawl Liiska To Do} other {Kudar # hawlood Liiska To Do}}",
+      "taskCreated": "waa lagu daray To Do",
+      "tasksCreated": "{count, plural, one {# hawl} other {# hawlood}} ayaa lagu daray liiska \"{list}\".",
+      "tasksFailed": "Lama abuuri karin hawsha/yaasha.",
+      "category": {
+        "needsReply": "Waxay u baahan tahay jawaabteyda",
+        "askedOfMe": "Iga la codsaday",
+        "waitingOnOthers": "Sugayaal dadka kale",
+        "scheduling": "Jadwaleyn",
+        "companyUpdates": "Warar cusub oo shirkadda iyo mashruuca la xiriira",
+        "fyi": "Ogow (FYI)",
+        "bulk": "Automated iyo badan"
+      },
+      "companyUpdatesHint": "muhim ah, marar dhif ah degdeg ah",
+      "markDone": "Calaamadee {title} in la qabtay",
+      "badge": {
+        "unanswered": "lama jawaabin",
+        "mentioned": "waxaa lagugu sheegay",
+        "important": "muhim sare"
+      },
+      "askAbout": "Wax ka weydii tan",
+      "askPrompt": "Ku saabsan shayga {source} \"{title}\" laga soo diray {from} ({when}) ee xusuusta sare: maxaa la weydiinayaa, jawi fiican maxaa noqon kara?",
+      "open": {
+        "mail": "Fur Outlook",
+        "chat": "Fur Teams",
+        "channel": "Fur Teams",
+        "calendar": "Fur Outlook"
+      },
+      "footnote": "Qeybaha waxay ka yimaadaan calaamadahaaga (lama jawaabin, lagugu sheegay, ku faafiyey) iyo kala soocidda AI; ka fiirso ka hor intaadan falin. Looma dirin cidna.",
+      "age": {
+        "now": "hadda",
+        "hours": "{count}saac kahor",
+        "days": "{count}maalin kahor"
+      },
+      "waitForReply": "Sug jawaabta hadda socota inay dhamaato ka hor inta aadan bilaabin soo koobis."
     }
   },
   "share": {
@@ -6394,9 +6666,9 @@
     "kind": {
       "rag": "Aqoonta",
       "prompt": "Qof ahaaneed",
-      "m365": "Aqoonta (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Aqoonta",
-      "foundry": "Wakiilka Foundry",
+      "foundry": "Wakiil la habayn karo",
       "connector": "Isku-xidhaha"
     },
     "semantics": {
@@ -6405,8 +6677,8 @@
       "own-model": "waxay ku socotaa moodelkeeda gaarka ah"
     },
     "loadError": "Wakiillada lama soo rogi karin waqtigan. Badanaa tani waa arrin ku meel gaar ah.",
-    "discoveryLoading": "Waxaa la raadinayaa wakiillada Foundry…",
-    "discoveryError": "Wakiillada Foundry lama soo rogi karin.",
+    "discoveryLoading": "Waxaan raadinaynaa wakiillo dheeraad ah…",
+    "discoveryError": "Qaar ka mid ah wakiillada lama soo dejin karin.",
     "retry": "Mar kale isku day"
   },
   "peopleSuggest": {
@@ -7547,5 +7819,146 @@
       "past-retention": "Waa ka weyn yahay {months} bilood ee kaydka galkan; dib looma tuso.",
       "unknown": "Dhibaato la soo sheegay: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Xirfadaha",
+    "description": "Xirmooyin tilmaamo dib loo isticmaali karo oo kaaliyuhu adeegsado marka looga baahdo wadahadalka. Waa la jaanqaadaysaa qaabka Agent Skills SKILL.md ee ay adeegsadaan Claude iyo ChatGPT.",
+    "loading": "Xirfadaha waa la rarayaa…",
+    "loadError": "Xirfadaha lama soo rogi karin.",
+    "retry": "Dib u day",
+    "unavailableBanner": "Kaydka xirfadaha hadda lama gaadhi karo — kuwa dhisan ee asalka ah ayaa la muujiyey; xirfadaha kaydsan iyo tafatirka ma adeegsan kartid ilaa laga soo celiyo.",
+    "conflictError": "Xirfaddan waxaa beddelay maamule kale. Liiska waa la cusboonaysiiyey — mar kale samee tafatirkaaga.",
+    "alwaysWarning": "{count} xirfadood ayaa loo dejiyey Had iyo Jeer. Mid kasta waxaa lagu darayaa wadahadal kasta — dooro Toos ah (Automatic) kuwa ku xidhan mowduucyada.",
+    "newSkill": "Xirfad cusub",
+    "importSkill": "Soo dejiso SKILL.md",
+    "importTitle": "Ku dheji faylka SKILL.md",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Waxa xirfaddani qabato iyo goorta la isticmaalo.\n---\n\nTilmaamaha…",
+    "importHint": "Xirfadda la fasiro waxay ku furmaysaa tifatiraha si aad u eegto — waxba lama kaydin ilaa aad adigu kaydiso.",
+    "importParse": "Fasiri oo eeg",
+    "invalidId": "Aqoonsiyada xirfadda waxay isticmaalaan xuruuf yar, tirooyin, iyo hal xariiq (hyphen) oo keliya.",
+    "saveSuccess": "Xirfadda waa la kaydiyey.",
+    "saveError": "Xirfadda lama kaydin karin.",
+    "deleteConfirm": "Ma tirtirtaa xirfaddan? Wadahadalada si degdeg ah ayay uga baxaysaa.",
+    "restoreConfirm": "Ma doonaysaa inaad tirtirto habaynta oo dib u soo celiso asalka xirfaddan ee la dhisay?",
+    "deleteSuccess": "Xirfadda waa la tirtiray.",
+    "restoreSuccess": "Asaaska la dhisay ayaa la soo celiyey.",
+    "deleteError": "Xirfadda lama tirtiri karin.",
+    "empty": "Wali lama hayo xirfado. Samee mid, ama soo dejiso SKILL.md.",
+    "builtinChip": "La dhisay",
+    "customizedChip": "La habeeyey",
+    "exportSkill": "Soo saar sida SKILL.md",
+    "edit": "Tafatir",
+    "delete": "Tirtir",
+    "restoreDefault": "Soo celi asalka",
+    "createTitle": "Xirfad cusub",
+    "editTitle": "Tafatir {name}",
+    "idLabel": "Aqoonsi",
+    "idHint": "Xuruufta yaryar, tirooyinka, iyo xariijimaha. Waxay noqonaysaa magaca SKILL.md ee xirfadda mana is beddeli karto marka la abuuray.",
+    "nameLabel": "Magaca la soo bandhigayo",
+    "descriptionLabel": "Sharaxaad",
+    "descriptionHint": "Waxa xirfaddani qabato IYO goorta la isticmaalayo — tan ayaa go’aamisa xulashada xirfadda, sidaa darteed ku dar mowduucyada iyo weedhaha ay la falgeli doonto.",
+    "activationLabel": "Hawlgelin",
+    "activation": {
+      "auto": "Toos ah",
+      "always": "Had iyo Jeer",
+      "off": "Dami",
+      "manual": "Marka la codsado"
+    },
+    "activationHint": {
+      "auto": "Si toos ah ayaa loo doortaa marka hawsha hadda jirta la mid tahay sharraxaadda. Isticmaalayaashu waxay sidoo kale codsan karaan hal mar ama si joogto ah ugu xiraan wada hadalka.",
+      "always": "Waa lagu darayaa wadahadal kasta qof walba oo arka xirfadda. Si dheellitiran u isticmaal — tani waa meel joogto ah oo loo qoondeeyo tilmaamaha.",
+      "off": "Aan firfircoonayn: waligeed lama adeegsanayo lagumana soo bandhigayo isticmaalayaasha, balse waa lagu hayaa halkan si loo tafatiro.",
+      "manual": "Kaliya la adeegsado marka isticmaale codsado ama ku dhajiyo. Si otomaatig ah looma doorto mana loo soo bandhigo moodeelka sidii xirfad la culeysan karo."
+    },
+    "instructionsLabel": "Tilmaamaha",
+    "instructionsHint": "Markdown, ilaa 16 KB. Waxaa si toos ah loogu dari doonaa marka xirfadda firfircoon tahay.",
+    "saving": "Keydinayaa…",
+    "save": "Kaydi",
+    "cancel": "Jooji",
+    "documents": {
+      "title": "Dukumentiyada",
+      "hint": "Tixraacyada waxaa lagu kaydiyaa xirfaddan. Dukumeentiyada yaryar si toos ah ayaa loo furaa; kuwa waaweyn waa la baadhaa si loo raadiyo tixraac. Ilaa 20 ilo, midkiiba 10 MB iyo wadarta 20 MB. Hantida waxaa loo kaydiyaa in la soo dejisto oo keliya.",
+      "saveFirst": "Keydi habeynta xirfaddan la dhisay ka hor intaadan ku darin dukumentiyo.",
+      "upload": "Ku dar dukumentiyo tixraac ah",
+      "remove": "Ka saar",
+      "stop": "Jooji baadhista",
+      "resume": "Baadh ama dib u bilow dukumentiyada",
+      "empty": "Wali dukumentiyo laguma darin.",
+      "requestFailed": "Codsiga dukumeentigu wuu fashilmay. Dib u cusboonaysii oo isku day mar kale.",
+      "importZip": "Soo geli ZIP xirfad ah",
+      "zipTooLarge": "Faylka ZIP xirfadda waa inuu ahaadaa 20 MB ama ka yar.",
+      "importCount": "Ilo lagu dabaqi doono kadib kaydinta: {count}",
+      "skippedScripts": "Qoraallo fulinaya waa la dhaafay",
+      "status": {
+        "pending": "Sugaya baadhis",
+        "processing": "Waa la baadhayaa",
+        "inline": "Diyaar (si toos ah loo furay)",
+        "indexed": "Diyaar (la raadin karo)",
+        "failed": "Baadhistu way fashilantay",
+        "asset": "Hanti la soo dejisan karo"
+      },
+      "confirmRemove": "Ma doonaysaa inaad ka saarto {filename} xirfaddan? Faylka asalka ah ee la kaydiyay waa la tirtiri doonaa mana heli doontid mar dambe inuu noqdo il tixraac.",
+      "reindexRequired": "Dukumentiyadan waa in si dib ah loo tusmeeyaa si ay ugu ekaadaan habeynta Raadinta iyo Embedding ee gobolka hadda. Lama raadin doono ilaa tusmeyntu dhammaato."
+    },
+    "applyToAgents": "Wakiillada waa u diyaar",
+    "applyToAgentsHint": "Waa dansan yahay asalka. Markaad hawlgeliso, wakiilladu waxay xirfaddan ku furi karaan qalab akhris oo keliya ah halkii ay ka beddeli lahaayeen tilmaamahooda shaqsiyeed. Wicitaanada xirfadda waxay leeyihiin xad tallaabo oo madax bannaan. Wakiillada Foundry waa in horay loogu diiwaangeliyey shaqooyinka load_skill iyo search_skill_documents.",
+    "requireConsent": "Weydii ka hor intaadan adeegsan",
+    "requireConsentHint": "Marka moodeelku uu doonayo inuu si iskiis ah u adeegsado xirfadan, isticmaalaha waa la weydiin doonaa marka hore. Isticmaalka la codsaday ama la dhajiyay ma u baahna xaqiijin.",
+    "consentChip": "Weydii marka hore",
+    "sourceChip": "Ka timi il",
+    "sourceChipHint": "Waxaa keenay ilo xirfadeed oo la isdiiwaan geliyay; tilmaamaha waala cusbooneysiiyaa marka la is waafajiyo. Dejiyaasha hawlgelinta, wakiilka iyo oggolaanshaha adigaa iska leh.",
+    "sources": {
+      "title": "Ilaha xirfadaha",
+      "description": "Isdiiwaan geli liiska xirfadaha dibedda (index.json oo ay ku taxan yihiin faylasha SKILL.md). Xirfadahiisa waxay noqonayaan xirfadaha ururka waxayna is cusbooneysiiyaan qiyaastii lixdii saacba mar. Kaliya SKILL.md ayaa la soo dhoofsadaa; dukumeentiyada tixraaca lama soo dhoofiyo.",
+      "urlLabel": "URL Liiska",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Waa inuu noqdaa https oo ku jira host dadweyne. Faylasha xirfadaha waxaa laga akhriyaa isla meeshaas oo kaliya.",
+      "labelLabel": "Summad (ikhtiyaari)",
+      "add": "Isdiiwaan geli",
+      "adding": "Isdiiwaan gelinaya…",
+      "added": "{count, plural, =0 {Isha waa la daray; wali lagama dhoofin xirfado} one {Isha waa la daray; # xirfad waa la dhoofiyay} other {Isha waa la daray; # xirfado waa la dhoofiyay}}",
+      "addedWithError": "Isha waa la daray, balse is-waafajintii hore waa ay fashilantay. Fiiri khaladka ku jira isha.",
+      "addError": "Lama awoodo in la daro isha xirfadda",
+      "sync": "Waafaji hadda",
+      "syncing": "Waa la waafajinayaa…",
+      "synced": "Isha waa la waafajiyay.",
+      "syncError": "Lama awoodo in la waafajiyo isha xirfadda",
+      "remove": "Ka saar isha",
+      "removeConfirm": "Ma ka saari doontaa ishan? Xirfadaha ay keentay waxay sii ahaanayaan xirfado caadi ah oo urur ah waana ka istaagaan inay is cusbooneysiiyaan.",
+      "removed": "Isha waa la saaray.",
+      "removeError": "Lama awoodo in la saaro isha xirfadda",
+      "loading": "Waa la soo xambaarayaa ilaha…",
+      "loadError": "Ilaha xirfadaha lama soo xambaarin karo.",
+      "empty": "Ilaha xirfado lama helin weli.",
+      "never": "Waligaa lama waafajin",
+      "statusOk": "La waafajiyay",
+      "statusError": "Waafajin waa ay fashilantay",
+      "statusPartial": "{count, plural, one {# diiwaan la booday} other {# diiwaan la booday}}",
+      "lastSync": "Waafajintii ugu dambeysay {time}",
+      "entryCount": "{count, plural, one {# diiwaan} other {# diiwaan}}",
+      "entryStatus": {
+        "synced": "la waafajiyay",
+        "skipped": "la booday",
+        "conflict": "iska horimaad — lama baddalin",
+        "invalid": "aan sax ahayn"
+      }
+    },
+    "requireConsentDisabledHint": "Kaliya xirfadaha si otomaatig ah u shaqeeya ayaa waydiin kara ogolaansho: kuwa la codsaday, la xushay ama marwalba shaqeeya si toos ah ayay u dhaqan galaan, kuwa dalabka ku saleysanna marnaba lama doorto model-ka."
+  },
+  "personalSkills": {
+    "title": "Xirfadaha shaqsiyeed",
+    "description": "Kaydi tilmaamo dib loo adeegsankaro oo u gaar ah wada sheekaysiyadaada. Xirfadaha waxa ay ku kaydsan yihiin biraawsarkan oo waxaa loo diraa moodeelka marka aad la sheekaysato kaliya. Xirfadaha la xidhiidha waxa si toos ah loo xulan karaa, hal mar baa loo adeegsan karaa, ama waa la dhejin karaa. Ma beddeli karaan siyaasadda ururka mana furi karaan adeegsiga qalab dheeraad ah. Si loo isticmaalo xirfadaha, waa in fursaddan lagu furo faylkan; wada sheekaysiga agentyadu ma adeegsadaan xirfadaha shaqsiyeed.",
+    "importFile": "Soo geli SKILL.md ama ZIP",
+    "review": "Eeg tilmaamaha oo dhamaystiran ka hor intaadan kaydin. Tilmaamaha la soo dejiyay waa dookha adeegsadaha, ma aha siyaasadda la aamini karo ee ururka.",
+    "skipped": "Skribtyo la fulin karo waa la dhaafay",
+    "importTooLarge": "Faylka la soo gelinayo waa inuu ahaadaa 20 MB ama ka yar.",
+    "invalid": "Xirfadda lama soo geli karin.",
+    "duplicate": "Aqoonsigan xirfadda shaqsiyeed hore ayuu u jiray. Xirfadda jirta wax ka beddel ama aqoonsi kale dooro.",
+    "countLimit": "Waxaad kaydin kartaa ugu badnaan 20 xirfadood oo shaqsiyeed.",
+    "requestLimit": "Xirfadaha shaqsiyeed ee la hawlgeliyay waxay ka badan yihiin xadka codsiga ee 160 KB. Xirfado qaarna danso ama tilmaamahooda gaabi.",
+    "saved": "Xirfad shaqsiyeed ayaa lagu kaydiyay biraawsarkan.",
+    "instructionsHint": "Ilaa 16 KB oo tilmaamo ah, oo ay ku jiraan qoraalka la soo geliyay. Fayooshinka binary-ga iyo diiwaan gelinta joogtada ah ee dukumiintiyada waxa loo heli karaa xirfadaha ururka oo keliya. Dhoofinta waxay isticmaashaa magaca caadiga ah ee SKILL.md la’aanteed astaanta user:.",
+    "enabled": "Waa loo hawlgeliyay wadahadalladayda",
+    "empty": "Abuur xirfad hawl soo noqnoqota ah, ama soo geli SKILL.md si aad u eegto una kaydiso halkan."
   }
 }

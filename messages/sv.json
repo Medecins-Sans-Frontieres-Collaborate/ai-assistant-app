@@ -812,7 +812,16 @@
       "stillWorking": "Arbetar fortfarande…",
       "assessingSearchResults": "Kontrollerar om resultaten besvarar frågan…",
       "refiningSearch": "Söker igen: ”{query}”…",
-      "readingSearchPages": "Läser {count} resultatsidor…"
+      "readingSearchPages": "Läser {count} resultatsidor…",
+      "toolRoutingUnavailableInRegion": "Verktygsdirigering är inte tillgänglig på {region}-endpointen — svarar utan verktyg…",
+      "applyingSkill": "Tillämpa färdighet: {skills}…",
+      "applyingSkills": "Tillämpa färdigheter: {skills}…",
+      "readingSkillReferences": "Läser referensdokument om färdigheter…",
+      "selectingSkills": "Väljer färdigheter...",
+      "retryingModel": "Modellen är upptagen — försöker igen om {seconds}s (försök {attempt})…",
+      "resumingResponse": "Anslutningen till modellen bröts — återupptar där det slutade…",
+      "continuingResponse": "Svaret nådde längdgränsen — fortsätter…",
+      "trimmingContext": "Konversationen är för lång för modellen — klipper äldre historik och försöker igen…"
     },
     "toolSummary": {
       "usedTools": "Använt {count, plural, one {# verktyg} other {# verktyg}}",
@@ -878,7 +887,9 @@
       "deniedByRuleHint": "Blockerat av din regel — hantera i Inställningar → Anslutningar.",
       "batchPendingHint": "{count} verktygsförfrågningar väntar",
       "approveAllButton": "Godkänn alla",
-      "denyAllButton": "Avvisa alla"
+      "denyAllButton": "Avvisa alla",
+      "applySkillTitle": "Använd färdigheten ”{skill}”?",
+      "skillConsentNote": "En administratör har ställt in att denna färdighet ska fråga innan den används. Godkännande laddar dess vägledning endast för detta svar."
     },
     "openImage": "Öppna bild",
     "copyMessage": "Kopiera meddelande",
@@ -918,7 +929,54 @@
     "alwaysWaitThisLong": "Vänta alltid upp till {duration}",
     "keepSearching": "Fortsätt söka",
     "keepSearchingHint": "Sökningen stoppades innan detta hittades. Be assistenten prova andra tillvägagångssätt.",
-    "keepSearchingMessage": "Fortsätt söka efter detta, tack — testa ett annat tillvägagångssätt."
+    "keepSearchingMessage": "Fortsätt söka efter detta, tack — testa ett annat tillvägagångssätt.",
+    "addSkill": "Färdigheter",
+    "removeSkill": "Ta bort färdighet",
+    "skillsMenuLabel": "Tillgängliga färdigheter",
+    "skillsLimit": "Upp till 3 färdigheter per meddelande.",
+    "skillPin": "Fäst till konversation",
+    "skillUseOnce": "Använd en gång",
+    "skillPinned": "fäst",
+    "skillOnce": "nästa meddelande",
+    "skillsPaused": "pausad",
+    "skillUnavailable": "otillgänglig",
+    "skillsAutomaticHint": "Relevanta färdigheter väljs automatiskt. Använd en gång för nästa meddelande eller fäst en färdighet för att använda den under hela konversationen.",
+    "skillsAgentDisabled": "Färdigheter är pausade medan en agent är ansluten. Dina fästa kommer att återupptas när du kopplar bort agenten.",
+    "skillPersonal": "personlig",
+    "skillsAgentToolsHint": "Endast organisationsfärdigheter som har aktiverats av en administratör för agentanvändning erbjuds här. Agenten kan ladda dem som verktyg med endast läsrättigheter. Andra fästen förblir pausade och personliga färdigheter är inte tillgängliga för agenter.",
+    "skillAlwaysOn": "alltid aktiv",
+    "skillAlwaysOnHint": "Tillagd till varje meddelande i denna konversation av en administratör.",
+    "skillUsage": {
+      "label": "Färdigheter",
+      "requested": "begärd",
+      "pinned": "fastnålad",
+      "auto": "auto",
+      "unavailable": "otillgänglig",
+      "incomplete": "Vissa färdigheter kunde inte tillämpas",
+      "references": "{count, plural, one {# referenstext} other {# referenstexter}}",
+      "referencesUnavailable": "Vissa referensdokument var otillgängliga",
+      "showDetails": "Visa färdighetsdetaljer",
+      "hideDetails": "Dölj färdighetsdetaljer",
+      "agentLoad": "inläst av agent",
+      "agentSearch": "dokument sökta av agent",
+      "needsApproval": "kräver ditt godkännande",
+      "original": "som ursprungligen kördes",
+      "updated": "uppdaterad sedan dess"
+    },
+    "skillsManualHint": "Automatiskt val är avstängt i Inställningar. Använd en gång för nästa meddelande eller fäst en färdighet för att använda den under hela denna konversation.",
+    "queuedMessage": {
+      "label": "I kö",
+      "attachmentOnly": "Bilaga",
+      "cancel": "Avbryt köat meddelande"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Svaret stoppades av innehållssäkerhetsfiltret. Formulera om begäran eller ta bort delen som kan ha utlöst det.",
+      "MODEL_CONTEXT_TOO_LONG": "Denna konversation är för lång för den valda modellen, även efter att äldre historik klippts bort. Starta en ny konversation, ta bort några bilagor eller välj en modell med större kontextfönster.",
+      "MODEL_OUTPUT_LIMIT": "Modellen använde hela sitt utdatautrymme utan att ge ett svar. Testa med lägre resonemangsinsats eller en kortare begäran.",
+      "MODEL_RATE_LIMITED": "Modellen får för många förfrågningar just nu. Omförsöktes automatiskt; försök igen om en stund.",
+      "MODEL_QUOTA_EXCEEDED": "Modellens kapacitetskvot är förbrukad. Prova en annan modell eller försök senare.",
+      "MODEL_AUTH_FAILED": "Appen kunde inte autentisera mot modelltjänsten. Detta är ett konfigurationsproblem — kontakta supporten."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -1325,7 +1383,11 @@
       "preferModelTitle": "Föredra min valda modell",
       "preferModelDescription": "Byt inte automatiskt till en annan modell när en begäran misslyckas. Felet kommer fortfarande att erbjuda byte."
     },
-    "Analytics": "Analys"
+    "Analytics": "Analys",
+    "skills": {
+      "autoApply": "Låt assistenten använda färdigheter automatiskt",
+      "autoApplyDescription": "Relevanta färdigheter, samt dina personliga färdigheter, väljs för varje meddelande. När detta är avstängt används endast färdigheter du begär eller fäster samt de som en administratör tilldelar varje konversation."
+    }
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "sekunder",
     "chipAutoHideHint": "Mellan {min} och {max} sekunder.",
     "byWorkflow": "Per arbetsflöde",
-    "byWorkflowNote": "Del av summorna ovan, visas separat — inte extra användning. Beviljade körningar räknas mot din organisations rapportering och tokenbudget, men inte i denna lokala summa."
+    "byWorkflowNote": "Del av summorna ovan, visas separat — inte extra användning. Beviljade körningar räknas mot din organisations rapportering och tokenbudget, men inte i denna lokala summa.",
+    "chipLabelTitle": "Chip-etikett",
+    "chipLabelHint": "Uppdelningen visar alltid utsläpp och kostnad sida vid sida; detta avgör endast vad den hopfällda chippen visar.",
+    "chipLabelEmissions": "Utsläpp",
+    "chipLabelCost": "Kostnad",
+    "chipLabelBoth": "Båda",
+    "costTile": "Uppskattad kostnad",
+    "costDisclosure": "Kostnad enligt listpriser per {asOf} (Global Standard rate, ingen rabatt för cachad indata): en övre gräns, ingen faktura. Webbsökning, kodkörning, transkribering, tal, översättning och dokumentindexering ingår ej.",
+    "costUnpriced": "{count, plural, one {# förfrågan utan listpris är} other {# förfrågningar utan listpris är}} inte inkluderade."
   },
   "extraction": {
     "toggleLabel": "Extrahera strukturerad data",
@@ -4502,7 +4572,16 @@
         "auto": "Auto",
         "hidden": "Dölj"
       },
-      "visibilityHint": "Auto visar chipet när uppskattningen uppdateras eller när du hovrar över det. Du kan ändra detta igen under Inställningar › Användning & påverkan."
+      "visibilityHint": "Auto visar chipet när uppskattningen uppdateras eller när du hovrar över det. Du kan ändra detta igen under Inställningar › Användning & påverkan.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Uppskattad kostnad {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Inget listpris för förfrågningarna i denna rad",
+        "unpriced": "{count, plural, one {# förfrågan utan listpris är} other {# förfrågningar utan listpris är}} inte inkluderade i kostnaden.",
+        "noPriceData": "Ingen kostnad visas: modellen för denna konversation har inget listpris (egna källor, lokala miljöer och agenter är inte prissatta).",
+        "note": "Kostnad enligt listpriser per {asOf} (Global Standard rate, ingen rabatt för cachad indata): en övre gräns, ingen faktura. Webbsökning, kodkörning, transkribering, tal, översättning och dokumentindexering ingår ej."
+      }
     },
     "workflow": {
       "title": "Detta arbetsutrymme (uppskattat)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "Ta bort ordlista",
     "glossaryDeleteSuccess": "Ordlista borttagen",
     "channelProfilesTab": "Plattformar",
-    "channelSetsTab": "Kanaluppsättningar"
+    "channelSetsTab": "Kanaluppsättningar",
+    "addPromptAgent": "Lägg till promptagent",
+    "m365AgentIndexStop": "Stoppa indexering",
+    "foundryAgentsHeading": "Foundry- och promptagenter",
+    "foundryAgentsDescription": "Agenter upptäckta från Azure AI Foundry via din egen åtkomst, samt promptagenter som definieras här. Kunskapsagenter och Microsoft 365-agenter hanteras i sina egna avsnitt nedan.",
+    "agentSkillsLabel": "Färdigheter",
+    "agentSkillsHelp": "Vilka organisationens färdigheter denna agent får ladda vid svar. Användare ser fortfarande bara färdigheter som deras åtkomstregler tillåter.",
+    "agentSkills": {
+      "inherit": "Färdigheter markerade ”tillgängliga för agenter”",
+      "selected": "Endast valda färdigheter nedan",
+      "none": "Inga färdigheter"
+    },
+    "agentSkillsNone": "Inga färdigheter tillgängliga att välja.",
+    "agentSkillsLoading": "Laddar färdigheter…",
+    "agentSkillsLoadError": "Färdigheter kunde inte laddas. Tidigare sparade val behålls.",
+    "agentSkillsNotVisible": "(inte synlig för dig — avmarkera för att ta bort)"
   },
   "localModels": {
     "title": "Lokala modeller",
@@ -5521,7 +5615,8 @@
       "channelSets": "Varje teams regler för att skriva på plattformarna: vägledning, röster, standarder, vem som får använda uppsättningen och vem som får skicka.",
       "webSearch": "Hur långt en webbsökning kan gå: flerstegssökning, bedömningsmodell och dess gränser.",
       "contextBudget": "Hur mycket av en konversation som skickas till varje modell vid varje tur.",
-      "analytics": "Levererade rapporter: vad anlände, vem kan öppna varje mapp och vilka fält som kan visas."
+      "analytics": "Levererade rapporter: vad anlände, vem kan öppna varje mapp och vilka fält som kan visas.",
+      "skills": "Återanvändbara instruktioner som assistenten tillämpar vid behov i en konversation."
     },
     "openSettings": "Öppna inställningar",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "Delegationer",
       "webSearch": "Webbsökning",
       "contextBudget": "Context budget",
-      "analytics": "Analys"
+      "analytics": "Analys",
+      "skills": "Färdigheter"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "Globala standardvärden",
       "overrides": "Åsidosättningar",
-      "delegations": "Delegationer"
+      "delegations": "Delegationer",
+      "models": "Modeller"
     },
     "tabsLabel": "Begränsningssektioner",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365-verktygsanrop per dag",
       "m365MailReadsPerDay": "Mail-läsningar per dag",
       "m365MailDraftsPerDay": "Mailutkast per dag",
-      "m365MailDeepScansPerDay": "Mail-djupanalyser per dag"
+      "m365MailDeepScansPerDay": "Mail-djupanalyser per dag",
+      "m365DigestRunsPerDay": "Dagliga digest-körningar per dag"
     },
     "valueModeLabel": "Begränsningstyp",
     "valueAmountLabel": "Begränsningsvärde",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Microsoft 365-verktygsanrop (kalender, personer, uppgifter, Teams) per dag. Om gränsen överskrids returnerar verktygen ett vänligt \"försök igen imorgon\" istället för att misslyckas i chatten.",
       "m365MailReadsPerDay": "E-postsökningar och läsningar av meddelanden/trådar per dag. Om gränsen överskrids returnerar e-postverktygen \"försök igen imorgon\".",
       "m365MailDraftsPerDay": "E-postutkast som assistenten får skapa per dag — varje måste bekräftas individuellt. Medvetet stramt.",
-      "m365MailDeepScansPerDay": "Sammansatta e-postanalyser (sammandrag, djupsök, åtaganden) per dag. Varje skanning räknas som en budgetenhet oavsett antal interna läsningar."
+      "m365MailDeepScansPerDay": "Sammansatta e-postanalyser (sammandrag, djupsök, åtaganden) per dag. Varje skanning räknas som en budgetenhet oavsett antal interna läsningar.",
+      "m365DigestRunsPerDay": "Microsoft 365 dagliga digest-körningar per dag. En körning innebär dussintals Graph-läsningar plus två analysmodellsanrop; periodväljaren gör det billigt att köra om, därför är standardvärdet stramt."
     },
     "scopeFamily": "Familj",
     "scopeModel": "Modell",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "Inbyggd standard",
     "previewSourceGlobal": "Global standard",
     "previewSourceOverride": "Åsidosättning: {label}",
-    "previewNotEvaluated": "Avdelnings-, företags- och gruppåsidosättningar kan inte utvärderas här – de beror på personens egen inloggning.",
+    "previewNotEvaluated": "Katalogen kunde inte nås, så regler för avdelning/företag/kontor och grupper utvärderades inte för denna person. Försök igen om en stund.",
     "previewUnsaved": "Visar den senast sparade policyn. Spara dina ändringar för att förhandsgranska dem.",
     "previewColumnLimit": "Begränsning",
     "previewColumnValue": "Värde",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "Endast grupper",
     "yourScopeGroupOnlyNote": "Definierad endast av grupper eller attribut, så gränser kan inte förhandsgranskas med e-postadress.",
     "previewOutOfScope": "Denna person är utanför din räckvidd.",
-    "previewGroupOnlyScope": "Din räckvidd definieras av grupper eller attribut, så gränser kan inte förhandsgranskas med e-postadress.",
+    "previewGroupOnlyScope": "Ditt omfång definieras av grupper eller attribut. Förhandsvisningen söker upp personen i katalogen för att avgöra om de ingår.",
     "previewCeilingPinned": "Begränsad av tak: {label}",
     "previewShowUsage": "Visa aktuell användning",
     "previewColumnUsage": "Använt",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "En hård gräns i en rad låser det värdet för denna överskrivnings mål: avgränsade administratörer kan inte höja den, och där flera tak gäller vinner det mest specifika.",
     "confirmDeleteOverride": "Radera \"{label}\"? Det tas bort omedelbart från servern och dess mål återgår till gällande bakomliggande gränser. Detta kan inte ångras.",
     "confirmDeleteOverrideAction": "Radera överskrivning",
-    "previewUndecidableScope": "Ditt omfång inkluderar grupper eller attribut, så det kan inte avgöras via e-postadress om denna person omfattas.",
+    "previewUndecidableScope": "Ditt omfång omfattar grupper eller attribut och katalogen kunde inte nås, så det går inte att avgöra om denna person ingår just nu. Försök igen om en stund.",
     "previewNoLongerAdmin": "Du är inte längre namngiven i en aktiv delegering och kan därför inte förhandsgranska gränser. Ladda om sidan för att se dina aktuella rättigheter.",
     "previewScopeMatchesNobody": "Ditt omfång matchar för närvarande ingen, så det finns ingen att förhandsgranska via e-postadress.",
     "yourScopeMatchesNobodyChip": "Matchar ingen",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "Dess delegering är inaktiverad, så denna överskrivning gäller ingen förrän delegeringen aktiveras igen. Den uppgraderas aldrig till global nivå.",
     "betaPolicyNotice": "Beta-miljö: denna policy och dess användningsräknare lagras separat från produktionen (policy.beta.json). Ändringar du gör här påverkar inte produktionen.",
     "delegationsManagedElsewhere": "Delegationer visas här som endast läsbara. Vilka som ingår i en delegation, vilka användare som omfattas och vad varje administratör får göra hanteras i Delegations-området.",
-    "delegationsManagedElsewhereLink": "Öppna Delegationer"
+    "delegationsManagedElsewhereLink": "Öppna Delegationer",
+    "modelAccess": {
+      "intro": "Bestäm vem som får använda varje modell. En familjs inställning gäller för dess modeller om inte en modell har en egen; personer på en lista gäller över standardinställningen för andra; blocklistan prioriteras över alla tilldelningar.",
+      "externalNote": "Modeller som ligger utanför Azure-miljön ({families}) är inte tillgängliga för någon förrän du beviljar åtkomst här — för alla via standardinställningen, eller för grupper, domäner och personer.",
+      "envelopeNote": "En begäransgräns på en familj är en gemensam dagsbudget för dess modeller; en gräns på en modell är ett tak inom den. Obegränsat på en modell höjer inte familjens budget.",
+      "observeNote": "Observera-läge är på: ingenting här döljer en modell eller stoppar en begäran ännu. Byt till Verkställ ovan när reglerna är korrekta.",
+      "familyChip": "Familj",
+      "modelChip": "Modell",
+      "otherModels": "Modeller utan familj",
+      "modelsInFamily": "{count, plural, one {# modell i denna familj} other {# modeller i denna familj}}",
+      "noModels": "Inga modeller i katalogen ännu.",
+      "expand": "Visa modeller",
+      "collapse": "Dölj modeller",
+      "edit": "Redigera",
+      "doneEditing": "Klar",
+      "editNode": "Redigera åtkomst för {label}",
+      "defaultLabel": "Alla andra",
+      "defaultInherit": "Ärv",
+      "defaultUnlimited": "Obegränsad",
+      "defaultLimited": "Begränsad till",
+      "defaultUnavailable": "Otillgänglig",
+      "defaultRequestsLabel": "Förfrågningar per dag för alla andra",
+      "requestsPerDay": "förfrågningar / dag",
+      "inheritedFrom": "Ärver {state} från {origin}.",
+      "effectiveLabel": "Alla som inte är på en lista får: {state}.",
+      "inheritedChip": "ärvd",
+      "origin": {
+        "model": "denna inställning",
+        "family": "dess familj",
+        "defaults": "Globala standardvärden",
+        "catalogExternal": "regeln att externa modeller är otillgängliga tills de beviljats åtkomst",
+        "catalog": "katalogens standardvärde"
+      },
+      "state": {
+        "unlimited": "Obegränsad",
+        "limited": "Begränsad till {requests} / dag",
+        "unavailable": "Otillgänglig"
+      },
+      "list": {
+        "groups": "Grupper med åtkomst",
+        "domains": "Domäner med åtkomst",
+        "allow": "Personer med tillåtelse",
+        "deny": "Blockerade personer"
+      },
+      "listHint": {
+        "groups": "Medlemmar i dessa Entra-grupper får använda den, enligt villkoren som är satta per grupp.",
+        "domains": "Alla med en e-postadress i dessa domäner, enligt villkoren per domän.",
+        "allow": "Namngivna personer får använda den oavsett standard eller deras domäninställning.",
+        "deny": "Namngivna personer får aldrig använda den. Detta prioriteras över alla tilldelningar ovan."
+      },
+      "grantUnlimited": "Obegränsad",
+      "grantLimited": "Begränsad till",
+      "termsLabel": "Villkor för {target}",
+      "requestsLabel": "Förfrågningar per dag för {target}",
+      "removeGrant": "Ta bort {target}",
+      "groupsCount": "{count, plural, one {# grupp} other {# grupper}}",
+      "domainsCount": "{count, plural, one {# domän} other {# domäner}}",
+      "allowCount": "{count, plural, one {# person tillåten} other {# personer tillåtna}}",
+      "denyCount": "{count, plural, one {# person blockerad} other {# personer blockerade}}",
+      "collisionChip": "Finns även i globala standardinställningar",
+      "collisionWarning": "Den här modellen eller familjen är också konfigurerad under globala standardinställningar. Spara kommer att nekas tills en av de två tas bort."
+    },
+    "previewSourceModelAccess": "Modelgodkännande — {list}",
+    "groupMembershipDegradedStructural": "Gruppmedlemskap kan inte slås upp på den här servern ({reason}). Gruppbaserade regler och behörigheter tillämpas inte för de berörda personerna – kontrollera tenantens Group.Read.All-samtycke och appregistreringen.",
+    "groupMembershipDegradedRetryable": "Vissa uppslag av gruppmedlemskap misslyckades på den här servern under de senaste minuterna ({reason}). Gruppbaserade regler kan utebli för dessa personer i upp till en minut medan uppslagen försöks igen.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# person} other {# personer}} påverkas för närvarande på den här servern.",
+    "previewDirectoryNotFound": "Ingen användare i katalogen har denna e-postadress, så avdelnings-, företags-, kontors- och grupptillhörighet utvärderades som om personen inte tillhörde någon."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Morgonöversikt",
-        "description": "Vad som kommit in, vad som väntar på dig och dagens kalender — en översikt"
+        "description": "En sammanfattning sedan förra arbetsdagen — vad som kommit in, vad som väntar på dig, inbjudningar och uppdateringar; på måndagar täcker den fredag och helgen."
       },
       "chipsSettingLabel": "Föreslå Microsoft 365-playbooks",
       "chipsSettingHint": "Visa förslag på Playbooks ovanför meddelanderutan när de är relevanta (t.ex. efter att ha importerat en mötestranskription).",
-      "dismissChip": "Avfärda {title}"
+      "dismissChip": "Avfärda {title}",
+      "dailyDigest": {
+        "title": "Daglig sammanfattning",
+        "description": "Sortera senaste e-post, Teams och kalender till vad som kräver din insats, vad du väntar på, uppdateringar och FYI — välj period"
+      }
+    },
+    "digest": {
+      "title": "Daglig sammanfattning",
+      "intro": "Skannar vad som nått dig under perioden och sorterar det i vad som kräver svar, vad andra begärt av dig, vad du väntar på, schemaläggning, företags- och projektuppdateringar samt FYI. Inget skickas eller ändras.",
+      "periodLabel": "Period",
+      "preset": {
+        "lastWorkday": "Sedan senaste arbetsdag",
+        "1d": "Senaste 24 timmarna",
+        "3d": "Senaste 3 dagarna",
+        "7d": "Senaste 7 dagarna",
+        "14d": "Senaste 14 dagarna",
+        "custom": "Eget intervall"
+      },
+      "lastWorkdayHint": "Från början av den senaste vardagen före idag — på en måndag täcks fredag och helgen.",
+      "from": "Från",
+      "to": "Till",
+      "customInvalid": "Välj ett ordnat intervall på högst {days} dagar.",
+      "sourcesLabel": "Källor",
+      "sourceNoConsent": "Behörighet inte beviljad för denna källa.",
+      "sourceHint": {
+        "mail": "Inkorgskuvert och förhandsvisningar; dina Skickade objekt avgör vad som räknas som besvarat.",
+        "chat": "Senaste Teams-chattar, med @omnämnanden du inte har besvarat.",
+        "channel": "Inlägg i kanalerna du väljer nedan.",
+        "calendar": "Inbjudningar som väntar på ditt svar och dina möten som andra inte har svarat på."
+      },
+      "channelsLabel": "Kanaler ({count} av {max})",
+      "removeChannel": "Ta bort {name}",
+      "channelsSlow": "Varje kanal ökar läsningarna; fler kanaler gör sammanfattningen långsammare.",
+      "channelsMax": "Maximalt antal kanaler ({max}) uppnått.",
+      "channelsNeeded": "Välj minst en kanal, eller lägg till en annan källa.",
+      "teamLabel": "Team",
+      "loadingTeams": "Laddar team…",
+      "pickTeam": "Välj ett team för att visa dess kanaler",
+      "loadingChannels": "Laddar kanaler…",
+      "noChannels": "Inga kanaler hittades i detta team.",
+      "privacyNote": "Endast ämnesrader, avsändare och korta förhandsvisningar läses; meddelandetext och bilagor stannar i Microsoft 365. Poster är sammanfattningar av din egen data.",
+      "cancel": "Avbryt",
+      "run": "Starta sammanfattning",
+      "starting": "Startar…",
+      "startFailed": "Sammanfattningen kunde inte startas.",
+      "userMessage": "Daglig sammanfattning — {period}; källor: {sources}",
+      "working": "Skannar din Microsoft 365-kommunikation…",
+      "failed": "Sammanfattningen misslyckades.",
+      "failedPrefix": "Daglig sammanfattning misslyckades:",
+      "expired": "Denna sammanfattning har gått ut. Kör igen för en ny uppdatering.",
+      "runAgain": "Kör igen",
+      "changePeriod": "Byt period",
+      "period": {
+        "lastWorkday": "sedan senaste arbetsdag",
+        "lastDays": "{count, plural, one {senaste dag} other {senaste # dagarna}}"
+      },
+      "source": {
+        "mail": "E-post",
+        "chat": "Teams-chattar",
+        "channel": "Teams-kanaler",
+        "calendar": "Kalender"
+      },
+      "sourceStatus": {
+        "ok": "klar",
+        "partial": "delvis",
+        "skipped": "hoppades över",
+        "unavailable": "ingen behörighet",
+        "error": "misslyckades"
+      },
+      "degraded": "Analysmodellen var inte tillgänglig, så kategorier baseras enbart på regler.",
+      "withheld": "{count, plural, one {# objekt har} other {# objekt har}} undanhållits av skyddsfiltren.",
+      "empty": "Inget att rapportera för denna period och dessa källor.",
+      "actionItems": "Åtgärdspunkter",
+      "createTasks": "{count, plural, =0 {Lägg till i Att göra} one {Lägg till # uppgift i Att göra} other {Lägg till # uppgifter i Att göra}}",
+      "taskCreated": "tillagt i Att göra",
+      "tasksCreated": "{count, plural, one {# uppgift} other {# uppgifter}} tillagd(e) i listan \"{list}\".",
+      "tasksFailed": "Kunde inte skapa uppgifterna.",
+      "category": {
+        "needsReply": "Behöver mitt svar",
+        "askedOfMe": "Begärt av mig",
+        "waitingOnOthers": "Väntar på andra",
+        "scheduling": "Schemaläggning",
+        "companyUpdates": "Företags- och projektuppdateringar",
+        "fyi": "Till kännedom",
+        "bulk": "Automatiserat och massutskick"
+      },
+      "companyUpdatesHint": "viktigt, sällan brådskande",
+      "markDone": "Markera {title} som hanterad",
+      "badge": {
+        "unanswered": "obesvarad",
+        "mentioned": "nämnde dig",
+        "important": "hög prioritet"
+      },
+      "askAbout": "Fråga om detta",
+      "askPrompt": "Om {source}-objektet \"{title}\" från {from} ({when}) i sammanställningen ovan: vad efterfrågas, och vad vore ett bra svar?",
+      "open": {
+        "mail": "Öppna i Outlook",
+        "chat": "Öppna i Teams",
+        "channel": "Öppna i Teams",
+        "calendar": "Öppna i Outlook"
+      },
+      "footnote": "Kategorier baseras på dina egna signaler (obesvarad, nämnd, sändning) samt AI-klassificering; kontrollera innan åtgärd. Inget har skickats.",
+      "age": {
+        "now": "nyss",
+        "hours": "{count}h sedan",
+        "days": "{count}d sedan"
+      },
+      "waitForReply": "Vänta tills det nuvarande svaret är klart innan du påbörjar en sammanfattning."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "Kunskap",
       "prompt": "Personlighet",
-      "m365": "Kunskap (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Kunskap",
-      "foundry": "Foundry-agent",
+      "foundry": "Anpassad agent",
       "connector": "Koppling"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "kör på egen modell"
     },
     "loadError": "Dina agenter kunde inte laddas just nu. Detta är vanligtvis tillfälligt.",
-    "discoveryLoading": "Letar efter Foundry-agenter…",
-    "discoveryError": "Det gick inte att ladda Foundry-agenter.",
+    "discoveryLoading": "Letar efter fler agenter…",
+    "discoveryError": "Vissa agenter kunde inte läsas in.",
     "retry": "Försök igen"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "Äldre än denna mapps {months} månaders lagring; visas inte längre.",
       "unknown": "Rapporterat problem: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Färdigheter",
+    "description": "Återanvändbara instruktioner som assistenten tillämpar vid behov i en konversation. Kompatibel med Agent Skills SKILL.md-formatet som används av Claude och ChatGPT.",
+    "loading": "Laddar färdigheter…",
+    "loadError": "Kunde inte ladda färdigheter.",
+    "retry": "Försök igen",
+    "unavailableBanner": "Färdighetslagring är för tillfället otillgänglig — inbyggda standardvärden visas; sparade färdigheter och redigeringar är otillgängliga tills anslutningen är återställd.",
+    "conflictError": "Denna färdighet har ändrats av en annan administratör. Listan har laddats om — gör om din ändring.",
+    "alwaysWarning": "{count} färdigheter är satta till Alltid. Alla dessa läggs till i varje konversation — använd hellre Automatisk för ämnesspecifika färdigheter.",
+    "newSkill": "Ny färdighet",
+    "importSkill": "Importera SKILL.md",
+    "importTitle": "Klistra in en SKILL.md-fil",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Vad denna färdighet gör och när den ska användas.\n---\n\nInstruktioner…",
+    "importHint": "Den tolkade färdigheten öppnas i redigeraren för granskning — inget sparas förrän du sparar den.",
+    "importParse": "Tolka och granska",
+    "invalidId": "Färdighets-ID får endast innehålla små bokstäver, siffror och enkla bindestreck.",
+    "saveSuccess": "Färdigheten sparad.",
+    "saveError": "Kunde inte spara färdigheten.",
+    "deleteConfirm": "Ta bort denna färdighet? Konversationer slutar omedelbart att ta emot den.",
+    "restoreConfirm": "Ta bort anpassningen och återställ denna inbyggda färdighets standardvärde?",
+    "deleteSuccess": "Färdigheten borttagen.",
+    "restoreSuccess": "Inbyggd standard återställd.",
+    "deleteError": "Kunde inte ta bort färdigheten.",
+    "empty": "Inga färdigheter ännu. Skapa en, eller importera en SKILL.md.",
+    "builtinChip": "Inbyggd",
+    "customizedChip": "Anpassad",
+    "exportSkill": "Exportera som SKILL.md",
+    "edit": "Redigera",
+    "delete": "Ta bort",
+    "restoreDefault": "Återställ standard",
+    "createTitle": "Ny färdighet",
+    "editTitle": "Redigera {name}",
+    "idLabel": "ID",
+    "idHint": "Små bokstäver, siffror och bindestreck. Blir färdighetens SKILL.md-namn och kan inte ändras efter skapandet.",
+    "nameLabel": "Visningsnamn",
+    "descriptionLabel": "Beskrivning",
+    "descriptionHint": "Vad färdigheten gör OCH när den ska användas — detta styr urvalet, så ange specifika ämnen och formuleringar den ska reagera på.",
+    "activationLabel": "Aktivering",
+    "activation": {
+      "auto": "Automatisk",
+      "always": "Alltid",
+      "off": "Av",
+      "manual": "Vid förfrågan"
+    },
+    "activationHint": {
+      "auto": "Väljs automatiskt när den aktuella uppgiften matchar beskrivningen. Användare kan också be om att använda den en gång eller fästa den till en konversation.",
+      "always": "Läggs till i varje konversation för alla som kan se färdigheten. Använd sparsamt — detta är permanent promptutrymme.",
+      "off": "Inaktiv: tillämpas aldrig och erbjuds inte användare, men sparas här för redigering.",
+      "manual": "Används endast när en användare begär eller fäster den. Väljs aldrig automatiskt och erbjuds inte till modellen som laddningsbar färdighet."
+    },
+    "instructionsLabel": "Instruktioner",
+    "instructionsHint": "Markdown, upp till 16 KB. Infogas ordagrant när färdigheten är aktiv.",
+    "saving": "Sparar…",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "documents": {
+      "title": "Dokument",
+      "hint": "Referenser lagras med denna färdighet. Små dokument laddas direkt; större dokument indexeras för citerad sökning. Upp till 20 resurser, 10 MB vardera och totalt 20 MB. Tillgångar lagras endast för nedladdning.",
+      "saveFirst": "Spara en anpassning av denna inbyggda färdighet innan du lägger till dokument.",
+      "upload": "Lägg till referensdokument",
+      "remove": "Ta bort",
+      "stop": "Stoppa indexering",
+      "resume": "Indexera eller återuppta dokument",
+      "empty": "Inga dokument bifogade ännu.",
+      "requestFailed": "Dokumentförfrågan misslyckades. Ladda om och försök igen.",
+      "importZip": "Importera en färdighets-ZIP",
+      "zipTooLarge": "Färdighets-ZIP-filen måste vara 20 MB eller mindre.",
+      "importCount": "Resurser att bifoga efter sparning: {count}",
+      "skippedScripts": "Exekverbara skript har hoppats över",
+      "status": {
+        "pending": "Väntar på att indexeras",
+        "processing": "Indexerar",
+        "inline": "Klar (laddas direkt)",
+        "indexed": "Klar (sökbar)",
+        "failed": "Indexeringen misslyckades",
+        "asset": "Nedladdningsbar tillgång"
+      },
+      "confirmRemove": "Ta bort {filename} från denna färdighet? Den sparade originalfilen kommer att raderas och inte längre vara tillgänglig som källhänvisning.",
+      "reindexRequired": "Dessa dokument behöver omindexeras för nuvarande regional sök- och inbäddningskonfiguration. De kommer inte att kunna sökas förrän indexeringen är klar."
+    },
+    "applyToAgents": "Tillgänglig för agenter",
+    "applyToAgentsHint": "Avstängd som standard. När detta är aktiverat kan agenter ladda denna färdighet via verktyg med endast läsrättigheter, istället för att ersätta sina personainstruktioner. Färdighetsanrop har separata stegränser. Foundry-agenter måste redan ha funktionerna load_skill och search_skill_documents registrerade i sin definition.",
+    "requireConsent": "Fråga innan tillämpning",
+    "requireConsentHint": "När modellen själv vill använda denna färdighet måste användaren först godkänna. Begärda och fästa användningar behöver inget godkännande.",
+    "consentChip": "Frågar först",
+    "sourceChip": "Från källa",
+    "sourceChipHint": "Tillhandahålls av en prenumererad färdighetskälla; instruktionerna uppdateras vid synkronisering. Aktivering, agent- och samtyckesinställningar är dina.",
+    "sources": {
+      "title": "Färdighetskällor",
+      "description": "Prenumerera på en extern färdighetskatalog (en index.json med SKILL.md-filer). Dess färdigheter blir organisationens färdigheter och uppdateras cirka var sjätte timme. Endast SKILL.md importeras; referensdokument importeras inte.",
+      "urlLabel": "Katalog-URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Måste vara https på en publik värd. Färdighetsfiler läses endast från samma plats.",
+      "labelLabel": "Etikett (valfritt)",
+      "add": "Prenumerera",
+      "adding": "Prenumererar…",
+      "added": "{count, plural, =0 {Källa tillagd; inga färdigheter importerade än} one {Källa tillagd; # färdighet importerad} other {Källa tillagd; # färdigheter importerade}}",
+      "addedWithError": "Källa tillagd, men första synken misslyckades. Kontrollera felet på källan.",
+      "addError": "Det gick inte att lägga till färdighetskällan",
+      "sync": "Synka nu",
+      "syncing": "Synkroniserar…",
+      "synced": "Källa synkroniserad.",
+      "syncError": "Det gick inte att synkronisera färdighetskällan",
+      "remove": "Ta bort källa",
+      "removeConfirm": "Ta bort denna källa? Färdigheterna som tillhandahållits blir kvar som vanliga organisationsfärdigheter och slutar att uppdateras.",
+      "removed": "Källa borttagen.",
+      "removeError": "Det gick inte att ta bort färdighetskällan",
+      "loading": "Laddar källor…",
+      "loadError": "Färdighetskällorna kunde inte laddas.",
+      "empty": "Inga färdighetskällor ännu.",
+      "never": "Aldrig synkroniserad",
+      "statusOk": "Synkroniserad",
+      "statusError": "Synkroniseringen misslyckades",
+      "statusPartial": "{count, plural, one {# post hoppad över} other {# poster hoppade över}}",
+      "lastSync": "Senaste synk {time}",
+      "entryCount": "{count, plural, one {# post} other {# poster}}",
+      "entryStatus": {
+        "synced": "synkroniserad",
+        "skipped": "hoppad över",
+        "conflict": "konflikt — inte överskriven",
+        "invalid": "ogiltig"
+      }
+    },
+    "requireConsentDisabledHint": "Endast automatiska färdigheter kan fråga först: begärda, fästa och alltid aktiva färdigheter används utan bekräftelse, och färdigheter på begäran väljs aldrig av modellen."
+  },
+  "personalSkills": {
+    "title": "Personliga färdigheter",
+    "description": "Spara återanvändbara instruktioner för dina egna konversationer. Färdigheter sparas i denna webbläsare och skickas till modellen endast när du chattar. Relevanta färdigheter kan väljas automatiskt, användas en gång eller fästas. De kan inte ändra organisationspolicy eller ge verktygsåtkomst. Användning av färdigheter kräver att funktionen är aktiverad för denna driftsättning; agentkonversationer använder inte personliga färdigheter.",
+    "importFile": "Importera SKILL.md eller ZIP",
+    "review": "Granska hela instruktionen innan du sparar. Importerade instruktioner är användarpreferenser, inte betrodd organisationspolicy.",
+    "skipped": "Körbara skript hoppades över",
+    "importTooLarge": "Importen måste vara 20 MB eller mindre.",
+    "invalid": "Färdigheten kunde inte importeras.",
+    "duplicate": "Den personliga färdighets-id:t finns redan. Redigera befintlig färdighet eller välj ett annat id.",
+    "countLimit": "Du kan spara upp till 20 personliga färdigheter.",
+    "requestLimit": "Aktiverade personliga färdigheter överskrider gränsen på 160 KB för förfrågningar. Inaktivera några färdigheter eller förkorta deras instruktioner.",
+    "saved": "Personlig färdighet sparad i denna webbläsare.",
+    "instructionsHint": "Upp till 16 KB instruktioner, inklusive eventuella importerade textreferenser. Binära filer och kvarvarande dokumentindexering är endast tillgängligt för organisationsfärdigheter. Export använder standardnamnet SKILL.md utan prefixet user:.",
+    "enabled": "Aktiverad för mina konversationer",
+    "empty": "Skapa en färdighet för en återkommande uppgift, eller importera en SKILL.md för att granska och spara den här."
   }
 }

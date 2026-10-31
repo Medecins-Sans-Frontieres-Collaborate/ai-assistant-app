@@ -19,6 +19,7 @@ import {
   isUnlimited,
   resolveLimit,
   resolveModelCells,
+  resolveModelGate,
 } from '@/lib/services/limits/resolver';
 import { LimitsPolicy } from '@/lib/services/limits/types';
 
@@ -167,26 +168,20 @@ export function checkGate(
   const def = getLimitDefinition(limitKey);
   if (!def) return ALLOWED;
 
-  // A per-model gate is checked on BOTH the model cell and the family cell:
-  // either one saying "blocked" blocks. A family gate is an envelope.
-  const cells = def.perModel
-    ? resolveModelCells(def, policy, principal, modelId, series, active)
-    : [resolveLimit(def, policy, principal, undefined, undefined, active)];
-  // A per-model key with no model context still has a global answer.
-  if (cells.length === 0) {
-    cells.push(
-      resolveLimit(def, policy, principal, undefined, undefined, active),
-    );
-  }
+  // A per-model gate is ONE merged cell: model and family qualifiers compete
+  // in the same comparator, so a rule about the model overrides its family's
+  // at the same layer (the approval view's inheritance) while a person-level
+  // rule on either beats every default. Mirrored by isModelBlocked.
+  const cell = def.perModel
+    ? resolveModelGate(def, policy, principal, modelId, series, active)
+    : resolveLimit(def, policy, principal, undefined, undefined, active);
 
-  for (const cell of cells) {
-    if (isBlocked(cell)) {
-      return applyMode(
-        policy,
-        principal,
-        denialFor(cell, policy?.timezone ?? 'UTC'),
-      );
-    }
+  if (isBlocked(cell)) {
+    return applyMode(
+      policy,
+      principal,
+      denialFor(cell, policy?.timezone ?? 'UTC'),
+    );
   }
   return ALLOWED;
 }

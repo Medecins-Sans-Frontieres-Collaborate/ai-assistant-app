@@ -1,4 +1,9 @@
+import { shrinkTranscriptForOverflow } from '@/lib/services/chat/contextOverflowRecovery';
 import { AnthropicFoundryHandler } from '@/lib/services/chat/handlers/AnthropicFoundryHandler';
+import {
+  continuationNudge,
+  normalizeAnthropicStop,
+} from '@/lib/services/chat/streamContinuation';
 
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 
@@ -67,6 +72,8 @@ export interface AnthropicMcpToolLoopOptions {
   userMessageText?: string;
   /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
   builtinExecutor?: ToolLoopCoreOptions<Anthropic.MessageParam>['builtinExecutor'];
+  builtinExecutors?: ToolLoopCoreOptions<Anthropic.MessageParam>['builtinExecutors'];
+  maxImmediateRounds?: number;
   /** Aborts every model round (see McpToolLoopOptions.signal). */
   signal?: AbortSignal;
 }
@@ -78,6 +85,7 @@ function buildAnthropicStrategy(
   // the system prompt out of the transcript, so the addendum is folded into
   // params.system on every round rather than into a message.
   let systemAddendum = '';
+  let lastDeclaredTools: Anthropic.Tool[] = [];
 
   return {
     applySystemAddendum(addendum) {
@@ -93,6 +101,28 @@ function buildAnthropicStrategy(
       // immediately follows the assistant tool_use message and covers every
       // tool_use id — executedResultsToUserMessage guarantees both.
       return [...messages, executedResultsToUserMessage(results)];
+    },
+
+    appendContinuation(messages, partialText, reason) {
+      // Strict alternation holds: the transcript ends with a user message
+      // (prompt or tool results), then assistant partial, then user nudge.
+      return [
+        ...messages,
+        { role: 'assistant', content: partialText },
+        { role: 'user', content: continuationNudge(reason) },
+      ];
+    },
+
+    shrinkForOverflow(messages) {
+      // A real user message is role:'user' whose content is text — a
+      // tool_result carrier has an array containing tool_result blocks.
+      return shrinkTranscriptForOverflow(
+        messages,
+        (message) =>
+          message.role === 'user' &&
+          (typeof message.content === 'string' ||
+            !message.content.some((block) => block.type === 'tool_result')),
+      );
     },
 
     async runModelRound(
@@ -115,12 +145,27 @@ function buildAnthropicStrategy(
         mcpToolsToAnthropicTools(server.id, tools),
       );
       if (anthropicTools.length > 0) {
+        lastDeclaredTools = anthropicTools;
         // Unlike OpenAI, tools must STAY declared past the round cap: the
         // resume transcript contains tool_use/tool_result blocks, and
         // Anthropic rejects such transcripts when no tools are declared.
         // tool_choice 'none' is how a capped round forbids further calls.
         params.tools = anthropicTools;
         if (!allowToolUse) {
+          params.tool_choice = { type: 'none' };
+        }
+      } else if (lastDeclaredTools.length) {
+        // An internal read-only executor can exhaust its budget mid-request.
+        // Retain legal transcript declarations, but force the final answer.
+        params.tools = lastDeclaredTools;
+        params.tool_choice = { type: 'none' };
+      } else {
+        const historyTools = serversWithTools.flatMap(
+          ({ server, transcriptTools }) =>
+            mcpToolsToAnthropicTools(server.id, transcriptTools ?? []),
+        );
+        if (historyTools.length) {
+          params.tools = historyTools;
           params.tool_choice = { type: 'none' };
         }
       }
@@ -139,6 +184,7 @@ function buildAnthropicStrategy(
 
       return {
         finishedWithToolUse: accumulator.stopReason === 'tool_use',
+        finish: normalizeAnthropicStop(accumulator.stopReason),
         calls: accumulator.toolUses(),
         usage: accumulator.usage
           ? {
@@ -173,5 +219,8 @@ export async function runAnthropicMcpToolLoop(
     existingPlan: options.existingPlan,
     userMessageText: options.userMessageText,
     builtinExecutor: options.builtinExecutor,
+    builtinExecutors: options.builtinExecutors,
+    maxImmediateRounds: options.maxImmediateRounds,
+    signal: options.signal,
   });
 }

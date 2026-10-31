@@ -18,6 +18,7 @@
  * editor-side validation in components/Limits/types.ts.
  */
 import { DELEGATION_ID_RE } from '@/lib/services/limits/types';
+import { isEntraGroupId } from '@/lib/services/shared/principalMatching';
 
 import { DIMENSION_RE, LIMIT_KEYS, getLimitDefinition } from '@/config/limits';
 import { z } from 'zod';
@@ -36,6 +37,8 @@ export const MAX_TARGETS_PER_OVERRIDE = 500;
 export const MAX_DELEGATIONS = 50;
 export const MAX_DELEGATION_ADMINS = 200;
 export const MAX_JURISDICTION_PREDICATES = 50;
+export const MAX_MODEL_ACCESS_RULES = 500;
+export const MAX_MODEL_ACCESS_TARGETS = 500;
 
 export const OVERRIDE_ID_RE = /^lim-[0-9a-f]{12}$/;
 
@@ -119,17 +122,35 @@ const overrideTargets = z
   .max(MAX_TARGETS_PER_OVERRIDE)
   .transform(canonicalList);
 
-export const overrideSchema = z.object({
-  id: z.string().regex(OVERRIDE_ID_RE),
-  label: z.string().max(200).default(''),
-  enabled: z.boolean().default(true),
-  scope: z.enum(['user', 'domain', 'attribute', 'group']),
-  targets: overrideTargets,
-  priority: z.number().int().min(-1000).max(1000).default(0),
-  /** Present ⇒ scoped tier; must name a delegation in the same document. */
-  delegationId: z.string().regex(DELEGATION_ID_RE).optional(),
-  entries: z.array(entrySchema).max(MAX_ENTRIES_PER_OVERRIDE),
-});
+/**
+ * Group targets must be Entra group object ids. A display name pasted into
+ * a group-scoped rule used to be stored verbatim: it never matched a
+ * membership id, so the rule silently applied to nobody while looking
+ * exactly like one that works. Runs AFTER canonicalization (lowercase).
+ */
+export const GROUP_TARGET_MESSAGE =
+  'Group targets must be Entra group object ids (GUIDs); pick them from the group search';
+
+function groupTargetsValid(scope: string, targets: readonly string[]): boolean {
+  return scope !== 'group' || targets.every((t) => isEntraGroupId(t));
+}
+
+export const overrideSchema = z
+  .object({
+    id: z.string().regex(OVERRIDE_ID_RE),
+    label: z.string().max(200).default(''),
+    enabled: z.boolean().default(true),
+    scope: z.enum(['user', 'domain', 'attribute', 'group']),
+    targets: overrideTargets,
+    priority: z.number().int().min(-1000).max(1000).default(0),
+    /** Present ⇒ scoped tier; must name a delegation in the same document. */
+    delegationId: z.string().regex(DELEGATION_ID_RE).optional(),
+    entries: z.array(entrySchema).max(MAX_ENTRIES_PER_OVERRIDE),
+  })
+  .refine((o) => groupTargetsValid(o.scope, o.targets), {
+    message: GROUP_TARGET_MESSAGE,
+    path: ['targets'],
+  });
 export type WriteOverride = z.infer<typeof overrideSchema>;
 
 /**
@@ -148,7 +169,11 @@ export const scopedOverrideBodySchema = z
     priority: z.literal(0).optional(),
     entries: z.array(scopedEntrySchema).max(MAX_ENTRIES_PER_OVERRIDE),
   })
-  .strict();
+  .strict()
+  .refine((o) => groupTargetsValid(o.scope, o.targets), {
+    message: GROUP_TARGET_MESSAGE,
+    path: ['targets'],
+  });
 export type ScopedOverrideBody = z.infer<typeof scopedOverrideBodySchema>;
 
 /**
@@ -185,7 +210,11 @@ export const jurisdictionPredicateWriteSchema = z
         message: 'At least one non-blank target is required',
       }),
   })
-  .strict();
+  .strict()
+  .refine((p) => groupTargetsValid(p.scope, p.targets), {
+    message: GROUP_TARGET_MESSAGE,
+    path: ['targets'],
+  });
 
 /**
  * Delegation write schema. `id` absent → the server generates one; present →
@@ -212,6 +241,85 @@ export const delegationWriteSchema = z
   .strict();
 export type WriteDelegation = z.infer<typeof delegationWriteSchema>;
 
+/**
+ * Model approval (docs/LIMITS.md "Model approval"). Grants are canonicalized
+ * like override targets and deduped by target (first terms win); a cap of 0
+ * is refused because "unavailable" is the explicit way to say that, and a
+ * zero-request grant on an allow list would read as access while refusing
+ * every send.
+ */
+const modelAccessGrantSchema = z
+  .object({
+    target: z.string().min(1).max(320),
+    requests: z
+      .number()
+      .int()
+      .min(1)
+      .max(1_000_000_000)
+      .nullable()
+      .default(null),
+  })
+  .strict();
+
+function canonicalGrants<T extends { target: string }>(grants: T[]): T[] {
+  const seen = new Set<string>();
+  const out: T[] = [];
+  for (const grant of grants) {
+    const target = grant.target.trim().toLowerCase();
+    if (!target || seen.has(target)) continue;
+    seen.add(target);
+    out.push({ ...grant, target });
+  }
+  return out;
+}
+
+const grantList = z
+  .array(modelAccessGrantSchema)
+  .max(MAX_MODEL_ACCESS_TARGETS)
+  .default([])
+  .transform(canonicalGrants);
+
+export const modelAccessRuleSchema = z
+  .object({
+    modelId: dimension.optional(),
+    series: dimension.optional(),
+    defaultAccess: z
+      .union([
+        z.number().int().min(1).max(1_000_000_000),
+        z.null(),
+        z.literal(false),
+      ])
+      .optional(),
+    groups: grantList,
+    domains: grantList,
+    allow: grantList,
+    deny: z
+      .array(z.string().min(1).max(320))
+      .max(MAX_MODEL_ACCESS_TARGETS)
+      .default([])
+      .transform(canonicalList),
+  })
+  .strict()
+  .refine((rule) => (rule.modelId ? 1 : 0) + (rule.series ? 1 : 0) === 1, {
+    message: 'A rule names exactly one of modelId / series',
+  })
+  .refine(
+    (rule) => {
+      const denied = new Set(rule.deny);
+      return !rule.allow.some((grant) => denied.has(grant.target));
+    },
+    { message: 'A person cannot be on both the allow and the block list' },
+  )
+  .refine(
+    (rule) =>
+      groupTargetsValid(
+        'group',
+        rule.groups.map((grant) => grant.target),
+      ),
+    { message: GROUP_TARGET_MESSAGE, path: ['groups'] },
+  );
+export type WriteModelAccessRule = z.infer<typeof modelAccessRuleSchema>;
+
 export const putBodySchema = z.object({
   defaults: z.array(entrySchema).max(500).default([]),
   overrides: z.array(overrideSchema).max(MAX_OVERRIDES).default([]),
@@ -221,6 +329,15 @@ export const putBodySchema = z.object({
    * key presence because zod would erase it either way.
    */
   delegations: z.array(delegationWriteSchema).max(MAX_DELEGATIONS).optional(),
+  /**
+   * OPTIONAL, not defaulted, for the same stale-client reason: a PUT from a
+   * client that predates the approval view must keep the stored rules, not
+   * erase them.
+   */
+  modelAccess: z
+    .array(modelAccessRuleSchema)
+    .max(MAX_MODEL_ACCESS_RULES)
+    .optional(),
   mode: z.enum(['observe', 'enforce']).default('observe'),
   failMode: z.enum(['open', 'closed']).default('open'),
   timezone: z.string().min(1).max(64).default('UTC'),

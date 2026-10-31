@@ -777,7 +777,16 @@
       "stillWorking": "Nog bezig…",
       "assessingSearchResults": "Controleren of de resultaten de vraag beantwoorden…",
       "refiningSearch": "Opnieuw zoeken: “{query}”…",
-      "readingSearchPages": "Leest {count} resultaatpagina's…"
+      "readingSearchPages": "Leest {count} resultaatpagina's…",
+      "toolRoutingUnavailableInRegion": "Toolrouting niet beschikbaar op de {region} endpoint — antwoord wordt gegeven zonder tools…",
+      "applyingSkill": "Skill toepassen: {skills}…",
+      "applyingSkills": "Skills toepassen: {skills}…",
+      "readingSkillReferences": "Referentiedocumenten van skills inlezen…",
+      "selectingSkills": "Vaardigheden kiezen…",
+      "retryingModel": "Model bezig — probeer opnieuw over {seconds}s (poging {attempt})…",
+      "resumingResponse": "Verbinding met het model verbroken — hervatten waar het was gestopt…",
+      "continuingResponse": "Antwoord bereikte de limiet — gaat verder…",
+      "trimmingContext": "Gesprek te lang voor het model — oudere geschiedenis wordt verwijderd en opnieuw geprobeerd…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# tool gebruikt} other {# tools gebruikt}}",
@@ -843,7 +852,9 @@
       "deniedByRuleHint": "Geblokkeerd door uw regel — beheren via Instellingen → Connectors.",
       "batchPendingHint": "{count} toolverzoeken in behandeling",
       "approveAllButton": "Alles goedkeuren",
-      "denyAllButton": "Alles weigeren"
+      "denyAllButton": "Alles weigeren",
+      "applySkillTitle": "De vaardigheid “{skill}” toepassen?",
+      "skillConsentNote": "Een beheerder heeft ingesteld dat voor deze vaardigheid toestemming gevraagd moet worden voordat deze wordt toegepast. Goedkeuren laadt de richtlijnen alleen voor dit antwoord."
     },
     "openImage": "Afbeelding openen",
     "copyMessage": "Bericht kopiëren",
@@ -883,7 +894,54 @@
     "alwaysWaitThisLong": "Altijd wachten tot {duration}",
     "keepSearching": "Blijf zoeken",
     "keepSearchingHint": "De zoekopdracht is gestopt voordat dit gevonden was. Vraag de assistent om andere methodes te proberen.",
-    "keepSearchingMessage": "Blijf hiernaar zoeken, alstublieft — probeer een andere aanpak."
+    "keepSearchingMessage": "Blijf hiernaar zoeken, alstublieft — probeer een andere aanpak.",
+    "addSkill": "Vaardigheden",
+    "removeSkill": "Vaardigheid verwijderen",
+    "skillsMenuLabel": "Beschikbare vaardigheden",
+    "skillsLimit": "Maximaal 3 vaardigheden per bericht.",
+    "skillPin": "Vastmaken aan gesprek",
+    "skillUseOnce": "Eenmalig gebruiken",
+    "skillPinned": "vastgemaakt",
+    "skillOnce": "volgende bericht",
+    "skillsPaused": "gepauzeerd",
+    "skillUnavailable": "niet beschikbaar",
+    "skillsAutomaticHint": "Relevante vaardigheden worden automatisch geselecteerd. Gebruik eenmalig voor het volgende bericht, of maak een vaardigheid vast om deze gedurende het hele gesprek te gebruiken.",
+    "skillsAgentDisabled": "Vaardigheden zijn gepauzeerd terwijl een agent is gekoppeld. Je vastgemaakte vaardigheden worden hervat zodra je de agent loskoppelt.",
+    "skillPersonal": "persoonlijk",
+    "skillsAgentToolsHint": "Alleen organisatieskills die door een beheerder zijn ingeschakeld voor agentgebruik worden hier aangeboden. De agent kan deze als alleen-lezen tools laden. Andere pins blijven gepauzeerd en persoonlijke skills zijn niet beschikbaar voor agents.",
+    "skillAlwaysOn": "altijd actief",
+    "skillAlwaysOnHint": "Toegevoegd aan elk bericht in dit gesprek door een beheerder.",
+    "skillUsage": {
+      "label": "Skills",
+      "requested": "aangevraagd",
+      "pinned": "vastgezet",
+      "auto": "auto",
+      "unavailable": "niet beschikbaar",
+      "incomplete": "Sommige skills konden niet worden toegepast",
+      "references": "{count, plural, one {# referentiepassage} other {# referentiepassages}}",
+      "referencesUnavailable": "Sommige referentiedocumenten waren niet beschikbaar",
+      "showDetails": "Toon skilldetails",
+      "hideDetails": "Verberg skilldetails",
+      "agentLoad": "geladen door agent",
+      "agentSearch": "documenten gezocht door agent",
+      "needsApproval": "heeft uw goedkeuring nodig",
+      "original": "zoals oorspronkelijk uitgevoerd",
+      "updated": "bijgewerkt sinds"
+    },
+    "skillsManualHint": "Automatische selectie staat uit in Instellingen. Gebruik eenmalig voor het volgende bericht, of pin een vaardigheid om deze in het hele gesprek te gebruiken.",
+    "queuedMessage": {
+      "label": "In wachtrij",
+      "attachmentOnly": "Bijlage",
+      "cancel": "Wachtrijbericht annuleren"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Het antwoord is gestopt door het inhoudsfilter. Herschrijf uw verzoek of verwijder het deel dat dit mogelijk heeft veroorzaakt.",
+      "MODEL_CONTEXT_TOO_LONG": "Dit gesprek is te lang voor het geselecteerde model, zelfs na het inkorten van de geschiedenis. Start een nieuw gesprek, verwijder enkele bijlagen of kies een model met een groter contextvenster.",
+      "MODEL_OUTPUT_LIMIT": "Het model heeft zijn volledige output-budget gebruikt zonder een antwoord te geven. Probeer een lagere redeneerkracht of een korter verzoek.",
+      "MODEL_RATE_LIMITED": "Het model ontvangt momenteel te veel verzoeken. Er is automatisch opnieuw geprobeerd; probeer het zo meteen opnieuw.",
+      "MODEL_QUOTA_EXCEEDED": "De capaciteitsquota van het model zijn bereikt. Probeer een ander model of probeer het later opnieuw.",
+      "MODEL_AUTH_FAILED": "De app kon niet verifiëren bij de modelservice. Dit is een configuratiefout — neem contact op met support."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -1290,7 +1348,11 @@
       "preferModelTitle": "Mijn geselecteerd model prefereren",
       "preferModelDescription": "Niet automatisch naar een ander model overschakelen als een verzoek faalt. De foutmelding biedt nog steeds de mogelijkheid om te wisselen."
     },
-    "Analytics": "Analytics"
+    "Analytics": "Analytics",
+    "skills": {
+      "autoApply": "De assistent vaardigheden automatisch laten toepassen",
+      "autoApplyDescription": "Relevante vaardigheden en uw persoonlijke vaardigheden worden per bericht geselecteerd. Als deze optie uit staat, worden alleen de vaardigheden die u aanvraagt of vastzet en de vaardigheden die een beheerder op elk gesprek toepast, gebruikt."
+    }
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -2700,7 +2762,15 @@
     "chipAutoHideUnit": "seconden",
     "chipAutoHideHint": "Tussen {min} en {max} seconden.",
     "byWorkflow": "Per workflow",
-    "byWorkflowNote": "Onderdeel van bovenstaande totalen, apart weergegeven — geen extra gebruik. Grants-runs tellen mee voor de rapportage van uw organisatie en uw tokenbudget, maar niet in dit lokale totaal."
+    "byWorkflowNote": "Onderdeel van bovenstaande totalen, apart weergegeven — geen extra gebruik. Grants-runs tellen mee voor de rapportage van uw organisatie en uw tokenbudget, maar niet in dit lokale totaal.",
+    "chipLabelTitle": "Chiplabel",
+    "chipLabelHint": "De uitsplitsing toont altijd emissies en kosten naast elkaar; dit bepaalt alleen wat er op de samengevouwen chip staat.",
+    "chipLabelEmissions": "Emissies",
+    "chipLabelCost": "Kosten",
+    "chipLabelBoth": "Beide",
+    "costTile": "Geschatte kosten",
+    "costDisclosure": "Kosten volgens lijstprijzen per {asOf} (Global Standard-tarief, geen korting voor gecachte invoer): een bovengrens, geen rekening. Webzoekopdrachten, code-uitvoering, transcriptie, spraak, vertaling en documentindexering zijn niet inbegrepen.",
+    "costUnpriced": "{count, plural, one {# aanvraag zonder lijstprijs wordt} other {# aanvragen zonder lijstprijs worden}} niet opgenomen."
   },
   "extraction": {
     "toggleLabel": "Gestructureerde gegevens extraheren",
@@ -4502,7 +4572,16 @@
         "auto": "Auto",
         "hidden": "Verbergen"
       },
-      "visibilityHint": "De chip wordt automatisch getoond wanneer de schatting wordt bijgewerkt of wanneer u eroverheen beweegt. U kunt dit later aanpassen in Instellingen › Gebruik & Impact."
+      "visibilityHint": "De chip wordt automatisch getoond wanneer de schatting wordt bijgewerkt of wanneer u eroverheen beweegt. U kunt dit later aanpassen in Instellingen › Gebruik & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Geschatte kosten {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Geen lijstprijs voor de aanvragen in deze rij",
+        "unpriced": "{count, plural, one {# aanvraag zonder lijstprijs wordt} other {# aanvragen zonder lijstprijs worden}} niet in de kosten opgenomen.",
+        "noPriceData": "Er worden geen kosten getoond: het model van dit gesprek heeft geen lijstprijs (eigen bronnen, lokale runtimes en agents worden niet geprijsd).",
+        "note": "Kosten volgens lijstprijzen per {asOf} (Global Standard-tarief, geen korting voor gecachte invoer): een bovengrens, geen rekening. Webzoekopdrachten, code-uitvoering, transcriptie, spraak, vertaling en documentindexering zijn niet inbegrepen."
+      }
     },
     "workflow": {
       "title": "Deze werkruimte (geschat)",
@@ -5294,7 +5373,22 @@
     "confirmDeleteGlossary": "Woordenlijst verwijderen",
     "glossaryDeleteSuccess": "Woordenlijst verwijderd",
     "channelProfilesTab": "Platforms",
-    "channelSetsTab": "Kanaalsets"
+    "channelSetsTab": "Kanaalsets",
+    "addPromptAgent": "Promptagent toevoegen",
+    "m365AgentIndexStop": "Indexeren stoppen",
+    "foundryAgentsHeading": "Foundry- en promptagents",
+    "foundryAgentsDescription": "Agents ontdekt via Azure AI Foundry met uw eigen toegang, plus de promptagents die hier zijn gedefinieerd. Kennisagents en Microsoft 365-agents worden in hun eigen secties hieronder beheerd.",
+    "agentSkillsLabel": "Vaardigheden",
+    "agentSkillsHelp": "Welke organisatievaardigheden deze agent mag laden tijdens het antwoorden. Gebruikers zien nog steeds alleen de vaardigheden waarvoor hun toegangsregels gelden.",
+    "agentSkills": {
+      "inherit": "Vaardigheden gemarkeerd als 'beschikbaar voor agenten'",
+      "selected": "Alleen de hieronder geselecteerde vaardigheden",
+      "none": "Geen vaardigheden"
+    },
+    "agentSkillsNone": "Geen vaardigheden beschikbaar om te selecteren.",
+    "agentSkillsLoading": "Vaardigheden laden…",
+    "agentSkillsLoadError": "Vaardigheden konden niet worden geladen. Eerder opgeslagen selecties blijven behouden.",
+    "agentSkillsNotVisible": "(niet zichtbaar voor u — deselecteer om te verwijderen)"
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -5521,7 +5615,8 @@
       "channelSets": "De spelregels per team voor berichten op platforms: richtlijnen, stemmen, standaarden, wie de set mag gebruiken en wie mag verzenden.",
       "webSearch": "Hoe uitgebreid webzoek kan gaan: meerdere zoekstappen, het beoordelingsmodel en zijn limieten.",
       "contextBudget": "Hoeveel van een gesprek elk model per beurt ontvangt.",
-      "analytics": "Afgeleverde rapporten: wat is ontvangen, wie mag welke map openen, en welke velden mogen getoond worden."
+      "analytics": "Afgeleverde rapporten: wat is ontvangen, wie mag welke map openen, en welke velden mogen getoond worden.",
+      "skills": "Herbruikbare instructieblokken die de assistent toepast wanneer een gesprek daarom vraagt."
     },
     "openSettings": "Instellingen openen",
     "area": {
@@ -5532,7 +5627,8 @@
       "delegations": "Delegaties",
       "webSearch": "Webzoek",
       "contextBudget": "Contextbudget",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "skills": "Vaardigheden"
     }
   },
   "limits": {
@@ -5562,7 +5658,8 @@
     "tab": {
       "defaults": "Globale standaardwaarden",
       "overrides": "Overschrijvingen",
-      "delegations": "Delegaties"
+      "delegations": "Delegaties",
+      "models": "Modellen"
     },
     "tabsLabel": "Limietsecties",
     "category": {
@@ -5594,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365-tooloproepen per dag",
       "m365MailReadsPerDay": "E-mails lezen per dag",
       "m365MailDraftsPerDay": "E-mailconcepten per dag",
-      "m365MailDeepScansPerDay": "Diepgaande e-mailscans per dag"
+      "m365MailDeepScansPerDay": "Diepgaande e-mailscans per dag",
+      "m365DigestRunsPerDay": "Dagelijkse samenvattingen per dag"
     },
     "valueModeLabel": "Limiettype",
     "valueAmountLabel": "Limietbedrag",
@@ -5672,7 +5770,8 @@
       "m365ToolCallsPerDay": "Microsoft 365-toolacties (agenda, personen, taken, Teams) per dag. Na overschrijding geeft de tool een vriendelijke melding 'probeer het morgen opnieuw' in plaats van de chat te laten falen.",
       "m365MailReadsPerDay": "E-mailzoekopdrachten en het lezen van berichten/threads per dag. Na overschrijding geeft de tool een melding 'probeer het morgen opnieuw'.",
       "m365MailDraftsPerDay": "E-mailconcepten die de assistent per dag mag aanmaken — elk exemplaar wordt afzonderlijk bevestigd. Bewust beperkt.",
-      "m365MailDeepScansPerDay": "Samengestelde mailanalyses (overzichten, diepzoeken, toezeggingen) per dag. Elke scan telt als één eenheid, ongeacht het aantal interne leesacties."
+      "m365MailDeepScansPerDay": "Samengestelde mailanalyses (overzichten, diepzoeken, toezeggingen) per dag. Elke scan telt als één eenheid, ongeacht het aantal interne leesacties.",
+      "m365DigestRunsPerDay": "Microsoft 365 dagelijkse samenvattingen per dag. Eén uitvoering bevat tientallen Graph-lezingen plus twee analysemodel-aanroepen; de periodekiezer maakt het eenvoudig om opnieuw uit te voeren, dus de standaardlimiet is streng."
     },
     "scopeFamily": "Familie",
     "scopeModel": "Model",
@@ -5727,7 +5826,7 @@
     "previewSourceCatalog": "Standaard ingebouwd",
     "previewSourceGlobal": "Globale standaard",
     "previewSourceOverride": "Override: {label}",
-    "previewNotEvaluated": "Afdelings-, bedrijfs- en groepsoverrides kunnen hier niet worden beoordeeld — deze hangen af van de eigen aanmelding van de persoon.",
+    "previewNotEvaluated": "De directory kon niet worden bereikt, waardoor afdelings-/bedrijfs-/kantooren groepsregels voor deze persoon niet zijn geëvalueerd. Probeer het over een moment opnieuw.",
     "previewUnsaved": "Toont het laatst opgeslagen beleid. Sla uw wijzigingen op om ze hier te zien.",
     "previewColumnLimit": "Limiet",
     "previewColumnValue": "Waarde",
@@ -5823,7 +5922,7 @@
     "yourScopeGroupOnlyChip": "Alleen groepen",
     "yourScopeGroupOnlyNote": "Gedefinieerd op basis van groepen of attributen, limieten kunnen hierdoor niet per e-mailadres worden getoond.",
     "previewOutOfScope": "Deze persoon valt buiten uw bereik.",
-    "previewGroupOnlyScope": "Uw bereik is gedefinieerd door groepen of attributen, dus limieten kunnen niet per e-mailadres worden getoond.",
+    "previewGroupOnlyScope": "Uw scope wordt bepaald door groepen of attributen. Previews zoeken de persoon op in de directory om te bepalen of zij binnen deze scope vallen.",
     "previewCeilingPinned": "Beperkt door maximum: {label}",
     "previewShowUsage": "Huidig gebruik tonen",
     "previewColumnUsage": "Gebruikt",
@@ -5839,7 +5938,7 @@
     "overrideCeilingHint": "Een harde bovengrens in een rij vergrendelt die waarde voor de doelen van deze override: beperkte beheerders kunnen deze niet opheffen, en waar meerdere bovengrenzen gelden, geldt de meest specifieke.",
     "confirmDeleteOverride": "\"{label}\" verwijderen? Dit wordt direct van de server verwijderd en de doelen vallen terug op de onderliggende limieten. Dit kan niet ongedaan worden gemaakt.",
     "confirmDeleteOverrideAction": "Override verwijderen",
-    "previewUndecidableScope": "Uw scope bevat groepen of attributen, dus het is niet mogelijk om te bepalen of deze persoon binnen de scope valt op basis van het e-mailadres.",
+    "previewUndecidableScope": "Uw scope bevat groepen of attributen en de directory kon niet worden bereikt, waardoor nu niet kan worden bepaald of deze persoon binnen de scope valt. Probeer het over een moment opnieuw.",
     "previewNoLongerAdmin": "U bent niet langer opgenomen in een actieve delegatie, waardoor u de limieten niet kunt bekijken. Herlaad de pagina om uw huidige toegang te zien.",
     "previewScopeMatchesNobody": "Uw scope komt momenteel met niemand overeen, er is dus niemand om te bekijken op e-mailadres.",
     "yourScopeMatchesNobodyChip": "Komt met niemand overeen",
@@ -5990,7 +6089,73 @@
     "disabledDelegationNote": "De delegatie is uitgeschakeld, dus deze overschrijving geldt voor niemand totdat de delegatie weer wordt ingeschakeld. Wordt nooit doorgezet naar het globale niveau.",
     "betaPolicyNotice": "Bèta-omgeving: dit beleid en de teller voor gebruik worden apart opgeslagen van productie (policy.beta.json). Alles wat u hier wijzigt, heeft geen invloed op de productie.",
     "delegationsManagedElsewhere": "Delegaties worden hier alleen als alleen-lezen weergegeven. Wie in een delegatie zit, welke gebruikers het betreft en wat elke beheerder mag doen, wordt beheerd in het gedeelte Delegaties.",
-    "delegationsManagedElsewhereLink": "Open Delegaties"
+    "delegationsManagedElsewhereLink": "Open Delegaties",
+    "modelAccess": {
+      "intro": "Bepaal wie elk model mag gebruiken. Een instelling op gezinsniveau geldt voor alle modellen in dat gezin, tenzij een model een eigen instelling heeft; mensen op een lijst gaan boven de standaardinstelling; de blokkadelijst gaat boven elke andere toewijzing.",
+      "externalNote": "Modellen die buiten de Azure-omgeving worden gehost ({families}), zijn voor iedereen niet beschikbaar totdat u ze hier toegang geeft — via de standaardinstelling voor iedereen of voor groepen, domeinen en personen.",
+      "envelopeNote": "Een aanvraaglimiet op een gezin is een gedeeld dagbudget voor al zijn modellen; een limiet op een model is een grens daarbinnen. Onbeperkt op modelniveau heft het gezinsbudget niet op.",
+      "observeNote": "Observe-modus is ingeschakeld: niets verbergt een model of stopt een aanvraag. Zet hierboven op Handhaven zodra de regels kloppen.",
+      "familyChip": "Gezin",
+      "modelChip": "Model",
+      "otherModels": "Modellen zonder gezin",
+      "modelsInFamily": "{count, plural, one {# model in dit gezin} other {# modellen in dit gezin}}",
+      "noModels": "Nog geen modellen in de catalogus.",
+      "expand": "Modellen tonen",
+      "collapse": "Modellen verbergen",
+      "edit": "Bewerken",
+      "doneEditing": "Gereed",
+      "editNode": "Toegang bewerken voor {label}",
+      "defaultLabel": "Iedereen anders",
+      "defaultInherit": "Overnemen",
+      "defaultUnlimited": "Onbeperkt",
+      "defaultLimited": "Beperkt tot",
+      "defaultUnavailable": "Niet beschikbaar",
+      "defaultRequestsLabel": "Aanvragen per dag voor iedereen anders",
+      "requestsPerDay": "aanvragen / dag",
+      "inheritedFrom": "Neemt {state} over van {origin}.",
+      "effectiveLabel": "Iedereen niet op een lijst krijgt: {state}.",
+      "inheritedChip": "overgenomen",
+      "origin": {
+        "model": "deze instelling",
+        "family": "zijn gezin",
+        "defaults": "Globale standaardinstellingen",
+        "catalogExternal": "de regel dat externe modellen niet beschikbaar zijn tot ze zijn toegekend",
+        "catalog": "de standaard van de catalogus"
+      },
+      "state": {
+        "unlimited": "Onbeperkt",
+        "limited": "Beperkt tot {requests} / dag",
+        "unavailable": "Niet beschikbaar"
+      },
+      "list": {
+        "groups": "Groepen met toegang",
+        "domains": "Domeinen met toegang",
+        "allow": "Toegestane personen",
+        "deny": "Geblokkeerde personen"
+      },
+      "listHint": {
+        "groups": "Leden van deze Entra-groepen mogen dit gebruiken, onder de voorwaarden per groep.",
+        "domains": "Iedereen met een e-mailadres op deze domeinen, onder de voorwaarden per domein.",
+        "allow": "Genoemde personen mogen dit gebruiken, ongeacht de standaard of wat hun domein toestaat.",
+        "deny": "Genoemde personen mogen dit nooit gebruiken. Dit gaat boven elke andere toewijzing."
+      },
+      "grantUnlimited": "Onbeperkt",
+      "grantLimited": "Beperkt tot",
+      "termsLabel": "Voorwaarden voor {target}",
+      "requestsLabel": "Aanvragen per dag voor {target}",
+      "removeGrant": "{target} verwijderen",
+      "groupsCount": "{count, plural, one {# groep} other {# groepen}}",
+      "domainsCount": "{count, plural, one {# domein} other {# domeinen}}",
+      "allowCount": "{count, plural, one {# persoon toegestaan} other {# personen toegestaan}}",
+      "denyCount": "{count, plural, one {# persoon geblokkeerd} other {# personen geblokkeerd}}",
+      "collisionChip": "Ook in wereldwijde standaardinstellingen",
+      "collisionWarning": "Dit model of deze familie is ook geconfigureerd onder wereldwijde standaardinstellingen. Opslaan wordt geweigerd totdat een van de twee is verwijderd."
+    },
+    "previewSourceModelAccess": "Modelgoedkeuring — {list}",
+    "groupMembershipDegradedStructural": "Groepslidmaatschap-zoekopdrachten werken niet op deze server ({reason}). Regels en machtigingen op basis van groepen worden niet toegepast voor de getroffen personen — controleer de Group.Read.All-toestemming van de tenant en de app-registratie.",
+    "groupMembershipDegradedRetryable": "Sommige groepslidmaatschap-zoekopdrachten zijn de afgelopen minuten mislukt op deze server ({reason}). Groepsgebaseerde regels kunnen tot een minuut niet van toepassing zijn op deze personen terwijl de zoekopdrachten worden herhaald.",
+    "groupMembershipDegradedUsers": "{count, plural, one {# persoon} other {# personen}} momenteel getroffen op deze server.",
+    "previewDirectoryNotFound": "Geen enkele gebruikersdirectory bevat dit e-mailadres, dus afdelings-/bedrijfs-/kantoor- en groepsregels zijn geëvalueerd alsof de persoon tot geen enkele behoorde."
   },
   "m365": {
     "connections": {
@@ -6341,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Ochtendtriage",
-        "description": "Wat is binnengekomen, wat wacht op jou en de agenda van vandaag — één briefing"
+        "description": "Een overzicht sinds de laatste werkdag — wat er is binnengekomen, wat op uw reactie wacht, uitnodigingen en updates; op maandag bevat het vrijdag en het weekend."
       },
       "chipsSettingLabel": "Microsoft 365-playbooks voorstellen",
       "chipsSettingHint": "Toon playbook-suggesties boven het tekstvak wanneer deze van toepassing zijn (bijvoorbeeld na het importeren van een vergaderverslag).",
-      "dismissChip": "{title} sluiten"
+      "dismissChip": "{title} sluiten",
+      "dailyDigest": {
+        "title": "Dagelijkse samenvatting",
+        "description": "Sorteer recente e-mail, Teams en agenda op wat uw aandacht nodig heeft, waar u op wacht, updates en ter informatie — kies de periode"
+      }
+    },
+    "digest": {
+      "title": "Dagelijkse samenvatting",
+      "intro": "Scant wat u in de gekozen periode heeft ontvangen en sorteert dit op wat een reactie vraagt, wat aan u is gevraagd, waar u op wacht, planning, bedrijfs- en projectupdates en ter informatie. Er wordt niets verzonden of gewijzigd.",
+      "periodLabel": "Periode",
+      "preset": {
+        "lastWorkday": "Sinds de laatste werkdag",
+        "1d": "Afgelopen 24 uur",
+        "3d": "Afgelopen 3 dagen",
+        "7d": "Afgelopen 7 dagen",
+        "14d": "Afgelopen 14 dagen",
+        "custom": "Aangepast bereik"
+      },
+      "lastWorkdayHint": "Vanaf het begin van de meest recente werkdag vóór vandaag — op maandag omvat dit vrijdag en het weekend.",
+      "from": "Van",
+      "to": "Tot",
+      "customInvalid": "Kies een opeenvolgend bereik van maximaal {days} dagen.",
+      "sourcesLabel": "Bronnen",
+      "sourceNoConsent": "Geen toestemming verleend voor deze bron.",
+      "sourceHint": {
+        "mail": "Inboxomslagen en previews; uw verzonden items bepalen wat als beantwoord telt.",
+        "chat": "Recente Teams-chats, met @vermeldingen waarop u nog niet heeft geantwoord.",
+        "channel": "Berichten in de kanalen die u hieronder selecteert.",
+        "calendar": "Uitnodigingen waarop u nog moet reageren en uw vergaderingen die anderen nog niet hebben beantwoord."
+      },
+      "channelsLabel": "Kanalen ({count} van {max})",
+      "removeChannel": "{name} verwijderen",
+      "channelsSlow": "Elke extra kanaal vereist meer lezingen; meer kanalen maken de samenvatting langzamer.",
+      "channelsMax": "Maximum van {max} kanalen bereikt.",
+      "channelsNeeded": "Selecteer ten minste één kanaal, of voeg een andere bron toe.",
+      "teamLabel": "Team",
+      "loadingTeams": "Teams laden…",
+      "pickTeam": "Kies een team om zijn kanalen te tonen",
+      "loadingChannels": "Kanalen laden…",
+      "noChannels": "Geen kanalen gevonden in dit team.",
+      "privacyNote": "Alleen onderwerpen, afzenders en korte previews worden gelezen; berichtinhouden en bijlagen blijven in Microsoft 365. Items zijn samenvattingen van uw eigen gegevens.",
+      "cancel": "Annuleren",
+      "run": "Samenvatting uitvoeren",
+      "starting": "Bezig met starten…",
+      "startFailed": "De samenvatting kon niet worden gestart.",
+      "userMessage": "Dagelijkse samenvatting — {period}; bronnen: {sources}",
+      "working": "Bezig met scannen van uw Microsoft 365-communicatie…",
+      "failed": "Fout bij de samenvatting.",
+      "failedPrefix": "Dagelijkse samenvatting mislukt:",
+      "expired": "Deze samenvatting is verlopen. Voer opnieuw uit voor een actuele versie.",
+      "runAgain": "Opnieuw uitvoeren",
+      "changePeriod": "Periode wijzigen",
+      "period": {
+        "lastWorkday": "sinds de laatste werkdag",
+        "lastDays": "{count, plural, one {afgelopen dag} other {afgelopen # dagen}}"
+      },
+      "source": {
+        "mail": "E-mail",
+        "chat": "Teams-chats",
+        "channel": "Teams-kanalen",
+        "calendar": "Agenda"
+      },
+      "sourceStatus": {
+        "ok": "voltooid",
+        "partial": "gedeeltelijk",
+        "skipped": "overgeslagen",
+        "unavailable": "geen toestemming",
+        "error": "mislukt"
+      },
+      "degraded": "Het analysmodel was niet beschikbaar, dus categorieën zijn alleen op regels gebaseerd.",
+      "withheld": "{count, plural, one {# item werd} other {# items werden}} geblokkeerd door de veiligheidsfilters.",
+      "empty": "Niets te melden voor deze periode en bronnen.",
+      "actionItems": "Actiepunten",
+      "createTasks": "{count, plural, =0 {Toevoegen aan To Do} one {Voeg # taak toe aan To Do} other {Voeg # taken toe aan To Do}}",
+      "taskCreated": "toegevoegd aan To Do",
+      "tasksCreated": "{count, plural, one {# taak} other {# taken}} toegevoegd aan de lijst \"{list}\".",
+      "tasksFailed": "Kon de taken niet aanmaken.",
+      "category": {
+        "needsReply": "Vereist mijn antwoord",
+        "askedOfMe": "Aan mij gevraagd",
+        "waitingOnOthers": "Wacht op anderen",
+        "scheduling": "Plannen",
+        "companyUpdates": "Bedrijfs- en projectupdates",
+        "fyi": "Ter info",
+        "bulk": "Geautomatiseerd en bulk"
+      },
+      "companyUpdatesHint": "belangrijk, zelden urgent",
+      "markDone": "Markeer {title} als afgehandeld",
+      "badge": {
+        "unanswered": "onbeantwoord",
+        "mentioned": "noemde u",
+        "important": "hoge prioriteit"
+      },
+      "askAbout": "Vraag hierover",
+      "askPrompt": "Over het {source}-item \"{title}\" van {from} ({when}) in het bovenstaande overzicht: wat wordt er gevraagd en wat zou een goed antwoord zijn?",
+      "open": {
+        "mail": "Openen in Outlook",
+        "chat": "Openen in Teams",
+        "channel": "Openen in Teams",
+        "calendar": "Openen in Outlook"
+      },
+      "footnote": "Categorieën zijn gebaseerd op uw eigen signalen (onbeantwoord, genoemd, uitgestuurd) plus AI-classificatie; controleer voordat u actie onderneemt. Er is niets verzonden.",
+      "age": {
+        "now": "zojuist",
+        "hours": "{count}u geleden",
+        "days": "{count}d geleden"
+      },
+      "waitForReply": "Wacht tot het huidige antwoord is afgerond voordat u een overzicht start."
     }
   },
   "share": {
@@ -6410,9 +6682,9 @@
     "kind": {
       "rag": "Kennis",
       "prompt": "Persona",
-      "m365": "Kennis (Microsoft 365)",
+      "m365": "Microsoft 365",
       "org": "Kennis",
-      "foundry": "Foundry-agent",
+      "foundry": "Aangepaste agent",
       "connector": "Connector"
     },
     "semantics": {
@@ -6421,8 +6693,8 @@
       "own-model": "draait op eigen model"
     },
     "loadError": "Uw agents konden zojuist niet worden geladen. Dit is meestal tijdelijk.",
-    "discoveryLoading": "Zoeken naar Foundry-agents…",
-    "discoveryError": "Foundry-agents konden niet worden geladen.",
+    "discoveryLoading": "Meer agents zoeken…",
+    "discoveryError": "Sommige agents konden niet worden geladen.",
     "retry": "Opnieuw proberen"
   },
   "peopleSuggest": {
@@ -7563,5 +7835,146 @@
       "past-retention": "Ouder dan de {months} maanden bewaartermijn van deze map; niet meer weergegeven.",
       "unknown": "Probleem gemeld: {code}."
     }
+  },
+  "skillsAdmin": {
+    "title": "Vaardigheden",
+    "description": "Herbruikbare instructieblokken die de assistent toepast wanneer een gesprek daarom vraagt. Compatibel met het Agent Skills SKILL.md-formaat zoals gebruikt door Claude en ChatGPT.",
+    "loading": "Vaardigheden laden…",
+    "loadError": "Kan vaardigheden niet laden.",
+    "retry": "Opnieuw proberen",
+    "unavailableBanner": "Vaardigheidsopslag is momenteel niet bereikbaar — ingebouwde standaarden worden getoond; opgeslagen vaardigheden en bewerkingen zijn niet beschikbaar tot herstel.",
+    "conflictError": "Deze vaardigheid is door een andere beheerder gewijzigd. De lijst is opnieuw geladen — voer uw wijziging opnieuw uit.",
+    "alwaysWarning": "{count} vaardigheden staan op Altijd. Al deze worden aan elk gesprek toegevoegd — kies liever Automatisch voor onderwerp-specifieke vaardigheden.",
+    "newSkill": "Nieuwe vaardigheid",
+    "importSkill": "Importeer SKILL.md",
+    "importTitle": "Plak een SKILL.md-bestand",
+    "importPlaceholder": "---\nname: my-skill\ndescription: Wat deze vaardigheid doet en wanneer deze te gebruiken.\n---\n\nInstructies…",
+    "importHint": "De geparste vaardigheid opent in de editor ter controle — er wordt pas iets opgeslagen wanneer u het opslaat.",
+    "importParse": "Parsen en beoordelen",
+    "invalidId": "Vaardigheids-ID's gebruiken kleine letters, cijfers en enkele koppeltekens.",
+    "saveSuccess": "Vaardigheid opgeslagen.",
+    "saveError": "Kan de vaardigheid niet opslaan.",
+    "deleteConfirm": "Deze vaardigheid verwijderen? Gesprekken ontvangen deze direct niet meer.",
+    "restoreConfirm": "De aanpassing verwijderen en de standaard van deze ingebouwde vaardigheid herstellen?",
+    "deleteSuccess": "Vaardigheid verwijderd.",
+    "restoreSuccess": "Ingebouwde standaard hersteld.",
+    "deleteError": "Kan de vaardigheid niet verwijderen.",
+    "empty": "Nog geen vaardigheden. Maak er een aan of importeer een SKILL.md.",
+    "builtinChip": "Ingebouwd",
+    "customizedChip": "Aangepast",
+    "exportSkill": "Exporteren als SKILL.md",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "restoreDefault": "Standaard herstellen",
+    "createTitle": "Nieuwe vaardigheid",
+    "editTitle": "{name} bewerken",
+    "idLabel": "Id",
+    "idHint": "Kleine letters, cijfers en koppeltekens. Wordt de SKILL.md-naam van de vaardigheid en kan na het aanmaken niet meer gewijzigd worden.",
+    "nameLabel": "Weergavenaam",
+    "descriptionLabel": "Beschrijving",
+    "descriptionHint": "Wat de vaardigheid doet EN wanneer deze gebruikt wordt — dit bepaalt de keuze, dus geef de specifieke onderwerpen en formuleringen aan waarop gereageerd moet worden.",
+    "activationLabel": "Activering",
+    "activation": {
+      "auto": "Automatisch",
+      "always": "Altijd",
+      "off": "Uit",
+      "manual": "Op aanvraag"
+    },
+    "activationHint": {
+      "auto": "Automatisch geselecteerd als de huidige taak overeenkomt met de beschrijving. Gebruikers kunnen het ook eenmalig aanvragen of aan een gesprek vastmaken.",
+      "always": "Toegevoegd aan elk gesprek voor iedereen die de vaardigheid kan zien. Gebruik dit spaarzaam — dit is permanente prompt-ruimte.",
+      "off": "Inactief: wordt nooit toegepast en niet aangeboden aan gebruikers, maar blijft hier voor bewerking.",
+      "manual": "Wordt alleen toegepast wanneer een gebruiker hierom vraagt of het vastzet. Wordt nooit automatisch geselecteerd en niet aangeboden aan het model als laadbare vaardigheid."
+    },
+    "instructionsLabel": "Instructies",
+    "instructionsHint": "Markdown, maximaal 16 KB. Wordt letterlijk ingevoegd wanneer de skill actief is.",
+    "saving": "Bezig met opslaan…",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "documents": {
+      "title": "Documenten",
+      "hint": "Referenties worden bij deze vaardigheid opgeslagen. Kleine documenten worden direct geladen; grotere documenten worden geïndexeerd voor geciteerd zoeken. Maximaal 20 bronnen, elk 10 MB en totaal 20 MB. Bestanden worden alleen opgeslagen voor download.",
+      "saveFirst": "Sla een aangepaste versie van deze ingebouwde vaardigheid op voordat u documenten toevoegt.",
+      "upload": "Referentiedocumenten toevoegen",
+      "remove": "Verwijderen",
+      "stop": "Indexeren stoppen",
+      "resume": "Documenten indexeren of hervatten",
+      "empty": "Nog geen documenten toegevoegd.",
+      "requestFailed": "Het aanvragen van het document is mislukt. Herlaad en probeer opnieuw.",
+      "importZip": "Skill-ZIP importeren",
+      "zipTooLarge": "De skill-ZIP mag maximaal 20 MB groot zijn.",
+      "importCount": "Bronnen om toe te voegen na opslaan: {count}",
+      "skippedScripts": "Uitvoerbare scripts zijn overgeslagen",
+      "status": {
+        "pending": "Wachten op indexeren",
+        "processing": "Bezig met indexeren",
+        "inline": "Gereed (direct geladen)",
+        "indexed": "Gereed (doorzoekbaar)",
+        "failed": "Indexeren mislukt",
+        "asset": "Downloadbaar bestand"
+      },
+      "confirmRemove": "{filename} uit deze vaardigheid verwijderen? Het opgeslagen origineel wordt verwijderd en is niet meer beschikbaar als bron voor verwijzingen.",
+      "reindexRequired": "Deze documenten moeten opnieuw worden geïndexeerd voor de huidige regionale zoek- en embeddingconfiguratie. Ze worden pas doorzocht nadat het indexeren is voltooid."
+    },
+    "applyToAgents": "Beschikbaar voor agents",
+    "applyToAgentsHint": "Standaard uitgeschakeld. Wanneer ingeschakeld, kunnen agents deze skill laden via alleen-lezen tools in plaats van hun persoonlijke instructies te vervangen. Skill-oproepen hebben onafhankelijke staplimieten. Foundry agents moeten al functies voor load_skill en search_skill_documents in hun definitie geregistreerd hebben.",
+    "requireConsent": "Eerst toestemming vragen",
+    "requireConsentHint": "Als het model deze vaardigheid zelf wil toepassen, wordt eerst aan de gebruiker gevraagd. Voor aangevraagde en vastgezette gebruiken is geen bevestiging nodig.",
+    "consentChip": "Vraagt eerst",
+    "sourceChip": "Van bron",
+    "sourceChipHint": "Geleverd door een geabonneerde bron; de instructies worden bij synchronisatie bijgewerkt. Activatie-, agent- en toestemmingsinstellingen zijn van u.",
+    "sources": {
+      "title": "Vaardighedenbronnen",
+      "description": "Abonneer op een externe vaardighedencatalogus (een index.json met SKILL.md-bestanden). Deze vaardigheden worden organisatievaardigheden en worden ongeveer elke zes uur bijgewerkt. Alleen SKILL.md wordt geïmporteerd; referentiedocumenten niet.",
+      "urlLabel": "Catalogus-URL",
+      "urlPlaceholder": "https://example.org/skills/index.json",
+      "urlHint": "Moet https zijn op een publieke host. Vaardigheidsbestanden worden alleen van deze locatie gelezen.",
+      "labelLabel": "Label (optioneel)",
+      "add": "Abonneren",
+      "adding": "Bezig met abonneren…",
+      "added": "{count, plural, =0 {Bron toegevoegd; nog geen vaardigheden geïmporteerd} one {Bron toegevoegd; # vaardigheid geïmporteerd} other {Bron toegevoegd; # vaardigheden geïmporteerd}}",
+      "addedWithError": "Bron toegevoegd, maar de eerste synchronisatie is mislukt. Controleer de foutmelding bij de bron.",
+      "addError": "Kon de bron van vaardigheden niet toevoegen",
+      "sync": "Nu synchroniseren",
+      "syncing": "Synchroniseren…",
+      "synced": "Bron gesynchroniseerd.",
+      "syncError": "Kon de bron van vaardigheden niet synchroniseren",
+      "remove": "Bron verwijderen",
+      "removeConfirm": "Deze bron verwijderen? De geleverde vaardigheden blijven als gewone organisatievaardigheden en worden niet meer bijgewerkt.",
+      "removed": "Bron verwijderd.",
+      "removeError": "Kon de bron van vaardigheden niet verwijderen",
+      "loading": "Bronnen laden…",
+      "loadError": "Vaardighedenbronnen konden niet worden geladen.",
+      "empty": "Nog geen vaardighedenbronnen.",
+      "never": "Nooit gesynchroniseerd",
+      "statusOk": "Gesynchroniseerd",
+      "statusError": "Synchronisatie mislukt",
+      "statusPartial": "{count, plural, one {# item overgeslagen} other {# items overgeslagen}}",
+      "lastSync": "Laatste synchronisatie {time}",
+      "entryCount": "{count, plural, one {# item} other {# items}}",
+      "entryStatus": {
+        "synced": "gesynchroniseerd",
+        "skipped": "overgeslagen",
+        "conflict": "conflict — niet overschreven",
+        "invalid": "ongeldig"
+      }
+    },
+    "requireConsentDisabledHint": "Alleen automatische vaardigheden kunnen vooraf toestemming vragen: aangevraagde, vastgepinde en altijd-actieve vaardigheden worden zonder melding toegepast, en op-aanvraag vaardigheden worden nooit door het model gekozen."
+  },
+  "personalSkills": {
+    "title": "Persoonlijke vaardigheden",
+    "description": "Bewaar herbruikbare instructies voor uw eigen gesprekken. Vaardigheden blijven in deze browser en worden alleen naar het model verzonden wanneer u chat. Relevante vaardigheden kunnen automatisch worden geselecteerd, eenmalig gebruikt of vastgezet. Ze kunnen het organisatiebeleid niet wijzigen of toegang tot tools verlenen. Voor het gebruik van vaardigheden moeten vaardigheden voor deze implementatie zijn ingeschakeld; agentgesprekken gebruiken geen persoonlijke vaardigheden.",
+    "importFile": "Importeer SKILL.md of ZIP",
+    "review": "Controleer de volledige instructies voordat u opslaat. Geïmporteerde instructies zijn gebruikersvoorkeuren, geen vertrouwd organisatiebeleid.",
+    "skipped": "Uitvoerbare scripts zijn overgeslagen",
+    "importTooLarge": "De import mag maximaal 20 MB zijn.",
+    "invalid": "De vaardigheid kon niet worden geïmporteerd.",
+    "duplicate": "Dat persoonlijke vaardigheids-id bestaat al. Bewerk de bestaande vaardigheid of kies een ander id.",
+    "countLimit": "U kunt maximaal 20 persoonlijke vaardigheden opslaan.",
+    "requestLimit": "Ingeschakelde persoonlijke vaardigheden overschrijden de limiet van 160 KB per aanvraag. Schakel enkele vaardigheden uit of verkort hun instructies.",
+    "saved": "Persoonlijke vaardigheid opgeslagen in deze browser.",
+    "instructionsHint": "Maximaal 16 KB aan instructies, inclusief geïmporteerde tekstverwijzingen. Binaire bestanden en permanente documentindexering zijn alleen beschikbaar voor organisatievaardigheden. Export gebruikt de standaardnaam SKILL.md zonder het user:-voorvoegsel.",
+    "enabled": "Ingeschakeld voor mijn gesprekken",
+    "empty": "Maak een vaardigheid voor een terugkerende taak, of importeer een SKILL.md om deze hier te bekijken en op te slaan."
   }
 }

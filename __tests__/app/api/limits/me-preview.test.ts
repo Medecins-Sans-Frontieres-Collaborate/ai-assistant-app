@@ -32,6 +32,10 @@ import {
   LimitsPolicySchema,
 } from '@/lib/services/limits/types';
 import { lookupUsage } from '@/lib/services/limits/usageLookup';
+import {
+  fetchMemberGroupIds,
+  lookupDirectoryUser,
+} from '@/lib/services/m365/groupDirectory';
 
 import { parseJsonResponse } from '../helpers';
 
@@ -77,6 +81,18 @@ vi.mock('@/lib/services/m365/groupMembership', () => ({
 }));
 vi.mock('@/lib/services/limits/usageLookup', () => ({
   lookupUsage: vi.fn(),
+}));
+// The directory reads behind the preview's attribute + group layers.
+vi.mock('@/lib/services/m365/groupDirectory', () => ({
+  lookupDirectoryUser: vi.fn(),
+  fetchMemberGroupIds: vi.fn(),
+}));
+vi.mock('@/lib/services/auth/OfficeResolver', () => ({
+  OfficeResolver: {
+    findOfficeByEmail: vi.fn((mail: string | undefined) =>
+      mail?.endsWith('@ocp.msf.org') ? { id: 'ocp' } : null,
+    ),
+  },
 }));
 
 const DEL_OCP = 'del-0000000000aa';
@@ -194,6 +210,16 @@ describe('GET /api/limits/me?as=', () => {
       subjectId: 'oid-alice',
       usage: { 'chat.messagesPerDay': { used: 7, window: 'day' } },
     });
+    vi.mocked(lookupDirectoryUser).mockResolvedValue({
+      id: 'oid-subject',
+      mail: 'subject@ocp.msf.org',
+      department: 'Health',
+    });
+    vi.mocked(fetchMemberGroupIds).mockResolvedValue({
+      groupIds: [],
+      oversizeFallback: false,
+      truncated: false,
+    });
     // Sanity: the mocked service is what the route sees.
     expect(LimitsService.getInstance().getSnapshot().policy).toBe(policy);
   });
@@ -232,6 +258,73 @@ describe('GET /api/limits/me?as=', () => {
       const serialized = JSON.stringify(body);
       expect(serialized).not.toContain('unrelated global rule');
       expect(serialized).not.toContain('secret-ish');
+    });
+
+    it('evaluates group AND attribute overrides from the directory record (no more notEvaluated)', async () => {
+      snapshot.policy = LimitsPolicySchema.parse({
+        ...policy,
+        overrides: [
+          ...policy.overrides,
+          override('lim-0000000000a1', {
+            label: 'research lift',
+            scope: 'group',
+            targets: ['g-1'],
+            entries: [{ limitKey: 'chat.tokensPerDay', value: 5000 }],
+          }),
+          override('lim-0000000000a2', {
+            label: 'health dept',
+            scope: 'attribute',
+            targets: ['department:health'],
+            entries: [{ limitKey: 'chat.tokensPerDay', value: 3000 }],
+          }),
+        ],
+      });
+      vi.mocked(fetchMemberGroupIds).mockResolvedValue({
+        groupIds: ['G-1'],
+        oversizeFallback: false,
+        truncated: false,
+      });
+      const body = await parseJsonResponse(
+        await GET(request('as=bob@ocp.msf.org')),
+      );
+      expect(body.data.directoryStatus).toBe('resolved');
+      expect(body.data.notEvaluated).toEqual([]);
+      // Group (layer 4) outranks attribute (layer 3) — the real resolution order.
+      expect(limitFor(body, 'chat.tokensPerDay')).toMatchObject({
+        value: 5000,
+        source: 'group',
+        overrideId: 'lim-0000000000a1',
+      });
+
+      vi.mocked(fetchMemberGroupIds).mockResolvedValue({
+        groupIds: [],
+        oversizeFallback: false,
+        truncated: false,
+      });
+      const noGroups = await parseJsonResponse(
+        await GET(request('as=bob@ocp.msf.org')),
+      );
+      expect(limitFor(noGroups, 'chat.tokensPerDay')).toMatchObject({
+        value: 3000,
+        source: 'attribute',
+      });
+    });
+
+    it('says so when no directory user has the mail, and lists both layers as not evaluated when Graph is down', async () => {
+      vi.mocked(lookupDirectoryUser).mockResolvedValue(null);
+      const missing = await parseJsonResponse(
+        await GET(request('as=ghost@ocp.msf.org')),
+      );
+      expect(missing.data.directoryStatus).toBe('not-found');
+      expect(missing.data.notEvaluated).toEqual([]);
+      expect(fetchMemberGroupIds).not.toHaveBeenCalled();
+
+      vi.mocked(lookupDirectoryUser).mockRejectedValue(new Error('graph down'));
+      const response = await GET(request('as=alice@ocp.msf.org'));
+      const down = await parseJsonResponse(response);
+      expect(response.status).toBe(200);
+      expect(down.data.directoryStatus).toBe('unavailable');
+      expect(down.data.notEvaluated).toEqual(['attribute', 'group']);
     });
 
     it('still previews while the policy is unavailable (resolves from the catalog)', async () => {
@@ -305,13 +398,46 @@ describe('GET /api/limits/me?as=', () => {
       expect(lookupUsage).not.toHaveBeenCalled();
     });
 
-    it('403s LIMITS_PREVIEW_OUT_OF_SCOPE (undecidable) for a group-only jurisdiction', async () => {
-      mockAuth.mockResolvedValue(session('groups-admin@paris.msf.org'));
-      const response = await GET(request('as=anyone@ocp.msf.org'));
-      const body = await parseJsonResponse(response);
-      expect(response.status).toBe(403);
-      expect(body.code).toBe('LIMITS_PREVIEW_OUT_OF_SCOPE');
-      expect(body.details).toBe('undecidable');
+    describe('group-only jurisdiction (decided through the directory)', () => {
+      beforeEach(() => {
+        mockAuth.mockResolvedValue(session('groups-admin@paris.msf.org'));
+      });
+
+      it('403s undecidable ONLY when the directory cannot be reached', async () => {
+        vi.mocked(lookupDirectoryUser).mockRejectedValue(
+          new Error('graph down'),
+        );
+        const response = await GET(request('as=anyone@ocp.msf.org'));
+        const body = await parseJsonResponse(response);
+        expect(response.status).toBe(403);
+        expect(body.code).toBe('LIMITS_PREVIEW_OUT_OF_SCOPE');
+        expect(body.details).toBe('undecidable');
+      });
+
+      it('previews a person the directory places inside the jurisdiction', async () => {
+        vi.mocked(fetchMemberGroupIds).mockResolvedValue({
+          groupIds: ['G-1'],
+          oversizeFallback: false,
+          truncated: false,
+        });
+        const response = await GET(request('as=anyone@ocp.msf.org'));
+        const body = await parseJsonResponse(response);
+        expect(response.status).toBe(200);
+        expect(body.data.scopedPreview).toBe(true);
+        expect(body.data.directoryStatus).toBe('resolved');
+        expect(body.data.notEvaluated).toEqual([]);
+        expect(vi.mocked(fetchMemberGroupIds).mock.calls[0][1]).toEqual({
+          kind: 'user',
+          userId: 'oid-subject',
+        });
+      });
+
+      it('403s outside for a person the directory places outside every delegation', async () => {
+        const response = await GET(request('as=anyone@ocp.msf.org'));
+        const body = await parseJsonResponse(response);
+        expect(response.status).toBe(403);
+        expect(body.details).toBe('outside');
+      });
     });
 
     it('503s LIMITS_POLICY_UNAVAILABLE when the policy cannot be read — never a 403', async () => {
@@ -462,8 +588,15 @@ describe('GET /api/limits/me?as=', () => {
       [k: string]: unknown;
     };
     const rowsOf = (body: { data: { limits: Row[] } }) => body.data.limits;
+    // Rows the POLICY mentions: the catalog's own external-family rows
+    // (config/limits.ts CATALOG_MODEL_DEFAULTS) appear for everyone and are
+    // asserted separately.
     const qualified = (rows: Row[]) =>
-      rows.filter((r) => r.modelId !== undefined || r.series !== undefined);
+      rows.filter(
+        (r) =>
+          (r.modelId !== undefined || r.series !== undefined) &&
+          r.source !== 'catalog',
+      );
     const find = (rows: Row[], key: string, q: Partial<Row>) =>
       rows.find(
         (r) =>
@@ -475,6 +608,26 @@ describe('GET /api/limits/me?as=', () => {
     beforeEach(() => {
       snapshot.policy = qualifiedPolicy;
       stored.policy = qualifiedPolicy;
+    });
+
+    it('surfaces the catalog block for external models even when no rule mentions them', async () => {
+      const bare = { ...qualifiedPolicy, defaults: [], overrides: [] };
+      snapshot.policy = bare;
+      stored.policy = bare;
+      const rows = rowsOf(
+        await parseJsonResponse(await GET(request('as=alice@ocp.msf.org'))),
+      );
+      // One family row says it; the catalog qualifier adds no other rows.
+      expect(find(rows, 'model.allowed', { series: 'claude' })).toMatchObject({
+        value: false,
+        source: 'catalog',
+      });
+      expect(
+        find(rows, 'model.allowed', { modelId: 'claude-sonnet-4-6' }),
+      ).toBeUndefined();
+      expect(
+        find(rows, 'model.requests', { series: 'claude' }),
+      ).toBeUndefined();
     });
 
     it('appends one row per perModel key × mentioned qualifier, with the same provenance as unqualified rows', async () => {
@@ -510,9 +663,11 @@ describe('GET /api/limits/me?as=', () => {
       expect(find(rows, 'model.allowed', { modelId: 'gpt-5.2' })).toMatchObject(
         { value: true },
       );
+      // External by catalog (config/limits.ts): unavailable until granted,
+      // and the preview says so with catalog provenance.
       expect(
         find(rows, 'model.allowed', { modelId: 'claude-sonnet-4-6' }),
-      ).toMatchObject({ value: true, source: 'catalog' });
+      ).toMatchObject({ value: false, source: 'catalog' });
       expect(find(rows, 'model.allowed', { series: 'gpt' })).toMatchObject({
         value: true,
       });

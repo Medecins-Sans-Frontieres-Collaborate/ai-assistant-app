@@ -1,11 +1,10 @@
 'use client';
 
 import {
+  IconChecklist,
   IconDatabase,
   IconHistory,
   IconPlus,
-  IconRefresh,
-  IconTrash,
   IconX,
 } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -23,6 +22,7 @@ import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
 import { OpenAIModels } from '@/types/openai';
 
+import { AccessPill } from './AccessPill';
 import { CanonicalKeyChip } from './CanonicalKeyChip';
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
 import {
@@ -1035,15 +1035,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                       {entry.agent.searchIndex || entry.agent.id}
                     </p>
                   </div>
-                  <span
-                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                      isRestricted
-                        ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                        : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                    }`}
-                  >
-                    {isRestricted ? t('accessRestricted') : t('accessEveryone')}
-                  </span>
+                  <AccessPill restricted={isRestricted} />
                   {hiddenAgents.isHidden(entry.canonicalKey) && <HiddenBadge />}
                   <HideAgentButton
                     hidden={hiddenAgents.isHidden(entry.canonicalKey)}
@@ -1052,6 +1044,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                   />
                   <button
                     type="button"
+                    aria-expanded={editingRuleKey === entry.canonicalKey}
                     onClick={() =>
                       setEditingRuleKey(
                         editingRuleKey === entry.canonicalKey
@@ -1061,7 +1054,9 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                     }
                     className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                   >
-                    {t('editAccess')}
+                    {editingRuleKey === entry.canonicalKey
+                      ? t('cancel')
+                      : t('editAccess')}
                   </button>
                   {canCreate && (
                     <button
@@ -1158,15 +1153,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                         : t('orgAgentValidationOk')
                       : t('orgAgentValidationFailed')}
                   </span>
-                  <span
-                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                      isRestricted
-                        ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                        : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                    }`}
-                  >
-                    {isRestricted ? t('accessRestricted') : t('accessEveryone')}
-                  </span>
+                  <AccessPill restricted={isRestricted} />
                   {hiddenAgents.isHidden(entry.canonicalKey) && <HiddenBadge />}
                   <HideAgentButton
                     hidden={hiddenAgents.isHidden(entry.canonicalKey)}
@@ -1175,6 +1162,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                   />
                   <button
                     type="button"
+                    aria-expanded={editingRuleKey === entry.canonicalKey}
                     onClick={() =>
                       setEditingRuleKey(
                         editingRuleKey === entry.canonicalKey
@@ -1184,10 +1172,13 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                     }
                     className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                   >
-                    {t('editAccess')}
+                    {editingRuleKey === entry.canonicalKey
+                      ? t('cancel')
+                      : t('editAccess')}
                   </button>
                   <button
                     type="button"
+                    aria-expanded={editingId === entry.agent.id}
                     onClick={() => {
                       setRestorePrefill(null);
                       setEditingId(
@@ -1196,7 +1187,9 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                     }}
                     className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                   >
-                    {t('editAgent')}
+                    {editingId === entry.agent.id
+                      ? t('cancel')
+                      : t('editAgent')}
                   </button>
                   <button
                     type="button"
@@ -1205,10 +1198,10 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                     className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                     title={t('orgAgentRevalidateHint')}
                   >
-                    <IconRefresh
+                    <IconChecklist
                       size={14}
                       className={
-                        revalidateMutation.isPending ? 'animate-spin' : ''
+                        revalidateMutation.isPending ? 'animate-pulse' : ''
                       }
                     />
                     {t('orgAgentRevalidate')}
@@ -1230,11 +1223,16 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                   </button>
                   <button
                     type="button"
-                    aria-label={t('deleteAgent')}
-                    onClick={() => setConfirmDeleteId(entry.agent.id)}
-                    className="shrink-0 rounded-md border border-gray-200 p-1.5 text-red-600 hover:bg-red-50 dark:border-gray-700 dark:hover:bg-red-900/20"
+                    className="shrink-0 rounded-md border border-red-200 px-3 py-1 text-sm text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-900/20"
+                    onClick={() =>
+                      setConfirmDeleteId(
+                        confirmDeleteId === entry.agent.id
+                          ? null
+                          : entry.agent.id,
+                      )
+                    }
                   >
-                    <IconTrash size={15} />
+                    {t('deleteAgent')}
                   </button>
                 </div>
 
@@ -1245,24 +1243,24 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                 )}
 
                 {confirmDeleteId === entry.agent.id && (
-                  <div className="mt-2 flex items-center justify-between rounded-md bg-red-50 p-2 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-300">
-                    <span>{t('orgAgentDeleteConfirm')}</span>
-                    <span className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setConfirmDeleteId(null)}
-                        className="rounded-md px-2 py-0.5 hover:bg-red-100 dark:hover:bg-red-900/40"
-                      >
-                        {t('cancel')}
-                      </button>
+                  <div className="mt-2 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-700 dark:bg-red-900/20 dark:text-red-300">
+                    <p>{t('orgAgentDeleteConfirm')}</p>
+                    <div className="mt-2 flex gap-2">
                       <button
                         type="button"
                         onClick={() => void handleDelete(entry)}
-                        className="rounded-md bg-red-600 px-2 py-0.5 font-medium text-white hover:bg-red-700"
+                        className="rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700"
                       >
-                        {t('deleteAgent')}
+                        {t('confirmDeleteAgent')}
                       </button>
-                    </span>
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDeleteId(null)}
+                        className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                      >
+                        {t('cancel')}
+                      </button>
+                    </div>
                   </div>
                 )}
 
