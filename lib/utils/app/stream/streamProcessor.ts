@@ -1,7 +1,22 @@
+import {
+  classifyProviderError,
+  describeProviderError,
+  providerErrorCode,
+} from '@/lib/services/chat/providerErrors';
+import {
+  CONTENT_FILTER_STREAM_ERROR,
+  ContinuationBudget,
+  OUTPUT_LIMIT_STREAM_ERROR,
+  RoundFinish,
+  StreamContinuation,
+  continuationActivityKey,
+  normalizeOpenAIFinish,
+} from '@/lib/services/chat/streamContinuation';
 import { RAGService } from '@/lib/services/ragService';
 
 import {
   PendingTranscriptionInfo,
+  StreamMetadata,
   TokenUsageMetadata,
   TranscriptMetadata,
   appendMetadataToStream,
@@ -11,7 +26,7 @@ import { parseThinkingContent } from '@/lib/utils/app/stream/thinking';
 
 import { Citation } from '@/types/rag';
 
-import { UI_CONSTANTS } from '@/lib/constants/ui';
+import { emitAgentActivity } from '@/lib/streamMarkers';
 import OpenAI from 'openai';
 
 /**
@@ -21,6 +36,26 @@ import OpenAI from 'openai';
  */
 function isControllerAlreadyClosedError(err: unknown): boolean {
   return (err as { code?: string } | null)?.code === 'ERR_INVALID_STATE';
+}
+
+export interface UsageContext {
+  modelId: string;
+  region: 'US' | 'EU' | null;
+  reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
+  /** Server-side sink (logging); runs at stream end when usage was captured. */
+  onUsage?: (usage: TokenUsageMetadata) => void;
+}
+
+/** Optional behaviours of the chat.completions processor. */
+export interface OpenAIStreamProcessorOptions {
+  /**
+   * Mid-answer recovery (lib/services/chat/streamContinuation.ts): reopen
+   * the upstream stream after an interruption or an output-limit finish and
+   * keep appending to the text the client already has. Absent = the
+   * historical behaviour (interruption → in-band streamError; `length` →
+   * silent truncation).
+   */
+  continuation?: StreamContinuation<OpenAI.Chat.Completions.ChatCompletionChunk>;
 }
 
 /**
@@ -36,16 +71,9 @@ function isControllerAlreadyClosedError(err: unknown): boolean {
  *   usage chunk (requested via stream_options.include_usage) is attributed and
  *   forwarded in the terminal metadata block + reported via onUsage. Callers
  *   that don't pass it (RAG, document summary) see zero behavior change.
+ * @param {OpenAIStreamProcessorOptions} [options] - Continuation hooks.
  * @returns {ReadableStream} A processed stream with citation data appended.
  */
-export interface UsageContext {
-  modelId: string;
-  region: 'US' | 'EU' | null;
-  reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
-  /** Server-side sink (logging); runs at stream end when usage was captured. */
-  onUsage?: (usage: TokenUsageMetadata) => void;
-}
-
 export function createAzureOpenAIStreamProcessor(
   response: AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>,
   ragService?: RAGService,
@@ -54,13 +82,17 @@ export function createAzureOpenAIStreamProcessor(
   webSearchCitations?: Citation[],
   pendingTranscriptions?: PendingTranscriptionInfo[],
   usageContext?: UsageContext,
+  options?: OpenAIStreamProcessorOptions,
 ): ReadableStream {
+  const continuation = options?.continuation;
   return new ReadableStream({
     start: (controller) => {
       const encoder = createStreamEncoder();
       let allContent = '';
       let controllerClosed = false;
-      let capturedUsage: OpenAI.Completions.CompletionUsage | undefined;
+      // Usage summed across the original stream and every continuation.
+      const usageTotals = { prompt: 0, completion: 0, total: 0 };
+      let sawUsage = false;
       // Reasoning models served with a separate `reasoning_content` delta
       // field (DeepSeek-R1 on Foundry). We re-emit it inline wrapped in
       // <think> tags — the client already parses those into the collapsible
@@ -68,105 +100,213 @@ export function createAzureOpenAIStreamProcessor(
       // `content` flow through unchanged on the same path).
       let allReasoning = '';
       let reasoningOpen = false;
+      const budget = new ContinuationBudget(
+        continuation?.maxInterruptionResumes,
+        continuation?.maxOutputLimitContinuations,
+      );
+
+      const closeController = () => {
+        if (controllerClosed) return;
+        controllerClosed = true;
+        try {
+          controller.close();
+        } catch (closeError) {
+          if (!isControllerAlreadyClosedError(closeError)) {
+            console.error('Error closing controller:', closeError);
+          }
+        }
+      };
+
+      const closeThinkBlock = () => {
+        if (reasoningOpen) {
+          reasoningOpen = false;
+          controller.enqueue(encoder.encode('\n</think>\n\n'));
+        }
+      };
+
+      /** Consume one upstream stream. Returns the normalised finish, or 'stopped' when the user stopped. */
+      const consume = async (
+        source: AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>,
+      ): Promise<RoundFinish | 'stopped'> => {
+        let finish: RoundFinish = null;
+        for await (const chunk of source) {
+          // Check if stopConversationRef is true before processing each chunk
+          if (stopConversationRef?.current || controllerClosed) {
+            console.log('Stream processing stopped by user');
+            closeController();
+            return 'stopped';
+          }
+
+          // The terminal usage chunk (stream_options.include_usage) has
+          // empty `choices` and a populated `usage` — capture it; the
+          // content guard below is unaffected.
+          if (chunk?.usage) {
+            sawUsage = true;
+            usageTotals.prompt += chunk.usage.prompt_tokens ?? 0;
+            usageTotals.completion += chunk.usage.completion_tokens ?? 0;
+            usageTotals.total += chunk.usage.total_tokens ?? 0;
+          }
+
+          const choice = chunk?.choices?.[0];
+          if (choice?.finish_reason) {
+            finish = normalizeOpenAIFinish(choice.finish_reason);
+          }
+
+          // Separate reasoning channel (not part of `content`). Streamed
+          // to the client immediately so the thinking is visible live.
+          const reasoningChunk = (
+            choice?.delta as { reasoning_content?: string } | undefined
+          )?.reasoning_content;
+          if (reasoningChunk) {
+            if (!reasoningOpen) {
+              reasoningOpen = true;
+              controller.enqueue(encoder.encode('<think>\n'));
+            }
+            allReasoning += reasoningChunk;
+            controller.enqueue(encoder.encode(reasoningChunk));
+          }
+
+          if (choice?.delta?.content) {
+            // Reasoning always precedes the answer — close the think
+            // block the moment real content starts.
+            closeThinkBlock();
+            const contentChunk = choice.delta.content;
+            allContent += contentChunk;
+
+            // Process the chunk if it's a RAG stream
+            let processedChunk = contentChunk;
+            if (ragService) {
+              processedChunk = ragService.processCitationInChunk(contentChunk);
+            }
+
+            controller.enqueue(encoder.encode(processedChunk));
+          }
+        }
+        return finish;
+      };
+
+      /**
+       * Ask the continuation hook for a follow-up stream. Returns null when
+       * continuation is unavailable, exhausted, or declined.
+       */
+      const tryContinue = async (
+        reason: 'interrupted' | 'length',
+      ): Promise<AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk> | null> => {
+        if (!continuation || !budget.take(reason)) return null;
+        const attempt =
+          budget.used[reason === 'length' ? 'outputLimits' : 'interruptions'];
+        const key = continuationActivityKey(reason);
+        continuation.onActivity?.(key);
+        controller.enqueue(encoder.encode(emitAgentActivity(key)));
+        try {
+          return await continuation.resume(allContent, reason, attempt);
+        } catch (resumeError) {
+          console.error(
+            `Stream continuation (${reason}) could not be opened:`,
+            resumeError instanceof Error ? resumeError.message : resumeError,
+          );
+          return null;
+        }
+      };
 
       (async function () {
+        let streamError: StreamMetadata['streamError'];
         try {
-          for await (const chunk of response) {
-            // Check if stopConversationRef is true before processing each chunk
-            if (stopConversationRef?.current || controllerClosed) {
-              console.log('Stream processing stopped by user');
-              if (!controllerClosed) {
-                controllerClosed = true;
-                try {
-                  controller.close();
-                } catch (closeError) {
-                  if (!isControllerAlreadyClosedError(closeError)) {
-                    console.error('Error closing controller:', closeError);
-                  }
-                }
+          let source = response;
+          for (;;) {
+            let finish: RoundFinish | 'stopped';
+            try {
+              finish = await consume(source);
+            } catch (error) {
+              const err = error as { name?: string; message?: string };
+              if (
+                err.name === 'AbortError' ||
+                err.message === 'Abort error: Fetch is already aborted' ||
+                err.message?.includes('abort') ||
+                err.message?.includes('Abort')
+              ) {
+                console.log('Stream aborted by user, closing cleanly');
+                closeController();
+                return;
               }
-              return;
-            }
-
-            // The terminal usage chunk (stream_options.include_usage) has
-            // empty `choices` and a populated `usage` — capture it; the
-            // content guard below is unaffected.
-            if (chunk?.usage) {
-              capturedUsage = chunk.usage;
-            }
-
-            // Separate reasoning channel (not part of `content`). Streamed
-            // to the client immediately so the thinking is visible live.
-            const reasoningChunk = (
-              chunk?.choices?.[0]?.delta as
-                | { reasoning_content?: string }
-                | undefined
-            )?.reasoning_content;
-            if (reasoningChunk) {
-              if (!reasoningOpen) {
-                reasoningOpen = true;
-                controller.enqueue(encoder.encode('<think>\n'));
+              console.error('Stream processing error:', error);
+              const classified = classifyProviderError(error);
+              if (classified.kind === 'content_filter') {
+                streamError = { ...CONTENT_FILTER_STREAM_ERROR };
+                break;
               }
-              allReasoning += reasoningChunk;
-              controller.enqueue(encoder.encode(reasoningChunk));
-            }
-
-            if (chunk?.choices?.[0]?.delta?.content) {
-              // Reasoning always precedes the answer — close the think
-              // block the moment real content starts.
-              if (reasoningOpen) {
-                reasoningOpen = false;
-                controller.enqueue(encoder.encode('\n</think>\n\n'));
+              // Upstream died after bytes already reached the client (mid-
+              // stream 5xx, connection reset). Continue from the partial
+              // text on the same model when the policy allows; otherwise
+              // end CLEANLY with an in-band streamError — controller.error()
+              // aborts the socket, which the browser reports as an opaque
+              // network failure and the client store silently re-sends on a
+              // fallback model (partial text discarded, tool calls re-run).
+              const next = classified.retryable
+                ? await tryContinue('interrupted')
+                : null;
+              if (next) {
+                source = next;
+                continue;
               }
-              const contentChunk = chunk.choices[0].delta.content;
-              allContent += contentChunk;
-
-              // Process the chunk if it's a RAG stream
-              let processedChunk = contentChunk;
-              if (ragService) {
-                processedChunk =
-                  ragService.processCitationInChunk(contentChunk);
-              }
-
-              controller.enqueue(encoder.encode(processedChunk));
+              streamError = {
+                code: providerErrorCode(classified.kind),
+                kind: classified.kind,
+                message: allContent.trim()
+                  ? 'The model stopped responding before the answer was finished.'
+                  : describeProviderError(classified.kind),
+                // No text reached the client: the partial is nothing, so a
+                // fallback-model resend is the right next move.
+                ...(allContent.trim() ? {} : { retry: true }),
+              };
+              break;
             }
+            if (finish === 'stopped') return;
+
+            if (finish === 'content_filter') {
+              streamError = { ...CONTENT_FILTER_STREAM_ERROR };
+              break;
+            }
+            if (finish === 'length') {
+              if (!allContent.trim()) {
+                // Reasoning consumed the whole budget; a "continue" nudge
+                // would only do it again.
+                streamError = { ...OUTPUT_LIMIT_STREAM_ERROR };
+                break;
+              }
+              const next = await tryContinue('length');
+              if (next) {
+                source = next;
+                continue;
+              }
+            }
+            break;
           }
 
           if (!controllerClosed) {
             // A reasoning-only stream (aborted before any answer text)
             // must still close its think block or the client renders the
             // open tag as body text forever.
-            if (reasoningOpen) {
-              reasoningOpen = false;
-              controller.enqueue(encoder.encode('\n</think>\n\n'));
-            }
+            closeThinkBlock();
 
             // Parse thinking content from the accumulated content
             const { thinking: inlineThinking } =
               parseThinkingContent(allContent);
             const thinking = allReasoning.trim() || inlineThinking;
 
-            // Get citations if available
-            let citations: Citation[] | undefined;
-
             // Merge citations from both RAG and web search
             const allCitations: Citation[] = [];
-
-            // Add RAG citations if available
             if (ragService) {
               const rawCitations = ragService.getCurrentCitations();
               const uniqueCitations =
                 ragService.deduplicateCitations(rawCitations);
               allCitations.push(...uniqueCitations);
             }
-
-            // Add web search citations if available
             if (webSearchCitations && webSearchCitations.length > 0) {
               allCitations.push(...webSearchCitations);
             }
-
-            // Only set citations if we have any
-            citations = allCitations.length > 0 ? allCitations : undefined;
+            const citations =
+              allCitations.length > 0 ? allCitations : undefined;
 
             // Build transcript metadata with LLM's processed content
             let transcriptMetadata: TranscriptMetadata | undefined;
@@ -180,11 +320,11 @@ export function createAzureOpenAIStreamProcessor(
             // Attribute captured provider usage (model that actually served,
             // resolved region, applied effort) for the client + server sinks.
             let usage: TokenUsageMetadata | undefined;
-            if (usageContext && capturedUsage) {
+            if (usageContext && sawUsage) {
               usage = {
-                promptTokens: capturedUsage.prompt_tokens ?? 0,
-                completionTokens: capturedUsage.completion_tokens ?? 0,
-                totalTokens: capturedUsage.total_tokens ?? 0,
+                promptTokens: usageTotals.prompt,
+                completionTokens: usageTotals.completion,
+                totalTokens: usageTotals.total,
                 modelId: usageContext.modelId,
                 region: usageContext.region,
                 reasoningEffort: usageContext.reasoningEffort,
@@ -200,61 +340,26 @@ export function createAzureOpenAIStreamProcessor(
               transcript: transcriptMetadata,
               pendingTranscriptions,
               usage,
+              streamError,
             });
           }
 
+          closeController();
+        } catch (error) {
+          console.error('Stream processing error (post-stream):', error);
           if (!controllerClosed) {
             controllerClosed = true;
             try {
+              appendMetadataToStream(controller, {
+                streamError: {
+                  code: 'UPSTREAM_STREAM_FAILED',
+                  message:
+                    'The model stopped responding before the answer was finished.',
+                },
+              });
               controller.close();
-            } catch (closeError) {
-              if (!isControllerAlreadyClosedError(closeError)) {
-                console.error('Error closing controller:', closeError);
-              }
-            }
-          }
-        } catch (error) {
-          console.error('Stream processing error:', error);
-
-          const err = error as { name?: string; message?: string };
-          if (
-            err.name === 'AbortError' ||
-            err.message === 'Abort error: Fetch is already aborted' ||
-            err.message?.includes('abort') ||
-            err.message?.includes('Abort')
-          ) {
-            console.log('Stream aborted by user, closing cleanly');
-            if (!controllerClosed) {
-              controllerClosed = true;
-              try {
-                controller.close();
-              } catch (closeError) {
-                if (!isControllerAlreadyClosedError(closeError)) {
-                  console.error('Error closing controller:', closeError);
-                }
-              }
-            }
-          } else {
-            if (!controllerClosed) {
-              controllerClosed = true;
-              // Upstream died after bytes already reached the client (Azure
-              // content-filter cut, mid-stream 5xx, connection reset). End
-              // CLEANLY with an in-band streamError: controller.error()
-              // aborts the socket, which the browser reports as an opaque
-              // network failure and the client store silently re-sends on a
-              // fallback model — partial text discarded, tool calls re-run.
-              try {
-                appendMetadataToStream(controller, {
-                  streamError: {
-                    code: 'UPSTREAM_STREAM_FAILED',
-                    message:
-                      'The model stopped responding before the answer was finished.',
-                  },
-                });
-                controller.close();
-              } catch {
-                controller.error(error);
-              }
+            } catch {
+              controller.error(error);
             }
           }
         }
