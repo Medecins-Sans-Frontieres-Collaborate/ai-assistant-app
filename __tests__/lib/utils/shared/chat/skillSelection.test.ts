@@ -1,8 +1,13 @@
 import {
+  appliedSkillVersionsFromToolCalls,
+  attachAppliedSkillVersions,
   mergeSkillRequestMetadata,
   requestedSkillsForMessage,
   skillSelectionForRequest,
+  skillVersionsForRequest,
 } from '@/lib/utils/shared/chat/skillSelection';
+
+import type { ConversationEntry } from '@/types/chat';
 
 import { describe, expect, it } from 'vitest';
 
@@ -62,5 +67,55 @@ describe('conversation skill request selection', () => {
       skillSelectionForRequest(['../bad', 'UPPER', 'gdpr'], undefined)
         .pinnedSkillIds,
     ).toEqual(['gdpr']);
+  });
+});
+
+describe('applied skill versions (regeneration replay)', () => {
+  const record = {
+    id: 'skills-1',
+    name: 'use_skills',
+    server_label: 'Skills',
+    status: 'completed' as const,
+    arguments: JSON.stringify({
+      applied: [
+        { id: 'gdpr', updatedAt: '2026-10-01T00:00:00.000Z' },
+        { id: '../bad', updatedAt: 'x' },
+        { id: 'forms', updatedAt: 7 },
+      ],
+    }),
+    output: 'GDPR (requested)',
+    error: null,
+  };
+  it('reads versions from the record and ignores malformed entries', () => {
+    expect(appliedSkillVersionsFromToolCalls([record])).toEqual({
+      gdpr: '2026-10-01T00:00:00.000Z',
+    });
+    expect(
+      appliedSkillVersionsFromToolCalls([{ ...record, arguments: '{oops' }]),
+    ).toBeUndefined();
+    expect(appliedSkillVersionsFromToolCalls(undefined)).toBeUndefined();
+  });
+  it('attaches versions to the last user message before the regenerated index', () => {
+    const messages = [
+      { role: 'user', content: 'first' },
+      { role: 'assistant', content: 'a1' },
+      { role: 'user', content: 'second' },
+      { role: 'assistant', content: 'a2' },
+    ] as unknown as ConversationEntry[];
+    const result = attachAppliedSkillVersions(messages, { gdpr: 'v' }, 1);
+    expect(
+      (result[0] as { appliedSkillVersions?: unknown }).appliedSkillVersions,
+    ).toEqual({ gdpr: 'v' });
+    expect('appliedSkillVersions' in result[2]).toBe(false);
+    expect(attachAppliedSkillVersions(messages, undefined)).toBe(messages);
+  });
+  it('pins only on replay, only for ids still requested, never personal skills', () => {
+    const saved = { gdpr: 'v1', 'user:mine': 'v2', forms: 'v3' };
+    expect(skillVersionsForRequest(saved, ['gdpr', 'user:mine'], true)).toEqual(
+      { gdpr: 'v1' },
+    );
+    expect(skillVersionsForRequest(saved, ['gdpr'], false)).toBeUndefined();
+    expect(skillVersionsForRequest(saved, [], true)).toBeUndefined();
+    expect(skillVersionsForRequest(undefined, ['gdpr'], true)).toBeUndefined();
   });
 });

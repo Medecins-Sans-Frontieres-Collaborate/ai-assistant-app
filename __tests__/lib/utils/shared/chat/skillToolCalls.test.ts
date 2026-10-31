@@ -118,3 +118,25 @@ describe('skillToolCalls', () => {
     expect(skillUsageHasIssue([record({ status: 'incomplete' })])).toBe(true);
   });
 });
+
+describe('consent and version suffixes', () => {
+  it('parses needs-approval lines and version notes on requested skills', () => {
+    const lines = summarizeSkillToolCalls([
+      record({
+        name: 'use_skills',
+        output: [
+          'GDPR (requested, as originally run)',
+          'Forms (pinned, updated since)',
+          'Travel (needs approval)',
+          'Plain (auto)',
+        ].join('\n'),
+      }),
+    ]);
+    expect(lines).toEqual([
+      { kind: 'skill', name: 'GDPR', via: 'requested', version: 'original' },
+      { kind: 'skill', name: 'Forms', via: 'pinned', version: 'updated' },
+      { kind: 'consent', name: 'Travel' },
+      { kind: 'skill', name: 'Plain', via: 'auto' },
+    ]);
+  });
+});
