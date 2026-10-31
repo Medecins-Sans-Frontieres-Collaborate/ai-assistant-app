@@ -59,7 +59,8 @@ export interface ParsedSkillMarkdown {
   instructions: string;
   activation: SkillActivation;
   applyToAgents: boolean;
-  requireConsent: boolean;
+  /** Optional so a stored record (where the field is optional) serializes directly. */
+  requireConsent?: boolean;
   /** Preserved, never interpreted; `metadata.*` keys are flattened. */
   foreignFrontmatter?: Record<string, string>;
 }
