@@ -302,11 +302,51 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
           </div>
           {skillAccess === 'selected' && (
             <div className="mt-2 max-h-48 space-y-1 overflow-y-auto rounded-md border border-gray-200 p-2 dark:border-gray-700">
-              {skillOptions.length === 0 && (
+              {skillsQuery.isLoading && (
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  {t('agentSkillsLoading')}
+                </p>
+              )}
+              {skillsQuery.isError && (
+                <p className="text-xs text-amber-700 dark:text-amber-400">
+                  {t('agentSkillsLoadError')}
+                </p>
+              )}
+              {skillsQuery.isSuccess && skillOptions.length === 0 && (
                 <p className="text-xs text-gray-600 dark:text-gray-400">
                   {t('agentSkillsNone')}
                 </p>
               )}
+              {/* Ids saved earlier that this admin cannot see now (deleted,
+                  switched off, or another admin's): shown so they can be
+                  removed deliberately rather than re-saved blindly. */}
+              {skillsQuery.isSuccess &&
+                skillIds
+                  .filter(
+                    (id) =>
+                      !skillOptions.some((entry) => entry.skill.id === id),
+                  )
+                  .map((id) => (
+                    <label
+                      key={id}
+                      className="flex items-start gap-2 text-sm text-gray-500 dark:text-gray-400"
+                    >
+                      <input
+                        type="checkbox"
+                        className="mt-1"
+                        checked
+                        onChange={() =>
+                          setSkillIds((current) =>
+                            current.filter((item) => item !== id),
+                          )
+                        }
+                      />
+                      <span>
+                        <code className="text-xs">{id}</code>{' '}
+                        {t('agentSkillsNotVisible')}
+                      </span>
+                    </label>
+                  ))}
               {skillOptions.map((entry) => (
                 <label
                   key={entry.skill.id}
