@@ -44,3 +44,32 @@ export function shrinkChatHistoryForOverflow(
 ): Message[] | null {
   return shrinkMessagesForOverflow(messages);
 }
+
+/**
+ * Tool-loop variant: the current turn (from the last REAL user message
+ * onward — its tool_use/tool_result exchange included) is never dropped,
+ * because a transcript with a dangling tool call is rejected by every
+ * provider. Older history before that anchor loses its oldest half.
+ * `isAnchor` tells a real user message from a tool-result carrier (Anthropic
+ * puts tool results in role:'user' messages).
+ */
+export function shrinkTranscriptForOverflow<T extends { role: string }>(
+  messages: readonly T[],
+  isAnchor: (message: T) => boolean,
+): T[] | null {
+  let anchor = -1;
+  for (let index = messages.length - 1; index >= 0; index -= 1) {
+    if (isAnchor(messages[index])) {
+      anchor = index;
+      break;
+    }
+  }
+  if (anchor <= 0) return null;
+  const droppable: number[] = [];
+  for (let index = 0; index < anchor; index += 1) {
+    if (messages[index].role !== 'system') droppable.push(index);
+  }
+  if (droppable.length === 0) return null;
+  const dropped = new Set(droppable.slice(0, Math.ceil(droppable.length / 2)));
+  return messages.filter((_, index) => !dropped.has(index));
+}
