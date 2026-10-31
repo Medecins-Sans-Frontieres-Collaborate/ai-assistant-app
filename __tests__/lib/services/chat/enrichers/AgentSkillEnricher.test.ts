@@ -110,3 +110,90 @@ describe('agent skill eligibility', () => {
     );
   });
 });
+
+describe('persona skill scope (§5.4)', () => {
+  const visible = (id: string, applyToAgents: boolean) => ({
+    builtin: false,
+    overridden: false,
+    skill: {
+      id,
+      name: id,
+      description: 'd',
+      version: 1,
+      activation: 'auto' as const,
+      applyToAgents,
+      documents: [],
+      instructions: 'body',
+      updatedAt: '',
+    },
+  });
+  const persona = (
+    skillAccess: 'inherit' | 'none' | 'selected',
+    skillIds: string[] = [],
+  ) => ({
+    version: 1 as const,
+    id: 'prompt-1',
+    name: 'Persona',
+    description: '',
+    systemPrompt: 'Persona',
+    modelId: 'gpt',
+    skillAccess,
+    skillIds,
+    createdBy: 'a',
+    createdAt: '',
+    updatedBy: 'a',
+    updatedAt: '',
+  });
+  beforeEach(() => {
+    vi.mocked(getVisibleSkills).mockResolvedValue([
+      visible('agent-ok', true),
+      visible('plain', false),
+    ]);
+  });
+  it('"none" switches skill tools off and tells the user why a request was dropped', async () => {
+    const emitMarker = vi.fn();
+    const context = {
+      ...createTestChatContext({
+        botId: 'prompt-1',
+        systemPrompt: 'Persona',
+        model: { supportsTools: true },
+      }),
+      promptAgent: persona('none'),
+      forcedSkillIds: ['agent-ok'],
+      emitMarker,
+    };
+    const result = await new AgentSkillEnricher().execute(context as never);
+    expect(result.agentSkillsEnabled).toBe(false);
+    expect(result.skillScope).toEqual({ mode: 'none' });
+    expect(result.forcedSkillIds).toEqual([]);
+    expect(emitMarker.mock.calls[0][0]).toContain('does not use skills');
+  });
+  it('"selected" offers the listed skills even without the per-skill agent flag', async () => {
+    const context = {
+      ...createTestChatContext({
+        botId: 'prompt-1',
+        systemPrompt: 'Persona',
+        model: { supportsTools: true },
+      }),
+      promptAgent: persona('selected', ['plain']),
+      forcedSkillIds: ['plain', 'agent-ok'],
+    };
+    const result = await new AgentSkillEnricher().execute(context as never);
+    expect(result.agentSkillsEnabled).toBe(true);
+    expect(result.skillScope).toEqual({ mode: 'selected', ids: ['plain'] });
+    expect(result.forcedSkillIds).toEqual(['plain']);
+  });
+  it('a persona without a scope inherits the agent-enabled set', async () => {
+    const context = {
+      ...createTestChatContext({
+        botId: 'prompt-1',
+        systemPrompt: 'Persona',
+        model: { supportsTools: true },
+      }),
+      promptAgent: persona('inherit'),
+    };
+    const result = await new AgentSkillEnricher().execute(context as never);
+    expect(result.skillScope).toEqual({ mode: 'agent' });
+    expect(result.agentSkillsEnabled).toBe(true);
+  });
+});

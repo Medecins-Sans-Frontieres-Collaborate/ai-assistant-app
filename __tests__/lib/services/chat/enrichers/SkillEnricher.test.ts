@@ -8,6 +8,7 @@
  * composition the pipeline runs.
  */
 import { createTestChatContext } from '@/__tests__/lib/services/chat/testUtils';
+import { readSkillHistoryVersion } from '@/lib/services/agentAccess/accessRulesStore';
 import {
   SkillCatalogEnricher,
   SkillEnricher,
@@ -31,7 +32,13 @@ vi.mock('@/lib/services/skills/skillCatalog', async (importOriginal) => {
   };
 });
 
+vi.mock('@/lib/services/agentAccess/accessRulesStore', () => ({
+  createAgentAccessBlobStorage: () => ({}),
+  readSkillHistoryVersion: vi.fn(async () => null),
+}));
+
 const mockGetVisibleSkills = getVisibleSkills as Mock;
+const mockReadHistory = readSkillHistoryVersion as Mock;
 
 function makeSkill(overrides: Partial<Skill> & { id: string }): Skill {
   return {
@@ -415,5 +422,155 @@ describe('SkillEnricher', () => {
       });
       expect(result.skillCatalog).toEqual([]);
     });
+  });
+});
+
+describe('tools delivery (§5.6): the model loads skills itself', () => {
+  beforeEach(() => {
+    mockGetVisibleSkills.mockResolvedValue([
+      entry({ id: 'alpha' }),
+      entry({ id: 'beta' }),
+      entry({ id: 'standing', activation: 'always' }),
+    ]);
+    mockReadHistory.mockResolvedValue(null);
+  });
+  it('skips the router, injects only forced and always skills, and excludes them from the tool catalog', async () => {
+    const router = { determineSkills: vi.fn() };
+    const emitMarker = vi.fn();
+    const context = {
+      ...createTestChatContext({
+        systemPrompt: BASE_PROMPT,
+        model: { supportsTools: true },
+      }),
+      forcedSkillIds: ['alpha'],
+      emitMarker,
+    };
+    const prepared = await new SkillCatalogEnricher().execute(context);
+    expect(prepared.skillCatalog).toEqual([]);
+    const result = await new SkillEnricher(router).execute(prepared);
+    expect(router.determineSkills).not.toHaveBeenCalled();
+    expect(result.systemPrompt).toContain('Instructions for alpha');
+    expect(result.systemPrompt).toContain('Instructions for standing');
+    expect(result.systemPrompt).not.toContain('Instructions for beta');
+    expect(result.standardSkillTools?.excludeIds.sort()).toEqual([
+      'alpha',
+      'standing',
+    ]);
+    // Platform sections leave the base prompt: the model can load the skill.
+    mockGetVisibleSkills.mockResolvedValue([entry({ id: 'platform-help' })]);
+    const swapped = await new SkillEnricher(router).execute(
+      createTestChatContext({
+        systemPrompt: BASE_PROMPT,
+        model: { supportsTools: true },
+      }),
+    );
+    expect(swapped.systemPrompt).not.toContain(PLATFORM_ABOUT_PROMPT_SECTION);
+  });
+  it('falls back to prompt delivery for non-tool models, non-streaming turns, and custom sources', async () => {
+    const router = {
+      determineSkills: vi.fn(async () => ({ relevantSkills: ['beta'] })),
+    };
+    for (const options of [
+      { model: { supportsTools: false } },
+      { model: { supportsTools: true }, stream: false },
+      { model: { supportsTools: true, isCustomSourceModel: true } },
+    ]) {
+      router.determineSkills.mockClear();
+      const context = createTestChatContext({
+        systemPrompt: BASE_PROMPT,
+        ...options,
+      } as never);
+      const prepared = await new SkillCatalogEnricher().execute(context);
+      const result = await new SkillEnricher(router).execute(prepared);
+      expect(router.determineSkills).toHaveBeenCalledTimes(1);
+      expect(result.systemPrompt).toContain('Instructions for beta');
+      expect(result.standardSkillTools).toBeUndefined();
+    }
+  });
+});
+
+describe('consent (§5.5) and version pins (§5.7)', () => {
+  beforeEach(() => {
+    mockGetVisibleSkills.mockResolvedValue([
+      entry({ id: 'careful', requireConsent: true }),
+      entry({ id: 'gdpr', updatedAt: '2026-10-30T00:00:00.000Z' }),
+    ]);
+    mockReadHistory.mockResolvedValue(null);
+  });
+  it('a routed consent-gated skill is reported, not applied; a requested one applies', async () => {
+    const router = {
+      determineSkills: vi.fn(async () => ({ relevantSkills: ['careful'] })),
+    };
+    const emitMarker = vi.fn();
+    const base = createTestChatContext({
+      systemPrompt: BASE_PROMPT,
+      model: { supportsTools: false },
+    });
+    const routed = await new SkillEnricher(router).execute({
+      ...(await new SkillCatalogEnricher().execute(base)),
+      emitMarker,
+    });
+    expect(routed.systemPrompt).not.toContain('Instructions for careful');
+    expect(emitMarker.mock.calls[0][0]).toContain('careful (needs approval)');
+
+    emitMarker.mockClear();
+    const requested = await new SkillEnricher(router).execute({
+      ...(await new SkillCatalogEnricher().execute(base)),
+      forcedSkillIds: ['careful'],
+      emitMarker,
+    });
+    expect(requested.systemPrompt).toContain('Instructions for careful');
+    expect(emitMarker.mock.calls[0][0]).toContain('careful (requested)');
+  });
+  it('replays the pinned historical body when it exists, else the current one with a note', async () => {
+    mockReadHistory.mockResolvedValue(
+      makeSkill({
+        id: 'gdpr',
+        instructions: 'OLD GDPR BODY',
+        updatedAt: '2026-10-01T00:00:00.000Z',
+      }),
+    );
+    const emitMarker = vi.fn();
+    const base = createTestChatContext({
+      systemPrompt: BASE_PROMPT,
+      model: { supportsTools: false },
+    });
+    const pinned = await new SkillEnricher().execute({
+      ...base,
+      forcedSkillIds: ['gdpr'],
+      skillVersions: { gdpr: '2026-10-01T00:00:00.000Z' },
+      emitMarker,
+    });
+    expect(pinned.systemPrompt).toContain('OLD GDPR BODY');
+    expect(pinned.systemPrompt).not.toContain('Instructions for gdpr');
+    const marker = emitMarker.mock.calls[0][0] as string;
+    expect(marker).toContain('gdpr (requested, as originally run)');
+    expect(marker).toContain('2026-10-01T00:00:00.000Z');
+    expect(mockReadHistory.mock.calls[0].slice(1, 3)).toEqual([
+      'gdpr',
+      '2026-10-01T00:00:00.000Z',
+    ]);
+
+    mockReadHistory.mockResolvedValue(null);
+    emitMarker.mockClear();
+    const current = await new SkillEnricher().execute({
+      ...base,
+      forcedSkillIds: ['gdpr'],
+      skillVersions: { gdpr: '2026-10-01T00:00:00.000Z' },
+      emitMarker,
+    });
+    expect(current.systemPrompt).toContain('Instructions for gdpr');
+    expect(emitMarker.mock.calls[0][0]).toContain(
+      'gdpr (requested, updated since)',
+    );
+    // A pin equal to the current version is a no-op: no history read.
+    mockReadHistory.mockClear();
+    await new SkillEnricher().execute({
+      ...base,
+      forcedSkillIds: ['gdpr'],
+      skillVersions: { gdpr: '2026-10-30T00:00:00.000Z' },
+      emitMarker,
+    });
+    expect(mockReadHistory).not.toHaveBeenCalled();
   });
 });
