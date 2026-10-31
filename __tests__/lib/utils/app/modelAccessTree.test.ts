@@ -203,6 +203,38 @@ describe('effectiveAccessFor', () => {
     });
   });
 
+  it('attributes the origin by what actually decided, not by which rule exists', () => {
+    // A model-qualified global default outranks the family rule's block.
+    const defaults: LimitEntry[] = [
+      {
+        limitKey: 'model.allowed',
+        modelId: 'claude-opus-5',
+        value: true,
+        ceiling: false,
+      },
+    ];
+    const rules = [rule({ series: 'claude', defaultAccess: false })];
+    expect(
+      effectiveAccessFor(
+        { modelId: 'claude-opus-5' },
+        'claude',
+        defaults,
+        rules,
+      ),
+    ).toEqual({ state: { kind: 'unlimited' }, origin: 'defaults' });
+    expect(
+      effectiveAccessFor(
+        { modelId: 'claude-sonnet-5' },
+        'claude',
+        defaults,
+        rules,
+      ),
+    ).toEqual({ state: { kind: 'unavailable' }, origin: 'family' });
+    expect(
+      effectiveAccessFor({ series: 'claude' }, undefined, defaults, rules),
+    ).toEqual({ state: { kind: 'unavailable' }, origin: 'model' });
+  });
+
   it('reads the generic global defaults when no rule speaks', () => {
     const defaults: LimitEntry[] = [
       { limitKey: 'model.requests', series: 'gpt', value: 200, ceiling: false },
